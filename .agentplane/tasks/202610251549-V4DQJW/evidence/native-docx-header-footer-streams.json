@@ -1,0 +1,440 @@
+{
+  "task": "202610251549-V4DQJW",
+  "checkpoint": "Writer header and footer package reference dispatch",
+  "baseline": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "upstream": [
+    "sw/source/writerfilter/ooxml/model.xml#CT_HdrFtrRef",
+    "sw/source/writerfilter/ooxml/OOXMLFastContextHandler.cxx#handleHdrFtr",
+    "sw/source/writerfilter/ooxml/Handler.cxx#OOXMLFooterHandler",
+    "sw/source/writerfilter/ooxml/OOXMLDocumentImpl.cxx#resolveHeader",
+    "sw/source/writerfilter/ooxml/OOXMLDocumentImpl.cxx#resolveFooter"
+  ],
+  "results": {
+    "targeted": {
+      "files": 7,
+      "tests": 61
+    },
+    "documentRetest": {
+      "files": 1,
+      "tests": 9
+    },
+    "chromium": 2,
+    "extended": {
+      "summary": [
+        "FAIL  |writer| src/sw/source/filter/ww8/docxexport.theme-fonts.test.ts > resolves Strict themed fonts and retains references until a concrete family changes",
+        "Test Files  1 failed | 9 passed (10)",
+        "Tests  1 failed | 68 passed (69)"
+      ]
+    },
+    "coverage": {
+      "apps/office/src/sw/source/writerfilter/ooxml/Handler.ts": {
+        "OOXMLHeaderFooterHandler": {
+          "lines": {
+            "covered": 10,
+            "total": 10,
+            "pct": 100
+          },
+          "statements": {
+            "covered": 11,
+            "total": 11,
+            "pct": 100
+          },
+          "branches": {
+            "covered": 3,
+            "total": 4,
+            "pct": 75
+          },
+          "functions": {
+            "covered": 3,
+            "total": 4,
+            "pct": 75
+          },
+          "missingBranches": [
+            [
+              18,
+              [
+                19,
+                0
+              ]
+            ]
+          ]
+        }
+      },
+      "apps/office/src/sw/source/writerfilter/ooxml/OOXMLDocumentImpl.ts": {
+        "resolveHeader": {
+          "lines": {
+            "covered": 1,
+            "total": 1,
+            "pct": 100
+          },
+          "statements": {
+            "covered": 1,
+            "total": 1,
+            "pct": 100
+          },
+          "branches": {
+            "covered": 0,
+            "total": 0,
+            "pct": null
+          },
+          "functions": {
+            "covered": 1,
+            "total": 1,
+            "pct": 100
+          },
+          "missingBranches": []
+        },
+        "resolveFooter": {
+          "lines": {
+            "covered": 1,
+            "total": 1,
+            "pct": 100
+          },
+          "statements": {
+            "covered": 1,
+            "total": 1,
+            "pct": 100
+          },
+          "branches": {
+            "covered": 0,
+            "total": 0,
+            "pct": null
+          },
+          "functions": {
+            "covered": 1,
+            "total": 1,
+            "pct": 100
+          },
+          "missingBranches": []
+        },
+        "resolveHeaderFooter": {
+          "lines": {
+            "covered": 28,
+            "total": 28,
+            "pct": 100
+          },
+          "statements": {
+            "covered": 30,
+            "total": 32,
+            "pct": 93.75
+          },
+          "branches": {
+            "covered": 14,
+            "total": 16,
+            "pct": 87.5
+          },
+          "functions": {
+            "covered": 2,
+            "total": 2,
+            "pct": 100
+          },
+          "missingBranches": [
+            [
+              108,
+              [
+                0,
+                14
+              ]
+            ],
+            [
+              114,
+              [
+                0,
+                16
+              ]
+            ]
+          ]
+        }
+      },
+      "apps/office/src/sw/source/writerfilter/ooxml/OOXMLFastContextHandler.ts": {
+        "handleHdrFtr": {
+          "lines": {
+            "covered": 9,
+            "total": 9,
+            "pct": 100
+          },
+          "statements": {
+            "covered": 9,
+            "total": 11,
+            "pct": 81.81818181818181
+          },
+          "branches": {
+            "covered": 4,
+            "total": 6,
+            "pct": 66.66666666666667
+          },
+          "functions": {
+            "covered": 2,
+            "total": 2,
+            "pct": 100
+          },
+          "missingBranches": [
+            [
+              272,
+              [
+                0,
+                19
+              ]
+            ],
+            [
+              278,
+              [
+                0,
+                19
+              ]
+            ]
+          ]
+        }
+      },
+      "apps/office/src/sw/source/writerfilter/ooxml/OOXMLStreamImpl.ts": {
+        "getHeaderFooterIds": {
+          "lines": {
+            "covered": 18,
+            "total": 18,
+            "pct": 100
+          },
+          "statements": {
+            "covered": 23,
+            "total": 23,
+            "pct": 100
+          },
+          "branches": {
+            "covered": 14,
+            "total": 14,
+            "pct": 100
+          },
+          "functions": {
+            "covered": 1,
+            "total": 1,
+            "pct": 100
+          },
+          "missingBranches": []
+        }
+      }
+    }
+  },
+  "commands": [
+    "vitest run --config vitest.writer.config.ts --coverage OOXMLDocumentImpl OOXMLStreamImpl OOXMLFastContextHandler docxexport.numbered-list fmthdft.native --maxWorkers=2 --testTimeout=90000 --coverage.include=src/sw/source/writerfilter/ooxml/Handler.ts --coverage.include=src/sw/source/writerfilter/ooxml/OOXMLDocumentImpl.ts --coverage.include=src/sw/source/writerfilter/ooxml/OOXMLFastContextHandler.ts --coverage.include=src/sw/source/writerfilter/ooxml/OOXMLStreamImpl.ts --coverage.thresholds.lines=0 --coverage.thresholds.functions=0 --coverage.thresholds.statements=0 --coverage.thresholds.branches=0 --coverage.reporter=json --coverage.reportsDirectory=coverage/footer-import-scoped",
+    "vitest run --config vitest.writer.config.ts --coverage OOXMLDocumentImpl --maxWorkers=1 --testTimeout=90000 --coverage.include=src/sw/source/writerfilter/ooxml/Handler.ts --coverage.include=src/sw/source/writerfilter/ooxml/OOXMLDocumentImpl.ts --coverage.include=src/sw/source/writerfilter/ooxml/OOXMLFastContextHandler.ts --coverage.include=src/sw/source/writerfilter/ooxml/OOXMLStreamImpl.ts --coverage.thresholds.lines=0 --coverage.thresholds.functions=0 --coverage.thresholds.statements=0 --coverage.thresholds.branches=0 --coverage.reporter=json --coverage.reportsDirectory=coverage/footer-import-direct",
+    "vitest run --config vitest.writer.config.ts OOXMLDocumentImpl OOXMLStreamImpl OOXMLFastContextHandler docxexport.numbered-list fmthdft.native paragraph-controls-native docxexport.theme --maxWorkers=2 --testTimeout=90000",
+    "npm run test:static",
+    "./node_modules/.bin/playwright test -c apps/office/coverage/writer-docx-theme.playwright.config.ts --workers=1 -g 'downloads and reopens nested DOCX tables|downloads and reopens the named styles'",
+    "npm run typecheck",
+    "npm run check:dependencies",
+    "npm run check:docs",
+    "npm run check:file-size",
+    "npm run check:source-tree",
+    "npm run check:writer-hintids",
+    "npm run check:writer-resources",
+    "python3 scripts/writer-ooxml/generate-factory.py --check",
+    "npm run inventory:registry:build",
+    "npm run check:source-provenance",
+    "npm run inventory:invariants",
+    "npm run inventory:parity",
+    "node .agentplane/policy/check-routing.mjs",
+    "ap doctor",
+    "git diff --check (changed Writer paths)"
+  ],
+  "verified": [
+    "The unchanged NumberedList package resolves its real package footer to the original default footer stream ID, delivering the visible field result twice across repeated reads.",
+    "Strict DOCX selects every one of the six original header/footer stream IDs, with no attempt to open the external relationship and no dispatch of the missing reference without a page variant.",
+    "Opening without a receiver for native header/footer content still signals failure before silent content loss.",
+    "Both existing Chromium scenarios pass on the final production build after the attribute module's stateless color reconstruction move."
+  ],
+  "remaining": [
+    "The Writer import entry point still needs the page-style setters, DomainMapper text append context and ODT/Worker persistence before enabling header/footer import.",
+    "DOCX header/footer output, section inheritance and UI layout are still open. Source-shaped NumberedList table geometry remains only partially qualified.",
+    "Some new OOXML owner branches remain below the scoped90 gate; exact counters are recorded separately.",
+    "Complete DOCX and XLSX acceptance remains open. No whole-suite run was due."
+  ],
+  "files": [
+    {
+      "path": "apps/office/src/sw/source/writerfilter/inc/dmapper/resourcemodel.ts",
+      "sha256": "a259ef873bcc4168f43e6ecdebda6f258d2061262f269683c0e14c669122e5dc"
+    },
+    {
+      "path": "docs/program/registry/writer/provenance/sw/source/writerfilter/inc/dmapper/resourcemodel.ts.json",
+      "sha256": "1638571f79ad59e529ba4bf980350623d58276e9280ead16917de511738f7883"
+    },
+    {
+      "path": "docs/program/registry/writer/runtime/sw/source/writerfilter/inc/dmapper/resourcemodel.ts.json",
+      "sha256": "cd6531f77c536a5e39cc3179b6e611939db63daa0125e544a4a749f18e811ed6"
+    },
+    {
+      "path": "apps/office/src/sw/source/writerfilter/inc/ooxml/OOXMLDocument.ts",
+      "sha256": "196fceb6e4dee3fae8c43108fd9ed6e12ed08142b72f3b75fd3bccf5c98f45e6"
+    },
+    {
+      "path": "docs/program/registry/writer/provenance/sw/source/writerfilter/inc/ooxml/OOXMLDocument.ts.json",
+      "sha256": "3051e9e7b06edb2182fe860218d1a97f6e01017226468c6ecb3d4379ae9c776d"
+    },
+    {
+      "path": "docs/program/registry/writer/runtime/sw/source/writerfilter/inc/ooxml/OOXMLDocument.ts.json",
+      "sha256": "5aa8f4d3653b7c7b1c706a60ea0a60d84565d85e788cc2782c5d422157080102"
+    },
+    {
+      "path": "apps/office/src/sw/source/writerfilter/inc/ooxml/resourceids.ts",
+      "sha256": "60b20750e52891832b81a2708a2594dede3d30220734a893c5fa72e399f2f8d6"
+    },
+    {
+      "path": "docs/program/registry/writer/provenance/sw/source/writerfilter/inc/ooxml/resourceids.ts.json",
+      "sha256": "77336a07db8f1694eb951a031e31f8508000ecca861c020e9966e2aae578be35"
+    },
+    {
+      "path": "docs/program/registry/writer/runtime/sw/source/writerfilter/inc/ooxml/resourceids.ts.json",
+      "sha256": "75633a6575d6da4ef956f5ee719583d92daf61c6742c961dfc19f68c8e546cc0"
+    },
+    {
+      "path": "apps/office/src/sw/source/writerfilter/ooxml/Handler.ts",
+      "sha256": "3ccd89e17d3240a198259c5ef11a6e4a7df2d2785e525c384d603348aedab124"
+    },
+    {
+      "path": "docs/program/registry/writer/provenance/sw/source/writerfilter/ooxml/Handler.ts.json",
+      "sha256": "9f8c64d374a1389d3c1e3c9382db08fc6b91d5b32a554def9040e78dd216378d"
+    },
+    {
+      "path": "docs/program/registry/writer/runtime/sw/source/writerfilter/ooxml/Handler.ts.json",
+      "sha256": "117501c3232227c6ad559e33d133662ffa40afdbf429fb3aab147996aa5219a1"
+    },
+    {
+      "path": "apps/office/src/sw/source/writerfilter/ooxml/OOXMLFastContextHandler.ts",
+      "sha256": "ef34f0f672144dfdb4cc41b6e0084d899494a646a62b81a17f7413d9095ecdf3"
+    },
+    {
+      "path": "docs/program/registry/writer/provenance/sw/source/writerfilter/ooxml/OOXMLFastContextHandler.ts.json",
+      "sha256": "eeb244ca0603bfe5249a2d6b083eac7d4cb7bcf61915012e8fa9f43375b62708"
+    },
+    {
+      "path": "docs/program/registry/writer/runtime/sw/source/writerfilter/ooxml/OOXMLFastContextHandler.ts.json",
+      "sha256": "8250bab7e218b6d283d7f688696c5d4b556bb54d0ceb24ccc45dd0e5f2f121aa"
+    },
+    {
+      "path": "apps/office/src/sw/source/writerfilter/ooxml/OOXMLStreamImpl.ts",
+      "sha256": "2efab8da22ac26a620586bc1fd7fc521a4a45c312979d154826c6548c00fb34c"
+    },
+    {
+      "path": "docs/program/registry/writer/provenance/sw/source/writerfilter/ooxml/OOXMLStreamImpl.ts.json",
+      "sha256": "6d24e69e5b2af7f916219748e22540d591602534d3c5f28a41c3461558c29be7"
+    },
+    {
+      "path": "docs/program/registry/writer/runtime/sw/source/writerfilter/ooxml/OOXMLStreamImpl.ts.json",
+      "sha256": "4ec4c5bb5fe37a460e370a3e538cec87e4ae2d2670d7dfd612df48265fd513be"
+    },
+    {
+      "path": "apps/office/src/sw/source/writerfilter/ooxml/OOXMLDocumentImpl.ts",
+      "sha256": "0294246bec40e2852460abca3043dc34fa8d9e7ee87ce1ffb9083702cb57c446"
+    },
+    {
+      "path": "docs/program/registry/writer/provenance/sw/source/writerfilter/ooxml/OOXMLDocumentImpl.ts.json",
+      "sha256": "63094b49de3abd7c5102a2b60a83beef13aa00a829a1d576d7c7ed3bc92c1257"
+    },
+    {
+      "path": "docs/program/registry/writer/runtime/sw/source/writerfilter/ooxml/OOXMLDocumentImpl.ts.json",
+      "sha256": "9163f4b7957396ae5b1b20899fc0210a126516c054046dd15663302e8e539d0b"
+    },
+    {
+      "path": "apps/office/src/sw/source/writerfilter/ooxml/OOXMLFactory_wml.attributes.ts",
+      "sha256": "edc8e240e1228844f933124e680cd675c551b58f25dd4dba69f68a3518bce736"
+    },
+    {
+      "path": "docs/program/registry/writer/provenance/sw/source/writerfilter/ooxml/OOXMLFactory_wml.attributes.ts.json",
+      "sha256": "d6a755eaacb7ca6bb1a286e5bd10700551dcd4acdf9ab3d546257e85f9bbd27d"
+    },
+    {
+      "path": "docs/program/registry/writer/runtime/sw/source/writerfilter/ooxml/OOXMLFactory_wml.attributes.ts.json",
+      "sha256": "906ff4b799bebd7109047b38fbfd4f9554168afee3ea810f1f86eac61f367dbc"
+    },
+    {
+      "path": "apps/office/src/sw/source/writerfilter/ooxml/OOXMLFactory_wml.elements.ts",
+      "sha256": "2cf5027b703362d338f0323fb61255fba6a159454fb00a8e51c7642c3e3f4b32"
+    },
+    {
+      "path": "docs/program/registry/writer/provenance/sw/source/writerfilter/ooxml/OOXMLFactory_wml.elements.ts.json",
+      "sha256": "98598c36d6cf3b35231674534fcbfb466de5305c4fe3468cb438ca074fa1c6eb"
+    },
+    {
+      "path": "docs/program/registry/writer/runtime/sw/source/writerfilter/ooxml/OOXMLFactory_wml.elements.ts.json",
+      "sha256": "4c628be071b420667faac0bd6b44962a6a505c7a59869c6ed93cfb51f708ae20"
+    },
+    {
+      "path": "apps/office/src/sw/source/writerfilter/ooxml/OOXMLFactory_wml.lists.ts",
+      "sha256": "620033e3918cf0b72e23617af04c9c37286a13a5f0ed0e777ac0a2cd142cc82c"
+    },
+    {
+      "path": "docs/program/registry/writer/provenance/sw/source/writerfilter/ooxml/OOXMLFactory_wml.lists.ts.json",
+      "sha256": "7d4d01f3d97c0bbc5ed51e60344bc4b7ed7e7b83cb6ada99cde4f107178c1394"
+    },
+    {
+      "path": "docs/program/registry/writer/runtime/sw/source/writerfilter/ooxml/OOXMLFactory_wml.lists.ts.json",
+      "sha256": "39c737a5f0919837bfe4d16ba68a7f676863d9321fcde879c534f8caba4deee1"
+    },
+    {
+      "path": "apps/office/src/sw/source/writerfilter/ooxml/OOXMLFactory_wml.resources.ts",
+      "sha256": "0e52d42f8fbd705b47bd07e5de75738dcc436376b27ffed0a5f2d36eff6551e3"
+    },
+    {
+      "path": "docs/program/registry/writer/provenance/sw/source/writerfilter/ooxml/OOXMLFactory_wml.resources.ts.json",
+      "sha256": "d0c3d8bdcd90e75435360b4a498f90f3fcc35ca090f7b132dc2da4811c67aa75"
+    },
+    {
+      "path": "docs/program/registry/writer/runtime/sw/source/writerfilter/ooxml/OOXMLFactory_wml.resources.ts.json",
+      "sha256": "5ec40fde6d9be497a6ec798404ee9a08f1b7508179379d0609733b3f2b1b8fa1"
+    },
+    {
+      "path": "apps/office/src/sw/source/writerfilter/ooxml/OOXMLFactory_wml.resources1.ts",
+      "sha256": "16b2d9aa82ac113493f463b1e257cbb94612a2da6da7a3e7aea721ff9fb455f9"
+    },
+    {
+      "path": "docs/program/registry/writer/provenance/sw/source/writerfilter/ooxml/OOXMLFactory_wml.resources1.ts.json",
+      "sha256": "85718ed81ef9ef14d03f287b209baaa9d962d0e6c0219da9b0954f0eb067acf0"
+    },
+    {
+      "path": "docs/program/registry/writer/runtime/sw/source/writerfilter/ooxml/OOXMLFactory_wml.resources1.ts.json",
+      "sha256": "c85b01120fc9b39a8af868ffc13ec7435948e3dd0de0677d3a17d3729bcd81c9"
+    },
+    {
+      "path": "apps/office/src/sw/source/writerfilter/ooxml/OOXMLFactory_wml.tables.ts",
+      "sha256": "8436fc1beb8bc5dcb0dcb3d4e77b86bcd00dd05a69b96c856abc33ecaaf3205c"
+    },
+    {
+      "path": "docs/program/registry/writer/provenance/sw/source/writerfilter/ooxml/OOXMLFactory_wml.tables.ts.json",
+      "sha256": "4576eb729adc1ca899add72d6e375fa68d15038ae04c8aea28b34ac353ff7e5f"
+    },
+    {
+      "path": "docs/program/registry/writer/runtime/sw/source/writerfilter/ooxml/OOXMLFactory_wml.tables.ts.json",
+      "sha256": "2e62e3acc42cc36dc967367abfd56a00aedf98342a60695f13c2be7bcd6907c9"
+    },
+    {
+      "path": "apps/office/src/sw/source/core/attr/swatrset.ts",
+      "sha256": "621aefb5c9a3419366044fffa7cd613d579671cf9c9d4cbc86a6dcf5ebbe2a7b"
+    },
+    {
+      "path": "docs/program/registry/writer/provenance/sw/source/core/attr/swatrset.ts.json",
+      "sha256": "2534ec0279426a5248dd7da0303ef25dbee2aacd496555e7c5747376ee27534e"
+    },
+    {
+      "path": "docs/program/registry/writer/runtime/sw/source/core/attr/swatrset.ts.json",
+      "sha256": "71448006a822654a199001239963a94180e799d0e31e4c46766d9f3964fdb91c"
+    },
+    {
+      "path": "apps/office/src/sw/source/core/attr/swatrset.paragraph.ts",
+      "sha256": "73a644e4be7d2e72fb9f0c04daa65b89bfb41bec0b1af5b8244d3482b72c353b"
+    },
+    {
+      "path": "docs/program/registry/writer/provenance/sw/source/core/attr/swatrset.paragraph.ts.json",
+      "sha256": "5d0ed763311c9ba02d422ec0079937b99483373c41864c458728d7be521d47b3"
+    },
+    {
+      "path": "docs/program/registry/writer/runtime/sw/source/core/attr/swatrset.paragraph.ts.json",
+      "sha256": "e51e07d938fcef7f2614392841d66b717864b37baba63e35946f4357c9ecfea8"
+    },
+    {
+      "path": "scripts/writer-ooxml/generate-factory.py",
+      "sha256": "ab1a19c75ce12d745e6a05c36ee1289e3143a39d03c87cfd042c24329963e4ee"
+    },
+    {
+      "path": "apps/office/src/sw/source/writerfilter/ooxml/OOXMLDocumentImpl.test.ts",
+      "sha256": "4259523398d577d0f3b67a927b074d44acae43677e6e47f7df0e17f9b0245165"
+    }
+  ]
+}

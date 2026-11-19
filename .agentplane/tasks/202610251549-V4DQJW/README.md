@@ -4,7 +4,7 @@ title: "Implement Writer DOCX import export and existing file UI integration"
 status: "DOING"
 priority: "high"
 owner: "CODER"
-revision: 368
+revision: 371
 origin:
   system: "manual"
 depends_on:
@@ -21,15 +21,18 @@ plan_approval:
   note: null
 verification:
   state: "blocked_external"
-  updated_at: "2026-11-19T03:56:06.093Z"
+  updated_at: "2026-11-19T04:06:43.740Z"
   updated_by: "CODER"
-  note: "Native header/footer frame formats, owning page items, default styles, sharing and SwXHeadFootText verified by 85 Writer tests and two browser file regressions. Both selected owners pass scoped90. DOCX substreams, persistence and output still required. Evidence: evidence/native-header-footer-model.json."
-  attempts: 109
+  note: "Original NumberedList footer and all six Strict DOCX header/footer IDs now resolve through native package and SAX callbacks. 61 related tests, the 9-case OOXML document rerun, and two production UI regressions passed. Page-style and text-append integration, persistence, output and the coverage gap remain open. Evidence: evidence/native-docx-header-footer-streams.json."
+  attempts: 110
 commit: null
 comments:
   -
     author: "CODER"
     body: "Start: Implement the approved Writer DOCX pipeline using native OOXML values, DomainMapper text/style/table APIs and DocxExport ownership, then connect existing shell and file UI with focused verification."
+  -
+    author: "CODER"
+    body: "Start: continue direct-mode task in current checkout."
   -
     author: "CODER"
     body: "Start: continue direct-mode task in current checkout."
@@ -1752,8 +1755,21 @@ events:
     from: "BLOCKED"
     to: "DOING"
     note: "Start: continue direct-mode task in current checkout."
+  -
+    type: "verify"
+    at: "2026-11-19T04:06:43.740Z"
+    author: "CODER"
+    state: "blocked_external"
+    note: "Original NumberedList footer and all six Strict DOCX header/footer IDs now resolve through native package and SAX callbacks. 61 related tests, the 9-case OOXML document rerun, and two production UI regressions passed. Page-style and text-append integration, persistence, output and the coverage gap remain open. Evidence: evidence/native-docx-header-footer-streams.json."
+  -
+    type: "status"
+    at: "2026-11-19T04:06:51.793Z"
+    author: "CODER"
+    from: "BLOCKED"
+    to: "DOING"
+    note: "Start: continue direct-mode task in current checkout."
 doc_version: 3
-doc_updated_at: "2026-11-19T03:56:14.201Z"
+doc_updated_at: "2026-11-19T04:06:51.793Z"
 doc_updated_by: "CODER"
 description: "User-approved second cohesive task: preserve pinned WriterFilter OOXML/DomainMapper import and DocxExportFilter/DocxExport ownership while supporting the existing Writer core slice, including paragraphs, runs, pooled formatting, styles, lists, tables, links and page properties where implemented. Integrate asynchronous shell filter routing, existing Open and download UI, errors/cancellation and primary ODT persistence. Refactor old workarounds in touched paths, record suspected upstream issues, provenance and related tests. No recovery/autosave product changes, network or publication."
 sections:
@@ -5036,6 +5052,36 @@ sections:
     - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
     - risks: none
 
+    ### 2026-11-19T04:06:43.740Z — VERIFY — blocked_external
+
+    By: CODER
+
+    Note: Original NumberedList footer and all six Strict DOCX header/footer IDs now resolve through native package and SAX callbacks. 61 related tests, the 9-case OOXML document rerun, and two production UI regressions passed. Page-style and text-append integration, persistence, output and the coverage gap remain open. Evidence: evidence/native-docx-header-footer-streams.json.
+    Attempts: 110
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-19T04:06:43.124Z, excerpt_hash=sha256:f1ce94bb673a9632d48a811076188278454b04d0783aab0712ee1947357ea697
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610251549-V4DQJW/blueprint/resolved-snapshot.json
+    - old_digest: c0e14f7bf31d4be862783b8d9c5eb6067e7f9f18464f5898e14e0fcc5b208aa0
+    - current_digest: c0e14f7bf31d4be862783b8d9c5eb6067e7f9f18464f5898e14e0fcc5b208aa0
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610251549-V4DQJW
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane commit 202610251549-V4DQJW -m 🧩 V4DQJW task: persist canonical task artifacts --allow-tasks
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Revert only this task's intentional implementation commits, preserving the shared OOXML prerequisite and other task history. Re-run impacted Writer DOCX/ODT shell and file UI tests and typecheck/build; confirm original ODT/TXT workflows and primary-store behavior."
   Findings: |-
@@ -5706,6 +5752,15 @@ sections:
     - Evidence: The native page-frame items use real section nodes, style defaults and format registration. Tests verify inactive defaults, print-width tab positions, section sharing, last-client reset, notification retention and access through the weak UNO identity.
     - Scope: Header/footer items and lifecycle, descriptor flags, native format creation, UNO text and existing DOCX style and table regressions.
     - The complete NumberedList footer still requires the native page-style property, section relationship, persistence and output paths. No full test run was due.
+
+    ### Native Writer DOCX header and footer substream transport
+
+    - Command: Focused Writer coverage runs and production Chromium file-dialog regressions recorded in evidence/native-docx-header-footer-streams.json.
+    - Result: 61 related tests and a 9-test document rerun passed. The two targeted Chromium regressions passed. Some new handler branches remain below scoped90.
+    - Evidence: Original NumberedList footer is dispatched through the selected relationship and emits its visible field result. Strict input exercises all six page-variant IDs. A receiver without native header/footer support fails visibly.
+    - Scope: Generated grammar, resource callbacks, local package relationship selection, nested SAX dispatch and existing Writer import/export regressions.
+    - The broad Writer selection reported: FAIL  |writer| src/sw/source/filter/ww8/docxexport.theme-fonts.test.ts > resolves Strict themed fonts and retains references until a concrete family changes | Test Files  1 failed | 9 passed (10) | Tests  1 failed | 68 passed (69)
+    - Remaining work includes the native page-style/text append context, section inheritance, Worker and ODT persistence and DOCX export. No whole test run was due.
 id_source: "generated"
 ---
 ## Summary
@@ -8999,6 +9054,36 @@ DecisionContextRef:
 - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
 - risks: none
 
+### 2026-11-19T04:06:43.740Z — VERIFY — blocked_external
+
+By: CODER
+
+Note: Original NumberedList footer and all six Strict DOCX header/footer IDs now resolve through native package and SAX callbacks. 61 related tests, the 9-case OOXML document rerun, and two production UI regressions passed. Page-style and text-append integration, persistence, output and the coverage gap remain open. Evidence: evidence/native-docx-header-footer-streams.json.
+Attempts: 110
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-19T04:06:43.124Z, excerpt_hash=sha256:f1ce94bb673a9632d48a811076188278454b04d0783aab0712ee1947357ea697
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610251549-V4DQJW/blueprint/resolved-snapshot.json
+- old_digest: c0e14f7bf31d4be862783b8d9c5eb6067e7f9f18464f5898e14e0fcc5b208aa0
+- current_digest: c0e14f7bf31d4be862783b8d9c5eb6067e7f9f18464f5898e14e0fcc5b208aa0
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610251549-V4DQJW
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane commit 202610251549-V4DQJW -m 🧩 V4DQJW task: persist canonical task artifacts --allow-tasks
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
+
 <!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
@@ -9674,3 +9759,12 @@ Evidence: `evidence/docx-native-ranged-bookmarks.json`.
 - Evidence: The native page-frame items use real section nodes, style defaults and format registration. Tests verify inactive defaults, print-width tab positions, section sharing, last-client reset, notification retention and access through the weak UNO identity.
 - Scope: Header/footer items and lifecycle, descriptor flags, native format creation, UNO text and existing DOCX style and table regressions.
 - The complete NumberedList footer still requires the native page-style property, section relationship, persistence and output paths. No full test run was due.
+
+### Native Writer DOCX header and footer substream transport
+
+- Command: Focused Writer coverage runs and production Chromium file-dialog regressions recorded in evidence/native-docx-header-footer-streams.json.
+- Result: 61 related tests and a 9-test document rerun passed. The two targeted Chromium regressions passed. Some new handler branches remain below scoped90.
+- Evidence: Original NumberedList footer is dispatched through the selected relationship and emits its visible field result. Strict input exercises all six page-variant IDs. A receiver without native header/footer support fails visibly.
+- Scope: Generated grammar, resource callbacks, local package relationship selection, nested SAX dispatch and existing Writer import/export regressions.
+- The broad Writer selection reported: FAIL  |writer| src/sw/source/filter/ww8/docxexport.theme-fonts.test.ts > resolves Strict themed fonts and retains references until a concrete family changes | Test Files  1 failed | 9 passed (10) | Tests  1 failed | 68 passed (69)
+- Remaining work includes the native page-style/text append context, section inheritance, Worker and ODT persistence and DOCX export. No whole test run was due.
