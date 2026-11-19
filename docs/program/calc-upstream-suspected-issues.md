@@ -7136,3 +7136,13 @@ persists the group through its own `tabSelected` attributes.
 - [ODF view settings writer](https://github.com/LibreOffice/core/blob/9bc445578031fecf56086729d8e4940c77e14d65/sc/source/ui/view/viewdata.cxx#L528-L608)
 - [Native TableSelected reader](https://github.com/LibreOffice/core/blob/9bc445578031fecf56086729d8e4940c77e14d65/sc/source/ui/view/viewdata.cxx#L714-L719)
 - [Calc regression](../../apps/office/src/sc/source/ui/view/viewdata.settings.test.ts)
+
+### CALC-755 — Worksheet print annotations use different OOXML values on read and write
+
+The original worksheet page settings importer enables Calc's print-annotations
+item for `cellComments="asDisplayed"`. The exporter writes that same native
+item as `cellComments="atEnd"`. Importing the exported value therefore leaves
+the item off. The browser filter keeps both source decisions.
+
+- [Import interpretation](../../vendor/libreoffice-reference/sc/source/filter/oox/pagesettings.cxx)
+- [Export attribute](../../vendor/libreoffice-reference/sc/source/filter/excel/xepage.cxx)

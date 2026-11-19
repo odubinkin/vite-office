@@ -63,10 +63,10 @@ import * as table7 from "./table7";
 type ColumnDataApply = (column: ScColumnData, first: number, last: number) => void;
 /** Sheet owner for the supported scalar document operations. */
 export class ScTable {
-  private readonly aPrintRanges: ScRange[] = [];
-  private bPrintEntireSheet = true;
-  private moRepeatColRange: ScRange | undefined;
-  private moRepeatRowRange: ScRange | undefined;
+  declare private readonly aPrintRanges: ScRange[];
+  declare private bPrintEntireSheet: boolean;
+  declare private moRepeatColRange: ScRange | undefined;
+  declare private moRepeatRowRange: ScRange | undefined;
   GetPrintRangeCount = table1.GetPrintRangeCount;
   GetPrintRange = table1.GetPrintRange;
   IsPrintEntireSheet = table1.IsPrintEntireSheet;
@@ -98,8 +98,8 @@ export class ScTable {
   /** Original pagination-cache bit,visible to native out-of-class friend definitions. */
   mbPageBreaksValid = false;
   private bStreamValid = false;
-  private bVisible = true;
-  private aTabBgColor = new Color(COL_AUTO);
+  declare private bVisible: boolean;
+  declare private aTabBgColor: Color;
   declare private maRowManualBreaks: Set<number>;
   declare private maColManualBreaks: Set<number>;
   private readonly maRowPageBreaks = new Set<number>();
@@ -122,6 +122,9 @@ export class ScTable {
   IsVisible = table1.IsVisible;
   SetVisible = table1.SetVisible;
   SetTabBgColor = table1.SetTabBgColor;
+  declare private aPageStyle: string;
+  GetPageStyle = table5.GetPageStyle;
+  SetPageStyle = table5.SetPageStyle;
   GetTabBgColor = table1.GetTabBgColor;
   /** Original page-break cache invalidation. @returns Nothing. */
   InvalidatePageBreaks(): void {
@@ -129,18 +132,9 @@ export class ScTable {
   }
   UndoToTable = table2.UndoToTable;
   RemoveManualBreaks = table5.RemoveManualBreaks;
-  /** Original table5 queries manual breaks. @param args - Native arguments. @returns Native result. */
-  HasManualBreaks(...args: Parameters<typeof table5.HasManualBreaks>): boolean {
-    return table5.HasManualBreaks.apply(this, args);
-  }
-  /** Original table5 moves row manual breaks. @param args - Native arguments. @returns Native result. */
-  SetRowManualBreaks(...args: Parameters<typeof table5.SetRowManualBreaks>): void {
-    return table5.SetRowManualBreaks.apply(this, args);
-  }
-  /** Original table5 moves column manual breaks. @param args - Native arguments. @returns Native result. */
-  SetColManualBreaks(...args: Parameters<typeof table5.SetColManualBreaks>): void {
-    return table5.SetColManualBreaks.apply(this, args);
-  }
+  HasManualBreaks = table5.HasManualBreaks;
+  SetRowManualBreaks = table5.SetRowManualBreaks;
+  SetColManualBreaks = table5.SetColManualBreaks;
   /** Original table5 collects row breaks. @param args - Native arguments. @returns Native result. */
   GetAllRowBreaks(...args: Parameters<typeof table5.GetAllRowBreaks>): void {
     return table5.GetAllRowBreaks.apply(this, args);
@@ -574,6 +568,13 @@ export class ScTable {
     this.pRowFlags = rowInfo
       ? new ScBitMaskCompressedArray(rDocument.MaxRow(), CRFlags.NONE, 32)
       : null;
+    this.aPrintRanges = [];
+    this.bPrintEntireSheet = true;
+    this.moRepeatColRange = undefined;
+    this.moRepeatRowRange = undefined;
+    this.bVisible = true;
+    this.aTabBgColor = new Color(COL_AUTO);
+    this.aPageStyle = table5.DEFAULT_PAGE_STYLE;
     this.maRowManualBreaks = new Set<number>();
     this.maColManualBreaks = new Set<number>();
     this.aDefaultColData = new ScColumnData(rDocument);

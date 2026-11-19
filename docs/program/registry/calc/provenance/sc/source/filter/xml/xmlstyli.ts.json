@@ -27,7 +27,8 @@
       "Automatic text-family styles are directed to the native edit-cell text style context.",
       "Installs ODF theme and complex-color children on actual document and style items.",
       "Applies the original typed ODF table-cell border color children after shorthand geometry.",
-      "Reads standard and legacy ODF table-family tab colors via the native SAX color conversion."
+      "Reads standard and legacy ODF table-family tab colors via the native SAX color conversion.",
+      "Routes page layouts and preserves native master-page names referenced by automatic table styles."
     ],
     "omittedResponsibilities": [
       "Only the consumed responsibilities are represented; full original constructors, UNO/property-map graph, VCL/device/layout and native dialogs remain unverified."

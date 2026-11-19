@@ -13,7 +13,8 @@
       "ScStyleSheet::GetItemSet"
     ],
     "preservedResponsibilities": [
-      "Calc cell style item sets use the original pattern Which range and shared Sfx style ownership."
+      "Calc cell style item sets use the original pattern Which range and shared Sfx style ownership.",
+      "Allocates native Page-family Which ranges and represented physical defaults and scale items."
     ],
     "omittedResponsibilities": [
       "Page style setup, the full built-in resource table, and other style-family properties remain open."

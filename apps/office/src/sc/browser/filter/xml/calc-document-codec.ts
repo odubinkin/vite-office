@@ -1,5 +1,6 @@
 /** @fileoverview Bounded Calc worker transfer of supported native cells, sparse attributes and geometry; XML remains the durable format. */
 import { Color, ColorTransparency, COL_AUTO } from "../../../../tools/inc/color";
+import { exportPageStyles } from "../../../source/filter/xml/xmlstyle.page";
 import { GetPrintRanges } from "../../../source/core/data/table1";
 import {
   getSheetCursor,
@@ -143,6 +144,7 @@ function isOoxPasswordHash(hash: ScOoxPasswordHash | undefined): boolean {
 interface Sheet {
   readonly visible?: boolean;
   readonly tabColor?: number;
+  readonly pageStyle?: string;
   readonly protection?: {
     readonly enabled: boolean;
     readonly options: boolean[];
@@ -210,6 +212,7 @@ function restoreWritingDirection(direction: D): SvxFrameDirectionItem {
 }
 /** Captures supported values without computing formula results or packaging XML. @param document - Model. @returns Incremental record. */
 function* encodeSteps(document: ScDocument): Generator<void, CalcDocumentRecord> {
+  const pageStyles = exportPageStyles(document);
   const sheets: Sheet[] = [],
     fonts = new XMLFontAutoStylePool(),
     styles = new Map<string, string>(),
@@ -264,7 +267,9 @@ function* encodeSteps(document: ScDocument): Generator<void, CalcDocumentRecord>
     const tabSelected = getSheetTabSelected(document, tab);
     const panes = getSheetPaneLayout(document, tab);
     const tabColor = table.GetTabBgColor();
+    const pageStyle = table.GetPageStyle();
     const sheet: Sheet = {
+      ...(pageStyles.names.has(pageStyle) ? { pageStyle } : {}),
       ...(tabColor.equals(COL_AUTO) ? {} : { tabColor: tabColor.toUInt32() }),
       ...(table.IsVisible() ? {} : { visible: false }),
       ...(protection
@@ -496,7 +501,7 @@ function* encodeSteps(document: ScDocument): Generator<void, CalcDocumentRecord>
     ...(defaultWritingDirection === undefined ? {} : { defaultWritingDirection }),
     ...(numberFormats.length ? { numberFormats } : {}),
     ...(names.length ? { names } : {}),
-    styles: `<office:document-styles${namespaces} office:version="1.3">${fonts.exportXML()}${defaults}<office:automatic-styles>${automatic}${textStyles.exportStyles()}</office:automatic-styles></office:document-styles>`,
+    styles: `<office:document-styles${namespaces} office:version="1.3">${fonts.exportXML()}${defaults}<office:automatic-styles>${automatic}${textStyles.exportStyles()}${pageStyles.layouts}</office:automatic-styles>${pageStyles.masters}</office:document-styles>`,
   };
 }
 /** Restores a fresh native document before atomic shell adoption. @param record - Worker record. @returns Incremental candidate. */
@@ -559,6 +564,14 @@ function* decodeSteps(record: CalcDocumentRecord): Generator<void, ScDocument> {
       try {
         if (!document.InsertTab(tab, name)) throw new Error("Calc worker sheet is invalid.");
         if (sheet.visible === false) document.SetVisible(tab, false);
+        if (sheet.pageStyle !== undefined) {
+          if (
+            typeof sheet.pageStyle !== "string" ||
+            !document.GetStyleSheetPool()?.GetPageStyle(sheet.pageStyle)
+          )
+            throw new Error("Invalid Calc sheet page style.");
+          document.SetPageStyle(tab, sheet.pageStyle);
+        }
         if (sheet.tabColor !== undefined) {
           if (sheet.tabColor !== sheet.tabColor >>> 0) throw new Error("Invalid Calc sheet color.");
           document.SetTabBgColor(

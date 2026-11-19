@@ -31,7 +31,8 @@
       "Writes ODF theme and native complex-color references through named and automatic styles.",
       "Declares the original ODF css3t namespace for Calc horizontal justification method.",
       "Writes native ODF protection attributes and options before sheet cell content.",
-      "Writes ODF 1.3 table-family tab colors and preserves display and color in a single automatic table style."
+      "Writes ODF 1.3 table-family tab colors and preserves display and color in a single automatic table style.",
+      "Exports used master pages and page layouts and links the automatic table style to the actual named page style."
     ],
     "omittedResponsibilities": [
       "Field identity and unimplemented character properties are outside this XML text boundary."

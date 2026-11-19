@@ -21,7 +21,8 @@
       "Binds the workbook GraphicHelper to inline string runs.",
       "Dispatches sheetProtection to WorksheetSettings and finalizes it on the native sheet.",
       "Admits the original protectedRanges container and dispatches its entries to WorksheetSettings.",
-      "Dispatches the original sheetPr/tabColor element to WorksheetSettings in the supported worksheet context."
+      "Dispatches the original sheetPr/tabColor element to WorksheetSettings in the supported worksheet context.",
+      "Dispatches print options, margins, setup and fit from their original worksheet contexts and finalizes the named page style."
     ],
     "omittedResponsibilities": [
       "Number formats, themed and rich formatting, and formula conventions beyond the supported Calc compiler remain open."

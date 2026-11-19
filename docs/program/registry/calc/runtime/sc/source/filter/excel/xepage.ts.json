@@ -20,7 +20,7 @@
         "apps/office/src/sc/source/filter/excel/xepage.test.ts",
         "vendor/libreoffice-reference/sc/source/filter/excel/xepage.cxx"
       ],
-      "justification": "Uses actual native manual page-break sets, sheet-part order, UInt16 position and range limits, and the practical XLSX ceiling of 1023 records per axis. BIFF, automatic page breaks and page layout settings remain outside this worksheet record.",
+      "justification": "Uses actual native manual page-break sets, sheet-part order, UInt16 position and range limits, and the practical XLSX ceiling of 1023 records per axis. BIFF, automatic page breaks and header/footer content remain outside this worksheet record. Uses actual Calc page-family items for worksheet print flags, margins, paper, fitting, orientation and page numbering, before manual page-break records.",
       "knownViolations": [],
       "localSymbols": [
         "XclExpPageBreaks",

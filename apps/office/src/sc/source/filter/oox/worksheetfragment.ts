@@ -21,6 +21,7 @@ import type { SharedStringsBuffer } from "./sharedstringsbuffer";
 import { SheetDataBuffer } from "./sheetdatabuffer";
 import { readStyleBool, styleIndex, type StylesBuffer } from "./stylesbuffer";
 import { WorksheetGlobals } from "./worksheethelper";
+import { PageSettings } from "./pagesettings";
 import { WorksheetSettings } from "./worksheetsettings";
 import { SheetViewSettings, type ViewSettings } from "./viewsettings";
 import { UnitConverter } from "./unitconverter";
@@ -37,11 +38,14 @@ const sheetElements: Readonly<Record<string, readonly string[]>> = {
     "sheetData",
     "sheetProtection",
     "protectedRanges",
+    "printOptions",
+    "pageMargins",
+    "pageSetup",
     "mergeCells",
     "rowBreaks",
     "colBreaks",
   ],
-  sheetPr: ["tabColor"],
+  sheetPr: ["tabColor", "pageSetUpPr"],
   sheetViews: ["sheetView"],
   sheetView: ["pane", "selection"],
   cols: ["col"],
@@ -68,6 +72,7 @@ export class WorksheetFragment extends FragmentHandler {
   private readonly address: ScAddress;
   private readonly sheetData: SheetDataBuffer;
   private readonly settings = new WorksheetSettings();
+  private readonly pageSettings = new PageSettings();
   private readonly views: SheetViewSettings;
   private readonly geometry: WorksheetGlobals;
   private row = -1;
@@ -131,6 +136,38 @@ export class WorksheetFragment extends FragmentHandler {
       }
       case "tabColor":
         this.settings.importTabColor(attributes);
+        break;
+      case "pageSetUpPr":
+        this.readAttributes(
+          attributes,
+          /** Imports native pageSetUpPr settings. @param values - Borrowed attributes. @returns Nothing. */ (
+            values,
+          ) => this.pageSettings.importPageSetupPr(values),
+        );
+        break;
+      case "printOptions":
+        this.readAttributes(
+          attributes,
+          /** Imports native printOptions settings. @param values - Borrowed attributes. @returns Nothing. */ (
+            values,
+          ) => this.pageSettings.importPrintOptions(values),
+        );
+        break;
+      case "pageMargins":
+        this.readAttributes(
+          attributes,
+          /** Imports native pageMargins settings. @param values - Borrowed attributes. @returns Nothing. */ (
+            values,
+          ) => this.pageSettings.importPageMargins(values),
+        );
+        break;
+      case "pageSetup":
+        this.readAttributes(
+          attributes,
+          /** Imports native pageSetup settings. @param values - Borrowed attributes. @returns Nothing. */ (
+            values,
+          ) => this.pageSettings.importPageSetup(values),
+        );
         break;
       case "sheetView":
         this.readAttributes(
@@ -345,6 +382,7 @@ export class WorksheetFragment extends FragmentHandler {
     this.sheetData.finalizeImport();
     this.geometry.finalizeImport();
     this.settings.finalizeImport(this.document, this.tab, this.styles.graphicHelper);
+    this.pageSettings.finalizeImport(this.document, this.tab);
     this.views.finalizeImport(this.document, this.tab, this.workbookViews);
   }
   /** Native cell type dispatch and explicit OOXML formula grammar. @returns Nothing. */

@@ -42,6 +42,19 @@ export class ScStyleSheetPool extends SfxStyleSheetPool {
     }
   }
 
+  /** Looks up a native page style and can create its independent item owner. @param name - Style name. @param create - Create when absent. @returns Native page style or null. */
+  GetPageStyle(name: string, create = false): SfxStyleSheetBase | null {
+    const key = unicode(name);
+    try {
+      return (
+        this.Find(key, SfxStyleFamily.Page) ??
+        (create ? this.Make(key, SfxStyleFamily.Page, SfxStyleSearchBits.UserDefined) : null)
+      );
+    } finally {
+      key.dispose();
+    }
+  }
+
   /** Populates the native Standard style and binds the implicit cell pattern. @param items - Imported style attributes. @returns Nothing. */
   SetDefaultCellStyle(items: SfxItemSet): void {
     const style = this.GetDefaultStyle(true);
@@ -66,10 +79,11 @@ export class ScStyleSheetPool extends SfxStyleSheetPool {
       return new ScStyleSheet(args[0]);
     }
     const [name, family, mask, parent] = args;
-    if (family !== SfxStyleFamily.Para)
+    if (family !== SfxStyleFamily.Para && family !== SfxStyleFamily.Page)
       throw new Error("ScStyleSheetPool::Create: native Calc style family is not ported");
     const style = new ScStyleSheet(name, this, family, mask, parent);
-    const defaultStyle = text(name) === standard ? null : this.GetDefaultStyle(true);
+    const defaultStyle =
+      family === SfxStyleFamily.Page || text(name) === standard ? null : this.GetDefaultStyle(true);
     if (defaultStyle) {
       style.SetParent(defaultStyle.GetName());
       style.GetItemSet().SetParent(defaultStyle.GetItemSet());

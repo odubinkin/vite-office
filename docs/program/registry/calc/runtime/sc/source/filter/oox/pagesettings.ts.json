@@ -1,0 +1,37 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sc/source/filter/oox/pagesettings.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "calc",
+    "subsystem": "xlsx-file-filter",
+    "capabilityIds": [
+      "CAP-1d1d48a3-5a10-4373-876c-fa5f18a62db9"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/sc/source/filter/oox/pagesettings.ts#PageSettings",
+        "vendor/libreoffice-reference/sc/source/filter/oox/pagesettings.cxx#PageSettings::finalizeImport",
+        "apps/office/src/sc/source/filter/oox/excelfilter.page-settings.test.ts"
+      ],
+      "justification": "Imports original worksheet print settings into the real named Calc page style with native metric conversion, bounds and defaults. Chart sheets, printer-setting binaries, full header/footer text and layout, and background pictures remain unported.",
+      "knownViolations": [],
+      "localSymbols": [
+        "PageSettings",
+        "finalizeImport"
+      ],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": "sc/source/filter/oox/pagesettings.cxx",
+      "upstreamSymbols": [
+        "PageSettings::finalizeImport",
+        "PageSettingsConverter::writePageSettingsProperties"
+      ]
+    }
+  }
+}

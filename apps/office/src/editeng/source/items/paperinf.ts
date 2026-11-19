@@ -1,4 +1,6 @@
-/** @fileoverview Consumed physical-unit SvxPaperInfo size/sloppy-fit contracts from paperinf.cxx. Printer and configured system-paper overloads are not fabricated. */
+/** @fileoverview Consumed physical-unit SvxPaperInfo size/sloppy-fit contracts from paperinf.cxx. Uses the original locale-based system-paper selection without a host printer. */
+import { MsLangId } from "../../../i18nlangtag/inc/mslangid";
+import { LANGUAGE_SYSTEM } from "../../../i18nlangtag/inc/lang";
 import { Paper, PaperInfo } from "../../../i18nutil/inc/paper";
 import { Size, type ReadonlySize } from "../../../tools/inc/gen";
 import { MapUnit, MapToO3tlLength } from "../../../tools/inc/mapunit";
@@ -10,6 +12,15 @@ export class SvxPaperInfo {
   static GetPaperSize(paper: Paper, unit = MapUnit.MapTwip): Size {
     const info = new PaperInfo(paper);
     return convertSize(new Size(info.getWidth(), info.getHeight()), MapUnit.Map100thMM, unit);
+  }
+  /** Selects the original system-locale paper on platforms without a physical printer service. @param unit - Requested native unit. @returns Physical paper size. */
+  static GetDefaultPaperSize(unit = MapUnit.MapTwip): Size {
+    const locale = MsLangId.Conversion.convertLanguageToLocale(LANGUAGE_SYSTEM, false);
+    try {
+      return this.GetPaperSize(PaperInfo.getDefaultPaperForLocale(locale).getPaper(), unit);
+    } finally {
+      locale.dispose();
+    }
   }
   /** Original nonrotating first-match sloppy fit; callers own orientation preparation. @param size - Actual physical dimensions. @param unit - Input metric. @returns Native Paper identity. */
   static GetSvxPaper(size: ReadonlySize, unit = MapUnit.MapTwip): Paper {

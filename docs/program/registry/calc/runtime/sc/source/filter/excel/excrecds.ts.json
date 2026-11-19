@@ -21,7 +21,7 @@
         "apps/office/src/sc/source/filter/oox/excelfilter.sheet-protection.test.ts",
         "apps/office/src/sc/source/filter/oox/excelfilter.enhanced-protection.test.ts"
       ],
-      "justification": "Writes the original worksheet protection record and omits default disallow flags. Enhanced protection range and binary records remain pending. Writes original enhanced protection metadata and emits source shorthand for whole-column ranges. Writes the represented XclExpXmlSheetPr tabColor record using the original ARGB formatter and omitting COL_AUTO.",
+      "justification": "Writes the original worksheet protection record and omits default disallow flags. Enhanced protection range and binary records remain pending. Writes original enhanced protection metadata and emits source shorthand for whole-column ranges. Writes the represented XclExpXmlSheetPr tabColor record using the original ARGB formatter and omitting COL_AUTO. Adds the native pageSetUpPr child after tabColor when the page style supplies fitting mode.",
       "knownViolations": [],
       "localSymbols": [
         "XclExpSheetProtection",

@@ -111,7 +111,8 @@
       "Exposes sheet protection via the documen3 owner.",
       "Exposes native document-level selection editability on the actual document.",
       "Exposes native leading-overlap, trailing-merge and covered-anchor operations for view selection.",
-      "Exposes the original document tab color operations from the documen3 owner."
+      "Exposes the original document tab color operations from the documen3 owner.",
+      "Dispatches GetPageStyle and SetPageStyle through the actual native sheet."
     ],
     "omittedResponsibilities": [
       "The browser document text-object slice only admits the consumed operations."

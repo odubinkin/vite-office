@@ -56,6 +56,8 @@ export class XMLTableStylesContext extends ScXMLImportContext {
     element: XMLToken,
     attributes: FastAttributeList,
   ): SvXMLImportContext {
+    if (element === XMLToken.STYLE_PAGE_LAYOUT)
+      return this.owner.pageStyles.CreateLayout(attributes);
     if (IsNumberStyle(element)) {
       const name = attributes.require(XMLToken.STYLE_NAME, "data style name");
       const style = new SvXMLNumFormatContext(
@@ -104,6 +106,7 @@ export class XMLTableStylesContext extends ScXMLImportContext {
       return new XMLSheetStyleContext(
         this.owner,
         attributes.require(XMLToken.STYLE_NAME, "table style name"),
+        attributes.get(XMLToken.STYLE_MASTER_PAGE_NAME),
       );
     if (element === XMLToken.STYLE_STYLE && attributes.get(XMLToken.STYLE_FAMILY) === "table-row")
       return new XMLTableRowStyleContext(
@@ -139,10 +142,11 @@ export class XMLTableStylesContext extends ScXMLImportContext {
 class XMLSheetStyleContext extends ScXMLImportContext {
   private visible = true;
   private tabColor: Readonly<Color> = COL_AUTO;
-  /** Binds a real ODF table style. @param owner - Importer. @param name - Style name. @returns Context. */
+  /** Binds a real ODF table style. @param owner - Importer. @param name - Style name. @param masterPage - Associated master page. @returns Context. */
   constructor(
     private readonly owner: ScXMLImport,
     private readonly name: string,
+    private readonly masterPage: string | null,
   ) {
     super(owner);
   }
@@ -167,7 +171,7 @@ class XMLSheetStyleContext extends ScXMLImportContext {
   /** Commits the automatic style under its XML identity. @param element - Closing token. @returns Nothing. */
   override endFastElement(element: XMLToken): void {
     if (element === XMLToken.STYLE_STYLE)
-      this.owner.AddTableStyle(this.name, this.visible, this.tabColor);
+      this.owner.AddTableStyle(this.name, this.visible, this.tabColor, this.masterPage);
   }
 }
 /** Automatic text style for a native Calc edit-cell span. */

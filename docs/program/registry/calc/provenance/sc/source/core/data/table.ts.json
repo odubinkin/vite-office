@@ -97,7 +97,8 @@
       "Owns a lazily created native ScOutlineTable for the actual sheet.",
       "Owns the native protected sheet state projected by table5.",
       "Exposes the marked selection editability check on the actual sheet.",
-      "Owns the original sheet tab color value with COL_AUTO initialization and by-value access."
+      "Owns the original sheet tab color value with COL_AUTO initialization and by-value access.",
+      "Maintains the original sheet-owned named page-style pointer by its style identity."
     ],
     "omittedResponsibilities": [
       "Task76 document/table paste orchestration,source general sparse-sheet copy,UndoToDocument/paste history and EnterBlock/UI are pending. Rich text,notes,sparklines,drawings,3D/matrix,nondefault paste and complete formatter/layout services remain outside this admitted slice."

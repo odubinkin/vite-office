@@ -1,0 +1,287 @@
+/** @fileoverview Native Calc page styles through XLSX, ODS and Worker transfer. */
+import { readFileSync } from "node:fs";
+import { assert, expect, it } from "vitest";
+import {
+  DocumentArchive,
+  DocumentArchiveWriter,
+} from "../../../../package/source/zippackage/document-archive";
+import { ExcelFilter } from "./excelfilter";
+import { exportXlsx } from "../excel/xetable";
+import { readOdsDocument, writeOdsDocument } from "../xml/xmlwrap";
+import {
+  decodeCalcDocument,
+  encodeCalcDocument,
+} from "../../../browser/filter/xml/calc-document-codec";
+import { ScXMLImport } from "../xml/xmlimprt";
+import { ScDocument } from "../../../inc/document";
+import type { SvxPageItem } from "../../../../svx/inc/pageitem";
+import type { SvxSizeItem } from "../../../../editeng/inc/sizeitem";
+import type { SfxBoolItem } from "../../../../svl/source/items/cenumitm";
+import type { SfxUInt16Item } from "../../../../svl/inc/intitem";
+import type { ScPageScaleToItem } from "../../../inc/attrib";
+import type { SvxLRSpaceItem } from "../../../../editeng/inc/lrspitem";
+import type { SvxULSpaceItem } from "../../../../editeng/inc/ulspitem";
+import {
+  ATTR_PAGE,
+  ATTR_PAGE_SIZE,
+  ATTR_PAGE_SCALETO,
+  ATTR_PAGE_SCALE,
+  ATTR_PAGE_GRID,
+  ATTR_PAGE_HEADERS,
+  ATTR_PAGE_FIRSTPAGENO,
+  ATTR_PAGE_TOPDOWN,
+  ATTR_PAGE_HORCENTER,
+  ATTR_PAGE_VERCENTER,
+  ATTR_PAGE_NOTES,
+  ATTR_LRSPACE,
+  ATTR_ULSPACE,
+} from "../../../inc/scitems";
+
+const worksheet = "xl/worksheets/sheet1.xml";
+
+/** Unchanged native QA workbook. @param stem - Fixture name. @returns File bytes. */
+function fixture(stem: string): Uint8Array {
+  return new Uint8Array(
+    readFileSync(`../../vendor/libreoffice-reference/sc/qa/unit/data/xlsx/${stem}.xlsx`),
+  );
+}
+
+/** Reads the sheet's real named page item set. @param document - Workbook. @param tab - Native sheet. @returns Existing style items. */
+function style(document: ScDocument, tab = 0) {
+  const items = document
+    .GetStyleSheetPool()
+    ?.GetPageStyle(document.GetPageStyle(tab))
+    ?.GetItemSet();
+  assert(items);
+  return items;
+}
+
+/** Returns represented print settings from the original page-pool values. @param document - Workbook. @returns Page properties. */
+function page(document: ScDocument) {
+  const items = style(document);
+  const size = (items.Get(ATTR_PAGE_SIZE) as SvxSizeItem).GetSize();
+  const lr = items.Get(ATTR_LRSPACE) as SvxLRSpaceItem;
+  const ul = items.Get(ATTR_ULSPACE) as SvxULSpaceItem;
+  const fit = items.Get(ATTR_PAGE_SCALETO) as ScPageScaleToItem;
+  const flag =
+    /** Borrows the native page boolean. @param which - Which identity. @returns Page flag. */ (
+      which: number,
+    ): boolean => (items.Get(which) as SfxBoolItem).GetValue();
+  return {
+    landscape: (items.Get(ATTR_PAGE) as SvxPageItem).IsLandscape(),
+    size: [size.Width(), size.Height()],
+    grid: flag(ATTR_PAGE_GRID),
+    headings: flag(ATTR_PAGE_HEADERS),
+    notes: flag(ATTR_PAGE_NOTES),
+    center: [flag(ATTR_PAGE_HORCENTER), flag(ATTR_PAGE_VERCENTER)],
+    down: flag(ATTR_PAGE_TOPDOWN),
+    margins: [lr.ResolveLeft(), lr.ResolveRight(), ul.GetUpper(), ul.GetLower()],
+    scale: (items.Get(ATTR_PAGE_SCALE) as SfxUInt16Item).GetValue(),
+    first: (items.Get(ATTR_PAGE_FIRSTPAGENO) as SfxUInt16Item).GetValue(),
+    fit: [fit.GetWidth(), fit.GetHeight()],
+  };
+}
+
+/** Reuses an unmodified workbook with a tailored worksheet property set. @param replacement - Independent page XML. @param fit - Fit mode. @returns Workbook bytes. */
+async function patched(replacement: string, fit = true): Promise<Uint8Array> {
+  const archive = await DocumentArchive.open(fixture("sheet-tab-color"));
+  const result = new DocumentArchiveWriter();
+  for (const part of archive.getEntryNames()) {
+    const bytes =
+      part === worksheet
+        ? new TextEncoder().encode(
+            (await archive.readTextEntry(part))
+              .replace("</sheetPr>", `<pageSetUpPr fitToPage="${fit}"/></sheetPr>`)
+              .replace(/<pageMargins[^>]*\/>/u, replacement),
+          )
+        : await archive.readEntry(part);
+    result.putNextEntry(part, bytes);
+  }
+  return result.finish();
+}
+
+it("exports paper size 70 from the original tdf136721 test and preserves the ODS and Worker style", /** Matches the native size identifier, sheet orientation, margins and print flags. @returns Completion. */ async () => {
+  const source = await ExcelFilter.importDocument(fixture("tdf136721_letter_sized_paper"));
+  const worker = decodeCalcDocument(structuredClone(encodeCalcDocument(source)));
+  const ods = await writeOdsDocument(worker);
+  const copy = await readOdsDocument(ods);
+  const xlsx = await exportXlsx(copy);
+  const reopened = await ExcelFilter.importDocument(xlsx);
+  try {
+    const expected = {
+      landscape: true,
+      size: [8391, 5953],
+      grid: true,
+      headings: true,
+      notes: false,
+      center: [false, false],
+      down: true,
+      margins: [283, 567, 1134, 1701],
+      scale: 100,
+      first: 0,
+      fit: [0, 0],
+    };
+    for (const document of [source, worker, copy, reopened])
+      expect(page(document)).toEqual(expected);
+    const stored = await DocumentArchive.open(ods);
+    expect(await stored.readTextEntry("styles.xml")).toContain(
+      'style:print-orientation="landscape"',
+    );
+    expect(await stored.readTextEntry("content.xml")).toContain('style:master-page-name="MP1"');
+    const xml = await (await DocumentArchive.open(xlsx)).readTextEntry(worksheet);
+    expect(xml).toMatch(/<pageSetup[^>]*paperSize="70"/u);
+    expect(xml).toContain('<printOptions headings="true" gridLines="true"');
+    expect(xml).toMatch(/<pageMargins[^>]*\/><pageSetup/u);
+  } finally {
+    for (const document of [source, worker, copy, reopened]) document.Dispose();
+  }
+});
+
+it("keeps the original fitted sheet bounded to one page wide", /** Uses the original tdf151755 package with its unbounded vertical dimension. @returns Completion. */ async () => {
+  const source = await ExcelFilter.importDocument(fixture("tdf151755_stylesLostOnXLSXExport"));
+  const copy = await readOdsDocument(await writeOdsDocument(source));
+  try {
+    expect(page(source)).toMatchObject({
+      landscape: false,
+      margins: [1080, 1080, 1440, 1440],
+      scale: 0,
+      fit: [1, 0],
+    });
+    expect(page(copy)).toEqual(page(source));
+    const xml = await (await DocumentArchive.open(await exportXlsx(copy))).readTextEntry(worksheet);
+    expect(xml).toContain('<pageSetUpPr fitToPage="true"/>');
+    expect(xml).toMatch(/<pageSetup[^>]*fitToWidth="1" fitToHeight="0"/u);
+  } finally {
+    source.Dispose();
+    copy.Dispose();
+  }
+});
+
+it("preserves independent physical and print flags in the page style", /** Exercises custom paper, native clamping and unsupported printer defaults. @returns Completion. */ async () => {
+  const source = await ExcelFilter.importDocument(
+    await patched(
+      '<printOptions horizontalCentered="1" verticalCentered="true" gridLines="true"/><pageMargins right="0.5"/><pageSetup paperSize="9" paperWidth="170mm" paperHeight="255mm" pageOrder="overThenDown" useFirstPageNumber="1" firstPageNumber="11000" fitToWidth="-7" fitToHeight="1200" cellComments="asDisplayed"/>',
+    ),
+  );
+  try {
+    expect(page(source)).toMatchObject({
+      center: [true, true],
+      grid: true,
+      headings: false,
+      down: false,
+      notes: true,
+      size: [9638, 14457],
+      first: 9999,
+      scale: 0,
+      fit: [0, 1000],
+      margins: [1077, 720, 1417, 1417],
+    });
+    const bytes = await exportXlsx(source);
+    const xml = await (await DocumentArchive.open(bytes)).readTextEntry(worksheet);
+    expect(xml).toContain('paperWidth="170mm" paperHeight="255mm"');
+    expect(xml).toContain('firstPageNumber="9999" useFirstPageNumber="true"');
+    expect(xml).toContain('cellComments="atEnd"');
+    const reopened = await ExcelFilter.importDocument(bytes);
+    try {
+      expect(page(reopened).notes).toBe(false);
+    } finally {
+      reopened.Dispose();
+    }
+    const stale = structuredClone(encodeCalcDocument(source));
+    const sheet = stale.sheets[0];
+    assert(sheet);
+    stale.sheets[0] = { ...sheet, pageStyle: "Missing" };
+    expect(
+      /** Tries an unknown page style. @returns Decoded workbook. */ () =>
+        decodeCalcDocument(stale),
+    ).toThrow("Invalid Calc sheet page style.");
+  } finally {
+    source.Dispose();
+  }
+});
+
+it("resolves a shared ODF master page and writes the first page number only once", /** Imports the original style reference, legacy fit attributes and first-page rules. @returns Completion. */ async () => {
+  const source = new ScDocument();
+  const importer = new ScXMLImport(source);
+  const namespaces =
+    'xmlns:office="urn:oasis:names:tc:opendocument:xmlns:office:1.0" xmlns:style="urn:oasis:names:tc:opendocument:xmlns:style:1.0" xmlns:table="urn:oasis:names:tc:opendocument:xmlns:table:1.0" xmlns:fo="urn:oasis:names:tc:opendocument:xmlns:xsl-fo-compatible:1.0" xmlns:loext="urn:org:documentfoundation:names:experimental:office:xmlns:loext:1.0"';
+  try {
+    importer.importStyles(`<office:document-styles ${namespaces}>
+      <office:automatic-styles><style:page-layout style:name="layout"><style:page-layout-properties
+        fo:page-width="21cm" fo:page-height="29.7cm" fo:margin="1in" fo:margin-left="0.5in"
+        style:table-centering="vertical" style:print-page-order="ltr" style:first-page-number="5"
+        loext:scale-to-X="2" loext:scale-to-Y="0"/></style:page-layout>
+      <style:page-layout style:name="wide"><style:page-layout-properties
+        fo:page-width="21cm" fo:page-height="invalid" fo:margin-left="0.5in" fo:margin-top="0.8in"
+        style:scale-to-pages="3" style:table-centering="horizontal"/></style:page-layout>
+      <style:page-layout style:name="tall"><style:page-layout-properties
+        fo:page-height="29cm" fo:margin-right="0.5in" fo:margin-bottom="0.8in"
+        style:table-centering="both"/></style:page-layout>
+      </office:automatic-styles>
+      <office:master-styles><style:master-page style:name="page" style:display-name="Shared print page"
+        style:page-layout-name="layout"/>
+      <style:master-page style:name="wide" style:page-layout-name="wide"/>
+      <style:master-page style:name="tall" style:page-layout-name="tall"/>
+      <style:master-page style:name="blank"/></office:master-styles></office:document-styles>`);
+    importer.importContent(`<office:document-content ${namespaces}><office:automatic-styles>
+      <style:style style:name="sheet" style:family="table" style:master-page-name="page"/>
+      <style:style style:name="wideStyle" style:family="table" style:master-page-name="wide"/>
+      <style:style style:name="tallStyle" style:family="table" style:master-page-name="tall"/>
+      <style:style style:name="blankStyle" style:family="table" style:master-page-name="blank"/>
+      <style:style style:name="missingStyle" style:family="table" style:master-page-name="missing"/>
+      </office:automatic-styles><office:body><office:spreadsheet>
+      <table:table table:name="First" table:style-name="sheet"/><table:table table:name="Second" table:style-name="sheet"/>
+      <table:table table:name="Third" table:style-name="wideStyle"/>
+      <table:table table:name="Fourth" table:style-name="tallStyle"/>
+      <table:table table:name="Fifth" table:style-name="blankStyle"/>
+      <table:table table:name="Sixth" table:style-name="missingStyle"/>
+      </office:spreadsheet></office:body></office:document-content>`);
+    expect(source.GetPageStyle(0)).toBe("Shared print page");
+    expect(source.GetPageStyle(1)).toBe("Shared print page");
+    expect(page(source)).toMatchObject({
+      center: [false, true],
+      down: false,
+      fit: [2, 0],
+      scale: 0,
+      first: 5,
+      margins: [720, 1440, 1440, 1440],
+    });
+    const ods = await DocumentArchive.open(await writeOdsDocument(source));
+    const styles = await ods.readTextEntry("styles.xml");
+    expect(styles).toContain('style:table-centering="horizontal"');
+    expect(styles).toContain('style:table-centering="both"');
+    expect(styles).toContain('style:scale-to-pages="3"');
+    expect(source.GetPageStyle(4)).toBe("blank");
+    expect(source.GetPageStyle(5)).toBe("Default");
+    const archive = await DocumentArchive.open(await exportXlsx(source));
+    expect(await archive.readTextEntry(worksheet)).toContain('firstPageNumber="5"');
+    expect(await archive.readTextEntry("xl/worksheets/sheet2.xml")).not.toContain(
+      "firstPageNumber",
+    );
+  } finally {
+    source.Dispose();
+  }
+});
+
+it("uses the original 100 percent default for an uninitialized scale and keeps the style paper fallback", /** Exercises the source fallback when no custom or indexed paper is valid. @returns Completion. */ async () => {
+  const source = await ExcelFilter.importDocument(
+    await patched(
+      '<pageMargins/><pageSetup paperSize="0" scale="0" paperWidth="130pixels"/>',
+      false,
+    ),
+  );
+  try {
+    expect(page(source)).toMatchObject({
+      size: [12240, 15840],
+      landscape: false,
+      scale: 100,
+      fit: [0, 0],
+    });
+    const xml = await (
+      await DocumentArchive.open(await exportXlsx(source))
+    ).readTextEntry(worksheet);
+    expect(xml).toMatch(/<pageSetup[^>]*paperSize="1" scale="100"/u);
+  } finally {
+    source.Dispose();
+  }
+});

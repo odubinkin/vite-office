@@ -25,15 +25,21 @@ function formatRange(document: ScDocument, range: ScRange): string {
 
 /** Writes the represented worksheet properties in native SpreadsheetML order. */
 export class XclExpXmlSheetPr {
-  /** Binds the sheet color. @param tabColor - Canonical sheet color. @returns Worksheet record. */
-  constructor(private readonly tabColor: Color) {}
+  /** Binds worksheet properties. @param tabColor - Canonical sheet color. @param fitToPage - Associated print fitting mode. @returns Worksheet record. */
+  constructor(
+    private readonly tabColor: Color,
+    private readonly fitToPage?: boolean,
+  ) {}
 
   /** Writes a custom color before the other worksheet records. @param stream - Worksheet XML stream. @returns Nothing. */
   SaveXml(stream: XclExpXmlStream): void {
-    if (this.tabColor.equals(COL_AUTO)) return;
+    if (this.tabColor.equals(COL_AUTO) && this.fitToPage === undefined) return;
     const writer = stream.GetCurrentStream();
     writer.startElement(token("sheetPr"));
-    writer.singleElement(token("tabColor"), token("rgb"), XclXmlUtils.ToOString(this.tabColor));
+    if (!this.tabColor.equals(COL_AUTO))
+      writer.singleElement(token("tabColor"), token("rgb"), XclXmlUtils.ToOString(this.tabColor));
+    if (this.fitToPage !== undefined)
+      writer.singleElement(token("pageSetUpPr"), token("fitToPage"), String(this.fitToPage));
     writer.endElement(token("sheetPr"));
   }
 }

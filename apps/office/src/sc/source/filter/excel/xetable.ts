@@ -23,7 +23,7 @@ import { XclExpXmlStream, XclXmlUtils } from "./xestream";
 import { XclExpSheetProtection, XclExpXmlSheetPr } from "./excrecds";
 import { XclExpMergedcells, XclExpSst } from "./xecontent";
 import { CreateString } from "./xehelper";
-import { SaveXmlPageBreaks } from "./xepage";
+import { SaveXmlPageBreaks, XclExpPageSettings } from "./xepage";
 import { SaveXmlNames } from "./xename";
 import { SaveXmlTabViewSettings } from "./xeview";
 import { SaveXmlExternalLinks } from "./xelink";
@@ -353,7 +353,8 @@ function SaveXmlSheet(
   const serializer = stream.GetCurrentStream();
   const row = token("row");
   serializer.startElement(token("worksheet"), token("xmlns"), spreadsheetNamespace);
-  new XclExpXmlSheetPr(document.GetTabBgColor(tab)).SaveXml(stream);
+  const page = new XclExpPageSettings(document, tab);
+  new XclExpXmlSheetPr(document.GetTabBgColor(tab), page.FitToPages()).SaveXml(stream);
   SaveXmlTabViewSettings(stream, document, tab, selected, view);
   const table = document.FetchTable(tab);
   if (!table) throw new Error("Worksheet table is missing.");
@@ -443,6 +444,7 @@ function SaveXmlSheet(
   const protection = document.GetTabProtection(tab);
   if (protection?.isProtected()) new XclExpSheetProtection(document, protection).SaveXml(stream);
   new XclExpMergedcells(document, tab).SaveXml(stream);
+  page.SaveXml(stream);
   SaveXmlPageBreaks(stream, table);
   serializer.endElement(token("worksheet"));
   serializer.endDocument();

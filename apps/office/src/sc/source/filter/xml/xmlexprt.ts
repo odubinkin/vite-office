@@ -1,4 +1,5 @@
 /** @fileoverview Scalar ScXMLExport content path over actual row-major document cells and native ODFF serialization. */
+import { exportPageStyles } from "./xmlstyle.page";
 import { externalRefCacheStyle, WriteExternalRefCaches } from "./xmlexprt.external";
 import { GetPrintRanges } from "../../core/data/table1";
 import { ScMyOpenCloseColumnRowGroup } from "./XMLColumnRowGroupExport";
@@ -94,6 +95,7 @@ class ScPageBreakRanges {
 /** Native spreadsheet content export, including row and column automatic styles. */
 export class ScXMLExport {
   private fontPool = new XMLFontAutoStylePool();
+  private readonly pageStyles: ReturnType<typeof exportPageStyles>;
   private textStyles: CellTextStylePool;
   private readonly styles = new Map<
     string,
@@ -109,6 +111,7 @@ export class ScXMLExport {
     private readonly options: ScXMLExportOptions = {},
   ) {
     this.textStyles = new CellTextStylePool(document, this.fontPool);
+    this.pageStyles = exportPageStyles(document);
   }
   /** Registers direct font-height pattern data in the automatic-style pool. @param pattern - Real cell pattern. @returns Style name or empty default. */
   private styleName(pattern: ScPatternAttr): string {
@@ -155,8 +158,12 @@ export class ScXMLExport {
   exportStyles(): string {
     const fontPool = new XMLFontAutoStylePool();
     const styles = exportDefaultCellStyle(this.document, fontPool);
-    if (!styles) return "";
-    return `<?xml version="1.0" encoding="UTF-8"?><office:document-styles xmlns:office="${ODF_NAMESPACES.office}" xmlns:number="${ODF_NAMESPACES.number}" xmlns:style="${ODF_NAMESPACES.style}" xmlns:fo="${ODF_NAMESPACES.fo}" xmlns:css3t="${ODF_NAMESPACES.css3t}" xmlns:svg="${ODF_NAMESPACES.svg}" xmlns:loext="${ODF_NAMESPACES.loext}" xmlns:xlink="${ODF_NAMESPACES.xlink}" office:version="1.3">${fontPool.exportXML()}${styles}</office:document-styles>`;
+    const { layouts, masters } = this.pageStyles;
+    if (!styles && !layouts) return "";
+    const pageStyles = layouts
+      ? `<office:automatic-styles>${layouts}</office:automatic-styles>${masters}`
+      : "";
+    return `<?xml version="1.0" encoding="UTF-8"?><office:document-styles xmlns:office="${ODF_NAMESPACES.office}" xmlns:number="${ODF_NAMESPACES.number}" xmlns:style="${ODF_NAMESPACES.style}" xmlns:fo="${ODF_NAMESPACES.fo}" xmlns:css3t="${ODF_NAMESPACES.css3t}" xmlns:svg="${ODF_NAMESPACES.svg}" xmlns:loext="${ODF_NAMESPACES.loext}" xmlns:xlink="${ODF_NAMESPACES.xlink}" office:version="1.3">${fontPool.exportXML()}${styles}${pageStyles}</office:document-styles>`;
   }
   /** Collects equal effective cell-style ranges with the minimum native row-repeat boundary,as WriteRowContent consumes ScRowFormatRanges. @param table - Actual sheet. @param row - First row in the format run. @returns Horizontal styles and their common row end. */
   private collectColumnStyles(
@@ -224,7 +231,7 @@ export class ScXMLExport {
       ? escapeXml(text(SC_STYLE_PROG_STANDARD))
       : "";
     let body = this.WriteCalculationSettings();
-    const tableStyles = new Map<string, string>();
+    const tableStyles = new Map<string, { name: string; properties: string; master: string }>();
     for (let tab = 0; tab < this.document.GetTableCount(); tab++) {
       const table = this.document.FetchTable(tab) as ScTable,
         name = new OUString();
@@ -264,10 +271,16 @@ export class ScXMLExport {
         tableProperties += ` table:tab-color="${rgb[0]}"`;
       }
       let styleAttribute = "";
-      if (tableProperties) {
-        const style = tableStyles.get(tableProperties) ?? `ta${tableStyles.size + 1}`;
-        tableStyles.set(tableProperties, style);
-        styleAttribute = ` table:style-name="${style}"`;
+      const master = this.pageStyles.names.get(table.GetPageStyle()) ?? "";
+      if (tableProperties || master) {
+        const key = master + "\0" + tableProperties;
+        const style = tableStyles.get(key) ?? {
+          name: `ta${tableStyles.size + 1}`,
+          properties: tableProperties,
+          master,
+        };
+        tableStyles.set(key, style);
+        styleAttribute = ` table:style-name="${style.name}"`;
       }
       body += `<table:table table:name="${escapeXml(text(name))}"${styleAttribute}${protectionAttributes}${print}>`;
       name.dispose();
@@ -418,8 +431,10 @@ export class ScXMLExport {
     const external = WriteExternalRefCaches(this.document);
     body += external + this.WriteNamedRange(-1);
     let automatic = this.textStyles.exportStyles() + (external ? externalRefCacheStyle : "");
-    for (const [properties, name] of tableStyles)
-      automatic += `<style:style style:name="${name}" style:family="table"><style:table-properties${properties}/></style:style>`;
+    for (const { properties, name, master } of tableStyles.values()) {
+      const page = master ? ` style:master-page-name="${master}"` : "";
+      automatic += `<style:style style:name="${name}" style:family="table"${page}><style:table-properties${properties}/></style:style>`;
+    }
     for (const style of this.numberStyles.values()) if (style) automatic += style.xml;
     for (const { name, dataStyle, properties } of this.styles.values()) {
       automatic += `<style:style style:name="${name}" style:family="table-cell"${defaultName ? ` style:parent-style-name="${defaultName}"` : ""}${dataStyle ? ` style:data-style-name="${dataStyle}"` : ""}>${properties}</style:style>`;

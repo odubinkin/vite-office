@@ -15,10 +15,11 @@
       "XclExpPageSettings::XclExpPageSettings"
     ],
     "preservedResponsibilities": [
-      "Uses actual native manual page-break sets, sheet-part order, UInt16 position and range limits, and the practical XLSX ceiling of 1023 records per axis."
+      "Uses actual native manual page-break sets, sheet-part order, UInt16 position and range limits, and the practical XLSX ceiling of 1023 records per axis.",
+      "Uses actual Calc page-family items for worksheet print flags, margins, paper, fitting, orientation and page numbering, before manual page-break records."
     ],
     "omittedResponsibilities": [
-      "BIFF, automatic page breaks and page layout settings remain outside this worksheet record."
+      "BIFF, automatic page breaks, header/footer content and printer-device data remain outside the represented worksheet export."
     ],
     "evidence": {
       "local": [

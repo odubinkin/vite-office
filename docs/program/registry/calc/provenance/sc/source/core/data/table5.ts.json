@@ -28,7 +28,8 @@
     ],
     "preservedResponsibilities": [
       "Task76 native UndoToColumn/UndoToTable restore the edited payload,formula-only cells outside its rows/columns,whole conditional-format ownership,and full-axis raw geometry/manual breaks with actual null geometry checks. Marked copying retains the original null-mark-data asymmetry (CALC-265). Real table5 page/manual sets,ordered set value/move binding,stream-validity state/document locking and width-change pagination invalidation are represented. Named-expression maps,pagination/device calculation,full XML streaming and native document-level Undo/paste/history orchestration remain unported;no fake owner or alternate workbook is introduced.",
-      "Copies or clears native sheet protection and invalidates the sheet stream. This owner also exposes the original manual break queries."
+      "Copies or clears native sheet protection and invalidates the sheet stream. This owner also exposes the original manual break queries.",
+      "Resolves the original named page style or the Standard fallback and invalidates the sheet stream on change."
     ],
     "omittedResponsibilities": [
       "Full native pagination,print device/UNO and sheet-local named-expression owners are outside this represented slice."

@@ -17,6 +17,7 @@ import type { ScTable } from "../../../inc/table";
 import { RowHeightContext } from "../../../inc/rowheightcontext";
 import { ScFlatBoolRowSegments } from "../../core/data/segmenttree";
 import type { Color } from "../../../../tools/inc/color";
+import { ScXMLPageStyles } from "./xmlstyle.page";
 import { XMLTableStylesContext } from "./xmlstyli";
 import { CellAttributeHolder, type ScPatternAttr } from "../../../inc/patattr";
 import { ScXMLImportContext } from "./importcontext";
@@ -99,10 +100,19 @@ export class ScXMLImport extends SvXMLImport implements SvXMLImportRootFactory {
     { pattern: ScPatternAttr; reference: string }
   >();
   private readonly numberStyles = new Map<string, SvXMLNumFormatContext>();
-  private readonly tableStyles = new Map<string, { visible: boolean; tabColor: Readonly<Color> }>();
-  /** Registers properties of the native table-family style. @param name - Automatic style. @param visible - Sheet display. @param tabColor - Sheet tab color. @returns Nothing. */
-  AddTableStyle(name: string, visible: boolean, tabColor: Readonly<Color>): void {
-    this.tableStyles.set(name, { visible, tabColor });
+  readonly pageStyles: ScXMLPageStyles;
+  private readonly tableStyles = new Map<
+    string,
+    { visible: boolean; tabColor: Readonly<Color>; masterPage: string | null }
+  >();
+  /** Registers properties of the native table-family style. @param name - Automatic style. @param visible - Sheet display. @param tabColor - Sheet tab color. @param masterPage - Associated page style. @returns Nothing. */
+  AddTableStyle(
+    name: string,
+    visible: boolean,
+    tabColor: Readonly<Color>,
+    masterPage: string | null,
+  ): void {
+    this.tableStyles.set(name, { visible, tabColor, masterPage });
   }
   /** Applies the sheet style to its native owner. @param name - Automatic style. @param tab - Native sheet. @returns Nothing. */
   ApplyTableStyle(name: string, tab: number): void {
@@ -111,6 +121,7 @@ export class ScXMLImport extends SvXMLImport implements SvXMLImportRootFactory {
     else {
       this.document.SetVisible(tab, style.visible);
       this.document.SetTabBgColor(tab, style.tabColor);
+      if (style.masterPage) this.pageStyles.Apply(tab, style.masterPage);
     }
   }
   private readonly columnStyles = new Map<string, { width: number | null; pageBreak: boolean }>();
@@ -180,6 +191,7 @@ export class ScXMLImport extends SvXMLImport implements SvXMLImportRootFactory {
   ) {
     super();
     this.docImport = new ScDocumentImport(document);
+    this.pageStyles = new ScXMLPageStyles(document);
   }
   /** Transfers a parsed real automatic pattern into import lifetime ownership. @param name - Source name. @param pattern - Adopted source pattern. @param reference - Optional ODF data style. @returns Nothing. */
   AddAutoStyle(name: string, pattern: ScPatternAttr, reference: string | null = null): void {
@@ -419,10 +431,8 @@ class ScXMLDocContext_Impl extends ScXMLImportContext {
     if (element === XMLToken.OFFICE_AUTOMATIC_STYLES) return new XMLTableStylesContext(this.owner);
     if (element === XMLToken.OFFICE_FONT_FACE_DECLS) return this.owner.CreateFontDeclsContext();
     if (element === XMLToken.OFFICE_STYLES) return new XMLTableStylesContext(this.owner, true);
-    if (element === XMLToken.OFFICE_MASTER_STYLES) {
-      this.owner.unsupported("named and master styles are not preserved");
-      return new SvXMLIgnoreContext(true);
-    }
+    if (element === XMLToken.OFFICE_MASTER_STYLES)
+      return this.owner.pageStyles.CreateMasterStyles();
     throw new Error("ODS document feature is not implemented");
   }
 }

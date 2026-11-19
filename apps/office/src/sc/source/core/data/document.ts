@@ -89,14 +89,8 @@ export class ScDocument {
   InitUndoSelected(...args: Parameters<typeof documen7.InitUndoSelected>): void {
     documen7.InitUndoSelected.apply(this, args);
   }
-  /** Original conditional-index removal dispatch. @param args - Ranges,sheet and key. @returns Nothing. */
-  RemoveCondFormatData(...args: Parameters<typeof documen7.RemoveCondFormatData>): void {
-    documen7.RemoveCondFormatData.apply(this, args);
-  }
-  /** Original conditional-index dispatch. @param args - Ranges,sheet and key. @returns Nothing. */
-  AddCondFormatData(...args: Parameters<typeof documen7.AddCondFormatData>): void {
-    documen7.AddCondFormatData.apply(this, args);
-  }
+  RemoveCondFormatData = documen7.RemoveCondFormatData;
+  AddCondFormatData = documen7.AddCondFormatData;
   /** Original incremental Undo sheet allocation. @param args - Native sheet range and allocation defaults. @returns Nothing. */
   AddUndoTab(...args: Parameters<typeof documen7.AddUndoTab>): void {
     documen7.AddUndoTab.apply(this, args);
@@ -358,6 +352,14 @@ export class ScDocument {
   }
   /** Sheet direction. @param tab - Sheet. @returns RTL. */ IsLayoutRTL(tab: number): boolean {
     return this.FetchTable(tab)?.IsLayoutRTL() ?? false;
+  }
+  /** Finds the sheet's original named page style. @param tab - Native sheet. @returns Name or empty. */
+  GetPageStyle(tab: number): string {
+    return this.FetchTable(tab)?.GetPageStyle() ?? "";
+  }
+  /** Assigns the original page style. @param tab - Native sheet. @param name - Known page style. @returns Nothing. */
+  SetPageStyle(tab: number, name: string): void {
+    this.FetchTable(tab)?.SetPageStyle(name);
   }
   /** Original represented table flag dispatch;drawing/visibility services remain unported. @param tab - Sheet. @param set - RTL state. @returns Nothing. */
   SetLayoutRTL(tab: number, set: boolean): void {

@@ -1,0 +1,40 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/sc/source/filter/excel/xlpage.ts",
+    "status": "mapped",
+    "upstreamPath": "sc/source/filter/excel/xlpage.cxx",
+    "localSymbols": [
+      "SetScPaperSize"
+    ],
+    "upstreamSymbols": [
+      "XclPageData::SetScPaperSize"
+    ],
+    "preservedResponsibilities": [
+      "Matches the native oriented paper size against the original exported twip table and strict tolerance."
+    ],
+    "omittedResponsibilities": [
+      "BIFF device records and the non-strict legacy approximation remain unported."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sc/source/filter/excel/xlpage.ts",
+          "marker": "SetScPaperSize"
+        },
+        {
+          "path": "apps/office/src/sc/source/filter/oox/excelfilter.page-settings.test.ts",
+          "marker": "@fileoverview"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sc/source/filter/excel/xlpage.cxx",
+          "marker": "XclPageData::SetScPaperSize"
+        }
+      ]
+    }
+  }
+}

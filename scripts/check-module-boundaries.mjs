@@ -666,8 +666,14 @@ for (const sourceFile of runtimeSources) {
       );
       continue;
     }
+    // LibreOffice's scfilt uses msfilter::util::PaperSizeConv in PageSettingsConverter.
+    const calcPaperSizeImport =
+      relativeSource.split(path.sep).join("/") === "sc/source/filter/oox/pagesettings.ts" &&
+      relativeTarget.split(path.sep).join("/").replace(/\.ts$/u, "") ===
+        "filter/source/msfilter/util";
     if (
       isForbiddenModuleEdge(sourceModule, targetModule) &&
+      !calcPaperSizeImport &&
       !inlineSequence &&
       !isOriginalCharacterValueImport(relativeSource, relativeTarget) &&
       !isSidebarPresentationImport(relativeSource, relativeTarget)

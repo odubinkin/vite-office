@@ -77,7 +77,9 @@ it("keeps the four tab colors from testSheetTabColorsXLSX through XLSX, Worker a
     const archive = await DocumentArchive.open(xlsx);
     for (const [tab, rgb] of ["FF00B050", "FFFF0000", "FF0070C0", "FFFFFF00"].entries()) {
       const xml = await archive.readTextEntry(`${worksheets}${tab + 1}.xml`);
-      expect(xml).toContain(`<sheetPr><tabColor rgb="${rgb}"/></sheetPr><sheetViews>`);
+      expect(xml).toContain(
+        `<sheetPr><tabColor rgb="${rgb}"/><pageSetUpPr fitToPage="false"/></sheetPr><sheetViews>`,
+      );
     }
   } finally {
     for (const document of [source, worker, reopened, final]) document.Dispose();
@@ -90,7 +92,7 @@ it("exports the testTdf107586 theme value from its original theme into a workshe
     expect(document.GetTabBgColor(0).toUInt32()).toBe(0x9bbb59);
     const archive = await DocumentArchive.open(await exportXlsx(document));
     expect(await archive.readTextEntry(`${worksheets}1.xml`)).toContain(
-      '<sheetPr><tabColor rgb="FF9BBB59"/></sheetPr>',
+      '<sheetPr><tabColor rgb="FF9BBB59"/><pageSetUpPr fitToPage="false"/></sheetPr>',
     );
   } finally {
     document.Dispose();

@@ -58,8 +58,8 @@ it("rejects a shared base style and preserves the separate page-style boundary",
         pool.Add(foreign),
     ).toThrow("Invalid Calc style class.");
     expect(
-      /** Requests a page style outside the cell factory. @returns Style. */ () =>
-        pool.Make(name, SfxStyleFamily.Page, SfxStyleSearchBits.UserDefined),
+      /** Requests a frame style outside the Calc style families. @returns Style. */ () =>
+        pool.Make(name, SfxStyleFamily.Frame, SfxStyleSearchBits.UserDefined),
     ).toThrow("native Calc style family is not ported");
   } finally {
     foreign.Dispose();

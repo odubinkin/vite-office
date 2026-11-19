@@ -21,7 +21,7 @@
         "apps/office/src/sc/source/core/data/formula-copy.test.ts",
         "vendor/libreoffice-reference/sc/source/core/data/stlsheet.cxx"
       ],
-      "justification": "Calc cell style item sets use the original pattern Which range and shared Sfx style ownership. Page style setup, the full built-in resource table, and other style-family properties remain open.",
+      "justification": "Calc cell style item sets use the original pattern Which range and shared Sfx style ownership. Page style setup, the full built-in resource table, and other style-family properties remain open. Allocates native Page-family Which ranges and represented physical defaults and scale items.",
       "knownViolations": [],
       "localSymbols": [
         "ScStyleSheet"

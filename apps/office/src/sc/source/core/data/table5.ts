@@ -1,6 +1,26 @@
 /** @fileoverview Native table5 manual/page-break sets and ownership transfers;pagination/device calculation remains outside this kernel slice. */
 import type { ScTable } from "../../../inc/table";
 import { ScTableProtection } from "./tabprotection";
+import { scStyleNameResourcesEnglish } from "../../../inc/globstr";
+
+/** Native initial and fallback page style name. */
+export const DEFAULT_PAGE_STYLE = scStyleNameResourcesEnglish.STR_STYLENAME_STANDARD;
+
+/** Reads the sheet's page style name. @param this - Native sheet. @returns Style name. */
+export function GetPageStyle(this: ScTable): string {
+  return this["aPageStyle"];
+}
+
+/** Assigns a known page style or the original Standard fallback. @param this - Native sheet. @param name - Requested page style. @returns Nothing. */
+export function SetPageStyle(this: ScTable, name: string): void {
+  if (name === this["aPageStyle"]) return;
+  const styles = this["rDocument"].GetStyleSheetPool();
+  const resolved = styles?.GetPageStyle(name) ? name : DEFAULT_PAGE_STYLE;
+  if (this["aPageStyle"] === resolved) return;
+  this["aPageStyle"] = resolved;
+  this.SetStreamValid(false);
+}
+
 /** Native ordered integer set enumeration in the browser Set binding. @param left - First index. @param right - Second index. @returns Integer order. */
 function compare(left: number, right: number): number {
   return left - right;

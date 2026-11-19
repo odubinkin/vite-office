@@ -1,0 +1,50 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/sc/source/filter/xml/xmlstyle.page.ts",
+    "status": "mapped",
+    "upstreamPath": "sc/source/filter/xml/xmlstyli.cxx",
+    "localSymbols": [
+      "ScXMLPageStyles",
+      "exportPageStyles"
+    ],
+    "upstreamSymbols": [
+      "ScMasterPageContext::Finish"
+    ],
+    "preservedResponsibilities": [
+      "Uses native ODF table/master-page associations to apply and write real page-family item sets for represented print properties."
+    ],
+    "omittedResponsibilities": [
+      "Header/footer page stories, backgrounds, and unsupported page-style property groups remain unported."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sc/source/filter/xml/xmlstyle.page.ts",
+          "marker": "ScXMLPageStyles"
+        },
+        {
+          "path": "apps/office/src/sc/source/filter/oox/excelfilter.page-settings.test.ts",
+          "marker": "@fileoverview"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sc/source/filter/xml/xmlstyli.cxx",
+          "marker": "ScMasterPageContext::Finish"
+        },
+        {
+          "path": "vendor/libreoffice-reference/xmloff/source/style/PageMasterStyleMap.cxx",
+          "marker": "PROP_ScaleToPagesX"
+        }
+      ]
+    },
+    "filenameDivergence": {
+      "localPath": "apps/office/src/sc/source/filter/xml/xmlstyle.page.ts",
+      "stackNecessity": "responsibility-split",
+      "rationale": "Keeps Calc master-page assignment and represented page-layout import and export together beside the table style contexts."
+    }
+  }
+}

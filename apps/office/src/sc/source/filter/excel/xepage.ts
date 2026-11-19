@@ -1,5 +1,32 @@
 /** @fileoverview Native XLSX manual page-break records collected from the actual Calc sheet. */
 import { getTokenFromUtf8 as token } from "../../../../oox/source/token/tokenmap";
+import type { ScDocument } from "../../../inc/document";
+import type { ScPageScaleToItem } from "../../../inc/attrib";
+import type { SfxItemSet } from "../../../../svl/source/items/itemset";
+import type { SfxBoolItem } from "../../../../svl/source/items/cenumitm";
+import type { SfxUInt16Item } from "../../../../svl/inc/intitem";
+import type { SvxPageItem } from "../../../../svx/inc/pageitem";
+import type { SvxLRSpaceItem } from "../../../../editeng/inc/lrspitem";
+import type { SvxULSpaceItem } from "../../../../editeng/inc/ulspitem";
+import type { SvxSizeItem } from "../../../../editeng/inc/sizeitem";
+import { convert, Length } from "../../../../o3tl/inc/unit_conversion";
+import { SetScPaperSize } from "./xlpage";
+import {
+  ATTR_LRSPACE,
+  ATTR_ULSPACE,
+  ATTR_PAGE,
+  ATTR_PAGE_SIZE,
+  ATTR_PAGE_FIRSTPAGENO,
+  ATTR_PAGE_HORCENTER,
+  ATTR_PAGE_VERCENTER,
+  ATTR_PAGE_GRID,
+  ATTR_PAGE_HEADERS,
+  ATTR_PAGE_NOTES,
+  ATTR_PAGE_TOPDOWN,
+  ATTR_PAGE_SCALE,
+  ATTR_PAGE_SCALETOPAGES,
+  ATTR_PAGE_SCALETO,
+} from "../../../inc/scitems";
 import { MAXCOL, MAXROW } from "../../../inc/address";
 import type { ScTable } from "../../../inc/table";
 import type { XclExpXmlStream } from "./xestream";
@@ -58,4 +85,130 @@ export function SaveXmlPageBreaks(stream: XclExpXmlStream, table: ScTable): void
   const columns = new Set<number>();
   table.GetAllColBreaks(columns, false, true);
   new XclExpPageBreaks(false, columns, MAXROW & 0xffff).SaveXml(stream);
+}
+
+/** Original worksheet page settings obtained from the page-family item set. */
+export class XclExpPageSettings {
+  private readonly items: SfxItemSet | undefined;
+  private readonly scaling: number;
+  private readonly fit: readonly [width: number, height: number] | undefined;
+
+  /** Looks up the native sheet style and selects the original effective fitting mode. @param document - Workbook. @param tab - Sheet index. @returns Page settings writer. */
+  constructor(
+    private readonly document: ScDocument,
+    private readonly tab: number,
+  ) {
+    this.items = document
+      .GetStyleSheetPool()
+      ?.GetPageStyle(document.GetPageStyle(tab))
+      ?.GetItemSet();
+    const fit = this.items?.GetItemIfSet(ATTR_PAGE_SCALETO, false) as ScPageScaleToItem | undefined;
+    const pages =
+      (
+        this.items?.GetItemIfSet(ATTR_PAGE_SCALETOPAGES, false) as SfxUInt16Item | undefined
+      )?.GetValue() ?? 0;
+    const scale =
+      (this.items?.Get(ATTR_PAGE_SCALE) as SfxUInt16Item | undefined)?.GetValue() ?? 100;
+    this.fit = fit?.IsValid() ? [fit.GetWidth(), fit.GetHeight()] : pages ? [1, pages] : undefined;
+    this.scaling = this.fit ? 100 : scale || 100;
+  }
+
+  /** Supplies the fit mode for the preceding worksheet properties. @returns Fit flag when a page style exists. */
+  FitToPages(): boolean | undefined {
+    return this.items ? Boolean(this.fit) : undefined;
+  }
+
+  /** Writes the original print options, margins and page setup records in schema order. @param stream - Worksheet XML stream. @returns Nothing. */
+  SaveXml(stream: XclExpXmlStream): void {
+    const items = this.items;
+    if (!items) return;
+    const xml = stream.GetCurrentStream();
+    const flag =
+      /** Reads one native page boolean. @param which - Item identity. @returns XML boolean. */ (
+        which: number,
+      ): string => String((items.Get(which) as SfxBoolItem).GetValue());
+    xml.singleElement(
+      token("printOptions"),
+      token("headings"),
+      flag(ATTR_PAGE_HEADERS),
+      token("gridLines"),
+      flag(ATTR_PAGE_GRID),
+      token("gridLinesSet"),
+      "true",
+      token("horizontalCentered"),
+      flag(ATTR_PAGE_HORCENTER),
+      token("verticalCentered"),
+      flag(ATTR_PAGE_VERCENTER),
+    );
+    const lr = items.Get(ATTR_LRSPACE) as SvxLRSpaceItem;
+    const ul = items.Get(ATTR_ULSPACE) as SvxULSpaceItem;
+    const inches =
+      /** Converts the native export item length to inches. @param length - Margin in twips. @returns Excel margin. */ (
+        length: number,
+      ): string => String(convert(length, Length.twip, Length.in));
+    const headerFooter = String(convert(1300, Length.mm100, Length.in));
+    xml.singleElement(
+      token("pageMargins"),
+      token("left"),
+      inches(lr.ResolveLeft()),
+      token("right"),
+      inches(lr.ResolveRight()),
+      token("top"),
+      inches(ul.GetUpper()),
+      token("bottom"),
+      inches(ul.GetLower()),
+      token("header"),
+      headerFooter,
+      token("footer"),
+      headerFooter,
+    );
+
+    const landscape = (items.Get(ATTR_PAGE) as SvxPageItem).IsLandscape();
+    const size = (items.Get(ATTR_PAGE_SIZE) as SvxSizeItem).GetSize();
+    const index = SetScPaperSize(size, !landscape);
+    const first = (items.Get(ATTR_PAGE_FIRSTPAGENO) as SfxUInt16Item).GetValue();
+    const manual =
+      first !== 0 &&
+      (this.tab === 0 ||
+        this.document.GetPageStyle(this.tab) !== this.document.GetPageStyle(this.tab - 1));
+    const mm =
+      /** Formats one native paper dimension with the original integer millimetre conversion. @param length - Physical length in twips. @returns OOXML measure. */ (
+        length: number,
+      ): string => `${convert(BigInt(length), Length.twip, Length.mm)}mm`;
+    xml.singleElement(
+      token("pageSetup"),
+      token("paperSize"),
+      index ? String(index) : null,
+      token("paperWidth"),
+      index ? null : mm(landscape ? size.Height() : size.Width()),
+      token("paperHeight"),
+      index ? null : mm(landscape ? size.Width() : size.Height()),
+      token("scale"),
+      String(this.scaling),
+      token("fitToWidth"),
+      String(this.fit?.[0] ?? 1),
+      token("fitToHeight"),
+      String(this.fit?.[1] ?? 1),
+      token("orientation"),
+      landscape ? "landscape" : "portrait",
+      token("pageOrder"),
+      flag(ATTR_PAGE_TOPDOWN) === "true" ? "downThenOver" : "overThenDown",
+      token("cellComments"),
+      flag(ATTR_PAGE_NOTES) === "true" ? "atEnd" : "none",
+      token("firstPageNumber"),
+      manual ? String(first) : null,
+      token("useFirstPageNumber"),
+      manual ? "true" : null,
+      token("blackAndWhite"),
+      "false",
+      token("draft"),
+      "false",
+      token("horizontalDpi"),
+      "300",
+      token("verticalDpi"),
+      "300",
+      token("copies"),
+      "1",
+    );
+  }
 }
