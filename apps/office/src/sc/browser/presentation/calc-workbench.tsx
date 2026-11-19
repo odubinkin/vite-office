@@ -28,6 +28,8 @@ import { calcSheetTabItems } from "../../uiconfig/scalc/popupmenu/sheettab";
 import { getCalcPopupCommandResource } from "../../uiconfig/scalc/menubar/menubar";
 import { CalcFormattingToolbar } from "./CalcFormattingToolbar";
 import { ScGridWindow } from "./ScGridWindow";
+import { CALC_SPLIT_HANDLE_SIZE } from "./calc-grid-axis";
+import type { ScSplitPos } from "../../source/ui/inc/viewdata";
 import { ScInputWindow, type CalcInputAction } from "./ScInputWindow";
 import { ScTabControl } from "./ScTabControl";
 import type { SfxViewFrame } from "../../../sfx2/source/view/viewfrm";
@@ -198,9 +200,41 @@ export function CalcWorkbench({
           );
       }
       measure();
+      const client = grid();
+      /** Routes wheel deltas according to the pointer's left/right and top/bottom pair. @param event - Browser wheel event. @returns Nothing. */
+      function wheel(event: WheelEvent): void {
+        const viewport = controller.viewport;
+        if ((!viewport.splitColumns && !viewport.splitRows) || event.ctrlKey) return;
+        const bounds = client.getBoundingClientRect();
+        const headers = controller.viewData.IsHeaderMode();
+        const x = event.clientX - bounds.left - (headers ? 48 : 0);
+        const y = event.clientY - bounds.top - (headers ? viewport.rowHeight : 0);
+        const leadingX = !!viewport.splitColumns && x < viewport.splitColumns.pixels;
+        const leadingY = !!viewport.splitRows && y < viewport.splitRows.pixels;
+        const modeX = event.deltaMode === 2 ? client.clientWidth : event.deltaMode === 1 ? 16 : 1;
+        const modeY = event.deltaMode === 2 ? client.clientHeight : event.deltaMode === 1 ? 16 : 1;
+        const dx = (event.shiftKey && !event.deltaX ? event.deltaY : event.deltaX) * modeX;
+        const dy = event.shiftKey ? 0 : event.deltaY * modeY;
+        const offsets = controller.ScrollPaneWheel(
+          client.scrollLeft,
+          client.scrollTop,
+          client.clientWidth,
+          client.clientHeight,
+          dx,
+          dy,
+          leadingX,
+          leadingY,
+        );
+        client.scrollLeft = offsets.left;
+        client.scrollTop = offsets.top;
+        event.preventDefault();
+      }
+      client.addEventListener("wheel", wheel, { passive: false });
       window.addEventListener("resize", measure);
-      return /** Removes the viewport listener. @returns Nothing. */ () =>
+      return /** Removes the browser viewport listeners. @returns Nothing. */ () => {
+        client.removeEventListener("wheel", wheel);
         window.removeEventListener("resize", measure);
+      };
     },
     [controller],
   );
@@ -211,14 +245,27 @@ export function CalcWorkbench({
         viewport = controller.viewport;
       if (!client?.clientWidth || !client.clientHeight) return;
       const table = doc.FetchTable(activeTab) as ScTable;
-      const left = columnPixels(table, 0, viewport.firstColumn - 1) + viewport.columnOffset;
-      const top = rowPixels(table, 0, viewport.firstRow - 1) + viewport.rowOffset;
+      const pane = view.GetActivePart();
+      const splitX = pane & 1 ? undefined : viewport.splitColumns;
+      const splitY = pane & 2 ? undefined : viewport.splitRows;
+      const left =
+        columnPixels(table, 0, (splitX?.first ?? viewport.firstColumn) - 1) +
+        (splitX?.displacement ?? viewport.columnOffset);
+      const top =
+        rowPixels(table, 0, (splitY?.first ?? viewport.firstRow) - 1) +
+        (splitY?.displacement ?? viewport.rowOffset);
       const bodyWidth =
-        client.clientWidth - (view.IsHeaderMode() ? 48 : 0) - (viewport.frozenColumns?.pixels ?? 0);
+        splitX?.pixels ??
+        client.clientWidth -
+          (view.IsHeaderMode() ? 48 : 0) -
+          (viewport.frozenColumns?.pixels ??
+            (viewport.splitColumns ? viewport.splitColumns.pixels + CALC_SPLIT_HANDLE_SIZE : 0));
       const bodyHeight =
+        splitY?.pixels ??
         client.clientHeight -
-        (view.IsHeaderMode() ? viewport.rowHeight : 0) -
-        (viewport.frozenRows?.pixels ?? 0);
+          (view.IsHeaderMode() ? viewport.rowHeight : 0) -
+          (viewport.frozenRows?.pixels ??
+            (viewport.splitRows ? viewport.splitRows.pixels + CALC_SPLIT_HANDLE_SIZE : 0));
       const x = columnPixels(table, 0, column - 1),
         right = columnPixels(table, 0, column);
       const y = rowPixels(table, 0, row - 1),
@@ -231,7 +278,11 @@ export function CalcWorkbench({
         kind !== "column" &&
         row > (viewport.frozenRows?.last ?? -1) &&
         (y < top || bottom > top + bodyHeight);
-      if (scrollX)
+      controller.ScrollLeading(
+        splitX && scrollX ? (x < left ? x : right - bodyWidth) - left : 0,
+        splitY && scrollY ? (y < top ? y : bottom - bodyHeight) - top : 0,
+      );
+      if (scrollX && !splitX)
         client.scrollLeft = controller.ScrollLeftForColumn(
           x < left
             ? column
@@ -241,14 +292,14 @@ export function CalcWorkbench({
               ),
           client.clientWidth,
         );
-      if (scrollY)
+      if (scrollY && !splitY)
         client.scrollTop = controller.ScrollTopForRow(
           y < top
             ? row
             : Math.min(row, rowAtPixel(table, Math.max(0, bottom - bodyHeight), doc.MaxRow()) + 1),
           client.clientHeight,
         );
-      if (scrollX || scrollY)
+      if ((scrollX && !splitX) || (scrollY && !splitY))
         controller.Scroll(
           client.scrollLeft,
           client.scrollTop,
@@ -264,9 +315,20 @@ export function CalcWorkbench({
         restoredViewport.current = false;
         return;
       }
+      const viewport = controller.viewport,
+        active = view.GetActivePart();
+      const right = viewport.frozenColumns
+        ? Number(cursorColumn > viewport.frozenColumns.last)
+        : active & 1;
+      const bottom = viewport.frozenRows
+        ? cursorRow > viewport.frozenRows.last
+          ? 2
+          : 0
+        : active & 2;
+      view.SetActivePart((right | bottom) as ScSplitPos);
       revealCell(cursorColumn, cursorRow, "cell");
     },
-    [revealCell, cursorColumn, cursorRow, inputMode, cursorRowHeight],
+    [controller, view, revealCell, cursorColumn, cursorRow, inputMode, cursorRowHeight],
   );
   /** Projects original input-handler Command selected-reference collapse before DOM paste or IME starts. @param event - Actual editor command. @returns Nothing. */
   function inputCommand(event: SyntheticEvent<HTMLInputElement>): void {
@@ -580,6 +642,10 @@ export function CalcWorkbench({
           onAction={inputAction}
         />
         <ScGridWindow
+          onActivatePane={
+            /** Updates the active native pane before selecting its cell. @param part - Pointer pane. @returns Nothing. */
+            (part) => view.SetActivePart(part)
+          }
           referenceMode={controller.inputHandler.IsFormulaMode()}
           referenceRange={controller.ReferenceRange()}
           onReveal={

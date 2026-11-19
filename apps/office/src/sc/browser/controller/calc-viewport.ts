@@ -4,7 +4,12 @@ import type { ScTable } from "../../inc/table";
 import { ScHSplitPos, ScVSplitPos, type ScViewData } from "../../source/ui/view/viewdata";
 import { columnAtPixel, columnPixels } from "../presentation/column-geometry";
 import { rowAtPixel, rowPixels } from "../presentation/row-geometry";
-import type { CalcFrozenBand, CalcGridViewport } from "../presentation/calc-grid-axis";
+import {
+  CALC_SPLIT_HANDLE_SIZE,
+  type CalcFrozenBand,
+  type CalcGridViewport,
+  type CalcSplitBand,
+} from "../presentation/calc-grid-axis";
 
 /** Matching pixel offsets of a restored worksheet cell boundary. */
 interface ScrollAnchor {
@@ -82,6 +87,34 @@ function frozenBand(
     : undefined;
 }
 
+/** Converts the source absolute splitter position to an available body span. @param twips - Native physical position. @param header - Reserved header pixels. @param size - Client body size. @returns Leading pane size. */
+function splitSize(twips: number, header: number, size: number): number {
+  const pixels = Math.trunc(twips / 15) - header;
+  return pixels > 0 && pixels <= size - 30 ? pixels : 0;
+}
+
+/** Measures a scrollable leading band in actual sheet geometry. @param table - Sheet. @param logical - Requested logical offset. @param size - Leading pane size. @param maximum - Axis index limit. @param pixels - Native extent query. @param atPixel - Native coordinate query. @returns Actual band geometry and clamped offset. */
+function measureLeading(
+  table: ScTable,
+  logical: number,
+  size: number,
+  maximum: number,
+  pixels: typeof columnPixels,
+  atPixel: typeof columnAtPixel,
+): [CalcSplitBand, number] {
+  const position = Math.max(0, Math.min(logical, pixels(table, 0, maximum) - size));
+  const first = atPixel(table, position, maximum);
+  return [
+    {
+      pixels: size,
+      first,
+      displacement: position - pixels(table, 0, first - 1),
+      count: atPixel(table, position + size, maximum) - first + 1,
+    },
+    position,
+  ];
+}
+
 /** Projects native grid positions onto a bounded browser scrollbar on each movable axis. */
 export class CalcViewport {
   current: CalcGridViewport = {
@@ -100,6 +133,8 @@ export class CalcViewport {
   private client: { left: number; top: number; width: number; height: number } | undefined;
   private horizontalAnchor: ScrollAnchor | undefined;
   private verticalAnchor: ScrollAnchor | undefined;
+  private leadingX = 0;
+  private leadingY = 0;
 
   /** Receives the actual browser measurements. @param left - Physical offset. @param top - Physical offset. @param width - Client width. @param height - Client height. @returns Whether the scroll position changed. */
   Measure(left: number, top: number, width: number, height: number): boolean {
@@ -113,32 +148,31 @@ export class CalcViewport {
     this.horizontalAnchor = undefined;
     this.verticalAnchor = undefined;
     const layout = view.GetPaneLayout();
-    const stored =
-      layout !== undefined &&
-      layout.horizontalMode !== SheetSplitMode.NORMAL &&
-      layout.verticalMode !== SheetSplitMode.NORMAL;
+    this.leadingX = 0;
+    this.leadingY = 0;
+    const stored = layout !== undefined;
     if (!stored) return { left: 0, top: 0, stored };
-    const { table, horizontal, vertical, frozenColumns, frozenRows, xBase, yBase } = this.Axes(
-      view,
-      width,
-      height,
-    );
-    const x =
-      columnPixels(
-        table,
-        0,
-        view.GetPosX(frozenColumns ? ScHSplitPos.SC_SPLIT_RIGHT : ScHSplitPos.SC_SPLIT_LEFT) - 1,
-      ) - xBase;
-    const y =
-      rowPixels(
-        table,
-        0,
-        view.GetPosY(
-          !frozenRows && layout.verticalMode === SheetSplitMode.FIX
-            ? ScVSplitPos.SC_SPLIT_TOP
-            : ScVSplitPos.SC_SPLIT_BOTTOM,
-        ) - 1,
-      ) - yBase;
+    const {
+      table,
+      horizontal,
+      vertical,
+      frozenColumns,
+      frozenRows,
+      leadingWidth,
+      leadingHeight,
+      xBase,
+      yBase,
+    } = this.Axes(view, width, height);
+    this.leadingX = columnPixels(table, 0, layout.first[0] - 1);
+    this.leadingY = rowPixels(table, 0, layout.first[1] - 1);
+    const right =
+      frozenColumns || leadingWidth ? ScHSplitPos.SC_SPLIT_RIGHT : ScHSplitPos.SC_SPLIT_LEFT;
+    const bottom =
+      frozenRows || leadingHeight || layout.verticalMode === SheetSplitMode.NONE
+        ? ScVSplitPos.SC_SPLIT_BOTTOM
+        : ScVSplitPos.SC_SPLIT_TOP;
+    const x = columnPixels(table, 0, view.GetPosX(right) - 1) - xBase;
+    const y = rowPixels(table, 0, view.GetPosY(bottom) - 1) - yBase;
     this.horizontalAnchor = horizontal.Restore(x);
     this.verticalAnchor = vertical.Restore(y);
     return {
@@ -146,6 +180,35 @@ export class CalcViewport {
       top: this.verticalAnchor?.physical ?? vertical.ToPhysical(y),
       stored,
     };
+  }
+
+  /** Moves the left and top normal panes by logical pixels. @param dx - Left horizontal wheel delta. @param dy - Top vertical wheel delta. @returns Nothing. */
+  ScrollLeading(dx: number, dy: number): void {
+    this.leadingX += dx;
+    this.leadingY += dy;
+  }
+  /** Moves the trailing panes by logical wheel deltas using their DOM scroll tracks. @param view - Native view. @param left - Current physical horizontal offset. @param top - Current physical vertical offset. @param width - Measured client width. @param height - Measured client height. @param dx - Right pane delta. @param dy - Bottom pane delta. @returns Physical offsets. */
+  WheelTrailing(
+    view: ScViewData,
+    left: number,
+    top: number,
+    width: number,
+    height: number,
+    dx: number,
+    dy: number,
+  ) {
+    const { horizontal, vertical } = this.Axes(view, width, height);
+    if (dx) {
+      const x = horizontal.ToLogical(left) + dx;
+      this.horizontalAnchor = horizontal.Restore(x);
+      left = this.horizontalAnchor?.physical ?? horizontal.ToPhysical(x);
+    }
+    if (dy) {
+      const y = vertical.ToLogical(top) + dy;
+      this.verticalAnchor = vertical.Restore(y);
+      top = this.verticalAnchor?.physical ?? vertical.ToPhysical(y);
+    }
+    return { left, top };
   }
 
   /** Refreshes the visible range and publishes confirmed origins from scroll events. @param view - Native view. @param publish - Whether to publish a measured scroll as the new view origin. @returns Nothing. */
@@ -163,6 +226,8 @@ export class CalcViewport {
       bodyHeight,
       frozenColumns,
       frozenRows,
+      leadingWidth,
+      leadingHeight,
       xBase,
       yBase,
     } = this.Axes(view, width, height);
@@ -170,6 +235,26 @@ export class CalcViewport {
     const y = vertical.ToLogical(top) + yBase;
     const firstColumn = columnAtPixel(table, x, document.MaxCol());
     const firstRow = rowAtPixel(table, y, document.MaxRow());
+    let splitColumns: CalcSplitBand | undefined;
+    let splitRows: CalcSplitBand | undefined;
+    if (leadingWidth)
+      [splitColumns, this.leadingX] = measureLeading(
+        table,
+        this.leadingX,
+        leadingWidth,
+        document.MaxCol(),
+        columnPixels,
+        columnAtPixel,
+      );
+    if (leadingHeight)
+      [splitRows, this.leadingY] = measureLeading(
+        table,
+        this.leadingY,
+        leadingHeight,
+        document.MaxRow(),
+        rowPixels,
+        rowAtPixel,
+      );
     this.current = {
       ...this.current,
       firstColumn,
@@ -182,23 +267,19 @@ export class CalcViewport {
       rowOffset: y - rowPixels(table, 0, firstRow - 1),
       frozenColumns,
       frozenRows,
+      splitColumns,
+      splitRows,
     };
     if (publish) {
       const layout = view.GetPaneLayout();
-      if (
-        layout?.horizontalMode === SheetSplitMode.NORMAL ||
-        layout?.verticalMode === SheetSplitMode.NORMAL
-      )
-        return;
-      if (
-        layout?.horizontalMode === SheetSplitMode.FIX ||
-        layout?.verticalMode === SheetSplitMode.FIX
-      )
-        view.SetFrozenOrigin(
-          firstColumn,
-          firstRow,
-          Boolean(frozenColumns) || layout.horizontalMode === SheetSplitMode.NONE,
-          Boolean(frozenRows) || layout.verticalMode === SheetSplitMode.NONE,
+      if (layout && (layout.horizontalMode || layout.verticalMode))
+        view.SetPaneOrigins(
+          layout.horizontalMode === SheetSplitMode.NONE ? firstColumn : splitColumns?.first,
+          splitRows?.first,
+          frozenColumns || splitColumns ? firstColumn : undefined,
+          frozenRows || splitRows || layout.verticalMode === SheetSplitMode.NONE
+            ? firstRow
+            : undefined,
         );
       else view.SetUnsplitOrigin(firstColumn, firstRow);
     }
@@ -221,11 +302,13 @@ export class CalcViewport {
     const document = view.GetDocument();
     const table = document.FetchTable(view.GetTabNumber()) as ScTable;
     const headers = view.IsHeaderMode();
-    const widthWithoutHeader = Math.max(1, width - (headers ? 48 : 0));
-    const heightWithoutHeader = Math.max(1, height - (headers ? this.current.rowHeight : 0));
+    const headerWidth = headers ? 48 : 0,
+      headerHeight = headers ? this.current.rowHeight : 0;
+    const widthWithoutHeader = Math.max(1, width - headerWidth);
+    const heightWithoutHeader = Math.max(1, height - headerHeight);
     const layout = view.GetPaneLayout();
     const frozenColumns =
-      layout?.horizontalMode === SheetSplitMode.FIX && layout.verticalMode !== SheetSplitMode.NORMAL
+      layout?.horizontalMode === SheetSplitMode.FIX
         ? frozenBand(
             layout.first[0],
             layout.horizontalPosition,
@@ -234,7 +317,7 @@ export class CalcViewport {
           )
         : undefined;
     const frozenRows =
-      layout?.verticalMode === SheetSplitMode.FIX && layout.horizontalMode !== SheetSplitMode.NORMAL
+      layout?.verticalMode === SheetSplitMode.FIX
         ? frozenBand(
             layout.first[1],
             layout.verticalPosition,
@@ -242,8 +325,20 @@ export class CalcViewport {
             rowPixels(table, layout.first[1], layout.verticalPosition - 1),
           )
         : undefined;
-    const bodyWidth = widthWithoutHeader - (frozenColumns?.pixels ?? 0);
-    const bodyHeight = heightWithoutHeader - (frozenRows?.pixels ?? 0);
+    const leadingWidth =
+      layout?.horizontalMode === SheetSplitMode.NORMAL
+        ? splitSize(layout.horizontalPosition, headerWidth, widthWithoutHeader)
+        : 0;
+    const leadingHeight =
+      layout?.verticalMode === SheetSplitMode.NORMAL
+        ? splitSize(layout.verticalPosition, headerHeight, heightWithoutHeader)
+        : 0;
+    const bodyWidth =
+      widthWithoutHeader -
+      (frozenColumns?.pixels ?? (leadingWidth ? leadingWidth + CALC_SPLIT_HANDLE_SIZE : 0));
+    const bodyHeight =
+      heightWithoutHeader -
+      (frozenRows?.pixels ?? (leadingHeight ? leadingHeight + CALC_SPLIT_HANDLE_SIZE : 0));
     const xBase = frozenColumns ? columnPixels(table, 0, frozenColumns.last) : 0;
     const yBase = frozenRows ? rowPixels(table, 0, frozenRows.last) : 0;
     const horizontal = new ScrollAxis(
@@ -264,6 +359,8 @@ export class CalcViewport {
       bodyHeight,
       frozenColumns,
       frozenRows,
+      leadingWidth,
+      leadingHeight,
       xBase,
       yBase,
     };

@@ -20,7 +20,7 @@
         "apps/office/e2e/calc/xlsx-frozen-grid.spec.ts",
         "apps/office/src/sc/browser/controller/calc-view-controller.test.ts"
       ],
-      "justification": "Projects per-pane paint and pointer coordinates from the actual browser viewport and the native sheet dimensions.",
+      "justification": "Projects per-pane paint and pointer coordinates from the actual browser viewport and the native sheet dimensions. Projects independently displaced normal panes and clips their cells at the native split handle.",
       "knownViolations": [],
       "localSymbols": [
         "CalcGridAxis"

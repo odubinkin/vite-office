@@ -12,7 +12,12 @@ import { SpecialText } from "../../../vcl/browser/special-text";
 import { SvxShadowedItem, SvxCharReliefItem } from "../../../editeng/source/items/textitem";
 import type { SvxHorJustifyItem, SvxVerJustifyItem } from "../../../editeng/inc/justifyitem";
 import type { ScTable } from "../../inc/table";
-import { CalcGridAxis, type CalcGridViewport } from "./calc-grid-axis";
+import {
+  CALC_SPLIT_HANDLE_SIZE,
+  CalcGridAxis,
+  type CalcGridViewport,
+  type CalcPaintBand,
+} from "./calc-grid-axis";
 import { ScViewData as NativeViewData } from "../../source/ui/inc/viewdata";
 import { ScPatternAttr } from "../../inc/patattr";
 import { ScAutoFontColorMode } from "../../source/core/data/patattr";
@@ -44,7 +49,7 @@ import type { SvxBrushItem } from "../../../editeng/inc/brushitem";
 import { COL_AUTO, COL_BLACK, COL_WHITE } from "../../../tools/inc/color";
 import { browserColor } from "../../../vcl/browser/color";
 import { ScAddress, type ScRange } from "../../inc/address";
-import type { ScViewData } from "../../source/ui/inc/viewdata";
+import type { ScSplitPos, ScViewData } from "../../source/ui/inc/viewdata";
 export type { CalcGridViewport } from "./calc-grid-axis";
 /** Read-only presentation of one canonical cell, formatted by the controller's display owner. */
 export interface CalcCellPresentation {
@@ -56,6 +61,7 @@ export interface ScGridWindowProps {
   readonly referenceMode?: boolean;
   readonly referenceRange?: ScRange | null;
   readonly onPointerEnd?: () => void;
+  readonly onActivatePane?: (part: ScSplitPos) => void;
   readonly onReveal?: (position: ScAddress, kind: "cell" | "column" | "row") => void;
   readonly onDrag?: (position: ScAddress, kind?: "cell" | "column" | "row") => void;
   readonly headerSizing?: ScHeaderSizing;
@@ -133,11 +139,19 @@ function cellTypography(pattern: ScPatternAttr) {
   };
   return { style, outlined, shadowed, relief, underline, lineColor, fontColor };
 }
-/** Clips partially visible cells at the boundary of an adjacent fixed pane. @param topSeam - First visible pixel of the vertical band. @param y - Cell body position. @param leftSeam - First visible pixel of the horizontal band. @param x - Cell body position. @returns Optional CSS clipping rectangle. */
-function paneClip(topSeam: number, y: number, leftSeam: number, x: number): string | undefined {
-  const top = topSeam ? Math.max(0, topSeam - y) : 0;
-  const left = leftSeam ? Math.max(0, leftSeam - x) : 0;
-  return top || left ? `inset(${top}px 0 0 ${left}px)` : undefined;
+/** Determines the amount of a cell clipped by a neighboring pane. @param band - Pane along the axis. @param start - Cell edge in body pixels. @param size - Cell extent. @returns Inset distances. */
+function cellInsets(band: CalcPaintBand, start: number, size: number): readonly [number, number] {
+  const near =
+    band.clipStart || band.clipEnd !== undefined ? Math.max(0, band.clipStart - start) : 0;
+  const far = band.clipEnd === undefined ? 0 : Math.max(0, start + size - band.clipEnd);
+  return [near, far];
+}
+
+/** Formats a nonempty clipping rectangle. @param top - Top inset. @param right - Right inset. @param bottom - Bottom inset. @param left - Left inset. @returns Optional CSS clipping rectangle. */
+function paneClip(top: number, right: number, bottom: number, left: number): string | undefined {
+  return top || right || bottom || left
+    ? `inset(${top}px ${right}px ${bottom}px ${left}px)`
+    : undefined;
 }
 
 /** Paints a bounded window of actual view-owned cells and emits platform input intents. @param props - Read-only view and controller bindings. @returns Accessible Calc grid. */
@@ -193,32 +207,46 @@ export function ScGridWindow(props: ScGridWindowProps): React.JSX.Element {
   const headers = viewData.IsHeaderMode(),
     headerWidth = headers ? 48 : 0,
     headerHeight = headers ? viewport.rowHeight : 0;
+  const normal = !!(viewport.splitColumns || viewport.splitRows);
+  const activePart = viewData.GetActivePart();
+  /** Combines left/right and top/bottom view identities. @param x - Horizontal band. @param y - Vertical band. @returns Native pane. */
+  function part(x: CalcPaintBand, y: CalcPaintBand): ScSplitPos {
+    return ((xAxis.bands.length > 1 && !x.leading ? 1 : 0) | (!y.leading ? 2 : 0)) as ScSplitPos;
+  }
+  /** Produces distinct ARIA IDs when a normal split can show the same cell twice. @param col - Column. @param rowIndex - Row. @param pane - Pane. @returns Cell ID. */
+  function idFor(col: number, rowIndex: number, pane: ScSplitPos): string {
+    return `${props.idPrefix}-${tab}-${col}-${rowIndex}${normal ? `-${pane}` : ""}`;
+  }
   const columnBand = xAxis.bands.find(
-    /** Locates the active cell's horizontal pane. @param band - Candidate band. @returns Whether the cell is painted in the band. */
-    (band) => band.cells.includes(column),
+    /** Locates the cursor only in the active normal pane. @param band - Candidate. @returns Whether the cell is in this pane. */
+    (band) =>
+      band.cells.includes(column) && (!viewport.splitColumns || band.leading === !(activePart & 1)),
   );
   const rowBand = yAxis.bands.find(
-    /** Locates the active cell's vertical pane. @param band - Candidate band. @returns Whether the cell is painted in the band. */
-    (band) => band.cells.includes(row),
+    /** Locates the cursor only in the active normal pane. @param band - Candidate. @returns Whether the cell is in this pane. */
+    (band) =>
+      band.cells.includes(row) && (!viewport.splitRows || band.leading === !(activePart & 2)),
   );
-  const activeVisible = columnBand !== undefined && rowBand !== undefined;
-  const editorStyle: CSSProperties | undefined =
-    editing && activeVisible
-      ? {
-          ...cellTypography(document.GetPattern(new ScAddress(column, row, tab)) as ScPatternAttr)
-            .style,
-          left: headerWidth + xAxis.Position(columnBand, column) + 2,
-          top: headerHeight + yAxis.Position(rowBand, row) + 2,
-          clipPath: paneClip(
-            rowBand.clipStart,
-            yAxis.Position(rowBand, row) + 2,
-            columnBand.clipStart,
-            xAxis.Position(columnBand, column) + 2,
-          ),
-          width: Math.max(0, NativeViewData.ToPixel(table.GetColWidth(column), 1 / 15) - 4),
-          height: Math.max(0, NativeViewData.ToPixel(table.GetRowHeight(row), 1 / 15) - 4),
-        }
-      : undefined;
+  const activeId =
+    columnBand && rowBand ? idFor(column, row, part(columnBand, rowBand)) : undefined;
+  let editorStyle: CSSProperties | undefined;
+  if (editing && columnBand && rowBand) {
+    const x = xAxis.Position(columnBand, column) + 2;
+    const y = yAxis.Position(rowBand, row) + 2;
+    const width = Math.max(0, NativeViewData.ToPixel(table.GetColWidth(column), 1 / 15) - 4);
+    const height = Math.max(0, NativeViewData.ToPixel(table.GetRowHeight(row), 1 / 15) - 4);
+    const [left, right] = cellInsets(columnBand, x, width);
+    const [top, bottom] = cellInsets(rowBand, y, height);
+    editorStyle = {
+      ...cellTypography(document.GetPattern(new ScAddress(column, row, tab)) as ScPatternAttr)
+        .style,
+      left: headerWidth + x,
+      top: headerHeight + y,
+      clipPath: paneClip(top, right, bottom, left),
+      width,
+      height,
+    };
+  }
   useLayoutEffect(
     /** Follows native table/inline input focus on editing transitions, without retaining edit content. @returns Nothing. */ () => {
       if (editing) {
@@ -307,10 +335,13 @@ export function ScGridWindow(props: ScGridWindowProps): React.JSX.Element {
         },
     });
   }
-  /** Uses the shared Writer/VCL window tracking owner for actual cell selection and formula pointing. @param position - Initial cell. @param event - Initial pointer. @returns Nothing. */
-  function point(position: ScAddress, event: PointerEvent<HTMLDivElement>): void {
+  /** Uses the shared Writer/VCL window tracking owner for actual cell selection and formula pointing. @param position - Initial cell. @param pane - Hit pane. @param event - Initial pointer. @returns Nothing. */
+  function point(position: ScAddress, pane: ScSplitPos, event: PointerEvent<HTMLDivElement>): void {
     if (event.button !== 0 || event.altKey) return;
-    if (!props.referenceMode) grid.current?.focus();
+    if (!props.referenceMode) {
+      props.onActivatePane?.(pane);
+      grid.current?.focus();
+    }
     track(
       event,
       "cell",
@@ -332,6 +363,24 @@ export function ScGridWindow(props: ScGridWindowProps): React.JSX.Element {
         props.onHeader(kind, index, event),
     );
   }
+  /** Clips a column at the divider. @param band - Horizontal pane. @param index - Column. @returns CSS clipping rectangle. */
+  function columnClip(band: CalcPaintBand, index: number): string | undefined {
+    const [left, right] = cellInsets(
+      band,
+      xAxis.Position(band, index),
+      NativeViewData.ToPixel(table.GetColWidth(index), 1 / 15),
+    );
+    return paneClip(0, right, 0, left);
+  }
+  /** Clips a row at the divider. @param band - Vertical pane. @param index - Row. @returns CSS clipping rectangle. */
+  function rowClip(band: CalcPaintBand, index: number): string | undefined {
+    const [top, bottom] = cellInsets(
+      band,
+      yAxis.Position(band, index),
+      NativeViewData.ToPixel(table.GetRowHeight(index), 1 / 15),
+    );
+    return paneClip(top, 0, bottom, 0);
+  }
   return (
     <div className="relative flex min-h-0 flex-1 overflow-hidden text-[13px] text-slate-900">
       <div
@@ -340,9 +389,7 @@ export function ScGridWindow(props: ScGridWindowProps): React.JSX.Element {
         aria-label="Spreadsheet"
         aria-rowcount={document.MaxRow() + 1 + Number(headers)}
         aria-colcount={document.MaxCol() + 1 + Number(headers)}
-        aria-activedescendant={
-          activeVisible ? `${props.idPrefix}-${tab}-${column}-${row}` : undefined
-        }
+        aria-activedescendant={activeId}
         tabIndex={0}
         onScroll={props.onScroll}
         onKeyDown={
@@ -393,13 +440,13 @@ export function ScGridWindow(props: ScGridWindowProps): React.JSX.Element {
                 /** Renders the native column header in its own pane. @param heading - Column and band. @returns Heading. */
                 ({ col, band }) => (
                   <div
-                    key={col}
+                    key={`${col}:${band.leading}`}
                     role="columnheader"
                     aria-colindex={col + 1 + Number(headers)}
                     aria-label={`Column ${columnLabel(col)}`}
                     style={{
                       left: 48 + viewport.scrollLeft + xAxis.Position(band, col),
-                      clipPath: paneClip(0, 0, band.clipStart, xAxis.Position(band, col)),
+                      clipPath: columnClip(band, col),
                       width: NativeViewData.ToPixel(table.GetColWidth(col), 1 / 15),
                       height: viewport.rowHeight,
                     }}
@@ -443,13 +490,13 @@ export function ScGridWindow(props: ScGridWindowProps): React.JSX.Element {
             /** Renders a visible row with pane-specific cells and borders. @param entry - Row and paint bands. @returns Grid row. */
             ({ r, band, cells }) => (
               <div
-                key={r}
+                key={`${r}:${band.leading}`}
                 role="row"
                 aria-rowindex={r + 1 + Number(headers)}
                 className="absolute left-0 w-full"
                 style={{
                   top: viewport.scrollTop + headerHeight + yAxis.Position(band, r),
-                  clipPath: paneClip(band.clipStart, yAxis.Position(band, r), 0, 0),
+                  clipPath: rowClip(band, r),
                   height: NativeViewData.ToPixel(table.GetRowHeight(r), 1 / 15),
                 }}
               >
@@ -510,8 +557,9 @@ export function ScGridWindow(props: ScGridWindowProps): React.JSX.Element {
                       lineColor,
                       fontColor,
                     } = cellTypography(pattern);
-                    const active = column === col && row === r;
-                    const cellId = `${props.idPrefix}-${tab}-${col}-${r}`;
+                    const pane = part(x, band);
+                    const cellId = idFor(col, r, pane);
+                    const active = cellId === activeId;
                     const marks = viewData.GetMarkData();
                     const selected =
                       (!(marks.IsMarked() || marks.IsMultiMarked()) && active) ||
@@ -578,16 +626,17 @@ export function ScGridWindow(props: ScGridWindowProps): React.JSX.Element {
                         "flex-start",
                       ][(pattern.GetItem(132) as SvxVerJustifyItem).GetValue()],
                       left: headerWidth + viewport.scrollLeft + xAxis.Position(x, col),
-                      clipPath: paneClip(0, 0, x.clipStart, xAxis.Position(x, col)),
+                      clipPath: columnClip(x, col),
                       width: NativeViewData.ToPixel(table.GetColWidth(col), 1 / 15),
                       height: NativeViewData.ToPixel(table.GetRowHeight(r), 1 / 15),
                     };
                     return (
                       <div
-                        key={col}
+                        key={cellId}
                         id={cellId}
                         data-calc-column={col}
                         data-calc-row={r}
+                        data-calc-pane={pane}
                         role="gridcell"
                         aria-colindex={col + 1 + Number(headers)}
                         aria-selected={selected}
@@ -599,7 +648,7 @@ export function ScGridWindow(props: ScGridWindowProps): React.JSX.Element {
                           /** Focuses the grid and routes selection with button/modifiers intact. @param event - Platform pointer. @returns Nothing. */ (
                             event,
                           ) => {
-                            point(position, event);
+                            point(position, pane, event);
                           }
                         }
                         onDoubleClick={
@@ -690,6 +739,23 @@ export function ScGridWindow(props: ScGridWindowProps): React.JSX.Element {
           style={{ top: headerHeight + viewport.frozenRows.pixels - 1 }}
         />
       )}
+      {viewport.splitColumns && (
+        <div
+          aria-hidden="true"
+          className="pointer-events-none absolute inset-y-0 z-[10] bg-slate-400"
+          style={{
+            left: headerWidth + viewport.splitColumns.pixels,
+            width: CALC_SPLIT_HANDLE_SIZE,
+          }}
+        />
+      )}
+      {viewport.splitRows && (
+        <div
+          aria-hidden="true"
+          className="pointer-events-none absolute inset-x-0 z-[10] bg-slate-400"
+          style={{ top: headerHeight + viewport.splitRows.pixels, height: CALC_SPLIT_HANDLE_SIZE }}
+        />
+      )}
       {editing && (
         <input
           ref={input}
@@ -719,7 +785,7 @@ export function ScGridWindow(props: ScGridWindowProps): React.JSX.Element {
           onKeyDown={props.onInputKeyDown}
           style={editorStyle}
           className={
-            activeVisible
+            activeId
               ? "absolute z-[2] select-text border-0 bg-white px-[2px] text-left outline-none"
               : "sr-only"
           }

@@ -50,7 +50,8 @@
       "Reports native document-operation errors through the existing Calc host display.",
       "Uses native cell admission for address selection and native relative cursor and protected block movement.",
       "Routes Shift keyboard movement to native ExpandBlock and retains the active cell.",
-      "Delegates physical scroll track measurement and restoration to CalcViewport and retains ScViewData as the owner of visible sheet positions."
+      "Delegates physical scroll track measurement and restoration to CalcViewport and retains ScViewData as the owner of visible sheet positions.",
+      "Routes wheel axes to the appropriate normal pane pair and keeps trailing DOM scroll tracks in sync."
     ],
     "stackDivergence": {
       "kind": "browser-adaptation",

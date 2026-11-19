@@ -20,7 +20,7 @@
         "apps/office/src/sc/browser/controller/calc-view-controller.test.ts",
         "apps/office/e2e/calc/xlsx-active-view.spec.ts"
       ],
-      "justification": "Maps the existing bounded browser scrollbar to actual sheet geometry and calibrates the track at the imported unsplit cell origin. Native ScViewData owns the visible cell positions. Maps frozen geometry to bounded moving scroll domains using native dimensions and the source split margin. Updates only the available movable axes.",
+      "justification": "Maps the existing bounded browser scrollbar to actual sheet geometry and calibrates the track at the imported unsplit cell origin. Native ScViewData owns the visible cell positions. Maps frozen geometry to bounded moving scroll domains using native dimensions and the source split margin. Updates only the available movable axes. Restores and scrolls both normal pane pairs independently, using the source splitter margin and retaining exact logical wheel deltas across the integer browser tracks.",
       "knownViolations": [],
       "localSymbols": [
         "CalcViewport"

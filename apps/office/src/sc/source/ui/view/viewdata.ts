@@ -13,6 +13,7 @@ import {
   setSheetCursor,
   getSheetPaneLayout,
   setSheetPaneLayout,
+  sanitizeSheetPane,
   SheetPane,
   SheetSplitMode,
   type SheetPaneLayout,
@@ -282,19 +283,22 @@ export class ScViewData {
       second: [layout?.second[0] ?? 0, row],
     });
   }
-  /** Publishes the actual scroll positions of a frozen sheet's movable parts. @param column - Left column in the movable horizontal part. @param row - Top row in the movable vertical part. @param scrollX - Horizontal part is present in the client. @param scrollY - Vertical part is present in the client. @returns Nothing. */
-  SetFrozenOrigin(column: number, row: number, scrollX: boolean, scrollY: boolean): void {
+  /** Publishes the measured sheet positions of the left, top, right and bottom pane axes. @param left - Left column. @param top - Top row. @param right - Right column. @param bottom - Bottom row. @returns Nothing. */
+  SetPaneOrigins(
+    left: number | undefined,
+    top: number | undefined,
+    right: number | undefined,
+    bottom: number | undefined,
+  ): void {
     const layout = this.GetPaneLayout();
     if (!layout) return;
-    const x = layout.horizontalMode === SheetSplitMode.FIX;
-    const y = layout.verticalMode === SheetSplitMode.FIX;
     const first: SheetPaneLayout["first"] = [
-      x || !scrollX ? layout.first[0] : column,
-      y || !scrollY ? layout.first[1] : row,
+      left ?? layout.first[0],
+      (layout.verticalMode === SheetSplitMode.NONE ? bottom : top) ?? layout.first[1],
     ];
     const second: SheetPaneLayout["second"] = [
-      x && scrollX ? Math.max(column, layout.horizontalPosition) : layout.second[0],
-      scrollY ? Math.max(row, layout.verticalPosition) : layout.second[1],
+      right ?? layout.second[0],
+      bottom ?? layout.second[1],
     ];
     if (
       first[0] !== layout.first[0] ||
@@ -363,9 +367,22 @@ export class ScViewData {
     if (!ValidTab(nTabIndex) || nTabIndex >= this.maTabData.length) return null;
     return this.maTabData[nTabIndex] ?? null;
   }
-  /** Reads the native active-pane default for this unsplit view. @returns Pane identity. */
+  /** Reads the active pane of the current sheet view. @returns Pane identity. */
   GetActivePart(): ScSplitPos {
     return this.pThisTab.eWhichActive;
+  }
+  /** Activates an available grid window and mirrors the pane identity for file export. @param part - Selected pane. @returns Nothing. */
+  SetActivePart(part: ScSplitPos): void {
+    const layout = this.GetPaneLayout();
+    if (!layout) return;
+    const activePane = sanitizeSheetPane(
+      part,
+      layout.horizontalMode !== SheetSplitMode.NONE,
+      layout.verticalMode !== SheetSplitMode.NONE,
+    );
+    this.pThisTab.eWhichActive = activePane;
+    if (activePane !== layout.activePane)
+      setSheetPaneLayout(this.mrDoc, this.GetTabNumber(), { ...layout, activePane });
   }
   /** Reads the active sheet cursor column. @returns Zero-based column. */
   GetCurX(): number {

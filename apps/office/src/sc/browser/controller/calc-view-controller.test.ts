@@ -23,8 +23,10 @@ import {
   SheetPane,
   SheetSplitMode,
 } from "../../source/core/data/document.sheet-visibility";
-import { ScHSplitPos, ScVSplitPos } from "../../source/ui/view/viewdata";
+import { ScHSplitPos, ScSplitPos, ScVSplitPos } from "../../source/ui/view/viewdata";
 import { CalcGridAxis } from "../presentation/calc-grid-axis";
+import { columnPixels } from "../presentation/column-geometry";
+import { rowPixels } from "../presentation/row-geometry";
 
 it("displays and edits native rich-text cells without reading an absent shared-string variant", /** Checks repeated display ownership and preservation of text that resembles a number. @returns Nothing. */ () => {
   const shell = new ScDocShell();
@@ -301,6 +303,78 @@ it("keeps frozen bands and scrolls only their movable counterparts", /** Asserts
     c.Scroll(500, c.ScrollTopForRow(33, 680), 65, 680);
     expect(getSheetPaneLayout(doc, 0)).toMatchObject({ first: [1, 2], second: [12, 33] });
     expect(c.shell.IsModified()).toBe(false);
+  } finally {
+    c.Close();
+    doc.Dispose();
+  }
+});
+
+it("stores the four normal split axes and active part independently", /** Exercises exact browser wheel mapping, normal divider bounds and the native pane record. @returns Nothing. */ () => {
+  const c = new CalcViewController();
+  const doc = c.shell.GetDocument();
+  try {
+    const table = doc.FetchTable(0);
+    if (!table) throw new Error("Missing split test sheet.");
+    const layout = {
+      horizontalMode: SheetSplitMode.NORMAL,
+      horizontalPosition: 5100,
+      verticalMode: SheetSplitMode.NORMAL,
+      verticalPosition: 3600,
+      activePane: SheetPane.BOTTOMRIGHT,
+      first: [1, 2],
+      second: [6, 11],
+    } as const;
+    setSheetPaneLayout(doc, 0, layout);
+    const start = c.RestoreScrollPosition(960, 720);
+    c.MeasureViewport(start.left, start.top, 960, 720);
+    const viewport = c.viewport;
+    expect(viewport).toMatchObject({
+      firstColumn: 6,
+      firstRow: 11,
+      splitColumns: { first: 1, pixels: 292 },
+      splitRows: { first: 2, pixels: 218 },
+    });
+    const geometry = new CalcGridAxis(table, viewport, true, doc.MaxCol());
+    expect(geometry.bands[0]?.clipEnd).toBe(292);
+    expect(geometry.Hit(7)).toBe(1);
+    expect(geometry.Hit(299)).toBe(6);
+    const leading = c.ScrollPaneWheel(
+      start.left,
+      start.top,
+      960,
+      720,
+      columnPixels(table, 1, 2),
+      rowPixels(table, 2, 4),
+      true,
+      true,
+    );
+    expect(leading).toEqual({ left: start.left, top: start.top });
+    expect(getSheetPaneLayout(doc, 0)).toMatchObject({ first: [3, 5], second: [6, 11] });
+    const onePixel = c.ScrollPaneWheel(start.left, start.top, 960, 720, 1, 1, false, false);
+    expect(c.viewport.rowOffset).toBe(1);
+    expect(c.viewport.columnOffset).toBe(1);
+    c.ScrollPaneWheel(
+      onePixel.left,
+      onePixel.top,
+      960,
+      720,
+      columnPixels(table, 6, 7) - 1,
+      rowPixels(table, 11, 13) - 1,
+      false,
+      false,
+    );
+    c.viewData.SetActivePart(ScSplitPos.SC_SPLIT_TOPRIGHT);
+    expect(getSheetPaneLayout(doc, 0)).toMatchObject({
+      first: [3, 5],
+      second: [8, 14],
+      activePane: SheetPane.TOPRIGHT,
+    });
+    expect(c.viewData.GetActivePart()).toBe(ScSplitPos.SC_SPLIT_TOPRIGHT);
+    expect(c.shell.IsModified()).toBe(false);
+    c.MeasureViewport(0, 0, 60, 65);
+    expect(c.viewport.splitColumns).toBeUndefined();
+    expect(c.viewport.splitRows).toBeUndefined();
+    expect(getSheetPaneLayout(doc, 0)?.horizontalPosition).toBe(5100);
   } finally {
     c.Close();
     doc.Dispose();

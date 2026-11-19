@@ -7,7 +7,8 @@
     "status": "local-only",
     "rationale": "Platform paint and hit-testing geometry for the fixed and movable sides of the DOM grid.",
     "responsibilities": [
-      "Projects native visible cells into separate fixed and movable bands, skipping hidden rows and columns. Uses the same geometry for paint and pointer hit testing."
+      "Projects native visible cells into separate fixed and movable bands, skipping hidden rows and columns. Uses the same geometry for paint and pointer hit testing.",
+      "Projects independently displaced normal panes and clips their cells at the native split handle."
     ],
     "stackDivergence": {
       "kind": "browser-adaptation",

@@ -914,6 +914,37 @@ export class CalcViewController {
     this.gridViewport.Measure(left, top, width, height);
     this.Changed();
   }
+  /** Routes wheel input to the relevant paired pane axes. @param left - Actual DOM horizontal offset. @param top - Actual DOM vertical offset. @param width - Client width. @param height - Client height. @param dx - Horizontal wheel delta. @param dy - Vertical wheel delta. @param leadingX - Pointer lies in the normal left band. @param leadingY - Pointer lies in the normal top band. @returns New trailing DOM offsets. */
+  ScrollPaneWheel(
+    left: number,
+    top: number,
+    width: number,
+    height: number,
+    dx: number,
+    dy: number,
+    leadingX: boolean,
+    leadingY: boolean,
+  ) {
+    this.gridViewport.ScrollLeading(leadingX ? dx : 0, leadingY ? dy : 0);
+    const offsets = this.gridViewport.WheelTrailing(
+      this.viewData,
+      left,
+      top,
+      width,
+      height,
+      leadingX ? 0 : dx,
+      leadingY ? 0 : dy,
+    );
+    this.gridViewport.Measure(offsets.left, offsets.top, width, height);
+    this.Changed(true);
+    return offsets;
+  }
+  /** Scrolls the normal left and top axes by native logical pixels. @param dx - Left pane delta. @param dy - Top pane delta. @returns Nothing. */
+  ScrollLeading(dx: number, dy: number): void {
+    if (!dx && !dy) return;
+    this.gridViewport.ScrollLeading(dx, dy);
+    this.Changed(true);
+  }
   /** Publishes actual browser scrolling to the active view. @param left - Horizontal pixels. @param top - Vertical pixels. @param width - Client width. @param height - Client height. @returns Nothing. */
   Scroll(left: number, top: number, width: number, height: number): void {
     this.Changed(this.gridViewport.Measure(left, top, width, height));

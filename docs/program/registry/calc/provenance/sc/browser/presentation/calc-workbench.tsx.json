@@ -33,7 +33,8 @@
       "Final74 browser regression exposed a real input-focus race after ODS open:controlled layout re-applied the native end caret after browser select-all,so replacement appended to existing text. Source ScTextWnd::GetFocus delegates to WeldEditView without resetting selection. The presenter now records actual browser-owned TOP focus for that layout transaction and preserves its selection;programmatic native Formula/AutoSum/reference focus still projects native caret/ranges. Already-TOP programmatic focus does not restart native input. No timer,heuristic text rewrite or second editor model is introduced. Actual DOM select-all replacement/history regression and existing native argument/reference selection tests pass.",
       "Starts mouse editing only after selection of the actual target succeeds.",
       "Restores the adopted sheet viewport before cursor reveal, preserving distinct first visible cells and active cursor coordinates across sheet switches.",
-      "Reveals cursor and pointer endpoints within the movable part of each view axis, preserving the fixed part."
+      "Reveals cursor and pointer endpoints within the movable part of each view axis, preserving the fixed part.",
+      "Routes wheel input by the pane under the pointer and reveals the cursor in the active pane."
     ],
     "stackDivergence": {
       "kind": "browser-adaptation",
