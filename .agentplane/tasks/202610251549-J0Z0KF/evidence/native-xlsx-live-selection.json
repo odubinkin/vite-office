@@ -1,0 +1,56 @@
+{
+  "checkpoint": "Calc exports live range marks and the active Excel selection index",
+  "implementation": "ee1de1f0127e",
+  "baseline": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "sources": [
+    "sc/source/ui/view/scextopt.cxx#ScExtTabSettings::ScExtTabSettings",
+    "sc/source/ui/view/viewdata.cxx#ScViewData::WriteExtOptions",
+    "sc/source/filter/excel/xehelper.cxx#XclExpAddressConverter::ConvertRangeList",
+    "sc/source/filter/excel/xeview.cxx#XclExpTabViewSettings::CreateSelectionData",
+    "sc/source/filter/excel/xeview.cxx#XclExpSelection::XclExpSelection",
+    "sc/source/filter/excel/xestream.cxx#XclXmlUtils::ToOString",
+    "sc/source/filter/oox/viewsettings.cxx#SheetViewSettings::finalizeImport"
+  ],
+  "verification": {
+    "calc": {
+      "command": "npm run test:coverage:calc -- viewdata.settings markdata excelfilter.test calc-files --maxWorkers=2 --testTimeout=90000 --coverage.include='src/sc/source/{filter/excel/xeview,ui/view/scextopt}.ts' --coverage.reportsDirectory=coverage/calc-xlsx-selection --coverage.reporter=text --coverage.reporter=json --coverage.thresholds.statements=90 --coverage.thresholds.branches=90 --coverage.thresholds.functions=90 --coverage.thresholds.lines=90",
+      "result": "pass",
+      "evidence": "38 tests. Both measured owners meet scoped90. An export snapshot retains its ordered ranges after the live marks clear. The unchanged freezePaneStartCell.xlsx fixture verifies active versus inactive pane output. Invalid range starts are skipped, ends are clipped and a missing cursor cell is appended after the ranges. Import reopens the active cell with no restored grid marks, matching the original XLSX view finalizer."
+    },
+    "related_calc": {
+      "command": "npm run test:calc -- xestring ods-worker-boundaries docsh.csv-export --maxWorkers=1 --testTimeout=90000",
+      "result": "pass",
+      "evidence": "22 string serializer, ODS Worker and CSV export cases."
+    },
+    "chromium": {
+      "command": "PLAYWRIGHT_BROWSERS_PATH=\"$PWD/.agentplane/tmp/zip-migration/browsers\" npm exec -- playwright test --config .git/calc-panes-browser.config.mts --project calc --workers=1 apps/office/e2e/calc/xlsx-selection.spec.ts apps/office/e2e/calc/xlsx-split-grid.spec.ts apps/office/e2e/calc/xlsx-active-view.spec.ts --grep 'disjoint marks|normal XLSX|frozen panes|unsplit XLSX'",
+      "result": "pass",
+      "evidence": "Four scenarios on the production build. Real browser gestures create B2:C3 and E5. The downloaded workbook contains sqref B2:C3 E5 and activeCellId 1, and reopening at mobile width restores the E5 cursor. The browser config inherits production settings with an available preview port."
+    },
+    "static": {
+      "commands": [
+        "npm run typecheck",
+        "npm run test:static",
+        "npm run check:docs",
+        "npm run check:dependencies",
+        "npm run check:source-tree",
+        "npm run check:calc-resources",
+        "npm run check:file-size",
+        "node .agentplane/policy/check-routing.mjs",
+        "ap doctor",
+        "git diff --check"
+      ],
+      "result": "pass",
+      "evidence": "Scoped ESLint, Prettier and registry validation of seven runtime paths passed. Doctor retained the existing managed shim warning."
+    },
+    "global_provenance_and_registry": {
+      "commands": ["npm run check:source-provenance", "npm run inventory:registry:check"],
+      "result": "fail",
+      "evidence": "The unchanged framework OfficeTooltips.tsx and available-menu-items.ts entries remain absent. The global invariants and parity scripts use the same checker."
+    }
+  },
+  "residual": [
+    "The browser uses the live current-view sheet selection flags for XLSX output. Grouped tab import and grouped state through primary ODS remain open.",
+    "Complete XLSX acceptance remains open. Full regression suites remain on the approved ten-task cadence."
+  ]
+}
