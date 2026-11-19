@@ -22,6 +22,10 @@
         {
           "path": "apps/office/src/sw/source/filter/ww8/docxexport.typography.test.ts",
           "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/source/writerfilter/filter/WriterFilter.test.ts",
+          "marker": "exports the original testSemiTransparentText value through the UNO paragraph"
         }
       ],
       "upstream": [
@@ -69,7 +73,8 @@
     ],
     "preservedResponsibilities": [
       "Consumes source-native ligature, number form and number spacing resources. Stores the nested UNO PropertyValue/Sequence in the original character interoperability item.",
-      "Carries the native ordered styleSet children with signed ID and string toggle attributes. Contextual alternatives use the original scalar SPRM fallback documented in WRITER-653."
+      "Carries the native ordered styleSet children with signed ID and string toggle attributes. Contextual alternatives use the original scalar SPRM fallback documented in WRITER-653.",
+      "Solid Word 2010 text fill maps scheme color and numeric transformations to the original complex color. Native alpha becomes CharTransparence; the separate fallback RGB remains active. Gradient and outline property owners remain unqualified."
     ],
     "omittedResponsibilities": [
       "The consumed character typography uses the original three scalar effects. Other Word drawing effects and full Writer parity remain in progress."

@@ -15,7 +15,43 @@ import {
 import { DocxExport } from "../../filter/ww8/docxexport";
 import { SvxLineSpacingItem } from "../../../../editeng/inc/lspcitem";
 import { SvxLineSpaceRule } from "../../../../editeng/inc/svxenum";
-import { RES_PARATR_LINESPACING } from "../../../inc/hintids";
+import { RES_CHRATR_COLOR, RES_PARATR_LINESPACING } from "../../../inc/hintids";
+import type { SvxColorItem } from "../../../../editeng/inc/colritem";
+import { effectiveItem } from "../../core/unocore/unocrsrhelper";
+import { readOdtDocument } from "../../filter/xml/swxml";
+import { writeOdtDocument } from "../../filter/xml/wrtxml";
+import { ThemeColorType } from "../../../../docmodel/inc/theme/ThemeColorType";
+import { Any } from "../../../../cppu/inc/com/sun/star/uno/Any";
+import { unicode } from "../../../../i18nlangtag/source/isolang/isolang.tables";
+import { createWriterDocument } from "../../core/doc/doc";
+import { SwXTextDocument } from "../../uibase/uno/unotxdoc";
+import { SwXParagraph } from "../../core/unocore/unoparagraph";
+
+it("exports the original testSemiTransparentText value through the UNO paragraph", /** Replays ooxmlexport14 testSemiTransparentText using the canonical Writer model. @returns Completion. */ async () => {
+  const doc = createWriterDocument();
+  const model = new SwXTextDocument(doc);
+  const node = doc.paragraphs[0];
+  if (!node) throw new Error("Missing initial paragraph");
+  const paragraph = new SwXParagraph(node, model.getText());
+  const name = unicode("CharTransparence");
+  const value = new Any([75], "sal_Int16");
+  const letter = unicode("x");
+  try {
+    paragraph.setPropertyValue(name, value);
+    paragraph.setString(letter);
+    const exported = await DocumentArchive.open(await DocxExport.WriteDocument(doc));
+    expect(await exported.readTextEntry("word/document.xml")).toMatch(
+      /<w14:textFill><w14:solidFill><w14:srgbClr[^>]*><w14:alpha w14:val="75000"\/>/u,
+    );
+  } finally {
+    letter.dispose();
+    value.dispose();
+    name.dispose();
+    paragraph.Release();
+    model.dispose();
+    doc.Dispose();
+  }
+});
 
 it("opens editable text after view settings, text effects and table row exceptions", /** Replays the factory paths of an ordinary Word package using independent synthetic content. @returns Completion. */ async () => {
   const source = await DocumentArchive.open(
@@ -30,9 +66,9 @@ it("opens editable text after view settings, text effects and table row exceptio
   const effects = 'xmlns:w14="http://schemas.microsoft.com/office/word/2010/wordml"';
   const settings = `<w:settings ${xml}><w:view w:val="print"/><w:revisionView w:markup="true"/><w:noLineBreaksBefore w:lang="ja-JP" w:val="。"/><w:noLineBreaksAfter w:lang="ja-JP" w:val="「"/></w:settings>`;
   const body = `<w:document ${xml} ${effects}><w:body>
-    <w:p><w:r><w:rPr><w:w w:val="99"/><w14:textOutline><w14:noFill/></w14:textOutline><w14:textFill><w14:solidFill><w14:srgbClr w14:val="112233"/></w14:solidFill></w14:textFill></w:rPr><w:t>Before the table</w:t></w:r></w:p>
+    <w:p><w:r><w:rPr><w:w w:val="99"/><w14:textOutline><w14:noFill/></w14:textOutline><w14:textFill><w14:solidFill><w14:schemeClr w14:val="accent2"><w14:alpha w14:val="75000"/><w14:lumMod w14:val="50000"/></w14:schemeClr></w14:solidFill></w14:textFill><w:color w:val="112233"/></w:rPr><w:t>Before the table</w:t></w:r></w:p>
     <w:tbl><w:tblPr/><w:tblGrid><w:gridCol w:w="1200"/></w:tblGrid><w:tr><w:tblPrEx><w:tblW w:w="1200" w:type="dxa"/></w:tblPrEx><w:tc><w:p><w:r><w:t>Table cell</w:t></w:r></w:p></w:tc></w:tr></w:tbl>
-    <w:p><w:r><w:t>After the table</w:t></w:r></w:p>
+    <w:p><w:r><w:rPr><w:color w:val="445566"/><w14:textFill><w14:solidFill><w14:srgbClr w14:val="FF0000"><w14:alpha w14:val="25000"/></w14:srgbClr></w14:solidFill></w14:textFill></w:rPr><w:t>After the table</w:t></w:r></w:p>
   </w:body></w:document>`;
   const replacements = new Map([
     ["word/settings.xml", settings],
@@ -60,7 +96,37 @@ it("opens editable text after view settings, text effects and table row exceptio
       document.GetTables()[0]?.GetTabLines()[0]?.GetTabBoxes()[0]?.GetParagraphs()[0]?.GetText(),
     ).toBe("Table cell");
     const exported = await DocumentArchive.open(await DocxExport.WriteDocument(document));
-    expect(await exported.readTextEntry("word/document.xml")).toContain("After the table");
+    const output = await exported.readTextEntry("word/document.xml");
+    expect(output).toContain("After the table");
+    expect(output).toContain('<w14:schemeClr w14:val="accent2">');
+    expect(output).toContain('<w14:alpha w14:val="75000"/>');
+    const paragraph = document.paragraphs[0];
+    if (!paragraph) throw new Error("Missing first paragraph");
+    const color = effectiveItem(paragraph, 0, RES_CHRATR_COLOR) as SvxColorItem;
+    expect(color.GetValue().GetAlpha()).toBe(64);
+    expect(color.GetValue().toUInt32() & 0xffffff).toBe(0x112233);
+    expect(color.getComplexColor().getThemeColorType()).toBe(ThemeColorType.Accent2);
+    const after = document.paragraphs[1];
+    if (!after) throw new Error("Missing second paragraph");
+    const rgb = effectiveItem(after, 0, RES_CHRATR_COLOR) as SvxColorItem;
+    expect(rgb.GetValue().toUInt32() & 0xffffff).toBe(0x445566);
+    expect(rgb.GetValue().GetAlpha()).toBe(191);
+    const metadata = { title: "Text fill" };
+    const bytes = await writeOdtDocument(document, metadata);
+    const odt = await DocumentArchive.open(bytes);
+    expect(await odt.readTextEntry("content.xml")).toContain('loext:opacity="25%"');
+    const { document: restored } = await readOdtDocument(bytes, metadata);
+    try {
+      const restoredParagraph = restored.paragraphs[0];
+      if (!restoredParagraph) throw new Error("Missing restored paragraph");
+      expect(
+        (effectiveItem(restoredParagraph, 0, RES_CHRATR_COLOR) as SvxColorItem)
+          .GetValue()
+          .GetAlpha(),
+      ).toBe(64);
+    } finally {
+      restored.Dispose();
+    }
   } finally {
     document.Dispose();
   }

@@ -7,6 +7,7 @@ import type { OdfThemeColor } from "./XMLComplexColorContext";
 /** Direct character properties supported by the bounded text exporter. */
 export interface OdfCharacterProperties {
   readonly color?: string;
+  readonly textTransparency?: number;
   readonly themeColor?: OdfThemeColor;
   readonly language?: LanguageType;
   readonly languageAsian?: LanguageType;

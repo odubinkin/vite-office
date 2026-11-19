@@ -10,8 +10,10 @@ import {
 import { effectIds, lists, styleSetIds } from "../ooxml/OOXMLFactory_w14.tables";
 import {
   resolveReturnedReference,
+  releaseReturnedReference,
   type Id,
   type Properties,
+  type Reference,
   type Sprm,
   type Value,
 } from "../inc/dmapper/resourcemodel";
@@ -19,6 +21,12 @@ import { PropertyIds as P, getPropertyName } from "./PropertyIds";
 import { GrabBagType, propertyAt, type PropertyMap } from "./PropertyMap";
 import { PropertyState } from "../../../../udkapi/com/sun/star/beans/PropertyState";
 import type { GrabBagValueConstReference } from "../../../../svl/source/items/grabbagitem";
+import { ComplexColor } from "../../../../docmodel/inc/color/ComplexColor";
+import { ThemeColorType } from "../../../../docmodel/inc/theme/ThemeColorType";
+import { Transformation, TransformationType } from "../../../../docmodel/inc/color/Transformation";
+import { createXComplexColor } from "../../../../docmodel/inc/uno/UnoComplexColor";
+import { XComplexColor } from "../../../../offapi/com/sun/star/util/XComplexColor";
+import { NS_ooxml as N } from "../inc/ooxml/resourceids";
 
 const Values = Sequence.specialize<PropertyValue>(propertyType, 48);
 const sequenceType = ["Sequence", propertyType] as const;
@@ -51,6 +59,149 @@ function listValue(definition: Id, value: Value): string {
       ([kind, , native]) => kind === definition && native === token,
     )?.[1] ?? ""
   );
+}
+
+const fillTransforms = new Map<Id, TransformationType>([
+  [N.LN_EG_ColorTransform_alpha, TransformationType.Alpha],
+  [N.LN_EG_ColorTransform_tint, TransformationType.Tint],
+  [N.LN_EG_ColorTransform_shade, TransformationType.Shade],
+  [N.LN_EG_ColorTransform_sat, TransformationType.Sat],
+  [N.LN_EG_ColorTransform_satOff, TransformationType.SatOff],
+  [N.LN_EG_ColorTransform_satMod, TransformationType.SatMod],
+  [N.LN_EG_ColorTransform_lum, TransformationType.Lum],
+  [N.LN_EG_ColorTransform_lumOff, TransformationType.LumOff],
+  [N.LN_EG_ColorTransform_lumMod, TransformationType.LumMod],
+]);
+
+const fillThemeColors = new Map([
+  ["dk1", ThemeColorType.Dark1],
+  ["tx1", ThemeColorType.Dark1],
+  ["lt1", ThemeColorType.Light1],
+  ["bg1", ThemeColorType.Light1],
+  ["dk2", ThemeColorType.Dark2],
+  ["tx2", ThemeColorType.Dark2],
+  ["lt2", ThemeColorType.Light2],
+  ["bg2", ThemeColorType.Light2],
+  ["accent1", ThemeColorType.Accent1],
+  ["accent2", ThemeColorType.Accent2],
+  ["accent3", ThemeColorType.Accent3],
+  ["accent4", ThemeColorType.Accent4],
+  ["accent5", ThemeColorType.Accent5],
+  ["accent6", ThemeColorType.Accent6],
+  ["hlink", ThemeColorType.Hyperlink],
+  ["folHlink", ThemeColorType.FollowedHyperlink],
+]);
+
+/** Reads the original usable solid-fill subtree into its native complex color. */
+class TextFillHandler implements Properties {
+  readonly color = new ComplexColor();
+  private rgb: Reference<Properties> | null = null;
+  private scheme: Reference<Properties> | null = null;
+
+  /** Solid-fill itself has no attributes. @returns Nothing. */
+  attribute(): void {}
+
+  /** Retains both original color alternatives until resolution. @param modifier - Native property. @returns Nothing. */
+  sprm(modifier: Sprm): void {
+    if (modifier.getId() === N.LN_EG_ColorChoice_srgbClr) {
+      releaseReturnedReference(this.rgb);
+      this.rgb = modifier.getProps();
+    } else if (modifier.getId() === N.LN_EG_ColorChoice_schemeClr) {
+      releaseReturnedReference(this.scheme);
+      this.scheme = modifier.getProps();
+    }
+  }
+
+  /** Releases unconsumed source references if resolution exits early. @returns Nothing. */
+  dispose(): void {
+    releaseReturnedReference(this.rgb);
+    releaseReturnedReference(this.scheme);
+    this.rgb = null;
+    this.scheme = null;
+  }
+
+  /** Applies the original RGB precedence and native percentage conversion. @returns Nothing. */
+  updateComplexColor(): void {
+    const rgb = this.rgb;
+    const scheme = this.scheme;
+    this.rgb = null;
+    this.scheme = null;
+    if (rgb) releaseReturnedReference(scheme);
+    const properties = rgb ?? scheme;
+    const transforms = new Map<TransformationType, number>();
+    resolveReturnedReference(properties, {
+      /** The original solid RGB case keeps the fallback run RGB. @param id - Color attribute. @param value - Native attribute value. @returns Nothing. */
+      attribute: (id, value) => {
+        if (!rgb && id === N.LN_CT_SchemeColor_val) {
+          const scheme = listValue(1639300, value);
+          if (scheme)
+            this.color.setThemeColor(fillThemeColors.get(scheme) ?? ThemeColorType.Unknown);
+        }
+      },
+      /** Collects the represented color transforms. @param transform - Native modifier. @returns Nothing. */
+      sprm(transform) {
+        const type = fillTransforms.get(transform.getId());
+        if (type === undefined) return;
+        let amount = 0;
+        resolveReturnedReference(transform.getProps(), {
+          /** Reads the typed percentage attribute. @param id - Attribute identifier. @param value - Native value. @returns Nothing. */
+          attribute(id, value) {
+            if (
+              id === N.LN_CT_Percentage_val ||
+              id === N.LN_CT_PositivePercentage_val ||
+              id === N.LN_CT_PositiveFixedPercentage_val
+            )
+              amount = value.getInt();
+          },
+          /** Scalar transformation has no child modifiers. @returns Nothing. */
+          sprm() {},
+        });
+        transforms.set(type, (Math.trunc(amount / 1000) << 16) >> 16);
+      },
+    });
+    for (const [type, value] of transforms)
+      this.color.addTransformation(new Transformation(type, value));
+  }
+}
+
+/** Applies the solid-fill path to the original run color property owner. @param modifier - Text fill root. @param context - Current run or style. @returns Nothing. */
+function resolveTextFill(modifier: Sprm, context: PropertyMap): void {
+  const handler = new TextFillHandler();
+  let solid = false;
+  try {
+    resolveReturnedReference(modifier.getProps(), {
+      /** The text-fill root has no attributes. @returns Nothing. */
+      attribute() {},
+      /** Resolves the native solid-fill subtree. @param child - Fill resource. @returns Nothing. */
+      sprm(child) {
+        if (child.getId() === N.LN_EG_FillProperties_solidFill) {
+          solid = true;
+          resolveReturnedReference(child.getProps(), handler);
+        }
+      },
+    });
+    handler.updateComplexColor();
+  } finally {
+    handler.dispose();
+  }
+  if (!solid) return;
+  const reference = createXComplexColor(handler.color);
+  const complex = new Any([reference.get()], XComplexColor.static_type);
+  try {
+    context.Insert(P.PROP_CHAR_COMPLEX_COLOR, complex);
+  } finally {
+    complex.dispose();
+    reference.dispose();
+  }
+  for (const transform of handler.color.getTransformations()) {
+    if (transform.meType !== TransformationType.Alpha) continue;
+    const alpha = new Any([transform.mnValue], "sal_Int16");
+    try {
+      context.Insert(P.PROP_CHAR_TRANSPARENCE, alpha);
+    } finally {
+      alpha.dispose();
+    }
+  }
 }
 
 /** Converts actual typographic SPRMs into the original nested PropertyValue shape. */
@@ -101,6 +252,10 @@ export class TextEffectsHandler implements Properties {
 /** Resolves the source property into the current character interoperability bag. @param modifier - Original effect. @param context - Current Writer property map. @returns Whether handled. */
 export function resolveTextEffect(modifier: Sprm, context: PropertyMap): boolean {
   const id = modifier.getId();
+  if (id === N.LN_textFill_textFill) {
+    resolveTextFill(modifier, context);
+    return true;
+  }
   const effect = effects.find(
     /** Finds the native root SPRM. @param entry - Effect table entry. @returns Match. */
     ([name]) => effectIds[name][0] === id,

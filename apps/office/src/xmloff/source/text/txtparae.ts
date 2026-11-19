@@ -861,6 +861,9 @@ export function exportCharacterAttributes(
       : properties.color === "auto"
         ? ' style:use-window-font-color="true"'
         : ` fo:color="${escapeXml(properties.color)}"`,
+    properties.textTransparency === undefined
+      ? ""
+      : ` loext:opacity="${100 - properties.textTransparency}%"`,
     properties.fontFamily === undefined
       ? ""
       : fontFaceName === undefined

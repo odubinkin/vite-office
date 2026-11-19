@@ -5,6 +5,30 @@ import { FastAttributeList } from "../core/xmlimp";
 import { ODF_NAMESPACES, XMLToken } from "../core/xmltoken";
 import { XMLStylesContext, type XMLStyleImportTarget } from "./xmlstyle";
 
+it("imports standard and legacy text opacity with the original negative-percent rules", /** Uses real namespace-resolved attribute tokens. @returns Nothing. */ () => {
+  for (const [namespace, raw, transparency] of [
+    [ODF_NAMESPACES.loext, "25%", 75],
+    [ODF_NAMESPACES.draw, "100%", 0],
+    [ODF_NAMESPACES.loext, "0%", 100],
+    [ODF_NAMESPACES.loext, "101%", undefined],
+    [ODF_NAMESPACES.draw, "-1%", undefined],
+    [ODF_NAMESPACES.loext, "bad", undefined],
+  ] as const) {
+    const styles = new XMLStylesContext(target());
+    const style = styles.createFastChildContext(
+      XMLToken.STYLE_STYLE,
+      attributes({ name: "Effects", family: "text" }),
+    );
+    style?.createFastChildContext(
+      XMLToken.STYLE_TEXT_PROPERTIES,
+      attributes({ opacity: raw }, namespace),
+    );
+    expect(styles.GetStyleDefinitions("text").get("Effects")?.properties?.textTransparency).toBe(
+      transparency,
+    );
+  }
+});
+
 it("preserves native bounded outline attributes and leaves invalid or empty values unset", /** Verifies XMLTextStyleContext SetAttribute outline conversion and explicit empty list-style presence. @returns Nothing. */ () => {
   for (const [raw, level] of [
     ["0", 0],

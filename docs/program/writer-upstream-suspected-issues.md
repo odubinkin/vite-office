@@ -5060,3 +5060,10 @@ header or footer. Writer retains both source decisions.
 - [Original hidden-header output](https://github.com/LibreOffice/core/blob/9bc445578031fecf56086729d8e4940c77e14d65/xmloff/source/text/XMLTextMasterPageExport.cxx#L147-L155)
 - [Original import and empty-variant handling](https://github.com/LibreOffice/core/blob/9bc445578031fecf56086729d8e4940c77e14d65/xmloff/source/text/XMLTextHeaderFooterContext.cxx#L117-L186)
 - [Writer regression](../../apps/office/src/sw/source/filter/xml/odt-page-stories.test.ts)
+
+### WRITER-659 — Solid RGB text fill retains the fallback run color
+
+`TextFillHandler::updateComplexColor` prefers `srgbClr` when both solid-fill color choices are present. In the RGB case it reads the transformations without assigning the RGB value itself. The separate `w:color` value remains the run color even if it differs from the solid fill's RGB value. The DOCX import preserves this behavior.
+
+- [Original solid-fill color selection](https://github.com/LibreOffice/core/blob/9bc445578031fecf56086729d8e4940c77e14d65/sw/source/writerfilter/dmapper/TextEffectsHandler.cxx#L888-L982)
+- [Writer regression](../../apps/office/src/sw/source/writerfilter/filter/WriterFilter.test.ts)

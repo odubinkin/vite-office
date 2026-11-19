@@ -6,7 +6,7 @@ import {
   createXComplexColor,
   getFromXComplexColor,
 } from "../../../docmodel/inc/uno/UnoComplexColor";
-import { MID_COMPLEX_COLOR } from "../../inc/memberids";
+import { MID_COLOR_ALPHA, MID_COMPLEX_COLOR } from "../../inc/memberids";
 import { SfxPoolItem } from "../../../svl/source/items/poolitem";
 import type { SfxItemPool } from "../../../svl/source/items/itempool";
 import { Color, COL_BLACK, extractColor, insertColor } from "../../../tools/inc/color";
@@ -100,7 +100,10 @@ export class SvxColorItem extends SfxPoolItem {
   /** Reads the original color when the caller supplies its UNO output. @param value - Native output. @param member - Item member. @returns Success or absence. */
   override QueryValue(value?: Any, member = 0): boolean | undefined {
     if (!value) return undefined;
-    if ((member & 0x7f) !== MID_COMPLEX_COLOR) insertColor(value, this.maColor);
+    const id = member & 0x7f;
+    if (id === MID_COLOR_ALPHA)
+      value.insert([Math.round(((255 - this.maColor.GetAlpha()) * 100) / 255)], "sal_Int16");
+    else if (id !== MID_COMPLEX_COLOR) insertColor(value, this.maColor);
     else {
       const reference = createXComplexColor(this.maComplexColor);
       try {
@@ -115,7 +118,16 @@ export class SvxColorItem extends SfxPoolItem {
   /** Applies RGB or a non-null native complex color independently. @param value - UNO input. @param member - Item member. @returns Accepted type. */
   override PutValue(value: unknown, member = 0): boolean {
     if (!(value instanceof Any)) return false;
-    if ((member & 0x7f) !== MID_COMPLEX_COLOR) return extractColor(value, this.maColor);
+    const id = member & 0x7f;
+    if (id === MID_COLOR_ALPHA) {
+      const transparency: [number] = [0];
+      if (!value.extract(transparency, "sal_Int16")) return false;
+      const scaled = (transparency[0] * 255) / 100;
+      const rounded = Math.sign(scaled) * Math.round(Math.abs(scaled));
+      this.maColor.SetAlpha(255 - (rounded & 0xff));
+      return true;
+    }
+    if (id !== MID_COMPLEX_COLOR) return extractColor(value, this.maColor);
     const reference = new Reference<XComplexColor>();
     try {
       if (!value.extract(reference.getAddress(), XComplexColor.static_type)) return false;

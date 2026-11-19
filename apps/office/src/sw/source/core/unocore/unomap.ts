@@ -380,6 +380,16 @@ export const SwUnoPropertyMap: ReadonlyMap<string, SwUnoPropertyEntry> = new Map
     { type: "sal_Int32", attributes: 1, which: H.RES_CHRATR_COLOR, member: 0, kind: "color" },
   ],
   [
+    "CharTransparence",
+    {
+      type: "sal_Int16",
+      attributes: 1,
+      which: H.RES_CHRATR_COLOR,
+      member: M.MID_COLOR_ALPHA,
+      kind: "any",
+    },
+  ],
+  [
     "CharInteropGrabBag",
     {
       type: ["Sequence", propertyType],
@@ -588,6 +598,7 @@ const paragraphStyleProperties = new Set([
   "FillColor",
   "FillTransparence",
   "CharColor",
+  "CharTransparence",
   "CharComplexColor",
   "CharInteropGrabBag",
   "CharHighlight",
@@ -784,6 +795,7 @@ const textDefaultProperties = new Set([
   "CharEscapement",
   "CharEscapementHeight",
   "CharColor",
+  "CharTransparence",
   "CharComplexColor",
   "CharInteropGrabBag",
   "CharHighlight",

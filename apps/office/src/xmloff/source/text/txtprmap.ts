@@ -457,6 +457,7 @@ export function applyTextImportProperties(
         );
     }
     for (const [key, name, type] of [
+      ["textTransparency", "CharTransparence", "sal_Int16"],
       ["strikeout", "CharStrikeout", "sal_Int16"],
       ["escapement", "CharEscapement", "sal_Int16"],
       ["escapementHeight", "CharEscapementHeight", "sal_Int8"],

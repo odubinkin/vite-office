@@ -7,7 +7,7 @@ import {
   getFromXComplexColor,
 } from "../../../docmodel/inc/uno/UnoComplexColor";
 import { XComplexColor } from "../../../offapi/com/sun/star/util/XComplexColor";
-import { MID_COMPLEX_COLOR } from "../../inc/memberids";
+import { MID_COLOR_ALPHA, MID_COMPLEX_COLOR } from "../../inc/memberids";
 import { SvxColorItem, VERSION_USEAUTOCOLOR } from "../../inc/colritem";
 import { Color, ColorTransparency, COL_AUTO } from "../../../tools/inc/color";
 import { ComplexColor, ColorType } from "../../../docmodel/inc/color/ComplexColor";
@@ -16,6 +16,40 @@ import { Transformation, TransformationType } from "../../../docmodel/inc/color/
 import { SfxItemPool } from "../../../svl/source/items/itempool";
 import { SfxStringItem } from "../../../svl/source/items/stritem";
 import { hash_combine } from "../../../o3tl/inc/hash_combine";
+it("uses the original UNO transparency member and retains the RGB and theme", /** Checks byte rounding, full opacity, full transparency and a rejected value. @returns Nothing. */ () => {
+  const item = new SvxColorItem(
+    new Color(0x112233),
+    ComplexColor.Theme(ThemeColorType.Accent2),
+    109,
+  );
+  const rejected = new Any();
+  const query = new Any();
+  try {
+    for (const [percent, alpha] of [
+      [0, 255],
+      [75, 64],
+      [100, 0],
+    ] as const) {
+      const value = new Any([percent], "sal_Int16");
+      try {
+        expect(item.PutValue(value, MID_COLOR_ALPHA)).toBe(true);
+      } finally {
+        value.dispose();
+      }
+      expect(item.GetValue().GetAlpha()).toBe(alpha);
+      expect(item.QueryValue(query, MID_COLOR_ALPHA)).toBe(true);
+      const actual: [number] = [0];
+      expect(query.extract(actual, "sal_Int16")).toBe(true);
+      expect(actual[0]).toBe(percent);
+    }
+    expect(item.PutValue(rejected, MID_COLOR_ALPHA)).toBe(false);
+    expect(item.GetValue().toUInt32() & 0xffffff).toBe(0x112233);
+    expect(item.getComplexColor().getThemeColorType()).toBe(ThemeColorType.Accent2);
+  } finally {
+    query.dispose();
+    rejected.dispose();
+  }
+});
 it("retains original black default and independent automatic-color constructor", /** Checks exact header constant/default and native Color plus defaultUnused complex state. @returns Nothing. */ () => {
   expect(VERSION_USEAUTOCOLOR).toBe(1);
   const zero = SvxColorItem.CreateDefault(),

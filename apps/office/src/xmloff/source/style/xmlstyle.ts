@@ -4,6 +4,7 @@ import { Any } from "../../../cppu/inc/com/sun/star/uno/Any";
 import { FastAttributeList, SvXMLIgnoreContext, SvXMLImportContext } from "../core/xmlimp";
 import { XMLToken } from "../core/xmltoken";
 import { importOdfLength, SvXMLUnitConverter } from "../core/xmluconv";
+import { Converter } from "../../../sax/source/tools/converter";
 import { XMLTableStyleContext, type OdfTableStyle } from "../table/XMLTableImport";
 import type { OdfCharacterProperties, OdfParagraphAlignment } from "../text/txtparae";
 import type { OdfStyleDefinition, XMLParagraphImportProperties } from "../text/txtparai";
@@ -575,6 +576,8 @@ function importCharacterProperties(
       XMLToken.STYLE_TEXT_UNDERLINE_WIDTH,
       XMLToken.STYLE_TEXT_UNDERLINE_COLOR,
       XMLToken.FO_COLOR,
+      XMLToken.DRAW_OPACITY,
+      XMLToken.LOEXT_OPACITY,
       XMLToken.STYLE_USE_WINDOW_FONT_COLOR,
       XMLToken.FO_BACKGROUND_COLOR,
       XMLToken.STYLE_FONT_WEIGHT_ASIAN,
@@ -590,6 +593,13 @@ function importCharacterProperties(
   const fallbackFontFamily = attributes.get(XMLToken.FO_FONT_FAMILY);
   const fontSize = attributes.get(XMLToken.FO_FONT_SIZE);
   const color = attributes.get(XMLToken.FO_COLOR);
+  const opacity = attributes.get(XMLToken.LOEXT_OPACITY) ?? attributes.get(XMLToken.DRAW_OPACITY);
+  const amount: [number] = [0];
+  const validOpacity =
+    opacity !== null &&
+    Converter.convertPercent(amount, opacity) &&
+    amount[0] >= 0 &&
+    amount[0] <= 100;
   const useWindowColor = importOptionalBoolean(
     attributes.get(XMLToken.STYLE_USE_WINDOW_FONT_COLOR),
     "automatic font color",
@@ -632,6 +642,7 @@ function importCharacterProperties(
   }
   return {
     ...(useWindowColor === true ? { color: "auto" } : color === null ? {} : { color }),
+    ...(validOpacity ? { textTransparency: 100 - amount[0] } : {}),
     ...(fontFamily === undefined || fontFamily.trim().length === 0 ? {} : { fontFamily }),
     ...(fontFamilyGeneric === undefined ? {} : { fontFamilyGeneric }),
     ...(fontMetadata === undefined

@@ -186,6 +186,8 @@ export const MID_START_BRACKET = 1;
 /** Original final bracket selector. */
 export const MID_END_BRACKET = 2;
 
+/** Original font-color transparency member. */
+export const MID_COLOR_ALPHA = 1;
 /** Original drawing-color theme palette index member. */
 export const MID_COLOR_THEME_INDEX = 4;
 /** Original drawing-color luminance modulation member. */

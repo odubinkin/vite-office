@@ -144,7 +144,14 @@ export function getCharacterProperties(
   const themeColor =
     color instanceof SvxColorItem ? getOdfThemeColor(color.getComplexColor()) : undefined;
   return {
-    ...(color instanceof SvxColorItem ? { color: writerTextColorValue(color) } : {}),
+    ...(color instanceof SvxColorItem
+      ? color.GetValue().GetAlpha() === 255 || writerTextColorValue(color) === "auto"
+        ? { color: writerTextColorValue(color) }
+        : {
+            color: `#${(color.GetValue().toUInt32() & 0xffffff).toString(16).padStart(6, "0")}`,
+            textTransparency: Math.round(((255 - color.GetValue().GetAlpha()) * 100) / 255),
+          }
+      : {}),
     ...(themeColor ? { themeColor } : {}),
     ...(font instanceof SvxFontItem
       ? {
