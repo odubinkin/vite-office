@@ -4,7 +4,7 @@ title: "Implement Calc XLSX import export and existing file UI integration"
 status: "DOING"
 priority: "high"
 owner: "CODER"
-revision: 657
+revision: 659
 origin:
   system: "manual"
 depends_on:
@@ -21,10 +21,10 @@ plan_approval:
   note: null
 verification:
   state: "blocked_external"
-  updated_at: "2026-11-19T07:50:58.525Z"
+  updated_at: "2026-11-19T07:59:50.532Z"
   updated_by: "CODER"
-  note: "Checkpoint 6103d310fba6: native sheet grid XLSX and ODS round trips verified; full task continues."
-  attempts: 211
+  note: "Checkpoint 83934656ed7a: workbook display options and browser round trips verified; external defined names remain pending."
+  attempts: 212
 commit: null
 comments:
   -
@@ -276,6 +276,9 @@ comments:
   -
     author: "CODER"
     body: "Start: continue approved legacy manifest/OFOP migration to real registered Writer, actual Sfx metadata service/storage and DOCX/XLSX core/UI; preserve prior gaps and no pause."
+  -
+    author: "CODER"
+    body: "Start: continue direct-mode task in current checkout."
   -
     author: "CODER"
     body: "Start: continue direct-mode task in current checkout."
@@ -3384,8 +3387,21 @@ events:
     from: "BLOCKED"
     to: "DOING"
     note: "Start: continue direct-mode task in current checkout."
+  -
+    type: "verify"
+    at: "2026-11-19T07:59:50.532Z"
+    author: "CODER"
+    state: "blocked_external"
+    note: "Checkpoint 83934656ed7a: workbook display options and browser round trips verified; external defined names remain pending."
+  -
+    type: "status"
+    at: "2026-11-19T08:00:04.888Z"
+    author: "CODER"
+    from: "BLOCKED"
+    to: "DOING"
+    note: "Start: continue direct-mode task in current checkout."
 doc_version: 3
-doc_updated_at: "2026-11-19T07:51:12.357Z"
+doc_updated_at: "2026-11-19T08:00:04.888Z"
 doc_updated_by: "CODER"
 description: "User-approved third cohesive task: preserve pinned ExcelFilter workbook/worksheet/style/shared-string import and Excel export ownership while supporting the current Calc core slice, including cells, types, formulas, sheets, formatting and dimensions where implemented. Integrate shell filter routing and existing Open/download UI, errors/cancellation and primary ODS persistence. Record suspected upstream issues and source mappings, refactor touched workarounds and run related tests. Preserve recovery/autosave and browser file product decisions. Local work only."
 sections:
@@ -9748,6 +9764,43 @@ sections:
     - npm run test:writer -- native-rtf-tab-settings-roundtrip docxexport.compat --maxWorkers=2 --testTimeout=120000. Pass: 5 tests across two files.
     - node_modules/.bin/playwright test -c apps/office/coverage/xlsx-active-view.playwright.config.ts --workers=1 --timeout=120000. Pass: 3 production Chromium scenarios. The original XLSX fixture hides gridlines on open, restores them from local ODS with the same visibility setting, downloads XLSX with showGridLines false, and reopens/toggles the setting at mobile width. Existing active-sheet and sheet-visibility browser cases pass.
     - Typecheck, production/static smoke, scoped ESLint and Prettier, JSDoc, file size and tree, Calc resources, dependencies, provenance, registry validation with zero semantic violations, doctor/routing and Git diff checks pass. The complete suite is outside the ten-task cadence. Broader XLSX acceptance and other view fields remain pending.
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610251549-J0Z0KF/blueprint/resolved-snapshot.json
+    - old_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+    - current_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610251549-J0Z0KF
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task verify-show 202610251549-J0Z0KF
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: false
+    - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+    - risks: none
+
+    ### 2026-11-19T07:59:50.532Z — VERIFY — blocked_external
+
+    By: CODER
+
+    Note: Checkpoint 83934656ed7a: workbook display options and browser round trips verified; external defined names remain pending.
+    Attempts: 212
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-19T07:51:12.357Z, excerpt_hash=sha256:3da6ce8a820217533477184a0ee7a426a557f0606d162115a30aba26455afa46
+
+    Details:
+
+    Implementation 83934656ed7a connects the XLSX active worksheet's global header and zero-display options to the real Calc document and view. The existing workbook active-sheet owner chooses the source view. Imported flags survive the Worker, native ODS view settings and XLSX emission. The grid uses ScCellFormat's existing numeric-zero parameter and still displays literal text zero, formula text in formula mode and original model values. XLSX writes showFormulas from document view options. CALC-743 records the pinned upstream reader and writer omission, which leaves formula display at the existing runtime setting on import.
+
+    - npm run test:coverage:calc -- viewdata.settings excelfilter.test calc-view-options view-options.test calc-files calc-ods-io cellform.test ods.test ods-worker-boundaries --maxWorkers=2 --testTimeout=120000 with the three view owner includes and per-file 90 percent gates. Pass: 74 tests in 10 files, with viewdata.settings.ts at 96.42 percent branches and 100 percent other metrics. The covered XLSX read and write owners clear all four metrics.
+    - node_modules/.bin/playwright test -c apps/office/coverage/xlsx-active-view.playwright.config.ts --workers=1 --timeout=120000. Pass: 4 production Chromium scenarios. Actual header rendering, local primary ODS restore, XLSX ZIP attributes and mobile reopen pass with a fixture generated by adding one sheetView attribute to the original tdf126541 package. Original active-tab, sheet-visibility and grid QA paths also pass.
+    - Initial read of upstream tdf130959.xlsx failed in ScCompiler.CompileString during DefinedNamesBuffer.finalizeImport. Its definitions Dimension, dimensioner and nydim reference external workbooks. This is an outstanding XLSX import gap outside the current display mechanism. The failing probe remains in xlsx-display-calc.log. The acceptance case for header display uses the tdf126541 package variant and keeps this upstream import regression pending.
+    - Typecheck, production/static smoke, scoped ESLint and Prettier, JSDoc, file size and tree, module dependencies, provenance, registry validation with zero semantic violations, doctor/routing and Git diff checks pass. Complete suite outside the ten-task cadence. The XLSX Agentplane task and full acceptance remain open.
 
     BlueprintSnapshotRef:
     - state: current
@@ -17219,6 +17272,43 @@ Baseline 9bc445578031fecf56086729d8e4940c77e14d65. Referenced sc/source/filter/o
 - npm run test:writer -- native-rtf-tab-settings-roundtrip docxexport.compat --maxWorkers=2 --testTimeout=120000. Pass: 5 tests across two files.
 - node_modules/.bin/playwright test -c apps/office/coverage/xlsx-active-view.playwright.config.ts --workers=1 --timeout=120000. Pass: 3 production Chromium scenarios. The original XLSX fixture hides gridlines on open, restores them from local ODS with the same visibility setting, downloads XLSX with showGridLines false, and reopens/toggles the setting at mobile width. Existing active-sheet and sheet-visibility browser cases pass.
 - Typecheck, production/static smoke, scoped ESLint and Prettier, JSDoc, file size and tree, Calc resources, dependencies, provenance, registry validation with zero semantic violations, doctor/routing and Git diff checks pass. The complete suite is outside the ten-task cadence. Broader XLSX acceptance and other view fields remain pending.
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610251549-J0Z0KF/blueprint/resolved-snapshot.json
+- old_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+- current_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610251549-J0Z0KF
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task verify-show 202610251549-J0Z0KF
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: false
+- repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- risks: none
+
+### 2026-11-19T07:59:50.532Z — VERIFY — blocked_external
+
+By: CODER
+
+Note: Checkpoint 83934656ed7a: workbook display options and browser round trips verified; external defined names remain pending.
+Attempts: 212
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-19T07:51:12.357Z, excerpt_hash=sha256:3da6ce8a820217533477184a0ee7a426a557f0606d162115a30aba26455afa46
+
+Details:
+
+Implementation 83934656ed7a connects the XLSX active worksheet's global header and zero-display options to the real Calc document and view. The existing workbook active-sheet owner chooses the source view. Imported flags survive the Worker, native ODS view settings and XLSX emission. The grid uses ScCellFormat's existing numeric-zero parameter and still displays literal text zero, formula text in formula mode and original model values. XLSX writes showFormulas from document view options. CALC-743 records the pinned upstream reader and writer omission, which leaves formula display at the existing runtime setting on import.
+
+- npm run test:coverage:calc -- viewdata.settings excelfilter.test calc-view-options view-options.test calc-files calc-ods-io cellform.test ods.test ods-worker-boundaries --maxWorkers=2 --testTimeout=120000 with the three view owner includes and per-file 90 percent gates. Pass: 74 tests in 10 files, with viewdata.settings.ts at 96.42 percent branches and 100 percent other metrics. The covered XLSX read and write owners clear all four metrics.
+- node_modules/.bin/playwright test -c apps/office/coverage/xlsx-active-view.playwright.config.ts --workers=1 --timeout=120000. Pass: 4 production Chromium scenarios. Actual header rendering, local primary ODS restore, XLSX ZIP attributes and mobile reopen pass with a fixture generated by adding one sheetView attribute to the original tdf126541 package. Original active-tab, sheet-visibility and grid QA paths also pass.
+- Initial read of upstream tdf130959.xlsx failed in ScCompiler.CompileString during DefinedNamesBuffer.finalizeImport. Its definitions Dimension, dimensioner and nydim reference external workbooks. This is an outstanding XLSX import gap outside the current display mechanism. The failing probe remains in xlsx-display-calc.log. The acceptance case for header display uses the tdf126541 package variant and keeps this upstream import regression pending.
+- Typecheck, production/static smoke, scoped ESLint and Prettier, JSDoc, file size and tree, module dependencies, provenance, registry validation with zero semantic violations, doctor/routing and Git diff checks pass. Complete suite outside the ten-task cadence. The XLSX Agentplane task and full acceptance remain open.
 
 BlueprintSnapshotRef:
 - state: current
