@@ -139,7 +139,7 @@ function lclAddThemeValuesToCustomAttributes(
   }
 }
 /** Original color-specific attribute IDs. @param attributes - Actual list. @param color - Actual complex color. @returns Nothing. */
-function lclAddThemeColorAttributes(
+export function lclAddThemeColorAttributes(
   attributes: RtlReference<FastAttributeList>,
   color: Readonly<ComplexColor>,
 ): void {

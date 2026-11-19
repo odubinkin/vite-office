@@ -435,6 +435,7 @@ export function* decodeWriterDocumentSteps(
     for (const id of [
       "DO_NOT_RESET_PARA_ATTRS_FOR_NUM_FONT",
       "APPLY_PARAGRAPH_MARK_FORMAT_TO_NUMBERING",
+      "GUTTER_AT_TOP",
     ] as const)
       if (!Object.hasOwn(settings, id)) settings[id] = getDefaultDocumentSettings()[id];
     document.GetDocumentSettingManager().SetValues(settings);

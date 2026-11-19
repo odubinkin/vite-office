@@ -124,7 +124,7 @@ export class SwXStyle {
     }
     if (this.family === "PageStyles") {
       const entry = SwUnoPageStylePropertyMap.get(n);
-      if (entry) {
+      if (entry && !pageFields[n]) {
         (this.owner as SwPageDesc).GetMaster().ResetFormatAttr(entry.which);
         return;
       }

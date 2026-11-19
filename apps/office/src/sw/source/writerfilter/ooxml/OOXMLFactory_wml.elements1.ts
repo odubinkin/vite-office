@@ -3,6 +3,10 @@
 /** Native elements1 table. */
 // prettier-ignore
 export const elements1 = [
+  [1770197, "doc:caps", "Value", 1769846],
+  [1770197, "doc:smallCaps", "Value", 1769846],
+  [1770197, "doc:strike", "Value", 1769846],
+  [1770197, "doc:dstrike", "Value", 1769846],
   [1770197, "doc:outline", "Value", 1769846],
   [1770197, "doc:shadow", "Value", 1769846],
   [1770197, "doc:emboss", "Value", 1769846],

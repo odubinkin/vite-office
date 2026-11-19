@@ -1,4 +1,7 @@
 /** @fileoverview Implements streaming ODF style and numbering contexts from xmloff. */
+import type { OdfBoxProperties } from "./bordrhdl";
+import { XMLShadowPropHdl } from "./shadwhdl";
+import type { ShadowFormat } from "../../../offapi/com/sun/star/table/ShadowFormat";
 import { importFillProperties } from "../draw/fill-properties";
 import { Any } from "../../../cppu/inc/com/sun/star/uno/Any";
 import { FastAttributeList, SvXMLIgnoreContext, SvXMLImportContext } from "../core/xmlimp";
@@ -42,6 +45,9 @@ export interface XMLStyleImportTarget extends XMLListStyleImportTarget {
 
 /** Physical ODF page-layout subset consumed by Writer's Standard page descriptor. */
 export interface OdfPageLayout {
+  readonly box?: OdfBoxProperties;
+  readonly shadow?: ShadowFormat;
+  readonly gutter?: number;
   readonly bottomMargin: number;
   readonly height: number;
   readonly landscape: boolean;
@@ -177,12 +183,20 @@ class XMLPageLayoutContext extends SvXMLImportContext {
     const orientation = attributes.get(XMLToken.STYLE_PRINT_ORIENTATION) ?? "portrait";
     if (orientation !== "portrait" && orientation !== "landscape")
       throw new Error(`Unsupported ODF page orientation: ${orientation}`);
+    const box = readPageLayoutBox(attributes);
+    const shadowValue = attributes.get(XMLToken.STYLE_SHADOW);
+    const shadow = shadowValue === null ? undefined : new XMLShadowPropHdl().importXML(shadowValue);
+    const gutterValue = attributes.get(XMLToken.LOEXT_MARGIN_GUTTER);
+    const gutter = gutterValue === null ? null : Converter.convertMeasure(gutterValue, "twip", 0);
     this.layout = {
+      ...(Object.keys(box).length ? { box } : {}),
+      ...(shadow === undefined ? {} : { shadow }),
+      ...(gutter === null ? {} : { gutter }),
       bottomMargin: importOptionalPageLength(attributes, XMLToken.FO_MARGIN_BOTTOM),
       height,
       landscape: orientation === "landscape",
-      leftMargin: importOptionalPageLength(attributes, XMLToken.FO_MARGIN_LEFT),
-      rightMargin: importOptionalPageLength(attributes, XMLToken.FO_MARGIN_RIGHT),
+      leftMargin: importOptionalPageLength(attributes, XMLToken.FO_MARGIN_LEFT, true),
+      rightMargin: importOptionalPageLength(attributes, XMLToken.FO_MARGIN_RIGHT, true),
       topMargin: importOptionalPageLength(attributes, XMLToken.FO_MARGIN_TOP),
       width,
     };
@@ -195,15 +209,55 @@ class XMLPageLayoutContext extends SvXMLImportContext {
   }
 }
 
+/** Reads original page-layout borders and padding including signed native distances. @param attributes - Source page layout attributes. @returns Represented ODF box properties. */
+function readPageLayoutBox(attributes: FastAttributeList): OdfBoxProperties {
+  const result: Record<string, string | number> = {};
+  for (const [suffix, padding, border, width] of [
+    ["", XMLToken.FO_PADDING, XMLToken.FO_BORDER, XMLToken.STYLE_BORDER_LINE_WIDTH],
+    ["Top", XMLToken.FO_PADDING_TOP, XMLToken.FO_BORDER_TOP, XMLToken.STYLE_BORDER_LINE_WIDTH_TOP],
+    [
+      "Bottom",
+      XMLToken.FO_PADDING_BOTTOM,
+      XMLToken.FO_BORDER_BOTTOM,
+      XMLToken.STYLE_BORDER_LINE_WIDTH_BOTTOM,
+    ],
+    [
+      "Left",
+      XMLToken.FO_PADDING_LEFT,
+      XMLToken.FO_BORDER_LEFT,
+      XMLToken.STYLE_BORDER_LINE_WIDTH_LEFT,
+    ],
+    [
+      "Right",
+      XMLToken.FO_PADDING_RIGHT,
+      XMLToken.FO_BORDER_RIGHT,
+      XMLToken.STYLE_BORDER_LINE_WIDTH_RIGHT,
+    ],
+  ] as const) {
+    const rawDistance = attributes.get(padding);
+    const distance = rawDistance === null ? null : Converter.convertMeasure(rawDistance, "twip");
+    const line = attributes.get(border);
+    const widths = attributes.get(width);
+    if (distance !== null) result[`padding${suffix}`] = distance;
+    if (line !== null) result[`border${suffix}`] = line;
+    if (widths !== null) result[`borderLineWidth${suffix}`] = widths;
+  }
+  return result;
+}
+
 /** Imports one required non-percent page length in twips. @param attributes - Source attributes. @param token - Attribute token. @param label - Error label. @returns Twip length. */
 function importPageLength(attributes: FastAttributeList, token: XMLToken, label: string): number {
   return importOdfLength(attributes.require(token, label), false, label);
 }
 
-/** Imports one optional page length, defaulting an omitted margin to zero. @param attributes - Source attributes. @param token - Attribute token. @returns Twip length. */
-function importOptionalPageLength(attributes: FastAttributeList, token: XMLToken): number {
+/** Imports one optional page length, defaulting an omitted margin to zero. @param attributes - Source attributes. @param token - Attribute token. @param signed - Whether negative distances are allowed. @returns Twip length. */
+function importOptionalPageLength(
+  attributes: FastAttributeList,
+  token: XMLToken,
+  signed = false,
+): number {
   const value = attributes.get(token);
-  return value === null ? 0 : importOdfLength(value, false, "page margin");
+  return value === null ? 0 : importOdfLength(value, signed, "page margin");
 }
 
 /** Accumulates one bounded style definition. */

@@ -17,6 +17,7 @@ import { cppu_detail_getUnoType_FontSlant as fontSlantType } from "../../../../o
 import { cppu_detail_getUnoType_LineSpacing as lineSpacingType } from "../../../../offapi/com/sun/star/style/LineSpacing";
 import { cppu_detail_getUnoType_TabStop as tabStopType } from "../../../../offapi/com/sun/star/style/TabStop";
 import { cppu_detail_getUnoType_BorderLine as borderLineType } from "../../../../offapi/com/sun/star/table/BorderLine";
+import { cppu_detail_getUnoType_ShadowFormat as shadowFormatType } from "../../../../offapi/com/sun/star/table/ShadowFormat";
 import * as H from "../../../inc/hintids";
 import { WID_DOC_DEFAULT_PAGE_MODE, WID_DOC_INTEROP_GRAB_BAG } from "../../../inc/unomap";
 import * as Grid from "../../../inc/unomid";
@@ -55,6 +56,34 @@ export const SwUnoTextDocumentPropertyMap: ReadonlyMap<
 ]);
 /** Original page-style grid and direction entries from unomap1.cxx. */
 type PageStylePropertyEntry = SwUnoPropertyEntry & { readonly type: UnoTypeArgument };
+/** Shared box member descriptors for page and paragraph style property maps. @param attributes - Native property flags. @returns Original UNO descriptors. */
+function boxMembers(attributes: number): [string, PageStylePropertyEntry][] {
+  return (["Left", "Right", "Top", "Bottom"] as const).flatMap(
+    /** Binds each original box member. @param side - Physical side. @param index - Native member order. @returns UNO property entries. */
+    (side, index): [string, PageStylePropertyEntry][] => [
+      [
+        `${side}Border`,
+        {
+          which: H.RES_BOX,
+          member: (index + 1) | 0x80,
+          kind: "border",
+          type: borderLineType,
+          attributes,
+        },
+      ],
+      [
+        `${side}BorderDistance`,
+        {
+          which: H.RES_BOX,
+          member: (index + 6) | 0x80,
+          kind: "long",
+          type: "sal_Int32",
+          attributes,
+        },
+      ],
+    ],
+  );
+}
 export const SwUnoPageStylePropertyMap: ReadonlyMap<string, PageStylePropertyEntry> = new Map<
   string,
   PageStylePropertyEntry
@@ -63,6 +92,24 @@ export const SwUnoPageStylePropertyMap: ReadonlyMap<string, PageStylePropertyEnt
     "WritingMode",
     { which: H.RES_FRAMEDIR, member: 0, kind: "short", type: "sal_Int16", attributes: 0 },
   ],
+  ...(
+    [
+      ["LeftMargin", H.RES_LR_SPACE, M.MID_L_MARGIN],
+      ["RightMargin", H.RES_LR_SPACE, M.MID_R_MARGIN],
+      ["TopMargin", H.RES_UL_SPACE, M.MID_UP_MARGIN],
+      ["BottomMargin", H.RES_UL_SPACE, M.MID_LO_MARGIN],
+      ["GutterMargin", H.RES_LR_SPACE, M.MID_GUTTER_MARGIN],
+      ["BorderDistance", H.RES_BOX, 5],
+    ] as const
+  ).map(
+    /** Registers the native converted page metrics. @param row - Name, item and member. @returns UNO entry. */
+    ([name, which, member]): [string, PageStylePropertyEntry] => [
+      name,
+      { which, member: member | 0x80, kind: "long", type: "sal_Int32" },
+    ],
+  ),
+  ["ShadowFormat", { which: H.RES_SHADOW, member: 0x80, kind: "any", type: shadowFormatType }],
+  ...boxMembers(0),
   ...[
     ["GridColor", Grid.MID_GRID_COLOR, "sal_Int32"],
     ["GridLines", Grid.MID_GRID_LINES, "sal_Int16"],
@@ -257,33 +304,7 @@ export const SwUnoPropertyMap: ReadonlyMap<string, SwUnoPropertyEntry> = new Map
     "BorderDistance",
     { type: "sal_Int32", attributes: 1, which: H.RES_BOX, member: 5 | 0x80, kind: "long" },
   ],
-  ...(["Left", "Right", "Top", "Bottom"] as const).flatMap(
-    /** Exposes source paragraph edge and distance properties, retaining the existing cell paragraph aliases. @param side - Side. @param index - Native member order. @returns Property entries. */ (
-      side,
-      index,
-    ): [string, SwUnoPropertyEntry][] => {
-      const border = {
-        type: borderLineType,
-        attributes: 1,
-        which: H.RES_BOX,
-        member: (index + 1) | 0x80,
-        kind: "border",
-      } as const;
-      return [
-        [`${side}Border`, border],
-        [
-          `${side}BorderDistance`,
-          {
-            type: "sal_Int32",
-            attributes: 1,
-            which: H.RES_BOX,
-            member: (index + 6) | 0x80,
-            kind: "long",
-          },
-        ],
-      ];
-    },
-  ),
+  ...boxMembers(1),
   ["BreakType", { type: breakType, attributes: 1, which: H.RES_BREAK, member: 0, kind: "break" }],
   [
     "PageDescName",
@@ -910,10 +931,6 @@ export class SwUnoPropertyMapProvider {
           ["FollowStyle", row(Command.FN_UNO_FOLLOW_STYLE, "OUString")],
           ["Width", row(SID_ATTR_PAGE_SIZE, "sal_Int32", MID_SIZE_WIDTH | CONVERT_TWIPS)],
           ["Height", row(SID_ATTR_PAGE_SIZE, "sal_Int32", MID_SIZE_HEIGHT | CONVERT_TWIPS)],
-          ["LeftMargin", row(H.RES_LR_SPACE, "sal_Int32", M.MID_L_MARGIN | CONVERT_TWIPS)],
-          ["RightMargin", row(H.RES_LR_SPACE, "sal_Int32", M.MID_R_MARGIN | CONVERT_TWIPS)],
-          ["TopMargin", row(H.RES_UL_SPACE, "sal_Int32", M.MID_UP_MARGIN | CONVERT_TWIPS)],
-          ["BottomMargin", row(H.RES_UL_SPACE, "sal_Int32", M.MID_LO_MARGIN | CONVERT_TWIPS)],
           ["IsLandscape", row(SID_ATTR_PAGE, "bool", MID_PAGE_ORIENTATION)],
           ["PageStyleLayout", row(SID_ATTR_PAGE, pageLayoutType, MID_PAGE_LAYOUT)],
         ]);

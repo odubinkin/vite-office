@@ -1,5 +1,11 @@
 /** @fileoverview Native DOCX section property output from the Writer page descriptor and master frame. */
 import { SvxFrameDirection } from "../../../../editeng/inc/frmdir";
+import {
+  SvxBoxItemLine as Edge,
+  type WordPageMargins,
+} from "../../../../editeng/source/items/frmitems";
+import { HdFtDistanceGlue } from "./writerwordglue";
+import { SectionPageBorders } from "./docxattributeoutput.borders";
 import { SvxNumType } from "../../../../editeng/inc/svxenum";
 import { getTokenFromUtf8 as token } from "../../../../oox/source/token/tokenmap";
 import { FSNS } from "../../../../sax/inc/fshelper";
@@ -77,7 +83,14 @@ export function SectionProperties(output: DocxAttributeOutput, section: WW8SepIn
   const master = page.GetMaster();
   const size = master.GetFrameSize();
   const lr = master.GetLRSpace();
-  const ul = master.GetULSpace();
+  const box = master.GetBox();
+  const distances = new HdFtDistanceGlue(master);
+  const margins: WordPageMargins = [
+    distances.m_DyaTop,
+    distances.m_DyaBottom,
+    (lr.ResolveLeft() & 0xffff) + box.CalcLineSpace(Edge.LEFT, true),
+    (lr.ResolveRight() & 0xffff) + box.CalcLineSpace(Edge.RIGHT, true),
+  ];
   const frameDirection = master.GetFrameDir().GetValue();
   const direction =
     frameDirection === SvxFrameDirection.Environment
@@ -102,20 +115,21 @@ export function SectionProperties(output: DocxAttributeOutput, section: WW8SepIn
     w,
     token("pgMar"),
     FSNS(w, token("left")),
-    String(lr.ResolveLeft() & 0xffff),
+    String(margins[Edge.LEFT]),
     FSNS(w, token("right")),
-    String(lr.ResolveRight() & 0xffff),
+    String(margins[Edge.RIGHT]),
     FSNS(w, token("gutter")),
     String(lr.GetGutterMargin() & 0xffff),
     FSNS(w, token("top")),
-    String(ul.GetUpper()),
+    String(margins[Edge.TOP]),
     FSNS(w, token("bottom")),
-    String(ul.GetLower()),
+    String(margins[Edge.BOTTOM]),
     FSNS(w, token("header")),
     "0",
     FSNS(w, token("footer")),
     "0",
   );
+  SectionPageBorders(serializer, master, margins);
   output.SectionPageNumbering(SvxNumType.SVX_NUM_ARABIC, restart);
   if (!page.IsFirstShared()) serializer.singleElementNS(w, token("titlePg"));
   serializer.singleElementNS(

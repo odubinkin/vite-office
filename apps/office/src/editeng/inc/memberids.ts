@@ -201,6 +201,8 @@ export const MID_COMPLEX_COLOR = 8;
 export const MID_L_MARGIN = 4;
 /** Original complete LR-space right margin member. */
 export const MID_R_MARGIN = 5;
+/** Original complete LR-space gutter member. */
+export const MID_GUTTER_MARGIN = 12;
 /** Original upper UL-space margin member. */
 export const MID_UP_MARGIN = 3;
 /** Original lower UL-space margin member. */

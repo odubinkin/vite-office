@@ -2,7 +2,10 @@
 import { readFile } from "node:fs/promises";
 import { fileURLToPath } from "node:url";
 import { expect, test } from "@playwright/test";
-import { DocumentArchive } from "../src/package/source/zippackage/document-archive";
+import {
+  DocumentArchive,
+  DocumentArchiveWriter,
+} from "../src/package/source/zippackage/document-archive";
 
 test("Writer preserves themed text across primary ODT and DOCX download", /** Exercises the existing file dialog, Worker-backed storage, and a mobile reopen. @param fixtures - Browser fixtures. @param fixtures.page - Chromium page. @returns Completion. */ async ({
   page,
@@ -291,4 +294,67 @@ test("Writer keeps inherited and cleared DOCX tab positions on the ruler", /** O
   await expect(editor).toHaveText(/^\s*Tab\s*$/u);
   await page.setViewportSize({ width: 1280, height: 800 });
   await expect(tabs).toHaveCount(5);
+});
+
+test("Writer keeps Word page borders and shadow through local storage and download", /** Opens the original Word border data with a text paragraph, reopens its local copy, and verifies the downloaded DOCX. @param fixtures - Chromium fixtures. @param fixtures.page - Browser page. @returns Completion. */ async ({
+  page,
+}) => {
+  const fixture = fileURLToPath(
+    new URL(
+      "../../../vendor/libreoffice-reference/sw/qa/extras/ooxmlexport/data/page-border-shadow.docx",
+      import.meta.url,
+    ),
+  );
+  const original = await DocumentArchive.open(new Uint8Array(await readFile(fixture)));
+  const source = new DocumentArchiveWriter();
+  for (const entry of original.getEntryNames()) {
+    const bytes =
+      entry === "word/document.xml"
+        ? new TextEncoder().encode(
+            (await original.readTextEntry(entry)).replace(
+              "<w:body>",
+              "<w:body><w:p><w:r><w:t>Page border</w:t></w:r></w:p>",
+            ),
+          )
+        : await original.readEntry(entry);
+    source.putNextEntry(entry, bytes);
+  }
+  await page.goto("/writer");
+  await page.getByRole("button", { name: "Open" }).click();
+  await page.getByRole("tab", { name: "On computer" }).click();
+  await page.getByLabel("Browse").setInputFiles({
+    buffer: Buffer.from(await source.finish()),
+    name: "page-border-shadow.docx",
+    mimeType: "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+  });
+  const status = page.getByRole("status", { name: "Writer status bar" });
+  const editor = page.getByRole("textbox", { name: "Writer document text" });
+  await expect(editor).toContainText("Page border");
+  await expect(status).toContainText("Saved locally in this browser.");
+
+  await page.reload();
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.getByRole("button", { name: "Open" }).click();
+  await page.getByRole("tab", { name: "In browser" }).click();
+  await page.getByRole("button", { name: "page-border-shadow", exact: true }).click();
+  await expect(editor).toContainText("Page border");
+  const finished = page.waitForEvent("download");
+  await page.getByRole("menuitem", { name: "File" }).click();
+  await page.getByRole("menuitem", { name: "Export…" }).click();
+  await page.getByRole("button", { name: "Download DOCX" }).click();
+  const path = await (await finished).path();
+  if (!path) throw new Error("Chromium did not expose the DOCX file.");
+  const bytes = await readFile(path);
+  const archive = await DocumentArchive.open(new Uint8Array(bytes));
+  const xml = await archive.readTextEntry("word/document.xml");
+  expect(xml).toMatch(/<w:pgBorders[^>]*><w:top[^>]*w:shadow="1"/u);
+  expect(xml).toMatch(/<w:right[^>]*w:sz="48"[^>]*w:shadow="1"/u);
+  await page.getByRole("button", { name: "Open" }).click();
+  await page.getByRole("tab", { name: "On computer" }).click();
+  await page.getByLabel("Browse").setInputFiles({
+    buffer: bytes,
+    name: "reopened-page-border.docx",
+    mimeType: "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+  });
+  await expect(page.getByText("reopened-page-border", { exact: true })).toBeVisible();
 });

@@ -216,6 +216,8 @@ export const RES_BACKGROUND = 115 as const;
 
 /** Native four-sided box item, RES_FRMATR_BEGIN + 24. */
 export const RES_BOX = 116 as const;
+/** Native paragraph and page shadow, RES_FRMATR_BEGIN + 25. */
+export const RES_SHADOW = 117 as const;
 /** Original page text grid, RES_FRMATR_BEGIN +33. */
 export const RES_TEXTGRID = 125 as const;
 

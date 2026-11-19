@@ -1,4 +1,12 @@
 /** @fileoverview Ports consumed native PropertyMap/PropValue ordering, merge/default/cache and four interop grab-bag contracts; actual Any/PropertyValue/Sequence owners retain native value semantics. */
+import type { BorderLine2 } from "../../../../offapi/com/sun/star/table/BorderLine2";
+import { ApplyBorderToPageStyles } from "./PropertyMap.section";
+import {
+  BorderApply,
+  BorderOffsetFrom,
+  type BorderPosition,
+  type PgBorder,
+} from "./PageBordersHandler";
 import { convert, Length } from "../../../../o3tl/inc/unit_conversion";
 import { Exception } from "../../../../cppu/inc/com/sun/star/uno/Exception";
 import { Paper } from "../../../../i18nutil/inc/paper";
@@ -334,6 +342,32 @@ export class SectionPropertyMap extends PropertyMap {
   protected m_pStartingNode: SwTextNode | null = null;
   private m_aPageStyle: SwXPageStyle | null = null;
   private m_bTitlePage = false;
+  private readonly m_aBorders = new Map<BorderPosition, PgBorder>();
+  private m_eBorderApply = BorderApply.ToAllInSection;
+  private m_eBorderOffsetFrom = BorderOffsetFrom.Text;
+  /** Original separate storage for each physical side. @param position - Side. @param distance - Border offset in mm100. @param line - Native line. @param shadow - Side shadow flag. @returns Nothing. */
+  SetBorder(position: BorderPosition, distance: number, line: BorderLine2, shadow: boolean): void {
+    this.m_aBorders.set(position, { position, line, distance, shadow });
+  }
+  /** Stores the original section display selection. @param apply - Parsed page selection. @returns Nothing. */
+  SetBorderApply(apply: BorderApply): void {
+    this.m_eBorderApply = apply;
+  }
+  /** Stores the original distance origin. @param offset - Parsed distance origin. @returns Nothing. */
+  SetBorderOffsetFrom(offset: BorderOffsetFrom): void {
+    this.m_eBorderOffsetFrom = offset;
+  }
+  /** Applies the deferred native border properties once section page geometry is available. @param mapper - Active mapper. @returns Nothing. */
+  ApplyBorderToPageStyles(mapper: DomainMapper_Impl): void {
+    if (this.m_aBorders.size && this.m_sPageStyleName.getLength())
+      ApplyBorderToPageStyles(
+        this.GetPageStyle(mapper),
+        this.m_aBorders,
+        this.m_eBorderApply,
+        this.m_eBorderOffsetFrom,
+        mapper.GetSettingsTable().GetGutterAtTop(),
+      );
+  }
   /** Retains the original section title-page switch. @param title - Whether the first page is distinct. @returns Nothing. */
   SetTitlePage(title: boolean): void {
     this.m_bTitlePage = title;

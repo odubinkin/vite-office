@@ -247,8 +247,8 @@ function lcl_getWordLRSpace(frame: SwFrameFormat): ReturnType<SwFrameFormat["Get
 }
 /** Consumed original header/footer distance glue. The current model has no header/footer content owners, so both native presence branches are false. */
 export class HdFtDistanceGlue {
-  private readonly m_DyaTop: number;
-  private readonly m_DyaBottom: number;
+  readonly m_DyaTop: number;
+  readonly m_DyaBottom: number;
   /** Original no-header/footer distance construction includes box line space even without a border. @param frame - Actual frame. @returns Distance glue. */
   constructor(frame: SwFrameFormat) {
     const box = frame.GetBox(),

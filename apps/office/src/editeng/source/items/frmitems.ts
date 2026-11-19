@@ -699,3 +699,81 @@ export { SvxShadowItem, SvxShadowItemSide } from "./frmitems.shadow";
 export { SvxLineItem } from "./frmitems.line";
 
 export { SvxPaperBinItem } from "./frmitems.pbin";
+
+/** Original page margins ordered by SvxBoxItemLine, in twips on the export path. */
+export type WordPageMargins = readonly [top: number, bottom: number, left: number, right: number];
+
+/** Original Word edge selection and unsigned16 offsets in twips. */
+export interface WordBorderDistances {
+  readonly fromEdge: boolean;
+  readonly distances: readonly number[];
+}
+
+/** Converts a Word margin and offset into Writer's border geometry in the caller's units. @param fromEdge - Offset measured from the page edge. @param margin - Word text margin. @param distance - Word border offset. @param width - Border line width. @returns Writer's page margin and border distance. */
+export function BorderDistanceFromWord(
+  fromEdge: boolean,
+  margin: number,
+  distance: number,
+  width: number,
+): [margin: number, distance: number] {
+  let newMargin = fromEdge ? distance : margin - distance - width;
+  let newDistance = fromEdge ? margin - distance - width : distance;
+  if (newMargin < 0) {
+    newMargin = 0;
+    newDistance = Math.max(margin - width, 0);
+  } else if (newDistance < 0) {
+    newMargin = margin;
+  }
+  return [newMargin, newDistance];
+}
+
+const pageEdges = [
+  SvxBoxItemLine.TOP,
+  SvxBoxItemLine.BOTTOM,
+  SvxBoxItemLine.LEFT,
+  SvxBoxItemLine.RIGHT,
+] as const;
+
+/** Uses the native 32pt heuristic when selecting a common offset origin for all four sides. @param box - Writer box item. @param margins - Word page margins in twips. @returns Word border offsets. */
+export function BorderDistancesToWord(
+  box: SvxBoxItem,
+  margins: WordPageMargins,
+): WordBorderDistances {
+  const fromText = pageEdges.map(
+    /** Reads the native signed distance of an existing side. @param edge - Physical side. @returns Twips. */
+    (edge) => (box.GetLine(edge) ? box.GetDistance(edge, true) : 0),
+  );
+  const fromPage = pageEdges.map(
+    /** Derives distance from the page edge for an existing side. @param edge - Physical side. @returns Twips. */
+    (edge) => {
+      const line = box.GetLine(edge);
+      return line
+        ? Math.max(margins[edge] - box.GetDistance(edge, true) - line.GetScaledWidth(), 0)
+        : 0;
+    },
+  );
+  const fromEdge =
+    !fromText.every(
+      /** Native signed 32-point bound. @param distance - Distance in twips. @returns Whether representable from text. */
+      (distance) => distance >= 0 && distance < 640,
+    ) &&
+    (fromPage.every(
+      /** Native 32-point bound. @param distance - Distance in twips. @returns Whether representable from page edge. */
+      (distance) => distance < 640,
+    ) ||
+      sumDistances(fromText) > sumDistances(fromPage));
+  return {
+    fromEdge,
+    distances: (fromEdge ? fromPage : fromText).map(
+      /** Original sal_uInt16 narrowing. @param distance - Selected distance. @returns Unsigned twips. */
+      (distance) => distance & 0xffff,
+    ),
+  };
+}
+
+/** Sums the four original edge offsets. @param distances - Offsets in twips. @returns Total distance. */
+function sumDistances(distances: readonly number[]): number {
+  let sum = 0;
+  for (const distance of distances) sum += distance;
+  return sum;
+}

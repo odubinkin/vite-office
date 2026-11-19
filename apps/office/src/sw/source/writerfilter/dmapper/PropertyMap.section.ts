@@ -1,6 +1,22 @@
 /** @fileoverview Native SectionPropertyMap page-style finalization, parity copying and body attachment. */
 import { PageBreakType, SectionPropertyMap, type PropertyMap } from "./PropertyMap";
 import type { DomainMapper_Impl } from "./DomainMapper_Impl";
+import { resolveReturnedReference, type Properties, type Sprm } from "../inc/dmapper/resourcemodel";
+import {
+  BorderOffsetFrom,
+  BorderPosition,
+  PageBordersHandler,
+  type BorderApply,
+  type PgBorder,
+} from "./PageBordersHandler";
+import { BorderDistanceFromWord } from "../../../../editeng/source/items/frmitems";
+import { cppu_detail_getUnoType_BorderLine2 as borderLineType } from "../../../../offapi/com/sun/star/table/BorderLine2";
+import {
+  ShadowFormat,
+  cppu_detail_getUnoType_ShadowFormat as shadowFormatType,
+} from "../../../../offapi/com/sun/star/table/ShadowFormat";
+import { ShadowLocation } from "../../../../offapi/com/sun/star/table/ShadowLocation";
+import type { SwXPageStyle } from "../../core/unocore/unostyle";
 import { NS_ooxml as N } from "../inc/ooxml/resourceids";
 import { PropertyIds as P } from "./PropertyIds";
 import { Any } from "../../../../cppu/inc/com/sun/star/uno/Any";
@@ -14,6 +30,106 @@ import {
 import { WritingMode2 } from "../../../../offapi/com/sun/star/text/WritingMode2";
 import { convertTwipToMm100_Limited } from "./ConversionHelper";
 import { CompleteCopyHeaderFooter } from "./DomainMapper_Impl.headerfooter";
+
+/** Resolves the native compound margin property with defaults for this section. @param mapper - Active mapper. @param modifier - Page margin resource. @param receiver - Attribute receiver. @param section - Current mapper context. @returns Nothing. */
+export function ResolvePageMargins(
+  mapper: DomainMapper_Impl,
+  modifier: Sprm,
+  receiver: Properties,
+  section: PropertyMap | null,
+): void {
+  mapper.InitPageMargins();
+  resolveReturnedReference(modifier.getProps(), receiver);
+  if (!(section instanceof SectionPropertyMap)) return;
+  const margins = mapper.GetPageMargins();
+  section.SetTopMargin(margins.top);
+  section.SetRightMargin(margins.right);
+  section.SetBottomMargin(margins.bottom);
+  section.SetLeftMargin(margins.left);
+  insert(section, P.PROP_GUTTER_MARGIN, new Any([margins.gutter], "sal_Int32"));
+}
+
+/** Resolves Word page border resources on the current section. @param section - Current mapper context. @param modifier - Page border resource. @returns Nothing. */
+export function ResolvePageBorders(section: PropertyMap | null, modifier: Sprm): void {
+  if (!(section instanceof SectionPropertyMap)) return;
+  const handler = new PageBordersHandler();
+  resolveReturnedReference(modifier.getProps(), handler);
+  handler.SetBorders(section);
+}
+
+const sides = ["Left", "Right", "Top", "Bottom"] as const;
+
+/** Applies the native section box geometry. LibreOffice accepts the display selection and uses the section page style for every side. @param style - Target page style. @param borders - Native section sides. @param _apply - Original display selection. @param offset - Original offset origin. @param gutterAtTop - Document gutter direction. @returns Nothing. */
+export function ApplyBorderToPageStyles(
+  style: SwXPageStyle | null,
+  borders: ReadonlyMap<BorderPosition, PgBorder>,
+  _apply: BorderApply,
+  offset: BorderOffsetFrom,
+  gutterAtTop: boolean,
+): void {
+  if (!style) return;
+  const fromEdge = offset === BorderOffsetFrom.Edge;
+  for (const [position, side] of sides.entries()) {
+    const border = borders.get(position);
+    if (!border) continue;
+    setPageStyleValue(style, `${side}Border`, new Any(border.line, borderLineType));
+    if (border.distance < 0) continue;
+    const name = unicode(`${side}Margin`);
+    const distanceName = unicode(`${side}BorderDistance`);
+    const oldMargin = style.getPropertyValue(name);
+    try {
+      let [margin, distance] = BorderDistanceFromWord(
+        fromEdge,
+        oldMargin.get("sal_Int32"),
+        border.distance,
+        border.line.LineWidth,
+      );
+      if (fromEdge && position === (gutterAtTop ? BorderPosition.Top : BorderPosition.Left)) {
+        const gutterName = unicode("GutterMargin");
+        try {
+          const gutter = style.getPropertyValue(gutterName);
+          try {
+            margin -= gutter.get("sal_Int32");
+            distance += gutter.get("sal_Int32");
+          } finally {
+            gutter.dispose();
+          }
+        } finally {
+          gutterName.dispose();
+        }
+      }
+      const marginValue = new Any([margin], "sal_Int32");
+      const distanceValue = new Any([distance], "sal_Int32");
+      try {
+        style.setPropertyValues([name, distanceName], [marginValue, distanceValue]);
+      } finally {
+        marginValue.dispose();
+        distanceValue.dispose();
+      }
+    } finally {
+      oldMargin.dispose();
+      distanceName.dispose();
+      name.dispose();
+    }
+  }
+
+  const right = borders.get(BorderPosition.Right);
+  if (right?.shadow) {
+    const shadow = new ShadowFormat(ShadowLocation.BOTTOM_RIGHT, right.line.LineWidth, false, 0);
+    setPageStyleValue(style, "ShadowFormat", new Any(shadow, shadowFormatType));
+  }
+}
+
+/** Sets one page property and releases the caller's temporary UNO values. @param style - Target style. @param name - Original property name. @param value - Temporary value. @returns Nothing. */
+function setPageStyleValue(style: SwXPageStyle, name: string, value: Any): void {
+  const property = unicode(name);
+  try {
+    style.setPropertyValue(property, value);
+  } finally {
+    property.dispose();
+    value.dispose();
+  }
+}
 
 /** Original properties handled independently from direct page-style property copying. */
 const staticDenylist = new Set([
@@ -229,6 +345,7 @@ export function CloseSectionGroup(this: SectionPropertyMap, mapper: DomainMapper
   insert(this, P.PROP_GRID_BASE_WIDTH, new Any([gridCharacterWidth(mapper)], "sal_Int32"));
   insert(this, P.PROP_GRID_RUBY_HEIGHT, new Any([0], "sal_Int32"));
   this["ApplyProperties_"](style);
+  this.ApplyBorderToPageStyles(mapper);
   try {
     if (this["m_nBreakType"] === N.LN_Value_ST_SectionMark_evenPage)
       this.CreateEvenOddPageStyleCopy(mapper, PageBreakType.Even);

@@ -24,7 +24,7 @@ export { getCharacterProperties } from "./xmlexp-character";
 import { projectWriterLineSpacing } from "../../core/text/itrform2";
 import { SwXMLTableLines } from "./xmltble";
 import { VertOrientation } from "../../../../offapi/com/sun/star/text/VertOrientation";
-import { exportBoxProperties, exportFrameVisualProperties } from "./xmlexpit";
+import { exportBoxProperties, exportFrameVisualProperties, exportPageLayoutBox } from "./xmlexpit";
 import { HoriOrientation } from "../../../../offapi/com/sun/star/text/HoriOrientation";
 import { SwFrameSize, type SwFormatFrameSize } from "../../../inc/fmtfsize";
 import { SvxAdjust, SvxAdjustItem } from "../../../../editeng/inc/adjustitem";
@@ -296,7 +296,7 @@ export function exportStylesXml(document: SwDoc): string {
     const page = descriptor.GetValue();
     const layoutName = `pm${index + 1}`;
     pageLayouts.push(
-      `<style:page-layout style:name="${layoutName}"><style:page-layout-properties fo:page-width="${exportOdfLength(page.width)}" fo:page-height="${exportOdfLength(page.height)}" style:print-orientation="${page.landscape ? "landscape" : "portrait"}" fo:margin-top="${exportOdfLength(page.topMargin)}" fo:margin-bottom="${exportOdfLength(page.bottomMargin)}" fo:margin-left="${exportOdfLength(page.leftMargin)}" fo:margin-right="${exportOdfLength(page.rightMargin)}"/></style:page-layout>`,
+      `<style:page-layout style:name="${layoutName}"><style:page-layout-properties fo:page-width="${exportOdfLength(page.width)}" fo:page-height="${exportOdfLength(page.height)}" style:print-orientation="${page.landscape ? "landscape" : "portrait"}" fo:margin-top="${exportOdfLength(page.topMargin)}" fo:margin-bottom="${exportOdfLength(page.bottomMargin)}" fo:margin-left="${exportOdfLength(page.leftMargin)}" fo:margin-right="${exportOdfLength(page.rightMargin)}"${exportPageLayoutBox(descriptor.GetMaster(), exportOdfLength)}/></style:page-layout>`,
     );
     const followName = descriptor.GetFollow().GetName();
     const follow =

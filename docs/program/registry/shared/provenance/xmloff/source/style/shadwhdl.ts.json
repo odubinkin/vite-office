@@ -1,0 +1,45 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "status": "mapped",
+    "localPath": "apps/office/src/xmloff/source/style/shadwhdl.ts",
+    "localSymbols": [
+      "XMLShadowPropHdl"
+    ],
+    "upstreamPath": "xmloff/source/style/shadwhdl.cxx",
+    "upstreamSymbols": [
+      "XMLShadowPropHdl::importXML",
+      "XMLShadowPropHdl::exportXML"
+    ],
+    "preservedResponsibilities": [
+      "Reads and writes the native ODF ShadowFormat lexical representation consumed by Writer page layouts."
+    ],
+    "omittedResponsibilities": [
+      "Full native layout, page story spacing, and whole-filter parity remain unverified."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/xmloff/source/style/shadwhdl.ts",
+          "marker": "XMLShadowPropHdl"
+        },
+        {
+          "path": "apps/office/src/sw/source/filter/ww8/docxattributeoutput.borders.test.ts",
+          "marker": "testPageBorderShadow"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/xmloff/source/style/shadwhdl.cxx",
+          "marker": "XMLShadowPropHdl::importXML"
+        },
+        {
+          "path": "vendor/libreoffice-reference/xmloff/source/style/shadwhdl.cxx",
+          "marker": "XMLShadowPropHdl::exportXML"
+        }
+      ]
+    }
+  }
+}

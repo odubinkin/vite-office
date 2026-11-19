@@ -5079,3 +5079,38 @@ Writer retains this source behavior.
 - [Original Word 2010 camera and light definitions](https://github.com/LibreOffice/core/blob/9bc445578031fecf56086729d8e4940c77e14d65/sw/source/writerfilter/ooxml/model.xml#L4644-L4658)
 - [Original text-effect property mapping](https://github.com/LibreOffice/core/blob/9bc445578031fecf56086729d8e4940c77e14d65/sw/source/writerfilter/dmapper/TextEffectsHandler.cxx#L65-L73)
 - [Writer regression](../../apps/office/src/sw/source/filter/ww8/docxexport.text-effects.test.ts)
+
+### WRITER-661 — Word page borders lose first-page selection and stacking order
+
+The Word page-border grammar admits `display` and `zOrder`. The native page
+border handler reads `display`, but `ApplyBorderToPageStyles` ignores the
+selection and applies the box to the section page style. The export always
+writes `allPages`. The handler also has no case for `zOrder`. Writer
+preserves these decisions.
+
+- [Original page border handler](https://github.com/LibreOffice/core/blob/9bc445578031fecf56086729d8e4940c77e14d65/sw/source/writerfilter/dmapper/PageBordersHandler.cxx#L45-L88)
+- [Original page style application](https://github.com/LibreOffice/core/blob/9bc445578031fecf56086729d8e4940c77e14d65/sw/source/writerfilter/dmapper/PropertyMap.cxx#L630-L702)
+- [Original section page border output](https://github.com/LibreOffice/core/blob/9bc445578031fecf56086729d8e4940c77e14d65/sw/source/filter/ww8/docxattributeoutput.cxx#L7615-L7623)
+- [Writer regression](../../apps/office/src/sw/source/filter/ww8/docxattributeoutput.borders.test.ts)
+
+### WRITER-662 — Word page shadow import depends only on the right border
+
+The section map records shadow flags for all four sides, then checks only the
+right side when it creates the Writer page shadow. A shadow flag on another
+side alone disappears on round trip. A right-side flag becomes a black
+bottom-right shadow and exports a shadow flag on every emitted border line.
+Writer retains this source behavior.
+
+- [Original page style shadow conversion](https://github.com/LibreOffice/core/blob/9bc445578031fecf56086729d8e4940c77e14d65/sw/source/writerfilter/dmapper/PropertyMap.cxx#L698-L719)
+- [Original border shadow output](https://github.com/LibreOffice/core/blob/9bc445578031fecf56086729d8e4940c77e14d65/sw/source/filter/ww8/docxattributeoutput.cxx#L4819-L4844)
+- [Writer regression](../../apps/office/src/sw/source/filter/ww8/docxattributeoutput.borders.test.ts)
+
+### WRITER-663 — Extra ODF shadow offsets replace the first offset
+
+The ODF shadow handler tests an offset-found flag but never sets it. Each
+additional pair of lengths replaces the location and width derived from the
+preceding pair. The port retains that behavior, including an unpaired final
+length using zero for its second coordinate.
+
+- [Original shadow value parser](https://github.com/LibreOffice/core/blob/9bc445578031fecf56086729d8e4940c77e14d65/xmloff/source/style/shadwhdl.cxx#L43-L116)
+- [Regression](../../apps/office/src/xmloff/source/style/shadwhdl.test.ts)

@@ -104,6 +104,8 @@ export class DocxExport extends MSWordExportBase {
       );
     if (this.headerFooter.evenAndOddHeaders)
       serializer.singleElementNS(w, token("evenAndOddHeaders"));
+    if (document.GetDocumentSettingManager().get("GUTTER_AT_TOP"))
+      serializer.singleElementNS(w, token("gutterAtTop"));
     WriteCompat(document, serializer, version);
     if (language)
       serializer.singleElementNS(

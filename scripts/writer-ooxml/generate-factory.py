@@ -22,7 +22,7 @@ CONSUMED = (
     "CT_HdrFtr CT_HdrFtrRef "
     "CT_DocDefaults CT_PPrDefault CT_RPrDefault CT_Fonts CT_Underline CT_Color "
     "CT_FontsList CT_Font CT_Charset CT_FontFamily CT_FontSig CT_Panose CT_Pitch "
-    "CT_SectPr CT_finalSectPr CT_PageSz CT_PageMar CT_PageNumber CT_TextDirection CT_SectType CT_Columns CT_Column CT_DocGrid "
+    "CT_SectPr CT_finalSectPr CT_PageSz CT_PageMar CT_PageBorders CT_PageNumber CT_TextDirection CT_SectType CT_Columns CT_Column CT_DocGrid "
     "CT_Br CT_Br_OutOfOrder CT_Tab CT_Tabs CT_TabStop ST_TabJc ST_TabTlc CT_Cr CT_Empty "
     "CT_Bookmark CT_BookmarkRange CT_MarkupRangeBookmark CT_MarkupRange "
     "CT_Hyperlink CT_FldChar CT_instrText CT_SimpleField "

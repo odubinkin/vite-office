@@ -1,4 +1,5 @@
 /** @fileoverview Implements Writer's streaming SwXMLImport bridge over fast SAX contexts. */
+import { importPageLayoutBox } from "./xmlimpit";
 import { XMLDocumentSettingsContext } from "../../../../xmloff/source/core/DocumentSettingsContext";
 import type { PropertyValue } from "../../../../udkapi/com/sun/star/beans/PropertyValue";
 import type {
@@ -631,6 +632,8 @@ class SwXMLImport
         const landscape = new Any([layout.landscape], "bool");
         try {
           style.setPropertyValue(xmlTextString("IsLandscape"), landscape);
+          const page = this.model.GetDoc().FindPageDesc(name);
+          if (page) importPageLayoutBox(page, layout);
         } finally {
           landscape.dispose();
           key.dispose();

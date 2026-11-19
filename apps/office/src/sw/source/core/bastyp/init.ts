@@ -104,6 +104,7 @@ import { SwFormatHoriOrient, SwFormatVertOrient } from "../../../inc/fmtornt";
 import { SwFormatRowSplit } from "../../../inc/fmtrowsplt";
 import {
   RES_BOX,
+  RES_SHADOW,
   RES_BACKGROUND,
   RES_BREAK,
   RES_CHRATR_AUTOKERN,
@@ -240,6 +241,7 @@ class ItemInfoPackageSwAttributes extends ItemInfoPackage {
     add(new SwFormatAnchor());
     add(new SwFormatSurround());
     add(new SvxBoxItem(RES_BOX));
+    add(new SvxShadowItem(RES_SHADOW));
     add(new SfxBoolItem(RES_COLLAPSING_BORDERS, false));
     add(new SwFormatINetFormat("", ""));
     add(new SwFormatCharFormat());

@@ -1,0 +1,50 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "status": "mapped",
+    "localPath": "apps/office/src/sw/source/writerfilter/dmapper/PageBordersHandler.ts",
+    "localSymbols": [
+      "PageBordersHandler"
+    ],
+    "upstreamPath": "sw/source/writerfilter/dmapper/PageBordersHandler.cxx",
+    "upstreamSymbols": [
+      "PageBordersHandler::lcl_attribute",
+      "PageBordersHandler::lcl_sprm",
+      "PageBordersHandler::SetBorders"
+    ],
+    "preservedResponsibilities": [
+      "Reads native border display and offset fields, resolves each available physical side with BorderHandler and defers page-style application to SectionPropertyMap."
+    ],
+    "omittedResponsibilities": [
+      "Full native layout, page story spacing, and whole-filter parity remain unverified."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sw/source/writerfilter/dmapper/PageBordersHandler.ts",
+          "marker": "PageBordersHandler"
+        },
+        {
+          "path": "apps/office/src/sw/source/filter/ww8/docxattributeoutput.borders.test.ts",
+          "marker": "testPageBorderShadow"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sw/source/writerfilter/dmapper/PageBordersHandler.cxx",
+          "marker": "PageBordersHandler::lcl_attribute"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/writerfilter/dmapper/PageBordersHandler.cxx",
+          "marker": "PageBordersHandler::lcl_sprm"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/writerfilter/dmapper/PageBordersHandler.cxx",
+          "marker": "PageBordersHandler::SetBorders"
+        }
+      ]
+    }
+  }
+}

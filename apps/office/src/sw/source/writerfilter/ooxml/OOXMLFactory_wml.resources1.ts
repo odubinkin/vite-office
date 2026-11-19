@@ -3,6 +3,13 @@
 /** Native resources1 table. */
 // prettier-ignore
 export const resources1 = [
+  [1770098, "doc:name", 93248],
+  [1770083, "doc:gridCol", 92744],
+  [1770083, "doc:tblGridChange", 92745],
+  [1770086, "doc:w", 92743],
+  [1770091, "doc:tblStyle", 92832],
+  [1770091, "doc:tblpPr", 92833],
+  [1770091, "doc:tblOverlap", 92834],
   [1770091, "doc:bidiVisual", 92835],
   [1770091, "doc:tblStyleRowBandSize", 92836],
   [1770091, "doc:tblStyleColBandSize", 92837],

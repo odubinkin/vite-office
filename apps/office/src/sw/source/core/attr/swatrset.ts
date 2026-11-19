@@ -90,6 +90,7 @@ import { SwFormatLayoutSplit } from "../../../inc/fmtlsplt";
 import { SwFormatRowSplit } from "../../../inc/fmtrowsplt";
 import {
   RES_BOX,
+  RES_SHADOW,
   RES_BACKGROUND,
   RES_BREAK,
   RES_CHRATR_AUTOKERN,
@@ -335,6 +336,7 @@ export class SwAttrPool extends SfxItemPool {
         value,
       ) => new SwFormatRowSplit(Boolean(value)),
     );
+    register(RES_SHADOW);
     register(
       RES_BOX,
       /** Applies register to value. @param value - value value. @returns Callback result. */ (

@@ -1,8 +1,12 @@
 /** @fileoverview Browser transport for complete shared native frame-size and LR-space items; table/page owners share these exact encoders. */
+import { SvxShadowItem } from "../../../../editeng/source/items/frmitems.shadow";
+import { SvxShadowLocation as Shadow } from "../../../../editeng/inc/svxenum";
+import { Color, ColorTransparency } from "../../../../tools/inc/color";
 import { SwFormatFrameSize, SwFrameSize } from "../../../inc/fmtfsize";
 import { SvxLRSpaceItem, SvxIndentValue } from "../../../../editeng/inc/lrspitem";
 import {
   RES_FRM_SIZE,
+  RES_SHADOW,
   RES_LR_SPACE,
   RES_HORI_ORIENT,
   RES_VERT_ORIENT,
@@ -77,6 +81,11 @@ export function decodeFrameSize(frameSize: WriterFrameSizeRecord): SwFormatFrame
 
 /** Encodes complete concrete frame items; unrelated native items retain their existing codecs. @param item - Actual item. @returns Snapshot or null. */
 export function encodeWriterFrameItem(item: SfxPoolItem): SfxPoolItemSnapshot | null {
+  if (item instanceof SvxShadowItem && item.Which() === RES_SHADOW)
+    return {
+      which: item.Which(),
+      value: [item.GetColor().toUInt32(), item.GetWidth(), item.GetLocation()],
+    };
   if (item instanceof SwFormatFrameSize)
     return { which: item.Which(), value: { ...(encodeFrameSize(item) as WriterFrameSizeRecord) } };
   if (item instanceof SwFormatHoriOrient)
@@ -123,6 +132,35 @@ export function encodeWriterFrameItem(item: SfxPoolItem): SfxPoolItemSnapshot | 
 }
 /** Restores native frame values with exact original measures and percentage fields, including otherwise rejected65535 scale metadata. @param snapshot - Untrusted record. @returns Actual item or null. */
 export function decodeWriterFrameItem(snapshot: SfxPoolItemSnapshot): SfxPoolItem | null {
+  if (snapshot.which === RES_SHADOW) {
+    const value = snapshot.value;
+    if (
+      !Array.isArray(value) ||
+      value.length !== 3 ||
+      typeof value[0] !== "number" ||
+      !Number.isInteger(value[0]) ||
+      value[0] < 0 ||
+      value[0] > 0xffffffff ||
+      typeof value[1] !== "number" ||
+      !Number.isInteger(value[1]) ||
+      value[1] < 0 ||
+      value[1] > 0xffff ||
+      ![
+        Shadow.NONE,
+        Shadow.TopLeft,
+        Shadow.TopRight,
+        Shadow.BottomLeft,
+        Shadow.BottomRight,
+      ].includes(value[2] as Shadow)
+    )
+      throw new Error("Stored Writer shadow is invalid.");
+    return new SvxShadowItem(
+      RES_SHADOW,
+      new Color(ColorTransparency, value[0], "ColorTransparencyTag"),
+      value[1],
+      value[2] as Shadow,
+    );
+  }
   if (snapshot.which === RES_FRM_SIZE)
     return decodeFrameSize(snapshot.value as unknown as WriterFrameSizeRecord);
   if (

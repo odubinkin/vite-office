@@ -250,7 +250,7 @@ export class SwPageDesc extends BroadcastingModify {
   /** Existing atomic browser geometry ingress updates the four native frames after validation; no parallel geometry fields are retained. @param value - Geometry. @returns Nothing. */ SetValue(
     value: WriterPageDescriptorValue,
   ): void {
-    const next = validateWriterPageDescriptor(value);
+    const next = validateWriterPageDescriptor(value, true);
     if (!this.SetName(next.name)) throw new Error("Writer page descriptor name already exists.");
     this.m_IsLandscape = next.landscape;
     for (const frame of [this.m_Master, this.m_Left, this.m_FirstMaster, this.m_FirstLeft]) {
@@ -321,9 +321,10 @@ export function equalWriterPageDescriptors(
   );
 }
 
-/** Validates the supported Writer page geometry and returns a frozen copy. @param value - Candidate geometry. @returns Validated immutable copy. */
+/** Validates Writer page geometry and returns a frozen copy. @param value - Candidate geometry. @param signedHorizontal - Whether native signed LR item values are allowed. @returns Validated immutable copy. */
 export function validateWriterPageDescriptor(
   value: WriterPageDescriptorValue,
+  signedHorizontal = false,
 ): WriterPageDescriptorValue {
   const dimensions = [value.width, value.height];
   const margins = [value.leftMargin, value.rightMargin, value.topMargin, value.bottomMargin];
@@ -337,9 +338,10 @@ export function validateWriterPageDescriptor(
     throw new Error("Writer page dimensions must be positive integer twips.");
   if (
     !margins.every(
-      /** Validates one page margin. @param candidate - Twip length. @returns Whether valid. */ (
+      /** Validates one page margin. @param candidate - Twip length. @param side - Index of physical margin. @returns Whether valid. */ (
         candidate,
-      ) => Number.isInteger(candidate) && candidate >= 0,
+        side,
+      ) => Number.isInteger(candidate) && (candidate >= 0 || (signedHorizontal && side < 2)),
     )
   )
     throw new Error("Writer page margins must be non-negative integer twips.");

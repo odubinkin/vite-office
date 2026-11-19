@@ -1,0 +1,51 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "status": "mapped",
+    "localPath": "apps/office/src/sw/source/filter/ww8/docxattributeoutput.borders.ts",
+    "localSymbols": [
+      "SectionPageBorders",
+      "impl_borderLine"
+    ],
+    "upstreamPath": "sw/source/filter/ww8/docxattributeoutput.cxx",
+    "upstreamSymbols": [
+      "DocxAttributeOutput::SectionPageBorders",
+      "impl_borderLine"
+    ],
+    "preservedResponsibilities": [
+      "Writes physical page edges in native order from Writer box and shadow items with the shared Word offset heuristic and original line-width, style, color and shadow mapping."
+    ],
+    "omittedResponsibilities": [
+      "Full native layout, page story spacing, and whole-filter parity remain unverified."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sw/source/filter/ww8/docxattributeoutput.borders.ts",
+          "marker": "SectionPageBorders"
+        },
+        {
+          "path": "apps/office/src/sw/source/filter/ww8/docxattributeoutput.borders.test.ts",
+          "marker": "testPageBorderShadow"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sw/source/filter/ww8/docxattributeoutput.cxx",
+          "marker": "DocxAttributeOutput::SectionPageBorders"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/filter/ww8/docxattributeoutput.cxx",
+          "marker": "impl_borderLine"
+        }
+      ]
+    },
+    "filenameDivergence": {
+      "localPath": "apps/office/src/sw/source/filter/ww8/docxattributeoutput.borders.ts",
+      "stackNecessity": "responsibility-split",
+      "rationale": "Page border and shared line serialization are grouped separately from the main DOCX attribute output translation unit."
+    }
+  }
+}

@@ -112,7 +112,7 @@ export function restorePageFormats(page: SwPageDesc, candidate: unknown): void {
     decodeSfxItemSet(frame.GetAttrSet(), row as SfxPoolItemSnapshot[]);
   }
   page.WriteUseOn(candidate.useOn);
-  validateWriterPageDescriptor(page.GetValue());
+  validateWriterPageDescriptor(page.GetValue(), true);
 }
 /** Encodes a real document-pool grid override; absence retains native static defaults. @param doc - Document. @returns Snapshot or undefined. */
 export function encodeTextGridDefault(doc: SwDoc): SfxPoolItemSnapshot | undefined {

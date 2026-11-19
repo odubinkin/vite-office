@@ -1,0 +1,36 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/xmloff/source/style/shadwhdl.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "shared",
+    "subsystem": "odf-filter",
+    "capabilityIds": [
+      "CAP-0113"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/xmloff/source/style/shadwhdl.ts",
+        "apps/office/src/sw/source/filter/ww8/docxattributeoutput.borders.test.ts",
+        "vendor/libreoffice-reference/xmloff/source/style/shadwhdl.cxx"
+      ],
+      "justification": "Reads and writes the native ODF ShadowFormat lexical representation consumed by Writer page layouts.",
+      "knownViolations": [],
+      "localSymbols": [
+        "XMLShadowPropHdl"
+      ],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": "xmloff/source/style/shadwhdl.cxx",
+      "upstreamSymbols": [
+        "XMLShadowPropHdl::importXML",
+        "XMLShadowPropHdl::exportXML"
+      ]
+    }
+  }
+}

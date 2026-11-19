@@ -92,6 +92,10 @@ export class DomainMapper_Impl {
   }
   /** Applies the native text defaults when the settings table has been resolved. @returns Nothing. */
   ApplySettingsTable(): void {
+    this.model
+      .GetDoc()
+      .GetDocumentSettingManager()
+      .set("GUTTER_AT_TOP", this.GetSettingsTable().GetGutterAtTop());
     const name = unicode("TabStopDistance");
     const value = new Any([this.GetSettingsTable().GetDefaultTabStop()], "sal_Int32");
     try {

@@ -14,6 +14,7 @@ import {
   MID_L_UNIT_MARGIN,
   MID_TXT_LMARGIN,
   MID_L_REL_MARGIN,
+  MID_GUTTER_MARGIN,
 } from "./memberids";
 
 /** Resolves original em/ic units with native zero/uninitialized defaults. */
@@ -352,7 +353,7 @@ export class SvxLRSpaceItem extends SfxPoolItem {
         return this.IsAutoFirst();
       case 11:
         return absolute(this.GetTextLeft());
-      case 12:
+      case MID_GUTTER_MARGIN:
         return metric(this.GetGutterMargin());
       case MID_FIRST_LINE_UNIT_INDENT:
         return relative(this.GetTextFirstLineOffset());
@@ -443,7 +444,7 @@ export class SvxLRSpaceItem extends SfxPoolItem {
       case 11:
         this.SetTextLeft(SvxIndentValue.twips(metric(value)));
         break;
-      case 12:
+      case MID_GUTTER_MARGIN:
         this.SetGutterMargin(metric(value));
         break;
       default:

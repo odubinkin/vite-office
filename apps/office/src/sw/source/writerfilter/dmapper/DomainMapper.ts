@@ -49,6 +49,7 @@ import { ApplyFrameAttribute } from "./DomainMapper.frame";
 import { resolveTextEffect } from "./TextEffectsHandler";
 import { resolveThemeFont } from "./ThemeHandler.fonts";
 import { resolveThemeColor } from "./ThemeColorHandler";
+import { ResolvePageMargins, ResolvePageBorders } from "./PropertyMap.section";
 import { BorderHandler } from "./BorderHandler";
 import { cppu_detail_getUnoType_BorderLine2 } from "../../../../offapi/com/sun/star/table/BorderLine2";
 import { highlights, paragraphBorderIds, underline } from "./DomainMapper.resources";
@@ -657,19 +658,15 @@ export class DomainMapper implements Properties, Stream {
         }
         break;
       }
-      case N.LN_EG_SectPrContents_pgMar: {
-        this.impl.InitPageMargins();
-        resolveReturnedReference(modifier.getProps(), this);
-        const section = this.impl.GetTopContextOfType(C.CONTEXT_SECTION);
-        if (section instanceof SectionPropertyMap) {
-          const margins = this.impl.GetPageMargins();
-          section.SetTopMargin(margins.top);
-          section.SetRightMargin(margins.right);
-          section.SetBottomMargin(margins.bottom);
-          section.SetLeftMargin(margins.left);
-        }
-        break;
-      }
+      case N.LN_EG_SectPrContents_pgMar:
+        return ResolvePageMargins(
+          this.impl,
+          modifier,
+          this,
+          this.impl.GetTopContextOfType(C.CONTEXT_SECTION),
+        );
+      case N.LN_EG_SectPrContents_pgBorders:
+        return ResolvePageBorders(this.impl.GetTopContextOfType(C.CONTEXT_SECTION), modifier);
       case N.LN_EG_SectPrContents_textDirection: {
         let direction: number = WritingMode2.LR_TB;
         switch (n) {

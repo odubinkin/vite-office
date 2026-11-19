@@ -1,11 +1,19 @@
 /** @fileoverview Writer filter border-item export boundary corresponding to xmlexpit.cxx. Browser presentation shorthand retains its existing adapter behavior without moving native item ownership into shared xmloff. */
+import type { SvxShadowItem } from "../../../../editeng/source/items/frmitems.shadow";
+import { SvxShadowLocation } from "../../../../editeng/inc/svxenum";
+import {
+  cppu_detail_getUnoType_ShadowFormat as shadowType,
+  ShadowFormat,
+} from "../../../../offapi/com/sun/star/table/ShadowFormat";
+import { XMLShadowPropHdl } from "../../../../xmloff/source/style/shadwhdl";
+import type { SwFrameFormat } from "../../core/layout/atrfrm";
 import { SvxBoxItem } from "../../../../editeng/source/items/frmitems";
 import type { SvxBorderLine } from "../../../../editeng/source/items/borderline";
 import type { SvxBrushItem } from "../../../../editeng/source/items/frmitems.brush";
 import type { SvxFrameDirectionItem } from "../../../../editeng/inc/frmdiritem";
 import type { OdfTableVisualProperties } from "../../../../xmloff/source/table/XMLTableImport";
 import { Any } from "../../../../cppu/inc/com/sun/star/uno/Any";
-import { RES_BACKGROUND, RES_FRAMEDIR } from "../../../inc/hintids";
+import { RES_BACKGROUND, RES_FRAMEDIR, RES_BOX, RES_SHADOW } from "../../../inc/hintids";
 import { writerColorValue, type SwAttrSet } from "../../core/attr/swatrset";
 import {
   XMLBorderHdl,
@@ -56,4 +64,38 @@ export function exportBoxProperties(item: SvxBoxItem | undefined): OdfBoxPropert
     result[`borderLineWidth${suffix}`] = compound.exportXML(value);
   }
   return result;
+}
+
+/** Writes the original ODF page layout box, shadow and gutter properties. @param master - Actual page frame. @param formatLength - Twips to ODF length converter. @returns XML attributes. */
+export function exportPageLayoutBox(
+  master: SwFrameFormat,
+  formatLength: (value: number) => string,
+): string {
+  const items = master.GetAttrSet();
+  const box = exportBoxProperties(items.GetItemIfSet(RES_BOX, false) as SvxBoxItem | undefined);
+  const attributes: string[] = [];
+  for (const side of ["Top", "Bottom", "Left", "Right"] as const) {
+    const suffix = side.toLowerCase();
+    const padding = box[`padding${side}`];
+    const border = box[`border${side}`];
+    const lineWidth = box[`borderLineWidth${side}`];
+    if (padding !== undefined) attributes.push(`fo:padding-${suffix}="${formatLength(padding)}"`);
+    if (border !== undefined) attributes.push(`fo:border-${suffix}="${border}"`);
+    if (lineWidth !== undefined)
+      attributes.push(`style:border-line-width-${suffix}="${lineWidth}"`);
+  }
+  const shadow = items.GetItemIfSet(RES_SHADOW, false) as SvxShadowItem | undefined;
+  if (shadow && shadow.GetLocation() !== SvxShadowLocation.NONE) {
+    const value = new Any();
+    try {
+      const format = new ShadowFormat();
+      if (shadow.QueryValue(value, 0x80) && value.extract(format, shadowType))
+        attributes.push(`style:shadow="${new XMLShadowPropHdl().exportXML(format)}"`);
+    } finally {
+      value.dispose();
+    }
+  }
+  const gutter = master.GetLRSpace().GetGutterMargin();
+  if (gutter) attributes.push(`loext:margin-gutter="${formatLength(gutter)}"`);
+  return attributes.length ? ` ${attributes.join(" ")}` : "";
 }
