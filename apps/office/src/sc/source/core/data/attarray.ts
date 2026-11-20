@@ -27,7 +27,11 @@ import {
 import { SvxCellHorJustify, SvxCellOrientation } from "../../../../editeng/inc/svxenum";
 import { SC_INDENT_STEP, HasAttrFlags } from "../../../inc/global";
 import { ATTR_INDENT, ATTR_HOR_JUSTIFY } from "../../../inc/scitems";
-import { CellAttributeHolder, ScPatternAttr } from "../../../inc/patattr";
+import {
+  CellAttributeHolder,
+  ScPatternAttr,
+  type ScPatternStyleReference,
+} from "../../../inc/patattr";
 import type { ScDocument } from "../../../inc/document";
 import type { ScMergePatternState } from "../../../inc/attarray";
 import { SfxItemSet, SfxItemState } from "../../../../svl/inc/itemset";
@@ -357,8 +361,33 @@ export class ScAttrArray {
       start = end + 1;
     } while (end < last);
   }
+  /** Applies the native named style to the existing pattern runs, clearing direct items declared by the style. @param first - First row. @param last - Last row. @param style - Native style owner. @returns Nothing. */
+  ApplyStyleArea(first: number, last: number, style: ScPatternStyleReference): void {
+    const modified: CellAttributeHolder[] = [];
+    try {
+      this.ApplyCacheArea(first, last, {
+        /** Transforms one actual pattern while retaining unrelated direct items. @param original - Existing pattern registration. @returns New registration. */
+        ApplyTo(original) {
+          const pattern = original.getScPatternAttr();
+          if (!pattern) return original;
+          const next = new ScPatternAttr(pattern);
+          next.SetStyleSheet(style);
+          const holder = new CellAttributeHolder(next, true);
+          modified.push(holder);
+          return holder;
+        },
+      });
+    } finally {
+      for (const holder of modified) holder.Dispose();
+    }
+  }
   /** Original ApplyCacheArea split/full-run traversal;rich-edit,width-cache and stream validity services remain unported. @param first - First row. @param last - Last row. @param cache - Actual native cache. @param changed - Original optional change output. @returns Nothing. */
-  ApplyCacheArea(first: number, last: number, cache: ScItemPoolCache, changed?: [boolean]): void {
+  ApplyCacheArea(
+    first: number,
+    last: number,
+    cache: Pick<ScItemPoolCache, "ApplyTo">,
+    changed?: [boolean],
+  ): void {
     if (!(this.rDocument.ValidRow(first) && this.rDocument.ValidRow(last))) return;
     const position: [number] = [0];
     let start = 0;

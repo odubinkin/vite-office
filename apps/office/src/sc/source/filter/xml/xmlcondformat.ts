@@ -1,5 +1,7 @@
 /** @fileoverview ODF Calc extension contexts for condition formulas and the native conditional format list. */
 import { FormulaGrammar } from "../../../../formula/inc/grammar";
+import { OUString } from "../../../../sal/inc/rtl/ustring";
+import { getCellStyleXMLName } from "./xmlstyle";
 import { text, unicode } from "../../../../i18nlangtag/source/isolang/isolang.tables";
 import { SfxStyleFamily } from "../../../../svl/inc/style-values";
 import { Converter } from "../../../../sax/source/tools/converter";
@@ -242,7 +244,10 @@ class ScXMLConditionalFormatContext extends ScXMLImportContext {
           continue;
         }
         const name = unicode(condition.style);
-        const display = ScStyleNameConversion.ProgrammaticToDisplayName(name, SfxStyleFamily.Para);
+        const named = this.GetScImport().GetNamedCellStyle(condition.style);
+        const display = named
+          ? new OUString(named.GetName())
+          : ScStyleNameConversion.ProgrammaticToDisplayName(name, SfxStyleFamily.Para);
         try {
           if ("date" in condition) {
             const entry = new ScCondDateFormatEntry(document);
@@ -317,15 +322,8 @@ export function ExportConditionalFormat(
         continue;
       }
       if (entry instanceof ScCondDateFormatEntry) {
-        const programmatic = ScStyleNameConversion.DisplayToProgrammaticName(
-          entry.GetStyleName(),
-          SfxStyleFamily.Para,
-        );
-        try {
-          rules += `<calcext:date-is calcext:style="${escapeXml(text(programmatic))}" calcext:date="${dateTypes[entry.GetDateType()] ?? ""}"/>`;
-        } finally {
-          programmatic.dispose();
-        }
+        const name = getCellStyleXMLName(entry.GetStyleName());
+        rules += `<calcext:date-is calcext:style="${escapeXml(name)}" calcext:date="${dateTypes[entry.GetDateType()] ?? ""}"/>`;
         continue;
       }
       if (!(entry instanceof ScCondFormatEntry)) continue;
@@ -335,14 +333,10 @@ export function ExportConditionalFormat(
         .GetSrcPos()
         .Format(ScRefFlags.VALID | ScRefFlags.TAB_3D, document, new ScAddress.Details(odf));
       const name = unicode(entry.GetStyleName());
-      const programmatic = ScStyleNameConversion.DisplayToProgrammaticName(
-        name,
-        SfxStyleFamily.Para,
-      );
       try {
-        rules += `<calcext:condition calcext:apply-style-name="${escapeXml(text(programmatic))}" calcext:value="${escapeXml(value)}" calcext:base-cell-address="${escapeXml(text(address))}"/>`;
+        const styleName = getCellStyleXMLName(name);
+        rules += `<calcext:condition calcext:apply-style-name="${escapeXml(styleName)}" calcext:value="${escapeXml(value)}" calcext:base-cell-address="${escapeXml(text(address))}"/>`;
       } finally {
-        programmatic.dispose();
         name.dispose();
         address.dispose();
       }

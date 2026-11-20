@@ -7315,3 +7315,15 @@ vector and sheet-local index lifetime.
 
 - [Original workbook differential styles](../../vendor/libreoffice-reference/sc/source/filter/oox/stylesbuffer.cxx)
 - [Original sheet finalization](../../vendor/libreoffice-reference/sc/source/filter/oox/condformatbuffer.cxx)
+
+### CALC-770 — An unresolved parent falls back to the first style in the family
+
+`XMLPropStyleContext::Finish` clears a parent name absent from the style
+family. Calc's `ScStyleSheet::SetParent` then takes the first style in
+the family when lookup fails, unless that would make the style its own
+parent. The result depends on the family contents and iteration order.
+Calc keeps this fallback and exercises it through the named-style ODS
+import and export path.
+
+- [Original XML style parent resolution](../../vendor/libreoffice-reference/xmloff/source/style/prstylei.cxx#L448)
+- [Original Calc parent assignment](../../vendor/libreoffice-reference/sc/source/core/data/stlsheet.cxx#L110)

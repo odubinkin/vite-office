@@ -19,7 +19,7 @@ import { ScFlatBoolRowSegments } from "../../core/data/segmenttree";
 import type { Color } from "../../../../tools/inc/color";
 import { ScXMLPageStyles } from "./xmlstyle.page";
 import { XMLTableStylesContext } from "./xmlstyli";
-import { CellAttributeHolder, type ScPatternAttr } from "../../../inc/patattr";
+import { CellAttributeHolder, ScPatternAttr } from "../../../inc/patattr";
 import { ScXMLImportContext } from "./importcontext";
 import {
   SvXMLImport,
@@ -39,6 +39,7 @@ import { InsertRangeNames } from "../../core/tool/rangenam";
 import { GetNamedExpressionBase, type ScMyNamedExpression } from "./xmlnexpi";
 import type { ScDocument } from "../../../inc/document";
 import { ScXMLConditionalFormatsContext } from "./xmlcondformat";
+import type { SfxStyleSheetBase } from "../../../../svl/source/items/style-model";
 import { SfxStyleFamily, SfxStyleSearchBits } from "../../../../svl/inc/style-values";
 import { ScStyleNameConversion } from "../../core/tool/stylehelper";
 import { ScXMLBodyContext } from "./xmlbodyi";
@@ -131,9 +132,9 @@ export class ScXMLImport extends SvXMLImport implements SvXMLImportRootFactory {
   }
   private readonly autoStyles = new Map<string, CellAttributeHolder>();
   private readonly textStyles = new Map<string, SfxItemSet>();
-  private readonly pendingNumberStyles = new Map<
+  private readonly pendingAutoStyles = new Map<
     string,
-    { pattern: ScPatternAttr; reference: string }
+    { pattern: ScPatternAttr; reference: string | null; parent: string | null }
   >();
   private readonly numberStyles = new Map<string, SvXMLNumFormatContext>();
   readonly pageStyles: ScXMLPageStyles;
@@ -229,14 +230,17 @@ export class ScXMLImport extends SvXMLImport implements SvXMLImportRootFactory {
     this.docImport = new ScDocumentImport(document);
     this.pageStyles = new ScXMLPageStyles(document, this);
   }
-  /** Transfers a parsed real automatic pattern into import lifetime ownership. @param name - Source name. @param pattern - Adopted source pattern. @param reference - Optional ODF data style. @returns Nothing. */
-  AddAutoStyle(name: string, pattern: ScPatternAttr, reference: string | null = null): void {
-    this.pendingNumberStyles.get(name)?.pattern.Dispose();
-    this.pendingNumberStyles.delete(name);
+  /** Retains an automatic pattern until its named style and number format can be resolved. @param name - Source name. @param pattern - Adopted source pattern. @param reference - ODF data style. @param parent - Named parent. @returns Nothing. */
+  AddAutoStyle(
+    name: string,
+    pattern: ScPatternAttr,
+    reference: string | null = null,
+    parent: string | null = null,
+  ): void {
+    this.pendingAutoStyles.get(name)?.pattern.Dispose();
     this.autoStyles.get(name)?.Dispose();
     this.autoStyles.delete(name);
-    if (reference) this.pendingNumberStyles.set(name, { pattern, reference });
-    else this.autoStyles.set(name, new CellAttributeHolder(pattern, true));
+    this.pendingAutoStyles.set(name, { pattern, reference, parent });
   }
   /** Retains native edit items from an automatic text style. @param name - Source style. @param items - Adopted item set. @returns Nothing. */
   AddTextStyle(name: string, items: SfxItemSet): void {
@@ -252,20 +256,73 @@ export class ScXMLImport extends SvXMLImport implements SvXMLImportRootFactory {
     this.numberStyles.set(name, style);
   }
   private defaultNumberStyle: string | null = null;
-  /** Installs original named cell properties in the native style pool. @param name - ODF style name. @param pattern - Direct imported items. @returns Nothing. */
-  ApplyNamedCellStyle(name: string, pattern: ScPatternAttr): void {
+  private readonly namedCellStyles = new Map<
+    string,
+    {
+      style: SfxStyleSheetBase;
+      parent: string | null;
+      dataStyle: string | null;
+    }
+  >();
+
+  /** Creates the original style owner before parent and data-style resolution. @param name - Encoded ODF style name. @param displayName - Source unencoded name. @param parent - Encoded named parent. @param dataStyle - Named number format. @param pattern - Direct imported items. @returns Nothing. */
+  ApplyNamedCellStyle(
+    name: string,
+    displayName: string | null,
+    parent: string | null,
+    dataStyle: string | null,
+    pattern: ScPatternAttr,
+  ): void {
     const pool = this.document.GetStyleSheetPool();
     if (!pool) return;
-    const source = unicode(name);
+    const source = unicode(displayName ?? name);
     const display = ScStyleNameConversion.ProgrammaticToDisplayName(source, SfxStyleFamily.Para);
     try {
       const style =
         pool.Find(display, SfxStyleFamily.Para) ??
         pool.Make(display, SfxStyleFamily.Para, SfxStyleSearchBits.UserDefined);
       style.GetItemSet().PutSet(pattern.GetItemSet());
+      this.namedCellStyles.set(name, { style, parent, dataStyle });
     } finally {
       display.dispose();
       source.dispose();
+    }
+  }
+
+  /** Resolves a native style from its declared ODF name. @param name - Encoded style reference. @returns Original style, if declared. */
+  GetNamedCellStyle(name: string | null): SfxStyleSheetBase | null {
+    if (name === "Default") return this.document.GetStyleSheetPool()?.GetDefaultStyle(true) ?? null;
+    return name === null ? null : (this.namedCellStyles.get(name)?.style ?? null);
+  }
+
+  /** Links parents after all named declarations exist and applies their direct data styles. @returns Nothing. */
+  FinishNamedCellStyles(): void {
+    for (const { style, parent, dataStyle } of this.namedCellStyles.values()) {
+      const named = this.GetNamedCellStyle(parent);
+      if (named) {
+        if (!style.SetParent(named.GetName())) this.unsupported("cell parent style not allowed");
+      } else {
+        const empty = unicode("");
+        try {
+          if (!style.GetParent().isEmpty()) style.SetParent(empty);
+        } finally {
+          empty.dispose();
+        }
+      }
+      if (dataStyle) this.ApplyCellNumberStyle(style.GetItemSet(), dataStyle);
+    }
+  }
+
+  /** Applies the referenced data style as a direct native item. @param items - Actual style or pattern attributes. @param reference - ODF data style name. @returns Whether a format was resolved. */
+  private ApplyCellNumberStyle(items: SfxItemSet, reference: string): boolean {
+    const key = this.numberStyles.get(reference)?.GetKey(this.numberStyles);
+    if (key === undefined) return false;
+    const item = new SfxUInt32Item(ATTR_VALUE_FORMAT, key);
+    try {
+      items.Put(item);
+      return true;
+    } finally {
+      item.Dispose();
     }
   }
   /** Populates the original Default style from the named styles stream. @param pattern - Parsed direct properties. @param reference - Optional data-style reference. @returns Nothing. */
@@ -288,37 +345,37 @@ export class ScXMLImport extends SvXMLImport implements SvXMLImportRootFactory {
   /** Resolves the default data style before dependent cells use the Default item set. @returns Nothing. */
   ApplyDefaultNumberStyle(): void {
     if (!this.defaultNumberStyle) return;
-    const key = this.numberStyles.get(this.defaultNumberStyle)?.GetKey(this.numberStyles);
-    if (key === undefined) return;
-    const item = new SfxUInt32Item(ATTR_VALUE_FORMAT, key);
-    try {
-      const pool = this.document.GetStyleSheetPool();
-      pool?.GetDefaultStyle()?.GetItemSet().Put(item);
-      this.document.getCellAttributeHelper().getDefaultCellAttribute().InvalidateCaches();
-    } finally {
-      item.Dispose();
-    }
+    const style = this.document.GetStyleSheetPool()?.GetDefaultStyle();
+    if (!style || !this.ApplyCellNumberStyle(style.GetItemSet(), this.defaultNumberStyle)) return;
+    this.document.getCellAttributeHelper().getDefaultCellAttribute().InvalidateCaches();
     this.defaultNumberStyle = null;
   }
   /** Borrows actual automatic style data; missing references remain diagnosed. @param name - Style reference. @returns Pattern or null. */
   GetAutoStyle(name: string): ScPatternAttr | null {
-    const pending = this.pendingNumberStyles.get(name);
+    const pending = this.pendingAutoStyles.get(name);
     if (pending) {
-      const key = this.numberStyles.get(pending.reference)?.GetKey(this.numberStyles);
-      if (key === undefined) this.unsupported("cell style/number format");
-      else {
-        const item = new SfxUInt32Item(ATTR_VALUE_FORMAT, key);
-        try {
-          pending.pattern.ItemSetPut(item);
-        } finally {
-          item.Dispose();
-        }
-      }
-      this.pendingNumberStyles.delete(name);
+      const parent = this.GetNamedCellStyle(pending.parent);
+      if (parent) pending.pattern.SetStyleSheet(parent, false);
+      else if (pending.parent) this.unsupported("missing cell parent style");
+      if (
+        pending.reference &&
+        !this.ApplyCellNumberStyle(pending.pattern.GetItemSetWritable(), pending.reference)
+      )
+        this.unsupported("cell style/number format");
+      this.pendingAutoStyles.delete(name);
       this.autoStyles.set(name, new CellAttributeHolder(pending.pattern, true));
     }
-    const pattern = this.autoStyles.get(name)?.getScPatternAttr() ?? null;
-    if (pattern === null) this.unsupported("cell style/number format");
+    let pattern = this.autoStyles.get(name)?.getScPatternAttr() ?? null;
+    if (pattern === null) {
+      const style = this.GetNamedCellStyle(name);
+      if (style) {
+        pattern = new ScPatternAttr(this.document.getCellAttributeHelper());
+        pattern.SetStyleSheet(style, false);
+        const holder = new CellAttributeHolder(pattern, true);
+        this.autoStyles.set(name, holder);
+        pattern = holder.getScPatternAttr();
+      } else this.unsupported("cell style/number format");
+    }
     return pattern;
   }
   /** Borrows the actual native document-import owner. @returns Importer. */
@@ -374,7 +431,7 @@ export class ScXMLImport extends SvXMLImport implements SvXMLImportRootFactory {
     void attributes;
     throw new Error("ODS unknown document root");
   }
-  /** Imports font declarations from the native styles stream before cell content. Named styles remain diagnosed by the existing context. @param xml - Styles stream. @returns Nothing. */
+  /** Imports native styles and font declarations before cell content. @param xml - Styles stream. @returns Nothing. */
   importStyles(xml: string): void {
     parseOdfXmlStream(
       xml,
@@ -449,9 +506,10 @@ export class ScXMLImport extends SvXMLImport implements SvXMLImportRootFactory {
   }
   /** Releases temporary style holders after import or worker transfer. @returns Nothing. */
   DisposeStyles(): void {
-    for (const { pattern } of this.pendingNumberStyles.values()) pattern.Dispose();
-    this.pendingNumberStyles.clear();
+    for (const { pattern } of this.pendingAutoStyles.values()) pattern.Dispose();
+    this.pendingAutoStyles.clear();
     this.numberStyles.clear();
+    this.namedCellStyles.clear();
     for (const holder of this.autoStyles.values()) holder.Dispose();
     this.autoStyles.clear();
     for (const items of this.textStyles.values()) items.Dispose();

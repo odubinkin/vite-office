@@ -1,3 +1,4 @@
+import { escapeXml } from "../../../../xmloff/source/text/txtparae";
 /** @fileoverview Bounded Calc worker transfer of supported native cells, sparse attributes and geometry; XML remains the durable format. */
 import { Color, ColorTransparency, COL_AUTO } from "../../../../tools/inc/color";
 import { exportPageStyles } from "../../../source/filter/xml/xmlstyle.page";
@@ -37,7 +38,9 @@ import {
   exportCellTextPropertyElement,
   exportCellPropertyElement,
   exportCellParagraphProperties,
-  exportDefaultCellStyle,
+  exportNamedCellStyles,
+  getCellStyleXMLName,
+  getCellStyleXMLNames,
 } from "../../../source/filter/xml/xmlstyle";
 import type { ScTable } from "../../../inc/table";
 import { ViewOption } from "../../../inc/viewopti";
@@ -216,9 +219,11 @@ function restoreWritingDirection(direction: D): SvxFrameDirectionItem {
 function* encodeSteps(document: ScDocument): Generator<void, CalcDocumentRecord> {
   const sheets: Sheet[] = [],
     fonts = new XMLFontAutoStylePool(),
-    styles = new Map<string, string>(),
+    styles = new Map<string, { name: string; parent: string; properties: string }>(),
     patternNames = new Map<ScPatternAttr, string>();
   const pageStyles = exportPageStyles(document, fonts);
+  const reservedNames = getCellStyleXMLNames(document);
+  let automaticStyleIndex = 0;
   const numberFormats: NumberFormat[] = [];
   const textStyles = new CellTextStylePool(document, fonts);
   const numberFormatIndices = new Map<number, number>();
@@ -244,14 +249,24 @@ function* encodeSteps(document: ScDocument): Generator<void, CalcDocumentRecord>
       const t = exportCellTextPropertyElement(pattern, fonts),
         c = exportCellPropertyElement(pattern),
         p = exportCellParagraphProperties(pattern);
-      const key = `${t}${c}${p ? `<style:paragraph-properties${p}/>` : ""}`;
-      let name = styles.get(key);
-      if (name === undefined) {
-        name = key ? `ce${styles.size + 1}` : "";
-        styles.set(key, name);
+      const parent = getCellStyleXMLName(pattern.GetStyleName());
+      const properties = `${t}${c}${p ? `<style:paragraph-properties${p}/>` : ""}`;
+      if (!properties) {
+        const name = parent === "Default" ? "" : parent;
+        patternNames.set(pattern, name);
+        return name;
       }
-      patternNames.set(pattern, name);
-      return name;
+      const key = JSON.stringify([parent, properties]);
+      let style = styles.get(key);
+      if (!style) {
+        let name: string;
+        do name = `ce${++automaticStyleIndex}`;
+        while (reservedNames.has(name));
+        style = { name, parent, properties };
+        styles.set(key, style);
+      }
+      patternNames.set(pattern, style.name);
+      return style.name;
     };
   for (let tab = 0; tab < document.GetTableCount(); tab++) {
     const table = document.FetchTable(tab) as ScTable;
@@ -426,18 +441,16 @@ function* encodeSteps(document: ScDocument): Generator<void, CalcDocumentRecord>
       ]) => ` xmlns:${prefix}="${uri}"`,
     )
     .join("");
-  const automatic = [...styles]
-    .map(
-      /** Encodes native style identity for the Calc worker boundary. @param input1 - Operation input. @returns Operation result. */ ([
-        key,
-        name,
-      ]) =>
-        name
-          ? `<style:style style:name="${name}" style:family="table-cell">${key}</style:style>`
-          : "",
-    )
-    .join("");
-  const defaults = exportDefaultCellStyle(document, fonts);
+  const automatic = Array.from(
+    styles.values(),
+    /** Encodes an automatic pattern and its native named parent. @param style - Pattern style. @returns ODF style element. */ ({
+      name,
+      parent,
+      properties,
+    }) =>
+      `<style:style style:name="${name}" style:family="table-cell"${parent ? ` style:parent-style-name="${escapeXml(parent)}"` : ""}>${properties}</style:style>`,
+  ).join("");
+  const defaults = exportNamedCellStyles(document, fonts);
   const defaultWritingDirection = (
     document
       .GetStyleSheetPool()

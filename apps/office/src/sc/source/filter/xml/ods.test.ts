@@ -612,7 +612,7 @@ it("imports real script-specific automatic font heights and preserves styled emp
   doc.DisposeAttributes();
   again.DisposeAttributes();
 });
-it("diagnoses unsupported style families,inheritance,properties,relative sizes and missing references while retaining supported heights", /** Invalid metadata never becomes a successful invented format. @returns Nothing. */ () => {
+it("diagnoses unsupported style families,missing parents,properties,relative sizes and missing references while retaining supported heights", /** Invalid metadata never becomes a successful invented format. @returns Nothing. */ () => {
   const names: string[] = [];
   const xml = fontStyles(
     `<style:style style:name="p" style:family="paragraph"/><style:default-style style:family="table-cell"/><style:style style:name="ce" style:family="table-cell"><style:text-properties fo:font-size="8pt"/></style:style><style:style style:name="ce" style:family="table-cell" style:parent-style-name="Base"><style:paragraph-properties/><style:table-row-properties/><style:text-properties fo:font-size="0pt" style:font-size-asian="120%" style:font-size-complex="16pt" fo:font-weight="bold"/></style:style>`,
@@ -629,7 +629,7 @@ it("diagnoses unsupported style families,inheritance,properties,relative sizes a
   expect(names).toEqual(
     expect.arrayContaining([
       "non-cell automatic style",
-      "cell parent style inheritance",
+      "missing cell parent style",
       "cell style properties",
       "relative or invalid cell font height",
       "cell style/number format",

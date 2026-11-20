@@ -44,6 +44,17 @@ export class ScStyleSheet extends SfxStyleSheet {
     else super(...args);
   }
 
+  /** Sets the Calc parent and associates the inherited item set. @param name - Requested parent name. @returns Whether a parent was assigned. */
+  override SetParent(name: OUStringConstReference): boolean {
+    const pool = this.GetPool() as SfxStyleSheetBasePool;
+    const family = this.GetFamily();
+    const parent = pool.Find(name, family) ?? pool.CreateIterator(family).First();
+    if (!(parent instanceof ScStyleSheet) || parent === this || !super.SetParent(parent.GetName()))
+      return false;
+    this.GetItemSet().SetParent(parent.GetItemSet());
+    return true;
+  }
+
   /** Lazily allocates the family Which ranges on the original pool. @returns Owned style item set. */
   override GetItemSet(): SfxItemSet {
     if (!this.pSet) {

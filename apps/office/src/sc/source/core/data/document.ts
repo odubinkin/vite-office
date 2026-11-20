@@ -34,7 +34,12 @@ import type { ScFormulaCell } from "../../../inc/formulacell";
 import { CellType, InsertDeleteFlags, ScGlobal } from "../../../inc/global";
 import { ScInterpreterContext } from "../../../inc/interpretercontext";
 import type { ScMarkData } from "../../../inc/markdata";
-import { CellAttributeHelper, CellAttributeHolder, ScPatternAttr } from "../../../inc/patattr";
+import {
+  CellAttributeHelper,
+  CellAttributeHolder,
+  ScPatternAttr,
+  type ScPatternStyleReference,
+} from "../../../inc/patattr";
 import { SetFormulaDirtyContext } from "../../../inc/refupdatecontext";
 import { ScSheetLimits } from "../../../inc/sheetlimits";
 import type { ScStyleSheetPool } from "../../../inc/stlpool";
@@ -683,6 +688,18 @@ export class ScDocument {
   ApplyPattern(col: number, row: number, tab: number, pattern: ScPatternAttr): void {
     this.FetchTable(tab)?.ApplyPattern(col, row, pattern);
   }
+  /** Applies the named style to native attributes in the selected sheet. @param startCol - First column. @param startRow - First row. @param endCol - Last column. @param endRow - Last row. @param tab - Sheet. @param style - Native style. @returns Nothing. */
+  ApplyStyleAreaTab(
+    startCol: number,
+    startRow: number,
+    endCol: number,
+    endRow: number,
+    tab: number,
+    style: ScPatternStyleReference,
+  ): void {
+    this.FetchTable(tab)?.ApplyStyleArea(startCol, startRow, endCol, endRow, style);
+  }
+
   /** Original pattern-area dispatch through the actual sheet owner. @param args - Native coordinates and pattern delta. @returns Whether changed. */
   ApplyPatternAreaTab(...args: Parameters<typeof document10.ApplyPatternAreaTab>): boolean {
     return document10.ApplyPatternAreaTab.apply(this, args);

@@ -1,5 +1,10 @@
 /** @fileoverview Independent ordinary ODS metadata and full-sheet empty repeats through the actual native import path. */
-import { expect, it } from "vitest";
+import {
+  encodeCalcDocument,
+  decodeCalcDocument,
+} from "../../../browser/filter/xml/calc-document-codec";
+import { DocumentArchive } from "../../../../package/source/zippackage/document-archive";
+import { assert, expect, it } from "vitest";
 import { ScDocument } from "../../../inc/document";
 import { ScAddress } from "../../../inc/address";
 import { text } from "../../../../i18nlangtag/source/isolang/isolang.tables";
@@ -60,4 +65,49 @@ it("rejects actual unported form content and unknown sheet semantics rather than
       /** Reads each unsupported semantic subtree through the real importer. @returns Nothing. */ () =>
         new ScXMLImport(new ScDocument()).importContent(xml),
     ).toThrow(/not implemented/);
+});
+
+it("keeps named cell styles and their direct or inherited data styles through ODS and the Worker codec", /** Covers original style creation before parent resolution and named-only cell export. @returns Completion. */ async () => {
+  const namespace =
+    'xmlns:office="urn:oasis:names:tc:opendocument:xmlns:office:1.0" xmlns:table="urn:oasis:names:tc:opendocument:xmlns:table:1.0" xmlns:style="urn:oasis:names:tc:opendocument:xmlns:style:1.0" xmlns:number="urn:oasis:names:tc:opendocument:xmlns:datastyle:1.0" xmlns:fo="urn:oasis:names:tc:opendocument:xmlns:xsl-fo-compatible:1.0"';
+  const styles = `<office:document-styles ${namespace}><office:styles>
+    <style:style style:name="Child_20_Format" style:display-name="Child Format" style:family="table-cell" style:parent-style-name="ce1"/>
+    <style:style style:name="ce1" style:family="table-cell" style:parent-style-name="Default" style:data-style-name="D"/>
+    <style:style style:name="Orphan" style:family="table-cell" style:parent-style-name="Unresolved"/>
+    <number:date-style style:name="D"><number:month number:style="long"/><number:text>/</number:text><number:day number:style="long"/><number:text>/</number:text><number:year/></number:date-style>
+  </office:styles></office:document-styles>`;
+  const content = `<office:document-content ${namespace}>
+    <office:automatic-styles><style:style style:name="auto" style:family="table-cell" style:parent-style-name="Child_20_Format"><style:text-properties fo:font-weight="bold"/></style:style></office:automatic-styles>
+    <office:body><office:spreadsheet><table:table table:name="Styles"><table:table-row>
+      <table:table-cell table:style-name="Child_20_Format" office:value-type="float" office:value="44229"/>
+      <table:table-cell table:style-name="auto" office:value-type="float" office:value="44229"/>
+    </table:table-row></table:table></office:spreadsheet></office:body></office:document-content>`;
+  const original = new ScDocument();
+  const importer = new ScXMLImport(original);
+  importer.importStyles(styles);
+  importer.importContent(content);
+  const archive = await writeOdsDocument(original);
+  const documentArchive = await DocumentArchive.open(archive);
+  const xml = await documentArchive.readTextEntry("content.xml");
+  expect(await documentArchive.readTextEntry("styles.xml")).toContain(
+    'style:name="Orphan" style:family="table-cell" style:parent-style-name="Default"',
+  );
+  expect(xml).toContain('table:style-name="Child_20_Format"');
+  expect(xml).toContain('style:parent-style-name="Child_20_Format"');
+  const saved = await readOdsDocument(archive);
+  const worker = decodeCalcDocument(encodeCalcDocument(original));
+  for (const model of [original, saved, worker]) {
+    const direct = model.GetPattern(new ScAddress(0, 0, 0));
+    const automatic = model.GetPattern(new ScAddress(1, 0, 0));
+    const child = direct?.GetStyleSheet();
+    assert(direct && automatic && child);
+    expect(text(child.GetName())).toBe("Child Format");
+    expect(automatic.GetStyleSheet()).toBe(child);
+    const formatter = model.GetFormatTable();
+    const key = direct.GetNumberFormat(formatter);
+    expect(key).not.toBe(0);
+    expect(automatic.GetNumberFormat(formatter)).toBe(key);
+    expect(direct.GetItemSet().Count()).toBe(0);
+    expect(automatic.GetItemSet().Count()).toBeGreaterThan(0);
+  }
 });

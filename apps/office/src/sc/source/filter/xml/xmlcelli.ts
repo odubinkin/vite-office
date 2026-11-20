@@ -80,10 +80,14 @@ export class ScXMLTableRowCellContext extends ScXMLImportContext {
     if (this.style !== null) {
       const endCol = Math.min(owner.GetDocument().MaxCol(), pos.Col() + this.repeat - 1),
         endRow = Math.min(owner.GetDocument().MaxRow(), pos.Row() + this.row.repeat - 1);
-      if (owner.GetDocument().ValidColRow(pos.Col(), pos.Row()))
-        owner
-          .GetDocument()
-          .ApplyPatternAreaTab(pos.Col(), pos.Row(), endCol, endRow, pos.Tab(), this.style);
+      const document = owner.GetDocument();
+      if (document.ValidColRow(pos.Col(), pos.Row())) {
+        const style = this.style.GetStyleSheet();
+        if (style)
+          document.ApplyStyleAreaTab(pos.Col(), pos.Row(), endCol, endRow, pos.Tab(), style);
+        if (this.style.GetItemSet().Count())
+          document.ApplyPatternAreaTab(pos.Col(), pos.Row(), endCol, endRow, pos.Tab(), this.style);
+      }
       if (endCol !== pos.Col() + this.repeat - 1 || endRow !== pos.Row() + this.row.repeat - 1)
         owner.unsupported("cell range overflow");
     }

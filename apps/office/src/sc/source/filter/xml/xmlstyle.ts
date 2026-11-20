@@ -26,6 +26,7 @@ import {
   ATTR_SHRINKTOFIT,
   ATTR_STACKED,
   ATTR_VER_JUSTIFY_METHOD,
+  ATTR_VALUE_FORMAT,
 } from "../../../inc/scitems";
 import { ScIndentItem, ScLineBreakCell } from "../../../inc/attrib";
 import { XMLMeasurePropHdl } from "../../../../xmloff/source/style/xmlbahdl";
@@ -57,10 +58,13 @@ import { ScPatternAttr } from "../../../inc/patattr";
 import type { ScDocument } from "../../../inc/document";
 import { ExportNumberFormat } from "../../../../xmloff/source/style/xmlnumfe";
 import { SC_STYLE_PROG_STANDARD } from "../../../inc/stylehelper";
+import { SfxStyleSheetBase } from "../../../../svl/source/items/style-model";
 import { SfxStyleFamily } from "../../../../svl/inc/style-values";
-import { ScCondDateFormatEntry, ScCondFormatEntry } from "../../../inc/conditio";
+import type { OUStringConstReference } from "../../../../sal/inc/rtl/ustring";
+import { encodeStyleName } from "../../../../xmloff/source/core/xmluconv";
+import { exportStyleNameAttributes } from "../../../../xmloff/source/style/styleexp";
 import { ScStyleNameConversion } from "../../core/tool/stylehelper";
-import { text, unicode } from "../../../../i18nlangtag/source/isolang/isolang.tables";
+import { text } from "../../../../i18nlangtag/source/isolang/isolang.tables";
 import {
   SvxWeightItem,
   SvxPostureItem,
@@ -202,29 +206,67 @@ export const cellTextWhichIds = [
   ATTR_PROTECTION,
 ] as const;
 
-/** Serializes the native Standard cell style and its represented data style. @param document - Workbook. @param fonts - ODF font declarations. @returns Named styles XML or an empty string. */
-export function exportDefaultCellStyle(document: ScDocument, fonts: XMLFontAutoStylePool): string {
-  const items = document.GetStyleSheetPool()?.GetDefaultStyle()?.GetItemSet();
-  const pattern = new ScPatternAttr(document.getCellAttributeHelper(), items);
+/** Resolves the programmatic name used by Calc's XStyle. @param name - Native display name. @returns Programmatic name. */
+function programmaticCellStyleName(name: OUStringConstReference): string {
+  const programmatic = ScStyleNameConversion.DisplayToProgrammaticName(name, SfxStyleFamily.Para);
   try {
-    let named = "";
-    if (items?.Count()) {
-      const formatter = pattern.GetNumberFormatKey() ? document.GetFormatTable() : null;
-      const format = formatter
-        ? ExportNumberFormat(formatter, pattern.GetNumberFormat(formatter), "NDefault")
+    return text(programmatic);
+  } finally {
+    programmatic.dispose();
+  }
+}
+
+/** Encodes a native cell style reference with the same mapping as its definition. @param name - Actual display name. @returns ODF style name. */
+export function getCellStyleXMLName(name: OUStringConstReference | null): string {
+  return name && !name.isEmpty() ? encodeStyleName(programmaticCellStyleName(name)) : "";
+}
+
+/** Collects reserved names for the table-cell automatic-style family. @param document - Workbook. @returns Encoded named style names. */
+export function getCellStyleXMLNames(document: ScDocument): Set<string> {
+  const styles = document.GetStyleSheetPool()?.CreateIterator(SfxStyleFamily.Para);
+  const names = new Set<string>();
+  for (let style = styles?.First(); style; style = styles?.Next())
+    names.add(getCellStyleXMLName(style.GetName()));
+  return names;
+}
+
+/** Serializes native named styles and their data styles together with ODF document defaults. @param document - Workbook. @param fonts - ODF font declarations. @returns Named styles XML or an empty string. */
+export function exportNamedCellStyles(document: ScDocument, fonts: XMLFontAutoStylePool): string {
+  const pool = document.GetStyleSheetPool();
+  const styles = pool?.CreateIterator(SfxStyleFamily.Para);
+  const helper = document.getCellAttributeHelper();
+  let named = "";
+  let index = 0;
+  for (let style = styles?.First(); style; style = styles?.Next()) {
+    if (!(style instanceof SfxStyleSheetBase)) continue;
+    const name = programmaticCellStyleName(style.GetName());
+    const items = style.GetItemSet();
+    if (!items.Count() && name === text(SC_STYLE_PROG_STANDARD)) continue;
+    const pattern = new ScPatternAttr(helper, items);
+    try {
+      const parent = getCellStyleXMLName(style.GetParent());
+      const numberStyle = name === text(SC_STYLE_PROG_STANDARD) ? "NDefault" : `NCell${++index}`;
+      const formatter = items.GetItemIfSet(ATTR_VALUE_FORMAT, false)
+        ? document.GetFormatTable()
         : null;
-      named = `${format ?? ""}<style:style style:name="${escapeXml(text(SC_STYLE_PROG_STANDARD))}" style:family="table-cell"${format ? ' style:data-style-name="NDefault"' : ""}>${exportDefaultCellProperties(pattern, fonts)}</style:style>`;
+      const format = formatter
+        ? ExportNumberFormat(formatter, pattern.GetNumberFormat(formatter), numberStyle)
+        : null;
+      named += `${format ?? ""}<style:style${exportStyleNameAttributes(name, encodeStyleName(name))} style:family="table-cell"${parent ? ` style:parent-style-name="${escapeXml(parent)}"` : ""}${format ? ` style:data-style-name="${numberStyle}"` : ""}>${exportDefaultCellProperties(pattern, fonts)}</style:style>`;
+    } finally {
+      pattern.Dispose();
     }
-    pattern.GetItemSetWritable().ClearItem();
-    const pool = document.GetPool();
+  }
+  const pattern = new ScPatternAttr(helper);
+  try {
+    const itemPool = document.GetPool();
     for (const which of cellTextWhichIds) {
       if (which === ATTR_LINEBREAK) continue;
-      const item = pool?.GetUserDefaultItem(which);
+      const item = itemPool?.GetUserDefaultItem(which);
       if (item) pattern.ItemSetPut(item);
     }
     if (document.GetDocOptions().IsIgnoreLineBreaks())
       pattern.ItemSetPut(new ScLineBreakCell(true));
-    named += exportConditionalCellStyles(document, fonts);
     const defaults = exportDefaultCellProperties(pattern, fonts);
     const theme = ExportThemeElement(document.theme);
     if (!named && !defaults && !theme) return "";
@@ -232,42 +274,6 @@ export function exportDefaultCellStyle(document: ScDocument, fonts: XMLFontAutoS
   } finally {
     pattern.Dispose();
   }
-}
-
-/** Writes named styles used by the conditional-format list. @param document - Workbook. @param fonts - Font declarations. @returns Named style declarations. */
-function exportConditionalCellStyles(document: ScDocument, fonts: XMLFontAutoStylePool): string {
-  const pool = document.GetStyleSheetPool();
-  if (!pool) return "";
-  const names = new Set<string>();
-  for (let tab = 0; tab < document.GetTableCount(); ++tab)
-    for (const format of document.FetchTable(tab)?.GetCondFormList() ?? [])
-      for (let i = 0; i < format.size(); ++i) {
-        const entry = format.GetEntry(i);
-        if (entry instanceof ScCondFormatEntry && entry.GetStyleName())
-          names.add(entry.GetStyleName());
-        else if (entry instanceof ScCondDateFormatEntry && !entry.GetStyleName().isEmpty())
-          names.add(text(entry.GetStyleName()));
-      }
-  let result = "";
-  for (const source of names) {
-    const name = unicode(source);
-    const programmatic = ScStyleNameConversion.DisplayToProgrammaticName(name, SfxStyleFamily.Para);
-    try {
-      if (programmatic.equals(SC_STYLE_PROG_STANDARD)) continue;
-      const style = pool.Find(name, SfxStyleFamily.Para);
-      if (!style) continue;
-      const pattern = new ScPatternAttr(document.getCellAttributeHelper(), style.GetItemSet());
-      try {
-        result += `<style:style style:name="${escapeXml(text(programmatic))}" style:family="table-cell">${exportDefaultCellProperties(pattern, fonts)}</style:style>`;
-      } finally {
-        pattern.Dispose();
-      }
-    } finally {
-      programmatic.dispose();
-      name.dispose();
-    }
-  }
-  return result;
 }
 
 /** Emits properties of a named style or the ODF document defaults in schema order. @param pattern - Direct native properties. @param fonts - Existing font declarations. @returns Property elements. */

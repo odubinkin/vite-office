@@ -77,7 +77,11 @@ import type { ScInterpreterContext } from "../../../inc/interpretercontext";
 import { CopyToDocContext } from "../../../inc/clipcontext";
 import { ScMultiSelIter } from "../../../inc/markmulti";
 import { ScAttrArray, type ScAttrEntry } from "./attarray";
-import { ScPatternAttr, CellAttributeHolder } from "../../../inc/patattr";
+import {
+  ScPatternAttr,
+  CellAttributeHolder,
+  type ScPatternStyleReference,
+} from "../../../inc/patattr";
 /** Attribute portion of native ScColumnData, also used for the real default column. */
 export class ScColumnData {
   /** Original existing-line mutation traverses only actual multi marks. @param marks - Marks. @param line - Style or absence. @param colorOnly - Color mode. @returns Nothing. */
@@ -175,6 +179,11 @@ export class ScColumnData {
   SetAttrEntries(entries: ScAttrEntry[]): void {
     this.pAttrArray.SetAttrEntries(entries);
   }
+  /** Passes the named style to the native column attribute runs. @param first - First row. @param last - Last row. @param style - Native style. @returns Nothing. */
+  ApplyStyleArea(first: number, last: number, style: ScPatternStyleReference): void {
+    this.pAttrArray.ApplyStyleArea(first, last, style);
+  }
+
   /** Original ApplyPatternArea owns one actual native itemset cache. @param start - First row. @param end - Last row. @param delta - Borrowed actual pattern. @returns Stored attribute change. */
   ApplyPatternArea(start: number, end: number, delta: ScPatternAttr): boolean {
     const cache = new ScItemPoolCache(this.rDocument.getCellAttributeHelper(), delta.GetItemSet()),

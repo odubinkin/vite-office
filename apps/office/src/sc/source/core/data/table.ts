@@ -42,7 +42,11 @@ import type { EndListeningContext, StartListeningContext } from "../../../inc/li
 import type { ScMarkData } from "../../../inc/markdata";
 import { ScMultiSelIter } from "../../../inc/markmulti";
 import type { ColumnBlockPosition } from "../../../inc/mtvelements";
-import type { CellAttributeHolder, ScPatternAttr } from "../../../inc/patattr";
+import type {
+  CellAttributeHolder,
+  ScPatternAttr,
+  ScPatternStyleReference,
+} from "../../../inc/patattr";
 import type { ScItemPoolCache } from "../../../inc/poolcach";
 import type { SetFormulaDirtyContext } from "../../../inc/refupdatecontext";
 import type { RowHeightContext } from "../../../inc/rowheightcontext";
@@ -805,6 +809,31 @@ export class ScTable {
   GetPattern(col: number, row: number): ScPatternAttr | null {
     return this.rDocument.ValidColRow(col, row) ? this.GetColumnData(col).GetPattern(row) : null;
   }
+  /** Applies a named style to the existing columns and the implicit default-column range. @param startCol - First column. @param startRow - First row. @param endCol - Last column. @param endRow - Last row. @param style - Sheet style owner. @returns Nothing. */
+  ApplyStyleArea(
+    startCol: number,
+    startRow: number,
+    endCol: number,
+    endRow: number,
+    style: ScPatternStyleReference,
+  ): void {
+    if (
+      !this.rDocument.ValidColRow(startCol, startRow) ||
+      !this.rDocument.ValidColRow(endCol, endRow)
+    )
+      return;
+    [startCol, endCol] = [Math.min(startCol, endCol), Math.max(startCol, endCol)];
+    [startRow, endRow] = [Math.min(startRow, endRow), Math.max(startRow, endRow)];
+    if (endCol === this.rDocument.MaxCol()) {
+      endCol = Math.max(startCol, this.aCol.length) - 1;
+      this.CreateColumnIfNotExists(endCol);
+      this.aDefaultColData.ApplyStyleArea(startRow, endRow, style);
+    } else this.CreateColumnIfNotExists(endCol);
+    for (let column = startCol; column <= endCol; column++)
+      this.aCol[column]?.ApplyStyleArea(startRow, endRow, style);
+    this.SetStreamValid(false);
+  }
+
   /** Applies source ordered/clamped attribute ranges and default-column optimization for an end at MaxCol. @param startCol - First column. @param startRow - First row. @param endCol - Last column. @param endRow - Last row. @param delta - Pattern delta. @returns Whether changed. */
   ApplyPatternArea(
     startCol: number,

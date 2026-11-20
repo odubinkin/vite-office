@@ -87,19 +87,16 @@ export class XMLTableStylesContext extends ScXMLImportContext {
             null,
             attributes.get(XMLToken.STYLE_DATA_STYLE_NAME),
           );
-        if (element === XMLToken.STYLE_STYLE) {
-          if (attributes.get(XMLToken.STYLE_PARENT_STYLE_NAME) !== null)
-            this.owner.unsupported("named cell parent style inheritance");
-          if (attributes.get(XMLToken.STYLE_DATA_STYLE_NAME) !== null)
-            this.owner.unsupported("named cell number styles");
+        if (element === XMLToken.STYLE_STYLE)
           return new XMLTableStyleContext(
             this.owner,
             attributes.require(XMLToken.STYLE_NAME, "cell style name"),
-            null,
+            attributes.get(XMLToken.STYLE_DATA_STYLE_NAME),
             false,
             true,
+            attributes.get(XMLToken.STYLE_PARENT_STYLE_NAME),
+            attributes.get(XMLToken.STYLE_DISPLAY_NAME),
           );
-        }
       }
       this.owner.unsupported("named and master styles are not preserved");
       return new SvXMLIgnoreContext(true);
@@ -138,16 +135,19 @@ export class XMLTableStylesContext extends ScXMLImportContext {
       return new SvXMLIgnoreContext(true);
     }
     const parent = attributes.get(XMLToken.STYLE_PARENT_STYLE_NAME);
-    if (parent !== null && parent !== text(SC_STYLE_PROG_STANDARD))
-      this.owner.unsupported("cell parent style inheritance");
+
     return new XMLTableStyleContext(
       this.owner,
       attributes.require(XMLToken.STYLE_NAME, "cell style name"),
       attributes.get(XMLToken.STYLE_DATA_STYLE_NAME),
+      false,
+      false,
+      parent,
     );
   }
   /** Resolves the native Default style after all declarations in this style list. @returns Nothing. */
   override endFastElement(): void {
+    if (this.named) this.owner.FinishNamedCellStyles();
     this.owner.ApplyDefaultNumberStyle();
   }
 }
@@ -231,19 +231,23 @@ class XMLCellTextStyleContext extends ScXMLImportContext {
 class XMLTableStyleContext extends ScXMLImportContext {
   private readonly pattern: ScPatternAttr;
   private readonly horizontal = new Any();
-  /** Creates genuine native item state. @param owner - Importer. @param name - Automatic-style name or Standard. @param dataStyle - Referenced data style. @param documentDefaults - Pool-default properties. @param named - Named styles stream. @returns Context. */
+  /** Creates genuine native item state. @param owner - Importer. @param name - Automatic-style name or Standard. @param dataStyle - Referenced data style. @param documentDefaults - Pool-default properties. @param named - Named styles stream. @param parent - Encoded parent name. @param displayName - External unencoded name. @returns Context. */
   constructor(
     private readonly owner: ScXMLImport,
     private readonly name: string | null,
     private readonly dataStyle: string | null,
     private readonly documentDefaults = false,
     private readonly named = false,
+    private readonly parent: string | null = null,
+    private readonly displayName: string | null = null,
   ) {
     super(owner);
     this.pattern = new ScPatternAttr(owner.GetDocument().getCellAttributeHelper());
     if (name !== null)
       this.pattern.SetStyleSheet(
-        owner.GetDocument().GetStyleSheetPool()?.GetDefaultStyle() ?? null,
+        owner.GetNamedCellStyle(parent) ??
+          owner.GetDocument().GetStyleSheetPool()?.GetDefaultStyle() ??
+          null,
         false,
       );
   }
@@ -317,10 +321,17 @@ class XMLTableStyleContext extends ScXMLImportContext {
       const item = new SvxHorJustifyItem(129);
       if (item.PutValue(this.horizontal)) this.pattern.ItemSetPut(item);
       if (this.name !== null && !this.named)
-        this.owner.AddAutoStyle(this.name, this.pattern, this.dataStyle);
+        this.owner.AddAutoStyle(this.name, this.pattern, this.dataStyle, this.parent);
       else {
         try {
-          if (this.name !== null) this.owner.ApplyNamedCellStyle(this.name, this.pattern);
+          if (this.name !== null)
+            this.owner.ApplyNamedCellStyle(
+              this.name,
+              this.displayName,
+              this.parent,
+              this.dataStyle,
+              this.pattern,
+            );
           else if (this.documentDefaults) this.owner.ApplyDocumentDefaults(this.pattern);
           else this.owner.ApplyDefaultCellStyle(this.pattern, this.dataStyle);
         } finally {

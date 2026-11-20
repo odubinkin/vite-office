@@ -84,10 +84,7 @@ export class ScStyleSheetPool extends SfxStyleSheetPool {
     const style = new ScStyleSheet(name, this, family, mask, parent);
     const defaultStyle =
       family === SfxStyleFamily.Page || text(name) === standard ? null : this.GetDefaultStyle(true);
-    if (defaultStyle) {
-      style.SetParent(defaultStyle.GetName());
-      style.GetItemSet().SetParent(defaultStyle.GetItemSet());
-    }
+    if (defaultStyle) style.SetParent(defaultStyle.GetName());
     return style;
   }
 }

@@ -13,7 +13,9 @@ import {
   exportCellTextPropertyElement,
   exportCellPropertyElement,
   exportCellParagraphProperties,
-  exportDefaultCellStyle,
+  exportNamedCellStyles,
+  getCellStyleXMLName,
+  getCellStyleXMLNames,
 } from "./xmlstyle";
 import type { ScTable } from "../../../inc/table";
 import type { ScFormulaCell } from "../../../inc/formulacell";
@@ -99,9 +101,11 @@ export class ScXMLExport {
   private readonly pageFontPool = new XMLFontAutoStylePool();
   private readonly pageStyles: ReturnType<typeof exportPageStyles>;
   private textStyles: CellTextStylePool;
+  private automaticStyleIndex = 0;
+  private readonly reservedStyleNames: Set<string>;
   private readonly styles = new Map<
     string,
-    { name: string; dataStyle: string; properties: string }
+    { name: string; dataStyle: string; parent: string; properties: string }
   >();
   private readonly numberStyles = new Map<number, { name: string; xml: string } | null>();
   private readonly patternNames = new Map<ScPatternAttr, string>();
@@ -112,6 +116,7 @@ export class ScXMLExport {
     private readonly document: ScDocument,
     private readonly options: ScXMLExportOptions = {},
   ) {
+    this.reservedStyleNames = getCellStyleXMLNames(document);
     this.textStyles = new CellTextStylePool(document, this.fontPool);
     this.pageStyles = exportPageStyles(document, this.pageFontPool);
   }
@@ -120,6 +125,7 @@ export class ScXMLExport {
     const cached = this.patternNames.get(pattern);
     if (cached !== undefined) return cached;
     const dataStyle = this.numberStyleName(pattern);
+    const parent = getCellStyleXMLName(pattern.GetStyleName());
     const ids = cellTextWhichIds;
     if (
       !dataStyle &&
@@ -128,17 +134,21 @@ export class ScXMLExport {
           pattern.GetItemSet().GetItemState(which, false) === SfxItemState.SET,
       )
     ) {
-      this.patternNames.set(pattern, "");
-      return "";
+      const name = parent === text(SC_STYLE_PROG_STANDARD) ? "" : parent;
+      this.patternNames.set(pattern, name);
+      return name;
     }
-    const text = exportCellTextPropertyElement(pattern, this.fontPool),
+    const chars = exportCellTextPropertyElement(pattern, this.fontPool),
       cell = exportCellPropertyElement(pattern),
       paragraph = exportCellParagraphProperties(pattern),
-      properties = `${text}${cell}${paragraph ? `<style:paragraph-properties${paragraph}/>` : ""}`;
-    const key = dataStyle + ":" + properties;
+      properties = `${chars}${cell}${paragraph ? `<style:paragraph-properties${paragraph}/>` : ""}`;
+    const key = JSON.stringify([parent, dataStyle, properties]);
     let style = this.styles.get(key);
     if (style === undefined) {
-      style = { name: `ce${this.styles.size + 1}`, dataStyle, properties };
+      let name: string;
+      do name = `ce${++this.automaticStyleIndex}`;
+      while (this.reservedStyleNames.has(name));
+      style = { name, dataStyle, parent, properties };
       this.styles.set(key, style);
     }
     this.patternNames.set(pattern, style.name);
@@ -159,7 +169,7 @@ export class ScXMLExport {
   /** Writes the recognized default style in the ODF named styles stream. @returns ODF styles XML or empty. */
   exportStyles(): string {
     const fontPool = this.pageFontPool;
-    const styles = exportDefaultCellStyle(this.document, fontPool);
+    const styles = exportNamedCellStyles(this.document, fontPool);
     const { layouts, masters } = this.pageStyles;
     if (!styles && !layouts) return "";
     const pageStyles = layouts
@@ -226,6 +236,7 @@ export class ScXMLExport {
       );
     }
     this.styles.clear();
+    this.automaticStyleIndex = 0;
     this.patternNames.clear();
     this.rowStyles.clear();
     this.columnStyles.clear();
@@ -441,8 +452,8 @@ export class ScXMLExport {
       automatic += `<style:style style:name="${name}" style:family="table"${page}><style:table-properties${properties}/></style:style>`;
     }
     for (const style of this.numberStyles.values()) if (style) automatic += style.xml;
-    for (const { name, dataStyle, properties } of this.styles.values()) {
-      automatic += `<style:style style:name="${name}" style:family="table-cell"${defaultName ? ` style:parent-style-name="${defaultName}"` : ""}${dataStyle ? ` style:data-style-name="${dataStyle}"` : ""}>${properties}</style:style>`;
+    for (const { name, dataStyle, parent, properties } of this.styles.values()) {
+      automatic += `<style:style style:name="${name}" style:family="table-cell"${parent ? ` style:parent-style-name="${escapeXml(parent)}"` : ""}${dataStyle ? ` style:data-style-name="${dataStyle}"` : ""}>${properties}</style:style>`;
     }
     for (const [key, name] of this.rowStyles) {
       const [height, optimal, pageBreak] = key.split(",");
