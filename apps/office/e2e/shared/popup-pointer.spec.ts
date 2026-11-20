@@ -44,21 +44,10 @@ for (const suite of ["writer", "calc"] as const)
       );
       await expect(first).toHaveAttribute("data-popup-highlighted", "true");
       await expect(first).toBeEnabled();
-      if (suite === "calc") {
-        const disabled = popup.getByRole("menuitemcheckbox", {
-          name: "Superscript",
-          exact: true,
-        });
-        await expect(disabled).toBeDisabled();
-        await disabled.hover();
-        const disabledRect = await disabled.boundingBox();
-        expect(disabledRect).not.toBeNull();
-        await page.mouse.move(
-          (disabledRect as NonNullable<typeof disabledRect>).x + 10,
-          (disabledRect as NonNullable<typeof disabledRect>).y + 10,
-        );
-        await expect(disabled).toHaveAttribute("data-popup-highlighted", "true");
-      }
+      if (suite === "calc")
+        await expect(
+          popup.getByRole("menuitemcheckbox", { name: "Superscript", exact: true }),
+        ).toHaveCount(0);
       await page.screenshot({ path: test.info().outputPath(`popup-${suite}-${width}.png`) });
       await expect(trigger).toHaveAttribute("data-popup-highlighted", "true");
       await page.mouse.move(0, 0);
