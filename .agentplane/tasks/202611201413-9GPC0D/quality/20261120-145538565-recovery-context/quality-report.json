@@ -1,0 +1,24 @@
+{
+  "schema_version": 1,
+  "task_id": "202611201413-9GPC0D",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-11-20T14:55:38.565Z",
+  "verdict": "pass",
+  "summary": "Verified Calc outline controls, native group visibility and clipped frozen pane geometry.",
+  "evaluated_sha": "8d12db561d9f2e6b523a47408ab0076f849a9ab9",
+  "blueprint_digest": "da91c47ee1af9c2ed315b055d80125ec8b44bbee54a66116a3027531ce8bc9ba",
+  "findings": [
+    "The original ODS fixture exposes both outline axes and restores nested hidden rows via the browser buttons."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202611201413-9GPC0D/README.md",
+    "output/calc-9GPC0D-verification.md",
+    "output/playwright/calc-9GPC0D/browser-geometry.log"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": [
+    "The outline controls inherit physical grid orientation from the existing browser device."
+  ]
+}
