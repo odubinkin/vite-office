@@ -14,7 +14,8 @@
       "XclExpDxfFont::SaveXml"
     ],
     "preservedResponsibilities": [
-      "Serializes referenced differential cell styles using original OOXML font and fill elements."
+      "Serializes referenced differential cell styles using original OOXML font and fill elements.",
+      "Writes the original inline extension DXF and reuses the normal differential font and fill serialization."
     ],
     "omittedResponsibilities": [
       "Theme reserialization, other differential property families and native range-wide precollection remain unported."
@@ -28,6 +29,18 @@
         {
           "path": "apps/office/src/sc/source/filter/oox/excelfilter.page-settings.test.ts",
           "marker": "testTdf167019"
+        },
+        {
+          "path": "apps/office/src/sc/source/filter/excel/xestyle.dxf.ts",
+          "marker": "SaveXmlExt"
+        },
+        {
+          "path": "apps/office/src/sc/source/filter/oox/extlstcontext.test.ts",
+          "marker": "keeps the three extended operators"
+        },
+        {
+          "path": "apps/office/e2e/calc/xlsx-extended-conditions.spec.ts",
+          "marker": "opens and downloads XLSX"
         }
       ],
       "upstream": [
@@ -38,6 +51,14 @@
         {
           "path": "sc/source/filter/excel/xestyle.cxx",
           "marker": "XclExpDxfFont::SaveXml"
+        },
+        {
+          "path": "sc/source/filter/excel/xestyle.cxx",
+          "marker": "XclExpDxf::SaveXmlExt"
+        },
+        {
+          "path": "sc/qa/unit/cond_format.cxx",
+          "marker": "testCondFormatOperatorsSameRangeXLSX"
         }
       ]
     },

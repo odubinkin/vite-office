@@ -33,7 +33,8 @@
       "Passes native, per-tab extended view settings to worksheet serialization.",
       "Exports live group membership when an attached view was supplied, otherwise restores the detached tab settings; the displayed sheet is selected.",
       "Writes the represented sheetPr record before sheetViews using the actual sheet model color.",
-      "Writes native worksheet print settings between merged cells and manual page-break records."
+      "Writes native worksheet print settings between merged cells and manual page-break records.",
+      "Writes the original conditional-format extension list after page records."
     ],
     "omittedResponsibilities": [
       "Number formats, themed and rich formatting, and formula conventions beyond the supported Calc compiler remain open."
@@ -67,6 +68,18 @@
         {
           "path": "apps/office/src/sc/source/filter/excel/xlsx-sheet-names.test.ts",
           "marker": "exports the original tdf79998 ODS sheet"
+        },
+        {
+          "path": "apps/office/src/sc/source/filter/excel/xetable.ts",
+          "marker": "extended.SaveXml"
+        },
+        {
+          "path": "apps/office/src/sc/source/filter/oox/extlstcontext.test.ts",
+          "marker": "keeps the three extended operators"
+        },
+        {
+          "path": "apps/office/e2e/calc/xlsx-extended-conditions.spec.ts",
+          "marker": "opens and downloads XLSX"
         }
       ],
       "upstream": [
@@ -85,6 +98,14 @@
         {
           "path": "vendor/libreoffice-reference/sc/source/filter/excel/excdoc.cxx",
           "marker": "ExcDocument::WriteXml"
+        },
+        {
+          "path": "sc/source/filter/excel/xetable.cxx",
+          "marker": "XclExpCellTable::SaveXml"
+        },
+        {
+          "path": "sc/qa/unit/cond_format.cxx",
+          "marker": "testCondFormatOperatorsSameRangeXLSX"
         }
       ]
     }

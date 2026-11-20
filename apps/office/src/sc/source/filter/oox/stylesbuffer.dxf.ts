@@ -71,12 +71,12 @@ export class Dxf implements FragmentContext {
   /** Ignores formatting-only whitespace. @returns Nothing. */
   characters(): void {}
 
-  /** Creates the original ConditionalStyle_n style lazily at the workbook boundary. @param document - Native workbook. @param index - Zero-based dxf index. @returns Native style name. */
-  CreateStyle(document: ScDocument, index: number): string {
+  /** Creates the original ConditionalStyle_n style lazily at the workbook boundary. @param document - Native workbook. @param index - Zero-based dxf index. @param extended - Use the original extension style name. @returns Native style name. */
+  CreateStyle(document: ScDocument, index: number, extended = false): string {
     if (this.styleName) return this.styleName;
     const pool = document.GetStyleSheetPool();
     if (!pool) return "";
-    const name = unicode("ConditionalStyle_" + (index + 1));
+    const name = unicode((extended ? "ExtConditionalStyle_" : "ConditionalStyle_") + (index + 1));
     try {
       const style =
         pool.Find(name, SfxStyleFamily.Para) ??

@@ -22,7 +22,8 @@
       "Dispatches sheetProtection to WorksheetSettings and finalizes it on the native sheet.",
       "Admits the original protectedRanges container and dispatches its entries to WorksheetSettings.",
       "Dispatches the original sheetPr/tabColor element to WorksheetSettings in the supported worksheet context.",
-      "Dispatches print options, margins, setup and fit from their original worksheet contexts and finalizes the named page style."
+      "Dispatches print options, margins, setup and fit from their original worksheet contexts and finalizes the named page style.",
+      "Dispatches the worksheet-level extLst to the native extension contexts."
     ],
     "omittedResponsibilities": [
       "Number formats, themed and rich formatting, and formula conventions beyond the supported Calc compiler remain open."
@@ -44,12 +45,32 @@
         {
           "path": "apps/office/src/sc/source/filter/oox/excelfilter.enhanced-protection.test.ts",
           "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sc/source/filter/oox/worksheetfragment.ts",
+          "marker": "ExtLstGlobalContext"
+        },
+        {
+          "path": "apps/office/src/sc/source/filter/oox/extlstcontext.test.ts",
+          "marker": "keeps the three extended operators"
+        },
+        {
+          "path": "apps/office/e2e/calc/xlsx-extended-conditions.spec.ts",
+          "marker": "opens and downloads XLSX"
         }
       ],
       "upstream": [
         {
           "path": "sc/source/filter/oox/worksheetfragment.cxx",
           "marker": "WorksheetFragment::onCreateContext"
+        },
+        {
+          "path": "sc/source/filter/oox/worksheetfragment.cxx",
+          "marker": "ExtLstGlobalContext"
+        },
+        {
+          "path": "sc/qa/unit/cond_format.cxx",
+          "marker": "testCondFormatOperatorsSameRangeXLSX"
         }
       ]
     }

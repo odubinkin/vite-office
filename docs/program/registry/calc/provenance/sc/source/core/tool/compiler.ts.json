@@ -30,7 +30,8 @@
       "J0Z0KF native import-transfer checkpoint adds all4setFormulaCell overload paths over actual typed stores: numeric/string caches, owned token arrays and raw cells. Every non-null formula uses real document link inspection; raw overwrite unshares the actual old formula group, preserving the distinct source/token path. Rejected owned arrays release locally while raw cells remain caller-owned; release precedes the storage call. Numeric/string-only fillDown uses native cached column reads and existing vector/mdds range storage, preserving empty string, signed zero and error NaN bits. Raw append/count and direct origin-date options setup retain source editing/formatter boundaries. Actual formula defaults, clean empty construction and hybrid-string forwarding use existing owners. Initial native UI grammar resolves the real document convention as in SetGrammarAndRefConvention; full symbol maps and later unspecified transitions remain unported, and unsupported conventions still reject. Native const-token copy construction, style/Latin hints, matrix/data-table/visibility/merge import, outline/compute-cache finalization, full workbook/filter/UI and physical native ABI/lifetime parity remain unverified. CALC-521 is source-only; no null graph or fake provider/allocator is used.",
       "Compiles literal array tokens using the grammar separators and writes source-shaped typed inline matrix expressions.",
       "Recognizes the represented legacy ODFF deleted-sheet qualifier, retaining native reference flags and serializing deleted references in their current ODFF and OOXML spellings. Qualified OOXML reference errors retain the resolved tab and mark row and column deleted; the original tdf58243 workbook now round-trips through Calc file operations.",
-      "Normalizes admitted formula symbol lookup keys as well as source spelling, covering the native lowercase _xlfn function prefix."
+      "Normalizes admitted formula symbol lookup keys as well as source spelling, covering the native lowercase _xlfn function prefix.",
+      "Preserves the original sheet absolute marker in native A1 formula output and omits it under the Excel qualifier convention."
     ],
     "omittedResponsibilities": [
       "All services outside the explicitly represented numeric formula/arithmetic subset remain unsupported; no broad parity claim.",
@@ -97,6 +98,10 @@
         {
           "path": "apps/office/src/sc/source/filter/excel/xlsx-sheet-names.test.ts",
           "marker": "exports the original tdf79998 ODS sheet"
+        },
+        {
+          "path": "apps/office/src/sc/source/filter/oox/extlstcontext.test.ts",
+          "marker": "checkCellIs"
         }
       ],
       "upstream": [
@@ -123,6 +128,14 @@
         {
           "path": "vendor/libreoffice-reference/sc/source/core/tool/compiler.cxx",
           "marker": "struct ConventionXL_OOX"
+        },
+        {
+          "path": "sc/source/core/tool/compiler.cxx",
+          "marker": "MakeOneRefStrImpl"
+        },
+        {
+          "path": "sc/qa/unit/cond_format.cxx",
+          "marker": "testCondFormatImportCellIs"
         }
       ]
     }

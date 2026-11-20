@@ -26,7 +26,8 @@
       "Resolves the original border XF ID and applies real line and box items on the Calc pattern.",
       "Applies native alignment and rotation-reference items through XF ancestry.",
       "Resolves the cell XF and its source style parent protection flags and installs the actual native protection item.",
-      "Resolves date and ordinary conditional rules through one differential-style owner with its existing workbook fallback."
+      "Resolves date and ordinary conditional rules through one differential-style owner with its existing workbook fallback.",
+      "Owns the original extension differential-style vector and fallback style name."
     ],
     "omittedResponsibilities": [
       "The theme, format-code, border and differential-format families remain open."
@@ -52,6 +53,18 @@
         {
           "path": "apps/office/e2e/calc/xlsx-date-conditions.spec.ts",
           "marker": "evaluates and round-trips a tomorrow date rule"
+        },
+        {
+          "path": "apps/office/src/sc/source/filter/oox/stylesbuffer.ts",
+          "marker": "createExtDxfStyle"
+        },
+        {
+          "path": "apps/office/src/sc/source/filter/oox/extlstcontext.test.ts",
+          "marker": "keeps the three extended operators"
+        },
+        {
+          "path": "apps/office/e2e/calc/xlsx-extended-conditions.spec.ts",
+          "marker": "opens and downloads XLSX"
         }
       ],
       "upstream": [
@@ -70,6 +83,14 @@
         {
           "path": "sc/qa/unit/cond_format.cxx",
           "marker": "testTdf164334CondFormatTomorrow"
+        },
+        {
+          "path": "sc/source/filter/oox/stylesbuffer.cxx",
+          "marker": "StylesBuffer::createExtDxfStyle"
+        },
+        {
+          "path": "sc/qa/unit/cond_format.cxx",
+          "marker": "testCondFormatOperatorsSameRangeXLSX"
         }
       ]
     }

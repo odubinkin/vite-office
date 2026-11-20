@@ -1,0 +1,52 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/sc/source/filter/oox/extlstcontext.ts",
+    "status": "mapped",
+    "upstreamPath": "sc/source/filter/oox/extlstcontext.cxx",
+    "localSymbols": [
+      "ExtLstGlobalContext",
+      "ExtGlobalContext",
+      "ExtConditionalFormattingContext"
+    ],
+    "upstreamSymbols": [
+      "ExtLstGlobalContext::onCreateContext",
+      "ExtGlobalContext::onCreateContext",
+      "ExtConditionalFormattingContext::onEndElement"
+    ],
+    "preservedResponsibilities": [
+      "Dispatches the original worksheet extension hierarchy. Collects formula-backed text, cell comparisons and expression conditions from the source x14 and xm namespaces with inline differential style and range binding."
+    ],
+    "omittedResponsibilities": [
+      "Data bars, icon sets, validation and sparkline extensions remain outside this port."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sc/source/filter/oox/extlstcontext.ts",
+          "marker": "ExtLstGlobalContext"
+        },
+        {
+          "path": "apps/office/src/sc/source/filter/oox/extlstcontext.test.ts",
+          "marker": "keeps the three extended operators"
+        },
+        {
+          "path": "apps/office/e2e/calc/xlsx-extended-conditions.spec.ts",
+          "marker": "opens and downloads XLSX"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "sc/source/filter/oox/extlstcontext.cxx",
+          "marker": "ExtLstGlobalContext::onCreateContext"
+        },
+        {
+          "path": "sc/qa/unit/cond_format.cxx",
+          "marker": "testCondFormatBeginsAndEndsWithXLSX"
+        }
+      ]
+    }
+  }
+}

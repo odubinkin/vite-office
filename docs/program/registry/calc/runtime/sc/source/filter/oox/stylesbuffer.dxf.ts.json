@@ -18,9 +18,12 @@
       "evidence": [
         "apps/office/src/sc/source/filter/oox/stylesbuffer.dxf.ts",
         "sc/source/filter/oox/stylesbuffer.cxx",
-        "apps/office/src/sc/source/filter/oox/excelfilter.page-settings.test.ts"
+        "apps/office/src/sc/source/filter/oox/excelfilter.page-settings.test.ts",
+        "apps/office/src/sc/source/filter/oox/extlstcontext.test.ts",
+        "apps/office/e2e/calc/xlsx-extended-conditions.spec.ts",
+        "sc/qa/unit/cond_format.cxx"
       ],
-      "justification": "Materializes sparse native font and fill items under the original ConditionalStyle names. Differential borders, alignment, protection and number formats remain unported.",
+      "justification": "Materializes sparse native font and fill items under the original ConditionalStyle names. Differential borders, alignment, protection and number formats remain unported. Creates the original extension differential style names using the same explicit Calc style items.",
       "knownViolations": [],
       "localSymbols": [
         "Dxf",

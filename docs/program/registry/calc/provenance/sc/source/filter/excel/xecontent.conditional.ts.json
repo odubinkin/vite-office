@@ -18,10 +18,11 @@
       "Serializes native conditional-format ranges and the represented condition formulas and priorities into the worksheet.",
       "Exports native color scales with paired XLSX threshold and RGB lists.",
       "Writes native fixed text formulas based at the combined range origin and quotes Excel literals twice.",
-      "Serializes the ten original Excel time periods and omits the native year-only periods from XLSX."
+      "Serializes the ten original Excel time periods and omits the native year-only periods from XLSX.",
+      "Routes native extended conditions into the worksheet extension serializer with their assigned priority."
     ],
     "omittedResponsibilities": [
-      "Date, data-bar, icon and extended rules are not serialized by this owner."
+      "Data-bar and icon rules remain outside the represented slice."
     ],
     "evidence": {
       "local": [
@@ -52,6 +53,18 @@
         {
           "path": "apps/office/e2e/calc/xlsx-date-conditions.spec.ts",
           "marker": "evaluates and round-trips a tomorrow date rule"
+        },
+        {
+          "path": "apps/office/src/sc/source/filter/excel/xecontent.conditional.ts",
+          "marker": "SaveXmlConditionalFormats"
+        },
+        {
+          "path": "apps/office/src/sc/source/filter/oox/extlstcontext.test.ts",
+          "marker": "keeps the three extended operators"
+        },
+        {
+          "path": "apps/office/e2e/calc/xlsx-extended-conditions.spec.ts",
+          "marker": "opens and downloads XLSX"
         }
       ],
       "upstream": [
@@ -82,6 +95,14 @@
         {
           "path": "sc/qa/unit/cond_format.cxx",
           "marker": "testTdf164334CondFormatTomorrow"
+        },
+        {
+          "path": "sc/source/filter/excel/xecontent.cxx",
+          "marker": "XclExpCondfmt::XclExpCondfmt"
+        },
+        {
+          "path": "sc/qa/unit/cond_format.cxx",
+          "marker": "testCondFormatOperatorsSameRangeXLSX"
         }
       ]
     },

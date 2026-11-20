@@ -1,0 +1,51 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/sc/source/filter/excel/xeextlst.ts",
+    "status": "mapped",
+    "upstreamPath": "sc/source/filter/excel/xeextlst.cxx",
+    "localSymbols": [
+      "XclExpExtCondFormat",
+      "GetFixedFormula"
+    ],
+    "upstreamSymbols": [
+      "XclExpExtCondFormat::SaveXml",
+      "XclExpExtCF::SaveXml",
+      "GetFixedFormula"
+    ],
+    "preservedResponsibilities": [
+      "Writes original worksheet x14 conditional rule groups, priorities, UUIDs, formula operands and named inline differential styles."
+    ],
+    "omittedResponsibilities": [
+      "Data bars, icon sets and workbook-level extensions remain outside this port."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sc/source/filter/excel/xeextlst.ts",
+          "marker": "XclExpExtCondFormat"
+        },
+        {
+          "path": "apps/office/src/sc/source/filter/oox/extlstcontext.test.ts",
+          "marker": "keeps the three extended operators"
+        },
+        {
+          "path": "apps/office/e2e/calc/xlsx-extended-conditions.spec.ts",
+          "marker": "opens and downloads XLSX"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "sc/source/filter/excel/xeextlst.cxx",
+          "marker": "XclExpExtCondFormat::SaveXml"
+        },
+        {
+          "path": "sc/qa/unit/cond_format.cxx",
+          "marker": "testCondFormatBeginsAndEndsWithXLSX"
+        }
+      ]
+    }
+  }
+}

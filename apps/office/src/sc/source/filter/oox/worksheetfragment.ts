@@ -28,6 +28,7 @@ import { UnitConverter } from "./unitconverter";
 import { toDouble } from "../../../../o3tl/inc/string_view";
 import { attribute, isSpreadsheetTag } from "./workbookfragment";
 import { CondFormatBuffer } from "./condformatbuffer";
+import { ExtLstGlobalContext } from "./extlstcontext";
 
 const sheetElements: Readonly<Record<string, readonly string[]>> = {
   "": ["worksheet"],
@@ -47,6 +48,7 @@ const sheetElements: Readonly<Record<string, readonly string[]>> = {
     "rowBreaks",
     "colBreaks",
     "conditionalFormatting",
+    "extLst",
   ],
   headerFooter: headerFooterElements,
   sheetPr: ["tabColor", "pageSetUpPr"],
@@ -77,7 +79,7 @@ export class WorksheetFragment extends FragmentHandler {
   private readonly sheetData: SheetDataBuffer;
   private readonly settings = new WorksheetSettings();
   private readonly pageSettings = new PageSettings();
-  private readonly condFormats = new CondFormatBuffer();
+  private readonly condFormats: CondFormatBuffer;
   private readonly views: SheetViewSettings;
   private readonly geometry: WorksheetGlobals;
   private row = -1;
@@ -106,6 +108,7 @@ export class WorksheetFragment extends FragmentHandler {
   ) {
     super(filter, path);
     this.address = new ScAddress(0, 0, tab);
+    this.condFormats = new CondFormatBuffer(document, tab);
     this.sheetData = new SheetDataBuffer(document, tab, units);
     this.views = new SheetViewSettings(document, tab);
     const table = document.FetchTable(tab);
@@ -119,8 +122,10 @@ export class WorksheetFragment extends FragmentHandler {
       !sheetElements[this.elementStack.at(-1) ?? ""]?.includes(tag.local)
     )
       return null;
+    if (tag.local === "extLst")
+      return new ExtLstGlobalContext(this.condFormats, this.styles, this.document, this.tab);
     if (tag.local === "conditionalFormatting")
-      return this.condFormats.importConditionalFormatting(this.document, this.tab);
+      return this.condFormats.importConditionalFormatting();
     if (tag.local !== "is") return this;
     this.inlineString?.dispose();
     this.inlineString = new RichString();

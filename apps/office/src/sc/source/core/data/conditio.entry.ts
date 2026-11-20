@@ -402,7 +402,7 @@ export class ScConditionEntry extends ScFormatEntry {
 
 /** Native formula condition tied to a cell style. */
 export class ScCondFormatEntry extends ScConditionEntry {
-  /** Binds the original condition and named style. @param mode - Condition. @param expressions - Formula operands. @param document - Native document. @param source - Base address. @param grammar - Formula grammar. @param styleName - Cell style name. @returns Format entry. */
+  /** Binds the original condition and named style. @param mode - Condition. @param expressions - Formula operands. @param document - Native document. @param source - Base address. @param grammar - Formula grammar. @param styleName - Cell style name. @param type - Native condition discriminator. @returns Format entry. */
   constructor(
     mode: ScConditionMode,
     expressions: readonly (string | ScTokenArray)[],
@@ -410,8 +410,13 @@ export class ScCondFormatEntry extends ScConditionEntry {
     source: ScAddress,
     grammar: Grammar,
     private readonly styleName: string,
+    private readonly type = ScFormatEntryType.Condition,
   ) {
     super(mode, expressions, document, source, grammar);
+  }
+  /** Returns the condition or extension discriminator. @returns Original entry type. */
+  override GetType(): ScFormatEntryType {
+    return this.type;
   }
   /** Reads the original cell style identity. @returns Style name. */
   GetStyleName(): string {
@@ -430,6 +435,7 @@ export class ScCondFormatEntry extends ScConditionEntry {
       new ScAddress(this.GetSrcPos()),
       FormulaGrammar.Grammar.GRAM_ODFF,
       this.styleName,
+      this.type,
     );
   }
   /** Compares the condition and the associated style. @param other - Candidate entry. @param ignore - Ignore the reference origin. @returns Equality. */

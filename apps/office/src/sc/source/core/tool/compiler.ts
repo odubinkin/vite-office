@@ -296,7 +296,7 @@ export class ScCompiler extends FormulaCompiler {
     }
     let output = odf ? "." : "";
     if (!omitSheet && (reference.IsFlag3D() || address.Tab() !== this.aPos.Tab()))
-      output = this.FormatSheet(address.Tab(), odf, !reference.IsTabRel());
+      output = this.FormatSheet(address.Tab(), !reference.IsTabRel());
     if (singleton !== 2)
       output +=
         (reference.IsColRel() ? "" : "$") +
@@ -309,13 +309,13 @@ export class ScCompiler extends FormulaCompiler {
           : address.Row() + 1);
     return output;
   }
-  /** Formats one qualified sheet using the original formula convention. @param tab - Native sheet. @param odf - ODF syntax flag. @param absolute - Absolute sheet flag. @returns Prefix including delimiter. */
-  private FormatSheet(tab: number, odf: boolean, absolute: boolean): string {
+  /** Formats one qualified sheet using the original formula convention. @param tab - Native sheet. @param absolute - Absolute sheet flag. @returns Prefix including delimiter. */
+  private FormatSheet(tab: number, absolute: boolean): string {
     const source = this.rDoc.FetchTable(tab)?.GetName();
     if (!source) return "#REF!";
     const quoted = QuoteTabName(text(source));
-    if (odf) return (absolute ? "$" : "") + quoted + ".";
-    return quoted + (this.meGrammar === FormulaGrammar.Grammar.GRAM_OOXML ? "!" : ".");
+    if (this.meGrammar === FormulaGrammar.Grammar.GRAM_OOXML) return quoted + "!";
+    return (absolute ? "$" : "") + quoted + ".";
   }
   /** Admits the inline matrix operand owned by the Calc token array. @param token - Source token. @returns Whether this is a populated literal matrix. */
   protected override IsMatrixOperand(token: FormulaToken): boolean {
@@ -337,10 +337,7 @@ export class ScCompiler extends FormulaCompiler {
     const tab = token.GetSheet();
     const range = this.rDoc.GetRangeName(tab)?.findByIndex(token.GetIndex());
     if (!range) return "#NAME?";
-    return (
-      (tab !== -1 && tab !== this.aPos.Tab() ? this.FormatSheet(tab, false, false) : "") +
-      range.name
-    );
+    return (tab !== -1 && tab !== this.aPos.Tab() ? this.FormatSheet(tab, false) : "") + range.name;
   }
   /** Writes an external single-sheet operand in the active formula convention. @param token - External reference. @returns Serialized reference. */
   private CreateStringFromExternal(

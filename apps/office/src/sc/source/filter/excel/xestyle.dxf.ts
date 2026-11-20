@@ -41,17 +41,30 @@ export class XclExpDxfs {
     if (!name) return null;
     const previous = this.ids.get(name);
     if (previous !== undefined) return String(previous);
+    const items = this.GetStyleItems(name);
+    if (!items) return null;
+    const index = this.styles.length;
+    this.styles.push(items);
+    this.ids.set(name, index);
+    return String(index);
+  }
+
+  /** Retrieves original explicit differential style items. @param name - Cell style identity. @returns Borrowed items or absence. */
+  private GetStyleItems(name: string): SfxItemSet | undefined {
     const key = unicode(name);
     try {
-      const items = this.document.GetStyleSheetPool()?.Find(key, SfxStyleFamily.Para)?.GetItemSet();
-      if (!items) return null;
-      const index = this.styles.length;
-      this.styles.push(items);
-      this.ids.set(name, index);
-      return String(index);
+      return this.document.GetStyleSheetPool()?.Find(key, SfxStyleFamily.Para)?.GetItemSet();
     } finally {
       key.dispose();
     }
+  }
+
+  /** Writes inline extension differential style records. @param output - Worksheet serializer. @param name - Cell style identity. @param namespace - Extension prefix token. @returns Nothing. */
+  SaveXmlExt(output: FastSerializerHelper, name: string, namespace: number): void {
+    const items = this.GetStyleItems(name);
+    output.startElementNS(namespace, token("dxf"));
+    if (items) this.SaveDxfItems(output, items);
+    output.endElementNS(namespace, token("dxf"));
   }
 
   /** Writes the original indexed DXF group. @param output - Stylesheet serializer. @returns Nothing. */
@@ -60,22 +73,23 @@ export class XclExpDxfs {
     output.startElement(token("dxfs"), token("count"), String(this.styles.length));
     for (const items of this.styles) {
       output.startElement(token("dxf"));
-      this.SaveFont(output, items);
-      const fill = items.GetItemIfSet(Which.ATTR_BACKGROUND, false) as SvxBrushItem | undefined;
-      if (fill) {
-        output.startElement(token("fill"));
-        output.startElement(token("patternFill"));
-        output.singleElement(
-          token("bgColor"),
-          token("rgb"),
-          XclXmlUtils.ToOString(fill.GetColor()),
-        );
-        output.endElement(token("patternFill"));
-        output.endElement(token("fill"));
-      }
+      this.SaveDxfItems(output, items);
       output.endElement(token("dxf"));
     }
     output.endElement(token("dxfs"));
+  }
+
+  /** Serializes the represented fill and font of a differential style. @param output - Active serializer. @param items - Explicit style items. @returns Nothing. */
+  private SaveDxfItems(output: FastSerializerHelper, items: SfxItemSet): void {
+    this.SaveFont(output, items);
+    const fill = items.GetItemIfSet(Which.ATTR_BACKGROUND, false) as SvxBrushItem | undefined;
+    if (fill) {
+      output.startElement(token("fill"));
+      output.startElement(token("patternFill"));
+      output.singleElement(token("bgColor"), token("rgb"), XclXmlUtils.ToOString(fill.GetColor()));
+      output.endElement(token("patternFill"));
+      output.endElement(token("fill"));
+    }
   }
 
   /** Writes only the explicit DXF font properties. @param output - Active style serializer. @param items - Actual native style items. @returns Nothing. */

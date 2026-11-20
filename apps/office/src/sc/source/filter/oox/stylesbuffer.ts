@@ -41,7 +41,7 @@ import { NumberFormatsBuffer } from "./numberformatsbuffer";
 import { Font as VclFont } from "../../../../vcl/source/font/font";
 import { convertTwipToMm100 } from "../../../../tools/inc/UnitConversion";
 import { ExcelGraphicHelper, type XlsColor } from "./stylesbuffer.color";
-import type { Dxf } from "./stylesbuffer.dxf";
+import { Dxf } from "./stylesbuffer.dxf";
 
 const editFontWhich = new Map<number, readonly number[]>([
   [Which.ATTR_FONT, [EE.EE_CHAR_FONTINFO, EE.EE_CHAR_FONTINFO_CJK, EE.EE_CHAR_FONTINFO_CTL]],
@@ -381,6 +381,7 @@ export class StylesBuffer {
   readonly numberFormats = new NumberFormatsBuffer();
   readonly fonts: Font[] = [];
   readonly dxfs: Dxf[] = [];
+  private readonly extDxfs: Dxf[] = [];
   readonly fills: { color?: XlsColor }[] = [];
   readonly borders: Border[] = [];
   readonly styleXfs: Xf[] = [];
@@ -398,8 +399,29 @@ export class StylesBuffer {
 
   /** Resolves the native differential style, with the represented workbook default fallback. @param document - Native workbook. @param index - Differential style index. @returns Style name. */
   createDxfStyle(document: ScDocument, index: number): string {
-    const style = this.dxfs[index];
-    if (style) return style.CreateStyle(document, index);
+    return this.createConditionalStyle(document, this.dxfs[index], index, false);
+  }
+
+  /** Retains an inline differential style in the original workbook extension vector. @returns DXF context. */
+  createExtDxf(): Dxf {
+    const dxf = new Dxf(this.graphicHelper);
+    this.extDxfs.push(dxf);
+    return dxf;
+  }
+
+  /** Materializes an extension differential style. @param document - Workbook. @param index - Original index. @returns Cell style name. */
+  createExtDxfStyle(document: ScDocument, index: number): string {
+    return this.createConditionalStyle(document, this.extDxfs[index], index, true);
+  }
+
+  /** Resolves a differential style and its fallback. @param document - Workbook. @param style - Borrowed DXF. @param index - Style index. @param extended - Extension style naming. @returns Native style name. */
+  private createConditionalStyle(
+    document: ScDocument,
+    style: Dxf | undefined,
+    index: number,
+    extended: boolean,
+  ): string {
+    if (style) return style.CreateStyle(document, index, extended);
     const fallback = document.GetStyleSheetPool()?.GetDefaultStyle();
     return fallback ? text(fallback.GetName()) : "";
   }

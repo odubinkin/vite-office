@@ -16,7 +16,8 @@
     ],
     "preservedResponsibilities": [
       "Owns source-relative condition formulas, the represented comparisons, and named cell style binding.",
-      "Evaluates the four native text conditions with the original number conversion, transliteration and character classification owners."
+      "Evaluates the four native text conditions with the original number conversion, transliteration and character classification owners.",
+      "Preserves the original ExtCondition discriminator through cloning and native equality."
     ],
     "omittedResponsibilities": [
       "Additional condition families, full shift/move token updates and native listener caches remain unported."
@@ -38,6 +39,18 @@
         {
           "path": "apps/office/e2e/calc/xlsx-text-conditions.spec.ts",
           "marker": "preserves the original XLSX quoted text conditions"
+        },
+        {
+          "path": "apps/office/src/sc/source/core/data/conditio.entry.ts",
+          "marker": "ScCondFormatEntry"
+        },
+        {
+          "path": "apps/office/src/sc/source/filter/oox/extlstcontext.test.ts",
+          "marker": "keeps the three extended operators"
+        },
+        {
+          "path": "apps/office/e2e/calc/xlsx-extended-conditions.spec.ts",
+          "marker": "opens and downloads XLSX"
         }
       ],
       "upstream": [
@@ -56,6 +69,14 @@
         {
           "path": "sc/qa/unit/subsequent_export_test5.cxx",
           "marker": "testTdf166413"
+        },
+        {
+          "path": "sc/source/core/data/conditio.cxx",
+          "marker": "ScCondFormatEntry"
+        },
+        {
+          "path": "sc/qa/unit/cond_format.cxx",
+          "marker": "testCondFormatOperatorsSameRangeXLSX"
         }
       ]
     },

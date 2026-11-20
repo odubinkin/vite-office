@@ -18,9 +18,12 @@
       "evidence": [
         "apps/office/src/sc/source/filter/excel/xestyle.dxf.ts",
         "sc/source/filter/excel/xestyle.cxx",
-        "apps/office/src/sc/source/filter/oox/excelfilter.page-settings.test.ts"
+        "apps/office/src/sc/source/filter/oox/excelfilter.page-settings.test.ts",
+        "apps/office/src/sc/source/filter/oox/extlstcontext.test.ts",
+        "apps/office/e2e/calc/xlsx-extended-conditions.spec.ts",
+        "sc/qa/unit/cond_format.cxx"
       ],
-      "justification": "Serializes referenced differential cell styles using original OOXML font and fill elements. Theme reserialization, other differential property families and native range-wide precollection remain unported.",
+      "justification": "Serializes referenced differential cell styles using original OOXML font and fill elements. Theme reserialization, other differential property families and native range-wide precollection remain unported. Writes the original inline extension DXF and reuses the normal differential font and fill serialization.",
       "knownViolations": [],
       "localSymbols": [
         "XclExpDxfs"

@@ -7280,3 +7280,38 @@ Saturday. Calc preserves the original boundaries.
 
 - [Original date rule evaluator](../../vendor/libreoffice-reference/sc/source/core/data/conditio.cxx)
 - [Calc date-rule boundary tests](../../apps/office/src/sc/source/filter/oox/condformatbuffer.date.test.ts)
+
+### CALC-767 — Extended conditional rule order can change when ranges match
+
+`ExtConditionalFormattingContext` sorts the extended condition models by
+priority and retains the prior order of its parallel priority vector.
+When an ordinary conditional group has the same range list,
+`CondFormatBuffer::finalizeImport` reads both lists by index. An
+out-of-order extended group can therefore associate a rule with another
+rule's priority. Calc preserves the original import order and pairing.
+
+- [Original extension parser](../../vendor/libreoffice-reference/sc/source/filter/oox/extlstcontext.cxx)
+- [Original priority merge](../../vendor/libreoffice-reference/sc/source/filter/oox/condformatbuffer.cxx)
+
+### CALC-768 — ODS drops the XLSX distinction for formula-backed text conditions
+
+Extended SpreadsheetML stores the original text criterion as a formula.
+The ODS condition import reconstructs a plain condition with the same
+formula and retains its Calc evaluation. A subsequent XLSX export selects
+the ordinary text rule serializer, which emits an empty criterion if
+the formula begins with a reference. Calc preserves these original
+sequences for the two file formats.
+
+- [Original ODS condition reconstruction](../../vendor/libreoffice-reference/sc/source/filter/xml/xmlcondformat.cxx)
+- [Original plain XLSX text condition export](../../vendor/libreoffice-reference/sc/source/filter/excel/xecontent.cxx)
+
+### CALC-769 — Extended differential style indices restart on each sheet
+
+`StylesBuffer::createExtDxf` appends to a workbook's extension vector,
+while `CondFormatBuffer::finalizeImport` resets the extension style index
+after each sheet. Later sheets can therefore read earlier sheets'
+extended differential styles by index. Calc preserves the workbook
+vector and sheet-local index lifetime.
+
+- [Original workbook differential styles](../../vendor/libreoffice-reference/sc/source/filter/oox/stylesbuffer.cxx)
+- [Original sheet finalization](../../vendor/libreoffice-reference/sc/source/filter/oox/condformatbuffer.cxx)

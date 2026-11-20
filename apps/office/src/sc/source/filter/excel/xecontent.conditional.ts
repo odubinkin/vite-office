@@ -5,9 +5,15 @@ import { text } from "../../../../i18nlangtag/source/isolang/isolang.tables";
 import { getTokenFromUtf8 as token } from "../../../../oox/source/token/tokenmap";
 import { OUString } from "../../../../sal/inc/rtl/ustring";
 import type { FastSerializerHelper } from "../../../../sax/inc/fshelper";
-import { ScCondDateFormatEntry, ScCondFormatEntry, ScConditionMode } from "../../../inc/conditio";
+import {
+  ScCondDateFormatEntry,
+  ScCondFormatEntry,
+  ScConditionMode,
+  ScFormatEntryType,
+} from "../../../inc/conditio";
 import type { ScDocument } from "../../../inc/document";
 import type { ScTable } from "../../../inc/table";
+import { GetFixedFormula, type XclExpExtCondFormat } from "./xeextlst";
 import { XclXmlUtils } from "./xestream";
 import type { XclExpDxfs } from "./xestyle.dxf";
 import { ScColorScaleEntryType as ScaleType, ScColorScaleFormat } from "../../../inc/colorscale";
@@ -64,21 +70,6 @@ function GetText(entry: ScCondFormatEntry): string {
   }
 }
 
-/** Builds the prescribed Excel formula for a text condition. @param mode - Native condition mode. @param origin - A1 expression origin. @param value - Literal text. @returns OOXML formula. */
-function GetFixedFormula(mode: ScConditionMode, origin: string, value: string): string {
-  const quoted = `"${value.replaceAll('"', '""')}"`;
-  switch (mode) {
-    case ScConditionMode.BeginsWith:
-      return `LEFT(${origin},LEN(${quoted}))=${quoted}`;
-    case ScConditionMode.EndsWith:
-      return `RIGHT(${origin},LEN(${quoted}))=${quoted}`;
-    case ScConditionMode.ContainsText:
-      return `NOT(ISERROR(SEARCH(${quoted},${origin})))`;
-    default:
-      return `ISERROR(SEARCH(${quoted},${origin}))`;
-  }
-}
-
 /** Writes the original list of color thresholds followed by the RGB values. @param output - Worksheet serializer. @param entry - Native color scale. @param priority - XLSX priority. @returns Nothing. */
 function SaveColorScale(
   output: FastSerializerHelper,
@@ -122,16 +113,18 @@ function SaveColorScale(
   output.endElement(token("cfRule"));
 }
 
-/** Saves represented condition groups and original per-sheet priority. @param output - Active worksheet serializer. @param document - Native workbook. @param table - Actual worksheet. @param dxfs - Exported differential styles. @returns Nothing. */
+/** Saves represented condition groups and original per-sheet priority. @param output - Active worksheet serializer. @param document - Native workbook. @param table - Actual worksheet. @param dxfs - Exported differential styles. @param extended - Worksheet extension owner. @returns Nothing. */
 export function SaveXmlConditionalFormats(
   output: FastSerializerHelper,
   document: ScDocument,
   table: ScTable,
   dxfs: XclExpDxfs,
+  extended: XclExpExtCondFormat,
 ): void {
   let priority = 2;
   for (const format of table.GetCondFormList()) {
     let opened = false;
+    const extensionRules = [];
     const ranges = format.GetRange();
     if (ranges.empty()) continue;
     for (let i = 0; i < format.size(); ++i) {
@@ -148,6 +141,15 @@ export function SaveXmlConditionalFormats(
           ? "notContains"
           : (kind ?? cellIsOperators.get(mode));
       if (!scale && !direct && !operator && timePeriod === undefined) continue;
+      if (condition?.GetType() === ScFormatEntryType.ExtCondition) {
+        extensionRules.push({
+          entry: condition,
+          type: kind ?? (direct ? "expression" : "cellIs"),
+          operator: operator ?? null,
+          priority: priority++,
+        });
+        continue;
+      }
       if (!opened) {
         output.startElement(
           token("conditionalFormatting"),
@@ -196,7 +198,7 @@ export function SaveXmlConditionalFormats(
           XclXmlUtils.ToOString(document, new ScRange(address, address)),
         );
         output.startElement(token("formula"));
-        output.writeEscaped(GetFixedFormula(mode, origin, value));
+        output.writeEscaped(GetFixedFormula(mode, origin, `"${value.replaceAll('"', '""')}"`));
         output.endElement(token("formula"));
       } else
         for (let n = 0; n < condition.GetExpressionCount(); ++n) {
@@ -213,5 +215,6 @@ export function SaveXmlConditionalFormats(
       output.endElement(token("cfRule"));
     }
     if (opened) output.endElement(token("conditionalFormatting"));
+    extended.AddRecord(ranges, extensionRules);
   }
 }
