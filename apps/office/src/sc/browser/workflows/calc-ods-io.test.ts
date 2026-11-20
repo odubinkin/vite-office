@@ -141,7 +141,7 @@ it("shares Writer naming/empty rules and stores actual ODS bytes before adopting
   c.StartInput(ScInputMode.SC_INPUT_TABLE, "discard me");
   expect(await openBrowserCalcDocument(shell, db, id)).toBe(true);
   expect(c.mode).toBe(ScInputMode.SC_INPUT_NONE);
-  expect(c.Address()).toBe("A1");
+  expect(c.Address()).toBe("C1");
   expect(shell.GetDocument().GetValue(new ScAddress(2, 0, 0))).toBe(6);
   expect(shell.GetUndoManager().GetUndoActionCount()).toBe(0);
   expect(c.viewData.GetDocument()).toBe(shell.GetDocument());

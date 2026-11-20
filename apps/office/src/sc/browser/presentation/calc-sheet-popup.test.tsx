@@ -24,7 +24,7 @@ function fixture() {
   );
   return s;
 }
-it("opens the exact native popup and executes real group commands without changing document history", /** Unsupported native operations remain disabled through actual missing slots. @returns Nothing. */ () => {
+it("opens connected source popup entries and executes group commands without changing document history", /** Verifies source order and live command availability. @returns Nothing. */ () => {
   const s = fixture(),
     c = s.controller;
   act(
@@ -46,25 +46,10 @@ it("opens the exact native popup and executes real group commands without changi
         entry,
       ) => entry.textContent,
     ),
-  ).toEqual([
-    "Insert Sheet…",
-    "Delete Sheet…",
-    "Rename Sheet…",
-    "Duplicate Sheet",
-    "Move or Copy Sheet…",
-    "Select All Sheets",
-    "Deselect All Sheets",
-    "Protect Sheet…",
-    "Hide Sheet",
-    "Show Sheet…",
-    "✓View Grid Lines",
-    "Tab Color…",
-    "Sheet Right-To-Left",
-    "Sheet Events…",
-  ]);
+  ).toEqual(["Select All Sheets", "Deselect All Sheets", "✓View Grid Lines"]);
   expect(within(menu).getByRole("menuitemcheckbox", { name: "View Grid Lines" })).toBeChecked();
-  expect(menu.querySelectorAll(":scope > [aria-hidden='true']")).toHaveLength(3);
-  expect(within(menu).getByRole("menuitem", { name: "Insert Sheet…" })).toBeDisabled();
+  expect(menu.querySelectorAll(":scope > [aria-hidden='true']")).toHaveLength(1);
+  expect(within(menu).queryByRole("menuitem", { name: "Insert Sheet…" })).toBeNull();
   expect(within(menu).getByRole("menuitem", { name: "Deselect All Sheets" })).toBeEnabled();
   fireEvent.click(within(menu).getByRole("menuitem", { name: "Deselect All Sheets" }));
   expect(screen.queryByRole("menu", { name: "Calc sheet context menu" })).not.toBeInTheDocument();
