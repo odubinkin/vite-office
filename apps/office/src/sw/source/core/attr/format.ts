@@ -277,11 +277,16 @@ export class SwFormat extends BroadcastingModify {
 
   /** Stores one direct item using native effective old/new deltas. @param item - Format item. @returns True when changed. */
   public SetFormatAttr(item: SfxPoolItem): boolean {
-    if (this.IsModifyLocked()) return this.attributeSet.Put(item) !== undefined;
+    if (this.IsModifyLocked()) {
+      const changed = this.attributeSet.Put(item) !== undefined;
+      if (changed) this.SetModifyAtAttr();
+      return changed;
+    }
     const oldSet = new SwAttrSet(this.attributeSet.GetPool(), this.attributeSet.GetRanges()),
       newSet = new SwAttrSet(this.attributeSet.GetPool(), this.attributeSet.GetRanges());
     const changed = this.attributeSet.Put_BC(item, oldSet, newSet);
     if (changed) {
+      this.SetModifyAtAttr();
       ClientNotifyAttrChg(this, this.attributeSet, oldSet, newSet);
     }
     return changed;
@@ -291,11 +296,16 @@ export class SwFormat extends BroadcastingModify {
     if (set.Count() === 0) return false;
     const source = set.Clone();
     try {
-      if (this.IsModifyLocked()) return this.attributeSet.PutSet(source);
+      if (this.IsModifyLocked()) {
+        const changed = this.attributeSet.PutSet(source);
+        if (changed) this.SetModifyAtAttr();
+        return changed;
+      }
       const oldSet = new SwAttrSet(this.attributeSet.GetPool(), this.attributeSet.GetRanges()),
         newSet = new SwAttrSet(this.attributeSet.GetPool(), this.attributeSet.GetRanges());
       const changed = this.attributeSet.Put_BC(source, oldSet, newSet);
       if (changed) {
+        this.SetModifyAtAttr();
         ClientNotifyAttrChg(this, this.attributeSet, oldSet, newSet);
       }
       return changed;
@@ -303,6 +313,8 @@ export class SwFormat extends BroadcastingModify {
       source.Dispose();
     }
   }
+  /** Binds format-specific direct items to their owner before broadcasting. @returns Nothing. */
+  protected SetModifyAtAttr(): void {}
   /** Resets one identity or an inclusive native range. @param which - First WhichId. @param last - Optional last WhichId. @returns Whether removed. */
   public ResetFormatAttr(which: number, last = 0): boolean {
     if (this.attributeSet.Count() === 0) return false;

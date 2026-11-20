@@ -15,7 +15,15 @@ import { HoriOrientation } from "../../../../offapi/com/sun/star/text/HoriOrient
 import { SvxULSpaceItem } from "../../../../editeng/source/items/frmitems";
 import { SfxBoolItem } from "../../../../svl/source/items/cenumitm";
 import { SwFormatLayoutSplit } from "../../../inc/fmtlsplt";
-import { SvXMLImport } from "../../../../xmloff/source/core/xmlimp";
+import { SvXMLNumFormatContext } from "../../../../xmloff/source/style/xmlnumfi";
+import { XMLToken } from "../../../../xmloff/source/core/xmltoken";
+import { SwTableBoxNumFormat } from "../../core/attr/cellatr";
+import {
+  applyTableCellValue,
+  readTableCellValue,
+  type SwXMLTableCellValue,
+} from "./xmltbli.values";
+import { SvXMLImport, type FastAttributeList } from "../../../../xmloff/source/core/xmlimp";
 
 import type { OdfTableStyle } from "../../../../xmloff/source/table/XMLTableImport";
 import type { SwDoc } from "../../core/doc/doc";
@@ -38,6 +46,7 @@ class SwXMLTableContextState {
   activeCell: SwTableBox | undefined;
   activeCellStyleName = "";
   activeCellColumnSpan = 1;
+  activeCellValue: SwXMLTableCellValue | undefined;
   oldCursor: XMLTextCursor | undefined;
   rowCellIndex = 0;
   readonly columnWidths: number[] = [];
@@ -50,6 +59,7 @@ class SwXMLTableContextState {
       styleName: string;
       columns: number;
       coveredBox?: SwTableBox;
+      value?: SwXMLTableCellValue;
     }
   >();
   readonly coveredCellStyles = new Map<number, string>();
@@ -67,6 +77,7 @@ class SwXMLTableContextState {
 
 /** Keeps the native table contexts scoped to one Writer XML stream coordinator. */
 export class SwXMLTableImport extends SvXMLImport {
+  private readonly numberStyles = new Map<string, SvXMLNumFormatContext>();
   private readonly tableStyles = new Map<string, OdfTableStyle>();
   private readonly tableContexts: SwXMLTableContextState[] = [];
   protected textImport: XMLTextImportHelper | undefined;
@@ -91,6 +102,20 @@ export class SwXMLTableImport extends SvXMLImport {
   /** Starts a package XML stream with its own automatic table style names. @returns Nothing. */
   protected ResetTableStyles(): void {
     this.tableStyles.clear();
+  }
+
+  /** Registers a data style on the Writer document formatter. @param element - Number-style token. @param attributes - Data style declaration. @returns Native style context. */
+  public createNumberStyle(
+    element: XMLToken,
+    attributes: FastAttributeList,
+  ): SvXMLNumFormatContext {
+    const context = new SvXMLNumFormatContext(
+      element,
+      this.document.GetNumberFormatter(),
+      attributes,
+    );
+    this.numberStyles.set(attributes.require(XMLToken.STYLE_NAME, "data style name"), context);
+    return context;
   }
 
   /** Retains a referenced table style until SAX body import. */
@@ -280,10 +305,11 @@ export class SwXMLTableImport extends SvXMLImport {
     return this.tableContext.rowCellIndex < this.tableContext.columnWidths.length;
   }
 
-  /** Creates one native box over declared grid columns. @param styleName - Cell style. @param columnSpan - Number of source grid columns. @param rowSpan - Number of source grid rows. @returns Nothing. */ public beginTableCell(
+  /** Creates one native box over declared grid columns. @param styleName - Cell style. @param columnSpan - Number of source grid columns. @param rowSpan - Number of source grid rows. @param attributes - Original cell attributes. @returns Nothing. */ public beginTableCell(
     styleName: string,
     columnSpan = 1,
     rowSpan = 1,
+    attributes?: FastAttributeList,
   ): void {
     const context = this.tableContext;
     /* istanbul ignore next -- SAX cell contexts are created only by an open row and cannot overlap. */
@@ -295,8 +321,11 @@ export class SwXMLTableImport extends SvXMLImport {
     if (!actualColumnSpan) throw new Error("ODF table cell is outside the declared columns.");
     context.activeCellStyleName = styleName;
     context.activeCellColumnSpan = columnSpan;
+    context.activeCellValue = attributes
+      ? readTableCellValue(this.document, attributes)
+      : undefined;
     styleName = this.GetCellStyleName(styleName);
-    const cell = this.CreateBox(styleName, actualColumnSpan);
+    const cell = this.CreateBox(styleName, actualColumnSpan, false, context.activeCellValue);
     context.nonMergedCellIndex = context.rowCellIndex;
     if (rowSpan > 1) {
       const firstRow = context.table.GetTabLines().length - 1;
@@ -340,8 +369,13 @@ export class SwXMLTableImport extends SvXMLImport {
     );
   }
 
-  /** Appends a real cell over the declared width of its original grid slots. @param styleName - Native style name. @param columnSpan - Source column count. @param covered - Whether style attachment waits for covered markers. @returns Actual core box. */
-  private CreateBox(styleName: string, columnSpan: number, covered = false): SwTableBox {
+  /** Appends a real cell over the declared width of its original grid slots. @param styleName - Native style name. @param columnSpan - Source column count. @param covered - Whether style attachment waits for covered markers. @param value - Authored cell data. @returns Actual core box. */
+  private CreateBox(
+    styleName: string,
+    columnSpan: number,
+    covered = false,
+    value?: SwXMLTableCellValue,
+  ): SwTableBox {
     const context = this.tableContext;
     const row = context.activeRow;
     if (row === undefined) throw new Error("ODF table cell is outside a row.");
@@ -361,6 +395,7 @@ export class SwXMLTableImport extends SvXMLImport {
       styleName,
       columns: columnSpan,
       ...(covered ? { coveredBox: cell } : {}),
+      ...(value ? { value } : {}),
     });
     context.rowCellIndex += columnSpan;
     if (!covered) this.ApplyBoxStyle(cell, styleName);
@@ -375,6 +410,11 @@ export class SwXMLTableImport extends SvXMLImport {
     >;
     const frameFormat = cell.GetFrameFormat(),
       box = importBoxProperties(style, RES_BOX);
+    const key =
+      style.dataStyle === undefined
+        ? undefined
+        : this.numberStyles.get(style.dataStyle)?.GetKey(this.numberStyles);
+    if (key !== undefined) frameFormat.SetFormatAttr(new SwTableBoxNumFormat(key));
     importFrameVisualProperties(frameFormat, style);
     if (box !== undefined) frameFormat.SetFormatAttr(box);
     if (style.verticalAlign !== undefined)
@@ -434,7 +474,10 @@ export class SwXMLTableImport extends SvXMLImport {
       cursor.dispose();
       context.oldCursor = undefined;
     }
+    const value = context.activeCellValue;
     context.activeCell = undefined;
+    context.activeCellValue = undefined;
+    if (source && value) applyTableCellValue(source, value);
     if (source === undefined || context.activeCellColumnSpan !== 1 || repeat === 1) return;
     const span = context.verticalSpans.get(context.rowCellIndex - 1);
     for (let index = 1; index < repeat; index++) {
@@ -442,7 +485,7 @@ export class SwXMLTableImport extends SvXMLImport {
       if (context.rowCellIndex >= context.columnWidths.length) break;
       const column = context.rowCellIndex;
       const styleName = this.GetCellStyleName(context.activeCellStyleName);
-      const box = this.CreateBox(styleName, 1);
+      const box = this.CreateBox(styleName, 1, false, value);
       context.nonMergedCellIndex = context.rowCellIndex;
       if (span !== undefined) {
         box.setRowSpan(source.getRowSpan());
@@ -452,6 +495,7 @@ export class SwXMLTableImport extends SvXMLImport {
       const nodes = start.GetNodes();
       const placeholder = nodes.at(start.GetIndex() + 1) as SwTextNode;
       if (CopyNodes(source.GetStartNode(), start, placeholder)) nodes.removeTextNode(placeholder);
+      if (value) applyTableCellValue(box, value);
     }
   }
 
@@ -467,7 +511,13 @@ export class SwXMLTableImport extends SvXMLImport {
         if (context.rowCellIndex >= context.columnWidths.length) break;
         const source = previous.get(context.rowCellIndex);
         const columnSpan = this.ClipColumnSpan(source?.columns ?? 1);
-        this.CreateBox(this.GetCellStyleName(source?.styleName ?? ""), columnSpan);
+        const box = this.CreateBox(
+          this.GetCellStyleName(source?.styleName ?? ""),
+          columnSpan,
+          false,
+          source?.value,
+        );
+        if (source?.value) applyTableCellValue(box, source.value);
       }
       this.FinishRow();
     }

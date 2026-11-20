@@ -49,10 +49,14 @@ export interface XMLTableExportSource {
     cells: readonly Readonly<{
       columnSpan?: number | undefined;
       rowSpan?: number | undefined;
+      formula?: string | undefined;
+      protected?: boolean | undefined;
+      valueAttributes?: string | undefined;
       format: Readonly<
         OdfBoxProperties &
           OdfTableVisualProperties & {
             verticalAlign?: string | undefined;
+            numberFormat?: number | undefined;
           }
       >;
       content: readonly XMLTextExportBlock[];
@@ -77,7 +81,7 @@ function exportTableVisualProperties(
   return output;
 }
 
-/** Renders body and other text sections with shared automatic styles. @param blocks - Primary text blocks. @param renderParagraphs - Shared text exporter. @param isCancelled - Cooperative cancellation. @param sections - Additional text sections. @returns Rendered text and styles. */
+/** Renders body and other text sections with shared automatic styles. @param blocks - Primary text blocks. @param renderParagraphs - Shared text exporter. @param isCancelled - Cooperative cancellation. @param exportNumberStyle - Data-style registration. @param sections - Additional text sections. @returns Rendered text and styles. */
 export function exportTableBlocks(
   blocks: Iterable<XMLTextExportBlock>,
   renderParagraphs: (
@@ -86,6 +90,7 @@ export function exportTableBlocks(
   ) => string,
   isCancelled: () => boolean,
   sections?: Iterable<Iterable<XMLTextExportBlock>>,
+  exportNumberStyle?: (key: number) => string | undefined,
 ): {
   readonly body: string;
   readonly automaticStyles: string;
@@ -205,13 +210,20 @@ export function exportTableBlocks(
               cellProperties += ` style:border-line-width-${side.toLowerCase()}="${escapeXml(compound)}"`;
           }
           cellProperties += exportTableVisualProperties(cell.format, true);
-          let cellName = cellStyles.get(cellProperties);
-          if (cellProperties && cellName === undefined) {
+          const dataStyle =
+            cell.format.numberFormat === undefined
+              ? undefined
+              : exportNumberStyle?.(cell.format.numberFormat);
+          const styleKey = (dataStyle ?? "") + "\0" + cellProperties;
+          let cellName = cellStyles.get(styleKey);
+          if ((cellProperties || dataStyle) && cellName === undefined) {
             cellName = escapeXml(
               encodeStyleName(`${stylePrefix}.${table.columnName(column)}${rowIndex + 1}`),
             );
-            cellStyles.set(cellProperties, cellName);
-            automaticStyles += `<style:style style:name="${cellName}" style:family="table-cell"><style:table-cell-properties${cellProperties}/></style:style>`;
+            cellStyles.set(styleKey, cellName);
+            const dataStyleAttribute =
+              dataStyle === undefined ? "" : ` style:data-style-name="${escapeXml(dataStyle)}"`;
+            automaticStyles += `<style:style style:name="${cellName}" style:family="table-cell"${dataStyleAttribute}><style:table-cell-properties${cellProperties}/></style:style>`;
           }
           const style = cellName === undefined ? "" : ` table:style-name="${cellName}"`;
           const rowSpan = cell.rowSpan ?? 1;
@@ -221,7 +233,10 @@ export function exportTableBlocks(
             const rowSpanAttr = rowSpan > 1 ? ` table:number-rows-spanned="${rowSpan}"` : "";
             const columnSpanAttr =
               columnSpan > 1 ? ` table:number-columns-spanned="${columnSpan}"` : "";
-            body += `<table:table-cell${style}${columnSpanAttr}${rowSpanAttr} office:value-type="string">${renderBlocks(cell.content)}</table:table-cell>`;
+            const formula = cell.formula ? ` table:formula="ooow:${escapeXml(cell.formula)}"` : "";
+            const protection = cell.protected ? ' table:protected="true"' : "";
+            const value = cell.valueAttributes ?? ' office:value-type="string"';
+            body += `<table:table-cell${style}${columnSpanAttr}${rowSpanAttr}${formula}${value}${protection}>${renderBlocks(cell.content)}</table:table-cell>`;
           }
           for (let covered = 1; covered < columnSpan; covered++)
             body += "<table:covered-table-cell/>";

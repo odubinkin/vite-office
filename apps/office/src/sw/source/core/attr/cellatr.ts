@@ -38,6 +38,10 @@ export class SwTableBoxFormula extends SfxPoolItem {
   public GetFormula(): string {
     return this.formula;
   }
+  /** Detects the unresolved box label written by the table formula name conversion. @returns Whether the formula has an explicit missing box. */
+  public HasInvalidBoxReference(): boolean {
+    return this.formula.includes("<?>");
+  }
   /** Reads the native owning format. @returns Original format or absent owner. */
   public GetDefinedIn(): SwTableBoxFormat | undefined {
     return this.m_pDefinedIn;

@@ -5289,3 +5289,39 @@ of equal column styles. The column import context replaces counts above
 
 - [Original column repeat export](../../vendor/libreoffice-reference/sw/source/filter/xml/xmltble.cxx#L1038)
 - [Original column repeat import](../../vendor/libreoffice-reference/sw/source/filter/xml/xmltbli.cxx#L672)
+
+### WRITER-679 — Writer rejects the maximum double as an imported table-cell value
+
+Writer uses `DBL_MAX` internally to signal a faulty table expression.
+The ODT cell importer rejects that serialized numeric value. Resolving
+an explicit missing box in the formula reproduces the calculation
+error and replaces any stale numeric text with the error presentation.
+The Writer regression
+uses the original `tdf139126.odt` and checks both the valid and failed
+formulas across import, Worker transfer and export.
+
+- [Original ODF value admission](../../vendor/libreoffice-reference/sw/source/filter/xml/xmltbli.cxx#L433)
+- [Original table formula syntax error](../../vendor/libreoffice-reference/sw/source/core/fields/cellfml.cxx#L422)
+- [Original error presentation](../../vendor/libreoffice-reference/sw/source/core/table/swtable.cxx#L2694)
+- [Original ODT regression](../../vendor/libreoffice-reference/sw/qa/extras/odfexport/odfexport.cxx#L244)
+
+### WRITER-680 — Writer reads numeric values without matching the declared value type
+
+A cell's numeric, duration, date and boolean attributes can set the
+same cached value independently of its declared ODF value type. Each
+successfully parsed attribute replaces the preceding value in XML
+attribute order. The string type check applies specifically to
+`office:string-value`, which supplies the cell text in place of its
+child elements. The filter preserves both source rules.
+
+- [Original cell attribute dispatch](../../vendor/libreoffice-reference/sw/source/filter/xml/xmltbli.cxx#L433)
+- [Original string-override decision](../../vendor/libreoffice-reference/sw/source/filter/xml/xmltbli.cxx#L570)
+
+### WRITER-681 — A General zero can be treated as broken text during table import
+
+A styled cell with a General number format, a cached zero and no
+formula loses its numeric items if it contains several nodes or its
+single text node is longer than ten characters or lacks the character
+`0`. Writer preserves the visible text and the source heuristic.
+
+- [Original numeric-content rescue](../../vendor/libreoffice-reference/sw/source/filter/xml/xmltbli.cxx#L1911)

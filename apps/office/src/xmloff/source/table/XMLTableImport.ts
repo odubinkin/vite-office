@@ -44,6 +44,7 @@ export type OdfTableStyle =
   | (OdfBoxProperties &
       OdfTableVisualProperties & {
         readonly family: "table-cell";
+        readonly dataStyle?: string | undefined;
         readonly verticalAlign?: "" | "top" | "middle" | "bottom" | undefined;
       });
 
@@ -76,7 +77,12 @@ export interface XMLTableImportTarget extends XMLTextImportTarget {
   endTableHeaderRows(): void;
   beginTableRow(styleName: string, defaultCellStyleName: string): void;
   canInsertTableCell(): boolean;
-  beginTableCell(styleName: string, columnSpan?: number, rowSpan?: number): void;
+  beginTableCell(
+    styleName: string,
+    columnSpan?: number,
+    rowSpan?: number,
+    attributes?: FastAttributeList,
+  ): void;
   coveredTableCell?(styleName?: string): void;
   endTableCell(repeat: number): void;
   endTableRow(repeat: number): void;
@@ -88,6 +94,7 @@ export interface XMLTableImportTarget extends XMLTextImportTarget {
 export class XMLTableStyleContext extends SvXMLImportContext {
   private readonly name: string;
   private readonly family: OdfTableStyle["family"];
+  private readonly dataStyle: string | undefined;
   private style: OdfTableStyle | undefined;
 
   /** Opens one named table style. @param target - Writer style sink. @param attributes - Style identity. @returns Nothing. */
@@ -102,6 +109,7 @@ export class XMLTableStyleContext extends SvXMLImportContext {
         XMLToken.STYLE_DISPLAY_NAME,
         XMLToken.STYLE_FAMILY,
         XMLToken.STYLE_PARENT_STYLE_NAME,
+        XMLToken.STYLE_DATA_STYLE_NAME,
       ],
       "table style",
     );
@@ -115,6 +123,16 @@ export class XMLTableStyleContext extends SvXMLImportContext {
     )
       throw new Error(`Unsupported ODF table style family: ${family}`);
     this.family = family;
+    this.dataStyle = attributes.get(XMLToken.STYLE_DATA_STYLE_NAME) ?? undefined;
+  }
+
+  /** Leaves separate cell text properties to the text-style owner. @param element - Source property group. @returns Whether attributes may be skipped. */
+  public override ignoreUnknownAttributesForChild(element: XMLToken): boolean {
+    return (
+      this.family === "table-cell" &&
+      (element === XMLToken.STYLE_TEXT_PROPERTIES ||
+        element === XMLToken.STYLE_PARAGRAPH_PROPERTIES)
+    );
   }
 
   /** Imports one family-matched physical property child. @param element - Child token. @param attributes - Physical values. @returns Property context. */
@@ -122,6 +140,7 @@ export class XMLTableStyleContext extends SvXMLImportContext {
     element: XMLToken,
     attributes: FastAttributeList,
   ): SvXMLImportContext | null {
+    if (this.ignoreUnknownAttributesForChild(element)) return new SvXMLIgnoreContext(true);
     const length =
       /** Processes one ODF table value. @param argument1 - Callback input. @param argument2 - Callback input. @returns Callback result. */ (
         token: XMLToken,
@@ -318,7 +337,13 @@ export class XMLTableStyleContext extends SvXMLImportContext {
 
   /** Publishes the completed style. @returns Nothing. */
   public override endFastElement(): void {
-    this.target.registerTableStyle(this.name, this.style ?? { family: this.family });
+    const style = this.style ?? { family: this.family };
+    this.target.registerTableStyle(
+      this.name,
+      style.family === "table-cell" && this.dataStyle !== undefined
+        ? { ...style, dataStyle: this.dataStyle }
+        : style,
+    );
   }
 }
 
@@ -495,6 +520,7 @@ class XMLTableRowContext extends SvXMLImportContext {
 /** Imports a table cell's ordered paragraphs. */
 class XMLTableCellContext extends SvXMLImportContext {
   private readonly repeat: number;
+  private readonly hasStringValue: boolean;
   /** Opens a cell. @param target - Writer table sink. @param attributes - Cell style. @param helper - Shared native text owner. @returns Nothing. */
   public constructor(
     private readonly target: XMLTableImportTarget,
@@ -506,6 +532,15 @@ class XMLTableCellContext extends SvXMLImportContext {
       [
         XMLToken.TABLE_STYLE_NAME,
         XMLToken.TABLE_VALUE_TYPE,
+        XMLToken.TABLE_FORMULA,
+        XMLToken.TABLE_PROTECTED,
+        XMLToken.OFFICE_VALUE,
+        XMLToken.OFFICE_DATE_VALUE,
+        XMLToken.OFFICE_TIME_VALUE,
+        XMLToken.OFFICE_BOOLEAN_VALUE,
+        XMLToken.OFFICE_STRING_VALUE,
+        XMLToken.OFFICE_CURRENCY,
+        XMLToken.XML_ID,
         XMLToken.TABLE_NUMBER_COLUMNS_SPANNED,
         XMLToken.TABLE_NUMBER_ROWS_SPANNED,
         XMLToken.TABLE_NUMBER_COLUMNS_REPEATED,
@@ -513,10 +548,14 @@ class XMLTableCellContext extends SvXMLImportContext {
       "table cell",
     );
     this.repeat = repeatCount(attributes, XMLToken.TABLE_NUMBER_COLUMNS_REPEATED, 256);
+    this.hasStringValue =
+      attributes.get(XMLToken.TABLE_VALUE_TYPE) === "string" &&
+      attributes.get(XMLToken.OFFICE_STRING_VALUE) !== null;
     this.target.beginTableCell(
       attributes.get(XMLToken.TABLE_STYLE_NAME) ?? "",
       repeatCount(attributes, XMLToken.TABLE_NUMBER_COLUMNS_SPANNED, 256),
       repeatCount(attributes, XMLToken.TABLE_NUMBER_ROWS_SPANNED, 8192),
+      attributes,
     );
   }
   /** Imports a cell paragraph with the existing Writer text context. @param element - Child token. @param attributes - Paragraph values. @returns Child context. */
@@ -524,7 +563,9 @@ class XMLTableCellContext extends SvXMLImportContext {
     element: XMLToken,
     attributes: FastAttributeList,
   ): SvXMLImportContext | null {
-    return this.helper.CreateTextChildContext(element, attributes, "Cell");
+    return this.hasStringValue
+      ? new SvXMLIgnoreContext(true)
+      : this.helper.CreateTextChildContext(element, attributes, "Cell");
   }
   /** Closes the cell. @returns Nothing. */
   public override endFastElement(): void {

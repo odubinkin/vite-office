@@ -13,6 +13,7 @@ import {
 } from "../../../inc/swtblfmt";
 import { SfxItemState } from "../../../../svl/source/items/itemset";
 import {
+  RES_BOXATR_FORMAT,
   RES_BOXATR_FORMULA,
   RES_BOXATR_VALUE,
   RES_VERT_ORIENT,
@@ -22,6 +23,10 @@ import {
 } from "../../../inc/hintids";
 import type { SwFormatRowSplit } from "../../../inc/fmtrowsplt";
 import type { SvxBoxItem } from "../../../../editeng/source/items/frmitems";
+import { SwContentIndex } from "../bastyp/index";
+import { OUString } from "../../../../sal/inc/rtl/ustring";
+import { text } from "../../../../i18nlangtag/source/isolang/isolang.tables";
+import { SwTableBoxNumFormat, SwTableBoxValue } from "../attr/cellatr";
 import { Point } from "../../../../tools/inc/gen";
 import type { SwTable, SwTableBoxFormat, SwTableLineFormatValue } from "./swtable";
 
@@ -130,6 +135,42 @@ export class SwTableBox extends SwClient {
     }
     return format;
   }
+  /** Refreshes a valid numeric cell's visible text with the document formatter. @returns Nothing. */
+  public ActualiseValueBox(): void {
+    const frame = this.GetFrameFormat();
+    const format = frame.GetAttrSet().GetItemIfSet(RES_BOXATR_FORMAT, true);
+    const value = frame.GetAttrSet().GetItemIfSet(RES_BOXATR_VALUE, true);
+    if (!(format instanceof SwTableBoxNumFormat) || !(value instanceof SwTableBoxValue)) return;
+    const content = this.GetContentNodes();
+    const paragraph = content.length === 1 ? content[0]?.GetTextNode() : undefined;
+    if (!paragraph) return;
+    const hints = paragraph.GetpSwpHints();
+    for (let i = 0; hints && i < hints.Count(); i++)
+      if (hints.Get(i).GetEnd() === undefined) return;
+    const formatter = frame.GetDoc().GetNumberFormatter();
+    const key = format.GetValue();
+    if (formatter.IsTextFormat(key)) return;
+    const output = new OUString();
+    try {
+      const valueIsError = value.GetValue() === Number.MAX_VALUE;
+      if (!valueIsError) formatter.GetOutputString(value.GetValue(), key, output, [null]);
+      const old = paragraph.GetText(),
+        next = valueIsError ? "** Expression is faulty **" : text(output);
+      if (old === next) return;
+      if (!old) paragraph.SetText(next);
+      else {
+        const start = new SwContentIndex(paragraph);
+        try {
+          paragraph.ReplaceText(start, old.length, next);
+        } finally {
+          start.Dispose();
+        }
+      }
+    } finally {
+      output.dispose();
+    }
+  }
+
   /** Reads original registered native owner. @returns Native box format. */
   public GetFrameFormat(): SwNativeTableBoxFormat {
     return this.GetRegisteredIn() as SwNativeTableBoxFormat;

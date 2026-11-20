@@ -46,6 +46,11 @@ import { isWriterParagraphStyle, type WriterParagraphStyle } from "../../../sour
 import { RES_BOX, WRITER_TEXT_NODE_WHICH_RANGES } from "../../../inc/hintids";
 import { SwpHints } from "../../../source/core/txtnode/ndhints";
 import { decodeSfxPoolItem, encodeSfxItemSet } from "./item-codec";
+import {
+  decodeBoxValue,
+  encodeBoxValue,
+  type WriterBoxValueRecord,
+} from "./writer-table-value-codec";
 
 /** Primitive graph record for one ordered text node. */
 export interface WriterTextNodeRecord {
@@ -131,7 +136,7 @@ export function* decodeSectionBlocks(
 }
 
 /** Primitive complete box item; legacy scalar alignment is accepted only at storage ingress. */
-type WriterBoxFormatRecord = {
+type WriterBoxFormatRecord = WriterBoxValueRecord & {
   readonly interop?: readonly WriterInteropProperty[];
   readonly frameDirection?: SfxPoolItemSnapshot | undefined;
   readonly background?: SfxPoolItemSnapshot | undefined;
@@ -156,6 +161,7 @@ function encodeBoxFormat(cell: SwTableBox): WriterBoxFormatRecord {
   const interop = encodeCellInterop(cell.GetFrameFormat());
   return {
     ...(interop === undefined ? {} : { interop }),
+    ...encodeBoxValue(cell),
     frameSize: encodeFrameSize(frameSize),
     frameDirection: encodeFrameDirection(cell.GetFrameFormat()),
     background: encodeFrameBackground(cell.GetFrameFormat()),
@@ -441,6 +447,7 @@ export function* decodeWriterTableSteps(
         tableIndex !== (cellRecord.tables?.length ?? 0)
       )
         throw new Error("Stored Writer table cell order is invalid.");
+      decodeBoxValue(cell, cellRecord.format);
     }
   }
   if (tableRecord.softPageBreakRows.includes(tableRecord.rows.length)) table.AddSoftPageBreak();

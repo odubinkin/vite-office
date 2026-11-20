@@ -1,6 +1,15 @@
 /**
  * @fileoverview Reimplements the bounded Writer ODF XML export bridge from pinned LibreOffice `sw/source/filter/xml/xmlexp.cxx`.
  */
+import { ExportNumberFormat } from "../../../../xmloff/source/style/xmlnumfe";
+import { writeNumberFormatAttributes } from "../../../../xmloff/source/style/numehelp";
+import {
+  getSwDefaultTextFormat,
+  SwTableBoxFormula,
+  SwTableBoxNumFormat,
+  SwTableBoxValue,
+} from "../../core/attr/cellatr";
+import type { SvxProtectItem } from "../../../../editeng/source/items/frmitems";
 import * as ParaItems from "../../../../editeng/source/items/paraitem.controls";
 import {
   getTextFrameExportParagraphs,
@@ -119,6 +128,10 @@ import {
   RES_COLLAPSING_BORDERS,
   RES_ROW_SPLIT,
   RES_BOX,
+  RES_BOXATR_FORMAT,
+  RES_BOXATR_FORMULA,
+  RES_BOXATR_VALUE,
+  RES_PROTECT,
   RES_VERT_ORIENT,
   RES_KEEP,
   RES_LINENUMBER,
@@ -149,7 +162,7 @@ import { exportLineNumberingConfiguration } from "../../../../xmloff/source/text
 import { ExportThemeElement } from "../../../../xmloff/source/style/XMLThemeContext";
 import { FontFamily, FontPitch } from "../../../../tools/inc/fontenum";
 import { RTL_TEXTENCODING_DONTKNOW } from "../../../../sal/inc/rtl/textenc";
-const OFFICE_NAMESPACES = `xmlns:draw="${ODF_NAMESPACES.draw}" xmlns:office="${ODF_NAMESPACES.office}" xmlns:style="${ODF_NAMESPACES.style}" xmlns:text="${ODF_NAMESPACES.text}" xmlns:table="${ODF_NAMESPACES.table}" xmlns:fo="${ODF_NAMESPACES.fo}" xmlns:svg="${ODF_NAMESPACES.svg}" xmlns:xlink="${ODF_NAMESPACES.xlink}" xmlns:loext="${ODF_NAMESPACES.loext}"`;
+const OFFICE_NAMESPACES = `xmlns:draw="${ODF_NAMESPACES.draw}" xmlns:office="${ODF_NAMESPACES.office}" xmlns:style="${ODF_NAMESPACES.style}" xmlns:text="${ODF_NAMESPACES.text}" xmlns:table="${ODF_NAMESPACES.table}" xmlns:ooow="${ODF_NAMESPACES.ooow}" xmlns:number="${ODF_NAMESPACES.number}" xmlns:fo="${ODF_NAMESPACES.fo}" xmlns:svg="${ODF_NAMESPACES.svg}" xmlns:xlink="${ODF_NAMESPACES.xlink}" xmlns:loext="${ODF_NAMESPACES.loext}"`;
 
 /** Serializes Writer named paragraph styles into styles.xml. @param document - Canonical SwDoc. @param graphicHelper - Optional package graphic owner. @returns Complete XML. */
 export function exportStylesXml(document: SwDoc, graphicHelper?: SvXMLGraphicHelper): string {
@@ -451,8 +464,18 @@ function exportWriterText(
     text: CollectTextFlyFrames(document),
     ...(graphicHelper ? { graphicHelper, graphics: CollectGraphicFlyFrames(document, true) } : {}),
   };
-  return exportTextParagraphs(
+  const dataStyles = new Map<number, { name: string; xml: string } | null>();
+  const exported = exportTextParagraphs(
     {
+      /** Registers one referenced Writer format. @param key - Formatter identity. @returns ODF number style name. */
+      exportNumberStyle(key) {
+        if (!dataStyles.has(key)) {
+          const name = `N${dataStyles.size + 1}`;
+          const xml = ExportNumberFormat(document.GetNumberFormatter(), key, name);
+          dataStyles.set(key, xml ? { name, xml } : null);
+        }
+        return dataStyles.get(key)?.name;
+      },
       commonCharacterStyleNames: document.GetCharFormats().slice(1).map(getCharacterOdfStyleName),
       /** Iterates live Writer nodes without retaining a projection. @returns Paragraph source iterator. */
       *paragraphs(): Iterable<XMLTextParagraphSource> {
@@ -486,6 +509,9 @@ function exportWriterText(
     fontFaceName,
     existingFontFaceName,
   );
+  let automaticStyles = "";
+  for (const style of dataStyles.values()) if (style) automaticStyles += style.xml;
+  return { ...exported, automaticStyles: automaticStyles + exported.automaticStyles };
 }
 
 /** Projects one original text or table node, including interleaved cell sections. @param block - Native node. @param anchored - Actual bound frame sets. @returns Neutral ODF body block. */
@@ -571,12 +597,39 @@ function projectBlock(
                 const orientation = items.GetItemIfSet(RES_VERT_ORIENT, false) as
                   SwFormatVertOrient | undefined;
                 const orient = orientation?.GetVertOrient();
+                const format = items.GetItemIfSet(RES_BOXATR_FORMAT, false) as
+                  SwTableBoxNumFormat | undefined;
+                const formula = items.GetItemIfSet(RES_BOXATR_FORMULA) as
+                  SwTableBoxFormula | undefined;
+                const value = items.GetItemIfSet(RES_BOXATR_VALUE) as SwTableBoxValue | undefined;
+                const protect = items.GetItemIfSet(RES_PROTECT) as SvxProtectItem | undefined;
+                const formatKey = format?.GetValue() ?? getSwDefaultTextFormat();
+                const cellText = cell.GetParagraphs().some(
+                  /** Checks the represented cell's text. @param paragraph - Cell text node. @returns Whether nonempty. */
+                  (paragraph) => paragraph.GetText().length > 0,
+                );
+                let valueAttributes =
+                  formatKey === getSwDefaultTextFormat() ? ' office:value-type="string"' : "";
+                if (formatKey !== getSwDefaultTextFormat() && value && cellText) {
+                  const formatter = cell.GetFrameFormat().GetDoc().GetNumberFormatter();
+                  if (formatter.GetEntry(formatKey))
+                    valueAttributes = writeNumberFormatAttributes(
+                      formatter,
+                      formatKey,
+                      value.GetValue(),
+                      formatter.GetNullDate(),
+                    );
+                }
                 return {
+                  valueAttributes,
+                  formula: formula?.GetFormula(),
+                  protected: protect?.IsContentProtected(),
                   columnSpan: grid.GetColumnSpan(cell),
                   rowSpan: cell.getRowSpan(),
                   format: {
                     ...exportBoxProperties(box),
                     ...exportFrameVisualProperties(items),
+                    numberFormat: format?.GetValue(),
                     verticalAlign:
                       orient === undefined
                         ? undefined

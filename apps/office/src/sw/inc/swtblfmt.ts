@@ -4,6 +4,8 @@ import { SwClient, SwIterator } from "./calbck";
 import { SwFrameFormat } from "../source/core/layout/atrfrm";
 import type { SwAttrPool } from "../source/core/attr/swatrset";
 import { SwTableBox } from "../source/core/table/swtable";
+import { SwTableBoxFormula } from "../source/core/attr/cellatr";
+import { RES_BOXATR_FORMULA } from "./hintids";
 /** Native row frame format shares a document-owned item set among registered clients. */
 export class SwTableLineFormat extends SwFrameFormat {
   /** Creates the native row format with exact pinned row WhichId ranges. @param pool - Document pool. @param derivedFrom - Default frame parent. @returns Nothing. */
@@ -66,6 +68,11 @@ export class SwTableBoxFormat extends SwFrameFormat {
     this.SetFormatAttrSet(source.GetAttrSet());
     this.SetDerivedFrom(source.DerivedFrom());
     this.SetAuto(source.IsAuto());
+  }
+  /** Rebinds the stored non-shareable formula after the item set clones it. @returns Nothing. */
+  protected override SetModifyAtAttr(): void {
+    const formula = this.GetAttrSet().GetItemIfSet(RES_BOXATR_FORMULA, false);
+    if (formula instanceof SwTableBoxFormula) formula.ChgDefinedIn(this);
   }
   /** Reads the first original box client as the native iterator does. @returns Original box or absent. */
   public GetTableBox(): SwTableBox | undefined {

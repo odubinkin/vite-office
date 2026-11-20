@@ -7,6 +7,7 @@ import { importFillProperties } from "../draw/fill-properties";
 import { Any } from "../../../cppu/inc/com/sun/star/uno/Any";
 import { FastAttributeList, SvXMLIgnoreContext, SvXMLImportContext } from "../core/xmlimp";
 import { XMLToken } from "../core/xmltoken";
+import { IsNumberStyle } from "./xmlnumfi";
 import { importOdfLength, SvXMLUnitConverter } from "../core/xmluconv";
 import { Converter } from "../../../sax/source/tools/converter";
 import { XMLTableStyleContext, type OdfTableStyle } from "../table/XMLTableImport";
@@ -33,6 +34,7 @@ const ignoredStyleDefinitions = new Set([
 /** Consumer of completed style definitions; Writer stores canonical results. */
 export interface XMLStyleImportTarget extends XMLListStyleImportTarget {
   registerTheme?(theme: Theme): void;
+  createNumberStyle?(element: XMLToken, attributes: FastAttributeList): SvXMLImportContext;
   registerTableStyle(name: string, style: OdfTableStyle): void;
   registerTextFrameStyle?(name: string, style: XMLTextFrameStyle, parent?: string): void;
   registerLineNumbering(value: OdfLineNumberingConfiguration): void;
@@ -106,7 +108,9 @@ export class XMLStylesContext extends SvXMLImportContext {
   }
   /** Ignores theme attributes for consumers without the native theme property. @param element - Child token. @returns Whether metadata-only. */
   public override ignoreUnknownAttributesForChild(element: XMLToken): boolean {
-    return element === XMLToken.LOEXT_THEME && !this.target.registerTheme;
+    return (
+      (element === XMLToken.LOEXT_THEME && !this.target.registerTheme) || IsNumberStyle(element)
+    );
   }
   /** Creates one native named or automatic container. @param target - Writer property consumer. @param automatic - Whether automatic styles. @returns Context. */
   public constructor(
@@ -123,6 +127,8 @@ export class XMLStylesContext extends SvXMLImportContext {
   ): SvXMLImportContext | null {
     if (element === XMLToken.STYLE_DEFAULT_STYLE)
       return new XMLStyleContext(this.target, attributes, this, true);
+    if (IsNumberStyle(element) && this.target.createNumberStyle)
+      return this.target.createNumberStyle(element, attributes);
     if (element === XMLToken.STYLE_STYLE) {
       const family = attributes.get(XMLToken.STYLE_FAMILY);
       if (family === "graphic" && this.target.registerTextFrameStyle)

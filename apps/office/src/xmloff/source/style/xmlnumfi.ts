@@ -1,4 +1,5 @@
 /** @fileoverview ODF numeric data-style context using the native number format scanner. */
+import { LanguageTag } from "../../../i18nlangtag/source/languagetag/languagetag.value";
 import { LANGUAGE_ENGLISH_US, LANGUAGE_SYSTEM } from "../../../i18nlangtag/inc/lang";
 import { text, unicode } from "../../../i18nlangtag/source/isolang/isolang.tables";
 import {
@@ -44,8 +45,11 @@ export class SvXMLNumFormatContext extends SvXMLImportContext {
   private readonly parts: string[] = [];
   private readonly fields = new Set<X>();
   private readonly systemDate: boolean;
+  private readonly language: number;
   private unsupported = false;
   private emptyText = false;
+  private autoDecimal = false;
+  private autoInteger = false;
   private color = "";
   private readonly conditions: { condition: string; style: string }[] = [];
   private key: number | null | undefined;
@@ -58,6 +62,11 @@ export class SvXMLNumFormatContext extends SvXMLImportContext {
     attributes: FastAttributeList,
   ) {
     super();
+    const language = attributes.get(X.FO_LANGUAGE);
+    const country = attributes.get(X.FO_COUNTRY);
+    this.language = language
+      ? new LanguageTag(country ? language + "-" + country : language).getLanguageType()
+      : LANGUAGE_SYSTEM;
     const automatic = attributes.get(X.NUMBER_AUTOMATIC_ORDER);
     this.systemDate =
       element === X.NUMBER_DATE_STYLE &&
@@ -102,11 +111,13 @@ export class SvXMLNumFormatContext extends SvXMLImportContext {
     }
     if (element === X.NUMBER_NUMBER || element === X.NUMBER_SCIENTIFIC_NUMBER) {
       const sourceDigits = attributes.getAsInteger(X.NUMBER_DECIMAL_PLACES);
+      const sourceLeading = attributes.getAsInteger(X.NUMBER_MIN_INTEGER_DIGITS);
       const explicitDecimals = sourceDigits !== null && sourceDigits >= 0;
-      const leading = Math.max(
-        0,
-        Math.min(NF_MAX_FORMAT_SYMBOLS, attributes.getAsInteger(X.NUMBER_MIN_INTEGER_DIGITS) ?? 0),
-      );
+      if (element === X.NUMBER_NUMBER) {
+        this.autoDecimal = !explicitDecimals;
+        this.autoInteger = sourceLeading === null || sourceLeading < 0;
+      }
+      const leading = Math.max(0, Math.min(NF_MAX_FORMAT_SYMBOLS, sourceLeading ?? 0));
       const digits = explicitDecimals
         ? Math.min(NF_MAX_FORMAT_SYMBOLS, sourceDigits)
         : this.formatter.GetLocaleData().getCurrDigits();
@@ -276,8 +287,17 @@ export class SvXMLNumFormatContext extends SvXMLImportContext {
 
   /** Compiles the combined source through the native formatter and retains built-in shortcuts. @param source - Complete English number format. @returns Registered format key. */
   private CreateAndInsert(source: string): number | undefined {
+    if (
+      this.element === X.NUMBER_NUMBER_STYLE &&
+      this.parts.length === 1 &&
+      !this.conditions.length &&
+      !this.color
+    ) {
+      if (this.autoInteger) return this.formatter.GetFormatIndex(N.NF_NUMBER_SYSTEM, this.language);
+      if (this.autoDecimal) return this.formatter.GetStandardIndex(this.language);
+    }
     if (this.element === X.NUMBER_BOOLEAN_STYLE && source === "BOOLEAN")
-      return this.formatter.GetFormatIndex(N.NF_BOOLEAN, LANGUAGE_SYSTEM);
+      return this.formatter.GetFormatIndex(N.NF_BOOLEAN, this.language);
     const longDate = this.fields.has(X.NUMBER_DAY_OF_WEEK);
     if (
       this.systemDate &&
@@ -290,7 +310,7 @@ export class SvXMLNumFormatContext extends SvXMLImportContext {
     )
       return this.formatter.GetFormatIndex(
         longDate ? N.NF_DATE_SYSTEM_LONG : N.NF_DATE_SYSTEM_SHORT,
-        LANGUAGE_SYSTEM,
+        this.language,
       );
     const value = unicode(source);
     const check: [number] = [0],
@@ -303,7 +323,7 @@ export class SvXMLNumFormatContext extends SvXMLImportContext {
         type,
         key,
         LANGUAGE_ENGLISH_US,
-        LANGUAGE_SYSTEM,
+        this.language,
         false,
       );
       return check[0] === 0 && key[0] !== NUMBERFORMAT_ENTRY_NOT_FOUND ? key[0] : undefined;

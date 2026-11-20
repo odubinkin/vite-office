@@ -1,4 +1,6 @@
 /** @fileoverview XML number-style output from the native compiled number formatter. */
+import { LanguageTag } from "../../../i18nlangtag/source/languagetag/languagetag.value";
+import { LANGUAGE_ENGLISH_US, LANGUAGE_SYSTEM } from "../../../i18nlangtag/inc/lang";
 import { text } from "../../../i18nlangtag/source/isolang/isolang.tables";
 import { NfKeywordIndex as K } from "../../../svl/inc/nfkeytab";
 import { NfSymbolType as S } from "../../../svl/inc/nfsymbol";
@@ -37,6 +39,17 @@ const dateTerms = new Map<number, readonly [string, boolean, boolean?]>([
   [K.SS, ["seconds", true]],
 ]);
 
+/** Writes the declared data format locale. @param language - Formatter locale identifier. @returns ODF language attributes. */
+function numberStyleLocale(language: number): string {
+  if (language === LANGUAGE_SYSTEM || language === LANGUAGE_ENGLISH_US) return "";
+  const locale = new LanguageTag(language).getLocale();
+  const code = text(locale.Language),
+    country = text(locale.Country);
+  return code
+    ? ` number:language="${escapeXml(code)}"${country ? ` number:country="${escapeXml(country)}"` : ""}`
+    : "";
+}
+
 /** Exports supported number-format sections using the real format behind substituted system entries. @param formatter - Workbook formatter. @param key - Assigned format key. @param name - Generated style reference. @returns ODF data style or null. */
 export function ExportNumberFormat(
   formatter: SvNumberFormatter,
@@ -48,7 +61,7 @@ export function ExportNumberFormat(
   if (!entry) return null;
   const builtin = SvNumberFormatter.GetIndexTableOffset(realKey[0]);
   if (builtin === N.NF_BOOLEAN)
-    return `<number:boolean-style style:name="${name}"><number:boolean/></number:boolean-style>`;
+    return `<number:boolean-style style:name="${name}"${numberStyleLocale(entry.GetLanguage())}><number:boolean/></number:boolean-style>`;
   const conditions = entry.GetConditions();
   const textPart = entry.HasTextFormat();
   const sections = [
@@ -241,5 +254,5 @@ function exportPart(
   const properties = color ? `<style:text-properties fo:color="${rgb[0]}"/>` : "";
   const styleName = escapeXml(defaultPart ? name : `${name}P${part}`);
   const flags = defaultPart ? "" : ' style:volatile="true"';
-  return `<number:${tag} style:name="${styleName}"${flags}${source}>${properties}${parts.join("")}${defaultPart ? maps : ""}</number:${tag}>`;
+  return `<number:${tag} style:name="${styleName}"${flags}${source}${numberStyleLocale(entry.GetLanguage())}>${properties}${parts.join("")}${defaultPart ? maps : ""}</number:${tag}>`;
 }

@@ -150,6 +150,7 @@ export type XMLTextParagraphMarker =
 
 /** Reiterable model-facing source; definitions are collected before body references. */
 export interface XMLTextExportSource {
+  exportNumberStyle?(key: number): string | undefined;
   readonly commonCharacterStyleNames?: readonly string[];
   paragraphs(): Iterable<XMLTextParagraphSource>;
   blocks?(): Iterable<XMLTextExportBlock>;
@@ -346,7 +347,13 @@ export class XMLTextParagraphExport {
     const rendered =
       source.blocks === undefined
         ? { body: renderParagraphs(source.paragraphs()), automaticStyles: "" }
-        : exportTableBlocks(source.blocks(), renderParagraphs, isCancelled, source.sections?.());
+        : exportTableBlocks(
+            source.blocks(),
+            renderParagraphs,
+            isCancelled,
+            source.sections?.(),
+            source.exportNumberStyle?.bind(source),
+          );
     return {
       automaticStyles: [
         ...paragraphStyles,
