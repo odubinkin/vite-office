@@ -1,4 +1,5 @@
 /** @fileoverview Browser input/viewport binding for the current scalar Calc model. Actual cells,marks,formula evaluation and undo stacks remain with native-shaped owners. */
+import { ScUndoShowHideTab, ScUndoTabColor } from "../../source/ui/undo/undotab";
 import { ScMarkData } from "../../inc/markdata";
 import { ScViewUtil } from "../../source/ui/view/viewutil";
 import * as pointerInput from "./calc-pointer-selection";
@@ -805,10 +806,20 @@ export class CalcViewController {
   SelectTab(tab: number, extend = false): void {
     if (!this.shell.GetDocument().FetchTable(tab) || !this.Commit()) return;
     this.viewShell.SetTabNo(tab, false, extend);
+    this.SyncSheetView();
+  }
+  /** Borrows the active document's source view shell. @returns Current view shell. */
+  GetViewShell(): ScTabViewShell {
+    return this.viewShell;
+  }
+
+  /** Synchronizes the browser's position and command state after native sheet commands. @returns Nothing. */
+  SyncSheetView(): void {
     this.anchor = this.Position();
     this.addressText = this.Address();
     this.Changed();
   }
+
   /** Executes native adjacent-sheet navigation after accepting pending input. @param direction - Previous or next. @param extend - Extend the selected sheet group. @returns Nothing. */
   SelectNextTab(direction: number, extend = false): void {
     if (!this.Commit()) return;
@@ -876,6 +887,10 @@ export class CalcViewController {
     let cursorAction = action;
     while (cursorAction instanceof SfxListUndoAction)
       cursorAction = cursorAction.GetUndoAction(redo ? cursorAction.GetActionCount() - 1 : 0);
+    if (cursorAction instanceof ScUndoShowHideTab || cursorAction instanceof ScUndoTabColor) {
+      this.SyncSheetView();
+      return true;
+    }
     if (cursorAction instanceof ScUndoWidthOrHeight) {
       this.addressText = this.Address();
       this.Changed();

@@ -20,6 +20,13 @@ test("Calc opens and exports a workbook with hidden sheets", /** Checks actual X
   await page.getByLabel("Browse").setInputFiles(fixture);
   await expect(page.getByRole("dialog")).toHaveCount(0);
   await expect(sheetTabs.getByRole("tab")).toHaveText(["Sheet2"]);
+  await page.getByRole("menuitem", { name: "Sheet", exact: true }).click();
+  await page.getByRole("menuitem", { name: "Show Sheet…" }).click();
+  const show = page.getByRole("dialog", { name: "Show Sheet" });
+  await expect(show.getByRole("listbox", { name: "Hidden Sheets" })).toHaveValues(["0"]);
+  await show.getByRole("button", { name: "OK" }).click();
+  await expect(sheetTabs.getByRole("tab")).toHaveText(["Sheet1", "Sheet2"]);
+  await sheetTabs.getByRole("tab", { name: "Sheet2" }).click();
   const cell = page.getByRole("gridcell", { name: /^A1(?:\s|$)/u });
   await cell.click();
   await page.keyboard.type("42");
@@ -44,7 +51,7 @@ test("Calc opens and exports a workbook with hidden sheets", /** Checks actual X
   await page.getByRole("menuitem", { name: "Sheet", exact: true }).click();
   await page.getByRole("menuitem", { name: "Navigate" }).click();
   await page.getByRole("menuitem", { name: "Go to Sheet…" }).click();
-  await expect(page.getByRole("listbox").getByRole("option")).toHaveText(["Sheet2"]);
+  await expect(page.getByRole("listbox").getByRole("option")).toHaveText(["Sheet1", "Sheet2"]);
   await page.getByRole("button", { name: "Cancel" }).click();
 
   const pending = page.waitForEvent("download");
@@ -56,5 +63,5 @@ test("Calc opens and exports a workbook with hidden sheets", /** Checks actual X
   const archive = await DocumentArchive.open(new Uint8Array(await readFile(path)));
   const workbook = await archive.readTextEntry("xl/workbook.xml");
   expect(workbook).toContain('<workbookView activeTab="1"/>');
-  expect(workbook.match(/state="hidden"/g)).toHaveLength(2);
+  expect(workbook.match(/state="hidden"/g)).toHaveLength(1);
 });

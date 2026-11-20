@@ -1,0 +1,29 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "browser-adaptation",
+    "status": "local-only",
+    "localPath": "apps/office/src/sc/browser/presentation/ScSheetTabDialog.tsx",
+    "rationale": "Browser controls present the original multi-selection list and palette layouts with native select and radio elements, shared dialog styling, and asynchronous response delivery.",
+    "responsibilities": [
+      "Browser controls present the original multi-selection list and palette layouts with native select and radio elements, shared dialog styling, and asynchronous response delivery."
+    ],
+    "stackDivergence": {
+      "kind": "browser-adaptation",
+      "rationale": "Native HTML controls replace the weld tree view, icon view, and palette selector."
+    },
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sc/browser/presentation/ScSheetTabDialog.tsx",
+          "marker": "ScSheetTabDialog"
+        },
+        {
+          "path": "apps/office/src/sc/browser/presentation/calc-sheet-tab-dialogs.test.tsx",
+          "marker": "hides the marked sheets"
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,37 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sc/source/ui/undo/undotab.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "calc",
+    "subsystem": "sheet-dialog",
+    "capabilityIds": [
+      "CAP-59fb3261-21e4-5112-ba27-e5cafe502e21"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/sc/source/ui/undo/undotab.ts",
+        "apps/office/src/sc/browser/presentation/calc-sheet-tab-dialogs.test.tsx",
+        "vendor/libreoffice-reference/sc/source/ui/undo/undotab.cxx"
+      ],
+      "justification": "Visibility history replays actual ordered sheet activation and color history replays independent per-sheet values.",
+      "knownViolations": [],
+      "localSymbols": [
+        "ScUndoShowHideTab",
+        "ScUndoTabColor"
+      ],
+      "sourceResponsibility": "divergent",
+      "upstreamFile": "sc/source/ui/undo/undotab.cxx",
+      "upstreamSymbols": [
+        "ScUndoShowHideTab::DoChange",
+        "ScUndoTabColor::DoChange"
+      ]
+    }
+  }
+}

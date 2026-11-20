@@ -1,4 +1,6 @@
 /** @fileoverview Consumed ScDocFunc attribute-only delete operation dispatch;other native document operations remain with their existing owners. */
+import { Color } from "../../../../tools/inc/color";
+import { ScUndoTabColor, type ScUndoTabColorInfo } from "../undo/undotab";
 import { SetFormulaOperation } from "../operation/SetFormulaOperation";
 import type { ScFormulaCell } from "../../../inc/formulacell";
 import { RowHeightContext } from "../../../inc/rowheightcontext";
@@ -14,6 +16,40 @@ import { DeleteCellOperation } from "../operation/DeleteCellOperation";
 export class ScDocFunc {
   /** Borrows the actual shell. @param shell - Document owner. @returns Function owner. */
   constructor(private readonly shell: ScDocShell) {}
+  /** Changes one sheet color with the native undo and API flags. @param tab - Sheet. @param color - Native color. @param record - Record history. @param api - Suppress interactive error. @returns Success. */
+  SetTabBgColor(tab: number, color: Readonly<Color>, record: boolean, api: boolean): boolean;
+  /** Changes a group of sheet colors as one history action. @param colors - Requested colors by tab. @param api - Suppress interactive error. @returns Success. */
+  SetTabBgColor(
+    colors: readonly { tab: number; newColor: Readonly<Color> }[],
+    api: boolean,
+  ): boolean;
+  /** Dispatches the native single-sheet and grouped color operations. @param target - Sheet or group. @param value - Color or group API flag. @param record - Single-sheet recording flag. @param api - Single-sheet API flag. @returns Success. */
+  SetTabBgColor(
+    target: number | readonly { tab: number; newColor: Readonly<Color> }[],
+    value: Readonly<Color> | boolean,
+    record = true,
+    api = false,
+  ): boolean {
+    const doc = this.shell.GetDocument();
+    const colors =
+      typeof target === "number" ? [{ tab: target, newColor: value as Readonly<Color> }] : target;
+    const changes: ScUndoTabColorInfo[] = [];
+    for (const { tab, newColor } of colors) {
+      if (doc.IsTabProtected(tab)) continue;
+      const oldColor = doc.GetTabBgColor(tab);
+      doc.SetTabBgColor(tab, newColor);
+      if (!doc.GetTabBgColor(tab).equals(newColor)) return false;
+      changes.push({ tab, oldColor, newColor: new Color(newColor) });
+    }
+    if (changes.length === 0) {
+      if (!(typeof value === "boolean" ? value : api))
+        this.shell.ErrorMessage("Protected cells can not be modified.");
+      return false;
+    }
+    if (record) this.shell.GetUndoManager().AddUndoAction(new ScUndoTabColor(changes));
+    this.shell.SetDocumentModified();
+    return true;
+  }
   /** Original formula dispatch consumes the prepared cell through its concrete operation. @param position - Cell position. @param cell - Transferred formula. @param interaction - User interaction. @returns Success. */
   SetFormulaCell(position: ScAddress, cell: ScFormulaCell, interaction: boolean): boolean {
     return new SetFormulaOperation(this, this.shell, position, cell, !interaction).run();

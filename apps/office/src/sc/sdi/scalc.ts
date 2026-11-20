@@ -145,6 +145,15 @@ export const calcSheetSelectionCommands = [
   { id: ".uno:TableSelectAll", slotId: 26361, label: "Select All Sheets" },
   { id: ".uno:TableDeselectAll", slotId: 26365, label: "Deselect All Sheets" },
 ] as const;
+/** Native tab commands and the separate color argument Which ID from sc.hrc. */
+export const calcSheetCommands = {
+  hide: { id: ".uno:Hide", slotId: 26294, label: "Hide Sheet" },
+  show: { id: ".uno:Show", slotId: 26295, label: "Show Sheet" },
+  select: { id: ".uno:SelectTables", slotId: 26090, label: "Select Sheets" },
+  color: { id: ".uno:SetTabBgColor", slotId: 26366, label: "Sheet Tab Color" },
+} as const;
+export const FID_TAB_SET_TAB_BG_COLOR = 26367;
+
 /** Native normal-grid selection slots from SID_KEYFUNC_START+26/+27. */
 export const calcCellSelectionCommands = [
   { id: ".uno:Deselect", slotId: 26549, label: "Undo Selection" },
@@ -370,6 +379,7 @@ export const calcUserCommands = [
   ...calcFileCommands,
   ...calcSheetNavigationCommands,
   ...calcSheetSelectionCommands,
+  ...Object.values(calcSheetCommands),
   ...calcCellSelectionCommands,
   ...calcVisibleSelectionCommands,
   calcGoToSheetCommand,

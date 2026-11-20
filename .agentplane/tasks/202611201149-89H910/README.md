@@ -4,7 +4,7 @@ title: "Connect Calc sheet tab visibility selection and color commands"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 5
+revision: 11
 origin:
   system: "manual"
 depends_on: []
@@ -22,10 +22,10 @@ plan_approval:
   updated_by: "ORCHESTRATOR"
   note: null
 verification:
-  state: "pending"
-  updated_at: null
-  updated_by: null
-  note: null
+  state: "ok"
+  updated_at: "2026-11-20T12:40:01.951Z"
+  updated_by: "CODER"
+  note: "Fifteen focused Calc tests and all five production Chrome scenarios passed, including ODS/XLSX visibility and assigned color persistence. Typecheck, build, resources, provenance, boundaries and targeted quality checks pass."
   attempts: 0
 commit: null
 comments:
@@ -40,8 +40,20 @@ events:
     from: "TODO"
     to: "DOING"
     note: "Start: continue direct-mode task in current checkout."
+  -
+    type: "verify"
+    at: "2026-11-20T12:08:48.917Z"
+    author: "CODER"
+    state: "needs_rework"
+    note: "Calc menu resources, source provenance, dependency boundaries, routing and changed-file lint/format pass. The required focused Vitest and full TypeScript checks are blocked by missing lockfile packages and the installed Vitest version mismatch; Chrome acceptance is pending."
+  -
+    type: "verify"
+    at: "2026-11-20T12:40:01.951Z"
+    author: "CODER"
+    state: "ok"
+    note: "Fifteen focused Calc tests and all five production Chrome scenarios passed, including ODS/XLSX visibility and assigned color persistence. Typecheck, build, resources, provenance, boundaries and targeted quality checks pass."
 doc_version: 3
-doc_updated_at: "2026-11-20T11:51:32.525Z"
+doc_updated_at: "2026-11-20T12:40:02.069Z"
 doc_updated_by: "CODER"
 description: "Connect native Hide, Show, SelectTables and SetTabBgColor slots to the actual Calc sheet state, shared menus, dialogs and undo. Use local pinned LibreOffice sources and focused tests of browser commands and file persistence."
 sections:
@@ -54,9 +66,43 @@ sections:
     - `npm run check:calc-resources` checks source-backed menu resources.
     - `npm run test:e2e:calc -- sheet-context-menu xlsx-tab-colors xlsx-sheet-visibility xlsx-sheet-group` verifies the built browser paths.
     - `git diff --check` validates patch whitespace.
-  Verification: "Pending implementation."
+  Verification: |-
+    Locked install restored the checkout without manifest changes. Typecheck, production build, static build, Calc resources, source provenance, module boundaries, changed-file lint and format, routing, doctor and diff validation passed. The targeted Calc Vitest run passed 15 tests in five files with a 120-second test timeout, and the final dialog replay passed three tests. Scoped production Playwright used installed Google Chrome through a temporary config, dedicated server port, and one worker. Four browser scenarios passed together; the XLSX tab-color scenario passed in a separate 43-second replay after the initial test-wide timeout. Menu accessibility at 1280 and 390 pixels and the XLSX grouped, visibility and color file flows passed. An early runner argument mistake was interrupted during its first unrelated scenario; the valid run was constrained to exactly the approved five scenarios. Existing warning: managed AgentPlane hook shim lacks runner startup readiness.
+
+    <!-- BEGIN VERIFICATION RESULTS -->
+    ### 2026-11-20T12:40:01.951Z — VERIFY — ok
+
+    By: CODER
+
+    Note: Fifteen focused Calc tests and all five production Chrome scenarios passed, including ODS/XLSX visibility and assigned color persistence. Typecheck, build, resources, provenance, boundaries and targeted quality checks pass.
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-20T12:40:00.570Z, excerpt_hash=sha256:d2a3af777ce7e8c12dba04e7b536481a05a3488c0b56ea3e31647fe72abc3c08
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202611201149-89H910/blueprint/resolved-snapshot.json
+    - old_digest: 4cb4d974f3a7df5a4644df9c6172ccc0080a26b266732a5ddb4365d56c69819e
+    - current_digest: 4cb4d974f3a7df5a4644df9c6172ccc0080a26b266732a5ddb4365d56c69819e
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202611201149-89H910
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task verify-show 202611201149-89H910
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: false
+    - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+    - risks: none
+
+    <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Revert the task implementation while preserving existing import/export visibility and color owners."
-  Findings: "Pending source comparison."
+  Findings: "Native sheet selection includes hidden sheets and Hide compares selected count to visible count. The tab color request records the previous color. Typed Show can record an already-visible sheet. These paths remain source-compatible and are documented as CALC-770 through CALC-772. The browser uses the shared palette set and HTML lists. Desktop workbook structure protection, sharing and macro services are outside the represented slice."
 id_source: "generated"
 ---
 ## Summary
@@ -81,7 +127,40 @@ Port the pinned sheet-tab slot state, execution, dialog widgets and document/his
 
 ## Verification
 
-Pending implementation.
+Locked install restored the checkout without manifest changes. Typecheck, production build, static build, Calc resources, source provenance, module boundaries, changed-file lint and format, routing, doctor and diff validation passed. The targeted Calc Vitest run passed 15 tests in five files with a 120-second test timeout, and the final dialog replay passed three tests. Scoped production Playwright used installed Google Chrome through a temporary config, dedicated server port, and one worker. Four browser scenarios passed together; the XLSX tab-color scenario passed in a separate 43-second replay after the initial test-wide timeout. Menu accessibility at 1280 and 390 pixels and the XLSX grouped, visibility and color file flows passed. An early runner argument mistake was interrupted during its first unrelated scenario; the valid run was constrained to exactly the approved five scenarios. Existing warning: managed AgentPlane hook shim lacks runner startup readiness.
+
+<!-- BEGIN VERIFICATION RESULTS -->
+### 2026-11-20T12:40:01.951Z — VERIFY — ok
+
+By: CODER
+
+Note: Fifteen focused Calc tests and all five production Chrome scenarios passed, including ODS/XLSX visibility and assigned color persistence. Typecheck, build, resources, provenance, boundaries and targeted quality checks pass.
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-20T12:40:00.570Z, excerpt_hash=sha256:d2a3af777ce7e8c12dba04e7b536481a05a3488c0b56ea3e31647fe72abc3c08
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202611201149-89H910/blueprint/resolved-snapshot.json
+- old_digest: 4cb4d974f3a7df5a4644df9c6172ccc0080a26b266732a5ddb4365d56c69819e
+- current_digest: 4cb4d974f3a7df5a4644df9c6172ccc0080a26b266732a5ddb4365d56c69819e
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202611201149-89H910
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task verify-show 202611201149-89H910
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: false
+- repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- risks: none
+
+<!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
 
@@ -89,4 +168,4 @@ Revert the task implementation while preserving existing import/export visibilit
 
 ## Findings
 
-Pending source comparison.
+Native sheet selection includes hidden sheets and Hide compares selected count to visible count. The tab color request records the previous color. Typed Show can record an already-visible sheet. These paths remain source-compatible and are documented as CALC-770 through CALC-772. The browser uses the shared palette set and HTML lists. Desktop workbook structure protection, sharing and macro services are outside the represented slice.

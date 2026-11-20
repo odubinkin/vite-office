@@ -35,6 +35,14 @@ test("Calc keeps worksheet colors across XLSX, browser storage and a mobile reop
   await expect(red).toHaveCSS("box-shadow", "none");
   await page.emulateMedia({ forcedColors: "none" });
 
+  await yellow.click({ button: "right" });
+  await page.getByRole("menuitem", { name: "Tab Color…" }).click();
+  const colors = page.getByRole("dialog", { name: "Tab Color" });
+  await colors.getByRole("radio", { name: "#2a6099", exact: true }).first().click();
+  await colors.getByRole("button", { name: "OK" }).click();
+  await expect(yellow).toHaveCSS("box-shadow", /rgb\(42, 96, 153\).*inset/u);
+  await red.click();
+
   const cell = page.getByRole("gridcell", { name: /^A1(?:\s|$)/u });
   await cell.click();
   await page.keyboard.type("42");
@@ -51,7 +59,7 @@ test("Calc keeps worksheet colors across XLSX, browser storage and a mobile reop
   await page.getByRole("button", { name: "Colored sheets copy", exact: true }).click();
   await expect(red).toHaveAttribute("aria-current", "page");
   await expect(red).toHaveCSS("box-shadow", /rgb\(255, 0, 0\).*inset/u);
-  await expect(yellow).toHaveCSS("background-color", "rgb(255, 255, 0)");
+  await expect(yellow).toHaveCSS("background-color", "rgb(42, 96, 153)");
   await expect(cell).toHaveText("42");
 
   const pending = page.waitForEvent("download");
@@ -64,6 +72,10 @@ test("Calc keeps worksheet colors across XLSX, browser storage and a mobile reop
   const archive = await DocumentArchive.open(buffer);
   expect(await archive.readTextEntry("xl/worksheets/sheet2.xml")).toContain(
     '<tabColor rgb="FFFF0000"/>',
+  );
+
+  expect(await archive.readTextEntry("xl/worksheets/sheet4.xml")).toContain(
+    '<tabColor rgb="FF2A6099"/>',
   );
 
   await page.setViewportSize({ width: 430, height: 844 });

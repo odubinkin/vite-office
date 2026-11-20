@@ -1,0 +1,32 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sc/browser/presentation/ScSheetTabDialog.tsx",
+    "classification": "browser-adaptation",
+    "state": "foundation",
+    "suite": "calc",
+    "subsystem": "sheet-dialog",
+    "capabilityIds": [
+      "CAP-59fb3261-21e4-5112-ba27-e5cafe502e21"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "not-applicable",
+      "defaultStatus": "not-applicable",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/sc/browser/presentation/ScSheetTabDialog.tsx",
+        "apps/office/src/sc/browser/presentation/calc-sheet-tab-dialogs.test.tsx"
+      ],
+      "justification": "Browser controls present the original multi-selection list and palette layouts with native select and radio elements, shared dialog styling, and asynchronous response delivery.",
+      "knownViolations": [],
+      "localSymbols": [
+        "ScSheetTabDialog"
+      ],
+      "sourceResponsibility": "browser-owned",
+      "upstreamFile": null,
+      "upstreamSymbols": []
+    }
+  }
+}

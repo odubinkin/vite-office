@@ -7315,3 +7315,34 @@ vector and sheet-local index lifetime.
 
 - [Original workbook differential styles](../../vendor/libreoffice-reference/sc/source/filter/oox/stylesbuffer.cxx)
 - [Original sheet finalization](../../vendor/libreoffice-reference/sc/source/filter/oox/condformatbuffer.cxx)
+
+### CALC-770 — Hide counts selected hidden sheets against the visible minimum
+
+`GetStateTable` and `HideTable` compare the number of visible sheets with
+the entire sheet selection. Select Sheets permits a selection containing
+both visible and hidden sheets. Hide can therefore be disabled even when
+hiding the visible members would leave another sheet visible. Calc keeps
+the original comparison.
+
+- [Original Hide availability](../../vendor/libreoffice-reference/sc/source/ui/view/tabvwshf.cxx)
+- [Original Hide execution](../../vendor/libreoffice-reference/sc/source/ui/view/viewfun2.cxx)
+
+### CALC-771 — The tab color dialog records the previous color
+
+`DoTableBackgroundDialog` applies the chosen color and appends the old
+active sheet's color to the completed request. Typed slot execution
+interprets that item as the color to apply. Calc preserves both values at
+their respective request boundaries.
+
+- [Original tab color dispatch and response](../../vendor/libreoffice-reference/sc/source/ui/view/tabvwshf.cxx)
+
+### CALC-772 — A named Show request can record an already-visible sheet
+
+`ShowTable` records every resolved name in its visibility undo action,
+including a name that was already visible. The Show dialog lists hidden
+sheets only, while the typed name argument can address a visible sheet.
+Undoing that typed request can hide the previously visible sheet. Calc
+preserves the original name lookup and history recording.
+
+- [Original Show execution](../../vendor/libreoffice-reference/sc/source/ui/view/viewfun2.cxx)
+- [Original visibility undo](../../vendor/libreoffice-reference/sc/source/ui/undo/undotab.cxx)

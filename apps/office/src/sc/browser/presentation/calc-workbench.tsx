@@ -39,6 +39,7 @@ import { OfficeWorkspaceHeader } from "../../../framework/browser/presentation/O
 import { calcStandardBarItems } from "../../uiconfig/scalc/toolbar/standardbar";
 import type { CalcFileWorkflows } from "../workflows/calc-file-workflows";
 import { ScMetricInputDlg } from "./ScMetricInputDlg";
+import { ScSheetTabDialog } from "./ScSheetTabDialog";
 import { ScGoToTabDlg } from "./ScGoToTabDlg";
 import type { CalcSheetWorkflows } from "../workflows/calc-sheet-workflows";
 import { CalcFileDialog } from "./CalcFileDialog";
@@ -75,6 +76,11 @@ export function CalcWorkbench({
     sheetWorkflows.dialogs.GetSnapshot,
     sheetWorkflows.dialogs.GetSnapshot,
   );
+  const tabDialog = useSyncExternalStore(
+    sheetWorkflows.tabDialogs.Subscribe,
+    sheetWorkflows.tabDialogs.GetSnapshot,
+    sheetWorkflows.tabDialogs.GetSnapshot,
+  );
   const widthDialog = useSyncExternalStore(
     sheetWorkflows.metricDialogs.Subscribe,
     sheetWorkflows.metricDialogs.GetSnapshot,
@@ -100,7 +106,11 @@ export function CalcWorkbench({
     /** Releases the shared popup owner. @returns Nothing. */ () => setSheetPopup(undefined),
     [],
   );
-  const modal = dialog !== undefined || sheetDialog !== undefined || widthDialog !== undefined;
+  const modal =
+    dialog !== undefined ||
+    sheetDialog !== undefined ||
+    widthDialog !== undefined ||
+    tabDialog !== undefined;
   if (modal && sheetPopup !== undefined) setSheetPopup(undefined);
   const root = useRef<HTMLElement>(null),
     tabs = useRef<HTMLDivElement>(null),
@@ -889,6 +899,24 @@ export function CalcWorkbench({
               twips,
             ) => {
               sheetWorkflows.metricDialogs.Complete(widthDialog.id, twips);
+            }
+          }
+        />
+      )}
+      {tabDialog === undefined ? null : (
+        <ScSheetTabDialog
+          key={tabDialog.id}
+          model={tabDialog.request}
+          onCancel={
+            /** Cancels the active tab request. @returns Nothing. */
+            () => {
+              sheetWorkflows.tabDialogs.Cancel(tabDialog.id);
+            }
+          }
+          onSubmit={
+            /** Accepts the active tab request. @param value - Native widget selection. @returns Nothing. */
+            (value) => {
+              sheetWorkflows.tabDialogs.Complete(tabDialog.id, value);
             }
           }
         />

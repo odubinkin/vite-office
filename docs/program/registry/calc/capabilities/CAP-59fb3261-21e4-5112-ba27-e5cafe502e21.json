@@ -1,0 +1,111 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "id": "CAP-59fb3261-21e4-5112-ba27-e5cafe502e21",
+    "capabilityId": "CAP-59fb3261-21e4-5112-ba27-e5cafe502e21",
+    "suite": "calc",
+    "subsystem": "sheet-dialog",
+    "type": "command",
+    "maturity": "implemented",
+    "assertions": [
+      "Calc dispatches Hide, Show, SelectTables and SetTabBgColor through its actual document, mark, view and undo owners."
+    ],
+    "stackDivergence": {
+      "kind": "browser-adaptation",
+      "rationale": "Browser controls present the original multi-selection list and palette layouts with native select and radio elements, shared dialog styling, and asynchronous response delivery."
+    },
+    "capability": "Calc sheet visibility, selection and tab color commands",
+    "gaps": [
+      "The browser uses shared palette candidates and native HTML selection controls.",
+      "Workbook structure protection, document-sharing services, macro recording and native Help are unavailable in the current browser slice."
+    ],
+    "upstream": {
+      "implementation": [
+        {
+          "path": "vendor/libreoffice-reference/sc/source/ui/view/tabvwshf.cxx",
+          "marker": "ExecuteSetTableBackgroundCol"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/source/ui/view/tabvwsh3.cxx",
+          "marker": "case SID_SELECT_TABLES"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/source/ui/view/viewfun2.cxx",
+          "marker": "ScViewFunc::HideTable"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/source/ui/undo/undotab.cxx",
+          "marker": "ScUndoShowHideTab::DoChange"
+        }
+      ],
+      "tests": [
+        {
+          "path": "vendor/libreoffice-reference/sc/qa/unit/ucalc.cxx",
+          "marker": "testSetBackgroundColor"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/qa/uitest/calc_dialogs/openDialogs.py",
+          "marker": ".uno:SetTabBgColor"
+        }
+      ],
+      "docs": [
+        {
+          "path": "vendor/libreoffice-reference/sc/uiconfig/scalc/ui/showsheetdialog.ui",
+          "marker": "ShowSheetDialog"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/uiconfig/scalc/ui/tabcolordialog.ui",
+          "marker": "TabColorDialog"
+        }
+      ]
+    },
+    "implemented": true,
+    "contractParity": false,
+    "behaviorParity": false,
+    "defaultParity": false,
+    "verified": false,
+    "local": {
+      "implementation": [
+        {
+          "path": "apps/office/src/sc/browser/presentation/ScSheetTabDialog.tsx",
+          "marker": "ScSheetTabDialog"
+        },
+        {
+          "path": "apps/office/src/sc/source/ui/undo/undotab.ts",
+          "marker": "ScUndoTabColor"
+        },
+        {
+          "path": "apps/office/src/sc/browser/workflows/calc-sheet-workflows.ts",
+          "marker": "ExecuteTab"
+        }
+      ],
+      "tests": [
+        {
+          "path": "apps/office/src/sc/browser/presentation/calc-sheet-tab-dialogs.test.tsx",
+          "marker": "ports testSetBackgroundColor"
+        },
+        {
+          "path": "apps/office/e2e/calc/xlsx-sheet-visibility.spec.ts",
+          "marker": "Hidden Sheets"
+        },
+        {
+          "path": "apps/office/e2e/calc/xlsx-tab-colors.spec.ts",
+          "marker": "Tab Color"
+        }
+      ],
+      "docs": [
+        {
+          "path": "docs/program/calc-upstream-suspected-issues.md",
+          "marker": "CALC-770"
+        }
+      ]
+    },
+    "aspect": "command-state",
+    "atomicOperation": "calc-sheet-tab-workflows",
+    "scopeLimitations": [
+      "The browser uses shared palette candidates and native HTML selection controls.",
+      "Workbook structure protection, document-sharing services, macro recording and native Help are unavailable in the current browser slice."
+    ]
+  }
+}

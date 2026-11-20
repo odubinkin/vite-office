@@ -1,6 +1,6 @@
 /** @fileoverview Consumed native ScViewFunc selection formatting,frame operations and explicit sheet geometry;device/rich-edit/alternate-view services remain unported. */
 import { PasteFromClip } from "./viewfun3";
-import { EnterBlock, EnterAutoSum } from "./viewfun2";
+import { EnterBlock, EnterAutoSum, HideTable, ShowTable } from "./viewfun2";
 import type { ScModule } from "../../../inc/scmod";
 import type { ScDocumentPool } from "../../core/data/docpool";
 import {
@@ -132,6 +132,16 @@ export class ScViewFunc extends ScTabView {
   PasteFromClip(...args: Parameters<typeof PasteFromClip>): boolean {
     return PasteFromClip.apply(this, args);
   }
+  /** Shows matching sheets via the native view function. @param names - Target names. @returns Nothing. */
+  ShowTable(names: readonly OUStringConstReference[]): void {
+    ShowTable(this, this.shell, names);
+  }
+
+  /** Hides the marked visible sheets via the native view function. @param restore - Tab to restore for a targeted request. @returns Nothing. */
+  HideTable(restore?: number): void {
+    HideTable(this, this.shell, restore);
+  }
+
   /** Original formula block input. @param source - Formula text. @param rich - Native absent rich object. @returns Nothing. */
   EnterBlock(source: OUStringConstReference, rich: null): void {
     EnterBlock.call(this, source, rich);

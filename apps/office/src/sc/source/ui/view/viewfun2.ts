@@ -1,4 +1,7 @@
 /** @fileoverview Consumed AdjustBlockHeight standard attribute path from viewfun2.cxx; device-based script and EditEngine layout remain unported. */
+import { ScUndoShowHideTab } from "../undo/undotab";
+import type { ScDocShell } from "../docshell/docsh";
+import type { ScTabView } from "./tabview3";
 import { ScFormulaCell } from "../../../inc/formulacell";
 import type { ScViewFunc } from "./viewfunc";
 import { ScDocument, ScDocumentMode } from "../../../inc/document";
@@ -549,4 +552,53 @@ export function EnterAutoSum(
   } finally {
     formula.dispose();
   }
+}
+
+/** Shows named sheets and visits them in request order. @param view - Source view. @param shell - Document shell. @param names - Requested sheet names. @returns Nothing. */
+export function ShowTable(
+  view: ScTabView,
+  shell: ScDocShell,
+  names: readonly OUStringConstReference[],
+): void {
+  const doc = shell.GetDocument(),
+    tabs: number[] = [],
+    at: [number] = [0];
+  for (const name of names) {
+    if (!doc.GetTable(name, at)) continue;
+    const tab = at[0];
+    doc.SetVisible(tab, true);
+    view.SetTabNo(tab, true);
+    tabs.push(tab);
+  }
+  if (tabs.length === 0) return;
+  shell.GetUndoManager().AddUndoAction(new ScUndoShowHideTab(tabs, true, view));
+  shell.SetDocumentModified();
+}
+
+/** Original FID_TABLE_HIDE admission counts all selected tabs, including hidden tabs. @param view - Actual view. @returns Whether enough sheets remain. */
+export function CanHideTable(view: ScTabView): boolean {
+  const data = view.GetViewData(),
+    doc = data.GetDocument();
+  const selected = data.GetMarkData().GetSelectCount();
+  let visible = 0;
+  for (let tab = 0; tab < doc.GetTableCount(); tab++)
+    if (doc.IsVisible(tab) && ++visible > selected) return true;
+  return false;
+}
+
+/** Hides the selected visible sheets and advances the active view as upstream does. @param view - Actual view. @param shell - Document owner. @param restore - Optional active tab to restore. @returns Nothing. */
+export function HideTable(view: ScTabView, shell: ScDocShell, restore = -1): void {
+  if (!CanHideTable(view)) return;
+  const doc = shell.GetDocument(),
+    tabs: number[] = [];
+  const selected = [...view.GetViewData().GetMarkData().GetSelectedTabs()];
+  for (const tab of selected) {
+    if (!doc.IsVisible(tab)) continue;
+    doc.SetVisible(tab, false);
+    view.SetTabNo(tab, true);
+    tabs.push(tab);
+  }
+  if (restore !== -1) view.SetTabNo(restore);
+  shell.GetUndoManager().AddUndoAction(new ScUndoShowHideTab(tabs, false, view));
+  shell.SetDocumentModified();
 }
