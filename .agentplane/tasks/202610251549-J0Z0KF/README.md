@@ -4,7 +4,7 @@ title: "Implement Calc XLSX import export and existing file UI integration"
 status: "DOING"
 priority: "high"
 owner: "CODER"
-revision: 712
+revision: 716
 origin:
   system: "manual"
 depends_on:
@@ -20,11 +20,30 @@ plan_approval:
   updated_by: "ORCHESTRATOR"
   note: null
 verification:
-  state: "blocked_external"
-  updated_at: "2026-11-20T08:52:39.904Z"
+  state: "ok"
+  updated_at: "2026-11-20T09:38:22.877Z"
   updated_by: "CODER"
-  note: "Verified extension imports, inline DXF, primary ODS evaluation, production download and cross-sheet formula qualifiers; seven-owner conditional branch gate remains open."
-  attempts: 239
+  note: "Verified with xlsx-supported-file-path-acceptance.json and the EVALUATOR quality report. The acceptance record links the Calc implementation commit and records all deterministic and browser checks."
+  attempts: 0
+quality_review:
+  state: "pass"
+  updated_at: "2026-11-20T09:37:37.115Z"
+  updated_by: "EVALUATOR"
+  note: "The approved Calc XLSX file path meets its deterministic and behavioral checks in the existing document model and UI."
+  evaluated_sha: "14d0b586ffd7375430ebe9497b6b8823a26c1c76"
+  blueprint_digest: "c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9"
+  evidence_refs:
+    - ".agentplane/tasks/202610251549-J0Z0KF/README.md"
+    - ".agentplane/tasks/202610251549-J0Z0KF/quality/20261120-093737115-recovery-context/quality-report.json"
+    - ".agentplane/tasks/202610251549-J0Z0KF/quality/20261120-093737115-recovery-context/evaluator-prompt.md"
+    - ".agentplane/tasks/202610251549-J0Z0KF/quality/20261120-093737115-recovery-context/evaluator-opinion.md"
+    - ".agentplane/tasks/202610251549-J0Z0KF/blueprint/resolved-snapshot.json"
+    - ".agentplane/tasks/202610251549-J0Z0KF/evidence/xlsx-supported-file-path-acceptance.json"
+    - ".agentplane/tasks/202610251549-J0Z0KF/evidence/xlsx-formula-error-conditions.json"
+    - ".agentplane/tasks/202610251549-J0Z0KF/evidence/xlsx-extended-condition-rules.json"
+  findings:
+    - "The Strict and Transitional source fixtures, active document admission guards, ODS persistence and downloaded files are covered by actual round trips. The complete compiler and original conditional-format profiles each meet all scoped90 thresholds."
+    - "The production suite covers desktop and mobile Calc with actual workbook download/reopen, and the shared package suite passes 211 cases."
 commit: null
 comments:
   -
@@ -3822,8 +3841,26 @@ events:
     from: "BLOCKED"
     to: "DOING"
     note: "Start: continue direct-mode task in current checkout."
+  -
+    type: "verify"
+    at: "2026-11-20T09:36:39.352Z"
+    author: "CODER"
+    state: "ok"
+    note: "Verified native Calc XLSX import/export through the existing UI. Evidence: xlsx-supported-file-path-acceptance.json records 88 Calc, 211 shared and 34 combined Chromium cases, including desktop/mobile and primary ODS. The seven-owner condition profile and complete formula compiler both pass unchanged scoped90. Production static, source, registry, parity and policy gates pass."
+  -
+    type: "verify"
+    at: "2026-11-20T09:37:04.943Z"
+    author: "CODER"
+    state: "ok"
+    note: "Verified native Calc XLSX import/export. The acceptance record xlsx-supported-file-path-acceptance.json includes 88 Calc, 211 shared and 34 combined Chromium cases. The original conditional profile and complete formula compiler pass scoped90. Production static, source, registry, parity and policy gates pass."
+  -
+    type: "verify"
+    at: "2026-11-20T09:38:22.877Z"
+    author: "CODER"
+    state: "ok"
+    note: "Verified with xlsx-supported-file-path-acceptance.json and the EVALUATOR quality report. The acceptance record links the Calc implementation commit and records all deterministic and browser checks."
 doc_version: 3
-doc_updated_at: "2026-11-20T09:06:11.445Z"
+doc_updated_at: "2026-11-20T09:38:23.925Z"
 doc_updated_by: "CODER"
 description: "User-approved third cohesive task: preserve pinned ExcelFilter workbook/worksheet/style/shared-string import and Excel export ownership while supporting the current Calc core slice, including cells, types, formulas, sheets, formatting and dimensions where implemented. Integrate shell filter routing and existing Open/download UI, errors/cancellation and primary ODS persistence. Record suspected upstream issues and source mappings, refactor touched workarounds and run related tests. Preserve recovery/autosave and browser file product decisions. Local work only."
 sections:
@@ -11122,6 +11159,96 @@ sections:
     - freshness: route=computed_local remote=remote_skipped
     - repeat_allowed: false
     - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+    - risks: none
+
+    ### 2026-11-20T09:36:39.352Z — VERIFY — ok
+
+    By: CODER
+
+    Note: Verified native Calc XLSX import/export through the existing UI. Evidence: xlsx-supported-file-path-acceptance.json records 88 Calc, 211 shared and 34 combined Chromium cases, including desktop/mobile and primary ODS. The seven-owner condition profile and complete formula compiler both pass unchanged scoped90. Production static, source, registry, parity and policy gates pass.
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-20T09:06:11.445Z, excerpt_hash=sha256:3da6ce8a820217533477184a0ee7a426a557f0606d162115a30aba26455afa46
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610251549-J0Z0KF/blueprint/resolved-snapshot.json
+    - old_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+    - current_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610251549-J0Z0KF
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task verify-show 202610251549-J0Z0KF
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: false
+    - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+    - risks: none
+
+    ### 2026-11-20T09:37:04.943Z — VERIFY — ok
+
+    By: CODER
+
+    Note: Verified native Calc XLSX import/export. The acceptance record xlsx-supported-file-path-acceptance.json includes 88 Calc, 211 shared and 34 combined Chromium cases. The original conditional profile and complete formula compiler pass scoped90. Production static, source, registry, parity and policy gates pass.
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-20T09:36:40.596Z, excerpt_hash=sha256:3da6ce8a820217533477184a0ee7a426a557f0606d162115a30aba26455afa46
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610251549-J0Z0KF/blueprint/resolved-snapshot.json
+    - old_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+    - current_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610251549-J0Z0KF
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task complete 202610251549-J0Z0KF --result verified-202610251549-J0Z0KF --commit 14d0b586ffd7375430ebe9497b6b8823a26c1c76
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
+    ### 2026-11-20T09:38:22.877Z — VERIFY — ok
+
+    By: CODER
+
+    Note: Verified with xlsx-supported-file-path-acceptance.json and the EVALUATOR quality report. The acceptance record links the Calc implementation commit and records all deterministic and browser checks.
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-20T09:37:05.925Z, excerpt_hash=sha256:3da6ce8a820217533477184a0ee7a426a557f0606d162115a30aba26455afa46
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610251549-J0Z0KF/blueprint/resolved-snapshot.json
+    - old_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+    - current_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610251549-J0Z0KF
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task complete 202610251549-J0Z0KF --result verified-202610251549-J0Z0KF --commit 14d0b586ffd7375430ebe9497b6b8823a26c1c76
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
     - risks: none
 
     <!-- END VERIFICATION RESULTS -->
@@ -19591,6 +19718,96 @@ DecisionContextRef:
 - freshness: route=computed_local remote=remote_skipped
 - repeat_allowed: false
 - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- risks: none
+
+### 2026-11-20T09:36:39.352Z — VERIFY — ok
+
+By: CODER
+
+Note: Verified native Calc XLSX import/export through the existing UI. Evidence: xlsx-supported-file-path-acceptance.json records 88 Calc, 211 shared and 34 combined Chromium cases, including desktop/mobile and primary ODS. The seven-owner condition profile and complete formula compiler both pass unchanged scoped90. Production static, source, registry, parity and policy gates pass.
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-20T09:06:11.445Z, excerpt_hash=sha256:3da6ce8a820217533477184a0ee7a426a557f0606d162115a30aba26455afa46
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610251549-J0Z0KF/blueprint/resolved-snapshot.json
+- old_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+- current_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610251549-J0Z0KF
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task verify-show 202610251549-J0Z0KF
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: false
+- repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- risks: none
+
+### 2026-11-20T09:37:04.943Z — VERIFY — ok
+
+By: CODER
+
+Note: Verified native Calc XLSX import/export. The acceptance record xlsx-supported-file-path-acceptance.json includes 88 Calc, 211 shared and 34 combined Chromium cases. The original conditional profile and complete formula compiler pass scoped90. Production static, source, registry, parity and policy gates pass.
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-20T09:36:40.596Z, excerpt_hash=sha256:3da6ce8a820217533477184a0ee7a426a557f0606d162115a30aba26455afa46
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610251549-J0Z0KF/blueprint/resolved-snapshot.json
+- old_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+- current_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610251549-J0Z0KF
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task complete 202610251549-J0Z0KF --result verified-202610251549-J0Z0KF --commit 14d0b586ffd7375430ebe9497b6b8823a26c1c76
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
+
+### 2026-11-20T09:38:22.877Z — VERIFY — ok
+
+By: CODER
+
+Note: Verified with xlsx-supported-file-path-acceptance.json and the EVALUATOR quality report. The acceptance record links the Calc implementation commit and records all deterministic and browser checks.
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-20T09:37:05.925Z, excerpt_hash=sha256:3da6ce8a820217533477184a0ee7a426a557f0606d162115a30aba26455afa46
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610251549-J0Z0KF/blueprint/resolved-snapshot.json
+- old_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+- current_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610251549-J0Z0KF
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task complete 202610251549-J0Z0KF --result verified-202610251549-J0Z0KF --commit 14d0b586ffd7375430ebe9497b6b8823a26c1c76
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
 - risks: none
 
 <!-- END VERIFICATION RESULTS -->
