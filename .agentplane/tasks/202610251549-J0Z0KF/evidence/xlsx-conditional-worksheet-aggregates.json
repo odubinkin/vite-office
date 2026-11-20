@@ -1,0 +1,57 @@
+{
+  "scope": "Scalar conditional worksheet aggregates and the original tdf167019 XLSX file path",
+  "implementationCommit": "2c10e9be7b61",
+  "upstream": [
+    "formula/inc/core_resource.hrc (English OOXML and ODFF conditional formula names)",
+    "sc/source/core/tool/interpr1.cxx (IterateParametersIf, IterateParametersIfs, ScAverageIf, ScMinIfs_MS, ScMaxIfs_MS)",
+    "sc/source/core/tool/queryparam.cxx and sc/source/core/data/queryevaluator.cxx (Excel criteria and worksheet comparisons)",
+    "sc/qa/unit/data/xlsx/tdf167019.xlsx (unchanged workbook used by CondFormatTest::testTdf167019)"
+  ],
+  "checks": [
+    {
+      "command": "npm run test:coverage:calc -- interpr1.conditional.test.ts lookup-formula.test.ts queryiter.lookup.test.ts native-a1-formula.test.ts --maxWorkers=2 --testTimeout=90000 --coverage.include=src/sc/source/core/tool/interpr1.conditional.ts --coverage.include=src/sc/source/core/tool/queryparam.ts --coverage.reportsDirectory=coverage/xlsx-conditional-aggregate-verified --coverage.reporter=text --coverage.reporter=json --coverage.thresholds.perFile=true --coverage.thresholds.statements=90 --coverage.thresholds.branches=90 --coverage.thresholds.functions=90 --coverage.thresholds.lines=90",
+      "result": "pass",
+      "evidence": "8 related Calc cases, including a parameterized aggregate case. Branch coverage is 93.50% for interpr1.conditional.ts and 100% for queryparam.ts; all per-file metrics exceed 90%."
+    },
+    {
+      "command": "npm run test:calc -- excelfilter.page-settings.test.ts --maxWorkers=1 --testTimeout=90000",
+      "result": "pass",
+      "evidence": "15 worksheet cases. Unmodified tdf167019 opens and exports directly and after ODS/Worker transfer. D4, D5, and D6 produce 117, 123.25, and 127. Native field spellings and all three formulas survive."
+    },
+    {
+      "command": "npm run test:calc -- ods-style-routing.test.ts ods-worker-entry.test.ts ods-xml-boundaries.test.ts docsh.csv-export.test.ts --maxWorkers=2 --testTimeout=90000",
+      "result": "pass",
+      "evidence": "15 ODS, Worker, and CSV cases."
+    },
+    {
+      "command": "npm run test:shared -- compiler-arithmetic.test.ts compiler-output.test.ts --maxWorkers=2",
+      "result": "pass",
+      "evidence": "9 shared formula compiler cases."
+    },
+    {
+      "command": "npm run test:static && PLAYWRIGHT_BROWSERS_PATH=\"$PWD/.agentplane/tmp/zip-migration/browsers\" npm exec -- playwright test --config .git/calc-panes-browser.config.mts --project calc --workers=1 --timeout=90000 xlsx-page-settings.spec.ts",
+      "result": "pass",
+      "evidence": "Production build with typecheck and static smoke. Three Chromium scenarios passed. The original tdf167019 opens, survives browser storage, and downloads with all three formula expressions and unrounded cached value 123.25."
+    },
+    {
+      "command": "npm run check:dependencies; npm run check:docs; npm run check:file-size; npm run check:source-tree; npm run check:calc-resources; npm run check:writer-resources; npm run check:writer-hintids; node .agentplane/policy/check-routing.mjs; ap doctor; git diff --check",
+      "result": "pass",
+      "evidence": "Source and shell resource gates, scoped ESLint, Prettier and JSDoc passed. Doctor reports the existing hook shim warning."
+    },
+    {
+      "command": "npm exec -- tsx .git/xlsx-cursor-validate-changed-registry.mts <eight changed runtime sources>",
+      "result": "pass",
+      "evidence": "Validates all eight changed production modules, including both new source mappings."
+    },
+    {
+      "command": "npm run check:source-provenance; npm run inventory:invariants; npm run inventory:parity",
+      "result": "fail",
+      "evidence": "Two existing framework files remain absent from the global inventory."
+    }
+  ],
+  "remaining": [
+    "The original upstream tdf167019 assertion is for conditional formatting. This checkpoint uses the unmodified fixture for its formulas and footer; the three conditional formatting rules still need their filter and native rule owners.",
+    "Matrix aggregate operands, external reference-list arrays, threaded/vector execution, and ICU regular-expression criteria are outside the verified scalar worksheet range path.",
+    "CALC-759 records preserved finite-extrema sentinel behavior. The full application suite follows the approved ten-task cadence."
+  ]
+}
