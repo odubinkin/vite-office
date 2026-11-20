@@ -1,0 +1,24 @@
+{
+  "schema_version": 1,
+  "task_id": "202611201111-SJNQAJ",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-11-20T11:30:50.994Z",
+  "verdict": "pass",
+  "summary": "Same-agent review checked the pinned Writer table context branches and the ODT package regression.",
+  "evaluated_sha": "4e829bac537e5b223feeb27c8492f6d97aed158e",
+  "blueprint_digest": "d96c7446735f7a1f83b8c4ef5ef3ecca742c7d06c96be51ab99a7fb6cea26275",
+  "findings": [
+    "Canonical table and text owners retain repeated content. The row style export suppresses empty styles."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202611201111-SJNQAJ/README.md",
+    "57cb60d369a1",
+    "odt-table-roundtrip.test.ts, Writer filter profile and focused timeout retries"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": [
+    "Legacy subtable restructuring, span-driven grid growth and full ODF table-template parity remain outside this evidence."
+  ]
+}
