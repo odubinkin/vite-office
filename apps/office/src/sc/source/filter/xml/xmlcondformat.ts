@@ -13,6 +13,8 @@ import { ODF_NAMESPACES, XMLToken } from "../../../../xmloff/source/core/xmltoke
 import { escapeXml } from "../../../../xmloff/source/text/txtparae";
 import { ScAddress, ScRefFlags } from "../../../inc/address";
 import {
+  ScCondDateFormatEntry,
+  ScCondFormatDateType,
   ScConditionMode as Mode,
   ScCondFormatEntry,
   ScConditionalFormat,
@@ -34,6 +36,21 @@ import {
 
 const odf = FormulaGrammar.AddressConvention.CONV_ODF;
 const grammar = FormulaGrammar.Grammar.GRAM_ODFF;
+const dateTypes: readonly string[] = [
+  "today",
+  "yesterday",
+  "tomorrow",
+  "last-7-days",
+  "this-week",
+  "last-week",
+  "next-week",
+  "this-month",
+  "last-month",
+  "next-month",
+  "last-year",
+  "this-year",
+  "next-year",
+];
 const comparisons = [
   [Mode.EqLess, "<="],
   [Mode.EqGreater, ">="],
@@ -131,6 +148,12 @@ interface Condition {
   readonly style: string;
 }
 
+/** Native date condition attributes before sheet insertion. */
+interface DateCondition {
+  readonly date: ScCondFormatDateType;
+  readonly style: string;
+}
+
 /** Original conditional-formats context and deferred range binding. */
 export class ScXMLConditionalFormatsContext extends ScXMLImportContext {
   private readonly formats: ScXMLConditionalFormatContext[] = [];
@@ -168,7 +191,7 @@ export class ScXMLConditionalFormatsContext extends ScXMLImportContext {
 /** Collects original XML rules in document order. */
 class ScXMLConditionalFormatContext extends ScXMLImportContext {
   private readonly ranges: string;
-  private readonly conditions: (Condition | ScXMLColorScaleFormatContext)[] = [];
+  private readonly conditions: (Condition | DateCondition | ScXMLColorScaleFormatContext)[] = [];
   /** Adopts the XML range record. @param owner - Importer. @param attributes - Original attributes. @returns Context. */
   constructor(owner: ScXMLImport, attributes: FastAttributeList) {
     super(owner);
@@ -184,7 +207,13 @@ class ScXMLConditionalFormatContext extends ScXMLImportContext {
       this.conditions.push(scale);
       return scale;
     }
-    if (element === XMLToken.CALCEXT_CONDITION) {
+    if (element === XMLToken.CALCEXT_DATE_IS) {
+      const value = dateTypes.indexOf(attributes.get(XMLToken.CALCEXT_DATE) ?? "");
+      this.conditions.push({
+        date: value < 0 ? ScCondFormatDateType.TODAY : value,
+        style: attributes.get(XMLToken.CALCEXT_STYLE) ?? "",
+      });
+    } else if (element === XMLToken.CALCEXT_CONDITION) {
       const condition = GetConditionData(attributes.get(XMLToken.CALCEXT_VALUE) ?? "");
       if (condition)
         this.conditions.push({
@@ -210,16 +239,23 @@ class ScXMLConditionalFormatContext extends ScXMLImportContext {
           format.AddEntry(condition.Finalize(document, tab));
           continue;
         }
-        const { mode, formulas, source, style } = condition;
-        const address = ranges.GetTopLeftCorner();
-        if (source)
-          ScRangeStringConverter.GetAddressFromString(address, source, document, odf, [0]);
-        const name = unicode(style);
+        const name = unicode(condition.style);
         const display = ScStyleNameConversion.ProgrammaticToDisplayName(name, SfxStyleFamily.Para);
         try {
-          format.AddEntry(
-            new ScCondFormatEntry(mode, formulas, document, address, grammar, text(display)),
-          );
+          if ("date" in condition) {
+            const entry = new ScCondDateFormatEntry(document);
+            entry.SetStyleName(display);
+            entry.SetDateType(condition.date);
+            format.AddEntry(entry);
+          } else {
+            const { mode, formulas, source } = condition;
+            const address = ranges.GetTopLeftCorner();
+            if (source)
+              ScRangeStringConverter.GetAddressFromString(address, source, document, odf, [0]);
+            format.AddEntry(
+              new ScCondFormatEntry(mode, formulas, document, address, grammar, text(display)),
+            );
+          }
         } finally {
           display.dispose();
           name.dispose();
@@ -274,6 +310,18 @@ export function ExportConditionalFormat(
       const entry = format.GetEntry(i);
       if (entry instanceof ScColorScaleFormat) {
         rules += WriteColorScale(entry);
+        continue;
+      }
+      if (entry instanceof ScCondDateFormatEntry) {
+        const programmatic = ScStyleNameConversion.DisplayToProgrammaticName(
+          entry.GetStyleName(),
+          SfxStyleFamily.Para,
+        );
+        try {
+          rules += `<calcext:date-is calcext:style="${escapeXml(text(programmatic))}" calcext:date="${dateTypes[entry.GetDateType()] ?? ""}"/>`;
+        } finally {
+          programmatic.dispose();
+        }
         continue;
       }
       if (!(entry instanceof ScCondFormatEntry)) continue;

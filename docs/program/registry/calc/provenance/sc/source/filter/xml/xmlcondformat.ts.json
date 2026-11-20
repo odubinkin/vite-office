@@ -20,7 +20,8 @@
       "Loads and writes original Calc extension conditional ranges, expressions and named style bindings in ODF.",
       "Loads and writes original ODF color-scale threshold, color and formula attributes for ODS and Worker storage.",
       "Reads and writes the four original Calc extension text condition spellings.",
-      "Original function-style operands use the shared ScXMLConditionHelper scanner before formula compilation."
+      "Original function-style operands use the shared ScXMLConditionHelper scanner before formula compilation.",
+      "Imports and exports original Calc date-is conditions, including all native year periods."
     ],
     "omittedResponsibilities": [
       "Legacy table style maps and additional condition families remain unported."
@@ -54,6 +55,14 @@
         {
           "path": "apps/office/src/sc/source/filter/oox/condformatbuffer.text.test.ts",
           "marker": "keeps inclusive boundaries and nested operands"
+        },
+        {
+          "path": "apps/office/src/sc/source/filter/oox/condformatbuffer.date.test.ts",
+          "marker": "ports the original tomorrow serialization"
+        },
+        {
+          "path": "apps/office/e2e/calc/xlsx-date-conditions.spec.ts",
+          "marker": "evaluates and round-trips a tomorrow date rule"
         }
       ],
       "upstream": [
@@ -84,6 +93,14 @@
         {
           "path": "sc/source/filter/xml/XMLConverter.cxx",
           "marker": "ScXMLConditionHelper::getExpression"
+        },
+        {
+          "path": "sc/source/filter/xml/xmlcondformat.cxx",
+          "marker": "ScXMLDateContext::ScXMLDateContext"
+        },
+        {
+          "path": "sc/qa/unit/cond_format.cxx",
+          "marker": "testTdf164334CondFormatTomorrow"
         }
       ]
     }

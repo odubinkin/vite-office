@@ -14,6 +14,9 @@ import { SvtListener, type SvtDyingHint } from "../../../../svl/source/notify/li
 import { SfxHint, SfxHintId } from "../../../../svl/inc/hint";
 import { OUString, type OUStringConstReference } from "../../../../sal/inc/rtl/ustring";
 import type { Color } from "../../../../tools/inc/color";
+import { Date, DayOfWeek } from "../../../../tools/source/datetime/tdate";
+import { approxFloor } from "../../../../sal/inc/rtl/math";
+import { text } from "../../../../i18nlangtag/source/isolang/isolang.tables";
 /** Original ScFormatEntry::Type values. */
 export enum ScFormatEntryType {
   Condition,
@@ -23,7 +26,7 @@ export enum ScFormatEntryType {
   Iconset,
   Date,
 }
-/** Original native date-condition values;calendar evaluation is not represented by these copy owners. */
+/** Original native date-condition values. */
 export enum ScCondFormatDateType {
   TODAY,
   YESTERDAY,
@@ -75,13 +78,18 @@ export abstract class ScFormatEntry {
     void _position;
     return undefined;
   }
+  /** Starts the native conditional rendering pass. @returns Nothing. */
+  startRendering(): void {}
+  /** Completes the native conditional rendering pass. @returns Nothing. */
+  endRendering(): void {}
   /** Binds original member destruction at explicit managed lifetime exit. @returns Nothing. */
   abstract Dispose(): void;
 }
-/** Original date-entry copying preserves enum/style state;calendar IsValid and its date cache remain unported. */
+/** Original date-entry evaluation and rendering-pass date cache. */
 export class ScCondDateFormatEntry extends ScFormatEntry {
   private meType: ScCondFormatDateType;
   private readonly maStyleName: OUString;
+  private mpCache: Date | undefined;
   /** Binds original ordinary/copy constructors without copying evaluation cache state. @param doc - Actual owner. @param other - Optional source. @returns Entry. */
   constructor(doc: ScDocument, other?: ScCondDateFormatEntry) {
     super(doc);
@@ -103,6 +111,75 @@ export class ScCondDateFormatEntry extends ScFormatEntry {
   /** Original OUString copy assignment. @param value - Source style. @returns Nothing. */
   SetStyleName(value: OUStringConstReference): void {
     this.maStyleName.assign(value);
+  }
+  /** Checks the source date condition over the native formatter's calendar. @param position - Target cell. @returns Match. */
+  IsValid(position: ScAddress): boolean {
+    const cell = this.mrDoc.GetRefCellValue(position);
+    if (!cell.hasNumeric()) return false;
+    const actual = (this.mpCache ??= new Date(Date.SYSTEM));
+    const origin = this.mrDoc.GetFormatTable().GetNullDate();
+    const current = actual.GetAsNormalizedDays() - origin.GetAsNormalizedDays();
+    const number = cell.getFormula()?.GetValue() ?? cell.getDouble();
+    const serial = approxFloor(number) | 0;
+    const date = new Date(origin);
+    date.AddDays(serial);
+    const day = actual.GetDayOfWeek();
+    const month = actual.GetMonth(),
+      cellMonth = date.GetMonth(),
+      sameYear = actual.GetYear() === date.GetYear();
+    const offset = date.GetAsNormalizedDays() - actual.GetAsNormalizedDays();
+    switch (this.meType) {
+      case ScCondFormatDateType.TODAY:
+        return current === serial;
+      case ScCondFormatDateType.YESTERDAY:
+        return current === serial + 1;
+      case ScCondFormatDateType.TOMORROW:
+        return current === serial - 1;
+      case ScCondFormatDateType.LAST7DAYS:
+        return current >= serial && current - 7 < serial;
+      case ScCondFormatDateType.LASTWEEK:
+        return day === DayOfWeek.SUNDAY
+          ? offset >= -8 && offset <= -1
+          : offset >= -8 - day && offset <= -2 - day;
+      case ScCondFormatDateType.THISWEEK:
+        return day === DayOfWeek.SUNDAY
+          ? offset >= 0 && offset <= 6
+          : offset >= -1 - day && offset <= 5 - day;
+      case ScCondFormatDateType.NEXTWEEK:
+        return day === DayOfWeek.SUNDAY
+          ? offset >= 7 && offset <= 13
+          : offset >= 6 - day && offset <= 12 - day;
+      case ScCondFormatDateType.LASTMONTH:
+        return month === 1
+          ? cellMonth === 12 && actual.GetYear() === date.GetNextYear()
+          : sameYear && month === cellMonth + 1;
+      case ScCondFormatDateType.THISMONTH:
+        return sameYear && month === cellMonth;
+      case ScCondFormatDateType.NEXTMONTH:
+        return month === 12
+          ? cellMonth === 1 && actual.GetYear() === date.GetYear() - 1
+          : sameYear && month === cellMonth - 1;
+      case ScCondFormatDateType.LASTYEAR:
+        return actual.GetYear() === date.GetNextYear();
+      case ScCondFormatDateType.THISYEAR:
+        return sameYear;
+      case ScCondFormatDateType.NEXTYEAR:
+        return actual.GetYear() === date.GetYear() - 1;
+    }
+    return false;
+  }
+  /** Supplies the named style for a matching date. @param _cell - Borrowed cell. @param position - Target. @returns Style or absence. */
+  override GetCellStyle(_cell: ScRefCellValue, position: ScAddress): string | null {
+    void _cell;
+    return this.IsValid(position) ? text(this.maStyleName) : null;
+  }
+  /** Drops the original date snapshot before rendering cells. @returns Nothing. */
+  override startRendering(): void {
+    this.mpCache = undefined;
+  }
+  /** Clears the original date snapshot after a pass. @returns Nothing. */
+  override endRendering(): void {
+    this.mpCache = undefined;
   }
   /** Original concrete discriminator. @returns Date. */
   override GetType(): ScFormatEntryType {
@@ -227,6 +304,14 @@ export class ScConditionalFormat {
     }
     return undefined;
   }
+  /** Starts a render pass for each native rule. @returns Nothing. */
+  startRendering(): void {
+    for (const entry of this.maEntries) entry.startRendering();
+  }
+  /** Ends a render pass for each native rule. @returns Nothing. */
+  endRendering(): void {
+    for (const entry of this.maEntries) entry.endRendering();
+  }
   /** Original entry count. @returns Count. */
   size(): number {
     return this.maEntries.length;
@@ -336,6 +421,14 @@ export class ScConditionalFormat {
 export class ScConditionalFormatList implements Iterable<ScConditionalFormat> {
   private readonly m_ConditionalFormats = new Map<number, ScConditionalFormat>();
   private maxKey = 0;
+  /** Starts a render pass for the sheet's native formats. @returns Nothing. */
+  startRendering(): void {
+    for (const format of this.m_ConditionalFormats.values()) format.startRendering();
+  }
+  /** Ends the sheet's render pass. @returns Nothing. */
+  endRendering(): void {
+    for (const format of this.m_ConditionalFormats.values()) format.endRendering();
+  }
   /** Original public empty/same-document copy constructors. The private destination-copy body is bound inside Clone. @param source - Optional source list. @returns List. */
   constructor(source?: ScConditionalFormatList) {
     if (source) for (const format of source) this.InsertNew(format.Clone());

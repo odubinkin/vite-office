@@ -7269,3 +7269,14 @@ case-insensitive text matching path for string cells.
 
 - [Original condition evaluator](../../vendor/libreoffice-reference/sc/source/core/data/conditio.cxx)
 - [Quoted and numeric criteria regressions](../../apps/office/src/sc/source/filter/oox/condformatbuffer.text.test.ts)
+
+### CALC-766 — Last-week date rules include eight days on Sunday
+
+`ScCondDateFormatEntry::IsValid` uses an inclusive interval from eight days
+ago through yesterday when the current day is Sunday. On other weekdays,
+the last-week interval spans seven days. The Sunday branch therefore
+includes the preceding Saturday as well as the prior Sunday through
+Saturday. Calc preserves the original boundaries.
+
+- [Original date rule evaluator](../../vendor/libreoffice-reference/sc/source/core/data/conditio.cxx)
+- [Calc date-rule boundary tests](../../apps/office/src/sc/source/filter/oox/condformatbuffer.date.test.ts)

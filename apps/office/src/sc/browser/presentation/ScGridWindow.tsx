@@ -382,7 +382,9 @@ export function ScGridWindow(props: ScGridWindowProps): React.JSX.Element {
     );
     return paneClip(top, 0, bottom, 0);
   }
-  return (
+  const formats = table.GetCondFormList();
+  formats.startRendering();
+  const content = (
     <div className="relative flex min-h-0 flex-1 overflow-hidden text-[13px] text-slate-900">
       <div
         ref={grid}
@@ -800,4 +802,6 @@ export function ScGridWindow(props: ScGridWindowProps): React.JSX.Element {
       )}
     </div>
   );
+  formats.endRendering();
+  return content;
 }

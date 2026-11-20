@@ -1,11 +1,17 @@
 /** @fileoverview SpreadsheetML conditional cells and formula rules entering the native Calc range owner. */
 import type { SaxesAttributeNS, SaxesTagNS } from "saxes";
 import type { FragmentContext } from "../../../../oox/source/core/fragmenthandler";
-import { text, unicode } from "../../../../i18nlangtag/source/isolang/isolang.tables";
+import { unicode } from "../../../../i18nlangtag/source/isolang/isolang.tables";
 import { FormulaGrammar } from "../../../../formula/inc/grammar";
 import { ScRange, type ScAddress } from "../../../inc/address";
 import { ScRangeList } from "../../../inc/rangelst";
-import { ScCondFormatEntry, ScConditionalFormat, ScConditionMode } from "../../../inc/conditio";
+import {
+  ScCondDateFormatEntry,
+  ScCondFormatDateType,
+  ScCondFormatEntry,
+  ScConditionalFormat,
+  ScConditionMode,
+} from "../../../inc/conditio";
 import type { ScDocument } from "../../../inc/document";
 import { AddressConverter } from "./addressconverter";
 import { styleIndex, type StylesBuffer } from "./stylesbuffer";
@@ -37,6 +43,18 @@ const textModes = new Map([
   ["containsText", ScConditionMode.ContainsText],
   ["notContainsText", ScConditionMode.NotContainsText],
 ]);
+const dateTypes = [
+  "today",
+  "yesterday",
+  "tomorrow",
+  "last7Days",
+  "thisWeek",
+  "lastWeek",
+  "nextWeek",
+  "thisMonth",
+  "lastMonth",
+  "nextMonth",
+];
 const scaleTypes = new Map([
   ["min", ScColorScaleEntryType.MIN],
   ["max", ScColorScaleEntryType.MAX],
@@ -105,6 +123,7 @@ class ColorScaleRule implements FragmentContext {
 /** Collects the represented original cfRule records. */
 class CondFormatRule implements FragmentContext {
   mode: ScConditionMode | undefined;
+  dateType: ScCondFormatDateType | undefined;
   literal: string | undefined;
   dxfId = -1;
   priority = -1;
@@ -131,7 +150,10 @@ class CondFormatRule implements FragmentContext {
     const type = (this.type = attribute(attrs, "type"));
     if (type === "cellIs") this.mode = modes.get(attribute(attrs, "operator"));
     else if (type === "expression") this.mode = ScConditionMode.Direct;
-    else {
+    else if (type === "timePeriod") {
+      const period = dateTypes.indexOf(attribute(attrs, "timePeriod"));
+      this.dateType = period < 0 ? ScCondFormatDateType.TODAY : period;
+    } else {
       this.mode = textModes.get(type);
       if (this.mode !== undefined) this.literal = attribute(attrs, "text");
     }
@@ -210,6 +232,18 @@ class CondFormat implements FragmentContext {
           format.AddEntry(rule.colorScale.AddEntries(this.document, source, styles));
           continue;
         }
+        if (rule.dateType !== undefined) {
+          const entry = new ScCondDateFormatEntry(this.document);
+          const name = unicode(styles.createDxfStyle(this.document, rule.dxfId));
+          try {
+            entry.SetDateType(rule.dateType);
+            entry.SetStyleName(name);
+            format.AddEntry(entry);
+          } finally {
+            name.dispose();
+          }
+          continue;
+        }
         if (rule.mode === undefined) continue;
         const count =
           rule.mode === ScConditionMode.Between || rule.mode === ScConditionMode.NotBetween ? 2 : 1;
@@ -222,10 +256,7 @@ class CondFormat implements FragmentContext {
             ) => value.trim(),
           );
         if (rule.literal === undefined && expressions.includes("")) continue;
-        const defaultStyle = this.document.GetStyleSheetPool()?.GetDefaultStyle();
-        const style =
-          styles.dxfs[rule.dxfId]?.CreateStyle(this.document, rule.dxfId) ??
-          (defaultStyle ? text(defaultStyle.GetName()) : "");
+        const style = styles.createDxfStyle(this.document, rule.dxfId);
         try {
           if (rule.literal === undefined) {
             format.AddEntry(

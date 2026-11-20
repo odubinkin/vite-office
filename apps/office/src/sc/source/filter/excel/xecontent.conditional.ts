@@ -5,7 +5,7 @@ import { text } from "../../../../i18nlangtag/source/isolang/isolang.tables";
 import { getTokenFromUtf8 as token } from "../../../../oox/source/token/tokenmap";
 import { OUString } from "../../../../sal/inc/rtl/ustring";
 import type { FastSerializerHelper } from "../../../../sax/inc/fshelper";
-import { ScCondFormatEntry, ScConditionMode } from "../../../inc/conditio";
+import { ScCondDateFormatEntry, ScCondFormatEntry, ScConditionMode } from "../../../inc/conditio";
 import type { ScDocument } from "../../../inc/document";
 import type { ScTable } from "../../../inc/table";
 import { XclXmlUtils } from "./xestream";
@@ -25,6 +25,18 @@ const cellIsOperators: ReadonlyMap<ScConditionMode, string> = new Map([
   [ScConditionMode.NotBetween, "notBetween"],
 ]);
 const scaleTypes = ["min", "min", "max", "percentile", "num", "percent", "formula"] as const;
+const dateTypes: readonly string[] = [
+  "today",
+  "yesterday",
+  "tomorrow",
+  "last7Days",
+  "thisWeek",
+  "lastWeek",
+  "nextWeek",
+  "thisMonth",
+  "lastMonth",
+  "nextMonth",
+];
 const textTypes = new Map([
   [ScConditionMode.BeginsWith, "beginsWith"],
   [ScConditionMode.EndsWith, "endsWith"],
@@ -125,6 +137,8 @@ export function SaveXmlConditionalFormats(
     for (let i = 0; i < format.size(); ++i) {
       const entry = format.GetEntry(i);
       const scale = entry instanceof ScColorScaleFormat;
+      const timePeriod =
+        entry instanceof ScCondDateFormatEntry ? dateTypes[entry.GetDateType()] : undefined;
       const condition = entry instanceof ScCondFormatEntry ? entry : undefined;
       const mode = condition?.GetOperation() ?? ScConditionMode.NONE;
       const direct = mode === ScConditionMode.Direct;
@@ -133,7 +147,7 @@ export function SaveXmlConditionalFormats(
         mode === ScConditionMode.NotContainsText
           ? "notContains"
           : (kind ?? cellIsOperators.get(mode));
-      if (!scale && !direct && !operator) continue;
+      if (!scale && !direct && !operator && timePeriod === undefined) continue;
       if (!opened) {
         output.startElement(
           token("conditionalFormatting"),
@@ -144,6 +158,21 @@ export function SaveXmlConditionalFormats(
       }
       if (scale) {
         SaveColorScale(output, entry, priority++);
+        continue;
+      }
+      if (entry instanceof ScCondDateFormatEntry && timePeriod !== undefined) {
+        output.startElement(
+          token("cfRule"),
+          token("type"),
+          "timePeriod",
+          token("priority"),
+          String(priority++),
+          token("timePeriod"),
+          timePeriod,
+          token("dxfId"),
+          dxfs.GetDxfId(text(entry.GetStyleName())),
+        );
+        output.endElement(token("cfRule"));
         continue;
       }
       if (!condition) continue;

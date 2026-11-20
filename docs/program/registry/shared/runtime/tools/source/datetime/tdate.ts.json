@@ -19,13 +19,18 @@
       "evidence": [
         "apps/office/src/tools/source/datetime/tdate.ts",
         "apps/office/src/tools/source/datetime/tdate.test.ts",
-        "vendor/libreoffice-reference/tools/source/datetime/tdate.cxx"
+        "vendor/libreoffice-reference/tools/source/datetime/tdate.cxx",
+        "apps/office/src/sc/source/filter/oox/condformatbuffer.date.test.ts",
+        "apps/office/e2e/calc/xlsx-date-conditions.spec.ts",
+        "tools/source/datetime/tdate.cxx",
+        "sc/qa/unit/cond_format.cxx"
       ],
-      "justification": "Original tools Date packed signed32 raw/copy/DMY value, signed16 year extraction, validity/normalization and comphelper-backed day arithmetic are retained. DateInitSystem is a distinct host tag, calls original GetSystemDateTime date-output boundary, and retains 1900-01-01 failure fallback. Numeric browser clock construction and local field getters bind system_clock/localtime only; parsing and arithmetic use original source algorithms. UNO conversion, native platform-failure/ABI and unconsumed Date methods remain unverified.",
+      "justification": "Original tools Date packed signed32 raw/copy/DMY value, signed16 year extraction, validity/normalization and comphelper-backed day arithmetic are retained. DateInitSystem is a distinct host tag, calls original GetSystemDateTime date-output boundary, and retains 1900-01-01 failure fallback. Numeric browser clock construction and local field getters bind system_clock/localtime only; parsing and arithmetic use original source algorithms. UNO conversion, native platform-failure/ABI and unconsumed Date methods remain unverified. Uses original Monday-based weekday numbering and the native signed-year conversion skipping year zero.",
       "knownViolations": [],
       "localSymbols": [
         "Date",
-        "DateConstReference"
+        "DateConstReference",
+        "DayOfWeek"
       ],
       "sourceResponsibility": "divergent",
       "upstreamFile": "tools/source/datetime/tdate.cxx",

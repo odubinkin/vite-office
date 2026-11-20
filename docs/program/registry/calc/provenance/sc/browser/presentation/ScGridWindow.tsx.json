@@ -33,7 +33,8 @@
       "Binds the existing script direction from the actual grid cell pattern to its text DOM.",
       "Paints independent fixed and movable cell and header bands, clipping partially visible cells at the separator and computing border adjacency per pane.",
       "Paints all normal pane windows with distinct accessible cell identities and routes click activation independently from formula pointing.",
-      "Paints the native resolved color-scale background over the represented cell fill."
+      "Paints the native resolved color-scale background over the represented cell fill.",
+      "Brackets visible-cell style resolution with the sheet conditional-format rendering lifecycle so calendar rules use one date per pass."
     ],
     "stackDivergence": {
       "kind": "browser-adaptation",
@@ -80,6 +81,14 @@
         {
           "path": "apps/office/src/sc/source/filter/oox/condformatbuffer.colorscale.test.ts",
           "marker": "ports the upstream two- and three-stop"
+        },
+        {
+          "path": "apps/office/src/sc/source/filter/oox/condformatbuffer.date.test.ts",
+          "marker": "ports the original tomorrow serialization"
+        },
+        {
+          "path": "apps/office/e2e/calc/xlsx-date-conditions.spec.ts",
+          "marker": "evaluates and round-trips a tomorrow date rule"
         }
       ],
       "upstream": [
@@ -90,6 +99,14 @@
         {
           "path": "sc/source/core/data/fillinfo.cxx",
           "marker": "mxColorScale"
+        },
+        {
+          "path": "sc/source/core/data/fillinfo.cxx",
+          "marker": "startRendering"
+        },
+        {
+          "path": "sc/qa/unit/cond_format.cxx",
+          "marker": "testTdf164334CondFormatTomorrow"
         }
       ]
     }

@@ -18,7 +18,8 @@
     "preservedResponsibilities": [
       "Imports worksheet ranges and original numeric comparison and direct formula rule families in priority order.",
       "Imports original colorScale stops, fixed-palette and theme colors, and Excel num entries carrying formulas.",
-      "Creates the original text condition operand as an interned formula string token and uses SAL boolean parsing for threshold gte."
+      "Creates the original text condition operand as an interned formula string token and uses SAL boolean parsing for threshold gte.",
+      "Imports SpreadsheetML calendar rules into native ScCondDateFormatEntry, preserving priority and the original Today fallback."
     ],
     "omittedResponsibilities": [
       "Extended rules, content deduplication and advanced condition types remain outside the represented slice."
@@ -44,6 +45,14 @@
         {
           "path": "apps/office/e2e/calc/xlsx-text-conditions.spec.ts",
           "marker": "preserves the original XLSX quoted text conditions"
+        },
+        {
+          "path": "apps/office/src/sc/source/filter/oox/condformatbuffer.date.test.ts",
+          "marker": "ports the original tomorrow serialization"
+        },
+        {
+          "path": "apps/office/e2e/calc/xlsx-date-conditions.spec.ts",
+          "marker": "evaluates and round-trips a tomorrow date rule"
         }
       ],
       "upstream": [
@@ -66,6 +75,14 @@
         {
           "path": "sc/qa/unit/subsequent_export_test5.cxx",
           "marker": "testTdf166413"
+        },
+        {
+          "path": "sc/source/filter/oox/condformatbuffer.cxx",
+          "marker": "maModel.mnTimePeriod"
+        },
+        {
+          "path": "sc/qa/unit/cond_format.cxx",
+          "marker": "testTdf164334CondFormatTomorrow"
         }
       ]
     }

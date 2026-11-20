@@ -17,7 +17,8 @@
     "preservedResponsibilities": [
       "Serializes native conditional-format ranges and the represented condition formulas and priorities into the worksheet.",
       "Exports native color scales with paired XLSX threshold and RGB lists.",
-      "Writes native fixed text formulas based at the combined range origin and quotes Excel literals twice."
+      "Writes native fixed text formulas based at the combined range origin and quotes Excel literals twice.",
+      "Serializes the ten original Excel time periods and omits the native year-only periods from XLSX."
     ],
     "omittedResponsibilities": [
       "Date, data-bar, icon and extended rules are not serialized by this owner."
@@ -43,6 +44,14 @@
         {
           "path": "apps/office/e2e/calc/xlsx-text-conditions.spec.ts",
           "marker": "preserves the original XLSX quoted text conditions"
+        },
+        {
+          "path": "apps/office/src/sc/source/filter/oox/condformatbuffer.date.test.ts",
+          "marker": "ports the original tomorrow serialization"
+        },
+        {
+          "path": "apps/office/e2e/calc/xlsx-date-conditions.spec.ts",
+          "marker": "evaluates and round-trips a tomorrow date rule"
         }
       ],
       "upstream": [
@@ -65,6 +74,14 @@
         {
           "path": "sc/qa/unit/subsequent_export_test5.cxx",
           "marker": "testTdf166413"
+        },
+        {
+          "path": "sc/source/filter/excel/xecontent.cxx",
+          "marker": "XclExpDateFormat::SaveXml"
+        },
+        {
+          "path": "sc/qa/unit/cond_format.cxx",
+          "marker": "testTdf164334CondFormatTomorrow"
         }
       ]
     },

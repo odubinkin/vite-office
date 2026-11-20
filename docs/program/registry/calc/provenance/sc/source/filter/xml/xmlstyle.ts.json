@@ -39,7 +39,8 @@
       "Writes Calc outer-line complex colors in the original table-cell property group.",
       "Uses native ODF alignment attributes to preserve editable cell formatting.",
       "Carries the source document-default wrap option through ODS and the ephemeral style transport.",
-      "Includes the original merged cell protection properties in ODF default, automatic-style and Worker records."
+      "Includes the original merged cell protection properties in ODF default, automatic-style and Worker records.",
+      "Preserves styles referenced by native date conditions in primary ODS and worker transport."
     ],
     "omittedResponsibilities": [
       "Full Calc font-family/style actions,rich-text UI,named cell-style inheritance and other formatting actions remain pending.",
@@ -68,6 +69,14 @@
         {
           "path": "apps/office/src/sc/source/filter/oox/excelfilter.alignment.test.ts",
           "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sc/source/filter/oox/condformatbuffer.date.test.ts",
+          "marker": "ports the original tomorrow serialization"
+        },
+        {
+          "path": "apps/office/e2e/calc/xlsx-date-conditions.spec.ts",
+          "marker": "evaluates and round-trips a tomorrow date rule"
         }
       ],
       "upstream": [
@@ -90,6 +99,14 @@
         {
           "path": "vendor/libreoffice-reference/sc/source/filter/xml/xmlstyle.cxx",
           "marker": "SC_UNONAME_WRAP"
+        },
+        {
+          "path": "sc/source/filter/xml/xmlexprt.cxx",
+          "marker": "rDateFormat.GetStyleName"
+        },
+        {
+          "path": "sc/qa/unit/cond_format.cxx",
+          "marker": "testTdf164334CondFormatTomorrow"
         }
       ]
     }

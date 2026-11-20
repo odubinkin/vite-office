@@ -1,6 +1,7 @@
 /** @fileoverview SpreadsheetML font, fill and XF records finalized into native Calc cell patterns. */
 import type { Border } from "./stylesbuffer.border";
 import { Protection } from "./stylesbuffer.protection";
+import { text } from "../../../../i18nlangtag/source/isolang/isolang.tables";
 import { SvxBrushItem } from "../../../../editeng/inc/brushitem";
 import { SvxColorItem } from "../../../../editeng/inc/colritem";
 import { SvxContourItem } from "../../../../editeng/inc/contouritem";
@@ -393,6 +394,14 @@ export class StylesBuffer {
   getDefaultFont(): Font | undefined {
     const fontId = this.styleXfs[this.defaultStyleXf]?.fontId;
     return (fontId === undefined ? undefined : this.fonts[fontId]) ?? this.fonts[0];
+  }
+
+  /** Resolves the native differential style, with the represented workbook default fallback. @param document - Native workbook. @param index - Differential style index. @returns Style name. */
+  createDxfStyle(document: ScDocument, index: number): string {
+    const style = this.dxfs[index];
+    if (style) return style.CreateStyle(document, index);
+    const fallback = document.GetStyleSheetPool()?.GetDefaultStyle();
+    return fallback ? text(fallback.GetName()) : "";
   }
 
   /** Materializes the workbook Normal XF on the original Calc Standard style. @param document - Native workbook. @returns Nothing. */

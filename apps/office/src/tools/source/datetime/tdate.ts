@@ -9,6 +9,16 @@ import {
 import { GetSystemDateTime } from "./systemdatetime";
 /** Original DateInitSystem constructor tag; numeric packed dates remain a distinct overload. */
 const SYSTEM = Symbol("DateInitSystem");
+/** Original Monday-based weekday enum. */
+export enum DayOfWeek {
+  MONDAY,
+  TUESDAY,
+  WEDNESDAY,
+  THURSDAY,
+  FRIDAY,
+  SATURDAY,
+  SUNDAY,
+}
 /** Original borrowed const Date value contract,with no new lifetime owner. */
 export interface DateConstReference {
   /** Original raw packed field. @returns Signed32 date. */
@@ -81,6 +91,15 @@ export class Date implements DateConstReference {
   /** Original signed division truncates toward zero. @returns Native signed16 year. */
   GetYear(): number {
     return (Math.trunc(this.mnDate / 10000) << 16) >> 16;
+  }
+  /** Original signed16 next year skips year zero. @returns Next year. */
+  GetNextYear(): number {
+    const year = this.GetYear();
+    return year === -1 ? 1 : ((year + 1) << 16) >> 16;
+  }
+  /** Original normalized-day weekday, starting with Monday. @returns Native weekday. */
+  GetDayOfWeek(): DayOfWeek {
+    return ((this.GetAsNormalizedDays() - 1) % 7) as DayOfWeek;
   }
   /** Original validity delegates actual extracted fields to comphelper. @returns Validity. */
   IsValidDate(): boolean {

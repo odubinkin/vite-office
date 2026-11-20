@@ -25,7 +25,8 @@
       "Uses the workbook resolver for native font and solid fill display and complex-color metadata.",
       "Resolves the original border XF ID and applies real line and box items on the Calc pattern.",
       "Applies native alignment and rotation-reference items through XF ancestry.",
-      "Resolves the cell XF and its source style parent protection flags and installs the actual native protection item."
+      "Resolves the cell XF and its source style parent protection flags and installs the actual native protection item.",
+      "Resolves date and ordinary conditional rules through one differential-style owner with its existing workbook fallback."
     ],
     "omittedResponsibilities": [
       "The theme, format-code, border and differential-format families remain open."
@@ -43,6 +44,14 @@
         {
           "path": "apps/office/src/sc/source/filter/oox/excelfilter.alignment.test.ts",
           "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sc/source/filter/oox/condformatbuffer.date.test.ts",
+          "marker": "ports the original tomorrow serialization"
+        },
+        {
+          "path": "apps/office/e2e/calc/xlsx-date-conditions.spec.ts",
+          "marker": "evaluates and round-trips a tomorrow date rule"
         }
       ],
       "upstream": [
@@ -53,6 +62,14 @@
         {
           "path": "sc/source/filter/oox/stylesbuffer.cxx",
           "marker": "Font::fillToItemSet"
+        },
+        {
+          "path": "sc/source/filter/oox/stylesbuffer.cxx",
+          "marker": "StylesBuffer::createDxfStyle"
+        },
+        {
+          "path": "sc/qa/unit/cond_format.cxx",
+          "marker": "testTdf164334CondFormatTomorrow"
         }
       ]
     }

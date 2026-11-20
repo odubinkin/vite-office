@@ -168,6 +168,14 @@
         {
           "path": "apps/office/src/sc/source/filter/oox/condformatbuffer.colorscale.test.ts",
           "marker": "ports the upstream two- and three-stop"
+        },
+        {
+          "path": "apps/office/src/sc/source/filter/oox/condformatbuffer.date.test.ts",
+          "marker": "ports the original tomorrow serialization"
+        },
+        {
+          "path": "apps/office/e2e/calc/xlsx-date-conditions.spec.ts",
+          "marker": "evaluates and round-trips a tomorrow date rule"
         }
       ],
       "upstream": [
@@ -290,6 +298,14 @@
         {
           "path": "sc/source/filter/xml/xmlcondformat.cxx",
           "marker": "ScXMLColorScaleFormatEntryContext"
+        },
+        {
+          "path": "sc/source/filter/xml/xmlcondformat.cxx",
+          "marker": "XML_DATE_IS"
+        },
+        {
+          "path": "sc/qa/unit/cond_format.cxx",
+          "marker": "testTdf164334CondFormatTomorrow"
         }
       ]
     },
@@ -341,7 +357,8 @@
       "Recognizes original ODF style and LibreOffice compatibility namespaces for first/left/master header and footer children.",
       "Registers both ODF table tab-color namespaces without renumbering existing portable tokens.",
       "Registers original ODF page scale, order, centering, print and first-page tokens and the legacy loext fit aliases without renumbering the existing vocabulary.",
-      "Admits original calcext color scale and threshold elements, color and type attributes."
+      "Admits original calcext color scale and threshold elements, color and type attributes.",
+      "Registers original Calc extension tokens date-is, date and style without changing existing token values."
     ],
     "status": "mapped",
     "upstreamPath": "xmloff/source/core/xmltoken.cxx",

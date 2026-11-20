@@ -476,9 +476,15 @@ export enum XMLToken {
   CALCEXT_COLOR_SCALE_ENTRY,
   CALCEXT_COLOR,
   CALCEXT_TYPE,
+  CALCEXT_DATE_IS,
+  CALCEXT_DATE,
+  CALCEXT_STYLE,
 }
 
 const entries: readonly (readonly [string, string, XMLToken])[] = [
+  [ODF_NAMESPACES.calcext, "date-is", XMLToken.CALCEXT_DATE_IS],
+  [ODF_NAMESPACES.calcext, "date", XMLToken.CALCEXT_DATE],
+  [ODF_NAMESPACES.calcext, "style", XMLToken.CALCEXT_STYLE],
   [ODF_NAMESPACES.calcext, "conditional-formats", XMLToken.CALCEXT_CONDITIONAL_FORMATS],
   [ODF_NAMESPACES.calcext, "conditional-format", XMLToken.CALCEXT_CONDITIONAL_FORMAT],
   [ODF_NAMESPACES.calcext, "condition", XMLToken.CALCEXT_CONDITION],

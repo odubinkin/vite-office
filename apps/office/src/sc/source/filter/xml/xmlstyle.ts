@@ -58,7 +58,7 @@ import type { ScDocument } from "../../../inc/document";
 import { ExportNumberFormat } from "../../../../xmloff/source/style/xmlnumfe";
 import { SC_STYLE_PROG_STANDARD } from "../../../inc/stylehelper";
 import { SfxStyleFamily } from "../../../../svl/inc/style-values";
-import { ScCondFormatEntry } from "../../../inc/conditio";
+import { ScCondDateFormatEntry, ScCondFormatEntry } from "../../../inc/conditio";
 import { ScStyleNameConversion } from "../../core/tool/stylehelper";
 import { text, unicode } from "../../../../i18nlangtag/source/isolang/isolang.tables";
 import {
@@ -245,6 +245,8 @@ function exportConditionalCellStyles(document: ScDocument, fonts: XMLFontAutoSty
         const entry = format.GetEntry(i);
         if (entry instanceof ScCondFormatEntry && entry.GetStyleName())
           names.add(entry.GetStyleName());
+        else if (entry instanceof ScCondDateFormatEntry && !entry.GetStyleName().isEmpty())
+          names.add(text(entry.GetStyleName()));
       }
   let result = "";
   for (const source of names) {

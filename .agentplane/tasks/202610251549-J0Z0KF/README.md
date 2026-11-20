@@ -1,10 +1,10 @@
 ---
 id: "202610251549-J0Z0KF"
 title: "Implement Calc XLSX import export and existing file UI integration"
-status: "BLOCKED"
+status: "DOING"
 priority: "high"
 owner: "CODER"
-revision: 707
+revision: 708
 origin:
   system: "manual"
 depends_on:
@@ -276,6 +276,9 @@ comments:
   -
     author: "CODER"
     body: "Start: continue approved legacy manifest/OFOP migration to real registered Writer, actual Sfx metadata service/storage and DOCX/XLSX core/UI; preserve prior gaps and no pause."
+  -
+    author: "CODER"
+    body: "Start: continue direct-mode task in current checkout."
   -
     author: "CODER"
     body: "Start: continue direct-mode task in current checkout."
@@ -3780,8 +3783,15 @@ events:
     author: "CODER"
     state: "blocked_external"
     note: "Verified: native condition scanner and filter admission pass 15 focused tests and two Chromium cases. The scanner independently reaches 100% coverage. All 61 prior-scope cases pass, with branch coverage at 83.26%. XLSX remains open."
+  -
+    type: "status"
+    at: "2026-11-20T08:23:55.914Z"
+    author: "CODER"
+    from: "BLOCKED"
+    to: "DOING"
+    note: "Start: continue direct-mode task in current checkout."
 doc_version: 3
-doc_updated_at: "2026-11-20T08:12:44.719Z"
+doc_updated_at: "2026-11-20T08:23:55.914Z"
 doc_updated_by: "CODER"
 description: "User-approved third cohesive task: preserve pinned ExcelFilter workbook/worksheet/style/shared-string import and Excel export ownership while supporting the current Calc core slice, including cells, types, formulas, sheets, formatting and dimensions where implemented. Integrate shell filter routing and existing Open/download UI, errors/cancellation and primary ODS persistence. Record suspected upstream issues and source mappings, refactor touched workarounds and run related tests. Preserve recovery/autosave and browser file product decisions. Local work only."
 sections:

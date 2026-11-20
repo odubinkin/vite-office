@@ -11,8 +11,15 @@ import {
   yearToDays,
   type DateFields,
 } from "../../../comphelper/source/misc/date";
-import { Date } from "./tdate";
+import { Date, DayOfWeek } from "./tdate";
 import { GetSystemDateTime } from "./systemdatetime";
+
+it("uses the native weekday numbering and skips year zero", /** Checks the date operations consumed by calendar rules. @returns Nothing. */ () => {
+  expect(new Date(1, 1, 1).GetDayOfWeek()).toBe(DayOfWeek.MONDAY);
+  expect(new Date(4, 1, 2026).GetDayOfWeek()).toBe(DayOfWeek.SUNDAY);
+  expect(new Date(31, 12, -1).GetNextYear()).toBe(1);
+  expect(new Date(31, 12, 2026).GetNextYear()).toBe(2027);
+});
 
 it("counts source Gregorian days through the BCE boundary and Calc null date", /** Checks counts source Gregorian days through the BCE boundary and Calc null date. @returns Test completion or assertion result. */ () => {
   expect(yearToDays(-2)).toBe(-731);

@@ -8,7 +8,8 @@
     "upstreamPath": "tools/source/datetime/tdate.cxx",
     "localSymbols": [
       "Date",
-      "DateConstReference"
+      "DateConstReference",
+      "DayOfWeek"
     ],
     "upstreamSymbols": [
       "Date::setDateFromDMY",
@@ -18,7 +19,8 @@
       "Date::Normalize"
     ],
     "preservedResponsibilities": [
-      "Original tools Date packed signed32 raw/copy/DMY value, signed16 year extraction, validity/normalization and comphelper-backed day arithmetic are retained. DateInitSystem is a distinct host tag, calls original GetSystemDateTime date-output boundary, and retains 1900-01-01 failure fallback. Numeric browser clock construction and local field getters bind system_clock/localtime only; parsing and arithmetic use original source algorithms."
+      "Original tools Date packed signed32 raw/copy/DMY value, signed16 year extraction, validity/normalization and comphelper-backed day arithmetic are retained. DateInitSystem is a distinct host tag, calls original GetSystemDateTime date-output boundary, and retains 1900-01-01 failure fallback. Numeric browser clock construction and local field getters bind system_clock/localtime only; parsing and arithmetic use original source algorithms.",
+      "Uses original Monday-based weekday numbering and the native signed-year conversion skipping year zero."
     ],
     "omittedResponsibilities": [
       "UNO conversion, native platform-failure/ABI and unconsumed Date methods remain unverified."
@@ -32,6 +34,14 @@
         {
           "path": "apps/office/src/tools/source/datetime/tdate.test.ts",
           "marker": "normalize"
+        },
+        {
+          "path": "apps/office/src/sc/source/filter/oox/condformatbuffer.date.test.ts",
+          "marker": "ports the original tomorrow serialization"
+        },
+        {
+          "path": "apps/office/e2e/calc/xlsx-date-conditions.spec.ts",
+          "marker": "evaluates and round-trips a tomorrow date rule"
         }
       ],
       "upstream": [
@@ -42,6 +52,14 @@
         {
           "path": "vendor/libreoffice-reference/include/tools/date.hxx",
           "marker": "GetDay"
+        },
+        {
+          "path": "tools/source/datetime/tdate.cxx",
+          "marker": "Date::GetDayOfWeek"
+        },
+        {
+          "path": "sc/qa/unit/cond_format.cxx",
+          "marker": "testTdf164334CondFormatTomorrow"
         }
       ]
     }
