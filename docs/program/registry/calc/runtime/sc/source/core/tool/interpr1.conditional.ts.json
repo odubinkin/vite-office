@@ -1,0 +1,35 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sc/source/core/tool/interpr1.conditional.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "calc",
+    "subsystem": "range-formula-execution",
+    "capabilityIds": [
+      "CAP-df5573ca-0907-47d8-a385-6cd7af847f1d"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/sc/source/core/tool/interpr1.conditional.ts",
+        "apps/office/src/sc/source/core/tool/interpr1.conditional.test.ts",
+        "vendor/libreoffice-reference/sc/source/core/tool/interpr1.cxx#ScInterpreter::IterateParametersIf"
+      ],
+      "justification": "Uses the scalar worksheet-reference paths for AVERAGEIF, MINIFS and MAXIFS, including original left-edge alignment, arity, range geometry and result sentinels. Matrix operands and external reference-list arrays, threaded execution, and ICU regular-expression criteria remain pending.",
+      "knownViolations": [],
+      "localSymbols": [
+        "InterpretConditionalAggregate"
+      ],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": "sc/source/core/tool/interpr1.cxx",
+      "upstreamSymbols": [
+        "ScInterpreter::IterateParametersIf"
+      ]
+    }
+  }
+}

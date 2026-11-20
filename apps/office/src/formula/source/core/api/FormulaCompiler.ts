@@ -61,6 +61,9 @@ const arithmetic = new Set<OpCode>([
   OpCode.ocSumSQ,
   OpCode.ocProduct,
   OpCode.ocAverage,
+  OpCode.ocAverageIf,
+  OpCode.ocMinIfs_MS,
+  OpCode.ocMaxIfs_MS,
   OpCode.ocConcat,
   OpCode.ocVLookup,
   OpCode.ocHLookup,
@@ -408,6 +411,9 @@ export class FormulaCompiler {
       op === OpCode.ocSumSQ ||
       op === OpCode.ocProduct ||
       op === OpCode.ocAverage ||
+      op === OpCode.ocAverageIf ||
+      op === OpCode.ocMinIfs_MS ||
+      op === OpCode.ocMaxIfs_MS ||
       op === OpCode.ocConcat ||
       op === OpCode.ocVLookup ||
       op === OpCode.ocHLookup

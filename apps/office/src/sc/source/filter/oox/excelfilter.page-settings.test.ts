@@ -18,6 +18,7 @@ import {
 } from "../../../browser/filter/xml/calc-document-codec";
 import { ScXMLImport } from "../xml/xmlimprt";
 import { ScDocument } from "../../../inc/document";
+import { ScAddress } from "../../../inc/address";
 import type { SvxPageItem, SvxSetItem } from "../../../../svx/inc/pageitem";
 import type { SvxSizeItem } from "../../../../editeng/inc/sizeitem";
 import type { SfxBoolItem } from "../../../../svl/source/items/cenumitm";
@@ -529,18 +530,32 @@ it("preserves fixed ODF date and time snapshots and filename formats", /** Reads
   }
 });
 
-it("retains the native date and filename footer from tdf167019", /** Isolates the upstream header/footer XML from the workbook's conditional formats. @returns Completion. */ async () => {
-  const source = await DocumentArchive.open(fixture("tdf167019"));
-  const headerFooter = (await source.readTextEntry(worksheet)).match(
-    /<headerFooter>.*?<\/headerFooter>/su,
-  )?.[0];
-  assert(headerFooter);
-  const document = await ExcelFilter.importDocument(await patched("<pageMargins/>" + headerFooter));
+it("retains the native date and filename footer from the original tdf167019 workbook", /** Opens the unchanged upstream workbook and checks the exported footer and formulas. @returns Completion. */ async () => {
+  const document = await ExcelFilter.importDocument(fixture("tdf167019"));
   try {
-    const archive = await DocumentArchive.open(await exportXlsx(document));
-    expect(await archive.readTextEntry(worksheet)).toMatch(
-      /<oddFooter>&amp;L[^<]*&amp;D&amp;C[^<]*&amp;Z&amp;F&amp;R[^<]*&amp;P\/&amp;N<\/oddFooter>/u,
-    );
+    const worker = decodeCalcDocument(structuredClone(encodeCalcDocument(document)));
+    try {
+      const restored = await readOdsDocument(await writeOdsDocument(worker));
+      try {
+        for (const candidate of [document, restored]) {
+          expect(candidate.GetValue(new ScAddress(3, 3))).toBe(117);
+          expect(candidate.GetValue(new ScAddress(3, 4))).toBe(123.25);
+          expect(candidate.GetValue(new ScAddress(3, 5))).toBe(127);
+          const archive = await DocumentArchive.open(await exportXlsx(candidate));
+          const xml = await archive.readTextEntry(worksheet);
+          expect(xml).toMatch(
+            /<oddFooter>&amp;L[^<]*&amp;D&amp;C[^<]*&amp;Z&amp;F&amp;R[^<]*&amp;P\/&amp;N<\/oddFooter>/u,
+          );
+          expect(xml).toContain("_xlfn.MINIFS(C7:C10,C7:C10,&quot;&gt;0&quot;)");
+          expect(xml).toContain("AVERAGEIF(C7:C10,&quot;&gt;0&quot;)");
+          expect(xml).toContain("_xlfn.MAXIFS(C7:C10,C7:C10,&quot;&gt;0&quot;)");
+        }
+      } finally {
+        restored.Dispose();
+      }
+    } finally {
+      worker.Dispose();
+    }
   } finally {
     document.Dispose();
   }

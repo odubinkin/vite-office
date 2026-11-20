@@ -50,7 +50,8 @@
       "Registers the nullary logical opcodes with original returned format and preserves the original spreadsheet spill error token.",
       "Compiles the native concatenation function arity and the expression's separate ConcatLine precedence.",
       "Admits the native VLOOKUP and HLOOKUP opcodes through the existing lexical and formula-token path, preserving the original arguments in the RPN function token.",
-      "Compiles scalar IF using the native conditional jump offsets, comparisons and variable-arity reference calls."
+      "Compiles scalar IF using the native conditional jump offsets, comparisons and variable-arity reference calls.",
+      "Compiles AVERAGEIF, MINIFS and MAXIFS using the existing variable-arity function path and native parameter classification."
     ],
     "omittedResponsibilities": [
       "All opcode families and services outside the scalar token subset, including text scanning, function calls, II and matrix compilation; complete upstream QA is not executed.",

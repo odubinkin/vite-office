@@ -55,7 +55,7 @@ function createSymbolMap(resource: ReadonlyMap<OpCode, string>): Readonly<Record
         /** Reuses the native symbol spelling for scanning. @param entry - Source entry. @returns Scanner entry. */ ([
           op,
           symbol,
-        ]) => [symbol, op],
+        ]) => [symbol.toUpperCase(), op],
       ),
   );
 }

@@ -138,3 +138,53 @@ test("opens the unmodified tdf58243 workbook and preserves the named reference e
   await nameBox.press("Enter");
   await expect(cell).toHaveText("NOM");
 });
+
+test("recalculates the original tdf167019 formulas after browser storage reopen", /** Exercises the unmodified XLSX and preserves its formulas in the downloaded workbook. @param fixtures - Browser fixtures. @param fixtures.page - Chromium page. @returns Completion. */ async ({
+  page,
+}) => {
+  const fixture = new URL(
+    "../../../../vendor/libreoffice-reference/sc/qa/unit/data/xlsx/tdf167019.xlsx",
+    import.meta.url,
+  );
+  const open = page.getByRole("button", { name: "Open", exact: true });
+  const nameBox = page.getByRole("textbox", { name: "Name Box" });
+  await page.goto("/calc");
+  await open.click();
+  await page.getByRole("tab", { name: "On computer" }).click();
+  await page.getByLabel("Browse").setInputFiles({
+    buffer: await readFile(fixture),
+    name: "tdf167019.xlsx",
+    mimeType: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+  });
+  const minimum = page.getByRole("gridcell", { name: /^D4(?:\s|$)/u });
+  await expect(page.getByRole("heading", { name: "tdf167019" })).toBeVisible();
+  await nameBox.fill("D4");
+  await nameBox.press("Enter");
+  await expect(minimum).toHaveText("117");
+  await page.getByRole("menuitem", { name: "File" }).click();
+  await page.getByRole("menuitem", { name: "Save As…" }).click();
+  await page.getByRole("textbox", { name: "New copy name" }).fill("Conditional values copy");
+  await page.getByRole("button", { name: "Save copy" }).click();
+  await expect(page.getByRole("dialog")).toHaveCount(0);
+
+  await page.reload();
+  await open.click();
+  await page.getByRole("tab", { name: "In browser" }).click();
+  await page.getByRole("button", { name: "Conditional values copy", exact: true }).click();
+  await expect(minimum).toHaveText("117");
+  await expect(page.getByRole("gridcell", { name: /^D5(?:\s|$)/u })).toHaveText("123");
+  await expect(page.getByRole("gridcell", { name: /^D6(?:\s|$)/u })).toHaveText("127");
+
+  const pending = page.waitForEvent("download");
+  await page.getByRole("menuitem", { name: "File" }).click();
+  await page.getByRole("menuitem", { name: "Export…" }).click();
+  await page.getByRole("button", { name: "Download XLSX" }).click();
+  const path = await (await pending).path();
+  if (!path) throw new Error("Missing XLSX download.");
+  const saved = await DocumentArchive.open(await readFile(path));
+  const xml = await saved.readTextEntry("xl/worksheets/sheet1.xml");
+  expect(xml).toContain("_xlfn.MINIFS(D7:D10,D7:D10,&quot;&gt;0&quot;)");
+  expect(xml).toContain("AVERAGEIF(D7:D10,&quot;&gt;0&quot;)");
+  expect(xml).toMatch(/<c r="D5"[^>]*><f>[^<]+<\/f><v>123\.25<\/v><\/c>/u);
+  expect(xml).toContain("_xlfn.MAXIFS(D7:D10,D7:D10,&quot;&gt;0&quot;)");
+});

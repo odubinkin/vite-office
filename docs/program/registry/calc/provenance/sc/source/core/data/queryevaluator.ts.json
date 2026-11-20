@@ -16,7 +16,8 @@
       "compareByString"
     ],
     "preservedResponsibilities": [
-      "Evaluates numeric equality with RTL approximation, compares the original cell input string for exact queries, and applies the configured case-insensitive collator for the ordered string criterion. It preserves numeric and text domains during ordered lookup."
+      "Evaluates numeric equality with RTL approximation, compares the original cell input string for exact queries, and applies the configured case-insensitive collator for the ordered string criterion. It preserves numeric and text domains during ordered lookup.",
+      "Applies prepared conditional aggregate relational and blank-cell criteria over real worksheet values, preserving the existing direct lookup path."
     ],
     "omittedResponsibilities": [
       "Advanced filter formats, date criteria, multi-entry operators and format-as-shown rounding remain pending."

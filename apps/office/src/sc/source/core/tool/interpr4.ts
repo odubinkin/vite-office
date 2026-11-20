@@ -47,6 +47,7 @@ import { GetString as GetEditString } from "./editutil";
 import { ScMatValType } from "../../../inc/types";
 import type { ScExternalCacheToken } from "../../ui/docshell/externalrefmgr";
 import { CalculateMatrixLookup, InterpretReferenceOpcode, ScAnd } from "./interpr1";
+import { InterpretConditionalAggregate } from "./interpr1.conditional";
 import { CompareScalar } from "./compare";
 import { ScRangeFunc } from "./interpr2";
 import { isComparison } from "../../../../formula/inc/FormulaCompiler";
@@ -567,8 +568,8 @@ export class ScInterpreter {
     return undefined;
   }
 
-  /** Reads the lookup key with native cell and matrix type selection, without numeric text coercion. @returns Lookup key or absence following an error. */
-  private FillLookupEntry(): ScQueryItem | undefined {
+  /** Reads a query key with native cell and matrix type selection. @param emptyAsZero - Conditional aggregate policy for empty cell references. @returns Query key or absence following an error. */
+  private FillLookupEntry(emptyAsZero = false): ScQueryItem | undefined {
     let key: number | string;
     const token = this.pStack.at(-1);
     if (token instanceof FormulaDoubleToken) return this.GetDouble();
@@ -586,6 +587,7 @@ export class ScInterpreter {
           return undefined;
       }
       const cell = new ScRefCellValue(this.mrDoc, address);
+      if (emptyAsZero && cell.isEmpty()) return 0;
       if (cell.hasNumeric()) return this.GetCellValue(address, cell);
       key = this.GetCellString(cell);
     } else {
@@ -871,7 +873,10 @@ export class ScInterpreter {
               : power(left, right),
         );
       } else if (op === OpCode.ocRange) ScRangeFunc.call(this);
-      else if (!InterpretReferenceOpcode.call(this, token))
+      else if (
+        !InterpretConditionalAggregate.call(this, token) &&
+        !InterpretReferenceOpcode.call(this, token)
+      )
         throw new Error("Interpreter opcode is not implemented");
       if (this.nGlobalError !== FormulaError.NONE) break;
     }

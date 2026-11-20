@@ -7183,3 +7183,14 @@ original invalid reference as the OOXML `#REF!` token.
 
 - [Calc name creation during XLSX import](../../vendor/libreoffice-reference/sc/source/filter/oox/defnamesbuffer.cxx)
 - [Native name matching and export](../../vendor/libreoffice-reference/sc/source/filter/excel/xename.cxx)
+
+### CALC-759 — MINIFS and MAXIFS confuse finite extrema with no match
+
+The original MINIFS result uses `double::max()` as its uninitialized
+minimum and returns zero when that sentinel remains. MAXIFS does the same
+with `double::lowest()`. A matched value equal to the relevant finite
+sentinel therefore also returns zero. Calc preserves those strict
+comparisons in the scalar worksheet-range path.
+
+- [Original conditional aggregate wrappers](../../vendor/libreoffice-reference/sc/source/core/tool/interpr1.cxx)
+- [Conditional aggregate regression](../../apps/office/src/sc/source/core/tool/interpr1.conditional.test.ts)

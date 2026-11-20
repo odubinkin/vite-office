@@ -1,0 +1,45 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "status": "mapped",
+    "localPath": "apps/office/src/sc/source/core/tool/interpr1.conditional.ts",
+    "upstreamPath": "sc/source/core/tool/interpr1.cxx",
+    "localSymbols": [
+      "InterpretConditionalAggregate"
+    ],
+    "upstreamSymbols": [
+      "ScInterpreter::IterateParametersIf"
+    ],
+    "preservedResponsibilities": [
+      "Uses the scalar worksheet-reference paths for AVERAGEIF, MINIFS and MAXIFS, including original left-edge alignment, arity, range geometry and result sentinels."
+    ],
+    "omittedResponsibilities": [
+      "Matrix operands and external reference-list arrays, threaded execution, and ICU regular-expression criteria remain pending."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sc/source/core/tool/interpr1.conditional.ts",
+          "marker": "InterpretConditionalAggregate"
+        },
+        {
+          "path": "apps/office/src/sc/source/core/tool/interpr1.conditional.test.ts",
+          "marker": "evaluates Excel criteria"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sc/source/core/tool/interpr1.cxx",
+          "marker": "ScInterpreter::IterateParametersIf"
+        }
+      ]
+    },
+    "filenameDivergence": {
+      "localPath": "apps/office/src/sc/source/core/tool/interpr1.conditional.ts",
+      "stackNecessity": "responsibility-split",
+      "rationale": "Keeps conditional range aggregates beside the other original interpr1 interpreter operations within the TypeScript source budget."
+    }
+  }
+}
