@@ -840,44 +840,9 @@ export class ScAttrArray {
   SetPatternAreaSafe(first: number, last: number, wanted: CellAttributeHolder): void {
     deletion.SetPatternAreaSafe.call(this, first, last, wanted);
   }
-  /** Original DeleteHardAttr clears direct items while retaining styles and both merge items;canonical runs are re-searched after replacement. @param first - Ordered valid first row. @param last - Ordered valid last row. @returns Nothing. */
+  /** Clears hard attributes on the native array. @param first - First row. @param last - Last row. @returns Nothing. */
   DeleteHardAttr(first: number, last: number): void {
-    this.SetDefaultIfNotInit();
-    const defaults = new CellAttributeHolder(
-        this.rDocument.getCellAttributeHelper().getDefaultCellAttribute() as ScPatternAttr,
-      ),
-      index: [number] = [0];
-    try {
-      this.Search(first, index);
-      let row = index[0] > 0 ? (this.mvData[index[0] - 1] as ScAttrEntry).nEndRow + 1 : 0;
-      if (row < first) row = first;
-      while (row <= last) {
-        const entry = this.mvData[index[0]] as ScAttrEntry,
-          old = entry.getScPatternAttr() as ScPatternAttr;
-        if (old.GetItemSet().Count()) {
-          const stop = Math.min(entry.nEndRow, last),
-            next = new ScPatternAttr(old);
-          for (let which = ATTR_PATTERN_START; which <= ATTR_PATTERN_END; which++)
-            if (which !== ATTR_MERGE && which !== ATTR_MERGE_FLAG) next.ItemSetClearItem(which);
-          if (next.equals(defaults.getScPatternAttr() as ScPatternAttr)) {
-            next.Dispose();
-            this.SetPatternArea(row, stop, defaults);
-          } else {
-            const holder = new CellAttributeHolder(next, true);
-            try {
-              this.SetPatternArea(row, stop, holder);
-            } finally {
-              holder.Dispose();
-            }
-          }
-          this.Search(row, index);
-        }
-        ++index[0];
-        row = (this.mvData[index[0] - 1] as ScAttrEntry).nEndRow + 1;
-      }
-    } finally {
-      defaults.Dispose();
-    }
+    deletion.DeleteHardAttr.call(this, first, last);
   }
   /** Original attarray.hxx cursor assignment wraps the same complete-pattern area owner. @param row - Native row. @param holder - Complete canonical pattern. @returns Nothing. */
   SetPattern(row: number, holder: CellAttributeHolder): void {

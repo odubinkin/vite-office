@@ -1,0 +1,65 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sc/source/core/data/document.geometry.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "calc",
+    "subsystem": "scalar-document-editing",
+    "capabilityIds": [],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/sc/source/core/data/document.geometry.ts",
+        "vendor/libreoffice-reference/sc/source/core/data/document.cxx",
+        "apps/office/src/sc/source/filter/xml/ods-default-cell-styles.test.ts"
+      ],
+      "justification": "The existing document methods for row and column geometry and column default selection move to a source-backed fragment with the same ScDocument instance.",
+      "knownViolations": [],
+      "localSymbols": [
+        "SetRowHeightRange",
+        "SetRowHeightOnly",
+        "SetManualHeight",
+        "GetRowHeight",
+        "GetSheetOptimalMinRowHeight",
+        "RowHidden",
+        "RowFiltered",
+        "SetRowHidden",
+        "SetRowFiltered",
+        "ShowRows",
+        "SetColWidth",
+        "SetColWidthOnly",
+        "GetColWidth",
+        "ColHidden",
+        "SetColHidden",
+        "ShowCol",
+        "GetColDefault"
+      ],
+      "sourceResponsibility": "divergent",
+      "upstreamFile": "sc/source/core/data/document.cxx",
+      "upstreamSymbols": [
+        "ScDocument::SetRowHeightRange",
+        "ScDocument::SetRowHeightOnly",
+        "ScDocument::SetManualHeight",
+        "ScDocument::GetRowHeight",
+        "ScDocument::GetSheetOptimalMinRowHeight",
+        "ScDocument::RowHidden",
+        "ScDocument::RowFiltered",
+        "ScDocument::SetRowHidden",
+        "ScDocument::SetRowFiltered",
+        "ScDocument::ShowRows",
+        "ScDocument::SetColWidth",
+        "ScDocument::SetColWidthOnly",
+        "ScDocument::GetColWidth",
+        "ScDocument::ColHidden",
+        "ScDocument::SetColHidden",
+        "ScDocument::ShowCol",
+        "ScDocument::GetColDefault"
+      ]
+    }
+  }
+}

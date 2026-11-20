@@ -1,11 +1,10 @@
+/** @fileoverview Owns the bounded ODF-to-core length conversion responsibility from pinned xmloff/source/core/xmluconv.cxx. */
 import { DateTime } from "../../../offapi/com/sun/star/util/DateTime";
 import { Date as ToolsDate, type DateConstReference } from "../../../tools/source/datetime/tdate";
 import { Time } from "../../../tools/source/datetime/ttime";
 import { approxFloor } from "../../../sal/inc/rtl/math";
 import { rtl_math_StringFormat } from "../../../sal/inc/rtl/math-values";
 import { doubleToString } from "../../../sal/rtl/strtmpl.math";
-/** @fileoverview Owns the bounded ODF-to-core length conversion responsibility from pinned xmloff/source/core/xmluconv.cxx. */
-
 import { Converter, type CoreMeasureUnit } from "../../../sax/source/tools/converter";
 import * as N from "../../../offapi/com/sun/star/style/NumberingType";
 import {

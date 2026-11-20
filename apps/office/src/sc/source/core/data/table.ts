@@ -15,7 +15,6 @@ import { SvtScriptType } from "../../../../svl/inc/languageoptions";
 import type { SfxPoolItem } from "../../../../svl/inc/poolitem";
 import { SharedString, type SharedStringConstReference } from "../../../../svl/inc/sharedstring";
 import type { SvtBroadcaster } from "../../../../svl/source/notify/broadcast";
-import type { SvtListener } from "../../../../svl/source/notify/listener";
 import { INITIALCOLCOUNT, ScAddress, ScRange } from "../../../inc/address";
 import type { ScLineFlags, ScMergePatternState } from "../../../inc/attarray";
 import { ScRefCellValue } from "../../../inc/cellvalue";
@@ -914,38 +913,13 @@ export class ScTable {
       ? (this.aCol[col] as ScColumn).GetBroadcaster(row)
       : null;
   }
-  /** Starts actual single-cell listening, allocating only required columns. @param address - Position. @param listener - Listener. @returns Nothing. */
-  StartListening(
-    ...args:
-      [ScAddress, SvtListener<SfxHint>] | [StartListeningContext, ScAddress, SvtListener<SfxHint>]
-  ): void {
-    if (args.length === 3) {
-      const [context, address, listener] = args;
-      if (this.rDocument.ValidCol(address.Col()))
-        this.CreateColumnIfNotExists(address.Col()).StartListening(context, address, listener);
-      return;
-    }
-    const [address, listener] = args;
-    if (this.rDocument.ValidColRow(address.Col(), address.Row()))
-      this.CreateColumnIfNotExists(address.Col()).StartListening(listener, address.Row());
+  /** StartListening on the native sheet. @param args - Native listener arguments. @returns Nothing. */
+  StartListening(...args: Parameters<typeof table5.StartListening>): void {
+    table5.StartListening.apply(this, args);
   }
-  /** Ends single-cell listening without allocating. @param address - Position. @param listener - Listener. @returns Nothing. */
-  EndListening(
-    ...args:
-      [ScAddress, SvtListener<SfxHint>] | [EndListeningContext, ScAddress, SvtListener<SfxHint>]
-  ): void {
-    if (args.length === 3) {
-      const [context, address, listener] = args;
-      if (this.rDocument.ValidCol(address.Col()) && address.Col() < this.aCol.length)
-        (this.aCol[address.Col()] as ScColumn).EndListening(context, address, listener);
-      return;
-    }
-    const [address, listener] = args;
-    if (
-      this.rDocument.ValidColRow(address.Col(), address.Row()) &&
-      address.Col() < this.aCol.length
-    )
-      (this.aCol[address.Col()] as ScColumn).EndListening(listener, address.Row());
+  /** EndListening on the native sheet. @param args - Native listener arguments. @returns Nothing. */
+  EndListening(...args: Parameters<typeof table5.EndListening>): void {
+    table5.EndListening.apply(this, args);
   }
   /** Marks native default-context formula state without per-cell calculation. @param context - Default dirty context. @returns Nothing. */
   SetAllFormulasDirty(context: SetFormulaDirtyContext): void {

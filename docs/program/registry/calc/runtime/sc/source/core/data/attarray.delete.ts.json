@@ -34,7 +34,8 @@
         "DeleteArea",
         "ApplyFlags",
         "RemoveFlags",
-        "ExtendMerge"
+        "ExtendMerge",
+        "DeleteHardAttr"
       ],
       "sourceResponsibility": "divergent",
       "upstreamFile": "sc/source/core/data/attarray.cxx",
@@ -44,7 +45,8 @@
         "ScAttrArray::DeleteArea",
         "ScAttrArray::ApplyFlags",
         "ScAttrArray::RemoveFlags",
-        "ScAttrArray::ExtendMerge"
+        "ScAttrArray::ExtendMerge",
+        "ScAttrArray::DeleteHardAttr"
       ]
     }
   }

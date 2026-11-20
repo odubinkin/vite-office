@@ -41,7 +41,6 @@ import { SharedString, type SharedStringConstReference } from "../../../../svl/i
 import type { RefUpdateContext, SetFormulaDirtyContext } from "../../../inc/refupdatecontext";
 import { ScRefCellValue } from "../../../inc/cellvalue";
 import { SvtBroadcaster } from "../../../../svl/source/notify/broadcast";
-import type { SvtListener } from "../../../../svl/source/notify/listener";
 import { SfxHint, SfxHintId } from "../../../../svl/inc/hint";
 import { ScHint } from "../../../inc/brdcst";
 import { const_iterator_base } from "../../../../external/mdds/include/mdds/multi_type_vector/soa/iterator";
@@ -847,76 +846,13 @@ export class ScColumn extends ScColumnData {
     this.maBroadcasters.get(row, broadcaster_element_callbacks, value);
     return value[0];
   }
-  /** Registers with the actual row broadcaster, allocating it only when required. @param listener - Listener. @param row - Valid row. @returns Nothing. */
-  StartListening(
-    ...args:
-      [SvtListener<SfxHint>, number] | [StartListeningContext, ScAddress, SvtListener<SfxHint>]
-  ): void {
-    if (args.length === 2) {
-      this.startListeningAt(this.maBroadcasters.position(args[1]), args[1], args[0]);
-      return;
-    }
-    const [context, address, listener] = args;
-    if (!this.rDocument.ValidRow(address.Row())) return;
-    const cursor = context.getBlockPosition(address.Tab(), address.Col());
-    if (!cursor) return;
-    const position = this.maBroadcasters.position(
-      cursor.miBroadcasterPos as NonNullable<ColumnBlockPosition["miBroadcasterPos"]>,
-      address.Row(),
-    );
-    cursor.miBroadcasterPos = this.startListeningAt(position, address.Row(), listener);
+  /** StartListening on the native column. @param args - Native listener arguments. @returns Nothing. */
+  StartListening(...args: Parameters<typeof column2.StartListening>): void {
+    column2.StartListening.apply(this, args);
   }
-  /** Original anonymous startListening helper updates the borrowed store position. Its trait permits only broadcaster/empty blocks,so the native wrong-type assertion is outside this initialized owner contract. @param position - Actual broadcaster block position. @param row - Row. @param listener - Native observer. @returns Updated iterator. */
-  private startListeningAt(
-    position: ReturnType<BroadcasterStoreType["position"]>,
-    row: number,
-    listener: SvtListener<SfxHint>,
-  ): ReturnType<BroadcasterStoreType["begin"]> {
-    if (position.first.get().type === element_type_broadcaster) {
-      listener.StartListening(
-        broadcaster_block.at(
-          position.first.get().data as base_element_block,
-          position.second,
-        ) as SvtBroadcaster<SfxHint>,
-      );
-      return position.first;
-    }
-    const broadcaster = new SvtBroadcaster<SfxHint>();
-    listener.StartListening(broadcaster);
-    return this.maBroadcasters.set(position.first, row, broadcaster, broadcaster_element_callbacks);
-  }
-  /** Ends reciprocal registration and removes an empty broadcaster. @param listener - Listener. @param row - Valid row. @returns Nothing. */
-  EndListening(
-    ...args: [SvtListener<SfxHint>, number] | [EndListeningContext, ScAddress, SvtListener<SfxHint>]
-  ): void {
-    if (args.length === 3) {
-      const [context, address, listener] = args,
-        cursor = context.getBlockPosition(address.Tab(), address.Col());
-      if (!cursor) return;
-      const position = this.maBroadcasters.position(
-        cursor.miBroadcasterPos as NonNullable<ColumnBlockPosition["miBroadcasterPos"]>,
-        address.Row(),
-      );
-      cursor.miBroadcasterPos = position.first;
-      const block = position.first.get();
-      if (block.type !== element_type_broadcaster) return;
-      const broadcaster = broadcaster_block.at(
-        block.data as base_element_block,
-        position.second,
-      ) as SvtBroadcaster<SfxHint>;
-      listener.EndListening(broadcaster);
-      if (!broadcaster.HasListeners())
-        context.addEmptyBroadcasterPosition(address.Tab(), address.Col(), address.Row());
-      return;
-    }
-    const [listener, row] = args;
-    const broadcaster = this.GetBroadcaster(row);
-    if (!broadcaster) return;
-    listener.EndListening(broadcaster);
-    if (!broadcaster.HasListeners()) {
-      if (this.rDocument.IsDelayedDeletingBroadcasters()) this.mbEmptyBroadcastersPending = true;
-      else this.maBroadcasters.set_empty(row, row);
-    }
+  /** EndListening on the native column. @param args - Native listener arguments. @returns Nothing. */
+  EndListening(...args: Parameters<typeof column2.EndListening>): void {
+    column2.EndListening.apply(this, args);
   }
   /** Original column2 pending cleanup scans actual managed broadcaster elements. @returns Nothing. */
   DeleteEmptyBroadcasters(): void {

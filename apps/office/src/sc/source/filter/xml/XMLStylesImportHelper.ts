@@ -19,7 +19,7 @@ export class ScMyStylesImportHelper {
   private pending: CellStyleRange | undefined;
   private readonly ranges: ResolvedCellStyleRange[] = [];
 
-  /** Binds the importer which applies the ranges through the actual document. @param owner - Import owner. */
+  /** Binds the importer which applies the ranges through the actual document. @param owner - Import owner. @returns The range helper. */
   constructor(private readonly owner: ScXMLImport) {}
 
   /** Records declared defaults over the source's repeated columns. @param name - XML cell style. @param count - Clipped width. @returns Nothing. */

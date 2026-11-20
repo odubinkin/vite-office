@@ -8,7 +8,7 @@ export class ScMyDefaultStyles {
   private readonly names: string[] = [];
   private readonly tail: string;
 
-  /** Selects each allocated column and the shared trailing column pattern. @param document - Format owner. @param tab - Sheet. @param lastRow - Inclusive export row. @param allocated - Number of real columns. @param styleName - ODF style lookup. */
+  /** Selects each allocated column and the shared trailing column pattern. @param document - Format owner. @param tab - Sheet. @param lastRow - Inclusive export row. @param allocated - Number of real columns. @param styleName - ODF style lookup. @returns The column defaults. */
   constructor(
     document: ScDocument,
     tab: number,
@@ -17,11 +17,14 @@ export class ScMyDefaultStyles {
     styleName: (pattern: ScPatternAttr) => string,
   ) {
     /** Finds the ODF name at the core's winning row. @param col - Column. @returns Selected style. */
-    const nameAt = (col: number): string => {
-      const row = document.GetColDefault(tab, col, lastRow);
-      const pattern = document.GetPattern(new ScAddress(col, row, tab));
-      return pattern ? styleName(pattern) : "";
-    };
+    const nameAt =
+      /** Resolves the winning row style. @param col - Column. @returns ODF style name. */ (
+        col: number,
+      ): string => {
+        const row = document.GetColDefault(tab, col, lastRow);
+        const pattern = document.GetPattern(new ScAddress(col, row, tab));
+        return pattern ? styleName(pattern) : "";
+      };
     for (let col = 0; col < allocated; col++) this.names.push(nameAt(col));
     this.tail = nameAt(allocated);
   }

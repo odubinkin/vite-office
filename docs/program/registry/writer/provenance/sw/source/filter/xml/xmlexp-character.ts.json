@@ -23,7 +23,8 @@
     },
     "localPath": "apps/office/src/sw/source/filter/xml/xmlexp-character.ts",
     "localSymbols": [
-      "getCharacterProperties"
+      "getCharacterProperties",
+      "projectXmlTextRuns"
     ],
     "omittedResponsibilities": [
       "Unrepresented ODF text properties and named character style persistence remain open."

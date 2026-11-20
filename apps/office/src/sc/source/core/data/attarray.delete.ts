@@ -1,4 +1,5 @@
 /** @fileoverview Original attarray.cxx deletion/merge responsibilities partitioned from its size-bounded ScAttrArray facade;all operations use the same native attribute owner. */
+import { ATTR_PATTERN_START, ATTR_PATTERN_END } from "../../../inc/scitems";
 import type { ScDocumentPool } from "./docpool";
 import type { ScAttrArray, ScAttrEntry } from "./attarray";
 import { CellAttributeHolder, ScPatternAttr } from "../../../inc/patattr";
@@ -211,4 +212,44 @@ export function RemoveFlags(this: ScAttrArray, first: number, last: number, flag
     row = (entries[index[0] - 1] as ScAttrEntry).nEndRow + 1;
   }
   return changed;
+}
+
+/** Original DeleteHardAttr clears direct items while retaining styles and both merge items;canonical runs are re-searched after replacement. @param this - Actual owner. @param first - Ordered valid first row. @param last - Ordered valid last row. @returns Nothing. */
+export function DeleteHardAttr(this: ScAttrArray, first: number, last: number): void {
+  this["SetDefaultIfNotInit"]();
+  const defaults = new CellAttributeHolder(
+      this["rDocument"].getCellAttributeHelper().getDefaultCellAttribute() as ScPatternAttr,
+    ),
+    index: [number] = [0];
+  try {
+    this["Search"](first, index);
+    let row = index[0] > 0 ? (this["mvData"][index[0] - 1] as ScAttrEntry).nEndRow + 1 : 0;
+    if (row < first) row = first;
+    while (row <= last) {
+      const entry = this["mvData"][index[0]] as ScAttrEntry,
+        old = entry.getScPatternAttr() as ScPatternAttr;
+      if (old.GetItemSet().Count()) {
+        const stop = Math.min(entry.nEndRow, last),
+          next = new ScPatternAttr(old);
+        for (let which = ATTR_PATTERN_START; which <= ATTR_PATTERN_END; which++)
+          if (which !== ATTR_MERGE && which !== ATTR_MERGE_FLAG) next.ItemSetClearItem(which);
+        if (next.equals(defaults.getScPatternAttr() as ScPatternAttr)) {
+          next.Dispose();
+          this.SetPatternArea(row, stop, defaults);
+        } else {
+          const holder = new CellAttributeHolder(next, true);
+          try {
+            this.SetPatternArea(row, stop, holder);
+          } finally {
+            holder.Dispose();
+          }
+        }
+        this["Search"](row, index);
+      }
+      ++index[0];
+      row = (this["mvData"][index[0] - 1] as ScAttrEntry).nEndRow + 1;
+    }
+  } finally {
+    defaults.Dispose();
+  }
 }

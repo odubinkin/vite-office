@@ -1,4 +1,9 @@
 /** @fileoverview Native table5 manual/page-break sets and ownership transfers;pagination/device calculation remains outside this kernel slice. */
+import type { ScAddress } from "../../../inc/address";
+import type { ScColumn } from "../../../inc/column";
+import type { StartListeningContext, EndListeningContext } from "../../../inc/listenercontext";
+import type { SfxHint } from "../../../../svl/inc/hint";
+import type { SvtListener } from "../../../../svl/source/notify/listener";
 import type { ScTable } from "../../../inc/table";
 import { ScTableProtection } from "./tabprotection";
 import { scStyleNameResourcesEnglish } from "../../../inc/globstr";
@@ -117,4 +122,40 @@ export function HasRowManualBreak(this: ScTable, index: number): boolean {
 /** Original validated manual-break query. @param this - Sheet. @param index - Native col index. @returns Membership. */
 export function HasColManualBreak(this: ScTable, index: number): boolean {
   return this["rDocument"].ValidCol(index) && this["maColManualBreaks"].has(index);
+}
+
+/** Starts actual single-cell listening, allocating only required columns. @param this - Native sheet. @param args - Position, listener and optional context. @returns Nothing. */
+export function StartListening(
+  this: ScTable,
+  ...args:
+    [ScAddress, SvtListener<SfxHint>] | [StartListeningContext, ScAddress, SvtListener<SfxHint>]
+): void {
+  if (args.length === 3) {
+    const [context, address, listener] = args;
+    if (this["rDocument"].ValidCol(address.Col()))
+      this.CreateColumnIfNotExists(address.Col()).StartListening(context, address, listener);
+    return;
+  }
+  const [address, listener] = args;
+  if (this["rDocument"].ValidColRow(address.Col(), address.Row()))
+    this.CreateColumnIfNotExists(address.Col()).StartListening(listener, address.Row());
+}
+/** Ends single-cell listening without allocating. @param this - Native sheet. @param args - Position, listener and optional context. @returns Nothing. */
+export function EndListening(
+  this: ScTable,
+  ...args:
+    [ScAddress, SvtListener<SfxHint>] | [EndListeningContext, ScAddress, SvtListener<SfxHint>]
+): void {
+  if (args.length === 3) {
+    const [context, address, listener] = args;
+    if (this["rDocument"].ValidCol(address.Col()) && address.Col() < this["aCol"].length)
+      (this["aCol"][address.Col()] as ScColumn).EndListening(context, address, listener);
+    return;
+  }
+  const [address, listener] = args;
+  if (
+    this["rDocument"].ValidColRow(address.Col(), address.Row()) &&
+    address.Col() < this["aCol"].length
+  )
+    (this["aCol"][address.Col()] as ScColumn).EndListening(listener, address.Row());
 }

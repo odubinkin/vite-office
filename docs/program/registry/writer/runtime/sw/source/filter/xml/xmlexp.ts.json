@@ -190,7 +190,6 @@
         "exportStylesXml",
         "exportContentXml",
         "exportMetaXml",
-        "projectXmlTextRuns",
         "projectBlock"
       ],
       "sourceResponsibility": "aligned",

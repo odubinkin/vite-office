@@ -1,4 +1,11 @@
 /** @fileoverview Projects native Writer character attributes into the ODF text-property map. */
+import { RES_TXTATR_AUTOFMT, RES_TXTATR_INETFMT } from "../../../inc/hintids";
+import { GetTextAttrMode } from "../../../inc/swtypes";
+import { SwFormatAutoFormat } from "../../core/txtnode/txatbase";
+import { SwFormatINetFormat } from "../../core/txtnode/fmtatr2";
+import { SwTextCharFormat } from "../../core/txtnode/txtatr2";
+import type { SwTextNode } from "../../core/txtnode/ndtxt";
+import { getCharacterOdfStyleName } from "./xmlexp-style-names";
 import { writerTextColorValue, writerHighlightColorValue } from "../../core/attr/swatrset";
 import { SvxColorItem } from "../../../../editeng/inc/colritem";
 import { SvxBrushItem } from "../../../../editeng/source/items/frmitems.brush";
@@ -30,8 +37,9 @@ import {
 } from "../../../../editeng/source/items/textitem";
 import { ConvertFontWeight, ConvertFontSlant } from "../../../../vcl/inc/unohelp";
 import { getFontFamilyGeneric } from "../../../../xmloff/source/style/fonthdl";
-import type { SfxItemSet } from "../../../../svl/source/items/itemset";
+import { SfxItemSet } from "../../../../svl/source/items/itemset";
 import type { OdfCharacterProperties } from "../../../../xmloff/source/text/txtparae.types";
+import type { XMLTextParagraphSource } from "../../../../xmloff/source/text/txtparae";
 import { getOdfThemeColor } from "../../../../xmloff/source/text/XMLComplexColorContext";
 import {
   RES_CHRATR_CJK_POSTURE,
@@ -234,4 +242,69 @@ export function getCharacterProperties(
         }
       : {}),
   };
+}
+
+/** Enumerates actual native hint boundaries without merging through browser booleans. @param node - Canonical text owner. @returns Source item-based XML runs. */
+export function projectXmlTextRuns(node: SwTextNode): XMLTextParagraphSource["runs"] {
+  const boundaries = new Set([0, node.Len()]);
+  const hints = node.GetpSwpHints()?.entries() ?? [];
+  for (const hint of hints) {
+    boundaries.add(hint.GetStart());
+    boundaries.add(hint.end);
+  }
+  const ordered = [...boundaries].sort(
+    /** Orders UTF16 source positions. @param a - First. @param b - Second. @returns Ordering. */ (
+      a,
+      b,
+    ) => a - b,
+  );
+  return ordered.slice(0, -1).map(
+    /** Reads the native items and independent hyperlink for one source segment. @param start - Segment start. @param index - Boundary index. @returns XML run. */ (
+      start,
+      index,
+    ) => {
+      const end = ordered[index + 1] as number;
+      const styles = hints
+        .filter(
+          /** Finds fully covering native character portions. @param hint - Native text hint. @returns Matching style span. */
+          (hint): hint is SwTextCharFormat =>
+            hint instanceof SwTextCharFormat && hint.GetStart() <= start && end <= hint.GetEnd(),
+        )
+        .sort(
+          /** Uses the native CharStyleNames property order. @param a - First style. @param b - Second style. @returns Native order. */
+          (a, b) => a.GetSortNumber() - b.GetSortNumber(),
+        )
+        .flatMap(
+          /** Resolves the actual character format identity. @param hint - Style span. @returns Encoded style name if defined. */
+          (hint) => {
+            const format = hint.GetAttr().GetCharFormat();
+            return format ? [getCharacterOdfStyleName(format)] : [];
+          },
+        );
+      const auto = node.GetTextAttrAt(start, RES_TXTATR_AUTOFMT, GetTextAttrMode.Default)?.format;
+      const direct = auto instanceof SwFormatAutoFormat ? auto.GetStyleHandle() : undefined;
+      let properties: OdfCharacterProperties;
+      if (styles.length) properties = getCharacterProperties(direct, false) ?? {};
+      else if (direct === undefined)
+        properties = getCharacterProperties(node.GetSwAttrSet(), true) ?? {};
+      else {
+        const items = new SfxItemSet(node.GetSwAttrSet());
+        try {
+          items.PutSet(direct);
+          properties = getCharacterProperties(items, true) ?? {};
+        } finally {
+          items.Dispose();
+        }
+      }
+      const link = node.GetTextAttrAt(start, RES_TXTATR_INETFMT, GetTextAttrMode.Default);
+      return {
+        text: node.GetText().slice(start, end),
+        properties,
+        ...(styles.length ? { characterStyles: styles } : {}),
+        ...(link?.format instanceof SwFormatINetFormat
+          ? { hyperlink: link.format.GetHyperlink() }
+          : {}),
+      };
+    },
+  );
 }

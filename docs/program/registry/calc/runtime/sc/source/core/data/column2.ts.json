@@ -24,13 +24,17 @@
       "knownViolations": [],
       "localSymbols": [
         "lcl_GetAttribHeight",
-        "SetNumberFormat"
+        "SetNumberFormat",
+        "StartListening",
+        "EndListening"
       ],
       "sourceResponsibility": "unverified",
       "upstreamFile": "sc/source/core/data/column2.cxx",
       "upstreamSymbols": [
         "lcl_GetAttribHeight",
-        "ScColumn::SetNumberFormat"
+        "ScColumn::SetNumberFormat",
+        "ScColumn::StartListening",
+        "ScColumn::EndListening"
       ]
     }
   }

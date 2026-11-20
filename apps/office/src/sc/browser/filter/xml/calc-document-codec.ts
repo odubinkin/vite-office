@@ -1,6 +1,6 @@
+/** @fileoverview Bounded Calc worker transfer of supported native cells, sparse attributes and geometry; XML remains the durable format. */
 import { ScFormulaCell } from "../../../source/core/data/formulacell";
 import { escapeXml } from "../../../../xmloff/source/text/txtparae";
-/** @fileoverview Bounded Calc worker transfer of supported native cells, sparse attributes and geometry; XML remains the durable format. */
 import {
   decodeMatrixCell,
   encodeMatrixCell,

@@ -12,7 +12,8 @@
       "DeleteArea",
       "ApplyFlags",
       "RemoveFlags",
-      "ExtendMerge"
+      "ExtendMerge",
+      "DeleteHardAttr"
     ],
     "upstreamSymbols": [
       "ScAttrArray::RemoveAreaMerge",
@@ -20,7 +21,8 @@
       "ScAttrArray::DeleteArea",
       "ScAttrArray::ApplyFlags",
       "ScAttrArray::RemoveFlags",
-      "ScAttrArray::ExtendMerge"
+      "ScAttrArray::ExtendMerge",
+      "ScAttrArray::DeleteHardAttr"
     ],
     "preservedResponsibilities": [
       "Original attarray.cxx deletion methods operate on the same actual ScAttrArray owner. RemoveAreaMerge clears full native merge rectangles via canonical document/table/column ApplyAttr;SetPatternAreaSafe retains overlap/autofilter flags and default cell styles. Physical source partition satisfies the1000-line file bound. ScUndoPaste retains native CONTENTS/ATTRIB/NOCAPTIONS normalization and actual content/pattern snapshots. PasteFromClip/EnterBlock and final74 remain pending;no complete parity claim.",

@@ -8,7 +8,7 @@
     "suite": "shared",
     "subsystem": "formatting-model",
     "capabilityIds": [
-      "CAP-59fb3261-21e4-5112-ba27-e5cafe502e21"
+      "CAP-782e286a-ed71-476e-b888-94d395337ec8"
     ],
     "semantic": {
       "behaviorStatus": "unverified",

@@ -25,6 +25,8 @@ export default tseslint.config(
       "third_party/libxml2-wasm/index.d.ts",
       "third_party/libxml2-wasm/constants.mjs",
       "third_party/libxml2-wasm/constants.d.ts",
+      // Byte-exact module from the vendored ZIP implementation.
+      "third_party/zipjs-codecs/crc32.mjs",
       "output/playwright/**",
     ],
   },

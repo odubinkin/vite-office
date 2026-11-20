@@ -34,7 +34,9 @@
         "HasColManualBreak",
         "IsProtected",
         "GetProtection",
-        "SetProtection"
+        "SetProtection",
+        "StartListening",
+        "EndListening"
       ],
       "sourceResponsibility": "divergent",
       "upstreamFile": "sc/source/core/data/table5.cxx",
@@ -51,7 +53,9 @@
         "ScTable::HasColManualBreak",
         "ScTable::IsProtected",
         "ScTable::GetProtection",
-        "ScTable::SetProtection"
+        "ScTable::SetProtection",
+        "ScTable::StartListening",
+        "ScTable::EndListening"
       ]
     }
   }

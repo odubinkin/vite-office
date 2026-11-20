@@ -1,3 +1,4 @@
+/** @fileoverview Calc scalar,cell-font and row/column geometry import over shared fast XML contexts;advanced styles,device layout and objects remain unported. */
 import { FormulaError } from "../../../../formula/inc/errorcodes";
 import { ScFormulaCell } from "../../core/data/formulacell";
 import { SV_COUNTRY_LANGUAGE_OFFSET, SvNumFormatType as T } from "../../../../svl/inc/zforlist";
@@ -7,7 +8,6 @@ import {
   getNumDecimalSep,
   getNumThousandSep,
 } from "../../../../unotools/source/i18n/localedatawrapper";
-/** @fileoverview Calc scalar,cell-font and row/column geometry import over shared fast XML contexts;advanced styles,device layout and objects remain unported. */
 import type { SvXMLNumFormatContext } from "../../../../xmloff/source/style/xmlnumfi";
 
 import { Length, toTwips } from "../../../../o3tl/inc/unit_conversion";

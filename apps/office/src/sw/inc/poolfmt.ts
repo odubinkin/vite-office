@@ -1,9 +1,9 @@
-import { encodeStyleName as encodeWriterOdfStyleName } from "../../xmloff/source/core/xmluconv";
-export { encodeWriterOdfStyleName };
 /**
  * @fileoverview Declares the complete built-in Writer paragraph-style pool from the pinned
  * LibreOffice `sw/inc/poolfmt.hxx` and `SwStyleNameMapper.cxx` tables.
  */
+import { encodeStyleName as encodeWriterOdfStyleName } from "../../xmloff/source/core/xmluconv";
+export { encodeWriterOdfStyleName };
 import characterPool from "./charpool-data.json" with { type: "json" };
 
 /** Original non-paragraph format marker. */

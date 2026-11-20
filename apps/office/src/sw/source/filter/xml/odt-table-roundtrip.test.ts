@@ -152,14 +152,16 @@ describe("Writer canonical ODF tables", /** Verifies the bounded table scenario.
         expect(rows).toHaveLength(3);
         const [first, second, third] = rows;
         assert(first && second && third);
-        /** Reads direct colors at the native box owners. @param row - Native row. @returns Cell background colors. */
-        const colors = (row: typeof first) =>
-          row
-            .GetTabBoxes()
-            .map(
-              /** Reads a box brush. @param box - Native box. @returns Packed color. */ (box) =>
-                frameColor(box.GetFrameFormat())?.GetRGBColor().toUInt32(),
-            );
+        const colors =
+          /** Reads direct box colors. @param row - Native row. @returns Cell background colors. */ (
+            row: typeof first,
+          ) =>
+            row
+              .GetTabBoxes()
+              .map(
+                /** Reads a box brush. @param box - Native box. @returns Packed color. */ (box) =>
+                  frameColor(box.GetFrameFormat())?.GetRGBColor().toUInt32(),
+              );
         expect(colors(first)).toEqual([0x440000, 0x440000, 0x330000, 0x330000]);
         expect(colors(second)).toEqual(colors(first));
         expect(colors(third)).toEqual([0x220000, 0x110000, 0x110000, 0x110000]);

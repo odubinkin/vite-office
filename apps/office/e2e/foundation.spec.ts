@@ -59,6 +59,15 @@ test("Writer menu keyboard navigation and accessible application chrome" /**
   await expect(hyperlinkMenuItem).toHaveAttribute("data-popup-highlighted", "true");
   await expect(editPopup).toBeFocused();
   await editPopup.press("ArrowUp");
+  const findAndReplace = editPopup.getByRole("menuitem", {
+    exact: true,
+    name: "Find and Replace…",
+  });
+  await expect(findAndReplace).toBeFocused();
+  await findAndReplace.press("ArrowUp");
+  const find = editPopup.getByRole("menuitem", { exact: true, name: "Find" });
+  await expect(find).toBeFocused();
+  await find.press("ArrowUp");
   await expect(page.getByRole("menuitem", { name: "Select All" })).toBeFocused();
   await page.getByRole("menuitem", { name: "Select All" }).press("Escape");
   await expect(page.getByRole("textbox", { name: "Writer document text" })).toBeFocused();

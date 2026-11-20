@@ -1,6 +1,6 @@
+/** @fileoverview Native scalar Calc XML cell/default/repeat import specialization. */
 import { FormulaError, isPublishedFormulaError } from "../../../../formula/inc/errorcodes";
 import { errorSymbols } from "../../../../formula/inc/FormulaCompiler";
-/** @fileoverview Native scalar Calc XML cell/default/repeat import specialization. */
 import { ScXMLImportContext } from "./importcontext";
 import { SvXMLImportContext, type FastAttributeList } from "../../../../xmloff/source/core/xmlimp";
 import { XMLToken } from "../../../../xmloff/source/core/xmltoken";

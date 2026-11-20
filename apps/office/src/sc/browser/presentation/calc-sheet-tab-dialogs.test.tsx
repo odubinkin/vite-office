@@ -55,7 +55,12 @@ it("hides the marked sheets, preserves a visible sheet, and shows multiple sheet
   let dialog = screen.getByRole("dialog", { name: "Show Sheet" });
   let list = within(dialog).getByRole<HTMLSelectElement>("listbox", { name: "Hidden Sheets" });
   expect(list).toHaveFocus();
-  expect([...list.selectedOptions].map((option) => option.text)).toEqual(["Sheet1"]);
+  expect(
+    [...list.selectedOptions].map(
+      /** Reads the sheet label. @param option - Sheet option. @returns Tab name. */ (option) =>
+        option.text,
+    ),
+  ).toEqual(["Sheet1"]);
   await respond(dialog, "Cancel");
   expect(screen.getByRole("grid")).toHaveFocus();
   expect(c.shell.GetContentGeneration()).toBe(generation);
@@ -102,7 +107,12 @@ it("selects sheets from the native Edit submenu without adding history", /** Che
   fireEvent.click(selectSheets);
   const dialog = screen.getByRole("dialog", { name: "Select Sheets" });
   const list = within(dialog).getByRole<HTMLSelectElement>("listbox", { name: "Selected sheets" });
-  expect([...list.options].map((option) => option.text)).toEqual(["Sheet1", "Sheet2", "Sheet3"]);
+  expect(
+    [...list.options].map(
+      /** Reads the sheet label. @param option - Sheet option. @returns Tab name. */ (option) =>
+        option.text,
+    ),
+  ).toEqual(["Sheet1", "Sheet2", "Sheet3"]);
   const first = within(list).getByRole<HTMLOptionElement>("option", { name: "Sheet1" });
   const second = within(list).getByRole<HTMLOptionElement>("option", { name: "Sheet2" });
   const third = within(list).getByRole<HTMLOptionElement>("option", { name: "Sheet3" });

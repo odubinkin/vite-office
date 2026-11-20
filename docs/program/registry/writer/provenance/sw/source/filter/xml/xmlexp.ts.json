@@ -574,7 +574,6 @@
       "exportStylesXml",
       "exportContentXml",
       "exportMetaXml",
-      "projectXmlTextRuns",
       "projectBlock"
     ],
     "omittedResponsibilities": [

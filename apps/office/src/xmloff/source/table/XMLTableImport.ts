@@ -1,6 +1,5 @@
-import { toInt32 } from "../../../o3tl/inc/string_view";
 /** @fileoverview Imports the bounded table and table-style SAX contexts from pinned xmloff table import. */
-
+import { toInt32 } from "../../../o3tl/inc/string_view";
 import { FastAttributeList, SvXMLIgnoreContext, SvXMLImportContext } from "../core/xmlimp";
 import { XMLToken } from "../core/xmltoken";
 import { importOdfLength } from "../core/xmluconv";

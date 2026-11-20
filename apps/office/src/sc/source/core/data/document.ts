@@ -1,4 +1,5 @@
 /** @fileoverview Native document modes, consumed pooled resources and scalar/local-reference storage, attributes and formula tracking. Full construction, formatter and shell services remain unported. */
+import * as documentGeometry from "./document.geometry";
 import { ScCalcConfig } from "../../../inc/calcconfig";
 import { ScInterpreter } from "../inc/interpre";
 import { HardRecalcState, ScDocumentMode } from "./document.modes";
@@ -31,7 +32,7 @@ import type { ScColumn } from "../../../inc/column";
 import { ScDocOptions, type ScDocOptionsConstReference } from "../../../inc/docoptio";
 import type { Theme } from "../../../../docmodel/inc/theme/Theme";
 import type { ScFormulaCell } from "../../../inc/formulacell";
-import { CellType, InsertDeleteFlags, ScGlobal } from "../../../inc/global";
+import { CellType, InsertDeleteFlags } from "../../../inc/global";
 import { ScInterpreterContext } from "../../../inc/interpretercontext";
 import type { ScMarkData } from "../../../inc/markdata";
 import {
@@ -401,34 +402,13 @@ export class ScDocument {
   ValidCol(column: number): boolean {
     return ValidCol(column, MAXCOL);
   }
-  /** Original row-height dispatch. @param first - First row. @param last - Last row. @param tab - Sheet. @param height - UInt16 twips. @returns Nothing. */
-  SetRowHeightRange(first: number, last: number, tab: number, height: number): void {
-    this.FetchTable(tab)?.SetRowHeightRange(first, last, height, 1.0, true);
-  }
-  /** Original import/raw height setter. @param first - First row. @param last - Last row. @param tab - Sheet. @param height - Twips. @returns Nothing. */
-  SetRowHeightOnly(first: number, last: number, tab: number, height: number): void {
-    this.FetchTable(tab)?.SetRowHeightOnly(first, last, height);
-  }
-  /** Original manual flag dispatch. @param first - First row. @param last - Last row. @param tab - Sheet. @param manual - Flag. @returns Nothing. */
-  SetManualHeight(first: number, last: number, tab: number, manual: boolean): void {
-    this.FetchTable(tab)?.SetManualHeight(first, last, manual);
-  }
-  /** Original missing-table row-height zero. @param row - Row. @param tab - Sheet. @param hiddenAsZero - Source default,true. @returns Twips. */
-  GetRowHeight(row: number, tab: number, hiddenAsZero = true): number {
-    return this.FetchTable(tab)?.GetRowHeight(row, hiddenAsZero) ?? 0;
-  }
-  /** Original per-sheet minimum query. @param tab - Sheet. @returns Minimum twips or native standard height. */
-  GetSheetOptimalMinRowHeight(tab: number): number {
-    return this.FetchTable(tab)?.GetOptimalMinRowHeight() ?? ScGlobal.nStdRowHeight;
-  }
-  /** Original missing-table hidden query retains outputs. @param row - Row. @param tab - Sheet. @param first - Span output. @param last - Span output. @returns Hidden. */
-  RowHidden(row: number, tab: number, first?: [number], last?: [number]): boolean {
-    return this.FetchTable(tab)?.RowHidden(row, first, last) ?? false;
-  }
-  /** Original missing-table filtered query retains outputs. @param row - Row. @param tab - Sheet. @param first - Span output. @param last - Span output. @returns Filtered. */
-  RowFiltered(row: number, tab: number, first?: [number], last?: [number]): boolean {
-    return this.FetchTable(tab)?.getFilterData().rowFiltered(row, first, last) ?? false;
-  }
+  SetRowHeightRange = documentGeometry.SetRowHeightRange;
+  SetRowHeightOnly = documentGeometry.SetRowHeightOnly;
+  SetManualHeight = documentGeometry.SetManualHeight;
+  GetRowHeight = documentGeometry.GetRowHeight;
+  GetSheetOptimalMinRowHeight = documentGeometry.GetSheetOptimalMinRowHeight;
+  RowHidden = documentGeometry.RowHidden;
+  RowFiltered = documentGeometry.RowFiltered;
   /** Original normal-document block-editability dispatch. @param args - Native sheet,bounds and matrix policy. @returns Editable in represented profile. */
   IsBlockEditable(...args: Parameters<typeof document10.IsBlockEditable>): boolean {
     return document10.IsBlockEditable.apply(this, args);
@@ -442,46 +422,15 @@ export class ScDocument {
   LastNonFilteredRow(...args: Parameters<typeof document10.LastNonFilteredRow>): number {
     return document10.LastNonFilteredRow.apply(this, args);
   }
-  /** Original hidden row dispatch. @param first - First row. @param last - Last row. @param tab - Sheet. @param hidden - Flag. @returns Nothing. */
-  SetRowHidden(first: number, last: number, tab: number, hidden: boolean): void {
-    this.FetchTable(tab)?.SetRowHidden(first, last, hidden);
-  }
-  /** Original filtered row dispatch. @param first - First row. @param last - Last row. @param tab - Sheet. @param filtered - Flag. @returns Nothing. */
-  SetRowFiltered(first: number, last: number, tab: number, filtered: boolean): void {
-    this.FetchTable(tab)?.getFilterData().setRowFiltered(first, last, filtered);
-  }
-  /** Original show rows dispatch. @param first - First row. @param last - Last row. @param tab - Sheet. @param show - Flag. @returns Nothing. */
-  ShowRows(first: number, last: number, tab: number, show: boolean): void {
-    this.FetchTable(tab)?.ShowRows(first, last, show);
-  }
-  /** Original selected-table width assignment. @param column - Column. @param tab - Sheet. @param width - UInt16 twips. @returns Nothing. */
-  SetColWidth(column: number, tab: number, width: number): void {
-    this.FetchTable(tab)?.SetColWidth(column, width);
-  }
-  /** Original width-only table dispatch. @param column - Column. @param tab - Sheet. @param width - UInt16 twips. @returns Nothing. */
-  SetColWidthOnly(column: number, tab: number, width: number): void {
-    this.FetchTable(tab)?.SetColWidthOnly(column, width);
-  }
-  /** Original absent-sheet zero fallback. @param column - Column. @param tab - Sheet. @param hiddenAsZero - Include hidden flag,true by default. @returns Twips. */
-  GetColWidth(column: number, tab: number, hiddenAsZero = true): number {
-    return this.FetchTable(tab)?.GetColWidth(column, hiddenAsZero) ?? 0;
-  }
-  /** Original absent-sheet false result writes the requested column into both optional span outputs. @param column - Column. @param tab - Sheet. @param first - Optional span start. @param last - Optional span end. @returns Hidden flag. */
-  ColHidden(column: number, tab: number, first?: [number], last?: [number]): boolean {
-    const table = this.FetchTable(tab);
-    if (table) return table.ColHidden(column, first, last);
-    if (first) first[0] = column;
-    if (last) last[0] = column;
-    return false;
-  }
-  /** Original column visibility assignment dispatch. @param first - First column. @param last - Last column. @param tab - Sheet. @param hidden - Hidden flag. @returns Nothing. */
-  SetColHidden(first: number, last: number, tab: number, hidden: boolean): void {
-    this.FetchTable(tab)?.SetColHidden(first, last, hidden);
-  }
-  /** Original ShowCol dispatch preserves stored widths. @param column - Column. @param tab - Sheet. @param show - Show flag. @returns Nothing. */
-  ShowCol(column: number, tab: number, show: boolean): void {
-    this.FetchTable(tab)?.ShowCol(column, show);
-  }
+  SetRowHidden = documentGeometry.SetRowHidden;
+  SetRowFiltered = documentGeometry.SetRowFiltered;
+  ShowRows = documentGeometry.ShowRows;
+  SetColWidth = documentGeometry.SetColWidth;
+  SetColWidthOnly = documentGeometry.SetColWidthOnly;
+  GetColWidth = documentGeometry.GetColWidth;
+  ColHidden = documentGeometry.ColHidden;
+  SetColHidden = documentGeometry.SetColHidden;
+  ShowCol = documentGeometry.ShowCol;
   /** Consumed source DeleteArea orders coordinates and visits selected real sheets;attribute deletion does not rebuild formula listeners. @param firstCol - First column. @param firstRow - First row. @param lastCol - Last column. @param lastRow - Last row. @param marks - Selected sheets. @param flags - Attribute-only deletion flags. @returns Nothing. */
   DeleteArea(
     firstCol: number,
@@ -668,30 +617,7 @@ export class ScDocument {
   GetPattern(position: ScAddress): ScPatternAttr | null {
     return this.FetchTable(position.Tab())?.GetPattern(position.Col(), position.Row()) ?? null;
   }
-  /** Selects the first row of the most frequent native pattern in a column. @param tab - Sheet. @param col - Column. @param lastRow - Inclusive export bound. @returns Row of the default pattern. */
-  GetColDefault(tab: number, col: number, lastRow: number): number {
-    const column = this.FetchTable(tab)?.GetColumnData(col);
-    if (!column) return 0;
-    const first: [number] = [0],
-      last: [number] = [0];
-    const counts = new Map<ScPatternAttr, { count: number; first: number }>();
-    for (let row = 0; row <= lastRow; row = last[0] + 1) {
-      const pattern = column.GetPatternRange(first, last, row);
-      if (!pattern || (row === 0 && last[0] >= lastRow)) return 0;
-      const count = Math.min(last[0], lastRow) - row + 1;
-      const previous = counts.get(pattern);
-      if (previous) previous.count += count;
-      else counts.set(pattern, { count, first: row });
-    }
-    let count = 0,
-      selected = 0;
-    for (const entry of counts.values())
-      if (entry.count > count) {
-        count = entry.count;
-        selected = entry.first;
-      }
-    return selected;
-  }
+  GetColDefault = documentGeometry.GetColDefault;
   /** Original document10 merge query over actual sparse sheets. @param position - Queried cell. @returns Merged anchor. */
   IsMerged(position: ScAddress): boolean {
     return document10.IsMerged.call(this, position);

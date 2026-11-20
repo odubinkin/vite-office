@@ -1,0 +1,201 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/sc/source/core/data/document.geometry.ts",
+    "status": "mapped",
+    "upstreamPath": "sc/source/core/data/document.cxx",
+    "localSymbols": [
+      "SetRowHeightRange",
+      "SetRowHeightOnly",
+      "SetManualHeight",
+      "GetRowHeight",
+      "GetSheetOptimalMinRowHeight",
+      "RowHidden",
+      "RowFiltered",
+      "SetRowHidden",
+      "SetRowFiltered",
+      "ShowRows",
+      "SetColWidth",
+      "SetColWidthOnly",
+      "GetColWidth",
+      "ColHidden",
+      "SetColHidden",
+      "ShowCol",
+      "GetColDefault"
+    ],
+    "upstreamSymbols": [
+      "ScDocument::SetRowHeightRange",
+      "ScDocument::SetRowHeightOnly",
+      "ScDocument::SetManualHeight",
+      "ScDocument::GetRowHeight",
+      "ScDocument::GetSheetOptimalMinRowHeight",
+      "ScDocument::RowHidden",
+      "ScDocument::RowFiltered",
+      "ScDocument::SetRowHidden",
+      "ScDocument::SetRowFiltered",
+      "ScDocument::ShowRows",
+      "ScDocument::SetColWidth",
+      "ScDocument::SetColWidthOnly",
+      "ScDocument::GetColWidth",
+      "ScDocument::ColHidden",
+      "ScDocument::SetColHidden",
+      "ScDocument::ShowCol",
+      "ScDocument::GetColDefault"
+    ],
+    "preservedResponsibilities": [
+      "Original row and column geometry forwarding, missing-sheet defaults, and selection of the ODF column default pattern."
+    ],
+    "omittedResponsibilities": [
+      "Full device-dependent and compiled native differential parity remain unverified."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sc/source/core/data/document.geometry.ts",
+          "marker": "SetRowHeightRange"
+        },
+        {
+          "path": "apps/office/src/sc/source/core/data/document.geometry.ts",
+          "marker": "SetRowHeightOnly"
+        },
+        {
+          "path": "apps/office/src/sc/source/core/data/document.geometry.ts",
+          "marker": "SetManualHeight"
+        },
+        {
+          "path": "apps/office/src/sc/source/core/data/document.geometry.ts",
+          "marker": "GetRowHeight"
+        },
+        {
+          "path": "apps/office/src/sc/source/core/data/document.geometry.ts",
+          "marker": "GetSheetOptimalMinRowHeight"
+        },
+        {
+          "path": "apps/office/src/sc/source/core/data/document.geometry.ts",
+          "marker": "RowHidden"
+        },
+        {
+          "path": "apps/office/src/sc/source/core/data/document.geometry.ts",
+          "marker": "RowFiltered"
+        },
+        {
+          "path": "apps/office/src/sc/source/core/data/document.geometry.ts",
+          "marker": "SetRowHidden"
+        },
+        {
+          "path": "apps/office/src/sc/source/core/data/document.geometry.ts",
+          "marker": "SetRowFiltered"
+        },
+        {
+          "path": "apps/office/src/sc/source/core/data/document.geometry.ts",
+          "marker": "ShowRows"
+        },
+        {
+          "path": "apps/office/src/sc/source/core/data/document.geometry.ts",
+          "marker": "SetColWidth"
+        },
+        {
+          "path": "apps/office/src/sc/source/core/data/document.geometry.ts",
+          "marker": "SetColWidthOnly"
+        },
+        {
+          "path": "apps/office/src/sc/source/core/data/document.geometry.ts",
+          "marker": "GetColWidth"
+        },
+        {
+          "path": "apps/office/src/sc/source/core/data/document.geometry.ts",
+          "marker": "ColHidden"
+        },
+        {
+          "path": "apps/office/src/sc/source/core/data/document.geometry.ts",
+          "marker": "SetColHidden"
+        },
+        {
+          "path": "apps/office/src/sc/source/core/data/document.geometry.ts",
+          "marker": "ShowCol"
+        },
+        {
+          "path": "apps/office/src/sc/source/core/data/document.geometry.ts",
+          "marker": "GetColDefault"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sc/source/core/data/document.cxx",
+          "marker": "ScDocument::SetRowHeightRange"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/source/core/data/document.cxx",
+          "marker": "ScDocument::SetRowHeightOnly"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/source/core/data/document.cxx",
+          "marker": "ScDocument::SetManualHeight"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/source/core/data/document.cxx",
+          "marker": "ScDocument::GetRowHeight"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/source/core/data/document.cxx",
+          "marker": "ScDocument::GetSheetOptimalMinRowHeight"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/source/core/data/document.cxx",
+          "marker": "ScDocument::RowHidden"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/source/core/data/document.cxx",
+          "marker": "ScDocument::RowFiltered"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/source/core/data/document.cxx",
+          "marker": "ScDocument::SetRowHidden"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/source/core/data/document.cxx",
+          "marker": "ScDocument::SetRowFiltered"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/source/core/data/document.cxx",
+          "marker": "ScDocument::ShowRows"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/source/core/data/document.cxx",
+          "marker": "ScDocument::SetColWidth"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/source/core/data/document.cxx",
+          "marker": "ScDocument::SetColWidthOnly"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/source/core/data/document.cxx",
+          "marker": "ScDocument::GetColWidth"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/source/core/data/document.cxx",
+          "marker": "ScDocument::ColHidden"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/source/core/data/document.cxx",
+          "marker": "ScDocument::SetColHidden"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/source/core/data/document.cxx",
+          "marker": "ScDocument::ShowCol"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/source/core/data/document.cxx",
+          "marker": "ScDocument::GetColDefault"
+        }
+      ]
+    },
+    "filenameDivergence": {
+      "localPath": "apps/office/src/sc/source/core/data/document.geometry.ts",
+      "stackNecessity": "responsibility-split",
+      "rationale": "The document geometry implementations retain the same source responsibility on the native document instance."
+    }
+  }
+}

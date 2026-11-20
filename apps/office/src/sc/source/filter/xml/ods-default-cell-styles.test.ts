@@ -39,9 +39,24 @@ it("resolves repeated empty ranges and explicit cell overrides using the origina
       '<table:table-row><table:table-cell table:style-name="Direct" office:value-type="float" office:value="11"/><table:table-cell/><table:table-cell table:style-name=""/></table:table-row>',
   );
   try {
-    expect([0, 1, 2].map((col) => named(doc, col, 0))).toEqual(["First", "First", "Second"]);
-    expect([0, 1, 2].map((col) => named(doc, col, 1))).toEqual(["First", "First", "Second"]);
-    expect([0, 1, 2].map((col) => named(doc, col, 2))).toEqual(["Direct", "First", "Second"]);
+    expect(
+      [0, 1, 2].map(
+        /** Reads the resolved style. @param col - Column. @returns Style name. */ (col) =>
+          named(doc, col, 0),
+      ),
+    ).toEqual(["First", "First", "Second"]);
+    expect(
+      [0, 1, 2].map(
+        /** Reads the resolved style. @param col - Column. @returns Style name. */ (col) =>
+          named(doc, col, 1),
+      ),
+    ).toEqual(["First", "First", "Second"]);
+    expect(
+      [0, 1, 2].map(
+        /** Reads the resolved style. @param col - Column. @returns Style name. */ (col) =>
+          named(doc, col, 2),
+      ),
+    ).toEqual(["Direct", "First", "Second"]);
     expect(doc.GetValue(new ScAddress(0, 2, 0))).toBe(11);
   } finally {
     doc.Dispose();

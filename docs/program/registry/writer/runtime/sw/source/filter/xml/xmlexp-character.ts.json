@@ -36,7 +36,8 @@
       "justification": "Native Writer text export forwards Western, Asian and complex language items through the shared ODF text style mapping. Existing character item projection remains with the XML export owner. Unrepresented ODF text properties and named character style persistence remain open. Projects the native color item to resolved ODF RGB and ordered character theme metadata.",
       "knownViolations": [],
       "localSymbols": [
-        "getCharacterProperties"
+        "getCharacterProperties",
+        "projectXmlTextRuns"
       ],
       "sourceResponsibility": "aligned",
       "upstreamFile": "sw/source/filter/xml/xmlexp.cxx",
