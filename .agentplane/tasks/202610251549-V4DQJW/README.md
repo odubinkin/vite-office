@@ -1,10 +1,10 @@
 ---
 id: "202610251549-V4DQJW"
 title: "Implement Writer DOCX import export and existing file UI integration"
-status: "DOING"
+status: "BLOCKED"
 priority: "high"
 owner: "CODER"
-revision: 426
+revision: 427
 origin:
   system: "manual"
 depends_on:
@@ -21,10 +21,10 @@ plan_approval:
   note: null
 verification:
   state: "blocked_external"
-  updated_at: "2026-11-20T08:25:58.095Z"
+  updated_at: "2026-11-20T09:07:18.396Z"
   updated_by: "CODER"
-  note: "Verified: 42 focused Writer cases, scoped90, 12 shared and Calc regressions, three Chromium checks and repository gates passed. The broader DOCX task remains open."
-  attempts: 10
+  note: "Verified conditional table shading and production browser round trip. Retained open Writer fixture and per-owner coverage findings."
+  attempts: 11
 commit: null
 comments:
   -
@@ -2160,8 +2160,14 @@ events:
     from: "BLOCKED"
     to: "DOING"
     note: "Start: continue direct-mode task in current checkout."
+  -
+    type: "verify"
+    at: "2026-11-20T09:07:18.396Z"
+    author: "CODER"
+    state: "blocked_external"
+    note: "Verified conditional table shading and production browser round trip. Retained open Writer fixture and per-owner coverage findings."
 doc_version: 3
-doc_updated_at: "2026-11-20T08:52:50.947Z"
+doc_updated_at: "2026-11-20T09:07:18.605Z"
 doc_updated_by: "CODER"
 description: "User-approved second cohesive task: preserve pinned WriterFilter OOXML/DomainMapper import and DocxExportFilter/DocxExport ownership while supporting the existing Writer core slice, including paragraphs, runs, pooled formatting, styles, lists, tables, links and page properties where implemented. Integrate asynchronous shell filter routing, existing Open and download UI, errors/cancellation and primary ODT persistence. Refactor old workarounds in touched paths, record suspected upstream issues, provenance and related tests. No recovery/autosave product changes, network or publication."
 sections:
@@ -6406,6 +6412,36 @@ sections:
     - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
     - risks: none
 
+    ### 2026-11-20T09:07:18.396Z — VERIFY — blocked_external
+
+    By: CODER
+
+    Note: Verified conditional table shading and production browser round trip. Retained open Writer fixture and per-owner coverage findings.
+    Attempts: 11
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-20T08:52:50.947Z, excerpt_hash=sha256:f1ce94bb673a9632d48a811076188278454b04d0783aab0712ee1947357ea697
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610251549-V4DQJW/blueprint/resolved-snapshot.json
+    - old_digest: c0e14f7bf31d4be862783b8d9c5eb6067e7f9f18464f5898e14e0fcc5b208aa0
+    - current_digest: c0e14f7bf31d4be862783b8d9c5eb6067e7f9f18464f5898e14e0fcc5b208aa0
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610251549-V4DQJW
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task verify-show 202610251549-V4DQJW
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: false
+    - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+    - risks: none
+
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Revert only this task's intentional implementation commits, preserving the shared OOXML prerequisite and other task history. Re-run impacted Writer DOCX/ODT shell and file UI tests and typecheck/build; confirm original ODT/TXT workflows and primary-store behavior."
   Findings: |-
@@ -7155,6 +7191,10 @@ sections:
     - Observation: The Writer filter now extracts nested SAX and native UNO exception values in original order and carries WrongFormatException to the normal file error path.
       Impact: The browser shows the actual callback or lexical failure and retains the current graph. The supplied local DOCX opens and restores normally.
       Resolution: See evidence/docx-load-diagnostics.json. The unsupported tdf81100 WordprocessingShape remains an independent feature gap.
+
+    - Observation: 87 focused tests and three Chromium scenarios pass; five-owner profile reports 93.13% branches, with TblStylePrHandler separately at 81.48%.
+      Impact: Table shading and theme fields survive primary and DOCX save paths. Unsupported original picture wrapping and document background still interrupt unrelated fixture content.
+      Resolution: Continue the represented Writer file acceptance and preserve original data and fixture boundaries.
 id_source: "generated"
 ---
 ## Summary
@@ -11410,6 +11450,36 @@ DecisionContextRef:
 - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
 - risks: none
 
+### 2026-11-20T09:07:18.396Z — VERIFY — blocked_external
+
+By: CODER
+
+Note: Verified conditional table shading and production browser round trip. Retained open Writer fixture and per-owner coverage findings.
+Attempts: 11
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-20T08:52:50.947Z, excerpt_hash=sha256:f1ce94bb673a9632d48a811076188278454b04d0783aab0712ee1947357ea697
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610251549-V4DQJW/blueprint/resolved-snapshot.json
+- old_digest: c0e14f7bf31d4be862783b8d9c5eb6067e7f9f18464f5898e14e0fcc5b208aa0
+- current_digest: c0e14f7bf31d4be862783b8d9c5eb6067e7f9f18464f5898e14e0fcc5b208aa0
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610251549-V4DQJW
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task verify-show 202610251549-V4DQJW
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: false
+- repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- risks: none
+
 <!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
@@ -12164,3 +12234,7 @@ Evidence: `evidence/docx-native-ranged-bookmarks.json`.
 - Observation: The Writer filter now extracts nested SAX and native UNO exception values in original order and carries WrongFormatException to the normal file error path.
   Impact: The browser shows the actual callback or lexical failure and retains the current graph. The supplied local DOCX opens and restores normally.
   Resolution: See evidence/docx-load-diagnostics.json. The unsupported tdf81100 WordprocessingShape remains an independent feature gap.
+
+- Observation: 87 focused tests and three Chromium scenarios pass; five-owner profile reports 93.13% branches, with TblStylePrHandler separately at 81.48%.
+  Impact: Table shading and theme fields survive primary and DOCX save paths. Unsupported original picture wrapping and document background still interrupt unrelated fixture content.
+  Resolution: Continue the represented Writer file acceptance and preserve original data and fixture boundaries.
