@@ -1,10 +1,11 @@
 ---
 id: "202611201415-SKCF0Z"
 title: "Align Writer ODT table-cell text styles"
-status: "DOING"
+result_summary: "Verified Writer ODT cell text styles and the complete tenth regression checkpoint, with all functional failures recovered"
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 8
+revision: 10
 origin:
   system: "manual"
 depends_on: []
@@ -21,9 +22,9 @@ plan_approval:
   note: null
 verification:
   state: "ok"
-  updated_at: "2026-11-20T18:00:18.323Z"
+  updated_at: "2026-11-20T18:00:53.853Z"
   updated_by: "CODER"
-  note: "Verified the Writer ODT change and tenth regression checkpoint. All failing functional cases passed after repairs or focused replay. The existing global coverage gate remains below 100%."
+  note: "Full application and Chromium cases verified with focused recovery. The historical global coverage deficit is recorded in the verification details."
   attempts: 0
 quality_review:
   state: "pass"
@@ -44,11 +45,16 @@ quality_review:
   findings:
     - "The Writer ODT import and export retain native style order and defaults. The full application report isolates seven failures in one RTF table suite, all recovered by removing the private mapper marker before the UNO call."
     - "Chromium replay accounts for all 611 scenarios. The final RTF, adjacent DOCX, inventory, typecheck and tooling evidence confirms recovery."
-commit: null
+commit:
+  hash: "070f1a7315d2b5c4a538a388862aa1728b54b6c9"
+  message: "🧩 SKCF0Z code: keep the Writer table header marker internal"
 comments:
   -
     author: "CODER"
     body: "Start: Align Writer ODT table-cell text styles. Guided shortcut created the task, approved the plan, and entered execution."
+  -
+    author: "CODER"
+    body: "Verified: Verified Writer ODT cell text styles and the complete tenth regression checkpoint, with all functional failures recovered. Guided shortcut recorded verification and is closing the direct task with traceable commit metadata."
 events:
   -
     type: "status"
@@ -63,8 +69,21 @@ events:
     author: "CODER"
     state: "ok"
     note: "Verified the Writer ODT change and tenth regression checkpoint. All failing functional cases passed after repairs or focused replay. The existing global coverage gate remains below 100%."
+  -
+    type: "verify"
+    at: "2026-11-20T18:00:53.853Z"
+    author: "CODER"
+    state: "ok"
+    note: "Full application and Chromium cases verified with focused recovery. The historical global coverage deficit is recorded in the verification details."
+  -
+    type: "status"
+    at: "2026-11-20T18:00:53.938Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: Verified Writer ODT cell text styles and the complete tenth regression checkpoint, with all functional failures recovered. Guided shortcut recorded verification and is closing the direct task with traceable commit metadata."
 doc_version: 3
-doc_updated_at: "2026-11-20T18:00:18.375Z"
+doc_updated_at: "2026-11-20T18:00:53.939Z"
 doc_updated_by: "CODER"
 description: "Port automatic table-cell paragraph and character style ownership, temporary cell paragraph defaults and string-value style handling in Writer ODT. Validate native cell and paragraph property precedence, nested/repeated content, package and Worker round-trips, and the scheduled tenth full regression."
 sections:
@@ -114,6 +133,36 @@ sections:
     - freshness: route=computed_local remote=remote_skipped
     - repeat_allowed: false
     - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+    - risks: none
+
+    ### 2026-11-20T18:00:53.853Z — VERIFY — ok
+
+    By: CODER
+
+    Note: Full application and Chromium cases verified with focused recovery. The historical global coverage deficit is recorded in the verification details.
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-20T18:00:18.375Z, excerpt_hash=sha256:f84eb3022895b04d8ba315feef164706d583b6e1198907b98354ea6a7bea1e54
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202611201415-SKCF0Z/blueprint/resolved-snapshot.json
+    - old_digest: a8fc75cebdf26dbd062520cde0e320e4a29b1377b8f869e18741ef912ac3c712
+    - current_digest: a8fc75cebdf26dbd062520cde0e320e4a29b1377b8f869e18741ef912ac3c712
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202611201415-SKCF0Z
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task complete 202611201415-SKCF0Z --result verified-202611201415-SKCF0Z --commit ea126c0e3c1e63329f31eaf3f5326e83ae1c0354
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
     - risks: none
 
     <!-- END VERIFICATION RESULTS -->
@@ -183,6 +232,36 @@ DecisionContextRef:
 - freshness: route=computed_local remote=remote_skipped
 - repeat_allowed: false
 - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- risks: none
+
+### 2026-11-20T18:00:53.853Z — VERIFY — ok
+
+By: CODER
+
+Note: Full application and Chromium cases verified with focused recovery. The historical global coverage deficit is recorded in the verification details.
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-20T18:00:18.375Z, excerpt_hash=sha256:f84eb3022895b04d8ba315feef164706d583b6e1198907b98354ea6a7bea1e54
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202611201415-SKCF0Z/blueprint/resolved-snapshot.json
+- old_digest: a8fc75cebdf26dbd062520cde0e320e4a29b1377b8f869e18741ef912ac3c712
+- current_digest: a8fc75cebdf26dbd062520cde0e320e4a29b1377b8f869e18741ef912ac3c712
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202611201415-SKCF0Z
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task complete 202611201415-SKCF0Z --result verified-202611201415-SKCF0Z --commit ea126c0e3c1e63329f31eaf3f5326e83ae1c0354
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
 - risks: none
 
 <!-- END VERIFICATION RESULTS -->
