@@ -4,6 +4,7 @@ import { aSwMapProvider, SwUnoPropertyMapProvider } from "./unomap";
 import { PROPERTY_MAP_TEXT_DEFAULT } from "../../../inc/unomap";
 import {
   RES_PARATR_TABSTOP,
+  RES_PARATR_VERTALIGN,
   RES_PAGEDESC,
   RES_ROW_SPLIT,
   RES_TEXTGRID,
@@ -26,7 +27,7 @@ it("retains static default-table identity and clears MAYBEVOID except the origin
     second = new SwUnoPropertyMapProvider(),
     entries = first.GetPropertyMapEntries(PROPERTY_MAP_TEXT_DEFAULT),
     set = first.GetPropertySet(PROPERTY_MAP_TEXT_DEFAULT);
-  expect(entries.length).toBe(82);
+  expect(entries.length).toBe(83);
   const flags = upstream.originalFlags as Readonly<Record<string, number>>;
   for (const entry of entries) {
     const name = text(entry.aName);
@@ -73,6 +74,7 @@ it("publishes actual native default metadata and excludes cursor-only dispatch p
     expect(queried.get()).toBe(info.get());
     for (const [name, which, member] of [
       ["TabStopDistance", RES_PARATR_TABSTOP, MID_STD_TAB | CONVERT_TWIPS],
+      ["ParaVertAlignment", RES_PARATR_VERTALIGN, 0],
       ["CharStyleName", RES_TXTATR_CHARFMT, 0],
       ["IsSplitAllowed", RES_ROW_SPLIT, 0],
       ["CollapsingBorders", RES_COLLAPSING_BORDERS, 0],
