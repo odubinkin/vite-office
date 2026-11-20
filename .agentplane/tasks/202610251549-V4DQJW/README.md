@@ -1,10 +1,11 @@
 ---
 id: "202610251549-V4DQJW"
 title: "Implement Writer DOCX import export and existing file UI integration"
-status: "DOING"
+result_summary: "Writer DOCX import and export verified through the native document model and existing file controls"
+status: "DONE"
 priority: "high"
 owner: "CODER"
-revision: 430
+revision: 431
 origin:
   system: "manual"
 depends_on:
@@ -43,7 +44,9 @@ quality_review:
   findings:
     - "The pinned Strict and Transitional document tests cover supported graph properties, package XML and real export, reopen and admission failures. The final table correction retains empty and nested cell ranges. The three timing-limited cases passed under the original timeout when rerun sequentially."
     - "The separate scoped90 checks clear the previously failing stylesheet, table, document and header/footer gates. The production Chromium checks cover desktop/mobile and the two private sample reopen flows. The supplied files were not committed."
-commit: null
+commit:
+  hash: "c4cb11ec383226d857cffad0be0a532fe3be8498"
+  message: "🧩 V4DQJW task: record DOCX verification and quality review"
 comments:
   -
     author: "CODER"
@@ -441,6 +444,9 @@ comments:
   -
     author: "CODER"
     body: "Start: continue direct-mode task in current checkout."
+  -
+    author: "CODER"
+    body: "Verified: Writer DOCX import and export passed native document, file controls, production browser, earlier scoped coverage and sequential regression checks. Both supplied DOCX files opened and restored from browser storage."
 events:
   -
     type: "status"
@@ -2200,8 +2206,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Verified Writer DOCX import and export through the existing file controls and native working model. The acceptance record documents 220 cases in the current instrumented run and three successful sequential retries, all retained meaningfully scoped90 profiles, the production desktop/mobile file suite, both supplied DOCX files, and passing static/source gates."
+  -
+    type: "status"
+    at: "2026-11-20T10:07:36.157Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: Writer DOCX import and export passed native document, file controls, production browser, earlier scoped coverage and sequential regression checks. Both supplied DOCX files opened and restored from browser storage."
 doc_version: 3
-doc_updated_at: "2026-11-20T10:07:10.408Z"
+doc_updated_at: "2026-11-20T10:07:36.163Z"
 doc_updated_by: "CODER"
 description: "User-approved second cohesive task: preserve pinned WriterFilter OOXML/DomainMapper import and DocxExportFilter/DocxExport ownership while supporting the existing Writer core slice, including paragraphs, runs, pooled formatting, styles, lists, tables, links and page properties where implemented. Integrate asynchronous shell filter routing, existing Open and download UI, errors/cancellation and primary ODT persistence. Refactor old workarounds in touched paths, record suspected upstream issues, provenance and related tests. No recovery/autosave product changes, network or publication."
 sections:
@@ -7259,6 +7272,10 @@ sections:
     - Observation: 87 focused tests and three Chromium scenarios pass; five-owner profile reports 93.13% branches, with TblStylePrHandler separately at 81.48%.
       Impact: Table shading and theme fields survive primary and DOCX save paths. Unsupported original picture wrapping and document background still interrupt unrelated fixture content.
       Resolution: Continue the represented Writer file acceptance and preserve original data and fixture boundaries.
+extensions:
+  implementation_commit:
+    hash: "a50b52408573b5726a626bde022c8c21a23585fb"
+    message: "🧩 V4DQJW code: preserve Writer table cell paragraph boundaries"
 id_source: "generated"
 ---
 ## Summary
