@@ -1,0 +1,65 @@
+{
+  "scope": "Calc comparison and expression conditions with sparse font/fill items, XLSX sheet and styles streams, Calc ODF extensions, worker handoff and browser grid paint",
+  "implementationCommit": "9c1d715f0cd8",
+  "testCheckpoint": "0a78651ef2dc",
+  "upstream": [
+    "sc/source/core/data/conditio.cxx and documen4.cxx: condition entries, native comparison and style lookup",
+    "sc/source/filter/oox/condformatbuffer.cxx and stylesbuffer.cxx: worksheet rules and differential style realization",
+    "sc/source/filter/excel/xecontent.cxx and xestyle.cxx: XLSX rule and DXF serialization",
+    "sc/source/filter/xml/xmlcondformat.cxx and xmlexprt.cxx: ODF conditional extension",
+    "sc/qa/unit/cond_format.cxx: testTdf167019 with the unaltered vendor workbook"
+  ],
+  "checks": [
+    {
+      "command": "npm run test:coverage:calc --workspace @vite-office/office -- excelfilter.page-settings.test.ts ods-native-fonts.test.ts conditional-copy.test.ts conditio.entry.test.ts address.ooo-regression.test.ts --maxWorkers=2 --testTimeout=90000 --coverage.include=src/sc/source/core/data/conditio.entry.ts --coverage.include=src/sc/source/core/data/documen4.ts --coverage.include=src/sc/source/filter/excel/xecontent.conditional.ts --coverage.include=src/sc/source/filter/excel/xestyle.dxf.ts --coverage.include=src/sc/source/filter/oox/condformatbuffer.ts --coverage.include=src/sc/source/filter/oox/stylesbuffer.dxf.ts --coverage.include=src/sc/source/filter/xml/xmlcondformat.ts --coverage.thresholds.statements=90 --coverage.thresholds.branches=90 --coverage.thresholds.functions=90 --coverage.thresholds.lines=90 --coverage.reportsDirectory=../../.git/goal-cf-final-coverage",
+      "result": "fail",
+      "evidence": "44 passing Calc cases. Scoped Istanbul metrics for the seven new production owners: {'statements': 89.91, 'branches': 78.08, 'functions': 97.22, 'lines': 96.39}. The threshold is 90% for each metric."
+    },
+    {
+      "command": "npm run test:calc -- conditio.entry.test.ts excelfilter.page-settings.test.ts -t 'tdf167019|relative formula conditions|differential fill|scalar comparison modes|clones condition|assigns a new' --maxWorkers=1 --testTimeout=90000",
+      "result": "pass",
+      "evidence": "6 targeted cases after the final table and document owner decomposition. Unmodified tdf167019 retains all three original native condition groups through Worker, ODS and XLSX reopen. Relative expressions, priority, differential font/fill and native error-as-zero behavior are asserted."
+    },
+    {
+      "command": "npm run test:calc --workspace @vite-office/office -- calc-boundary-controls.test.tsx calc-strikeout.test.tsx --maxWorkers=2 --testTimeout=90000",
+      "result": "pass",
+      "evidence": "9 mounted Calc text/boundary and strikeout regression cases."
+    },
+    {
+      "command": "npm run test:calc --workspace @vite-office/office -- ods-style-routing.test.ts ods-worker-entry.test.ts ods-xml-boundaries.test.ts docsh.csv-export.test.ts --maxWorkers=2 --testTimeout=90000",
+      "result": "pass",
+      "evidence": "15 ODS, Worker and CSV regression cases."
+    },
+    {
+      "command": "npm run test:static && PLAYWRIGHT_BROWSERS_PATH=\"$PWD/.agentplane/tmp/zip-migration/browsers\" npm exec -- playwright test --config .git/calc-panes-browser.config.mts --project calc --workers=1 --timeout=90000 xlsx-page-settings.spec.ts",
+      "result": "pass",
+      "evidence": "Production build, static smoke and three Chromium scenarios. The original workbook opens, paints a red cell with white text, retains the rules and colors after browser storage reopen, and downloads with all three rules."
+    },
+    {
+      "command": "npm run typecheck; npm run check:docs; npm run check:dependencies; npm run check:file-size; npm run check:source-tree; npm run check:calc-resources; node .agentplane/policy/check-routing.mjs; ap doctor; git diff --check",
+      "result": "pass",
+      "evidence": "Source, resource and size gates and scoped ESLint and Prettier passed. Doctor retains the existing hook shim warning."
+    },
+    {
+      "command": "npm exec -- tsx .git/xlsx-cursor-validate-changed-registry.mts <28 changed production paths>",
+      "result": "pass",
+      "evidence": "All 28 changed production modules resolve to their corresponding inventory and source evidence."
+    },
+    {
+      "command": "npm run check:source-provenance; npm run inventory:invariants; npm run inventory:parity",
+      "result": "fail",
+      "evidence": "Existing framework modules OfficeTooltips.tsx and available-menu-items.ts lack registry rows."
+    },
+    {
+      "command": "npm run test:calc -- excelfilter.page-settings.test.ts -t tdf170298 --testTimeout=90000 (exploratory regression)",
+      "result": "fail",
+      "evidence": "The unmodified upstream testTdf170298 import reaches a named range with OFFSET before the conditional-format stream. The existing function lookup raises during defined-name compilation. The condition formulas also require NOT, ISBLANK, MONTH, EDATE and TODAY."
+    }
+  ],
+  "remaining": [
+    "Complete tdf170298 import and implement the relevant workbook function groups rather than dropping names or retaining raw formula strings.",
+    "Color scales, data bars, icon sets, noncomparison rule families, full shift/move token adjustments, native condition listeners, and extended differential attributes remain open.",
+    "Scoped90 is not certified by this checkpoint.",
+    "CALC-760 and CALC-761 record suspect native behavior. Full suites remain on the ten-task cadence."
+  ]
+}
