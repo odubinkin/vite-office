@@ -7355,3 +7355,13 @@ can leave both axes unsplit while still changing the modified state. The
 desktop command preserves this ordering.
 
 - [Original freeze and modified state](../../vendor/libreoffice-reference/sc/source/ui/view/tabview.cxx)
+
+### CALC-774 — Show Details reveals the gaps between selected groups
+
+`ShowMarkedOutlines` finds the first and last endpoints among the groups
+fully contained in the marked range. It then shows the entire span between
+those endpoints. Rows or columns that were hidden manually in a gap can
+therefore become visible. Calc preserves the span and keeps filtered rows
+hidden.
+
+- [Original marked outline expansion](../../vendor/libreoffice-reference/sc/source/ui/docshell/olinefun.cxx)

@@ -26,6 +26,49 @@ export class ScOutlineArray {
     return this.collections[level] ?? [];
   }
 
+  /** Copies the tree at its existing levels, including transient visibility. @param source - Source groups. @returns Nothing. */
+  Assign(source: ScOutlineArray): void {
+    if (source === this) return;
+    this.collections.length = 0;
+    for (let level = 0; level < source.GetDepth(); level++) {
+      this.collections[level] = source.GetEntries(level).map(
+        /** Copies one independently owned entry. @param entry - Source entry. @returns Copy. */
+        (entry) =>
+          Object.assign(new ScOutlineEntry(entry.start, entry.end, entry.hidden), {
+            visible: entry.visible,
+          }),
+      );
+    }
+  }
+
+  /** Removes overlapping entries at the deepest touched level, promoting their descendants. @param start - First index. @param end - Last index. @returns Whether changed. */
+  Remove(start: number, end: number): boolean {
+    const level = this.FindTouchedLevel(start, end) ?? 0;
+    const removed = this.GetEntries(level).filter(
+      /** Selects overlapping groups. @param entry - Group. @returns Whether it overlaps. */
+      (entry) => start <= entry.end && end >= entry.start,
+    );
+    if (!removed.length) return false;
+    const deleted = new Set(removed);
+    this.collections[level] = this.GetEntries(level).filter(
+      /** Keeps groups outside the marked span. @param entry - Group. @returns Whether retained. */
+      (entry) => !deleted.has(entry),
+    );
+    for (const parent of removed) {
+      for (let depth = level + 1; depth < this.GetDepth(); depth++) {
+        const retained: ScOutlineEntry[] = [];
+        for (const child of this.GetEntries(depth)) {
+          if (parent.start <= child.start && child.end <= parent.end)
+            this.insertAtLevel(child, depth - 1);
+          else retained.push(child);
+        }
+        this.collections[depth] = retained;
+      }
+    }
+    while (this.collections.length && !this.collections.at(-1)?.length) this.collections.pop();
+    return true;
+  }
+
   /** Finds the entry containing a position by the last preceding start. @param level - Level. @param position - Row or column. @returns Containing entry. */
   GetEntryByPos(level: number, position: number): ScOutlineEntry | undefined {
     const entries = this.GetEntries(level);
@@ -133,6 +176,13 @@ export class ScOutlineArray {
 export class ScOutlineTable {
   private readonly columns = new ScOutlineArray();
   private readonly rows = new ScOutlineArray();
+  /** Constructs an outline table or a detached copy for undo history. @param source - Optional source outline. @returns Table. */
+  constructor(source?: ScOutlineTable) {
+    if (source) {
+      this.columns.Assign(source.columns);
+      this.rows.Assign(source.rows);
+    }
+  }
   /** Borrows outline columns. @returns Column outline. */
   GetColArray(): ScOutlineArray {
     return this.columns;

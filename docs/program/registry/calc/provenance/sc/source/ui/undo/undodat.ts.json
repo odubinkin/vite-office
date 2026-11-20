@@ -1,0 +1,40 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "status": "mapped",
+    "localPath": "apps/office/src/sc/source/ui/undo/undodat.ts",
+    "upstreamPath": "sc/source/ui/undo/undodat.cxx",
+    "localSymbols": [
+      "ScUndoOutline"
+    ],
+    "upstreamSymbols": [
+      "ScUndoOutlineBlock::Undo"
+    ],
+    "preservedResponsibilities": [
+      "Saves the native outline and the affected row and column visibility for undo and redo."
+    ],
+    "omittedResponsibilities": [
+      "Captures compressed hidden runs and cloned outline trees through the current shared undo stack."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sc/source/ui/undo/undodat.ts",
+          "marker": "ScUndoOutline"
+        },
+        {
+          "path": "apps/office/src/sc/browser/presentation/calc-sheet-outline.test.tsx",
+          "marker": "groups rows through the native radio dialog"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sc/source/ui/undo/undodat.cxx",
+          "marker": "ScUndoOutlineBlock::Undo"
+        }
+      ]
+    }
+  }
+}

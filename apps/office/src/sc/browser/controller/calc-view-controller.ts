@@ -1,5 +1,6 @@
 /** @fileoverview Browser input/viewport binding for the current scalar Calc model. Actual cells,marks,formula evaluation and undo stacks remain with native-shaped owners. */
 import type { ScPaneCommand } from "../../source/ui/view/tabview";
+import { ScUndoOutline } from "../../source/ui/undo/undodat";
 import { ScUndoShowHideTab, ScUndoTabColor } from "../../source/ui/undo/undotab";
 import { ScMarkData } from "../../inc/markdata";
 import { ScViewUtil } from "../../source/ui/view/viewutil";
@@ -813,21 +814,17 @@ export class CalcViewController {
   GetViewShell(): ScTabViewShell {
     return this.viewShell;
   }
-
   /** Synchronizes the browser's position and command state after native sheet commands. @returns Nothing. */
   SyncSheetView(): void {
     this.anchor = this.Position();
     this.addressText = this.Address();
     this.Changed();
   }
-
   /** Executes native adjacent-sheet navigation after accepting pending input. @param direction - Previous or next. @param extend - Extend the selected sheet group. @returns Nothing. */
   SelectNextTab(direction: number, extend = false): void {
     if (!this.Commit()) return;
     this.viewShell.SelectNextTab(direction, extend);
-    this.anchor = this.Position();
-    this.addressText = this.Address();
-    this.Changed();
+    this.SyncSheetView();
   }
   /** Selects all actual sheets through the source view owner. @returns Nothing. */
   SelectAllTables(): void {
@@ -888,13 +885,17 @@ export class CalcViewController {
     let cursorAction = action;
     while (cursorAction instanceof SfxListUndoAction)
       cursorAction = cursorAction.GetUndoAction(redo ? cursorAction.GetActionCount() - 1 : 0);
-    if (cursorAction instanceof ScUndoShowHideTab || cursorAction instanceof ScUndoTabColor) {
-      this.SyncSheetView();
-      return true;
-    }
-    if (cursorAction instanceof ScUndoWidthOrHeight) {
-      this.addressText = this.Address();
-      this.Changed();
+    if (cursorAction instanceof ScUndoOutline) cursorAction.RestoreView(this.viewShell, redo);
+    if (
+      cursorAction instanceof ScUndoWidthOrHeight ||
+      cursorAction instanceof ScUndoShowHideTab ||
+      cursorAction instanceof ScUndoTabColor ||
+      cursorAction instanceof ScUndoOutline
+    ) {
+      if (cursorAction instanceof ScUndoWidthOrHeight) {
+        this.addressText = this.Address();
+        this.Changed();
+      } else this.SyncSheetView();
       return true;
     }
     const position =

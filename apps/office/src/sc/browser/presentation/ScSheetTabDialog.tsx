@@ -1,5 +1,6 @@
 /** @fileoverview Browser presentation of showsheetdialog.ui and tabcolordialog.ui. */
 import { useId, useLayoutEffect, useRef, useState } from "react";
+import { ScGroupDlg } from "./ScGroupDlg";
 import { DialogHeader } from "../../../framework/browser/presentation/DialogHeader";
 import palettes from "../../../svx/browser/tbxctrls/color-palettes.json" with { type: "json" };
 import type { CalcSheetTabDialog } from "../workflows/calc-sheet-workflows";
@@ -11,12 +12,24 @@ interface ScSheetTabDialogProps {
   readonly onSubmit: (value: number[] | string) => void;
 }
 
+/** Presents the active tab or outline request from the shared sheet workflow. @param props - Dialog and result handlers. @returns Modal. */
+export function ScSheetTabDialog(props: ScSheetTabDialogProps): React.JSX.Element {
+  const { model, onCancel, onSubmit } = props;
+  if (model.kind === "group" || model.kind === "ungroup")
+    return (
+      <ScGroupDlg ungroup={model.kind === "ungroup"} onCancel={onCancel} onSubmit={onSubmit} />
+    );
+  return <ScSheetChooser model={model} onCancel={onCancel} onSubmit={onSubmit} />;
+}
+
 /** Presents the source multi-select list or palette and its original response buttons. @param props - Dialog data and response callbacks. @returns Modal. */
-export function ScSheetTabDialog({
+function ScSheetChooser({
   model,
   onCancel,
   onSubmit,
-}: ScSheetTabDialogProps): React.JSX.Element {
+}: Omit<ScSheetTabDialogProps, "model"> & {
+  readonly model: Exclude<CalcSheetTabDialog, { readonly kind: "group" | "ungroup" }>;
+}): React.JSX.Element {
   const [palette, setPalette] = useState<keyof typeof palettes>("Standard");
   const [color, setColor] = useState("auto");
   const title =

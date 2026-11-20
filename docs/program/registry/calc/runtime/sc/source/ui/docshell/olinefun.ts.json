@@ -1,0 +1,35 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sc/source/ui/docshell/olinefun.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "calc",
+    "subsystem": "editable-workspace",
+    "capabilityIds": [
+      "CAP-52bb76b0-ff2d-4a8c-86df-79f033c21d86"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/sc/source/ui/docshell/olinefun.ts",
+        "apps/office/src/sc/browser/presentation/calc-sheet-outline.test.tsx",
+        "vendor/libreoffice-reference/sc/source/ui/docshell/olinefun.cxx"
+      ],
+      "justification": "Applies source marked outline grouping, detail visibility and removal to the existing document outline tree.",
+      "knownViolations": [],
+      "localSymbols": [
+        "changeOutlineDetail"
+      ],
+      "sourceResponsibility": "divergent",
+      "upstreamFile": "sc/source/ui/docshell/olinefun.cxx",
+      "upstreamSymbols": [
+        "ScOutlineDocFunc::ShowMarkedOutlines"
+      ]
+    }
+  }
+}

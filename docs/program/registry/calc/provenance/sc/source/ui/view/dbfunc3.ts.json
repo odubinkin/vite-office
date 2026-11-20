@@ -1,0 +1,40 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "status": "mapped",
+    "localPath": "apps/office/src/sc/source/ui/view/dbfunc3.ts",
+    "upstreamPath": "sc/source/ui/view/dbfunc3.cxx",
+    "localSymbols": [
+      "TestRemoveOutline"
+    ],
+    "upstreamSymbols": [
+      "ScDBFunc::TestRemoveOutline"
+    ],
+    "preservedResponsibilities": [
+      "Resolves the original simple selection, full-axis precedence, and outline command availability."
+    ],
+    "omittedResponsibilities": [
+      "The browser command dispatcher supplies action state and invokes the axis dialog."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sc/source/ui/view/dbfunc3.ts",
+          "marker": "TestRemoveOutline"
+        },
+        {
+          "path": "apps/office/src/sc/browser/presentation/calc-sheet-outline.test.tsx",
+          "marker": "groups rows through the native radio dialog"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sc/source/ui/view/dbfunc3.cxx",
+          "marker": "ScDBFunc::TestRemoveOutline"
+        }
+      ]
+    }
+  }
+}
