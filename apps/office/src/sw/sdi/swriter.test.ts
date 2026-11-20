@@ -50,6 +50,7 @@ describe("generated Writer slots", /** Exercises generated SDI identities and or
       ".uno:ResetAttributes",
       ".uno:Undo",
       ".uno:Redo",
+      ".uno:SearchDialog",
       ".uno:InsertTable",
       ".uno:InsertPagebreak",
       ".uno:HyperlinkDialog",

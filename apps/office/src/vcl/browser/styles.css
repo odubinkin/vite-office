@@ -423,3 +423,8 @@ a {
     transition-duration: 0.01ms !important;
   }
 }
+
+::highlight(writer-additional-selection) {
+  background-color: #c7d2fe;
+  color: #1e1b4b;
+}

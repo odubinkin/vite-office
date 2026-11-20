@@ -3,7 +3,7 @@ import type { ReactNode } from "react";
 import type { SwDoc } from "../../source/core/doc/doc";
 import { SwTableNode } from "../../source/core/docnode/node";
 import type { BoundGraphicFrame } from "../../source/core/layout/flycnt";
-import { PreparePageStories, type SwPageStory } from "../../source/core/layout/hffrm";
+import type { SwPageStory } from "../../source/core/layout/hffrm";
 import type { SwPageFrame } from "../../source/core/layout/newfrm";
 import type { SwTextNode } from "../../source/core/txtnode/ndtxt";
 import type { WriterParagraphProjection } from "../presentation/writer-view-projection";
@@ -11,17 +11,19 @@ import { WriterEditableParagraph } from "./WriterEditableParagraph";
 import { WriterEditableTable } from "./WriterEditableTable";
 import { WriterFloatingGraphic } from "./WriterFloatingGraphic";
 
-/** Paints the page-format-owned stories independently of the editable body cursor. @param props - Actual page, current text projections and connected graphics. @returns Story elements. */
+/** Paints the current page stories and registers their physical paragraph occurrences. @param props - Actual page, current text projections and connected graphics. @returns Story elements. */
 export function WriterPageStories({
   document,
   page,
-  previous,
+  stories,
+  retainParagraphElement,
   paragraphs,
   graphics,
 }: Readonly<{
   document: SwDoc;
   page: SwPageFrame;
-  previous: SwPageFrame | undefined;
+  stories: readonly SwPageStory[];
+  retainParagraphElement: (id: string, element: HTMLParagraphElement | null) => void;
   paragraphs: ReadonlyMap<number, WriterParagraphProjection>;
   graphics: ReadonlyMap<SwTextNode, readonly BoundGraphicFrame[]>;
 }>): ReactNode {
@@ -45,7 +47,7 @@ export function WriterPageStories({
       ) ?? null
     );
   }
-  return PreparePageStories(document, page, previous).map(
+  return stories.map(
     /** Paints one connected header or footer. @param story - Page story frame geometry. @returns Story DOM. */
     (story) => {
       const Tag = story.header ? "header" : "footer";
@@ -75,6 +77,7 @@ export function WriterPageStories({
                     availableWidth={story.width}
                     paragraphs={paragraphs}
                     readOnly
+                    retainParagraphElement={retainParagraphElement}
                     renderAnchoredFrames={
                       /** Uses actual table-cell width for embedded graphics. @param nodeIndex - Anchor node. @param width - Cell print width. @returns Graphic fragments. */
                       (nodeIndex, width) => {
@@ -95,10 +98,7 @@ export function WriterPageStories({
                     listMarker={paragraph.listMarker}
                     paragraph={paragraph}
                     readOnly
-                    retainElement={
-                      /** Leaves the page story outside the body cursor registry. @returns Nothing. */ () =>
-                        undefined
-                    }
+                    retainElement={retainParagraphElement}
                   />
                 </div>
               );

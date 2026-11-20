@@ -11,6 +11,7 @@ import { BrowserWriterEditWindow } from "./browser-writer-edit-window";
 import { WriterEditableParagraph } from "./WriterEditableParagraph";
 import { WriterEditableFlyFrame } from "./WriterEditableFlyFrame";
 import { WriterPageStories } from "./WriterPageStories";
+import { PreparePageStories } from "../../source/core/layout/hffrm";
 import { WriterFloatingGraphic } from "./WriterFloatingGraphic";
 import { WriterEditableTable } from "./WriterEditableTable";
 import type { WriterCursorSelection } from "./writer-selection-types";
@@ -39,6 +40,7 @@ export interface WriterPlainTextEditorProps {
   readonly onNumLabelMouseDown?: (event: React.MouseEvent<HTMLElement>) => boolean;
   readonly activeParagraphId: string;
   readonly cursorSelection: WriterCursorSelection;
+  readonly additionalSelections?: readonly WriterCursorSelection[];
   readonly editWindow: SwEditWin;
   readonly editingHostRef?: RefObject<HTMLElement | null>;
   readonly paragraphs: readonly WriterParagraph[];
@@ -87,32 +89,42 @@ export function WriterPlainTextEditor(props: WriterPlainTextEditorProps): React.
             /** Reads the active browser selection. @returns Current browser selection. */ () =>
               globalThis.getSelection(),
         },
-        /** Resolves one mounted render identity. @param paragraphId - Projection key. @param offset - Source-node offset. @returns Mounted fragment. */ (
+        /** Resolves one mounted render identity. @param paragraphId - Projection key. @param offset - Source-node offset. @param preferredPage - Previously projected physical page. @returns Mounted fragment. */ (
           paragraphId,
           offset,
+          preferredPage,
         ) => {
           const fragments = [...paragraphElements.values()].filter(
-            /** Matches the source-node identity. @param element - Mounted fragment. @returns Whether the identity matches. */ (
+            /** Matches the actual source-node identity. @param element - Mounted fragment. @returns Whether it matches. */ (
               element,
             ) => element.dataset.writerParagraphId === paragraphId,
           );
+          const atOffset = fragments.filter(
+            /** Matches the requested model offset. @param element - Mounted fragment. @returns Whether it contains the offset. */ (
+              element,
+            ) =>
+              Number(element.dataset.writerFragmentStart ?? 0) <= offset &&
+              (element.dataset.writerFragmentEnd === undefined ||
+                offset <= Number(element.dataset.writerFragmentEnd)),
+          );
           const focusNode = globalThis.getSelection()?.focusNode;
           return (
-            fragments.find(
-              /** Retains the actual header occurrence currently carrying the caret. @param element - Mounted occurrence. @returns Whether the caret belongs here. */
-              (element) =>
-                element.contains(focusNode ?? null) &&
-                Number(element.dataset.writerFragmentStart) <= offset &&
-                offset <= Number(element.dataset.writerFragmentEnd),
+            atOffset.find(
+              /** Retains the current physical occurrence. @param element - Mounted fragment. @returns Whether the caret belongs here. */ (
+                element,
+              ) => element.contains(focusNode ?? null),
             ) ??
-            fragments.find(
-              /** Finds the fragment containing the source offset. @param element - Mounted fragment. @returns Whether the offset belongs. */ (
+            atOffset.find(
+              /** Chooses a repeated page story on the current page when available. @param element - Mounted fragment. @returns Whether it belongs to that story. */ (
                 element,
               ) =>
-                Number(element.dataset.writerFragmentStart) <= offset &&
-                offset <= Number(element.dataset.writerFragmentEnd),
+                preferredPage !== undefined &&
+                element.closest<HTMLElement>("[data-writer-page]")?.dataset.writerPage ===
+                  preferredPage &&
+                element.closest("[data-writer-page-story]") !== null,
             ) ??
-            fragments[fragments.length - 1]
+            atOffset[0] ??
+            fragments.at(-1)
           );
         },
       ),
@@ -148,6 +160,27 @@ export function WriterPlainTextEditor(props: WriterPlainTextEditorProps): React.
       tableMeasurements,
     );
   const pages = layout.pages;
+  const pageStories = pages.map(
+    /** Prepares the selected variants for paint and search admission. @param page - Actual page. @param index - Physical page index. @returns Connected stories. */ (
+      page,
+      index,
+    ) => PreparePageStories(document, page, pages[index - 1]),
+  );
+  const search = props.editWindow.GetView().GetSearch();
+  useLayoutEffect(
+    /** Publishes the currently represented page-story roots at the device boundary. @returns Cleanup. */ () =>
+      search.RegisterPageStories(
+        new Set(
+          pageStories
+            .flat()
+            .map(
+              /** Uses one original section identity even when a story repeats. @param story - Physical occurrence. @returns Shared model section. */ (
+                story,
+              ) => story.start,
+            ),
+        ),
+      ),
+  );
   const paragraphById = new Map(
     props.paragraphs.map(
       /** Indexes one view paragraph. @param paragraph - View paragraph. @returns Key and paragraph pair. */ (
@@ -391,6 +424,14 @@ export function WriterPlainTextEditor(props: WriterPlainTextEditorProps): React.
     [controller, measuredLines, props.cursorSelection, props.paragraphs, rootElement],
   );
 
+  useLayoutEffect(
+    /** Projects Writer's additional selection ranges after text fragments mount. @returns Optional highlight cleanup. */ () =>
+      props.additionalSelections?.length
+        ? controller.HighlightSelections(props.additionalSelections)
+        : undefined,
+    [controller, measuredLines, props.additionalSelections, props.paragraphs],
+  );
+
   useEffect(
     /** Installs the edit-window native event boundary. @returns Listener cleanup. */
     function subscribeEditWindow(): () => void {
@@ -619,7 +660,17 @@ export function WriterPlainTextEditor(props: WriterPlainTextEditorProps): React.
                 <WriterPageStories
                   document={document}
                   page={page}
-                  previous={pages[pageIndex - 1]}
+                  stories={pageStories[pageIndex] ?? []}
+                  retainParagraphElement={
+                    /** Registers the actual page occurrence for browser selection. @param id - Native paragraph ID. @param element - Mounted paragraph or removal. @returns Nothing. */ (
+                      id,
+                      element,
+                    ) => {
+                      const key = `story:${pageIndex}:${id}`;
+                      if (element === null) paragraphElements.delete(key);
+                      else paragraphElements.set(key, element);
+                    }
+                  }
                   paragraphs={paragraphByNodeIndex}
                   graphics={graphics}
                 />

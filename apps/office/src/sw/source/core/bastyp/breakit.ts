@@ -41,9 +41,9 @@ export class SwBreakIt {
     return this.wordBreak.operatorStar();
   }
   /** Original weak-run resolution, next-mark preference and application language fallback. @param text - Logical native text. @param position - Native UTF16 position. @returns Native i18n script. */
-  public GetRealScriptOfText(text: string, position: number): number {
+  public GetRealScriptOfText(text: string | Uint16Array, position: number): number {
     let script: number = ScriptType.WEAK;
-    const units = GetWriterTextUnits(text);
+    const units = typeof text === "string" ? GetWriterTextUnits(text) : text;
     if (units.length !== 0) {
       if (position && position === units.length) --position;
       else if (position < 0) position = 0;

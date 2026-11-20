@@ -23,6 +23,8 @@ export interface WriterWorkspaceChromeProps {
   readonly formattingToolbar: ReactNode;
   /** Native contextual table toolbar, present only in table context. */
   readonly tableToolbar?: ReactNode;
+  /** Contextual Find toolbar placed above the status bar. */
+  readonly findToolbar?: ReactNode;
   /** Native numbering object toolbar, subordinate to the table bar in the same slot. */
   readonly numberingToolbar?: ReactNode;
   /** Whether the Writer properties sidebar is rendered beside the document canvas. */
@@ -51,6 +53,7 @@ export interface WriterWorkspaceChromeProps {
  * @param props.documentTitle - Title shown in the workspace title row.
  * @param props.onDocumentTitleChange - Applies a committed document title.
  * @param props.tableToolbar - Contextual table controls.
+ * @param props.findToolbar - Search controls above the status bar.
  * @param props.numberingToolbar - Contextual numbering controls.
  * @param props.formattingToolbar - Implemented formatting controls positioned below the standard toolbar.
  * @param props.isPropertiesSidebarVisible - Whether the contextual sidebar remains visible beside the canvas.
@@ -69,6 +72,7 @@ export function WriterWorkspaceChrome({
   documentTitle,
   formattingToolbar,
   tableToolbar,
+  findToolbar,
   numberingToolbar,
   isPropertiesSidebarVisible,
   isVerticalRulerVisible = false,
@@ -165,6 +169,8 @@ export function WriterWorkspaceChrome({
           {tableToolbar ?? numberingToolbar}
         </div>
       )}
+
+      {findToolbar}
 
       {isStatusBarVisible ? (
         <div

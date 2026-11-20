@@ -10,6 +10,7 @@ import { RES_BOX } from "../../inc/hintids";
 import { SwInsertTableFlags } from "../../inc/itabenum";
 /* eslint-disable react-refresh/only-export-components -- Pure presentation helpers are exported for focused behavior verification. */
 import { useCallback, useEffect, useMemo, useRef, useState, useSyncExternalStore } from "react";
+import { SvxSearchCmd } from "../../../svl/inc/srchitem";
 
 import { WriterCommandToolbar } from "./WriterCommandToolbar";
 import { WriterTableObjectBar } from "./WriterTableObjectBar";
@@ -40,10 +41,10 @@ import {
   resolveSwListFirstLineIndent,
 } from "../../source/core/txtnode/ndtxt-list-indent";
 import { WriterPropertiesPanel } from "./WriterPropertiesPanel";
+import { WriterSearch, type WriterSearchHistory } from "./WriterSearch";
 import { WriterWorkspaceChrome } from "./WriterWorkspaceChrome";
 import { CommandMenuBar } from "../../../framework/browser/presentation/CommandMenuBar";
 import { useWriterContextMenu } from "./WriterContextMenu";
-import type { CommandFailure } from "../../../sfx2/source/control/dispatch";
 import {
   createBrowserCommandSource,
   type BrowserCommandSource,
@@ -54,10 +55,11 @@ import {
   WRITER_COMMAND_IDS,
   writerMenuPlacements,
 } from "../../uiconfig/swriter/menubar/menubar-commands";
-import { selectWriterCommandResource } from "./writer-command-presentation";
+import { presentWriterStatus, selectWriterCommandResource } from "./writer-command-presentation";
+export { presentWriterCommandError, presentWriterStatus } from "./writer-command-presentation";
 import { WriterPlainTextEditor } from "../editor/WriterPlainTextEditor";
 import type { SwView } from "../../source/uibase/uiview/view";
-import { WriterViewStore, type WriterViewSnapshot } from "./writer-view-projection";
+import { WriterViewStore } from "./writer-view-projection";
 import { installWriterEmbeddedFonts } from "../../../vcl/browser/embedded-font-loader";
 import type { SwDoc } from "../../source/core/doc/doc";
 import { ItemSetToTableParam, TableParamToItemSet } from "../../source/uibase/shells/tabsh";
@@ -127,12 +129,45 @@ export function WriterWorkbench({
     presentationStore.GetSnapshot,
     presentationStore.GetSnapshot,
   );
+  const searchOwner = view.GetSearch();
+  const searchFeedback = useSyncExternalStore(
+    searchOwner.SubscribeFeedback,
+    searchOwner.GetFeedback,
+    searchOwner.GetFeedback,
+  );
   const activeDocument = view.GetDocShell().GetDoc();
   const occupiedTableNames = activeDocument.GetTables().map(
     /** Reads native table names for insertion. @param table - Existing table. @returns Name. */
     (table) => table.GetName(),
   );
   const suggestedTableName = activeDocument.GetUniqueTableName();
+  const [searchHistory, setSearchHistory] = useState<WriterSearchHistory>({
+    findbar: [],
+    search: [],
+    replacement: [],
+  });
+  const [searchSurface, setSearchSurface] = useState<{
+    dialog: boolean;
+    revision: number;
+  }>();
+  const openSearch = useCallback(
+    /** Opens the requested surface and reads the current model selection. @param dialog - Whether to open the full dialog. @returns Nothing. */ (
+      dialog: boolean,
+    ): void => {
+      if (searchSurface === undefined) searchOwner.OpenSearch(dialog);
+      setSearchSurface(
+        /** Requests focus even if the same surface is already open. @param previous - Current search surface. @returns Next search surface. */ (
+          previous,
+        ) => ({ dialog, revision: (previous?.revision ?? 0) + 1 }),
+      );
+    },
+    [searchOwner, searchSurface],
+  );
+  /** Closes the modeless search surface and returns to the document selection. @returns Nothing. */
+  function closeSearch(): void {
+    setSearchSurface(undefined);
+    editingHostRef.current?.focus();
+  }
   const [optionsDialog, setOptionsDialog] = useState(false);
   const [tableDialog, setTableDialog] = useState<"insert" | "properties">();
   const [tableBorderItems, setTableBorderItems] =
@@ -161,6 +196,17 @@ export function WriterWorkbench({
       const browserDialogShell = createSfxShell(
         null,
         createWriterInterface([
+          {
+            id: WRITER_COMMAND_IDS.focusFindbar,
+            capabilityId: "CAP-0111",
+            execute: /** Focuses the Find toolbar. @returns Nothing. */ () => openSearch(false),
+          },
+          {
+            id: WRITER_COMMAND_IDS.searchDialog,
+            capabilityId: "CAP-0111",
+            execute: /** Opens the modeless search dialog. @returns Nothing. */ () =>
+              openSearch(true),
+          },
           {
             id: WRITER_COMMAND_IDS.optionsDialog,
             execute: /** Opens real Writer module options. @returns Nothing. */ () =>
@@ -222,7 +268,7 @@ export function WriterWorkbench({
       return /** Releases browser-owned slots. @returns Nothing. */ () =>
         dispatcher.Pop(browserDialogShell);
     },
-    [currentTable, view],
+    [currentTable, openSearch, view],
   );
   /** Inserts a table from the upstream size grid with Writer's default table geometry. @param columns - Selected columns. @param rows - Selected rows. @returns Nothing. */
   function insertTableFromGrid(columns: number, rows: number): void {
@@ -502,10 +548,52 @@ export function WriterWorkbench({
       setTableSizeRequest(undefined);
     },
   };
+  useEffect(
+    /** Reveals any completed search after the browser projects the model cursor. @returns Optional frame cancellation. */ () => {
+      if (
+        searchFeedback?.kind !== "result" ||
+        searchFeedback.result.matches === 0 ||
+        searchFeedback.command === SvxSearchCmd.REPLACE_ALL
+      )
+        return;
+      const frame = requestAnimationFrame(
+        /** Scrolls the match into view without moving focus out of search controls. @returns Nothing. */ () => {
+          const host = editingHostRef.current;
+          const point = host?.ownerDocument.getSelection()?.focusNode;
+          if (point != null && host?.contains(point))
+            point.parentElement?.scrollIntoView?.({ block: "nearest", inline: "nearest" });
+        },
+      );
+      return /** Cancels an obsolete search scroll. @returns Nothing. */ () =>
+        cancelAnimationFrame(frame);
+    },
+    [searchFeedback],
+  );
+  const search =
+    searchSurface === undefined ? null : (
+      <WriterSearch
+        key={searchSurface.dialog ? "dialog" : "toolbar"}
+        dialog={searchSurface.dialog}
+        initial={searchOwner.GetSearchItem()}
+        focusRequest={searchSurface.revision}
+        history={searchHistory}
+        onHistoryChange={setSearchHistory}
+        owner={searchOwner}
+        canSearchSelection={searchOwner.HasSelection()}
+        close={closeSearch}
+        searchFeedback={searchFeedback}
+        showDialog={
+          /** Opens Find and Replace from the Find toolbar. @returns Nothing. */ () =>
+            openSearch(true)
+        }
+      />
+    );
   return (
     <div hidden={!isActive}>
+      {searchSurface?.dialog === true ? search : null}
       <WriterWorkspaceChrome
         documentTitle={snapshot.documentState.title}
+        findToolbar={searchSurface?.dialog === false ? search : null}
         numberingToolbar={
           (view.GetWrtShell().GetSelectionType() & SelectionType.NumberList) !== 0 ? (
             <WriterNumObjectBar
@@ -723,6 +811,7 @@ export function WriterWorkbench({
           }
           activeParagraphId={snapshot.activeParagraph.id}
           cursorSelection={snapshot.cursorSelection}
+          additionalSelections={snapshot.additionalSelections}
           editWindow={view.GetEditWin()}
           editingHostRef={editingHostRef}
           pageDescriptor={snapshot.pageDescriptor}
@@ -897,98 +986,4 @@ export function WriterWorkbench({
       )}
     </div>
   );
-}
-
-/** Formats command completion and shell/medium state at the browser presentation boundary. @param view - Active Writer view. @param snapshot - Current projection. @param getText - Localization lookup. @returns Status text. */
-export function presentWriterStatus(
-  view: SwView,
-  snapshot: WriterViewSnapshot,
-  getText: (messageId: string, fallback: string) => string,
-): string {
-  const commandError = presentWriterCommandError(view, getText);
-  if (commandError !== undefined) return commandError;
-  const operation = snapshot.mediumOperation;
-  if (operation.state === "failed")
-    return (
-      operation.message ?? getText("writer.status.operation-failed", "Document operation failed.")
-    );
-  if (operation.state === "pending")
-    return getText("writer.status.operation-pending", "Document operation in progress.");
-  if (operation.operation === "save" || operation.operation === "save-as")
-    return operation.state === "succeeded"
-      ? getText("writer.status.saved-local", "Saved locally in this browser.")
-      : getText("writer.status.saving", "Saving document.");
-  if (operation.operation === "open" && operation.state === "succeeded")
-    return getText("writer.status.opened", "Document opened.");
-  return snapshot.documentState.isModified
-    ? getText("writer.status.modified", "Document has unsaved changes.")
-    : getText("writer.status.not-saved", "Not saved in this browser.");
-}
-
-/** Resolves explicit Sfx command failures into browser presentation text. @param view - Active Writer view. @param getText - Localization lookup. @returns Status text, if a command failed. */
-export function presentWriterCommandError(
-  view: SwView,
-  getText: (messageId: string, fallback: string) => string,
-): string | undefined {
-  const failure = view.GetViewFrame().GetDispatcher().GetLastCommandError();
-  if (failure === undefined) return undefined;
-  const errors: readonly Readonly<{
-    commandId: string;
-    present: (failure: CommandFailure) => string;
-  }>[] = [
-    {
-      commandId: WRITER_COMMAND_IDS.openOdt,
-      present:
-        /** Presents an ODT-open failure. @param commandFailure - Failure state. @returns Status text. */ (
-          commandFailure,
-        ) => `${getText("writer.error.open-odt", "Could not open ODT")}: ${commandFailure.error}`,
-    },
-    {
-      commandId: WRITER_COMMAND_IDS.saveOdt,
-      present:
-        /** Presents an ODT-save failure. @param commandFailure - Failure state. @returns Status text. */ (
-          commandFailure,
-        ) => `${getText("writer.error.save-odt", "Could not save ODT")}: ${commandFailure.error}`,
-    },
-    {
-      commandId: WRITER_COMMAND_IDS.exportText,
-      present: /** Presents an export failure. @returns Status text. */ () =>
-        getText("writer.error.export-text", "Could not start plain-text download."),
-    },
-    {
-      commandId: WRITER_COMMAND_IDS.copy,
-      present:
-        /** Presents a Copy failure. @param commandFailure - Failure state. @returns Status text. */ (
-          commandFailure,
-        ) =>
-          commandFailure.code === "selection-required"
-            ? getText("writer.error.copy-selection-required", "Select text to copy.")
-            : getText("writer.error.copy", "Could not copy selection."),
-    },
-    {
-      commandId: WRITER_COMMAND_IDS.cut,
-      present:
-        /** Presents a Cut failure. @param commandFailure - Failure state. @returns Status text. */ (
-          commandFailure,
-        ) =>
-          commandFailure.code === "selection-required"
-            ? getText("writer.error.cut-selection-required", "Select text to cut.")
-            : getText("writer.error.cut", "Could not copy selection."),
-    },
-    {
-      commandId: WRITER_COMMAND_IDS.paste,
-      present:
-        /** Presents a Paste failure. @param commandFailure - Failure state. @returns Status text. */ (
-          commandFailure,
-        ) =>
-          commandFailure.code === "clipboard-empty"
-            ? getText("writer.error.clipboard-empty", "Clipboard has no text to paste.")
-            : getText("writer.error.paste", "Could not read browser clipboard."),
-    },
-  ];
-  for (const candidate of errors) {
-    if (candidate.commandId === failure.commandId) return candidate.present(failure);
-  }
-  /* istanbul ignore next -- an attached SwView dispatcher contains only the exhaustively mapped Writer commands above. */
-  return failure.error;
 }

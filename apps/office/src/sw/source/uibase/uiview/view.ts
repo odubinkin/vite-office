@@ -15,6 +15,7 @@ import {
 import type { SfxViewFrame } from "../../../../sfx2/source/view/viewfrm";
 import { createDocument } from "../../../../sfx2/source/doc/objsh";
 import type { SwModelHint } from "../../../inc/hints";
+import { SwViewSearch } from "./viewsrch";
 import { SwViewOption } from "../../../inc/viewopt";
 import { SwDocShell } from "../app/docsh";
 import { WriterDialogController } from "../dialog/writer-dialog-controller";
@@ -47,6 +48,7 @@ export class SwView {
   private readonly tableShell: SwTableShell;
   private readonly viewOptions: SwViewOption;
   private readonly wrtShell: SwWrtShell;
+  private readonly search: SwViewSearch;
   private readonly editWindow: SwEditWin;
   private readonly horizontalRuler = new SvxRuler(true);
   private readonly verticalRuler = new SvxRuler(false);
@@ -76,6 +78,7 @@ export class SwView {
       this.viewOptions,
       this,
     );
+    this.search = new SwViewSearch(this.wrtShell);
     this.docShell.SetView(this);
     this.editWindow = new SwEditWin(
       this,
@@ -160,6 +163,16 @@ export class SwView {
   /** Returns the persistent Writer editing shell. @returns SwWrtShell. */
   public GetWrtShell(): SwWrtShell {
     return this.wrtShell;
+  }
+
+  /** Executes the represented native repeat-search command. @returns Whether a match was found. */
+  public RepeatSearch(): boolean {
+    return this.search.RepeatSearch();
+  }
+
+  /** Returns the view's persistent search dispatcher. @returns Search owner. */
+  public GetSearch(): SwViewSearch {
+    return this.search;
   }
 
   /** Reads the consumed paragraph-spacing StateTabWin branch. @returns Uniform slot item or mixed state. */

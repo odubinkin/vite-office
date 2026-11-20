@@ -1,0 +1,42 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/sw/source/core/crsr/findcoll.ts",
+    "status": "mapped",
+    "upstreamPath": "sw/source/core/crsr/findcoll.cxx",
+    "localSymbols": [
+      "SwFindParaFormatColl",
+      "FindFormat"
+    ],
+    "upstreamSymbols": [
+      "SwFindParaFormatColl",
+      "FindFormat"
+    ],
+    "preservedResponsibilities": [
+      "Paragraph-style find and replace uses the registered cursor ring, whole-paragraph ranges, paragraph collection identity, and grouped format undo for Replace All."
+    ],
+    "omittedResponsibilities": [
+      "Style matching over layout-merged paragraphs remains unverified."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sw/source/core/crsr/findcoll.ts",
+          "marker": "FindFormat"
+        },
+        {
+          "path": "apps/office/src/sw/browser/presentation/WriterSearch.test.tsx",
+          "marker": "Search for styles"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "sw/source/core/crsr/findcoll.cxx",
+          "marker": "SwCursor::FindFormat"
+        }
+      ]
+    }
+  }
+}

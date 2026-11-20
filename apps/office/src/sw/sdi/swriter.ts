@@ -93,6 +93,7 @@ export interface WriterViewCommandTarget {
   readonly IsStoragePending: () => boolean;
   readonly NewDocument: () => void;
   readonly OpenPageDialog: () => Promise<boolean>;
+  readonly RepeatSearch: () => boolean;
   readonly RequestSelectAll: () => void;
   readonly ToggleHorizontalRuler: () => void;
   readonly ToggleVerticalRuler: () => void;

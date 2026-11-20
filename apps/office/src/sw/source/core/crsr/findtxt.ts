@@ -6,6 +6,7 @@ import {
   FIND_NO_RING,
   type SwCursor,
   type SwFindParas,
+  type SwSearchNodeFilter,
 } from "./swcrsr";
 import { FindRanges, SwDocPositions } from "../../../inc/cshtyp";
 import { REG_NOT_BEGINOFLINE } from "../../../../offapi/com/sun/star/util/SearchFlags";
@@ -13,6 +14,10 @@ import { SwTextNode } from "../txtnode/ndtxt";
 import type { SearchOptions2 } from "../../../../i18nutil/inc/searchopt";
 import { TextSearch } from "../../../../unotools/inc/textsearch";
 import { OUString } from "../../../../sal/inc/rtl/ustring";
+
+import { APPROXIMATE } from "../../../../offapi/com/sun/star/util/SearchAlgorithms2";
+import { SwScriptIterator } from "../txtnode/txatritr";
+import { g_pBreakIt } from "../bastyp/breakit";
 
 /** Native lcl_CleanStr's represented plain-text branch, retaining removal offsets in cleaned coordinates. @param node - Model text. @param start - Lower range bound. @param end - Upper range bound. @param removeSoftHyphens - Source DoSearch policy. @returns Clean text, adjusted end and removal offsets. */
 function lcl_CleanStr(
@@ -41,6 +46,46 @@ function lcl_CleanStr(
     removed,
   };
 }
+/** Searches a prepared paragraph in the native direction and chooses its locale per script run. @param node - Language-bearing text node. @param options - Native search options. @param engine - Shared wrapper. @param text - Cleaned text. @param start - Directional start and match output. @param end - Directional end and match output. @param backward - Direction. @returns Whether a nonempty match was found. */
+function searchText(
+  node: SwTextNode,
+  options: SearchOptions2,
+  engine: TextSearch,
+  text: OUString,
+  start: [number],
+  end: [number],
+  backward: boolean,
+): boolean {
+  /** Searches one prepared span. @returns Whether the native wrapper provided a nonempty match. */
+  function find(): boolean {
+    return (
+      (backward
+        ? engine.SearchBackward(text, start, end)
+        : engine.SearchForward(text, start, end)) && start[0] !== end[0]
+    );
+  }
+  if (options.AlgorithmType2 !== APPROXIMATE) return find();
+  const originalEnd = end[0];
+  const key = options.searchString.getStr().subarray(0, options.searchString.getLength());
+  const script = g_pBreakIt.GetRealScriptOfText(key, 0);
+  const scripts = new SwScriptIterator(
+    text.getStr().subarray(0, text.getLength()),
+    start[0],
+    !backward,
+  );
+  while (backward ? originalEnd < start[0] : start[0] < originalEnd) {
+    end[0] = scripts.GetScriptChgPos();
+    const runEnd = end[0];
+    if (script === scripts.GetCurrScript()) {
+      engine.SetLocale(options, g_pBreakIt.GetLocale(node.GetLang(backward ? runEnd : start[0])));
+      if (find()) return true;
+    }
+    scripts.Next();
+    start[0] = runEnd;
+  }
+  return false;
+}
+
 /** Native DoSearch model-text branch recovers point/mark using its directional removal predicates. @param target - Result PaM. @param node - Current node. @param options - Original options. @param engine - Shared wrapper. @param low - Lower content bound. @param high - Upper content bound. @param backward - Search direction. @returns Whether a nonempty match was selected. */
 function DoSearch(
   target: SwPaM,
@@ -57,13 +102,7 @@ function DoSearch(
   if (low >= clean.end) return false;
   const start: [number] = [backward ? clean.end : low],
     end: [number] = [backward ? low : clean.end];
-  if (
-    !(backward
-      ? engine.SearchBackward(clean.text, start, end)
-      : engine.SearchForward(clean.text, start, end)) ||
-    start[0] === end[0]
-  )
-    return false;
+  if (!searchText(node, options, engine, clean.text, start, end, backward)) return false;
   // Wrapper offsets are increasing in either direction. Native DoSearch temporarily swaps
   // them backward when recovering removals, then exchanges point and mark afterward.
   const startLimit = backward ? end[0] : start[0],
@@ -89,13 +128,14 @@ function DoSearch(
   if (backward) target.Exchange();
   return true;
 }
-/** Native represented model-text traversal through actual SwNodes, including table content. No projection IDs or concatenated document string are used. @param searchPam - Result cursor; the region owns traversal bounds. @param options - Native search options. @param engine - Prepared shared engine. @param backward - Direction. @param region - Registered model bounds. @returns Whether one match was found; failure preserves the caller cursor. */
+/** Native represented model-text traversal through actual SwNodes, including table content. No projection IDs or concatenated document string are used. @param searchPam - Result cursor; the region owns traversal bounds. @param options - Native search options. @param engine - Prepared shared engine. @param backward - Direction. @param region - Registered model bounds. @param acceptsNode - Represented layout admission. @returns Whether one match was found; failure preserves the caller cursor. */
 export function FindTextImpl(
   searchPam: SwPaM,
   options: SearchOptions2,
   engine: TextSearch,
   backward: boolean,
   region: SwPaM,
+  acceptsNode?: SwSearchNodeFilter,
 ): boolean {
   if (options.searchString.getLength() === 0) return false;
   const first = region.Start(),
@@ -111,7 +151,7 @@ export function FindTextImpl(
     index += backward ? -1 : 1
   ) {
     const node = nodes.at(index);
-    if (!(node instanceof SwTextNode)) continue;
+    if (!(node instanceof SwTextNode) || acceptsNode?.(node) === false) continue;
     const low = node === first.GetNode() ? first.GetContentIndex() : 0;
     const high = node === last.GetNode() ? last.GetContentIndex() : node.Len();
     if (low < high && DoSearch(searchPam, node, options, engine, low, high, backward)) return true;
@@ -122,16 +162,17 @@ export function FindTextImpl(
 /** Native SwFindParaText normal strategy over the actual shared TextSearch owner. Normal same-node replacement uses the actual document/history owner; other search modes remain unported. */
 export class SwFindParaText implements SwFindParas {
   private readonly m_aSText: TextSearch;
-  /** Initializes actual search state, once for all visited ranges. @param m_rSearchOpt - Native options. @param m_bReplace - Native replacement mode. @returns Search strategy. */
+  /** Initializes actual search state, once for all visited ranges. @param m_rSearchOpt - Native options. @param m_bReplace - Native replacement mode. @param acceptsNode - Represented layout admission. @returns Search strategy. */
   public constructor(
     private readonly m_rSearchOpt: SearchOptions2,
     private readonly m_bReplace: boolean,
+    private readonly acceptsNode?: SwSearchNodeFilter,
   ) {
     this.m_aSText = new TextSearch(m_rSearchOpt);
   }
   /** Calls the native represented model-text search. @param cursor - Result PaM. @param backward - Direction. @param region - Current native region. @returns Native find result flag. */
   public DoFind(cursor: SwPaM, backward: boolean, region: SwPaM): number {
-    if (!FindTextImpl(cursor, this.m_rSearchOpt, this.m_aSText, backward, region))
+    if (!FindTextImpl(cursor, this.m_rSearchOpt, this.m_aSText, backward, region, this.acceptsNode))
       return FIND_NOT_FOUND;
     if (!this.m_bReplace) return FIND_FOUND;
     const start = cursor.Start().GetContentIndex();
@@ -152,7 +193,7 @@ export class SwFindParaText implements SwFindParas {
     return this.m_bReplace;
   }
 }
-/** Native Find_Text prepares the strategy and applies the selection flag before generic cursor traversal. @param cursor - Actual cursor. @param options - Search value. @param start - First boundary. @param end - Last boundary. @param cancel - Cancellation output. @param ranges - Scope flags. @param replace - Native replacement mode. @returns Match count. */
+/** Native Find_Text prepares the strategy and applies the selection flag before generic cursor traversal. @param cursor - Actual cursor. @param options - Search value. @param start - First boundary. @param end - Last boundary. @param cancel - Cancellation output. @param ranges - Scope flags. @param replace - Native replacement mode. @param acceptsNode - Represented layout admission. @returns Match count. */
 export function FindText(
   cursor: SwCursor,
   options: SearchOptions2,
@@ -161,12 +202,13 @@ export function FindText(
   cancel: [boolean],
   ranges: FindRanges,
   replace = false,
+  acceptsNode?: SwSearchNodeFilter,
 ): number {
   if ((options.searchFlag & REG_NOT_BEGINOFLINE) !== 0) ranges |= FindRanges.InSel;
   const doc = cursor.GetPoint().GetNode().GetDoc(),
     undo = doc.GetUndoManager();
   // Prepare the actual backend before opening history, so unported engine modes do not mutate undo state.
-  const strategy = new SwFindParaText(options, replace);
+  const strategy = new SwFindParaText(options, replace, acceptsNode);
   return doc.RunModelTransaction(
     /** Completes native replacement history before publishing the model. @returns Match count. */ () => {
       const record = replace && undo.DoesUndo();

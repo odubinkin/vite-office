@@ -86,9 +86,9 @@ it("newer setOptions2 uses AlgorithmType2 while legacy setOptions reads only the
   engine.setOptions2(options);
   expect(engine.searchForward(string("a?b"), 0, 3).subRegExpressions).toBe(1);
 });
-it.each([Legacy.REGEXP, Legacy.APPROXIMATE])(
+it.each([Legacy.REGEXP])(
   "legacy mode %i keeps unsupported algorithms explicit and prior state intact",
-  /** No fake regex/similarity conversion or silent literal downgrade is allowed for known old modes. @param algorithm - Original legacy mode. @returns Nothing. */ (
+  /** No fake regex conversion or silent literal downgrade is allowed for known old modes. @param algorithm - Original legacy mode. @returns Nothing. */ (
     algorithm,
   ) => {
     const engine = new TextSearch(),

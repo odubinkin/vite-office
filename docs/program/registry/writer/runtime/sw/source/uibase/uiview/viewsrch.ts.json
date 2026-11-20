@@ -1,0 +1,34 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sw/source/uibase/uiview/viewsrch.ts",
+    "classification": "upstream-mechanism",
+    "state": "active",
+    "suite": "writer",
+    "subsystem": "text-search",
+    "capabilityIds": [
+      "CAP-0111"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/sw/source/uibase/uiview/viewsrch.ts#SwViewSearch",
+        "vendor/libreoffice-reference/sw/source/uibase/uiview/viewsrch.cxx#SwView::ExecSearch"
+      ],
+      "justification": "Connects the represented SwView search command branches to actual Writer cursor ranges, search options and document history. Uses actual body, connected editable text-frame, and active header/footer ranges for text and paragraph-style search and replacement. Uses the native SvxSearchCmd enum and initializes the dialog search item from the current document selection.",
+      "knownViolations": [],
+      "localSymbols": [
+        "SwViewSearch"
+      ],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": "sw/source/uibase/uiview/viewsrch.cxx",
+      "upstreamSymbols": [
+        "SwView::ExecSearch"
+      ]
+    }
+  }
+}

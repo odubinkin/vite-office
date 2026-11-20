@@ -30,6 +30,7 @@ import { KEY_SHIFT, KEY_MOD1, KEY_MOD2, KEY_MOD3 } from "../../../vcl/keycodes";
 export type BrowserWriterParagraphResolver = (
   paragraphId: string,
   offset: number,
+  preferredPage?: string,
 ) => HTMLParagraphElement | undefined;
 
 /** Browser surfaces injected for deterministic edit-window tests. */
@@ -54,6 +55,7 @@ export class BrowserWriterEditWindow {
   private tableBorderGuide: HTMLDivElement | undefined;
   private suppressBorderClick = false;
   private restoringSelection = false;
+  private selectionPage: string | undefined;
 
   /** Creates a browser edit window. @param editWindow - Writer-owned operation boundary. @param environment - Browser selection surface. @param resolveParagraph - Mounted projection lookup. @returns Nothing. */
   public constructor(
@@ -61,7 +63,13 @@ export class BrowserWriterEditWindow {
     private readonly environment: BrowserWriterEditWindowEnvironment,
     private readonly resolveParagraph: BrowserWriterParagraphResolver,
   ) {
-    this.selectionMapper = new BrowserWriterSelectionMapper(environment, resolveParagraph);
+    this.selectionMapper = new BrowserWriterSelectionMapper(
+      environment,
+      /** Resolves a search result relative to the previously projected physical page. @param id - Model owner. @param offset - Model text offset. @returns Mounted paragraph. */ (
+        id,
+        offset,
+      ) => resolveParagraph(id, offset, this.selectionPage),
+    );
     /* istanbul ignore start -- JSDOM lacks caretRangeFromPoint; geometry has isolated coverage. */
     const caretRangeFromPoint = environment.document.caretRangeFromPoint?.bind(
       environment.document,
@@ -158,10 +166,24 @@ export class BrowserWriterEditWindow {
     const previous = this.restoringSelection;
     this.restoringSelection = true;
     try {
-      return this.selectionMapper.Restore(selection);
+      if (!this.selectionMapper.Restore(selection)) return false;
+      const focusNode = this.environment.getSelection()?.focusNode;
+      const element = focusNode instanceof HTMLElement ? focusNode : focusNode?.parentElement;
+      const paragraph = element?.closest<HTMLElement>("[data-writer-paragraph-id]");
+      if (paragraph && (this.root === undefined || this.root.contains(paragraph)))
+        this.selectionPage =
+          paragraph.closest<HTMLElement>("[data-writer-page]")?.dataset.writerPage;
+      return true;
     } finally {
       this.restoringSelection = previous;
     }
+  }
+
+  /** Projects additional Writer selections without changing the browser's active caret. @param selections - Registered model selections. @returns Cleanup for these ranges. */
+  public HighlightSelections(
+    selections: readonly WriterCursorSelection[],
+  ): (() => void) | undefined {
+    return this.selectionMapper.HighlightSelections(selections);
   }
 
   /** Focuses the native editing device without admitting a stale DOM selection during an explicit model-owned gesture. Native GrabFocus retains the PaM. @param host - Actual editing host. @returns Nothing. */
