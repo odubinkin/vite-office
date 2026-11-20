@@ -1,4 +1,13 @@
 /** @fileoverview Consumed ScTabViewShell actual view ownership and default frame line from tabvwsh3.cxx/tabvwsh4.cxx/tabvwsh8.cxx/tabvwshf.cxx;native window/UNO services remain unported. */
+import { SheetSplitMode } from "../../core/data/document.sheet-visibility";
+import {
+  FreezeSplitters,
+  RemoveSplit,
+  SplitAtCursor,
+  type ScPaneCommand,
+  type ScSplitDevice,
+} from "./tabview";
+import { SfxInt32Item } from "../../../../svl/source/items/intitem";
 import type { Color } from "../../../../tools/inc/color";
 import { CanHideTable } from "./viewfun2";
 import type { ScModule } from "../../../inc/scmod";
@@ -67,6 +76,61 @@ export class ScTabViewShell extends ScViewFunc {
     this.viewShellDoc.SetDocumentModified();
     request.Done();
   }
+  /** Queries the live per-sheet source splitter modes. @param mode - Mode to look for. @returns Whether either axis matches. */
+  HasPaneMode(mode: SheetSplitMode): boolean {
+    const layout = this.GetViewData().GetPaneLayout();
+    return layout?.horizontalMode === mode || layout?.verticalMode === mode;
+  }
+
+  /** Queries source split and freeze menu activation. @param command - Pane slot kind. @returns Checked state for the native boolean commands. */
+  GetPaneCommandState(command: ScPaneCommand): Readonly<{ enabled: boolean; checked?: boolean }> {
+    if (command === "split" || command === "cursor") {
+      const mode = command === "split" ? SheetSplitMode.NORMAL : SheetSplitMode.FIX;
+      return { enabled: true, checked: this.HasPaneMode(mode) };
+    }
+    return { enabled: true };
+  }
+
+  /** Original MoveCursorEnd targets the editable side of each fixed splitter. @returns Cursor deltas for GoToStart. */
+  MoveToStartDelta(): readonly [number, number] {
+    const view = this.GetViewData(),
+      layout = view.GetPaneLayout();
+    const x = layout?.horizontalMode === SheetSplitMode.FIX ? layout.horizontalPosition : 0;
+    const y = layout?.verticalMode === SheetSplitMode.FIX ? layout.verticalPosition : 0;
+    view.ResetOldCursor();
+    return [x - view.GetCurX(), y - view.GetCurY()];
+  }
+
+  /** Executes the native window split and freeze command family. @param kind - Source operation. @param device - Grid geometry. @param request - Source slot request. @returns Nothing. */
+  ExecutePaneCommand(kind: ScPaneCommand, device: ScSplitDevice, request: SfxRequest): void {
+    const view = this.GetViewData();
+    const frozen = this.HasPaneMode(SheetSplitMode.FIX);
+    if (kind === "split") {
+      if (this.HasPaneMode(SheetSplitMode.NORMAL)) {
+        RemoveSplit(view);
+        if (frozen) this.viewShellDoc.SetDocumentModified();
+      } else if (frozen) FreezeSplitters(view, device, false);
+      else SplitAtCursor(view, device);
+    } else if (kind === "cursor" && frozen) {
+      RemoveSplit(view);
+      this.viewShellDoc.SetDocumentModified();
+    } else {
+      const index = request.GetArgs().find(
+        /** Finds the source FN_PARAM_1 index. @param item - Argument. @returns Match. */
+        (item) => item.Which() === 21160,
+      );
+      FreezeSplitters(
+        view,
+        device,
+        true,
+        kind,
+        index instanceof SfxInt32Item ? Math.max(0, index.GetValue()) : 1,
+      );
+      this.viewShellDoc.SetDocumentModified();
+    }
+    request.Done();
+  }
+
   /** Source Hide state keeps at least one visible sheet. @returns Availability. */
   CanHideTable(): boolean {
     return CanHideTable(this);

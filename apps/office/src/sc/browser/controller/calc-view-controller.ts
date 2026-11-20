@@ -1,4 +1,5 @@
 /** @fileoverview Browser input/viewport binding for the current scalar Calc model. Actual cells,marks,formula evaluation and undo stacks remain with native-shaped owners. */
+import type { ScPaneCommand } from "../../source/ui/view/tabview";
 import { ScUndoShowHideTab, ScUndoTabColor } from "../../source/ui/undo/undotab";
 import { ScMarkData } from "../../inc/markdata";
 import { ScViewUtil } from "../../source/ui/view/viewutil";
@@ -920,6 +921,20 @@ export class CalcViewController {
     }
     return true;
   }
+  /** Commits pending input before changing the real pane layout. @param command - Source pane command. @param request - Optional typed index and completion. @returns Nothing. */
+  ExecutePaneCommand(command: ScPaneCommand, request: SfxRequest): void {
+    if (!this.Commit()) {
+      request.Ignore();
+      return;
+    }
+    this.viewShell.ExecutePaneCommand(
+      command,
+      this.gridViewport.SplitDevice(this.viewData),
+      request,
+    );
+    this.Changed();
+  }
+
   /** Repositions the DOM track from the adopted native sheet. @param width - Client width. @param height - Client height. @returns Browser scroll position and whether an origin was stored. */
   RestoreScrollPosition(width: number, height: number) {
     return this.gridViewport.Restore(this.viewData, width, height);

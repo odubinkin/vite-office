@@ -119,6 +119,7 @@ export function CalcWorkbench({
     restoredViewport = useRef(false);
   const view = controller.viewData,
     doc = controller.shell.GetDocument();
+  const paneLayoutRevision = view.GetPaneLayoutRevision();
   const cursorColumn = view.GetCurX(),
     cursorRow = view.GetCurY(),
     activeTab = view.GetTabNumber(),
@@ -194,7 +195,7 @@ export function CalcWorkbench({
           client.clientHeight,
         );
     },
-    [controller, doc, activeTab],
+    [controller, doc, activeTab, paneLayoutRevision],
   );
   useEffect(
     /** Tracks concrete browser viewport changes separately from logical sheet rows. @returns Cleanup. */ () => {
@@ -338,7 +339,16 @@ export function CalcWorkbench({
       view.SetActivePart((right | bottom) as ScSplitPos);
       revealCell(cursorColumn, cursorRow, "cell");
     },
-    [controller, view, revealCell, cursorColumn, cursorRow, inputMode, cursorRowHeight],
+    [
+      controller,
+      view,
+      revealCell,
+      cursorColumn,
+      cursorRow,
+      inputMode,
+      cursorRowHeight,
+      paneLayoutRevision,
+    ],
   );
   /** Projects original input-handler Command selected-reference collapse before DOM paste or IME starts. @param event - Actual editor command. @returns Nothing. */
   function inputCommand(event: SyntheticEvent<HTMLInputElement>): void {
@@ -441,6 +451,15 @@ export function CalcWorkbench({
         frame.GetDispatcher().Execute(command.command.id);
       }
       return;
+    }
+    if (event.key === "Home") {
+      const d = frame.GetDispatcher();
+      const command = d.FindCommandByShortcut(getBrowserShortcut(event) as string);
+      if (command) {
+        event.preventDefault();
+        d.Execute(command.command.id);
+        return;
+      }
     }
     if ((event.key === " " || event.code === "Space") && !event.metaKey) {
       const rowSelection = event.shiftKey && !event.ctrlKey && !event.altKey;

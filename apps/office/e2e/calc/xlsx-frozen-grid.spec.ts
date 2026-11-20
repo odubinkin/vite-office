@@ -102,3 +102,44 @@ test("Calc keeps the frozen XLSX rows and columns stationary while scrolling", /
     `<pane xSplit="5" ySplit="10" topLeftCell="${origin}" activePane="bottomRight" state="frozen"/>`,
   );
 });
+
+test("Calc freezes the first row from View even when it is scrolled out of the grid", /** Checks the production freeze command, scroll behavior and XLSX pane output. @param fixtures - Chromium fixtures. @param fixtures.page - Page. @returns Completion. */ async ({
+  page,
+}) => {
+  await page.goto("/calc");
+  const grid = page.getByRole("grid", { name: "Spreadsheet" });
+  const top = grid.locator('[data-calc-column="0"][data-calc-row="0"]');
+  await expect(top).toBeInViewport();
+  await grid.evaluate(
+    /** Scrolls the first row out of the body. @param element - Grid viewport. @returns Nothing. */
+    (element) => {
+      element.scrollTop += 100;
+    },
+  );
+  await expect(top).toHaveCount(0);
+  await page.getByRole("menuitem", { name: "View", exact: true }).click();
+  await page.getByRole("menuitem", { name: "Freeze Cells", exact: true }).click();
+  await page.getByRole("menuitem", { name: "Freeze First Row", exact: true }).click();
+  await expect(top).toBeInViewport();
+  const before = await top.boundingBox();
+  await grid.evaluate(
+    /** Scrolls the lower pane while leaving the first row fixed. @param element - Grid viewport. @returns Nothing. */
+    (element) => {
+      element.scrollTop += 100;
+    },
+  );
+  await expect(top).toBeInViewport();
+  expect(await top.boundingBox()).toEqual(before);
+
+  const download = page.waitForEvent("download");
+  await page.getByRole("menuitem", { name: "File", exact: true }).click();
+  await page.getByRole("menuitem", { name: "Export…" }).click();
+  await page.getByRole("button", { name: "Download XLSX" }).click();
+  const output = await (await download).path();
+  if (!output) throw new Error("Missing XLSX download after freezing first row.");
+  const archive = await DocumentArchive.open(await readFile(output));
+  const xml = await archive.readTextEntry("xl/worksheets/sheet1.xml");
+  expect(xml.match(/<pane[^>]*\/>/u)?.[0]).toMatch(
+    /<pane xSplit="0" ySplit="1" [^>]*state="frozen"\/>/u,
+  );
+});

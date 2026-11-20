@@ -7346,3 +7346,12 @@ preserves the original name lookup and history recording.
 
 - [Original Show execution](../../vendor/libreoffice-reference/sc/source/ui/view/viewfun2.cxx)
 - [Original visibility undo](../../vendor/libreoffice-reference/sc/source/ui/undo/undotab.cxx)
+
+### CALC-773 — Freeze can mark a document modified without adding a pane
+
+The desktop `FreezeSplitters(true)` path marks the document modified
+before computing the boundary. At the first visible cell, Freeze Panes
+can leave both axes unsplit while still changing the modified state. The
+desktop command preserves this ordering.
+
+- [Original freeze and modified state](../../vendor/libreoffice-reference/sc/source/ui/view/tabview.cxx)
