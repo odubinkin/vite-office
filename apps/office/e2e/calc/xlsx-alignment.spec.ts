@@ -21,10 +21,14 @@ test("Calc preserves both XLSX reading orders through Open and Download", /** Ve
     .locator('input[type="file"]');
   const left = page.getByRole("gridcell", { name: /^A4(?:\s|$)/u }).locator("[dir]");
   const right = page.getByRole("gridcell", { name: /^A5(?:\s|$)/u }).locator("[dir]");
+  const name = page.getByRole("textbox", { name: "Name Box", exact: true });
   await page.goto("/calc");
   await page.getByRole("button", { name: "Open", exact: true }).click();
   await page.getByRole("tab", { name: "On computer" }).click();
   await picker.setInputFiles(fixture);
+  await expect(page.getByRole("dialog")).toBeHidden();
+  await name.fill("A4");
+  await name.press("Enter");
   await expect(left).toHaveAttribute("dir", "ltr");
   await expect(right).toHaveAttribute("dir", "rtl");
 
@@ -49,6 +53,8 @@ test("Calc preserves both XLSX reading orders through Open and Download", /** Ve
     mimeType: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
   });
   await expect(page.getByText("reading-order-reopened", { exact: true })).toBeVisible();
+  await name.fill("A4");
+  await name.press("Enter");
   await expect(left).toHaveAttribute("dir", "ltr");
   await expect(right).toHaveAttribute("dir", "rtl");
 });

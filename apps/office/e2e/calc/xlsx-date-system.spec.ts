@@ -21,6 +21,14 @@ for (const representation of ["serial", "ISO date"] as const)
     const upload = page
       .getByRole("tabpanel", { name: "On computer", exact: true })
       .locator('input[type="file"]');
+    const name = page.getByRole("textbox", { name: "Name Box", exact: true });
+    /** Reveals the date cell after Calc restores the workbook's saved viewport. @returns Completion. */
+    async function showDateCell(): Promise<void> {
+      await expect(page.getByRole("dialog")).toBeHidden();
+      await name.fill("A1");
+      await name.press("Enter");
+      await expect(date).toBeVisible();
+    }
     await page.goto("/calc");
     await page.getByRole("button", { name: "Open", exact: true }).click();
     await page.getByRole("tab", { name: "On computer" }).click();
@@ -47,14 +55,13 @@ for (const representation of ["serial", "ISO date"] as const)
         mimeType: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
       });
     }
-    await expect(date).toBeVisible();
-    await expect(page.getByRole("dialog")).toHaveCount(0);
+    await showDateCell();
 
     await page.reload();
     await page.getByRole("button", { name: "Open", exact: true }).click();
     await page.getByRole("tab", { name: "In browser" }).click();
     await page.getByRole("button", { name: "tdf165180_date1904", exact: true }).click();
-    await expect(date).toBeVisible();
+    await showDateCell();
     if (representation === "ISO date") {
       await expect(page.getByText("TRUE", { exact: true })).toBeVisible();
       await expect(page.getByText("#DIV/0!", { exact: true })).toBeVisible();
@@ -85,5 +92,5 @@ for (const representation of ["serial", "ISO date"] as const)
       mimeType: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
     });
     await expect(page.getByText("reopened-1904", { exact: true })).toBeVisible();
-    await expect(date).toBeVisible();
+    await showDateCell();
   });
