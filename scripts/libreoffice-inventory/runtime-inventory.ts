@@ -352,6 +352,8 @@ function collectDeclaredSymbols(sourceFile: ts.SourceFile): ReadonlySet<string> 
         ts.isInterfaceDeclaration(node) ||
         ts.isTypeAliasDeclaration(node) ||
         ts.isVariableDeclaration(node) ||
+        ts.isPropertyDeclaration(node) ||
+        ts.isExportSpecifier(node) ||
         ts.isMethodDeclaration(node)) &&
       node.name !== undefined
     )

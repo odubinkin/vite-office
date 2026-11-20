@@ -15,7 +15,7 @@ test("Writer menu keyboard navigation and accessible application chrome" /**
   await page.goto("/");
 
   await expect(page.getByText("Vite Office")).toBeVisible();
-  await expect(page.getByLabel("Search is unavailable")).toHaveAttribute("aria-disabled", "true");
+  await expect(page.getByLabel("Search is unavailable")).toHaveCount(0);
   await expect(page.getByRole("navigation", { name: "Office applications" })).toBeVisible();
   await expect(page.locator("#workspace")).toHaveCount(0);
   const writerLink = page.getByRole("link", { name: "Writer" });

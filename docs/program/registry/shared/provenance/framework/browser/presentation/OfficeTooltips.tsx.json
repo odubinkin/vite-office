@@ -1,0 +1,25 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "browser-adaptation",
+    "status": "local-only",
+    "localPath": "apps/office/src/framework/browser/presentation/OfficeTooltips.tsx",
+    "rationale": "React presents icon help through a DOM portal so the viewport can position it outside scrollable browser toolbars.",
+    "responsibilities": [
+      "Shows viewport-positioned help for the shared icon controls on pointer or keyboard focus."
+    ],
+    "stackDivergence": {
+      "kind": "browser-adaptation",
+      "rationale": "Browsers render and position the help bubble through a DOM portal."
+    },
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/framework/browser/presentation/OfficeTooltips.tsx",
+          "marker": "OfficeTooltips"
+        }
+      ]
+    }
+  }
+}

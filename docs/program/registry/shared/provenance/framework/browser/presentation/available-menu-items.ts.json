@@ -1,0 +1,25 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "browser-adaptation",
+    "status": "local-only",
+    "localPath": "apps/office/src/framework/browser/presentation/available-menu-items.ts",
+    "rationale": "The browser command adapter supplies registrations to shared React menu placements, which normalize empty groups and separators before rendering.",
+    "responsibilities": [
+      "Projects Calc menu resources through browser command registration, removing empty submenus and stray separators."
+    ],
+    "stackDivergence": {
+      "kind": "browser-adaptation",
+      "rationale": "React menu placements derive availability from the browser command adapter."
+    },
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/framework/browser/presentation/available-menu-items.ts",
+          "marker": "selectAvailableMenuItems"
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,33 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/framework/browser/presentation/available-menu-items.ts",
+    "classification": "browser-adaptation",
+    "state": "active",
+    "suite": "shared",
+    "subsystem": "browser-presentation",
+    "capabilityIds": [
+      "CAP-a8560287-c005-4bae-8300-bcd06f394ec7",
+      "CAP-3315316f-31e4-478e-b359-0cd714f0db20"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "not-applicable",
+      "defaultStatus": "not-applicable",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/framework/browser/presentation/available-menu-items.ts",
+        "apps/office/src/sc/browser/presentation/calc-workbench.tsx"
+      ],
+      "justification": "Projects Calc menu resources through browser command registration, removing empty submenus and stray separators.",
+      "knownViolations": [],
+      "localSymbols": [
+        "selectAvailableMenuItems"
+      ],
+      "sourceResponsibility": "browser-owned",
+      "upstreamFile": null,
+      "upstreamSymbols": []
+    }
+  }
+}

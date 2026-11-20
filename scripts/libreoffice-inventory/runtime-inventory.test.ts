@@ -395,10 +395,20 @@ describe("runtime inventory" /** Groups strict parser and complete-coverage chec
           path: "apps/office/src/sw/source/core/example.ts",
           semantic: semanticRecord({
             expectedBaseClass: "Base",
-            localSymbols: ["Alpha", "Mode", "run", "Shape", "Alias", "value", "method"],
+            localSymbols: [
+              "Alpha",
+              "Mode",
+              "run",
+              "Shape",
+              "Alias",
+              "value",
+              "method",
+              "delegate",
+              "forwarded",
+            ],
           }),
         }) as never,
-        "export class Alpha extends Base { method(): void {} } export enum Mode { One } export function run(): void {} export interface Shape {} export type Alias = string; export const value = 1;",
+        "export class Alpha extends Base { method(): void {} delegate = run; } export enum Mode { One } export function run(): void {} export interface Shape {} export type Alias = string; export const value = 1; export { run as forwarded };",
       ),
     ).toEqual([]);
     expect(
