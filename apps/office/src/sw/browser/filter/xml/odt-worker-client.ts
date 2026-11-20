@@ -303,13 +303,34 @@ export class OdtWorkerClient implements OdtFilterService {
 
 /** Creates the production Dedicated Worker filter. @returns Worker-backed ODT service. */
 export function createBrowserOdtFilterService(): OdtFilterService {
-  return new OdtWorkerClient(
-    /** Creates one Vite-emitted module worker. @returns Dedicated Worker transport. */ () =>
-      new Worker(new URL("../../../../writer-odt-worker.ts", import.meta.url), {
-        name: "writer-odt-filter",
-        type: "module",
-      }),
-  );
+  /** Creates a lazy client for the Vite-emitted module worker. @returns Restartable client. */
+  function createClient(): OdtWorkerClient {
+    return new OdtWorkerClient(
+      /** Starts a dedicated ODT worker. @returns Worker transport. */ () =>
+        new Worker(new URL("../../../../writer-odt-worker.ts", import.meta.url), {
+          name: "writer-odt-filter",
+          type: "module",
+        }),
+    );
+  }
+
+  const foreground = createClient();
+  const primaryStorage = createClient();
+  return {
+    Import: foreground.Import.bind(foreground),
+    Export: foreground.Export.bind(foreground),
+    ExportXml: primaryStorage.ExportXml.bind(primaryStorage),
+    /** Invalidates both operations when the owning document changes. @returns Nothing. */
+    Cancel() {
+      foreground.Cancel();
+      primaryStorage.Cancel();
+    },
+    /** Releases both workers when the owning session closes. @returns Nothing. */
+    Close() {
+      foreground.Close();
+      primaryStorage.Close();
+    },
+  };
 }
 
 /** Checks the envelope fields needed before terminal narrowing. @param value - Untrusted response. @returns Whether it is a supported response shape. */

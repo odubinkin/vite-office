@@ -294,7 +294,7 @@ describe("ODT worker client" /** Groups client transport behavior. @returns Noth
     ).toThrow("timeout");
   });
 
-  it("constructs the production module Worker through the browser composition branch" /** Verifies the Vite Worker factory without executing the worker bootstrap in jsdom. @returns Completion after cancellation. */, async () => {
+  it("keeps a download active during primary XML persistence" /** Verifies independent production worker ownership and session cancellation. @returns Completion after both formats are written. */, async () => {
     const workers: FakeWorker[] = [];
     const urls: string[] = [];
     /** Browser-compatible Worker constructor test double. */
@@ -308,15 +308,55 @@ describe("ODT worker client" /** Groups client transport behavior. @returns Noth
       }
     }
     vi.stubGlobal("Worker", BrowserWorkerStub);
+    const source = snapshot();
+    const service = createBrowserOdtFilterService();
     try {
-      const service = createBrowserOdtFilterService();
+      createWriterModuleFactory();
+      expect(workers).toHaveLength(0);
+      const downloading = service.Export(source);
+      await vi.waitFor(
+        /** Waits for the download snapshot to reach its worker. @returns Assertion result. */ () =>
+          expect(workers[0]?.posted[0]?.message).toMatchObject({
+            payload: { operation: "export" },
+          }),
+      );
+      const downloadWorker = workers[0] as FakeWorker;
+      const saving = service.ExportXml(source);
+      await vi.waitFor(
+        /** Waits for the storage snapshot to reach a separate worker. @returns Assertion result. */ () =>
+          expect(workers[1]?.posted[0]?.message).toMatchObject({
+            payload: { operation: "export-xml" },
+          }),
+      );
+      const storageWorker = workers[1] as FakeWorker;
+      const xml = { format: "xml" as const, files: { "content.xml": "<document />" } };
+      storageWorker.emit({
+        id: postedId(storageWorker),
+        protocol: 1,
+        type: "result",
+        payload: { operation: "export-xml", data: xml },
+      });
+      await expect(saving).resolves.toEqual(xml);
+      const bytes = new Uint8Array([0x50, 0x4b]);
+      downloadWorker.emit({
+        id: postedId(downloadWorker),
+        protocol: 1,
+        type: "result",
+        payload: { operation: "export", bytes: bytes.buffer },
+      });
+      await expect(downloading).resolves.toEqual(bytes);
+
       const pending = service.Import(new Uint8Array([1]), metadata());
       expect(urls[0]).toContain("odt-worker.ts");
       service.Cancel();
       await expect(pending).rejects.toMatchObject({ category: "cancelled" });
-      createWriterModuleFactory();
-      expect(workers).toHaveLength(1);
+      expect(downloadWorker.terminated).toBe(true);
+      service.Close();
+      expect(storageWorker.terminated).toBe(true);
+      expect(workers).toHaveLength(2);
     } finally {
+      service.Close();
+      source.document.Dispose();
       vi.unstubAllGlobals();
     }
   });
