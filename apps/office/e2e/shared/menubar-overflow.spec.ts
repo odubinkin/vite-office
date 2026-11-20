@@ -3,7 +3,7 @@ import AxeBuilder from "@axe-core/playwright";
 import { expect, test } from "@playwright/test";
 const roots = {
   writer: ["File", "Edit", "View", "Insert", "Format", "Styles", "Table", "Tools"],
-  calc: ["File", "Edit", "View", "Format", "Sheet"],
+  calc: ["File", "Edit", "View", "Format", "Sheet", "Data"],
 };
 for (const suite of ["writer", "calc"] as const)
   for (const width of suite === "writer" ? [1280, 390] : [1280, 390, 320]) {
@@ -27,7 +27,7 @@ for (const suite of ["writer", "calc"] as const)
       await editor.focus();
       await expect(bar.getByRole("menuitem", { name: "File", exact: true })).toBeVisible();
       const more = bar.getByRole("menuitem", { name: "More menus", exact: true });
-      if (width === (suite === "writer" ? 390 : 320)) {
+      if (width < 1280) {
         await expect(more).toBeVisible();
         const visible = await bar.locator(":scope > div > button").allTextContents();
         const prefix = roots[suite].filter(

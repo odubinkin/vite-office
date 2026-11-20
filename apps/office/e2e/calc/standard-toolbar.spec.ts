@@ -1,7 +1,7 @@
 /** @fileoverview Connected Calc standard toolbar commands, compact icon geometry and real bindings. */
 import AxeBuilder from "@axe-core/playwright";
 import { expect, test } from "@playwright/test";
-const labels = ["Open", "Clear", "Undo", "Redo"];
+const labels = ["Open", "Clear", "Undo", "Redo", "Freeze Panes", "Split Window"];
 for (const viewport of [
   { width: 1280, height: 800 },
   { width: 390, height: 600 },
@@ -37,8 +37,8 @@ for (const viewport of [
     for (let index = 0; index < labels.length; index++) {
       const button = buttons.nth(index);
       await expect(button.locator("svg")).toHaveCount(1);
-      if (index === 0 || labels[index] === "Clear") await expect(button).toBeEnabled();
-      else await expect(button).toBeDisabled();
+      if (labels[index] === "Undo" || labels[index] === "Redo") await expect(button).toBeDisabled();
+      else await expect(button).toBeEnabled();
     }
     const geometry = await toolbar.evaluate(
       /** Reads actual layout without overriding browser measurements. @param node - Toolbar. @returns Width evidence. */ (

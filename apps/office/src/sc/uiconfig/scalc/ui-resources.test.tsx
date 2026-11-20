@@ -22,7 +22,7 @@ it("opens connected top menus with shared shortcut captions", /** Uses real prod
       sheetWorkflows={session.sheetWorkflows}
     />,
   );
-  const labels = ["File", "Edit", "View", "Format", "Sheet"];
+  const labels = ["File", "Edit", "View", "Format", "Sheet", "Data"];
   const menubar = screen.getByRole("menubar", { name: "Calc menu" });
   expect(
     within(menubar)
@@ -115,7 +115,14 @@ it("retains the complete standardbar resource and projects connected controls wi
         ) => item.commandId,
       ),
   ).toEqual(ids);
-  const connectedIds = [".uno:OpenFromCalc", ".uno:ResetAttributes", ".uno:Undo", ".uno:Redo"];
+  const connectedIds = [
+    ".uno:OpenFromCalc",
+    ".uno:ResetAttributes",
+    ".uno:Undo",
+    ".uno:Redo",
+    ".uno:FreezePanes",
+    ".uno:SplitWindow",
+  ];
   const buttons = toolbar.getAllByRole("button");
   expect(
     buttons.map(
@@ -136,8 +143,9 @@ it("retains the complete standardbar resource and projects connected controls wi
     ) => {
       expect(button.querySelector("svg")).not.toBeNull();
       expect(button).toHaveClass("size-7", "shrink-0");
-      if (index < 2) expect(button).toBeEnabled();
-      else expect(button).toBeDisabled();
+      const id = connectedIds[index];
+      if (id === ".uno:Undo" || id === ".uno:Redo") expect(button).toBeDisabled();
+      else expect(button).toBeEnabled();
     },
   );
   expect(toolbar.queryByRole("button", { name: "Cut" })).toBeNull();
