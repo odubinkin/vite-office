@@ -1,0 +1,99 @@
+{
+  "scope": "Original tdf170298 XLSX dynamic names and overlapping conditional rules, with native worksheet and reference formula dependencies.",
+  "implementationCommit": "7473d4544632",
+  "upstream": [
+    "formula/inc/core_resource.hrc (original OOXML and ODFF function tokens)",
+    "formula/source/core/api/FormulaCompiler.cxx (OFFSET reference export and volatile function handling)",
+    "sc/source/core/tool/interpr1.cxx (ScOffset, ScCountIf, ScNot, ScIsEmpty)",
+    "sc/source/core/tool/interpr2.cxx (ScGetActDate and ScGetMonth)",
+    "sc/source/core/tool/odffmap.cxx and interpr4.cxx (Analysis.getEdate mapping and integer add-in argument handling)",
+    "scaddins/source/analysis/analysis.cxx and analysishelper.cxx (AnalysisAddIn::getEdate and ScaDate)",
+    "sc/qa/unit/cond_format.cxx (testTdf170298_importHang)",
+    "sc/qa/unit/ucalc_formula.cxx and ucalc_formula2.cxx (testFuncCOUNTIF and testExtRefFuncOFFSET)"
+  ],
+  "checks": [
+    {
+      "command": "npm run test:calc --workspace @vite-office/office -- excelfilter.page-settings.test.ts --maxWorkers=1 --testTimeout=90000",
+      "result": "pass",
+      "evidence": "18 passing cases. The original XLSX keeps the OFFSET/COUNTIF name and both original rule ranges and expressions through Worker, ODS, XLSX export and reopen. The live date condition paints green, and the blank condition takes precedence and paints yellow."
+    },
+    {
+      "command": "npm run test:coverage:calc --workspace @vite-office/office -- interpr1.reference.test.ts interpr1.conditional.test.ts numeric-formula.test.ts lookup-formula.test.ts reference-protocol.test.ts external-reference-formula.test.ts -t COUNTIF|OFFSET|scalar occupancy|Excel criteria|reference|dynamic --maxWorkers=2 --testTimeout=90000 --coverage.include=src/sc/source/core/tool/interpr1.reference.ts --coverage.include=src/sc/source/core/tool/interpr1.conditional.ts --coverage.include=src/sc/source/core/tool/interpr2.ts --coverage.include=src/sc/source/core/tool/addincol.analysis.ts --coverage.include=src/sc/source/core/tool/odffmap.ts --coverage.thresholds.perFile=true --coverage.thresholds.statements=90 --coverage.thresholds.branches=90 --coverage.thresholds.functions=90 --coverage.thresholds.lines=90 --coverage.reportsDirectory=../../.git/offset-final-coverage",
+      "result": "pass",
+      "evidence": "9 selected cases. Each scoped formula owner reaches the unchanged 90% thresholds in all four metrics."
+    },
+    {
+      "command": "npm run test:calc --workspace @vite-office/office -- interpr1.conditional.test.ts interpr1.reference.test.ts lookup-formula.test.ts numeric-formula.test.ts external-reference-formula.test.ts ods-worker-entry.test.ts docsh.csv-export.test.ts --maxWorkers=2 --testTimeout=90000",
+      "result": "pass",
+      "evidence": "28 Calc interpreter, lookup, cached external reference, Worker and CSV cases."
+    },
+    {
+      "command": "npm run test:shared -- compiler-arithmetic.test.ts compiler-output.test.ts --maxWorkers=2",
+      "result": "pass",
+      "evidence": "9 shared compiler cases."
+    },
+    {
+      "command": "npm run test:static && PLAYWRIGHT_BROWSERS_PATH=\"$PWD/.agentplane/tmp/zip-migration/browsers\" npm exec -- playwright test --config .git/calc-panes-browser.config.mts --project calc --workers=1 --timeout=90000 xlsx-page-settings.spec.ts",
+      "result": "pass",
+      "evidence": "Typecheck, static smoke and four Chromium scenarios. The original tdf170298 opens and displays the rule result, survives browser storage reload, and downloads with both rules and the original dynamic name."
+    },
+    {
+      "command": "npm run check:docs; npm run check:dependencies; npm run check:file-size; npm run check:source-tree; npm run check:calc-resources; node .agentplane/policy/check-routing.mjs; ap doctor; git diff --check",
+      "result": "pass",
+      "evidence": "Scoped ESLint, Prettier, JSDoc, dependencies, file limits, resources and source tree gates pass. Doctor retains an existing hook readiness warning."
+    },
+    {
+      "command": "npm exec -- tsx .git/xlsx-cursor-validate-changed-registry.mts <10 changed production paths>",
+      "result": "pass",
+      "evidence": "Ten implementation modules have valid mapped source evidence."
+    },
+    {
+      "command": "npm run check:source-provenance; npm run inventory:invariants; npm run inventory:parity",
+      "result": "fail",
+      "evidence": "Existing framework runtime entries OfficeTooltips.tsx and available-menu-items.ts are missing from the global registry."
+    }
+  ],
+  "coverageByFormulaOwner": {
+    "total": {
+      "statements": 98.14,
+      "branches": 96.34,
+      "functions": 100,
+      "lines": 99.15
+    },
+    "addincol.analysis.ts": {
+      "statements": 97.05,
+      "branches": 97.43,
+      "functions": 100,
+      "lines": 96.55
+    },
+    "interpr1.conditional.ts": {
+      "statements": 98.38,
+      "branches": 95.34,
+      "functions": 100,
+      "lines": 99.06
+    },
+    "interpr1.reference.ts": {
+      "statements": 97.67,
+      "branches": 96.1,
+      "functions": 100,
+      "lines": 100
+    },
+    "interpr2.ts": {
+      "statements": 100,
+      "branches": 100,
+      "functions": 100,
+      "lines": 100
+    },
+    "odffmap.ts": {
+      "statements": 100,
+      "branches": 100,
+      "functions": 100,
+      "lines": 100
+    }
+  },
+  "remaining": [
+    "The native logical array and COUNTIF matrix/reference-list families and full UNO add-in discovery are outside this checkpoint.",
+    "The earlier conditional format import/export owners are separate from this formula coverage scope. Advanced conditional formatting and remaining XLSX/Writer coverage are still open.",
+    "CALC-762 and CALC-763 record the preserved original OFFSET and EDATE edge behavior. Full suites follow the ten-task cadence."
+  ]
+}
