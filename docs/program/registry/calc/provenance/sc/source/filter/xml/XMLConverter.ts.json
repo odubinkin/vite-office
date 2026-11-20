@@ -1,0 +1,48 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "localPath": "apps/office/src/sc/source/filter/xml/XMLConverter.ts",
+    "status": "mapped",
+    "classification": "upstream-mechanism",
+    "upstreamPath": "sc/source/filter/xml/XMLConverter.cxx",
+    "localSymbols": [
+      "ScXMLConditionHelper"
+    ],
+    "upstreamSymbols": [
+      "ScXMLConditionHelper::getExpression"
+    ],
+    "preservedResponsibilities": [
+      "ScXMLConditionHelper owns the original UTF-16 expression boundary, including nested parentheses, braces, quoted segments and the native whitespace predicate."
+    ],
+    "omittedResponsibilities": [
+      "Other XMLConverter operations and nonrepresented condition grammar remain outside this source slice."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sc/source/filter/xml/XMLConverter.ts",
+          "marker": "getExpression"
+        },
+        {
+          "path": "apps/office/src/sc/source/filter/xml/XMLConverter.test.ts",
+          "marker": "reads source operands"
+        },
+        {
+          "path": "apps/office/src/sc/source/filter/oox/condformatbuffer.text.test.ts",
+          "marker": "keeps inclusive boundaries and nested operands"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "sc/source/filter/xml/XMLConverter.cxx",
+          "marker": "ScXMLConditionHelper::getExpression"
+        },
+        {
+          "path": "sc/source/filter/xml/XMLConverter.cxx",
+          "marker": "lclSkipExpression"
+        }
+      ]
+    }
+  }
+}

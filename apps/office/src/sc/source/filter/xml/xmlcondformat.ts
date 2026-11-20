@@ -25,6 +25,7 @@ import { ScRangeStringConverter } from "../../core/tool/rangeutl";
 import { ScStyleNameConversion } from "../../core/tool/stylehelper";
 import { ScXMLImportContext } from "./importcontext";
 import type { ScXMLImport } from "./xmlimprt";
+import { ScXMLConditionHelper } from "./XMLConverter";
 import {
   ScColorScaleEntry,
   ScColorScaleEntryType as ScaleType,
@@ -108,32 +109,16 @@ class ScXMLColorScaleFormatContext extends ScXMLImportContext {
   }
 }
 
-/** Finds the native operand delimiter outside nested expressions and quoted constants. @param source - Both operands. @returns Separator or -1. */
-function findOperandSeparator(source: string): number {
-  let quote = "";
-  let depth = 0;
-  for (let i = 0; i < source.length; ++i) {
-    const char = source[i];
-    if (quote) {
-      if (char === quote) quote = "";
-    } else if (char === '"' || char === "'") quote = char;
-    else if (char === "(" || char === "[" || char === "{") ++depth;
-    else if (char === ")" || char === "]" || char === "}") --depth;
-    else if (char === "," && depth === 0) return i;
-  }
-  return -1;
-}
-
 /** Decodes the represented original condition grammar. @param value - Value attribute. @returns Operation and formulas. */
 function GetConditionData(value: string): readonly [Mode, string[]] | undefined {
   for (const [mode, operator] of comparisons)
     if (value.startsWith(operator)) return [mode, [value.slice(operator.length)]];
   for (const [mode, name, count] of functions) {
-    if (!value.startsWith(name + "(") || !value.endsWith(")")) continue;
-    const body = value.slice(name.length + 1, -1);
-    if (count === 1) return [mode, [body]];
-    const separator = findOperandSeparator(body);
-    if (separator >= 0) return [mode, [body.slice(0, separator), body.slice(separator + 1)]];
+    if (!value.startsWith(name + "(")) continue;
+    const position: [number] = [name.length + 1];
+    const first = ScXMLConditionHelper.getExpression(value, position, count === 1 ? ")" : ",");
+    if (count === 1) return [mode, [first]];
+    return [mode, [first, ScXMLConditionHelper.getExpression(value, position, ")")]];
   }
   return undefined;
 }

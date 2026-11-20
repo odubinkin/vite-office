@@ -23,9 +23,12 @@
         "apps/office/src/sc/source/filter/oox/condformatbuffer.colorscale.test.ts",
         "apps/office/src/sc/source/filter/oox/condformatbuffer.text.test.ts",
         "apps/office/e2e/calc/xlsx-text-conditions.spec.ts",
-        "sc/qa/unit/subsequent_export_test5.cxx"
+        "sc/qa/unit/subsequent_export_test5.cxx",
+        "apps/office/src/sc/source/filter/xml/XMLConverter.ts",
+        "apps/office/src/sc/source/filter/xml/XMLConverter.test.ts",
+        "sc/source/filter/xml/XMLConverter.cxx"
       ],
-      "justification": "Loads and writes original Calc extension conditional ranges, expressions and named style bindings in ODF. Legacy table style maps and additional condition families remain unported. Loads and writes original ODF color-scale threshold, color and formula attributes for ODS and Worker storage. Reads and writes the four original Calc extension text condition spellings.",
+      "justification": "Loads and writes original Calc extension conditional ranges, expressions and named style bindings in ODF. Legacy table style maps and additional condition families remain unported. Loads and writes original ODF color-scale threshold, color and formula attributes for ODS and Worker storage. Reads and writes the four original Calc extension text condition spellings. Original function-style operands use the native ScXMLConditionHelper scanner before compilation.",
       "knownViolations": [],
       "localSymbols": [
         "ScXMLConditionalFormatsContext",

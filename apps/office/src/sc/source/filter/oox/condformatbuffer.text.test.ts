@@ -2,8 +2,11 @@
 import { readFileSync } from "node:fs";
 import { expect, it } from "vitest";
 import { FormulaGrammar } from "../../../../formula/inc/grammar";
-import { unicode } from "../../../../i18nlangtag/source/isolang/isolang.tables";
-import { DocumentArchive } from "../../../../package/source/zippackage/document-archive";
+import { text, unicode } from "../../../../i18nlangtag/source/isolang/isolang.tables";
+import {
+  DocumentArchive,
+  DocumentArchiveWriter,
+} from "../../../../package/source/zippackage/document-archive";
 import { ScAddress, ScRange } from "../../../inc/address";
 import { ScRefCellValue } from "../../../inc/cellvalue";
 import { ScCondFormatEntry, ScConditionalFormat, ScConditionMode } from "../../../inc/conditio";
@@ -172,6 +175,97 @@ it("exports the original numeric criterion as a string operand and reimports it"
     } finally {
       reopened.Dispose();
     }
+  } finally {
+    document.Dispose();
+  }
+});
+
+it("keeps inclusive boundaries and nested operands as ordinary rules through both filters", /** Exercises every supported scalar comparison through the native document and format owners. @returns Completion. */ async () => {
+  const document = await ExcelFilter.importDocument(fixture("xlsx/universal-content.xlsx"));
+  const grammar = FormulaGrammar.Grammar.GRAM_OOXML;
+  const cases = [
+    [ScConditionMode.Equal, ["5"], [false, true, false]],
+    [ScConditionMode.NotEqual, ["5"], [true, false, true]],
+    [ScConditionMode.Less, ["5"], [true, false, false]],
+    [ScConditionMode.EqLess, ["5"], [true, true, false]],
+    [ScConditionMode.Greater, ["5"], [false, false, true]],
+    [ScConditionMode.EqGreater, ["5"], [false, true, true]],
+    [ScConditionMode.Between, ["(1+1)", "(3*3)"], [false, true, true]],
+    [ScConditionMode.NotBetween, ["(1+1)", "(3*3)"], [true, false, false]],
+  ] as const;
+  let ods: ScDocument | undefined;
+  let xlsx: ScDocument | undefined;
+  try {
+    const style = document.GetStyleSheetPool()?.GetDefaultStyle();
+    if (!style) throw new Error("Missing native default cell style.");
+    for (const [index, [mode, operands]] of cases.entries()) {
+      const col = index + 8;
+      const first = new ScAddress(col, 0);
+      const ranges = new ScRangeList();
+      ranges.push_back(new ScRange(first, new ScAddress(col, 2)));
+      const format = new ScConditionalFormat(0, document);
+      format.SetRange(ranges);
+      format.AddEntry(
+        new ScCondFormatEntry(mode, operands, document, first, grammar, text(style.GetName())),
+      );
+      const key = document.AddCondFormat(format, 0);
+      expect(key).toBeGreaterThan(0);
+      document.AddCondFormatData(ranges, 0, key);
+      for (const [row, value] of [0, 5, 9].entries())
+        document.SetValue(new ScAddress(col, row), value);
+    }
+    ods = await readOdsDocument(await writeOdsDocument(document));
+    xlsx = await ExcelFilter.importDocument(await exportXlsx(ods));
+    for (const graph of [document, ods, xlsx]) {
+      for (const [index, [, , values]] of cases.entries()) {
+        for (const [row, expected] of values.entries())
+          expect(graph.GetCondResult(new ScAddress(index + 8, row)) !== undefined).toBe(expected);
+      }
+    }
+  } finally {
+    xlsx?.Dispose();
+    ods?.Dispose();
+    document.Dispose();
+  }
+});
+
+it("keeps usable XLSX rules beside malformed rule records and missing differential styles", /** Exercises rule admission, priority replacement and default style through the native filter. @returns Completion. */ async () => {
+  const original = await DocumentArchive.open(fixture("xlsx/universal-content.xlsx"));
+  const writer = new DocumentArchiveWriter();
+  const worksheet = "xl/worksheets/sheet1.xml";
+  const valid =
+    '<cfRule type="cellIs" operator="equal" dxfId="999" priority="5"><formula>1</formula></cfRule>';
+  const ignored = '<cfRule type="cellIs" operator="equal"><formula>1</formula></cfRule>';
+  const noOperator = '<cfRule type="cellIs" priority="6"><formula>1</formula></cfRule>';
+  const shortBetween =
+    '<cfRule type="cellIs" operator="between" priority="7"><formula>1</formula></cfRule>';
+  const emptyOperand =
+    '<cfRule type="cellIs" operator="equal" priority="8"><formula> </formula></cfRule>';
+  const previous =
+    '<cfRule type="cellIs" operator="equal" priority="5"><formula>2</formula></cfRule>';
+  const invalidRange = `<conditionalFormatting sqref="XFE1048577">${valid}</conditionalFormatting>`;
+  const conditions = `<conditionalFormatting sqref="A1">${previous}${valid}${ignored}${noOperator}${shortBetween}${emptyOperand}</conditionalFormatting>`;
+  for (const path of original.getEntryNames()) {
+    if (path !== worksheet) writer.putNextEntry(path, await original.readEntry(path));
+    else {
+      const xml = await original.readTextEntry(path);
+      writer.putNextEntry(
+        path,
+        new TextEncoder().encode(
+          xml.replace("</worksheet>", invalidRange + conditions + "</worksheet>"),
+        ),
+      );
+    }
+  }
+  const document = await ExcelFilter.importDocument(await writer.finish());
+  try {
+    const [format] = Array.from(document.FetchTable(0)?.GetCondFormList() ?? []);
+    expect(format?.size()).toBe(1);
+    expect(document.GetCondResult(new ScAddress())).toBeDefined();
+    document.SetValue(new ScAddress(), 2);
+    expect(document.GetCondResult(new ScAddress())).toBeUndefined();
+    const formulas = await exportFormulas(document);
+    expect([...formulas]).toEqual([["A1", "1"]]);
   } finally {
     document.Dispose();
   }
