@@ -1,10 +1,11 @@
 ---
 id: "202611200139-4Z94YX"
 title: "Repair full-suite regressions after DOCX and XLSX integration"
-status: "DOING"
+result_summary: "verified-202611200139-4Z94YX"
+status: "DONE"
 priority: "high"
 owner: "CODER"
-revision: 11
+revision: 13
 origin:
   system: "manual"
 depends_on: []
@@ -19,7 +20,7 @@ plan_approval:
   note: null
 verification:
   state: "ok"
-  updated_at: "2026-11-20T04:28:38.338Z"
+  updated_at: "2026-11-20T04:28:53.131Z"
   updated_by: "CODER"
   note: "verified-202611200139-4Z94YX"
   attempts: 0
@@ -40,11 +41,16 @@ quality_review:
     - "node .agentplane/policy/check-routing.mjs"
   findings:
     - "Recorded the initial application and Chromium counts, all focused reruns, and the unchanged global application coverage result separately."
-commit: null
+commit:
+  hash: "b42fe18e6fd26e7ef7ca0a4380e59057f152ebb3"
+  message: "🧩 4Z94YX task: record completed application and browser regression checks"
 comments:
   -
     author: "CODER"
     body: "Start: Repair full-suite regressions after DOCX and XLSX integration. Guided shortcut created the task, approved the plan, and entered execution."
+  -
+    author: "CODER"
+    body: "Verified: verified-202611200139-4Z94YX. Guided shortcut recorded verification and is closing the direct task with traceable commit metadata."
 events:
   -
     type: "status"
@@ -71,8 +77,21 @@ events:
     author: "CODER"
     state: "ok"
     note: "verified-202611200139-4Z94YX"
+  -
+    type: "verify"
+    at: "2026-11-20T04:28:53.131Z"
+    author: "CODER"
+    state: "ok"
+    note: "verified-202611200139-4Z94YX"
+  -
+    type: "status"
+    at: "2026-11-20T04:28:53.250Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: verified-202611200139-4Z94YX. Guided shortcut recorded verification and is closing the direct task with traceable commit metadata."
 doc_version: 3
-doc_updated_at: "2026-11-20T04:28:38.388Z"
+doc_updated_at: "2026-11-20T04:28:53.250Z"
 doc_updated_by: "CODER"
 description: "Run and record the complete application, browser, inventory and tooling suites requested by the user. Reproduce and fix concrete failures in their owning modules, including missing inventory records for existing presentation modules. Preserve historical coverage thresholds and document independent coverage deficits. Confirm the reported DOCX in the current browser build, then pause the broader goal when failing tests are repaired."
 sections:
@@ -198,6 +217,36 @@ sections:
     - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
     - risks: none
 
+    ### 2026-11-20T04:28:53.131Z — VERIFY — ok
+
+    By: CODER
+
+    Note: verified-202611200139-4Z94YX
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-20T04:28:38.388Z, excerpt_hash=sha256:5d1943958051f40e9697c748473d616e0d498864455fbdbf6bc0d7ce257337e4
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202611200139-4Z94YX/blueprint/resolved-snapshot.json
+    - old_digest: c8c284182a87084e1bd614416a21a97b7c44d7ae03eedd497e307a4912f392b8
+    - current_digest: c8c284182a87084e1bd614416a21a97b7c44d7ae03eedd497e307a4912f392b8
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202611200139-4Z94YX
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task complete 202611200139-4Z94YX --result verified-202611200139-4Z94YX --commit b42fe18e6fd26e7ef7ca0a4380e59057f152ebb3
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: |-
     - Revert task-related commit(s).
@@ -206,6 +255,10 @@ sections:
     - The production Chromium test opened the supplied DOCX and restored its browser-saved copy on the final build. The cached remote revision `2406dda9b` predates the existing Writer protection settings and header picture imports. The attachment is private test input.
     - The full browser run reproduced a race in which an autosave cancelled an in-flight ODT download. The browser filter now uses independent lazy clients for explicit file operations and primary XML writes. The existing worker cancellation contracts and autosave schedule are preserved. Writer's bounded text replacement also again rejects unsupported dummy attributes before changing text or registered indices.
     - The existing global application coverage gate reported below 100% on the full pass. Focused worker and inventory coverage each reached 100%. All reported functional test failures passed their focused reruns. The full browser and application runs preserve the initial failures in the retained logs.
+extensions:
+  implementation_commit:
+    hash: "9b8ad35de42b8230af30a3e14c8f9402a159ff88"
+    message: "🧩 4Z94YX code: verify Writer vertical alignment default metadata"
 id_source: "generated"
 ---
 ## Summary
@@ -333,6 +386,36 @@ DecisionContextRef:
 - operator_action: run_exact_argv
 - can_execute_now: true
 - safe_command: agentplane task complete 202611200139-4Z94YX --result verified-202611200139-4Z94YX --commit 9b8ad35de42b8230af30a3e14c8f9402a159ff88
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
+
+### 2026-11-20T04:28:53.131Z — VERIFY — ok
+
+By: CODER
+
+Note: verified-202611200139-4Z94YX
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-20T04:28:38.388Z, excerpt_hash=sha256:5d1943958051f40e9697c748473d616e0d498864455fbdbf6bc0d7ce257337e4
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202611200139-4Z94YX/blueprint/resolved-snapshot.json
+- old_digest: c8c284182a87084e1bd614416a21a97b7c44d7ae03eedd497e307a4912f392b8
+- current_digest: c8c284182a87084e1bd614416a21a97b7c44d7ae03eedd497e307a4912f392b8
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202611200139-4Z94YX
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task complete 202611200139-4Z94YX --result verified-202611200139-4Z94YX --commit b42fe18e6fd26e7ef7ca0a4380e59057f152ebb3
 - diagnostic_command: none
 - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
 - freshness: route=computed_local remote=remote_skipped
