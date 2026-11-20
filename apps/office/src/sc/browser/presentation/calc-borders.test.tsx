@@ -38,7 +38,7 @@ it("uses the shared toolbar preset control with original twelve entries and real
     const label = getCalcCommandResource(".uno:SetBorderStyle").label;
     const button = screen.getByRole("button", { name: label });
     expect(button).toBeEnabled();
-    expect(button).toHaveClass("size-8", "rounded-md", "bg-white");
+    expect(button).toHaveClass("size-7", "rounded-md", "bg-white");
     fireEvent.click(button);
     fireEvent.click(screen.getByRole("button", { name: "Outer Border" }));
     expect(box(s).GetTop()?.GetWidth()).toBe(15);

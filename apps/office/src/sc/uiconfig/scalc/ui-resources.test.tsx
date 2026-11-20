@@ -12,7 +12,7 @@ afterEach(
     vi.restoreAllMocks();
   },
 );
-it("opens every source top menu with unavailable operations disabled and shared shortcut captions", /** Uses real production Sfx bindings and shared presenters. @returns Nothing. */ () => {
+it("opens connected top menus with shared shortcut captions", /** Uses real production Sfx bindings and shared presenters. @returns Nothing. */ () => {
   const session = createCalcSession();
   render(
     <CalcWorkbench
@@ -22,19 +22,17 @@ it("opens every source top menu with unavailable operations disabled and shared 
       sheetWorkflows={session.sheetWorkflows}
     />,
   );
-  const labels = [
-    "File",
-    "Edit",
-    "View",
-    "Insert",
-    "Format",
-    "Styles",
-    "Sheet",
-    "Data",
-    "Tools",
-    "Window",
-    "Help",
-  ];
+  const labels = ["File", "Edit", "View", "Format", "Sheet"];
+  const menubar = screen.getByRole("menubar", { name: "Calc menu" });
+  expect(
+    within(menubar)
+      .getAllByRole("menuitem")
+      .map(
+        /** Reads the projected source label. @param item - Top menu entry. @returns Menu label. */ (
+          item,
+        ) => item.textContent,
+      ),
+  ).toEqual(labels);
   for (const label of labels) {
     fireEvent.click(screen.getByRole("menuitem", { name: label }));
     expect(screen.getAllByRole("menu").length).toBeGreaterThan(0);
@@ -49,7 +47,7 @@ it("opens every source top menu with unavailable operations disabled and shared 
         "Ctrl+Shift+S",
       );
     }
-    if (label === "Edit") expect(screen.getByRole("menuitem", { name: /^Cut/ })).toBeDisabled();
+    if (label === "Edit") expect(screen.queryByRole("menuitem", { name: /^Cut/ })).toBeNull();
     fireEvent.keyDown(screen.getAllByRole("menu")[0] as HTMLElement, { key: "Escape" });
   }
   expect(getCalcCommandResource(".uno:About").label).toContain("Vite Office");
@@ -58,7 +56,7 @@ it("opens every source top menu with unavailable operations disabled and shared 
   session.Close();
 });
 
-it("retains the complete visible source standardbar with disabled missing slots and SVG icons", /** Verifies the actual production resource,bindings and shared buttons. @returns Nothing. */ () => {
+it("retains the complete standardbar resource and projects connected controls with icons", /** Verifies the actual production resource,bindings and shared buttons. @returns Nothing. */ () => {
   const session = createCalcSession();
   render(
     <CalcWorkbench
@@ -117,6 +115,7 @@ it("retains the complete visible source standardbar with disabled missing slots 
         ) => item.commandId,
       ),
   ).toEqual(ids);
+  const connectedIds = [".uno:OpenFromCalc", ".uno:ResetAttributes", ".uno:Undo", ".uno:Redo"];
   const buttons = toolbar.getAllByRole("button");
   expect(
     buttons.map(
@@ -125,7 +124,7 @@ it("retains the complete visible source standardbar with disabled missing slots 
       ) => button.getAttribute("aria-label"),
     ),
   ).toEqual(
-    ids.map(
+    connectedIds.map(
       /** Reads source English label. @param id - Source command. @returns Label. */ (id) =>
         getCalcCommandResource(id).label,
     ),
@@ -136,12 +135,12 @@ it("retains the complete visible source standardbar with disabled missing slots 
       index,
     ) => {
       expect(button.querySelector("svg")).not.toBeNull();
-      expect(button).toHaveClass("size-9", "shrink-0");
-      if (index === 0 || ids[index] === ".uno:ResetAttributes") expect(button).toBeEnabled();
+      expect(button).toHaveClass("size-7", "shrink-0");
+      if (index < 2) expect(button).toBeEnabled();
       else expect(button).toBeDisabled();
     },
   );
-  fireEvent.click(toolbar.getByRole("button", { name: "Cut" }));
+  expect(toolbar.queryByRole("button", { name: "Cut" })).toBeNull();
   expect(session.controller.shell.GetUndoManager().GetUndoActionCount()).toBe(0);
   fireEvent.click(toolbar.getByRole("button", { name: "Open" }));
   expect(screen.getByRole("dialog")).toBeVisible();
@@ -149,7 +148,7 @@ it("retains the complete visible source standardbar with disabled missing slots 
   session.Close();
 });
 
-it("renders native formatting placements with the bound shared font-size control and unavailable actions disabled", /** Verifies actual source placements and production Sfx ownership. @returns Nothing. */ () => {
+it("renders connected formatting placements with the bound shared font-size control", /** Verifies source placement order and production Sfx ownership. @returns Nothing. */ () => {
   const session = createCalcSession();
   const fontsRequested = vi.spyOn(FontList, "FromBrowser");
   render(
@@ -187,25 +186,11 @@ it("renders native formatting placements with the bound shared font-size control
     "Center Vertically",
     "Align Bottom",
     "Wrap Text",
-    "Merge and Center Cells",
-    "Merge Cells",
-    "Unmerge Cells",
-    "Currency",
-    "Percent",
-    "Number",
-    "Date",
-    "Add Decimal Place",
-    "Delete Decimal Place",
     "Increase",
     "Decrease",
     "Borders (Shift to overwrite)",
     "Border Style",
     "Border Color",
-    "Conditional",
-    "Left-To-Right",
-    "Right-To-Left",
-    "Text direction from left to right",
-    "Text direction from top to bottom",
   ];
   expect(
     [...controls].map(
@@ -234,30 +219,9 @@ it("renders native formatting placements with the bound shared font-size control
     const color = ["Font Color", "Background Color", "Border Color"].includes(
       button.getAttribute("aria-label") as string,
     );
-    if (
-      [
-        "Bold",
-        "Italic",
-        "Underline",
-        "Font Color",
-        "Background Color",
-        "Align Left",
-        "Align Center",
-        "Align Right",
-        "Align Top",
-        "Center Vertically",
-        "Align Bottom",
-        "Increase",
-        "Decrease",
-        "Wrap Text",
-        "Borders (Shift to overwrite)",
-        "Border Color",
-      ].includes(button.getAttribute("aria-label") as string)
-    )
-      expect(button).toBeEnabled();
-    else expect(button).toBeDisabled();
-    if (color) expect(button).toHaveClass("h-8", "w-8", "rounded-l", "bg-white");
-    else expect(button).toHaveClass("size-8", "rounded-md", "bg-white");
+    expect(button).toBeEnabled();
+    if (color) expect(button).toHaveClass("size-7", "rounded-l", "bg-white");
+    else expect(button).toHaveClass("size-7", "rounded-md", "bg-white");
     if (["Bold", "Italic", "Underline"].includes(button.getAttribute("aria-label") as string))
       expect(button).toHaveTextContent(/B|I|U/);
     else if (color && button.getAttribute("aria-label") !== "Border Color")
