@@ -1,0 +1,25 @@
+{
+  "schema_version": 1,
+  "task_id": "202610251549-V4DQJW",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-11-20T10:07:11.086Z",
+  "verdict": "pass",
+  "summary": "The approved Writer DOCX file path meets the behavioral, source and retained independent scope criteria.",
+  "evaluated_sha": "a50b52408573b5726a626bde022c8c21a23585fb",
+  "blueprint_digest": "c0e14f7bf31d4be862783b8d9c5eb6067e7f9f18464f5898e14e0fcc5b208aa0",
+  "findings": [
+    "The pinned Strict and Transitional document tests cover supported graph properties, package XML and real export, reopen and admission failures. The final table correction retains empty and nested cell ranges. The three timing-limited cases passed under the original timeout when rerun sequentially.",
+    "The separate scoped90 checks clear the previously failing stylesheet, table, document and header/footer gates. The production Chromium checks cover desktop/mobile and the two private sample reopen flows. The supplied files were not committed."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202610251549-V4DQJW/README.md",
+    ".agentplane/tasks/202610251549-V4DQJW/evidence/docx-supported-file-path-acceptance.json",
+    ".agentplane/tasks/202610251549-V4DQJW/evidence/native-table-style-dispatch-coverage.json"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": [
+    "The functional slice is bounded by the represented Writer model. Some drawing and floating-table structures require separate owners. Two private sample files were verified locally."
+  ]
+}

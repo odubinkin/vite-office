@@ -4,7 +4,7 @@ title: "Implement Writer DOCX import export and existing file UI integration"
 status: "DOING"
 priority: "high"
 owner: "CODER"
-revision: 428
+revision: 430
 origin:
   system: "manual"
 depends_on:
@@ -20,11 +20,29 @@ plan_approval:
   updated_by: "ORCHESTRATOR"
   note: null
 verification:
-  state: "blocked_external"
-  updated_at: "2026-11-20T09:07:18.396Z"
+  state: "ok"
+  updated_at: "2026-11-20T10:07:10.187Z"
   updated_by: "CODER"
-  note: "Verified conditional table shading and production browser round trip. Retained open Writer fixture and per-owner coverage findings."
-  attempts: 11
+  note: "Verified Writer DOCX import and export through the existing file controls and native working model. The acceptance record documents 220 cases in the current instrumented run and three successful sequential retries, all retained meaningfully scoped90 profiles, the production desktop/mobile file suite, both supplied DOCX files, and passing static/source gates."
+  attempts: 0
+quality_review:
+  state: "pass"
+  updated_at: "2026-11-20T10:07:11.086Z"
+  updated_by: "EVALUATOR"
+  note: "The approved Writer DOCX file path meets the behavioral, source and retained independent scope criteria."
+  evaluated_sha: "a50b52408573b5726a626bde022c8c21a23585fb"
+  blueprint_digest: "c0e14f7bf31d4be862783b8d9c5eb6067e7f9f18464f5898e14e0fcc5b208aa0"
+  evidence_refs:
+    - ".agentplane/tasks/202610251549-V4DQJW/README.md"
+    - ".agentplane/tasks/202610251549-V4DQJW/quality/20261120-100711086-recovery-context/quality-report.json"
+    - ".agentplane/tasks/202610251549-V4DQJW/quality/20261120-100711086-recovery-context/evaluator-prompt.md"
+    - ".agentplane/tasks/202610251549-V4DQJW/quality/20261120-100711086-recovery-context/evaluator-opinion.md"
+    - ".agentplane/tasks/202610251549-V4DQJW/blueprint/resolved-snapshot.json"
+    - ".agentplane/tasks/202610251549-V4DQJW/evidence/docx-supported-file-path-acceptance.json"
+    - ".agentplane/tasks/202610251549-V4DQJW/evidence/native-table-style-dispatch-coverage.json"
+  findings:
+    - "The pinned Strict and Transitional document tests cover supported graph properties, package XML and real export, reopen and admission failures. The final table correction retains empty and nested cell ranges. The three timing-limited cases passed under the original timeout when rerun sequentially."
+    - "The separate scoped90 checks clear the previously failing stylesheet, table, document and header/footer gates. The production Chromium checks cover desktop/mobile and the two private sample reopen flows. The supplied files were not committed."
 commit: null
 comments:
   -
@@ -2176,8 +2194,14 @@ events:
     from: "BLOCKED"
     to: "DOING"
     note: "Start: continue direct-mode task in current checkout."
+  -
+    type: "verify"
+    at: "2026-11-20T10:07:10.187Z"
+    author: "CODER"
+    state: "ok"
+    note: "Verified Writer DOCX import and export through the existing file controls and native working model. The acceptance record documents 220 cases in the current instrumented run and three successful sequential retries, all retained meaningfully scoped90 profiles, the production desktop/mobile file suite, both supplied DOCX files, and passing static/source gates."
 doc_version: 3
-doc_updated_at: "2026-11-20T09:16:30.333Z"
+doc_updated_at: "2026-11-20T10:07:10.408Z"
 doc_updated_by: "CODER"
 description: "User-approved second cohesive task: preserve pinned WriterFilter OOXML/DomainMapper import and DocxExportFilter/DocxExport ownership while supporting the existing Writer core slice, including paragraphs, runs, pooled formatting, styles, lists, tables, links and page properties where implemented. Integrate asynchronous shell filter routing, existing Open and download UI, errors/cancellation and primary ODT persistence. Refactor old workarounds in touched paths, record suspected upstream issues, provenance and related tests. No recovery/autosave product changes, network or publication."
 sections:
@@ -6430,6 +6454,36 @@ sections:
     Attempts: 11
 
     VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-20T08:52:50.947Z, excerpt_hash=sha256:f1ce94bb673a9632d48a811076188278454b04d0783aab0712ee1947357ea697
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610251549-V4DQJW/blueprint/resolved-snapshot.json
+    - old_digest: c0e14f7bf31d4be862783b8d9c5eb6067e7f9f18464f5898e14e0fcc5b208aa0
+    - current_digest: c0e14f7bf31d4be862783b8d9c5eb6067e7f9f18464f5898e14e0fcc5b208aa0
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610251549-V4DQJW
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task verify-show 202610251549-V4DQJW
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: false
+    - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+    - risks: none
+
+    ### 2026-11-20T10:07:10.187Z — VERIFY — ok
+
+    By: CODER
+
+    Note: Verified Writer DOCX import and export through the existing file controls and native working model. The acceptance record documents 220 cases in the current instrumented run and three successful sequential retries, all retained meaningfully scoped90 profiles, the production desktop/mobile file suite, both supplied DOCX files, and passing static/source gates.
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-20T09:16:30.333Z, excerpt_hash=sha256:f1ce94bb673a9632d48a811076188278454b04d0783aab0712ee1947357ea697
 
     Details:
 
@@ -11468,6 +11522,36 @@ Note: Verified conditional table shading and production browser round trip. Reta
 Attempts: 11
 
 VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-20T08:52:50.947Z, excerpt_hash=sha256:f1ce94bb673a9632d48a811076188278454b04d0783aab0712ee1947357ea697
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610251549-V4DQJW/blueprint/resolved-snapshot.json
+- old_digest: c0e14f7bf31d4be862783b8d9c5eb6067e7f9f18464f5898e14e0fcc5b208aa0
+- current_digest: c0e14f7bf31d4be862783b8d9c5eb6067e7f9f18464f5898e14e0fcc5b208aa0
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610251549-V4DQJW
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task verify-show 202610251549-V4DQJW
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: false
+- repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- risks: none
+
+### 2026-11-20T10:07:10.187Z — VERIFY — ok
+
+By: CODER
+
+Note: Verified Writer DOCX import and export through the existing file controls and native working model. The acceptance record documents 220 cases in the current instrumented run and three successful sequential retries, all retained meaningfully scoped90 profiles, the production desktop/mobile file suite, both supplied DOCX files, and passing static/source gates.
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-20T09:16:30.333Z, excerpt_hash=sha256:f1ce94bb673a9632d48a811076188278454b04d0783aab0712ee1947357ea697
 
 Details:
 
