@@ -33,6 +33,8 @@ describe("Writer uiconfig resources" /** Groups pure Writer resource tests. @ret
       "toolsmenu",
     ]);
     expect(writerMenuCommandIds).toContain(WRITER_COMMAND_IDS.bold);
+    expect(writerMenuCommandIds).toContain(WRITER_COMMAND_IDS.focusFindbar);
+    expect(writerMenuCommandIds).toContain(WRITER_COMMAND_IDS.searchDialog);
     expect(writerMenuCommandIds).toContain(WRITER_COMMAND_IDS.toggleHorizontalRuler);
     expect(writerMenuCommandIds).not.toContain(WRITER_COMMAND_IDS.alignLeft);
     expect(writerMenuCommandIds).not.toContain(WRITER_COMMAND_IDS.underline);
@@ -59,6 +61,7 @@ describe("Writer uiconfig resources" /** Groups pure Writer resource tests. @ret
       ".uno:ResetAttributes",
       WRITER_COMMAND_IDS.undo,
       WRITER_COMMAND_IDS.redo,
+      WRITER_COMMAND_IDS.searchDialog,
       WRITER_COMMAND_IDS.insertTable,
       WRITER_COMMAND_IDS.insertPageBreak,
       WRITER_COMMAND_IDS.hyperlinkDialog,
