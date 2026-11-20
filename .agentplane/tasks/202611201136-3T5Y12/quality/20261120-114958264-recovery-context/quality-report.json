@@ -1,0 +1,23 @@
+{
+  "schema_version": 1,
+  "task_id": "202611201136-3T5Y12",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-11-20T11:49:58.264Z",
+  "verdict": "pass",
+  "summary": "Same-agent review checked pinned scalar, temporal, number-format and cache contracts against the actual Calc and Worker entry points.",
+  "evaluated_sha": "96a414491e30f929da6c8de14640912bc9094338",
+  "blueprint_digest": "a55f2524791cf974472aa52c8cff43f197332504ace4c1e2a1b66b5bff48fad1",
+  "findings": [
+    "The represented Calc model retains its numeric scalar owner and formatter, including the ODS date-format exception for formulas and numeric nonbinary logical values."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202611201136-3T5Y12/README.md",
+    "138 Calc assertions, 14 shared conversion assertions, external-ref-cache.ods and tdf126116 short-date assertions"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": [
+    "The tdf126116 assertion port uses an explicit cell style because row and column default styles remain separate work. Alternate numeric attribute namespaces and full UNO currency properties remain partial."
+  ]
+}
