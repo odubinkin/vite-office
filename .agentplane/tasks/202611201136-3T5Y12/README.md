@@ -1,10 +1,11 @@
 ---
 id: "202611201136-3T5Y12"
 title: "Port Calc ODS typed values and formula result attributes"
-status: "DOING"
+result_summary: "Verified Calc ODS typed scalar attributes and native formula cache round trips through the ODF filter and Worker"
+status: "DONE"
 priority: "high"
 owner: "CODER"
-revision: 9
+revision: 11
 origin:
   system: "manual"
 depends_on: []
@@ -20,9 +21,9 @@ plan_approval:
   note: null
 verification:
   state: "ok"
-  updated_at: "2026-11-20T11:49:55.633Z"
+  updated_at: "2026-11-20T11:50:10.411Z"
   updated_by: "CODER"
-  note: "Verified Calc ODS value categories, null dates, formula cache adoption and registration across ODS and Worker paths."
+  note: "Verified Calc ODS typed scalar attributes and native formula cache round trips through the ODF filter and Worker"
   attempts: 0
 quality_review:
   state: "pass"
@@ -40,11 +41,16 @@ quality_review:
     - "138 Calc assertions, 14 shared conversion assertions, external-ref-cache.ods and tdf126116 short-date assertions"
   findings:
     - "The represented Calc model retains its numeric scalar owner and formatter, including the ODS date-format exception for formulas and numeric nonbinary logical values."
-commit: null
+commit:
+  hash: "96a414491e30f929da6c8de14640912bc9094338"
+  message: "🧩 3T5Y12 code: preserve typed Calc ODS values and formula caches"
 comments:
   -
     author: "CODER"
     body: "Start: continue direct-mode task in current checkout."
+  -
+    author: "CODER"
+    body: "Verified: Verified Calc ODS typed scalar attributes and native formula cache round trips through the ODF filter and Worker. Guided shortcut recorded verification and is closing the direct task with traceable commit metadata."
 events:
   -
     type: "status"
@@ -59,8 +65,21 @@ events:
     author: "CODER"
     state: "ok"
     note: "Verified Calc ODS value categories, null dates, formula cache adoption and registration across ODS and Worker paths."
+  -
+    type: "verify"
+    at: "2026-11-20T11:50:10.411Z"
+    author: "CODER"
+    state: "ok"
+    note: "Verified Calc ODS typed scalar attributes and native formula cache round trips through the ODF filter and Worker"
+  -
+    type: "status"
+    at: "2026-11-20T11:50:10.714Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: Verified Calc ODS typed scalar attributes and native formula cache round trips through the ODF filter and Worker. Guided shortcut recorded verification and is closing the direct task with traceable commit metadata."
 doc_version: 3
-doc_updated_at: "2026-11-20T11:49:55.882Z"
+doc_updated_at: "2026-11-20T11:50:10.715Z"
 doc_updated_by: "CODER"
 description: "Import and export native ODF scalar categories and supported hybrid formula caches directly in the Calc model, with LibreOffice date, duration and number-format rules."
 sections:
@@ -106,6 +125,36 @@ sections:
     - freshness: route=computed_local remote=remote_skipped
     - repeat_allowed: false
     - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+    - risks: none
+
+    ### 2026-11-20T11:50:10.411Z — VERIFY — ok
+
+    By: CODER
+
+    Note: Verified Calc ODS typed scalar attributes and native formula cache round trips through the ODF filter and Worker
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-20T11:49:55.882Z, excerpt_hash=sha256:ae4b93f0be46e956f252f3f85c3f00da812ed2566dd4a1746c7cd897e48f4f22
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202611201136-3T5Y12/blueprint/resolved-snapshot.json
+    - old_digest: a55f2524791cf974472aa52c8cff43f197332504ace4c1e2a1b66b5bff48fad1
+    - current_digest: a55f2524791cf974472aa52c8cff43f197332504ace4c1e2a1b66b5bff48fad1
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202611201136-3T5Y12
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task complete 202611201136-3T5Y12 --result verified-202611201136-3T5Y12 --commit df074b51e5a69b4331988257b7f7a3d5ef947d8c
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
     - risks: none
 
     <!-- END VERIFICATION RESULTS -->
@@ -166,6 +215,36 @@ DecisionContextRef:
 - freshness: route=computed_local remote=remote_skipped
 - repeat_allowed: false
 - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- risks: none
+
+### 2026-11-20T11:50:10.411Z — VERIFY — ok
+
+By: CODER
+
+Note: Verified Calc ODS typed scalar attributes and native formula cache round trips through the ODF filter and Worker
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-20T11:49:55.882Z, excerpt_hash=sha256:ae4b93f0be46e956f252f3f85c3f00da812ed2566dd4a1746c7cd897e48f4f22
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202611201136-3T5Y12/blueprint/resolved-snapshot.json
+- old_digest: a55f2524791cf974472aa52c8cff43f197332504ace4c1e2a1b66b5bff48fad1
+- current_digest: a55f2524791cf974472aa52c8cff43f197332504ace4c1e2a1b66b5bff48fad1
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202611201136-3T5Y12
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task complete 202611201136-3T5Y12 --result verified-202611201136-3T5Y12 --commit df074b51e5a69b4331988257b7f7a3d5ef947d8c
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
 - risks: none
 
 <!-- END VERIFICATION RESULTS -->
