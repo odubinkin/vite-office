@@ -1,0 +1,32 @@
+{
+  "scope": "XLSX import and export for the working Calc document model and existing file controls.",
+  "implementationCommit": "3a504f7958a3",
+  "verification": [
+    {
+      "command": "npm run test:calc -- excelfilter docsh.xlsx.test.ts calc-files.test.tsx docsh.csv-export.test.ts ods-native-fonts.test.ts --maxWorkers=1 --testTimeout=120000",
+      "result": "88 passed in 13 files",
+      "evidence": "Strict and Transitional workbooks, ScDocument and package XML assertions, XLSX export and reopen, malformed and cancelled opens, stale results, primary ODS and CSV, and mounted file controls. Local transcript: .git/ooxml-final-calc.log."
+    },
+    {
+      "command": "Run the original scoped90 conditional-format profile documented in xlsx-formula-error-conditions.json.",
+      "result": "81 passed in 12 files; 95.91% statements, 91.80% branches, 96.93% functions and 98.24% lines",
+      "evidence": "Original mechanism coverage for the condition model, XLSX/ODS filters, and related style and sheet operations. Calendar and extended XLSX rules retain their separate evidence."
+    },
+    {
+      "command": "Run Calc specs referencing ScCompiler and excelfilter.test.ts, excelfilter.page-settings.test.ts, excelfilter.named-arrays.test.ts and print-ranges.test.ts with Istanbul coverage for src/sc/source/core/tool/compiler.ts and the unchanged scoped90 thresholds.",
+      "result": "159 passed in 18 files; 91.40% statements, 90.08% branches, 100% functions and 92.92% lines",
+      "evidence": "Rechecks the complete formula compiler owner after the qualified and deleted worksheet reference changes. Local transcript and raw report: .git/ooxml-final-compiler-coverage.log and .git/ooxml-final-compiler-coverage/coverage-final.json."
+    },
+    {
+      "command": "Run the production Chromium file scenarios in xlsx-{error-conditions,extended-conditions,frozen-grid,text,date-conditions}.spec.ts with the related Writer DOCX/ODT scenarios.",
+      "result": "34 passed across Calc and Writer, including seven Calc cases",
+      "evidence": "Existing Open and Export controls, browser storage, desktop and mobile opening, actual downloads and round trips. Local transcript: .git/ooxml-final-browser.log."
+    },
+    {
+      "command": "npm run test:static; run dependencies, JSDoc, provenance, registry, invariants, parity, resources, docs, file and source tree checks, policy routing and ap doctor; run git diff --check.",
+      "result": "Passed",
+      "evidence": "The production output passed static smoke checks. The registry reported zero semantic violations. Local transcripts: .git/ooxml-final-static.log and .git/ooxml-final-*.log."
+    }
+  ],
+  "boundary": "The supported file slice applies to data and formatting represented by the Calc model. Data bars and icon sets need their own rendering and editing owners. CALC-767 through CALC-769 document preserved upstream extended-condition behavior."
+}
