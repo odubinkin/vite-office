@@ -1,0 +1,57 @@
+{
+  "scope": "Native Calc header/footer date, time, and filename fields across XLSX, ODS, and the browser",
+  "implementationCommit": "3072e694b26e",
+  "upstream": [
+    "include/editeng/flditem.hxx and editeng/source/items/flditem.cxx (SvxDateField, SvxExtTimeField and SvxExtFileField)",
+    "sc/source/ui/unoobj/fielduno.cxx (field formats, property defaults and fixed values)",
+    "sc/source/filter/oox/pagesettings.cxx and sc/source/filter/excel/xehelper.cxx (dynamic field controls)",
+    "xmloff/source/text/txtfldi.cxx and txtflde.cxx (ODF fixed dates, times and filename display formats)"
+  ],
+  "checks": [
+    {
+      "command": "npm run test:coverage:calc -- excelfilter.page-settings.test.ts native-page-hf.test.ts pageattr.test.ts xlstyle.fonts.test.ts --maxWorkers=2 --testTimeout=90000 --coverage.include=src/sc/source/filter/oox/pagesettings.headerfooter.ts --coverage.include=src/sc/source/filter/excel/xehelper.headerfooter.ts --coverage.include=src/sc/source/filter/xml/XMLTableHeaderFooterContext.ts --coverage.reportsDirectory=coverage/xlsx-header-footer-fields --coverage.reporter=text --coverage.reporter=json --coverage.thresholds.perFile=true --coverage.thresholds.statements=90 --coverage.thresholds.branches=90 --coverage.thresholds.functions=90 --coverage.thresholds.lines=90",
+      "result": "pass",
+      "evidence": "31 tests. Branch coverage per owner: parser 100%, XLSX converter 96.20%, ODF context 95.41%; each metric clears 90%. Pinned tdf167019 header/footer XML is copied unmodified into a small XLSX fixture for its independent regression."
+    },
+    {
+      "command": "npm run test:coverage:shared -- native-field-values.test.ts --maxWorkers=1 --coverage.include=src/editeng/source/items/flditem.ts --coverage.reportsDirectory=coverage/xlsx-hf-field-values --coverage.reporter=text --coverage.reporter=json --coverage.thresholds.perFile=true --coverage.thresholds.statements=90 --coverage.thresholds.branches=90 --coverage.thresholds.functions=90 --coverage.thresholds.lines=90",
+      "result": "pass",
+      "evidence": "7 native EditEngine field cases, 100% coverage on flditem.ts."
+    },
+    {
+      "command": "npm run test:calc -- ods-native-fonts.test.ts ods-style-routing.test.ts ods-worker-entry.test.ts ods-xml-boundaries.test.ts docsh.csv-export.test.ts --maxWorkers=2 --testTimeout=90000",
+      "result": "pass",
+      "evidence": "18 ODS and CSV cases."
+    },
+    {
+      "command": "npm run test:shared -- converter-date.test.ts converter-temporal.test.ts txtparae-calc-reuse.test.ts --maxWorkers=2",
+      "result": "pass",
+      "evidence": "15 SAX converter and shared text exporter cases."
+    },
+    {
+      "command": "npm run test:static && PLAYWRIGHT_BROWSERS_PATH=\"$PWD/.agentplane/tmp/zip-migration/browsers\" npm exec -- playwright test --config .git/calc-panes-browser.config.mts --project calc --workers=1 --timeout=90000 xlsx-page-settings.spec.ts",
+      "result": "pass",
+      "evidence": "Static build and production Chromium. The browser path reopens the saved primary-format copy, confirms dynamic fields in the downloaded XLSX and opens it at a mobile viewport."
+    },
+    {
+      "command": "npm run typecheck; npm run check:dependencies; npm run check:docs; npm run check:file-size; npm run check:source-tree; npm run check:calc-resources; npm run check:writer-resources; npm run check:writer-hintids; node .agentplane/policy/check-routing.mjs; ap doctor; git diff --check",
+      "result": "pass",
+      "evidence": "Typecheck and project gates passed along with scoped ESLint and Prettier. Doctor reports the existing hook shim warning."
+    },
+    {
+      "command": "npm exec -- tsx .git/xlsx-cursor-validate-changed-registry.mts <changed production sources>",
+      "result": "pass",
+      "evidence": "All six changed runtime modules and their mappings validated."
+    },
+    {
+      "command": "npm run check:source-provenance; npm run inventory:invariants; npm run inventory:parity",
+      "result": "fail",
+      "evidence": "The global runtime registry lacks the pre-existing OfficeTooltips.tsx and available-menu-items.ts records."
+    }
+  ],
+  "remaining": [
+    "Field-specific ODF number-format references, localized display and printing are outside the verified checkpoint.",
+    "Full tdf58243 import hits an unsupported named-range formula. Full tdf167019 import reports an invalid worksheet. Only the latter's original header/footer XML is asserted here.",
+    "CALC-757 documents the original path-only XLSX normalization. The overall XLSX task remains open; the full suite is deferred on the approved ten-task cadence."
+  ]
+}
