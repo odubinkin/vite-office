@@ -1,10 +1,10 @@
 ---
 id: "202610251549-J0Z0KF"
 title: "Implement Calc XLSX import export and existing file UI integration"
-status: "DOING"
+status: "BLOCKED"
 priority: "high"
 owner: "CODER"
-revision: 708
+revision: 709
 origin:
   system: "manual"
 depends_on:
@@ -21,10 +21,10 @@ plan_approval:
   note: null
 verification:
   state: "blocked_external"
-  updated_at: "2026-11-20T08:12:44.413Z"
+  updated_at: "2026-11-20T08:37:33.766Z"
   updated_by: "CODER"
-  note: "Verified: native condition scanner and filter admission pass 15 focused tests and two Chromium cases. The scanner independently reaches 100% coverage. All 61 prior-scope cases pass, with branch coverage at 83.26%. XLSX remains open."
-  attempts: 237
+  note: "Verified native calendar conditions in Calc, ODS, XLSX and production Chromium; the prior seven-owner conditional-profile branch gate is still open."
+  attempts: 238
 commit: null
 comments:
   -
@@ -3790,8 +3790,14 @@ events:
     from: "BLOCKED"
     to: "DOING"
     note: "Start: continue direct-mode task in current checkout."
+  -
+    type: "verify"
+    at: "2026-11-20T08:37:33.766Z"
+    author: "CODER"
+    state: "blocked_external"
+    note: "Verified native calendar conditions in Calc, ODS, XLSX and production Chromium; the prior seven-owner conditional-profile branch gate is still open."
 doc_version: 3
-doc_updated_at: "2026-11-20T08:23:55.914Z"
+doc_updated_at: "2026-11-20T08:37:34.090Z"
 doc_updated_by: "CODER"
 description: "User-approved third cohesive task: preserve pinned ExcelFilter workbook/worksheet/style/shared-string import and Excel export ownership while supporting the current Calc core slice, including cells, types, formulas, sheets, formatting and dimensions where implemented. Integrate shell filter routing and existing Open/download UI, errors/cancellation and primary ODS persistence. Record suspected upstream issues and source mappings, refactor touched workarounds and run related tests. Preserve recovery/autosave and browser file product decisions. Local work only."
 sections:
@@ -11032,6 +11038,36 @@ sections:
     - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
     - risks: none
 
+    ### 2026-11-20T08:37:33.766Z — VERIFY — blocked_external
+
+    By: CODER
+
+    Note: Verified native calendar conditions in Calc, ODS, XLSX and production Chromium; the prior seven-owner conditional-profile branch gate is still open.
+    Attempts: 238
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-20T08:23:55.914Z, excerpt_hash=sha256:3da6ce8a820217533477184a0ee7a426a557f0606d162115a30aba26455afa46
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610251549-J0Z0KF/blueprint/resolved-snapshot.json
+    - old_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+    - current_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610251549-J0Z0KF
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task verify-show 202610251549-J0Z0KF
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: false
+    - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+    - risks: none
+
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: |-
     - Revert task-related commit(s).
@@ -12183,6 +12219,10 @@ sections:
     - Observation: The old inline ODF expression split did not share the native XML converter boundary.
       Impact: Nested delimiter and quoting semantics now match the original scanner, and the related ordinary XLSX and ODS rules retain their external representation.
       Resolution: See evidence/calc-xml-condition-expression-boundary.json. The earlier seven-owner coverage remains in rework.
+
+    - Observation: Focused calendar checks and scoped90 for conditio.ts pass; the prior seven-owner conditional profile reports 83.84% branches.
+      Impact: Calc XLSX acceptance remains open.
+      Resolution: Retain the original profile and cover its remaining source branches as part of conditional format verification.
 id_source: "generated"
 ---
 ## Summary
@@ -19433,6 +19473,36 @@ DecisionContextRef:
 - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
 - risks: none
 
+### 2026-11-20T08:37:33.766Z — VERIFY — blocked_external
+
+By: CODER
+
+Note: Verified native calendar conditions in Calc, ODS, XLSX and production Chromium; the prior seven-owner conditional-profile branch gate is still open.
+Attempts: 238
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-20T08:23:55.914Z, excerpt_hash=sha256:3da6ce8a820217533477184a0ee7a426a557f0606d162115a30aba26455afa46
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610251549-J0Z0KF/blueprint/resolved-snapshot.json
+- old_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+- current_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610251549-J0Z0KF
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task verify-show 202610251549-J0Z0KF
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: false
+- repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- risks: none
+
 <!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
@@ -20588,3 +20658,7 @@ Evidence: `evidence/xlsx-native-page-break-roundtrip.json`.
 - Observation: The old inline ODF expression split did not share the native XML converter boundary.
   Impact: Nested delimiter and quoting semantics now match the original scanner, and the related ordinary XLSX and ODS rules retain their external representation.
   Resolution: See evidence/calc-xml-condition-expression-boundary.json. The earlier seven-owner coverage remains in rework.
+
+- Observation: Focused calendar checks and scoped90 for conditio.ts pass; the prior seven-owner conditional profile reports 83.84% branches.
+  Impact: Calc XLSX acceptance remains open.
+  Resolution: Retain the original profile and cover its remaining source branches as part of conditional format verification.
