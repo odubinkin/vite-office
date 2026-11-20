@@ -4,7 +4,7 @@ title: "Implement Writer DOCX import export and existing file UI integration"
 status: "BLOCKED"
 priority: "high"
 owner: "CODER"
-revision: 419
+revision: 421
 origin:
   system: "manual"
 depends_on:
@@ -21,15 +21,18 @@ plan_approval:
   note: null
 verification:
   state: "blocked_external"
-  updated_at: "2026-11-20T00:57:27.020Z"
+  updated_at: "2026-11-20T01:45:43.740Z"
   updated_by: "CODER"
-  note: "Verified: the reported DOCX opens and reopens via the current production Writer build. Older revisions reproduce settings and header drawing importer errors."
-  attempts: 7
+  note: "Verified: the provided DOCX opens and restores in production Chromium on local main; the broader Writer DOCX task retains its previously recorded gaps."
+  attempts: 8
 commit: null
 comments:
   -
     author: "CODER"
     body: "Start: Implement the approved Writer DOCX pipeline using native OOXML values, DomainMapper text/style/table APIs and DocxExport ownership, then connect existing shell and file UI with focused verification."
+  -
+    author: "CODER"
+    body: "Start: continue direct-mode task in current checkout."
   -
     author: "CODER"
     body: "Start: continue direct-mode task in current checkout."
@@ -2102,8 +2105,21 @@ events:
     author: "CODER"
     state: "blocked_external"
     note: "Verified: the reported DOCX opens and reopens via the current production Writer build. Older revisions reproduce settings and header drawing importer errors."
+  -
+    type: "status"
+    at: "2026-11-20T01:38:19.039Z"
+    author: "CODER"
+    from: "BLOCKED"
+    to: "DOING"
+    note: "Start: continue direct-mode task in current checkout."
+  -
+    type: "verify"
+    at: "2026-11-20T01:45:43.740Z"
+    author: "CODER"
+    state: "blocked_external"
+    note: "Verified: the provided DOCX opens and restores in production Chromium on local main; the broader Writer DOCX task retains its previously recorded gaps."
 doc_version: 3
-doc_updated_at: "2026-11-20T00:57:27.319Z"
+doc_updated_at: "2026-11-20T01:45:46.794Z"
 doc_updated_by: "CODER"
 description: "User-approved second cohesive task: preserve pinned WriterFilter OOXML/DomainMapper import and DocxExportFilter/DocxExport ownership while supporting the existing Writer core slice, including paragraphs, runs, pooled formatting, styles, lists, tables, links and page properties where implemented. Integrate asynchronous shell filter routing, existing Open and download UI, errors/cancellation and primary ODT persistence. Refactor old workarounds in touched paths, record suspected upstream issues, provenance and related tests. No recovery/autosave product changes, network or publication."
 sections:
@@ -6258,6 +6274,36 @@ sections:
     - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
     - risks: none
 
+    ### 2026-11-20T01:45:43.740Z — VERIFY — blocked_external
+
+    By: CODER
+
+    Note: Verified: the provided DOCX opens and restores in production Chromium on local main; the broader Writer DOCX task retains its previously recorded gaps.
+    Attempts: 8
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-20T01:38:19.039Z, excerpt_hash=sha256:f1ce94bb673a9632d48a811076188278454b04d0783aab0712ee1947357ea697
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610251549-V4DQJW/blueprint/resolved-snapshot.json
+    - old_digest: c0e14f7bf31d4be862783b8d9c5eb6067e7f9f18464f5898e14e0fcc5b208aa0
+    - current_digest: c0e14f7bf31d4be862783b8d9c5eb6067e7f9f18464f5898e14e0fcc5b208aa0
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610251549-V4DQJW
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task verify-show 202610251549-V4DQJW
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: false
+    - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+    - risks: none
+
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Revert only this task's intentional implementation commits, preserving the shared OOXML prerequisite and other task history. Re-run impacted Writer DOCX/ODT shell and file UI tests and typecheck/build; confirm original ODT/TXT workflows and primary-store behavior."
   Findings: |-
@@ -6995,6 +7041,10 @@ sections:
     - Observation: The user-provided DOCX was used locally only. Revision 2406dda9b fails in the settings substream on CT_DocProtect with enforcement disabled. Revision 65849cbea proceeds to the header substream and fails on CT_Drawing. At df644eccf the direct import succeeds and Chromium Open on computer renders the body and one picture, saves locally, then opens the same document from browser storage after a reload.
       Impact: The cached origin/main lacks the local document protection and header picture imports. No source change was needed to repair this specific input on current local main. This sample does not complete the broader Writer DOCX task.
       Resolution: Deploy a current build with the existing settings and drawing commits. The pinned tdf166173 Worker round trip and settings group passed 31 tests, and the header picture path already has an independent browser fixture.
+
+    - Observation: The local production browser test opened the supplied DOCX, rendered its document text and picture, and reopened the browser-stored copy after reload.
+      Impact: The cached remote revision predates the existing Writer settings and drawing fixes. The supplied document remained outside tracked files.
+      Resolution: Retain the existing public regression fixtures for the supported settings and header image paths.
 id_source: "generated"
 ---
 ## Summary
@@ -11160,6 +11210,36 @@ DecisionContextRef:
 - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
 - risks: none
 
+### 2026-11-20T01:45:43.740Z — VERIFY — blocked_external
+
+By: CODER
+
+Note: Verified: the provided DOCX opens and restores in production Chromium on local main; the broader Writer DOCX task retains its previously recorded gaps.
+Attempts: 8
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-20T01:38:19.039Z, excerpt_hash=sha256:f1ce94bb673a9632d48a811076188278454b04d0783aab0712ee1947357ea697
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610251549-V4DQJW/blueprint/resolved-snapshot.json
+- old_digest: c0e14f7bf31d4be862783b8d9c5eb6067e7f9f18464f5898e14e0fcc5b208aa0
+- current_digest: c0e14f7bf31d4be862783b8d9c5eb6067e7f9f18464f5898e14e0fcc5b208aa0
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610251549-V4DQJW
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task verify-show 202610251549-V4DQJW
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: false
+- repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- risks: none
+
 <!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
@@ -11902,3 +11982,7 @@ Evidence: `evidence/docx-native-ranged-bookmarks.json`.
 - Observation: The user-provided DOCX was used locally only. Revision 2406dda9b fails in the settings substream on CT_DocProtect with enforcement disabled. Revision 65849cbea proceeds to the header substream and fails on CT_Drawing. At df644eccf the direct import succeeds and Chromium Open on computer renders the body and one picture, saves locally, then opens the same document from browser storage after a reload.
   Impact: The cached origin/main lacks the local document protection and header picture imports. No source change was needed to repair this specific input on current local main. This sample does not complete the broader Writer DOCX task.
   Resolution: Deploy a current build with the existing settings and drawing commits. The pinned tdf166173 Worker round trip and settings group passed 31 tests, and the header picture path already has an independent browser fixture.
+
+- Observation: The local production browser test opened the supplied DOCX, rendered its document text and picture, and reopened the browser-stored copy after reload.
+  Impact: The cached remote revision predates the existing Writer settings and drawing fixes. The supplied document remained outside tracked files.
+  Resolution: Retain the existing public regression fixtures for the supported settings and header image paths.
