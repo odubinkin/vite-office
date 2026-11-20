@@ -67,7 +67,6 @@ test("Writer imported restarted table row Add to List preserves both starts and 
     mimeType: "application/vnd.oasis.opendocument.text",
     name: "restart-row.odt",
   });
-  await expect(page.getByRole("dialog", { name: "Open", exact: true })).toBeHidden();
   const first = page.getByRole("textbox", { name: "Row 2 column 1 paragraph 1", exact: true }),
     second = page.getByRole("textbox", { name: "Row 2 column 2 paragraph 1", exact: true }),
     firstId = await first.getAttribute("data-writer-paragraph-id"),

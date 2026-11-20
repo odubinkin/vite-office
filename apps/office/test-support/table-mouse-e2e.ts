@@ -6,6 +6,7 @@ export async function exposeBrowserTableEdge(
   page: Page,
   element: Locator,
 ): Promise<{ x: number; y: number; width: number; height: number }> {
+  await expect(page.getByRole("dialog", { name: "Open", exact: true })).toBeHidden();
   await element.scrollIntoViewIfNeeded();
   for (let attempt = 0; attempt < 4; attempt++) {
     const bounds = await element.boundingBox();
