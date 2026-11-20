@@ -1,10 +1,11 @@
 ---
 id: "202611201238-Q3GS36"
 title: "Connect Calc freeze rows and sheet pane commands"
-status: "DOING"
+result_summary: "Connect Calc row freezing and sheet pane commands"
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 9
+revision: 10
 origin:
   system: "manual"
 depends_on: []
@@ -45,11 +46,16 @@ quality_review:
     - "output/calc-Q3GS36-browser-row-replay.log"
   findings:
     - "Chrome verifies freezing a scrolled-away first row and XLSX persistence; focused source tests verify typed row counts, pane transitions and the native GoToStart regression."
-commit: null
+commit:
+  hash: "a68b5031718386d2c100716d5f31dbbe92d6f251"
+  message: "🧩 Q3GS36 code: connect Calc freeze rows and pane commands"
 comments:
   -
     author: "CODER"
     body: "Start: continue direct-mode task in current checkout."
+  -
+    author: "CODER"
+    body: "Verified: Calc first row stays frozen while the lower pane scrolls and exports correctly to XLSX. All focused cases, Chrome pane cases, types and source gates passed."
 events:
   -
     type: "status"
@@ -64,8 +70,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "All 16 focused Calc cases and three production Chrome cases passed. Freeze First Row works from the scrolled View menu and exports the expected XLSX pane. Final types, resources, provenance and related gates pass."
+  -
+    type: "status"
+    at: "2026-11-20T13:38:25.506Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: Calc first row stays frozen while the lower pane scrolls and exports correctly to XLSX. All focused cases, Chrome pane cases, types and source gates passed."
 doc_version: 3
-doc_updated_at: "2026-11-20T13:37:29.033Z"
+doc_updated_at: "2026-11-20T13:38:25.507Z"
 doc_updated_by: "CODER"
 description: "Prioritize Freeze First Row, then connect the related cursor and column freeze and split commands to the real pane owners. Preserve source mode transitions, active pane, applicable navigation and XLSX view settings; exercise production Calc with focused tests."
 sections:
