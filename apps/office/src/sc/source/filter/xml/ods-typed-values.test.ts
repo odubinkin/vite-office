@@ -1,5 +1,6 @@
 /** @fileoverview Native Calc typed ODF scalars, formats and hybrid formula caches. */
 import { assert, expect, it } from "vitest";
+import { readFileSync } from "node:fs";
 import {
   encodeCalcDocument,
   decodeCalcDocument,
@@ -28,7 +29,7 @@ const namespaces = Object.entries(ODF_NAMESPACES)
 function load(row: string, declarations = "", settings = ""): ScDocument {
   const document = new ScDocument();
   new ScXMLImport(document).importContent(
-    `<office:document-content ${namespaces} office:version="1.3"><office:automatic-styles>${declarations}</office:automatic-styles><office:body><office:spreadsheet>${settings}<table:table table:name="Sheet1"><table:table-row>${row}</table:table-row></table:table></office:spreadsheet></office:body></office:document-content>`,
+    `<office:document-content ${namespaces} office:version="1.3"><office:automatic-styles>${declarations}</office:automatic-styles><office:body><office:spreadsheet>${settings}<table:table table:name="Sheet1"><table:table-column table:number-columns-repeated="8"/><table:table-row>${row}</table:table-row></table:table></office:spreadsheet></office:body></office:document-content>`,
   );
   return document;
 }
@@ -79,10 +80,14 @@ it("routes ODS scalar types through the document's format table and date origin"
   }
 });
 
-it("retains both assertions from Calc tdf126116 with the authored date format on the cell", /** Ports the native short-date display and edit-format assertions. @returns Nothing. */ () => {
-  const document = load(
-    '<table:table-cell table:style-name="ce5" office:value-type="date" office:date-value="2021-02-02" calcext:value-type="date"><text:p>02/02/21</text:p></table:table-cell>',
-    '<number:date-style style:name="N37" number:automatic-order="true"><number:month number:style="long"/><number:text>/</number:text><number:day number:style="long"/><number:text>/</number:text><number:year/></number:date-style><style:style style:name="ce5" style:family="table-cell" style:parent-style-name="Default" style:data-style-name="N37"/>',
+it("retains both assertions from Calc tdf126116 with the original column defaults", /** Ports the native short-date display and edit-format assertions. @returns Nothing. */ () => {
+  const flat = readFileSync(
+    "../../vendor/libreoffice-reference/sc/qa/unit/data/fods/tdf126116.fods",
+    "utf8",
+  );
+  const document = new ScDocument();
+  new ScXMLImport(document).importContent(
+    flat.replace(/(<\/?office:document)(?=[\s>])/gu, "$1-content"),
   );
   const input = unicode("03/03");
   try {

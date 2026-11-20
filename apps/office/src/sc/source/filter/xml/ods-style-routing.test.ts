@@ -92,7 +92,8 @@ it("keeps named cell styles and their direct or inherited data styles through OD
   expect(await documentArchive.readTextEntry("styles.xml")).toContain(
     'style:name="Orphan" style:family="table-cell" style:parent-style-name="Default"',
   );
-  expect(xml).toContain('table:style-name="Child_20_Format"');
+  expect(xml).toContain('table:default-cell-style-name="Child_20_Format"');
+  expect(xml).not.toContain('table:style-name="Child_20_Format"');
   expect(xml).toContain('style:parent-style-name="Child_20_Format"');
   const saved = await readOdsDocument(archive);
   const worker = decodeCalcDocument(encodeCalcDocument(original));

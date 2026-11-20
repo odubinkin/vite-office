@@ -41,7 +41,7 @@ import {
 } from "../../../../xmloff/source/core/xmlimp";
 import { XMLToken, ODF_NAMESPACES } from "../../../../xmloff/source/core/xmltoken";
 import { ScDocumentImport } from "../../../inc/documentimport";
-import type { ScAddress } from "../../../inc/address";
+import type { ScAddress, ScRange } from "../../../inc/address";
 import { FormulaGrammar } from "../../../../formula/inc/grammar";
 import { InsertRangeNames } from "../../core/tool/rangenam";
 import { GetNamedExpressionBase, type ScMyNamedExpression } from "./xmlnexpi";
@@ -106,21 +106,63 @@ export class ScXMLImport extends SvXMLImport implements SvXMLImportRootFactory {
     }
   }
 
-  /** Applies the source type-based number-format override after cell styles. @param address - Cell position. @param type - ODF number category. @param currency - Source currency. @returns Nothing. */
-  SetType(address: ScAddress, type: number, currency: string): void {
+  /** Applies the resolved cell style and effective type to its native range. @param range - Original formatted rectangle. @param name - Resolved cell style. @param type - ODF number category. @param currency - Source currency. @returns Nothing. */
+  SetStyleToRange(range: ScRange, name: string, type: number, currency: string | null): void {
+    const { aStart: start, aEnd: end } = range;
+    const pattern = this.GetAutoStyle(name);
+    const style = pattern?.GetStyleSheet();
+    if (style && style !== this.document.GetStyleSheetPool()?.GetDefaultStyle())
+      this.document.ApplyStyleAreaTab(
+        start.Col(),
+        start.Row(),
+        end.Col(),
+        end.Row(),
+        start.Tab(),
+        style,
+      );
+    if (pattern?.GetItemSet().Count())
+      this.document.ApplyPatternAreaTab(
+        start.Col(),
+        start.Row(),
+        end.Col(),
+        end.Row(),
+        start.Tab(),
+        pattern,
+      );
+    this.SetType(range, type, currency);
+  }
+
+  /** Applies the source type-based number-format override after cell styles. @param range - Original formatted rectangle. @param type - ODF number category. @param currency - Source currency. @returns Nothing. */
+  private SetType(range: ScRange, type: number, currency: string | null): void {
     if (type === T.TEXT || type === T.UNDEFINED || type === T.NUMBER) return;
+    const { aStart: start, aEnd: end } = range;
     const formatter = this.document.GetFormatTable();
-    const key = this.document.GetPattern(address)?.GetNumberFormat(formatter) ?? 0;
+    const key = this.document.GetPattern(start)?.GetNumberFormat(formatter) ?? 0;
     const entry = formatter.GetEntry(key);
     if (!entry) return;
     const current = formatter.GetType(key) & ~T.DEFINED;
+    let next = key;
     if (type === T.CURRENCY) {
       const actual = getCurrencySymbol(formatter, key);
-      if (currency && actual && currency !== actual)
-        this.document.SetNumberFormat(address, this.SetCurrencySymbol(key, currency));
-    } else if (type !== current && key % SV_COUNTRY_LANGUAGE_OFFSET === 0) {
-      const next = formatter.GetStandardFormat(type, entry.GetLanguage());
-      if (next !== key) this.document.SetNumberFormat(address, next);
+      if (currency && actual && currency !== actual) next = this.SetCurrencySymbol(key, currency);
+    } else if (type !== current && key % SV_COUNTRY_LANGUAGE_OFFSET === 0)
+      next = formatter.GetStandardFormat(type, entry.GetLanguage());
+    if (next === key) return;
+    const pattern = new ScPatternAttr(this.document.getCellAttributeHelper());
+    const format = new SfxUInt32Item(ATTR_VALUE_FORMAT, next);
+    try {
+      pattern.GetItemSetWritable().Put(format);
+      this.document.ApplyPatternAreaTab(
+        start.Col(),
+        start.Row(),
+        end.Col(),
+        end.Row(),
+        start.Tab(),
+        pattern,
+      );
+    } finally {
+      format.Dispose();
+      pattern.Dispose();
     }
   }
 

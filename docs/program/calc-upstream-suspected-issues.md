@@ -7360,3 +7360,25 @@ fixture exercises this distinction through import and subsequent editing.
 
 - [Original UNO property](../../vendor/libreoffice-reference/svl/source/numbers/numfmuno.cxx#L695)
 - [Original ODS format selection](../../vendor/libreoffice-reference/sc/source/filter/xml/xmlimprt.cxx#L897)
+
+### CALC-774 — A pending ODF cell range can use the following row's default style
+
+`ScXMLTableRowContext` sets the current row's default before reading any
+cells on that row. `ScMyStylesImportHelper` resolves an unstyled pending
+range using the row default in effect when it flushes that range. The
+first range of a new row can therefore cause a preceding row's cells
+to receive the new row's style. Calc preserves this timing even when
+the two ranges differ in their ODF value types.
+
+- [Original row context](../../vendor/libreoffice-reference/sc/source/filter/xml/xmlrowi.cxx#L97)
+- [Original pending style application](../../vendor/libreoffice-reference/sc/source/filter/xml/XMLStylesImportHelper.cxx#L230)
+
+### CALC-775 — A declared column default can cross the declaration boundary
+
+When an unstyled range starts within the declared columns and extends
+beyond them, `AddDefaultRange` applies the final declared style through
+the end of the range. A separate range starting beyond the declared
+columns receives no default style or style-driven number-format
+override from this path. Calc follows both original branches.
+
+- [Original column fallback loop](../../vendor/libreoffice-reference/sc/source/filter/xml/XMLStylesImportHelper.cxx#L240)

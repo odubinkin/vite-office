@@ -13,9 +13,11 @@ import { ScXMLTableRowContext } from "./xmlrowi";
 import { ScXMLConditionalFormatsContext } from "./xmlcondformat";
 import { ScXMLNamedExpressionsContext } from "./xmlnexpi";
 import { readTableProtection, readTableProtectionOptions } from "./xmlsubti";
+import { ScMyStylesImportHelper } from "./XMLStylesImportHelper";
 /** Real sheet import cursor;row/column positions are transient parser state only. */
 export class ScXMLTableContext extends ScXMLImportContext {
   readonly tab: number;
+  readonly styles: ScMyStylesImportHelper;
   row = 0;
   column = 0;
   private readonly printRanges: string;
@@ -37,6 +39,7 @@ export class ScXMLTableContext extends ScXMLImportContext {
     attributes: FastAttributeList,
   ) {
     super(owner);
+    this.styles = new ScMyStylesImportHelper(owner);
     this.printRanges = attributes.get(XMLToken.TABLE_PRINT_RANGES) ?? "";
     this.printEntireSheet = attributes.get(XMLToken.TABLE_PRINT) !== "false";
     this.protection = readTableProtection(attributes);
@@ -54,6 +57,7 @@ export class ScXMLTableContext extends ScXMLImportContext {
   /** Commits the sheet's native print selection after its structural children. @param element - Closing token. @returns Nothing. */
   override endFastElement(element: XMLToken): void {
     if (element !== XMLToken.TABLE_TABLE) return;
+    this.styles.EndTable();
     const document = this.owner.GetDocument();
     const table = document.FetchTable(this.tab);
     if (this.protection) document.SetTabProtection(this.tab, this.protection);

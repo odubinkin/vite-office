@@ -7,7 +7,7 @@ import { toDouble } from "../../../../o3tl/inc/string_view";
 import { convertDurationToDays } from "../../../../sax/source/tools/converter.duration";
 import { SvXMLUnitConverter } from "../../../../xmloff/source/core/xmluconv";
 import { SvNumFormatType as T } from "../../../../svl/inc/zforlist";
-import { ScAddress } from "../../../inc/address";
+import { ScAddress, ScRange } from "../../../inc/address";
 import { CellType } from "../../../inc/global";
 import { unicode } from "../../../../i18nlangtag/source/isolang/isolang.tables";
 import type { ScXMLTableRowContext } from "./xmlrowi";
@@ -17,13 +17,13 @@ import { createCellEditText } from "./xmlcelli.edit";
 import type { CellTextParagraph } from "./xmlexprt.celltext";
 /** Cell state is a transient native XML context,not an imported cell model. */
 export class ScXMLTableRowCellContext extends ScXMLImportContext {
-  private readonly style: import("../../../inc/patattr").ScPatternAttr | null;
+  private readonly style: string | null;
   private readonly paragraphs: CellTextParagraph[] = [];
   private readonly repeat: number;
   private readonly mergedColumns: number;
   private readonly mergedRows: number;
   private readonly type: number;
-  private readonly currency: string;
+  private readonly currency: string | null;
   private readonly numberValue: number;
   private readonly errorValue: boolean;
   private readonly hasExtendedValueType: boolean;
@@ -44,7 +44,7 @@ export class ScXMLTableRowCellContext extends ScXMLImportContext {
     let type: number = T.TEXT;
     let number = NaN;
     let string: string | null = null;
-    let currency = "";
+    let currency: string | null = null;
     let error = false;
     let extended = false;
     let formulaText = false;
@@ -112,7 +112,7 @@ export class ScXMLTableRowCellContext extends ScXMLImportContext {
       ? null
       : row.table.owner.ExtractFormulaNamespaceGrammar(formula, attributes);
     const name = attributes.get(XMLToken.TABLE_STYLE_NAME);
-    this.style = name === null ? null : row.table.owner.GetAutoStyle(name);
+    this.style = name;
     this.hasStyle = name !== null;
     if (this.source !== null && (this.repeat > 1 || row.repeat > 1))
       throw new Error("ODS repeated formula services are not implemented");
@@ -148,20 +148,21 @@ export class ScXMLTableRowCellContext extends ScXMLImportContext {
       text += "\n";
     }
     const value = this.stringValue || (this.paragraphs.length ? text.slice(0, -1) : undefined);
-    if (this.style !== null) {
-      const endCol = Math.min(owner.GetDocument().MaxCol(), pos.Col() + this.repeat - 1),
-        endRow = Math.min(owner.GetDocument().MaxRow(), pos.Row() + this.row.repeat - 1);
-      const document = owner.GetDocument();
-      if (document.ValidColRow(pos.Col(), pos.Row())) {
-        const style = this.style.GetStyleSheet();
-        if (style)
-          document.ApplyStyleAreaTab(pos.Col(), pos.Row(), endCol, endRow, pos.Tab(), style);
-        if (this.style.GetItemSet().Count())
-          document.ApplyPatternAreaTab(pos.Col(), pos.Row(), endCol, endRow, pos.Tab(), this.style);
-      }
-      if (endCol !== pos.Col() + this.repeat - 1 || endRow !== pos.Row() + this.row.repeat - 1)
-        owner.unsupported("cell range overflow");
-    }
+    const document = owner.GetDocument();
+    const endCol = Math.min(document.MaxCol(), pos.Col() + this.repeat - 1),
+      endRow = Math.min(document.MaxRow(), pos.Row() + this.row.repeat - 1);
+    if (document.ValidColRow(pos.Col(), pos.Row()))
+      this.row.table.styles.AddRange(
+        new ScRange(pos.Col(), pos.Row(), pos.Tab(), endCol, endRow, pos.Tab()),
+        this.style,
+        this.source !== null && this.type === T.DATETIME ? T.UNDEFINED : this.type,
+        this.currency,
+      );
+    if (
+      this.style !== null &&
+      (endCol !== pos.Col() + this.repeat - 1 || endRow !== pos.Row() + this.row.repeat - 1)
+    )
+      owner.unsupported("cell range overflow");
     if (
       this.source === null &&
       (this.type === T.UNDEFINED || (this.type === T.TEXT && value === undefined))
@@ -208,11 +209,6 @@ export class ScXMLTableRowCellContext extends ScXMLImportContext {
           const address = new ScAddress(pos.Col() + col, pos.Row() + row, pos.Tab());
           if (this.covered && owner.GetDocument().GetCellType(address) !== CellType.CELLTYPE_NONE)
             continue;
-          owner.SetType(
-            address,
-            this.source !== null && this.type === T.DATETIME ? T.UNDEFINED : this.type,
-            this.currency,
-          );
           if (this.source !== null)
             owner.AddFormula(
               address,

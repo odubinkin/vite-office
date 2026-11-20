@@ -668,6 +668,30 @@ export class ScDocument {
   GetPattern(position: ScAddress): ScPatternAttr | null {
     return this.FetchTable(position.Tab())?.GetPattern(position.Col(), position.Row()) ?? null;
   }
+  /** Selects the first row of the most frequent native pattern in a column. @param tab - Sheet. @param col - Column. @param lastRow - Inclusive export bound. @returns Row of the default pattern. */
+  GetColDefault(tab: number, col: number, lastRow: number): number {
+    const column = this.FetchTable(tab)?.GetColumnData(col);
+    if (!column) return 0;
+    const first: [number] = [0],
+      last: [number] = [0];
+    const counts = new Map<ScPatternAttr, { count: number; first: number }>();
+    for (let row = 0; row <= lastRow; row = last[0] + 1) {
+      const pattern = column.GetPatternRange(first, last, row);
+      if (!pattern || (row === 0 && last[0] >= lastRow)) return 0;
+      const count = Math.min(last[0], lastRow) - row + 1;
+      const previous = counts.get(pattern);
+      if (previous) previous.count += count;
+      else counts.set(pattern, { count, first: row });
+    }
+    let count = 0,
+      selected = 0;
+    for (const entry of counts.values())
+      if (entry.count > count) {
+        count = entry.count;
+        selected = entry.first;
+      }
+    return selected;
+  }
   /** Original document10 merge query over actual sparse sheets. @param position - Queried cell. @returns Merged anchor. */
   IsMerged(position: ScAddress): boolean {
     return document10.IsMerged.call(this, position);

@@ -1,4 +1,4 @@
-/** @fileoverview Native ScXMLTableColContext repeated column geometry/visibility import;non-default cell-style inheritance remains explicit unsupported metadata. */
+/** @fileoverview Native ScXMLTableColContext column geometry, visibility and default cell style. */
 import { ScXMLImportContext } from "./importcontext";
 import type { FastAttributeList } from "../../../../xmloff/source/core/xmlimp";
 import { XMLToken } from "../../../../xmloff/source/core/xmltoken";
@@ -9,6 +9,7 @@ export class ScXMLTableColContext extends ScXMLImportContext {
   private readonly count: number;
   private readonly style: string | null;
   private readonly visibility: string;
+  private readonly cellStyle: string;
   /** Reads source repetition clamp and visible default. @param table - Real table cursor. @param attributes - Native attributes. @returns Context. */
   constructor(
     private readonly table: ScXMLTableContext,
@@ -21,9 +22,7 @@ export class ScXMLTableColContext extends ScXMLImportContext {
     );
     this.style = attributes.get(XMLToken.TABLE_STYLE_NAME);
     this.visibility = attributes.get(XMLToken.TABLE_VISIBILITY) ?? "visible";
-    const cellStyle = attributes.get(XMLToken.TABLE_DEFAULT_CELL_STYLE_NAME);
-    if (cellStyle !== null && cellStyle !== "" && cellStyle !== "Default")
-      table.owner.unsupported("column default-cell-style inheritance");
+    this.cellStyle = attributes.get(XMLToken.TABLE_DEFAULT_CELL_STYLE_NAME) || "Default";
   }
   /** Native overflow clamps both endpoints to MaxCol before applying source properties and advancing the import cursor. @returns Nothing. */
   override endFastElement(): void {
@@ -33,6 +32,7 @@ export class ScXMLTableColContext extends ScXMLImportContext {
     if (this.style !== null && this.style !== "")
       this.table.owner.ApplyColumnStyle(this.style, this.table.tab, first, last);
     doc.SetColHidden(first, last, this.table.tab, this.visibility !== "visible");
+    this.table.styles.AddColumnStyle(this.cellStyle, Math.max(0, last - this.table.column + 1));
     this.table.column += this.count;
   }
 }

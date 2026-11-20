@@ -66,7 +66,6 @@ it("retains native repeat clamps and final-column overflow while diagnosing unpo
       "invalid column width",
       "optimal column width",
       "column style properties",
-      "column default-cell-style inheritance",
       "column style",
       "column parent style inheritance",
     ]),

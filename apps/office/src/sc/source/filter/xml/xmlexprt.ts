@@ -4,6 +4,7 @@ import { exportPageStyles } from "./xmlstyle.page";
 import { externalRefCacheStyle, WriteExternalRefCaches } from "./xmlexprt.external";
 import { GetPrintRanges } from "../../core/data/table1";
 import { ScMyOpenCloseColumnRowGroup } from "./XMLColumnRowGroupExport";
+import { ScMyDefaultStyles } from "./XMLStylesExportHelper";
 import type { ScDocumentPool } from "../../core/data/docpool";
 import { convert, Length } from "../../../../o3tl/inc/unit_conversion";
 import { XMLFontAutoStylePool } from "../../../../xmloff/source/style/XMLFontAutoStylePool";
@@ -57,6 +58,7 @@ interface RowCellRange {
   first: number;
   last: number;
   style: string;
+  automatic: boolean;
   covered: boolean;
   merge: ScMergeAttr;
 }
@@ -110,6 +112,7 @@ export class ScXMLExport {
   >();
   private readonly numberStyles = new Map<number, { name: string; xml: string } | null>();
   private readonly patternNames = new Map<ScPatternAttr, string>();
+  private readonly automaticStyleNames = new Set<string>();
   private readonly columnStyles = new Map<string, string>();
   private readonly rowStyles = new Map<string, string>();
   /** Binds the actual document and bounds. @param document - Document. @param options - Controls. @returns Exporter. */
@@ -151,6 +154,7 @@ export class ScXMLExport {
       while (this.reservedStyleNames.has(name));
       style = { name, dataStyle, parent, properties };
       this.styles.set(key, style);
+      this.automaticStyleNames.add(name);
     }
     this.patternNames.set(pattern, style.name);
     return style.name;
@@ -178,10 +182,11 @@ export class ScXMLExport {
       : "";
     return `<?xml version="1.0" encoding="UTF-8"?><office:document-styles xmlns:office="${ODF_NAMESPACES.office}" xmlns:number="${ODF_NAMESPACES.number}" xmlns:text="${ODF_NAMESPACES.text}" xmlns:style="${ODF_NAMESPACES.style}" xmlns:fo="${ODF_NAMESPACES.fo}" xmlns:css3t="${ODF_NAMESPACES.css3t}" xmlns:svg="${ODF_NAMESPACES.svg}" xmlns:loext="${ODF_NAMESPACES.loext}" xmlns:xlink="${ODF_NAMESPACES.xlink}" office:version="1.3">${fontPool.exportXML()}${styles}${pageStyles}</office:document-styles>`;
   }
-  /** Collects equal effective cell-style ranges with the minimum native row-repeat boundary,as WriteRowContent consumes ScRowFormatRanges. @param table - Actual sheet. @param row - First row in the format run. @returns Horizontal styles and their common row end. */
+  /** Collects equal effective cell-style ranges with the minimum native row-repeat boundary, as WriteRowContent consumes ScRowFormatRanges. @param table - Actual sheet. @param row - First row in the format run. @param defaults - Selected column styles. @returns Horizontal styles and their common row end. */
   private collectColumnStyles(
     table: ScTable,
     row: number,
+    defaults: ScMyDefaultStyles,
   ): {
     endRow: number;
     ranges: RowCellRange[];
@@ -200,7 +205,9 @@ export class ScXMLExport {
         .GetColumnData(column)
         .GetPatternRange(first, last, row) as ScPatternAttr;
       endRow = Math.min(endRow, last[0]);
-      const style = this.styleName(pattern),
+      const name = this.styleName(pattern),
+        style = name === defaults.Get(column) ? "" : name || text(SC_STYLE_PROG_STANDARD),
+        automatic = this.automaticStyleNames.has(name),
         merge = pattern.GetItem(ATTR_MERGE) as ScMergeAttr,
         covered = (pattern.GetItem(ATTR_MERGE_FLAG) as ScMergeFlagAttr).IsOverlapped(),
         end = column < allocated ? column : endColumn;
@@ -208,12 +215,13 @@ export class ScXMLExport {
       const previous = ranges.at(-1);
       if (
         previous?.style === style &&
+        previous.automatic === automatic &&
         previous.covered === covered &&
         !merge.IsMerged() &&
         !previous.merge.IsMerged()
       )
         previous.last = end;
-      else ranges.push({ first: column, last: end, style, covered, merge });
+      else ranges.push({ first: column, last: end, style, automatic, covered, merge });
       column = end + 1;
     }
     return { endRow, ranges };
@@ -238,11 +246,12 @@ export class ScXMLExport {
     }
     this.styles.clear();
     this.automaticStyleIndex = 0;
+    this.automaticStyleNames.clear();
     this.patternNames.clear();
     this.rowStyles.clear();
     this.columnStyles.clear();
     const defaultName = this.document.GetStyleSheetPool()?.GetDefaultStyle()?.GetItemSet().Count()
-      ? escapeXml(text(SC_STYLE_PROG_STANDARD))
+      ? text(SC_STYLE_PROG_STANDARD)
       : "";
     let body = this.WriteCalculationSettings();
     const tableStyles = new Map<string, { name: string; properties: string; master: string }>();
@@ -312,28 +321,6 @@ export class ScXMLExport {
       );
       const columnBreaks = new ScPageBreakRanges(table, false);
       const rowBreaks = new ScPageBreakRanges(table, true);
-      for (let column = 0; column <= this.document.MaxCol();) {
-        if (this.options.isCancelled?.()) throw new Error("ODS operation was cancelled");
-        const width = table.GetColWidthRange(column),
-          end: [number] = [0],
-          hidden = table.ColHidden(column, undefined, end),
-          span = columnBreaks.ClipRange(
-            column,
-            Math.min(this.document.MaxCol(), width.mnRow2, end[0]),
-          ),
-          stop = columnGroups.ClipRange(column, span.last),
-          count = stop - column + 1,
-          key = width.maValue + "," + (span.manual ? "page" : "auto");
-        let style = this.columnStyles.get(key);
-        if (style === undefined) {
-          style = "co" + (this.columnStyles.size + 1);
-          this.columnStyles.set(key, style);
-        }
-        body += columnGroups.OpenGroups(column);
-        body += `<table:table-column table:style-name="${style}"${defaultName ? ` table:default-cell-style-name="${defaultName}"` : ""}${count > 1 ? ` table:number-columns-repeated="${count}"` : ""}${hidden ? ' table:visibility="collapse"' : ""}/>`;
-        body += columnGroups.CloseGroups(stop);
-        column = stop + 1;
-      }
       const first: [number] = [0],
         last: [number] = [0],
         allocated = table.GetAllocatedColumnsCount();
@@ -375,6 +362,38 @@ export class ScXMLExport {
           maxRow = Math.max(maxRow, end);
         r = end + 1;
       }
+      const defaults = new ScMyDefaultStyles(
+        this.document,
+        tab,
+        maxRow,
+        allocated,
+        /** Registers the selected native pattern. @param pattern - Pattern. @returns ODF style name. */ (
+          pattern,
+        ) => this.styleName(pattern),
+      );
+      for (let column = 0; column <= this.document.MaxCol();) {
+        if (this.options.isCancelled?.()) throw new Error("ODS operation was cancelled");
+        const width = table.GetColWidthRange(column),
+          end: [number] = [0],
+          hidden = table.ColHidden(column, undefined, end),
+          span = columnBreaks.ClipRange(
+            column,
+            Math.min(this.document.MaxCol(), width.mnRow2, end[0]),
+          ),
+          stop = defaults.ClipRange(column, columnGroups.ClipRange(column, span.last)),
+          defaultStyle = defaults.Get(column) || defaultName,
+          count = stop - column + 1,
+          key = width.maValue + "," + (span.manual ? "page" : "auto");
+        let style = this.columnStyles.get(key);
+        if (style === undefined) {
+          style = "co" + (this.columnStyles.size + 1);
+          this.columnStyles.set(key, style);
+        }
+        body += columnGroups.OpenGroups(column);
+        body += `<table:table-column table:style-name="${style}"${defaultStyle ? ` table:default-cell-style-name="${escapeXml(defaultStyle)}"` : ""}${count > 1 ? ` table:number-columns-repeated="${count}"` : ""}${hidden ? ' table:visibility="collapse"' : ""}/>`;
+        body += columnGroups.CloseGroups(stop);
+        column = stop + 1;
+      }
       const iterator = new ScHorizontalCellIterator(this.document, tab, 0, 0, MAXCOL, MAXROW),
         col: [number] = [0],
         row: [number] = [0];
@@ -409,7 +428,7 @@ export class ScXMLExport {
           this.rowStyles.set(key, rowStyle);
         }
         if (columnStyles === undefined || currentRow > columnStyles.endRow)
-          columnStyles = this.collectColumnStyles(table, currentRow);
+          columnStyles = this.collectColumnStyles(table, currentRow, defaults);
         endRow = Math.min(endRow, columnStyles.endRow);
         if (cell) endRow = Math.min(endRow, row[0] === currentRow ? currentRow : row[0] - 1);
         endRow = rowGroups.ClipRange(currentRow, endRow);
@@ -418,7 +437,7 @@ export class ScXMLExport {
         body += `<table:table-row table:style-name="${rowStyle}"${hidden ? ` table:visibility="${filtered ? "filter" : "collapse"}"` : ""}${repeat > 1 ? ` table:number-rows-repeated="${repeat}"` : ""}>`;
         for (const range of columnStyles.ranges) {
           const element = range.covered ? "table:covered-table-cell" : "table:table-cell";
-          let attribute = range.style ? ` table:style-name="${range.style}"` : "";
+          let attribute = range.style ? ` table:style-name="${escapeXml(range.style)}"` : "";
           if (!range.covered && range.merge.IsMerged())
             attribute += ` table:number-columns-spanned="${range.merge.GetColMerge()}" table:number-rows-spanned="${range.merge.GetRowMerge()}"`;
           for (let column = range.first; column <= range.last;) {
