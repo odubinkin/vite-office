@@ -1,10 +1,11 @@
 ---
 id: "202611201222-VQCBGY"
 title: "Align Calc ODS row and column default cell styles"
-status: "DOING"
+result_summary: "Calc ODS imports native row and column cell styles and emits native column defaults through the package and Worker boundaries."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 9
+revision: 11
 origin:
   system: "manual"
 depends_on: []
@@ -18,9 +19,9 @@ plan_approval:
   note: null
 verification:
   state: "ok"
-  updated_at: "2026-11-20T12:40:42.333Z"
+  updated_at: "2026-11-20T12:40:56.335Z"
   updated_by: "CODER"
-  note: "The pinned Calc date fixture, native ODS style range tests, Worker round trips and all 106 tests in the declared Calc XML profile passed on the implementation commit."
+  note: "Calc ODS imports native row and column cell styles and emits native column defaults through the package and Worker boundaries."
   attempts: 0
 quality_review:
   state: "pass"
@@ -43,11 +44,16 @@ quality_review:
     - "The default shapes follow Calc row and column range precedence, deferred row-default timing and final declared column fallback."
     - "The core picks column defaults by native pattern coverage and first-row tie-break; XML keeps automatic and named runs distinct and writes direct overrides."
     - "The updated fixture retains original column default declarations and data styles and verifies both upstream date assertions."
-commit: null
+commit:
+  hash: "28ab3177d2f442d13732212cdb306bb98f75b481"
+  message: "🧩 VQCBGY code: port Calc ODS default cell style ranges"
 comments:
   -
     author: "CODER"
     body: "Start: Port the native Calc ODS cell style range and column default selection paths."
+  -
+    author: "CODER"
+    body: "Verified: Calc ODS imports native row and column cell styles and emits native column defaults through the package and Worker boundaries.. Guided shortcut recorded verification and is closing the direct task with traceable commit metadata."
 events:
   -
     type: "status"
@@ -62,8 +68,21 @@ events:
     author: "CODER"
     state: "ok"
     note: "The pinned Calc date fixture, native ODS style range tests, Worker round trips and all 106 tests in the declared Calc XML profile passed on the implementation commit."
+  -
+    type: "verify"
+    at: "2026-11-20T12:40:56.335Z"
+    author: "CODER"
+    state: "ok"
+    note: "Calc ODS imports native row and column cell styles and emits native column defaults through the package and Worker boundaries."
+  -
+    type: "status"
+    at: "2026-11-20T12:40:56.437Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: Calc ODS imports native row and column cell styles and emits native column defaults through the package and Worker boundaries.. Guided shortcut recorded verification and is closing the direct task with traceable commit metadata."
 doc_version: 3
-doc_updated_at: "2026-11-20T12:40:42.388Z"
+doc_updated_at: "2026-11-20T12:40:56.438Z"
 doc_updated_by: "CODER"
 description: "Port the native Calc XML default-style range import and column default export selection, preserving formatted empties, repeated ranges, typed values and native pattern ownership. Replay the original tdf126116 FODS scenario with inherited formatting."
 sections:
@@ -124,6 +143,36 @@ sections:
     - freshness: route=computed_local remote=remote_skipped
     - repeat_allowed: false
     - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+    - risks: none
+
+    ### 2026-11-20T12:40:56.335Z — VERIFY — ok
+
+    By: CODER
+
+    Note: Calc ODS imports native row and column cell styles and emits native column defaults through the package and Worker boundaries.
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-20T12:40:42.388Z, excerpt_hash=sha256:461f552e0515e6e00853ba135c539ecedb41d8e9f81391553d17bfeef4174e46
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202611201222-VQCBGY/blueprint/resolved-snapshot.json
+    - old_digest: 176bf10945c138f1f6eb7868e822c8f9ea4e70339825b1194f623e56d4025115
+    - current_digest: 176bf10945c138f1f6eb7868e822c8f9ea4e70339825b1194f623e56d4025115
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202611201222-VQCBGY
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task complete 202611201222-VQCBGY --result verified-202611201222-VQCBGY --commit b0043038982551edb04c172ce9dd73d2e3eb26e2
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
     - risks: none
 
     <!-- END VERIFICATION RESULTS -->
@@ -199,6 +248,36 @@ DecisionContextRef:
 - freshness: route=computed_local remote=remote_skipped
 - repeat_allowed: false
 - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- risks: none
+
+### 2026-11-20T12:40:56.335Z — VERIFY — ok
+
+By: CODER
+
+Note: Calc ODS imports native row and column cell styles and emits native column defaults through the package and Worker boundaries.
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-20T12:40:42.388Z, excerpt_hash=sha256:461f552e0515e6e00853ba135c539ecedb41d8e9f81391553d17bfeef4174e46
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202611201222-VQCBGY/blueprint/resolved-snapshot.json
+- old_digest: 176bf10945c138f1f6eb7868e822c8f9ea4e70339825b1194f623e56d4025115
+- current_digest: 176bf10945c138f1f6eb7868e822c8f9ea4e70339825b1194f623e56d4025115
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202611201222-VQCBGY
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task complete 202611201222-VQCBGY --result verified-202611201222-VQCBGY --commit b0043038982551edb04c172ce9dd73d2e3eb26e2
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
 - risks: none
 
 <!-- END VERIFICATION RESULTS -->
