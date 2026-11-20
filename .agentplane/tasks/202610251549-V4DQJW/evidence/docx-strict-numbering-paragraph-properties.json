@@ -1,6 +1,6 @@
 {
   "scope": "Strict WordprocessingML numbering level paragraph properties through the native Writer list owner and existing browser file workflow.",
-  "implementationCommit": "1043092509e5",
+  "implementationCommit": "01314abeb87d",
   "upstream": [
     "sw/source/writerfilter/ooxml/model.xml (CT_Lvl_pPr)",
     "sw/source/writerfilter/dmapper/NumberingManager.cxx (ListsManager level paragraph properties)",
