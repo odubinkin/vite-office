@@ -7316,7 +7316,7 @@ vector and sheet-local index lifetime.
 - [Original workbook differential styles](../../vendor/libreoffice-reference/sc/source/filter/oox/stylesbuffer.cxx)
 - [Original sheet finalization](../../vendor/libreoffice-reference/sc/source/filter/oox/condformatbuffer.cxx)
 
-### CALC-779 — An unresolved parent falls back to the first style in the family
+### CALC-770 — An unresolved parent falls back to the first style in the family
 
 `XMLPropStyleContext::Finish` clears a parent name absent from the style
 family. Calc's `ScStyleSheet::SetParent` then takes the first style in
@@ -7328,7 +7328,7 @@ import and export path.
 - [Original XML style parent resolution](../../vendor/libreoffice-reference/xmloff/source/style/prstylei.cxx#L448)
 - [Original Calc parent assignment](../../vendor/libreoffice-reference/sc/source/core/data/stlsheet.cxx#L110)
 
-### CALC-780 — A currency value does not turn a General format into currency
+### CALC-771 — A currency value does not turn a General format into currency
 
 In `ScXMLImport::SetType`, a currency code can replace the symbol of
 an existing currency format. The override requires both the imported
@@ -7339,7 +7339,7 @@ replacement of an existing symbol.
 
 - [Original value-type and currency checks](../../vendor/libreoffice-reference/sc/source/filter/xml/xmlimprt.cxx#L898)
 
-### CALC-781 — Numeric ODF durations can end without a component
+### CALC-772 — Numeric ODF durations can end without a component
 
 The floating-day branch of `sax::Converter::convertDuration` succeeds
 when it reaches the end of the source after the duration marker, including
@@ -7349,7 +7349,7 @@ when the last numeric component has no unit. A bare `PT` returns zero and
 
 - [Original floating duration scanner](../../vendor/libreoffice-reference/sax/source/tools/converter.cxx#L1080)
 
-### CALC-782 — UNO StandardFormat differs from the formatter's standard flag
+### CALC-773 — UNO StandardFormat differs from the formatter's standard flag
 
 The `StandardFormat` property in the pinned number formats service
 checks whether the key is the first in its language's format block. Other
@@ -7361,7 +7361,7 @@ fixture exercises this distinction through import and subsequent editing.
 - [Original UNO property](../../vendor/libreoffice-reference/svl/source/numbers/numfmuno.cxx#L695)
 - [Original ODS format selection](../../vendor/libreoffice-reference/sc/source/filter/xml/xmlimprt.cxx#L897)
 
-### CALC-783 — A pending ODF cell range can use the following row's default style
+### CALC-774 — A pending ODF cell range can use the following row's default style
 
 `ScXMLTableRowContext` sets the current row's default before reading any
 cells on that row. `ScMyStylesImportHelper` resolves an unstyled pending
