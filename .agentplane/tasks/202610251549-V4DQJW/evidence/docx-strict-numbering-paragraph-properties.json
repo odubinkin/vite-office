@@ -1,0 +1,39 @@
+{
+  "scope": "Strict WordprocessingML numbering level paragraph properties through the native Writer list owner and existing browser file workflow.",
+  "implementationCommit": "1043092509e5",
+  "upstream": [
+    "sw/source/writerfilter/ooxml/model.xml (CT_Lvl_pPr)",
+    "sw/source/writerfilter/dmapper/NumberingManager.cxx (ListsManager level paragraph properties)",
+    "sw/qa/extras/ooxmlexport/ooxmlexport11.cxx (testTdf82065_Ind_start_strict)"
+  ],
+  "checks": [
+    {
+      "command": "npm run test:writer -- WriterFilter.test.ts WriterFileDialog.test.tsx docxexport.table-flow.test.ts docxexport.page-stories.test.ts docxexport.drawing.test.ts docxexport.theme-fonts.test.ts docsh.test.ts --maxWorkers=1 --testTimeout=120000",
+      "result": "fail",
+      "evidence": "Before the fix, 104 tests passed and the new upstream indent assertion failed. Writer imported zero in the original Strict numbering level instead of 6001 hundredths of a millimetre."
+    },
+    {
+      "command": "npm run test:writer -- WriterFilter.test.ts --maxWorkers=1 --testTimeout=120000",
+      "result": "pass",
+      "evidence": "All six cases pass after the missing branch is restored. Strict w:start=170.10pt and hanging=56.70pt produce 3402 and 1134 twips in the downloaded number level. The original UNO projection reports 6001 after import and reopen."
+    },
+    {
+      "command": "npm run test:writer -- docxexport.numbering.test.ts docxattributeoutput.numbering.test.ts docxexport.numbered-list.test.ts NumberingManager.test.ts --maxWorkers=1 --testTimeout=120000",
+      "result": "pass",
+      "evidence": "27 related numbering cases passed across three files."
+    },
+    {
+      "command": "PLAYWRIGHT_BROWSERS_PATH=\"$PWD/.agentplane/tmp/zip-migration/browsers\" ./node_modules/.bin/playwright test -c .git/calc-panes-browser.config.mts --project writer --workers=1 --timeout=90000 writer-docx-styles.spec.ts writer-docx-table-flow.spec.ts",
+      "result": "pass",
+      "evidence": "Seven Chromium scenarios pass through the production build. Strict numbering survives browser storage and DOCX download. Existing nested tables, floating pictures, row headers and mobile reopen also pass."
+    },
+    {
+      "command": "npm run test:static && npm run check:docs && npm run check:dependencies && npm run check:source-provenance && npm run inventory:parity:writer && npm run check:writer-resources && npm run check:writer-hintids && git diff --check",
+      "result": "pass",
+      "evidence": "TypeScript, static smoke, scoped ESLint/Prettier, source provenance, resources and parity registry pass."
+    }
+  ],
+  "remaining": [
+    "This regression covers the restored dispatch of list-level paragraph properties. The previously recorded wider Writer mapper and drawing gaps remain open."
+  ]
+}
