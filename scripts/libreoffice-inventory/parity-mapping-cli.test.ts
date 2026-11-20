@@ -205,14 +205,27 @@ describe("parity mapping CLI" /**
   });
 });
 
-/** Creates independent upstream-marker and local-runtime evidence for one CLI acceptance case. @returns Runtime declaration and evidence reader. */
+/** Shares immutable evidence bytes while each case runs the complete CLI validation. */
+const fixtureSource = new Map<string, Promise<string>>();
+
+/** Reads each fixture path once across acceptance cases. @param file - Repository-relative evidence path. @returns Fixture text. */
+function readFixtureSource(file: string): Promise<string> {
+  let source = fixtureSource.get(file);
+  if (source === undefined) {
+    source = readUtf8File(file);
+    fixtureSource.set(file, source);
+  }
+  return source;
+}
+
+/** Creates an upstream marker fixture and reader for one CLI acceptance case. @returns Runtime declaration and evidence reader. */
 async function ownedEvidence() {
-  const evidence = createMarkerEvidenceFixture(
-    JSON.parse(await readUtf8File("docs/program/parity/writer-command-slice.json")),
-  );
-  const runtimeDeclaration = JSON.parse(
-    await readUtf8File("docs/program/parity/runtime-inventory.json"),
-  );
+  const [writerMapping, runtimeInventory] = await Promise.all([
+    readFixtureSource("docs/program/parity/writer-command-slice.json"),
+    readFixtureSource("docs/program/parity/runtime-inventory.json"),
+  ]);
+  const evidence = createMarkerEvidenceFixture(JSON.parse(writerMapping));
+  const runtimeDeclaration = JSON.parse(runtimeInventory);
   expect(runtimeDeclaration.placeholderSuites).not.toContain("calc");
   /** Reads local project files and supplies owned upstream marker text. @param file - Requested evidence path. @returns Local source or synthetic marker contents. */
   async function readOwnedEvidence(file: string): Promise<string> {
@@ -221,7 +234,7 @@ async function ownedEvidence() {
       if (text === undefined) throw new Error(`Undeclared fixture evidence: ${file}`);
       return text;
     }
-    return readUtf8File(file);
+    return readFixtureSource(file);
   }
   return { runtimeDeclaration, readOwnedEvidence };
 }
