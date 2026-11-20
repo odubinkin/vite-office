@@ -545,3 +545,37 @@ it("retains the native date and filename footer from tdf167019", /** Isolates th
     document.Dispose();
   }
 });
+
+it("saves the original tdf58243 XLSX with its invalid named reference", /** Ports the native rows-order export and checks the source date header. @returns Completion. */ async () => {
+  const document = await ExcelFilter.importDocument(fixture("tdf58243"));
+  try {
+    expect(document.GetRangeName(0)?.findByUpperName("EXCEL_BUILTIN_DATABASE")?.GetSymbol()).toBe(
+      "[#REF!]",
+    );
+    const worker = decodeCalcDocument(structuredClone(encodeCalcDocument(document)));
+    try {
+      const restored = await readOdsDocument(await writeOdsDocument(worker));
+      try {
+        for (const candidate of [document, restored]) {
+          const archive = await DocumentArchive.open(await exportXlsx(candidate));
+          const names = await archive.readTextEntry("xl/workbook.xml");
+          expect(names).toContain(
+            '<definedName name="Excel_BuiltIn_Database" localSheetId="0">#REF!</definedName>',
+          );
+          expect(names).toContain(
+            '<definedName name="Etat_du_dossier">[1]Feuil1!$D$2:$D$5</definedName>',
+          );
+          expect(await archive.readTextEntry(worksheet)).toMatch(
+            /<oddHeader>[^<]*&amp;R&amp;D<\/oddHeader>/u,
+          );
+        }
+      } finally {
+        restored.Dispose();
+      }
+    } finally {
+      worker.Dispose();
+    }
+  } finally {
+    document.Dispose();
+  }
+});

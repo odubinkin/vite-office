@@ -7171,3 +7171,15 @@ Calc retains that normalization. A path-only ODF field can still export as
 
 - [Header/footer token import](../../vendor/libreoffice-reference/sc/source/filter/oox/pagesettings.cxx)
 - [Native filename field export](../../vendor/libreoffice-reference/sc/source/filter/excel/xehelper.cxx)
+
+### CALC-758 — A built-in XLSX name can return with the Calc prefix
+
+Import converts `_xlnm.Database` to `Excel_BuiltIn_Database`. On export, the
+native name manager reuses a built-in record only when a matching record
+already exists and its formula matches. A database name with a deleted
+reference in `tdf58243.xlsx` has no such record and is exported with the
+Calc prefix. The browser export preserves that spelling and writes the
+original invalid reference as the OOXML `#REF!` token.
+
+- [Calc name creation during XLSX import](../../vendor/libreoffice-reference/sc/source/filter/oox/defnamesbuffer.cxx)
+- [Native name matching and export](../../vendor/libreoffice-reference/sc/source/filter/excel/xename.cxx)

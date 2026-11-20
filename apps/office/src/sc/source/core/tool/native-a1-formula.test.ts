@@ -5,8 +5,67 @@ import { ScAddress } from "../../../inc/address";
 import { ScCompiler } from "../../../inc/compiler";
 import { ScSingleRefToken } from "../../../inc/token";
 import { FormulaGrammar } from "../../../../formula/inc/grammar";
+import { FormulaError } from "../../../../formula/inc/errorcodes";
+import { FormulaErrorToken } from "../../../../formula/inc/token";
 import { unicode, text } from "../../../../i18nlangtag/source/isolang/isolang.tables";
+import { OUString } from "../../../../sal/inc/rtl/ustring";
 const G = FormulaGrammar.Grammar;
+
+it("retains the valid sheet and deleted coordinate flags on qualified XLSX reference errors", /** Exercises both kinds of XLSX reference error token and native output. @returns Nothing. */ () => {
+  const doc = new ScDocument();
+  const position = new ScAddress(4, 3, 0);
+  const first = unicode("Feuil1");
+  const second = unicode("Owner's Rates");
+  const unknown = unicode("Feuil1!UnknownName");
+  const serialized = new OUString();
+  try {
+    doc.InsertTab(0, first);
+    doc.InsertTab(1, second);
+    expect(
+      /** Keeps an unknown name distinct from a deleted reference token. @returns Native code. */ () =>
+        new ScCompiler(doc, position, G.GRAM_OOXML).CompileString(unknown),
+    ).toThrow(/not implemented/u);
+    for (const [source, tab] of [
+      ["Feuil1!#REF!+2", 0],
+      ["'Owner''s Rates'!#REF!+2", 1],
+      ["#REF!+2", -1],
+    ] as const) {
+      const formula = unicode(source);
+      const code = new ScCompiler(doc, position, G.GRAM_OOXML).CompileString(formula);
+      try {
+        const token = code.FirstToken();
+        if (tab === -1) {
+          assert(token instanceof FormulaErrorToken);
+          expect(token.GetError()).toBe(FormulaError.NoRef);
+        } else {
+          assert(token instanceof ScSingleRefToken);
+          const reference = token.GetSingleRef();
+          expect(reference.Tab()).toBe(tab);
+          expect(reference.IsFlag3D()).toBe(true);
+          expect(reference.IsTabRel()).toBe(false);
+          expect(reference.IsTabDeleted()).toBe(false);
+          expect(reference.IsColRel()).toBe(false);
+          expect(reference.IsRowRel()).toBe(false);
+          expect(reference.IsColDeleted()).toBe(true);
+          expect(reference.IsRowDeleted()).toBe(true);
+        }
+        new ScCompiler(doc, position, code, G.GRAM_OOXML).CreateStringFromTokenArray(serialized);
+        expect(text(serialized)).toBe("#REF!+2");
+        new ScCompiler(doc, position, code, G.GRAM_ODFF).CreateStringFromTokenArray(serialized);
+        expect(text(serialized)).toBe(tab === -1 ? "#REF!+2" : "[#REF!]+2");
+      } finally {
+        code.Clear();
+        formula.dispose();
+      }
+    }
+  } finally {
+    serialized.dispose();
+    unknown.dispose();
+    second.dispose();
+    first.dispose();
+    doc.Dispose();
+  }
+});
 it("round-trips native A1 references through ODFF without replacing token or dependency owners", /** Exercises source-relative and absolute coordinates with real recalculation. @returns Nothing. */ () => {
   for (const grammar of [G.GRAM_NATIVE, G.GRAM_ENGLISH, G.GRAM_ODFF_A1]) {
     const doc = new ScDocument(),

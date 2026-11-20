@@ -531,7 +531,7 @@ export class ScCompiler extends FormulaCompiler {
   protected override SetError(error: FormulaError): void {
     if (this.mpArr.GetCodeError() === FormulaError.NONE) this.mpArr.SetCodeError(error);
   }
-  /** Binds valid local A1 parse flags to genuine relative/absolute native reference data. @param name - Unwrapped address. @param tab - Resolved sheet index. @param qualified - Whether the address includes a sheet qualifier. @param absolute - Whether the sheet qualifier is absolute. @param deletedTab - Whether the reference points to a deleted sheet. @returns Recognized reference. */
+  /** Binds local A1 parse flags, including deleted cell axes, to native reference data. @param name - Unwrapped address or reference error. @param tab - Resolved sheet index. @param qualified - Whether the address includes a sheet qualifier. @param absolute - Whether the sheet qualifier is absolute. @param deletedTab - Whether the reference points to a deleted sheet. @returns Recognized reference. */
   private ParseSingleReference(
     name: string,
     tab = this.aPos.Tab(),
@@ -540,22 +540,30 @@ export class ScCompiler extends FormulaCompiler {
     deletedTab = false,
   ): boolean {
     const address = new ScAddress(this.aPos);
-    const input = unicode(name);
-    let flags: ScRefFlags;
-    try {
-      flags = address.Parse(input, this.rDoc, ScAddress.detailsOOOa1);
-    } finally {
-      input.dispose();
+    const deletedCell = name === "#REF!";
+    let flags = ScRefFlags.ZERO;
+    if (!deletedCell) {
+      const input = unicode(name);
+      try {
+        flags = address.Parse(input, this.rDoc, ScAddress.detailsOOOa1);
+      } finally {
+        input.dispose();
+      }
+      if (!(flags & ScRefFlags.VALID))
+        throw new Error("Reference/name fallback is not implemented");
     }
-    if (!(flags & ScRefFlags.VALID)) throw new Error("Reference/name fallback is not implemented");
     address.SetTab(tab);
     const reference = new ScSingleRefData();
     reference.InitAddress(address);
-    reference.SetColRel(!(flags & ScRefFlags.COL_ABS));
-    reference.SetRowRel(!(flags & ScRefFlags.ROW_ABS));
+    reference.SetColRel(!deletedCell && !(flags & ScRefFlags.COL_ABS));
+    reference.SetRowRel(!deletedCell && !(flags & ScRefFlags.ROW_ABS));
     reference.SetTabRel(!absolute);
     reference.SetFlag3D(qualified);
     reference.SetAddress(this.rDoc.GetSheetLimits(), address, this.aPos);
+    if (deletedCell) {
+      reference.SetColDeleted(true);
+      reference.SetRowDeleted(true);
+    }
     if (deletedTab) reference.SetTabDeleted(true);
     if (!(this.mpArr as ScTokenArray).AddSingleReference(reference))
       this.SetError(FormulaError.CodeOverflow);
@@ -729,12 +737,13 @@ export class ScCompiler extends FormulaCompiler {
             last = OpCode.ocPush;
             continue;
           }
-          if (cell) {
+          const match = cell?.[0] ?? (ooxml && address.startsWith("#REF!") ? "#REF!" : "");
+          if (match) {
             const absolute =
               this.meGrammar === FormulaGrammar.Grammar.GRAM_OOXML || spelling.startsWith("$");
-            if (range) this.ParseDoubleReference(cell[0], tab, true, absolute);
-            else this.ParseSingleReference(cell[0], tab, true, absolute);
-            index += qualifier[0].length + cell[0].length;
+            if (range) this.ParseDoubleReference(match, tab, true, absolute);
+            else this.ParseSingleReference(match, tab, true, absolute);
+            index += qualifier[0].length + match.length;
             last = OpCode.ocPush;
             continue;
           }

@@ -80,3 +80,61 @@ test("Calc keeps XLSX print geometry through browser storage and a mobile reopen
   await expect(page.getByRole("textbox", { name: "Name Box" })).toHaveValue("G9");
   await expect(page.getByRole("gridcell", { name: /^G9(?:\s|$)/u })).toHaveText("End");
 });
+
+test("opens the unmodified tdf58243 workbook and preserves the named reference error", /** Exercises the existing file dialog, browser copy and exported Workbook definitions. @param fixtures - Browser fixtures. @param fixtures.page - Chromium page. @returns Completion. */ async ({
+  page,
+}) => {
+  const fixture = new URL(
+    "../../../../vendor/libreoffice-reference/sc/qa/unit/data/xlsx/tdf58243.xlsx",
+    import.meta.url,
+  );
+  const open = page.getByRole("button", { name: "Open", exact: true });
+  const cell = page.getByRole("gridcell", { name: /^A1(?:\s|$)/u });
+  await page.goto("/calc");
+  await open.click();
+  await page.getByRole("tab", { name: "On computer" }).click();
+  await page.getByLabel("Browse").setInputFiles({
+    buffer: await readFile(fixture),
+    name: "tdf58243.xlsx",
+    mimeType: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+  });
+  await expect(cell).toHaveText("NOM");
+
+  await page.getByRole("menuitem", { name: "File" }).click();
+  await page.getByRole("menuitem", { name: "Save As…" }).click();
+  await page.getByRole("textbox", { name: "New copy name" }).fill("Reference error copy");
+  await page.getByRole("button", { name: "Save copy" }).click();
+  await expect(page.getByRole("dialog")).toHaveCount(0);
+  await page.reload();
+  await open.click();
+  await page.getByRole("tab", { name: "In browser" }).click();
+  await page.getByRole("button", { name: "Reference error copy", exact: true }).click();
+  await expect(cell).toHaveText("NOM");
+
+  const pending = page.waitForEvent("download");
+  await page.getByRole("menuitem", { name: "File" }).click();
+  await page.getByRole("menuitem", { name: "Export…" }).click();
+  await page.getByRole("button", { name: "Download XLSX" }).click();
+  const path = await (await pending).path();
+  if (!path) throw new Error("Missing XLSX download.");
+  const buffer = await readFile(path);
+  const workbook = await DocumentArchive.open(buffer);
+  expect(await workbook.readTextEntry("xl/workbook.xml")).toContain(
+    '<definedName name="Excel_BuiltIn_Database" localSheetId="0">#REF!</definedName>',
+  );
+  await page.setViewportSize({ width: 430, height: 844 });
+  await open.click();
+  await page.getByRole("tab", { name: "On computer" }).click();
+  await page.getByLabel("Browse").setInputFiles({
+    buffer,
+    name: "Reference error reopened.xlsx",
+    mimeType: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+  });
+  await expect(page.getByRole("dialog")).toHaveCount(0);
+  await expect(page.getByRole("heading", { name: "Reference error reopened" })).toBeVisible();
+  const nameBox = page.getByRole("textbox", { name: "Name Box" });
+  await expect(nameBox).toHaveValue("F7");
+  await nameBox.fill("A1");
+  await nameBox.press("Enter");
+  await expect(cell).toHaveText("NOM");
+});
