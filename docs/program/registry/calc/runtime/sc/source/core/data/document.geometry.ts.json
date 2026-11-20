@@ -7,7 +7,11 @@
     "state": "foundation",
     "suite": "calc",
     "subsystem": "scalar-document-editing",
-    "capabilityIds": [],
+    "capabilityIds": [
+      "CAP-ef411d57-b025-407e-a0b7-fce8342cdeda",
+      "CAP-b0983657-1a03-4cca-8982-119820de587b",
+      "CAP-52bb76b0-ff2d-4a8c-86df-79f033c21d86"
+    ],
     "semantic": {
       "behaviorStatus": "unverified",
       "contractStatus": "unverified",
