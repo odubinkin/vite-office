@@ -4,7 +4,7 @@ title: "Implement Calc XLSX import export and existing file UI integration"
 status: "BLOCKED"
 priority: "high"
 owner: "CODER"
-revision: 702
+revision: 703
 origin:
   system: "manual"
 depends_on:
@@ -21,10 +21,10 @@ plan_approval:
   note: null
 verification:
   state: "blocked_external"
-  updated_at: "2026-11-20T07:43:44.030Z"
+  updated_at: "2026-11-20T07:44:23.241Z"
   updated_by: "CODER"
-  note: "Verified: color scale checkpoint passes 46 focused Calc cases, scoped90 in all metrics for the scale core, five Chromium file scenarios, build and repository checks. The broader XLSX task remains in direct execution."
-  attempts: 234
+  note: "Verified: the Calc shell and mounted file workflows pass 74 tests, including real Strict and Transitional export and reopen, and reject malformed, cancelled and superseded candidates. The XLSX umbrella remains in direct execution."
+  attempts: 235
 commit: null
 comments:
   -
@@ -3742,8 +3742,14 @@ events:
     author: "CODER"
     state: "blocked_external"
     note: "Verified: color scale checkpoint passes 46 focused Calc cases, scoped90 in all metrics for the scale core, five Chromium file scenarios, build and repository checks. The broader XLSX task remains in direct execution."
+  -
+    type: "verify"
+    at: "2026-11-20T07:44:23.241Z"
+    author: "CODER"
+    state: "blocked_external"
+    note: "Verified: the Calc shell and mounted file workflows pass 74 tests, including real Strict and Transitional export and reopen, and reject malformed, cancelled and superseded candidates. The XLSX umbrella remains in direct execution."
 doc_version: 3
-doc_updated_at: "2026-11-20T07:43:44.870Z"
+doc_updated_at: "2026-11-20T07:44:24.197Z"
 doc_updated_by: "CODER"
 description: "User-approved third cohesive task: preserve pinned ExcelFilter workbook/worksheet/style/shared-string import and Excel export ownership while supporting the current Calc core slice, including cells, types, formulas, sheets, formatting and dimensions where implemented. Integrate shell filter routing and existing Open/download UI, errors/cancellation and primary ODS persistence. Record suspected upstream issues and source mappings, refactor touched workarounds and run related tests. Preserve recovery/autosave and browser file product decisions. Local work only."
 sections:
@@ -10894,6 +10900,36 @@ sections:
     - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
     - risks: none
 
+    ### 2026-11-20T07:44:23.241Z — VERIFY — blocked_external
+
+    By: CODER
+
+    Note: Verified: the Calc shell and mounted file workflows pass 74 tests, including real Strict and Transitional export and reopen, and reject malformed, cancelled and superseded candidates. The XLSX umbrella remains in direct execution.
+    Attempts: 235
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-20T07:43:44.870Z, excerpt_hash=sha256:3da6ce8a820217533477184a0ee7a426a557f0606d162115a30aba26455afa46
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610251549-J0Z0KF/blueprint/resolved-snapshot.json
+    - old_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+    - current_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610251549-J0Z0KF
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task start-ready 202610251549-J0Z0KF --author CODER --body Start: continue direct-mode task in current checkout.
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: |-
     - Revert task-related commit(s).
@@ -12033,6 +12069,10 @@ sections:
     - Observation: Unchanged LibreOffice color-scale fixtures preserve thresholds, colors and formula state through the native model, Worker, files and grid.
       Impact: Original workbook fills appear after import, browser primary reopen and downloaded XLSX reopen.
       Resolution: See evidence/xlsx-color-scale-rules.json for exact commands and remaining native scope.
+
+    - Observation: The XLSX branch could publish its model after the caller cancelled while it was parsing.
+      Impact: Calc now rejects the candidate at the existing document-shell adoption boundary and keeps the current graph and medium.
+      Resolution: See evidence/xlsx-shell-open-admission.json for the commands, original fixtures and remaining scope.
 id_source: "generated"
 ---
 ## Summary
@@ -19193,6 +19233,36 @@ DecisionContextRef:
 - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
 - risks: none
 
+### 2026-11-20T07:44:23.241Z — VERIFY — blocked_external
+
+By: CODER
+
+Note: Verified: the Calc shell and mounted file workflows pass 74 tests, including real Strict and Transitional export and reopen, and reject malformed, cancelled and superseded candidates. The XLSX umbrella remains in direct execution.
+Attempts: 235
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-20T07:43:44.870Z, excerpt_hash=sha256:3da6ce8a820217533477184a0ee7a426a557f0606d162115a30aba26455afa46
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610251549-J0Z0KF/blueprint/resolved-snapshot.json
+- old_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+- current_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610251549-J0Z0KF
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task start-ready 202610251549-J0Z0KF --author CODER --body Start: continue direct-mode task in current checkout.
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
+
 <!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
@@ -20336,3 +20406,7 @@ Evidence: `evidence/xlsx-native-page-break-roundtrip.json`.
 - Observation: Unchanged LibreOffice color-scale fixtures preserve thresholds, colors and formula state through the native model, Worker, files and grid.
   Impact: Original workbook fills appear after import, browser primary reopen and downloaded XLSX reopen.
   Resolution: See evidence/xlsx-color-scale-rules.json for exact commands and remaining native scope.
+
+- Observation: The XLSX branch could publish its model after the caller cancelled while it was parsing.
+  Impact: Calc now rejects the candidate at the existing document-shell adoption boundary and keeps the current graph and medium.
+  Resolution: See evidence/xlsx-shell-open-admission.json for the commands, original fixtures and remaining scope.

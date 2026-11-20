@@ -1,0 +1,24 @@
+{
+  "scope": "Calc shell XLSX admission, native Strict and Transitional round trips and existing file dialog and primary storage regressions.",
+  "implementationCommit": "9608208a2469",
+  "upstream": [
+    "sc/source/ui/docshell/docsh.cxx (ScDocShell::ConvertFrom)",
+    "sc/qa/unit/subsequent_filters_test.cxx (testContentXLSX, testContentXLSXStrict and testContentImpl)"
+  ],
+  "checks": [
+    {
+      "command": "npm run test:calc -- docsh.xlsx.test.ts docsh.test.ts calc-files.test.tsx --maxWorkers=1 --testTimeout=120000",
+      "result": "pass",
+      "evidence": "74 tests in three files. Both original workbook variants preserve numeric cells, shared strings, formulas, merge geometry and the second sheet through shell Open, XLSX serialization and reopen. A malformed or cancelled XLSX leaves the active model and medium intact. Only the latest concurrent Open is admitted. Existing CSV, ODS and mounted file UI tests also pass."
+    },
+    {
+      "command": "npm run test:static",
+      "result": "pass",
+      "evidence": "TypeScript, production Vite build and static smoke passed for the updated shell."
+    }
+  ],
+  "remaining": [
+    "The original source fixture also checks a cell note. Calc's working model does not yet own cell notes.",
+    "Mid-import cancellation discards the candidate at the shell boundary. The file filter may still finish its current parse before disposal."
+  ]
+}
