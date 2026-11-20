@@ -6,6 +6,12 @@ import {
   SvxPagesField,
   SvxTableField,
   SvxFieldItem,
+  SvxDateField,
+  SvxExtTimeField,
+  SvxExtFileField,
+  SvxFileFormat,
+  SvxFileType,
+  type SvxFieldData,
 } from "../../../../editeng/inc/flditem";
 import { CH_FEATURE } from "../../../../editeng/inc/editattr";
 import { SfxItemSet } from "../../../../svl/source/items/itemset";
@@ -85,6 +91,11 @@ export class HeaderFooterParser {
         add(buffer);
         buffer = "";
       };
+    const appendField =
+      /** Inserts one EditEngine field character. @param field - Original native field. @returns Nothing. */ (
+        field: SvxFieldData,
+      ): void =>
+        add(String.fromCharCode(CH_FEATURE), new SvxFieldItem(field, EE_FEATURE_FIELD, true));
     const nul = source.indexOf("\0");
     if (nul !== -1) source = source.slice(0, nul);
     try {
@@ -118,7 +129,13 @@ export class HeaderFooterParser {
                 : code === "N"
                   ? new SvxPagesField()
                   : new SvxTableField();
-            add(String.fromCharCode(CH_FEATURE), new SvxFieldItem(field, EE_FEATURE_FIELD));
+            appendField(field);
+          } else if (code === "D") appendField(new SvxDateField());
+          else if (code === "T") appendField(new SvxExtTimeField());
+          else if (code === "F" || code === "Z") {
+            const format = code === "Z" ? SvxFileFormat.PathFull : SvxFileFormat.NameAndExt;
+            appendField(new SvxExtFileField(undefined, SvxFileType.Var, format));
+            if (code === "Z" && /^&[fF]/u.test(source.slice(i + 1, i + 3))) i += 2;
           } else if (code === "K") {
             if (i + 6 < source.length) {
               font.setColor(XlsColor.importHeaderFooterColor(source.slice(i + 1, i + 7)));

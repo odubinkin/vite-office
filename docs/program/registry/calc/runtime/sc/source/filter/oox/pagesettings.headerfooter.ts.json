@@ -20,7 +20,7 @@
         "sc/source/filter/oox/pagesettings.cxx",
         "apps/office/src/sc/source/filter/oox/excelfilter.page-settings.test.ts"
       ],
-      "justification": "Converts original Excel header/footer text, formatting controls and represented fields into native Calc rich text.",
+      "justification": "Converts original Excel header/footer text, formatting controls and native date, time, filename and pagination fields into Calc rich text.",
       "knownViolations": [],
       "localSymbols": [
         "HeaderFooterParser"

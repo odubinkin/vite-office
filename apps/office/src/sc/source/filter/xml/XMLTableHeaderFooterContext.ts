@@ -13,8 +13,14 @@ import {
   SvxPageField,
   SvxPagesField,
   SvxTableField,
-  SvxTimeField,
+  SvxDateField,
+  SvxDateType,
+  SvxExtTimeField,
+  SvxTimeType,
+  SvxExtFileField,
+  SvxFileFormat,
   type SvxFieldData,
+  type SvxFieldDataConstReference,
 } from "../../../../editeng/inc/flditem";
 import type { Section } from "../../../../editeng/inc/section";
 import { SvtScriptType } from "../../../../svl/inc/languageoptions";
@@ -36,6 +42,11 @@ import type { ScXMLImport } from "./xmlimprt";
 import { ScPageHFItem } from "../../../inc/attrib";
 import * as Which from "../../../inc/scitems";
 import * as Field from "../../../../offapi/com/sun/star/text/textfield/Type";
+import { DateTime } from "../../../../offapi/com/sun/star/util/DateTime";
+import { Date } from "../../../../tools/source/datetime/tdate";
+import { Time } from "../../../../tools/source/datetime/ttime";
+import { OUStringBuffer } from "../../../../sal/inc/rtl/ustrbuf";
+import { Converter } from "../../../../sax/source/tools/converter";
 
 const variants = [
   [
@@ -89,9 +100,40 @@ const fieldTokens = new Map([
   [Field.DOCINFO_TITLE, "title"],
   [Field.TIME, "time"],
 ]);
+const fileFormats = new Map([
+  ["full", SvxFileFormat.PathFull],
+  ["path", SvxFileFormat.PathOnly],
+  ["name", SvxFileFormat.NameOnly],
+  ["name-and-extension", SvxFileFormat.NameAndExt],
+]);
 
-/** Returns the native field belonging to one ODF text element. @param element - XML token. @returns Field value or absence. */
-function getField(element: T): SvxFieldData | undefined {
+/** Applies the shared XMLTimeFieldImportContext fixed-value rule. @param element - Date or time. @param attrs - ODF field attributes. @returns Native temporal field. */
+function importDateTimeField(element: T, attrs: FastAttributeList): SvxDateField | SvxExtTimeField {
+  const isDate = element === T.TEXT_DATE;
+  const fixed: [boolean] = [false];
+  const fixedAttribute = attrs.get(T.TEXT_FIXED);
+  if (fixedAttribute !== null) Converter.convertBool(fixed, fixedAttribute);
+  const lexical = attrs.get(isDate ? T.TEXT_DATE_VALUE : T.TEXT_TIME_VALUE);
+  const value = new DateTime();
+  const parsed =
+    fixed[0] &&
+    lexical !== null &&
+    (isDate
+      ? Converter.parseDateTime(value, lexical)
+      : Converter.parseTimeOrDateTime(value, lexical));
+  if (isDate)
+    return new SvxDateField(
+      parsed ? new Date(value.Day, value.Month, value.Year) : undefined,
+      fixed[0] ? SvxDateType.Fix : SvxDateType.Var,
+    );
+  return new SvxExtTimeField(
+    parsed ? new Time(value) : undefined,
+    fixed[0] ? SvxTimeType.Fix : SvxTimeType.Var,
+  );
+}
+
+/** Returns the native field belonging to one ODF text element. @param element - XML token. @param attrs - ODF field attributes. @returns Field value or absence. */
+function getField(element: T, attrs: FastAttributeList): SvxFieldData | undefined {
   switch (element) {
     case T.TEXT_PAGE_NUMBER:
       return new SvxPageField();
@@ -101,8 +143,15 @@ function getField(element: T): SvxFieldData | undefined {
       return new SvxTableField();
     case T.TEXT_TITLE:
       return new SvxFileField();
+    case T.TEXT_DATE:
     case T.TEXT_TIME:
-      return new SvxTimeField();
+      return importDateTimeField(element, attrs);
+    case T.TEXT_FILE_NAME:
+      return new SvxExtFileField(
+        undefined,
+        undefined,
+        fileFormats.get(attrs.get(T.TEXT_DISPLAY) ?? ""),
+      );
     default:
       return undefined;
   }
@@ -171,7 +220,7 @@ class HeaderFooterParagraph extends SvXMLImportContext {
   child(element: T, attrs: FastAttributeList, style: string): SvXMLImportContext {
     if (element === T.TEXT_SPAN)
       return new HeaderFooterSpan(this, attrs.get(T.TEXT_STYLE_NAME) ?? style);
-    const field = getField(element);
+    const field = getField(element, attrs);
     if (field) this.append(String.fromCharCode(CH_FEATURE), style, field);
     else if (element === T.TEXT_TAB) this.append("\t", style);
     else if (element === T.TEXT_LINE_BREAK) this.append("\n", style);
@@ -307,6 +356,51 @@ export function createHeaderFooterContext(
     : new SvXMLIgnoreContext(true);
 }
 
+/** Serializes a stored date or time with the original SAX lexical conversion. @param field - Native field. @returns Field element. */
+function exportDateTimeField(field: SvxDateField | SvxExtTimeField): string {
+  const value = new DateTime();
+  const buffer = new OUStringBuffer();
+  const isDate = field instanceof SvxDateField;
+  const name = isDate ? "date" : "time";
+  let fixed: boolean;
+  if (isDate) {
+    const date = new Date(field.GetFixDate());
+    value.Year = date.GetYear();
+    value.Month = date.GetMonth();
+    value.Day = date.GetDay();
+    fixed = field.GetType() === SvxDateType.Fix;
+    Converter.convertDateTime(buffer, value, null);
+  } else {
+    const time = Time.fromEncodedTime(field.GetFixTime());
+    value.Hours = time.GetHour();
+    value.Minutes = time.GetMin();
+    value.Seconds = time.GetSec();
+    value.NanoSeconds = time.GetNanoSec();
+    fixed = field.GetType() === SvxTimeType.Fix;
+    Converter.convertTimeOrDateTime(buffer, value);
+  }
+  const lexical = buffer.makeStringAndClear();
+  try {
+    return `<text:${name} text:${name}-value="${text(lexical)}"${fixed ? ' text:fixed="true"' : ""}/>`;
+  } finally {
+    lexical.dispose();
+    buffer.dispose();
+  }
+}
+
+/** Writes the ODF field corresponding to the native edit value. @param field - Pooled edit field. @returns XML fragment. */
+function exportField(field: SvxFieldDataConstReference | null): string {
+  if (field instanceof SvxDateField || field instanceof SvxExtTimeField)
+    return exportDateTimeField(field);
+  if (field instanceof SvxExtFileField) {
+    for (const [name, format] of fileFormats)
+      if (field.GetFormat() === format) return `<text:file-name text:display="${name}"/>`;
+    return "<text:file-name/>";
+  }
+  const name = field ? fieldTokens.get(field.GetClassId()) : undefined;
+  return name ? `<text:${name}/>` : "";
+}
+
 /** Writes all represented text and fields in one ODF region. @param area - Actual edit text. @param styles - ODF automatic text style pool. @returns Region paragraphs. */
 function exportArea(area: EditTextObjectConstReference, styles: CellTextStylePool): string {
   const sections: Section[] = [];
@@ -326,14 +420,9 @@ function exportArea(area: EditTextObjectConstReference, styles: CellTextStylePoo
             item,
           ) => item instanceof SvxFieldItem,
         );
-        const field =
+        const span =
           attr instanceof SvxFieldItem
-            ? fieldTokens.get(attr.GetField()?.GetClassId() ?? 0)
-            : undefined;
-        const span = field
-          ? `<text:${field}/>`
-          : attr
-            ? ""
+            ? exportField(attr.GetField())
             : exportText(value.slice(section.mnStart, section.mnEnd));
         const style = styles.add(area, section, true);
         output += style ? `<text:span text:style-name="${style}">${span}</text:span>` : span;

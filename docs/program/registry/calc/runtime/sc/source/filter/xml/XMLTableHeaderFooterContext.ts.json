@@ -20,7 +20,7 @@
         "sc/source/filter/xml/XMLTableHeaderFooterContext.cxx",
         "apps/office/src/sc/source/filter/oox/excelfilter.page-settings.test.ts"
       ],
-      "justification": "Reads ODF master-page variants and writes their native text portions and visibility through page style XML.",
+      "justification": "Reads and writes ODF master-page regions, visibility, fixed date/time snapshots, and filename display formats.",
       "knownViolations": [],
       "localSymbols": [
         "XMLTableHeaderFooterContext"

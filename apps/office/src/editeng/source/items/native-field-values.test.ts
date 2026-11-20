@@ -11,6 +11,15 @@ import {
   SvxTimeField,
   SvxFileField,
   SvxTableField,
+  SvxDateField,
+  SvxDateFormat,
+  SvxDateType,
+  SvxExtTimeField,
+  SvxTimeFormat,
+  SvxTimeType,
+  SvxExtFileField,
+  SvxFileFormat,
+  SvxFileType,
   type SvxFieldDataConstReference,
   type SvxURLFieldConstReference,
 } from "../../inc/flditem";
@@ -22,6 +31,8 @@ import { SfxInt16Item } from "../../../svl/source/items/intitem";
 import { SfxItemPool } from "../../../svl/inc/itempool";
 import { SfxItemSet, SfxPoolItemHolder } from "../../../svl/inc/itemset";
 import { ContentInfo, XEditAttribute } from "../editeng/editobj2";
+import { Date } from "../../../tools/source/datetime/tdate";
+import { Time } from "../../../tools/source/datetime/ttime";
 /** Builds an actual Unicode string with all logical code units. @param text - Input. @returns Native value. */
 function unicode(text: string): OUString {
   const units = Uint16Array.from(
@@ -37,6 +48,68 @@ function unicode(text: string): OUString {
 function urlOf(item: SvxFieldItem): SvxURLFieldConstReference {
   return item.GetField() as SvxURLFieldConstReference;
 }
+
+it("copies date, time, and filename payloads with their original update policies", /** Exercises packed fields and the original polymorphic item copy. @returns Nothing. */ () => {
+  const filename = unicode("Current workbook.ods");
+  const leapDay = new Date(29, 2, 2024);
+  const instant = new Time(16, 7, 0, 123456789n);
+  const date = new SvxDateField(leapDay, SvxDateType.Fix, SvxDateFormat.StdBig);
+  const time = new SvxExtTimeField(instant, SvxTimeType.Fix, SvxTimeFormat.HH24_MM);
+  const file = new SvxExtFileField(filename, SvxFileType.Var, SvxFileFormat.NameAndExt);
+  try {
+    expect([date.GetClassId(), date.GetFixDate(), date.GetType(), date.GetFormat()]).toEqual([
+      FieldType.DATE,
+      20240229,
+      SvxDateType.Fix,
+      SvxDateFormat.StdBig,
+    ]);
+    expect([time.GetClassId(), time.GetFixTime(), time.GetType(), time.GetFormat()]).toEqual([
+      FieldType.EXTENDED_TIME,
+      instant.GetTime(),
+      SvxTimeType.Fix,
+      SvxTimeFormat.HH24_MM,
+    ]);
+    expect([file.GetClassId(), file.GetType(), file.GetFormat()]).toEqual([
+      FieldType.EXTENDED_FILE,
+      SvxFileType.Var,
+      SvxFileFormat.NameAndExt,
+    ]);
+    expect(file.GetFile().equals(filename)).toBe(true);
+    expect(new SvxDateField().GetType()).toBe(SvxDateType.Var);
+    expect(new SvxExtTimeField().GetType()).toBe(SvxTimeType.Var);
+    expect(new SvxExtFileField().GetFormat()).toBe(SvxFileFormat.PathFull);
+    const distinct = [
+      [
+        date,
+        new SvxDateField(new Date(1, 3, 2024), SvxDateType.Fix, SvxDateFormat.StdBig),
+        new SvxDateField(leapDay, SvxDateType.Var, SvxDateFormat.StdBig),
+        new SvxDateField(leapDay, SvxDateType.Fix),
+      ],
+      [
+        time,
+        new SvxExtTimeField(new Time(16, 7), SvxTimeType.Fix, SvxTimeFormat.HH24_MM),
+        new SvxExtTimeField(instant, SvxTimeType.Var, SvxTimeFormat.HH24_MM),
+        new SvxExtTimeField(instant, SvxTimeType.Fix),
+      ],
+      [
+        file,
+        new SvxExtFileField(undefined, SvxFileType.Var, SvxFileFormat.NameAndExt),
+        new SvxExtFileField(filename, SvxFileType.Fix, SvxFileFormat.NameAndExt),
+        new SvxExtFileField(filename),
+      ],
+    ] as const;
+    for (const [field, ...different] of distinct) {
+      const item = new SvxFieldItem(field, EE_FEATURE_FIELD);
+      expect(item.GetField()).not.toBe(field);
+      expect(item.GetField()?.equals(field)).toBe(true);
+      expect(item.Clone().equals(item)).toBe(true);
+      expect(field.equals(new SvxPageField())).toBe(false);
+      for (const other of different) expect(field.equals(other)).toBe(false);
+    }
+  } finally {
+    filename.dispose();
+  }
+});
 it("declares all original field IDs and preserves empty base value/copy/assignment behavior", /** Opaque RTTI hash values are tested by contract rather than native compiler-specific bits. @returns Nothing. */ () => {
   expect(FieldType).toMatchObject({
     UNSPECIFIED: -1,

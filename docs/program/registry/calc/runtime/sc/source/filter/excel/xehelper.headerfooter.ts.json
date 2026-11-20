@@ -20,7 +20,7 @@
         "sc/source/filter/excel/xehelper.cxx",
         "apps/office/src/sc/source/filter/oox/excelfilter.page-settings.test.ts"
       ],
-      "justification": "Writes original Excel section order, native font differences, escaped text, and represented fields.",
+      "justification": "Writes original Excel section order, font differences, escaped text, and native date, time, filename and pagination fields.",
       "knownViolations": [],
       "localSymbols": [
         "XclExpHFConverter"

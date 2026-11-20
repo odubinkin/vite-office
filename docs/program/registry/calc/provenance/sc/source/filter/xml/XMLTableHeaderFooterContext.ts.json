@@ -13,10 +13,10 @@
       "XMLTableHeaderFooterContext::endFastElement"
     ],
     "preservedResponsibilities": [
-      "Reads ODF master-page variants and writes their native text portions and visibility through page style XML."
+      "Reads and writes ODF master-page regions, visibility, fixed date/time snapshots, and filename display formats."
     ],
     "omittedResponsibilities": [
-      "Unsupported temporal and extended filename fields, pictures and complete print layout remain outside the represented slice."
+      "Field-specific ODF number-format references, pictures and complete print layout remain outside the represented slice."
     ],
     "evidence": {
       "local": [

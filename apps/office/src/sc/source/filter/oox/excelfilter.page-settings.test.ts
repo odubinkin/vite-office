@@ -457,11 +457,89 @@ it("preserves ODF header spans, text features and unformatted text through XLSX 
     const xml = await ods.readTextEntry("styles.xml");
     expect(xml).toContain("plain<text:s/><text:span");
     expect(xml).toContain("<text:tab/>tail");
-    expect(xml).toContain("<text:p><text:title/><text:line-break/><text:time/></text:p>");
+    expect(xml).toMatch(
+      /<text:p><text:title\/><text:line-break\/><text:time text:time-value="[^"]+"\/><\/text:p>/u,
+    );
     expect(xml).not.toContain("Ignored");
     const workbook = await DocumentArchive.open(await exportXlsx(document));
     expect(await workbook.readTextEntry(worksheet)).toContain(
       "<oddHeader>&amp;Lplain &amp;20 123&amp;10&#9;tail&amp;C&amp;F&#10;&amp;T</oddHeader>",
+    );
+  } finally {
+    document.Dispose();
+  }
+});
+
+it("retains XLSX date, time and file fields across primary ODS and Worker transfer", /** Checks real output tokens, including original full-path normalization. @returns Completion. */ async () => {
+  const source = await ExcelFilter.importDocument(
+    await patched(
+      '<pageMargins top="1" header="0.5"/><headerFooter><oddHeader>&amp;L&amp;D/&amp;T&amp;C&amp;F&amp;R&amp;Z&amp;f + &amp;Z</oddHeader></headerFooter>',
+    ),
+  );
+  const worker = decodeCalcDocument(structuredClone(encodeCalcDocument(source)));
+  const saved = await writeOdsDocument(worker);
+  const restored = await readOdsDocument(saved);
+  try {
+    const styles = await (await DocumentArchive.open(saved)).readTextEntry("styles.xml");
+    expect(styles).toMatch(/<text:date text:date-value="\d{4}-\d{2}-\d{2}"\/>/u);
+    expect(styles).toMatch(/<text:time text:time-value="[^"]+"\/>/u);
+    expect(styles.match(/<text:file-name text:display="full"\/>/gu)).toHaveLength(2);
+    expect(styles).toContain('<text:file-name text:display="name-and-extension"/>');
+    for (const document of [source, worker, restored]) {
+      const archive = await DocumentArchive.open(await exportXlsx(document));
+      expect(await archive.readTextEntry(worksheet)).toContain(
+        "<oddHeader>&amp;L&amp;D/&amp;T&amp;C&amp;F&amp;R&amp;Z&amp;F + &amp;Z&amp;F</oddHeader>",
+      );
+    }
+  } finally {
+    source.Dispose();
+    worker.Dispose();
+    restored.Dispose();
+  }
+});
+
+it("preserves fixed ODF date and time snapshots and filename formats", /** Reads a leap-day and nanosecond timestamp from native ODF field attributes. @returns Completion. */ async () => {
+  const document = new ScDocument();
+  const importer = new ScXMLImport(document);
+  const namespaces =
+    'xmlns:office="urn:oasis:names:tc:opendocument:xmlns:office:1.0" xmlns:style="urn:oasis:names:tc:opendocument:xmlns:style:1.0" xmlns:table="urn:oasis:names:tc:opendocument:xmlns:table:1.0" xmlns:text="urn:oasis:names:tc:opendocument:xmlns:text:1.0"';
+  try {
+    importer.importStyles(`<office:document-styles ${namespaces}>
+      <office:master-styles><style:master-page style:name="Letter"><style:header>
+      <text:p><text:date text:fixed="true" text:date-value="2024-02-29">Fixed date</text:date>
+      <text:time text:fixed="true" text:time-value="16:07:00.123456789">Fixed time</text:time>
+      <text:file-name text:display="path"/><text:file-name text:display="name"/><text:file-name/>
+      </text:p></style:header></style:master-page></office:master-styles></office:document-styles>`);
+    importer.importContent(`<office:document-content ${namespaces}><office:automatic-styles>
+      <style:style style:name="sheet" style:family="table" style:master-page-name="Letter"/>
+      </office:automatic-styles><office:body><office:spreadsheet><table:table table:name="First" table:style-name="sheet"/></office:spreadsheet></office:body></office:document-content>`);
+    const ods = await DocumentArchive.open(await writeOdsDocument(document));
+    const xml = await ods.readTextEntry("styles.xml");
+    expect(xml).toContain('<text:date text:date-value="2024-02-29" text:fixed="true"/>');
+    expect(xml).toContain('<text:time text:time-value="16:07:00.123456789" text:fixed="true"/>');
+    expect(xml).toContain('<text:file-name text:display="path"/>');
+    expect(xml).toContain('<text:file-name text:display="name"/>');
+    expect(xml).toContain('<text:file-name text:display="full"/>');
+    const archive = await DocumentArchive.open(await exportXlsx(document));
+    expect(await archive.readTextEntry(worksheet)).toMatch(
+      /<oddHeader>&amp;C&amp;D[^<]*&amp;T[^<]*&amp;Z&amp;F&amp;Z&amp;F/u,
+    );
+  } finally {
+    document.Dispose();
+  }
+});
+
+it("retains the native date and filename footer from tdf167019", /** Isolates the upstream header/footer XML from the workbook's conditional formats. @returns Completion. */ async () => {
+  const source = await DocumentArchive.open(fixture("tdf167019"));
+  const headerFooter = (await source.readTextEntry(worksheet)).match(
+    /<headerFooter>.*?<\/headerFooter>/su,
+  )?.[0];
+  assert(headerFooter);
+  const document = await ExcelFilter.importDocument(await patched("<pageMargins/>" + headerFooter));
+  try {
+    const archive = await DocumentArchive.open(await exportXlsx(document));
+    expect(await archive.readTextEntry(worksheet)).toMatch(
+      /<oddFooter>&amp;L[^<]*&amp;D&amp;C[^<]*&amp;Z&amp;F&amp;R[^<]*&amp;P\/&amp;N<\/oddFooter>/u,
     );
   } finally {
     document.Dispose();

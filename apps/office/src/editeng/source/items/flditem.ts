@@ -1,10 +1,13 @@
-/** @fileoverview Original field data, pooled item and locale-independent URL/page/table values from flditem.cxx. UNO field factory/date-time formatting and diagnostic XML await their actual owners; no fake provider or native lifetime manager is supplied. */
+/** @fileoverview Original field data and pooled edit items from flditem.cxx, including stored date, time, and filename values. */
 import { SfxPoolItem } from "../../../svl/inc/poolitem";
 import type { SfxItemPool } from "../../../svl/inc/itempool";
 import { OUString, type OUStringConstReference } from "../../../sal/inc/rtl/ustring";
 import { rtl_ustr_hashCode_WithLength } from "../../../sal/inc/rtl/ustring.h";
 import { hash_combine } from "../../../o3tl/inc/hash_combine";
 import * as FieldType from "../../../offapi/com/sun/star/text/textfield/Type";
+import { Date, type DateConstReference } from "../../../tools/source/datetime/tdate";
+import { DateTime } from "../../../tools/source/datetime/datetime";
+import { Time, type TimeConstReference } from "../../../tools/source/datetime/ttime";
 /** Original const field reference, borrowing the real polymorphic value with no wrapper/ownership protocol. */
 export type SvxFieldDataConstReference = Readonly<Omit<SvxFieldData, "assign">>;
 /** Original empty base value and virtual field contract; native type-index numeric hash is runtime opaque, not document bytes. */
@@ -315,5 +318,199 @@ export class SvxTableField extends SvxFieldData {
   /** Original type gate then index comparison. @param other - Native field. @returns Equality. */
   override equals(other: SvxFieldDataConstReference): boolean {
     return other instanceof SvxTableField && this.mnTab === other.GetTab();
+  }
+}
+
+/** Original date field update policy. */
+export enum SvxDateType {
+  Fix,
+  Var,
+}
+
+/** Original date format identifiers. */
+export enum SvxDateFormat {
+  AppDefault,
+  System,
+  StdSmall,
+  StdBig,
+  A,
+  B,
+  C,
+  D,
+  E,
+  F,
+}
+
+/** Original packed local date and field attributes. */
+export class SvxDateField extends SvxFieldData {
+  static override readonly CLASS_ID: number = FieldType.DATE;
+  private readonly nFixDate: number;
+
+  /** Constructs the original date field. @param date - Date snapshot, current local date when omitted. @param type - Update policy. @param format - Native display format. @returns Date field. */
+  constructor(
+    date: DateConstReference = new Date(Date.SYSTEM),
+    private readonly type = SvxDateType.Var,
+    private readonly format = SvxDateFormat.StdSmall,
+  ) {
+    super();
+    this.nFixDate = date.GetDate();
+  }
+
+  /** Gets the original DATE identity. @returns Field class ID. */
+  override GetClassId(): number {
+    return SvxDateField.CLASS_ID;
+  }
+  /** Returns the stored date snapshot. @returns Signed packed date. */
+  GetFixDate(): number {
+    return this.nFixDate;
+  }
+  /** Reads the original update policy. @returns Date type. */
+  GetType(): SvxDateType {
+    return this.type;
+  }
+  /** Reads the original display format. @returns Date format. */
+  GetFormat(): SvxDateFormat {
+    return this.format;
+  }
+  /** Copies the original stored attributes without resampling the clock. @returns Independent field. */
+  override Clone(): SvxDateField {
+    return new SvxDateField(new Date(this.nFixDate), this.type, this.format);
+  }
+  /** Compares native date values. @param other - Actual field. @returns Whether all attributes match. */
+  override equals(other: SvxFieldDataConstReference): boolean {
+    return (
+      other instanceof SvxDateField &&
+      this.nFixDate === other.nFixDate &&
+      this.type === other.type &&
+      this.format === other.format
+    );
+  }
+}
+
+/** Original time field update policy. */
+export enum SvxTimeType {
+  Fix,
+  Var,
+}
+
+/** Original extended time format identifiers. */
+export enum SvxTimeFormat {
+  AppDefault,
+  System,
+  Standard,
+  HH24_MM,
+  HH24_MM_SS,
+  HH24_MM_SS_00,
+  HH12_MM,
+  HH12_MM_SS,
+  HH12_MM_SS_00,
+  HH12_MM_AMPM,
+  HH12_MM_SS_AMPM,
+  HH12_MM_SS_00_AMPM,
+}
+
+/** Original packed local time and field attributes. */
+export class SvxExtTimeField extends SvxFieldData {
+  static override readonly CLASS_ID: number = FieldType.EXTENDED_TIME;
+  private readonly fixTime: bigint;
+
+  /** Constructs the original time field. @param time - Clock snapshot, current local time when omitted. @param type - Update policy. @param format - Native display format. @returns Time field. */
+  constructor(
+    time: TimeConstReference = new DateTime(DateTime.SYSTEM),
+    private readonly type = SvxTimeType.Var,
+    private readonly format = SvxTimeFormat.Standard,
+  ) {
+    super();
+    this.fixTime = time.GetTime();
+  }
+
+  /** Gets the original EXTENDED_TIME identity. @returns Field class ID. */
+  override GetClassId(): number {
+    return SvxExtTimeField.CLASS_ID;
+  }
+  /** Returns the stored clock snapshot. @returns Signed packed time. */
+  GetFixTime(): bigint {
+    return this.fixTime;
+  }
+  /** Reads the original update policy. @returns Time type. */
+  GetType(): SvxTimeType {
+    return this.type;
+  }
+  /** Reads the original display format. @returns Time format. */
+  GetFormat(): SvxTimeFormat {
+    return this.format;
+  }
+  /** Copies the original stored attributes. @returns Independent field. */
+  override Clone(): SvxExtTimeField {
+    return new SvxExtTimeField(Time.fromEncodedTime(this.fixTime), this.type, this.format);
+  }
+  /** Compares native time values. @param other - Actual field. @returns Whether all attributes match. */
+  override equals(other: SvxFieldDataConstReference): boolean {
+    return (
+      other instanceof SvxExtTimeField &&
+      this.fixTime === other.fixTime &&
+      this.type === other.type &&
+      this.format === other.format
+    );
+  }
+}
+
+/** Original filename field update policy. */
+export enum SvxFileType {
+  Fix,
+  Var,
+}
+
+/** Original filename display format identifiers. */
+export enum SvxFileFormat {
+  NameAndExt,
+  PathFull,
+  PathOnly,
+  NameOnly,
+}
+
+/** Original filename field value. */
+export class SvxExtFileField extends SvxFieldData {
+  static override readonly CLASS_ID: number = FieldType.EXTENDED_FILE;
+  private readonly file = new OUString();
+
+  /** Constructs the original extended filename field. @param file - Stored filename. @param type - Update policy. @param format - Native display format. @returns Filename field. */
+  constructor(
+    file?: OUStringConstReference,
+    private readonly type = SvxFileType.Var,
+    private readonly format = SvxFileFormat.PathFull,
+  ) {
+    super();
+    if (file !== undefined) this.file.assign(file);
+  }
+
+  /** Gets the original EXTENDED_FILE identity. @returns Field class ID. */
+  override GetClassId(): number {
+    return SvxExtFileField.CLASS_ID;
+  }
+  /** Borrows the stored filename. @returns Filename value. */
+  GetFile(): OUStringConstReference {
+    return this.file;
+  }
+  /** Reads the original update policy. @returns File type. */
+  GetType(): SvxFileType {
+    return this.type;
+  }
+  /** Reads the original display format. @returns Filename format. */
+  GetFormat(): SvxFileFormat {
+    return this.format;
+  }
+  /** Copies the original stored attributes. @returns Independent field. */
+  override Clone(): SvxExtFileField {
+    return new SvxExtFileField(this.file, this.type, this.format);
+  }
+  /** Compares native filename values. @param other - Actual field. @returns Whether all attributes match. */
+  override equals(other: SvxFieldDataConstReference): boolean {
+    return (
+      other instanceof SvxExtFileField &&
+      this.file.equals(other.file) &&
+      this.type === other.type &&
+      this.format === other.format
+    );
   }
 }

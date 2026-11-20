@@ -1,24 +1,43 @@
 /** @fileoverview Actual Calc file controls retain native page styles across primary ODS and XLSX. */
 import { readFile } from "node:fs/promises";
-import { fileURLToPath } from "node:url";
 import { expect, test } from "@playwright/test";
-import { DocumentArchive } from "../../src/package/source/zippackage/document-archive";
+import {
+  DocumentArchive,
+  DocumentArchiveWriter,
+} from "../../src/package/source/zippackage/document-archive";
 
 test("Calc keeps XLSX print geometry through browser storage and a mobile reopen", /** Opens the pinned page setup regression and verifies the actual downloaded XLSX. @param fixtures - Browser fixtures. @param fixtures.page - Chromium page. @returns Completion. */ async ({
   page,
 }) => {
-  const fixture = fileURLToPath(
-    new URL(
-      "../../../../vendor/libreoffice-reference/sc/qa/unit/data/xlsx/tdf136721_letter_sized_paper.xlsx",
-      import.meta.url,
-    ),
+  const fixture = new URL(
+    "../../../../vendor/libreoffice-reference/sc/qa/unit/data/xlsx/tdf136721_letter_sized_paper.xlsx",
+    import.meta.url,
   );
+  const source = await DocumentArchive.open(await readFile(fixture));
+  const worksheet = "xl/worksheets/sheet1.xml";
+  const workbook = new DocumentArchiveWriter();
+  for (const part of source.getEntryNames()) {
+    if (part === worksheet) {
+      const xml = await source.readTextEntry(part);
+      expect(xml).toContain("</oddFooter>");
+      workbook.putNextEntry(
+        part,
+        new TextEncoder().encode(
+          xml.replace("</oddFooter>", "&amp;C&amp;D &amp;T &amp;Z&amp;F</oddFooter>"),
+        ),
+      );
+    } else workbook.putNextEntry(part, await source.readEntry(part));
+  }
   const open = page.getByRole("button", { name: "Open", exact: true });
   const cell = page.getByRole("gridcell", { name: /^A1(?:\s|$)/u });
   await page.goto("/calc");
   await open.click();
   await page.getByRole("tab", { name: "On computer" }).click();
-  await page.getByLabel("Browse").setInputFiles(fixture);
+  await page.getByLabel("Browse").setInputFiles({
+    buffer: Buffer.from(await workbook.finish()),
+    name: "Print layout.xlsx",
+    mimeType: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+  });
   await expect(cell).toHaveText("Start");
   await page.getByRole("menuitem", { name: "File" }).click();
   await page.getByRole("menuitem", { name: "Save As…" }).click();
@@ -40,12 +59,14 @@ test("Calc keeps XLSX print geometry through browser storage and a mobile reopen
   if (!path) throw new Error("Missing page setup download.");
   const buffer = await readFile(path);
   const archive = await DocumentArchive.open(buffer);
-  const xml = await archive.readTextEntry("xl/worksheets/sheet1.xml");
+  const xml = await archive.readTextEntry(worksheet);
   expect(xml).toMatch(/<pageSetup[^>]*paperSize="70"[^>]*orientation="landscape"/u);
   expect(xml).toContain('<printOptions headings="true" gridLines="true"');
   expect(xml).toMatch(/<pageMargins[^>]*left="0\.1965[^"]*"[^>]*\/>/u);
   expect(xml).toContain("<oddHeader>&amp;L&amp;18Left&amp;R&amp;18Right</oddHeader>");
-  expect(xml).toContain("<oddFooter>&amp;LLeft&amp;RRight</oddFooter>");
+  expect(xml).toContain(
+    "<oddFooter>&amp;LLeft&amp;C&amp;D &amp;T &amp;Z&amp;F&amp;RRight</oddFooter>",
+  );
 
   await page.setViewportSize({ width: 430, height: 844 });
   await open.click();

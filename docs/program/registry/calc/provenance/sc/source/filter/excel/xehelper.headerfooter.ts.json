@@ -13,10 +13,10 @@
       "XclExpHFConverter::GenerateString"
     ],
     "preservedResponsibilities": [
-      "Writes original Excel section order, native font differences, escaped text, and represented fields."
+      "Writes original Excel section order, font differences, escaped text, and native date, time, filename and pagination fields."
     ],
     "omittedResponsibilities": [
-      "Unsupported temporal and extended filename fields, pictures and complete print layout remain outside the represented slice."
+      "Field-specific ODF number-format references, pictures and complete print layout remain outside the represented slice."
     ],
     "evidence": {
       "local": [

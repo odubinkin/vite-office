@@ -458,6 +458,12 @@ export enum XMLToken {
   TEXT_SHEET_NAME,
   TEXT_TITLE,
   TEXT_TIME,
+  TEXT_DATE,
+  TEXT_FILE_NAME,
+  TEXT_DISPLAY,
+  TEXT_FIXED,
+  TEXT_DATE_VALUE,
+  TEXT_TIME_VALUE,
 }
 
 const entries: readonly (readonly [string, string, XMLToken])[] = [
@@ -470,6 +476,12 @@ const entries: readonly (readonly [string, string, XMLToken])[] = [
   [ODF_NAMESPACES.text, "sheet-name", XMLToken.TEXT_SHEET_NAME],
   [ODF_NAMESPACES.text, "title", XMLToken.TEXT_TITLE],
   [ODF_NAMESPACES.text, "time", XMLToken.TEXT_TIME],
+  [ODF_NAMESPACES.text, "date", XMLToken.TEXT_DATE],
+  [ODF_NAMESPACES.text, "file-name", XMLToken.TEXT_FILE_NAME],
+  [ODF_NAMESPACES.text, "display", XMLToken.TEXT_DISPLAY],
+  [ODF_NAMESPACES.text, "fixed", XMLToken.TEXT_FIXED],
+  [ODF_NAMESPACES.text, "date-value", XMLToken.TEXT_DATE_VALUE],
+  [ODF_NAMESPACES.text, "time-value", XMLToken.TEXT_TIME_VALUE],
   [ODF_NAMESPACES.table, "protected", XMLToken.TABLE_PROTECTED],
   [ODF_NAMESPACES.table, "protection-key", XMLToken.TABLE_PROTECTION_KEY],
   [

@@ -13,10 +13,10 @@
       "HeaderFooterParser::parse"
     ],
     "preservedResponsibilities": [
-      "Converts original Excel header/footer text, formatting controls and represented fields into native Calc rich text."
+      "Converts original Excel header/footer text, formatting controls and native date, time, filename and pagination fields into Calc rich text."
     ],
     "omittedResponsibilities": [
-      "Unsupported temporal and extended filename fields, pictures and complete print layout remain outside the represented slice."
+      "Field-specific ODF number-format references, pictures and complete print layout remain outside the represented slice."
     ],
     "evidence": {
       "local": [

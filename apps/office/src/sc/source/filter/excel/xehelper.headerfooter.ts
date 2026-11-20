@@ -10,7 +10,7 @@ import type { SvxCrossedOutItem } from "../../../../editeng/inc/crossedoutitem";
 import type { SvxEscapementItem } from "../../../../editeng/source/items/textitem.escapement";
 import type { SvxPostureItem } from "../../../../editeng/inc/postitem";
 import type { SvxWeightItem } from "../../../../editeng/inc/wghtitem";
-import { SvxFieldItem } from "../../../../editeng/inc/flditem";
+import { SvxExtFileField, SvxFieldItem, SvxFileFormat } from "../../../../editeng/inc/flditem";
 import { SvxEscapement } from "../../../../editeng/inc/svxenum";
 import {
   FontStrikeout,
@@ -28,7 +28,15 @@ const fieldTokens = new Map([
   [Field.PAGES, "&N"],
   [Field.TABLE, "&A"],
   [Field.TIME, "&T"],
+  [Field.EXTENDED_TIME, "&T"],
+  [Field.DATE, "&D"],
   [Field.DOCINFO_TITLE, "&F"],
+]);
+const fileTokens = new Map([
+  [SvxFileFormat.NameAndExt, "&F"],
+  [SvxFileFormat.NameOnly, "&F"],
+  [SvxFileFormat.PathFull, "&Z&F"],
+  [SvxFileFormat.PathOnly, "&Z"],
 ]);
 
 /** Applies the original Excel font substitutions before comparing names. @param value - Actual family name. @returns Excel family. */
@@ -167,8 +175,9 @@ export class XclExpHFConverter {
             line += (current.escape || previous.escape) === SvxEscapement.Superscript ? "&X" : "&Y";
           const field = items.get(EE.EE_FEATURE_FIELD);
           if (field instanceof SvxFieldItem && section.mnEnd === section.mnStart + 1) {
-            const id = field.GetField()?.GetClassId();
-            if (id !== undefined) line += fieldTokens.get(id) ?? "";
+            const data = field.GetField();
+            if (data instanceof SvxExtFileField) line += fileTokens.get(data.GetFormat()) ?? "";
+            else if (data) line += fieldTokens.get(data.GetClassId()) ?? "";
           } else {
             const literal = source.slice(section.mnStart, section.mnEnd).replaceAll("&", "&&");
             if (resized && /\d$/u.test(line) && /^\d/u.test(literal)) line += " ";

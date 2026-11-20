@@ -7159,3 +7159,15 @@ the original ordering and height calculation.
 
 - [Original import height and body distance](../../vendor/libreoffice-reference/sc/source/filter/oox/pagesettings.cxx)
 - [Original worksheet export sequence](../../vendor/libreoffice-reference/sc/source/filter/excel/xepage.cxx)
+
+### CALC-757 — A path-only XLSX header field can acquire a filename on round trip
+
+LibreOffice imports bare `&Z` as the full document location. It also consumes
+the trailing `&F` in a consecutive `&Z&F` pair because this XLSX import path
+does not retain a separate path-only field. The exporter can write a native
+path-only field as `&Z`, but writes the full-location field as `&Z&F`.
+Calc retains that normalization. A path-only ODF field can still export as
+`&Z` before the resulting XLSX is reopened.
+
+- [Header/footer token import](../../vendor/libreoffice-reference/sc/source/filter/oox/pagesettings.cxx)
+- [Native filename field export](../../vendor/libreoffice-reference/sc/source/filter/excel/xehelper.cxx)

@@ -10,6 +10,15 @@ export {
   SvxTimeField,
   SvxFileField,
   SvxTableField,
+  SvxDateField,
+  SvxDateType,
+  SvxDateFormat,
+  SvxExtTimeField,
+  SvxTimeType,
+  SvxTimeFormat,
+  SvxExtFileField,
+  SvxFileType,
+  SvxFileFormat,
 } from "../source/items/flditem";
 export type {
   SvxFieldDataConstReference,
