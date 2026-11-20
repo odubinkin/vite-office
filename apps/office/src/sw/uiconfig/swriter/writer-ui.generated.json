@@ -30,6 +30,9 @@
     "entireRow": ".uno:EntireRow",
     "entireColumn": ".uno:EntireColumn",
     "selectTable": ".uno:SelectTable",
+    "focusFindbar": "vnd.sun.star.findbar:FocusToFindbar",
+    "searchDialog": ".uno:SearchDialog",
+    "repeatSearch": ".uno:RepeatSearch",
     "insertTable": ".uno:InsertTable",
     "insertRowsBefore": ".uno:InsertRowsBefore",
     "insertRowsAfter": ".uno:InsertRowsAfter",
@@ -1045,6 +1048,46 @@
       "shortcuts": ["Ctrl+A", "Meta+A"],
       "slotId": 5723
     },
+    "vnd.sun.star.findbar:FocusToFindbar": {
+      "browserOwned": false,
+      "argumentSchema": [],
+      "capabilityId": "CAP-0111",
+      "controlLabel": "Find",
+      "label": "Find",
+      "placements": ["sw/uiconfig/swriter/menubar/menubar.xml"],
+      "semantics": "action",
+      "showsDialog": false,
+      "shortcuts": ["Ctrl+F", "Meta+F"],
+      "slotId": 65000
+    },
+    ".uno:SearchDialog": {
+      "browserOwned": false,
+      "argumentSchema": [],
+      "capabilityId": "CAP-0111",
+      "controlLabel": "Find and Replace",
+      "label": "Find and Replace",
+      "iconName": "lc_searchdialog.svg",
+      "placements": [
+        "sw/uiconfig/swriter/menubar/menubar.xml",
+        "sw/uiconfig/swriter/toolbar/standardbar.xml"
+      ],
+      "semantics": "action",
+      "showsDialog": true,
+      "shortcuts": ["Ctrl+H", "Meta+H"],
+      "slotId": 5961
+    },
+    ".uno:RepeatSearch": {
+      "browserOwned": false,
+      "argumentSchema": ["Quiet:SfxBoolItem"],
+      "capabilityId": "CAP-0111",
+      "controlLabel": "Repeat Search",
+      "label": "Repeat Search",
+      "placements": ["officecfg/registry/data/org/openoffice/Office/Accelerators.xcu"],
+      "semantics": "action",
+      "showsDialog": false,
+      "shortcuts": ["Ctrl+Shift+F", "Meta+Shift+F"],
+      "slotId": 20150
+    },
     ".uno:Ruler": {
       "browserOwned": false,
       "argumentSchema": [],
@@ -1877,6 +1920,24 @@
     },
     {
       "classification": "supported-upstream",
+      "commandUrl": "vnd.sun.star.findbar:FocusToFindbar",
+      "sources": ["sw/uiconfig/swriter/menubar/menubar.xml"]
+    },
+    {
+      "classification": "supported-upstream",
+      "commandUrl": ".uno:SearchDialog",
+      "sources": [
+        "sw/uiconfig/swriter/menubar/menubar.xml",
+        "sw/uiconfig/swriter/toolbar/standardbar.xml"
+      ]
+    },
+    {
+      "classification": "supported-upstream",
+      "commandUrl": ".uno:RepeatSearch",
+      "sources": ["officecfg/registry/data/org/openoffice/Office/Accelerators.xcu"]
+    },
+    {
+      "classification": "supported-upstream",
       "commandUrl": ".uno:Ruler",
       "sources": ["sw/uiconfig/swriter/menubar/menubar.xml"]
     },
@@ -2520,22 +2581,6 @@
       "context": [".uno:EditMenu"],
       "entryKind": "command",
       "sourceUrl": ".uno:SelectTextMode",
-      "reason": "outside-p1-supported-command-slice",
-      "sourcePath": "sw/uiconfig/swriter/menubar/menubar.xml"
-    },
-    {
-      "classification": "X",
-      "context": [".uno:EditMenu"],
-      "entryKind": "command",
-      "sourceUrl": "vnd.sun.star.findbar:FocusToFindbar",
-      "reason": "outside-p1-supported-command-slice",
-      "sourcePath": "sw/uiconfig/swriter/menubar/menubar.xml"
-    },
-    {
-      "classification": "X",
-      "context": [".uno:EditMenu"],
-      "entryKind": "command",
-      "sourceUrl": ".uno:SearchDialog",
       "reason": "outside-p1-supported-command-slice",
       "sourcePath": "sw/uiconfig/swriter/menubar/menubar.xml"
     },
@@ -6015,14 +6060,6 @@
       "classification": "X",
       "context": [],
       "entryKind": "command",
-      "sourceUrl": ".uno:SearchDialog",
-      "reason": "outside-p1-supported-command-slice",
-      "sourcePath": "sw/uiconfig/swriter/toolbar/standardbar.xml"
-    },
-    {
-      "classification": "X",
-      "context": [],
-      "entryKind": "command",
       "sourceUrl": ".uno:Navigator",
       "reason": "outside-p1-supported-command-slice",
       "sourcePath": "sw/uiconfig/swriter/toolbar/standardbar.xml"
@@ -7675,6 +7712,13 @@
           { "kind": "separator" },
           { "commandUrl": ".uno:SelectAll", "kind": "command", "visible": true },
           { "kind": "separator" },
+          {
+            "commandUrl": "vnd.sun.star.findbar:FocusToFindbar",
+            "kind": "command",
+            "visible": true
+          },
+          { "commandUrl": ".uno:SearchDialog", "kind": "command", "visible": true },
+          { "kind": "separator" },
           { "commandUrl": ".uno:EditHyperlink", "kind": "command", "visible": true }
         ],
         "kind": "menu",
@@ -7969,6 +8013,8 @@
       { "kind": "separator" },
       { "commandUrl": ".uno:Undo", "kind": "command", "visible": true },
       { "commandUrl": ".uno:Redo", "kind": "command", "visible": true },
+      { "kind": "separator" },
+      { "commandUrl": ".uno:SearchDialog", "kind": "command", "visible": true },
       { "kind": "separator" },
       { "commandUrl": ".uno:InsertTable", "kind": "command", "visible": true },
       { "kind": "separator" },
@@ -8370,18 +8416,6 @@
         "context": [".uno:EditMenu"],
         "entryKind": "command",
         "sourceUrl": ".uno:SelectTextMode"
-      },
-      {
-        "classification": "X",
-        "context": [".uno:EditMenu"],
-        "entryKind": "command",
-        "sourceUrl": "vnd.sun.star.findbar:FocusToFindbar"
-      },
-      {
-        "classification": "X",
-        "context": [".uno:EditMenu"],
-        "entryKind": "command",
-        "sourceUrl": ".uno:SearchDialog"
       },
       {
         "classification": "X",
@@ -10958,12 +10992,6 @@
         "context": [],
         "entryKind": "command",
         "sourceUrl": ".uno:PrintPreview"
-      },
-      {
-        "classification": "X",
-        "context": [],
-        "entryKind": "command",
-        "sourceUrl": ".uno:SearchDialog"
       },
       {
         "classification": "X",

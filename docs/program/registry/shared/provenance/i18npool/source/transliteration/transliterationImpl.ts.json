@@ -1,0 +1,38 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/i18npool/source/transliteration/transliterationImpl.ts",
+          "marker": "transliterate"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/i18npool/source/transliteration/transliterationImpl.cxx",
+          "marker": "TransliterationImpl::transliterate"
+        }
+      ]
+    },
+    "localPath": "apps/office/src/i18npool/source/transliteration/transliterationImpl.ts",
+    "localSymbols": [
+      "transliterate"
+    ],
+    "omittedResponsibilities": [
+      "Full UNO service lifecycle, remaining simple and complex module cascades, locale loading and other transliteration entry points."
+    ],
+    "preservedResponsibilities": [
+      "Composes the represented simple modules in native load order and rebases each output UTF-16 position to the source interval. Uses the existing case, diacritics and kashida module implementations.",
+      "Runs the existing width module between case folding and the CTL modules as defined by TMlist.",
+      "Registers all Japanese ignore modules in native TMlist order for the separate simple and complex TextSearch passes."
+    ],
+    "status": "mapped",
+    "upstreamPath": "i18npool/source/transliteration/transliterationImpl.cxx",
+    "upstreamSymbols": [
+      "TransliterationImpl::transliterate"
+    ]
+  }
+}

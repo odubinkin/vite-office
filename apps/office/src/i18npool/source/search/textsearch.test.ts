@@ -5,6 +5,7 @@ import { TextSearch } from "./textsearch";
 import { SearchOptions2 } from "../../../i18nutil/inc/searchopt";
 import { TransliterationFlags } from "../../../i18nutil/inc/transliteration";
 import { OUString } from "../../../sal/inc/rtl/ustring";
+import { APPROXIMATE } from "../../../offapi/com/sun/star/util/SearchAlgorithms2";
 import { NORM_WORD_ONLY } from "../../../offapi/com/sun/star/util/SearchFlags";
 import { getCharacterType } from "../characterclassification/cclass_unicode";
 
@@ -239,7 +240,7 @@ describe("native absolute TextSearch", /** Registers initialized native source e
     config.AlgorithmType2 = 999;
     engine.setOptions2(config);
     expect(offsets(engine.searchForward(string("ab"), 0, 2).startOffset)).toEqual([1]);
-    for (const algorithm of [2, 3]) {
+    for (const algorithm of [2]) {
       config.AlgorithmType2 = algorithm;
       expect(
         /** Attempts an unported native engine. @returns Search owner. */ () =>
@@ -247,7 +248,7 @@ describe("native absolute TextSearch", /** Registers initialized native source e
       ).toThrow("algorithm is not implemented");
     }
     config.AlgorithmType2 = 1;
-    config.transliterateFlags = TransliterationFlags.IGNORE_WIDTH;
+    config.transliterateFlags = TransliterationFlags.UPPERCASE_LOWERCASE;
     expect(
       /** Attempts unported transliteration. @returns Search owner. */ () => new TextSearch(config),
     ).toThrow("transliteration is not implemented");
@@ -318,4 +319,161 @@ describe("native absolute TextSearch", /** Registers initialized native source e
       expect(getCharacterType(string(value), value.length)).toBe(0);
     },
   );
+});
+
+it.each([
+  [
+    "\u0643",
+    0,
+    [
+      [0, 1],
+      [7, 6],
+    ],
+  ],
+  [
+    "\u0643",
+    TransliterationFlags.IGNORE_DIACRITICS_CTL,
+    [
+      [0, 1],
+      [7, 6],
+    ],
+  ],
+  [
+    "\u0643\u064f",
+    0,
+    [
+      [0, 2],
+      [2, 0],
+    ],
+  ],
+  [
+    "\u0643\u064f",
+    TransliterationFlags.IGNORE_DIACRITICS_CTL,
+    [
+      [0, 1],
+      [7, 6],
+    ],
+  ],
+  [
+    "\u064f",
+    0,
+    [
+      [1, 2],
+      [4, 3],
+    ],
+  ],
+  ["\u064f", TransliterationFlags.IGNORE_DIACRITICS_CTL, undefined],
+] as const)(
+  "ports tdf91764 Arabic diacritic offsets for %s with flags %s",
+  /** Preserves both directional offsets from upstream testTdf91764_searchArabicDiacritics. @param key - Source pattern. @param flags - Native options. @param expected - Directional endpoints or no match. @returns Nothing. */ (
+    key,
+    flags,
+    expected,
+  ) => {
+    const text = string("\u0643\u064f\u062a\u064f\u0628 \u0643\u062a\u0628");
+    const config = options(key);
+    config.transliterateFlags = flags;
+    const engine = new TextSearch(config);
+    const first = engine.searchForward(text, 0, text.getLength());
+    const last = engine.searchBackward(text, text.getLength(), 0);
+    if (expected === undefined) {
+      expect(first.subRegExpressions).toBe(0);
+      expect(last.subRegExpressions).toBe(0);
+      return;
+    }
+    expect([offsets(first.startOffset)[0], offsets(first.endOffset)[0]]).toEqual(expected[0]);
+    expect([offsets(last.startOffset)[0], offsets(last.endOffset)[0]]).toEqual(expected[1]);
+  },
+);
+
+it("composes case expansion, mark deletion and kashida deletion over an interior UTF-16 range", /** Checks rebase to the source range after all three stages. @returns Nothing. */ () => {
+  const config = options("strasseكتب", true);
+  config.transliterateFlags |=
+    TransliterationFlags.IGNORE_DIACRITICS_CTL | TransliterationFlags.IGNORE_KASHIDA_CTL;
+  const engine = new TextSearch(config);
+  const text = string("😀|Stráßeكُـتب|😀");
+  const start = 3;
+  const end = text.getLength() - 3;
+  const forward = engine.searchForward(text, start, end);
+  const backward = engine.searchBackward(text, end, start);
+  expect([offsets(forward.startOffset)[0], offsets(forward.endOffset)[0]]).toEqual([start, end]);
+  expect([offsets(backward.startOffset)[0], offsets(backward.endOffset)[0]]).toEqual([end, start]);
+});
+
+it.each([
+  ["It’s an apostrophe.", "'", [2, 3]],
+  ["“x”, „y‟, ‘z’, ‚a‛", '"x"', [0, 3]],
+  ["xＡｂy", "ab", [1, 3]],
+] as const)(
+  "preserves original range offsets with case and width folding for %s",
+  /** Ports the width-enabled upstream apostrophe and quotation tests and checks full-width Latin matching. @param source - Original source text. @param key - Search key. @param expected - Original forward offsets. @returns Nothing. */ (
+    source,
+    key,
+    expected,
+  ) => {
+    const config = options(key, true);
+    config.transliterateFlags |= TransliterationFlags.IGNORE_WIDTH;
+    const engine = new TextSearch(config);
+    const text = string(source);
+    const first = engine.searchForward(text, 0, text.getLength());
+    const last = engine.searchBackward(text, text.getLength(), 0);
+    expect([offsets(first.startOffset)[0], offsets(first.endOffset)[0]]).toEqual(expected);
+    expect([offsets(last.startOffset)[0], offsets(last.endOffset)[0]]).toEqual([
+      expected[1],
+      expected[0],
+    ]);
+  },
+);
+
+it("chooses the nearer native Japanese complex match in either direction and respects original bounds", /** Exercises independent primary and complex keys, caches and source offsets. @returns Nothing. */ () => {
+  const config = options("ハ");
+  config.transliterateFlags = TransliterationFlags.ignoreBaFa_ja_JP;
+  const engine = new TextSearch(config);
+  const text = string("xファ yハ");
+  const first = engine.searchForward(text, 0, text.getLength());
+  const last = engine.searchBackward(text, text.getLength(), 0);
+  const bounded = engine.searchBackward(text, 3, 1);
+  expect([offsets(first.startOffset)[0], offsets(first.endOffset)[0]]).toEqual([1, 3]);
+  expect([offsets(last.startOffset)[0], offsets(last.endOffset)[0]]).toEqual([6, 5]);
+  expect([offsets(bounded.startOffset)[0], offsets(bounded.endOffset)[0]]).toEqual([3, 1]);
+});
+
+it("retains the loaded complex search item when native setOptions2 is called without complex flags", /** Preserves the pinned source's complex owner lifetime on a reused instance. @returns Nothing. */ () => {
+  const config = options("ハ");
+  config.transliterateFlags = TransliterationFlags.ignoreBaFa_ja_JP;
+  const engine = new TextSearch(config);
+  const text = string("xファ");
+  engine.setOptions2(options("q"));
+  const reused = engine.searchForward(text, 0, text.getLength());
+  expect([offsets(reused.startOffset)[0], offsets(reused.endOffset)[0]]).toEqual([1, 3]);
+  expect(
+    new TextSearch(options("q")).searchForward(text, 0, text.getLength()).subRegExpressions,
+  ).toBe(0);
+});
+
+it("keeps the ignore-width option in the primary pass when complex matching is enabled", /** Preserves the pinned distinction between the width flag and the complex mask. @returns Nothing. */ () => {
+  const config = options("ﾊ");
+  config.transliterateFlags =
+    TransliterationFlags.IGNORE_WIDTH | TransliterationFlags.ignoreBaFa_ja_JP;
+  const engine = new TextSearch(config);
+  const direct = engine.searchForward(string("ハ"), 0, 1);
+  expect([offsets(direct.startOffset)[0], offsets(direct.endOffset)[0]]).toEqual([0, 1]);
+  expect(engine.searchForward(string("ファ"), 0, 2).subRegExpressions).toBe(0);
+});
+
+it("searches native word candidates by weighted distance in both directions", /** Exercises word segmentation, clipping, and the directional endpoints. @returns Nothing. */ () => {
+  const config = options("cat");
+  config.AlgorithmType2 = APPROXIMATE;
+  config.changedChars = 1;
+  config.insertedChars = 0;
+  config.deletedChars = 0;
+  const engine = new TextSearch(config);
+  const source = string("  dog cot cat  ");
+  const first = engine.searchForward(source, 0, source.getLength());
+  const last = engine.searchBackward(source, source.getLength(), 0);
+  expect([offsets(first.startOffset)[0], offsets(first.endOffset)[0]]).toEqual([6, 9]);
+  expect([offsets(last.startOffset)[0], offsets(last.endOffset)[0]]).toEqual([13, 10]);
+  expect(engine.searchForward(source, 7, 9).subRegExpressions).toBe(0);
+  expect(engine.searchForward(string("   "), 0, 3).subRegExpressions).toBe(0);
+  expect(engine.searchBackward(string("   "), 3, 0).subRegExpressions).toBe(0);
 });

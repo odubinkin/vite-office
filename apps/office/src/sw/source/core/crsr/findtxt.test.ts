@@ -2,6 +2,7 @@
 import { expect, it } from "vitest";
 import { SwCursor } from "./swcrsr";
 import { FindRanges, SwDocPositions } from "../../../inc/cshtyp";
+import { APPROXIMATE } from "../../../../offapi/com/sun/star/util/SearchAlgorithms2";
 import { REG_NOT_BEGINOFLINE } from "../../../../offapi/com/sun/star/util/SearchFlags";
 import { FindText, FindTextImpl } from "./findtxt";
 import { SwPaM, SwPosition } from "./pam";
@@ -388,5 +389,27 @@ it("Normalize preserves range extent and changes only native point/mark orientat
     expect(selection.HasMark()).toBe(false);
   } finally {
     selection.Dispose();
+  }
+});
+
+it("retains the native similarity script end when it reaches beyond the requested range", /** Checks the upstream script-boundary overwrite on an actual Writer node. @returns Nothing. */ () => {
+  const doc = new SwDoc();
+  const node = doc.paragraphs[0] as SwTextNode;
+  node.SetText("abc def");
+  const selected = range(node, 0, node, 3);
+  const result = range(node, 0, node, 0);
+  const options = new SearchOptions2();
+  options.AlgorithmType2 = APPROXIMATE;
+  options.searchString.assign(string("def"));
+  options.changedChars = 0;
+  options.insertedChars = 0;
+  options.deletedChars = 0;
+  try {
+    expect(FindTextImpl(result, options, new TextSearch(options), false, selected)).toBe(true);
+    expect(result.Start().GetContentIndex()).toBe(4);
+    expect(result.End().GetContentIndex()).toBe(7);
+  } finally {
+    result.Dispose();
+    selected.Dispose();
   }
 });

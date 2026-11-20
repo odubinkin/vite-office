@@ -610,6 +610,11 @@ but that operation only pops `m_vSavePos`; it does not remove ring members.
 For a single marked cursor on text `abc`, whole-body find-all for `z` can
 return zero while leaving two unmarked cursors at the original point.
 Plain single-match and selection-only branches have different control flow.
+The adjacent `InOther` branch also creates `pSav` in the ring. Its unmatched
+return and its successful single-match branch both leave that owner linked.
+The current port keeps the cursor-level ring contract. The view's working copy
+releases the saved member before exposing the single match to presentation
+and before trying another search area.
 
 Decision: retain the saved member and mark loss on this exact failed branch;
 do not silently restore the previous ring shape. The normal
@@ -5361,3 +5366,41 @@ applies its authored properties without that collection change.
 - [Original two calls in paragraph import](../../vendor/libreoffice-reference/xmloff/source/text/txtparai.cxx#L1738)
 - [Original automatic-style parent lookup and assignment](../../vendor/libreoffice-reference/xmloff/source/text/txtimp.cxx#L1036)
 - [Original paragraph collection reset flags](../../vendor/libreoffice-reference/sw/inc/doc.hxx#L832)
+
+### WRITER-685 — Reconfiguring TextSearch can retain an earlier Japanese complex query
+
+- Upstream: `i18npool/source/search/textsearch.cxx`, `TextSearch::setOptions2`,
+  `searchForward` and `searchBackward` at the pinned baseline.
+- Observation: `setOptions2` clears the jump-table and wildcard caches but only
+  loads or replaces `xTranslit2` when the new options contain complex flags.
+  It leaves the previous complex transliterator and key in place otherwise.
+  Subsequent non-regex searches can therefore return a match for the previous
+  complex query. For example, initialize with `ハ` and the Ba/Fa equivalence,
+  then change the query to `q` with zero flags and search `xファ`.
+- Preserve the retained second pass when the same backend instance is
+  reconfigured. The Writer options-based wrapper uses a fresh backend when
+  options change, as exercised separately by its cache contract.
+
+### WRITER-686 — The complex Japanese pass excludes the ordinary ignore-width flag
+
+- Upstream: `i18npool/source/search/textsearch.cxx`, `maskComplexTrans` at the
+  pinned baseline.
+- Observation: the comment says width conversion also takes effect in the
+  complex pass, but the mask includes `FULLWIDTH_HALFWIDTH`, an older
+  conversion value distinct from the `IGNORE_WIDTH` bit set by the Japanese
+  search options. The ordinary ignore-width flag participates in the primary
+  pass only.
+- Preserve the source mask for the complex pass and run the configured primary
+  pass independently.
+
+### WRITER-687 — Similarity search can extend a selection to the script boundary
+
+- Upstream: `sw/source/core/crsr/findtxt.cxx`, model-text approximate-search
+  branch at the pinned baseline.
+- Observation: the loop saves the original range end as `nStringEnd` for its
+  continuation test, then assigns the full script transition to `nEnd` before
+  invoking the matcher. The first call can search past a range ending inside
+  the same script. For example, searching `abc def` in the range `[0,3)` for
+  `def` with zero similarity tolerances can report `[4,7)`.
+- Preserve the script-transition argument and cover the resulting source
+  offsets on an actual Writer text node.

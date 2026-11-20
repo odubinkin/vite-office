@@ -29,6 +29,13 @@ export function createWriterViewCommandRegistry(
       !target.IsStoragePending();
   return createWriterInterface([
     {
+      capabilityId: "CAP-0111",
+      id: WRITER_COMMAND_IDS.repeatSearch,
+      execute:
+        /** Repeats the dispatched Writer search item. @returns Whether a match was found. */ () =>
+          target.RepeatSearch(),
+    },
+    {
       capabilityId: "CAP-0125",
       id: WRITER_COMMAND_IDS.paragraphSpacing,
       /** Executes SwView's actual native paragraph spacing branch. @param context - Active view. @param args - Typed request items. @returns Whether changed. */

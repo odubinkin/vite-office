@@ -20,6 +20,9 @@ import type { SwRootFrame } from "../layout/newfrm";
 export const FIND_NOT_FOUND = 0;
 export const FIND_FOUND = 1;
 export const FIND_NO_RING = 2;
+/** Supplies the represented layout admission for a model-text search strategy. */
+export type SwSearchNodeFilter = (node: SwTextNode) => boolean;
+
 /** Native search-strategy virtual contract for represented model ranges. Drawing/LOK search-item state remains unported. */
 export interface SwFindParas {
   /** Searches one model range. @param cursor - Result cursor. @param backward - Direction. @param region - Registered region. @param readOnly - Read-only permission. @returns Native find flag. */
@@ -179,7 +182,7 @@ export class SwCursor extends SwPaM {
     }
     target.Assign(boundary, 0);
   }
-  /** Native Find_Text entry point for represented absolute model-text search. Notes and merged layout remain unported and reject explicitly. @param options - Native option value. @param searchInNotes - Search annotations. @param start - Start selector. @param end - End selector. @param cancel - Native cancellation output. @param ranges - Scope/all flags. @param replace - Native replace mode. @param layout - Optional layout owner for merged-text searching. @returns Number of matches. */
+  /** Native Find_Text entry point for represented absolute model-text search. Notes and merged layout remain unported and reject explicitly. @param options - Native option value. @param searchInNotes - Search annotations. @param start - Start selector. @param end - End selector. @param cancel - Native cancellation output. @param ranges - Scope/all flags. @param replace - Native replace mode. @param layout - Optional layout owner for merged-text searching. @param acceptsNode - Represented layout admission. @returns Number of matches. */
   public Find_Text(
     options: SearchOptions2,
     searchInNotes: boolean,
@@ -189,10 +192,11 @@ export class SwCursor extends SwPaM {
     ranges: FindRanges,
     replace = false,
     layout?: SwRootFrame,
+    acceptsNode?: SwSearchNodeFilter,
   ): number {
     if (searchInNotes || layout !== undefined)
       throw new Error("Writer notes and layout-text search are not implemented.");
-    return FindText(this, options, start, end, cancel, ranges, replace);
+    return FindText(this, options, start, end, cancel, ranges, replace, acceptsNode);
   }
   /** Native default threshold response, RET_YES=2: continue after discarding undo. Shell/UNO overrides may return RET_CANCEL=0 or RET_NO=3. @returns Native VCL response identity. */
   public MaxReplaceArived(): number {

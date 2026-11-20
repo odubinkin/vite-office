@@ -20,6 +20,7 @@ import {
 
 /** One supported command and any explicit browser-bound divergence. */
 interface CommandSpec {
+  readonly acceleratorOnly?: boolean;
   readonly browserArguments?: readonly string[];
   readonly browserControlLabel?: string;
   readonly browserLabel?: string;
@@ -31,6 +32,7 @@ interface CommandSpec {
 }
 
 const upstreamRoot = "vendor/libreoffice-reference";
+const acceleratorPath = "officecfg/registry/data/org/openoffice/Office/Accelerators.xcu";
 const outputPath = "apps/office/src/sw/uiconfig/swriter/writer-ui.generated.json";
 const specs: readonly CommandSpec[] = [
   { commandUrl: ".uno:OptionsTreeDialog", showsDialog: true },
@@ -98,6 +100,10 @@ const specs: readonly CommandSpec[] = [
   { commandUrl: ".uno:RemoveHyperlink" },
   { commandUrl: ".uno:SaveAs", showsDialog: true },
   { commandUrl: ".uno:SelectAll" },
+  // The native findbar protocol is dispatched by a component rather than an SDI slot.
+  { commandUrl: "vnd.sun.star.findbar:FocusToFindbar", browserSlotId: 65000 },
+  { commandUrl: ".uno:SearchDialog", showsDialog: true },
+  { commandUrl: ".uno:RepeatSearch", acceleratorOnly: true },
   { commandUrl: ".uno:Ruler", semantics: "check" },
   { commandUrl: ".uno:VRuler", semantics: "check" },
   { commandUrl: ".uno:Sidebar", semantics: "check" },
@@ -157,6 +163,9 @@ const commandAliases = {
   entireRow: ".uno:EntireRow",
   entireColumn: ".uno:EntireColumn",
   selectTable: ".uno:SelectTable",
+  focusFindbar: "vnd.sun.star.findbar:FocusToFindbar",
+  searchDialog: ".uno:SearchDialog",
+  repeatSearch: ".uno:RepeatSearch",
   insertTable: ".uno:InsertTable",
   insertRowsBefore: ".uno:InsertRowsBefore",
   insertRowsAfter: ".uno:InsertRowsAfter",
@@ -273,6 +282,9 @@ const commandCapabilities: Readonly<Record<string, `CAP-${string}`>> = {
   ".uno:VRuler": "CAP-0104",
   ".uno:SaveAs": "CAP-0113",
   ".uno:SelectAll": "CAP-0103",
+  ".uno:SearchDialog": "CAP-0111",
+  ".uno:RepeatSearch": "CAP-0111",
+  "vnd.sun.star.findbar:FocusToFindbar": "CAP-0111",
   ".uno:Sidebar": "CAP-0104",
   ".uno:StartPara": "CAP-0112",
   ".uno:StatusBarVisible": "CAP-0104",
@@ -393,10 +405,7 @@ const [genericCommands, writerCommands, accelerators, ...remainingTexts] = await
     `${upstreamRoot}/officecfg/registry/data/org/openoffice/Office/UI/WriterCommands.xcu`,
     "utf8",
   ),
-  readFile(
-    `${upstreamRoot}/officecfg/registry/data/org/openoffice/Office/Accelerators.xcu`,
-    "utf8",
-  ),
+  readFile(`${upstreamRoot}/${acceleratorPath}`, "utf8"),
   ...resourcePaths.map(
     /** Reads one upstream UI resource. @param path - Relative source path. @returns Resource text promise. */ (
       path,
@@ -435,12 +444,13 @@ const commands = Object.fromEntries(
         spec.browserLabel === undefined
           ? findShortcuts(spec.commandUrl, accelerators, "com.sun.star.text.TextDocument")
           : [];
-      const placements = resourcePaths.filter(
+      const placements: string[] = resourcePaths.filter(
         /** Detects a command placement in an upstream resource. @param _path - Resource path. @param index - Resource index. @returns Whether placed. */ (
           _,
           index,
         ) => resourceTexts[index]?.includes(sourceUrl),
       );
+      if (spec.acceleratorOnly && shortcuts.length > 0) placements.push(acceleratorPath);
       if (spec.browserLabel === undefined && placements.length === 0)
         throw new Error(
           `Supported upstream command has no Writer resource placement: ${sourceUrl}`,

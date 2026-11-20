@@ -201,6 +201,7 @@ export interface WriterPresentationProjection {
   readonly activeParagraph: WriterParagraphProjection;
   readonly activeParagraphIndex: number;
   readonly cursorSelection: WriterCursorSelection;
+  readonly additionalSelections: readonly WriterCursorSelection[];
   readonly documentState: SfxObjectShellState;
   readonly lineNumberInfo: SwLineNumberInfoValue;
   readonly modelRevision: number;
@@ -478,25 +479,35 @@ export class WriterViewProjection {
       (node) => textNodes[nodes.indexOf(node)] as WriterParagraphProjection,
     );
     const activeParagraphIndex = bodyNodes.indexOf(activeParagraph);
-    const point = cursor.GetPoint();
-    const mark = cursor.HasMark() ? cursor.GetMark() : undefined;
-    const cursorSelection: WriterCursorSelection = {
-      ...(mark === undefined
-        ? {}
-        : {
-            mark: {
-              nodeIndex: mark.GetNodeIndex(),
-              offset: mark.GetContentIndex(),
-              paragraphId: this.GetNodeId(mark.GetNode() as SwTextNode),
-            },
-          }),
-      point: {
-        ...(inFrontOfLabel ? { inFrontOfLabel: true } : {}),
-        nodeIndex: point.GetNodeIndex(),
-        offset: point.GetContentIndex(),
-        paragraphId: this.GetNodeId(point.GetNode() as SwTextNode),
-      },
-    };
+    const projectSelection =
+      /** Projects one registered Writer selection. @param range - Model PaM. @param label - Whether the caret precedes a label. @returns Browser coordinates. */ (
+        range: SwPaM,
+        label = false,
+      ): WriterCursorSelection => {
+        const point = range.GetPoint();
+        const mark = range.HasMark() ? range.GetMark() : undefined;
+        return Object.freeze({
+          ...(mark === undefined
+            ? {}
+            : {
+                mark: {
+                  nodeIndex: mark.GetNodeIndex(),
+                  offset: mark.GetContentIndex(),
+                  paragraphId: this.GetNodeId(mark.GetNode() as SwTextNode),
+                },
+              }),
+          point: {
+            ...(label ? { inFrontOfLabel: true } : {}),
+            nodeIndex: point.GetNodeIndex(),
+            offset: point.GetContentIndex(),
+            paragraphId: this.GetNodeId(point.GetNode() as SwTextNode),
+          },
+        });
+      };
+    const additionalSelections: WriterCursorSelection[] = [];
+    if (!(cursor instanceof SwTableCursor))
+      for (let range = cursor.GetNext(); range !== cursor; range = range.GetNext())
+        if (range.HasMark()) additionalSelections.push(projectSelection(range));
     return Object.freeze({
       selectedTableBoxes: Object.freeze(
         cursor instanceof SwTableCursor
@@ -511,7 +522,8 @@ export class WriterViewProjection {
       ),
       activeParagraph: textNodes[nodes.indexOf(activeParagraph)] as WriterParagraphProjection,
       activeParagraphIndex,
-      cursorSelection: Object.freeze(cursorSelection),
+      cursorSelection: projectSelection(cursor, inFrontOfLabel),
+      additionalSelections: Object.freeze(additionalSelections),
       documentState: Object.freeze({ ...documentState }),
       lineNumberInfo: Object.freeze(document.GetLineNumberInfo().QueryValue()),
       modelRevision: document.GetDocumentStateManager().GetModelRevision(),

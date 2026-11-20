@@ -1,0 +1,29 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "browser-adaptation",
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sw/browser/presentation/WriterSearch.tsx",
+          "marker": "WriterSearch"
+        }
+      ]
+    },
+    "localPath": "apps/office/src/sw/browser/presentation/WriterSearch.tsx",
+    "localSymbols": [
+      "WriterSearch"
+    ],
+    "status": "local-only",
+    "rationale": "Browser controls for the supported findbar.xml and findreplacedialog.ui surfaces use the Writer search owner for all document operations.",
+    "responsibilities": [
+      "Browser controls for the supported findbar.xml and findreplacedialog.ui surfaces use the Writer search owner for all document operations.",
+      "Exposes the pinned CTL and CJK kashida and width controls in Other options. The toolbar passes its native transliteration subset."
+    ],
+    "stackDivergence": {
+      "kind": "browser-adaptation",
+      "rationale": "DOM controls and React provide the browser device implementation."
+    }
+  }
+}

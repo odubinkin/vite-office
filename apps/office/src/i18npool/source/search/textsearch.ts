@@ -1,4 +1,4 @@
-/** @fileoverview Native absolute/wildcard TextSearch backend: directional native loops, full folding, punctuation and source offsets. ICU regex and approximate algorithms remain unported. */
+/** @fileoverview Native absolute/wildcard TextSearch backend: directional native loops, full folding, punctuation and source offsets. ICU regular expressions remain unported. */
 import { OUString, type OUStringConstReference } from "../../../sal/inc/rtl/ustring";
 import { SearchOptions2 } from "../../../i18nutil/inc/searchopt";
 import { SearchAlgorithms } from "../../../offapi/com/sun/star/util/SearchAlgorithms";
@@ -10,6 +10,7 @@ import {
 import { TransliterationFlags } from "../../../i18nutil/inc/transliteration";
 import * as Algorithms from "../../../offapi/com/sun/star/util/SearchAlgorithms2";
 import {
+  LEV_RELAXED,
   NORM_WORD_ONLY,
   WILD_MATCH_SELECTION,
 } from "../../../offapi/com/sun/star/util/SearchFlags";
@@ -21,13 +22,21 @@ import { SearchResult } from "../../../offapi/com/sun/star/util/SearchResult";
 import { ALPHA, DIGIT, LETTER } from "../../../offapi/com/sun/star/i18n/KCharacterType";
 import { iterateCodePoints } from "../../../o3tl/inc/string_view";
 import { getCharacterType } from "../characterclassification/cclass_unicode";
-import { transliterateCaseFolding } from "../transliteration/transliteration_caseignore";
+import { supportedTransliteration, transliterate } from "../transliteration/transliterationImpl";
+
+import { WLevDistance } from "./levdis";
+import { BreakIterator } from "../../../offapi/com/sun/star/i18n/BreakIterator";
+import type { XBreakIteratorService } from "../../../offapi/com/sun/star/i18n/XBreakIterator";
+import { ANYWORD_IGNOREWHITESPACES } from "../../../offapi/com/sun/star/i18n/WordType";
+import { getProcessComponentContext } from "../../../comphelper/inc/processfactory";
+import type { Reference } from "../../../cppu/inc/com/sun/star/uno/Reference";
+import type { XComponentContext } from "../../../udkapi/com/sun/star/uno/XComponentContext";
 
 /** Native result default: no expressions and empty offset sequences. @returns Unsuccessful search result. */
 function notFound(): SearchResult {
   return new SearchResult();
 }
-/** Original setWildcardMatch updates the caller result with actual one-element sequences. @param result - Caller-owned result. @param start - Directional start. @param end - Directional end. @returns Nothing. */
+/** Original wildcard and approximate paths update the caller result with actual one-element sequences. @param result - Caller-owned result. @param start - Directional start. @param end - Directional end. @returns Nothing. */
 function setWildcardMatch(result: SearchResult, start: number, end: number): void {
   result.subRegExpressions = 1;
   result.startOffset.realloc(1);
@@ -84,16 +93,35 @@ function replacePunctuation(text: Uint16Array): Uint16Array {
     ) => (c >= 0x2018 && c <= 0x201b ? 39 : c >= 0x201c && c <= 0x201f ? 34 : c),
   );
 }
+const complexTransMask =
+  TransliterationFlags.ignoreBaFa_ja_JP |
+  TransliterationFlags.ignoreIterationMark_ja_JP |
+  TransliterationFlags.ignoreTiJi_ja_JP |
+  TransliterationFlags.ignoreHyuByu_ja_JP |
+  TransliterationFlags.ignoreSeZe_ja_JP |
+  TransliterationFlags.ignoreIandEfollowedByYa_ja_JP |
+  TransliterationFlags.ignoreKiKuFollowedBySa_ja_JP |
+  TransliterationFlags.ignoreProlongedSoundMark_ja_JP;
+
+/** Stores an independent native key and its directional caches for one search pass. */
+interface PreparedPattern {
+  units: Uint16Array;
+  jumpTable?: Map<number, number>;
+  forwardTable?: boolean;
+  reverse?: Uint16Array;
+}
+
 /** Native primary absolute/wildcard-search owner; realm-local Map storage replaces the native jump-table allocation. */
 export class TextSearch {
   private aSrchPara = new SearchOptions2();
-  private sSrchStr = new Uint16Array();
+  private primaryPattern: PreparedPattern = { units: new Uint16Array() };
+  private complexPattern: { flags: number; pattern: PreparedPattern } | undefined;
+  private pattern = this.primaryPattern;
+  private distance: WLevDistance | undefined;
+  private static wordBreak: Reference<XBreakIteratorService> | undefined;
   private bSearchApostrophe = false;
-  private pJumpTable: Map<number, number> | undefined;
-  private bIsForwardTab = true;
   private mcWildcardEscapeChar = 0;
   private mbWildcardAllowSubstring = true;
-  private maWildcardReversePattern = new Uint16Array();
 
   /** Initializes source options before the first search. @param options - Native option value. @returns Search owner. */
   public constructor(options = new SearchOptions2()) {
@@ -129,26 +157,61 @@ export class TextSearch {
   }
   /** Copies options and resets native prepared key/jump state. @param options - New native options. @returns Nothing. */
   public setOptions2(options: SearchOptions2 | SearchOptions2ConstReference): void {
-    if ([Algorithms.REGEXP, Algorithms.APPROXIMATE].includes(options.AlgorithmType2))
+    if (options.AlgorithmType2 === Algorithms.REGEXP)
       throw new Error("This TextSearch algorithm is not implemented.");
-    if ((options.transliterateFlags & ~TransliterationFlags.IGNORE_CASE) !== 0)
+    if ((options.transliterateFlags & ~supportedTransliteration) !== 0)
       throw new Error("This TextSearch transliteration is not implemented.");
     const para = new SearchOptions2().assign(options);
     const original = para.searchString.getStr().subarray(0, para.searchString.getLength());
     this.bSearchApostrophe = original.includes(39) || original.includes(34);
+    const simpleFlags = para.transliterateFlags & ~complexTransMask;
     let key =
-      para.transliterateFlags & TransliterationFlags.IGNORE_CASE
-        ? transliterateCaseFolding(para.searchString, 0, original.length, para.Locale).text
+      simpleFlags !== 0
+        ? transliterate(para.searchString, 0, original.length, simpleFlags, para.Locale, false).text
         : para.searchString;
     if (this.bSearchApostrophe && isReplacePunctuation(original))
       key = new OUString(
         replacePunctuation(key.getStr().subarray(0, key.getLength())),
         key.getLength(),
       );
-    this.sSrchStr = key.getStr().slice(0, key.getLength());
+    this.primaryPattern = { units: key.getStr().slice(0, key.getLength()) };
+    this.pattern = this.primaryPattern;
+    if ((para.transliterateFlags & complexTransMask) !== 0) {
+      const flags =
+        para.transliterateFlags &
+        (complexTransMask |
+          TransliterationFlags.IGNORE_KANA |
+          TransliterationFlags.FULLWIDTH_HALFWIDTH);
+      const complexKey = transliterate(
+        para.searchString,
+        0,
+        original.length,
+        flags,
+        para.Locale,
+        false,
+      ).text;
+      this.complexPattern = {
+        flags,
+        pattern: { units: complexKey.getStr().slice(0, complexKey.getLength()) },
+      };
+      complexKey.dispose();
+    } else if (this.complexPattern !== undefined) {
+      // setOptions2 in the pinned source resets the caches, retaining the loaded complex module and key.
+      this.complexPattern.pattern = { units: this.complexPattern.pattern.units };
+    }
+    this.distance = undefined;
+    if (para.AlgorithmType2 === Algorithms.APPROXIMATE) {
+      const terminated = new Uint16Array(this.primaryPattern.units.length + 1);
+      terminated.set(this.primaryPattern.units);
+      this.distance = new WLevDistance(
+        terminated,
+        para.changedChars,
+        para.insertedChars,
+        para.deletedChars,
+        (para.searchFlag & LEV_RELAXED) !== 0,
+      );
+    }
     this.aSrchPara = para;
-    this.pJumpTable = undefined;
-    this.maWildcardReversePattern = new Uint16Array();
     this.mcWildcardEscapeChar = para.WildcardEscapeCharacter >>> 0;
     this.mbWildcardAllowSubstring = (para.searchFlag & WILD_MATCH_SELECTION) === 0;
   }
@@ -177,20 +240,20 @@ export class TextSearch {
   }
   /** Builds the directional native bad-character table once per direction. @param forward - Requested table direction. @returns Nothing. */
   private MakeTable(forward: boolean): void {
-    if (this.pJumpTable !== undefined && this.bIsForwardTab === forward) return;
-    this.bIsForwardTab = forward;
-    this.pJumpTable = new Map();
-    const key = this.sSrchStr;
+    if (this.pattern.jumpTable !== undefined && this.pattern.forwardTable === forward) return;
+    this.pattern.forwardTable = forward;
+    this.pattern.jumpTable = new Map();
+    const key = this.pattern.units;
     if (forward) {
       for (let i = 0; i < key.length - 1; i++)
-        this.pJumpTable.set(key[i] as number, key.length - i - 1);
+        this.pattern.jumpTable.set(key[i] as number, key.length - i - 1);
     } else {
-      for (let i = key.length - 1; i > 0; i--) this.pJumpTable.set(key[i] as number, i);
+      for (let i = key.length - 1; i > 0; i--) this.pattern.jumpTable.set(key[i] as number, i);
     }
   }
   /** Native jump lookup defaults to the whole key length. @param unit - Inspected input unit. @returns Positive distance. */
   private GetDiff(unit: number): number {
-    return this.pJumpTable?.get(unit) ?? this.sSrchStr.length;
+    return this.pattern.jumpTable?.get(unit) ?? this.pattern.units.length;
   }
   /** Runs native punctuation/transliteration preparation and original offset recovery. @param text - Source text. @param start - Directional start. @param end - Directional end. @param forward - Direction. @returns Native result. */
   private search(
@@ -211,10 +274,11 @@ export class TextSearch {
       throw new RangeError("TextSearch bounds are outside the original string.");
     const original = text.getStr().subarray(0, text.getLength());
     const replace = this.bSearchApostrophe && isReplacePunctuation(original);
-    const folded = (this.aSrchPara.transliterateFlags & TransliterationFlags.IGNORE_CASE) !== 0;
-    const mapped = folded
-      ? transliterateCaseFolding(text, lower, upper - lower, this.aSrchPara.Locale)
-      : undefined;
+    const simpleFlags = this.aSrchPara.transliterateFlags & ~complexTransMask;
+    const mapped =
+      simpleFlags === 0
+        ? undefined
+        : transliterate(text, lower, upper - lower, simpleFlags, this.aSrchPara.Locale, true);
     let input: Uint16Array =
       mapped === undefined
         ? original.slice()
@@ -239,15 +303,108 @@ export class TextSearch {
           ? this.FindPos(offsets, upper)
           : input.length;
     const prepared = new OUString(input, input.length);
-    const wildcard = this.aSrchPara.AlgorithmType2 === Algorithms.WILDCARD;
-    const result = wildcard
-      ? forward
-        ? this.WildcardSrchFrwrd(prepared, lo, hi)
-        : this.WildcardSrchBkwrd(prepared, hi, lo)
-      : forward
-        ? this.NSrchFrwrd(prepared, lo, hi)
-        : this.NSrchBkwrd(prepared, hi, lo);
+    const result = this.SearchPrepared(prepared, lo, hi, forward);
+    prepared.dispose();
+    mapped?.text.dispose();
     if (offsets !== undefined) replaceTransliterationOffsets(text, offsets, result, forward);
+
+    const complex = this.complexPattern;
+    if (complex === undefined) return result;
+    // Native complex transliteration starts with the complete source string.
+    const second = transliterate(
+      text,
+      0,
+      text.getLength(),
+      complex.flags,
+      this.aSrchPara.Locale,
+      true,
+    );
+    const secondOffsets = second.offsets ?? [];
+    const secondLo = lower === 0 ? 0 : this.FindPos(secondOffsets, lower);
+    const secondHi =
+      upper === text.getLength() ? second.text.getLength() : this.FindPos(secondOffsets, upper);
+    this.pattern = complex.pattern;
+    let candidate: SearchResult;
+    try {
+      candidate = this.SearchPrepared(second.text, secondLo, secondHi, forward);
+    } finally {
+      this.pattern = this.primaryPattern;
+      second.text.dispose();
+    }
+    if (candidate.subRegExpressions === 0) return result;
+    const starts = asNonConstRange(candidate.startOffset);
+    const ends = asNonConstRange(candidate.endOffset);
+    for (let index = 0; index < candidate.startOffset.getLength(); index++) {
+      for (const offset of [starts.operatorIndex(index, 4), ends.operatorIndex(index, 4)]) {
+        if (offset[0] !== 0) {
+          const position: [number] = [secondOffsets[offset[0] - 1] as number];
+          iterateCodePoints(original, position, 1);
+          offset[0] = position[0];
+        }
+      }
+    }
+    if (result.subRegExpressions === 0) return candidate;
+    const primaryStart = asNonConstRange(result.startOffset).operatorIndex(0, 4)[0];
+    const primaryEnd = asNonConstRange(result.endOffset).operatorIndex(0, 4)[0];
+    const nextStart = starts.operatorIndex(0, 4)[0];
+    const nextEnd = ends.operatorIndex(0, 4)[0];
+    const closer = forward ? nextStart < primaryStart : nextStart > primaryStart;
+    const longer = forward ? nextEnd > primaryEnd : nextEnd < primaryEnd;
+    return closer || (nextStart === primaryStart && longer) ? candidate : result;
+  }
+  /** Runs the prepared native algorithm for the current pattern. @param text - Prepared input. @param lo - Lower bound. @param hi - Upper bound. @param forward - Direction. @returns Native directional result. */
+  private SearchPrepared(
+    text: OUStringConstReference,
+    lo: number,
+    hi: number,
+    forward: boolean,
+  ): SearchResult {
+    if (this.distance !== undefined) return this.ApproxSearch(text, lo, hi, forward, this.distance);
+    return this.aSrchPara.AlgorithmType2 === Algorithms.WILDCARD
+      ? forward
+        ? this.WildcardSrchFrwrd(text, lo, hi)
+        : this.WildcardSrchBkwrd(text, hi, lo)
+      : forward
+        ? this.NSrchFrwrd(text, lo, hi)
+        : this.NSrchBkwrd(text, hi, lo);
+  }
+  /** Searches native word candidates with the original weighted distance and directional bounds. @param text - Prepared input. @param lo - Lower bound. @param hi - Upper bound. @param forward - Search direction. @param distance - Calculator prepared from the primary key. @returns Directional result. */
+  private ApproxSearch(
+    text: OUStringConstReference,
+    lo: number,
+    hi: number,
+    forward: boolean,
+    distance: WLevDistance,
+  ): SearchResult {
+    TextSearch.wordBreak ??= BreakIterator.create(
+      getProcessComponentContext() as Reference<XComponentContext>,
+    );
+    const iterator = TextSearch.wordBreak.operatorStar();
+    const locale = this.aSrchPara.Locale;
+    const type = ANYWORD_IGNOREWHITESPACES;
+    const length = text.getLength();
+    const result = notFound();
+    let boundary = iterator.getWordBoundary(text, forward ? lo : hi, locale, type, true);
+    let end: number;
+    do {
+      if (forward ? boundary.startPos >= hi : boundary.endPos <= lo) break;
+      const start = Math.max(boundary.startPos, lo);
+      end = Math.min(boundary.endPos, hi);
+      if (
+        start < end &&
+        distance.WLD(text.getStr().subarray(start), end - start) <= distance.GetLimit()
+      ) {
+        setWildcardMatch(result, forward ? start : end, forward ? end : start);
+        break;
+      }
+      if (!forward && start === 0) break;
+      boundary = forward
+        ? iterator.nextWord(text, end - 1, locale, type)
+        : iterator.previousWord(text, start, locale, type);
+    } while (
+      boundary.startPos !== boundary.endPos ||
+      (boundary.endPos !== length && (!forward || boundary.endPos !== end))
+    );
     return result;
   }
   /** Native FindPosInSeq_Impl first offset not less than the source position. @param offsets - Output-to-source map. @param position - Source offset. @returns Output offset. */
@@ -261,7 +418,7 @@ export class TextSearch {
   }
   /** Native NSrchFrwrd retains bounded word checks and the exact Boyer-Moore skip order. @param text - Prepared text. @param start - Lower bound. @param end - Upper bound. @returns Forward result. */
   private NSrchFrwrd(text: OUStringConstReference, start: number, end: number): SearchResult {
-    const key = this.sSrchStr,
+    const key = this.pattern.units,
       input = text.getStr(),
       size = key.length;
     if (text.getLength() === 0 || size === 0 || size > text.getLength() || end < size)
@@ -295,7 +452,7 @@ export class TextSearch {
   }
   /** Native NSrchBkwrd retains its reversed endpoint and bounded word checks. @param text - Prepared text. @param start - Upper bound. @param end - Lower bound. @returns Backward result. */
   private NSrchBkwrd(text: OUStringConstReference, start: number, end: number): SearchResult {
-    const key = this.sSrchStr,
+    const key = this.pattern.units,
       input = text.getStr(),
       size = key.length;
     if (text.getLength() === 0 || size === 0 || size > text.getLength()) return notFound();
@@ -347,7 +504,7 @@ export class TextSearch {
     )
       return aRes;
 
-    const rPattern = this.sSrchStr;
+    const rPattern = this.pattern.units;
     const nPatternLen = rPattern.length;
 
     // Handle special cases empty pattern and/or string outside of the loop to
@@ -514,7 +671,7 @@ export class TextSearch {
     )
       return aRes;
 
-    const rPattern = this.sSrchStr;
+    const rPattern = this.pattern.units;
     let nPatternLen = rPattern.length;
 
     // Handle special cases empty pattern and/or string outside of the loop to
@@ -650,8 +807,8 @@ export class TextSearch {
   }
   /** Native backward pattern preparation moves each escape after its code point; a trailing escape is eliminated. The cache is reset only by setOptions2. @returns Reordered original UTF-16 units. */
   private GetWildcardReversePattern(): Uint16Array {
-    if (this.maWildcardReversePattern.length === 0) {
-      const rPattern = this.sSrchStr,
+    if (!this.pattern.reverse?.length) {
+      const rPattern = this.pattern.units,
         buffer = Array.from(rPattern),
         nIndex: [number] = [0];
       while (nIndex[0] < rPattern.length) {
@@ -669,8 +826,8 @@ export class TextSearch {
           } else buffer.splice(nOld, nIndex[0] - nOld);
         }
       }
-      this.maWildcardReversePattern = Uint16Array.from(buffer);
+      this.pattern.reverse = Uint16Array.from(buffer);
     }
-    return this.maWildcardReversePattern;
+    return this.pattern.reverse;
   }
 }

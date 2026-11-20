@@ -1,0 +1,37 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sw/source/core/crsr/findcoll.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "writer",
+    "subsystem": "text-search",
+    "capabilityIds": [
+      "CAP-0111"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/sw/source/core/crsr/findcoll.ts#FindFormat",
+        "sw/source/core/crsr/findcoll.cxx#FindFormat",
+        "apps/office/src/sw/browser/presentation/WriterSearch.test.tsx"
+      ],
+      "justification": "Paragraph-style find and replace uses the registered cursor ring, whole-paragraph ranges, paragraph collection identity, and grouped format undo for Replace All. Covers document model text.",
+      "knownViolations": [],
+      "localSymbols": [
+        "SwFindParaFormatColl",
+        "FindFormat"
+      ],
+      "sourceResponsibility": "divergent",
+      "upstreamFile": "sw/source/core/crsr/findcoll.cxx",
+      "upstreamSymbols": [
+        "SwFindParaFormatColl",
+        "FindFormat"
+      ]
+    }
+  }
+}

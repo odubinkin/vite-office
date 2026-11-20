@@ -1,0 +1,28 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "browser-adaptation",
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sw/browser/presentation/WriterSimilaritySearchDialog.tsx",
+          "marker": "WriterSimilaritySearchDialog"
+        }
+      ]
+    },
+    "localPath": "apps/office/src/sw/browser/presentation/WriterSimilaritySearchDialog.tsx",
+    "localSymbols": [
+      "WriterSimilaritySearchDialog"
+    ],
+    "status": "local-only",
+    "rationale": "Presents the native similarity search option fields from cui/ui/similaritysearchdialog.ui with a browser draft and OK/Cancel.",
+    "responsibilities": [
+      "Presents the native similarity search option fields from cui/ui/similaritysearchdialog.ui with a browser draft and OK/Cancel."
+    ],
+    "stackDivergence": {
+      "kind": "browser-adaptation",
+      "rationale": "Browser controls implement the pinned VCL option fields."
+    }
+  }
+}

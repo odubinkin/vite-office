@@ -609,6 +609,12 @@ describe("WriterMenuBar" /** Groups Writer menu and clipboard integration tests.
     );
     expect(screen.getByRole("menu", { name: "Edit menu" })).toHaveFocus();
     fireEvent.keyDown(screen.getByRole("menu", { name: "Edit menu" }), { key: "ArrowUp" });
+    const findAndReplace = screen.getByRole("menuitem", { name: "Find and Replace…" });
+    expect(findAndReplace).toHaveFocus();
+    fireEvent.keyDown(findAndReplace, { key: "ArrowUp" });
+    const find = screen.getByRole("menuitem", { name: "Find" });
+    expect(find).toHaveFocus();
+    fireEvent.keyDown(find, { key: "ArrowUp" });
     expect(screen.getByRole("menuitem", { name: "Select All" })).toHaveFocus();
     fireEvent.keyDown(screen.getByRole("menuitem", { name: "Select All" }), { key: "p" });
     expect(screen.getByRole("menuitem", { name: "Paste" })).toHaveFocus();

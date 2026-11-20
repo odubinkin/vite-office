@@ -49,6 +49,47 @@ export class BrowserWriterSelectionMapper {
     );
   }
 
+  /** Displays extra SwPaM ranges using the CSS Custom Highlight API. @param selections - Additional canonical ranges. @returns Cleanup for the registered ranges. */
+  public HighlightSelections(
+    selections: readonly WriterCursorSelection[],
+  ): (() => void) | undefined {
+    const registry = globalThis.CSS?.highlights;
+    if (registry === undefined || typeof Highlight === "undefined") return undefined;
+    const key = "writer-additional-selection";
+    const highlight = registry.get(key) ?? new Highlight();
+    const ranges: Range[] = [];
+    for (const { point, mark } of selections) {
+      if (mark === undefined) continue;
+      const start = this.resolveParagraph(point.paragraphId, point.offset);
+      const end = this.resolveParagraph(mark.paragraphId, mark.offset);
+      if (start === undefined || end === undefined) continue;
+      const pointDom = getWriterTextCaretPoint(
+        start,
+        point.offset - Number(start.dataset.writerFragmentStart ?? 0),
+      );
+      const markDom = getWriterTextCaretPoint(
+        end,
+        mark.offset - Number(end.dataset.writerFragmentStart ?? 0),
+      );
+      const range = this.environment.document.createRange();
+      range.setStart(pointDom.node, pointDom.offset);
+      range.setEnd(markDom.node, markDom.offset);
+      if (range.collapsed) {
+        range.setStart(markDom.node, markDom.offset);
+        range.setEnd(pointDom.node, pointDom.offset);
+      }
+      if (range.collapsed) continue;
+      ranges.push(range);
+      highlight.add(range);
+    }
+    if (ranges.length === 0) return undefined;
+    registry.set(key, highlight);
+    return /** Removes this editor's ranges only. @returns Nothing. */ () => {
+      for (const range of ranges) highlight.delete(range);
+      if (highlight.size === 0) registry.delete(key);
+    };
+  }
+
   /** Installs native point-and-mark endpoints owned by a browser geometry adapter. @param anchorNode - Fixed endpoint node. @param anchorOffset - Fixed endpoint offset. @param focusNode - Moving endpoint node. @param focusOffset - Moving endpoint offset. @returns Whether the browser exposes a selection surface. */
   public SetBaseAndExtent(
     anchorNode: Node,
