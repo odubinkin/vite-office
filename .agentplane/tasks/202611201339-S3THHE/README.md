@@ -1,10 +1,11 @@
 ---
 id: "202611201339-S3THHE"
 title: "Connect Calc manual outline grouping and detail commands"
-status: "DOING"
+result_summary: "Connect Calc manual outline groups and visibility commands"
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 10
+revision: 11
 origin:
   system: "manual"
 depends_on: []
@@ -44,11 +45,16 @@ quality_review:
     - "output/calc-S3THHE-typecheck-office-serial.log"
   findings:
     - "Marked Show Details retains the upstream bounding-span behavior documented as CALC-774 while keeping filtered rows hidden."
-commit: null
+commit:
+  hash: "ff18fb0740c5d4cf929c7bc1acc327f4187b8467"
+  message: "🧩 S3THHE code: connect Calc outline commands"
 comments:
   -
     author: "CODER"
     body: "Start: continue direct-mode task in current checkout."
+  -
+    author: "CODER"
+    body: "Verified: Manual outline commands follow existing outline geometry and history. All related tests, TypeScript checks and source ownership checks passed."
 events:
   -
     type: "status"
@@ -63,8 +69,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Five outline-focused regressions passed on the final implementation, including the native fixture, and the broader worksheet runs passed 15 tests. TypeScript, Calc resources, provenance and static checks passed."
+  -
+    type: "status"
+    at: "2026-11-20T14:12:50.138Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: Manual outline commands follow existing outline geometry and history. All related tests, TypeScript checks and source ownership checks passed."
 doc_version: 3
-doc_updated_at: "2026-11-20T14:12:33.183Z"
+doc_updated_at: "2026-11-20T14:12:50.139Z"
 doc_updated_by: "CODER"
 description: "Expose native manual Group, Ungroup, Clear Outline, Hide Detail and Show Detail over the current outline tree and segmented row/column geometry. Preserve the source grouping dialog, command state, history and file persistence."
 sections:
