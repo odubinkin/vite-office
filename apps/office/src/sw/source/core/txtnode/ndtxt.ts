@@ -701,7 +701,6 @@ export class SwTextNode extends SwContentNode {
     });
     return { text, hints };
   }
-
   /** Native capacity reserves two signed32 positions beyond the final text character. @returns Remaining native text units. */
   public GetSpaceLeft(): number {
     return 0x7ffffffd - this.mText.length;
@@ -717,8 +716,9 @@ export class SwTextNode extends SwContentNode {
     const inserted = rStr.slice(0, Math.max(0, this.GetSpaceLeft() + nDelLen));
     if (inserted.length === 0 && nDelLen === 0) return;
     const hints = this.pSwpHints;
-    if (hints?.HasFlyContent(start, start + nDelLen))
-      throw new Error("Writer dummy-character replacement is not implemented.");
+    for (const hint of hints?.entries() ?? [])
+      if (hint.HasDummyChar() && hint.GetStart() >= start && hint.GetStart() < start + nDelLen)
+        throw new Error("Writer dummy-character replacement is not implemented.");
     const oldIgnore = this.IsIgnoreDontExpand();
     this.SetIgnoreDontExpand(true);
     try {
