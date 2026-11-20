@@ -18,6 +18,13 @@ import {
 } from "../../../browser/filter/xml/calc-document-codec";
 import { ScXMLImport } from "../xml/xmlimprt";
 import { ScDocument } from "../../../inc/document";
+import { FormulaGrammar } from "../../../../formula/inc/grammar";
+import { SfxStyleFamily } from "../../../../svl/inc/style-values";
+import { unicode } from "../../../../i18nlangtag/source/isolang/isolang.tables";
+import type { SvxBrushItem } from "../../../../editeng/inc/brushitem";
+import { ATTR_BACKGROUND } from "../../../inc/scitems";
+import { ScCondFormatEntry, ScConditionMode } from "../../../inc/conditio";
+import { XclXmlUtils } from "../excel/xestream";
 import { ScAddress } from "../../../inc/address";
 import type { SvxPageItem, SvxSetItem } from "../../../../svx/inc/pageitem";
 import type { SvxSizeItem } from "../../../../editeng/inc/sizeitem";
@@ -530,6 +537,49 @@ it("preserves fixed ODF date and time snapshots and filename formats", /** Reads
   }
 });
 
+/** Checks the three original conditions from CondFormatTest::testTdf167019. @param document - Native workbook. @returns Nothing. */
+function expectOriginalConditionalFormats(document: ScDocument): void {
+  const table = document.FetchTable(0);
+  assert(table);
+  const formats = [...table.GetCondFormList()];
+  expect(formats).toHaveLength(3);
+  const expected = [
+    ["D4 G4 J4 M4 G6:G10 J6:J10 M6:M10 D6:D10", "100", "152"],
+    ["E4 H4 K4 N4 E6:E10 H6:H10 K6:K10 N6:N10", "54", "102"],
+    ["F4 I4 L4 O4 F6 I6 L6 O6", "32", "100"],
+  ] as const;
+  for (const [index, format] of formats.entries()) {
+    const values = expected[index];
+    assert(values);
+    const [range, first, second] = values;
+    expect(
+      new TextDecoder()
+        .decode(XclXmlUtils.ToOString(document, format.GetRange()))
+        .split(" ")
+        .sort(),
+    ).toEqual(range.split(" ").sort());
+    expect(format.size()).toBe(1);
+    const entry = format.GetEntry(0);
+    assert(entry instanceof ScCondFormatEntry);
+    expect(entry.GetOperation()).toBe(ScConditionMode.NotBetween);
+    expect(entry.GetExpression(entry.GetSrcPos(), 0, FormulaGrammar.Grammar.GRAM_OOXML)).toBe(
+      first,
+    );
+    expect(entry.GetExpression(entry.GetSrcPos(), 1, FormulaGrammar.Grammar.GRAM_OOXML)).toBe(
+      second,
+    );
+    const name = unicode(entry.GetStyleName());
+    try {
+      const items = document.GetStyleSheetPool()?.Find(name, SfxStyleFamily.Para)?.GetItemSet();
+      const background = items?.GetItemIfSet(ATTR_BACKGROUND, false) as SvxBrushItem | undefined;
+      expect(background?.GetColor().toUInt32()).toBe(0xcc0000);
+      expect(background?.GetColor().GetAlpha()).toBe(255);
+    } finally {
+      name.dispose();
+    }
+  }
+}
+
 it("retains the native date and filename footer from the original tdf167019 workbook", /** Opens the unchanged upstream workbook and checks the exported footer and formulas. @returns Completion. */ async () => {
   const document = await ExcelFilter.importDocument(fixture("tdf167019"));
   try {
@@ -537,10 +587,15 @@ it("retains the native date and filename footer from the original tdf167019 work
     try {
       const restored = await readOdsDocument(await writeOdsDocument(worker));
       try {
-        for (const candidate of [document, restored]) {
+        for (const candidate of [document, worker, restored]) {
+          expectOriginalConditionalFormats(candidate);
           expect(candidate.GetValue(new ScAddress(3, 3))).toBe(117);
           expect(candidate.GetValue(new ScAddress(3, 4))).toBe(123.25);
           expect(candidate.GetValue(new ScAddress(3, 5))).toBe(127);
+          expect(candidate.GetCondResult(new ScAddress(3, 3))).toBeUndefined();
+          const applied = candidate.GetCondResult(new ScAddress(5, 3));
+          const fill = applied?.GetItemIfSet(ATTR_BACKGROUND, false) as SvxBrushItem | undefined;
+          expect(fill?.GetColor().toUInt32()).toBe(0xcc0000);
           const archive = await DocumentArchive.open(await exportXlsx(candidate));
           const xml = await archive.readTextEntry(worksheet);
           expect(xml).toMatch(
@@ -549,6 +604,13 @@ it("retains the native date and filename footer from the original tdf167019 work
           expect(xml).toContain("_xlfn.MINIFS(C7:C10,C7:C10,&quot;&gt;0&quot;)");
           expect(xml).toContain("AVERAGEIF(C7:C10,&quot;&gt;0&quot;)");
           expect(xml).toContain("_xlfn.MAXIFS(C7:C10,C7:C10,&quot;&gt;0&quot;)");
+          expect(xml.match(/<cfRule [^>]*operator="notBetween"/gu)).toHaveLength(3);
+          const reopened = await ExcelFilter.importDocument(await exportXlsx(candidate));
+          try {
+            expectOriginalConditionalFormats(reopened);
+          } finally {
+            reopened.Dispose();
+          }
         }
       } finally {
         restored.Dispose();
@@ -589,6 +651,124 @@ it("saves the original tdf58243 XLSX with its invalid named reference", /** Port
       }
     } finally {
       worker.Dispose();
+    }
+  } finally {
+    document.Dispose();
+  }
+});
+
+/** Replaces conditional records independently of the source workbook's cells. @param rules - Sheet XML. @param dxfs - Optional differential style XML. @returns Workbook bytes. */
+async function withConditionalRules(rules: string, dxfs?: string): Promise<Uint8Array> {
+  const source = await DocumentArchive.open(fixture("tdf167019"));
+  const zip = new DocumentArchiveWriter();
+  const encoder = new TextEncoder();
+  for (const part of source.getEntryNames()) {
+    const bytes =
+      part === worksheet
+        ? encoder.encode(
+            (await source.readTextEntry(part))
+              .replace(/<conditionalFormatting\b[^>]*>[\s\S]*?<\/conditionalFormatting>/gu, "")
+              .replace(/<pageMargins\b/u, rules + "<pageMargins"),
+          )
+        : dxfs !== undefined && part === "xl/styles.xml"
+          ? encoder.encode(
+              (await source.readTextEntry(part)).replace(/<dxfs\b[^>]*>[\s\S]*?<\/dxfs>/u, dxfs),
+            )
+          : await source.readEntry(part);
+    zip.putNextEntry(part, bytes);
+  }
+  return zip.finish();
+}
+
+it("evaluates relative formula conditions in priority order after ODS storage", /** Opens independent worksheet rules then evaluates and reexports after storage. @returns Completion. */ async () => {
+  const rules = `<conditionalFormatting sqref="B20:B21">
+    <cfRule type="cellIs" operator="between" priority="4" dxfId="1"><formula>20</formula><formula>10</formula></cfRule>
+    <cfRule type="expression" priority="2" dxfId="2"><formula>$A20&gt;10</formula></cfRule>
+  </conditionalFormatting>`;
+  const document = await ExcelFilter.importDocument(await withConditionalRules(rules));
+  try {
+    document.SetValue(new ScAddress(0, 19), 15);
+    document.SetValue(new ScAddress(1, 19), 15);
+    document.SetValue(new ScAddress(0, 20), 5);
+    document.SetValue(new ScAddress(1, 20), 10);
+    const restored = await readOdsDocument(await writeOdsDocument(document));
+    try {
+      for (const candidate of [document, restored]) {
+        for (const [row, style] of [
+          [19, "ConditionalStyle_3"],
+          [20, "ConditionalStyle_2"],
+        ] as const) {
+          const name = unicode(style);
+          try {
+            const items = candidate
+              .GetStyleSheetPool()
+              ?.Find(name, SfxStyleFamily.Para)
+              ?.GetItemSet();
+            assert(items);
+            expect(candidate.GetCondResult(new ScAddress(1, row))).toBe(items);
+          } finally {
+            name.dispose();
+          }
+        }
+      }
+
+      const xlsx = await DocumentArchive.open(await exportXlsx(restored));
+      const xml = await xlsx.readTextEntry(worksheet);
+      expect(xml).toMatch(
+        /type="expression" priority="2" dxfId="0"><formula>\$A20&gt;10<\/formula>/u,
+      );
+      expect(xml).toMatch(/type="cellIs" priority="3" operator="between" dxfId="1"/u);
+    } finally {
+      restored.Dispose();
+    }
+  } finally {
+    document.Dispose();
+  }
+});
+
+it("keeps differential fill and font properties sparse across both XML formats", /** Compares native conditional style ownership and original XML properties. @returns Completion. */ async () => {
+  const dxfs = `<dxfs count="2">
+    <dxf><fill><patternFill patternType="solid"><fgColor rgb="FF123456"/></patternFill></fill></dxf>
+    <dxf><font><i val="0"/><strike/><outline/><shadow/><u val="double"/></font></dxf>
+  </dxfs>`;
+  const rules = `<conditionalFormatting sqref="A20:A22">
+    <cfRule type="cellIs" operator="equal" priority="6" dxfId="1"><formula>10</formula></cfRule>
+    <cfRule type="cellIs" operator="equal" priority="6" dxfId="0"><formula>10</formula></cfRule>
+    <cfRule type="cellIs" operator="greaterThan" priority="7" dxfId="1"><formula>10</formula></cfRule>
+    <cfRule type="cellIs" operator="equal" priority="0" dxfId="0"><formula>0</formula></cfRule>
+    <cfRule type="cellIs" operator="between" priority="8"><formula>5</formula></cfRule>
+  </conditionalFormatting>
+  <conditionalFormatting sqref="B20">
+    <cfRule type="cellIs" operator="equal" priority="9" dxfId="1"><formula>20</formula></cfRule>
+  </conditionalFormatting>`;
+  const document = await ExcelFilter.importDocument(await withConditionalRules(rules, dxfs));
+  try {
+    document.SetValue(new ScAddress(0, 19), 10);
+    document.SetValue(new ScAddress(0, 20), 20);
+    document.SetValue(new ScAddress(1, 19), 20);
+    const restored = await readOdsDocument(await writeOdsDocument(document));
+    try {
+      for (const candidate of [document, restored]) {
+        const fill = candidate.GetCondResult(new ScAddress(0, 19));
+        const font = candidate.GetCondResult(new ScAddress(0, 20));
+        assert(fill && font);
+        expect(fill.Count()).toBe(1);
+        expect(
+          (fill.GetItemIfSet(ATTR_BACKGROUND, false) as SvxBrushItem).GetColor().toUInt32(),
+        ).toBe(0x123456);
+        expect(font.GetItemIfSet(ATTR_BACKGROUND, false)).toBeUndefined();
+        expect(candidate.GetCondResult(new ScAddress(1, 19))).toBe(font);
+        expect(candidate.GetCondResult(new ScAddress(0, 21))).toBeUndefined();
+      }
+      const archive = await DocumentArchive.open(await exportXlsx(restored));
+      const styles = await archive.readTextEntry("xl/styles.xml");
+      expect(styles).toContain('<dxfs count="2">');
+      expect(styles).toContain('<dxf><fill><patternFill><bgColor rgb="FF123456"/>');
+      expect(styles).toContain(
+        '<i val="false"/><strike val="true"/><outline val="true"/><shadow val="true"/><u val="double"/>',
+      );
+    } finally {
+      restored.Dispose();
     }
   } finally {
     document.Dispose();

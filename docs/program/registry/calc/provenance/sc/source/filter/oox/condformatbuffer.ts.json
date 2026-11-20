@@ -1,0 +1,46 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/sc/source/filter/oox/condformatbuffer.ts",
+    "status": "mapped",
+    "upstreamPath": "sc/source/filter/oox/condformatbuffer.cxx",
+    "localSymbols": [
+      "CondFormatBuffer",
+      "CondFormatRule"
+    ],
+    "upstreamSymbols": [
+      "CondFormatBuffer::finalizeImport",
+      "CondFormatRule::finalizeImport"
+    ],
+    "preservedResponsibilities": [
+      "Imports worksheet ranges and original numeric comparison and direct formula rule families in priority order."
+    ],
+    "omittedResponsibilities": [
+      "Extended rules, content deduplication and advanced condition types remain outside the represented slice."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sc/source/filter/oox/condformatbuffer.ts",
+          "marker": "CondFormatBuffer"
+        },
+        {
+          "path": "apps/office/src/sc/source/filter/oox/excelfilter.page-settings.test.ts",
+          "marker": "testTdf167019"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "sc/source/filter/oox/condformatbuffer.cxx",
+          "marker": "CondFormatBuffer::finalizeImport"
+        },
+        {
+          "path": "sc/source/filter/oox/condformatbuffer.cxx",
+          "marker": "CondFormatRule::finalizeImport"
+        }
+      ]
+    }
+  }
+}

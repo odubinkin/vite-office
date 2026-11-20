@@ -1,0 +1,51 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/sc/source/filter/xml/xmlcondformat.ts",
+    "status": "mapped",
+    "upstreamPath": "sc/source/filter/xml/xmlcondformat.cxx",
+    "localSymbols": [
+      "ScXMLConditionalFormatsContext",
+      "ScXMLConditionalFormatContext",
+      "ExportConditionalFormat"
+    ],
+    "upstreamSymbols": [
+      "ScXMLConditionalFormatsContext",
+      "ScXMLConditionalFormatContext"
+    ],
+    "preservedResponsibilities": [
+      "Loads and writes original Calc extension conditional ranges, expressions and named style bindings in ODF."
+    ],
+    "omittedResponsibilities": [
+      "Legacy table style maps and additional condition families remain unported."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sc/source/filter/xml/xmlcondformat.ts",
+          "marker": "ScXMLConditionalFormatsContext"
+        },
+        {
+          "path": "apps/office/src/sc/source/filter/oox/excelfilter.page-settings.test.ts",
+          "marker": "testTdf167019"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "sc/source/filter/xml/xmlcondformat.cxx",
+          "marker": "ScXMLConditionalFormatsContext"
+        },
+        {
+          "path": "sc/source/filter/xml/xmlcondformat.cxx",
+          "marker": "ScXMLConditionalFormatContext"
+        },
+        {
+          "path": "sc/source/filter/xml/xmlexprt.cxx",
+          "marker": "ScXMLExport::ExportConditionalFormat"
+        }
+      ]
+    }
+  }
+}

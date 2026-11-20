@@ -1,0 +1,37 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sc/source/core/data/conditio.entry.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "calc",
+    "subsystem": "internal-clipboard",
+    "capabilityIds": [
+      "CAP-df5573ca-0907-47d8-a385-6cd7af847f1d"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/sc/source/core/data/conditio.entry.ts",
+        "sc/source/core/data/conditio.cxx",
+        "apps/office/src/sc/source/filter/oox/excelfilter.page-settings.test.ts"
+      ],
+      "justification": "Owns source-relative condition formulas, the represented comparisons, and named cell style binding. Additional condition families, full shift/move token updates and native listener caches remain unported.",
+      "knownViolations": [],
+      "localSymbols": [
+        "ScConditionEntry",
+        "ScCondFormatEntry"
+      ],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": "sc/source/core/data/conditio.cxx",
+      "upstreamSymbols": [
+        "ScConditionEntry::IsCellValid",
+        "ScConditionEntry::GetExpression"
+      ]
+    }
+  }
+}

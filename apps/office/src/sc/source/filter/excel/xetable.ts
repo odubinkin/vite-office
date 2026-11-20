@@ -22,6 +22,7 @@ import { getMaxDigitWidth, type XlsxReferenceDevice } from "../oox/unitconverter
 import { XclExpXmlStream, XclXmlUtils } from "./xestream";
 import { XclExpSheetProtection, XclExpXmlSheetPr } from "./excrecds";
 import { XclExpMergedcells, XclExpSst } from "./xecontent";
+import { SaveXmlConditionalFormats } from "./xecontent.conditional";
 import { CreateString } from "./xehelper";
 import { SaveXmlPageBreaks, XclExpPageSettings } from "./xepage";
 import { SaveXmlNames } from "./xename";
@@ -444,6 +445,7 @@ function SaveXmlSheet(
   const protection = document.GetTabProtection(tab);
   if (protection?.isProtected()) new XclExpSheetProtection(document, protection).SaveXml(stream);
   new XclExpMergedcells(document, tab).SaveXml(stream);
+  SaveXmlConditionalFormats(serializer, document, table, styles.dxfs);
   page.SaveXml(stream);
   SaveXmlPageBreaks(stream, table);
   serializer.endElement(token("worksheet"));

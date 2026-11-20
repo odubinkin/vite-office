@@ -9,12 +9,14 @@
     "localSymbols": [
       "SetOptimalHeightsToRows",
       "SetStreamValid",
-      "GetDataArea"
+      "GetDataArea",
+      "AddCondFormat"
     ],
     "upstreamSymbols": [
       "SetOptimalHeightsToRows",
       "ScTable::SetStreamValid",
-      "ScTable::GetDataArea"
+      "ScTable::GetDataArea",
+      "ScTable::AddCondFormat"
     ],
     "preservedResponsibilities": [
       "TaskGKVVR7 connects source standard automatic row-height arithmetic and genuine compressed geometry/flags to current FontHeight UI and attribute Undo/Redo. Original contiguous pool defaults extend through ATTR_MARGIN143. Standard uniform-script unwrapped/unrotated rows use native 256-twip startup minimum,23-twip correction,margin/emphasis and pixel-change conditions. Selected sheets retain one original shared context. React uses actual row segments and bounded physical scrolling; ODS row styles apply to real sheet storage. Device-based initialization/script scanning,rich/wrapped/rotated/merged layout,drawing/hidden rows and standalone height dialogs remain unported. Nonstandard represented attribute profiles decline adjustment;unrepresented foreign layout properties,mixed-script text and device layout remain unverified. Writer primary saving/no-recovery/visible-content policy is retained; broad parity remains unverified.",
@@ -22,7 +24,8 @@
       "Native table1 UpdateReference now forwards to the real conditional-format list after column traversal;cache values are reset even for nonintersecting copied cells. Original list UpdateReference prunes empty ranges only in URM_INSDEL. Broader sheet insert/delete/move token/table consumers remain unported and are not replaced by a SetTabNo shortcut.",
       "Task76 native UndoToColumn/UndoToTable restore the edited payload,formula-only cells outside its rows/columns,whole conditional-format ownership,and full-axis raw geometry/manual breaks with actual null geometry checks. Marked copying retains the original null-mark-data asymmetry (CALC-265). Real table5 page/manual sets,ordered set value/move binding,stream-validity state/document locking and width-change pagination invalidation are represented. Named-expression maps,pagination/device calculation,full XML streaming and native document-level Undo/paste/history orchestration remain unported;no fake owner or alternate workbook is introduced.",
       "AQF9AG relocates the existing connected-area algorithm into its original table1 source responsibility with unchanged bounds, expansion and shrinking; the actual ScTable owner forwards to this fragment.",
-      "Changes the sheet tab color by value and invalidates the stream only when the color changes."
+      "Changes the sheet tab color by value and invalidates the stream only when the color changes.",
+      "Allocates a conditional format key from the native list maximum and transfers ownership."
     ],
     "omittedResponsibilities": [
       "Only the consumed responsibilities are represented; full original constructors, UNO/property-map graph, VCL/device/layout and native dialogs remain unverified."
@@ -66,6 +69,10 @@
         {
           "path": "vendor/libreoffice-reference/sc/source/core/data/table1.cxx",
           "marker": "ScTable::GetDataArea"
+        },
+        {
+          "path": "sc/source/core/data/table1.cxx",
+          "marker": "ScTable::AddCondFormat"
         }
       ]
     }

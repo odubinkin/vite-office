@@ -1,0 +1,51 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/sc/source/filter/oox/stylesbuffer.dxf.ts",
+    "status": "mapped",
+    "upstreamPath": "sc/source/filter/oox/stylesbuffer.cxx",
+    "localSymbols": [
+      "Dxf",
+      "CreateStyle"
+    ],
+    "upstreamSymbols": [
+      "Dxf::fillToItemSet",
+      "StylesBuffer::createDxfStyle"
+    ],
+    "preservedResponsibilities": [
+      "Materializes sparse native font and fill items under the original ConditionalStyle names."
+    ],
+    "omittedResponsibilities": [
+      "Differential borders, alignment, protection and number formats remain unported."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sc/source/filter/oox/stylesbuffer.dxf.ts",
+          "marker": "Dxf"
+        },
+        {
+          "path": "apps/office/src/sc/source/filter/oox/excelfilter.page-settings.test.ts",
+          "marker": "testTdf167019"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "sc/source/filter/oox/stylesbuffer.cxx",
+          "marker": "Dxf::fillToItemSet"
+        },
+        {
+          "path": "sc/source/filter/oox/stylesbuffer.cxx",
+          "marker": "StylesBuffer::createDxfStyle"
+        }
+      ]
+    },
+    "filenameDivergence": {
+      "localPath": "apps/office/src/sc/source/filter/oox/stylesbuffer.dxf.ts",
+      "stackNecessity": "responsibility-split",
+      "rationale": "Keeps the represented methods in a module adjacent to the original owner's other TypeScript responsibilities."
+    }
+  }
+}

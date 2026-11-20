@@ -1,5 +1,6 @@
 /** @fileoverview Native five-field three-script cell fonts survive the actual shared font pool and ODS package path. */
 import type { ScDocumentPool } from "../../core/data/docpool";
+import { SfxStyleFamily } from "../../../../svl/inc/style-values";
 import { expect, it } from "vitest";
 import { ScDocument } from "../../../inc/document";
 import { ScPatternAttr } from "../../../inc/patattr";
@@ -141,13 +142,13 @@ it("resolves an independently authored styles-stream declaration referenced by c
         diagnostics.push(item.name);
       },
   });
-  expect(
-    diagnostics.filter(
-      /** Selects the diagnostic for the unsupported named cell style. @param name - Diagnostic name. @returns Whether named styles are diagnosed. */ (
-        name,
-      ) => name === "named and master styles are not preserved",
-    ),
-  ).toHaveLength(1);
+  expect(diagnostics).not.toContain("named and master styles are not preserved");
+  const named = unicode("Named");
+  try {
+    expect(loaded.GetStyleSheetPool()?.Find(named, SfxStyleFamily.Para)).toBeTruthy();
+  } finally {
+    named.dispose();
+  }
   expect(
     font(loaded, 100).equals(
       new SvxFontItem(

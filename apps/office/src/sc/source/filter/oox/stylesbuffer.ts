@@ -40,6 +40,7 @@ import { NumberFormatsBuffer } from "./numberformatsbuffer";
 import { Font as VclFont } from "../../../../vcl/source/font/font";
 import { convertTwipToMm100 } from "../../../../tools/inc/UnitConversion";
 import { ExcelGraphicHelper, type XlsColor } from "./stylesbuffer.color";
+import type { Dxf } from "./stylesbuffer.dxf";
 
 const editFontWhich = new Map<number, readonly number[]>([
   [Which.ATTR_FONT, [EE.EE_CHAR_FONTINFO, EE.EE_CHAR_FONTINFO_CJK, EE.EE_CHAR_FONTINFO_CTL]],
@@ -378,6 +379,7 @@ export class StylesBuffer {
   units = new UnitConverter();
   readonly numberFormats = new NumberFormatsBuffer();
   readonly fonts: Font[] = [];
+  readonly dxfs: Dxf[] = [];
   readonly fills: { color?: XlsColor }[] = [];
   readonly borders: Border[] = [];
   readonly styleXfs: Xf[] = [];

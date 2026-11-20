@@ -1,0 +1,37 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sc/source/filter/oox/stylesbuffer.dxf.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "calc",
+    "subsystem": "xlsx-file-filter",
+    "capabilityIds": [
+      "CAP-1d1d48a3-5a10-4373-876c-fa5f18a62db9"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/sc/source/filter/oox/stylesbuffer.dxf.ts",
+        "sc/source/filter/oox/stylesbuffer.cxx",
+        "apps/office/src/sc/source/filter/oox/excelfilter.page-settings.test.ts"
+      ],
+      "justification": "Materializes sparse native font and fill items under the original ConditionalStyle names. Differential borders, alignment, protection and number formats remain unported.",
+      "knownViolations": [],
+      "localSymbols": [
+        "Dxf",
+        "CreateStyle"
+      ],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": "sc/source/filter/oox/stylesbuffer.cxx",
+      "upstreamSymbols": [
+        "Dxf::fillToItemSet",
+        "StylesBuffer::createDxfStyle"
+      ]
+    }
+  }
+}

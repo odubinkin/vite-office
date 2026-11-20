@@ -1,0 +1,50 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/sc/source/filter/excel/xecontent.conditional.ts",
+    "status": "mapped",
+    "upstreamPath": "sc/source/filter/excel/xecontent.cxx",
+    "localSymbols": [
+      "SaveXmlConditionalFormats"
+    ],
+    "upstreamSymbols": [
+      "XclExpCondfmt::SaveXml",
+      "XclExpCondFormatBuffer::SaveXml"
+    ],
+    "preservedResponsibilities": [
+      "Serializes native conditional-format ranges and the represented condition formulas and priorities into the worksheet."
+    ],
+    "omittedResponsibilities": [
+      "Date, color-scale, data-bar, icon and extended rules are not serialized by this owner."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sc/source/filter/excel/xecontent.conditional.ts",
+          "marker": "SaveXmlConditionalFormats"
+        },
+        {
+          "path": "apps/office/src/sc/source/filter/oox/excelfilter.page-settings.test.ts",
+          "marker": "testTdf167019"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "sc/source/filter/excel/xecontent.cxx",
+          "marker": "XclExpCondfmt::SaveXml"
+        },
+        {
+          "path": "sc/source/filter/excel/xecontent.cxx",
+          "marker": "XclExpCondFormatBuffer::SaveXml"
+        }
+      ]
+    },
+    "filenameDivergence": {
+      "localPath": "apps/office/src/sc/source/filter/excel/xecontent.conditional.ts",
+      "stackNecessity": "responsibility-split",
+      "rationale": "Keeps the represented methods in a module adjacent to the original owner's other TypeScript responsibilities."
+    }
+  }
+}

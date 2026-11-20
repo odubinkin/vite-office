@@ -11,6 +11,7 @@ import { Border } from "./stylesbuffer.border";
 import { XlsColor } from "./stylesbuffer.color";
 import { attribute, isSpreadsheetTag } from "./workbookfragment";
 import { readProtection } from "./stylesbuffer.protection";
+import { Dxf } from "./stylesbuffer.dxf";
 
 const children: Readonly<Record<string, readonly string[]>> = {
   "": ["styleSheet"],
@@ -23,7 +24,9 @@ const children: Readonly<Record<string, readonly string[]>> = {
     "cellXfs",
     "cellStyles",
     "colors",
+    "dxfs",
   ],
+  dxfs: ["dxf"],
   colors: ["indexedColors"],
   indexedColors: ["rgbColor"],
   cellStyles: ["cellStyle"],
@@ -88,6 +91,11 @@ export class StylesFragment extends FragmentHandler {
   override createFastChildContext(tag: SaxesTagNS): FragmentContext | null {
     if (!isSpreadsheetTag(tag) || !children[this.stack.at(-1) ?? ""]?.includes(tag.local))
       return null;
+    if (tag.local === "dxf") {
+      const dxf = new Dxf(this.styles.graphicHelper);
+      this.styles.dxfs.push(dxf);
+      return dxf;
+    }
     if (tag.local !== "font") return this;
     const font = new Font(this.styles.graphicHelper);
     this.styles.fonts.push(font);

@@ -51,6 +51,7 @@ import * as documen2 from "./documen2";
 import * as documentFrame from "./document.frame";
 import * as documen8 from "./documen8";
 import * as documen3 from "./documen3";
+import * as documen4 from "./documen4";
 import { GetBreakIterator, GetStringScriptType } from "./documen6";
 import * as documen7 from "./documen7";
 import * as documen9 from "./documen9";
@@ -58,6 +59,7 @@ import * as document10 from "./document10";
 import { ScRangeName } from "../tool/rangenam";
 /** Explicit initial document subset;all supported cells live in its actual sheet/column chain. */
 export class ScDocument {
+  GetCondResult = documen4.GetCondResult;
   IsTabProtected = documen3.IsTabProtected;
   GetTabBgColor = documen3.GetTabBgColor;
   SetTabBgColor = documen3.SetTabBgColor;
@@ -90,6 +92,7 @@ export class ScDocument {
     documen7.InitUndoSelected.apply(this, args);
   }
   RemoveCondFormatData = documen7.RemoveCondFormatData;
+  AddCondFormat = documen4.AddCondFormat;
   AddCondFormatData = documen7.AddCondFormatData;
   /** Original incremental Undo sheet allocation. @param args - Native sheet range and allocation defaults. @returns Nothing. */
   AddUndoTab(...args: Parameters<typeof documen7.AddUndoTab>): void {
@@ -883,11 +886,9 @@ export class ScDocument {
   ValidColRow(col: number, row: number): boolean {
     return ValidCol(col, MAXCOL) && this.ValidRow(row);
   }
-  GetTableCount = documentVisibility.GetTableCount;
-  /** Returns the source document's data-only sheet extent with zero outputs for a missing sheet. @param tab - Sheet. @param endCol - Last occupied column. @param endRow - Last occupied row. @returns Whether occupied. */
-  GetCellArea(tab: number, endCol: [number], endRow: [number]): boolean {
-    return document10.GetCellArea.call(this, tab, endCol, endRow);
-  }
+  /** Returns the extent of the native sheet storage. @returns Sheet count. */
+  GetTableCount = (): number => this.maTabs.length;
+  GetCellArea = document10.GetCellArea;
   FetchTable = documentVisibility.FetchTable;
   IsVisible = documentVisibility.IsVisible;
   SetVisible = documentVisibility.SetVisible;

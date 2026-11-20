@@ -7194,3 +7194,29 @@ comparisons in the scalar worksheet-range path.
 
 - [Original conditional aggregate wrappers](../../vendor/libreoffice-reference/sc/source/core/tool/interpr1.cxx)
 - [Conditional aggregate regression](../../apps/office/src/sc/source/core/tool/interpr1.conditional.test.ts)
+
+### CALC-760 — XLSX comparison rules lose stop-if-true during realization
+
+The native OOXML rule model reads `stopIfTrue` with a default of false and
+compares it during deduplication. The ordinary comparison/formula realization
+constructs a Calc condition entry without that flag. The cell style query
+returns the style from the first matching entry. The represented Calc path
+preserves that evaluation order and does not serialize the flag back into a
+comparison rule. Whether the import is expected to retain Excel's style
+composition for these rules needs separate upstream review.
+
+- [Original rule model and realization](../../vendor/libreoffice-reference/sc/source/filter/oox/condformatbuffer.cxx)
+- [Original first-match style query](../../vendor/libreoffice-reference/sc/source/core/data/conditio.cxx)
+
+### CALC-761 — A conditional comparison can treat a formula error as zero
+
+The original condition obtains an ordinary formula value via `IsValue()`
+and `GetValue()`. The legacy value classifier admits error results and
+`GetValue()` returns zero on a formula error. An ordinary equality rule
+against zero can therefore match a cell containing a division-by-zero
+formula. The same conversion applies to formula operands in comparison
+rules. This behavior is retained and tested.
+
+- [Original conditional comparison and formula dispatch](../../vendor/libreoffice-reference/sc/source/core/data/conditio.cxx)
+- [Original formula value accessor](../../vendor/libreoffice-reference/sc/source/core/data/formulacell.cxx)
+- [Conditional comparison regression](../../apps/office/src/sc/source/core/data/conditio.entry.test.ts)

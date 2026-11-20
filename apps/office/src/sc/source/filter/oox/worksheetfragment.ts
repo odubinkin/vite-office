@@ -27,6 +27,7 @@ import { SheetViewSettings, type ViewSettings } from "./viewsettings";
 import { UnitConverter } from "./unitconverter";
 import { toDouble } from "../../../../o3tl/inc/string_view";
 import { attribute, isSpreadsheetTag } from "./workbookfragment";
+import { CondFormatBuffer } from "./condformatbuffer";
 
 const sheetElements: Readonly<Record<string, readonly string[]>> = {
   "": ["worksheet"],
@@ -45,6 +46,7 @@ const sheetElements: Readonly<Record<string, readonly string[]>> = {
     "mergeCells",
     "rowBreaks",
     "colBreaks",
+    "conditionalFormatting",
   ],
   headerFooter: headerFooterElements,
   sheetPr: ["tabColor", "pageSetUpPr"],
@@ -75,6 +77,7 @@ export class WorksheetFragment extends FragmentHandler {
   private readonly sheetData: SheetDataBuffer;
   private readonly settings = new WorksheetSettings();
   private readonly pageSettings = new PageSettings();
+  private readonly condFormats = new CondFormatBuffer();
   private readonly views: SheetViewSettings;
   private readonly geometry: WorksheetGlobals;
   private row = -1;
@@ -116,6 +119,8 @@ export class WorksheetFragment extends FragmentHandler {
       !sheetElements[this.elementStack.at(-1) ?? ""]?.includes(tag.local)
     )
       return null;
+    if (tag.local === "conditionalFormatting")
+      return this.condFormats.importConditionalFormatting(this.document, this.tab);
     if (tag.local !== "is") return this;
     this.inlineString?.dispose();
     this.inlineString = new RichString();
@@ -401,6 +406,7 @@ export class WorksheetFragment extends FragmentHandler {
     this.geometry.finalizeImport();
     this.settings.finalizeImport(this.document, this.tab, this.styles.graphicHelper);
     this.pageSettings.finalizeImport(this.document, this.tab, this.styles);
+    this.condFormats.finalizeImport(this.styles);
     this.views.finalizeImport(this.document, this.tab, this.workbookViews);
   }
   /** Native cell type dispatch and explicit OOXML formula grammar. @returns Nothing. */

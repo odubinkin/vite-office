@@ -87,6 +87,19 @@ export class XMLTableStylesContext extends ScXMLImportContext {
             null,
             attributes.get(XMLToken.STYLE_DATA_STYLE_NAME),
           );
+        if (element === XMLToken.STYLE_STYLE) {
+          if (attributes.get(XMLToken.STYLE_PARENT_STYLE_NAME) !== null)
+            this.owner.unsupported("named cell parent style inheritance");
+          if (attributes.get(XMLToken.STYLE_DATA_STYLE_NAME) !== null)
+            this.owner.unsupported("named cell number styles");
+          return new XMLTableStyleContext(
+            this.owner,
+            attributes.require(XMLToken.STYLE_NAME, "cell style name"),
+            null,
+            false,
+            true,
+          );
+        }
       }
       this.owner.unsupported("named and master styles are not preserved");
       return new SvXMLIgnoreContext(true);
@@ -218,12 +231,13 @@ class XMLCellTextStyleContext extends ScXMLImportContext {
 class XMLTableStyleContext extends ScXMLImportContext {
   private readonly pattern: ScPatternAttr;
   private readonly horizontal = new Any();
-  /** Creates genuine native item state. @param owner - Importer. @param name - Automatic-style name or Standard. @param dataStyle - Referenced data style. @param documentDefaults - Pool-default properties. @returns Context. */
+  /** Creates genuine native item state. @param owner - Importer. @param name - Automatic-style name or Standard. @param dataStyle - Referenced data style. @param documentDefaults - Pool-default properties. @param named - Named styles stream. @returns Context. */
   constructor(
     private readonly owner: ScXMLImport,
     private readonly name: string | null,
     private readonly dataStyle: string | null,
     private readonly documentDefaults = false,
+    private readonly named = false,
   ) {
     super(owner);
     this.pattern = new ScPatternAttr(owner.GetDocument().getCellAttributeHelper());
@@ -302,10 +316,12 @@ class XMLTableStyleContext extends ScXMLImportContext {
     try {
       const item = new SvxHorJustifyItem(129);
       if (item.PutValue(this.horizontal)) this.pattern.ItemSetPut(item);
-      if (this.name !== null) this.owner.AddAutoStyle(this.name, this.pattern, this.dataStyle);
+      if (this.name !== null && !this.named)
+        this.owner.AddAutoStyle(this.name, this.pattern, this.dataStyle);
       else {
         try {
-          if (this.documentDefaults) this.owner.ApplyDocumentDefaults(this.pattern);
+          if (this.name !== null) this.owner.ApplyNamedCellStyle(this.name, this.pattern);
+          else if (this.documentDefaults) this.owner.ApplyDocumentDefaults(this.pattern);
           else this.owner.ApplyDefaultCellStyle(this.pattern, this.dataStyle);
         } finally {
           this.pattern.Dispose();

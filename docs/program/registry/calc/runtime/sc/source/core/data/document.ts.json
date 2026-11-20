@@ -128,7 +128,10 @@
         "GetAllTableNames",
         "SetTabNameOnLoad",
         "GetCalcConfig",
-        "SetCalcConfig"
+        "SetCalcConfig",
+        "GetTableCount",
+        "AddCondFormat",
+        "GetCondResult"
       ],
       "sourceResponsibility": "divergent",
       "upstreamFile": "sc/source/core/data/document.cxx",
@@ -153,7 +156,8 @@
         "ScDocument::SetString",
         "ScDocument::SetTextCell",
         "ScDocument::SetEditText",
-        "GetEditEngine"
+        "GetEditEngine",
+        "ScDocument::GetTableCount"
       ]
     }
   }

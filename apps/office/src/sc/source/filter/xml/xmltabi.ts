@@ -10,6 +10,7 @@ import { ScRangeList } from "../../../inc/rangelst";
 import { ScRangeStringConverter } from "../../core/tool/rangeutl";
 import { ScXMLTableColContext } from "./xmlcoli";
 import { ScXMLTableRowContext } from "./xmlrowi";
+import { ScXMLConditionalFormatsContext } from "./xmlcondformat";
 import { ScXMLNamedExpressionsContext } from "./xmlnexpi";
 import { readTableProtection, readTableProtectionOptions } from "./xmlsubti";
 /** Real sheet import cursor;row/column positions are transient parser state only. */
@@ -74,6 +75,8 @@ export class ScXMLTableContext extends ScXMLImportContext {
     element: XMLToken,
     attributes: FastAttributeList,
   ): SvXMLImportContext {
+    if (element === XMLToken.CALCEXT_CONDITIONAL_FORMATS)
+      return new ScXMLConditionalFormatsContext(this.owner, this.tab);
     if (element === XMLToken.TABLE_TABLE_ROW) return new ScXMLTableRowContext(this, attributes);
     if (element === XMLToken.TABLE_TABLE_PROTECTION) {
       if (this.protection) readTableProtectionOptions(this.protection, attributes);

@@ -157,6 +157,7 @@ export class ScTable {
     if (!this.mpCondFormatList) this.mpCondFormatList = new ScConditionalFormatList();
     return this.mpCondFormatList;
   }
+  AddCondFormat = table1.AddCondFormat;
   /** Original unique-pointer reset transfers ownership before destroying the previous list. @param next - New owned list or native null. @returns Nothing. */
   SetCondFormList(next: ScConditionalFormatList | null): void {
     const previous = this.mpCondFormatList;

@@ -1,0 +1,50 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/sc/source/filter/excel/xestyle.dxf.ts",
+    "status": "mapped",
+    "upstreamPath": "sc/source/filter/excel/xestyle.cxx",
+    "localSymbols": [
+      "XclExpDxfs"
+    ],
+    "upstreamSymbols": [
+      "XclExpDxfs::SaveXml",
+      "XclExpDxfFont::SaveXml"
+    ],
+    "preservedResponsibilities": [
+      "Serializes referenced differential cell styles using original OOXML font and fill elements."
+    ],
+    "omittedResponsibilities": [
+      "Theme reserialization, other differential property families and native range-wide precollection remain unported."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sc/source/filter/excel/xestyle.dxf.ts",
+          "marker": "XclExpDxfs"
+        },
+        {
+          "path": "apps/office/src/sc/source/filter/oox/excelfilter.page-settings.test.ts",
+          "marker": "testTdf167019"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "sc/source/filter/excel/xestyle.cxx",
+          "marker": "XclExpDxfs::SaveXml"
+        },
+        {
+          "path": "sc/source/filter/excel/xestyle.cxx",
+          "marker": "XclExpDxfFont::SaveXml"
+        }
+      ]
+    },
+    "filenameDivergence": {
+      "localPath": "apps/office/src/sc/source/filter/excel/xestyle.dxf.ts",
+      "stackNecessity": "responsibility-split",
+      "rationale": "Keeps the represented methods in a module adjacent to the original owner's other TypeScript responsibilities."
+    }
+  }
+}

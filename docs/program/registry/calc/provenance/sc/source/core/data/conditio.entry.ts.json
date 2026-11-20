@@ -1,0 +1,51 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/sc/source/core/data/conditio.entry.ts",
+    "status": "mapped",
+    "upstreamPath": "sc/source/core/data/conditio.cxx",
+    "localSymbols": [
+      "ScConditionEntry",
+      "ScCondFormatEntry"
+    ],
+    "upstreamSymbols": [
+      "ScConditionEntry::IsCellValid",
+      "ScConditionEntry::GetExpression"
+    ],
+    "preservedResponsibilities": [
+      "Owns source-relative condition formulas, the represented comparisons, and named cell style binding."
+    ],
+    "omittedResponsibilities": [
+      "Additional condition families, full shift/move token updates and native listener caches remain unported."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sc/source/core/data/conditio.entry.ts",
+          "marker": "ScConditionEntry"
+        },
+        {
+          "path": "apps/office/src/sc/source/filter/oox/excelfilter.page-settings.test.ts",
+          "marker": "testTdf167019"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "sc/source/core/data/conditio.cxx",
+          "marker": "ScConditionEntry::IsCellValid"
+        },
+        {
+          "path": "sc/source/core/data/conditio.cxx",
+          "marker": "ScConditionEntry::GetExpression"
+        }
+      ]
+    },
+    "filenameDivergence": {
+      "localPath": "apps/office/src/sc/source/core/data/conditio.entry.ts",
+      "stackNecessity": "responsibility-split",
+      "rationale": "Keeps the represented methods in a module adjacent to the original owner's other TypeScript responsibilities."
+    }
+  }
+}

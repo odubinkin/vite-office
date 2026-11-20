@@ -2,6 +2,7 @@
 import { Color } from "../../../../tools/inc/color";
 import type { RowHeightContext } from "../../../inc/rowheightcontext";
 import type { ScBitMaskCompressedArray } from "../../../inc/compressedarray";
+import type { ScConditionalFormat } from "../../../inc/conditio";
 import type { ScColumn } from "../../../inc/column";
 import type { ScTable } from "../../../inc/table";
 import type { ScDocument } from "../../../inc/document";
@@ -9,6 +10,14 @@ import type { RefUpdateContext } from "../../../inc/refupdatecontext";
 import { ScRange } from "../../../inc/address";
 import { UpdateRefMode } from "../../../inc/global";
 import { CRFlags } from "../../../inc/global";
+
+/** Allocates the original next key before taking ownership. @param this - Native sheet. @param format - Owned conditional format. @returns Assigned key. */
+export function AddCondFormat(this: ScTable, format: ScConditionalFormat): number {
+  const list = this.GetCondFormList();
+  format.SetKey(list.getMaxKey() + 1);
+  list.InsertNew(format);
+  return format.GetKey();
+}
 
 /** Reports the native sheet visibility flag. @param this - Actual sheet. @returns Sheet visibility. */
 export function IsVisible(this: ScTable): boolean {

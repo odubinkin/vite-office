@@ -157,10 +157,13 @@ test("recalculates the original tdf167019 formulas after browser storage reopen"
     mimeType: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
   });
   const minimum = page.getByRole("gridcell", { name: /^D4(?:\s|$)/u });
+  const conditional = page.getByRole("gridcell", { name: /^F4(?:\s|$)/u });
   await expect(page.getByRole("heading", { name: "tdf167019" })).toBeVisible();
   await nameBox.fill("D4");
   await nameBox.press("Enter");
   await expect(minimum).toHaveText("117");
+  await expect(conditional).toHaveCSS("background-color", "rgb(204, 0, 0)");
+  await expect(conditional).toHaveCSS("color", "rgb(255, 255, 255)");
   await page.getByRole("menuitem", { name: "File" }).click();
   await page.getByRole("menuitem", { name: "Save As…" }).click();
   await page.getByRole("textbox", { name: "New copy name" }).fill("Conditional values copy");
@@ -172,6 +175,8 @@ test("recalculates the original tdf167019 formulas after browser storage reopen"
   await page.getByRole("tab", { name: "In browser" }).click();
   await page.getByRole("button", { name: "Conditional values copy", exact: true }).click();
   await expect(minimum).toHaveText("117");
+  await expect(conditional).toHaveCSS("background-color", "rgb(204, 0, 0)");
+  await expect(conditional).toHaveCSS("color", "rgb(255, 255, 255)");
   await expect(page.getByRole("gridcell", { name: /^D5(?:\s|$)/u })).toHaveText("123");
   await expect(page.getByRole("gridcell", { name: /^D6(?:\s|$)/u })).toHaveText("127");
 
@@ -187,4 +192,7 @@ test("recalculates the original tdf167019 formulas after browser storage reopen"
   expect(xml).toContain("AVERAGEIF(D7:D10,&quot;&gt;0&quot;)");
   expect(xml).toMatch(/<c r="D5"[^>]*><f>[^<]+<\/f><v>123\.25<\/v><\/c>/u);
   expect(xml).toContain("_xlfn.MAXIFS(D7:D10,D7:D10,&quot;&gt;0&quot;)");
+  expect(xml.match(/<cfRule [^>]*operator="notBetween"/gu)).toHaveLength(3);
+  expect(xml).toContain("<formula>100</formula><formula>152</formula>");
+  expect(await saved.readTextEntry("xl/styles.xml")).toContain('rgb="FFCC0000"');
 });

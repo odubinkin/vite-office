@@ -38,6 +38,9 @@ import { FormulaGrammar } from "../../../../formula/inc/grammar";
 import { InsertRangeNames } from "../../core/tool/rangenam";
 import { GetNamedExpressionBase, type ScMyNamedExpression } from "./xmlnexpi";
 import type { ScDocument } from "../../../inc/document";
+import { ScXMLConditionalFormatsContext } from "./xmlcondformat";
+import { SfxStyleFamily, SfxStyleSearchBits } from "../../../../svl/inc/style-values";
+import { ScStyleNameConversion } from "../../core/tool/stylehelper";
 import { ScXMLBodyContext } from "./xmlbodyi";
 import type { ScLineBreakCell } from "../../../inc/attrib";
 import { ScDocOptions } from "../../core/tool/docoptio";
@@ -59,6 +62,39 @@ export class ScXMLImport extends SvXMLImport implements SvXMLImportRootFactory {
   AddFormula(address: ScAddress, source: string): void {
     this.pendingFormulas.push({ address, source });
   }
+  private readonly conditionalFormats: ScXMLConditionalFormatsContext[] = [];
+
+  /** Defers conditional formulas until sheet and name indexes exist. @param formats - Original sheet element. @returns Nothing. */
+  AddConditionalFormats(formats: ScXMLConditionalFormatsContext): void {
+    this.conditionalFormats.push(formats);
+  }
+
+  /** Realizes deferred conditional ranges and cell indexes. @returns Nothing. */
+  FinalizeConditionalFormats(): void {
+    for (const formats of this.conditionalFormats) formats.Finalize();
+    this.conditionalFormats.length = 0;
+  }
+
+  /** Reads the original per-sheet ODF element from the temporary worker record. @param xml - Conditional format XML. @param tab - Sheet. @returns Nothing. */
+  importConditionalFormats(xml: string, tab: number): void {
+    parseOdfXmlStream(
+      xml,
+      {
+        /** Requires the extension's original root. @param element - Token. @returns Context. */
+        createFastContext: (element: XMLToken) => {
+          if (element !== XMLToken.CALCEXT_CONDITIONAL_FORMATS)
+            throw new Error("Calc worker conditional formats expected");
+          return new ScXMLConditionalFormatsContext(this, tab);
+        },
+        /** Rejects an unrelated record. @returns Never. */
+        createUnknownContext(): never {
+          throw new Error("Unknown Calc worker conditional formats element");
+        },
+      },
+      this.options,
+    );
+  }
+
   private cells = 0;
   private readonly fontFaces = new Map<string, SvxFontItem>();
   /** Registers original five-field font declarations through the common context. @param name - Reference name. @param family - Family names. @param generic - Family class. @param metadata - Native remaining fields. @returns Nothing. */
@@ -216,6 +252,22 @@ export class ScXMLImport extends SvXMLImport implements SvXMLImportRootFactory {
     this.numberStyles.set(name, style);
   }
   private defaultNumberStyle: string | null = null;
+  /** Installs original named cell properties in the native style pool. @param name - ODF style name. @param pattern - Direct imported items. @returns Nothing. */
+  ApplyNamedCellStyle(name: string, pattern: ScPatternAttr): void {
+    const pool = this.document.GetStyleSheetPool();
+    if (!pool) return;
+    const source = unicode(name);
+    const display = ScStyleNameConversion.ProgrammaticToDisplayName(source, SfxStyleFamily.Para);
+    try {
+      const style =
+        pool.Find(display, SfxStyleFamily.Para) ??
+        pool.Make(display, SfxStyleFamily.Para, SfxStyleSearchBits.UserDefined);
+      style.GetItemSet().PutSet(pattern.GetItemSet());
+    } finally {
+      display.dispose();
+      source.dispose();
+    }
+  }
   /** Populates the original Default style from the named styles stream. @param pattern - Parsed direct properties. @param reference - Optional data-style reference. @returns Nothing. */
   ApplyDefaultCellStyle(pattern: ScPatternAttr, reference: string | null): void {
     this.document.GetStyleSheetPool()?.SetDefaultCellStyle(pattern.GetItemSet());
@@ -367,6 +419,7 @@ export class ScXMLImport extends SvXMLImport implements SvXMLImportRootFactory {
         }
       }
       this.docImport.finalize();
+      this.FinalizeConditionalFormats();
       for (let tab = 0; tab < this.document.GetTableCount(); ++tab) {
         const table = this.document.FetchTable(tab);
         if (!table) continue;

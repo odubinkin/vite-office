@@ -1,4 +1,6 @@
-/** @fileoverview Native conditional-format ownership,copy ranges and live value-cache subscriptions;date evaluation,condition formulas and painting remain unported. */
+/** @fileoverview Native conditional-format ownership,copy ranges and live value-cache subscriptions;with date rules retained as copy state. */
+import type { ScRefCellValue } from "../../../inc/cellvalue";
+import type { ScAddress } from "../../../inc/address";
 import type { ScDocument } from "../../../inc/document";
 import { ScRangeList } from "../../../inc/rangelst";
 import type {
@@ -60,6 +62,12 @@ export abstract class ScFormatEntry {
     void _other;
     void _ignore;
     return false;
+  }
+  /** Resolves a matching style for entry types that provide cell conditions. @param _cell - Actual cell. @param _position - Evaluated address. @returns No matching style for the base entry. */
+  GetCellStyle(_cell: ScRefCellValue, _position: ScAddress): string | null {
+    void _cell;
+    void _position;
+    return null;
   }
   /** Binds original member destruction at explicit managed lifetime exit. @returns Nothing. */
   abstract Dispose(): void;
@@ -197,6 +205,14 @@ export class ScConditionalFormat {
   GetRangeList(): ScRangeList {
     return this.maRanges;
   }
+  /** Returns the first matching native entry's style. @param cell - Actual cell. @param position - Evaluated address. @returns Style name. */
+  GetCellStyle(cell: ScRefCellValue, position: ScAddress): string {
+    for (const entry of this.maEntries) {
+      const style = entry.GetCellStyle(cell, position);
+      if (style !== null) return style;
+    }
+    return "";
+  }
   /** Original entry count. @returns Count. */
   size(): number {
     return this.maEntries.length;
@@ -305,6 +321,7 @@ export class ScConditionalFormat {
 /** Native key-ordered unique collection;copy/clone owns real entries and independent subscriptions. */
 export class ScConditionalFormatList implements Iterable<ScConditionalFormat> {
   private readonly m_ConditionalFormats = new Map<number, ScConditionalFormat>();
+  private maxKey = 0;
   /** Original public empty/same-document copy constructors. The private destination-copy body is bound inside Clone. @param source - Optional source list. @returns List. */
   constructor(source?: ScConditionalFormatList) {
     if (source) for (const format of source) this.InsertNew(format.Clone());
@@ -329,7 +346,14 @@ export class ScConditionalFormatList implements Iterable<ScConditionalFormat> {
   /** Original unique ownership insertion destroys a duplicate rejected owner. @param format - Owned format. @returns Nothing. */
   InsertNew(format: ScConditionalFormat): void {
     if (this.m_ConditionalFormats.has(format.GetKey())) format.Dispose();
-    else this.m_ConditionalFormats.set(format.GetKey(), format);
+    else {
+      this.m_ConditionalFormats.set(format.GetKey(), format);
+      this.maxKey = Math.max(this.maxKey, format.GetKey());
+    }
+  }
+  /** Returns the highest currently assigned key. @returns Native key or zero for an empty collection. */
+  getMaxKey(): number {
+    return this.maxKey;
   }
   /** Original keyed lookup with null when absent. @param key - Native attribute index. @returns Borrowed owner or null. */
   GetFormat(key: number): ScConditionalFormat | null {
@@ -367,6 +391,11 @@ export class ScConditionalFormatList implements Iterable<ScConditionalFormat> {
     const format = this.m_ConditionalFormats.get(key);
     if (format) {
       this.m_ConditionalFormats.delete(key);
+      if (key === this.maxKey) {
+        this.maxKey = 0;
+        for (const remaining of this.m_ConditionalFormats.keys())
+          this.maxKey = Math.max(this.maxKey, remaining);
+      }
       format.Dispose();
     }
   }
@@ -382,5 +411,6 @@ export class ScConditionalFormatList implements Iterable<ScConditionalFormat> {
   Dispose(): void {
     for (const format of this.m_ConditionalFormats.values()) format.Dispose();
     this.m_ConditionalFormats.clear();
+    this.maxKey = 0;
   }
 }

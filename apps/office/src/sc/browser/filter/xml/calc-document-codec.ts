@@ -31,6 +31,7 @@ import { FormulaGrammar } from "../../../../formula/inc/grammar";
 import { unicode, text } from "../../../../i18nlangtag/source/isolang/isolang.tables";
 import { XMLFontAutoStylePool } from "../../../../xmloff/source/style/XMLFontAutoStylePool";
 import { ODF_NAMESPACES } from "../../../../xmloff/source/core/xmltoken";
+import { ExportConditionalFormat } from "../../../source/filter/xml/xmlcondformat";
 import { ScXMLImport } from "../../../source/filter/xml/xmlimprt";
 import {
   exportCellTextPropertyElement,
@@ -158,6 +159,7 @@ interface Sheet {
   readonly rowBreaks?: number[];
   readonly columnBreaks?: number[];
   readonly printRanges?: PrintRange[];
+  readonly conditionalFormats?: string;
   readonly repeatColumns?: PrintRange;
   readonly repeatRows?: PrintRange;
   readonly name: string;
@@ -268,6 +270,7 @@ function* encodeSteps(document: ScDocument): Generator<void, CalcDocumentRecord>
     const panes = getSheetPaneLayout(document, tab);
     const tabColor = table.GetTabBgColor();
     const pageStyle = table.GetPageStyle();
+    const conditionalFormats = ExportConditionalFormat(document, table, true);
     const sheet: Sheet = {
       ...(pageStyles.names.has(pageStyle) ? { pageStyle } : {}),
       ...(tabColor.equals(COL_AUTO) ? {} : { tabColor: tabColor.toUInt32() }),
@@ -296,6 +299,7 @@ function* encodeSteps(document: ScDocument): Generator<void, CalcDocumentRecord>
       ...(table.IsPrintEntireSheet()
         ? {}
         : { printRanges: GetPrintRanges(table).map(encodePrintRange) }),
+      ...(conditionalFormats ? { conditionalFormats } : {}),
       ...(repeatColumns ? { repeatColumns: encodePrintRange(repeatColumns) } : {}),
       ...(repeatRows ? { repeatRows: encodePrintRange(repeatRows) } : {}),
       name: text(table.GetName()),
@@ -806,6 +810,10 @@ function* decodeSteps(record: CalcDocumentRecord): Generator<void, ScDocument> {
       }
     }
     importer.docImport.finalize();
+    for (const [tab, sheet] of record.sheets.entries())
+      if (sheet.conditionalFormats)
+        importer.importConditionalFormats(sheet.conditionalFormats, tab);
+    importer.FinalizeConditionalFormats();
     document.SetAutoCalc(true);
     complete = true;
     return document;

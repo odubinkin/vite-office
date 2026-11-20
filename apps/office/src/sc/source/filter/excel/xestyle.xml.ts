@@ -27,6 +27,7 @@ import { XclExpCellAlign } from "./xestyle.alignment";
 import type { XlsxReferenceDevice } from "../oox/unitconverter";
 import { Font } from "../../../../vcl/source/font/font";
 import { text } from "../../../../i18nlangtag/source/isolang/isolang.tables";
+import { XclExpDxfs } from "./xestyle.dxf";
 import type { ScDocument } from "../../../inc/document";
 import { ScPatternAttr } from "../../../inc/patattr";
 import * as Which from "../../../inc/scitems";
@@ -155,6 +156,7 @@ export class XclExpFontBuffer {
 
 /** Collects style records from the native pattern used by each XLSX cell. */
 export class XclExpXFBuffer {
+  readonly dxfs: XclExpDxfs;
   private readonly fonts = new XclExpFontBuffer();
   private readonly borders = new XclExpBorderBuffer();
   private readonly numberFormats: XclExpNumFmtBuffer;
@@ -168,6 +170,7 @@ export class XclExpXFBuffer {
 
   /** Seeds the Normal format from the actual workbook defaults. @param document - Native workbook. @param device - Workbook reference device. @returns XF buffer. */
   constructor(document: ScDocument, device?: XlsxReferenceDevice) {
+    this.dxfs = new XclExpDxfs(document);
     this.numberFormats = new XclExpNumFmtBuffer(document);
     const pattern = document.getCellAttributeHelper().getDefaultCellAttribute();
     this.normalUsesProtection =
@@ -302,6 +305,7 @@ export class XclExpXFBuffer {
       "0",
     );
     serializer.endElement(token("cellStyles"));
+    this.dxfs.SaveXml(serializer);
     serializer.endElement(styleSheet);
     serializer.endDocument();
   }

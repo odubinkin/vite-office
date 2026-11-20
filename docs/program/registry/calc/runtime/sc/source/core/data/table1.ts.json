@@ -27,14 +27,16 @@
       "localSymbols": [
         "SetOptimalHeightsToRows",
         "SetStreamValid",
-        "GetDataArea"
+        "GetDataArea",
+        "AddCondFormat"
       ],
       "sourceResponsibility": "unverified",
       "upstreamFile": "sc/source/core/data/table1.cxx",
       "upstreamSymbols": [
         "SetOptimalHeightsToRows",
         "ScTable::SetStreamValid",
-        "ScTable::GetDataArea"
+        "ScTable::GetDataArea",
+        "ScTable::AddCondFormat"
       ]
     }
   }

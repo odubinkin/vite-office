@@ -13,11 +13,6 @@ export interface SheetViewState {
 
 const defaultSheetView: SheetViewState = { showGrid: true, cursor: [0, 0] };
 
-/** Reports the actual sheet ownership count. @param this - Native document. @returns Count. */
-export function GetTableCount(this: ScDocument): number {
-  return this["maTabs"].length;
-}
-
 /** Borrows an existing sheet or returns the native null result. @param this - Native document. @param tab - Native tab. @returns Sheet or null. */
 export function FetchTable(this: ScDocument, tab: number): ScTable | null {
   return ValidTab(tab) ? (this["maTabs"][tab] ?? null) : null;

@@ -55,8 +55,11 @@ export class ScAddress {
     doc: ScAddressDocument | null = null,
     details: Readonly<ScAddressDetails> = ScAddress.detailsOOOa1,
   ): OUString {
+    const nativeA1 =
+      details.eConv === FormulaGrammar.AddressConvention.CONV_OOO ||
+      details.eConv === FormulaGrammar.AddressConvention.CONV_ODF;
     if (
-      (details.eConv !== FormulaGrammar.AddressConvention.CONV_OOO &&
+      (!nativeA1 &&
         details.eConv !== FormulaGrammar.AddressConvention.CONV_XL_A1 &&
         details.eConv !== FormulaGrammar.AddressConvention.CONV_XL_OOX &&
         details.eConv !== FormulaGrammar.AddressConvention.CONV_XL_R1C1) ||
@@ -69,12 +72,7 @@ export class ScAddress {
     if (doc && flags & ScRefFlags.TAB_VALID) {
       if (this.Tab() < 0 || this.Tab() >= doc.GetTableCount()) return unicode("#REF!");
       if (flags & ScRefFlags.TAB_3D) {
-        const sheet = formatTab(
-          this.Tab(),
-          doc,
-          Boolean(flags & ScRefFlags.TAB_ABS),
-          details.eConv !== FormulaGrammar.AddressConvention.CONV_OOO,
-        );
+        const sheet = formatTab(this.Tab(), doc, Boolean(flags & ScRefFlags.TAB_ABS), !nativeA1);
         if (!sheet) return unicode("#REF!");
         output += sheet;
       }

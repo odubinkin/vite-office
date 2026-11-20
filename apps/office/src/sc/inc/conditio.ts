@@ -8,3 +8,8 @@ export {
   ScConditionalFormat,
   ScConditionalFormatList,
 } from "../source/core/data/conditio";
+export {
+  ScConditionMode,
+  ScConditionEntry,
+  ScCondFormatEntry,
+} from "../source/core/data/conditio.entry";

@@ -7,7 +7,6 @@
     "status": "mapped",
     "upstreamPath": "sc/source/core/data/document.cxx",
     "localSymbols": [
-      "GetTableCount",
       "FetchTable",
       "IsVisible",
       "SetVisible",
@@ -18,7 +17,6 @@
       "sanitizeSheetPane"
     ],
     "upstreamSymbols": [
-      "ScDocument::GetTableCount",
       "ScDocument::FetchTable",
       "ScDocument::IsVisible",
       "ScDocument::SetVisible"
@@ -47,10 +45,6 @@
         }
       ],
       "upstream": [
-        {
-          "path": "sc/source/core/data/document.cxx",
-          "marker": "ScDocument::GetTableCount"
-        },
         {
           "path": "sc/source/core/data/document.cxx",
           "marker": "ScDocument::FetchTable"

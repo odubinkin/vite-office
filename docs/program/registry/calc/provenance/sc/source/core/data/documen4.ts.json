@@ -1,0 +1,46 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/sc/source/core/data/documen4.ts",
+    "status": "mapped",
+    "upstreamPath": "sc/source/core/data/documen4.cxx",
+    "localSymbols": [
+      "AddCondFormat",
+      "GetCondResult"
+    ],
+    "upstreamSymbols": [
+      "ScDocument::AddCondFormat",
+      "ScDocument::GetCondResult"
+    ],
+    "preservedResponsibilities": [
+      "Hands conditional rules to their native sheet and resolves the first matching style through a cell's format indexes."
+    ],
+    "omittedResponsibilities": [
+      "Other documen4 mechanisms are outside this module."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sc/source/core/data/documen4.ts",
+          "marker": "AddCondFormat"
+        },
+        {
+          "path": "apps/office/src/sc/source/filter/oox/excelfilter.page-settings.test.ts",
+          "marker": "testTdf167019"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "sc/source/core/data/documen4.cxx",
+          "marker": "ScDocument::AddCondFormat"
+        },
+        {
+          "path": "sc/source/core/data/documen4.cxx",
+          "marker": "ScDocument::GetCondResult"
+        }
+      ]
+    }
+  }
+}

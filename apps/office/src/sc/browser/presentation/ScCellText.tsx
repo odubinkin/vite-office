@@ -3,6 +3,7 @@ import { COL_BLACK } from "../../../tools/inc/color";
 import { SvxCharReliefItem } from "../../../editeng/source/items/textitem";
 
 import { SvxCrossedOutItem } from "../../../editeng/inc/crossedoutitem";
+import type { SfxItemSet } from "../../../svl/source/items/itemset";
 import type { ScPatternAttr } from "../../inc/patattr";
 import { SvxOverlineItem } from "../../../editeng/source/items/textitem";
 import { FontLineStyle, FontStrikeout } from "../../../tools/inc/fontenum";
@@ -15,16 +16,18 @@ import { browserFontFamily } from "../../../vcl/browser/font-family";
 import { getFontFamilyGeneric } from "../../../xmloff/source/style/fonthdl";
 import type { SvxFontHeightItem } from "../../../editeng/inc/fhgtitem";
 const breakIterator = new BreakIteratorImpl();
-/** Paints original script font values without storing text or attributes in React state. @param props - Display text and borrowed pattern. @returns Script-specific text spans. */
+/** Paints original script font values without storing text or attributes in React state. @param props - Display text, borrowed pattern and active conditional style. @returns Script-specific text spans. */
 export function ScCellText({
   text,
   pattern,
+  conditional,
 }: {
   readonly text: string;
   readonly pattern: ScPatternAttr;
+  readonly conditional?: SfxItemSet | undefined;
 }): React.JSX.Element {
-  const strikeout = pattern.GetItem(106) as SvxCrossedOutItem,
-    overline = pattern.GetItem(105) as SvxOverlineItem,
+  const strikeout = pattern.GetItem(106, conditional) as SvxCrossedOutItem,
+    overline = pattern.GetItem(105, conditional) as SvxOverlineItem,
     lineColor = overline.GetColor(),
     lineStyle = overline.GetLineStyle(),
     string = unicode(text),
@@ -38,7 +41,7 @@ export function ScCellText({
         script === ScriptType.WEAK ? getScriptType(getConfiguredSystemUILanguage()) : script;
       const which =
         effective === ScriptType.ASIAN ? 111 : effective === ScriptType.COMPLEX ? 116 : 100;
-      const font = pattern.GetItem(which) as SvxFontItem;
+      const font = pattern.GetItem(which, conditional) as SvxFontItem;
       runs.push(
         <span
           key={pos}
@@ -54,7 +57,7 @@ export function ScCellText({
               textDecorationStyle:
                 lineStyle === FontLineStyle.LINESTYLE_DOUBLE ? "double" : "solid",
               textDecorationColor:
-                (pattern.GetItem(124) as SvxCharReliefItem).GetValue() !== 0 &&
+                (pattern.GetItem(124, conditional) as SvxCharReliefItem).GetValue() !== 0 &&
                 lineColor.equals(COL_BLACK)
                   ? "white"
                   : lineColor.GetAlpha() === 255
@@ -64,7 +67,7 @@ export function ScCellText({
                 font.GetFamilyName(),
                 getFontFamilyGeneric(font.GetFamily()),
               ),
-              fontSize: `${(pattern.GetItem(effective === ScriptType.ASIAN ? 112 : effective === ScriptType.COMPLEX ? 117 : 101) as SvxFontHeightItem).GetHeight() / 20}pt`,
+              fontSize: `${(pattern.GetItem(effective === ScriptType.ASIAN ? 112 : effective === ScriptType.COMPLEX ? 117 : 101, conditional) as SvxFontHeightItem).GetHeight() / 20}pt`,
             }}
           >
             {text.slice(pos, end)}

@@ -46,7 +46,10 @@
       "GetAllTableNames",
       "SetTabNameOnLoad",
       "GetCalcConfig",
-      "SetCalcConfig"
+      "SetCalcConfig",
+      "GetTableCount",
+      "AddCondFormat",
+      "GetCondResult"
     ],
     "upstreamSymbols": [
       "ScDocument::SetValue",
@@ -69,7 +72,8 @@
       "ScDocument::SetString",
       "ScDocument::SetTextCell",
       "ScDocument::SetEditText",
-      "GetEditEngine"
+      "GetEditEngine",
+      "ScDocument::GetTableCount"
     ],
     "preservedResponsibilities": [
       "Task76 in progress: original clipboard ResetClip/InitClipPtrs and SharePooledResources retain genuine pool/string/attribute helper identities,source option values and sparse selected-sheet indexes. Clear releases actual formula and attribute owners before sheet removal. Native column4 CloneFormulaCell creates shared code once per shareable span,bulk-inserts actual typed storage and joins boundaries. Default CONTENTS CopyFromClipContext retains native cursor caches,cell values,metadata and deferred listening spans;single-cell column replication handles represented values,strings,empty and grouped formulas. Original temporary/inserting document guards suppress premature subscriptions and broadcasts. No browser fill loop,formula-text reparse,alternate workbook or simulated physical refcount is introduced. Document-level paste/reference completion,real paste undo and EnterBlock/UI acceptance are still pending;this progress record does not certify task76 or full native parity.",
@@ -548,6 +552,18 @@
         {
           "path": "vendor/libreoffice-reference/sc/qa/unit/ucalc.cxx",
           "marker": "testFuncParam"
+        },
+        {
+          "path": "sc/source/core/data/document.cxx",
+          "marker": "ScDocument::GetTableCount"
+        },
+        {
+          "path": "sc/source/core/data/documen4.cxx",
+          "marker": "ScDocument::AddCondFormat"
+        },
+        {
+          "path": "sc/source/core/data/documen4.cxx",
+          "marker": "ScDocument::GetCondResult"
         }
       ]
     }

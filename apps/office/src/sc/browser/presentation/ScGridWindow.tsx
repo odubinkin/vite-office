@@ -1,4 +1,5 @@
 /** @fileoverview Controlled browser rendering of ScGridWindow headers, visible cells and inline input; canonical cell/selection/input state stays with the view controller. */
+import type { SfxItemSet } from "../../../svl/source/items/itemset";
 import type { SyntheticEvent } from "react";
 import { useWindowTracking } from "../../../vcl/browser/use-window-tracking";
 import { createCalcGridFrames, calcGridBorderStyle } from "./calc-grid-borders";
@@ -93,15 +94,15 @@ function columnLabel(column: number): string {
     label = String.fromCharCode(65 + ((value - 1) % 26)) + label;
   return label;
 }
-/** Projects one actual source cell's typography identically for paint and the independent edit view. @param pattern - Actual native cell attributes. @returns Read-only render projection. */
-function cellTypography(pattern: ScPatternAttr) {
-  const weight = (pattern.GetItem(102) as SvxWeightItem).GetWeight();
-  const posture = (pattern.GetItem(103) as SvxPostureItem).GetPosture();
-  const outlined = (pattern.GetItem(107) as SvxContourItem).GetValue(),
-    shadowed = (pattern.GetItem(108) as SvxShadowedItem).GetValue(),
-    relief = (pattern.GetItem(124) as SvxCharReliefItem).GetValue(),
+/** Projects one actual source cell's typography identically for paint and the independent edit view. @param pattern - Actual native cell attributes. @param conditional - Matching conditional style. @returns Read-only render projection. */
+function cellTypography(pattern: ScPatternAttr, conditional?: SfxItemSet) {
+  const weight = (pattern.GetItem(102, conditional) as SvxWeightItem).GetWeight();
+  const posture = (pattern.GetItem(103, conditional) as SvxPostureItem).GetPosture();
+  const outlined = (pattern.GetItem(107, conditional) as SvxContourItem).GetValue(),
+    shadowed = (pattern.GetItem(108, conditional) as SvxShadowedItem).GetValue(),
+    relief = (pattern.GetItem(124, conditional) as SvxCharReliefItem).GetValue(),
     special = outlined || shadowed || relief !== 0;
-  const lineItem = pattern.GetItem(104) as SvxUnderlineItem;
+  const lineItem = pattern.GetItem(104, conditional) as SvxUnderlineItem;
   const underline = lineItem.GetLineStyle(),
     lineColor = lineItem.GetColor();
   const fontColor = new ComplexColor();
@@ -109,7 +110,7 @@ function cellTypography(pattern: ScPatternAttr) {
     fontColor,
     pattern.GetItemSet(),
     ScAutoFontColorMode.Display,
-    undefined,
+    conditional,
     undefined,
     COL_WHITE,
     COL_BLACK,
@@ -124,7 +125,7 @@ function cellTypography(pattern: ScPatternAttr) {
   );
   const style: CSSProperties = {
     color: browserColor(fontColor.getFinalColor()),
-    fontFamily: (pattern.GetItem(100) as SvxFontItem).GetFamilyName(),
+    fontFamily: (pattern.GetItem(100, conditional) as SvxFontItem).GetFamilyName(),
     fontWeight: [400, 100, 200, 300, 350, 400, 500, 600, 700, 800, 900][weight],
     fontStyle: ["normal", "oblique", "italic"][posture],
     textDecorationColor:
@@ -134,7 +135,7 @@ function cellTypography(pattern: ScPatternAttr) {
     textDecorationStyle: underline === FontLineStyle.LINESTYLE_DOUBLE ? "double" : "solid",
     textDecorationLine:
       special || underline === FontLineStyle.LINESTYLE_NONE ? "none" : "underline",
-    fontSize: `${(pattern.GetItem(ATTR_FONT_HEIGHT) as SvxFontHeightItem).GetHeight() / 20}pt`,
+    fontSize: `${(pattern.GetItem(ATTR_FONT_HEIGHT, conditional) as SvxFontHeightItem).GetHeight() / 20}pt`,
     lineHeight: "normal",
   };
   return { style, outlined, shadowed, relief, underline, lineColor, fontColor };
@@ -548,6 +549,7 @@ export function ScGridWindow(props: ScGridWindowProps): React.JSX.Element {
                     const position = new ScAddress(col, r, tab),
                       cell = props.getCell(position);
                     const pattern = document.GetPattern(position) as ScPatternAttr;
+                    const conditional = document.GetCondResult(position);
                     const {
                       style: fontStyle,
                       outlined,
@@ -556,7 +558,7 @@ export function ScGridWindow(props: ScGridWindowProps): React.JSX.Element {
                       underline,
                       lineColor,
                       fontColor,
-                    } = cellTypography(pattern);
+                    } = cellTypography(pattern, conditional);
                     const pane = part(x, band);
                     const cellId = idFor(col, r, pane);
                     const active = cellId === activeId;
@@ -609,9 +611,13 @@ export function ScGridWindow(props: ScGridWindowProps): React.JSX.Element {
                           15,
                       ),
                       backgroundColor:
-                        (pattern.GetItem(148) as SvxBrushItem).GetColor().GetAlpha() === 0
+                        (pattern.GetItem(148, conditional) as SvxBrushItem)
+                          .GetColor()
+                          .GetAlpha() === 0
                           ? undefined
-                          : browserColor((pattern.GetItem(148) as SvxBrushItem).GetColor()),
+                          : browserColor(
+                              (pattern.GetItem(148, conditional) as SvxBrushItem).GetColor(),
+                            ),
                       textAlign:
                         ([undefined, "left", "center", "right", "justify", "left"] as const)[
                           (pattern.GetItem(129) as SvxHorJustifyItem).GetValue()
@@ -712,7 +718,11 @@ export function ScGridWindow(props: ScGridWindowProps): React.JSX.Element {
                                   underline === FontLineStyle.LINESTYLE_NONE ? "none" : "underline",
                               }}
                             >
-                              <ScCellText text={cell.text} pattern={pattern} />
+                              <ScCellText
+                                text={cell.text}
+                                pattern={pattern}
+                                conditional={conditional}
+                              />
                             </SpecialText>
                           </div>
                         )}

@@ -2,6 +2,7 @@
 
 /** ODF namespace URIs understood by the bounded Writer filter. */
 export const ODF_NAMESPACES = {
+  calcext: "urn:org:documentfoundation:names:experimental:calc:xmlns:calcext:1.0",
   css3t: "http://www.w3.org/TR/css3-text/",
   config: "urn:oasis:names:tc:opendocument:xmlns:config:1.0",
   ooo: "http://openoffice.org/2004/office",
@@ -464,9 +465,24 @@ export enum XMLToken {
   TEXT_FIXED,
   TEXT_DATE_VALUE,
   TEXT_TIME_VALUE,
+  CALCEXT_CONDITIONAL_FORMATS,
+  CALCEXT_CONDITIONAL_FORMAT,
+  CALCEXT_CONDITION,
+  CALCEXT_TARGET_RANGE_ADDRESS,
+  CALCEXT_APPLY_STYLE_NAME,
+  CALCEXT_BASE_CELL_ADDRESS,
+  CALCEXT_VALUE,
 }
 
 const entries: readonly (readonly [string, string, XMLToken])[] = [
+  [ODF_NAMESPACES.calcext, "conditional-formats", XMLToken.CALCEXT_CONDITIONAL_FORMATS],
+  [ODF_NAMESPACES.calcext, "conditional-format", XMLToken.CALCEXT_CONDITIONAL_FORMAT],
+  [ODF_NAMESPACES.calcext, "condition", XMLToken.CALCEXT_CONDITION],
+  [ODF_NAMESPACES.calcext, "target-range-address", XMLToken.CALCEXT_TARGET_RANGE_ADDRESS],
+  [ODF_NAMESPACES.calcext, "apply-style-name", XMLToken.CALCEXT_APPLY_STYLE_NAME],
+  [ODF_NAMESPACES.calcext, "base-cell-address", XMLToken.CALCEXT_BASE_CELL_ADDRESS],
+  [ODF_NAMESPACES.calcext, "value", XMLToken.CALCEXT_VALUE],
+
   [ODF_NAMESPACES.style, "display", XMLToken.STYLE_DISPLAY],
   [ODF_NAMESPACES.style, "region-left", XMLToken.STYLE_REGION_LEFT],
   [ODF_NAMESPACES.style, "region-center", XMLToken.STYLE_REGION_CENTER],
