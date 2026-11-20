@@ -57,7 +57,7 @@ for (const width of [1280, 390])
     await expect(page.locator("[data-calc-diagonal]")).toHaveCount(2);
     await summary.click();
     await page.screenshot({ path: test.info().outputPath(`borders-${width}.png`) });
-    await input.click();
+    await page.getByRole("textbox", { name: "Name Box", exact: true }).click();
     await expect(popup).toHaveCount(0);
     expect(errors).toEqual([]);
   });
