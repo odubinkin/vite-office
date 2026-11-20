@@ -1,0 +1,47 @@
+{
+  "scope": "DOCX import and export for the working Writer document model and existing file controls.",
+  "implementationCommit": "a50b52408573b5726a626bde022c8c21a23585fb",
+  "checks": [
+    {
+      "command": "npm run test:writer -- WriterFilter.test.ts docxexport WriterFileDialog.test.tsx docsh.test.ts writer-primary-odt-filter.test.ts --maxWorkers=1 --testTimeout=120000",
+      "result": "175 passed in 21 files before the final empty-cell boundary correction",
+      "evidence": "Native Strict and Transitional WordprocessingML, document and package XML, stylesheet and paragraph/run properties, lists, links, page and table cases, failed and competing opens, downloads and primary ODT. Local transcript: .git/ooxml-final-writer.log."
+    },
+    {
+      "command": "Run the final Writer owner profile over OOXMLDocumentImpl, DomainMapperTableManager.ranges, docxexport.table-flow, docxexport.numbered-list, docxexport.table-shading, docxexport.fonts, docxexport.page-stories, docxexport.drawing, WriterFilter, native-import-table-errors, native-text-import-api, native-content-box-registry, fmthdft.native, pam-selection, OOXMLFastContextHandler, OOXMLStreamImpl and WriterFileDialog.",
+      "result": "220 cases passed and three reached the fixed per-file deadline in the instrumented parallel run",
+      "evidence": "The final code was exercised through real UNO table endpoints and archive files. Local transcript: .git/ooxml-final-writer-owner-coverage.log. Separate focused five-case table and 13-case document resolver runs both passed on the final code."
+    },
+    {
+      "command": "npm run test:writer -- docxexport.numbered-list.test.ts docxexport.page-stories.test.ts -t 'keeps the NumberedList nested table|preserves the direct zero indent|reopens the pinned Word linked-to-previous fixture' --maxWorkers=1",
+      "result": "All three cases that reached their deadline passed sequentially with the original per-file timeout",
+      "evidence": "The original NumberedList, indent/width/margins and linked page stories passed through the current model and exporters. Local transcript: .git/ooxml-final-writer-quiet-regressions.log."
+    },
+    {
+      "command": "npm run test:shared -- upstream-packages.test.ts xmlfilterbase.test.ts document-archive.integration.test.ts zipfileaccess.test.ts fastparser --maxWorkers=1 --testTimeout=120000",
+      "result": "211 passed in 17 files",
+      "evidence": "Shared OOXML package, archive, XML filter and SAX contracts. Local transcript: .git/ooxml-final-shared.log."
+    },
+    {
+      "command": "Measure the complete StyleSheetTable.import.ts owner over StyleSheetTable, native-style-entry-merge, native-table-value-handlers, docxexport.styles, docxexport.fonts, docxexport.kerning, docxexport.tabs, docxexport.table-flow and docxexport.table-shading with unchanged scoped90.",
+      "result": "82 passed in 10 files; 93.58% statements, 90.43% branches, 100% functions and 95.32% lines",
+      "evidence": "Unknown identity, nullable style modifiers and cyclic inheritance use actual OOXML property sets and UNO style families. Local transcript: .git/ooxml-final-writer-import-style-edges-coverage.log."
+    },
+    {
+      "command": "Read unmodified Istanbul counters from the final Writer owner and separate document resolver runs; evaluate each original table and header/footer scope separately at 90%.",
+      "result": "Every listed scope reaches scoped90",
+      "evidence": "The complete WriterFilter and OOXMLDocumentImpl owners reach 100% and 90.91% branches respectively. DomainMapperTableRanges reaches 100%, TableLevel 96.10%, TextToTableNodes 94.12% and convertToTable 100%. OOXMLHeaderFooterHandler, resolveHeaderFooter, handleHdrFtr and getHeaderFooterIds each reach 100% branches. StyleSheetTable.import.ts and TblStylePrHandler are checked independently. No owner branches were excluded or changed in the reports. Local transcript: .git/ooxml-final-writer-owner-scope.log."
+    },
+    {
+      "command": "Run production Chromium over the Writer DOCX/ODT and Calc XLSX file scenarios; repeat Writer table-flow, table-shading and the two supplied documents on the final build.",
+      "result": "34 combined scenario passes, plus three current table scenario passes and two current private attachment passes",
+      "evidence": "Verified existing Open and Export controls, mobile and desktop reopening, browser storage, downloaded DOCX, and failure preserving the active graph. The supplied files were kept outside Git. Local transcripts: .git/ooxml-final-browser.log, .git/ooxml-final-writer-table-browser.log and .git/ooxml-final-writer-user-files.log."
+    },
+    {
+      "command": "Run production static build, typecheck, ESLint, Prettier, dependencies, JSDoc, Writer resources, docs, file and source tree checks, provenance, registry, invariants, parity, hintids, ap doctor, policy routing and git diff --check.",
+      "result": "Passed",
+      "evidence": "The final production build passed static smoke checks; the registry reported zero semantic violations. Local transcripts: .git/ooxml-final-writer-table-*.log."
+    }
+  ],
+  "boundary": "The file path covers Word properties represented by Writer. The original cell-grid-span table is tested with an unrelated text-animation property isolated in the test copy. Some drawing and floating-table content still needs a corresponding Writer owner. WRITER511 documents the preserved upstream path-copy behavior verified through the Strict document resolver."
+}
