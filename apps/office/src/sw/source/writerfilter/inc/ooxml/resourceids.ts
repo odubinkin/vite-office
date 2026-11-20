@@ -911,6 +911,7 @@ export const NS_ooxml = Object.freeze({
   LN_CT_Lvl_isLgl: 93126,
   LN_CT_Lvl_legacy: 93130,
   LN_CT_Lvl_lvlJc: 93131,
+  LN_CT_Lvl_pPr: 93132,
   LN_CT_Lvl_numFmt: 93123,
   LN_CT_Lvl_start: 93122,
   LN_CT_Lvl_suff: 93127,

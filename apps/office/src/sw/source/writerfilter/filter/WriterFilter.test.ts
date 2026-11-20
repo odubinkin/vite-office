@@ -26,6 +26,7 @@ import { unicode } from "../../../../i18nlangtag/source/isolang/isolang.tables";
 import { createWriterDocument } from "../../core/doc/doc";
 import { SwXTextDocument } from "../../uibase/uno/unotxdoc";
 import { SwXParagraph } from "../../core/unocore/unoparagraph";
+import { SwXNumberingRules } from "../../core/unocore/unosett";
 
 it("exports the original testSemiTransparentText value through the UNO paragraph", /** Replays ooxmlexport14 testSemiTransparentText using the canonical Writer model. @returns Completion. */ async () => {
   const doc = createWriterDocument();
@@ -136,8 +137,8 @@ it.each([
   ["hello.docx", "hello"],
   ["tdf82065_Ind_start_strict.docx", "RTL with indent"],
 ])(
-  "imports the pinned %s body through the live Writer mapper",
-  /** Asserts destination graph text from the original QA fixture. @param filename - Original fixture. @param first - First paragraph. @returns Completion. */
+  "round-trips the pinned %s body through the Writer filters",
+  /** Asserts destination graph text and the original Strict numbering-indent contract. @param filename - Original fixture. @param first - First paragraph. @returns Completion. */
   async (filename, first) => {
     const bytes = new Uint8Array(
       readFileSync(
@@ -154,6 +155,25 @@ it.each([
     }
     try {
       expect(document.paragraphs[0]?.GetText()).toBe(first);
+      const output = await DocxExport.WriteDocument(document);
+      const reopened = await importOOXML(output, {});
+      try {
+        expect(reopened.paragraphs[0]?.GetText()).toBe(first);
+        if (filename === "tdf82065_Ind_start_strict.docx") {
+          for (const graph of [document, reopened]) {
+            const format = graph.paragraphs[0]?.GetNumRule()?.Get(0);
+            if (!format) throw new Error("Missing original level-zero numbering format.");
+            const properties = SwXNumberingRules.GetPropertiesForNumFormat(format, false);
+            expect(properties.indentAt).toBe(6001);
+          }
+          const archive = await DocumentArchive.open(output);
+          expect(await archive.readTextEntry("word/numbering.xml")).toContain(
+            '<w:ind w:left="3402" w:hanging="1134"/>',
+          );
+        }
+      } finally {
+        reopened.Dispose();
+      }
     } finally {
       document.Dispose();
     }

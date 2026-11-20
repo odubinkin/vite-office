@@ -98,6 +98,10 @@
         {
           "path": "apps/office/src/sw/source/filter/ww8/docxexport.text-effects.test.ts",
           "marker": "round-trips original w14 drawing properties"
+        },
+        {
+          "path": "apps/office/src/sw/source/writerfilter/filter/WriterFilter.test.ts",
+          "marker": "6001"
         }
       ],
       "upstream": [
@@ -128,6 +132,10 @@
         {
           "path": "vendor/libreoffice-reference/sw/source/writerfilter/ooxml/model.xml",
           "marker": "tokenid=\"ooxml:EG_SectPrContents_pgBorders\""
+        },
+        {
+          "path": "sw/qa/extras/ooxmlexport/ooxmlexport11.cxx",
+          "marker": "testTdf82065_Ind_start_strict"
         }
       ]
     },
@@ -169,7 +177,8 @@
       "Publishes the eight native ST_Theme enumeration IDs.",
       "Exposes the consumed original generated paragraph-default, tab alignment and leader resource IDs.",
       "Retains original page variant stream IDs and the generated header/footer reference attributes.",
-      "The Word 2010 effect roots for glow, shadow, reflection, scene3d and props3d now use the original generated definitions and nested interoperability properties for DOCX run and style persistence through the browser Worker."
+      "The Word 2010 effect roots for glow, shadow, reflection, scene3d and props3d now use the original generated definitions and nested interoperability properties for DOCX run and style persistence through the browser Worker.",
+      "The original CT_Lvl_pPr resource is available to the numbering callback owner and agrees with the generated WML table."
     ],
     "omittedResponsibilities": [
       "DOCX document-model mapping, export and shell/UI integration are still being implemented in the same cohesive task.",

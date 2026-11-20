@@ -362,6 +362,7 @@ function createListLevelHandler(
           [
             N.LN_CT_Lvl_rPr,
             N.LN_CT_Lvl_lvlText,
+            N.LN_CT_Lvl_pPr,
             N.LN_CT_PPrBase_ind,
             N.LN_CT_PPrBase_tabs,
             N.LN_CT_Tabs_tab,

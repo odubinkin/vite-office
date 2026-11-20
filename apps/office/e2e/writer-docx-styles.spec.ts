@@ -7,6 +7,43 @@ import {
   DocumentArchiveWriter,
 } from "../src/package/source/zippackage/document-archive";
 
+test("Writer preserves the original Strict numbering indent after browser restore", /** Opens a Strict package and checks the exported number-level properties. @param fixtures - Playwright fixtures. @param fixtures.page - Chromium page. @returns Completion. */ async ({
+  page,
+}) => {
+  const fixture = fileURLToPath(
+    new URL(
+      "../../../vendor/libreoffice-reference/sw/qa/extras/ooxmlexport/data/tdf82065_Ind_start_strict.docx",
+      import.meta.url,
+    ),
+  );
+  const editor = page.getByRole("textbox", { name: "Writer document text" });
+  await page.goto("/writer");
+  await page.getByRole("button", { name: "Open" }).click();
+  await page.getByRole("tab", { name: "On computer" }).click();
+  await page.getByLabel("Browse").setInputFiles(fixture);
+  await expect(editor).toContainText("RTL with indent");
+  await expect(page.getByRole("status", { name: "Writer status bar" })).toContainText(
+    "Saved locally in this browser.",
+  );
+
+  await page.reload();
+  await page.getByRole("button", { name: "Open" }).click();
+  await page.getByRole("tab", { name: "In browser" }).click();
+  await page.getByRole("button", { name: "tdf82065_Ind_start_strict", exact: true }).click();
+  await expect(editor).toContainText("RTL with indent");
+
+  const pendingDownload = page.waitForEvent("download");
+  await page.getByRole("menuitem", { name: "File" }).click();
+  await page.getByRole("menuitem", { name: "Export…" }).click();
+  await page.getByRole("button", { name: "Download DOCX" }).click();
+  const path = await (await pendingDownload).path();
+  if (path === null) throw new Error("Chromium did not expose the DOCX download.");
+  const archive = await DocumentArchive.open(new Uint8Array(await readFile(path)));
+  expect(await archive.readTextEntry("word/numbering.xml")).toContain(
+    '<w:ind w:left="3402" w:hanging="1134"/>',
+  );
+});
+
 test("Writer downloads and reopens the named styles from a DOCX", /** Verifies the shipped file dialog at desktop and mobile widths. @param root0 - Browser fixtures. @param root0.page - Actual Chromium page. @returns Completion. */ async ({
   page,
 }) => {
