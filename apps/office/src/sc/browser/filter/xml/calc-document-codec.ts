@@ -1,6 +1,11 @@
 import { ScFormulaCell } from "../../../source/core/data/formulacell";
 import { escapeXml } from "../../../../xmloff/source/text/txtparae";
 /** @fileoverview Bounded Calc worker transfer of supported native cells, sparse attributes and geometry; XML remains the durable format. */
+import {
+  decodeMatrixCell,
+  encodeMatrixCell,
+  type CalcMatrixCellRecord,
+} from "./calc-matrix-cell-codec";
 import { Color, ColorTransparency, COL_AUTO } from "../../../../tools/inc/color";
 import { exportPageStyles } from "../../../source/filter/xml/xmlstyle.page";
 import { GetPrintRanges } from "../../../source/core/data/table1";
@@ -87,6 +92,7 @@ type ExternalSheet = readonly [name: string, cells: readonly ExternalCell[], com
 type FormulaCache = readonly [value: number | string, needsNumberFormat: boolean];
 /** Compact native scalar alternative with an optional clean formula result. */
 type Cell =
+  | CalcMatrixCellRecord
   | readonly [col: number, row: number, kind: "number", value: number]
   | readonly [col: number, row: number, kind: "text", value: string]
   | readonly [col: number, row: number, kind: "formula", value: string, cache?: FormulaCache]
@@ -350,6 +356,11 @@ function* encodeSteps(document: ScDocument): Generator<void, CalcDocumentRecord>
     while ((cell = iterator.GetNext(col, row))) {
       const formula = cell.getFormula();
       if (formula) {
+        const matrix = encodeMatrixCell(formula);
+        if (matrix) {
+          sheet.cells.push(matrix);
+          continue;
+        }
         const source = formula.GetFormula(FormulaGrammar.Grammar.GRAM_ODFF);
         try {
           if (
@@ -816,7 +827,13 @@ function* decodeSteps(record: CalcDocumentRecord): Generator<void, ScDocument> {
       if (sheet.repeatColumns)
         table.SetRepeatColRange(decodePrintRange(sheet.repeatColumns, document));
       if (sheet.repeatRows) table.SetRepeatRowRange(decodePrintRange(sheet.repeatRows, document));
-      for (const [col, row, kind, value, cache] of sheet.cells) {
+      for (const record of sheet.cells) {
+        if (record[2] === "matrix" || record[2] === "matrix-ref") {
+          decodeMatrixCell(importer, tab, record);
+          yield;
+          continue;
+        }
+        const [col, row, kind, value, cache] = record;
         const pos = new ScAddress(col, row, tab);
         if (kind === "number") importer.docImport.setNumericCell(pos, value);
         else if (typeof value !== "string")

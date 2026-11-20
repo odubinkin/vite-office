@@ -234,7 +234,6 @@ it("keeps importer APIs on the actual document and does not allocate invalid coo
 });
 it("rejects unsupported cell services and malformed structure explicitly", /** Each input is independent from the exporter. @returns Nothing. */ () => {
   for (const cell of [
-    '<table:table-cell table:formula="f:=1" table:number-columns-repeated="2"/>',
     "<table:table-cell><text:p><text:ruby/></text:p></table:table-cell>",
     '<table:table-cell><text:p><text:s text:c="1000001"/></text:p></table:table-cell>',
     '<table:table-cell table:formula="unknown:=1"/>',
@@ -245,14 +244,6 @@ it("rejects unsupported cell services and malformed structure explicitly", /** E
       /** Rejects the concrete unsupported semantic owner. @returns Document. */ () =>
         load(independent(`<table:table-row>${cell}</table:table-row>`)),
     ).toThrow();
-  expect(
-    /** Repeated formula rows need their real formula-copy services. @returns Document. */ () =>
-      load(
-        independent(
-          '<table:table-row table:number-rows-repeated="2"><table:table-cell table:formula="f:=1"/></table:table-row>',
-        ),
-      ),
-  ).toThrow(/repeated formula/);
   for (const content of [
     "<table:table-cell/>",
     "<table:table-row><table:table-row/></table:table-row>",

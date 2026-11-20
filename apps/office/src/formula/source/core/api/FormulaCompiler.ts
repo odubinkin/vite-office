@@ -49,6 +49,10 @@ const arithmetic = new Set<OpCode>([
   OpCode.ocLessEqual,
   OpCode.ocGreaterEqual,
   OpCode.ocNotAvail,
+  OpCode.ocMatRef,
+  OpCode.ocSqrt,
+  OpCode.ocIsError,
+  OpCode.ocFrequency,
   OpCode.ocIf,
   OpCode.ocAnd,
   OpCode.ocOffset,
@@ -242,10 +246,9 @@ export class FormulaCompiler {
     return false;
   }
 
-  /** Binds the original code owner and II flag;matrix compilation requires its unported real services. @param array - Token owner. @param computeII - Implicit intersection mode. @param matrixFlag - Matrix mode. @returns Compiler. */
+  /** Binds the original code owner and suppresses implicit intersection for matrix formulas. @param array - Token owner. @param computeII - Implicit intersection mode. @param matrixFlag - Matrix mode. @returns Compiler. */
   constructor(array: FormulaTokenArray, computeII = false, matrixFlag = false) {
-    if (matrixFlag) throw new Error("Formula matrix compilation is not implemented");
-    this.mbComputeII = computeII;
+    this.mbComputeII = computeII && !matrixFlag;
     this.mbMatrixFlag = matrixFlag;
     this.mpArr = array;
   }
@@ -419,7 +422,7 @@ export class FormulaCompiler {
           : op === OpCode.ocPercentSign
             ? SvNumFormatType.PERCENT
             : SvNumFormatType.NUMBER;
-    if (op === OpCode.ocPush) {
+    if (op === OpCode.ocPush || op === OpCode.ocMatRef) {
       this.PutCode(this.mpToken);
       if (this.NextToken() === OpCode.ocOpen) this.SetError(FormulaError.OperatorExpected);
     } else if (op === OpCode.ocMissing) {
@@ -443,6 +446,9 @@ export class FormulaCompiler {
         this.NextToken();
       }
     } else if (
+      op === OpCode.ocSqrt ||
+      op === OpCode.ocIsError ||
+      op === OpCode.ocFrequency ||
       op === OpCode.ocAnd ||
       op === OpCode.ocNot ||
       op === OpCode.ocIsEmpty ||

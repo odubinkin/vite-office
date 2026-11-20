@@ -1,3 +1,4 @@
+import { FormulaError, isPublishedFormulaError } from "../../../../formula/inc/errorcodes";
 import { errorSymbols } from "../../../../formula/inc/FormulaCompiler";
 /** @fileoverview Native scalar Calc XML cell/default/repeat import specialization. */
 import { ScXMLImportContext } from "./importcontext";
@@ -22,6 +23,8 @@ export class ScXMLTableRowCellContext extends ScXMLImportContext {
   private readonly repeat: number;
   private readonly mergedColumns: number;
   private readonly mergedRows: number;
+  private readonly matrixColumns: number | null;
+  private readonly matrixRows: number | null;
   private readonly type: number;
   private readonly currency: string | null;
   private readonly numberValue: number;
@@ -41,6 +44,8 @@ export class ScXMLTableRowCellContext extends ScXMLImportContext {
     this.repeat = repeatCount(attributes, XMLToken.TABLE_NUMBER_COLUMNS_REPEATED);
     this.mergedColumns = repeatCount(attributes, XMLToken.TABLE_NUMBER_COLUMNS_SPANNED);
     this.mergedRows = repeatCount(attributes, XMLToken.TABLE_NUMBER_ROWS_SPANNED);
+    this.matrixColumns = attributes.getAsInteger(XMLToken.TABLE_MATRIX_COLS_SPANNED);
+    this.matrixRows = attributes.getAsInteger(XMLToken.TABLE_MATRIX_ROWS_SPANNED);
     let type: number = T.TEXT;
     let number = NaN;
     let string: string | null = null;
@@ -114,8 +119,6 @@ export class ScXMLTableRowCellContext extends ScXMLImportContext {
     const name = attributes.get(XMLToken.TABLE_STYLE_NAME);
     this.style = name;
     this.hasStyle = name !== null;
-    if (this.source !== null && (this.repeat > 1 || row.repeat > 1))
-      throw new Error("ODS repeated formula services are not implemented");
   }
   /** Appends native text paragraphs, preserving the EditEngine line boundary. @param value - Decoded paragraph spans. @returns Nothing. */
   setParagraph(value: CellTextParagraph): void {
@@ -153,7 +156,14 @@ export class ScXMLTableRowCellContext extends ScXMLImportContext {
       endRow = Math.min(document.MaxRow(), pos.Row() + this.row.repeat - 1);
     if (document.ValidColRow(pos.Col(), pos.Row()))
       this.row.table.styles.AddRange(
-        new ScRange(pos.Col(), pos.Row(), pos.Tab(), endCol, endRow, pos.Tab()),
+        new ScRange(
+          pos.Col(),
+          pos.Row(),
+          pos.Tab(),
+          this.source === null ? endCol : pos.Col(),
+          this.source === null ? endRow : pos.Row(),
+          pos.Tab(),
+        ),
         this.style,
         this.source !== null && this.type === T.DATETIME ? T.UNDEFINED : this.type,
         this.currency,
@@ -175,7 +185,6 @@ export class ScXMLTableRowCellContext extends ScXMLImportContext {
       owner.unsupported("cell range overflow");
       return;
     }
-    owner.consumeCells(columns * rows);
     const number = this.numberValue;
     const firstParagraph = this.paragraphs[0]
       ?.map(
@@ -202,22 +211,64 @@ export class ScXMLTableRowCellContext extends ScXMLImportContext {
       this.errorValue || (cachedString !== undefined && possibleLegacyError)
         ? undefined
         : (cachedString ?? (Number.isFinite(number) ? number : undefined));
-    const string = unicode(this.source ?? value ?? "");
+    const legacyError = firstParagraph?.startsWith("Err:")
+      ? (Number(firstParagraph.slice(4)) as FormulaError)
+      : undefined;
+    const errorText = firstParagraph ?? this.stringValue ?? "";
+    const error =
+      (this.errorValue || !this.hasExtendedValueType) &&
+      (this.errorValue || possibleLegacyError || (this.source === null && number === 0))
+        ? (errorSymbols.get(errorText) ??
+          (legacyError !== undefined && isPublishedFormulaError(legacyError)
+            ? legacyError
+            : FormulaError.NONE))
+        : FormulaError.NONE;
+    const matrixValue =
+      error !== FormulaError.NONE || (possibleEmpty && number === 0)
+        ? null
+        : this.type === T.TEXT
+          ? (value ?? null)
+          : Number.isFinite(number)
+            ? number
+            : null;
+    if (this.source !== null) {
+      if (this.matrixColumns !== null || this.matrixRows !== null) {
+        if ((this.matrixColumns ?? 0) > 0 && (this.matrixRows ?? 0) > 0)
+          owner.AddMatrixFormula(
+            new ScRange(
+              pos.Col(),
+              pos.Row(),
+              pos.Tab(),
+              Math.min(document.MaxCol(), pos.Col() + (this.matrixColumns as number) - 1),
+              Math.min(document.MaxRow(), pos.Row() + (this.matrixRows as number) - 1),
+              pos.Tab(),
+            ),
+            this.source,
+            cachedString === undefined
+              ? error || this.paragraphs.length || Number.isFinite(number) || value !== undefined
+                ? matrixValue
+                : undefined
+              : error
+                ? null
+                : cachedString,
+            error,
+          );
+      } else {
+        owner.consumeCells(1);
+        owner.AddFormula(pos, this.source, cache, this.hasStyle, possibleEmpty && number === 0);
+      }
+      return;
+    }
+    const string = unicode(value ?? "");
     try {
       for (let col = 0; col < columns; col++)
         for (let row = 0; row < rows; row++) {
           const address = new ScAddress(pos.Col() + col, pos.Row() + row, pos.Tab());
           if (this.covered && owner.GetDocument().GetCellType(address) !== CellType.CELLTYPE_NONE)
             continue;
-          if (this.source !== null)
-            owner.AddFormula(
-              address,
-              this.source,
-              cache,
-              this.hasStyle,
-              possibleEmpty && number === 0,
-            );
-          else if (this.type !== T.TEXT)
+          if (owner.SetMatrixFormulaResult(address, matrixValue, error)) continue;
+          owner.consumeCells(1);
+          if (this.type !== T.TEXT)
             doc.setNumericCell(address, Number.isFinite(number) ? number : 0);
           else if (styled && !this.stringValue)
             doc.setEditCell(address, createCellEditText(owner, this.paragraphs));

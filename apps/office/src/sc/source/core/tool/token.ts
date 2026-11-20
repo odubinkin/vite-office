@@ -492,6 +492,9 @@ const operators = new Set<OpCode>([
   OpCode.ocLessEqual,
   OpCode.ocGreaterEqual,
   OpCode.ocNotAvail,
+  OpCode.ocSqrt,
+  OpCode.ocIsError,
+  OpCode.ocFrequency,
   OpCode.ocAnd,
   OpCode.ocOffset,
   OpCode.ocCountIf,
@@ -852,6 +855,10 @@ export class ScTokenArray extends FormulaTokenArray {
   /** Appends the actual native single-reference token with the retained limits owner. @param reference - Initialized reference data. @returns Added token or null. */
   AddSingleReference(reference: ScSingleRefData): FormulaToken | null {
     return this.Add(new ScSingleRefToken(this.mxSheetLimits, reference));
+  }
+  /** Appends the original matrix member reference token. @param reference - Relative master address. @returns Added token. */
+  AddMatrixSingleReference(reference: ScSingleRefData): FormulaToken | null {
+    return this.Add(new ScSingleRefToken(this.mxSheetLimits, reference, OpCode.ocMatRef));
   }
   /** Original double-reference token append with retained sheet limits. @param reference - Actual complex reference. @returns Token or null. */
   AddDoubleReference(reference: ScComplexRefData): FormulaToken | null {

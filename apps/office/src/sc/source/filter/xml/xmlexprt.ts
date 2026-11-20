@@ -19,7 +19,7 @@ import {
   getCellStyleXMLNames,
 } from "./xmlstyle";
 import type { ScTable } from "../../../inc/table";
-import type { ScFormulaCell } from "../../../inc/formulacell";
+import { ScMatrixMode, type ScFormulaCell } from "../../../inc/formulacell";
 import type { SharedStringConstReference } from "../../../../svl/inc/sharedstring";
 import type { ScDocument } from "../../../inc/document";
 import { MAXCOL, MAXROW, ScAddress, ScRange, ScRefFlags } from "../../../inc/address";
@@ -565,11 +565,18 @@ export class ScXMLExport {
     const type = cell.getType();
     if (type === CellType.CELLTYPE_FORMULA) {
       const actual = cell.getFormula() as ScFormulaCell;
-      const source = actual.GetFormula(FormulaGrammar.Grammar.GRAM_ODFF);
-      try {
-        formula = ` table:formula="of:${escapeXml(text(source))}"`;
-      } finally {
-        source.dispose();
+      const mode = actual.GetMatrixFlag();
+      if (mode !== ScMatrixMode.Reference) {
+        const source = actual.GetFormula(FormulaGrammar.Grammar.GRAM_ODFF);
+        try {
+          const dimensions = actual.GetMatColsRows();
+          const code = text(source);
+          formula = ` table:formula="of:${escapeXml(dimensions && code.startsWith("{") ? code.slice(1, -1) : code)}"`;
+          if (dimensions)
+            formula += ` table:number-matrix-columns-spanned="${dimensions[0]}" table:number-matrix-rows-spanned="${dimensions[1]}"`;
+        } finally {
+          source.dispose();
+        }
       }
       const error = actual.GetErrCode();
       if (error !== FormulaError.NONE) {
@@ -581,6 +588,9 @@ export class ScXMLExport {
         } finally {
           message.dispose();
         }
+      } else if (mode !== ScMatrixMode.NONE && actual.IsEmptyDisplayedAsString()) {
+        value = ' office:value-type="float" office:value="0"';
+        children = "<text:p/>";
       } else if (!actual.IsEmpty()) {
         if (actual.IsValue())
           value = writeNumberFormatAttributes(

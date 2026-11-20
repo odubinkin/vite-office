@@ -1,3 +1,4 @@
+import { FormulaError } from "../../../../formula/inc/errorcodes";
 import { ScFormulaCell } from "../../core/data/formulacell";
 import { SV_COUNTRY_LANGUAGE_OFFSET, SvNumFormatType as T } from "../../../../svl/inc/zforlist";
 import { getCurrencySymbol } from "../../../../xmloff/source/style/numehelp";
@@ -57,16 +58,32 @@ import { ScDocOptions } from "../../core/tool/docoptio";
 export interface ScXMLImportOptions extends OdfXmlParseOptions {
   readonly maxExpandedCells?: number;
 }
+/** Saved numeric, text, empty or error result for one matrix formula cell. */
+interface MatrixCellResult {
+  readonly position: ScAddress;
+  readonly value: number | string | null | undefined;
+  readonly error: FormulaError;
+}
+
+/** Matrix ranges are retained until named expressions are installed and formulas can be compiled. */
+interface MatrixFormulaRange {
+  readonly range: ScRange;
+  readonly master: MatrixCellResult;
+  readonly members: MatrixCellResult[];
+}
+
 /** Actual import root/state for scalar content;no intermediate sheet/cell data model is retained. */
 export class ScXMLImport extends SvXMLImport implements SvXMLImportRootFactory {
   readonly docImport: ScDocumentImport;
   private readonly namedExpressions: ScMyNamedExpression[] = [];
+  private readonly matrixRanges: MatrixFormulaRange[] = [];
   private readonly pendingFormulas: {
     address: ScAddress;
     source: string;
     cache: number | string | undefined;
     hasStyle: boolean;
     emptyDisplay: boolean;
+    matrix?: MatrixFormulaRange;
   }[] = [];
 
   /** Collects the named definition before resolution. @param expression - Original XML definition. @returns Nothing. */
@@ -82,6 +99,45 @@ export class ScXMLImport extends SvXMLImport implements SvXMLImportRootFactory {
     emptyDisplay: boolean,
   ): void {
     this.pendingFormulas.push({ address, source, cache, hasStyle, emptyDisplay });
+  }
+
+  /** Queues a native master range and its top-left cache. @param range - Clipped array rectangle. @param source - Original formula. @param cache - Saved top-left value. @param error - Original error. @returns Nothing. */
+  AddMatrixFormula(
+    range: ScRange,
+    source: string,
+    cache: number | string | null | undefined,
+    error: FormulaError,
+  ): void {
+    this.consumeCells(
+      error === FormulaError.Spill
+        ? 1
+        : (range.aEnd.Col() - range.aStart.Col() + 1) * (range.aEnd.Row() - range.aStart.Row() + 1),
+    );
+    const matrix = { range, master: { position: range.aStart, value: cache, error }, members: [] };
+    if (error !== FormulaError.Spill) this.matrixRanges.push(matrix);
+    this.pendingFormulas.push({
+      address: range.aStart,
+      source,
+      cache: undefined,
+      hasStyle: true,
+      emptyDisplay: false,
+      matrix,
+    });
+  }
+
+  /** Adopts a cache only for cells inside a materialized matrix range. @param position - Saved cell position. @param value - Saved result. @param error - Saved error. @returns Whether the position belongs to a matrix. */
+  SetMatrixFormulaResult(
+    position: ScAddress,
+    value: number | string | null,
+    error: FormulaError,
+  ): boolean {
+    for (let index = this.matrixRanges.length - 1; index >= 0; index--) {
+      const matrix = this.matrixRanges[index];
+      if (!matrix?.range.Contains(position)) continue;
+      matrix.members.push({ position, value, error });
+      return true;
+    }
+    return false;
   }
 
   /** Reads the original ODF scalar discriminator. @param value - ODF attribute. @returns Native type. */
@@ -594,9 +650,26 @@ export class ScXMLImport extends SvXMLImport implements SvXMLImportRootFactory {
         ),
         grammar,
       );
-      for (const { address, source, cache, hasStyle, emptyDisplay } of this.pendingFormulas) {
+      for (const { address, source, cache, hasStyle, emptyDisplay, matrix } of this
+        .pendingFormulas) {
         const value = unicode(source);
         try {
+          if (matrix) {
+            const master = this.docImport.setMatrixCells(
+              matrix.range,
+              value,
+              grammar,
+              matrix.master.error === FormulaError.Spill,
+            );
+            if (matrix.master.value !== undefined)
+              master.SetMatrixCachedResult(matrix.master.value, matrix.master.error);
+            for (const result of matrix.members)
+              if (result.value !== undefined)
+                this.document
+                  .GetFormulaCell(result.position)
+                  ?.SetMatrixCachedResult(result.value, result.error);
+            continue;
+          }
           const cell = new ScFormulaCell(this.document, address, value, grammar);
           if (typeof cache === "string") {
             const string = unicode(cache);

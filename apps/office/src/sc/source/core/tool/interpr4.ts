@@ -50,8 +50,9 @@ import { CalculateMatrixLookup, InterpretReferenceOpcode, ScAnd } from "./interp
 import { InterpretConditionalAggregate } from "./interpr1.conditional";
 import { CompareScalar } from "./compare";
 import { InterpretDateOpcode, ScRangeFunc } from "./interpr2";
+import { ScFrequency, ScMatRef } from "./interpr5";
 import { InterpretAnalysisAddIn } from "./addincol.analysis";
-import { ScIsEmpty, ScNot, ScOffset } from "./interpr1.reference";
+import { ScIsEmpty, ScIsError, ScNot, ScOffset } from "./interpr1.reference";
 import { isComparison } from "../../../../formula/inc/FormulaCompiler";
 import { ScQueryEntry, type ScQueryItem } from "./queryentry";
 import { ScQueryCellIteratorDirect } from "../data/queryiter";
@@ -775,6 +776,38 @@ export class ScInterpreter {
       left = this.GetDouble();
     this.PushDouble(subtract ? approxSub(left, right) : approxAdd(left, right));
   }
+  /** Materializes the range returned by a matrix formula. @param range - Native referenced area. @returns Matrix result. */
+  private MatrixFromRange(range: ScRange): ScMatrix {
+    const { aStart: start, aEnd: end } = range;
+    const matrix = new ScMatrix(end.Col() - start.Col() + 1, end.Row() - start.Row() + 1);
+    if (!matrix.ValidColRow(end.Col() - start.Col(), end.Row() - start.Row())) return matrix;
+    for (let col = start.Col(); col <= end.Col(); col++)
+      for (let row = start.Row(); row <= end.Row(); row++) {
+        const cell = new ScRefCellValue(this.mrDoc, new ScAddress(col, row, start.Tab()));
+        const c = col - start.Col(),
+          r = row - start.Row();
+        const formula = cell.getFormula();
+        const error = formula?.GetErrCode() ?? FormulaError.NONE;
+        if (error !== FormulaError.NONE) matrix.PutError(error, c, r);
+        else if (cell.hasEmptyValue()) matrix.PutEmpty(c, r);
+        else if (formula) {
+          if (formula.IsValue()) matrix.PutDouble(formula.GetValue(), c, r);
+          else matrix.PutString(formula.GetString(), c, r);
+        } else if (cell.getType() === CellType.CELLTYPE_STRING)
+          matrix.PutString(cell.getSharedString() as SharedStringConstReference, c, r);
+        else if (cell.getType() === CellType.CELLTYPE_EDIT) {
+          const value = unicode(this.GetCellString(cell));
+          const shared = this.mrDoc.GetSharedStringPool().intern(value);
+          try {
+            matrix.PutString(shared, c, r);
+          } finally {
+            shared.dispose();
+            value.dispose();
+          }
+        } else matrix.PutDouble(cell.getDouble(), c, r);
+      }
+    return matrix;
+  }
   /** Produces the original matrix result and its scalar upper-left projection. @param matrix - Matrix result. @returns Nothing. */
   private QueryMatrixType(matrix: ScMatrix | null): void {
     if (!matrix) {
@@ -847,9 +880,18 @@ export class ScInterpreter {
         if (token.GetType() === StackVar.svDouble)
           this.PushDouble((token as FormulaDoubleToken).GetDouble());
         else this.PushWithoutError(token);
-      } else if (op === OpCode.ocMissing) this.PushWithoutError(token);
+      } else if (op === OpCode.ocMatRef && token instanceof ScSingleRefToken)
+        ScMatRef.call(this, token);
+      else if (op === OpCode.ocMissing) this.PushWithoutError(token);
       else if (op === OpCode.ocPi) this.PushDouble(Math.PI);
       else if (op === OpCode.ocNotAvail) this.SetError(FormulaError.NotAvailable);
+      else if (op === OpCode.ocFrequency)
+        ScFrequency.call(this, (token as FormulaByteToken).GetByte());
+      else if (op === OpCode.ocSqrt) {
+        const number = this.GetDouble();
+        if (number < 0) this.SetError(FormulaError.IllegalArgument);
+        else this.PushDouble(Math.sqrt(number));
+      } else if (op === OpCode.ocIsError) ScIsError.call(this);
       else if (op === OpCode.ocAnd) ScAnd.call(this, (token as FormulaByteToken).GetByte());
       else if (op === OpCode.ocNot) ScNot.call(this, (token as FormulaByteToken).GetByte());
       else if (op === OpCode.ocIsEmpty) ScIsEmpty.call(this, (token as FormulaByteToken).GetByte());
@@ -910,8 +952,13 @@ export class ScInterpreter {
     ) {
       const range = this.PopDoubleRef(),
         address = new ScAddress();
-      if (this.nGlobalError === FormulaError.NONE && this.DoubleRefToPosSingleRef(range, address))
-        this.PushCellResultToken(address);
+      if (this.nGlobalError === FormulaError.NONE) {
+        if (this.pMyFormulaCell?.GetMatColsRows()) {
+          if (range.aStart.Tab() === range.aEnd.Tab())
+            this.QueryMatrixType(this.MatrixFromRange(range));
+          else this.SetError(FormulaError.NoRef);
+        } else if (this.DoubleRefToPosSingleRef(range, address)) this.PushCellResultToken(address);
+      }
     }
     const result = this.pStack[0];
     if (this.pStack.length === 1 && result instanceof ScExternalSingleRefToken) {

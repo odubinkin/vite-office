@@ -1,6 +1,6 @@
 /** @fileoverview Calc scalar information functions and OFFSET over native local reference tokens. */
 import { FormulaError } from "../../../../formula/inc/errorcodes";
-import { StackVar } from "../../../../formula/inc/token";
+import { FormulaErrorToken, StackVar } from "../../../../formula/inc/token";
 import { SvNumFormatType } from "../../../../svl/inc/zforlist";
 import { ScAddress, ScRange } from "../../../inc/address";
 import { CellType } from "../../../inc/global";
@@ -141,4 +141,34 @@ export function ScOffset(this: ScInterpreter, count: number): void {
       this["PushWithoutError"](new ScDoubleRefToken(limits, ref));
     }
   }
+}
+
+/** Tests error state without coercing text to numbers. @param this - Active interpreter. @returns Nothing. */
+export function ScIsError(this: ScInterpreter): void {
+  const type = this["pStack"].at(-1)?.GetType();
+  let error = FormulaError.NONE;
+  if (type === StackVar.svSingleRef || type === StackVar.svDoubleRef) {
+    const address = type === StackVar.svSingleRef ? this["PopSingleRef"]() : new ScAddress();
+    if (type === StackVar.svDoubleRef)
+      this["DoubleRefToPosSingleRef"](this["PopDoubleRef"](), address);
+    if (this["nGlobalError"] === FormulaError.NONE)
+      error = this.mrDoc.GetFormulaCell(address)?.GetErrCode() ?? FormulaError.NONE;
+  } else if (type === StackVar.svExternalSingleRef) {
+    const token = this["PopExternalSingleRef"]();
+    if (token instanceof FormulaErrorToken) error = token.GetError();
+  } else if (type === StackVar.svMatrix || type === StackVar.svExternalDoubleRef) {
+    const matrix = this["GetLookupMatrix"]();
+    const item = matrix?.Get(0, 0);
+    if (item) {
+      error = item.GetError();
+      item.dispose();
+    } else error = FormulaError.NoValue;
+  } else {
+    const token = this["pStack"].pop();
+    if (token instanceof FormulaErrorToken) error = token.GetError();
+  }
+  const result = error !== FormulaError.NONE || this["nGlobalError"] !== FormulaError.NONE;
+  this["nGlobalError"] = FormulaError.NONE;
+  this["nRetFmtType"] = SvNumFormatType.LOGICAL;
+  this["PushDouble"](Number(result));
 }

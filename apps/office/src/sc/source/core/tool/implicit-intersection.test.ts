@@ -197,7 +197,7 @@ it("caps native II argument locations at eight and retains actual malformed-expr
   doc.Dispose();
 });
 
-it("retains native precompiled matrix mode,copy identity and explicit unsupported evaluation", /** Mode is supplied through the actual native constructor,without altering private cell state. @returns Nothing. */ () => {
+it("keeps native matrix mode and copy identity through compilation and evaluation", /** Mode is supplied through the actual native constructor,without altering private cell state. @returns Nothing. */ () => {
   const doc = new ScDocument();
   doc.InsertTab(0, unicode("Data"));
   doc.SetAutoCalc(false);
@@ -215,19 +215,20 @@ it("retains native precompiled matrix mode,copy identity and explicit unsupporte
   expect(matrix.CompareByTokenArray(copy)).toBe(ScFormulaCell.NotEqual);
   expect(text(matrix.GetFormula(doc.GetGrammar()))).toBe("{=1}");
   expect(text(copy.GetFormula(doc.GetGrammar()))).toBe("{=1}");
-  expect(
-    /** Attempts actual matrix evaluation. @returns Result or explicit unsupported service error. */ () =>
-      matrix.GetValue(),
-  ).toThrow("Matrix formula evaluation is not implemented");
-  expect(
-    /** Attempts copied matrix evaluation. @returns Result or explicit unsupported service error. */ () =>
-      copy.GetValue(),
-  ).toThrow("Matrix formula evaluation is not implemented");
-  for (const input of [unicode("=1"), new ScCompiler(doc, position).CompileString(unicode("=1"))])
-    expect(
-      /** Requests the actual unported matrix compiler. @returns Cell or explicit unsupported service error. */ () =>
-        new ScFormulaCell(doc, position, input, doc.GetGrammar(), ScMatrixMode.Formula),
-    ).toThrow("Formula matrix compilation is not implemented");
+  expect(matrix.GetValue()).toBe(1);
+  expect(copy.GetValue()).toBe(1);
+  for (const input of [unicode("=1"), new ScCompiler(doc, position).CompileString(unicode("=1"))]) {
+    const compiled = new ScFormulaCell(
+      doc,
+      position,
+      input,
+      doc.GetGrammar(),
+      ScMatrixMode.Formula,
+    );
+    expect(text(compiled.GetFormula(doc.GetGrammar()))).toBe("{=1}");
+    expect(compiled.GetValue()).toBe(1);
+    compiled.Dispose();
+  }
   matrix.Dispose();
   copy.Dispose();
   doc.Dispose();
@@ -251,10 +252,7 @@ it("resolves real matrix reference origins and retains native orphan source form
   expect(text(follower.GetFormula(doc.GetGrammar()))).toBe("=2+3");
   doc.SetValue(originPosition, 7);
   expect(text(follower.GetFormula(doc.GetGrammar()))).toBe("{=A1}");
-  expect(
-    /** Attempts matrix reference evaluation. @returns Result or explicit unsupported service error. */ () =>
-      follower.GetValue(),
-  ).toThrow("Matrix formula evaluation is not implemented");
+  expect(follower.GetErrCode()).toBe(FormulaError.NoRef);
   follower.Dispose();
   doc.Dispose();
 });

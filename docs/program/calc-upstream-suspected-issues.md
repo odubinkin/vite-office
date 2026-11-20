@@ -7382,3 +7382,35 @@ columns receives no default style or style-driven number-format
 override from this path. Calc follows both original branches.
 
 - [Original column fallback loop](../../vendor/libreoffice-reference/sc/source/filter/xml/XMLStylesImportHelper.cxx#L240)
+
+### CALC-776 — A repeated ODF formula is installed only at the first position
+
+`ScXMLTableRowCellContext::AddFormulaCell` warns when the cell or row is
+repeated and still inserts just one formula at the original address.
+The repeated shape advances the cursor, while later ordinary cells
+continue to honor their own repetition.
+
+- [Original formula position admission](../../vendor/libreoffice-reference/sc/source/filter/xml/xmlcelli.cxx#L1431)
+
+### CALC-777 — A blank matrix result can be stored as a numeric zero
+
+An ODF member of a formula matrix can contain a numeric zero and an
+empty text paragraph even when its visible result is blank. Calc
+restores the empty-display flag and retains the member's reference to
+the matrix master. The original matrix fixture checks this alongside
+the cached error cases.
+
+- [Original matrix fixture assertions](../../vendor/libreoffice-reference/sc/qa/unit/subsequent_filters_test.cxx#L786)
+- [Original formula cache lexical recovery](../../vendor/libreoffice-reference/sc/source/filter/xml/xmlcelli.cxx#L1495)
+
+### CALC-778 — Equal FREQUENCY cutoffs can exchange their result positions
+
+The original numeric sort retains the source index of each cutoff but can
+reorder equal values during partitioning. For sufficiently long sequences
+it also swaps a random pair before partitioning. Since the cumulative
+scan assigns the entire count to the first sorted instance of a duplicate
+cutoff, equal input cutoffs can receive different counts depending on their
+sort order. Calc preserves the original partitioning and pre-sort swaps.
+
+- [Original numeric sort](../../vendor/libreoffice-reference/sc/source/core/tool/interpr3.cxx#L4606)
+- [Original bin scan](../../vendor/libreoffice-reference/sc/source/core/tool/interpr5.cxx#L1883)

@@ -140,10 +140,10 @@ it("rejects unsupported compilation before touching existing RPN", /** Leaves un
       new FormulaCompiler(flagged).CompileTokenArray(),
   ).toThrow(/array context/);
   expect(new FormulaCompiler(array, true)).toBeInstanceOf(FormulaCompiler);
-  expect(
-    /** Rejects missing matrix services. @returns Compiler. */ () =>
-      new FormulaCompiler(array, false, true),
-  ).toThrow(/matrix/);
+  const matrixFormula = tokens([1]);
+  new FormulaCompiler(matrixFormula, false, true).CompileTokenArray();
+  expect(matrixFormula.GetCodeError()).toBe(FormulaError.NONE);
+  expect(matrixFormula.GetCodeLen()).toBe(1);
 });
 
 it("preserves the native expression and token-recursion limits", /** Bounded source witnesses for nested groups and prefix plus. @returns Nothing. */ () => {

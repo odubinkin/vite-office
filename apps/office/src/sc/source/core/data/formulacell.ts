@@ -6,7 +6,13 @@ import {
 } from "../../../../svl/source/notify/listener";
 import { ScGlobal } from "../../../inc/global";
 import { SfxHint, SfxHintId } from "../../../../svl/inc/hint";
-import { ScSingleRefToken, ScDoubleRefToken, ScTableRefToken } from "../../../inc/token";
+import {
+  ScSingleRefToken,
+  ScDoubleRefToken,
+  ScTableRefToken,
+  ScEmptyCellToken,
+  ScMatrixCellResultToken,
+} from "../../../inc/token";
 import {
   StackVar,
   FormulaDoubleToken,
@@ -24,6 +30,7 @@ import { FormulaGrammar, type Grammar } from "../../../../formula/inc/grammar";
 import { FormulaError } from "../../../../formula/inc/errorcodes";
 import { ScCompiler } from "../../../inc/compiler";
 import { ScInterpreter } from "../inc/interpre";
+import { ScMatrix } from "../tool/scmatrix";
 import { ScFormulaResult, type FormulaResultNumber } from "../../../inc/formularesult";
 import { ScTokenArray } from "../../../inc/tokenarray";
 import { UpdateRefMode, CellType } from "../../../inc/global";
@@ -34,13 +41,14 @@ import type { ScDocument } from "../../../inc/document";
 import { FormulaResultValue } from "../../../inc/formularesult";
 import { OUString } from "../../../../sal/inc/rtl/ustring";
 import { unicode, text } from "../../../../i18nlangtag/source/isolang/isolang.tables";
+import type { ScConstMatrixRef } from "../../../inc/types";
 import { ScFormulaCellGroup } from "./formulacellgroup";
 import { NfIndexTableOffset, SvNumFormatType } from "../../../../svl/inc/zforlist";
 import { OpCode } from "../../../../formula/inc/opcode";
 import { SC_LISTENER_QUERY_FORMULA_GROUP_POS } from "../../../inc/listenerqueryids";
 import { RefQueryFormulaGroup } from "../../../inc/listenerquery";
 
-/** Original formula-cell matrix discriminator;precompiled metadata is represented while matrix computation remains unported. */
+/** Original formula-cell matrix discriminator for scalar cells, masters and references. */
 export enum ScMatrixMode {
   NONE = 0,
   Formula = 1,
@@ -71,6 +79,7 @@ export class ScFormulaCell extends SvtListener<SfxHint> {
   private readonly eTempGrammar: Grammar;
   private cMatrixFlag: ScMatrixMode = ScMatrixMode.NONE;
   private bDirty = true;
+  private bSpilled = false;
   private bCompile = false;
   private bChanged = false;
   private bNeedListening = false;
@@ -297,6 +306,7 @@ export class ScFormulaCell extends SvtListener<SfxHint> {
         throw new Error("Formula foreign-document pool conversion is not implemented");
       this.rDocument = doc;
       this.cMatrixFlag = source.cMatrixFlag;
+      this.bSpilled = source.bSpilled;
       this.aPos = new ScAddress(pos);
       this.eTempGrammar = source.eTempGrammar;
       this.nFormatType = source.nFormatType;
@@ -426,6 +436,91 @@ export class ScFormulaCell extends SvtListener<SfxHint> {
   /** Original matrix-mode query reads the actual cell member. @returns Mode. */
   GetMatrixFlag(): ScMatrixMode {
     return this.cMatrixFlag;
+  }
+  /** Stores the declared geometry on the original matrix formula result. @param columns - Width. @param rows - Height. @returns Nothing. */
+  SetMatColsRows(columns: number, rows: number): void {
+    const token = this.aResult.GetMatrixFormulaCellToken();
+    if (token) token.SetMatColsRows(columns, rows);
+    else this.aResult.SetMatrix(columns, rows, null, null);
+  }
+  /** Reads declared dimensions without interpreting the matrix. @returns Geometry or undefined. */
+  GetMatColsRows(): readonly [number, number] | undefined {
+    if (this.cMatrixFlag !== ScMatrixMode.Formula) return undefined;
+    const token = this.aResult.GetMatrixFormulaCellToken();
+    return token ? [token.GetMatCols(), token.GetMatRows()] : undefined;
+  }
+  /** Resolves the matrix origin from the actual reference token. @returns Origin or undefined. */
+  GetMatrixOrigin(): ScAddress | undefined {
+    if (this.cMatrixFlag === ScMatrixMode.Formula) return new ScAddress(this.aPos);
+    if (this.cMatrixFlag !== ScMatrixMode.Reference) return undefined;
+    for (const token of this.pCode.RPNTokens())
+      if (token instanceof ScSingleRefToken && token.GetOpCode() === OpCode.ocMatRef) {
+        const origin = token.GetSingleRef().toAbs(this.rDocument, this.aPos);
+        return origin.IsValid() ? origin : undefined;
+      }
+    return undefined;
+  }
+  /** Borrows the calculated result matrix through the actual result owner. @returns Matrix or null. */
+  GetMatrix(): ScConstMatrixRef {
+    this.MaybeInterpret();
+    return this.aResult.GetMatrix();
+  }
+  /** Retains an imported spill error without overwriting existing cells. @returns Nothing. */
+  MarkAsSpilled(): void {
+    this.bSpilled = true;
+    this.SetMatrixCachedResult(null, FormulaError.Spill);
+  }
+  /** Reports whether a saved spill error still has a blocking cell. @returns Saved spill state that remains applicable. */
+  IsSpilled(): boolean {
+    return (
+      this.HasSpillBlocker() ||
+      (this.bSpilled && !this.bDirty && this.aResult.GetResultError() === FormulaError.Spill)
+    );
+  }
+  /** Checks the originally blocked array area before interpreting its master. @returns Whether a cell still prevents spilling. */
+  private HasSpillBlocker(): boolean {
+    if (!this.bSpilled) return false;
+    const dimensions = this.GetMatColsRows();
+    if (!dimensions) return false;
+    const { aPos: pos } = this;
+    const endCol = pos.Col() + dimensions[0] - 1;
+    const endRow = pos.Row() + dimensions[1] - 1;
+    return (
+      (endRow > pos.Row() &&
+        !this.rDocument.IsBlockEmpty(pos.Col(), pos.Row() + 1, pos.Col(), endRow, pos.Tab())) ||
+      (endCol > pos.Col() &&
+        !this.rDocument.IsBlockEmpty(pos.Col() + 1, pos.Row(), endCol, endRow, pos.Tab()))
+    );
+  }
+  /** Checks recursive access to a matrix master. @returns Whether interpreting. */
+  IsRunning(): boolean {
+    return this.bRunning;
+  }
+  /** Installs one trusted matrix cache without losing master geometry. @param value - Cached number, string or empty display. @param error - Cached formula error. @returns Nothing. */
+  SetMatrixCachedResult(value: number | string | null, error = FormulaError.NONE): void {
+    if (error !== FormulaError.NONE) this.aResult.SetResultError(error);
+    else {
+      let token: FormulaToken;
+      if (typeof value === "number") token = new FormulaDoubleToken(value);
+      else if (value === null) token = new ScEmptyCellToken(false, true);
+      else {
+        const string = unicode(value);
+        const shared = this.rDocument.GetSharedStringPool().intern(string);
+        try {
+          token = new FormulaStringToken(shared);
+        } finally {
+          shared.dispose();
+          string.dispose();
+        }
+      }
+      const dimensions = this.GetMatColsRows();
+      this.aResult.SetToken(
+        dimensions && value !== null
+          ? new ScMatrixCellResultToken(new ScMatrix(...dimensions), token)
+          : token,
+      );
+    }
+    this.ResetDirty();
   }
   /** Original borrowed owning document. @returns Actual document. */
   GetDocument(): ScDocument {
@@ -639,8 +734,11 @@ export class ScFormulaCell extends SvtListener<SfxHint> {
   }
   /** Runs the actual interpreter and stores its genuine result token; no display-side evaluation occurs. @returns Whether interpretation ran. */
   Interpret(): boolean {
-    if (this.cMatrixFlag !== ScMatrixMode.NONE)
-      throw new Error("Matrix formula evaluation is not implemented");
+    if (this.HasSpillBlocker()) {
+      this.SetMatrixCachedResult(null, FormulaError.Spill);
+      this.rDocument.RemoveFromFormulaTree(this);
+      return true;
+    }
     if (this.bRunning) {
       this.aResult.SetResultError(FormulaError.CircularReference);
       return false;

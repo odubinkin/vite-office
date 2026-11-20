@@ -9,11 +9,11 @@ import type { base_element_block } from "../../../../external/mdds/include/mdds/
 import type { Grammar } from "../../../../formula/inc/grammar";
 import type { OUStringConstReference } from "../../../../sal/inc/rtl/ustring";
 import { SvtScriptType } from "../../../../svl/inc/languageoptions";
-import { ValidTab, type ScAddress } from "../../../inc/address";
+import { ValidTab, ScAddress, type ScRange } from "../../../inc/address";
 import { CellTextAttr } from "../../../inc/celltextattr";
 import type { ScColumn } from "../../../inc/column";
 import type { ScDocument } from "../../../inc/document";
-import { ScFormulaCell } from "../../../inc/formulacell";
+import { ScFormulaCell, ScMatrixMode } from "../../../inc/formulacell";
 import { StartListeningContext } from "../../../inc/listenercontext";
 import {
   CellTextAttrStoreType,
@@ -29,6 +29,7 @@ import {
   string_element_callbacks,
   type ColumnBlockPosition,
 } from "../../../inc/mtvelements";
+import { ScSingleRefData } from "../../../inc/refdata";
 import { SharedFormulaUtil } from "../../../inc/sharedformula";
 import { ScTokenArray } from "../../../inc/tokenarray";
 import { ScExternalSingleRefToken, ScExternalDoubleRefToken } from "../tool/token";
@@ -271,6 +272,44 @@ export class ScDocumentImport {
         edittext_element_callbacks,
       );
   }
+  /** Installs the native matrix master and relative formula references over a validated range. @param range - Declared matrix area. @param source - Formula source. @param grammar - Source grammar. @param spilled - Whether the saved master failed to spill. @returns Master cell. */
+  setMatrixCells(
+    range: ScRange,
+    source: OUStringConstReference,
+    grammar: Grammar,
+    spilled = false,
+  ): ScFormulaCell {
+    const document = this.getDoc();
+    const { aStart: base, aEnd: end } = range;
+    if (
+      !document.ValidColRow(base.Col(), base.Row()) ||
+      !document.ValidColRow(end.Col(), end.Row()) ||
+      base.Tab() !== end.Tab() ||
+      !document.FetchTable(base.Tab())
+    )
+      throw new Error("Calc matrix range is invalid.");
+    const master = new ScFormulaCell(document, base, source, grammar, ScMatrixMode.Formula);
+    master.SetMatColsRows(end.Col() - base.Col() + 1, end.Row() - base.Row() + 1);
+    this.setFormulaCell(base, master);
+    if (spilled) {
+      master.MarkAsSpilled();
+      return master;
+    }
+    for (let col = base.Col(); col <= end.Col(); col++)
+      for (let row = col === base.Col() ? base.Row() + 1 : base.Row(); row <= end.Row(); row++) {
+        const position = new ScAddress(col, row, base.Tab());
+        const reference = new ScSingleRefData();
+        reference.InitAddressRel(document, base, position);
+        const tokens = new ScTokenArray(document);
+        tokens.AddMatrixSingleReference(reference);
+        this.setFormulaCell(
+          position,
+          new ScFormulaCell(document, position, tokens, grammar, ScMatrixMode.Reference),
+        );
+      }
+    return master;
+  }
+
   /** Original source formula with an optional numeric cache or mandatory string cache. @param pos - Destination. @param value - Formula source. @param grammar - Explicit grammar. @param result - Optional cached double or actual Unicode result. @returns Nothing. */
   setFormulaCell(
     pos: ScAddress,
