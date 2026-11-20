@@ -1,0 +1,32 @@
+{
+  "scope": "Original Calc error/no-error conditional rules and admission checks for its existing XLSX and ODS condition families.",
+  "implementationCommit": "3a504f7958a3",
+  "upstream": [
+    "sc/source/core/data/conditio.cxx (ScConditionEntry::IsError)",
+    "sc/source/filter/oox/condformatbuffer.cxx (containsErrors and notContainsErrors)",
+    "sc/source/filter/excel/xecontent.cxx (the original fixed formula for error rules)",
+    "sc/source/filter/xml/xmlcondformat.cxx and sc/source/filter/xml/xmlexprt.cxx (is-error and is-no-error)"
+  ],
+  "checks": [
+    {
+      "command": "npm run test:calc -- condformatbuffer.admission.test.ts xmlcondformat.admission.test.ts conditio.entry.test.ts --maxWorkers=1 --testTimeout=120000",
+      "result": "pass",
+      "evidence": "Nine tests. Real formula errors, values, text and empty cells get the original style decisions through XLSX and ODS. Missing threshold attributes, extension-only ranges, priority fallbacks, rich text and deleted sheet references have executable checks."
+    },
+    {
+      "command": "cd apps/office && node ../../node_modules/vitest/vitest.mjs run --config vitest.calc.config.ts condformatbuffer.admission.test.ts xmlcondformat.admission.test.ts extlstcontext.test.ts condformatbuffer.date.test.ts condformatbuffer.text.test.ts condformatbuffer.colorscale.test.ts excelfilter.page-settings.test.ts conditional-copy.test.ts conditio.entry.test.ts stylesbuffer.color.test.ts ods-native-fonts.test.ts address.ooo-regression.test.ts --maxWorkers=1 --testTimeout=120000 --coverage --coverage.reporter=text --coverage.reporter=json --coverage.include=src/sc/source/core/data/conditio.entry.ts --coverage.include=src/sc/source/core/data/documen4.ts --coverage.include=src/sc/source/filter/excel/xecontent.conditional.ts --coverage.include=src/sc/source/filter/excel/xestyle.dxf.ts --coverage.include=src/sc/source/filter/oox/condformatbuffer.ts --coverage.include=src/sc/source/filter/oox/stylesbuffer.dxf.ts --coverage.include=src/sc/source/filter/xml/xmlcondformat.ts --coverage.thresholds.statements=90 --coverage.thresholds.branches=90 --coverage.thresholds.functions=90 --coverage.thresholds.lines=90 --coverage.reportsDirectory=../../.git/cf-admission-acceptance-coverage",
+      "result": "pass",
+      "evidence": "81 cases in twelve files. The original seven-owner profile passes unchanged scoped90 at 95.91% statements, 91.80% branches, 96.93% functions and 98.24% lines. No coverage counter modification or exclusion. See .git/calc-cf-admission-acceptance.log."
+    },
+    {
+      "command": "npm run test:static && PLAYWRIGHT_BROWSERS_PATH=\"$PWD/.agentplane/tmp/zip-migration/browsers\" ./node_modules/.bin/playwright test -c .git/calc-panes-browser.config.mts --project calc --workers=1 --timeout=45000 xlsx-error-conditions.spec.ts",
+      "result": "pass",
+      "evidence": "Production build and browser. Editing a formula changes cell shading, the downloaded workbook carries ISERROR(F4), and mobile reopening retains the error style. The initial test clicked a frozen pane cell hidden by its header. The final test selects it through the existing name box. Related extended condition browser case also passed."
+    },
+    {
+      "command": "npm run check:source-provenance && npm run inventory:registry:check && npm run check:dependencies && npm run check:docs && npm run check:file-size && npm run check:source-tree && npm run check:calc-resources && node .agentplane/policy/check-routing.mjs && git diff --check",
+      "result": "pass",
+      "evidence": "Build, scoped ESLint and Prettier, JSDoc, dependencies, Calc UI resources, source and registry gates pass."
+    }
+  ]
+}
