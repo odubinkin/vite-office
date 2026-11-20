@@ -1,10 +1,10 @@
 ---
 id: "202610251549-J0Z0KF"
 title: "Implement Calc XLSX import export and existing file UI integration"
-status: "DOING"
+status: "BLOCKED"
 priority: "high"
 owner: "CODER"
-revision: 704
+revision: 705
 origin:
   system: "manual"
 depends_on:
@@ -21,10 +21,10 @@ plan_approval:
   note: null
 verification:
   state: "blocked_external"
-  updated_at: "2026-11-20T07:44:23.241Z"
+  updated_at: "2026-11-20T08:04:32.586Z"
   updated_by: "CODER"
-  note: "Verified: the Calc shell and mounted file workflows pass 74 tests, including real Strict and Transitional export and reopen, and reject malformed, cancelled and superseded candidates. The XLSX umbrella remains in direct execution."
-  attempts: 235
+  note: "Verified: five native text-rule tests, 15 shared tests, six Chromium cases and repository checks pass. The prior seven-owner profile passes 59 cases but branch coverage is 82.04%. XLSX remains open."
+  attempts: 236
 commit: null
 comments:
   -
@@ -3758,8 +3758,14 @@ events:
     from: "BLOCKED"
     to: "DOING"
     note: "Start: continue direct-mode task in current checkout."
+  -
+    type: "verify"
+    at: "2026-11-20T08:04:32.586Z"
+    author: "CODER"
+    state: "blocked_external"
+    note: "Verified: five native text-rule tests, 15 shared tests, six Chromium cases and repository checks pass. The prior seven-owner profile passes 59 cases but branch coverage is 82.04%. XLSX remains open."
 doc_version: 3
-doc_updated_at: "2026-11-20T07:52:40.452Z"
+doc_updated_at: "2026-11-20T08:04:32.903Z"
 doc_updated_by: "CODER"
 description: "User-approved third cohesive task: preserve pinned ExcelFilter workbook/worksheet/style/shared-string import and Excel export ownership while supporting the current Calc core slice, including cells, types, formulas, sheets, formatting and dimensions where implemented. Integrate shell filter routing and existing Open/download UI, errors/cancellation and primary ODS persistence. Record suspected upstream issues and source mappings, refactor touched workarounds and run related tests. Preserve recovery/autosave and browser file product decisions. Local work only."
 sections:
@@ -10940,6 +10946,36 @@ sections:
     - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
     - risks: none
 
+    ### 2026-11-20T08:04:32.586Z — VERIFY — blocked_external
+
+    By: CODER
+
+    Note: Verified: five native text-rule tests, 15 shared tests, six Chromium cases and repository checks pass. The prior seven-owner profile passes 59 cases but branch coverage is 82.04%. XLSX remains open.
+    Attempts: 236
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-20T07:52:40.452Z, excerpt_hash=sha256:3da6ce8a820217533477184a0ee7a426a557f0606d162115a30aba26455afa46
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610251549-J0Z0KF/blueprint/resolved-snapshot.json
+    - old_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+    - current_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610251549-J0Z0KF
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane commit 202610251549-J0Z0KF -m 🧩 J0Z0KF task: persist canonical task artifacts --allow-tasks
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: |-
     - Revert task-related commit(s).
@@ -12083,6 +12119,10 @@ sections:
     - Observation: The XLSX branch could publish its model after the caller cancelled while it was parsing.
       Impact: Calc now rejects the candidate at the existing document-shell adoption boundary and keeps the current graph and medium.
       Resolution: See evidence/xlsx-shell-open-admission.json for the commands, original fixtures and remaining scope.
+
+    - Observation: Calc now retains the four original text conditions, quoted literals and the combined range origin through native filtering and primary ODS.
+      Impact: The unchanged tdf166413 workbook keeps the original style decisions and valid Excel formulas after mobile and primary-storage reopen.
+      Resolution: See evidence/xlsx-text-condition-rules.json. Continue the pending coverage and x14 extension rules.
 id_source: "generated"
 ---
 ## Summary
@@ -19273,6 +19313,36 @@ DecisionContextRef:
 - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
 - risks: none
 
+### 2026-11-20T08:04:32.586Z — VERIFY — blocked_external
+
+By: CODER
+
+Note: Verified: five native text-rule tests, 15 shared tests, six Chromium cases and repository checks pass. The prior seven-owner profile passes 59 cases but branch coverage is 82.04%. XLSX remains open.
+Attempts: 236
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-20T07:52:40.452Z, excerpt_hash=sha256:3da6ce8a820217533477184a0ee7a426a557f0606d162115a30aba26455afa46
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610251549-J0Z0KF/blueprint/resolved-snapshot.json
+- old_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+- current_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610251549-J0Z0KF
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane commit 202610251549-J0Z0KF -m 🧩 J0Z0KF task: persist canonical task artifacts --allow-tasks
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
+
 <!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
@@ -20420,3 +20490,7 @@ Evidence: `evidence/xlsx-native-page-break-roundtrip.json`.
 - Observation: The XLSX branch could publish its model after the caller cancelled while it was parsing.
   Impact: Calc now rejects the candidate at the existing document-shell adoption boundary and keeps the current graph and medium.
   Resolution: See evidence/xlsx-shell-open-admission.json for the commands, original fixtures and remaining scope.
+
+- Observation: Calc now retains the four original text conditions, quoted literals and the combined range origin through native filtering and primary ODS.
+  Impact: The unchanged tdf166413 workbook keeps the original style decisions and valid Excel formulas after mobile and primary-storage reopen.
+  Resolution: See evidence/xlsx-text-condition-rules.json. Continue the pending coverage and x14 extension rules.

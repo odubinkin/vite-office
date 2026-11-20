@@ -1,0 +1,44 @@
+{
+  "scope": "Original SpreadsheetML text rule kinds through Calc native conditions, ODS, XLSX and the existing file UI.",
+  "implementationCommit": "28228a010aa0",
+  "upstream": [
+    "sc/source/core/data/conditio.cxx (numeric and string text evaluations)",
+    "sc/source/filter/oox/condformatbuffer.cxx (interned literal operand)",
+    "sc/source/filter/excel/xecontent.cxx (text rule export and combined range origin)",
+    "sc/source/filter/xml/xmlcondformat.cxx (Calc extension conditions)",
+    "unotools/source/i18n/charclass.cxx and transliterationwrapper.cxx",
+    "sc/qa/unit/subsequent_export_test5.cxx (testTdf166413)",
+    "sc/qa/unit/cond_format.cxx (origin, cross-format text and numeric criterion tests)"
+  ],
+  "checks": [
+    {
+      "command": "npm run test:calc -- condformatbuffer.text.test.ts --maxWorkers=1 --testTimeout=120000",
+      "result": "pass",
+      "evidence": "Five cases, including four exact output formulas from original tdf166413, original B1 origin for B3:C6 F1:G2, original ODS contains-text cross-format export, native mixed-case and numeric matching, and numeric-to-string export and reopen. A1:C4 match decisions survive XLSX and ODS reopen."
+    },
+    {
+      "command": "cd apps/office && node ../../node_modules/vitest/vitest.mjs run --config vitest.calc.config.ts condformatbuffer.text.test.ts condformatbuffer.colorscale.test.ts excelfilter.page-settings.test.ts conditional-copy.test.ts conditio.entry.test.ts stylesbuffer.color.test.ts ods-native-fonts.test.ts address.ooo-regression.test.ts --maxWorkers=1 --testTimeout=120000 --coverage --coverage.reporter=text --coverage.reporter=json --coverage.include=src/sc/source/core/data/conditio.entry.ts --coverage.include=src/sc/source/core/data/documen4.ts --coverage.include=src/sc/source/filter/excel/xecontent.conditional.ts --coverage.include=src/sc/source/filter/excel/xestyle.dxf.ts --coverage.include=src/sc/source/filter/oox/condformatbuffer.ts --coverage.include=src/sc/source/filter/oox/stylesbuffer.dxf.ts --coverage.include=src/sc/source/filter/xml/xmlcondformat.ts --coverage.thresholds.statements=90 --coverage.thresholds.branches=90 --coverage.thresholds.functions=90 --coverage.thresholds.lines=90 --coverage.reportsDirectory=../../.git/cf-text-acceptance-coverage",
+      "result": "fail",
+      "evidence": "59 test cases pass. The earlier seven-owner conditional-format profile reaches 92.08% statements, 82.04% branches, 96.59% functions and 96.54% lines. The branch threshold remains unmet."
+    },
+    {
+      "command": "npm run test:shared -- charclass transliterationwrapper cclass_unicode.lower.test.ts --maxWorkers=1 --testTimeout=120000",
+      "result": "pass",
+      "evidence": "15 shared classification and transliteration tests in three files."
+    },
+    {
+      "command": "PLAYWRIGHT_BROWSERS_PATH=\"$PWD/.agentplane/tmp/zip-migration/browsers\" ./node_modules/.bin/playwright test -c .git/calc-panes-browser.config.mts --project calc --workers=1 --timeout=90000 xlsx-text-conditions.spec.ts xlsx-color-scale.spec.ts xlsx-page-settings.spec.ts",
+      "result": "pass",
+      "evidence": "Six production Chromium cases. The original quoted-text workbook paints its matching cell, preserves styles across browser storage, writes the quoted criterion, and reopens at mobile width."
+    },
+    {
+      "command": "npm run test:static && npm run check:dependencies && npm run check:docs && npm run check:source-provenance && npm run inventory:registry:check && git diff --check",
+      "result": "pass",
+      "evidence": "TypeScript, production build, static smoke, scoped ESLint/Prettier and the provenance and dependency gates passed."
+    }
+  ],
+  "remaining": [
+    "The extension-only x14 rules with dynamic operands, such as the original tdf120749 workbook, still require the native extension parser and writer.",
+    "CALC-765 records original empty-text semantics in numeric cells. The previous conditional-format coverage gate remains open."
+  ]
+}
