@@ -1,0 +1,50 @@
+{
+  "scope": "Qualified deleted worksheet references in Excel named ranges, original tdf58243 opening and saving",
+  "implementationCommit": "e82b1bcfa25d",
+  "upstream": [
+    "sc/source/core/tool/compiler.cxx (ScCompiler::ParseSingleReference, ConventionXL_OOX::makeRefStr)",
+    "sc/qa/unit/subsequent_export_test5.cxx (ScExportTest5::testXlsxRowsOrder, tdf58243.xlsx)",
+    "sc/source/filter/oox/defnamesbuffer.cxx and sc/source/filter/excel/xename.cxx (native named expression spelling)"
+  ],
+  "checks": [
+    {
+      "command": "npm run test:coverage:calc -- native-a1-formula.test.ts formula-output.test.ts compiler.external.test.ts external-reference-formula.test.ts excelfilter.test.ts excelfilter.page-settings.test.ts excelfilter.named-arrays.test.ts print-ranges.test.ts --maxWorkers=2 --testTimeout=90000 --coverage.include=src/sc/source/core/tool/compiler.ts --coverage.reportsDirectory=coverage/xlsx-qualified-deleted-reference --coverage.reporter=text --coverage.reporter=json --coverage.thresholds.statements=90 --coverage.thresholds.branches=90 --coverage.thresholds.functions=90 --coverage.thresholds.lines=90",
+      "result": "fail",
+      "evidence": "All 46 cases in eight suites passed. The legacy full compiler coverage was 75.09% statements, 70.16% branches, 82.14% functions and 78.21% lines, below the 90% whole-file gate."
+    },
+    {
+      "command": "npm run test:coverage:calc -- native-a1-formula.test.ts excelfilter.page-settings.test.ts -t tdf58243|qualified XLSX --maxWorkers=2 --testTimeout=90000 --coverage.include=src/sc/source/core/tool/compiler.ts --coverage.reportsDirectory=coverage/xlsx-qualified-deleted-reference-new-branches --coverage.reporter=json --coverage.thresholds.statements=90 --coverage.thresholds.branches=90 --coverage.thresholds.functions=90 --coverage.thresholds.lines=90",
+      "result": "fail",
+      "evidence": "Both final regressions passed, including the negative case for an unsupported qualified name and the unmodified fixture's direct export. The legacy whole-file coverage gate still fails for this narrow two-case run."
+    },
+    {
+      "command": "Read the two unchanged Istanbul coverage-final.json reports, compare instrumented maps, and combine hit counts for compiler.ts at the new decision and changed statement locations.",
+      "result": "pass",
+      "evidence": "18/18 branch alternatives and 20/20 executable statement counters hit over both runs. Branch source lines 545, 552, 558, 559, 563, 740, 741. Statement source lines 543–548, 550, 552–553, 558–559, 563–565, 740–741 and 744–746. Counts apply only to this change in the existing compiler."
+    },
+    {
+      "command": "npm run test:calc -- ods-native-fonts.test.ts ods-style-routing.test.ts ods-worker-entry.test.ts ods-xml-boundaries.test.ts docsh.csv-export.test.ts --maxWorkers=2 --testTimeout=90000",
+      "result": "pass",
+      "evidence": "All 18 related ODS, Worker and CSV tests passed."
+    },
+    {
+      "command": "npm run test:static; PLAYWRIGHT_BROWSERS_PATH=\"$PWD/.agentplane/tmp/zip-migration/browsers\" npm exec -- playwright test --config .git/calc-panes-browser.config.mts --project calc --workers=1 --timeout=90000 xlsx-page-settings.spec.ts",
+      "result": "pass",
+      "evidence": "Production build with typecheck and static smoke. Two Chromium scenarios passed. The unmodified tdf58243 opens, reopens from IndexedDB, exports both the sheet-scoped error and data, and reopens in a mobile viewport."
+    },
+    {
+      "command": "npm run check:dependencies; npm run check:docs; npm run check:file-size; npm run check:source-tree; npm run check:calc-resources; npm run check:writer-resources; npm run check:writer-hintids; npm exec -- tsx .git/xlsx-cursor-validate-changed-registry.mts apps/office/src/sc/source/core/tool/compiler.ts; node .agentplane/policy/check-routing.mjs; ap doctor; git diff --check",
+      "result": "pass",
+      "evidence": "Source and scoped registry gates, JSDoc, ESLint and Prettier passed. Doctor reports the pre-existing hook shim warning."
+    },
+    {
+      "command": "npm run check:source-provenance; npm run inventory:invariants; npm run inventory:parity",
+      "result": "fail",
+      "evidence": "Two existing framework files remain absent from the global inventory."
+    }
+  ],
+  "remaining": [
+    "CALC-758 records the upstream spreadsheet-name spelling asymmetry.",
+    "Other unsupported formula families in the wider XLSX task remain open. The full application suite follows the approved ten-task cadence."
+  ]
+}
