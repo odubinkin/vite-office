@@ -10,6 +10,7 @@ import {
 import { SvxFrameDirection as Direction } from "../../../../editeng/inc/frmdir";
 import { SvxFrameDirectionItem } from "../../../../editeng/inc/frmdiritem";
 import { SfxBoolItem } from "../../../../svl/source/items/cenumitm";
+import { ThrowFilterLoadError } from "../../../../sfx2/source/doc/objstor";
 import { RES_FRAMEDIR, RES_KEEP } from "../../../inc/hintids";
 import { SwFormatPageDesc } from "../../core/attr/fmtpdsc";
 import { createWriterDocument, type SwDoc } from "../../core/doc/doc";
@@ -75,6 +76,38 @@ it.each([
     }
   },
 );
+
+it("keeps the narrow source columns in cell-grid-span as five single cells", /** Ports testCellGridSpan using its original table and isolates an unrelated unsupported text-animation property in styles.xml. @returns Completion. */ async () => {
+  const original = await DocumentArchive.open(fixture("cell-grid-span.docx"));
+  const output = new DocumentArchiveWriter();
+  const stylesPath = "word/styles.xml";
+  for (const path of original.getEntryNames()) {
+    if (path !== stylesPath) output.putNextEntry(path, await original.readEntry(path));
+    else {
+      const styles = await original.readTextEntry(path);
+      const unsupported = '<w:effect w:val="none"/>';
+      expect(styles).toContain(unsupported);
+      output.putNextEntry(path, new TextEncoder().encode(styles.replace(unsupported, "")));
+    }
+  }
+  const document = await importOOXML(await output.finish(), {}).catch(ThrowFilterLoadError);
+  try {
+    const row = document.GetTables()[0]?.GetTabLines()[0];
+    expect(row?.GetTabBoxes()).toHaveLength(5);
+    const { bytes, xml } = await exportDocument(document);
+    const exportedRow = xml.match(/<w:tr(?: [^>]*)?>[\s\S]*?<\/w:tr>/u)?.[0] ?? "";
+    expect(exportedRow.match(/<w:tc(?: [^>]*)?>/gu)).toHaveLength(5);
+    expect(exportedRow).not.toContain("<w:gridSpan");
+    const reopened = await importOOXML(bytes, {});
+    try {
+      expect(reopened.GetTables()[0]?.GetTabLines()[0]?.GetTabBoxes()).toHaveLength(5);
+    } finally {
+      reopened.Dispose();
+    }
+  } finally {
+    document.Dispose();
+  }
+});
 
 it("applies the conditional first-row header and honors a direct false override in tdf81100", /** Checks the source tables and the native ODT and DOCX header counts. @returns Completion. */ async () => {
   const original = await DocumentArchive.open(fixture("tdf81100.docx"));

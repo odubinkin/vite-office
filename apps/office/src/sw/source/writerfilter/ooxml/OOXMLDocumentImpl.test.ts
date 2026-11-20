@@ -21,6 +21,10 @@ import { type StringPair } from "../../../../comphelper/source/xml/ofopxmlhelper
 import { Exception } from "../../../../cppu/inc/com/sun/star/uno/Exception";
 import { FastSaxParseError } from "../../../../sax/source/fastparser/fastparser";
 import { NS_ooxml as N } from "../inc/ooxml/resourceids";
+import { getNamespacedToken } from "../../../../oox/source/token/namespacemap";
+import { OOXMLHeaderFooterHandler } from "./Handler";
+import { OOXMLFastContextHandler } from "./OOXMLFastContextHandler";
+import { OOXMLPropertySet, OOXMLPropertyType as Kind, OOXMLValue as V } from "./OOXMLPropertySet";
 
 const rel = "http://schemas.openxmlformats.org/officeDocument/2006/relationships/";
 const wml = "http://schemas.openxmlformats.org/wordprocessingml/2006/main";
@@ -141,70 +145,157 @@ const variants = [
 const numberedList =
   "../../vendor/libreoffice-reference/sw/qa/extras/ooxmlexport/data/NumberedList.docx";
 
-it("associates all Strict page variants with the original package part IDs", /** Uses real ZIP relationships, including omitted and external parts. @returns Completion. */ async () => {
+it.each([false, true])(
+  "associates all Strict page variants with the original package part IDs (invalid target: %s)",
+  /** Uses real ZIP relationships, including omitted, external and invalid targets. @param invalidTarget - Whether the last reference has an opaque target with no path. @returns Completion. */ async (
+    invalidTarget,
+  ) => {
+    const storage = new ZipStorage();
+    const namespace = "http://purl.oclc.org/ooxml/wordprocessingml/main";
+    const relations = "http://purl.oclc.org/ooxml/officeDocument/relationships/";
+    const parts = variants.map(
+      /** Makes a native relationship row. @param variant - Original element and page type. @returns Relationship. */
+      ([kind, type]) => relation(kind + type, relations + kind, "../pages/" + kind + type + ".xml"),
+    );
+    const references = variants.map(
+      /** Makes the original reference element for a page variant. @param variant - Element and page type. @returns XML. */
+      ([kind, type]) => `<w:${kind}Reference w:type="${type}" r:id="${kind}${type}"/>`,
+    );
+    const external = relation(
+      "external",
+      relations + "header",
+      "https://example.invalid/header.xml",
+    );
+    external.push({ First: "TargetMode", Second: "External" });
+    put(
+      storage,
+      "_rels/.rels",
+      writeRelationsInfoSequenceXml([
+        relation("main", relations + "officeDocument", "word/document.xml"),
+      ]),
+    );
+    put(
+      storage,
+      "word/_rels/document.xml.rels",
+      writeRelationsInfoSequenceXml([
+        ...parts,
+        external,
+        relation("missing", relations + "footer", "missing.xml"),
+        relation("empty", relations + "header", "vnd.sun.star.script:"),
+        ...(invalidTarget ? [relation("opaque", relations + "header", "opaque:")] : []),
+      ]),
+    );
+    put(
+      storage,
+      "word/document.xml",
+      `<w:document xmlns:w="${namespace}" xmlns:r="${relations.slice(0, -1)}"><w:body><w:p/><w:sectPr>${references.join("")}<w:headerReference w:type="default" r:id="external"/><w:footerReference r:id="missing"/><w:headerReference w:type="default" r:id="empty"/>${invalidTarget ? '<w:headerReference w:type="default" r:id="opaque"/>' : ""}</w:sectPr></w:body></w:document>`,
+    );
+    for (const [kind, type] of variants) {
+      const root = kind === "header" ? "hdr" : "ftr";
+      put(storage, "pages/" + kind + type + ".xml", `<w:${root} xmlns:w="${namespace}"/>`);
+    }
+    const s = await session(await storage.commit());
+    const seen: number[] = [];
+    try {
+      expect(s.stream.getHeaderFooterIds()).toEqual([
+        ...variants.map(
+          /** Matches the input ID sequence. @param variant - Element and page type. @returns ID. */
+          ([kind, type]) => kind + type,
+        ),
+        "missing",
+        "empty",
+        ...(invalidTarget ? ["opaque"] : []),
+      ]);
+      const parsing = s.document.resolve(
+        Object.assign(s.mapper, {
+          /** Resolves an empty story in its original parser context. @param kind - Native page variant. @param part - Part reference. @returns Nothing. */
+          substream(kind: number, part: Parameters<NonNullable<Stream["substream"]>>[1]) {
+            seen.push(kind);
+            part.resolve(s.receiver);
+          },
+        }),
+      );
+      if (invalidTarget)
+        await expect(parsing).rejects.toMatchObject({ cause: { message: "assert(false)" } });
+      else await parsing;
+      expect(seen).toEqual([
+        ...variants.map(
+          /** Retains native left, right and first ID selection. @param variant - Original expected variant. @returns Native resource ID. */
+          ([, , id]) => id,
+        ),
+        N.LN_headerr,
+      ]);
+    } finally {
+      s.dispose();
+    }
+  },
+);
+
+it("distinguishes a missing main part from well-formed XML with an unrelated root", /** Uses two actual ZIP packages and a model-backed text-only receiver. @returns Completion. */ async () => {
   const storage = new ZipStorage();
-  const namespace = "http://purl.oclc.org/ooxml/wordprocessingml/main";
-  const relations = "http://purl.oclc.org/ooxml/officeDocument/relationships/";
-  const parts = variants.map(
-    /** Makes a native relationship row. @param variant - Original element and page type. @returns Relationship. */
-    ([kind, type]) => relation(kind + type, relations + kind, "../pages/" + kind + type + ".xml"),
+  put(storage, "extra.xml", "<extra/>");
+  const withoutMain = await session(await storage.commit());
+  try {
+    await expect(withoutMain.document.resolve(withoutMain.mapper)).rejects.toThrow(
+      "Word document part is missing.",
+    );
+  } finally {
+    withoutMain.dispose();
+  }
+
+  const packageWithMain = new ZipStorage();
+  put(
+    packageWithMain,
+    "_rels/.rels",
+    writeRelationsInfoSequenceXml([relation("main", rel + "officeDocument", "word/document.xml")]),
   );
-  const references = variants.map(
-    /** Makes the original reference element for a page variant. @param variant - Element and page type. @returns XML. */
-    ([kind, type]) => `<w:${kind}Reference w:type="${type}" r:id="${kind}${type}"/>`,
-  );
-  const external = relation("external", relations + "header", "https://example.invalid/header.xml");
-  external.push({ First: "TargetMode", Second: "External" });
+  put(packageWithMain, "word/document.xml", "<extra/>");
+  const unrelatedRoot = await session(await packageWithMain.commit());
+  try {
+    await expect(unrelatedRoot.document.resolve(unrelatedRoot.receiver)).rejects.toThrow(
+      "Word document element is missing.",
+    );
+  } finally {
+    unrelatedRoot.dispose();
+  }
+});
+
+it("ignores external pictures and malformed themes when two page variants share a header part", /** Parses real relationship and theme entries with the normal ZIP and drawing owners. @returns Completion. */ async () => {
+  const storage = new ZipStorage();
   put(
     storage,
     "_rels/.rels",
-    writeRelationsInfoSequenceXml([
-      relation("main", relations + "officeDocument", "word/document.xml"),
-    ]),
+    writeRelationsInfoSequenceXml([relation("main", rel + "officeDocument", "word/document.xml")]),
   );
+  const external = relation("picture", rel + "image", "https://example.invalid/external.png");
+  external.push({ First: "TargetMode", Second: "External" });
   put(
     storage,
     "word/_rels/document.xml.rels",
     writeRelationsInfoSequenceXml([
-      ...parts,
+      relation("theme", rel + "theme", "theme.xml"),
       external,
-      relation("missing", relations + "footer", "missing.xml"),
+      relation("first", rel + "header", "header.xml"),
+      relation("even", rel + "header", "header.xml"),
     ]),
   );
+  put(storage, "word/theme.xml", "<a:theme>");
+  put(storage, "word/header.xml", `<w:hdr xmlns:w="${wml}"><w:p/></w:hdr>`);
   put(
     storage,
     "word/document.xml",
-    `<w:document xmlns:w="${namespace}" xmlns:r="${relations.slice(0, -1)}"><w:body><w:p/><w:sectPr>${references.join("")}<w:headerReference w:type="default" r:id="external"/><w:footerReference r:id="missing"/></w:sectPr></w:body></w:document>`,
+    `<w:document xmlns:w="${wml}" xmlns:r="${rel.slice(0, -1)}"><w:body><w:p/><w:sectPr><w:headerReference w:type="first" r:id="first"/><w:headerReference w:type="even" r:id="even"/></w:sectPr></w:body></w:document>`,
   );
-  for (const [kind, type] of variants) {
-    const root = kind === "header" ? "hdr" : "ftr";
-    put(storage, "pages/" + kind + type + ".xml", `<w:${root} xmlns:w="${namespace}"/>`);
-  }
   const s = await session(await storage.commit());
-  const seen: number[] = [];
+  let installed = 0;
+  /** Counts only successfully parsed native themes. @returns Nothing. */
+  function installTheme(): void {
+    installed++;
+  }
   try {
-    expect(s.stream.getHeaderFooterIds()).toEqual([
-      ...variants.map(
-        /** Matches the input ID sequence. @param variant - Element and page type. @returns ID. */
-        ([kind, type]) => kind + type,
-      ),
-      "missing",
-    ]);
-    await s.document.resolve(
-      Object.assign(s.mapper, {
-        /** Resolves an empty story in its original parser context. @param kind - Native page variant. @param part - Part reference. @returns Nothing. */
-        substream(kind: number, part: Parameters<NonNullable<Stream["substream"]>>[1]) {
-          seen.push(kind);
-          part.resolve(s.receiver);
-        },
-      }),
-    );
-    expect(seen).toEqual(
-      variants.map(
-        /** Retains native left, right and first ID selection. @param variant - Original expected variant. @returns Native resource ID. */
-        ([, , id]) => id,
-      ),
-    );
+    await s.document.resolve(s.mapper, installTheme);
+    expect(installed).toBe(0);
+    expect(s.document.getEmbeddedGraphic("picture")).toBeUndefined();
   } finally {
     s.dispose();
   }
@@ -266,6 +357,38 @@ it("fails visibly on a real footer when the receiver cannot own its content", /*
     await expect(s.document.resolve(s.mapper)).rejects.toMatchObject({
       cause: { message: "The Writer receiver does not support header/footer content." },
     });
+  } finally {
+    s.dispose();
+  }
+});
+
+it("ignores unrelated reference resources and skips dispatch without an active forwarding context", /** Uses the original nullable document state and native property dispatch. @returns Completion. */ async () => {
+  const selections: [number, string][] = [];
+  const handler = new OOXMLHeaderFooterHandler(
+    /** Records the selected original reference. @param type - Native page type. @param id - Relationship ID. @returns Nothing. */ (
+      type,
+      id,
+    ) => {
+      selections.push([type, id]);
+    },
+  );
+  const properties = new OOXMLPropertySet();
+  const type = N.LN_Value_ST_HdrFtr_even;
+  properties.add(N.LN_CT_HdrFtrRef_type, V.createInteger(type), Kind.ATTRIBUTE);
+  properties.add(N.LN_CT_Style_default, V.createInteger(1), Kind.ATTRIBUTE);
+  properties.add(N.LN_CT_HdrFtrRef_type, V.createInteger(0), Kind.SPRM);
+  properties.resolve(handler);
+  handler.finalize();
+  expect(selections).toEqual([[type, ""]]);
+
+  const context = new OOXMLFastContextHandler();
+  context.setToken(getNamespacedToken("doc:headerReference"));
+  context.handleHdrFtr();
+  const s = await session(new Uint8Array(readFileSync(numberedList)));
+  try {
+    context.setDocument(s.document);
+    context.setForwardEvents(false);
+    context.handleHdrFtr();
   } finally {
     s.dispose();
   }

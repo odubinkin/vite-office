@@ -19,10 +19,11 @@
     "preservedResponsibilities": [
       "Original table, row and cell markers feed the actual property and Writer text range owners. Completed text spans convert through SwXText into the canonical table graph. The represented grid, row split/height, cell alignment and merge groups round trip.",
       "Keeps row, grid, cell and UNO endpoint state at each original nesting level, then converts each inner table before closing its parent cell.",
-      "Passes the original resolved cell map to native UNO table conversion, alongside direct row geometry."
+      "Passes the original resolved cell map to native UNO table conversion, alongside direct row geometry.",
+      "Finishes a cell paragraph when its boundary arrives before a paragraph event and releases the returned range without deleting the paragraph."
     ],
     "omittedResponsibilities": [
-      "Nested and floating table conversion, full imported table styles and complete DOCX parity remain open."
+      "Floating tables and table style properties outside the represented Writer model remain open."
     ],
     "evidence": {
       "local": [
@@ -49,6 +50,10 @@
         {
           "path": "apps/office/src/sw/source/filter/ww8/docxexport.table-shading.test.ts",
           "marker": "resolves original base, conditional and direct cell fills"
+        },
+        {
+          "path": "apps/office/src/sw/source/writerfilter/dmapper/DomainMapperTableManager.ranges.test.ts",
+          "marker": "uses a terminal nested table"
         },
         {
           "path": "apps/office/e2e/writer-docx-table-shading.spec.ts",

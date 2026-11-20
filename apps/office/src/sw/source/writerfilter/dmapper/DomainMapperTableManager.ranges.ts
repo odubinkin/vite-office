@@ -134,7 +134,7 @@ class TableLevel {
     const owner = this.body.GetStartNode();
     let content = nodes.GetSectionContent(owner);
     if (content.at(-1) === first) {
-      this.body.finishParagraph([]).dispose();
+      this.body.finishParagraph([]).Release();
       content = nodes.GetSectionContent(owner);
     }
     const last = content.at(-2);

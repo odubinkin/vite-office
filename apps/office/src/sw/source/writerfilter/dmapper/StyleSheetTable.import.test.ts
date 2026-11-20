@@ -93,7 +93,7 @@ it("retains the first valid UNO parent when a later source entry would create a 
     for (const [name, expected] of [
       ["CycleAlpha", "CycleBeta"],
       ["CycleBeta", "Standard"],
-    ]) {
+    ] as const) {
       const nativeName = unicode(name);
       const acquired = family.getStyleByName(nativeName);
       const parent = acquired.getParentStyle();
