@@ -1,0 +1,38 @@
+{
+  "scope": "Native Writer DOCX error conversion and existing browser Open handling.",
+  "implementationCommit": "cd6b0e20225c",
+  "upstream": [
+    "sw/source/writerfilter/filter/WriterFilter.cxx (lcl_GetExceptionMessage and WrongFormatException conversion)",
+    "sfx2/source/doc/objstor.cxx (WrongFormatException in WrappedTargetRuntimeException)"
+  ],
+  "checks": [
+    {
+      "command": "cd apps/office && node ../../node_modules/vitest/vitest.mjs run --config vitest.writer.config.ts WriterFilter.test.ts WriterFileDialog.test.tsx docxexport.protection.test.ts --maxWorkers=1 --testTimeout=120000 --coverage --coverage.reporter=text --coverage.reporter=json --coverage.include=src/sw/source/writerfilter/filter/WriterFilter.ts --coverage.thresholds.statements=90 --coverage.thresholds.branches=90 --coverage.thresholds.functions=90 --coverage.thresholds.lines=90 --coverage.reportsDirectory=../../.git/docx-load-diagnostics-final-coverage",
+      "result": "pass",
+      "evidence": "42 tests. The native SAX exception chain retains its original order. The bounded filter wraps malformed main XML and an original DrawingML callback error with row and column diagnostics. The mounted dialog leaves the active graph and medium intact. Scoped WriterFilter coverage is 98.36% statements, 100% branches, 100% functions and 98.18% lines."
+    },
+    {
+      "command": "npm run test:shared -- objstor.test.ts --maxWorkers=1 --testTimeout=120000 && npm run test:calc -- docsh.xlsx.test.ts docsh.csv-diagnostic.test.ts --maxWorkers=1 --testTimeout=120000",
+      "result": "pass",
+      "evidence": "Four shared shell tests and eight Calc XLSX/CSV admission tests passed."
+    },
+    {
+      "command": "PLAYWRIGHT_BROWSERS_PATH=\"$PWD/.agentplane/tmp/zip-migration/browsers\" ./node_modules/.bin/playwright test -c .git/calc-panes-browser.config.mts --project writer --workers=1 --timeout=90000 writer-docx-styles.spec.ts --grep 'parser diagnostic|Strict numbering'",
+      "result": "pass",
+      "evidence": "Two Chromium cases. A failed import reports the actual unsupported DrawingML reason and keeps the draft. The existing Strict list opens and downloads with the original indentation."
+    },
+    {
+      "command": "VITE_OFFICE_REPORTED_DOCX=<user-supplied local path> PLAYWRIGHT_BROWSERS_PATH=\"$PWD/.agentplane/tmp/zip-migration/browsers\" ./node_modules/.bin/playwright test -c .git/docx-user-report.config.mts --workers=1 --timeout=120000",
+      "result": "pass",
+      "evidence": "One local-only Chromium replay. The supplied document opens with its body and picture and both remain visible after browser storage reopen. The input and probe are excluded from version control."
+    },
+    {
+      "command": "npm run test:static && npm run check:source-provenance && npm run check:dependencies && npm run check:docs && npm run inventory:registry:check && git diff --check",
+      "result": "pass",
+      "evidence": "TypeScript, build, static smoke, scoped ESLint/Prettier and source and registry gates passed."
+    }
+  ],
+  "remaining": [
+    "The original tdf81100 footer still exercises the unported WordprocessingShape path. Its error reaches the user with the native nested diagnostic."
+  ]
+}
