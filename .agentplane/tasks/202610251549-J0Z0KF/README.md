@@ -1,10 +1,10 @@
 ---
 id: "202610251549-J0Z0KF"
 title: "Implement Calc XLSX import export and existing file UI integration"
-status: "DOING"
+status: "BLOCKED"
 priority: "high"
 owner: "CODER"
-revision: 699
+revision: 700
 origin:
   system: "manual"
 depends_on:
@@ -21,10 +21,10 @@ plan_approval:
   note: null
 verification:
   state: "blocked_external"
-  updated_at: "2026-11-20T01:22:48.887Z"
+  updated_at: "2026-11-20T01:36:01.769Z"
   updated_by: "CODER"
-  note: "Verified: the conditional comparison and expression checkpoint preserves actual XLSX rules and differential styles through worker, ODS and the Chromium open/save/export UI. The broader XLSX task and scoped90 gate need further work."
-  attempts: 232
+  note: "Verified: original tdf170298 workbook opens and round-trips both dynamic names and conditional rules with all scoped formula owners above 90%. The broader XLSX task remains open."
+  attempts: 233
 commit: null
 comments:
   -
@@ -3720,8 +3720,14 @@ events:
     from: "BLOCKED"
     to: "DOING"
     note: "Start: continue direct-mode task in current checkout."
+  -
+    type: "verify"
+    at: "2026-11-20T01:36:01.769Z"
+    author: "CODER"
+    state: "blocked_external"
+    note: "Verified: original tdf170298 workbook opens and round-trips both dynamic names and conditional rules with all scoped formula owners above 90%. The broader XLSX task remains open."
 doc_version: 3
-doc_updated_at: "2026-11-20T01:23:18.808Z"
+doc_updated_at: "2026-11-20T01:36:02.108Z"
 doc_updated_by: "CODER"
 description: "User-approved third cohesive task: preserve pinned ExcelFilter workbook/worksheet/style/shared-string import and Excel export ownership while supporting the current Calc core slice, including cells, types, formulas, sheets, formatting and dimensions where implemented. Integrate shell filter routing and existing Open/download UI, errors/cancellation and primary ODS persistence. Record suspected upstream issues and source mappings, refactor touched workarounds and run related tests. Preserve recovery/autosave and browser file product decisions. Local work only."
 sections:
@@ -10812,6 +10818,36 @@ sections:
     - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
     - risks: none
 
+    ### 2026-11-20T01:36:01.769Z — VERIFY — blocked_external
+
+    By: CODER
+
+    Note: Verified: original tdf170298 workbook opens and round-trips both dynamic names and conditional rules with all scoped formula owners above 90%. The broader XLSX task remains open.
+    Attempts: 233
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-20T01:23:18.808Z, excerpt_hash=sha256:3da6ce8a820217533477184a0ee7a426a557f0606d162115a30aba26455afa46
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610251549-J0Z0KF/blueprint/resolved-snapshot.json
+    - old_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+    - current_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610251549-J0Z0KF
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task verify-show 202610251549-J0Z0KF
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: false
+    - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+    - risks: none
+
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: |-
     - Revert task-related commit(s).
@@ -11943,6 +11979,10 @@ sections:
     - Observation: Code 9c1d715f0 restores all three native comparisons from unchanged tdf167019 and verifies their ranges, expressions, styles, worker/ODS storage and exported XLSX. The final browser build passes three scenarios. 44 focused cases pass, as do 9 grid cases and 15 ODS/CSV cases. Branch coverage reaches 78.08% and statement coverage 89.91% across the seven scoped owners.
       Impact: Scoped90 is incomplete and global registry gates retain the existing framework inventory errors. Exploratory tdf170298 still fails before worksheet condition parsing because its named OFFSET formulas are unported. This does not complete the XLSX integration task.
       Resolution: Continue native formula and condition coverage and the original tdf170298 regression. Keep checkpoint evidence in evidence/xlsx-conditional-format-rules.json and preserve the full-suite cadence.
+
+    - Observation: Code 7473d4544 preserves the original OFFSET/COUNTIF defined name and both overlapping conditions through Calc workers, ODS, XLSX export and reopen. 18 XLSX, 28 associated Calc, 9 shared and 4 Chromium cases pass. Scoped formula branches are 96.34% overall and at least 95.34% for each measured owner. CALC-762 and CALC-763 document the original boundary behavior.
+      Impact: The earlier conditional format coverage and advanced rule families remain open. Global registry checks still report the two preexisting framework inventory gaps. No claim is made for array logical or COUNTIF matrix paths.
+      Resolution: Retain the original tdf170298 and scalar native QA in regular focused verification. Continue the pending advanced conditional-format and file fidelity work under the approved XLSX task and ten-task full-suite cadence.
 id_source: "generated"
 ---
 ## Summary
@@ -19043,6 +19083,36 @@ DecisionContextRef:
 - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
 - risks: none
 
+### 2026-11-20T01:36:01.769Z — VERIFY — blocked_external
+
+By: CODER
+
+Note: Verified: original tdf170298 workbook opens and round-trips both dynamic names and conditional rules with all scoped formula owners above 90%. The broader XLSX task remains open.
+Attempts: 233
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-20T01:23:18.808Z, excerpt_hash=sha256:3da6ce8a820217533477184a0ee7a426a557f0606d162115a30aba26455afa46
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610251549-J0Z0KF/blueprint/resolved-snapshot.json
+- old_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+- current_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610251549-J0Z0KF
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task verify-show 202610251549-J0Z0KF
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: false
+- repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- risks: none
+
 <!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
@@ -20178,3 +20248,7 @@ Evidence: `evidence/xlsx-native-page-break-roundtrip.json`.
 - Observation: Code 9c1d715f0 restores all three native comparisons from unchanged tdf167019 and verifies their ranges, expressions, styles, worker/ODS storage and exported XLSX. The final browser build passes three scenarios. 44 focused cases pass, as do 9 grid cases and 15 ODS/CSV cases. Branch coverage reaches 78.08% and statement coverage 89.91% across the seven scoped owners.
   Impact: Scoped90 is incomplete and global registry gates retain the existing framework inventory errors. Exploratory tdf170298 still fails before worksheet condition parsing because its named OFFSET formulas are unported. This does not complete the XLSX integration task.
   Resolution: Continue native formula and condition coverage and the original tdf170298 regression. Keep checkpoint evidence in evidence/xlsx-conditional-format-rules.json and preserve the full-suite cadence.
+
+- Observation: Code 7473d4544 preserves the original OFFSET/COUNTIF defined name and both overlapping conditions through Calc workers, ODS, XLSX export and reopen. 18 XLSX, 28 associated Calc, 9 shared and 4 Chromium cases pass. Scoped formula branches are 96.34% overall and at least 95.34% for each measured owner. CALC-762 and CALC-763 document the original boundary behavior.
+  Impact: The earlier conditional format coverage and advanced rule families remain open. Global registry checks still report the two preexisting framework inventory gaps. No claim is made for array logical or COUNTIF matrix paths.
+  Resolution: Retain the original tdf170298 and scalar native QA in regular focused verification. Continue the pending advanced conditional-format and file fidelity work under the approved XLSX task and ten-task full-suite cadence.
