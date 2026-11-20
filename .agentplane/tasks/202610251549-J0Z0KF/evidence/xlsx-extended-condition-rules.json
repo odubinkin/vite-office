@@ -1,0 +1,40 @@
+{
+  "scope": "Calc x14 worksheet extension import and export for formula-backed text rules, cell comparisons and direct formulas.",
+  "implementationCommit": "ce35ac412435",
+  "upstream": [
+    "sc/source/filter/oox/extlstcontext.cxx",
+    "sc/source/filter/oox/condformatbuffer.cxx",
+    "sc/source/filter/excel/xeextlst.cxx",
+    "sc/source/filter/excel/xecontent.cxx",
+    "sc/source/core/tool/compiler.cxx",
+    "sc/qa/unit/cond_format.cxx (testCondFormatBeginsAndEndsWithXLSX, testExtCondFormatXLSX, testCondFormatOperatorsSameRangeXLSX, testCondFormatImportCellIs, testCondFormatExportCellIs, testConditionalFormatPriorityCheckXLSX)"
+  ],
+  "checks": [
+    {
+      "command": "npm run test:calc -- extlstcontext.test.ts native-a1-formula.test.ts formula-output.test.ts compiler.external.test.ts --maxWorkers=1 --testTimeout=120000",
+      "result": "pass",
+      "evidence": "16 focused cases. Original workbook inputs assert local and cross-sheet formula operands, cellIs absolute markers, inline styles, standard/extension priorities and reopened graphs."
+    },
+    {
+      "command": "Vitest with Istanbul and the complete extlstcontext.ts and xeextlst.ts owners selected.",
+      "result": "pass",
+      "evidence": "17 cases; scoped coverage 100% statements, 98.61% branches, 100% functions and lines. See .git/calc-ext-conditions-coverage.log."
+    },
+    {
+      "command": "npm run test:static && PLAYWRIGHT_BROWSERS_PATH=\"$PWD/.agentplane/tmp/zip-migration/browsers\" ./node_modules/.bin/playwright test -c .git/calc-panes-browser.config.mts --project calc --workers=1 --timeout=90000 xlsx-extended-conditions.spec.ts xlsx-text-conditions.spec.ts",
+      "result": "pass",
+      "evidence": "Production build and static smoke, then two Chromium cases check real Open/Export, formula-bearing downloads, locally reopened ODS and mobile XLSX reopening."
+    },
+    {
+      "command": "npm run check:source-provenance && npm run inventory:registry:check && npm run check:dependencies && npm run check:docs && npm run check:file-size && npm run check:source-tree && npm run check:calc-resources && npm run inventory:invariants && npm run inventory:parity && node .agentplane/policy/check-routing.mjs && ap doctor && git diff --check",
+      "result": "pass",
+      "evidence": "Source, Calc resources, static validation and scoped lint/format pass. Doctor reports zero errors and the pre-existing hook-shim warning."
+    },
+    {
+      "command": "Vitest with Istanbul and the unchanged seven-owner conditional-format verification scope.",
+      "result": "fail",
+      "evidence": "All test cases pass. Coverage is 92.84% statements, 82.04% branches, 95.91% functions and 96.55% lines. See .git/calc-cf-x14-acceptance.log."
+    }
+  ],
+  "remaining": "The constrained XLSX task still requires guard coverage. CALC-767 through CALC-769 document source behavior preserved in the current port, including the loss of dynamic criteria when a rule is exported as XLSX after ODS reconstruction."
+}
