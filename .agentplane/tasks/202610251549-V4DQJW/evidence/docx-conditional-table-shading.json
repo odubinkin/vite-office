@@ -1,0 +1,34 @@
+{
+  "scope": "Writer DOCX named table cell shading, conditional masks, cell precedence, native box items, worker/primary storage and export.",
+  "implementationCommit": "35f4b6d0b",
+  "upstream": [
+    "sw/source/writerfilter/dmapper/StyleSheetTable.cxx (LN_CT_Style_tcPr)",
+    "sw/source/writerfilter/dmapper/DomainMapperTableHandler.cxx (endTableGetCellProperties)",
+    "sw/source/writerfilter/dmapper/TablePropertiesHandler.cxx (LN_CT_TcPrBase_shd)",
+    "sw/source/filter/ww8/docxtableexport.cxx (TableBackgrounds)",
+    "sw/source/filter/ww8/docxtablestyleexport.cxx (tableStyleTcPr)"
+  ],
+  "checks": [
+    {
+      "command": "npm run test:writer -- docxexport.table-shading.test.ts docxexport.table-flow.test.ts writer-primary-odt-filter.test.ts writer-table-interop-codec.test.ts native-style-entry-merge.test.ts native-cell-color.test.ts OOXMLFastContextHandlerTable.test.ts --maxWorkers=1 --testTimeout=120000",
+      "result": "pass",
+      "evidence": "87 cases pass in seven files. Four unmodified DOCX fixtures exercise original tables and styles. Two fixtures isolate unrelated drawing content and retain their original table markup and styles. Graph assertions, DOCX reopening, ODT brushes, including direct automatic color, and nested/malformed primary storage all pass."
+    },
+    {
+      "command": "Vitest with Istanbul and complete writer-table-interop-codec.ts, writer-primary-odt-filter.ts, docxtableexport.ts, docxtablestyleexport.ts and TblStylePrHandler.ts owners selected.",
+      "result": "pass",
+      "evidence": "28 cases pass. Aggregate 99.79% statements, 93.13% branches, 100% functions and lines. TblStylePrHandler alone has 81.48% branch coverage. See .git/writer-table-shading-coverage.log."
+    },
+    {
+      "command": "npm run test:static && PLAYWRIGHT_BROWSERS_PATH=\"$PWD/.agentplane/tmp/zip-migration/browsers\" ./node_modules/.bin/playwright test -c .git/calc-panes-browser.config.mts --project writer --workers=1 --timeout=90000 writer-docx-table-shading.spec.ts writer-docx-table-flow.spec.ts",
+      "result": "pass",
+      "evidence": "Production Chromium passes all three cases, including style fills in the editor, browser reload, theme attributes in the real download and mobile DOCX reopen."
+    },
+    {
+      "command": "npm run check:source-provenance && npm run inventory:registry:check && npm run check:dependencies && npm run check:docs && npm run check:file-size && npm run check:source-tree && npm run check:writer-resources && python3 scripts/writer-ooxml/generate-factory.py --check && npm run inventory:invariants && npm run inventory:parity && node .agentplane/policy/check-routing.mjs && ap doctor && git diff --check",
+      "result": "pass",
+      "evidence": "Source, resource, registry, static and documentation checks passed with scoped ESLint/Prettier. Factory validation confirmed the pinned resource identity."
+    }
+  ],
+  "remaining": "The unmodified tdf97090 fixture reaches DrawingML wrapTight and the unmodified tdf90906_colAutoB fixture reaches document background Shape. Their unrelated drawing content is isolated in the shading test only. Table-style typography and unimplemented drawing owners remain separate gaps."
+}
