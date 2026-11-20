@@ -43,6 +43,7 @@ for (const width of [1280, 390])
         mimeType: "application/vnd.oasis.opendocument.text",
         name: "linear.odt",
       });
+      await expect(page.getByRole("dialog", { name: "Open", exact: true })).toBeHidden();
       const mounted = page.locator("[data-writer-table='Linear']"),
         paragraph = page.getByRole("textbox", { name: "Row 1 column 1 paragraph 1" });
       await expect(paragraph).toHaveText("Cell");

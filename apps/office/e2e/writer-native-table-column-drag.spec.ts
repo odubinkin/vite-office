@@ -26,6 +26,7 @@ for (const viewport of [1280, 390])
       mimeType: "application/vnd.oasis.opendocument.text",
       name: "drag.odt",
     });
+    await expect(page.getByRole("dialog", { name: "Open", exact: true })).toBeHidden();
     const rendered = page.getByRole("table", { name: "Drag", exact: true }),
       first = rendered.locator("tr").first().locator("td,th").first();
     await expect(rendered).toHaveCount(1);

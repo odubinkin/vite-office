@@ -25,6 +25,7 @@ for (const viewport of [1280, 390])
       mimeType: "application/vnd.oasis.opendocument.text",
       name: "rows.odt",
     });
+    await expect(page.getByRole("dialog", { name: "Open", exact: true })).toBeHidden();
     const rendered = page.getByRole("table", { name: "Rows", exact: true }),
       first = rendered.locator("tr").first().locator("td,th").first(),
       second = rendered.locator("tr").nth(1),
