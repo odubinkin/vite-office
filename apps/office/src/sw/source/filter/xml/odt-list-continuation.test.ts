@@ -139,18 +139,35 @@ interface Case {
   roots: string[][];
   starts: string[];
 }
-it("imports native root continuation and default IDs through common and automatic ODT cycles", /** Verifies literal state, owned copies, Worker16, selected XML and source-derived reopen projections. @returns Completion. */ async () => {
-  vi.useFakeTimers();
-  vi.setSystemTime(new Date(2026, 9, 1, 12, 34, 56, 789));
-  const random = vi.spyOn(crypto, "getRandomValues").mockImplementation(
-    /** Supplies the primary fixed RNG value. @param array - Output. @returns Array. */ (array) => {
-      (array as Uint32Array).fill(0);
-      return array;
-    },
-  );
-  try {
-    const baseline = await writeOdtDocument(createWriterDocument(), { title: "Continuation" });
-    for (const bullet of [false, true]) {
+it.each([
+  { bullet: false, common: false },
+  { bullet: false, common: true },
+  { bullet: true, common: false },
+  { bullet: true, common: true },
+])(
+  "preserves native list continuation and default IDs for bullet=$bullet common=$common",
+  /** Checks one independent style family against the original import, copy, Worker and ODT outputs. @param profile - Style profile. @returns Completion. */ async ({
+    bullet,
+    common,
+  }) => {
+    vi.useFakeTimers();
+    vi.setSystemTime(new Date(2026, 9, 1, 12, 34, 56, 789));
+    const random = vi.spyOn(crypto, "getRandomValues").mockImplementation(
+      /** Supplies the primary fixed RNG value. @param array - Output. @returns Array. */ (
+        array,
+      ) => {
+        (array as Uint32Array).fill(0);
+        return array;
+      },
+    );
+    try {
+      const seed = createWriterDocument();
+      let baseline: Uint8Array;
+      try {
+        baseline = await writeOdtDocument(seed, { title: "Continuation" });
+      } finally {
+        seed.Dispose();
+      }
       const r = bullet ? 1 : 7,
         c = bullet ? 1 : 5;
       const first = root("A", item("a") + item("b")),
@@ -420,13 +437,14 @@ it("imports native root continuation and default IDs through common and automati
           starts: [],
         });
       }
-      for (const test of cases)
-        for (const common of [false, true]) {
-          const doc = (
-            await readOdtDocument(await input(baseline, test.body, common, bullet), {
-              title: "Continuation",
-            })
-          ).document;
+      for (const test of cases) {
+        const doc = (
+          await readOdtDocument(await input(baseline, test.body, common, bullet), {
+            title: "Continuation",
+          })
+        ).document;
+        const owners = [doc];
+        try {
           /** Adds literal native defaults and marker projection to the independent row table. @param rows - Expected rows. @returns States. */
           function expected(rows: Row[]) {
             return rows.map(
@@ -454,6 +472,7 @@ it("imports native root continuation and default IDs through common and automati
           }
           expect(state(doc), `${test.name}/${common}/${bullet}`).toEqual(expected(test.before));
           const copied = createWriterDocument();
+          owners.push(copied);
           for (const [index, name] of ["Counters", "Other"].entries()) {
             const rule = doc.GetNumRuleTable().slice(1)[index];
             if (rule === undefined) throw new Error("Missing declared rule");
@@ -470,16 +489,23 @@ it("imports native root continuation and default IDs through common and automati
                 index === 0 ? (copied.paragraphs[0] as SwTextNode) : copied.nodes.MakeTextNode();
               target.SetText(node.GetText());
               const items = node.CaptureListItems();
-              target.SetListItems(items);
-              if (node.GetListId().length !== 0) {
-                const identityItem = items.GetItemIfSet(RES_PARATR_LIST_ID, false);
-                expect(identityItem).toBeDefined();
-                expect(target.GetAttr(RES_PARATR_LIST_ID)).not.toBe(
-                  node.GetAttr(RES_PARATR_LIST_ID),
-                );
-                expect(target.CaptureListItems().GetItemIfSet(RES_PARATR_LIST_ID, false)).not.toBe(
-                  identityItem,
-                );
+              try {
+                target.SetListItems(items);
+                if (node.GetListId().length !== 0) {
+                  const identityItem = items.GetItemIfSet(RES_PARATR_LIST_ID, false);
+                  expect(identityItem).toBeDefined();
+                  expect(target.GetAttr(RES_PARATR_LIST_ID)).not.toBe(
+                    node.GetAttr(RES_PARATR_LIST_ID),
+                  );
+                  const captured = target.CaptureListItems();
+                  try {
+                    expect(captured.GetItemIfSet(RES_PARATR_LIST_ID, false)).not.toBe(identityItem);
+                  } finally {
+                    captured.Dispose();
+                  }
+                }
+              } finally {
+                items.Dispose();
               }
             },
           );
@@ -487,6 +513,7 @@ it("imports native root continuation and default IDs through common and automati
           const record = encodeWriterDocument(doc);
           expect(record.swModelVersion).toBe(17);
           const worker = decodeWriterDocument(record);
+          owners.push(worker);
           expect(worker.GetNumRuleTable().slice(1)[0]).not.toBe(doc.GetNumRuleTable().slice(1)[0]);
           expect(state(worker)).toEqual(expected(test.before));
           const bytes = await writeOdtDocument(doc, { title: "Continuation" });
@@ -526,11 +553,15 @@ it("imports native root continuation and default IDs through common and automati
             test.name,
           ).toEqual(test.starts);
           const reopened = (await readOdtDocument(bytes, { title: "Continuation" })).document;
+          owners.push(reopened);
           expect(state(reopened), `reopen ${test.name}`).toEqual(expected(test.after));
+        } finally {
+          for (const owner of owners.reverse()) owner.Dispose();
         }
+      }
+    } finally {
+      random.mockRestore();
+      vi.useRealTimers();
     }
-  } finally {
-    random.mockRestore();
-    vi.useRealTimers();
-  }
-});
+  },
+);

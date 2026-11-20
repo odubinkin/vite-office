@@ -4,7 +4,7 @@ title: "Align Writer ODT table-cell text styles"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 5
+revision: 6
 origin:
   system: "manual"
 depends_on: []
@@ -39,7 +39,7 @@ events:
     to: "DOING"
     note: "Start: Align Writer ODT table-cell text styles. Guided shortcut created the task, approved the plan, and entered execution."
 doc_version: 3
-doc_updated_at: "2026-11-20T14:15:36.081Z"
+doc_updated_at: "2026-11-20T14:43:16.880Z"
 doc_updated_by: "CODER"
 description: "Port automatic table-cell paragraph and character style ownership, temporary cell paragraph defaults and string-value style handling in Writer ODT. Validate native cell and paragraph property precedence, nested/repeated content, package and Worker round-trips, and the scheduled tenth full regression."
 sections:
@@ -58,7 +58,10 @@ sections:
   Rollback Plan: |-
     - Revert task-related commit(s).
     - Re-run required checks to confirm rollback safety.
-  Findings: ""
+  Findings: |-
+    - Observation: The scheduled full run found seven missing production registry entries from the preceding ODF work. Exact discovery and source provenance pass after e73e50f40. The shared XML suite passed 115 tests and focused Writer matrix-independent ODT cell style and value tests passed.
+      Impact: The first inventory coverage attempt reported 23 failures from missing registry entries and test timeouts. The complete application coverage and browser production test commands remain live.
+      Resolution: Keep the existing suite gates. Recheck the six failed inventory suites against the corrected registry under an isolated worker, then triage full application and browser failures. Checkpoint logs are under output/playwright/SKCF0Z.
 id_source: "generated"
 ---
 ## Summary
@@ -91,3 +94,7 @@ Read pinned Writer item-set style, table-cell section and xmloff paragraph impor
 - Re-run required checks to confirm rollback safety.
 
 ## Findings
+
+- Observation: The scheduled full run found seven missing production registry entries from the preceding ODF work. Exact discovery and source provenance pass after e73e50f40. The shared XML suite passed 115 tests and focused Writer matrix-independent ODT cell style and value tests passed.
+  Impact: The first inventory coverage attempt reported 23 failures from missing registry entries and test timeouts. The complete application coverage and browser production test commands remain live.
+  Resolution: Keep the existing suite gates. Recheck the six failed inventory suites against the corrected registry under an isolated worker, then triage full application and browser failures. Checkpoint logs are under output/playwright/SKCF0Z.
