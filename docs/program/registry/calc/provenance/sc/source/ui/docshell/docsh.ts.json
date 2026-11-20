@@ -33,7 +33,8 @@
       "Original ConvertFrom distinguishes an absent filter item, which uses API defaults, from an explicitly empty item, which uses the ScAsciiOptions parser.",
       "The browser open method covers the original filter and outer load handoff. CSV overflow preserves row, column and cell priority, successful imports retain the warning on the input medium, and failed replacement leaves the previously active model intact. The original invalid numbered sheet path supplies the packed export diagnostic.",
       "Delivers native deletion and indentation failures through the active document host.",
-      "Passes the captured native view settings to the current workbook XLSX filter."
+      "Passes the captured native view settings to the current workbook XLSX filter.",
+      "The existing asynchronous Open boundary rejects cancellation before opening the selected filter and before adopting its candidate, including XLSX. The displaced candidate is disposed on failure."
     ],
     "omittedResponsibilities": [
       "The browser handles input identity and primary persistence through its existing file workflows."
@@ -83,6 +84,10 @@
         {
           "path": "apps/office/src/sc/source/filter/oox/excelfilter.enhanced-protection.test.ts",
           "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sc/source/ui/docshell/docsh.xlsx.test.ts",
+          "marker": "discards malformed, cancelled and stale XLSX candidates"
         }
       ],
       "upstream": [

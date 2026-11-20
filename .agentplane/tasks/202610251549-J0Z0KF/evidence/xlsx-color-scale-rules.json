@@ -1,0 +1,45 @@
+{
+  "scope": "Native color-scale conditional formatting through Calc, XLSX, ODS, Worker transfer and the existing grid.",
+  "implementationCommit": "5560ab5a9b5b",
+  "upstream": [
+    "sc/inc/colorscale.hxx",
+    "sc/source/core/data/colorscale.cxx",
+    "sc/source/filter/oox/condformatbuffer.cxx",
+    "sc/source/filter/excel/xecontent.cxx",
+    "sc/source/filter/xml/xmlcondformat.cxx",
+    "sc/qa/unit/cond_format.cxx"
+  ],
+  "checks": [
+    {
+      "command": "npm run test:calc -- condformatbuffer.colorscale.test.ts excelfilter.page-settings.test.ts conditional-copy.test.ts stylesbuffer.color.test.ts --maxWorkers=2 --testTimeout=120000",
+      "result": "pass",
+      "evidence": "46 cases in four files. Unchanged XLSX and ODS color-scale fixtures, formula and theme thresholds, percentile boundaries, reference updates, range-cache invalidation and Worker round trip."
+    },
+    {
+      "command": "cd apps/office && node ../../node_modules/vitest/vitest.mjs run --config vitest.calc.config.ts condformatbuffer.colorscale.test.ts --maxWorkers=1 --testTimeout=120000 --coverage --coverage.include=src/sc/source/core/data/colorscale.ts --coverage.reportsDirectory=../../.git/cscale-coverage --coverage.reporter=text --coverage.reporter=json --coverage.thresholds.statements=90 --coverage.thresholds.lines=90 --coverage.thresholds.functions=90 --coverage.thresholds.branches=90",
+      "result": "pass",
+      "evidence": "Seven focused cases. The initial five cases covered 44.66% of branches. Formula ownership, bounds, errors and reference-update cases raise all four native scale-owner metrics above the 90% floor."
+    },
+    {
+      "command": "PLAYWRIGHT_BROWSERS_PATH=\"$PWD/.agentplane/tmp/zip-migration/browsers\" ./node_modules/.bin/playwright test -c .git/calc-panes-browser.config.mts --project calc --workers=1 --timeout=90000 xlsx-color-scale.spec.ts xlsx-page-settings.spec.ts",
+      "result": "pass",
+      "evidence": "Five cases in Chromium. Original tdf155321 shows the expected fill colors after Open, primary browser storage, download and mobile reopen."
+    },
+    {
+      "command": "npm run test:static && npm run check:dependencies && npm run check:docs && npm run check:file-size && npm run check:source-tree && npm run check:source-provenance && npm run inventory:registry:check && npm run inventory:invariants && npm run inventory:parity:calc && npm run check:calc-resources && node .agentplane/policy/check-routing.mjs && ap doctor && git diff --check",
+      "result": "pass",
+      "evidence": "Build, static smoke, source and registry gates plus scoped ESLint and Prettier passed. Agentplane doctor retains the existing hook readiness warning."
+    }
+  ],
+  "coverageForColorscaleOwner": {
+    "statements": 98.24,
+    "branches": 90.29,
+    "functions": 100,
+    "lines": 99.31
+  },
+  "remaining": [
+    "Earlier conditional-rule filter coverage is independent of the color-scale core coverage in this checkpoint.",
+    "Native shift and move dispatchers for detached formula cells, native repaint callbacks, data bars and icon sets remain unported.",
+    "CALC-764 describes the source asymmetric comparison. No full suite was due."
+  ]
+}

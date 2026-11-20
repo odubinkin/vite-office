@@ -1,10 +1,10 @@
 ---
 id: "202610251549-J0Z0KF"
 title: "Implement Calc XLSX import export and existing file UI integration"
-status: "DOING"
+status: "BLOCKED"
 priority: "high"
 owner: "CODER"
-revision: 701
+revision: 702
 origin:
   system: "manual"
 depends_on:
@@ -21,10 +21,10 @@ plan_approval:
   note: null
 verification:
   state: "blocked_external"
-  updated_at: "2026-11-20T01:36:01.769Z"
+  updated_at: "2026-11-20T07:43:44.030Z"
   updated_by: "CODER"
-  note: "Verified: original tdf170298 workbook opens and round-trips both dynamic names and conditional rules with all scoped formula owners above 90%. The broader XLSX task remains open."
-  attempts: 233
+  note: "Verified: color scale checkpoint passes 46 focused Calc cases, scoped90 in all metrics for the scale core, five Chromium file scenarios, build and repository checks. The broader XLSX task remains in direct execution."
+  attempts: 234
 commit: null
 comments:
   -
@@ -3736,8 +3736,14 @@ events:
     from: "BLOCKED"
     to: "DOING"
     note: "Start: continue direct-mode task in current checkout."
+  -
+    type: "verify"
+    at: "2026-11-20T07:43:44.030Z"
+    author: "CODER"
+    state: "blocked_external"
+    note: "Verified: color scale checkpoint passes 46 focused Calc cases, scoped90 in all metrics for the scale core, five Chromium file scenarios, build and repository checks. The broader XLSX task remains in direct execution."
 doc_version: 3
-doc_updated_at: "2026-11-20T01:36:31.088Z"
+doc_updated_at: "2026-11-20T07:43:44.870Z"
 doc_updated_by: "CODER"
 description: "User-approved third cohesive task: preserve pinned ExcelFilter workbook/worksheet/style/shared-string import and Excel export ownership while supporting the current Calc core slice, including cells, types, formulas, sheets, formatting and dimensions where implemented. Integrate shell filter routing and existing Open/download UI, errors/cancellation and primary ODS persistence. Record suspected upstream issues and source mappings, refactor touched workarounds and run related tests. Preserve recovery/autosave and browser file product decisions. Local work only."
 sections:
@@ -10858,6 +10864,36 @@ sections:
     - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
     - risks: none
 
+    ### 2026-11-20T07:43:44.030Z — VERIFY — blocked_external
+
+    By: CODER
+
+    Note: Verified: color scale checkpoint passes 46 focused Calc cases, scoped90 in all metrics for the scale core, five Chromium file scenarios, build and repository checks. The broader XLSX task remains in direct execution.
+    Attempts: 234
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-20T01:36:31.088Z, excerpt_hash=sha256:3da6ce8a820217533477184a0ee7a426a557f0606d162115a30aba26455afa46
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610251549-J0Z0KF/blueprint/resolved-snapshot.json
+    - old_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+    - current_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610251549-J0Z0KF
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane commit 202610251549-J0Z0KF -m 🧩 J0Z0KF task: persist canonical task artifacts --allow-tasks
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: |-
     - Revert task-related commit(s).
@@ -11993,6 +12029,10 @@ sections:
     - Observation: Code 7473d4544 preserves the original OFFSET/COUNTIF defined name and both overlapping conditions through Calc workers, ODS, XLSX export and reopen. 18 XLSX, 28 associated Calc, 9 shared and 4 Chromium cases pass. Scoped formula branches are 96.34% overall and at least 95.34% for each measured owner. CALC-762 and CALC-763 document the original boundary behavior.
       Impact: The earlier conditional format coverage and advanced rule families remain open. Global registry checks still report the two preexisting framework inventory gaps. No claim is made for array logical or COUNTIF matrix paths.
       Resolution: Retain the original tdf170298 and scalar native QA in regular focused verification. Continue the pending advanced conditional-format and file fidelity work under the approved XLSX task and ten-task full-suite cadence.
+
+    - Observation: Unchanged LibreOffice color-scale fixtures preserve thresholds, colors and formula state through the native model, Worker, files and grid.
+      Impact: Original workbook fills appear after import, browser primary reopen and downloaded XLSX reopen.
+      Resolution: See evidence/xlsx-color-scale-rules.json for exact commands and remaining native scope.
 id_source: "generated"
 ---
 ## Summary
@@ -19123,6 +19163,36 @@ DecisionContextRef:
 - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
 - risks: none
 
+### 2026-11-20T07:43:44.030Z — VERIFY — blocked_external
+
+By: CODER
+
+Note: Verified: color scale checkpoint passes 46 focused Calc cases, scoped90 in all metrics for the scale core, five Chromium file scenarios, build and repository checks. The broader XLSX task remains in direct execution.
+Attempts: 234
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-20T01:36:31.088Z, excerpt_hash=sha256:3da6ce8a820217533477184a0ee7a426a557f0606d162115a30aba26455afa46
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610251549-J0Z0KF/blueprint/resolved-snapshot.json
+- old_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+- current_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610251549-J0Z0KF
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane commit 202610251549-J0Z0KF -m 🧩 J0Z0KF task: persist canonical task artifacts --allow-tasks
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
+
 <!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
@@ -20262,3 +20332,7 @@ Evidence: `evidence/xlsx-native-page-break-roundtrip.json`.
 - Observation: Code 7473d4544 preserves the original OFFSET/COUNTIF defined name and both overlapping conditions through Calc workers, ODS, XLSX export and reopen. 18 XLSX, 28 associated Calc, 9 shared and 4 Chromium cases pass. Scoped formula branches are 96.34% overall and at least 95.34% for each measured owner. CALC-762 and CALC-763 document the original boundary behavior.
   Impact: The earlier conditional format coverage and advanced rule families remain open. Global registry checks still report the two preexisting framework inventory gaps. No claim is made for array logical or COUNTIF matrix paths.
   Resolution: Retain the original tdf170298 and scalar native QA in regular focused verification. Continue the pending advanced conditional-format and file fidelity work under the approved XLSX task and ten-task full-suite cadence.
+
+- Observation: Unchanged LibreOffice color-scale fixtures preserve thresholds, colors and formula state through the native model, Worker, files and grid.
+  Impact: Original workbook fills appear after import, browser primary reopen and downloaded XLSX reopen.
+  Resolution: See evidence/xlsx-color-scale-rules.json for exact commands and remaining native scope.

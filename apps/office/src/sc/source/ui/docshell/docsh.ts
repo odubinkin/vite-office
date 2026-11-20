@@ -245,7 +245,7 @@ export class ScDocShell extends SfxObjectShell {
     this.Changed();
     return document;
   }
-  /** Reads a separate ODS candidate and installs it only if the request/model generation remains current. @param bytes - Package. @param metadata - Browser identity. @param medium - Open route. @param options - Filter controls. @returns Installed model. */
+  /** Reads a separate candidate through the selected filter and installs it only while the open request remains current. @param bytes - Package. @param metadata - Browser identity. @param medium - Open route. @param options - Filter controls. @returns Installed model. */
   async Open(
     bytes: Uint8Array | XmlPackage,
     metadata: SfxObjectShellState,
@@ -260,6 +260,7 @@ export class ScDocShell extends SfxObjectShell {
     let updatedFilterOptions: string | undefined;
     let conversionCode = ERRCODE_NONE;
     try {
+      if (options.isCancelled?.()) throw new Error("Document open was cancelled.");
       if (medium?.filterId === ScDocShell.CSV_FILTER_NAME) {
         if (!ArrayBuffer.isView(bytes)) throw new Error("CSV input requires a byte stream.");
         candidate = new ScDocument();
@@ -317,6 +318,7 @@ export class ScDocShell extends SfxObjectShell {
             options.isCancelled?.() === true,
         });
       this.EnsureOpen();
+      if (options.isCancelled?.()) throw new Error("Document open was cancelled.");
       if (request !== this.openRequest || generation !== this.GetContentGeneration())
         throw new Error("Document open result is stale.");
       const input = acquireSfxMedium(
