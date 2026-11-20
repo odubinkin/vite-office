@@ -1,10 +1,11 @@
 ---
 id: "202610251549-J0Z0KF"
 title: "Implement Calc XLSX import export and existing file UI integration"
-status: "DOING"
+result_summary: "Calc XLSX import and export verified through the native document model and existing file controls"
+status: "DONE"
 priority: "high"
 owner: "CODER"
-revision: 716
+revision: 717
 origin:
   system: "manual"
 depends_on:
@@ -44,7 +45,9 @@ quality_review:
   findings:
     - "The Strict and Transitional source fixtures, active document admission guards, ODS persistence and downloaded files are covered by actual round trips. The complete compiler and original conditional-format profiles each meet all scoped90 thresholds."
     - "The production suite covers desktop and mobile Calc with actual workbook download/reopen, and the shared package suite passes 211 cases."
-commit: null
+commit:
+  hash: "761913f7bb225fe4475b6063bc2d545e3db39d43"
+  message: "🧩 J0Z0KF task: record XLSX verification and quality review"
 comments:
   -
     author: "CODER"
@@ -754,6 +757,9 @@ comments:
   -
     author: "CODER"
     body: "Start: continue direct-mode task in current checkout."
+  -
+    author: "CODER"
+    body: "Verified: Calc XLSX import and export passed native document, existing file controls, real browser, shared package and scoped coverage checks. The acceptance record links the Calc implementation commit and the quality report identifies the verified combined revision."
 events:
   -
     type: "status"
@@ -3859,8 +3865,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Verified with xlsx-supported-file-path-acceptance.json and the EVALUATOR quality report. The acceptance record links the Calc implementation commit and records all deterministic and browser checks."
+  -
+    type: "status"
+    at: "2026-11-20T09:39:34.753Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: Calc XLSX import and export passed native document, existing file controls, real browser, shared package and scoped coverage checks. The acceptance record links the Calc implementation commit and the quality report identifies the verified combined revision."
 doc_version: 3
-doc_updated_at: "2026-11-20T09:38:23.925Z"
+doc_updated_at: "2026-11-20T09:39:34.798Z"
 doc_updated_by: "CODER"
 description: "User-approved third cohesive task: preserve pinned ExcelFilter workbook/worksheet/style/shared-string import and Excel export ownership while supporting the current Calc core slice, including cells, types, formulas, sheets, formatting and dimensions where implemented. Integrate shell filter routing and existing Open/download UI, errors/cancellation and primary ODS persistence. Record suspected upstream issues and source mappings, refactor touched workarounds and run related tests. Preserve recovery/autosave and browser file product decisions. Local work only."
 sections:
@@ -12410,6 +12423,10 @@ sections:
     - Observation: 75 tests in the retained seven-owner profile pass; branch coverage is 82.04%. The complete two worksheet extension modules pass scoped90.
       Impact: Working XLSX extension import/export is committed; the broader Calc XLSX acceptance still requires branch coverage.
       Resolution: Preserve the original scope and exercise the remaining branches with source fixtures and critical malformed-input and graph checks.
+extensions:
+  implementation_commit:
+    hash: "14d0b586ffd7375430ebe9497b6b8823a26c1c76"
+    message: "🧩 V4DQJW code: verify native stylesheet admission and cyclic parents"
 id_source: "generated"
 ---
 ## Summary
