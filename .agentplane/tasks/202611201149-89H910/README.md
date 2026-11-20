@@ -4,7 +4,7 @@ title: "Connect Calc sheet tab visibility selection and color commands"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 11
+revision: 13
 origin:
   system: "manual"
 depends_on: []
@@ -23,10 +23,28 @@ plan_approval:
   note: null
 verification:
   state: "ok"
-  updated_at: "2026-11-20T12:40:01.951Z"
+  updated_at: "2026-11-20T12:41:26.524Z"
   updated_by: "CODER"
-  note: "Fifteen focused Calc tests and all five production Chrome scenarios passed, including ODS/XLSX visibility and assigned color persistence. Typecheck, build, resources, provenance, boundaries and targeted quality checks pass."
+  note: "verified-202611201149-89H910"
   attempts: 0
+quality_review:
+  state: "pass"
+  updated_at: "2026-11-20T12:41:10.418Z"
+  updated_by: "EVALUATOR"
+  note: "Calc sheet tab commands meet the approved slice"
+  evaluated_sha: "b86ce70293fc1c104f95fe03240db46dd193b243"
+  blueprint_digest: "4cb4d974f3a7df5a4644df9c6172ccc0080a26b266732a5ddb4365d56c69819e"
+  evidence_refs:
+    - ".agentplane/tasks/202611201149-89H910/README.md"
+    - ".agentplane/tasks/202611201149-89H910/quality/20261120-124110418-recovery-context/quality-report.json"
+    - ".agentplane/tasks/202611201149-89H910/quality/20261120-124110418-recovery-context/evaluator-prompt.md"
+    - ".agentplane/tasks/202611201149-89H910/quality/20261120-124110418-recovery-context/evaluator-opinion.md"
+    - ".agentplane/tasks/202611201149-89H910/blueprint/resolved-snapshot.json"
+    - "output/calc-89H910-scoped-test.log"
+    - "output/calc-89H910-browser.log"
+    - "output/calc-89H910-browser-color-replay.log"
+  findings:
+    - "Focused model and production Chrome cases cover sheet selection, visibility, tab colors, history and persistence."
 commit: null
 comments:
   -
@@ -52,8 +70,14 @@ events:
     author: "CODER"
     state: "ok"
     note: "Fifteen focused Calc tests and all five production Chrome scenarios passed, including ODS/XLSX visibility and assigned color persistence. Typecheck, build, resources, provenance, boundaries and targeted quality checks pass."
+  -
+    type: "verify"
+    at: "2026-11-20T12:41:26.524Z"
+    author: "CODER"
+    state: "ok"
+    note: "verified-202611201149-89H910"
 doc_version: 3
-doc_updated_at: "2026-11-20T12:40:02.069Z"
+doc_updated_at: "2026-11-20T12:41:26.583Z"
 doc_updated_by: "CODER"
 description: "Connect native Hide, Show, SelectTables and SetTabBgColor slots to the actual Calc sheet state, shared menus, dialogs and undo. Use local pinned LibreOffice sources and focused tests of browser commands and file persistence."
 sections:
@@ -98,6 +122,36 @@ sections:
     - freshness: route=computed_local remote=remote_skipped
     - repeat_allowed: false
     - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+    - risks: none
+
+    ### 2026-11-20T12:41:26.524Z — VERIFY — ok
+
+    By: CODER
+
+    Note: verified-202611201149-89H910
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-20T12:40:02.069Z, excerpt_hash=sha256:d2a3af777ce7e8c12dba04e7b536481a05a3488c0b56ea3e31647fe72abc3c08
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202611201149-89H910/blueprint/resolved-snapshot.json
+    - old_digest: 4cb4d974f3a7df5a4644df9c6172ccc0080a26b266732a5ddb4365d56c69819e
+    - current_digest: 4cb4d974f3a7df5a4644df9c6172ccc0080a26b266732a5ddb4365d56c69819e
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202611201149-89H910
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task complete 202611201149-89H910 --result verified-202611201149-89H910 --commit b86ce70293fc1c104f95fe03240db46dd193b243
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
     - risks: none
 
     <!-- END VERIFICATION RESULTS -->
@@ -158,6 +212,36 @@ DecisionContextRef:
 - freshness: route=computed_local remote=remote_skipped
 - repeat_allowed: false
 - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- risks: none
+
+### 2026-11-20T12:41:26.524Z — VERIFY — ok
+
+By: CODER
+
+Note: verified-202611201149-89H910
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-20T12:40:02.069Z, excerpt_hash=sha256:d2a3af777ce7e8c12dba04e7b536481a05a3488c0b56ea3e31647fe72abc3c08
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202611201149-89H910/blueprint/resolved-snapshot.json
+- old_digest: 4cb4d974f3a7df5a4644df9c6172ccc0080a26b266732a5ddb4365d56c69819e
+- current_digest: 4cb4d974f3a7df5a4644df9c6172ccc0080a26b266732a5ddb4365d56c69819e
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202611201149-89H910
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task complete 202611201149-89H910 --result verified-202611201149-89H910 --commit b86ce70293fc1c104f95fe03240db46dd193b243
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
 - risks: none
 
 <!-- END VERIFICATION RESULTS -->
