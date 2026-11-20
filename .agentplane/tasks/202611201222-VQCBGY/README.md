@@ -4,7 +4,7 @@ title: "Align Calc ODS row and column default cell styles"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 7
+revision: 9
 origin:
   system: "manual"
 depends_on: []
@@ -17,11 +17,32 @@ plan_approval:
   updated_by: "ORCHESTRATOR"
   note: null
 verification:
-  state: "pending"
-  updated_at: null
-  updated_by: null
-  note: null
+  state: "ok"
+  updated_at: "2026-11-20T12:40:42.333Z"
+  updated_by: "CODER"
+  note: "The pinned Calc date fixture, native ODS style range tests, Worker round trips and all 106 tests in the declared Calc XML profile passed on the implementation commit."
   attempts: 0
+quality_review:
+  state: "pass"
+  updated_at: "2026-11-20T12:40:42.958Z"
+  updated_by: "EVALUATOR"
+  note: "Same-agent review against pinned Calc XML range helpers, document pattern selection and final deterministic checks."
+  evaluated_sha: "28ab3177d2f442d13732212cdb306bb98f75b481"
+  blueprint_digest: "176bf10945c138f1f6eb7868e822c8f9ea4e70339825b1194f623e56d4025115"
+  evidence_refs:
+    - ".agentplane/tasks/202611201222-VQCBGY/README.md"
+    - ".agentplane/tasks/202611201222-VQCBGY/quality/20261120-124042958-recovery-context/quality-report.json"
+    - ".agentplane/tasks/202611201222-VQCBGY/quality/20261120-124042958-recovery-context/evaluator-prompt.md"
+    - ".agentplane/tasks/202611201222-VQCBGY/quality/20261120-124042958-recovery-context/evaluator-opinion.md"
+    - ".agentplane/tasks/202611201222-VQCBGY/blueprint/resolved-snapshot.json"
+    - "28ab3177d2f4: final 106-test Calc XML filter and Worker profile, office typecheck and static checks"
+    - "apps/office/src/sc/source/filter/xml/ods-default-cell-styles.test.ts"
+    - "apps/office/src/sc/source/filter/xml/ods-typed-values.test.ts"
+    - "docs/program/calc-upstream-suspected-issues.md"
+  findings:
+    - "The default shapes follow Calc row and column range precedence, deferred row-default timing and final declared column fallback."
+    - "The core picks column defaults by native pattern coverage and first-row tie-break; XML keeps automatic and named runs distinct and writes direct overrides."
+    - "The updated fixture retains original column default declarations and data styles and verifies both upstream date assertions."
 commit: null
 comments:
   -
@@ -35,8 +56,14 @@ events:
     from: "TODO"
     to: "DOING"
     note: "Start: Port the native Calc ODS cell style range and column default selection paths."
+  -
+    type: "verify"
+    at: "2026-11-20T12:40:42.333Z"
+    author: "CODER"
+    state: "ok"
+    note: "The pinned Calc date fixture, native ODS style range tests, Worker round trips and all 106 tests in the declared Calc XML profile passed on the implementation commit."
 doc_version: 3
-doc_updated_at: "2026-11-20T12:23:18.961Z"
+doc_updated_at: "2026-11-20T12:40:42.388Z"
 doc_updated_by: "CODER"
 description: "Port the native Calc XML default-style range import and column default export selection, preserving formatted empties, repeated ranges, typed values and native pattern ownership. Replay the original tdf126116 FODS scenario with inherited formatting."
 sections:
@@ -52,6 +79,53 @@ sections:
     3. Run scoped ESLint and Prettier, git diff --check, ap doctor, and node .agentplane/policy/check-routing.mjs.
   Verification: |-
     <!-- BEGIN VERIFICATION RESULTS -->
+    ### 2026-11-20T12:40:42.333Z — VERIFY — ok
+
+    By: CODER
+
+    Note: The pinned Calc date fixture, native ODS style range tests, Worker round trips and all 106 tests in the declared Calc XML profile passed on the implementation commit.
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-20T12:23:18.961Z, excerpt_hash=sha256:461f552e0515e6e00853ba135c539ecedb41d8e9f81391553d17bfeef4174e46
+
+    Details:
+
+    Command: npm run test:calc -- src/sc/source/filter/xml src/sc/browser/filter/xml --maxWorkers 2 --testTimeout 120000
+    Result: pass
+    Evidence: 23 files, 106 tests passed on 28ab3177d2f4. The original tdf126116 fixture retains both short-date assertions with only the XML root adapted to the package content reader.
+    Scope: Calc ODF range formats, typed values, repeated styled empties, worker records and package reopening.
+
+    Command: npm run typecheck --workspace @vite-office/office
+    Result: pass
+    Evidence: tsc --noEmit completed with exit code zero.
+    Scope: office type checking.
+
+    Command: scoped ESLint and Prettier for all changed TypeScript, git diff HEAD^ HEAD --check, npm run check:dependencies, npm run check:source-tree, node .agentplane/policy/check-routing.mjs, and ap doctor
+    Result: pass
+    Evidence: formatting, lint, module boundaries, pinned source-tree paths and routing passed. Doctor OK with the existing managed hook readiness warning.
+    Scope: changed sources and process checks.
+
+    Initial declared run recorded two export assertions and a protection-test timeout. The source-backed export correction and assertion update passed individually and the final declared rerun passed all 106 tests.
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202611201222-VQCBGY/blueprint/resolved-snapshot.json
+    - old_digest: 176bf10945c138f1f6eb7868e822c8f9ea4e70339825b1194f623e56d4025115
+    - current_digest: 176bf10945c138f1f6eb7868e822c8f9ea4e70339825b1194f623e56d4025115
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202611201222-VQCBGY
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task verify-show 202611201222-VQCBGY
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: false
+    - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+    - risks: none
+
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Revert the committed Calc ODF cell-style range and column default implementation with its tests and audit findings."
   Findings: ""
@@ -80,6 +154,53 @@ Port the represented native style range helper and its row and column default re
 ## Verification
 
 <!-- BEGIN VERIFICATION RESULTS -->
+### 2026-11-20T12:40:42.333Z — VERIFY — ok
+
+By: CODER
+
+Note: The pinned Calc date fixture, native ODS style range tests, Worker round trips and all 106 tests in the declared Calc XML profile passed on the implementation commit.
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-20T12:23:18.961Z, excerpt_hash=sha256:461f552e0515e6e00853ba135c539ecedb41d8e9f81391553d17bfeef4174e46
+
+Details:
+
+Command: npm run test:calc -- src/sc/source/filter/xml src/sc/browser/filter/xml --maxWorkers 2 --testTimeout 120000
+Result: pass
+Evidence: 23 files, 106 tests passed on 28ab3177d2f4. The original tdf126116 fixture retains both short-date assertions with only the XML root adapted to the package content reader.
+Scope: Calc ODF range formats, typed values, repeated styled empties, worker records and package reopening.
+
+Command: npm run typecheck --workspace @vite-office/office
+Result: pass
+Evidence: tsc --noEmit completed with exit code zero.
+Scope: office type checking.
+
+Command: scoped ESLint and Prettier for all changed TypeScript, git diff HEAD^ HEAD --check, npm run check:dependencies, npm run check:source-tree, node .agentplane/policy/check-routing.mjs, and ap doctor
+Result: pass
+Evidence: formatting, lint, module boundaries, pinned source-tree paths and routing passed. Doctor OK with the existing managed hook readiness warning.
+Scope: changed sources and process checks.
+
+Initial declared run recorded two export assertions and a protection-test timeout. The source-backed export correction and assertion update passed individually and the final declared rerun passed all 106 tests.
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202611201222-VQCBGY/blueprint/resolved-snapshot.json
+- old_digest: 176bf10945c138f1f6eb7868e822c8f9ea4e70339825b1194f623e56d4025115
+- current_digest: 176bf10945c138f1f6eb7868e822c8f9ea4e70339825b1194f623e56d4025115
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202611201222-VQCBGY
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task verify-show 202611201222-VQCBGY
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: false
+- repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- risks: none
+
 <!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan

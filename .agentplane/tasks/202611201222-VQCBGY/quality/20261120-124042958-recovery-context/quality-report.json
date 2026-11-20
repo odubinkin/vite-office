@@ -1,0 +1,28 @@
+{
+  "schema_version": 1,
+  "task_id": "202611201222-VQCBGY",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-11-20T12:40:42.958Z",
+  "verdict": "pass",
+  "summary": "Same-agent review against pinned Calc XML range helpers, document pattern selection and final deterministic checks.",
+  "evaluated_sha": "28ab3177d2f442d13732212cdb306bb98f75b481",
+  "blueprint_digest": "176bf10945c138f1f6eb7868e822c8f9ea4e70339825b1194f623e56d4025115",
+  "findings": [
+    "The default shapes follow Calc row and column range precedence, deferred row-default timing and final declared column fallback.",
+    "The core picks column defaults by native pattern coverage and first-row tie-break; XML keeps automatic and named runs distinct and writes direct overrides.",
+    "The updated fixture retains original column default declarations and data styles and verifies both upstream date assertions."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202611201222-VQCBGY/README.md",
+    "28ab3177d2f4: final 106-test Calc XML filter and Worker profile, office typecheck and static checks",
+    "apps/office/src/sc/source/filter/xml/ods-default-cell-styles.test.ts",
+    "apps/office/src/sc/source/filter/xml/ods-typed-values.test.ts",
+    "docs/program/calc-upstream-suspected-issues.md"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": [
+    "The regression adapts the fixture root to the package content reader; production flat FODS ingestion is outside this ODS task."
+  ]
+}
