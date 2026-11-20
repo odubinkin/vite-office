@@ -157,6 +157,7 @@ export function exportTableBlocks(
       const repeatedHeaders = table.format.repeatHeaderRows
         ? Math.min(table.format.headerRows ?? 0, table.rows.length)
         : 0;
+      const rowStyles = new Map<string, string>();
       for (const [rowIndex, row] of table.rows.entries()) {
         if (rowIndex === 0 && repeatedHeaders > 0) body += "<table:table-header-rows>";
         if (rowIndex === repeatedHeaders && repeatedHeaders > 0)
@@ -164,8 +165,13 @@ export function exportTableBlocks(
         if (table.softPageBreakRows.includes(rowIndex)) body += "<text:soft-page-break/>";
         const rowName = `${prefix}.R${rowIndex + 1}`;
         const rowProperties = `${row.format.height === undefined ? "" : ` style:row-height="${exportOdfLength(row.format.height)}"`}${row.format.minHeight === undefined ? "" : ` style:min-row-height="${exportOdfLength(row.format.minHeight)}"`}${row.format.keepTogether === undefined ? "" : ` fo:keep-together="${row.format.keepTogether ? "always" : "auto"}"`}${exportTableVisualProperties(row.format)}`;
-        automaticStyles += `<style:style style:name="${rowName}" style:family="table-row"><style:table-row-properties${rowProperties}/></style:style>`;
-        body += `<table:table-row table:style-name="${rowName}">`;
+        let rowStyleName = rowStyles.get(rowProperties);
+        if (rowProperties && rowStyleName === undefined) {
+          rowStyleName = rowName;
+          rowStyles.set(rowProperties, rowStyleName);
+          automaticStyles += `<style:style style:name="${rowStyleName}" style:family="table-row"><style:table-row-properties${rowProperties}/></style:style>`;
+        }
+        body += `<table:table-row${rowStyleName === undefined ? "" : ` table:style-name="${rowStyleName}"`}>`;
         for (const [cellIndex, cell] of row.cells.entries()) {
           const cellName = `${rowName}.C${cellIndex + 1}`;
           let cellProperties = `${cell.format.padding === undefined ? "" : ` fo:padding="${exportOdfLength(cell.format.padding)}"`}${cell.format.border === undefined ? "" : ` fo:border="${escapeXml(cell.format.border)}"`}${cell.format.verticalAlign === undefined ? "" : ` style:vertical-align="${escapeXml(cell.format.verticalAlign)}"`}${cell.format.borderLineWidth === undefined ? "" : ` style:border-line-width="${escapeXml(cell.format.borderLineWidth)}"`}`;

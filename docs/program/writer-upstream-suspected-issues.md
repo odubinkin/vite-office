@@ -5235,3 +5235,26 @@ exporter retains the source condition on the stored property.
 
 - [Original table look default](../../vendor/libreoffice-reference/sw/source/writerfilter/dmapper/DomainMapperTableHandler.cxx)
 - [Original header override lookup](../../vendor/libreoffice-reference/sw/source/filter/ww8/docxattributeoutput.cxx)
+
+### WRITER-674 — Writer row repeats and cell defaults use the style namespace
+
+Pinned `SwXMLTableRowContext_Impl` reads `style:number-rows-repeated` and
+`style:default-cell-style-name`. The same local names in the table namespace
+do not trigger either branch. Calc's row importer reads both attributes in
+the table namespace. Writer keeps the source token checks and tests both forms
+with separate rows in an ODT round trip.
+
+- [Writer row import](../../vendor/libreoffice-reference/sw/source/filter/xml/xmltbli.cxx#L795)
+- [Calc row import](../../vendor/libreoffice-reference/sc/source/filter/xml/xmlrowi.cxx#L72)
+
+### WRITER-675 — The table cell fallback requires a column default declaration
+
+Pinned `SwXMLTableContext::InsertCell` consults the table-wide default only
+when the column default list exists. `InsertColumn` first creates that list
+on a nonempty column default. A column without its own default can therefore
+receive different formatting when an unrelated column declares one. The
+Writer filter preserves the conditional lookup and the regression verifies
+the direct brushes after package save and reopen.
+
+- [Column default list initialization](../../vendor/libreoffice-reference/sw/source/filter/xml/xmltbli.cxx#L1325)
+- [Cell default selection](../../vendor/libreoffice-reference/sw/source/filter/xml/xmltbli.cxx#L1456)

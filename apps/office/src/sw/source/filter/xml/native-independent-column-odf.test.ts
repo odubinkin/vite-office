@@ -200,7 +200,15 @@ it("codec keeps complete independent frame size fields and accepts prior records
     [1500, 3000],
   ]);
 });
-it.each(["missing-covered", "foreign-covered", "overflow"])(
+it("builds spanning boxes without an explicit covered-cell marker", /** Tests Writer's native omission of redundant covered cells. @returns Nothing. */ () => {
+  const f = fixture(),
+    content = exportContentXml(f.doc).replace("<table:covered-table-cell/>", ""),
+    imported = importWriterXml(exportStylesXml(f.doc), content, {
+      title: "Implicit cover",
+    }).document;
+  expect(required(imported.GetTables()[0]).GetTabLines()[0]?.GetTabBoxes()).toHaveLength(2);
+});
+it.each(["foreign-covered", "overflow"])(
   "ODF independent grid rejects malformed %s",
   /** Checks source span-grid cardinality without silently duplicating cells. @param kind - Malformation. @returns Nothing. */ (
     kind,
@@ -208,14 +216,9 @@ it.each(["missing-covered", "foreign-covered", "overflow"])(
     const f = fixture(),
       content = exportContentXml(f.doc),
       invalid =
-        kind === "missing-covered"
-          ? content.replace("<table:covered-table-cell/>", "")
-          : kind === "foreign-covered"
-            ? content.replace("</table:table-row>", "<table:covered-table-cell/></table:table-row>")
-            : content.replace(
-                'table:number-columns-spanned="2"',
-                'table:number-columns-spanned="4"',
-              );
+        kind === "foreign-covered"
+          ? content.replace("</table:table-row>", "<table:covered-table-cell/></table:table-row>")
+          : content.replace('table:number-columns-spanned="2"', 'table:number-columns-spanned="4"');
     expect(
       /** Imports an independently malformed span stream. @returns Import result or validation error. */ () =>
         importWriterXml(exportStylesXml(f.doc), invalid, { title: "Invalid" }),

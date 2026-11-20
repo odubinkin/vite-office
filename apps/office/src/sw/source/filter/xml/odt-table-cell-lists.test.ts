@@ -197,7 +197,7 @@ for (const common of [false, true])
           expect(doc.GetTables()).toHaveLength(1);
           const nativeTable = required(doc.GetTables()[0]);
           expect(nativeTable.GetFormat()).toMatchObject({ headerRows: 1, repeatHeaderRows: true });
-          expect(nativeTable.GetColumnWidths()).toEqual([0, 0]);
+          expect(nativeTable.GetColumnWidths()).toEqual([23, 23]);
           for (const box of required(nativeTable.GetTabLines()[0]).GetTabBoxes())
             for (const node of box.GetParagraphs()) {
               expect(node.StartOfSectionNode()).toBe(box.GetStartNode());
@@ -253,7 +253,7 @@ for (const common of [false, true])
             const reopened = (await readOdtDocument(bytes, { title: "Cell lists" })).document;
             expect(state(reopened)).toEqual(state(current));
             expect(required(reopened.GetTables()[0]).GetFormat()).toEqual(nativeTable.GetFormat());
-            expect(required(reopened.GetTables()[0]).GetColumnWidths()).toEqual([0, 0]);
+            expect(required(reopened.GetTables()[0]).GetColumnWidths()).toEqual([23, 23]);
             current = reopened;
           }
         },

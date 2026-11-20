@@ -1,3 +1,4 @@
+import { toInt32 } from "../../../o3tl/inc/string_view";
 /** @fileoverview Imports the bounded table and table-style SAX contexts from pinned xmloff table import. */
 
 import { FastAttributeList, SvXMLIgnoreContext, SvXMLImportContext } from "../core/xmlimp";
@@ -69,15 +70,16 @@ function importTableVisualProperties(attributes: FastAttributeList): OdfTableVis
 /** Writer-facing streaming table operations; canonical ownership stays in sw. */
 export interface XMLTableImportTarget extends XMLTextImportTarget {
   registerTableStyle(name: string, style: OdfTableStyle): void;
-  beginTable(name: string, styleName: string): void;
-  addTableColumn(styleName: string): void;
+  beginTable(name: string, styleName: string, defaultCellStyleName: string): void;
+  addTableColumn(styleName: string, defaultCellStyleName: string): void;
   beginTableHeaderRows(): void;
   endTableHeaderRows(): void;
-  beginTableRow(styleName: string): void;
+  beginTableRow(styleName: string, defaultCellStyleName: string): void;
+  canInsertTableCell(): boolean;
   beginTableCell(styleName: string, columnSpan?: number, rowSpan?: number): void;
   coveredTableCell?(styleName?: string): void;
-  endTableCell(): void;
-  endTableRow(): void;
+  endTableCell(repeat: number): void;
+  endTableRow(repeat: number): void;
   endTable(): void;
   addTableSoftPageBreak(): void;
 }
@@ -329,10 +331,19 @@ export class XMLTableContext extends SvXMLImportContext {
     private readonly helper = target.GetTextImport(),
   ) {
     super();
-    attributes.assertOnly([XMLToken.TABLE_NAME, XMLToken.TABLE_STYLE_NAME], "table");
+    attributes.assertOnly(
+      [
+        XMLToken.TABLE_NAME,
+        XMLToken.TABLE_STYLE_NAME,
+        XMLToken.TABLE_DEFAULT_CELL_STYLE_NAME,
+        XMLToken.XML_ID,
+      ],
+      "table",
+    );
     this.target.beginTable(
       attributes.require(XMLToken.TABLE_NAME, "table name"),
       attributes.get(XMLToken.TABLE_STYLE_NAME) ?? "",
+      attributes.get(XMLToken.TABLE_DEFAULT_CELL_STYLE_NAME) ?? "",
     );
   }
 
@@ -342,21 +353,21 @@ export class XMLTableContext extends SvXMLImportContext {
     attributes: FastAttributeList,
   ): SvXMLImportContext | null {
     if (element === XMLToken.TABLE_TABLE_COLUMN) {
-      attributes.assertOnly(
-        [XMLToken.TABLE_STYLE_NAME, XMLToken.TABLE_NUMBER_COLUMNS_REPEATED],
-        "table column",
-      );
-      const count = repeatCount(attributes, XMLToken.TABLE_NUMBER_COLUMNS_REPEATED);
-      for (let i = 0; i < count; i += 1)
-        this.target.addTableColumn(attributes.get(XMLToken.TABLE_STYLE_NAME) ?? "");
+      importColumn(this.target, attributes);
       return new SvXMLIgnoreContext();
     }
+    if (
+      element === XMLToken.TABLE_TABLE_COLUMNS ||
+      element === XMLToken.TABLE_TABLE_HEADER_COLUMNS ||
+      element === XMLToken.TABLE_TABLE_COLUMN_GROUP
+    )
+      return new XMLTableColumnsContext(this.target);
     if (element === XMLToken.TABLE_TABLE_ROW)
       return new XMLTableRowContext(this.target, attributes, this.helper);
-    if (element === XMLToken.TABLE_TABLE_HEADER_ROWS) {
-      attributes.assertOnly([], "table header rows");
-      this.target.beginTableHeaderRows();
-      return new XMLTableHeaderRowsContext(this.target, this.helper);
+    if (element === XMLToken.TABLE_TABLE_HEADER_ROWS || element === XMLToken.TABLE_TABLE_ROWS) {
+      const header = element === XMLToken.TABLE_TABLE_HEADER_ROWS;
+      if (header) this.target.beginTableHeaderRows();
+      return new XMLTableRowsContext(this.target, this.helper, header);
     }
     if (element === XMLToken.TEXT_SOFT_PAGE_BREAK) {
       attributes.assertOnly([], "table soft page break");
@@ -372,12 +383,48 @@ export class XMLTableContext extends SvXMLImportContext {
   }
 }
 
+/** Applies column attributes in the Writer table context. @param target - Writer table sink. @param attributes - Source attributes. @returns Nothing. */
+function importColumn(target: XMLTableImportTarget, attributes: FastAttributeList): void {
+  attributes.assertOnly(
+    [
+      XMLToken.TABLE_STYLE_NAME,
+      XMLToken.TABLE_NUMBER_COLUMNS_REPEATED,
+      XMLToken.TABLE_DEFAULT_CELL_STYLE_NAME,
+      XMLToken.XML_ID,
+    ],
+    "table column",
+  );
+  const count = repeatCount(attributes, XMLToken.TABLE_NUMBER_COLUMNS_REPEATED, 256);
+  const name = attributes.get(XMLToken.TABLE_STYLE_NAME) ?? "";
+  const cellStyle = attributes.get(XMLToken.TABLE_DEFAULT_CELL_STYLE_NAME) ?? "";
+  for (let index = 0; index < count; index++) target.addTableColumn(name, cellStyle);
+}
+
+/** Imports the flat grid from a Writer column group. */
+class XMLTableColumnsContext extends SvXMLImportContext {
+  /** Binds the column group to its actual table. @param target - Writer table sink. @returns Context. */
+  constructor(private readonly target: XMLTableImportTarget) {
+    super();
+  }
+
+  /** Reads the group's column declarations. @param element - Child token. @param attributes - Column attributes. @returns Child context. */
+  override createFastChildContext(
+    element: XMLToken,
+    attributes: FastAttributeList,
+  ): SvXMLImportContext | null {
+    if (element !== XMLToken.TABLE_TABLE_COLUMN) return null;
+    importColumn(this.target, attributes);
+    return new SvXMLIgnoreContext();
+  }
+}
+
 /** Imports the first repeated header rows from Writer's table grouping. */
-class XMLTableHeaderRowsContext extends SvXMLImportContext {
-  /** Stores the table sink. @param target - Writer table sink. @param helper - Shared native text owner. @returns Nothing. */
+class XMLTableRowsContext extends SvXMLImportContext {
+  /** Stores the table sink. @param target - Writer table sink. @param helper - Shared native text owner. @param header - Header row group. @returns Nothing. */
   public constructor(
     private readonly target: XMLTableImportTarget,
     private readonly helper: XMLTextImportHelper,
+    private readonly header: boolean,
   ) {
     super();
   }
@@ -392,12 +439,13 @@ class XMLTableHeaderRowsContext extends SvXMLImportContext {
   }
   /** Completes the header group. @returns Nothing. */
   public override endFastElement(): void {
-    this.target.endTableHeaderRows();
+    if (this.header) this.target.endTableHeaderRows();
   }
 }
 
 /** Imports one ordered table row. */
 class XMLTableRowContext extends SvXMLImportContext {
+  private readonly repeat: number;
   /** Opens a row. @param target - Writer table sink. @param attributes - Row style. @param helper - Shared native text owner. @returns Nothing. */
   public constructor(
     private readonly target: XMLTableImportTarget,
@@ -405,8 +453,22 @@ class XMLTableRowContext extends SvXMLImportContext {
     private readonly helper: XMLTextImportHelper,
   ) {
     super();
-    attributes.assertOnly([XMLToken.TABLE_STYLE_NAME], "table row");
-    this.target.beginTableRow(attributes.get(XMLToken.TABLE_STYLE_NAME) ?? "");
+    attributes.assertOnly(
+      [
+        XMLToken.TABLE_STYLE_NAME,
+        XMLToken.STYLE_DEFAULT_CELL_STYLE_NAME,
+        XMLToken.STYLE_NUMBER_ROWS_REPEATED,
+        XMLToken.TABLE_DEFAULT_CELL_STYLE_NAME,
+        XMLToken.TABLE_NUMBER_ROWS_REPEATED,
+        XMLToken.XML_ID,
+      ],
+      "table row",
+    );
+    this.repeat = repeatCount(attributes, XMLToken.STYLE_NUMBER_ROWS_REPEATED, 8192);
+    this.target.beginTableRow(
+      attributes.get(XMLToken.TABLE_STYLE_NAME) ?? "",
+      attributes.get(XMLToken.STYLE_DEFAULT_CELL_STYLE_NAME) ?? "",
+    );
   }
   /** Imports a row cell. @param element - Child token. @param attributes - Cell values. @returns Child context. */
   public override createFastChildContext(
@@ -414,7 +476,9 @@ class XMLTableRowContext extends SvXMLImportContext {
     attributes: FastAttributeList,
   ): SvXMLImportContext | null {
     if (element === XMLToken.TABLE_TABLE_CELL)
-      return new XMLTableCellContext(this.target, attributes, this.helper);
+      return this.target.canInsertTableCell()
+        ? new XMLTableCellContext(this.target, attributes, this.helper)
+        : new SvXMLIgnoreContext(true);
     if (element === XMLToken.TABLE_COVERED_TABLE_CELL) {
       attributes.assertOnly([XMLToken.TABLE_STYLE_NAME], "covered table cell");
       this.target.coveredTableCell?.(attributes.get(XMLToken.TABLE_STYLE_NAME) ?? "");
@@ -424,12 +488,13 @@ class XMLTableRowContext extends SvXMLImportContext {
   }
   /** Closes the row. @returns Nothing. */
   public override endFastElement(): void {
-    this.target.endTableRow();
+    this.target.endTableRow(this.repeat);
   }
 }
 
 /** Imports a table cell's ordered paragraphs. */
 class XMLTableCellContext extends SvXMLImportContext {
+  private readonly repeat: number;
   /** Opens a cell. @param target - Writer table sink. @param attributes - Cell style. @param helper - Shared native text owner. @returns Nothing. */
   public constructor(
     private readonly target: XMLTableImportTarget,
@@ -443,13 +508,15 @@ class XMLTableCellContext extends SvXMLImportContext {
         XMLToken.TABLE_VALUE_TYPE,
         XMLToken.TABLE_NUMBER_COLUMNS_SPANNED,
         XMLToken.TABLE_NUMBER_ROWS_SPANNED,
+        XMLToken.TABLE_NUMBER_COLUMNS_REPEATED,
       ],
       "table cell",
     );
+    this.repeat = repeatCount(attributes, XMLToken.TABLE_NUMBER_COLUMNS_REPEATED, 256);
     this.target.beginTableCell(
       attributes.get(XMLToken.TABLE_STYLE_NAME) ?? "",
-      repeatCount(attributes, XMLToken.TABLE_NUMBER_COLUMNS_SPANNED),
-      repeatCount(attributes, XMLToken.TABLE_NUMBER_ROWS_SPANNED, 65535),
+      repeatCount(attributes, XMLToken.TABLE_NUMBER_COLUMNS_SPANNED, 256),
+      repeatCount(attributes, XMLToken.TABLE_NUMBER_ROWS_SPANNED, 8192),
     );
   }
   /** Imports a cell paragraph with the existing Writer text context. @param element - Child token. @param attributes - Paragraph values. @returns Child context. */
@@ -461,15 +528,14 @@ class XMLTableCellContext extends SvXMLImportContext {
   }
   /** Closes the cell. @returns Nothing. */
   public override endFastElement(): void {
-    this.target.endTableCell();
+    this.target.endTableCell(this.repeat);
   }
 }
 
-/** Validates a bounded ODF table repeat or span count. @param attributes - XML attributes. @param token - Repeat attribute. @param maximum - Native admitted range. @returns Repeat count. */
-function repeatCount(attributes: FastAttributeList, token: XMLToken, maximum = 256): number {
+/** Reads Writer's signed decimal count and resets values outside its upper bound. @param attributes - XML attributes. @param token - Repeat or span attribute. @param maximum - Native normal-mode upper bound. @returns Repeat or span count. */
+function repeatCount(attributes: FastAttributeList, token: XMLToken, maximum: number): number {
   const raw = attributes.get(token);
-  const count = raw === null ? 1 : Number(raw);
-  if (!Number.isInteger(count) || count < 1 || count > maximum)
-    throw new Error(`Unsupported ODF table repeat count: ${raw}`);
-  return count;
+  if (raw === null) return 1;
+  const count = Math.max(1, toInt32(new TextEncoder().encode(raw)));
+  return count > maximum ? 1 : count;
 }

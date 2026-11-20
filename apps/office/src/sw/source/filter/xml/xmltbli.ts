@@ -2,6 +2,8 @@
 import type { XMLTextCursor } from "../../../../xmloff/inc/txtimp";
 import type { XMLTextImportHelper } from "../../../../xmloff/source/text/txtimp";
 import { SwXCell } from "../../core/unocore/unotbl";
+import { CopyNodes } from "../../core/docnode/ndcopy";
+import { MINLAY } from "../../../inc/swtypes";
 import { SwTextNode } from "../../core/txtnode/ndtxt";
 import { SvxIndentValue } from "../../../../editeng/inc/lrspitem";
 import { SwFormatVertOrient } from "../../../inc/fmtornt";
@@ -34,16 +36,24 @@ interface SwXMLVerticalSpan {
 class SwXMLTableContextState {
   activeRow: SwTableLine | undefined;
   activeCell: SwTableBox | undefined;
+  activeCellStyleName = "";
   oldCursor: XMLTextCursor | undefined;
   rowCellIndex = 0;
   readonly columnWidths: number[] = [];
+  columnDefaultCellStyleNames: string[] | undefined;
+  rowStyleName = "";
+  rowDefaultCellStyleName = "";
+  readonly rowCellStyles = new Map<number, { styleName: string; columns: number }>();
   readonly verticalSpans = new Map<number, SwXMLVerticalSpan>();
   pendingCovered = 0;
   inHeaderRows = false;
   headerRowCount = 0;
 
-  /** Binds the connected native table to its SAX import state. @param table - Actual table owner. @returns State. */
-  constructor(readonly table: SwTable) {}
+  /** Binds the connected native table to its SAX import state. @param table - Actual table owner. @param defaultCellStyleName - Table fallback for cells. @returns State. */
+  constructor(
+    readonly table: SwTable,
+    readonly defaultCellStyleName: string,
+  ) {}
 }
 
 /** Keeps the native table contexts scoped to one Writer XML stream coordinator. */
@@ -83,11 +93,8 @@ export class SwXMLTableImport extends SvXMLImport {
     this.tableStyles.set(name, style);
   }
 
-  /** Opens one canonical table at the current body position. */
-  /** Projects one canonical Writer table value. @param argument1 - Callback input. @param argument2 - Callback input. @returns Callback result. */ public beginTable(
-    name: string,
-    styleName: string,
-  ): void {
+  /** Opens one canonical table at the current body position. @param name - Table name. @param styleName - ODF table style. @param defaultCellStyleName - Table fallback for cells. @returns Nothing. */
+  public beginTable(name: string, styleName: string, defaultCellStyleName = ""): void {
     const parent = this.tableContexts.at(-1);
     if (parent && !parent.activeCell) throw new Error("ODF nested table is outside a cell.");
     const style = this.resolveTableStyle(styleName, "table") as Extract<
@@ -103,7 +110,7 @@ export class SwXMLTableImport extends SvXMLImport {
           {},
         )
       : this.document.nodes.MakeTableNode(name);
-    this.tableContexts.push(new SwXMLTableContextState(table));
+    this.tableContexts.push(new SwXMLTableContextState(table, defaultCellStyleName));
     const frameFormat = table.GetFrameFormat();
     importFrameVisualProperties(frameFormat, style);
     const hasMargins = style.marginLeft !== undefined || style.marginRight !== undefined;
@@ -175,30 +182,40 @@ export class SwXMLTableImport extends SvXMLImport {
     table.SetRowsToRepeat(this.tableContext.headerRowCount);
   }
 
-  /** Appends one physical table column. */
-  /** Projects one canonical Writer table value. @param argument1 - Callback input. @returns Callback result. */ public addTableColumn(
-    styleName: string,
-  ): void {
-    const table = this.requireTable();
+  /** Inserts a declared column and its optional default. @param styleName - ODF column style. @param defaultCellStyleName - Column fallback for cells. @returns Nothing. */
+  public addTableColumn(styleName: string, defaultCellStyleName = ""): void {
+    const context = this.tableContext;
     const style = this.resolveTableStyle(styleName, "table-column") as Extract<
       OdfTableStyle,
       { family: "table-column" }
     >;
-    const isRelative = table.GetFrameFormat().GetFrameSize().GetWidthPercent() !== 0;
-    const width =
-      (isRelative
-        ? (style.relativeColumnWidth ?? style.columnWidth)
-        : (style.columnWidth ?? style.relativeColumnWidth)) ?? 0;
-    table.AddColumnWidth(width);
-    this.tableContext.columnWidths.push(width);
+    const relative = context.table.GetFrameFormat().GetFrameSize().GetWidthPercent() !== 0;
+    const width = relative
+      ? (style.relativeColumnWidth ?? style.columnWidth)
+      : (style.columnWidth ?? style.relativeColumnWidth);
+    if (width !== 0) this.InsertColumn(width ?? MINLAY, defaultCellStyleName);
   }
 
-  /** Opens one ordered table row with the declared column count. */
-  /** Projects one canonical Writer table value. @param argument1 - Callback input. @returns Callback result. */ public beginTableRow(
+  /** Appends the physical grid width and creates the optional default list on first use. @param width - Imported width in twips. @param defaultCellStyleName - Default for this column. @returns Nothing. */
+  private InsertColumn(width: number, defaultCellStyleName: string): void {
+    const context = this.tableContext;
+    if (context.columnWidths.length >= 65535) return;
+    if (defaultCellStyleName && context.columnDefaultCellStyleNames === undefined)
+      context.columnDefaultCellStyleNames = Array<string>(context.columnWidths.length).fill("");
+    context.columnDefaultCellStyleNames?.push(defaultCellStyleName);
+    context.table.AddColumnWidth(width);
+    context.columnWidths.push(width);
+  }
+
+  /** Opens one ordered table row. @param styleName - ODF row style. @param defaultCellStyleName - Row fallback for cells. @param inHeader - Whether to consider this row for the repeated header. @returns Nothing. */
+  public beginTableRow(
     styleName: string,
+    defaultCellStyleName = "",
+    inHeader = this.tableContext.inHeaderRows,
   ): void {
     const context = this.tableContext;
     const table = context.table;
+    if (!context.columnWidths.length) this.InsertColumn(65535, "");
     const format = table.GetFrameFormat();
     const size = format.GetFrameSize();
     if (size.GetWidthPercent() && !size.GetWidth()) {
@@ -217,8 +234,9 @@ export class SwXMLTableImport extends SvXMLImport {
       OdfTableStyle,
       { family: "table-row" }
     >;
-    const count = context.columnWidths.length;
-    if (count === 0) throw new Error("ODF table has no declared columns.");
+    context.rowStyleName = styleName;
+    context.rowDefaultCellStyleName = defaultCellStyleName;
+    context.rowCellStyles.clear();
     const rowIndex = table.GetTabLines().length;
     for (const [column, span] of context.verticalSpans)
       if (span.endRow <= rowIndex) context.verticalSpans.delete(column);
@@ -241,8 +259,15 @@ export class SwXMLTableImport extends SvXMLImport {
       );
     table.AddLine(context.activeRow);
     context.pendingCovered = 0;
-    if (context.inHeaderRows) context.headerRowCount += 1;
+    if (inHeader && context.headerRowCount === rowIndex) context.headerRowCount++;
     context.rowCellIndex = 0;
+  }
+
+  /** Advances past reserved positions and checks whether the row can admit another anchored cell. @returns Whether a column is available. */
+  public canInsertTableCell(): boolean {
+    this.tableContext.pendingCovered = 0;
+    this.InsertImplicitCoveredBoxes();
+    return this.tableContext.rowCellIndex < this.tableContext.columnWidths.length;
   }
 
   /** Creates one native box over declared grid columns. @param styleName - Cell style. @param columnSpan - Number of source grid columns. @param rowSpan - Number of source grid rows. @returns Nothing. */ public beginTableCell(
@@ -264,6 +289,8 @@ export class SwXMLTableImport extends SvXMLImport {
     for (const column of context.verticalSpans.keys())
       if (firstColumn < column && column < firstColumn + columnSpan)
         throw new Error("ODF table cell overlaps a covered cell.");
+    context.activeCellStyleName = styleName;
+    styleName = this.GetCellStyleName(styleName);
     const cell = this.CreateBox(styleName, columnSpan);
     if (rowSpan > 1) {
       const firstRow = context.table.GetTabLines().length - 1;
@@ -284,6 +311,18 @@ export class SwXMLTableImport extends SvXMLImport {
       this.textImport.SetCursor(new SwXCell(cell).createTextCursor());
     }
     context.pendingCovered = columnSpan - 1;
+  }
+
+  /** Resolves fallback names in the same order as SwXMLTableContext::InsertCell. @param styleName - Explicit cell style. @returns Resolved name. */
+  private GetCellStyleName(styleName: string): string {
+    const context = this.tableContext;
+    return (
+      styleName ||
+      context.rowDefaultCellStyleName ||
+      (context.columnDefaultCellStyleNames === undefined
+        ? ""
+        : context.columnDefaultCellStyleNames[context.rowCellIndex] || context.defaultCellStyleName)
+    );
   }
 
   /** Appends a real cell over the declared width of its original grid slots. @param styleName - Native style name. @param columnSpan - Source column count. @returns Actual core box. */
@@ -324,6 +363,7 @@ export class SwXMLTableImport extends SvXMLImport {
                 : VertOrientation.NONE,
         ),
       );
+    context.rowCellStyles.set(context.rowCellIndex, { styleName, columns: columnSpan });
     context.rowCellIndex += columnSpan;
     return cell;
   }
@@ -360,30 +400,68 @@ export class SwXMLTableImport extends SvXMLImport {
     context.pendingCovered = span.columns - 1;
   }
 
-  /** Closes a cell after its paragraph contexts. */
-  /** Projects one canonical Writer table value.  @returns Callback result. */ public endTableCell(): void {
+  /** Closes the active text section and copies single-column repeated cells. @param repeat - Parsed cell repetition count. @returns Nothing. */
+  public endTableCell(repeat = 1): void {
     const context = this.tableContext;
+    const source = context.activeCell;
     if (this.textImport && context.oldCursor) {
       const cursor = this.textImport.GetCursor();
-      const content = context.activeCell?.GetContentNodes();
+      const content = source?.GetContentNodes();
       if (content?.at(-2)?.IsTextNode()) this.textImport.DeleteParagraph();
       this.textImport.SetCursor(context.oldCursor);
       cursor.dispose();
       context.oldCursor = undefined;
     }
     context.activeCell = undefined;
+    if (source === undefined || context.pendingCovered !== 0 || repeat === 1) return;
+    const span = context.verticalSpans.get(context.rowCellIndex - 1);
+    for (let index = 1; index < repeat; index++) {
+      this.InsertImplicitCoveredBoxes();
+      if (context.rowCellIndex >= context.columnWidths.length) break;
+      const column = context.rowCellIndex;
+      const styleName = this.GetCellStyleName(context.activeCellStyleName);
+      const box = this.CreateBox(styleName, 1);
+      if (span !== undefined) {
+        box.setRowSpan(source.getRowSpan());
+        context.verticalSpans.set(column, { ...span, styleName, master: box, covered: [] });
+      }
+      const start = box.GetStartNode();
+      const nodes = start.GetNodes();
+      const placeholder = nodes.at(start.GetIndex() + 1) as SwTextNode;
+      if (CopyNodes(source.GetStartNode(), start, placeholder)) nodes.removeTextNode(placeholder);
+    }
   }
 
-  /** Validates the row's cell cardinality. */
-  /** Projects one canonical Writer table value.  @returns Callback result. */ public endTableRow(): void {
+  /** Finishes an incomplete row and inserts the native repeated row sections. @param repeat - Parsed row repetition count. @returns Nothing. */
+  public endTableRow(repeat = 1): void {
     const context = this.tableContext;
-    this.InsertImplicitCoveredBoxes();
-    if (
-      context.activeRow === undefined ||
-      context.rowCellIndex !== context.columnWidths.length ||
-      context.pendingCovered !== 0
-    )
-      throw new Error("ODF table row cell count differs from declared columns.");
+    this.FinishRow();
+    for (let index = 1; index < repeat && context.table.GetTabLines().length < 65535; index++) {
+      const previous = new Map(context.rowCellStyles);
+      this.beginTableRow(context.rowStyleName, context.rowDefaultCellStyleName, false);
+      while (context.rowCellIndex < context.columnWidths.length) {
+        this.InsertImplicitCoveredBoxes();
+        if (context.rowCellIndex >= context.columnWidths.length) break;
+        const source = previous.get(context.rowCellIndex);
+        const columnSpan = source?.columns ?? 1;
+        this.CreateBox(this.GetCellStyleName(source?.styleName ?? ""), columnSpan);
+      }
+      this.FinishRow();
+    }
+  }
+
+  /** Completes the row with a default empty cell across trailing unoccupied columns. @returns Nothing. */
+  private FinishRow(): void {
+    const context = this.tableContext;
+    context.pendingCovered = 0;
+    while (context.rowCellIndex < context.columnWidths.length) {
+      this.InsertImplicitCoveredBoxes();
+      if (context.rowCellIndex >= context.columnWidths.length) break;
+      let end = context.columnWidths.length;
+      for (const column of context.verticalSpans.keys())
+        if (column > context.rowCellIndex) end = Math.min(end, column);
+      this.CreateBox(this.GetCellStyleName(""), end - context.rowCellIndex);
+    }
     context.activeRow = undefined;
   }
 

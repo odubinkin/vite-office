@@ -173,6 +173,8 @@ it("keeps native body cell dispatch and explicit unimplemented structural bounda
     beginTableHeaderRows: /** No header here. @returns Nothing. */ () => {},
     endTableHeaderRows: /** No header here. @returns Nothing. */ () => {},
     beginTableRow: /** No row here. @returns Nothing. */ () => {},
+    canInsertTableCell:
+      /** Admits cells in the open table. @returns Whether there is space. */ () => true,
     beginTableCell: /** No cell here. @returns Nothing. */ () => {},
     endTableCell: /** No cell here. @returns Nothing. */ () => {},
     endTableRow: /** No row here. @returns Nothing. */ () => {},

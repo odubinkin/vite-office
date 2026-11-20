@@ -110,7 +110,8 @@ it.each([false, true])(
       boxFormat.ResetFormatAttr(RES_BOX);
       boxFormat.ResetFormatAttr(RES_VERT_ORIENT);
       const xml = exportContentXml(f.doc);
-      expect(properties(xml, "row")).toBe("");
+      expect(xml).not.toContain("<style:table-row-properties");
+      expect(xml).toContain("<table:table-row>");
       expect(properties(xml, "cell")).toBe("");
       expect(rowFormat.GetFrameSize().GetHeight()).toBe(inherited ? 900 : 0);
       expect(boxFormat.GetVertOrient().GetVertOrient()).toBe(inherited ? V.CENTER : V.NONE);

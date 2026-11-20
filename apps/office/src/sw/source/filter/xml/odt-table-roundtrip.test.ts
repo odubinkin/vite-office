@@ -98,6 +98,85 @@ function tableShape(document: ReturnType<typeof createWriterDocument>) {
 }
 
 describe("Writer canonical ODF tables", /** Verifies the bounded table scenario.  @returns Callback result. */ () => {
+  it("preserves native default precedence and repeated table sections", /** Covers Writer XML row namespace and repeat semantics through a complete ODT save and reopen. @returns Completion. */ async () => {
+    const metadata = { title: "Table defaults" };
+    const source = createWriterDocument();
+    const namespaces = Object.entries(ODF_NAMESPACES)
+      .map(
+        /** Declares a namespace for the independent input XML. @param entry - Prefix and URI. @returns Namespace declaration. */ ([
+          prefix,
+          uri,
+        ]) => `xmlns:${prefix}="${uri}"`,
+      )
+      .join(" ");
+    const definitions = ["110000", "220000", "330000", "440000"]
+      .map(
+        /** Creates a distinguishable direct cell property. @param color - RGB in hexadecimal. @returns Style definition. */ (
+          color,
+        ) =>
+          `<style:style style:name="S${color}" style:family="table-cell"><style:table-cell-properties fo:background-color="#${color}"/></style:style>`,
+      )
+      .join("");
+    const xml = `<office:document-content ${namespaces} office:version="1.3">
+      <office:automatic-styles>${definitions}</office:automatic-styles>
+      <office:body><office:text>
+        <table:table table:name="Defaults" table:default-cell-style-name="S110000">
+          <table:table-column-group><table:table-column table:default-cell-style-name="S220000"/><table:table-column table:number-columns-repeated="3"/></table:table-column-group>
+          <table:table-header-rows>
+            <table:table-row style:number-rows-repeated="2" style:default-cell-style-name="S330000">
+              <table:table-cell table:style-name="S440000" table:number-columns-repeated="2"><text:p>copy</text:p><text:p>paragraph</text:p></table:table-cell><table:table-cell/>
+            </table:table-row>
+          </table:table-header-rows>
+          <table:table-rows><table:table-row table:number-rows-repeated="3" table:default-cell-style-name="S440000">
+            <table:table-cell table:number-columns-repeated="4"><text:p>column fallback</text:p></table:table-cell>
+          </table:table-row></table:table-rows>
+        </table:table>
+        <table:table table:name="NoColumnDefault" table:default-cell-style-name="S110000">
+          <table:table-column/><table:table-row><table:table-cell/></table:table-row>
+        </table:table>
+      </office:text></office:body>
+    </office:document-content>`;
+    const document = importWriterXml(exportStylesXml(source), xml, metadata).document;
+    const bytes = await writeOdtDocument(document, metadata);
+    const reopened = (await readOdtDocument(bytes, metadata)).document;
+    try {
+      const content = await (await DocumentArchive.open(bytes)).readTextEntry("content.xml");
+      // LibreOffice odfexport3::testTdf145226 asserts no style-name on four unstyled rows.
+      expect(content?.match(/<table:table-row>/gu)).toHaveLength(4);
+      expect(content?.match(/<table:table-row table:style-name=/gu)).toBeNull();
+      for (const candidate of [document, reopened]) {
+        const [table, tableWithoutColumnDefault] = candidate.GetTables();
+        assert(table && tableWithoutColumnDefault);
+        expect(table.GetRowsToRepeat()).toBe(1);
+        const rows = table.GetTabLines();
+        expect(rows).toHaveLength(3);
+        const [first, second, third] = rows;
+        assert(first && second && third);
+        /** Reads direct colors at the native box owners. @param row - Native row. @returns Cell background colors. */
+        const colors = (row: typeof first) =>
+          row
+            .GetTabBoxes()
+            .map(
+              /** Reads a box brush. @param box - Native box. @returns Packed color. */ (box) =>
+                frameColor(box.GetFrameFormat())?.GetRGBColor().toUInt32(),
+            );
+        expect(colors(first)).toEqual([0x440000, 0x440000, 0x330000, 0x330000]);
+        expect(colors(second)).toEqual(colors(first));
+        expect(colors(third)).toEqual([0x220000, 0x110000, 0x110000, 0x110000]);
+        expect(first.GetTabBoxes()[1]?.GetParagraphs()[1]?.GetText()).toBe("paragraph");
+        expect(second.GetTabBoxes()[1]?.GetParagraphs()[0]?.GetText()).toBe("");
+        expect(third.GetTabBoxes()[3]?.GetParagraphs()[0]?.GetText()).toBe("column fallback");
+        const unstyled = tableWithoutColumnDefault.GetTabLines()[0]?.GetTabBoxes()[0];
+        assert(unstyled);
+        expect(frameColor(unstyled.GetFrameFormat())).toBeUndefined();
+      }
+    } finally {
+      source.Dispose();
+      document.Dispose();
+      reopened.Dispose();
+    }
+  });
+
   it("preserves real nested RTF sections through ODF XML and Worker transfer", /** The cell owns ordered text/table/text, including the inner cell format and bookmark. @returns Completion. */ async () => {
     const source = new RtfDocumentImpl().ResolveBytes(
       new TextEncoder().encode(
@@ -439,25 +518,25 @@ describe("Writer canonical ODF tables", /** Verifies the bounded table scenario.
           tableProps('style:width="1cm"'),
           "<table:table-row><table:table-cell><text:p/></table:table-cell></table:table-row>",
         ),
-    ).toThrow("ODF table has no declared columns");
+    ).not.toThrow();
     expect(
       /** Verifies the bounded table scenario.  @returns Callback result. */ () =>
         open(
           tableProps('style:width="1cm"'),
           '<table:table-column table:number-columns-repeated="0"/>',
         ),
-    ).toThrow("Unsupported ODF table repeat count");
+    ).not.toThrow();
     expect(
       /** Verifies the bounded table scenario.  @returns Callback result. */ () =>
         open(
           tableProps('style:width="1cm"'),
           "<table:table-column/><table:table-row><table:table-cell/><table:table-cell/></table:table-row>",
         ),
-    ).toThrow("more cells than declared columns");
+    ).not.toThrow();
     expect(
       /** Verifies the bounded table scenario.  @returns Callback result. */ () =>
         open(tableProps('style:width="1cm"'), "<table:table-column/><table:table-row/>"),
-    ).toThrow("cell count differs");
+    ).not.toThrow();
     expect(
       /** Ignores unrelated known header children. @returns Nothing. */ () =>
         open(
@@ -635,6 +714,6 @@ describe("Writer canonical ODF tables", /** Verifies the bounded table scenario.
     expect(xml).toContain('<style:table-properties table:align="margins"/>');
     expect(xml).toContain("<style:table-column-properties/>");
     const reopened = await readOdtDocument(await writeOdtDocument(document, metadata), metadata);
-    expect(reopened.document.GetTables()[0]?.GetColumnWidths()).toEqual([0]);
+    expect(reopened.document.GetTables()[0]?.GetColumnWidths()).toEqual([23]);
   });
 });
