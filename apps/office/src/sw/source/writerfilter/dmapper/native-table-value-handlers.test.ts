@@ -2,6 +2,9 @@
 import { afterEach, expect, it } from "vitest";
 import { MeasureHandler } from "./MeasureHandler";
 import { CellMarginHandler } from "./CellMarginHandler";
+import { PropertyMap } from "./PropertyMap";
+import { PropertyIds as P } from "./PropertyIds";
+import { TblStylePrHandler, TblStyleType } from "./TblStylePrHandler";
 import { LatentStyleHandler } from "./LatentStyleHandler";
 import { OUString } from "../../../../sal/inc/rtl/ustring";
 import { SizeType } from "../../../../offapi/com/sun/star/text/SizeType";
@@ -339,4 +342,51 @@ it("stores all latent style attributes in original order with duplicates and exa
   ]);
   handler.dispose();
   expect(handler.getAttributes()).toEqual([]);
+});
+
+it("keeps table style defaults when conditional types, indentation or margin sides are absent", /** Exercises the original receiver with native optional properties. @returns Nothing. */ () => {
+  const properties = new PropertyMap();
+  const handler = new TblStylePrHandler(properties);
+  try {
+    handler.attribute(
+      N.LN_CT_TblStyleOverrideType,
+      V.createInteger(N.LN_Value_ST_TblStyleOverrideType_firstRow),
+    );
+    handler.attribute(N.LN_CT_Style_hidden, V.createInteger(1));
+    expect(handler.getType()).toBe(TblStyleType.FirstRow);
+    handler.attribute(N.LN_CT_TblStyleOverrideType, V.createInteger(0));
+    expect(handler.getType()).toBe(TblStyleType.Unknown);
+    expect(handler.getTypeString()).toBe("");
+    handler.sprm(new OOXMLProperty(N.LN_CT_TblPrBase_tblInd, new V(), Kind.SPRM));
+    expect(properties.isSet(P.PROP_LEFT_MARGIN)).toBe(false);
+
+    const margins = new OOXMLPropertySet();
+    margins.add(
+      N.LN_CT_TcMar_top,
+      V.createPropertySet(width(1440, N.LN_Value_ST_TblWidth_dxa)),
+      Kind.SPRM,
+    );
+    handler.sprm(
+      new OOXMLProperty(N.LN_CT_TblPrBase_tblCellMar, V.createPropertySet(margins), Kind.SPRM),
+    );
+    expect(properties.isSet(P.META_PROP_CELL_MAR_TOP)).toBe(true);
+    expect(properties.isSet(P.META_PROP_CELL_MAR_LEFT)).toBe(false);
+    expect(properties.isSet(P.META_PROP_CELL_MAR_RIGHT)).toBe(false);
+    expect(properties.isSet(P.META_PROP_CELL_MAR_BOTTOM)).toBe(false);
+    handler.sprm(new OOXMLProperty(N.LN_CT_TblPrBase_tblStyleRowBandSize, new V(), Kind.SPRM));
+    const bag = handler.getInteropGrabBag("tblPr");
+    const values = sequence(bag);
+    try {
+      expect(values.getLength()).toBe(2);
+      expect(text(at(values, 0).Name)).toBe("tblCellMar");
+      expect(text(at(values, 1).Name)).toBe("tblStyleRowBandSize");
+      expect(at(values, 1).Value.get("sal_Int32")).toBe(0);
+    } finally {
+      values.dispose();
+      bag.dispose();
+    }
+  } finally {
+    handler.dispose();
+    properties.dispose();
+  }
 });
