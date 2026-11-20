@@ -145,7 +145,7 @@ it.each([
   { bullet: true, common: false },
   { bullet: true, common: true },
 ])(
-  "preserves native list continuation and default IDs for bullet=$bullet common=$common",
+  "imports native root continuation and default IDs through common and automatic ODT cycles (bullet=$bullet common=$common)",
   /** Checks one independent style family against the original import, copy, Worker and ODT outputs. @param profile - Style profile. @returns Completion. */ async ({
     bullet,
     common,
