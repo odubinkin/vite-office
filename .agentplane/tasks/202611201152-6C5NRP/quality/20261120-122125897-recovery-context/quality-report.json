@@ -1,0 +1,27 @@
+{
+  "schema_version": 1,
+  "task_id": "202611201152-6C5NRP",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-11-20T12:21:25.897Z",
+  "verdict": "pass",
+  "summary": "Same-agent review of the committed Writer ODT table integration against pinned Writer sources and passing deterministic evidence.",
+  "evaluated_sha": "e9436f967d32e94e9aac4b69659b81b333cf02ec",
+  "blueprint_digest": "e49e384e30ad7ef81a525c0921564f9a68eeea23fc2fe07401e7d8ab37219a12",
+  "findings": [
+    "Grid admission clips at declared columns and occupied vertical slots while the TableRowKeep cursor applies authored covered formats to the native owner.",
+    "The original native testVerticallyMergedCellBorder document preserves its two border states through Worker and package export; older Worker records obtain the native false default.",
+    "The declared XML filter profile is green. Supplemental RTF header failures reproduce on the prior revision with the same UNO exception."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202611201152-6C5NRP/README.md",
+    "e9436f967d32: 369 Writer XML tests, 68 focused ODT and DOCX tests, shared XML table test, typecheck and scoped static checks",
+    "apps/office/src/sw/source/filter/xml/native-independent-column-odf.test.ts",
+    "docs/program/writer-upstream-suspected-issues.md"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": [
+    "The serialized table-cell property cache represents the implemented direct item set. Legacy Writer subtable formats and standalone RTF repeating headers remain outside this task."
+  ]
+}
