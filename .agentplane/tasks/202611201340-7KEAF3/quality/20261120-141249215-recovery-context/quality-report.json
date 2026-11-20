@@ -1,0 +1,23 @@
+{
+  "schema_version": 1,
+  "task_id": "202611201340-7KEAF3",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-11-20T14:12:49.215Z",
+  "verdict": "pass",
+  "summary": "The implementation satisfies the approved Calc ODS matrix, repeat and Worker contract for the represented core.",
+  "evaluated_sha": "5eac1319d3e4748654b2f357e80340fd1d51bc1c",
+  "blueprint_digest": "cc07a06573bef719b31b084d5a97d94429ddc80b53492df247128981570b67db",
+  "findings": [
+    "The pinned LibreOffice fixture matches all three CSVs on import, Worker transfer and reopen. Scoped reruns recovered both missed cases in the combined Calc run, and office typecheck and module guards passed."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202611201340-7KEAF3/README.md",
+    "apps/office/src/sc/source/filter/xml/ods-matrix-formulas.test.ts"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": [
+    "Full dynamic-array expansion after removal of a saved spill blocker belongs to the unrepresented dynamic-array runtime."
+  ]
+}
