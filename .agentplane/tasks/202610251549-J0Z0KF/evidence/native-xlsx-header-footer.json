@@ -1,0 +1,57 @@
+{
+  "scope": "Calc XLSX print header and footer import, export and primary ODS/browser persistence",
+  "implementationCommit": "310d7d3090ec",
+  "upstream": [
+    "sc/source/filter/oox/pagesettings.cxx (HeaderFooterParser and PageSettingsConverter)",
+    "sc/source/filter/excel/xehelper.cxx and xepage.cxx (XclExpHFConverter and worksheet margins)",
+    "sc/source/filter/xml/XMLTableHeaderFooterContext.cxx (master-page header/footer stories)",
+    "sc/qa/unit/subsequent_export_test4.cxx (tdf134459_HeaderFooterColor, tdf134817_HeaderFooterTextWith2Section, tdf121716_EvenHeaderFooter)"
+  ],
+  "behavior": [
+    "Native ScPageHFItem and edit-object portions own represented rich header/footer runs and dynamic page/count/sheet fields. Page styles record odd, even and first-page sharing and physical distances.",
+    "The original RGB and theme color outputs and shared footer assertions survive native XLSX export, ODS reopen or Worker transfer as appropriate. The existing Calc interface saves the browser copy and reopens a downloaded XLSX on a mobile viewport.",
+    "CALC-756 documents and preserves the source exporter overwrite of the height when a later enabled variant is converted."
+  ],
+  "checks": [
+    {
+      "command": "npm run test:coverage:calc -- excelfilter.page-settings.test.ts native-page-hf.test.ts pageattr.test.ts xlstyle.fonts.test.ts --maxWorkers=2 --testTimeout=90000 --coverage.include=src/sc/source/filter/oox/pagesettings.headerfooter.ts --coverage.include=src/sc/source/filter/excel/xehelper.headerfooter.ts --coverage.include=src/sc/source/filter/xml/XMLTableHeaderFooterContext.ts --coverage.reportsDirectory=coverage/xlsx-header-footer --coverage.reporter=text --coverage.reporter=json --coverage.thresholds.perFile=true --coverage.thresholds.statements=90 --coverage.thresholds.branches=90 --coverage.thresholds.functions=90 --coverage.thresholds.lines=90",
+      "result": "pass",
+      "evidence": "28 tests. Unchanged Istanbul report lists all three files. Branches are 100%, 97.33% and 93.24% respectively. Overall statements 99.68%, branches 96.75%, functions and lines 100%."
+    },
+    {
+      "command": "npm run test:calc -- ods-native-fonts.test.ts ods-style-routing.test.ts ods-worker-entry.test.ts ods-xml-boundaries.test.ts docsh.csv-export.test.ts --maxWorkers=2 --testTimeout=90000",
+      "result": "pass",
+      "evidence": "18 ODS/Worker/CSV cases. The named-style diagnostic is asserted once because an empty master-styles section no longer emits an unsupported-style diagnostic."
+    },
+    {
+      "command": "npm run test:shared -- txtparae-calc-reuse.test.ts --maxWorkers=1",
+      "result": "pass",
+      "evidence": "1 shared text export case."
+    },
+    {
+      "command": "npm run test:static && PLAYWRIGHT_BROWSERS_PATH=\"$PWD/.agentplane/tmp/zip-migration/browsers\" npm exec -- playwright test --config .git/calc-panes-browser.config.mts --project calc --workers=1 --timeout=90000 xlsx-page-settings.spec.ts",
+      "result": "pass",
+      "evidence": "Production typecheck/build and static smoke, then 1 Chromium XLSX import, browser storage reopen, export, and mobile download reopen. Original header and footer strings are checked in exported worksheet XML."
+    },
+    {
+      "command": "npm run typecheck; npm run check:dependencies; npm run check:docs; npm run check:file-size; npm run check:source-tree; npm run check:writer-resources; npm run check:calc-resources; npm run check:writer-hintids; node .agentplane/policy/check-routing.mjs; ap doctor; git diff --check",
+      "result": "pass",
+      "evidence": "Project checks and task routing passed. Doctor reported the existing hook shim warning. Scoped ESLint and Prettier passed."
+    },
+    {
+      "command": "npm exec -- tsx .git/xlsx-cursor-validate-changed-registry.mts <changed production sources>",
+      "result": "pass",
+      "evidence": "15 changed runtime sources validated, including all three new Calc modules and their pinned upstream references."
+    },
+    {
+      "command": "npm run check:source-provenance; npm run inventory:invariants; npm run inventory:parity",
+      "result": "fail",
+      "evidence": "Existing runtime discovery gap for framework/browser/presentation/OfficeTooltips.tsx and available-menu-items.ts. The changed Calc registry passed the scoped check."
+    }
+  ],
+  "remaining": [
+    "XLSX date, time and extended filename import and corresponding ODS field values require the shared native field owners. Existing ODF title and time values have dedicated fields.",
+    "XLSX bold/italic transitions currently use Excel switches. LibreOffice's localized named style emission depends on its document-shell FontList. FontList integration, header/footer graphics and full pagination are outside this checkpoint.",
+    "The full suite was deferred on the approved ten-task cadence. The parent XLSX task retains its broader acceptance criteria."
+  ]
+}
