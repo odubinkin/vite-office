@@ -1,0 +1,21 @@
+{
+  "scope": "Independent coverage of the complete TblStylePrHandler in the Writer table style path.",
+  "implementationCommit": "7b1bf70b8",
+  "checks": [
+    {
+      "command": "npm run test:writer -- native-table-value-handlers.test.ts --maxWorkers=1 --testTimeout=120000",
+      "result": "pass",
+      "evidence": "Seven tests assert the pinned style receiver's original defaults, including unrelated attributes, an absent style category, indentation without nested properties, omitted margin sides and band-size metadata."
+    },
+    {
+      "command": "cd apps/office && node ../../node_modules/vitest/vitest.mjs run --config vitest.writer.config.ts docxexport.table-flow.test.ts docxexport.table-shading.test.ts native-table-value-handlers.test.ts --maxWorkers=1 --testTimeout=120000 --coverage --coverage.reporter=text --coverage.reporter=json --coverage.include=src/sw/source/writerfilter/dmapper/TblStylePrHandler.ts --coverage.thresholds.statements=90 --coverage.thresholds.branches=90 --coverage.thresholds.functions=90 --coverage.thresholds.lines=90 --coverage.reportsDirectory=../../.git/ooxml-final-writer-style-coverage",
+      "result": "pass",
+      "evidence": "29 tests pass. Complete owner coverage is 87/87 statements, 27/27 branches, 11/11 functions and 86/86 lines against unchanged scoped90."
+    },
+    {
+      "command": "PLAYWRIGHT_BROWSERS_PATH=\"$PWD/.agentplane/tmp/zip-migration/browsers\" ./node_modules/.bin/playwright test -c .git/docx-attachments-final.config.mts --workers=1",
+      "result": "pass",
+      "evidence": "The two reported DOCX attachments open on the current production build and reopen from browser storage. The newer report also asserts the original picture. Inputs were supplied locally through the actual Open dialog and were never committed."
+    }
+  ]
+}
