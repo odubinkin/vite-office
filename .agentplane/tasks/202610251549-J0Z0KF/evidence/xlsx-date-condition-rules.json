@@ -1,0 +1,18 @@
+{
+  "scope": "Native Calc calendar conditions, rendering cache and XLSX/ODS filters.",
+  "implementationCommit": "6a47ea04b2be",
+  "upstream": [
+    "sc/source/core/data/conditio.cxx (ScCondDateFormatEntry)",
+    "sc/source/filter/oox/condformatbuffer.cxx (timePeriod)",
+    "sc/source/filter/excel/xecontent.cxx (date rules and supported XLSX periods)",
+    "sc/source/filter/xml/xmlcondformat.cxx (calcext:date-is)",
+    "sc/qa/unit/data/xlsx/tdf167019.xlsx"
+  ],
+  "checks": [
+    {"result": "pass", "evidence": "40 focused Calc cases and 7 shared date cases pass. Calc covers weekday and month/year boundaries, import defaults, styles in primary ODS, and XLSX reopening."},
+    {"result": "pass", "evidence": "Three production Chromium cases pass, including style changes with the clock and XLSX preservation through existing mobile file controls. The date case also passes on the final build."},
+    {"result": "pass", "evidence": "26 tests with the complete conditio.ts owner at 95.21% statements, 96.61% branches, 92.85% functions and 95.02% lines against scoped90."},
+    {"result": "pass", "evidence": "Production build/static, ESLint, Prettier, provenance, dependencies, docs, file size and registry checks pass."},
+    {"result": "fail", "evidence": "The original seven-owner profile remains at 93.42% statements, 83.84% branches, 96.55% functions and 96.96% lines. Branches are below scoped90. See .git/calc-cf-date-acceptance.log."}
+  ]
+}
