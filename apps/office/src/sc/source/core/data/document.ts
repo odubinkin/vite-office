@@ -60,6 +60,7 @@ import { ScRangeName } from "../tool/rangenam";
 /** Explicit initial document subset;all supported cells live in its actual sheet/column chain. */
 export class ScDocument {
   GetCondResult = documen4.GetCondResult;
+  GetCondColor = documen4.GetCondColor;
   IsTabProtected = documen3.IsTabProtected;
   GetTabBgColor = documen3.GetTabBgColor;
   SetTabBgColor = documen3.SetTabBgColor;

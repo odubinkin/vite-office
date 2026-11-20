@@ -164,6 +164,10 @@
         {
           "path": "apps/office/src/sw/source/filter/xml/odt-page-stories.test.ts",
           "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sc/source/filter/oox/condformatbuffer.colorscale.test.ts",
+          "marker": "ports the upstream two- and three-stop"
         }
       ],
       "upstream": [
@@ -282,6 +286,10 @@
         {
           "path": "vendor/libreoffice-reference/xmloff/source/core/xmltoken.cxx",
           "marker": "XML_DOCUMENT_SETTINGS"
+        },
+        {
+          "path": "sc/source/filter/xml/xmlcondformat.cxx",
+          "marker": "ScXMLColorScaleFormatEntryContext"
         }
       ]
     },
@@ -332,7 +340,8 @@
       "Recognizes the source ODF tab-stop-distance attribute.",
       "Recognizes original ODF style and LibreOffice compatibility namespaces for first/left/master header and footer children.",
       "Registers both ODF table tab-color namespaces without renumbering existing portable tokens.",
-      "Registers original ODF page scale, order, centering, print and first-page tokens and the legacy loext fit aliases without renumbering the existing vocabulary."
+      "Registers original ODF page scale, order, centering, print and first-page tokens and the legacy loext fit aliases without renumbering the existing vocabulary.",
+      "Admits original calcext color scale and threshold elements, color and type attributes."
     ],
     "status": "mapped",
     "upstreamPath": "xmloff/source/core/xmltoken.cxx",

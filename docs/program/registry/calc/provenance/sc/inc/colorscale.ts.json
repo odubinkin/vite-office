@@ -1,0 +1,66 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "localPath": "apps/office/src/sc/inc/colorscale.ts",
+    "status": "mapped",
+    "classification": "upstream-mechanism",
+    "upstreamPath": "sc/inc/colorscale.hxx",
+    "localSymbols": [
+      "ScColorFormat",
+      "ScColorScaleEntry",
+      "ScColorScaleEntryType",
+      "ScColorScaleFormat"
+    ],
+    "upstreamSymbols": [
+      "ScColorFormat",
+      "ScColorScaleEntry",
+      "ScColorScaleEntryType",
+      "ScColorScaleFormat"
+    ],
+    "preservedResponsibilities": [
+      "Exposes the implemented original color-scale threshold and format owners at the native header boundary."
+    ],
+    "omittedResponsibilities": [
+      "Data bars, icon sets, the native repaint callbacks, and unported shift and move engines for detached formula cells remain open."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sc/inc/colorscale.ts",
+          "marker": "ScColorFormat"
+        },
+        {
+          "path": "apps/office/src/sc/source/filter/oox/condformatbuffer.colorscale.test.ts",
+          "marker": "ports the upstream two- and three-stop"
+        },
+        {
+          "path": "apps/office/e2e/calc/xlsx-color-scale.spec.ts",
+          "marker": "paints and reopens the original XLSX color scale"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "sc/inc/colorscale.hxx",
+          "marker": "ScColorFormat"
+        },
+        {
+          "path": "sc/inc/colorscale.hxx",
+          "marker": "ScColorScaleEntry"
+        },
+        {
+          "path": "sc/inc/colorscale.hxx",
+          "marker": "ScColorScaleEntryType"
+        },
+        {
+          "path": "sc/inc/colorscale.hxx",
+          "marker": "ScColorScaleFormat"
+        },
+        {
+          "path": "sc/qa/unit/cond_format.cxx",
+          "marker": "testTdf155321_CondFormatColor_XLSX"
+        }
+      ]
+    }
+  }
+}

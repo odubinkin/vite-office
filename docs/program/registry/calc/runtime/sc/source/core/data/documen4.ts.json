@@ -18,13 +18,15 @@
       "evidence": [
         "apps/office/src/sc/source/core/data/documen4.ts",
         "sc/source/core/data/documen4.cxx",
-        "apps/office/src/sc/source/filter/oox/excelfilter.page-settings.test.ts"
+        "apps/office/src/sc/source/filter/oox/excelfilter.page-settings.test.ts",
+        "apps/office/src/sc/source/filter/oox/condformatbuffer.colorscale.test.ts"
       ],
-      "justification": "Hands conditional rules to their native sheet and resolves the first matching style through a cell's format indexes. Other documen4 mechanisms are outside this module.",
+      "justification": "Hands conditional rules to their native sheet and resolves the first matching style through a cell's format indexes. Other documen4 mechanisms are outside this module. The presentation lookup walks the same ordered native conditional indices to resolve the first scale background.",
       "knownViolations": [],
       "localSymbols": [
         "AddCondFormat",
-        "GetCondResult"
+        "GetCondResult",
+        "GetCondColor"
       ],
       "sourceResponsibility": "unverified",
       "upstreamFile": "sc/source/core/data/documen4.cxx",

@@ -13,6 +13,7 @@ import { UpdateRefMode } from "../../../inc/global";
 import { SvtListener, type SvtDyingHint } from "../../../../svl/source/notify/listener";
 import { SfxHint, SfxHintId } from "../../../../svl/inc/hint";
 import { OUString, type OUStringConstReference } from "../../../../sal/inc/rtl/ustring";
+import type { Color } from "../../../../tools/inc/color";
 /** Original ScFormatEntry::Type values. */
 export enum ScFormatEntryType {
   Condition,
@@ -68,6 +69,11 @@ export abstract class ScFormatEntry {
     void _cell;
     void _position;
     return null;
+  }
+  /** Resolves a color scale when this entry supplies one. @param _position - Target cell. @returns Color or absence. */
+  GetColor(_position: ScAddress): Color | undefined {
+    void _position;
+    return undefined;
   }
   /** Binds original member destruction at explicit managed lifetime exit. @returns Nothing. */
   abstract Dispose(): void;
@@ -212,6 +218,14 @@ export class ScConditionalFormat {
       if (style !== null) return style;
     }
     return "";
+  }
+  /** Resolves the first scale color independently of the conditional style. @param position - Target cell. @returns Color or absence. */
+  GetColor(position: ScAddress): Color | undefined {
+    for (const entry of this.maEntries) {
+      const color = entry.GetColor(position);
+      if (color) return color;
+    }
+    return undefined;
   }
   /** Original entry count. @returns Count. */
   size(): number {

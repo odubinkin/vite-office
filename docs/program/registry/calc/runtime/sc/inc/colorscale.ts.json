@@ -1,0 +1,43 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sc/inc/colorscale.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "calc",
+    "subsystem": "internal-clipboard",
+    "capabilityIds": [
+      "CAP-df5573ca-0907-47d8-a385-6cd7af847f1d"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/sc/inc/colorscale.ts",
+        "sc/inc/colorscale.hxx",
+        "apps/office/src/sc/source/filter/oox/condformatbuffer.colorscale.test.ts",
+        "apps/office/e2e/calc/xlsx-color-scale.spec.ts",
+        "sc/qa/unit/cond_format.cxx"
+      ],
+      "justification": "Exposes the implemented original color-scale threshold and format owners at the native header boundary.",
+      "knownViolations": [],
+      "localSymbols": [
+        "ScColorFormat",
+        "ScColorScaleEntry",
+        "ScColorScaleEntryType",
+        "ScColorScaleFormat"
+      ],
+      "upstreamFile": "sc/inc/colorscale.hxx",
+      "upstreamSymbols": [
+        "ScColorFormat",
+        "ScColorScaleEntry",
+        "ScColorScaleEntryType",
+        "ScColorScaleFormat"
+      ],
+      "sourceResponsibility": "unverified"
+    }
+  }
+}

@@ -8,7 +8,8 @@
     "upstreamPath": "sc/source/filter/oox/stylesbuffer.cxx",
     "localSymbols": [
       "XlsColor",
-      "ExcelGraphicHelper"
+      "ExcelGraphicHelper",
+      "importOOXColor"
     ],
     "upstreamSymbols": [
       "XlsColor::importColor",
@@ -19,7 +20,8 @@
     "preservedResponsibilities": [
       "Resolves SpreadsheetML colors for fonts, solid fills and rich text with source precedence, palette overrides and ordered luminance metadata.",
       "Uses the source-supplied automatic color and original window text palette default for border colors.",
-      "Exposes the original XlsColor placeholder test to worksheet settings."
+      "Exposes the original XlsColor placeholder test to worksheet settings.",
+      "Resolves conditional-format RGB, theme, indexed color and tint semantics using the original fixed conditional palette."
     ],
     "omittedResponsibilities": [
       "The stylesbuffer color responsibilities are split from existing native pattern ownership. Non-solid fill, DXF and binary formats remain outside this owner."
@@ -37,6 +39,10 @@
         {
           "path": "apps/office/src/sc/source/filter/xml/ods-native-colors.test.ts",
           "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sc/source/filter/oox/condformatbuffer.colorscale.test.ts",
+          "marker": "ports the upstream two- and three-stop"
         }
       ],
       "upstream": [
@@ -55,6 +61,10 @@
         {
           "path": "vendor/libreoffice-reference/sc/source/filter/oox/stylesbuffer.cxx",
           "marker": "ExcelGraphicHelper::getSchemeColor"
+        },
+        {
+          "path": "sc/source/filter/oox/condformatbuffer.cxx",
+          "marker": "importOOXColor"
         }
       ]
     },

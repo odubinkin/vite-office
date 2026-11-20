@@ -550,6 +550,9 @@ export function ScGridWindow(props: ScGridWindowProps): React.JSX.Element {
                       cell = props.getCell(position);
                     const pattern = document.GetPattern(position) as ScPatternAttr;
                     const conditional = document.GetCondResult(position);
+                    const background =
+                      document.GetCondColor(position) ??
+                      (pattern.GetItem(148, conditional) as SvxBrushItem).GetColor();
                     const {
                       style: fontStyle,
                       outlined,
@@ -611,13 +614,7 @@ export function ScGridWindow(props: ScGridWindowProps): React.JSX.Element {
                           15,
                       ),
                       backgroundColor:
-                        (pattern.GetItem(148, conditional) as SvxBrushItem)
-                          .GetColor()
-                          .GetAlpha() === 0
-                          ? undefined
-                          : browserColor(
-                              (pattern.GetItem(148, conditional) as SvxBrushItem).GetColor(),
-                            ),
+                        background.GetAlpha() === 0 ? undefined : browserColor(background),
                       textAlign:
                         ([undefined, "left", "center", "right", "justify", "left"] as const)[
                           (pattern.GetItem(129) as SvxHorJustifyItem).GetValue()

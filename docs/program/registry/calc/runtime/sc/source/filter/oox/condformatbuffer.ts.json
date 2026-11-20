@@ -18,13 +18,15 @@
       "evidence": [
         "apps/office/src/sc/source/filter/oox/condformatbuffer.ts",
         "sc/source/filter/oox/condformatbuffer.cxx",
-        "apps/office/src/sc/source/filter/oox/excelfilter.page-settings.test.ts"
+        "apps/office/src/sc/source/filter/oox/excelfilter.page-settings.test.ts",
+        "apps/office/src/sc/source/filter/oox/condformatbuffer.colorscale.test.ts"
       ],
-      "justification": "Imports worksheet ranges and original numeric comparison and direct formula rule families in priority order. Extended rules, content deduplication and advanced condition types remain outside the represented slice.",
+      "justification": "Imports worksheet ranges and original numeric comparison and direct formula rule families in priority order. Extended rules, content deduplication and advanced condition types remain outside the represented slice. Imports original colorScale stops, fixed-palette and theme colors, and Excel num entries carrying formulas.",
       "knownViolations": [],
       "localSymbols": [
         "CondFormatBuffer",
-        "CondFormatRule"
+        "CondFormatRule",
+        "ColorScaleRule"
       ],
       "sourceResponsibility": "unverified",
       "upstreamFile": "sc/source/filter/oox/condformatbuffer.cxx",

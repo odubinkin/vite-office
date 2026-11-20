@@ -7245,3 +7245,16 @@ preserves this check.
 
 - [Original add-in date conversion](../../vendor/libreoffice-reference/scaddins/source/analysis/analysishelper.cxx)
 - [EDATE regressions](../../apps/office/src/sc/source/core/tool/interpr1.reference.test.ts)
+
+### CALC-764 — Color-scale equality only traverses the left operand
+
+`ScColorScaleFormat::IsEqual` compares resolved numeric thresholds, types
+and RGB colors in order. It reads a stop from the right operand for every
+stop on the left, without first comparing the counts. A two-stop scale can
+therefore compare equal to a matching prefix of a three-stop scale. In the
+reverse direction, a matching prefix reaches an out-of-bounds read. Calc
+retains the defined prefix comparison and returns false when the required
+stop is absent.
+
+- [Original color-scale equality](../../vendor/libreoffice-reference/sc/source/core/data/colorscale.cxx)
+- [Calc color-scale owner](../../apps/office/src/sc/source/core/data/colorscale.ts)

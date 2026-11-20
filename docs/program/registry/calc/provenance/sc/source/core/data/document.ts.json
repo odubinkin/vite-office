@@ -49,7 +49,8 @@
       "SetCalcConfig",
       "GetTableCount",
       "AddCondFormat",
-      "GetCondResult"
+      "GetCondResult",
+      "GetCondColor"
     ],
     "upstreamSymbols": [
       "ScDocument::SetValue",
@@ -116,7 +117,8 @@
       "Exposes native document-level selection editability on the actual document.",
       "Exposes native leading-overlap, trailing-merge and covered-anchor operations for view selection.",
       "Exposes the original document tab color operations from the documen3 owner.",
-      "Dispatches GetPageStyle and SetPageStyle through the actual native sheet."
+      "Dispatches GetPageStyle and SetPageStyle through the actual native sheet.",
+      "The document exposes native conditional scale backgrounds via its existing conditional-format owner."
     ],
     "omittedResponsibilities": [
       "The browser document text-object slice only admits the consumed operations."
@@ -318,6 +320,10 @@
         {
           "path": "apps/office/src/sc/source/ui/view/tabview2-protection.test.ts",
           "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sc/source/filter/oox/condformatbuffer.colorscale.test.ts",
+          "marker": "ports the upstream two- and three-stop"
         }
       ],
       "upstream": [
@@ -564,6 +570,10 @@
         {
           "path": "sc/source/core/data/documen4.cxx",
           "marker": "ScDocument::GetCondResult"
+        },
+        {
+          "path": "sc/source/core/data/fillinfo.cxx",
+          "marker": "handleConditionalFormat"
         }
       ]
     }

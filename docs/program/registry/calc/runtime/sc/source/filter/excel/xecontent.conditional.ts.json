@@ -18,12 +18,14 @@
       "evidence": [
         "apps/office/src/sc/source/filter/excel/xecontent.conditional.ts",
         "sc/source/filter/excel/xecontent.cxx",
-        "apps/office/src/sc/source/filter/oox/excelfilter.page-settings.test.ts"
+        "apps/office/src/sc/source/filter/oox/excelfilter.page-settings.test.ts",
+        "apps/office/src/sc/source/filter/oox/condformatbuffer.colorscale.test.ts"
       ],
-      "justification": "Serializes native conditional-format ranges and the represented condition formulas and priorities into the worksheet. Date, color-scale, data-bar, icon and extended rules are not serialized by this owner.",
+      "justification": "Serializes native conditional-format ranges and the represented condition formulas and priorities into the worksheet. Date, data-bar, icon and extended rules are not serialized by this owner. Exports native color scales with paired XLSX threshold and RGB lists.",
       "knownViolations": [],
       "localSymbols": [
-        "SaveXmlConditionalFormats"
+        "SaveXmlConditionalFormats",
+        "SaveColorScale"
       ],
       "sourceResponsibility": "unverified",
       "upstreamFile": "sc/source/filter/excel/xecontent.cxx",

@@ -19,14 +19,16 @@
         "apps/office/src/sc/source/filter/xml/xmlcondformat.ts",
         "sc/source/filter/xml/xmlcondformat.cxx",
         "sc/source/filter/xml/xmlexprt.cxx",
-        "apps/office/src/sc/source/filter/oox/excelfilter.page-settings.test.ts"
+        "apps/office/src/sc/source/filter/oox/excelfilter.page-settings.test.ts",
+        "apps/office/src/sc/source/filter/oox/condformatbuffer.colorscale.test.ts"
       ],
-      "justification": "Loads and writes original Calc extension conditional ranges, expressions and named style bindings in ODF. Legacy table style maps and additional condition families remain unported.",
+      "justification": "Loads and writes original Calc extension conditional ranges, expressions and named style bindings in ODF. Legacy table style maps and additional condition families remain unported. Loads and writes original ODF color-scale threshold, color and formula attributes for ODS and Worker storage.",
       "knownViolations": [],
       "localSymbols": [
         "ScXMLConditionalFormatsContext",
         "ScXMLConditionalFormatContext",
-        "ExportConditionalFormat"
+        "ExportConditionalFormat",
+        "ScXMLColorScaleFormatContext"
       ],
       "sourceResponsibility": "unverified",
       "upstreamFile": "sc/source/filter/xml/xmlcondformat.cxx",

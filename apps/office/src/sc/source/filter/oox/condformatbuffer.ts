@@ -1,15 +1,22 @@
 /** @fileoverview SpreadsheetML conditional cells and formula rules entering the native Calc range owner. */
 import type { SaxesAttributeNS, SaxesTagNS } from "saxes";
 import type { FragmentContext } from "../../../../oox/source/core/fragmenthandler";
-import { text } from "../../../../i18nlangtag/source/isolang/isolang.tables";
+import { text, unicode } from "../../../../i18nlangtag/source/isolang/isolang.tables";
 import { FormulaGrammar } from "../../../../formula/inc/grammar";
-import { ScRange } from "../../../inc/address";
+import { ScRange, type ScAddress } from "../../../inc/address";
 import { ScRangeList } from "../../../inc/rangelst";
 import { ScCondFormatEntry, ScConditionalFormat, ScConditionMode } from "../../../inc/conditio";
 import type { ScDocument } from "../../../inc/document";
 import { AddressConverter } from "./addressconverter";
 import { styleIndex, type StylesBuffer } from "./stylesbuffer";
 import { attribute, isSpreadsheetTag } from "./workbookfragment";
+import {
+  ScColorScaleEntry,
+  ScColorScaleEntryType,
+  ScColorScaleFormat,
+} from "../../../inc/colorscale";
+import { stringToDouble } from "../../../../sal/inc/rtl/math";
+import { importOOXColor } from "./stylesbuffer.color";
 
 const grammar = FormulaGrammar.Grammar.GRAM_OOXML;
 const modes = new Map([
@@ -22,6 +29,70 @@ const modes = new Map([
   ["between", ScConditionMode.Between],
   ["notBetween", ScConditionMode.NotBetween],
 ]);
+const scaleTypes = new Map([
+  ["min", ScColorScaleEntryType.MIN],
+  ["max", ScColorScaleEntryType.MAX],
+  ["percent", ScColorScaleEntryType.PERCENT],
+  ["percentile", ScColorScaleEntryType.PERCENTILE],
+]);
+
+/** Collects OOXML threshold and color records in their independent source orders. */
+class ColorScaleRule implements FragmentContext {
+  private readonly thresholds: (readonly SaxesAttributeNS[])[] = [];
+  private readonly colors: (readonly SaxesAttributeNS[])[] = [];
+
+  /** Opens one original threshold or color. @param tag - Child token. @returns Context or ignored subtree. */
+  createFastChildContext(tag: SaxesTagNS): ColorScaleRule | null {
+    return isSpreadsheetTag(tag) && (tag.local === "cfvo" || tag.local === "color") ? this : null;
+  }
+  /** Preserves original attribute records until workbook theme and formulas are available. @param tag - Source token. @param attrs - Attributes. @returns Nothing. */
+  startFastElement(tag: SaxesTagNS, attrs: readonly SaxesAttributeNS[]): void {
+    if (tag.local === "cfvo") this.thresholds.push(attrs);
+    else if (tag.local === "color") this.colors.push(attrs);
+  }
+  /** Completes the element. @returns Nothing. */
+  endFastElement(): void {}
+  /** Ignores scale whitespace. @returns Nothing. */
+  characters(): void {}
+
+  /** Converts the original paired entries to native threshold owners. @param document - Workbook. @param address - Formula base. @param styles - Theme resolver. @returns Owned rule. */
+  AddEntries(document: ScDocument, address: ScAddress, styles: StylesBuffer): ScColorScaleFormat {
+    const scale = new ScColorScaleFormat(document);
+    try {
+      for (let i = 0; i < Math.max(this.thresholds.length, this.colors.length); ++i) {
+        const attrs = this.thresholds[i] ?? [];
+        const type = attribute(attrs, "type");
+        const raw = attribute(attrs, "val");
+        const input = unicode(raw.trim());
+        const end: [number] = [-1];
+        let value: number;
+        try {
+          value = stringToDouble(input, 46, 44, null, end);
+        } finally {
+          input.dispose();
+        }
+        const formula = raw !== "" && raw !== '""' && (type === "formula" || end[0] < raw.length);
+        const mode = attribute(attrs, "gte");
+        const entry = new ScColorScaleEntry(
+          formula ? 0 : value,
+          importOOXColor(this.colors[i] ?? [], styles.graphicHelper),
+          formula
+            ? ScColorScaleEntryType.FORMULA
+            : (scaleTypes.get(type) ?? ScColorScaleEntryType.VALUE),
+          mode && mode !== "true" && mode !== "1"
+            ? ScConditionMode.Greater
+            : ScConditionMode.EqGreater,
+        );
+        scale.AddEntry(entry);
+        if (formula) entry.SetFormula(raw, document, address, grammar);
+      }
+      return scale;
+    } catch (error) {
+      scale.Dispose();
+      throw error;
+    }
+  }
+}
 
 /** Collects the represented original cfRule records. */
 class CondFormatRule implements FragmentContext {
@@ -29,11 +100,17 @@ class CondFormatRule implements FragmentContext {
   dxfId = -1;
   priority = -1;
   readonly expressions: string[] = [];
+  colorScale: ColorScaleRule | undefined;
+  private type = "";
   private inFormula = false;
 
   /** Opens an operand in the current native rule. @param tag - Child token. @returns This context or an ignored subtree. */
-  createFastChildContext(tag: SaxesTagNS): CondFormatRule | null {
-    return isSpreadsheetTag(tag) && tag.local === "formula" ? this : null;
+  createFastChildContext(tag: SaxesTagNS): FragmentContext | null {
+    if (!isSpreadsheetTag(tag)) return null;
+    if (tag.local === "formula") return this;
+    if (tag.local === "colorScale" && this.type === "colorScale")
+      return (this.colorScale ??= new ColorScaleRule());
+    return null;
   }
   /** Reads the original type, priority and style attributes. @param tag - Source element. @param attrs - SpreadsheetML attributes. @returns Nothing. */
   startFastElement(tag: SaxesTagNS, attrs: readonly SaxesAttributeNS[]): void {
@@ -42,7 +119,7 @@ class CondFormatRule implements FragmentContext {
       this.inFormula = true;
       return;
     }
-    const type = attribute(attrs, "type");
+    const type = (this.type = attribute(attrs, "type"));
     if (type === "cellIs") this.mode = modes.get(attribute(attrs, "operator"));
     else if (type === "expression") this.mode = ScConditionMode.Direct;
     this.priority = styleIndex(attribute(attrs, "priority"));
@@ -116,6 +193,10 @@ class CondFormat implements FragmentContext {
         ) => a - b,
       )) {
         const rule = ordered.get(priority) as CondFormatRule;
+        if (rule.colorScale) {
+          format.AddEntry(rule.colorScale.AddEntries(this.document, source, styles));
+          continue;
+        }
         if (rule.mode === undefined) continue;
         const count =
           rule.mode === ScConditionMode.Between || rule.mode === ScConditionMode.NotBetween ? 2 : 1;

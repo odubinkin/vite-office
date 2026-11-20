@@ -472,6 +472,10 @@ export enum XMLToken {
   CALCEXT_APPLY_STYLE_NAME,
   CALCEXT_BASE_CELL_ADDRESS,
   CALCEXT_VALUE,
+  CALCEXT_COLOR_SCALE,
+  CALCEXT_COLOR_SCALE_ENTRY,
+  CALCEXT_COLOR,
+  CALCEXT_TYPE,
 }
 
 const entries: readonly (readonly [string, string, XMLToken])[] = [
@@ -482,6 +486,10 @@ const entries: readonly (readonly [string, string, XMLToken])[] = [
   [ODF_NAMESPACES.calcext, "apply-style-name", XMLToken.CALCEXT_APPLY_STYLE_NAME],
   [ODF_NAMESPACES.calcext, "base-cell-address", XMLToken.CALCEXT_BASE_CELL_ADDRESS],
   [ODF_NAMESPACES.calcext, "value", XMLToken.CALCEXT_VALUE],
+  [ODF_NAMESPACES.calcext, "color-scale", XMLToken.CALCEXT_COLOR_SCALE],
+  [ODF_NAMESPACES.calcext, "color-scale-entry", XMLToken.CALCEXT_COLOR_SCALE_ENTRY],
+  [ODF_NAMESPACES.calcext, "color", XMLToken.CALCEXT_COLOR],
+  [ODF_NAMESPACES.calcext, "type", XMLToken.CALCEXT_TYPE],
 
   [ODF_NAMESPACES.style, "display", XMLToken.STYLE_DISPLAY],
   [ODF_NAMESPACES.style, "region-left", XMLToken.STYLE_REGION_LEFT],

@@ -2,6 +2,8 @@
 import { FormulaGrammar } from "../../../../formula/inc/grammar";
 import { text, unicode } from "../../../../i18nlangtag/source/isolang/isolang.tables";
 import { SfxStyleFamily } from "../../../../svl/inc/style-values";
+import { Converter } from "../../../../sax/source/tools/converter";
+import { Color } from "../../../../tools/inc/color";
 import {
   SvXMLIgnoreContext,
   type FastAttributeList,
@@ -23,6 +25,11 @@ import { ScRangeStringConverter } from "../../core/tool/rangeutl";
 import { ScStyleNameConversion } from "../../core/tool/stylehelper";
 import { ScXMLImportContext } from "./importcontext";
 import type { ScXMLImport } from "./xmlimprt";
+import {
+  ScColorScaleEntry,
+  ScColorScaleEntryType as ScaleType,
+  ScColorScaleFormat,
+} from "../../../inc/colorscale";
 
 const odf = FormulaGrammar.AddressConvention.CONV_ODF;
 const grammar = FormulaGrammar.Grammar.GRAM_ODFF;
@@ -39,6 +46,63 @@ const functions = [
   [Mode.NotBetween, "not-between", 2],
   [Mode.Direct, "formula-is", 1],
 ] as const;
+const scaleTypes = [
+  "auto-minimum",
+  "minimum",
+  "maximum",
+  "percentile",
+  "number",
+  "percent",
+  "formula",
+] as const;
+
+/** Original ODF color-scale context, retaining thresholds until sheet names are available. */
+class ScXMLColorScaleFormatContext extends ScXMLImportContext {
+  private readonly stops: FastAttributeList[] = [];
+
+  /** Records one threshold element in source order. @param element - Child token. @param attributes - Threshold attributes. @returns Ignored child content. */
+  override createFastChildContext(
+    element: XMLToken,
+    attributes: FastAttributeList,
+  ): SvXMLImportContext {
+    if (element === XMLToken.CALCEXT_COLOR_SCALE_ENTRY) this.stops.push(attributes);
+    return new SvXMLIgnoreContext(true);
+  }
+
+  /** Creates the native scale and compiles its formulas at the sheet origin. @param document - Workbook. @param tab - Sheet. @returns Owned scale. */
+  Finalize(document: ScDocument, tab: number): ScColorScaleFormat {
+    const scale = new ScColorScaleFormat(document);
+    try {
+      for (const attrs of this.stops) {
+        const kind = attrs.get(XMLToken.CALCEXT_TYPE);
+        const index = scaleTypes.findIndex(
+          /** Selects the original threshold spelling. @param name - Stored spelling. @returns Match. */ (
+            name,
+          ) => name === kind,
+        );
+        const type =
+          kind === "auto-maximum"
+            ? ScaleType.AUTO
+            : index === -1
+              ? ScaleType.VALUE
+              : (index as ScaleType);
+        const source = attrs.get(XMLToken.CALCEXT_VALUE) ?? "";
+        const rgb: [number] = [0],
+          value: [number] = [0];
+        Converter.convertColor(rgb, attrs.get(XMLToken.CALCEXT_COLOR) ?? "");
+        if (source) Converter.convertDouble(value, source);
+        const entry = new ScColorScaleEntry(value[0], new Color(rgb[0]), type);
+        scale.AddEntry(entry);
+        if (type === ScaleType.FORMULA)
+          entry.SetFormula(source, document, new ScAddress(0, 0, tab), grammar);
+      }
+      return scale;
+    } catch (error) {
+      scale.Dispose();
+      throw error;
+    }
+  }
+}
 
 /** Finds the native operand delimiter outside nested expressions and quoted constants. @param source - Both operands. @returns Separator or -1. */
 function findOperandSeparator(source: string): number {
@@ -115,7 +179,7 @@ export class ScXMLConditionalFormatsContext extends ScXMLImportContext {
 /** Collects original XML rules in document order. */
 class ScXMLConditionalFormatContext extends ScXMLImportContext {
   private readonly ranges: string;
-  private readonly conditions: Condition[] = [];
+  private readonly conditions: (Condition | ScXMLColorScaleFormatContext)[] = [];
   /** Adopts the XML range record. @param owner - Importer. @param attributes - Original attributes. @returns Context. */
   constructor(owner: ScXMLImport, attributes: FastAttributeList) {
     super(owner);
@@ -126,6 +190,11 @@ class ScXMLConditionalFormatContext extends ScXMLImportContext {
     element: XMLToken,
     attributes: FastAttributeList,
   ): SvXMLImportContext {
+    if (element === XMLToken.CALCEXT_COLOR_SCALE) {
+      const scale = new ScXMLColorScaleFormatContext(this.GetScImport());
+      this.conditions.push(scale);
+      return scale;
+    }
     if (element === XMLToken.CALCEXT_CONDITION) {
       const condition = GetConditionData(attributes.get(XMLToken.CALCEXT_VALUE) ?? "");
       if (condition)
@@ -147,7 +216,12 @@ class ScXMLConditionalFormatContext extends ScXMLImportContext {
     const format = new ScConditionalFormat(0, document);
     format.SetRange(ranges);
     try {
-      for (const { mode, formulas, source, style } of this.conditions) {
+      for (const condition of this.conditions) {
+        if (condition instanceof ScXMLColorScaleFormatContext) {
+          format.AddEntry(condition.Finalize(document, tab));
+          continue;
+        }
+        const { mode, formulas, source, style } = condition;
         const address = ranges.GetTopLeftCorner();
         if (source)
           ScRangeStringConverter.GetAddressFromString(address, source, document, odf, [0]);
@@ -185,6 +259,19 @@ function WriteCondition(entry: ScCondFormatEntry): string {
   return "";
 }
 
+/** Emits the original Calc extension thresholds with their ODF formula grammar. @param scale - Scale rule. @returns XML fragment. */
+function WriteColorScale(scale: ScColorScaleFormat): string {
+  let stops = "";
+  for (const entry of scale) {
+    const type = entry.GetType();
+    const value = type === ScaleType.FORMULA ? entry.GetFormula(grammar) : String(entry.GetValue());
+    const color: [string] = [""];
+    Converter.convertColor(color, entry.GetColor().toUInt32());
+    stops += `<calcext:color-scale-entry calcext:value="${escapeXml(value)}" calcext:type="${scaleTypes[type]}" calcext:color="${color[0]}"/>`;
+  }
+  return `<calcext:color-scale>${stops}</calcext:color-scale>`;
+}
+
 /** Writes the original Calc extension from the sheet's native conditional ranges. @param document - Workbook. @param table - Sheet. @param standalone - Declare the namespace for worker XML. @returns Conditional-format XML. */
 export function ExportConditionalFormat(
   document: ScDocument,
@@ -196,6 +283,10 @@ export function ExportConditionalFormat(
     let rules = "";
     for (let i = 0; i < format.size(); ++i) {
       const entry = format.GetEntry(i);
+      if (entry instanceof ScColorScaleFormat) {
+        rules += WriteColorScale(entry);
+        continue;
+      }
       if (!(entry instanceof ScCondFormatEntry)) continue;
       const value = WriteCondition(entry);
       if (!value) continue;

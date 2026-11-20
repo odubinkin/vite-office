@@ -9,14 +9,16 @@
     "localSymbols": [
       "ScXMLConditionalFormatsContext",
       "ScXMLConditionalFormatContext",
-      "ExportConditionalFormat"
+      "ExportConditionalFormat",
+      "ScXMLColorScaleFormatContext"
     ],
     "upstreamSymbols": [
       "ScXMLConditionalFormatsContext",
       "ScXMLConditionalFormatContext"
     ],
     "preservedResponsibilities": [
-      "Loads and writes original Calc extension conditional ranges, expressions and named style bindings in ODF."
+      "Loads and writes original Calc extension conditional ranges, expressions and named style bindings in ODF.",
+      "Loads and writes original ODF color-scale threshold, color and formula attributes for ODS and Worker storage."
     ],
     "omittedResponsibilities": [
       "Legacy table style maps and additional condition families remain unported."
@@ -30,6 +32,10 @@
         {
           "path": "apps/office/src/sc/source/filter/oox/excelfilter.page-settings.test.ts",
           "marker": "testTdf167019"
+        },
+        {
+          "path": "apps/office/src/sc/source/filter/oox/condformatbuffer.colorscale.test.ts",
+          "marker": "ports the upstream two- and three-stop"
         }
       ],
       "upstream": [
@@ -44,6 +50,10 @@
         {
           "path": "sc/source/filter/xml/xmlexprt.cxx",
           "marker": "ScXMLExport::ExportConditionalFormat"
+        },
+        {
+          "path": "sc/source/filter/xml/xmlcondformat.cxx",
+          "marker": "ScXMLColorScaleFormatEntryContext"
         }
       ]
     }

@@ -76,6 +76,31 @@ const systemPalette = new Map([
 ]);
 const excelThemes = [1, 0, 3, 2, 4, 5, 6, 7, 8, 9, 10, 11];
 
+/** Resolves the original conditional-format color using its fixed indexed palette. @param attributes - SpreadsheetML color. @param helper - Workbook theme. @returns Resolved RGB. */
+export function importOOXColor(
+  attributes: readonly SaxesAttributeNS[],
+  helper: ExcelGraphicHelper,
+): Color {
+  const values = new Map<string, string>();
+  for (const entry of attributes) if (!entry.uri) values.set(entry.local, entry.value);
+  const rgb = values.get("rgb");
+  const theme = values.get("theme");
+  const indexed = values.get("indexed");
+  const base =
+    rgb !== undefined
+      ? parseRgb(rgb)
+      : theme !== undefined
+        ? helper.getSchemeColor(convertToThemeColorType(excelThemes[index(theme)] ?? -1))
+        : indexed !== undefined
+          ? new Color(palette[index(indexed)] ?? 0)
+          : undefined;
+  const color = base?.GetRGBColor() ?? new Color();
+  const tint = Number(values.get("tint") ?? 0);
+  return Number.isFinite(tint) && tint !== 0
+    ? applyExcelTint(color, Math.min(100_000, Math.round(Math.abs(tint) * 100_000)), tint > 0)
+    : color;
+}
+
 /** Original package color resolver used by both file styles and rich text portions. */
 export class ExcelGraphicHelper {
   private readonly overrides: Color[] = [];

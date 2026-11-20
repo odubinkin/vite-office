@@ -8,14 +8,16 @@
     "upstreamPath": "sc/source/core/data/documen4.cxx",
     "localSymbols": [
       "AddCondFormat",
-      "GetCondResult"
+      "GetCondResult",
+      "GetCondColor"
     ],
     "upstreamSymbols": [
       "ScDocument::AddCondFormat",
       "ScDocument::GetCondResult"
     ],
     "preservedResponsibilities": [
-      "Hands conditional rules to their native sheet and resolves the first matching style through a cell's format indexes."
+      "Hands conditional rules to their native sheet and resolves the first matching style through a cell's format indexes.",
+      "The presentation lookup walks the same ordered native conditional indices to resolve the first scale background."
     ],
     "omittedResponsibilities": [
       "Other documen4 mechanisms are outside this module."
@@ -29,6 +31,10 @@
         {
           "path": "apps/office/src/sc/source/filter/oox/excelfilter.page-settings.test.ts",
           "marker": "testTdf167019"
+        },
+        {
+          "path": "apps/office/src/sc/source/filter/oox/condformatbuffer.colorscale.test.ts",
+          "marker": "ports the upstream two- and three-stop"
         }
       ],
       "upstream": [
@@ -39,6 +45,10 @@
         {
           "path": "sc/source/core/data/documen4.cxx",
           "marker": "ScDocument::GetCondResult"
+        },
+        {
+          "path": "sc/source/core/data/fillinfo.cxx",
+          "marker": "handleConditionalFormat"
         }
       ]
     }

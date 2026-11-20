@@ -1,0 +1,60 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "localPath": "apps/office/src/sc/source/core/data/colorscale.ts",
+    "status": "mapped",
+    "classification": "upstream-mechanism",
+    "upstreamPath": "sc/source/core/data/colorscale.cxx",
+    "localSymbols": [
+      "ScColorFormat",
+      "ScColorScaleEntry",
+      "ScColorScaleFormat"
+    ],
+    "upstreamSymbols": [
+      "ScColorFormat::getValues",
+      "ScColorScaleEntry::SetFormula",
+      "ScColorScaleFormat::GetColor"
+    ],
+    "preservedResponsibilities": [
+      "Owns subscribed sorted range data, numeric and formula stop evaluation, and the original inclusive percentile and RGB interpolation."
+    ],
+    "omittedResponsibilities": [
+      "Data bars, icon sets, the native repaint callbacks, and unported shift and move engines for detached formula cells remain open."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sc/source/core/data/colorscale.ts",
+          "marker": "ScColorFormat"
+        },
+        {
+          "path": "apps/office/src/sc/source/filter/oox/condformatbuffer.colorscale.test.ts",
+          "marker": "ports the upstream two- and three-stop"
+        },
+        {
+          "path": "apps/office/e2e/calc/xlsx-color-scale.spec.ts",
+          "marker": "paints and reopens the original XLSX color scale"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "sc/source/core/data/colorscale.cxx",
+          "marker": "ScColorFormat::getValues"
+        },
+        {
+          "path": "sc/source/core/data/colorscale.cxx",
+          "marker": "ScColorScaleEntry::SetFormula"
+        },
+        {
+          "path": "sc/source/core/data/colorscale.cxx",
+          "marker": "ScColorScaleFormat::GetColor"
+        },
+        {
+          "path": "sc/qa/unit/cond_format.cxx",
+          "marker": "testTdf155321_CondFormatColor_XLSX"
+        }
+      ]
+    }
+  }
+}

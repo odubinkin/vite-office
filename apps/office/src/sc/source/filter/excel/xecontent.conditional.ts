@@ -7,6 +7,8 @@ import type { ScDocument } from "../../../inc/document";
 import type { ScTable } from "../../../inc/table";
 import { XclXmlUtils } from "./xestream";
 import type { XclExpDxfs } from "./xestyle.dxf";
+import { ScColorScaleEntryType as ScaleType, ScColorScaleFormat } from "../../../inc/colorscale";
+import { Color } from "../../../../tools/inc/color";
 
 const cellIsOperators: ReadonlyMap<ScConditionMode, string> = new Map([
   [ScConditionMode.Equal, "equal"],
@@ -18,6 +20,50 @@ const cellIsOperators: ReadonlyMap<ScConditionMode, string> = new Map([
   [ScConditionMode.Between, "between"],
   [ScConditionMode.NotBetween, "notBetween"],
 ]);
+const scaleTypes = ["min", "min", "max", "percentile", "num", "percent", "formula"] as const;
+
+/** Writes the original list of color thresholds followed by the RGB values. @param output - Worksheet serializer. @param entry - Native color scale. @param priority - XLSX priority. @returns Nothing. */
+function SaveColorScale(
+  output: FastSerializerHelper,
+  entry: ScColorScaleFormat,
+  priority: number,
+): void {
+  output.startElement(
+    token("cfRule"),
+    token("type"),
+    "colorScale",
+    token("priority"),
+    String(priority),
+  );
+  output.startElement(token("colorScale"));
+  for (const stop of entry) {
+    const type = stop.GetType();
+    const value =
+      type === ScaleType.FORMULA
+        ? stop.GetFormula(FormulaGrammar.Grammar.GRAM_OOXML).replace(/^=/u, "")
+        : String(stop.GetValue());
+    output.startElement(
+      token("cfvo"),
+      token("type"),
+      scaleTypes[type],
+      token("val"),
+      value,
+      token("gte"),
+      stop.GetMode() === ScConditionMode.EqGreater ? null : "0",
+    );
+    output.endElement(token("cfvo"));
+  }
+  for (const stop of entry) {
+    output.startElement(
+      token("color"),
+      token("rgb"),
+      XclXmlUtils.ToOString(new Color(stop.GetColor())),
+    );
+    output.endElement(token("color"));
+  }
+  output.endElement(token("colorScale"));
+  output.endElement(token("cfRule"));
+}
 
 /** Saves represented condition groups and original per-sheet priority. @param output - Active worksheet serializer. @param document - Native workbook. @param table - Actual worksheet. @param dxfs - Exported differential styles. @returns Nothing. */
 export function SaveXmlConditionalFormats(
@@ -33,10 +79,11 @@ export function SaveXmlConditionalFormats(
     if (ranges.empty()) continue;
     for (let i = 0; i < format.size(); ++i) {
       const entry = format.GetEntry(i);
-      if (!(entry instanceof ScCondFormatEntry)) continue;
-      const direct = entry.GetOperation() === ScConditionMode.Direct;
-      const operator = cellIsOperators.get(entry.GetOperation());
-      if (!direct && !operator) continue;
+      const scale = entry instanceof ScColorScaleFormat;
+      const condition = entry instanceof ScCondFormatEntry ? entry : undefined;
+      const direct = condition?.GetOperation() === ScConditionMode.Direct;
+      const operator = condition ? cellIsOperators.get(condition.GetOperation()) : undefined;
+      if (!scale && !direct && !operator) continue;
       if (!opened) {
         output.startElement(
           token("conditionalFormatting"),
@@ -45,6 +92,11 @@ export function SaveXmlConditionalFormats(
         );
         opened = true;
       }
+      if (scale) {
+        SaveColorScale(output, entry, priority++);
+        continue;
+      }
+      if (!condition) continue;
       output.startElement(
         token("cfRule"),
         token("type"),
@@ -54,12 +106,12 @@ export function SaveXmlConditionalFormats(
         token("operator"),
         operator ?? null,
         token("dxfId"),
-        dxfs.GetDxfId(entry.GetStyleName()),
+        dxfs.GetDxfId(condition.GetStyleName()),
       );
-      for (let n = 0; n < entry.GetExpressionCount(); ++n) {
+      for (let n = 0; n < condition.GetExpressionCount(); ++n) {
         output.startElement(token("formula"));
         output.writeEscaped(
-          entry.GetExpression(entry.GetValidSrcPos(), n, FormulaGrammar.Grammar.GRAM_OOXML),
+          condition.GetExpression(condition.GetValidSrcPos(), n, FormulaGrammar.Grammar.GRAM_OOXML),
         );
         output.endElement(token("formula"));
       }

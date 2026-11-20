@@ -7,17 +7,19 @@
     "status": "mapped",
     "upstreamPath": "sc/source/filter/excel/xecontent.cxx",
     "localSymbols": [
-      "SaveXmlConditionalFormats"
+      "SaveXmlConditionalFormats",
+      "SaveColorScale"
     ],
     "upstreamSymbols": [
       "XclExpCondfmt::SaveXml",
       "XclExpCondFormatBuffer::SaveXml"
     ],
     "preservedResponsibilities": [
-      "Serializes native conditional-format ranges and the represented condition formulas and priorities into the worksheet."
+      "Serializes native conditional-format ranges and the represented condition formulas and priorities into the worksheet.",
+      "Exports native color scales with paired XLSX threshold and RGB lists."
     ],
     "omittedResponsibilities": [
-      "Date, color-scale, data-bar, icon and extended rules are not serialized by this owner."
+      "Date, data-bar, icon and extended rules are not serialized by this owner."
     ],
     "evidence": {
       "local": [
@@ -28,6 +30,10 @@
         {
           "path": "apps/office/src/sc/source/filter/oox/excelfilter.page-settings.test.ts",
           "marker": "testTdf167019"
+        },
+        {
+          "path": "apps/office/src/sc/source/filter/oox/condformatbuffer.colorscale.test.ts",
+          "marker": "ports the upstream two- and three-stop"
         }
       ],
       "upstream": [
@@ -38,6 +44,10 @@
         {
           "path": "sc/source/filter/excel/xecontent.cxx",
           "marker": "XclExpCondFormatBuffer::SaveXml"
+        },
+        {
+          "path": "sc/source/filter/excel/xecontent.cxx",
+          "marker": "XclExpColorScale::SaveXml"
         }
       ]
     },
