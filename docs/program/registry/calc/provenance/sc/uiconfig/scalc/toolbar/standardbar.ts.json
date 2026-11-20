@@ -27,7 +27,7 @@
         },
         {
           "path": "apps/office/src/sc/uiconfig/scalc/ui-resources.test.tsx",
-          "marker": "opens every source top menu"
+          "marker": "retains the complete standardbar resource"
         }
       ],
       "upstream": [

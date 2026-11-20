@@ -40,6 +40,9 @@ const canonicalFixture = Promise.all([
   readFile("docs/program/libreoffice-baseline.json", "utf8"),
 ]);
 
+/** Reuses immutable runtime source bytes across scope checks of the same checkout. */
+const sourceText = new Map<string, Promise<string>>();
+
 /** Finds a test-owned mutable raw record. @param registry - Mutable registry copy. @param kind - Record kind. @returns First matching record. */
 function first(
   registry: InventoryRegistry,
@@ -88,8 +91,6 @@ function activateCalc(registry: InventoryRegistry): void {
 /** Creates injected CLI boundaries using local source and synthetic upstream declarations. @param registry - Canonical registry. @param baseline - Baseline JSON. @returns Test-owned CLI boundaries. */
 function dependencies(registry: InventoryRegistry, baseline: string): RegistryCliDependencies {
   const markers = new Map<string, string>();
-  // Every scope validates the same immutable fixture snapshot; retain source bytes without repeating IO for each evidence reference.
-  const sourceText = new Map<string, Promise<string>>();
   for (const [path, text] of createMarkerEvidenceFixture([
     projectRegistryViews(registry),
     registry.records,

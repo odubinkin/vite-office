@@ -56,7 +56,7 @@
       "tests": [
         {
           "path": "apps/office/src/sc/uiconfig/scalc/ui-resources.test.tsx",
-          "marker": "opens every source top menu"
+          "marker": "opens connected top menus"
         },
         {
           "path": "apps/office/src/sc/browser/presentation/calc-sheet-popup.test.tsx",

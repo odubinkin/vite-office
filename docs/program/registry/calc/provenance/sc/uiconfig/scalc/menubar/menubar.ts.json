@@ -32,7 +32,7 @@
         },
         {
           "path": "apps/office/src/sc/uiconfig/scalc/ui-resources.test.tsx",
-          "marker": "opens every source top menu"
+          "marker": "opens connected top menus"
         }
       ],
       "upstream": [

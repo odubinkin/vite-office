@@ -77,7 +77,7 @@ test("Writer opens an original DOCX with a footer and retains it in browser stor
   await page.getByRole("button", { name: "Open" }).click();
   await page.getByRole("tab", { name: "In browser" }).click();
   await page.getByRole("button", { name: "NumberedList", exact: true }).click();
-  await expect(page.getByRole("cell", { name: "Instructions" })).toBeVisible();
+  await expect(page.getByRole("columnheader", { name: "Instructions" })).toBeVisible();
 
   const pending = page.waitForEvent("download");
   await page.getByRole("menuitem", { name: "File" }).click();
@@ -113,7 +113,7 @@ test("Writer opens an original DOCX with a footer and retains it in browser stor
     name: "NumberedList-reopened.docx",
   });
   await expect(page.getByRole("heading", { name: "NumberedList-reopened" })).toBeVisible();
-  await expect(page.getByRole("cell", { name: "Instructions" })).toBeVisible();
+  await expect(page.getByRole("columnheader", { name: "Instructions" })).toBeVisible();
 });
 
 test("Writer retains DOCX character spacing through browser reopen and DOCX download", /** Verifies native signed spacing in Chromium's existing editor and the exported document. @param root0 - Playwright fixtures. @param root0.page - Chromium page. @returns Completion. */ async ({
