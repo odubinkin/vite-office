@@ -45,6 +45,10 @@ const functions = [
   [Mode.Between, "between", 2],
   [Mode.NotBetween, "not-between", 2],
   [Mode.Direct, "formula-is", 1],
+  [Mode.BeginsWith, "begins-with", 1],
+  [Mode.EndsWith, "ends-with", 1],
+  [Mode.ContainsText, "contains-text", 1],
+  [Mode.NotContainsText, "not-contains-text", 1],
 ] as const;
 const scaleTypes = [
   "auto-minimum",

@@ -1,8 +1,9 @@
-/** @fileoverview Original CharClass uppercase field query over prepared Locale state, using actual shared classification/mapping owners. This is not a fake CharClass or UNO provider. */
+/** @fileoverview Original CharClass queries over prepared Locale state and the shared classification and mapping owners. */
 import { Exception } from "../../../cppu/inc/com/sun/star/uno/Exception";
 import {
   getCharacterType,
   KCharacterType,
+  toLower,
   toUpper,
 } from "../../../i18npool/source/characterclassification/cclass_unicode";
 import { OUString, type OUStringConstReference } from "../../../sal/inc/rtl/ustring";
@@ -61,6 +62,15 @@ export class CharClass {
     return range.length === 0
       ? uppercase(value, this.locale)
       : uppercase(value, this.locale, range[0], range[1]);
+  }
+  /** Original whole-string and ranged lowercase queries. @param value - Input. @param position - UTF-16 start. @param count - Selected length. @returns Mapped text or the original range on a UNO exception. */
+  lowercase(value: OUStringConstReference, position = 0, count = value.getLength()): OUString {
+    try {
+      return toLower(value, position, count, this.locale);
+    } catch (error) {
+      if (!(error instanceof Exception)) throw error;
+      return new OUString(value.getStr().subarray(position, position + count), count);
+    }
   }
   /** Original classifier forwarding with catch-only-UNO-Exception zero fallback. @param value - Input. @param position - UTF-16 offset. @returns Native KCharacterType mask. */
   getCharacterType(value: OUStringConstReference, position: number): number {

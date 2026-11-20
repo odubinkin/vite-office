@@ -17,6 +17,8 @@ import {
 } from "../../../inc/colorscale";
 import { stringToDouble } from "../../../../sal/inc/rtl/math";
 import { importOOXColor } from "./stylesbuffer.color";
+import { ScTokenArray } from "../../../inc/tokenarray";
+import { rtl_str_toBoolean } from "../../../../sal/inc/rtl/string.h";
 
 const grammar = FormulaGrammar.Grammar.GRAM_OOXML;
 const modes = new Map([
@@ -28,6 +30,12 @@ const modes = new Map([
   ["greaterThanOrEqual", ScConditionMode.EqGreater],
   ["between", ScConditionMode.Between],
   ["notBetween", ScConditionMode.NotBetween],
+]);
+const textModes = new Map([
+  ["beginsWith", ScConditionMode.BeginsWith],
+  ["endsWith", ScConditionMode.EndsWith],
+  ["containsText", ScConditionMode.ContainsText],
+  ["notContainsText", ScConditionMode.NotContainsText],
 ]);
 const scaleTypes = new Map([
   ["min", ScColorScaleEntryType.MIN],
@@ -79,7 +87,7 @@ class ColorScaleRule implements FragmentContext {
           formula
             ? ScColorScaleEntryType.FORMULA
             : (scaleTypes.get(type) ?? ScColorScaleEntryType.VALUE),
-          mode && mode !== "true" && mode !== "1"
+          mode && !rtl_str_toBoolean(new TextEncoder().encode(mode))
             ? ScConditionMode.Greater
             : ScConditionMode.EqGreater,
         );
@@ -97,6 +105,7 @@ class ColorScaleRule implements FragmentContext {
 /** Collects the represented original cfRule records. */
 class CondFormatRule implements FragmentContext {
   mode: ScConditionMode | undefined;
+  literal: string | undefined;
   dxfId = -1;
   priority = -1;
   readonly expressions: string[] = [];
@@ -122,6 +131,10 @@ class CondFormatRule implements FragmentContext {
     const type = (this.type = attribute(attrs, "type"));
     if (type === "cellIs") this.mode = modes.get(attribute(attrs, "operator"));
     else if (type === "expression") this.mode = ScConditionMode.Direct;
+    else {
+      this.mode = textModes.get(type);
+      if (this.mode !== undefined) this.literal = attribute(attrs, "text");
+    }
     this.priority = styleIndex(attribute(attrs, "priority"));
     this.dxfId = styleIndex(attribute(attrs, "dxfId"));
   }
@@ -200,7 +213,7 @@ class CondFormat implements FragmentContext {
         if (rule.mode === undefined) continue;
         const count =
           rule.mode === ScConditionMode.Between || rule.mode === ScConditionMode.NotBetween ? 2 : 1;
-        if (rule.expressions.length < count) continue;
+        if (rule.literal === undefined && rule.expressions.length < count) continue;
         const expressions = rule.expressions
           .slice(0, count)
           .map(
@@ -208,15 +221,31 @@ class CondFormat implements FragmentContext {
               value,
             ) => value.trim(),
           );
-        if (expressions.includes("")) continue;
+        if (rule.literal === undefined && expressions.includes("")) continue;
         const defaultStyle = this.document.GetStyleSheetPool()?.GetDefaultStyle();
         const style =
           styles.dxfs[rule.dxfId]?.CreateStyle(this.document, rule.dxfId) ??
           (defaultStyle ? text(defaultStyle.GetName()) : "");
         try {
-          format.AddEntry(
-            new ScCondFormatEntry(rule.mode, expressions, this.document, source, grammar, style),
-          );
+          if (rule.literal === undefined) {
+            format.AddEntry(
+              new ScCondFormatEntry(rule.mode, expressions, this.document, source, grammar, style),
+            );
+          } else {
+            const tokens = new ScTokenArray(this.document);
+            const value = unicode(rule.literal);
+            const shared = this.document.GetSharedStringPool().intern(value);
+            try {
+              tokens.AddString(shared);
+              format.AddEntry(
+                new ScCondFormatEntry(rule.mode, [tokens], this.document, source, grammar, style),
+              );
+            } finally {
+              tokens.Clear();
+              shared.dispose();
+              value.dispose();
+            }
+          }
         } catch (error) {
           if (!(error instanceof Error) || !error.message.includes("not implemented")) throw error;
         }

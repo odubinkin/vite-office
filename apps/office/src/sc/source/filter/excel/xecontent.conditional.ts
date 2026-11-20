@@ -1,6 +1,9 @@
 /** @fileoverview Original worksheet conditional rule export over native Calc ranges. */
 import { FormulaGrammar } from "../../../../formula/inc/grammar";
+import { FormulaDoubleToken, FormulaStringToken } from "../../../../formula/inc/token";
+import { text } from "../../../../i18nlangtag/source/isolang/isolang.tables";
 import { getTokenFromUtf8 as token } from "../../../../oox/source/token/tokenmap";
+import { OUString } from "../../../../sal/inc/rtl/ustring";
 import type { FastSerializerHelper } from "../../../../sax/inc/fshelper";
 import { ScCondFormatEntry, ScConditionMode } from "../../../inc/conditio";
 import type { ScDocument } from "../../../inc/document";
@@ -9,6 +12,7 @@ import { XclXmlUtils } from "./xestream";
 import type { XclExpDxfs } from "./xestyle.dxf";
 import { ScColorScaleEntryType as ScaleType, ScColorScaleFormat } from "../../../inc/colorscale";
 import { Color } from "../../../../tools/inc/color";
+import { ScRange } from "../../../inc/address";
 
 const cellIsOperators: ReadonlyMap<ScConditionMode, string> = new Map([
   [ScConditionMode.Equal, "equal"],
@@ -21,6 +25,47 @@ const cellIsOperators: ReadonlyMap<ScConditionMode, string> = new Map([
   [ScConditionMode.NotBetween, "notBetween"],
 ]);
 const scaleTypes = ["min", "min", "max", "percentile", "num", "percent", "formula"] as const;
+const textTypes = new Map([
+  [ScConditionMode.BeginsWith, "beginsWith"],
+  [ScConditionMode.EndsWith, "endsWith"],
+  [ScConditionMode.ContainsText, "containsText"],
+  [ScConditionMode.NotContainsText, "notContainsText"],
+]);
+
+/** Gets the native text-rule literal from the first formula token. @param entry - Text rule. @returns Unquoted operand. */
+function GetText(entry: ScCondFormatEntry): string {
+  const tokens = entry.CreateFlatCopiedTokenArray(0);
+  try {
+    const first = tokens?.TokenAt(0);
+    if (first instanceof FormulaStringToken) return text(first.GetString().getString());
+    if (first instanceof FormulaDoubleToken) {
+      const number = OUString.numberDouble(first.GetDouble());
+      try {
+        return text(number);
+      } finally {
+        number.dispose();
+      }
+    }
+    return "";
+  } finally {
+    tokens?.Clear();
+  }
+}
+
+/** Builds the prescribed Excel formula for a text condition. @param mode - Native condition mode. @param origin - A1 expression origin. @param value - Literal text. @returns OOXML formula. */
+function GetFixedFormula(mode: ScConditionMode, origin: string, value: string): string {
+  const quoted = `"${value.replaceAll('"', '""')}"`;
+  switch (mode) {
+    case ScConditionMode.BeginsWith:
+      return `LEFT(${origin},LEN(${quoted}))=${quoted}`;
+    case ScConditionMode.EndsWith:
+      return `RIGHT(${origin},LEN(${quoted}))=${quoted}`;
+    case ScConditionMode.ContainsText:
+      return `NOT(ISERROR(SEARCH(${quoted},${origin})))`;
+    default:
+      return `ISERROR(SEARCH(${quoted},${origin}))`;
+  }
+}
 
 /** Writes the original list of color thresholds followed by the RGB values. @param output - Worksheet serializer. @param entry - Native color scale. @param priority - XLSX priority. @returns Nothing. */
 function SaveColorScale(
@@ -81,8 +126,13 @@ export function SaveXmlConditionalFormats(
       const entry = format.GetEntry(i);
       const scale = entry instanceof ScColorScaleFormat;
       const condition = entry instanceof ScCondFormatEntry ? entry : undefined;
-      const direct = condition?.GetOperation() === ScConditionMode.Direct;
-      const operator = condition ? cellIsOperators.get(condition.GetOperation()) : undefined;
+      const mode = condition?.GetOperation() ?? ScConditionMode.NONE;
+      const direct = mode === ScConditionMode.Direct;
+      const kind = textTypes.get(mode);
+      const operator =
+        mode === ScConditionMode.NotContainsText
+          ? "notContains"
+          : (kind ?? cellIsOperators.get(mode));
       if (!scale && !direct && !operator) continue;
       if (!opened) {
         output.startElement(
@@ -97,24 +147,40 @@ export function SaveXmlConditionalFormats(
         continue;
       }
       if (!condition) continue;
+      const value = kind === undefined ? null : GetText(condition);
       output.startElement(
         token("cfRule"),
         token("type"),
-        direct ? "expression" : "cellIs",
+        kind ?? (direct ? "expression" : "cellIs"),
         token("priority"),
         String(priority++),
         token("operator"),
         operator ?? null,
+        token("text"),
+        value,
         token("dxfId"),
         dxfs.GetDxfId(condition.GetStyleName()),
       );
-      for (let n = 0; n < condition.GetExpressionCount(); ++n) {
-        output.startElement(token("formula"));
-        output.writeEscaped(
-          condition.GetExpression(condition.GetValidSrcPos(), n, FormulaGrammar.Grammar.GRAM_OOXML),
+      if (value !== null) {
+        const address = ranges.Combine().aStart;
+        const origin = new TextDecoder().decode(
+          XclXmlUtils.ToOString(document, new ScRange(address, address)),
         );
+        output.startElement(token("formula"));
+        output.writeEscaped(GetFixedFormula(mode, origin, value));
         output.endElement(token("formula"));
-      }
+      } else
+        for (let n = 0; n < condition.GetExpressionCount(); ++n) {
+          output.startElement(token("formula"));
+          output.writeEscaped(
+            condition.GetExpression(
+              condition.GetValidSrcPos(),
+              n,
+              FormulaGrammar.Grammar.GRAM_OOXML,
+            ),
+          );
+          output.endElement(token("formula"));
+        }
       output.endElement(token("cfRule"));
     }
     if (opened) output.endElement(token("conditionalFormatting"));

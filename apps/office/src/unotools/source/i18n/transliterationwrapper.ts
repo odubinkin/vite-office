@@ -78,6 +78,14 @@ export class TransliterationWrapper {
     return this.equals(first, 0, first.getLength(), [0], second, 0, second.getLength(), [0]);
   }
 
+  /** Checks a prefix using the source module's matched UTF-16 lengths. @param first - Prefix. @param second - Text. @returns Match. */
+  isMatch(first: OUStringConstReference, second: OUStringConstReference): boolean {
+    const match1: [number] = [0],
+      match2: [number] = [0];
+    this.equals(first, 0, first.getLength(), match1, second, 0, second.getLength(), match2);
+    return match1[0] <= match2[0] && match1[0] === first.getLength();
+  }
+
   /** Releases the owned native module. @returns Nothing. */
   dispose(): void {
     this.trans.dispose();

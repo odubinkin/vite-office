@@ -24,6 +24,7 @@ import type {
   RefUpdateMoveTabContext,
 } from "../../../inc/refupdatecontext";
 import { ScFormatEntry, ScFormatEntryType, type ScConditionalFormat } from "./conditio";
+import { ScGlobal } from "./global";
 
 /** Original ScConditionMode identities. */
 export enum ScConditionMode {
@@ -60,6 +61,50 @@ function compare(first: number | string, second: number | string): number {
   if (typeof first === "number" && typeof second === "number")
     return approxEqual(first, second) ? 0 : Math.sign(first - second);
   return GetCollator().compare(String(first), String(second));
+}
+
+/** Uses the original comparison service and casing rules of each text condition. @param mode - Text operation. @param value - Actual scalar. @param operand - Condition operand. @returns Match. */
+function IsTextValid(
+  mode: ScConditionMode,
+  value: number | string,
+  operand: number | string,
+): boolean {
+  if (typeof value === "string" && typeof operand !== "string") return false;
+  const actual = typeof value === "string" ? unicode(value) : OUString.numberDouble(value);
+  const expected =
+    typeof operand === "string" && (operand !== "" || typeof value === "string")
+      ? unicode(operand)
+      : OUString.numberDouble(typeof operand === "number" ? operand : 0);
+  try {
+    if (typeof value === "number") {
+      if (mode === ScConditionMode.BeginsWith) return actual.startsWith(expected);
+      if (mode === ScConditionMode.EndsWith)
+        return actual.endsWith(expected.getStr().subarray(0, expected.getLength()));
+      return (actual.indexOf(expected) !== -1) === (mode === ScConditionMode.ContainsText);
+    }
+    if (mode === ScConditionMode.BeginsWith)
+      return ScGlobal.GetTransliteration().isMatch(expected, actual);
+    if (mode === ScConditionMode.EndsWith) {
+      const size = expected.getLength(),
+        start = actual.getLength() - size;
+      return (
+        start >= 0 &&
+        ScGlobal.GetTransliteration().equals(actual, start, size, [0], expected, 0, size, [0])
+      );
+    }
+    const classifier = ScGlobal.getCharClass();
+    const haystack = classifier.lowercase(actual),
+      needle = classifier.lowercase(expected);
+    try {
+      return (haystack.indexOf(needle) !== -1) === (mode === ScConditionMode.ContainsText);
+    } finally {
+      haystack.dispose();
+      needle.dispose();
+    }
+  } finally {
+    actual.dispose();
+    expected.dispose();
+  }
 }
 
 /** Owns the original condition mode, source address and compiled expressions. */
@@ -125,6 +170,11 @@ export class ScConditionEntry extends ScFormatEntry {
   /** Reads the original operand count. @returns Number of operands. */
   GetExpressionCount(): number {
     return this.arrays.length;
+  }
+
+  /** Returns the original flat operand copy for exporters. @param index - Operand number. @returns Owned token array or absence. */
+  CreateFlatCopiedTokenArray(index: number): ScTokenArray | undefined {
+    return this.arrays[index]?.CloneValue();
   }
   /** Writes an existing token array at the caller's reference origin. @param cursor - Output base address. @param index - Operand index. @param grammar - Destination grammar. @returns Formula text. */
   GetExpression(cursor: ScAddress, index: number, grammar: Grammar): string {
@@ -210,6 +260,8 @@ export class ScConditionEntry extends ScFormatEntry {
     if (first === undefined) return false;
     const value = this.GetCellContent(cell, first);
     if (value === undefined) return false;
+    if (this.mode >= ScConditionMode.BeginsWith && this.mode <= ScConditionMode.NotContainsText)
+      return IsTextValid(this.mode, value, first);
     if (typeof value !== typeof first) return this.mode === ScConditionMode.NotEqual;
     const order = compare(value, first);
     switch (this.mode) {

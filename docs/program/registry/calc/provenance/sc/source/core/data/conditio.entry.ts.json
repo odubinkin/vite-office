@@ -15,7 +15,8 @@
       "ScConditionEntry::GetExpression"
     ],
     "preservedResponsibilities": [
-      "Owns source-relative condition formulas, the represented comparisons, and named cell style binding."
+      "Owns source-relative condition formulas, the represented comparisons, and named cell style binding.",
+      "Evaluates the four native text conditions with the original number conversion, transliteration and character classification owners."
     ],
     "omittedResponsibilities": [
       "Additional condition families, full shift/move token updates and native listener caches remain unported."
@@ -29,6 +30,14 @@
         {
           "path": "apps/office/src/sc/source/filter/oox/excelfilter.page-settings.test.ts",
           "marker": "testTdf167019"
+        },
+        {
+          "path": "apps/office/src/sc/source/filter/oox/condformatbuffer.text.test.ts",
+          "marker": "ports the four quoted literal formula assertions"
+        },
+        {
+          "path": "apps/office/e2e/calc/xlsx-text-conditions.spec.ts",
+          "marker": "preserves the original XLSX quoted text conditions"
         }
       ],
       "upstream": [
@@ -39,6 +48,14 @@
         {
           "path": "sc/source/core/data/conditio.cxx",
           "marker": "ScConditionEntry::GetExpression"
+        },
+        {
+          "path": "sc/source/core/data/conditio.cxx",
+          "marker": "ScConditionEntry::IsValidStr"
+        },
+        {
+          "path": "sc/qa/unit/subsequent_export_test5.cxx",
+          "marker": "testTdf166413"
         }
       ]
     },

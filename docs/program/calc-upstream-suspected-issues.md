@@ -7258,3 +7258,14 @@ stop is absent.
 
 - [Original color-scale equality](../../vendor/libreoffice-reference/sc/source/core/data/colorscale.cxx)
 - [Calc color-scale owner](../../apps/office/src/sc/source/core/data/colorscale.ts)
+
+### CALC-765 — Empty text becomes a numeric criterion for numeric cells
+
+`ScConditionEntry::IsValid` uses the numeric operand when the stored
+string is empty. With an explicit empty string and the original numeric
+default of zero, a numeric value such as 10 matches a contains-text rule
+while 153.6 does not. Calc preserves this behavior and the separate
+case-insensitive text matching path for string cells.
+
+- [Original condition evaluator](../../vendor/libreoffice-reference/sc/source/core/data/conditio.cxx)
+- [Quoted and numeric criteria regressions](../../apps/office/src/sc/source/filter/oox/condformatbuffer.text.test.ts)

@@ -7,7 +7,9 @@
     "state": "foundation",
     "suite": "shared",
     "subsystem": "number-format-input",
-    "capabilityIds": ["CAP-5f0f5ed3-9c6d-4ac7-b9fb-250a1f2497ea"],
+    "capabilityIds": [
+      "CAP-5f0f5ed3-9c6d-4ac7-b9fb-250a1f2497ea"
+    ],
     "semantic": {
       "behaviorStatus": "unverified",
       "contractStatus": "unverified",
@@ -16,14 +18,25 @@
       "evidence": [
         "apps/office/src/unotools/source/i18n/transliterationwrapper.ts#TransliterationWrapper",
         "apps/office/src/unotools/source/i18n/transliterationwrapper.test.ts",
-        "unotools/source/i18n/transliterationwrapper.cxx#TransliterationWrapper::isEqual"
+        "unotools/source/i18n/transliterationwrapper.cxx#TransliterationWrapper::isEqual",
+        "apps/office/src/sc/source/filter/oox/condformatbuffer.text.test.ts",
+        "apps/office/e2e/calc/xlsx-text-conditions.spec.ts",
+        "unotools/source/i18n/transliterationwrapper.cxx",
+        "sc/qa/unit/subsequent_export_test5.cxx"
       ],
-      "justification": "Task AQF9AG maps the source IGNORE_CASE wrapper path to the already implemented native Transliteration_caseignore module. It preserves first-call loading, current-language reloading, source equals/isEqual forwarding, UNO-only failure handling and owned module lifetime. Other transliteration modes and UNO service construction are outside the represented slice.",
+      "justification": "Task AQF9AG maps the source IGNORE_CASE wrapper path to the already implemented native Transliteration_caseignore module. It preserves first-call loading, current-language reloading, source equals/isEqual forwarding, UNO-only failure handling and owned module lifetime. Other transliteration modes and UNO service construction are outside the represented slice. Admits prefixes using the original matched lengths from the owned transliteration module.",
       "knownViolations": [],
-      "localSymbols": ["TransliterationWrapper"],
+      "localSymbols": [
+        "TransliterationWrapper"
+      ],
       "sourceResponsibility": "aligned",
       "upstreamFile": "unotools/source/i18n/transliterationwrapper.cxx",
-      "upstreamSymbols": ["TransliterationWrapper::TransliterationWrapper", "TransliterationWrapper::loadModuleIfNeeded", "TransliterationWrapper::equals", "TransliterationWrapper::isEqual"]
+      "upstreamSymbols": [
+        "TransliterationWrapper::TransliterationWrapper",
+        "TransliterationWrapper::loadModuleIfNeeded",
+        "TransliterationWrapper::equals",
+        "TransliterationWrapper::isEqual"
+      ]
     }
   }
 }

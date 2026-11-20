@@ -18,9 +18,12 @@
       "evidence": [
         "apps/office/src/sc/source/core/data/conditio.entry.ts",
         "sc/source/core/data/conditio.cxx",
-        "apps/office/src/sc/source/filter/oox/excelfilter.page-settings.test.ts"
+        "apps/office/src/sc/source/filter/oox/excelfilter.page-settings.test.ts",
+        "apps/office/src/sc/source/filter/oox/condformatbuffer.text.test.ts",
+        "apps/office/e2e/calc/xlsx-text-conditions.spec.ts",
+        "sc/qa/unit/subsequent_export_test5.cxx"
       ],
-      "justification": "Owns source-relative condition formulas, the represented comparisons, and named cell style binding. Additional condition families, full shift/move token updates and native listener caches remain unported.",
+      "justification": "Owns source-relative condition formulas, the represented comparisons, and named cell style binding. Additional condition families, full shift/move token updates and native listener caches remain unported. Evaluates the four native text conditions with the original number conversion, transliteration and character classification owners.",
       "knownViolations": [],
       "localSymbols": [
         "ScConditionEntry",
