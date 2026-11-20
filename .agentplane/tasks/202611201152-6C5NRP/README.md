@@ -1,10 +1,11 @@
 ---
 id: "202611201152-6C5NRP"
 title: "Align Writer ODT merged cell grid and covered border styles"
-status: "DOING"
+result_summary: "Writer ODT follows native span clipping and TableRowKeep covered formatting through package and Worker round trips."
+status: "DONE"
 priority: "high"
 owner: "CODER"
-revision: 9
+revision: 11
 origin:
   system: "manual"
 depends_on: []
@@ -20,9 +21,9 @@ plan_approval:
   note: null
 verification:
   state: "ok"
-  updated_at: "2026-11-20T12:21:17.048Z"
+  updated_at: "2026-11-20T12:21:41.757Z"
   updated_by: "CODER"
-  note: "The reviewed Writer ODT table implementation passed the declared 369-test XML filter profile, the pinned vertical-border fixture, Worker decoding, office typecheck, and static validation."
+  note: "Writer ODT follows native span clipping and TableRowKeep covered formatting through package and Worker round trips."
   attempts: 0
 quality_review:
   state: "pass"
@@ -44,11 +45,16 @@ quality_review:
     - "Grid admission clips at declared columns and occupied vertical slots while the TableRowKeep cursor applies authored covered formats to the native owner."
     - "The original native testVerticallyMergedCellBorder document preserves its two border states through Worker and package export; older Worker records obtain the native false default."
     - "The declared XML filter profile is green. Supplemental RTF header failures reproduce on the prior revision with the same UNO exception."
-commit: null
+commit:
+  hash: "e9436f967d32e94e9aac4b69659b81b333cf02ec"
+  message: "🧩 6C5NRP code: preserve Writer ODT merge grid and covered styles"
 comments:
   -
     author: "CODER"
     body: "Start: continue direct-mode task in current checkout."
+  -
+    author: "CODER"
+    body: "Verified: Writer ODT follows native span clipping and TableRowKeep covered formatting through package and Worker round trips.. Guided shortcut recorded verification and is closing the direct task with traceable commit metadata."
 events:
   -
     type: "status"
@@ -63,8 +69,21 @@ events:
     author: "CODER"
     state: "ok"
     note: "The reviewed Writer ODT table implementation passed the declared 369-test XML filter profile, the pinned vertical-border fixture, Worker decoding, office typecheck, and static validation."
+  -
+    type: "verify"
+    at: "2026-11-20T12:21:41.757Z"
+    author: "CODER"
+    state: "ok"
+    note: "Writer ODT follows native span clipping and TableRowKeep covered formatting through package and Worker round trips."
+  -
+    type: "status"
+    at: "2026-11-20T12:21:42.176Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: Writer ODT follows native span clipping and TableRowKeep covered formatting through package and Worker round trips.. Guided shortcut recorded verification and is closing the direct task with traceable commit metadata."
 doc_version: 3
-doc_updated_at: "2026-11-20T12:21:17.104Z"
+doc_updated_at: "2026-11-20T12:21:42.178Z"
 doc_updated_by: "CODER"
 description: "Port Writer XML table span normalization, reserved-slot handling, covered-cell compatibility and native box style export through ODT and Worker boundaries."
 sections:
@@ -133,6 +152,36 @@ sections:
     - freshness: route=computed_local remote=remote_skipped
     - repeat_allowed: false
     - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+    - risks: none
+
+    ### 2026-11-20T12:21:41.757Z — VERIFY — ok
+
+    By: CODER
+
+    Note: Writer ODT follows native span clipping and TableRowKeep covered formatting through package and Worker round trips.
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-20T12:21:17.104Z, excerpt_hash=sha256:616836cfe280dc1fa6ff5115ed20b9ec775c215443e8dc5e41a7b6dd604cab7b
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202611201152-6C5NRP/blueprint/resolved-snapshot.json
+    - old_digest: e49e384e30ad7ef81a525c0921564f9a68eeea23fc2fe07401e7d8ab37219a12
+    - current_digest: e49e384e30ad7ef81a525c0921564f9a68eeea23fc2fe07401e7d8ab37219a12
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202611201152-6C5NRP
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task complete 202611201152-6C5NRP --result verified-202611201152-6C5NRP --commit 249c7d82fc3922a7d73a66a70c207fed4a20563f
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
     - risks: none
 
     <!-- END VERIFICATION RESULTS -->
@@ -216,6 +265,36 @@ DecisionContextRef:
 - freshness: route=computed_local remote=remote_skipped
 - repeat_allowed: false
 - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- risks: none
+
+### 2026-11-20T12:21:41.757Z — VERIFY — ok
+
+By: CODER
+
+Note: Writer ODT follows native span clipping and TableRowKeep covered formatting through package and Worker round trips.
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-20T12:21:17.104Z, excerpt_hash=sha256:616836cfe280dc1fa6ff5115ed20b9ec775c215443e8dc5e41a7b6dd604cab7b
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202611201152-6C5NRP/blueprint/resolved-snapshot.json
+- old_digest: e49e384e30ad7ef81a525c0921564f9a68eeea23fc2fe07401e7d8ab37219a12
+- current_digest: e49e384e30ad7ef81a525c0921564f9a68eeea23fc2fe07401e7d8ab37219a12
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202611201152-6C5NRP
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task complete 202611201152-6C5NRP --result verified-202611201152-6C5NRP --commit 249c7d82fc3922a7d73a66a70c207fed4a20563f
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
 - risks: none
 
 <!-- END VERIFICATION RESULTS -->
