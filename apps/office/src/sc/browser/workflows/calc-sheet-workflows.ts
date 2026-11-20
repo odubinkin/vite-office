@@ -6,21 +6,61 @@ import { FieldUnit } from "../../../tools/inc/fldunit";
 import { SfxDialogController } from "../../../sfx2/source/dialog/basedlgs";
 import { SfxInterface } from "../../../sfx2/source/control/objface";
 import { createSfxShell, type SfxShell } from "../../../sfx2/source/control/shell";
-import type { SfxRequest } from "../../../sfx2/source/control/request";
+import { SfxRequest } from "../../../sfx2/source/control/request";
 import { SfxUnoAnyItem } from "../../../sfx2/source/view/frame";
-import { SfxUInt16Item } from "../../../svl/source/items/intitem";
+import { SfxInt16Item, SfxUInt16Item } from "../../../svl/source/items/intitem";
 import { OUString } from "../../../sal/inc/rtl/ustring";
 import { text, unicode } from "../../../i18nlangtag/source/isolang/isolang.tables";
-import { calcGoToSheetCommand } from "../../sdi/scalc";
+import { SvxColorItem } from "../../../editeng/inc/colritem";
+import { SfxStringItem } from "../../../svl/source/items/stritem";
+import { SfxIntegerListItem } from "../../../svl/source/items/ilstitem";
+import { Color } from "../../../tools/inc/color";
+import { createBrowserColorItem } from "../../../svx/browser/tbxctrls/color-item";
+import { ScRange } from "../../inc/address";
+import {
+  applyOutlineControl,
+  changeOutline,
+  changeOutlineDetail,
+  type ScOutlineControl,
+} from "../../source/ui/docshell/olinefun";
+import {
+  fullOutlineAxes,
+  OutlinePossible,
+  simpleOutlineRange,
+  TestRemoveOutline,
+} from "../../source/ui/view/dbfunc3";
+import {
+  calcGoToSheetCommand,
+  calcOutlineCommands,
+  calcSheetCommands,
+  FID_TAB_SET_TAB_BG_COLOR,
+} from "../../sdi/scalc";
 import type { CalcViewController } from "../controller/calc-view-controller";
 /** Immutable native dialog initialization;names are copied only as dialog widget resources. */
 export interface CalcGoToSheetRequest {
   readonly names: readonly string[];
   readonly selectedName: string;
 }
+/** Dialog contents from ScShowTabDlg and ScTabBgColorDlg. */
+export type CalcSheetTabDialog =
+  | {
+      readonly kind: "select" | "show";
+      readonly names: readonly string[];
+      readonly selected: readonly number[];
+    }
+  | { readonly kind: "color" }
+  | { readonly kind: "group" }
+  | { readonly kind: "ungroup" };
+
+/** Source sheet workflow identities. */
+type SheetCommand = keyof typeof calcSheetCommands;
+/** Native manual outline operation identifiers. */
+type OutlineCommand = (typeof calcOutlineCommands)[number]["kind"];
+
 /** Session-owned native Go to Sheet request and asynchronous result application. */
 export class CalcSheetWorkflows {
   readonly dialogs = new SfxDialogController<CalcGoToSheetRequest, string>();
+  readonly tabDialogs = new SfxDialogController<CalcSheetTabDialog, number[] | string>();
   readonly metricDialogs = new SfxDialogController<ScMetricInputDlg, number>();
   private readonly shell: SfxShell;
   /** Connects a source command to the active document view. @param controller - Actual Calc controller. @returns Workflow. */
@@ -45,7 +85,7 @@ export class CalcSheetWorkflows {
             getState:
               /** Excludes simultaneous metric dialogs. @param target - Owner. @returns Availability. */ (
                 target: CalcSheetWorkflows,
-              ) => ({ enabled: target.metricDialogs.GetSnapshot() === undefined }),
+              ) => ({ enabled: !target.HasSheetDialog() }),
             execute:
               /** Routes the actual dimension. @param target - Owner. @param request - Source request. @returns Completion. */ (
                 target: CalcSheetWorkflows,
@@ -77,6 +117,35 @@ export class CalcSheetWorkflows {
           }),
         ),
 
+        ...calcOutlineCommands.map(
+          /** Registers the cell-shell outline slots in the browser dispatch adapter. @param source - Source command. @returns Shell slot. */
+          (source) => ({
+            commandUrl: source.id,
+            slotId: source.slotId,
+            label: source.label,
+            getState:
+              /** Queries actual outline availability. @param target - Browser workflow. @returns State. */
+              (target: CalcSheetWorkflows) => ({ enabled: target.CanExecuteOutline(source.kind) }),
+            execute:
+              /** Invokes the original operation through its source request. @param target - Browser workflow. @param request - Slot request. @returns Operation completion. */
+              (target: CalcSheetWorkflows, request: SfxRequest) =>
+                target.ExecuteOutline(source.kind, request),
+          }),
+        ),
+        ...(Object.keys(calcSheetCommands) as SheetCommand[]).map(
+          /** Connects the four source sheet slots. @param kind - Command identity. @returns Shell slot. */
+          (kind) => ({
+            commandUrl: calcSheetCommands[kind].id,
+            slotId: calcSheetCommands[kind].slotId,
+            label: calcSheetCommands[kind].label,
+            getState:
+              /** Queries native state from the active view. @param target - Workflow. @returns Slot state. */
+              (target: CalcSheetWorkflows) => ({ enabled: target.CanExecuteTab(kind) }),
+            execute:
+              /** Delegates the slot and its typed arguments. @param target - Workflow. @param request - Source request. @returns Completion. */
+              (target: CalcSheetWorkflows, request: SfxRequest) => target.ExecuteTab(kind, request),
+          }),
+        ),
         {
           commandUrl: calcGoToSheetCommand.id,
           slotId: calcGoToSheetCommand.slotId,
@@ -84,7 +153,7 @@ export class CalcSheetWorkflows {
           getState:
             /** Prevents a duplicate active dialog request. @param target - Workflow. @returns Slot state. */ (
               target,
-            ) => ({ enabled: target.dialogs.GetSnapshot() === undefined }),
+            ) => ({ enabled: !target.HasSheetDialog() }),
           execute:
             /** Retains the original native request boundary. @param target - Workflow. @param request - Slot and arguments. @returns Operation completion. */ (
               target,
@@ -187,8 +256,219 @@ export class CalcSheetWorkflows {
       else this.controller.CompleteRowHeight(result.result);
     }
   }
+  /** Checks whether the sheet workflows already own a modal. @returns Active modal state. */
+  private HasSheetDialog(): boolean {
+    return Boolean(
+      this.tabDialogs.GetSnapshot() ||
+      this.dialogs.GetSnapshot() ||
+      this.metricDialogs.GetSnapshot(),
+    );
+  }
+
+  /** Applies a level or group button through the active Calc shell. @param control - Native outline window action. @returns Nothing. */
+  OutlineControl(control: ScOutlineControl): void {
+    const { controller } = this;
+    const view = controller.viewData;
+    const editing = controller.inputHandler.IsInputMode()
+      ? control.columns
+        ? view.GetCurX()
+        : view.GetCurY()
+      : undefined;
+    applyOutlineControl(controller.shell, view.GetTabNumber(), control, editing);
+  }
+
+  /** Calculates source state for the outline commands. @param kind - Source slot. @returns Whether enabled. */
+  private CanExecuteOutline(kind: OutlineCommand): boolean {
+    if (this.HasSheetDialog()) return false;
+    const view = this.controller.viewData;
+    if (kind === "group") return !view.GetMarkData().IsMultiMarked();
+    if (kind === "clear")
+      return !!view.GetDocument().FetchTable(view.GetTabNumber())?.GetOutlineTable();
+    const range = simpleOutlineRange(view);
+    if (!range) return false;
+    return kind === "ungroup"
+      ? TestRemoveOutline(view, range).some(Boolean)
+      : OutlinePossible(view, range, kind);
+  }
+
+  /** Runs the source outline slot and opens an axis choice only when needed. @param kind - Outline command. @param request - Typed value or no-argument command. @returns Completion. */
+  private async ExecuteOutline(kind: OutlineCommand, request: SfxRequest): Promise<void> {
+    if (!this.controller.Commit()) return;
+    const view = this.controller.viewData,
+      shell = this.controller.shell;
+    const range =
+      kind === "clear" ? new ScRange(0, 0, view.GetTabNumber()) : simpleOutlineRange(view);
+    if (!range) {
+      shell.ErrorMessage("This function cannot be used with multiple selections.");
+      return;
+    }
+    if (kind === "hide" || kind === "show" || kind === "clear") {
+      changeOutlineDetail(shell, range, kind);
+      request.Done();
+      return;
+    }
+    const args = request.GetArgs();
+    let axis: string;
+    if (args.length) {
+      const item = args.find(
+        /** Finds the RowOrCol item. @param candidate - Request item. @returns Whether this is the slot argument. */
+        (candidate) => candidate.Which() === request.GetSlot(),
+      );
+      const first = item instanceof SfxStringItem ? item.GetValue().charAt(0) : "";
+      axis = first === "r" ? "R" : first === "c" ? "C" : first;
+      if (axis !== "R" && axis !== "C") return;
+    } else {
+      const [columns, rows] =
+        kind === "group" ? fullOutlineAxes(view, range) : TestRemoveOutline(view, range);
+      if (columns !== rows) axis = columns ? "C" : "R";
+      else {
+        const result = await this.tabDialogs.Request({ kind });
+        if (
+          result.kind !== "accepted" ||
+          typeof result.result !== "string" ||
+          view !== this.controller.viewData
+        )
+          return;
+        const liveRange = simpleOutlineRange(view);
+        if (liveRange) changeOutline(shell, liveRange, result.result === "C", kind === "group");
+        else shell.ErrorMessage("This function cannot be used with multiple selections.");
+        return;
+      }
+    }
+    changeOutline(shell, range, axis === "C", kind === "group");
+    if (!request.IsAPI()) {
+      request.AppendItem(new SfxStringItem(request.GetSlot(), axis));
+      request.Done();
+    }
+  }
+
+  /** Queries original view rules and prevents overlapping sheet dialogs. @param kind - Slot identity. @returns Availability. */
+  private CanExecuteTab(kind: SheetCommand): boolean {
+    if (this.HasSheetDialog()) return false;
+    const view = this.controller.GetViewShell();
+    if (kind === "hide") return view.CanHideTable();
+    if (kind === "show") return view.CanShowTable();
+    if (kind === "color") return view.CanSetTabBgColor();
+    return true;
+  }
+
+  /** Runs original typed sheet commands and supplies the async browser dialog when needed. @param kind - Source command. @param request - Actual Sfx slot request. @returns Completion. */
+  private async ExecuteTab(kind: SheetCommand, request: SfxRequest): Promise<void> {
+    if (!this.controller.Commit()) {
+      request.Ignore();
+      return;
+    }
+    const view = this.controller.GetViewShell(),
+      data = view.GetViewData(),
+      doc = data.GetDocument();
+    const which = kind === "color" ? FID_TAB_SET_TAB_BG_COLOR : request.GetSlot();
+    const args = request.GetArgs();
+    const item = args.find(
+      /** Finds the typed native argument identity. @param candidate - Request argument. @returns Match. */
+      (candidate) => candidate.Which() === which,
+    );
+    if (kind === "hide") {
+      let restore = -1;
+      if (item !== undefined && !(item instanceof SfxInt16Item))
+        throw new TypeError("Hide requires signed16 nTabNumber.");
+      if (item instanceof SfxInt16Item) {
+        const tab = item.GetValue();
+        if (!doc.FetchTable(tab)) return;
+        if (!data.GetMarkData().GetTableSelect(tab)) restore = data.GetTabNumber();
+        data.GetMarkData().SelectOneTable(tab);
+      }
+      view.HideTable(restore);
+    } else if (kind === "color") {
+      if (args.length) {
+        if (view.SetTabBgColor(item instanceof SvxColorItem ? item.GetValue() : new Color()))
+          request.Done();
+      } else {
+        const oldColor = doc.GetTabBgColor(data.GetTabNumber());
+        const copy = new SfxRequest(request.GetSlot(), args, request.GetCallMode());
+        request.Ignore();
+        const result = await this.tabDialogs.Request({ kind });
+        if (
+          result.kind !== "accepted" ||
+          typeof result.result !== "string" ||
+          view !== this.controller.GetViewShell()
+        )
+          return;
+        if (view.SetTabBgColor(createBrowserColorItem(result.result, which).GetValue())) {
+          copy.AppendItem(new SvxColorItem(oldColor, which));
+          copy.Done();
+        }
+      }
+    } else if (kind === "show" && args.length) {
+      if (item instanceof SfxStringItem) {
+        this.ShowNamedTables([item.GetValue()]);
+        if (!request.IsAPI()) request.Done();
+      }
+    } else if (kind === "select" && item instanceof SfxIntegerListItem) {
+      if (item.GetList().length) {
+        view.SelectTables(item.GetList());
+        request.Done();
+      }
+    } else {
+      const names: string[] = [],
+        selected: number[] = [],
+        name = new OUString();
+      try {
+        for (let tab = 0; tab < doc.GetTableCount(); tab++) {
+          if (kind === "show" && doc.IsVisible(tab)) continue;
+          doc.GetName(tab, name);
+          names.push(text(name));
+          if (kind === "select" && data.GetMarkData().GetTableSelect(tab)) selected.push(tab);
+        }
+      } finally {
+        name.dispose();
+      }
+      if (kind === "show" && names.length) selected.push(0);
+      const completion =
+        kind === "show" ? new SfxRequest(request.GetSlot(), args, request.GetCallMode()) : request;
+      if (kind === "show") request.Ignore();
+      const result = await this.tabDialogs.Request({ kind, names, selected });
+      if (
+        result.kind !== "accepted" ||
+        typeof result.result === "string" ||
+        view !== this.controller.GetViewShell()
+      ) {
+        if (kind === "select") request.Ignore();
+        return;
+      }
+      const rows = result.result;
+      if (kind === "show") {
+        const namesToShow = rows.map(
+          /** Resolves the original row to the snapshot's sheet name. @param row - Selected row. @returns Name. */
+          (row) => names[row] as string,
+        );
+        for (const name of namesToShow) completion.AppendItem(new SfxStringItem(which, name));
+        this.ShowNamedTables(namesToShow);
+        completion.Done();
+      } else {
+        request.AppendItem(new SfxIntegerListItem(which, rows));
+        if (rows.length) {
+          view.SelectTables(rows);
+          request.Done();
+        }
+      }
+    }
+    this.controller.SyncSheetView();
+  }
+
+  /** Supplies source OUString values and releases them after the view operation. @param names - Target sheet names. @returns Nothing. */
+  private ShowNamedTables(names: readonly string[]): void {
+    const values = names.map(unicode);
+    try {
+      this.controller.GetViewShell().ShowTable(values);
+    } finally {
+      for (const value of values) value.dispose();
+    }
+  }
+
   /** Cancels the native async request before the session destroys its document. @returns Nothing. */
   Close(): void {
+    const tab = this.tabDialogs.GetSnapshot();
+    if (tab) this.tabDialogs.Cancel(tab.id);
     const width = this.metricDialogs.GetSnapshot();
     if (width) this.metricDialogs.Cancel(width.id);
     const request = this.dialogs.GetSnapshot();

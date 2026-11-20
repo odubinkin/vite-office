@@ -1,4 +1,6 @@
 /** @fileoverview Fixed and movable sheet axis geometry at the DOM grid boundary. */
+import { ViewOption } from "../../inc/viewopti";
+import type { ScViewData } from "../../source/ui/view/viewdata";
 import type { ScTable } from "../../inc/table";
 import { columnAtPixel, columnPixels, visibleColumns } from "./column-geometry";
 import { rowAtPixel, rowPixels, visibleRows } from "./row-geometry";
@@ -40,9 +42,43 @@ export interface CalcGridViewport {
   readonly splitColumns?: CalcSplitBand | undefined;
   readonly splitRows?: CalcSplitBand | undefined;
 }
+/** Outline bitmap and inset sizes at the desktop view's CSS-pixel scale. */
+export const SC_OL_BITMAPSIZE = 12;
+export const SC_OL_POSOFFSET = 2;
+
+/** Resolves outline controls and shared browser device insets for the active sheet. @param view - Active native view. @param rowHeight - Column header height. @returns Gutter trees and inset dimensions. */
+export function calcGridInsets(view: ScViewData, rowHeight: number) {
+  const table = view.GetDocument().FetchTable(view.GetTabNumber());
+  const outline = view.GetOptions().GetOption(ViewOption.OUTLINER)
+    ? table?.GetOutlineTable()
+    : undefined;
+  const rowOutline = outline?.GetRowArray();
+  const columnOutline = outline?.GetColArray();
+  /** Measures one native outline window. @param depth - Stored number of levels. @returns Pixels. */
+  function size(depth: number): number {
+    return depth ? (depth + 1) * SC_OL_BITMAPSIZE + 2 * SC_OL_POSOFFSET + 1 : 0;
+  }
+  const rowGutter = size(rowOutline?.GetDepth() ?? 0);
+  const columnGutter = size(columnOutline?.GetDepth() ?? 0);
+  const headerWidth = view.IsHeaderMode() ? 48 : 0;
+  const headerHeight = view.IsHeaderMode() ? rowHeight : 0;
+  return {
+    rowOutline,
+    columnOutline,
+    rowGutter,
+    columnGutter,
+    headerWidth,
+    headerHeight,
+    left: headerWidth + rowGutter,
+    top: headerHeight + columnGutter,
+  };
+}
+
 /** A contiguous visible range and its location in the grid body. */
 export interface CalcPaintBand {
   readonly cells: readonly number[];
+  readonly first: number;
+  readonly last: number;
   readonly offset: number;
   readonly clipStart: number;
   readonly clipEnd?: number;
@@ -76,23 +112,32 @@ export class CalcGridAxis {
       : viewport.frozenRows;
     const split = horizontal ? viewport.splitColumns : viewport.splitRows;
     const seam = fixed?.pixels ?? (split ? split.pixels + CALC_SPLIT_HANDLE_SIZE : 0);
+    const last = Math.min(maximum, first + count - 1);
     if (fixed)
       this.leading = {
         cells: visible(table, fixed.first, fixed.last),
+        first: fixed.first,
+        last: fixed.last,
         offset: 0,
         clipStart: 0,
         leading: true,
       };
-    else if (split)
+    else if (split) {
+      const end = Math.min(maximum, split.first + split.count - 1);
       this.leading = {
-        cells: visible(table, split.first, Math.min(maximum, split.first + split.count - 1)),
+        cells: visible(table, split.first, end),
+        first: split.first,
+        last: end,
         offset: -split.displacement,
         clipStart: 0,
         clipEnd: split.pixels,
         leading: true,
       };
+    }
     this.moving = {
-      cells: visible(table, first, Math.min(maximum, first + count - 1)),
+      cells: visible(table, first, last),
+      first,
+      last,
       offset: seam - displacement,
       clipStart: seam,
       leading: false,
@@ -102,7 +147,12 @@ export class CalcGridAxis {
 
   /** Locates one actual cell in its paint band. @param band - Current pane axis. @param index - Native cell index. @returns Body coordinate in pixels. */
   Position(band: CalcPaintBand, index: number): number {
-    return band.offset + this.pixels(this.table, band.cells[0] ?? this.first, index - 1);
+    return (
+      band.offset +
+      (index >= band.first
+        ? this.pixels(this.table, band.first, index - 1)
+        : -this.pixels(this.table, index, band.first - 1))
+    );
   }
 
   /** Maps a physical body point to the cell in its own visible pane. @param pixel - Pointer coordinate within the body. @returns Actual source index. */

@@ -7316,7 +7316,7 @@ vector and sheet-local index lifetime.
 - [Original workbook differential styles](../../vendor/libreoffice-reference/sc/source/filter/oox/stylesbuffer.cxx)
 - [Original sheet finalization](../../vendor/libreoffice-reference/sc/source/filter/oox/condformatbuffer.cxx)
 
-### CALC-770 — An unresolved parent falls back to the first style in the family
+### CALC-779 — An unresolved parent falls back to the first style in the family
 
 `XMLPropStyleContext::Finish` clears a parent name absent from the style
 family. Calc's `ScStyleSheet::SetParent` then takes the first style in
@@ -7328,7 +7328,7 @@ import and export path.
 - [Original XML style parent resolution](../../vendor/libreoffice-reference/xmloff/source/style/prstylei.cxx#L448)
 - [Original Calc parent assignment](../../vendor/libreoffice-reference/sc/source/core/data/stlsheet.cxx#L110)
 
-### CALC-771 — A currency value does not turn a General format into currency
+### CALC-780 — A currency value does not turn a General format into currency
 
 In `ScXMLImport::SetType`, a currency code can replace the symbol of
 an existing currency format. The override requires both the imported
@@ -7339,7 +7339,7 @@ replacement of an existing symbol.
 
 - [Original value-type and currency checks](../../vendor/libreoffice-reference/sc/source/filter/xml/xmlimprt.cxx#L898)
 
-### CALC-772 — Numeric ODF durations can end without a component
+### CALC-781 — Numeric ODF durations can end without a component
 
 The floating-day branch of `sax::Converter::convertDuration` succeeds
 when it reaches the end of the source after the duration marker, including
@@ -7349,7 +7349,7 @@ when the last numeric component has no unit. A bare `PT` returns zero and
 
 - [Original floating duration scanner](../../vendor/libreoffice-reference/sax/source/tools/converter.cxx#L1080)
 
-### CALC-773 — UNO StandardFormat differs from the formatter's standard flag
+### CALC-782 — UNO StandardFormat differs from the formatter's standard flag
 
 The `StandardFormat` property in the pinned number formats service
 checks whether the key is the first in its language's format block. Other
@@ -7361,7 +7361,7 @@ fixture exercises this distinction through import and subsequent editing.
 - [Original UNO property](../../vendor/libreoffice-reference/svl/source/numbers/numfmuno.cxx#L695)
 - [Original ODS format selection](../../vendor/libreoffice-reference/sc/source/filter/xml/xmlimprt.cxx#L897)
 
-### CALC-774 — A pending ODF cell range can use the following row's default style
+### CALC-783 — A pending ODF cell range can use the following row's default style
 
 `ScXMLTableRowContext` sets the current row's default before reading any
 cells on that row. `ScMyStylesImportHelper` resolves an unstyled pending
@@ -7414,3 +7414,53 @@ sort order. Calc preserves the original partitioning and pre-sort swaps.
 
 - [Original numeric sort](../../vendor/libreoffice-reference/sc/source/core/tool/interpr3.cxx#L4606)
 - [Original bin scan](../../vendor/libreoffice-reference/sc/source/core/tool/interpr5.cxx#L1883)
+
+### CALC-779 — Hide counts selected hidden sheets against the visible minimum
+
+`GetStateTable` and `HideTable` compare the number of visible sheets with
+the entire sheet selection. Select Sheets permits a selection containing
+both visible and hidden sheets. Hide can therefore be disabled even when
+hiding the visible members would leave another sheet visible. Calc keeps
+the original comparison.
+
+- [Original Hide availability](../../vendor/libreoffice-reference/sc/source/ui/view/tabvwshf.cxx)
+- [Original Hide execution](../../vendor/libreoffice-reference/sc/source/ui/view/viewfun2.cxx)
+
+### CALC-780 — The tab color dialog records the previous color
+
+`DoTableBackgroundDialog` applies the chosen color and appends the old
+active sheet's color to the completed request. Typed slot execution
+interprets that item as the color to apply. Calc preserves both values at
+their respective request boundaries.
+
+- [Original tab color dispatch and response](../../vendor/libreoffice-reference/sc/source/ui/view/tabvwshf.cxx)
+
+### CALC-781 — A named Show request can record an already-visible sheet
+
+`ShowTable` records every resolved name in its visibility undo action,
+including a name that was already visible. The Show dialog lists hidden
+sheets only, while the typed name argument can address a visible sheet.
+Undoing that typed request can hide the previously visible sheet. Calc
+preserves the original name lookup and history recording.
+
+- [Original Show execution](../../vendor/libreoffice-reference/sc/source/ui/view/viewfun2.cxx)
+- [Original visibility undo](../../vendor/libreoffice-reference/sc/source/ui/undo/undotab.cxx)
+
+### CALC-782 — Freeze can mark a document modified without adding a pane
+
+The desktop `FreezeSplitters(true)` path marks the document modified
+before computing the boundary. At the first visible cell, Freeze Panes
+can leave both axes unsplit while still changing the modified state. The
+desktop command preserves this ordering.
+
+- [Original freeze and modified state](../../vendor/libreoffice-reference/sc/source/ui/view/tabview.cxx)
+
+### CALC-783 — Show Details reveals the gaps between selected groups
+
+`ShowMarkedOutlines` finds the first and last endpoints among the groups
+fully contained in the marked range. It then shows the entire span between
+those endpoints. Rows or columns that were hidden manually in a gap can
+therefore become visible. Calc preserves the span and keeps filtered rows
+hidden.
+
+- [Original marked outline expansion](../../vendor/libreoffice-reference/sc/source/ui/docshell/olinefun.cxx)

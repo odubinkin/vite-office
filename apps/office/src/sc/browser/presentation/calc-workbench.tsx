@@ -28,7 +28,7 @@ import { calcSheetTabItems } from "../../uiconfig/scalc/popupmenu/sheettab";
 import { getCalcPopupCommandResource } from "../../uiconfig/scalc/menubar/menubar";
 import { CalcFormattingToolbar } from "./CalcFormattingToolbar";
 import { ScGridWindow } from "./ScGridWindow";
-import { CALC_SPLIT_HANDLE_SIZE } from "./calc-grid-axis";
+import { CALC_SPLIT_HANDLE_SIZE, calcGridInsets } from "./calc-grid-axis";
 import type { ScSplitPos } from "../../source/ui/inc/viewdata";
 import { ScInputWindow, type CalcInputAction } from "./ScInputWindow";
 import { ScTabControl } from "./ScTabControl";
@@ -39,6 +39,7 @@ import { OfficeWorkspaceHeader } from "../../../framework/browser/presentation/O
 import { calcStandardBarItems } from "../../uiconfig/scalc/toolbar/standardbar";
 import type { CalcFileWorkflows } from "../workflows/calc-file-workflows";
 import { ScMetricInputDlg } from "./ScMetricInputDlg";
+import { ScSheetTabDialog } from "./ScSheetTabDialog";
 import { ScGoToTabDlg } from "./ScGoToTabDlg";
 import type { CalcSheetWorkflows } from "../workflows/calc-sheet-workflows";
 import { CalcFileDialog } from "./CalcFileDialog";
@@ -75,6 +76,11 @@ export function CalcWorkbench({
     sheetWorkflows.dialogs.GetSnapshot,
     sheetWorkflows.dialogs.GetSnapshot,
   );
+  const tabDialog = useSyncExternalStore(
+    sheetWorkflows.tabDialogs.Subscribe,
+    sheetWorkflows.tabDialogs.GetSnapshot,
+    sheetWorkflows.tabDialogs.GetSnapshot,
+  );
   const widthDialog = useSyncExternalStore(
     sheetWorkflows.metricDialogs.Subscribe,
     sheetWorkflows.metricDialogs.GetSnapshot,
@@ -100,7 +106,11 @@ export function CalcWorkbench({
     /** Releases the shared popup owner. @returns Nothing. */ () => setSheetPopup(undefined),
     [],
   );
-  const modal = dialog !== undefined || sheetDialog !== undefined || widthDialog !== undefined;
+  const modal =
+    dialog !== undefined ||
+    sheetDialog !== undefined ||
+    widthDialog !== undefined ||
+    tabDialog !== undefined;
   if (modal && sheetPopup !== undefined) setSheetPopup(undefined);
   const root = useRef<HTMLElement>(null),
     tabs = useRef<HTMLDivElement>(null),
@@ -109,6 +119,7 @@ export function CalcWorkbench({
     restoredViewport = useRef(false);
   const view = controller.viewData,
     doc = controller.shell.GetDocument();
+  const paneLayoutRevision = view.GetPaneLayoutRevision();
   const cursorColumn = view.GetCurX(),
     cursorRow = view.GetCurY(),
     activeTab = view.GetTabNumber(),
@@ -184,7 +195,7 @@ export function CalcWorkbench({
           client.clientHeight,
         );
     },
-    [controller, doc, activeTab],
+    [controller, doc, activeTab, paneLayoutRevision],
   );
   useEffect(
     /** Tracks concrete browser viewport changes separately from logical sheet rows. @returns Cleanup. */ () => {
@@ -200,15 +211,17 @@ export function CalcWorkbench({
           );
       }
       measure();
-      const client = grid();
+      const client = grid(),
+        wheelTarget = client.parentElement ?? client;
       /** Routes wheel deltas according to the pointer's left/right and top/bottom pair. @param event - Browser wheel event. @returns Nothing. */
       function wheel(event: WheelEvent): void {
         const viewport = controller.viewport;
-        if ((!viewport.splitColumns && !viewport.splitRows) || event.ctrlKey) return;
+        const outline = (event.target as Element).closest("[data-calc-outline]");
+        if ((!viewport.splitColumns && !viewport.splitRows && !outline) || event.ctrlKey) return;
         const bounds = client.getBoundingClientRect();
-        const headers = controller.viewData.IsHeaderMode();
-        const x = event.clientX - bounds.left - (headers ? 48 : 0);
-        const y = event.clientY - bounds.top - (headers ? viewport.rowHeight : 0);
+        const inset = calcGridInsets(controller.viewData, viewport.rowHeight);
+        const x = event.clientX - bounds.left - inset.left;
+        const y = event.clientY - bounds.top - inset.top;
         const leadingX = !!viewport.splitColumns && x < viewport.splitColumns.pixels;
         const leadingY = !!viewport.splitRows && y < viewport.splitRows.pixels;
         const modeX = event.deltaMode === 2 ? client.clientWidth : event.deltaMode === 1 ? 16 : 1;
@@ -229,10 +242,10 @@ export function CalcWorkbench({
         client.scrollTop = offsets.top;
         event.preventDefault();
       }
-      client.addEventListener("wheel", wheel, { passive: false });
+      wheelTarget.addEventListener("wheel", wheel, { passive: false });
       window.addEventListener("resize", measure);
       return /** Removes the browser viewport listeners. @returns Nothing. */ () => {
-        client.removeEventListener("wheel", wheel);
+        wheelTarget.removeEventListener("wheel", wheel);
         window.removeEventListener("resize", measure);
       };
     },
@@ -245,6 +258,7 @@ export function CalcWorkbench({
         viewport = controller.viewport;
       if (!client?.clientWidth || !client.clientHeight) return;
       const table = doc.FetchTable(activeTab) as ScTable;
+      const { left: insetLeft, top: insetTop } = calcGridInsets(view, viewport.rowHeight);
       const pane = view.GetActivePart();
       const splitX = pane & 1 ? undefined : viewport.splitColumns;
       const splitY = pane & 2 ? undefined : viewport.splitRows;
@@ -257,13 +271,13 @@ export function CalcWorkbench({
       const bodyWidth =
         splitX?.pixels ??
         client.clientWidth -
-          (view.IsHeaderMode() ? 48 : 0) -
+          insetLeft -
           (viewport.frozenColumns?.pixels ??
             (viewport.splitColumns ? viewport.splitColumns.pixels + CALC_SPLIT_HANDLE_SIZE : 0));
       const bodyHeight =
         splitY?.pixels ??
         client.clientHeight -
-          (view.IsHeaderMode() ? viewport.rowHeight : 0) -
+          insetTop -
           (viewport.frozenRows?.pixels ??
             (viewport.splitRows ? viewport.splitRows.pixels + CALC_SPLIT_HANDLE_SIZE : 0));
       const x = columnPixels(table, 0, column - 1),
@@ -328,7 +342,16 @@ export function CalcWorkbench({
       view.SetActivePart((right | bottom) as ScSplitPos);
       revealCell(cursorColumn, cursorRow, "cell");
     },
-    [controller, view, revealCell, cursorColumn, cursorRow, inputMode, cursorRowHeight],
+    [
+      controller,
+      view,
+      revealCell,
+      cursorColumn,
+      cursorRow,
+      inputMode,
+      cursorRowHeight,
+      paneLayoutRevision,
+    ],
   );
   /** Projects original input-handler Command selected-reference collapse before DOM paste or IME starts. @param event - Actual editor command. @returns Nothing. */
   function inputCommand(event: SyntheticEvent<HTMLInputElement>): void {
@@ -431,6 +454,15 @@ export function CalcWorkbench({
         frame.GetDispatcher().Execute(command.command.id);
       }
       return;
+    }
+    if (event.key === "Home") {
+      const d = frame.GetDispatcher();
+      const command = d.FindCommandByShortcut(getBrowserShortcut(event) as string);
+      if (command) {
+        event.preventDefault();
+        d.Execute(command.command.id);
+        return;
+      }
     }
     if ((event.key === " " || event.code === "Space") && !event.metaKey) {
       const rowSelection = event.shiftKey && !event.ctrlKey && !event.altKey;
@@ -642,6 +674,10 @@ export function CalcWorkbench({
           onAction={inputAction}
         />
         <ScGridWindow
+          onOutline={
+            /** Routes native outline window controls. @param control - Selected group or level. @returns Nothing. */
+            (control) => sheetWorkflows.OutlineControl(control)
+          }
           onActivatePane={
             /** Updates the active native pane before selecting its cell. @param part - Pointer pane. @returns Nothing. */
             (part) => view.SetActivePart(part)
@@ -889,6 +925,24 @@ export function CalcWorkbench({
               twips,
             ) => {
               sheetWorkflows.metricDialogs.Complete(widthDialog.id, twips);
+            }
+          }
+        />
+      )}
+      {tabDialog === undefined ? null : (
+        <ScSheetTabDialog
+          key={tabDialog.id}
+          model={tabDialog.request}
+          onCancel={
+            /** Cancels the active tab request. @returns Nothing. */
+            () => {
+              sheetWorkflows.tabDialogs.Cancel(tabDialog.id);
+            }
+          }
+          onSubmit={
+            /** Accepts the active tab request. @param value - Native widget selection. @returns Nothing. */
+            (value) => {
+              sheetWorkflows.tabDialogs.Complete(tabDialog.id, value);
             }
           }
         />

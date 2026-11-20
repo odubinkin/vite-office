@@ -1,11 +1,13 @@
 /** @fileoverview Bounded browser scroll track for the active Calc grid window. */
 import { SheetSplitMode } from "../../source/core/data/document.sheet-visibility";
+import type { ScSplitAxisDevice, ScSplitDevice } from "../../source/ui/view/tabview";
 import type { ScTable } from "../../inc/table";
 import { ScHSplitPos, ScVSplitPos, type ScViewData } from "../../source/ui/view/viewdata";
 import { columnAtPixel, columnPixels } from "../presentation/column-geometry";
 import { rowAtPixel, rowPixels } from "../presentation/row-geometry";
 import {
   CALC_SPLIT_HANDLE_SIZE,
+  calcGridInsets,
   type CalcFrozenBand,
   type CalcGridViewport,
   type CalcSplitBand,
@@ -135,6 +137,37 @@ export class CalcViewport {
   private verticalAnchor: ScrollAnchor | undefined;
   private leadingX = 0;
   private leadingY = 0;
+
+  /** Supplies the same measured geometry used for painting and scroll tracks. @param view - Native sheet view. @returns Grid device geometry. */
+  SplitDevice(view: ScViewData): ScSplitDevice {
+    const doc = view.GetDocument(),
+      table = doc.FetchTable(view.GetTabNumber()) as ScTable;
+    /** Adapts one measured browser axis to native offset and cell hit-testing. @param size - Visible span. @param header - Header width or height. @param maximum - Last cell index. @param pixels - Axis pixel extent. @param atPixel - Axis hit test. @returns Axis geometry. */
+    function axis(
+      size: number,
+      header: number,
+      maximum: number,
+      pixels: typeof rowPixels,
+      atPixel: typeof rowAtPixel,
+    ): ScSplitAxisDevice {
+      return {
+        size,
+        header,
+        offset:
+          /** Computes signed pixels between cell boundaries. @param first - Origin index. @param index - Target index. @returns Pixel delta. */
+          (first, index) =>
+            index >= first ? pixels(table, first, index - 1) : -pixels(table, index, first - 1),
+        cellAt:
+          /** Finds the actual cell at an absolute pixel position. @param absolutePixel - Pixel from sheet start. @returns Cell index. */
+          (absolutePixel) => atPixel(table, absolutePixel, maximum),
+      };
+    }
+    const { left, top } = calcGridInsets(view, this.current.rowHeight);
+    return {
+      column: axis(this.client?.width ?? 0, left, doc.MaxCol(), columnPixels, columnAtPixel),
+      row: axis(this.client?.height ?? 0, top, doc.MaxRow(), rowPixels, rowAtPixel),
+    };
+  }
 
   /** Receives the actual browser measurements. @param left - Physical offset. @param top - Physical offset. @param width - Client width. @param height - Client height. @returns Whether the scroll position changed. */
   Measure(left: number, top: number, width: number, height: number): boolean {
@@ -301,9 +334,7 @@ export class CalcViewport {
   private Axes(view: ScViewData, width: number, height: number) {
     const document = view.GetDocument();
     const table = document.FetchTable(view.GetTabNumber()) as ScTable;
-    const headers = view.IsHeaderMode();
-    const headerWidth = headers ? 48 : 0,
-      headerHeight = headers ? this.current.rowHeight : 0;
+    const { left: headerWidth, top: headerHeight } = calcGridInsets(view, this.current.rowHeight);
     const widthWithoutHeader = Math.max(1, width - headerWidth);
     const heightWithoutHeader = Math.max(1, height - headerHeight);
     const layout = view.GetPaneLayout();

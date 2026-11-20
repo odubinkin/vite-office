@@ -1,0 +1,36 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/svl/source/items/ilstitem.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "shared",
+    "subsystem": "formatting-model",
+    "capabilityIds": [
+      "CAP-59fb3261-21e4-5112-ba27-e5cafe502e21"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/svl/source/items/ilstitem.ts",
+        "apps/office/src/sc/browser/presentation/calc-sheet-tab-dialogs.test.tsx",
+        "vendor/libreoffice-reference/svl/source/items/ilstitem.cxx"
+      ],
+      "justification": "The typed selection request owns ordered signed 32-bit values and supports equality, clone and query.",
+      "knownViolations": [],
+      "localSymbols": [
+        "SfxIntegerListItem"
+      ],
+      "sourceResponsibility": "divergent",
+      "upstreamFile": "svl/source/items/ilstitem.cxx",
+      "upstreamSymbols": [
+        "SfxIntegerListItem::Clone",
+        "SfxIntegerListItem::QueryValue"
+      ]
+    }
+  }
+}

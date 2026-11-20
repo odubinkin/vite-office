@@ -1,0 +1,29 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "browser-adaptation",
+    "status": "local-only",
+    "localPath": "apps/office/src/sc/browser/presentation/ScOutlineWindow.tsx",
+    "rationale": "Presents native Calc outline levels, group brackets and toggles over the actual clipped row or column pane geometry.",
+    "responsibilities": [
+      "Presents native Calc outline levels, group brackets and toggles over the actual clipped row or column pane geometry."
+    ],
+    "stackDivergence": {
+      "kind": "browser-adaptation",
+      "rationale": "HTML buttons and CSS rectangles provide desktop outline-window interactions using the existing browser grid device."
+    },
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sc/browser/presentation/ScOutlineWindow.tsx",
+          "marker": "ScOutlineWindow"
+        },
+        {
+          "path": "apps/office/src/sc/browser/presentation/calc-outline-window.test.tsx",
+          "marker": "expands an outer group"
+        }
+      ]
+    }
+  }
+}

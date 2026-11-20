@@ -1,5 +1,5 @@
 /** @fileoverview ScTable scalar/local-reference,cell-attribute and standard row-height operations over lazy contiguous columns. Device layout and full sheet services remain unported. */
-import { ScOutlineTable } from "./olinetab";
+import type { ScOutlineTable } from "./olinetab";
 import { Color, COL_AUTO } from "../../../../tools/inc/color";
 import type { ScTableProtection } from "./tabprotection";
 import { ScRangeName } from "../tool/rangenam";
@@ -91,14 +91,9 @@ export class ScTable {
   GetProtection = table5.GetProtection;
   SetProtection = table5.SetProtection;
   private pOutlineTable: ScOutlineTable | undefined;
-  /** Borrows the native sheet outline, when allocated. @returns Outline table. */
-  GetOutlineTable(): ScOutlineTable | undefined {
-    return this.pOutlineTable;
-  }
-  /** Lazily allocates the original sheet outline owner. @returns Outline table. */
-  StartOutlineTable(): ScOutlineTable {
-    return (this.pOutlineTable ??= new ScOutlineTable());
-  }
+  GetOutlineTable = table1.GetOutlineTable;
+  StartOutlineTable = table1.StartOutlineTable;
+  SetOutlineTable = table1.SetOutlineTable;
   /** Original pagination-cache bit,visible to native out-of-class friend definitions. */
   mbPageBreaksValid = false;
   private bStreamValid = false;

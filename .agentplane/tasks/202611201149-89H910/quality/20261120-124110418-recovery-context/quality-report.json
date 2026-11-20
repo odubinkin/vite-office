@@ -1,0 +1,23 @@
+{
+  "schema_version": 1,
+  "task_id": "202611201149-89H910",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-11-20T12:41:10.418Z",
+  "verdict": "pass",
+  "summary": "Calc sheet tab commands meet the approved slice",
+  "evaluated_sha": "b86ce70293fc1c104f95fe03240db46dd193b243",
+  "blueprint_digest": "4cb4d974f3a7df5a4644df9c6172ccc0080a26b266732a5ddb4365d56c69819e",
+  "findings": [
+    "Focused model and production Chrome cases cover sheet selection, visibility, tab colors, history and persistence."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202611201149-89H910/README.md",
+    "output/calc-89H910-scoped-test.log",
+    "output/calc-89H910-browser.log",
+    "output/calc-89H910-browser-color-replay.log"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": []
+}

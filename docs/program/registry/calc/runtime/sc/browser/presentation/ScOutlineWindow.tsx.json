@@ -1,0 +1,33 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sc/browser/presentation/ScOutlineWindow.tsx",
+    "classification": "browser-adaptation",
+    "state": "active",
+    "suite": "calc",
+    "subsystem": "spreadsheet-view-geometry",
+    "capabilityIds": [
+      "CAP-15ddc750-5b40-4d1a-b26f-33b7a204d1e4"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "not-applicable",
+      "defaultStatus": "not-applicable",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/sc/browser/presentation/ScOutlineWindow.tsx",
+        "apps/office/src/sc/browser/presentation/calc-outline-window.test.tsx",
+        "vendor/libreoffice-reference/sc/source/ui/view/olinewin.cxx"
+      ],
+      "justification": "Presents native Calc outline levels, group brackets and toggles over the actual clipped row or column pane geometry.",
+      "knownViolations": [],
+      "localSymbols": [
+        "ScOutlineWindow"
+      ],
+      "sourceResponsibility": "browser-owned",
+      "upstreamFile": null,
+      "upstreamSymbols": []
+    }
+  }
+}

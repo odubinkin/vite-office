@@ -1,0 +1,44 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "status": "mapped",
+    "localPath": "apps/office/src/sc/source/ui/view/tabview.ts",
+    "upstreamPath": "sc/source/ui/view/tabview.cxx",
+    "localSymbols": [
+      "FreezeSplitters",
+      "RemoveSplit",
+      "SplitAtCursor"
+    ],
+    "upstreamSymbols": [
+      "ScTabView::FreezeSplitters",
+      "ScTabView::RemoveSplit",
+      "ScTabView::SplitAtCursor"
+    ],
+    "preservedResponsibilities": [
+      "Uses actual ScViewData pane modes, active pane and scroll origins for source Calc split and freeze behavior, with CSS pixel geometry supplied by the browser grid device."
+    ],
+    "omittedResponsibilities": [
+      "Native VCL window and drawing map objects are represented by the existing browser grid geometry. LibreOfficeKit is a separate view profile."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sc/source/ui/view/tabview.ts",
+          "marker": "FreezeSplitters"
+        },
+        {
+          "path": "apps/office/src/sc/browser/presentation/calc-pane-commands.test.tsx",
+          "marker": "opens Freeze First Row"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sc/source/ui/view/tabview.cxx",
+          "marker": "ScTabView::FreezeSplitters"
+        }
+      ]
+    }
+  }
+}

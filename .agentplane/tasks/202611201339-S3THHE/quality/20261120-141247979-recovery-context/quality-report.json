@@ -1,0 +1,25 @@
+{
+  "schema_version": 1,
+  "task_id": "202611201339-S3THHE",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-11-20T14:12:47.979Z",
+  "verdict": "pass",
+  "summary": "Manual outline slots, axis choices, visibility, history and source persistence are verified.",
+  "evaluated_sha": "ff18fb0740c5d4cf929c7bc1acc327f4187b8467",
+  "blueprint_digest": "8d15e1c236bc4907105949f02b39dd7de3d90fc73eb10da2c26e07ab4ba8a03c",
+  "findings": [
+    "Marked Show Details retains the upstream bounding-span behavior documented as CALC-783 while keeping filtered rows hidden."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202611201339-S3THHE/README.md",
+    "output/calc-S3THHE-verification.md",
+    "output/calc-S3THHE-targeted.log",
+    "output/calc-S3THHE-typecheck-office-serial.log"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": [
+    "Outline header controls and DataPilot have separate source command paths."
+  ]
+}

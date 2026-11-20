@@ -1,4 +1,5 @@
 /** @fileoverview Native SetOptimalHeightsToRows reducer over actual compressed row flags and calculated heights; drawing services remain unported. */
+import { ScOutlineTable } from "./olinetab";
 import { Color } from "../../../../tools/inc/color";
 import type { RowHeightContext } from "../../../inc/rowheightcontext";
 import type { ScBitMaskCompressedArray } from "../../../inc/compressedarray";
@@ -270,4 +271,19 @@ export function GetDataArea(
     const last = this.GetLastDataRow(firstCol[0], lastCol[0], lastRow[0]);
     if (last < lastRow[0]) lastRow[0] = Math.max(firstRow[0], last);
   }
+}
+
+/** Borrows the sheet's outline. @param this - Source sheet. @returns Allocated outline, if present. */
+export function GetOutlineTable(this: ScTable): ScOutlineTable | undefined {
+  return this["pOutlineTable"];
+}
+
+/** Allocates the original outline lazily. @param this - Source sheet. @returns Outline. */
+export function StartOutlineTable(this: ScTable): ScOutlineTable {
+  return (this["pOutlineTable"] ??= new ScOutlineTable());
+}
+
+/** Replaces or clears the canonical sheet outline. @param this - Source sheet. @param outline - Owned outline. @returns Nothing. */
+export function SetOutlineTable(this: ScTable, outline?: ScOutlineTable): void {
+  this["pOutlineTable"] = outline;
 }

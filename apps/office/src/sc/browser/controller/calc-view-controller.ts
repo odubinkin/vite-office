@@ -1,4 +1,7 @@
 /** @fileoverview Browser input/viewport binding for the current scalar Calc model. Actual cells,marks,formula evaluation and undo stacks remain with native-shaped owners. */
+import type { ScPaneCommand } from "../../source/ui/view/tabview";
+import { ScUndoOutline } from "../../source/ui/undo/undodat";
+import { ScUndoShowHideTab, ScUndoTabColor } from "../../source/ui/undo/undotab";
 import { ScMarkData } from "../../inc/markdata";
 import { ScViewUtil } from "../../source/ui/view/viewutil";
 import * as pointerInput from "./calc-pointer-selection";
@@ -805,6 +808,14 @@ export class CalcViewController {
   SelectTab(tab: number, extend = false): void {
     if (!this.shell.GetDocument().FetchTable(tab) || !this.Commit()) return;
     this.viewShell.SetTabNo(tab, false, extend);
+    this.SyncSheetView();
+  }
+  /** Borrows the active document's source view shell. @returns Current view shell. */
+  GetViewShell(): ScTabViewShell {
+    return this.viewShell;
+  }
+  /** Synchronizes the browser's position and command state after native sheet commands. @returns Nothing. */
+  SyncSheetView(): void {
     this.anchor = this.Position();
     this.addressText = this.Address();
     this.Changed();
@@ -813,9 +824,7 @@ export class CalcViewController {
   SelectNextTab(direction: number, extend = false): void {
     if (!this.Commit()) return;
     this.viewShell.SelectNextTab(direction, extend);
-    this.anchor = this.Position();
-    this.addressText = this.Address();
-    this.Changed();
+    this.SyncSheetView();
   }
   /** Selects all actual sheets through the source view owner. @returns Nothing. */
   SelectAllTables(): void {
@@ -876,9 +885,17 @@ export class CalcViewController {
     let cursorAction = action;
     while (cursorAction instanceof SfxListUndoAction)
       cursorAction = cursorAction.GetUndoAction(redo ? cursorAction.GetActionCount() - 1 : 0);
-    if (cursorAction instanceof ScUndoWidthOrHeight) {
-      this.addressText = this.Address();
-      this.Changed();
+    if (cursorAction instanceof ScUndoOutline) cursorAction.RestoreView(this.viewShell, redo);
+    if (
+      cursorAction instanceof ScUndoWidthOrHeight ||
+      cursorAction instanceof ScUndoShowHideTab ||
+      cursorAction instanceof ScUndoTabColor ||
+      cursorAction instanceof ScUndoOutline
+    ) {
+      if (cursorAction instanceof ScUndoWidthOrHeight) {
+        this.addressText = this.Address();
+        this.Changed();
+      } else this.SyncSheetView();
       return true;
     }
     const position =
@@ -905,6 +922,20 @@ export class CalcViewController {
     }
     return true;
   }
+  /** Commits pending input before changing the real pane layout. @param command - Source pane command. @param request - Optional typed index and completion. @returns Nothing. */
+  ExecutePaneCommand(command: ScPaneCommand, request: SfxRequest): void {
+    if (!this.Commit()) {
+      request.Ignore();
+      return;
+    }
+    this.viewShell.ExecutePaneCommand(
+      command,
+      this.gridViewport.SplitDevice(this.viewData),
+      request,
+    );
+    this.Changed();
+  }
+
   /** Repositions the DOM track from the adopted native sheet. @param width - Client width. @param height - Client height. @returns Browser scroll position and whether an origin was stored. */
   RestoreScrollPosition(width: number, height: number) {
     return this.gridViewport.Restore(this.viewData, width, height);

@@ -46,9 +46,16 @@ it("opens connected source popup entries and executes group commands without cha
         entry,
       ) => entry.textContent,
     ),
-  ).toEqual(["Select All Sheets", "Deselect All Sheets", "✓View Grid Lines"]);
+  ).toEqual([
+    "Select All Sheets",
+    "Deselect All Sheets",
+    "Hide Sheet",
+    "Show Sheet…",
+    "✓View Grid Lines",
+    "Tab Color…",
+  ]);
   expect(within(menu).getByRole("menuitemcheckbox", { name: "View Grid Lines" })).toBeChecked();
-  expect(menu.querySelectorAll(":scope > [aria-hidden='true']")).toHaveLength(1);
+  expect(menu.querySelectorAll(":scope > [aria-hidden='true']")).toHaveLength(3);
   expect(within(menu).queryByRole("menuitem", { name: "Insert Sheet…" })).toBeNull();
   expect(within(menu).getByRole("menuitem", { name: "Deselect All Sheets" })).toBeEnabled();
   fireEvent.click(within(menu).getByRole("menuitem", { name: "Deselect All Sheets" }));

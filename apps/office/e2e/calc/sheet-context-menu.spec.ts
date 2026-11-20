@@ -26,7 +26,7 @@ for (const viewport of [
     await first.click({ button: "right" });
     const menu = page.getByRole("menu", { name: "Calc sheet context menu" });
     await expect(menu).toBeFocused();
-    await expect(menu.getByRole("menuitem")).toHaveCount(2);
+    await expect(menu.getByRole("menuitem")).toHaveCount(5);
     await expect(menu.getByRole("menuitemcheckbox")).toHaveCount(1);
     await expect(
       menu.getByRole("menuitemcheckbox", { name: "View Grid Lines", exact: true }),
@@ -39,7 +39,7 @@ for (const viewport of [
     await second.click({ button: "right" });
     await expect(first).toHaveAttribute("aria-current", "page");
     await expect(menu).toBeFocused();
-    await expect(menu.getByRole("menuitem", { name: "Tab Color…" })).toHaveCount(0);
+    await expect(menu.getByRole("menuitem", { name: "Tab Color…" })).toBeEnabled();
     const bounds = await menu.boundingBox();
     expect(bounds).not.toBeNull();
     expect(bounds?.x).toBeGreaterThanOrEqual(0);

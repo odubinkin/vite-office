@@ -1,0 +1,40 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sc/source/ui/view/tabview.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "calc",
+    "subsystem": "editable-workspace",
+    "capabilityIds": [
+      "CAP-52bb76b0-ff2d-4a8c-86df-79f033c21d86"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/sc/source/ui/view/tabview.ts",
+        "apps/office/src/sc/browser/presentation/calc-pane-commands.test.tsx",
+        "apps/office/e2e/calc/xlsx-frozen-grid.spec.ts",
+        "vendor/libreoffice-reference/sc/source/ui/view/tabview.cxx"
+      ],
+      "justification": "Uses actual ScViewData pane modes, active pane and scroll origins for source Calc split and freeze behavior, with CSS pixel geometry supplied by the browser grid device.",
+      "knownViolations": [],
+      "localSymbols": [
+        "FreezeSplitters",
+        "RemoveSplit",
+        "SplitAtCursor"
+      ],
+      "sourceResponsibility": "divergent",
+      "upstreamFile": "sc/source/ui/view/tabview.cxx",
+      "upstreamSymbols": [
+        "ScTabView::FreezeSplitters",
+        "ScTabView::RemoveSplit",
+        "ScTabView::SplitAtCursor"
+      ]
+    }
+  }
+}

@@ -4,6 +4,8 @@ import type { SyntheticEvent } from "react";
 import { useWindowTracking } from "../../../vcl/browser/use-window-tracking";
 import { createCalcGridFrames, calcGridBorderStyle } from "./calc-grid-borders";
 import { ScHeaderResizeHandle, type ScHeaderSizing } from "./ScHeaderResizeHandle";
+import { ScOutlineWindow } from "./ScOutlineWindow";
+import type { ScOutlineControl } from "../../source/ui/docshell/olinefun";
 import { ScCellDiagonalBorders } from "./ScCellDiagonalBorders";
 import { ScIndentItem, ScLineBreakCell } from "../../inc/attrib";
 import { SvxMarginItem } from "../../../svx/source/items/algitem";
@@ -15,6 +17,7 @@ import type { SvxHorJustifyItem, SvxVerJustifyItem } from "../../../editeng/inc/
 import type { ScTable } from "../../inc/table";
 import {
   CALC_SPLIT_HANDLE_SIZE,
+  calcGridInsets,
   CalcGridAxis,
   type CalcGridViewport,
   type CalcPaintBand,
@@ -68,6 +71,7 @@ export interface ScGridWindowProps {
   readonly headerSizing?: ScHeaderSizing;
   readonly idPrefix: string;
   readonly viewData: ScViewData;
+  readonly onOutline?: (control: ScOutlineControl) => void;
   readonly viewport: CalcGridViewport;
   readonly inputMode: ScInputMode;
   readonly inputText: string;
@@ -205,9 +209,17 @@ export function ScGridWindow(props: ScGridWindowProps): React.JSX.Element {
     },
   );
   const showGrid = viewData.GetOptions().GetOption(ViewOption.GRID) && viewData.GetShowGrid();
-  const headers = viewData.IsHeaderMode(),
-    headerWidth = headers ? 48 : 0,
-    headerHeight = headers ? viewport.rowHeight : 0;
+  const headers = viewData.IsHeaderMode();
+  const {
+    left: headerWidth,
+    top: headerHeight,
+    headerWidth: rowHeader,
+    headerHeight: columnHeader,
+    rowGutter,
+    columnGutter,
+    rowOutline,
+    columnOutline,
+  } = calcGridInsets(viewData, viewport.rowHeight);
   const normal = !!(viewport.splitColumns || viewport.splitRows);
   const activePart = viewData.GetActivePart();
   /** Combines left/right and top/bottom view identities. @param x - Horizontal band. @param y - Vertical band. @returns Native pane. */
@@ -417,14 +429,15 @@ export function ScGridWindow(props: ScGridWindowProps): React.JSX.Element {
               aria-rowindex={1}
               className="sticky top-0 z-10 bg-slate-50"
               style={{
-                height: viewport.rowHeight,
+                height: columnHeader,
+                top: columnGutter,
               }}
             >
               <div
                 role="columnheader"
                 aria-label="Select all cells"
                 className="sticky left-0 z-[11] border-b border-r border-slate-300 bg-slate-50"
-                style={{ width: 48, height: viewport.rowHeight }}
+                style={{ left: rowGutter, width: rowHeader, height: columnHeader }}
               >
                 <button
                   type="button"
@@ -448,7 +461,7 @@ export function ScGridWindow(props: ScGridWindowProps): React.JSX.Element {
                     aria-colindex={col + 1 + Number(headers)}
                     aria-label={`Column ${columnLabel(col)}`}
                     style={{
-                      left: 48 + viewport.scrollLeft + xAxis.Position(band, col),
+                      left: headerWidth + viewport.scrollLeft + xAxis.Position(band, col),
                       clipPath: columnClip(band, col),
                       width: NativeViewData.ToPixel(table.GetColWidth(col), 1 / 15),
                       height: viewport.rowHeight,
@@ -509,7 +522,8 @@ export function ScGridWindow(props: ScGridWindowProps): React.JSX.Element {
                     aria-colindex={1}
                     aria-label={`Row ${r + 1}`}
                     style={{
-                      width: 48,
+                      left: rowGutter,
+                      width: rowHeader,
                       height: NativeViewData.ToPixel(table.GetRowHeight(r), 1 / 15),
                     }}
                     className="sticky left-0 z-[3] border-b border-r border-slate-300 bg-slate-50 text-center font-normal"
@@ -734,6 +748,43 @@ export function ScGridWindow(props: ScGridWindowProps): React.JSX.Element {
           )}
         </div>
       </div>
+      {rowGutter > 0 && rowOutline && props.onOutline && (
+        <ScOutlineWindow
+          columns={false}
+          table={table}
+          tree={rowOutline}
+          axis={yAxis}
+          extent={rowGutter}
+          crossInset={columnGutter}
+          header={columnHeader}
+          formatEntry={
+            /** Formats the visible row number. @param index - Native row. @returns Label. */ (
+              index,
+            ) => String(index + 1)
+          }
+          activate={props.onOutline}
+        />
+      )}
+      {columnGutter > 0 && columnOutline && props.onOutline && (
+        <ScOutlineWindow
+          columns
+          table={table}
+          tree={columnOutline}
+          axis={xAxis}
+          extent={columnGutter}
+          crossInset={rowGutter}
+          header={rowHeader}
+          formatEntry={columnLabel}
+          activate={props.onOutline}
+        />
+      )}
+      {rowGutter > 0 && columnGutter > 0 && (
+        <div
+          aria-hidden="true"
+          className="pointer-events-none absolute left-0 top-0 z-20 bg-slate-100"
+          style={{ width: rowGutter, height: columnGutter }}
+        />
+      )}
       {viewport.frozenColumns && (
         <div
           aria-hidden="true"

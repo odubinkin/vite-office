@@ -1,0 +1,37 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "status": "mapped",
+    "localPath": "apps/office/src/svl/source/items/ilstitem.ts",
+    "upstreamPath": "svl/source/items/ilstitem.cxx",
+    "localSymbols": [
+      "SfxIntegerListItem"
+    ],
+    "upstreamSymbols": [
+      "SfxIntegerListItem::Clone",
+      "SfxIntegerListItem::QueryValue"
+    ],
+    "preservedResponsibilities": [
+      "The typed selection request owns ordered signed 32-bit values and supports equality, clone and query."
+    ],
+    "omittedResponsibilities": [
+      "UNO converter-based mutation and native pool registration are unported."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/svl/source/items/ilstitem.ts",
+          "marker": "SfxIntegerListItem"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/svl/source/items/ilstitem.cxx",
+          "marker": "SfxIntegerListItem::Clone"
+        }
+      ]
+    }
+  }
+}

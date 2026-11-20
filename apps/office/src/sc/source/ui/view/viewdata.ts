@@ -251,6 +251,20 @@ export class ScViewData {
     }
     this.maMarkData.SetSelectedTabs(selected);
   }
+  private paneLayoutRevision = 0;
+
+  /** Returns the layout change counter used when rebuilding physical grid windows. @returns Revision. */
+  GetPaneLayoutRevision(): number {
+    return this.paneLayoutRevision;
+  }
+
+  /** Applies new split modes, boundaries, origins and the active grid as one native view change. @param layout - Updated per-sheet view layout. @returns Nothing. */
+  SetPaneLayout(layout: SheetPaneLayout): void {
+    setSheetPaneLayout(this.mrDoc, this.GetTabNumber(), layout);
+    this.pThisTab.eWhichActive = this.GetPaneLayout()?.activePane ?? SheetPane.BOTTOMLEFT;
+    this.paneLayoutRevision++;
+  }
+
   /** Borrows the geometry of the current native sheet view. @returns Pane geometry or the default view. */
   GetPaneLayout(): SheetPaneLayout | undefined {
     return getSheetPaneLayout(this.mrDoc, this.GetTabNumber());

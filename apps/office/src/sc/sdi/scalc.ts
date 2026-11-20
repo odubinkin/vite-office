@@ -1,5 +1,7 @@
 /** @fileoverview Consumed Calc SDI slots from scalc.sdi,sc.hrc,sfxsids.hrc and solar.hrc; no local command IDs are invented. */
 import { calcViewCommands, createCalcViewSlots, type CalcViewCommandTarget } from "./tabvwsh";
+import type { ScTabViewShell } from "../source/ui/view/tabvwsh4";
+import type { ScPaneCommand } from "../source/ui/view/tabview";
 import type { SfxRequest } from "../../sfx2/source/control/request";
 import {
   createCalcTextEffectSlots,
@@ -81,6 +83,9 @@ export interface CalcCommandTarget
   SelectAllTables(): void;
   DeselectAllTables(): void;
   HasMultipleSelectedTables(): boolean;
+  GetViewShell(): ScTabViewShell;
+  ExecutePaneCommand(command: ScPaneCommand, request: SfxRequest): void;
+  Navigate(columns: number, rows: number, extend?: boolean): boolean;
 }
 /** Resource labels for the initial implemented edit slots; full Calc resource/menu projection follows separately. */
 export const calcEditCommands = [
@@ -145,6 +150,32 @@ export const calcSheetSelectionCommands = [
   { id: ".uno:TableSelectAll", slotId: 26361, label: "Select All Sheets" },
   { id: ".uno:TableDeselectAll", slotId: 26365, label: "Deselect All Sheets" },
 ] as const;
+/** Native tab commands and the separate color argument Which ID from sc.hrc. */
+export const calcSheetCommands = {
+  hide: { id: ".uno:Hide", slotId: 26294, label: "Hide Sheet" },
+  show: { id: ".uno:Show", slotId: 26295, label: "Show Sheet" },
+  select: { id: ".uno:SelectTables", slotId: 26090, label: "Select Sheets" },
+  color: { id: ".uno:SetTabBgColor", slotId: 26366, label: "Sheet Tab Color" },
+} as const;
+export const FID_TAB_SET_TAB_BG_COLOR = 26367;
+
+/** Native split and freeze window slots from sc.hrc. */
+export const calcPaneCommands = [
+  { id: ".uno:FreezePanesRow", label: "Freeze First Row", slotId: 26184, kind: "row" },
+  { id: ".uno:FreezePanesColumn", label: "Freeze First Column", slotId: 26185, kind: "column" },
+  { id: ".uno:FreezePanes", label: "Freeze Panes", slotId: 26070, kind: "cursor" },
+  { id: ".uno:SplitWindow", label: "Split Window", slotId: 26069, kind: "split" },
+] as const;
+
+/** Source cell-shell and view-shell manual outline slots. */
+export const calcOutlineCommands = [
+  { id: ".uno:Group", slotId: 26355, label: "Group", kind: "group" },
+  { id: ".uno:Ungroup", slotId: 26356, label: "Ungroup", kind: "ungroup" },
+  { id: ".uno:HideDetail", slotId: 26353, label: "Hide Details", kind: "hide" },
+  { id: ".uno:ShowDetail", slotId: 26354, label: "Show Details", kind: "show" },
+  { id: ".uno:ClearOutline", slotId: 10234, label: "Remove Outline", kind: "clear" },
+] as const;
+
 /** Native normal-grid selection slots from SID_KEYFUNC_START+26/+27. */
 export const calcCellSelectionCommands = [
   { id: ".uno:Deselect", slotId: 26549, label: "Undo Selection" },
@@ -370,6 +401,9 @@ export const calcUserCommands = [
   ...calcFileCommands,
   ...calcSheetNavigationCommands,
   ...calcSheetSelectionCommands,
+  ...Object.values(calcSheetCommands),
+  ...calcPaneCommands,
+  ...calcOutlineCommands,
   ...calcCellSelectionCommands,
   ...calcVisibleSelectionCommands,
   calcGoToSheetCommand,
@@ -794,6 +828,32 @@ export function createCalcInterface(
           ) => target.SelectNextTab(resource.direction, resource.extend),
       }),
     ),
+    ...calcPaneCommands.map(
+      /** Binds the actual per-sheet split and freeze commands. @param command - Source slot definition. @returns Slot. */
+      (command): SfxSlotDefinition<CalcCommandTarget> => ({
+        commandUrl: command.id,
+        slotId: command.slotId,
+        label: command.label,
+        getState:
+          /** Reads the actual pane modes. @param target - View owner. @returns Command state. */
+          (target) => target.GetViewShell().GetPaneCommandState(command.kind),
+        execute:
+          /** Dispatches one native pane operation. @param target - View owner. @param request - Source request. @returns Nothing. */
+          (target, request) => target.ExecutePaneCommand(command.kind, request),
+      }),
+    ),
+    {
+      commandUrl: ".uno:GoToStart",
+      slotId: 5742,
+      label: "To Document Begin",
+      shortcuts: ["Ctrl+HOME", "Meta+HOME"],
+      execute:
+        /** Moves the cursor to the editable pane's start. @param target - View owner. @returns Accepted. */
+        (target) => {
+          if (!target.Commit()) return false;
+          return target.Navigate(...target.GetViewShell().MoveToStartDelta());
+        },
+    },
     ...calcSheetSelectionCommands.map(
       /** Binds source tab-group slots and their original availability rule. @param resource - Source slot. @returns Slot. */ (
         resource,
