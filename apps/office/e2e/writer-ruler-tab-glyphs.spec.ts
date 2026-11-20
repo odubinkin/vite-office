@@ -86,6 +86,7 @@ for (const width of [1280, 390]) {
       mimeType: "application/vnd.oasis.opendocument.text",
       name: "ruler-glyphs.odt",
     });
+    await expect(page.getByRole("dialog", { name: "Open", exact: true })).toBeHidden();
     const editor = page.getByLabel("Writer document body", { exact: true });
     const paragraph = page.getByRole("textbox", { name: "Writer document text" });
     await expect(paragraph).toHaveText("RulerTabGlyphProof");
