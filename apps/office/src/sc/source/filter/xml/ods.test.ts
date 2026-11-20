@@ -106,7 +106,7 @@ it("maps optional ODF numeric digits, named months and positioned decimal text",
     expect(code(4)).toBe("@");
     expect(code(5)).toBe("General");
     expect(code(6)).toBe("General");
-    expect(code(7)).toBe("General");
+    expect(code(7)).toBe("#,###.00");
     expect(code(8)).toBe("0.00E+00");
     const result = await (
       await DocumentArchive.open(await writeOdsDocument(first))

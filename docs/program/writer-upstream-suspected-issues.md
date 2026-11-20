@@ -5325,3 +5325,12 @@ single text node is longer than ten characters or lacks the character
 `0`. Writer preserves the visible text and the source heuristic.
 
 - [Original numeric-content rescue](../../vendor/libreoffice-reference/sw/source/filter/xml/xmltbli.cxx#L1911)
+
+### WRITER-682 — Missing integer digits override automatic decimal selection
+
+For a plain ODF number style without either digit count, the shared data
+style context first selects General for automatic decimal places and
+then replaces it with the locale's system number format for automatic
+integer digits. Writer and Calc retain that order.
+
+- [Original automatic number format selection](../../vendor/libreoffice-reference/xmloff/source/style/xmlnumfi.cxx#L1627)
