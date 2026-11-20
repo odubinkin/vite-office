@@ -196,3 +196,50 @@ test("recalculates the original tdf167019 formulas after browser storage reopen"
   expect(xml).toContain("<formula>100</formula><formula>152</formula>");
   expect(await saved.readTextEntry("xl/styles.xml")).toContain('rgb="FFCC0000"');
 });
+
+test("opens and preserves the original tdf170298 dynamic names and formatting", /** Uses the browser's real file dialog, saved ODS and downloaded XLSX. @param fixtures - Playwright fixtures. @param fixtures.page - Chromium page. @returns Completion. */ async ({
+  page,
+}) => {
+  const fixture = new URL(
+    "../../../../vendor/libreoffice-reference/sc/qa/unit/data/xlsx/tdf170298.xlsx",
+    import.meta.url,
+  );
+  await page.clock.setFixedTime(new Date(2026, 5, 16, 12));
+  await page.goto("/calc");
+  const open = page.getByRole("button", { name: "Open", exact: true });
+  const dateCell = page.getByRole("gridcell", { name: /^A7(?:\s|$)/u });
+  await open.click();
+  await page.getByRole("tab", { name: "On computer" }).click();
+  await page.getByLabel("Browse").setInputFiles({
+    buffer: await readFile(fixture),
+    name: "tdf170298.xlsx",
+    mimeType: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+  });
+  await expect(page.getByRole("heading", { name: "tdf170298" })).toBeVisible();
+  await expect(dateCell).toHaveCSS("background-color", "rgb(0, 176, 80)");
+
+  await page.getByRole("menuitem", { name: "File" }).click();
+  await page.getByRole("menuitem", { name: "Save As…" }).click();
+  await page.getByRole("textbox", { name: "New copy name" }).fill("Dynamic date copy");
+  await page.getByRole("button", { name: "Save copy" }).click();
+  await expect(page.getByRole("dialog")).toHaveCount(0);
+  await page.reload();
+  await open.click();
+  await page.getByRole("tab", { name: "In browser" }).click();
+  await page.getByRole("button", { name: "Dynamic date copy", exact: true }).click();
+  await expect(dateCell).toHaveCSS("background-color", "rgb(0, 176, 80)");
+
+  const downloaded = page.waitForEvent("download");
+  await page.getByRole("menuitem", { name: "File" }).click();
+  await page.getByRole("menuitem", { name: "Export…" }).click();
+  await page.getByRole("button", { name: "Download XLSX" }).click();
+  const path = await (await downloaded).path();
+  if (!path) throw new Error("Missing XLSX download.");
+  const saved = await DocumentArchive.open(await readFile(path));
+  expect(await saved.readTextEntry("xl/workbook.xml")).toContain(
+    "OFFSET(#REF!,,,12-COUNTIF(#REF!,&quot;&quot;))",
+  );
+  const xml = await saved.readTextEntry("xl/worksheets/sheet1.xml");
+  expect(xml).toContain("AND(NOT(ISBLANK(A$6)),ISBLANK(A7))");
+  expect(xml).toContain("MONTH(EDATE(A$7,1))&lt;MONTH(TODAY())");
+});

@@ -1,0 +1,45 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/sc/source/core/tool/odffmap.ts",
+    "status": "mapped",
+    "upstreamPath": "sc/source/core/tool/odffmap.cxx",
+    "localSymbols": [
+      "ANALYSIS_EDATE",
+      "EDATE"
+    ],
+    "upstreamSymbols": [
+      "com.sun.star.sheet.addin.Analysis.getEdate"
+    ],
+    "preservedResponsibilities": [
+      "Keeps the original EDATE spelling and UNO analysis function identity for ODF and OOXML."
+    ],
+    "omittedResponsibilities": [
+      "The remaining native add-in name rows are outside this slice."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sc/source/core/tool/odffmap.ts",
+          "marker": "ANALYSIS_EDATE"
+        },
+        {
+          "path": "apps/office/src/sc/source/core/tool/interpr1.reference.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sc/source/filter/oox/excelfilter.page-settings.test.ts",
+          "marker": "expectTdf170298"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "sc/source/core/tool/odffmap.cxx",
+          "marker": "com.sun.star.sheet.addin.Analysis.getEdate"
+        }
+      ]
+    }
+  }
+}

@@ -6,6 +6,7 @@ import {
   FormulaSpaceToken,
   FormulaMissingToken,
   FormulaErrorToken,
+  FormulaExternalToken,
   FormulaIndexToken,
   StackVar,
 } from "../../../../formula/inc/token";
@@ -38,6 +39,7 @@ import {
 import type { FormulaToken } from "../../../../formula/inc/token";
 import type { ScMatrix } from "./scmatrix";
 import { doubleToString } from "../../../../sal/rtl/strtmpl.math";
+import { ANALYSIS_EDATE, EDATE } from "./odffmap";
 import { QuoteTabName } from "./address.ooo";
 import { parseExternalReference } from "./compiler.external";
 import { getExternalFileUrl } from "../../ui/docshell/externalrefmgr";
@@ -324,6 +326,8 @@ export class ScCompiler extends FormulaCompiler {
 
   /** Writes symbolic names and typed inline matrices from the actual lexical tokens. @param token - Source token. @returns Formula spelling. */
   protected override CreateStringFromToken(token: FormulaToken): string {
+    if (token instanceof FormulaExternalToken && text(token.GetExternal()) === ANALYSIS_EDATE)
+      return EDATE;
     if (token instanceof ScExternalSingleRefToken || token instanceof ScExternalDoubleRefToken)
       return this.CreateStringFromExternal(token);
     if (token instanceof ScMatrixToken)
@@ -672,7 +676,22 @@ export class ScCompiler extends FormulaCompiler {
       const remaining = source.slice(index);
       const identifier = nameIdentifier.exec(remaining);
       if (identifier && /^[ \t\r\n]*\(/.test(source.slice(index + identifier[0].length))) {
-        const functionCode = symbols[identifier[0].toUpperCase()];
+        const functionName = identifier[0].toUpperCase();
+        if (functionName === EDATE || functionName === ANALYSIS_EDATE.toUpperCase()) {
+          const external = unicode(ANALYSIS_EDATE);
+          try {
+            if (!array.AddToken(new FormulaExternalToken(OpCode.ocExternal, external))) {
+              this.SetError(FormulaError.CodeOverflow);
+              break;
+            }
+          } finally {
+            external.dispose();
+          }
+          index += identifier[0].length;
+          last = OpCode.ocExternal;
+          continue;
+        }
+        const functionCode = symbols[functionName];
         if (functionCode === undefined)
           throw new Error("Formula function/name lookup is not implemented");
         if (!array.AddOpCode(functionCode)) {

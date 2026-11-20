@@ -33,7 +33,7 @@ import { SharedString, type SharedStringConstReference } from "../../../../svl/i
 import type { FormulaConstTokenRef } from "../../../../formula/inc/types";
 import { FormulaError, GetDoubleErrorValue } from "../../../../formula/inc/errorcodes";
 import { OpCode } from "../../../../formula/inc/opcode";
-import { approxAdd, approxFloor, approxSub } from "../../../../sal/inc/rtl/math";
+import { approxAdd, approxCeil, approxFloor, approxSub } from "../../../../sal/inc/rtl/math";
 import { div, power } from "../../../inc/math";
 import type { ScFormulaCell } from "../../../inc/formulacell";
 import type { ScDocument } from "../../../inc/document";
@@ -42,14 +42,16 @@ import type { ScTokenArray } from "../../../inc/tokenarray";
 import type { ScInterpreterContext } from "../../../inc/interpretercontext";
 import { KahanSum } from "../../../inc/kahan";
 import { text, unicode } from "../../../../i18nlangtag/source/isolang/isolang.tables";
-import { SAL_MAX_INT32 } from "../../../../sal/inc/types";
+import { SAL_MAX_INT32, SAL_MIN_INT32 } from "../../../../sal/inc/types";
 import { GetString as GetEditString } from "./editutil";
 import { ScMatValType } from "../../../inc/types";
 import type { ScExternalCacheToken } from "../../ui/docshell/externalrefmgr";
 import { CalculateMatrixLookup, InterpretReferenceOpcode, ScAnd } from "./interpr1";
 import { InterpretConditionalAggregate } from "./interpr1.conditional";
 import { CompareScalar } from "./compare";
-import { ScRangeFunc } from "./interpr2";
+import { InterpretDateOpcode, ScRangeFunc } from "./interpr2";
+import { InterpretAnalysisAddIn } from "./addincol.analysis";
+import { ScIsEmpty, ScNot, ScOffset } from "./interpr1.reference";
 import { isComparison } from "../../../../formula/inc/FormulaCompiler";
 import { ScQueryEntry, type ScQueryItem } from "./queryentry";
 import { ScQueryCellIteratorDirect } from "../data/queryiter";
@@ -184,6 +186,16 @@ export class ScInterpreter {
     if (token.GetType() === StackVar.svString)
       return this.ConvertStringToValue((token as FormulaStringToken).GetString().getString());
     return (token as FormulaDoubleToken).GetDouble();
+  }
+  /** Converts the native scalar with approximate truncation and signed32 bounds. @returns Integer or error fallback. */
+  GetInt32(): number {
+    const value = this.GetDouble();
+    const rounded = value < 0 ? approxCeil(value) : approxFloor(value);
+    if (rounded < SAL_MIN_INT32 || rounded > SAL_MAX_INT32) {
+      this.SetError(FormulaError.IllegalArgument);
+      return SAL_MAX_INT32;
+    }
+    return rounded;
   }
   /** Drops the actual top token,assigning its error exactly as native PopError. @returns Nothing. */
   private PopError(): void {
@@ -839,6 +851,9 @@ export class ScInterpreter {
       else if (op === OpCode.ocPi) this.PushDouble(Math.PI);
       else if (op === OpCode.ocNotAvail) this.SetError(FormulaError.NotAvailable);
       else if (op === OpCode.ocAnd) ScAnd.call(this, (token as FormulaByteToken).GetByte());
+      else if (op === OpCode.ocNot) ScNot.call(this, (token as FormulaByteToken).GetByte());
+      else if (op === OpCode.ocIsEmpty) ScIsEmpty.call(this, (token as FormulaByteToken).GetByte());
+      else if (op === OpCode.ocOffset) ScOffset.call(this, (token as FormulaByteToken).GetByte());
       else if (isComparison(op)) {
         const right = this.PopComparisonValue();
         const left = this.PopComparisonValue();
@@ -875,7 +890,9 @@ export class ScInterpreter {
       } else if (op === OpCode.ocRange) ScRangeFunc.call(this);
       else if (
         !InterpretConditionalAggregate.call(this, token) &&
-        !InterpretReferenceOpcode.call(this, token)
+        !InterpretReferenceOpcode.call(this, token) &&
+        !InterpretDateOpcode.call(this, token) &&
+        !InterpretAnalysisAddIn.call(this, token)
       )
         throw new Error("Interpreter opcode is not implemented");
       if (this.nGlobalError !== FormulaError.NONE) break;

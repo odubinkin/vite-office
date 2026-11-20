@@ -7220,3 +7220,28 @@ rules. This behavior is retained and tested.
 - [Original conditional comparison and formula dispatch](../../vendor/libreoffice-reference/sc/source/core/data/conditio.cxx)
 - [Original formula value accessor](../../vendor/libreoffice-reference/sc/source/core/data/formulacell.cxx)
 - [Conditional comparison regression](../../apps/office/src/sc/source/core/data/conditio.entry.test.ts)
+
+### CALC-762 — OFFSET narrows columns before checking sheet bounds
+
+The original OFFSET adds the signed32 column delta to the starting column,
+narrows the result to `SCCOL`, then checks whether that column is valid.
+In the native two's-complement build, adding 65,536 to column A therefore
+wraps back to column A. The implemented formula keeps that ordering.
+The native OOXML writer also changes a literal first argument such as
+`OFFSET(9,1,0)` to a deleted reference on export, which can change the
+error observed after reopening the formula.
+
+- [Original reference arithmetic](../../vendor/libreoffice-reference/sc/source/core/tool/interpr1.cxx)
+- [Original OOXML token export](../../vendor/libreoffice-reference/formula/source/core/api/FormulaCompiler.cxx)
+- [OFFSET regressions](../../apps/office/src/sc/source/core/tool/interpr1.reference.test.ts)
+
+### CALC-763 — EDATE bounds its initial year estimate before calendar resolution
+
+The Analysis add-in rejects a normalized day number when integer division
+by 365 exceeds the signed16 year maximum. The estimate ignores leap days.
+Consequently, some dates within the representable year range, including
+31 December 32767, are rejected before the date can be resolved. Calc
+preserves this check.
+
+- [Original add-in date conversion](../../vendor/libreoffice-reference/scaddins/source/analysis/analysishelper.cxx)
+- [EDATE regressions](../../apps/office/src/sc/source/core/tool/interpr1.reference.test.ts)

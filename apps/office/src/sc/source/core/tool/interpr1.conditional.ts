@@ -23,10 +23,16 @@ interface Condition {
 /** Dispatches conditional aggregates compiled with the native parameter count. @param this - Active Calc interpreter. @param token - Opcode and arity. @returns Whether dispatched. */
 export function InterpretConditionalAggregate(this: ScInterpreter, token: FormulaToken): boolean {
   const op = token.GetOpCode();
-  if (op !== OpCode.ocAverageIf && op !== OpCode.ocMinIfs_MS && op !== OpCode.ocMaxIfs_MS)
+  if (
+    op !== OpCode.ocAverageIf &&
+    op !== OpCode.ocMinIfs_MS &&
+    op !== OpCode.ocMaxIfs_MS &&
+    op !== OpCode.ocCountIf
+  )
     return false;
   const count = (token as FormulaByteToken).GetByte();
-  if (op === OpCode.ocAverageIf) IterateParametersIf.call(this, count);
+  if (op === OpCode.ocCountIf) ScCountIf.call(this, count);
+  else if (op === OpCode.ocAverageIf) IterateParametersIf.call(this, count);
   else IterateParametersIfs.call(this, count, op === OpCode.ocMinIfs_MS);
   return true;
 }
@@ -69,6 +75,36 @@ function popCondition(this: ScInterpreter, dimensionError: FormulaError): Condit
     return undefined;
   }
   return { range, query, evaluator: new ScQueryEvaluator(this.mrDoc, query.entry) };
+}
+
+/** Counts matched worksheet cells, accounting for the unallocated blank portion of the native range. @param this - Active interpreter. @param count - Argument count. @returns Nothing. */
+function ScCountIf(this: ScInterpreter, count: number): void {
+  if (count !== 2) {
+    this.SetError(count < 2 ? FormulaError.ParameterExpected : FormulaError.IllegalParameter);
+    return;
+  }
+  const condition = popCondition.call(this, FormulaError.IllegalParameter);
+  if (!condition) return;
+  const { range, query, evaluator } = condition;
+  const { aStart, aEnd } = range;
+  const empty = Number(evaluator.matchesCriterion(new ScRefCellValue(), aStart, query));
+  let result = empty * (aEnd.Col() - aStart.Col() + 1) * (aEnd.Row() - aStart.Row() + 1);
+  const cells = new ScHorizontalCellIterator(
+    this.mrDoc,
+    aStart.Tab(),
+    aStart.Col(),
+    aStart.Row(),
+    aEnd.Col(),
+    aEnd.Row(),
+  );
+  const col: [number] = [0];
+  const row: [number] = [0];
+  const address = new ScAddress(aStart);
+  for (let cell = cells.GetNext(col, row); cell; cell = cells.GetNext(col, row)) {
+    address.Set(col[0], row[0], aStart.Tab());
+    result += Number(evaluator.matchesCriterion(cell, address, query)) - empty;
+  }
+  this["PushDouble"](result);
 }
 
 /** Runs the original scalar AVERAGEIF alignment and clipping rules. @param this - Active interpreter. @param count - Argument count. @returns Nothing. */

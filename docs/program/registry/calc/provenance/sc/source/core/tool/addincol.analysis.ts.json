@@ -1,0 +1,58 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/sc/source/core/tool/addincol.analysis.ts",
+    "status": "mapped",
+    "upstreamPath": "sc/source/core/tool/interpr4.cxx",
+    "localSymbols": [
+      "InterpretAnalysisAddIn",
+      "getEdate"
+    ],
+    "upstreamSymbols": [
+      "ScInterpreter::ScExternal"
+    ],
+    "preservedResponsibilities": [
+      "Binds the typed Analysis.getEdate external formula token to the original integer argument and basis-5 calendar behavior."
+    ],
+    "omittedResponsibilities": [
+      "The general UNO add-in service, dynamic add-in discovery, and matrix argument handling remain outside this owner."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sc/source/core/tool/addincol.analysis.ts",
+          "marker": "InterpretAnalysisAddIn"
+        },
+        {
+          "path": "apps/office/src/sc/source/core/tool/interpr1.reference.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sc/source/filter/oox/excelfilter.page-settings.test.ts",
+          "marker": "expectTdf170298"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "sc/source/core/tool/interpr4.cxx",
+          "marker": "ScInterpreter::ScExternal"
+        },
+        {
+          "path": "scaddins/source/analysis/analysis.cxx",
+          "marker": "AnalysisAddIn::getEdate"
+        },
+        {
+          "path": "scaddins/source/analysis/analysishelper.cxx",
+          "marker": "ScaDate::addMonths"
+        }
+      ]
+    },
+    "filenameDivergence": {
+      "localPath": "apps/office/src/sc/source/core/tool/addincol.analysis.ts",
+      "stackNecessity": "responsibility-split",
+      "rationale": "Keeps the consumed native interpreter or analysis-add-in responsibilities in a focused source fragment."
+    }
+  }
+}

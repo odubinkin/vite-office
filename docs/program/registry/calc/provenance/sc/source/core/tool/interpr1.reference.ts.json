@@ -1,0 +1,61 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/sc/source/core/tool/interpr1.reference.ts",
+    "status": "mapped",
+    "upstreamPath": "sc/source/core/tool/interpr1.cxx",
+    "localSymbols": [
+      "ScOffset",
+      "ScNot",
+      "ScIsEmpty"
+    ],
+    "upstreamSymbols": [
+      "ScInterpreter::ScOffset",
+      "ScInterpreter::ScNot",
+      "ScInterpreter::ScIsEmpty"
+    ],
+    "preservedResponsibilities": [
+      "Evaluates OFFSET over original local and cached external reference tokens and the scalar NOT and ISBLANK predicates."
+    ],
+    "omittedResponsibilities": [
+      "Array logical dispatch, matrix-jump execution, and recalculation after scalar error propagation are outside the represented slice."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sc/source/core/tool/interpr1.reference.ts",
+          "marker": "ScOffset"
+        },
+        {
+          "path": "apps/office/src/sc/source/core/tool/interpr1.reference.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sc/source/filter/oox/excelfilter.page-settings.test.ts",
+          "marker": "expectTdf170298"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "sc/source/core/tool/interpr1.cxx",
+          "marker": "ScInterpreter::ScOffset"
+        },
+        {
+          "path": "sc/source/core/tool/interpr1.cxx",
+          "marker": "ScInterpreter::ScNot"
+        },
+        {
+          "path": "sc/source/core/tool/interpr1.cxx",
+          "marker": "ScInterpreter::ScIsEmpty"
+        }
+      ]
+    },
+    "filenameDivergence": {
+      "localPath": "apps/office/src/sc/source/core/tool/interpr1.reference.ts",
+      "stackNecessity": "responsibility-split",
+      "rationale": "Keeps the consumed native interpreter or analysis-add-in responsibilities in a focused source fragment."
+    }
+  }
+}

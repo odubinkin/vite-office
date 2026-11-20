@@ -7,13 +7,16 @@
     "localPath": "apps/office/src/sc/source/core/tool/interpr1.conditional.ts",
     "upstreamPath": "sc/source/core/tool/interpr1.cxx",
     "localSymbols": [
-      "InterpretConditionalAggregate"
+      "InterpretConditionalAggregate",
+      "ScCountIf"
     ],
     "upstreamSymbols": [
-      "ScInterpreter::IterateParametersIf"
+      "ScInterpreter::IterateParametersIf",
+      "ScInterpreter::ScCountIf"
     ],
     "preservedResponsibilities": [
-      "Uses the scalar worksheet-reference paths for AVERAGEIF, MINIFS and MAXIFS, including original left-edge alignment, arity, range geometry and result sentinels."
+      "Uses the scalar worksheet-reference paths for AVERAGEIF, MINIFS and MAXIFS, including original left-edge alignment, arity, range geometry and result sentinels.",
+      "Counts matches over scalar worksheet criteria and sparse blank spans."
     ],
     "omittedResponsibilities": [
       "Matrix operands and external reference-list arrays, threaded execution, and ICU regular-expression criteria remain pending."
@@ -27,12 +30,20 @@
         {
           "path": "apps/office/src/sc/source/core/tool/interpr1.conditional.test.ts",
           "marker": "evaluates Excel criteria"
+        },
+        {
+          "path": "apps/office/src/sc/source/core/tool/interpr1.reference.test.ts",
+          "marker": "@fileoverview"
         }
       ],
       "upstream": [
         {
           "path": "vendor/libreoffice-reference/sc/source/core/tool/interpr1.cxx",
           "marker": "ScInterpreter::IterateParametersIf"
+        },
+        {
+          "path": "sc/source/core/tool/interpr1.cxx",
+          "marker": "ScInterpreter::ScCountIf"
         }
       ]
     },

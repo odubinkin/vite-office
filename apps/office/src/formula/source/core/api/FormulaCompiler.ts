@@ -7,6 +7,7 @@ import {
   FormulaDoubleToken,
   FormulaStringToken,
   FormulaErrorToken,
+  FormulaExternalToken,
   FormulaSpaceToken,
   StackVar,
 } from "../../../inc/token";
@@ -50,6 +51,13 @@ const arithmetic = new Set<OpCode>([
   OpCode.ocNotAvail,
   OpCode.ocIf,
   OpCode.ocAnd,
+  OpCode.ocOffset,
+  OpCode.ocCountIf,
+  OpCode.ocNot,
+  OpCode.ocIsEmpty,
+  OpCode.ocGetMonth,
+  OpCode.ocGetActDate,
+  OpCode.ocExternal,
   OpCode.ocRow,
   OpCode.ocColumn,
   OpCode.ocAddress,
@@ -107,7 +115,27 @@ export class FormulaCompiler {
     )
       throw new Error("Scalar formula symbols must be selected before serialization");
     let result = this.mpArr.GetLen() && this.mpArr.IsRecalcModeForced() ? "=" : "";
-    for (const token of this.mpArr.Tokens()) result += this.CreateStringFromToken(token);
+    for (let index = 0; index < this.mpArr.GetLen(); ++index) {
+      const token = this.mpArr.TokenAt(index) as FormulaToken;
+      result += this.CreateStringFromToken(token);
+      if (
+        this.meGrammar !== FormulaGrammar.Grammar.GRAM_OOXML ||
+        token.GetOpCode() !== OpCode.ocOffset ||
+        token.GetType() !== StackVar.svByte
+      )
+        continue;
+      const opening = this.mpArr.TokenAt(index + 1);
+      const reference = this.mpArr.TokenAt(index + 2);
+      if (
+        opening?.GetOpCode() === OpCode.ocOpen &&
+        opening.GetType() === StackVar.svSep &&
+        reference?.GetOpCode() === OpCode.ocPush &&
+        (reference.GetType() === StackVar.svDouble || reference.GetType() === StackVar.svString)
+      ) {
+        result += this.CreateStringFromToken(opening) + "#REF!";
+        index += 2;
+      }
+    }
     const value = new OUString(
       Uint16Array.from(
         { length: result.length },
@@ -250,7 +278,12 @@ export class FormulaCompiler {
     this.PostProcessCode();
     this.nameFrames.length = 0;
     if (this.mpCode.length) this.mpArr.CreateNewRPNArrayFromData(this.mpCode, this.mpCode.length);
-    if (this.mpArr.HasOpCodeRPN(OpCode.ocIndirect)) this.mpArr.SetExclusiveRecalcModeAlways();
+    if (
+      this.mpArr.HasOpCodeRPN(OpCode.ocIndirect) ||
+      this.mpArr.HasOpCodeRPN(OpCode.ocOffset) ||
+      this.mpArr.HasOpCodeRPN(OpCode.ocGetActDate)
+    )
+      this.mpArr.SetExclusiveRecalcModeAlways();
     if (this.mpArr.GetCodeError() !== FormulaError.NONE) {
       this.mpArr.DelRPN();
       this.mpArr.SetHyperLink(false);
@@ -376,13 +409,16 @@ export class FormulaCompiler {
     if (this.mpArr.GetCodeError() !== FormulaError.NONE) return;
     const op = this.mpToken.GetOpCode();
     const logical = op === OpCode.ocTrue || op === OpCode.ocFalse;
+    const logicalResult = logical || op === OpCode.ocNot || op === OpCode.ocIsEmpty;
     // Native lcl_GetRetFormat classifies nullary logical constants separately from numbers.
     if (op !== OpCode.ocOpen && this.mnNumFmt === SvNumFormatType.UNDEFINED)
-      this.mnNumFmt = logical
+      this.mnNumFmt = logicalResult
         ? SvNumFormatType.LOGICAL
-        : op === OpCode.ocPercentSign
-          ? SvNumFormatType.PERCENT
-          : SvNumFormatType.NUMBER;
+        : op === OpCode.ocGetActDate
+          ? SvNumFormatType.DATE
+          : op === OpCode.ocPercentSign
+            ? SvNumFormatType.PERCENT
+            : SvNumFormatType.NUMBER;
     if (op === OpCode.ocPush) {
       this.PutCode(this.mpToken);
       if (this.NextToken() === OpCode.ocOpen) this.SetError(FormulaError.OperatorExpected);
@@ -391,7 +427,12 @@ export class FormulaCompiler {
       this.NextToken();
     } else if (op === OpCode.ocIf) {
       this.CompileIf(this.mpToken as FormulaJumpToken);
-    } else if (logical || op === OpCode.ocPi || op === OpCode.ocNotAvail) {
+    } else if (
+      logical ||
+      op === OpCode.ocPi ||
+      op === OpCode.ocNotAvail ||
+      op === OpCode.ocGetActDate
+    ) {
       const factor = this.mpToken;
       if (this.NextToken() !== OpCode.ocOpen) {
         this.SetError(FormulaError.PairExpected);
@@ -403,6 +444,12 @@ export class FormulaCompiler {
       }
     } else if (
       op === OpCode.ocAnd ||
+      op === OpCode.ocNot ||
+      op === OpCode.ocIsEmpty ||
+      op === OpCode.ocGetMonth ||
+      op === OpCode.ocOffset ||
+      op === OpCode.ocCountIf ||
+      op === OpCode.ocExternal ||
       op === OpCode.ocRow ||
       op === OpCode.ocColumn ||
       op === OpCode.ocAddress ||
@@ -418,7 +465,7 @@ export class FormulaCompiler {
       op === OpCode.ocVLookup ||
       op === OpCode.ocHLookup
     ) {
-      const functionToken = this.mpToken as FormulaByteToken;
+      const functionToken = this.mpToken as FormulaByteToken | FormulaExternalToken;
       let terminal = this.NextToken(),
         noParameters = false;
       if (terminal === OpCode.ocOpen) {

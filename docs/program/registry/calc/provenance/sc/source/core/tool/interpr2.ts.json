@@ -7,13 +7,17 @@
     "localPath": "apps/office/src/sc/source/core/tool/interpr2.ts",
     "upstreamPath": "sc/source/core/tool/interpr2.cxx",
     "localSymbols": [
-      "ScRangeFunc"
+      "ScRangeFunc",
+      "InterpretDateOpcode"
     ],
     "upstreamSymbols": [
-      "ScInterpreter::ScRangeFunc"
+      "ScInterpreter::ScRangeFunc",
+      "ScInterpreter::ScGetMonth",
+      "ScInterpreter::ScGetActDate"
     ],
     "preservedResponsibilities": [
-      "Pops the original pair of formula tokens and joins a dynamic range through the existing native reference combiner."
+      "Pops the original pair of formula tokens and joins a dynamic range through the existing native reference combiner.",
+      "Evaluates MONTH and TODAY using the workbook's original null date and local platform clock."
     ],
     "omittedResponsibilities": [
       "Intersection and union execution remain outside this operator."
@@ -27,12 +31,24 @@
         {
           "path": "apps/office/src/sc/source/core/tool/numeric-formula.test.ts",
           "marker": "resolves native text references"
+        },
+        {
+          "path": "apps/office/src/sc/source/core/tool/interpr1.reference.test.ts",
+          "marker": "@fileoverview"
         }
       ],
       "upstream": [
         {
           "path": "vendor/libreoffice-reference/sc/source/core/tool/interpr2.cxx",
           "marker": "ScInterpreter::ScRangeFunc"
+        },
+        {
+          "path": "sc/source/core/tool/interpr2.cxx",
+          "marker": "ScInterpreter::ScGetMonth"
+        },
+        {
+          "path": "sc/source/core/tool/interpr2.cxx",
+          "marker": "ScInterpreter::ScGetActDate"
         }
       ]
     }

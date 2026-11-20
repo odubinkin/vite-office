@@ -1,6 +1,6 @@
 /** @fileoverview Native Calc page styles through XLSX, ODS and Worker transfer. */
 import { readFileSync } from "node:fs";
-import { assert, expect, it } from "vitest";
+import { assert, expect, it, vi } from "vitest";
 import {
   DocumentArchive,
   DocumentArchiveWriter,
@@ -773,5 +773,68 @@ it("keeps differential fill and font properties sparse across both XML formats",
     }
   } finally {
     document.Dispose();
+  }
+});
+
+/** Ports the original tdf170298 conditional format assertions. @param document - Native workbook. @returns Nothing. */
+function expectTdf170298(document: ScDocument): void {
+  const formats = document.FetchTable(0)?.GetCondFormList();
+  assert(formats);
+  expect(formats.size()).toBe(2);
+  const formulas = new Map<string, string>();
+  const grammar = FormulaGrammar.Grammar.GRAM_OOXML;
+  for (const format of formats) {
+    const rule = format.GetEntry(0);
+    assert(rule instanceof ScCondFormatEntry);
+    expect(rule.GetOperation()).toBe(ScConditionMode.Direct);
+    const range = new TextDecoder().decode(XclXmlUtils.ToOString(document, format.GetRange()));
+    formulas.set(range, rule.GetExpression(rule.GetSrcPos(), 0, grammar));
+  }
+  expect(formulas.get("A7")).toBe("AND(NOT(ISBLANK(A$6)),ISBLANK(A7))");
+  expect(formulas.get("A7:AP7")).toBe(
+    'AND(A$6<>"Growth",A$6<>"",MONTH(EDATE(A$7,1))<MONTH(TODAY()))',
+  );
+  expect(document.GetRangeName()?.findByUpperName("ACCOUNTANNRETMENU")?.GetSymbol(grammar)).toBe(
+    'OFFSET(#REF!,,,12-COUNTIF(#REF!,""))',
+  );
+  const fill = document.GetCondResult(new ScAddress(0, 6))?.GetItemIfSet(ATTR_BACKGROUND, false);
+  expect((fill as SvxBrushItem | undefined)?.GetColor().toUInt32()).toBe(0x00b050);
+  expect(document.GetCondResult(new ScAddress(1, 6))).toBeUndefined();
+}
+
+it("opens both overlapping formula rules in the original tdf170298 workbook", /** Ports the native import-hang regression and round-trips through Calc storage. @returns Completion. */ async () => {
+  vi.useFakeTimers({ toFake: ["Date"] });
+  vi.setSystemTime(new globalThis.Date(2026, 5, 16, 12));
+  try {
+    const document = await ExcelFilter.importDocument(fixture("tdf170298"));
+    try {
+      expectTdf170298(document);
+      const worker = decodeCalcDocument(structuredClone(encodeCalcDocument(document)));
+      try {
+        const restored = await readOdsDocument(await writeOdsDocument(worker));
+        try {
+          expectTdf170298(restored);
+          const reopened = await ExcelFilter.importDocument(await exportXlsx(restored));
+          try {
+            expectTdf170298(reopened);
+            reopened.SetEmptyCell(new ScAddress(0, 6));
+            const fill = reopened
+              .GetCondResult(new ScAddress(0, 6))
+              ?.GetItemIfSet(ATTR_BACKGROUND, false);
+            expect((fill as SvxBrushItem | undefined)?.GetColor().toUInt32()).toBe(0xffff00);
+          } finally {
+            reopened.Dispose();
+          }
+        } finally {
+          restored.Dispose();
+        }
+      } finally {
+        worker.Dispose();
+      }
+    } finally {
+      document.Dispose();
+    }
+  } finally {
+    vi.useRealTimers();
   }
 });

@@ -1,0 +1,39 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sc/source/core/tool/addincol.analysis.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "calc",
+    "subsystem": "range-formula-execution",
+    "capabilityIds": [
+      "CAP-df5573ca-0907-47d8-a385-6cd7af847f1d"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/sc/source/core/tool/addincol.analysis.ts",
+        "sc/source/core/tool/interpr4.cxx",
+        "scaddins/source/analysis/analysis.cxx",
+        "scaddins/source/analysis/analysishelper.cxx",
+        "apps/office/src/sc/source/core/tool/interpr1.reference.test.ts",
+        "apps/office/src/sc/source/filter/oox/excelfilter.page-settings.test.ts"
+      ],
+      "justification": "Binds the typed Analysis.getEdate external formula token to the original integer argument and basis-5 calendar behavior. The general UNO add-in service, dynamic add-in discovery, and matrix argument handling remain outside this owner.",
+      "knownViolations": [],
+      "localSymbols": [
+        "InterpretAnalysisAddIn",
+        "getEdate"
+      ],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": "sc/source/core/tool/interpr4.cxx",
+      "upstreamSymbols": [
+        "ScInterpreter::ScExternal"
+      ]
+    }
+  }
+}

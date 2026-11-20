@@ -19,17 +19,21 @@
         "apps/office/src/sc/source/core/tool/interpr2.ts#ScRangeFunc",
         "vendor/libreoffice-reference/sc/source/core/tool/interpr2.cxx#ScInterpreter::ScRangeFunc",
         "apps/office/src/sc/source/core/tool/numeric-formula.test.ts",
-        "apps/office/src/sc/source/filter/oox/excelfilter.test.ts"
+        "apps/office/src/sc/source/filter/oox/excelfilter.test.ts",
+        "apps/office/src/sc/source/core/tool/interpr1.reference.test.ts"
       ],
-      "justification": "Pops the original pair of formula tokens and joins a dynamic range through the existing native reference combiner. Intersection and union execution remain outside this operator.",
+      "justification": "Pops the original pair of formula tokens and joins a dynamic range through the existing native reference combiner. Intersection and union execution remain outside this operator. Evaluates MONTH and TODAY using the workbook's original null date and local platform clock.",
       "knownViolations": [],
       "localSymbols": [
-        "ScRangeFunc"
+        "ScRangeFunc",
+        "InterpretDateOpcode"
       ],
       "sourceResponsibility": "divergent",
       "upstreamFile": "sc/source/core/tool/interpr2.cxx",
       "upstreamSymbols": [
-        "ScInterpreter::ScRangeFunc"
+        "ScInterpreter::ScRangeFunc",
+        "ScInterpreter::ScGetMonth",
+        "ScInterpreter::ScGetActDate"
       ]
     }
   }
