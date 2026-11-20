@@ -72,6 +72,85 @@ function showRows(sheet: ScTable, [first, last]: OutlineSpan): void {
   }
 }
 
+/** Changes a group's sheet geometry using the original filtered-row exception. @param sheet - Actual sheet. @param columns - Axis. @param span - Affected entries. @param show - Whether to reveal the span. @returns Nothing. */
+function setOutlineVisibility(
+  sheet: ScTable,
+  columns: boolean,
+  span: OutlineSpan,
+  show: boolean,
+): void {
+  if (columns) sheet.SetColHidden(...span, !show);
+  else if (show) showRows(sheet, span);
+  else sheet.SetRowHidden(...span, true);
+}
+
+/** Outline header action. A missing entry selects a whole level. */
+export interface ScOutlineControl {
+  readonly columns: boolean;
+  readonly level: number;
+  readonly entry?: number;
+}
+
+/** Executes SelectLevel, ShowOutline or HideOutline from an outline window. @param shell - Document owner. @param tab - Active sheet. @param control - Displayed axis, level and optional entry. @param editing - Position on this axis being edited. @returns Whether a mutation was applied. */
+export function applyOutlineControl(
+  shell: ScDocShell,
+  tab: number,
+  { columns, level, entry }: ScOutlineControl,
+  editing?: number,
+): boolean {
+  const sheet = shell.GetDocument().FetchTable(tab);
+  const outline = sheet?.GetOutlineTable();
+  if (!sheet || !outline) return false;
+  const tree = columns ? outline.GetColArray() : outline.GetRowArray();
+  if (level < 0 || level > tree.GetDepth() || !tree.GetDepth()) return false;
+  const target = entry === undefined ? undefined : tree.GetEntries(level)[entry];
+  if (
+    entry !== undefined &&
+    (!target?.visible ||
+      (!target.hidden && editing !== undefined && target.start <= editing && editing <= target.end))
+  )
+    return false;
+
+  const spans: OutlineSpan[] = target ? [[target.start, target.end]] : levelZeroSpans(tree);
+  const [x, y] = columns ? [spans, []] : [[], spans];
+  const previous = new ScOutlineUndoState(sheet, x, y);
+  let label = "Select outline level";
+  if (target) {
+    const show = target.hidden;
+    label = show ? "View Details" : "Hide details";
+    target.hidden = !show;
+    setOutlineVisibility(sheet, columns, [target.start, target.end], show);
+    if (show) {
+      for (let depth = level + 1; depth < tree.GetDepth(); ++depth)
+        for (const child of tree.GetEntries(depth))
+          if (child.hidden && target.start <= child.start && child.end <= target.end)
+            setOutlineVisibility(sheet, columns, [child.start, child.end], false);
+    }
+    tree.SetVisibleBelow(level, target, show, show);
+  } else {
+    for (let depth = 0; depth < tree.GetDepth(); ++depth) {
+      const show = depth < level;
+      for (const group of tree.GetEntries(depth)) {
+        const { start, end } = group;
+        if (!show && editing !== undefined && start <= editing && editing <= end) continue;
+        if (depth <= level) group.hidden = !show;
+        group.visible = depth <= level;
+        setOutlineVisibility(sheet, columns, [start, end], show);
+      }
+    }
+  }
+  sheet.InvalidatePageBreaks();
+  finish(
+    shell,
+    new ScRange(0, 0, tab),
+    label,
+    previous,
+    new ScOutlineUndoState(sheet, x, y),
+    "none",
+  );
+  return true;
+}
+
 /** Calculates and applies the original marked detail operation on one axis. @param tree - Source outline tree. @param span - Marked endpoints. @param show - Whether to expand. @returns Affected visibility spans and outline mutation. */
 function markedAxis(tree: ScOutlineArray, [first, last]: OutlineSpan, show: boolean) {
   if (!show) {
@@ -142,11 +221,8 @@ export function changeOutlineDetail(
     columns.apply();
     rows.apply();
   }
-  for (const [first, last] of columns.spans) sheet.SetColHidden(first, last, !show);
-  for (const span of rows.spans) {
-    if (show) showRows(sheet, span);
-    else sheet.SetRowHidden(...span, true);
-  }
+  for (const span of columns.spans) setOutlineVisibility(sheet, true, span, show);
+  for (const span of rows.spans) setOutlineVisibility(sheet, false, span, show);
   sheet.InvalidatePageBreaks();
   const label = operation === "clear" ? "Clear Outline" : show ? "View Details" : "Hide details";
   finish(

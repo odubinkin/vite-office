@@ -7,6 +7,7 @@ import { columnAtPixel, columnPixels } from "../presentation/column-geometry";
 import { rowAtPixel, rowPixels } from "../presentation/row-geometry";
 import {
   CALC_SPLIT_HANDLE_SIZE,
+  calcGridInsets,
   type CalcFrozenBand,
   type CalcGridViewport,
   type CalcSplitBand,
@@ -161,22 +162,10 @@ export class CalcViewport {
           (absolutePixel) => atPixel(table, absolutePixel, maximum),
       };
     }
-    const headers = view.IsHeaderMode();
+    const { left, top } = calcGridInsets(view, this.current.rowHeight);
     return {
-      column: axis(
-        this.client?.width ?? 0,
-        headers ? 48 : 0,
-        doc.MaxCol(),
-        columnPixels,
-        columnAtPixel,
-      ),
-      row: axis(
-        this.client?.height ?? 0,
-        headers ? this.current.rowHeight : 0,
-        doc.MaxRow(),
-        rowPixels,
-        rowAtPixel,
-      ),
+      column: axis(this.client?.width ?? 0, left, doc.MaxCol(), columnPixels, columnAtPixel),
+      row: axis(this.client?.height ?? 0, top, doc.MaxRow(), rowPixels, rowAtPixel),
     };
   }
 
@@ -345,9 +334,7 @@ export class CalcViewport {
   private Axes(view: ScViewData, width: number, height: number) {
     const document = view.GetDocument();
     const table = document.FetchTable(view.GetTabNumber()) as ScTable;
-    const headers = view.IsHeaderMode();
-    const headerWidth = headers ? 48 : 0,
-      headerHeight = headers ? this.current.rowHeight : 0;
+    const { left: headerWidth, top: headerHeight } = calcGridInsets(view, this.current.rowHeight);
     const widthWithoutHeader = Math.max(1, width - headerWidth);
     const heightWithoutHeader = Math.max(1, height - headerHeight);
     const layout = view.GetPaneLayout();

@@ -18,17 +18,22 @@
       "evidence": [
         "apps/office/src/sc/source/ui/docshell/olinefun.ts",
         "apps/office/src/sc/browser/presentation/calc-sheet-outline.test.tsx",
-        "vendor/libreoffice-reference/sc/source/ui/docshell/olinefun.cxx"
+        "vendor/libreoffice-reference/sc/source/ui/docshell/olinefun.cxx",
+        "apps/office/src/sc/browser/presentation/calc-outline-window.test.tsx"
       ],
       "justification": "Applies source marked outline grouping, detail visibility and removal to the existing document outline tree.",
       "knownViolations": [],
       "localSymbols": [
-        "changeOutlineDetail"
+        "changeOutlineDetail",
+        "applyOutlineControl"
       ],
       "sourceResponsibility": "divergent",
       "upstreamFile": "sc/source/ui/docshell/olinefun.cxx",
       "upstreamSymbols": [
-        "ScOutlineDocFunc::ShowMarkedOutlines"
+        "ScOutlineDocFunc::ShowMarkedOutlines",
+        "ScOutlineDocFunc::SelectLevel",
+        "ScOutlineDocFunc::ShowOutline",
+        "ScOutlineDocFunc::HideOutline"
       ]
     }
   }

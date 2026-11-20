@@ -17,7 +17,12 @@ import { SfxIntegerListItem } from "../../../svl/source/items/ilstitem";
 import { Color } from "../../../tools/inc/color";
 import { createBrowserColorItem } from "../../../svx/browser/tbxctrls/color-item";
 import { ScRange } from "../../inc/address";
-import { changeOutline, changeOutlineDetail } from "../../source/ui/docshell/olinefun";
+import {
+  applyOutlineControl,
+  changeOutline,
+  changeOutlineDetail,
+  type ScOutlineControl,
+} from "../../source/ui/docshell/olinefun";
 import {
   fullOutlineAxes,
   OutlinePossible,
@@ -258,6 +263,18 @@ export class CalcSheetWorkflows {
       this.dialogs.GetSnapshot() ||
       this.metricDialogs.GetSnapshot(),
     );
+  }
+
+  /** Applies a level or group button through the active Calc shell. @param control - Native outline window action. @returns Nothing. */
+  OutlineControl(control: ScOutlineControl): void {
+    const { controller } = this;
+    const view = controller.viewData;
+    const editing = controller.inputHandler.IsInputMode()
+      ? control.columns
+        ? view.GetCurX()
+        : view.GetCurY()
+      : undefined;
+    applyOutlineControl(controller.shell, view.GetTabNumber(), control, editing);
   }
 
   /** Calculates source state for the outline commands. @param kind - Source slot. @returns Whether enabled. */

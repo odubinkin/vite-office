@@ -7,13 +7,18 @@
     "localPath": "apps/office/src/sc/source/ui/docshell/olinefun.ts",
     "upstreamPath": "sc/source/ui/docshell/olinefun.cxx",
     "localSymbols": [
-      "changeOutlineDetail"
+      "changeOutlineDetail",
+      "applyOutlineControl"
     ],
     "upstreamSymbols": [
-      "ScOutlineDocFunc::ShowMarkedOutlines"
+      "ScOutlineDocFunc::ShowMarkedOutlines",
+      "ScOutlineDocFunc::SelectLevel",
+      "ScOutlineDocFunc::ShowOutline",
+      "ScOutlineDocFunc::HideOutline"
     ],
     "preservedResponsibilities": [
-      "Applies source marked outline grouping, detail visibility and removal to the existing document outline tree."
+      "Applies source marked outline grouping, detail visibility and removal to the existing document outline tree.",
+      "Changes a single group or outline level with native child visibility and filtered-row handling."
     ],
     "omittedResponsibilities": [
       "VCL repaint and scrolling notifications are supplied by the browser view controller."
@@ -27,12 +32,20 @@
         {
           "path": "apps/office/src/sc/browser/presentation/calc-sheet-outline.test.tsx",
           "marker": "groups rows through the native radio dialog"
+        },
+        {
+          "path": "apps/office/src/sc/browser/presentation/calc-outline-window.test.tsx",
+          "marker": "expands an outer group"
         }
       ],
       "upstream": [
         {
           "path": "vendor/libreoffice-reference/sc/source/ui/docshell/olinefun.cxx",
           "marker": "ScOutlineDocFunc::ShowMarkedOutlines"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/source/ui/docshell/olinefun.cxx",
+          "marker": "ScOutlineDocFunc::SelectLevel"
         }
       ]
     }
