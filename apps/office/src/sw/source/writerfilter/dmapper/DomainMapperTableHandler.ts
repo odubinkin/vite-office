@@ -225,6 +225,8 @@ export function ApplyTableRowProperties(line: SwTableLine, properties: TableProp
   } finally {
     split.dispose();
   }
+  // The mapper consumes this marker before passing row properties to UNO.
+  properties.Erase(P.PROP_TBL_HEADER);
   const row = new SwXTextTableRow(line);
   for (const property of properties.GetPropertyValues())
     row.setPropertyValue(property.Name, property.Value);
