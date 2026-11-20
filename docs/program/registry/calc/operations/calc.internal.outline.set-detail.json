@@ -2,11 +2,11 @@
   "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
   "baselineTag": "libreoffice-26.8.0.2",
   "record": {
-    "id": "calc.internal.outline.change-outline",
+    "id": "calc.internal.outline.set-detail",
     "modulePath": "apps/office/src/sc/source/ui/docshell/olinefun.ts",
-    "symbol": "changeOutline",
+    "symbol": "changeOutlineDetail",
     "classification": "upstream-mechanism",
     "capabilityId": "CAP-52bb76b0-ff2d-4a8c-86df-79f033c21d86",
-    "description": "Groups or ungroups the marked sheet axis, updating native outline state and recording undo."
+    "description": "Shows or hides marked group details or clears the outline, updating native visibility and undo state."
   }
 }
