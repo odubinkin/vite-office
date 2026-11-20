@@ -1,10 +1,11 @@
 ---
 id: "202611201340-7KEAF3"
 title: "Align Calc ODS matrix and repeated formula ranges"
-status: "DOING"
+result_summary: "Verified Calc ODS matrix masters and references, cached values and blockers, repeated formula placement, native recalculation, and Worker round-trips."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 9
+revision: 11
 origin:
   system: "manual"
 depends_on: []
@@ -18,9 +19,9 @@ plan_approval:
   note: null
 verification:
   state: "ok"
-  updated_at: "2026-11-20T14:12:35.029Z"
+  updated_at: "2026-11-20T14:13:03.614Z"
   updated_by: "CODER"
-  note: "Calc ODS matrix fixture, recalculation, Worker and package round-trips verified; all wide-run misses recovered in focused reruns."
+  note: "Verified Calc ODS matrix masters and references, cached values and blockers, repeated formula placement, native recalculation, and Worker round-trips."
   attempts: 0
 quality_review:
   state: "pass"
@@ -38,11 +39,16 @@ quality_review:
     - "apps/office/src/sc/source/filter/xml/ods-matrix-formulas.test.ts"
   findings:
     - "The pinned LibreOffice fixture matches all three CSVs on import, Worker transfer and reopen. Scoped reruns recovered both missed cases in the combined Calc run, and office typecheck and module guards passed."
-commit: null
+commit:
+  hash: "5eac1319d3e4748654b2f357e80340fd1d51bc1c"
+  message: "🧩 7KEAF3 code: preserve native Calc ODS matrix formulas"
 comments:
   -
     author: "CODER"
     body: "Start: Port native matrix formula geometry and cached member results through Calc ODS and Worker."
+  -
+    author: "CODER"
+    body: "Verified: Verified Calc ODS matrix masters and references, cached values and blockers, repeated formula placement, native recalculation, and Worker round-trips.. Guided shortcut recorded verification and is closing the direct task with traceable commit metadata."
 events:
   -
     type: "status"
@@ -57,8 +63,21 @@ events:
     author: "CODER"
     state: "ok"
     note: "Calc ODS matrix fixture, recalculation, Worker and package round-trips verified; all wide-run misses recovered in focused reruns."
+  -
+    type: "verify"
+    at: "2026-11-20T14:13:03.614Z"
+    author: "CODER"
+    state: "ok"
+    note: "Verified Calc ODS matrix masters and references, cached values and blockers, repeated formula placement, native recalculation, and Worker round-trips."
+  -
+    type: "status"
+    at: "2026-11-20T14:13:03.703Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: Verified Calc ODS matrix masters and references, cached values and blockers, repeated formula placement, native recalculation, and Worker round-trips.. Guided shortcut recorded verification and is closing the direct task with traceable commit metadata."
 doc_version: 3
-doc_updated_at: "2026-11-20T14:12:35.214Z"
+doc_updated_at: "2026-11-20T14:13:03.703Z"
 doc_updated_by: "CODER"
 description: "Port the Calc document import owner and matrix formula master/reference cells, cached results, declared range export and Worker transfer. Preserve original repeated-formula placement and replay the pinned matrix ODS fixture."
 sections:
@@ -138,6 +157,36 @@ sections:
     - freshness: route=computed_local remote=remote_skipped
     - repeat_allowed: false
     - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+    - risks: none
+
+    ### 2026-11-20T14:13:03.614Z — VERIFY — ok
+
+    By: CODER
+
+    Note: Verified Calc ODS matrix masters and references, cached values and blockers, repeated formula placement, native recalculation, and Worker round-trips.
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-20T14:12:35.214Z, excerpt_hash=sha256:416a50ea98c51dea0072cd92736474d73aba549d50184b05acbaa0a79d1e762b
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202611201340-7KEAF3/blueprint/resolved-snapshot.json
+    - old_digest: cc07a06573bef719b31b084d5a97d94429ddc80b53492df247128981570b67db
+    - current_digest: cc07a06573bef719b31b084d5a97d94429ddc80b53492df247128981570b67db
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202611201340-7KEAF3
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task complete 202611201340-7KEAF3 --result verified-202611201340-7KEAF3 --commit 051fcd30fa1df04de8c9f800b19076645a577793
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
     - risks: none
 
     <!-- END VERIFICATION RESULTS -->
@@ -232,6 +281,36 @@ DecisionContextRef:
 - freshness: route=computed_local remote=remote_skipped
 - repeat_allowed: false
 - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- risks: none
+
+### 2026-11-20T14:13:03.614Z — VERIFY — ok
+
+By: CODER
+
+Note: Verified Calc ODS matrix masters and references, cached values and blockers, repeated formula placement, native recalculation, and Worker round-trips.
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-20T14:12:35.214Z, excerpt_hash=sha256:416a50ea98c51dea0072cd92736474d73aba549d50184b05acbaa0a79d1e762b
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202611201340-7KEAF3/blueprint/resolved-snapshot.json
+- old_digest: cc07a06573bef719b31b084d5a97d94429ddc80b53492df247128981570b67db
+- current_digest: cc07a06573bef719b31b084d5a97d94429ddc80b53492df247128981570b67db
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202611201340-7KEAF3
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task complete 202611201340-7KEAF3 --result verified-202611201340-7KEAF3 --commit 051fcd30fa1df04de8c9f800b19076645a577793
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
 - risks: none
 
 <!-- END VERIFICATION RESULTS -->
