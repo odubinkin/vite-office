@@ -108,6 +108,21 @@ export class ScFormulaCell extends SvtListener<SfxHint> {
   SetResultDouble(value: number): void {
     this.aResult.SetDouble(value);
   }
+  /** Installs the native hybrid numeric cache. @param value - Cached number. @returns Nothing. */
+  SetHybridDouble(value: number): void {
+    this.aResult.SetHybridDouble(value);
+  }
+
+  /** Keeps a hybrid numeric zero displayed as an empty string until interpretation. @returns Nothing. */
+  SetHybridEmptyDisplayedAsString(): void {
+    this.aResult.SetHybridEmptyDisplayedAsString();
+  }
+
+  /** Clears the represented native dirty state after importing a trusted formula result. @returns Nothing. */
+  ResetDirty(): void {
+    this.bDirty = false;
+  }
+
   /** Original cached hybrid-string assignment without changing dirty/listening state. @param value - Actual shared string. @returns Nothing. */
   SetHybridString(value: SharedStringConstReference): void {
     this.aResult.SetHybridString(value);

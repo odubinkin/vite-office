@@ -1,8 +1,12 @@
+import { errorSymbols } from "../../../../formula/inc/FormulaCompiler";
 /** @fileoverview Native scalar Calc XML cell/default/repeat import specialization. */
 import { ScXMLImportContext } from "./importcontext";
 import { SvXMLImportContext, type FastAttributeList } from "../../../../xmloff/source/core/xmlimp";
 import { XMLToken } from "../../../../xmloff/source/core/xmltoken";
-import { Converter } from "../../../../sax/source/tools/converter";
+import { toDouble } from "../../../../o3tl/inc/string_view";
+import { convertDurationToDays } from "../../../../sax/source/tools/converter.duration";
+import { SvXMLUnitConverter } from "../../../../xmloff/source/core/xmluconv";
+import { SvNumFormatType as T } from "../../../../svl/inc/zforlist";
 import { ScAddress } from "../../../inc/address";
 import { CellType } from "../../../inc/global";
 import { unicode } from "../../../../i18nlangtag/source/isolang/isolang.tables";
@@ -18,9 +22,14 @@ export class ScXMLTableRowCellContext extends ScXMLImportContext {
   private readonly repeat: number;
   private readonly mergedColumns: number;
   private readonly mergedRows: number;
-  private readonly type: string | null;
+  private readonly type: number;
+  private readonly currency: string;
+  private readonly numberValue: number;
+  private readonly errorValue: boolean;
+  private readonly hasExtendedValueType: boolean;
+  private readonly formulaTextResult: boolean;
+  private readonly hasStyle: boolean;
   private readonly source: string | null;
-  private readonly rawValue: string | null;
   private readonly stringValue: string | null;
   /** Reads native scalar attributes and explicit unsupported boundaries. @param row - Row cursor. @param attributes - Actual SAX attributes/scope. @param covered - Covered cell. @returns Context. */
   constructor(
@@ -32,17 +41,79 @@ export class ScXMLTableRowCellContext extends ScXMLImportContext {
     this.repeat = repeatCount(attributes, XMLToken.TABLE_NUMBER_COLUMNS_REPEATED);
     this.mergedColumns = repeatCount(attributes, XMLToken.TABLE_NUMBER_COLUMNS_SPANNED);
     this.mergedRows = repeatCount(attributes, XMLToken.TABLE_NUMBER_ROWS_SPANNED);
-    this.type = attributes.get(XMLToken.TABLE_VALUE_TYPE);
-    this.rawValue = attributes.get(XMLToken.OFFICE_VALUE);
-    this.stringValue = attributes.get(XMLToken.OFFICE_STRING_VALUE);
+    let type: number = T.TEXT;
+    let number = NaN;
+    let string: string | null = null;
+    let currency = "";
+    let error = false;
+    let extended = false;
+    let formulaText = false;
+    let empty = true;
+    const numeric: [number] = [NaN];
+    const formatter = row.table.owner.GetDocument().GetFormatTable();
+    for (const [token, value] of attributes) {
+      switch (token) {
+        case XMLToken.CALCEXT_VALUE_TYPE:
+        case XMLToken.TABLE_VALUE_TYPE:
+          if (token === XMLToken.CALCEXT_VALUE_TYPE) extended = true;
+          if (token === XMLToken.CALCEXT_VALUE_TYPE && value === "error") error = true;
+          else type = row.table.owner.GetCellType(value);
+          empty = false;
+          break;
+        case XMLToken.OFFICE_VALUE:
+          if (!value) break;
+          number = toDouble(new TextEncoder().encode(value));
+          if (number === 0) formulaText = true;
+          empty = false;
+          break;
+        case XMLToken.OFFICE_DATE_VALUE:
+          if (!value) break;
+          numeric[0] = number;
+          SvXMLUnitConverter.convertDateTimeToDays(numeric, value, formatter.GetNullDate());
+          number = numeric[0];
+          empty = false;
+          break;
+        case XMLToken.OFFICE_TIME_VALUE:
+          if (!value) break;
+          numeric[0] = number;
+          convertDurationToDays(numeric, value);
+          number = numeric[0];
+          empty = false;
+          break;
+        case XMLToken.OFFICE_BOOLEAN_VALUE:
+          if (!value) break;
+          number =
+            value === "true"
+              ? 1
+              : value === "false"
+                ? 0
+                : toDouble(new TextEncoder().encode(value));
+          empty = false;
+          break;
+        case XMLToken.OFFICE_STRING_VALUE:
+          if (!value) break;
+          string = value;
+          empty = false;
+          break;
+        case XMLToken.OFFICE_CURRENCY:
+          currency = value;
+          break;
+      }
+    }
+    this.currency = currency;
+    this.type = type;
+    this.numberValue = number;
+    this.stringValue = string;
+    this.errorValue = error;
+    this.hasExtendedValueType = extended;
+    this.formulaTextResult = formulaText || type === T.TEXT || empty;
     const formula = attributes.get(XMLToken.TABLE_FORMULA);
     this.source = !formula
       ? null
       : row.table.owner.ExtractFormulaNamespaceGrammar(formula, attributes);
     const name = attributes.get(XMLToken.TABLE_STYLE_NAME);
     this.style = name === null ? null : row.table.owner.GetAutoStyle(name);
-    if (this.type !== null && this.type !== "float" && this.type !== "string")
-      throw new Error("ODS formatted cell type is not implemented");
+    this.hasStyle = name !== null;
     if (this.source !== null && (this.repeat > 1 || row.repeat > 1))
       throw new Error("ODS repeated formula services are not implemented");
   }
@@ -91,7 +162,11 @@ export class ScXMLTableRowCellContext extends ScXMLImportContext {
       if (endCol !== pos.Col() + this.repeat - 1 || endRow !== pos.Row() + this.row.repeat - 1)
         owner.unsupported("cell range overflow");
     }
-    if (this.source === null && this.type !== "float" && value === undefined) return;
+    if (
+      this.source === null &&
+      (this.type === T.UNDEFINED || (this.type === T.TEXT && value === undefined))
+    )
+      return;
     const columns = Math.min(this.repeat, owner.GetDocument().MaxCol() - pos.Col() + 1),
       rows = Math.min(this.row.repeat, owner.GetDocument().MaxRow() - pos.Row() + 1);
     if (columns < this.repeat || rows < this.row.repeat) owner.unsupported("cell range overflow");
@@ -100,9 +175,32 @@ export class ScXMLTableRowCellContext extends ScXMLImportContext {
       return;
     }
     owner.consumeCells(columns * rows);
-    const numeric: [number] = [0];
-    if (this.rawValue !== null) Converter.convertDouble(numeric, this.rawValue);
-    if (!Number.isFinite(numeric[0])) numeric[0] = 0;
+    const number = this.numberValue;
+    const firstParagraph = this.paragraphs[0]
+      ?.map(
+        /** Reads the first displayed formula paragraph. @param span - Text fragment. @returns Text. */ ([
+          fragment,
+        ]) => fragment,
+      )
+      .join("");
+    const possibleEmpty = firstParagraph === "";
+    const legacyMarker =
+      !this.hasExtendedValueType &&
+      (possibleEmpty || firstParagraph?.startsWith("Err:") || firstParagraph?.startsWith("#"));
+    const cachedString = this.formulaTextResult
+      ? legacyMarker
+        ? firstParagraph
+        : (this.stringValue ?? (this.type === T.TEXT ? value : undefined))
+      : undefined;
+    const possibleLegacyError =
+      legacyMarker &&
+      (possibleEmpty ||
+        firstParagraph?.startsWith("Err:") ||
+        (cachedString !== undefined && errorSymbols.has(cachedString)));
+    const cache =
+      this.errorValue || (cachedString !== undefined && possibleLegacyError)
+        ? undefined
+        : (cachedString ?? (Number.isFinite(number) ? number : undefined));
     const string = unicode(this.source ?? value ?? "");
     try {
       for (let col = 0; col < columns; col++)
@@ -110,8 +208,21 @@ export class ScXMLTableRowCellContext extends ScXMLImportContext {
           const address = new ScAddress(pos.Col() + col, pos.Row() + row, pos.Tab());
           if (this.covered && owner.GetDocument().GetCellType(address) !== CellType.CELLTYPE_NONE)
             continue;
-          if (this.source !== null) owner.AddFormula(address, this.source);
-          else if (this.type === "float") doc.setNumericCell(address, numeric[0]);
+          owner.SetType(
+            address,
+            this.source !== null && this.type === T.DATETIME ? T.UNDEFINED : this.type,
+            this.currency,
+          );
+          if (this.source !== null)
+            owner.AddFormula(
+              address,
+              this.source,
+              cache,
+              this.hasStyle,
+              possibleEmpty && number === 0,
+            );
+          else if (this.type !== T.TEXT)
+            doc.setNumericCell(address, Number.isFinite(number) ? number : 0);
           else if (styled && !this.stringValue)
             doc.setEditCell(address, createCellEditText(owner, this.paragraphs));
           else if (this.paragraphs.length > 1 || (value !== undefined && /[\r\n]/.test(value))) {

@@ -1,3 +1,4 @@
+import { ScFormulaCell } from "../../../source/core/data/formulacell";
 import { escapeXml } from "../../../../xmloff/source/text/txtparae";
 /** @fileoverview Bounded Calc worker transfer of supported native cells, sparse attributes and geometry; XML remains the durable format. */
 import { Color, ColorTransparency, COL_AUTO } from "../../../../tools/inc/color";
@@ -82,10 +83,13 @@ type ExternalFile = readonly [
 ];
 /** External sheet cache including the ODF complete-table marker. */
 type ExternalSheet = readonly [name: string, cells: readonly ExternalCell[], complete?: boolean];
-/** Compact native scalar alternative, with formula source rather than result text. */
+/** Already imported hybrid formula result, with the native pending format flag. */
+type FormulaCache = readonly [value: number | string, needsNumberFormat: boolean];
+/** Compact native scalar alternative with an optional clean formula result. */
 type Cell =
   | readonly [col: number, row: number, kind: "number", value: number]
-  | readonly [col: number, row: number, kind: "text" | "formula", value: string]
+  | readonly [col: number, row: number, kind: "text", value: string]
+  | readonly [col: number, row: number, kind: "formula", value: string, cache?: FormulaCache]
   | readonly [col: number, row: number, kind: "edit", value: string | readonly CellTextParagraph[]];
 /** Actual sparse pattern span; -1 selects the native default column. */
 type Pattern = readonly [
@@ -348,7 +352,22 @@ function* encodeSteps(document: ScDocument): Generator<void, CalcDocumentRecord>
       if (formula) {
         const source = formula.GetFormula(FormulaGrammar.Grammar.GRAM_ODFF);
         try {
-          sheet.cells.push([col[0], row[0], "formula", text(source)]);
+          if (
+            !formula.GetDirty() &&
+            formula.GetErrCode() === FormulaError.NONE &&
+            !formula.IsEmpty()
+          ) {
+            const result = formula.IsValue()
+              ? formula.GetValue()
+              : text(formula.GetString().getString());
+            sheet.cells.push([
+              col[0],
+              row[0],
+              "formula",
+              text(source),
+              [result, formula.NeedsNumberFormat()],
+            ]);
+          } else sheet.cells.push([col[0], row[0], "formula", text(source)]);
         } finally {
           source.dispose();
         }
@@ -797,7 +816,7 @@ function* decodeSteps(record: CalcDocumentRecord): Generator<void, ScDocument> {
       if (sheet.repeatColumns)
         table.SetRepeatColRange(decodePrintRange(sheet.repeatColumns, document));
       if (sheet.repeatRows) table.SetRepeatRowRange(decodePrintRange(sheet.repeatRows, document));
-      for (const [col, row, kind, value] of sheet.cells) {
+      for (const [col, row, kind, value, cache] of sheet.cells) {
         const pos = new ScAddress(col, row, tab);
         if (kind === "number") importer.docImport.setNumericCell(pos, value);
         else if (typeof value !== "string")
@@ -805,9 +824,39 @@ function* decodeSteps(record: CalcDocumentRecord): Generator<void, ScDocument> {
         else {
           const string = unicode(value);
           try {
-            if (kind === "formula")
-              importer.docImport.setFormulaCell(pos, string, FormulaGrammar.Grammar.GRAM_ODFF);
-            else if (kind === "edit") {
+            if (kind === "formula") {
+              if (cache === undefined)
+                importer.docImport.setFormulaCell(pos, string, FormulaGrammar.Grammar.GRAM_ODFF);
+              else {
+                if (
+                  !Array.isArray(cache) ||
+                  cache.length !== 2 ||
+                  !(typeof cache[0] === "string" || Number.isFinite(cache[0])) ||
+                  typeof cache[1] !== "boolean"
+                )
+                  throw new Error("Calc worker formula cache is invalid.");
+                const formula = new ScFormulaCell(
+                  document,
+                  pos,
+                  string,
+                  FormulaGrammar.Grammar.GRAM_ODFF,
+                );
+                formula.SetNeedNumberFormat(cache[1]);
+                if (typeof cache[0] === "number") formula.SetHybridDouble(cache[0]);
+                else {
+                  const value = unicode(cache[0]);
+                  const shared = document.GetSharedStringPool().intern(value);
+                  try {
+                    formula.SetHybridString(shared);
+                  } finally {
+                    value.dispose();
+                    shared.dispose();
+                  }
+                }
+                formula.ResetDirty();
+                importer.docImport.setFormulaCell(pos, formula);
+              }
+            } else if (kind === "edit") {
               document.SetTextCell(pos, string);
               importer.docImport.invalidateBlockPositionSet(pos.Tab());
             } else importer.docImport.setStringCell(pos, string);

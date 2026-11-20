@@ -1,0 +1,42 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "status": "mapped",
+    "localPath": "apps/office/src/xmloff/source/style/numehelp.ts",
+    "localSymbols": [
+      "getCurrencySymbol",
+      "writeNumberFormatAttributes"
+    ],
+    "upstreamPath": "xmloff/source/style/numehelp.cxx",
+    "upstreamSymbols": [
+      "XMLNumberFormatAttributesExportHelper::GetCurrencySymbol",
+      "XMLNumberFormatAttributesExportHelper::WriteAttributes"
+    ],
+    "preservedResponsibilities": [
+      "Selects ODF value attributes from the effective native format and uses shared serial-date and duration conversion."
+    ],
+    "omittedResponsibilities": [
+      "Full UNO currency property lookup and alternate export namespace dispatch."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/xmloff/source/style/numehelp.ts",
+          "marker": "writeNumberFormatAttributes"
+        },
+        {
+          "path": "apps/office/src/sc/source/filter/xml/ods-typed-values.test.ts",
+          "marker": "routes ODS scalar types"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/xmloff/source/style/numehelp.cxx",
+          "marker": "XMLNumberFormatAttributesExportHelper::WriteAttributes"
+        }
+      ]
+    }
+  }
+}

@@ -4066,7 +4066,7 @@ Pinned `sc/source/ui/docshell/impex.cxx`, `ScImportExport::ExtText2Doc`, sets `m
 
 ### CALC-297 — ISO date-time timezone adjustment counts offset minutes twice or cancels them
 
-Pinned `sax/source/tools/converter.cxx`, `lcl_ConvertToUTC`, adds `nOffsetMinutes` to the output minutes before testing the offset sign. Its negative-offset branch adds those minutes again, while its positive-offset branch subtracts them after a comparison against the already increased value. For `2024-01-02T03:04:05-01:30`, `Converter::parseDateTime` therefore produces 05:04:05 UTC; for `+01:30`, it produces 02:04:05 UTC. Ordinary offset arithmetic would give 04:34:05 and 01:34:05. The source order looks accidental. Preserve it in the local `sax::Converter` port; the focused date parser test records both witnesses. The CSV importer's ISO precheck uses only the parser's success flag, so this arithmetic does not by itself establish a wrong CSV cell value.
+Pinned `sax/source/tools/converter.cxx`, `lcl_ConvertToUTC`, adds `nOffsetMinutes` to the output minutes before testing the offset sign. Its negative-offset branch adds those minutes again, while its positive-offset branch subtracts them after a comparison against the already increased value. For `2024-01-02T03:04:05-01:30`, `Converter::parseDateTime` therefore produces 05:04:05 UTC; for `+01:30`, it produces 02:04:05 UTC. Ordinary offset arithmetic would give 04:34:05 and 01:34:05. The source order looks accidental. Preserve it in the local `sax::Converter` port; the focused date parser test records both witnesses. The CSV importer's ISO precheck uses only the parser's success flag, so this arithmetic does not by itself establish a wrong CSV cell value. ODS import consumes the shifted clock fields and keeps the original remaining 30 minutes for an input of `05:30:00+05:30`.
 
 ### CALC-298 — Scalar document-import setters bypass shared-formula detachment
 
@@ -7327,3 +7327,36 @@ import and export path.
 
 - [Original XML style parent resolution](../../vendor/libreoffice-reference/xmloff/source/style/prstylei.cxx#L448)
 - [Original Calc parent assignment](../../vendor/libreoffice-reference/sc/source/core/data/stlsheet.cxx#L110)
+
+### CALC-771 — A currency value does not turn a General format into currency
+
+In `ScXMLImport::SetType`, a currency code can replace the symbol of
+an existing currency format. The override requires both the imported
+and the current currency symbol to be nonempty. A currency-typed
+cell with a General format therefore keeps General and exports as a
+float. The ODS regression exercises both this case and the successful
+replacement of an existing symbol.
+
+- [Original value-type and currency checks](../../vendor/libreoffice-reference/sc/source/filter/xml/xmlimprt.cxx#L898)
+
+### CALC-772 — Numeric ODF durations can end without a component
+
+The floating-day branch of `sax::Converter::convertDuration` succeeds
+when it reaches the end of the source after the duration marker, including
+when the last numeric component has no unit. A bare `PT` returns zero and
+`PT1H99` returns one hour. Calc uses this numeric overload for
+`office:time-value`.
+
+- [Original floating duration scanner](../../vendor/libreoffice-reference/sax/source/tools/converter.cxx#L1080)
+
+### CALC-773 — UNO StandardFormat differs from the formatter's standard flag
+
+The `StandardFormat` property in the pinned number formats service
+checks whether the key is the first in its language's format block. Other
+builtin entries can be standard in `SvNumberformat::IsStandard` and
+still return false to UNO. The ODS importer uses the UNO result when
+choosing whether a value type may override the format. The short date
+fixture exercises this distinction through import and subsequent editing.
+
+- [Original UNO property](../../vendor/libreoffice-reference/svl/source/numbers/numfmuno.cxx#L695)
+- [Original ODS format selection](../../vendor/libreoffice-reference/sc/source/filter/xml/xmlimprt.cxx#L897)

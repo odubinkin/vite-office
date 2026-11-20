@@ -1,5 +1,6 @@
 /** @fileoverview Checks XML converter delegation and the remaining bounded caller adapter. */
 
+import { Date as ToolsDate } from "../../../tools/source/datetime/tdate";
 import { describe, expect, it } from "vitest";
 import { SvXMLUnitConverter, importOdfLength } from "./xmluconv";
 
@@ -58,4 +59,17 @@ it("delegates native core measure export to the supported CM unit", /** Checks M
     [127, "0.224cm"],
   ] as const)
     expect(twips.convertMeasureToXML(value)).toBe(expected);
+});
+
+it("uses the native null date and signed serial day clock", /** Exercises timezone normalization, midnight and negative serials. @returns Nothing. */ () => {
+  const origin = new ToolsDate(1, 1, 2000);
+  const serial: [number] = [17];
+  expect(SvXMLUnitConverter.convertDateTimeToDays(serial, "1999-12-31T18:00:00Z", origin)).toBe(
+    true,
+  );
+  expect(serial[0]).toBe(-0.25);
+  expect(SvXMLUnitConverter.convertDaysToDateTime(serial[0], origin)).toBe("1999-12-31T18:00:00");
+  expect(SvXMLUnitConverter.convertDaysToDateTime(0, origin)).toBe("2000-01-01");
+  expect(SvXMLUnitConverter.convertDateTimeToDays(serial, "1999-13-31", origin)).toBe(false);
+  expect(serial[0]).toBe(-0.25);
 });

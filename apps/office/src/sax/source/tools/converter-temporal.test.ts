@@ -1,6 +1,7 @@
 /** @fileoverview Original sax ConverterTest duration/dateTime/time entry-point assertions replay their exact UTF16 fixtures against actual generated values and OUStringBuffer owners. */
 import { expect, it } from "vitest";
 import fixture from "./converter-temporal-cases.json";
+import { convertDaysToDuration, convertDurationToDays } from "./converter.duration";
 import { Converter } from "./converter";
 import { Duration } from "../../../offapi/com/sun/star/util/Duration";
 import { DateTime } from "../../../offapi/com/sun/star/util/DateTime";
@@ -222,4 +223,18 @@ it("preserves original UTC rollover through year zero without repairing the stri
   } finally {
     buffer.dispose();
   }
+});
+
+it("preserves the native numeric duration scanner and day fractions", /** Exercises numeric overload acceptance, untouched failures and nonwrapped output. @returns Nothing. */ () => {
+  const serial: [number] = [67];
+  expect(convertDurationToDays(serial, "PT")).toBe(true);
+  expect(serial[0]).toBe(0);
+  expect(convertDurationToDays(serial, "PT1H99")).toBe(true);
+  expect(serial[0]).toBe(1 / 24);
+  expect(convertDurationToDays(serial, "-p1dt12h")).toBe(true);
+  expect(serial[0]).toBe(-1.5);
+  expect(convertDurationToDays(serial, "P1M")).toBe(false);
+  expect(serial[0]).toBe(-1.5);
+  expect(convertDaysToDuration(serial[0])).toBe("-PT36H00M00S");
+  expect(convertDaysToDuration(1.25 / 86400)).toBe("PT00H00M01.25S");
 });

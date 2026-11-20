@@ -95,10 +95,8 @@ export class SvXMLNumFormatContext extends SvXMLImportContext {
         /** Adds the completed text token. @param value - Source text. @returns Nothing. */
         (value) => {
           if (element === X.NUMBER_CURRENCY_SYMBOL) this.parts.push(`[$${value}]`);
-          else if (this.element === X.NUMBER_PERCENTAGE_STYLE && value === "%")
-            this.parts.push("%");
           else if (!value) this.emptyText = true;
-          else this.parts.push('"' + value.replace(/"/g, '\\"') + '"');
+          else this.parts.push(this.EnquoteIfNecessary(value));
         },
       );
     }
@@ -164,6 +162,58 @@ export class SvXMLNumFormatContext extends SvXMLImportContext {
       } else this.unsupported = true;
     }
     return new SvXMLIgnoreContext(true);
+  }
+
+  /** Determines whether the native format scanner can use an unquoted separator. @param value - One authored character. @returns Literal admission. */
+  private IsValidTextCharacter(value: string): boolean {
+    const type = this.element;
+    const numeric =
+      type === X.NUMBER_NUMBER_STYLE ||
+      type === X.NUMBER_PERCENTAGE_STYLE ||
+      type === X.NUMBER_CURRENCY_STYLE;
+    const separator = text(this.formatter.GetLocaleData().getNumThousandSep())[0];
+    if (numeric && (value === separator || (value === " " && separator === "\u00a0"))) return false;
+    return (
+      (value === "-" && type !== X.NUMBER_BOOLEAN_STYLE) ||
+      (" /.,:'".includes(value) &&
+        (type === X.NUMBER_CURRENCY_STYLE ||
+          type === X.NUMBER_DATE_STYLE ||
+          type === X.NUMBER_TIME_STYLE)) ||
+      (value === "%" && type === X.NUMBER_PERCENTAGE_STYLE) ||
+      (numeric && (value === "(" || value === ")"))
+    );
+  }
+
+  /** Retains the source literal quoting rules for separators and percent signs. @param value - Authored text. @returns Number-format code. */
+  private EnquoteIfNecessary(value: string): string {
+    const quote =
+      /** Quotes a numeric-style literal. @param literal - Literal text. @returns Quoted code. */ (
+        literal: string,
+      ) => '"' + literal.replaceAll('"', '"\\""') + '"';
+    if (
+      (value.length === 1 && this.IsValidTextCharacter(value)) ||
+      (value.length === 2 &&
+        this.element !== X.NUMBER_BOOLEAN_STYLE &&
+        (value === " -" || (value[1] === " " && this.IsValidTextCharacter(value[0] as string))))
+    )
+      return value;
+    if (this.element === X.NUMBER_PERCENTAGE_STYLE) {
+      const position = value.indexOf("%");
+      if (position >= 0) {
+        const prefix = value.slice(0, position);
+        const suffix = value.slice(position + 1);
+        return (
+          (prefix && !(prefix.length === 1 && this.IsValidTextCharacter(prefix))
+            ? quote(prefix)
+            : prefix) +
+          "%" +
+          (suffix && !(suffix.length === 1 && this.IsValidTextCharacter(suffix))
+            ? quote(suffix)
+            : suffix)
+        );
+      }
+    }
+    return quote(value);
   }
 
   /** Rejects unrepresented children. @returns Ignored child. */

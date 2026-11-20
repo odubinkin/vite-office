@@ -1,3 +1,9 @@
+import { DateTime } from "../../../offapi/com/sun/star/util/DateTime";
+import { Date as ToolsDate, type DateConstReference } from "../../../tools/source/datetime/tdate";
+import { Time } from "../../../tools/source/datetime/ttime";
+import { approxFloor } from "../../../sal/inc/rtl/math";
+import { rtl_math_StringFormat } from "../../../sal/inc/rtl/math-values";
+import { doubleToString } from "../../../sal/rtl/strtmpl.math";
 /** @fileoverview Owns the bounded ODF-to-core length conversion responsibility from pinned xmloff/source/core/xmluconv.cxx. */
 
 import { Converter, type CoreMeasureUnit } from "../../../sax/source/tools/converter";
@@ -25,6 +31,52 @@ standardNumberingFormats.set(N.CHARS_UPPER_LETTER_N, "A");
 export class SvXMLUnitConverter {
   /** Captures the owning import's core measurement unit. @param coreUnit - Core unit. @returns Nothing. */
   public constructor(private readonly coreUnit: CoreMeasureUnit) {}
+
+  /** Parses an ISO date or datetime against the document null date. @param output - Serial value destination. @param source - Original XML attribute. @param nullDate - Document day zero. @returns Conversion success. */
+  static convertDateTimeToDays(
+    output: [number],
+    source: string,
+    nullDate: DateConstReference,
+  ): boolean {
+    const value = new DateTime();
+    if (!Converter.parseDateTime(value, source)) return false;
+    const date = new ToolsDate(value.Day, value.Month, value.Year);
+    let serial = date.GetAsNormalizedDays() - nullDate.GetAsNormalizedDays();
+    serial += value.Hours / 24;
+    serial += value.Minutes / 1440;
+    serial += value.Seconds / 86400;
+    serial += value.NanoSeconds / 86400000000000;
+    output[0] = serial;
+    return true;
+  }
+
+  /** Writes an ISO date or datetime from serial days using the native clock precision. @param serial - Serial value. @param nullDate - Document day zero. @returns Original XML spelling. */
+  static convertDaysToDateTime(serial: number, nullDate: DateConstReference): string {
+    const days = approxFloor(serial) | 0;
+    const date = new ToolsDate(nullDate);
+    date.AddDays(days);
+    const year = date.GetYear();
+    const formatted = `${year < 0 ? "-" : ""}${String(Math.abs(year)).padStart(4, "0")}-${String(date.GetMonth()).padStart(2, "0")}-${String(date.GetDay()).padStart(2, "0")}`;
+    if (serial - days <= 0) return formatted;
+    const decimals = Math.max(
+      10 - (days === 0 ? 0 : approxFloor(Math.log10(Math.abs(days))) + 1),
+      0,
+    );
+    const hour: [number] = [0],
+      minute: [number] = [0],
+      second: [number] = [0],
+      fraction: [number] = [0];
+    Time.GetClock(serial, hour, minute, second, fraction, decimals);
+    const clock = `${String(hour[0]).padStart(2, "0")}:${String(minute[0]).padStart(2, "0")}:${String(second[0]).padStart(2, "0")}`;
+    const digits = decimals
+      ? doubleToString(
+          fraction[0],
+          rtl_math_StringFormat.rtl_math_StringFormat_F,
+          decimals + 1,
+        ).slice(2, decimals + 2)
+      : "";
+    return `${formatted}T${clock}${digits ? "." + digits : ""}`;
+  }
 
   /** Exports a represented native numbering type. @param type - Native type. @returns XML format. */
   public convertNumFormat(type: number): string;

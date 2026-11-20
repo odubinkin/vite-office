@@ -1,4 +1,7 @@
 /** @fileoverview Original util::Duration UTF16 parse and OUStringBuffer export overloads from converter.cxx, retaining component order, widths, fractional truncation and untouched failure output. Floating-duration/byte/iostream physical implementations remain unqualified. */
+import { approxFloor, round } from "../../../sal/inc/rtl/math";
+import { rtl_math_StringFormat } from "../../../sal/inc/rtl/math-values";
+import { doubleToString } from "../../../sal/rtl/strtmpl.math";
 import { Duration } from "../../../offapi/com/sun/star/util/Duration";
 import { OUString } from "../../../sal/inc/rtl/ustring";
 import { OUStringBuffer } from "../../../sal/inc/rtl/ustrbuf";
@@ -178,4 +181,85 @@ export function convertDuration(
 ): boolean | void {
   if (output instanceof OUStringBuffer) return formatDuration(output, source as Readonly<Duration>);
   return parseDuration(output, source as StringSource);
+}
+
+/** Reads the numeric converter's native duration grammar into a serial day value. @param output - Destination retained on failure. @param source - ODF duration. @returns Whether the duration was admitted. */
+export function convertDurationToDays(output: [number], source: string): boolean {
+  let first = 0;
+  let last = source.length;
+  while (first < last && source.charCodeAt(first) > 0 && source.charCodeAt(first) <= 32) first++;
+  while (last > first && source.charCodeAt(last - 1) > 0 && source.charCodeAt(last - 1) <= 32)
+    last--;
+  const negative = source[first] === "-";
+  const start = first + Number(negative);
+  if ((source.charCodeAt(start) | 32) !== 112) return false;
+  let time = false;
+  let fraction = "";
+  let part = 0;
+  let day = 0;
+  let hour = 0;
+  let minute = 0;
+  let second = 0;
+  for (let index = start + 1; index < last; index++) {
+    const code = source.charCodeAt(index);
+    if (!code) break;
+    if (code >= 48 && code <= 57) {
+      if (part >= 214748364) return false;
+      if (fraction) fraction += source[index];
+      else part = part * 10 + code - 48;
+      continue;
+    }
+    const token = String.fromCharCode(
+      code < 128 ? code | (code >= 65 && code <= 90 ? 32 : 0) : code,
+    );
+    if (!time && token === "t") time = true;
+    else if (!time && token === "d") {
+      day = part;
+      part = 0;
+    } else if (time && token === "h") {
+      hour = part;
+      part = 0;
+    } else if (time && token === "m") {
+      minute = part;
+      part = 0;
+    } else if (time && (token === "." || token === ",")) {
+      second = part;
+      part = 0;
+      fraction = "0.";
+    } else if (time && token === "s") {
+      if (!fraction) {
+        second = part;
+        part = 0;
+      }
+    } else return false;
+  }
+  const days = (day * 86400 + hour * 3600 + minute * 60 + second + Number(fraction)) / 86400;
+  output[0] = negative ? -days : days;
+  return true;
+}
+
+/** Writes the numeric duration without wrapping hours at midnight. @param serial - Serial days. @returns ODF duration. */
+export function convertDaysToDuration(serial: number): string {
+  const absolute = Math.abs(serial) * 24;
+  let hours = approxFloor(absolute);
+  const minutes = (absolute - hours) * 60;
+  let wholeMinutes = approxFloor(minutes);
+  const seconds = (minutes - wholeMinutes) * 60;
+  let wholeSeconds = approxFloor(seconds);
+  const fraction = seconds - wholeSeconds;
+  const rounded = fraction > 1e-11 ? round(fraction, 9) : 0;
+  if (rounded === 1) wholeSeconds++;
+  if (wholeSeconds >= 60) {
+    wholeSeconds -= 60;
+    wholeMinutes++;
+  }
+  if (wholeMinutes >= 60) {
+    wholeMinutes -= 60;
+    hours++;
+  }
+  const decimal =
+    rounded > 0 && rounded < 1
+      ? doubleToString(fraction, rtl_math_StringFormat.rtl_math_StringFormat_F, 9).slice(1)
+      : "";
+  return `${serial < 0 ? "-" : ""}PT${String(hours | 0).padStart(2, "0")}H${String(wholeMinutes).padStart(2, "0")}M${String(wholeSeconds).padStart(2, "0")}${decimal}S`;
 }

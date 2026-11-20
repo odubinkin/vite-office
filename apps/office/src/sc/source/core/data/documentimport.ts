@@ -31,6 +31,7 @@ import {
 } from "../../../inc/mtvelements";
 import { SharedFormulaUtil } from "../../../inc/sharedformula";
 import { ScTokenArray } from "../../../inc/tokenarray";
+import { ScExternalSingleRefToken, ScExternalDoubleRefToken } from "../tool/token";
 import { ScTable } from "../../../inc/table";
 import { SharedString, type SharedStringConstReference } from "../../../../svl/inc/sharedstring";
 import { delayed_delete_vector_iterator } from "../../../../external/mdds/include/mdds/multi_type_vector/delayed_delete_vector";
@@ -340,6 +341,10 @@ export class ScDocumentImport {
         cell,
         formula_element_callbacks,
       );
+      // Register compiled external IDs after the imported cell has an address in the store.
+      for (const token of cell?.GetCode().Tokens() ?? [])
+        if (token instanceof ScExternalSingleRefToken || token instanceof ScExternalDoubleRefToken)
+          document.GetExternalRefManager().insertRefCell(token.GetFileId(), pos);
     } finally {
       // The native source/token overload owns a local unique_ptr until rCells.set takes it.
       if (!transferred && !raw) cell?.Dispose();

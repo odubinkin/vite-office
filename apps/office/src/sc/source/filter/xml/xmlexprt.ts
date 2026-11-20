@@ -21,7 +21,7 @@ import type { ScTable } from "../../../inc/table";
 import type { ScFormulaCell } from "../../../inc/formulacell";
 import type { SharedStringConstReference } from "../../../../svl/inc/sharedstring";
 import type { ScDocument } from "../../../inc/document";
-import { MAXCOL, MAXROW, ScRange, ScRefFlags } from "../../../inc/address";
+import { MAXCOL, MAXROW, ScAddress, ScRange, ScRefFlags } from "../../../inc/address";
 import { ScHorizontalCellIterator } from "../../../inc/dociter";
 import { CRFlags } from "../../../inc/global";
 import { CellType } from "../../../inc/global";
@@ -33,7 +33,8 @@ import { SvXMLUnitConverter } from "../../../../xmloff/source/core/xmluconv";
 import { escapeXml, exportText } from "../../../../xmloff/source/text/txtparae";
 import { StackVar } from "../../../../formula/inc/token";
 import { RangeDataType } from "../../core/tool/rangenam";
-import { doubleToString } from "../../../../sal/rtl/strtmpl.math";
+import { writeNumberFormatAttributes } from "../../../../xmloff/source/style/numehelp";
+import { ScGlobal } from "../../core/data/global";
 import { COL_AUTO } from "../../../../tools/inc/color";
 import { Converter } from "../../../../sax/source/tools/converter";
 import { DateTime } from "../../../../offapi/com/sun/star/util/DateTime";
@@ -422,7 +423,12 @@ export class ScXMLExport {
             attribute += ` table:number-columns-spanned="${range.merge.GetColMerge()}" table:number-rows-spanned="${range.merge.GetRowMerge()}"`;
           for (let column = range.first; column <= range.last;) {
             if (cell && row[0] === currentRow && col[0] === column) {
-              body += this.exportCell(cell, element, attribute);
+              body += this.exportCell(
+                cell,
+                new ScAddress(column, currentRow, tab),
+                element,
+                attribute,
+              );
               column++;
               cell = iterator.GetNext(col, row);
             } else {
@@ -525,8 +531,15 @@ export class ScXMLExport {
     }
     return output && "<table:named-expressions>" + output + "</table:named-expressions>";
   }
-  /** Serializes the original scalar/formula alternatives with actual result computation. @param cell - Native cell view. @param element - ODF cell element. @param attribute - Generated cell attributes. @returns Cell XML. */
-  private exportCell(cell: ScRefCellValue, element: string, attribute: string): string {
+  /** Serializes the original scalar/formula alternatives with actual result computation. @param cell - Native cell view. @param address - Actual source coordinate. @param element - ODF cell element. @param attribute - Generated cell attributes. @returns Cell XML. */
+  private exportCell(
+    cell: ScRefCellValue,
+    address: ScAddress,
+    element: string,
+    attribute: string,
+  ): string {
+    const formatter = this.document.GetFormatTable();
+    const key = this.document.GetPattern(address)?.GetNumberFormat(formatter) ?? 0;
     let formula = "",
       value = "",
       children = "";
@@ -539,17 +552,39 @@ export class ScXMLExport {
       } finally {
         source.dispose();
       }
-      if (actual.GetErrCode() === FormulaError.NONE && !actual.IsEmpty()) {
+      const error = actual.GetErrCode();
+      if (error !== FormulaError.NONE) {
+        const message = ScGlobal.GetErrorString(error);
+        try {
+          const displayed = text(message);
+          value = ` office:value-type="string" office:string-value="${escapeXml(displayed)}" calcext:value-type="error"`;
+          children = this.textParagraph(displayed);
+        } finally {
+          message.dispose();
+        }
+      } else if (!actual.IsEmpty()) {
         if (actual.IsValue())
-          value = ` office:value-type="float" office:value="${doubleToString(actual.GetValue())}"`;
+          value = writeNumberFormatAttributes(
+            formatter,
+            key,
+            actual.GetValue(),
+            formatter.GetNullDate(),
+          );
         else {
           const string = text(actual.GetString().getString());
-          value = ' office:value-type="string"';
-          children = this.textParagraph(string);
+          if (string) {
+            value = ` office:value-type="string" office:string-value="${escapeXml(string)}"`;
+            children = this.textParagraph(string);
+          }
         }
       }
     } else if (type === CellType.CELLTYPE_VALUE)
-      value = ` office:value-type="float" office:value="${doubleToString(cell.getDouble())}"`;
+      value = writeNumberFormatAttributes(
+        formatter,
+        key,
+        cell.getDouble(),
+        formatter.GetNullDate(),
+      );
     else if (type === CellType.CELLTYPE_EDIT) {
       value = ' office:value-type="string"';
       const edit = cell.getEditText();

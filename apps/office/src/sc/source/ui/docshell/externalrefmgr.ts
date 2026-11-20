@@ -127,7 +127,7 @@ export class ScExternalRefManager {
   constructor(private readonly document: ScDocument) {}
 
   /** Records a live formula cell against the referenced file. @param fileId - Source file. @param position - Calling formula position. @returns Nothing. */
-  private insertRefCell(fileId: number, position: ScAddress): void {
+  insertRefCell(fileId: number, position: ScAddress): void {
     const cell = this.document.GetFormulaCell(position);
     if (!cell) return;
     let registered = this.refCells.get(fileId);

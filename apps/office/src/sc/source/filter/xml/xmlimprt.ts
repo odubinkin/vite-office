@@ -1,8 +1,16 @@
+import { ScFormulaCell } from "../../core/data/formulacell";
+import { SV_COUNTRY_LANGUAGE_OFFSET, SvNumFormatType as T } from "../../../../svl/inc/zforlist";
+import { getCurrencySymbol } from "../../../../xmloff/source/style/numehelp";
+import { LanguageTag } from "../../../../i18nlangtag/source/languagetag/languagetag.value";
+import {
+  getNumDecimalSep,
+  getNumThousandSep,
+} from "../../../../unotools/source/i18n/localedatawrapper";
 /** @fileoverview Calc scalar,cell-font and row/column geometry import over shared fast XML contexts;advanced styles,device layout and objects remain unported. */
 import type { SvXMLNumFormatContext } from "../../../../xmloff/source/style/xmlnumfi";
 
 import { Length, toTwips } from "../../../../o3tl/inc/unit_conversion";
-import { unicode } from "../../../../i18nlangtag/source/isolang/isolang.tables";
+import { text, unicode } from "../../../../i18nlangtag/source/isolang/isolang.tables";
 import { SvxFontItem } from "../../../../editeng/inc/fontitem";
 import { FontPitch } from "../../../../tools/inc/fontenum";
 import { RTL_TEXTENCODING_UTF8 } from "../../../../sal/inc/rtl/textenc";
@@ -53,16 +61,93 @@ export interface ScXMLImportOptions extends OdfXmlParseOptions {
 export class ScXMLImport extends SvXMLImport implements SvXMLImportRootFactory {
   readonly docImport: ScDocumentImport;
   private readonly namedExpressions: ScMyNamedExpression[] = [];
-  private readonly pendingFormulas: { address: ScAddress; source: string }[] = [];
+  private readonly pendingFormulas: {
+    address: ScAddress;
+    source: string;
+    cache: number | string | undefined;
+    hasStyle: boolean;
+    emptyDisplay: boolean;
+  }[] = [];
 
   /** Collects the named definition before resolution. @param expression - Original XML definition. @returns Nothing. */
   AddNamedExpression(expression: ScMyNamedExpression): void {
     this.namedExpressions.push(expression);
   }
-  /** Defers a cell formula until global and local name indexes exist. @param address - Destination. @param source - Native ODFF formula. @returns Nothing. */
-  AddFormula(address: ScAddress, source: string): void {
-    this.pendingFormulas.push({ address, source });
+  /** Defers a cell formula until name indexes exist. @param address - Destination. @param source - Native ODFF formula. @param cache - Saved result. @param hasStyle - Whether a style reference was authored. @param emptyDisplay - Whether a numeric zero was displayed as empty. @returns Nothing. */
+  AddFormula(
+    address: ScAddress,
+    source: string,
+    cache: number | string | undefined,
+    hasStyle: boolean,
+    emptyDisplay: boolean,
+  ): void {
+    this.pendingFormulas.push({ address, source, cache, hasStyle, emptyDisplay });
   }
+
+  /** Reads the original ODF scalar discriminator. @param value - ODF attribute. @returns Native type. */
+  GetCellType(value: string): number {
+    switch (value) {
+      case "float":
+        return T.NUMBER;
+      case "percentage":
+        return T.PERCENT;
+      case "currency":
+        return T.CURRENCY;
+      case "date":
+        return T.DATETIME;
+      case "time":
+        return T.TIME;
+      case "boolean":
+        return T.LOGICAL;
+      case "string":
+        return T.TEXT;
+      default:
+        return T.UNDEFINED;
+    }
+  }
+
+  /** Applies the source type-based number-format override after cell styles. @param address - Cell position. @param type - ODF number category. @param currency - Source currency. @returns Nothing. */
+  SetType(address: ScAddress, type: number, currency: string): void {
+    if (type === T.TEXT || type === T.UNDEFINED || type === T.NUMBER) return;
+    const formatter = this.document.GetFormatTable();
+    const key = this.document.GetPattern(address)?.GetNumberFormat(formatter) ?? 0;
+    const entry = formatter.GetEntry(key);
+    if (!entry) return;
+    const current = formatter.GetType(key) & ~T.DEFINED;
+    if (type === T.CURRENCY) {
+      const actual = getCurrencySymbol(formatter, key);
+      if (currency && actual && currency !== actual)
+        this.document.SetNumberFormat(address, this.SetCurrencySymbol(key, currency));
+    } else if (type !== current && key % SV_COUNTRY_LANGUAGE_OFFSET === 0) {
+      const next = formatter.GetStandardFormat(type, entry.GetLanguage());
+      if (next !== key) this.document.SetNumberFormat(address, next);
+    }
+  }
+
+  /** Compiles the source locale currency format for a changed bank symbol. @param key - Original key. @param currency - Requested bank symbol. @returns Format key. */
+  private SetCurrencySymbol(key: number, currency: string): number {
+    const formatter = this.document.GetFormatTable();
+    const language = formatter.GetEntry(key)?.GetLanguage();
+    if (language === undefined) return key;
+    const locale = new LanguageTag(language).getLocale();
+    const group = getNumThousandSep(locale);
+    const decimal = getNumDecimalSep(locale);
+    const code = unicode(`#${text(group)}##0${text(decimal)}00 [$${currency}]`);
+    const check: [number] = [0],
+      type: [number] = [0],
+      result: [number] = [key];
+    try {
+      formatter.PutEntry(code, check, type, result, language);
+      if (check[0] === 0) return result[0];
+      this.unsupported("invalid cell currency format");
+      return key;
+    } finally {
+      code.dispose();
+      group.dispose();
+      decimal.dispose();
+    }
+  }
+
   private readonly conditionalFormats: ScXMLConditionalFormatsContext[] = [];
 
   /** Defers conditional formulas until sheet and name indexes exist. @param formats - Original sheet element. @returns Nothing. */
@@ -467,10 +552,29 @@ export class ScXMLImport extends SvXMLImport implements SvXMLImportRootFactory {
         ),
         grammar,
       );
-      for (const { address, source } of this.pendingFormulas) {
+      for (const { address, source, cache, hasStyle, emptyDisplay } of this.pendingFormulas) {
         const value = unicode(source);
         try {
-          this.docImport.setFormulaCell(address, value, grammar);
+          const cell = new ScFormulaCell(this.document, address, value, grammar);
+          if (typeof cache === "string") {
+            const string = unicode(cache);
+            const shared = this.document.GetSharedStringPool().intern(string);
+            try {
+              cell.SetHybridString(shared);
+              cell.ResetDirty();
+            } finally {
+              shared.dispose();
+              string.dispose();
+            }
+          } else {
+            cell.SetNeedNumberFormat(!hasStyle);
+            if (cache !== undefined) {
+              cell.SetHybridDouble(cache);
+              if (emptyDisplay) cell.SetHybridEmptyDisplayedAsString();
+              else cell.ResetDirty();
+            }
+          }
+          this.docImport.setFormulaCell(address, cell);
         } finally {
           value.dispose();
         }

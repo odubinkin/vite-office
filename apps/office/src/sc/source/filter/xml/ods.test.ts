@@ -100,7 +100,7 @@ it("maps optional ODF numeric digits, named months and positioned decimal text",
       return entry ? text(entry.GetFormatstring()) : "";
     }
     expect(code(0)).toContain('0"x"##');
-    expect(code(1)).toContain('MMM" "MMMM');
+    expect(code(1)).toContain("MMM MMMM");
     expect(code(2)).toBe("0E-0");
     expect(code(3)).toBe('0"x"');
     expect(code(4)).toBe("@");
@@ -152,7 +152,9 @@ it("imports independent modern ODF XML with scoped formula namespace alias and s
   new ScXMLImport(doc).importContent(xml);
   expect(doc.GetValue(new ScAddress(1, 1, 0))).toBe(3);
   expect(text(doc.GetSharedString(new ScAddress(2, 1, 0)).getString())).toBe("A  B\tC");
-  expect(doc.GetValue(new ScAddress(0, 2, 0))).toBe(4);
+  expect(doc.GetValue(new ScAddress(0, 2, 0))).toBe(999);
+  doc.SetValue(new ScAddress(), 5);
+  expect(doc.GetValue(new ScAddress(0, 2, 0))).toBe(6);
 });
 
 it("imports ODF paragraph boundaries into edit-text cells", /** Checks imports ODF paragraph boundaries into edit-text cells. @returns Test completion or assertion result. */ () => {
@@ -232,7 +234,6 @@ it("keeps importer APIs on the actual document and does not allocate invalid coo
 });
 it("rejects unsupported cell services and malformed structure explicitly", /** Each input is independent from the exporter. @returns Nothing. */ () => {
   for (const cell of [
-    '<table:table-cell office:value-type="date"/>',
     '<table:table-cell table:formula="f:=1" table:number-columns-repeated="2"/>',
     "<table:table-cell><text:p><text:ruby/></text:p></table:table-cell>",
     '<table:table-cell><text:p><text:s text:c="1000001"/></text:p></table:table-cell>',
