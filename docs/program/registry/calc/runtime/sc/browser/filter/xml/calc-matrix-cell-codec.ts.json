@@ -1,0 +1,33 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sc/browser/filter/xml/calc-matrix-cell-codec.ts",
+    "classification": "local-infrastructure",
+    "state": "active",
+    "suite": "calc",
+    "subsystem": "document-lifecycle",
+    "capabilityIds": [
+      "CAP-f15476e9-2d48-48f8-9cc5-6c90aa523b01"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "not-applicable",
+      "defaultStatus": "not-applicable",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/sc/browser/filter/xml/calc-matrix-cell-codec.ts",
+        "apps/office/src/sc/source/filter/xml/ods-matrix-formulas.test.ts"
+      ],
+      "justification": "Transfers Calc matrix geometry, formula source and cached results as detached browser Worker records, then reconstructs native master and member cells through the document importer.",
+      "knownViolations": [],
+      "localSymbols": [
+        "encodeMatrixCell",
+        "decodeMatrixCell"
+      ],
+      "sourceResponsibility": "browser-owned",
+      "upstreamFile": null,
+      "upstreamSymbols": []
+    }
+  }
+}

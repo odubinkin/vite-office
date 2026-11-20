@@ -1,0 +1,50 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/sc/source/core/tool/interpr5.ts",
+    "status": "mapped",
+    "upstreamPath": "sc/source/core/tool/interpr5.cxx",
+    "localSymbols": [
+      "ScMatRef",
+      "ScFrequency"
+    ],
+    "upstreamSymbols": [
+      "ScInterpreter::ScMatRef",
+      "ScInterpreter::ScFrequency"
+    ],
+    "preservedResponsibilities": [
+      "Executes matrix-member reference projection and the represented FREQUENCY sorted cutoff scan using native matrix storage."
+    ],
+    "omittedResponsibilities": [
+      "The other original interpreter functions and full dynamic array evaluation remain unverified."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sc/source/core/tool/interpr5.ts",
+          "marker": "ScMatRef"
+        },
+        {
+          "path": "apps/office/src/sc/source/core/tool/interpr5.ts",
+          "marker": "ScFrequency"
+        },
+        {
+          "path": "apps/office/src/sc/source/filter/xml/ods-matrix-formulas.test.ts",
+          "marker": "@fileoverview"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sc/source/core/tool/interpr5.cxx",
+          "marker": "ScInterpreter::ScMatRef"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/source/core/tool/interpr5.cxx",
+          "marker": "ScInterpreter::ScFrequency"
+        }
+      ]
+    }
+  }
+}

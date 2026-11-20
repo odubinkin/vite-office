@@ -1,0 +1,50 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/sc/source/core/tool/interpr3.ts",
+    "status": "mapped",
+    "upstreamPath": "sc/source/core/tool/interpr3.cxx",
+    "localSymbols": [
+      "GetNumberSequenceArray",
+      "GetSortArray"
+    ],
+    "upstreamSymbols": [
+      "ScInterpreter::GetNumberSequenceArray",
+      "ScInterpreter::GetSortArray"
+    ],
+    "preservedResponsibilities": [
+      "Collects numeric scalar, reference and matrix operands for FREQUENCY, and retains the original source index during the native numeric partition and pre-sort swaps."
+    ],
+    "omittedResponsibilities": [
+      "Other statistical functions, reference lists, text coercion variants and subtotal flags remain outside the represented path."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sc/source/core/tool/interpr3.ts",
+          "marker": "GetNumberSequenceArray"
+        },
+        {
+          "path": "apps/office/src/sc/source/core/tool/interpr3.ts",
+          "marker": "GetSortArray"
+        },
+        {
+          "path": "apps/office/src/sc/source/filter/xml/ods-matrix-formulas.test.ts",
+          "marker": "@fileoverview"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sc/source/core/tool/interpr3.cxx",
+          "marker": "ScInterpreter::GetNumberSequenceArray"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/source/core/tool/interpr3.cxx",
+          "marker": "ScInterpreter::GetSortArray"
+        }
+      ]
+    }
+  }
+}

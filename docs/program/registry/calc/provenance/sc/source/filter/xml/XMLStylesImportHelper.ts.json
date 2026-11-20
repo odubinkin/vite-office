@@ -1,0 +1,60 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/sc/source/filter/xml/XMLStylesImportHelper.ts",
+    "status": "mapped",
+    "upstreamPath": "sc/source/filter/xml/XMLStylesImportHelper.cxx",
+    "localSymbols": [
+      "ScMyStylesImportHelper",
+      "AddColumnStyle",
+      "SetRowStyle"
+    ],
+    "upstreamSymbols": [
+      "ScMyStylesImportHelper::AddDefaultRange",
+      "ScMyStylesImportHelper::AddColumnStyle",
+      "ScMyStylesImportHelper::SetRowStyle"
+    ],
+    "preservedResponsibilities": [
+      "Batches admitted Calc ODS cell style ranges and resolves unstyled ranges against the active row and declared column defaults at the original flush boundary."
+    ],
+    "omittedResponsibilities": [
+      "The remaining native style map and unrelated filter responsibilities are unverified."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sc/source/filter/xml/XMLStylesImportHelper.ts",
+          "marker": "ScMyStylesImportHelper"
+        },
+        {
+          "path": "apps/office/src/sc/source/filter/xml/XMLStylesImportHelper.ts",
+          "marker": "AddColumnStyle"
+        },
+        {
+          "path": "apps/office/src/sc/source/filter/xml/XMLStylesImportHelper.ts",
+          "marker": "SetRowStyle"
+        },
+        {
+          "path": "apps/office/src/sc/source/filter/xml/ods-default-cell-styles.test.ts",
+          "marker": "@fileoverview"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sc/source/filter/xml/XMLStylesImportHelper.cxx",
+          "marker": "ScMyStylesImportHelper::AddDefaultRange"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/source/filter/xml/XMLStylesImportHelper.cxx",
+          "marker": "ScMyStylesImportHelper::AddColumnStyle"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/source/filter/xml/XMLStylesImportHelper.cxx",
+          "marker": "ScMyStylesImportHelper::SetRowStyle"
+        }
+      ]
+    }
+  }
+}

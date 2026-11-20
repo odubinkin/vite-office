@@ -1,0 +1,37 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sw/source/filter/xml/xmltbli.values.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "writer",
+    "subsystem": "odt-table-import",
+    "capabilityIds": [
+      "CAP-0113"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/sw/source/filter/xml/xmltbli.values.ts",
+        "apps/office/src/sw/source/filter/xml/odt-table-values.test.ts",
+        "vendor/libreoffice-reference/sw/source/filter/xml/xmltbli.cxx"
+      ],
+      "justification": "Reads native table-cell scalar attributes in XML order and applies the represented Writer box items and General-zero rescue to the actual cell format.",
+      "knownViolations": [],
+      "localSymbols": [
+        "readTableCellValue",
+        "applyTableCellValue"
+      ],
+      "sourceResponsibility": "divergent",
+      "upstreamFile": "sw/source/filter/xml/xmltbli.cxx",
+      "upstreamSymbols": [
+        "SwXMLTableCellContext_Impl",
+        "SwXMLTableContext::MakeTableBox"
+      ]
+    }
+  }
+}

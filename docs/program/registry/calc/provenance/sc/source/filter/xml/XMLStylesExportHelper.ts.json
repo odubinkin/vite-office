@@ -1,0 +1,45 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/sc/source/filter/xml/XMLStylesExportHelper.ts",
+    "status": "mapped",
+    "upstreamPath": "sc/source/filter/xml/XMLStylesExportHelper.cxx",
+    "localSymbols": [
+      "ScMyDefaultStyles",
+      "ClipRange"
+    ],
+    "upstreamSymbols": [
+      "ScMyDefaultStyles::FillDefaultStyles"
+    ],
+    "preservedResponsibilities": [
+      "Selects native per-column default cell styles over live document rows and keeps the XML column runs within each selected default style."
+    ],
+    "omittedResponsibilities": [
+      "The other native style export collectors remain outside this helper."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sc/source/filter/xml/XMLStylesExportHelper.ts",
+          "marker": "ScMyDefaultStyles"
+        },
+        {
+          "path": "apps/office/src/sc/source/filter/xml/XMLStylesExportHelper.ts",
+          "marker": "ClipRange"
+        },
+        {
+          "path": "apps/office/src/sc/source/filter/xml/ods-default-cell-styles.test.ts",
+          "marker": "@fileoverview"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sc/source/filter/xml/XMLStylesExportHelper.cxx",
+          "marker": "ScMyDefaultStyles::FillDefaultStyles"
+        }
+      ]
+    }
+  }
+}

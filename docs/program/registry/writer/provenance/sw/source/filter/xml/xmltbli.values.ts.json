@@ -1,0 +1,55 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/sw/source/filter/xml/xmltbli.values.ts",
+    "status": "mapped",
+    "upstreamPath": "sw/source/filter/xml/xmltbli.cxx",
+    "localSymbols": [
+      "readTableCellValue",
+      "applyTableCellValue"
+    ],
+    "upstreamSymbols": [
+      "SwXMLTableCellContext_Impl",
+      "SwXMLTableContext::MakeTableBox"
+    ],
+    "preservedResponsibilities": [
+      "Reads native table-cell scalar attributes in XML order and applies the represented Writer box items and General-zero rescue to the actual cell format."
+    ],
+    "omittedResponsibilities": [
+      "Native table formula evaluation and unrepresented box-format services remain unverified."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sw/source/filter/xml/xmltbli.values.ts",
+          "marker": "readTableCellValue"
+        },
+        {
+          "path": "apps/office/src/sw/source/filter/xml/xmltbli.values.ts",
+          "marker": "applyTableCellValue"
+        },
+        {
+          "path": "apps/office/src/sw/source/filter/xml/odt-table-values.test.ts",
+          "marker": "@fileoverview"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sw/source/filter/xml/xmltbli.cxx",
+          "marker": "SwXMLTableCellContext_Impl"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/filter/xml/xmltbli.cxx",
+          "marker": "SwXMLTableContext::MakeTableBox"
+        }
+      ]
+    },
+    "filenameDivergence": {
+      "localPath": "apps/office/src/sw/source/filter/xml/xmltbli.values.ts",
+      "rationale": "The Writer ODT importer keeps scalar attribute admission and box-value item application together in a companion module while xmltbli.ts owns table structure and cursor transitions.",
+      "stackNecessity": "responsibility-split"
+    }
+  }
+}
