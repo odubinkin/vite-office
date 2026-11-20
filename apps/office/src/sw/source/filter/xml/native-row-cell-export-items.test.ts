@@ -112,7 +112,7 @@ it.each([false, true])(
       const xml = exportContentXml(f.doc);
       expect(xml).not.toContain("<style:table-row-properties");
       expect(xml).toContain("<table:table-row>");
-      expect(properties(xml, "cell")).toBe("");
+      expect(xml).not.toContain("<style:table-cell-properties");
       expect(rowFormat.GetFrameSize().GetHeight()).toBe(inherited ? 900 : 0);
       expect(boxFormat.GetVertOrient().GetVertOrient()).toBe(inherited ? V.CENTER : V.NONE);
     } finally {

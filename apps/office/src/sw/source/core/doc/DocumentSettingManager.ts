@@ -20,6 +20,7 @@ export type DocumentSettingId =
   | "TAB_AT_LEFT_INDENT_FOR_PARA_IN_LIST"
   | "TAB_COMPAT"
   | "TAB_OVERFLOW"
+  | "TABLE_ROW_KEEP"
   | "TABS_RELATIVE_TO_INDENT";
 
 /** Pinned upstream defaults independent of host configuration. */
@@ -42,6 +43,7 @@ const DEFAULT_DOCUMENT_SETTINGS: Readonly<Record<DocumentSettingId, boolean>> = 
   TAB_AT_LEFT_INDENT_FOR_PARA_IN_LIST: false,
   TAB_COMPAT: true,
   TAB_OVERFLOW: true,
+  TABLE_ROW_KEEP: false,
   TABS_RELATIVE_TO_INDENT: true,
 });
 

@@ -16,6 +16,7 @@ it("exports all ordinary cells when a legacy repeat flag omits the numeric heade
     table: XMLTableExportSource = {
       name: "MissingHeaderCount",
       format: { repeatHeaderRows: true },
+      columnName: /** Names the single grid column. @returns Column name. */ () => "A",
       columnWidths: [3000],
       softPageBreakRows: [],
       rows: [{ format: {}, cells: [{ format: {}, content: [{ kind: "paragraph", paragraph }] }] }],
@@ -35,7 +36,7 @@ it("exports all ordinary cells when a legacy repeat flag omits the numeric heade
   expect(result.body).toContain("<table:table-cell");
   expect(result.body).toContain("Original<text:s/>&amp;<text:s/>preserved");
   expect(result.body).not.toContain("table:table-header-rows");
-  expect(result.automaticStyles).toContain('style:family="table-row"');
+  expect(result.automaticStyles).not.toContain('style:family="table-row"');
   expect(table.format).toEqual({ repeatHeaderRows: true });
   expect(table.rows[0]?.cells[0]?.content[0]).toEqual({ kind: "paragraph", paragraph });
 });

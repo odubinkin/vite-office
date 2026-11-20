@@ -927,3 +927,15 @@ export class SwTable extends SwClient {
     return this.softPageBreakRows;
   }
 }
+
+/** Converts a native 0-based table column to its mixed-case base-52 name. @param column - Native grid index. @returns Writer column name. */
+export function sw_GetTableBoxColStr(column: number): string {
+  let name = "";
+  let index = column & 0xffff;
+  for (;;) {
+    const digit = index % 52;
+    name = String.fromCharCode(digit < 26 ? 65 + digit : 97 + digit - 26) + name;
+    if (index === digit) return name;
+    index = (index - digit) / 52 - 1;
+  }
+}

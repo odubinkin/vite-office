@@ -263,6 +263,7 @@ export class DomainMapper implements Properties, Stream {
     if (this.IsOOXMLImport()) this.impl.GetSettingsTable().ApplyOOXMLProperties(this.model);
   }
   /** Explicit host binding for the native mapper destructor; the destination model is borrowed. @returns Nothing. */ dispose(): void {
+    this.impl.GetSettingsTable().ApplyProperties(this.model);
     this.tableRanges.dispose();
     this.impl.dispose();
   }

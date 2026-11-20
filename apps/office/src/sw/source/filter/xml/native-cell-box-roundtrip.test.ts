@@ -55,6 +55,7 @@ it("retains native border export fallbacks and rejects malformed legacy storage 
           table: {
             name: "Neutral",
             format: {},
+            columnName: /** Names the single grid column. @returns Column name. */ () => "A",
             columnWidths: [3000],
             softPageBreakRows: [],
             rows: [

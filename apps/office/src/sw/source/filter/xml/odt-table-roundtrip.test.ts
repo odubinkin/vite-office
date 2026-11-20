@@ -188,8 +188,11 @@ describe("Writer canonical ODF tables", /** Verifies the bounded table scenario.
     const metadata = { title: "Nested table" };
     const bytes = await writeOdtDocument(source, metadata);
     const xml = await (await DocumentArchive.open(bytes)).readTextEntry("content.xml");
+    expect(source.GetDocumentSettingManager().get("TABLE_ROW_KEEP")).toBe(true);
     expect(xml.match(/<table:table table:name=/gu)).toHaveLength(2);
-    expect(xml).toContain('style:name="T2.C1"');
+    const nested = source.GetTables()[0]?.GetTabLines()[0]?.GetTabBoxes()[0]?.GetContentNodes()[1];
+    assert(nested instanceof SwTableNode);
+    expect(xml).toContain(`style:name="${nested.GetTable().GetName()}.A"`);
     const odt = (await readOdtDocument(bytes, metadata)).document;
     const transferred = decodeWriterDocument(encodeWriterDocument(odt));
     try {
@@ -550,7 +553,7 @@ describe("Writer canonical ODF tables", /** Verifies the bounded table scenario.
           tableProps('style:width="1cm"'),
           '<table:table-column/><table:table-row table:style-name="S"><table:table-cell/></table:table-row>',
         ),
-    ).toThrow("wrong family");
+    ).not.toThrow();
     expect(
       open(
         tableProps('style:width="1cm"'),

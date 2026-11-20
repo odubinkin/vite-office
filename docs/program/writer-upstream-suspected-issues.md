@@ -5258,3 +5258,34 @@ the direct brushes after package save and reopen.
 
 - [Column default list initialization](../../vendor/libreoffice-reference/sw/source/filter/xml/xmltbli.cxx#L1325)
 - [Cell default selection](../../vendor/libreoffice-reference/sw/source/filter/xml/xmltbli.cxx#L1456)
+
+### WRITER-676 — Oversized table merges are clipped before the grid-growth branch
+
+`SwXMLTableContext::InsertCell` truncates the requested span to the
+declared column count, then truncates it again at the first occupied slot
+in the row. The subsequent condition for growing the column grid cannot
+be reached through this path. The Writer regression verifies both truncation
+points in one authored table and checks that export retains the admitted grid.
+
+- [Original span normalization](../../vendor/libreoffice-reference/sw/source/filter/xml/xmltbli.cxx#L1402)
+
+### WRITER-677 — Unstyled covered markers leave the compatibility cursor in place
+
+The native covered-cell context calls `InsertCoveredCell` only when the
+marker has a nonempty style name. With `TableRowKeep` enabled, a styled
+marker after an unstyled marker can therefore apply to an earlier
+covered slot. The filter keeps the independent compatibility cursor. A
+regression verifies this behavior and the pinned border fixture verifies
+explicit covered styling through package export.
+
+- [Original covered-cell context](../../vendor/libreoffice-reference/sw/source/filter/xml/xmltbli.cxx#L847)
+- [Original compatibility cursor](../../vendor/libreoffice-reference/sw/source/filter/xml/xmltbli.cxx#L1491)
+
+### WRITER-678 — Writer can export more equal columns than a single import repeat accepts
+
+`SwXMLExport::ExportTableLines` emits one repeat count per consecutive run
+of equal column styles. The column import context replaces counts above
+256 with one. The Writer filter retains both original rules.
+
+- [Original column repeat export](../../vendor/libreoffice-reference/sw/source/filter/xml/xmltble.cxx#L1038)
+- [Original column repeat import](../../vendor/libreoffice-reference/sw/source/filter/xml/xmltbli.cxx#L672)

@@ -88,6 +88,18 @@ export class SettingsTable implements Properties, Table {
   private m_bRecordChanges = false;
   private m_bDoNotVertAlignCellWithSp = false;
   private m_bAdjustLineHeightInTable = false;
+  /** Applies the represented unconditional native Word table setting at mapper teardown. @param document - Destination model. @returns Nothing. */
+  ApplyProperties(document: SwXTextDocument): void {
+    const name = unicode("TableRowKeep");
+    const value = new Any(true);
+    try {
+      document.createDocumentSettings().setPropertyValue(name, value);
+    } finally {
+      name.dispose();
+      value.dispose();
+    }
+  }
+
   /** Native RTF opts into HTML spacing suppression and longer-space handling; OOXML keeps both false. Other native constructor service owners remain unported. @param mapper - Actual fully initialized mapper. @returns Settings owner. */
   constructor(mapper: DomainMapper) {
     if (mapper.IsRTFImport()) {

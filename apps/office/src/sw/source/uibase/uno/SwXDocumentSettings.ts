@@ -16,6 +16,7 @@ const documentSettings = new Map<string, DocumentSettingId>([
   ["DoNotJustifyLinesWithManualBreak", "DO_NOT_JUSTIFY_LINES_WITH_MANUAL_BREAK"],
   ["AddParaTableSpacing", "PARA_SPACE_MAX"],
   ["GutterAtTop", "GUTTER_AT_TOP"],
+  ["TableRowKeep", "TABLE_ROW_KEEP"],
 ]);
 
 /** Represented SwXDocumentSettings property owner backed by the actual document manager. */

@@ -1,6 +1,7 @@
 /** @fileoverview Emits ordered ODF table blocks from Writer's canonical table graph. */
 
 import { escapeXml, exportOdfLength, type XMLTextParagraphSource } from "../text/txtparae";
+import { encodeStyleName } from "../core/xmluconv";
 import type { OdfBoxProperties } from "../style/bordrhdl";
 import type { OdfTableVisualProperties } from "./XMLTableImport";
 import { exportWritingDirection } from "../style/prhdlfac";
@@ -34,6 +35,7 @@ export interface XMLTableExportSource {
       layoutSplit?: boolean | undefined;
     }
   >;
+  readonly columnName: (index: number) => string;
   readonly columnWidths: readonly number[];
   readonly softPageBreakRows: readonly number[];
   readonly rows: readonly Readonly<{
@@ -90,7 +92,7 @@ export function exportTableBlocks(
   readonly sections?: readonly string[];
 } {
   let automaticStyles = "";
-  let tableIndex = 0;
+  const tableStyleNames = new Set<string>();
   let frameIndex = 0;
   /** Shares graphic and table style identity across every nested native text box. @param frame - Native frame properties. @returns Frame XML. */
   function renderFrame(frame: XMLTextFrameExportSource): string {
@@ -114,7 +116,12 @@ export function exportTableBlocks(
       }
       flush();
       const table = block.table;
-      const prefix = `T${++tableIndex}`;
+      const base = table.name || "Table";
+      let stylePrefix = base;
+      let suffix = 0;
+      while (tableStyleNames.has(stylePrefix)) stylePrefix = base + ++suffix;
+      tableStyleNames.add(stylePrefix);
+      const prefix = escapeXml(encodeStyleName(stylePrefix));
       const tableProperties =
         [
           table.format.width === undefined
@@ -143,27 +150,38 @@ export function exportTableBlocks(
         ].join("") + exportTableVisualProperties(table.format);
       automaticStyles += `<style:style style:name="${prefix}" style:family="table"><style:table-properties${tableProperties}/></style:style>`;
       body += `<table:table table:name="${escapeXml(table.name)}" table:style-name="${prefix}">`;
-      for (const [columnIndex, width] of table.columnWidths.entries()) {
-        const styleName = `${prefix}.C${columnIndex + 1}`;
-        const columnWidth =
-          width <= 0
-            ? ""
-            : table.format.relativeWidth
-              ? ` style:rel-column-width="${width}*"`
-              : ` style:column-width="${exportOdfLength(width)}"`;
-        automaticStyles += `<style:style style:name="${styleName}" style:family="table-column"><style:table-column-properties${columnWidth}/></style:style>`;
-        body += `<table:table-column table:style-name="${styleName}"/>`;
+      const columnStyles = new Map<number, string>();
+      for (let column = 0; column < table.columnWidths.length;) {
+        const width = table.columnWidths[column] as number;
+        let name = columnStyles.get(width);
+        if (name === undefined) {
+          name = escapeXml(encodeStyleName(`${stylePrefix}.${table.columnName(column)}`));
+          columnStyles.set(width, name);
+          const property =
+            width <= 0
+              ? ""
+              : table.format.relativeWidth
+                ? ` style:rel-column-width="${width}*"`
+                : ` style:column-width="${exportOdfLength(width)}"`;
+          automaticStyles += `<style:style style:name="${name}" style:family="table-column"><style:table-column-properties${property}/></style:style>`;
+        }
+        let end = column + 1;
+        while (table.columnWidths[end] === width) end++;
+        const repeat = end - column;
+        body += `<table:table-column table:style-name="${name}"${repeat > 1 ? ` table:number-columns-repeated="${repeat}"` : ""}/>`;
+        column = end;
       }
       const repeatedHeaders = table.format.repeatHeaderRows
         ? Math.min(table.format.headerRows ?? 0, table.rows.length)
         : 0;
       const rowStyles = new Map<string, string>();
+      const cellStyles = new Map<string, string>();
       for (const [rowIndex, row] of table.rows.entries()) {
         if (rowIndex === 0 && repeatedHeaders > 0) body += "<table:table-header-rows>";
         if (rowIndex === repeatedHeaders && repeatedHeaders > 0)
           body += "</table:table-header-rows>";
         if (table.softPageBreakRows.includes(rowIndex)) body += "<text:soft-page-break/>";
-        const rowName = `${prefix}.R${rowIndex + 1}`;
+        const rowName = escapeXml(encodeStyleName(`${stylePrefix}.${rowIndex + 1}`));
         const rowProperties = `${row.format.height === undefined ? "" : ` style:row-height="${exportOdfLength(row.format.height)}"`}${row.format.minHeight === undefined ? "" : ` style:min-row-height="${exportOdfLength(row.format.minHeight)}"`}${row.format.keepTogether === undefined ? "" : ` fo:keep-together="${row.format.keepTogether ? "always" : "auto"}"`}${exportTableVisualProperties(row.format)}`;
         let rowStyleName = rowStyles.get(rowProperties);
         if (rowProperties && rowStyleName === undefined) {
@@ -172,8 +190,8 @@ export function exportTableBlocks(
           automaticStyles += `<style:style style:name="${rowStyleName}" style:family="table-row"><style:table-row-properties${rowProperties}/></style:style>`;
         }
         body += `<table:table-row${rowStyleName === undefined ? "" : ` table:style-name="${rowStyleName}"`}>`;
-        for (const [cellIndex, cell] of row.cells.entries()) {
-          const cellName = `${rowName}.C${cellIndex + 1}`;
+        let column = 0;
+        for (const cell of row.cells) {
           let cellProperties = `${cell.format.padding === undefined ? "" : ` fo:padding="${exportOdfLength(cell.format.padding)}"`}${cell.format.border === undefined ? "" : ` fo:border="${escapeXml(cell.format.border)}"`}${cell.format.verticalAlign === undefined ? "" : ` style:vertical-align="${escapeXml(cell.format.verticalAlign)}"`}${cell.format.borderLineWidth === undefined ? "" : ` style:border-line-width="${escapeXml(cell.format.borderLineWidth)}"`}`;
           for (const side of ["Top", "Bottom", "Left", "Right"]) {
             const padding = cell.format[`padding${side}` as keyof OdfBoxProperties],
@@ -187,15 +205,27 @@ export function exportTableBlocks(
               cellProperties += ` style:border-line-width-${side.toLowerCase()}="${escapeXml(compound)}"`;
           }
           cellProperties += exportTableVisualProperties(cell.format, true);
-          automaticStyles += `<style:style style:name="${cellName}" style:family="table-cell"><style:table-cell-properties${cellProperties}/></style:style>`;
+          let cellName = cellStyles.get(cellProperties);
+          if (cellProperties && cellName === undefined) {
+            cellName = escapeXml(
+              encodeStyleName(`${stylePrefix}.${table.columnName(column)}${rowIndex + 1}`),
+            );
+            cellStyles.set(cellProperties, cellName);
+            automaticStyles += `<style:style style:name="${cellName}" style:family="table-cell"><style:table-cell-properties${cellProperties}/></style:style>`;
+          }
+          const style = cellName === undefined ? "" : ` table:style-name="${cellName}"`;
           const rowSpan = cell.rowSpan ?? 1;
-          if (rowSpan < 1) body += `<table:covered-table-cell table:style-name="${cellName}"/>`;
+          const columnSpan = cell.columnSpan ?? 1;
+          if (rowSpan < 1) body += `<table:covered-table-cell${style}/>`;
           else {
             const rowSpanAttr = rowSpan > 1 ? ` table:number-rows-spanned="${rowSpan}"` : "";
-            body += `<table:table-cell table:style-name="${cellName}"${(cell.columnSpan ?? 1) > 1 ? ` table:number-columns-spanned="${cell.columnSpan}"` : ""}${rowSpanAttr} office:value-type="string">${renderBlocks(cell.content)}</table:table-cell>`;
+            const columnSpanAttr =
+              columnSpan > 1 ? ` table:number-columns-spanned="${columnSpan}"` : "";
+            body += `<table:table-cell${style}${columnSpanAttr}${rowSpanAttr} office:value-type="string">${renderBlocks(cell.content)}</table:table-cell>`;
           }
-          for (let covered = 1; covered < (cell.columnSpan ?? 1); covered++)
+          for (let covered = 1; covered < columnSpan; covered++)
             body += "<table:covered-table-cell/>";
+          column += columnSpan;
         }
         body += "</table:table-row>";
       }

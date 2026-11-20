@@ -25,6 +25,7 @@ import {
 import { getCharacterProperties } from "./xmlexp-character";
 export { getCharacterProperties } from "./xmlexp-character";
 import { projectWriterLineSpacing } from "../../core/text/itrform2";
+import { sw_GetTableBoxColStr } from "../../core/table/swtable";
 import { SwXMLTableLines } from "./xmltble";
 import { VertOrientation } from "../../../../offapi/com/sun/star/text/VertOrientation";
 import {
@@ -512,6 +513,7 @@ function projectBlock(
     kind: "table" as const,
     table: {
       name: table.GetName(),
+      columnName: sw_GetTableBoxColStr,
       format: {
         ...exportFrameVisualProperties(items),
         width: size?.GetWidthPercent() ? undefined : size?.GetWidth(),

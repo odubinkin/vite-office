@@ -1,5 +1,7 @@
 /** @fileoverview Checks source union-grid ODF spans and complete native box frame sizes across codec boundaries. */
+import { readFileSync } from "node:fs";
 import { expect, it } from "vitest";
+import { ODF_NAMESPACES } from "../../../../xmloff/source/core/xmltoken";
 import { SwDoc } from "../../core/doc/doc";
 import { SwFormatFrameSize, SwFrameSize } from "../../../inc/fmtfsize";
 import type { SwTable } from "../../core/table/swtable";
@@ -78,9 +80,7 @@ it("keeps vertical Writer spans through ODT, the worker codec and clipped source
     const bytes = await writeOdtDocument(doc, { title: "Vertical spans" });
     const content = await (await DocumentArchive.open(bytes)).readTextEntry("content.xml");
     expect(content).toContain('table:number-rows-spanned="3"');
-    expect(content.match(/<table:covered-table-cell table:style-name="[^"]+"\/>/gu)).toHaveLength(
-      2,
-    );
+    expect(content.match(/<table:covered-table-cell\/>/gu)).toHaveLength(2);
     const reopened = (await readOdtDocument(bytes, { title: "Vertical spans" })).document;
     restored.push(reopened);
     expect(signedSpans(required(reopened.GetTables()[0]))).toEqual(spans);
@@ -88,7 +88,7 @@ it("keeps vertical Writer spans through ODT, the worker codec and clipped source
       exportStylesXml(doc),
       content
         .replace('table:number-rows-spanned="3"', 'table:number-rows-spanned="4"')
-        .replaceAll(/<table:covered-table-cell table:style-name="[^"]+"\/>/gu, ""),
+        .replaceAll("<table:covered-table-cell/>", ""),
       { title: "Clipped vertical spans" },
     );
     restored.push(clipped);
@@ -208,23 +208,115 @@ it("builds spanning boxes without an explicit covered-cell marker", /** Tests Wr
     }).document;
   expect(required(imported.GetTables()[0]).GetTabLines()[0]?.GetTabBoxes()).toHaveLength(2);
 });
-it.each(["foreign-covered", "overflow"])(
-  "ODF independent grid rejects malformed %s",
-  /** Checks source span-grid cardinality without silently duplicating cells. @param kind - Malformation. @returns Nothing. */ (
-    kind,
-  ) => {
-    const f = fixture(),
-      content = exportContentXml(f.doc),
-      invalid =
-        kind === "foreign-covered"
-          ? content.replace("</table:table-row>", "<table:covered-table-cell/></table:table-row>")
-          : content.replace('table:number-columns-spanned="2"', 'table:number-columns-spanned="4"');
-    expect(
-      /** Imports an independently malformed span stream. @returns Import result or validation error. */ () =>
-        importWriterXml(exportStylesXml(f.doc), invalid, { title: "Invalid" }),
-    ).toThrow(/ODF/);
-  },
-);
+it("clips column spans at grid edges and preceding vertical reservations", /** Replays admitted cells over a three-column native grid. @returns Nothing. */ () => {
+  const namespaces = Object.entries(ODF_NAMESPACES)
+    .map(
+      /** Supplies the actual SAX namespaces. @param pair - Namespace binding. @returns XML declaration. */ ([
+        prefix,
+        uri,
+      ]) => `xmlns:${prefix}="${uri}"`,
+    )
+    .join(" ");
+  const content = `<office:document-content ${namespaces} office:version="1.3"><office:body><office:text>
+    <table:table table:name="Clipped"><table:table-column table:number-columns-repeated="3"/>
+    <table:table-row>
+      <table:table-cell><text:p>Left</text:p></table:table-cell>
+      <table:table-cell table:number-rows-spanned="2"><text:p>Master</text:p></table:table-cell>
+      <table:table-cell/><table:covered-table-cell/>
+    </table:table-row>
+    <table:table-row>
+      <table:table-cell table:number-columns-spanned="3"><text:p>Before reservation</text:p></table:table-cell>
+      <table:covered-table-cell/>
+      <table:table-cell table:number-columns-spanned="4" table:number-columns-repeated="2"><text:p>At edge</text:p></table:table-cell>
+    </table:table-row>
+    </table:table></office:text></office:body></office:document-content>`;
+  const imported = importWriterXml(undefined, content, { title: "Clipped" }).document;
+  try {
+    const table = required(imported.GetTables()[0]);
+    expect(table.GetColumnWidths()).toEqual([23, 23, 23]);
+    expect(signedSpans(table)).toEqual([
+      [1, 2, 1],
+      [1, -1, 1],
+    ]);
+    const row = required(table.GetTabLines()[1]);
+    expect(row.GetTabBoxes()[0]?.GetParagraphs()[0]?.GetText()).toBe("Before reservation");
+    expect(row.GetTabBoxes()[2]?.GetParagraphs()[0]?.GetText()).toBe("At edge");
+    const exported = exportContentXml(imported);
+    expect(exported).toContain('table:number-columns-repeated="3"');
+    expect(exported).not.toContain("table:number-columns-spanned");
+  } finally {
+    imported.Dispose();
+  }
+});
+
+it("advances the compatibility cursor only for styled covered cells", /** Verifies Writer's separate marker cursor with two vertically reserved slots. @returns Nothing. */ () => {
+  const content = `<office:document-content xmlns:office="${ODF_NAMESPACES.office}" xmlns:table="${ODF_NAMESPACES.table}" xmlns:style="${ODF_NAMESPACES.style}" xmlns:fo="${ODF_NAMESPACES.fo}">
+  <office:automatic-styles><style:style style:name="Border" style:family="table-cell"><style:table-cell-properties fo:border-right="1pt solid #000000"/></style:style></office:automatic-styles>
+  <office:body><office:text><table:table table:name="Cursor">
+    <table:table-column table:number-columns-repeated="2"/>
+    <table:table-row><table:table-cell table:number-rows-spanned="2"/><table:table-cell table:number-rows-spanned="2"/></table:table-row>
+    <table:table-row><table:covered-table-cell/><table:covered-table-cell table:style-name="Border"/></table:table-row>
+  </table:table></office:text></office:body></office:document-content>`;
+  const settingsXml = `<office:document-settings xmlns:office="${ODF_NAMESPACES.office}" xmlns:config="${ODF_NAMESPACES.config}" xmlns:ooo="${ODF_NAMESPACES.ooo}"><office:settings><config:config-item-set config:name="ooo:configuration-settings"><config:config-item config:name="TableRowKeep" config:type="boolean">true</config:config-item></config:config-item-set></office:settings></office:document-settings>`;
+  const document = importWriterXml(undefined, content, { title: "Marker cursor" }, undefined, {
+    settingsXml,
+  }).document;
+  try {
+    const row = required(document.GetTables()[0]?.GetTabLines()[1]);
+    const first = required(row.GetTabBoxes()[0]);
+    const second = required(row.GetTabBoxes()[1]);
+    expect(first.GetFrameFormat().GetBox().GetRight()).toBeTruthy();
+    expect(second.GetFrameFormat().GetBox().GetRight()).toBeUndefined();
+  } finally {
+    document.Dispose();
+  }
+});
+
+it("replays LibreOffice testVerticallyMergedCellBorder on the original ODT", /** Checks both direct border owners and the native covered style name through worker and package export. @returns Completion. */ async () => {
+  const bytes = readFileSync(
+    "../../vendor/libreoffice-reference/sw/qa/extras/odfimport/data/vmerge-cell-border.odt",
+  );
+  const metadata = { title: "Vertically merged cell borders" };
+  const document = (await readOdtDocument(new Uint8Array(bytes), metadata)).document;
+  const record = structuredClone(encodeWriterDocument(document));
+  const worker = decodeWriterDocument(record);
+  const legacyRecord = structuredClone(record);
+  Reflect.deleteProperty(legacyRecord.documentSettings, "TABLE_ROW_KEEP");
+  const legacy = decodeWriterDocument(legacyRecord);
+  let reopened: SwDoc | undefined;
+  try {
+    expect(legacy.GetDocumentSettingManager().get("TABLE_ROW_KEEP")).toBe(false);
+    const output = await writeOdtDocument(worker, metadata);
+    const stream = await (await DocumentArchive.open(output)).readTextEntry("content.xml");
+    expect(stream).toContain('<table:covered-table-cell table:style-name="Table1.A2"/>');
+    reopened = (await readOdtDocument(output, metadata)).document;
+    for (const candidate of [document, worker, reopened]) {
+      expect(candidate.GetDocumentSettingManager().get("TABLE_ROW_KEEP")).toBe(true);
+      const table = required(candidate.GetTables()[0]);
+      const upper = required(table.GetTabLines()[0]?.GetTabBoxes()[0]);
+      const lower = required(table.GetTabLines()[1]?.GetTabBoxes()[0]);
+      expect(upper.GetFrameFormat().GetBox().GetRight()).toBeTruthy();
+      expect(lower.GetFrameFormat().GetBox().GetRight()).toBeUndefined();
+      expect(signedSpans(table)).toEqual([[2], [-1]]);
+    }
+    const withoutSetting = importWriterXml(
+      undefined,
+      await (await DocumentArchive.open(new Uint8Array(bytes))).readTextEntry("content.xml"),
+      metadata,
+    ).document;
+    try {
+      const covered = required(withoutSetting.GetTables()[0]?.GetTabLines()[1]?.GetTabBoxes()[0]);
+      expect(covered.GetFrameFormat().GetBox().GetRight()).toBeTruthy();
+    } finally {
+      withoutSetting.Dispose();
+    }
+  } finally {
+    reopened?.Dispose();
+    legacy.Dispose();
+    worker.Dispose();
+    document.Dispose();
+  }
+});
 
 it("ODF fuzzy20 column equivalence exports the native shared grid without extra covered owners", /** Checks source tolerance normalization through a real package stream. @returns Completion. */ async () => {
   const f = fixture(),

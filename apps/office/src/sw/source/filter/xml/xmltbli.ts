@@ -37,15 +37,24 @@ class SwXMLTableContextState {
   activeRow: SwTableLine | undefined;
   activeCell: SwTableBox | undefined;
   activeCellStyleName = "";
+  activeCellColumnSpan = 1;
   oldCursor: XMLTextCursor | undefined;
   rowCellIndex = 0;
   readonly columnWidths: number[] = [];
   columnDefaultCellStyleNames: string[] | undefined;
   rowStyleName = "";
   rowDefaultCellStyleName = "";
-  readonly rowCellStyles = new Map<number, { styleName: string; columns: number }>();
+  readonly rowCellStyles = new Map<
+    number,
+    {
+      styleName: string;
+      columns: number;
+      coveredBox?: SwTableBox;
+    }
+  >();
+  readonly coveredCellStyles = new Map<number, string>();
   readonly verticalSpans = new Map<number, SwXMLVerticalSpan>();
-  pendingCovered = 0;
+  nonMergedCellIndex = 0;
   inHeaderRows = false;
   headerRowCount = 0;
 
@@ -89,8 +98,9 @@ export class SwXMLTableImport extends SvXMLImport {
     name: string,
     style: OdfTableStyle,
   ): void {
-    if (this.tableStyles.has(name)) throw new Error(`Duplicate ODF table style: ${name}`);
-    this.tableStyles.set(name, style);
+    const key = `${style.family}:${name}`;
+    if (this.tableStyles.has(key)) throw new Error(`Duplicate ODF table style: ${name}`);
+    this.tableStyles.set(key, style);
   }
 
   /** Opens one canonical table at the current body position. @param name - Table name. @param styleName - ODF table style. @param defaultCellStyleName - Table fallback for cells. @returns Nothing. */
@@ -258,14 +268,14 @@ export class SwXMLTableImport extends SvXMLImport {
         new SwFormatFrameSize(SwFrameSize.Fixed, 0, Math.min(65535, Math.max(1, style.height))),
       );
     table.AddLine(context.activeRow);
-    context.pendingCovered = 0;
+    context.nonMergedCellIndex = 0;
+    context.coveredCellStyles.clear();
     if (inHeader && context.headerRowCount === rowIndex) context.headerRowCount++;
     context.rowCellIndex = 0;
   }
 
   /** Advances past reserved positions and checks whether the row can admit another anchored cell. @returns Whether a column is available. */
   public canInsertTableCell(): boolean {
-    this.tableContext.pendingCovered = 0;
     this.InsertImplicitCoveredBoxes();
     return this.tableContext.rowCellIndex < this.tableContext.columnWidths.length;
   }
@@ -280,18 +290,14 @@ export class SwXMLTableImport extends SvXMLImport {
     if (context.activeRow === undefined || context.activeCell !== undefined)
       throw new Error("ODF table cell is outside a row.");
     this.InsertImplicitCoveredBoxes();
-    if (
-      context.pendingCovered !== 0 ||
-      context.rowCellIndex + columnSpan > context.columnWidths.length
-    )
-      throw new Error("ODF table row contains more cells than declared columns.");
     const firstColumn = context.rowCellIndex;
-    for (const column of context.verticalSpans.keys())
-      if (firstColumn < column && column < firstColumn + columnSpan)
-        throw new Error("ODF table cell overlaps a covered cell.");
+    const actualColumnSpan = this.ClipColumnSpan(columnSpan);
+    if (!actualColumnSpan) throw new Error("ODF table cell is outside the declared columns.");
     context.activeCellStyleName = styleName;
+    context.activeCellColumnSpan = columnSpan;
     styleName = this.GetCellStyleName(styleName);
-    const cell = this.CreateBox(styleName, columnSpan);
+    const cell = this.CreateBox(styleName, actualColumnSpan);
+    context.nonMergedCellIndex = context.rowCellIndex;
     if (rowSpan > 1) {
       const firstRow = context.table.GetTabLines().length - 1;
       const endRow = Math.min(firstRow + rowSpan, 65535);
@@ -299,7 +305,7 @@ export class SwXMLTableImport extends SvXMLImport {
       context.verticalSpans.set(firstColumn, {
         firstRow,
         endRow,
-        columns: columnSpan,
+        columns: actualColumnSpan,
         styleName,
         master: cell,
         covered: [],
@@ -310,7 +316,16 @@ export class SwXMLTableImport extends SvXMLImport {
       context.oldCursor = this.textImport.GetCursor();
       this.textImport.SetCursor(new SwXCell(cell).createTextCursor());
     }
-    context.pendingCovered = columnSpan - 1;
+  }
+
+  /** Truncates a span at the declared grid edge or the next occupied slot. @param count - Source column count. @returns Admitted column count. */
+  private ClipColumnSpan(count: number): number {
+    const context = this.tableContext;
+    const start = context.rowCellIndex;
+    let end = Math.min(start + count, context.columnWidths.length);
+    for (const column of context.verticalSpans.keys())
+      if (column > start && column < end) end = column;
+    return end - start;
   }
 
   /** Resolves fallback names in the same order as SwXMLTableContext::InsertCell. @param styleName - Explicit cell style. @returns Resolved name. */
@@ -325,8 +340,8 @@ export class SwXMLTableImport extends SvXMLImport {
     );
   }
 
-  /** Appends a real cell over the declared width of its original grid slots. @param styleName - Native style name. @param columnSpan - Source column count. @returns Actual core box. */
-  private CreateBox(styleName: string, columnSpan: number): SwTableBox {
+  /** Appends a real cell over the declared width of its original grid slots. @param styleName - Native style name. @param columnSpan - Source column count. @param covered - Whether style attachment waits for covered markers. @returns Actual core box. */
+  private CreateBox(styleName: string, columnSpan: number, covered = false): SwTableBox {
     const context = this.tableContext;
     const row = context.activeRow;
     if (row === undefined) throw new Error("ODF table cell is outside a row.");
@@ -342,6 +357,18 @@ export class SwXMLTableImport extends SvXMLImport {
       cell = this.document.nodes.AppendTableBox(this.requireTable(), row, {
         frameSize: new SwFormatFrameSize(SwFrameSize.Variable, width, 0),
       });
+    context.rowCellStyles.set(context.rowCellIndex, {
+      styleName,
+      columns: columnSpan,
+      ...(covered ? { coveredBox: cell } : {}),
+    });
+    context.rowCellIndex += columnSpan;
+    if (!covered) this.ApplyBoxStyle(cell, styleName);
+    return cell;
+  }
+
+  /** Applies direct ODF items to the actual box format. @param cell - Canonical box. @param styleName - Resolved cell style. @returns Nothing. */
+  private ApplyBoxStyle(cell: SwTableBox, styleName: string): void {
     const style = this.resolveTableStyle(styleName, "table-cell") as Extract<
       OdfTableStyle,
       { family: "table-cell" }
@@ -363,15 +390,12 @@ export class SwXMLTableImport extends SvXMLImport {
                 : VertOrientation.NONE,
         ),
       );
-    context.rowCellStyles.set(context.rowCellIndex, { styleName, columns: columnSpan });
-    context.rowCellIndex += columnSpan;
-    return cell;
   }
 
   /** Inserts the native empty box for a vertically covered position. @param span - Actual owning master reservation. @returns Nothing. */
   private InsertCoveredBox(span: SwXMLVerticalSpan): void {
     const rowIndex = this.requireTable().GetTabLines().length - 1;
-    const cell = this.CreateBox(span.styleName, span.columns);
+    const cell = this.CreateBox(span.styleName, span.columns, true);
     cell.setRowSpan(rowIndex - span.endRow);
     span.covered.push(cell);
   }
@@ -379,7 +403,6 @@ export class SwXMLTableImport extends SvXMLImport {
   /** Materializes reserved vertical boxes without requiring a redundant covered-cell tag. @returns Nothing. */
   private InsertImplicitCoveredBoxes(): void {
     const context = this.tableContext;
-    if (context.pendingCovered) return;
     let span = context.verticalSpans.get(context.rowCellIndex);
     while (span !== undefined) {
       this.InsertCoveredBox(span);
@@ -387,17 +410,16 @@ export class SwXMLTableImport extends SvXMLImport {
     }
   }
 
-  /** Consumes a covered grid slot. The default native TABLE_ROW_KEEP setting ignores authored covered-cell styles. @returns Nothing. */
-  public coveredTableCell(): void {
+  /** Records an authored style at the source's independent covered-cell cursor. @param styleName - Authored style name. @returns Nothing. */
+  public coveredTableCell(styleName = ""): void {
     const context = this.tableContext;
-    if (context.pendingCovered > 0) {
-      context.pendingCovered--;
+    if (
+      !styleName ||
+      context.nonMergedCellIndex >= context.columnWidths.length ||
+      !this.document.GetDocumentSettingManager().get("TABLE_ROW_KEEP")
+    )
       return;
-    }
-    const span = context.verticalSpans.get(context.rowCellIndex);
-    if (span === undefined) throw new Error("ODF covered table cell has no spanning cell.");
-    this.InsertCoveredBox(span);
-    context.pendingCovered = span.columns - 1;
+    context.coveredCellStyles.set(context.nonMergedCellIndex++, styleName);
   }
 
   /** Closes the active text section and copies single-column repeated cells. @param repeat - Parsed cell repetition count. @returns Nothing. */
@@ -413,7 +435,7 @@ export class SwXMLTableImport extends SvXMLImport {
       context.oldCursor = undefined;
     }
     context.activeCell = undefined;
-    if (source === undefined || context.pendingCovered !== 0 || repeat === 1) return;
+    if (source === undefined || context.activeCellColumnSpan !== 1 || repeat === 1) return;
     const span = context.verticalSpans.get(context.rowCellIndex - 1);
     for (let index = 1; index < repeat; index++) {
       this.InsertImplicitCoveredBoxes();
@@ -421,6 +443,7 @@ export class SwXMLTableImport extends SvXMLImport {
       const column = context.rowCellIndex;
       const styleName = this.GetCellStyleName(context.activeCellStyleName);
       const box = this.CreateBox(styleName, 1);
+      context.nonMergedCellIndex = context.rowCellIndex;
       if (span !== undefined) {
         box.setRowSpan(source.getRowSpan());
         context.verticalSpans.set(column, { ...span, styleName, master: box, covered: [] });
@@ -443,7 +466,7 @@ export class SwXMLTableImport extends SvXMLImport {
         this.InsertImplicitCoveredBoxes();
         if (context.rowCellIndex >= context.columnWidths.length) break;
         const source = previous.get(context.rowCellIndex);
-        const columnSpan = source?.columns ?? 1;
+        const columnSpan = this.ClipColumnSpan(source?.columns ?? 1);
         this.CreateBox(this.GetCellStyleName(source?.styleName ?? ""), columnSpan);
       }
       this.FinishRow();
@@ -453,14 +476,15 @@ export class SwXMLTableImport extends SvXMLImport {
   /** Completes the row with a default empty cell across trailing unoccupied columns. @returns Nothing. */
   private FinishRow(): void {
     const context = this.tableContext;
-    context.pendingCovered = 0;
     while (context.rowCellIndex < context.columnWidths.length) {
       this.InsertImplicitCoveredBoxes();
       if (context.rowCellIndex >= context.columnWidths.length) break;
-      let end = context.columnWidths.length;
-      for (const column of context.verticalSpans.keys())
-        if (column > context.rowCellIndex) end = Math.min(end, column);
-      this.CreateBox(this.GetCellStyleName(""), end - context.rowCellIndex);
+      this.CreateBox(this.GetCellStyleName(""), this.ClipColumnSpan(context.columnWidths.length));
+    }
+    for (const [column, state] of context.rowCellStyles) {
+      if (!state.coveredBox) continue;
+      state.styleName = context.coveredCellStyles.get(column) ?? state.styleName;
+      this.ApplyBoxStyle(state.coveredBox, state.styleName);
     }
     context.activeRow = undefined;
   }
@@ -493,11 +517,6 @@ export class SwXMLTableImport extends SvXMLImport {
 
   /** Resolves a table-family style or its omitted default. @param name - Style reference. @param family - Required family. @returns Table geometry. */
   private resolveTableStyle(name: string, family: OdfTableStyle["family"]): OdfTableStyle {
-    if (name === "") return { family };
-    const style = this.tableStyles.get(name);
-    if (style === undefined) return { family };
-    if (style.family !== family)
-      throw new Error(`ODF ${family} style has the wrong family: ${name}`);
-    return style;
+    return this.tableStyles.get(`${family}:${name}`) ?? { family };
   }
 }
