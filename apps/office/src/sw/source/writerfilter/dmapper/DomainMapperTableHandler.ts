@@ -17,7 +17,7 @@ import { HoriOrientation } from "../../../../offapi/com/sun/star/text/HoriOrient
 import { WritingMode2 } from "../../../../offapi/com/sun/star/text/WritingMode2";
 import { SizeType } from "../../../../offapi/com/sun/star/text/SizeType";
 import { PropertyIds as P } from "./PropertyIds";
-import { TablePropertyMapTarget as T, type TablePropertyMap } from "./PropertyMap";
+import { PropertyMap, TablePropertyMapTarget as T, TablePropertyMap } from "./PropertyMap";
 import { TableStyleSheetEntry, type StyleSheetTable } from "./StyleSheetTable";
 import { RES_FRMATR_GRABBAG } from "../../../inc/hintids";
 import { SfxGrabBagItem } from "../../../../svl/inc/grabbagitem";
@@ -31,8 +31,35 @@ export function ApplyOOXMLTableDefaults(properties: TablePropertyMap): void {
     if (!properties.getValue(target, current)) properties.setValue(target, DEF_BORDER_DIST);
 }
 
-/** Resolves inherited style geometry before applying direct table properties. @param properties - Direct table map. @param styles - Original stylesheet table. @returns Nothing. */
-export function ApplyTableStyle(properties: TablePropertyMap, styles: StyleSheetTable): void {
+const FIRST_ROW = 0x800;
+const LAST_ROW = 0x400;
+const FIRST_COLUMN = 0x200;
+const LAST_COLUMN = 0x100;
+
+/** Native table-style inputs shared by all cells in the same table. */
+interface TableInfo {
+  look: number;
+  style?: TableStyleSheetEntry;
+  defaults: PropertyMap;
+}
+
+/** Cell properties that are applied to the original Writer box. */
+const templateCellProperties = [
+  P.PROP_BACK_COLOR,
+  P.PROP_CELL_INTEROP_GRAB_BAG,
+  P.PROP_VERT_ORIENT,
+  P.PROP_LEFT_BORDER,
+  P.PROP_RIGHT_BORDER,
+  P.PROP_TOP_BORDER,
+  P.PROP_BOTTOM_BORDER,
+  P.PROP_LEFT_BORDER_DISTANCE,
+  P.PROP_RIGHT_BORDER_DISTANCE,
+  P.PROP_TOP_BORDER_DISTANCE,
+  P.PROP_BOTTOM_BORDER_DISTANCE,
+] as const;
+
+/** Resolves inherited style geometry before applying direct table properties. @param properties - Direct table map. @param styles - Original stylesheet table. @returns Cell resolution inputs with owned defaults. */
+export function ApplyTableStyle(properties: TablePropertyMap, styles: StyleSheetTable): TableInfo {
   const lookProperty = properties.getProperty(P.PROP_TBL_LOOK)?.[1];
   let look = 0x4a0;
   try {
@@ -41,14 +68,26 @@ export function ApplyTableStyle(properties: TablePropertyMap, styles: StyleSheet
     lookProperty?.dispose();
     properties.Erase(P.PROP_TBL_LOOK);
   }
+  const info: TableInfo = { look, defaults: new PropertyMap() };
   const style = properties.getProperty(P.META_PROP_TABLE_STYLE_NAME)?.[1];
-  if (!style) return;
+  if (!style) return info;
   const value: [number] = [0];
   try {
     const entry = styles.FindStyleSheetByISTD(stringValue(style));
-    if (!entry) return;
-    if (entry instanceof TableStyleSheetEntry && look & 0x020) {
-      const firstRow = entry.GetProperties(0x800);
+    if (!entry) return info;
+    if (entry instanceof TableStyleSheetEntry) {
+      info.style = entry;
+      for (const [bit, condition] of [
+        [0x020, FIRST_ROW],
+        [0x040, LAST_ROW],
+        [0x080, FIRST_COLUMN],
+        [0x100, LAST_COLUMN],
+      ] as const) {
+        if (info.look & bit && !entry.Has(condition)) info.look &= ~bit;
+      }
+    }
+    if (info.style && info.look & 0x020) {
+      const firstRow = info.style.GetProperties(FIRST_ROW);
       try {
         const header = firstRow.getProperty(P.PROP_HEADER_ROW_COUNT)?.[1];
         try {
@@ -62,6 +101,7 @@ export function ApplyTableStyle(properties: TablePropertyMap, styles: StyleSheet
     }
     const merged = entry.GetMergedInheritedProperties(styles);
     try {
+      CopyTableCellStyleProperties(info.defaults, merged);
       for (const [id, target] of [
         [P.PROP_LEFT_MARGIN, T.LEFT_MARGIN],
         [P.META_PROP_CELL_MAR_LEFT, T.CELL_MAR_LEFT],
@@ -80,8 +120,75 @@ export function ApplyTableStyle(properties: TablePropertyMap, styles: StyleSheet
     } finally {
       merged.dispose();
     }
+    return info;
+  } catch (error) {
+    info.defaults.dispose();
+    throw error;
   } finally {
     style.dispose();
+  }
+}
+
+/** Copies the represented cell portion of an original table property map. @param target - Cell map. @param source - Table or conditional map. @returns Nothing. */
+function CopyTableCellStyleProperties(target: PropertyMap, source: PropertyMap): void {
+  for (const id of templateCellProperties) {
+    const value = source.getProperty(id)?.[1];
+    if (!value) continue;
+    try {
+      target.Insert(id, value);
+    } finally {
+      value.dispose();
+    }
+  }
+}
+
+/** Determines the native row condition for the cell masks in this row. @param info - Resolved table style. @param row - Source row index. @param rowCount - Number of source rows. @param header - Original explicit header marker. @returns Row condition mask. */
+export function TableRowStyleMask(
+  info: TableInfo,
+  row: number,
+  rowCount: number,
+  header: boolean,
+): number {
+  if (header || (row === 0 && info.look & 0x020)) return FIRST_ROW;
+  if (row > 0 && row === rowCount - 1 && info.look & 0x040) return LAST_ROW;
+  if (info.look & 0x200) return 0;
+  return (row + 1 + Number(Boolean(info.look & 0x020))) & 1 ? 0x020 : 0x010;
+}
+
+/** Layers table defaults, native row/column conditions and direct cell properties. @param info - Resolved table style. @param rowMask - Source row mask. @param cell - Cell index in this row. @param cellCount - Source row cell count. @param direct - Native direct cell properties. @returns Owned cell map. */
+export function ResolveTableCellProperties(
+  info: TableInfo,
+  rowMask: number,
+  cell: number,
+  cellCount: number,
+  direct: TablePropertyMap | undefined,
+): TablePropertyMap {
+  const properties = new TablePropertyMap();
+  try {
+    properties.InsertProps(info.defaults);
+    if (info.style) {
+      let cellMask = 0;
+      if (cell === 0 && info.look & 0x080) cellMask = FIRST_COLUMN;
+      else if (cell > 0 && cell === cellCount - 1 && info.look & 0x100) cellMask = LAST_COLUMN;
+      else if (!(info.look & 0x400))
+        cellMask = (cell + 1 + Number(Boolean(info.look & 0x080))) & 1 ? 0x080 : 0x040;
+      let mask = rowMask | cellMask;
+      if (mask === (FIRST_ROW | FIRST_COLUMN)) mask |= 0x004;
+      else if (mask === (FIRST_ROW | LAST_COLUMN)) mask |= 0x008;
+      else if (mask === (LAST_ROW | FIRST_COLUMN)) mask |= 0x001;
+      else if (mask === (LAST_ROW | LAST_COLUMN)) mask |= 0x002;
+      const conditional = info.style.GetProperties(mask);
+      try {
+        CopyTableCellStyleProperties(properties, conditional);
+      } finally {
+        conditional.dispose();
+      }
+    }
+    if (direct) properties.InsertProps(direct);
+    return properties;
+  } catch (error) {
+    properties.dispose();
+    throw error;
   }
 }
 

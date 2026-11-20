@@ -1,5 +1,7 @@
 /** @fileoverview Writer browser graph transport for text nodes and the native table section hierarchy. */
 import {
+  encodeCellInterop,
+  restoreCellInterop,
   encodeTableInterop,
   restoreTableInterop,
   type WriterInteropProperty,
@@ -130,6 +132,7 @@ export function* decodeSectionBlocks(
 
 /** Primitive complete box item; legacy scalar alignment is accepted only at storage ingress. */
 type WriterBoxFormatRecord = {
+  readonly interop?: readonly WriterInteropProperty[];
   readonly frameDirection?: SfxPoolItemSnapshot | undefined;
   readonly background?: SfxPoolItemSnapshot | undefined;
   readonly frameSize?: WriterFrameSizeRecord | undefined;
@@ -150,7 +153,9 @@ type WriterBoxFormatRecord = {
 /** Encodes the original cell format items at the browser boundary. @param cell - Actual cell. @returns Primitive format. */
 function encodeBoxFormat(cell: SwTableBox): WriterBoxFormatRecord {
   const { vertOrient, box, frameSize } = cell.GetFormat();
+  const interop = encodeCellInterop(cell.GetFrameFormat());
   return {
+    ...(interop === undefined ? {} : { interop }),
     frameSize: encodeFrameSize(frameSize),
     frameDirection: encodeFrameDirection(cell.GetFrameFormat()),
     background: encodeFrameBackground(cell.GetFrameFormat()),
@@ -402,6 +407,8 @@ export function* decodeWriterTableSteps(
         direction = decodeFrameDirection(frame, cellRecord.format.frameDirection);
       if (direction !== undefined) frame.SetFormatAttr(direction);
       restoreFrameBackground(frame, cellRecord.format.background);
+      if (cellRecord.format.interop !== undefined)
+        restoreCellInterop(frame, cellRecord.format.interop);
       const order =
         cellRecord.contentOrder ??
         cellRecord.paragraphs.map(

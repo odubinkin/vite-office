@@ -7,14 +7,22 @@ import { SvxBoxItemLine, type SvxBoxItem } from "../../../../editeng/source/item
 import { SvxFrameDirection } from "../../../../editeng/inc/frmdir";
 import { VertOrientation } from "../../../../offapi/com/sun/star/text/VertOrientation";
 import { SwFrameSize } from "../../../inc/fmtfsize";
-import { RES_FRMATR_GRABBAG, RES_KEEP, RES_LAYOUT_SPLIT } from "../../../inc/hintids";
+import type { SvxBrushItem } from "../../../../editeng/source/items/frmitems.brush";
+import { ConvertColorOU } from "../../../../filter/source/msfilter/util";
+import { COL_AUTO } from "../../../../tools/inc/color";
+import {
+  RES_BACKGROUND,
+  RES_FRMATR_GRABBAG,
+  RES_KEEP,
+  RES_LAYOUT_SPLIT,
+} from "../../../inc/hintids";
 import type { SfxBoolItem } from "../../../../svl/source/items/cenumitm";
 import type { SwFormatLayoutSplit } from "../../../inc/fmtlsplt";
 import type { SwTable, SwTableBox, SwTableLine } from "../../core/table/swtable";
 import { SwTextNode } from "../../core/txtnode/ndtxt";
 import type { DocxAttributeOutput } from "./docxattributeoutput";
 import type { GrabBagValueConstReference, SfxGrabBagItem } from "../../../../svl/inc/grabbagitem";
-import { stringValue } from "../../core/unocore/unocrsrhelper";
+import { stringValue, text } from "../../core/unocore/unocrsrhelper";
 import { forEachProperty } from "../../writerfilter/dmapper/SettingsTable.compat";
 
 const w = token("w"),
@@ -245,6 +253,67 @@ export function StartTableRow(
   TableHeight(output, line);
   TableCanSplit(output, table, line);
   serializer.endElementNS(w, token("trPr"));
+}
+
+/** Writes the cell, row or table brush and reuses original shading when its color still matches. @param output - Native DOCX writer. @param table - Actual table. @param row - Actual row. @param box - Actual cell. @returns Nothing. */
+export function TableBackgrounds(
+  output: DocxAttributeOutput,
+  table: SwTable,
+  row: SwTableLine,
+  box: SwTableBox,
+): void {
+  let color = COL_AUTO;
+  for (const format of [box.GetFrameFormat(), row.GetFrameFormat(), table.GetFrameFormat()]) {
+    const item = format.GetAttrSet().GetItem(RES_BACKGROUND) as SvxBrushItem | undefined;
+    if (item) color = item.GetColor();
+    if (!color.equals(COL_AUTO)) break;
+  }
+  const value = ConvertColorOU(color);
+  try {
+    const current = text(value);
+    const item = box.GetFrameFormat().GetAttrSet().Get(RES_FRMATR_GRABBAG) as SfxGrabBagItem;
+    const grabBag = item.GetGrabBag();
+    const original = grabBag.get("originalColor");
+    const serializer = output.GetSerializer();
+    if (!original || stringValue(original) !== current) {
+      if (current !== "auto")
+        serializer.singleElementNS(
+          w,
+          token("shd"),
+          FSNS(w, token("fill")),
+          current,
+          FSNS(w, token("val")),
+          "clear",
+        );
+      return;
+    }
+    const attrs = FastSerializerHelper.createAttrList();
+    try {
+      for (const name of [
+        "themeFill",
+        "themeFillTint",
+        "themeFillShade",
+        "fill",
+        "themeColor",
+        "themeTint",
+        "themeShade",
+        "color",
+      ]) {
+        const attribute = grabBag.get(name);
+        if (attribute?.has("OUString"))
+          attrs.operatorArrow().add(FSNS(w, token(name)), stringValue(attribute));
+      }
+      const pattern = grabBag.get("val");
+      attrs
+        .operatorArrow()
+        .add(FSNS(w, token("val")), pattern?.has("OUString") ? stringValue(pattern) : "clear");
+      serializer.singleElementNS(w, token("shd"), attrs);
+    } finally {
+      attrs.dispose();
+    }
+  } finally {
+    value.dispose();
+  }
 }
 
 /** Projects native cell direction and vertical orientation after the cell margins. @param output - Native DOCX writer. @param box - Actual cell. @returns Nothing. */

@@ -4,8 +4,14 @@ import { SwDoc } from "../../../source/core/doc/doc";
 import { SwXTextDocument } from "../../../source/uibase/uno/unotxdoc";
 import { DocumentArchive } from "../../../../package/source/zippackage/document-archive";
 import { DocxExport } from "../../../source/filter/ww8/docxexport";
+import { SwTableNode } from "../../../source/core/docnode/node";
 import { OdtFilterError } from "../../../source/filter/xml/odt-filter-service";
-import { restoreTableInterop, restoreTableStyles } from "./writer-table-interop-codec";
+import {
+  encodeCellInterop,
+  restoreCellInterop,
+  restoreTableInterop,
+  restoreTableStyles,
+} from "./writer-table-interop-codec";
 import { WriterPrimaryOdtFilterService } from "./writer-primary-odt-filter";
 
 const style = {
@@ -40,7 +46,14 @@ it("restores table style bindings by native name across primary XML, including n
     "Nested",
     {},
   );
-  document.nodes.AppendTableRow(nested, 1);
+  const nestedCell = document.nodes.AppendTableRow(nested, 1).GetTabBoxes()[0];
+  assert(nestedCell);
+  const shading = [
+    { name: "val", value: "clear" },
+    { name: "fill", value: "auto" },
+    { name: "originalColor", value: "auto" },
+  ];
+  restoreCellInterop(nestedCell.ClaimFrameFormat(), shading);
   document.nodes.AppendTableRow(table, 1);
   table.SetRowsToRepeat(1);
   nested.SetRowsToRepeat(0);
@@ -52,6 +65,7 @@ it("restores table style bindings by native name across primary XML, including n
     const content = await filter.ExportXml(input);
     expect(content).toHaveProperty("wordTableStyles", {
       styles: [style],
+      cells: [["Nested", 0, 0, shading]],
       tables: [
         ["Outer", heading],
         ["Nested", heading],
@@ -60,6 +74,17 @@ it("restores table style bindings by native name across primary XML, including n
     const restored = await filter.Import(structuredClone(content), input);
     try {
       expect(restored.document.GetTables()[0]?.GetRowsToRepeat()).toBe(1);
+      const section = restored.document
+        .GetNodes()
+        .entries()
+        .find(
+          /** Resolves the native second table. @param node - Document node. @returns Whether it owns the nested table. */
+          (node) => node instanceof SwTableNode && node.GetTable().GetName() === "Nested",
+        );
+      assert(section instanceof SwTableNode);
+      const nestedBox = section.GetTable().GetTabLines()[0]?.GetTabBoxes()[0];
+      assert(nestedBox);
+      expect(encodeCellInterop(nestedBox.GetFrameFormat())).toEqual(shading);
       const zip = await DocumentArchive.open(await DocxExport.WriteDocument(restored.document));
       expect(await zip.readTextEntry("word/styles.xml")).toContain(
         '<w:style w:type="table" w:styleId="HeadingStyle">',
@@ -111,6 +136,10 @@ it("accepts old primary packages and rejects malformed associated records", /** 
       },
       { styles: {}, tables: [] },
       { tables: [["Table", ["invalid"]]] },
+      { tables: [], cells: null },
+      { tables: [], cells: [["Table", -1, 0, []]] },
+      { tables: [], cells: [["Table", 0, 1.5, []]] },
+      { tables: [], cells: [["Table", 0, 0, [{ name: "fill", value: true }]]] },
     ]) {
       const content = { ...old, wordTableStyles };
       await expect(filter.Import(content, input)).rejects.toMatchObject({

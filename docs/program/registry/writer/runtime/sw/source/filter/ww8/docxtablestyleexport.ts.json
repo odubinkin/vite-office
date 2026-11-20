@@ -18,9 +18,12 @@
       "evidence": [
         "apps/office/src/sw/source/filter/ww8/docxtablestyleexport.ts",
         "apps/office/src/sw/source/filter/ww8/docxexport.table-flow.test.ts",
-        "sw/source/filter/ww8/docxtablestyleexport.cxx"
+        "sw/source/filter/ww8/docxtablestyleexport.cxx",
+        "apps/office/src/sw/source/filter/ww8/docxexport.table-shading.test.ts",
+        "apps/office/e2e/writer-docx-table-shading.spec.ts",
+        "sw/qa/extras/ooxmlexport/ooxmlexport25.cxx"
       ],
-      "justification": "Projects native table style interoperability properties into Word styles, including named metadata, ordered conditional row properties, represented table sizes and cell margins, and emitted header tracking. Conditional paragraph, character and cell-format property groups and native border interop remain outside this slice.",
+      "justification": "Projects native table style interoperability properties into Word styles, including named metadata, ordered conditional row properties, represented table sizes and cell margins, and emitted header tracking. Conditional paragraph, character and cell-format property groups and native border interop remain outside this slice. Writes the original style cell property group with represented original OOXML shading fields.",
       "knownViolations": [],
       "localSymbols": [
         "DocxTableStyleExport",

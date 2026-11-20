@@ -78,6 +78,7 @@ export class DocxTableStyleExport {
           value,
         ) => {
           if (name === "tblPr") TableStyleTablePr(serializer, value);
+          else if (name === "tcPr") TableStyleTcPr(serializer, value);
         },
       );
       forEachProperty(
@@ -146,8 +147,46 @@ export class DocxTableStyleExport {
         if (written) serializer.endElementNS(w, token("trPr"));
       },
     );
+    forEachProperty(
+      style,
+      /** Writes conditional cell formatting after the row group. @param name - Field. @param value - Native group. @returns Nothing. */
+      (name, value) => {
+        if (name === "tcPr") TableStyleTcPr(serializer, value);
+      },
+    );
     serializer.endElementNS(w, token("tblStylePr"));
   }
+}
+
+/** Emits the original style cell group and the represented shading attributes. @param serializer - Styles stream. @param cell - Original native property sequence. @returns Nothing. */
+function TableStyleTcPr(serializer: FastSerializerHelper, cell: GrabBagValueConstReference): void {
+  let opened = false;
+  forEachProperty(
+    cell,
+    /** Collects the native cell shading sequence. @param name - Cell property. @param value - Native sequence. @returns Nothing. */
+    (name, value) => {
+      if (!opened) serializer.startElementNS(w, token("tcPr"));
+      opened = true;
+      if (name !== "shd") return;
+      const attrs = FastSerializerHelper.createAttrList();
+      try {
+        forEachProperty(
+          value,
+          /** Uses the fields emitted by the original table style shading exporter. @param key - Attribute name. @param attr - Native text. @returns Nothing. */
+          (key, attr) => {
+            if (
+              ["val", "color", "fill", "themeFill", "themeFillShade", "themeFillTint"].includes(key)
+            )
+              attrs.operatorArrow().add(FSNS(w, token(key)), stringValue(attr));
+          },
+        );
+        serializer.singleElementNS(w, token("shd"), attrs);
+      } finally {
+        attrs.dispose();
+      }
+    },
+  );
+  if (opened) serializer.endElementNS(w, token("tcPr"));
 }
 
 /** Emits represented band counts and cell margins in the native order. @param serializer - Styles serializer. @param source - Native table properties. @returns Whether there was a table property group to write. */

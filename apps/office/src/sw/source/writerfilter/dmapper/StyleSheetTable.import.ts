@@ -132,7 +132,11 @@ export class StyleSheetTableImport implements Table, Properties {
       this.applyCharacterDefaults(modifier);
       return;
     }
-    if (id === N.LN_CT_Style_tblPr || id === N.LN_CT_Style_tblStylePr) {
+    if (
+      id === N.LN_CT_Style_tblPr ||
+      id === N.LN_CT_Style_tblStylePr ||
+      (id === N.LN_CT_Style_tcPr && this.current instanceof TableStyleSheetEntry)
+    ) {
       this.resolveTableStyleProperties(this.current, modifier);
       return;
     }
@@ -196,7 +200,12 @@ export class StyleSheetTableImport implements Table, Properties {
       if (entry instanceof TableStyleSheetEntry) {
         const conditional = modifier.getId() === N.LN_CT_Style_tblStylePr;
         if (conditional) handler.appendInteropGrabBag("type", stringAny(handler.getTypeString()));
-        const property = handler.getInteropGrabBag(conditional ? "tblStylePr" : "tblPr");
+        const name = conditional
+          ? "tblStylePr"
+          : modifier.getId() === N.LN_CT_Style_tcPr
+            ? "tcPr"
+            : "tblPr";
+        const property = handler.getInteropGrabBag(name);
         try {
           entry.AppendInteropGrabBag(property);
         } finally {

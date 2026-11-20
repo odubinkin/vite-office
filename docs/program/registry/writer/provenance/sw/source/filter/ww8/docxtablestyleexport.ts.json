@@ -13,6 +13,18 @@
         {
           "path": "apps/office/src/sw/source/filter/ww8/docxexport.table-flow.test.ts",
           "marker": "direct false override"
+        },
+        {
+          "path": "apps/office/src/sw/source/filter/ww8/docxtablestyleexport.ts",
+          "marker": "TableStyleTcPr"
+        },
+        {
+          "path": "apps/office/src/sw/source/filter/ww8/docxexport.table-shading.test.ts",
+          "marker": "resolves original base, conditional and direct cell fills"
+        },
+        {
+          "path": "apps/office/e2e/writer-docx-table-shading.spec.ts",
+          "marker": "preserves Word table style fills"
         }
       ],
       "upstream": [
@@ -27,6 +39,14 @@
         {
           "path": "sw/source/filter/ww8/docxtablestyleexport.cxx",
           "marker": "DocxTableStyleExport::Impl::tableStyleTablePr"
+        },
+        {
+          "path": "sw/source/filter/ww8/docxtablestyleexport.cxx",
+          "marker": "tableStyleTcPr"
+        },
+        {
+          "path": "sw/qa/extras/ooxmlexport/ooxmlexport25.cxx",
+          "marker": "testTdf138020_undefined_firstCol"
         }
       ]
     },
@@ -42,7 +62,8 @@
       "DocxTableStyleExport::Impl::tableStyleTablePr"
     ],
     "preservedResponsibilities": [
-      "Projects native table style interoperability properties into Word styles, including named metadata, ordered conditional row properties, represented table sizes and cell margins, and emitted header tracking."
+      "Projects native table style interoperability properties into Word styles, including named metadata, ordered conditional row properties, represented table sizes and cell margins, and emitted header tracking.",
+      "Writes the original style cell property group with represented original OOXML shading fields."
     ],
     "omittedResponsibilities": [
       "Conditional paragraph, character and cell-format property groups and native border interop remain outside this slice."

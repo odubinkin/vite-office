@@ -22,9 +22,12 @@
         "vendor/libreoffice-reference/sw/source/writerfilter/dmapper/TablePropertiesHandler.cxx#LN_CT_TblPrBase_tblCellMar",
         "apps/office/src/sw/source/writerfilter/rtftok/rtfdocumentimpl.document.test.ts",
         "vendor/libreoffice-reference/sw/source/writerfilter/dmapper/TablePropertiesHandler.cxx#LN_CT_TrPrBase_trHeight",
-        "vendor/libreoffice-reference/sw/source/writerfilter/dmapper/TablePropertiesHandler.cxx#case NS_ooxml::LN_CT_TcPrBase_tcBorders"
+        "vendor/libreoffice-reference/sw/source/writerfilter/dmapper/TablePropertiesHandler.cxx#case NS_ooxml::LN_CT_TcPrBase_tcBorders",
+        "apps/office/src/sw/source/filter/ww8/docxexport.table-shading.test.ts",
+        "apps/office/e2e/writer-docx-table-shading.spec.ts",
+        "sw/qa/extras/ooxmlexport/ooxmlexport25.cxx"
       ],
-      "justification": "Resolves nested original cell shading through CellColorHandler and sends the native BackColor map to the owning table manager. RTF105. Reuses the original CellMarginHandler for table and cell margin properties and maps table justification. RTF107. Resolves the original row height and split and cell vertical alignment into typed mapper properties. RTF110. Resolves original tcBorders modifiers through TDefTableHandler.",
+      "justification": "Resolves nested original cell shading through CellColorHandler and sends the native BackColor map to the owning table manager. RTF105. Reuses the original CellMarginHandler for table and cell margin properties and maps table justification. RTF107. Resolves the original row height and split and cell vertical alignment into typed mapper properties. RTF110. Resolves original tcBorders modifiers through TDefTableHandler. Routes original cell shading through the existing CellColorHandler to either the stylesheet property map or the direct table manager and retains its lexical fields.",
       "knownViolations": [],
       "localSymbols": [
         "TablePropertiesHandler",

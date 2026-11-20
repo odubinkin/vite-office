@@ -13,6 +13,18 @@
         {
           "path": "apps/office/src/sw/browser/filter/xml/writer-primary-odt-filter.test.ts",
           "marker": "including nested tables"
+        },
+        {
+          "path": "apps/office/src/sw/browser/filter/xml/writer-primary-odt-filter.ts",
+          "marker": "applyCellShading"
+        },
+        {
+          "path": "apps/office/src/sw/source/filter/ww8/docxexport.table-shading.test.ts",
+          "marker": "resolves original base, conditional and direct cell fills"
+        },
+        {
+          "path": "apps/office/e2e/writer-docx-table-shading.spec.ts",
+          "marker": "preserves Word table style fills"
         }
       ],
       "upstream": []
@@ -20,7 +32,8 @@
     "status": "local-only",
     "rationale": "Stores native Word table style definitions and per-table interoperability data in the existing browser primary document record beside the ODF package. Worker and inline paths restore it before document adoption. Portable ODF uses the unmodified ODF filter.",
     "responsibilities": [
-      "Stores native Word table style definitions and per-table interoperability data in the existing browser primary document record beside the ODF package. Worker and inline paths restore it before document adoption. Portable ODF uses the unmodified ODF filter."
+      "Stores native Word table style definitions and per-table interoperability data in the existing browser primary document record beside the ODF package. Worker and inline paths restore it before document adoption. Portable ODF uses the unmodified ODF filter.",
+      "Retains typed per-cell shading metadata throughout the existing atomic primary XML record and validates its table name and cell address."
     ],
     "stackDivergence": {
       "kind": "local-infrastructure",

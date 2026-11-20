@@ -28,7 +28,8 @@
       "Applies native table and cell widths, margins, orientation and the source horizontal border-distance adjustment.",
       "Finalizes the original repeating header count, all-header and single-row split behavior, and row split default.",
       "Applies the resolved first-cell border width to native table spacing, indent and original floating placement.",
-      "Applies the original nested table indent rule using the mapper's source depth before the enclosing cell section is built."
+      "Applies the original nested table indent rule using the mapper's source depth before the enclosing cell section is built.",
+      "Resolves enabled edges, row headers, alternating bands and corner cells with the original conditional masks. Native per-cell shading and represented cell properties merge before direct formatting."
     ],
     "omittedResponsibilities": [
       "Complete mapper table handler, OOXML grid-before/after, overlapping/nested rows, default styles and desktop table ABI remain unverified."
@@ -62,6 +63,18 @@
         {
           "path": "apps/office/src/sw/source/filter/ww8/docxexport.numbered-list.test.ts",
           "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/source/writerfilter/dmapper/DomainMapperTableHandler.ts",
+          "marker": "ResolveTableCellProperties"
+        },
+        {
+          "path": "apps/office/src/sw/source/filter/ww8/docxexport.table-shading.test.ts",
+          "marker": "resolves original base, conditional and direct cell fills"
+        },
+        {
+          "path": "apps/office/e2e/writer-docx-table-shading.spec.ts",
+          "marker": "preserves Word table style fills"
         }
       ],
       "upstream": [
@@ -88,6 +101,14 @@
         {
           "path": "vendor/libreoffice-reference/sw/source/writerfilter/dmapper/DomainMapperTableHandler.cxx",
           "marker": "lcl_DecrementHoriOrientPosition"
+        },
+        {
+          "path": "sw/source/writerfilter/dmapper/DomainMapperTableHandler.cxx",
+          "marker": "endTableGetCellProperties"
+        },
+        {
+          "path": "sw/qa/extras/ooxmlexport/ooxmlexport25.cxx",
+          "marker": "testTdf138020_undefined_firstCol"
         }
       ]
     }

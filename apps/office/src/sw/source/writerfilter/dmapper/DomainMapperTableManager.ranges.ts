@@ -19,6 +19,8 @@ import {
   ApplyTableStyle,
   ApplyTableInteropGrabBag,
   FinalizeTableFlowProperties,
+  ResolveTableCellProperties,
+  TableRowStyleMask,
 } from "./DomainMapperTableHandler";
 import type { TablePropertyMap } from "./PropertyMap";
 import type { DomainMapper_Impl } from "./DomainMapper_Impl";
@@ -157,6 +159,30 @@ class TableLevel {
   /** Converts native text spans and applies row and cell property vectors. @param mapper - Original mapper owner. @param nested - Whether the parent level is still open. @returns Converted native table when the range has rows. */
   convert(mapper: DomainMapper_Impl, nested: boolean): SwTable | undefined {
     try {
+      const properties = this.manager.getTableProps();
+      const info = ApplyTableStyle(properties, mapper.GetStyleSheetTable());
+      try {
+        const applyStyle = info.style !== undefined || info.defaults.GetPropertyIds().length !== 0;
+        for (const [rowIndex, row] of this.rows.entries()) {
+          const header = row.properties.isSet(PropertyIds.PROP_TBL_HEADER);
+          row.properties.Erase(PropertyIds.PROP_TBL_HEADER);
+          if (!applyStyle) continue;
+          const mask = TableRowStyleMask(info, rowIndex, this.rows.length, header);
+          for (const [cellIndex, cell] of row.cells.entries()) {
+            const direct = cell.properties;
+            cell.properties = ResolveTableCellProperties(
+              info,
+              mask,
+              cellIndex,
+              row.cells.length,
+              direct,
+            );
+            direct?.dispose();
+          }
+        }
+      } finally {
+        info.defaults.dispose();
+      }
       const table = this.body.convertToTable(
         this.rows.map(
           /** Collects original cell endpoints. @param row - Completed row. @returns Endpoints. */ (
@@ -193,9 +219,7 @@ class TableLevel {
         [],
       );
       if (table) {
-        const properties = this.manager.getTableProps();
         const first = this.rows[0]?.cells[0]?.properties;
-        ApplyTableStyle(properties, mapper.GetStyleSheetTable());
         ApplyTableInteropGrabBag(table.table, properties);
         ApplyOOXMLTableDefaults(properties);
         ApplyTableMeasures(

@@ -13,6 +13,18 @@
         {
           "path": "apps/office/src/sw/source/filter/ww8/docxexport.table-flow.test.ts",
           "marker": "direct false override"
+        },
+        {
+          "path": "apps/office/src/sw/browser/filter/xml/writer-table-interop-codec.ts",
+          "marker": "encodeCellInterop"
+        },
+        {
+          "path": "apps/office/src/sw/source/filter/ww8/docxexport.table-shading.test.ts",
+          "marker": "resolves original base, conditional and direct cell fills"
+        },
+        {
+          "path": "apps/office/e2e/writer-docx-table-shading.spec.ts",
+          "marker": "preserves Word table style fills"
         }
       ],
       "upstream": []
@@ -20,7 +32,8 @@
     "status": "local-only",
     "rationale": "Transfers the native tableStyles and frame table style and look bags without changing the model or UNO contracts.",
     "responsibilities": [
-      "Transfers the native tableStyles and frame table style and look bags without changing the model or UNO contracts."
+      "Transfers the native tableStyles and frame table style and look bags without changing the model or UNO contracts.",
+      "Copies and validates the original cell shading lexical fields as part of the browser graph transport."
     ],
     "stackDivergence": {
       "kind": "local-infrastructure",

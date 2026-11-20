@@ -20,7 +20,8 @@ import { BorderLine2 } from "../../../../offapi/com/sun/star/table/BorderLine2";
 import type { SwTableBox } from "../table/swtable";
 import { SvxFrameDirection } from "../../../../editeng/inc/frmdir";
 import { SvxFrameDirectionItem } from "../../../../editeng/inc/frmdiritem";
-import { RES_BACKGROUND, RES_BOX, RES_FRAMEDIR } from "../../../inc/hintids";
+import { SfxGrabBagItem } from "../../../../svl/inc/grabbagitem";
+import { RES_BACKGROUND, RES_BOX, RES_FRAMEDIR, RES_FRMATR_GRABBAG } from "../../../inc/hintids";
 import { SvxBrushItem } from "../../../../editeng/source/items/frmitems.brush";
 import { MID_BACK_COLOR } from "../../../../editeng/inc/memberids";
 import { lcl_extractBorderLine, type SvxBoxItem } from "../../../../editeng/source/items/frmitems";
@@ -380,6 +381,16 @@ export function setCellProperty(box: SwTableBox, name: string, value: Any): bool
     try {
       if (!item.PutValue(value, MID_BACK_COLOR)) illegal("Invalid cell background color");
       format.SetFormatAttr(item);
+    } finally {
+      item.Dispose();
+    }
+    return true;
+  }
+  if (name === "CellInteropGrabBag") {
+    const item = new SfxGrabBagItem(RES_FRMATR_GRABBAG);
+    try {
+      if (!item.PutValue(value)) illegal("Invalid cell interoperability properties");
+      box.ClaimFrameFormat().SetFormatAttr(item);
     } finally {
       item.Dispose();
     }

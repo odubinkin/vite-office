@@ -10,6 +10,7 @@ import {
 import { NS_ooxml as N } from "../inc/ooxml/resourceids";
 import { CellMarginHandler } from "./CellMarginHandler";
 import { MeasureHandler } from "./MeasureHandler";
+import { TablePropertiesHandler } from "./TablePropertiesHandler";
 import { PropertyIds as P } from "./PropertyIds";
 import type { PropertyMap } from "./PropertyMap";
 import type { PropertyValue } from "../../../../udkapi/com/sun/star/beans/PropertyValue";
@@ -70,6 +71,7 @@ const typeNames = [
 /** Writes the original style properties that the table conversion consumes. */
 export class TblStylePrHandler implements Properties {
   private m_nType = TblStyleType.Unknown;
+  private readonly m_pTablePropsHandler = new TablePropertiesHandler();
   private m_aInteropGrabBag: PropertyValue[] = [];
 
   /** Borrows the owning style property map. @param properties - Actual style map. @returns Handler. */
@@ -132,6 +134,9 @@ export class TblStylePrHandler implements Properties {
       case N.LN_CT_TrPrBase:
         this.resolveGroup("trPr", modifier);
         break;
+      case N.LN_CT_TcPrBase:
+        this.resolveGroup("tcPr", modifier);
+        break;
       case N.LN_CT_TrPrBase_tblHeader:
         this.insert(P.PROP_HEADER_ROW_COUNT, 1);
         this.appendInteropGrabBag("tblHeader", new Any([true], "bool"));
@@ -179,6 +184,10 @@ export class TblStylePrHandler implements Properties {
         }
         break;
       }
+      default:
+        this.m_pTablePropsHandler.SetProperties(this.properties, this.m_aInteropGrabBag);
+        this.m_pTablePropsHandler.sprm(modifier);
+        break;
     }
   }
 

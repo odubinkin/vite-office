@@ -9,7 +9,9 @@ import { Any } from "../../../../cppu/inc/com/sun/star/uno/Any";
 import { convertTableJustification } from "./ConversionHelper";
 import { CellMarginHandler } from "./CellMarginHandler";
 import { PropertyIds as P } from "./PropertyIds";
-import { TablePropertyMap, TablePropertyMapTarget as T } from "./PropertyMap";
+import { TablePropertyMap, TablePropertyMapTarget as T, type PropertyMap } from "./PropertyMap";
+import type { PropertyValue } from "../../../../udkapi/com/sun/star/beans/PropertyValue";
+import { unicode } from "../../core/unocore/unocrsrhelper";
 
 /** Native table manager endpoint for the represented cell property cases. */
 interface TablePropertyTarget {
@@ -21,6 +23,20 @@ interface TablePropertyTarget {
 /** Resolves nested table resource properties through their source handlers. */
 export class TablePropertiesHandler {
   private m_pTableManager: TablePropertyTarget | undefined;
+  private m_pProperties: PropertyMap | undefined;
+  private m_pCurrentInteropGrabBag: PropertyValue[] | undefined;
+
+  /** Binds the native style map and interop vector. @param properties - Style properties. @param grabBag - Active property vector. @returns Nothing. */
+  SetProperties(properties: PropertyMap, grabBag: PropertyValue[]): void {
+    this.m_pProperties = properties;
+    this.m_pCurrentInteropGrabBag = grabBag;
+  }
+
+  /** Sends resolved cell properties to the original style or direct table owner. @param properties - Resolved cell properties. @returns Nothing. */
+  private cellProps(properties: TablePropertyMap): void {
+    if (this.m_pProperties) this.m_pProperties.InsertProps(properties);
+    else this.m_pTableManager?.cellProps(properties);
+  }
 
   /** Binds the original table manager property target. @param manager - Actual table property owner. @returns Nothing. */
   SetTableManager(manager: TablePropertyTarget): void {
@@ -36,7 +52,7 @@ export class TablePropertiesHandler {
       try {
         resolveReturnedReference(modifier.getProps(), handler);
         handler.fillCellProperties(properties);
-        this.m_pTableManager?.cellProps(properties);
+        this.cellProps(properties);
       } finally {
         properties.dispose();
         handler.dispose();
@@ -83,7 +99,7 @@ export class TablePropertiesHandler {
       try {
         properties.Insert(row ? P.PROP_IS_SPLIT_ALLOWED : P.PROP_VERT_ORIENT, property);
         if (row) this.m_pTableManager?.insertRowProps(properties);
-        else this.m_pTableManager?.cellProps(properties);
+        else this.cellProps(properties);
       } finally {
         properties.dispose();
         property.dispose();
@@ -147,7 +163,7 @@ export class TablePropertiesHandler {
           }
         }
         if (table) this.m_pTableManager?.insertTableProps(properties);
-        else this.m_pTableManager?.cellProps(properties);
+        else this.cellProps(properties);
       } finally {
         properties.dispose();
         handler.dispose();
@@ -155,16 +171,29 @@ export class TablePropertiesHandler {
       return true;
     }
     if (id !== N.LN_CT_TcPrBase_shd) return false;
+    const reference = modifier.getProps();
+    if (!reference) return true;
     const handler = new CellColorHandler();
+    const name = unicode("shd");
     try {
-      resolveReturnedReference(modifier.getProps(), handler);
+      handler.enableInteropGrabBag(name);
+      resolveReturnedReference(reference, handler);
       const properties = handler.getProperties();
+      const grabBag = handler.getInteropGrabBag();
+      let retained = false;
       try {
-        this.m_pTableManager?.cellProps(properties);
+        properties.Insert(P.PROP_CELL_INTEROP_GRAB_BAG, grabBag.Value);
+        this.cellProps(properties);
+        if (this.m_pCurrentInteropGrabBag) {
+          this.m_pCurrentInteropGrabBag.push(grabBag);
+          retained = true;
+        }
       } finally {
         properties.dispose();
+        if (!retained) grabBag.dispose();
       }
     } finally {
+      name.dispose();
       handler.dispose();
     }
     return true;

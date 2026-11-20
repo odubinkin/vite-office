@@ -29,7 +29,8 @@
       "Delegates the original fallback table sprm to TablePropertiesHandler and receives native cell properties.",
       "Resolves the original nested row position properties through the native TablePositionHandler and consumes overlap only for an existing position.",
       "Resolves the original preferred-width and indent measures and preserves source grid fallback.",
-      "Accumulates original row properties and the contiguous header prefix with its source limit."
+      "Accumulates original row properties and the contiguous header prefix with its source limit.",
+      "Retains explicit repeated-header presence independently of the range count so the corresponding row uses its original conditional style."
     ],
     "omittedResponsibilities": [
       "The rest of the native table-import module, nested table orchestration, physical layout, and full filter contracts remain unverified."
@@ -67,6 +68,18 @@
         {
           "path": "apps/office/src/sw/source/writerfilter/rtftok/rtfdocumentimpl.document.test.ts",
           "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/source/writerfilter/dmapper/DomainMapperTableManager.ts",
+          "marker": "PROP_TBL_HEADER"
+        },
+        {
+          "path": "apps/office/src/sw/source/filter/ww8/docxexport.table-shading.test.ts",
+          "marker": "resolves original base, conditional and direct cell fills"
+        },
+        {
+          "path": "apps/office/e2e/writer-docx-table-shading.spec.ts",
+          "marker": "preserves Word table style fills"
         }
       ],
       "upstream": [
@@ -93,6 +106,14 @@
         {
           "path": "vendor/libreoffice-reference/sw/source/writerfilter/dmapper/DomainMapperTableManager.cxx",
           "marker": "HEADER_ROW_LIMIT_FOR_MSO_WORKAROUND"
+        },
+        {
+          "path": "sw/source/writerfilter/dmapper/DomainMapperTableManager.cxx",
+          "marker": "LN_CT_TrPrBase_tblHeader"
+        },
+        {
+          "path": "sw/qa/extras/ooxmlexport/ooxmlexport25.cxx",
+          "marker": "testTdf138020_undefined_firstCol"
         }
       ]
     }

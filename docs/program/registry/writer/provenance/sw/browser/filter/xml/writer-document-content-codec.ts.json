@@ -22,6 +22,18 @@
         {
           "path": "apps/office/src/sw/browser/filter/xml/writer-page-story-codec.test.ts",
           "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/browser/filter/xml/writer-document-content-codec.ts",
+          "marker": "encodeCellInterop"
+        },
+        {
+          "path": "apps/office/src/sw/source/filter/ww8/docxexport.table-shading.test.ts",
+          "marker": "resolves original base, conditional and direct cell fills"
+        },
+        {
+          "path": "apps/office/e2e/writer-docx-table-shading.spec.ts",
+          "marker": "preserves Word table style fills"
         }
       ],
       "upstream": []
@@ -29,7 +41,8 @@
     "rationale": "Transports original Writer text and table sections through existing item and numbering owners. The same section codec serves body tables, nested cell tables and anchored frame tables.",
     "responsibilities": [
       "Transports original Writer text and table sections through existing item and numbering owners. The same section codec serves body tables, nested cell tables and anchored frame tables.",
-      "Shares the existing recursive paragraph and table codec for ordered actual text-frame and page story sections."
+      "Shares the existing recursive paragraph and table codec for ordered actual text-frame and page story sections.",
+      "Transports the compatible cell shading interop bag with its native box format alongside the actual cell brush."
     ],
     "stackDivergence": {
       "kind": "local-infrastructure",

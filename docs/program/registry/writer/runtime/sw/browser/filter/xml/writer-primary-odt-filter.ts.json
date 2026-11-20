@@ -18,9 +18,11 @@
       "evidence": [
         "apps/office/src/sw/browser/filter/xml/writer-primary-odt-filter.ts",
         "apps/office/src/sw/browser/filter/xml/writer-primary-odt-filter.test.ts",
-        "apps/office/e2e/writer-docx-table-flow.spec.ts"
+        "apps/office/e2e/writer-docx-table-flow.spec.ts",
+        "apps/office/src/sw/source/filter/ww8/docxexport.table-shading.test.ts",
+        "apps/office/e2e/writer-docx-table-shading.spec.ts"
       ],
-      "justification": "Stores native Word table style definitions and per-table interoperability data in the existing browser primary document record beside the ODF package. Worker and inline paths restore it before document adoption. Portable ODF uses the unmodified ODF filter.",
+      "justification": "Stores native Word table style definitions and per-table interoperability data in the existing browser primary document record beside the ODF package. Worker and inline paths restore it before document adoption. Portable ODF uses the unmodified ODF filter. Retains typed per-cell shading metadata throughout the existing atomic primary XML record and validates its table name and cell address.",
       "knownViolations": [],
       "localSymbols": [
         "WriterPrimaryOdtFilterService"

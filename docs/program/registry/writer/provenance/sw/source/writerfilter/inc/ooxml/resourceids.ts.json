@@ -102,6 +102,18 @@
         {
           "path": "apps/office/src/sw/source/writerfilter/filter/WriterFilter.test.ts",
           "marker": "6001"
+        },
+        {
+          "path": "apps/office/src/sw/source/writerfilter/inc/ooxml/resourceids.ts",
+          "marker": "LN_CT_TcPrBase"
+        },
+        {
+          "path": "apps/office/src/sw/source/filter/ww8/docxexport.table-shading.test.ts",
+          "marker": "resolves original base, conditional and direct cell fills"
+        },
+        {
+          "path": "apps/office/e2e/writer-docx-table-shading.spec.ts",
+          "marker": "preserves Word table style fills"
         }
       ],
       "upstream": [
@@ -136,6 +148,14 @@
         {
           "path": "sw/qa/extras/ooxmlexport/ooxmlexport11.cxx",
           "marker": "testTdf82065_Ind_start_strict"
+        },
+        {
+          "path": "sw/source/writerfilter/ooxml/model.xml",
+          "marker": "tokenid=\"ooxml:CT_TcPrBase\""
+        },
+        {
+          "path": "sw/qa/extras/ooxmlexport/ooxmlexport25.cxx",
+          "marker": "testTdf138020_undefined_firstCol"
         }
       ]
     },
@@ -178,7 +198,8 @@
       "Exposes the consumed original generated paragraph-default, tab alignment and leader resource IDs.",
       "Retains original page variant stream IDs and the generated header/footer reference attributes.",
       "The Word 2010 effect roots for glow, shadow, reflection, scene3d and props3d now use the original generated definitions and nested interoperability properties for DOCX run and style persistence through the browser Worker.",
-      "The original CT_Lvl_pPr resource is available to the numbering callback owner and agrees with the generated WML table."
+      "The original CT_Lvl_pPr resource is available to the numbering callback owner and agrees with the generated WML table.",
+      "Publishes the pinned generated CT_TcPrBase resource ID 93179 consumed by the stylesheet handler."
     ],
     "omittedResponsibilities": [
       "DOCX document-model mapping, export and shell/UI integration are still being implemented in the same cohesive task.",

@@ -20,9 +20,12 @@
         "apps/office/src/sw/source/writerfilter/filter/WriterFilter.test.ts",
         "vendor/libreoffice-reference/sw/source/filter/ww8/wrtw8nds.cxx",
         "apps/office/src/sw/source/filter/ww8/docxexport.theme.test.ts",
-        "apps/office/src/sw/source/filter/ww8/docxexport.theme-fonts.test.ts"
+        "apps/office/src/sw/source/filter/ww8/docxexport.theme-fonts.test.ts",
+        "apps/office/src/sw/source/filter/ww8/docxexport.table-shading.test.ts",
+        "apps/office/e2e/writer-docx-table-shading.spec.ts",
+        "sw/qa/extras/ooxmlexport/ooxmlexport25.cxx"
       ],
-      "justification": "Native Writer body traversal exports represented runs, paragraph properties and table structure. The existing file dialog uses the same graph. Nested and floating tables, links, bookmarks and page fidelity remain open. Exports native named paragraph and character style references and preserves direct run overrides. Routes the native character interoperability item through DOCX attribute output. Dispatches original Asian and complex-script fonts for run and style serialization. Delegates row and cell formatting to the table output owner and selects the current page descriptor before content emission.",
+      "justification": "Native Writer body traversal exports represented runs, paragraph properties and table structure. The existing file dialog uses the same graph. Nested and floating tables, links, bookmarks and page fidelity remain open. Exports native named paragraph and character style references and preserves direct run overrides. Routes the native character interoperability item through DOCX attribute output. Dispatches original Asian and complex-script fonts for run and style serialization. Delegates row and cell formatting to the table output owner and selects the current page descriptor before content emission. Ports the original cell background output position between cell merges and cell margins.",
       "knownViolations": [],
       "localSymbols": [
         "WriteText",

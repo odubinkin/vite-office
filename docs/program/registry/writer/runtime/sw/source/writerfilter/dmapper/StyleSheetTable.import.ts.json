@@ -22,9 +22,12 @@
         "apps/office/src/sw/source/filter/ww8/docxexport.theme.test.ts",
         "apps/office/src/sw/source/filter/ww8/docxexport.theme-fonts.test.ts",
         "apps/office/src/sw/source/filter/ww8/docxexport.tabs.test.ts",
-        "apps/office/e2e/writer-docx-theme.spec.ts"
+        "apps/office/e2e/writer-docx-theme.spec.ts",
+        "apps/office/src/sw/source/filter/ww8/docxexport.table-shading.test.ts",
+        "apps/office/e2e/writer-docx-table-shading.spec.ts",
+        "sw/qa/extras/ooxmlexport/ooxmlexport25.cxx"
       ],
-      "justification": "DOCX open and download reach the native Writer graph through the existing shell and dialogs. Original package relationships, represented text/runs and style import are exercised. Table import and full export styles, numbered paragraphs, links, bookmarks, and page fidelity remain open. Resolves the paragraph follow style after all named format collections have been inserted into the native style families. Applies the represented native Word typographic defaults and style values through document item defaults and the ordinary style setter. Applies represented native document-default Latin, Asian and complex font items and interoperability metadata. Resolves paragraph-default tab items through the original default paragraph context and native Writer pool. DomainMapper initializes Calibri 11 pt, and explicit rPrDefault resets the Western family to Times New Roman and applies the original run property vector through UNO text defaults.",
+      "justification": "DOCX open and download reach the native Writer graph through the existing shell and dialogs. Original package relationships, represented text/runs and style import are exercised. Table import and full export styles, numbered paragraphs, links, bookmarks, and page fidelity remain open. Resolves the paragraph follow style after all named format collections have been inserted into the native style families. Applies the represented native Word typographic defaults and style values through document item defaults and the ordinary style setter. Applies represented native document-default Latin, Asian and complex font items and interoperability metadata. Resolves paragraph-default tab items through the original default paragraph context and native Writer pool. DomainMapper initializes Calibri 11 pt, and explicit rPrDefault resets the Western family to Times New Roman and applies the original run property vector through UNO text defaults. Imports base cell properties from a named table style and retains the native tcPr interoperability group.",
       "knownViolations": [],
       "localSymbols": [
         "StyleSheetTableImport",

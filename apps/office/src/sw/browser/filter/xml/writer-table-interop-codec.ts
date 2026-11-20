@@ -28,6 +28,19 @@ export interface WriterInteropProperty {
 
 const tableFields = ["TableStyleName", "TableStyleLook"] as const;
 
+const cellFields = [
+  "val",
+  "color",
+  "fill",
+  "themeColor",
+  "themeTint",
+  "themeShade",
+  "themeFill",
+  "themeFillTint",
+  "themeFillShade",
+  "originalColor",
+] as const;
+
 /** Projects a represented scalar or nested native sequence. @param value - Borrowed native value. @returns Structured clone value. */
 function encodeValue(value: GrabBagValueConstReference): InteropValue {
   if (!value.hasValue()) return null;
@@ -112,11 +125,26 @@ export function restoreTableStyles(model: SwXTextDocument, record: unknown): voi
 export function encodeTableInterop(
   frame: SwFrameFormat,
 ): readonly WriterInteropProperty[] | undefined {
+  return encodeFrameInterop(frame, tableFields);
+}
+
+/** Copies the source cell shading fields. @param frame - Native box format. @returns Transport record when present. */
+export function encodeCellInterop(
+  frame: SwFrameFormat,
+): readonly WriterInteropProperty[] | undefined {
+  return encodeFrameInterop(frame, cellFields);
+}
+
+/** Encodes represented fields from a native frame bag. @param frame - Native frame. @param fields - Owned field names. @returns Optional transport record. */
+function encodeFrameInterop(
+  frame: SwFrameFormat,
+  fields: readonly string[],
+): readonly WriterInteropProperty[] | undefined {
   const item = frame.GetAttrSet().GetItemIfSet(RES_FRMATR_GRABBAG, false) as
     SfxGrabBagItem | undefined;
   if (!item) return undefined;
   const result: WriterInteropProperty[] = [];
-  for (const name of tableFields) {
+  for (const name of fields) {
     const value = item.GetGrabBag().get(name);
     if (value !== undefined) result.push({ name, value: encodeValue(value) });
   }
@@ -125,15 +153,27 @@ export function encodeTableInterop(
 
 /** Restores the native table frame interop item. @param frame - Native frame. @param record - Stored property fields. @returns Nothing. */
 export function restoreTableInterop(frame: SwFrameFormat, record: unknown): void {
+  restoreFrameInterop(frame, record, false);
+}
+
+/** Restores original shading lexical attributes onto a native box format. @param frame - Native box format. @param record - Stored shading fields. @returns Nothing. */
+export function restoreCellInterop(frame: SwFrameFormat, record: unknown): void {
+  restoreFrameInterop(frame, record, true);
+}
+
+/** Verifies and restores a typed frame bag. @param frame - Native frame. @param record - Stored property fields. @param cell - Restore cell shading instead of table identity fields. @returns Nothing. */
+function restoreFrameInterop(frame: SwFrameFormat, record: unknown, cell: boolean): void {
   const entries = decodeProperties(record);
   try {
     const values = new Map<string, GrabBagValueConstReference>();
     for (const entry of entries) {
       const name = text(entry.Name);
       if (
-        name === "TableStyleName"
-          ? entry.Value.has("OUString")
-          : name === "TableStyleLook" && entry.Value.has(["Sequence", propertyValueType])
+        cell
+          ? (cellFields as readonly string[]).includes(name) && entry.Value.has("OUString")
+          : name === "TableStyleName"
+            ? entry.Value.has("OUString")
+            : name === "TableStyleLook" && entry.Value.has(["Sequence", propertyValueType])
       )
         values.set(name, entry.Value);
       else throw new Error("Stored Writer table style field has an invalid type.");

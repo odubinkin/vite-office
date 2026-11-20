@@ -17,9 +17,11 @@
       "divergenceClass": "B",
       "evidence": [
         "apps/office/src/sw/browser/filter/xml/writer-table-interop-codec.ts",
-        "apps/office/src/sw/source/filter/ww8/docxexport.table-flow.test.ts"
+        "apps/office/src/sw/source/filter/ww8/docxexport.table-flow.test.ts",
+        "apps/office/src/sw/source/filter/ww8/docxexport.table-shading.test.ts",
+        "apps/office/e2e/writer-docx-table-shading.spec.ts"
       ],
-      "justification": "Transfers the native tableStyles and frame table style and look bags without changing the model or UNO contracts.",
+      "justification": "Transfers the native tableStyles and frame table style and look bags without changing the model or UNO contracts. Copies and validates the original cell shading lexical fields as part of the browser graph transport.",
       "knownViolations": [],
       "localSymbols": [
         "encodeTableStyles",

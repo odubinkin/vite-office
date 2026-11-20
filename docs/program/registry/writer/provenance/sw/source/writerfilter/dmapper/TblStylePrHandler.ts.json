@@ -16,7 +16,8 @@
       "lcl_sprm"
     ],
     "preservedResponsibilities": [
-      "Resolves the represented table style indentation and cell distances into the existing style property map."
+      "Resolves the represented table style indentation and cell distances into the existing style property map.",
+      "Binds the original conditional cell-property group to the native table property handler with the active interoperability vector."
     ],
     "omittedResponsibilities": [
       "Conditional table-style XML forwarding and full interop grab bag capture remain outside this geometry path."
@@ -38,6 +39,18 @@
         {
           "path": "apps/office/src/sw/source/filter/ww8/docxexport.numbered-list.test.ts",
           "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/source/writerfilter/dmapper/TblStylePrHandler.ts",
+          "marker": "LN_CT_TcPrBase"
+        },
+        {
+          "path": "apps/office/src/sw/source/filter/ww8/docxexport.table-shading.test.ts",
+          "marker": "resolves original base, conditional and direct cell fills"
+        },
+        {
+          "path": "apps/office/e2e/writer-docx-table-shading.spec.ts",
+          "marker": "preserves Word table style fills"
         }
       ],
       "upstream": [
@@ -48,6 +61,14 @@
         {
           "path": "sw/source/writerfilter/dmapper/TblStylePrHandler.cxx",
           "marker": "TblStylePrHandler::lcl_sprm"
+        },
+        {
+          "path": "sw/source/writerfilter/dmapper/TblStylePrHandler.cxx",
+          "marker": "LN_CT_TcPrBase"
+        },
+        {
+          "path": "sw/qa/extras/ooxmlexport/ooxmlexport25.cxx",
+          "marker": "testTdf138020_undefined_firstCol"
         }
       ]
     }

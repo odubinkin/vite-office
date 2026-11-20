@@ -32,7 +32,8 @@
       "Applies the original UNO absolute and relative width properties to the actual table frame item.",
       "Applies the original row SizeType and returns the native variable-height test for IsAutoHeight.",
       "Preserves the full BorderLine2 values and the original legacy BorderLine extraction fallback on cell properties.",
-      "The native UNO table conversion accepts inclusive endpoints spanning complete nested Writer sections, and validates adjacency before moving nodes."
+      "The native UNO table conversion accepts inclusive endpoints spanning complete nested Writer sections, and validates adjacency before moving nodes.",
+      "Applies the typed original cell interop bag to the claimed native box frame."
     ],
     "omittedResponsibilities": [
       "Only the current canonical Writer core slice is represented. Full UNO service metadata/query interfaces, listeners, interactive undo/actions, Unicode cursor navigation, layout, unsupported character/table/conditional styles, ranges in unsupported sections, expanded bookmarks and wider properties remain unverified or unported. DomainMapper, OOXML package parser and export are outside this task; no whole-module parity claim."
@@ -70,6 +71,18 @@
         {
           "path": "apps/office/src/sw/source/filter/ww8/docxexport.numbered-list.test.ts",
           "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/unocore/unotbl.ts",
+          "marker": "CellInteropGrabBag"
+        },
+        {
+          "path": "apps/office/src/sw/source/filter/ww8/docxexport.table-shading.test.ts",
+          "marker": "resolves original base, conditional and direct cell fills"
+        },
+        {
+          "path": "apps/office/e2e/writer-docx-table-shading.spec.ts",
+          "marker": "preserves Word table style fills"
         }
       ],
       "upstream": [
@@ -104,6 +117,14 @@
         {
           "path": "vendor/libreoffice-reference/editeng/source/items/frmitems.cxx",
           "marker": "lcl_extractBorderLine"
+        },
+        {
+          "path": "sw/source/filter/ww8/docxtableexport.cxx",
+          "marker": "RES_FRMATR_GRABBAG"
+        },
+        {
+          "path": "sw/qa/extras/ooxmlexport/ooxmlexport25.cxx",
+          "marker": "testTdf138020_undefined_firstCol"
         }
       ]
     }

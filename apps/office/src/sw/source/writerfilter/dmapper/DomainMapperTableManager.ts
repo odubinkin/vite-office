@@ -168,6 +168,14 @@ export class DomainMapperTableManager {
       return true;
     }
     if (id === N.LN_CT_TrPrBase_tblHeader) {
+      if (value > 0) {
+        const header = new Any([true], "bool");
+        try {
+          this.m_pRowProps.Insert(P.PROP_TBL_HEADER, header);
+        } finally {
+          header.dispose();
+        }
+      }
       const repeat = value > 0 && this.m_nHeaderRepeat === this.m_nRow;
       if (repeat || (value === 0 && this.m_nRow === 0)) {
         // Original ten-row limit handles headers that Word stops repeating at a page boundary.

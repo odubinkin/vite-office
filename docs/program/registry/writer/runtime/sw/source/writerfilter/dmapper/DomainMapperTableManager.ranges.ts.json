@@ -22,9 +22,12 @@
         "vendor/libreoffice-reference/sw/source/writerfilter/dmapper/DomainMapperTableHandler.cxx",
         "vendor/libreoffice-reference/sw/source/core/unocore/unotext.cxx",
         "apps/office/src/sw/source/filter/ww8/docxexport.numbered-list.test.ts",
-        "apps/office/e2e/writer-docx-styles.spec.ts"
+        "apps/office/e2e/writer-docx-styles.spec.ts",
+        "apps/office/src/sw/source/filter/ww8/docxexport.table-shading.test.ts",
+        "apps/office/e2e/writer-docx-table-shading.spec.ts",
+        "sw/qa/extras/ooxmlexport/ooxmlexport25.cxx"
       ],
-      "justification": "Original table, row and cell markers feed the actual property and Writer text range owners. Completed text spans convert through SwXText into the canonical table graph. The represented grid, row split/height, cell alignment and merge groups round trip. Nested and floating table conversion, full imported table styles and complete DOCX parity remain open. Keeps row, grid, cell and UNO endpoint state at each original nesting level, then converts each inner table before closing its parent cell.",
+      "justification": "Original table, row and cell markers feed the actual property and Writer text range owners. Completed text spans convert through SwXText into the canonical table graph. The represented grid, row split/height, cell alignment and merge groups round trip. Nested and floating table conversion, full imported table styles and complete DOCX parity remain open. Keeps row, grid, cell and UNO endpoint state at each original nesting level, then converts each inner table before closing its parent cell. Passes the original resolved cell map to native UNO table conversion, alongside direct row geometry.",
       "knownViolations": [],
       "localSymbols": [
         "DomainMapperTableRanges",

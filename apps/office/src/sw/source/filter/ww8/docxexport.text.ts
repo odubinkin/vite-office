@@ -46,6 +46,7 @@ import type { SvxKerningItem } from "../../../../editeng/inc/kernitem";
 import {
   ImplCellMargins,
   StartTableRow,
+  TableBackgrounds,
   TableDefaultCellMargins,
   TableDefinition,
   TableVerticalCell,
@@ -283,6 +284,7 @@ function Out_SwTableNode(
       if (columns > 1) serializer.singleElementNS(w, token("gridSpan"), value, String(columns));
       if (rowSpan !== 1)
         serializer.singleElementNS(w, token("vMerge"), value, rowSpan > 1 ? "restart" : "continue");
+      TableBackgrounds(output, model, line, box);
       ImplCellMargins(output, box.GetFrameFormat().GetBox(), "tcMar", defaultMargins);
       TableVerticalCell(output, box);
       serializer.endElementNS(w, properties);

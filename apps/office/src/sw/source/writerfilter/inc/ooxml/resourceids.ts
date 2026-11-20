@@ -617,6 +617,7 @@ export const NS_ooxml = Object.freeze({
   LN_Value_ST_TblStyleOverrideType_swCell: 93174,
   LN_CT_TblPrBase: 93177,
   LN_CT_TrPrBase: 93178,
+  LN_CT_TcPrBase: 93179,
   LN_CT_TblStyleOverrideType: 93180,
   LN_Value_ST_StyleType_paragraph: 93181,
   LN_Value_ST_StyleType_character: 93182,

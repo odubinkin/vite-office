@@ -19,9 +19,12 @@
         "apps/office/src/sw/source/filter/ww8/docxtableexport.ts",
         "apps/office/src/sw/source/filter/ww8/docxexport.numbered-list.test.ts",
         "sw/source/filter/ww8/docxtableexport.cxx",
-        "sw/source/filter/ww8/docxattributeoutput.cxx"
+        "sw/source/filter/ww8/docxattributeoutput.cxx",
+        "apps/office/src/sw/source/filter/ww8/docxexport.table-shading.test.ts",
+        "apps/office/e2e/writer-docx-table-shading.spec.ts",
+        "sw/qa/extras/ooxmlexport/ooxmlexport25.cxx"
       ],
-      "justification": "Writes preferred table width, justification, compatibility-sensitive indentation, and default or differing cell distances from Writer frame and cell formats. Complete table style and border export and layout-dependent percentage-grid sizing remain outside the represented geometry. Writes native repeated headers, fixed and minimum row heights, row split, one-row table split emulation, table bidi and both represented vertical cell directions.",
+      "justification": "Writes preferred table width, justification, compatibility-sensitive indentation, and default or differing cell distances from Writer frame and cell formats. Complete table style and border export and layout-dependent percentage-grid sizing remain outside the represented geometry. Writes native repeated headers, fixed and minimum row heights, row split, one-row table split emulation, table bidi and both represented vertical cell directions. Writes cell shading with native brush precedence and reuses theme/pattern fields only while the resulting color agrees with originalColor.",
       "knownViolations": [],
       "localSymbols": [
         "TableDefinition",

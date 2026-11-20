@@ -18,7 +18,8 @@
     ],
     "preservedResponsibilities": [
       "Writes preferred table width, justification, compatibility-sensitive indentation, and default or differing cell distances from Writer frame and cell formats.",
-      "Writes native repeated headers, fixed and minimum row heights, row split, one-row table split emulation, table bidi and both represented vertical cell directions."
+      "Writes native repeated headers, fixed and minimum row heights, row split, one-row table split emulation, table bidi and both represented vertical cell directions.",
+      "Writes cell shading with native brush precedence and reuses theme/pattern fields only while the resulting color agrees with originalColor."
     ],
     "omittedResponsibilities": [
       "Complete table style and border export and layout-dependent percentage-grid sizing remain outside the represented geometry."
@@ -32,6 +33,18 @@
         {
           "path": "apps/office/src/sw/source/filter/ww8/docxexport.numbered-list.test.ts",
           "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/source/filter/ww8/docxtableexport.ts",
+          "marker": "TableBackgrounds"
+        },
+        {
+          "path": "apps/office/src/sw/source/filter/ww8/docxexport.table-shading.test.ts",
+          "marker": "resolves original base, conditional and direct cell fills"
+        },
+        {
+          "path": "apps/office/e2e/writer-docx-table-shading.spec.ts",
+          "marker": "preserves Word table style fills"
         }
       ],
       "upstream": [
@@ -46,6 +59,14 @@
         {
           "path": "sw/source/filter/ww8/docxattributeoutput.cxx",
           "marker": "DocxAttributeOutput::ImplCellMargins"
+        },
+        {
+          "path": "sw/source/filter/ww8/docxtableexport.cxx",
+          "marker": "DocxAttributeOutput::TableBackgrounds"
+        },
+        {
+          "path": "sw/qa/extras/ooxmlexport/ooxmlexport25.cxx",
+          "marker": "testTdf138020_undefined_firstCol"
         }
       ]
     }

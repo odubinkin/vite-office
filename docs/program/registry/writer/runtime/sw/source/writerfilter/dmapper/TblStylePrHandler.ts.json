@@ -20,9 +20,12 @@
         "apps/office/src/sw/source/writerfilter/dmapper/native-property-map-owners.test.ts",
         "apps/office/src/sw/source/writerfilter/dmapper/native-style-entry-merge.test.ts",
         "apps/office/src/sw/source/filter/ww8/docxexport.numbered-list.test.ts",
-        "sw/source/writerfilter/dmapper/TblStylePrHandler.cxx"
+        "sw/source/writerfilter/dmapper/TblStylePrHandler.cxx",
+        "apps/office/src/sw/source/filter/ww8/docxexport.table-shading.test.ts",
+        "apps/office/e2e/writer-docx-table-shading.spec.ts",
+        "sw/qa/extras/ooxmlexport/ooxmlexport25.cxx"
       ],
-      "justification": "Resolves the represented table style indentation and cell distances into the existing style property map. Conditional table-style XML forwarding and full interop grab bag capture remain outside this geometry path.",
+      "justification": "Resolves the represented table style indentation and cell distances into the existing style property map. Conditional table-style XML forwarding and full interop grab bag capture remain outside this geometry path. Binds the original conditional cell-property group to the native table property handler with the active interoperability vector.",
       "knownViolations": [],
       "localSymbols": [
         "TblStyleType",
