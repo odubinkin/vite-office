@@ -1,0 +1,26 @@
+{
+  "schema_version": 1,
+  "task_id": "202611201415-SKCF0Z",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-11-20T18:00:34.809Z",
+  "verdict": "pass",
+  "summary": "The pinned ODT cell-style contracts and functional regression recovery satisfy the approved checkpoint.",
+  "evaluated_sha": "070f1a7315d2b5c4a538a388862aa1728b54b6c9",
+  "blueprint_digest": "a8fc75cebdf26dbd062520cde0e320e4a29b1377b8f869e18741ef912ac3c712",
+  "findings": [
+    "The Writer ODT import and export retain native style order and defaults. The full application report isolates seven failures in one RTF table suite, all recovered by removing the private mapper marker before the UNO call.",
+    "Chromium replay accounts for all 611 scenarios. The final RTF, adjacent DOCX, inventory, typecheck and tooling evidence confirms recovery."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202611201415-SKCF0Z/README.md",
+    "output/playwright/SKCF0Z/full-coverage-resumed.json",
+    "output/playwright/SKCF0Z/writer-rtf-header-retry.log",
+    "output/playwright/SKCF0Z/full-e2e-resumed.log"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": [
+    "The existing global 100% Istanbul gate remains red at 96.29% statements, 94.09% branches, 98.38% functions and 97.06% lines. The focused final replays supersede the identified functional failures only."
+  ]
+}
