@@ -1,10 +1,11 @@
 ---
 id: "202611201149-89H910"
 title: "Connect Calc sheet tab visibility selection and color commands"
-status: "DOING"
+result_summary: "verified-202611201149-89H910"
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 13
+revision: 15
 origin:
   system: "manual"
 depends_on: []
@@ -23,7 +24,7 @@ plan_approval:
   note: null
 verification:
   state: "ok"
-  updated_at: "2026-11-20T12:41:26.524Z"
+  updated_at: "2026-11-20T12:42:04.348Z"
   updated_by: "CODER"
   note: "verified-202611201149-89H910"
   attempts: 0
@@ -45,11 +46,16 @@ quality_review:
     - "output/calc-89H910-browser-color-replay.log"
   findings:
     - "Focused model and production Chrome cases cover sheet selection, visibility, tab colors, history and persistence."
-commit: null
+commit:
+  hash: "134a17ee396d018d117deee624b8001f0a80a332"
+  message: "🧩 89H910 task: record browser verification"
 comments:
   -
     author: "CODER"
     body: "Start: continue direct-mode task in current checkout."
+  -
+    author: "CODER"
+    body: "Verified: verified-202611201149-89H910. Guided shortcut recorded verification and is closing the direct task with traceable commit metadata."
 events:
   -
     type: "status"
@@ -76,8 +82,21 @@ events:
     author: "CODER"
     state: "ok"
     note: "verified-202611201149-89H910"
+  -
+    type: "verify"
+    at: "2026-11-20T12:42:04.348Z"
+    author: "CODER"
+    state: "ok"
+    note: "verified-202611201149-89H910"
+  -
+    type: "status"
+    at: "2026-11-20T12:42:04.477Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: verified-202611201149-89H910. Guided shortcut recorded verification and is closing the direct task with traceable commit metadata."
 doc_version: 3
-doc_updated_at: "2026-11-20T12:41:26.583Z"
+doc_updated_at: "2026-11-20T12:42:04.477Z"
 doc_updated_by: "CODER"
 description: "Connect native Hide, Show, SelectTables and SetTabBgColor slots to the actual Calc sheet state, shared menus, dialogs and undo. Use local pinned LibreOffice sources and focused tests of browser commands and file persistence."
 sections:
@@ -154,9 +173,43 @@ sections:
     - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
     - risks: none
 
+    ### 2026-11-20T12:42:04.348Z — VERIFY — ok
+
+    By: CODER
+
+    Note: verified-202611201149-89H910
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-20T12:41:26.583Z, excerpt_hash=sha256:d2a3af777ce7e8c12dba04e7b536481a05a3488c0b56ea3e31647fe72abc3c08
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202611201149-89H910/blueprint/resolved-snapshot.json
+    - old_digest: 4cb4d974f3a7df5a4644df9c6172ccc0080a26b266732a5ddb4365d56c69819e
+    - current_digest: 4cb4d974f3a7df5a4644df9c6172ccc0080a26b266732a5ddb4365d56c69819e
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202611201149-89H910
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task complete 202611201149-89H910 --result verified-202611201149-89H910 --commit 134a17ee396d018d117deee624b8001f0a80a332
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Revert the task implementation while preserving existing import/export visibility and color owners."
   Findings: "Native sheet selection includes hidden sheets and Hide compares selected count to visible count. The tab color request records the previous color. Typed Show can record an already-visible sheet. These paths remain source-compatible and are documented as CALC-770 through CALC-772. The browser uses the shared palette set and HTML lists. Desktop workbook structure protection, sharing and macro services are outside the represented slice."
+extensions:
+  implementation_commit:
+    hash: "b86ce70293fc1c104f95fe03240db46dd193b243"
+    message: "🧩 89H910 code: connect Calc sheet tab commands"
 id_source: "generated"
 ---
 ## Summary
@@ -237,6 +290,36 @@ DecisionContextRef:
 - operator_action: run_exact_argv
 - can_execute_now: true
 - safe_command: agentplane task complete 202611201149-89H910 --result verified-202611201149-89H910 --commit b86ce70293fc1c104f95fe03240db46dd193b243
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
+
+### 2026-11-20T12:42:04.348Z — VERIFY — ok
+
+By: CODER
+
+Note: verified-202611201149-89H910
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-20T12:41:26.583Z, excerpt_hash=sha256:d2a3af777ce7e8c12dba04e7b536481a05a3488c0b56ea3e31647fe72abc3c08
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202611201149-89H910/blueprint/resolved-snapshot.json
+- old_digest: 4cb4d974f3a7df5a4644df9c6172ccc0080a26b266732a5ddb4365d56c69819e
+- current_digest: 4cb4d974f3a7df5a4644df9c6172ccc0080a26b266732a5ddb4365d56c69819e
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202611201149-89H910
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task complete 202611201149-89H910 --result verified-202611201149-89H910 --commit 134a17ee396d018d117deee624b8001f0a80a332
 - diagnostic_command: none
 - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
 - freshness: route=computed_local remote=remote_skipped
