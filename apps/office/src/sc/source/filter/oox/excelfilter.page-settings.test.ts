@@ -596,7 +596,8 @@ it("retains the native date and filename footer from the original tdf167019 work
           const applied = candidate.GetCondResult(new ScAddress(5, 3));
           const fill = applied?.GetItemIfSet(ATTR_BACKGROUND, false) as SvxBrushItem | undefined;
           expect(fill?.GetColor().toUInt32()).toBe(0xcc0000);
-          const archive = await DocumentArchive.open(await exportXlsx(candidate));
+          const saved = await exportXlsx(candidate);
+          const archive = await DocumentArchive.open(saved);
           const xml = await archive.readTextEntry(worksheet);
           expect(xml).toMatch(
             /<oddFooter>&amp;L[^<]*&amp;D&amp;C[^<]*&amp;Z&amp;F&amp;R[^<]*&amp;P\/&amp;N<\/oddFooter>/u,
@@ -605,7 +606,7 @@ it("retains the native date and filename footer from the original tdf167019 work
           expect(xml).toContain("AVERAGEIF(C7:C10,&quot;&gt;0&quot;)");
           expect(xml).toContain("_xlfn.MAXIFS(C7:C10,C7:C10,&quot;&gt;0&quot;)");
           expect(xml.match(/<cfRule [^>]*operator="notBetween"/gu)).toHaveLength(3);
-          const reopened = await ExcelFilter.importDocument(await exportXlsx(candidate));
+          const reopened = await ExcelFilter.importDocument(saved);
           try {
             expectOriginalConditionalFormats(reopened);
           } finally {
