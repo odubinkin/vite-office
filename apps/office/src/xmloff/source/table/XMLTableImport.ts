@@ -96,11 +96,13 @@ export class XMLTableStyleContext extends SvXMLImportContext {
   private readonly family: OdfTableStyle["family"];
   private readonly dataStyle: string | undefined;
   private style: OdfTableStyle | undefined;
+  private textStyle: SvXMLImportContext | undefined;
 
-  /** Opens one named table style. @param target - Writer style sink. @param attributes - Style identity. @returns Nothing. */
+  /** Opens one named table style. @param target - Writer style sink. @param attributes - Style identity. @param createTextStyle - Automatic paragraph style factory. @returns Nothing. */
   public constructor(
     private readonly target: Pick<XMLTableImportTarget, "registerTableStyle">,
     attributes: FastAttributeList,
+    private readonly createTextStyle?: () => SvXMLImportContext,
   ) {
     super();
     attributes.assertOnly(
@@ -129,6 +131,7 @@ export class XMLTableStyleContext extends SvXMLImportContext {
   /** Leaves separate cell text properties to the text-style owner. @param element - Source property group. @returns Whether attributes may be skipped. */
   public override ignoreUnknownAttributesForChild(element: XMLToken): boolean {
     return (
+      this.createTextStyle === undefined &&
       this.family === "table-cell" &&
       (element === XMLToken.STYLE_TEXT_PROPERTIES ||
         element === XMLToken.STYLE_PARAGRAPH_PROPERTIES)
@@ -140,7 +143,14 @@ export class XMLTableStyleContext extends SvXMLImportContext {
     element: XMLToken,
     attributes: FastAttributeList,
   ): SvXMLImportContext | null {
-    if (this.ignoreUnknownAttributesForChild(element)) return new SvXMLIgnoreContext(true);
+    if (
+      element === XMLToken.STYLE_TEXT_PROPERTIES ||
+      element === XMLToken.STYLE_PARAGRAPH_PROPERTIES
+    ) {
+      if (!this.createTextStyle) return new SvXMLIgnoreContext(true);
+      this.textStyle ??= this.createTextStyle();
+      return this.textStyle.createFastChildContext(element, attributes);
+    }
     const length =
       /** Processes one ODF table value. @param argument1 - Callback input. @param argument2 - Callback input. @returns Callback result. */ (
         token: XMLToken,
@@ -521,6 +531,7 @@ class XMLTableRowContext extends SvXMLImportContext {
 class XMLTableCellContext extends SvXMLImportContext {
   private readonly repeat: number;
   private readonly hasStringValue: boolean;
+  private readonly savedParaStyle: string;
   /** Opens a cell. @param target - Writer table sink. @param attributes - Cell style. @param helper - Shared native text owner. @returns Nothing. */
   public constructor(
     private readonly target: XMLTableImportTarget,
@@ -551,8 +562,11 @@ class XMLTableCellContext extends SvXMLImportContext {
     this.hasStringValue =
       attributes.get(XMLToken.TABLE_VALUE_TYPE) === "string" &&
       attributes.get(XMLToken.OFFICE_STRING_VALUE) !== null;
+    const styleName = attributes.get(XMLToken.TABLE_STYLE_NAME);
+    this.savedParaStyle = this.helper.GetCellParaStyleDefault();
+    if (styleName !== null) this.helper.SetCellParaStyleDefault(styleName);
     this.target.beginTableCell(
-      attributes.get(XMLToken.TABLE_STYLE_NAME) ?? "",
+      styleName ?? "",
       repeatCount(attributes, XMLToken.TABLE_NUMBER_COLUMNS_SPANNED, 256),
       repeatCount(attributes, XMLToken.TABLE_NUMBER_ROWS_SPANNED, 8192),
       attributes,
@@ -570,6 +584,7 @@ class XMLTableCellContext extends SvXMLImportContext {
   /** Closes the cell. @returns Nothing. */
   public override endFastElement(): void {
     this.target.endTableCell(this.repeat);
+    this.helper.SetCellParaStyleDefault(this.savedParaStyle);
   }
 }
 

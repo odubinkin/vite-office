@@ -5334,3 +5334,30 @@ then replaces it with the locale's system number format for automatic
 integer digits. Writer and Calc retain that order.
 
 - [Original automatic number format selection](../../vendor/libreoffice-reference/xmloff/source/style/xmlnumfi.cxx#L1627)
+
+### WRITER-683 — The effective box style and cell paragraph default can differ
+
+A column or row default can supply the physical cell style without
+supplying its paragraph and text properties. The cell context changes
+the text import default only for its own explicit style name. A nested
+cell without that attribute therefore inherits the outer cell paragraph
+default while resolving its physical style independently. For a cell
+populated from `office:string-value`, the section creation path uses
+the explicit cell style alone.
+
+- [Original cell context and paragraph default](../../vendor/libreoffice-reference/sw/source/filter/xml/xmltbli.cxx#L392)
+- [Original physical style fallback](../../vendor/libreoffice-reference/sw/source/filter/xml/xmltbli.cxx#L1460)
+- [Original string-value section style application](../../vendor/libreoffice-reference/sw/source/filter/xml/xmltbli.cxx#L2722)
+
+### WRITER-684 — A paragraph style assignment can discard cell text formatting
+
+The paragraph context applies the cell paragraph default, then applies
+the paragraph's own style and direct attributes. If that second style
+has a named parent, the normal paragraph collection change resets
+existing direct paragraph items, including character items represented
+at paragraph scope. An automatic paragraph style with no parent
+applies its authored properties without that collection change.
+
+- [Original two calls in paragraph import](../../vendor/libreoffice-reference/xmloff/source/text/txtparai.cxx#L1738)
+- [Original automatic-style parent lookup and assignment](../../vendor/libreoffice-reference/xmloff/source/text/txtimp.cxx#L1036)
+- [Original paragraph collection reset flags](../../vendor/libreoffice-reference/sw/inc/doc.hxx#L832)

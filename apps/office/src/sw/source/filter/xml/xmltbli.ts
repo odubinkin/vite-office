@@ -343,7 +343,10 @@ export class SwXMLTableImport extends SvXMLImport {
     context.activeCell = cell;
     if (this.textImport) {
       context.oldCursor = this.textImport.GetCursor();
-      this.textImport.SetCursor(new SwXCell(cell).createTextCursor());
+      const cursor = new SwXCell(cell).createTextCursor();
+      this.textImport.SetCursor(cursor);
+      if (context.activeCellValue?.stringValue !== undefined)
+        this.textImport.ApplyCellParaStyle(cursor, context.activeCellStyleName);
     }
   }
 

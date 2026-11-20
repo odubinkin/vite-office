@@ -15,7 +15,7 @@ import { Any } from "../../../cppu/inc/com/sun/star/uno/Any";
 import { RuntimeException } from "../../../cppu/inc/com/sun/star/uno/RuntimeException";
 import { applyTextImportProperties, xmlTextString } from "./txtprmap";
 import { APPEND_PARAGRAPH } from "../../../offapi/com/sun/star/text/ControlCharacter";
-import { XMLParaContext, type XMLTextImportTarget } from "./txtparai";
+import { XMLParaContext, resolveParagraphStyle, type XMLTextImportTarget } from "./txtparai";
 import { XMLTextListsHelper } from "./txtlists";
 import { XMLTextFrameContext } from "./XMLTextFrameContext";
 import { XMLTextListBlockContext } from "./XMLTextListBlockContext";
@@ -41,6 +41,39 @@ interface TextImportHint {
 /** One native text import owner keeps processed list roots across body and every cell. */
 export class XMLTextImportHelper {
   private readonly lists = new XMLTextListsHelper();
+  private cellParaStyleDefault = "";
+
+  /** Gets the explicit cell paragraph default in the current SAX scope. @returns Source style name. */
+  public GetCellParaStyleDefault(): string {
+    return this.cellParaStyleDefault;
+  }
+
+  /** Saves or restores the cell paragraph default. @param name - Source paragraph style name. @returns Nothing. */
+  public SetCellParaStyleDefault(name: string): void {
+    this.cellParaStyleDefault = name;
+  }
+
+  /** Applies the cell's paragraph style without reapplying numbering or outline state. @param cursor - Actual paragraph text cursor. @param name - Explicit cell style name. @returns Nothing. */
+  public ApplyCellParaStyle(cursor: XMLTextCursor, name: string): void {
+    if (!name) return;
+    const automatic = this.target.getAutoStyle("paragraph", name);
+    const parentName = automatic?.parentStyleName ?? (automatic ? "" : name);
+    if (parentName) {
+      const style =
+        this.target.resolveNamedParagraphStyle?.(parentName) ??
+        this.target.resolveBuiltInParagraphStyle?.(parentName);
+      if (style !== undefined) this.SetProperty(cursor, "ParaStyleName", style);
+    }
+    if (!automatic) return;
+    const resolved = resolveParagraphStyle(name, false, this.target);
+    applyTextImportProperties(
+      cursor,
+      resolved.properties,
+      resolved.paragraphProperties,
+      resolved.alignment,
+      resolved.leftMargin,
+    );
+  }
 
   /** Binds the common dispatcher to actual Writer paragraph/table operations. @param target - Canonical import target. @returns Nothing.  @param model - Native operation input. */
   public constructor(
@@ -100,6 +133,7 @@ export class XMLTextImportHelper {
   }
   /** Releases import-owned cursor and hint positions after stream completion or failure. @returns Nothing. */
   public ResetCursor(): void {
+    this.cellParaStyleDefault = "";
     while (this.frameContexts.length !== 0) this.PopTextFrameCursor();
     this.ClearCursor();
   }
@@ -119,7 +153,7 @@ export class XMLTextImportHelper {
     for (const start of this.bookmarkStarts.values()) start.dispose();
     this.bookmarkStarts.clear();
   }
-  /** Starts a paragraph and defers its native style application until after the break. @param style - Paragraph style. @param alignment - Direct alignment. @param left - Direct margin. @param paragraph - Paragraph properties. @param properties - Direct character map. @param list - Native list state. @param listGeometryWins - Legacy parser precedence. @param forceListRule - Explicit automatic list declaration. @param markerProperties - Direct text properties of the paragraph mark. @returns Nothing. */
+  /** Starts a paragraph and defers its native style application until after the break. @param style - Paragraph style. @param alignment - Direct alignment. @param left - Direct margin. @param paragraph - Paragraph properties. @param properties - Direct character map. @param list - Native list state. @param listGeometryWins - Legacy parser precedence. @param forceListRule - Explicit automatic list declaration. @param markerProperties - Direct text properties of the paragraph mark. @param applyStyle - Whether the paragraph supplies its own style. @returns Nothing. */
   public BeginParagraph(
     style: string,
     alignment: OdfParagraphAlignment | undefined,
@@ -130,13 +164,16 @@ export class XMLTextImportHelper {
     _listGeometryWins: boolean,
     forceListRule = false,
     markerProperties?: Partial<OdfCharacterProperties>,
+    applyStyle = true,
   ): void {
+    const cellStyle = this.cellParaStyleDefault;
     this.start = this.GetCursor().getStart();
     this.applyParagraph =
       /** Executes this bounded native operation. @param cursor - Native operation input. @returns Native operation result. */ (
         cursor,
       ) => {
-        this.SetStyleAndAttrs(cursor, style, list, forceListRule);
+        this.ApplyCellParaStyle(cursor, cellStyle);
+        this.SetStyleAndAttrs(cursor, style, list, forceListRule, applyStyle || !cellStyle);
         applyTextImportProperties(cursor, properties, paragraph, alignment, left);
         if (markerProperties) {
           const name = xmlTextString("CharacterStyles");
@@ -157,14 +194,15 @@ export class XMLTextImportHelper {
         }
       };
   }
-  /** Applies the original paragraph style/list API properties, preserving inherited numbering when already equal. @param cursor - Selected original paragraph. @param style - Native style identity. @param list - Active list state. @param forceListRule - Explicit automatic numbering. @returns Nothing. */
+  /** Applies the original paragraph style/list API properties, preserving inherited numbering when already equal. @param cursor - Selected original paragraph. @param style - Native style identity. @param list - Active list state. @param forceListRule - Explicit automatic numbering. @param applyStyle - Whether the paragraph supplies its own style. @returns Nothing. */
   public SetStyleAndAttrs(
     cursor: XMLTextCursor,
     style: string,
     list: XMLParagraphListState | undefined,
     forceListRule = false,
+    applyStyle = true,
   ): void {
-    this.SetProperty(cursor, "ParaStyleName", style);
+    if (applyStyle) this.SetProperty(cursor, "ParaStyleName", style);
     const ruleKey = xmlTextString("NumberingStyleName"),
       value = cursor.getPropertyValue(ruleKey),
       current = xmlTextString("");

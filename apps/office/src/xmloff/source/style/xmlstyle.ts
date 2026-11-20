@@ -74,7 +74,8 @@ export class XMLStylesContext extends SvXMLImportContext {
 
   /** Retains the source-owned leaf context. @param style - Parsed style context. @returns Nothing. */
   public AddStyle(style: XMLStyleContext): void {
-    if (this.FindStyleChildContext(style.GetFamily(), style.GetName()) !== undefined)
+    const existing = this.FindStyleChildContext(style.GetFamily(), style.GetName());
+    if (existing && !existing.IsTableItemTextStyle() && !style.IsTableItemTextStyle())
       throw new Error(`Duplicate ODF style: ${style.GetName()}`);
     this.styles.push(style);
   }
@@ -142,7 +143,18 @@ export class XMLStylesContext extends SvXMLImportContext {
         family === "table-row" ||
         family === "table-cell"
       )
-        return new XMLTableStyleContext(this.target, attributes);
+        return new XMLTableStyleContext(
+          this.target,
+          attributes,
+          this.automatic
+            ? /** Registers the paragraph context associated with the automatic item set. @returns Paragraph property owner. */
+              () => {
+                const style = new XMLStyleContext(this.target, attributes, this, false, true);
+                this.AddStyle(style);
+                return style;
+              }
+            : undefined,
+        );
       const context = new XMLStyleContext(this.target, attributes, this);
       if (context.IsSupportedStyle()) this.AddStyle(context);
       return context;
@@ -303,14 +315,21 @@ class XMLStyleContext extends SvXMLImportContext {
   >;
   private readonly supported: boolean;
 
-  /** Reads style identity attributes. @param target - Property consumer. @param attributes - Style attributes. @param styles - Owning native container. @param isDefault - Whether this is style:default-style. @returns Context. */
+  /** Reads style identity attributes. @param target - Property consumer. @param attributes - Style attributes. @param styles - Owning native container. @param isDefault - Whether this is style:default-style. @param tableItemTextStyle - Whether the name comes from a table item set. @returns Context. */
   public constructor(
     private readonly target: XMLStyleImportTarget,
     attributes: FastAttributeList,
     private readonly styles: XMLStylesContext,
     private readonly isDefault = false,
+    private readonly tableItemTextStyle = false,
   ) {
     super();
+    if (tableItemTextStyle) {
+      this.name = attributes.require(XMLToken.STYLE_NAME, "table style name");
+      this.definition = { family: "paragraph" };
+      this.supported = true;
+      return;
+    }
     this.masterPageName = attributes.get(XMLToken.STYLE_MASTER_PAGE_NAME) ?? undefined;
     attributes.assertOnly(
       [
@@ -383,7 +402,11 @@ class XMLStyleContext extends SvXMLImportContext {
     if (element === XMLToken.STYLE_TEXT_PROPERTIES) {
       if (this.properties !== undefined)
         throw new Error("ODF style has duplicate text-properties.");
-      this.properties = importCharacterProperties(attributes, this.target);
+      this.properties = importCharacterProperties(
+        attributes,
+        this.target,
+        !this.tableItemTextStyle,
+      );
       return new XMLTextPropertySetContext(
         undefined,
         /** Retains the native complex color beside the resolved RGB attribute. @param color - Parsed theme color. @returns Nothing. */
@@ -405,6 +428,11 @@ class XMLStyleContext extends SvXMLImportContext {
   /** Returns the implemented style family. @returns Native family identity. */
   public GetFamily(): OdfStyleDefinition["family"] {
     return this.definition.family;
+  }
+
+  /** Identifies the paragraph context inserted by an automatic table item set. @returns Whether the identity was synthesized. */
+  public IsTableItemTextStyle(): boolean {
+    return this.tableItemTextStyle;
   }
 
   /** Returns whether this style has a supported named identity. @returns Whether retained by the container. */
@@ -643,37 +671,39 @@ function importOptionalLength(
   return value === null ? undefined : importOdfLength(value, signed, label);
 }
 
-/** Imports supported character properties. @param attributes - Property attributes. @param target - Style and font resolver. @returns Property deltas. */
+/** Imports supported character properties. @param attributes - Property attributes. @param target - Style and font resolver. @param strict - Whether to reject unsupported attributes or missing face references. @returns Property deltas. */
 function importCharacterProperties(
   attributes: FastAttributeList,
   target: XMLStyleImportTarget,
+  strict = true,
 ): Partial<OdfCharacterProperties> {
-  attributes.assertOnly(
-    [
-      ...textCharacterPropertyTokens,
-      XMLToken.STYLE_FONT_NAME,
-      XMLToken.STYLE_FONT_NAME_ASIAN,
-      XMLToken.STYLE_FONT_NAME_COMPLEX,
-      XMLToken.FO_FONT_FAMILY,
-      XMLToken.FO_FONT_SIZE,
-      XMLToken.STYLE_FONT_SIZE_ASIAN,
-      XMLToken.STYLE_FONT_SIZE_COMPLEX,
-      XMLToken.FO_FONT_STYLE,
-      XMLToken.STYLE_TEXT_UNDERLINE_STYLE,
-      XMLToken.STYLE_TEXT_UNDERLINE_WIDTH,
-      XMLToken.STYLE_TEXT_UNDERLINE_COLOR,
-      XMLToken.FO_COLOR,
-      XMLToken.DRAW_OPACITY,
-      XMLToken.LOEXT_OPACITY,
-      XMLToken.STYLE_USE_WINDOW_FONT_COLOR,
-      XMLToken.FO_BACKGROUND_COLOR,
-      XMLToken.STYLE_FONT_WEIGHT_ASIAN,
-      XMLToken.STYLE_FONT_WEIGHT_COMPLEX,
-      XMLToken.STYLE_FONT_STYLE_ASIAN,
-      XMLToken.STYLE_FONT_STYLE_COMPLEX,
-    ],
-    "text properties",
-  );
+  if (strict)
+    attributes.assertOnly(
+      [
+        ...textCharacterPropertyTokens,
+        XMLToken.STYLE_FONT_NAME,
+        XMLToken.STYLE_FONT_NAME_ASIAN,
+        XMLToken.STYLE_FONT_NAME_COMPLEX,
+        XMLToken.FO_FONT_FAMILY,
+        XMLToken.FO_FONT_SIZE,
+        XMLToken.STYLE_FONT_SIZE_ASIAN,
+        XMLToken.STYLE_FONT_SIZE_COMPLEX,
+        XMLToken.FO_FONT_STYLE,
+        XMLToken.STYLE_TEXT_UNDERLINE_STYLE,
+        XMLToken.STYLE_TEXT_UNDERLINE_WIDTH,
+        XMLToken.STYLE_TEXT_UNDERLINE_COLOR,
+        XMLToken.FO_COLOR,
+        XMLToken.DRAW_OPACITY,
+        XMLToken.LOEXT_OPACITY,
+        XMLToken.STYLE_USE_WINDOW_FONT_COLOR,
+        XMLToken.FO_BACKGROUND_COLOR,
+        XMLToken.STYLE_FONT_WEIGHT_ASIAN,
+        XMLToken.STYLE_FONT_WEIGHT_COMPLEX,
+        XMLToken.STYLE_FONT_STYLE_ASIAN,
+        XMLToken.STYLE_FONT_STYLE_COMPLEX,
+      ],
+      "text properties",
+    );
   const faceName = attributes.get(XMLToken.STYLE_FONT_NAME);
   const asianFaceName = attributes.get(XMLToken.STYLE_FONT_NAME_ASIAN);
   const complexFaceName = attributes.get(XMLToken.STYLE_FONT_NAME_COMPLEX);
@@ -697,14 +727,14 @@ function importCharacterProperties(
   if (highlight !== null && !isOdfColor(highlight, true))
     throw new Error(`Unsupported ODF highlight color: ${highlight}`);
   const declaredFontFamily = faceName === null ? undefined : target.getFontFace(faceName);
-  if (faceName !== null && declaredFontFamily === undefined)
+  if (strict && faceName !== null && declaredFontFamily === undefined)
     throw new Error(`Undefined ODF font face: ${faceName}`);
   const asianFontFamily = asianFaceName === null ? undefined : target.getFontFace(asianFaceName);
-  if (asianFaceName !== null && asianFontFamily === undefined)
+  if (strict && asianFaceName !== null && asianFontFamily === undefined)
     throw new Error(`Undefined ODF Asian font face: ${asianFaceName}`);
   const complexFontFamily =
     complexFaceName === null ? undefined : target.getFontFace(complexFaceName);
-  if (complexFaceName !== null && complexFontFamily === undefined)
+  if (strict && complexFaceName !== null && complexFontFamily === undefined)
     throw new Error(`Undefined ODF complex font face: ${complexFaceName}`);
   const fontFamily = declaredFontFamily ?? fallbackFontFamily?.replace(/^(['"])(.*)\1$/, "$2");
   const fontFamilyGeneric = faceName === null ? undefined : target.getFontFaceGeneric?.(faceName);

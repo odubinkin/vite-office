@@ -85,7 +85,7 @@ export function applyTableCellValue(box: SwTableBox, source: SwXMLTableCellValue
   const nodes = box.GetContentNodes();
   const paragraph = nodes[0]?.GetTextNode();
   if (source.stringValue !== undefined && paragraph && paragraph.GetText() !== source.stringValue)
-    paragraph.SetText(source.stringValue);
+    paragraph.InsertText(source.stringValue, 0);
   const text = paragraph?.GetText();
   if (
     source.value === 0 &&

@@ -154,11 +154,11 @@ export class XMLParaContext extends SvXMLImportContext {
         : [XMLToken.TEXT_STYLE_NAME, XMLToken.LOEXT_MARKER_STYLE_NAME],
       "paragraph",
     );
-    const resolved = resolveParagraphStyle(
-      attributes.get(XMLToken.TEXT_STYLE_NAME) ?? "",
-      element === XMLToken.TEXT_H,
-      target,
-    );
+    const name = attributes.get(XMLToken.TEXT_STYLE_NAME) ?? "";
+    const heading = element === XMLToken.TEXT_H;
+    const resolved = resolveParagraphStyle(name, heading, target);
+    const automatic = name ? target.getAutoStyle("paragraph", name) : undefined;
+    const parent = automatic ? automatic.parentStyleName : name;
     this.paragraph = target.GetTextImport();
     const marker = attributes.get(XMLToken.LOEXT_MARKER_STYLE_NAME);
     this.paragraph.BeginParagraph(
@@ -171,6 +171,10 @@ export class XMLParaContext extends SvXMLImportContext {
       resolved.listGeometryWins === true,
       resolved.forceListRule,
       marker ? target.getAutoStyle("text", marker)?.properties : undefined,
+      heading ||
+        (!!parent &&
+          (target.resolveNamedParagraphStyle?.(parent) !== undefined ||
+            target.resolveBuiltInParagraphStyle?.(parent) !== undefined)),
     );
     this.inherited = DEFAULT_PROPERTIES;
   }
