@@ -21,7 +21,7 @@
         "apps/office/src/sc/source/filter/oox/excelfilter.page-settings.test.ts",
         "vendor/libreoffice-reference/xmloff/source/style/PageMasterStyleMap.cxx#PROP_ScaleToPagesX"
       ],
-      "justification": "Uses native ODF table/master-page associations to apply and write real page-family item sets for represented print properties. Header/footer page stories, backgrounds, and unsupported page-style property groups remain unported.",
+      "justification": "Uses native ODF table/master-page associations to apply and write page-family item sets for represented print properties, header/footer geometry, and story content. Header/footer backgrounds, borders, and unsupported page-style property groups remain unported.",
       "knownViolations": [],
       "localSymbols": [
         "ScXMLPageStyles",

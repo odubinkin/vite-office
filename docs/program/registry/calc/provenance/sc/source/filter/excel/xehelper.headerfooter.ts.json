@@ -1,0 +1,45 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/sc/source/filter/excel/xehelper.headerfooter.ts",
+    "status": "mapped",
+    "upstreamPath": "sc/source/filter/excel/xehelper.cxx",
+    "localSymbols": [
+      "XclExpHFConverter"
+    ],
+    "upstreamSymbols": [
+      "XclExpHFConverter::GenerateString"
+    ],
+    "preservedResponsibilities": [
+      "Writes original Excel section order, native font differences, escaped text, and represented fields."
+    ],
+    "omittedResponsibilities": [
+      "Unsupported temporal and extended filename fields, pictures and complete print layout remain outside the represented slice."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sc/source/filter/excel/xehelper.headerfooter.ts",
+          "marker": "XclExpHFConverter"
+        },
+        {
+          "path": "apps/office/src/sc/source/filter/oox/excelfilter.page-settings.test.ts",
+          "marker": "@fileoverview"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "sc/source/filter/excel/xehelper.cxx",
+          "marker": "XclExpHFConverter::GenerateString"
+        }
+      ]
+    },
+    "filenameDivergence": {
+      "localPath": "apps/office/src/sc/source/filter/excel/xehelper.headerfooter.ts",
+      "stackNecessity": "responsibility-split",
+      "rationale": "Keeps the original header/footer implementation beside the corresponding Calc worksheet or export owner."
+    }
+  }
+}

@@ -353,7 +353,7 @@ function SaveXmlSheet(
   const serializer = stream.GetCurrentStream();
   const row = token("row");
   serializer.startElement(token("worksheet"), token("xmlns"), spreadsheetNamespace);
-  const page = new XclExpPageSettings(document, tab);
+  const page = new XclExpPageSettings(document, tab, styles.GetFontBuffer().GetAppFontData());
   new XclExpXmlSheetPr(document.GetTabBgColor(tab), page.FitToPages()).SaveXml(stream);
   SaveXmlTabViewSettings(stream, document, tab, selected, view);
   const table = document.FetchTable(tab);

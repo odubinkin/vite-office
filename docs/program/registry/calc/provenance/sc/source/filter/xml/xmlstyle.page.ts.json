@@ -14,10 +14,10 @@
       "ScMasterPageContext::Finish"
     ],
     "preservedResponsibilities": [
-      "Uses native ODF table/master-page associations to apply and write real page-family item sets for represented print properties."
+      "Uses native ODF table/master-page associations to apply and write page-family item sets for represented print properties, header/footer geometry, and story content."
     ],
     "omittedResponsibilities": [
-      "Header/footer page stories, backgrounds, and unsupported page-style property groups remain unported."
+      "Header/footer backgrounds, borders, and unsupported page-style property groups remain unported."
     ],
     "evidence": {
       "local": [

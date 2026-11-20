@@ -44,6 +44,8 @@ test("Calc keeps XLSX print geometry through browser storage and a mobile reopen
   expect(xml).toMatch(/<pageSetup[^>]*paperSize="70"[^>]*orientation="landscape"/u);
   expect(xml).toContain('<printOptions headings="true" gridLines="true"');
   expect(xml).toMatch(/<pageMargins[^>]*left="0\.1965[^"]*"[^>]*\/>/u);
+  expect(xml).toContain("<oddHeader>&amp;L&amp;18Left&amp;R&amp;18Right</oddHeader>");
+  expect(xml).toContain("<oddFooter>&amp;LLeft&amp;RRight</oddFooter>");
 
   await page.setViewportSize({ width: 430, height: 844 });
   await open.click();

@@ -1,12 +1,18 @@
 /** @fileoverview Calc ODF text spans over native EditTextObject sections and the shared text style mapping. */
-import type { EditTextObject } from "../../../../editeng/inc/editobj";
+import type { EditTextObject, EditTextObjectConstReference } from "../../../../editeng/inc/editobj";
 import type { Section } from "../../../../editeng/inc/section";
 import {
   EE_CHAR_ESCAPEMENT,
+  EE_CHAR_FONTHEIGHT,
+  EE_CHAR_FONTHEIGHT_CJK,
+  EE_CHAR_FONTHEIGHT_CTL,
+  EE_FEATURE_FIELD,
   EE_FEATURE_LINEBR,
   EE_FEATURE_TAB,
 } from "../../../../editeng/inc/eeitem";
 import type { SvxEscapementItem } from "../../../../editeng/source/items/textitem.escapement";
+import { SvxFontHeightItem } from "../../../../editeng/inc/fhgtitem";
+import { convertTwipToMm100 } from "../../../../tools/inc/UnitConversion";
 import { text } from "../../../../i18nlangtag/source/isolang/isolang.tables";
 import { SfxItemSet } from "../../../../svl/source/items/itemset";
 import type { ScDocument } from "../../../inc/document";
@@ -25,14 +31,15 @@ export type CellTextParagraph = readonly CellTextSpan[];
 export class CellTextStylePool {
   private readonly styles = new Map<string, string>();
 
-  /** Uses the document formatting pool and the package's shared font declarations. @param document - Actual Calc document. @param fonts - ODF font declaration pool. @returns Style owner. */
+  /** Uses the document formatting pool and the package's shared font declarations. @param document - Actual Calc document. @param fonts - ODF font declaration pool. @param prefix - Automatic style name prefix. @returns Style owner. */
   constructor(
     private readonly document: ScDocument,
     private readonly fonts: XMLFontAutoStylePool,
+    private readonly prefix = "T",
   ) {}
 
-  /** Registers a section's equivalent ODF character style. @param edit - Actual cell value. @param section - Source range. @returns Optional style name. */
-  private add(edit: EditTextObject, section: Section): string {
+  /** Registers a section's equivalent ODF character style. @param edit - Native text value. @param section - Source range. @param twips - Header/footer font height unit. @returns Optional style name. */
+  add(edit: EditTextObjectConstReference, section: Section, twips = false): string {
     if (!section.maAttributes.length) return "";
     if (
       section.maAttributes.some(
@@ -45,7 +52,22 @@ export class CellTextStylePool {
     const pattern = new ScPatternAttr(this.document.getCellAttributeHelper());
     let properties: string;
     try {
-      for (const item of section.maAttributes) items.Put(item);
+      for (const item of section.maAttributes) {
+        const which = item.Which();
+        if (which === EE_FEATURE_FIELD) continue;
+        if (
+          twips &&
+          (which === EE_CHAR_FONTHEIGHT ||
+            which === EE_CHAR_FONTHEIGHT_CJK ||
+            which === EE_CHAR_FONTHEIGHT_CTL)
+        ) {
+          const size = item as SvxFontHeightItem;
+          items.Put(
+            new SvxFontHeightItem(Number(convertTwipToMm100(BigInt(size.GetHeight()))), 100, which),
+            true,
+          );
+        } else items.Put(item);
+      }
       pattern.GetFromEditItemSet(items);
       const position = items.GetItemIfSet(EE_CHAR_ESCAPEMENT) as SvxEscapementItem | undefined;
       properties = exportCellTextPropertyElement(
@@ -65,7 +87,7 @@ export class CellTextStylePool {
     if (!properties) return "";
     const existing = this.styles.get(properties);
     if (existing) return existing;
-    const name = "T" + (this.styles.size + 1);
+    const name = this.prefix + (this.styles.size + 1);
     this.styles.set(properties, name);
     return name;
   }

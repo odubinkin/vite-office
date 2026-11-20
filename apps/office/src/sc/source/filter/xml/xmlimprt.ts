@@ -191,7 +191,7 @@ export class ScXMLImport extends SvXMLImport implements SvXMLImportRootFactory {
   ) {
     super();
     this.docImport = new ScDocumentImport(document);
-    this.pageStyles = new ScXMLPageStyles(document);
+    this.pageStyles = new ScXMLPageStyles(document, this);
   }
   /** Transfers a parsed real automatic pattern into import lifetime ownership. @param name - Source name. @param pattern - Adopted source pattern. @param reference - Optional ODF data style. @returns Nothing. */
   AddAutoStyle(name: string, pattern: ScPatternAttr, reference: string | null = null): void {

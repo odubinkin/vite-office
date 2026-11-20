@@ -95,6 +95,7 @@ class ScPageBreakRanges {
 /** Native spreadsheet content export, including row and column automatic styles. */
 export class ScXMLExport {
   private fontPool = new XMLFontAutoStylePool();
+  private readonly pageFontPool = new XMLFontAutoStylePool();
   private readonly pageStyles: ReturnType<typeof exportPageStyles>;
   private textStyles: CellTextStylePool;
   private readonly styles = new Map<
@@ -111,7 +112,7 @@ export class ScXMLExport {
     private readonly options: ScXMLExportOptions = {},
   ) {
     this.textStyles = new CellTextStylePool(document, this.fontPool);
-    this.pageStyles = exportPageStyles(document);
+    this.pageStyles = exportPageStyles(document, this.pageFontPool);
   }
   /** Registers direct font-height pattern data in the automatic-style pool. @param pattern - Real cell pattern. @returns Style name or empty default. */
   private styleName(pattern: ScPatternAttr): string {
@@ -156,14 +157,14 @@ export class ScXMLExport {
   }
   /** Writes the recognized default style in the ODF named styles stream. @returns ODF styles XML or empty. */
   exportStyles(): string {
-    const fontPool = new XMLFontAutoStylePool();
+    const fontPool = this.pageFontPool;
     const styles = exportDefaultCellStyle(this.document, fontPool);
     const { layouts, masters } = this.pageStyles;
     if (!styles && !layouts) return "";
     const pageStyles = layouts
       ? `<office:automatic-styles>${layouts}</office:automatic-styles>${masters}`
       : "";
-    return `<?xml version="1.0" encoding="UTF-8"?><office:document-styles xmlns:office="${ODF_NAMESPACES.office}" xmlns:number="${ODF_NAMESPACES.number}" xmlns:style="${ODF_NAMESPACES.style}" xmlns:fo="${ODF_NAMESPACES.fo}" xmlns:css3t="${ODF_NAMESPACES.css3t}" xmlns:svg="${ODF_NAMESPACES.svg}" xmlns:loext="${ODF_NAMESPACES.loext}" xmlns:xlink="${ODF_NAMESPACES.xlink}" office:version="1.3">${fontPool.exportXML()}${styles}${pageStyles}</office:document-styles>`;
+    return `<?xml version="1.0" encoding="UTF-8"?><office:document-styles xmlns:office="${ODF_NAMESPACES.office}" xmlns:number="${ODF_NAMESPACES.number}" xmlns:text="${ODF_NAMESPACES.text}" xmlns:style="${ODF_NAMESPACES.style}" xmlns:fo="${ODF_NAMESPACES.fo}" xmlns:css3t="${ODF_NAMESPACES.css3t}" xmlns:svg="${ODF_NAMESPACES.svg}" xmlns:loext="${ODF_NAMESPACES.loext}" xmlns:xlink="${ODF_NAMESPACES.xlink}" office:version="1.3">${fontPool.exportXML()}${styles}${pageStyles}</office:document-styles>`;
   }
   /** Collects equal effective cell-style ranges with the minimum native row-repeat boundary,as WriteRowContent consumes ScRowFormatRanges. @param table - Actual sheet. @param row - First row in the format run. @returns Horizontal styles and their common row end. */
   private collectColumnStyles(

@@ -143,11 +143,11 @@ it("resolves an independently authored styles-stream declaration referenced by c
   });
   expect(
     diagnostics.filter(
-      /** Selects unsupported native style scopes. @param name - Diagnostic name. @returns Whether named or master styles. */ (
+      /** Selects the diagnostic for the unsupported named cell style. @param name - Diagnostic name. @returns Whether named styles are diagnosed. */ (
         name,
       ) => name === "named and master styles are not preserved",
     ),
-  ).toHaveLength(2);
+  ).toHaveLength(1);
   expect(
     font(loaded, 100).equals(
       new SvxFontItem(

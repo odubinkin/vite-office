@@ -1,7 +1,7 @@
 /** @fileoverview Native XLSX manual page-break records collected from the actual Calc sheet. */
 import { getTokenFromUtf8 as token } from "../../../../oox/source/token/tokenmap";
 import type { ScDocument } from "../../../inc/document";
-import type { ScPageScaleToItem } from "../../../inc/attrib";
+import type { ScPageHFItem, ScPageScaleToItem } from "../../../inc/attrib";
 import type { SfxItemSet } from "../../../../svl/source/items/itemset";
 import type { SfxBoolItem } from "../../../../svl/source/items/cenumitm";
 import type { SfxUInt16Item } from "../../../../svl/inc/intitem";
@@ -11,6 +11,9 @@ import type { SvxULSpaceItem } from "../../../../editeng/inc/ulspitem";
 import type { SvxSizeItem } from "../../../../editeng/inc/sizeitem";
 import { convert, Length } from "../../../../o3tl/inc/unit_conversion";
 import { SetScPaperSize } from "./xlpage";
+import { XclExpHFConverter } from "./xehelper.headerfooter";
+import type { XclFontData } from "./xlstyle";
+import type { SvxSetItem } from "../../../../svx/inc/pageitem";
 import {
   ATTR_LRSPACE,
   ATTR_ULSPACE,
@@ -26,6 +29,18 @@ import {
   ATTR_PAGE_SCALE,
   ATTR_PAGE_SCALETOPAGES,
   ATTR_PAGE_SCALETO,
+  ATTR_PAGE_HEADERSET,
+  ATTR_PAGE_FOOTERSET,
+  ATTR_PAGE_HEADERRIGHT,
+  ATTR_PAGE_HEADERLEFT,
+  ATTR_PAGE_HEADERFIRST,
+  ATTR_PAGE_FOOTERRIGHT,
+  ATTR_PAGE_FOOTERLEFT,
+  ATTR_PAGE_FOOTERFIRST,
+  ATTR_PAGE_ON,
+  ATTR_PAGE_DYNAMIC,
+  ATTR_PAGE_SHARED,
+  ATTR_PAGE_SHARED_FIRST,
 } from "../../../inc/scitems";
 import { MAXCOL, MAXROW } from "../../../inc/address";
 import type { ScTable } from "../../../inc/table";
@@ -87,16 +102,27 @@ export function SaveXmlPageBreaks(stream: XclExpXmlStream, table: ScTable): void
   new XclExpPageBreaks(false, columns, MAXROW & 0xffff).SaveXml(stream);
 }
 
+/** Converted Excel text variants and the body distance owned by one header/footer set. */
+interface HeaderFooterData {
+  odd: string;
+  even: string;
+  first: string;
+  useEven: boolean;
+  useFirst: boolean;
+  height?: number;
+}
+
 /** Original worksheet page settings obtained from the page-family item set. */
 export class XclExpPageSettings {
   private readonly items: SfxItemSet | undefined;
   private readonly scaling: number;
   private readonly fit: readonly [width: number, height: number] | undefined;
 
-  /** Looks up the native sheet style and selects the original effective fitting mode. @param document - Workbook. @param tab - Sheet index. @returns Page settings writer. */
+  /** Looks up the native sheet style and selects the original effective fitting mode. @param document - Workbook. @param tab - Sheet index. @param appFont - Workbook font zero. @returns Page settings writer. */
   constructor(
     private readonly document: ScDocument,
     private readonly tab: number,
+    private readonly appFont: XclFontData,
   ) {
     this.items = document
       .GetStyleSheetPool()
@@ -147,6 +173,8 @@ export class XclExpPageSettings {
         length: number,
       ): string => String(convert(length, Length.twip, Length.in));
     const headerFooter = String(convert(1300, Length.mm100, Length.in));
+    const header = this.readHeaderFooter(items, true);
+    const footer = this.readHeaderFooter(items, false);
     xml.singleElement(
       token("pageMargins"),
       token("left"),
@@ -154,13 +182,13 @@ export class XclExpPageSettings {
       token("right"),
       inches(lr.ResolveRight()),
       token("top"),
-      inches(ul.GetUpper()),
+      inches(ul.GetUpper() + (header.height ?? 0)),
       token("bottom"),
-      inches(ul.GetLower()),
+      inches(ul.GetLower() + (footer.height ?? 0)),
       token("header"),
-      headerFooter,
+      header.height === undefined ? headerFooter : inches(ul.GetUpper()),
       token("footer"),
-      headerFooter,
+      footer.height === undefined ? headerFooter : inches(ul.GetLower()),
     );
 
     const landscape = (items.Get(ATTR_PAGE) as SvxPageItem).IsLandscape();
@@ -210,5 +238,88 @@ export class XclExpPageSettings {
       token("copies"),
       "1",
     );
+    this.saveHeaderFooter(stream, header, footer);
+  }
+
+  /** Reads native page content and shared variants. @param items - Page style. @param header - Header selector. @returns Worksheet record values. */
+  private readHeaderFooter(items: SfxItemSet, header: boolean): HeaderFooterData {
+    const set = (
+      items.Get(header ? ATTR_PAGE_HEADERSET : ATTR_PAGE_FOOTERSET) as SvxSetItem
+    ).GetItemSet();
+    const flag = /** Reads one native slot. @param which - Item ID. @returns Boolean. */ (
+      which: number,
+    ) => (set.Get(which) as SfxBoolItem).GetValue();
+    if (!flag(ATTR_PAGE_ON))
+      return { odd: "", even: "", first: "", useEven: false, useFirst: false };
+    const converter = new XclExpHFConverter(this.appFont);
+    const read =
+      /** Encodes one native variant from its three actual areas. @param which - Variant ID. @returns Encoded result. */ (
+        which: number,
+      ) => {
+        const value = items.Get(which) as ScPageHFItem;
+        return converter.GenerateString([
+          value.GetLeftArea(),
+          value.GetCenterArea(),
+          value.GetRightArea(),
+        ]);
+      };
+    const useEven =
+      set.GetItemIfSet(ATTR_PAGE_SHARED, false) !== undefined && !flag(ATTR_PAGE_SHARED);
+    const useFirst =
+      set.GetItemIfSet(ATTR_PAGE_SHARED_FIRST, false) !== undefined &&
+      !flag(ATTR_PAGE_SHARED_FIRST);
+    const odd = read(header ? ATTR_PAGE_HEADERRIGHT : ATTR_PAGE_FOOTERRIGHT);
+    const even = useEven ? read(header ? ATTR_PAGE_HEADERLEFT : ATTR_PAGE_FOOTERLEFT) : odd;
+    const first = useFirst ? read(header ? ATTR_PAGE_HEADERFIRST : ATTR_PAGE_FOOTERFIRST) : odd;
+    const spacing = set.Get(ATTR_ULSPACE) as SvxULSpaceItem;
+    const outHeight = flag(ATTR_PAGE_DYNAMIC)
+      ? (useFirst ? first : useEven ? even : odd).height +
+        (header ? spacing.GetLower() : spacing.GetUpper())
+      : (set.Get(ATTR_PAGE_SIZE) as SvxSizeItem).GetSize().Height();
+    // An enabled default style with empty text is equivalent to a style without a header record.
+    const height = odd.value || even.value || first.value ? outHeight : undefined;
+    return {
+      odd: odd.value,
+      even: even.value,
+      first: first.value,
+      useEven,
+      useFirst,
+      ...(height === undefined ? {} : { height }),
+    };
+  }
+
+  /** Writes normal, even and first-page variants using the original worksheet-wide sharing semantics. @param stream - Worksheet XML owner. @param header - Header records. @param footer - Footer records. @returns Nothing. */
+  private saveHeaderFooter(
+    stream: XclExpXmlStream,
+    header: HeaderFooterData,
+    footer: HeaderFooterData,
+  ): void {
+    const xml = stream.GetCurrentStream();
+    const even = header.useEven || footer.useEven;
+    const first = header.useFirst || footer.useFirst;
+    xml.startElement(
+      token("headerFooter"),
+      token("differentFirst"),
+      String(first),
+      token("differentOddEven"),
+      String(even),
+    );
+    const variants = [
+      ["oddHeader", header.odd],
+      ["oddFooter", footer.odd],
+      ["evenHeader", even ? header.even : ""],
+      ["evenFooter", even ? footer.even : ""],
+      ["firstHeader", first ? header.first : ""],
+      ["firstFooter", first ? footer.first : ""],
+    ] as const;
+    for (const [index, [name, value]] of variants.entries()) {
+      if ((index === 2 || index === 3) && !even) continue;
+      if (index >= 4 && !first) continue;
+      const element = token(name);
+      xml.startElement(element);
+      xml.writeEscaped(value);
+      xml.endElement(element);
+    }
+    xml.endElement(token("headerFooter"));
   }
 }

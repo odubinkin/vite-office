@@ -212,11 +212,11 @@ function restoreWritingDirection(direction: D): SvxFrameDirectionItem {
 }
 /** Captures supported values without computing formula results or packaging XML. @param document - Model. @returns Incremental record. */
 function* encodeSteps(document: ScDocument): Generator<void, CalcDocumentRecord> {
-  const pageStyles = exportPageStyles(document);
   const sheets: Sheet[] = [],
     fonts = new XMLFontAutoStylePool(),
     styles = new Map<string, string>(),
     patternNames = new Map<ScPatternAttr, string>();
+  const pageStyles = exportPageStyles(document, fonts);
   const numberFormats: NumberFormat[] = [];
   const textStyles = new CellTextStylePool(document, fonts);
   const numberFormatIndices = new Map<number, number>();

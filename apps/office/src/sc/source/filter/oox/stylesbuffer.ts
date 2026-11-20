@@ -86,6 +86,33 @@ export class Font {
   /** Binds colors to the actual workbook helper. @param graphicHelper - Workbook color owner. @returns Font. */
   constructor(private readonly graphicHelper = new ExcelGraphicHelper()) {}
 
+  /** Copies the workbook font model for an independent header/footer portion. @returns Mutable font copy. */
+  clone(): Font {
+    return Object.assign(new Font(this.graphicHelper), this);
+  }
+
+  /** Toggles an original worksheet header/footer font control. @param control - Excel character control. @returns Nothing. */
+  toggleHeaderFooter(control: string): void {
+    if (control === "B") this.bold = !this.bold;
+    else if (control === "I") this.italic = !this.italic;
+    else if (control === "S") this.strikeout = !this.strikeout;
+    else if (control === "O") this.outline = !this.outline;
+    else if (control === "H") this.shadow = !this.shadow;
+    else if (control === "U" || control === "E") {
+      const line =
+        control === "U" ? FontLineStyle.LINESTYLE_SINGLE : FontLineStyle.LINESTYLE_DOUBLE;
+      this.underline = this.underline === line ? FontLineStyle.LINESTYLE_NONE : line;
+    } else if (control === "X" || control === "Y") {
+      const position = control === "X" ? SvxEscapement.Superscript : SvxEscapement.Subscript;
+      this.escapement = this.escapement === position ? SvxEscapement.Off : position;
+    }
+  }
+
+  /** Reads the original size retained by the workbook font model. @returns Font height in twips. */
+  getHeight(): number {
+    return this.height;
+  }
+
   /** Retains the source font color until native style and text resolution. @param color - Source workbook color. @returns Nothing. */
   setColor(color: XlsColor): void {
     this.color = color;
@@ -205,8 +232,8 @@ export class Font {
     return items;
   }
 
-  /** Writes the represented font into an EditEngine text item set. @param target - Actual edit pool set. @returns Nothing. */
-  fillToItemSet(target: SfxItemSet): void {
+  /** Writes the represented font into an EditEngine text item set. @param target - Actual edit pool set. @param twips - Uses the header/footer editor's original unit. @returns Nothing. */
+  fillToItemSet(target: SfxItemSet, twips = false): void {
     for (const item of this.createItems()) {
       try {
         for (const which of editFontWhich.get(item.Which()) ?? [])
@@ -216,7 +243,7 @@ export class Font {
       }
     }
     if (this.height > 0) {
-      const height = Number(convertTwipToMm100(BigInt(this.height)));
+      const height = twips ? this.height : Number(convertTwipToMm100(BigInt(this.height)));
       for (const which of [
         EE.EE_CHAR_FONTHEIGHT,
         EE.EE_CHAR_FONTHEIGHT_CJK,

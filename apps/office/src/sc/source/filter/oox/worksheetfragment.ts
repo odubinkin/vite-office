@@ -21,7 +21,7 @@ import type { SharedStringsBuffer } from "./sharedstringsbuffer";
 import { SheetDataBuffer } from "./sheetdatabuffer";
 import { readStyleBool, styleIndex, type StylesBuffer } from "./stylesbuffer";
 import { WorksheetGlobals } from "./worksheethelper";
-import { PageSettings } from "./pagesettings";
+import { headerFooterElements, PageSettings } from "./pagesettings";
 import { WorksheetSettings } from "./worksheetsettings";
 import { SheetViewSettings, type ViewSettings } from "./viewsettings";
 import { UnitConverter } from "./unitconverter";
@@ -41,10 +41,12 @@ const sheetElements: Readonly<Record<string, readonly string[]>> = {
     "printOptions",
     "pageMargins",
     "pageSetup",
+    "headerFooter",
     "mergeCells",
     "rowBreaks",
     "colBreaks",
   ],
+  headerFooter: headerFooterElements,
   sheetPr: ["tabColor", "pageSetUpPr"],
   sheetViews: ["sheetView"],
   sheetView: ["pane", "selection"],
@@ -167,6 +169,14 @@ export class WorksheetFragment extends FragmentHandler {
           /** Imports native pageSetup settings. @param values - Borrowed attributes. @returns Nothing. */ (
             values,
           ) => this.pageSettings.importPageSetup(values),
+        );
+        break;
+      case "headerFooter":
+        this.readAttributes(
+          attributes,
+          /** Routes the worksheet sharing flags to the original page settings. @param values - Borrowed attributes. @returns Nothing. */ (
+            values,
+          ) => this.pageSettings.importHeaderFooter(values),
         );
         break;
       case "sheetView":
@@ -353,6 +363,14 @@ export class WorksheetFragment extends FragmentHandler {
       case "f":
         this.formula += value;
         break;
+      case "oddHeader":
+      case "evenHeader":
+      case "firstHeader":
+      case "oddFooter":
+      case "evenFooter":
+      case "firstFooter":
+        this.pageSettings.importHeaderFooterCharacters(this.elementStack.at(-1) as string, value);
+        break;
     }
   }
   /** Commits one complete cell to its actual Calc tab. @param tag - Current element. @returns Nothing. */
@@ -382,7 +400,7 @@ export class WorksheetFragment extends FragmentHandler {
     this.sheetData.finalizeImport();
     this.geometry.finalizeImport();
     this.settings.finalizeImport(this.document, this.tab, this.styles.graphicHelper);
-    this.pageSettings.finalizeImport(this.document, this.tab);
+    this.pageSettings.finalizeImport(this.document, this.tab, this.styles);
     this.views.finalizeImport(this.document, this.tab, this.workbookViews);
   }
   /** Native cell type dispatch and explicit OOXML formula grammar. @returns Nothing. */

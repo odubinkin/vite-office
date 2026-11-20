@@ -6,7 +6,11 @@ import {
   DocumentArchiveWriter,
 } from "../../../../package/source/zippackage/document-archive";
 import { ExcelFilter } from "./excelfilter";
+import { HeaderFooterParser } from "./pagesettings.headerfooter";
+import { StylesBuffer } from "./stylesbuffer";
 import { exportXlsx } from "../excel/xetable";
+import { XclExpHFConverter } from "../excel/xehelper.headerfooter";
+import { XclFontData } from "../excel/xlstyle";
 import { readOdsDocument, writeOdsDocument } from "../xml/xmlwrap";
 import {
   decodeCalcDocument,
@@ -14,7 +18,7 @@ import {
 } from "../../../browser/filter/xml/calc-document-codec";
 import { ScXMLImport } from "../xml/xmlimprt";
 import { ScDocument } from "../../../inc/document";
-import type { SvxPageItem } from "../../../../svx/inc/pageitem";
+import type { SvxPageItem, SvxSetItem } from "../../../../svx/inc/pageitem";
 import type { SvxSizeItem } from "../../../../editeng/inc/sizeitem";
 import type { SfxBoolItem } from "../../../../svl/source/items/cenumitm";
 import type { SfxUInt16Item } from "../../../../svl/inc/intitem";
@@ -23,6 +27,10 @@ import type { SvxLRSpaceItem } from "../../../../editeng/inc/lrspitem";
 import type { SvxULSpaceItem } from "../../../../editeng/inc/ulspitem";
 import {
   ATTR_PAGE,
+  ATTR_PAGE_ON,
+  ATTR_PAGE_HEADERSET,
+  ATTR_PAGE_FOOTERSET,
+  ATTR_PAGE_HEADERRIGHT,
   ATTR_PAGE_SIZE,
   ATTR_PAGE_SCALETO,
   ATTR_PAGE_SCALE,
@@ -67,6 +75,15 @@ function page(document: ScDocument) {
     /** Borrows the native page boolean. @param which - Which identity. @returns Page flag. */ (
       which: number,
     ): boolean => (items.Get(which) as SfxBoolItem).GetValue();
+  const reserve =
+    /** Reads the native header/footer total height. @param which - Header or footer set. @returns Body offset in twips. */ (
+      which: number,
+    ): number => {
+      const set = (items.Get(which) as SvxSetItem).GetItemSet();
+      return (set.Get(ATTR_PAGE_ON) as SfxBoolItem).GetValue()
+        ? (set.Get(ATTR_PAGE_SIZE) as SvxSizeItem).GetSize().Height()
+        : 0;
+    };
   return {
     landscape: (items.Get(ATTR_PAGE) as SvxPageItem).IsLandscape(),
     size: [size.Width(), size.Height()],
@@ -75,7 +92,12 @@ function page(document: ScDocument) {
     notes: flag(ATTR_PAGE_NOTES),
     center: [flag(ATTR_PAGE_HORCENTER), flag(ATTR_PAGE_VERCENTER)],
     down: flag(ATTR_PAGE_TOPDOWN),
-    margins: [lr.ResolveLeft(), lr.ResolveRight(), ul.GetUpper(), ul.GetLower()],
+    margins: [
+      lr.ResolveLeft(),
+      lr.ResolveRight(),
+      ul.GetUpper() + reserve(ATTR_PAGE_HEADERSET),
+      ul.GetLower() + reserve(ATTR_PAGE_FOOTERSET),
+    ],
     scale: (items.Get(ATTR_PAGE_SCALE) as SfxUInt16Item).GetValue(),
     first: (items.Get(ATTR_PAGE_FIRSTPAGENO) as SfxUInt16Item).GetValue(),
     fit: [fit.GetWidth(), fit.GetHeight()],
@@ -121,8 +143,18 @@ it("exports paper size 70 from the original tdf136721 test and preserves the ODS
       first: 0,
       fit: [0, 0],
     };
-    for (const document of [source, worker, copy, reopened])
-      expect(page(document)).toEqual(expected);
+    for (const document of [source, worker, copy, reopened]) {
+      const values = page(document);
+      expect({ ...values, margins: values.margins.slice(0, 2) }).toEqual({
+        ...expected,
+        margins: expected.margins.slice(0, 2),
+      });
+      // Separate native edge and header/footer height conversions can round in opposite directions.
+      for (const axis of [2, 3])
+        expect(
+          Math.abs((values.margins[axis] ?? 0) - (expected.margins[axis] ?? 0)),
+        ).toBeLessThanOrEqual(1);
+    }
     const stored = await DocumentArchive.open(ods);
     expect(await stored.readTextEntry("styles.xml")).toContain(
       'style:print-orientation="landscape"',
@@ -283,5 +315,155 @@ it("uses the original 100 percent default for an uninitialized scale and keeps t
     expect(xml).toMatch(/<pageSetup[^>]*paperSize="1" scale="100"/u);
   } finally {
     source.Dispose();
+  }
+});
+
+it.each([
+  [
+    "tdf134459_HeaderFooterColor",
+    "&amp;L&amp;Kc06040l&amp;C&amp;K4c3789c&amp;Rr",
+    "&amp;Ll&amp;C&amp;K64cf5fc&amp;R&amp;Kcd15aar",
+  ],
+  [
+    "tdf134817_HeaderFooterTextWith2Section",
+    '&amp;L&amp;"Abadi"&amp;11aaa&amp;"Bembo"&amp;20bbb',
+    '&amp;R&amp;"Cambria"&amp;14camb&amp;"Dante"&amp;18dant',
+  ],
+] as const)(
+  "exports the original header/footer assertions for %s",
+  /** Checks upstream's complete worksheet header and footer strings. @param name - Pinned XLSX fixture. @param header - Expected XML-escaped header. @param footer - Expected XML-escaped footer. @returns Completion. */ async (
+    name,
+    header,
+    footer,
+  ) => {
+    const source = await ExcelFilter.importDocument(fixture(name));
+    try {
+      const worker = decodeCalcDocument(structuredClone(encodeCalcDocument(source)));
+      const stored = await readOdsDocument(await writeOdsDocument(worker));
+      try {
+        for (const document of [source, worker, stored]) {
+          const archive = await DocumentArchive.open(await exportXlsx(document));
+          const xml = await archive.readTextEntry(worksheet);
+          expect(xml).toContain("<oddHeader>" + header.replaceAll('"', "&quot;") + "</oddHeader>");
+          expect(xml).toContain("<oddFooter>" + footer.replaceAll('"', "&quot;") + "</oddFooter>");
+        }
+      } finally {
+        worker.Dispose();
+        stored.Dispose();
+      }
+    } finally {
+      source.Dispose();
+    }
+  },
+);
+
+it("duplicates the shared footer in the original even-page ODS export", /** Runs upstream's first and second sheet header/footer assertions. @returns Completion. */ async () => {
+  const source = await readOdsDocument(
+    new Uint8Array(
+      readFileSync(
+        "../../vendor/libreoffice-reference/sc/qa/unit/data/ods/tdf121716_EvenHeaderFooter.ods",
+      ),
+    ),
+  );
+  try {
+    const packageFile = await DocumentArchive.open(await exportXlsx(source));
+    const first = await packageFile.readTextEntry(worksheet);
+    const second = await packageFile.readTextEntry("xl/worksheets/sheet2.xml");
+    expect(first).toContain('differentOddEven="true"');
+    expect(first).toContain("<oddHeader>&amp;Lodd/right&amp;Cpage&amp;Rheader</oddHeader>");
+    expect(first).toContain("<evenHeader>&amp;Lpage&amp;Cheader&amp;Reven/left</evenHeader>");
+    for (const tag of ["oddFooter", "evenFooter"])
+      expect(first).toContain(`<${tag}>&amp;Lboth&amp;C&amp;12page&amp;Rfooter</${tag}>`);
+    expect(second).toContain("<oddHeader>&amp;Coddh</oddHeader>");
+    expect(second).toContain("<evenHeader>&amp;Cevenh</evenHeader>");
+    expect(second).toContain("<oddFooter>&amp;Coddf</oddFooter>");
+    expect(second).toContain("<evenFooter>&amp;Levenf</evenFooter>");
+  } finally {
+    source.Dispose();
+  }
+});
+
+it("retains worksheet page fields and first/even settings across ODS", /** Asserts native field identities and escaped output after the primary-format conversion. @returns Completion. */ async () => {
+  const source = await ExcelFilter.importDocument(
+    await patched(
+      '<pageMargins left="0.7" right="0.7" top="0.9" bottom="0.9" header="0.2" footer="0.2"/><headerFooter differentFirst="1" differentOddEven="1"><oddHeader>&amp;L&amp;A&amp;C&amp;P/&amp;N&amp;RRock &amp;&amp; Roll</oddHeader><evenHeader>&amp;Ceven</evenHeader><firstHeader>&amp;Cfirst</firstHeader><oddFooter>&amp;Rfooter</oddFooter></headerFooter>',
+    ),
+  );
+  const restored = await readOdsDocument(await writeOdsDocument(source));
+  try {
+    const document = await DocumentArchive.open(await exportXlsx(restored));
+    const xml = await document.readTextEntry(worksheet);
+    expect(xml).toContain('<headerFooter differentFirst="true" differentOddEven="true">');
+    expect(xml).toContain(
+      "<oddHeader>&amp;L&amp;A&amp;C&amp;P/&amp;N&amp;RRock &amp;&amp; Roll</oddHeader>",
+    );
+    expect(xml).toContain("<evenHeader>&amp;Ceven</evenHeader>");
+    expect(xml).toContain("<firstHeader>&amp;Cfirst</firstHeader>");
+  } finally {
+    source.Dispose();
+    restored.Dispose();
+  }
+});
+
+it("applies the original font control transitions and skips incomplete tokens", /** Checks blank paragraph height, ASCII control codes and the current font transitions. @returns Nothing. */ () => {
+  const document = new ScDocument();
+  const styles = new StylesBuffer();
+  const parser = new HeaderFooterParser(document, styles);
+  const base = new XclFontData();
+  const converter = new XclExpHFConverter(base);
+  const parsed = parser.parse(
+    '&l&30\n\n&L&"Cambria,Fett SchrÄg"&U&S&XFirst&U&S&X Plain&E&YDouble&E&Y Last\n&"-,Regular"Second&0!&1001?&K!&',
+    ATTR_PAGE_HEADERRIGHT,
+  );
+  const interrupted = parser.parse('Keep&"Ignore\0remainder', ATTR_PAGE_HEADERRIGHT);
+  const reset = parser.parse('&C&"Bembo"Custom&"-"Default&",Italic"Italic', ATTR_PAGE_HEADERRIGHT);
+  try {
+    expect(parsed.height).toBe(2400);
+    const encoded = converter.GenerateString([parsed.content.GetLeftArea(), null, null]).value;
+    expect(encoded).toContain("&B&I&30&U&S&XFirst&U&S&X Plain&E&YDouble&E&Y Last");
+    expect(encoded).toContain("\n&B&ISecond!?!");
+    expect(
+      converter.GenerateString([null, interrupted.content.GetCenterArea(), null]).value,
+    ).toMatch(/Keep$/u);
+    const families = converter.GenerateString([null, reset.content.GetCenterArea(), null]).value;
+    expect(families).toContain('&"Bembo"');
+    expect(families).toContain('&"Cambria"Default&IItalic');
+  } finally {
+    parsed.content.dispose();
+    interrupted.content.dispose();
+    reset.content.dispose();
+    base.Dispose();
+    styles.dispose();
+    document.Dispose();
+  }
+});
+
+it("preserves ODF header spans, text features and unformatted text through XLSX export", /** Uses a digit at a font-size transition and tests original dynamic text fields. @returns Completion. */ async () => {
+  const document = new ScDocument();
+  const importer = new ScXMLImport(document);
+  const namespaces =
+    'xmlns:office="urn:oasis:names:tc:opendocument:xmlns:office:1.0" xmlns:style="urn:oasis:names:tc:opendocument:xmlns:style:1.0" xmlns:table="urn:oasis:names:tc:opendocument:xmlns:table:1.0" xmlns:text="urn:oasis:names:tc:opendocument:xmlns:text:1.0" xmlns:fo="urn:oasis:names:tc:opendocument:xmlns:xsl-fo-compatible:1.0"';
+  try {
+    importer.importStyles(`<office:document-styles ${namespaces}><office:automatic-styles>
+      <style:style style:name="Big" style:family="text"><style:text-properties fo:font-size="20pt"/></style:style>
+      </office:automatic-styles><office:master-styles><style:master-page style:name="Letter">
+      <style:header><style:region-left><text:h>Ignored</text:h><text:p>plain<text:s/><text:span text:style-name="Big"><text:span>123</text:span></text:span><text:tab/>tail</text:p></style:region-left>
+      <text:h>Ignored</text:h><text:p><text:title/><text:line-break/><text:time/></text:p></style:header>
+      </style:master-page></office:master-styles></office:document-styles>`);
+    importer.importContent(`<office:document-content ${namespaces}><office:automatic-styles>
+      <style:style style:name="sheet" style:family="table" style:master-page-name="Letter"/>
+      </office:automatic-styles><office:body><office:spreadsheet><table:table table:name="First" table:style-name="sheet"/></office:spreadsheet></office:body></office:document-content>`);
+    const ods = await DocumentArchive.open(await writeOdsDocument(document));
+    const xml = await ods.readTextEntry("styles.xml");
+    expect(xml).toContain("plain<text:s/><text:span");
+    expect(xml).toContain("<text:tab/>tail");
+    expect(xml).toContain("<text:p><text:title/><text:line-break/><text:time/></text:p>");
+    expect(xml).not.toContain("Ignored");
+    const workbook = await DocumentArchive.open(await exportXlsx(document));
+    expect(await workbook.readTextEntry(worksheet)).toContain(
+      "<oddHeader>&amp;Lplain &amp;20 123&amp;10&#9;tail&amp;C&amp;F&#10;&amp;T</oddHeader>",
+    );
+  } finally {
+    document.Dispose();
   }
 });

@@ -20,7 +20,7 @@
         "vendor/libreoffice-reference/sc/source/filter/oox/pagesettings.cxx#PageSettings::finalizeImport",
         "apps/office/src/sc/source/filter/oox/excelfilter.page-settings.test.ts"
       ],
-      "justification": "Imports original worksheet print settings into the real named Calc page style with native metric conversion, bounds and defaults. Chart sheets, printer-setting binaries, full header/footer text and layout, and background pictures remain unported.",
+      "justification": "Imports original worksheet print settings and represented rich header/footer variants into the named Calc page style with native metric conversion, bounds, and defaults. Chart sheets, printer-setting binaries, header/footer date and filename inputs, and background pictures remain unported.",
       "knownViolations": [],
       "localSymbols": [
         "PageSettings",

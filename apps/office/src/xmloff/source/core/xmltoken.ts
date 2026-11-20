@@ -449,9 +449,27 @@ export enum XMLToken {
   STYLE_SCALE_TO_Y,
   LOEXT_SCALE_TO_X,
   LOEXT_SCALE_TO_Y,
+  STYLE_DISPLAY,
+  STYLE_REGION_LEFT,
+  STYLE_REGION_CENTER,
+  STYLE_REGION_RIGHT,
+  TEXT_PAGE_NUMBER,
+  TEXT_PAGE_COUNT,
+  TEXT_SHEET_NAME,
+  TEXT_TITLE,
+  TEXT_TIME,
 }
 
 const entries: readonly (readonly [string, string, XMLToken])[] = [
+  [ODF_NAMESPACES.style, "display", XMLToken.STYLE_DISPLAY],
+  [ODF_NAMESPACES.style, "region-left", XMLToken.STYLE_REGION_LEFT],
+  [ODF_NAMESPACES.style, "region-center", XMLToken.STYLE_REGION_CENTER],
+  [ODF_NAMESPACES.style, "region-right", XMLToken.STYLE_REGION_RIGHT],
+  [ODF_NAMESPACES.text, "page-number", XMLToken.TEXT_PAGE_NUMBER],
+  [ODF_NAMESPACES.text, "page-count", XMLToken.TEXT_PAGE_COUNT],
+  [ODF_NAMESPACES.text, "sheet-name", XMLToken.TEXT_SHEET_NAME],
+  [ODF_NAMESPACES.text, "title", XMLToken.TEXT_TITLE],
+  [ODF_NAMESPACES.text, "time", XMLToken.TEXT_TIME],
   [ODF_NAMESPACES.table, "protected", XMLToken.TABLE_PROTECTED],
   [ODF_NAMESPACES.table, "protection-key", XMLToken.TABLE_PROTECTION_KEY],
   [

@@ -142,6 +142,19 @@ export class XlsColor {
     return color;
   }
 
+  /** Reads the six-character header/footer font color form. @param value - RGB or theme and tint. @returns Native color model. */
+  static importHeaderFooterColor(value: string): XlsColor {
+    const color = new XlsColor();
+    if (value[2] === "+" || value[2] === "-") {
+      color.source = [
+        "theme",
+        convertToThemeColorType(excelThemes[index(value.slice(0, 2))] ?? -1),
+      ];
+      color.tint = (Number.parseInt(value.slice(2), 10) || 0) / 100;
+    } else color.source = ["rgb", new Color(Number.parseInt(value, 16) || 0)];
+    return color;
+  }
+
   /** Tests the original placeholder source. @returns Whether this color is automatic. */
   isAuto(): boolean {
     return this.source[0] === "auto";

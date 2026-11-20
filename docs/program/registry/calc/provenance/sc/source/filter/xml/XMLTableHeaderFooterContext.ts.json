@@ -1,0 +1,40 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/sc/source/filter/xml/XMLTableHeaderFooterContext.ts",
+    "status": "mapped",
+    "upstreamPath": "sc/source/filter/xml/XMLTableHeaderFooterContext.cxx",
+    "localSymbols": [
+      "XMLTableHeaderFooterContext"
+    ],
+    "upstreamSymbols": [
+      "XMLTableHeaderFooterContext::endFastElement"
+    ],
+    "preservedResponsibilities": [
+      "Reads ODF master-page variants and writes their native text portions and visibility through page style XML."
+    ],
+    "omittedResponsibilities": [
+      "Unsupported temporal and extended filename fields, pictures and complete print layout remain outside the represented slice."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sc/source/filter/xml/XMLTableHeaderFooterContext.ts",
+          "marker": "XMLTableHeaderFooterContext"
+        },
+        {
+          "path": "apps/office/src/sc/source/filter/oox/excelfilter.page-settings.test.ts",
+          "marker": "@fileoverview"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "sc/source/filter/xml/XMLTableHeaderFooterContext.cxx",
+          "marker": "XMLTableHeaderFooterContext::endFastElement"
+        }
+      ]
+    }
+  }
+}

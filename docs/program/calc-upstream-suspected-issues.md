@@ -7146,3 +7146,16 @@ the item off. The browser filter keeps both source decisions.
 
 - [Import interpretation](../../vendor/libreoffice-reference/sc/source/filter/oox/pagesettings.cxx)
 - [Export attribute](../../vendor/libreoffice-reference/sc/source/filter/excel/xepage.cxx)
+
+### CALC-756 — XLSX dynamic header/footer height can come from the last exported variant
+
+The XLSX importer calculates the maximum story height across the enabled
+odd, even and first-page text. The exporter calls its text converter in
+that same variant order, and every conversion replaces the stored height.
+For a dynamic header or footer, the XLSX body margin uses the last separately
+converted variant's height plus the shared body distance. A later shorter
+or empty variant can therefore reduce the body margin. The exporter retains
+the original ordering and height calculation.
+
+- [Original import height and body distance](../../vendor/libreoffice-reference/sc/source/filter/oox/pagesettings.cxx)
+- [Original worksheet export sequence](../../vendor/libreoffice-reference/sc/source/filter/excel/xepage.cxx)
