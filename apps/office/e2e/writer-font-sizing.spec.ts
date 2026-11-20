@@ -31,9 +31,9 @@ for (const width of [1280, 390]) {
     await expect(sidebar.getByRole("combobox", { name: "Font size", exact: true })).toHaveValue(
       "13.3 pt",
     );
-    const observed = page.evaluate(
-      /** Observes the next actual nonmodifier platform key without changing application state. @returns Event fields. */ () =>
-        new Promise(
+    const observed = await page.evaluateHandle(
+      /** Observes the next actual nonmodifier platform key and returns a handle as soon as the listener is installed. @returns Pending device event. */ () => ({
+        event: new Promise(
           /** Captures a real device event. @param resolve - Event completion. @returns Nothing. */ (
             resolve,
           ) => {
@@ -58,9 +58,18 @@ for (const width of [1280, 390]) {
             window.addEventListener("keydown", handler);
           },
         ),
+      }),
     );
-    await page.keyboard.press("ControlOrMeta+]");
-    await writeFile(info.outputPath("shortcut-event.json"), JSON.stringify(await observed));
+    try {
+      await page.keyboard.press("ControlOrMeta+]");
+      const event = await observed.evaluate(
+        /** Gets the recorded keyboard event after the real key dispatch. @param capture - Pending event. @returns Keyboard event fields. */
+        (capture) => capture.event,
+      );
+      await writeFile(info.outputPath("shortcut-event.json"), JSON.stringify(event));
+    } finally {
+      await observed.dispose();
+    }
     await expect(size).toHaveValue("15.3 pt");
     await page.keyboard.press("ControlOrMeta+[");
     await expect(size).toHaveValue("13.3 pt");
