@@ -1,10 +1,11 @@
 ---
 id: "202611201241-ED306A"
 title: "Align Writer ODT table cell values and formulas"
-status: "DOING"
+result_summary: "Writer reads and writes native ODT table values, data styles, cached formulas and protection through Worker with both pinned regressions passing."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 9
+revision: 11
 origin:
   system: "manual"
 depends_on: []
@@ -18,9 +19,9 @@ plan_approval:
   note: null
 verification:
   state: "ok"
-  updated_at: "2026-11-20T13:38:17.266Z"
+  updated_at: "2026-11-20T13:38:31.829Z"
   updated_by: "CODER"
-  note: "Writer table values, shared data styles and Worker transfer passed both pinned regressions and all targeted checks, including isolated retries of four wider-profile timeouts."
+  note: "Writer reads and writes native ODT table values, data styles, cached formulas and protection through Worker with both pinned regressions passing."
   attempts: 0
 quality_review:
   state: "pass"
@@ -42,11 +43,16 @@ quality_review:
     - "Original ODT fixtures preserve string value precedence, cached numeric values, and explicit formula errors through their covered boundaries."
     - "The format mutation path binds the direct formula item before notification and Worker rehydrates its actual document formatter."
     - "The expanded Writer profile had four timeout-only failures and the same four cases passed in focused retries."
-commit: null
+commit:
+  hash: "6df3d2520caafeb0de11537661677c3954f5c838"
+  message: "🧩 ED306A code: align shared automatic digit expectation"
 comments:
   -
     author: "CODER"
     body: "Start: Route Writer ODT cell values and formulas through native table box attributes."
+  -
+    author: "CODER"
+    body: "Verified: Writer reads and writes native ODT table values, data styles, cached formulas and protection through Worker with both pinned regressions passing.. Guided shortcut recorded verification and is closing the direct task with traceable commit metadata."
 events:
   -
     type: "status"
@@ -61,8 +67,21 @@ events:
     author: "CODER"
     state: "ok"
     note: "Writer table values, shared data styles and Worker transfer passed both pinned regressions and all targeted checks, including isolated retries of four wider-profile timeouts."
+  -
+    type: "verify"
+    at: "2026-11-20T13:38:31.829Z"
+    author: "CODER"
+    state: "ok"
+    note: "Writer reads and writes native ODT table values, data styles, cached formulas and protection through Worker with both pinned regressions passing."
+  -
+    type: "status"
+    at: "2026-11-20T13:38:32.104Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: Writer reads and writes native ODT table values, data styles, cached formulas and protection through Worker with both pinned regressions passing.. Guided shortcut recorded verification and is closing the direct task with traceable commit metadata."
 doc_version: 3
-doc_updated_at: "2026-11-20T13:38:17.376Z"
+doc_updated_at: "2026-11-20T13:38:32.105Z"
 doc_updated_by: "CODER"
 description: "Use native Writer table box attributes for ODF numeric formats, typed values, string overrides, formula caches and protection, with ODT and Worker round-trip verification against pinned fixtures."
 sections:
@@ -131,6 +150,36 @@ sections:
     - freshness: route=computed_local remote=remote_skipped
     - repeat_allowed: false
     - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+    - risks: none
+
+    ### 2026-11-20T13:38:31.829Z — VERIFY — ok
+
+    By: CODER
+
+    Note: Writer reads and writes native ODT table values, data styles, cached formulas and protection through Worker with both pinned regressions passing.
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-20T13:38:17.376Z, excerpt_hash=sha256:f68842f7c9cdc191d50d1afff849461745230cb8c6be9cb8c6bd9eb5697f0336
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202611201241-ED306A/blueprint/resolved-snapshot.json
+    - old_digest: ee6920538548619a635c185344414b87c058c16a24a9b09959785eb18b802208
+    - current_digest: ee6920538548619a635c185344414b87c058c16a24a9b09959785eb18b802208
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202611201241-ED306A
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task complete 202611201241-ED306A --result verified-202611201241-ED306A --commit ef0317e7e6f20a28495dee6fb2def7155d231d33
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
     - risks: none
 
     <!-- END VERIFICATION RESULTS -->
@@ -214,6 +263,36 @@ DecisionContextRef:
 - freshness: route=computed_local remote=remote_skipped
 - repeat_allowed: false
 - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- risks: none
+
+### 2026-11-20T13:38:31.829Z — VERIFY — ok
+
+By: CODER
+
+Note: Writer reads and writes native ODT table values, data styles, cached formulas and protection through Worker with both pinned regressions passing.
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-20T13:38:17.376Z, excerpt_hash=sha256:f68842f7c9cdc191d50d1afff849461745230cb8c6be9cb8c6bd9eb5697f0336
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202611201241-ED306A/blueprint/resolved-snapshot.json
+- old_digest: ee6920538548619a635c185344414b87c058c16a24a9b09959785eb18b802208
+- current_digest: ee6920538548619a635c185344414b87c058c16a24a9b09959785eb18b802208
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202611201241-ED306A
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task complete 202611201241-ED306A --result verified-202611201241-ED306A --commit ef0317e7e6f20a28495dee6fb2def7155d231d33
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
 - risks: none
 
 <!-- END VERIFICATION RESULTS -->
