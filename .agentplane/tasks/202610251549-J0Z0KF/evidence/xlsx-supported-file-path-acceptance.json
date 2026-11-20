@@ -23,6 +23,11 @@
       "evidence": "Existing Open and Export controls, browser storage, desktop and mobile opening, actual downloads and round trips. Local transcript: .git/ooxml-final-browser.log."
     },
     {
+      "command": "npm run test:shared -- upstream-packages.test.ts xmlfilterbase.test.ts document-archive.integration.test.ts zipfileaccess.test.ts fastparser --maxWorkers=1 --testTimeout=120000",
+      "result": "211 passed in 17 files",
+      "evidence": "Shared OOXML package, XML filter, archive and SAX stream contracts. Local transcript: .git/ooxml-final-shared.log."
+    },
+    {
       "command": "npm run test:static; run dependencies, JSDoc, provenance, registry, invariants, parity, resources, docs, file and source tree checks, policy routing and ap doctor; run git diff --check.",
       "result": "Passed",
       "evidence": "The production output passed static smoke checks. The registry reported zero semantic violations. Local transcripts: .git/ooxml-final-static.log and .git/ooxml-final-*.log."
