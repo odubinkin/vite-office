@@ -4,7 +4,7 @@ title: "Connect Calc freeze rows and sheet pane commands"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 8
+revision: 9
 origin:
   system: "manual"
 depends_on: []
@@ -27,6 +27,24 @@ verification:
   updated_by: "CODER"
   note: "All 16 focused Calc cases and three production Chrome cases passed. Freeze First Row works from the scrolled View menu and exports the expected XLSX pane. Final types, resources, provenance and related gates pass."
   attempts: 0
+quality_review:
+  state: "pass"
+  updated_at: "2026-11-20T13:38:01.323Z"
+  updated_by: "EVALUATOR"
+  note: "Calc pane commands meet the approved desktop slice"
+  evaluated_sha: "a68b5031718386d2c100716d5f31dbbe92d6f251"
+  blueprint_digest: "070b8625598388b2760f69c3002c156f739f8f94de762feb4cc2b126152adf26"
+  evidence_refs:
+    - ".agentplane/tasks/202611201238-Q3GS36/README.md"
+    - ".agentplane/tasks/202611201238-Q3GS36/quality/20261120-133801323-recovery-context/quality-report.json"
+    - ".agentplane/tasks/202611201238-Q3GS36/quality/20261120-133801323-recovery-context/evaluator-prompt.md"
+    - ".agentplane/tasks/202611201238-Q3GS36/quality/20261120-133801323-recovery-context/evaluator-opinion.md"
+    - ".agentplane/tasks/202611201238-Q3GS36/blueprint/resolved-snapshot.json"
+    - "output/calc-Q3GS36-tests-final.log"
+    - "output/calc-Q3GS36-browser-dist.log"
+    - "output/calc-Q3GS36-browser-row-replay.log"
+  findings:
+    - "Chrome verifies freezing a scrolled-away first row and XLSX persistence; focused source tests verify typed row counts, pane transitions and the native GoToStart regression."
 commit: null
 comments:
   -
