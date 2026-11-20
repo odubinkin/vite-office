@@ -257,6 +257,11 @@ export class ScConditionEntry extends ScFormatEntry {
   IsCellValid(cell: ScRefCellValue, position: ScAddress): boolean {
     const first = this.Interpret(0, position);
     if (this.mode === ScConditionMode.Direct) return typeof first === "number" && first !== 0;
+    if (this.mode === ScConditionMode.Error || this.mode === ScConditionMode.NoError)
+      return (
+        (this.mrDoc.GetErrCode(position) !== FormulaError.NONE) ===
+        (this.mode === ScConditionMode.Error)
+      );
     if (first === undefined) return false;
     const value = this.GetCellContent(cell, first);
     if (value === undefined) return false;

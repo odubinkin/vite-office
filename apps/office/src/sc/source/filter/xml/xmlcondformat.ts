@@ -130,6 +130,8 @@ class ScXMLColorScaleFormatContext extends ScXMLImportContext {
 function GetConditionData(value: string): readonly [Mode, string[]] | undefined {
   for (const [mode, operator] of comparisons)
     if (value.startsWith(operator)) return [mode, [value.slice(operator.length)]];
+  if (value.startsWith("is-error")) return [Mode.Error, []];
+  if (value.startsWith("is-no-error")) return [Mode.NoError, []];
   for (const [mode, name, count] of functions) {
     if (!value.startsWith(name + "(")) continue;
     const position: [number] = [name.length + 1];
@@ -272,6 +274,8 @@ class ScXMLConditionalFormatContext extends ScXMLImportContext {
 /** Emits original conditional formulas in the native ODF grammar. @param entry - Condition and named style. @returns Serialized condition. */
 function WriteCondition(entry: ScCondFormatEntry): string {
   const mode = entry.GetOperation();
+  if (mode === Mode.Error) return "is-error";
+  if (mode === Mode.NoError) return "is-no-error";
   const source = entry.GetSrcPos();
   for (const [candidate, operator] of comparisons)
     if (candidate === mode) return operator + entry.GetExpression(source, 0, grammar);

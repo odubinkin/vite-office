@@ -17,7 +17,8 @@
     "preservedResponsibilities": [
       "Owns source-relative condition formulas, the represented comparisons, and named cell style binding.",
       "Evaluates the four native text conditions with the original number conversion, transliteration and character classification owners.",
-      "Preserves the original ExtCondition discriminator through cloning and native equality."
+      "Preserves the original ExtCondition discriminator through cloning and native equality.",
+      "Evaluates the original error and no-error rule modes on the actual formula cell at the evaluated address."
     ],
     "omittedResponsibilities": [
       "Additional condition families, full shift/move token updates and native listener caches remain unported."
@@ -51,6 +52,18 @@
         {
           "path": "apps/office/e2e/calc/xlsx-extended-conditions.spec.ts",
           "marker": "opens and downloads XLSX"
+        },
+        {
+          "path": "apps/office/src/sc/source/core/data/conditio.entry.ts",
+          "marker": "this.mrDoc.GetErrCode(position)"
+        },
+        {
+          "path": "apps/office/src/sc/source/filter/oox/condformatbuffer.admission.test.ts",
+          "marker": "evaluates formula-error rules"
+        },
+        {
+          "path": "apps/office/e2e/calc/xlsx-error-conditions.spec.ts",
+          "marker": "Calc paints formula errors from XLSX"
         }
       ],
       "upstream": [
@@ -77,6 +90,10 @@
         {
           "path": "sc/qa/unit/cond_format.cxx",
           "marker": "testCondFormatOperatorsSameRangeXLSX"
+        },
+        {
+          "path": "sc/source/core/data/conditio.cxx",
+          "marker": "ScConditionEntry::IsError"
         }
       ]
     },

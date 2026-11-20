@@ -27,9 +27,11 @@
         "apps/office/e2e/calc/xlsx-date-conditions.spec.ts",
         "sc/qa/unit/cond_format.cxx",
         "apps/office/src/sc/source/filter/oox/extlstcontext.test.ts",
-        "apps/office/e2e/calc/xlsx-extended-conditions.spec.ts"
+        "apps/office/e2e/calc/xlsx-extended-conditions.spec.ts",
+        "apps/office/src/sc/source/filter/oox/condformatbuffer.admission.test.ts",
+        "apps/office/e2e/calc/xlsx-error-conditions.spec.ts"
       ],
-      "justification": "Imports worksheet ranges and original numeric comparison and direct formula rule families in priority order. Extended data-bar and icon rules, content deduplication and advanced condition types remain outside the represented slice. Imports original colorScale stops, fixed-palette and theme colors, and Excel num entries carrying formulas. Creates the original text condition operand as an interned formula string token and uses SAL boolean parsing for threshold gte. Imports SpreadsheetML calendar rules into native ScCondDateFormatEntry, preserving priority and the original Today fallback. Merges the represented x14 condition models into exact matching ordinary range groups using the original priority pairing.",
+      "justification": "Imports worksheet ranges and original numeric comparison and direct formula rule families in priority order. Extended data-bar and icon rules, content deduplication and advanced condition types remain outside the represented slice. Imports original colorScale stops, fixed-palette and theme colors, and Excel num entries carrying formulas. Creates the original text condition operand as an interned formula string token and uses SAL boolean parsing for threshold gte. Imports SpreadsheetML calendar rules into native ScCondDateFormatEntry, preserving priority and the original Today fallback. Merges the represented x14 condition models into exact matching ordinary range groups using the original priority pairing. Imports original formula-error rules without using the SpreadsheetML compatibility formula as an operand.",
       "knownViolations": [],
       "localSymbols": [
         "CondFormatBuffer",

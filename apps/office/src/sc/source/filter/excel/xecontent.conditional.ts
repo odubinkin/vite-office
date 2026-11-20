@@ -136,11 +136,18 @@ export function SaveXmlConditionalFormats(
       const mode = condition?.GetOperation() ?? ScConditionMode.NONE;
       const direct = mode === ScConditionMode.Direct;
       const kind = textTypes.get(mode);
+      const errorType =
+        mode === ScConditionMode.Error
+          ? "containsErrors"
+          : mode === ScConditionMode.NoError
+            ? "notContainsErrors"
+            : undefined;
       const operator =
         mode === ScConditionMode.NotContainsText
           ? "notContains"
           : (kind ?? cellIsOperators.get(mode));
-      if (!scale && !direct && !operator && timePeriod === undefined) continue;
+      if (!scale && !direct && !operator && timePeriod === undefined && errorType === undefined)
+        continue;
       if (condition?.GetType() === ScFormatEntryType.ExtCondition) {
         extensionRules.push({
           entry: condition,
@@ -182,7 +189,7 @@ export function SaveXmlConditionalFormats(
       output.startElement(
         token("cfRule"),
         token("type"),
-        kind ?? (direct ? "expression" : "cellIs"),
+        kind ?? errorType ?? (direct ? "expression" : "cellIs"),
         token("priority"),
         String(priority++),
         token("operator"),
@@ -192,13 +199,16 @@ export function SaveXmlConditionalFormats(
         token("dxfId"),
         dxfs.GetDxfId(condition.GetStyleName()),
       );
-      if (value !== null) {
+      if (value !== null || errorType !== undefined) {
         const address = ranges.Combine().aStart;
         const origin = new TextDecoder().decode(
           XclXmlUtils.ToOString(document, new ScRange(address, address)),
         );
         output.startElement(token("formula"));
-        output.writeEscaped(GetFixedFormula(mode, origin, `"${value.replaceAll('"', '""')}"`));
+        if (value !== null)
+          output.writeEscaped(GetFixedFormula(mode, origin, `"${value.replaceAll('"', '""')}"`));
+        else if (mode === ScConditionMode.Error) output.writeEscaped(`ISERROR(${origin})`);
+        else output.writeEscaped(`NOT(ISERROR(${origin}))`);
         output.endElement(token("formula"));
       } else
         for (let n = 0; n < condition.GetExpressionCount(); ++n) {

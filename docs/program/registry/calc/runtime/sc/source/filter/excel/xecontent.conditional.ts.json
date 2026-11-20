@@ -27,9 +27,11 @@
         "apps/office/e2e/calc/xlsx-date-conditions.spec.ts",
         "sc/qa/unit/cond_format.cxx",
         "apps/office/src/sc/source/filter/oox/extlstcontext.test.ts",
-        "apps/office/e2e/calc/xlsx-extended-conditions.spec.ts"
+        "apps/office/e2e/calc/xlsx-extended-conditions.spec.ts",
+        "apps/office/src/sc/source/filter/oox/condformatbuffer.admission.test.ts",
+        "apps/office/e2e/calc/xlsx-error-conditions.spec.ts"
       ],
-      "justification": "Serializes native conditional-format ranges and the represented condition formulas and priorities into the worksheet. Data-bar and icon rules remain outside the represented slice. Exports native color scales with paired XLSX threshold and RGB lists. Writes native fixed text formulas based at the combined range origin and quotes Excel literals twice. Serializes the ten original Excel time periods and omits the native year-only periods from XLSX. Routes native extended conditions into the worksheet extension serializer with their assigned priority.",
+      "justification": "Serializes native conditional-format ranges and the represented condition formulas and priorities into the worksheet. Data-bar and icon rules remain outside the represented slice. Exports native color scales with paired XLSX threshold and RGB lists. Writes native fixed text formulas based at the combined range origin and quotes Excel literals twice. Serializes the ten original Excel time periods and omits the native year-only periods from XLSX. Routes native extended conditions into the worksheet extension serializer with their assigned priority. Writes the original formula-error type and the ISERROR or NOT(ISERROR) compatibility expression at the native combined range origin.",
       "knownViolations": [],
       "localSymbols": [
         "SaveXmlConditionalFormats",

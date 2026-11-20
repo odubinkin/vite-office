@@ -155,3 +155,93 @@ it("assigns a new format key from the current owned maximum", /** Exercises orig
     document.Dispose();
   }
 });
+
+it("matches rich text and textual formula results using the original cell views", /** Exercises actual edit-engine and formula cells through the same rule. @returns Nothing. */ () => {
+  const document = new ScDocument();
+  const name = unicode("Rules");
+  const formatted = unicode("Alpha\nBeta");
+  const formula = unicode('="Alpha"&" Beta"');
+  const origin = new ScAddress();
+  const formulaCell = new ScAddress(1, 0);
+  try {
+    assert(document.InsertTab(0, name));
+    const engine = document.GetEditEngine();
+    engine.SetText(formatted);
+    assert(document.SetEditText(origin, engine.CreateTextObject()));
+    document.SetString(formulaCell, formula);
+    const entry = new ScCondFormatEntry(
+      Mode.ContainsText,
+      ['"beta"'],
+      document,
+      origin,
+      grammar,
+      "Standard",
+    );
+    try {
+      expect(entry.IsCellValid(document.GetRefCellValue(origin), origin)).toBe(true);
+      expect(entry.IsCellValid(document.GetRefCellValue(formulaCell), formulaCell)).toBe(true);
+      expect(entry.GetExpression(formulaCell, 1, grammar)).toBe("");
+    } finally {
+      entry.Dispose();
+    }
+  } finally {
+    formula.dispose();
+    formatted.dispose();
+    name.dispose();
+    document.Dispose();
+  }
+});
+
+it("retains absolute and local references when dependent sheets and the original range move", /** Exercises detached and owned source positions with native update contexts. @returns Nothing. */ () => {
+  const document = new ScDocument();
+  const names = ["First", "Second", "Third"].map(unicode);
+  const base = new ScAddress(2, 4, 1);
+  try {
+    for (const [index, name] of names.entries()) assert(document.InsertTab(index, name));
+    const entry = new ScCondFormatEntry(
+      Mode.Direct,
+      ["A1+Third!$A$1"],
+      document,
+      base,
+      grammar,
+      "Standard",
+    );
+    try {
+      const shift = new RefUpdateContext(document);
+      shift.meMode = UpdateRefMode.URM_INSDEL;
+      shift.mnRowDelta = 1;
+      shift.maRange.aStart.Set(2, 4, 1);
+      shift.maRange.aEnd.Set(2, 7, 1);
+      entry.UpdateReference(shift);
+      expect(entry.GetSrcPos().equals(new ScAddress(2, 5, 1))).toBe(true);
+      entry.UpdateDeleteTab(new RefUpdateDeleteTabContext(document, 2, 1));
+      expect(
+        entry.GetExpression(entry.GetValidSrcPos(), 0, FormulaGrammar.Grammar.GRAM_ODFF),
+      ).toContain("#REF!");
+      entry.UpdateInsertTab(new RefUpdateInsertTabContext(document, 1, 1));
+      expect(entry.GetSrcPos().Tab()).toBe(2);
+      expect(
+        entry.GetExpression(entry.GetValidSrcPos(), 0, FormulaGrammar.Grammar.GRAM_ODFF),
+      ).toContain("#REF!");
+      expect(entry.GetExpression(entry.GetValidSrcPos(), 0, grammar)).toContain("A2");
+    } finally {
+      entry.Dispose();
+    }
+    const detached = new ScCondFormatEntry(
+      Mode.Direct,
+      ["1"],
+      document,
+      new ScAddress(0, 0, 4),
+      grammar,
+      "",
+    );
+    try {
+      expect(detached.GetValidSrcPos().Tab()).toBe(0);
+    } finally {
+      detached.Dispose();
+    }
+  } finally {
+    for (const name of names) name.dispose();
+    document.Dispose();
+  }
+});

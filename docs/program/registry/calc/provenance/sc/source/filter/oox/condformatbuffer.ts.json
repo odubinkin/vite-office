@@ -20,7 +20,8 @@
       "Imports original colorScale stops, fixed-palette and theme colors, and Excel num entries carrying formulas.",
       "Creates the original text condition operand as an interned formula string token and uses SAL boolean parsing for threshold gte.",
       "Imports SpreadsheetML calendar rules into native ScCondDateFormatEntry, preserving priority and the original Today fallback.",
-      "Merges the represented x14 condition models into exact matching ordinary range groups using the original priority pairing."
+      "Merges the represented x14 condition models into exact matching ordinary range groups using the original priority pairing.",
+      "Imports original formula-error rules without using the SpreadsheetML compatibility formula as an operand."
     ],
     "omittedResponsibilities": [
       "Extended data-bar and icon rules, content deduplication and advanced condition types remain outside the represented slice."
@@ -66,6 +67,18 @@
         {
           "path": "apps/office/e2e/calc/xlsx-extended-conditions.spec.ts",
           "marker": "opens and downloads XLSX"
+        },
+        {
+          "path": "apps/office/src/sc/source/filter/oox/condformatbuffer.ts",
+          "marker": "notContainsErrors"
+        },
+        {
+          "path": "apps/office/src/sc/source/filter/oox/condformatbuffer.admission.test.ts",
+          "marker": "evaluates formula-error rules"
+        },
+        {
+          "path": "apps/office/e2e/calc/xlsx-error-conditions.spec.ts",
+          "marker": "Calc paints formula errors from XLSX"
         }
       ],
       "upstream": [
@@ -104,6 +117,10 @@
         {
           "path": "sc/qa/unit/cond_format.cxx",
           "marker": "testCondFormatOperatorsSameRangeXLSX"
+        },
+        {
+          "path": "sc/source/filter/oox/condformatbuffer.cxx",
+          "marker": "case XML_notContainsErrors"
         }
       ]
     }

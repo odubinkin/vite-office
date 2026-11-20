@@ -19,7 +19,8 @@
       "Exports native color scales with paired XLSX threshold and RGB lists.",
       "Writes native fixed text formulas based at the combined range origin and quotes Excel literals twice.",
       "Serializes the ten original Excel time periods and omits the native year-only periods from XLSX.",
-      "Routes native extended conditions into the worksheet extension serializer with their assigned priority."
+      "Routes native extended conditions into the worksheet extension serializer with their assigned priority.",
+      "Writes the original formula-error type and the ISERROR or NOT(ISERROR) compatibility expression at the native combined range origin."
     ],
     "omittedResponsibilities": [
       "Data-bar and icon rules remain outside the represented slice."
@@ -65,6 +66,18 @@
         {
           "path": "apps/office/e2e/calc/xlsx-extended-conditions.spec.ts",
           "marker": "opens and downloads XLSX"
+        },
+        {
+          "path": "apps/office/src/sc/source/filter/excel/xecontent.conditional.ts",
+          "marker": "notContainsErrors"
+        },
+        {
+          "path": "apps/office/src/sc/source/filter/oox/condformatbuffer.admission.test.ts",
+          "marker": "evaluates formula-error rules"
+        },
+        {
+          "path": "apps/office/e2e/calc/xlsx-error-conditions.spec.ts",
+          "marker": "Calc paints formula errors from XLSX"
         }
       ],
       "upstream": [
@@ -103,6 +116,10 @@
         {
           "path": "sc/qa/unit/cond_format.cxx",
           "marker": "testCondFormatOperatorsSameRangeXLSX"
+        },
+        {
+          "path": "sc/source/filter/excel/xecontent.cxx",
+          "marker": "case ScConditionMode::NoError"
         }
       ]
     },

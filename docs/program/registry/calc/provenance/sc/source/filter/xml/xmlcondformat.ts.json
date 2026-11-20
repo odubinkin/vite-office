@@ -21,7 +21,8 @@
       "Loads and writes original ODF color-scale threshold, color and formula attributes for ODS and Worker storage.",
       "Reads and writes the four original Calc extension text condition spellings.",
       "Original function-style operands use the shared ScXMLConditionHelper scanner before formula compilation.",
-      "Imports and exports original Calc date-is conditions, including all native year periods."
+      "Imports and exports original Calc date-is conditions, including all native year periods.",
+      "Serializes and imports the original operand-free is-error and is-no-error CALCEXT condition lexemes."
     ],
     "omittedResponsibilities": [
       "Legacy table style maps and additional condition families remain unported."
@@ -63,6 +64,22 @@
         {
           "path": "apps/office/e2e/calc/xlsx-date-conditions.spec.ts",
           "marker": "evaluates and round-trips a tomorrow date rule"
+        },
+        {
+          "path": "apps/office/src/sc/source/filter/xml/xmlcondformat.ts",
+          "marker": "is-no-error"
+        },
+        {
+          "path": "apps/office/src/sc/source/filter/oox/condformatbuffer.admission.test.ts",
+          "marker": "evaluates formula-error rules"
+        },
+        {
+          "path": "apps/office/e2e/calc/xlsx-error-conditions.spec.ts",
+          "marker": "Calc paints formula errors from XLSX"
+        },
+        {
+          "path": "apps/office/src/sc/source/filter/xml/xmlcondformat.admission.test.ts",
+          "marker": "retains native defaults on omitted attributes"
         }
       ],
       "upstream": [
@@ -101,6 +118,14 @@
         {
           "path": "sc/qa/unit/cond_format.cxx",
           "marker": "testTdf164334CondFormatTomorrow"
+        },
+        {
+          "path": "sc/source/filter/xml/xmlcondformat.cxx",
+          "marker": "is-no-error"
+        },
+        {
+          "path": "sc/source/filter/xml/xmlexprt.cxx",
+          "marker": "is-no-error"
         }
       ]
     }

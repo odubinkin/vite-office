@@ -159,7 +159,9 @@ class CondFormatRule implements FragmentContext {
       return;
     }
     const type = (this.type = attribute(attrs, "type"));
-    this.mode = convertToInternalOperator(type, attribute(attrs, "operator"));
+    if (type === "containsErrors") this.mode = ScConditionMode.Error;
+    else if (type === "notContainsErrors") this.mode = ScConditionMode.NoError;
+    else this.mode = convertToInternalOperator(type, attribute(attrs, "operator"));
     if (type === "timePeriod") {
       const period = dateTypes.indexOf(attribute(attrs, "timePeriod"));
       this.dateType = period < 0 ? ScCondFormatDateType.TODAY : period;
@@ -287,7 +289,11 @@ class CondFormat implements FragmentContext {
         }
         if (rule.mode === undefined) continue;
         const count =
-          rule.mode === ScConditionMode.Between || rule.mode === ScConditionMode.NotBetween ? 2 : 1;
+          rule.mode === ScConditionMode.Error || rule.mode === ScConditionMode.NoError
+            ? 0
+            : rule.mode === ScConditionMode.Between || rule.mode === ScConditionMode.NotBetween
+              ? 2
+              : 1;
         if (rule.literal === undefined && rule.expressions.length < count) continue;
         const expressions = rule.expressions
           .slice(0, count)
