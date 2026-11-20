@@ -4,7 +4,7 @@ title: "Integrate current Writer and Calc development into main"
 status: "DOING"
 priority: "high"
 owner: "CODER"
-revision: 5
+revision: 7
 origin:
   system: "manual"
 depends_on: []
@@ -17,11 +17,11 @@ plan_approval:
   updated_by: "ORCHESTRATOR"
   note: null
 verification:
-  state: "pending"
-  updated_at: null
-  updated_by: null
-  note: null
-  attempts: 0
+  state: "needs_rework"
+  updated_at: "2026-11-20T20:08:32.638Z"
+  updated_by: "CODER"
+  note: "Completed whole-project verification and rechecked all nine functional failures. Application-wide coverage still falls below the 100 percent thresholds."
+  attempts: 1
 commit: null
 comments:
   -
@@ -35,8 +35,14 @@ events:
     from: "TODO"
     to: "DOING"
     note: "Start: continue direct-mode task in current checkout."
+  -
+    type: "verify"
+    at: "2026-11-20T20:08:32.638Z"
+    author: "CODER"
+    state: "needs_rework"
+    note: "Completed whole-project verification and rechecked all nine functional failures. Application-wide coverage still falls below the 100 percent thresholds."
 doc_version: 3
-doc_updated_at: "2026-11-20T18:04:02.076Z"
+doc_updated_at: "2026-11-20T20:08:32.684Z"
 doc_updated_by: "CODER"
 description: "Publish current feature branches, integrate both into main, run complete verification and fix regressions, record suspected upstream issues, publish main and synchronize both development checkouts."
 sections:
@@ -47,9 +53,49 @@ sections:
     1. Run npm run verify and repair failed checks. Run remaining components separately when the aggregate short-circuits.
     2. Run ap doctor, node .agentplane/policy/check-routing.mjs and git diff --check.
     3. Confirm the published Writer and Calc tips enter main, all three published heads match local heads, and main is an ancestor of both feature branches. Confirm tracked trees are clean and preserve Calc output.
-  Verification: "Pending execution."
+  Verification: |-
+    Pending execution.
+
+    <!-- BEGIN VERIFICATION RESULTS -->
+    ### 2026-11-20T20:08:32.638Z — VERIFY — needs_rework
+
+    By: CODER
+
+    Note: Completed whole-project verification and rechecked all nine functional failures. Application-wide coverage still falls below the 100 percent thresholds.
+    Attempts: 1
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-20T20:08:32.121Z, excerpt_hash=sha256:fb7168956ce537f97a978d7ae38997359d400b4d02b205f6182f357acdfb20f5
+
+    Details:
+
+    - Command: npm run test:coverage -- --maxWorkers=3 --testTimeout=120000 --reporter=default. Result: rework. Evidence: all 2,228 files completed, 33,763 of 33,772 tests passed in the full run. Six Calc XLSX tests reached the run timeout, and three resource assertions still expected the old Calc and Writer chrome. The unchanged global thresholds remain at 100%. Istanbul measured 96.23% statements, 93.98% branches, 98.33% functions, and 97.02% lines with gaps in 897 source modules. Scope: complete application and shared runtime.
+    - Command: targeted Vitest replays with the same runtime. Result: pass. Evidence: all six exact XLSX cases passed with a 600-second run-level timeout. All three Calc resource tests and the Writer menu-resource test passed after assertions were aligned with the source commands. Scope: every failed functional case from the full run.
+    - Command: npm run build, node scripts/check-static-build.mjs, and Playwright across all projects with Chromium and a 120-second run-level timeout. Result: pass. Evidence: 613 browser cases, including the new Writer search and grouped undo regression, plus static assets smoke. Scope: production bundles and Writer, Calc and shared browser behavior.
+    - Command: Vitest tooling and inventory coverage with a 120-second run-level timeout. Result: pass. Evidence: 194 tooling tests, 130 inventory tests and 100% inventory coverage. Scope: test discovery, command resources, source and registry checks.
+    - Command: remaining npm run verify components, ap doctor, node .agentplane/policy/check-routing.mjs, and git diff --check. Result: pass. Evidence: full formatting, lint, types, generated resources, module boundaries, source tree, Writer WhichIds, JSDoc, file size, and provenance validated. Inventory parity and invariants share the same command and reported 2,911 runtime modules with zero semantic violations. Doctor reported one existing hook-shim readiness warning.
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202611201803-QMYDFT/blueprint/resolved-snapshot.json
+    - old_digest: d745fb53e06003421e806969a72ccdc04cb35c69ff0c10da6869e02708646185
+    - current_digest: d745fb53e06003421e806969a72ccdc04cb35c69ff0c10da6869e02708646185
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202611201803-QMYDFT
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task verify-show 202611201803-QMYDFT
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: false
+    - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+    - risks: none
+
+    <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Retain the original branch history and use only non-force pushes. Use a revert for any published correction that needs rollback."
-  Findings: "Pending integration and verification."
+  Findings: "Merged the published Writer checkpoint fc26d329f and Calc tip 93903dd90 into main. Both conflicts involved independently allocated journal identifiers. Preserved all entries and updated cross-references for WRITER-685 through WRITER-687 and CALC-779 through CALC-783. Static repairs kept the native algorithms and preserved ownership in the registry. The global coverage deficit extends beyond this integration and remains open. Pre-existing untracked Calc output is preserved."
 id_source: "generated"
 ---
 ## Summary
@@ -74,10 +120,49 @@ Execute the nine steps explicitly requested by the user. Publish both feature br
 
 Pending execution.
 
+<!-- BEGIN VERIFICATION RESULTS -->
+### 2026-11-20T20:08:32.638Z — VERIFY — needs_rework
+
+By: CODER
+
+Note: Completed whole-project verification and rechecked all nine functional failures. Application-wide coverage still falls below the 100 percent thresholds.
+Attempts: 1
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-20T20:08:32.121Z, excerpt_hash=sha256:fb7168956ce537f97a978d7ae38997359d400b4d02b205f6182f357acdfb20f5
+
+Details:
+
+- Command: npm run test:coverage -- --maxWorkers=3 --testTimeout=120000 --reporter=default. Result: rework. Evidence: all 2,228 files completed, 33,763 of 33,772 tests passed in the full run. Six Calc XLSX tests reached the run timeout, and three resource assertions still expected the old Calc and Writer chrome. The unchanged global thresholds remain at 100%. Istanbul measured 96.23% statements, 93.98% branches, 98.33% functions, and 97.02% lines with gaps in 897 source modules. Scope: complete application and shared runtime.
+- Command: targeted Vitest replays with the same runtime. Result: pass. Evidence: all six exact XLSX cases passed with a 600-second run-level timeout. All three Calc resource tests and the Writer menu-resource test passed after assertions were aligned with the source commands. Scope: every failed functional case from the full run.
+- Command: npm run build, node scripts/check-static-build.mjs, and Playwright across all projects with Chromium and a 120-second run-level timeout. Result: pass. Evidence: 613 browser cases, including the new Writer search and grouped undo regression, plus static assets smoke. Scope: production bundles and Writer, Calc and shared browser behavior.
+- Command: Vitest tooling and inventory coverage with a 120-second run-level timeout. Result: pass. Evidence: 194 tooling tests, 130 inventory tests and 100% inventory coverage. Scope: test discovery, command resources, source and registry checks.
+- Command: remaining npm run verify components, ap doctor, node .agentplane/policy/check-routing.mjs, and git diff --check. Result: pass. Evidence: full formatting, lint, types, generated resources, module boundaries, source tree, Writer WhichIds, JSDoc, file size, and provenance validated. Inventory parity and invariants share the same command and reported 2,911 runtime modules with zero semantic violations. Doctor reported one existing hook-shim readiness warning.
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202611201803-QMYDFT/blueprint/resolved-snapshot.json
+- old_digest: d745fb53e06003421e806969a72ccdc04cb35c69ff0c10da6869e02708646185
+- current_digest: d745fb53e06003421e806969a72ccdc04cb35c69ff0c10da6869e02708646185
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202611201803-QMYDFT
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task verify-show 202611201803-QMYDFT
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: false
+- repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- risks: none
+
+<!-- END VERIFICATION RESULTS -->
+
 ## Rollback Plan
 
 Retain the original branch history and use only non-force pushes. Use a revert for any published correction that needs rollback.
 
 ## Findings
 
-Pending integration and verification.
+Merged the published Writer checkpoint fc26d329f and Calc tip 93903dd90 into main. Both conflicts involved independently allocated journal identifiers. Preserved all entries and updated cross-references for WRITER-685 through WRITER-687 and CALC-779 through CALC-783. Static repairs kept the native algorithms and preserved ownership in the registry. The global coverage deficit extends beyond this integration and remains open. Pre-existing untracked Calc output is preserved.
