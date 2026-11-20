@@ -6,7 +6,8 @@
     "status": "mapped",
     "localPath": "apps/office/src/sw/source/writerfilter/filter/WriterFilter.ts",
     "localSymbols": [
-      "importOOXML"
+      "importOOXML",
+      "ThrowWrongFormat"
     ],
     "upstreamPath": "sw/source/writerfilter/filter/WriterFilter.cxx",
     "upstreamSymbols": [
@@ -16,7 +17,8 @@
       "DOCX open and download reach the native Writer graph through the existing shell and dialogs. Original package relationships, represented text/runs and style import are exercised.",
       "The shipped Writer filter owns the actual OFOPXML storage for the lifetime of the imported stream and releases its references on both success and failure.",
       "Installs the native theme on the import candidate before the style and body context runs.",
-      "Captures the source theme language property default after successful import."
+      "Captures the source theme language property default after successful import.",
+      "A failed SAX import retains nested callback diagnostics and the original locator and uses the real UNO WrongFormatException Any in WrappedTargetRuntimeException."
     ],
     "omittedResponsibilities": [
       "Table import and full export styles, numbered paragraphs, links, bookmarks, and page fidelity remain open."
@@ -34,12 +36,28 @@
         {
           "path": "apps/office/src/sw/source/filter/ww8/docx-bookmarks.test.ts",
           "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/source/writerfilter/filter/WriterFilter.test.ts",
+          "marker": "native WrongFormatException"
+        },
+        {
+          "path": "apps/office/src/sw/browser/presentation/WriterFileDialog.test.tsx",
+          "marker": "shows the source DOCX parser callback failure"
+        },
+        {
+          "path": "apps/office/e2e/writer-docx-styles.spec.ts",
+          "marker": "shows a DOCX parser diagnostic"
         }
       ],
       "upstream": [
         {
           "path": "sw/source/writerfilter/filter/WriterFilter.cxx",
           "marker": "WriterFilter::filter"
+        },
+        {
+          "path": "sw/source/writerfilter/filter/WriterFilter.cxx",
+          "marker": "lcl_GetExceptionMessage"
         }
       ]
     }

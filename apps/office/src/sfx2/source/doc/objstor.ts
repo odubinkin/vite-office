@@ -1,7 +1,27 @@
-/** @fileoverview Source SfxObjectShell CSV separator detection from objstor.cxx. */
+/** @fileoverview Source SfxObjectShell load diagnostics and CSV separator detection from objstor.cxx. */
+import {
+  WrongFormatException,
+  getCppuType as wrongFormatType,
+} from "../../../cppu/inc/com/sun/star/io/WrongFormatException";
+import { WrappedTargetRuntimeException } from "../../../cppu/inc/com/sun/star/lang/WrappedTargetRuntimeException";
+import { text } from "../../../i18nlangtag/source/isolang/isolang.tables";
 import type { rtl_TextEncoding } from "../../../sal/inc/rtl/textenc";
 import { Time } from "../../../tools/source/datetime/ttime";
 import type { SvStream } from "../../../tools/source/stream/stream";
+
+/** Projects the original row-and-column diagnostic to the browser's file-operation boundary. @param error - Filter exception. @returns Never. */
+export function ThrowFilterLoadError(error: unknown): never {
+  if (!(error instanceof WrappedTargetRuntimeException)) throw error;
+  const detail = new WrongFormatException();
+  try {
+    if (!error.TargetException.extract(detail, wrongFormatType)) throw error;
+    const message = text(detail.Message);
+    error.dispose();
+    throw new Error(message);
+  } finally {
+    detail.dispose();
+  }
+}
 
 const commonSeparators = [",", "\t", ";", ":", "|", " ", "\\", "/"] as const;
 

@@ -7,14 +7,16 @@
     "status": "mapped",
     "upstreamPath": "sfx2/source/doc/objstor.cxx",
     "localSymbols": [
-      "DetectCsvSeparators"
+      "DetectCsvSeparators",
+      "ThrowFilterLoadError"
     ],
     "upstreamSymbols": [
       "SfxObjectShell::DetectCsvSeparators"
     ],
     "preservedResponsibilities": [
       "Task AQF9AG ports source CSV separator detection's header check, quote state, per-line common-character counts, stability selection, priority ordering, timeout and stream rewind.",
-      "The 500ms source CSV separator timeout uses native monotonic clock units and is checked after each physical-line read."
+      "The 500ms source CSV separator timeout uses native monotonic clock units and is checked after each physical-line read.",
+      "The bounded load path extracts the actual native wrong-format target and exposes the row/column diagnostic to the existing browser error boundary."
     ],
     "omittedResponsibilities": [
       "Browser file storage remains separate from this detector."
@@ -32,6 +34,18 @@
         {
           "path": "apps/office/src/sfx2/source/doc/objstor.test.ts",
           "marker": "it("
+        },
+        {
+          "path": "apps/office/src/sw/source/writerfilter/filter/WriterFilter.test.ts",
+          "marker": "native WrongFormatException"
+        },
+        {
+          "path": "apps/office/src/sw/browser/presentation/WriterFileDialog.test.tsx",
+          "marker": "shows the source DOCX parser callback failure"
+        },
+        {
+          "path": "apps/office/e2e/writer-docx-styles.spec.ts",
+          "marker": "shows a DOCX parser diagnostic"
         }
       ],
       "upstream": [
@@ -46,6 +60,10 @@
         {
           "path": "tools/source/datetime/ttime.cxx",
           "marker": "Time::GetSystemTicks"
+        },
+        {
+          "path": "sfx2/source/doc/objstor.cxx",
+          "marker": "rWrapped.TargetException >>= e"
         }
       ]
     }

@@ -2,11 +2,20 @@
 import { readFileSync } from "node:fs";
 import { resolve } from "node:path";
 import { expect, it } from "vitest";
-import { importOOXML } from "./WriterFilter";
-import { FastSaxParseError } from "../../../../sax/source/fastparser/fastparser";
+import { importOOXML, ThrowWrongFormat } from "./WriterFilter";
+import {
+  WrongFormatException,
+  getCppuType as wrongFormatType,
+} from "../../../../cppu/inc/com/sun/star/io/WrongFormatException";
+import { WrappedTargetRuntimeException } from "../../../../cppu/inc/com/sun/star/lang/WrappedTargetRuntimeException";
 import { Exception } from "../../../../cppu/inc/com/sun/star/uno/Exception";
+import { Reference } from "../../../../cppu/inc/com/sun/star/uno/Reference";
+import {
+  SAXException,
+  cppu_detail_getUnoType as saxType,
+} from "../../../../cppu/inc/com/sun/star/xml/sax/SAXException";
+import { SAXParseException } from "../../../../cppu/inc/com/sun/star/xml/sax/SAXParseException";
 import { text } from "../../../../i18nlangtag/source/isolang/isolang.tables";
-import type { SwDoc } from "../../core/doc/doc";
 import { SwTableNode } from "../../core/docnode/node";
 import {
   DocumentArchive,
@@ -27,6 +36,97 @@ import { createWriterDocument } from "../../core/doc/doc";
 import { SwXTextDocument } from "../../uibase/uno/unotxdoc";
 import { SwXParagraph } from "../../core/unocore/unoparagraph";
 import { SwXNumberingRules } from "../../core/unocore/unosett";
+import { ThrowFilterLoadError } from "../../../../sfx2/source/doc/objstor";
+
+it("retains genuine UNO SAX exception messages in their original order", /** Exercises actual UNO targets at the WriterFilter and SfxObjectShell boundary. @returns Nothing. */ () => {
+  const context = new Reference();
+  const cause = unicode("Original handler failure");
+  const inner = unicode("Nested SAX failure");
+  const outer = unicode("XML failure");
+  const part = unicode("word/document.xml");
+  const publicId = unicode("");
+  const original = new Exception(cause, context);
+  const originalValue = new Any(original, "Exception");
+  const nested = new SAXException(inner, context, originalValue);
+  const nestedValue = new Any(nested, saxType);
+  try {
+    const parse = new SAXParseException(outer, context, nestedValue, publicId, part, 7, 19);
+    try {
+      ThrowWrongFormat(parse);
+    } catch (error) {
+      expect(
+        /** Classifies the actual filter exception before presenting it to the file UI. @returns Never. */ () =>
+          ThrowFilterLoadError(error),
+      ).toThrow(
+        "Original handler failure\nSAXParseException: \"Nested SAX failure\"\nSAXParseException: 'XML failure', Stream 'word/document.xml', Line 7, Column 19",
+      );
+    }
+    const unrelated = new Error("Unrelated filter failure");
+    expect(
+      /** Exercises the original non-SAX fallback. @returns Never. */ () =>
+        ThrowWrongFormat(unrelated),
+    ).toThrow(unrelated);
+  } finally {
+    nestedValue.dispose();
+    nested.dispose();
+    originalValue.dispose();
+    original.dispose();
+    publicId.dispose();
+    part.dispose();
+    outer.dispose();
+    inner.dispose();
+    cause.dispose();
+    context.dispose();
+  }
+});
+
+it("wraps an original DOCX callback error as a native WrongFormatException", /** Checks typed filter error and the retained callback and locator messages. @returns Completion. */ async () => {
+  const bytes = new Uint8Array(
+    readFileSync(
+      resolve("../../vendor/libreoffice-reference/sw/qa/extras/ooxmlexport/data/tdf81100.docx"),
+    ),
+  );
+  try {
+    const document = await importOOXML(bytes, {});
+    document.Dispose();
+    throw new Error("Expected a parser callback error for the footer drawing.");
+  } catch (error) {
+    if (!(error instanceof WrappedTargetRuntimeException)) throw error;
+    const detail = new WrongFormatException();
+    try {
+      expect(error.Message.isEmpty()).toBe(true);
+      expect(error.TargetException.extract(detail, wrongFormatType)).toBe(true);
+      expect(text(detail.Message)).toContain("Writer does not support this DrawingML drawing.");
+      expect(text(detail.Message)).toMatch(/SAXParseException:.*Line \d+, Column \d+/su);
+    } finally {
+      detail.dispose();
+      error.dispose();
+    }
+  }
+});
+
+it("retains the main part location when WordprocessingML is malformed", /** Checks the real archive, XML parser and object-shell format diagnostic. @returns Completion. */ async () => {
+  const bytes = new Uint8Array(
+    readFileSync(
+      resolve("../../vendor/libreoffice-reference/sw/qa/extras/ooxmlexport/data/hello.docx"),
+    ),
+  );
+  const original = await DocumentArchive.open(bytes);
+  const writer = new DocumentArchiveWriter();
+  const part = "word/document.xml";
+  for (const path of original.getEntryNames()) {
+    if (path !== part) writer.putNextEntry(path, await original.readEntry(path));
+    else {
+      const xml = await original.readTextEntry(part);
+      const broken = xml.replace("</w:document>", "</w:wrong>");
+      expect(broken).not.toBe(xml);
+      writer.putNextEntry(part, new TextEncoder().encode(broken));
+    }
+  }
+  await expect(importOOXML(await writer.finish(), {}).catch(ThrowFilterLoadError)).rejects.toThrow(
+    /Stream 'word\/document\.xml', Line \d+, Column \d+/u,
+  );
+});
 
 it("exports the original testSemiTransparentText value through the UNO paragraph", /** Replays ooxmlexport14 testSemiTransparentText using the canonical Writer model. @returns Completion. */ async () => {
   const doc = createWriterDocument();
@@ -145,14 +245,7 @@ it.each([
         resolve("../../vendor/libreoffice-reference/sw/qa/extras/ooxmlexport/data", filename),
       ),
     );
-    let document: SwDoc;
-    try {
-      document = await importOOXML(bytes, {});
-    } catch (error) {
-      if (error instanceof FastSaxParseError && error.WrappedException instanceof Exception)
-        throw new Error(text(error.WrappedException.Message), { cause: error });
-      throw error;
-    }
+    const document = await importOOXML(bytes, {});
     try {
       expect(document.paragraphs[0]?.GetText()).toBe(first);
       const output = await DocxExport.WriteDocument(document);

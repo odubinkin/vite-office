@@ -6,6 +6,7 @@ import { SwXTextDocument } from "../uno/unotxdoc";
 import { MapUnit } from "../../../../tools/inc/mapunit";
 import type { XmlPackage } from "../../../../svl/source/misc/storage";
 import { SfxObjectShell, type SfxObjectShellState } from "../../../../sfx2/source/doc/objsh";
+import { ThrowFilterLoadError } from "../../../../sfx2/source/doc/objstor";
 import { createSfxShell, type SfxShell } from "../../../../sfx2/source/control/shell";
 import type { SfxRequest } from "../../../../sfx2/source/control/request";
 import { KEY_MOD1 } from "../../../../vcl/keycodes";
@@ -192,7 +193,7 @@ export class SwDocShell extends SfxObjectShell {
         ? {}
         : { defaultFontDevice: this.defaultFontDevice }),
       locale: this.defaultLocale,
-    });
+    }).catch(ThrowFilterLoadError);
     try {
       if (
         this.openRequestGeneration !== requestGeneration ||

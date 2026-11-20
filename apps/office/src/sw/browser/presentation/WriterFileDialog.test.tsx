@@ -26,6 +26,7 @@ import type { WriterSessionServices } from "../workflows/writer-workflows";
 import { openBrowserWriterDocument } from "../workflows/writer-odt-io";
 import { WriterFileDialog } from "./WriterFileDialog";
 import { DocumentArchive } from "../../../package/source/zippackage/document-archive";
+import { readFileSync } from "node:fs";
 
 InitApplicationServiceManager(implementations);
 beforeAll(initializeRuntime);
@@ -379,6 +380,43 @@ describe("WriterFileDialog", /** Registers file dialog interaction tests. @retur
       ).toEqual(["rejected", "fulfilled"]);
       expect(documentShell.GetTitle()).toBe("Latest");
       expect(documentShell.GetDoc().paragraphs[0]?.GetText()).toBe("Active Writer document");
+    } finally {
+      documentShell.Close();
+    }
+  });
+
+  it("shows the source DOCX parser callback failure without replacing the active document", /** Checks the actual file UI reads the native wrong-format diagnostic. @returns Completion. */ async () => {
+    const documentShell = shell();
+    const store = new IndexedDbWriterOdtStore("dialog-docx-format-error", new IDBFactory());
+    const close = vi.fn();
+    const original = documentShell.GetDoc();
+    const previousMedium = documentShell.GetMedium();
+    const bytes = new Uint8Array(
+      readFileSync(
+        "../../vendor/libreoffice-reference/sw/qa/extras/ooxmlexport/data/tdf81100.docx",
+      ),
+    );
+    try {
+      original.paragraphs[0]?.SetText("Active Writer document");
+      render(
+        <WriterFileDialog
+          docShell={documentShell}
+          kind="open"
+          onClose={close}
+          services={services(store)}
+        />,
+      );
+      fireEvent.click(screen.getByRole("tab", { name: "On computer" }));
+      fireEvent.change(screen.getByLabelText("Browse"), {
+        target: { files: [new File([bytes], "Unsupported footer.docx")] },
+      });
+      const alert = await screen.findByRole("alert", {}, { timeout: 15000 });
+      expect(alert).toHaveTextContent("Writer does not support this DrawingML drawing.");
+      expect(alert).toHaveTextContent(/Line \d+, Column \d+/u);
+      expect(close).not.toHaveBeenCalled();
+      expect(documentShell.GetDoc()).toBe(original);
+      expect(documentShell.GetMedium()).toBe(previousMedium);
+      expect(original.paragraphs[0]?.GetText()).toBe("Active Writer document");
     } finally {
       documentShell.Close();
     }

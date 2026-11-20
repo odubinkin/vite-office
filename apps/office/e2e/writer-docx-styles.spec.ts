@@ -7,6 +7,32 @@ import {
   DocumentArchiveWriter,
 } from "../src/package/source/zippackage/document-archive";
 
+test("Writer shows a DOCX parser diagnostic and keeps the active document", /** Closes the browser failure loop over an actual pinned package. @param fixtures - Playwright fixtures. @param fixtures.page - Chromium page. @returns Completion. */ async ({
+  page,
+}) => {
+  const fixture = fileURLToPath(
+    new URL(
+      "../../../vendor/libreoffice-reference/sw/qa/extras/ooxmlexport/data/tdf81100.docx",
+      import.meta.url,
+    ),
+  );
+  await page.goto("/writer");
+  const editor = page.getByRole("textbox", { name: "Writer document text" });
+  await editor.click();
+  await page.keyboard.insertText("Keep this draft");
+  await expect(editor).toContainText("Keep this draft");
+  await page.getByRole("button", { name: "Open" }).click();
+  await page.getByRole("tab", { name: "On computer" }).click();
+  await page.getByLabel("Browse").setInputFiles(fixture);
+  const alert = page.getByRole("alert");
+  await expect(alert).toContainText("Writer does not support this DrawingML drawing.");
+  await expect(alert).toContainText(/Line \d+, Column \d+/u);
+  const dialog = page.getByRole("dialog", { name: "Open" });
+  await dialog.getByRole("button", { name: "Close", exact: true }).click();
+  await expect(dialog).toHaveCount(0);
+  await expect(editor).toContainText("Keep this draft");
+});
+
 test("Writer preserves the original Strict numbering indent after browser restore", /** Opens a Strict package and checks the exported number-level properties. @param fixtures - Playwright fixtures. @param fixtures.page - Chromium page. @returns Completion. */ async ({
   page,
 }) => {
