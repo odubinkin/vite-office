@@ -1,10 +1,11 @@
 ---
 id: "202611201413-9GPC0D"
 title: "Connect Calc outline header controls and levels"
-status: "DOING"
+result_summary: "Connect Calc outline header controls and levels"
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 9
+revision: 10
 origin:
   system: "manual"
 depends_on:
@@ -40,11 +41,16 @@ quality_review:
     - "output/playwright/calc-9GPC0D/browser-geometry.log"
   findings:
     - "The original ODS fixture exposes both outline axes and restores nested hidden rows via the browser buttons."
-commit: null
+commit:
+  hash: "8d12db561d9f2e6b523a47408ab0076f849a9ab9"
+  message: "🧩 9GPC0D code: connect Calc outline header controls"
 comments:
   -
     author: "CODER"
     body: "Start: continue direct-mode task in current checkout."
+  -
+    author: "CODER"
+    body: "Verified: Native outline levels and individual controls work for both sheet axes. Targeted tests, source verification and measured Chrome freeze behavior passed."
 events:
   -
     type: "status"
@@ -59,8 +65,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Eleven focused Calc tests, native ODS in Chrome with measured frozen-pane placement, production build, the initial type checks and final static gates passed."
+  -
+    type: "status"
+    at: "2026-11-20T14:56:20.671Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: Native outline levels and individual controls work for both sheet axes. Targeted tests, source verification and measured Chrome freeze behavior passed."
 doc_version: 3
-doc_updated_at: "2026-11-20T14:55:09.031Z"
+doc_updated_at: "2026-11-20T14:56:20.679Z"
 doc_updated_by: "CODER"
 description: "Expose the source row and column outline gutters, level selection and individual group expand/collapse in the browser grid. Preserve native nested visibility, filtered rows, undo and split-pane placement using existing document owners."
 sections:
