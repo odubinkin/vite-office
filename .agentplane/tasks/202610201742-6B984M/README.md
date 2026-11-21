@@ -4,7 +4,7 @@ title: "Implement Writer search and replace core and browser UI"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 44
+revision: 45
 origin:
   system: "manual"
 depends_on:
@@ -136,6 +136,9 @@ comments:
   -
     author: "CODER"
     body: "Verified paragraph-style search checkpoint. The Writer view uses the native visible stylesheet admission: used hidden styles stay available, unused hidden styles are omitted, and favourite built-in styles keep the exception on the replacement side. The modeless style selectors apply natural numeric ordering in the browser UI language. Style commands accept native visible names in addition to stable browser identities and preserve the default search collection and the distinct unresolved replacement paths. The two source-derived behaviours are recorded as WRITER-693 and WRITER-694. The final focused run passed 78 tests across six view, search UI, cursor, and replacement suites. The production build, two resource tests, dependency, source-tree/provenance, JSDoc/file-size, scoped lint and formatting, policy routing, and diff checks passed. Doctor retains its existing managed-hook readiness warning. This checkpoint leaves the search task open and does not advance full-suite cadence."
+  -
+    author: "CODER"
+    body: "Verified protected-content search checkpoint. Writer Find retains the source default that permits the cursor in protected content. Replacement reads the actual native table, row, cell and anchored text fly protection formats. Single text replacement checks its matched selection before editing, single style replacement admits each cursor-ring range through the existing edit-shell history owner, and both bulk strategies skip protected matches. A missing style replacement collection retains find-only admission. The source-derived endpoint distinction is documented in WRITER-695. Actual protected cell and anchored-frame fixtures passed with the related view, browser search, cursor, and style reset/history coverage. The final focused run passed 141 tests in nine files. Production build, two Writer resource tests, dependencies, source tree, provenance, JSDoc, file size, scoped lint/format, routing and diff checks passed. AgentPlane doctor retains its current hook-readiness warning. Section, form and other unrepresented protection owners are not claimed. The search task remains open and the full-suite cadence does not advance."
 events:
   -
     type: "status"
@@ -304,8 +307,13 @@ events:
     at: "2026-11-21T05:58:22.819Z"
     author: "CODER"
     body: "Verified paragraph-style search checkpoint. The Writer view uses the native visible stylesheet admission: used hidden styles stay available, unused hidden styles are omitted, and favourite built-in styles keep the exception on the replacement side. The modeless style selectors apply natural numeric ordering in the browser UI language. Style commands accept native visible names in addition to stable browser identities and preserve the default search collection and the distinct unresolved replacement paths. The two source-derived behaviours are recorded as WRITER-693 and WRITER-694. The final focused run passed 78 tests across six view, search UI, cursor, and replacement suites. The production build, two resource tests, dependency, source-tree/provenance, JSDoc/file-size, scoped lint and formatting, policy routing, and diff checks passed. Doctor retains its existing managed-hook readiness warning. This checkpoint leaves the search task open and does not advance full-suite cadence."
+  -
+    type: "comment"
+    at: "2026-11-21T06:04:56.460Z"
+    author: "CODER"
+    body: "Verified protected-content search checkpoint. Writer Find retains the source default that permits the cursor in protected content. Replacement reads the actual native table, row, cell and anchored text fly protection formats. Single text replacement checks its matched selection before editing, single style replacement admits each cursor-ring range through the existing edit-shell history owner, and both bulk strategies skip protected matches. A missing style replacement collection retains find-only admission. The source-derived endpoint distinction is documented in WRITER-695. Actual protected cell and anchored-frame fixtures passed with the related view, browser search, cursor, and style reset/history coverage. The final focused run passed 141 tests in nine files. Production build, two Writer resource tests, dependencies, source tree, provenance, JSDoc, file size, scoped lint/format, routing and diff checks passed. AgentPlane doctor retains its current hook-readiness warning. Section, form and other unrepresented protection owners are not claimed. The search task remains open and the full-suite cadence does not advance."
 doc_version: 3
-doc_updated_at: "2026-11-21T05:58:22.819Z"
+doc_updated_at: "2026-11-21T06:04:56.460Z"
 doc_updated_by: "CODER"
 description: "Implement the approved coherent Writer search-and-replace feature from pinned LibreOffice sources: real shared search engine and options, native paragraph/cursor traversal and replacement/history contracts, view-owned search state and dispatch, Find toolbar and Find and Replace dialog with generated upstream command placement and shortcuts. Preserve source semantics and explicit unsupported boundaries; never substitute DOM text search or browser RegExp for ICU contracts. Work only on writer in vite-office-writer; local upstream reading approved, no network or merges. Keep active until approved scope is verified."
 sections:

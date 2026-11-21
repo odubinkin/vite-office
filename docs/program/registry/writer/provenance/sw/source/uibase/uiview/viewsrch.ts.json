@@ -52,7 +52,8 @@
       "Searches the actual selected cursor ring to validate a single replacement. Backward Replace discards the stack copy and exchanges the live result endpoints before continuing; Replace All restores the registered cursor. A saved table cursor regenerates its box selection after the text edits.",
       "Tracks the body and extra-area phases across single commands, resets the phase on bulk commands, and uses the pre-normalization document boundary and resulting cursor position in wrap feedback (WRITER-688 and WRITER-689). Uses the native wrap path for selection-only search, including the extra-area flag transition and restored cursor, and keeps the prior command after a zero-result Replace All (WRITER-690 and WRITER-691).",
       "Uses the application data language for search, the explicit native algorithm identity and both selection flags. Find passes and single replacement validation use an empty replacement field.",
-      "Uses the visible paragraph stylesheet pool for style controls. Hidden styles remain listed while used, and hidden favourite built-in styles remain available on the replacement side (WRITER-694). Resolves existing and pool style names and preserves the native missing-template fallbacks (WRITER-693)."
+      "Uses the visible paragraph stylesheet pool for style controls. Hidden styles remain listed while used, and hidden favourite built-in styles remain available on the replacement side (WRITER-694). Resolves existing and pool style names and preserves the native missing-template fallbacks (WRITER-693).",
+      "Uses the existing table, row, cell and text fly content-protection owners for search replacement admission. Find includes protected matches under the native cursor-in-protected-area default. A style Replace All request with no replacement collection still uses the find-only admission."
     ],
     "upstreamPath": "sw/source/uibase/uiview/viewsrch.cxx",
     "upstreamSymbols": [

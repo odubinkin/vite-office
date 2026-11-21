@@ -2,19 +2,24 @@
 
 import { describe, expect, it, vi } from "vitest";
 
+import { SvxProtectItem } from "../../../../editeng/source/items/frmitems";
 import { LanguageTag } from "../../../../i18nlangtag/inc/languagetag";
 import { ABSOLUTE } from "../../../../offapi/com/sun/star/util/SearchAlgorithms2";
 import {
   REG_NOT_BEGINOFLINE,
   REG_NOT_ENDOFLINE,
 } from "../../../../offapi/com/sun/star/util/SearchFlags";
+import { SfxItemSet } from "../../../../svl/source/items/itemset";
 import { SvxSearchCmd } from "../../../../svl/inc/srchitem";
 import { GetSettings } from "../../../../vcl/source/app/svapp";
+import { RndStdIds } from "../../../../svx/inc/swframetypes";
+import { RES_FRMATR_BEGIN, RES_FRMATR_END, RES_PROTECT } from "../../../inc/hintids";
 import { SwPosition } from "../../core/crsr/pam";
 import { SwCursor } from "../../core/crsr/swcrsr";
 import { BrowserSfxDispatcher } from "../../../../framework/browser/dispatch/browser-dispatcher";
 import { createDocument } from "../../../../sfx2/source/doc/objsh";
 import { SfxViewFrame } from "../../../../sfx2/source/view/viewfrm";
+import { MakeFlySection } from "../../core/doc/doclay";
 import { createWriterDocument } from "../../core/doc/doc";
 import { createDefaultWriterPageDescriptor } from "../../../../test/writer-page-descriptor";
 import { WRITER_COMMAND_IDS } from "../../../uiconfig/swriter/menubar/menubar-commands";
@@ -132,6 +137,91 @@ it("resolves styles by display name and handles stale style requests", /** Exerc
   expect(shell.GetActiveParagraph().GetParagraphStyle()).toBe("heading-2");
   search.ExecSearch({ ...item, replaceStyle: "Missing style" }, SvxSearchCmd.REPLACE);
   expect(shell.GetActiveParagraph().GetParagraphStyle()).toBe("default");
+  view.Close();
+});
+
+it("finds protected cell text but skips it in text and style replacement", /** Uses the actual protected cell format for single and bulk view commands. @returns Nothing. */ () => {
+  const view = new SwView(
+    new SwDocShell(
+      createWriterDocument(),
+      createDocument({ id: "protection", suiteId: "writer", title: "Search" }),
+    ),
+  );
+  const shell = view.GetWrtShell();
+  const body = shell.GetActiveParagraph();
+  body.SetText("needle body");
+  const table = shell.InsertTable({ mnInsMode: 0, mnRowsToRepeat: 0 }, 1, 2);
+  const [box, otherBox] = table?.GetTabLines()[0]?.GetTabBoxes() ?? [];
+  const protectedText = box?.GetParagraphs()[0];
+  const editableText = otherBox?.GetParagraphs()[0];
+  if (!box || !protectedText || !editableText) throw new Error("Missing Writer cell content.");
+  protectedText.SetText("needle protected");
+  editableText.SetText("needle editable");
+  const protect = new SvxProtectItem(RES_PROTECT);
+  protect.SetContentProtect(true);
+  box.ClaimFrameFormat().SetFormatAttr(protect);
+  const search = view.GetSearch();
+  const item = { ...search.GetSearchItem(), search: "needle", replacement: "match" };
+  const start = new SwPosition(protectedText, 0);
+  const end = new SwPosition(protectedText, 6);
+  try {
+    expect(search.ExecSearch(item, SvxSearchCmd.FIND_ALL).matches).toBe(3);
+    shell.SetPaM(end, start);
+    search.ExecSearch(item, SvxSearchCmd.REPLACE);
+    expect(protectedText.GetText()).toBe("needle protected");
+    expect(search.ExecSearch(item, SvxSearchCmd.REPLACE_ALL).matches).toBe(2);
+    expect([protectedText.GetText(), editableText.GetText(), body.GetText()]).toEqual([
+      "needle protected",
+      "match editable",
+      "match body",
+    ]);
+    const styleItem = {
+      ...item,
+      styleSearch: true,
+      searchStyle: protectedText.GetParagraphStyle(),
+      replaceStyle: "heading-1",
+    };
+    shell.SetPaM(end, start);
+    search.ExecSearch(styleItem, SvxSearchCmd.REPLACE);
+    expect(protectedText.GetParagraphStyle()).toBe(styleItem.searchStyle);
+    expect(search.ExecSearch(styleItem, SvxSearchCmd.REPLACE_ALL).matches).toBe(1);
+    expect(protectedText.GetParagraphStyle()).toBe(styleItem.searchStyle);
+    expect(editableText.GetParagraphStyle()).toBe("heading-1");
+  } finally {
+    end.Dispose();
+    start.Dispose();
+    view.Close();
+  }
+});
+
+it("finds anchored text in a protected fly and leaves it intact during Replace All", /** Uses the original fly format's protection bit with native search traversal. @returns Nothing. */ () => {
+  const document = createWriterDocument();
+  const view = new SwView(
+    new SwDocShell(
+      document,
+      createDocument({ id: "protected-fly", suiteId: "writer", title: "Search" }),
+    ),
+  );
+  const body = view.GetWrtShell().GetActiveParagraph();
+  body.SetText("needle body");
+  const anchor = new SwPosition(body, 0);
+  const items = new SfxItemSet(document.GetAttrPool(), [[RES_FRMATR_BEGIN, RES_FRMATR_END - 1]]);
+  const protect = new SvxProtectItem(RES_PROTECT);
+  protect.SetContentProtect(true);
+  items.Put(protect);
+  const fly = MakeFlySection(document, RndStdIds.FLY_AT_PARA, anchor, items);
+  items.Dispose();
+  anchor.Dispose();
+  const start = fly?.GetContent().GetContentIdx()?.GetNode();
+  const text = start && document.nodes.at(start.GetIndex() + 1).GetTextNode();
+  if (!text) throw new Error("Missing Writer text frame content.");
+  text.SetText("needle frame");
+  const search = view.GetSearch();
+  const item = { ...search.GetSearchItem(), search: "needle", replacement: "edited" };
+  expect(search.ExecSearch(item, SvxSearchCmd.FIND_ALL).matches).toBe(2);
+  expect(search.ExecSearch(item, SvxSearchCmd.REPLACE_ALL).matches).toBe(1);
+  expect(text.GetText()).toBe("needle frame");
+  expect(body.GetText()).toBe("edited body");
   view.Close();
 });
 

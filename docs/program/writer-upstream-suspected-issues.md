@@ -5500,3 +5500,18 @@ applies its authored properties without that collection change.
   still requires use before putting it in the search-style selector.
 - Preserve its availability for replacement and its absence from the
   search selector. This observation is based on source control flow.
+
+### WRITER-695 — Style replacement checks protected frames at the selection endpoints
+
+- Upstream: `sw/source/core/crsr/pam.cxx`, `SwPaM::HasReadonlySel`;
+  `sw/source/core/edit/edfcol.cxx`, `SwEditShell::SetTextFormatColl`;
+  `sw/source/core/doc/docfmt.cxx`, `SwDoc::SetTextFormatColl`.
+- Observation: the range check tests frame protection at the point and
+  mark and has a separate interior scan for protected section formats.
+  It does not perform the same scan for protected table cells wholly
+  inside the range. If such a range reaches the edit-shell command with
+  editable endpoints, the style-application loop visits its interior
+  text nodes.
+- Preserve the endpoint admission for single style replacement in the
+  represented table and fly profile. Bulk style replacement checks the
+  individual match. This finding is source-derived.

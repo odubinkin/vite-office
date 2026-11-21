@@ -1,4 +1,5 @@
 /** @fileoverview Writer view search dispatch over the native model cursor and replacement history. */
+import type { SvxProtectItem } from "../../../../editeng/source/items/frmitems";
 import { SearchOptions2 } from "../../../../i18nutil/inc/searchopt";
 import { TransliterationFlags } from "../../../../i18nutil/inc/transliteration";
 import { ABSOLUTE, APPROXIMATE } from "../../../../offapi/com/sun/star/util/SearchAlgorithms2";
@@ -12,6 +13,7 @@ import { OUString } from "../../../../sal/inc/rtl/ustring";
 import { SvxSearchCmd } from "../../../../svl/inc/srchitem";
 import { GetSettings } from "../../../../vcl/source/app/svapp";
 import { FindRanges, SwDocPositions } from "../../../inc/cshtyp";
+import { RES_PROTECT } from "../../../inc/hintids";
 import { FindFormat } from "../../core/crsr/findcoll";
 import {
   getWriterMaterializedParagraphStyleDefinition,
@@ -22,9 +24,12 @@ import type { SwTextFormatColl } from "../../core/doc/fmtcol";
 import { SwCursor, type SwSearchNodeFilter } from "../../core/crsr/swcrsr";
 import { PopMode } from "../../core/crsr/trvltbl";
 import type { SwDoc } from "../../core/doc/doc";
-import type { SwStartNode } from "../../core/docnode/node";
+import type { SwFrameFormat } from "../../core/layout/atrfrm";
+import type { SwNode, SwStartNode } from "../../core/docnode/node";
+import { setTextFormatCollAtShell } from "../../core/edit/edfcol";
 import { SwStartNodeType } from "../../../inc/ndtyp";
 import { CollectTextFlyFrames } from "../../core/layout/flycnt";
+import type { SwTableBox } from "../../core/table/swtable-boxline";
 import type { SwTextNode } from "../../core/txtnode/ndtxt";
 import { findParagraphStyle } from "../app/docst";
 import type { SwWrtShell } from "../wrtsh/wrtsh1";
@@ -137,6 +142,44 @@ function createSearchNodeFilter(
     }
     return true;
   };
+}
+
+/** Reads a represented frame's inherited content-protection bit. @param format - Native layout format. @returns Whether its content is protected. */
+function isContentProtected(format: SwFrameFormat | undefined): boolean {
+  return (
+    (format?.GetAttrSet().Get(RES_PROTECT) as SvxProtectItem | undefined)?.IsContentProtected() ===
+    true
+  );
+}
+
+/** Follows the native containing table formats up to an enclosing cell or story. @param node - Text or nested table owner. @returns Whether a layout ancestor protects the content. */
+function isInProtectedTable(node: SwNode): boolean {
+  for (let box = node.GetTableBox(); box !== null;) {
+    const table = box.GetStartNode().FindTableNode();
+    if (table === null) return false;
+    if (box.getRowSpan() < 1 || isContentProtected(table.GetTable().GetFrameFormat())) return true;
+    for (let parent: SwTableBox | null = box; parent !== null;) {
+      const line = parent.GetUpper();
+      if (isContentProtected(parent.GetFrameFormat()) || isContentProtected(line?.GetFrameFormat()))
+        return true;
+      parent = line?.GetUpper() ?? null;
+    }
+    box = table.GetTableBox();
+  }
+  return false;
+}
+
+/** Applies the represented SwFrame::IsProtected owners to an editable search result. @param node - Result endpoint. @returns Whether the content admits replacement. */
+function canReplaceAtNode(node: SwNode): boolean {
+  const seen = new Set<SwNode>();
+  for (let owner: SwNode | undefined = node; owner !== undefined;) {
+    if (seen.has(owner)) return false;
+    seen.add(owner);
+    const fly = owner.GetFlyFormat();
+    if (isInProtectedTable(owner) || isContentProtected(fly)) return false;
+    owner = fly?.GetAnchor().GetAnchorNode() ?? undefined;
+  }
+  return true;
 }
 
 /** Drops temporary cursor owners left by a non-selection search. @param cursor - Working search ring. @returns Nothing. */
@@ -423,7 +466,8 @@ export class SwViewSearch {
         ) > 0
       ) {
         const document = this.shell.GetDoc();
-        document.GetDocumentContentOperationsManager().ReplaceRange(match, replacement, false);
+        if (canReplaceAtNode(match.GetPoint().GetNode()))
+          document.GetDocumentContentOperationsManager().ReplaceRange(match, replacement, false);
         this.shell.SetPaM(match.GetPoint(), match.GetMark());
       }
     } finally {
@@ -526,6 +570,7 @@ export class SwViewSearch {
       ? (this.GetParaStyle(item.searchStyle) ?? document.GetDfltTextFormatColl())
       : undefined;
     const acceptsNode = createSearchNodeFilter(document, this.pageStories);
+    const replaceAll = command === SvxSearchCmd.REPLACE_ALL;
     return this.shell.RunNotificationTransaction(
       /** Releases the new cursor and editing notifications together. @returns Search feedback. */ () => {
         const result = document.RunModelTransaction(
@@ -537,8 +582,15 @@ export class SwViewSearch {
                   this.ReplaceSelection(cursor, options, item.replacement, last, acceptsNode);
                 else {
                   const replacement = this.GetParaStyle(item.replaceStyle);
-                  this.shell.SetParagraphStyle(
-                    (replacement ?? document.GetDfltTextFormatColl()).id,
+                  setTextFormatCollAtShell(
+                    this.shell,
+                    replacement ?? document.GetDfltTextFormatColl(),
+                    false,
+                    /** Rejects a style replacement with a protected selection endpoint. @param range - Shell selection. @returns Whether it admits editing. */ (
+                      range,
+                    ) =>
+                      canReplaceAtNode(range.GetPoint().GetNode()) &&
+                      canReplaceAtNode(range.GetMark().GetNode()),
                   );
                 }
               } finally {
@@ -547,7 +599,6 @@ export class SwViewSearch {
               if (backward) this.shell.GetCursor_().Exchange();
             }
 
-            const replaceAll = command === SvxSearchCmd.REPLACE_ALL;
             const fromTableCaret = !inSelection && this.shell.HasBoxSelection();
             const search = fromTableCaret
               ? new SwCursor(this.shell.getShellCursor().GetPoint())
@@ -564,6 +615,13 @@ export class SwViewSearch {
                 style !== undefined && replaceAll
                   ? this.GetParaStyle(item.replaceStyle)
                   : undefined;
+              const replacesMatches =
+                replaceAll && (style === undefined || replacement !== undefined);
+              const acceptsResult: SwSearchNodeFilter = replacesMatches
+                ? /** Skips protected results when the model strategy can edit them. @param node - Candidate. @returns Whether the candidate is editable and visible. */ (
+                    node,
+                  ) => acceptsNode(node) && canReplaceAtNode(node)
+                : acceptsNode;
               const find =
                 /** Dispatches to the native model strategy in the given area. @param from - Start boundary. @param ranges - Search scope. @returns Match count. */ (
                   from: SwDocPositions,
@@ -580,7 +638,7 @@ export class SwViewSearch {
                           ranges,
                           replaceAll,
                           undefined,
-                          acceptsNode,
+                          acceptsResult,
                         )
                       : FindFormat(
                           search,
@@ -590,7 +648,7 @@ export class SwViewSearch {
                           last,
                           ranges,
                           this.shell.CaptureCursorState(),
-                          acceptsNode,
+                          acceptsResult,
                         );
                   // Native InOther keeps its saved point in the working ring (WRITER-024).
                   // The view publishes only the match for this single-result pass.
