@@ -25,6 +25,7 @@ import { SfxItemSet } from "../../../svl/source/items/itemset";
 import { SfxPoolItem } from "../../../svl/source/items/poolitem";
 import { SearchAttrItemList } from "../../../svx/source/dialog/srchdlg";
 import {
+  asianTypographyOptions,
   caseEffects,
   fontPageItems,
   makeSearchFormatItem,
@@ -111,6 +112,13 @@ const formatPages = {
   ],
   alignment: ["Alignment", [RES_PARATR_ADJUST, RES_PARATR_VERTALIGN]],
   textflow: ["Text Flow", [RES_PARATR_SPLIT, RES_PARATR_ORPHANS, RES_PARATR_WIDOWS]],
+  asiantypo: [
+    "Asian Typography",
+    asianTypographyOptions.map(
+      /** Identifies the native criteria reset with the Asian Typography page. @param option - Checkbox binding. @returns WhichId. */
+      ([which]) => which,
+    ),
+  ],
   highlighting: ["Highlighting", [RES_CHRATR_BACKGROUND]],
 } as const;
 
@@ -940,6 +948,15 @@ export function WriterSearchFormatDialog(
           </fieldset>
           {check(RES_PARATR_SPLIT, label("split-paragraph", "Allow to split paragraph"))}
         </div>
+        <fieldset hidden={page !== "asiantypo"} className="rounded border border-slate-200 p-2">
+          <legend className="px-1 text-sm">{label("line-change", "Line Change")}</legend>
+          {asianTypographyOptions.map(
+            /** Renders the native tri-state criterion. @param option - Checkbox binding. @returns Checkbox. */
+            ([which, key, caption]) => (
+              <div key={which}>{check(which, label(key, caption))}</div>
+            ),
+          )}
+        </fieldset>
         <div role="tabpanel" hidden={page !== "highlighting"}>
           {color(
             scalar(RES_CHRATR_BACKGROUND),

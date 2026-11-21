@@ -4,7 +4,7 @@ title: "Implement Writer search and replace core and browser UI"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 62
+revision: 63
 origin:
   system: "manual"
 depends_on:
@@ -190,6 +190,9 @@ comments:
   -
     author: "CODER"
     body: "Verified checkpoint: the Writer Search Format Font page presents a persistent Western group alongside Asian and Complex tabs. All three groups write their native family, point height, weight, posture and language items. The source notebook preference is persisted on deactivation, and the browser regression adapts the upstream notebook reopening QA and verifies combined exact matches. WRITER-705 records the shared extra style row index. Targeted tests passed: 50 in five Writer files and two Writer resource cases. Production build, dependency/source-tree/provenance/JSDoc/file-size checks, scoped ESLint/Prettier, diff check, doctor and policy routing passed. Doctor reported the existing hook-shim warning. This is part of the still-open task; the next full regression remains tied to task closures."
+  -
+    author: "CODER"
+    body: "Verified checkpoint: Search Format opens the upstream Asian Typography page with three initially indeterminate native paragraph criteria. Writer registers the original types, Which IDs, slots and true defaults. The existing node, style, replacement, undo and Worker snapshot paths consume the concrete items. The browser regression exercises explicit false matching and true replacement with undo. Targeted tests passed: 29 in four related suites, plus the two-test native paragraph suite rerun with the added slot/default/snapshot regression, and two Writer resource tests. Production build and declared targeted static gates passed. ODT/DOCX filter mappings are outside this checkpoint. The parent remains open for browser ICU regex, note search and remaining native UI such as Asian Layout. The local workspace has pinned ICU sources and no Emscripten 4.0.19 toolchain. Network authorization for the SDK is pending."
 events:
   -
     type: "status"
@@ -448,8 +451,13 @@ events:
     at: "2026-11-21T10:13:40.687Z"
     author: "CODER"
     body: "Verified checkpoint: the Writer Search Format Font page presents a persistent Western group alongside Asian and Complex tabs. All three groups write their native family, point height, weight, posture and language items. The source notebook preference is persisted on deactivation, and the browser regression adapts the upstream notebook reopening QA and verifies combined exact matches. WRITER-705 records the shared extra style row index. Targeted tests passed: 50 in five Writer files and two Writer resource cases. Production build, dependency/source-tree/provenance/JSDoc/file-size checks, scoped ESLint/Prettier, diff check, doctor and policy routing passed. Doctor reported the existing hook-shim warning. This is part of the still-open task; the next full regression remains tied to task closures."
+  -
+    type: "comment"
+    at: "2026-11-21T10:18:51.604Z"
+    author: "CODER"
+    body: "Verified checkpoint: Search Format opens the upstream Asian Typography page with three initially indeterminate native paragraph criteria. Writer registers the original types, Which IDs, slots and true defaults. The existing node, style, replacement, undo and Worker snapshot paths consume the concrete items. The browser regression exercises explicit false matching and true replacement with undo. Targeted tests passed: 29 in four related suites, plus the two-test native paragraph suite rerun with the added slot/default/snapshot regression, and two Writer resource tests. Production build and declared targeted static gates passed. ODT/DOCX filter mappings are outside this checkpoint. The parent remains open for browser ICU regex, note search and remaining native UI such as Asian Layout. The local workspace has pinned ICU sources and no Emscripten 4.0.19 toolchain. Network authorization for the SDK is pending."
 doc_version: 3
-doc_updated_at: "2026-11-21T10:13:40.687Z"
+doc_updated_at: "2026-11-21T10:18:51.604Z"
 doc_updated_by: "CODER"
 description: "Implement the approved coherent Writer search-and-replace feature from pinned LibreOffice sources: real shared search engine and options, native paragraph/cursor traversal and replacement/history contracts, view-owned search state and dispatch, Find toolbar and Find and Replace dialog with generated upstream command placement and shortcuts. Preserve source semantics and explicit unsupported boundaries; never substitute DOM text search or browser RegExp for ICU contracts. Work only on writer in vite-office-writer; local upstream reading approved, no network or merges. Keep active until approved scope is verified."
 sections:

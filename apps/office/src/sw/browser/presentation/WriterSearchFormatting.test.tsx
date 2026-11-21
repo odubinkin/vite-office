@@ -11,6 +11,7 @@ import {
   SvxFontHeightItem,
 } from "../../../editeng/source/items/textitem";
 import { SvxLanguageItem } from "../../../editeng/inc/langitem";
+import { SvxHangingPunctuationItem } from "../../../editeng/source/items/paraitem";
 import { SvxBreak } from "../../../editeng/inc/svxenum";
 import { SvxTabAdjust, SvxTabStop, SvxTabStopItem } from "../../../editeng/inc/tstpitem";
 import { SfxInt16Item } from "../../../svl/source/items/intitem";
@@ -54,6 +55,7 @@ import {
   RES_CHRATR_WEIGHT,
   RES_MARGIN_FIRSTLINE,
   RES_PARATR_ADJUST,
+  RES_PARATR_HANGINGPUNCTUATION,
   RES_PARATR_LINESPACING,
   RES_PARATR_TABSTOP,
   RES_UL_SPACE,
@@ -934,5 +936,55 @@ it("searches Asian and Complex formatting together and remembers the selected sc
     workbench.unmount();
     session.view.Close();
     writePreferredCTLFontTab(false);
+  }
+});
+
+it("finds Asian typography formatting and replaces it with native paragraph undo", /** Verifies untouched, true and false checkbox criteria. @returns Nothing. */ () => {
+  const session = createWriterDocumentSession();
+  const shell = session.view.GetWrtShell();
+  const first = shell.GetActiveParagraph();
+  shell.Insert("word");
+  shell.SplitNode();
+  const second = shell.GetActiveParagraph();
+  shell.Insert("word");
+  first.SetAttr(new SvxHangingPunctuationItem(true, RES_PARATR_HANGINGPUNCTUATION));
+  second.SetAttr(new SvxHangingPunctuationItem(false, RES_PARATR_HANGINGPUNCTUATION));
+  const workbench = render(<WriterWorkbench isActive view={session.view} />);
+  try {
+    fireEvent.keyDown(window, { key: "h", ctrlKey: true });
+    const dialog = within(screen.getByRole("dialog", { name: "Find and Replace" }));
+    fireEvent.click(dialog.getByText("Other options"));
+    const format = dialog.getByRole("button", { name: "Format…" });
+    fireEvent.click(format);
+    const search = within(screen.getByRole("dialog", { name: "Search" }));
+    fireEvent.click(search.getByRole("tab", { name: "Asian Typography" }));
+    const hanging = search.getByRole("checkbox", { name: "Allow hanging punctuation" });
+    expect(hanging).toBePartiallyChecked();
+    fireEvent.click(hanging);
+    fireEvent.click(hanging);
+    fireEvent.click(search.getByRole("button", { name: "OK" }));
+    expect(dialog.getByText("No hanging punctuation at line end")).toBeVisible();
+    fireEvent.click(dialog.getByRole("button", { name: "Find All" }));
+    const matches = [...shell.GetCursor().GetRingContainer()];
+    expect(matches).toHaveLength(1);
+    expect(matches[0]?.Start().GetNode()).toBe(second);
+
+    fireEvent.focus(dialog.getByLabelText("Replace with"));
+    fireEvent.click(format);
+    const replacement = within(screen.getByRole("dialog", { name: "Replace" }));
+    fireEvent.click(replacement.getByRole("tab", { name: "Asian Typography" }));
+    fireEvent.click(replacement.getByRole("checkbox", { name: "Allow hanging punctuation" }));
+    fireEvent.click(replacement.getByRole("button", { name: "OK" }));
+    fireEvent.click(dialog.getByRole("button", { name: "Replace All" }));
+    expect(
+      (second.GetAttr(RES_PARATR_HANGINGPUNCTUATION) as SvxHangingPunctuationItem).GetValue(),
+    ).toBe(true);
+    expect(shell.Undo()).toBe(true);
+    expect(
+      (second.GetAttr(RES_PARATR_HANGINGPUNCTUATION) as SvxHangingPunctuationItem).GetValue(),
+    ).toBe(false);
+  } finally {
+    workbench.unmount();
+    session.view.Close();
   }
 });

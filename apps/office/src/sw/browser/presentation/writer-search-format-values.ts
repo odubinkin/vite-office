@@ -1,4 +1,9 @@
 /** @fileoverview Shared browser presentation of native search formatting choices and summaries. */
+import {
+  SvxForbiddenRuleItem,
+  SvxHangingPunctuationItem,
+  SvxScriptSpaceItem,
+} from "../../../editeng/source/items/paraitem";
 import { SvxAdjustItem } from "../../../editeng/inc/adjustitem";
 import { SvxULSpaceItem } from "../../../editeng/inc/ulspitem";
 import { SvxLineSpacingItem } from "../../../editeng/inc/lspcitem";
@@ -84,6 +89,9 @@ import {
   RES_CHRATR_UNDERLINE,
   RES_CHRATR_WEIGHT,
   RES_PARATR_ADJUST,
+  RES_PARATR_FORBIDDEN_RULES,
+  RES_PARATR_HANGINGPUNCTUATION,
+  RES_PARATR_SCRIPTSPACE,
   RES_PARATR_SPLIT,
   RES_PARATR_ORPHANS,
   RES_PARATR_WIDOWS,
@@ -248,6 +256,9 @@ export function readSearchFormatValue(item: SfxPoolItem | undefined): string {
   if (item instanceof SvxRightMarginItem) return String(item.GetRight().ResolveFixedPart() / 20);
   if (item instanceof SvxParaVertAlignItem) return String(item.GetValue());
   if (
+    item instanceof SvxForbiddenRuleItem ||
+    item instanceof SvxHangingPunctuationItem ||
+    item instanceof SvxScriptSpaceItem ||
     item instanceof SvxFormatSplitItem ||
     item instanceof SvxOrphansItem ||
     item instanceof SvxWidowsItem
@@ -312,6 +323,12 @@ export function makeSearchFormatItem(
       return new SvxTextLeftMarginItem(SvxIndentValue.twips(Math.round(Number(value) * 20)), which);
     case RES_MARGIN_RIGHT:
       return new SvxRightMarginItem(SvxIndentValue.twips(Math.round(Number(value) * 20)), which);
+    case RES_PARATR_FORBIDDEN_RULES:
+      return new SvxForbiddenRuleItem(value === "true", which);
+    case RES_PARATR_HANGINGPUNCTUATION:
+      return new SvxHangingPunctuationItem(value === "true", which);
+    case RES_PARATR_SCRIPTSPACE:
+      return new SvxScriptSpaceItem(value === "true", which);
     case RES_PARATR_SPLIT:
       return new SvxFormatSplitItem(value === "true", which);
     case RES_PARATR_ORPHANS:
@@ -442,6 +459,23 @@ function describeSearchFormat(
           : "After text";
     return `${text(`attribute.${key}`, name)} ${readSearchFormatValue(item)} pt`;
   }
+  if (item instanceof SvxForbiddenRuleItem)
+    return text(
+      `attribute-value.forbidden-characters.${item.GetValue()}`,
+      item.GetValue()
+        ? "Apply list of forbidden characters to beginning and end of lines"
+        : "Don't apply list of forbidden characters to beginning and end of lines",
+    );
+  if (item instanceof SvxHangingPunctuationItem)
+    return text(
+      `attribute-value.hanging-punctuation.${item.GetValue()}`,
+      item.GetValue() ? "Hanging punctuation at line end" : "No hanging punctuation at line end",
+    );
+  if (item instanceof SvxScriptSpaceItem)
+    return text(
+      `attribute-value.script-space.${item.GetValue()}`,
+      item.GetValue() ? "Automatic character spacing" : "No automatic character spacing",
+    );
   if (item instanceof SvxFormatSplitItem)
     return item.GetValue()
       ? text("attribute-value.split.true", "Allow to split paragraph")
@@ -618,3 +652,14 @@ export const fontPageItems = fontGroups.flatMap(
   /** Projects one script group's items. @param group - Native Which bindings. @returns Which IDs. */
   ({ family, size, weight, posture, language }) => [family, size, weight, posture, language],
 );
+
+/** Native Asian Typography checkboxes in their resource order. */
+export const asianTypographyOptions = [
+  [
+    RES_PARATR_FORBIDDEN_RULES,
+    "forbidden-characters",
+    "Apply list of forbidden characters to the beginning and end of lines",
+  ],
+  [RES_PARATR_HANGINGPUNCTUATION, "hanging-punctuation", "Allow hanging punctuation"],
+  [RES_PARATR_SCRIPTSPACE, "script-space", "Apply spacing between Asian and non-Asian text"],
+] as const;

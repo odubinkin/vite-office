@@ -19,6 +19,9 @@ export function isParagraphEditItem(which: number): boolean {
   return (
     which === H.RES_PARATR_ADJUST ||
     which === H.RES_PARATR_VERTALIGN ||
+    which === H.RES_PARATR_SCRIPTSPACE ||
+    which === H.RES_PARATR_HANGINGPUNCTUATION ||
+    which === H.RES_PARATR_FORBIDDEN_RULES ||
     which === H.RES_PARATR_LINESPACING ||
     which === H.RES_PARATR_SPLIT ||
     which === H.RES_PARATR_ORPHANS ||

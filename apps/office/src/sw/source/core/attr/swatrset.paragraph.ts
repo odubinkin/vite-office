@@ -6,15 +6,36 @@ import {
   SvxParaVertAlignItem,
   SvxWidowsItem,
 } from "../../../../editeng/source/items/paraitem.controls";
+import {
+  SvxForbiddenRuleItem,
+  SvxHangingPunctuationItem,
+  SvxScriptSpaceItem,
+} from "../../../../editeng/source/items/paraitem";
 import { SfxBoolItem } from "../../../../svl/inc/eitem";
 import type { SfxPoolItem } from "../../../../svl/inc/poolitem";
 import {
+  RES_KEEP,
+  RES_LINENUMBER,
+  RES_PARATR_FORBIDDEN_RULES,
+  RES_PARATR_HANGINGPUNCTUATION,
+  RES_PARATR_SCRIPTSPACE,
   RES_PARATR_SPLIT,
   RES_PARATR_ORPHANS,
   RES_PARATR_VERTALIGN,
   RES_PARATR_WIDOWS,
 } from "../../../inc/hintids";
-/** Restores the registered split/orphan/widow/keep/line-number scalar domain using its real item constructors. @param which - One registered control identity. @param value - Persisted scalar. @returns Actual native item. */
+/** Paragraph and adjacent frame settings restored through the same native item factory. */
+export const paragraphControlItems = [
+  RES_PARATR_SPLIT,
+  RES_PARATR_VERTALIGN,
+  RES_PARATR_SCRIPTSPACE,
+  RES_PARATR_HANGINGPUNCTUATION,
+  RES_PARATR_FORBIDDEN_RULES,
+  RES_KEEP,
+  RES_LINENUMBER,
+] as const;
+
+/** Restores the registered scalar controls using their native item constructors. @param which - One registered control identity. @param value - Persisted scalar. @returns Actual native item. */
 export function restoreParagraphControlItem(which: number, value: unknown): SfxPoolItem {
   if (which === RES_PARATR_ORPHANS) return new SvxOrphansItem(Number(value), which);
   if (which === RES_PARATR_WIDOWS) return new SvxWidowsItem(Number(value), which);
@@ -29,6 +50,10 @@ export function restoreParagraphControlItem(which: number, value: unknown): SfxP
     return new SvxParaVertAlignItem(value, which);
   }
   if (which === RES_PARATR_SPLIT) return new SvxFormatSplitItem(Boolean(value), which);
+  if (which === RES_PARATR_SCRIPTSPACE) return new SvxScriptSpaceItem(Boolean(value), which);
+  if (which === RES_PARATR_HANGINGPUNCTUATION)
+    return new SvxHangingPunctuationItem(Boolean(value), which);
+  if (which === RES_PARATR_FORBIDDEN_RULES) return new SvxForbiddenRuleItem(Boolean(value), which);
   return new SfxBoolItem(which, Boolean(value));
 }
 
