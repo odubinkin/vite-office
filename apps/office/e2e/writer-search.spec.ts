@@ -140,4 +140,16 @@ test("Writer inserts a comment, finds its text and undoes note formatting", /** 
   await expect(reply).toContainText('"Find this annotation"');
   await page.keyboard.insertText("Browser reply");
   await expect(reply.locator("p").last()).toHaveText("Browser reply");
+
+  const replyActions = page
+    .locator("article")
+    .filter({ hasText: "Browser reply" })
+    .getByLabel("Comment actions", { exact: true });
+  const promote = page.getByRole("button", { name: "Promote Comment", exact: true });
+  await replyActions.click();
+  await promote.click();
+  await expect(page.getByLabel("Writer document body", { exact: true })).toBeFocused();
+  await expect(reply.locator("p").last()).toHaveText("Browser reply");
+  await replyActions.click();
+  await expect(promote).toHaveCount(0);
 });

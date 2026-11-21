@@ -123,3 +123,101 @@ it("quotes an ellipsis when the parent starts with an empty paragraph", /** Chec
     view.Close();
   }
 });
+
+it("promotes a reply without moving its anchor or changing its descendants", /** Exercises imported parent links, the comment menu, native history, and ODT persistence. @returns Completion. */ async () => {
+  const { view } = createWriterDocumentSession();
+  const shell = view.GetWrtShell();
+  shell.Insert("Body text for comments");
+  const node = shell.GetActiveParagraph();
+  const doc = shell.GetDoc();
+  const type = SwPostItFieldType.Get(doc);
+  /** Attaches an imported note at a distinct anchor. @param name - Note identifier. @param start - Anchor offset. @param parentName - Persisted parent name. @returns Attached note. */
+  function addNote(name: string, start: number, parentName = ""): SwFormatField {
+    const field = new SwPostItField(type, {
+      author: name,
+      name,
+      initials: "",
+      text: name,
+      dateTime: new DateTime(DateTime.SYSTEM),
+      parentName,
+    });
+    const format = new SwFormatField(field);
+    field.Dispose();
+    expect(node.InsertHint(new SwTextField(format, start))).toBe(true);
+    return format;
+  }
+  const root = addNote("Root", 1);
+  const reply = addNote("Reply", 4, "Root");
+  const nested = addNote("Nested", 8, "Reply");
+  const sibling = addNote("Sibling", 12, "Root");
+  const fields = [root, reply, nested, sibling];
+  const manager = view.GetPostItMgr();
+  const undo = doc.GetUndoManager();
+  const undoCount = undo.GetUndoActionCount();
+  const command = WRITER_COMMAND_IDS.promoteComment;
+  const workbench = render(<WriterWorkbench isActive view={view} />);
+  try {
+    const rootInput = screen.getByRole("textbox", { name: "Comment — Root" });
+    const replyInput = screen.getByRole("textbox", { name: "Comment — Reply" });
+    const card = replyInput.closest("article");
+    if (!card) throw new Error("Missing reply card.");
+    const actions = within(card).getByLabelText("Comment actions");
+    act(/** Activates the original root. @returns Nothing. */ () => rootInput.focus());
+    expect(view.QueryState(command).enabled).toBe(false);
+    act(/** Activates the imported reply. @returns Nothing. */ () => replyInput.focus());
+    expect(view.QueryState(command).enabled).toBe(true);
+    fireEvent.click(actions);
+    fireEvent.click(within(card).getByRole("button", { name: "Promote Comment" }));
+
+    expect(screen.getByLabelText("Writer document body")).toHaveFocus();
+    expect(reply.GetField().GetData()).toMatchObject({
+      parentId: 0,
+      parentName: "",
+      parentPostItId: 0,
+    });
+    expect(nested.GetField().GetData().parentName).toBe("Reply");
+    expect(sibling.GetField().GetData().parentName).toBe("Root");
+    expect(reply.GetTextField()?.GetStart()).toBe(4);
+    expect(manager.GetThreads(fields)).toEqual([fields]);
+    expect(undo.GetUndoActionCount()).toBe(undoCount);
+    fireEvent.click(actions);
+    expect(within(card).queryByRole("button", { name: "Promote Comment" })).toBeNull();
+    fireEvent.click(actions);
+
+    const id = new SfxStringItem(SID_ATTR_POSTIT_ID, String(sibling.GetField().GetPostItId()));
+    try {
+      act(
+        /** Promotes a second reply through the text-shell ID request. @returns Nothing. */ () => {
+          expect(view.Execute(command, [id])).toMatchObject({ status: "executed", value: true });
+        },
+      );
+    } finally {
+      id.Dispose();
+    }
+    const metadata = { title: "Promoted comment" };
+    const { document: reopened } = await readOdtDocument(
+      await writeOdtDocument(doc, metadata),
+      metadata,
+    );
+    try {
+      const saved = [...SwPostItFieldType.Get(reopened).GatherFields()];
+      expect(
+        saved.map(
+          /** Reads the saved parent names in anchor order. @param field - Saved annotation. @returns Parent name. */ (
+            field,
+          ) => field.GetField().GetData().parentName || "",
+        ),
+      ).toEqual(["", "", "Reply", ""]);
+      expect(manager.GetThreads(saved)).toEqual([
+        saved.slice(0, 1),
+        saved.slice(1, 3),
+        saved.slice(3),
+      ]);
+    } finally {
+      reopened.Dispose();
+    }
+  } finally {
+    workbench.unmount();
+    view.Close();
+  }
+});

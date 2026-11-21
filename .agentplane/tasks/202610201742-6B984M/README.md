@@ -4,7 +4,7 @@ title: "Implement Writer search and replace core and browser UI"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 98
+revision: 99
 origin:
   system: "manual"
 depends_on:
@@ -289,6 +289,20 @@ comments:
   -
     author: "CODER"
     body: "Verified interactive Writer comment replies against the pinned AnnotationWin, InitAnswer and native annotation field slots. Reply inserts immediately after its parent, preserves its ID, paragraph ID and name linkage, and leaves focus at the end of a formatted EditEngine quotation. The native rich text insertion loop is used to preserve quoted runs. Reply insertion is one Writer history action and parent name and reply content survive ODT reopen. WRITER-729 records the original first-paragraph ellipsis rule. The main slot accepts the active note or a parent ID from the text shell. Prefilled remote Text/HTML arguments and automatic deletion of empty parents are outside this checkpoint. Six targeted Writer suites passed 44 tests, two generated resource tests and two real Chrome scenarios passed, and build, dependency boundaries, source tree/provenance, Writer registry, scoped lint and formatting, routing, doctor and diff checks passed. Repository-wide JSDoc and size findings remain outside changed files. No parent task closure or full-suite cadence increment."
+  -
+    author: "CODER"
+    body: |-
+      Verified the Promote Comment checkpoint against pinned annotation.ui, AnnotationMenuButton, AnnotationWin, annotation and text shell dispatch, and PostItMgr. The generated Edit > Comment command and card popup use the same native field operation. Promotion clears only the selected note's parent metadata and preserves descendants, anchors and undo count. WRITER-730 records the native anchor sort and sticky follow flag that keep a live card in its previous group until windows are recreated.
+
+      - Command: `npm run test:writer -- src/sw/browser/presentation/WriterCommentReply.test.tsx src/sw/browser/presentation/WriterCommentsSidebar.test.tsx src/sw/browser/presentation/WriterCommentDeletion.test.tsx src/sw/browser/presentation/WriterMenuBar.test.tsx src/sw/source/filter/xml/odt-annotation.test.ts`. Result: 40 passed across five files, including active and ID-based promotion, focus, menu state and ODT reopen.
+      - Command: `npm run test:writer -- src/sw/browser/presentation/WriterSearch.test.tsx src/sw/browser/presentation/WriterSearchRegex.test.tsx src/sw/source/uibase/uiview/view-note-search.test.ts src/sw/source/core/crsr/native-search-replace.test.ts src/sw/source/core/crsr/findtxt.test.ts`. Result: 63 passed across five files, with 15 existing conditional skips requiring a native regex probe.
+      - Command: `npm run build:single-threaded --workspace @vite-office/office`. Result: production build and typecheck passed with the existing bundle-size advisory.
+      - Command: `node_modules/.bin/playwright test writer-search.spec.ts --config=output/playwright/writer-rich-comments-chrome.config.ts --project=writer --workers=1`. Result: both scenarios passed against the final preview bundle.
+      - Command: `npm run check:writer-resources`, `npm run check:dependencies`, `npm run check:source-tree`, `npm run check:source-provenance`, `npm run inventory:parity:writer`, scoped ESLint and Prettier, `ap doctor`, `node .agentplane/policy/check-routing.mjs`, and `git diff --check`. Result: passed, two resource tests, no registry semantic violations, and the existing doctor shim warning.
+      - Command: `npm run check:docs` and `npm run check:file-size`. Result: baseline failures remain outside the changed paths (307 JSDoc findings and five oversized files). Local evidence is in output/playwright/writer-comment-promote-docs.log and output/playwright/writer-comment-promote-size.log.
+
+      Parent task remains in progress. This checkpoint does not advance the ten-task full regression counter.
+
 events:
   -
     type: "status"
@@ -712,8 +726,24 @@ events:
     at: "2026-11-21T19:21:40.452Z"
     author: "CODER"
     body: "Verified interactive Writer comment replies against the pinned AnnotationWin, InitAnswer and native annotation field slots. Reply inserts immediately after its parent, preserves its ID, paragraph ID and name linkage, and leaves focus at the end of a formatted EditEngine quotation. The native rich text insertion loop is used to preserve quoted runs. Reply insertion is one Writer history action and parent name and reply content survive ODT reopen. WRITER-729 records the original first-paragraph ellipsis rule. The main slot accepts the active note or a parent ID from the text shell. Prefilled remote Text/HTML arguments and automatic deletion of empty parents are outside this checkpoint. Six targeted Writer suites passed 44 tests, two generated resource tests and two real Chrome scenarios passed, and build, dependency boundaries, source tree/provenance, Writer registry, scoped lint and formatting, routing, doctor and diff checks passed. Repository-wide JSDoc and size findings remain outside changed files. No parent task closure or full-suite cadence increment."
+  -
+    type: "comment"
+    at: "2026-11-21T19:29:19.716Z"
+    author: "CODER"
+    body: |-
+      Verified the Promote Comment checkpoint against pinned annotation.ui, AnnotationMenuButton, AnnotationWin, annotation and text shell dispatch, and PostItMgr. The generated Edit > Comment command and card popup use the same native field operation. Promotion clears only the selected note's parent metadata and preserves descendants, anchors and undo count. WRITER-730 records the native anchor sort and sticky follow flag that keep a live card in its previous group until windows are recreated.
+
+      - Command: `npm run test:writer -- src/sw/browser/presentation/WriterCommentReply.test.tsx src/sw/browser/presentation/WriterCommentsSidebar.test.tsx src/sw/browser/presentation/WriterCommentDeletion.test.tsx src/sw/browser/presentation/WriterMenuBar.test.tsx src/sw/source/filter/xml/odt-annotation.test.ts`. Result: 40 passed across five files, including active and ID-based promotion, focus, menu state and ODT reopen.
+      - Command: `npm run test:writer -- src/sw/browser/presentation/WriterSearch.test.tsx src/sw/browser/presentation/WriterSearchRegex.test.tsx src/sw/source/uibase/uiview/view-note-search.test.ts src/sw/source/core/crsr/native-search-replace.test.ts src/sw/source/core/crsr/findtxt.test.ts`. Result: 63 passed across five files, with 15 existing conditional skips requiring a native regex probe.
+      - Command: `npm run build:single-threaded --workspace @vite-office/office`. Result: production build and typecheck passed with the existing bundle-size advisory.
+      - Command: `node_modules/.bin/playwright test writer-search.spec.ts --config=output/playwright/writer-rich-comments-chrome.config.ts --project=writer --workers=1`. Result: both scenarios passed against the final preview bundle.
+      - Command: `npm run check:writer-resources`, `npm run check:dependencies`, `npm run check:source-tree`, `npm run check:source-provenance`, `npm run inventory:parity:writer`, scoped ESLint and Prettier, `ap doctor`, `node .agentplane/policy/check-routing.mjs`, and `git diff --check`. Result: passed, two resource tests, no registry semantic violations, and the existing doctor shim warning.
+      - Command: `npm run check:docs` and `npm run check:file-size`. Result: baseline failures remain outside the changed paths (307 JSDoc findings and five oversized files). Local evidence is in output/playwright/writer-comment-promote-docs.log and output/playwright/writer-comment-promote-size.log.
+
+      Parent task remains in progress. This checkpoint does not advance the ten-task full regression counter.
+
 doc_version: 3
-doc_updated_at: "2026-11-21T19:21:40.452Z"
+doc_updated_at: "2026-11-21T19:29:19.716Z"
 doc_updated_by: "CODER"
 description: "Implement the approved coherent Writer search-and-replace feature from pinned LibreOffice sources: real shared search engine and options, native paragraph/cursor traversal and replacement/history contracts, view-owned search state and dispatch, Find toolbar and Find and Replace dialog with generated upstream command placement and shortcuts. Preserve source semantics and explicit unsupported boundaries; never substitute DOM text search or browser RegExp for ICU contracts. Work only on writer in vite-office-writer; local upstream reading approved, no network or merges. Keep active until approved scope is verified."
 sections:

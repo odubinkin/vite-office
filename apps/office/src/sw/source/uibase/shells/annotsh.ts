@@ -164,6 +164,16 @@ export class SwAnnotationShell {
         isEnabled: () => this.CanEdit(),
       },
       {
+        id: CMD.promoteComment,
+        /** Promotes the active reply to a top-level comment. @returns Whether promoted. */
+        execute: () => this.manager.PromoteToRoot(),
+        /** Enables promotion in an editable reply. @returns Whether enabled. */
+        isEnabled: () => {
+          const field = this.manager.GetActiveField();
+          return field !== undefined && this.CanEdit() && !this.manager.IsRootNote(field);
+        },
+      },
+      {
         id: CMD.resolveComment,
         /** Toggles resolution in the original active annotation window. @returns Whether changed. */
         execute: () => this.manager.ToggleResolved(),

@@ -137,6 +137,11 @@ export class SwPostItField {
     this.data = { ...this.data, paraId };
   }
 
+  /** Clears the original parent link when a reply becomes a root. @returns Nothing. */
+  ClearParent(): void {
+    this.data = { ...this.data, parentId: 0, parentPostItId: 0, parentName: "" };
+  }
+
   /** Reads the plain text fallback used by the original sidebar. @returns Comment text. */
   GetPar2(): string {
     return this.data.text;

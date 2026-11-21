@@ -5886,3 +5886,18 @@ the original text object. When that paragraph is empty, the quotation is
 `...` even if a later paragraph contains text. Writer preserves this rule.
 
 - [Original reply quotation](../../vendor/libreoffice-reference/sw/source/uibase/docvw/AnnotationWin.cxx)
+
+### WRITER-730 — Promoting a reply can leave it in its original sidebar thread
+
+`SwAnnotationWin::SetAsRoot` clears the parent links and calls
+`SwPostItMgr::MoveSubthreadToRoot`. The manager rotates the promoted subthread
+past the remaining replies, then `CalcRects` sorts the notes by field anchor.
+This restores their original order when the anchors differ. Layout sets
+the follow flag for replies and leaves the existing flag in place for a
+promoted note. A mounted note can therefore still appear within the previous
+thread after Promote Comment disappears from its menu. Writer keeps the field
+anchors and the mounted window's follow flag. Recreated windows group the
+comments from the persisted parent links.
+
+- [Original root promotion](../../vendor/libreoffice-reference/sw/source/uibase/docvw/AnnotationWin.cxx)
+- [Original anchor sorting, follow flag, and subthread rotation](../../vendor/libreoffice-reference/sw/source/uibase/docvw/PostItMgr.cxx)

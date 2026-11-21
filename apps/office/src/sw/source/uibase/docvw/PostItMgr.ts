@@ -35,6 +35,7 @@ export interface SwAnnotationWindow {
 /** Owns active comment search state and resolves sidebar windows by actual field identity. */
 export class SwPostItMgr {
   private readonly windows = new Map<SwFormatField, SwAnnotationWindow>();
+  private readonly followWindows = new WeakSet<SwAnnotationWindow>();
   private active: SwFormatField | undefined;
   private pendingFocus: Readonly<{ field: SwFormatField; atEnd: boolean }> | undefined;
 
@@ -151,6 +152,31 @@ export class SwPostItMgr {
     return this.SetResolved(field, !field.GetField().IsResolved());
   }
 
+  /** Checks the field's parent metadata, including imported links that have no runtime ID. @param field - Anchored comment. @returns Whether the field is a root. */
+  IsRootNote(field: SwFormatField): boolean {
+    const note = field.GetField();
+    const { parentId, parentName, parentPostItId } = note.GetData();
+    if (parentPostItId) return false;
+    if (!parentId && !parentName) return true;
+    for (const candidate of note.GetTyp().GatherFields()) {
+      const data = candidate.GetField().GetData();
+      if ((parentId && data.paraId === parentId) || (parentName && data.name === parentName))
+        return false;
+    }
+    return true;
+  }
+
+  /** Promotes a reply field to a root, retaining the live window's original follow flag. @param id - Optional annotation ID from the body request. @returns Whether promoted. */
+  PromoteToRoot(id?: number): boolean {
+    const field = this.GetFieldForCommand(id);
+    if (!field || this.options.IsReadonly() || this.IsRootNote(field)) return false;
+    const window = this.windows.get(field);
+    if (window) this.followWindows.add(window);
+    field.GetField().ClearParent();
+    this.activeChanged?.();
+    return true;
+  }
+
   /** Groups consecutive follow windows after resolving the native parent metadata. @param fields - Layout fields in anchor order. @returns Sidebar threads in order. */
   GetThreads(fields: readonly SwFormatField[]): readonly (readonly SwFormatField[])[] {
     const names = new Set<string>();
@@ -163,7 +189,9 @@ export class SwPostItMgr {
     const threads: SwFormatField[][] = [];
     for (const format of fields) {
       const { parentId, parentName, parentPostItId } = format.GetField().GetData();
+      const window = this.windows.get(format);
       const follows =
+        (window !== undefined && this.followWindows.has(window)) ||
         !!parentPostItId ||
         (parentId !== undefined && paraIds.has(parentId)) ||
         (parentName !== undefined && names.has(parentName));

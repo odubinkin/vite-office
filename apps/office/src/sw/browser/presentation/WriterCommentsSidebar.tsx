@@ -206,6 +206,18 @@ function WriterCommentCard({
                     ? localization.GetText("writer.comments.unresolveThread", "Unresolve Thread")
                     : localization.GetText("writer.comments.resolveThread", "Resolve Thread")}
                 </button>
+                {!manager.IsRootNote(format) && (
+                  <button
+                    type="button"
+                    className="w-full rounded px-2 py-1 text-left text-sm hover:bg-slate-100"
+                    onClick={
+                      /** Promotes this reply to a top-level comment. @returns Nothing. */
+                      () => execute(WRITER_COMMAND_IDS.promoteComment)
+                    }
+                  >
+                    {localization.GetText("writer.comments.promote", "Promote Comment")}
+                  </button>
+                )}
                 {(
                   [
                     [
