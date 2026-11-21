@@ -1,10 +1,11 @@
 ---
 id: "202611210550-9ABZE8"
 title: "Port Writer ODT page background bitmap and color ownership"
-status: "DOING"
+result_summary: "Verified named and legacy Writer ODT page backgrounds, story fills, native properties and bitmap package retention."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 7
+revision: 9
 origin:
   system: "manual"
 depends_on: []
@@ -20,9 +21,9 @@ plan_approval:
   note: null
 verification:
   state: "ok"
-  updated_at: "2026-11-21T06:04:56.162Z"
+  updated_at: "2026-11-21T06:05:07.494Z"
   updated_by: "CODER"
-  note: "Verified Writer ODT named and legacy page bitmaps and solid page/story backgrounds against the pinned LibreOffice fixture."
+  note: "Verified named and legacy Writer ODT page backgrounds, story fills, native properties and bitmap package retention."
   attempts: 0
 quality_review:
   state: "pass"
@@ -43,11 +44,16 @@ quality_review:
     - "output/playwright/9ABZE8/final-provenance.log"
   findings:
     - "Canonical page and story items, typed page style queries, and the existing graphic package helper retain embedded fills from modern and legacy XML. Original bytes survive and the package stores shared images once."
-commit: null
+commit:
+  hash: "812018a71b3e72c3026e2145ffa1b6593adcf083"
+  message: "🧩 9ABZE8 code: preserve Writer ODT bitmap and color backgrounds"
 comments:
   -
     author: "CODER"
     body: "Start: port native bitmap ownership and Writer ODF page and story background mappings from the pinned source."
+  -
+    author: "CODER"
+    body: "Verified: Verified named and legacy Writer ODT page backgrounds, story fills, native properties and bitmap package retention.. Guided shortcut recorded verification and is closing the direct task with traceable commit metadata."
 events:
   -
     type: "status"
@@ -62,8 +68,21 @@ events:
     author: "CODER"
     state: "ok"
     note: "Verified Writer ODT named and legacy page bitmaps and solid page/story backgrounds against the pinned LibreOffice fixture."
+  -
+    type: "verify"
+    at: "2026-11-21T06:05:07.494Z"
+    author: "CODER"
+    state: "ok"
+    note: "Verified named and legacy Writer ODT page backgrounds, story fills, native properties and bitmap package retention."
+  -
+    type: "status"
+    at: "2026-11-21T06:05:07.580Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: Verified named and legacy Writer ODT page backgrounds, story fills, native properties and bitmap package retention.. Guided shortcut recorded verification and is closing the direct task with traceable commit metadata."
 doc_version: 3
-doc_updated_at: "2026-11-21T06:04:56.215Z"
+doc_updated_at: "2026-11-21T06:05:07.581Z"
 doc_updated_by: "CODER"
 description: "Port named and legacy page fill image import, native DrawingLayer fill items and Worker transfer, page style properties, package export, and the original PageBackground.odt assertions."
 sections:
@@ -105,6 +124,36 @@ sections:
     - freshness: route=computed_local remote=remote_skipped
     - repeat_allowed: false
     - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+    - risks: none
+
+    ### 2026-11-21T06:05:07.494Z — VERIFY — ok
+
+    By: CODER
+
+    Note: Verified named and legacy Writer ODT page backgrounds, story fills, native properties and bitmap package retention.
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-21T06:04:56.215Z, excerpt_hash=sha256:0a47b1eab5fc2643e54c2314cc260b0c3e3db531a4a5e4224d6966c3ee4bc4c4
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202611210550-9ABZE8/blueprint/resolved-snapshot.json
+    - old_digest: 1c8c71763c3c0b7ca60af6b43128526a30dcf4f5cf4ae52f428afc7a701930b5
+    - current_digest: 1c8c71763c3c0b7ca60af6b43128526a30dcf4f5cf4ae52f428afc7a701930b5
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202611210550-9ABZE8
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task complete 202611210550-9ABZE8 --result verified-202611210550-9ABZE8 --commit fc81b329a58088cdb561d73e2fe981161ef6dea8
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
     - risks: none
 
     <!-- END VERIFICATION RESULTS -->
@@ -163,6 +212,36 @@ DecisionContextRef:
 - freshness: route=computed_local remote=remote_skipped
 - repeat_allowed: false
 - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- risks: none
+
+### 2026-11-21T06:05:07.494Z — VERIFY — ok
+
+By: CODER
+
+Note: Verified named and legacy Writer ODT page backgrounds, story fills, native properties and bitmap package retention.
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-21T06:04:56.215Z, excerpt_hash=sha256:0a47b1eab5fc2643e54c2314cc260b0c3e3db531a4a5e4224d6966c3ee4bc4c4
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202611210550-9ABZE8/blueprint/resolved-snapshot.json
+- old_digest: 1c8c71763c3c0b7ca60af6b43128526a30dcf4f5cf4ae52f428afc7a701930b5
+- current_digest: 1c8c71763c3c0b7ca60af6b43128526a30dcf4f5cf4ae52f428afc7a701930b5
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202611210550-9ABZE8
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task complete 202611210550-9ABZE8 --result verified-202611210550-9ABZE8 --commit fc81b329a58088cdb561d73e2fe981161ef6dea8
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
 - risks: none
 
 <!-- END VERIFICATION RESULTS -->
