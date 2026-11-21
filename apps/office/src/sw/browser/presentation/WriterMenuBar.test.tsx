@@ -15,6 +15,10 @@ import {
 } from "../composition/writer-module";
 import { WriterWorkbench } from "./writer-view";
 import { SwPosition } from "../../source/core/crsr/pam";
+import { SfxItemSet } from "../../../svl/source/items/itemset";
+import { RndStdIds } from "../../../svx/inc/swframetypes";
+import { RES_FRMATR_BEGIN, RES_FRMATR_END } from "../../inc/hintids";
+import { MakeFlySection } from "../../source/core/doc/doclay";
 
 /** Renders the desktop through the same Writer module registration used by the composition root. @returns Configured desktop element. */
 function App(): React.JSX.Element {
@@ -708,6 +712,93 @@ describe("WriterMenuBar" /** Groups Writer menu and clipboard integration tests.
     ]);
     expect(shell.HasBoxSelection()).toBe(true);
     expect(shell.GetTableCrs()?.GetSelectedBoxes()).toEqual(cells);
+    workbench.unmount();
+    session.view.Close();
+  });
+
+  it("continues the native extra-area search phase after the caret moves", /** Checks a manually entered frame, the retained search phase and the bulk-search reset. @returns Nothing. */ () => {
+    const session = createWriterDocumentSession();
+    const shell = session.view.GetWrtShell();
+    const body = shell.GetActiveParagraph();
+    const doc = body.GetDoc();
+    body.SetText("needle body");
+    const anchor = new SwPosition(body, 0);
+    const items = new SfxItemSet(doc.GetAttrPool(), [[RES_FRMATR_BEGIN, RES_FRMATR_END - 1]]);
+    const format = MakeFlySection(doc, RndStdIds.FLY_AT_PARA, anchor, items);
+    items.Dispose();
+    const start = format?.GetContent().GetContentIdx()?.GetNode();
+    const frame = start && doc.nodes.at(start.GetIndex() + 1).GetTextNode();
+    if (!frame) throw new Error("Missing Writer text frame paragraph.");
+    frame.SetText("needle frame");
+    const frameStart = new SwPosition(frame, 0);
+    shell.SetCursor(frameStart);
+    frameStart.Dispose();
+    const workbench = render(<WriterWorkbench isActive view={session.view} />);
+
+    fireEvent.keyDown(window, { key: "f", ctrlKey: true });
+    const toolbar = within(screen.getByRole("toolbar", { name: "Find" }));
+    fireEvent.change(toolbar.getByLabelText("Find"), { target: { value: "needle" } });
+    const next = toolbar.getByRole("button", { name: "Find Next" });
+    const status = toolbar.getByRole("status");
+    fireEvent.click(next);
+    expect(shell.GetCursor().Start().GetNode()).toBe(frame);
+    fireEvent.click(next);
+    expect(shell.GetCursor().Start().GetNode()).toBe(body);
+    expect(status).toBeEmptyDOMElement();
+    fireEvent.click(next);
+    expect(shell.GetCursor().Start().GetNode()).toBe(frame);
+
+    act(
+      /** Moves the caret without resetting the last extra-area search pass. @returns Nothing. */ () =>
+        shell.SetCursor(anchor),
+    );
+    fireEvent.click(next);
+    expect(shell.GetCursor().Start().GetNode()).toBe(frame);
+    expect(status).toBeEmptyDOMElement();
+    fireEvent.click(next);
+    expect(shell.GetCursor().Start().GetNode()).toBe(body);
+    expect(status).toHaveTextContent("Reached the end of the document");
+
+    fireEvent.click(next);
+    expect(shell.GetCursor().Start().GetNode()).toBe(frame);
+    fireEvent.click(toolbar.getByRole("button", { name: "Find All" }));
+    expect(status).toHaveTextContent("2 results");
+    act(
+      /** Returns to the body after the bulk command resets the search phase. @returns Nothing. */ () =>
+        shell.SetCursor(anchor),
+    );
+    fireEvent.click(next);
+    expect(shell.GetCursor().Start().GetNode()).toBe(body);
+    expect(status).toBeEmptyDOMElement();
+
+    anchor.Dispose();
+    workbench.unmount();
+    session.view.Close();
+  });
+
+  it("takes the no-wrap decision before normalizing a reversed selection", /** Exercises the initial native caret boundary and its failed-search position. @returns Nothing. */ () => {
+    const session = createWriterDocumentSession();
+    const shell = session.view.GetWrtShell();
+    shell.Insert("needle");
+    const paragraph = shell.GetActiveParagraph();
+    const start = new SwPosition(paragraph, 0);
+    const end = new SwPosition(paragraph, paragraph.Len());
+    shell.SetPaM(start, end);
+    start.Dispose();
+    end.Dispose();
+    const workbench = render(<WriterWorkbench isActive view={session.view} />);
+
+    fireEvent.keyDown(window, { key: "f", ctrlKey: true });
+    const toolbar = within(screen.getByRole("toolbar", { name: "Find" }));
+    const next = toolbar.getByRole("button", { name: "Find Next" });
+    fireEvent.click(next);
+    expect(toolbar.getByRole("status")).toHaveTextContent("Search key not found");
+    expect(shell.GetCursor().HasMark()).toBe(false);
+    expect(shell.GetCursor().GetPoint().GetContentIndex()).toBe(paragraph.Len());
+    fireEvent.click(next);
+    expect(toolbar.getByRole("status")).toHaveTextContent("Reached the end of the document");
+    expect(shell.GetCursor().Start().GetContentIndex()).toBe(0);
+
     workbench.unmount();
     session.view.Close();
   });

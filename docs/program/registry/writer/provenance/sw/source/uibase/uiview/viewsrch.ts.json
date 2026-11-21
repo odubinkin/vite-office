@@ -24,6 +24,10 @@
           "marker": "SwView::Replace"
         },
         {
+          "path": "vendor/libreoffice-reference/sw/source/uibase/uiview/viewsrch.cxx",
+          "marker": "SwView::SearchAndWrap"
+        },
+        {
           "path": "vendor/libreoffice-reference/sw/qa/uitest/findReplace/tdf44837.py",
           "marker": "test_tdf448373_Replace_All_clears_current_selection"
         },
@@ -45,7 +49,8 @@
       "Connects the represented SwView search command branches to actual Writer cursor ranges, search options and document history. Uses actual body, connected editable text-frame, and active header/footer ranges for text and paragraph-style search and replacement.",
       "Uses the native SvxSearchCmd enum. Initializes the dialog with the expanded single-paragraph cursor text or scopes it to the selection. Find Bar uses the Writer ASCII range writer with numbering and trailing paragraph breaks disabled and refreshes the search entry on focus from the editor.",
       "Projects the represented read-only Writer view state to the replacement controls and applies the same admission to fresh and repeated replacement dispatch.",
-      "Searches the actual selected cursor ring to validate a single replacement and restores the registered cursor for backward replacement and Replace All. A saved table cursor regenerates its box selection after the text edits."
+      "Searches the actual selected cursor ring to validate a single replacement and restores the registered cursor for backward replacement and Replace All. A saved table cursor regenerates its box selection after the text edits.",
+      "Tracks the body and extra-area phases across single commands, resets the phase on bulk commands, and uses the pre-normalization document boundary and resulting cursor position in wrap feedback (WRITER-688 and WRITER-689)."
     ],
     "upstreamPath": "sw/source/uibase/uiview/viewsrch.cxx",
     "upstreamSymbols": [

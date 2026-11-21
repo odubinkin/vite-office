@@ -4,7 +4,7 @@ title: "Implement Writer search and replace core and browser UI"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 39
+revision: 40
 origin:
   system: "manual"
 depends_on:
@@ -121,6 +121,9 @@ comments:
   -
     author: "CODER"
     body: "Verified replacement cursor checkpoint against SwView::ExecSearch, SwView::Replace, SwCursorShell::Push/Pop and SwEditShell::Replace. Single replacement validates the real selected cursor ring through Find_Text(InSel), consumes its first confirmed match, and searches onward. Backward replacement restores the saved cursor before the follow-up search. Replace All keeps registered cursor offsets across edits, discards the obsolete ordinary match ring, and restores the saved range or regenerated table selection. Ported tdf44837 and added critical coverage for single replacement after Find All, length-changing bulk replacement, and restoring selected cells after document-wide replacement. Six targeted Vitest files passed all 80 tests, two Writer resource tests passed, and the existing Writer search scenario plus tdf44837 passed in the installed Chrome channel. Build, dependency/source/provenance/JSDoc/file-size checks, scoped lint and format, doctor, routing and diff checks passed. No parent closure or full-suite cadence increment."
+  -
+    author: "CODER"
+    body: "Verified the search wrap checkpoint. Single searches preserve the active extra-area phase across manual cursor movement. Bulk commands reset the phase, and wrap suppression uses the registered endpoint before search-direction normalization. 71 focused Vitest tests passed across five search-related suites. Chrome Playwright passed for the existing Writer search flow and the reversed-selection keyboard probe. Build, the two Writer resource tests, dependency, source tree, provenance, docs, file-size, scoped lint and formatting, routing and diff checks passed. AgentPlane doctor reported the existing hook-readiness warning. Native behavior was inspected at the pinned source, and WRITER-688 and WRITER-689 record the two suspected upstream behaviors. This is an intermediate checkpoint."
 events:
   -
     type: "status"
@@ -264,8 +267,13 @@ events:
     at: "2026-11-21T05:17:25.721Z"
     author: "CODER"
     body: "Verified replacement cursor checkpoint against SwView::ExecSearch, SwView::Replace, SwCursorShell::Push/Pop and SwEditShell::Replace. Single replacement validates the real selected cursor ring through Find_Text(InSel), consumes its first confirmed match, and searches onward. Backward replacement restores the saved cursor before the follow-up search. Replace All keeps registered cursor offsets across edits, discards the obsolete ordinary match ring, and restores the saved range or regenerated table selection. Ported tdf44837 and added critical coverage for single replacement after Find All, length-changing bulk replacement, and restoring selected cells after document-wide replacement. Six targeted Vitest files passed all 80 tests, two Writer resource tests passed, and the existing Writer search scenario plus tdf44837 passed in the installed Chrome channel. Build, dependency/source/provenance/JSDoc/file-size checks, scoped lint and format, doctor, routing and diff checks passed. No parent closure or full-suite cadence increment."
+  -
+    type: "comment"
+    at: "2026-11-21T05:24:16.080Z"
+    author: "CODER"
+    body: "Verified the search wrap checkpoint. Single searches preserve the active extra-area phase across manual cursor movement. Bulk commands reset the phase, and wrap suppression uses the registered endpoint before search-direction normalization. 71 focused Vitest tests passed across five search-related suites. Chrome Playwright passed for the existing Writer search flow and the reversed-selection keyboard probe. Build, the two Writer resource tests, dependency, source tree, provenance, docs, file-size, scoped lint and formatting, routing and diff checks passed. AgentPlane doctor reported the existing hook-readiness warning. Native behavior was inspected at the pinned source, and WRITER-688 and WRITER-689 record the two suspected upstream behaviors. This is an intermediate checkpoint."
 doc_version: 3
-doc_updated_at: "2026-11-21T05:17:25.721Z"
+doc_updated_at: "2026-11-21T05:24:16.080Z"
 doc_updated_by: "CODER"
 description: "Implement the approved coherent Writer search-and-replace feature from pinned LibreOffice sources: real shared search engine and options, native paragraph/cursor traversal and replacement/history contracts, view-owned search state and dispatch, Find toolbar and Find and Replace dialog with generated upstream command placement and shortcuts. Preserve source semantics and explicit unsupported boundaries; never substitute DOM text search or browser RegExp for ICU contracts. Work only on writer in vite-office-writer; local upstream reading approved, no network or merges. Keep active until approved scope is verified."
 sections:

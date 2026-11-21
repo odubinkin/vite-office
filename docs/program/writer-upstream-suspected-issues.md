@@ -5411,3 +5411,28 @@ applies its authored properties without that collection change.
   `def` with zero similarity tolerances can report `[4,7)`.
 - Preserve the script-transition argument and cover the resulting source
   offsets on an actual Writer text node.
+
+### WRITER-688 — A moved caret can retain the extra-area search phase
+
+- Upstream: `sw/source/uibase/uiview/viewsrch.cxx`, `SwView::SearchAndWrap`
+  and `SwView::FUNC_Search` at the pinned baseline.
+- Observation: after a single search succeeds in an extra area, `s_bExtra`
+  remains true. Moving the caret into the main text does not reset that
+  flag. The next search starts in `InOther` even when the caret is at a
+  body match. Find All and Replace All reset the flag on entry.
+- Preserve the phase in the browser view owner and cover the observable
+  ordering with an anchored text frame and a body match. The evidence is
+  source-derived and does not claim a compiled native differential.
+
+### WRITER-689 — The no-wrap decision can predate a change of search origin
+
+- Upstream: `sw/source/uibase/uiview/viewsrch.cxx`, `SwSearchOptions` and
+  `SwView::SearchAndWrap` at the pinned baseline.
+- Observation: the options constructor computes `bDontWrap` from the cursor
+  before `SearchAndWrap` normalizes the selection. A reversed selection with
+  its point at the start of the document can therefore suppress forward
+  wrap even though normalization advances the search start to the other
+  end of the selection.
+- Preserve the initial boundary decision and the normalized cursor after
+  the unsuccessful pass. A subsequent forward search from that cursor
+  can wrap. The browser regression exercises this source ordering.

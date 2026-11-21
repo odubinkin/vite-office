@@ -166,6 +166,7 @@ export class SwViewSearch {
   private feedback: WriterSearchFeedback | undefined;
   private readonly feedbackListeners = new Set<() => void>();
   private lastCommand: SvxSearchCmd | undefined;
+  private searchInOther = false;
   private lastRequest:
     { item: WriterSearchItem; command: SvxSearchCmd; backward: boolean } | undefined;
 
@@ -408,6 +409,48 @@ export class SwViewSearch {
     }
   }
 
+  /** Runs the body, extras and wrap passes of the native view search. @param cursor - Working cursor. @param first - Directional beginning of the document. @param find - Model search strategy. @returns Match count and wrap state. */
+  private SearchAndWrap(
+    cursor: SwCursor,
+    first: SwDocPositions,
+    find: (from: SwDocPositions, ranges: FindRanges) => number,
+  ): WriterSearchResult {
+    const origin = cursor.GetPoint().clone();
+    const boundary = origin.clone();
+    try {
+      cursor.FillFindPos(first, boundary);
+      const dontWrap = origin.compare(boundary) === 0;
+      if (this.lastCommand === SvxSearchCmd.FIND_ALL)
+        cursor.MoveSection(first === SwDocPositions.Start);
+      cursor.Normalize(first === SwDocPositions.End);
+      cursor.DeleteMark();
+      const startedInOther = this.searchInOther;
+      let matches = find(
+        SwDocPositions.Curr,
+        startedInOther ? FindRanges.InOther : FindRanges.InBody,
+      );
+      if (matches > 0) return { matches, wrapped: false };
+      if (!startedInOther) {
+        this.searchInOther = true;
+        matches = find(SwDocPositions.Curr, FindRanges.InOther);
+        if (matches > 0) return { matches, wrapped: false };
+      }
+      this.searchInOther = false;
+      if (dontWrap) return { matches: 0, wrapped: false };
+
+      cursor.Assign(startedInOther ? boundary : origin);
+      matches = find(first, FindRanges.InBody);
+      if (matches === 0) {
+        matches = find(first, FindRanges.InOther);
+        this.searchInOther = matches > 0;
+      }
+      return { matches, wrapped: matches > 0 };
+    } finally {
+      origin.Dispose();
+      boundary.Dispose();
+    }
+  }
+
   /** Searches the model with the request's original options. @param item - Dispatched search item. @param command - Requested operation. @param backward - Direction. @returns Search feedback. */
   private Search(
     item: WriterSearchItem,
@@ -469,11 +512,8 @@ export class SwViewSearch {
               // Keep the table cursor alive so Pop can regenerate its box selections.
               if (replaceAll && !inSelection && !fromTableCaret) this.shell.ClearMark();
               const all = command === SvxSearchCmd.FIND_ALL || command === SvxSearchCmd.REPLACE_ALL;
-              search.Normalize(backward);
-              const start =
-                all || (this.lastCommand === SvxSearchCmd.FIND_ALL && !inSelection)
-                  ? first
-                  : SwDocPositions.Curr;
+              if (all) this.searchInOther = false;
+              if (all || inSelection) search.Normalize(backward);
               const replacement =
                 style !== undefined && replaceAll && item.replaceStyle
                   ? document.GetTextFormatColl(item.replaceStyle)
@@ -511,24 +551,18 @@ export class SwViewSearch {
                   if (ranges === FindRanges.InOther) disposeSearchRing(search);
                   return matches;
                 };
-              let matches: number;
-              let wrapped = false;
-              if (all || inSelection) {
-                const scope = inSelection ? FindRanges.InSel : FindRanges.InBody;
-                matches = find(start, scope | (all ? FindRanges.InSelAll : 0));
-              } else {
-                if (start === first) search.FillFindPos(first, search.GetPoint());
-                const fromOther =
-                  search.GetPoint().GetNodeIndex() <= document.nodes.GetEndOfExtras().GetIndex();
-                matches = find(start, fromOther ? FindRanges.InOther : FindRanges.InBodyOnly);
-                if (matches === 0 && !fromOther) matches = find(start, FindRanges.InOther);
-                if (matches === 0 && (start !== first || fromOther)) {
-                  search.FillFindPos(first, search.GetPoint());
-                  matches = find(first, FindRanges.InBodyOnly);
-                  if (matches === 0 && fromOther) matches = find(first, FindRanges.InOther);
-                  wrapped = matches > 0;
-                }
-              }
+              const result =
+                all || inSelection
+                  ? {
+                      matches: find(
+                        all ? first : SwDocPositions.Curr,
+                        (inSelection ? FindRanges.InSel : FindRanges.InBody) |
+                          (all ? FindRanges.InSelAll : 0),
+                      ),
+                      wrapped: false,
+                    }
+                  : this.SearchAndWrap(search, first, find);
+              const { matches } = result;
               if (replaceAll) {
                 if (matches > 0 && !this.shell.IsTableMode()) disposeSearchRing(cursor);
               } else if (matches > 0) {
@@ -538,9 +572,10 @@ export class SwViewSearch {
                 transferred = true;
               } else if (!inSelection) {
                 this.shell.ClearMark();
+                if (!all) this.shell.SetCursor(search.GetPoint());
               }
               this.lastCommand = command;
-              return { matches, wrapped };
+              return result;
             } finally {
               if (!transferred) disposeSearchRing(search);
               search.Dispose();
