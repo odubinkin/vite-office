@@ -49,7 +49,7 @@ import {
   getCellStyleXMLNames,
 } from "../../../source/filter/xml/xmlstyle";
 import type { ScTable } from "../../../inc/table";
-import { ViewOption } from "../../../inc/viewopti";
+import { ScGridOptions, ViewOption } from "../../../inc/viewopti";
 import { SvxLanguageItem } from "../../../../editeng/inc/langitem";
 import { SfxUInt32Item } from "../../../../svl/source/items/intitem";
 import { NUMBERFORMAT_ENTRY_NOT_FOUND } from "../../../../svl/inc/zforlist";
@@ -207,6 +207,43 @@ interface CalculationSettings {
   readonly year2000: number;
 }
 
+/** Calc drawing grid across the Worker boundary in native unsigned units. */
+type DrawingGrid = readonly [
+  resolutionX: number,
+  resolutionY: number,
+  subdivisionX: number,
+  subdivisionY: number,
+  snap: boolean,
+  visible: boolean,
+  synchronized: boolean,
+];
+
+/** Rebuilds native drawing-grid options from a validated transfer. @param input - Worker payload. @returns Drawing-grid value. */
+function decodeDrawingGrid(input: DrawingGrid): ScGridOptions {
+  if (!Array.isArray(input) || input.length !== 7)
+    throw new Error("Calc worker drawing grid is invalid.");
+  const [resolutionX, resolutionY, subdivisionX, subdivisionY, snap, visible, synchronized] = input;
+  if (
+    ![resolutionX, resolutionY, subdivisionX, subdivisionY].every(
+      /** Checks the native UInt32 domain. @param value - Transferred measurement. @returns Whether it fits. */
+      (value) => Number.isInteger(value) && value >= 0 && value <= 0xffffffff,
+    ) ||
+    typeof snap !== "boolean" ||
+    typeof visible !== "boolean" ||
+    typeof synchronized !== "boolean"
+  )
+    throw new Error("Calc worker drawing grid is invalid.");
+  const grid = new ScGridOptions();
+  grid.SetFieldDrawX(resolutionX);
+  grid.SetFieldDrawY(resolutionY);
+  grid.SetFieldDivisionX(subdivisionX);
+  grid.SetFieldDivisionY(subdivisionY);
+  grid.SetUseGridSnap(snap);
+  grid.SetGridVisible(visible);
+  grid.SetSynchronize(synchronized);
+  return grid;
+}
+
 /** Ephemeral transport, never persisted instead of XML. */
 export interface CalcDocumentRecord {
   readonly version: 1;
@@ -221,6 +258,11 @@ export interface CalcDocumentRecord {
   readonly showOutline?: boolean;
   readonly showSheetTabs?: boolean;
   readonly showPageBreaks?: boolean;
+  readonly showNotes?: boolean;
+  readonly showNoteAuthor?: boolean;
+  readonly showFormulasMarks?: boolean;
+  readonly valueHighlighting?: boolean;
+  readonly drawingGrid?: DrawingGrid;
   readonly nullDate?: number;
   readonly ignoreCase?: boolean;
   readonly calculationSettings?: CalculationSettings;
@@ -552,6 +594,7 @@ function* encodeSteps(document: ScDocument): Generator<void, CalcDocumentRecord>
     );
   }
   const options = document.GetDocOptions();
+  const grid = view.GetGridOptions();
   return {
     version: 1,
     sheets,
@@ -564,6 +607,19 @@ function* encodeSteps(document: ScDocument): Generator<void, CalcDocumentRecord>
     ...(view.GetOption(ViewOption.OUTLINER) ? {} : { showOutline: false }),
     ...(view.GetOption(ViewOption.TABCONTROLS) ? {} : { showSheetTabs: false }),
     ...(view.GetOption(ViewOption.PAGEBREAKS) ? {} : { showPageBreaks: false }),
+    ...(view.GetOption(ViewOption.NOTES) ? {} : { showNotes: false }),
+    ...(view.GetOption(ViewOption.NOTEAUTHOR) ? {} : { showNoteAuthor: false }),
+    ...(view.GetOption(ViewOption.FORMULAS_MARKS) ? { showFormulasMarks: true } : {}),
+    ...(view.GetOption(ViewOption.SYNTAX) ? { valueHighlighting: true } : {}),
+    drawingGrid: [
+      grid.GetFieldDrawX(),
+      grid.GetFieldDrawY(),
+      grid.GetFieldDivisionX(),
+      grid.GetFieldDivisionY(),
+      grid.GetUseGridSnap(),
+      grid.GetGridVisible(),
+      grid.GetSynchronize(),
+    ],
     nullDate: document.GetFormatTable().GetNullDate().GetDate(),
     ...(options.IsIgnoreCase() ? { ignoreCase: true } : {}),
     calculationSettings: {
@@ -724,6 +780,15 @@ function* decodeSteps(record: CalcDocumentRecord): Generator<void, ScDocument> {
       view.SetOption(ViewOption.TABCONTROLS, record.showSheetTabs);
     if (typeof record.showPageBreaks === "boolean")
       view.SetOption(ViewOption.PAGEBREAKS, record.showPageBreaks);
+    if (typeof record.showNotes === "boolean") view.SetOption(ViewOption.NOTES, record.showNotes);
+    if (typeof record.showNoteAuthor === "boolean")
+      view.SetOption(ViewOption.NOTEAUTHOR, record.showNoteAuthor);
+    if (typeof record.showFormulasMarks === "boolean")
+      view.SetOption(ViewOption.FORMULAS_MARKS, record.showFormulasMarks);
+    if (typeof record.valueHighlighting === "boolean")
+      view.SetOption(ViewOption.SYNTAX, record.valueHighlighting);
+    if (record.drawingGrid !== undefined)
+      view.SetGridOptions(decodeDrawingGrid(record.drawingGrid));
     for (const [name, sheets, relativeName] of record.externalFiles ?? []) {
       const manager = document.GetExternalRefManager();
       const file = manager.getExternalFileId(name);

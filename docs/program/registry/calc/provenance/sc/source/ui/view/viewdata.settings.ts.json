@@ -25,10 +25,11 @@
       "Uses native PositionLeft and PositionBottom for the unsplit origin and writes the default inactive top position when no vertical split exists.",
       "Reads the original TableSelected boolean in ODF view settings while retaining the native output omission.",
       "Carries the native HasSheetTabs and IsOutlineSymbolsSet booleans through the primary ODF view sequence.",
-      "Persists ShowPageBreaks through the native primary view sequence."
+      "Persists ShowPageBreaks through the native primary view sequence.",
+      "The primary ODS view carries drawing-grid resolution, subdivisions, snap, visibility and synchronization with native signed XML scalars. It also carries note, author, formula-mark and value-highlighting flags. The named sheet view accepts legacy TabColor while the writer persists the color in the table style."
     ],
     "omittedResponsibilities": [
-      "Window, zoom, pane split and other view properties remain outside this mechanism."
+      "Window state, zoom, grid color and other view properties remain outside this mechanism."
     ],
     "evidence": {
       "local": [
@@ -55,6 +56,10 @@
         {
           "path": "apps/office/src/sc/browser/presentation/calc-page-breaks.test.tsx",
           "marker": "inserts and removes the manual breaks"
+        },
+        {
+          "path": "apps/office/src/sc/source/ui/view/viewdata.settings.test.ts",
+          "marker": "preserves the native ODS drawing grid"
         }
       ],
       "upstream": [
@@ -77,6 +82,14 @@
         {
           "path": "vendor/libreoffice-reference/sc/source/ui/view/viewdata.cxx",
           "marker": "SC_UNO_SHOWPAGEBR"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/source/ui/view/viewdata.cxx",
+          "marker": "SC_UNO_RASTERRESX"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/source/ui/view/viewdata.cxx",
+          "marker": "SC_UNONAME_TABCOLOR"
         }
       ]
     },

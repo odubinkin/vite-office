@@ -6,6 +6,7 @@ import {
   DocumentArchiveWriter,
 } from "../../../../package/source/zippackage/document-archive";
 import { text, unicode } from "../../../../i18nlangtag/source/isolang/isolang.tables";
+import { COL_AUTO } from "../../../../tools/inc/color";
 import {
   decodeCalcDocument,
   encodeCalcDocument,
@@ -15,7 +16,7 @@ import { ExcelFilter } from "../../filter/oox/excelfilter";
 import { readOdsDocument, writeOdsXml } from "../../filter/xml/xmlwrap";
 import { ReadUserDataSequence, WriteUserDataSequence } from "./viewdata.settings";
 import type { ScDocument } from "../../../inc/document";
-import { ViewOption } from "../../../inc/viewopti";
+import { ScGridOptions, ScViewOptions, ViewOption } from "../../../inc/viewopti";
 import { ScViewData } from "./viewdata";
 import { ScExtDocOptions } from "./scextopt";
 import { MAXCOL, MAXROW, ScRange } from "../../../inc/address";
@@ -34,6 +35,127 @@ import {
 function fixture(name: string): Uint8Array {
   return new Uint8Array(readFileSync("../../vendor/libreoffice-reference/sc/qa/unit/data/" + name));
 }
+
+it("preserves the native ODS drawing grid through import, Worker and export", /** Uses the settings of LibreOffice's ManualColWidthRowHeight workbook. @returns Completion. */ async () => {
+  const source = await readOdsDocument(fixture("ods/ManualColWidthRowHeight.ods"));
+  const transferred = decodeCalcDocument(structuredClone(encodeCalcDocument(source)));
+  let reopened: ScDocument | undefined;
+  try {
+    const originalGrid = source.GetViewOptions().GetGridOptions();
+    expect(originalGrid.GetFieldDrawX()).toBe(500);
+    expect(originalGrid.GetFieldDrawY()).toBe(500);
+    expect(originalGrid.GetFieldDivisionX()).toBe(4);
+    expect(originalGrid.GetFieldDivisionY()).toBe(4);
+    expect(originalGrid.GetUseGridSnap()).toBe(true);
+    expect(originalGrid.GetGridVisible()).toBe(true);
+    expect(originalGrid.GetSynchronize()).toBe(false);
+    expect(transferred.GetViewOptions().GetGridOptions().equals(originalGrid)).toBe(true);
+
+    const exported = await writeOdsXml(transferred);
+    expect(exported.files["settings.xml"]).toContain(
+      '<config:config-item config:name="RasterResolutionX" config:type="int">500</config:config-item>',
+    );
+    reopened = await readOdsDocument(exported);
+    expect(reopened.GetViewOptions().GetGridOptions().equals(originalGrid)).toBe(true);
+  } finally {
+    reopened?.Dispose();
+    transferred.Dispose();
+    source.Dispose();
+  }
+});
+
+it("uses Calc grid defaults and copies its drawing options by value", /** Verifies native defaults and copy/assignment isolation. @returns Nothing. */ () => {
+  const defaults = new ScGridOptions();
+  defaults.SetDefaults();
+  const options = new ScViewOptions();
+  expect(options.GetGridOptions().equals(defaults)).toBe(true);
+  defaults.SetFieldDivisionX(8);
+  options.SetGridOptions(defaults);
+  const copy = new ScViewOptions(options);
+  defaults.SetFieldDivisionX(5);
+  options.SetGridOptions(defaults);
+  expect(copy.GetGridOptions().GetFieldDivisionX()).toBe(8);
+  copy.SetDefaults();
+  expect(copy.GetGridOptions().GetFieldDivisionX()).toBe(1);
+  expect(options.GetGridOptions().GetFieldDivisionX()).toBe(5);
+});
+
+it("reads legacy tab colors and writes the current ODS style and display properties", /** Covers legacy color precedence, native signed raster fields and represented display flags. @returns Completion. */ async () => {
+  const source = await readOdsDocument(fixture("ods/print-range.ods"));
+  let transferred: ScDocument | undefined;
+  let reopened: ScDocument | undefined;
+  let legacy: ScDocument | undefined;
+  try {
+    source.SetTabBgColor(0, COL_AUTO);
+    ReadUserDataSequence(source, [
+      [
+        ["ShowNotes", false],
+        ["ShowNoteAuthor", false],
+        ["ShowFormulasMarks", true],
+        ["IsValueHighlightingEnabled", true],
+        ["RasterResolutionX", -1],
+        ["RasterSubdivisionY", 3, "short"],
+        ["RasterIsVisible", true],
+        [
+          "Tables",
+          [
+            [
+              "Sheet1",
+              [
+                ["TabColor", 0x123456],
+                ["TabColor", -1],
+              ],
+            ],
+            ["Sheet2", [["TabColor", "16711680"]]],
+          ],
+        ],
+      ],
+    ]);
+    expect(source.GetTabBgColor(0).toUInt32()).toBe(0x123456);
+    expect(source.GetTabBgColor(1).equals(COL_AUTO)).toBe(true);
+    const record = encodeCalcDocument(source);
+    expect(() =>
+      decodeCalcDocument({ ...record, drawingGrid: [-1, 500, 4, 4, false, true, true] }),
+    ).toThrow("Calc worker drawing grid is invalid.");
+    transferred = decodeCalcDocument(structuredClone(record));
+    const exported = await writeOdsXml(transferred);
+    const settings = exported.files["settings.xml"];
+    assert(typeof settings === "string");
+    expect(settings).not.toContain('config:name="TabColor"');
+    expect(settings).toContain(
+      '<config:config-item config:name="RasterResolutionX" config:type="int">-1</config:config-item>',
+    );
+    reopened = await readOdsDocument(exported);
+    const view = reopened.GetViewOptions();
+    expect(view.GetGridOptions().GetFieldDrawX()).toBe(0xffffffff);
+    expect(view.GetGridOptions().GetFieldDivisionY()).toBe(3);
+    expect(view.GetGridOptions().GetGridVisible()).toBe(true);
+    expect(view.GetOption(ViewOption.NOTES)).toBe(false);
+    expect(view.GetOption(ViewOption.NOTEAUTHOR)).toBe(false);
+    expect(view.GetOption(ViewOption.FORMULAS_MARKS)).toBe(true);
+    expect(view.GetOption(ViewOption.SYNTAX)).toBe(true);
+    expect(reopened.GetTabBgColor(0).toUInt32()).toBe(0x123456);
+    const sheetView = '<config:config-item-map-entry config:name="Sheet1">';
+    expect(settings).toContain(sheetView);
+    legacy = await readOdsDocument({
+      ...exported,
+      files: {
+        ...exported.files,
+        "settings.xml": settings.replace(
+          sheetView,
+          sheetView +
+            '<config:config-item config:name="TabColor" config:type="int">255</config:config-item>',
+        ),
+      },
+    });
+    expect(legacy.GetTabBgColor(0).toUInt32()).toBe(255);
+  } finally {
+    legacy?.Dispose();
+    reopened?.Dispose();
+    transferred?.Dispose();
+    source.Dispose();
+  }
+});
 
 it("restores XLSX worksheet groups through the Worker and exports the live membership", /** Checks source active-sheet inclusion, hidden selected sheets and replacement of stale imported flags. @returns Completion. */ async () => {
   const original = await DocumentArchive.open(fixture("xlsx/sheet-names.xlsx"));

@@ -1,6 +1,7 @@
-/** @fileoverview Represents the original ActiveTable and supported display properties of Calc view data. */
+/** @fileoverview Reads and writes the supported native Calc document and sheet view properties. */
 import type { ScDocument } from "../../../inc/document";
-import { ViewOption } from "../../../inc/viewopti";
+import { ScGridOptions, ViewOption } from "../../../inc/viewopti";
+import { COL_AUTO, Color, ColorTransparency } from "../../../../tools/inc/color";
 import { OUString } from "../../../../sal/inc/rtl/ustring";
 import { text, unicode } from "../../../../i18nlangtag/source/isolang/isolang.tables";
 import type {
@@ -29,18 +30,34 @@ const SC_UNO_SHEETTABS = "HasSheetTabs";
 const SC_UNO_SHOWPAGEBR = "ShowPageBreaks";
 const SC_CURSORPOSITIONX = "CursorPositionX";
 const SC_CURSORPOSITIONY = "CursorPositionY";
+const SC_UNONAME_TABCOLOR = "TabColor";
+const SC_UNO_SNAPTORASTER = "IsSnapToRaster";
+const SC_UNO_RASTERVIS = "RasterIsVisible";
+const SC_UNO_RASTERRESX = "RasterResolutionX";
+const SC_UNO_RASTERRESY = "RasterResolutionY";
+const SC_UNO_RASTERSUBX = "RasterSubdivisionX";
+const SC_UNO_RASTERSUBY = "RasterSubdivisionY";
+const SC_UNO_RASTERSYNC = "IsRasterAxisSynchronized";
+
 const viewOptions = new Map<string, ViewOption>([
   [SC_UNO_SHOWGRID, ViewOption.GRID],
   [SC_UNO_SHOWZERO, ViewOption.NULLVALS],
+  ["ShowNotes", ViewOption.NOTES],
+  ["ShowNoteAuthor", ViewOption.NOTEAUTHOR],
+  ["ShowFormulasMarks", ViewOption.FORMULAS_MARKS],
   [SC_UNO_COLROWHDR, ViewOption.HEADER],
   [SC_UNO_OUTLSYMB, ViewOption.OUTLINER],
   [SC_UNO_SHEETTABS, ViewOption.TABCONTROLS],
   [SC_UNO_SHOWPAGEBR, ViewOption.PAGEBREAKS],
+  ["IsValueHighlightingEnabled", ViewOption.SYNTAX],
 ]);
 
 /** Reads the selected table name from the primary view entry. @param document - Actual document. @param views - Borrowed records. @returns Nothing. */
 export function ReadUserDataSequence(document: ScDocument, views: ViewSettings): void {
+  const options = document.GetViewOptions();
+  const grid = new ScGridOptions(options.GetGridOptions());
   for (const [key, value] of views[0] ?? []) {
+    const option = viewOptions.get(key);
     if (key === SC_ACTIVETABLE && typeof value === "string") {
       const name = unicode(value);
       const tab: [number] = [0];
@@ -49,9 +66,8 @@ export function ReadUserDataSequence(document: ScDocument, views: ViewSettings):
       } finally {
         name.dispose();
       }
-    } else if (typeof value === "boolean") {
-      const option = viewOptions.get(key);
-      if (option !== undefined) document.GetViewOptions().SetOption(option, value);
+    } else if (option !== undefined) {
+      options.SetOption(option, value === true);
     } else if (key === SC_TABLES && typeof value === "object") {
       for (const [sheet, items] of value) {
         const name = unicode(sheet);
@@ -65,6 +81,10 @@ export function ReadUserDataSequence(document: ScDocument, views: ViewSettings):
               setSheetTabSelected(document, tab[0], scalar === true);
             if (property === SC_UNO_SHOWGRID && typeof scalar === "boolean")
               document.SetSheetShowGrid(tab[0], scalar);
+            if (property === SC_UNONAME_TABCOLOR && typeof scalar === "number") {
+              const color = new Color(ColorTransparency, scalar, "ColorTransparencyTag");
+              if (!color.equals(COL_AUTO)) document.SetTabBgColor(tab[0], color);
+            }
             if (property !== SC_CURSORPOSITIONX && property !== SC_CURSORPOSITIONY) continue;
             if (typeof scalar === "number") cursorValue = scalar;
             if (property === SC_CURSORPOSITIONX)
@@ -77,7 +97,36 @@ export function ReadUserDataSequence(document: ScDocument, views: ViewSettings):
           name.dispose();
         }
       }
-    }
+    } else readGridOption(grid, key, value);
+  }
+  options.SetGridOptions(grid);
+}
+
+/** Applies one native drawing-grid property using the UNO extraction defaults. @param grid - Drawing grid. @param key - Settings name. @param value - Parsed value. @returns Nothing. */
+function readGridOption(grid: ScGridOptions, key: string, value: unknown): void {
+  const number = typeof value === "number" ? value : 0;
+  switch (key) {
+    case SC_UNO_SNAPTORASTER:
+      grid.SetUseGridSnap(value === true);
+      break;
+    case SC_UNO_RASTERVIS:
+      grid.SetGridVisible(value === true);
+      break;
+    case SC_UNO_RASTERRESX:
+      grid.SetFieldDrawX(number);
+      break;
+    case SC_UNO_RASTERRESY:
+      grid.SetFieldDrawY(number);
+      break;
+    case SC_UNO_RASTERSUBX:
+      grid.SetFieldDivisionX(number);
+      break;
+    case SC_UNO_RASTERSUBY:
+      grid.SetFieldDivisionY(number);
+      break;
+    case SC_UNO_RASTERSYNC:
+      grid.SetSynchronize(value === true);
+      break;
   }
 }
 
@@ -103,6 +152,8 @@ export function WriteUserDataSequence(document: ScDocument): ViewSettings {
         ]);
       }
     }
+    const options = document.GetViewOptions();
+    const grid = options.GetGridOptions();
     return [
       [
         ["ViewId", "view1"],
@@ -111,8 +162,15 @@ export function WriteUserDataSequence(document: ScDocument): ViewSettings {
         ...Array.from(
           viewOptions,
           /** Reads one supported view boolean. @param entry - Name and native option. @returns View property. */
-          ([key, option]) => [key, document.GetViewOptions().GetOption(option)] as const,
+          ([key, option]) => [key, options.GetOption(option)] as const,
         ),
+        [SC_UNO_SNAPTORASTER, grid.GetUseGridSnap()],
+        [SC_UNO_RASTERVIS, grid.GetGridVisible()],
+        [SC_UNO_RASTERRESX, grid.GetFieldDrawX() | 0],
+        [SC_UNO_RASTERRESY, grid.GetFieldDrawY() | 0],
+        [SC_UNO_RASTERSUBX, grid.GetFieldDivisionX() | 0],
+        [SC_UNO_RASTERSUBY, grid.GetFieldDivisionY() | 0],
+        [SC_UNO_RASTERSYNC, grid.GetSynchronize()],
       ],
     ];
   } finally {

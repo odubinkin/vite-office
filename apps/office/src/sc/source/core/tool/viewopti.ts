@@ -1,4 +1,6 @@
-/** @fileoverview Original ScViewOptions boolean array/default/copy responsibility. Object modes,grid color,drawing-grid members and configuration services remain explicitly unported. */
+/** @fileoverview Calc display and drawing-grid options with native defaults and value copying. */
+import { ScGridOptions } from "./viewopti.grid";
+
 /** Native sc::ViewOption ordinals from viewopti.hxx. */
 export enum ViewOption {
   FORMULAS = 0,
@@ -21,15 +23,16 @@ export enum ViewOption {
   COPY_SHEET,
   THEMEDCURSOR,
 }
-/** Original view-option owner for the consumed boolean fields;this is not a replacement for unported rendering/configuration members. */
+/** Native value owner for display flags and the drawing grid. */
 export class ScViewOptions {
   private aOptArr: boolean[] = [];
+  private readonly aGridOpt = new ScGridOptions();
   /** Original default or independent copy construction. @param source - Optional source options. @returns Options. */
   constructor(source?: ScViewOptions) {
     if (source) this.copy_assign(source);
     else this.SetDefaults();
   }
-  /** Original19boolean defaults in enum order;other native members are not represented by this partial owner. @returns Nothing. */
+  /** Restores the defaults for display flags and drawing geometry. @returns Nothing. */
   SetDefaults(): void {
     this.aOptArr = [
       false,
@@ -52,10 +55,12 @@ export class ScViewOptions {
       false,
       false,
     ];
+    this.aGridOpt.SetDefaults();
   }
   /** Original array assignment copies values into the existing owner. @param source - Source. @returns This. */
   copy_assign(source: ScViewOptions): this {
     this.aOptArr = [...source.aOptArr];
+    this.aGridOpt.copy_assign(source.aGridOpt);
     return this;
   }
   /** Original indexed option getter. @param option - Native valid ordinal. @returns Stored value. */
@@ -65,5 +70,15 @@ export class ScViewOptions {
   /** Original indexed option setter. @param option - Native valid ordinal. @param value - State. @returns Nothing. */
   SetOption(option: ViewOption, value: boolean): void {
     this.aOptArr[option] = value;
+  }
+
+  /** Borrows the native drawing-grid options. @returns Read-only grid options. */
+  GetGridOptions(): Readonly<ScGridOptions> {
+    return this.aGridOpt;
+  }
+
+  /** Copies drawing-grid options into the existing owner. @param options - Native grid value. @returns Nothing. */
+  SetGridOptions(options: Readonly<ScGridOptions>): void {
+    this.aGridOpt.copy_assign(options);
   }
 }

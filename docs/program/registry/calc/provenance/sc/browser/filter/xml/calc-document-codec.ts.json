@@ -44,6 +44,10 @@
         {
           "path": "apps/office/src/sc/source/filter/xml/ods-calculation-settings.test.ts",
           "marker": "round-trips ODS calculation properties"
+        },
+        {
+          "path": "apps/office/src/sc/source/ui/view/viewdata.settings.test.ts",
+          "marker": "preserves the native ODS drawing grid"
         }
       ]
     },
@@ -64,7 +68,8 @@
       "Transfers optional native sheet group flags across the same detached Worker graph as the active sheet and pane positions.",
       "Copies the native packed sheet tab color across the Calc Worker, with the automatic default omitted and older records admitted.",
       "Transports the existing Calc page-style name with native ODF layout and master-page XML, validates the assignment, and admits older transfer records.",
-      "Transfers native ODF calculation properties alongside the existing date and case fields. Older Worker graphs without these settings retain native new-document options."
+      "Transfers native ODF calculation properties alongside the existing date and case fields. Older Worker graphs without these settings retain native new-document options.",
+      "Transfers drawing-grid values and the represented note, author, formula-mark and value-highlighting settings. Older records retain native defaults."
     ],
     "stackDivergence": {
       "kind": "local-infrastructure",

@@ -4,7 +4,7 @@ title: "Round-trip Calc ODS drawing grid and view options"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 5
+revision: 6
 origin:
   system: "manual"
 depends_on: []
@@ -37,7 +37,7 @@ events:
     to: "DOING"
     note: "Start: implement native drawing-grid ownership and ODS view settings with Worker transfer and fixture coverage."
 doc_version: 3
-doc_updated_at: "2026-11-21T18:27:30.577Z"
+doc_updated_at: "2026-11-21T18:31:15.586Z"
 doc_updated_by: "CODER"
 description: "Port the native ScViewData settings for the existing drawing-grid value type and the remaining represented display flags. Import legacy per-sheet TabColor into the native model. Preserve the settings across the Calc Worker and verify the ODF XML contract with pinned LibreOffice fixtures and focused tests."
 sections:
@@ -53,7 +53,12 @@ sections:
     - Run `npm run check:dependencies`, `npm run check:source-provenance`, `node .agentplane/policy/check-routing.mjs`, `ap doctor` and `git diff --check`.
   Verification: "Pending."
   Rollback Plan: "Revert the scoped implementation commit."
-  Findings: "None recorded yet."
+  Findings: |-
+    None recorded yet.
+
+    - Observation: The first focused test run had 33 passes and one failed new fixture. LargeAnchorOffset.ods contains a measure-line shape outside the current Calc filter.
+      Impact: The fixture cannot reach the view-settings reader with the represented drawing-object slice.
+      Resolution: Use pinned ManualColWidthRowHeight.ods with native nondefault drawing-grid settings and supported sheet contents. Keep measure-line import outside this task.
 id_source: "generated"
 ---
 ## Summary
@@ -87,3 +92,7 @@ Revert the scoped implementation commit.
 ## Findings
 
 None recorded yet.
+
+- Observation: The first focused test run had 33 passes and one failed new fixture. LargeAnchorOffset.ods contains a measure-line shape outside the current Calc filter.
+  Impact: The fixture cannot reach the view-settings reader with the represented drawing-object slice.
+  Resolution: Use pinned ManualColWidthRowHeight.ods with native nondefault drawing-grid settings and supported sheet contents. Keep measure-line import outside this task.
