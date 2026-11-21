@@ -1,10 +1,11 @@
 ---
 id: "202611210412-B3P0ZB"
 title: "Connect persisted Calc outline symbols and sheet tab visibility"
-status: "DOING"
+result_summary: "Connect persisted Calc outline symbols and sheet tab visibility"
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 9
+revision: 10
 origin:
   system: "manual"
 depends_on:
@@ -40,11 +41,16 @@ quality_review:
     - "output/calc-B3P0ZB-browser.log"
   findings:
     - "Both booleans retain native Excel precedence and ODF property names. Mounted Calc hides only the controls while keyboard navigation and group data remain available."
-commit: null
+commit:
+  hash: "1bf93878fff42b94804645f4656eef0bdbda58eb"
+  message: "🧩 B3P0ZB code: persist Calc outline and tab visibility"
 comments:
   -
     author: "CODER"
     body: "Start: continue direct-mode task in current checkout."
+  -
+    author: "CODER"
+    body: "Verified: ODS, XLSX and the Calc Worker preserve outline symbols and sheet tab visibility. Related unit and browser regressions passed."
 events:
   -
     type: "status"
@@ -59,8 +65,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "All 98 affected Calc cases passed across the first run and isolated replay. The installed Chrome passed both workbook exports. Type checks, build, and static gates passed."
+  -
+    type: "status"
+    at: "2026-11-21T04:41:39.609Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: ODS, XLSX and the Calc Worker preserve outline symbols and sheet tab visibility. Related unit and browser regressions passed."
 doc_version: 3
-doc_updated_at: "2026-11-21T04:41:36.433Z"
+doc_updated_at: "2026-11-21T04:41:39.610Z"
 doc_updated_by: "CODER"
 description: "Apply the native outline symbol and sheet tab visibility settings across desktop ODS and XLSX view import/export, worker transport, and the mounted Calc workspace. Preserve grouping data and sheet shortcuts when controls are hidden."
 sections:
