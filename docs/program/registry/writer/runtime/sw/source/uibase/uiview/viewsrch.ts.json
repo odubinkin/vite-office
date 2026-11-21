@@ -21,7 +21,7 @@
         "vendor/libreoffice-reference/sw/source/uibase/uiview/viewsrch.cxx#SwView::StateSearch",
         "apps/office/src/sw/browser/presentation/WriterSearch.test.tsx"
       ],
-      "justification": "Connects the represented SwView search command branches to actual Writer cursor ranges, search options and document history. Uses actual body, connected editable text-frame, and active header/footer ranges for text and paragraph-style search and replacement. The dialog uses cursor-shell expanded single-paragraph text or selection scope. The Find Bar uses ASCII range output without numbering or a final paragraph break and refreshes its entry on focus from the document.",
+      "justification": "Connects the represented SwView search command branches to actual Writer cursor ranges, search options and document history. Uses actual body, connected editable text-frame, and active header/footer ranges for text and paragraph-style search and replacement. The dialog uses cursor-shell expanded single-paragraph text or selection scope. The Find Bar uses ASCII range output without numbering or a final paragraph break and refreshes its entry on focus from the document. Read-only Writer view state gates replacement controls and dispatch.",
       "knownViolations": [],
       "localSymbols": [
         "SwViewSearch"

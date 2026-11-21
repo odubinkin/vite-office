@@ -244,6 +244,11 @@ export class SwViewSearch {
     );
   }
 
+  /** Reports the replacement commands allowed by the native Writer view state. @returns Whether Replace and Replace All are enabled. */
+  public CanReplace(): boolean {
+    return !this.shell.GetViewOptions().IsReadonly();
+  }
+
   /** Initializes the displayed search item from the Writer selection. @param dialog - Whether the modeless dialog is opening. @param rememberedSearch - Last Find Bar entry. @returns Current settings. */
   public OpenSearch(dialog: boolean, rememberedSearch?: string): WriterSearchItem {
     this.ClearFeedback();
@@ -301,7 +306,6 @@ export class SwViewSearch {
     command: SvxSearchCmd,
     backward = false,
   ): WriterSearchResult {
-    this.lastRequest = { item, command, backward };
     return this.DispatchSearch(item, command, backward);
   }
 
@@ -311,6 +315,12 @@ export class SwViewSearch {
     command: SvxSearchCmd,
     backward: boolean,
   ): WriterSearchResult {
+    if (
+      (command === SvxSearchCmd.REPLACE || command === SvxSearchCmd.REPLACE_ALL) &&
+      !this.CanReplace()
+    )
+      return { matches: 0, wrapped: false };
+    this.lastRequest = { item, command, backward };
     let result: WriterSearchResult;
     try {
       result = this.Search(item, command, backward);

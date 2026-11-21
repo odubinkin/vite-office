@@ -89,6 +89,7 @@ export function WriterSearch({
   const replaceField = useRef<HTMLInputElement>(null);
   const searchList = useId();
   const replacementList = useId();
+  const canReplace = dialog && owner.CanReplace();
 
   useLayoutEffect(
     /** Gives the search entry focus after the calling menu releases it. @returns Nothing. */ () => {
@@ -420,7 +421,7 @@ export function WriterSearch({
           </label>
           {feedback}
         </fieldset>
-        <fieldset className="grid gap-2 rounded border border-slate-200 p-2">
+        <fieldset disabled={!canReplace} className="grid gap-2 rounded border border-slate-200 p-2">
           <legend className="px-1 text-sm">{text("replace-with-group", "Replace With")}</legend>
           {styleOptions === undefined ? (
             <>
@@ -476,7 +477,7 @@ export function WriterSearch({
           <button
             type="button"
             className={buttonStyle}
-            disabled={cannotSearch}
+            disabled={cannotSearch || !canReplace}
             onClick={
               /** Replaces the current match. @returns Nothing. */ () =>
                 execute(SvxSearchCmd.REPLACE, replaceBackward)
@@ -487,7 +488,7 @@ export function WriterSearch({
           <button
             type="button"
             className={buttonStyle}
-            disabled={cannotSearch}
+            disabled={cannotSearch || !canReplace}
             onClick={
               /** Replaces all matches. @returns Nothing. */ () => execute(SvxSearchCmd.REPLACE_ALL)
             }

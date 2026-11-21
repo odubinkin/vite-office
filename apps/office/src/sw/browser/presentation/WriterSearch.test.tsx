@@ -205,6 +205,66 @@ it("shares the query with Find and Replace, replaces the selected match and undo
   session.view.Close();
 });
 
+it("keeps finding available when read-only Writer state disables replacement", /** Exercises command admission, dialog state, the repeat request, and the document history. @returns Nothing. */ () => {
+  const session = createWriterDocumentSession();
+  const shell = session.view.GetWrtShell();
+  const owner = session.view.GetSearch();
+  const paragraph = shell.GetActiveParagraph();
+  const undo = paragraph.GetDoc().GetUndoManager();
+  shell.Insert("cat cat cat");
+  const undoCount = undo.GetUndoActionCount();
+  shell.GetViewOptions().SetReadonly(true);
+  const workbench = render(<WriterWorkbench isActive view={session.view} />);
+
+  fireEvent.keyDown(window, { key: "h", ctrlKey: true });
+  const dialog = within(screen.getByRole("dialog", { name: "Find and Replace" }));
+  const replacement = dialog.getByLabelText("Replace with");
+  const replace = dialog.getByRole("button", { name: /^Replace$/ });
+  const replaceAll = dialog.getByRole("button", { name: "Replace All" });
+  fireEvent.change(dialog.getByLabelText("Find"), { target: { value: "cat" } });
+  expect(replacement).toBeDisabled();
+  expect(replace).toBeDisabled();
+  expect(replaceAll).toBeDisabled();
+
+  fireEvent.click(dialog.getByRole("button", { name: "Find All" }));
+  expect([...shell.GetCursor().GetRingContainer()]).toHaveLength(3);
+  fireEvent.click(dialog.getByRole("button", { name: "Find Previous" }));
+  expect(shell.GetCursor().Start().GetContentIndex()).toBe(8);
+  const request = { ...owner.GetSearchItem(), replacement: "dog" };
+  for (const command of [SvxSearchCmd.REPLACE, SvxSearchCmd.REPLACE_ALL])
+    expect(owner.ExecSearch(request, command)).toEqual({ matches: 0, wrapped: false });
+  expect(paragraph.GetText()).toBe("cat cat cat");
+  expect(undo.GetUndoActionCount()).toBe(undoCount);
+  expect(shell.GetCursor().Start().GetContentIndex()).toBe(8);
+  act(
+    /** Repeats the saved backward find after the refused replacement requests. @returns Nothing. */ () => {
+      expect(owner.RepeatSearch()).toBe(true);
+    },
+  );
+  expect(shell.GetCursor().Start().GetContentIndex()).toBe(4);
+
+  act(
+    /** Publishes a Writer view update after returning to editable mode. @returns Nothing. */ () => {
+      shell.GetViewOptions().SetReadonly(false);
+      shell.NotifySelectionChanged();
+    },
+  );
+  expect(replacement).toBeEnabled();
+  expect(replace).toBeEnabled();
+  fireEvent.change(replacement, { target: { value: "catdog" } });
+  fireEvent.click(replaceAll);
+  expect(paragraph.GetText()).toBe("catdog catdog catdog");
+  expect(undo.GetUndoActionCount()).toBe(undoCount + 1);
+
+  shell.GetViewOptions().SetReadonly(true);
+  expect(owner.RepeatSearch()).toBe(false);
+  expect(paragraph.GetText()).toBe("catdog catdog catdog");
+  expect(undo.GetUndoActionCount()).toBe(undoCount + 1);
+
+  workbench.unmount();
+  session.view.Close();
+});
+
 it("uses the current selection and whole-word option without replacing outside the range", /** Checks selection seeding and the bounded replacement path. @returns Nothing. */ () => {
   const session = createWriterDocumentSession();
   const shell = session.view.GetWrtShell();
