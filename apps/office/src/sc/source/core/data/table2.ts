@@ -3,7 +3,7 @@ import type { EditTextObject } from "../../../../editeng/inc/editobj";
 import type { SfxHintId } from "../../../../svl/inc/hint";
 import type { SharedStringConstReference } from "../../../../svl/inc/sharedstring";
 import { ScRange } from "../../../inc/address";
-import { HasAttrFlags } from "../../../inc/global";
+import { CRFlags, HasAttrFlags, STD_COL_WIDTH } from "../../../inc/global";
 import { ScMultiSelIter } from "../../../inc/markmulti";
 import { ScMF } from "../../../inc/attrib";
 import { ScAttrEntry } from "../../../inc/attarray";
@@ -13,6 +13,25 @@ import type { ScColumn } from "../../../inc/column";
 import type { StartListeningContext } from "../../../inc/listenercontext";
 import type { OUStringConstReference } from "../../../../sal/inc/rtl/ustring";
 import type { ScSetStringParam } from "../../../inc/stringutil";
+
+/** Finds the last column with stored width, flags or hidden geometry. @param this - Native sheet. @returns Last changed column. */
+export function GetLastChangedColFlagsWidth(this: ScTable): number {
+  const flags = this["mpColFlags"];
+  if (!flags) return 0;
+  for (let column = this.GetDoc().MaxCol(); column > 0;) {
+    const width = this.GetColWidthRange(column);
+    const flagRun = flags.GetRangeData(column);
+    const firstHidden: [number] = [0];
+    if (
+      width.maValue !== STD_COL_WIDTH ||
+      flagRun.maValue & CRFlags.All ||
+      this.ColHidden(column, firstHidden)
+    )
+      return column;
+    column = Math.max(width.mnRow1, flagRun.mnRow1, firstHidden[0]) - 1;
+  }
+  return 0;
+}
 /** Original SetString validates both coordinates and forwards the document convention to the actual column. @param this - Sheet. @param col - Column. @param row - Row. @param tab - Source sheet parameter. @param value - Input. @param parameter - Optional source policy. @returns Whether parsing overwrote the format. */
 export function SetString(
   this: ScTable,

@@ -696,20 +696,6 @@ export class ScXMLImport extends SvXMLImport implements SvXMLImportRootFactory {
       }
       this.docImport.finalize();
       this.FinalizeConditionalFormats();
-      for (let tab = 0; tab < this.document.GetTableCount(); ++tab) {
-        const table = this.document.FetchTable(tab);
-        if (!table) continue;
-        table
-          .GetOutlineTable()
-          ?.GetRowArray()
-          .finalizeImport(
-            /** Resolves the source last hidden row in the native flat segment table. @param row - Group start. @returns Hidden extent or absence. */
-            (row) => {
-              const end: [number] = [row];
-              return table.RowHidden(row, undefined, end) ? end[0] : -1;
-            },
-          );
-      }
       for (const [tab, ranges] of this.recalcRows) {
         const table = this.document.FetchTable(tab) as ScTable;
         const context = new RowHeightContext(this.document.MaxRow(), 1 / 15, 1 / 15, 1, 1, null);

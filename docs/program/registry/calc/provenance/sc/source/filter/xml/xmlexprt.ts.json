@@ -11,7 +11,8 @@
     ],
     "upstreamSymbols": [
       "ScXMLExport",
-      "ScXMLExport::WriteCalculationSettings"
+      "ScXMLExport::WriteCalculationSettings",
+      "ScXMLExport::ExportColumns"
     ],
     "preservedResponsibilities": [
       "Task204 exports the same actual document through ScHorizontalCellIterator,ScFormulaCell.GetFormula(ODFF),common RTL decimal output and shared ODF inline text encoding. Empty row/cell spans compress without materializing a grid;numeric/string/formula source and supported lazy result getters are reused.",
@@ -32,7 +33,8 @@
       "Declares the original ODF css3t namespace for Calc horizontal justification method.",
       "Writes native ODF protection attributes and options before sheet cell content.",
       "Writes ODF 1.3 table-family tab colors and preserves display and color in a single automatic table style.",
-      "Exports used master pages and page layouts and links the automatic table style to the actual named page style."
+      "Exports used master pages and page layouts and links the automatic table style to the actual named page style.",
+      "Column output ends at the furthest used, formatted, geometrically changed, grouped or repeated-title column in the represented sheet model."
     ],
     "omittedResponsibilities": [
       "Field identity and unimplemented character properties are outside this XML text boundary."
@@ -86,6 +88,10 @@
         {
           "path": "apps/office/src/sc/source/filter/xml/ods-sheet-protection.test.ts",
           "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sc/source/filter/xml/ods-outline.test.ts",
+          "marker": "reopens print titles around adjacent groups"
         }
       ],
       "upstream": [
@@ -104,6 +110,10 @@
         {
           "path": "vendor/libreoffice-reference/sc/source/filter/xml/xmlexprt.cxx",
           "marker": "ScXMLExport::WriteCalculationSettings"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/source/filter/xml/xmlexprt.cxx",
+          "marker": "ScXMLExport::ExportColumns"
         }
       ]
     }

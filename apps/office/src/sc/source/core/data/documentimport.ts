@@ -510,5 +510,6 @@ export class ScDocumentImport {
       const count = table["aCol"].length;
       for (let col = 0; col < count; col++) this.initColumn(table["aCol"][col] as ScColumn);
     }
+    for (const table of this.getDoc()["maTabs"]) table?.finalizeOutlineImport();
   }
 }

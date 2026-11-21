@@ -1,6 +1,7 @@
 /** @fileoverview Native Calc row/repeat cursor for scalar XML cells. */
 import { ScXMLImportContext } from "./importcontext";
 import { SvXMLImportContext, type FastAttributeList } from "../../../../xmloff/source/core/xmlimp";
+import { ScRange } from "../../../inc/address";
 import { XMLToken } from "../../../../xmloff/source/core/xmltoken";
 import type { ScXMLTableContext } from "./xmltabi";
 import { ScXMLTableRowCellContext } from "./xmlcelli";
@@ -54,5 +55,68 @@ export class ScXMLTableRowContext extends ScXMLImportContext {
   /** Advances a complete repeated row span without copying its contents to a second model. @returns Nothing. */
   override endFastElement(): void {
     this.table.row = this.start + this.repeat;
+  }
+}
+
+/** Dispatches a native row record or wrapper. @param table - Sheet context. @param element - ODF child token. @param attributes - Child attributes. @returns Axis context or null. */
+export function createTableRowContext(
+  table: ScXMLTableContext,
+  element: XMLToken,
+  attributes: FastAttributeList,
+): SvXMLImportContext | null {
+  switch (element) {
+    case XMLToken.TABLE_TABLE_ROW:
+      return new ScXMLTableRowContext(table, attributes);
+    case XMLToken.TABLE_TABLE_ROWS:
+    case XMLToken.TABLE_TABLE_HEADER_ROWS:
+    case XMLToken.TABLE_TABLE_ROW_GROUP:
+      return new ScXMLTableRowsContext(table, attributes, element);
+    default:
+      return null;
+  }
+}
+
+/** A native row wrapper retains its initial position and commits its interval after its children. */
+class ScXMLTableRowsContext extends ScXMLImportContext {
+  private readonly start: number;
+  private readonly hidden: boolean;
+
+  /** Reads the original row group display default and cursor. @param table - Sheet context. @param attributes - ODF wrapper attributes. @param kind - Row wrapper token. @returns Context. */
+  constructor(
+    private readonly table: ScXMLTableContext,
+    attributes: FastAttributeList,
+    private readonly kind: XMLToken,
+  ) {
+    super(table.owner);
+    this.start = table.row;
+    const display = attributes.get(XMLToken.TABLE_DISPLAY);
+    this.hidden = display !== null && display !== "true";
+  }
+
+  /** Dispatches children on this axis only. @param element - ODF child token. @param attributes - Child attributes. @returns Axis context or an inert context. */
+  override createFastChildContext(
+    element: XMLToken,
+    attributes: FastAttributeList,
+  ): SvXMLImportContext {
+    return createTableRowContext(this.table, element, attributes) ?? new SvXMLImportContext();
+  }
+
+  /** Commits a title or outline interval after the contained row records. @param element - Closing token. @returns Nothing. */
+  override endFastElement(element: XMLToken): void {
+    if (element !== this.kind) return;
+    const document = this.table.owner.GetDocument();
+    const end = Math.min(Math.max(0, this.table.row - 1), document.MaxRow());
+    if (end < this.start) return;
+    const sheet = document.FetchTable(this.table.tab);
+    if (!sheet) return;
+    if (this.kind === XMLToken.TABLE_TABLE_ROW_GROUP) {
+      sheet.StartOutlineTable().GetRowArray().Insert(this.start, end, this.hidden);
+    } else if (this.kind === XMLToken.TABLE_TABLE_HEADER_ROWS) {
+      const previous = sheet.GetRepeatRowRange();
+      const tab = previous ? this.table.tab : 0;
+      sheet.SetRepeatRowRange(
+        new ScRange(0, previous?.aStart.Row() ?? this.start, tab, 0, end, tab),
+      );
+    }
   }
 }

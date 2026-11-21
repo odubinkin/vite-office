@@ -91,6 +91,8 @@ export class ScTable {
   SetProtection = table5.SetProtection;
   private pOutlineTable: ScOutlineTable | undefined;
   GetOutlineTable = table1.GetOutlineTable;
+  finalizeOutlineImport = table7.finalizeOutlineImport;
+  GetLastChangedColFlagsWidth = table2.GetLastChangedColFlagsWidth;
   StartOutlineTable = table1.StartOutlineTable;
   SetOutlineTable = table1.SetOutlineTable;
   /** Original pagination-cache bit,visible to native out-of-class friend definitions. */

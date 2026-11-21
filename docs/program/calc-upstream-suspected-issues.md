@@ -7464,3 +7464,36 @@ therefore become visible. Calc preserves the span and keeps filtered rows
 hidden.
 
 - [Original marked outline expansion](../../vendor/libreoffice-reference/sc/source/ui/docshell/olinefun.cxx)
+
+### CALC-784 — Adjacent outline groups can emit an empty print-title wrapper
+
+When a print title continues across two adjacent groups on the same axis,
+the exporter closes the first group and immediately reopens the title.
+It closes that title again before opening the next group. The two calls
+emit an empty header wrapper at the common boundary. That wrapper leaves
+the existing print title unchanged on import. Calc preserves this ordering
+for both axes.
+
+- [Original group and header export](../../vendor/libreoffice-reference/sc/source/filter/xml/xmlexprt.cxx)
+- [Original column header import](../../vendor/libreoffice-reference/sc/source/filter/xml/xmlcoli.cxx)
+- [Original row header import](../../vendor/libreoffice-reference/sc/source/filter/xml/xmlrowi.cxx)
+
+### CALC-785 — ODS column wrappers can omit the last sheet column
+
+`GetCurrentColCount` caps the next column position at `MaxCol`. The group
+and title contexts subtract one after obtaining that position, which limits
+their final inclusive interval to `MaxCol - 1`. Individual column records
+can still apply geometry to `MaxCol`. Calc preserves both results.
+
+- [Original cursor accessor](../../vendor/libreoffice-reference/sc/source/filter/xml/xmlsubti.cxx)
+- [Original column wrapper import](../../vendor/libreoffice-reference/sc/source/filter/xml/xmlcoli.cxx)
+
+### CALC-786 — An empty leading ODS row wrapper can include the first row
+
+Before the first row, the position used when opening a wrapper is `-1`.
+The context adds one to obtain a start at zero. The closing accessor
+returns zero for the same cursor position, so an empty leading title or
+group can commit a one-row interval. Calc preserves both cursor readings.
+
+- [Original row cursor accessor](../../vendor/libreoffice-reference/sc/source/filter/xml/xmlsubti.hxx)
+- [Original row wrapper import](../../vendor/libreoffice-reference/sc/source/filter/xml/xmlrowi.cxx)

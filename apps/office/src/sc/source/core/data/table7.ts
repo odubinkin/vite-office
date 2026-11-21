@@ -7,6 +7,20 @@ import type { ColumnSpanSet } from "../../../inc/columnspanset";
 import type { ScTable } from "../../../inc/table";
 import { CRFlags } from "../../../inc/global";
 import type { ScColumn } from "../../../inc/column";
+
+/** Reconciles imported row outlines with the actual hidden row runs. @param this - Native sheet. @returns Nothing. */
+export function finalizeOutlineImport(this: ScTable): void {
+  if (!this["pRowFlags"]) return;
+  this.GetOutlineTable()
+    ?.GetRowArray()
+    .finalizeImport(
+      /** Resolves the last hidden row or the source missing-run sentinel. @param row - Group start. @returns Hidden end. */
+      (row) => {
+        const end: [number] = [0];
+        return this.RowHidden(row, undefined, end) ? end[0] : 0x7fffffff;
+      },
+    );
+}
 /** Original single-cell group teardown does not allocate a missing column. @param this - Sheet. @param context - End context. @param col - Column. @param row - Row. @param groups - Optional source positions. @returns Nothing. */
 export function EndListeningIntersectedGroup(
   this: ScTable,

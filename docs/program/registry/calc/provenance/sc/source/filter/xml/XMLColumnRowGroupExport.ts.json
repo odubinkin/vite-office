@@ -15,7 +15,8 @@
     ],
     "preservedResponsibilities": [
       "Native ODF group starts and ends divide the repeated row and column records, preserving nesting and visibility.",
-      "Repeating header wrappers split at native outline boundaries and retain their full interval on import."
+      "Repeating header wrappers split at native outline boundaries and retain their full interval on import.",
+      "Group closures resume the active print title before processing the next opening. Adjacent groups can therefore write an empty intervening title wrapper as described in CALC-784."
     ],
     "omittedResponsibilities": [
       "Unconsumed outline editing commands and full host integration remain outside this filter checkpoint."
@@ -33,6 +34,10 @@
         {
           "path": "apps/office/src/sc/source/filter/excel/print-ranges.test.ts",
           "marker": "keeps quoted print areas"
+        },
+        {
+          "path": "apps/office/src/sc/source/filter/xml/ods-outline.test.ts",
+          "marker": "reopens print titles around adjacent groups"
         }
       ],
       "upstream": [

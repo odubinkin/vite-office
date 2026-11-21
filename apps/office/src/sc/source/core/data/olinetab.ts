@@ -166,7 +166,8 @@ export class ScOutlineArray {
     for (let level = 0; level < this.GetDepth(); ++level)
       for (const entry of this.GetEntries(level)) {
         if (!entry.hidden) continue;
-        entry.hidden = entry.end <= lastHidden(entry.start);
+        const end = lastHidden(entry.start);
+        entry.hidden = entry.end <= end && end < 0x7fffffff;
         this.SetVisibleBelow(level, entry, !entry.hidden, !entry.hidden);
       }
   }

@@ -182,10 +182,11 @@ export class ScXMLExport {
       : "";
     return `<?xml version="1.0" encoding="UTF-8"?><office:document-styles xmlns:office="${ODF_NAMESPACES.office}" xmlns:number="${ODF_NAMESPACES.number}" xmlns:text="${ODF_NAMESPACES.text}" xmlns:style="${ODF_NAMESPACES.style}" xmlns:fo="${ODF_NAMESPACES.fo}" xmlns:css3t="${ODF_NAMESPACES.css3t}" xmlns:svg="${ODF_NAMESPACES.svg}" xmlns:loext="${ODF_NAMESPACES.loext}" xmlns:xlink="${ODF_NAMESPACES.xlink}" office:version="1.3">${fontPool.exportXML()}${styles}${pageStyles}</office:document-styles>`;
   }
-  /** Collects equal effective cell-style ranges with the minimum native row-repeat boundary, as WriteRowContent consumes ScRowFormatRanges. @param table - Actual sheet. @param row - First row in the format run. @param defaults - Selected column styles. @returns Horizontal styles and their common row end. */
+  /** Collects equal effective cell-style ranges with the minimum native row-repeat boundary, as WriteRowContent consumes ScRowFormatRanges. @param table - Actual sheet. @param row - First row in the format run. @param endColumn - Inclusive export column bound. @param defaults - Selected column styles. @returns Horizontal styles and their common row end. */
   private collectColumnStyles(
     table: ScTable,
     row: number,
+    endColumn: number,
     defaults: ScMyDefaultStyles,
   ): {
     endRow: number;
@@ -193,12 +194,8 @@ export class ScXMLExport {
   } {
     const first: [number] = [0],
       last: [number] = [0];
-    const defaultPattern = table
-      .GetDefaultColumnData()
-      .GetPatternRange(first, last, row) as ScPatternAttr;
-    let endRow = last[0];
+    let endRow = this.document.MaxRow();
     const allocated = table.GetAllocatedColumnsCount();
-    const endColumn = this.styleName(defaultPattern) ? MAXCOL : Math.max(0, allocated - 1);
     const ranges: RowCellRange[] = [];
     for (let column = 0; column <= endColumn;) {
       const pattern = table
@@ -325,14 +322,20 @@ export class ScXMLExport {
         last: [number] = [0],
         allocated = table.GetAllocatedColumnsCount();
       let maxRow = Math.max(0, rowGroups.GetLast(), rowBreaks.last);
+      let maxColumn = Math.max(
+        table.GetLastChangedColFlagsWidth(),
+        columnGroups.GetLast(),
+        columnBreaks.last,
+      );
       const bounds = new ScHorizontalCellIterator(this.document, tab, 0, 0, MAXCOL, MAXROW),
         bc: [number] = [0],
         br: [number] = [0];
       while (bounds.GetNext(bc, br)) {
         if (this.options.isCancelled?.()) throw new Error("ODS operation was cancelled");
+        maxColumn = Math.max(maxColumn, bc[0]);
         maxRow = Math.max(maxRow, br[0]);
       }
-      for (let col = 0; col <= allocated; col++)
+      for (let col = 0; col <= Math.min(allocated, this.document.MaxCol()); col++)
         for (let row = 0; row <= MAXROW;) {
           const pattern = table
             .GetColumnData(col)
@@ -341,8 +344,10 @@ export class ScXMLExport {
             this.styleName(pattern) ||
             (pattern.GetItem(ATTR_MERGE) as ScMergeAttr).IsMerged() ||
             (pattern.GetItem(ATTR_MERGE_FLAG) as ScMergeFlagAttr).IsOverlapped()
-          )
+          ) {
+            maxColumn = Math.max(maxColumn, col === allocated ? this.document.MaxCol() : col);
             maxRow = Math.max(maxRow, last[0]);
+          }
           row = last[0] + 1;
         }
       for (let r = 0; r <= MAXROW;) {
@@ -371,15 +376,12 @@ export class ScXMLExport {
           pattern,
         ) => this.styleName(pattern),
       );
-      for (let column = 0; column <= this.document.MaxCol();) {
+      for (let column = 0; column <= maxColumn;) {
         if (this.options.isCancelled?.()) throw new Error("ODS operation was cancelled");
         const width = table.GetColWidthRange(column),
           end: [number] = [0],
           hidden = table.ColHidden(column, undefined, end),
-          span = columnBreaks.ClipRange(
-            column,
-            Math.min(this.document.MaxCol(), width.mnRow2, end[0]),
-          ),
+          span = columnBreaks.ClipRange(column, Math.min(maxColumn, width.mnRow2, end[0])),
           stop = defaults.ClipRange(column, columnGroups.ClipRange(column, span.last)),
           defaultStyle = defaults.Get(column) || defaultName,
           count = stop - column + 1,
@@ -428,7 +430,7 @@ export class ScXMLExport {
           this.rowStyles.set(key, rowStyle);
         }
         if (columnStyles === undefined || currentRow > columnStyles.endRow)
-          columnStyles = this.collectColumnStyles(table, currentRow, defaults);
+          columnStyles = this.collectColumnStyles(table, currentRow, maxColumn, defaults);
         endRow = Math.min(endRow, columnStyles.endRow);
         if (cell) endRow = Math.min(endRow, row[0] === currentRow ? currentRow : row[0] - 1);
         endRow = rowGroups.ClipRange(currentRow, endRow);

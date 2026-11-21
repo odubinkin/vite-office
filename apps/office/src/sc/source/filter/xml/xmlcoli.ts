@@ -1,6 +1,7 @@
 /** @fileoverview Native ScXMLTableColContext column geometry, visibility and default cell style. */
 import { ScXMLImportContext } from "./importcontext";
-import type { FastAttributeList } from "../../../../xmloff/source/core/xmlimp";
+import { SvXMLImportContext, type FastAttributeList } from "../../../../xmloff/source/core/xmlimp";
+import { ScRange } from "../../../inc/address";
 import { XMLToken } from "../../../../xmloff/source/core/xmltoken";
 import { repeatCount } from "./xmlrowi";
 import type { ScXMLTableContext } from "./xmltabi";
@@ -34,5 +35,68 @@ export class ScXMLTableColContext extends ScXMLImportContext {
     doc.SetColHidden(first, last, this.table.tab, this.visibility !== "visible");
     this.table.styles.AddColumnStyle(this.cellStyle, Math.max(0, last - this.table.column + 1));
     this.table.column += this.count;
+  }
+}
+
+/** Dispatches a native column record or wrapper. @param table - Sheet context. @param element - ODF child token. @param attributes - Child attributes. @returns Axis context or null. */
+export function createTableColContext(
+  table: ScXMLTableContext,
+  element: XMLToken,
+  attributes: FastAttributeList,
+): SvXMLImportContext | null {
+  switch (element) {
+    case XMLToken.TABLE_TABLE_COLUMN:
+      return new ScXMLTableColContext(table, attributes);
+    case XMLToken.TABLE_TABLE_COLUMNS:
+    case XMLToken.TABLE_TABLE_HEADER_COLUMNS:
+    case XMLToken.TABLE_TABLE_COLUMN_GROUP:
+      return new ScXMLTableColsContext(table, attributes, element);
+    default:
+      return null;
+  }
+}
+
+/** A native column wrapper retains its initial position and commits its interval after its children. */
+class ScXMLTableColsContext extends ScXMLImportContext {
+  private readonly start: number;
+  private readonly hidden: boolean;
+
+  /** Reads the original column group display default and cursor. @param table - Sheet context. @param attributes - ODF wrapper attributes. @param kind - Column wrapper token. @returns Context. */
+  constructor(
+    private readonly table: ScXMLTableContext,
+    attributes: FastAttributeList,
+    private readonly kind: XMLToken,
+  ) {
+    super(table.owner);
+    this.start = Math.min(table.column, table.owner.GetDocument().MaxCol());
+    const display = attributes.get(XMLToken.TABLE_DISPLAY);
+    this.hidden = display === "false";
+  }
+
+  /** Dispatches children on this axis only. @param element - ODF child token. @param attributes - Child attributes. @returns Axis context or an inert context. */
+  override createFastChildContext(
+    element: XMLToken,
+    attributes: FastAttributeList,
+  ): SvXMLImportContext {
+    return createTableColContext(this.table, element, attributes) ?? new SvXMLImportContext();
+  }
+
+  /** Commits a title or outline interval after the contained column records. @param element - Closing token. @returns Nothing. */
+  override endFastElement(element: XMLToken): void {
+    if (element !== this.kind) return;
+    const document = this.table.owner.GetDocument();
+    const end = Math.min(this.table.column, document.MaxCol()) - 1;
+    if (end < this.start) return;
+    const sheet = document.FetchTable(this.table.tab);
+    if (!sheet) return;
+    if (this.kind === XMLToken.TABLE_TABLE_COLUMN_GROUP) {
+      sheet.StartOutlineTable().GetColArray().Insert(this.start, end, this.hidden);
+    } else if (this.kind === XMLToken.TABLE_TABLE_HEADER_COLUMNS) {
+      const previous = sheet.GetRepeatColRange();
+      const tab = previous ? this.table.tab : 0;
+      sheet.SetRepeatColRange(
+        new ScRange(previous?.aStart.Col() ?? this.start, 0, tab, end, 0, tab),
+      );
+    }
   }
 }
