@@ -7506,3 +7506,14 @@ hidden.
   previous non-regex complex key.
 - The shared search owner preserves the pattern selection and skips the regex
   second pass. See WRITER-710 for the original source path and behavior.
+
+### CALC-788 — EditEngine Replace All can revisit a zero-width paragraph-end match
+
+- In `editeng/source/editeng/impedit4.cxx`, the Replace All loop starts its
+  next search at the position returned by insertion. `ImpSearch` accepts a
+  successful zero-width match from the shared text search.
+- For a paragraph-end assertion and nonempty replacement, the new insertion
+  position can be the new paragraph end, allowing the same assertion to match
+  again. An empty replacement can leave the position unchanged. The port
+  retains the source loop. This finding follows from the source branches and
+  has not been exercised as an unbounded native operation.

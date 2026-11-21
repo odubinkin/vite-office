@@ -1,0 +1,50 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "status": "mapped",
+    "localPath": "apps/office/src/editeng/source/editeng/impedit4.search.ts",
+    "upstreamPath": "editeng/source/editeng/impedit4.cxx",
+    "localSymbols": [
+      "ImpSearch",
+      "Search",
+      "StartSearchAndReplace"
+    ],
+    "upstreamSymbols": [
+      "ImpEditEngine::ImpSearch",
+      "ImpEditEngine::Search",
+      "ImpEditEngine::StartSearchAndReplace"
+    ],
+    "preservedResponsibilities": [
+      "Searches the actual EditDoc paragraphs through the original TextSearch wrapper, applies selection and directional bounds, and maps expanded field matches back to model positions.",
+      "Preserves Find All as a single selection, native cursor reveal order, and forward grouped Replace All through the original editor insertion and undo entry points."
+    ],
+    "omittedResponsibilities": [
+      "Interactive window, Outliner view, and Writer comment integration remain outside this EditEngine module."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/editeng/source/editeng/impedit4.search.ts",
+          "marker": "StartSearchAndReplace"
+        },
+        {
+          "path": "apps/office/src/editeng/source/editeng/native-engine-search.test.ts",
+          "marker": "groups Replace All from the start"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/editeng/source/editeng/impedit4.cxx",
+          "marker": "ImpEditEngine::ImpSearch"
+        }
+      ]
+    },
+    "filenameDivergence": {
+      "localPath": "apps/office/src/editeng/source/editeng/impedit4.search.ts",
+      "stackNecessity": "responsibility-split",
+      "rationale": "The search responsibilities are extracted from the same upstream source file and use the original ImpEditEngine receiver."
+    }
+  }
+}

@@ -5719,3 +5719,14 @@ applies its authored properties without that collection change.
   `sw/qa/extras/uiwriter/uiwriter7.cxx` expects the paragraph-end find-all
   count to be one less than the paragraph count and explicitly calls out the
   omitted last empty paragraph. Writer preserves this document boundary.
+
+### WRITER-714 — EditEngine Replace All can revisit a zero-width paragraph-end match
+
+- In `editeng/source/editeng/impedit4.cxx`, the Replace All loop starts its
+  next search at the position returned by insertion. `ImpSearch` accepts a
+  successful zero-width match from the shared text search.
+- For a paragraph-end assertion and nonempty replacement, the new insertion
+  position can be the new paragraph end, allowing the same assertion to match
+  again. An empty replacement can leave the position unchanged. The port
+  retains the source loop. This finding follows from the source branches and
+  has not been exercised as an unbounded native operation.

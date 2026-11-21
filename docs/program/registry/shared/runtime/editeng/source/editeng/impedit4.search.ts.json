@@ -1,0 +1,39 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/editeng/source/editeng/impedit4.search.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "shared",
+    "subsystem": "text-search",
+    "capabilityIds": [
+      "CAP-0111"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/editeng/source/editeng/impedit4.search.ts#ImpSearch",
+        "apps/office/src/editeng/source/editeng/native-engine-search.test.ts",
+        "vendor/libreoffice-reference/editeng/source/editeng/impedit4.cxx"
+      ],
+      "justification": "Searches the actual EditDoc paragraphs through the original TextSearch wrapper, applies selection and directional bounds, and maps expanded field matches back to model positions. Preserves Find All as a single selection, native cursor reveal order, and forward grouped Replace All through the original editor insertion and undo entry points.",
+      "knownViolations": [],
+      "localSymbols": [
+        "ImpSearch",
+        "Search",
+        "StartSearchAndReplace"
+      ],
+      "sourceResponsibility": "aligned",
+      "upstreamFile": "editeng/source/editeng/impedit4.cxx",
+      "upstreamSymbols": [
+        "ImpEditEngine::ImpSearch",
+        "ImpEditEngine::Search",
+        "ImpEditEngine::StartSearchAndReplace"
+      ]
+    }
+  }
+}

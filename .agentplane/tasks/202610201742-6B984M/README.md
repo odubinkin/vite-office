@@ -4,7 +4,7 @@ title: "Implement Writer search and replace core and browser UI"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 74
+revision: 75
 origin:
   system: "manual"
 depends_on:
@@ -226,6 +226,9 @@ comments:
   -
     author: "CODER"
     body: "Verified checkpoint: regex ReplaceRange now interprets the original unescaped paragraph token, splits inserted text into actual paragraphs, and replaces selected adjacent paragraph breaks using the original join survivor. SwUndoReplace records both end coordinates, reverses inserted splits, reconstructs removed boundaries and restores the first undo formatting history. WRITER-010 documents and preserves the consumed formatting on a second undo. InsertItemSet applies represented formatting across the inserted paragraph range. Model and mounted dialog regressions cover grouped Replace All in both splitting and joining cases. Passed 128 targeted Writer cases in seven suites, production build, two Writer resource tests, dependencies, source tree and provenance, JSDoc, file size, scoped lint and formatting, whitespace, doctor and routing. Doctor retains the existing hook warning. Annotation fields, anchored note traversal and sidebar search are still pending. This checkpoint does not close the task or trigger a full regression."
+  -
+    author: "CODER"
+    body: "Verified checkpoint: ported the shared EditEngine search path required by the upstream annotation OutlinerView. It searches actual EditDoc paragraphs through TextSearch, maps expanded positions onto native selections, preserves single-selection Find All and backward continuation, and groups forward Replace All through the editor undo API. The platform regex compiler can be supplied through the existing matcher contract. WRITER-714 and CALC-788 record the source-derived zero-width replacement-loop behavior. Passed 54 targeted shared scenarios in five files, production build, both Writer resource cases, module boundaries, source tree, provenance, JSDoc, file size, focused lint and formatting, and policy routing. Doctor retains the existing hook warning. The Writer annotation field, document anchor and sidebar integration remain pending. No full regression or task closure."
 events:
   -
     type: "status"
@@ -544,8 +547,13 @@ events:
     at: "2026-11-21T11:39:00.713Z"
     author: "CODER"
     body: "Verified checkpoint: regex ReplaceRange now interprets the original unescaped paragraph token, splits inserted text into actual paragraphs, and replaces selected adjacent paragraph breaks using the original join survivor. SwUndoReplace records both end coordinates, reverses inserted splits, reconstructs removed boundaries and restores the first undo formatting history. WRITER-010 documents and preserves the consumed formatting on a second undo. InsertItemSet applies represented formatting across the inserted paragraph range. Model and mounted dialog regressions cover grouped Replace All in both splitting and joining cases. Passed 128 targeted Writer cases in seven suites, production build, two Writer resource tests, dependencies, source tree and provenance, JSDoc, file size, scoped lint and formatting, whitespace, doctor and routing. Doctor retains the existing hook warning. Annotation fields, anchored note traversal and sidebar search are still pending. This checkpoint does not close the task or trigger a full regression."
+  -
+    type: "comment"
+    at: "2026-11-21T11:47:19.176Z"
+    author: "CODER"
+    body: "Verified checkpoint: ported the shared EditEngine search path required by the upstream annotation OutlinerView. It searches actual EditDoc paragraphs through TextSearch, maps expanded positions onto native selections, preserves single-selection Find All and backward continuation, and groups forward Replace All through the editor undo API. The platform regex compiler can be supplied through the existing matcher contract. WRITER-714 and CALC-788 record the source-derived zero-width replacement-loop behavior. Passed 54 targeted shared scenarios in five files, production build, both Writer resource cases, module boundaries, source tree, provenance, JSDoc, file size, focused lint and formatting, and policy routing. Doctor retains the existing hook warning. The Writer annotation field, document anchor and sidebar integration remain pending. No full regression or task closure."
 doc_version: 3
-doc_updated_at: "2026-11-21T11:39:00.713Z"
+doc_updated_at: "2026-11-21T11:47:19.176Z"
 doc_updated_by: "CODER"
 description: "Implement the approved coherent Writer search-and-replace feature from pinned LibreOffice sources: real shared search engine and options, native paragraph/cursor traversal and replacement/history contracts, view-owned search state and dispatch, Find toolbar and Find and Replace dialog with generated upstream command placement and shortcuts. Preserve source semantics and explicit unsupported boundaries; never substitute DOM text search or browser RegExp for ICU contracts. Work only on writer in vite-office-writer; local upstream reading approved, no network or merges. Keep active until approved scope is verified."
 sections:

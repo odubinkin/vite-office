@@ -49,6 +49,9 @@ import type { SvxScriptHintItem } from "../../inc/scripthintitem";
 import type { TextRotation } from "../../inc/editobj";
 import type { EditTextObject } from "./editobj";
 import { CreateTextObject as CreateTextObjectBody } from "./impedit4.textobject";
+import { StartSearchAndReplace, type SearchEditView } from "./impedit4.search";
+import type { SvxSearchItem } from "../../../svl/source/items/srchitem";
+import type { RegexMatcherFactory } from "../../../unotools/inc/textsearch";
 import { SfxItemSet } from "../../../svl/source/items/itemset";
 import type { SfxItemPool } from "../../../svl/source/items/itempool";
 import type { SfxPoolItem } from "../../../svl/source/items/poolitem";
@@ -228,7 +231,7 @@ export abstract class ImpEditEngine extends SfxListener implements StyleSheetUse
     }
   }
   /** Original character language prefers the matching hard attribute over the paragraph item. @param cursor - Actual paragraph position. @returns Owned locale. */
-  private GetLocale(cursor: EditPaM): Locale {
+  public GetLocale(cursor: EditPaM): Locale {
     const node = cursor.GetNode() as ContentNode;
     const script = FromI18NToSvtScriptType(this.GetI18NScriptType(cursor));
     const which = GetScriptItemId(EE_CHAR_LANGUAGE, script);
@@ -525,6 +528,15 @@ export abstract class ImpEditEngine extends SfxListener implements StyleSheetUse
   GetActiveView(): EditView | null {
     return this.mpActiveView;
   }
+  /** Runs native search and replacement on the active edit view. @param view - Editor view. @param item - Request. @param createRegex - Optional regex compiler. @returns Found or replaced count. */
+  StartSearchAndReplace(
+    view: SearchEditView,
+    item: SvxSearchItem,
+    createRegex?: RegexMatcherFactory,
+  ): number {
+    return StartSearchAndReplace(this, view, item, createRegex);
+  }
+
   /** Original plain-text public insertion delegation. @param selection - Actual source selection. @param text - Borrowed input. @returns Actual resulting position. */
   InsertText(selection: EditSelection, text: OUStringConstReference): EditPaM {
     return this.ImpInsertText(selection, text);
