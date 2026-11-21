@@ -7488,3 +7488,12 @@ hidden.
   other properties.
 - The shared item preserves the mutation order. The Writer dispatcher
   admits an aggregate argument only when conversion reports success.
+
+### CALC-786 — An assertion can produce the empty region-end match described as a dollar anchor
+
+- The shared `i18npool/source/search/textsearch.cxx` regular-expression
+  backend describes a retained zero-length region-end match as a dollar
+  anchor. Its conditions check only the match offsets.
+- With transparent bounds, `(?=y)` matches at offset 1 in `xy` over the
+  region from 0 to 1. The native ICU binding retains that empty match in
+  both directions. See WRITER-709 for the corresponding Writer finding.

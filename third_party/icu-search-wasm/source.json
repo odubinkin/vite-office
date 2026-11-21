@@ -1,0 +1,10 @@
+{
+  "icuVersion": "78.3",
+  "icuDataSha256": "d5cf2a40dccbe471781ec7af85693bff542ff12f0b670c9630c4e72d60714b8b",
+  "libreofficeBaseline": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "referencePath": "i18npool/source/search/textsearch.cxx",
+  "referenceSha256": "378aaf3e310749b8b639f9677c7d7d075f7790d7dc06a7ce14aea28069214408",
+  "referenceSymbols": ["RESrchPrepare", "lcl_findRegex", "RESrchFrwrd", "RESrchBkwrd"],
+  "emscriptenVersion": "4.0.19",
+  "abi": ["lo_regex_create", "lo_regex_destroy", "lo_regex_search", "lo_regex_offsets"]
+}

@@ -4,7 +4,7 @@ title: "Implement Writer search and replace core and browser UI"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 66
+revision: 67
 origin:
   system: "manual"
 depends_on:
@@ -202,6 +202,9 @@ comments:
   -
     author: "CODER"
     body: "Verified checkpoint: the Writer enclosure picker now binds the native SfxCharmapContainer recent and favorite lists. The twelve Office.Common default favorites, their Liberation Serif font, the sixteen-row limit, append order for favorites and pair-aware recency order are retained. Selecting a saved character restores its font and code. Remove and Clear All act on their own list. Browser application preferences commit each native character/font property pair together. WRITER-708 records the frame-less picker distinction between explicit OK and Return on the character grid. Targeted Writer suites passed 36 cases across four files, plus two Writer resource cases. Production build, dependency/source-tree/provenance/JSDoc/file-size checks, scoped lint and formatting, git diff check, doctor and routing passed. DOCX/ODT and document save/open/recovery policy are unaffected. Native browser regex and note search remain pending, so the parent task stays open."
+  -
+    author: "CODER"
+    body: "Verified checkpoint: a portable native ICU 78.3 regex binding now owns Unicode word and case flags, legacy chevron conversion, the original timeout, transparent non-anchoring regions, directional selection, and signed UTF-16 capture pairs. The host probe validates both source pins, compiles the original LibreOffice regex bodies against the same real ICU libraries, and agrees in 32,364 differential cases, including the upstream regex QA boundaries. Header and C++ implementation compile with warnings as errors. WRITER-709 and CALC-786 record that a zero-width lookahead can meet the native offset-based end condition described as a dollar anchor. Related Vitest verification passed 73 shared and 47 Writer cases. Dependency, source-tree, provenance, JSDoc, file-size, scoped lint and formatting, doctor, routing and diff hygiene passed. No browser binary or browser command was enabled. Building for WebAssembly still requires the approved pinned Emscripten toolchain, then the existing TextSearch and Writer cursor consumers need integration. Notes search still requires the document annotation and sidebar owners. The parent remains open."
 events:
   -
     type: "status"
@@ -480,8 +483,13 @@ events:
     at: "2026-11-21T10:40:19.027Z"
     author: "CODER"
     body: "Verified checkpoint: the Writer enclosure picker now binds the native SfxCharmapContainer recent and favorite lists. The twelve Office.Common default favorites, their Liberation Serif font, the sixteen-row limit, append order for favorites and pair-aware recency order are retained. Selecting a saved character restores its font and code. Remove and Clear All act on their own list. Browser application preferences commit each native character/font property pair together. WRITER-708 records the frame-less picker distinction between explicit OK and Return on the character grid. Targeted Writer suites passed 36 cases across four files, plus two Writer resource cases. Production build, dependency/source-tree/provenance/JSDoc/file-size checks, scoped lint and formatting, git diff check, doctor and routing passed. DOCX/ODT and document save/open/recovery policy are unaffected. Native browser regex and note search remain pending, so the parent task stays open."
+  -
+    type: "comment"
+    at: "2026-11-21T10:45:21.043Z"
+    author: "CODER"
+    body: "Verified checkpoint: a portable native ICU 78.3 regex binding now owns Unicode word and case flags, legacy chevron conversion, the original timeout, transparent non-anchoring regions, directional selection, and signed UTF-16 capture pairs. The host probe validates both source pins, compiles the original LibreOffice regex bodies against the same real ICU libraries, and agrees in 32,364 differential cases, including the upstream regex QA boundaries. Header and C++ implementation compile with warnings as errors. WRITER-709 and CALC-786 record that a zero-width lookahead can meet the native offset-based end condition described as a dollar anchor. Related Vitest verification passed 73 shared and 47 Writer cases. Dependency, source-tree, provenance, JSDoc, file-size, scoped lint and formatting, doctor, routing and diff hygiene passed. No browser binary or browser command was enabled. Building for WebAssembly still requires the approved pinned Emscripten toolchain, then the existing TextSearch and Writer cursor consumers need integration. Notes search still requires the document annotation and sidebar owners. The parent remains open."
 doc_version: 3
-doc_updated_at: "2026-11-21T10:40:19.027Z"
+doc_updated_at: "2026-11-21T10:45:21.043Z"
 doc_updated_by: "CODER"
 description: "Implement the approved coherent Writer search-and-replace feature from pinned LibreOffice sources: real shared search engine and options, native paragraph/cursor traversal and replacement/history contracts, view-owned search state and dispatch, Find toolbar and Find and Replace dialog with generated upstream command placement and shortcuts. Preserve source semantics and explicit unsupported boundaries; never substitute DOM text search or browser RegExp for ICU contracts. Work only on writer in vite-office-writer; local upstream reading approved, no network or merges. Keep active until approved scope is verified."
 sections:

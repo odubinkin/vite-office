@@ -5663,3 +5663,12 @@ applies its authored properties without that collection change.
   bypasses that recent-list update.
 - Writer preserves both acceptance paths and the resulting difference in
   recent characters.
+
+### WRITER-709 — An assertion can produce the empty region-end match described as a dollar anchor
+
+- Upstream `i18npool/source/search/textsearch.cxx` describes the retained
+  zero-length match at the end of a search region as a dollar anchor.
+  `RESrchFrwrd` and `RESrchBkwrd` inspect offsets rather than pattern syntax.
+- With transparent bounds, `(?=y)` matches at offset 1 in `xy` over the
+  region from 0 to 1. The native ICU binding retains that empty match in
+  both directions.
