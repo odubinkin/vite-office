@@ -26,7 +26,8 @@
       "S3HW1E applies parsed drawing fill properties through real typed Writer UNO values, preserving native enum/int32/int16 map contracts.",
       "Native Writer metadata checkpoint removes the ordinary host-array property-info projection and createPropertySetInfo/-1 handles. Genuine SfxItemPropertySetInfo/WeakImplHelper, lazy property-set strong ownership, actual Reference<XPropertySetInfo>/Sequence<Property> suppliers and consumers, original static provider identities and six admitted map families are implemented. Explicit source types and literal source-derived family flags replace name heuristics. Original dispatch/member identities, RubyBelow/ParaIsConnectBorder names and BorderLine metadata are retained; cursor Para*Border aliases and family-inappropriate advertised rows are removed. Actual Writer/UNO/weak/RTF/ODF/Worker regressions accompany critical source-backed metadata tests. Other map families/TEXT_DEFAULT/SwXTextDefaults, full model/state-array/Stream/service ABI, DOCX-XLSX import/export and mounted UI remain incomplete; no broad parity/default/service promotion.",
       "The shared ODF text-property map binds native CharLocale, CharLocaleAsian and CharLocaleComplex to the four source locale attributes and writes a native Locale Any through the existing Writer import property dispatch.",
-      "Sends the original typed CharComplexColor member through native UNO character style and text cursor properties."
+      "Sends the original typed CharComplexColor member through native UNO character style and text cursor properties.",
+      "Transfers the original signed UNO property into the Writer item-backed style or range."
     ],
     "omittedResponsibilities": [
       "Full Calc font-family/style actions,rich-text UI,named cell-style inheritance and other formatting actions remain pending.",
@@ -67,6 +68,10 @@
         {
           "path": "apps/office/src/svl/source/items/native-property-info.test.ts",
           "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/xmloff/source/text/txtprmap.ts",
+          "marker": "ParaLineNumberStartValue"
         }
       ],
       "upstream": [
@@ -81,6 +86,10 @@
         {
           "path": "vendor/libreoffice-reference/xmloff/source/text/txtprmap.cxx",
           "marker": "XML_SW_TYPE_FILLSTYLE"
+        },
+        {
+          "path": "xmloff/source/text/txtprmap.cxx",
+          "marker": "PROP_ParaLineNumberStartValue"
         }
       ]
     }

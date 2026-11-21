@@ -1,4 +1,5 @@
 /** @fileoverview Verifies Writer shell paragraph dialog and ruler command boundaries. */
+import { SwFormatLineNumber } from "../../../inc/fmtline";
 import { createTabs } from "../../../../../test/tab-item-fixtures";
 import { SvxLineSpaceRule } from "../../../../editeng/inc/svxenum";
 
@@ -43,6 +44,8 @@ describe("Writer paragraph dialog and ruler shell", /** Registers command-bounda
     const secondId = fixtureSplitParagraph(shell, "p-1", 5);
     const first = shell.GetDoc().paragraphs[0] as SwTextNode;
     const second = shell.GetDoc().paragraphs[1] as SwTextNode;
+    first.SetAttr(new SwFormatLineNumber(true, 17));
+    second.SetAttr(new SwFormatLineNumber(true, 64));
     setTestCursor(shell, "p-1", 0);
     expect(
       shell.SetParagraphItem(
@@ -75,9 +78,11 @@ describe("Writer paragraph dialog and ruler shell", /** Registers command-bounda
     for (const paragraph of [first, second]) {
       expect((paragraph.GetAttr(RES_UL_SPACE) as SvxULSpaceItem).GetUpper()).toBe(120);
       expect((paragraph.GetAttr(RES_KEEP) as SfxBoolItem).GetValue()).toBe(true);
-      expect((paragraph.GetAttr(RES_LINENUMBER) as SfxBoolItem).GetValue()).toBe(false);
+      expect((paragraph.GetAttr(RES_LINENUMBER) as SwFormatLineNumber).IsCount()).toBe(false);
     }
     expect((first.GetAttr(RES_PARATR_TABSTOP) as SvxTabStopItem).At(0).GetFill()).toBe("_");
+    expect(first.GetSwAttrSet().GetLineNumber().GetStartValue()).toBe(17);
+    expect(second.GetSwAttrSet().GetLineNumber().GetStartValue()).toBe(64);
     expect((second.GetAttr(RES_PARATR_TABSTOP) as SvxTabStopItem).At(0).GetAdjustment()).toBe(
       SvxTabAdjust.Decimal,
     );

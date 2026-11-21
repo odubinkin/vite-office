@@ -77,7 +77,8 @@
       "Emits the pinned floating-table row relation, coordinate, distance and no-overlap controls.",
       "Emits native document line-number section controls and the paragraph and style count exclusion.",
       "Consumes native paragraph fill and legacy brush properties in the original RTF paragraph output.",
-      "DOCX numbering continuation uses the actual shared AttributeOutputBase with source void output; the existing RTF text-buffer adapter normalizes only the no-output return. Preserve native per-list abstract cache, distinct null override slots, unsigned16 IDs/counter/restart values, nested restart maps, rule/level export equivalence and original source paragraph dispatch before final Word-level clamping. Actual DocxAttributeOutput omits inherited outline numbering and emits numPr through real document/list/style owners. Native GetTextColl is bound to the existing equivalent GetTextFormatColl owner accessor. DOCX destruction now also destroys its actual base temporary tail; null placeholders own no SwNumRule. Source default unsupported override sink retains an explicit assertion diagnostic, not fabricated XML. Complete DOCX numbering-level/part orchestration, full main-text traversal and fixture/filter/mounted UI import/export remain unported or unqualified. Generic result typing and the RTF no-output normalization preserve the established browser formatting buffer, not a new native result contract. Existing RTF tests now initialize the actual already-shipped runtime before stream/locale use."
+      "DOCX numbering continuation uses the actual shared AttributeOutputBase with source void output; the existing RTF text-buffer adapter normalizes only the no-output return. Preserve native per-list abstract cache, distinct null override slots, unsigned16 IDs/counter/restart values, nested restart maps, rule/level export equivalence and original source paragraph dispatch before final Word-level clamping. Actual DocxAttributeOutput omits inherited outline numbering and emits numPr through real document/list/style owners. Native GetTextColl is bound to the existing equivalent GetTextFormatColl owner accessor. DOCX destruction now also destroys its actual base temporary tail; null placeholders own no SwNumRule. Source default unsupported override sink retains an explicit assertion diagnostic, not fabricated XML. Complete DOCX numbering-level/part orchestration, full main-text traversal and fixture/filter/mounted UI import/export remain unported or unqualified. Generic result typing and the RTF no-output normalization preserve the established browser formatting buffer, not a new native result contract. Existing RTF tests now initialize the actual already-shipped runtime before stream/locale use.",
+      "Dispatches the native paragraph item to the existing exclusion writer."
     ],
     "omittedResponsibilities": [
       "Full upstream character, page, section, drawing and field attribute vocabularies remain unverified."
@@ -183,6 +184,10 @@
         {
           "path": "apps/office/src/sw/source/filter/ww8/docxattributeoutput.numbering.test.ts",
           "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/source/filter/ww8/rtfattributeoutput.ts",
+          "marker": "FormatLineNumbering(item as SwFormatLineNumber)"
         }
       ],
       "upstream": [
@@ -245,6 +250,10 @@
         {
           "path": "vendor/libreoffice-reference/sw/source/filter/ww8/rtfattributeoutput.cxx",
           "marker": "RtfAttributeOutput::FormatBackground"
+        },
+        {
+          "path": "sw/source/filter/ww8/rtfattributeoutput.cxx",
+          "marker": "RtfAttributeOutput::FormatLineNumbering"
         }
       ]
     }

@@ -1,5 +1,6 @@
 /** @fileoverview Verifies the browser page dialog, rulers, pagination, and paged workspace chrome. */
 
+import { SwFormatLineNumber } from "../../inc/fmtline";
 import { SwFormatFrameSize, SwFrameSize } from "../../inc/fmtfsize";
 import { cleanup, fireEvent, render, screen, waitFor } from "@testing-library/react";
 import { afterEach, describe, expect, it, vi } from "vitest";
@@ -16,8 +17,6 @@ import { WriterRulers, WriterVerticalRuler } from "./WriterRulers";
 import { WriterWorkspaceChrome } from "./WriterWorkspaceChrome";
 import type { WriterParagraphProjection } from "./writer-view-projection";
 import { createWriterDocument } from "../../source/core/doc/doc";
-import { SfxBoolItem } from "../../../svl/source/items/cenumitm";
-import { RES_LINENUMBER } from "../../inc/hintids";
 import { WriterViewProjection } from "./writer-view-projection";
 import { SwPaM, SwPosition } from "../../source/core/crsr/pam";
 import { createDocument } from "../../../sfx2/source/doc/objsh";
@@ -79,7 +78,7 @@ function layoutEditWindow(paragraphs: readonly WriterParagraphProjection[]): SwE
       if (node === undefined) throw new Error("Writer document has no first paragraph");
       node.SetText(paragraph.text);
       if (paragraph.computedStyle.countLineNumbers === false)
-        node.SetAttr(new SfxBoolItem(RES_LINENUMBER, false));
+        node.SetAttr(new SwFormatLineNumber(false));
     },
   );
   const view = layoutView(document);

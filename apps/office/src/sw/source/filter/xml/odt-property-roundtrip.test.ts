@@ -1,4 +1,5 @@
 /** @fileoverview Verifies upstream-mapped Writer color and paragraph compatibility properties through ODT. */
+import { SwFormatLineNumber } from "../../../inc/fmtline";
 import * as ParaItems from "../../../../editeng/source/items/paraitem.controls";
 import {
   writerTextColorValue,
@@ -761,7 +762,7 @@ describe("Writer ODT mapped pooled properties", /** Groups symmetric property te
     );
     paragraph.SetAttr(createTabs(RES_PARATR_TABSTOP, [new SvxTabStop(720)]));
     paragraph.SetAttr(new SfxBoolItem(RES_KEEP, true));
-    paragraph.SetAttr(new SfxBoolItem(RES_LINENUMBER, false));
+    paragraph.SetAttr(new SwFormatLineNumber(false));
     paragraph.ReplaceRange(
       0,
       0,
@@ -805,7 +806,9 @@ describe("Writer ODT mapped pooled properties", /** Groups symmetric property te
       (reopenedParagraph?.GetAttr(RES_PARATR_TABSTOP) as SvxTabStopItem).At(0).GetTabPos(),
     ).toBe(720);
     expect((reopenedParagraph?.GetAttr(RES_KEEP) as SfxBoolItem).GetValue()).toBe(true);
-    expect((reopenedParagraph?.GetAttr(RES_LINENUMBER) as SfxBoolItem).GetValue()).toBe(false);
+    expect((reopenedParagraph?.GetAttr(RES_LINENUMBER) as SwFormatLineNumber).IsCount()).toBe(
+      false,
+    );
     expect(projectWriterTextRuns(reopenedParagraph)[0]?.attributes).toMatchObject({
       color: "#abcdef",
       highlight: "transparent",
@@ -820,7 +823,7 @@ describe("Writer ODT mapped pooled properties", /** Groups symmetric property te
     const defaultStyle = writer.GetDfltTextFormatColl();
     defaultStyle.SetFormatAttr(createTabs(RES_PARATR_TABSTOP, [new SvxTabStop(360)]));
     defaultStyle.SetFormatAttr(new SfxBoolItem(RES_KEEP, false));
-    defaultStyle.SetFormatAttr(new SfxBoolItem(RES_LINENUMBER, true));
+    defaultStyle.SetFormatAttr(new SwFormatLineNumber(true));
     const bytes = await writeOdtDocument(writer, metadata);
     const styles = await (await DocumentArchive.open(bytes)).readTextEntry("styles.xml");
     expect(styles).toContain('style:use-window-font-color="true"');
@@ -873,18 +876,23 @@ describe("Writer ODT mapped pooled properties", /** Groups symmetric property te
         metadata,
       ),
     ).rejects.toThrow("Unsupported ODF keep-with-next");
-    await expect(
-      readOdtDocument(
-        await rewriteEntry(
-          bytes,
-          "styles.xml",
-          /** Injects an invalid ODF boolean. @param xml - Style stream. @returns Changed stream. */ (
-            xml,
-          ) => xml.replace('text:number-lines="true"', 'text:number-lines="yes"'),
-        ),
-        metadata,
+    const invalidCount = await readOdtDocument(
+      await rewriteEntry(
+        bytes,
+        "styles.xml",
+        /** Leaves the valid start member beside a malformed count attribute. @param xml - Style stream. @returns Changed stream. */ (
+          xml,
+        ) =>
+          xml.replace(
+            'text:number-lines="true" text:line-number="0"',
+            'text:number-lines="yes" text:line-number="37"',
+          ),
       ),
-    ).rejects.toThrow("paragraph line-number participation");
+      metadata,
+    );
+    const lineNumber = invalidCount.document.GetDfltTextFormatColl().GetAttrSet().GetLineNumber();
+    expect(lineNumber.IsCount()).toBe(true);
+    expect(lineNumber.GetStartValue()).toBe(37);
 
     const tabWriter = createWriterDocument();
     tabWriter.paragraphs[0]?.SetAttr(createTabs(RES_PARATR_TABSTOP, [new SvxTabStop(720)]));

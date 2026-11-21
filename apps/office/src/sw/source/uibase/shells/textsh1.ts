@@ -21,6 +21,7 @@ import { createSfxShell, type SfxShell } from "../../../../sfx2/source/control/s
 import { SfxListUndoAction, type SfxUndoAction } from "../../../../svl/source/undo/undo";
 import { SfxItemState, type SfxItemSet } from "../../../../svl/source/items/itemset";
 import { SfxBoolItem } from "../../../../svl/source/items/cenumitm";
+import { SwFormatLineNumber } from "../../../inc/fmtline";
 import { SfxInt16Item } from "../../../../svl/source/items/intitem";
 import { type SfxPoolItem } from "../../../../svl/source/items/poolitem";
 import { SwFormatPageDesc } from "../../core/attr/fmtpdsc";
@@ -46,7 +47,6 @@ import {
   RES_PARATR_SPLIT,
   RES_PARATR_ORPHANS,
   RES_PARATR_WIDOWS,
-  RES_LINENUMBER,
   RES_PARATR_LINESPACING,
   RES_PARATR_TABSTOP,
   RES_UL_SPACE,
@@ -655,7 +655,10 @@ export class SwTextShell extends SwBaseShell {
                   : value.pageNumber,
               ),
             ]),
-        new SfxBoolItem(RES_LINENUMBER, value.countLineNumbers),
+        new SwFormatLineNumber(
+          value.countLineNumbers,
+          paragraph.GetSwAttrSet().GetLineNumber().GetStartValue(),
+        ),
       ],
     );
   }
@@ -732,7 +735,7 @@ export class SwTextShell extends SwBaseShell {
       autoTextIndent: firstLine.IsAutoFirst(),
       pageStyleName: pageDesc.GetPageDescName(),
       pageNumber: pageDesc.GetNumOffset() ?? "auto",
-      countLineNumbers: (paragraph.GetAttr(RES_LINENUMBER) as SfxBoolItem).GetValue(),
+      countLineNumbers: paragraph.GetSwAttrSet().GetLineNumber().IsCount(),
     };
   }
 

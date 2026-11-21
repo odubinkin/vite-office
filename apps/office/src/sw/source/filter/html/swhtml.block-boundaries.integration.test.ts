@@ -1,11 +1,11 @@
 /** @fileoverview Genuine HTML byte-stream imports cover original Writer block transitions and script-dependent inline ranges across paragraph boundaries. */
+import { SwFormatLineNumber } from "../../../inc/fmtline";
 import { assert, expect, it } from "vitest";
 import { SwDoc } from "../../core/doc/doc";
 import { SwPaM, SwPosition } from "../../core/crsr/pam";
 import { SfxItemSet } from "../../../../svl/source/items/itemset";
 import { SvxWeightItem } from "../../../../editeng/inc/wghtitem";
 import { SvxPostureItem } from "../../../../editeng/inc/postitem";
-import { SfxBoolItem } from "../../../../svl/source/items/cenumitm";
 import { FontItalic } from "../../../../tools/inc/fontenum";
 import {
   RES_CHRATR_POSTURE,
@@ -152,7 +152,7 @@ it.each([false, true])(
       const sender = doc.GetTextFormatColl("sender"),
         items = sender.GetAttrSet();
       expect(sender.GetULSpace().GetLower()).toBe(htmlMode ? 0 : 60);
-      expect((items.Get(RES_LINENUMBER) as SfxBoolItem).GetValue()).toBe(false);
+      expect((items.Get(RES_LINENUMBER) as SwFormatLineNumber).IsCount()).toBe(false);
       for (const which of [RES_CHRATR_POSTURE, RES_CHRATR_CJK_POSTURE, RES_CHRATR_CTL_POSTURE])
         expect((items.Get(which) as SvxPostureItem).GetPosture()).toBe(
           htmlMode ? FontItalic.ITALIC_NORMAL : FontItalic.ITALIC_NONE,

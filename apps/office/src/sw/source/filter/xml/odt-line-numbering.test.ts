@@ -1,15 +1,16 @@
 /** @fileoverview Verifies document-owned Writer line numbering across ODF styles. */
 
+import { SwFormatLineNumber } from "../../../inc/fmtline";
 import { readFileSync } from "node:fs";
 import { assert, describe, expect, it } from "vitest";
 
 import { DocumentArchive } from "../../../../package/source/zippackage/document-archive";
 import { DocumentArchiveWriter } from "../../../../package/source/zippackage/document-archive";
 import { createDocument } from "../../../../sfx2/source/doc/objsh";
-import { SfxBoolItem } from "../../../../svl/source/items/cenumitm";
 import { ARABIC, CHARS_UPPER_LETTER_N } from "../../../../offapi/com/sun/star/style/NumberingType";
 import { LineNumberPosition } from "../../../inc/lineinfo";
 import { RES_LINENUMBER } from "../../../inc/hintids";
+import { decodeSfxPoolItem } from "../../../browser/filter/xml/item-codec";
 import { SwPoolFormatId } from "../../../inc/poolfmt";
 import {
   decodeWriterDocument,
@@ -262,8 +263,57 @@ it("ports the tdf148834 paragraph line-count settings through ODT", /** Reads th
       [footer, false],
       [numbered, true],
     ] as const)
-      expect((style.GetAttrSet().Get(RES_LINENUMBER) as SfxBoolItem).GetValue()).toBe(count);
+      expect((style.GetAttrSet().Get(RES_LINENUMBER) as SwFormatLineNumber).IsCount()).toBe(count);
     document.Dispose();
+  }
+});
+
+it("keeps the tdf134548 style restart and separate automatic paragraph restarts through Worker and ODT", /** Preserves original named and direct formatting with the native paragraph item. @returns Completion. */ async () => {
+  const bytes = new Uint8Array(
+    readFileSync("../../vendor/libreoffice-reference/sw/qa/extras/layout/data/tdf134548.odt"),
+  );
+  const archive = await DocumentArchive.open(bytes);
+  const ordered = new DocumentArchiveWriter();
+  ordered.putNextEntry("mimetype", await archive.readEntry("mimetype"));
+  for (const name of archive.getEntryNames())
+    if (name !== "mimetype" && !name.endsWith("/"))
+      ordered.putNextEntry(name, await archive.readEntry(name));
+  const source = (await readOdtDocument(await ordered.finish(), metadata)).document;
+  let worker: ReturnType<typeof decodeWriterDocument> | undefined;
+  let reopened: typeof worker;
+  try {
+    const first = source.paragraphs[0];
+    const second = source.paragraphs[1];
+    const parent = source.FindTextFormatCollByName("LibOComputerCode ZeilenNr");
+    assert(first && second && parent);
+    source.MakeTextFormatColl("Inherited restart", parent);
+    first.SetAttr(new SwFormatLineNumber(true, 14));
+    second.SetAttr(new SwFormatLineNumber(true, 61));
+    const legacy = decodeSfxPoolItem(source.GetAttrPool(), { which: RES_LINENUMBER, value: false });
+    assert(legacy instanceof SwFormatLineNumber);
+    expect(legacy.IsCount()).toBe(false);
+    expect(legacy.GetStartValue()).toBe(0);
+
+    worker = decodeWriterDocument(structuredClone(encodeWriterDocument(source)));
+    const saved = await writeOdtDocument(worker, metadata);
+    const content = await (await DocumentArchive.open(saved)).readTextEntry("content.xml");
+    expect(content).toContain('text:number-lines="true" text:line-number="14"');
+    expect(content).toContain('text:number-lines="true" text:line-number="61"');
+    reopened = (await readOdtDocument(saved, metadata)).document;
+    for (const doc of [source, worker, reopened]) {
+      const named = doc.FindTextFormatCollByName("LibOComputerCode ZeilenNr");
+      assert(named);
+      expect(named.GetAttrSet().GetLineNumber().GetStartValue()).toBe(1);
+      const inherited = doc.FindTextFormatCollByName("Inherited restart");
+      expect(inherited?.GetAttrSet().GetLineNumber().GetStartValue()).toBe(1);
+      expect(inherited?.GetAttrSet().GetItemIfSet(RES_LINENUMBER, false)).toBeUndefined();
+      expect(doc.paragraphs[0]?.GetSwAttrSet().GetLineNumber().GetStartValue()).toBe(14);
+      expect(doc.paragraphs[1]?.GetSwAttrSet().GetLineNumber().GetStartValue()).toBe(61);
+    }
+  } finally {
+    reopened?.Dispose();
+    worker?.Dispose();
+    source.Dispose();
   }
 });
 

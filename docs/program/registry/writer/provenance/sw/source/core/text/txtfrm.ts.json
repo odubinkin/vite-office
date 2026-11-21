@@ -108,6 +108,10 @@
         {
           "path": "apps/office/src/sw/source/filter/ww8/rtfexport.direction.test.ts",
           "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/text/txtfrm.ts",
+          "marker": "input.lineNumberStart"
         }
       ],
       "upstream": [
@@ -154,6 +158,10 @@
         {
           "path": "vendor/libreoffice-reference/sw/source/core/layout/wsfrm.cxx",
           "marker": "SwTextFrame::CheckDirection"
+        },
+        {
+          "path": "sw/source/core/text/txtfrm.cxx",
+          "marker": "rLineNum.GetStartValue()"
         }
       ]
     },
@@ -191,7 +199,8 @@
       "Task202610102046-XB6GB4 connects current native margin movement to original source frame position mapping and represented default no-scroll adjacency over already device-formatted unmerged frames. SwContentFrame FindMaster checks original reciprocal predecessor links and returns source lost-link fallback. SwTextFrame GetText and MapViewToModel/MapViewToModelPos/MapModelToView/MapModelToViewPos retain original node/index ownership; the unmerged source model-to-view branch deliberately ignores the node argument and retains its index. SwTextSizeInfo reads original frame GetText. GetAdjFrameAtPos selects actual native follows via GetFrameAtPos, retains preceding-frame right-margin affinity, compares original mapped model owner/index, walks actual immediate masters including zero-length follows and preserves source lost-master fallback. Actual Home End calls original adjacency and maps its native point through actual SwPosition temporaries with explicit release; no copied model owner or coordinate array is introduced. Original core/mounted caret-edit-history and Chromium body/cell/page/list/table cases cover this correction; explicit reciprocal-link corruption probes check native defensive guards, not ordinary valid-state parity. Native GetFormatted/re-entrant format stabilization, forced-scroll/sw_ChangeOffset, merged/vertical/absolute geometry/full empty/scroll margins, native GetFrameOfModify and UI publication of the full original cursor-follow chain remain unported or unverified. Measured cursor map and end-less-than-node-length proxy remain explicit next integration work, without invented boolean/synthetic follow. Complete formatter, paragraph flags/portion/font/register/script/cache-lock/root/Doc factory/Undo/hierarchy and broader parity remain unverified. Historical statuses/defaults/classifications/responsibilities/evidence and registered recovery/open/save/settings boundaries unchanged, no whole-module or goal promotion.",
       "Task202610111813-A06D5E unifies mounted body cursor publication with actual current formatter clients. Original SwTextFrame::SetPara returns the old native paragraph cache and clears on missing input, after txtcache.cxx; the represented device-lines cache builder is shared once. Matching original body fragments refresh that cache without replacing registrations, IDs or reciprocal master/follow links; stale body spans register no duplicate frame. Root formatting releases old standalone body chains when original page frames appear, and measured aliases are dropped on reflow. Destruction deduplicates owned/borrowed references and rejects dead aliases. Genuinely unformatted content still constructs native frames; existing measurement-availability/text freshness registry and full native formatting/geometric query integration remain pending. Core/React/Chromium cases check original clients/cache ownership and repeated line movement/edit/history; only two old React expectations that encoded frame destruction on every key now assert original identity survival. Historical statuses/defaults/classifications/array/evidence/text prefixes and registered recovery/open/save deviations retained; no whole capability promotion.",
       "Actual original occurrence identity is matched once even when consecutive native fragments have equal source spans; initialized real zero-length-frame ownership reproduces and fixes the port span-only lookup collision (master cache overwritten by follow data). This does not certify full native field formatting or its consumer constraints. No upstream defect is claimed.",
-      "S3HW1E HTML73: Actual text frames use native paragraph-only bidi and derive vertical flags. Direct item and existing inherited-format notifications update cached direction. The current view's paged profile has no browse/draft owner."
+      "S3HW1E HTML73: Actual text frames use native paragraph-only bidi and derive vertical flags. Direct item and existing inherited-format notifications update cached direction. The current view's paged profile has no browse/draft owner.",
+      "Applies master-frame restart precedence for counted paragraphs."
     ],
     "status": "mapped",
     "upstreamPath": "sw/source/core/text/txtfrm.cxx",

@@ -180,6 +180,10 @@
         {
           "path": "apps/office/src/sw/source/filter/ww8/docxexport.drawing.test.ts",
           "marker": "n783638"
+        },
+        {
+          "path": "apps/office/src/xmloff/source/text/txtparae.ts",
+          "marker": "properties.lineNumberStart"
         }
       ],
       "upstream": [
@@ -294,6 +298,10 @@
         {
           "path": "vendor/libreoffice-reference/xmloff/source/text/txtparae.cxx",
           "marker": "XMLTextParagraphExport::exportParagraph"
+        },
+        {
+          "path": "xmloff/source/text/txtprmap.cxx",
+          "marker": "PROP_ParaLineNumberStartValue"
         }
       ]
     },
@@ -335,7 +343,8 @@
       "Registers the paragraph marker as a text automatic style and emits the extended ODF marker-style-name independently of visible runs.",
       "Emits the shared ODF character property element, retaining the source-native complex-color child in deduplicated text and paragraph styles.",
       "Collects shared paragraph and character automatic styles for each additional master-page text section.",
-      "V4DQJW as-character graphic checkpoint. An as-char frame occupies one text position in the run and the original control marker is omitted from XML."
+      "V4DQJW as-character graphic checkpoint. An as-char frame occupies one text position in the run and the original control marker is omitted from XML.",
+      "Writes the paragraph start attribute independently of participation."
     ],
     "status": "mapped",
     "upstreamPath": "xmloff/source/text/txtparae.cxx",

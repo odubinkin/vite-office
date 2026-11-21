@@ -7,6 +7,7 @@ import type { OUStringConstReference } from "../../../../sal/inc/rtl/ustring";
 import {
   RES_CHRATR_BEGIN,
   RES_CHRATR_END,
+  RES_LINENUMBER,
   RES_PARATR_TABSTOP,
   RES_TEXTGRID,
 } from "../../../inc/hintids";
@@ -31,6 +32,7 @@ export class SwXTextDefaults {
       !entry ||
       (entry.nWID !== RES_PARATR_TABSTOP &&
         entry.nWID !== RES_TEXTGRID &&
+        entry.nWID !== RES_LINENUMBER &&
         (entry.nWID < RES_CHRATR_BEGIN || entry.nWID >= RES_CHRATR_END))
     )
       return unknown(text(name));

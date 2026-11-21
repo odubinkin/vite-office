@@ -14,7 +14,8 @@
       "RtfAttributeOutput::SectionLineNumbering"
     ],
     "preservedResponsibilities": [
-      "Emits original RTF document interval, distance, restart and paragraph count controls."
+      "Emits original RTF document interval, distance, restart and paragraph count controls.",
+      "Uses the native paragraph item to produce RTF line-number exclusion."
     ],
     "omittedResponsibilities": [
       "Numeric paragraph start is not represented by the current paragraph item."
@@ -28,12 +29,20 @@
         {
           "path": "apps/office/src/sw/source/writerfilter/rtftok/rtf-line-numbering.test.ts",
           "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/source/filter/ww8/rtfattributeoutput.linenumbering.ts",
+          "marker": "item?.IsCount()"
         }
       ],
       "upstream": [
         {
           "path": "vendor/libreoffice-reference/sw/source/filter/ww8/rtfattributeoutput.cxx",
           "marker": "RtfAttributeOutput::SectionLineNumbering"
+        },
+        {
+          "path": "sw/source/filter/ww8/rtfattributeoutput.cxx",
+          "marker": "RtfAttributeOutput::FormatLineNumbering"
         }
       ]
     },

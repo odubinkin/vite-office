@@ -13,6 +13,7 @@ import {
 } from "../../../../docmodel/browser/complex-color-codec";
 import { Color, ColorTransparency } from "../../../../tools/inc/color";
 import { SwFormatPageDesc } from "../../../source/core/attr/fmtpdsc";
+import { SwFormatLineNumber } from "../../../inc/fmtline";
 import { encodeWriterFrameItem, decodeWriterFrameItem } from "./writer-frame-item-codec";
 import { SvxBoxItem } from "../../../../editeng/source/items/frmitems";
 import { encodeNativeBoxItem, decodeNativeBoxItem } from "./writer-box-item-codec";
@@ -161,6 +162,8 @@ export function encodeSfxPoolItem(item: SfxPoolItem): SfxPoolItemSnapshot;
 
 /** Encodes one pooled item without adding persistence methods to the model class. @param item - Core item. @returns JSON record. */
 export function encodeSfxPoolItem(item: SfxPoolItem): SfxPoolItemSnapshot {
+  if (item instanceof SwFormatLineNumber)
+    return { which: item.Which(), value: [item.IsCount(), item.GetStartValue()] };
   if (item instanceof SfxGrabBagItem && item.Which() === RES_CHRATR_GRABBAG)
     return encodeTextEffects(item);
   if (item instanceof SfxGrabBagItem && item.Which() === RES_PARATR_GRABBAG)

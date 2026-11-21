@@ -156,6 +156,10 @@
         {
           "path": "apps/office/src/sw/source/core/undo/native-auto-style-lifetime.test.ts",
           "marker": "it("
+        },
+        {
+          "path": "apps/office/src/sw/source/uibase/shells/textsh1.ts",
+          "marker": "GetLineNumber().GetStartValue()"
         }
       ],
       "upstream": [
@@ -234,6 +238,10 @@
         {
           "path": "vendor/libreoffice-reference/sw/source/core/crsr/crsrsh.cxx",
           "marker": "SwCursorShell::HasSelection"
+        },
+        {
+          "path": "sw/inc/fmtline.hxx",
+          "marker": "SwFormatLineNumber"
         }
       ]
     },
@@ -266,7 +274,8 @@
       "TaskRH91WB ports the consumed original tabulator Reset/FillItemSet, type/fill/UTF16/default/offset/null-tab handlers and typed complete Writer input/output through one native paragraph history action, with actual selected-cell/mixed state, module units, ruler and physical ODT transport. Original GetTabDist, pool slot metadata and VCL metric suffix responsibility stay in source owners; React/DOM supply actual text/focus/lazy exchange and deferred post-commit selection. WRITER061-066 preserve qualified suspected source issues. Portable evidence:42 current producer cases, related item/metric/paragraph/ruler/filter batches and5 current-build Chromium cases at1280/390CM and1280INCH. Exact18 executable-owner audit S1138/B790/F333/L1044 all100 uses current producer/source identities plus historical hits only for unchanged spans at verified095449e7c319 baseline positions. Two explicitly named synthetic-only tests requested by the user execute normally unreachable deletion/focus bodies; they do not establish native UI reachability or alter production logic. Raw partial focused coverage is separately disclosed with unchanged thresholds. No compiled native/full service, widget, locale catalog, frame/configuration or general SfxTabPage/SfxTabDialog parity promotion; classifications/statuses and deliberate browser document I/O/recovery/autosave defaults remain.",
       "Task0AGGG4 connects zero page-number offset admitted by original textflowpage.ui and unsigned16 Writer page descriptor to existing paragraph acceptance and ODT boundary;broader XML numeric handler semantics remain unverified.",
       "Native lifetime checkpoint: logical history/action destructors release unique item, item-set and automatic-style owners on rollback, discard and replacement; temporary fragment snapshots and reduced reset-style handles are balanced in represented editing paths. Real font collection observes undo-held styles until the final owner is discarded. Browser fragment and disconnected-node ID carriers remain explicit bindings, not native SwNodes undo sections or full C++ ABI. Complete UNO/import/cache/temporary-owner closure and native item-instance interning remain unverified; no whole-filter parity promotion.",
-      "Original paragraph control concrete values replace generic Writer split and signed16 line-count items. Split preserves false factory versus true Writer pool default; widow/orphan preserve unsigned8 storage, signed8 Any projection and zero global/two-line document overlays. Concrete copy/Clone and vertical signed16 QueryValue/0..4 PutValue use actual Sfx/Any owners. Actual pool, snapshot reconstruction, CSS/RTF producers and paragraph UI commands use the correct concrete values. DOCX emits original split/widow boolean normalization, script-space/hanging/forbidden/grid booleans, vertical mapping, page-break spelling and outline clamp through the real exporter/serializer and native ZIP output. No fake exporter, direction/version provider or complete main-text/paragraph/style orchestration is introduced. Localized EditResId GetPresentation, original instance managers, native allocator/physical ABI and full DOCX text/model/filter/UI acceptance remain unported or unqualified. Current keep/line-number snapshot factories retain their existing separately bounded scalar domains; no full item-pool parity is claimed."
+      "Original paragraph control concrete values replace generic Writer split and signed16 line-count items. Split preserves false factory versus true Writer pool default; widow/orphan preserve unsigned8 storage, signed8 Any projection and zero global/two-line document overlays. Concrete copy/Clone and vertical signed16 QueryValue/0..4 PutValue use actual Sfx/Any owners. Actual pool, snapshot reconstruction, CSS/RTF producers and paragraph UI commands use the correct concrete values. DOCX emits original split/widow boolean normalization, script-space/hanging/forbidden/grid booleans, vertical mapping, page-break spelling and outline clamp through the real exporter/serializer and native ZIP output. No fake exporter, direction/version provider or complete main-text/paragraph/style orchestration is introduced. Localized EditResId GetPresentation, original instance managers, native allocator/physical ABI and full DOCX text/model/filter/UI acceptance remain unported or unqualified. Current keep/line-number snapshot factories retain their existing separately bounded scalar domains; no full item-pool parity is claimed.",
+      "Preserves each selected paragraph's restart when its participation setting changes."
     ],
     "status": "mapped",
     "upstreamPath": "sw/source/uibase/shells/textsh1.cxx",

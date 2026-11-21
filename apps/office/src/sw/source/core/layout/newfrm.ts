@@ -620,6 +620,7 @@ function textFrameInputEqual(left: SwTextFrameInput, right: SwTextFrameInput | u
     left.pageStyleName === right.pageStyleName &&
     left.pageNumber === right.pageNumber &&
     left.countLineNumbers === right.countLineNumbers &&
+    left.lineNumberStart === right.lineNumberStart &&
     textLinesEqual(left.lines, right.lines)
   );
 }

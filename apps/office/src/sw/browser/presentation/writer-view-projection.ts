@@ -84,7 +84,6 @@ import {
   RES_PARATR_LINESPACING,
   RES_PARATR_TABSTOP,
   RES_KEEP,
-  RES_LINENUMBER,
   RES_UL_SPACE,
 } from "../../inc/hintids";
 import { WRITER_AVAILABLE_PARAGRAPH_STYLE_POOL } from "../../inc/poolfmt";
@@ -412,7 +411,7 @@ export class WriterViewProjection {
             tabStopPositionPt: tabStopsPt[0],
             tabStopsPt,
             keepWithNext: (node.GetAttr(RES_KEEP) as SfxBoolItem).GetValue(),
-            countLineNumbers: (node.GetAttr(RES_LINENUMBER) as SfxBoolItem).GetValue(),
+            countLineNumbers: node.GetSwAttrSet().GetLineNumber().IsCount(),
             lowerSpacingPt: spacing.GetLower() / 20,
             rightMarginPt:
               (node.GetAttr(RES_MARGIN_RIGHT) as SvxRightMarginItem).ResolveRight() / 20,

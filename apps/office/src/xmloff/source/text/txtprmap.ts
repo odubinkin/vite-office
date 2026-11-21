@@ -501,6 +501,8 @@ export function applyTextImportProperties(
       ["keepWithNext", "ParaKeepTogether"],
     ] as const)
       if (paragraph[key] !== undefined) add(name, paragraph[key], "bool");
+    if (paragraph.lineNumberStart !== undefined)
+      add("ParaLineNumberStartValue", paragraph.lineNumberStart, "sal_Int32");
     if (paragraph.verticalAlign !== undefined)
       add("ParaVertAlignment", paragraph.verticalAlign, "sal_Int16");
     if (paragraph.keepTogether !== undefined) add("ParaSplit", !paragraph.keepTogether, "bool");

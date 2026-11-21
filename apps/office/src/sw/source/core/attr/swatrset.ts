@@ -5,6 +5,7 @@ import { XATTR_FILLSTYLE } from "../../../../svx/inc/xdef";
 import { getSvxBrushItemFromSourceSet } from "../../../../svx/source/unodraw/unobrushitemhelper";
 import { SwFormatFlySplit } from "../../../inc/formatflysplit";
 import { SwFormatFollowTextFlow } from "../../../inc/fmtfollowtextflow";
+import type { SwFormatLineNumber } from "../../../inc/fmtline";
 import {
   RES_ANCHOR,
   RES_CNTNT,
@@ -14,6 +15,7 @@ import {
   RES_FOOTER,
   RES_FRAMEDIR,
   RES_HEADER,
+  RES_LINENUMBER,
   RES_OPAQUE,
   RES_RTL_GUTTER,
   RES_SURROUND,
@@ -796,6 +798,10 @@ export class SwAttrPool extends SfxItemPool {
 
 /** Writer-specialized item set with typed paragraph accessors. */
 export class SwAttrSet extends SfxItemSet {
+  /** Original inline paragraph line-number item query. @param searchInParent - Native inherited lookup. @returns Borrowed item. */
+  GetLineNumber(searchInParent = true): SwFormatLineNumber {
+    return this.Get(RES_LINENUMBER, searchInParent) as SwFormatLineNumber;
+  }
   /** Original frame direction item query. @param searchInParent - Native inheritance flag. @returns Borrowed direction item. */
   GetFrameDir(searchInParent = true): SvxFrameDirectionItem {
     return this.Get(RES_FRAMEDIR, searchInParent) as SvxFrameDirectionItem;

@@ -27,7 +27,8 @@
       "Character-default checkpoint: all48 original Writer character identities now carry actual source concrete static default classes and original values/slots on the real module package and SwAttrPool. Adds actual hidden/no-hyphen bool item copy/Clone and unsigned32 SvxRsidItem Any conversion/empty presentation. ScriptHint document-pool registration was missing and is now present. Native unused3 stays SfxVoidItem despite its typed declaration (WRITER457). Actual document defaults feed DOCX attribute output; full filter/package/UI, complete Writer/Sdr packages and stylesheet/default services remain pending. No contiguous ranges or filler items are inferred, and broad semantic status remains unverified.",
       "Original paragraph control concrete values replace generic Writer split and signed16 line-count items. Split preserves false factory versus true Writer pool default; widow/orphan preserve unsigned8 storage, signed8 Any projection and zero global/two-line document overlays. Concrete copy/Clone and vertical signed16 QueryValue/0..4 PutValue use actual Sfx/Any owners. Actual pool, snapshot reconstruction, CSS/RTF producers and paragraph UI commands use the correct concrete values. DOCX emits original split/widow boolean normalization, script-space/hanging/forbidden/grid booleans, vertical mapping, page-break spelling and outline clamp through the real exporter/serializer and native ZIP output. No fake exporter, direction/version provider or complete main-text/paragraph/style orchestration is introduced. Localized EditResId GetPresentation, original instance managers, native allocator/physical ABI and full DOCX text/model/filter/UI acceptance remain unported or unqualified. Current keep/line-number snapshot factories retain their existing separately bounded scalar domains; no full item-pool parity is claimed.",
       "Installs the static inactive SwFormatHeader and SwFormatFooter defaults with their pinned native WhichIds.",
-      "Creates the original global null-frame fly-content default in the native ItemInfoPackage slot."
+      "Creates the original global null-frame fly-content default in the native ItemInfoPackage slot.",
+      "Registers the native paragraph item as the pool default."
     ],
     "omittedResponsibilities": [
       "Unrepresented native item classes are absent rather than replaced by stand-ins. Existing generic paragraph bool/count/break carriers and complete native typed defaults remain unverified; complete InitCore/shutdown/native ABI are not represented by this package profile."
@@ -93,6 +94,10 @@
         {
           "path": "apps/office/src/sw/source/core/txtnode/atrflyin.test.ts",
           "marker": "SwTextFlyCnt"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/bastyp/init.ts",
+          "marker": "new SwFormatLineNumber()"
         }
       ],
       "upstream": [
@@ -139,6 +144,10 @@
         {
           "path": "vendor/libreoffice-reference/sw/source/core/bastyp/init.cxx",
           "marker": "new SwFormatFlyCnt"
+        },
+        {
+          "path": "sw/source/core/bastyp/init.cxx",
+          "marker": "new SwFormatLineNumber"
         }
       ]
     }

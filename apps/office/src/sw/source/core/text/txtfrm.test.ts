@@ -109,6 +109,48 @@ describe("Writer line numbering on text frames", /** Groups page-frame line-numb
         projectSwLineNumbers(pages, [], new SwLineNumberInfo().QueryValue()),
     ).toThrow("no measured text node");
   });
+
+  it("applies paragraph restarts only to counted master frames", /** Exercises the source precedence between paragraph restart, page restart and follow frames. @returns Nothing. */ () => {
+    const descriptor = {
+      ...createDefaultWriterPageDescriptor("en-GB").GetValue(),
+      height: 1100,
+      topMargin: 100,
+      bottomMargin: 100,
+    };
+    const inputs = [
+      { ...paragraph("split", ["a", "b", "c", "d"]), lineNumberStart: 20 },
+      { ...paragraph("excluded", ["e"], false), lineNumberStart: 500 },
+      paragraph("next", ["f"]),
+    ];
+    const pages = createSwPageFrames(inputs, descriptor);
+    const info = new SwLineNumberInfo();
+    info.SetPaintLineNumbers(true);
+    info.SetCountBy(1);
+    expect(projectSwLineNumbers(pages, inputs, info.QueryValue())).toEqual([
+      [
+        [
+          { number: 20, topTwips: 0 },
+          { number: 21, topTwips: 300 },
+        ],
+      ],
+      [
+        [
+          { number: 22, topTwips: 0 },
+          { number: 23, topTwips: 300 },
+        ],
+        [],
+      ],
+      [[{ number: 24, topTwips: 0 }]],
+    ]);
+    info.SetRestartEachPage(true);
+    expect(projectSwLineNumbers(pages, inputs, info.QueryValue())[1]).toEqual([
+      [
+        { number: 1, topTwips: 0 },
+        { number: 2, topTwips: 300 },
+      ],
+      [],
+    ]);
+  });
 });
 
 it("transports an explicit native page-number restart from the paragraph item into physical pages", /** Uses actual page-reference items and the shared frame-input projection. @returns Nothing. */ () => {

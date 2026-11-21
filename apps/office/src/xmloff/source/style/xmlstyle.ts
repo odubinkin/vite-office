@@ -631,10 +631,14 @@ function importParagraphProperties(
     : numberProperty.extract(numberValue, "sal_Int16")
       ? numberValue[0] & 65535
       : ("auto" as const);
-  const countLineNumbers = importOptionalBoolean(
-    attributes.get(XMLToken.TEXT_NUMBER_LINES),
-    "paragraph line-number participation",
-  );
+  const rawCountLines = attributes.get(XMLToken.TEXT_NUMBER_LINES);
+  const rawLineStart = attributes.get(XMLToken.TEXT_LINE_NUMBER);
+  const countLineNumbers: [boolean] = [false];
+  const lineNumberStart: [number] = [0];
+  const hasCountLines =
+    rawCountLines !== null && Converter.convertBool(countLineNumbers, rawCountLines);
+  const hasLineStart =
+    rawLineStart !== null && Converter.convertNumber(lineNumberStart, rawLineStart);
   const joinBorder = importOptionalBoolean(
     attributes.get(XMLToken.STYLE_JOIN_BORDER),
     "paragraph border connection",
@@ -685,7 +689,8 @@ function importParagraphProperties(
     ...(orphans === undefined ? {} : { orphans }),
     ...(breakBefore === undefined ? {} : { breakBefore }),
     ...(breakAfter === undefined ? {} : { breakAfter }),
-    ...(countLineNumbers === undefined ? {} : { countLineNumbers }),
+    ...(hasCountLines ? { countLineNumbers: countLineNumbers[0] } : {}),
+    ...(hasLineStart ? { lineNumberStart: lineNumberStart[0] } : {}),
     ...(joinBorder === undefined ? {} : { joinBorder }),
     ...borders,
   };

@@ -306,7 +306,23 @@ export const SwUnoPropertyMap: ReadonlyMap<string, SwUnoPropertyEntry> = new Map
   ],
   [
     "ParaLineNumberCount",
-    { type: "bool", attributes: 1, which: H.RES_LINENUMBER, member: 0, kind: "bool" },
+    {
+      type: "bool",
+      attributes: 1,
+      which: H.RES_LINENUMBER,
+      member: Grid.MID_LINENUMBER_COUNT,
+      kind: "any",
+    },
+  ],
+  [
+    "ParaLineNumberStartValue",
+    {
+      type: "sal_Int32",
+      attributes: 1,
+      which: H.RES_LINENUMBER,
+      member: Grid.MID_LINENUMBER_STARTVALUE,
+      kind: "any",
+    },
   ],
   [
     "ParaIsConnectBorder",
@@ -605,6 +621,7 @@ const paragraphStyleProperties = new Set([
   "CharUnderlineHasColor",
   "ParaIsAutoFirstLineIndent",
   "ParaLineNumberCount",
+  "ParaLineNumberStartValue",
   "ParaIsConnectBorder",
   "BorderDistance",
   "LeftBorder",
@@ -804,6 +821,7 @@ const textDefaultProperties = new Set([
   "CharUnderlineHasColor",
   "ParaIsAutoFirstLineIndent",
   "ParaLineNumberCount",
+  "ParaLineNumberStartValue",
   "ParaIsConnectBorder",
   "BorderDistance",
   "LeftBorder",

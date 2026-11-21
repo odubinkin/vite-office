@@ -14,7 +14,8 @@
       "XMLTextParagraphExport"
     ],
     "preservedResponsibilities": [
-      "Responsibility split of existing portable automatic paragraph-style identity encoding consumed by XMLTextParagraphExport. Fields retain old ordering and append direct drawing fill values. The string key is a local representation, not a native ABI."
+      "Responsibility split of existing portable automatic paragraph-style identity encoding consumed by XMLTextParagraphExport. Fields retain old ordering and append direct drawing fill values. The string key is a local representation, not a native ABI.",
+      "Includes the paragraph restart in automatic style identity."
     ],
     "omittedResponsibilities": [
       "Full native auto-style pool/service graph is not claimed by this key projection."
@@ -24,12 +25,20 @@
         {
           "path": "apps/office/src/xmloff/source/text/txtparae-properties.ts",
           "marker": "paragraphPropertiesKey"
+        },
+        {
+          "path": "apps/office/src/xmloff/source/text/txtparae-properties.ts",
+          "marker": "properties?.lineNumberStart"
         }
       ],
       "upstream": [
         {
           "path": "vendor/libreoffice-reference/xmloff/source/text/txtparae.cxx",
           "marker": "XMLTextParagraphExport"
+        },
+        {
+          "path": "xmloff/source/text/txtprmap.cxx",
+          "marker": "PROP_ParaLineNumberStartValue"
         }
       ]
     },

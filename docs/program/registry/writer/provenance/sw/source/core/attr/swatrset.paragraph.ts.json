@@ -26,8 +26,15 @@
         {
           "path": "apps/office/src/sw/source/filter/ww8/docxexport.theme.test.ts",
           "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/attr/swatrset.paragraph.ts",
+          "marker": "Stored Writer paragraph line numbering"
         }
       ]
-    }
+    },
+    "preservedResponsibilities": [
+      "Restores both native members and decodes legacy boolean-only snapshots with a zero start."
+    ]
   }
 }

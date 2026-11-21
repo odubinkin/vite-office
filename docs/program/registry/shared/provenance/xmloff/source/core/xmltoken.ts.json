@@ -180,6 +180,10 @@
         {
           "path": "apps/office/src/xmloff/source/core/xmltoken.ts",
           "marker": "STYLE_BASE_CELL_ADDRESS"
+        },
+        {
+          "path": "apps/office/src/xmloff/source/core/xmltoken.ts",
+          "marker": "TEXT_LINE_NUMBER"
         }
       ],
       "upstream": [
@@ -314,6 +318,10 @@
         {
           "path": "xmloff/source/core/xmltoken.cxx",
           "marker": "XML_BASE_CELL_ADDRESS"
+        },
+        {
+          "path": "xmloff/source/core/xmltoken.cxx",
+          "marker": "XML_LINE_NUMBER"
         }
       ]
     },
@@ -367,7 +375,8 @@
       "Registers original ODF page scale, order, centering, print and first-page tokens and the legacy loext fit aliases without renumbering the existing vocabulary.",
       "Admits original calcext color scale and threshold elements, color and type attributes.",
       "Registers original Calc extension tokens date-is, date and style without changing existing token values.",
-      "Recognizes the style namespace base-cell-address token used for automatic cell-style conditions."
+      "Recognizes the style namespace base-cell-address token used for automatic cell-style conditions.",
+      "Recognizes the original text namespace line-number attribute."
     ],
     "status": "mapped",
     "upstreamPath": "xmloff/source/core/xmltoken.cxx",

@@ -1,8 +1,8 @@
 /** @fileoverview Native RTF line number controls through the mapper and Writer document service. */
+import { SwFormatLineNumber } from "../../../inc/fmtline";
 import { existsSync, readFileSync } from "node:fs";
 import { beforeAll, assert, expect, it } from "vitest";
 import { initializeRuntime } from "../../../../external/emscripten/runtime";
-import { SfxBoolItem } from "../../../../svl/source/items/cenumitm";
 import { RES_LINENUMBER } from "../../../inc/hintids";
 import { SwFormatPageDesc } from "../../core/attr/fmtpdsc";
 import { SwDoc } from "../../core/doc/doc";
@@ -57,7 +57,7 @@ it("uses the original explicit paragraph exclusion control and the reader's dist
     const paragraph = source.paragraphs[0];
     assert(paragraph);
     paragraph.SetText("Excluded");
-    const excluded = new SfxBoolItem(RES_LINENUMBER, false);
+    const excluded = new SwFormatLineNumber(false);
     try {
       paragraph.SetAttr(excluded);
     } finally {
@@ -75,9 +75,9 @@ it("uses the original explicit paragraph exclusion control and the reader's dist
       expect(actual.IsRestartEachPage()).toBe(true);
       expect(actual.GetCountBy()).toBe(7);
       expect(actual.GetPosFromLeft()).toBe(283);
-      expect((reopened.paragraphs[0]?.GetAttr(RES_LINENUMBER) as SfxBoolItem).GetValue()).toBe(
-        true,
-      );
+      expect(
+        (reopened.paragraphs[0]?.GetAttr(RES_LINENUMBER) as SwFormatLineNumber).IsCount(),
+      ).toBe(true);
     } finally {
       reopened.Dispose();
     }

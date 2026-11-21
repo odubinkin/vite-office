@@ -56,6 +56,7 @@ export interface OdfTabStop {
 export interface OdfParagraphProperties extends OdfBoxProperties, OdfFillProperties {
   readonly joinBorder?: boolean;
   readonly countLineNumbers?: boolean;
+  readonly lineNumberStart?: number;
   readonly contextualSpacing?: boolean;
   readonly firstLineIndent?: number;
   readonly autoTextIndent?: boolean;
@@ -750,6 +751,9 @@ export function exportParagraphAttributes(properties: OdfParagraphProperties): s
     ...(properties.countLineNumbers === undefined
       ? []
       : [`text:number-lines="${properties.countLineNumbers}"`]),
+    ...(properties.lineNumberStart === undefined
+      ? []
+      : [`text:line-number="${properties.lineNumberStart}"`]),
   ];
 }
 

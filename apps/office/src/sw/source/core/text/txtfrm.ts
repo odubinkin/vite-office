@@ -20,7 +20,6 @@ import { MoveTextFrameMargin } from "./frmcrsr";
 import {
   RES_BREAK,
   RES_KEEP,
-  RES_LINENUMBER,
   RES_PAGEDESC,
   RES_PARATR_ORPHANS,
   RES_PARATR_SPLIT,
@@ -56,6 +55,8 @@ export function projectSwLineNumbers(
         (frame) => {
           const input = byId.get(frame.nodeId);
           if (input === undefined) throw new Error("Line-number frame has no measured text node.");
+          if (input.countLineNumbers !== false && input.lineNumberStart && !frame.IsFollow())
+            count = input.lineNumberStart - 1;
           const marks: SwLineNumberMark[] = [];
           let topTwips = 0;
           for (const line of input.lines) {
@@ -108,6 +109,7 @@ export interface SwTextFrameInput {
   readonly pageStyleName?: string;
   readonly pageNumber?: number;
   readonly countLineNumbers?: boolean;
+  readonly lineNumberStart?: number;
 }
 
 /** Reads layout-owned values from canonical Writer nodes, pairing them only with measured lines. @param document - Active Writer document. @param measurements - Browser device line geometry in document order. @returns Core frame inputs. */
@@ -129,6 +131,7 @@ export function createSwTextFrameInputs(
       const paragraphBreak = (node.GetAttr(RES_BREAK) as SfxInt16Item).GetValue();
       const pageDesc = node.GetAttr(RES_PAGEDESC) as SwFormatPageDesc;
       const pageNumber = pageDesc.GetNumOffset();
+      const lineNumber = node.GetSwAttrSet().GetLineNumber();
       return {
         node,
         id: measurement.id,
@@ -145,7 +148,8 @@ export function createSwTextFrameInputs(
         breakAfter: paragraphBreak === 5 || paragraphBreak === 6,
         pageStyleName: pageDesc.GetPageDescName(),
         ...(pageNumber === undefined ? {} : { pageNumber }),
-        countLineNumbers: (node.GetAttr(RES_LINENUMBER) as SfxBoolItem).GetValue(),
+        countLineNumbers: lineNumber.IsCount(),
+        lineNumberStart: lineNumber.GetStartValue(),
       };
     },
   );

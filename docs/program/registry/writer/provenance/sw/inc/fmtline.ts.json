@@ -1,0 +1,44 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "status": "mapped",
+    "localPath": "apps/office/src/sw/inc/fmtline.ts",
+    "upstreamPath": "sw/inc/fmtline.hxx",
+    "localSymbols": [
+      "SwFormatLineNumber"
+    ],
+    "upstreamSymbols": [
+      "SwFormatLineNumber"
+    ],
+    "preservedResponsibilities": [
+      "Owns original paragraph line-count participation and the unsigned 24-bit restart value. Copies, equality and addressed UNO values preserve both members."
+    ],
+    "omittedResponsibilities": [
+      "Localized item presentation remains outside this filter slice."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sw/inc/fmtline.ts",
+          "marker": "SwFormatLineNumber"
+        },
+        {
+          "path": "apps/office/src/sw/inc/fmtline.native.test.ts",
+          "marker": "narrows signed start values"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "sw/inc/fmtline.hxx",
+          "marker": "m_nStartValue"
+        },
+        {
+          "path": "sw/source/core/layout/atrfrm.cxx",
+          "marker": "SwFormatLineNumber::PutValue"
+        }
+      ]
+    }
+  }
+}

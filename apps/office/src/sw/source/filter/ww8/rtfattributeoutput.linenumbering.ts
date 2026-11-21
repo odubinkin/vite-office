@@ -1,6 +1,6 @@
 /** @fileoverview Original RTF section and paragraph line-number output callbacks. */
 import type { SwLineNumberInfo } from "../../../inc/lineinfo";
-import type { SfxBoolItem } from "../../../../svl/source/items/cenumitm";
+import type { SwFormatLineNumber } from "../../../inc/fmtline";
 
 /** Emits the represented original section line-number properties. @param info - Document-owned line-number settings. @returns RTF controls. */
 export function SectionLineNumbering(info: SwLineNumberInfo): string {
@@ -9,6 +9,6 @@ export function SectionLineNumbering(info: SwLineNumberInfo): string {
 }
 
 /** Emits the original paragraph line-count exclusion. @param item - Native paragraph or style count item. @returns RTF control when excluded. */
-export function FormatLineNumbering(item: SfxBoolItem | undefined): string {
-  return item?.GetValue() === false ? "\\noline" : "";
+export function FormatLineNumbering(item: SwFormatLineNumber | undefined): string {
+  return item?.IsCount() === false ? "\\noline" : "";
 }

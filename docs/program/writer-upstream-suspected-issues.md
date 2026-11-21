@@ -5892,3 +5892,14 @@ replaces the first separator and its interval comes from the first.
 Writer preserves the separate updates.
 
 - [Original separator context](../../vendor/libreoffice-reference/xmloff/source/text/XMLLineNumberingSeparatorImportContext.cxx)
+
+### WRITER-730 — A negative paragraph line restart becomes a large positive number
+
+The UNO setter accepts a signed 32-bit value and assigns it to an unsigned
+24-bit field. For example, an ODT paragraph style with `text:line-number="-1"`
+stores 16777215. Its next ODT export uses that positive value. A value that
+narrows to zero means continuation. Writer preserves the original field width
+and conversion.
+
+- [Original line-number field](../../vendor/libreoffice-reference/sw/inc/fmtline.hxx)
+- [Original UNO start-value setter](../../vendor/libreoffice-reference/sw/source/core/layout/atrfrm.cxx)

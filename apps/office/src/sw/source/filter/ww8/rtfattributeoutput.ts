@@ -53,6 +53,7 @@ import { TransColToIco } from "../../../../filter/source/msfilter/util";
 import { GetScriptClass } from "../../../../i18nutil/source/utility/scriptclass";
 import { LATIN } from "../../../../offapi/com/sun/star/i18n/ScriptType";
 import { SfxBoolItem } from "../../../../svl/source/items/cenumitm";
+import type { SwFormatLineNumber } from "../../../inc/fmtline";
 import { SfxInt16Item } from "../../../../svl/source/items/intitem";
 import { FontLineStyle, FontStrikeout } from "../../../../tools/inc/fontenum";
 import {
@@ -457,7 +458,7 @@ export class RtfAttributeOutput extends AttributeOutputBase<string> {
       case RES_BACKGROUND:
         return FormatBackground(item as SvxBrushItem, this.colorIndex);
       case RES_LINENUMBER:
-        return FormatLineNumbering(item as SfxBoolItem);
+        return FormatLineNumbering(item as SwFormatLineNumber);
       case RES_KEEP:
         return (item as SfxBoolItem).GetValue() ? "\\keepn" : "";
       case RES_PARATR_SPLIT:
@@ -552,7 +553,9 @@ export class RtfAttributeOutput extends AttributeOutputBase<string> {
         ),
       ) +
       this.WriteFormatBox(items.GetItemIfSet(RES_BOX, true) as SvxBoxItem | undefined) +
-      FormatLineNumbering(items.GetItemIfSet(RES_LINENUMBER, true) as SfxBoolItem | undefined) +
+      FormatLineNumbering(
+        items.GetItemIfSet(RES_LINENUMBER, true) as SwFormatLineNumber | undefined,
+      ) +
       this.WriteStyleFrameDirection(style) +
       FormatBackground(
         items.GetItemIfSet(RES_BACKGROUND, false) as SvxBrushItem | undefined,

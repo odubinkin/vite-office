@@ -12,6 +12,7 @@ import {
   SvxScriptSpaceItem,
 } from "../../../../editeng/source/items/paraitem";
 import { SfxBoolItem } from "../../../../svl/inc/eitem";
+import { SwFormatLineNumber } from "../../../inc/fmtline";
 import type { SfxPoolItem } from "../../../../svl/inc/poolitem";
 import {
   RES_KEEP,
@@ -37,6 +38,20 @@ export const paragraphControlItems = [
 
 /** Restores the registered scalar controls using their native item constructors. @param which - One registered control identity. @param value - Persisted scalar. @returns Actual native item. */
 export function restoreParagraphControlItem(which: number, value: unknown): SfxPoolItem {
+  if (which === RES_LINENUMBER) {
+    if (typeof value === "boolean") return new SwFormatLineNumber(value);
+    if (
+      !Array.isArray(value) ||
+      value.length !== 2 ||
+      typeof value[0] !== "boolean" ||
+      typeof value[1] !== "number" ||
+      !Number.isInteger(value[1]) ||
+      value[1] < 0 ||
+      value[1] > 0xffffff
+    )
+      throw new Error("Stored Writer paragraph line numbering is invalid.");
+    return new SwFormatLineNumber(value[0], value[1]);
+  }
   if (which === RES_PARATR_ORPHANS) return new SvxOrphansItem(Number(value), which);
   if (which === RES_PARATR_WIDOWS) return new SvxWidowsItem(Number(value), which);
   if (which === RES_PARATR_VERTALIGN) {

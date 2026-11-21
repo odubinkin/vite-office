@@ -30,6 +30,7 @@ import {
   SvxWeightItem,
 } from "../../../../editeng/source/items/textitem";
 import { SfxBoolItem } from "../../../../svl/source/items/cenumitm";
+import { SwFormatLineNumber } from "../../../inc/fmtline";
 import {
   RES_CHRATR_CJK_FONT,
   RES_CHRATR_CJK_FONTSIZE,
@@ -53,7 +54,6 @@ import {
   RES_PARATR_TABSTOP,
   RES_UL_SPACE,
   RES_KEEP,
-  RES_LINENUMBER,
   RES_BOX,
 } from "../../../inc/hintids";
 import { getDefaultFontSelection, getWriterDefaultFontLanguage } from "./default-font";
@@ -216,7 +216,7 @@ export function applyWriterParagraphStyleDefaults(collection: SwTextFormatColl):
     tabs.Insert(new SvxTabStop(Math.trunc(width / 2), SvxTabAdjust.Center));
     tabs.Insert(new SvxTabStop(width, SvxTabAdjust.Right));
     collection.SetFormatAttr(tabs);
-    collection.SetFormatAttr(new SfxBoolItem(RES_LINENUMBER, false));
+    collection.SetFormatAttr(new SwFormatLineNumber(false));
     if (poolId === SwPoolFormatId.COLL_HEADERR || poolId === SwPoolFormatId.COLL_FOOTERR)
       collection.SetFormatAttr(new SvxAdjustItem(SvxAdjust.Right, RES_PARATR_ADJUST));
     return;
@@ -270,7 +270,7 @@ export function applyWriterParagraphStyleDefaults(collection: SwTextFormatColl):
   if (defaults.keepWithNext !== undefined)
     collection.SetFormatAttr(new SfxBoolItem(RES_KEEP, defaults.keepWithNext));
   if (defaults.lineNumber !== undefined)
-    collection.SetFormatAttr(new SfxBoolItem(RES_LINENUMBER, defaults.lineNumber));
+    collection.SetFormatAttr(new SwFormatLineNumber(defaults.lineNumber));
   if (defaults.orphans !== undefined)
     collection.SetFormatAttr(new ParaItems.SvxOrphansItem(defaults.orphans, RES_PARATR_ORPHANS));
   if (defaults.widows !== undefined)

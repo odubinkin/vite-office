@@ -79,6 +79,7 @@ import { SvxXMLNumRuleExport } from "../../../../xmloff/source/style/xmlnume";
 import type { SwNumRuleItem } from "../../core/para/paratr";
 import { exportParagraphStyleNumberingAttributes } from "../../../../xmloff/source/style/styleexp";
 import { SwFormatPageDesc } from "../../core/attr/fmtpdsc";
+import { SwFormatLineNumber } from "../../../inc/fmtline";
 import {
   escapeXml,
   exportCharacterPropertyElement,
@@ -965,7 +966,7 @@ function getParagraphProperties(set: SfxItemSet | undefined): OdfParagraphProper
     (verticalAlign !== undefined && !(verticalAlign instanceof ParaItems.SvxParaVertAlignItem)) ||
     (paragraphBreak !== undefined && !(paragraphBreak instanceof SfxInt16Item)) ||
     (pageDesc !== undefined && !(pageDesc instanceof SwFormatPageDesc)) ||
-    (lineNumber !== undefined && !(lineNumber instanceof SfxBoolItem)) ||
+    (lineNumber !== undefined && !(lineNumber instanceof SwFormatLineNumber)) ||
     (joinBorder !== undefined && !(joinBorder instanceof SfxBoolItem)) ||
     (box !== undefined && !(box instanceof SvxBoxItem))
   )
@@ -1027,7 +1028,9 @@ function getParagraphProperties(set: SfxItemSet | undefined): OdfParagraphProper
           pageNumber: pageDesc.GetNumOffset() ?? ("auto" as const),
         }
       : {}),
-    ...(lineNumber instanceof SfxBoolItem ? { countLineNumbers: lineNumber.GetValue() } : {}),
+    ...(lineNumber instanceof SwFormatLineNumber
+      ? { countLineNumbers: lineNumber.IsCount(), lineNumberStart: lineNumber.GetStartValue() }
+      : {}),
     ...(joinBorder instanceof SfxBoolItem ? { joinBorder: joinBorder.GetValue() } : {}),
     ...(box instanceof SvxBoxItem ? exportBoxProperties(box) : {}),
   };
