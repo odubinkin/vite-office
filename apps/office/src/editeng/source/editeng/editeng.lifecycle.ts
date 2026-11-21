@@ -94,6 +94,12 @@ export abstract class EditEngine {
     const engine = this.getImpl();
     engine.SetAttribs(engine.CreateNormalizedSel(selection), items);
   }
+
+  /** Inserts a native field feature over the selected text. @param field - Original field item. @param selection - Source selection. @returns Nothing. */
+  QuickInsertField(field: SvxFieldItem, selection: ESelection): void {
+    const engine = this.getImpl();
+    engine.ImpInsertFeature(engine.CreateNormalizedSel(selection), field);
+  }
   /** Returns the original empty set registered for the editor pool. @returns Borrowed empty item set. */
   GetEmptyItemSet(): SfxItemSet {
     return this.getImpl().GetEmptyItemSet();

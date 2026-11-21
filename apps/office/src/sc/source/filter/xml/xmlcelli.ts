@@ -127,7 +127,7 @@ export class ScXMLTableRowCellContext extends ScXMLImportContext {
   /** Creates actual simple text child state. @param element - Token. @returns Context. */
   override createFastChildContext(element: XMLToken): SvXMLImportContext {
     if (element !== XMLToken.TEXT_P) throw new Error("ODS cell object is not implemented");
-    return new ScXMLCellTextParaContext(this);
+    return new ScXMLCellTextParaContext(this, this.row.table.tab);
   }
   /** Commits supported scalar contents directly into native document cells and advances the XML cursor. @returns Nothing. */
   override endFastElement(): void {
@@ -144,13 +144,13 @@ export class ScXMLTableRowCellContext extends ScXMLImportContext {
     let text = "";
     let styled = false;
     for (const paragraph of this.paragraphs) {
-      for (const [span, style] of paragraph) {
+      for (const [span, style, field] of paragraph) {
         text += span;
-        styled ||= !!style;
+        styled ||= !!style || field !== undefined;
       }
       text += "\n";
     }
-    const value = this.stringValue || (this.paragraphs.length ? text.slice(0, -1) : undefined);
+    const value = this.stringValue ?? (this.paragraphs.length ? text.slice(0, -1) : undefined);
     const document = owner.GetDocument();
     const endCol = Math.min(document.MaxCol(), pos.Col() + this.repeat - 1),
       endRow = Math.min(document.MaxRow(), pos.Row() + this.row.repeat - 1);
@@ -270,12 +270,12 @@ export class ScXMLTableRowCellContext extends ScXMLImportContext {
           owner.consumeCells(1);
           if (this.type !== T.TEXT)
             doc.setNumericCell(address, Number.isFinite(number) ? number : 0);
-          else if (styled && !this.stringValue)
+          else if (
+            this.stringValue === null &&
+            (styled || this.paragraphs.length > 1 || /[\r\n]/.test(value ?? ""))
+          )
             doc.setEditCell(address, createCellEditText(owner, this.paragraphs));
-          else if (this.paragraphs.length > 1 || (value !== undefined && /[\r\n]/.test(value))) {
-            owner.GetDocument().SetTextCell(address, string);
-            doc.invalidateBlockPositionSet(address.Tab());
-          } else doc.setStringCell(address, string);
+          else doc.setStringCell(address, string);
         }
     } finally {
       string.dispose();

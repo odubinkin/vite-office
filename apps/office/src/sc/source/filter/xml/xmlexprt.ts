@@ -604,8 +604,20 @@ export class ScXMLExport {
         else {
           const string = text(actual.GetString().getString());
           if (string) {
-            value = ` office:value-type="string" office:string-value="${escapeXml(string)}"`;
-            children = this.textParagraph(string);
+            const xmlValue = escapeXml(string)
+              .replaceAll("\n", "&#10;")
+              .replaceAll("\r", "&#13;")
+              .replaceAll("\t", "&#9;");
+            value = ` office:value-type="string" office:string-value="${xmlValue}"`;
+            children = string.includes("\n")
+              ? string
+                  .split("\n")
+                  .map(
+                    /** Writes a native formula result paragraph. @param line - Cached result line. @returns Paragraph XML. */
+                    (line) => `<text:p>${escapeXml(line)}</text:p>`,
+                  )
+                  .join("")
+              : this.textParagraph(string);
           }
         }
       }
@@ -629,7 +641,6 @@ export class ScXMLExport {
   }
   /** Reuses actual shared Writer/Calc inline encoding for a simple literal paragraph. @param value - Literal simple text. @returns Paragraph XML. */
   private textParagraph(value: string): string {
-    if (/[\r\n]/.test(value)) throw new Error("ODS multiline cell export is not implemented");
-    return `<text:p>${exportText(value)}</text:p>`;
+    return `<text:p>${exportText(value.replace(/\r\n?/gu, "\n"))}</text:p>`;
   }
 }

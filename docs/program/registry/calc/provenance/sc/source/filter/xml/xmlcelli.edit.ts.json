@@ -12,13 +12,15 @@
     ],
     "upstreamSymbols": [
       "ScXMLTableRowCellContext::PushParagraphSpan",
-      "ScXMLTableRowCellContext::PushParagraphEnd"
+      "ScXMLTableRowCellContext::PushParagraphEnd",
+      "ScXMLTableRowCellContext::PushParagraphField"
     ],
     "preservedResponsibilities": [
-      "Constructs the native edit-cell paragraphs and applies their sparse style items through EditEngine selections."
+      "Constructs the native edit-cell paragraphs and applies their sparse style items through EditEngine selections.",
+      "Installs field placeholders through EditEngine selection and feature insertion, using the real Calc URL, date, sheet and title field items."
     ],
     "omittedResponsibilities": [
-      "Unrepresented text properties and edit-engine field import remain outside this responsibility."
+      "Unrepresented text properties and other edit field classes remain outside this responsibility."
     ],
     "evidence": {
       "local": [
@@ -33,6 +35,10 @@
         {
           "path": "apps/office/src/sc/source/filter/oox/excelfilter.test.ts",
           "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sc/source/filter/xml/ods-rich-text-fields.test.ts",
+          "marker": "testHyperlinkTargetFrameODS"
         }
       ],
       "upstream": [
@@ -43,6 +49,10 @@
         {
           "path": "vendor/libreoffice-reference/sc/source/filter/xml/xmlcelli.cxx",
           "marker": "ScXMLTableRowCellContext::PushParagraphEnd"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/source/filter/xml/xmlcelli.cxx",
+          "marker": "ScXMLTableRowCellContext::PushParagraphField"
         }
       ]
     },

@@ -1,6 +1,7 @@
 /** @fileoverview Original ImpEditEngine lifecycle, selection conversion and notification member groups. Unported state/constructor/undo/layout members are mandatory abstract dependencies: this is not an instantiable engine or a production fallback. */
 import { getProcessComponentContext } from "../../../comphelper/inc/processfactory";
 import { Reference } from "../../../cppu/inc/com/sun/star/uno/Reference";
+import { UpdateFields } from "./impedit2.fields";
 import { LanguageTag } from "../../../i18nlangtag/inc/languagetag";
 import { Locale } from "../../../udkapi/com/sun/star/lang/Locale";
 import { BreakIterator } from "../../../offapi/com/sun/star/i18n/BreakIterator";
@@ -189,6 +190,21 @@ export abstract class ImpEditEngine extends SfxListener implements StyleSheetUse
   protected abstract maNotifyHdl: ((notification: EENotify) => void) | null;
   /** Original mandatory range-deletion dependency; no alternative deletion provider. @param selection - Source range. @returns Actual resulting position. */
   abstract ImpDeleteSelection(selection: EditSelection): EditPaM;
+  /** Inserts one registered feature and updates field values and editor positions. @param selection - Original selection. @param item - Native item. @returns End position. */
+  ImpInsertFeature(selection: EditSelection, item: SfxPoolItem): EditPaM {
+    if (this.IsUndoEnabled() && !this.IsInUndo())
+      throw new Error("EditEngine feature insertion requires disabled undo");
+    const start = this.CreateEPaM(selection.Min());
+    const caret = selection.HasRange() ? this.ImpDeleteSelection(selection) : selection.Max();
+    const inserted = this.maEditDoc.InsertFeature(caret, item);
+    UpdateFields(this);
+    this.FindParaPortion(inserted.GetNode())?.MarkInvalid(inserted.GetIndex() - 1, 1);
+    const range = new ESelection(start);
+    range.end = this.CreateEPaM(inserted);
+    this.UpdateSelectionsInsert(range);
+    this.TextModified();
+    return inserted;
+  }
   /** Original selected word honors the cursor-side locale and source endpoint preferences. @param selection - Source caret/range. @param wordType - Original WordType. @param acceptStart - Accept a cursor at the word start. @param acceptEnd - Accept a cursor at the word end. @returns Original resulting selection. */
   SelectWord(
     selection: EditSelection,

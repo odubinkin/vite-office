@@ -12,14 +12,16 @@
     "upstreamSymbols": [
       "ImpEditEngine::ImpEditEngine",
       "ImpEditEngine::Dispose",
-      "ImpEditEngine::UpdateFields"
+      "ImpEditEngine::UpdateFields",
+      "ImpEditEngine::ImpDeleteSelection"
     ],
     "preservedResponsibilities": [
       "The document-only engine constructs the actual EditDoc, paragraph portion and edit status, and installs the original paragraph callbacks and document modification link.",
-      "The document engine exposes source rich-text insertion and field-refresh operations using the same actual EditDoc as literal import."
+      "The document engine exposes source rich-text insertion and field-refresh operations using the same actual EditDoc as literal import.",
+      "The document engine removes a same-paragraph placeholder with the native EditDoc character and attribute-owner operation when undo is disabled."
     ],
     "omittedResponsibilities": [
-      "The no-layout document scope omits interactive view formatting, device output, style notifications and selection-range editing."
+      "The no-layout document scope omits interactive view formatting, device output, style notifications and multi-paragraph selection deletion."
     ],
     "evidence": {
       "local": [
@@ -34,6 +36,10 @@
         {
           "path": "apps/office/src/sc/source/ui/docshell/docsh.csv-export.test.ts",
           "marker": "it("
+        },
+        {
+          "path": "apps/office/src/sc/source/filter/xml/ods-rich-text-fields.test.ts",
+          "marker": "testHyperlinkTargetFrameODS"
         }
       ],
       "upstream": [
@@ -52,6 +58,10 @@
         {
           "path": "editeng/source/editeng/impedit4.cxx",
           "marker": "ImpEditEngine::SetText"
+        },
+        {
+          "path": "vendor/libreoffice-reference/editeng/source/editeng/impedit2.cxx",
+          "marker": "ImpEditEngine::ImpDeleteSelection"
         }
       ]
     },

@@ -501,10 +501,17 @@ it("enforces real ZIP/media boundaries and cooperative import/export controls", 
   const table = target.FetchTable(0);
   assert(table);
   table.CreateColumnIfNotExists(0).SetRawString(1, unicode("a\nb"));
-  await expect(
-    /** Rich multiline storage needs its actual export owner. @returns Bytes. */ async () =>
-      await writeOdsDocument(target),
-  ).rejects.toThrow(/multiline/);
+  const multiline = await writeOdsDocument(target);
+  const again = await readOdsDocument(multiline);
+  const edit = again.GetRefCellValue(new ScAddress(0, 1, 0)).getEditText();
+  assert(edit);
+  const value = edit.GetText();
+  try {
+    expect(text(value)).toBe("a\nb");
+  } finally {
+    value.dispose();
+    again.Dispose();
+  }
 });
 
 it("distinguishes empty metadata wrappers from unimplemented semantic descendants", /** Namespace dispatch cannot flatten unsupported content into cells. @returns Nothing. */ () => {

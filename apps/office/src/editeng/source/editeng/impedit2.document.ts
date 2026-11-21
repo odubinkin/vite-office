@@ -97,9 +97,21 @@ export class DocumentImpEditEngine extends ImpEditEngine {
     this.GetNotifyHdl()?.(new EENotify(EENotifyType.EE_NOTIFY_PROCESSNOTIFICATIONS));
   }
 
-  /** The document owner only supplies collapsed selections created by SetText. @param selection - Actual edit selection. @returns Its caret. */
+  /** Deletes a same-paragraph selection in the document editor. @param selection - Actual edit selection. @returns The new caret. */
   override ImpDeleteSelection(selection: EditSelection): EditPaM {
-    if (selection.HasRange()) throw new Error("Document EditEngine requires a collapsed selection");
-    return selection.Min();
+    const start = selection.Min();
+    if (!selection.HasRange()) return start;
+    const end = selection.Max();
+    const node = start.GetNode();
+    if (node !== end.GetNode() || this.IsUndoEnabled())
+      throw new Error("Document EditEngine requires a same-paragraph selection and disabled undo");
+    const deleted = this.CreateESel(selection);
+    node?.checkAndDeleteEmptyAttribs();
+    const count = end.GetIndex() - start.GetIndex();
+    this.maEditDoc.RemoveChars(start, count);
+    this.FindParaPortion(node)?.MarkInvalid(end.GetIndex(), -count);
+    this.UpdateSelectionsDelete(deleted);
+    this.TextModified();
+    return start;
   }
 }

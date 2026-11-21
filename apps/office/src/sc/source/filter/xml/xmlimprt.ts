@@ -54,9 +54,11 @@ import { ScStyleNameConversion } from "../../core/tool/stylehelper";
 import { ScXMLBodyContext } from "./xmlbodyi";
 import type { ScLineBreakCell } from "../../../inc/attrib";
 import { ScDocOptions } from "../../core/tool/docoptio";
+import { INetURLObject } from "../../../../tools/source/fsys/urlobj.object";
 /** Browser parser ceilings bind native scalar import to bounded resources. */
 export interface ScXMLImportOptions extends OdfXmlParseOptions {
   readonly maxExpandedCells?: number;
+  readonly baseUrl?: string;
 }
 /** Saved numeric, text, empty or error result for one matrix formula cell. */
 interface MatrixCellResult {
@@ -74,6 +76,10 @@ interface MatrixFormulaRange {
 
 /** Actual import root/state for scalar content;no intermediate sheet/cell data model is retained. */
 export class ScXMLImport extends SvXMLImport implements SvXMLImportRootFactory {
+  /** Resolves a field reference when the caller supplies the original document URI. @param href - ODF reference. @returns Document-relative or resolved URI. */
+  GetAbsoluteReference(href: string): string {
+    return this.options.baseUrl ? INetURLObject.GetAbsURL(this.options.baseUrl, href) : href;
+  }
   readonly docImport: ScDocumentImport;
   private readonly namedExpressions: ScMyNamedExpression[] = [];
   private readonly matrixRanges: MatrixFormulaRange[] = [];

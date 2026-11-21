@@ -7497,3 +7497,13 @@ group can commit a one-row interval. Calc preserves both cursor readings.
 
 - [Original row cursor accessor](../../vendor/libreoffice-reference/sc/source/filter/xml/xmlsubti.hxx)
 - [Original row wrapper import](../../vendor/libreoffice-reference/sc/source/filter/xml/xmlrowi.cxx)
+
+### CALC-787 — ODS cell date fields use the current date after reopening
+
+The cell date-field importer constructs a default `SvxDateField` and
+ignores the stored `text:date-value` and displayed text. The exporter
+writes today's date with the `N2` data-style reference. Calc preserves
+the dynamic field and the original attribute behavior.
+
+- [Original date field import](../../vendor/libreoffice-reference/sc/source/filter/xml/celltextparacontext.cxx)
+- [Original edit-field export](../../vendor/libreoffice-reference/sc/source/filter/xml/xmlexprt.cxx)

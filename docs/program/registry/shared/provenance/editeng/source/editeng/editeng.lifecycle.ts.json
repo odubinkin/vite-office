@@ -28,7 +28,8 @@
       "EditEngine::GetText",
       "EditEngine::CalcFieldValue",
       "EditEngine::QuickSetAttribs",
-      "EditEngine::GetEmptyItemSet"
+      "EditEngine::GetEmptyItemSet",
+      "EditEngine::QuickInsertField"
     ],
     "preservedResponsibilities": [
       "Original outer notification bodies allocate real EENotify values and delegate actual implementation callbacks; original empty ParaAttribsChanged virtual body is retained, not used to disguise an unported provider. Static CreatePool shares the existing actual factory with ESM namespace callers. Concrete constructor/full engine APIs remain unported and abstract getImpl is mandatory.",
@@ -37,7 +38,8 @@
       "Original outer text/default-language/control/paragraph-count/undo methods delegate to the actual internal owner. Undo comment dispatch uses the source English strings.",
       "Source SetText restores the original conditional layout call. Source SetUpdateLayout and paragraph-attribute wrappers delegate to the actual internal engine.",
       "Original whole-text and paragraph getters expand actual document features and the base field virtual returns a single space.",
-      "QuickSetAttribs normalizes actual public selection endpoints and delegates to ImpEditEngine."
+      "QuickSetAttribs normalizes actual public selection endpoints and delegates to ImpEditEngine.",
+      "Normalizes the public selection and delegates field insertion to the represented no-view feature path."
     ],
     "omittedResponsibilities": [
       "Interactive layout and application-specific field presentation remain outside the shared document text slice."
@@ -71,6 +73,10 @@
         {
           "path": "apps/office/src/sc/source/filter/oox/excelfilter.test.ts",
           "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sc/source/filter/xml/ods-rich-text-fields.test.ts",
+          "marker": "testHyperlinkTargetFrameODS"
         }
       ],
       "upstream": [
@@ -105,6 +111,10 @@
         {
           "path": "editeng/source/editeng/editeng.cxx",
           "marker": "EditEngine::QuickSetAttribs"
+        },
+        {
+          "path": "vendor/libreoffice-reference/editeng/source/editeng/editeng.cxx",
+          "marker": "EditEngine::QuickInsertField"
         }
       ]
     },

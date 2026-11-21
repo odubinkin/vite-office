@@ -93,7 +93,7 @@ it("exports actual multi-paragraph edit cells and releases their owned text on r
   }
 });
 
-it("expands native tab and field features in CSV and ODS text exports", /** Checks field display and tab expansion through the real file writers. @returns Completion. */ async () => {
+it("expands native fields for CSV and preserves the field elements in ODS", /** Checks field display and tab expansion through the real file writers. @returns Completion. */ async () => {
   const shell = new ScDocShell();
   const doc = shell.GetDocument();
   const edit = new EditTextObjectImpl(
@@ -132,7 +132,7 @@ it("expands native tab and field features in CSV and ODS text exports", /** Chec
     expect(new TextDecoder().decode(shell.AsciiSave())).toBe('"A\tLink, labelSheet1Test title"\n');
     const archive = await DocumentArchive.open(await writeOdsDocument(doc));
     expect(await archive.readTextEntry("content.xml")).toContain(
-      "<text:p>A<text:tab/>Link,<text:s/>labelSheet1Test<text:s/>title</text:p>",
+      '<text:p>A<text:tab/><text:a xlink:href="https://example.invalid/" xlink:type="simple">Link, label</text:a><text:sheet-name>Sheet1</text:sheet-name><text:title>Test title</text:title></text:p>',
     );
   } finally {
     tab.Dispose();

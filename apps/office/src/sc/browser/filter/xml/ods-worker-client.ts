@@ -62,6 +62,7 @@ export class OdsWorkerClient implements OdsFilterService {
             ? {}
             : { maxExpandedCells: options.maxExpandedCells }),
           ...(options.zipLimits === undefined ? {} : { zipLimits: options.zipLimits }),
+          ...(options.baseUrl === undefined ? {} : { baseUrl: options.baseUrl }),
         },
       },
       data instanceof ArrayBuffer ? [data] : [],

@@ -44,6 +44,9 @@ export type DocumentEditEngine = Pick<
   | "GetParagraphText"
   | "GetEmptyItemSet"
   | "QuickSetAttribs"
+  | "QuickInsertField"
+  | "IsUndoEnabled"
+  | "EnableUndo"
 >;
 
 /** Original Calc editor layer owns optional paragraph defaults and applies them without recording undo. */
@@ -151,7 +154,7 @@ export class ScFieldEditEngine extends ScEditEngineDefaulter {
 }
 
 /** Original text evaluation for field classes admitted by the Calc document editor. @param field - Borrowed field. @param doc - Actual document. @param lineStyle - Optional underline output. @returns Owned field representation. */
-function GetCellFieldValue(
+export function GetCellFieldValue(
   field: SvxFieldDataConstReference,
   doc: ScDocument,
   lineStyle: [FontLineStyle | null],

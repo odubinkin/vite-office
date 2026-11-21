@@ -12,7 +12,7 @@ export type OdsWorkerRequest = { id: number } & (
   | {
       operation: "import";
       input: ArrayBuffer | XmlPackage;
-      options: Pick<OdsImportOptions, "limits" | "maxExpandedCells" | "zipLimits">;
+      options: Pick<OdsImportOptions, "limits" | "maxExpandedCells" | "zipLimits" | "baseUrl">;
     }
   | { operation: "export" | "export-xml"; document: CalcDocumentRecord }
 );
