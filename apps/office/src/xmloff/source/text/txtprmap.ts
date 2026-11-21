@@ -1,6 +1,7 @@
 /** @fileoverview Consumed native text character property map and handler transport from txtprmap.cxx; no browser boolean formatting model or substitute UNO provider. */
 import { cppu_detail_getUnoType_FillStyle } from "../../../offapi/com/sun/star/drawing/FillStyle";
 import * as CaseMap from "../../../offapi/com/sun/star/style/CaseMap";
+import { XMLShadowedPropHdl } from "../style/shdwdhdl";
 import { XMLConstantsPropertyHandler } from "../style/XMLConstantsPropertyHandler";
 import { PropertyValue } from "../../../udkapi/com/sun/star/beans/PropertyValue";
 import { PropertyState } from "../../../udkapi/com/sun/star/beans/PropertyState";
@@ -55,6 +56,14 @@ const weight = new XMLFontWeightPropHdl(),
   posture = new XMLPosturePropHdl(),
   converter = new SvXMLUnitConverter("twip");
 const kerning = new XMLKerningPropHdl();
+const fontRelief = new XMLConstantsPropertyHandler(
+  [
+    ["none", 0],
+    ["embossed", 1],
+    ["engraved", 2],
+  ],
+  null,
+);
 const kerningConverter = new SvXMLUnitConverter("mm100");
 /** Independent source CharWeight/CharPosture associations; floats and typed FontSlant are retained. */
 const scriptProperties = [
@@ -136,12 +145,14 @@ const strikeoutProperties = [
 ] as const;
 /** Native merged CharWordMode map and exact XML_TYPE_BOOL association. */
 const wordMode = new XMLNamedBoolPropertyHdl("skip-white-space", "continuous"),
-  autoKerning = new XMLBoolPropHdl();
+  bool = new XMLBoolPropHdl();
 const boolProperties = [
   [T.STYLE_TEXT_UNDERLINE_MODE, "style:text-underline-mode", "wordMode", wordMode],
   [T.STYLE_TEXT_OVERLINE_MODE, "style:text-overline-mode", "wordMode", wordMode],
   [T.STYLE_TEXT_LINE_THROUGH_MODE, "style:text-line-through-mode", "wordMode", wordMode],
-  [T.STYLE_LETTER_KERNING, "style:letter-kerning", "autoKerning", autoKerning],
+  [T.STYLE_LETTER_KERNING, "style:letter-kerning", "autoKerning", bool],
+  [T.STYLE_TEXT_OUTLINE, "style:text-outline", "outline", bool],
+  [T.FO_TEXT_SHADOW, "fo:text-shadow", "shadow", new XMLShadowedPropHdl()],
 ] as const;
 /** Source merged CharLocale mappings for the three independent script families. */
 const languageProperties = [
@@ -231,6 +242,7 @@ export const textCharacterPropertyTokens = [
   ...Object.values(lineColorTokens),
   T.STYLE_TEXT_POSITION,
   T.STYLE_TEXT_EMPHASIZE,
+  T.STYLE_FONT_RELIEF,
   T.FO_FONT_VARIANT,
   T.FO_TEXT_TRANSFORM,
   T.FO_LETTER_SPACING,
@@ -312,6 +324,12 @@ export function exportTextCharacterProperties(properties: OdfCharacterProperties
       }
       // At least one native signed scalar was inserted above; both original handlers necessarily emit numeric text.
       result += ` style:text-position="${output[0]}"`;
+    }
+    if (properties.relief !== undefined) {
+      output[0] = "";
+      value.insert([properties.relief], "sal_Int16");
+      if (fontRelief.exportXML(output, value, converter) && output[0] !== "")
+        result += ` style:font-relief="${output[0]}"`;
     }
     if (properties.caseMap !== undefined) {
       value.insert([properties.caseMap], "sal_Int16");
@@ -414,6 +432,12 @@ export function importTextCharacterProperties(
           value.extract(scalar, "sal_Int16");
           result.caseMap = scalar[0];
         }
+        continue;
+      }
+      if (token === T.STYLE_FONT_RELIEF) {
+        const scalar: [number] = [0];
+        if (fontRelief.importXML(text, value, converter) && value.extract(scalar, "sal_Int16"))
+          result.relief = scalar[0];
         continue;
       }
       if (token === T.STYLE_TEXT_EMPHASIZE) {
@@ -761,6 +785,9 @@ export function applyTextImportProperties(
       ["strikeout", "CharStrikeout", "sal_Int16"],
       ["emphasis", "CharEmphasis", "sal_Int16"],
       ["caseMap", "CharCaseMap", "sal_Int16"],
+      ["outline", "CharContoured", "bool"],
+      ["shadow", "CharShadowed", "bool"],
+      ["relief", "CharRelief", "sal_Int16"],
       ["escapement", "CharEscapement", "sal_Int16"],
       ["escapementHeight", "CharEscapementHeight", "sal_Int8"],
       ["underlineStyle", "CharUnderline", "sal_Int16"],

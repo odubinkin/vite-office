@@ -256,6 +256,9 @@ export const SwUnoPropertyMap: ReadonlyMap<string, SwUnoPropertyEntry> = new Map
   ),
   ["CharUnderlineColor", row(H.RES_CHRATR_UNDERLINE, "sal_Int32", M.MID_TL_COLOR, 1)],
   ["CharUnderlineHasColor", row(H.RES_CHRATR_UNDERLINE, "bool", M.MID_TL_HASCOLOR, 1)],
+  ["CharContoured", row(H.RES_CHRATR_CONTOUR, "bool", 0, 1)],
+  ["CharShadowed", row(H.RES_CHRATR_SHADOWED, "bool", 0, 1)],
+  ["CharRelief", row(H.RES_CHRATR_RELIEF, "sal_Int16", M.MID_RELIEF, 1)],
   ["CharCaseMap", row(H.RES_CHRATR_CASEMAP, "sal_Int16", 0, 1)],
   ["CharOverline", row(H.RES_CHRATR_OVERLINE, "sal_Int16", M.MID_TL_STYLE, 1)],
   ["CharOverlineColor", row(H.RES_CHRATR_OVERLINE, "sal_Int32", M.MID_TL_COLOR, 1)],
@@ -556,6 +559,9 @@ const characterMaybeVoidProperties = new Set([
   "CharStrikeout",
 ]);
 const paragraphStyleProperties = new Set([
+  "CharContoured",
+  "CharShadowed",
+  "CharRelief",
   "CharCaseMap",
   ...hyphenationNames,
   ...charBoxNames,
@@ -738,6 +744,9 @@ const staticMapEntries: (readonly SfxItemPropertyMapEntry[] | undefined)[] = [];
 const staticPropertySets: (SfxItemPropertySet | undefined)[] = [];
 /** Original COMMON_CRSR_PARA_PROPERTIES_WITHOUT_FN and hyperlink rows represented by this core. */
 const textDefaultProperties = new Set([
+  "CharContoured",
+  "CharShadowed",
+  "CharRelief",
   "CharCaseMap",
   ...hyphenationNames,
   ...charBoxNames,

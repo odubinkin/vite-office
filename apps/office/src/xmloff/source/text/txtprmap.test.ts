@@ -155,7 +155,7 @@ it("transports all native independent script values without boolean normalizatio
   ).not.toContain("text-underline-color");
   expect(exportTextCharacterProperties({ underlineStyle: 19 })).toBe("");
   expect(importTextCharacterProperties(attributes([["fo:font-size", "12pt"]]))).toEqual({});
-  expect(textCharacterPropertyTokens).toHaveLength(69);
+  expect(textCharacterPropertyTokens).toHaveLength(72);
   expect(textCharacterPropertyTokens).toContain(XMLToken.STYLE_TEXT_EMPHASIZE);
   expect(textCharacterPropertyTokens).toContain(XMLToken.FO_LETTER_SPACING);
   expect(textCharacterPropertyTokens.slice(9, 13)).toEqual([
@@ -334,4 +334,31 @@ it("preserves the two native CharCaseMap ODF attributes", /** Checks all publish
       ]),
     ),
   ).toEqual({ caseMap: 4 });
+});
+
+it("uses the native outline, shadow and font relief ODF spellings", /** Covers explicit off values and the original shadow lexical fallback. @returns Nothing. */ () => {
+  expect(
+    importTextCharacterProperties(
+      attributes([
+        ["style:text-outline", "false"],
+        ["fo:text-shadow", "unexpected"],
+        ["style:font-relief", "engraved"],
+      ]),
+    ),
+  ).toEqual({ outline: false, shadow: true, relief: 2 });
+  expect(
+    importTextCharacterProperties(
+      attributes([
+        ["style:text-outline", "true"],
+        ["fo:text-shadow", "none"],
+        ["style:font-relief", "none"],
+      ]),
+    ),
+  ).toEqual({ outline: true, shadow: false, relief: 0 });
+  expect(exportTextCharacterProperties({ outline: true, shadow: true, relief: 1 })).toBe(
+    ' style:text-outline="true" fo:text-shadow="1pt 1pt" style:font-relief="embossed"',
+  );
+  expect(exportTextCharacterProperties({ outline: false, shadow: false, relief: 0 })).toBe(
+    ' style:text-outline="false" fo:text-shadow="none" style:font-relief="none"',
+  );
 });

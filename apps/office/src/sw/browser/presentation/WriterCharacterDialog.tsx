@@ -19,12 +19,20 @@ import { SvxEscapement } from "../../../editeng/inc/svxenum";
 import {
   SvxPostureItem,
   SvxOverlineItem,
+  SvxContourItem,
+  SvxShadowedItem,
+  SvxCharReliefItem,
   SvxTextLineItem,
   SvxUnderlineItem,
   SvxWeightItem,
 } from "../../../editeng/source/items/textitem";
 import { ComplexColor } from "../../../docmodel/inc/color/ComplexColor";
-import { caseEffects, nextWordLineMode, underlines } from "./writer-search-format-values";
+import {
+  caseEffects,
+  nextFontEffectCheck,
+  reliefs,
+  underlines,
+} from "./writer-search-format-values";
 import { WriterSearchEmphasisControls } from "./WriterSearchEmphasisControls";
 import { SvxEmphasisMarkItem } from "../../../editeng/inc/emphasismarkitem";
 import { SvxWordLineModeItem } from "../../../editeng/inc/wrlmitem";
@@ -52,6 +60,9 @@ const characterItems = {
     wordMode: EE.EE_CHAR_WLM,
     emphasis: EE.EE_CHAR_EMPHASISMARK,
     caseMap: EE.EE_CHAR_CASEMAP,
+    outline: EE.EE_CHAR_OUTLINE,
+    shadow: EE.EE_CHAR_SHADOW,
+    relief: EE.EE_CHAR_RELIEF,
     position: EE.EE_CHAR_ESCAPEMENT,
     spacing: EE.EE_CHAR_KERNING,
     color: EE.EE_CHAR_COLOR,
@@ -68,6 +79,9 @@ const characterItems = {
     wordMode: SW.RES_CHRATR_WORDLINEMODE,
     emphasis: SW.RES_CHRATR_EMPHASIS_MARK,
     caseMap: SW.RES_CHRATR_CASEMAP,
+    outline: SW.RES_CHRATR_CONTOUR,
+    shadow: SW.RES_CHRATR_SHADOWED,
+    relief: SW.RES_CHRATR_RELIEF,
     position: SW.RES_CHRATR_ESCAPEMENT,
     spacing: SW.RES_CHRATR_KERNING,
     color: SW.RES_CHRATR_COLOR,
@@ -75,6 +89,7 @@ const characterItems = {
   },
 } as const;
 
+const fontPaintChecks = ["outline", "shadow"] as const;
 const characterLines = ["overline", "underline"] as const;
 /** Decoration item identities on the Font Effects tab. */
 type CharacterLine = (typeof characterLines)[number];
@@ -164,6 +179,17 @@ export function WriterCharacterDialog({
         ? writerColorValue(backgroundItem.GetValue(), "transparent")
         : "";
   const caseItem = read(which.caseMap);
+  const outline = read(which.outline);
+  const shadow = read(which.shadow);
+  const reliefItem = read(which.relief);
+  const initialPaint = {
+    outline: outline instanceof SvxContourItem ? outline.GetValue() : undefined,
+    shadow: shadow instanceof SvxShadowedItem ? shadow.GetValue() : undefined,
+  };
+  const initialRelief =
+    reliefItem instanceof SvxCharReliefItem ? String(reliefItem.GetValue()) : "";
+  const [paint, setPaint] = useState(initialPaint);
+  const [relief, setRelief] = useState(initialRelief);
   const initialCase = caseItem instanceof SvxCaseMapItem ? String(caseItem.GetCaseMap()) : "";
   const emphasisItem = read(which.emphasis);
   const initialEmphasis =
@@ -229,6 +255,8 @@ export function WriterCharacterDialog({
       setLineChanges({});
       setStrikethrough(initialStrike);
       setWordMode(initialWordMode);
+      setPaint(initialPaint);
+      setRelief(initialRelief);
     }
     if (tab === 3) setBackground(initialBackground);
     if (tab === 4) {
@@ -366,6 +394,18 @@ export function WriterCharacterDialog({
       output.Put(new SvxCrossedOutItem(Number(strikethrough), which.strike), true);
     if (wordMode !== undefined && wordMode !== initialWordMode)
       output.Put(new SvxWordLineModeItem(wordMode, which.wordMode), true);
+    for (const effect of fontPaintChecks) {
+      const value = paint[effect];
+      if (value === undefined || value === initialPaint[effect]) continue;
+      output.Put(
+        effect === "outline"
+          ? new SvxContourItem(value, which[effect])
+          : new SvxShadowedItem(value, which[effect]),
+        true,
+      );
+    }
+    if (relief !== "" && relief !== initialRelief)
+      output.Put(new SvxCharReliefItem(Number(relief), which.relief), true);
     const nextCase = String(values.get("caseMap") ?? "");
     if (nextCase !== "" && nextCase !== initialCase)
       output.Put(new SvxCaseMapItem(Number(nextCase), which.caseMap), true);
@@ -561,7 +601,7 @@ export function WriterCharacterDialog({
                       /** Advances the original false, true and mixed cycle. @returns Nothing. */
                       () =>
                         setWordMode(
-                          nextWordLineMode(wordMode, wordModeState === SfxItemState.INVALID),
+                          nextFontEffectCheck(wordMode, wordModeState === SfxItemState.INVALID),
                         )
                     }
                   />
@@ -589,6 +629,66 @@ export function WriterCharacterDialog({
                   )}
                 </select>
               </label>
+              {input.GetItemState(which.relief) !== SfxItemState.UNKNOWN && (
+                <label className={fieldClass}>
+                  {localization.GetText("writer.search.format.relief", "Relief")}
+                  <select
+                    value={relief}
+                    disabled={input.GetItemState(which.relief) === SfxItemState.DISABLED}
+                    className="rounded border border-slate-300 px-2 py-1"
+                    onChange={
+                      /** Tracks relief without changing the stored outline and shadow. @param event - Relief selection. @returns Nothing. */
+                      (event) => setRelief(event.currentTarget.value)
+                    }
+                  >
+                    <option value="" disabled />
+                    {reliefs.map(
+                      /** Presents one native relief option. @param entry - Value and caption. @returns Option. */
+                      ([value, label]) => (
+                        <option value={value} key={value}>
+                          {label}
+                        </option>
+                      ),
+                    )}
+                  </select>
+                </label>
+              )}
+              {fontPaintChecks.map(
+                /** Presents a native mixed-state outline or shadow control. @param effect - Font paint item. @returns Checkbox or nothing. */
+                (effect) => {
+                  const state = input.GetItemState(which[effect]);
+                  if (state === SfxItemState.UNKNOWN) return null;
+                  return (
+                    <label key={effect} className="flex items-center gap-2 text-sm">
+                      <input
+                        type="checkbox"
+                        checked={paint[effect] === true}
+                        disabled={Number(relief) > 0 || state === SfxItemState.DISABLED}
+                        ref={
+                          /** Displays native mixed state. @param box - Checkbox. @returns Nothing. */
+                          (box) => {
+                            if (box) box.indeterminate = paint[effect] === undefined;
+                          }
+                        }
+                        onChange={
+                          /** Advances the native mixed-state cycle. @returns Nothing. */
+                          () =>
+                            setPaint({
+                              ...paint,
+                              [effect]: nextFontEffectCheck(
+                                paint[effect],
+                                state === SfxItemState.INVALID,
+                              ),
+                            })
+                        }
+                      />
+                      {effect === "outline"
+                        ? localization.GetText("writer.search.format.outline", "Outline")
+                        : localization.GetText("writer.search.format.shadow", "Shadow")}
+                    </label>
+                  );
+                },
+              )}
               <WriterSearchEmphasisControls
                 value={emphasis}
                 label={

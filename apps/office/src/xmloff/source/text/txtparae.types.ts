@@ -50,6 +50,10 @@ export interface OdfCharacterProperties {
   readonly emphasis?: number;
   /** Original UNO CharCaseMap short, shared by both ODF attributes. */
   readonly caseMap?: number;
+  /** Original UNO font paint properties. */
+  readonly outline?: boolean;
+  readonly shadow?: boolean;
+  readonly relief?: number;
   /** Native CharEscapement and CharEscapementHeight. */
   readonly escapement?: number;
   readonly escapementHeight?: number;

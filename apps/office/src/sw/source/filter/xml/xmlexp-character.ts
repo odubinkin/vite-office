@@ -15,13 +15,16 @@ import { SvxEscapementItem } from "../../../../editeng/inc/escapementitem";
 import { RES_CHRATR_ESCAPEMENT } from "../../../inc/hintids";
 import { SvxCaseMapItem } from "../../../../editeng/inc/cmapitem";
 import { SvxEmphasisMarkItem } from "../../../../editeng/inc/emphasismarkitem";
-import { MID_EMPHASIS } from "../../../../editeng/inc/memberids";
+import { MID_EMPHASIS, MID_RELIEF } from "../../../../editeng/inc/memberids";
 import { Any } from "../../../../cppu/inc/com/sun/star/uno/Any";
 import { SvxCrossedOutItem } from "../../../../editeng/inc/crossedoutitem";
 import {
   RES_CHRATR_CROSSEDOUT,
   RES_CHRATR_EMPHASIS_MARK,
   RES_CHRATR_CASEMAP,
+  RES_CHRATR_CONTOUR,
+  RES_CHRATR_SHADOWED,
+  RES_CHRATR_RELIEF,
   RES_CHRATR_OVERLINE,
 } from "../../../inc/hintids";
 import {
@@ -46,6 +49,9 @@ import {
   SvxPostureItem,
   SvxUnderlineItem,
   SvxOverlineItem,
+  SvxContourItem,
+  SvxShadowedItem,
+  SvxCharReliefItem,
 } from "../../../../editeng/source/items/textitem";
 import { ConvertFontWeight, ConvertFontSlant } from "../../../../vcl/inc/unohelp";
 import { getFontFamilyGeneric } from "../../../../xmloff/source/style/fonthdl";
@@ -91,6 +97,9 @@ export function getCharacterProperties(
   const box = set.GetItemIfSet(RES_CHRATR_BOX, inherited);
   const escapement = set.GetItemIfSet(RES_CHRATR_ESCAPEMENT, inherited);
   const crossedOut = set.GetItemIfSet(RES_CHRATR_CROSSEDOUT, inherited);
+  const contour = set.GetItemIfSet(RES_CHRATR_CONTOUR, inherited);
+  const shadow = set.GetItemIfSet(RES_CHRATR_SHADOWED, inherited);
+  const relief = set.GetItemIfSet(RES_CHRATR_RELIEF, inherited);
   const caseItem = set.GetItemIfSet(RES_CHRATR_CASEMAP, inherited);
   const emphasisItem = set.GetItemIfSet(RES_CHRATR_EMPHASIS_MARK, inherited);
   const wordMode = set.GetItemIfSet(RES_CHRATR_WORDLINEMODE, inherited),
@@ -127,6 +136,9 @@ export function getCharacterProperties(
     crossedOut === undefined &&
     emphasisItem === undefined &&
     caseItem === undefined &&
+    contour === undefined &&
+    shadow === undefined &&
+    relief === undefined &&
     escapement === undefined &&
     !directFontSize &&
     color === undefined &&
@@ -183,6 +195,11 @@ export function getCharacterProperties(
       ? { emphasis: queryCharacterShort(emphasisItem, MID_EMPHASIS) }
       : {}),
     ...(caseItem instanceof SvxCaseMapItem ? { caseMap: queryCharacterShort(caseItem, 0) } : {}),
+    ...(contour instanceof SvxContourItem ? { outline: contour.GetValue() } : {}),
+    ...(shadow instanceof SvxShadowedItem ? { shadow: shadow.GetValue() } : {}),
+    ...(relief instanceof SvxCharReliefItem
+      ? { relief: queryCharacterShort(relief, MID_RELIEF) }
+      : {}),
     ...(color instanceof SvxColorItem
       ? color.GetValue().GetAlpha() === 255 || writerTextColorValue(color) === "auto"
         ? { color: writerTextColorValue(color) }
@@ -284,7 +301,10 @@ export function getCharacterProperties(
 }
 
 /** Reads the original UNO short without passing native flag encodings into ODF. @param item - Concrete Writer character item. @param member - Original UNO member. @returns Signed short. */
-function queryCharacterShort(item: SvxEmphasisMarkItem | SvxCaseMapItem, member: number): number {
+function queryCharacterShort(
+  item: SvxEmphasisMarkItem | SvxCaseMapItem | SvxCharReliefItem,
+  member: number,
+): number {
   const value = new Any();
   const scalar: [number] = [0];
   try {

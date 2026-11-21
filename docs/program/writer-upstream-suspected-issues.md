@@ -6013,3 +6013,14 @@ space/tab boundary and expansion-triggered restart.
 
 - [Original title-case scan and midword comment](../../vendor/libreoffice-reference/editeng/source/items/svxfont.cxx#L166)
 - [Original Writer portion handling after a length change](../../vendor/libreoffice-reference/sw/source/core/txtnode/swfont.cxx#L1182)
+
+### WRITER-738 — The ODF text-shadow import accepts arbitrary values as enabled
+
+The character shadow property uses `XMLShadowedPropHdl`. Its import
+handler treats every attribute value except the exact token `none`
+as true, including an empty value or a malformed shadow expression.
+Its export handler emits `1pt 1pt` for true. Writer uses the same
+handler for this boolean character property.
+
+- [Original boolean shadow handler](../../vendor/libreoffice-reference/xmloff/source/style/shdwdhdl.cxx#L37)
+- [Original character property mapping](../../vendor/libreoffice-reference/xmloff/source/text/txtprmap.cxx#L175)

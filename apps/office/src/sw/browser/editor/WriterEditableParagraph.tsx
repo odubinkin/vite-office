@@ -10,10 +10,11 @@ import { StrikeoutText } from "../../../vcl/browser/strikeout-text";
 import { Fragment, useLayoutEffect, useRef } from "react";
 import { resolveSwNumberingTabPosition } from "../../source/core/text/txttab";
 import {
+  browserFontPaint,
   browserTextDecoration,
   browserTextEmphasis,
-  splitWordLineText,
-} from "../presentation/writer-view-projection";
+} from "../presentation/writer-font-paint";
+import { splitWordLineText } from "../presentation/writer-view-projection";
 import { browserFontFamily } from "./writer-font-family";
 import { FontLineStyle } from "../../../editeng/source/items/textitem";
 
@@ -461,6 +462,9 @@ export function WriterTextPortionProjection({
   const caseStyle =
     run.inlineGraphic === undefined ? browserCaseStyle(attributes.caseMap) : undefined;
   if (caseStyle !== undefined) content = <span style={caseStyle}>{content}</span>;
+  const effect = browserFontPaint(attributes, attributes.color);
+  if (effect !== undefined && run.inlineGraphic === undefined)
+    content = <span style={effect}>{content}</span>;
   if (run.attributes.color !== undefined)
     content = (
       <span style={{ color: run.attributes.color === "auto" ? "initial" : run.attributes.color }}>

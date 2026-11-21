@@ -28,7 +28,7 @@ it("retains static default-table identity and clears MAYBEVOID except the origin
     second = new SwUnoPropertyMapProvider(),
     entries = first.GetPropertyMapEntries(PROPERTY_MAP_TEXT_DEFAULT),
     set = first.GetPropertySet(PROPERTY_MAP_TEXT_DEFAULT);
-  expect(entries.length).toBe(118);
+  expect(entries.length).toBe(121);
   const flags = upstream.originalFlags as Readonly<Record<string, number>>;
   for (const entry of entries) {
     const name = text(entry.aName);

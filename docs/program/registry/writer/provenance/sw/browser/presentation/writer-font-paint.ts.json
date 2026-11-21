@@ -1,0 +1,36 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "browser-adaptation",
+    "localPath": "apps/office/src/sw/browser/presentation/writer-font-paint.ts",
+    "localSymbols": [
+      "browserTextEmphasis",
+      "browserTextDecoration",
+      "browserFontPaint"
+    ],
+    "status": "local-only",
+    "rationale": "Paints native text decorations, outline, shadow and relief with browser CSS, preserving VCL precedence and color rules.",
+    "responsibilities": [
+      "Paints native text decorations, outline, shadow and relief with browser CSS, preserving VCL precedence and color rules."
+    ],
+    "stackDivergence": {
+      "kind": "browser-adaptation",
+      "rationale": "CSS paints the effect on one original text subtree using nominal screen offsets."
+    },
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sw/browser/presentation/writer-font-paint.ts",
+          "marker": "browserFontPaint"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/vcl/source/outdev/text.cxx",
+          "marker": "OutputDevice::ImplDrawSpecialText"
+        }
+      ]
+    }
+  }
+}

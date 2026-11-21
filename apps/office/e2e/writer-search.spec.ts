@@ -501,3 +501,67 @@ test("Writer keeps original text through case effects, ODT reopen and search rep
   await expect(smallCaps).toHaveText("gamma");
   expect(await editor.textContent()).toBe("alpha-beta gamma");
 });
+
+test("Writer retains outline and shadow across ODT and gives relief paint precedence", /** Exercises the original Font Effects dependencies and rendered text. @param fixtures - Playwright fixtures. @param fixtures.page - Chromium page. @returns Test completion. */ async ({
+  page,
+}) => {
+  await page.goto("/writer");
+  const editor = page.getByRole("textbox", { name: "Writer document text", exact: true });
+  await editor.fill("text paint");
+  await editor.press("Control+a");
+  await page.getByRole("menuitem", { name: "Format", exact: true }).click();
+  await page.getByRole("menuitem", { name: "Character…", exact: true }).click();
+  const character = page.getByRole("dialog", { name: "Character", exact: true });
+  await character.getByRole("tab", { name: "Font Effects", exact: true }).click();
+  const outline = character.getByRole("checkbox", { name: "Outline", exact: true });
+  const shadow = character.getByRole("checkbox", { name: "Shadow", exact: true });
+  const relief = character.getByRole("combobox", { name: "Relief", exact: true });
+  await outline.check();
+  await shadow.check();
+  await relief.selectOption({ label: "Embossed" });
+  await expect(outline).toBeDisabled();
+  await expect(shadow).toBeDisabled();
+  await relief.selectOption("0");
+  await expect(outline).toBeChecked();
+  await expect(shadow).toBeChecked();
+  await character.getByRole("button", { name: "OK", exact: true }).click();
+
+  const outlined = editor.locator('[style*="-webkit-text-stroke"]');
+  await expect(outlined).toHaveCSS("-webkit-text-stroke-width", "1px");
+  await expect(outlined).toHaveCSS("text-shadow", "rgb(192, 192, 192) 2px 2px 0px");
+
+  const pending = page.waitForEvent("download");
+  await page.getByRole("menuitem", { name: "File", exact: true }).click();
+  await page.getByRole("menuitem", { name: "Export…" }).click();
+  await page.getByRole("button", { name: "Download ODT" }).click();
+  const path = await (await pending).path();
+  if (path === null) throw new Error("Missing exported ODT.");
+  await page.getByRole("button", { name: "Open", exact: true }).click();
+  await page.getByRole("tab", { name: "On computer" }).click();
+  await page.getByLabel("Browse").setInputFiles({
+    buffer: await readFile(path),
+    mimeType: "application/vnd.oasis.opendocument.text",
+    name: "outline-shadow.odt",
+  });
+  await expect(page.getByRole("dialog", { name: "Open", exact: true })).toHaveCount(0);
+  await expect(outlined).toHaveCSS("-webkit-text-stroke-width", "1px");
+  await expect(outlined).toHaveCSS("text-shadow", "rgb(192, 192, 192) 2px 2px 0px");
+
+  await page.keyboard.press("Control+h");
+  const search = page.getByRole("dialog", { name: "Find and Replace", exact: true });
+  await search.getByLabel("Find", { exact: true }).fill("paint");
+  await search.getByText("Other options", { exact: true }).click();
+  await search.getByLabel("Replace with", { exact: true }).fill("paint");
+  await search.getByRole("button", { name: "Format…" }).click();
+  const replacement = page.getByRole("dialog", { name: "Replace", exact: true });
+  await replacement.getByRole("tab", { name: "Font Effects", exact: true }).click();
+  await replacement.getByRole("combobox", { name: "Relief", exact: true }).selectOption({
+    label: "Engraved",
+  });
+  await replacement.getByRole("button", { name: "OK", exact: true }).click();
+  await search.getByRole("button", { name: "Replace All", exact: true }).click();
+  const engraved = editor.getByText("paint", { exact: true });
+  await expect(engraved).toHaveCSS("text-shadow", "rgb(0, 0, 0) -1px -1px 0px");
+  await expect(engraved).toHaveCSS("-webkit-text-stroke-width", "0px");
+  await expect(editor).toHaveText("text paint");
+});

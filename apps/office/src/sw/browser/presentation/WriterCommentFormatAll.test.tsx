@@ -32,6 +32,8 @@ import {
   EE_CHAR_EMPHASISMARK,
   EE_CHAR_FONTHEIGHT,
   EE_CHAR_OVERLINE,
+  EE_CHAR_OUTLINE,
+  EE_CHAR_SHADOW,
 } from "../../../editeng/inc/eeitem";
 import { SvxCaseMap } from "../../../editeng/inc/svxenum";
 import { SvxFontHeightItem } from "../../../editeng/inc/fhgtitem";
@@ -178,6 +180,8 @@ it("opens Character from the Format menu and applies only the selected annotatio
     fireEvent.change(controls.getByLabelText("Effects"), {
       target: { value: SvxCaseMap.Uppercase },
     });
+    fireEvent.click(controls.getByRole("checkbox", { name: "Outline" }));
+    fireEvent.click(controls.getByRole("checkbox", { name: "Shadow" }));
     fireEvent.change(controls.getByLabelText("Overlining"), {
       target: { value: FontLineStyle.LINESTYLE_DOUBLE },
     });
@@ -198,6 +202,7 @@ it("opens Character from the Format menu and applies only the selected annotatio
     expect(selected.parentElement).toHaveStyle({
       fontSize: "20pt",
       textTransform: "uppercase",
+      textShadow: "2px 2px #c0c0c0",
       textEmphasisStyle: "filled dot",
       textEmphasisPosition: "under right",
     });
@@ -226,6 +231,8 @@ it("opens Character from the Format menu and applies only the selected annotatio
           end: 3,
           item: { which: EE_CHAR_CASEMAP, value: SvxCaseMap.Uppercase },
         });
+        for (const which of [EE_CHAR_OUTLINE, EE_CHAR_SHADOW])
+          expect(items).toContainEqual({ start: 1, end: 3, item: { which, value: true } });
         expect(items).toContainEqual({
           start: 1,
           end: 3,

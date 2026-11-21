@@ -38,7 +38,7 @@ import {
   setParagraphLineSpacing,
   readSearchFormatValue,
   reliefs,
-  nextWordLineMode,
+  nextFontEffectCheck,
   strikeouts,
   underlines,
 } from "./writer-search-format-values";
@@ -268,11 +268,15 @@ export function WriterSearchFormatDialog(
             /** Commits an explicit boolean criterion. @param event - Checkbox change. @returns Nothing. */ (
               event,
             ) => {
-              if (which !== RES_CHRATR_WORDLINEMODE) {
+              if (
+                which !== RES_CHRATR_WORDLINEMODE &&
+                which !== RES_CHRATR_CONTOUR &&
+                which !== RES_CHRATR_SHADOWED
+              ) {
                 change(which, String(event.currentTarget.checked));
                 return;
               }
-              const next = nextWordLineMode(
+              const next = nextFontEffectCheck(
                 value === "" ? undefined : value === "true",
                 initialScalar(which) === "",
               );

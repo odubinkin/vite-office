@@ -1,4 +1,5 @@
 /** @fileoverview Projects the live Writer graph to immutable browser presentation values. */
+import { projectWriterFontPaint, type WriterFontPaint } from "../../source/core/txtnode/txatbase";
 import { getPageBodyGeometry } from "../../source/core/layout/pagedesc";
 import { SwStyleNameMapper } from "../../source/core/doc/SwStyleNameMapper";
 import { IsPoolUserFormat } from "../../inc/poolfmt";
@@ -157,69 +158,6 @@ export interface WriterParagraphListLayout {
   readonly listTabPositionPt: number;
 }
 
-/** Maps native visible line variants to CSS decoration families. @param style - Native decoration style. @returns Browser decoration style. */
-export function browserTextLineStyle(
-  style: FontLineStyle,
-): "solid" | "double" | "dotted" | "dashed" | "wavy" {
-  switch (style) {
-    case FontLineStyle.LINESTYLE_DOUBLE:
-      return "double";
-    case FontLineStyle.LINESTYLE_DOTTED:
-    case FontLineStyle.LINESTYLE_BOLDDOTTED:
-      return "dotted";
-    case FontLineStyle.LINESTYLE_DASH:
-    case FontLineStyle.LINESTYLE_LONGDASH:
-    case FontLineStyle.LINESTYLE_DASHDOT:
-    case FontLineStyle.LINESTYLE_DASHDOTDOT:
-    case FontLineStyle.LINESTYLE_BOLDDASH:
-    case FontLineStyle.LINESTYLE_BOLDLONGDASH:
-    case FontLineStyle.LINESTYLE_BOLDDASHDOT:
-    case FontLineStyle.LINESTYLE_BOLDDASHDOTDOT:
-      return "dashed";
-    case FontLineStyle.LINESTYLE_SMALLWAVE:
-    case FontLineStyle.LINESTYLE_WAVE:
-    case FontLineStyle.LINESTYLE_DOUBLEWAVE:
-    case FontLineStyle.LINESTYLE_BOLDWAVE:
-      return "wavy";
-    default:
-      return "solid";
-  }
-}
-
-const emphasisStyles: Readonly<Partial<Record<number, string>>> = {
-  [FontEmphasisMark.Dot]: "filled dot",
-  [FontEmphasisMark.Circle]: "open circle",
-  [FontEmphasisMark.Disc]: "filled circle",
-  [FontEmphasisMark.Accent]: "filled sesame",
-};
-
-/** Projects native emphasis flags to CSS shared by body and annotation text. @param mark - Effective font emphasis. @returns CSS emphasis properties when painted. */
-export function browserTextEmphasis(mark: FontEmphasisMark | undefined) {
-  if (mark === undefined) return undefined;
-  const textEmphasisStyle = emphasisStyles[mark & FontEmphasisMark.Style];
-  if (textEmphasisStyle === undefined) return undefined;
-  return {
-    textEmphasisStyle,
-    textEmphasisPosition: mark & FontEmphasisMark.PosBelow ? "under right" : "over right",
-  };
-}
-
-/** Returns the CSS for one independently decorated line. @param line - Decoration position. @param value - Native line projection. @returns Browser paint values. */
-export function browserTextDecoration(
-  line: "underline" | "overline",
-  value: WriterTextLineProjection,
-) {
-  return {
-    textDecorationLine: line,
-    textDecorationStyle: browserTextLineStyle(value.style),
-    textDecorationColor: value.color ?? "currentColor",
-    ...(value.style >= FontLineStyle.LINESTYLE_BOLD &&
-    value.style <= FontLineStyle.LINESTYLE_BOLDWAVE
-      ? { textDecorationThickness: "0.13em" }
-      : {}),
-  };
-}
-
 /** Separates decorated text from spacing glyphs as in CommonSalLayout. @param text - Model text portion. @returns Alternating nonspacing and spacing text, starting with nonspacing text. */
 export function splitWordLineText(text: string): string[] {
   return text.split(/(\p{White_Space}+)/u);
@@ -234,28 +172,30 @@ export interface WriterTextLineProjection {
 /** One immutable display portion; no filter or transfer record participates in rendering. */
 export interface WriterTextPortion {
   readonly inlineGraphic?: WriterInlineGraphicProjection;
-  readonly attributes: Readonly<{
-    bold: boolean;
-    italic: boolean;
-    underline: boolean;
-    underlineLine?: WriterTextLineProjection;
-    overlineLine?: WriterTextLineProjection;
-    wordLineMode?: boolean;
-    caseMap?: SvxCaseMap;
-    emphasisMark?: FontEmphasisMark;
-    escapement?: Readonly<{ offset: number; height: number }>;
-    strikeout?: import("../../../tools/inc/fontenum").FontStrikeout;
-    color?: string;
-    highlight?: string;
-    fontFamily?: string;
-    fontFamilyGeneric?: string;
-    fontSizeTwips?: number;
-    kerningTwips?: number;
-    joinsPreviousCharacterBox?: boolean;
-    characterBox?: Readonly<
-      Record<"Top" | "Bottom" | "Left" | "Right", Readonly<{ line: string; padding: number }>>
-    >;
-  }>;
+  readonly attributes: Readonly<
+    WriterFontPaint & {
+      bold: boolean;
+      italic: boolean;
+      underline: boolean;
+      underlineLine?: WriterTextLineProjection;
+      overlineLine?: WriterTextLineProjection;
+      wordLineMode?: boolean;
+      caseMap?: SvxCaseMap;
+      emphasisMark?: FontEmphasisMark;
+      escapement?: Readonly<{ offset: number; height: number }>;
+      strikeout?: import("../../../tools/inc/fontenum").FontStrikeout;
+      color?: string;
+      highlight?: string;
+      fontFamily?: string;
+      fontFamilyGeneric?: string;
+      fontSizeTwips?: number;
+      kerningTwips?: number;
+      joinsPreviousCharacterBox?: boolean;
+      characterBox?: Readonly<
+        Record<"Top" | "Bottom" | "Left" | "Right", Readonly<{ line: string; padding: number }>>
+      >;
+    }
+  >;
   readonly hyperlink?: Readonly<{ url: string; targetFrame?: string }>;
   readonly startOffset: number;
   readonly text: string;
@@ -890,6 +830,10 @@ function projectTextPortions(node: SwTextNode): readonly WriterTextPortion[] {
         attributes: Object.freeze({
           bold: (handler.ReadItem(RES_CHRATR_WEIGHT) as SvxWeightItem).GetBoolValue(),
           italic: (handler.ReadItem(RES_CHRATR_POSTURE) as SvxPostureItem).GetBoolValue(),
+          ...projectWriterFontPaint(
+            /** Reads the current native paint item at this portion. @param which - Character item. @returns Effective item. */
+            (which) => handler.ReadItem(which),
+          ),
           underline: underline.GetBoolValue(),
           ...(caseMap === SvxCaseMap.NotMapped ? {} : { caseMap }),
           ...(underline.GetBoolValue() &&

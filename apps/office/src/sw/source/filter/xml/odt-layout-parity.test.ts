@@ -17,7 +17,10 @@ import {
 import { createDocument } from "../../../../sfx2/source/doc/objsh";
 import { ODF_NAMESPACES } from "../../../../xmloff/source/core/xmltoken";
 import {
+  RES_CHRATR_CONTOUR,
   RES_CHRATR_FONTSIZE,
+  RES_CHRATR_RELIEF,
+  RES_CHRATR_SHADOWED,
   RES_CHRATR_OVERLINE,
   RES_PARATR_LINESPACING,
   RES_UL_SPACE,
@@ -458,5 +461,38 @@ it("preserves a named ODT character style and a direct overline override across 
     }
   } finally {
     source.Dispose();
+  }
+});
+
+it("keeps outline and shadow values under relief and restores each native item", /** Exercises native Writer properties and the ODT export/reopen path. @returns Nothing. */ () => {
+  const combined =
+    '<style:style style:name="Effects" style:family="text"><style:text-properties style:text-outline="true" fo:text-shadow="1pt 1pt" style:font-relief="engraved"/></style:style>';
+  const body = '<text:p><text:span text:style-name="Effects">Relief</text:span> Plain</text:p>';
+  const { document: original } = importWriterXml(styles(""), content(combined, body), metadata);
+  try {
+    const exported = exportContentXml(original);
+    expect(exported).toContain('style:text-outline="true"');
+    expect(exported).toContain('fo:text-shadow="1pt 1pt"');
+    expect(exported).toContain('style:font-relief="engraved"');
+    const { document: reopened } = importWriterXml(exportStylesXml(original), exported, metadata);
+    try {
+      const iterator = new SwAttrIter(reopened.paragraphs[0]!);
+      for (const [offset, expected] of [
+        [2, [true, true, 2]],
+        [8, [false, false, 0]],
+      ] as const) {
+        iterator.Seek(offset);
+        const handler = iterator.GetAttrHandler();
+        expect([
+          handler.ReadItem(RES_CHRATR_CONTOUR).QueryValue(),
+          handler.ReadItem(RES_CHRATR_SHADOWED).QueryValue(),
+          handler.ReadItem(RES_CHRATR_RELIEF).QueryValue(),
+        ]).toEqual(expected);
+      }
+    } finally {
+      reopened.Dispose();
+    }
+  } finally {
+    original.Dispose();
   }
 });

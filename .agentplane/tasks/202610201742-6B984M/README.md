@@ -4,7 +4,7 @@ title: "Implement Writer search and replace core and browser UI"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 121
+revision: 122
 origin:
   system: "manual"
 depends_on:
@@ -490,6 +490,16 @@ comments:
       The first verification run exposed missing test imports and an overly wide CSS style type, which were corrected. This is an implementation checkpoint in the current Writer search task and the ten-task cadence remains unchanged.
 
       Verification passed 103 targeted Writer tests, 15 shared tests, and 8 production Chromium scenarios. The new Chromium scenario uses Character title case across ODT reopen, then applies small capitals using formatted search replacement. TypeScript and Vite build, scoped ESLint and Prettier, dependencies, source tree and provenance, Writer resources, Writer and shared registry parity (zero semantic violations), routing and diff checks passed. Repository-wide documentation and file-size checks still list the pre-existing 307 JSDoc findings and four files at or above the size limit. AgentPlane doctor passed with the existing hook-shim warning.
+  -
+    author: "CODER"
+    body: |-
+      Verified the Writer Font Effects outline, shadow and relief checkpoint. The regular and annotation Character dialog uses the native SvxContourItem, SvxShadowedItem and SvxCharReliefItem, and the search dialog keeps the corresponding mixed-state controls. Relief disables the two checkboxes while retaining their values. The document and annotation projections share the VCL effect precedence and color selection. The CSS renderer uses nominal screen offsets for stroke and shadow paint.
+
+      Writer UNO and the annotation TextRange map now carry CharContoured, CharShadowed and CharRelief through native items. Shared ODF uses the original boolean outline, the existing XMLShadowedPropHdl and the native font-relief tokens. WRITER-738 records the native shadow handler's acceptance of any value except exact none. The core paints through its EditEngine relief item contract and the browser owns CSS.
+
+      Evidence covers selected comment formatting and its Worker and ODT round-trip, the relief property alongside persisted outline and shadow, and ordinary Character controls and formatted replacement. This checkpoint leaves the current Writer search task and the ten-task cadence active.
+
+      Targeted checks passed 53 Writer tests and 15 shared tests. Production TypeScript and Vite build and all 9 Writer Chromium scenarios passed. Scoped lint and formatting, module boundaries, source tree, source provenance, Writer UI resources, Writer/shared registry parity with zero semantic violations, routing and diff checks passed. Repository-wide documentation and file-size checks still show the existing 307 findings and four files at or above the size limit. AgentPlane doctor passed with the existing hook-shim warning.
 
 events:
   -
@@ -1161,9 +1171,21 @@ events:
       The first verification run exposed missing test imports and an overly wide CSS style type, which were corrected. This is an implementation checkpoint in the current Writer search task and the ten-task cadence remains unchanged.
 
       Verification passed 103 targeted Writer tests, 15 shared tests, and 8 production Chromium scenarios. The new Chromium scenario uses Character title case across ODT reopen, then applies small capitals using formatted search replacement. TypeScript and Vite build, scoped ESLint and Prettier, dependencies, source tree and provenance, Writer resources, Writer and shared registry parity (zero semantic violations), routing and diff checks passed. Repository-wide documentation and file-size checks still list the pre-existing 307 JSDoc findings and four files at or above the size limit. AgentPlane doctor passed with the existing hook-shim warning.
+  -
+    type: "comment"
+    at: "2026-11-21T23:21:46.299Z"
+    author: "CODER"
+    body: |-
+      Verified the Writer Font Effects outline, shadow and relief checkpoint. The regular and annotation Character dialog uses the native SvxContourItem, SvxShadowedItem and SvxCharReliefItem, and the search dialog keeps the corresponding mixed-state controls. Relief disables the two checkboxes while retaining their values. The document and annotation projections share the VCL effect precedence and color selection. The CSS renderer uses nominal screen offsets for stroke and shadow paint.
+
+      Writer UNO and the annotation TextRange map now carry CharContoured, CharShadowed and CharRelief through native items. Shared ODF uses the original boolean outline, the existing XMLShadowedPropHdl and the native font-relief tokens. WRITER-738 records the native shadow handler's acceptance of any value except exact none. The core paints through its EditEngine relief item contract and the browser owns CSS.
+
+      Evidence covers selected comment formatting and its Worker and ODT round-trip, the relief property alongside persisted outline and shadow, and ordinary Character controls and formatted replacement. This checkpoint leaves the current Writer search task and the ten-task cadence active.
+
+      Targeted checks passed 53 Writer tests and 15 shared tests. Production TypeScript and Vite build and all 9 Writer Chromium scenarios passed. Scoped lint and formatting, module boundaries, source tree, source provenance, Writer UI resources, Writer/shared registry parity with zero semantic violations, routing and diff checks passed. Repository-wide documentation and file-size checks still show the existing 307 findings and four files at or above the size limit. AgentPlane doctor passed with the existing hook-shim warning.
 
 doc_version: 3
-doc_updated_at: "2026-11-21T23:12:21.557Z"
+doc_updated_at: "2026-11-21T23:21:46.299Z"
 doc_updated_by: "CODER"
 description: "Implement the approved coherent Writer search-and-replace feature from pinned LibreOffice sources: real shared search engine and options, native paragraph/cursor traversal and replacement/history contracts, view-owned search state and dispatch, Find toolbar and Find and Replace dialog with generated upstream command placement and shortcuts. Preserve source semantics and explicit unsupported boundaries; never substitute DOM text search or browser RegExp for ICU contracts. Work only on writer in vite-office-writer; local upstream reading approved, no network or merges. Keep active until approved scope is verified."
 sections:

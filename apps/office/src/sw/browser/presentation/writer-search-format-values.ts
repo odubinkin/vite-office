@@ -157,8 +157,8 @@ export const underlines = [
   [FontLineStyle.LINESTYLE_DOUBLEWAVE, "Double Wave"],
 ] as const;
 
-/** Advances the native Font Effects word-line checkbox. @param current - Current state, or undefined when mixed. @param mixed - Whether the input supports the mixed state. @returns Next state. */
-export function nextWordLineMode(
+/** Advances the native tri-state Font Effects checkbox. @param current - Current state, or undefined when mixed. @param mixed - Whether the input supports the mixed state. @returns Next state. */
+export function nextFontEffectCheck(
   current: boolean | undefined,
   mixed: boolean,
 ): boolean | undefined {

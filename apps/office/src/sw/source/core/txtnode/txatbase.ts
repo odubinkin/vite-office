@@ -29,6 +29,9 @@ import {
   SvxPostureItem,
   SvxUnderlineItem,
   SvxOverlineItem,
+  SvxCharReliefItem,
+  SvxContourItem,
+  SvxShadowedItem,
   SvxWeightItem,
   SvxWordLineModeItem,
 } from "../../../../editeng/source/items/textitem";
@@ -50,6 +53,9 @@ import {
   RES_CHRATR_HIGHLIGHT,
   RES_CHRATR_EMPHASIS_MARK,
   RES_CHRATR_CASEMAP,
+  RES_CHRATR_CONTOUR,
+  RES_CHRATR_SHADOWED,
+  RES_CHRATR_RELIEF,
   RES_CHRATR_BACKGROUND,
   RES_CHRATR_KERNING,
   RES_CHRATR_POSTURE,
@@ -72,8 +78,31 @@ import { Color } from "../../../../tools/inc/color";
 export { RES_TXTATR_AUTOFMT } from "../../../inc/hintids";
 export { RES_TXTATR_INETFMT } from "../../../inc/hintids";
 
+/** Original special text-paint items for an effective run. */
+export interface WriterFontPaint {
+  readonly outline?: boolean;
+  readonly shadow?: boolean;
+  readonly relief?: ReturnType<SvxCharReliefItem["GetValue"]>;
+}
+
+/** Resolves supported special text-paint items without changing the source set. @param get - Current character item lookup. @returns Active paint settings. */
+export function projectWriterFontPaint(
+  get: (which: number) => SfxPoolItem | undefined,
+): WriterFontPaint {
+  const outline = get(RES_CHRATR_CONTOUR);
+  const shadow = get(RES_CHRATR_SHADOWED);
+  const relief = get(RES_CHRATR_RELIEF);
+  return {
+    ...(outline instanceof SvxContourItem && outline.GetValue() ? { outline: true } : {}),
+    ...(shadow instanceof SvxShadowedItem && shadow.GetValue() ? { shadow: true } : {}),
+    ...(relief instanceof SvxCharReliefItem && relief.GetValue()
+      ? { relief: relief.GetValue() }
+      : {}),
+  };
+}
+
 /** Names the bounded direct character properties currently carried by an auto-format item. */
-export interface WriterCharacterAttributes {
+export interface WriterCharacterAttributes extends WriterFontPaint {
   /** CSS-compatible explicit foreground color or Writer's automatic color marker. */
   readonly color?: string;
   /** Explicit font family; absent means the paragraph style or document default. */
@@ -558,6 +587,10 @@ export function projectWriterCharacterAttributes(
     items.GetItemIfSet(RES_CHRATR_WORDLINEMODE, false) ??
     inherited?.GetItemIfSet(RES_CHRATR_WORDLINEMODE, true);
   return {
+    ...projectWriterFontPaint(
+      /** Reads the attached paint item when the sparse pool represents it. @param which - Character item. @returns Attached item. */
+      (which) => items.GetItemIfSet(which, false) ?? inherited?.GetItemIfSet(which, true),
+    ),
     ...(color instanceof SvxColorItem ? { color: writerTextColorValue(color) } : {}),
     ...(font instanceof SvxFontItem ? { fontFamily: font.GetFamilyName() } : {}),
     ...(caseItem instanceof SvxCaseMapItem ? { caseMap: caseItem.GetCaseMap() } : {}),

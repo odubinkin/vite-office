@@ -37,11 +37,8 @@ import {
 } from "../../inc/hintids";
 import { projectWriterCharacterAttributes } from "../../source/core/txtnode/txatbase";
 import { projectWriterLineSpacing } from "../../source/core/text/itrform2";
-import {
-  browserTextDecoration,
-  browserTextEmphasis,
-  splitWordLineText,
-} from "./writer-view-projection";
+import { browserFontPaint, browserTextDecoration, browserTextEmphasis } from "./writer-font-paint";
+import { splitWordLineText } from "./writer-view-projection";
 import { browserFontFamily } from "../editor/writer-font-family";
 import { getWriterTextCaretPoint } from "../editor/writer-selection";
 import { EditPaM } from "../../../editeng/inc/EditPaM";
@@ -782,6 +779,8 @@ function applyTextStyle(
   if (attributes.fontSizeTwips !== undefined) style.fontSize = `${attributes.fontSizeTwips / 20}pt`;
   if (attributes.kerningTwips !== undefined)
     style.letterSpacing = `${attributes.kerningTwips / 20}pt`;
+  const effects = browserFontPaint(attributes, attributes.color);
+  if (effects !== undefined) Object.assign(style, effects);
   const caseStyle = browserCaseStyle(attributes.caseMap);
   if (caseStyle !== undefined) Object.assign(style, caseStyle);
   const value = element.textContent ?? "";

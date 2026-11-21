@@ -1,0 +1,34 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sw/browser/presentation/writer-font-paint.ts",
+    "classification": "browser-adaptation",
+    "state": "active",
+    "suite": "writer",
+    "subsystem": "presentation",
+    "capabilityIds": [
+      "CAP-0111"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "not-applicable",
+      "defaultStatus": "not-applicable",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/sw/browser/presentation/writer-font-paint.ts#browserFontPaint",
+        "apps/office/e2e/writer-search.spec.ts"
+      ],
+      "justification": "Paints native text decorations, outline, shadow and relief with browser CSS, preserving VCL precedence and color rules.",
+      "knownViolations": [],
+      "localSymbols": [
+        "browserTextEmphasis",
+        "browserTextDecoration",
+        "browserFontPaint"
+      ],
+      "sourceResponsibility": "browser-owned",
+      "upstreamFile": null,
+      "upstreamSymbols": []
+    }
+  }
+}
