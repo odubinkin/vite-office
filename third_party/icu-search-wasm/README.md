@@ -27,3 +27,18 @@ local standard I/O.
 ```sh
 WRITER_ICU_REGEX_PROBE="$PWD/output/playwright/writer-icu-regex/probe" npm run test:shared -- src/i18npool/source/search/textsearch-regex.test.ts
 ```
+
+## Browser module build
+
+With an installed and activated repository-local SDK, the build uses the pinned ICU source archive,
+a local ICU 78.3 host build and the pinned Emscripten compiler. The script leaves the existing
+deployment alone and writes the module and its binary under `output/playwright/icu-regex-wasm` after
+an ICU smoke test.
+
+```sh
+python3 scripts/build-icu-regex-wasm.py --host-icu path/to/icu-build --emsdk path/to/emsdk
+```
+
+Add `--verify-inputs` to verify the archive, ICU data and host tool version without an SDK. The
+application adapter is tested with real growable WebAssembly memory and ABI observers. These tests
+cover the memory and lifetime contract, while the host differential covers matcher semantics.

@@ -4,7 +4,7 @@ title: "Implement Writer search and replace core and browser UI"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 68
+revision: 69
 origin:
   system: "manual"
 depends_on:
@@ -208,6 +208,9 @@ comments:
   -
     author: "CODER"
     body: "Verified checkpoint: the shared TextSearch owner accepts an explicitly supplied ICU matcher, leaves case matching to that matcher, preserves native regex pattern syntax, skips apostrophe substitution and the complex second pass, pads forward transliteration context, remaps every directional capture, and releases matcher handles on reconfiguration. The optional host integration tests call the compiled ICU 78.3 C ABI through local standard I/O. The pinned native differential passed 32,364 cases, and the final targeted runtime checks passed 80 shared and 47 Writer scenarios, production build and two Writer resource cases. Dependency, source-tree, provenance, JSDoc, file-size, scoped lint/format, doctor, routing and diff checks passed. WRITER-710 and CALC-787 preserve the source complex-only regex pattern selection. There is still no browser WASM binary or deployment capability gate enabled. Native browser regex needs the approved SDK and adapter, and note search needs the annotation and sidebar owners. The parent remains open."
+  -
+    author: "CODER"
+    body: "Verified checkpoint: the browser ICU adapter accepts the pinned native ABI, passes explicit UTF-16 lengths through growable WebAssembly memory, takes independent signed directional capture copies, and releases temporary buffers and matcher handles. ABI tests cover embedded NULs, supplementary units, signed unmatched pairs, memory growth, failures and repeated disposal. The offline build recipe checks the pinned ICU source archive, ICU data and host tooling, then uses the pinned local Emscripten SDK to cross-build and run an ICU smoke test. Local input verification and smoke-script syntax passed. The actual cross-compile and its smoke test remain unexecuted because the pinned SDK is absent and network authorization is pending. Targeted shared suites passed 68 cases including native host TextSearch tests. Office production build, two Writer resource cases, dependency/source-tree/provenance/JSDoc/file-size checks, scoped lint and format, doctor, routing and diff checks passed. The browser regex capability remains gated, and note search still requires annotation and sidebar owners. The parent remains open."
 events:
   -
     type: "status"
@@ -496,8 +499,13 @@ events:
     at: "2026-11-21T10:52:21.661Z"
     author: "CODER"
     body: "Verified checkpoint: the shared TextSearch owner accepts an explicitly supplied ICU matcher, leaves case matching to that matcher, preserves native regex pattern syntax, skips apostrophe substitution and the complex second pass, pads forward transliteration context, remaps every directional capture, and releases matcher handles on reconfiguration. The optional host integration tests call the compiled ICU 78.3 C ABI through local standard I/O. The pinned native differential passed 32,364 cases, and the final targeted runtime checks passed 80 shared and 47 Writer scenarios, production build and two Writer resource cases. Dependency, source-tree, provenance, JSDoc, file-size, scoped lint/format, doctor, routing and diff checks passed. WRITER-710 and CALC-787 preserve the source complex-only regex pattern selection. There is still no browser WASM binary or deployment capability gate enabled. Native browser regex needs the approved SDK and adapter, and note search needs the annotation and sidebar owners. The parent remains open."
+  -
+    type: "comment"
+    at: "2026-11-21T10:57:20.847Z"
+    author: "CODER"
+    body: "Verified checkpoint: the browser ICU adapter accepts the pinned native ABI, passes explicit UTF-16 lengths through growable WebAssembly memory, takes independent signed directional capture copies, and releases temporary buffers and matcher handles. ABI tests cover embedded NULs, supplementary units, signed unmatched pairs, memory growth, failures and repeated disposal. The offline build recipe checks the pinned ICU source archive, ICU data and host tooling, then uses the pinned local Emscripten SDK to cross-build and run an ICU smoke test. Local input verification and smoke-script syntax passed. The actual cross-compile and its smoke test remain unexecuted because the pinned SDK is absent and network authorization is pending. Targeted shared suites passed 68 cases including native host TextSearch tests. Office production build, two Writer resource cases, dependency/source-tree/provenance/JSDoc/file-size checks, scoped lint and format, doctor, routing and diff checks passed. The browser regex capability remains gated, and note search still requires annotation and sidebar owners. The parent remains open."
 doc_version: 3
-doc_updated_at: "2026-11-21T10:52:21.661Z"
+doc_updated_at: "2026-11-21T10:57:20.847Z"
 doc_updated_by: "CODER"
 description: "Implement the approved coherent Writer search-and-replace feature from pinned LibreOffice sources: real shared search engine and options, native paragraph/cursor traversal and replacement/history contracts, view-owned search state and dispatch, Find toolbar and Find and Replace dialog with generated upstream command placement and shortcuts. Preserve source semantics and explicit unsupported boundaries; never substitute DOM text search or browser RegExp for ICU contracts. Work only on writer in vite-office-writer; local upstream reading approved, no network or merges. Keep active until approved scope is verified."
 sections:

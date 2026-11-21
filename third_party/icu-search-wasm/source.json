@@ -6,5 +6,7 @@
   "referenceSha256": "378aaf3e310749b8b639f9677c7d7d075f7790d7dc06a7ce14aea28069214408",
   "referenceSymbols": ["RESrchPrepare", "lcl_findRegex", "RESrchFrwrd", "RESrchBkwrd"],
   "emscriptenVersion": "4.0.19",
-  "abi": ["lo_regex_create", "lo_regex_destroy", "lo_regex_search", "lo_regex_offsets"]
+  "abi": ["lo_regex_create", "lo_regex_destroy", "lo_regex_search", "lo_regex_offsets"],
+  "icuSourceSha256": "3a2e7a47604ba702f345878308e6fefeca612ee895cf4a5f222e7955fabfe0c0",
+  "emsdkCommit": "1693ce7359fc9694f198694f902a2cc061239b86"
 }
