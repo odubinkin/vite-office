@@ -1,0 +1,21 @@
+{
+  "schema_version": 1,
+  "task_id": "202611211845-XEPNMP",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-11-21T18:52:42.261Z",
+  "verdict": "pass",
+  "summary": "The ODS filter now carries native data-bar settings and both limits through the document model and Worker XML.",
+  "evaluated_sha": "724bfde7f7822ce6f375bcc09320edac085e8f9f",
+  "blueprint_digest": "c834b49d0c0545824ddb37493eb78b032b8eac7bbb69e438d8a3eadf89e581f3",
+  "findings": [
+    "The Calc fixture reproduces native ODS import and export scenarios. Geometry, threshold defaults, formula retargeting on value changes and legacy spelling are verified. Browser painting and XLSX remain outside this filter scope."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202611211845-XEPNMP/README.md",
+    "45 focused tests, office typecheck, lint and formatting, dependency and provenance checks, AgentPlane gate"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": []
+}
