@@ -1,0 +1,34 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/i18nutil/source/utility/unicodeescape.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "shared",
+    "subsystem": "text-search",
+    "capabilityIds": [
+      "CAP-0111"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "not-applicable",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/i18nutil/source/utility/unicodeescape.ts",
+        "apps/office/src/i18nutil/source/utility/unicodeescape.test.ts"
+      ],
+      "justification": "Ports the native replacement Unicode escape pass, including escaped backslashes, four/eight hex digits, literal malformed values, the original control filter and UTF-16 output.",
+      "knownViolations": [],
+      "localSymbols": [
+        "processUnicodeEscapes"
+      ],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": "i18nutil/source/utility/unicodeescape.cxx",
+      "upstreamSymbols": [
+        "processUnicodeEscapes"
+      ]
+    }
+  }
+}

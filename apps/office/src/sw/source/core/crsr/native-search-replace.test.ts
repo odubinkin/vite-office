@@ -1,5 +1,8 @@
 /** @fileoverview Source-contract checks for actual native string replacement, search history/no-ring progression and threshold behavior. */
 import { expect, it, vi } from "vitest";
+import { createNativeRegexMatcher, hasNativeRegexProbe } from "../../../../test/icu-regex-probe";
+import { REGEXP } from "../../../../offapi/com/sun/star/util/SearchAlgorithms2";
+import { ReplaceBackReferences } from "./findtxt";
 import { SwDoc } from "../doc/doc";
 import { SwDocShell } from "../../uibase/app/docsh";
 import { SwWrtShell } from "../../uibase/wrtsh/wrtsh1";
@@ -245,8 +248,8 @@ it("handles no-mark, empty marked and unsupported regex ranges before partial mu
     expect(f.shell.Undo()).toBe(true);
     expect(f.node.GetText()).toBe("abc");
     expect(
-      /** Rejects unported regex replacement before modifying history. @returns Native success. */ () =>
-        manager.ReplaceRange(selected, "x", true),
+      /** Rejects a paragraph split before modifying history. @returns Native success. */ () =>
+        manager.ReplaceRange(selected, String.raw`x\n`, true),
     ).toThrow("regex replacement");
   } finally {
     selected.Dispose();
@@ -361,6 +364,103 @@ it.each([false, true])(
       expect(f.node.GetText()).toBe("cat cot cut");
       expect(f.shell.Redo()).toBe(true);
       expect(f.node.GetText()).toBe("dog🌴 dog🌴 dog🌴");
+    } finally {
+      f.shell.Close();
+      f.docShell.Close();
+    }
+  },
+);
+
+it.each(["$", "^$", "$^"])(
+  "uses the native paragraph-end match as a newline for %s",
+  /** Exercises Writer's anchor-specific replacement branch without mocking captures. @param pattern - Native anchor spelling. @returns Nothing. */
+  (pattern) => {
+    const f = fixture("end");
+    const selected = range(f.node, 3, 3);
+    const options = new SearchOptions2();
+    options.AlgorithmType2 = REGEXP;
+    options.searchString.assign(string(pattern));
+    options.replaceString.assign(string(String.raw`&:$${0}`));
+    try {
+      const replacement = ReplaceBackReferences(options, selected);
+      expect(replacement).toBeDefined();
+      expect(Array.from(replacement?.getStr().subarray(0, replacement.getLength()) ?? [])).toEqual([
+        10, 58, 10,
+      ]);
+      replacement?.dispose();
+    } finally {
+      selected.Dispose();
+      f.shell.Close();
+      f.docShell.Close();
+    }
+  },
+);
+
+it.skipIf(!hasNativeRegexProbe).each([false, true])(
+  "replaces real ICU capture groups and retains grouped undo and redo backward=%s",
+  /** Exercises full regex reference expansion in the native model-text replacement strategy. @param backward - Search direction. @returns Nothing. */
+  (backward) => {
+    const f = fixture("a1 a2");
+    const options = new SearchOptions2();
+    options.AlgorithmType2 = REGEXP;
+    options.searchString.assign(string("(a)([0-9])(z)?"));
+    options.replaceString.assign(string(String.raw`😀$2$1$3`));
+    try {
+      const count = f.shell
+        .GetCursor()
+        .Find_Text(
+          options,
+          false,
+          backward ? SwDocPositions.End : SwDocPositions.Start,
+          backward ? SwDocPositions.Start : SwDocPositions.End,
+          [false],
+          FindRanges.InSelAll | FindRanges.InBodyOnly,
+          true,
+          undefined,
+          undefined,
+          createNativeRegexMatcher,
+        );
+      expect(count).toBe(2);
+      expect(f.node.GetText()).toBe("😀1a 😀2a");
+      expect(f.shell.Undo()).toBe(true);
+      expect(f.node.GetText()).toBe("a1 a2");
+      expect(f.shell.Redo()).toBe(true);
+      expect(f.node.GetText()).toBe("😀1a 😀2a");
+    } finally {
+      f.shell.Close();
+      f.docShell.Close();
+    }
+  },
+);
+
+it.skipIf(!hasNativeRegexProbe)(
+  "keeps the native replacement fallback when capture search retains a soft hyphen",
+  /** Replays the two native cleanup policies against actual ICU. @returns Nothing. */ () => {
+    const f = fixture("a\u00adb");
+    const options = new SearchOptions2();
+    options.AlgorithmType2 = REGEXP;
+    options.searchString.assign(string("(ab)"));
+    options.replaceString.assign(string("$1"));
+    try {
+      expect(
+        f.shell
+          .GetCursor()
+          .Find_Text(
+            options,
+            false,
+            SwDocPositions.Start,
+            SwDocPositions.End,
+            [false],
+            FindRanges.InSelAll | FindRanges.InBodyOnly,
+            true,
+            undefined,
+            undefined,
+            createNativeRegexMatcher,
+          ),
+      ).toBe(1);
+      expect(f.node.GetText()).toBe("$1");
+      expect(f.shell.Undo()).toBe(true);
+      expect(f.node.GetText()).toBe("a\u00adb");
     } finally {
       f.shell.Close();
       f.docShell.Close();

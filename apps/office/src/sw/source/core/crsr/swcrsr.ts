@@ -2,6 +2,7 @@
 import { SwPaM, SwPosition, GoNextPos, GoPreviousPos } from "./pam";
 import { SwNodes } from "../docnode/nodes";
 import { FindText } from "./findtxt";
+import type { RegexMatcherFactory } from "../../../../unotools/inc/textsearch";
 import { FindRanges, SwDocPositions } from "../../../inc/cshtyp";
 import type { SearchOptions2 } from "../../../../i18nutil/inc/searchopt";
 import {
@@ -182,7 +183,7 @@ export class SwCursor extends SwPaM {
     }
     target.Assign(boundary, 0);
   }
-  /** Native Find_Text entry point for represented absolute model-text search. Notes and merged layout remain unported and reject explicitly. @param options - Native option value. @param searchInNotes - Search annotations. @param start - Start selector. @param end - End selector. @param cancel - Native cancellation output. @param ranges - Scope/all flags. @param replace - Native replace mode. @param layout - Optional layout owner for merged-text searching. @param acceptsNode - Represented layout admission. @returns Number of matches. */
+  /** Native Find_Text entry point for model-text search. Notes and merged layout remain unported and reject explicitly. @param options - Native option value. @param searchInNotes - Search annotations. @param start - Start selector. @param end - End selector. @param cancel - Native cancellation output. @param ranges - Scope/all flags. @param replace - Native replace mode. @param layout - Optional layout owner for merged-text searching. @param acceptsNode - Represented layout admission. @param createRegex - Native ICU constructor. @returns Number of matches. */
   public Find_Text(
     options: SearchOptions2,
     searchInNotes: boolean,
@@ -193,10 +194,11 @@ export class SwCursor extends SwPaM {
     replace = false,
     layout?: SwRootFrame,
     acceptsNode?: SwSearchNodeFilter,
+    createRegex?: RegexMatcherFactory,
   ): number {
     if (searchInNotes || layout !== undefined)
       throw new Error("Writer notes and layout-text search are not implemented.");
-    return FindText(this, options, start, end, cancel, ranges, replace, acceptsNode);
+    return FindText(this, options, start, end, cancel, ranges, replace, acceptsNode, createRegex);
   }
   /** Native default threshold response, RET_YES=2: continue after discarding undo. Shell/UNO overrides may return RET_CANCEL=0 or RET_NO=3. @returns Native VCL response identity. */
   public MaxReplaceArived(): number {

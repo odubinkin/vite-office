@@ -5681,3 +5681,13 @@ applies its authored properties without that collection change.
   fresh instance or retain the key from a previous non-regex search.
 - The shared search owner preserves that pattern selection and skips the
   second transliteration pass for regex, as the source does.
+
+### WRITER-711 — Regex capture expansion keeps a soft hyphen ignored by the original match
+
+- In upstream `sw/source/core/crsr/findtxt.cxx`, the original model-text
+  search normally drops soft hyphens. `ReplaceBackReferences` searches the
+  selected range again with soft hyphens retained.
+- For `(ab)` over `a<U+00AD>b`, the initial search succeeds and the capture
+  search fails. Replace All falls back to Unicode escape processing without
+  expanding `$1`. The Writer model regression preserves this sequence
+  against the pinned ICU.

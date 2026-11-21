@@ -131,7 +131,7 @@ export class SwUndoInsert extends SwUndo {
 /** Native replacement undo wrapper; the SaveContent-derived implementation owns source strings, ranges and partitioned history. */
 export class SwUndoReplace extends SwUndo {
   private readonly m_pImpl: SwUndoReplaceImpl;
-  /** Creates the original normal marked same-node replacement payload. @param range - Original range. @param inserted - Requested string. @param regExp - Unsupported regex mode. @returns Undo action. */
+  /** Creates the original marked same-node replacement payload. @param range - Original range. @param inserted - Requested string. @param regExp - Native regex mode. @returns Undo action. */
   public constructor(range: SwPaM, inserted: string, regExp = false) {
     super("Replace");
     this.m_pImpl = new SwUndoReplaceImpl(range, inserted, regExp);
@@ -187,7 +187,7 @@ export class SwUndoReplace extends SwUndo {
   }
 }
 
-/** Original SwUndoReplace::Impl responsibility on SwUndoSaveContent. Only normal same-node text and the existing collapsed ordinary bookmark model are represented. */
+/** Original SwUndoReplace::Impl responsibility on SwUndoSaveContent. Same-node text and the existing collapsed ordinary bookmark model are represented. */
 class SwUndoReplaceImpl extends SwUndoSaveContent {
   private readonly m_rDoc: SwDoc;
   private readonly m_nSttNd: number;
@@ -196,15 +196,15 @@ class SwUndoReplaceImpl extends SwUndoSaveContent {
   private m_nEndCnt: number;
   private readonly m_sOld: string;
   private m_nSetPos: number;
-  /** Captures original coordinates, deletes/stores affected content indices, then copies complete node hint history. @param range - Native source range. @param m_sIns - Requested string. @param regExp - Native regex mode, not represented. @returns Payload. */
+  /** Captures original coordinates, deletes/stores affected content indices, then copies complete node hint history. @param range - Native source range. @param m_sIns - Requested string. @param m_bRegExp - Native regex mode. @returns Payload. */
   public constructor(
     range: SwPaM,
     private readonly m_sIns: string,
-    regExp: boolean,
+    private readonly m_bRegExp: boolean,
   ) {
     super();
-    if (regExp || !range.HasMark() || range.Start().GetNode() !== range.End().GetNode())
-      throw new Error("Writer replacement undo requires a normal marked same-node range.");
+    if (!range.HasMark() || range.Start().GetNode() !== range.End().GetNode())
+      throw new Error("Writer replacement undo requires a marked same-node range.");
     const node = range.Start().GetNode() as SwTextNode;
     this.m_rDoc = node.GetDoc();
     this.m_nSttNd = node.GetIndex();
@@ -285,7 +285,7 @@ class SwUndoReplaceImpl extends SwUndoSaveContent {
         this.m_nSetPos = this.m_pHistory.Count();
         if (this.m_nSetPos === 0) this.m_pHistory = undefined;
       }
-      doc.GetDocumentContentOperationsManager().ReplaceRange(range, this.m_sIns, false);
+      doc.GetDocumentContentOperationsManager().ReplaceRange(range, this.m_sIns, this.m_bRegExp);
       return range;
     } catch (error) {
       range.Dispose();

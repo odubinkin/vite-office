@@ -4,7 +4,7 @@ title: "Implement Writer search and replace core and browser UI"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 69
+revision: 70
 origin:
   system: "manual"
 depends_on:
@@ -211,6 +211,9 @@ comments:
   -
     author: "CODER"
     body: "Verified checkpoint: the browser ICU adapter accepts the pinned native ABI, passes explicit UTF-16 lengths through growable WebAssembly memory, takes independent signed directional capture copies, and releases temporary buffers and matcher handles. ABI tests cover embedded NULs, supplementary units, signed unmatched pairs, memory growth, failures and repeated disposal. The offline build recipe checks the pinned ICU source archive, ICU data and host tooling, then uses the pinned local Emscripten SDK to cross-build and run an ICU smoke test. Local input verification and smoke-script syntax passed. The actual cross-compile and its smoke test remain unexecuted because the pinned SDK is absent and network authorization is pending. Targeted shared suites passed 68 cases including native host TextSearch tests. Office production build, two Writer resource cases, dependency/source-tree/provenance/JSDoc/file-size checks, scoped lint and format, doctor, routing and diff checks passed. The browser regex capability remains gated, and note search still requires annotation and sidebar owners. The parent remains open."
+  -
+    author: "CODER"
+    body: "Verified checkpoint: native model-text Replace All now decodes Unicode escapes, recomputes ICU capture pairs over the selected span, expands replacement references and replays same-paragraph edits with grouped undo/redo. The shared wrapper isolates cached backends by the explicit matcher factory. The native paragraph-end reference helper preserves the synthetic LF capture. WRITER-711 records the original soft-hyphen cleanup asymmetry and its literal replacement fallback. Local native ICU tests verify forward and backward model replacement, unmatched groups, supplementary UTF-16, and grouped history. Passed 87 shared and 87 Writer tests, two resource cases, production build, dependency/source-tree/provenance/JSDoc/file-size checks, scoped lint/format, doctor and routing. Browser regex still requires the WASM module and runtime binding. Regex paragraph breaks and zero-length cursor traversal, single and attribute replacement integration, and note search remain incomplete, so the parent stays open."
 events:
   -
     type: "status"
@@ -504,8 +507,13 @@ events:
     at: "2026-11-21T10:57:20.847Z"
     author: "CODER"
     body: "Verified checkpoint: the browser ICU adapter accepts the pinned native ABI, passes explicit UTF-16 lengths through growable WebAssembly memory, takes independent signed directional capture copies, and releases temporary buffers and matcher handles. ABI tests cover embedded NULs, supplementary units, signed unmatched pairs, memory growth, failures and repeated disposal. The offline build recipe checks the pinned ICU source archive, ICU data and host tooling, then uses the pinned local Emscripten SDK to cross-build and run an ICU smoke test. Local input verification and smoke-script syntax passed. The actual cross-compile and its smoke test remain unexecuted because the pinned SDK is absent and network authorization is pending. Targeted shared suites passed 68 cases including native host TextSearch tests. Office production build, two Writer resource cases, dependency/source-tree/provenance/JSDoc/file-size checks, scoped lint and format, doctor, routing and diff checks passed. The browser regex capability remains gated, and note search still requires annotation and sidebar owners. The parent remains open."
+  -
+    type: "comment"
+    at: "2026-11-21T11:04:43.886Z"
+    author: "CODER"
+    body: "Verified checkpoint: native model-text Replace All now decodes Unicode escapes, recomputes ICU capture pairs over the selected span, expands replacement references and replays same-paragraph edits with grouped undo/redo. The shared wrapper isolates cached backends by the explicit matcher factory. The native paragraph-end reference helper preserves the synthetic LF capture. WRITER-711 records the original soft-hyphen cleanup asymmetry and its literal replacement fallback. Local native ICU tests verify forward and backward model replacement, unmatched groups, supplementary UTF-16, and grouped history. Passed 87 shared and 87 Writer tests, two resource cases, production build, dependency/source-tree/provenance/JSDoc/file-size checks, scoped lint/format, doctor and routing. Browser regex still requires the WASM module and runtime binding. Regex paragraph breaks and zero-length cursor traversal, single and attribute replacement integration, and note search remain incomplete, so the parent stays open."
 doc_version: 3
-doc_updated_at: "2026-11-21T10:57:20.847Z"
+doc_updated_at: "2026-11-21T11:04:43.886Z"
 doc_updated_by: "CODER"
 description: "Implement the approved coherent Writer search-and-replace feature from pinned LibreOffice sources: real shared search engine and options, native paragraph/cursor traversal and replacement/history contracts, view-owned search state and dispatch, Find toolbar and Find and Replace dialog with generated upstream command placement and shortcuts. Preserve source semantics and explicit unsupported boundaries; never substitute DOM text search or browser RegExp for ICU contracts. Work only on writer in vite-office-writer; local upstream reading approved, no network or merges. Keep active until approved scope is verified."
 sections:

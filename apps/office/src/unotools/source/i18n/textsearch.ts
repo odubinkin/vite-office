@@ -1,6 +1,9 @@
 /** @fileoverview Original shared SearchParam values and search-mode conversions from textsearch.hxx/textsearch.cxx; search engine responsibilities remain with TextSearch. */
 import { SearchOptions2 } from "../../../i18nutil/inc/searchopt";
-import { TextSearch as TextSearchService } from "../../../i18npool/source/search/textsearch";
+import {
+  TextSearch as TextSearchService,
+  type RegexMatcherFactory,
+} from "../../../i18npool/source/search/textsearch";
 import type { SearchResult } from "../../../offapi/com/sun/star/util/SearchResult";
 import { Exception } from "../../../cppu/inc/com/sun/star/uno/Exception";
 import type { LocaleConstReference } from "../../../udkapi/com/sun/star/lang/Locale";
@@ -133,7 +136,14 @@ export class SearchParam {
 }
 
 /** The native shared one-entry cache; wrappers retain their chosen backend after cache replacement. */
-let cached: { options: SearchOptions2; backend: TextSearchService } | undefined;
+let cached:
+  | {
+      options: SearchOptions2;
+      backend: TextSearchService;
+      createRegex: RegexMatcherFactory | undefined;
+    }
+  | undefined;
+export type { RegexMatcherFactory };
 /** Native cache equality includes replacement, approximate and wildcard fields even in absolute mode. @param left - Cached value. @param right - Requested value. @returns Complete option equality. */
 function equalSearchOptions(left: SearchOptions2, right: SearchOptions2): boolean {
   return (
@@ -286,22 +296,33 @@ export class TextSearch {
     similarityScore[1] = second;
     return true;
   }
-  /** Borrows the native options-based cache entry; SearchParam/LanguageTag constructors are not yet implemented. @param options - Complete native search options. @returns Wrapper value. */
-  public constructor(options: SearchOptions2) {
-    this.xTextSearch = TextSearch.getXTextSearch(options);
+  /** Borrows the native options-based cache entry; SearchParam/LanguageTag constructors are not yet implemented. @param options - Complete native search options. @param createRegex - ICU constructor supplied by the owning realm. @returns Wrapper value. */
+  public constructor(
+    options: SearchOptions2,
+    private readonly createRegex?: RegexMatcherFactory,
+  ) {
+    this.xTextSearch = TextSearch.getXTextSearch(options, createRegex);
   }
-  /** Native cache replaces its backend rather than mutating the previously borrowed instance. @param options - New option value. @returns Prepared backend. */
-  private static getXTextSearch(options: SearchOptions2): TextSearchService {
-    if (cached !== undefined && equalSearchOptions(cached.options, options)) return cached.backend;
-    const backend = new TextSearchService(options);
-    cached = { options: new SearchOptions2(options), backend };
+  /** Native cache replaces its backend rather than mutating the previously borrowed instance. @param options - New option value. @param createRegex - ICU constructor in the current realm. @returns Prepared backend. */
+  private static getXTextSearch(
+    options: SearchOptions2,
+    createRegex?: RegexMatcherFactory,
+  ): TextSearchService {
+    if (
+      cached !== undefined &&
+      cached.createRegex === createRegex &&
+      equalSearchOptions(cached.options, options)
+    )
+      return cached.backend;
+    const backend = new TextSearchService(options, createRegex);
+    cached = { options: new SearchOptions2(options), backend, createRegex };
     return backend;
   }
   /** Native locale override copies all options before choosing another cache entry. @param options - Original option value. @param locale - Replacement locale. @returns Nothing. */
   public SetLocale(options: SearchOptions2, locale: LocaleConstReference): void {
     const copy = new SearchOptions2(options);
     copy.Locale.assign(locale);
-    this.xTextSearch = TextSearch.getXTextSearch(copy);
+    this.xTextSearch = TextSearch.getXTextSearch(copy, this.createRegex);
   }
   /** Normalizes a successful forward result and leaves caller outputs untouched on failure. @param text - Original UTF-16 input. @param start - Inclusive lower bound, then match start. @param end - Exclusive upper bound, then match end. @param result - Optional raw XTextSearch result. @returns Whether found. */
   public SearchForward(

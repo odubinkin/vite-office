@@ -106,7 +106,7 @@ export class DocumentContentOperationsManager {
   public InsertItemSet(range: SwPaM, set: SfxItemSet, mode = SetAttrMode.DEFAULT): void {
     InsertItemSet(this.document, range, set, mode);
   }
-  /** Replaces a native marked string range, or applies an already formatted fragment through the existing fragment adapter. Native regex/structured replacement remains unported. @param range - Original native range. @param replacement - Literal string or formatted fragment. @param regExp - Native regex replacement policy. @returns Native success for strings, content-change result for fragment adaptation. */
+  /** Replaces a native marked string range, or applies an already formatted fragment through the existing fragment adapter. Paragraph-breaking regex and structured replacement remain unported. @param range - Original native range. @param replacement - Literal string or formatted fragment. @param regExp - Native regex replacement policy. @returns Native success for strings, content-change result for fragment adaptation. */
   public ReplaceRange(range: SwPaM, replacement: string | SwTextFragment, regExp = false): boolean {
     if (typeof replacement !== "string") {
       const { end, node, start } = this.GetSameTextNodeRange(range, "replacement");
@@ -116,7 +116,17 @@ export class DocumentContentOperationsManager {
       node.ReplaceRange(start, end, replacement);
       return true;
     }
-    if (regExp) throw new Error("Writer regex replacement is not implemented.");
+    if (regExp) {
+      // lcl_GetTokenToParaBreak tests the unit immediately before each backslash.
+      for (
+        let index = replacement.indexOf("\\n");
+        index !== -1;
+        index = replacement.indexOf("\\n", index + 1)
+      ) {
+        if (index === 0 || replacement.charCodeAt(index - 1) !== 92)
+          throw new Error("Writer paragraph-breaking regex replacement is not implemented.");
+      }
+    }
     if (!range.HasMark()) return false;
     const { end, node, start } = this.GetSameTextNodeRange(range, "replacement");
     const hints = node.GetpSwpHints();
@@ -127,7 +137,7 @@ export class DocumentContentOperationsManager {
     return this.document.RunModelTransaction(
       /** Runs native replacement/history/modified publication in one model action. @returns Native success. */ () => {
         const undo = this.document.GetUndoManager();
-        const action = undo.DoesUndo() ? new SwUndoReplace(range, replacement, false) : undefined;
+        const action = undo.DoesUndo() ? new SwUndoReplace(range, replacement, regExp) : undefined;
         if (action !== undefined) undo.AddUndoAction(action);
         const enabled = undo.DoesUndo(),
           oldLength = node.Len();

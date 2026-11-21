@@ -1,4 +1,4 @@
-/** @fileoverview Writer model-text FindTextImpl and inline fly/soft-hyphen cleanup from native findtxt.cxx; layout-merged text, fields/notes and regex modes remain unported. */
+/** @fileoverview Writer model-text FindTextImpl and inline fly/soft-hyphen cleanup from native findtxt.cxx; layout-merged text and fields/notes remain unported. */
 import { SwPaM } from "./pam";
 import {
   FIND_FOUND,
@@ -13,10 +13,12 @@ import { RES_TXTATR_FLYCNT } from "../../../inc/hintids";
 import { REG_NOT_BEGINOFLINE } from "../../../../offapi/com/sun/star/util/SearchFlags";
 import { SwTextNode } from "../txtnode/ndtxt";
 import type { SearchOptions2 } from "../../../../i18nutil/inc/searchopt";
-import { TextSearch } from "../../../../unotools/inc/textsearch";
+import { TextSearch, type RegexMatcherFactory } from "../../../../unotools/inc/textsearch";
+import { processUnicodeEscapes } from "../../../../i18nutil/source/utility/unicodeescape";
+import { SearchResult } from "../../../../offapi/com/sun/star/util/SearchResult";
 import { OUString } from "../../../../sal/inc/rtl/ustring";
 
-import { APPROXIMATE } from "../../../../offapi/com/sun/star/util/SearchAlgorithms2";
+import { APPROXIMATE, REGEXP } from "../../../../offapi/com/sun/star/util/SearchAlgorithms2";
 import { SwScriptIterator } from "../txtnode/txatritr";
 import { g_pBreakIt } from "../bastyp/breakit";
 
@@ -124,10 +126,14 @@ function DoSearch(
   const keepSoftHyphens =
     options.searchString.getLength() === 1 && options.searchString.getStr()[0] === 0xad;
   const clean = lcl_CleanStr(node, low, high, !keepSoftHyphens);
-  if (low >= clean.end) return false;
   const start: [number] = [backward ? clean.end : low],
     end: [number] = [backward ? low : clean.end];
-  if (!searchText(node, options, engine, clean.text, start, end, backward)) return false;
+  try {
+    if (low >= clean.end || !searchText(node, options, engine, clean.text, start, end, backward))
+      return false;
+  } finally {
+    clean.text.dispose();
+  }
   // Wrapper offsets are increasing in either direction. Native DoSearch temporarily swaps
   // them backward when recovering removals, then exchanges point and mark afterward.
   const startLimit = backward ? end[0] : start[0],
@@ -184,16 +190,76 @@ export function FindTextImpl(
   return false;
 }
 
-/** Native SwFindParaText normal strategy over the actual shared TextSearch owner. Normal same-node replacement uses the actual document/history owner; other search modes remain unported. */
+/** Resolves native Writer replacement references using the forward search of the selected model span. @param options - Source regex and replacement. @param cursor - Marked model selection. @param prepared - Already resolved search service. @returns Expanded replacement or no match. */
+export function ReplaceBackReferences(
+  options: SearchOptions2,
+  cursor: SwPaM,
+  prepared?: TextSearch,
+): OUString | undefined {
+  if (options.AlgorithmType2 !== REGEXP || !cursor.HasMark()) return undefined;
+  const first = cursor.Start();
+  const last = cursor.End();
+  const node = first.GetNode();
+  if (!(node instanceof SwTextNode) || !(last.GetNode() instanceof SwTextNode)) return undefined;
+  const pattern = options.searchString.getStr().subarray(0, options.searchString.getLength());
+  const paragraphEnd =
+    (pattern[0] === 36 && (pattern.length === 1 || (pattern.length === 2 && pattern[1] === 94))) ||
+    (pattern.length === 2 && pattern[0] === 94 && pattern[1] === 36);
+  if (!paragraphEnd && node !== last.GetNode()) return undefined;
+
+  const replacement = options.replaceString;
+  const value = processUnicodeEscapes(replacement.getStr().subarray(0, replacement.getLength()));
+  const result = { value: new SearchResult() };
+  let transferred = false;
+  try {
+    if (paragraphEnd) {
+      result.value.subRegExpressions = 1;
+      result.value.startOffset.realloc(1);
+      result.value.endOffset.realloc(1);
+      result.value.startOffset.operatorIndex(0)[0] = 0;
+      result.value.endOffset.operatorIndex(0)[0] = 1;
+      TextSearch.ReplaceBackReferences(value, Uint16Array.of(10), result.value);
+    } else {
+      const low = first.GetContentIndex();
+      const clean = lcl_CleanStr(node, low, last.GetContentIndex(), false);
+      try {
+        if (
+          !(prepared ?? new TextSearch(options)).SearchForward(
+            clean.text,
+            [low],
+            [clean.end],
+            result,
+          )
+        )
+          return undefined;
+        TextSearch.ReplaceBackReferences(
+          value,
+          clean.text.getStr().subarray(0, clean.text.getLength()),
+          result.value,
+        );
+      } finally {
+        clean.text.dispose();
+      }
+    }
+    transferred = true;
+    return value;
+  } finally {
+    result.value.dispose();
+    if (!transferred) value.dispose();
+  }
+}
+
+/** Native SwFindParaText normal strategy over the actual shared TextSearch owner. Replacement uses the native document and history owners. */
 export class SwFindParaText implements SwFindParas {
   private readonly m_aSText: TextSearch;
-  /** Initializes actual search state, once for all visited ranges. @param m_rSearchOpt - Native options. @param m_bReplace - Native replacement mode. @param acceptsNode - Represented layout admission. @returns Search strategy. */
+  /** Initializes actual search state, once for all visited ranges. @param m_rSearchOpt - Native options. @param m_bReplace - Native replacement mode. @param acceptsNode - Represented layout admission. @param createRegex - ICU constructor in this realm. @returns Search strategy. */
   public constructor(
     private readonly m_rSearchOpt: SearchOptions2,
     private readonly m_bReplace: boolean,
     private readonly acceptsNode?: SwSearchNodeFilter,
+    createRegex?: RegexMatcherFactory,
   ) {
-    this.m_aSText = new TextSearch(m_rSearchOpt);
+    this.m_aSText = new TextSearch(m_rSearchOpt, createRegex);
   }
   /** Calls the native represented model-text search. @param cursor - Result PaM. @param backward - Direction. @param region - Current native region. @returns Native find result flag. */
   public DoFind(cursor: SwPaM, backward: boolean, region: SwPaM): number {
@@ -201,15 +267,26 @@ export class SwFindParaText implements SwFindParas {
       return FIND_NOT_FOUND;
     if (!this.m_bReplace) return FIND_FOUND;
     const start = cursor.Start().GetContentIndex();
+    const regex = this.m_rSearchOpt.AlgorithmType2 === REGEXP;
+    const original = this.m_rSearchOpt.replaceString;
+    const expanded = regex
+      ? (ReplaceBackReferences(this.m_rSearchOpt, cursor, this.m_aSText) ??
+        processUnicodeEscapes(original.getStr().subarray(0, original.getLength())))
+      : undefined;
+    const decoded = expanded ?? original;
     let replacement = "";
-    for (let i = 0; i < this.m_rSearchOpt.replaceString.getLength(); i++)
-      replacement += String.fromCharCode(this.m_rSearchOpt.replaceString.getStr()[i] as number);
+    try {
+      for (let i = 0; i < decoded.getLength(); i++)
+        replacement += String.fromCharCode(decoded.getStr()[i] as number);
+    } finally {
+      expanded?.dispose();
+    }
     cursor
       .GetPoint()
       .GetNode()
       .GetDoc()
       .GetDocumentContentOperationsManager()
-      .ReplaceRange(cursor, replacement, false);
+      .ReplaceRange(cursor, replacement, regex);
     cursor.Start().SetContent(start);
     return FIND_NO_RING;
   }
@@ -218,7 +295,7 @@ export class SwFindParaText implements SwFindParas {
     return this.m_bReplace;
   }
 }
-/** Native Find_Text prepares the strategy and applies the selection flag before generic cursor traversal. @param cursor - Actual cursor. @param options - Search value. @param start - First boundary. @param end - Last boundary. @param cancel - Cancellation output. @param ranges - Scope flags. @param replace - Native replacement mode. @param acceptsNode - Represented layout admission. @returns Match count. */
+/** Native Find_Text prepares the strategy and applies the selection flag before generic cursor traversal. @param cursor - Actual cursor. @param options - Search value. @param start - First boundary. @param end - Last boundary. @param cancel - Cancellation output. @param ranges - Scope flags. @param replace - Native replacement mode. @param acceptsNode - Represented layout admission. @param createRegex - ICU constructor in this realm. @returns Match count. */
 export function FindText(
   cursor: SwCursor,
   options: SearchOptions2,
@@ -228,12 +305,13 @@ export function FindText(
   ranges: FindRanges,
   replace = false,
   acceptsNode?: SwSearchNodeFilter,
+  createRegex?: RegexMatcherFactory,
 ): number {
   if ((options.searchFlag & REG_NOT_BEGINOFLINE) !== 0) ranges |= FindRanges.InSel;
   const doc = cursor.GetPoint().GetNode().GetDoc(),
     undo = doc.GetUndoManager();
   // Prepare the actual backend before opening history, so unported engine modes do not mutate undo state.
-  const strategy = new SwFindParaText(options, replace, acceptsNode);
+  const strategy = new SwFindParaText(options, replace, acceptsNode, createRegex);
   return doc.RunModelTransaction(
     /** Completes native replacement history before publishing the model. @returns Match count. */ () => {
       const record = replace && undo.DoesUndo();
