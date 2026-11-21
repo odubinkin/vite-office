@@ -52,12 +52,15 @@ for (const width of [1280, 390])
     await expect(grid.getByRole("gridcell", { name: /^B5(?:\s|$)/ })).toHaveText("16");
     await grid.focus();
     await page.keyboard.press("ControlOrMeta+s");
-    await installKernelFixture(page, "CalcSumPersistenceFixture", [
+    const nativeExports = [
       { module: "src/sc/browser/workflows/calc-ods-io.ts", names: ["createCalcDocumentStore"] },
       { module: "src/sc/source/filter/xml/xmlwrap.ts", names: ["readOdsDocument"] },
       { module: "src/sc/inc/address.ts", names: ["ScAddress"] },
       { module: "src/i18nlangtag/source/isolang/isolang.tables.ts", names: ["text"] },
-    ]);
+    ];
+    await installKernelFixture(page, "CalcSumPersistenceFixture", nativeExports, {
+      officeServices: true,
+    });
     await expect
       .poll(
         /** Reads only the actual browser-primary ODS through original import and formula owners. @returns Stored value and source. */ () =>
