@@ -1,10 +1,11 @@
 ---
 id: "202611210443-QJ6DRG"
 title: "Connect Calc manual page break commands and normal-grid indicators"
-status: "DOING"
+result_summary: "Connect Calc manual page break commands and normal-grid indicators"
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 9
+revision: 10
 origin:
   system: "manual"
 depends_on:
@@ -40,11 +41,16 @@ quality_review:
     - "output/playwright/calc-QJ6DRG/browser-check.log"
   findings:
     - "Both menu pairs update the canonical flags and preserve protected sheets, history and native output."
-commit: null
+commit:
+  hash: "862b79811c4369fd09fd8da5a43ccea37fea107d"
+  message: "🧩 QJ6DRG code: connect Calc manual page breaks"
 comments:
   -
     author: "CODER"
     body: "Start: continue direct-mode task in current checkout."
+  -
+    author: "CODER"
+    body: "Verified: The four native page-break menu commands, normal-grid indicators, undo, and native package persistence passed targeted tests and an actual Chrome session."
 events:
   -
     type: "status"
@@ -59,8 +65,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "47 focused cases, browser geometry and undo, production build, type checks and static gates passed."
+  -
+    type: "status"
+    at: "2026-11-21T04:52:10.106Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: The four native page-break menu commands, normal-grid indicators, undo, and native package persistence passed targeted tests and an actual Chrome session."
 doc_version: 3
-doc_updated_at: "2026-11-21T04:52:04.341Z"
+doc_updated_at: "2026-11-21T04:52:10.109Z"
 doc_updated_by: "CODER"
 description: "Connect the native insert/remove row and column page break slots, history, and ordinary grid indicators to the canonical break sets. Preserve protected sheets, cursor behavior, ODS/XLSX persistence and the native ShowPageBreaks view flag."
 sections:
