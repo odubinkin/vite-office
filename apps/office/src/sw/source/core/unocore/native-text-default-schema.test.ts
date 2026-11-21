@@ -10,8 +10,18 @@ import {
   RES_TEXTGRID,
   RES_COLLAPSING_BORDERS,
   RES_TXTATR_CHARFMT,
+  RES_CHRATR_OVERLINE,
+  RES_CHRATR_CONTOUR,
+  RES_CHRATR_SHADOWED,
+  RES_CHRATR_RELIEF,
 } from "../../../inc/hintids";
-import { MID_STD_TAB } from "../../../../editeng/inc/memberids";
+import {
+  MID_RELIEF,
+  MID_STD_TAB,
+  MID_TL_COLOR,
+  MID_TL_HASCOLOR,
+  MID_TL_STYLE,
+} from "../../../../editeng/inc/memberids";
 import { MID_PAGEDESC_PAGEDESCNAME, MID_GRID_STANDARD_MODE } from "../../../inc/unomid";
 import { MAYBEVOID } from "../../../../udkapi/com/sun/star/beans/PropertyAttribute";
 import { CONVERT_TWIPS } from "../../../../svl/inc/poolitem";
@@ -27,7 +37,7 @@ it("retains static default-table identity and clears MAYBEVOID except the origin
     second = new SwUnoPropertyMapProvider(),
     entries = first.GetPropertyMapEntries(PROPERTY_MAP_TEXT_DEFAULT),
     set = first.GetPropertySet(PROPERTY_MAP_TEXT_DEFAULT);
-  expect(entries.length).toBe(88);
+  expect(entries.length).toBe(94);
   const flags = upstream.originalFlags as Readonly<Record<string, number>>;
   for (const entry of entries) {
     const name = text(entry.aName);
@@ -79,6 +89,12 @@ it("publishes actual native default metadata and excludes cursor-only dispatch p
       ["IsSplitAllowed", RES_ROW_SPLIT, 0],
       ["CollapsingBorders", RES_COLLAPSING_BORDERS, 0],
       ["StandardPageMode", RES_TEXTGRID, MID_GRID_STANDARD_MODE],
+      ["CharOverline", RES_CHRATR_OVERLINE, MID_TL_STYLE],
+      ["CharOverlineColor", RES_CHRATR_OVERLINE, MID_TL_COLOR],
+      ["CharOverlineHasColor", RES_CHRATR_OVERLINE, MID_TL_HASCOLOR],
+      ["CharContoured", RES_CHRATR_CONTOUR, 0],
+      ["CharShadowed", RES_CHRATR_SHADOWED, 0],
+      ["CharRelief", RES_CHRATR_RELIEF, MID_RELIEF],
     ] as const) {
       const key = unicode(name),
         entry = set.getPropertyMap().getByName(propertyNameView(key)),
