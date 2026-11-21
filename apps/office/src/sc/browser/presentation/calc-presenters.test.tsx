@@ -141,6 +141,74 @@ it("renders canonical grid coordinates,marks and bounded cells while forwarding 
   rerender(<ScGridWindow {...props} />);
   expect(screen.getByRole("grid")).toHaveFocus();
 });
+it("paints a merged range from its source cell even when its origin is hidden or scrolled out", /** Covers the original i69369 visible merge geometry and browser edit hit testing. @returns Nothing. */ () => {
+  const { document, view } = owners();
+  const table = document.FetchTable(0);
+  if (!table) throw new Error("Missing test sheet");
+  const origin = new ScAddress(0, 0, 0);
+  document.SetValue(origin, 42);
+  document.SetValue(new ScAddress(1, 1, 0), 99);
+  table.SetMergedCells(0, 0, 1, 1);
+  const props: ScGridWindowProps = {
+    idPrefix: "merged-grid",
+    viewData: view,
+    viewport: {
+      firstColumn: 0,
+      firstRow: 0,
+      columns: 3,
+      rows: 3,
+      scrollWidth: 1_000,
+      scrollLeft: 0,
+      columnOffset: 0,
+      rowHeight: 22,
+      scrollTop: 0,
+      rowOffset: 0,
+      scrollHeight: 1_000,
+    },
+    inputMode: ScInputMode.SC_INPUT_NONE,
+    inputText: "",
+    getCell: (
+      /** Reads actual document values. @param position - Native address. @returns Cell text and alignment. */
+      position,
+    ) => ({ text: String(document.GetValue(position)), alignment: "right" }),
+    onSelect: vi.fn(),
+    onHeader: vi.fn(),
+    onEdit: vi.fn(),
+    onKeyDown: vi.fn(),
+    onScroll: vi.fn(),
+    onInput: vi.fn(),
+    onInputKeyDown: vi.fn(),
+  };
+  const { rerender } = render(<ScGridWindow {...props} />);
+  const merged = screen.getByRole("gridcell", { name: "A1 42" });
+  expect(screen.getAllByRole("gridcell")).toHaveLength(6);
+  expect(screen.queryByRole("gridcell", { name: /^B2/ })).toBeNull();
+  expect(merged).toHaveAttribute("aria-colspan", "2");
+  expect(merged).toHaveAttribute("aria-rowspan", "2");
+  const size = { width: merged.style.width, height: merged.style.height };
+  expect(parseFloat(size.width)).toBeGreaterThan(table.GetColWidth(0) / 15);
+  expect(parseFloat(size.height)).toBeGreaterThan(table.GetRowHeight(0) / 15);
+
+  const scrolled = { ...props.viewport, firstColumn: 1, firstRow: 1, columns: 2, rows: 2 };
+  rerender(<ScGridWindow {...props} viewport={scrolled} />);
+  const clipped = screen.getByRole("gridcell", { name: "A1 42" });
+  expect(clipped).toHaveStyle(size);
+  expect(clipped.style.clipPath).toMatch(/^inset\([1-9]/);
+  expect(screen.getByRole("grid")).toHaveAttribute("aria-activedescendant", clipped.id);
+  fireEvent.pointerDown(clipped, { button: 0 });
+  fireEvent.pointerUp(clipped);
+  expect(props.onSelect).toHaveBeenCalledWith(origin, expect.anything());
+  fireEvent.doubleClick(clipped);
+  expect(props.onEdit).toHaveBeenCalledWith(origin);
+
+  table.SetColHidden(0, 0, true);
+  table.SetRowHidden(0, 0, true);
+  rerender(<ScGridWindow {...props} viewport={scrolled} />);
+  const moved = screen.getByRole("gridcell", { name: "A1 42" });
+  expect(parseFloat(moved.style.width)).toBeLessThan(parseFloat(size.width));
+  expect(parseFloat(moved.style.height)).toBeLessThan(parseFloat(size.height));
+  expect(moved.style.clipPath).toBe("");
+});
 it("keeps formula-line state controlled and shows connected actions in each mode", /** Covers input events, available actions and absence of placeholders. @returns Nothing. */ () => {
   const actions = new Set<CalcInputAction>(["sum", "equals", "cancel", "accept"]);
   const props: ScInputWindowProps = {

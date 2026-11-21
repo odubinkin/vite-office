@@ -10,6 +10,7 @@ import { FormulaError } from "../../../../formula/inc/errorcodes";
 import type { ScFormulaCell } from "../../../inc/formulacell";
 import type { SharedStringConstReference } from "../../../../svl/inc/sharedstring";
 import { unicode } from "../../../../i18nlangtag/source/isolang/isolang.tables";
+import { GetString as GetEditString } from "./editutil";
 /** Original static-only ScCellFormat API;the namespace has no substitute document or cell state. */
 export const ScCellFormat = {
   /** Original GetInputString dispatch for scalar, edit and formula cells. The current formatter admits General; numeric formatting stays owned by NFGetInputLineString. @param cell - Borrowed cell. @param format - Format key. @param context - Actual context or null. @param doc - Actual document. @param filtering - Source default false. @param forceSystemLocale - Source default false. @returns Owned input text. */
@@ -99,6 +100,15 @@ export const ScCellFormat = {
     switch (cell.getType()) {
       case CellType.CELLTYPE_STRING:
         return output((cell.getSharedString() as SharedStringConstReference).getString());
+      case CellType.CELLTYPE_EDIT: {
+        const edit = cell.getEditText();
+        const value = edit ? GetEditString(edit, doc) : new OUString();
+        try {
+          return output(value);
+        } finally {
+          value.dispose();
+        }
+      }
       case CellType.CELLTYPE_VALUE:
         return !nullValues && cell.getDouble() === 0 ? new OUString() : output(cell.getDouble());
       case CellType.CELLTYPE_FORMULA: {

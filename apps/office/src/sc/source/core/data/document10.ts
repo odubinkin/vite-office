@@ -274,18 +274,6 @@ export function GetMergeFlags(
     ScMergeFlagAttr | undefined;
 }
 
-/** Walks backwards from a covered cell to the original merge anchor. @param this - Document. @param col - Column. @param row - Row. @param tab - Sheet. @returns Anchor coordinates. */
-export function SkipOverlapped(
-  this: ScDocument,
-  col: number,
-  row: number,
-  tab: number,
-): [number, number] {
-  while (GetMergeFlags.call(this, col, row, tab)?.IsHorOverlapped()) --col;
-  while (GetMergeFlags.call(this, col, row, tab)?.IsVerOverlapped()) --row;
-  return [col, row];
-}
-
 /** Extends the leading edges to include merge anchors on every sheet in the range. @param this - Document. @param range - Ordered cell coordinates with either sheet direction. @returns Nothing. */
 export function ExtendOverlapped(this: ScDocument, range: ScRange): void {
   const oldCol = range.aStart.Col(),

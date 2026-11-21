@@ -1,4 +1,4 @@
-/** @fileoverview Browser grid border painting borrows actual native box/diagonal items and SVX frame conflict selection;CSS uses the same shared line projection as Writer. Native merged/rotation/device primitives remain unported. */
+/** @fileoverview Browser grid borders use native box items and SVX frame styles, projected through the shared CSS line renderer. */
 import type { CSSProperties } from "react";
 import { Array as FrameArray } from "../../../svx/source/dialog/framelinkarray";
 import { Style } from "../../../svx/source/dialog/framelink";
@@ -77,6 +77,21 @@ export function calcGridBorderStyle(
       : showGrid
         ? undefined
         : "1px solid transparent",
+  };
+}
+
+/** Projects the original merge anchor's box around the complete merged cell. @param box - Effective box item. @param showGrid - Combined grid visibility. @returns CSS for the four perimeter edges. */
+export function calcMergedBorderStyle(box: SvxBoxItem, showGrid: boolean): CSSProperties {
+  const top = new Style(box.GetTop()),
+    right = new Style(box.GetRight()),
+    bottom = new Style(box.GetBottom()),
+    left = new Style(box.GetLeft());
+  const gridEdge = showGrid ? undefined : "1px solid transparent";
+  return {
+    borderTop: top.GetWidth() ? browserBorderLine(top, false) : undefined,
+    borderRight: right.GetWidth() ? browserBorderLine(right, false) : gridEdge,
+    borderBottom: bottom.GetWidth() ? browserBorderLine(bottom, false) : gridEdge,
+    borderLeft: left.GetWidth() ? browserBorderLine(left, false) : undefined,
   };
 }
 

@@ -155,6 +155,17 @@ export class CalcGridAxis {
     );
   }
 
+  /** Measures a source span with hidden entries contributing zero pixels. @param first - First index. @param last - Last index. @returns Extent in CSS pixels. */
+  Extent(first: number, last: number): number {
+    return this.pixels(this.table, first, last);
+  }
+
+  /** Clips a merged span against this pane's boundaries. @param band - Paint pane. @param start - Span origin. @param extent - Span size. @returns Insets from the leading and trailing edges. */
+  ClipSpan(band: CalcPaintBand, start: number, extent: number): readonly [number, number] {
+    const end = band.clipEnd ?? (band.leading ? this.moving.clipStart : Infinity);
+    return [Math.max(0, band.clipStart - start), Math.max(0, start + extent - end)];
+  }
+
   /** Maps a physical body point to the cell in its own visible pane. @param pixel - Pointer coordinate within the body. @returns Actual source index. */
   Hit(pixel: number): number {
     const band = this.leading && pixel < this.moving.clipStart ? this.leading : this.moving;

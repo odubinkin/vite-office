@@ -7798,3 +7798,13 @@ can process the active cell alone. Calc preserves that behavior for
 command availability and execution.
 
 - [Original Text to Columns range selection](../../vendor/libreoffice-reference/sc/source/ui/view/cellsh2.cxx#L76)
+
+### CALC-819 — Moving merged contents can retain only the first rich-text cell
+
+The source collects the formatted text of every cell and separately saves the
+first rich-text cell. When the anchor has no display text and a rich-text cell
+was found, the source installs that edit object. The other collected values
+never reach the anchor even though the covered cells have been cleared. Calc
+preserves the same branch, including the rich-text object and its fields.
+
+- [Original merge contents routine](../../vendor/libreoffice-reference/sc/source/core/data/documen3.cxx#L2056)

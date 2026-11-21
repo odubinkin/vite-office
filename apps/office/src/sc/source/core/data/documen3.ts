@@ -1,12 +1,146 @@
 /** @fileoverview Original documen3.cxx document grammar projection and copy-reference traversal;with exact range-name lookup. */
 import { Color, COL_AUTO } from "../../../../tools/inc/color";
-import type { ScRange } from "../../../inc/address";
+import { ScAddress, type ScRange } from "../../../inc/address";
 import type { ScRangeData } from "../tool/rangenam";
 import type { ScDocument } from "../../../inc/document";
 import type { ScTableProtection } from "./tabprotection";
 import type { RefUpdateContext } from "../../../inc/refupdatecontext";
-import { UpdateRefMode } from "../../../inc/global";
+import { CellType, UpdateRefMode } from "../../../inc/global";
 import { FormulaGrammar, type AddressConvention } from "../../../../formula/inc/grammar";
+import { OUString } from "../../../../sal/inc/rtl/ustring";
+import { OUStringBuffer } from "../../../../sal/inc/rtl/ustrbuf";
+import { ScMF, type ScMergeAttr, type ScMergeFlagAttr } from "../../../inc/attrib";
+import { ATTR_MERGE, ATTR_MERGE_FLAG } from "../../../inc/scitems";
+import { ScCellValue } from "../../../inc/cellvalue";
+import { ScCellFormat } from "../tool/cellform";
+import { GetMergeFlags } from "./document10";
+
+/** Resolves the native display string after interpreting a formula with an inherited format. @param document - Actual workbook. @param position - Source cell. @returns Owned cell display string. */
+function GetString(document: ScDocument, position: ScAddress): OUString {
+  const cell = document.GetRefCellValue(position);
+  if (cell.isEmpty()) return new OUString();
+  cell.getFormula()?.GetErrCode();
+  const context = document.GetNonThreadedContext();
+  const format = document.GetPattern(position)?.GetNumberFormat(context) ?? 0;
+  return ScCellFormat.GetString(cell, format, [null], context, document);
+}
+
+/** Joins displayed cell contents in source row order and preserves the first rich-text cell when the anchor is empty. @param this - Actual workbook. @param startCol - First column. @param startRow - First row. @param endCol - Last column. @param endRow - Last row. @param tab - Source sheet. @returns Nothing. */
+export function DoMergeContents(
+  this: ScDocument,
+  startCol: number,
+  startRow: number,
+  endCol: number,
+  endRow: number,
+  tab: number,
+): void {
+  const anchor = new ScAddress(startCol, startRow, tab),
+    total = new OUStringBuffer(),
+    empty = new OUString();
+  let rich = new ScCellValue();
+  try {
+    for (let row = startRow; row <= endRow; row++) {
+      for (let col = startCol; col <= endCol; col++) {
+        const position = new ScAddress(col, row, tab);
+        const value = GetString(this, position);
+        try {
+          if (value.getLength()) {
+            if (total.getLength()) total.appendUtf32(0x20);
+            total.append(value);
+            if (rich.isEmpty() && this.GetCellType(position) === CellType.CELLTYPE_EDIT)
+              rich = new ScCellValue(this.GetRefCellValue(position));
+          }
+        } finally {
+          value.dispose();
+        }
+        if (col !== startCol || row !== startRow) this.SetString(position, empty);
+      }
+    }
+    const anchorText = GetString(this, anchor);
+    const replace = rich.isEmpty() || anchorText.getLength() !== 0;
+    anchorText.dispose();
+    if (replace) {
+      const value = total.makeStringAndClear();
+      try {
+        this.SetString(anchor, value);
+      } finally {
+        value.dispose();
+      }
+    } else rich.release(this, anchor);
+  } finally {
+    rich.clear();
+    empty.dispose();
+    total.dispose();
+  }
+}
+
+/** Clears covered contents using the original string setter and leaves the anchor alone. @param this - Actual workbook. @param startCol - First column. @param startRow - First row. @param endCol - Last column. @param endRow - Last row. @param tab - Source sheet. @returns Nothing. */
+export function DoEmptyBlock(
+  this: ScDocument,
+  startCol: number,
+  startRow: number,
+  endCol: number,
+  endRow: number,
+  tab: number,
+): void {
+  const empty = new OUString();
+  try {
+    for (let row = startRow; row <= endRow; row++)
+      for (let col = startCol; col <= endCol; col++)
+        if (col !== startCol || row !== startRow) this.SetString(col, row, tab, empty);
+  } finally {
+    empty.dispose();
+  }
+}
+
+/** Applies the original merge span and coverage to the actual sheet. @param this - Actual workbook. @param startCol - First column. @param startRow - First row. @param endCol - Last column. @param endRow - Last row. @param tab - Source sheet. @returns Nothing. */
+export function DoMerge(
+  this: ScDocument,
+  startCol: number,
+  startRow: number,
+  endCol: number,
+  endRow: number,
+  tab: number,
+): void {
+  this.FetchTable(tab)?.SetMergedCells(startCol, startRow, endCol, endRow);
+}
+
+/** Clears the native overlap flags and restores the pool's span default. @param this - Actual workbook. @param col - Anchor column. @param row - Anchor row. @param tab - Sheet. @returns Nothing. */
+export function RemoveMerge(this: ScDocument, col: number, row: number, tab: number): void {
+  const attr = this.GetPattern(new ScAddress(col, row, tab))?.GetItem(ATTR_MERGE) as
+    ScMergeAttr | undefined;
+  const defaultItem = this.GetPool()?.GetUserOrPoolDefaultItem(ATTR_MERGE);
+  if (!attr?.IsMerged() || !defaultItem) return;
+  this.RemoveFlagsTab(
+    col,
+    row,
+    col + attr.GetColMerge() - 1,
+    row + attr.GetRowMerge() - 1,
+    tab,
+    ScMF.Hor | ScMF.Ver,
+  );
+  this.ApplyAttr(col, row, tab, defaultItem);
+}
+
+/** Resolves the merge anchor by walking horizontal flags followed by vertical flag runs. @param this - Document. @param col - Column. @param row - Row. @param tab - Sheet. @returns Anchor coordinates. */
+export function SkipOverlapped(
+  this: ScDocument,
+  col: number,
+  row: number,
+  tab: number,
+): [number, number] {
+  while (GetMergeFlags.call(this, col, row, tab)?.IsHorOverlapped()) --col;
+  const column = this.FetchTable(tab)?.FetchColumn(col);
+  const first: [number] = [row],
+    last: [number] = [row];
+  while (column && row >= 0) {
+    const pattern = column.GetPatternRange(first, last, row);
+    if (!(pattern?.GetItem(ATTR_MERGE_FLAG) as ScMergeFlagAttr | undefined)?.IsVerOverlapped())
+      break;
+    row = first[0] - 1;
+  }
+  return [col, row];
+}
 /** Returns the native sheet color with the original missing-sheet default. @param this - Workbook. @param tab - Sheet index. @returns Tab color. */
 export function GetTabBgColor(this: ScDocument, tab: number): Color {
   return this.FetchTable(tab)?.GetTabBgColor() ?? new Color(COL_AUTO);
