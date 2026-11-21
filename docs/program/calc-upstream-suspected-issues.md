@@ -7709,3 +7709,12 @@ The browser follows that behavior and records the resulting scope as one undo
 action.
 
 - [Original CreateOneName and CreateNames](../../vendor/libreoffice-reference/sc/source/ui/docshell/docfunc.cxx)
+
+### CALC-810 — Right-edge row labels can suggest overlapping data
+
+For a row label range spanning more than one column at the sheet's right
+edge, the source default data range ends just before the last column. This
+can overlap the rest of the label range until the data range is adjusted on
+Add. Calc preserves the source default and subsequent adjustment.
+
+- [Original SetColRowData and AdjustColRowData](../../vendor/libreoffice-reference/sc/source/ui/miscdlgs/crnrdlg.cxx)

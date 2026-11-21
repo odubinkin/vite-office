@@ -1,4 +1,5 @@
 /** @fileoverview Calc scalar,cell-font and row/column geometry import over shared fast XML contexts;advanced styles,device layout and objects remain unported. */
+import { SetLabelRanges, type ScMyLabelRange } from "./xmllabri";
 import { FormulaError } from "../../../../formula/inc/errorcodes";
 import { ScFormulaCell } from "../../core/data/formulacell";
 import { SV_COUNTRY_LANGUAGE_OFFSET, SvNumFormatType as T } from "../../../../svl/inc/zforlist";
@@ -81,6 +82,11 @@ export class ScXMLImport extends SvXMLImport implements SvXMLImportRootFactory {
     return this.options.baseUrl ? INetURLObject.GetAbsURL(this.options.baseUrl, href) : href;
   }
   readonly docImport: ScDocumentImport;
+  private readonly labelRanges: ScMyLabelRange[] = [];
+  /** Stages a label pair until all sheets are known. @param range - Pair text. @returns Nothing. */
+  AddLabelRange(range: ScMyLabelRange): void {
+    this.labelRanges.push(range);
+  }
   private readonly namedExpressions: ScMyNamedExpression[] = [];
   private readonly matrixRanges: MatrixFormulaRange[] = [];
   private readonly pendingFormulas: {
@@ -648,6 +654,7 @@ export class ScXMLImport extends SvXMLImport implements SvXMLImportRootFactory {
       parseOdfXmlStream(xml, this, this.options);
       if (!this.body) throw new Error("ODS spreadsheet body is missing");
       const grammar = FormulaGrammar.Grammar.GRAM_ODFF;
+      SetLabelRanges(this.document, this.labelRanges);
       InsertRangeNames(
         this.document,
         this.namedExpressions.map(

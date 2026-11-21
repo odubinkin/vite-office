@@ -7,13 +7,15 @@
     "localPath": "apps/office/src/sc/source/core/tool/compiler.external.ts",
     "upstreamPath": "sc/source/core/tool/compiler.cxx",
     "localSymbols": [
-      "parseExternalReference"
+      "parseExternalReference",
+      "CreateStringFromExternal"
     ],
     "upstreamSymbols": [
       "CreateStringFromExternal"
     ],
     "preservedResponsibilities": [
-      "Compiles source-indexed SpreadsheetML and ODF/native external A1 operands into the original single and double reference tokens. Uses genuine address, reference data and shared string owners."
+      "Compiles source-indexed SpreadsheetML and ODF/native external A1 operands into the original single and double reference tokens. Uses genuine address, reference data and shared string owners.",
+      "Keeps native external reference formatting beside external address and token scanning."
     ],
     "omittedResponsibilities": [
       "External range-name expansion, cross-sheet references and interpreter evaluation are pending."

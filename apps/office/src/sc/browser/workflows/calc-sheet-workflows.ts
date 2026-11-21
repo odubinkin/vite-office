@@ -1,4 +1,5 @@
 /** @fileoverview Browser async adapter for native ScTabViewShell::ExecGoToTab and JumpToTable/Nr;real sheet/cursor ownership remains with Calc. */
+import { CalcLabelRangeWorkflow } from "./calc-label-range-workflow";
 import { STD_COL_WIDTH, MAX_COL_WIDTH, MAX_ROW_HEIGHT, ScInputMode } from "../../inc/global";
 import { ScMetricInputDlg } from "../../source/ui/miscdlgs/mtrindlg";
 import { ScOptionsUtil } from "../../source/core/tool/optutil";
@@ -117,6 +118,7 @@ export type CreateNamesResult = CreateNameFlags | Exclude<CreateNameAnswer, "can
 
 /** Session-owned native Go to Sheet request and asynchronous result application. */
 export class CalcSheetWorkflows {
+  readonly labelRanges: CalcLabelRangeWorkflow;
   readonly dialogs = new SfxDialogController<CalcGoToSheetRequest, string>();
   readonly tabDialogs = new SfxDialogController<CalcSheetTabDialog, number[] | string>();
   readonly metricDialogs = new SfxDialogController<ScMetricInputDlg, number>();
@@ -137,6 +139,7 @@ export class CalcSheetWorkflows {
   /** Connects a source command to the active document view. @param controller - Actual Calc controller. @returns Workflow. */
   constructor(readonly controller: CalcViewController) {
     this.conditionals = new CalcConditionalWorkflows(controller);
+    this.labelRanges = new CalcLabelRangeWorkflow(this.controller);
     this.shell = createSfxShell(
       this,
       new SfxInterface<CalcSheetWorkflows>([
@@ -176,6 +179,16 @@ export class CalcSheetWorkflows {
           }),
           execute: (target: CalcSheetWorkflows, request: SfxRequest) =>
             !request.GetArgs().length && target.CreateNames(),
+        },
+        {
+          commandUrl: ".uno:DefineLabelRange",
+          slotId: 26629,
+          label: "Define Label Range",
+          getState: (target: CalcSheetWorkflows) => ({
+            enabled: Boolean(target.labelRanges.dialogs.GetSnapshot()) || !target.HasSheetDialog(),
+          }),
+          execute: (target: CalcSheetWorkflows, request: SfxRequest) =>
+            !request.GetArgs().length && target.labelRanges.Execute(),
         },
         ...conditionalFormatCommands.map(
           /** Binds one original conditional-format Sfx command. @param slot - Source command. @returns Slot definition. */ ([
@@ -597,6 +610,7 @@ export class CalcSheetWorkflows {
       this.creatingNames ||
       this.namePasteDialogs.GetSnapshot() ||
       this.nameDialogs.GetSnapshot() ||
+      this.labelRanges.dialogs.GetSnapshot() ||
       this.conditionals.IsOpen(),
     );
   }
@@ -947,6 +961,7 @@ export class CalcSheetWorkflows {
   /** Cancels the native async request before the session destroys its document. @returns Nothing. */
   Close(): void {
     this.conditionals.Close();
+    this.labelRanges.Close();
     this.managing = undefined;
     this.creatingNames?.abort();
     const createNames = this.createNamesDialogs.GetSnapshot();

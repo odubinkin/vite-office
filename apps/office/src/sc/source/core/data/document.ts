@@ -1,4 +1,5 @@
 /** @fileoverview Native document modes, consumed pooled resources and scalar/local-reference storage, attributes and formula tracking. Full construction, formatter and shell services remain unported. */
+import { ScRangePairList } from "../../../inc/rangelst";
 import * as documentGeometry from "./document.geometry";
 import { ScCalcConfig } from "../../../inc/calcconfig";
 import { ScInterpreter } from "../inc/interpre";
@@ -88,6 +89,18 @@ export class ScDocument {
     for (let tab = 0; tab < count; tab++) {
       this.FetchTable(tab)?.RestorePrintRanges(saver.GetTabData(tab));
     }
+  }
+  private readonly xColNameRanges = new ScRangePairList();
+  private readonly xRowNameRanges = new ScRangePairList();
+
+  /** Borrows the native column label pairs. @returns Document list. */
+  GetColNameRanges(): ScRangePairList {
+    return this.xColNameRanges;
+  }
+
+  /** Borrows the native row label pairs. @returns Document list. */
+  GetRowNameRanges(): ScRangePairList {
+    return this.xRowNameRanges;
   }
   private readonly pRangeName = new ScRangeName();
   /** Looks up the owner of names in this scope. @param tab - Sheet scope or -1. @returns Native names. */

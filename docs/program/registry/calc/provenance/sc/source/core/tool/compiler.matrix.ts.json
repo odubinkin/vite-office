@@ -1,0 +1,45 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/sc/source/core/tool/compiler.matrix.ts",
+    "status": "mapped",
+    "localSymbols": [
+      "CreateStringFromMatrix"
+    ],
+    "upstreamPath": "sc/source/core/tool/compiler.cxx",
+    "upstreamSymbols": [
+      "ScCompiler::CreateStringFromMatrix"
+    ],
+    "preservedResponsibilities": [
+      "Keeps the existing typed inline matrix output in a source compiler responsibility partition."
+    ],
+    "omittedResponsibilities": [
+      "Other matrix and function grammar coverage remains unchanged."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sc/source/core/tool/compiler.matrix.ts",
+          "marker": "CreateStringFromMatrix"
+        },
+        {
+          "path": "apps/office/src/sc/browser/presentation/calc-label-ranges.test.tsx",
+          "marker": "ports tdf131170"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sc/source/core/tool/compiler.cxx",
+          "marker": "ScCompiler::CreateStringFromMatrix"
+        }
+      ]
+    },
+    "filenameDivergence": {
+      "localPath": "apps/office/src/sc/source/core/tool/compiler.matrix.ts",
+      "rationale": "Splits the original compiler translation unit by responsibility to retain the existing compiler owner within the TypeScript source size budget.",
+      "stackNecessity": "responsibility-split"
+    }
+  }
+}

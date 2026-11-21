@@ -39,11 +39,11 @@ import {
 } from "../../../inc/token";
 import type { FormulaToken } from "../../../../formula/inc/token";
 import type { ScMatrix } from "./scmatrix";
-import { doubleToString } from "../../../../sal/rtl/strtmpl.math";
+import { CreateStringFromMatrix } from "./compiler.matrix";
+import { GetLabelString, GetRefColRowNames, ParseColRowName } from "./compiler.colrowname";
 import { ANALYSIS_EDATE, EDATE } from "./odffmap";
 import { QuoteTabName } from "./address.ooo";
-import { parseExternalReference } from "./compiler.external";
-import { getExternalFileUrl } from "../../ui/docshell/externalrefmgr";
+import { CreateStringFromExternal, parseExternalReference } from "./compiler.external";
 
 /** Selects lexical symbols from the native language resource. @param resource - Actual symbols. @returns Token lookup. */
 function createSymbolMap(resource: ReadonlyMap<OpCode, string>): Readonly<Record<string, OpCode>> {
@@ -402,9 +402,18 @@ export class ScCompiler extends FormulaCompiler {
     if (token instanceof FormulaExternalToken && text(token.GetExternal()) === ANALYSIS_EDATE)
       return EDATE;
     if (token instanceof ScExternalSingleRefToken || token instanceof ScExternalDoubleRefToken)
-      return this.CreateStringFromExternal(token);
+      return CreateStringFromExternal(this.rDoc, this.meGrammar, token, (ref) =>
+        this.MakeOneRefStrImpl(ref, false, 0, true),
+      );
     if (token instanceof ScMatrixToken)
-      return this.CreateStringFromMatrix(token.GetMatrix() as ScMatrix);
+      return CreateStringFromMatrix(
+        token.GetMatrix() as ScMatrix,
+        this.meGrammar === FormulaGrammar.Grammar.GRAM_OOXML,
+        (value) => this.AppendString(value),
+        (error) => super.CreateStringFromToken(new FormulaErrorToken(error)),
+      );
+    if (token instanceof ScSingleRefToken && token.GetOpCode() === OpCode.ocColRowName)
+      return this.CreateStringFromLabel(token);
     if (!(token instanceof FormulaIndexToken) || token.GetOpCode() !== OpCode.ocName)
       return super.CreateStringFromToken(token);
     const tab = token.GetSheet();
@@ -416,67 +425,36 @@ export class ScCompiler extends FormulaCompiler {
       (replacement?.name ?? range.name)
     );
   }
-  /** Writes an external single-sheet operand in the active formula convention. @param token - External reference. @returns Serialized reference. */
-  private CreateStringFromExternal(
-    token: ScExternalSingleRefToken | ScExternalDoubleRefToken,
-  ): string {
-    const file = this.rDoc.GetExternalRefManager().getExternalFileName(token.GetFileId());
-    if (file === undefined) return "";
-    const sheet = QuoteTabName(text(token.GetTableName().getString()));
-    const odf =
-      FormulaGrammar.extractRefConvention(this.meGrammar) ===
-      FormulaGrammar.AddressConvention.CONV_ODF;
-    const first = this.MakeOneRefStrImpl(token.GetSingleRef(), false, 0, true);
-    const second =
-      token instanceof ScExternalDoubleRefToken
-        ? (odf ? ":." : ":") + this.MakeOneRefStrImpl(token.GetDoubleRef().Ref2, false, 0, true)
-        : "";
+  /** Spells the label or emits its equivalent Excel reference. @param token - Label token. @returns Formula text. */
+  private CreateStringFromLabel(token: ScSingleRefToken): string {
     if (this.meGrammar === FormulaGrammar.Grammar.GRAM_OOXML) {
-      const index = `[${token.GetFileId() + 1}]`;
-      return (
-        (sheet.startsWith("'") ? "'" + index + sheet.slice(1) : index + sheet) +
-        "!" +
-        first +
-        second
+      const expanded = GetRefColRowNames(
+        this.rDoc,
+        this.aPos,
+        token,
+        OpCode.ocOpen,
+        OpCode.ocClose,
       );
+      return typeof expanded === "number" ? "#REF!" : this.CreateStringFromToken(expanded);
     }
-    const identity = odf ? getExternalFileUrl(file) : file;
-    const source = "'" + identity.replaceAll("'", "''") + "'#$" + sheet + "." + first + second;
-    return odf ? "[" + source + "]" : source;
+    const label = GetLabelString(this.rDoc, token.GetSingleRef().toAbs(this.rDoc, this.aPos));
+    return label === undefined ? "#NAME?" : "'" + label.replaceAll("'", "''") + "'";
   }
-  /** Emits an inline matrix using the source grammar and the original typed values. @param matrix - Original matrix. @returns Formula source. */
-  private CreateStringFromMatrix(matrix: ScMatrix): string {
-    const symbols =
-      this.meGrammar === FormulaGrammar.Grammar.GRAM_OOXML
-        ? RID_STRLIST_FUNCTION_NAMES_ENGLISH_OOXML
-        : RID_STRLIST_FUNCTION_NAMES_ENGLISH_ODFF;
-    const size = { row: 0, column: 0 };
-    matrix.GetDimensions(size);
-    let result = symbols.get(OpCode.ocArrayOpen) as string;
-    for (let row = 0; row < size.row; ++row) {
-      if (row) result += symbols.get(OpCode.ocArrayRowSep);
-      for (let column = 0; column < size.column; ++column) {
-        if (column) result += symbols.get(OpCode.ocArrayColSep);
-        const value = matrix.Get(column, row);
-        try {
-          if (matrix.IsBoolean(column, row))
-            result += symbols.get(value.GetBoolean() ? OpCode.ocTrue : OpCode.ocFalse);
-          else if (matrix.IsValue(column, row)) {
-            const error = value.GetError();
-            result +=
-              error === FormulaError.NONE
-                ? doubleToString(value.fVal)
-                : super.CreateStringFromToken(new FormulaErrorToken(error));
-          } else if (matrix.IsEmpty(column, row)) result += "#N/A";
-          else if (matrix.IsStringOrEmpty(column, row))
-            result += this.AppendString(value.GetString().getString());
-        } finally {
-          value.dispose();
-        }
-      }
-    }
-    return result + symbols.get(OpCode.ocArrayClose);
+
+  /** Expands an explicit row or column label in the source operand position. @param token - Label. @param previous - Left opcode. @param next - Right opcode. @returns RPN operand or absence. */
+  protected override HandleColRowName(token: FormulaToken, previous: OpCode, next: OpCode) {
+    const expanded = GetRefColRowNames(
+      this.rDoc,
+      this.aPos,
+      token as ScSingleRefToken,
+      previous,
+      next,
+    );
+    if (typeof expanded !== "number") return expanded;
+    this.SetError(expanded);
+    return undefined;
   }
+
   /** Expands the actual name at RPN compilation time, preserving source order. @param token - Compiled name index. @returns Name expansion. */
   protected override HandleRange(token: FormulaToken): Iterable<FormulaToken> | undefined {
     if (!(token instanceof FormulaIndexToken)) return undefined;
@@ -898,6 +876,29 @@ export class ScCompiler extends FormulaCompiler {
         last = OpCode.ocPush;
         index = close + 1;
         continue;
+      }
+      const quoted = /^'((?:[^']|'')+)'/u.exec(remaining);
+      const labelName = quoted ? (quoted[1] ?? "").replaceAll("''", "'") : identifier?.[0];
+      if (labelName) {
+        const label = ParseColRowName(this.rDoc, this.aPos, labelName);
+        if (label || quoted) {
+          if (label && !array.AddToken(label)) {
+            this.SetError(FormulaError.CodeOverflow);
+            break;
+          }
+          if (!label) {
+            const invalid = unicode(quoted?.[0] ?? labelName);
+            try {
+              array.AddBad(invalid);
+            } finally {
+              invalid.dispose();
+            }
+            this.SetError(FormulaError.NoName);
+          }
+          index += (quoted?.[0] ?? labelName).length;
+          last = OpCode.ocPush;
+          continue;
+        }
       }
       const errorLiteral = ch === "#" ? /^#[A-Z0-9/?]+!?/u.exec(remaining)?.[0] : undefined;
       const error = errorLiteral && errorSymbols.get(errorLiteral);

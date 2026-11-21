@@ -21,18 +21,20 @@
         "apps/office/src/sc/source/filter/oox/excelfilter.page-settings.test.ts",
         "apps/office/src/sc/source/filter/oox/condformatbuffer.colorscale.test.ts"
       ],
-      "justification": "Hands conditional rules to their native sheet and resolves the first matching style through a cell's format indexes. Other documen4 mechanisms are outside this module. The presentation lookup walks the same ordered native conditional indices to resolve the first scale background.",
+      "justification": "Hands conditional rules to their native sheet and resolves the first matching style through a cell's format indexes. Other documen4 mechanisms are outside this module. The presentation lookup walks the same ordered native conditional indices to resolve the first scale background. Recompiles existing label-reference tokens and reattaches their data subscriptions after the dialog applies its pair lists.",
       "knownViolations": [],
       "localSymbols": [
         "AddCondFormat",
         "GetCondResult",
-        "GetCondColor"
+        "GetCondColor",
+        "CompileColRowNameFormula"
       ],
       "sourceResponsibility": "unverified",
       "upstreamFile": "sc/source/core/data/documen4.cxx",
       "upstreamSymbols": [
         "ScDocument::AddCondFormat",
-        "ScDocument::GetCondResult"
+        "ScDocument::GetCondResult",
+        "ScDocument::CompileColRowNameFormula"
       ]
     }
   }

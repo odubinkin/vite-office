@@ -1,4 +1,5 @@
 /** @fileoverview Scalar ScXMLExport content path over actual row-major document cells and native ODFF serialization. */
+import { WriteLabelRanges } from "./xmllabri";
 import { ExportConditionalFormat } from "./xmlcondformat";
 import { exportPageStyles } from "./xmlstyle.page";
 import { externalRefCacheStyle, WriteExternalRefCaches } from "./xmlexprt.external";
@@ -473,7 +474,7 @@ export class ScXMLExport {
         "</table:table>";
     }
     const external = WriteExternalRefCaches(this.document);
-    body += external + this.WriteNamedRange(-1);
+    body += external + this.WriteNamedRange(-1) + WriteLabelRanges(this.document);
     let automatic = this.textStyles.exportStyles() + (external ? externalRefCacheStyle : "");
     for (const { properties, name, master } of tableStyles.values()) {
       const page = master ? ` style:master-page-name="${master}"` : "";

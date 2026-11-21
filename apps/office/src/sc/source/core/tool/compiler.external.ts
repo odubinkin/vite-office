@@ -1,8 +1,10 @@
 /** @fileoverview Calc compiler external A1 cell and range references. */
+import { QuoteTabName } from "./address.ooo";
+import { getExternalFileUrl } from "../../ui/docshell/externalrefmgr";
 import { FormulaGrammar, type Grammar } from "../../../../formula/inc/grammar";
 import { FormulaErrorToken } from "../../../../formula/inc/token";
 import { FormulaError } from "../../../../formula/inc/errorcodes";
-import { unicode } from "../../../../i18nlangtag/source/isolang/isolang.tables";
+import { text, unicode } from "../../../../i18nlangtag/source/isolang/isolang.tables";
 import { ScAddress, ScRange, ScRefFlags } from "../../../inc/address";
 import type { ScDocument } from "../../../inc/document";
 import { ScComplexRefData, ScSingleRefData } from "../../../inc/refdata";
@@ -72,4 +74,32 @@ export function parseExternalReference(
     name.dispose();
     sheet.dispose();
   }
+}
+
+/** Writes an external single-sheet operand in the active formula convention. @param document - Workbook. @param grammar - Formula syntax. @param token - External reference. @param format - Internal reference formatter. @returns Serialized reference. */
+export function CreateStringFromExternal(
+  document: ScDocument,
+  grammar: Grammar,
+  token: ScExternalSingleRefToken | ScExternalDoubleRefToken,
+  format: (reference: ScSingleRefData) => string,
+): string {
+  const file = document.GetExternalRefManager().getExternalFileName(token.GetFileId());
+  if (file === undefined) return "";
+  const sheet = QuoteTabName(text(token.GetTableName().getString()));
+  const odf =
+    FormulaGrammar.extractRefConvention(grammar) === FormulaGrammar.AddressConvention.CONV_ODF;
+  const first = format(token.GetSingleRef());
+  const second =
+    token instanceof ScExternalDoubleRefToken
+      ? (odf ? ":." : ":") + format(token.GetDoubleRef().Ref2)
+      : "";
+  if (grammar === FormulaGrammar.Grammar.GRAM_OOXML) {
+    const index = `[${token.GetFileId() + 1}]`;
+    return (
+      (sheet.startsWith("'") ? "'" + index + sheet.slice(1) : index + sheet) + "!" + first + second
+    );
+  }
+  const identity = odf ? getExternalFileUrl(file) : file;
+  const source = "'" + identity.replaceAll("'", "''") + "'#$" + sheet + "." + first + second;
+  return odf ? "[" + source + "]" : source;
 }

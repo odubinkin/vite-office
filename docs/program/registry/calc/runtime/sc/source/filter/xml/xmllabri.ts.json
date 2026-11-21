@@ -1,0 +1,38 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sc/source/filter/xml/xmllabri.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "calc",
+    "subsystem": "editable-workspace",
+    "capabilityIds": [
+      "CAP-52bb76b0-ff2d-4a8c-86df-79f033c21d86"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/sc/source/filter/xml/xmllabri.ts",
+        "apps/office/src/sc/browser/presentation/calc-label-ranges.test.tsx",
+        "vendor/libreoffice-reference/sc/source/filter/xml/xmllabri.cxx"
+      ],
+      "justification": "Queues the native ODS label ranges before formula import and writes them back with the original addresses and orientation.",
+      "knownViolations": [],
+      "localSymbols": [
+        "ScXMLLabelRangesContext",
+        "SetLabelRanges",
+        "WriteLabelRanges"
+      ],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": "sc/source/filter/xml/xmllabri.cxx",
+      "upstreamSymbols": [
+        "ScXMLLabelRangesContext",
+        "ScXMLLabelRangeContext::endFastElement"
+      ]
+    }
+  }
+}
