@@ -10,6 +10,7 @@ import {
   REG_NOT_ENDOFLINE,
 } from "../../../../offapi/com/sun/star/util/SearchFlags";
 import { OUString } from "../../../../sal/inc/rtl/ustring";
+import { SearchOptionFlags } from "../../../../svl/inc/srchdefs";
 import { SvxSearchCmd } from "../../../../svl/inc/srchitem";
 import { GetSettings } from "../../../../vcl/source/app/svapp";
 import { FindRanges, SwDocPositions } from "../../../inc/cshtyp";
@@ -329,8 +330,15 @@ export class SwViewSearch {
     );
   }
 
-  /** Reports the replacement commands allowed by the native Writer view state. @returns Whether Replace and Replace All are enabled. */
-  public CanReplace(): boolean {
+  /** Reports the native SID_SEARCH_OPTIONS mask for the attached Writer view. @returns Available search options. */
+  public GetSearchOptions(): SearchOptionFlags {
+    return this.CanReplace()
+      ? SearchOptionFlags.ALL
+      : SearchOptionFlags.ALL & ~(SearchOptionFlags.REPLACE | SearchOptionFlags.REPLACE_ALL);
+  }
+
+  /** Shares the read-only decision with the search dispatcher. @returns Whether replacing is allowed. */
+  private CanReplace(): boolean {
     return !this.shell.GetViewOptions().IsReadonly();
   }
 

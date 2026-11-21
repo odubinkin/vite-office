@@ -11,7 +11,7 @@ import generated from "../uiconfig/swriter/writer-ui.generated.json" with { type
 /** Shell-owned Execute/GetState declaration before generated slot metadata is attached. */
 export interface WriterSlotHandler<Context> {
   readonly capabilityId?: `CAP-${string}`;
-  readonly execute: (context: Context, arguments_: readonly SfxPoolItem[]) => unknown;
+  readonly execute?: (context: Context, arguments_: readonly SfxPoolItem[]) => unknown;
   readonly getStateValue?: (context: Context) => unknown;
   readonly id: string;
   readonly isChecked?: (context: Context) => boolean;
@@ -29,14 +29,16 @@ export function createWriterInterface<Context>(
         handler,
       ): SfxSlotDefinition<Context> => {
         const resource = getWriterCommandResource(handler.id);
+        const execute = handler.execute;
         return {
           ...(handler.capabilityId === undefined ? {} : { capabilityId: handler.capabilityId }),
           commandUrl: handler.id,
-          execute:
-            /** Executes through SfxRequest items. @param context - Shell context. @param request - Request. @returns Handler result. */ (
-              context,
-              request,
-            ) => handler.execute(context, request.GetArgs()),
+          ...(execute === undefined
+            ? {}
+            : {
+                /** Executes through SfxRequest items. @param context - Shell context. @param request - Request. @returns Handler result. */
+                execute: (context, request) => execute(context, request.GetArgs()),
+              }),
           getState:
             /** Queries shell-owned slot state. @param context - Shell context. @returns Slot state. */ (
               context,

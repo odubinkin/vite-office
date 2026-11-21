@@ -34,6 +34,7 @@
     "searchDialog": ".uno:SearchDialog",
     "executeSearch": ".uno:ExecuteSearch",
     "searchProperties": ".uno:SearchProperties",
+    "searchOptions": ".uno:SearchOptions",
     "searchOn": ".uno:SearchOn",
     "searchOff": ".uno:SearchOff",
     "repeatSearch": ".uno:RepeatSearch",
@@ -1108,6 +1109,18 @@
       "shortcuts": [],
       "slotId": 10291
     },
+    ".uno:SearchOptions": {
+      "browserOwned": false,
+      "argumentSchema": [],
+      "capabilityId": "CAP-0111",
+      "controlLabel": "Search Options",
+      "label": "Search Options",
+      "placements": ["sfx2/sdi/sfx.sdi"],
+      "semantics": "action",
+      "showsDialog": false,
+      "shortcuts": [],
+      "slotId": 10281
+    },
     ".uno:SearchOn": {
       "browserOwned": false,
       "argumentSchema": ["SearchItem:SvxSearchItem"],
@@ -1995,6 +2008,11 @@
     {
       "classification": "supported-upstream",
       "commandUrl": ".uno:SearchProperties",
+      "sources": ["sfx2/sdi/sfx.sdi"]
+    },
+    {
+      "classification": "supported-upstream",
+      "commandUrl": ".uno:SearchOptions",
       "sources": ["sfx2/sdi/sfx.sdi"]
     },
     {

@@ -23,6 +23,7 @@ describe("generated Writer slots", /** Exercises generated SDI identities and or
       "UseAttrItemList:SfxBoolItem",
     ]);
     expect(getWriterSlotId(".uno:SearchProperties")).toBe(10_291);
+    expect(getWriterSlotId(".uno:SearchOptions")).toBe(10_281);
     expect(getWriterSlotId(".uno:SearchOn")).toBe(10_500);
     expect(getWriterSlotId(".uno:SearchOff")).toBe(10_501);
     expect(generated.commands[".uno:SearchOff"].argumentSchema).toEqual([

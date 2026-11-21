@@ -246,13 +246,14 @@ it("keeps finding available when read-only Writer state disables replacement", /
   expect(shell.GetCursor().Start().GetContentIndex()).toBe(4);
 
   act(
-    /** Publishes a Writer view update after returning to editable mode. @returns Nothing. */ () => {
+    /** Updates SearchOptions through the active bindings when editing is restored. @returns Nothing. */ () => {
       shell.GetViewOptions().SetReadonly(false);
-      shell.NotifySelectionChanged();
+      session.frame.GetBindings().Invalidate("view");
     },
   );
   expect(replacement).toBeEnabled();
   expect(replace).toBeEnabled();
+  expect(replaceAll).toBeEnabled();
   fireEvent.change(replacement, { target: { value: "catdog" } });
   fireEvent.click(replaceAll);
   expect(paragraph.GetText()).toBe("catdog catdog catdog");

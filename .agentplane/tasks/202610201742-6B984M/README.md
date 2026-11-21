@@ -4,7 +4,7 @@ title: "Implement Writer search and replace core and browser UI"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 48
+revision: 49
 origin:
   system: "manual"
 depends_on:
@@ -148,6 +148,9 @@ comments:
   -
     author: "CODER"
     body: "Verified checkpoint: pinned SearchOn (10500), SearchOff (10501), and SearchProperties (10291) now connect dialog lifecycle and state to the Writer shell stack. SearchOn arms the first SearchProperties state read to seed the selected text or selection scope. Accepted controls dispatch SearchProperties; Close carries the final SearchItem through SearchOff; Repeat Search uses the saved operation and direction. Browser drafts stay local until accepted. This change carries the represented Writer search item through the existing Any adapter. SearchOptions capability bits, native attribute lists and the full SvxSearchItem UNO projection remain open. Compared pinned svx/sdi/svx.sdi, sfx2/sdi/sfx.sdi, sw/sdi/_viewsh.sdi, SwView::ExecSearch and StateSearch, SvxSearchDialog::SaveToModule_Impl and the close handler. Reviewed the upstream findReplace.py reopen scenario against the represented UI coverage. Final targeted Vitest: 50 browser/view/SDI tests in four files, 55 native cursor/search/replacement tests in three files, and two generated resource tests passed. The scope test now collapses the initial full-document selection before repeating backwards. Production build, scoped ESLint/Prettier, source tree/provenance, dependency boundaries, JSDoc, size, diff and routing checks passed. No full-suite run; the parent remains DOING."
+  -
+    author: "CODER"
+    body: "Verified checkpoint: Writer now publishes the pinned SID_SEARCH_OPTIONS (10281) SfxUInt16Item through the view shell. Its shared SearchOptionFlags match include/svl/srchdefs.hxx. The editable view returns ALL and the existing read-only view flag removes exactly REPLACE and REPLACE_ALL. The browser search dialog subscribes through the existing Sfx browser controller, preserving the separate Find Bar option surface, and consumes distinct bits for both replacement operations and the other represented controls. Verified that a live bindings invalidation restores both replace buttons without reopening the dialog. Sfx slots can supply state without an execution handler; direct execution of SearchOptions returns disabled. Cross-checked the pinned Writer StateSearch, _viewsh.sdi and svx EnableControls_Impl/EnableControl_Impl. Final checks: 79 targeted Writer tests in six files, 28 shared dispatcher/bindings tests in three files and two Writer resource tests passed. Final production build, dependency boundaries, JSDoc, file sizes, provenance and source tree, scoped ESLint/Prettier, policy routing and whitespace passed. This checkpoint keeps the existing browser read-only view state owner. Native format attributes, unrepresented option controls and the complete SvxSearchItem UNO property bridge remain open. No full-suite run; task stays DOING."
 events:
   -
     type: "status"
@@ -336,8 +339,13 @@ events:
     at: "2026-11-21T07:02:10.455Z"
     author: "CODER"
     body: "Verified checkpoint: pinned SearchOn (10500), SearchOff (10501), and SearchProperties (10291) now connect dialog lifecycle and state to the Writer shell stack. SearchOn arms the first SearchProperties state read to seed the selected text or selection scope. Accepted controls dispatch SearchProperties; Close carries the final SearchItem through SearchOff; Repeat Search uses the saved operation and direction. Browser drafts stay local until accepted. This change carries the represented Writer search item through the existing Any adapter. SearchOptions capability bits, native attribute lists and the full SvxSearchItem UNO projection remain open. Compared pinned svx/sdi/svx.sdi, sfx2/sdi/sfx.sdi, sw/sdi/_viewsh.sdi, SwView::ExecSearch and StateSearch, SvxSearchDialog::SaveToModule_Impl and the close handler. Reviewed the upstream findReplace.py reopen scenario against the represented UI coverage. Final targeted Vitest: 50 browser/view/SDI tests in four files, 55 native cursor/search/replacement tests in three files, and two generated resource tests passed. The scope test now collapses the initial full-document selection before repeating backwards. Production build, scoped ESLint/Prettier, source tree/provenance, dependency boundaries, JSDoc, size, diff and routing checks passed. No full-suite run; the parent remains DOING."
+  -
+    type: "comment"
+    at: "2026-11-21T07:08:26.379Z"
+    author: "CODER"
+    body: "Verified checkpoint: Writer now publishes the pinned SID_SEARCH_OPTIONS (10281) SfxUInt16Item through the view shell. Its shared SearchOptionFlags match include/svl/srchdefs.hxx. The editable view returns ALL and the existing read-only view flag removes exactly REPLACE and REPLACE_ALL. The browser search dialog subscribes through the existing Sfx browser controller, preserving the separate Find Bar option surface, and consumes distinct bits for both replacement operations and the other represented controls. Verified that a live bindings invalidation restores both replace buttons without reopening the dialog. Sfx slots can supply state without an execution handler; direct execution of SearchOptions returns disabled. Cross-checked the pinned Writer StateSearch, _viewsh.sdi and svx EnableControls_Impl/EnableControl_Impl. Final checks: 79 targeted Writer tests in six files, 28 shared dispatcher/bindings tests in three files and two Writer resource tests passed. Final production build, dependency boundaries, JSDoc, file sizes, provenance and source tree, scoped ESLint/Prettier, policy routing and whitespace passed. This checkpoint keeps the existing browser read-only view state owner. Native format attributes, unrepresented option controls and the complete SvxSearchItem UNO property bridge remain open. No full-suite run; task stays DOING."
 doc_version: 3
-doc_updated_at: "2026-11-21T07:02:10.455Z"
+doc_updated_at: "2026-11-21T07:08:26.379Z"
 doc_updated_by: "CODER"
 description: "Implement the approved coherent Writer search-and-replace feature from pinned LibreOffice sources: real shared search engine and options, native paragraph/cursor traversal and replacement/history contracts, view-owned search state and dispatch, Find toolbar and Find and Replace dialog with generated upstream command placement and shortcuts. Preserve source semantics and explicit unsupported boundaries; never substitute DOM text search or browser RegExp for ICU contracts. Work only on writer in vite-office-writer; local upstream reading approved, no network or merges. Keep active until approved scope is verified."
 sections:

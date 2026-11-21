@@ -10,6 +10,8 @@ import {
   REG_NOT_ENDOFLINE,
 } from "../../../../offapi/com/sun/star/util/SearchFlags";
 import { SfxItemSet } from "../../../../svl/source/items/itemset";
+import { SearchOptionFlags } from "../../../../svl/inc/srchdefs";
+import { SfxUInt16Item } from "../../../../svl/source/items/intitem";
 import { SvxSearchCmd } from "../../../../svl/inc/srchitem";
 import { GetSettings } from "../../../../vcl/source/app/svapp";
 import { RndStdIds } from "../../../../svx/inc/swframetypes";
@@ -301,6 +303,30 @@ it("seeds SearchProperties once after SearchOn and saves the dialog state throug
   });
   expect(view.Execute(WRITER_COMMAND_IDS.repeatSearch)).toMatchObject({ value: true });
   expect(view.GetSearch().GetFeedback()).toMatchObject({ backward: true });
+  view.Close();
+});
+
+it("publishes the native SearchOptions item through the view bindings", /** Covers the editable and read-only masks on a state-only slot. @returns Nothing. */ () => {
+  const view = new SwView(
+    new SwDocShell(
+      createWriterDocument(),
+      createDocument({ id: "search-options", suiteId: "writer", title: "Search" }),
+    ),
+  );
+  const frame = new SfxViewFrame<SwView>(new BrowserSfxDispatcher());
+  view.AttachFrame(frame);
+  frame.SetActiveView(view, [view.GetCommandShell(), view.GetWrtShell().GetCommandShell()]);
+  const command = WRITER_COMMAND_IDS.searchOptions;
+  const state = view.QueryState(command);
+  expect(state.value).toBeInstanceOf(SfxUInt16Item);
+  const options = state.value as SfxUInt16Item;
+  expect(options.Which()).toBe(10_281);
+  expect(options.GetValue()).toBe(SearchOptionFlags.ALL);
+  expect(view.Execute(command)).toMatchObject({ status: "disabled" });
+  view.GetWrtShell().GetViewOptions().SetReadonly(true);
+  expect((view.QueryState(command).value as SfxUInt16Item).GetValue()).toBe(
+    SearchOptionFlags.ALL & ~(SearchOptionFlags.REPLACE | SearchOptionFlags.REPLACE_ALL),
+  );
   view.Close();
 });
 

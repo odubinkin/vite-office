@@ -1,0 +1,35 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/svl/inc/srchdefs.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "shared",
+    "subsystem": "text-search",
+    "capabilityIds": [
+      "CAP-7c62943f-8dba-496e-b4df-b8c30ffe3d48"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "none",
+      "evidence": [
+        "apps/office/src/svl/inc/srchdefs.ts#SearchOptionFlags",
+        "apps/office/src/sw/source/uibase/uiview/view.test.ts",
+        "include/svl/srchdefs.hxx#SearchOptionFlags"
+      ],
+      "justification": "The original SID_SEARCH_OPTIONS flag identities and full mask; Writer publishes the mask using SfxUInt16Item and the view search state.",
+      "knownViolations": [],
+      "localSymbols": [
+        "SearchOptionFlags"
+      ],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": "include/svl/srchdefs.hxx",
+      "upstreamSymbols": [
+        "SearchOptionFlags"
+      ]
+    }
+  }
+}

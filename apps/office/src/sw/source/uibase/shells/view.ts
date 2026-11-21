@@ -6,8 +6,10 @@ import { WRITER_COMMAND_IDS } from "../../../uiconfig/swriter/menubar/menubar-co
 import {
   createWriterInterface,
   getWriterCommandArguments,
+  getWriterSlotId,
   type WriterViewCommandTarget,
 } from "../../../sdi/swriter";
+import { SfxUInt16Item } from "../../../../svl/source/items/intitem";
 import type { WriterExecuteSearchArguments, WriterSearchSlotItem } from "../uiview/viewsrch";
 import { SvxULSpaceItem } from "../../../../editeng/inc/ulspitem";
 import { SID_ATTR_PARA_ULSPACE } from "../../../../editeng/inc/editids";
@@ -38,6 +40,16 @@ export function createWriterViewCommandRegistry(
       capabilityId: "CAP-0111",
       /** Requests selection initialization for the modeless dialog. @param context - Active view. @returns Nothing. */
       execute: (context): void => context.GetSearch().SearchOn(),
+    },
+    {
+      id: WRITER_COMMAND_IDS.searchOptions,
+      capabilityId: "CAP-0111",
+      /** Supplies the native unsigned search option mask. @param context - Active view. @returns SID_SEARCH_OPTIONS state. */
+      getStateValue: (context) =>
+        new SfxUInt16Item(
+          getWriterSlotId(WRITER_COMMAND_IDS.searchOptions),
+          context.GetSearch().GetSearchOptions(),
+        ),
     },
     {
       id: WRITER_COMMAND_IDS.searchProperties,

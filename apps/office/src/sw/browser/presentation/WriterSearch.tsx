@@ -9,6 +9,12 @@ import {
   type SetStateAction,
 } from "react";
 import { Info } from "lucide-react";
+import {
+  useBrowserCommandState,
+  type BrowserCommandSource,
+} from "../../../framework/browser/presentation/command-surface";
+import { SearchOptionFlags } from "../../../svl/inc/srchdefs";
+import { SfxUInt16Item } from "../../../svl/source/items/intitem";
 import { useBrowserLocalization } from "../../../framework/browser/localization/browser-localization-context";
 import type {
   SwViewSearch,
@@ -77,10 +83,11 @@ function remember(values: readonly string[], entry: string): readonly string[] {
 export function WriterSearch({
   dialog,
   request: { initial, revision: focusRequest, search: focusSearch },
+  commandSource,
   history,
   onHistoryChange,
   view,
-  canSearchSelection,
+  canSearchSelection: hasDocumentSelection,
   close,
   openSearch,
   searchFeedback,
@@ -88,6 +95,7 @@ export function WriterSearch({
 }: Readonly<{
   dialog: boolean;
   request: SearchFocusRequest;
+  commandSource: BrowserCommandSource;
   history: WriterSearchHistory;
   onHistoryChange: Dispatch<SetStateAction<WriterSearchHistory>>;
   view: SwView;
@@ -115,7 +123,6 @@ export function WriterSearch({
     setLastFocusRequest(focusRequest);
     if (search !== undefined && search !== item.search) setItem({ ...item, search });
   }
-  if (dialog && !canSearchSelection && item.selection) setItem({ ...item, selection: false });
   const [findbarMatchCase, setFindbarMatchCase] = useState(false);
   const [findbarMatchDiacritics, setFindbarMatchDiacritics] = useState(false);
   const [similarityOptionsOpen, setSimilarityOptionsOpen] = useState(false);
@@ -137,7 +144,25 @@ export function WriterSearch({
   const replaceField = useRef<HTMLInputElement>(null);
   const searchList = useId();
   const replacementList = useId();
-  const canReplace = dialog && owner.CanReplace();
+  const searchOptionsState = useBrowserCommandState(
+    commandSource,
+    WRITER_COMMAND_IDS.searchOptions,
+  );
+  const searchOptions = !dialog
+    ? SearchOptionFlags.ALL
+    : searchOptionsState.value instanceof SfxUInt16Item
+      ? searchOptionsState.value.GetValue()
+      : SearchOptionFlags.NONE;
+  const canReplace = hasOption(SearchOptionFlags.REPLACE);
+  const canReplaceAll = hasOption(SearchOptionFlags.REPLACE_ALL);
+
+  /** Reads the view shell's option mask. @param option - Native search capability. @returns Whether the control is available. */
+  function hasOption(option: SearchOptionFlags): boolean {
+    return (searchOptions & option) !== 0;
+  }
+
+  const canSearchSelection = hasDocumentSelection && hasOption(SearchOptionFlags.SELECTION);
+  if (dialog && !hasDocumentSelection && item.selection) setItem({ ...item, selection: false });
 
   useLayoutEffect(
     /** Saves the toolbar history when its controller is destroyed. @returns Optional cleanup. */ () => {
@@ -338,7 +363,8 @@ export function WriterSearch({
           ((event.ctrlKey || event.metaKey) && event.key.toLowerCase() === "g")))
     ) {
       event.preventDefault();
-      if (!cannotSearch) execute(SvxSearchCmd.FIND, !dialog && event.shiftKey, !dialog);
+      if (!cannotSearch && hasOption(SearchOptionFlags.SEARCH))
+        execute(SvxSearchCmd.FIND, !dialog && event.shiftKey, !dialog);
     }
   }
 
@@ -390,7 +416,10 @@ export function WriterSearch({
       <input
         type="checkbox"
         checked={dialog ? item.matchCase : findbarMatchCase}
-        disabled={dialog && (item.styleSearch || item.useAsianOptions)}
+        disabled={
+          dialog &&
+          (!hasOption(SearchOptionFlags.EXACT) || item.styleSearch || item.useAsianOptions)
+        }
         onChange={
           /** Stores the case option. @param event - Updated control. @returns Nothing. */ (
             event,
@@ -408,7 +437,7 @@ export function WriterSearch({
     <button
       type="button"
       className={buttonStyle}
-      disabled={cannotSearch}
+      disabled={cannotSearch || !hasOption(SearchOptionFlags.BACKWARDS)}
       onClick={/** Searches backward. @returns Nothing. */ () => execute(SvxSearchCmd.FIND, true)}
     >
       {previousLabel}
@@ -418,7 +447,7 @@ export function WriterSearch({
     <button
       type="button"
       className={buttonStyle}
-      disabled={cannotSearch}
+      disabled={cannotSearch || !hasOption(SearchOptionFlags.SEARCH)}
       onClick={/** Searches forward. @returns Nothing. */ () => execute(SvxSearchCmd.FIND)}
     >
       {nextLabel}
@@ -428,7 +457,7 @@ export function WriterSearch({
     <button
       type="button"
       className={buttonStyle}
-      disabled={cannotSearch}
+      disabled={cannotSearch || !hasOption(SearchOptionFlags.SEARCHALL)}
       onClick={/** Selects all matches. @returns Nothing. */ () => execute(SvxSearchCmd.FIND_ALL)}
     >
       {findAllLabel}
@@ -540,7 +569,7 @@ export function WriterSearch({
             <input
               type="checkbox"
               checked={item.wholeWords}
-              disabled={item.styleSearch}
+              disabled={item.styleSearch || !hasOption(SearchOptionFlags.WHOLE_WORDS)}
               onChange={
                 /** Stores the whole-word option. @param event - Updated control. @returns Nothing. */ (
                   event,
@@ -620,7 +649,7 @@ export function WriterSearch({
           <button
             type="button"
             className={buttonStyle}
-            disabled={cannotSearch || !canReplace}
+            disabled={cannotSearch || !canReplaceAll}
             onClick={
               /** Replaces all matches. @returns Nothing. */ () => execute(SvxSearchCmd.REPLACE_ALL)
             }
@@ -650,6 +679,7 @@ export function WriterSearch({
               <input
                 type="checkbox"
                 checked={replaceBackward}
+                disabled={!hasOption(SearchOptionFlags.BACKWARDS)}
                 onChange={
                   /** Sets the native replacement direction. @param event - Updated control. @returns Nothing. */ (
                     event,
@@ -666,7 +696,7 @@ export function WriterSearch({
               <input
                 type="checkbox"
                 checked={item.styleSearch}
-                disabled={item.similaritySearch}
+                disabled={item.similaritySearch || !hasOption(SearchOptionFlags.FAMILIES)}
                 onChange={
                   /** Switches between text fields and native paragraph style lists. @param event - Updated control. @returns Nothing. */ (
                     event,
@@ -698,7 +728,7 @@ export function WriterSearch({
                 <input
                   type="checkbox"
                   checked={item.similaritySearch}
-                  disabled={item.styleSearch}
+                  disabled={item.styleSearch || !hasOption(SearchOptionFlags.SIMILARITY)}
                   onChange={
                     /** Enables the native similarity algorithm. @param event - Updated control. @returns Nothing. */ (
                       event,
@@ -711,7 +741,7 @@ export function WriterSearch({
                 type="button"
                 ref={similarityOptionsButton}
                 className={buttonStyle}
-                disabled={!item.similaritySearch}
+                disabled={!item.similaritySearch || !hasOption(SearchOptionFlags.SIMILARITY)}
                 onClick={
                   /** Opens the similarity limits dialog. @returns Nothing. */ () =>
                     setSimilarityOptionsOpen(true)

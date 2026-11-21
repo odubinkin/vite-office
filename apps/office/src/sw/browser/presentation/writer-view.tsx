@@ -43,7 +43,7 @@ import {
 import { WriterPropertiesPanel } from "./WriterPropertiesPanel";
 import {
   WriterSearch,
-  type SearchFocusRequest,
+  type SearchFocusRequest as SearchFocus,
   type SearchSurfaces,
   type WriterSearchHistory,
 } from "./WriterSearch";
@@ -64,7 +64,6 @@ import { presentWriterStatus, selectWriterCommandResource } from "./writer-comma
 export { presentWriterCommandError, presentWriterStatus } from "./writer-command-presentation";
 import { WriterPlainTextEditor } from "../editor/WriterPlainTextEditor";
 import type { SwView } from "../../source/uibase/uiview/view";
-import type { WriterSearchSlotItem } from "../../source/uibase/uiview/viewsrch";
 import { WriterViewStore } from "./writer-view-projection";
 import { installWriterEmbeddedFonts } from "../../../vcl/browser/embedded-font-loader";
 import type { SwDoc } from "../../source/core/doc/doc";
@@ -161,7 +160,7 @@ export function WriterWorkbench({
       if (surface === "searchDialog" && !searchDialog) view.Execute(WRITER_COMMAND_IDS.searchOn);
       const initial =
         surface === "searchDialog"
-          ? (view.QueryState(WRITER_COMMAND_IDS.searchProperties).value as WriterSearchSlotItem)
+          ? (view.QueryState(WRITER_COMMAND_IDS.searchProperties).value as SearchFocus["initial"])
           : searchOwner.GetSearchItem();
       const feedback = searchOwner.GetFeedback();
       setSearchSurfaces(
@@ -580,12 +579,13 @@ export function WriterWorkbench({
     [searchFeedback],
   );
   /** Projects the requested surface over the shared view owner. @param dialog - Whether to render Find and Replace. @param request - Surface-specific focus request. @returns Mounted search controls. */
-  function renderSearch(dialog: boolean, request: SearchFocusRequest): React.JSX.Element {
+  function renderSearch(dialog: boolean, request: SearchFocus): React.JSX.Element {
     const barStatus = findbar?.feedback === searchFeedback ? undefined : findbar && searchFeedback;
     return (
       <WriterSearch
         dialog={dialog}
         request={request}
+        commandSource={commandSource}
         history={searchHistory}
         onHistoryChange={setSearchHistory}
         view={view}
