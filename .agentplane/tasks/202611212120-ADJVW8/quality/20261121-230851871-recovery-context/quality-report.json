@@ -1,0 +1,26 @@
+{
+  "schema_version": 1,
+  "task_id": "202611212120-ADJVW8",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-11-21T23:08:51.871Z",
+  "verdict": "pass",
+  "summary": "The Calc clipboard Text Import command, source separator modes and ruler, locale and native undo route meet the approved scope.",
+  "evaluated_sha": "d9fa462a5b60909050e4a5bcad94a1e3f83f5ff0",
+  "blueprint_digest": "e9032ad66927e5493aa0c04ca8ad31f91821ba21f9eaba57c22274b0ff9a59ff",
+  "findings": [
+    "Both upstream regression adaptations and the mounted resize and stale-selection scenarios pass. Chrome confirmed the same Unicode column boundaries and Undo after resizing to 390px."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202611212120-ADJVW8/README.md",
+    "output/calc-task11-verification.md",
+    "output/calc-task11-resize-retry.log",
+    "output/playwright/calc-task11/retry/smoke.log",
+    "d9fa462a5b60909050e4a5bcad94a1e3f83f5ff0"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": [
+    "The delimited preview is a bounded sample, and the browser supplies already-decoded Unicode clipboard text and session-level dialog preferences."
+  ]
+}
