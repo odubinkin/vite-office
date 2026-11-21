@@ -136,13 +136,9 @@ export class DocumentContentOperationsManager {
       const hints = paragraph.GetpSwpHints();
       if (paragraph === node && hints?.HasFlyContent(start, end))
         throw new Error("Writer structured replacement is not implemented.");
-      for (const hint of hints?.entries() ?? []) {
-        if (!hint.HasDummyChar()) continue;
-        const offset = hint.GetStart();
-        const replacesAnchor = paragraph === node && start <= offset && offset < end;
-        if (!(hint instanceof SwTextField) || replacesAnchor)
+      for (const hint of hints?.entries() ?? [])
+        if (hint.HasDummyChar() && !(hint instanceof SwTextField))
           throw new Error("Writer structured replacement is not implemented.");
-      }
     }
     const parts = regExp ? tokenizeReplacement(replacement) : [replacement];
     return this.document.RunModelTransaction(

@@ -18,6 +18,7 @@ import type { WriterHyperlink } from "./fmtatr2";
 import { SwpHints, type WriterTextRunLike } from "./ndhints";
 import { SetAttrMode } from "../../../inc/swtypes";
 import { SwTextFlyCnt } from "../../../inc/txtflcnt";
+import { SwTextField } from "../../../inc/txtfld";
 import {
   CH_TXT_ATR_FIELDEND,
   CH_TXT_ATR_FIELDSEP,
@@ -26,6 +27,7 @@ import {
   CH_TXT_ATR_INPUTFIELDSTART,
   CH_TXTATR_BREAKWORD,
   CH_TXTATR_INWORD,
+  RES_TXTATR_ANNOTATION,
   RES_TXTATR_AUTOFMT,
   RES_TXTATR_FLYCNT,
 } from "../../../inc/hintids";
@@ -59,17 +61,32 @@ export function GetTextNodeExpandedText(node: SwTextNode, start: number, end: nu
     .replaceAll(CH_TXTATR_INWORD, "");
 }
 
-/** Validates a native ReplaceText range before adjusting text or owned hints. @param node - Actual paragraph. @param start - Inclusive offset. @param end - Exclusive offset. @returns Nothing. */
-export function AssertTextNodeReplaceRange(node: SwTextNode, start: number, end: number): void {
+/** Erases represented point attributes before the native differential replacement. @param node - Actual paragraph. @param start - Inclusive offset. @param end - Exclusive offset. @returns Remaining text length to replace. */
+export function EraseTextNodeReplacementDummies(
+  node: SwTextNode,
+  start: number,
+  end: number,
+): number {
   AssertTextNodeRange(node, start, end);
   const hints = node.GetpSwpHints();
   for (let i = 0; hints !== undefined && i < hints.Count(); i++) {
     const hint = hints.Get(i);
     const offset = hint.GetStart();
     if (offset >= end) break;
-    if (offset >= start && hint.HasDummyChar())
+    if (offset >= start && hint.HasDummyChar() && !(hint instanceof SwTextField))
       throw new Error("Writer dummy-character replacement is not implemented.");
   }
+  let remainingEnd = end;
+  for (let offset = start; offset < remainingEnd; offset++) {
+    if (
+      node.GetText().charAt(offset) !== CH_TXTATR_INWORD ||
+      !node.GetpSwpHints()?.GetTextAttrForCharAt(offset, RES_TXTATR_ANNOTATION)
+    )
+      continue;
+    node.EraseText(offset, 1);
+    remainingEnd--;
+  }
+  return remainingEnd - start;
 }
 
 /** Preserves CutText's equal-end attributes in an empty split suffix and removes closed empty hints. Full CutImpl ownership remains unverified. @param node - Source. @param offset - Split position. @param suffix - Captured nonempty suffix hints. @returns Remaining suffix hints. */

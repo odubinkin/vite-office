@@ -5923,3 +5923,18 @@ selection aggregation and the bulk-format merge.
 
 - [Original EditEngine selection aggregation](../../vendor/libreoffice-reference/editeng/source/editeng/impedit5.cxx)
 - [Original annotation Character dialog and bulk formatting](../../vendor/libreoffice-reference/sw/source/uibase/docvw/PostItMgr.cxx)
+
+### WRITER-732 — Text replacement can skip the second of two adjacent annotation markers
+
+`SwTextNode::ReplaceText` deletes a dummy attribute and its character, then
+decrements the remaining range length. The loop advances its position even
+though the next character shifted into the position just processed. If that
+character is another annotation marker, the following raw text replacement can
+overwrite the marker without deleting its field. The source-derived Writer
+test replaces `a<annotation><annotation>bc` with `ZZ` and observes the
+second field still associated with offset 1. Writer retains the original
+forward scan. The native result is inferred from the pinned source and has
+been reproduced in the port.
+
+- [Original ReplaceText loop](../../vendor/libreoffice-reference/sw/source/core/txtnode/ndtxt.cxx#L3916)
+- [Original DeleteAttribute behavior](../../vendor/libreoffice-reference/sw/source/core/txtnode/thints.cxx#L1785)

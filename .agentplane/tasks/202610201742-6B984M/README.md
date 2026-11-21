@@ -4,7 +4,7 @@ title: "Implement Writer search and replace core and browser UI"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 106
+revision: 107
 origin:
   system: "manual"
 depends_on:
@@ -371,6 +371,14 @@ comments:
       Targeted evidence: nine Writer suites (1101 passed, six optional ICU probes skipped) cover the view, native search and replacement, paragraph joins, text formatting, and delete/split history. The final view suite passes six tests, including the consumed history on the second Undo, documented as an extension of WRITER-010 with pinned native source evidence. TypeScript, the production build, and all three production Chrome search scenarios pass. The new Chrome scenario applies Replace All to both body matches, observes the live comment, and restores the body with a single Undo. Scoped ESLint, Prettier, git diff --check, resources, dependencies, source tree, provenance, Writer/shared parity inventories, policy routing and doctor pass. Global JSDoc and file size retain 307 and four existing findings respectively. Provenance and runtime records now describe the shipped ECMAScript matcher and cite the actual running tests.
 
       Matches that consume the annotation marker remain an open part of structured replacement. This checkpoint does not close the task or increment the full regression cadence.
+  -
+    author: "CODER"
+    body: |-
+      Writer search checkpoint. A body match spanning an annotation marker now uses the native ReplaceText sequence: erase the point attribute while processing dummy characters, then replace the remaining text. DelContentIndex saves a covered annotation mark in the ordinary mark-history prefix. The existing text-field entry restores the comment first, so mark history can bind its original range to the restored field. Model tests cover point and ranged annotations, including repeated Undo/Redo for the ranged case. The normal browser command removes the covered comment and one Undo restores it. Preserved the native forward scan over adjacent markers and documented the skipped second field under WRITER-732.
+
+      Verification: 129 tests pass in eight targeted Writer suites. Six optional ICU-specific probes are skipped. All four production Chrome search and annotation scenarios pass. Production build, independent final typecheck, scoped lint and formatting, git diff --check, dependency boundaries, source provenance and tree, Writer resources, and policy routing pass. AgentPlane doctor reports zero errors with the existing hook shim warning. The repository-wide JSDoc and file-size gates retain 307 and four prior findings respectively.
+
+      Inline-fly replacement and other unrepresented structured content still use their existing admission checks. The open search task and full-regression cadence retain their current status.
 
 events:
   -
@@ -893,9 +901,19 @@ events:
       Targeted evidence: nine Writer suites (1101 passed, six optional ICU probes skipped) cover the view, native search and replacement, paragraph joins, text formatting, and delete/split history. The final view suite passes six tests, including the consumed history on the second Undo, documented as an extension of WRITER-010 with pinned native source evidence. TypeScript, the production build, and all three production Chrome search scenarios pass. The new Chrome scenario applies Replace All to both body matches, observes the live comment, and restores the body with a single Undo. Scoped ESLint, Prettier, git diff --check, resources, dependencies, source tree, provenance, Writer/shared parity inventories, policy routing and doctor pass. Global JSDoc and file size retain 307 and four existing findings respectively. Provenance and runtime records now describe the shipped ECMAScript matcher and cite the actual running tests.
 
       Matches that consume the annotation marker remain an open part of structured replacement. This checkpoint does not close the task or increment the full regression cadence.
+  -
+    type: "comment"
+    at: "2026-11-21T20:43:55.218Z"
+    author: "CODER"
+    body: |-
+      Writer search checkpoint. A body match spanning an annotation marker now uses the native ReplaceText sequence: erase the point attribute while processing dummy characters, then replace the remaining text. DelContentIndex saves a covered annotation mark in the ordinary mark-history prefix. The existing text-field entry restores the comment first, so mark history can bind its original range to the restored field. Model tests cover point and ranged annotations, including repeated Undo/Redo for the ranged case. The normal browser command removes the covered comment and one Undo restores it. Preserved the native forward scan over adjacent markers and documented the skipped second field under WRITER-732.
+
+      Verification: 129 tests pass in eight targeted Writer suites. Six optional ICU-specific probes are skipped. All four production Chrome search and annotation scenarios pass. Production build, independent final typecheck, scoped lint and formatting, git diff --check, dependency boundaries, source provenance and tree, Writer resources, and policy routing pass. AgentPlane doctor reports zero errors with the existing hook shim warning. The repository-wide JSDoc and file-size gates retain 307 and four prior findings respectively.
+
+      Inline-fly replacement and other unrepresented structured content still use their existing admission checks. The open search task and full-regression cadence retain their current status.
 
 doc_version: 3
-doc_updated_at: "2026-11-21T20:34:15.587Z"
+doc_updated_at: "2026-11-21T20:43:55.218Z"
 doc_updated_by: "CODER"
 description: "Implement the approved coherent Writer search-and-replace feature from pinned LibreOffice sources: real shared search engine and options, native paragraph/cursor traversal and replacement/history contracts, view-owned search state and dispatch, Find toolbar and Find and Replace dialog with generated upstream command placement and shortcuts. Preserve source semantics and explicit unsupported boundaries; never substitute DOM text search or browser RegExp for ICU contracts. Work only on writer in vite-office-writer; local upstream reading approved, no network or merges. Keep active until approved scope is verified."
 sections:

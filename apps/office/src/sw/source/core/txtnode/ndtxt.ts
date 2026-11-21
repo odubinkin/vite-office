@@ -77,7 +77,7 @@ import {
   AssertTextNodeAppend,
   CloneTextNodeTo,
   AssertTextNodeRange,
-  AssertTextNodeReplaceRange,
+  EraseTextNodeReplacementDummies,
   CopyTextNodeHints,
   CreateTextNodeColorFragment,
   CreateTextNodeFontFamilyFragment,
@@ -706,25 +706,25 @@ export class SwTextNode extends SwContentNode {
   public GetSpaceLeft(): number {
     return 0x7ffffffd - this.mText.length;
   }
-  /** Native ReplaceText retains actual hints and applies differential Update modes; the supplied start index advances over inserted text. Dummy-character deletion remains unported. @param rStart - Actual registered content index or native position. @param nDelLen - Deleted UTF-16 count. @param rStr - Replacement string. @returns Nothing. */
+  /** Native ReplaceText retains actual hints and applies differential Update modes; the supplied start index advances over inserted text. @param rStart - Actual registered content index or native position. @param nDelLen - Deleted UTF-16 count. @param rStr - Replacement string. @returns Nothing. */
   public ReplaceText(rStart: SwContentIndex | SwPosition, nDelLen: number, rStr: string): void {
     const index = "nContent" in rStart ? rStart.nContent : rStart;
-    const start = index.GetIndex(),
-      oldLength = this.mText.length;
-    if (index.GetContentNode() !== this || start >= oldLength)
+    const start = index.GetIndex();
+    if (index.GetContentNode() !== this || start >= this.Len())
       throw new Error("Writer ReplaceText needs an index inside its own node.");
-    AssertTextNodeReplaceRange(this, start, start + nDelLen);
     const inserted = rStr.slice(0, Math.max(0, this.GetSpaceLeft() + nDelLen));
     if (inserted.length === 0 && nDelLen === 0) return;
+    const deleted = EraseTextNodeReplacementDummies(this, start, start + nDelLen),
+      oldLength = this.Len();
     const hints = this.pSwpHints;
     const oldIgnore = this.IsIgnoreDontExpand();
     this.SetIgnoreDontExpand(true);
     try {
-      this.mText = this.mText.slice(0, start) + inserted + this.mText.slice(start + nDelLen);
-      if (nDelLen !== 0 && inserted.length !== 0) {
-        const difference = inserted.length - nDelLen;
+      this.mText = this.mText.slice(0, start) + inserted + this.mText.slice(start + deleted);
+      if (deleted !== 0 && inserted.length !== 0) {
+        const difference = inserted.length - deleted;
         if (difference !== 0) {
-          const offset = start + Math.min(nDelLen, inserted.length);
+          const offset = start + Math.min(deleted, inserted.length);
           hints?.Update(oldLength, offset, Math.abs(difference), difference < 0);
           this.UpdateContentIndices(
             offset,
@@ -734,9 +734,9 @@ export class SwTextNode extends SwContentNode {
         }
         index.Assign(this, index.GetIndex() + inserted.length);
       } else {
-        hints?.Update(oldLength, start, nDelLen, true);
-        this.UpdateContentIndices(start, nDelLen, SwContentIndexUpdateMode.Negative);
-        hints?.Update(oldLength - nDelLen, start, inserted.length);
+        hints?.Update(oldLength, start, deleted, true);
+        this.UpdateContentIndices(start, deleted, SwContentIndexUpdateMode.Negative);
+        hints?.Update(oldLength - deleted, start, inserted.length);
         this.UpdateContentIndices(start, inserted.length, SwContentIndexUpdateMode.Replace);
       }
       if (hints?.CanBeDeleted()) this.pSwpHints = undefined;

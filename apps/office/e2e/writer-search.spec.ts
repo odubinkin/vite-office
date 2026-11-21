@@ -78,6 +78,36 @@ test("Writer replaces body matches around a comment and restores them with one u
   await expect(comment).toHaveText("hit in the comment");
 });
 
+test("Writer replaces a match across a comment marker and restores the comment on undo", /** Checks removal and restoration through normal browser commands. @param fixtures - Playwright fixtures. @param fixtures.page - Chromium page. @returns Test completion. */ async ({
+  page,
+}) => {
+  await page.goto("/writer");
+  const editor = page.getByRole("textbox", { name: "Writer document text", exact: true });
+  await editor.fill("hit");
+  await page.keyboard.press("End");
+  await page.keyboard.press("ArrowLeft");
+  await page.keyboard.press("ArrowLeft");
+  await page.getByRole("button", { name: "Comment", exact: true }).click();
+  const comment = page.getByRole("textbox", { name: "Comment — Unknown Author" });
+  await expect(comment).toBeFocused();
+  await page.keyboard.insertText("Comment inside the match");
+
+  await editor.click();
+  await page.keyboard.press("Control+h");
+  const dialog = page.getByRole("dialog", { name: "Find and Replace", exact: true });
+  await dialog.getByLabel("Find", { exact: true }).fill("hit");
+  await dialog.getByLabel("Replace with", { exact: true }).fill("matched");
+  await dialog.getByRole("button", { name: "Replace All", exact: true }).click();
+  await expect(dialog.getByRole("status")).toHaveText("Search key replaced 1 times.");
+  await expect(editor).toHaveText("matched");
+  await expect(comment).toHaveCount(0);
+
+  await page.keyboard.press("Escape");
+  await page.keyboard.press("Control+z");
+  await expect(editor).toHaveText("h\uFFF9it");
+  await expect(comment).toHaveText("Comment inside the match");
+});
+
 test("Writer inserts a comment, finds its text and undoes note formatting", /** Drives the ordinary comment and search controls in Chromium. @param fixtures - Playwright fixtures. @param fixtures.page - Chromium page. @returns Test completion. */ async ({
   page,
 }) => {

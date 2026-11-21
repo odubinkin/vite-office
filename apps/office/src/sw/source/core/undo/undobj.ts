@@ -12,6 +12,8 @@ import type { SwTextFragment } from "../txtnode/ndtxt";
 import { SwTextNode } from "../txtnode/ndtxt";
 import type { SwDoc } from "../doc/doc";
 import { SwHistory } from "./rolbck";
+import { AnnotationMark } from "../crsr/annotationmark";
+import { UnoMark } from "../crsr/bookmark";
 
 /** Original undobj.hxx content-index deletion flags. */
 export enum DelContentType {
@@ -62,7 +64,7 @@ export class SwUndRng {
 /** Owns removed append-only content until the native move from undo storage consumes it. Full SwNodes undo sections and non-end moves remain unverified. */
 export class SwUndoSaveContent {
   protected m_pHistory: SwHistory | undefined;
-  /** Native ordinary bookmark branch for content removal. @param rMark - Native mark. @param rPoint - Native point. @param nDelContentType - Original deletion flags. @returns Nothing. */
+  /** Native mark history branches for content removal. @param rMark - Native mark. @param rPoint - Native point. @param nDelContentType - Original deletion flags. @returns Nothing. */
   protected DelContentIndex(
     rMark: SwPosition,
     rPoint: SwPosition,
@@ -75,7 +77,8 @@ export class SwUndoSaveContent {
     const pStart = rMark.compare(rPoint) <= 0 ? rMark : rPoint,
       pEnd = pStart === rMark ? rPoint : rMark;
     const access = doc.GetIDocumentMarkAccess();
-    for (const bookmark of access.GetBookmarks()) {
+    for (const bookmark of [...access.GetAllMarks()]) {
+      if (bookmark instanceof UnoMark) continue;
       const position = bookmark.GetMarkPos();
       const other = bookmark.IsExpanded() ? bookmark.GetOtherMarkPos() : undefined;
       let savePosition: boolean,
@@ -92,6 +95,11 @@ export class SwUndoSaveContent {
         savePosition = insideNodeRange(position);
         saveOther = !!other && insideNodeRange(other);
         remove = savePosition && saveOther;
+      } else if (bookmark instanceof AnnotationMark) {
+        const end = bookmark.GetMarkEnd();
+        savePosition = pStart.compare(end) < 0 && end.compare(pEnd) <= 0;
+        saveOther = savePosition && !!other;
+        remove = savePosition;
       } else {
         const first = pStart.compare(position),
           last = position.compare(pEnd);
@@ -120,7 +128,11 @@ export class SwUndoSaveContent {
       if (savePosition || saveOther) {
         this.m_pHistory ??= new SwHistory();
         this.m_pHistory.AddIMark(bookmark, savePosition, saveOther);
-        if (savePosition && (remove || !other)) access.DeleteMark(bookmark.GetName());
+        if (savePosition && (remove || !other)) {
+          if (bookmark instanceof AnnotationMark)
+            access.DeleteAnnotationMark(bookmark.GetAnnotationFormatField());
+          else access.DeleteMark(bookmark.GetName());
+        }
       }
     }
   }

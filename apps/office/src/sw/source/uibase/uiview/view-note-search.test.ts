@@ -269,3 +269,99 @@ it("moves an annotation across a replaced paragraph boundary", /** Exercises nat
     view.Close();
   }
 });
+
+it.each([false, true])(
+  "restores a comment deleted by a body match across its marker (ranged=%s)",
+  /** Exercises the text hint and separate mark history through the Writer search view. @param ranged - Whether the field has an annotation mark. @returns Nothing. */
+  (ranged) => {
+    const doc = createWriterDocument();
+    const view = new SwView(
+      new SwDocShell(
+        doc,
+        createDocument({ id: "note-covered", suiteId: "writer", title: "Notes" }),
+      ),
+    );
+    const shell = view.GetWrtShell();
+    shell.Insert("hit tail");
+    const node = shell.GetActiveParagraph();
+    const start = new SwPosition(node, 0);
+    const end = new SwPosition(node, 1);
+    const anchor = new SwPaM(end, ranged ? start : undefined);
+    const field = new SwPostItField(SwPostItFieldType.Get(doc), {
+      author: "Author",
+      initials: "A",
+      name: "covered",
+      text: "Existing comment",
+      dateTime: new DateTime(DateTime.EMPTY),
+    });
+    try {
+      const format = doc.GetDocumentContentOperationsManager().InsertPostItField(anchor, field);
+      const id = format.GetField().GetPostItId();
+      const fieldType = SwPostItFieldType.Get(doc);
+      const marks = doc.GetIDocumentMarkAccess();
+      const search = view.GetSearch();
+      const item = { ...search.GetSearchItem(), search: "hit", replacement: "matched" };
+      expect(node.GetText()).toBe(`h${CH_TXTATR_INWORD}it tail`);
+      expect(search.ExecSearch(item, SvxSearchCmd.REPLACE_ALL).matches).toBe(1);
+      expect(node.GetText()).toBe("matched tail");
+      expect(fieldType.FindFormat(id)).toBeUndefined();
+      expect(marks.GetAllMarks()).toHaveLength(0);
+
+      for (let cycle = 0; cycle < (ranged ? 2 : 1); cycle++) {
+        expect(shell.Undo()).toBe(true);
+        expect(node.GetText()).toBe(`h${CH_TXTATR_INWORD}it tail`);
+        const restored = fieldType.FindFormat(id);
+        if (!restored) throw new Error("Expected the restored annotation");
+        expect(restored.GetField().GetData().text).toBe("Existing comment");
+        expect(restored.GetTextField()?.GetStart()).toBe(1);
+        const mark = marks.GetAnnotationMark(restored);
+        expect(mark?.GetMarkStart().GetContentIndex()).toBe(ranged ? 0 : undefined);
+        expect(mark?.GetMarkEnd().GetContentIndex()).toBe(ranged ? 2 : undefined);
+        expect(shell.Redo()).toBe(true);
+        expect(node.GetText()).toBe("matched tail");
+        expect(fieldType.FindFormat(id)).toBeUndefined();
+        expect(marks.GetAllMarks()).toHaveLength(0);
+      }
+    } finally {
+      field.Dispose();
+      anchor.Dispose();
+      start.Dispose();
+      end.Dispose();
+      view.Close();
+    }
+  },
+);
+
+it("keeps the native forward scan over adjacent annotation markers", /** Reproduces the source index advance after deleting the first marker (WRITER-732). @returns Nothing. */ () => {
+  const doc = createWriterDocument();
+  const node = doc.paragraphs[0];
+  if (!node) throw new Error("Expected a body paragraph");
+  node.SetText("abc");
+  const fieldType = SwPostItFieldType.Get(doc);
+  const first = new SwPostItField(fieldType, {
+    author: "",
+    initials: "",
+    name: "first",
+    text: "",
+    dateTime: new DateTime(DateTime.EMPTY),
+  });
+  const second = new SwPostItField(fieldType, { ...first.GetData(), id: 0, name: "second" });
+  const firstFormat = new SwFormatField(first);
+  const secondFormat = new SwFormatField(second);
+  expect(node.InsertHint(new SwTextField(firstFormat, 1))).toBe(true);
+  expect(node.InsertHint(new SwTextField(secondFormat, 2))).toBe(true);
+  const start = new SwPosition(node, 0);
+  try {
+    node.ReplaceText(start, node.Len(), "ZZ");
+    expect(node.GetText()).toBe("ZZ");
+    const remaining = [...fieldType.GatherFields()];
+    expect(remaining).toHaveLength(1);
+    expect(remaining[0]).toBe(secondFormat);
+    expect(secondFormat.GetTextField()?.GetStart()).toBe(1);
+  } finally {
+    start.Dispose();
+    first.Dispose();
+    second.Dispose();
+    doc.Dispose();
+  }
+});

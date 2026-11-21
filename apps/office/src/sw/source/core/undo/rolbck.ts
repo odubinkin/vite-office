@@ -8,6 +8,8 @@ import { RES_BOXATR_FORMULA, RES_BOXATR_VALUE, RES_TXTATR_ANNOTATION } from "../
 import { SetAttrMode } from "../../../inc/swtypes";
 import type { SwDoc } from "../doc/doc";
 import type { SwBookmark } from "../doc/docbm";
+import { AnnotationMark } from "../crsr/annotationmark";
+import type { SwPostItFieldType } from "../fields/docufld";
 import { SwPaM, SwPosition } from "../crsr/pam";
 import { SwTextNode } from "../txtnode/ndtxt";
 import type { SwpHints } from "../txtnode/ndhints";
@@ -306,6 +308,7 @@ export class SwHistoryResetText extends SwHistoryHint {
 /** Native history payload for ordinary Writer bookmark endpoints. */
 export class SwHistoryBookmark extends SwHistoryHint {
   private readonly m_aName: string;
+  private readonly annotation: { type: SwPostItFieldType; id: number } | undefined;
   private readonly hidden: boolean;
   private readonly hideCondition: string;
   private readonly m_nNode: number;
@@ -314,14 +317,21 @@ export class SwHistoryBookmark extends SwHistoryHint {
   private readonly hadOther: boolean;
   /** Saves requested native endpoints without retaining registered positions. @param bookmark - Existing mark. @param m_bSavePos - Save primary position. @param saveOtherPos - Save second position. @returns History entry. */
   public constructor(
-    bookmark: SwBookmark,
+    bookmark: SwBookmark | AnnotationMark,
     private readonly m_bSavePos: boolean,
     saveOtherPos: boolean,
   ) {
     super(HISTORY_HINT.HSTRY_BOOKMARK);
     this.m_aName = bookmark.GetName();
-    this.hidden = bookmark.IsHidden();
-    this.hideCondition = bookmark.GetHideCondition();
+    if (bookmark instanceof AnnotationMark) {
+      const field = bookmark.GetAnnotationFormatField().GetField();
+      this.annotation = { type: field.GetTyp(), id: field.GetPostItId() };
+      this.hidden = false;
+      this.hideCondition = "";
+    } else {
+      this.hidden = bookmark.IsHidden();
+      this.hideCondition = bookmark.GetHideCondition();
+    }
     this.m_nNode = m_bSavePos ? bookmark.GetMarkPos().GetNodeIndex() : 0;
     this.m_nContent = m_bSavePos ? bookmark.GetMarkPos().GetContentIndex() : 0;
     this.hadOther = bookmark.IsExpanded();
@@ -345,15 +355,19 @@ export class SwHistoryBookmark extends SwHistoryHint {
       enabled = undo.DoesUndo();
     undo.DoUndo(false);
     try {
-      const access = doc.GetIDocumentMarkAccess(),
-        mark = access.FindMark(this.m_aName);
+      const access = doc.GetIDocumentMarkAccess();
+      const annotation = this.annotation?.type.FindFormat(this.annotation.id);
+      if (this.annotation && !annotation) return;
+      const mark = annotation
+        ? access.GetAnnotationMark(annotation)
+        : access.FindMark(this.m_aName);
       if (!this.m_bSavePos && mark === undefined)
         throw new Error("Writer unsaved bookmark position requires an existing mark.");
       const node = this.m_bSavePos ? doc.GetNodes().at(this.m_nNode) : mark?.GetMarkPos().GetNode();
       if (!(node instanceof SwTextNode)) return;
       const content = this.m_bSavePos
         ? this.m_nContent
-        : (mark as SwBookmark).GetMarkPos().GetContentIndex();
+        : (mark as SwBookmark | AnnotationMark).GetMarkPos().GetContentIndex();
       const position = new SwPosition(node, content),
         range = new SwPaM(position);
       position.Dispose();
@@ -368,6 +382,10 @@ export class SwHistoryBookmark extends SwHistoryHint {
             throw new Error("Writer unsaved bookmark end requires an existing range.");
           range.SetMark();
           range.GetMark().Assign(mark.GetOtherMarkPos());
+        }
+        if (annotation) {
+          access.MakeAnnotationMark(range, annotation);
+          return;
         }
         if (mark !== undefined) access.DeleteMark(this.m_aName);
         const restored = access.MakeBookmark(range, this.m_aName);
@@ -391,7 +409,11 @@ export class SwHistory {
     this.m_SwpHstry.push(hint);
   }
   /** Original represented ordinary mark variant of AddIMark. @param bookmark - Live mark. @param savePos - Save primary position. @param saveOtherPos - Save expanded end. @returns Nothing. */
-  public AddIMark(bookmark: SwBookmark, savePos: boolean, saveOtherPos: boolean): void {
+  public AddIMark(
+    bookmark: SwBookmark | AnnotationMark,
+    savePos: boolean,
+    saveOtherPos: boolean,
+  ): void {
     this.m_SwpHstry.push(new SwHistoryBookmark(bookmark, savePos, saveOtherPos));
   }
   /** Original ownership move; neither history's temporary-end counter is reset, even when moving a nonempty suffix. @param position - Destination insertion slot. @param source - Source history. @param start - First moved entry. @returns Nothing. */
