@@ -5693,3 +5693,13 @@ applies its authored properties without that collection change.
   and formatted Replace All in `sw/source/core/crsr/findattr.cxx` instead
   pass the original template to the regex replacement operation. The Writer
   model and view regressions preserve both outcomes against the pinned ICU.
+
+### WRITER-712 — Escaped dollar signs can trigger the paragraph-end range gate
+
+- The regex check in `sw/source/core/crsr/findtxt.cxx` inspects the final
+  character and the character before each vertical bar to determine whether
+  the range must reach the end of the paragraph. It does not interpret
+  escaping or regex grouping.
+- An escaped dollar at the end of a pattern therefore requires the range to
+  reach the paragraph end even when the literal dollar is inside the range.
+  Writer preserves these checks in both directions.

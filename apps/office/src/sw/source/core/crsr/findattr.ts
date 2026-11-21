@@ -24,7 +24,7 @@ import { isParagraphEditItem } from "../doc/DocumentContentOperationsManager.att
 import type { SwTextFormatColl } from "../doc/fmtcol";
 import { SwAttrIter } from "../text/itratr";
 import { SwTextNode } from "../txtnode/ndtxt";
-import { DecodeSearchReplacement, FindTextImpl, ResolveSearchReplacement } from "./findtxt";
+import { DecodeSearchText, FindTextImpl, ResolveSearchReplacement } from "./findtxt";
 import { SwPaM } from "./pam";
 import {
   FIND_FOUND,
@@ -287,7 +287,7 @@ export function FindAttrs(
     options !== undefined &&
     (options.replaceString.getLength() !== 0 || set.Count() === 0 || applied.Count() === 0);
   const regex = replaceText && options.AlgorithmType2 === REGEXP;
-  const text = replaceText && !regex ? DecodeSearchReplacement(options.replaceString) : undefined;
+  const text = replaceText && !regex ? DecodeSearchText(options.replaceString) : undefined;
   const undo = cursor.GetPoint().GetNode().GetDoc().GetUndoManager();
   const record = undo.DoesUndo();
   if (record) undo.StartUndo("Replace");

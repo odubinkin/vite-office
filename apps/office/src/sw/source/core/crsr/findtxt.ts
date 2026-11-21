@@ -123,8 +123,18 @@ function DoSearch(
   high: number,
   backward: boolean,
 ): boolean {
-  const keepSoftHyphens =
-    options.searchString.getLength() === 1 && options.searchString.getStr()[0] === 0xad;
+  const regex = options.AlgorithmType2 === REGEXP;
+  const pattern = regex ? DecodeSearchText(options.searchString) : "";
+  if (regex && high !== node.Len() && pattern.endsWith("$")) {
+    let alternative = pattern.indexOf("|");
+    while (alternative > 0 && pattern[alternative - 1] === "$")
+      alternative = pattern.indexOf("|", alternative + 1);
+    if (alternative === -1) return false;
+  }
+
+  const keepSoftHyphens = regex
+    ? /\\(?:xAD|x\{00AD\}|u00AD|u00ad|U000000AD|N\{SOFT HYPHEN\})/.test(pattern)
+    : options.searchString.getLength() === 1 && options.searchString.getStr()[0] === 0xad;
   const clean = lcl_CleanStr(node, low, high, !keepSoftHyphens);
   const start: [number] = [backward ? clean.end : low],
     end: [number] = [backward ? low : clean.end];
@@ -249,8 +259,8 @@ export function ReplaceBackReferences(
   }
 }
 
-/** Converts counted replacement text to the content operations' UTF-16 string. @param value - Native replacement text. @returns Model text. */
-export function DecodeSearchReplacement(value: OUString): string {
+/** Converts counted search text to a UTF-16 string. @param value - Native search text. @returns Model text. */
+export function DecodeSearchText(value: OUString): string {
   const units = value.getStr();
   let replacement = "";
   for (let index = 0; index < value.getLength(); index++)
@@ -266,7 +276,7 @@ export function ResolveSearchReplacement(
 ): string {
   const expanded = ReplaceBackReferences(options, cursor, engine);
   try {
-    return DecodeSearchReplacement(expanded ?? options.replaceString);
+    return DecodeSearchText(expanded ?? options.replaceString);
   } finally {
     expanded?.dispose();
   }
@@ -298,7 +308,7 @@ export class SwFindParaText implements SwFindParas {
       : undefined;
     let replacement: string;
     try {
-      replacement = DecodeSearchReplacement(expanded ?? original);
+      replacement = DecodeSearchText(expanded ?? original);
     } finally {
       expanded?.dispose();
     }

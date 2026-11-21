@@ -1,8 +1,9 @@
 /** @fileoverview Source-derived model-text search checks over real Writer nodes, sections and registered positions. */
 import { expect, it } from "vitest";
+import { createNativeRegexMatcher, hasNativeRegexProbe } from "../../../../test/icu-regex-probe";
 import { SwCursor } from "./swcrsr";
 import { FindRanges, SwDocPositions } from "../../../inc/cshtyp";
-import { APPROXIMATE } from "../../../../offapi/com/sun/star/util/SearchAlgorithms2";
+import { APPROXIMATE, REGEXP } from "../../../../offapi/com/sun/star/util/SearchAlgorithms2";
 import { REG_NOT_BEGINOFLINE } from "../../../../offapi/com/sun/star/util/SearchFlags";
 import { FindText, FindTextImpl } from "./findtxt";
 import { SwPaM, SwPosition } from "./pam";
@@ -473,3 +474,102 @@ it("retains the native similarity script end when it reaches beyond the requeste
     selected.Dispose();
   }
 });
+
+it.skipIf(!hasNativeRegexProbe).each([false, true])(
+  "requires access to the paragraph end for trailing-dollar alternatives backward=%s",
+  /** Tests the pinned model's character-level anchor detection with real ICU. @param backward - Direction. @returns Nothing. */ (
+    backward,
+  ) => {
+    const doc = new SwDoc(),
+      node = doc.paragraphs[0] as SwTextNode;
+    node.SetText("a$ x");
+    const bounded = range(node, 0, node, 2);
+    const full = range(node, 0);
+    const cursor = range(node, 0);
+    const options = new SearchOptions2();
+    options.AlgorithmType2 = REGEXP;
+    try {
+      options.searchString.assign(string(String.raw`a\$`));
+      expect(
+        FindTextImpl(
+          cursor,
+          options,
+          new TextSearch(options, createNativeRegexMatcher),
+          backward,
+          bounded,
+        ),
+      ).toBe(false);
+      expect(
+        FindTextImpl(
+          cursor,
+          options,
+          new TextSearch(options, createNativeRegexMatcher),
+          backward,
+          full,
+        ),
+      ).toBe(true);
+      options.searchString.assign(string(String.raw`a\$|x$`));
+      expect(
+        FindTextImpl(
+          cursor,
+          options,
+          new TextSearch(options, createNativeRegexMatcher),
+          backward,
+          bounded,
+        ),
+      ).toBe(false);
+      options.searchString.assign(string("a|x$"));
+      expect(
+        FindTextImpl(
+          cursor,
+          options,
+          new TextSearch(options, createNativeRegexMatcher),
+          backward,
+          bounded,
+        ),
+      ).toBe(true);
+      expect(cursor.Start().GetContentIndex()).toBe(0);
+      expect(cursor.End().GetContentIndex()).toBe(1);
+    } finally {
+      cursor.Dispose();
+      full.Dispose();
+      bounded.Dispose();
+    }
+  },
+);
+
+it
+  .skipIf(!hasNativeRegexProbe)
+  .each([
+    String.raw`\xAD`,
+    String.raw`\x{00AD}`,
+    String.raw`\u00AD`,
+    String.raw`\u00ad`,
+    String.raw`\U000000AD`,
+    String.raw`\N{SOFT HYPHEN}`,
+  ])(
+  "preserves a soft hyphen requested by the source regex token %s",
+  /** Verifies each literal spelling admitted by native Writer model-text cleanup. @param token - Native pattern token. @returns Nothing. */ (
+    token,
+  ) => {
+    const doc = new SwDoc(),
+      node = doc.paragraphs[0] as SwTextNode;
+    node.SetText("😀a\u00adb");
+    const region = range(node, 0);
+    const cursor = range(node, 0);
+    const options = new SearchOptions2();
+    options.AlgorithmType2 = REGEXP;
+    options.searchString.assign(string(token));
+    const engine = new TextSearch(options, createNativeRegexMatcher);
+    try {
+      for (const backward of [false, true]) {
+        expect(FindTextImpl(cursor, options, engine, backward, region)).toBe(true);
+        expect(cursor.Start().GetContentIndex()).toBe(3);
+        expect(cursor.End().GetContentIndex()).toBe(4);
+      }
+    } finally {
+      cursor.Dispose();
+      region.Dispose();
+    }
+  },
+);
