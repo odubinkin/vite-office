@@ -4,7 +4,7 @@ title: "Implement Writer search and replace core and browser UI"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 109
+revision: 110
 origin:
   system: "manual"
 depends_on:
@@ -393,6 +393,12 @@ comments:
       WRITER-733 records the source-derived change in anchor offset when redoing a backward replacement. The existing as-character graphic behavior and its UI assertions remain covered.
 
       Verification: 152 targeted tests pass across the ten relevant suites. A test-only assertion originally ran after closing the view and was moved before teardown; the six-test UI suite passes on recheck. Six optional ICU probe cases are skipped. The production TypeScript and Vite build and all four Chrome search smoke scenarios pass. Dependency boundaries, source provenance and tree, Writer resources, Writer inventory, lint, formatting, policy routing, and git diff --check pass. AgentPlane doctor has the existing hook shim warning. The project-wide JSDoc and size checks still report their 307 and four pre-existing findings. The implementation covers same-paragraph and adjacent-paragraph replacement. This checkpoint leaves the overall search task active.
+  -
+    author: "CODER"
+    body: |-
+      Writer multi-paragraph edit checkpoint. The browser typing path uses the native delete-and-insert sequence for a selection spanning paragraphs. SwUndoDelete now saves supported floating text frames and graphics whose anchors belong to fully selected interior paragraphs before joining the boundary text nodes. SwUndoDelLayFormat retains the original special format and moves its real section to Writer undo storage. Undo restores the body paragraphs, fly section, object identity and anchor in the correct order. Redo removes the fly again. The model regression adapts the pinned testSetStringDeletesShape selection to the ordinary Writer shell and exercises both text and graphic content. A browser editor regression uses the actual beforeinput path with a rendered floating text story.
+
+      Verification: 1804 tests passed across eight focused Writer suites, including native deletion, split history, graphics and search replacement. The production build and six Chrome search and style-history smoke scenarios pass. Scoped ESLint and Prettier, git diff --check, dependency boundaries, provenance, source tree, Writer resources and inventory, and policy routing pass. AgentPlane doctor retains its hook-shim warning and reports zero errors. The repository-wide JSDoc and file-size checks retain their 307 and four existing findings. The supported floating histories cover plain sections and graphics anchored to fully selected middle paragraphs. Nested fly content and section mark history remain open. This checkpoint leaves the search task active.
 
 events:
   -
@@ -943,9 +949,17 @@ events:
       WRITER-733 records the source-derived change in anchor offset when redoing a backward replacement. The existing as-character graphic behavior and its UI assertions remain covered.
 
       Verification: 152 targeted tests pass across the ten relevant suites. A test-only assertion originally ran after closing the view and was moved before teardown; the six-test UI suite passes on recheck. Six optional ICU probe cases are skipped. The production TypeScript and Vite build and all four Chrome search smoke scenarios pass. Dependency boundaries, source provenance and tree, Writer resources, Writer inventory, lint, formatting, policy routing, and git diff --check pass. AgentPlane doctor has the existing hook shim warning. The project-wide JSDoc and size checks still report their 307 and four pre-existing findings. The implementation covers same-paragraph and adjacent-paragraph replacement. This checkpoint leaves the overall search task active.
+  -
+    type: "comment"
+    at: "2026-11-21T21:11:42.362Z"
+    author: "CODER"
+    body: |-
+      Writer multi-paragraph edit checkpoint. The browser typing path uses the native delete-and-insert sequence for a selection spanning paragraphs. SwUndoDelete now saves supported floating text frames and graphics whose anchors belong to fully selected interior paragraphs before joining the boundary text nodes. SwUndoDelLayFormat retains the original special format and moves its real section to Writer undo storage. Undo restores the body paragraphs, fly section, object identity and anchor in the correct order. Redo removes the fly again. The model regression adapts the pinned testSetStringDeletesShape selection to the ordinary Writer shell and exercises both text and graphic content. A browser editor regression uses the actual beforeinput path with a rendered floating text story.
+
+      Verification: 1804 tests passed across eight focused Writer suites, including native deletion, split history, graphics and search replacement. The production build and six Chrome search and style-history smoke scenarios pass. Scoped ESLint and Prettier, git diff --check, dependency boundaries, provenance, source tree, Writer resources and inventory, and policy routing pass. AgentPlane doctor retains its hook-shim warning and reports zero errors. The repository-wide JSDoc and file-size checks retain their 307 and four existing findings. The supported floating histories cover plain sections and graphics anchored to fully selected middle paragraphs. Nested fly content and section mark history remain open. This checkpoint leaves the search task active.
 
 doc_version: 3
-doc_updated_at: "2026-11-21T21:01:55.318Z"
+doc_updated_at: "2026-11-21T21:11:42.362Z"
 doc_updated_by: "CODER"
 description: "Implement the approved coherent Writer search-and-replace feature from pinned LibreOffice sources: real shared search engine and options, native paragraph/cursor traversal and replacement/history contracts, view-owned search state and dispatch, Find toolbar and Find and Replace dialog with generated upstream command placement and shortcuts. Preserve source semantics and explicit unsupported boundaries; never substitute DOM text search or browser RegExp for ICU contracts. Work only on writer in vite-office-writer; local upstream reading approved, no network or merges. Keep active until approved scope is verified."
 sections:

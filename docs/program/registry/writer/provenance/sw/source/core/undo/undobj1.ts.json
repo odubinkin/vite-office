@@ -12,6 +12,10 @@
         {
           "path": "apps/office/src/sw/source/core/crsr/native-search-replace.test.ts",
           "marker": "preserves inline graphics adjacent to matches and restores a covered graphic"
+        },
+        {
+          "path": "apps/office/src/sw/source/uibase/wrtsh/native-cross-node-deletion.test.ts",
+          "marker": "replaces a multi-paragraph selection and restores its middle"
         }
       ],
       "upstream": [
@@ -22,6 +26,10 @@
         {
           "path": "vendor/libreoffice-reference/sw/source/core/undo/undobj1.cxx",
           "marker": "void SwUndoFlyBase::InsFly"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/qa/extras/uiwriter/uiwriter9.cxx",
+          "marker": "testSetStringDeletesShape"
         }
       ]
     },
@@ -30,10 +38,11 @@
       "SwUndoDelLayFormat"
     ],
     "omittedResponsibilities": [
-      "Floating and drawing anchors, nested fly content, native layout frame selection, redlines, and complete SwNodes undo-array parity are unverified."
+      "Other floating-anchor deletion profiles, drawing anchors, nested fly content and section mark history, native layout frame selection, redlines, and complete SwNodes undo-array parity are unverified."
     ],
     "preservedResponsibilities": [
-      "Retains the actual inline graphic format and moves its graphic section into Writer undo ownership, unlinks the dummy, then restores the original section and reinserts an as-character hint."
+      "Retains the actual inline graphic format and moves its graphic section into Writer undo ownership, unlinks the dummy, then restores the original section and reinserts an as-character hint.",
+      "For text selection deletion, retains the live floating text frame or graphic and its section when its anchor is on a completely selected middle paragraph. Undo restores the section, format, and original character or paragraph anchor."
     ],
     "status": "mapped",
     "upstreamPath": "sw/source/core/undo/undobj1.cxx",

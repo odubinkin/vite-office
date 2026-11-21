@@ -594,19 +594,31 @@ export class SwNodes {
       node.DisposeModify();
     }
   }
-  /** Moves a complete graphic fly section out of the live document for undo. @param section - Actual fly section. @returns Owned detached section. */
-  public DetachGraphicSection(section: SwStartNode): readonly SwNode[] {
+  /** Moves a complete fly section out of the live document for undo. @param section - Actual fly section. @returns Owned detached section. */
+  public DetachFlySection(section: SwStartNode): readonly SwNode[] {
+    if (
+      section.GetNodes() !== this ||
+      section.GetStartNodeType() !== SwStartNodeType.SwFlyStartNode
+    )
+      throw new Error("Writer fly history requires a fly section.");
     const start = section.GetIndex();
     const end = section.EndOfSectionNode().GetIndex();
-    if (end !== start + 2 || !this.at(start + 1).GetGrfNode())
-      throw new Error("Writer fly history requires a graphic section.");
     const detached = this.nodeArray.slice(start, end + 1);
+    for (const node of detached) {
+      if (node instanceof SwTextNode) this.m_aOutlineNodes.erase(node);
+      if (node instanceof SwContentNode) node.DelFrames();
+    }
     this.RemoveNode(start, detached.length, false);
     return detached;
   }
-  /** Restores the same section and graphic node at the original SwNodes position. @param index - Saved position. @param section - Owned detached nodes. @returns Nothing. */
-  public RestoreGraphicSection(index: number, section: readonly SwNode[]): void {
+  /** Restores the original fly section at its saved position. @param index - Saved position. @param section - Owned detached nodes. @returns Nothing. */
+  public RestoreFlySection(index: number, section: readonly SwNode[]): void {
     for (const [offset, node] of section.entries()) this.InsertNode(node, index + offset);
+    for (const node of section) {
+      if (!(node instanceof SwTextNode)) continue;
+      node.AddToList();
+      this.InsertOutlineNode(node);
+    }
     this.document.NotifyModelChange({ index, kind: "node-inserted" });
   }
 

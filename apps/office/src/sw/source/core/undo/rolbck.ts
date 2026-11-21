@@ -23,7 +23,7 @@ import { SwTextField } from "../../../inc/txtfld";
 import type { SwTextFlyCnt } from "../../../inc/txtflcnt";
 import { SwUndoDelLayFormat } from "./undobj1";
 import { RndStdIds } from "../../../../svx/inc/swframetypes";
-import type { SpzFrameFormat } from "../layout/atrfrm";
+import type { SpzFrameFormat, SwFlyFrameFormat } from "../layout/atrfrm";
 import { SwUndRng } from "./undobj";
 
 /** Native history discriminants;registered old ranged text,direct format and text collection entries are implemented. */
@@ -96,10 +96,10 @@ export class SwHistorySetFormat extends SwHistoryHint {
 /** Original fly hint history delegates to the layout-format deletion owner. */
 export class SwHistoryTextFlyCnt extends SwHistoryHint {
   private readonly deletion: SwUndoDelLayFormat;
-  /** Captures and removes an inline graphic. @param hint - Actual text point. @returns History entry. */
-  constructor(hint: SwTextFlyCnt) {
+  /** Captures and removes an anchored fly. @param source - Inline point or floating format. @returns History entry. */
+  constructor(source: SwTextFlyCnt | SwFlyFrameFormat) {
     super(HISTORY_HINT.HSTRY_FLYCNT);
-    this.deletion = new SwUndoDelLayFormat(hint);
+    this.deletion = new SwUndoDelLayFormat(source);
   }
   /** Restores the original object without selecting its layout frame. @returns Nothing. */
   override SetInDoc(): void {
@@ -476,6 +476,10 @@ export class SwHistory {
   /** Removes the covered inline fly and retains its deletion history first. @param hint - Actual point. @returns Nothing. */
   public AddTextFly(hint: SwTextFlyCnt): void {
     this.m_SwpHstry.push(new SwHistoryTextFlyCnt(hint));
+  }
+  /** Retains a floating format whose anchor is leaving the document. @param format - Actual fly format. @returns Nothing. */
+  public AddDeleteFly(format: SwFlyFrameFormat): void {
+    this.m_SwpHstry.push(new SwHistoryTextFlyCnt(format));
   }
   /** Records a floating anchor before its position changes. @param format - Actual special format. @returns Nothing. */
   public AddChangeFlyAnchor(format: SpzFrameFormat): void {
