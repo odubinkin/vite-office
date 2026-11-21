@@ -1,0 +1,26 @@
+{
+  "schema_version": 1,
+  "task_id": "202611211651-3NASPH",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-11-21T16:55:54.691Z",
+  "verdict": "pass",
+  "summary": "Original duplicate, rank and average conditions survive ODS and Worker with native rendering cache boundaries.",
+  "evaluated_sha": "d055907e110876efed2313aced1f9aeb7b18165f",
+  "blueprint_digest": "dd383dc6a2373e1ade4c19073a488ddf6465d9fa2d60d4f702bbaf62d1ed2ea8",
+  "findings": [
+    "The pinned duplicate regression and independent rank, ties, average, empty-cell and edit assertions passed."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202611211651-3NASPH/README.md",
+    "output/playwright/3NASPH/calc.log",
+    "output/playwright/3NASPH/recheck.log",
+    "output/playwright/3NASPH/types-final.log",
+    "output/playwright/3NASPH/provenance.log",
+    "output/playwright/3NASPH/doctor.log",
+    "node .agentplane/policy/check-routing.mjs passed"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": []
+}
