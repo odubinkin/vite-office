@@ -1,9 +1,12 @@
-/** @fileoverview Browser annotation mode of Writer's pinned Character dialog. */
+/** @fileoverview Browser presentation of Writer's standard and annotation Character modes. */
 import { useId, useLayoutEffect, useRef, useState } from "react";
 import { WriterDialogHeader } from "./WriterDialogHeader";
 import { useBrowserLocalization } from "../../../framework/browser/localization/browser-localization-context";
-import { SfxItemSet } from "../../../svl/source/items/itemset";
+import { SfxItemSet, SfxItemState } from "../../../svl/source/items/itemset";
 import * as EE from "../../../editeng/inc/eeitem";
+import { SvxBrushItem } from "../../../editeng/inc/brushitem";
+import { SvxKerningItem } from "../../../editeng/inc/kernitem";
+import * as SW from "../../inc/hintids";
 import { SvxColorItem } from "../../../editeng/inc/colritem";
 import { SvxFontItem } from "../../../editeng/inc/fontitem";
 import { SvxFontHeightItem } from "../../../editeng/inc/fhgtitem";
@@ -26,14 +29,43 @@ const annotationCharTabs = [
   ["background", "Background"],
 ] as const;
 
-/** Presents the annotation mode of characterproperties.ui over native EditEngine input and output sets. @param props - Initial attributes and request completion. @returns Character dialog. */
-export function WriterAnnotationCharDialog({
+const characterItems = {
+  annotation: {
+    family: EE.EE_CHAR_FONTINFO,
+    size: EE.EE_CHAR_FONTHEIGHT,
+    weight: EE.EE_CHAR_WEIGHT,
+    posture: EE.EE_CHAR_ITALIC,
+    underline: EE.EE_CHAR_UNDERLINE,
+    strike: EE.EE_CHAR_STRIKEOUT,
+    position: EE.EE_CHAR_ESCAPEMENT,
+    spacing: EE.EE_CHAR_KERNING,
+    color: EE.EE_CHAR_COLOR,
+    background: EE.EE_CHAR_BKGCOLOR,
+  },
+  standard: {
+    family: SW.RES_CHRATR_FONT,
+    size: SW.RES_CHRATR_FONTSIZE,
+    weight: SW.RES_CHRATR_WEIGHT,
+    posture: SW.RES_CHRATR_POSTURE,
+    underline: SW.RES_CHRATR_UNDERLINE,
+    strike: SW.RES_CHRATR_CROSSEDOUT,
+    position: SW.RES_CHRATR_ESCAPEMENT,
+    spacing: SW.RES_CHRATR_KERNING,
+    color: SW.RES_CHRATR_COLOR,
+    background: SW.RES_CHRATR_BACKGROUND,
+  },
+} as const;
+
+/** Presents the represented characterproperties.ui controls over native input and output sets. @param props - Initial attributes and request completion. @returns Character dialog. */
+export function WriterCharacterDialog({
   input,
+  mode,
   initialPage,
   onCancel,
   onSubmit,
 }: Readonly<{
   input: SfxItemSet;
+  mode: "annotation" | "standard";
   initialPage?: string | undefined;
   onCancel: () => void;
   onSubmit: (output: SfxItemSet) => void;
@@ -52,21 +84,28 @@ export function WriterAnnotationCharDialog({
     ),
   );
   const [resets, setResets] = useState([0, 0, 0, 0]);
-  const font = input.GetItemIfSet(EE.EE_CHAR_FONTINFO);
-  const height = input.GetItemIfSet(EE.EE_CHAR_FONTHEIGHT);
-  const weight = input.GetItemIfSet(EE.EE_CHAR_WEIGHT);
-  const posture = input.GetItemIfSet(EE.EE_CHAR_ITALIC);
-  const underline = input.GetItemIfSet(EE.EE_CHAR_UNDERLINE);
-  const strike = input.GetItemIfSet(EE.EE_CHAR_STRIKEOUT);
-  const escapement = input.GetItemIfSet(EE.EE_CHAR_ESCAPEMENT);
-  const colorItem = input.GetItemIfSet(EE.EE_CHAR_COLOR);
-  const backgroundItem = input.GetItemIfSet(EE.EE_CHAR_BKGCOLOR);
+  const which = characterItems[mode];
+  /** Reads a uniform effect, including the original pool default. @param id - Native item identity. @returns Uniform item or undefined for mixed input. */
+  function read(id: number) {
+    return input.GetItemState(id) >= SfxItemState.DEFAULT ? input.Get(id) : undefined;
+  }
+  const font = read(which.family);
+  const height = read(which.size);
+  const weight = read(which.weight);
+  const posture = read(which.posture);
+  const underline = read(which.underline);
+  const strike = read(which.strike);
+  const escapement = read(which.position);
+  const kerning = read(which.spacing);
+  const colorItem = read(which.color);
+  const backgroundItem = read(which.background);
   const family = font instanceof SvxFontItem ? font.GetFamilyName() : "";
   const size = height instanceof SvxFontHeightItem ? String(height.GetHeight() / 20) : "";
   const fontStyle =
     weight instanceof SvxWeightItem && posture instanceof SvxPostureItem
       ? String(Number(weight.GetBoolValue()) * 2 + Number(posture.GetBoolValue()))
       : "";
+  const spacing = kerning instanceof SvxKerningItem ? String(kerning.GetValue() / 20) : "";
   const underlining = underline instanceof SvxUnderlineItem ? String(underline.GetValue()) : "";
   const strikethrough = strike instanceof SvxCrossedOutItem ? String(strike.GetValue()) : "";
   const position =
@@ -74,9 +113,11 @@ export function WriterAnnotationCharDialog({
   const initialColor =
     colorItem instanceof SvxColorItem ? writerColorValue(colorItem.GetValue()) : "";
   const initialBackground =
-    backgroundItem instanceof SvxColorItem
-      ? writerColorValue(backgroundItem.GetValue(), "transparent")
-      : "";
+    backgroundItem instanceof SvxBrushItem
+      ? writerColorValue(backgroundItem.GetColor(), "transparent")
+      : backgroundItem instanceof SvxColorItem
+        ? writerColorValue(backgroundItem.GetValue(), "transparent")
+        : "";
   const [color, setColor] = useState(initialColor);
   const [background, setBackground] = useState(initialBackground);
   const title = localization.GetText("writer.character.title", "Character");
@@ -127,7 +168,7 @@ export function WriterAnnotationCharDialog({
     const output = new SfxItemSet(input.GetPool(), input.GetRanges());
     const nextFamily = String(values.get("family") ?? "").trim();
     if (nextFamily && nextFamily !== family) {
-      const base = input.Get(EE.EE_CHAR_FONTINFO);
+      const base = input.Get(which.family);
       if (base instanceof SvxFontItem) {
         const item = base.Clone();
         item.SetFamilyName(nextFamily);
@@ -136,43 +177,49 @@ export function WriterAnnotationCharDialog({
     }
     const nextSize = String(values.get("size") ?? "");
     if (nextSize && nextSize !== size)
-      output.Put(
-        new SvxFontHeightItem(Math.round(Number(nextSize) * 20), 100, EE.EE_CHAR_FONTHEIGHT),
-        true,
-      );
+      output.Put(new SvxFontHeightItem(Math.round(Number(nextSize) * 20), 100, which.size), true);
     const nextStyle = String(values.get("style") ?? "");
     if (nextStyle && nextStyle !== fontStyle) {
       output.Put(
         new SvxWeightItem(
           Number(nextStyle) >= 2 ? FontWeight.WEIGHT_BOLD : FontWeight.WEIGHT_NORMAL,
-          EE.EE_CHAR_WEIGHT,
+          which.weight,
         ),
         true,
       );
       output.Put(
         new SvxPostureItem(
           Number(nextStyle) % 2 ? FontItalic.ITALIC_NORMAL : FontItalic.ITALIC_NONE,
-          EE.EE_CHAR_ITALIC,
+          which.posture,
         ),
         true,
       );
     }
     const nextUnderline = String(values.get("underline") ?? "");
     if (nextUnderline && nextUnderline !== underlining)
-      output.Put(new SvxUnderlineItem(Number(nextUnderline), EE.EE_CHAR_UNDERLINE), true);
+      output.Put(new SvxUnderlineItem(Number(nextUnderline), which.underline), true);
     const nextStrike = String(values.get("strike") ?? "");
     if (nextStrike && nextStrike !== strikethrough)
-      output.Put(new SvxCrossedOutItem(Number(nextStrike), EE.EE_CHAR_STRIKEOUT), true);
+      output.Put(new SvxCrossedOutItem(Number(nextStrike), which.strike), true);
     const nextPosition = String(values.get("position") ?? "");
     if (nextPosition && nextPosition !== position)
-      output.Put(new SvxEscapementItem(Number(nextPosition), EE.EE_CHAR_ESCAPEMENT), true);
+      output.Put(new SvxEscapementItem(Number(nextPosition), which.position), true);
     if (color && color !== initialColor)
-      output.Put(new SvxColorItem(writerColorFromPrimitive(color, "auto"), EE.EE_CHAR_COLOR), true);
-    if (background && background !== initialBackground)
+      output.Put(new SvxColorItem(writerColorFromPrimitive(color, "auto"), which.color), true);
+    const nextSpacing = String(values.get("spacing") ?? "");
+    if (nextSpacing && nextSpacing !== spacing) {
+      const twips = Math.sign(Number(nextSpacing)) * Math.round(Math.abs(Number(nextSpacing)) * 20);
+      output.Put(new SvxKerningItem(twips, which.spacing), true);
+    }
+    if (background && background !== initialBackground) {
+      const resolved = writerColorFromPrimitive(background, "transparent");
       output.Put(
-        new SvxColorItem(writerColorFromPrimitive(background, "transparent"), EE.EE_CHAR_BKGCOLOR),
+        mode === "standard"
+          ? new SvxBrushItem(resolved, which.background)
+          : new SvxColorItem(resolved, which.background),
         true,
       );
+    }
     close();
     onSubmit(output);
   }
@@ -350,6 +397,18 @@ export function WriterAnnotationCharDialog({
                 <option value={SvxEscapement.Subscript}>Subscript</option>
               </select>
             </label>
+            <label className={`${fieldClass} mt-3`}>
+              {localization.GetText("writer.character.spacing", "Character spacing")}
+              <input
+                type="number"
+                name="spacing"
+                defaultValue={spacing}
+                min="-1000"
+                max="1000"
+                step="0.1"
+                className="rounded border border-slate-300 px-2 py-1"
+              />
+            </label>
           </section>
           <section
             role="tabpanel"
@@ -359,7 +418,11 @@ export function WriterAnnotationCharDialog({
             key={`background-${resets[3]}`}
           >
             <ColorControl
-              label={localization.GetText("writer.character.background", "Character Background")}
+              label={
+                mode === "standard"
+                  ? localization.GetText("writer.character.highlighting", "Highlighting")
+                  : localization.GetText("writer.character.background", "Character Background")
+              }
               property="highlight"
               value={background || "transparent"}
               fallback="#ffffff"

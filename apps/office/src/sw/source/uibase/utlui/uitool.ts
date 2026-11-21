@@ -4,7 +4,7 @@ import { Any } from "../../../../cppu/inc/com/sun/star/uno/Any";
 import { ComplexColor } from "../../../../docmodel/inc/color/ComplexColor";
 import { SvxBrushItem } from "../../../../editeng/inc/brushitem";
 import { SfxGrabBagItem } from "../../../../svl/inc/grabbagitem";
-import { SfxItemSet } from "../../../../svl/source/items/itemset";
+import { SfxItemSet, SfxItemState } from "../../../../svl/source/items/itemset";
 import { COL_TRANSPARENT, type Color } from "../../../../tools/inc/color";
 import {
   RES_CHRATR_BACKGROUND,
@@ -14,6 +14,30 @@ import {
 import { writerColorFromPrimitive } from "../../core/attr/swatrset";
 import type { SwPaM } from "../../core/crsr/pam";
 import type { SwEditShell } from "../../core/edit/edatmisc";
+
+/** Projects the visible imported highlight as the Character dialog background. @param input - Owned Writer Character input set. @returns Nothing. */
+export function ConvertAttrCharToGen(input: SfxItemSet): void {
+  const highlight = input.GetItemIfSet(RES_CHRATR_HIGHLIGHT, false);
+  if (highlight instanceof SvxBrushItem && !highlight.GetColor().equals(COL_TRANSPARENT))
+    input.PutAsTargetWhich(highlight, RES_CHRATR_BACKGROUND);
+}
+
+/** Clears imported highlight and its shading marker whenever the dialog changes the background. @param output - Owned Character output set. @param original - Original Character attributes. @returns Nothing. */
+export function ConvertAttrGenToChar(output: SfxItemSet, original: SfxItemSet): void {
+  if (output.GetItemState(RES_CHRATR_BACKGROUND, false) !== SfxItemState.SET) return;
+  output.Put(new SvxBrushItem(RES_CHRATR_HIGHLIGHT), true);
+  const bag = original.GetItemIfSet(RES_CHRATR_GRABBAG, false);
+  if (bag instanceof SfxGrabBagItem && bag.GetGrabBag().has("CharShadingMarker")) {
+    const disabled = new Any([false], "bool");
+    try {
+      const properties = new Map(bag.GetGrabBag());
+      properties.set("CharShadingMarker", disabled);
+      output.Put(new SfxGrabBagItem(RES_CHRATR_GRABBAG, properties), true);
+    } finally {
+      disabled.dispose();
+    }
+  }
+}
 
 /** Applies Writer's background brush, clears imported highlight, and removes the imported shading marker in one undo action. @param color - Resolved color. @param complex - Native complex color. @param shell - Active editing shell contract. @returns Whether the document changed. */
 export function ApplyCharBackground(
@@ -30,18 +54,7 @@ export function ApplyCharBackground(
   try {
     shell.GetCurAttr(state);
     delta.Put(new SvxBrushItem(color, complex, RES_CHRATR_BACKGROUND), true);
-    delta.Put(new SvxBrushItem(RES_CHRATR_HIGHLIGHT), true);
-    const bag = state.GetItemIfSet(RES_CHRATR_GRABBAG, false);
-    if (bag instanceof SfxGrabBagItem && bag.GetGrabBag().has("CharShadingMarker")) {
-      const disabled = new Any([false], "bool");
-      try {
-        const properties = new Map(bag.GetGrabBag());
-        properties.set("CharShadingMarker", disabled);
-        delta.Put(new SfxGrabBagItem(RES_CHRATR_GRABBAG, properties), true);
-      } finally {
-        disabled.dispose();
-      }
-    }
+    ConvertAttrGenToChar(delta, state);
     return shell.SetAttrSet(delta);
   } finally {
     delta.Dispose();

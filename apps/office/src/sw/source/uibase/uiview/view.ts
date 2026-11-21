@@ -386,10 +386,7 @@ export class SwView {
   /** Releases view, dispatcher, and document-shell subscriptions at explicit session close. @returns Nothing. */
   public Close(): void {
     const dialog = this.dialogController.GetSnapshot();
-    if (
-      dialog?.request.kind === "delete-comments" ||
-      dialog?.request.kind === "annotation-character"
-    )
+    if (dialog?.request.kind === "delete-comments" || dialog?.request.kind === "character")
       this.dialogController.Cancel(dialog.id);
     this.releaseMetricView();
     this.editWindow.MouseButtonUp(true);

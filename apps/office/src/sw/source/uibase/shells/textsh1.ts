@@ -100,6 +100,7 @@ export interface SwTextShellTarget extends Pick<
   readonly CaptureCursorState: () => SwUndoCursorState;
   readonly GetActiveParagraph: () => SwTextNode;
   readonly GetCursor: () => import("../../core/crsr/pam").SwPaM;
+  readonly GetViewOptions: () => import("../../../inc/viewopt").SwViewOption;
   readonly IsTableMode: () => boolean;
   readonly GetDefaultFontFamily: () => string;
   readonly GetDefaultFontSizePt: () => number;
@@ -155,6 +156,16 @@ export class SwTextShell extends SwBaseShell {
     this.shell = createSfxShell(this, createWriterTextCommandRegistry(this, dialogs, annotation));
     this.shell.GetInterface().RegisterPopupMenu("text");
   }
+  /** Reads the current native selection for the Character dialog. @returns Borrowed selection ring. */
+  public GetCharacterDialogSelection(): SwPaM {
+    return this.target.GetCursor();
+  }
+
+  /** Observes document editability for the Character dialog. @returns Whether the dialog is available. */
+  public CanFormatCharacters(): boolean {
+    return !this.target.GetViewOptions().IsReadonly();
+  }
+
   /** Returns the dispatcher-facing shell. @returns Registered Sfx shell. */
   public GetShell(): SfxShell {
     return this.shell;

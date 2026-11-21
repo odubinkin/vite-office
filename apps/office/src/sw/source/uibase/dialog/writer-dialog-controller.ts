@@ -95,7 +95,8 @@ export type WriterDialogRequest =
   | WriterParagraphDialogRequest
   | Readonly<{ kind: "delete-comments"; commandUrl: string; author?: string }>
   | Readonly<{
-      kind: "annotation-character";
+      kind: "character";
+      mode: "annotation" | "standard";
       commandUrl: string;
       input: SfxItemSet;
       initialPage?: string;
@@ -215,14 +216,16 @@ export class WriterDialogController {
       : undefined;
   }
 
-  /** Requests the original annotation-mode Character dialog. @param commandUrl - Original slot. @param input - Borrowed initial EditEngine attributes. @param initialPage - Original tab ID, if supplied. @returns Owned output item set on acceptance. */
-  public async RequestAnnotationCharacter(
+  /** Requests the original Writer Character dialog. @param commandUrl - Original slot. @param input - Borrowed native attributes. @param mode - Writer dialog mode. @param initialPage - Original tab ID, if supplied. @returns Owned output item set on acceptance. */
+  public async RequestCharacterDialog(
     commandUrl: string,
     input: SfxItemSet,
+    mode: "annotation" | "standard",
     initialPage?: string,
   ): Promise<SfxItemSet | undefined> {
     const completion = await this.controller.Request({
-      kind: "annotation-character",
+      kind: "character",
+      mode,
       commandUrl,
       input,
       ...(initialPage !== undefined && { initialPage }),

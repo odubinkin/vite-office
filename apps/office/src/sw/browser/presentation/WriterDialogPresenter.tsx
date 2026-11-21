@@ -16,7 +16,7 @@ import { WriterInsertBreakDialog } from "./WriterInsertBreakDialog";
 import { WriterPageStyleDialog } from "./WriterPageStyleDialog";
 
 import { WRITER_COMMAND_IDS } from "../../uiconfig/swriter/menubar/menubar-commands";
-import { WriterAnnotationCharDialog } from "./WriterAnnotationCharDialog";
+import { WriterCharacterDialog } from "./WriterCharacterDialog";
 
 /** Forwards original request identity and completion payloads;the paragraph presenter stays with its formatting controls. @param props - Actual controller,snapshot and module metric. @returns Active dialog or no dialog. */
 export function WriterDialogPresenter({
@@ -35,6 +35,7 @@ export function WriterDialogPresenter({
   focusDocument: () => void;
 }>): React.JSX.Element {
   const localization = useBrowserLocalization();
+  const characterRequest = request?.request.kind === "character" ? request.request : undefined;
   return (
     <>
       {request?.request.kind !== "new-style" ? null : (
@@ -139,22 +140,31 @@ export function WriterDialogPresenter({
           }
         />
       )}
-      {request?.request.kind !== "annotation-character" ? null : (
-        <WriterAnnotationCharDialog
+      {!request || !characterRequest ? null : (
+        <WriterCharacterDialog
           key={request.id}
-          input={request.request.input}
-          initialPage={request.request.initialPage}
+          input={characterRequest.input}
+          mode={characterRequest.mode}
+          initialPage={characterRequest.initialPage}
           onCancel={
             /** Cancels the request and restores the bulk command's document client. @returns Nothing. */ () => {
               controller.Cancel(request.id);
-              if (request.request.commandUrl === WRITER_COMMAND_IDS.formatAllNotes) focusDocument();
+              if (
+                characterRequest.mode === "standard" ||
+                characterRequest.commandUrl === WRITER_COMMAND_IDS.formatAllNotes
+              )
+                focusDocument();
             }
           }
           onSubmit={
             /** Returns the native tab-page output set to the comment manager. @param attributes - Owned set. @returns Nothing. */
             (attributes) => {
               if (!controller.Complete(request.id, { attributes })) attributes.Dispose();
-              if (request.request.commandUrl === WRITER_COMMAND_IDS.formatAllNotes) focusDocument();
+              if (
+                characterRequest.mode === "standard" ||
+                characterRequest.commandUrl === WRITER_COMMAND_IDS.formatAllNotes
+              )
+                focusDocument();
             }
           }
         />

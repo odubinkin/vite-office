@@ -2,8 +2,12 @@
 import { createWriterTabulatorInput } from "./textsh1-tabs";
 import { createWriterEscapementCommands } from "./txtattr";
 
+import { SfxStringItem } from "../../../../svl/source/items/stritem";
+import { FN_PARAM_1 } from "../../../inc/cmdid";
+import { SwPaM } from "../../core/crsr/pam";
+import { ConvertAttrCharToGen, ConvertAttrGenToChar } from "../utlui/uitool";
 import { SvxCrossedOutItem } from "../../../../editeng/inc/crossedoutitem";
-import { RES_CHRATR_CROSSEDOUT } from "../../../inc/hintids";
+import { RES_CHRATR_CROSSEDOUT, WRITER_CHARACTER_WHICH_RANGES } from "../../../inc/hintids";
 import { SfxItemSet, SfxItemState } from "../../../../svl/inc/itemset";
 import { createAttributeToggleItem } from "../../../../sfx2/source/control/bindings";
 
@@ -73,6 +77,47 @@ export function createWriterTextCommandRegistry(
         },
       );
   }
+  /** Opens the original standard Character dialog over Writer's current selection. @param command - Original slot. @param initialPage - Original notebook page. @returns Whether selected text changed. */
+  async function openCharacterDialog(command: string, initialPage?: string): Promise<boolean> {
+    const document = target.GetActiveParagraph().GetDoc();
+    const input = new SfxItemSet(document.GetAttrPool(), WRITER_CHARACTER_WHICH_RANGES);
+    target.GetTextCtrlState(input);
+    ConvertAttrCharToGen(input);
+    const selection: SwPaM[] = [];
+    for (const range of target.GetCharacterDialogSelection().GetRingContainer()) {
+      const copy = new SwPaM(
+        range.GetPoint(),
+        range.HasMark() ? range.GetMark() : undefined,
+        selection[0],
+      );
+      selection.push(copy);
+    }
+    try {
+      const output = await dialogController.RequestCharacterDialog(
+        command,
+        input,
+        "standard",
+        initialPage,
+      );
+      if (!output) return false;
+      try {
+        if (
+          !output.Count() ||
+          target.GetActiveParagraph().GetDoc() !== document ||
+          !target.CanFormatCharacters()
+        )
+          return false;
+        ConvertAttrGenToChar(output, input);
+        return target.ExecTextCtrl(output, selection[0]);
+      } finally {
+        output.Dispose();
+      }
+    } finally {
+      input.Dispose();
+      for (const range of selection) range.Dispose();
+    }
+  }
+
   /** Reads original complete strikeout item state through the native UI/core boundary. @returns Independent item set. */
   function strikeoutState(): SfxItemSet {
     const state = new SfxItemSet(target.GetActiveParagraph().GetDoc().GetAttrPool(), [
@@ -84,6 +129,29 @@ export function createWriterTextCommandRegistry(
   return createWriterInterface([
     ...annotation,
     ...createWriterEscapementCommands(target),
+    ...(
+      [
+        [WRITER_COMMAND_IDS.fontDialog, undefined],
+        [WRITER_COMMAND_IDS.fontEffectsDialog, "fonteffects"],
+        [WRITER_COMMAND_IDS.fontPositionDialog, "position"],
+      ] as const
+    ).map<WriterSlotHandler<SwTextShell>>(
+      /** Routes the three body Character slots through the native text shell. @param entry - Original slot and page override. @returns Slot handler. */
+      ([id, fixedPage]) => ({
+        id,
+        /** Opens the requested standard Character page. @param _context - Bound text shell. @param args - Optional Page item. @returns Whether changed. */
+        execute: (_context, args) => {
+          const page = args.find(
+            /** Finds the original Page parameter. @param item - Request item. @returns Whether it selects a page. */
+            (item): item is SfxStringItem =>
+              item instanceof SfxStringItem && item.Which() === FN_PARAM_1,
+          );
+          return openCharacterDialog(id, fixedPage ?? page?.GetValue());
+        },
+        /** Observes native text editability. @returns Whether enabled. */
+        isEnabled: () => target.CanFormatCharacters(),
+      }),
+    ),
     ...([true, false] as const).map(
       /** Original distinct Grow/Shrink slots share native execute/state logic. @param grow - Native grow direction. @returns Original handler. */ (
         grow,

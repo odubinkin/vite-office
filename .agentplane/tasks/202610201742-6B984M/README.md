@@ -4,7 +4,7 @@ title: "Implement Writer search and replace core and browser UI"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 102
+revision: 103
 origin:
   system: "manual"
 depends_on:
@@ -334,6 +334,17 @@ comments:
 
       - Command: `npm run test:writer -- src/sw/browser/presentation/WriterCommentFormatAll.test.tsx src/sw/browser/presentation/WriterCommentsSidebar.test.tsx src/sw/browser/presentation/WriterMenuBar.test.tsx src/sw/uiconfig/swriter/menubar/menubar-commands.test.ts`. Result: 36 passed in four files. Covers selection and focus restoration, single-note undo, original Page and fixed tab routes, direct item arguments and preceding bulk behavior.
       - Command: `npm run build:single-threaded --workspace @vite-office/office` and `node_modules/.bin/playwright test writer-search.spec.ts --config=output/playwright/writer-rich-comments-chrome.config.ts --project=writer --workers=1`. Result: typecheck and production build passed with existing Vite advisories. Both Chrome scenarios passed against the final preview.
+      - Command: `npm run check:writer-resources`, `npm run check:dependencies`, `npm run check:source-tree`, `npm run check:source-provenance`, `npm run inventory:parity:writer`, scoped ESLint and Prettier, `ap doctor`, `node .agentplane/policy/check-routing.mjs`, and `git diff --check`. Result: passed with the existing AgentPlane hook shim warning.
+      - Command: `npm run check:docs` and `npm run check:file-size`. Result: baseline failures remain outside changed files (307 JSDoc findings and five oversized files).
+
+      Parent task remains in progress. This checkpoint does not advance the ten-task full regression counter.
+  -
+    author: "CODER"
+    body: |-
+      Verified the body-text Character checkpoint against pinned sw_CharDialog, sw_CharDialogResult, SwCharDlg and ConvertAttrCharToGen/ConvertAttrGenToChar. The original general, Font Effects and Position slots read mixed or uniform Writer attributes, retain the original selection ring across the asynchronous dialog and pass accepted Writer items through SetAttrSet. The standard and annotation modes share the same presenter while retaining their separate item identities. Character spacing uses the native signed kerning item in both modes. Character background displays visible imported highlighting and clears the imported highlight and shading marker only when the dialog returns a background delta. The Borders page, advanced typographic controls and the native paragraph-auto-update branch remain outside this checkpoint.
+
+      - Command: `npm run test:writer -- src/sw/browser/presentation/WriterCommentFormatAll.test.tsx src/sw/browser/presentation/WriterCommentsSidebar.test.tsx src/sw/browser/presentation/WriterMenuBar.test.tsx src/sw/browser/presentation/WriterSearchFormatting.test.tsx src/sw/source/core/edit/native-character-shell.test.ts src/sw/source/uibase/utlui/native-pointer-items.test.ts`. Result: 64 passed in six files, including mixed-size range formatting, signed spacing, background conversion and shared selection/history behavior.
+      - Command: `npm run build:single-threaded --workspace @vite-office/office` and `node_modules/.bin/playwright test writer-search.spec.ts --config=output/playwright/writer-rich-comments-chrome.config.ts --project=writer --workers=1`. Result: production build and typecheck passed with existing Vite advisories. Both Chrome scenarios passed, including opening the Character command from Format, applying a new size, restoring body focus and undoing the format change.
       - Command: `npm run check:writer-resources`, `npm run check:dependencies`, `npm run check:source-tree`, `npm run check:source-provenance`, `npm run inventory:parity:writer`, scoped ESLint and Prettier, `ap doctor`, `node .agentplane/policy/check-routing.mjs`, and `git diff --check`. Result: passed with the existing AgentPlane hook shim warning.
       - Command: `npm run check:docs` and `npm run check:file-size`. Result: baseline failures remain outside changed files (307 JSDoc findings and five oversized files).
 
@@ -819,9 +830,22 @@ events:
       - Command: `npm run check:docs` and `npm run check:file-size`. Result: baseline failures remain outside changed files (307 JSDoc findings and five oversized files).
 
       Parent task remains in progress. This checkpoint does not advance the ten-task full regression counter.
+  -
+    type: "comment"
+    at: "2026-11-21T20:05:54.109Z"
+    author: "CODER"
+    body: |-
+      Verified the body-text Character checkpoint against pinned sw_CharDialog, sw_CharDialogResult, SwCharDlg and ConvertAttrCharToGen/ConvertAttrGenToChar. The original general, Font Effects and Position slots read mixed or uniform Writer attributes, retain the original selection ring across the asynchronous dialog and pass accepted Writer items through SetAttrSet. The standard and annotation modes share the same presenter while retaining their separate item identities. Character spacing uses the native signed kerning item in both modes. Character background displays visible imported highlighting and clears the imported highlight and shading marker only when the dialog returns a background delta. The Borders page, advanced typographic controls and the native paragraph-auto-update branch remain outside this checkpoint.
+
+      - Command: `npm run test:writer -- src/sw/browser/presentation/WriterCommentFormatAll.test.tsx src/sw/browser/presentation/WriterCommentsSidebar.test.tsx src/sw/browser/presentation/WriterMenuBar.test.tsx src/sw/browser/presentation/WriterSearchFormatting.test.tsx src/sw/source/core/edit/native-character-shell.test.ts src/sw/source/uibase/utlui/native-pointer-items.test.ts`. Result: 64 passed in six files, including mixed-size range formatting, signed spacing, background conversion and shared selection/history behavior.
+      - Command: `npm run build:single-threaded --workspace @vite-office/office` and `node_modules/.bin/playwright test writer-search.spec.ts --config=output/playwright/writer-rich-comments-chrome.config.ts --project=writer --workers=1`. Result: production build and typecheck passed with existing Vite advisories. Both Chrome scenarios passed, including opening the Character command from Format, applying a new size, restoring body focus and undoing the format change.
+      - Command: `npm run check:writer-resources`, `npm run check:dependencies`, `npm run check:source-tree`, `npm run check:source-provenance`, `npm run inventory:parity:writer`, scoped ESLint and Prettier, `ap doctor`, `node .agentplane/policy/check-routing.mjs`, and `git diff --check`. Result: passed with the existing AgentPlane hook shim warning.
+      - Command: `npm run check:docs` and `npm run check:file-size`. Result: baseline failures remain outside changed files (307 JSDoc findings and five oversized files).
+
+      Parent task remains in progress. This checkpoint does not advance the ten-task full regression counter.
 
 doc_version: 3
-doc_updated_at: "2026-11-21T19:58:54.128Z"
+doc_updated_at: "2026-11-21T20:05:54.109Z"
 doc_updated_by: "CODER"
 description: "Implement the approved coherent Writer search-and-replace feature from pinned LibreOffice sources: real shared search engine and options, native paragraph/cursor traversal and replacement/history contracts, view-owned search state and dispatch, Find toolbar and Find and Replace dialog with generated upstream command placement and shortcuts. Preserve source semantics and explicit unsupported boundaries; never substitute DOM text search or browser RegExp for ICU contracts. Work only on writer in vite-office-writer; local upstream reading approved, no network or merges. Keep active until approved scope is verified."
 sections:

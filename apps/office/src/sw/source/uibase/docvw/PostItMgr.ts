@@ -150,7 +150,12 @@ export class SwPostItMgr {
     const selection = window.editor.CreateESel(editorView.GetEditSelection());
     const input = window.editor.GetAttribs(editorView.GetEditSelection());
     try {
-      const output = await this.dialogs.RequestAnnotationCharacter(command, input, initialPage);
+      const output = await this.dialogs.RequestCharacterDialog(
+        command,
+        input,
+        "annotation",
+        initialPage,
+      );
       if (!output) return false;
       try {
         if (
@@ -198,9 +203,10 @@ export class SwPostItMgr {
     this.SetActiveSidebarWin(source);
     const input = window.editor.GetAttribs(window.view.getImpl().GetEditSelection());
     try {
-      const output = await this.dialogs.RequestAnnotationCharacter(
+      const output = await this.dialogs.RequestCharacterDialog(
         WRITER_COMMAND_IDS.formatAllNotes,
         input,
+        "annotation",
       );
       if (!output) return false;
       try {

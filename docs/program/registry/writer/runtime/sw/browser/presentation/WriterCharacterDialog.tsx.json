@@ -2,7 +2,7 @@
   "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
   "baselineTag": "libreoffice-26.8.0.2",
   "record": {
-    "path": "apps/office/src/sw/browser/presentation/WriterAnnotationCharDialog.tsx",
+    "path": "apps/office/src/sw/browser/presentation/WriterCharacterDialog.tsx",
     "classification": "browser-adaptation",
     "state": "active",
     "suite": "writer",
@@ -16,12 +16,12 @@
       "defaultStatus": "not-applicable",
       "divergenceClass": "B",
       "evidence": [
-        "apps/office/src/sw/browser/presentation/WriterAnnotationCharDialog.tsx#WriterAnnotationCharDialog"
+        "apps/office/src/sw/browser/presentation/WriterCharacterDialog.tsx#WriterCharacterDialog"
       ],
-      "justification": "Uses browser controls for the pinned annotation-mode Character dialog and sends native EditEngine item deltas to the original Writer comment manager.",
+      "justification": "Uses one browser presenter for the pinned standard and annotation Character modes. Sends native item deltas to the original Writer text shell or comment manager.",
       "knownViolations": [],
       "localSymbols": [
-        "WriterAnnotationCharDialog"
+        "WriterCharacterDialog"
       ],
       "sourceResponsibility": "browser-owned",
       "upstreamFile": null,
