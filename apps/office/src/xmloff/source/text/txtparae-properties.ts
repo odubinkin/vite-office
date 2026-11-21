@@ -36,6 +36,7 @@ export function paragraphPropertiesKey(properties?: OdfParagraphProperties): str
     properties?.fillColor,
     properties?.fillTransparency,
     properties?.verticalAlign,
+    properties?.registerModeActive === undefined ? "" : Number(properties.registerModeActive),
   ]
     .map(
       /** Encodes one optional paragraph metric. @param value - Metric. @returns Stable field. */ (
@@ -111,6 +112,7 @@ export function parseParagraphPropertiesKey(key: string): OdfParagraphProperties
     ...(breakAfter === undefined || breakAfter === ""
       ? {}
       : { breakAfter: breakAfter as "auto" | "page" }),
+    ...(fields[25] === "0" || fields[25] === "1" ? { registerModeActive: fields[25] === "1" } : {}),
     ...(autoTextIndent === undefined || autoTextIndent === ""
       ? {}
       : { autoTextIndent: autoTextIndent === "1" }),

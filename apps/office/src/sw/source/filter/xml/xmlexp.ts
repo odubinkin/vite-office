@@ -1,6 +1,7 @@
 /**
  * @fileoverview Reimplements the bounded Writer ODF XML export bridge from pinned LibreOffice `sw/source/filter/xml/xmlexp.cxx`.
  */
+import { SwRegisterItem } from "../../core/para/paratr";
 import { ExportNumberFormat } from "../../../../xmloff/source/style/xmlnumfe";
 import { IsSquaredPageMode } from "../../core/doc/docdesc";
 import { UseOnPage } from "../../core/layout/pagedesc";
@@ -114,6 +115,7 @@ import {
   RES_PARATR_GRABBAG,
   RES_PARATR_SPLIT,
   RES_PARATR_ORPHANS,
+  RES_PARATR_REGISTER,
   RES_PARATR_WIDOWS,
   RES_PARATR_VERTALIGN,
   RES_PARATR_LINESPACING,
@@ -817,6 +819,7 @@ function assertSupportedItems(
     RES_PARATR_SPLIT,
     RES_PARATR_ORPHANS,
     RES_PARATR_WIDOWS,
+    RES_PARATR_REGISTER,
     RES_PARATR_VERTALIGN,
     RES_BREAK,
     RES_PAGEDESC,
@@ -863,6 +866,7 @@ function getParagraphProperties(set: SfxItemSet | undefined): OdfParagraphProper
   const lineSpacing = set.GetItemIfSet(RES_PARATR_LINESPACING, false);
   const tabStop = set.GetItemIfSet(RES_PARATR_TABSTOP, false);
   const keep = set.GetItemIfSet(RES_KEEP, false);
+  const register = set.GetItemIfSet(RES_PARATR_REGISTER, false);
   const split = set.GetItemIfSet(RES_PARATR_SPLIT, false);
   const orphans = set.GetItemIfSet(RES_PARATR_ORPHANS, false);
   const widows = set.GetItemIfSet(RES_PARATR_WIDOWS, false);
@@ -906,6 +910,7 @@ function getParagraphProperties(set: SfxItemSet | undefined): OdfParagraphProper
           tabStopDetails: exportParagraphTabStops(tabStop),
         }
       : {}),
+    ...(register instanceof SwRegisterItem ? { registerModeActive: register.GetValue() } : {}),
     ...(keep instanceof SfxBoolItem ? { keepWithNext: keep.GetValue() } : {}),
     ...(split instanceof ParaItems.SvxFormatSplitItem ? { keepTogether: !split.GetValue() } : {}),
     ...(orphans instanceof ParaItems.SvxOrphansItem ? { orphans: orphans.GetValue() } : {}),

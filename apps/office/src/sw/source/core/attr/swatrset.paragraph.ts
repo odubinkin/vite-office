@@ -11,6 +11,7 @@ import {
   SvxHangingPunctuationItem,
   SvxScriptSpaceItem,
 } from "../../../../editeng/source/items/paraitem";
+import { SwRegisterItem } from "../para/paratr";
 import { SfxBoolItem } from "../../../../svl/inc/eitem";
 import type { SfxPoolItem } from "../../../../svl/inc/poolitem";
 import {
@@ -19,6 +20,7 @@ import {
   RES_PARATR_FORBIDDEN_RULES,
   RES_PARATR_HANGINGPUNCTUATION,
   RES_PARATR_SCRIPTSPACE,
+  RES_PARATR_REGISTER,
   RES_PARATR_SPLIT,
   RES_PARATR_ORPHANS,
   RES_PARATR_VERTALIGN,
@@ -26,6 +28,7 @@ import {
 } from "../../../inc/hintids";
 /** Paragraph and adjacent frame settings restored through the same native item factory. */
 export const paragraphControlItems = [
+  RES_PARATR_REGISTER,
   RES_PARATR_SPLIT,
   RES_PARATR_VERTALIGN,
   RES_PARATR_SCRIPTSPACE,
@@ -49,6 +52,7 @@ export function restoreParagraphControlItem(which: number, value: unknown): SfxP
       throw new Error("SvxParaVertAlignItem value is invalid.");
     return new SvxParaVertAlignItem(value, which);
   }
+  if (which === RES_PARATR_REGISTER) return new SwRegisterItem(Boolean(value));
   if (which === RES_PARATR_SPLIT) return new SvxFormatSplitItem(Boolean(value), which);
   if (which === RES_PARATR_SCRIPTSPACE) return new SvxScriptSpaceItem(Boolean(value), which);
   if (which === RES_PARATR_HANGINGPUNCTUATION)

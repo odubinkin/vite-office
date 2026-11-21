@@ -555,6 +555,7 @@ export function applyTextImportProperties(
       ["contextualSpacing", "ParaContextMargin"],
       ["countLineNumbers", "ParaLineNumberCount"],
       ["keepWithNext", "ParaKeepTogether"],
+      ["registerModeActive", "ParaRegisterModeActive"],
     ] as const)
       if (paragraph[key] !== undefined) add(name, paragraph[key], "bool");
     if (paragraph.verticalAlign !== undefined)

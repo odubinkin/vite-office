@@ -68,6 +68,7 @@ export interface OdfParagraphProperties extends OdfBoxProperties, OdfFillPropert
   readonly lineSpacingTwips?: number;
   readonly fontIndependentLineSpacing?: boolean;
   readonly keepWithNext?: boolean;
+  readonly registerModeActive?: boolean;
   readonly keepTogether?: boolean;
   readonly widows?: number;
   readonly verticalAlign?: number;
@@ -759,6 +760,9 @@ export function exportParagraphAttributes(properties: OdfParagraphProperties): s
     ...(properties.contextualSpacing === undefined
       ? []
       : [`style:contextual-spacing="${properties.contextualSpacing}"`]),
+    ...(properties.registerModeActive === undefined
+      ? []
+      : [`style:register-true="${properties.registerModeActive}"`]),
     ...(properties.keepWithNext === undefined
       ? []
       : [`fo:keep-with-next="${properties.keepWithNext ? "always" : "auto"}"`]),

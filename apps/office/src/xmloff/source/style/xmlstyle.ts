@@ -635,6 +635,11 @@ function importParagraphProperties(
     attributes.get(XMLToken.TEXT_NUMBER_LINES),
     "paragraph line-number participation",
   );
+  const register: [boolean] = [false];
+  const hasRegister = Converter.convertBool(
+    register,
+    attributes.get(XMLToken.STYLE_REGISTER_TRUE) ?? "",
+  );
   const joinBorder = importOptionalBoolean(
     attributes.get(XMLToken.STYLE_JOIN_BORDER),
     "paragraph border connection",
@@ -686,6 +691,7 @@ function importParagraphProperties(
     ...(breakBefore === undefined ? {} : { breakBefore }),
     ...(breakAfter === undefined ? {} : { breakAfter }),
     ...(countLineNumbers === undefined ? {} : { countLineNumbers }),
+    ...(hasRegister ? { registerModeActive: register[0] } : {}),
     ...(joinBorder === undefined ? {} : { joinBorder }),
     ...borders,
   };

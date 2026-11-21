@@ -155,7 +155,7 @@ import {
   RES_UL_SPACE,
 } from "../../../inc/hintids";
 import { SwTextGridItem } from "../../../inc/tgrditem";
-import { SwNumRuleItem, SwParaConnectBorderItem } from "../para/paratr";
+import { SwNumRuleItem, SwParaConnectBorderItem, SwRegisterItem } from "../para/paratr";
 import { SwFormatCharFormat, SwFormatINetFormat } from "../txtnode/fmtatr2";
 import { SwTableBoxFormula, SwTableBoxNumFormat, SwTableBoxValue } from "../attr/cellatr";
 import { SwFormatPageDesc } from "../attr/fmtpdsc";
@@ -300,6 +300,7 @@ class ItemInfoPackageSwAttributes extends ItemInfoPackage {
     );
     add(new SfxInt16Item(RES_BREAK, 0));
     add(new SwFormatPageDesc());
+    add(new SwRegisterItem());
     add(new SwNumRuleItem());
     add(new SfxStringItem(RES_PARATR_LIST_ID, ""));
     add(new SfxInt16Item(RES_PARATR_LIST_LEVEL, 0));

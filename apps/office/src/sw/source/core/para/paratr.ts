@@ -5,7 +5,11 @@
 import { SfxBoolItem } from "../../../../svl/source/items/cenumitm";
 import { type SfxPoolItem } from "../../../../svl/source/items/poolitem";
 import { SfxStringItem } from "../../../../svl/source/items/stritem";
-import { RES_PARATR_CONNECT_BORDER, RES_PARATR_NUMRULE } from "../../../inc/hintids";
+import {
+  RES_PARATR_CONNECT_BORDER,
+  RES_PARATR_NUMRULE,
+  RES_PARATR_REGISTER,
+} from "../../../inc/hintids";
 
 /** Native paragraph-border connection item, whose pooled default is true. */
 export class SwParaConnectBorderItem extends SfxBoolItem {
@@ -17,6 +21,24 @@ export class SwParaConnectBorderItem extends SfxBoolItem {
   /** Preserves the native concrete item type. @returns Independent item. */
   public override Clone(): SwParaConnectBorderItem {
     return new SwParaConnectBorderItem(this.GetValue());
+  }
+}
+
+/** Native paragraph participation in page line-spacing. */
+export class SwRegisterItem extends SfxBoolItem {
+  /** Creates the paragraph register item. @param active - Participation in page line-spacing. @returns Item. */
+  public constructor(active = false) {
+    super(RES_PARATR_REGISTER, active);
+  }
+
+  /** Creates the native pool default. @returns Item with participation disabled. */
+  public static override CreateDefault(): SwRegisterItem {
+    return new SwRegisterItem();
+  }
+
+  /** Copies the original typed item. @returns Independent item. */
+  public override Clone(): SwRegisterItem {
+    return new SwRegisterItem(this.GetValue());
   }
 }
 

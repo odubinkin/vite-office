@@ -213,6 +213,7 @@ const entries: readonly (readonly [string, string, XMLToken])[] = [
   [ODF_NAMESPACES.fo, "text-shadow", XMLToken.FO_TEXT_SHADOW],
   [ODF_NAMESPACES.style, "font-relief", XMLToken.STYLE_FONT_RELIEF],
   [ODF_NAMESPACES.style, "join-border", XMLToken.STYLE_JOIN_BORDER],
+  [ODF_NAMESPACES.style, "register-true", XMLToken.STYLE_REGISTER_TRUE],
   [ODF_NAMESPACES.fo, "wrap-option", XMLToken.FO_WRAP_OPTION],
   [ODF_NAMESPACES.style, "diagonal-tl-br", XMLToken.STYLE_DIAGONAL_TL_BR],
   [ODF_NAMESPACES.style, "diagonal-tl-br-width", XMLToken.STYLE_DIAGONAL_TL_BR_WIDTH],

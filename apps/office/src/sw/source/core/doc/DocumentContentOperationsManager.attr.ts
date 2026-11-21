@@ -23,6 +23,7 @@ export function isParagraphEditItem(which: number): boolean {
     which === H.RES_PARATR_HANGINGPUNCTUATION ||
     which === H.RES_PARATR_FORBIDDEN_RULES ||
     which === H.RES_PARATR_LINESPACING ||
+    which === H.RES_PARATR_REGISTER ||
     which === H.RES_PARATR_SPLIT ||
     which === H.RES_PARATR_ORPHANS ||
     which === H.RES_PARATR_WIDOWS ||

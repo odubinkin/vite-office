@@ -4,7 +4,7 @@ title: "Implement Writer search and replace core and browser UI"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 114
+revision: 115
 origin:
   system: "manual"
 depends_on:
@@ -426,6 +426,14 @@ comments:
       The final Writer run passed 148 tests across 15 files with six existing native ICU host-probe skips. TypeScript and the production Vite build passed, and all five production Chrome search scenarios passed. Dependency, source tree, source provenance, Writer identities and resources, Writer registry parity, scoped lint and format, routing and diff checks passed.
 
       Existing repository-wide JSDoc and file-size checks still report 307 documentation issues and four files at or above the limit. AgentPlane doctor retains its existing hook-shim warning. The search task remains open and this checkpoint does not advance the ten-task full-regression cadence.
+  -
+    author: "CODER"
+    body: |-
+      Verified the Writer page line-spacing attribute checkpoint. The pinned SwRegisterItem owns a false default and preserves its type through the paragraph/style pool, UNO ParaRegisterModeActive, and the existing document transfer. ODF style:register-true preserves both named-style participation and explicit automatic-style overrides, including false. The ordinary ODT Open test confirms direct-only search by Page line-spacing and the inherited match when Including Styles is selected. The pinned Format dialog does not enable the register checkbox. Page-style reference selection and physical baseline-grid layout are outside this checkpoint.
+
+      The UNO text-default schema regression now accounts for the eight native character-border rows already exposed by a7cddb231 and the new register row. The ODF and UI run passed 25 other checks and the corrected schema suite passed all three checks. All 13 related shared ODF tests passed. The search run passed 141 tests in 15 files with six existing native ICU host-probe skips. The final TypeScript and Vite production build and all five Chrome search scenarios passed. Dependency, source-tree, provenance, Writer identities and resources, registry parity, scoped lint and formatting, routing, and diff checks passed. Existing JSDoc and file-size checks retain 307 baseline JSDoc issues and four existing oversized files. AgentPlane doctor retains its existing hook-shim warning.
+
+      The search task remains open. This checkpoint does not advance the ten-task full-regression cadence.
 
 events:
   -
@@ -1019,9 +1027,19 @@ events:
       The final Writer run passed 148 tests across 15 files with six existing native ICU host-probe skips. TypeScript and the production Vite build passed, and all five production Chrome search scenarios passed. Dependency, source tree, source provenance, Writer identities and resources, Writer registry parity, scoped lint and format, routing and diff checks passed.
 
       Existing repository-wide JSDoc and file-size checks still report 307 documentation issues and four files at or above the limit. AgentPlane doctor retains its existing hook-shim warning. The search task remains open and this checkpoint does not advance the ten-task full-regression cadence.
+  -
+    type: "comment"
+    at: "2026-11-21T22:04:00.554Z"
+    author: "CODER"
+    body: |-
+      Verified the Writer page line-spacing attribute checkpoint. The pinned SwRegisterItem owns a false default and preserves its type through the paragraph/style pool, UNO ParaRegisterModeActive, and the existing document transfer. ODF style:register-true preserves both named-style participation and explicit automatic-style overrides, including false. The ordinary ODT Open test confirms direct-only search by Page line-spacing and the inherited match when Including Styles is selected. The pinned Format dialog does not enable the register checkbox. Page-style reference selection and physical baseline-grid layout are outside this checkpoint.
+
+      The UNO text-default schema regression now accounts for the eight native character-border rows already exposed by a7cddb231 and the new register row. The ODF and UI run passed 25 other checks and the corrected schema suite passed all three checks. All 13 related shared ODF tests passed. The search run passed 141 tests in 15 files with six existing native ICU host-probe skips. The final TypeScript and Vite production build and all five Chrome search scenarios passed. Dependency, source-tree, provenance, Writer identities and resources, registry parity, scoped lint and formatting, routing, and diff checks passed. Existing JSDoc and file-size checks retain 307 baseline JSDoc issues and four existing oversized files. AgentPlane doctor retains its existing hook-shim warning.
+
+      The search task remains open. This checkpoint does not advance the ten-task full-regression cadence.
 
 doc_version: 3
-doc_updated_at: "2026-11-21T21:51:27.745Z"
+doc_updated_at: "2026-11-21T22:04:00.554Z"
 doc_updated_by: "CODER"
 description: "Implement the approved coherent Writer search-and-replace feature from pinned LibreOffice sources: real shared search engine and options, native paragraph/cursor traversal and replacement/history contracts, view-owned search state and dispatch, Find toolbar and Find and Replace dialog with generated upstream command placement and shortcuts. Preserve source semantics and explicit unsupported boundaries; never substitute DOM text search or browser RegExp for ICU contracts. Work only on writer in vite-office-writer; local upstream reading approved, no network or merges. Keep active until approved scope is verified."
 sections:
