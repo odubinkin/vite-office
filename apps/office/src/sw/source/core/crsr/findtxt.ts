@@ -1,4 +1,4 @@
-/** @fileoverview Writer model-text FindTextImpl and soft-hyphen cleanup from native findtxt.cxx; layout-merged text, fields/notes and regex modes remain unported. */
+/** @fileoverview Writer model-text FindTextImpl and inline fly/soft-hyphen cleanup from native findtxt.cxx; layout-merged text, fields/notes and regex modes remain unported. */
 import { SwPaM } from "./pam";
 import {
   FIND_FOUND,
@@ -9,6 +9,7 @@ import {
   type SwSearchNodeFilter,
 } from "./swcrsr";
 import { FindRanges, SwDocPositions } from "../../../inc/cshtyp";
+import { RES_TXTATR_FLYCNT } from "../../../inc/hintids";
 import { REG_NOT_BEGINOFLINE } from "../../../../offapi/com/sun/star/util/SearchFlags";
 import { SwTextNode } from "../txtnode/ndtxt";
 import type { SearchOptions2 } from "../../../../i18nutil/inc/searchopt";
@@ -19,26 +20,50 @@ import { APPROXIMATE } from "../../../../offapi/com/sun/star/util/SearchAlgorith
 import { SwScriptIterator } from "../txtnode/txatritr";
 import { g_pBreakIt } from "../bastyp/breakit";
 
-/** Native lcl_CleanStr's represented plain-text branch, retaining removal offsets in cleaned coordinates. @param node - Model text. @param start - Lower range bound. @param end - Upper range bound. @param removeSoftHyphens - Source DoSearch policy. @returns Clean text, adjusted end and removal offsets. */
+/** Native model-text lcl_CleanStr, retaining removal offsets in cleaned coordinates. @param node - Model text. @param start - Lower range bound. @param end - Upper range bound. @param removeSoftHyphens - Source DoSearch policy. @returns Clean text, adjusted end and removal offsets. */
 function lcl_CleanStr(
   node: SwTextNode,
   start: number,
   end: number,
   removeSoftHyphens: boolean,
 ): { text: OUString; end: number; removed: readonly number[] } {
-  const hints = node.GetpSwpHints();
-  if (hints !== undefined)
-    for (let i = 0; i < hints.Count(); i++) {
-      if (hints.Get(i).HasDummyChar())
-        throw new Error("Writer field/dummy-character search is not implemented.");
-    }
+  const hints = node.GetpSwpHints(),
+    flyAnchors = new Set<number>();
+  for (let i = 0; hints !== undefined && i < hints.Count(); i++) {
+    const hint = hints.Get(i);
+    const offset = hint.GetStart();
+    if (offset >= end) break;
+    if (offset < start || !hint.HasDummyChar()) continue;
+    if (hint.Which() !== RES_TXTATR_FLYCNT)
+      throw new Error("Writer field/dummy-character search is not implemented.");
+    flyAnchors.add(offset);
+  }
   const original = node.GetText(),
     units: number[] = [],
-    removed: number[] = [];
+    removed: number[] = [],
+    replaced: number[] = [];
   for (let i = 0; i < original.length; i++) {
-    if (removeSoftHyphens && i >= start && i < end && original.charCodeAt(i) === 0xad)
+    const unit = original.charCodeAt(i);
+    if (flyAnchors.has(i)) {
+      if (units.length === start) {
+        removed.push(units.length);
+      } else {
+        // Native uses DEL as a separator inside the text and removes it at the paragraph end.
+        replaced.push(units.length);
+        units.push(0x7f);
+      }
+    } else if (removeSoftHyphens && i >= start && i < end && unit === 0xad) {
       removed.push(units.length);
-    else units.push(original.charCodeAt(i));
+    } else {
+      units.push(unit);
+    }
+  }
+  for (let i = replaced.length - 1; i >= 0; i--) {
+    const offset = replaced[i] as number;
+    if (offset === units.length - 1) {
+      units.pop();
+      removed.push(offset);
+    }
   }
   return {
     text: new OUString(Uint16Array.from(units), units.length),

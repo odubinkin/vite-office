@@ -77,6 +77,7 @@ import {
   AssertTextNodeAppend,
   CloneTextNodeTo,
   AssertTextNodeRange,
+  AssertTextNodeReplaceRange,
   CopyTextNodeHints,
   CreateTextNodeColorFragment,
   CreateTextNodeFontFamilyFragment,
@@ -712,13 +713,10 @@ export class SwTextNode extends SwContentNode {
       oldLength = this.mText.length;
     if (index.GetContentNode() !== this || start >= oldLength)
       throw new Error("Writer ReplaceText needs an index inside its own node.");
-    AssertTextNodeRange(this, start, start + nDelLen);
+    AssertTextNodeReplaceRange(this, start, start + nDelLen);
     const inserted = rStr.slice(0, Math.max(0, this.GetSpaceLeft() + nDelLen));
     if (inserted.length === 0 && nDelLen === 0) return;
     const hints = this.pSwpHints;
-    for (const hint of hints?.entries() ?? [])
-      if (hint.HasDummyChar() && hint.GetStart() >= start && hint.GetStart() < start + nDelLen)
-        throw new Error("Writer dummy-character replacement is not implemented.");
     const oldIgnore = this.IsIgnoreDontExpand();
     this.SetIgnoreDontExpand(true);
     try {

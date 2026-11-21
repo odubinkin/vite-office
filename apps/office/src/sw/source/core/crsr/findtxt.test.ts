@@ -10,6 +10,8 @@ import { SwDoc } from "../doc/doc";
 import { SearchOptions2 } from "../../../../i18nutil/inc/searchopt";
 import { TextSearch } from "../../../../unotools/inc/textsearch";
 import { OUString } from "../../../../sal/inc/rtl/ustring";
+import { SwFormatFlyCnt } from "../../../inc/fmtflcnt";
+import { SwTextFlyCnt } from "../../../inc/txtflcnt";
 import type { SwTextNode } from "../txtnode/ndtxt";
 /** Copies text to a native string. @param text - Model text. @returns Actual value. */
 function string(text: string): OUString {
@@ -95,6 +97,64 @@ function search(text: string, key: string, backward: boolean): readonly number[]
     cursor.Dispose();
   }
 }
+it("uses native separators for inline fly hints and restores filtered UTF-16 boundaries", /** Uses actual anchor hints and bounded forward/backward search. @returns Nothing. */ () => {
+  const doc = new SwDoc(),
+    node = doc.paragraphs[0] as SwTextNode;
+  node.SetText("😀a\u00adb");
+  for (const offset of [0, node.Len() + 1]) {
+    const format = doc.MakeFlyFrameFormat("Inline object", undefined);
+    expect(node.InsertHint(new SwTextFlyCnt(new SwFormatFlyCnt(format), offset))).toBe(true);
+  }
+  const options = new SearchOptions2();
+  options.searchString.assign(string("😀ab"));
+  const region = range(node, 0),
+    cursor = range(node, 0);
+  try {
+    const engine = new TextSearch(options);
+    expect(FindTextImpl(cursor, options, engine, false, region)).toBe(true);
+    expect([cursor.GetPoint().GetContentIndex(), cursor.GetMark().GetContentIndex()]).toEqual([
+      6, 1,
+    ]);
+    expect(FindTextImpl(cursor, options, engine, true, region)).toBe(true);
+    expect([cursor.GetPoint().GetContentIndex(), cursor.GetMark().GetContentIndex()]).toEqual([
+      0, 7,
+    ]);
+
+    const format = doc.MakeFlyFrameFormat("Interior inline object", undefined);
+    const interior = new SwTextFlyCnt(new SwFormatFlyCnt(format), 3);
+    expect(node.InsertHint(interior)).toBe(true);
+    expect(FindTextImpl(cursor, options, engine, false, region)).toBe(false);
+    const anchored = range(node, 3, node, 4);
+    try {
+      const original = node.GetText();
+      expect(
+        /** Exercises the guarded document operation before mutation/history. @returns Native replacement outcome. */ () =>
+          doc.GetDocumentContentOperationsManager().ReplaceRange(anchored, "x"),
+      ).toThrow("Writer structured replacement is not implemented.");
+      expect(
+        /** Exercises the same restriction at the text-node boundary. @returns Nothing. */ () =>
+          node.ReplaceText(anchored.Start(), 1, "x"),
+      ).toThrow("Writer dummy-character replacement is not implemented.");
+      expect(node.GetText()).toBe(original);
+      expect(node.GetpSwpHints()?.GetTextAttrForCharAt(3)).toBe(interior);
+      expect(format.GetAnchor().GetAnchorContentOffset()).toBe(3);
+    } finally {
+      anchored.Dispose();
+    }
+    const bounded = range(node, 3, node, 7);
+    try {
+      options.searchString.assign(string("ab"));
+      expect(FindTextImpl(cursor, options, new TextSearch(options), false, bounded)).toBe(true);
+      expect([cursor.Start().GetContentIndex(), cursor.End().GetContentIndex()]).toEqual([4, 7]);
+    } finally {
+      bounded.Dispose();
+    }
+  } finally {
+    region.Dispose();
+    cursor.Dispose();
+    doc.Dispose();
+  }
+});
 it.each([false, true])(
   "searches body and table text through the original SwNodes order backward=%s",
   /** Skips structural nodes and preserves actual paragraph identity. @param backward - Direction. @returns Nothing. */ (

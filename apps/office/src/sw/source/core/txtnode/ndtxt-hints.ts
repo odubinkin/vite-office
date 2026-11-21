@@ -35,6 +35,19 @@ export function AssertTextNodeRange(node: SwTextNode, start: number, end: number
     throw new Error("Writer text range is outside the text node.");
 }
 
+/** Validates a native ReplaceText range before adjusting text or owned hints. @param node - Actual paragraph. @param start - Inclusive offset. @param end - Exclusive offset. @returns Nothing. */
+export function AssertTextNodeReplaceRange(node: SwTextNode, start: number, end: number): void {
+  AssertTextNodeRange(node, start, end);
+  const hints = node.GetpSwpHints();
+  for (let i = 0; hints !== undefined && i < hints.Count(); i++) {
+    const hint = hints.Get(i);
+    const offset = hint.GetStart();
+    if (offset >= end) break;
+    if (offset >= start && hint.HasDummyChar())
+      throw new Error("Writer dummy-character replacement is not implemented.");
+  }
+}
+
 /** Preserves CutText's equal-end attributes in an empty split suffix and removes closed empty hints. Full CutImpl ownership remains unverified. @param node - Source. @param offset - Split position. @param suffix - Captured nonempty suffix hints. @returns Remaining suffix hints. */
 export function SplitTextNodeEndHints(
   node: SwTextNode,
@@ -393,7 +406,7 @@ export function GetTextNodeRangeFormatState(
   format: WriterCharacterFormat,
 ): "mixed" | "off" | "on" {
   AssertTextNodeRange(node, start, end);
-  const hints = node.GetpSwpHints()?.clone() ?? new SwpHints(node.GetDoc().GetAttrPool());
+  const hints = node.GetpSwpHints() ?? new SwpHints(node.GetDoc().GetAttrPool());
   return hints.getCharacterFormatState(node.Len(), start, end, format, node.GetSwAttrSet());
 }
 

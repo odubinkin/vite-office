@@ -4,10 +4,14 @@ import { expect, it, vi } from "vitest";
 import { SvxSearchCmd } from "../../../svl/inc/srchitem";
 import { SfxItemSet } from "../../../svl/source/items/itemset";
 import { RndStdIds } from "../../../svx/inc/swframetypes";
-import { RES_FRMATR_BEGIN, RES_FRMATR_END } from "../../inc/hintids";
+import { Size } from "../../../tools/inc/gen";
+import { Graphic } from "../../../vcl/source/gdi/graph";
+import { CH_TXTATR_BREAKWORD, RES_FRMATR_BEGIN, RES_FRMATR_END } from "../../inc/hintids";
 import { SwFormatFooter, SwFormatHeader } from "../../inc/fmthdft";
+import { SwFormatFlyCnt } from "../../inc/fmtflcnt";
+import { SwTextFlyCnt } from "../../inc/txtflcnt";
 import { MakeFlySection } from "../../source/core/doc/doclay";
-import { SwPosition } from "../../source/core/crsr/pam";
+import { SwPaM, SwPosition } from "../../source/core/crsr/pam";
 import { createWriterDocumentSession } from "../composition/writer-module";
 import { WriterWorkbench } from "./writer-view";
 
@@ -34,6 +38,65 @@ it("opens Find from Edit, wraps in both directions and restores document focus o
   fireEvent.keyDown(search, { key: "Escape" });
   expect(screen.queryByRole("toolbar", { name: "Find" })).toBeNull();
   expect(workbench.container.querySelector("[data-writer-editing-host]")).toHaveFocus();
+  workbench.unmount();
+  session.view.Close();
+});
+
+it("finds whole words on both sides of an as-character image", /** Exercises the native inline separator through browser search commands and selections. @returns Nothing. */ () => {
+  const session = createWriterDocumentSession();
+  const shell = session.view.GetWrtShell();
+  const node = shell.GetActiveParagraph();
+  shell.Insert("needleneedle");
+  const position = new SwPosition(node, 6);
+  const range = new SwPaM(position);
+  const gif = Buffer.from("R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7", "base64");
+  const graphic = new Graphic(gif, "image/gif", new Size(120, 120));
+  const format = node.GetDoc().GetDocumentContentOperationsManager().InsertGraphic(range, graphic);
+  const inline = new SwTextFlyCnt(new SwFormatFlyCnt(format), 6);
+  expect(node.InsertHint(inline)).toBe(true);
+  range.Dispose();
+  position.Dispose();
+  shell.GetCursor().GetPoint().SetContent(0);
+
+  const workbench = render(<WriterWorkbench isActive view={session.view} />);
+  expect(workbench.container.querySelector("[data-writer-inline-graphic] img")).toBeInTheDocument();
+  fireEvent.keyDown(window, { key: "h", ctrlKey: true });
+  const dialog = within(screen.getByRole("dialog", { name: "Find and Replace" }));
+  fireEvent.change(dialog.getByLabelText("Find"), { target: { value: "needle" } });
+  fireEvent.click(dialog.getByRole("checkbox", { name: "Whole words only" }));
+
+  const next = dialog.getByRole("button", { name: "Find Next" });
+  fireEvent.click(next);
+  expect([
+    shell.GetCursor().Start().GetContentIndex(),
+    shell.GetCursor().End().GetContentIndex(),
+  ]).toEqual([0, 6]);
+  fireEvent.click(next);
+  expect([
+    shell.GetCursor().Start().GetContentIndex(),
+    shell.GetCursor().End().GetContentIndex(),
+  ]).toEqual([7, 13]);
+  expect(window.getSelection()?.toString()).toBe("needle");
+  fireEvent.click(dialog.getByRole("button", { name: "Find Previous" }));
+  expect(shell.GetCursor().Start().GetContentIndex()).toBe(0);
+  fireEvent.click(dialog.getByRole("button", { name: "Find All" }));
+  expect([...shell.GetCursor().GetRingContainer()]).toHaveLength(2);
+
+  fireEvent.change(dialog.getByLabelText("Replace with"), { target: { value: "match" } });
+  fireEvent.click(dialog.getByRole("button", { name: "Replace All" }));
+  expect(node.GetText()).toBe(`match${CH_TXTATR_BREAKWORD}match`);
+  expect(node.GetpSwpHints()?.GetTextAttrForCharAt(5)).toBe(inline);
+  expect(format.GetAnchor().GetAnchorContentOffset()).toBe(5);
+  fireEvent.keyDown(dialog.getByLabelText("Find"), { key: "Escape" });
+  fireEvent.keyDown(window, { key: "z", ctrlKey: true });
+  expect(node.GetText()).toBe(`needle${CH_TXTATR_BREAKWORD}needle`);
+  expect(node.GetpSwpHints()?.GetTextAttrForCharAt(6)).toBe(inline);
+  expect(format.GetAnchor().GetAnchorContentOffset()).toBe(6);
+  fireEvent.keyDown(window, { key: "y", ctrlKey: true });
+  expect(node.GetText()).toBe(`match${CH_TXTATR_BREAKWORD}match`);
+  expect(node.GetpSwpHints()?.GetTextAttrForCharAt(5)).toBe(inline);
+  expect(format.GetAnchor().GetAnchorContentOffset()).toBe(5);
+
   workbench.unmount();
   session.view.Close();
 });

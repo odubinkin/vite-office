@@ -119,7 +119,10 @@ export class DocumentContentOperationsManager {
     if (regExp) throw new Error("Writer regex replacement is not implemented.");
     if (!range.HasMark()) return false;
     const { end, node, start } = this.GetSameTextNodeRange(range, "replacement");
-    for (const hint of node.GetpSwpHints()?.entries() ?? [])
+    const hints = node.GetpSwpHints();
+    if (hints?.HasFlyContent(start, end))
+      throw new Error("Writer structured replacement is not implemented.");
+    for (const hint of hints?.entries() ?? [])
       if (hint.HasDummyChar()) throw new Error("Writer structured replacement is not implemented.");
     return this.document.RunModelTransaction(
       /** Runs native replacement/history/modified publication in one model action. @returns Native success. */ () => {

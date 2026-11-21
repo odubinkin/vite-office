@@ -296,6 +296,13 @@ contract checks; compiled upstream execution and complete consumer invariants
 are unverified. Decision: retain the exact directional predicates and the
 single-character-only literal exception.
 
+The same predicates apply when `lcl_CleanStr` removes inline fly anchors.
+With an anchor on each side of `😀a<U+00AD>b`, the key `😀ab` yields forward
+point/mark [6,1] and backward [0,7] in UTF-16 coordinates. This includes both
+boundary anchors in the backward result. The model regression test preserves
+those endpoints. Replacement of an anchor itself still requires fly undo
+history in the port.
+
 ## WRITER-010: Normal replacement history can remain consumed after redo
 
 Pinned `sw/source/core/undo/unins.cxx`, `SwUndoReplace::Impl::UndoImpl`, clears
