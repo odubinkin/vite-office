@@ -6,6 +6,7 @@ import { unicode, text } from "../../../../i18nlangtag/source/isolang/isolang.ta
 import { OUString } from "../../../../sal/inc/rtl/ustring";
 import { ScAddress, ScRange, ScRefFlags } from "../../../inc/address";
 import type { ScDocument } from "../../../inc/document";
+import { getRangeFromToken } from "../../../inc/reftokenhelper";
 import { ScTokenArray } from "../../../inc/tokenarray";
 import { ScCompiler } from "./compiler";
 
@@ -82,12 +83,28 @@ export class ScRangeData {
     return result;
   }
 
+  /** Converts a cell label using the source all-convention name character rules. @param document - Workbook. @param label - Candidate cell text. @returns Name or empty string. */
+  static MakeValidName(document: ScDocument, label: string): string {
+    let name = label.replace(/^[^\p{L}\p{N}_.?]+/u, "");
+    if (!name) return name;
+    if (!/^[\p{L}_]/u.test(name)) name = "_" + name;
+    name = name.replace(/[^\p{L}\p{N}_.?]/gu, "_");
+    while (this.HasAddressConflict(name, document))
+      name = name.includes(".") ? name.replace(".", "_") : "_" + name;
+    return name;
+  }
+
   /** Checks a source name against identifier and reference syntax. @param name - Proposed spelling. @param document - Workbook. @returns Name validation result. */
   static IsNameValid(name: string, document: ScDocument): "valid" | "syntax" | "reference" {
     if (!/^[\p{L}_][\p{L}\p{N}_?]*$/u.test(name)) return "syntax";
+    return this.HasAddressConflict(name, document) ? "reference" : "valid";
+  }
+
+  /** Checks full and partial address parses under the admitted reference conventions. @param name - Candidate name. @param document - Workbook. @returns Address conflict. */
+  private static HasAddressConflict(name: string, document: ScDocument): boolean {
     const value = unicode(name);
     try {
-      // Lotus uses A1 row and column syntax for the unqualified identifiers admitted above.
+      // Lotus uses A1 row and column syntax for unqualified names.
       const conventions = FormulaGrammar.AddressConvention;
       for (
         let convention = conventions.CONV_OOO;
@@ -99,12 +116,23 @@ export class ScRangeData {
           new ScRange().Parse(value, document, details) !== ScRefFlags.ZERO ||
           new ScAddress().Parse(value, document, details) !== ScRefFlags.ZERO
         )
-          return "reference";
+          return true;
       }
-      return "valid";
+      return false;
     } finally {
       value.dispose();
     }
+  }
+
+  /** Checks the exact named block using the definition origin. @param block - Compared range. @returns Match. */
+  IsRangeAtBlock(block: ScRange): boolean {
+    if (!(this.type & (RangeDataType.AbsArea | RangeDataType.AbsPos))) return false;
+    const array = this.code.GetArray();
+    const token = array?.length === 1 ? array[0] : undefined;
+    const kind = token?.GetType();
+    if (!token || (kind !== StackVar.svSingleRef && kind !== StackVar.svDoubleRef)) return false;
+    const reference = new ScRange();
+    return getRangeFromToken(this.document, reference, token, this.pos) && reference.equals(block);
   }
 
   /** Returns the native name identity. @returns Case-folded lookup key. */
@@ -155,6 +183,12 @@ export class ScRangeName {
   /** Looks up the original key. @param name - Uppercase name. @returns Definition or undefined. */
   findByUpperName(name: string): ScRangeData | undefined {
     return this.data.get(name);
+  }
+
+  /** Finds the first name for an exact block, in native key order. @param block - Compared range. @returns Matching definition. */
+  findByRange(block: ScRange): ScRangeData | undefined {
+    for (const entry of this) if (entry.IsRangeAtBlock(block)) return entry;
+    return undefined;
   }
 
   /** Resolves a compiled name token. @param index - Native index. @returns Definition or undefined. */

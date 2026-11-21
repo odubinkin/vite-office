@@ -959,13 +959,15 @@ function formatLocalExcelR1C1(
   details: Readonly<ScAddressDetails>,
   full: boolean,
 ): string {
-  if (flags & ScRefFlags.TAB_3D)
-    throw new Error("Excel sheet and external reference headers are not implemented");
   const wholeRows = range.aStart.Col() === 0 && range.aEnd.Col() >= doc.MaxCol() && !full,
     wholeCols = !wholeRows && range.aStart.Row() === 0 && range.aEnd.Row() >= doc.MaxRow() && !full,
     start = range.aStart,
     end = range.aEnd;
-  let result = "";
+  let result =
+    flags & ScRefFlags.TAB_3D
+      ? (formatTab(start.Tab(), doc, Boolean(flags & ScRefFlags.TAB_ABS), true) ?? "#REF!")
+      : "";
+  if (start.Tab() !== end.Tab()) throw new Error("Excel sheet spans are not implemented");
   if (!wholeCols)
     result += appendR1C1(start.Row(), Boolean(flags & ScRefFlags.ROW_ABS), details.nRow, "R");
   if (!wholeRows)

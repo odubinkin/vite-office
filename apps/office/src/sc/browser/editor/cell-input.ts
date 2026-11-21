@@ -8,7 +8,6 @@ import type { ScAddress } from "../../inc/address";
 import { CellType } from "../../inc/global";
 import { ScCellFormat } from "../../source/core/tool/cellform";
 import { ScStringUtil } from "../../inc/stringutil";
-import { FormulaGrammar } from "../../../formula/inc/grammar";
 import { unicode, text } from "../../../i18nlangtag/source/isolang/isolang.tables";
 import { doubleToString } from "../../../sal/rtl/strtmpl.math";
 /** Native English symbols used by ScGlobal::GetErrorString for reachable scalar errors. */
@@ -45,7 +44,7 @@ export function prepareCell(doc: ScDocument, pos: ScAddress, content: CalcCellIn
   try {
     if (content.kind === "formula") {
       const result = new ScCellValue();
-      result.set(new ScFormulaCell(doc, pos, value, FormulaGrammar.Grammar.GRAM_NATIVE));
+      result.set(new ScFormulaCell(doc, pos, value, doc.GetGrammar()));
       return result;
     }
     const shared = doc.GetSharedStringPool().intern(value);
@@ -91,7 +90,7 @@ export function cellInputText(doc: ScDocument, pos: ScAddress): string {
   if (formula) {
     if (formula.GetCode().GetCodeError() && !formula.GetCode().GetLen())
       return errorText(formula.GetCode().GetCodeError());
-    const value = formula.GetFormula(FormulaGrammar.Grammar.GRAM_NATIVE);
+    const value = formula.GetFormula(doc.GetGrammar());
     try {
       return text(value);
     } finally {
@@ -124,7 +123,7 @@ export function cellPresentation(
   if (showFormulas) {
     const formula = doc.GetFormulaCell(pos);
     if (formula) {
-      const expression = formula.GetFormula(FormulaGrammar.Grammar.GRAM_NATIVE);
+      const expression = formula.GetFormula(doc.GetGrammar());
       try {
         return { text: text(expression), alignment: "left" };
       } finally {

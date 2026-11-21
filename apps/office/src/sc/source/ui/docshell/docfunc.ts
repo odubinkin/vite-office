@@ -12,12 +12,14 @@ import {
 } from "../../../inc/conditio";
 import type { ScRangeList } from "../../../inc/rangelst";
 import { PreprocessAllRangeNamesUpdate } from "../../core/data/document10.rangenames";
-import { CloneRangeNameMap, type ScRangeNameMap } from "../../core/tool/rangenam";
+import { CloneRangeNameMap, type ScRangeName, type ScRangeNameMap } from "../../core/tool/rangenam";
 import { ScUndoAllRangeNames } from "../undo/undorangename";
 import { InsertNameListOperation } from "../operation/InsertNameListOperation";
 import { text } from "../../../../i18nlangtag/source/isolang/isolang.tables";
 import { Color } from "../../../../tools/inc/color";
-import { ScUndoPageBreak } from "../undo/undocell";
+import { CreateNames, type ConfirmCreateName } from "./docfunc.names";
+import type { CreateNameFlags } from "../inc/scui_def";
+import { ScUndoPageBreak, ScUndoRangeNames } from "../undo/undocell";
 import { ScUndoTabColor, type ScUndoTabColorInfo } from "../undo/undotab";
 import { SetFormulaOperation } from "../operation/SetFormulaOperation";
 import type { ScFormulaCell } from "../../../inc/formulacell";
@@ -44,6 +46,43 @@ export class ScDocFunc {
     );
     undo.RedoWithContext(this.shell);
     this.shell.GetUndoManager().AddUndoAction(undo);
+    this.shell.SetDocumentModified();
+  }
+
+  /** Creates range names from header labels and installs one native scope snapshot. @param range - Source selection. @param flags - Chosen edges. @param confirm - Existing name prompt. @param signal - Dialog session teardown signal. @param scope - Global or sheet-local names. @returns Whether the operation ran. */
+  async CreateNames(
+    range: ScRange,
+    flags: CreateNameFlags,
+    confirm: ConfirmCreateName,
+    signal: AbortSignal,
+    scope = -1,
+  ): Promise<boolean> {
+    const document = this.shell.GetDocument();
+    const live = document.GetRangeName(scope);
+    if (!live || signal.aborted) return false;
+    const draft = live.Clone();
+    try {
+      if (
+        !(await CreateNames(document, range, flags, draft, confirm)) ||
+        signal.aborted ||
+        document !== this.shell.GetDocument()
+      )
+        return false;
+      this.ModifyRangeNames(draft, scope);
+      return true;
+    } finally {
+      draft.clear();
+    }
+  }
+
+  /** Installs one native scope while preserving existing formula names by spelling. @param names - Replacement definitions. @param scope - Sheet index or global. @returns Nothing. */
+  ModifyRangeNames(names: ScRangeName, scope = -1): void {
+    const live = this.shell.GetDocument().GetRangeName(scope);
+    if (!live) return;
+    const history = this.shell.GetUndoManager();
+    const undo = new ScUndoRangeNames(live.Clone(), names.Clone(), scope);
+    undo.RedoWithContext(this.shell);
+    history.AddUndoAction(undo);
     this.shell.SetDocumentModified();
   }
 

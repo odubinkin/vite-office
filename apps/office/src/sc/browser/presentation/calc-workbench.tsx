@@ -77,6 +77,7 @@ export function CalcWorkbench({
   const condManager = useCalcDialog(sheetWorkflows.conditionals.managers);
   const nameDialog = useCalcDialog(sheetWorkflows.nameDialogs);
   const nameManager = useCalcDialog(sheetWorkflows.nameManagerDialogs);
+  const createNames = useCalcDialog(sheetWorkflows.createNamesDialogs);
   const namePaste = useCalcDialog(sheetWorkflows.namePasteDialogs);
   const referenceDialog = printDialog ?? condEditor ?? nameDialog ?? nameManager;
   const printInput = useRef<ScPrintReferenceInput>(null);
@@ -113,7 +114,8 @@ export function CalcWorkbench({
     pageStyleDialog !== undefined ||
     headerFooterDialog !== undefined ||
     condManager !== undefined ||
-    namePaste !== undefined;
+    namePaste !== undefined ||
+    createNames !== undefined;
   const root = useRef<HTMLElement>(null),
     tabs = useRef<HTMLDivElement>(null),
     previousModal = useRef(modal || referenceOpen),
@@ -961,6 +963,7 @@ export function CalcWorkbench({
           nameDialog,
           nameManager,
           namePaste,
+          createNames,
         }}
         referenceInput={printInput}
         onReference={(owner, range) => setReferenceSelection({ owner, range })}

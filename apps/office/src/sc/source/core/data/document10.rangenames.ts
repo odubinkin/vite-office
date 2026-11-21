@@ -20,10 +20,10 @@ export interface ScRangeNameFormula {
   readonly after: string;
 }
 
-/** Captures the formulas containing a source name token before replacing the scope maps. @param document - Live workbook. @param replacement - New scopes. @returns Hybrid formula pairs. */
+/** Captures the formulas containing a source name token before replacing the scope maps. @param document - Live workbook. @param replacement - Optional new scopes for indexed renames. @returns Hybrid formula pairs. */
 export function PreprocessAllRangeNamesUpdate(
   document: ScDocument,
-  replacement: ScRangeNameMap,
+  replacement?: ScRangeNameMap,
 ): ScRangeNameFormula[] {
   const changes: ScRangeNameFormula[] = [];
   const grammar = document.GetGrammar();
@@ -48,7 +48,8 @@ export function PreprocessAllRangeNamesUpdate(
       try {
         compiler.CreateStringFromTokenArray(symbol);
         const before = "=" + text(symbol);
-        compiler.SetRangeNameUpdate(replacement).CreateStringFromTokenArray(symbol);
+        if (replacement)
+          compiler.SetRangeNameUpdate(replacement).CreateStringFromTokenArray(symbol);
         changes.push({ position, before, after: "=" + text(symbol) });
       } finally {
         symbol.dispose();

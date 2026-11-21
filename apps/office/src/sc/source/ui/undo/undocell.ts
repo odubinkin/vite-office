@@ -3,6 +3,12 @@ import { CellAttributeHolder, type ScPatternAttr } from "../../../inc/patattr";
 import type { ScViewData } from "../inc/viewdata";
 import { ScMarkData } from "../../../inc/markdata";
 import { AdjustBlockHeight } from "../view/viewfun2";
+import { SfxHint, SfxHintId } from "../../../../svl/inc/hint";
+import {
+  PreprocessAllRangeNamesUpdate,
+  SetAllRangeNames,
+} from "../../core/data/document10.rangenames";
+import type { ScRangeName } from "../../core/tool/rangenam";
 import { SfxUndoAction } from "../../../../svl/source/undo/undo";
 import type { ScDocShell } from "../docshell/docsh";
 import { ScAddress, ScRange } from "../../../inc/address";
@@ -169,5 +175,50 @@ export class ScUndoPageBreak extends SfxUndoAction<ScDocShell> {
   override GetComment(): string {
     if (this.insert) return this.columns ? "Insert Column Break" : "Insert Row Break";
     return this.columns ? "Delete column break" : "Delete row break";
+  }
+}
+
+/** Native history for one range-name scope. */
+export class ScUndoRangeNames extends SfxUndoAction<ScDocShell> {
+  /** Owns both scope snapshots. @param oldNames - Original definitions. @param newNames - New definitions. @param scope - Sheet index or -1. @returns Action. */
+  constructor(
+    private readonly oldNames: ScRangeName,
+    private readonly newNames: ScRangeName,
+    private readonly scope: number,
+  ) {
+    super();
+  }
+
+  /** Recompiles formulas by spelling across the changed native scope. @param shell - Workbook. @param names - Reinstated scope. @returns Nothing. */
+  private DoChange(shell: ScDocShell, names: ScRangeName): void {
+    const document = shell.GetDocument();
+    SetAllRangeNames(
+      document,
+      new Map([[this.scope, names]]),
+      PreprocessAllRangeNamesUpdate(document),
+      false,
+    );
+    shell.Broadcast(new SfxHint(SfxHintId.ScAreasChanged));
+  }
+
+  /** Restores the old names. @param shell - Workbook. @returns Nothing. */
+  override UndoWithContext(shell: ScDocShell): void {
+    this.DoChange(shell, this.oldNames);
+  }
+
+  /** Reinstates the new names. @param shell - Workbook. @returns Nothing. */
+  override RedoWithContext(shell: ScDocShell): void {
+    this.DoChange(shell, this.newNames);
+  }
+
+  /** Releases both owned snapshots. @returns Nothing. */
+  override Dispose(): void {
+    this.oldNames.clear();
+    this.newNames.clear();
+  }
+
+  /** Returns the native edit-names label. @returns Caption. */
+  override GetComment(): string {
+    return "Edit range names";
   }
 }

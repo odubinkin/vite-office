@@ -1,0 +1,45 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/sc/source/ui/view/viewfunc.names.ts",
+    "status": "mapped",
+    "localSymbols": [
+      "GetCreateNameFlags"
+    ],
+    "upstreamPath": "sc/source/ui/view/viewfunc.cxx",
+    "upstreamSymbols": [
+      "ScViewFunc::GetCreateNameFlags"
+    ],
+    "preservedResponsibilities": [
+      "Reads the actual simple selection and proposes the original text-label edges and precedence."
+    ],
+    "omittedResponsibilities": [
+      "Native modal presentation uses the existing browser dialog service."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sc/source/ui/view/viewfunc.names.ts",
+          "marker": "GetCreateNameFlags"
+        },
+        {
+          "path": "apps/office/src/sc/browser/presentation/calc-named-ranges.test.tsx",
+          "marker": "ports tdf137617"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sc/source/ui/view/viewfunc.cxx",
+          "marker": "ScViewFunc::GetCreateNameFlags"
+        }
+      ]
+    },
+    "filenameDivergence": {
+      "localPath": "apps/office/src/sc/source/ui/view/viewfunc.names.ts",
+      "rationale": "Splits the source translation unit at its name creation responsibilities to keep the existing TypeScript owners within the source size budget.",
+      "stackNecessity": "responsibility-split"
+    }
+  }
+}

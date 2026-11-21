@@ -1,12 +1,29 @@
 /** @fileoverview Browser position-box dispatch of native Calc range names and addresses. */
 import { StackVar } from "../../../formula/inc/token.enum";
-import { unicode } from "../../../i18nlangtag/source/isolang/isolang.tables";
+import { FormulaGrammar } from "../../../formula/inc/grammar";
+import { text, unicode } from "../../../i18nlangtag/source/isolang/isolang.tables";
 import { ScAddress, ScRange, ScRefFlags } from "../../inc/address";
 import { getRangeFromToken } from "../../inc/reftokenhelper";
 import { RangeDataType } from "../../source/core/tool/rangenam";
 import { ScMarkType } from "../../source/ui/inc/viewdata";
 import { FormatNameReference, ScNameDefDlg } from "../../source/ui/namedlg/namedefdlg";
 import type { CalcViewController } from "./calc-view-controller";
+
+/** Displays the source name of an exactly selected block, or its address in document syntax. @param this - Calc view controller. @returns Position box text. */
+export function PositionText(this: CalcViewController): string {
+  const document = this.shell.GetDocument();
+  const range = new ScRange();
+  this.viewData.GetSimpleArea(range);
+  const match = document.GetRangeAtBlock(range);
+  if (match) {
+    const sheetName = match.sheetLocal && document.FetchTable(range.aStart.Tab())?.GetName();
+    return sheetName ? match.data.name + " (" + text(sheetName) + ")" : match.data.name;
+  }
+  const convention = document.GetAddressConvention();
+  if (convention !== FormulaGrammar.AddressConvention.CONV_XL_R1C1) return this.Address();
+  const flags = ScRefFlags.RANGE_ABS & ~ScRefFlags.TAB_ABS & ~ScRefFlags.TAB2_ABS;
+  return FormatNameReference(document, range, flags);
+}
 
 /** Resolves the typed address or name and runs the original position-box definition fallback. @param this - Calc view controller. @returns Whether accepted. */
 export function GoToAddress(this: CalcViewController): boolean {

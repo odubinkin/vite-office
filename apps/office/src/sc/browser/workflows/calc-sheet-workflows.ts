@@ -69,6 +69,10 @@ import {
   FormatPastedRangeName,
   type ScRangeNameLine,
 } from "../../source/ui/namedlg/namedlg";
+import { CreateNameFlags } from "../../source/ui/inc/scui_def";
+import { ScMarkType } from "../../source/ui/inc/viewdata";
+import { GetCreateNameFlags } from "../../source/ui/view/viewfunc.names";
+import type { CreateNameAnswer } from "../../source/ui/docshell/docfunc.names";
 import type { CalcViewController } from "../controller/calc-view-controller";
 /** Immutable native dialog initialization;names are copied only as dialog widget resources. */
 export interface CalcGoToSheetRequest {
@@ -103,6 +107,14 @@ function printRangeArgument(request: SfxRequest, which: number): string {
 export type NamePasteResult =
   { readonly kind: "names"; readonly rows: readonly ScRangeNameLine[] } | { readonly kind: "list" };
 
+/** Source Create Names dialog and its follow-up native prompts. */
+export type CreateNamesRequest =
+  | { readonly kind: "options"; readonly flags: CreateNameFlags }
+  | { readonly kind: "replace"; readonly name: string }
+  | { readonly kind: "invalid" };
+/** Source response to orientation or replacement. */
+export type CreateNamesResult = CreateNameFlags | Exclude<CreateNameAnswer, "cancel">;
+
 /** Session-owned native Go to Sheet request and asynchronous result application. */
 export class CalcSheetWorkflows {
   readonly dialogs = new SfxDialogController<CalcGoToSheetRequest, string>();
@@ -112,6 +124,8 @@ export class CalcSheetWorkflows {
   readonly pageStyleDialogs = new SfxDialogController<ScStyleDlgRequest, ScStyleDlgResult>();
   readonly printDialogs = new SfxDialogController<PrintAreasModel, SfxRequest | undefined>();
   private managing: ScNameDlg | undefined;
+  private creatingNames: AbortController | undefined;
+  readonly createNamesDialogs = new SfxDialogController<CreateNamesRequest, CreateNamesResult>();
   readonly nameManagerDialogs = new SfxDialogController<ScNameDlg, "add" | "apply">();
   readonly namePasteDialogs = new SfxDialogController<
     readonly ScRangeNameLine[],
@@ -150,6 +164,18 @@ export class CalcSheetWorkflows {
           getState: (target: CalcSheetWorkflows) => ({ enabled: !target.HasSheetDialog() }),
           execute: (target: CalcSheetWorkflows, request: SfxRequest) =>
             !request.GetArgs().length && target.PasteNames(),
+        },
+        {
+          commandUrl: ".uno:CreateNames",
+          slotId: 26273,
+          label: "Create Names",
+          getState: (target: CalcSheetWorkflows) => ({
+            enabled:
+              !target.HasSheetDialog() &&
+              target.controller.viewData.GetSimpleArea(new ScRange()) === ScMarkType.SC_MARK_SIMPLE,
+          }),
+          execute: (target: CalcSheetWorkflows, request: SfxRequest) =>
+            !request.GetArgs().length && target.CreateNames(),
         },
         ...conditionalFormatCommands.map(
           /** Binds one original conditional-format Sfx command. @param slot - Source command. @returns Slot definition. */ ([
@@ -521,6 +547,43 @@ export class CalcSheetWorkflows {
     }
   }
 
+  /** Executes the source selection-label command around its modal decisions. @returns Whether the creation ran. */
+  private async CreateNames(): Promise<boolean> {
+    const controller = this.controller;
+    if (this.HasSheetDialog() || !controller.Commit()) return false;
+    const view = controller.viewData;
+    const range = new ScRange();
+    if (view.GetSimpleArea(range) !== ScMarkType.SC_MARK_SIMPLE) return false;
+    const owner = new AbortController();
+    this.creatingNames = owner;
+    try {
+      const options = await this.createNamesDialogs.Request({
+        kind: "options",
+        flags: GetCreateNameFlags(view),
+      });
+      if (owner.signal.aborted || options.kind !== "accepted" || typeof options.result !== "number")
+        return false;
+      const done = await controller.shell.GetDocFunc().CreateNames(
+        range,
+        options.result,
+        async (name) => {
+          if (owner.signal.aborted) return "cancel";
+          const result = await this.createNamesDialogs.Request({ kind: "replace", name });
+          return result.kind === "accepted" && typeof result.result === "string"
+            ? result.result
+            : "cancel";
+        },
+        owner.signal,
+      );
+      if (owner.signal.aborted) return false;
+      if (done) controller.SyncSheetView();
+      else await this.createNamesDialogs.Request({ kind: "invalid" });
+      return done;
+    } finally {
+      if (this.creatingNames === owner) this.creatingNames = undefined;
+    }
+  }
+
   /** Checks whether the sheet workflows already own a modal. @returns Active modal state. */
   private HasSheetDialog(): boolean {
     return Boolean(
@@ -531,6 +594,7 @@ export class CalcSheetWorkflows {
       this.pageStyleDialogs.GetSnapshot() ||
       this.headerFooterDialogs.GetSnapshot() ||
       this.managing ||
+      this.creatingNames ||
       this.namePasteDialogs.GetSnapshot() ||
       this.nameDialogs.GetSnapshot() ||
       this.conditionals.IsOpen(),
@@ -884,6 +948,9 @@ export class CalcSheetWorkflows {
   Close(): void {
     this.conditionals.Close();
     this.managing = undefined;
+    this.creatingNames?.abort();
+    const createNames = this.createNamesDialogs.GetSnapshot();
+    if (createNames) this.createNamesDialogs.Cancel(createNames.id);
     const manager = this.nameManagerDialogs.GetSnapshot();
     if (manager) this.nameManagerDialogs.Cancel(manager.id);
     const paste = this.namePasteDialogs.GetSnapshot();

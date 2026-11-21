@@ -3,6 +3,7 @@ import { act, cleanup, fireEvent, render, screen, within } from "@testing-librar
 import { afterEach, assert, expect, it } from "vitest";
 import { text } from "../../../i18nlangtag/source/isolang/isolang.tables";
 import { ScRefCellValue } from "../../inc/cellvalue";
+import { FormulaGrammar } from "../../../formula/inc/grammar";
 import { ScInputMode } from "../../inc/global";
 import { ScAddress } from "../../inc/address";
 import { readOdsDocument, writeOdsDocument } from "../../source/filter/xml/xmlwrap";
@@ -259,4 +260,126 @@ it("keeps nested Add and Delete staged and restores all scopes with one Undo", a
   act(() => expect(controller.Undo()).toBe(true));
   expect(document.GetRangeName()?.findByUpperName("ORIGINALNAME")).toBeDefined();
   expect(document.GetRangeName(0)?.findByUpperName("NESTEDNAME")).toBeUndefined();
+});
+
+it("ports tdf137617 Create Names defaults and named position text in Calc A1 and Excel R1C1", async () => {
+  const { controller } = mount();
+  const document = controller.shell.GetDocument();
+  act(() => {
+    controller.Select(0, 0);
+    controller.EnterString("Result1");
+    controller.Select(0, 1);
+    controller.EnterString("Result2");
+  });
+  enterNameBox("A1:B2");
+  openNameMenu(/^Create Names/);
+  let dialog = screen.getByRole("dialog", { name: "Create Names" });
+  expect(within(dialog).getByRole("checkbox", { name: "Left column" })).toBeChecked();
+  for (const label of ["Top row", "Bottom row", "Right column"])
+    expect(within(dialog).getByRole("checkbox", { name: label })).not.toBeChecked();
+  await act(async () => fireEvent.click(within(dialog).getByRole("button", { name: "OK" })));
+  act(() => controller.Select(1, 0));
+  expect(screen.getByRole("textbox", { name: "Name Box" })).toHaveValue("Result1");
+  act(() => controller.Select(1, 1));
+  expect(screen.getByRole("textbox", { name: "Name Box" })).toHaveValue("Result2");
+
+  act(() => {
+    document.SetGrammar(FormulaGrammar.Grammar.GRAM_NATIVE_XL_R1C1);
+    controller.Select(2, 0);
+    controller.EnterString("Result3");
+    controller.Select(3, 0);
+    controller.EnterString("Result4");
+  });
+  enterNameBox("R1C3:R2C4");
+  openNameMenu(/^Create Names/);
+  dialog = screen.getByRole("dialog", { name: "Create Names" });
+  expect(within(dialog).getByRole("checkbox", { name: "Top row" })).toBeChecked();
+  for (const label of ["Left column", "Bottom row", "Right column"])
+    expect(within(dialog).getByRole("checkbox", { name: label })).not.toBeChecked();
+  await act(async () => fireEvent.click(within(dialog).getByRole("button", { name: "OK" })));
+  act(() => controller.Select(2, 1));
+  expect(screen.getByRole("textbox", { name: "Name Box" })).toHaveValue("Result3");
+  act(() => controller.Select(3, 1));
+  expect(screen.getByRole("textbox", { name: "Name Box" })).toHaveValue("Result4");
+  act(() => expect(controller.Undo()).toBe(true));
+  expect(screen.getByRole("textbox", { name: "Name Box" })).toHaveValue("R2C4");
+  act(() => expect(controller.Redo()).toBe(true));
+  expect(screen.getByRole("textbox", { name: "Name Box" })).toHaveValue("Result4");
+  document.SetValue(new ScAddress(2, 1, 0), 5);
+  document.SetValue(new ScAddress(2, 2, 0), 8);
+  act(() => {
+    controller.Select(4, 0);
+    const accepted = controller.EnterString("=SUM(Sheet1!R2C3:R3C3)");
+    expect(accepted, controller.error).toBe(true);
+  });
+  expect(document.GetValue(new ScAddress(4, 0, 0))).toBe(13);
+});
+
+it("creates names in edge order and stops at Cancel while preserving earlier accepted entries", async () => {
+  const { controller } = mount();
+  const document = controller.shell.GetDocument();
+  enterNameBox("ToReplace");
+  act(() => {
+    controller.Select(0, 2);
+    controller.EnterString("  Gross profit");
+    controller.Select(1, 2);
+    controller.EnterString("ToReplace");
+    controller.Select(2, 2);
+    controller.EnterString("AfterConflict");
+  });
+  enterNameBox("A3:C4");
+  openNameMenu(/^Create Names/);
+  const dialog = screen.getByRole("dialog", { name: "Create Names" });
+  await act(async () => fireEvent.click(within(dialog).getByRole("button", { name: "OK" })));
+  const replace = screen.getByRole("alertdialog", { name: "Create Names" });
+  expect(within(replace).getByText("Replace existing definition of ToReplace?")).toBeVisible();
+  expect(document.GetRangeName()?.findByUpperName("GROSS_PROFIT")).toBeUndefined();
+  await act(async () => fireEvent.click(within(replace).getByRole("button", { name: "Cancel" })));
+  expect(
+    document.GetRangeName()?.findByUpperName("GROSS_PROFIT")?.GetSymbol(document.GetGrammar()),
+  ).toBe("$Sheet1.$A$4");
+  expect(document.GetRangeName()?.findByUpperName("AFTERCONFLICT")).toBeUndefined();
+  expect(
+    document.GetRangeName()?.findByUpperName("TOREPLACE")?.GetSymbol(document.GetGrammar()),
+  ).toBe("$Sheet1.$A$1");
+  act(() => expect(controller.Undo()).toBe(true));
+  expect(document.GetRangeName()?.findByUpperName("GROSS_PROFIT")).toBeUndefined();
+});
+
+it("applies Yes and No to separate name conflicts and recalculates formulas through history", async () => {
+  const { controller } = mount();
+  const document = controller.shell.GetDocument();
+  document.SetValue(new ScAddress(3, 0, 0), 11);
+  document.SetValue(new ScAddress(4, 0, 0), 22);
+  document.SetValue(new ScAddress(0, 3, 0), 8);
+  document.SetValue(new ScAddress(1, 3, 0), 9);
+  act(() => controller.Select(3, 0));
+  enterNameBox("MoveThis");
+  act(() => controller.Select(4, 0));
+  enterNameBox("KeepThis");
+  act(() => {
+    controller.Select(0, 2);
+    controller.EnterString("MoveThis");
+    controller.Select(1, 2);
+    controller.EnterString("KeepThis");
+    controller.Select(2, 4);
+    controller.EnterString("=MoveThis+KeepThis");
+  });
+  const total = new ScAddress(2, 4, 0);
+  expect(document.GetValue(total)).toBe(33);
+  enterNameBox("A3:B4");
+  openNameMenu(/^Create Names/);
+  const dialog = screen.getByRole("dialog", { name: "Create Names" });
+  await act(async () => fireEvent.click(within(dialog).getByRole("button", { name: "OK" })));
+  let question = screen.getByRole("alertdialog", { name: "Create Names" });
+  expect(within(question).getByText("Replace existing definition of MoveThis?")).toBeVisible();
+  await act(async () => fireEvent.click(within(question).getByRole("button", { name: "Yes" })));
+  question = screen.getByRole("alertdialog", { name: "Create Names" });
+  expect(within(question).getByText("Replace existing definition of KeepThis?")).toBeVisible();
+  await act(async () => fireEvent.click(within(question).getByRole("button", { name: "No" })));
+  expect(document.GetValue(total)).toBe(30);
+  act(() => expect(controller.Undo()).toBe(true));
+  expect(document.GetValue(total)).toBe(33);
+  act(() => expect(controller.Redo()).toBe(true));
+  expect(document.GetValue(total)).toBe(30);
 });

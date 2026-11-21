@@ -82,7 +82,17 @@ const excelSheet = new RegExp("^" + sheetIdentifier + "!", "u");
 const odfSheet = new RegExp("^" + sheetIdentifier + "\\.", "u");
 const deletedOdfSheet = /^(\$?)#REF!\./u;
 const a1Reference = /^\$?[A-Za-z]+\$?[1-9][0-9]*/u;
-const nameIdentifier = /^[\p{L}_][\p{L}\p{N}_.]*/u;
+const nameIdentifier = /^[\p{L}_][\p{L}\p{N}_.?]*/u;
+const r1c1Offset = String.raw`(?:[0-9]+|\[[+-]?[0-9]+\])?`;
+const r1c1Row = "R" + r1c1Offset,
+  r1c1Column = "C" + r1c1Offset;
+const r1c1Cell = r1c1Row + r1c1Column;
+const referenceBoundary = String.raw`(?![\p{L}\p{N}_?\[])`;
+const r1c1Reference = new RegExp(`^${r1c1Cell}${referenceBoundary}`, "iu");
+const r1c1Range = new RegExp(
+  `^(?:${r1c1Cell}:${r1c1Cell}|${r1c1Row}(?::${r1c1Row})?|${r1c1Column}(?::${r1c1Column})?)${referenceBoundary}`,
+  "iu",
+);
 const a1Range =
   /^(?:\$?[A-Za-z]+\$?[1-9][0-9]*:\$?[A-Za-z]+\$?[1-9][0-9]*|\$?[A-Za-z]+:\$?[A-Za-z]+|\$?[1-9][0-9]*:\$?[1-9][0-9]*)/u;
 // Existing per-realm compiler symbol bootstrap binds the classification part of
@@ -275,10 +285,25 @@ export class ScCompiler extends FormulaCompiler {
       grammar !== FormulaGrammar.Grammar.GRAM_ODFF_A1 &&
       grammar !== FormulaGrammar.Grammar.GRAM_NATIVE &&
       grammar !== FormulaGrammar.Grammar.GRAM_ENGLISH &&
-      grammar !== FormulaGrammar.Grammar.GRAM_OOXML
+      grammar !== FormulaGrammar.Grammar.GRAM_OOXML &&
+      grammar !== FormulaGrammar.Grammar.GRAM_NATIVE_XL_R1C1 &&
+      grammar !== FormulaGrammar.Grammar.GRAM_ENGLISH_XL_R1C1
     )
       throw new Error("Formula language or reference convention is not implemented");
     this.meGrammar = grammar;
+  }
+  /** Reads the active Excel reference convention. @returns Whether to use R1C1. */
+  private IsR1C1(): boolean {
+    return (
+      FormulaGrammar.extractRefConvention(this.meGrammar) ===
+      FormulaGrammar.AddressConvention.CONV_XL_R1C1
+    );
+  }
+  /** Supplies the actual relative origin for R1C1 reference parsing. @returns Reference details. */
+  private ReferenceDetails() {
+    return this.IsR1C1()
+      ? new ScAddress.Details(FormulaGrammar.AddressConvention.CONV_XL_R1C1, this.aPos)
+      : ScAddress.detailsOOOa1;
   }
   /** Original local native/ODF one-reference convention operation. @param reference - Actual reference data. @param odf - ODF convention. @param singleton - Native none/column/row display. @param omitSheet - Whether the other range endpoint already supplies the sheet. @returns Reference fragment. */
   private MakeOneRefStrImpl(
@@ -288,6 +313,25 @@ export class ScCompiler extends FormulaCompiler {
     omitSheet = false,
   ): string {
     const address = reference.toAbs(this.rDoc, this.aPos);
+    if (this.IsR1C1()) {
+      if (reference.IsDeleted() || !this.rDoc.GetSheetLimits().ValidAddress(address))
+        return "#REF!";
+      const flags =
+        (singleton === 1 ? 0 : ScRefFlags.ROW_VALID) |
+        (singleton === 2 ? 0 : ScRefFlags.COL_VALID) |
+        (reference.IsColRel() ? 0 : ScRefFlags.COL_ABS) |
+        (reference.IsRowRel() ? 0 : ScRefFlags.ROW_ABS);
+      const value = address.Format(flags, null, this.ReferenceDetails());
+      try {
+        const prefix =
+          !omitSheet && (reference.IsFlag3D() || address.Tab() !== this.aPos.Tab())
+            ? this.FormatSheet(address.Tab(), true)
+            : "";
+        return prefix + text(value);
+      } finally {
+        value.dispose();
+      }
+    }
     let column = address.Col() + 1,
       letters = "";
     while (column > 0) {
@@ -315,8 +359,16 @@ export class ScCompiler extends FormulaCompiler {
     const source = this.rDoc.FetchTable(tab)?.GetName();
     if (!source) return "#REF!";
     const quoted = QuoteTabName(text(source));
-    if (this.meGrammar === FormulaGrammar.Grammar.GRAM_OOXML) return quoted + "!";
+    if (this.IsExcelReference()) return quoted + "!";
     return (absolute ? "$" : "") + quoted + ".";
+  }
+  /** Reads the separator used by the current sheet-qualified syntax. @returns Whether it uses an Excel separator. */
+  private IsExcelReference(): boolean {
+    const convention = FormulaGrammar.extractRefConvention(this.meGrammar);
+    return (
+      convention >= FormulaGrammar.AddressConvention.CONV_XL_A1 &&
+      convention <= FormulaGrammar.AddressConvention.CONV_XL_OOX
+    );
   }
   /** Admits the inline matrix operand owned by the Calc token array. @param token - Source token. @returns Whether this is a populated literal matrix. */
   protected override IsMatrixOperand(token: FormulaToken): boolean {
@@ -528,7 +580,7 @@ export class ScCompiler extends FormulaCompiler {
       input = unicode(name);
     let flags: ScRefFlags;
     try {
-      flags = range.Parse(input, this.rDoc, ScAddress.detailsOOOa1);
+      flags = range.Parse(input, this.rDoc, this.ReferenceDetails());
     } finally {
       input.dispose();
     }
@@ -571,7 +623,7 @@ export class ScCompiler extends FormulaCompiler {
     if (!deletedCell) {
       const input = unicode(name);
       try {
-        flags = address.Parse(input, this.rDoc, ScAddress.detailsOOOa1);
+        flags = address.Parse(input, this.rDoc, this.ReferenceDetails());
       } finally {
         input.dispose();
       }
@@ -622,6 +674,9 @@ export class ScCompiler extends FormulaCompiler {
   CompileString(formula: OUStringConstReference): ScTokenArray {
     const ooxml = this.meGrammar === FormulaGrammar.Grammar.GRAM_OOXML;
     const symbols = ooxml ? ooxmlSymbols : odffSymbols;
+    const excel = this.IsExcelReference();
+    const cellPattern = this.IsR1C1() ? r1c1Reference : a1Reference;
+    const rangePattern = this.IsR1C1() ? r1c1Range : a1Range;
     const original = text(formula);
     let first = 0,
       end = original.length;
@@ -755,9 +810,7 @@ export class ScCompiler extends FormulaCompiler {
         last = OpCode.ocPush;
         continue;
       }
-      const qualifier = (
-        this.meGrammar === FormulaGrammar.Grammar.GRAM_OOXML ? excelSheet : odfSheet
-      ).exec(remaining);
+      const qualifier = (excel ? excelSheet : odfSheet).exec(remaining);
       if (qualifier) {
         const spelling = qualifier[1] as string;
         const address = remaining.slice(qualifier[0].length);
@@ -766,8 +819,8 @@ export class ScCompiler extends FormulaCompiler {
           const qualifiedName = nameIdentifier.exec(address)?.[0];
           const defined =
             qualifiedName && this.GetRangeNames(tab)?.findByUpperName(qualifiedName.toUpperCase());
-          const range = odf ? null : a1Range.exec(address);
-          const cell = range ?? (odf ? null : a1Reference.exec(address));
+          const range = odf ? null : rangePattern.exec(address);
+          const cell = range ?? (odf ? null : cellPattern.exec(address));
           if (defined) {
             if (!array.AddToken(new FormulaIndexToken(OpCode.ocName, defined.GetIndex(), tab))) {
               this.SetError(FormulaError.CodeOverflow);
@@ -779,8 +832,7 @@ export class ScCompiler extends FormulaCompiler {
           }
           const match = cell?.[0] ?? (ooxml && address.startsWith("#REF!") ? "#REF!" : "");
           if (match) {
-            const absolute =
-              this.meGrammar === FormulaGrammar.Grammar.GRAM_OOXML || spelling.startsWith("$");
+            const absolute = excel || spelling.startsWith("$");
             if (range) this.ParseDoubleReference(match, tab, true, absolute);
             else this.ParseSingleReference(match, tab, true, absolute);
             index += qualifier[0].length + match.length;
@@ -808,14 +860,14 @@ export class ScCompiler extends FormulaCompiler {
         }
       }
       if (!odf) {
-        const range = a1Range.exec(remaining);
+        const range = rangePattern.exec(remaining);
         if (range) {
           this.ParseDoubleReference(range[0]);
           last = OpCode.ocPush;
           index += range[0].length;
           continue;
         }
-        const reference = a1Reference.exec(remaining);
+        const reference = cellPattern.exec(remaining);
         if (reference) {
           this.ParseSingleReference(reference[0]);
           last = OpCode.ocPush;

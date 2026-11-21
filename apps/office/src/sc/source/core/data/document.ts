@@ -94,6 +94,9 @@ export class ScDocument {
   GetRangeName(tab = -1) {
     return tab === -1 ? this.pRangeName : this.FetchTable(tab)?.GetRangeName();
   }
+  /** Original exact block lookup with local scope precedence. */
+  GetRangeAtBlock = documen3.GetRangeAtBlock;
+
   declare private pUnoBroadcaster: SfxBroadcaster | null;
   AddUnoObject = documen3.AddUnoObject;
   RemoveUnoObject = documen3.RemoveUnoObject;

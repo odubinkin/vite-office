@@ -8,7 +8,8 @@ import { ScViewUtil } from "../../source/ui/view/viewutil";
 import * as pointerInput from "./calc-pointer-selection";
 import type { CalcPointerKind } from "./calc-pointer-selection";
 import * as referenceInput from "./calc-reference-input";
-import { GoToAddress } from "./calc-name-box";
+import { ScUndoAddRangeData, ScUndoAllRangeNames } from "../../source/ui/undo/undorangename";
+import { GoToAddress, PositionText } from "./calc-name-box";
 import * as cellInput from "./calc-cell-input";
 import { ScModule } from "../../inc/scmod";
 import { ScRefType } from "../../source/ui/inc/viewdata";
@@ -32,7 +33,7 @@ import { SvxColorItem } from "../../../editeng/inc/colritem";
 import type { CalcColorKind } from "../../source/ui/view/formatsh";
 import { getCalcSelectionScriptType } from "./calc-selection-script";
 import { SvxFontHeightItem } from "../../../editeng/inc/fhgtitem";
-import { ScUndoCursorAttr, ScUndoPageBreak } from "../../source/ui/undo/undocell";
+import { ScUndoCursorAttr, ScUndoPageBreak, ScUndoRangeNames } from "../../source/ui/undo/undocell";
 import { ScUndoSelectionAttr, ScUndoDeleteContents } from "../../source/ui/undo/undoblk3";
 import type { CalcCharacterFormat } from "../../source/ui/view/formatsh";
 import { ScFormatShell } from "../../source/ui/view/formatsh";
@@ -98,7 +99,7 @@ export class CalcViewController {
   ExecuteRowHeight(request: SfxRequest): boolean {
     const consumed = new ScCellShell(this.viewShell).ExecuteRowHeight(request, this.viewData);
     if (consumed) {
-      this.addressText = this.Address();
+      this.addressText = PositionText.call(this);
       this.Changed();
     }
     return consumed;
@@ -106,7 +107,7 @@ export class CalcViewController {
   /** Native accepted row-height result. @param twips - Height. @returns Recorded request. */
   CompleteRowHeight(twips: number): SfxRequest {
     const request = new ScCellShell(this.viewShell).CompleteRowHeight(twips);
-    this.addressText = this.Address();
+    this.addressText = PositionText.call(this);
     this.Changed();
     return request;
   }
@@ -114,14 +115,14 @@ export class CalcViewController {
   ShowRows(show: boolean): void {
     if (!this.Commit()) return;
     new ScCellShell(this.viewShell).ShowRows(show);
-    this.addressText = this.Address();
+    this.addressText = PositionText.call(this);
     this.Changed();
   }
   /** Routes typed source width arguments through the actual cell shell. @param request - Native request. @returns Typed width consumed. */
   ExecuteColumnWidth(request: SfxRequest): boolean {
     const consumed = new ScCellShell(this.viewShell).ExecuteColumnWidth(request, this.viewData);
     if (consumed) {
-      this.addressText = this.Address();
+      this.addressText = PositionText.call(this);
       this.Changed();
     }
     return consumed;
@@ -129,7 +130,7 @@ export class CalcViewController {
   /** Applies accepted native dialog twips and returns its separate completed recording request. @param twips - Input twips. @returns Recording request. */
   CompleteColumnWidth(twips: number): SfxRequest {
     const request = new ScCellShell(this.viewShell).CompleteColumnWidth(twips);
-    this.addressText = this.Address();
+    this.addressText = PositionText.call(this);
     this.Changed();
     return request;
   }
@@ -145,21 +146,21 @@ export class CalcViewController {
   SetHeaderEntrySize(width: boolean, index: number, pixels: number): void {
     if (this.mode !== ScInputMode.SC_INPUT_NONE) return;
     this.HeaderBar(width).SetEntrySize(index, pixels);
-    this.addressText = this.Address();
+    this.addressText = PositionText.call(this);
     this.Changed();
   }
   /** Completes a negative header drag through the original hide-range operation. @param width - Axis. @param first - First entry. @param last - Last entry. @returns Nothing. */
   HideHeaderEntries(width: boolean, first: number, last: number): void {
     if (this.mode !== ScInputMode.SC_INPUT_NONE) return;
     this.HeaderBar(width).HideEntries(first, last);
-    this.addressText = this.Address();
+    this.addressText = PositionText.call(this);
     this.Changed();
   }
   /** Native column visibility command over current marks. @param show - Requested visibility. @returns Nothing. */
   ShowColumns(show: boolean): void {
     if (!this.Commit()) return;
     new ScCellShell(this.viewShell).ShowColumns(show);
-    this.addressText = this.Address();
+    this.addressText = PositionText.call(this);
     this.Changed();
   }
   /** Admits pending input then delegates native Clear through cell/view/document operation owners. @returns Whether admitted. */
@@ -310,7 +311,7 @@ export class CalcViewController {
     this.BindViewErrorMessage();
     this.viewData = this.viewShell.GetViewData();
     this.anchor = this.Position();
-    this.addressText = this.Address();
+    this.addressText = PositionText.call(this);
     this.detachShell = shell.Subscribe(
       /** Rebinds only when the canonical model identity changes. @returns Nothing. */ () => {
         if (this.viewData.GetDocument() !== shell.GetDocument()) {
@@ -321,7 +322,7 @@ export class CalcViewController {
           this.inputHandler.SetMode(ScInputMode.SC_INPUT_NONE);
           this.inputHandler.ResetInputState();
           this.inputText = "";
-          this.addressText = this.Address();
+          this.addressText = PositionText.call(this);
           this.error = "";
         }
         this.Changed();
@@ -404,7 +405,7 @@ export class CalcViewController {
         new ScRange(this.anchor.Col(), this.anchor.Row(), pos.Tab(), col, row, pos.Tab()),
       );
     else this.anchor = pos;
-    this.addressText = this.Address();
+    this.addressText = PositionText.call(this);
     this.error = "";
     this.Changed();
     return true;
@@ -647,7 +648,7 @@ export class CalcViewController {
         formula = this.viewShell.DoAutoSum(rangeFinder, subtotal, OpCode.ocSum);
       try {
         if (formula.isEmpty()) {
-          this.addressText = this.Address();
+          this.addressText = PositionText.call(this);
           this.Changed();
           return undefined;
         }
@@ -799,7 +800,7 @@ export class CalcViewController {
   /** Synchronizes the browser's position and command state after native sheet commands. @returns Nothing. */
   SyncSheetView(): void {
     this.anchor = this.Position();
-    this.addressText = this.Address();
+    this.addressText = PositionText.call(this);
     this.Changed();
   }
   /** Executes native adjacent-sheet navigation after accepting pending input. @param direction - Previous or next. @param extend - Extend the selected sheet group. @returns Nothing. */
@@ -874,10 +875,13 @@ export class CalcViewController {
       cursorAction instanceof ScUndoTabColor ||
       cursorAction instanceof ScUndoPrintRange ||
       cursorAction instanceof ScUndoModifyStyle ||
+      cursorAction instanceof ScUndoRangeNames ||
+      cursorAction instanceof ScUndoAddRangeData ||
+      cursorAction instanceof ScUndoAllRangeNames ||
       cursorAction instanceof ScUndoOutline
     ) {
       if (cursorAction instanceof ScUndoWidthOrHeight) {
-        this.addressText = this.Address();
+        this.addressText = PositionText.call(this);
         this.Changed();
       } else this.SyncSheetView();
       return true;

@@ -3,6 +3,7 @@ import type { Ref } from "react";
 import type { ScRange } from "../../inc/address";
 import type { ScPrintReferenceInput } from "./ScPrintAreasDlg";
 import { ScNameManagerDlg, ScNamePasteDlg } from "./namedlg/ScNameDialogs";
+import { ScNameCreateDlg } from "./namedlg/ScNameCreateDlg";
 import { ScNameDefDlg } from "./namedlg/ScNameDefDlg";
 import { ScCondFormatDlg } from "./condformat/ScCondFormatDlg";
 import { ScCondFormatManagerDlg } from "./condformat/ScCondFormatManagerDlg";
@@ -24,6 +25,7 @@ interface CalcSheetDialogsProps {
   readonly condManager: ReturnType<CalcSheetWorkflows["conditionals"]["managers"]["GetSnapshot"]>;
   readonly nameDialog: ReturnType<CalcSheetWorkflows["nameDialogs"]["GetSnapshot"]>;
   readonly nameManager: ReturnType<CalcSheetWorkflows["nameManagerDialogs"]["GetSnapshot"]>;
+  readonly createNames: ReturnType<CalcSheetWorkflows["createNamesDialogs"]["GetSnapshot"]>;
   readonly namePaste: ReturnType<CalcSheetWorkflows["namePasteDialogs"]["GetSnapshot"]>;
   readonly referenceInput: Ref<ScPrintReferenceInput>;
   readonly onReference: (owner: object, range: ScRange | undefined) => void;
@@ -43,11 +45,20 @@ export function CalcSheetDialogs({
   nameDialog,
   nameManager,
   namePaste,
+  createNames,
   referenceInput,
   onReference,
 }: CalcSheetDialogsProps): React.JSX.Element {
   return (
     <>
+      {createNames && (
+        <ScNameCreateDlg
+          key={createNames.id}
+          request={createNames.request}
+          onCancel={() => sheetWorkflows.createNamesDialogs.Cancel(createNames.id)}
+          onRespond={(result) => sheetWorkflows.createNamesDialogs.Complete(createNames.id, result)}
+        />
+      )}
       {nameManager && (
         <ScNameManagerDlg
           key={nameManager.id}

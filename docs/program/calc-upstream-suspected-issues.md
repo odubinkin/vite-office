@@ -7700,3 +7700,12 @@ remains. The browser keeps the source change in the draft until confirmation
 and includes it in the manager's single Undo action.
 
 - [Original ScopeChanged and NameModified handlers](../../vendor/libreoffice-reference/sc/source/ui/namedlg/namedlg.cxx)
+
+### CALC-809 — Cancel in Create Names keeps names processed before the conflict
+
+The Cancel response to a replacement prompt stops the remaining header and
+corner labels. The source still installs the names already added to its draft.
+The browser follows that behavior and records the resulting scope as one undo
+action.
+
+- [Original CreateOneName and CreateNames](../../vendor/libreoffice-reference/sc/source/ui/docshell/docfunc.cxx)

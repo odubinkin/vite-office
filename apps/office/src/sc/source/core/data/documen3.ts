@@ -1,5 +1,7 @@
-/** @fileoverview Original documen3.cxx document grammar projection and copy-reference traversal;non-copy global/name/drawing/embedded services remain unported. */
+/** @fileoverview Original documen3.cxx document grammar projection and copy-reference traversal;with exact range-name lookup. */
 import { Color, COL_AUTO } from "../../../../tools/inc/color";
+import type { ScRange } from "../../../inc/address";
+import type { ScRangeData } from "../tool/rangenam";
 import type { ScDocument } from "../../../inc/document";
 import type { ScTableProtection } from "./tabprotection";
 import type { RefUpdateContext } from "../../../inc/refupdatecontext";
@@ -23,6 +25,18 @@ export function IsDefaultTabBgColor(this: ScDocument, tab: number): boolean {
 /** Original document grammar-to-reference-convention projection. @param this - Actual document owner. @returns Stored grammar's reference convention. */
 export function GetAddressConvention(this: ScDocument): AddressConvention {
   return FormulaGrammar.extractRefConvention(this.GetGrammar()) as AddressConvention;
+}
+/** Resolves an exact local name before consulting the global scope. @param this - Workbook. @param block - Selected block. @returns Definition and its scope. */
+export function GetRangeAtBlock(
+  this: ScDocument,
+  block: ScRange,
+): { readonly data: ScRangeData; readonly sheetLocal: boolean } | undefined {
+  if (block.aStart.Tab() === block.aEnd.Tab()) {
+    const data = this.GetRangeName(block.aStart.Tab())?.findByRange(block);
+    if (data) return { data, sheetLocal: true };
+  }
+  const data = this.GetRangeName()?.findByRange(block);
+  return data && { data, sheetLocal: false };
 }
 /** Original valid-range and sparse sheet traversal for copy updates. @param this - Actual native owner. @param context - Native context. @param undo - Optional actual undo document. @param includeDraw - Original default true. @param updateNoteCaptionPos - Original default true. @returns Nothing. */
 export function UpdateReference(
