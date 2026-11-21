@@ -4,7 +4,7 @@ title: "Round-trip Calc ODS drawing grid and view options"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 6
+revision: 8
 origin:
   system: "manual"
 depends_on: []
@@ -18,11 +18,27 @@ plan_approval:
   updated_by: "ORCHESTRATOR"
   note: null
 verification:
-  state: "pending"
-  updated_at: null
-  updated_by: null
-  note: null
+  state: "ok"
+  updated_at: "2026-11-21T18:32:45.413Z"
+  updated_by: "CODER"
+  note: "34 targeted Calc tests passed across six files. Office typechecking, lint, formatting, dependency boundaries, registry provenance and task policy checks passed."
   attempts: 0
+quality_review:
+  state: "pass"
+  updated_at: "2026-11-21T18:32:46.130Z"
+  updated_by: "EVALUATOR"
+  note: "The current Calc drawing grid and display properties now round-trip through native ODS view properties and the Worker."
+  evaluated_sha: "7381dcf1e15e8c78019789001e52c69962a2b038"
+  blueprint_digest: "709b7a5756042aacf241273588172dee67b8d67e4c973872acd0617d4978281e"
+  evidence_refs:
+    - ".agentplane/tasks/202611211827-Q9AG7E/README.md"
+    - ".agentplane/tasks/202611211827-Q9AG7E/quality/20261121-183246130-recovery-context/quality-report.json"
+    - ".agentplane/tasks/202611211827-Q9AG7E/quality/20261121-183246130-recovery-context/evaluator-prompt.md"
+    - ".agentplane/tasks/202611211827-Q9AG7E/quality/20261121-183246130-recovery-context/evaluator-opinion.md"
+    - ".agentplane/tasks/202611211827-Q9AG7E/blueprint/resolved-snapshot.json"
+    - "34 focused Calc tests, office TypeScript, ESLint, Prettier, 2977 provenance records and AgentPlane gateway checks"
+  findings:
+    - "Native defaults, property types, unsigned drawing geometry, legacy tab color precedence and Worker rejection of invalid geometry are covered. The settings fixture exercises the pinned LibreOffice profile with supported sheet content."
 commit: null
 comments:
   -
@@ -36,8 +52,14 @@ events:
     from: "TODO"
     to: "DOING"
     note: "Start: implement native drawing-grid ownership and ODS view settings with Worker transfer and fixture coverage."
+  -
+    type: "verify"
+    at: "2026-11-21T18:32:45.413Z"
+    author: "CODER"
+    state: "ok"
+    note: "34 targeted Calc tests passed across six files. Office typechecking, lint, formatting, dependency boundaries, registry provenance and task policy checks passed."
 doc_version: 3
-doc_updated_at: "2026-11-21T18:31:15.586Z"
+doc_updated_at: "2026-11-21T18:32:45.484Z"
 doc_updated_by: "CODER"
 description: "Port the native ScViewData settings for the existing drawing-grid value type and the remaining represented display flags. Import legacy per-sheet TabColor into the native model. Preserve the settings across the Calc Worker and verify the ODF XML contract with pinned LibreOffice fixtures and focused tests."
 sections:
@@ -51,7 +73,66 @@ sections:
     - Run `npm run test:calc -- viewdata.settings.test.ts viewopti.grid.test.ts ods-worker --maxWorkers 2 --testTimeout 120000` to cover ODS, view options and Worker boundaries.
     - Run the office workspace typecheck and ESLint and Prettier on changed TypeScript.
     - Run `npm run check:dependencies`, `npm run check:source-provenance`, `node .agentplane/policy/check-routing.mjs`, `ap doctor` and `git diff --check`.
-  Verification: "Pending."
+  Verification: |-
+    Pending.
+
+    <!-- BEGIN VERIFICATION RESULTS -->
+    ### 2026-11-21T18:32:45.413Z — VERIFY — ok
+
+    By: CODER
+
+    Note: 34 targeted Calc tests passed across six files. Office typechecking, lint, formatting, dependency boundaries, registry provenance and task policy checks passed.
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-21T18:31:15.586Z, excerpt_hash=sha256:dfadf295fa616551d414d3933da2cda21387cec795c5f53856059eccf1a3d039
+
+    Details:
+
+    Command: npm run test:calc -- viewdata.settings.test.ts viewopti.grid.test.ts ods-worker --maxWorkers 2 --testTimeout 120000
+    Result: pass
+    Evidence: 34 tests across 6 files, including pinned ManualColWidthRowHeight ODS, signed grid field and legacy tab color override.
+    Scope: ODF view properties, native grid value semantics and Calc Worker transfer.
+
+    Command: npm run typecheck --workspace @vite-office/office -- --singleThreaded --checkers 1 --incremental --tsBuildInfoFile ../../output/playwright/ods-odt-office.tsbuildinfo
+    Result: pass
+    Evidence: exit zero.
+    Scope: office TypeScript.
+
+    Command: npx eslint and npx prettier --check on viewopti.ts, viewdata.settings.ts, viewdata.settings.test.ts and calc-document-codec.ts
+    Result: pass
+    Evidence: no diagnostics.
+    Scope: changed TypeScript.
+
+    Command: npm run check:dependencies && npm run check:source-provenance
+    Result: pass
+    Evidence: 2976 dependency-checked runtime sources and 2977 provenance records.
+    Scope: import boundaries and source registry.
+
+    Command: node .agentplane/policy/check-routing.mjs && ap doctor && git diff --check
+    Result: pass
+    Evidence: routing OK, zero doctor errors, existing managed shim warning, no whitespace errors.
+    Scope: task policy and implementation diff.
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202611211827-Q9AG7E/blueprint/resolved-snapshot.json
+    - old_digest: 709b7a5756042aacf241273588172dee67b8d67e4c973872acd0617d4978281e
+    - current_digest: 709b7a5756042aacf241273588172dee67b8d67e4c973872acd0617d4978281e
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202611211827-Q9AG7E
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task verify-show 202611211827-Q9AG7E
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: false
+    - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+    - risks: none
+
+    <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Revert the scoped implementation commit."
   Findings: |-
     None recorded yet.
@@ -84,6 +165,64 @@ ScViewOptions ownership, ODS view settings and Calc document Worker transfer. Us
 ## Verification
 
 Pending.
+
+<!-- BEGIN VERIFICATION RESULTS -->
+### 2026-11-21T18:32:45.413Z — VERIFY — ok
+
+By: CODER
+
+Note: 34 targeted Calc tests passed across six files. Office typechecking, lint, formatting, dependency boundaries, registry provenance and task policy checks passed.
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-21T18:31:15.586Z, excerpt_hash=sha256:dfadf295fa616551d414d3933da2cda21387cec795c5f53856059eccf1a3d039
+
+Details:
+
+Command: npm run test:calc -- viewdata.settings.test.ts viewopti.grid.test.ts ods-worker --maxWorkers 2 --testTimeout 120000
+Result: pass
+Evidence: 34 tests across 6 files, including pinned ManualColWidthRowHeight ODS, signed grid field and legacy tab color override.
+Scope: ODF view properties, native grid value semantics and Calc Worker transfer.
+
+Command: npm run typecheck --workspace @vite-office/office -- --singleThreaded --checkers 1 --incremental --tsBuildInfoFile ../../output/playwright/ods-odt-office.tsbuildinfo
+Result: pass
+Evidence: exit zero.
+Scope: office TypeScript.
+
+Command: npx eslint and npx prettier --check on viewopti.ts, viewdata.settings.ts, viewdata.settings.test.ts and calc-document-codec.ts
+Result: pass
+Evidence: no diagnostics.
+Scope: changed TypeScript.
+
+Command: npm run check:dependencies && npm run check:source-provenance
+Result: pass
+Evidence: 2976 dependency-checked runtime sources and 2977 provenance records.
+Scope: import boundaries and source registry.
+
+Command: node .agentplane/policy/check-routing.mjs && ap doctor && git diff --check
+Result: pass
+Evidence: routing OK, zero doctor errors, existing managed shim warning, no whitespace errors.
+Scope: task policy and implementation diff.
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202611211827-Q9AG7E/blueprint/resolved-snapshot.json
+- old_digest: 709b7a5756042aacf241273588172dee67b8d67e4c973872acd0617d4978281e
+- current_digest: 709b7a5756042aacf241273588172dee67b8d67e4c973872acd0617d4978281e
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202611211827-Q9AG7E
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task verify-show 202611211827-Q9AG7E
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: false
+- repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- risks: none
+
+<!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
 

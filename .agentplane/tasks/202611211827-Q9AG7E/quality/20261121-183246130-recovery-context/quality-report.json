@@ -1,0 +1,21 @@
+{
+  "schema_version": 1,
+  "task_id": "202611211827-Q9AG7E",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-11-21T18:32:46.130Z",
+  "verdict": "pass",
+  "summary": "The current Calc drawing grid and display properties now round-trip through native ODS view properties and the Worker.",
+  "evaluated_sha": "7381dcf1e15e8c78019789001e52c69962a2b038",
+  "blueprint_digest": "709b7a5756042aacf241273588172dee67b8d67e4c973872acd0617d4978281e",
+  "findings": [
+    "Native defaults, property types, unsigned drawing geometry, legacy tab color precedence and Worker rejection of invalid geometry are covered. The settings fixture exercises the pinned LibreOffice profile with supported sheet content."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202611211827-Q9AG7E/README.md",
+    "34 focused Calc tests, office TypeScript, ESLint, Prettier, 2977 provenance records and AgentPlane gateway checks"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": []
+}
