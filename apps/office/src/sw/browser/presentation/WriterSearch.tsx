@@ -12,9 +12,12 @@ import { Info } from "lucide-react";
 import { useBrowserLocalization } from "../../../framework/browser/localization/browser-localization-context";
 import type {
   SwViewSearch,
+  WriterExecuteSearchArguments,
   WriterSearchFeedback,
   WriterSearchItem,
 } from "../../source/uibase/uiview/viewsrch";
+import type { SwView } from "../../source/uibase/uiview/view";
+import { WRITER_COMMAND_IDS } from "../../uiconfig/swriter/menubar/menubar-commands";
 import { SvxSearchCmd } from "../../../svl/inc/srchitem";
 import { TransliterationFlags } from "../../../i18nutil/inc/transliteration";
 import { WriterSimilaritySearchDialog } from "./WriterSimilaritySearchDialog";
@@ -64,7 +67,7 @@ export function WriterSearch({
   focusSearch,
   history,
   onHistoryChange,
-  owner,
+  view,
   canSearchSelection,
   close,
   openSearch,
@@ -77,13 +80,14 @@ export function WriterSearch({
   focusSearch: string | undefined;
   history: WriterSearchHistory;
   onHistoryChange: Dispatch<SetStateAction<WriterSearchHistory>>;
-  owner: SwViewSearch;
+  view: SwView;
   canSearchSelection: boolean;
   close: () => void;
   openSearch: (surface: "searchDialog", search: string) => void;
   searchFeedback: WriterSearchFeedback | undefined;
   findBarFeedback: WriterSearchFeedback | undefined;
 }>): React.JSX.Element {
+  const owner = view.GetSearch();
   const localization = useBrowserLocalization();
   const [feedbackOnEdit, setFeedbackOnEdit] = useState<WriterSearchFeedback>();
   const [findBarHistory, setFindBarHistory] = useState(
@@ -253,29 +257,25 @@ export function WriterSearch({
       );
     }
     try {
-      if (!dialog) {
-        const all = command === SvxSearchCmd.FIND_ALL;
-        if (all) searchField.current?.focus();
-        owner.ExecFindBarSearch({
-          search: item.search,
-          matchCase: findbarMatchCase,
-          matchDiacritics: findbarMatchDiacritics,
-          all,
-          backward,
-        });
-        return;
-      }
-      owner.ExecSearch(
-        {
-          ...item,
-          styleSearch: styleOptions !== undefined,
-          searchStyle,
-          replaceStyle,
-          selection: canSearchSelection && item.selection,
-        },
-        command,
-        backward,
-      );
+      if (!dialog && command === SvxSearchCmd.FIND_ALL) searchField.current?.focus();
+      const searchItem = dialog
+        ? {
+            ...item,
+            styleSearch: styleOptions !== undefined,
+            searchStyle,
+            replaceStyle,
+            selection: canSearchSelection && item.selection,
+          }
+        : owner.CreateFindBarSearchItem({
+            search: item.search,
+            matchCase: findbarMatchCase,
+            matchDiacritics: findbarMatchDiacritics,
+          });
+      const request: WriterExecuteSearchArguments = {
+        SearchItem: { ...searchItem, command, backward },
+        ...(!dialog ? { UseAttrItemList: false } : {}),
+      };
+      view.Execute(WRITER_COMMAND_IDS.executeSearch, request);
     } catch {
       // The view publishes command errors through the same feedback as repeat search.
     }

@@ -3,7 +3,12 @@
 import type { SfxInterface } from "../../../../sfx2/source/control/objface";
 import { createSfxShell, type SfxShell } from "../../../../sfx2/source/control/shell";
 import { WRITER_COMMAND_IDS } from "../../../uiconfig/swriter/menubar/menubar-commands";
-import { createWriterInterface, type WriterViewCommandTarget } from "../../../sdi/swriter";
+import {
+  createWriterInterface,
+  getWriterCommandArguments,
+  type WriterViewCommandTarget,
+} from "../../../sdi/swriter";
+import type { WriterExecuteSearchArguments } from "../uiview/viewsrch";
 import { SvxULSpaceItem } from "../../../../editeng/inc/ulspitem";
 import { SID_ATTR_PARA_ULSPACE } from "../../../../editeng/inc/editids";
 
@@ -28,6 +33,23 @@ export function createWriterViewCommandRegistry(
     /** Reads lifecycle command availability. @returns True outside a pending medium operation. */ (): boolean =>
       !target.IsStoragePending();
   return createWriterInterface([
+    {
+      id: WRITER_COMMAND_IDS.executeSearch,
+      capabilityId: "CAP-0111",
+      /** Dispatches the native SearchItem request. @param context - Active view. @param args - Request items. @returns Whether the search matched. */
+      execute(context, args): boolean {
+        const request = getWriterCommandArguments<WriterExecuteSearchArguments>(args);
+        if (request?.SearchItem === undefined) return false;
+        const { SearchItem: item, Quiet } = request;
+        const search = context.GetSearch();
+        return (
+          (Quiet
+            ? search.ExecSearch(item, item.command, item.backward, true)
+            : search.ExecSearch(item, item.command, item.backward)
+          ).matches > 0
+        );
+      },
+    },
     {
       capabilityId: "CAP-0111",
       id: WRITER_COMMAND_IDS.repeatSearch,

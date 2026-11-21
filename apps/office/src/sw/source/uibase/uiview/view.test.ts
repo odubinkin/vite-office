@@ -225,6 +225,38 @@ it("finds anchored text in a protected fly and leaves it intact during Replace A
   view.Close();
 });
 
+it("dispatches ExecuteSearch through the native view slot and honors Quiet", /** Exercises the actual generated command, nested SearchItem and repeat request. @returns Nothing. */ () => {
+  const view = new SwView(
+    new SwDocShell(
+      createWriterDocument(),
+      createDocument({ id: "execute-search", suiteId: "writer", title: "Search" }),
+    ),
+  );
+  const frame = new SfxViewFrame<SwView>(new BrowserSfxDispatcher());
+  view.AttachFrame(frame);
+  frame.SetActiveView(view, [view.GetCommandShell(), view.GetWrtShell().GetCommandShell()]);
+  const shell = view.GetWrtShell();
+  shell.Insert("cat cat");
+  const item = { ...view.GetSearch().GetSearchItem(), search: "cat" };
+  expect(view.Execute(WRITER_COMMAND_IDS.executeSearch)).toMatchObject({ value: false });
+  expect(
+    view.Execute(WRITER_COMMAND_IDS.executeSearch, {
+      SearchItem: { ...item, command: SvxSearchCmd.FIND_ALL, backward: false },
+    }),
+  ).toMatchObject({ value: true });
+  expect(view.GetSearch().GetFeedback()).toMatchObject({ result: { matches: 2 } });
+  expect(
+    view.Execute(WRITER_COMMAND_IDS.executeSearch, {
+      SearchItem: { ...item, command: SvxSearchCmd.FIND_ALL, backward: true },
+      Quiet: true,
+    }),
+  ).toMatchObject({ value: true });
+  expect(view.GetSearch().GetFeedback()).toBeUndefined();
+  expect(view.Execute(WRITER_COMMAND_IDS.repeatSearch)).toMatchObject({ value: true });
+  expect(view.GetSearch().GetFeedback()).toMatchObject({ backward: true });
+  view.Close();
+});
+
 describe("SwView frame ownership", /** Groups SwView frame ownership. @returns Test callback result. */ () => {
   it("requires one attached frame for dispatch and exposes its command state", /** Checks requires one attached frame for dispatch and exposes its command state. @returns Test callback result. */ () => {
     const shell = new SwDocShell(

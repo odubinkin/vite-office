@@ -62,6 +62,16 @@ export interface WriterSearchItem {
   readonly selection: boolean;
 }
 
+/** Arguments of the represented FID_SEARCH_NOW request. */
+export interface WriterExecuteSearchArguments {
+  readonly SearchItem: WriterSearchItem & {
+    readonly command: SvxSearchCmd;
+    readonly backward: boolean;
+  };
+  readonly Quiet?: boolean;
+  readonly UseAttrItemList?: boolean;
+}
+
 /** Search label state returned by SwView search commands. */
 export interface WriterSearchResult {
   readonly matches: number;
@@ -370,16 +380,14 @@ export class SwViewSearch {
     return this.DispatchSearch(request.item, request.command, request.backward).matches > 0;
   }
 
-  /** Dispatches the Find Bar's absolute search with its own transliteration flags. @param query - Toolbar text, toggles and direction. @returns Search feedback. */
-  public ExecFindBarSearch(
+  /** Prepares the Find Bar request with its own transliteration flags. @param query - Toolbar text and toggles. @returns Native search item. */
+  public CreateFindBarSearchItem(
     query: Readonly<{
       search: string;
       matchCase: boolean;
       matchDiacritics: boolean;
-      all: boolean;
-      backward: boolean;
     }>,
-  ): WriterSearchResult {
+  ): WriterSearchItem {
     const item = {
       ...this.item,
       search: query.search,
@@ -391,32 +399,30 @@ export class SwViewSearch {
       selection: false,
     };
     this.SetSearchItem(item);
-    return this.ExecSearch(
-      {
-        ...item,
-        matchDiacritics: query.matchDiacritics,
-        matchKashida: false,
-        useAsianOptions: false,
-      },
-      query.all ? SvxSearchCmd.FIND_ALL : SvxSearchCmd.FIND,
-      query.backward,
-    );
+    return {
+      ...item,
+      matchDiacritics: query.matchDiacritics,
+      matchKashida: false,
+      useAsianOptions: false,
+    };
   }
 
-  /** Runs the represented Find, Find All, Replace and Replace All commands. @param item - Options dispatched by the active surface. @param command - Search operation. @param backward - Direction. @returns Search feedback. */
+  /** Runs the represented Find, Find All, Replace and Replace All commands. @param item - Options dispatched by the active surface. @param command - Search operation. @param backward - Direction. @param quiet - Whether to suppress miss and bulk count messages. @returns Search feedback. */
   public ExecSearch(
     item: WriterSearchItem,
     command: SvxSearchCmd,
     backward = false,
+    quiet = false,
   ): WriterSearchResult {
-    return this.DispatchSearch(item, command, backward);
+    return this.DispatchSearch(item, command, backward, quiet);
   }
 
-  /** Executes both a fresh and a repeated request and updates the view feedback. @param item - Dispatched options. @param command - Search operation. @param backward - Direction. @returns Native result. */
+  /** Executes both a fresh and a repeated request and updates the view feedback. @param item - Dispatched options. @param command - Search operation. @param backward - Direction. @param quiet - Whether to suppress miss and bulk count messages. @returns Native result. */
   private DispatchSearch(
     item: WriterSearchItem,
     command: SvxSearchCmd,
     backward: boolean,
+    quiet = false,
   ): WriterSearchResult {
     if (
       (command === SvxSearchCmd.REPLACE || command === SvxSearchCmd.REPLACE_ALL) &&
@@ -434,7 +440,14 @@ export class SwViewSearch {
       });
       throw error;
     }
-    this.PublishFeedback({ kind: "result", result, command, backward });
+    if (
+      quiet &&
+      (result.matches === 0 ||
+        command === SvxSearchCmd.FIND_ALL ||
+        command === SvxSearchCmd.REPLACE_ALL)
+    )
+      this.ClearFeedback();
+    else this.PublishFeedback({ kind: "result", result, command, backward });
     return result;
   }
 

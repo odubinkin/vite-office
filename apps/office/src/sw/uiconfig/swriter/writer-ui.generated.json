@@ -32,6 +32,7 @@
     "selectTable": ".uno:SelectTable",
     "focusFindbar": "vnd.sun.star.findbar:FocusToFindbar",
     "searchDialog": ".uno:SearchDialog",
+    "executeSearch": ".uno:ExecuteSearch",
     "repeatSearch": ".uno:RepeatSearch",
     "insertTable": ".uno:InsertTable",
     "insertRowsBefore": ".uno:InsertRowsBefore",
@@ -1076,6 +1077,22 @@
       "shortcuts": ["Ctrl+H", "Meta+H"],
       "slotId": 5961
     },
+    ".uno:ExecuteSearch": {
+      "browserOwned": false,
+      "argumentSchema": [
+        "SearchItem:SvxSearchItem",
+        "Quiet:SfxBoolItem",
+        "UseAttrItemList:SfxBoolItem"
+      ],
+      "capabilityId": "CAP-0111",
+      "controlLabel": "Execute Search",
+      "label": "Execute Search",
+      "placements": ["sfx2/sdi/sfx.sdi"],
+      "semantics": "action",
+      "showsDialog": false,
+      "shortcuts": [],
+      "slotId": 10502
+    },
     ".uno:RepeatSearch": {
       "browserOwned": false,
       "argumentSchema": ["Quiet:SfxBoolItem"],
@@ -1930,6 +1947,11 @@
         "sw/uiconfig/swriter/menubar/menubar.xml",
         "sw/uiconfig/swriter/toolbar/standardbar.xml"
       ]
+    },
+    {
+      "classification": "supported-upstream",
+      "commandUrl": ".uno:ExecuteSearch",
+      "sources": ["sfx2/sdi/sfx.sdi"]
     },
     {
       "classification": "supported-upstream",

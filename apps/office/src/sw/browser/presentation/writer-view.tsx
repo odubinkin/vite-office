@@ -588,7 +588,7 @@ export function WriterWorkbench({
         focusSearch={request.search}
         history={searchHistory}
         onHistoryChange={setSearchHistory}
-        owner={searchOwner}
+        view={view}
         canSearchSelection={dialog && searchOwner.HasSelection()}
         close={/** Closes this surface. @returns Nothing. */ () => closeSearch(dialog)}
         searchFeedback={request.feedback === searchFeedback ? undefined : searchFeedback}

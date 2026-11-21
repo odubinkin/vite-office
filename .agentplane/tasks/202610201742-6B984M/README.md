@@ -4,7 +4,7 @@ title: "Implement Writer search and replace core and browser UI"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 46
+revision: 47
 origin:
   system: "manual"
 depends_on:
@@ -142,6 +142,9 @@ comments:
   -
     author: "CODER"
     body: "Verified search feedback checkpoint. A newly opened search surface starts with an empty label without clearing the already open surface. The dialog reserves its information row, and query edits clear the field error while the shared message follows the native Find Bar label lookup. WRITER-696 records the source-derived label retention. The initial six-suite focused run passed all 80 tests. The post-lint run of the same suites reported 67 passes and 13 timeouts at existing limits under host load; all failures were timeouts. Both modified feedback scenarios passed in isolation. Three other search scenarios and the optimized history scenario also passed in isolated runs with longer run-level limits. Final production build, Writer resource tests, dependency/source tree/provenance, documentation/file size, scoped lint/formatting, routing, and diff checks passed. Doctor retains the existing managed hook readiness warning. An accidentally targeted test-only edit in the adjacent main checkout was reverted after an exact diff check. The Writer search task remains open and full-suite cadence does not advance."
+  -
+    author: "CODER"
+    body: "Verified checkpoint: the Find Bar and modeless Find and Replace dialog dispatch the generated FID_SEARCH_NOW slot (.uno:ExecuteSearch, 10502) through the active Writer view. The SearchItem command and direction feed the existing search owner, Quiet suppresses miss and bulk count feedback, and RepeatSearch consumes the last dispatch. Find Bar sends UseAttrItemList=false. The browser adapts the represented SearchItem as a typed Any payload. Native attribute-item-list matching and the complete SvxSearchItem UNO property bridge remain open. Verification: 49 browser and view/SDI tests in four files, 36 cursor/text/replacement tests in three files, and two Writer resource tests passed. App typecheck and production build passed with browser externalization and chunk size warnings. Scoped ESLint, Prettier, dependency boundaries, JSDoc, size, source provenance/tree, routing and diff checks passed. The full suite is deferred to the task cadence checkpoint; this parent remains DOING."
 events:
   -
     type: "status"
@@ -320,8 +323,13 @@ events:
     at: "2026-11-21T06:39:31.405Z"
     author: "CODER"
     body: "Verified search feedback checkpoint. A newly opened search surface starts with an empty label without clearing the already open surface. The dialog reserves its information row, and query edits clear the field error while the shared message follows the native Find Bar label lookup. WRITER-696 records the source-derived label retention. The initial six-suite focused run passed all 80 tests. The post-lint run of the same suites reported 67 passes and 13 timeouts at existing limits under host load; all failures were timeouts. Both modified feedback scenarios passed in isolation. Three other search scenarios and the optimized history scenario also passed in isolated runs with longer run-level limits. Final production build, Writer resource tests, dependency/source tree/provenance, documentation/file size, scoped lint/formatting, routing, and diff checks passed. Doctor retains the existing managed hook readiness warning. An accidentally targeted test-only edit in the adjacent main checkout was reverted after an exact diff check. The Writer search task remains open and full-suite cadence does not advance."
+  -
+    type: "comment"
+    at: "2026-11-21T06:54:37.563Z"
+    author: "CODER"
+    body: "Verified checkpoint: the Find Bar and modeless Find and Replace dialog dispatch the generated FID_SEARCH_NOW slot (.uno:ExecuteSearch, 10502) through the active Writer view. The SearchItem command and direction feed the existing search owner, Quiet suppresses miss and bulk count feedback, and RepeatSearch consumes the last dispatch. Find Bar sends UseAttrItemList=false. The browser adapts the represented SearchItem as a typed Any payload. Native attribute-item-list matching and the complete SvxSearchItem UNO property bridge remain open. Verification: 49 browser and view/SDI tests in four files, 36 cursor/text/replacement tests in three files, and two Writer resource tests passed. App typecheck and production build passed with browser externalization and chunk size warnings. Scoped ESLint, Prettier, dependency boundaries, JSDoc, size, source provenance/tree, routing and diff checks passed. The full suite is deferred to the task cadence checkpoint; this parent remains DOING."
 doc_version: 3
-doc_updated_at: "2026-11-21T06:39:31.405Z"
+doc_updated_at: "2026-11-21T06:54:37.563Z"
 doc_updated_by: "CODER"
 description: "Implement the approved coherent Writer search-and-replace feature from pinned LibreOffice sources: real shared search engine and options, native paragraph/cursor traversal and replacement/history contracts, view-owned search state and dispatch, Find toolbar and Find and Replace dialog with generated upstream command placement and shortcuts. Preserve source semantics and explicit unsupported boundaries; never substitute DOM text search or browser RegExp for ICU contracts. Work only on writer in vite-office-writer; local upstream reading approved, no network or merges. Keep active until approved scope is verified."
 sections:
