@@ -1,0 +1,25 @@
+{
+  "schema_version": 1,
+  "task_id": "202611211959-7YBA20",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-11-21T20:07:59.441Z",
+  "verdict": "pass",
+  "summary": "Native clipboard transposition, relative references, border rotation, shared warnings and history verified.",
+  "evaluated_sha": "62fda08091d3d09b8a56bd58d171510d52d693de",
+  "blueprint_digest": "b0f20679d023315535f4754a36b730ac3cf897379450df6eadb59110dabc5523",
+  "findings": [
+    "Cross-sheet testCopyPasteTranspose, mixed references, repeated transfer, dimensions and overflow pass in the native owners and mounted menu."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202611211959-7YBA20/README.md",
+    "output/calc-task9-focused.log",
+    "output/calc-task9-verification.md",
+    "62fda08091d3d09b8a56bd58d171510d52d693de"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": [
+    "Current native transpose admission is limited to regular single-range unfiltered clipboard cells. Existing cut, drawing, note and merge-processing gaps are outside scope."
+  ]
+}
