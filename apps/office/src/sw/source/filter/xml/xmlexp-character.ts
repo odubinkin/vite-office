@@ -13,8 +13,11 @@ import { SvxColorItem } from "../../../../editeng/inc/colritem";
 import { SvxBrushItem } from "../../../../editeng/source/items/frmitems.brush";
 import { SvxEscapementItem } from "../../../../editeng/inc/escapementitem";
 import { RES_CHRATR_ESCAPEMENT } from "../../../inc/hintids";
+import { SvxEmphasisMarkItem } from "../../../../editeng/inc/emphasismarkitem";
+import { MID_EMPHASIS } from "../../../../editeng/inc/memberids";
+import { Any } from "../../../../cppu/inc/com/sun/star/uno/Any";
 import { SvxCrossedOutItem } from "../../../../editeng/inc/crossedoutitem";
-import { RES_CHRATR_CROSSEDOUT } from "../../../inc/hintids";
+import { RES_CHRATR_CROSSEDOUT, RES_CHRATR_EMPHASIS_MARK } from "../../../inc/hintids";
 import {
   RES_CHRATR_WORDLINEMODE,
   RES_CHRATR_AUTOKERN,
@@ -81,6 +84,7 @@ export function getCharacterProperties(
   const box = set.GetItemIfSet(RES_CHRATR_BOX, inherited);
   const escapement = set.GetItemIfSet(RES_CHRATR_ESCAPEMENT, inherited);
   const crossedOut = set.GetItemIfSet(RES_CHRATR_CROSSEDOUT, inherited);
+  const emphasisItem = set.GetItemIfSet(RES_CHRATR_EMPHASIS_MARK, inherited);
   const wordMode = set.GetItemIfSet(RES_CHRATR_WORDLINEMODE, inherited),
     autoKerning = set.GetItemIfSet(RES_CHRATR_AUTOKERN, inherited);
   const kerning = set.GetItemIfSet(RES_CHRATR_KERNING, inherited);
@@ -111,6 +115,7 @@ export function getCharacterProperties(
     !directUnderline &&
     box === undefined &&
     crossedOut === undefined &&
+    emphasisItem === undefined &&
     escapement === undefined &&
     !directFontSize &&
     color === undefined &&
@@ -162,7 +167,18 @@ export function getCharacterProperties(
         : undefined;
   const themeColor =
     color instanceof SvxColorItem ? getOdfThemeColor(color.getComplexColor()) : undefined;
+  const emphasis: [number] = [0];
+  if (emphasisItem instanceof SvxEmphasisMarkItem) {
+    const value = new Any();
+    try {
+      emphasisItem.QueryValue(value, MID_EMPHASIS);
+      value.extract(emphasis, "sal_Int16");
+    } finally {
+      value.dispose();
+    }
+  }
   return {
+    ...(emphasisItem instanceof SvxEmphasisMarkItem ? { emphasis: emphasis[0] } : {}),
     ...(color instanceof SvxColorItem
       ? color.GetValue().GetAlpha() === 255 || writerTextColorValue(color) === "auto"
         ? { color: writerTextColorValue(color) }

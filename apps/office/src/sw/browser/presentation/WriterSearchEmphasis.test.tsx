@@ -7,6 +7,9 @@ import { SfxItemSet } from "../../../svl/source/items/itemset";
 import { RES_CHRATR_EMPHASIS_MARK } from "../../inc/hintids";
 import { SwPaM, SwPosition } from "../../source/core/crsr/pam";
 import { SwAttrIter } from "../../source/core/text/itratr";
+import { exportContentXml, exportStylesXml } from "../../source/filter/xml/xmlexp";
+import { importWriterXml } from "../../source/filter/xml/xmlimp";
+import { decodeWriterDocument, encodeWriterDocument } from "../filter/xml/writer-document-codec";
 import { createWriterDocumentSession } from "../composition/writer-module";
 import { SEARCH_OPTIONS_KEY } from "../storage/writer-search-options-store";
 import { WriterWorkbench } from "./writer-view";
@@ -118,6 +121,66 @@ it("finds the selected emphasis on the correct side and replaces it with grouped
     );
     expect(emphasisAt(6)).toBe(FontEmphasisMark.NONE);
   } finally {
+    workbench.unmount();
+    session.view.Close();
+  }
+});
+
+it("retains the Character dialog emphasis through ODT and the Worker document graph", /** Ports the Dot and Below Text check from formatCharacter.py and verifies the persistence path. @returns Completion. */ async () => {
+  const session = createWriterDocumentSession();
+  const shell = session.view.GetWrtShell();
+  shell.Insert("marked plain");
+  const node = shell.GetActiveParagraph();
+  const start = new SwPosition(node, 0);
+  const end = new SwPosition(node, 6);
+  shell.SetPaM(end, start);
+  const workbench = render(<WriterWorkbench isActive view={session.view} />);
+  /** Opens the standard Character dialog and visits Font Effects. @returns Dialog queries. */
+  function openEffects() {
+    fireEvent.click(screen.getByRole("menuitem", { name: "Format" }));
+    fireEvent.click(screen.getByRole("menuitem", { name: "Character…" }));
+    const dialog = within(screen.getByRole("dialog", { name: "Character" }));
+    fireEvent.click(dialog.getByRole("tab", { name: "Font Effects" }));
+    return dialog;
+  }
+  try {
+    const dialog = openEffects();
+    const mark = dialog.getByRole("combobox", { name: "Emphasis mark" });
+    const position = dialog.getByRole("combobox", { name: "Position" });
+    expect(position).toBeDisabled();
+    fireEvent.change(mark, { target: { value: FontEmphasisMark.Dot } });
+    fireEvent.change(position, { target: { value: FontEmphasisMark.PosBelow } });
+    await act(
+      /** Accepts the selected native item. @returns Completion. */ async () => {
+        fireEvent.click(dialog.getByRole("button", { name: "OK" }));
+      },
+    );
+    expect(screen.getByText("marked")).toHaveStyle({ textEmphasisPosition: "under right" });
+    const reopened = openEffects();
+    expect(reopened.getByRole("combobox", { name: "Emphasis mark" })).toHaveValue("1");
+    expect(reopened.getByRole("combobox", { name: "Position" })).toHaveValue("8192");
+    fireEvent.click(reopened.getByRole("button", { name: "Cancel" }));
+
+    const document = shell.GetDoc();
+    const content = exportContentXml(document);
+    expect(content).toContain('style:text-emphasize="dot below"');
+    const imported = importWriterXml(exportStylesXml(document), content, { title: "Emphasis" });
+    const decoded = decodeWriterDocument(structuredClone(encodeWriterDocument(imported.document)));
+    const [paragraph] = decoded.paragraphs;
+    if (paragraph === undefined) throw new Error("Missing reopened paragraph.");
+    const iterator = new SwAttrIter(paragraph);
+    for (const [offset, value] of [
+      [1, FontEmphasisMark.Dot | FontEmphasisMark.PosBelow],
+      [8, FontEmphasisMark.NONE],
+    ] as const) {
+      iterator.Seek(offset);
+      const item = iterator.GetAttrHandler().ReadItem(RES_CHRATR_EMPHASIS_MARK);
+      expect(item).toBeInstanceOf(SvxEmphasisMarkItem);
+      expect((item as SvxEmphasisMarkItem).GetEmphasisMark()).toBe(value);
+    }
+  } finally {
+    end.Dispose();
+    start.Dispose();
     workbench.unmount();
     session.view.Close();
   }

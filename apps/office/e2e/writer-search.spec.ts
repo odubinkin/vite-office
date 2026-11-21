@@ -1,5 +1,6 @@
 /** @fileoverview Verifies Writer search shortcuts, focus, and replacement history in Chromium. */
 
+import { readFile } from "node:fs/promises";
 import { expect, test } from "@playwright/test";
 
 test("Writer Find and Replace restores editor focus and undoes all replacements together", /** Drives the browser shortcuts and checks the visible document. @param fixtures - Playwright fixtures. @param fixtures.page - Chromium page. @returns Test completion. */ async ({
@@ -277,7 +278,7 @@ test("Writer inserts a comment, finds its text and undoes note formatting", /** 
   await expect(comment).toHaveCount(2);
 });
 
-test("Writer paints emphasis below the text after a formatted replacement", /** Checks the computed style through the production search UI. @param fixtures - Playwright fixtures. @param fixtures.page - Chromium page. @returns Test completion. */ async ({
+test("Writer keeps emphasis from formatted replacement after reopening the exported ODT", /** Checks the computed style, undo and ODT reopen through the production UI. @param fixtures - Playwright fixtures. @param fixtures.page - Chromium page. @returns Test completion. */ async ({
   page,
 }) => {
   await page.goto("/writer");
@@ -305,6 +306,27 @@ test("Writer paints emphasis below the text after a formatted replacement", /** 
   await page.keyboard.press("Control+z");
   await expect(editor).toHaveText("plain marked plain");
   await expect(editor.locator('[style*="text-emphasis-style"]')).toHaveCount(0);
+  await page.keyboard.press("Control+y");
+  await expect(marked).toHaveCSS("text-emphasis-position", /^under( right)?$/);
+
+  const pending = page.waitForEvent("download");
+  await page.getByRole("menuitem", { name: "File", exact: true }).click();
+  await page.getByRole("menuitem", { name: "Export…" }).click();
+  await page.getByRole("button", { name: "Download ODT" }).click();
+  const path = await (await pending).path();
+  if (path === null) throw new Error("Missing exported ODT.");
+
+  await page.getByRole("button", { name: "Open", exact: true }).click();
+  await page.getByRole("tab", { name: "On computer" }).click();
+  await page.getByLabel("Browse").setInputFiles({
+    buffer: await readFile(path),
+    mimeType: "application/vnd.oasis.opendocument.text",
+    name: "emphasis.odt",
+  });
+  await expect(page.getByRole("dialog", { name: "Open", exact: true })).toHaveCount(0);
+  await expect(editor).toHaveText("plain marked plain");
+  await expect(marked).toHaveCSS("text-emphasis-style", /^(filled )?dot$/);
+  await expect(marked).toHaveCSS("text-emphasis-position", /^under( right)?$/);
 });
 
 test("Writer applies Text Flow hyphenation and finds the formatted paragraph", /** Exercises the native checkbox and spin controls through the production search dialog. @param fixtures - Playwright fixtures. @param fixtures.page - Chromium page. @returns Test completion. */ async ({

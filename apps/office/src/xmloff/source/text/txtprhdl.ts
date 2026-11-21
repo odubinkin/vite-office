@@ -1,4 +1,5 @@
-/** @fileoverview Consumed Writer text-frame orientation and wrap maps from native txtprhdl.cxx. */
+/** @fileoverview Consumed Writer text-frame orientation, wrap and character emphasis handlers from native txtprhdl.cxx. */
+import { FontEmphasis } from "../../../offapi/com/sun/star/text/FontEmphasis";
 import { HoriOrientation as H } from "../../../offapi/com/sun/star/text/HoriOrientation";
 import { VertOrientation as V } from "../../../offapi/com/sun/star/text/VertOrientation";
 import { RelOrientation as R } from "../../../offapi/com/sun/star/text/RelOrientation";
@@ -129,4 +130,39 @@ export function exportTextConstant(
   } finally {
     any.dispose();
   }
+}
+
+const textEmphasisTypes: ReadonlyMap<string, number> = new Map([
+  ["none", FontEmphasis.NONE],
+  ["dot", FontEmphasis.DOT_ABOVE],
+  ["circle", FontEmphasis.CIRCLE_ABOVE],
+  ["disc", FontEmphasis.DISK_ABOVE],
+  ["accent", FontEmphasis.ACCENT_ABOVE],
+]);
+
+/** Reads the two unordered tokens accepted by XMLTextEmphasizePropHdl_Impl. @param value - ODF attribute. @returns UNO short on success. */
+export function importTextEmphasis(value: string): number | undefined {
+  let type: number | undefined;
+  let position: string | undefined;
+  for (const token of value.split(" ")) {
+    if (position === undefined && (token === "above" || token === "below")) {
+      position = token;
+      continue;
+    }
+    if (type !== undefined) return undefined;
+    type = textEmphasisTypes.get(token);
+    if (type === undefined) return undefined;
+  }
+  if (type === undefined || type === FontEmphasis.NONE) return FontEmphasis.NONE;
+  return position === "below" ? type + 10 : type;
+}
+
+/** Emits the original type and position, including the converter's default token. @param value - UNO short. @returns ODF lexical value. */
+export function exportTextEmphasis(value: number): string {
+  const below = value > 10;
+  const type = below ? value - 10 : value;
+  for (const [token, wire] of textEmphasisTypes)
+    if (wire === type)
+      return type === FontEmphasis.NONE ? token : `${token} ${below ? "below" : "above"}`;
+  return below ? "dot below" : "dot above";
 }

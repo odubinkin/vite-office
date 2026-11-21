@@ -20,6 +20,8 @@ import {
   SvxUnderlineItem,
   SvxWeightItem,
 } from "../../../editeng/source/items/textitem";
+import { WriterSearchEmphasisControls } from "./WriterSearchEmphasisControls";
+import { SvxEmphasisMarkItem } from "../../../editeng/inc/emphasismarkitem";
 import { SvxCrossedOutItem } from "../../../editeng/source/items/textitem.effects";
 import { FontItalic, FontLineStyle, FontStrikeout, FontWeight } from "../../../tools/inc/fontenum";
 import { ColorControl } from "../../../svx/browser/tbxctrls/ColorControl";
@@ -133,6 +135,10 @@ export function WriterCharacterDialog({
       : backgroundItem instanceof SvxColorItem
         ? writerColorValue(backgroundItem.GetValue(), "transparent")
         : "";
+  const emphasisItem = mode === "standard" ? read(SW.RES_CHRATR_EMPHASIS_MARK) : undefined;
+  const initialEmphasis =
+    emphasisItem instanceof SvxEmphasisMarkItem ? String(emphasisItem.GetEmphasisMark()) : "";
+  const [emphasis, setEmphasis] = useState(initialEmphasis);
   const [color, setColor] = useState(initialColor);
   const [background, setBackground] = useState(initialBackground);
   const title = localization.GetText("writer.character.title", "Character");
@@ -172,7 +178,10 @@ export function WriterCharacterDialog({
           (revision, index) => revision + Number(index === tab),
         ),
     );
-    if (tab === 1) setColor(initialColor);
+    if (tab === 1) {
+      setColor(initialColor);
+      setEmphasis(initialEmphasis);
+    }
     if (tab === 3) setBackground(initialBackground);
     if (tab === 4) {
       border?.Reset();
@@ -220,6 +229,8 @@ export function WriterCharacterDialog({
     const nextStrike = String(values.get("strike") ?? "");
     if (nextStrike && nextStrike !== strikethrough)
       output.Put(new SvxCrossedOutItem(Number(nextStrike), which.strike), true);
+    if (mode === "standard" && emphasis !== "" && emphasis !== initialEmphasis)
+      output.Put(new SvxEmphasisMarkItem(Number(emphasis), SW.RES_CHRATR_EMPHASIS_MARK), true);
     const nextPosition = String(values.get("position") ?? "");
     if (nextPosition && nextPosition !== position)
       output.Put(new SvxEscapementItem(Number(nextPosition), which.position), true);
@@ -395,6 +406,19 @@ export function WriterCharacterDialog({
                   <option value={FontStrikeout.STRIKEOUT_DOUBLE}>Double</option>
                 </select>
               </label>
+              {mode === "standard" && (
+                <WriterSearchEmphasisControls
+                  value={emphasis}
+                  label={
+                    /** Resolves the shared Font Effects captions. @param key - Label key. @param fallback - Default caption. @returns Localized caption. */
+                    (key, fallback) => localization.GetText(`writer.search.format.${key}`, fallback)
+                  }
+                  onChange={
+                    /** Records a native emphasis selection. @param value - Combined style and position. @returns Nothing. */
+                    (value) => setEmphasis(String(value))
+                  }
+                />
+              )}
             </div>
           </section>
           <section

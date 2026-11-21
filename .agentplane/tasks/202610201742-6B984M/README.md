@@ -4,7 +4,7 @@ title: "Implement Writer search and replace core and browser UI"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 116
+revision: 117
 origin:
   system: "manual"
 depends_on:
@@ -444,6 +444,14 @@ comments:
       The focused Writer run passed 138 tests in 16 files and the shared run passed 16 tests in five files. The production Vite/TypeScript build, final standalone typecheck and all six Chrome search scenarios passed. The dependency, source tree, provenance, Writer identities and resources, scoped lint and format, registry parity, doctor, routing and diff checks passed. Repository-wide JSDoc and file-size checks retain 307 baseline documentation issues and four existing oversized files. Doctor retains the existing AgentPlane hook-shim warning.
 
       The task remains open and this intermediate checkpoint does not advance the ten-task full-regression cadence.
+  -
+    author: "CODER"
+    body: |-
+      Verified a Writer character-emphasis and search checkpoint. The standard Character dialog reuses the existing native emphasis selectors, submits a concrete Writer item and restores the selected style and position on reopen. Writer UNO and the shared ODF map now carry CharEmphasis and style:text-emphasize with the source short constants, token order, optional placement and invalid-token behavior. The Worker graph now restores the concrete emphasis item. Ported the emphasis portion of formatCharacter.py and the selection-only start-anchor scenario from tdf144089.py, with a corresponding end-anchor regression.
+
+      Targeted Writer verification passed 97 tests in 11 files. Six optional native ICU host-probe scenarios were skipped by the runner because the host probe was not configured. Targeted shared verification passed 9 tests in 2 files. All six production Chrome search scenarios passed, including export and reopen with the emphasis intact after redo. Production typecheck and Vite build, scoped ESLint and Prettier, module boundaries, source tree and provenance, Writer resources, Writer and shared registry parity (zero semantic violations), routing and diff checks passed. The first iteration exposed the missing Worker constructor and an incorrect property-map tuple; both were corrected and the related tests reran successfully.
+
+      Repository-wide documentation and file-size gates still report the existing 307 JSDoc issues and four files at the size limit. No changed path appears in either failure list. AgentPlane doctor passed with the existing hook-shim warning. The task stays open and the ten-task full-run counter is unchanged.
 
 events:
   -
@@ -1059,9 +1067,19 @@ events:
       The focused Writer run passed 138 tests in 16 files and the shared run passed 16 tests in five files. The production Vite/TypeScript build, final standalone typecheck and all six Chrome search scenarios passed. The dependency, source tree, provenance, Writer identities and resources, scoped lint and format, registry parity, doctor, routing and diff checks passed. Repository-wide JSDoc and file-size checks retain 307 baseline documentation issues and four existing oversized files. Doctor retains the existing AgentPlane hook-shim warning.
 
       The task remains open and this intermediate checkpoint does not advance the ten-task full-regression cadence.
+  -
+    type: "comment"
+    at: "2026-11-21T22:36:25.049Z"
+    author: "CODER"
+    body: |-
+      Verified a Writer character-emphasis and search checkpoint. The standard Character dialog reuses the existing native emphasis selectors, submits a concrete Writer item and restores the selected style and position on reopen. Writer UNO and the shared ODF map now carry CharEmphasis and style:text-emphasize with the source short constants, token order, optional placement and invalid-token behavior. The Worker graph now restores the concrete emphasis item. Ported the emphasis portion of formatCharacter.py and the selection-only start-anchor scenario from tdf144089.py, with a corresponding end-anchor regression.
+
+      Targeted Writer verification passed 97 tests in 11 files. Six optional native ICU host-probe scenarios were skipped by the runner because the host probe was not configured. Targeted shared verification passed 9 tests in 2 files. All six production Chrome search scenarios passed, including export and reopen with the emphasis intact after redo. Production typecheck and Vite build, scoped ESLint and Prettier, module boundaries, source tree and provenance, Writer resources, Writer and shared registry parity (zero semantic violations), routing and diff checks passed. The first iteration exposed the missing Worker constructor and an incorrect property-map tuple; both were corrected and the related tests reran successfully.
+
+      Repository-wide documentation and file-size gates still report the existing 307 JSDoc issues and four files at the size limit. No changed path appears in either failure list. AgentPlane doctor passed with the existing hook-shim warning. The task stays open and the ten-task full-run counter is unchanged.
 
 doc_version: 3
-doc_updated_at: "2026-11-21T22:22:36.686Z"
+doc_updated_at: "2026-11-21T22:36:25.049Z"
 doc_updated_by: "CODER"
 description: "Implement the approved coherent Writer search-and-replace feature from pinned LibreOffice sources: real shared search engine and options, native paragraph/cursor traversal and replacement/history contracts, view-owned search state and dispatch, Find toolbar and Find and Replace dialog with generated upstream command placement and shortcuts. Preserve source semantics and explicit unsupported boundaries; never substitute DOM text search or browser RegExp for ICU contracts. Work only on writer in vite-office-writer; local upstream reading approved, no network or merges. Keep active until approved scope is verified."
 sections:

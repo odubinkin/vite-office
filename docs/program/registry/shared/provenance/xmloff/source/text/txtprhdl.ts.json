@@ -8,17 +8,21 @@
     "upstreamPath": "xmloff/source/text/txtprhdl.cxx",
     "localSymbols": [
       "importTextConstant",
-      "exportTextConstant"
+      "exportTextConstant",
+      "importTextEmphasis",
+      "exportTextEmphasis"
     ],
     "upstreamSymbols": [
-      "pXML_HoriRel_Enum"
+      "pXML_HoriRel_Enum",
+      "XMLTextEmphasizePropHdl_Impl"
     ],
     "preservedResponsibilities": [
       "Uses the original text-frame constant token maps and shared Any property handler for the consumed frame positioning and wrap values.",
-      "Adds the original wrap-influence mode map used by graphic frame styles."
+      "Adds the original wrap-influence mode map used by graphic frame styles.",
+      "Preserves the native text-emphasis token order, defaults and UNO CharEmphasis values."
     ],
     "omittedResponsibilities": [
-      "Property handlers for text-frame types and other text properties outside this slice are not represented here."
+      "Unconsumed property handlers in txtprhdl.cxx remain outside this slice."
     ],
     "evidence": {
       "local": [
@@ -37,6 +41,10 @@
         {
           "path": "apps/office/src/sw/source/writerfilter/rtftok/rtf-floating-table.test.ts",
           "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/xmloff/source/text/txtprmap.test.ts",
+          "marker": "uses the native CharEmphasis tokens"
         }
       ],
       "upstream": [
@@ -47,6 +55,10 @@
         {
           "path": "vendor/libreoffice-reference/xmloff/source/text/txtprhdl.cxx",
           "marker": "pXML_WrapInfluenceOnPosition_Enum"
+        },
+        {
+          "path": "vendor/libreoffice-reference/xmloff/source/text/txtprhdl.cxx",
+          "marker": "XMLTextEmphasizePropHdl_Impl"
         }
       ]
     }

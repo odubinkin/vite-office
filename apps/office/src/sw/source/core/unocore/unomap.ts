@@ -353,6 +353,16 @@ export const SwUnoPropertyMap: ReadonlyMap<string, SwUnoPropertyEntry> = new Map
     },
   ],
   [
+    "CharEmphasis",
+    {
+      type: "sal_Int16",
+      attributes: 1,
+      which: H.RES_CHRATR_EMPHASIS_MARK,
+      member: M.MID_EMPHASIS,
+      kind: "any",
+    },
+  ],
+  [
     "CharWordMode",
     { type: "bool", attributes: 1, which: H.RES_CHRATR_WORDLINEMODE, member: 0, kind: "bool" },
   ],
@@ -609,6 +619,7 @@ const paragraphStyleProperties = new Set([
   "NumberingStyleName",
   "CharUnderline",
   "CharStrikeout",
+  "CharEmphasis",
   "CharWordMode",
   "CharAutoKerning",
   "CharKerning",
@@ -791,6 +802,7 @@ const textDefaultProperties = new Set([
   "UnvisitedCharStyleName",
   "CharUnderline",
   "CharStrikeout",
+  "CharEmphasis",
   "CharWordMode",
   "CharAutoKerning",
   "CharKerning",

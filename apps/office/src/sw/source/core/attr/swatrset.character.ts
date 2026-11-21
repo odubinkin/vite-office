@@ -1,4 +1,5 @@
 /** @fileoverview Concrete Writer item-pool factories for character formatting used by the browser Worker graph. */
+import { SvxEmphasisMarkItem } from "../../../../editeng/inc/emphasismarkitem";
 import { SvxCaseMapItem } from "../../../../editeng/source/items/textitem.modes";
 import {
   SvxCharRotateItem,
@@ -74,6 +75,14 @@ export function writerCharacterItemFactory(which: number): SfxPoolItemFactory | 
       return /** Restores the native shadow. @param value - Stored value. @returns Shadow item. */ (
         value,
       ) => new SvxShadowedItem(Boolean(value), which);
+    case Which.RES_CHRATR_EMPHASIS_MARK:
+      return /** Restores native emphasis flags. @param value - Stored unsigned short. @returns Emphasis item. */ (
+        value,
+      ) => {
+        if (typeof value !== "number" || !Number.isInteger(value) || value < 0 || value > 0xffff)
+          throw new Error("Invalid Writer emphasis mark.");
+        return new SvxEmphasisMarkItem(value, which);
+      };
     case Which.RES_CHRATR_RELIEF:
       return /** Restores the native relief. @param value - Stored value. @returns Relief item. */ (
         value,

@@ -3,6 +3,7 @@ import { cppu_detail_getUnoType_FillStyle } from "../../../offapi/com/sun/star/d
 import { PropertyValue } from "../../../udkapi/com/sun/star/beans/PropertyValue";
 import { PropertyState } from "../../../udkapi/com/sun/star/beans/PropertyState";
 
+import { exportTextEmphasis, importTextEmphasis } from "./txtprhdl";
 import { XMLEscapementPropHdl, XMLEscapementHeightPropHdl } from "../style/escphdl";
 
 import {
@@ -182,6 +183,7 @@ export const textCharacterPropertyTokens = [
   ),
   T.STYLE_TEXT_UNDERLINE_COLOR,
   T.STYLE_TEXT_POSITION,
+  T.STYLE_TEXT_EMPHASIZE,
   T.FO_LETTER_SPACING,
   ...boolProperties.map(
     /** Reads original bool property tokens. @param entry - Entry. @returns Token. */ ([token]) =>
@@ -262,6 +264,8 @@ export function exportTextCharacterProperties(properties: OdfCharacterProperties
       // At least one native signed scalar was inserted above; both original handlers necessarily emit numeric text.
       result += ` style:text-position="${output[0]}"`;
     }
+    if (properties.emphasis !== undefined)
+      result += ` style:text-emphasize="${exportTextEmphasis(properties.emphasis)}"`;
     if (properties.strikeout !== undefined) {
       value.insert([properties.strikeout], "sal_Int16");
       for (const [, name, handler] of strikeoutProperties)
@@ -340,6 +344,11 @@ export function importTextCharacterProperties(
           value.extract(scalar, type);
           result[key] = scalar[0];
         }
+        continue;
+      }
+      if (token === T.STYLE_TEXT_EMPHASIZE) {
+        const emphasis = importTextEmphasis(text);
+        if (emphasis !== undefined) result.emphasis = emphasis;
         continue;
       }
       if (token === T.STYLE_TEXT_POSITION) {
@@ -676,6 +685,7 @@ export function applyTextImportProperties(
     for (const [key, name, type] of [
       ["textTransparency", "CharTransparence", "sal_Int16"],
       ["strikeout", "CharStrikeout", "sal_Int16"],
+      ["emphasis", "CharEmphasis", "sal_Int16"],
       ["escapement", "CharEscapement", "sal_Int16"],
       ["escapementHeight", "CharEscapementHeight", "sal_Int8"],
       ["underlineStyle", "CharUnderline", "sal_Int16"],

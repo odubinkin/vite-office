@@ -155,7 +155,8 @@ it("transports all native independent script values without boolean normalizatio
   ).not.toContain("text-underline-color");
   expect(exportTextCharacterProperties({ underlineStyle: 19 })).toBe("");
   expect(importTextCharacterProperties(attributes([["fo:font-size", "12pt"]]))).toEqual({});
-  expect(textCharacterPropertyTokens).toHaveLength(62);
+  expect(textCharacterPropertyTokens).toHaveLength(63);
+  expect(textCharacterPropertyTokens).toContain(XMLToken.STYLE_TEXT_EMPHASIZE);
   expect(textCharacterPropertyTokens).toContain(XMLToken.FO_LETTER_SPACING);
   expect(textCharacterPropertyTokens.slice(9, 13)).toEqual([
     XMLToken.STYLE_TEXT_LINE_THROUGH_STYLE,
@@ -236,4 +237,38 @@ it("imports legacy and extended character borders and exports extended text attr
   expect(xml).toContain('loext:border-line-width-left="0.01cm 0.02cm 0.02cm"');
   expect(xml).toContain("loext:padding-left=");
   expect(xml).toContain("loext:padding-right=");
+});
+
+it("uses the native CharEmphasis tokens in both directions", /** Checks each UNO value and the accepted native token order. @returns Nothing. */ () => {
+  for (const [emphasis, lexical] of [
+    [0, "none"],
+    [1, "dot above"],
+    [2, "circle above"],
+    [3, "disc above"],
+    [4, "accent above"],
+    [11, "dot below"],
+    [12, "circle below"],
+    [13, "disc below"],
+    [14, "accent below"],
+  ] as const) {
+    expect(importTextCharacterProperties(attributes([["style:text-emphasize", lexical]]))).toEqual({
+      emphasis,
+    });
+    expect(exportTextCharacterProperties({ emphasis })).toContain(
+      `style:text-emphasize="${lexical}"`,
+    );
+  }
+  expect(
+    importTextCharacterProperties(attributes([["style:text-emphasize", "below circle"]])),
+  ).toEqual({ emphasis: 12 });
+  expect(importTextCharacterProperties(attributes([["style:text-emphasize", "dot"]]))).toEqual({
+    emphasis: 1,
+  });
+  expect(
+    importTextCharacterProperties(attributes([["style:text-emphasize", "below none"]])),
+  ).toEqual({ emphasis: 0 });
+  for (const lexical of ["unknown", "dot below above", "dot  below", "dot circle"])
+    expect(importTextCharacterProperties(attributes([["style:text-emphasize", lexical]]))).toEqual(
+      {},
+    );
 });

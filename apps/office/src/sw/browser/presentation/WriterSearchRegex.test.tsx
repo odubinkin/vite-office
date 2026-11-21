@@ -204,3 +204,39 @@ it.each([
     }
   },
 );
+
+it.each([
+  { anchor: "^.", end: 14, selected: "test" },
+  { anchor: ".$", end: 13, selected: "tes" },
+])(
+  "keeps $anchor at the actual paragraph boundary in a selection search",
+  /** Ports tdf144089 and checks the matching end-anchor boundary. @param scenario - Pattern and native selection. @returns Nothing. */
+  (scenario) => {
+    const session = createWriterDocumentSession();
+    const shell = session.view.GetWrtShell();
+    shell.Insert("This is a test");
+    const node = shell.GetActiveParagraph();
+    const start = new SwPosition(node, 10);
+    const end = new SwPosition(node, scenario.end);
+    shell.SetPaM(end, start);
+    const workbench = render(<WriterWorkbench isActive view={session.view} />);
+    try {
+      fireEvent.keyDown(window, { key: "h", ctrlKey: true });
+      const dialog = within(screen.getByRole("dialog", { name: "Find and Replace" }));
+      fireEvent.click(dialog.getByText("Other options"));
+      fireEvent.click(dialog.getByRole("checkbox", { name: "Current selection only" }));
+      fireEvent.click(dialog.getByRole("checkbox", { name: "Regular expressions" }));
+      fireEvent.change(dialog.getByLabelText("Replace with"), { target: { value: "A" } });
+      fireEvent.change(dialog.getByLabelText("Find"), { target: { value: scenario.anchor } });
+      fireEvent.click(dialog.getByRole("button", { name: "Replace All" }));
+      fireEvent.click(dialog.getByRole("button", { name: "Close" }));
+      expect(node.GetText()).toBe("This is a test");
+      expect(window.getSelection()?.toString()).toBe(scenario.selected);
+    } finally {
+      end.Dispose();
+      start.Dispose();
+      workbench.unmount();
+      session.view.Close();
+    }
+  },
+);
