@@ -39,7 +39,7 @@ import { OfficeWorkspaceHeader } from "../../../framework/browser/presentation/O
 import { calcStandardBarItems } from "../../uiconfig/scalc/toolbar/standardbar";
 import type { CalcFileWorkflows } from "../workflows/calc-file-workflows";
 import { CalcSheetDialogs } from "./CalcSheetDialogs";
-import { HandleWorkspaceShortcut } from "./calc-workbench-keys";
+import { HandleCellClipboard, HandleWorkspaceShortcut } from "./calc-workbench-keys";
 import { useCalcDialog } from "./use-calc-dialog";
 import { ScPrintAreasDlg, type ScPrintReferenceInput } from "./ScPrintAreasDlg";
 import type { CalcSheetWorkflows } from "../workflows/calc-sheet-workflows";
@@ -81,6 +81,7 @@ export function CalcWorkbench({
   const createNames = useCalcDialog(sheetWorkflows.createNamesDialogs);
   const namePaste = useCalcDialog(sheetWorkflows.namePasteDialogs);
   const optionsDialog = useCalcDialog(sheetWorkflows.options.dialogs);
+  const pasteText = useCalcDialog(sheetWorkflows.clipboard.dialogs);
   const labelRanges = useCalcDialog(sheetWorkflows.labelRanges.dialogs);
   const referenceDialog = printDialog ?? condEditor ?? nameDialog ?? nameManager ?? labelRanges;
   const printInput = useRef<ScPrintReferenceInput>(null);
@@ -119,7 +120,8 @@ export function CalcWorkbench({
     condManager !== undefined ||
     namePaste !== undefined ||
     createNames !== undefined ||
-    optionsDialog !== undefined;
+    optionsDialog !== undefined ||
+    pasteText !== undefined;
   const root = useRef<HTMLElement>(null),
     tabs = useRef<HTMLDivElement>(null),
     previousModal = useRef(modal || referenceOpen),
@@ -546,6 +548,12 @@ export function CalcWorkbench({
   return (
     <section
       onKeyDown={(event) => HandleWorkspaceShortcut(event, frame, source, modal || referenceOpen)}
+      onCopy={(event) =>
+        HandleCellClipboard(event, sheetWorkflows.clipboard, modal || referenceOpen)
+      }
+      onPaste={(event) =>
+        HandleCellClipboard(event, sheetWorkflows.clipboard, modal || referenceOpen)
+      }
       ref={root}
       aria-label="Calc workspace"
       className="flex h-dvh w-full min-h-0 min-w-0 flex-col overflow-hidden bg-slate-100"
@@ -954,6 +962,7 @@ export function CalcWorkbench({
           createNames,
           labelRanges,
           optionsDialog,
+          pasteText,
         }}
         referenceInput={printInput}
         onReference={(owner, range) => setReferenceSelection({ owner, range })}

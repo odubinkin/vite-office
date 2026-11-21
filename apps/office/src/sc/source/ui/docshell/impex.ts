@@ -1,4 +1,5 @@
 /** @fileoverview CSV stream conversion owner from sc/source/ui/docshell/impex.cxx. */
+import { ScCompiler } from "../../../inc/compiler";
 import { UEastAsianWidth, UProperty } from "../../../../external/icu/source/common/unicode/uchar";
 import { u_getIntPropertyValue } from "../../../../external/icu/source/common/uprops";
 import { unicode } from "../../../../i18nlangtag/source/isolang/isolang.tables";
@@ -204,7 +205,7 @@ function scanQuotedString(
   return { value, next };
 }
 
-/** Implements the consumed scalar branches of source lcl_PutString. @param document - Actual document. @param pos - Cell. @param field - Parsed field. @param format - Column format. @param options - Filter options. @returns Nothing. @param formatter - Actual import formatter. @param transliteration - Primary wrapper. @param calendar - Primary calendar. @param secondTransliteration - Optional second wrapper. @param secondCalendar - Optional second calendar. */
+/** Implements the consumed scalar branches of source lcl_PutString. @param document - Actual document. @param pos - Cell. @param field - Parsed field. @param format - Column format. @param options - Filter options. @returns Nothing. @param formatter - Actual import formatter. @param transliteration - Primary wrapper. @param calendar - Primary calendar. @param secondTransliteration - Optional second wrapper. @param secondCalendar - Optional second calendar. @param formulaDocument - Workbook for formula compilation during clipboard import. */
 function lcl_PutString(
   docImport: ScDocumentImport,
   pos: ScAddress,
@@ -216,6 +217,7 @@ function lcl_PutString(
   calendar: CalendarWrapper,
   secondTransliteration: TransliterationWrapper | null,
   secondCalendar: CalendarWrapper | null,
+  formulaDocument: ScDocument,
 ): void {
   const document = docImport.getDoc();
   const value = field.value;
@@ -331,6 +333,13 @@ function lcl_PutString(
         }
       } while (false); // eslint-disable-line no-constant-condition -- Preserve original source single-pass block and break paths.
     }
+    if (document.IsClipboard() && value.length > 1 && value.startsWith("=")) {
+      const grammar = formulaDocument.GetGrammar();
+      const code = new ScCompiler(formulaDocument, pos, grammar).CompileString(input);
+      new ScCompiler(formulaDocument, pos, code, grammar).CompileTokenArray();
+      docImport.setFormulaCell(pos, code);
+      return;
+    }
     const parameter = new ScSetStringParam();
     parameter.mpNumFormatter = formatter;
     parameter.mbDetectNumberFormat = options.bDetectSpecialNumber;
@@ -351,8 +360,13 @@ export class ScImportExport {
   private overflowCol = false;
   private overflowCell = false;
   private includeBOM = false;
-  /** Binds the canonical destination document. @param document - Actual model.  @returns Constructed instance. */
-  constructor(private readonly document: ScDocument) {}
+  private importedSize: readonly [columns: number, rows: number] = [0, 0];
+  /** Binds the destination document and original import origin. @param document - Actual model. @param origin - First destination cell. @param formulaDocument - Actual workbook for formulas staged in a clipboard document. @returns Constructed instance. */
+  constructor(
+    private readonly document: ScDocument,
+    private readonly origin = new ScAddress(),
+    private readonly formulaDocument = document,
+  ) {}
   /** Source ScanNextFieldFromString over a UTF-16 cursor: quoted content, dirty suffix, ASCII-space trimming, and merged separators. @param line - Null-treated logical line. @param start - Current pointer offset. @param quote - Text separator. @param separators - Field separators. @param merge - Merge consecutive separators. @param removeSpace - Trim unquoted ASCII blanks. @param overflowCell - Native cell-overflow output. @returns Field and pointer past its separator. */
   static ScanNextFieldFromString(
     line: string,
@@ -421,8 +435,14 @@ export class ScImportExport {
     return this.overflowRow || this.overflowCol || this.overflowCell;
   }
 
+  /** Returns the parsed field rectangle, including unoccupied source cells. @returns Column and row counts. */
+  GetImportedSize(): readonly [columns: number, rows: number] {
+    return this.importedSize;
+  }
+
   /** Imports CSV through the source SvStream; raw bytes remain a browser call-site convenience. @param input - Source stream or bytes. @returns Success. */
   ImportStream(input: SvStream | Uint8Array): boolean {
+    this.importedSize = [0, 0];
     const options = this.options;
     if (!options) return false;
     const stream = input instanceof SvStream ? input : new SvStream(input, options.eCharSet);
@@ -439,6 +459,8 @@ export class ScImportExport {
       calendar = new CalendarWrapper();
     let secondTransliteration: TransliterationWrapper | null = null,
       secondCalendar: CalendarWrapper | null = null;
+    const maxRow = this.document.MaxRow() - this.origin.Row(),
+      maxCol = this.document.MaxCol() - this.origin.Col();
     let row = 0,
       endCol = 0;
     try {
@@ -470,7 +492,7 @@ export class ScImportExport {
       for (;;) {
         const sourceLine = readLine();
         if (stream.eof() && !sourceLine) break;
-        if (row > this.document.MaxRow()) {
+        if (row > maxRow) {
           this.overflowRow = true;
           break;
         }
@@ -481,7 +503,7 @@ export class ScImportExport {
           let startIndex = 0;
           for (
             let source = 0;
-            source < options.mvColStart.length && column <= this.document.MaxCol() + 1;
+            source < options.mvColStart.length && column <= maxCol + 1;
             source++
           ) {
             const nextIndex: [number] = [startIndex];
@@ -494,12 +516,16 @@ export class ScImportExport {
             else nextIndex[0] = line.length;
             const format = options.mvColFormat[source] ?? SC_COL_STANDARD;
             if (format !== SC_COL_SKIP) {
-              if (column > this.document.MaxCol()) this.overflowCol = true;
+              if (column > maxCol) this.overflowCol = true;
               else {
                 const field = ScImportExport.GetFixed(line, startIndex, nextIndex[0], cellOverflow);
                 lcl_PutString(
                   docImport,
-                  new ScAddress(column, row, 0),
+                  new ScAddress(
+                    this.origin.Col() + column,
+                    this.origin.Row() + row,
+                    this.origin.Tab(),
+                  ),
                   field,
                   field.quoted && options.bQuotedFieldAsText ? SC_COL_TEXT : format,
                   options,
@@ -508,6 +534,7 @@ export class ScImportExport {
                   calendar,
                   secondTransliteration,
                   secondCalendar,
+                  this.formulaDocument,
                 );
               }
               column++;
@@ -519,7 +546,7 @@ export class ScImportExport {
             source = 0,
             infoStart = 0,
             lastColEmpty = line.length === 0 && !options.bSkipEmptyCells;
-          while ((next < line.length || lastColEmpty) && column <= this.document.MaxCol() + 1) {
+          while ((next < line.length || lastColEmpty) && column <= maxCol + 1) {
             const scanned = ScImportExport.ScanNextFieldFromString(
               line,
               next,
@@ -538,14 +565,18 @@ export class ScImportExport {
                 break;
               }
             if (format !== SC_COL_SKIP) {
-              if (column > this.document.MaxCol()) this.overflowCol = true;
+              if (column > maxCol) this.overflowCol = true;
               else {
                 const field = scanned.field.value.endsWith("\n")
                   ? { ...scanned.field, value: scanned.field.value.slice(0, -1) }
                   : scanned.field;
                 lcl_PutString(
                   docImport,
-                  new ScAddress(column, row, 0),
+                  new ScAddress(
+                    this.origin.Col() + column,
+                    this.origin.Row() + row,
+                    this.origin.Tab(),
+                  ),
                   field,
                   field.quoted && options.bQuotedFieldAsText ? SC_COL_TEXT : format,
                   options,
@@ -554,6 +585,7 @@ export class ScImportExport {
                   calendar,
                   secondTransliteration,
                   secondCalendar,
+                  this.formulaDocument,
                 );
               }
               column++;
@@ -570,6 +602,7 @@ export class ScImportExport {
         row++;
       }
       docImport.finalize();
+      this.importedSize = [Math.min(endCol, maxCol + 1), row];
     } finally {
       secondCalendar?.dispose();
       secondTransliteration?.dispose();

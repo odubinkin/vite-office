@@ -1,14 +1,12 @@
 /** @fileoverview Original document10.cxx delayed formula-group ownership and regroup routing. */
 import { UpdateLabelRangesOnTab } from "./documen4";
-import { ScGlobal } from "../../../inc/global";
-
 import type { OUString, OUStringConstReference } from "../../../../sal/inc/rtl/ustring";
 import { SfxHintId } from "../../../../svl/inc/hint";
 import type { SfxPoolItem } from "../../../../svl/inc/poolitem";
 import { MAXTAB, SC_TAB_APPEND, ValidTab } from "../../../inc/address";
 import { ScMF, type ScMergeFlagAttr } from "../../../inc/attrib";
 import { ScHorizontalCellIterator } from "../../../inc/dociter";
-import { InsertDeleteFlags, UpdateRefMode } from "../../../inc/global";
+import { CellType, ScGlobal, InsertDeleteFlags, UpdateRefMode } from "../../../inc/global";
 import type { ScPatternAttr } from "../../../inc/patattr";
 import { ATTR_MERGE_FLAG } from "../../../inc/scitems";
 import { ScRangeList } from "../../../inc/rangelst";
@@ -184,7 +182,8 @@ export function CopyOneCellFromClip(
   row2: number,
 ): boolean {
   const clip = context.getClipDoc();
-  if (clip.GetClipParam().mbCutMode) return false;
+  if (clip.GetClipParam().mbCutMode || context.getInsertFlag() & InsertDeleteFlags.ATTRIB)
+    return false;
   const range = clip.GetClipParam().getWholeRange();
   if (range.aStart.Row() !== range.aEnd.Row()) return false;
   const width = range.aEnd.Col() - range.aStart.Col() + 1;
@@ -202,7 +201,7 @@ export function CopyOneCellFromClip(
   for (let offset = 0; offset < width; ++offset, source.IncCol()) {
     context.setSingleCellPattern(offset, clip.GetPattern(source));
     const column = table.FetchColumn(source.Col());
-    if (!column) throw Error("Clipboard source column assertion");
+    if (!column || column.GetCellType(source.Row()) === CellType.CELLTYPE_EDIT) return false;
     UpdateScriptTypes.call(column, source.Row(), source.Row());
     context.setSingleCell(source, column);
   }

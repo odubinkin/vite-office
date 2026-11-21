@@ -1,0 +1,39 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sc/source/core/data/column3.clip.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "calc",
+    "subsystem": "clipboard",
+    "capabilityIds": [
+      "CAP-1c4b358a-d58f-4cb3-bd8a-a4aac3aa3bf5",
+      "CAP-d9e3bd7a-f47f-4958-81a7-e7ef31935bf3"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/sc/source/core/data/column3.clip.ts#CopyCellsFromClipHandler",
+        "apps/office/src/sc/browser/presentation/calc-cell-clipboard.test.tsx",
+        "vendor/libreoffice-reference/sc/source/core/data/column3.cxx#CopyCellsFromClipHandler",
+        "vendor/libreoffice-reference/sc/source/core/data/column3.cxx#ScColumn::CopyFromClip"
+      ],
+      "justification": "Copies typed cell blocks, edit text and original pattern spans through the native clipboard column cursors.",
+      "knownViolations": [],
+      "localSymbols": [
+        "CopyCellsFromClipHandler",
+        "CopyFromClip"
+      ],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": "sc/source/core/data/column3.cxx",
+      "upstreamSymbols": [
+        "CopyCellsFromClipHandler",
+        "ScColumn::CopyFromClip"
+      ]
+    }
+  }
+}

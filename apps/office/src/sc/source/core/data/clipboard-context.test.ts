@@ -137,7 +137,7 @@ it("re-interns foreign-pool strings and rejects unrepresented paste context opti
   for (const [flags, link, skip] of [
     [InsertDeleteFlags.ATTRIB, false, false],
     [InsertDeleteFlags.CONTENTS, true, false],
-    [InsertDeleteFlags.CONTENTS, false, true],
+    [InsertDeleteFlags.CONTENTS | InsertDeleteFlags.ATTRIB, false, true],
   ] as const)
     expect(
       /** Calls the actual native invalid-input boundary. @returns Native result. */ () =>

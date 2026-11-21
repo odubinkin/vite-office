@@ -1,4 +1,6 @@
 /** @fileoverview Browser hosts for sheet-workflow modal requests. */
+import { ScImportAsciiDlg } from "./ScImportAsciiDlg";
+import { ScPasteConfirmationDlg } from "./ScPasteConfirmationDlg";
 import type { Ref } from "react";
 import type { ScRange } from "../../inc/address";
 import type { ScPrintReferenceInput } from "./ScPrintAreasDlg";
@@ -30,6 +32,7 @@ interface CalcSheetDialogsProps {
   readonly createNames: ReturnType<CalcSheetWorkflows["createNamesDialogs"]["GetSnapshot"]>;
   readonly namePaste: ReturnType<CalcSheetWorkflows["namePasteDialogs"]["GetSnapshot"]>;
   readonly labelRanges: ReturnType<CalcSheetWorkflows["labelRanges"]["dialogs"]["GetSnapshot"]>;
+  readonly pasteText: ReturnType<CalcSheetWorkflows["clipboard"]["dialogs"]["GetSnapshot"]>;
   readonly optionsDialog: ReturnType<CalcSheetWorkflows["options"]["dialogs"]["GetSnapshot"]>;
   readonly referenceInput: Ref<ScPrintReferenceInput>;
   readonly onReference: (owner: object, range: ScRange | undefined) => void;
@@ -52,11 +55,27 @@ export function CalcSheetDialogs({
   createNames,
   labelRanges,
   optionsDialog,
+  pasteText,
   referenceInput,
   onReference,
 }: CalcSheetDialogsProps): React.JSX.Element {
   return (
     <>
+      {pasteText?.request.kind === "text" && (
+        <ScImportAsciiDlg
+          key={pasteText.id}
+          request={pasteText.request}
+          onAccept={(value) => sheetWorkflows.clipboard.dialogs.Complete(pasteText.id, value)}
+          onCancel={() => sheetWorkflows.clipboard.dialogs.Cancel(pasteText.id)}
+        />
+      )}
+      {pasteText && pasteText.request.kind !== "text" && (
+        <ScPasteConfirmationDlg
+          key={pasteText.id}
+          kind={pasteText.request.kind}
+          onRespond={(value) => sheetWorkflows.clipboard.dialogs.Complete(pasteText.id, value)}
+        />
+      )}
       {optionsDialog && (
         <ScCalcOptionsDialog
           key={optionsDialog.id}

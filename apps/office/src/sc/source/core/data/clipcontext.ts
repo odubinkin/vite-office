@@ -48,7 +48,11 @@ export class CopyFromClipContext extends ClipContextBase {
     private readonly mbSkipEmptyCells: boolean,
   ) {
     super(mrDestDoc);
-    if (mnInsertFlag !== InsertDeleteFlags.CONTENTS || mbAsLink || mbSkipEmptyCells)
+    if (
+      (mnInsertFlag & ~InsertDeleteFlags.ATTRIB) !== InsertDeleteFlags.CONTENTS ||
+      mbAsLink ||
+      (mbSkipEmptyCells && mnInsertFlag & InsertDeleteFlags.ATTRIB)
+    )
       throw new Error("Nondefault clipboard paste context is not implemented");
   }
   /** Original sheet span setter. @param first - First sheet. @param last - Last sheet. @returns Nothing. */

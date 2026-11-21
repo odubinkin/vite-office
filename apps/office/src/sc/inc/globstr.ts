@@ -38,4 +38,7 @@ export const scPasteResourcesEnglish = Object.freeze({
   STR_MSSG_PASTEFROMCLIP_0: "Insert into multiple selection not possible",
   STR_PROTECTIONERR: "Protected cells can not be modified.",
   STR_PASTE_FULL: "There is not enough space on the sheet to insert here.",
+  STR_PASTE_ERROR: "The contents of the clipboard could not be pasted.",
+  STR_PASTE_BIGGER:
+    "The content of the clipboard is bigger than the range selected.\nDo you want to insert it anyway?",
 });

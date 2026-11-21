@@ -7748,3 +7748,13 @@ pasting the result into the draft. Calc preserves the reparse and the
 associated insertion restriction.
 
 - [Original formula preview helper](../../vendor/libreoffice-reference/sc/source/ui/app/inputhdl.cxx)
+
+### CALC-814 — Text Import can report failure after inserting some cells
+
+When multiline clipboard text overflows the sheet, the source keeps the
+portion that fits and reports that the clipboard contents could not be
+pasted. The source marks this case with an overflow TODO and notes that the
+user can undo the partial insertion. Calc preserves the partial insertion,
+error message and Undo action.
+
+- [Original clipboard Text Import completion](../../vendor/libreoffice-reference/sc/source/ui/view/viewfun5.cxx#L793)

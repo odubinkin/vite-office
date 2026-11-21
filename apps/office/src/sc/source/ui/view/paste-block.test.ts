@@ -153,7 +153,7 @@ it("keeps nondefault paste families explicit and reports actual sheet overflow t
   const requests: Parameters<ScTabViewShell["PasteFromClip"]>[] = [
     [F.ATTRIB, clip],
     [F.CONTENTS, clip, ScPasteFunc.ADD],
-    [F.CONTENTS, clip, ScPasteFunc.NONE, true],
+    [F.CONTENTS | F.ATTRIB, clip, ScPasteFunc.NONE, true],
     [F.CONTENTS, clip, ScPasteFunc.NONE, false, true],
     [F.CONTENTS, clip, ScPasteFunc.NONE, false, false, true],
     [F.CONTENTS, clip, ScPasteFunc.NONE, false, false, false, InsCellCmd.INS_CELLSDOWN],

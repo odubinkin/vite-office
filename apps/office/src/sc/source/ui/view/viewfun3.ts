@@ -1,4 +1,4 @@
-/** @fileoverview Native PasteFromClip default-content copy orchestration for active normal sheets with unfiltered single clipboard ranges and enabled Undo. Nondefault paste,cut,matrix/drawing/database/window and multi-range service families remain explicit boundaries. */
+/** @fileoverview Native PasteFromClip copy orchestration for active normal sheets with unfiltered single clipboard ranges and enabled Undo. Nondefault paste,cut,matrix/drawing/database/window and multi-range service families remain explicit boundaries. */
 import type { ScViewFunc } from "./viewfunc";
 import { ScDocument, ScDocumentMode } from "../../../inc/document";
 import { ScMarkData } from "../../../inc/markdata";
@@ -28,10 +28,10 @@ export function PasteFromClip(
   const data = this.GetViewData();
   if (data.SelectionForbidsPaste(clip)) return false;
   if (
-    flags !== F.CONTENTS ||
+    (flags & ~F.ATTRIB) !== F.CONTENTS ||
     (undoExtra !== F.NONE && undoExtra !== F.ATTRIB) ||
     operation !== ScPasteFunc.NONE ||
-    skipEmpty ||
+    (skipEmpty && flags & F.ATTRIB) ||
     transpose ||
     asLink ||
     move !== InsCellCmd.INS_NONE ||
@@ -39,8 +39,8 @@ export function PasteFromClip(
   )
     throw Error("Nondefault native paste services are not implemented");
   const content = (flags & F.CONTENTS) as F;
-  // ATTRIB copying is outside this admitted path;undo-extra preserves the original destination pattern.
-  const undoFlags = (content | (undoExtra & F.ATTRIB) | F.NOCAPTIONS) as F;
+  // Capture the destination patterns when paste or native extra-undo can change them.
+  const undoFlags = (content | ((flags | undoExtra) & F.ATTRIB) | F.NOCAPTIONS) as F;
   const parameter = clip.GetClipParam(),
     marks = data.GetMarkData();
   if (parameter.isMultiRange() || marks.IsMultiMarked())
@@ -157,7 +157,7 @@ export function PasteFromClip(
     this.DoneBlockMode();
     this.InitOwnBlockMode(user);
     marks.SetMarkArea(user);
-    doc.CopyFromClip(user, filteredMark, flags, null, clip, true, false, false, false);
+    doc.CopyFromClip(user, filteredMark, flags, null, clip, true, false, false, skipEmpty);
     const refreshedCol: [number] = [endCol],
       refreshedRow: [number] = [endRow];
     doc.ExtendMergeSel(startCol, startRow, refreshedCol, refreshedRow, filteredMark, true);

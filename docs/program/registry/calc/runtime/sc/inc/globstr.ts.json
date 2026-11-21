@@ -25,7 +25,9 @@
       "knownViolations": [],
       "localSymbols": [
         "scStyleNameResourcesEnglish",
-        "scPasteResourcesEnglish"
+        "scPasteResourcesEnglish",
+        "STR_PASTE_ERROR",
+        "STR_PASTE_BIGGER"
       ],
       "sourceResponsibility": "unverified",
       "upstreamFile": "sc/inc/globstr.hrc",

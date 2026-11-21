@@ -283,14 +283,43 @@ export function DeleteBeforeCopyFromClip(
   const position = context.getBlockPosition(this.GetTab(), this.GetCol());
   if (!position) return;
   const flags = context.getDeleteFlag();
-  if (context.isSkipEmptyCells() || flags !== InsertDeleteFlags.CONTENTS)
+  if ((flags & ~InsertDeleteFlags.ATTRIB) !== InsertDeleteFlags.CONTENTS)
     throw new Error("Nondefault pre-paste deletion is not implemented");
-  // CONTENTS does not delete patterns. Rich edit,notes and sparklines cannot be inserted in this represented store.
-  void clipColumn;
-  const result = this.DeleteCells(position, range.mnRow1, range.mnRow2, flags);
-  broadcasts.set(doc, this.GetTab(), this.GetCol(), result.aDeletedRows, true);
-  for (const [first, last] of result.aFormulaRanges)
-    context.setListeningFormulaSpans(this.GetTab(), this.GetCol(), first, this.GetCol(), last);
+  /** Clears a destination span and records its original broadcast and listener spans. @param first - First row. @param last - Last row. @returns Nothing. */
+  const remove = (first: number, last: number): void => {
+    const result = this.DeleteCells(position, first, last, InsertDeleteFlags.CONTENTS);
+    broadcasts.set(doc, this.GetTab(), this.GetCol(), result.aDeletedRows, true);
+    for (const [start, end] of result.aFormulaRanges)
+      context.setListeningFormulaSpans(this.GetTab(), this.GetCol(), start, this.GetCol(), end);
+  };
+  if (!context.isSkipEmptyCells()) {
+    remove(range.mnRow1, range.mnRow2);
+    return;
+  }
+  const source = context.getClipDoc().GetClipParam().getWholeRange();
+  const startRow = source.aStart.Row(),
+    endRow = source.aEnd.Row();
+  const sourceCells = clipColumn.GetCellStore(),
+    spans: RowSpan[] = [];
+  ParseBlock(
+    sourceCells.cbegin(),
+    sourceCells,
+    {
+      /** Collects original nonempty clipboard runs. @param node - Storage block. @param offset - Offset within the block. @param count - Intersection length. @returns Nothing. */
+      call(node, offset, count) {
+        if (node.type !== element_type_empty)
+          spans.push(new RowSpan(node.position + offset, node.position + offset + count - 1));
+      },
+    },
+    startRow,
+    endRow,
+  );
+  if (!spans.length) return;
+  for (let dy = range.mnRow1 - startRow; startRow + dy <= range.mnRow2; dy += endRow - startRow + 1)
+    for (const { mnRow1, mnRow2 } of spans) {
+      const first = mnRow1 + dy;
+      if (first <= range.mnRow2) remove(first, Math.min(range.mnRow2, mnRow2 + dy));
+    }
 }
 
 /** Original block handler ends whole intersected groups and retains source output sentinel behavior. */

@@ -1,0 +1,29 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "browser-adaptation",
+    "localPath": "apps/office/src/sc/browser/presentation/ScImportAsciiDlg.tsx",
+    "status": "local-only",
+    "rationale": "Presents clipboard text import conversion controls and a preview driven by the native CSV scanner in the Calc workspace.",
+    "responsibilities": [
+      "Presents clipboard text import conversion controls and a preview driven by the native CSV scanner in the Calc workspace."
+    ],
+    "stackDivergence": {
+      "kind": "browser-adaptation",
+      "rationale": "Presents clipboard text import conversion controls and a preview driven by the native CSV scanner in the Calc workspace."
+    },
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sc/browser/presentation/ScImportAsciiDlg.tsx",
+          "marker": "ScImportAsciiDlg"
+        },
+        {
+          "path": "apps/office/src/sc/browser/presentation/calc-cell-clipboard.test.tsx",
+          "marker": "asks for Text Import settings"
+        }
+      ]
+    }
+  }
+}
