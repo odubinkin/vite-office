@@ -1,0 +1,49 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sw/source/core/crsr/findattr.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "writer",
+    "subsystem": "text-search",
+    "capabilityIds": [
+      "CAP-0111"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/sw/source/core/crsr/findattr.ts#FindAttrs",
+        "apps/office/src/sw/source/core/crsr/findattr.ts#SwFindParaAttr",
+        "apps/office/src/sw/source/core/crsr/findattr.ts#FindAttrsImpl",
+        "apps/office/src/sw/source/core/crsr/findattr.ts#CmpAttr",
+        "apps/office/src/sw/source/core/crsr/findattr.ts#ReplaceAttrs",
+        "apps/office/src/sw/browser/presentation/WriterSearchFormatting.test.tsx",
+        "sw/source/core/crsr/findattr.cxx#SwCursor::FindAttrs",
+        "sw/source/core/crsr/findattr.cxx#SwFindParaAttr::DoFind",
+        "sw/source/core/crsr/findattr.cxx#FindAttrsImpl",
+        "sw/source/core/crsr/findattr.cxx#CmpAttr"
+      ],
+      "justification": "Searches native hint boundaries and effective pooled formatting with optional text matching inside each span. Formatted replacement uses the document operations and grouped undo. Matches paragraph OtherSet before character ranges, preserves directional paragraph-only endpoints, and applies prepared replacement item sets through the document content operation owner. Formatted bulk regex replacement resolves captures with a forward search of the matched range, preserves the literal template when capture resolution fails, and uses the native regex replacement flag.",
+      "knownViolations": [],
+      "localSymbols": [
+        "FindAttrs",
+        "SwFindParaAttr",
+        "FindAttrsImpl",
+        "CmpAttr",
+        "ReplaceAttrs"
+      ],
+      "sourceResponsibility": "divergent",
+      "upstreamFile": "sw/source/core/crsr/findattr.cxx",
+      "upstreamSymbols": [
+        "SwCursor::FindAttrs",
+        "SwFindParaAttr::DoFind",
+        "FindAttrsImpl",
+        "CmpAttr"
+      ]
+    }
+  }
+}

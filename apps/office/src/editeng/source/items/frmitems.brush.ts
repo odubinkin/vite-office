@@ -1,8 +1,14 @@
-/** @fileoverview Original SvxBrushItem non-graphic color constructor/value/member family. Graphic loaders/constructors/positions/links and XComplexColor transport remain unported; no fake Graphic provider, memory manager or localized presentation. */
+/** @fileoverview Original SvxBrushItem non-graphic color constructor/value/member family. Graphic loaders/constructors/positions/links remain unported; no fake Graphic provider, memory manager or localized presentation. */
 import { SfxPoolItem } from "../../../svl/source/items/poolitem";
 import type { SfxItemPool } from "../../../svl/source/items/itempool";
 import { Any2Bool } from "../../../svl/inc/poolitem";
 import { Any } from "../../../cppu/inc/com/sun/star/uno/Any";
+import { Reference } from "../../../cppu/inc/com/sun/star/uno/Reference";
+import {
+  createXComplexColor,
+  getFromXComplexColor,
+} from "../../../docmodel/inc/uno/UnoComplexColor";
+import { XComplexColor } from "../../../offapi/com/sun/star/util/XComplexColor";
 import { Color, COL_TRANSPARENT, insertColor, extractColor } from "../../../tools/inc/color";
 import { ComplexColor } from "../../../docmodel/inc/color/ComplexColor";
 import { ShadingPattern } from "../../../offapi/com/sun/star/drawing/ShadingPattern";
@@ -163,6 +169,15 @@ export class SvxBrushItem extends SfxPoolItem {
       case MID_BACK_COLOR:
         insertColor(output, this.maColor);
         break;
+      case MID_BACKGROUND_COMPLEX_COLOR: {
+        const reference = createXComplexColor(this.maComplexColor);
+        try {
+          output.insert([reference.get()], XComplexColor.static_type);
+        } finally {
+          reference.dispose();
+        }
+        break;
+      }
       case MID_BACK_COLOR_R_G_B:
         insertColor(output, this.maColor.GetRGBColor());
         break;
@@ -185,7 +200,6 @@ export class SvxBrushItem extends SfxPoolItem {
       case MID_GRAPHIC:
       case MID_GRAPHIC_URL:
       case MID_GRAPHIC_FILTER:
-      case MID_BACKGROUND_COMPLEX_COLOR:
         return false;
     }
     return true;
@@ -194,6 +208,17 @@ export class SvxBrushItem extends SfxPoolItem {
   public override PutValue(input: unknown, member: number): boolean {
     const key = member & 0xff & ~0x80;
     switch (key) {
+      case MID_BACKGROUND_COMPLEX_COLOR: {
+        if (!(input instanceof Any)) return false;
+        const reference = new Reference<XComplexColor>();
+        try {
+          if (!input.extract(reference.getAddress(), XComplexColor.static_type)) return false;
+          if (reference.is()) this.setComplexColor(getFromXComplexColor(reference));
+        } finally {
+          reference.dispose();
+        }
+        break;
+      }
       case MID_BACK_COLOR:
       case MID_BACK_COLOR_R_G_B: {
         const color = new Color();
@@ -233,7 +258,6 @@ export class SvxBrushItem extends SfxPoolItem {
       case MID_GRAPHIC:
       case MID_GRAPHIC_URL:
       case MID_GRAPHIC_FILTER:
-      case MID_BACKGROUND_COMPLEX_COLOR:
         return false;
     }
     return true;

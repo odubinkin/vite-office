@@ -17,7 +17,8 @@
       "setWildcardMatch",
       "setOptions",
       "setOptions2",
-      "replaceTransliterationOffsets"
+      "replaceTransliterationOffsets",
+      "RESrchPrepare"
     ],
     "upstreamSymbols": [
       "TextSearch",
@@ -29,7 +30,8 @@
       "WildcardSrchBkwrd",
       "setWildcardMatch",
       "setOptions",
-      "setOptions2"
+      "setOptions2",
+      "RESrchPrepare"
     ],
     "preservedResponsibilities": [
       "Original absolute Boyer-Moore jump order, native category delimiters, full case-folding with original UTF16 offset recovery, all-quote helper and original no-transliteration forward U+2019-only branch. Preserve the backward endPos==length special case. Actual shared ICU category/case mapping data and OUString/Locale reused. Other algorithms/transliterations reject explicitly; no browser regex or whole-string concatenation fallback. Portable source-contract tests are not a compiled native differential; no full engine or UI parity claim.",
@@ -42,7 +44,8 @@
       "The supported simple search cascade dispatches existing case, diacritics and kashida modules and applies native directional source-offset recovery.",
       "The simple cascade also admits the upstream width flag for the represented algorithms.",
       "Native non-regex search uses independent prepared primary and complex keys/caches, source second-pass offset recovery and directional candidate precedence. WRITER-685 and WRITER-686 document source quirks.",
-      "The approximate mode validates native directional word candidates with the existing UNO BreakIterator and WLevDistance."
+      "The approximate mode validates native directional word candidates with the existing UNO BreakIterator and WLevDistance.",
+      "ICU regex preparation preserves raw pattern syntax, delegates case matching, applies the source forward transliteration context and remaps directional capture arrays. Host tests use the compiled ICU bridge. Browser deployment remains gated on the WebAssembly module."
     ],
     "omittedResponsibilities": [
       "Complete upstream library/API/service and native compiled QA are unverified; task scope remains in progress."
@@ -68,6 +71,10 @@
         {
           "path": "apps/office/src/i18npool/source/search/native-search-result.test.ts",
           "marker": "constructs zero/default values with distinct owned sequence fields"
+        },
+        {
+          "path": "apps/office/src/i18npool/source/search/textsearch-regex.test.ts",
+          "marker": "maps actual ICU capture results"
         }
       ],
       "upstream": [
@@ -78,6 +85,10 @@
         {
           "path": "i18npool/qa/cppunit/test_textsearch.cxx",
           "marker": "testWildcardSearch"
+        },
+        {
+          "path": "i18npool/source/search/textsearch.cxx",
+          "marker": "RESrchPrepare"
         }
       ]
     }

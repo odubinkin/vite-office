@@ -53,6 +53,7 @@ import {
   RES_CHRATR_FONT,
   RES_CHRATR_FONTSIZE,
   RES_CHRATR_CTL_WEIGHT,
+  RES_CHRATR_BACKGROUND,
   RES_CHRATR_HIGHLIGHT,
   RES_CHRATR_POSTURE,
   RES_CHRATR_UNDERLINE,
@@ -83,6 +84,11 @@ export function getCharacterProperties(
   const directUnderline = set.GetItemIfSet(RES_CHRATR_UNDERLINE, false) !== undefined;
   const color = set.GetItemIfSet(RES_CHRATR_COLOR, inherited);
   const highlight = set.GetItemIfSet(RES_CHRATR_HIGHLIGHT, inherited);
+  const background = set.GetItemIfSet(RES_CHRATR_BACKGROUND, inherited);
+  const visibleBackground =
+    highlight instanceof SvxBrushItem && writerHighlightColorValue(highlight) !== "transparent"
+      ? highlight
+      : background;
   const language = set.GetItemIfSet(RES_CHRATR_LANGUAGE, inherited);
   const languageAsian = set.GetItemIfSet(RES_CHRATR_CJK_LANGUAGE, inherited);
   const languageComplex = set.GetItemIfSet(RES_CHRATR_CTL_LANGUAGE, inherited);
@@ -104,7 +110,7 @@ export function getCharacterProperties(
     escapement === undefined &&
     !directFontSize &&
     color === undefined &&
-    highlight === undefined &&
+    visibleBackground === undefined &&
     language === undefined &&
     languageAsian === undefined &&
     languageComplex === undefined &&
@@ -136,6 +142,7 @@ export function getCharacterProperties(
     !(underline instanceof SvxUnderlineItem) ||
     (color !== undefined && !(color instanceof SvxColorItem)) ||
     (highlight !== undefined && !(highlight instanceof SvxBrushItem)) ||
+    (background !== undefined && !(background instanceof SvxBrushItem)) ||
     !(fontSize instanceof SvxFontHeightItem) ||
     !(asianFontSize instanceof SvxFontHeightItem) ||
     !(complexFontSize instanceof SvxFontHeightItem)
@@ -204,8 +211,8 @@ export function getCharacterProperties(
     ...(languageComplex instanceof SvxLanguageItem
       ? { languageComplex: languageComplex.GetLanguage() }
       : {}),
-    ...(highlight instanceof SvxBrushItem
-      ? { highlight: writerHighlightColorValue(highlight) }
+    ...(visibleBackground instanceof SvxBrushItem
+      ? { highlight: writerHighlightColorValue(visibleBackground) }
       : {}),
     ...(inherited || set.GetItemIfSet(RES_CHRATR_WEIGHT, false) !== undefined
       ? { fontWeight: ConvertFontWeight(weight.GetValue(), "FontWeight") }

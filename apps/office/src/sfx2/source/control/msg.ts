@@ -21,7 +21,7 @@ export interface SfxSlotDefinition<Context, Result = unknown> {
   readonly capabilityId?: `CAP-${string}`;
   readonly commandUrl: string;
   readonly debugLabel?: string;
-  readonly execute: (context: Context, request: SfxRequest) => Result;
+  readonly execute?: (context: Context, request: SfxRequest) => Result;
   readonly getState?: (context: Context) => SfxSlotState;
   readonly label: string;
   readonly presentation?: CommandPresentation;
@@ -60,8 +60,15 @@ export class SfxSlot<Context = unknown, Result = unknown> {
     return this.shortcuts[0];
   }
 
+  /** Tests whether the generated slot has an execution method. @returns Whether this slot accepts a request. */
+  public CanExecute(): boolean {
+    return this.definition.execute !== undefined;
+  }
+
   /** Executes this slot against its owning shell context. @param context - Shell context. @param request - Slot request. @returns Handler result. */
   public Execute(context: Context, request: SfxRequest): Result {
+    if (this.definition.execute === undefined)
+      throw new Error(`Sfx slot has no execution method: ${this.commandUrl}`);
     return this.definition.execute(context, request);
   }
 

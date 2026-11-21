@@ -4,6 +4,7 @@ import { SwTableBoxStartNode, SwTableNode, type SwNode, type SwStartNode } from 
 import { SwCursor, SwTableCursor } from "./swcrsr";
 import { SwTable, type SwTableBox } from "../table/swtable";
 import { SwTextNode } from "../txtnode/ndtxt";
+import { GetTextNodeExpandedText } from "../txtnode/ndtxt-hints";
 import type { SwDoc } from "../doc/doc";
 import type { SwUndoCursorState } from "../undo/undobj";
 import type { SwTableLine } from "../table/swtable";
@@ -285,6 +286,15 @@ export abstract class SwCursorShell extends SwViewShell {
   /** Original raw current cursor borrow bypasses table-selection materialization. @returns Actual ordinary ring head. */
   public GetCursor_(): SwCursor {
     return this.cursor;
+  }
+  /** Native GetSelText for a selection in one model paragraph. @returns Selected visible text. */
+  public GetSelText(): string {
+    const start = this.cursor.Start(),
+      end = this.cursor.End();
+    const node = start.GetNode().GetTextNode();
+    return node && node === end.GetNode()
+      ? GetTextNodeExpandedText(node, start.GetContentIndex(), end.GetContentIndex())
+      : "";
   }
   /** Original table cursor borrow does not synthesize an ordinary ring. @returns Actual table cursor or null binding. */
   public GetTableCrs(): SwTableCursor | undefined {

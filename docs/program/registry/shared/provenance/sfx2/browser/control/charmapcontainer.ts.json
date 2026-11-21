@@ -1,0 +1,42 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "browser-adaptation",
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sfx2/browser/control/charmapcontainer.ts",
+          "marker": "readCharacterList"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sfx2/source/control/charmapcontainer.cxx",
+          "marker": "SfxCharmapContainer::updateRecentCharacterList"
+        },
+        {
+          "path": "vendor/libreoffice-reference/officecfg/registry/schema/org/openoffice/Office/Common.xcs",
+          "marker": "FavoriteCharacterFontList"
+        }
+      ]
+    },
+    "localPath": "apps/office/src/sfx2/browser/control/charmapcontainer.ts",
+    "rationale": "Binds native SfxCharmapContainer character and font preferences to browser storage. Preserves shipped favorites, paired configuration properties, list order and the sixteen-entry limit.",
+    "status": "local-only",
+    "responsibilities": [
+      "Binds native SfxCharmapContainer character and font preferences to browser storage. Preserves shipped favorites, paired configuration properties, list order and the sixteen-entry limit."
+    ],
+    "stackDivergence": {
+      "kind": "browser-adaptation",
+      "rationale": "Browser application preferences store the two properties of each native group together."
+    },
+    "localSymbols": [
+      "readCharacterList",
+      "writeCharacterList",
+      "rememberCharacter",
+      "removeCharacter"
+    ]
+  },
+  "legacyOrder": 321
+}

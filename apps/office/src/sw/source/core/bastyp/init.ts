@@ -1,4 +1,9 @@
 /** @fileoverview Native module-global static Writer defaults from pinned bastyp/init.cxx, limited to represented item classes. */
+import {
+  SvxForbiddenRuleItem,
+  SvxHangingPunctuationItem,
+  SvxScriptSpaceItem,
+} from "../../../../editeng/source/items/paraitem";
 import * as ParaItems from "../../../../editeng/source/items/paraitem.controls";
 import * as CharacterWhich from "../../../inc/hintids";
 import {
@@ -273,6 +278,9 @@ class ItemInfoPackageSwAttributes extends ItemInfoPackage {
     add(new SvxScriptHintItem(RES_CHRATR_SCRIPT_HINT));
     add(new SvxBrushItem(RES_BACKGROUND));
     add(new SvxAdjustItem(SvxAdjust.ParaStart, RES_PARATR_ADJUST));
+    add(new SvxScriptSpaceItem(true, W.RES_PARATR_SCRIPTSPACE));
+    add(new SvxHangingPunctuationItem(true, W.RES_PARATR_HANGINGPUNCTUATION));
+    add(new SvxForbiddenRuleItem(true, W.RES_PARATR_FORBIDDEN_RULES));
     add(new SvxTabStopItem(1, 1134, SvxTabAdjust.Default, RES_PARATR_TABSTOP));
     add(new SvxTextLeftMarginItem(RES_MARGIN_TEXTLEFT));
     add(new SvxFirstLineIndentItem(RES_MARGIN_FIRSTLINE));

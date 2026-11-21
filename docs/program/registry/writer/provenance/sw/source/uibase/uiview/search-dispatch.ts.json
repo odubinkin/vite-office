@@ -1,0 +1,42 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "local-infrastructure",
+    "localPath": "apps/office/src/sw/source/uibase/uiview/search-dispatch.ts",
+    "localSymbols": [
+      "TransformWriterSearchParameters"
+    ],
+    "status": "local-only",
+    "rationale": "Translates named native SearchItem members for Writer ExecuteSearch from actual UNO PropertyValues or browser scalar records. Retains caller property order and the source admission rule, including precedence of a complete Any-encoded argument over dotted members. Populates and projects the shared pooled SvxSearchItem. The modeless dialog exchanges its browser draft, while named requests and raw pooled requests use the item values.",
+    "responsibilities": [
+      "Translates named native SearchItem members for Writer ExecuteSearch from actual UNO PropertyValues or browser scalar records. Retains caller property order and the source admission rule, including precedence of a complete Any-encoded argument over dotted members. Populates and projects the shared pooled SvxSearchItem. The modeless dialog exchanges its browser draft, while named requests and raw pooled requests use the item values."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sw/source/uibase/uiview/search-dispatch.ts",
+          "marker": "TransformWriterSearchParameters"
+        },
+        {
+          "path": "apps/office/src/sw/source/uibase/uiview/view.test.ts",
+          "marker": "dispatches a named wildcard Replace All"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "sfx2/source/appl/appuno.cxx",
+          "marker": "TransformParameters"
+        },
+        {
+          "path": "svl/source/items/srchitem.cxx",
+          "marker": "SvxSearchItem::PutValue"
+        }
+      ]
+    },
+    "stackDivergence": {
+      "kind": "local-infrastructure",
+      "rationale": "Translates the represented fields at the current Writer Sfx dispatcher boundary. The shared Sfx converter outside Writer search remains pending. Whole Any-encoded arguments retain native precedence over dotted members."
+    }
+  }
+}

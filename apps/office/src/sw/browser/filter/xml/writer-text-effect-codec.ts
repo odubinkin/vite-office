@@ -4,7 +4,7 @@ import {
   isThemeFontProperty,
   readThemeFontProperty,
 } from "../../../source/writerfilter/dmapper/ThemeHandler.fonts";
-import type { Any } from "../../../../cppu/inc/com/sun/star/uno/Any";
+import { Any } from "../../../../cppu/inc/com/sun/star/uno/Any";
 import { SfxGrabBagItem } from "../../../../svl/inc/grabbagitem";
 import type { SfxPoolItemSnapshot } from "../../../../svl/source/items/poolitem";
 import { RES_CHRATR_GRABBAG } from "../../../inc/hintids";
@@ -25,7 +25,15 @@ import {
 export function encodeTextEffects(item: SfxGrabBagItem): SfxPoolItemSnapshot {
   const effects: ([string] | [string, TextEffectValue])[] = [];
   const fonts: string[][] = [];
+  let shading: boolean | undefined;
   for (const [key, value] of item.GetGrabBag()) {
+    if (key === "CharShadingMarker") {
+      const marker: [boolean] = [false];
+      if (!value.extract(marker, "bool"))
+        throw new Error("Writer character shading marker is invalid.");
+      shading = marker[0];
+      continue;
+    }
     if (isThemeFontProperty(key)) {
       const font = readThemeFontProperty(value);
       if (font === undefined) throw new Error("Invalid Writer theme font property: " + key);
@@ -37,7 +45,14 @@ export function encodeTextEffects(item: SfxGrabBagItem): SfxPoolItemSnapshot {
     const [name, val] = effect;
     effects.push(val === undefined ? [name] : [name, val]);
   }
-  return { which: RES_CHRATR_GRABBAG, value: { effects, ...(fonts.length ? { fonts } : {}) } };
+  return {
+    which: RES_CHRATR_GRABBAG,
+    value: {
+      effects,
+      ...(fonts.length ? { fonts } : {}),
+      ...(shading === undefined ? {} : { shading }),
+    },
+  };
 }
 
 /** Restores the original native PropertyValue tree after transfer. @param value - Untrusted item payload. @returns Owned native grab bag. */
@@ -92,6 +107,11 @@ export function decodeTextEffects(value: unknown): SfxGrabBagItem {
           throw new Error("Writer theme font property is invalid.");
         entries.set(entry[0], stringAny(entry[1]));
       }
+    }
+    if ("shading" in value) {
+      if (typeof value.shading !== "boolean")
+        throw new Error("Writer character shading marker is invalid.");
+      entries.set("CharShadingMarker", new Any([value.shading], "bool"));
     }
     return new SfxGrabBagItem(RES_CHRATR_GRABBAG, entries);
   } finally {

@@ -5,6 +5,7 @@ export {
   WLD_THRESHOLD,
   SMALL_STRING_THRESHOLD,
   type SearchType,
+  type RegexMatcherFactory,
   type SearchParamBooleanReference,
   type SearchParamFlags,
 } from "../source/i18n/textsearch";

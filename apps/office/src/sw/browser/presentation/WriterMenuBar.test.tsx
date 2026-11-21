@@ -9,7 +9,16 @@ import { FieldUnit } from "../../../tools/inc/fldunit";
 import { WRITER_LAYOUT_PREFERENCES_KEY } from "../storage/writer-layout-preferences-store";
 import { Desktop } from "../../../framework/browser/app/desktop";
 import { createOfficeModuleDescriptors } from "../../../framework/browser/app/modulemanager";
-import { createWriterModuleFactory } from "../composition/writer-module";
+import {
+  createWriterDocumentSession,
+  createWriterModuleFactory,
+} from "../composition/writer-module";
+import { WriterWorkbench } from "./writer-view";
+import { SwPosition } from "../../source/core/crsr/pam";
+import { SfxItemSet } from "../../../svl/source/items/itemset";
+import { RndStdIds } from "../../../svx/inc/swframetypes";
+import { RES_FRMATR_BEGIN, RES_FRMATR_END } from "../../inc/hintids";
+import { MakeFlySection } from "../../source/core/doc/doclay";
 
 /** Renders the desktop through the same Writer module registration used by the composition root. @returns Configured desktop element. */
 function App(): React.JSX.Element {
@@ -579,6 +588,251 @@ describe("WriterMenuBar" /** Groups Writer menu and clipboard integration tests.
       "text/plain",
       expect.stringContaining("Paragraph style:"),
     );
+  });
+
+  it("keeps the Find Bar open when passing its text to Find and Replace", /** Exercises native toolbar options and the independent modeless search surfaces. @returns Nothing. */ () => {
+    render(<App />);
+    const editor = screen.getByRole("textbox", { name: "Writer document text" });
+    enterWriterParagraphText(editor, "Libre libre Libré");
+    fireEvent.click(screen.getByRole("menuitem", { name: "Edit" }));
+    fireEvent.click(screen.getByRole("menuitem", { name: "Find" }));
+    const toolbar = within(screen.getByRole("toolbar", { name: "Find" }));
+    const query = toolbar.getByLabelText("Find");
+    const matchCase = toolbar.getByRole("checkbox", { name: "Match case" });
+    const matchDiacritics = toolbar.getByRole("checkbox", { name: "Match Diacritics" });
+    fireEvent.change(query, { target: { value: "Libre" } });
+    fireEvent.click(matchCase);
+    fireEvent.click(matchDiacritics);
+    fireEvent.keyDown(query, { key: "h", ctrlKey: true });
+    const dialog = within(screen.getByRole("dialog", { name: "Find and Replace" }));
+    expect(dialog.getByLabelText("Find")).toHaveValue("Libre");
+    expect(dialog.getByRole("checkbox", { name: "Match case" })).not.toBeChecked();
+    fireEvent.click(dialog.getByRole("button", { name: "Close" }));
+    expect(matchCase).toBeChecked();
+    expect(matchDiacritics).toBeChecked();
+    fireEvent.click(toolbar.getByRole("button", { name: "Find All" }));
+    expect(toolbar.getByRole("status")).toHaveTextContent("One match found.");
+    expect(query).toHaveFocus();
+    fireEvent.click(toolbar.getByRole("button", { name: "Find and Replace" }));
+    const reopened = within(screen.getByRole("dialog", { name: "Find and Replace" }));
+    expect(reopened.getByRole("checkbox", { name: "Match case" })).toBeChecked();
+    expect(reopened.getByRole("status")).toBeEmptyDOMElement();
+    expect(toolbar.getByRole("status")).toHaveTextContent("One match found.");
+    fireEvent.change(reopened.getByLabelText("Find"), { target: { value: "other" } });
+    expect(toolbar.getByRole("status")).toBeEmptyDOMElement();
+    fireEvent.change(query, { target: { value: "libre" } });
+    fireEvent.keyDown(query, { key: "h", ctrlKey: true });
+    expect(reopened.getByLabelText("Find")).toHaveValue("libre");
+    fireEvent.click(toolbar.getByRole("button", { name: "Close" }));
+    expect(reopened.getByLabelText("Find")).toBeInTheDocument();
+    fireEvent.keyDown(window, { key: "f", ctrlKey: true });
+    const newToolbar = within(screen.getByRole("toolbar", { name: "Find" }));
+    expect(newToolbar.getByRole("checkbox", { name: "Match case" })).not.toBeChecked();
+    expect(newToolbar.getByRole("checkbox", { name: "Match Diacritics" })).not.toBeChecked();
+  });
+
+  it("preserves the selection when Replace All is scoped to it", /** Ports tdf44837 through the browser dialog and Writer model cursor. @returns Nothing. */ () => {
+    const session = createWriterDocumentSession();
+    const shell = session.view.GetWrtShell();
+    shell.Insert("asd asd");
+    shell.ExtendedSelectAll();
+    const workbench = render(<WriterWorkbench isActive view={session.view} />);
+
+    fireEvent.keyDown(window, { key: "h", ctrlKey: true });
+    const dialog = within(screen.getByRole("dialog", { name: "Find and Replace" }));
+    fireEvent.change(dialog.getByLabelText("Find"), { target: { value: "a" } });
+    fireEvent.change(dialog.getByLabelText("Replace with"), { target: { value: "b" } });
+    fireEvent.click(dialog.getByText("Other options"));
+    fireEvent.click(dialog.getByRole("checkbox", { name: "Current selection only" }));
+    fireEvent.click(dialog.getByRole("button", { name: "Replace All" }));
+    fireEvent.click(dialog.getByRole("button", { name: "Close" }));
+
+    expect(shell.GetActiveParagraph().GetText()).toBe("bsd bsd");
+    expect(window.getSelection()?.toString()).toBe("bsd bsd");
+    workbench.unmount();
+    session.view.Close();
+  });
+
+  it("replaces one match from the Find All ring and restores a single range after Replace All", /** Uses the retained native cursor owners across both replacement commands. @returns Nothing. */ () => {
+    const session = createWriterDocumentSession();
+    const shell = session.view.GetWrtShell();
+    shell.Insert("cat cat cat");
+    const paragraph = shell.GetActiveParagraph();
+    const workbench = render(<WriterWorkbench isActive view={session.view} />);
+
+    fireEvent.keyDown(window, { key: "h", ctrlKey: true });
+    const dialog = within(screen.getByRole("dialog", { name: "Find and Replace" }));
+    fireEvent.change(dialog.getByLabelText("Find"), { target: { value: "cat" } });
+    fireEvent.click(dialog.getByRole("button", { name: "Find All" }));
+    expect([...shell.GetCursor().GetRingContainer()]).toHaveLength(3);
+    fireEvent.change(dialog.getByLabelText("Replace with"), { target: { value: "dog" } });
+    fireEvent.click(dialog.getByRole("button", { name: /^Replace$/ }));
+    expect(paragraph.GetText()).toBe("dog cat cat");
+    expect(shell.GetCursor().Start().GetContentIndex()).toBe(4);
+
+    fireEvent.click(dialog.getByRole("button", { name: "Find All" }));
+    expect([...shell.GetCursor().GetRingContainer()]).toHaveLength(2);
+    fireEvent.change(dialog.getByLabelText("Replace with"), { target: { value: "longer" } });
+    fireEvent.click(dialog.getByRole("button", { name: "Replace All" }));
+    expect(paragraph.GetText()).toBe("dog longer longer");
+    expect(shell.GetCursor().IsMultiSelection()).toBe(false);
+    expect(window.getSelection()?.toString()).toBe("longer");
+    workbench.unmount();
+    session.view.Close();
+  });
+
+  it("restores selected table cells after a document-wide Replace All", /** Keeps the displayed table cursor while editing body and table text. @returns Nothing. */ () => {
+    const session = createWriterDocumentSession();
+    const shell = session.view.GetWrtShell();
+    const body = shell.GetActiveParagraph();
+    body.SetText("cat body");
+    const table = shell.InsertTable({ mnInsMode: 0, mnRowsToRepeat: 0 }, 2, 2);
+    const cells = table?.GetTabLines()[0]?.GetTabBoxes();
+    const left = cells?.[0]?.GetParagraphs()[0];
+    const right = cells?.[1]?.GetParagraphs()[0];
+    if (!left || !right) throw new Error("Missing Writer table row.");
+    left.SetText("cat left");
+    right.SetText("cat right");
+    const point = new SwPosition(left, 0);
+    shell.SetCursor(point);
+    point.Dispose();
+    expect(shell.SelectTableRow()).toBe(true);
+    const workbench = render(<WriterWorkbench isActive view={session.view} />);
+
+    fireEvent.keyDown(window, { key: "h", ctrlKey: true });
+    const dialog = within(screen.getByRole("dialog", { name: "Find and Replace" }));
+    fireEvent.click(dialog.getByRole("checkbox", { name: "Current selection only" }));
+    fireEvent.change(dialog.getByLabelText("Find"), { target: { value: "cat" } });
+    fireEvent.change(dialog.getByLabelText("Replace with"), { target: { value: "longer" } });
+    fireEvent.click(dialog.getByRole("button", { name: "Replace All" }));
+    expect([body.GetText(), left.GetText(), right.GetText()]).toEqual([
+      "longer body",
+      "longer left",
+      "longer right",
+    ]);
+    expect(shell.HasBoxSelection()).toBe(true);
+    expect(shell.GetTableCrs()?.GetSelectedBoxes()).toEqual(cells);
+    workbench.unmount();
+    session.view.Close();
+  });
+
+  it("continues the native extra-area search phase after the caret moves", /** Checks a manually entered frame, the retained search phase and the bulk-search reset. @returns Nothing. */ () => {
+    const session = createWriterDocumentSession();
+    const shell = session.view.GetWrtShell();
+    const body = shell.GetActiveParagraph();
+    const doc = body.GetDoc();
+    body.SetText("needle body");
+    const anchor = new SwPosition(body, 0);
+    const items = new SfxItemSet(doc.GetAttrPool(), [[RES_FRMATR_BEGIN, RES_FRMATR_END - 1]]);
+    const format = MakeFlySection(doc, RndStdIds.FLY_AT_PARA, anchor, items);
+    items.Dispose();
+    const start = format?.GetContent().GetContentIdx()?.GetNode();
+    const frame = start && doc.nodes.at(start.GetIndex() + 1).GetTextNode();
+    if (!frame) throw new Error("Missing Writer text frame paragraph.");
+    frame.SetText("needle frame");
+    const frameStart = new SwPosition(frame, 0);
+    shell.SetCursor(frameStart);
+    frameStart.Dispose();
+    const workbench = render(<WriterWorkbench isActive view={session.view} />);
+
+    fireEvent.keyDown(window, { key: "f", ctrlKey: true });
+    const toolbar = within(screen.getByRole("toolbar", { name: "Find" }));
+    fireEvent.change(toolbar.getByLabelText("Find"), { target: { value: "needle" } });
+    const next = toolbar.getByRole("button", { name: "Find Next" });
+    const status = toolbar.getByRole("status");
+    fireEvent.click(next);
+    expect(shell.GetCursor().Start().GetNode()).toBe(frame);
+    fireEvent.click(next);
+    expect(shell.GetCursor().Start().GetNode()).toBe(body);
+    expect(status).toBeEmptyDOMElement();
+    fireEvent.click(next);
+    expect(shell.GetCursor().Start().GetNode()).toBe(frame);
+
+    act(
+      /** Moves the caret without resetting the last extra-area search pass. @returns Nothing. */ () =>
+        shell.SetCursor(anchor),
+    );
+    fireEvent.click(next);
+    expect(shell.GetCursor().Start().GetNode()).toBe(frame);
+    expect(status).toBeEmptyDOMElement();
+    fireEvent.click(next);
+    expect(shell.GetCursor().Start().GetNode()).toBe(body);
+    expect(status).toHaveTextContent("Reached the end of the document");
+
+    fireEvent.click(next);
+    expect(shell.GetCursor().Start().GetNode()).toBe(frame);
+    fireEvent.click(toolbar.getByRole("button", { name: "Find All" }));
+    expect(status).toHaveTextContent("2 results");
+    act(
+      /** Returns to the body after the bulk command resets the search phase. @returns Nothing. */ () =>
+        shell.SetCursor(anchor),
+    );
+    fireEvent.click(next);
+    expect(shell.GetCursor().Start().GetNode()).toBe(body);
+    expect(status).toBeEmptyDOMElement();
+
+    anchor.Dispose();
+    workbench.unmount();
+    session.view.Close();
+  });
+
+  it("takes the no-wrap decision before normalizing a reversed selection", /** Exercises the initial native caret boundary and its failed-search position. @returns Nothing. */ () => {
+    const session = createWriterDocumentSession();
+    const shell = session.view.GetWrtShell();
+    shell.Insert("needle");
+    const paragraph = shell.GetActiveParagraph();
+    const start = new SwPosition(paragraph, 0);
+    const end = new SwPosition(paragraph, paragraph.Len());
+    shell.SetPaM(start, end);
+    start.Dispose();
+    end.Dispose();
+    const workbench = render(<WriterWorkbench isActive view={session.view} />);
+
+    fireEvent.keyDown(window, { key: "f", ctrlKey: true });
+    const toolbar = within(screen.getByRole("toolbar", { name: "Find" }));
+    const next = toolbar.getByRole("button", { name: "Find Next" });
+    fireEvent.click(next);
+    expect(toolbar.getByRole("status")).toHaveTextContent("Search key not found");
+    expect(shell.GetCursor().HasMark()).toBe(false);
+    expect(shell.GetCursor().GetPoint().GetContentIndex()).toBe(paragraph.Len());
+    fireEvent.click(next);
+    expect(toolbar.getByRole("status")).toHaveTextContent("Reached the end of the document");
+    expect(shell.GetCursor().Start().GetContentIndex()).toBe(0);
+
+    workbench.unmount();
+    session.view.Close();
+  });
+
+  it("restarts scoped Find after a zero-result Replace All follows Find All", /** Checks native scope restoration and the extra-phase miss. @returns Nothing. */ () => {
+    const session = createWriterDocumentSession();
+    const shell = session.view.GetWrtShell();
+    shell.Insert("outside cat cat outside");
+    const start = new SwPosition(shell.GetActiveParagraph(), 8);
+    const end = new SwPosition(start.GetNode(), 15);
+    shell.SetPaM(end, start);
+    start.Dispose();
+    end.Dispose();
+    const workbench = render(<WriterWorkbench isActive view={session.view} />);
+    fireEvent.keyDown(window, { key: "h", ctrlKey: true });
+    const dialog = within(screen.getByRole("dialog", { name: "Find and Replace" }));
+    fireEvent.click(dialog.getByText("Other options"));
+    const scope = dialog.getByLabelText("Current selection only");
+    fireEvent.click(scope);
+    const query = dialog.getByLabelText("Find");
+    fireEvent.change(query, { target: { value: "cat" } });
+    fireEvent.click(dialog.getByRole("button", { name: "Find All" }));
+    fireEvent.change(query, { target: { value: "outside" } });
+    fireEvent.click(dialog.getByRole("button", { name: "Replace All" }));
+    fireEvent.change(query, { target: { value: "cat" } });
+    const next = dialog.getByRole("button", { name: "Find Next" });
+    fireEvent.click(next);
+    expect(dialog.getByRole("status")).toHaveTextContent("Reached the end of the document");
+    fireEvent.change(query, { target: { value: "outside" } });
+    fireEvent.click(next);
+    expect(dialog.getByRole("status")).toHaveTextContent("Search key not found");
+    expect(scope).toBeDisabled();
+    workbench.unmount();
+    session.view.Close();
   });
 
   it("implements roving, popup, submenu, typeahead, escape, and outside-click menu semantics" /** Verifies the primary menu keyboard and dismissal interactions. @returns Nothing. */, function navigatesWriterMenus(): void {

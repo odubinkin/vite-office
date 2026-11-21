@@ -1,8 +1,9 @@
 /** @fileoverview Source-derived model-text search checks over real Writer nodes, sections and registered positions. */
 import { expect, it } from "vitest";
+import { createNativeRegexMatcher, hasNativeRegexProbe } from "../../../../test/icu-regex-probe";
 import { SwCursor } from "./swcrsr";
 import { FindRanges, SwDocPositions } from "../../../inc/cshtyp";
-import { APPROXIMATE } from "../../../../offapi/com/sun/star/util/SearchAlgorithms2";
+import { APPROXIMATE, REGEXP } from "../../../../offapi/com/sun/star/util/SearchAlgorithms2";
 import { REG_NOT_BEGINOFLINE } from "../../../../offapi/com/sun/star/util/SearchFlags";
 import { FindText, FindTextImpl } from "./findtxt";
 import { SwPaM, SwPosition } from "./pam";
@@ -10,6 +11,8 @@ import { SwDoc } from "../doc/doc";
 import { SearchOptions2 } from "../../../../i18nutil/inc/searchopt";
 import { TextSearch } from "../../../../unotools/inc/textsearch";
 import { OUString } from "../../../../sal/inc/rtl/ustring";
+import { SwFormatFlyCnt } from "../../../inc/fmtflcnt";
+import { SwTextFlyCnt } from "../../../inc/txtflcnt";
 import type { SwTextNode } from "../txtnode/ndtxt";
 /** Copies text to a native string. @param text - Model text. @returns Actual value. */
 function string(text: string): OUString {
@@ -95,6 +98,64 @@ function search(text: string, key: string, backward: boolean): readonly number[]
     cursor.Dispose();
   }
 }
+it("uses native separators for inline fly hints and restores filtered UTF-16 boundaries", /** Uses actual anchor hints and bounded forward/backward search. @returns Nothing. */ () => {
+  const doc = new SwDoc(),
+    node = doc.paragraphs[0] as SwTextNode;
+  node.SetText("😀a\u00adb");
+  for (const offset of [0, node.Len() + 1]) {
+    const format = doc.MakeFlyFrameFormat("Inline object", undefined);
+    expect(node.InsertHint(new SwTextFlyCnt(new SwFormatFlyCnt(format), offset))).toBe(true);
+  }
+  const options = new SearchOptions2();
+  options.searchString.assign(string("😀ab"));
+  const region = range(node, 0),
+    cursor = range(node, 0);
+  try {
+    const engine = new TextSearch(options);
+    expect(FindTextImpl(cursor, options, engine, false, region)).toBe(true);
+    expect([cursor.GetPoint().GetContentIndex(), cursor.GetMark().GetContentIndex()]).toEqual([
+      6, 1,
+    ]);
+    expect(FindTextImpl(cursor, options, engine, true, region)).toBe(true);
+    expect([cursor.GetPoint().GetContentIndex(), cursor.GetMark().GetContentIndex()]).toEqual([
+      0, 7,
+    ]);
+
+    const format = doc.MakeFlyFrameFormat("Interior inline object", undefined);
+    const interior = new SwTextFlyCnt(new SwFormatFlyCnt(format), 3);
+    expect(node.InsertHint(interior)).toBe(true);
+    expect(FindTextImpl(cursor, options, engine, false, region)).toBe(false);
+    const anchored = range(node, 3, node, 4);
+    try {
+      const original = node.GetText();
+      expect(
+        /** Exercises the guarded document operation before mutation/history. @returns Native replacement outcome. */ () =>
+          doc.GetDocumentContentOperationsManager().ReplaceRange(anchored, "x"),
+      ).toThrow("Writer structured replacement is not implemented.");
+      expect(
+        /** Exercises the same restriction at the text-node boundary. @returns Nothing. */ () =>
+          node.ReplaceText(anchored.Start(), 1, "x"),
+      ).toThrow("Writer dummy-character replacement is not implemented.");
+      expect(node.GetText()).toBe(original);
+      expect(node.GetpSwpHints()?.GetTextAttrForCharAt(3)).toBe(interior);
+      expect(format.GetAnchor().GetAnchorContentOffset()).toBe(3);
+    } finally {
+      anchored.Dispose();
+    }
+    const bounded = range(node, 3, node, 7);
+    try {
+      options.searchString.assign(string("ab"));
+      expect(FindTextImpl(cursor, options, new TextSearch(options), false, bounded)).toBe(true);
+      expect([cursor.Start().GetContentIndex(), cursor.End().GetContentIndex()]).toEqual([4, 7]);
+    } finally {
+      bounded.Dispose();
+    }
+  } finally {
+    region.Dispose();
+    cursor.Dispose();
+    doc.Dispose();
+  }
+});
 it.each([false, true])(
   "searches body and table text through the original SwNodes order backward=%s",
   /** Skips structural nodes and preserves actual paragraph identity. @param backward - Direction. @returns Nothing. */ (
@@ -413,3 +474,206 @@ it("retains the native similarity script end when it reaches beyond the requeste
     selected.Dispose();
   }
 });
+
+it.skipIf(!hasNativeRegexProbe).each([false, true])(
+  "requires access to the paragraph end for trailing-dollar alternatives backward=%s",
+  /** Tests the pinned model's character-level anchor detection with real ICU. @param backward - Direction. @returns Nothing. */ (
+    backward,
+  ) => {
+    const doc = new SwDoc(),
+      node = doc.paragraphs[0] as SwTextNode;
+    node.SetText("a$ x");
+    const bounded = range(node, 0, node, 2);
+    const full = range(node, 0);
+    const cursor = range(node, 0);
+    const options = new SearchOptions2();
+    options.AlgorithmType2 = REGEXP;
+    try {
+      options.searchString.assign(string(String.raw`a\$`));
+      expect(
+        FindTextImpl(
+          cursor,
+          options,
+          new TextSearch(options, createNativeRegexMatcher),
+          backward,
+          bounded,
+        ),
+      ).toBe(false);
+      expect(
+        FindTextImpl(
+          cursor,
+          options,
+          new TextSearch(options, createNativeRegexMatcher),
+          backward,
+          full,
+        ),
+      ).toBe(true);
+      options.searchString.assign(string(String.raw`a\$|x$`));
+      expect(
+        FindTextImpl(
+          cursor,
+          options,
+          new TextSearch(options, createNativeRegexMatcher),
+          backward,
+          bounded,
+        ),
+      ).toBe(false);
+      options.searchString.assign(string("a|x$"));
+      expect(
+        FindTextImpl(
+          cursor,
+          options,
+          new TextSearch(options, createNativeRegexMatcher),
+          backward,
+          bounded,
+        ),
+      ).toBe(true);
+      expect(cursor.Start().GetContentIndex()).toBe(0);
+      expect(cursor.End().GetContentIndex()).toBe(1);
+    } finally {
+      cursor.Dispose();
+      full.Dispose();
+      bounded.Dispose();
+    }
+  },
+);
+
+it
+  .skipIf(!hasNativeRegexProbe)
+  .each([
+    String.raw`\xAD`,
+    String.raw`\x{00AD}`,
+    String.raw`\u00AD`,
+    String.raw`\u00ad`,
+    String.raw`\U000000AD`,
+    String.raw`\N{SOFT HYPHEN}`,
+  ])(
+  "preserves a soft hyphen requested by the source regex token %s",
+  /** Verifies each literal spelling admitted by native Writer model-text cleanup. @param token - Native pattern token. @returns Nothing. */ (
+    token,
+  ) => {
+    const doc = new SwDoc(),
+      node = doc.paragraphs[0] as SwTextNode;
+    node.SetText("😀a\u00adb");
+    const region = range(node, 0);
+    const cursor = range(node, 0);
+    const options = new SearchOptions2();
+    options.AlgorithmType2 = REGEXP;
+    options.searchString.assign(string(token));
+    const engine = new TextSearch(options, createNativeRegexMatcher);
+    try {
+      for (const backward of [false, true]) {
+        expect(FindTextImpl(cursor, options, engine, backward, region)).toBe(true);
+        expect(cursor.Start().GetContentIndex()).toBe(3);
+        expect(cursor.End().GetContentIndex()).toBe(4);
+      }
+    } finally {
+      cursor.Dispose();
+      region.Dispose();
+    }
+  },
+);
+
+it.skipIf(!hasNativeRegexProbe).each([
+  { pattern: "$", breaks: [0, 1, 2, 3] },
+  { pattern: "^$", breaks: [1, 3] },
+  { pattern: "$^", breaks: [1, 3] },
+])(
+  "finds $pattern as directional ranges between adjacent paragraph nodes",
+  /** Ports the paragraph-break assertion from tdf147583 to the model ring. @param scenario - Anchor and expected preceding paragraphs. @returns Nothing. */ (
+    scenario,
+  ) => {
+    const doc = new SwDoc();
+    const first = doc.paragraphs[0] as SwTextNode;
+    first.SetText("abc");
+    const nodes = [
+      first,
+      doc.nodes.MakeTextNode(""),
+      doc.nodes.MakeTextNode("xyz"),
+      doc.nodes.MakeTextNode(""),
+      doc.nodes.MakeTextNode(""),
+    ];
+    const options = new SearchOptions2();
+    options.AlgorithmType2 = REGEXP;
+    options.searchString.assign(string(scenario.pattern));
+    for (const backward of [false, true]) {
+      const point = new SwPosition(first, 0);
+      const cursor = new SwCursor(point);
+      point.Dispose();
+      try {
+        expect(
+          cursor.Find_Text(
+            options,
+            false,
+            backward ? SwDocPositions.End : SwDocPositions.Start,
+            backward ? SwDocPositions.Start : SwDocPositions.End,
+            [false],
+            FindRanges.InSelAll | FindRanges.InBodyOnly,
+            false,
+            undefined,
+            undefined,
+            createNativeRegexMatcher,
+          ),
+        ).toBe(scenario.breaks.length);
+        const breaks = backward ? [...scenario.breaks].reverse() : scenario.breaks;
+        const found = [...cursor.GetRingContainer()];
+        for (const [index, before] of breaks.entries()) {
+          const match = found[index];
+          const start = nodes[before];
+          if (!match || !start) throw new Error("Expected a paragraph break in the cursor ring.");
+          expect(match.Start().GetNode()).toBe(start);
+          expect(match.Start().GetContentIndex()).toBe(start.Len());
+          expect(match.End().GetNode()).toBe(nodes[before + 1]);
+          expect(match.End().GetContentIndex()).toBe(0);
+          expect(match.GetPoint()).toBe(backward ? match.Start() : match.End());
+        }
+      } finally {
+        while (cursor.GetNext() !== cursor) cursor.GetNext().Dispose();
+        cursor.Dispose();
+      }
+    }
+  },
+);
+
+it.skipIf(!hasNativeRegexProbe)(
+  "respects both ends of a search region when selecting a paragraph break",
+  /** Verifies clipping and layout admission on actual model positions. @returns Nothing. */ () => {
+    const doc = new SwDoc();
+    const first = doc.paragraphs[0] as SwTextNode;
+    first.SetText("abc");
+    const next = doc.nodes.MakeTextNode("xyz");
+    const options = new SearchOptions2();
+    options.AlgorithmType2 = REGEXP;
+    options.searchString.assign(string("$"));
+    const engine = new TextSearch(options, createNativeRegexMatcher);
+    const within = range(first, 0);
+    const across = range(first, 2, next, 0);
+    const cursor = range(first, 0);
+    try {
+      expect(FindTextImpl(cursor, options, engine, false, within)).toBe(false);
+      expect(FindTextImpl(cursor, options, engine, true, within)).toBe(false);
+      expect(
+        FindTextImpl(
+          cursor,
+          options,
+          engine,
+          false,
+          across,
+          /** Excludes the second text node from device layout. @param node - Candidate. @returns Whether represented. */ (
+            node,
+          ) => node !== next,
+        ),
+      ).toBe(false);
+      expect(cursor.GetPoint().GetNode()).toBe(first);
+      expect(cursor.GetPoint().GetContentIndex()).toBe(0);
+      expect(FindTextImpl(cursor, options, engine, false, across)).toBe(true);
+      expect(cursor.Start().GetContentIndex()).toBe(3);
+      expect(cursor.End().GetNode()).toBe(next);
+      expect(cursor.End().GetContentIndex()).toBe(0);
+    } finally {
+      cursor.Dispose();
+      across.Dispose();
+      within.Dispose();
+    }
+  },
+);

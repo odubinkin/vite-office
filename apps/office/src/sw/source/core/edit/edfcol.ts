@@ -104,15 +104,21 @@ interface TextFormatCollShell {
     execute: () => void,
   ): boolean;
 }
-/** Applies source-ordered collection/reset operations over the actual cursor ring with one native undo group. @param target - Original shell. @param collection - Owned paragraph format. @param resetAllCharAttrs - Initial selective reset eligibility. @returns Whether applied. */
+/** Applies source-ordered collection/reset operations over the actual cursor ring with one native undo group. @param target - Original shell. @param collection - Owned paragraph format. @param resetAllCharAttrs - Initial selective reset eligibility. @param acceptsRange - Optional native read-only admission for each selection. @returns Whether applied. */
 export function setTextFormatCollAtShell(
   target: TextFormatCollShell,
   collection: SwTextFormatColl,
   resetAllCharAttrs: boolean,
+  acceptsRange?: (range: SwPaM) => boolean,
 ): boolean {
   const document = target.GetDoc(),
     cursor = target.GetCursor(),
-    ranges = [...cursor.GetRingContainer()];
+    ranges = [...cursor.GetRingContainer()].filter(
+      /** Skips protected cursor ranges when the caller supplies native admission. @param range - Cursor-ring member. @returns Whether the edit can proceed. */ (
+        range,
+      ) => acceptsRange?.(range) !== false,
+    );
+  if (ranges.length === 0) return false;
   if (ranges.length > 1) {
     const group = new SfxListUndoAction<SwUndoRedoContext>("Paragraph Style");
     return target.ApplyAction(
@@ -136,7 +142,7 @@ export function setTextFormatCollAtShell(
   }
   const operation = createTextFormatCollAction(
     document,
-    cursor,
+    ranges[0] as SwPaM,
     collection,
     target.CaptureCursorState(),
     resetAllCharAttrs,

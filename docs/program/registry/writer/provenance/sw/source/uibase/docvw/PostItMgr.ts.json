@@ -1,0 +1,45 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "status": "mapped",
+    "localPath": "apps/office/src/sw/source/uibase/docvw/PostItMgr.ts",
+    "upstreamPath": "sw/source/uibase/docvw/PostItMgr.cxx",
+    "localSymbols": [
+      "SwPostItMgr",
+      "SearchReplace",
+      "FinishSearchReplace",
+      "Replace"
+    ],
+    "upstreamSymbols": [
+      "SwPostItMgr::SearchReplace",
+      "SwPostItMgr::FinishSearchReplace",
+      "SwPostItMgr::Replace"
+    ],
+    "preservedResponsibilities": [
+      "Resolves open sidebar editors by annotation field identity, searches from the directional editor boundary, continues the active match, and delegates single replacement to the original EditEngine."
+    ],
+    "omittedResponsibilities": [
+      "Sidebar layout, annotation insertion and document file mapping remain outside the current search manager."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sw/source/uibase/docvw/PostItMgr.ts",
+          "marker": "FinishSearchReplace"
+        },
+        {
+          "path": "apps/office/src/sw/source/uibase/uiview/view-note-search.test.ts",
+          "marker": "interleaves body matches"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sw/source/uibase/docvw/PostItMgr.cxx",
+          "marker": "SwPostItMgr::FinishSearchReplace"
+        }
+      ]
+    }
+  }
+}

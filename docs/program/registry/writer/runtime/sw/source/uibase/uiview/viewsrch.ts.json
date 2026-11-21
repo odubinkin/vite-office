@@ -17,9 +17,13 @@
       "divergenceClass": "B",
       "evidence": [
         "apps/office/src/sw/source/uibase/uiview/viewsrch.ts#SwViewSearch",
-        "vendor/libreoffice-reference/sw/source/uibase/uiview/viewsrch.cxx#SwView::ExecSearch"
+        "vendor/libreoffice-reference/sw/source/uibase/uiview/viewsrch.cxx#SwView::ExecSearch",
+        "vendor/libreoffice-reference/sw/source/uibase/uiview/viewsrch.cxx#SwView::StateSearch",
+        "apps/office/src/sw/source/uibase/uiview/view.test.ts",
+        "apps/office/src/sw/browser/presentation/WriterSearch.test.tsx",
+        "apps/office/src/sw/browser/presentation/WriterMenuBar.test.tsx"
       ],
-      "justification": "Connects the represented SwView search command branches to actual Writer cursor ranges, search options and document history. Uses actual body, connected editable text-frame, and active header/footer ranges for text and paragraph-style search and replacement. Uses the native SvxSearchCmd enum and initializes the dialog search item from the current document selection.",
+      "justification": "Connects the represented SwView search command branches to actual Writer cursor ranges, search options and document history. Uses actual body, connected editable text-frame, and active header/footer ranges for text and paragraph-style search and replacement. The dialog uses cursor-shell expanded single-paragraph text or selection scope. The Find Bar uses ASCII range output without numbering or a final paragraph break and refreshes its entry on focus from the document. Read-only Writer view state clears both replacement bits in the SearchOptions item and gates replacement dispatch. Single replacement validates the selected cursor ring and backward replacement keeps the live result and swaps its endpoints, and bulk replacement restores the registered cursor. Single searches retain the extra-area phase and take the no-wrap decision before cursor normalization. Scoped single searches use the same wrap path with the native InSel flag and publish the resulting cursor and range; zero-result Replace All retains the last command. Search dispatch supplies the application data locale and native selection flags and omits replacement text from Find passes. Single regex Replace resolves capture references on the displayed selection before revalidation, preserves the replacement template for subsequent commands, and propagates the regex flag for plain and formatted replacement. The modeless dialog and search request expose the regular-expression algorithm and preserve the native IsUseRegularExpression preference. The style lists omit unused hidden styles with the native favourite built-in replacement exception, and template dispatch resolves native display names and preserves missing-template fallbacks. Single and bulk search replacements consult the represented table and text-frame protection owners. Find uses the native default allowing the cursor in protected content. The generated ExecuteSearch slot routes represented SearchItem payloads to the search owner and observes Quiet feedback. SearchOn arms selection initialization for the next SearchProperties state query; both SearchProperties and SearchOff retain accepted dialog settings.",
       "knownViolations": [],
       "localSymbols": [
         "SwViewSearch"
@@ -27,7 +31,8 @@
       "sourceResponsibility": "unverified",
       "upstreamFile": "sw/source/uibase/uiview/viewsrch.cxx",
       "upstreamSymbols": [
-        "SwView::ExecSearch"
+        "SwView::ExecSearch",
+        "SwView::StateSearch"
       ]
     }
   }

@@ -1,0 +1,32 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/i18npool/browser/regex-matcher.ts",
+    "classification": "browser-adaptation",
+    "state": "foundation",
+    "suite": "shared",
+    "subsystem": "text-search",
+    "capabilityIds": [
+      "CAP-0111"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "not-applicable",
+      "defaultStatus": "not-applicable",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/i18npool/browser/regex-matcher.ts#createBrowserRegexMatcher",
+        "apps/office/src/i18npool/browser/regex-matcher.test.ts"
+      ],
+      "justification": "Runs the platform RegExp engine over prepared UTF-16 text, preserves the surrounding search context, and returns signed directional capture offsets.",
+      "knownViolations": [],
+      "localSymbols": [
+        "createBrowserRegexMatcher"
+      ],
+      "sourceResponsibility": "browser-owned",
+      "upstreamFile": null,
+      "upstreamSymbols": []
+    }
+  }
+}

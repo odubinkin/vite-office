@@ -1,0 +1,33 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sw/browser/storage/writer-search-options-store.ts",
+    "classification": "browser-adaptation",
+    "state": "active",
+    "suite": "writer",
+    "subsystem": "text-search",
+    "capabilityIds": [
+      "CAP-0111"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "not-applicable",
+      "defaultStatus": "not-applicable",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/sw/browser/storage/writer-search-options-store.ts#WriterSearchOptionsStore",
+        "apps/office/src/sw/browser/presentation/WriterSearchPreferences.test.tsx",
+        "unotools/source/config/searchopt.cxx#SvtSearchOptions_Impl::Save"
+      ],
+      "justification": "Browser localStorage adapter for user search preferences, using the source Common configuration path and boolean property names.",
+      "knownViolations": [],
+      "localSymbols": [
+        "WriterSearchOptionsStore"
+      ],
+      "sourceResponsibility": "browser-owned",
+      "upstreamFile": null,
+      "upstreamSymbols": []
+    }
+  }
+}

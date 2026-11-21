@@ -1,0 +1,38 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "browser-adaptation",
+    "status": "local-only",
+    "localPath": "apps/office/src/sw/browser/presentation/WriterCommentsSidebar.tsx",
+    "localSymbols": [
+      "RenderWriterComments"
+    ],
+    "rationale": "Projects live annotation fields in the document margin and registers each mounted comment editor by native field identity.",
+    "responsibilities": [
+      "Projects live annotation fields in the document margin and registers each mounted comment editor by native field identity."
+    ],
+    "stackDivergence": {
+      "kind": "browser-adaptation",
+      "rationale": "Browser text controls render the source annotation editor in the document margin."
+    },
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sw/browser/presentation/WriterCommentsSidebar.tsx",
+          "marker": "RenderWriterComments"
+        },
+        {
+          "path": "apps/office/src/sw/browser/presentation/WriterCommentsSidebar.test.tsx",
+          "marker": "focuses the matched comment"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sw/source/uibase/docvw/PostItMgr.cxx",
+          "marker": "SwPostItMgr::SearchReplace"
+        }
+      ]
+    }
+  }
+}

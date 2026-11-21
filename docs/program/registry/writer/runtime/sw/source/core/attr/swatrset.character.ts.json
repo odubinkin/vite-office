@@ -1,0 +1,32 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sw/source/core/attr/swatrset.character.ts",
+    "classification": "local-infrastructure",
+    "state": "active",
+    "suite": "writer",
+    "subsystem": "text-search",
+    "capabilityIds": [
+      "CAP-0111"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "not-applicable",
+      "defaultStatus": "not-applicable",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/sw/source/core/attr/swatrset.character.ts#writerCharacterItemFactory",
+        "apps/office/src/sw/browser/filter/xml/writer-codec.boundaries.test.ts"
+      ],
+      "justification": "Snapshot reconstruction maps character Which values to native item constructors, preserving line style and rotation fit state in every realm.",
+      "knownViolations": [],
+      "localSymbols": [
+        "writerCharacterItemFactory"
+      ],
+      "sourceResponsibility": "browser-owned",
+      "upstreamFile": null,
+      "upstreamSymbols": []
+    }
+  }
+}

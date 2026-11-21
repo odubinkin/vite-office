@@ -1,6 +1,10 @@
 /** @fileoverview Named Word styles through the actual Writer graph, OOXML archive, and import. */
 import { readFileSync } from "node:fs";
 import { assert, expect, it, vi } from "vitest";
+import { SvxBrushItem } from "../../../../editeng/inc/brushitem";
+import { SfxGrabBagItem } from "../../../../svl/inc/grabbagitem";
+import { Color } from "../../../../tools/inc/color";
+import { SwAttrIter } from "../../core/text/itratr";
 import { SvxAdjust } from "../../../../editeng/inc/svxenum";
 import { SvxAdjustItem } from "../../../../editeng/source/items/paraitem.adjust";
 import { SvxWeightItem } from "../../../../editeng/source/items/textitem";
@@ -14,6 +18,8 @@ import { importOOXML } from "../../writerfilter/filter/WriterFilter";
 import { writeOdtDocument } from "../xml/wrtxml";
 import { readOdtDocument } from "../xml/swxml";
 import {
+  RES_CHRATR_BACKGROUND,
+  RES_CHRATR_GRABBAG,
   RES_CHRATR_LANGUAGE,
   RES_CHRATR_CJK_LANGUAGE,
   RES_CHRATR_CTL_LANGUAGE,
@@ -127,6 +133,42 @@ it("round trips the pinned character style without flattening its Word style ID"
     );
   } finally {
     primary?.Dispose();
+    reopened?.Dispose();
+    original.Dispose();
+  }
+});
+
+it("round-trips Writer character background as Word shading", /** Tests the default shading export and native marker on import. @returns Completion. */ async () => {
+  const original = new SwDoc();
+  let reopened: SwDoc | undefined;
+  try {
+    const node = original.paragraphs[0];
+    assert(node);
+    node.SetText("colored plain");
+    const which = RES_CHRATR_BACKGROUND;
+    const direct = new SfxItemSet(original.GetAttrPool(), [[which, which]]);
+    direct.Put(new SvxBrushItem(new Color(0xabcdef), which));
+    node.SetAttr(direct, 0, 7);
+    direct.Dispose();
+    const bytes = await DocxExport.WriteDocument(original);
+    const archive = await DocumentArchive.open(bytes);
+    expect(await archive.readTextEntry("word/document.xml")).toContain(
+      '<w:shd w:fill="ABCDEF" w:val="clear"/>',
+    );
+    reopened = await importOOXML(bytes, {});
+    const paragraph = reopened.paragraphs[0];
+    assert(paragraph);
+    const attrs = new SwAttrIter(paragraph);
+    attrs.Seek(1);
+    const brush = attrs.GetAttrHandler().ReadItem(which);
+    assert(brush instanceof SvxBrushItem);
+    expect(brush.GetColor().toUInt32()).toBe(0xabcdef);
+    const bag = attrs.GetAttrHandler().ReadItem(RES_CHRATR_GRABBAG);
+    assert(bag instanceof SfxGrabBagItem);
+    const marker: [boolean] = [false];
+    expect(bag.GetGrabBag().get("CharShadingMarker")?.extract(marker, "bool")).toBe(true);
+    expect(marker[0]).toBe(true);
+  } finally {
     reopened?.Dispose();
     original.Dispose();
   }

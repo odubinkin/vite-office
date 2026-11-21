@@ -1,0 +1,38 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "browser-adaptation",
+    "localPath": "apps/office/src/i18npool/browser/regex-matcher.ts",
+    "status": "local-only",
+    "rationale": "Runs the platform RegExp engine over prepared UTF-16 text, preserves the surrounding search context, and returns signed directional capture offsets.",
+    "responsibilities": [
+      "Runs the platform RegExp engine over prepared UTF-16 text, preserves the surrounding search context, and returns signed directional capture offsets."
+    ],
+    "stackDivergence": {
+      "kind": "browser-adaptation",
+      "rationale": "Writer uses ECMAScript regex syntax and Unicode matching in the browser. The ICU binding serves host verification."
+    },
+    "localSymbols": [
+      "createBrowserRegexMatcher"
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/i18npool/browser/regex-matcher.ts",
+          "marker": "createBrowserRegexMatcher"
+        },
+        {
+          "path": "apps/office/src/i18npool/browser/regex-matcher.test.ts",
+          "marker": "keeps lookaround context outside a bounded greedy match"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/i18npool/source/search/textsearch.cxx",
+          "marker": "TextSearch::RESrchPrepare"
+        }
+      ]
+    }
+  }
+}

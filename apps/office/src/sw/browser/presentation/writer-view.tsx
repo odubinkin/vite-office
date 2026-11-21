@@ -41,7 +41,13 @@ import {
   resolveSwListFirstLineIndent,
 } from "../../source/core/txtnode/ndtxt-list-indent";
 import { WriterPropertiesPanel } from "./WriterPropertiesPanel";
-import { WriterSearch, type WriterSearchHistory } from "./WriterSearch";
+import {
+  WriterSearch,
+  type SearchFocusRequest as SearchFocus,
+  type SearchSurfaces,
+  type WriterSearchHistory,
+} from "./WriterSearch";
+import { RenderWriterComments } from "./WriterCommentsSidebar";
 import { WriterWorkspaceChrome } from "./WriterWorkspaceChrome";
 import { CommandMenuBar } from "../../../framework/browser/presentation/CommandMenuBar";
 import { useWriterContextMenu } from "./WriterContextMenu";
@@ -142,31 +148,46 @@ export function WriterWorkbench({
   );
   const suggestedTableName = activeDocument.GetUniqueTableName();
   const [searchHistory, setSearchHistory] = useState<WriterSearchHistory>({
-    findbar: [],
     search: [],
     replacement: [],
   });
-  const [searchSurface, setSearchSurface] = useState<{
-    dialog: boolean;
-    revision: number;
-  }>();
+  const [{ findbar, searchDialog }, setSearchSurfaces] = useState<SearchSurfaces>({});
   const openSearch = useCallback(
-    /** Opens the requested surface and reads the current model selection. @param dialog - Whether to open the full dialog. @returns Nothing. */ (
-      dialog: boolean,
-    ): void => {
-      if (searchSurface === undefined) searchOwner.OpenSearch(dialog);
-      setSearchSurface(
-        /** Requests focus even if the same surface is already open. @param previous - Current search surface. @returns Next search surface. */ (
+    /** Opens or refocuses a search surface. @param surface - Requested surface. @param search - Optional live toolbar query. @returns Nothing. */ (
+      surface: keyof SearchSurfaces,
+      search?: string,
+    ) => {
+      const text = surface === "findbar" ? searchOwner.GetFindBarSeed() || undefined : search;
+      if (surface === "searchDialog" && !searchDialog) view.Execute(WRITER_COMMAND_IDS.searchOn);
+      const initial =
+        surface === "searchDialog"
+          ? (view.QueryState(WRITER_COMMAND_IDS.searchProperties).value as SearchFocus["initial"])
+          : searchOwner.GetSearchItem();
+      const feedback = searchOwner.GetFeedback();
+      setSearchSurfaces(
+        /** Requests focus for one surface. @param previous - Open surfaces. @returns Updated focus requests. */ (
           previous,
-        ) => ({ dialog, revision: (previous?.revision ?? 0) + 1 }),
+        ) => ({
+          ...previous,
+          [surface]: {
+            search: text,
+            initial,
+            revision: (previous[surface]?.revision ?? 0) + 1,
+            feedback: previous[surface] ? previous[surface]?.feedback : feedback,
+          },
+        }),
       );
     },
-    [searchOwner, searchSurface],
+    [searchDialog, searchOwner, view],
   );
-  /** Closes the modeless search surface and returns to the document selection. @returns Nothing. */
-  function closeSearch(): void {
-    setSearchSurface(undefined);
-    editingHostRef.current?.focus();
+  /** Closes one search surface and restores Writer focus. @param dialog - Whether the dialog closes. @returns Nothing. */
+  function closeSearch(dialog: boolean): void {
+    setSearchSurfaces(
+      /** Removes only the closed surface. @param previous - Open surfaces. @returns Remaining surfaces. */ (
+        previous,
+      ) => ({ ...previous, [dialog ? "searchDialog" : "findbar"]: undefined }),
+    );
+    if (!view.GetPostItMgr().GrabFocusOnActiveSidebarWin()) editingHostRef.current?.focus();
   }
   const [optionsDialog, setOptionsDialog] = useState(false);
   const [tableDialog, setTableDialog] = useState<"insert" | "properties">();
@@ -199,13 +220,12 @@ export function WriterWorkbench({
           {
             id: WRITER_COMMAND_IDS.focusFindbar,
             capabilityId: "CAP-0111",
-            execute: /** Focuses the Find toolbar. @returns Nothing. */ () => openSearch(false),
+            execute: /** Focuses the toolbar. @returns Nothing. */ () => openSearch("findbar"),
           },
           {
             id: WRITER_COMMAND_IDS.searchDialog,
             capabilityId: "CAP-0111",
-            execute: /** Opens the modeless search dialog. @returns Nothing. */ () =>
-              openSearch(true),
+            execute: /** Opens the dialog. @returns Nothing. */ () => openSearch("searchDialog"),
           },
           {
             id: WRITER_COMMAND_IDS.optionsDialog,
@@ -364,45 +384,35 @@ export function WriterWorkbench({
     },
     [autosave, view],
   );
-  const handleDocumentTitleChange = useCallback(
-    /** Checks one inline-edited title before persisting it. @param title - Committed title. @returns Nothing. */
-    (title: string): void => {
-      void (
-        /** Resolves storage collisions before applying the title. @returns Completion. */ async function resolveDocumentTitle(): Promise<void> {
-          const store = services?.odtStore;
-          const shell = view.GetDocShell();
-          if (store !== undefined) {
-            const documents = await store.list();
-            const conflicting = documents.find(
-              /** Finds another browser record with the requested title. @param document - Stored record. @returns Whether it conflicts. */ (
-                document,
-              ) => document.title === title && document.id !== shell.GetDocumentId(),
-            );
-            if (conflicting !== undefined) {
-              setRenameCollision({ conflicting });
-              setRenameTitle(getUniqueWriterTitle(title, documents));
-              setRenameError(undefined);
-              return;
-            }
-          }
-          await commitDocumentTitle(title);
+  /** Checks one inline-edited title before persisting it. @param title - Committed title. @returns Completion. */
+  async function handleDocumentTitleChange(title: string): Promise<void> {
+    const shell = view.GetDocShell();
+    try {
+      const store = services?.odtStore;
+      if (store !== undefined) {
+        const documents = await store.list();
+        const conflicting = documents.find(
+          /** Finds another browser record with the requested title. @param document - Stored record. @returns Whether it conflicts. */ (
+            document,
+          ) => document.title === title && document.id !== shell.GetDocumentId(),
+        );
+        if (conflicting !== undefined) {
+          setRenameCollision({ conflicting });
+          setRenameTitle(getUniqueWriterTitle(title, documents));
+          setRenameError(undefined);
+          return;
         }
-      )().catch(
-        /** Reports title lookup or persistence failure through the document medium. @param error - Failure value. @returns Nothing. */ (
-          error: unknown,
-        ) => {
-          const shell = view.GetDocShell();
-          shell.SetMediumOperation(
-            "save",
-            "failed",
-            shell.GetDocumentState().contentGeneration,
-            error instanceof Error ? error.message : String(error),
-          );
-        },
+      }
+      await commitDocumentTitle(title);
+    } catch (error) {
+      shell.SetMediumOperation(
+        "save",
+        "failed",
+        shell.GetDocumentState().contentGeneration,
+        error instanceof Error ? error.message : String(error),
       );
-    },
-    [commitDocumentTitle, services?.odtStore, view],
-  );
+    }
+  }
 
   /** Resolves the rename collision with the editable alternative, repeating the prompt for another occupied name. @param requestedTitle - User-entered alternative. @returns Completion. */
   async function saveRenamedDocumentAs(requestedTitle: string): Promise<void> {
@@ -569,31 +579,32 @@ export function WriterWorkbench({
     },
     [searchFeedback],
   );
-  const search =
-    searchSurface === undefined ? null : (
+  /** Projects the requested surface over the shared view owner. @param dialog - Whether to render Find and Replace. @param request - Surface-specific focus request. @returns Mounted search controls. */
+  function renderSearch(dialog: boolean, request: SearchFocus): React.JSX.Element {
+    const barStatus = findbar?.feedback === searchFeedback ? undefined : findbar && searchFeedback;
+    return (
       <WriterSearch
-        key={searchSurface.dialog ? "dialog" : "toolbar"}
-        dialog={searchSurface.dialog}
-        initial={searchOwner.GetSearchItem()}
-        focusRequest={searchSurface.revision}
+        dialog={dialog}
+        request={request}
+        commandSource={commandSource}
         history={searchHistory}
         onHistoryChange={setSearchHistory}
-        owner={searchOwner}
-        canSearchSelection={searchOwner.HasSelection()}
-        close={closeSearch}
-        searchFeedback={searchFeedback}
-        showDialog={
-          /** Opens Find and Replace from the Find toolbar. @returns Nothing. */ () =>
-            openSearch(true)
-        }
+        view={view}
+        canSearchSelection={dialog && searchOwner.HasSelection()}
+        close={/** Closes this surface. @returns Nothing. */ () => closeSearch(dialog)}
+        searchFeedback={request.feedback === searchFeedback ? undefined : searchFeedback}
+        findBarFeedback={barStatus}
+        openSearch={openSearch}
       />
     );
+  }
   return (
     <div hidden={!isActive}>
-      {searchSurface?.dialog === true ? search : null}
+      {searchDialog && renderSearch(true, searchDialog)}
       <WriterWorkspaceChrome
+        commentsSidebar={RenderWriterComments(activeDocument, view)}
         documentTitle={snapshot.documentState.title}
-        findToolbar={searchSurface?.dialog === false ? search : null}
+        findToolbar={findbar && renderSearch(false, findbar)}
         numberingToolbar={
           (view.GetWrtShell().GetSelectionType() & SelectionType.NumberList) !== 0 ? (
             <WriterNumObjectBar
@@ -689,28 +700,26 @@ export function WriterWorkbench({
         }
         onDocumentTitleChange={handleDocumentTitleChange}
         propertiesSidebar={
-          <>
-            <WriterPropertiesPanel
-              objectShell={view.GetDocShell()}
-              isTable={currentTable !== undefined}
-              unit={snapshot.metricUnit}
-              paragraphStyleOptions={snapshot.paragraphStyleOptions}
-              paragraphStyleNames={snapshot.paragraphStyleNames}
-              embeddedFontFamilies={activeDocument.GetEmbeddedFonts().map(
-                /** Projects actual embedded family names. @param font - Package font. @returns Family name. */
-                (font) => font.familyName,
-              )}
-              fontAvailability={
-                fontAvailability?.document === activeDocument ? fontAvailability.values : {}
-              }
-              commandSource={commandSource}
-              focusDocument={
-                /** Returns panel header focus to this Writer frame's mounted client. @returns Nothing. */ () =>
-                  (editingHostRef.current as HTMLElement).focus()
-              }
-              resolveArguments={resolveCommandArguments}
-            />
-          </>
+          <WriterPropertiesPanel
+            objectShell={view.GetDocShell()}
+            isTable={currentTable !== undefined}
+            unit={snapshot.metricUnit}
+            paragraphStyleOptions={snapshot.paragraphStyleOptions}
+            paragraphStyleNames={snapshot.paragraphStyleNames}
+            embeddedFontFamilies={activeDocument.GetEmbeddedFonts().map(
+              /** Projects actual embedded family names. @param font - Package font. @returns Family name. */
+              (font) => font.familyName,
+            )}
+            fontAvailability={
+              fontAvailability?.document === activeDocument ? fontAvailability.values : {}
+            }
+            commandSource={commandSource}
+            focusDocument={
+              /** Returns panel header focus to this Writer frame's mounted client. @returns Nothing. */ () =>
+                (editingHostRef.current as HTMLElement).focus()
+            }
+            resolveArguments={resolveCommandArguments}
+          />
         }
         rulers={
           <WriterRulers

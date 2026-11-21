@@ -2,6 +2,8 @@
  * @fileoverview Implements Writer's ordered auto-format hint container from pinned `sw/source/core/txtnode/ndhints.cxx`.
  */
 
+import { SwTextField } from "../../../inc/txtfld";
+import { SwPostItFieldType } from "../fields/docufld";
 import { SwTextFlyCnt } from "../../../inc/txtflcnt";
 import { TryInsertTextNodeHint, DestroyTextNodeAttribute } from "./thints-insert";
 import { TryInsertInternetNesting } from "./thints-nesting";
@@ -9,6 +11,7 @@ import type { SwRegHistory } from "../undo/rolbck";
 import { CheckCharacterHintSortNumber } from "./thints-portions";
 import { SvxFontItem } from "../../../../editeng/inc/fontitem";
 import {
+  mergeTextRuns,
   setFontItem,
   projectCharacterHintAttributes,
   setCharacterItems,
@@ -21,7 +24,9 @@ import { SwInsertFlags } from "../../../inc/IDocumentContentOperations";
 import { SfxItemSet } from "../../../../svl/source/items/itemset";
 import {
   RES_CHRATR_FONT,
+  RES_TXTATR_ANNOTATION,
   RES_TXTATR_AUTOFMT,
+  RES_TXTATR_FLYCNT,
   RES_TXTATR_INETFMT,
   WRITER_CHARACTER_WHICH_RANGES,
 } from "../../../inc/hintids";
@@ -51,7 +56,6 @@ import {
   type WriterCharacterAttributes,
 } from "./txatbase";
 import {
-  equalWriterHyperlinks,
   normalizeWriterHyperlink,
   SwFormatINetFormat,
   SwFormatCharFormat,
@@ -61,7 +65,7 @@ import {
 /** Bounded implemented ranged item families held by the native maps. */
 type RangedTextAttr = SwTextAttrEnd<SwFormatAutoFormat | SwFormatINetFormat | SwFormatCharFormat>;
 /** Point and ranged attributes share the three native indexes. */
-export type TextNodeAttribute = RangedTextAttr | SwTextFlyCnt;
+export type TextNodeAttribute = RangedTextAttr | SwTextFlyCnt | SwTextField;
 
 /** Stores directly formatted text portions in three native ordered maps. */
 export class SwpHints {
@@ -90,7 +94,11 @@ export class SwpHints {
       throw new Error("Writer hints require the owning document pool.");
     this.m_pTextNode = node;
     for (const hint of this.m_HintsByStart)
-      if (hint instanceof SwTextINetFormat || hint instanceof SwTextCharFormat)
+      if (
+        hint instanceof SwTextINetFormat ||
+        hint instanceof SwTextCharFormat ||
+        hint instanceof SwTextField
+      )
         hint.ChgTextNode(node);
   }
 
@@ -114,7 +122,11 @@ export class SwpHints {
   private set hintsByStart(hints: TextNodeAttribute[]) {
     for (const hint of this.m_HintsByStart) {
       hint.m_pHints = undefined;
-      if (hint instanceof SwTextINetFormat || hint instanceof SwTextCharFormat)
+      if (
+        hint instanceof SwTextINetFormat ||
+        hint instanceof SwTextCharFormat ||
+        hint instanceof SwTextField
+      )
         hint.ChgTextNode(undefined);
     }
     this.m_HintsByStart = hints;
@@ -122,7 +134,11 @@ export class SwpHints {
     this.m_HintsByWhichAndStart = [...hints].sort(compareHintsByWhichAndStart);
     for (const hint of hints) {
       hint.m_pHints = this;
-      if (hint instanceof SwTextINetFormat || hint instanceof SwTextCharFormat)
+      if (
+        hint instanceof SwTextINetFormat ||
+        hint instanceof SwTextCharFormat ||
+        hint instanceof SwTextField
+      )
         hint.ChgTextNode(this.m_pTextNode);
     }
     this.m_StartMapNeedsSortingRange = [0x7fffffff, -1];
@@ -227,7 +243,6 @@ export class SwpHints {
     this.ResortEndMap();
     return hintPositionBound(this.m_HintsByEnd, end, true, true) - 1;
   }
-
   /** Reads an actual attribute in native end order. @param position - End-map index. @returns Owned attribute. */
   public GetSortedByEnd(position: number): TextNodeAttribute {
     this.ResortEndMap();
@@ -242,7 +257,6 @@ export class SwpHints {
     const position = hintWhichStartBound(this.m_HintsByWhichAndStart, [which, -Infinity], false);
     return position === this.Count() ? Number.MAX_SAFE_INTEGER : position;
   }
-
   /** Reads an actual attribute in native Which/start order. @param position - Which-map index. @returns Owned attribute. */
   public GetSortedByWhichAndStart(position: number): TextNodeAttribute {
     this.ResortWhichMap();
@@ -258,24 +272,21 @@ export class SwpHints {
   ) {
     this.replace(hints);
   }
-
   /** Owns one actual attribute in all native maps without merging portions. @param hint - Fresh detached attribute. @returns Nothing. */
   public Insert(hint: TextNodeAttribute): void {
     if (hint.m_pHints !== undefined) throw new Error("Writer hint is already owned.");
     this.hintsByStart = [...this.hintsByStart, hint].sort(compareHints);
   }
-
   /** Releases an actual attribute from the three owned maps. @param position - Native start-map offset. @returns Nothing. */
   public DeleteAtPos(position: number): void {
     const hint = this.Get(position);
-    if (!(hint instanceof SwTextFlyCnt)) this.NoteInHistory(hint);
+    if (hint instanceof SwTextAttrEnd) this.NoteInHistory(hint);
     this.hintsByStart = this.hintsByStart.filter(
       /** Keeps the other actual attributes. @param entry - Map attribute. @returns Whether retained. */ (
         entry,
       ) => entry !== hint,
     );
   }
-
   /** Original TryInsertHint entrypoint at the actual map owner. @param hint - New attribute. @param node - Actual node. @param mode - Native flags. @returns Success. */
   public TryInsertHint(
     hint: RangedTextAttr,
@@ -317,7 +328,6 @@ export class SwpHints {
     if (hint === undefined) throw new Error(`Unknown SwpHints position: ${position}`);
     return hint;
   }
-
   /** Returns ranged attributes for character formatting and run projection. @returns Ordered ranged hints. */
   public entries(): readonly RangedTextAttr[] {
     return this.hintsByStart.filter(
@@ -327,11 +337,21 @@ export class SwpHints {
   }
 
   /** Looks up an owned point at its dummy character. @param offset - Text offset. @returns Actual point or undefined. */
-  public GetTextAttrForCharAt(offset: number): SwTextFlyCnt | undefined {
+  public GetTextAttrForCharAt(offset: number): SwTextFlyCnt | undefined;
+  /** Queries a field at its point marker. @param offset - Text offset. @param which - Native field identity. @returns Owned field or undefined. */
+  public GetTextAttrForCharAt(
+    offset: number,
+    which: typeof RES_TXTATR_ANNOTATION,
+  ): SwTextField | undefined;
+  /** Queries an owned point of the requested family. @param offset - Text offset. @param which - Requested family. @returns Point or undefined. */
+  public GetTextAttrForCharAt(
+    offset: number,
+    which: number = RES_TXTATR_FLYCNT,
+  ): SwTextFlyCnt | SwTextField | undefined {
     const hints = this.hintsByStart;
     for (let i = hintPositionBound(hints, offset, false); hints[i]?.GetStart() === offset; ++i) {
       const hint = hints[i];
-      if (hint instanceof SwTextFlyCnt) return hint;
+      if (hint && !(hint instanceof SwTextAttrEnd) && hint.Which() === which) return hint;
     }
     return undefined;
   }
@@ -340,7 +360,6 @@ export class SwpHints {
   public GetIndexOf(hint: TextNodeAttribute): number {
     return this.hintsByStart.indexOf(hint);
   }
-
   /** Tests whether native point-copy support is required. @param start - Inclusive bound. @param end - Exclusive bound. @returns Whether a point is in the range. */
   public HasFlyContent(start = 0, end = Infinity): boolean {
     for (const hint of this.hintsByStart) {
@@ -349,7 +368,6 @@ export class SwpHints {
     }
     return false;
   }
-
   /** Compares ordered native hints, including ranges, flags, and pooled item values. @param other - Candidate hint container. @returns Whether both containers are structurally equal. */
   public equals(other: SwpHints): boolean {
     if (this.Count() !== other.Count()) return false;
@@ -371,23 +389,24 @@ export class SwpHints {
       },
     );
   }
-
   /** Copies hints intersecting a text range, clipping and rebasing them to zero. @param start - Inclusive text offset. @param end - Exclusive text offset. @returns Independent rebased hints. */
   public slice(start: number, end: number): SwpHints {
     return this.sliceRange(start, end, false);
   }
-
   /** Captures cut attributes with native split/equal-end reconstruction and strictly interior retained flags. @param start - Inclusive cut offset. @param end - Exclusive cut offset. @returns Rebased cut hints. */
   public sliceForCut(start: number, end: number): SwpHints {
     return this.sliceRange(start, end, true);
   }
-
   /** Clips snapshot or cut attributes without changing the source container. @param start - Inclusive offset. @param end - Exclusive offset. @param cut - Whether native CutImpl construction applies. @returns Independent rebased attributes. */
   private sliceRange(start: number, end: number, cut: boolean): SwpHints {
     assertHintSlice(start, end);
     if (this.HasFlyContent(start, end))
       throw new Error("Writer inline fly copy requires a layout format copy.");
-    return this.sliceRanges(start, end, cut);
+    const result = this.sliceRanges(start, end, cut);
+    for (const hint of this.hintsByStart)
+      if (hint instanceof SwTextField && hint.start >= start && hint.start < end)
+        result.Insert(hint.Copy(hint.start - start));
+    return result;
   }
 
   /** Copies only ranged attributes around a text replacement. @param start - First offset. @param end - End offset. @param cut - Native CutImpl flags. @returns Ranged fragments. */
@@ -423,7 +442,7 @@ export class SwpHints {
     const moved: TextNodeAttribute[] = [];
     const remaining: TextNodeAttribute[] = [];
     for (const hint of this.hintsByStart) {
-      if (hint instanceof SwTextFlyCnt) {
+      if (!(hint instanceof SwTextAttrEnd)) {
         if (hint.start >= start && hint.start < end) {
           hint.start -= start;
           moved.push(hint);
@@ -495,14 +514,13 @@ export class SwpHints {
       ...middle.takeOwned(start),
       ...trailing.takeOwned(start + replacementLength),
     ]);
-    this.TransferFlyHints(result, start, end, replacementLength);
+    this.TransferPointHints(result, start, end, replacementLength);
     return result;
   }
-
-  /** Transfers surviving fly hints after the new ranged coordinates are ready. @param destination - Replacement map. @param start - First removed offset. @param end - End of removal. @param length - Inserted text length. @returns Nothing. */
-  public TransferFlyHints(destination: SwpHints, start = 0, end = 0, length = 0): void {
+  /** Transfers surviving point hints after the new ranged coordinates are ready. @param destination - Replacement map. @param start - First removed offset. @param end - End of removal. @param length - Inserted text length. @returns Nothing. */
+  public TransferPointHints(destination: SwpHints, start = 0, end = 0, length = 0): void {
     for (const hint of [...this.hintsByStart]) {
-      if (!(hint instanceof SwTextFlyCnt)) continue;
+      if (hint instanceof SwTextAttrEnd) continue;
       this.DeleteAtPos(this.GetIndexOf(hint));
       if (hint.start >= start && hint.start < end) DestroyTextNodeAttribute(hint);
       else {
@@ -516,9 +534,9 @@ export class SwpHints {
   public Split(offset: number, length: number): [SwpHints, SwpHints] {
     const leading = this.sliceRanges(0, offset);
     const trailing = this.sliceRanges(offset, length);
-    this.TransferFlyHints(leading);
+    this.TransferPointHints(leading);
     for (const hint of [...leading.hintsByStart]) {
-      if (!(hint instanceof SwTextFlyCnt) || hint.start < offset) continue;
+      if (hint instanceof SwTextAttrEnd || hint.start < offset) continue;
       leading.DeleteAtPos(leading.GetIndexOf(hint));
       hint.start -= offset;
       trailing.Insert(hint);
@@ -532,7 +550,7 @@ export class SwpHints {
     this.hintsByStart = [];
     for (const hint of owned) {
       hint.start += offset;
-      if (!(hint instanceof SwTextFlyCnt)) hint.SetEnd(hint.end + offset);
+      if (hint instanceof SwTextAttrEnd) hint.SetEnd(hint.end + offset);
     }
     return owned;
   }
@@ -558,7 +576,7 @@ export class SwpHints {
         /** Keeps actual internet and unrelated automatic attributes;only intersecting automatic portions are replaced. @param hint - Updated owned attribute. @returns Retained actual attributes or clipped automatic portions. */
         (hint) => {
           if (
-            hint instanceof SwTextFlyCnt ||
+            !(hint instanceof SwTextAttrEnd) ||
             hint.Which() !== RES_TXTATR_AUTOFMT ||
             hint.end <= offset ||
             hint.start >= end
@@ -745,7 +763,6 @@ export class SwpHints {
     );
     return values.size > 1 ? "mixed" : values.has(true) ? "on" : "off";
   }
-
   /** Replaces hyperlink hints over one native range without projecting character runs. @param textLength - Complete text length. @param start - Inclusive range start. @param end - Exclusive range end. @param hyperlink - Replacement hyperlink or undefined. @returns Updated independent hints. */
   public setHyperlink(
     textLength: number,
@@ -801,7 +818,7 @@ export class SwpHints {
       ),
       ...hints.filter(
         /** Preserves the identity of point hints. @param hint - Attribute. @returns Whether a point. */
-        (hint) => hint instanceof SwTextFlyCnt,
+        (hint) => !(hint instanceof SwTextAttrEnd),
       ),
     ].sort(compareHints);
     for (const hint of old) DestroyTextNodeAttribute(hint);
@@ -893,12 +910,15 @@ export class SwpHints {
     const hint = GetTextAttrAt(this, characterOffset, RES_TXTATR_INETFMT, GetTextAttrMode.Default);
     return hint?.format instanceof SwFormatINetFormat ? hint.format.GetHyperlink() : undefined;
   }
-
   /** Captures same-pool state or converts a foreign container into copied attributes. @param pool - Requested owner, defaulting to the current pool. @returns Independent hints. */
   public clone(pool: SwAttrPool = this.pool): SwpHints {
     if (this.HasFlyContent())
       throw new Error("Writer inline fly copy requires a layout format copy.");
-    return pool === this.pool ? new SwpHints(pool, this.entries()) : this.CopyTo(pool);
+    if (pool !== this.pool) return this.CopyTo(pool);
+    const result = new SwpHints(pool, this.entries());
+    for (const hint of this.hintsByStart)
+      if (hint instanceof SwTextField) result.Insert(hint.Copy(hint.start));
+    return result;
   }
 
   /** Copies text attributes through native construction, including same-document copies. @param pool - Destination document pool. @returns Fresh hints with constructor flags and destination-owned automatic handles. */
@@ -912,6 +932,9 @@ export class SwpHints {
       result.Insert(copied);
     }
     result.assignOwned(result.entries());
+    for (const hint of this.hintsByStart)
+      if (hint instanceof SwTextField)
+        result.Insert(hint.Copy(hint.start, SwPostItFieldType.Get(pool.GetDoc())));
     return result;
   }
 
@@ -936,53 +959,6 @@ export interface WriterTextRunLike {
 
 /** Native Which/start sorting boundary. */
 type WhichStartPair = [number, number];
-
-/** Copies and merges adjacent equal browser runs. @param runs - Generated runs. @returns Independent normalized runs. */
-function mergeTextRuns(runs: readonly WriterTextRunLike[]): readonly WriterTextRunLike[] {
-  const merged: WriterTextRunLike[] = [];
-  runs.forEach(
-    /** Appends or merges one projection run. @param run - Source run. @returns Nothing. */
-    (run) => {
-      const copy = {
-        attributes: { ...run.attributes },
-        ...(run.hyperlink === undefined ? {} : { hyperlink: { ...run.hyperlink } }),
-        text: run.text,
-      };
-      const previous = merged[merged.length - 1];
-      if (
-        previous !== undefined &&
-        equalAttributes(previous.attributes, copy.attributes) &&
-        equalWriterHyperlinks(previous.hyperlink, copy.hyperlink)
-      )
-        merged[merged.length - 1] = { ...previous, text: previous.text + copy.text };
-      else merged.push(copy);
-    },
-  );
-  return merged;
-}
-
-/** Compares browser character projections. @param left - First properties. @param right - Second properties. @returns Whether equal. */
-function equalAttributes(
-  left: WriterCharacterAttributes,
-  right: WriterCharacterAttributes,
-): boolean {
-  return (
-    left.bold === right.bold &&
-    left.color === right.color &&
-    left.fontFamily === right.fontFamily &&
-    left.fontSizeTwips === right.fontSizeTwips &&
-    left.kerningTwips === right.kerningTwips &&
-    left.highlight === right.highlight &&
-    left.italic === right.italic &&
-    left.underline === right.underline &&
-    left.underlineStyle === right.underlineStyle &&
-    left.underlineColor === right.underlineColor &&
-    left.underlineWordMode === right.underlineWordMode &&
-    (left.strikeout ?? 0) === (right.strikeout ?? 0) &&
-    (left.escapement?.offset ?? 0) === (right.escapement?.offset ?? 0) &&
-    (left.escapement?.height ?? 100) === (right.escapement?.height ?? 100)
-  );
-}
 
 /** Validates bounded hint slice/cut offsets. @param start - Inclusive offset. @param end - Exclusive offset. @returns Nothing. */
 function assertHintSlice(start: number, end: number): void {

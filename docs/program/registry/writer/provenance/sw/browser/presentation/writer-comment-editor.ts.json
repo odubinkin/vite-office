@@ -1,0 +1,38 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "browser-adaptation",
+    "status": "local-only",
+    "localPath": "apps/office/src/sw/browser/presentation/writer-comment-editor.ts",
+    "localSymbols": [
+      "WriterCommentEditor"
+    ],
+    "rationale": "Adapts a native textarea and its UTF-16 selection to the existing EditEngine, preserving edit snapshots and Writer history when a search replaces a comment match.",
+    "responsibilities": [
+      "Adapts a native textarea and its UTF-16 selection to the existing EditEngine, preserving edit snapshots and Writer history when a search replaces a comment match."
+    ],
+    "stackDivergence": {
+      "kind": "browser-adaptation",
+      "rationale": "Browser text controls render the source annotation editor in the document margin."
+    },
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sw/browser/presentation/writer-comment-editor.ts",
+          "marker": "WriterCommentEditor"
+        },
+        {
+          "path": "apps/office/src/sw/browser/presentation/WriterCommentsSidebar.test.tsx",
+          "marker": "focuses the matched comment"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sw/source/uibase/docvw/PostItMgr.cxx",
+          "marker": "SwPostItMgr::SearchReplace"
+        }
+      ]
+    }
+  }
+}

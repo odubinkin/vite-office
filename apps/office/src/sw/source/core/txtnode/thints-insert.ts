@@ -2,11 +2,12 @@
 import type { SwTextNode } from "./ndtxt";
 import type { SwpHints, TextNodeAttribute } from "./ndhints";
 import { SwTextFlyCnt } from "../../../inc/txtflcnt";
-import { CH_TXTATR_BREAKWORD } from "../../../inc/hintids";
+import { SwTextField } from "../../../inc/txtfld";
+import { CH_TXTATR_BREAKWORD, CH_TXTATR_INWORD, RES_TXTATR_ANNOTATION } from "../../../inc/hintids";
 import { SwInsertFlags } from "../../../inc/IDocumentContentOperations";
 import { SwFlyFrameFormat } from "../layout/atrfrm";
 import { SwTextCharFormat, SwTextINetFormat } from "./txtatr2";
-import { SwFormatAutoFormat, type SwTextAttrEnd } from "./txatbase";
+import { SwFormatAutoFormat, SwTextAttrEnd } from "./txatbase";
 import type { SwFormatCharFormat, SwFormatINetFormat } from "./fmtatr2";
 import { SetAttrMode } from "../../../inc/swtypes";
 import { BuildTextHintPortions, CheckCharacterHintSortNumber } from "./thints-portions";
@@ -95,23 +96,40 @@ export function InsertTextNodeHint(
 ): boolean {
   if (hint.GetStart() < 0 || hint.GetAnyEnd() > node.Len() || hint.GetStart() > node.Len())
     throw new Error("assert: Writer hint endpoint exceeds text length");
-  if (hint instanceof SwTextFlyCnt) return InsertFlyHint(node, hint, mode);
+  if (!(hint instanceof SwTextAttrEnd)) return InsertPointHint(node, hint, mode);
   if (hint.HasDummyChar() || hint.HasContent())
     throw new Error("Writer structured InsertHint is not implemented.");
   return node.GetOrCreateSwpHints().TryInsertHint(hint, node, mode);
 }
 
-/** Applies the native point-hint insertion order, inserting its dummy before binding the fly format. @param node - Owning text node. @param hint - Detached point. @param mode - Native insertion flags. @returns Whether inserted. */
-function InsertFlyHint(node: SwTextNode, hint: SwTextFlyCnt, mode: SetAttrMode): boolean {
-  const format = hint.GetAttr().GetFrameFormat();
-  if (!(format instanceof SwFlyFrameFormat) || format.GetDoc() !== node.GetDoc() || hint.m_pHints)
-    throw new Error("Writer inline hint requires a detached point and an owned fly format.");
+/** Applies the native point-hint insertion order, inserting its dummy before binding the owned point. @param node - Owning text node. @param hint - Detached point. @param mode - Native insertion flags. @returns Whether inserted. */
+function InsertPointHint(
+  node: SwTextNode,
+  hint: SwTextFlyCnt | SwTextField,
+  mode: SetAttrMode,
+): boolean {
+  const format = hint instanceof SwTextFlyCnt ? hint.GetAttr().GetFrameFormat() : undefined;
+  const owner =
+    hint instanceof SwTextField ? hint.GetAttr().GetField().GetTyp().GetDoc() : format?.GetDoc();
+  if (
+    hint.m_pHints ||
+    owner !== node.GetDoc() ||
+    (hint instanceof SwTextFlyCnt && !(format instanceof SwFlyFrameFormat))
+  )
+    throw new Error(
+      hint instanceof SwTextFlyCnt
+        ? "Writer inline hint requires a detached point and an owned fly format."
+        : "Writer annotation requires a detached point in its owning document.",
+    );
+  const marker = hint instanceof SwTextField ? CH_TXTATR_INWORD : CH_TXTATR_BREAKWORD;
   const start = hint.GetStart();
   const existing = node.GetpSwpHints();
   const hasMarker = (mode & SetAttrMode.NOTXTATRCHR) !== 0;
   if (
     hasMarker &&
-    (node.GetText().charAt(start) !== CH_TXTATR_BREAKWORD || existing?.GetTextAttrForCharAt(start))
+    (node.GetText().charAt(start) !== marker ||
+      existing?.GetTextAttrForCharAt(start) ||
+      existing?.GetTextAttrForCharAt(start, RES_TXTATR_ANNOTATION))
   )
     throw new Error("Writer inline hint requires an unclaimed dummy character.");
   if (MAX_HINTS <= BigInt(existing?.Count() ?? 0) || (!hasMarker && !node.GetSpaceLeft())) {
@@ -126,9 +144,9 @@ function InsertFlyHint(node: SwTextNode, hint: SwTextFlyCnt, mode: SetAttrMode):
         : mode & SetAttrMode.FORCEHINTEXPAND
           ? SwInsertFlags.FORCEHINTEXPAND | SwInsertFlags.EMPTYEXPAND
           : SwInsertFlags.EMPTYEXPAND;
-    node.InsertText(CH_TXTATR_BREAKWORD, start, flags);
+    node.InsertText(marker, start, flags);
   }
-  hint.SetAnchor(node);
+  if (hint instanceof SwTextFlyCnt) hint.SetAnchor(node);
   node.GetOrCreateSwpHints().Insert(hint);
   node.TriggerNodeUpdate(
     new UpdateAttrHint(undefined, new SwUpdateAttr(start, start, hint.Which())),

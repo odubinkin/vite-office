@@ -1,0 +1,38 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "browser-adaptation",
+    "localPath": "apps/office/src/sw/browser/presentation/WriterSearchFontPage.tsx",
+    "localSymbols": [
+      "WriterSearchFontPage"
+    ],
+    "status": "local-only",
+    "rationale": "Maps the Western, Asian and Complex groups to separate native character items and preserves the shared search style offset and the script notebook preference.",
+    "responsibilities": [
+      "Maps the Western, Asian and Complex groups to separate native character items and preserves the shared search style offset and the script notebook preference."
+    ],
+    "stackDivergence": {
+      "kind": "browser-adaptation",
+      "rationale": "Browser controls provide the pinned VCL dialog structure."
+    },
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sw/browser/presentation/WriterSearchFontPage.tsx",
+          "marker": "WriterSearchFontPage"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/cui/source/tabpages/chardlg.cxx",
+          "marker": "SvxCharNamePage::FillItemSet_Impl"
+        },
+        {
+          "path": "vendor/libreoffice-reference/svtools/source/control/ctrlbox.cxx",
+          "marker": "FontStyleBox::Fill"
+        }
+      ]
+    }
+  }
+}

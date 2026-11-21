@@ -1,9 +1,12 @@
-/** @fileoverview Consumed native InsertItemSet/lcl_InsAttr no-undo paragraph item-set paths from DocumentContentOperationsManager.cxx, used by HTML target-attribute restoration. */
+/** @fileoverview Consumed native InsertItemSet paths for selected character edits and HTML paragraph attribute restoration. */
 import type { SwDoc } from "./doc";
 import { getTextFormatCollNodes } from "./docfmt";
+import type { SfxPoolItem } from "../../../../svl/source/items/poolitem";
 import type { SwPaM } from "../crsr/pam";
 import { SwTextNode } from "../txtnode/ndtxt";
 import { SfxItemSet } from "../../../../svl/source/items/itemset";
+import { MakeCharacterFormattingUndo, SwUndoParagraphItem } from "../undo/unattr";
+import { createWriterUndoCursorState } from "../undo/undobj";
 import { SwRegHistory } from "../undo/rolbck";
 import { SetAttrMode } from "../../../inc/swtypes";
 import * as H from "../../../inc/hintids";
@@ -11,14 +14,136 @@ import { XATTR_FILL_FIRST, XATTR_FILL_LAST } from "../../../../svx/inc/xdef";
 import { SwFormatAutoFormat } from "../txtnode/fmtatr2";
 import { releaseStyleHandle } from "../../../../svl/source/items/stylepool";
 import { SwAutoStyleFamily } from "../../../inc/istyleaccess";
-/** Original filter-consumed branch. Unsupported general editing/word-interior inputs are rejected before mutation; no word/undo/layout service is simulated. @param doc - Actual document. @param range - Native filter selection. @param set - Actual attribute set. @param mode - Native flags. @returns Nothing. */
+/** Admits native paragraph-family items supported by the represented selected edit path. @param which - Native item identity. @returns Whether the paragraph owner can apply it. */
+export function isParagraphEditItem(which: number): boolean {
+  return (
+    which === H.RES_PARATR_ADJUST ||
+    which === H.RES_PARATR_VERTALIGN ||
+    which === H.RES_PARATR_SCRIPTSPACE ||
+    which === H.RES_PARATR_HANGINGPUNCTUATION ||
+    which === H.RES_PARATR_FORBIDDEN_RULES ||
+    which === H.RES_PARATR_LINESPACING ||
+    which === H.RES_PARATR_SPLIT ||
+    which === H.RES_PARATR_ORPHANS ||
+    which === H.RES_PARATR_WIDOWS ||
+    which === H.RES_MARGIN_TEXTLEFT ||
+    which === H.RES_MARGIN_FIRSTLINE ||
+    which === H.RES_MARGIN_RIGHT ||
+    which === H.RES_UL_SPACE
+  );
+}
+
+/** Identifies a native direct character item. @param which - Native item identity. @returns Whether it belongs to the character set. */
+function isCharacterItem(which: number): boolean {
+  return H.RES_CHRATR_BEGIN <= which && which < H.RES_CHRATR_END;
+}
+
+/** Applies represented character and paragraph items to the selected paragraphs. @param doc - Active document. @param range - Native selected range. @param items - Direct formatting deltas. @returns Nothing. */
+function insertSelectedItems(doc: SwDoc, range: SwPaM, items: readonly SfxPoolItem[]): void {
+  const start = range.Start();
+  const end = range.End();
+  const point = range.GetPoint();
+  const mark = range.GetMark();
+  const pointNode = point.GetNode();
+  const markNode = mark.GetNode();
+  if (
+    !(pointNode instanceof SwTextNode) ||
+    !(markNode instanceof SwTextNode) ||
+    pointNode.GetDoc() !== doc
+  )
+    throw new Error("InsertItemSet selected formatting requires a document text range.");
+  const nodes = pointNode === markNode ? [pointNode] : getTextFormatCollNodes(doc, range);
+
+  const characterItems = new SfxItemSet(doc.GetAttrPool(), H.WRITER_CHARACTER_WHICH_RANGES);
+  const pending = new SfxItemSet(doc.GetAttrPool(), H.WRITER_CHARACTER_WHICH_RANGES);
+  const state = createWriterUndoCursorState(
+    pointNode,
+    point.GetContentIndex(),
+    markNode,
+    mark.GetContentIndex(),
+    pointNode,
+    pending,
+  );
+  const undo = doc.GetUndoManager();
+  const grouped =
+    undo.DoesUndo() &&
+    (nodes.length > 1 ||
+      (items.length > 1 &&
+        items.some(
+          /** Detects the paragraph half of a mixed set. @param item - Direct delta. @returns Whether it belongs to the paragraph. */ (
+            item,
+          ) => isParagraphEditItem(item.Which()),
+        )));
+  if (grouped) undo.StartUndo("Formatting");
+  try {
+    for (const item of items) if (isCharacterItem(item.Which())) characterItems.Put(item);
+    for (const node of nodes) {
+      if (characterItems.Count() > 0) {
+        const action = MakeCharacterFormattingUndo(
+          {
+            node,
+            start: node === start.GetNode() ? start.GetContentIndex() : 0,
+            end: node === end.GetNode() ? end.GetContentIndex() : node.Len(),
+          },
+          characterItems,
+          state,
+          state,
+        );
+        try {
+          action.ApplyExact();
+        } catch (error) {
+          action.Dispose();
+          throw error;
+        }
+        if (undo.DoesUndo()) undo.AddUndoAction(action);
+        else action.Dispose();
+      }
+      for (const item of items) {
+        if (!isParagraphEditItem(item.Which())) continue;
+        const old = node.GetpSwAttrSet()?.GetItemIfSet(item.Which(), false);
+        const action = undo.DoesUndo()
+          ? new SwUndoParagraphItem(node, old, item, state, state)
+          : undefined;
+        let changed = false;
+        try {
+          changed = node.SetAttr(item);
+        } finally {
+          if (changed && action !== undefined) undo.AddUndoAction(action);
+          else action?.Dispose();
+        }
+      }
+    }
+    doc.NotifyModelChange({ kind: "document-modified", modified: true });
+  } finally {
+    if (grouped) undo.EndUndo();
+    state.pendingCharacterItems.Dispose();
+    characterItems.Dispose();
+    pending.Dispose();
+  }
+}
+
+/** Applies selected formatting or deltas from the original HTML filter path. @param doc - Actual document. @param range - Native selection or filter range. @param set - Actual attribute set. @param mode - Native flags. @returns Nothing. */
 export function InsertItemSet(doc: SwDoc, range: SwPaM, set: SfxItemSet, mode: SetAttrMode): void {
+  const items = set.entries();
+  if (
+    !range.IsInFrontOfLabel() &&
+    range.HasMark() &&
+    mode === SetAttrMode.DEFAULT &&
+    items.length === set.Count() &&
+    items.every(
+      /** Identifies the represented editing branches. @param item - Formatting delta. @returns Whether this owner handles the item. */ (
+        item,
+      ) => isCharacterItem(item.Which()) || isParagraphEditItem(item.Which()),
+    )
+  ) {
+    if (items.length > 0) insertSelectedItems(doc, range, items);
+    return;
+  }
   if (doc.GetUndoManager().DoesUndo() || range.IsInFrontOfLabel())
     throw new Error(
       "InsertItemSet filter path requires disabled undo and an ordinary paragraph range",
     );
   if (range.HasMark()) {
-    const items = set.entries();
     if (
       items.length !== set.Count() ||
       items.some(

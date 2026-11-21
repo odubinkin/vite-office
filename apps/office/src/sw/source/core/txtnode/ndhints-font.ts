@@ -1,4 +1,6 @@
 /** @fileoverview Character item deltas for font controls and sibling commands;actual automatic hint sets retain complete values. */
+import { equalWriterHyperlinks } from "./fmtatr2";
+import type { WriterTextRunLike } from "./ndhints";
 import { SwFormatCharFormat } from "./fmtatr2";
 import { SfxItemSet } from "../../../../svl/source/items/itemset";
 import type { SfxPoolItem } from "../../../../svl/source/items/poolitem";
@@ -235,5 +237,52 @@ export function collectCharacterSegments(
         start: segmentStart,
       };
     },
+  );
+}
+
+/** Copies and merges adjacent equal browser runs. @param runs - Generated runs. @returns Independent normalized runs. */
+export function mergeTextRuns(runs: readonly WriterTextRunLike[]): readonly WriterTextRunLike[] {
+  const merged: WriterTextRunLike[] = [];
+  runs.forEach(
+    /** Appends or merges one projection run. @param run - Source run. @returns Nothing. */
+    (run) => {
+      const copy = {
+        attributes: { ...run.attributes },
+        ...(run.hyperlink === undefined ? {} : { hyperlink: { ...run.hyperlink } }),
+        text: run.text,
+      };
+      const previous = merged[merged.length - 1];
+      if (
+        previous !== undefined &&
+        equalAttributes(previous.attributes, copy.attributes) &&
+        equalWriterHyperlinks(previous.hyperlink, copy.hyperlink)
+      )
+        merged[merged.length - 1] = { ...previous, text: previous.text + copy.text };
+      else merged.push(copy);
+    },
+  );
+  return merged;
+}
+
+/** Compares browser character projections. @param left - First properties. @param right - Second properties. @returns Whether equal. */
+function equalAttributes(
+  left: WriterCharacterAttributes,
+  right: WriterCharacterAttributes,
+): boolean {
+  return (
+    left.bold === right.bold &&
+    left.color === right.color &&
+    left.fontFamily === right.fontFamily &&
+    left.fontSizeTwips === right.fontSizeTwips &&
+    left.kerningTwips === right.kerningTwips &&
+    left.highlight === right.highlight &&
+    left.italic === right.italic &&
+    left.underline === right.underline &&
+    left.underlineStyle === right.underlineStyle &&
+    left.underlineColor === right.underlineColor &&
+    left.underlineWordMode === right.underlineWordMode &&
+    (left.strikeout ?? 0) === (right.strikeout ?? 0) &&
+    (left.escapement?.offset ?? 0) === (right.escapement?.offset ?? 0) &&
+    (left.escapement?.height ?? 100) === (right.escapement?.height ?? 100)
   );
 }

@@ -74,7 +74,12 @@ import {
 import { RTL_TEXTENCODING_DONTKNOW } from "../../../../sal/inc/rtl/textenc";
 import { SwHeaderAndFooterEatSpacingItem } from "../../../inc/hfspacingitem";
 import { SfxBoolItem } from "../../../../svl/source/items/cenumitm";
-import { restoreParagraphControlItem, writerColorFromPrimitive } from "./swatrset.paragraph";
+import {
+  paragraphControlItems,
+  restoreParagraphControlItem,
+  writerColorFromPrimitive,
+} from "./swatrset.paragraph";
+import { writerCharacterItemFactory } from "./swatrset.character";
 export { writerColorFromPrimitive } from "./swatrset.paragraph";
 import { SfxInt16Item, SfxUInt16Item } from "../../../../svl/source/items/intitem";
 import { SfxItemPool } from "../../../../svl/source/items/itempool";
@@ -114,8 +119,6 @@ import {
   RES_CHRATR_WEIGHT,
   RES_CHRATR_WORDLINEMODE,
   RES_COLLAPSING_BORDERS,
-  RES_KEEP,
-  RES_LINENUMBER,
   RES_LR_SPACE,
   RES_MARGIN_FIRSTLINE,
   RES_MARGIN_RIGHT,
@@ -130,9 +133,7 @@ import {
   RES_PARATR_NUMRULE,
   RES_PARATR_ORPHANS,
   RES_PARATR_OUTLINELEVEL,
-  RES_PARATR_SPLIT,
   RES_PARATR_TABSTOP,
-  RES_PARATR_VERTALIGN,
   RES_PARATR_WIDOWS,
   RES_UL_SPACE,
 } from "../../../inc/hintids";
@@ -198,7 +199,7 @@ export class SwAttrPool extends SfxItemPool {
       RES_ANCHOR,
       RES_SURROUND,
     ])
-      register(which);
+      register(which, writerCharacterItemFactory(which));
     register(
       RES_FLY_SPLIT,
       /** Restores the original boolean fly split item. @param value - Native wire value. @returns Actual item. */
@@ -720,7 +721,7 @@ export class SwAttrPool extends SfxItemPool {
         return item;
       },
     );
-    for (const which of [RES_PARATR_SPLIT, RES_PARATR_VERTALIGN, RES_KEEP, RES_LINENUMBER])
+    for (const which of paragraphControlItems)
       register(
         which,
         /** Applies register to value. @param value - value value. @returns Callback result. */ (

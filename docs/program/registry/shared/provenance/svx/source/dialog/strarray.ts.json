@@ -1,0 +1,45 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/svx/source/dialog/strarray.ts",
+    "localSymbols": [
+      "GetAttributeName"
+    ],
+    "status": "mapped",
+    "upstreamPath": "svx/source/dialog/strarray.cxx",
+    "upstreamSymbols": [
+      "SvxAttrNameTable::FindIndex",
+      "SvxAttrNameTable::GetString"
+    ],
+    "preservedResponsibilities": [
+      "Looks up the pinned RID_ATTR_NAMES labels by original slot identity. Localized presentation uses the caller’s browser catalog."
+    ],
+    "omittedResponsibilities": [
+      "Native widget construction and translation catalog lookup are represented by browser presentation."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/svx/source/dialog/strarray.ts",
+          "marker": "GetAttributeName"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/svx/source/dialog/strarray.cxx",
+          "marker": "SvxAttrNameTable::FindIndex"
+        },
+        {
+          "path": "vendor/libreoffice-reference/svx/source/dialog/strarray.cxx",
+          "marker": "SvxAttrNameTable::GetString"
+        },
+        {
+          "path": "vendor/libreoffice-reference/include/svx/svxitems.hrc",
+          "marker": "RID_ATTR_NAMES"
+        }
+      ]
+    }
+  }
+}

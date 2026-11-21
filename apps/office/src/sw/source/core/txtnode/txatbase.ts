@@ -43,6 +43,7 @@ import {
   RES_CHRATR_FONTSIZE,
   RES_CHRATR_CTL_WEIGHT,
   RES_CHRATR_HIGHLIGHT,
+  RES_CHRATR_BACKGROUND,
   RES_CHRATR_KERNING,
   RES_CHRATR_POSTURE,
   RES_CHRATR_UNDERLINE,
@@ -508,6 +509,13 @@ export function projectWriterCharacterAttributes(
   const highlight =
     items.GetItemIfSet(RES_CHRATR_HIGHLIGHT, false) ??
     inherited?.GetItemIfSet(RES_CHRATR_HIGHLIGHT, true);
+  const background =
+    items.GetItemIfSet(RES_CHRATR_BACKGROUND, false) ??
+    inherited?.GetItemIfSet(RES_CHRATR_BACKGROUND, true);
+  const visibleBackground =
+    highlight instanceof SvxBrushItem && writerHighlightColorValue(highlight) !== "transparent"
+      ? highlight
+      : (background ?? highlight);
   const escapement = get(RES_CHRATR_ESCAPEMENT) as SvxEscapementItem;
   const authoredEscapement =
     items.GetItemIfSet(RES_CHRATR_ESCAPEMENT, false) ??
@@ -529,8 +537,8 @@ export function projectWriterCharacterAttributes(
     ...(font instanceof SvxFontItem ? { fontFamily: font.GetFamilyName() } : {}),
     ...(fontSize instanceof SvxFontHeightItem ? { fontSizeTwips: fontSize.GetHeight() } : {}),
     ...(kerning instanceof SvxKerningItem ? { kerningTwips: kerning.GetValue() } : {}),
-    ...(highlight instanceof SvxBrushItem
-      ? { highlight: writerHighlightColorValue(highlight) }
+    ...(visibleBackground instanceof SvxBrushItem
+      ? { highlight: writerHighlightColorValue(visibleBackground) }
       : {}),
     ...(authoredEscapement !== undefined ||
     escapement.GetEsc() !== 0 ||

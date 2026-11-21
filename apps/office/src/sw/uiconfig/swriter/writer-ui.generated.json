@@ -32,6 +32,11 @@
     "selectTable": ".uno:SelectTable",
     "focusFindbar": "vnd.sun.star.findbar:FocusToFindbar",
     "searchDialog": ".uno:SearchDialog",
+    "executeSearch": ".uno:ExecuteSearch",
+    "searchProperties": ".uno:SearchProperties",
+    "searchOptions": ".uno:SearchOptions",
+    "searchOn": ".uno:SearchOn",
+    "searchOff": ".uno:SearchOff",
     "repeatSearch": ".uno:RepeatSearch",
     "insertTable": ".uno:InsertTable",
     "insertRowsBefore": ".uno:InsertRowsBefore",
@@ -1076,6 +1081,70 @@
       "shortcuts": ["Ctrl+H", "Meta+H"],
       "slotId": 5961
     },
+    ".uno:ExecuteSearch": {
+      "browserOwned": false,
+      "argumentSchema": [
+        "SearchItem:SvxSearchItem",
+        "Quiet:SfxBoolItem",
+        "UseAttrItemList:SfxBoolItem"
+      ],
+      "capabilityId": "CAP-0111",
+      "controlLabel": "Execute Search",
+      "label": "Execute Search",
+      "placements": ["sfx2/sdi/sfx.sdi"],
+      "semantics": "action",
+      "showsDialog": false,
+      "shortcuts": [],
+      "slotId": 10502
+    },
+    ".uno:SearchProperties": {
+      "browserOwned": false,
+      "argumentSchema": [],
+      "capabilityId": "CAP-0111",
+      "controlLabel": "Search Properties",
+      "label": "Search Properties",
+      "placements": ["sfx2/sdi/sfx.sdi"],
+      "semantics": "action",
+      "showsDialog": false,
+      "shortcuts": [],
+      "slotId": 10291
+    },
+    ".uno:SearchOptions": {
+      "browserOwned": false,
+      "argumentSchema": [],
+      "capabilityId": "CAP-0111",
+      "controlLabel": "Search Options",
+      "label": "Search Options",
+      "placements": ["sfx2/sdi/sfx.sdi"],
+      "semantics": "action",
+      "showsDialog": false,
+      "shortcuts": [],
+      "slotId": 10281
+    },
+    ".uno:SearchOn": {
+      "browserOwned": false,
+      "argumentSchema": ["SearchItem:SvxSearchItem"],
+      "capabilityId": "CAP-0111",
+      "controlLabel": "Search On",
+      "label": "Search On",
+      "placements": ["svx/sdi/svx.sdi"],
+      "semantics": "action",
+      "showsDialog": false,
+      "shortcuts": [],
+      "slotId": 10500
+    },
+    ".uno:SearchOff": {
+      "browserOwned": false,
+      "argumentSchema": ["SearchItem:SvxSearchItem"],
+      "capabilityId": "CAP-0111",
+      "controlLabel": "Search Off",
+      "label": "Search Off",
+      "placements": ["svx/sdi/svx.sdi"],
+      "semantics": "action",
+      "showsDialog": false,
+      "shortcuts": [],
+      "slotId": 10501
+    },
     ".uno:RepeatSearch": {
       "browserOwned": false,
       "argumentSchema": ["Quiet:SfxBoolItem"],
@@ -1930,6 +1999,31 @@
         "sw/uiconfig/swriter/menubar/menubar.xml",
         "sw/uiconfig/swriter/toolbar/standardbar.xml"
       ]
+    },
+    {
+      "classification": "supported-upstream",
+      "commandUrl": ".uno:ExecuteSearch",
+      "sources": ["sfx2/sdi/sfx.sdi"]
+    },
+    {
+      "classification": "supported-upstream",
+      "commandUrl": ".uno:SearchProperties",
+      "sources": ["sfx2/sdi/sfx.sdi"]
+    },
+    {
+      "classification": "supported-upstream",
+      "commandUrl": ".uno:SearchOptions",
+      "sources": ["sfx2/sdi/sfx.sdi"]
+    },
+    {
+      "classification": "supported-upstream",
+      "commandUrl": ".uno:SearchOn",
+      "sources": ["svx/sdi/svx.sdi"]
+    },
+    {
+      "classification": "supported-upstream",
+      "commandUrl": ".uno:SearchOff",
+      "sources": ["svx/sdi/svx.sdi"]
     },
     {
       "classification": "supported-upstream",

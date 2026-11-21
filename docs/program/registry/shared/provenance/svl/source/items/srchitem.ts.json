@@ -1,0 +1,45 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/svl/source/items/srchitem.ts",
+    "status": "mapped",
+    "upstreamPath": "svl/source/items/srchitem.cxx",
+    "localSymbols": [
+      "SvxSearchItem"
+    ],
+    "upstreamSymbols": [
+      "SvxSearchItem"
+    ],
+    "preservedResponsibilities": [
+      "Owns the SvxSearchItem value, copied options, pool identity, scalar member conversion, native equality exclusions and ordered thirteen-property browser aggregate. Writer uses the item for named and pooled ExecuteSearch requests.",
+      "The same item transports native scalar Any values and Sequence<PropertyValue> containing the real extended SearchOptions2 struct."
+    ],
+    "omittedResponsibilities": [
+      "Live ConfigItem preferences and notifications still require the configuration provider."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/svl/source/items/srchitem.ts",
+          "marker": "class SvxSearchItem"
+        },
+        {
+          "path": "apps/office/src/svl/source/items/srchitem.test.ts",
+          "marker": "requires thirteen distinct converted aggregate names"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "svl/source/items/srchitem.cxx",
+          "marker": "SvxSearchItem::PutValue"
+        },
+        {
+          "path": "svl/source/items/srchitem.cxx",
+          "marker": "SvxSearchItem::equalsIgnoring"
+        }
+      ]
+    }
+  }
+}

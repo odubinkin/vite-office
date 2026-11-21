@@ -127,3 +127,42 @@ export function isRightToLeft(language: number): boolean {
     (isOnTheFlyID(language) && getOnTheFlyScriptType(language) === ScriptType.RTL)
   );
 }
+
+/** Original obsolete and legacy locale replacement pairs from the pinned MsLangId. */
+const obsoleteLanguages = new Map<number, number>([
+  [0x0610, 0x0476], // LANGUAGE_OBSOLETE_USER_LATIN
+  [0x8076, 0x0476], // LANGUAGE_OBSOLETE_USER_LATIN_VATICAN
+  [0x0620, 0x0481], // LANGUAGE_OBSOLETE_USER_MAORI
+  [0x0621, 0x0487], // LANGUAGE_OBSOLETE_USER_KINYARWANDA
+  [0x0623, 0x042e], // LANGUAGE_OBSOLETE_USER_UPPER_SORBIAN
+  [0x0624, 0x082e], // LANGUAGE_OBSOLETE_USER_LOWER_SORBIAN
+  [0x0625, 0x0482], // LANGUAGE_OBSOLETE_USER_OCCITAN
+  [0x0629, 0x047e], // LANGUAGE_OBSOLETE_USER_BRETON
+  [0x062a, 0x046f], // LANGUAGE_OBSOLETE_USER_KALAALLISUT
+  [0x0630, 0x046e], // LANGUAGE_OBSOLETE_USER_LUXEMBOURGISH
+  [0x0659, 0x085f], // LANGUAGE_OBSOLETE_USER_KABYLE
+  [0x8003, 0x0803], // LANGUAGE_OBSOLETE_USER_CATALAN_VALENCIAN
+  [0x064f, 0x048d], // LANGUAGE_OBSOLETE_USER_MALAGASY_PLATEAU
+  [0x043c, 0x0491], // LANGUAGE_GAELIC_SCOTLAND_LEGACY
+  [0x8032, 0x0832], // LANGUAGE_OBSOLETE_USER_TSWANA_BOTSWANA
+  [0x881a, 0x241a], // LANGUAGE_OBSOLETE_USER_SERBIAN_LATIN_SERBIA
+  [0xc81a, 0x2c1a], // LANGUAGE_OBSOLETE_USER_SERBIAN_LATIN_MONTENEGRO
+  [0x8c1a, 0x281a], // LANGUAGE_OBSOLETE_USER_SERBIAN_CYRILLIC_SERBIA
+  [0xcc1a, 0x301a], // LANGUAGE_OBSOLETE_USER_SERBIAN_CYRILLIC_MONTENEGRO
+  [0x0e26, 0x0492], // LANGUAGE_OBSOLETE_USER_KURDISH_IRAQ
+  [0x800a, 0x5c0a], // LANGUAGE_OBSOLETE_USER_SPANISH_CUBA
+  [0xe40a, 0x580a], // LANGUAGE_OBSOLETE_USER_SPANISH_LATIN_AMERICA
+  [0x0014, 0x0414], // LANGUAGE_NORWEGIAN
+  [0x0851, 0x0c51], // LANGUAGE_TIBETAN_BHUTAN
+  [0x8c09, 0x9409], // LANGUAGE_USER_ENGLISH_UK_OED
+]);
+
+/** Resolves a legacy language for language selection. @param language - Native language identity. @returns The source replacement or the input ID. */
+export function getReplacementForObsoleteLanguage(language: number): number {
+  return obsoleteLanguages.get(language) ?? language;
+}
+
+/** Tests the original two Serbian legacy language IDs. @param language - Native language identity. @returns Whether the original chooser suppresses it. */
+export function isLegacy(language: number): boolean {
+  return language === 0x0c1a || language === 0x081a;
+}

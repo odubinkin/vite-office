@@ -1,0 +1,29 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "local-infrastructure",
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sw/source/core/attr/swatrset.character.ts",
+          "marker": "writerCharacterItemFactory"
+        }
+      ]
+    },
+    "localPath": "apps/office/src/sw/source/core/attr/swatrset.character.ts",
+    "localSymbols": [
+      "writerCharacterItemFactory"
+    ],
+    "status": "local-only",
+    "rationale": "Snapshot reconstruction maps character Which values to native item constructors, preserving line style and rotation fit state in every realm.",
+    "responsibilities": [
+      "Snapshot reconstruction maps character Which values to native item constructors, preserving line style and rotation fit state in every realm."
+    ],
+    "stackDivergence": {
+      "kind": "local-infrastructure",
+      "rationale": "SwAttrPool calls the same snapshot factories in the main thread and in Workers."
+    }
+  },
+  "legacyOrder": 150
+}

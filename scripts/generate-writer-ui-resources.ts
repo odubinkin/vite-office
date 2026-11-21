@@ -26,6 +26,7 @@ interface CommandSpec {
   readonly browserLabel?: string;
   readonly browserSlotId?: number;
   readonly commandUrl: string;
+  readonly internalLabel?: string;
   readonly showsDialog?: boolean;
   readonly semantics?: "action" | "check" | "radio";
   readonly sourceUrl?: string;
@@ -103,6 +104,11 @@ const specs: readonly CommandSpec[] = [
   // The native findbar protocol is dispatched by a component rather than an SDI slot.
   { commandUrl: "vnd.sun.star.findbar:FocusToFindbar", browserSlotId: 65000 },
   { commandUrl: ".uno:SearchDialog", showsDialog: true },
+  { commandUrl: ".uno:ExecuteSearch", internalLabel: "Execute Search" },
+  { commandUrl: ".uno:SearchProperties", internalLabel: "Search Properties" },
+  { commandUrl: ".uno:SearchOptions", internalLabel: "Search Options" },
+  { commandUrl: ".uno:SearchOn", internalLabel: "Search On" },
+  { commandUrl: ".uno:SearchOff", internalLabel: "Search Off" },
   { commandUrl: ".uno:RepeatSearch", acceleratorOnly: true },
   { commandUrl: ".uno:Ruler", semantics: "check" },
   { commandUrl: ".uno:VRuler", semantics: "check" },
@@ -165,6 +171,11 @@ const commandAliases = {
   selectTable: ".uno:SelectTable",
   focusFindbar: "vnd.sun.star.findbar:FocusToFindbar",
   searchDialog: ".uno:SearchDialog",
+  executeSearch: ".uno:ExecuteSearch",
+  searchProperties: ".uno:SearchProperties",
+  searchOptions: ".uno:SearchOptions",
+  searchOn: ".uno:SearchOn",
+  searchOff: ".uno:SearchOff",
   repeatSearch: ".uno:RepeatSearch",
   insertTable: ".uno:InsertTable",
   insertRowsBefore: ".uno:InsertRowsBefore",
@@ -283,6 +294,11 @@ const commandCapabilities: Readonly<Record<string, `CAP-${string}`>> = {
   ".uno:SaveAs": "CAP-0113",
   ".uno:SelectAll": "CAP-0103",
   ".uno:SearchDialog": "CAP-0111",
+  ".uno:ExecuteSearch": "CAP-0111",
+  ".uno:SearchProperties": "CAP-0111",
+  ".uno:SearchOptions": "CAP-0111",
+  ".uno:SearchOn": "CAP-0111",
+  ".uno:SearchOff": "CAP-0111",
   ".uno:RepeatSearch": "CAP-0111",
   "vnd.sun.star.findbar:FocusToFindbar": "CAP-0111",
   ".uno:Sidebar": "CAP-0104",
@@ -435,7 +451,9 @@ const commands = Object.fromEntries(
     ) => {
       const sourceUrl = spec.sourceUrl ?? spec.commandUrl;
       const label =
-        spec.browserLabel ?? findEnglishLabel(spec.commandUrl, genericCommands, writerCommands);
+        spec.browserLabel ??
+        spec.internalLabel ??
+        findEnglishLabel(spec.commandUrl, genericCommands, writerCommands);
       const popupLabel =
         spec.browserLabel === undefined
           ? findEnglishLabelProperty(spec.commandUrl, "PopupLabel", genericCommands, writerCommands)
@@ -451,6 +469,15 @@ const commands = Object.fromEntries(
         ) => resourceTexts[index]?.includes(sourceUrl),
       );
       if (spec.acceleratorOnly && shortcuts.length > 0) placements.push(acceleratorPath);
+      if (spec.internalLabel !== undefined)
+        placements.push(
+          ...sdiPaths.filter(
+            /** Locates the declaration of an internal slot. @param path - SDI source path. @param index - Source index. @returns Whether the slot is declared here. */ (
+              _path,
+              index,
+            ) => sdiTexts[index]?.includes(` ${spec.commandUrl.slice(5)} `),
+          ),
+        );
       if (spec.browserLabel === undefined && placements.length === 0)
         throw new Error(
           `Supported upstream command has no Writer resource placement: ${sourceUrl}`,

@@ -1,0 +1,40 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/svl/inc/srchdefs.ts",
+    "status": "mapped",
+    "upstreamPath": "include/svl/srchdefs.hxx",
+    "localSymbols": [
+      "SearchOptionFlags"
+    ],
+    "upstreamSymbols": [
+      "SearchOptionFlags"
+    ],
+    "preservedResponsibilities": [
+      "The original SID_SEARCH_OPTIONS flag identities and full mask; Writer publishes the mask using SfxUInt16Item and the view search state."
+    ],
+    "omittedResponsibilities": [
+      "The template specialization for C++ bitwise operators is handled by native JavaScript bitwise operations on the numeric enum."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/svl/inc/srchdefs.ts",
+          "marker": "SearchOptionFlags"
+        },
+        {
+          "path": "apps/office/src/sw/source/uibase/uiview/view.test.ts",
+          "marker": "publishes the native SearchOptions item"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "include/svl/srchdefs.hxx",
+          "marker": "SearchOptionFlags"
+        }
+      ]
+    }
+  }
+}

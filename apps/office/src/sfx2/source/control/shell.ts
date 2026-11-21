@@ -42,8 +42,8 @@ export function createSfxShell<Context>(
             ): CommandDispatchResult<unknown> => {
               if (request.GetSlot() !== slotId)
                 throw new Error(`SfxRequest slot does not match command: ${slot.commandUrl}`);
-              const state = slot.GetState(context);
-              if (!state.enabled) return { commandId: slot.commandUrl, status: "disabled" };
+              if (!slot.CanExecute() || !slot.GetState(context).enabled)
+                return { commandId: slot.commandUrl, status: "disabled" };
               return {
                 commandId: slot.commandUrl,
                 status: "executed",

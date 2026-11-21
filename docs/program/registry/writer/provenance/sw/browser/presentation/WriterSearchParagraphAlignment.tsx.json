@@ -1,0 +1,38 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "browser-adaptation",
+    "localPath": "apps/office/src/sw/browser/presentation/WriterSearchParagraphAlignment.tsx",
+    "localSymbols": [
+      "WriterSearchParagraphAlignment"
+    ],
+    "status": "local-only",
+    "rationale": "Renders SvxParaAlignTabPage horizontal alignment, last-line selection, single-word expansion and justification controls. Edits a complete SvxAdjustItem and preserves the pinned word-spacing dependencies.",
+    "responsibilities": [
+      "Renders SvxParaAlignTabPage horizontal alignment, last-line selection, single-word expansion and justification controls. Edits a complete SvxAdjustItem and preserves the pinned word-spacing dependencies."
+    ],
+    "stackDivergence": {
+      "kind": "browser-adaptation",
+      "rationale": "Browser controls provide the pinned VCL dialog structure."
+    },
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sw/browser/presentation/WriterSearchParagraphAlignment.tsx",
+          "marker": "WriterSearchParagraphAlignment"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/cui/source/tabpages/paragrph.cxx",
+          "marker": "SvxParaAlignTabPage::EnableJustifyExt"
+        },
+        {
+          "path": "vendor/libreoffice-reference/cui/uiconfig/ui/paragalignpage.ui",
+          "marker": "frameFL_JUSTIFICATION"
+        }
+      ]
+    }
+  }
+}

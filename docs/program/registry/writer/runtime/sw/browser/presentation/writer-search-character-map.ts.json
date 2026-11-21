@@ -1,0 +1,33 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sw/browser/presentation/writer-search-character-map.ts",
+    "classification": "browser-adaptation",
+    "state": "active",
+    "suite": "writer",
+    "subsystem": "text-search",
+    "capabilityIds": [
+      "CAP-0111"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "not-applicable",
+      "defaultStatus": "not-applicable",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/sw/browser/presentation/writer-search-character-map.ts#WriterSearchCharacterMap",
+        "apps/office/src/sw/browser/presentation/WriterSearchTwoLinesPage.test.tsx",
+        "apps/office/src/sw/browser/presentation/writer-search-character-map.data.txt"
+      ],
+      "justification": "Uses the pinned native ICU character names and LibreOffice subset ranges for the browser character map. Filters the fixed face by glyph coverage and native search text rules.",
+      "knownViolations": [],
+      "localSymbols": [
+        "WriterSearchCharacterMap"
+      ],
+      "sourceResponsibility": "browser-owned",
+      "upstreamFile": null,
+      "upstreamSymbols": []
+    }
+  }
+}

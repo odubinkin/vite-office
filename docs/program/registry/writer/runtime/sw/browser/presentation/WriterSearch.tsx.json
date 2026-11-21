@@ -16,9 +16,11 @@
       "defaultStatus": "not-applicable",
       "divergenceClass": "B",
       "evidence": [
-        "apps/office/src/sw/browser/presentation/WriterSearch.tsx#WriterSearch"
+        "apps/office/src/sw/browser/presentation/WriterSearch.tsx#WriterSearch",
+        "vendor/libreoffice-reference/svx/source/dialog/srchdlg.cxx#SvxSearchDialog::SaveToModule_Impl",
+        "vendor/libreoffice-reference/svx/source/tbxctrls/tbunosearchcontrollers.cxx#impl_executeSearch"
       ],
-      "justification": "Browser controls for the supported findbar.xml and findreplacedialog.ui surfaces use the Writer search owner for all document operations. Exposes the pinned CTL and CJK kashida and width controls in Other options. The toolbar passes its native transliteration subset.",
+      "justification": "Browser controls for the supported findbar.xml and findreplacedialog.ui surfaces dispatch the generated ExecuteSearch view slot for document operations. Exposes the pinned CTL and CJK kashida and width controls in Other options. The toolbar sends the native named SearchItem arguments and transliteration subset at dispatch and retains local flags while the dialog is open. The dialog publishes text and style entries on focus loss through SearchProperties and sends the final item through SearchOff. Accepted settings feed Repeat Search. The dialog binds to SearchOptions and applies separate capability bits to Replace and Replace All. Find Bar entry activation, direction buttons and Find All update recent-query state through their distinct native paths. Dialog saves add the current search term to the history. The style selectors use natural numeric ordering in the browser UI language. The modeless dialog reserves a status row and initializes its label independently of an already-open Find Bar, preserving the source edit and toolbar-label interaction.",
       "knownViolations": [],
       "localSymbols": [
         "WriterSearch"

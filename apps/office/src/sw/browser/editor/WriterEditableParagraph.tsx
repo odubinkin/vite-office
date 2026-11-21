@@ -12,6 +12,7 @@ import { FontLineStyle } from "../../../editeng/source/items/textitem";
 
 import type {
   WriterParagraphProjection as WriterParagraph,
+  WriterTextLineProjection,
   WriterTextPortion,
 } from "../presentation/writer-view-projection";
 
@@ -321,6 +322,58 @@ export function WriterEditableParagraph({
   );
 }
 
+/** Maps native visible line variants to CSS decoration families. @param style - Native decoration style. @returns Browser decoration style. */
+function browserTextLineStyle(
+  style: FontLineStyle,
+): "solid" | "double" | "dotted" | "dashed" | "wavy" {
+  switch (style) {
+    case FontLineStyle.LINESTYLE_DOUBLE:
+      return "double";
+    case FontLineStyle.LINESTYLE_DOTTED:
+    case FontLineStyle.LINESTYLE_BOLDDOTTED:
+      return "dotted";
+    case FontLineStyle.LINESTYLE_DASH:
+    case FontLineStyle.LINESTYLE_LONGDASH:
+    case FontLineStyle.LINESTYLE_DASHDOT:
+    case FontLineStyle.LINESTYLE_DASHDOTDOT:
+    case FontLineStyle.LINESTYLE_BOLDDASH:
+    case FontLineStyle.LINESTYLE_BOLDLONGDASH:
+    case FontLineStyle.LINESTYLE_BOLDDASHDOT:
+    case FontLineStyle.LINESTYLE_BOLDDASHDOTDOT:
+      return "dashed";
+    case FontLineStyle.LINESTYLE_SMALLWAVE:
+    case FontLineStyle.LINESTYLE_WAVE:
+    case FontLineStyle.LINESTYLE_DOUBLEWAVE:
+    case FontLineStyle.LINESTYLE_BOLDWAVE:
+      return "wavy";
+    default:
+      return "solid";
+  }
+}
+
+/** Paints one selected decoration independently from the other line. @param line - Decoration position. @param value - Native line projection. @param content - Existing text portion. @returns Platform decoration. */
+function paintTextLine(
+  line: "underline" | "overline",
+  value: WriterTextLineProjection,
+  content: React.ReactNode,
+): React.ReactNode {
+  return (
+    <span
+      style={{
+        textDecorationLine: line,
+        textDecorationStyle: browserTextLineStyle(value.style),
+        textDecorationColor: value.color,
+        ...(value.style >= FontLineStyle.LINESTYLE_BOLD &&
+        value.style <= FontLineStyle.LINESTYLE_BOLDWAVE
+          ? { textDecorationThickness: "0.13em" }
+          : {}),
+      }}
+    >
+      {content}
+    </span>
+  );
+}
+
 /** Projects one immutable Writer run through semantic browser elements. @param props - Canonical run and inherited paragraph flags. @returns React-owned run subtree. */
 export function WriterTextPortionProjection({
   inheritedBold,
@@ -359,8 +412,12 @@ export function WriterTextPortionProjection({
         {content}
       </span>
     );
-  if (run.attributes.underline)
+  if (run.attributes.underlineLine !== undefined)
+    content = paintTextLine("underline", run.attributes.underlineLine, content);
+  else if (run.attributes.underline)
     content = <span style={{ textDecoration: "underline" }}>{content}</span>;
+  if (run.attributes.overlineLine !== undefined)
+    content = paintTextLine("overline", run.attributes.overlineLine, content);
   if (run.attributes.fontSizeTwips !== undefined)
     content = <span style={{ fontSize: `${run.attributes.fontSizeTwips / 20}pt` }}>{content}</span>;
   if (run.attributes.kerningTwips !== undefined)

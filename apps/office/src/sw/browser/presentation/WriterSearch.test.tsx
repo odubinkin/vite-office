@@ -1,15 +1,22 @@
 /** @fileoverview Ports the represented pinned Writer Find and Find & Replace UI scenarios. */
 import { act, fireEvent, render, screen, within } from "@testing-library/react";
-import { expect, it, vi } from "vitest";
+import { beforeEach, expect, it, vi } from "vitest";
 import { SvxSearchCmd } from "../../../svl/inc/srchitem";
 import { SfxItemSet } from "../../../svl/source/items/itemset";
 import { RndStdIds } from "../../../svx/inc/swframetypes";
-import { RES_FRMATR_BEGIN, RES_FRMATR_END } from "../../inc/hintids";
+import { Size } from "../../../tools/inc/gen";
+import { Graphic } from "../../../vcl/source/gdi/graph";
+import { CH_TXTATR_BREAKWORD, RES_FRMATR_BEGIN, RES_FRMATR_END } from "../../inc/hintids";
 import { SwFormatFooter, SwFormatHeader } from "../../inc/fmthdft";
+import { SwFormatFlyCnt } from "../../inc/fmtflcnt";
+import { SwTextFlyCnt } from "../../inc/txtflcnt";
 import { MakeFlySection } from "../../source/core/doc/doclay";
-import { SwPosition } from "../../source/core/crsr/pam";
+import { SwPaM, SwPosition } from "../../source/core/crsr/pam";
 import { createWriterDocumentSession } from "../composition/writer-module";
 import { WriterWorkbench } from "./writer-view";
+import { SEARCH_OPTIONS_KEY } from "../storage/writer-search-options-store";
+
+beforeEach(localStorage.removeItem.bind(localStorage, SEARCH_OPTIONS_KEY));
 
 it("opens Find from Edit, wraps in both directions and restores document focus on Escape", /** Exercises directional traversal and focus. @returns Nothing. */ () => {
   const session = createWriterDocumentSession();
@@ -34,6 +41,132 @@ it("opens Find from Edit, wraps in both directions and restores document focus o
   fireEvent.keyDown(search, { key: "Escape" });
   expect(screen.queryByRole("toolbar", { name: "Find" })).toBeNull();
   expect(workbench.container.querySelector("[data-writer-editing-host]")).toHaveFocus();
+  workbench.unmount();
+  session.view.Close();
+});
+
+it("finds whole words on both sides of an as-character image", /** Exercises the native inline separator through browser search commands and selections. @returns Nothing. */ () => {
+  const session = createWriterDocumentSession();
+  const shell = session.view.GetWrtShell();
+  const node = shell.GetActiveParagraph();
+  shell.Insert("needleneedle");
+  const position = new SwPosition(node, 6);
+  const range = new SwPaM(position);
+  const gif = Buffer.from("R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7", "base64");
+  const graphic = new Graphic(gif, "image/gif", new Size(120, 120));
+  const format = node.GetDoc().GetDocumentContentOperationsManager().InsertGraphic(range, graphic);
+  const inline = new SwTextFlyCnt(new SwFormatFlyCnt(format), 6);
+  expect(node.InsertHint(inline)).toBe(true);
+  range.Dispose();
+  position.Dispose();
+  shell.GetCursor().GetPoint().SetContent(0);
+
+  const workbench = render(<WriterWorkbench isActive view={session.view} />);
+  expect(workbench.container.querySelector("[data-writer-inline-graphic] img")).toBeInTheDocument();
+  const beforeImage = new SwPosition(node, 0);
+  const afterImage = new SwPosition(node, 9);
+  act(
+    /** Selects text across the live inline image. @returns Nothing. */ () =>
+      shell.SetPaM(afterImage, beforeImage),
+  );
+  fireEvent.keyDown(window, { key: "f", ctrlKey: true });
+  const findbar = within(screen.getByRole("toolbar", { name: "Find" }));
+  expect(findbar.getByLabelText("Find")).toHaveValue("needlene");
+  fireEvent.keyDown(findbar.getByLabelText("Find"), { key: "Escape" });
+  fireEvent.keyDown(window, { key: "h", ctrlKey: true });
+  const dialog = within(screen.getByRole("dialog", { name: "Find and Replace" }));
+  expect(dialog.getByLabelText("Find")).toHaveValue("needlene");
+  act(
+    /** Restores the starting caret for forward search. @returns Nothing. */ () =>
+      shell.SetCursor(beforeImage),
+  );
+  beforeImage.Dispose();
+  afterImage.Dispose();
+  fireEvent.change(dialog.getByLabelText("Find"), { target: { value: "needle" } });
+  fireEvent.click(dialog.getByRole("checkbox", { name: "Whole words only" }));
+
+  const next = dialog.getByRole("button", { name: "Find Next" });
+  fireEvent.click(next);
+  expect([
+    shell.GetCursor().Start().GetContentIndex(),
+    shell.GetCursor().End().GetContentIndex(),
+  ]).toEqual([0, 6]);
+  fireEvent.click(next);
+  expect([
+    shell.GetCursor().Start().GetContentIndex(),
+    shell.GetCursor().End().GetContentIndex(),
+  ]).toEqual([7, 13]);
+  expect(window.getSelection()?.toString()).toBe("needle");
+  fireEvent.click(dialog.getByRole("button", { name: "Find Previous" }));
+  expect(shell.GetCursor().Start().GetContentIndex()).toBe(0);
+  fireEvent.click(dialog.getByRole("button", { name: "Find All" }));
+  expect([...shell.GetCursor().GetRingContainer()]).toHaveLength(2);
+
+  fireEvent.change(dialog.getByLabelText("Replace with"), { target: { value: "match" } });
+  fireEvent.click(dialog.getByRole("button", { name: "Replace All" }));
+  expect(node.GetText()).toBe(`match${CH_TXTATR_BREAKWORD}match`);
+  expect(node.GetpSwpHints()?.GetTextAttrForCharAt(5)).toBe(inline);
+  expect(format.GetAnchor().GetAnchorContentOffset()).toBe(5);
+  fireEvent.keyDown(dialog.getByLabelText("Find"), { key: "Escape" });
+  fireEvent.keyDown(window, { key: "z", ctrlKey: true });
+  expect(node.GetText()).toBe(`needle${CH_TXTATR_BREAKWORD}needle`);
+  expect(node.GetpSwpHints()?.GetTextAttrForCharAt(6)).toBe(inline);
+  expect(format.GetAnchor().GetAnchorContentOffset()).toBe(6);
+  fireEvent.keyDown(window, { key: "y", ctrlKey: true });
+  expect(node.GetText()).toBe(`match${CH_TXTATR_BREAKWORD}match`);
+  expect(node.GetpSwpHints()?.GetTextAttrForCharAt(5)).toBe(inline);
+  expect(format.GetAnchor().GetAnchorContentOffset()).toBe(5);
+
+  const anchorStart = new SwPosition(node, 5);
+  const anchorEnd = new SwPosition(node, 6);
+  act(
+    /** Selects only the anchor to check the empty expanded-text case. @returns Nothing. */ () =>
+      shell.SetPaM(anchorEnd, anchorStart),
+  );
+  fireEvent.keyDown(window, { key: "h", ctrlKey: true });
+  const reopened = within(screen.getByRole("dialog", { name: "Find and Replace" }));
+  expect(reopened.getByLabelText("Find")).toHaveValue("needle");
+  expect(reopened.getByRole("checkbox", { name: "Current selection only" })).toBeChecked();
+  anchorStart.Dispose();
+  anchorEnd.Dispose();
+  workbench.unmount();
+  session.view.Close();
+});
+
+it("refreshes the Find Bar from the current model selection when the editor calls it again", /** Uses the ASCII writer for a two-paragraph selection and keeps the current entry while it has focus. @returns Nothing. */ () => {
+  const session = createWriterDocumentSession();
+  const shell = session.view.GetWrtShell();
+  const first = shell.GetActiveParagraph();
+  shell.Insert("first text");
+  shell.SplitNode();
+  const second = shell.GetActiveParagraph();
+  shell.Insert("second text");
+  const start = new SwPosition(first, 6);
+  const end = new SwPosition(second, 6);
+  const workbench = render(<WriterWorkbench isActive view={session.view} />);
+
+  fireEvent.keyDown(window, { key: "f", ctrlKey: true });
+  const search = within(screen.getByRole("toolbar", { name: "Find" })).getByLabelText("Find");
+  fireEvent.change(search, { target: { value: "draft" } });
+
+  act(
+    /** Changes the registered selection while the toolbar is open. @returns Nothing. */ () =>
+      shell.SetPaM(end, start),
+  );
+  fireEvent.keyDown(search, { key: "f", ctrlKey: true });
+  expect(search).toHaveValue("draft");
+  expect((search as HTMLInputElement).selectionStart).toBe(0);
+  expect((search as HTMLInputElement).selectionEnd).toBe(5);
+  const editor = workbench.container.querySelector<HTMLElement>("[data-writer-editing-host]");
+  editor?.focus();
+  fireEvent.keyDown(editor ?? window, { key: "f", ctrlKey: true });
+  expect(search).toHaveValue("textsecond");
+  expect(search).toHaveFocus();
+  expect(shell.GetCursor().Start().compare(start)).toBe(0);
+  expect(shell.GetCursor().End().compare(end)).toBe(0);
+
+  start.Dispose();
+  end.Dispose();
   workbench.unmount();
   session.view.Close();
 });
@@ -73,6 +206,67 @@ it("shares the query with Find and Replace, replaces the selected match and undo
   fireEvent.keyDown(search, { key: "Escape" });
   expect(fireEvent.keyDown(window, { key: "z", ctrlKey: true })).toBe(false);
   expect(shell.GetActiveParagraph().GetText()).toBe("Replace first first third");
+  workbench.unmount();
+  session.view.Close();
+});
+
+it("keeps finding available when read-only Writer state disables replacement", /** Exercises command admission, dialog state, the repeat request, and the document history. @returns Nothing. */ () => {
+  const session = createWriterDocumentSession();
+  const shell = session.view.GetWrtShell();
+  const owner = session.view.GetSearch();
+  const paragraph = shell.GetActiveParagraph();
+  const undo = paragraph.GetDoc().GetUndoManager();
+  shell.Insert("cat cat cat");
+  const undoCount = undo.GetUndoActionCount();
+  shell.GetViewOptions().SetReadonly(true);
+  const workbench = render(<WriterWorkbench isActive view={session.view} />);
+
+  fireEvent.keyDown(window, { key: "h", ctrlKey: true });
+  const dialog = within(screen.getByRole("dialog", { name: "Find and Replace" }));
+  const replacement = dialog.getByLabelText("Replace with");
+  const replace = dialog.getByRole("button", { name: /^Replace$/ });
+  const replaceAll = dialog.getByRole("button", { name: "Replace All" });
+  fireEvent.change(dialog.getByLabelText("Find"), { target: { value: "cat" } });
+  expect(replacement).toBeDisabled();
+  expect(replace).toBeDisabled();
+  expect(replaceAll).toBeDisabled();
+
+  fireEvent.click(dialog.getByRole("button", { name: "Find All" }));
+  expect([...shell.GetCursor().GetRingContainer()]).toHaveLength(3);
+  fireEvent.click(dialog.getByRole("button", { name: "Find Previous" }));
+  expect(shell.GetCursor().Start().GetContentIndex()).toBe(8);
+  const request = { ...owner.GetSearchItem(), replacement: "dog" };
+  for (const command of [SvxSearchCmd.REPLACE, SvxSearchCmd.REPLACE_ALL])
+    expect(owner.ExecSearch(request, command)).toEqual({ matches: 0, wrapped: false });
+  expect(paragraph.GetText()).toBe("cat cat cat");
+  expect(undo.GetUndoActionCount()).toBe(undoCount);
+  expect(shell.GetCursor().Start().GetContentIndex()).toBe(8);
+  act(
+    /** Repeats the saved backward find after the refused replacement requests. @returns Nothing. */ () => {
+      expect(owner.RepeatSearch()).toBe(true);
+    },
+  );
+  expect(shell.GetCursor().Start().GetContentIndex()).toBe(4);
+
+  act(
+    /** Updates SearchOptions through the active bindings when editing is restored. @returns Nothing. */ () => {
+      shell.GetViewOptions().SetReadonly(false);
+      session.frame.GetBindings().Invalidate("view");
+    },
+  );
+  expect(replacement).toBeEnabled();
+  expect(replace).toBeEnabled();
+  expect(replaceAll).toBeEnabled();
+  fireEvent.change(replacement, { target: { value: "catdog" } });
+  fireEvent.click(replaceAll);
+  expect(paragraph.GetText()).toBe("catdog catdog catdog");
+  expect(undo.GetUndoActionCount()).toBe(undoCount + 1);
+
+  shell.GetViewOptions().SetReadonly(true);
+  expect(owner.RepeatSearch()).toBe(false);
+  expect(paragraph.GetText()).toBe("catdog catdog catdog");
+  expect(undo.GetUndoActionCount()).toBe(undoCount + 1);
+
   workbench.unmount();
   session.view.Close();
 });
@@ -246,41 +440,60 @@ it("updates the open dialog when the dispatcher repeats Find All", /** Verifies 
   expect(status).toHaveTextContent("Search key not found");
   expect(search).toBeInvalid();
   fireEvent.change(search, { target: { value: "two" } });
-  expect(status).toBeEmptyDOMElement();
+  expect(status).toHaveTextContent("Search key not found");
   expect(search).toBeValid();
+
+  const end = new SwPosition(paragraph, paragraph.Len());
+  act(
+    /** Checks that typing alone leaves the dispatched Find All request in place. @returns Nothing. */ () => {
+      expect(session.view.GetSearch().RepeatSearch()).toBe(false);
+    },
+  );
+  fireEvent.blur(search);
+  expect((search as HTMLInputElement).list?.options[0]).toHaveValue("two");
+  act(
+    /** Reads the newly accepted query, then changes the document for the case toggle. @returns Nothing. */ () => {
+      expect(session.view.GetSearch().RepeatSearch()).toBe(true);
+      expect([...shell.GetCursor().GetRingContainer()]).toHaveLength(1);
+      paragraph.SetText("two TWO");
+      end.SetContent(paragraph.Len());
+      shell.SetCursor(end);
+    },
+  );
+  fireEvent.change(search, { target: { value: "TWO" } });
+  fireEvent.click(dialog.getByRole("checkbox", { name: "Match case" }));
+  fireEvent.keyDown(window, { key: "f", ctrlKey: true, shiftKey: true });
+  expect(shell.GetCursor().Start().GetContentIndex()).toBe(4);
+  end.Dispose();
   workbench.unmount();
   session.view.Close();
 });
 
-it("keeps the upstream ten most recent distinct Find Bar entries across reopening", /** Ports tdf154269 and checks move-to-front for a remembered entry. @returns Nothing. */ () => {
+it("keeps recent Find Bar entries separately from the keyboard search used on reopening", /** Ports tdf154269 and tdf154818 and verifies the toolbar command paths. @returns Nothing. */ () => {
   const session = createWriterDocumentSession();
   const workbench = render(<WriterWorkbench isActive view={session.view} />);
-
+  fireEvent.keyDown(window, { key: "f", ctrlKey: true });
+  const toolbar = within(screen.getByRole("toolbar", { name: "Find" }));
+  const search = toolbar.getByLabelText("Find");
   for (const letter of "ABCDEFGHIJKLMNOPQRSTUVWXYZ") {
-    fireEvent.keyDown(window, { key: "f", ctrlKey: true });
-    const toolbar = within(screen.getByRole("toolbar", { name: "Find" }));
-    const search = toolbar.getByLabelText("Find");
     fireEvent.change(search, { target: { value: letter } });
     fireEvent.keyDown(search, { key: "Enter" });
-    fireEvent.click(toolbar.getByRole("button", { name: "Close" }));
   }
-
-  fireEvent.keyDown(window, { key: "f", ctrlKey: true });
-  const toolbar = screen.getByRole("toolbar", { name: "Find" });
-  const search = within(toolbar).getByLabelText("Find");
-  /** Reads the native datalist's ordered entries. @returns The stored terms. */
-  function terms(): string[] {
-    return Array.from(
-      toolbar.querySelectorAll<HTMLOptionElement>("datalist option"),
-      /** Projects the actual Browser option. @param option - History option. @returns Term. */ (
-        option,
-      ) => option.value,
-    );
-  }
-  expect(terms()).toEqual(Array.from("ZYXWVUTSRQ"));
   fireEvent.change(search, { target: { value: "U" } });
-  fireEvent.keyDown(search, { key: "Enter" });
-  expect(terms()).toEqual(Array.from("UZYXWVTSRQ"));
+  fireEvent.click(toolbar.getByRole("button", { name: "Find Next" }));
+  fireEvent.change(search, { target: { value: "new" } });
+  fireEvent.click(toolbar.getByRole("button", { name: "Find All" }));
+  fireEvent.click(toolbar.getByRole("button", { name: "Close" }));
+  fireEvent.keyDown(window, { key: "f", ctrlKey: true });
+  expect(screen.getByRole("combobox", { name: "Find" })).toHaveValue("Z");
+  expect(
+    Array.from(
+      screen.getByRole("toolbar", { name: "Find" }).querySelectorAll("datalist option"),
+      /** Reads the option's search term. @param option - Browser option. @returns Term. */ (
+        option,
+      ) => option.getAttribute("value"),
+    ),
+  ).toEqual(Array.from("UZYXWVTSRQ"));
   workbench.unmount();
   session.view.Close();
 });
@@ -464,7 +677,7 @@ it("searches used paragraph styles and replaces matched collections in one undo 
   const find = dialog.getByRole("combobox", { name: "Find" });
   const replacement = dialog.getByRole("combobox", { name: "Replace with" });
   expect(within(find).queryByRole("option", { name: "Heading 2" })).toBeNull();
-  expect(within(replacement).getByRole("option", { name: "Heading 2" })).toBeInTheDocument();
+  expect(replacement.querySelector('[value="heading-2"] ~ [value="heading-10"]')).toBeTruthy();
   fireEvent.change(find, { target: { value: "heading-1" } });
   fireEvent.click(dialog.getByRole("button", { name: "Find All" }));
   expect(dialog.getByRole("status")).toHaveTextContent("2 results");

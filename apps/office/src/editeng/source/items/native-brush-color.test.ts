@@ -6,6 +6,7 @@ import {
   BRUSH_GRAPHIC_VERSION,
 } from "../../inc/brushitem";
 import { Color, ColorAlpha, COL_TRANSPARENT } from "../../../tools/inc/color";
+import { ThemeColorType } from "../../../docmodel/inc/theme/ThemeColorType";
 import { ComplexColor } from "../../../docmodel/inc/color/ComplexColor";
 import { ShadingPattern } from "../../../offapi/com/sun/star/drawing/ShadingPattern";
 import { SfxInt16Item } from "../../../svl/inc/intitem";
@@ -25,13 +26,7 @@ import {
   MID_GRAPHIC_REPEAT,
 } from "../../inc/memberids";
 /** Actual provider-dependent native members, without an invented provider object. */
-const pending = [
-  MID_GRAPHIC_POSITION,
-  MID_GRAPHIC,
-  MID_GRAPHIC_URL,
-  MID_GRAPHIC_FILTER,
-  MID_BACKGROUND_COMPLEX_COLOR,
-];
+const pending = [MID_GRAPHIC_POSITION, MID_GRAPHIC, MID_GRAPHIC_URL, MID_GRAPHIC_FILTER];
 it("retains original transparent defaults and complete published constant declarations", /** Default shading and position identities are not native graphics implementations. @returns Nothing. */ () => {
   const item = Item.CreateDefault();
   expect(item.Which()).toBe(0);
@@ -155,6 +150,23 @@ it("queries original typed color/RGB/percentage/transparency/shading members", /
   for (const member of pending) {
     expect(item.QueryValue(out, member)).toBe(false);
     expect(out.operatorEquals(before)).toBe(true);
+  }
+});
+it("transfers the background complex color independently of the resolved brush RGB", /** Covers the native XComplexColor property used by Writer shading. @returns Nothing. */ () => {
+  const theme = new ComplexColor();
+  theme.setThemeColor(ThemeColorType.Accent2);
+  const source = new Item(new Color(0xabcdef), theme, 148);
+  const target = new Item(new Color(0x123456), 148);
+  const property = new Any();
+  try {
+    expect(source.QueryValue(property, MID_BACKGROUND_COMPLEX_COLOR)).toBe(true);
+    expect(target.PutValue(property, MID_BACKGROUND_COMPLEX_COLOR)).toBe(true);
+    expect(target.GetColor().toUInt32()).toBe(0x123456);
+    expect(target.getComplexColor().getThemeColorType()).toBe(ThemeColorType.Accent2);
+  } finally {
+    property.dispose();
+    target.Dispose();
+    source.Dispose();
   }
 });
 it("preserves alpha for RGB writes and replaces it for full color writes", /** Typed extraction failures leave the actual color unchanged. @returns Nothing. */ () => {

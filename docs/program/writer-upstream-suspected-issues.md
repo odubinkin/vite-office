@@ -296,6 +296,13 @@ contract checks; compiled upstream execution and complete consumer invariants
 are unverified. Decision: retain the exact directional predicates and the
 single-character-only literal exception.
 
+The same predicates apply when `lcl_CleanStr` removes inline fly anchors.
+With an anchor on each side of `😀a<U+00AD>b`, the key `😀ab` yields forward
+point/mark [6,1] and backward [0,7] in UTF-16 coordinates. This includes both
+boundary anchors in the backward result. The model regression test preserves
+those endpoints. Replacement of an anchor itself still requires fly undo
+history in the port.
+
 ## WRITER-010: Normal replacement history can remain consumed after redo
 
 Pinned `sw/source/core/undo/unins.cxx`, `SwUndoReplace::Impl::UndoImpl`, clears
@@ -315,6 +322,12 @@ Portable checks in `native-search-replace.test.ts` retain that consumed-end
 state. They do not execute the native binary; full consumer invariants and a
 compiled native differential remain unverified. Decision: do not add a
 `SetTmpEnd(Count())` reset that does not exist in this source branch.
+
+The adjacent-paragraph variant retains the same consumed end. A first undo
+restores both paragraph alignments from the saved format history. After redo,
+a second undo restores the boundary and text, while the newly split paragraph
+can inherit the join survivor's alignment. The paragraph replacement
+regression covers this extended source-derived sequence.
 
 ## WRITER-011: Empty replacement can advance to the next content node
 
@@ -5405,7 +5418,345 @@ applies its authored properties without that collection change.
 - Preserve the script-transition argument and cover the resulting source
   offsets on an actual Writer text node.
 
-### WRITER-688 — ODT drops a bookmark condition when the bookmark is visible
+### WRITER-688 — A moved caret can retain the extra-area search phase
+
+- Upstream: `sw/source/uibase/uiview/viewsrch.cxx`, `SwView::SearchAndWrap`
+  and `SwView::FUNC_Search` at the pinned baseline.
+- Observation: after a single search succeeds in an extra area, `s_bExtra`
+  remains true. Moving the caret into the main text does not reset that
+  flag. The next search starts in `InOther` even when the caret is at a
+  body match. Find All and Replace All reset the flag on entry.
+- Preserve the phase in the browser view owner and cover the observable
+  ordering with an anchored text frame and a body match. The evidence is
+  source-derived and does not claim a compiled native differential.
+
+### WRITER-689 — The no-wrap decision can predate a change of search origin
+
+- Upstream: `sw/source/uibase/uiview/viewsrch.cxx`, `SwSearchOptions` and
+  `SwView::SearchAndWrap` at the pinned baseline.
+- Observation: the options constructor computes `bDontWrap` from the cursor
+  before `SearchAndWrap` normalizes the selection. A reversed selection with
+  its point at the start of the document can therefore suppress forward
+  wrap even though normalization advances the search start to the other
+  end of the selection.
+- Preserve the initial boundary decision and the normalized cursor after
+  the unsuccessful pass. A subsequent forward search from that cursor
+  can wrap. The browser regression exercises this source ordering.
+
+### WRITER-690 — A failed selection-only search can set the extra-area flag
+
+- Upstream: `sw/source/uibase/uiview/viewsrch.cxx`, `SwView::SearchAndWrap`
+  and `SwView::FUNC_Search` at the pinned baseline.
+- Observation: `FUNC_Search` uses `InSel` for both passes when selection-only
+  is on. If the first pass misses, `SearchAndWrap` still flips `s_bExtra`.
+  A later miss that entered with this flag set can clear the current mark
+  and move the point to the document boundary before retrying `InSel`.
+  Matches outside the selection remain excluded.
+- Preserve the shared flag, the restored cursor on wrap, and the resulting
+  mark and point. The browser regression covers the source-derived order
+  through the modeless dialog.
+
+### WRITER-691 — A zero-result Replace All can leave Find All as the last command
+
+- Upstream: `sw/source/uibase/uiview/viewsrch.cxx`, `SwView::ExecSearch`
+  and `SwView::SearchAndWrap` at the pinned baseline.
+- Observation: the zero-result Replace All branch returns before committing
+  `m_eLastSearchCommand`. A following single search can still perform the
+  repositioning normally associated with Find All.
+- Preserve this command-state distinction. This observation is based on
+  source control flow.
+
+### WRITER-692 — Find Bar buttons and keyboard activation remember different queries
+
+- Upstream: `svx/source/tbxctrls/tbunosearchcontrollers.cxx`,
+  `FindTextFieldControl::ActivateFind`, `UpDownSearchToolboxController::execute`,
+  `FindAllToolboxController::execute`, and
+  `FindTextFieldControl::SetTextToSelected_Impl` at the pinned baseline.
+- Observation: Next and Previous append to the toolbar history without
+  changing the remembered activation string. Find All does neither.
+  With no selection, reopening Find Bar prefers the last keyboard-activated
+  query over the most recent history item.
+- Preserve the separate updates and verify them together through the
+  Writer toolbar. This observation is based on source control flow.
+
+### WRITER-693 — Replace All can count style matches when the replacement is missing
+
+- Upstream: `sw/source/uibase/wrtsh/select.cxx`, `SwWrtShell::SearchTempl`;
+  `sw/source/uibase/uiview/viewsrch.cxx`, `SwView::ExecSearch` and
+  `SwView::Replace`; `sw/source/core/crsr/findcoll.cxx`,
+  `SwFindParaFormatColl::DoFind` at the pinned baseline.
+- Observation: if the requested replacement style cannot be resolved,
+  style Replace All searches with a null replacement collection. It
+  returns the number of matches to the replacement feedback even though
+  it did not change their styles. Single Replace goes through
+  `SwEditShell::SetTextFormatColl`, which uses the default collection
+  when its argument is null.
+- Preserve the separate paths and test them at the Writer view command
+  boundary. The evidence is source-derived.
+
+### WRITER-694 — A favourite built-in style can bypass hidden-style filtering
+
+- Upstream: `sw/source/uibase/app/docstyle.cxx`,
+  `SwStyleSheetIterator::First` and `SwStyleSheetIterator::AppendStyleList`;
+  `svx/source/dialog/srchdlg.cxx`, `SvxSearchDialog::TemplatesChanged_Impl`
+  at the pinned baseline.
+- Observation: the document-style enumeration omits a hidden style that
+  is unused. The built-in pool enumeration can append that name again
+  because its favourite flag bypasses the visibility check. The dialog
+  still requires use before putting it in the search-style selector.
+- Preserve its availability for replacement and its absence from the
+  search selector. This observation is based on source control flow.
+
+### WRITER-695 — Style replacement checks protected frames at the selection endpoints
+
+- Upstream: `sw/source/core/crsr/pam.cxx`, `SwPaM::HasReadonlySel`;
+  `sw/source/core/edit/edfcol.cxx`, `SwEditShell::SetTextFormatColl`;
+  `sw/source/core/doc/docfmt.cxx`, `SwDoc::SetTextFormatColl`.
+- Observation: the range check tests frame protection at the point and
+  mark and has a separate interior scan for protected section formats.
+  It does not perform the same scan for protected table cells wholly
+  inside the range. If such a range reaches the edit-shell command with
+  editable endpoints, the style-application loop visits its interior
+  text nodes.
+- Preserve the endpoint admission for single style replacement in the
+  represented table and fly profile. Bulk style replacement checks the
+  individual match. This finding is source-derived.
+
+### WRITER-696 — Editing the dialog can clear its entry error while retaining its old message
+
+- Upstream: `svx/source/dialog/srchdlg.cxx`,
+  `SvxSearchDialog::SetModifyFlag_Impl` and
+  `SvxSearchDialogWrapper::GetSearchLabel` at the pinned baseline.
+- Observation: editing the search entry directly resets its message type.
+  The shared label is cleared only if the wrapper reads a nonempty
+  label from the Find Bar. A closed toolbar yields an empty string from
+  that query even when the dialog still shows a previous message.
+- Preserve the independent entry state and the status row. The evidence
+  is source-derived and covered through the Writer search UI.
+
+### WRITER-697 — Named argument admission depends on the last recognized member
+
+- Upstream: `sfx2/source/appl/appuno.cxx`, `TransformParameters`, complex
+  formal argument with individually named members.
+- Observation: the loop replaces the conversion status for each recognized
+  member. A trailing malformed member suppresses the assembled item even
+  after earlier members converted. The same malformed member listed before
+  a valid member can leave the assembled item admitted, with defaults for
+  the member that failed. Unrecognized names do not change that status.
+- Writer preserves this ordering for the represented `SearchItem.*` members
+  of `.uno:ExecuteSearch`. This observation applies to the shared Sfx
+  source. Calc-side dispatch was not changed in this checkpoint.
+
+### WRITER-698 — Failed aggregate SearchItem conversion retains successful writes
+
+- Upstream: `svl/source/items/srchitem.cxx`, `SvxSearchItem::PutValue`,
+  member zero with a thirteen-property sequence.
+- Observation: each successfully converted property updates the item
+  before the source counts the distinct successful names. A duplicate or
+  malformed entry may make the function return false after changing the
+  other properties.
+- The shared item preserves the mutation order. The Writer dispatcher
+  admits an aggregate argument only when conversion reports success.
+
+### WRITER-699 — The Highlighting search page can miss an identical visible highlight
+
+- Upstream: `cui/source/dialogs/srchxtra.cxx` configures the search Format
+  dialog with `SHOW_HIGHLIGHTING`. `SvxBkgTabPage` in
+  `cui/source/tabpages/backgrnd.cxx` reads and writes `SID_ATTR_BRUSH_CHAR`,
+  whose Writer pool item is `RES_CHRATR_BACKGROUND`.
+- Observation: `SwTextPaintInfo::DrawBackground` in
+  `sw/source/core/text/inftxt.cxx` paints a nontransparent
+  `RES_CHRATR_HIGHLIGHT` before considering `RES_CHRATR_BACKGROUND`.
+  `FindAttrsImpl` and `CmpAttr` in `sw/source/core/crsr/findattr.cxx`
+  compare the requested WhichId. A run with only the separate highlight
+  item can therefore look identical to a run with the background brush
+  and be absent from the same Highlighting query.
+- Writer preserves the separate WhichIds and the display precedence.
+  The browser regression exercises identical effective colors and different
+  native item families. The original desktop behavior is source-derived.
+
+### WRITER-700 — A paragraph-format search can find text beyond the selected substring
+
+- Upstream: `sw/source/core/crsr/findattr.cxx`, `FindAttrsImpl` and
+  `SwFindParaAttr::DoFind`, and `sw/source/core/crsr/pam.cxx`, `GetNode`.
+- Observation: `GetNode` admits a paragraph intersecting the search range.
+  The paragraph-only `OtherSet` branch keeps the directional starting
+  endpoint and sets the other endpoint to the paragraph edge. The
+  subsequent text search receives that candidate range. In a centered
+  paragraph containing `red word`, a forward search for `word` with only
+  `red` selected can return the word outside the original selection.
+  A backward search can similarly extend to the paragraph start.
+- Writer retains both directional endpoints for the represented
+  paragraph-only attribute branch. The view regression covers both
+  directions. This is a source-derived observation.
+
+### WRITER-701 — The Attributes dialog labels pair kerning as character blinking
+
+- Upstream `include/svx/svxitems.hrc` assigns “Character blinking” to
+  `SID_ATTR_CHAR_AUTOKERN`. Writer’s pool maps that slot to `RES_CHRATR_AUTOKERN`.
+  The actual blinking item uses `SID_ATTR_FLASH` and appears as “Blinking”.
+- Writer retains the two separate source slots and the original labels. The
+  Attributes dialog regression checks that both entries are available.
+
+### WRITER-702 — Format can append an exact criterion after a presence criterion for the same slot
+
+- Upstream `svx/source/dialog/srchdlg.cxx`, `FormatHdl_Impl`, updates only
+  concrete existing entries before appending unused output items. A slot with
+  an existing invalid-item presence criterion can then appear twice.
+- `SearchAttrItemList::Get` transfers both entries in order, so the appended
+  exact value takes effect. `cui/source/dialogs/srchxtra.cxx` reads the first
+  occurrence for the checkbox and edits the last occurrence on confirmation.
+- Writer retains the ordered entries and the different lookup directions.
+  The formatting dialog regression checks the combined summary, checkbox
+  state, and effective search.
+
+### WRITER-703 — Search formatting summaries can hide settings that affect a match
+
+- Upstream `SvxAdjustItem::GetPresentation` reports the primary alignment
+  even when the search criterion also includes last-line alignment, word and
+  letter spacing, glyph scaling, or the paragraph composer. The method has
+  a TODO for word spacing. `SvxFirstLineIndentItem::GetPresentation` reports
+  the measure without its automatic-indentation flag.
+- Writer retains the summary fields and compares the complete items. The
+  browser regression distinguishes paragraphs that differ only in a
+  justification member or the automatic-first-line flag.
+
+### WRITER-704 — “Not Bold” and “Not Italic” produce exact default font members
+
+- Upstream `cui/source/tabpages/chardlg.cxx`, in
+  `SvxCharNamePage::FillItemSet_Impl`, the two search-only style entries
+  write normal weight and upright posture respectively. The other member
+  is left alone. Writer’s attribute search compares the native values,
+  so “Not Bold” can exclude light weight alongside bold weight.
+- Writer retains the exact, one-sided criteria. The browser regression
+  distinguishes regular, light and bold text and verifies that italic
+  text can match “Not Bold”.
+
+### WRITER-705 — The Font search page shares the extra style row index across scripts
+
+- Upstream `cui/source/tabpages/chardlg.cxx`, in
+  `SvxCharNamePage::FillStyleBox_Impl`, updates a single `m_nExtraEntryPos`
+  after filling whichever script's family is active. Reset fills Western,
+  Asian and Complex in that order.
+- `FillItemSet_Impl` reads that index when interpreting style rows for each
+  script. Families with different style counts can cause an ordinary style or
+  a search-only row to be interpreted using the other family's boundary.
+- Writer preserves the shared index and uses it when collecting all three
+  scripts' formatting.
+
+### WRITER-706 — Double-line enclosures truncate supplementary characters
+
+- Upstream `cui/source/tabpages/chardlg.cxx`, in `SvxCharTwoLinesPage::SelectCharacter`,
+  casts the full Unicode codepoint from `SvxCharacterMap::GetChar` to
+  `sal_Unicode`. A supplementary codepoint can become an unrelated BMP
+  character or zero before the item is written.
+- Writer retains the same low 16 bits when committing the enclosure. The
+  character picker still previews the selected Unicode codepoint.
+
+### WRITER-707 — Two mathematical Unicode subsets share one label
+
+- Upstream `svx/source/dialog/charmap.cxx`, in `SubsetMap::InitList`, uses
+  `RID_SUBSETSTR_MISC_MATH_SYMS_B` for both Miscellaneous Mathematical
+  Symbols-B and Supplemental Mathematical Operators.
+- Writer preserves both ranges and their shared display string. Selecting a
+  row still navigates to its own range.
+
+### WRITER-708 — The enclosure picker records OK and Return differently
+
+- Upstream `svx/source/dialog/cuicharmap.cxx` adds a recent character in
+  `InsertClickHdl` when the picker has no Writer frame. Pressing Return on the
+  character grid also accepts the enclosure, but `ReturnKeypressOnCharHdl`
+  bypasses that recent-list update.
+- Writer preserves both acceptance paths and the resulting difference in
+  recent characters.
+
+### WRITER-709 — An assertion can produce the empty region-end match described as a dollar anchor
+
+- Upstream `i18npool/source/search/textsearch.cxx` describes the retained
+  zero-length match at the end of a search region as a dollar anchor.
+  `RESrchFrwrd` and `RESrchBkwrd` inspect offsets rather than pattern syntax.
+- With transparent bounds, `(?=y)` matches at offset 1 in `xy` over the
+  region from 0 to 1. The native ICU binding retains that empty match in
+  both directions.
+
+### WRITER-710 — A complex-only regex can use the previous non-regex key
+
+- In upstream `i18npool/source/search/textsearch.cxx`, regex setup does not
+  compute `sSrchStr2`, but `RESrchPrepare` selects it when all enabled
+  transliteration flags are complex. The compiled pattern can be empty on a
+  fresh instance or retain the key from a previous non-regex search.
+- The shared search owner preserves that pattern selection and skips the
+  second transliteration pass for regex, as the source does.
+
+### WRITER-711 — Regex capture expansion keeps a soft hyphen ignored by the original match
+
+- In upstream `sw/source/core/crsr/findtxt.cxx`, the original model-text
+  search normally drops soft hyphens. `ReplaceBackReferences` searches the
+  selected range again with soft hyphens retained.
+- For `(ab)` over `a<U+00AD>b`, the initial search succeeds and the capture
+  search fails. Replace All falls back to Unicode escape processing without
+  expanding `$1`. Single Replace in `sw/source/uibase/uiview/viewsrch.cxx`
+  and formatted Replace All in `sw/source/core/crsr/findattr.cxx` instead
+  pass the original template to the regex replacement operation. The Writer
+  model and view regressions preserve both outcomes against the pinned ICU.
+
+- The same search and capture passes apply different rules to comment
+  anchors. An ordinary pattern can match across a removed annotation marker;
+  the capture pass retains the marker and can fail on the same range. The
+  annotation regression exercises both passes over a real point hint.
+
+### WRITER-712 — Escaped dollar signs can trigger the paragraph-end range gate
+
+- The regex check in `sw/source/core/crsr/findtxt.cxx` inspects the final
+  character and the character before each vertical bar to determine whether
+  the range must reach the end of the paragraph. It does not interpret
+  escaping or regex grouping.
+- An escaped dollar at the end of a pattern therefore requires the range to
+  reach the paragraph end even when the literal dollar is inside the range.
+  Writer preserves these checks in both directions.
+
+### WRITER-713 — Paragraph-anchor search omits the final paragraph
+
+- For `$`, `^$` and `$^`, upstream `sw/source/core/crsr/findtxt.cxx`
+  selects a range spanning two adjacent nodes. At the end of the document, no
+  following text node exists, even when the last paragraph is empty.
+- `testTdf147583_backwardSearch` in
+  `sw/qa/extras/uiwriter/uiwriter7.cxx` expects the paragraph-end find-all
+  count to be one less than the paragraph count and explicitly calls out the
+  omitted last empty paragraph. Writer preserves this document boundary.
+
+### WRITER-714 — EditEngine Replace All can revisit a zero-width paragraph-end match
+
+- In `editeng/source/editeng/impedit4.cxx`, the Replace All loop starts its
+  next search at the position returned by insertion. `ImpSearch` accepts a
+  successful zero-width match from the shared text search.
+- For a paragraph-end assertion and nonempty replacement, the new insertion
+  position can be the new paragraph end, allowing the same assertion to match
+  again. An empty replacement can leave the position unchanged. The port
+  retains the source loop. This finding follows from the source branches and
+  has not been exercised as an unbounded native operation.
+
+### WRITER-715 — Annotation search compares an absolute bound with the span length
+
+- When notes are included, `sw/source/core/crsr/findtxt.cxx` sets the text
+  length passed to `DoSearch` to the subrange length for each span between
+  comment markers. The bound passed separately remains a paragraph offset.
+- The trailing-dollar check compares those values. A pattern such as `b$`
+  can match at the paragraph end during ordinary text search and fail with
+  notes enabled. Writer preserves this check in the annotation traversal.
+
+### WRITER-716 — Regex replacement inserts capture references literally in comments
+
+- Writer delegates a single replacement in the active annotation to
+  `SwPostItMgr::Replace` in `sw/source/uibase/docvw/PostItMgr.cxx`. The
+  EditEngine branch in `editeng/source/editeng/impedit4.cxx` inserts
+  `SvxSearchItem::GetReplaceString()` into the current editor selection.
+- Writer body text resolves capture references in its replacement path. A
+  replacement of `(😀)7` with `$1` therefore inserts the characters `$1` in
+  the comment editor, while body replacement inserts the captured emoji.
+  The browser preserves the annotation behavior.
+
+### WRITER-717 — ODT drops a bookmark condition when the bookmark is visible
 
 Import stores the hide condition on a matched bookmark range even when the
 hidden flag is false. Export writes the condition only on a hidden bookmark
@@ -5416,7 +5767,7 @@ by the pinned `tdf101856.odt` fixture.
 - [Original bookmark import](../../vendor/libreoffice-reference/xmloff/source/text/XMLTextMarkImportContext.cxx)
 - [Original bookmark export](../../vendor/libreoffice-reference/xmloff/source/text/txtparae.cxx)
 
-### WRITER-689 — A repeated ODT bookmark start replaces the earlier start
+### WRITER-718 — A repeated ODT bookmark start replaces the earlier start
 
 Bookmark starts are keyed by name and the latest start replaces an existing
 entry with the same name. An end consumes that entry even when it belongs to
@@ -5426,7 +5777,7 @@ at the end of import produce no marks. Writer preserves these pairing rules.
 - [Original pending range map](../../vendor/libreoffice-reference/xmloff/source/text/txtimp.cxx)
 - [Original range validation](../../vendor/libreoffice-reference/xmloff/source/text/XMLTextMarkImportContext.cxx)
 
-### WRITER-690 — ODT infers right-to-left gutter direction from writing mode
+### WRITER-719 — ODT infers right-to-left gutter direction from writing mode
 
 The page exporter uses the native `RtlGutter` flag when choosing the side
 that receives the gutter. Its property handler emits no separate attribute
@@ -5438,7 +5789,7 @@ preserves both sides of this contract.
 - [Original getter and setter mapping](../../vendor/libreoffice-reference/xmloff/source/style/XMLRtlGutterPropertyHandler.cxx)
 - [Original margin adjustment](../../vendor/libreoffice-reference/xmloff/source/style/PageMasterImportPropMapper.cxx)
 
-### WRITER-691 — ODT adjusts only explicit page margins for a gutter
+### WRITER-720 — ODT adjusts only explicit page margins for a gutter
 
 Shorthand `fo:margin` creates a property for each missing side. The gutter
 adjustment visits only the original side properties. A margin inherited
@@ -5447,7 +5798,7 @@ the gutter during layout. Writer preserves this ordering.
 
 - [Original margin synthesis and gutter adjustment](../../vendor/libreoffice-reference/xmloff/source/style/PageMasterImportPropMapper.cxx)
 
-### WRITER-692 — A legacy page background image can override a modern bitmap mode
+### WRITER-721 — A legacy page background image can override a modern bitmap mode
 
 When a page declares a modern bitmap mode and also has a loaded legacy
 background image, the legacy image context replaces the modern mode with
@@ -5456,7 +5807,7 @@ placement defaults to repeat. Writer keeps this precedence.
 
 - [Original legacy image placement and bitmap mode override](../../vendor/libreoffice-reference/xmloff/source/style/XMLBackgroundImageContext.cxx)
 
-### WRITER-693 — Legacy percentage positions can select the bottom edge
+### WRITER-722 — Legacy percentage positions can select the bottom edge
 
 The legacy background-image importer passes a left-column point to its
 vertical merge when processing the second percentage. For example, it
@@ -5465,7 +5816,7 @@ the legacy image to a DrawingLayer reference point.
 
 - [Original legacy position conversion](../../vendor/libreoffice-reference/xmloff/source/style/XMLBackgroundImageContext.cxx)
 
-### WRITER-694 — ODT writes only one bitmap tile-offset axis
+### WRITER-723 — ODT writes only one bitmap tile-offset axis
 
 DrawingLayer stores horizontal and vertical offsets independently. If both
 are present, the page exporter emits the horizontal offset when it is
@@ -5475,7 +5826,7 @@ applies the same selection when writing ODT.
 
 - [Original tile-offset export selection](../../vendor/libreoffice-reference/xmloff/source/style/PageMasterExportPropMapper.cxx)
 
-### WRITER-695 — ODT named bitmap fills and legacy backgrounds use different inline fallback rules
+### WRITER-724 — ODT named bitmap fills and legacy backgrounds use different inline fallback rules
 
 The named fill-image context consults its first inline stream when its href
 did not resolve to a graphic. The legacy background context only opens a

@@ -7542,3 +7542,56 @@ disabled. Calc preserves the original conversions and export conditions.
 - [Original iteration and year import conversions](../../vendor/libreoffice-reference/sc/source/filter/xml/XMLCalculationSettingsContext.cxx)
 - [Original iteration count setter](../../vendor/libreoffice-reference/sc/source/ui/unoobj/optuno.cxx)
 - [Original calculation settings export](../../vendor/libreoffice-reference/sc/source/filter/xml/xmlexprt.cxx)
+
+### CALC-793 — Named argument admission depends on the last recognized member
+
+- Upstream: `sfx2/source/appl/appuno.cxx`, `TransformParameters`, complex
+  formal argument with individually named members.
+- Observation: the loop replaces the conversion status for each recognized
+  member. A trailing malformed member suppresses the assembled item even
+  after earlier members converted. The same malformed member listed before
+  a valid member can leave the assembled item admitted, with defaults for
+  the member that failed. Unrecognized names do not change that status.
+- Writer preserves this ordering for the represented `SearchItem.*` members
+  of `.uno:ExecuteSearch`. This observation applies to the shared Sfx
+  source. Calc-side dispatch was not changed in this checkpoint.
+
+### CALC-794 — Failed aggregate SearchItem conversion retains successful writes
+
+- Upstream: `svl/source/items/srchitem.cxx`, `SvxSearchItem::PutValue`,
+  member zero with a thirteen-property sequence.
+- Observation: each successfully converted property updates the item
+  before the source counts the distinct successful names. A duplicate or
+  malformed entry may make the function return false after changing the
+  other properties.
+- The shared item preserves the mutation order. The Writer dispatcher
+  admits an aggregate argument only when conversion reports success.
+
+### CALC-795 — An assertion can produce the empty region-end match described as a dollar anchor
+
+- The shared `i18npool/source/search/textsearch.cxx` regular-expression
+  backend describes a retained zero-length region-end match as a dollar
+  anchor. Its conditions check only the match offsets.
+- With transparent bounds, `(?=y)` matches at offset 1 in `xy` over the
+  region from 0 to 1. The native ICU binding retains that empty match in
+  both directions. See WRITER-709 for the corresponding Writer finding.
+
+### CALC-796 — A complex-only regex can use the previous non-regex key
+
+- The shared `i18npool/source/search/textsearch.cxx` regular-expression
+  preparation can choose the stored complex key `sSrchStr2`, even though regex
+  setup does not populate that key. Reusing the search object can retain the
+  previous non-regex complex key.
+- The shared search owner preserves the pattern selection and skips the regex
+  second pass. See WRITER-710 for the original source path and behavior.
+
+### CALC-797 — EditEngine Replace All can revisit a zero-width paragraph-end match
+
+- In `editeng/source/editeng/impedit4.cxx`, the Replace All loop starts its
+  next search at the position returned by insertion. `ImpSearch` accepts a
+  successful zero-width match from the shared text search.
+- For a paragraph-end assertion and nonempty replacement, the new insertion
+  position can be the new paragraph end, allowing the same assertion to match
+  again. An empty replacement can leave the position unchanged. The port
+  retains the source loop. This finding follows from the source branches and
+  has not been exercised as an unbounded native operation.

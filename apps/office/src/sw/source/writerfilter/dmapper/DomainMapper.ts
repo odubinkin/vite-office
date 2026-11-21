@@ -53,7 +53,8 @@ import { ResolvePageMargins, ResolvePageBorders } from "./PropertyMap.section";
 import { BorderHandler } from "./BorderHandler";
 import { cppu_detail_getUnoType_BorderLine2 } from "../../../../offapi/com/sun/star/table/BorderLine2";
 import {
-  highlights,
+  ResolveCharacterShading,
+  ResolveCharacterHighlight,
   paragraphBorderIds,
   paragraphVerticalAlignment,
   underline,
@@ -816,21 +817,10 @@ export class DomainMapper implements Properties, Stream {
         break;
       case N.LN_EG_RPrBase_spacing:
         return this.impl.SetCharacterKerning(context, n);
-      case N.LN_EG_RPrBase_highlight: {
-        if (
-          this.impl.IsStyleSheetImport() &&
-          this.impl.GetStyleSheetTable().GetCurrentEntry()?.m_nStyleTypeCode === StyleType.Character
-        )
-          break;
-        if (this.IsRTFImport()) {
-          this.insert(context, P.PROP_CHAR_HIGHLIGHT, new Any([n], "sal_Int32"));
-          break;
-        }
-        const color = highlights[n - N.LN_Value_ST_HighlightColor_black];
-        if (color !== undefined)
-          this.insert(context, P.PROP_CHAR_HIGHLIGHT, new Any([color], "sal_Int32"));
-        break;
-      }
+      case N.LN_EG_RPrBase_shd:
+        return ResolveCharacterShading(modifier, context);
+      case N.LN_EG_RPrBase_highlight:
+        return ResolveCharacterHighlight(n, context, this.impl);
       case N.LN_EG_RPrBase_color:
         resolveThemeColor(modifier, context);
         break;

@@ -9,6 +9,7 @@ import { useEffect, useState } from "react";
 
 import type { OfficeModuleFactory } from "../../../framework/browser/app/modulemanager";
 import { BrowserSfxDispatcher } from "../../../framework/browser/dispatch/browser-dispatcher";
+import { createBrowserRegexMatcher } from "../../../i18npool/browser/regex-matcher";
 import { createDocument } from "../../../sfx2/source/doc/objsh";
 import { SfxViewFrame } from "../../../sfx2/source/view/viewfrm";
 import { copyRichText, readRichClipboard } from "../../../vcl/browser/browser-clipboard";
@@ -32,6 +33,7 @@ import { WriterPrimaryOdtFilterService } from "../filter/xml/writer-primary-odt-
 import { createBrowserOdtFilterService } from "../filter/xml/odt-worker-client";
 import { WriterWorkbench } from "../presentation/writer-view";
 import { WriterViewStore } from "../presentation/writer-view-projection";
+import { WriterSearchOptionsStore } from "../storage/writer-search-options-store";
 import { WriterLayoutPreferenceStore } from "../storage/writer-layout-preferences-store";
 import { IndexedDbWriterOdtStore } from "../storage/writer-odt-store";
 import { WriterAutosaveController } from "../workflows/writer-autosave";
@@ -95,7 +97,10 @@ export function createWriterBrowserSessionServices(): WriterSessionServices {
   return {
     ...(globalThis.localStorage === undefined
       ? {}
-      : { layoutPreferences: new WriterLayoutPreferenceStore(globalThis.localStorage) }),
+      : {
+          layoutPreferences: new WriterLayoutPreferenceStore(globalThis.localStorage),
+          searchOptions: new WriterSearchOptionsStore(globalThis.localStorage),
+        }),
     copyRichText,
     createDownloadFilename,
     documentExport: createBrowserDocumentExportPort(),
@@ -162,7 +167,7 @@ export function createWriterDocumentSession(
     { kind: "untitled", name: "Untitled Writer Document" },
     odtFilter,
   );
-  const view = new SwView(docShell, module);
+  const view = new SwView(docShell, module, services.searchOptions, createBrowserRegexMatcher);
   const fileDialogs = new WriterFileDialogController();
   const sessionServices = { ...services, fileDialogs };
   const workflowCommandShell = new WriterWorkflowCommandShell(

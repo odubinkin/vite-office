@@ -15,10 +15,13 @@ import {
 import type { SfxViewFrame } from "../../../../sfx2/source/view/viewfrm";
 import { createDocument } from "../../../../sfx2/source/doc/objsh";
 import type { SwModelHint } from "../../../inc/hints";
+import type { SearchOptionsConfiguration } from "../../../../unotools/source/config/searchopt";
+import type { RegexMatcherFactory } from "../../../../unotools/inc/textsearch";
 import { SwViewSearch } from "./viewsrch";
 import { SwViewOption } from "../../../inc/viewopt";
 import { SwDocShell } from "../app/docsh";
 import { WriterDialogController } from "../dialog/writer-dialog-controller";
+import { SwPostItMgr } from "../docvw/PostItMgr";
 import { SwEditWin } from "../docvw/edtwin";
 import { SwTableShell } from "../shells/tabsh";
 import { SwViewCommandShell } from "../shells/view";
@@ -49,16 +52,19 @@ export class SwView {
   private readonly viewOptions: SwViewOption;
   private readonly wrtShell: SwWrtShell;
   private readonly search: SwViewSearch;
+  private readonly postItMgr: SwPostItMgr;
   private readonly editWindow: SwEditWin;
   private readonly horizontalRuler = new SvxRuler(true);
   private readonly verticalRuler = new SvxRuler(false);
   private readonly layout: SwRootFrame;
   private readonly wrtShellSubscription: () => void;
 
-  /** Creates one persistent view over a persistent document shell. @param docShell - Owning Writer document shell. @param module - Actual module metric preferences and open-view enumeration. @returns Nothing. */
+  /** Creates one persistent view over a persistent document shell. @param docShell - Owning Writer document shell. @param module - Actual module metric preferences and open-view enumeration. @param searchOptions - User search configuration. @param createRegex - Native ICU constructor. @returns Nothing. */
   public constructor(
     private readonly docShell: SwDocShell,
     private readonly module: SwModule = SwModule.get(),
+    searchOptions?: SearchOptionsConfiguration,
+    createRegex?: RegexMatcherFactory,
   ) {
     const pref = module.GetUsrPref(false);
     this.horizontalRuler.SetUnit(pref.GetHScrollMetric());
@@ -78,7 +84,8 @@ export class SwView {
       this.viewOptions,
       this,
     );
-    this.search = new SwViewSearch(this.wrtShell);
+    this.postItMgr = new SwPostItMgr(createRegex);
+    this.search = new SwViewSearch(this.wrtShell, searchOptions, createRegex, this.postItMgr);
     this.docShell.SetView(this);
     this.editWindow = new SwEditWin(
       this,
@@ -173,6 +180,11 @@ export class SwView {
   /** Returns the view's persistent search dispatcher. @returns Search owner. */
   public GetSearch(): SwViewSearch {
     return this.search;
+  }
+
+  /** Returns the view-owned annotation manager. @returns Active view comment manager. */
+  public GetPostItMgr(): SwPostItMgr {
+    return this.postItMgr;
   }
 
   /** Reads the consumed paragraph-spacing StateTabWin branch. @returns Uniform slot item or mixed state. */
@@ -331,6 +343,7 @@ export class SwView {
     this.wrtShellSubscription();
     this.frame?.CloseView();
     this.frame = undefined;
+    this.postItMgr.Dispose();
     this.wrtShell.Close();
     this.layout.DestroyImpl();
     this.docShell.SetView(undefined);

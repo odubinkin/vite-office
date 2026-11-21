@@ -1,0 +1,38 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/cui/source/dialogs/srchxtra.ts",
+    "classification": "upstream-mechanism",
+    "state": "active",
+    "suite": "shared",
+    "subsystem": "text-search",
+    "capabilityIds": [
+      "CAP-0111"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/cui/source/dialogs/srchxtra.ts#GetSearchAttributeRows",
+        "apps/office/src/cui/source/dialogs/srchxtra.ts#ApplySearchAttributeChecks",
+        "cui/source/dialogs/srchxtra.cxx#SvxSearchAttributeDialog::SvxSearchAttributeDialog",
+        "cui/source/dialogs/srchxtra.cxx#SvxSearchAttributeDialog, OKHdl"
+      ],
+      "justification": "Enumerates resource-backed slots in the document pool, projects first-entry presence state and updates the last criterion on confirmation.",
+      "knownViolations": [],
+      "localSymbols": [
+        "GetSearchAttributeRows",
+        "ApplySearchAttributeChecks"
+      ],
+      "sourceResponsibility": "divergent",
+      "upstreamFile": "cui/source/dialogs/srchxtra.cxx",
+      "upstreamSymbols": [
+        "SvxSearchAttributeDialog::SvxSearchAttributeDialog",
+        "SvxSearchAttributeDialog, OKHdl"
+      ]
+    }
+  }
+}

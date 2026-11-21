@@ -77,6 +77,7 @@ import {
   AssertTextNodeAppend,
   CloneTextNodeTo,
   AssertTextNodeRange,
+  AssertTextNodeReplaceRange,
   CopyTextNodeHints,
   CreateTextNodeColorFragment,
   CreateTextNodeFontFamilyFragment,
@@ -188,7 +189,7 @@ export class SwTextNode extends SwContentNode {
   /** Replaces canonical ranged attributes without accepting a browser run projection. @param hints - Writer text attributes. @returns Nothing. */
   public SetTextHints(hints: SwpHints): void {
     const replacement = CopyTextNodeHints(this, hints);
-    this.pSwpHints?.TransferFlyHints(replacement);
+    this.pSwpHints?.TransferPointHints(replacement);
     this.pSwpHints = replacement.CanBeDeleted() ? undefined : replacement;
     this.GetDoc().NotifyModelChange({
       kind: "attribute-set-changed",
@@ -712,13 +713,10 @@ export class SwTextNode extends SwContentNode {
       oldLength = this.mText.length;
     if (index.GetContentNode() !== this || start >= oldLength)
       throw new Error("Writer ReplaceText needs an index inside its own node.");
-    AssertTextNodeRange(this, start, start + nDelLen);
+    AssertTextNodeReplaceRange(this, start, start + nDelLen);
     const inserted = rStr.slice(0, Math.max(0, this.GetSpaceLeft() + nDelLen));
     if (inserted.length === 0 && nDelLen === 0) return;
     const hints = this.pSwpHints;
-    for (const hint of hints?.entries() ?? [])
-      if (hint.HasDummyChar() && hint.GetStart() >= start && hint.GetStart() < start + nDelLen)
-        throw new Error("Writer dummy-character replacement is not implemented.");
     const oldIgnore = this.IsIgnoreDontExpand();
     this.SetIgnoreDontExpand(true);
     try {
@@ -796,7 +794,7 @@ export class SwTextNode extends SwContentNode {
       format,
       this.GetSwAttrSet(),
     );
-    this.pSwpHints?.TransferFlyHints(hints);
+    this.pSwpHints?.TransferPointHints(hints);
     this.pSwpHints = hints.CanBeDeleted() ? undefined : hints;
     this.GetDoc().NotifyModelChange({
       kind: "attribute-set-changed",
@@ -847,7 +845,7 @@ export class SwTextNode extends SwContentNode {
     AssertTextNodeRange(this, start, end);
     if (start === end) return;
     const hints = this.GetTextHints().setHyperlink(this.mText.length, start, end, hyperlink);
-    this.pSwpHints?.TransferFlyHints(hints);
+    this.pSwpHints?.TransferPointHints(hints);
     this.pSwpHints = hints.CanBeDeleted() ? undefined : hints;
     this.GetDoc().NotifyModelChange({
       kind: "attribute-set-changed",

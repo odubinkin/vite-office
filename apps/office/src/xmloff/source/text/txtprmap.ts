@@ -444,7 +444,7 @@ export function applyTextImportProperties(
     }
     for (const [key, name] of [
       ["color", "CharColor"],
-      ["highlight", "CharHighlight"],
+      ["highlight", "CharBackColor"],
     ] as const) {
       const value = character[key];
       if (value !== undefined)
@@ -456,6 +456,8 @@ export function applyTextImportProperties(
           "sal_Int32",
         );
     }
+    if (character.highlight !== undefined)
+      add("CharBackTransparent", character.highlight === "transparent", "bool");
     for (const [key, name, type] of [
       ["textTransparency", "CharTransparence", "sal_Int16"],
       ["strikeout", "CharStrikeout", "sal_Int16"],

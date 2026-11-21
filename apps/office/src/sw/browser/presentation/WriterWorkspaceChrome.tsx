@@ -13,6 +13,8 @@ import { WriterRulerLaneContext } from "./writer-ruler-lane-context";
 export interface WriterWorkspaceChromeProps {
   /** Document editing surface placed in the continuous Writer canvas. */
   readonly children: ReactNode;
+  /** Comment editors in the document margin. */
+  readonly commentsSidebar?: ReactNode;
   /** Human-readable title of the open Writer document. */
   readonly documentTitle: string;
   /** Applies a committed document title from the browser presentation. */
@@ -50,6 +52,7 @@ export interface WriterWorkspaceChromeProps {
  *
  * @param props - Stable Writer chrome content supplied by the stateful workbench.
  * @param props.children - Current document editing surface.
+ * @param props.commentsSidebar - Mounted comment editors in the canvas margin.
  * @param props.documentTitle - Title shown in the workspace title row.
  * @param props.onDocumentTitleChange - Applies a committed document title.
  * @param props.tableToolbar - Contextual table controls.
@@ -69,6 +72,7 @@ export interface WriterWorkspaceChromeProps {
  */
 export function WriterWorkspaceChrome({
   children,
+  commentsSidebar,
   documentTitle,
   formattingToolbar,
   tableToolbar,
@@ -138,7 +142,14 @@ export function WriterWorkspaceChrome({
             <WriterRulerLaneContext.Provider
               value={{ lane: rulerLane, scrollTop: canvasScrollTop }}
             >
-              {children}
+              {commentsSidebar ? (
+                <div className="flex items-start">
+                  <div className="min-w-0 flex-1">{children}</div>
+                  {commentsSidebar}
+                </div>
+              ) : (
+                children
+              )}
             </WriterRulerLaneContext.Provider>
           </div>
         </div>

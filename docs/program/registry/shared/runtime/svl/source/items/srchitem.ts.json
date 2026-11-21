@@ -1,0 +1,35 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/svl/source/items/srchitem.ts",
+    "classification": "upstream-mechanism",
+    "state": "active",
+    "suite": "shared",
+    "subsystem": "text-search",
+    "capabilityIds": [
+      "CAP-7c62943f-8dba-496e-b4df-b8c30ffe3d48"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/svl/source/items/srchitem.ts#SvxSearchItem",
+        "apps/office/src/svl/source/items/srchitem.test.ts",
+        "svl/source/items/srchitem.cxx#SvxSearchItem::PutValue"
+      ],
+      "justification": "Owns the SvxSearchItem value, copied options, pool identity, scalar member conversion, native equality exclusions and ordered thirteen-property browser aggregate. Writer uses the item for named and pooled ExecuteSearch requests. The same item transports native scalar Any values and Sequence<PropertyValue> containing the real extended SearchOptions2 struct.",
+      "knownViolations": [],
+      "localSymbols": [
+        "SvxSearchItem"
+      ],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": "svl/source/items/srchitem.cxx",
+      "upstreamSymbols": [
+        "SvxSearchItem"
+      ]
+    }
+  }
+}

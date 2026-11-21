@@ -1,0 +1,28 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "browser-adaptation",
+    "localPath": "apps/office/src/sw/browser/presentation/WriterSearchAttributesDialog.tsx",
+    "localSymbols": [
+      "WriterSearchAttributesDialog"
+    ],
+    "status": "local-only",
+    "rationale": "Presents the pinned cui/uiconfig/ui/searchattrdialog.ui checkbox structure for the supported attributes. Stores presence criteria using native slot IDs and applies a draft on OK.",
+    "responsibilities": [
+      "Presents the pinned cui/uiconfig/ui/searchattrdialog.ui checkbox structure for the supported attributes. Stores presence criteria using native slot IDs and applies a draft on OK."
+    ],
+    "stackDivergence": {
+      "kind": "browser-adaptation",
+      "rationale": "Browser controls provide the pinned VCL dialog structure."
+    },
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sw/browser/presentation/WriterSearchAttributesDialog.tsx",
+          "marker": "WriterSearchAttributesDialog"
+        }
+      ]
+    }
+  }
+}

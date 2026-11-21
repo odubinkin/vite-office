@@ -18,12 +18,14 @@
       "evidence": [
         "apps/office/src/offapi/com/sun/star/util/SearchAlgorithms.ts#SearchAlgorithms",
         "apps/office/src/i18nutil/source/utility/native-search-options.test.ts",
-        "offapi/com/sun/star/util/SearchAlgorithms.idl#SearchAlgorithms"
+        "offapi/com/sun/star/util/SearchAlgorithms.idl#SearchAlgorithms",
+        "apps/office/src/svl/source/items/srchitem.test.ts"
       ],
-      "justification": "Original legacy ABSOLUTE/REGEXP/APPROXIMATE enum identities 0/1/2, distinct from the newer 1/2/3/4 constants. Value declarations only; no algorithm support is invented.",
+      "justification": "Original legacy ABSOLUTE/REGEXP/APPROXIMATE enum identities 0/1/2, distinct from the newer 1/2/3/4 constants. Value declarations only; no algorithm support is invented. Provides the normal CPPU type for SearchAlgorithms and supports real Any transport of the derived search options.",
       "knownViolations": [],
       "localSymbols": [
-        "SearchAlgorithms"
+        "SearchAlgorithms",
+        "cppu_detail_getUnoType_SearchAlgorithms"
       ],
       "sourceResponsibility": "unverified",
       "upstreamFile": "offapi/com/sun/star/util/SearchAlgorithms.idl",

@@ -443,6 +443,13 @@ export const SwUnoPropertyMap: ReadonlyMap<string, SwUnoPropertyEntry> = new Map
       kind: "any",
     },
   ],
+  ["CharBackColor", row(H.RES_CHRATR_BACKGROUND, "sal_Int32", M.MID_BACK_COLOR, 1)],
+  ["CharBackTransparent", row(H.RES_CHRATR_BACKGROUND, "bool", M.MID_GRAPHIC_TRANSPARENT, 1)],
+  ["CharShadingValue", row(H.RES_CHRATR_BACKGROUND, "sal_Int32", M.MID_SHADING_VALUE)],
+  [
+    "CharBackgroundComplexColor",
+    row(H.RES_CHRATR_BACKGROUND, XComplexColor.static_type, M.MID_BACKGROUND_COMPLEX_COLOR),
+  ],
   [
     "CharHighlight",
     { type: "sal_Int32", attributes: 1, which: H.RES_CHRATR_HIGHLIGHT, member: 0, kind: "color" },
@@ -535,7 +542,6 @@ export const SwUnoPropertyMap: ReadonlyMap<string, SwUnoPropertyEntry> = new Map
     },
   ],
 ]);
-
 /** Original admitted STANDARD/CJK/CTL and paragraph-style rows expanded from unomapproperties.hxx/unomap1.cxx; these are literal schema flags, not name-pattern guesses. */
 const characterMaybeVoidProperties = new Set([
   "CharLocale",
@@ -627,6 +633,10 @@ const paragraphStyleProperties = new Set([
   "CharTransparence",
   "CharComplexColor",
   "CharInteropGrabBag",
+  "CharBackColor",
+  "CharBackTransparent",
+  "CharShadingValue",
+  "CharBackgroundComplexColor",
   "CharHighlight",
   "WritingMode",
   "ParaVertAlignment",
@@ -708,13 +718,9 @@ export const SwUnoCharStylePropertyMap: ReadonlyMap<string, SwUnoPropertyEntry> 
       ],
     ),
 );
-
 /** Represented native GetAutoCharStylePropertyMap entries, with original direct character properties and hint references. */
 export const SwUnoCharAutoStylePropertyMap: ReadonlyMap<string, SwUnoPropertyEntry> = new Map([
-  ...[...SwUnoCharStylePropertyMap].filter(
-    /** Legacy host background aliases are not native character-auto-style highlight properties. @param property - Name and entry. @returns Whether its native Which is represented. */
-    ([name]) => name !== "CharBackColor" && name !== "CharBackTransparent",
-  ),
+  ...SwUnoCharStylePropertyMap,
   [
     "CharAutoStyleName",
     { type: "OUString", which: H.RES_TXTATR_AUTOFMT, member: 0, kind: "any", attributes: 1 },
@@ -724,7 +730,6 @@ export const SwUnoCharAutoStylePropertyMap: ReadonlyMap<string, SwUnoPropertyEnt
     { type: "OUString", which: H.RES_TXTATR_CHARFMT, member: 0, kind: "any", attributes: 1 },
   ],
 ]);
-
 import * as MapId from "../../../inc/unomap";
 import * as Command from "../../../inc/cmdid";
 import { SID_ATTR_PAGE, SID_ATTR_PAGE_SIZE } from "../../../../svx/inc/svxids";
@@ -826,6 +831,10 @@ const textDefaultProperties = new Set([
   "CharTransparence",
   "CharComplexColor",
   "CharInteropGrabBag",
+  "CharBackColor",
+  "CharBackTransparent",
+  "CharShadingValue",
+  "CharBackgroundComplexColor",
   "CharHighlight",
   "WritingMode",
   "ParaVertAlignment",
@@ -994,14 +1003,11 @@ export class SwUnoPropertyMapProvider {
 }
 /** Original process-static provider. Its schema and property-set owners retain process lifetime. */
 export const aSwMapProvider = new SwUnoPropertyMapProvider();
-
 /** Creates the existing known-length Unicode value from browser UTF16 units. @param value - Logical text. @returns Owned native string. */
 function unicode(value: string): OUString {
   const units = new Uint16Array(value.length);
   for (let i = 0; i < value.length; i++) units[i] = value.charCodeAt(i);
   return new OUString(units, units.length);
 }
-
 import { CONVERT_TWIPS } from "../../../../svl/inc/poolitem";
-
 import { MAYBEVOID } from "../../../../udkapi/com/sun/star/beans/PropertyAttribute";

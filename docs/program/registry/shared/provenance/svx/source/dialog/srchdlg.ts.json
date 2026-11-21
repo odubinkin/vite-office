@@ -1,0 +1,41 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/svx/source/dialog/srchdlg.ts",
+    "localSymbols": [
+      "SearchAttrItemList"
+    ],
+    "status": "mapped",
+    "upstreamPath": "svx/source/dialog/srchdlg.cxx",
+    "upstreamSymbols": [
+      "SearchAttrItemList::Put",
+      "SearchAttrItemList::Get"
+    ],
+    "preservedResponsibilities": [
+      "Transfers native attribute-slot identities and concrete pooled values between search dialog criteria and separate Writer search and replacement item sets."
+    ],
+    "omittedResponsibilities": [
+      "JavaScript owns detached item clones. Disabled entries and VCL dialog state are outside the list transport used here."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/svx/source/dialog/srchdlg.ts",
+          "marker": "SearchAttrItemList"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/svx/source/dialog/srchdlg.cxx",
+          "marker": "SearchAttrItemList::Put"
+        },
+        {
+          "path": "vendor/libreoffice-reference/svx/source/dialog/srchdlg.cxx",
+          "marker": "SearchAttrItemList::Get"
+        }
+      ]
+    }
+  }
+}

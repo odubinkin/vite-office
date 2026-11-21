@@ -66,7 +66,7 @@
       "SwpHints",
       "WriterTextRunLike",
       "GetTextAttrForCharAt",
-      "TransferFlyHints"
+      "TransferPointHints"
     ],
     "omittedResponsibilities": [
       "Upstream obligations outside SwpHints, CompareSwpHtWhichStart::operator, CompareSwpHtEnd::operator, SwpHints::Insert and the bounded SwpHints, WriterTextRunLike, createSwpHintsFromSnapshot contract remain intentionally omitted."

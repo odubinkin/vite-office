@@ -34,7 +34,19 @@ export function OutASC_SwTextNode(
     }
     if (indentation.length !== 0 || number.length !== 0) result += indentation + number + " ";
   }
-  result += node.GetText().slice(start, end);
+  const text = node.GetText();
+  const hints = node.GetpSwpHints();
+  let textStart = start;
+  for (let index = 0; hints !== undefined && index < hints.Count(); ++index) {
+    const hint = hints.Get(index);
+    const offset = hint.GetStart();
+    if (offset >= end) break;
+    if (offset < textStart || !hint.HasDummyChar()) continue;
+    result += text.slice(textStart, offset);
+    // OutAttr emits no characters for an as-character fly.
+    textStart = offset + 1;
+  }
+  result += text.slice(textStart, end);
   if (
     !lastNode ||
     (!writer.m_bWriteClipboardDoc &&

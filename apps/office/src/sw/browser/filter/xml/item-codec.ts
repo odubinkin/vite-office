@@ -28,7 +28,11 @@ import {
   encodeTextLineItem,
   decodeTextLineItem,
 } from "../../../../editeng/browser/text-line-item-codec";
-import { SvxUnderlineItem } from "../../../../editeng/source/items/textitem";
+import {
+  SvxCharRotateItem,
+  SvxTwoLinesItem,
+} from "../../../../editeng/source/items/textitem.layout";
+import { SvxOverlineItem, SvxUnderlineItem } from "../../../../editeng/source/items/textitem";
 import { SvxAdjustItem } from "../../../../editeng/inc/adjustitem";
 import { MID_SHADING_VALUE, MID_EXPAND_SINGLE } from "../../../../editeng/inc/memberids";
 import { Any } from "../../../../cppu/inc/com/sun/star/uno/Any";
@@ -248,7 +252,18 @@ export function encodeSfxPoolItem(item: SfxPoolItem): SfxPoolItemSnapshot {
       };
     return { which: item.Which(), value: item.GetColor().toUInt32() };
   }
-  if (item instanceof SvxUnderlineItem) return encodeTextLineItem(item);
+  if (item instanceof SvxUnderlineItem || item instanceof SvxOverlineItem)
+    return encodeTextLineItem(item);
+  if (item instanceof SvxTwoLinesItem)
+    return {
+      which: item.Which(),
+      value: { enabled: item.GetValue(), start: item.GetStartBracket(), end: item.GetEndBracket() },
+    };
+  if (item instanceof SvxCharRotateItem)
+    return {
+      which: item.Which(),
+      value: { angle: item.GetValue(), fitToLine: item.IsFitToLine() },
+    };
   if (item instanceof SvxEscapementItem)
     return {
       which: item.Which(),

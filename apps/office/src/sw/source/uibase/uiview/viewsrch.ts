@@ -1,24 +1,69 @@
 /** @fileoverview Writer view search dispatch over the native model cursor and replacement history. */
+import type { SvxProtectItem } from "../../../../editeng/source/items/frmitems";
+import {
+  SvtSearchOptions,
+  type SearchOptionsConfiguration,
+} from "../../../../unotools/source/config/searchopt";
+import { TextSearch, type RegexMatcherFactory } from "../../../../unotools/inc/textsearch";
 import { SearchOptions2 } from "../../../../i18nutil/inc/searchopt";
 import { TransliterationFlags } from "../../../../i18nutil/inc/transliteration";
-import { APPROXIMATE } from "../../../../offapi/com/sun/star/util/SearchAlgorithms2";
-import { LEV_RELAXED, NORM_WORD_ONLY } from "../../../../offapi/com/sun/star/util/SearchFlags";
+import {
+  ABSOLUTE,
+  APPROXIMATE,
+  REGEXP,
+} from "../../../../offapi/com/sun/star/util/SearchAlgorithms2";
+import {
+  LEV_RELAXED,
+  NORM_WORD_ONLY,
+  REG_NOT_BEGINOFLINE,
+  REG_NOT_ENDOFLINE,
+} from "../../../../offapi/com/sun/star/util/SearchFlags";
 import { OUString } from "../../../../sal/inc/rtl/ustring";
+import { SearchOptionFlags } from "../../../../svl/inc/srchdefs";
 import { SvxSearchCmd } from "../../../../svl/inc/srchitem";
-import { TextSearch } from "../../../../unotools/inc/textsearch";
+import { GetSettings } from "../../../../vcl/source/app/svapp";
 import { FindRanges, SwDocPositions } from "../../../inc/cshtyp";
+import {
+  RES_CHRATR_BEGIN,
+  RES_CHRATR_END,
+  RES_PARATR_BEGIN,
+  RES_PARATR_END,
+  RES_FRMATR_BEGIN,
+  RES_FRMATR_END,
+  RES_PROTECT,
+} from "../../../inc/hintids";
+import { SfxItemSet, type WhichRangesContainer } from "../../../../svl/source/items/itemset";
+import type { SearchAttrItemList } from "../../../../svx/source/dialog/srchdlg";
+import { FindAttrs, ReplaceAttrs } from "../../core/crsr/findattr";
+import { ResolveSearchReplacement } from "../../core/crsr/findtxt";
 import { FindFormat } from "../../core/crsr/findcoll";
-import { WRITER_AVAILABLE_PARAGRAPH_STYLE_POOL } from "../../../inc/poolfmt";
+import {
+  getWriterMaterializedParagraphStyleDefinition,
+  WRITER_AVAILABLE_PARAGRAPH_STYLE_POOL,
+} from "../../../inc/poolfmt";
 import { SwStyleNameMapper } from "../../core/doc/SwStyleNameMapper";
-import { FindTextImpl } from "../../core/crsr/findtxt";
-import { getWriterSelectedTextRange, SwPaM } from "../../core/crsr/pam";
+import type { SwTextFormatColl } from "../../core/doc/fmtcol";
 import { SwCursor, type SwSearchNodeFilter } from "../../core/crsr/swcrsr";
+import { PopMode } from "../../core/crsr/trvltbl";
 import type { SwDoc } from "../../core/doc/doc";
-import type { SwStartNode } from "../../core/docnode/node";
+import type { SwFrameFormat } from "../../core/layout/atrfrm";
+import type { SwNode, SwStartNode } from "../../core/docnode/node";
+import { setTextFormatCollAtShell } from "../../core/edit/edfcol";
 import { SwStartNodeType } from "../../../inc/ndtyp";
 import { CollectTextFlyFrames } from "../../core/layout/flycnt";
+import type { SwTableBox } from "../../core/table/swtable-boxline";
 import type { SwTextNode } from "../../core/txtnode/ndtxt";
+import { findParagraphStyle } from "../app/docst";
 import type { SwWrtShell } from "../wrtsh/wrtsh1";
+import type { SwPostItMgr } from "../docvw/PostItMgr";
+import { SwASCWriter } from "../../filter/ascii/wrtasc";
+
+/** Native view search attribute ranges for both modeless formatting editors. */
+export const WRITER_SEARCH_ATTR_WHICH_RANGES: WhichRangesContainer = [
+  [RES_CHRATR_BEGIN, RES_CHRATR_END - 1],
+  [RES_PARATR_BEGIN, RES_PARATR_END - 1],
+  [RES_FRMATR_BEGIN, RES_FRMATR_END - 1],
+];
 
 /** Native options accepted by the Similarity Search dialog. */
 export interface WriterSimilarityOptions {
@@ -38,14 +83,31 @@ export interface WriterSearchItem {
   readonly matchCharacterWidth: boolean;
   readonly useAsianOptions: boolean;
   readonly japaneseFlags: number;
-  readonly findbarMatchDiacritics: boolean;
   readonly wholeWords: boolean;
+  readonly regularExpression: boolean;
   readonly similaritySearch: boolean;
   readonly styleSearch: boolean;
   readonly searchStyle: string;
   readonly replaceStyle: string;
   readonly similarity: WriterSimilarityOptions;
   readonly selection: boolean;
+  readonly searchOptions?: SearchOptions2;
+  readonly searchInNotes?: boolean;
+  readonly searchAttributes?: SearchAttrItemList | undefined;
+  readonly replaceAttributes?: SearchAttrItemList | undefined;
+}
+
+/** The represented SvxSearchItem value exchanged by Writer search slots. */
+export interface WriterSearchSlotItem extends WriterSearchItem {
+  readonly command: SvxSearchCmd;
+  readonly backward: boolean;
+}
+
+/** Arguments of FID_SEARCH_NOW. */
+export interface WriterExecuteSearchArguments {
+  readonly SearchItem: WriterSearchSlotItem;
+  readonly Quiet?: boolean;
+  readonly UseAttrItemList?: boolean;
 }
 
 /** Search label state returned by SwView search commands. */
@@ -70,26 +132,6 @@ function toOUString(value: string): OUString {
   for (let index = 0; index < value.length; index++) units[index] = value.charCodeAt(index);
   return new OUString(units, units.length);
 }
-
-// Common.xcs SearchOptions/Japanese enables each equivalence by default.
-const defaultJapaneseFlags =
-  TransliterationFlags.IGNORE_KANA |
-  TransliterationFlags.ignoreSize_ja_JP |
-  TransliterationFlags.ignoreMinusSign_ja_JP |
-  TransliterationFlags.ignoreIterationMark_ja_JP |
-  TransliterationFlags.ignoreTraditionalKanji_ja_JP |
-  TransliterationFlags.ignoreTraditionalKana_ja_JP |
-  TransliterationFlags.ignoreZiZu_ja_JP |
-  TransliterationFlags.ignoreBaFa_ja_JP |
-  TransliterationFlags.ignoreTiJi_ja_JP |
-  TransliterationFlags.ignoreHyuByu_ja_JP |
-  TransliterationFlags.ignoreSeZe_ja_JP |
-  TransliterationFlags.ignoreIandEfollowedByYa_ja_JP |
-  TransliterationFlags.ignoreKiKuFollowedBySa_ja_JP |
-  TransliterationFlags.ignoreProlongedSoundMark_ja_JP |
-  TransliterationFlags.ignoreSeparator_ja_JP |
-  TransliterationFlags.ignoreSpace_ja_JP |
-  TransliterationFlags.ignoreMiddleDot_ja_JP;
 
 /** Admits body paragraphs, connected text frames, and active page stories. @param document - Current native model. @param pageStories - Visible page-story sections. @returns Admission for the represented profile. */
 function createSearchNodeFilter(
@@ -130,9 +172,57 @@ function createSearchNodeFilter(
   };
 }
 
+/** Reads a represented frame's inherited content-protection bit. @param format - Native layout format. @returns Whether its content is protected. */
+function isContentProtected(format: SwFrameFormat | undefined): boolean {
+  return (
+    (format?.GetAttrSet().Get(RES_PROTECT) as SvxProtectItem | undefined)?.IsContentProtected() ===
+    true
+  );
+}
+
+/** Follows the native containing table formats up to an enclosing cell or story. @param node - Text or nested table owner. @returns Whether a layout ancestor protects the content. */
+function isInProtectedTable(node: SwNode): boolean {
+  for (let box = node.GetTableBox(); box !== null;) {
+    const table = box.GetStartNode().FindTableNode();
+    if (table === null) return false;
+    if (box.getRowSpan() < 1 || isContentProtected(table.GetTable().GetFrameFormat())) return true;
+    for (let parent: SwTableBox | null = box; parent !== null;) {
+      const line = parent.GetUpper();
+      if (isContentProtected(parent.GetFrameFormat()) || isContentProtected(line?.GetFrameFormat()))
+        return true;
+      parent = line?.GetUpper() ?? null;
+    }
+    box = table.GetTableBox();
+  }
+  return false;
+}
+
+/** Applies the represented SwFrame::IsProtected owners to an editable search result. @param node - Result endpoint. @returns Whether the content admits replacement. */
+function canReplaceAtNode(node: SwNode): boolean {
+  const seen = new Set<SwNode>();
+  for (let owner: SwNode | undefined = node; owner !== undefined;) {
+    if (seen.has(owner)) return false;
+    seen.add(owner);
+    const fly = owner.GetFlyFormat();
+    if (isInProtectedTable(owner) || isContentProtected(fly)) return false;
+    owner = fly?.GetAnchor().GetAnchorNode() ?? undefined;
+  }
+  return true;
+}
+
 /** Drops temporary cursor owners left by a non-selection search. @param cursor - Working search ring. @returns Nothing. */
 function disposeSearchRing(cursor: SwCursor): void {
   while (cursor.GetNext() !== cursor) cursor.GetNext().Dispose();
+}
+
+/** Copies the live cursor and any selected ranges into the working search ring. @param cursor - Displayed text cursor. @param inSelection - Whether to search the selection ring. @returns Owned working cursor. */
+function createSearchCursor(cursor: SwCursor, inSelection: boolean): SwCursor {
+  const search = new SwCursor(cursor.GetPoint(), cursor.HasMark() ? cursor.GetMark() : undefined);
+  if (inSelection) {
+    for (let range = cursor.GetNext(); range !== cursor; range = range.GetNext())
+      new SwCursor(range.GetPoint(), range.HasMark() ? range.GetMark() : undefined, search);
+  }
+  return search;
 }
 
 /** Holds the search item and executes the represented SwView::ExecSearch branches. */
@@ -145,9 +235,9 @@ export class SwViewSearch {
     matchKashida: false,
     matchCharacterWidth: false,
     useAsianOptions: false,
-    japaneseFlags: defaultJapaneseFlags,
-    findbarMatchDiacritics: false,
+    japaneseFlags: 0,
     wholeWords: false,
+    regularExpression: false,
     similaritySearch: false,
     styleSearch: false,
     searchStyle: "",
@@ -159,11 +249,34 @@ export class SwViewSearch {
   private feedback: WriterSearchFeedback | undefined;
   private readonly feedbackListeners = new Set<() => void>();
   private lastCommand: SvxSearchCmd | undefined;
+  private searchInOther = false;
+  private searchDialogJustOpened = false;
   private lastRequest:
     { item: WriterSearchItem; command: SvxSearchCmd; backward: boolean } | undefined;
 
-  /** Connects search to the same Writer shell as editing. @param shell - Persistent writing shell. @returns Search owner. */
-  public constructor(private readonly shell: SwWrtShell) {}
+  /** Connects search to the writing shell and user search properties. @param shell - Persistent writing shell. @param configuration - User search configuration. @param createRegex - Platform regex compiler. @param postItMgr - Active view comment manager. @returns Search owner. */
+  public constructor(
+    private readonly shell: SwWrtShell,
+    public readonly configuration?: SearchOptionsConfiguration,
+    private readonly createRegex?: RegexMatcherFactory,
+    private readonly postItMgr?: SwPostItMgr,
+  ) {
+    const options = new SvtSearchOptions(configuration);
+    this.item = {
+      ...this.item,
+      matchCase: options.GetFlag("IsMatchCase"),
+      matchDiacritics: !options.GetFlag("IsIgnoreDiacritics_CTL"),
+      matchKashida: !options.GetFlag("IsIgnoreKashida_CTL"),
+      matchCharacterWidth: !options.GetFlag("Japanese/IsMatchFullHalfWidthForms"),
+      useAsianOptions: options.GetFlag("IsUseAsianOptions"),
+      japaneseFlags: options.GetJapaneseTransliterationFlags() & ~TransliterationFlags.IGNORE_WIDTH,
+      wholeWords: options.GetFlag("IsWholeWordsOnly"),
+      regularExpression: options.GetFlag("IsUseRegularExpression"),
+      similaritySearch: options.GetFlag("IsSimilaritySearch"),
+      styleSearch: options.GetFlag("IsSearchForStyles"),
+      searchInNotes: options.GetFlag("IsNotes"),
+    };
+  }
 
   /** Registers the current device layout's page-story model owners. @param sections - Visible story roots. @returns Registration cleanup. */
   public RegisterPageStories(sections: ReadonlySet<SwStartNode>): () => void {
@@ -217,8 +330,12 @@ export class SwViewSearch {
       all.set(definition.id, SwStyleNameMapper.GetUIName(definition.poolId, definition.name));
     for (const style of doc.GetTextFormatColls()) {
       const name = style.GetName();
-      all.set(style.id, name);
-      if (doc.IsUsed(style)) used.push({ id: style.id, name });
+      const isUsed = doc.IsUsed(style);
+      // AppendStyleList admits favourite built-ins independently of visibility.
+      if (style.IsHidden() && !isUsed && !(all.has(style.id) && style.IsFavourite()))
+        all.delete(style.id);
+      else all.set(style.id, name);
+      if (isUsed) used.push({ id: style.id, name });
     }
     const replace = Array.from(
       all,
@@ -227,11 +344,17 @@ export class SwViewSearch {
         name,
       ]) => ({ id, name }),
     );
-    /** Orders displayed style names. @param a - First entry. @param b - Second entry. @returns Name order. */
-    function compare(a: { name: string }, b: { name: string }): number {
-      return a.name.localeCompare(b.name);
-    }
-    return { search: used.sort(compare), replace: replace.sort(compare) };
+    return { search: used, replace };
+  }
+
+  /** Resolves a search template as native GetParaStyle with GETSTYLE_CREATESOME. @param name - Browser identity or Writer UI name. @returns Document-owned paragraph collection. */
+  private GetParaStyle(name: string): SwTextFormatColl | undefined {
+    const document = this.shell.GetDoc();
+    const owned = document.FindTextFormatColl(name);
+    if (owned !== undefined) return owned;
+    const id =
+      findParagraphStyle(document, name) ?? getWriterMaterializedParagraphStyleDefinition(name)?.id;
+    return id === undefined ? undefined : document.GetTextFormatColl(id);
   }
 
   /** Reflects native text and table selection availability for the search dialog. @returns Whether a document selection exists. */
@@ -243,37 +366,102 @@ export class SwViewSearch {
     );
   }
 
-  /** Initializes the displayed search item from the Writer selection. @param dialog - Whether the modeless dialog is opening. @returns Current settings. */
-  public OpenSearch(dialog: boolean): WriterSearchItem {
-    this.ClearFeedback();
-    const cursor = this.shell.GetCursor();
-    const range = getWriterSelectedTextRange(cursor);
-    const selectedCount = [...cursor.GetRingContainer()].filter(
-      /** Counts nonempty native selection ranges. @param member - Registered range. @returns Whether it selects content. */ (
-        member,
-      ) => member.HasMark() && member.Start().compare(member.End()) !== 0,
-    ).length;
-    if (range !== undefined && selectedCount === 1) {
+  /** Reports the native SID_SEARCH_OPTIONS mask for the attached Writer view. @returns Available search options. */
+  public GetSearchOptions(): SearchOptionFlags {
+    return this.CanReplace()
+      ? SearchOptionFlags.ALL
+      : SearchOptionFlags.ALL & ~(SearchOptionFlags.REPLACE | SearchOptionFlags.REPLACE_ALL);
+  }
+
+  /** Shares the read-only decision with the search dispatcher. @returns Whether replacing is allowed. */
+  private CanReplace(): boolean {
+    return !this.shell.GetViewOptions().IsReadonly();
+  }
+
+  /** Marks the next SID_SEARCH_ITEM state query as initialization of the new dialog. @returns Nothing. */
+  public SearchOn(): void {
+    this.searchDialogJustOpened = true;
+  }
+
+  /** Returns SID_SEARCH_ITEM state and seeds the newly opened dialog from the selection. @returns Current search properties. */
+  public StateSearch(): WriterSearchSlotItem {
+    if (this.searchDialogJustOpened) {
+      this.searchDialogJustOpened = false;
+      const cursor = this.shell.GetCursor();
+      const text =
+        cursor.IsMultiSelection() || this.shell.IsTableMode() ? "" : this.shell.GetSelText();
+      const hasSelection = this.HasSelection();
+      const selection = text.length === 0 && hasSelection;
+      const options = new SvtSearchOptions(this.configuration);
       this.item = {
         ...this.item,
-        search: range.node.GetText().slice(range.start, range.end),
-        selection: dialog ? false : this.item.selection,
+        search: text || this.item.search,
+        selection,
+        ...(this.configuration === undefined
+          ? {}
+          : {
+              matchDiacritics: !options.GetFlag("IsIgnoreDiacritics_CTL"),
+              matchKashida: !options.GetFlag("IsIgnoreKashida_CTL"),
+            }),
       };
-    } else if (dialog) {
-      this.item = { ...this.item, selection: this.HasSelection() };
+      if (this.lastRequest !== undefined && hasSelection)
+        this.lastRequest = {
+          ...this.lastRequest,
+          item: {
+            ...this.lastRequest.item,
+            search: text || this.lastRequest.item.search,
+            selection,
+          },
+        };
     }
-    return this.item;
+    return {
+      ...this.item,
+      similarity: { ...this.item.similarity },
+      command: this.lastRequest?.command ?? SvxSearchCmd.FIND,
+      backward:
+        this.lastRequest?.backward ??
+        new SvtSearchOptions(this.configuration).GetFlag("IsBackwards"),
+    };
   }
 
-  /** Updates the shared search item without editing the document. @param item - Search controls. @returns Nothing. */
-  public SetSearchItem(item: WriterSearchItem): void {
-    this.item = item;
+  /** Reads the Find Bar's selection text for its single-line entry. @returns Browser search text. */
+  public GetFindBarSeed(): string {
+    return this.GetFindBarSelection(this.shell.GetCursor())
+      .replaceAll("\r", "")
+      .replaceAll("\n", "");
   }
 
-  /** Saves the dialog's current query as a Find request when the modeless dialog closes. @param item - Accepted dialog state. @param backward - Dialog direction. @returns Nothing. */
-  public SaveSearchItem(item: WriterSearchItem, backward: boolean): void {
-    this.SetSearchItem(item);
-    this.lastRequest = { item, command: SvxSearchCmd.FIND, backward };
+  /** Reads the represented UNO view-cursor text using the native selection writer. @param cursor - Native editing ring. @returns Text to seed the Find Bar. */
+  private GetFindBarSelection(cursor: SwCursor): string {
+    if (!cursor.HasMark() || this.shell.IsTableMode()) return "";
+    const writer = new SwASCWriter();
+    writer.m_bASCII_NoLastLineEnd = true;
+    writer.m_bExportParagraphNumbering = false;
+    let text = "";
+    for (const range of cursor.GetRingContainer()) {
+      if (range.HasMark() && range.Start().compare(range.End()) !== 0) text += writer.Write(range);
+    }
+    return text;
+  }
+
+  /** Stores the dialog item and commits the properties saved by the source dialog. @param properties - Dispatched search item. @param closing - Whether the dialog is closing. @returns Nothing. */
+  public SetSearchProperties(properties: WriterSearchSlotItem, closing = false): void {
+    const { command, backward, ...item } = properties;
+    this.item = { ...item, similarity: { ...item.similarity } };
+    this.lastRequest = { item: this.item, command, backward };
+    const options = new SvtSearchOptions(this.configuration);
+    options.SetFlag("IsIgnoreDiacritics_CTL", !item.matchDiacritics);
+    options.SetFlag("IsIgnoreKashida_CTL", !item.matchKashida);
+    if (closing) {
+      options.SetFlag("IsWholeWordsOnly", item.wholeWords);
+      options.SetFlag("IsBackwards", backward);
+      options.SetFlag("IsSearchForStyles", item.styleSearch);
+      options.SetFlag("IsUseRegularExpression", item.regularExpression);
+      options.SetFlag("IsSimilaritySearch", item.similaritySearch);
+      options.SetFlag("IsUseAsianOptions", item.useAsianOptions);
+      options.SetFlag("IsNotes", item.searchInNotes ?? false);
+    }
+    options.Commit();
   }
 
   /** Repeats the source command with its last dispatched search item. @returns Whether a match was found. */
@@ -283,22 +471,58 @@ export class SwViewSearch {
     return this.DispatchSearch(request.item, request.command, request.backward).matches > 0;
   }
 
-  /** Runs the represented Find, Find All, Replace and Replace All commands. @param item - Options dispatched by the active surface. @param command - Search operation. @param backward - Direction. @returns Search feedback. */
+  /** Prepares the Find Bar request with its own transliteration flags. @param query - Toolbar text and toggles. @returns Native search item. */
+  public CreateFindBarSearchItem(
+    query: Readonly<{
+      search: string;
+      matchCase: boolean;
+      matchDiacritics: boolean;
+    }>,
+  ): WriterSearchItem {
+    const item = {
+      ...this.item,
+      search: query.search,
+      matchCase: query.matchCase,
+      matchCharacterWidth: true,
+      wholeWords: false,
+      regularExpression: false,
+      similaritySearch: false,
+      styleSearch: false,
+      searchInNotes: false,
+      selection: false,
+    };
+    this.item = item;
+    return {
+      ...item,
+      matchDiacritics: query.matchDiacritics,
+      matchKashida: false,
+      useAsianOptions: false,
+    };
+  }
+
+  /** Runs the represented Find, Find All, Replace and Replace All commands. @param item - Options dispatched by the active surface. @param command - Search operation. @param backward - Direction. @param quiet - Whether to suppress miss and bulk count messages. @returns Search feedback. */
   public ExecSearch(
     item: WriterSearchItem,
     command: SvxSearchCmd,
     backward = false,
+    quiet = false,
   ): WriterSearchResult {
-    this.lastRequest = { item, command, backward };
-    return this.DispatchSearch(item, command, backward);
+    return this.DispatchSearch(item, command, backward, quiet);
   }
 
-  /** Executes both a fresh and a repeated request and updates the view feedback. @param item - Dispatched options. @param command - Search operation. @param backward - Direction. @returns Native result. */
+  /** Executes both a fresh and a repeated request and updates the view feedback. @param item - Dispatched options. @param command - Search operation. @param backward - Direction. @param quiet - Whether to suppress miss and bulk count messages. @returns Native result. */
   private DispatchSearch(
     item: WriterSearchItem,
     command: SvxSearchCmd,
     backward: boolean,
+    quiet = false,
   ): WriterSearchResult {
+    if (
+      (command === SvxSearchCmd.REPLACE || command === SvxSearchCmd.REPLACE_ALL) &&
+      !this.CanReplace()
+    )
+      return { matches: 0, wrapped: false };
+    this.lastRequest = { item, command, backward };
     let result: WriterSearchResult;
     try {
       result = this.Search(item, command, backward);
@@ -309,25 +533,122 @@ export class SwViewSearch {
       });
       throw error;
     }
-    this.PublishFeedback({ kind: "result", result, command, backward });
+    if (
+      quiet &&
+      (result.matches === 0 ||
+        command === SvxSearchCmd.FIND_ALL ||
+        command === SvxSearchCmd.REPLACE_ALL)
+    )
+      this.ClearFeedback();
+    else this.PublishFeedback({ kind: "result", result, command, backward });
     return result;
   }
 
-  /** Searches the model with the request's original options. @param item - Dispatched search item. @param command - Requested operation. @param backward - Direction. @returns Search feedback. */
-  private Search(
-    item: WriterSearchItem,
-    command: SvxSearchCmd,
-    backward: boolean,
+  /** Validates the selected ranges and replaces the first matching span. @param cursor - Displayed selection ring. @param options - Active search options. @param replacement - New text. @param end - Directional search endpoint. @param acceptsNode - Represented layout admission. @returns Nothing. */
+  private ReplaceSelection(
+    cursor: SwCursor,
+    options: SearchOptions2,
+    replacement: string,
+    end: SwDocPositions,
+    acceptsNode: SwSearchNodeFilter,
+  ): void {
+    if (!cursor.HasMark()) return;
+    const match = createSearchCursor(cursor, true);
+    const scopedOptions = new SearchOptions2(options);
+    scopedOptions.searchFlag |= REG_NOT_BEGINOFLINE | REG_NOT_ENDOFLINE;
+    try {
+      if (
+        match.Find_Text(
+          scopedOptions,
+          false,
+          SwDocPositions.Curr,
+          end,
+          [false],
+          FindRanges.InSel,
+          false,
+          undefined,
+          acceptsNode,
+          this.createRegex,
+        ) > 0
+      ) {
+        const document = this.shell.GetDoc();
+        if (canReplaceAtNode(match.GetPoint().GetNode()))
+          document
+            .GetDocumentContentOperationsManager()
+            .ReplaceRange(match, replacement, options.AlgorithmType2 === REGEXP);
+        this.shell.SetPaM(match.GetPoint(), match.GetMark());
+      }
+    } finally {
+      disposeSearchRing(match);
+      match.Dispose();
+    }
+  }
+
+  /** Runs the current-area and wrap passes of the native view search. @param cursor - Working cursor. @param first - Directional beginning of the document. @param inSelection - Whether the live selection ring bounds both passes. @param find - Model search strategy. @returns Match count and wrap state. */
+  private SearchAndWrap(
+    cursor: SwCursor,
+    first: SwDocPositions,
+    inSelection: boolean,
+    find: (from: SwDocPositions, ranges: FindRanges) => number,
   ): WriterSearchResult {
-    if (item.styleSearch ? !item.searchStyle : item.search.length === 0)
-      return { matches: 0, wrapped: false };
-    const inSelection = item.selection;
-    if (inSelection && !this.HasSelection()) return { matches: 0, wrapped: false };
-    const options = new SearchOptions2();
+    const saved = this.shell.getShellCursor();
+    const origin = saved.GetPoint();
+    const boundary = origin.clone();
+    const forward = first === SwDocPositions.Start;
+    try {
+      cursor.FillFindPos(first, boundary);
+      const dontWrap = cursor.GetPoint().compare(boundary) === 0;
+      if (this.lastCommand === SvxSearchCmd.FIND_ALL) {
+        disposeSearchRing(cursor);
+        cursor.DeleteMark();
+        cursor.MoveSection(forward);
+      }
+      cursor.Normalize(!forward);
+      if (!inSelection) cursor.DeleteMark();
+
+      const startedInOther = this.searchInOther;
+      let matches = find(
+        SwDocPositions.Curr,
+        inSelection ? FindRanges.InSel : startedInOther ? FindRanges.InOther : FindRanges.InBody,
+      );
+      if (matches > 0) return { matches, wrapped: false };
+      if (!inSelection && !startedInOther) {
+        this.searchInOther = true;
+        matches = find(SwDocPositions.Curr, FindRanges.InOther);
+        if (matches > 0) return { matches, wrapped: false };
+        this.searchInOther = false;
+      } else this.searchInOther = !startedInOther;
+      if (dontWrap) return { matches: 0, wrapped: false };
+
+      cursor.Assign(origin, inSelection && saved.HasMark() ? saved.GetMark() : undefined);
+      if (startedInOther) {
+        cursor.DeleteMark();
+        cursor.SttEndDoc(forward);
+      }
+      matches = find(first, inSelection ? FindRanges.InSel : FindRanges.InBody);
+      if (!inSelection && matches === 0) {
+        matches = find(first, FindRanges.InOther);
+        this.searchInOther = matches > 0;
+      }
+      return { matches, wrapped: matches > 0 };
+    } finally {
+      boundary.Dispose();
+    }
+  }
+
+  /** Copies native options or builds them from the represented dialog controls. @param item - Search item. @returns Independent options for this execution. */
+  private CreateSearchOptions(item: WriterSearchItem): SearchOptions2 {
+    const options =
+      item.searchOptions === undefined
+        ? new SearchOptions2()
+        : new SearchOptions2(item.searchOptions);
     options.searchString.assign(toOUString(item.search));
-    options.replaceString.assign(toOUString(item.replacement));
-    options.searchFlag = item.wholeWords ? NORM_WORD_ONLY : 0;
-    if (item.similaritySearch) {
+    if (item.searchOptions !== undefined) return options;
+    options.AlgorithmType2 = item.regularExpression ? REGEXP : ABSOLUTE;
+    options.searchFlag =
+      (item.wholeWords ? NORM_WORD_ONLY : 0) |
+      (item.selection ? REG_NOT_BEGINOFLINE | REG_NOT_ENDOFLINE : 0);
+    if (!item.regularExpression && item.similaritySearch) {
       options.AlgorithmType2 = APPROXIMATE;
       options.changedChars = item.similarity.changedChars;
       options.insertedChars = item.similarity.insertedChars;
@@ -340,145 +661,250 @@ export class SwViewSearch {
       (item.matchKashida ? 0 : TransliterationFlags.IGNORE_KASHIDA_CTL) |
       (item.matchCharacterWidth ? 0 : TransliterationFlags.IGNORE_WIDTH) |
       (item.useAsianOptions ? item.japaneseFlags : 0);
+    return options;
+  }
+
+  /** Searches the model with the request's original options. @param item - Dispatched search item. @param command - Requested operation. @param backward - Direction. @returns Search feedback. */
+  private Search(
+    item: WriterSearchItem,
+    command: SvxSearchCmd,
+    backward: boolean,
+  ): WriterSearchResult {
+    const searchesAttributes = Boolean(item.searchAttributes?.GetEntries().length);
+    const replacing = command === SvxSearchCmd.REPLACE || command === SvxSearchCmd.REPLACE_ALL;
+    const replacesAttributes = replacing && Boolean(item.replaceAttributes?.GetEntries().length);
+    const attributeMode = searchesAttributes || replacesAttributes;
+    if (!attributeMode && (item.styleSearch ? !item.searchStyle : item.search.length === 0))
+      return { matches: 0, wrapped: false };
+    const searchNotes = item.searchInNotes === true && !attributeMode && !item.styleSearch;
+    if (!searchNotes) this.postItMgr?.ClearActiveField();
+    const inSelection = item.selection;
+    if (inSelection && !this.HasSelection()) return { matches: 0, wrapped: false };
+    const options = this.CreateSearchOptions(item);
+    options.Locale = GetSettings().GetLanguageTag().getLocale();
+    // Native FUNC_Search supplies replacement text only for Replace All.
+    if (command === SvxSearchCmd.REPLACE_ALL)
+      options.replaceString.assign(toOUString(item.replacement));
+    else options.replaceString.clear();
     const cursor = this.shell.GetCursor();
     const first = backward ? SwDocPositions.End : SwDocPositions.Start;
     const last = backward ? SwDocPositions.Start : SwDocPositions.End;
     const document = this.shell.GetDoc();
-    const style = item.styleSearch ? document.FindTextFormatColl(item.searchStyle) : undefined;
-    if (item.styleSearch && style === undefined) return { matches: 0, wrapped: false };
+    const style =
+      item.styleSearch && !attributeMode
+        ? (this.GetParaStyle(item.searchStyle) ?? document.GetDfltTextFormatColl())
+        : undefined;
     const acceptsNode = createSearchNodeFilter(document, this.pageStories);
-    return this.shell.RunNotificationTransaction(
-      /** Releases the new cursor and editing notifications together. @returns Search feedback. */ () => {
-        const result = document.RunModelTransaction(
-          /** Publishes edits only after restoring the view cursor. @returns Search feedback. */ () => {
-            if (style !== undefined && command === SvxSearchCmd.REPLACE && item.replaceStyle) {
-              this.shell.SetParagraphStyle(item.replaceStyle);
-            } else if (
-              style === undefined &&
-              command === SvxSearchCmd.REPLACE &&
-              cursor.HasMark() &&
-              !cursor.IsMultiSelection()
-            ) {
-              const match = new SwPaM(cursor.GetPoint());
-              try {
-                if (
-                  FindTextImpl(
-                    match,
-                    options,
-                    new TextSearch(options),
-                    backward,
-                    cursor,
-                    acceptsNode,
-                  )
-                ) {
-                  cursor.Assign(match.GetPoint(), match.GetMark());
-                  document
-                    .GetDocumentContentOperationsManager()
-                    .ReplaceRange(cursor, item.replacement, false);
+    const replaceAll = command === SvxSearchCmd.REPLACE_ALL;
+    const searchSet = new SfxItemSet(document.GetAttrPool(), WRITER_SEARCH_ATTR_WHICH_RANGES);
+    const replaceSet = new SfxItemSet(document.GetAttrPool(), WRITER_SEARCH_ATTR_WHICH_RANGES);
+    try {
+      item.searchAttributes?.Get(searchSet);
+      if (replacing) item.replaceAttributes?.Get(replaceSet);
+      const textOptions = item.search.length === 0 ? undefined : options;
+      return this.shell.RunNotificationTransaction(
+        /** Releases the new cursor and editing notifications together. @returns Search feedback. */ () => {
+          const result = document.RunModelTransaction(
+            /** Publishes edits only after restoring the view cursor. @returns Search feedback. */ () => {
+              if (
+                command === SvxSearchCmd.REPLACE &&
+                searchNotes &&
+                this.postItMgr?.GetActiveField()
+              ) {
+                const noteOptions = new SearchOptions2(options);
+                const template = toOUString(item.replacement);
+                try {
+                  noteOptions.replaceString.assign(template);
+                  this.postItMgr.Replace(noteOptions, backward);
+                } finally {
+                  template.dispose();
+                  noteOptions.replaceString.clear();
                 }
-              } finally {
-                match.Dispose();
-              }
-            }
-
-            // Keep the displayed PaM registered while the search moves a separate ring.
-            // During Replace All, the displayed content indices follow the actual edits.
-            const fromTableCaret = !inSelection && this.shell.HasBoxSelection();
-            const search = new SwCursor(
-              fromTableCaret ? this.shell.getShellCursor().GetPoint() : cursor.GetPoint(),
-              !fromTableCaret && cursor.HasMark() ? cursor.GetMark() : undefined,
-            );
-            if (inSelection) {
-              for (let range = cursor.GetNext(); range !== cursor; range = range.GetNext())
-                new SwCursor(
-                  range.GetPoint(),
-                  range.HasMark() ? range.GetMark() : undefined,
-                  search,
-                );
-            }
-            let transferred = false;
-            try {
-              const all = command === SvxSearchCmd.FIND_ALL || command === SvxSearchCmd.REPLACE_ALL;
-              const replaceAll = command === SvxSearchCmd.REPLACE_ALL;
-              search.Normalize(backward);
-              const start =
-                all || (this.lastCommand === SvxSearchCmd.FIND_ALL && !inSelection)
-                  ? first
-                  : SwDocPositions.Curr;
-              const replacement =
-                style !== undefined && replaceAll && item.replaceStyle
-                  ? document.GetTextFormatColl(item.replaceStyle)
-                  : undefined;
-              const find =
-                /** Dispatches to the native model strategy in the given area. @param from - Start boundary. @param ranges - Search scope. @returns Match count. */ (
-                  from: SwDocPositions,
-                  ranges: FindRanges,
-                ): number => {
-                  const matches =
-                    style === undefined
-                      ? search.Find_Text(
-                          options,
-                          false,
-                          from,
+              } else if (command === SvxSearchCmd.REPLACE) {
+                if (backward) this.shell.Push();
+                try {
+                  const regex = options.AlgorithmType2 === REGEXP;
+                  let replacement = item.replacement;
+                  if (regex && style === undefined && cursor.HasMark()) {
+                    const source = new SearchOptions2(options);
+                    const template = toOUString(replacement);
+                    try {
+                      source.replaceString.assign(template);
+                      replacement = ResolveSearchReplacement(
+                        source,
+                        cursor,
+                        new TextSearch(source, this.createRegex),
+                      );
+                    } finally {
+                      template.dispose();
+                      source.replaceString.clear();
+                    }
+                  }
+                  if (attributeMode && cursor.HasMark()) {
+                    const match = createSearchCursor(cursor, true);
+                    try {
+                      if (
+                        FindAttrs(
+                          match,
+                          searchSet,
+                          item.styleSearch,
+                          SwDocPositions.Curr,
                           last,
-                          [false],
-                          ranges,
-                          replaceAll,
+                          FindRanges.InSel,
+                          textOptions,
+                          acceptsNode,
                           undefined,
-                          acceptsNode,
-                        )
-                      : FindFormat(
+                          this.createRegex,
+                        ) > 0 &&
+                        canReplaceAtNode(match.GetPoint().GetNode())
+                      ) {
+                        const undo = document.GetUndoManager();
+                        const record = undo.DoesUndo();
+                        if (record) undo.StartUndo("Replace");
+                        try {
+                          const text = replacement || (replaceSet.Count() === 0 ? "" : undefined);
+                          ReplaceAttrs(match, text, replaceSet, regex);
+                        } finally {
+                          if (record) undo.EndUndo();
+                        }
+                        this.shell.SetPaM(match.GetPoint(), match.GetMark());
+                      }
+                    } finally {
+                      disposeSearchRing(match);
+                      match.Dispose();
+                    }
+                  } else if (style === undefined)
+                    this.ReplaceSelection(cursor, options, replacement, last, acceptsNode);
+                  else {
+                    const replacement = this.GetParaStyle(item.replaceStyle);
+                    setTextFormatCollAtShell(
+                      this.shell,
+                      replacement ?? document.GetDfltTextFormatColl(),
+                      false,
+                      /** Rejects a style replacement with a protected selection endpoint. @param range - Shell selection. @returns Whether it admits editing. */ (
+                        range,
+                      ) =>
+                        canReplaceAtNode(range.GetPoint().GetNode()) &&
+                        canReplaceAtNode(range.GetMark().GetNode()),
+                    );
+                  }
+                } finally {
+                  if (backward) this.shell.Pop(PopMode.DeleteStack);
+                }
+                if (backward) this.shell.GetCursor_().Exchange();
+              }
+
+              const fromTableCaret = !inSelection && this.shell.HasBoxSelection();
+              const search = fromTableCaret
+                ? new SwCursor(this.shell.getShellCursor().GetPoint())
+                : createSearchCursor(cursor, inSelection);
+              if (replaceAll) this.shell.Push();
+              let transferred = false;
+              try {
+                // Keep the table cursor alive so Pop can regenerate its box selections.
+                if (replaceAll && !inSelection && !fromTableCaret) this.shell.ClearMark();
+                const all =
+                  command === SvxSearchCmd.FIND_ALL || command === SvxSearchCmd.REPLACE_ALL;
+                if (all) this.searchInOther = false;
+                if (all) search.Normalize(backward);
+                const replacement =
+                  style !== undefined && replaceAll
+                    ? this.GetParaStyle(item.replaceStyle)
+                    : undefined;
+                const replacesMatches =
+                  replaceAll && (style === undefined || replacement !== undefined);
+                const acceptsResult: SwSearchNodeFilter = replacesMatches
+                  ? /** Skips protected results when the model strategy can edit them. @param node - Candidate. @returns Whether the candidate is editable and visible. */ (
+                      node,
+                    ) => acceptsNode(node) && canReplaceAtNode(node)
+                  : acceptsNode;
+                const find =
+                  /** Dispatches to the native model strategy in the given area. @param from - Start boundary. @param ranges - Search scope. @returns Match count. */ (
+                    from: SwDocPositions,
+                    ranges: FindRanges,
+                  ): number => {
+                    const matches = attributeMode
+                      ? FindAttrs(
                           search,
-                          style,
-                          replacement,
+                          searchSet,
+                          item.styleSearch,
                           from,
                           last,
                           ranges,
-                          this.shell.CaptureCursorState(),
-                          acceptsNode,
-                        );
-                  // Native InOther keeps its saved point in the working ring (WRITER-024).
-                  // The view publishes only the match for this single-result pass.
-                  if (ranges === FindRanges.InOther) disposeSearchRing(search);
-                  return matches;
-                };
-              let matches: number;
-              let wrapped = false;
-              if (all || inSelection) {
-                const scope = inSelection ? FindRanges.InSel : FindRanges.InBody;
-                matches = find(start, scope | (all ? FindRanges.InSelAll : 0));
-              } else {
-                if (start === first) search.FillFindPos(first, search.GetPoint());
-                const fromOther =
-                  search.GetPoint().GetNodeIndex() <= document.nodes.GetEndOfExtras().GetIndex();
-                matches = find(start, fromOther ? FindRanges.InOther : FindRanges.InBodyOnly);
-                if (matches === 0 && !fromOther) matches = find(start, FindRanges.InOther);
-                if (matches === 0 && (start !== first || fromOther)) {
-                  search.FillFindPos(first, search.GetPoint());
-                  matches = find(first, FindRanges.InBodyOnly);
-                  if (matches === 0 && fromOther) matches = find(first, FindRanges.InOther);
-                  wrapped = matches > 0;
+                          textOptions,
+                          acceptsResult,
+                          replaceAll ? replaceSet : undefined,
+                          this.createRegex,
+                        )
+                      : style === undefined
+                        ? search.Find_Text(
+                            options,
+                            searchNotes,
+                            from,
+                            last,
+                            [false],
+                            ranges,
+                            replaceAll,
+                            undefined,
+                            acceptsResult,
+                            this.createRegex,
+                            this.postItMgr,
+                          )
+                        : FindFormat(
+                            search,
+                            style,
+                            replacement,
+                            from,
+                            last,
+                            ranges,
+                            this.shell.CaptureCursorState(),
+                            acceptsResult,
+                          );
+                    // Native InOther keeps its saved point in the working ring (WRITER-024).
+                    // The view publishes only the match for this single-result pass.
+                    if (ranges === FindRanges.InOther) disposeSearchRing(search);
+                    return matches;
+                  };
+                const result = all
+                  ? {
+                      matches: find(
+                        first,
+                        (inSelection ? FindRanges.InSel : FindRanges.InBody) | FindRanges.InSelAll,
+                      ),
+                      wrapped: false,
+                    }
+                  : this.SearchAndWrap(search, first, inSelection, find);
+                const { matches } = result;
+                if (replaceAll) {
+                  if (matches > 0 && !this.shell.IsTableMode()) disposeSearchRing(cursor);
+                } else if (matches > 0 || (!all && inSelection)) {
+                  this.shell.ClearMark();
+                  this.shell.SetPaM(
+                    search.GetPoint(),
+                    search.HasMark() ? search.GetMark() : undefined,
+                  );
+                  search.GetRingContainer().merge(this.shell.GetCursor_().GetRingContainer());
+                  transferred = true;
+                } else if (!inSelection) {
+                  this.shell.ClearMark();
+                  if (!all) this.shell.SetCursor(search.GetPoint());
                 }
+                if (!replaceAll || matches > 0) this.lastCommand = command;
+                return result;
+              } finally {
+                if (!transferred) disposeSearchRing(search);
+                search.Dispose();
+                if (replaceAll) this.shell.Pop(PopMode.DeleteCurrent);
               }
-              if (matches > 0 && !replaceAll) {
-                this.shell.ClearMark();
-                this.shell.SetPaM(search.GetPoint(), search.GetMark());
-                search.GetRingContainer().merge(this.shell.GetCursor_().GetRingContainer());
-                transferred = true;
-              } else if (!inSelection && !replaceAll) {
-                this.shell.ClearMark();
-              }
-              this.lastCommand = command;
-              return { matches, wrapped };
-            } finally {
-              if (!transferred) disposeSearchRing(search);
-              search.Dispose();
-            }
-          },
-        );
-        this.shell.NotifySelectionChanged();
-        return result;
-      },
-    );
+            },
+          );
+          this.shell.NotifySelectionChanged();
+          return result;
+        },
+      );
+    } finally {
+      searchSet.Dispose();
+      replaceSet.Dispose();
+    }
   }
 }

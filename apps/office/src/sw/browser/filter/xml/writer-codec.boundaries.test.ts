@@ -1,14 +1,26 @@
 /** @fileoverview Validates malformed graph records and actual unregistered style ownership at the Writer transport boundary. */
 import { assert, expect, it } from "vitest";
-import { encodeSfxPoolItem } from "./item-codec";
+import { decodeSfxPoolItem, encodeSfxPoolItem } from "./item-codec";
 import { SwDoc } from "../../../source/core/doc/doc";
 import { SwCharFormat } from "../../../inc/charfmt";
 import { SwFormatCharFormat } from "../../../source/core/txtnode/fmtatr2";
 import { SwFormatAutoFormat } from "../../../source/core/txtnode/txatbase";
 import { SfxItemSet } from "../../../../svl/source/items/itemset";
+import {
+  SvxCharRotateItem,
+  SvxTwoLinesItem,
+} from "../../../../editeng/source/items/textitem.layout";
+import { FontLineStyle, SvxOverlineItem } from "../../../../editeng/source/items/textitem";
 import { SvxBrushItem } from "../../../../editeng/inc/brushitem";
 import { Color } from "../../../../tools/inc/color";
-import { WRITER_CHARACTER_WHICH_RANGES, RES_CHRATR_HIGHLIGHT } from "../../../inc/hintids";
+import {
+  WRITER_CHARACTER_WHICH_RANGES,
+  RES_CHRATR_BACKGROUND,
+  RES_CHRATR_HIGHLIGHT,
+  RES_CHRATR_OVERLINE,
+  RES_CHRATR_ROTATE,
+  RES_CHRATR_TWO_LINES,
+} from "../../../inc/hintids";
 import { SwTextCharFormat } from "../../../source/core/txtnode/txtatr2";
 import { SwTextAttrEnd } from "../../../source/core/txtnode/txatbase";
 import { encodeWriterDocument, decodeWriterDocument } from "./writer-document-codec";
@@ -208,6 +220,29 @@ it("preserves brush color values through an actual automatic character owner", /
   } finally {
     automatic?.Dispose();
     items.Dispose();
+    doc.Dispose();
+  }
+});
+
+it("round-trips character background, colored overline and rotation fit and double-line state", /** Preserves complete native character items at the Worker boundary. @returns Nothing. */ () => {
+  const doc = new SwDoc();
+  try {
+    const line = new SvxOverlineItem(FontLineStyle.LINESTYLE_DOUBLE, RES_CHRATR_OVERLINE);
+    line.SetColor(new Color(0x331188));
+    const attributes = [
+      new SvxBrushItem(new Color(0xffaa00), RES_CHRATR_BACKGROUND),
+      line,
+      new SvxCharRotateItem(900, true, RES_CHRATR_ROTATE),
+      new SvxTwoLinesItem(true, 0x00ab, 0x00bb, RES_CHRATR_TWO_LINES),
+      new SvxTwoLinesItem(false, 0x0028, 0x0029, RES_CHRATR_TWO_LINES),
+    ];
+    for (const item of attributes) {
+      const payload = encodeSfxPoolItem(item);
+      const restored = decodeSfxPoolItem(doc.GetAttrPool(), structuredClone(payload));
+      expect(restored.equals(item)).toBe(true);
+      expect(encodeSfxPoolItem(restored)).toEqual(payload);
+    }
+  } finally {
     doc.Dispose();
   }
 });

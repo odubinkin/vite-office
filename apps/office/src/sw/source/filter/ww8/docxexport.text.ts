@@ -23,6 +23,7 @@ import {
   RES_CHRATR_LANGUAGE,
   RES_CHRATR_CJK_LANGUAGE,
   RES_CHRATR_CTL_LANGUAGE,
+  RES_CHRATR_BACKGROUND,
   RES_CHRATR_HIGHLIGHT,
   RES_CHRATR_KERNING,
   RES_CHRATR_POSTURE,
@@ -65,6 +66,7 @@ const runProperties = [
   RES_CHRATR_LANGUAGE,
   RES_CHRATR_CJK_LANGUAGE,
   RES_CHRATR_CTL_LANGUAGE,
+  RES_CHRATR_BACKGROUND,
   RES_CHRATR_HIGHLIGHT,
   RES_CHRATR_UNDERLINE,
   RES_CHRATR_KERNING,
@@ -102,6 +104,9 @@ export function OutputItem(output: DocxAttributeOutput, item: SfxPoolItem): void
     case RES_CHRATR_CJK_LANGUAGE:
     case RES_CHRATR_CTL_LANGUAGE:
       output.CharLanguage(item as SvxLanguageItem);
+      break;
+    case RES_CHRATR_BACKGROUND:
+      output.CharBackground(item as SvxBrushItem);
       break;
     case RES_CHRATR_HIGHLIGHT:
       output.CharHighlight(item as SvxBrushItem);

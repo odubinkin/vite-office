@@ -72,9 +72,12 @@ export class SwAttrHandler {
   /** Borrows the effective item for a platform formatter; this accessor does not emulate SwFont or device shaping. @param which - Character WhichId. @returns Actual effective pooled item. */
   public ReadItem(which: number): SfxPoolItem {
     if (this.m_pDefaultArray === undefined) throw new Error("SwAttrHandler requires Init.");
+    return this.ReadHintItem(which) ?? this.m_pDefaultArray.Get(which);
+  }
+
+  /** Reads only a live ranged hint. @param which - Character WhichId. @returns Item when supplied by a hint. */
+  public ReadHintItem(which: number): SfxPoolItem | undefined {
     const top = this.m_aAttrStack.get(which)?.at(-1);
-    return top === undefined
-      ? this.m_pDefaultArray.Get(which)
-      : (CharFormat.GetItem(top, which) ?? this.m_pDefaultArray.Get(which));
+    return top === undefined ? undefined : CharFormat.GetItem(top, which);
   }
 }

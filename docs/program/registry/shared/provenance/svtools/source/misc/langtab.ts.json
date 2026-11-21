@@ -1,0 +1,40 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "status": "mapped",
+    "localPath": "apps/office/src/svtools/source/misc/langtab.ts",
+    "localSymbols": [
+      "getLanguageName"
+    ],
+    "upstreamPath": "svtools/source/misc/langtab.cxx",
+    "upstreamSymbols": [
+      "SvtLanguageTable::GetLanguageString"
+    ],
+    "preservedResponsibilities": [
+      "Preserves the English SvtLanguageTable catalog and first matching native ID with obsolete-language resolution."
+    ],
+    "omittedResponsibilities": [
+      "Native translation catalog loading and spellchecker availability badges remain browser and service concerns."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/svtools/source/misc/langtab.ts",
+          "marker": "getLanguageName"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/svtools/source/misc/langtab.cxx",
+          "marker": "SvtLanguageTable::GetLanguageString"
+        },
+        {
+          "path": "vendor/libreoffice-reference/svtools/inc/langtab.hrc",
+          "marker": "STR_ARR_SVT_LANGUAGE_TABLE"
+        }
+      ]
+    }
+  }
+}

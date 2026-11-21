@@ -2,16 +2,11 @@
 import { SwEditShell as SwAttributeEditShell } from "./edattr";
 import { SfxItemSet } from "../../../../svl/inc/itemset";
 import { SfxListUndoAction } from "../../../../svl/source/undo/undo";
-import { SwUndoAttr } from "../undo/unattr";
+import { MakeCharacterFormattingUndo, type SwUndoAttr } from "../undo/unattr";
 import type { SwUndoRedoContext } from "../undo/undobj";
 import { SwTextNode } from "../txtnode/ndtxt";
 import type { WriterTextRange, SwPaM } from "../crsr/pam";
 import { SetAttrMode } from "../../../inc/swtypes";
-import { WRITER_CHARACTER_WHICH_RANGES } from "../../../inc/hintids";
-import { SwpHints } from "../txtnode/ndhints";
-import { SwFormatAutoFormat } from "../txtnode/txatbase";
-import { MakeTextAttr } from "../txtnode/thints";
-import { setCharacterItems } from "../txtnode/ndhints-font";
 /** Character item edits remain in the native editing-shell core. */
 export abstract class SwEditShell extends SwAttributeEditShell {
   /** Applies complete request items through original node/hint/history owners. @param items - Native character request. @param mode - Consumed DEFAULT mode. @param pam - Original optional explicit range, independent from the live cursor. @returns Whether selected content changed; caret typing state is updated independently. */
@@ -50,76 +45,8 @@ export abstract class SwEditShell extends SwAttributeEditShell {
       }
     }
     const actions: SwUndoAttr[] = [];
-    for (const range of ranges) {
-      const original =
-        range.start === range.end
-          ? { text: "", hints: new SwpHints(this.GetDoc().GetAttrPool()) }
-          : range.node.CaptureTextFragment(range.start, range.end);
-      if (range.start === range.end)
-        for (const hint of range.node.GetpSwpHints()?.entries() ?? []) {
-          if (hint.GetStart() !== range.start || hint.GetEnd() !== range.end) continue;
-          const copy = hint.clone();
-          copy.SetStart(0);
-          copy.SetEnd(0);
-          original.hints.Insert(copy);
-        }
-      const collapsed = new SfxItemSet(this.GetDoc().GetAttrPool(), WRITER_CHARACTER_WHICH_RANGES);
-      if (range.start === range.end) {
-        for (const hint of original.hints.entries())
-          if (hint.format instanceof SwFormatAutoFormat)
-            collapsed.PutSet(hint.format.GetStyleHandle());
-        collapsed.PutSet(items);
-      }
-      const replacement = {
-        text: original.text,
-        hints:
-          range.start === range.end
-            ? new SwpHints(this.GetDoc().GetAttrPool())
-            : setCharacterItems(
-                original.hints,
-                this.GetDoc().GetAttrPool(),
-                original.text.length,
-                0,
-                original.text.length,
-                items.entries(),
-                range.node.GetSwAttrSet(),
-              ),
-      };
-      if (range.start === range.end) {
-        for (const hint of original.hints.entries())
-          if (!(hint.format instanceof SwFormatAutoFormat)) replacement.hints.Insert(hint.clone());
-        replacement.hints.Insert(MakeTextAttr(this.GetDoc(), collapsed, 0, 0));
-      }
-      try {
-        actions.push(
-          new SwUndoAttr(
-            range.node,
-            range.start,
-            original,
-            replacement,
-            before,
-            this.CaptureCursorState(),
-            range.start === 0 &&
-              range.end === range.node.Len() &&
-              !(
-                range.node
-                  .GetpSwpHints()
-                  ?.entries()
-                  .some(
-                    /** Native full-node SetAttr uses hints when an actual character format is present. @param hint - Original hint. @returns Native flag. */
-                    (hint) => hint.IsCharFormatAttr(),
-                  ) ?? false
-              )
-              ? items
-              : undefined,
-          ),
-        );
-      } finally {
-        original.hints.Dispose();
-        replacement.hints.Dispose();
-        collapsed.Dispose();
-      }
-    }
+    for (const range of ranges)
+      actions.push(MakeCharacterFormattingUndo(range, items, before, this.CaptureCursorState()));
     if (actions.length === 0) return false;
     if (actions.length === 1) {
       const action = actions[0] as SwUndoAttr;
