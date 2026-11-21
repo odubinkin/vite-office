@@ -62,12 +62,15 @@ export interface WriterSearchItem {
   readonly selection: boolean;
 }
 
-/** Arguments of the represented FID_SEARCH_NOW request. */
+/** The represented SvxSearchItem value exchanged by Writer search slots. */
+export interface WriterSearchSlotItem extends WriterSearchItem {
+  readonly command: SvxSearchCmd;
+  readonly backward: boolean;
+}
+
+/** Arguments of FID_SEARCH_NOW. */
 export interface WriterExecuteSearchArguments {
-  readonly SearchItem: WriterSearchItem & {
-    readonly command: SvxSearchCmd;
-    readonly backward: boolean;
-  };
+  readonly SearchItem: WriterSearchSlotItem;
   readonly Quiet?: boolean;
   readonly UseAttrItemList?: boolean;
 }
@@ -231,6 +234,7 @@ export class SwViewSearch {
   private readonly feedbackListeners = new Set<() => void>();
   private lastCommand: SvxSearchCmd | undefined;
   private searchInOther = false;
+  private searchDialogJustOpened = false;
   private lastRequest:
     { item: WriterSearchItem; command: SvxSearchCmd; backward: boolean } | undefined;
 
@@ -330,23 +334,44 @@ export class SwViewSearch {
     return !this.shell.GetViewOptions().IsReadonly();
   }
 
-  /** Initializes the displayed search item from the Writer selection. @param dialog - Whether the modeless dialog is opening. @returns Current settings. */
-  public OpenSearch(dialog: boolean): WriterSearchItem {
-    const cursor = this.shell.GetCursor();
-    if (dialog) {
+  /** Marks the next SID_SEARCH_ITEM state query as initialization of the new dialog. @returns Nothing. */
+  public SearchOn(): void {
+    this.searchDialogJustOpened = true;
+  }
+
+  /** Returns SID_SEARCH_ITEM state and seeds the newly opened dialog from the selection. @returns Current search properties. */
+  public StateSearch(): WriterSearchSlotItem {
+    if (this.searchDialogJustOpened) {
+      this.searchDialogJustOpened = false;
+      const cursor = this.shell.GetCursor();
       const text =
         cursor.IsMultiSelection() || this.shell.IsTableMode() ? "" : this.shell.GetSelText();
-      this.item = {
-        ...this.item,
-        search: text || this.item.search,
-        selection: text.length === 0 && this.HasSelection(),
-      };
-    } else {
-      // Keep the search value consistent with the browser's single-line input.
-      const text = this.GetFindBarSelection(cursor).replaceAll("\r", "").replaceAll("\n", "");
-      return { ...this.item, search: text };
+      const hasSelection = this.HasSelection();
+      const selection = text.length === 0 && hasSelection;
+      this.item = { ...this.item, search: text || this.item.search, selection };
+      if (this.lastRequest !== undefined && hasSelection)
+        this.lastRequest = {
+          ...this.lastRequest,
+          item: {
+            ...this.lastRequest.item,
+            search: text || this.lastRequest.item.search,
+            selection,
+          },
+        };
     }
-    return this.item;
+    return {
+      ...this.item,
+      similarity: { ...this.item.similarity },
+      command: this.lastRequest?.command ?? SvxSearchCmd.FIND,
+      backward: this.lastRequest?.backward ?? false,
+    };
+  }
+
+  /** Reads the Find Bar's selection text for its single-line entry. @returns Browser search text. */
+  public GetFindBarSeed(): string {
+    return this.GetFindBarSelection(this.shell.GetCursor())
+      .replaceAll("\r", "")
+      .replaceAll("\n", "");
   }
 
   /** Reads the represented UNO view-cursor text using the native selection writer. @param cursor - Native editing ring. @returns Text to seed the Find Bar. */
@@ -362,15 +387,11 @@ export class SwViewSearch {
     return text;
   }
 
-  /** Updates the shared search item without editing the document. @param item - Search controls. @returns Nothing. */
-  public SetSearchItem(item: WriterSearchItem): void {
-    this.item = item;
-  }
-
-  /** Publishes the dialog's accepted state as a Find request, as in SaveToModule. @param item - Accepted dialog state. @param backward - Dialog direction. @returns Nothing. */
-  public SaveSearchItem(item: WriterSearchItem, backward: boolean): void {
-    this.SetSearchItem(item);
-    this.lastRequest = { item, command: SvxSearchCmd.FIND, backward };
+  /** Stores the represented SID_SEARCH_ITEM for dialog state and repeated searches. @param properties - Dispatched search item. @returns Nothing. */
+  public SetSearchProperties(properties: WriterSearchSlotItem): void {
+    const { command, backward, ...item } = properties;
+    this.item = { ...item, similarity: { ...item.similarity } };
+    this.lastRequest = { item: this.item, command, backward };
   }
 
   /** Repeats the source command with its last dispatched search item. @returns Whether a match was found. */
@@ -398,7 +419,7 @@ export class SwViewSearch {
       styleSearch: false,
       selection: false,
     };
-    this.SetSearchItem(item);
+    this.item = item;
     return {
       ...item,
       matchDiacritics: query.matchDiacritics,

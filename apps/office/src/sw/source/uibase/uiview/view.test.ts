@@ -257,6 +257,53 @@ it("dispatches ExecuteSearch through the native view slot and honors Quiet", /**
   view.Close();
 });
 
+it("seeds SearchProperties once after SearchOn and saves the dialog state through SearchOff", /** Covers the modeless dialog slot lifecycle and the retained native search request. @returns Nothing. */ () => {
+  const view = new SwView(
+    new SwDocShell(
+      createWriterDocument(),
+      createDocument({ id: "search-properties", suiteId: "writer", title: "Search" }),
+    ),
+  );
+  const frame = new SfxViewFrame<SwView>(new BrowserSfxDispatcher());
+  view.AttachFrame(frame);
+  frame.SetActiveView(view, [view.GetCommandShell(), view.GetWrtShell().GetCommandShell()]);
+  const shell = view.GetWrtShell();
+  shell.Insert("cat dog");
+  view.Execute(WRITER_COMMAND_IDS.selectAll);
+  const item = {
+    ...view.GetSearch().GetSearchItem(),
+    search: "cat",
+    command: SvxSearchCmd.FIND,
+    backward: true,
+  };
+  expect(view.Execute(WRITER_COMMAND_IDS.searchProperties, item).status).toBe("executed");
+  expect(view.QueryState(WRITER_COMMAND_IDS.searchProperties).value).toMatchObject({
+    search: "cat",
+    backward: true,
+  });
+  expect(view.Execute(WRITER_COMMAND_IDS.searchOn).status).toBe("executed");
+  expect(view.QueryState(WRITER_COMMAND_IDS.searchProperties).value).toMatchObject({
+    search: "cat dog",
+    selection: false,
+  });
+  const endOfText = new SwPosition(shell.GetActiveParagraph(), 7);
+  shell.SetPaM(endOfText);
+  endOfText.Dispose();
+  expect(view.QueryState(WRITER_COMMAND_IDS.searchProperties).value).toMatchObject({
+    search: "cat dog",
+  });
+  expect(
+    view.Execute(WRITER_COMMAND_IDS.searchOff, { SearchItem: { ...item, search: "dog" } }).status,
+  ).toBe("executed");
+  expect(view.QueryState(WRITER_COMMAND_IDS.searchProperties).value).toMatchObject({
+    search: "dog",
+    backward: true,
+  });
+  expect(view.Execute(WRITER_COMMAND_IDS.repeatSearch)).toMatchObject({ value: true });
+  expect(view.GetSearch().GetFeedback()).toMatchObject({ backward: true });
+  view.Close();
+});
+
 describe("SwView frame ownership", /** Groups SwView frame ownership. @returns Test callback result. */ () => {
   it("requires one attached frame for dispatch and exposes its command state", /** Checks requires one attached frame for dispatch and exposes its command state. @returns Test callback result. */ () => {
     const shell = new SwDocShell(

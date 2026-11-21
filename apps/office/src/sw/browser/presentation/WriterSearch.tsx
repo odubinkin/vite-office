@@ -15,6 +15,7 @@ import type {
   WriterExecuteSearchArguments,
   WriterSearchFeedback,
   WriterSearchItem,
+  WriterSearchSlotItem,
 } from "../../source/uibase/uiview/viewsrch";
 import type { SwView } from "../../source/uibase/uiview/view";
 import { WRITER_COMMAND_IDS } from "../../uiconfig/swriter/menubar/menubar-commands";
@@ -41,6 +42,19 @@ const rememberedSearches = 10;
 let savedFindBarHistory: readonly string[] = [];
 let rememberedFindBarSearch = "";
 
+/** The search dialog and toolbar own separate focus requests. */
+export type SearchSurfaces = Partial<
+  Record<"findbar" | "searchDialog", SearchFocusRequest | undefined>
+>;
+
+/** Search state queried when a surface is opened or refocused. */
+export interface SearchFocusRequest {
+  readonly revision: number;
+  readonly search: string | undefined;
+  readonly initial: WriterSearchItem | WriterSearchSlotItem;
+  readonly feedback: WriterSearchFeedback | undefined;
+}
+
 /** Stores the query activated by the Find Bar entry. @param search - Activated query. @returns Nothing. */
 function rememberFindBarActivation(search: string): void {
   rememberedFindBarSearch = search;
@@ -62,9 +76,7 @@ function remember(values: readonly string[], entry: string): readonly string[] {
 /** Displays the search controls for one active Writer surface. @param props - Mode, owner and focus callbacks. @returns Search UI. */
 export function WriterSearch({
   dialog,
-  initial,
-  focusRequest,
-  focusSearch,
+  request: { initial, revision: focusRequest, search: focusSearch },
   history,
   onHistoryChange,
   view,
@@ -75,9 +87,7 @@ export function WriterSearch({
   findBarFeedback,
 }: Readonly<{
   dialog: boolean;
-  initial: WriterSearchItem;
-  focusRequest: number;
-  focusSearch: string | undefined;
+  request: SearchFocusRequest;
   history: WriterSearchHistory;
   onHistoryChange: Dispatch<SetStateAction<WriterSearchHistory>>;
   view: SwView;
@@ -112,7 +122,7 @@ export function WriterSearch({
   const similarityOptionsButton = useRef<HTMLButtonElement>(null);
   const [japaneseOptionsOpen, setJapaneseOptionsOpen] = useState(false);
   const japaneseOptionsButton = useRef<HTMLButtonElement>(null);
-  const [replaceBackward, setReplaceBackward] = useState(false);
+  const [replaceBackward, setReplaceBackward] = useState("backward" in initial && initial.backward);
   const [otherOptionsOpen] = useState(
     initial.selection ||
       !initial.matchDiacritics ||
@@ -158,10 +168,7 @@ export function WriterSearch({
   function update(changes: Partial<WriterSearchItem>, commit = true): void {
     const next = { ...item, ...changes };
     setItem(next);
-    if (dialog) {
-      if (commit) saveDialogItem(next, replaceBackward);
-      else owner.SetSearchItem(next);
-    }
+    if (dialog && commit) saveDialogItem(next, replaceBackward);
     if (changes.search !== undefined) {
       if (!dialog || formatFeedback(findBarFeedback)) owner.ClearFeedback();
       else setFeedbackOnEdit(searchFeedback);
@@ -211,15 +218,16 @@ export function WriterSearch({
             : previous.replacement,
         }),
       );
-    owner.SaveSearchItem(
-      {
-        ...draft,
-        searchStyle: effectiveStyle(styles?.search, draft.searchStyle),
-        replaceStyle: effectiveStyle(styles?.replace, draft.replaceStyle),
-        selection: canSearchSelection && draft.selection,
-      },
+    const item: WriterSearchSlotItem = {
+      ...draft,
+      searchStyle: effectiveStyle(styles?.search, draft.searchStyle),
+      replaceStyle: effectiveStyle(styles?.replace, draft.replaceStyle),
+      selection: canSearchSelection && draft.selection,
+      command: SvxSearchCmd.FIND,
       backward,
-    );
+    };
+    if (closing) view.Execute(WRITER_COMMAND_IDS.searchOff, { SearchItem: item });
+    else view.Execute(WRITER_COMMAND_IDS.searchProperties, item);
   }
 
   /** Publishes text and style entries when they lose focus. @returns Nothing. */

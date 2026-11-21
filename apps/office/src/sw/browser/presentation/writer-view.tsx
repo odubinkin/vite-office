@@ -41,7 +41,12 @@ import {
   resolveSwListFirstLineIndent,
 } from "../../source/core/txtnode/ndtxt-list-indent";
 import { WriterPropertiesPanel } from "./WriterPropertiesPanel";
-import { WriterSearch, type WriterSearchHistory } from "./WriterSearch";
+import {
+  WriterSearch,
+  type SearchFocusRequest,
+  type SearchSurfaces,
+  type WriterSearchHistory,
+} from "./WriterSearch";
 import { WriterWorkspaceChrome } from "./WriterWorkspaceChrome";
 import { CommandMenuBar } from "../../../framework/browser/presentation/CommandMenuBar";
 import { useWriterContextMenu } from "./WriterContextMenu";
@@ -59,6 +64,7 @@ import { presentWriterStatus, selectWriterCommandResource } from "./writer-comma
 export { presentWriterCommandError, presentWriterStatus } from "./writer-command-presentation";
 import { WriterPlainTextEditor } from "../editor/WriterPlainTextEditor";
 import type { SwView } from "../../source/uibase/uiview/view";
+import type { WriterSearchSlotItem } from "../../source/uibase/uiview/viewsrch";
 import { WriterViewStore } from "./writer-view-projection";
 import { installWriterEmbeddedFonts } from "../../../vcl/browser/embedded-font-loader";
 import type { SwDoc } from "../../source/core/doc/doc";
@@ -145,23 +151,18 @@ export function WriterWorkbench({
     search: [],
     replacement: [],
   });
-  /** A published search result or an empty status. */
-  type Feedback = typeof searchFeedback;
-  /** A focus request with a query and the result visible before this surface opened. */
-  type SearchFocusRequest = { revision: number; search: string | undefined; feedback: Feedback };
-  /** A surface with its own open state and focus request. */
-  type SearchSurface = "findbar" | "searchDialog";
-  const [{ findbar, searchDialog }, setSearchSurfaces] = useState<
-    Partial<Record<SearchSurface, SearchFocusRequest | undefined>>
-  >({});
+  const [{ findbar, searchDialog }, setSearchSurfaces] = useState<SearchSurfaces>({});
   const openSearch = useCallback(
     /** Opens or refocuses a search surface. @param surface - Requested surface. @param search - Optional live toolbar query. @returns Nothing. */ (
-      surface: SearchSurface,
+      surface: keyof SearchSurfaces,
       search?: string,
     ) => {
-      const text =
-        surface === "findbar" ? searchOwner.OpenSearch(false).search || undefined : search;
-      if (surface === "searchDialog" && !searchDialog) searchOwner.OpenSearch(true);
+      const text = surface === "findbar" ? searchOwner.GetFindBarSeed() || undefined : search;
+      if (surface === "searchDialog" && !searchDialog) view.Execute(WRITER_COMMAND_IDS.searchOn);
+      const initial =
+        surface === "searchDialog"
+          ? (view.QueryState(WRITER_COMMAND_IDS.searchProperties).value as WriterSearchSlotItem)
+          : searchOwner.GetSearchItem();
       const feedback = searchOwner.GetFeedback();
       setSearchSurfaces(
         /** Requests focus for one surface. @param previous - Open surfaces. @returns Updated focus requests. */ (
@@ -170,13 +171,14 @@ export function WriterWorkbench({
           ...previous,
           [surface]: {
             search: text,
+            initial,
             revision: (previous[surface]?.revision ?? 0) + 1,
             feedback: previous[surface] ? previous[surface]?.feedback : feedback,
           },
         }),
       );
     },
-    [searchDialog, searchOwner],
+    [searchDialog, searchOwner, view],
   );
   /** Closes one search surface and restores document focus. @param dialog - Whether the dialog closes. @returns Nothing. */
   function closeSearch(dialog: boolean): void {
@@ -583,9 +585,7 @@ export function WriterWorkbench({
     return (
       <WriterSearch
         dialog={dialog}
-        initial={searchOwner.GetSearchItem()}
-        focusRequest={request.revision}
-        focusSearch={request.search}
+        request={request}
         history={searchHistory}
         onHistoryChange={setSearchHistory}
         view={view}

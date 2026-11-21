@@ -22,6 +22,12 @@ describe("generated Writer slots", /** Exercises generated SDI identities and or
       "Quiet:SfxBoolItem",
       "UseAttrItemList:SfxBoolItem",
     ]);
+    expect(getWriterSlotId(".uno:SearchProperties")).toBe(10_291);
+    expect(getWriterSlotId(".uno:SearchOn")).toBe(10_500);
+    expect(getWriterSlotId(".uno:SearchOff")).toBe(10_501);
+    expect(generated.commands[".uno:SearchOff"].argumentSchema).toEqual([
+      "SearchItem:SvxSearchItem",
+    ]);
     expect(getWriterSlotId(".uno:Bold?unused=1")).toBe(10_009);
     expect(
       /** Runs the focused test callback. @returns Operation result. */ () =>

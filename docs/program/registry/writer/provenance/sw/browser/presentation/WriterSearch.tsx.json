@@ -30,7 +30,7 @@
     "responsibilities": [
       "Browser controls for the supported findbar.xml and findreplacedialog.ui surfaces dispatch the native ExecuteSearch view slot for document operations.",
       "Exposes the pinned CTL and CJK kashida and width controls in Other options. The toolbar passes its native transliteration subset.",
-      "Publishes the dialog's text and style entries on focus loss and saves accepted option changes as a Find request for Repeat Search.",
+      "Publishes the dialog's text and style entries on focus loss and saves accepted option changes to SearchProperties as a Find request for Repeat Search. SearchOff carries the final dialog item on close.",
       "The modeless dialog and the Find Bar can stay open together. Toolbar toggles belong to each mounted toolbar and contribute to the shared command state only when the toolbar executes a search.",
       "Keeps the keyboard-activated Find Bar query separate from the toolbar controller history, which is saved on destruction. Find All does not record a history entry. Dialog saves remember the search term.",
       "Sorts the paragraph style controls by visible name in the browser UI locale, including native natural numeric ordering.",

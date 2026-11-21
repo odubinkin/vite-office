@@ -8,7 +8,7 @@ import {
   getWriterCommandArguments,
   type WriterViewCommandTarget,
 } from "../../../sdi/swriter";
-import type { WriterExecuteSearchArguments } from "../uiview/viewsrch";
+import type { WriterExecuteSearchArguments, WriterSearchSlotItem } from "../uiview/viewsrch";
 import { SvxULSpaceItem } from "../../../../editeng/inc/ulspitem";
 import { SID_ATTR_PARA_ULSPACE } from "../../../../editeng/inc/editids";
 
@@ -33,6 +33,34 @@ export function createWriterViewCommandRegistry(
     /** Reads lifecycle command availability. @returns True outside a pending medium operation. */ (): boolean =>
       !target.IsStoragePending();
   return createWriterInterface([
+    {
+      id: WRITER_COMMAND_IDS.searchOn,
+      capabilityId: "CAP-0111",
+      /** Requests selection initialization for the modeless dialog. @param context - Active view. @returns Nothing. */
+      execute: (context): void => context.GetSearch().SearchOn(),
+    },
+    {
+      id: WRITER_COMMAND_IDS.searchProperties,
+      capabilityId: "CAP-0111",
+      /** Saves the dialog's properties. @param context - Active view. @param args - SID_SEARCH_ITEM request. @returns Nothing. */
+      execute(context, args): void {
+        const item = getWriterCommandArguments<WriterSearchSlotItem>(args);
+        if (item !== undefined) context.GetSearch().SetSearchProperties(item);
+      },
+      /** Supplies the search state for the dialog. @param context - Active view. @returns Current properties. */
+      getStateValue: (context) => context.GetSearch().StateSearch(),
+    },
+    {
+      id: WRITER_COMMAND_IDS.searchOff,
+      capabilityId: "CAP-0111",
+      /** Saves the dialog's final search item. @param context - Active view. @param args - Request items. @returns Nothing. */
+      execute(context, args): void {
+        const request =
+          getWriterCommandArguments<Pick<WriterExecuteSearchArguments, "SearchItem">>(args);
+        if (request?.SearchItem !== undefined)
+          context.GetSearch().SetSearchProperties(request.SearchItem);
+      },
+    },
     {
       id: WRITER_COMMAND_IDS.executeSearch,
       capabilityId: "CAP-0111",
