@@ -168,3 +168,33 @@ it("preserves direct print options and signed scale values without materializing
     source.Dispose();
   }
 });
+
+it("keeps different page usages in separate ODS layouts", /** Checks layout deduplication across different page usages. @returns Completion. */ async () => {
+  const source = new ScDocument();
+  const importer = new ScXMLImport(source);
+  const { office, style, table } = ODF_NAMESPACES;
+  const ns = `xmlns:office="${office}" xmlns:style="${style}" xmlns:table="${table}"`;
+  try {
+    importer.importStyles(`<office:document-styles ${ns}>
+      <office:automatic-styles>
+        <style:page-layout style:name="left" style:page-usage="left"><style:page-layout-properties/></style:page-layout>
+        <style:page-layout style:name="right" style:page-usage="right"><style:page-layout-properties/></style:page-layout>
+      </office:automatic-styles>
+      <office:master-styles>
+        <style:master-page style:name="LeftPage" style:page-layout-name="left"/>
+        <style:master-page style:name="RightPage" style:page-layout-name="right"/>
+      </office:master-styles>
+    </office:document-styles>`);
+    importer.importContent(
+      `<office:document-content ${ns}><office:body><office:spreadsheet><table:table table:name="Sheet1"/></office:spreadsheet></office:body></office:document-content>`,
+    );
+    const bytes = await writeOdsDocument(source);
+    const xml = await (await DocumentArchive.open(bytes)).readTextEntry("styles.xml");
+    expect(layout(xml, "LeftPage").parentElement?.getAttributeNS(style, "page-usage")).toBe("left");
+    expect(layout(xml, "RightPage").parentElement?.getAttributeNS(style, "page-usage")).toBe(
+      "right",
+    );
+  } finally {
+    source.Dispose();
+  }
+});

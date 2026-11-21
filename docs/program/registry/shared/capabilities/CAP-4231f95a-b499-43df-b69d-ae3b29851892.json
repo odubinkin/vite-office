@@ -49,8 +49,8 @@
           "marker": "Color"
         },
         {
-          "path": "apps/office/src/sw/browser/presentation/WriterBorderPage.tsx",
-          "marker": "Color"
+          "path": "apps/office/src/cui/browser/tabpages/BorderTabPage.tsx",
+          "marker": "page.SelColHdl_Impl(new Color"
         },
         {
           "path": "apps/office/src/sw/source/core/docnode/ndtbl.ts",
