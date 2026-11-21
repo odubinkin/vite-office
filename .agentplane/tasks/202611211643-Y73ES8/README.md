@@ -1,10 +1,11 @@
 ---
 id: "202611211643-Y73ES8"
 title: "Roll out Graphify to the Writer and Calc checkouts"
-status: "DOING"
+result_summary: "Published the verified Graphify integration to writer and calc and built both local indexes."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 8
+revision: 9
 origin:
   system: "manual"
 depends_on: []
@@ -43,11 +44,16 @@ quality_review:
     - "scripts/graphify-context.sh"
   findings:
     - "Real indexed Writer and Calc symbol queries returned exact source lines. The graphs have different file identities and matched their individual roots. Existing Calc output was preserved and excluded."
-commit: null
+commit:
+  hash: "7d9dc72d8ee71132b52d24267da9645057007676"
+  message: "🧩 Y73ES8 task: record branch rollout and index verification"
 comments:
   -
     author: "CODER"
     body: "Start: continue direct-mode task in current checkout."
+  -
+    author: "CODER"
+    body: "Verified: Writer and Calc match their published refs and each has an independent Graphify index, checkout hook, and source-verified query."
 events:
   -
     type: "status"
@@ -62,8 +68,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Writer and Calc fast-forwarded to 0617406d9 and were published atomically. Both checkouts match origin, have independent 58,198-node indexes and installed checkout hooks, and resolve their product symbol to source. Calc output is preserved."
+  -
+    type: "status"
+    at: "2026-11-21T16:48:48.930Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: Writer and Calc match their published refs and each has an independent Graphify index, checkout hook, and source-verified query."
 doc_version: 3
-doc_updated_at: "2026-11-21T16:48:25.237Z"
+doc_updated_at: "2026-11-21T16:48:48.931Z"
 doc_updated_by: "CODER"
 description: "Fast-forward the writer and calc branches to the verified Graphify integration, publish the two branches, and build isolated local indexes and checkout hooks."
 sections:
@@ -116,6 +129,10 @@ sections:
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "If publication has occurred, use reviewed revert commits on the affected branches. The checkout-local hooks and generated indexes can be removed independently."
   Findings: ""
+extensions:
+  implementation_commit:
+    hash: "df692053d260aad5cf3244f639082612ab0298f7"
+    message: "🧩 Y73ES8 task: persist canonical task artifacts"
 id_source: "generated"
 ---
 ## Summary
