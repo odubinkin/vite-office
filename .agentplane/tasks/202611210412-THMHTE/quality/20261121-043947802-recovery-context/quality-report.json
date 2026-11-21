@@ -1,0 +1,24 @@
+{
+  "schema_version": 1,
+  "task_id": "202611210412-THMHTE",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-11-21T04:39:47.802Z",
+  "verdict": "pass",
+  "summary": "Calc ODS axis import and boundary export match the pinned source for the connected outline and print range model.",
+  "evaluated_sha": "ff047bc5e9b8320c50d8b458bf28c1ac53642acb",
+  "blueprint_digest": "ec37d4896aded89d88247299c402cfbd2ac83aaf5ba98662210f6747fba5a8f4",
+  "findings": [
+    "The independent ODS outline and print fixtures confirm row and column visibility, title reconstruction and preserved cursor edge cases. All 121 related Calc cases are verified, including the exact timeout replay."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202611210412-THMHTE/README.md",
+    "output/playwright/THMHTE/outline-final.log",
+    "output/playwright/THMHTE/calc-ods.log",
+    "output/playwright/THMHTE/row-height-retry.log",
+    "docs/program/calc-upstream-suspected-issues.md"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": []
+}
