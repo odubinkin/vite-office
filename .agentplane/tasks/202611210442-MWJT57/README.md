@@ -1,10 +1,11 @@
 ---
 id: "202611210442-MWJT57"
 title: "Align Writer ODT bookmark ranges and properties"
-status: "DOING"
+result_summary: "Verified Writer ODT ordinary bookmark ranges, placement and hidden properties against LibreOffice"
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 7
+revision: 9
 origin:
   system: "manual"
 depends_on: []
@@ -20,9 +21,9 @@ plan_approval:
   note: null
 verification:
   state: "ok"
-  updated_at: "2026-11-21T04:53:27.980Z"
+  updated_at: "2026-11-21T04:53:45.973Z"
   updated_by: "CODER"
-  note: "Verified pinned Writer ODT bookmark order, range recovery and hidden properties across real package, Worker and history boundaries."
+  note: "Pinned ODF bookmark fixtures, 106 related cases, final targeted replays, Office typecheck and shared inventory passed."
   attempts: 0
 quality_review:
   state: "pass"
@@ -43,11 +44,16 @@ quality_review:
     - "docs/program/writer-upstream-suspected-issues.md"
   findings:
     - "Pinned bookmark ordering and hidden ranges round-trip through actual Writer packages. Focused final checks cover anchored frame phases, worker transfer, native properties and edited bookmark history."
-commit: null
+commit:
+  hash: "5e931355f4d8f0a01a1eb694ce8dd27a08b08079"
+  message: "🧩 MWJT57 code: align Writer ODT bookmark range ownership and export"
 comments:
   -
     author: "CODER"
     body: "Start: port ordinary Writer ODT bookmark ranges and attributes against the pinned source and fixtures."
+  -
+    author: "CODER"
+    body: "Verified: Verified Writer ODT ordinary bookmark ranges, placement and hidden properties against LibreOffice. Guided shortcut recorded verification and is closing the direct task with traceable commit metadata."
 events:
   -
     type: "status"
@@ -62,8 +68,21 @@ events:
     author: "CODER"
     state: "ok"
     note: "Verified pinned Writer ODT bookmark order, range recovery and hidden properties across real package, Worker and history boundaries."
+  -
+    type: "verify"
+    at: "2026-11-21T04:53:45.973Z"
+    author: "CODER"
+    state: "ok"
+    note: "Pinned ODF bookmark fixtures, 106 related cases, final targeted replays, Office typecheck and shared inventory passed."
+  -
+    type: "status"
+    at: "2026-11-21T04:53:46.063Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: Verified Writer ODT ordinary bookmark ranges, placement and hidden properties against LibreOffice. Guided shortcut recorded verification and is closing the direct task with traceable commit metadata."
 doc_version: 3
-doc_updated_at: "2026-11-21T04:53:28.032Z"
+doc_updated_at: "2026-11-21T04:53:46.063Z"
 doc_updated_by: "CODER"
 description: "Port the pinned ordinary bookmark SAX context, pairing and same-position text-portion order, native hidden and condition properties, and transfer and history lifetime. Replay native ODF regressions."
 sections:
@@ -110,6 +129,36 @@ sections:
     - freshness: route=computed_local remote=remote_skipped
     - repeat_allowed: false
     - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+    - risks: none
+
+    ### 2026-11-21T04:53:45.973Z — VERIFY — ok
+
+    By: CODER
+
+    Note: Pinned ODF bookmark fixtures, 106 related cases, final targeted replays, Office typecheck and shared inventory passed.
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-21T04:53:28.032Z, excerpt_hash=sha256:da133de75248fb955858432646fc78eb3410cc121f29787cea2ba0b265cfa48a
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202611210442-MWJT57/blueprint/resolved-snapshot.json
+    - old_digest: 492a610a85b3799642445c6126e0b7f08549b9f70ba91362a7e17c34ddc1a469
+    - current_digest: 492a610a85b3799642445c6126e0b7f08549b9f70ba91362a7e17c34ddc1a469
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202611210442-MWJT57
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task complete 202611210442-MWJT57 --result verified-202611210442-MWJT57 --commit e3d2e79973400c998e188721b502229f2674e1e0
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
     - risks: none
 
     <!-- END VERIFICATION RESULTS -->
@@ -173,6 +222,36 @@ DecisionContextRef:
 - freshness: route=computed_local remote=remote_skipped
 - repeat_allowed: false
 - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- risks: none
+
+### 2026-11-21T04:53:45.973Z — VERIFY — ok
+
+By: CODER
+
+Note: Pinned ODF bookmark fixtures, 106 related cases, final targeted replays, Office typecheck and shared inventory passed.
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-21T04:53:28.032Z, excerpt_hash=sha256:da133de75248fb955858432646fc78eb3410cc121f29787cea2ba0b265cfa48a
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202611210442-MWJT57/blueprint/resolved-snapshot.json
+- old_digest: 492a610a85b3799642445c6126e0b7f08549b9f70ba91362a7e17c34ddc1a469
+- current_digest: 492a610a85b3799642445c6126e0b7f08549b9f70ba91362a7e17c34ddc1a469
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202611210442-MWJT57
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task complete 202611210442-MWJT57 --result verified-202611210442-MWJT57 --commit e3d2e79973400c998e188721b502229f2674e1e0
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
 - risks: none
 
 <!-- END VERIFICATION RESULTS -->
