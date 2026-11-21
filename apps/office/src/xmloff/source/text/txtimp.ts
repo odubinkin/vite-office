@@ -24,7 +24,7 @@ import { XMLTextFrameContext } from "./XMLTextFrameContext";
 import { XMLTextListBlockContext } from "./XMLTextListBlockContext";
 
 /** Native text import locations represented by the current body/table slice. */
-export type XMLTextType = "Body" | "Cell" | "TextBox" | "HeaderFooter";
+export type XMLTextType = "Body" | "Cell" | "TextBox" | "HeaderFooter" | "Annotation";
 
 /** One native named style application and the direct properties from its enclosing span. */
 export interface XMLCharacterStyleLayer {
@@ -87,6 +87,7 @@ export class XMLTextImportHelper {
   private start: XMLTextRange | undefined;
   private applyParagraph: ((cursor: XMLTextCursor) => void) | undefined;
   private hints: TextImportHint[] = [];
+  private annotationDepth = 0;
   private readonly annotations = new Map<string, XMLAnnotationTextContent>();
   private readonly bookmarkStarts = new Map<
     string,
@@ -125,6 +126,23 @@ export class XMLTextImportHelper {
     this.hints = saved.hints;
     this.lists.PopListContext();
   }
+  /** Suspends the containing text while the annotation TextRange owns the active cursor. @param cursor - Annotation text cursor. @returns Nothing. */
+  public PushAnnotationCursor(cursor: XMLTextCursor): void {
+    this.PushTextFrameCursor(cursor);
+    this.annotationDepth++;
+  }
+
+  /** Restores the containing text after the annotation is parsed. @returns Nothing. */
+  public PopAnnotationCursor(): void {
+    this.PopTextFrameCursor();
+    this.annotationDepth--;
+  }
+
+  /** Determines whether direct EditEngine range properties are in use. @returns Whether the cursor is in annotation text. */
+  public IsAnnotationText(): boolean {
+    return this.annotationDepth > 0;
+  }
+
   /** Borrows the current native text cursor. @returns Active cursor. */
   public GetCursor(): XMLTextCursor {
     if (!this.cursor) throw new RuntimeException();
@@ -137,6 +155,7 @@ export class XMLTextImportHelper {
   /** Releases import-owned cursor and hint positions after stream completion or failure. @returns Nothing. */
   public ResetCursor(): void {
     this.cellParaStyleDefault = "";
+    this.annotationDepth = 0;
     while (this.frameContexts.length !== 0) this.PopTextFrameCursor();
     this.ClearCursor();
     for (const start of this.bookmarkStarts.values()) start.range.dispose();
@@ -175,10 +194,18 @@ export class XMLTextImportHelper {
       /** Executes this bounded native operation. @param cursor - Native operation input. @returns Native operation result. */ (
         cursor,
       ) => {
-        this.ApplyCellParaStyle(cursor, cellStyle);
-        this.SetStyleAndAttrs(cursor, style, list, forceListRule, applyStyle || !cellStyle);
-        applyTextImportProperties(cursor, properties, paragraph, alignment, left);
-        if (markerProperties) {
+        if (!this.IsAnnotationText()) {
+          this.ApplyCellParaStyle(cursor, cellStyle);
+          this.SetStyleAndAttrs(cursor, style, list, forceListRule, applyStyle || !cellStyle);
+        }
+        applyTextImportProperties(
+          cursor.getParagraphPropertySet?.() ?? cursor,
+          properties,
+          paragraph,
+          alignment,
+          left,
+        );
+        if (markerProperties && !this.IsAnnotationText()) {
           const name = xmlTextString("CharacterStyles");
           try {
             const family = this.model.getAutoStyles().getByName(name);
@@ -314,6 +341,10 @@ export class XMLTextImportHelper {
         const range = text.createTextCursorByRange(hint.start);
         try {
           range.gotoRange(hint.end, true);
+          if (this.IsAnnotationText()) {
+            applyTextImportProperties(range, hint.properties);
+            continue;
+          }
           const familyName = xmlTextString("CharacterStyles");
           try {
             const family = this.model.getAutoStyles().getByName(familyName);
@@ -359,22 +390,26 @@ export class XMLTextImportHelper {
       this.applyParagraph = undefined;
     }
   }
-  /** Creates and inserts the original UNO Annotation service. @param name - ODF annotation name. @param prepare - Metadata and content publication. @returns Nothing. */
-  public InsertAnnotation(name: string, prepare: (field: XMLNamedTextContent) => void): void {
+  /** Creates a detached Annotation field before importing its content. @param name - ODF annotation name. @returns Native descriptor. */
+  public CreateAnnotation(name: string): XMLAnnotationTextContent {
     const service = xmlTextString("com.sun.star.text.TextField.Annotation");
     const key = xmlTextString(name);
     try {
       const field = this.model.createInstance(service) as XMLAnnotationTextContent;
       field.setName(key);
-      prepare(field);
-      const cursor = this.GetCursor();
-      cursor.getText().insertTextContent(cursor, field, false);
-      this.MovePastAnnotation(cursor, field);
-      if (name) this.annotations.set(name, field);
+      return field;
     } finally {
       service.dispose();
       key.dispose();
     }
+  }
+
+  /** Inserts a prepared Annotation field at the current body cursor. @param name - ODF annotation name. @param field - Prepared descriptor. @returns Nothing. */
+  public InsertAnnotation(name: string, field: XMLAnnotationTextContent): void {
+    const cursor = this.GetCursor();
+    cursor.getText().insertTextContent(cursor, field, false);
+    this.MovePastAnnotation(cursor, field);
+    if (name) this.annotations.set(name, field);
   }
 
   /** Reattaches a named annotation to the range ending at the active text cursor. @param name - ODF annotation name. @returns Nothing. */
@@ -515,6 +550,7 @@ export class XMLTextImportHelper {
   ): SvXMLImportContext | null {
     if (element === XMLToken.TEXT_P || element === XMLToken.TEXT_H)
       return new XMLParaContext(this.target, element, attributes);
+    if (type === "Annotation") return null;
     if (element === XMLToken.TEXT_LIST)
       return new XMLTextListBlockContext(this.target, attributes, this.lists);
     if (element === XMLToken.TABLE_TABLE) {

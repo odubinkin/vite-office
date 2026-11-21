@@ -19,6 +19,7 @@ export interface XMLTextRange {
 }
 /** Consumed XTextCursor/XParagraphCursor contract. */
 export interface XMLTextCursor extends XMLTextRange, XMLPropertySet {
+  getParagraphPropertySet?(): XMLPropertySet;
   createEnumeration(): {
     hasMoreElements(): boolean;
     nextElement(): { dispose(): void };
@@ -47,6 +48,7 @@ export interface XMLNamedTextContent {
 /** Text field attachment surface consumed by annotation ranges. */
 export interface XMLAnnotationTextContent extends XMLNamedTextContent {
   getAnchor(): XMLTextRange;
+  getTextRange(): XMLText;
 }
 /** Borrowed style service with the original parent/follow/property ownership. */
 export interface XMLStyle extends XMLPropertySet {

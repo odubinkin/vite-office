@@ -5,9 +5,15 @@ import {
   EE_FEATURE_START,
   EE_FEATURE_TAB,
   EE_PARA_JUST,
+  EE_PARA_SBL,
+  EE_PARA_TABS,
+  EE_PARA_ULSPACE,
 } from "../../../../editeng/inc/eeitem";
 import { SvxAdjust, SvxAdjustItem } from "../../../../editeng/inc/adjustitem";
 import { SvxColorItem } from "../../../../editeng/inc/colritem";
+import { SvxLineSpacingItem } from "../../../../editeng/inc/lspcitem";
+import { SvxTabStopItem } from "../../../../editeng/inc/tstpitem";
+import { SvxULSpaceItem } from "../../../../editeng/inc/ulspitem";
 import type { Section } from "../../../../editeng/inc/section";
 import type { EditTextObject } from "../../../../editeng/source/editeng/editobj";
 import { SvxBrushItem } from "../../../../editeng/source/items/frmitems.brush";
@@ -33,6 +39,11 @@ import { SwTextField } from "../../../inc/txtfld";
 import { getWriterAnnotationItemWhich } from "../../core/fields/textapi";
 import type { SwDoc } from "../../core/doc/doc";
 import { getCharacterProperties } from "./xmlexp-character";
+import {
+  exportParagraphLineSpacing,
+  exportParagraphTabStops,
+  exportParagraphVerticalMargins,
+} from "./xmlexpit";
 import { getParagraphOdfStyleName } from "./xmlexp-style-names";
 import { AnnotationMark } from "../../core/crsr/annotationmark";
 import { SwBookmark } from "../../core/doc/docbm";
@@ -231,12 +242,23 @@ function projectAnnotationText(
       const justify = paragraph.GetItemIfSet(EE_PARA_JUST, false);
       const native = justify instanceof SvxAdjustItem ? justify.GetAdjust() : undefined;
       const alignment = native === undefined ? undefined : annotationAlignment.get(native);
+      const spacing = paragraph.GetItemIfSet(EE_PARA_ULSPACE, false);
+      const line = paragraph.GetItemIfSet(EE_PARA_SBL, false);
+      const tabs = paragraph.GetItemIfSet(EE_PARA_TABS, false);
+      const paragraphProperties = {
+        ...(spacing instanceof SvxULSpaceItem ? exportParagraphVerticalMargins(spacing) : {}),
+        ...(line instanceof SvxLineSpacingItem ? exportParagraphLineSpacing(line) : {}),
+        ...(tabs instanceof SvxTabStopItem
+          ? { tabStopDetails: exportParagraphTabStops(tabs) }
+          : {}),
+      };
       const collection = style ? document.FindTextFormatColl(style) : undefined;
       result.push({
         style: collection ? style : "default",
-        ...(collection ? { styleName: getParagraphOdfStyleName(document, style) } : {}),
+        styleName: collection ? getParagraphOdfStyleName(document, style) : "",
         runs,
         ...(alignment === undefined ? {} : { alignment }),
+        ...(Object.keys(paragraphProperties).length ? { paragraphProperties } : {}),
         ...(properties ? { properties, inheritedProperties: properties } : {}),
       });
     } finally {

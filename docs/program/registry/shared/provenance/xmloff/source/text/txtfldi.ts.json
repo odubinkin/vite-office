@@ -28,13 +28,14 @@
     },
     "upstreamPath": "xmloff/source/text/txtfldi.cxx",
     "upstreamSymbols": [
+      "XMLAnnotationImportContext::createFastChildContext",
       "XMLAnnotationImportContext::endFastElement"
     ],
     "preservedResponsibilities": [
-      "Imports the represented annotation metadata and plain paragraphs and completes its named text range."
+      "Imports annotation metadata, delegates editable text to the shared paragraph importer using the annotation TextRange cursor, and completes named annotation ranges."
     ],
     "omittedResponsibilities": [
-      "Only the represented annotation/marker path is implemented. Complete UNO services and unsupported rich comment formatting remain outside this mapping."
+      "Uses a typed TextRange operation over the represented EditEngine cursors. Annotation hyperlinks, lists and the complete UNO service surface remain outside this mapping."
     ]
   }
 }

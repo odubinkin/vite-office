@@ -2,22 +2,26 @@
 import { readFileSync } from "node:fs";
 import { expect, it } from "vitest";
 import { CH_FEATURE } from "../../../../editeng/inc/editattr";
+import type { EECharAttrib } from "../../../../editeng/inc/editdata";
 import { TextRotation } from "../../../../editeng/inc/editobj";
 import {
+  EE_CHAR_BKGCOLOR,
   EE_CHAR_COLOR,
   EE_CHAR_UNDERLINE,
   EE_CHAR_WEIGHT,
   EE_FEATURE_LINEBR,
   EE_FEATURE_TAB,
   EE_PARA_JUST,
+  EE_PARA_ULSPACE,
 } from "../../../../editeng/inc/eeitem";
 import { EditTextObjectImpl } from "../../../../editeng/source/editeng/editobj.owner";
 import { SvxAdjust } from "../../../../editeng/inc/svxenum";
 import { SvxColorItem } from "../../../../editeng/inc/colritem";
 import { SvxUnderlineItem } from "../../../../editeng/source/items/textitem";
 import { SvxAdjustItem } from "../../../../editeng/inc/adjustitem";
+import { SvxULSpaceItem } from "../../../../editeng/inc/ulspitem";
 import { SvxWeightItem } from "../../../../editeng/inc/wghtitem";
-import { unicode } from "../../../../i18nlangtag/source/isolang/isolang.tables";
+import { text, unicode } from "../../../../i18nlangtag/source/isolang/isolang.tables";
 import { SvtScriptType } from "../../../../svl/inc/languageoptions";
 import { SfxStyleFamily } from "../../../../svl/inc/style-values";
 import { SfxVoidItem } from "../../../../svl/source/items/voiditem";
@@ -112,6 +116,11 @@ it("transports native annotation editor text through the ODT Worker record", /**
     paragraph.SetStyle(style);
     paragraph.SetFamily(SfxStyleFamily.Para);
     paragraph.GetParaAttribs().Put(new SvxAdjustItem(SvxAdjust.Center, EE_PARA_JUST), true);
+    const spacing = new SvxULSpaceItem(EE_PARA_ULSPACE);
+    spacing.SetUpper(160);
+    spacing.SetLower(120);
+    spacing.SetContextValue(true);
+    paragraph.GetParaAttribs().Put(spacing, true);
     const underline = new SvxUnderlineItem(FontLineStyle.LINESTYLE_SINGLE, EE_CHAR_UNDERLINE);
     underline.SetColor(new Color(221, 0, 73));
     paragraph
@@ -120,6 +129,7 @@ it("transports native annotation editor text through the ODT Worker record", /**
         rich.CreateAttrib(new SvxColorItem(new Color(40, 90, 200), EE_CHAR_COLOR), 0, 3),
         rich.CreateAttrib(new SvxWeightItem(FontWeight.WEIGHT_BOLD, EE_CHAR_WEIGHT), 1, 3),
         rich.CreateAttrib(underline, 1, 3),
+        rich.CreateAttrib(new SvxColorItem(new Color(255, 223, 97), EE_CHAR_BKGCOLOR), 1, 3),
         rich.CreateAttrib(new SfxVoidItem(EE_FEATURE_TAB), 3, 4),
         rich.CreateAttrib(new SfxVoidItem(EE_FEATURE_LINEBR), 5, 6),
       );
@@ -142,12 +152,52 @@ it("transports native annotation editor text through the ODT Worker record", /**
     expect(annotation).toMatch(/<text:p text:style-name="P\d+">/u);
     expect(annotation).toMatch(/<text:span text:style-name="T\d+">😀<\/text:span>/u);
     expect(annotation).toContain("<text:tab/>B<text:line-break/>C");
-    expect(annotation).toMatch(/<text:p text:style-name="[^"]+"><\/text:p>/u);
+    expect(annotation).toMatch(/<text:p(?: text:style-name="[^"]+")?><\/text:p>/u);
     expect(xml).toContain('fo:text-align="center"');
+    expect(xml).toContain('style:contextual-spacing="true"');
     expect(xml).toContain('fo:font-weight="bold"');
     expect(xml).toContain('fo:color="#285ac8"');
     expect(xml).toContain('style:text-underline-color="#dd0049"');
+    expect(xml).toContain('fo:background-color="#ffdf61"');
     expect(xml).not.toContain(feature);
+
+    const reopened = await readOdtDocument(bytes, { title: "Rich comments" });
+    const reopenedRecord = createOdtWriterTransfer(reopened.document).graph.annotations?.[0];
+    expect(reopenedRecord?.text).toBe("A😀\tB\nC\n");
+    const reopenedField =
+      reopenedRecord && SwPostItFieldType.Get(reopened.document).FindField(reopenedRecord.id);
+    const reopenedText = reopenedField?.GetTextObject();
+    expect(reopenedText?.GetParagraphCount()).toBe(2);
+    const first = reopenedText?.GetText(0);
+    if (!first) throw new Error("Missing native annotation paragraph.");
+    try {
+      expect(text(first)).toBe(`A😀${feature}B${feature}C`);
+    } finally {
+      first.dispose();
+    }
+    const spans: EECharAttrib[] = [];
+    reopenedText?.GetCharAttribs(0, spans);
+    const background = spans.find(
+      /** Locates the native imported background over the styled range. @param span - Note attribute. @returns Whether this is the background. */
+      (span) => span.pAttr?.Which() === EE_CHAR_BKGCOLOR,
+    );
+    expect(background?.pAttr).toBeInstanceOf(SvxColorItem);
+    expect((background?.pAttr as SvxColorItem).GetValue().toUInt32()).toBe(0xffdf61);
+    expect(spans).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({ nStart: 1, nEnd: 3, pAttr: expect.any(SvxWeightItem) }),
+        expect.objectContaining({ nStart: 1, nEnd: 3, pAttr: expect.any(SvxUnderlineItem) }),
+        expect.objectContaining({ nStart: 3, nEnd: 4, pAttr: expect.any(SfxVoidItem) }),
+        expect.objectContaining({ nStart: 5, nEnd: 6, pAttr: expect.any(SfxVoidItem) }),
+      ]),
+    );
+    expect(
+      (
+        reopenedText?.GetParaAttribs(0).GetItemIfSet(EE_PARA_JUST, false) as SvxAdjustItem
+      ).GetAdjust(),
+    ).toBe(SvxAdjust.Center);
+    const reopenedSpacing = reopenedText?.GetParaAttribs(0).GetItemIfSet(EE_PARA_ULSPACE, false);
+    expect(reopenedSpacing?.equals(spacing)).toBe(true);
   } finally {
     empty.dispose();
     style.dispose();

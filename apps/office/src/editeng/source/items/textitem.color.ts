@@ -6,8 +6,8 @@ import {
   createXComplexColor,
   getFromXComplexColor,
 } from "../../../docmodel/inc/uno/UnoComplexColor";
-import { MID_COLOR_ALPHA, MID_COMPLEX_COLOR } from "../../inc/memberids";
-import { SfxPoolItem } from "../../../svl/source/items/poolitem";
+import { MID_COLOR_ALPHA, MID_COMPLEX_COLOR, MID_GRAPHIC_TRANSPARENT } from "../../inc/memberids";
+import { Any2Bool, SfxPoolItem } from "../../../svl/inc/poolitem";
 import type { SfxItemPool } from "../../../svl/source/items/itempool";
 import { Color, COL_BLACK, extractColor, insertColor } from "../../../tools/inc/color";
 import { ComplexColor } from "../../../docmodel/inc/color/ComplexColor";
@@ -103,6 +103,7 @@ export class SvxColorItem extends SfxPoolItem {
     const id = member & 0x7f;
     if (id === MID_COLOR_ALPHA)
       value.insert([Math.round(((255 - this.maColor.GetAlpha()) * 100) / 255)], "sal_Int16");
+    else if (id === MID_GRAPHIC_TRANSPARENT) value.insert([this.maColor.GetAlpha() === 0], "bool");
     else if (id !== MID_COMPLEX_COLOR) insertColor(value, this.maColor);
     else {
       const reference = createXComplexColor(this.maComplexColor);
@@ -125,6 +126,10 @@ export class SvxColorItem extends SfxPoolItem {
       const scaled = (transparency[0] * 255) / 100;
       const rounded = Math.sign(scaled) * Math.round(Math.abs(scaled));
       this.maColor.SetAlpha(255 - (rounded & 0xff));
+      return true;
+    }
+    if (id === MID_GRAPHIC_TRANSPARENT) {
+      this.maColor.SetAlpha(Any2Bool(value) ? 0 : 255);
       return true;
     }
     if (id !== MID_COMPLEX_COLOR) return extractColor(value, this.maColor);

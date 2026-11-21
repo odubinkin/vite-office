@@ -163,12 +163,18 @@ export class XMLParaContext extends SvXMLImportContext {
     const parent = automatic ? automatic.parentStyleName : name;
     this.paragraph = target.GetTextImport();
     const marker = attributes.get(XMLToken.LOEXT_MARKER_STYLE_NAME);
+    const annotation = this.paragraph.IsAnnotationText();
+    const noteStyle = annotation && automatic && !automatic.parentStyleName ? automatic : undefined;
     this.paragraph.BeginParagraph(
       resolved.style,
-      resolved.alignment,
-      resolved.leftMargin,
-      resolved.paragraphProperties,
-      resolved.properties,
+      noteStyle ? noteStyle.alignment : resolved.alignment,
+      noteStyle ? noteStyle.leftMargin : resolved.leftMargin,
+      noteStyle ? noteStyle.paragraphProperties : resolved.paragraphProperties,
+      noteStyle
+        ? noteStyle.properties
+        : annotation
+          ? resolved.effectiveProperties
+          : resolved.properties,
       list,
       resolved.listGeometryWins === true,
       resolved.forceListRule,
@@ -324,15 +330,17 @@ function createInlineContext(
   allowHyperlink = true,
   namedStyles: readonly XMLCharacterStyleLayer[] = [],
 ): SvXMLImportContext | null {
+  const annotation = paragraph.IsAnnotationText();
   if (element === XMLToken.OFFICE_ANNOTATION || element === XMLToken.OFFICE_ANNOTATION_END)
-    return new XMLAnnotationImportContext(paragraph);
-  if (element === XMLToken.DRAW_FRAME) return paragraph.CreateTextFrameContext(attributes);
+    return annotation ? null : new XMLAnnotationImportContext(paragraph);
+  if (element === XMLToken.DRAW_FRAME)
+    return annotation ? null : paragraph.CreateTextFrameContext(attributes);
   if (element === XMLToken.TEXT_SPAN) {
     attributes.assertOnly([XMLToken.TEXT_STYLE_NAME], "span");
     const name = attributes.get(XMLToken.TEXT_STYLE_NAME) ?? "";
     const automatic = name ? target.getAutoStyle("text", name) : undefined;
     const common = automatic ? automatic.parentStyleName : name;
-    const style = common ? target.resolveNamedCharacterStyle?.(common) : undefined;
+    const style = common && !annotation ? target.resolveNamedCharacterStyle?.(common) : undefined;
     if (style !== undefined) {
       return new XMLSpanContext(
         target,
@@ -370,7 +378,7 @@ function createInlineContext(
     element === XMLToken.TEXT_BOOKMARK_START ||
     element === XMLToken.TEXT_BOOKMARK_END
   )
-    return new XMLTextMarkImportContext(paragraph);
+    return annotation ? null : new XMLTextMarkImportContext(paragraph);
   if (element === XMLToken.TEXT_SOFT_PAGE_BREAK) {
     attributes.assertOnly([], "soft page break");
     // Native text import ignores pagination hints; these are produced by layout on export.

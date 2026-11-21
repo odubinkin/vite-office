@@ -20,15 +20,17 @@
         "apps/office/src/sw/browser/presentation/WriterCommentsSidebar.test.tsx",
         "vendor/libreoffice-reference/sw/source/core/fields/textapi.cxx"
       ],
-      "justification": "Owns no-view EditEngine paragraphs for annotation text, reusing native edit operations and the corresponding Writer text attribute identities.",
+      "justification": "Owns annotation TextRange cursors and native EditEngine text and property operations shared by Writer comment import and editing.",
       "knownViolations": [],
       "localSymbols": [
-        "SwTextAPIEditSource"
+        "SwTextAPIEditSource",
+        "SwTextAPIObject"
       ],
       "sourceResponsibility": "aligned",
       "upstreamFile": "sw/source/core/fields/textapi.cxx",
       "upstreamSymbols": [
-        "SwTextAPIEditSource"
+        "SwTextAPIEditSource",
+        "SwTextAPIObject"
       ]
     }
   }

@@ -38,7 +38,6 @@ import {
 } from "../../../inc/hintids";
 import { getCharacterProperties, projectXmlTextRuns } from "./xmlexp-character";
 export { getCharacterProperties } from "./xmlexp-character";
-import { projectWriterLineSpacing } from "../../core/text/itrform2";
 import { sw_GetTableBoxColStr } from "../../core/table/swtable";
 import { SwXMLTableLines } from "./xmltble";
 import { VertOrientation } from "../../../../offapi/com/sun/star/text/VertOrientation";
@@ -47,7 +46,9 @@ import {
   exportFrameVisualProperties,
   exportPageLayoutBox,
   exportPageWritingAndGrid,
+  exportParagraphLineSpacing,
   exportParagraphTabStops,
+  exportParagraphVerticalMargins,
   XMLPageBackgroundExport,
 } from "./xmlexpit";
 import { HoriOrientation } from "../../../../offapi/com/sun/star/text/HoriOrientation";
@@ -897,24 +898,8 @@ function getParagraphProperties(set: SfxItemSet | undefined): OdfParagraphProper
         }
       : {}),
     ...(right instanceof SvxRightMarginItem ? { rightMargin: right.ResolveRight() } : {}),
-    ...(spacing instanceof SvxULSpaceItem
-      ? {
-          upperSpacing: spacing.GetUpper(),
-          lowerSpacing: spacing.GetLower(),
-          contextualSpacing: spacing.GetContext(),
-        }
-      : {}),
-    ...(lineSpacing instanceof SvxLineSpacingItem
-      ? {
-          ...(projectWriterLineSpacing(lineSpacing).mode === "proportional"
-            ? { lineHeightPercent: projectWriterLineSpacing(lineSpacing).value }
-            : projectWriterLineSpacing(lineSpacing).mode === "fixed"
-              ? { lineHeightTwips: projectWriterLineSpacing(lineSpacing).value }
-              : projectWriterLineSpacing(lineSpacing).mode === "minimum"
-                ? { lineHeightAtLeastTwips: projectWriterLineSpacing(lineSpacing).value }
-                : { lineSpacingTwips: projectWriterLineSpacing(lineSpacing).value }),
-        }
-      : {}),
+    ...(spacing instanceof SvxULSpaceItem ? exportParagraphVerticalMargins(spacing) : {}),
+    ...(lineSpacing instanceof SvxLineSpacingItem ? exportParagraphLineSpacing(lineSpacing) : {}),
     ...(tabStop instanceof SvxTabStopItem
       ? {
           tabStopDetails: exportParagraphTabStops(tabStop),

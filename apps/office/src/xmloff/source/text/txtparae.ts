@@ -265,7 +265,7 @@ export class XMLTextParagraphExport {
         const [style, alignment, leftMargin, paraKey, charKey, listRule, directRule] = JSON.parse(
           key,
         ) as StyleKey;
-        const parent = escapeXml(style);
+        const parent = style ? ` style:parent-style-name="${escapeXml(style)}"` : "";
         const paragraphAttributes = [
           ...(alignment === "" ? [] : [`fo:text-align="${exportAlignment(alignment)}"`]),
           ...(leftMargin === "" ? [] : [`fo:margin-left="${exportOdfLength(Number(leftMargin))}"`]),
@@ -292,7 +292,7 @@ export class XMLTextParagraphExport {
           if (listStyle === undefined) throw new Error(`Missing ODF list style: ${listRule}`);
           const baseName = `${name}Base`;
           namedStyles.push(
-            `<style:style style:name="${baseName}" style:family="paragraph" style:parent-style-name="${parent}"${masterPage}>${paragraphProperties}${textProperties}</style:style>`,
+            `<style:style style:name="${baseName}" style:family="paragraph"${parent}${masterPage}>${paragraphProperties}${textProperties}</style:style>`,
           );
           return `<style:style style:name="${name}" style:family="paragraph" style:parent-style-name="${baseName}" style:list-style-name="${listStyle}"/>`;
         }
@@ -301,7 +301,7 @@ export class XMLTextParagraphExport {
           throw new Error(`Missing ODF direct list style: ${directRule}`);
         const numbering =
           directNumbering === undefined ? "" : ` style:list-style-name="${directNumbering}"`;
-        return `<style:style style:name="${name}" style:family="paragraph" style:parent-style-name="${parent}"${numbering}${masterPage}>${paragraphProperties}${textProperties}</style:style>`;
+        return `<style:style style:name="${name}" style:family="paragraph"${parent}${numbering}${masterPage}>${paragraphProperties}${textProperties}</style:style>`;
       },
     );
     const characterStyles = [...characterStyleNames].map(
@@ -603,9 +603,10 @@ function exportParagraphElement(
     paragraph.markerProperties &&
     characterStyleNames.get(characterPropertiesKey(paragraph.markerProperties));
   const marker = markerStyle ? ` loext:marker-style-name="${markerStyle}"` : "";
+  const style = styleName ? ` text:style-name="${escapeXml(styleName)}"` : "";
   return paragraph.style === "heading-1"
-    ? `<text:h text:outline-level="1" text:style-name="${escapeXml(styleName)}"${marker}>${content}</text:h>`
-    : `<text:p text:style-name="${escapeXml(styleName)}"${marker}>${content}</text:p>`;
+    ? `<text:h text:outline-level="1"${style}${marker}>${content}</text:h>`
+    : `<text:p${style}${marker}>${content}</text:p>`;
 }
 
 /** Emits one zero-width Writer marker. @param marker - Canonical position. @param renderFrame - Native frame body exporter. @param exportAnnotationParagraph - Shared annotation paragraph serializer. @returns ODF element. */

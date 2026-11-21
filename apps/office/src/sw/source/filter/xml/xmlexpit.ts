@@ -8,7 +8,10 @@ import {
 import { XMLShadowPropHdl } from "../../../../xmloff/source/style/shadwhdl";
 import type { SwFrameFormat } from "../../core/layout/atrfrm";
 import { SvxTabAdjust, type SvxTabStopItem } from "../../../../editeng/inc/tstpitem";
-import type { OdfTabStop } from "../../../../xmloff/source/text/txtparae";
+import type { SvxLineSpacingItem } from "../../../../editeng/inc/lspcitem";
+import type { SvxULSpaceItem } from "../../../../editeng/inc/ulspitem";
+import { projectWriterLineSpacing } from "../../core/text/itrform2";
+import type { OdfParagraphProperties, OdfTabStop } from "../../../../xmloff/source/text/txtparae";
 import { SvxBoxItem } from "../../../../editeng/source/items/frmitems";
 import { BitmapMode } from "../../../../offapi/com/sun/star/drawing/BitmapMode";
 import { FillStyle } from "../../../../offapi/com/sun/star/drawing/FillStyle";
@@ -273,4 +276,28 @@ export function exportParagraphTabStops(item: SvxTabStopItem): OdfTabStop[] {
     });
   }
   return stops;
+}
+
+/** Projects vertical paragraph spacing shared by body and annotation paragraphs. @param spacing - Native upper/lower spacing item. @returns ODF spacing properties. */
+export function exportParagraphVerticalMargins(spacing: SvxULSpaceItem): OdfParagraphProperties {
+  return {
+    upperSpacing: spacing.GetUpper(),
+    lowerSpacing: spacing.GetLower(),
+    contextualSpacing: spacing.GetContext(),
+  };
+}
+
+/** Projects the native line spacing mode and its independent value. @param item - Native line spacing item. @returns ODF property for the active mode. */
+export function exportParagraphLineSpacing(item: SvxLineSpacingItem): OdfParagraphProperties {
+  const { mode, value } = projectWriterLineSpacing(item);
+  switch (mode) {
+    case "proportional":
+      return { lineHeightPercent: value };
+    case "fixed":
+      return { lineHeightTwips: value };
+    case "minimum":
+      return { lineHeightAtLeastTwips: value };
+    case "leading":
+      return { lineSpacingTwips: value };
+  }
 }

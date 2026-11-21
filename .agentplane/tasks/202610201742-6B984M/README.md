@@ -4,7 +4,7 @@ title: "Implement Writer search and replace core and browser UI"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 88
+revision: 89
 origin:
   system: "manual"
 depends_on:
@@ -259,6 +259,9 @@ comments:
   -
     author: "CODER"
     body: "Verified intermediate ODT export checkpoint. Writer now projects annotation EditEngine text sections through the shared paragraph and automatic-style export passes, corresponding to the pinned txtflde.cxx TextRange collection and export calls. ODT output preserves represented inline formatting, paragraph alignment, tabs, soft line breaks and empty paragraphs. The browser comment editor now uses the Writer text edit source and shared DocumentImpEditEngine deletion logic. The pinned ODT fixture with a formatted native comment passes Writer Worker equality and content.xml assertions. Targeted Writer and shared runs each passed 29 tests; Writer resource suite passed 2. Production build, dependencies, source-tree, provenance, routing, doctor, scoped lint and format, and diff checks passed. Repo-wide documentation and size checks found only pre-existing problems outside these changes. Rich ODT re-import and browser formatting presentation remain pending. This is a checkpoint rather than task closure, and the ten-task full-run count is unchanged."
+  -
+    author: "CODER"
+    body: "Verified intermediate Writer annotation import checkpoint. The shared ODT paragraph parser switches to the detached annotation TextRange cursor, inserts text and structural controls into native EditEngine, applies represented item members, removes the parser's trailing separator and restores the containing cursor before the ordinary annotation attachment. The pinned annotation fixture verifies stable range and graph transport. Save/reopen verifies native UTF-16 spans, bold, underline, background color, centered alignment, vertical spacing, tab and line-break items and trailing empty paragraph. Shared export projects the represented paragraph spacing properties. The native SvxColorItem now owns MID_GRAPHIC_TRANSPARENT according to pinned textitem.cxx. Final focused runs passed 42 Writer and 34 shared tests plus 2 resource tests. Build, dependencies, source tree, provenance, scoped ESLint and Prettier, routing, doctor and diff checks passed. Repository JSDoc and size checks report existing issues outside the changed files. Named formatting is resolved to represented values. Lists, hyperlinks and visible rich annotation editing remain pending. The task remains open and the ten-task cadence is unchanged."
 events:
   -
     type: "status"
@@ -632,8 +635,13 @@ events:
     at: "2026-11-21T17:32:44.547Z"
     author: "CODER"
     body: "Verified intermediate ODT export checkpoint. Writer now projects annotation EditEngine text sections through the shared paragraph and automatic-style export passes, corresponding to the pinned txtflde.cxx TextRange collection and export calls. ODT output preserves represented inline formatting, paragraph alignment, tabs, soft line breaks and empty paragraphs. The browser comment editor now uses the Writer text edit source and shared DocumentImpEditEngine deletion logic. The pinned ODT fixture with a formatted native comment passes Writer Worker equality and content.xml assertions. Targeted Writer and shared runs each passed 29 tests; Writer resource suite passed 2. Production build, dependencies, source-tree, provenance, routing, doctor, scoped lint and format, and diff checks passed. Repo-wide documentation and size checks found only pre-existing problems outside these changes. Rich ODT re-import and browser formatting presentation remain pending. This is a checkpoint rather than task closure, and the ten-task full-run count is unchanged."
+  -
+    type: "comment"
+    at: "2026-11-21T17:45:23.705Z"
+    author: "CODER"
+    body: "Verified intermediate Writer annotation import checkpoint. The shared ODT paragraph parser switches to the detached annotation TextRange cursor, inserts text and structural controls into native EditEngine, applies represented item members, removes the parser's trailing separator and restores the containing cursor before the ordinary annotation attachment. The pinned annotation fixture verifies stable range and graph transport. Save/reopen verifies native UTF-16 spans, bold, underline, background color, centered alignment, vertical spacing, tab and line-break items and trailing empty paragraph. Shared export projects the represented paragraph spacing properties. The native SvxColorItem now owns MID_GRAPHIC_TRANSPARENT according to pinned textitem.cxx. Final focused runs passed 42 Writer and 34 shared tests plus 2 resource tests. Build, dependencies, source tree, provenance, scoped ESLint and Prettier, routing, doctor and diff checks passed. Repository JSDoc and size checks report existing issues outside the changed files. Named formatting is resolved to represented values. Lists, hyperlinks and visible rich annotation editing remain pending. The task remains open and the ten-task cadence is unchanged."
 doc_version: 3
-doc_updated_at: "2026-11-21T17:32:44.547Z"
+doc_updated_at: "2026-11-21T17:45:23.705Z"
 doc_updated_by: "CODER"
 description: "Implement the approved coherent Writer search-and-replace feature from pinned LibreOffice sources: real shared search engine and options, native paragraph/cursor traversal and replacement/history contracts, view-owned search state and dispatch, Find toolbar and Find and Replace dialog with generated upstream command placement and shortcuts. Preserve source semantics and explicit unsupported boundaries; never substitute DOM text search or browser RegExp for ICU contracts. Work only on writer in vite-office-writer; local upstream reading approved, no network or merges. Keep active until approved scope is verified."
 sections:

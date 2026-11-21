@@ -9,8 +9,9 @@ import { DateTime } from "../../../../tools/source/datetime/datetime";
 import type { SwTextField } from "../../../inc/txtfld";
 import { SwPaM, SwPosition } from "../crsr/pam";
 import { SwPostItField, SwPostItFieldType, type SwPostItFieldData } from "../fields/docufld";
+import { SwTextAPIObject } from "../fields/textapi";
 import { SwXTextRange, type SwXTextOwner } from "./unoobj2";
-import { illegal, invalid, scalar, stringValue, text, unknown } from "./unocrsrhelper";
+import { illegal, invalid, scalar, stringValue, text, unicode, unknown } from "./unocrsrhelper";
 
 /** Implements the annotation service's descriptor and borrowed attached text field. */
 export class SwXTextField {
@@ -23,6 +24,26 @@ export class SwXTextField {
   };
   private hint: SwTextField | undefined;
   private parent: SwXTextOwner | undefined;
+  private textRange: SwTextAPIObject | undefined;
+
+  /** Supplies the original annotation TextRange text source. @returns Actual annotation text. */
+  getTextRange(): SwTextAPIObject {
+    if (!this.textRange) {
+      this.textRange = new SwTextAPIObject();
+      const field = this.hint?.GetAttr().GetField();
+      const object = field?.GetTextObject();
+      if (object) this.textRange.GetEditSource().SetText(object);
+      else {
+        const value = unicode(field?.GetPar2() ?? this.data.text);
+        try {
+          this.textRange.GetEditSource().SetText(value);
+        } finally {
+          value.dispose();
+        }
+      }
+    }
+    return this.textRange;
+  }
 
   /** Sets the annotation descriptor's native name. @param name - Field name. @returns Nothing. */
   setName(name: OUStringConstReference): void {
@@ -73,6 +94,20 @@ export class SwXTextField {
     const oldField = oldHint?.GetAttr().GetField();
     const value = oldField ?? new SwPostItField(SwPostItFieldType.Get(doc), this.data);
     try {
+      if (!oldField && this.textRange) {
+        const source = this.textRange.GetEditSource();
+        const plain = source.GetText();
+        const editText = source.CreateTextObject();
+        try {
+          value.SetPar2(text(plain));
+          value.SetTextObject(editText);
+        } finally {
+          editText.dispose();
+          plain.dispose();
+          this.textRange.dispose();
+          this.textRange = undefined;
+        }
+      }
       doc.RunModelTransaction(
         /** Attaches the current range and releases the earlier annotation point. @returns Nothing. */ () => {
           const format = doc
@@ -114,5 +149,7 @@ export class SwXTextField {
     if (hint) hint.GetTextNode()?.EraseText(hint.GetStart(), 1);
     this.hint = undefined;
     this.parent = undefined;
+    this.textRange?.dispose();
+    this.textRange = undefined;
   }
 }
