@@ -67,8 +67,7 @@ export function CalcSheetDialogs({
         <ScImportAsciiDlg
           key={pasteText.id}
           request={pasteText.request}
-          onAccept={(value) => sheetWorkflows.clipboard.dialogs.Complete(pasteText.id, value)}
-          onCancel={() => sheetWorkflows.clipboard.dialogs.Cancel(pasteText.id)}
+          onRespond={(value) => sheetWorkflows.clipboard.dialogs.Complete(pasteText.id, value)}
         />
       )}
       {pasteText?.request.kind === "special" && (

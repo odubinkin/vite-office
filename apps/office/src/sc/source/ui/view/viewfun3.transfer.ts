@@ -1,6 +1,4 @@
 /** @fileoverview Source Calc clipboard document and plain text transfer for scalar sheet selections. */
-import { SfxObjectShell } from "../../../../sfx2/source/doc/objsh";
-import { SvStream } from "../../../../tools/source/stream/stream";
 import { text } from "../../../../i18nlangtag/source/isolang/isolang.tables";
 import { ScAddress, ScRange } from "../../../inc/address";
 import { ScHorizontalCellIterator } from "../../../inc/dociter";
@@ -93,18 +91,13 @@ export function ExportClipboardText(clip: ScDocument, source: ScDocument): strin
   return rows.join("\n");
 }
 
-/** Supplies the source clipboard text-import options to the text importer. @param dialog - Clipboard text for interactive separator detection. @returns Default options. */
-export function ClipboardTextOptions(dialog?: string): ScAsciiOptions {
+/** Supplies the native clipboard defaults before the optional dialog. @param interactive - Whether to use the ClipboardTextImport dialog defaults. @returns Default options. */
+export function ClipboardTextOptions(interactive = false): ScAsciiOptions {
   const options = new ScAsciiOptions();
   options.aFieldSeps = "\t";
   options.bEvaluateFormulas = true;
-  options.bSkipEmptyCells = dialog !== undefined;
-  options.bDetectSpecialNumber = dialog !== undefined;
-  if (dialog) {
-    const stream = new SvStream(new TextEncoder().encode(dialog), options.eCharSet);
-    options.aFieldSeps =
-      SfxObjectShell.DetectCsvSeparators(stream, options.eCharSet, options.cTextSep) || "\t";
-  }
+  options.bSkipEmptyCells = interactive;
+  options.bDetectSpecialNumber = interactive;
   return options;
 }
 

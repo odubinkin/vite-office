@@ -300,6 +300,7 @@ export class CalcViewController {
   error = "";
   private readonly gridViewport = new CalcViewport();
   private revision = 0;
+  private commandStateRevision = 0;
   /** Borrows the measured browser projection. @returns Current grid viewport. */
   get viewport(): CalcGridViewport {
     return this.gridViewport.current;
@@ -345,6 +346,10 @@ export class CalcViewController {
   }
   readonly GetSnapshot =
     /** Stable React external-store snapshot. @returns Revision. */ (): number => this.revision;
+  /** Reads the command target revision without viewport-only changes. @returns Current command state revision. */
+  GetCommandStateRevision(): number {
+    return this.commandStateRevision;
+  }
   readonly Subscribe =
     /** Subscribes a platform presenter. @param listener - Invalidation listener. @returns Cleanup. */ (
       listener: () => void,
@@ -355,6 +360,11 @@ export class CalcViewController {
     };
   /** Publishes source/controller changes once per input operation. @param publishOrigin - Whether a scroll changed the view origin. @returns Nothing. */
   private Changed(publishOrigin = false): void {
+    this.commandStateRevision++;
+    this.PublishView(publishOrigin);
+  }
+  /** Updates the browser projection without modifying the command target. @param publishOrigin - Whether to store the browser scroll origin. @returns Nothing. */
+  private PublishView(publishOrigin = false): void {
     this.gridViewport.Update(this.viewData, publishOrigin);
     this.revision++;
     for (const listener of this.listeners) listener();
@@ -936,7 +946,7 @@ export class CalcViewController {
   /** Measures an attached or resized grid without publishing it as a user scroll. @param left - Horizontal pixels. @param top - Vertical pixels. @param width - Client width. @param height - Client height. @returns Nothing. */
   MeasureViewport(left: number, top: number, width: number, height: number): void {
     this.gridViewport.Measure(left, top, width, height);
-    this.Changed();
+    this.PublishView();
   }
   /** Routes wheel input to the relevant paired pane axes. @param left - Actual DOM horizontal offset. @param top - Actual DOM vertical offset. @param width - Client width. @param height - Client height. @param dx - Horizontal wheel delta. @param dy - Vertical wheel delta. @param leadingX - Pointer lies in the normal left band. @param leadingY - Pointer lies in the normal top band. @returns New trailing DOM offsets. */
   ScrollPaneWheel(
@@ -960,18 +970,18 @@ export class CalcViewController {
       leadingY ? 0 : dy,
     );
     this.gridViewport.Measure(offsets.left, offsets.top, width, height);
-    this.Changed(true);
+    this.PublishView(true);
     return offsets;
   }
   /** Scrolls the normal left and top axes by native logical pixels. @param dx - Left pane delta. @param dy - Top pane delta. @returns Nothing. */
   ScrollLeading(dx: number, dy: number): void {
     if (!dx && !dy) return;
     this.gridViewport.ScrollLeading(dx, dy);
-    this.Changed(true);
+    this.PublishView(true);
   }
   /** Publishes actual browser scrolling to the active view. @param left - Horizontal pixels. @param top - Vertical pixels. @param width - Client width. @param height - Client height. @returns Nothing. */
   Scroll(left: number, top: number, width: number, height: number): void {
-    this.Changed(this.gridViewport.Measure(left, top, width, height));
+    this.PublishView(this.gridViewport.Measure(left, top, width, height));
   }
   /** Projects a native column onto the browser scrollbar. @param column - First visible column. @param clientWidth - Measured width. @returns Physical offset. */
   ScrollLeftForColumn(column: number, clientWidth: number): number {

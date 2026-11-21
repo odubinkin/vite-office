@@ -9,7 +9,7 @@ import type { ScDocument } from "../../inc/document";
 import { scPasteResourcesEnglish } from "../../inc/globstr";
 import { ScMarkData } from "../../inc/markdata";
 import { InsertDeleteFlags, InsCellCmd, ScInputMode, ScPasteFunc } from "../../inc/global";
-import { ScAsciiOptions } from "../../source/ui/dbgui/asciiopt";
+import type { ScAsciiOptions } from "../../source/ui/dbgui/asciiopt";
 import { ScMarkType } from "../../source/ui/inc/viewdata";
 import {
   defaultPasteSpecial,
@@ -82,11 +82,31 @@ type PasteRequest =
   | { readonly kind: "unformatted" | "special" | "textImport" }
   | ({ readonly kind: "owned" } & OwnedPasteOptions);
 
+/** Native source separator selection, separate from the final filter option flags. */
+export type TextImportSeparatorMode = "detected" | "separated" | "fixed";
+
+/** ClipboardTextImport dialog settings saved on acceptance. */
+export interface PasteTextPreferences {
+  readonly mode: TextImportSeparatorMode;
+  readonly options: ScAsciiOptions;
+}
+
 /** Original Text Import dialog inputs for a text transfer. */
 export interface PasteTextRequest {
   readonly text: string;
-  readonly options: ScAsciiOptions;
+  readonly preferences: PasteTextPreferences;
+  readonly fixedSplits: readonly number[];
 }
+
+/** The ruler keeps its positions when the dialog closes, independently of the import decision. */
+export type PasteTextResult = { readonly fixedSplits: readonly number[] } & (
+  | { readonly accepted: false }
+  | {
+      readonly accepted: true;
+      readonly options: ScAsciiOptions;
+      readonly preferences: PasteTextPreferences;
+    }
+);
 
 /** Native clipboard confirmation before changing the sheet. */
 export type PasteConfirmation = "replace" | "larger";
@@ -108,10 +128,14 @@ export interface PasteConfirmationResult {
 export class CalcClipboardWorkflow {
   readonly dialogs = new SfxDialogController<
     PasteDialogRequest,
-    ScAsciiOptions | PasteConfirmationResult | ScInsertContentsResponse | ClipboardFormatChoice
+    PasteTextResult | PasteConfirmationResult | ScInsertContentsResponse | ClipboardFormatChoice
   >();
   private owned: OwnedTransfer | undefined;
-  private preferences: ScAsciiOptions | undefined;
+  private preferences: PasteTextPreferences = {
+    mode: "detected",
+    options: ClipboardTextOptions(true),
+  };
+  private fixedSplits: readonly number[] = [];
   private special = defaultPasteSpecial;
   private warnReplace = true;
   private closed = false;
@@ -321,7 +345,7 @@ export class CalcClipboardWorkflow {
     this.reading = true;
     const { controller } = this;
     const doc = controller.shell.GetDocument();
-    const revision = controller.GetSnapshot();
+    const revision = controller.GetCommandStateRevision();
     try {
       const transfer =
         (request.kind === "normal" ? request.transfer : undefined) ?? (await ReadSystemTransfer());
@@ -329,7 +353,7 @@ export class CalcClipboardWorkflow {
       const current = (): boolean =>
         !this.closed &&
         doc === controller.shell.GetDocument() &&
-        revision === controller.GetSnapshot();
+        revision === controller.GetCommandStateRevision();
       if (!current()) return false;
       const owned = this.owned;
       if (
@@ -364,22 +388,23 @@ export class CalcClipboardWorkflow {
       let options = ClipboardTextOptions();
       const newline = transfer.plainText.indexOf("\n");
       if (kind === "textImport" || (newline >= 0 && newline < transfer.plainText.length - 1)) {
-        options = this.preferences
-          ? new ScAsciiOptions(this.preferences)
-          : ClipboardTextOptions(transfer.plainText);
         const response = await this.dialogs.Request({
           kind: "text",
           text: transfer.plainText,
-          options,
+          preferences: this.preferences,
+          fixedSplits: this.fixedSplits,
         });
         if (
           response.kind !== "accepted" ||
-          !(response.result instanceof ScAsciiOptions) ||
+          typeof response.result !== "object" ||
+          !("fixedSplits" in response.result) ||
           !current()
         )
           return false;
-        options = response.result;
-        this.preferences = new ScAsciiOptions(options);
+        this.fixedSplits = response.result.fixedSplits;
+        if (!response.result.accepted) return false;
+        options = response.result.options;
+        this.preferences = response.result.preferences;
       }
       const imported = ImportClipboardText(doc, origin, transfer.plainText, options);
       if (!imported) return false;
