@@ -79,6 +79,7 @@ export function CalcWorkbench({
   const nameManager = useCalcDialog(sheetWorkflows.nameManagerDialogs);
   const createNames = useCalcDialog(sheetWorkflows.createNamesDialogs);
   const namePaste = useCalcDialog(sheetWorkflows.namePasteDialogs);
+  const optionsDialog = useCalcDialog(sheetWorkflows.options.dialogs);
   const labelRanges = useCalcDialog(sheetWorkflows.labelRanges.dialogs);
   const referenceDialog = printDialog ?? condEditor ?? nameDialog ?? nameManager ?? labelRanges;
   const printInput = useRef<ScPrintReferenceInput>(null);
@@ -116,7 +117,8 @@ export function CalcWorkbench({
     headerFooterDialog !== undefined ||
     condManager !== undefined ||
     namePaste !== undefined ||
-    createNames !== undefined;
+    createNames !== undefined ||
+    optionsDialog !== undefined;
   const root = useRef<HTMLElement>(null),
     tabs = useRef<HTMLDivElement>(null),
     previousModal = useRef(modal || referenceOpen),
@@ -966,6 +968,7 @@ export function CalcWorkbench({
           namePaste,
           createNames,
           labelRanges,
+          optionsDialog,
         }}
         referenceInput={printInput}
         onReference={(owner, range) => setReferenceSelection({ owner, range })}

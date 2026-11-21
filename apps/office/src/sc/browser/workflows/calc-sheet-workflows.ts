@@ -1,4 +1,5 @@
 /** @fileoverview Browser async adapter for native ScTabViewShell::ExecGoToTab and JumpToTable/Nr;real sheet/cursor ownership remains with Calc. */
+import { CalcOptionsWorkflow } from "./calc-options-workflow";
 import { CalcLabelRangeWorkflow } from "./calc-label-range-workflow";
 import { STD_COL_WIDTH, MAX_COL_WIDTH, MAX_ROW_HEIGHT, ScInputMode } from "../../inc/global";
 import { ScMetricInputDlg } from "../../source/ui/miscdlgs/mtrindlg";
@@ -118,6 +119,7 @@ export type CreateNamesResult = CreateNameFlags | Exclude<CreateNameAnswer, "can
 
 /** Session-owned native Go to Sheet request and asynchronous result application. */
 export class CalcSheetWorkflows {
+  readonly options: CalcOptionsWorkflow;
   readonly labelRanges: CalcLabelRangeWorkflow;
   readonly dialogs = new SfxDialogController<CalcGoToSheetRequest, string>();
   readonly tabDialogs = new SfxDialogController<CalcSheetTabDialog, number[] | string>();
@@ -138,6 +140,7 @@ export class CalcSheetWorkflows {
   private readonly shell: SfxShell;
   /** Connects a source command to the active document view. @param controller - Actual Calc controller. @returns Workflow. */
   constructor(readonly controller: CalcViewController) {
+    this.options = new CalcOptionsWorkflow(controller, () => !this.HasSheetDialog());
     this.conditionals = new CalcConditionalWorkflows(controller);
     this.labelRanges = new CalcLabelRangeWorkflow(this.controller);
     this.shell = createSfxShell(
@@ -611,6 +614,7 @@ export class CalcSheetWorkflows {
       this.namePasteDialogs.GetSnapshot() ||
       this.nameDialogs.GetSnapshot() ||
       this.labelRanges.dialogs.GetSnapshot() ||
+      this.options.dialogs.GetSnapshot() ||
       this.conditionals.IsOpen(),
     );
   }
@@ -960,6 +964,7 @@ export class CalcSheetWorkflows {
 
   /** Cancels the native async request before the session destroys its document. @returns Nothing. */
   Close(): void {
+    this.options.Close();
     this.conditionals.Close();
     this.labelRanges.Close();
     this.managing = undefined;

@@ -1,0 +1,37 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sc/source/ui/optdlg/tpformula.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "calc",
+    "subsystem": "document-calculation-config",
+    "capabilityIds": [
+      "CAP-6edf8b17-739a-4a36-8429-4560dc10f34c"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/sc/source/ui/optdlg/tpformula.ts",
+        "apps/office/src/sc/browser/presentation/calc-options.test.tsx",
+        "vendor/libreoffice-reference/sc/source/ui/optdlg/tpformula.cxx"
+      ],
+      "justification": "Stages formula grammar, English names, calculation configuration and write scope until the parent Options response.",
+      "knownViolations": [],
+      "localSymbols": [
+        "ScTpFormulaOptions"
+      ],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": "sc/source/ui/optdlg/tpformula.cxx",
+      "upstreamSymbols": [
+        "ScTpFormulaOptions::Reset",
+        "ScTpFormulaOptions::FillItemSet",
+        "ScTpFormulaOptions::LaunchCustomCalcSettings"
+      ]
+    }
+  }
+}

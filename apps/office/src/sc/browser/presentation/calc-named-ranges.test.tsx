@@ -283,8 +283,20 @@ it("ports tdf137617 Create Names defaults and named position text in Calc A1 and
   act(() => controller.Select(1, 1));
   expect(screen.getByRole("textbox", { name: "Name Box" })).toHaveValue("Result2");
 
+  /** Changes syntax through the original Options tree. @param value - Formula syntax choice. @returns Completion. */
+  async function setSyntax(value: string): Promise<void> {
+    fireEvent.click(screen.getByRole("menuitem", { name: "Tools" }));
+    fireEvent.click(screen.getByRole("menuitem", { name: /^Options/ }));
+    const options = within(screen.getByRole("dialog", { name: "Options" }));
+    fireEvent.click(options.getByRole("treeitem", { name: "Formula" }));
+    fireEvent.change(options.getByRole("combobox", { name: /Formula syntax/ }), {
+      target: { value },
+    });
+    await act(async () => fireEvent.click(options.getByRole("button", { name: "OK" })));
+  }
+  await setSyntax("2");
+  expect(document.GetGrammar()).toBe(FormulaGrammar.Grammar.GRAM_NATIVE_XL_R1C1);
   act(() => {
-    document.SetGrammar(FormulaGrammar.Grammar.GRAM_NATIVE_XL_R1C1);
     controller.Select(2, 0);
     controller.EnterString("Result3");
     controller.Select(3, 0);
@@ -313,6 +325,8 @@ it("ports tdf137617 Create Names defaults and named position text in Calc A1 and
     expect(accepted, controller.error).toBe(true);
   });
   expect(document.GetValue(new ScAddress(4, 0, 0))).toBe(13);
+  await setSyntax("0");
+  expect(document.GetGrammar()).toBe(FormulaGrammar.Grammar.GRAM_NATIVE);
 });
 
 it("creates names in edge order and stops at Cancel while preserving earlier accepted entries", async () => {

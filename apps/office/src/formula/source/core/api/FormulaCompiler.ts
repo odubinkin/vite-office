@@ -130,6 +130,8 @@ export class FormulaCompiler {
       this.meGrammar !== FormulaGrammar.Grammar.GRAM_ODFF &&
       this.meGrammar !== FormulaGrammar.Grammar.GRAM_ODFF_A1 &&
       this.meGrammar !== FormulaGrammar.Grammar.GRAM_NATIVE &&
+      this.meGrammar !== FormulaGrammar.Grammar.GRAM_NATIVE_XL_A1 &&
+      this.meGrammar !== FormulaGrammar.Grammar.GRAM_ENGLISH_XL_A1 &&
       this.meGrammar !== FormulaGrammar.Grammar.GRAM_NATIVE_XL_R1C1 &&
       this.meGrammar !== FormulaGrammar.Grammar.GRAM_ENGLISH_XL_R1C1 &&
       this.meGrammar !== FormulaGrammar.Grammar.GRAM_ENGLISH &&
@@ -183,7 +185,7 @@ export class FormulaCompiler {
         op === OpCode.ocSpaces ? " " : String.fromCharCode((token as FormulaSpaceToken).GetChar())
       ).repeat(byte);
     }
-    if (op === OpCode.ocPush || op === OpCode.ocMatRef) {
+    if (op === OpCode.ocPush || op === OpCode.ocMatRef || op === OpCode.ocColRowNameAuto) {
       if (token.GetType() === StackVar.svDouble)
         return doubleToString((token as FormulaDoubleToken).GetDouble());
       if (token.GetType() === StackVar.svString)
@@ -473,7 +475,7 @@ export class FormulaCompiler {
           : op === OpCode.ocPercentSign
             ? SvNumFormatType.PERCENT
             : SvNumFormatType.NUMBER;
-    if (op === OpCode.ocPush || op === OpCode.ocMatRef) {
+    if (op === OpCode.ocPush || op === OpCode.ocMatRef || op === OpCode.ocColRowNameAuto) {
       this.PutCode(this.mpToken);
       if (this.NextToken() === OpCode.ocOpen) this.SetError(FormulaError.OperatorExpected);
     } else if (op === OpCode.ocMissing) {

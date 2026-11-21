@@ -1,0 +1,45 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/sc/source/core/tool/interpr4.colrowname.ts",
+    "status": "mapped",
+    "localSymbols": [
+      "ScColRowNameAuto"
+    ],
+    "upstreamPath": "sc/source/core/tool/interpr4.cxx",
+    "upstreamSymbols": [
+      "ScInterpreter::ScColRowNameAuto"
+    ],
+    "preservedResponsibilities": [
+      "Expands the compiler's automatic label range to its current connected data area and excludes the formula position."
+    ],
+    "omittedResponsibilities": [
+      "Interpreter dispatch and other opcodes stay in the owning interpreter module."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sc/source/core/tool/interpr4.colrowname.ts",
+          "marker": "ScColRowNameAuto"
+        },
+        {
+          "path": "apps/office/src/sc/browser/presentation/calc-options.test.tsx",
+          "marker": "uses the automatic label switch"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sc/source/core/tool/interpr4.cxx",
+          "marker": "ScInterpreter::ScColRowNameAuto"
+        }
+      ]
+    },
+    "filenameDivergence": {
+      "localPath": "apps/office/src/sc/source/core/tool/interpr4.colrowname.ts",
+      "rationale": "Keeps label range interpretation in a focused TypeScript fragment of the original interpreter translation unit.",
+      "stackNecessity": "responsibility-split"
+    }
+  }
+}

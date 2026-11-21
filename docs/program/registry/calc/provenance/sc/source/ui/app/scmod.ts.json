@@ -10,10 +10,12 @@
       "ScModule"
     ],
     "upstreamSymbols": [
-      "ScModule"
+      "ScModule",
+      "ScModule::ModifyOptions"
     ],
     "preservedResponsibilities": [
-      "Task77 adds normal unmerged local-reference mouse input using actual ScInputHandler selected UTF16 text,ScModule ordered dispatch,ScViewData reference start/end and ScTabView block/function-set owners. Browser formula pointing precedes Commit and preserves the edit origin;ordinary cell dragging retains the active anchor while headers move their native cursor endpoint. Shift extends;Ctrl adds/subtracts native ScMarkData/ScMultiSel selections. This is bounded source-backed foundation work,not full Calc parity. Merged cells,fill/transfer/move,protected/alternate/split views,reference dialogs,external/3D/matrix calculation,EditEngine and complete VCL painting remain unported."
+      "Task77 adds normal unmerged local-reference mouse input using actual ScInputHandler selected UTF16 text,ScModule ordered dispatch,ScViewData reference start/end and ScTabView block/function-set owners. Browser formula pointing precedes Commit and preserves the edit origin;ordinary cell dragging retains the active anchor while headers move their native cursor endpoint. Shift extends;Ctrl adds/subtracts native ScMarkData/ScMultiSel selections. This is bounded source-backed foundation work,not full Calc parity. Merged cells,fill/transfer/move,protected/alternate/split views,reference dialogs,external/3D/matrix calculation,EditEngine and complete VCL painting remain unported.",
+      "Applies the represented Calculate and Formula items to the document, with the source ordering and recalculation triggers."
     ],
     "omittedResponsibilities": [
       "Complete owner implementations and the unsupported services listed in the bounded foundation note remain unported."
@@ -23,12 +25,20 @@
         {
           "path": "apps/office/src/sc/source/ui/app/scmod.ts",
           "marker": "ScModule"
+        },
+        {
+          "path": "apps/office/src/sc/browser/presentation/calc-options.test.tsx",
+          "marker": "validates Calculate before leaving the page"
         }
       ],
       "upstream": [
         {
           "path": "vendor/libreoffice-reference/sc/source/ui/app/scmod.cxx",
           "marker": "ScModule"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/source/ui/app/scmod.cxx",
+          "marker": "ScModule::ModifyOptions"
         }
       ]
     }

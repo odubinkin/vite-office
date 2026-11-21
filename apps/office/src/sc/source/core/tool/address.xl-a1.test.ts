@@ -238,9 +238,16 @@ it("resolves internal sheet headers while refusing external headers", /** Preser
         external.dispose();
       }
     }
+    const range = new ScRange(0, 0, 1, 1, 1, 1);
+    const formatted = range.Format(doc, F.ADDR_ABS_3D | F.COL2_ABS | F.ROW2_ABS, details);
+    try {
+      expect(text(formatted)).toBe("'A B'!$A$1:$B$2");
+    } finally {
+      formatted.dispose();
+    }
     expect(
-      /** Rejects unavailable qualified range formatting. @returns Reference. */ () =>
-        new ScRange().Format(doc, F.ADDR_ABS_3D, details),
+      /** Rejects unavailable multi-sheet range formatting. @returns Reference. */ () =>
+        new ScRange(0, 0, 0, 1, 1, 1).Format(doc, F.ADDR_ABS_3D, details),
     ).toThrow(/headers are not implemented/);
   } finally {
     doc.Dispose();

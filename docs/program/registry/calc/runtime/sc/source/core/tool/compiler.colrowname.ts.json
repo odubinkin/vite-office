@@ -18,9 +18,10 @@
       "evidence": [
         "apps/office/src/sc/source/core/tool/compiler.colrowname.ts",
         "apps/office/src/sc/browser/presentation/calc-label-ranges.test.tsx",
-        "vendor/libreoffice-reference/sc/source/core/tool/compiler.cxx"
+        "vendor/libreoffice-reference/sc/source/core/tool/compiler.cxx",
+        "apps/office/src/sc/browser/presentation/calc-options.test.tsx"
       ],
-      "justification": "Compiles and expands explicit row and column labels from native document pair lists with source sheet precedence and scalar intersection.",
+      "justification": "Compiles explicit label pairs and optional automatic labels using source sheet precedence, position, and scalar intersection.",
       "knownViolations": [],
       "localSymbols": [
         "ParseColRowName",

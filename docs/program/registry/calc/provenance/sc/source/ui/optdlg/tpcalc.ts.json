@@ -1,0 +1,50 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/sc/source/ui/optdlg/tpcalc.ts",
+    "status": "mapped",
+    "localSymbols": [
+      "ScTpCalcOptions"
+    ],
+    "upstreamPath": "sc/source/ui/optdlg/tpcalc.cxx",
+    "upstreamSymbols": [
+      "ScTpCalcOptions::Reset",
+      "ScTpCalcOptions::FillItemSet",
+      "ScTpCalcOptions::DeactivatePage"
+    ],
+    "preservedResponsibilities": [
+      "Resets and validates Calculate controls against a copied calculation item and returns a changed native ScTpCalcItem."
+    ],
+    "omittedResponsibilities": [
+      "Desktop CPU threading, OpenCL controls, and desktop configuration access are outside this browser page."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sc/source/ui/optdlg/tpcalc.ts",
+          "marker": "ScTpCalcOptions"
+        },
+        {
+          "path": "apps/office/src/sc/browser/presentation/calc-options.test.tsx",
+          "marker": "validates Calculate before leaving the page"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sc/source/ui/optdlg/tpcalc.cxx",
+          "marker": "ScTpCalcOptions::Reset"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/source/ui/optdlg/tpcalc.cxx",
+          "marker": "ScTpCalcOptions::FillItemSet"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/source/ui/optdlg/tpcalc.cxx",
+          "marker": "ScTpCalcOptions::DeactivatePage"
+        }
+      ]
+    }
+  }
+}

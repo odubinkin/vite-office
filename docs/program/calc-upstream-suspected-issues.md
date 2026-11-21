@@ -7718,3 +7718,13 @@ can overlap the rest of the label range until the data range is adjusted on
 Add. Calc preserves the source default and subsequent adjustment.
 
 - [Original SetColRowData and AdjustColRowData](../../vendor/libreoffice-reference/sc/source/ui/miscdlgs/crnrdlg.cxx)
+
+### CALC-811 — Calculate options can replace a Formula page recalculation request
+
+The Formula item requests recalculation when conversion or string-reference
+settings change. If the same Options submission also returns a Calculate
+item, Calc replaces that request with the Calculate comparison. Date base
+and automatic label lookup are absent from that comparison. Calc preserves
+the source ordering and recalculation conditions.
+
+- [Original ScModule::ModifyOptions](../../vendor/libreoffice-reference/sc/source/ui/app/scmod.cxx)

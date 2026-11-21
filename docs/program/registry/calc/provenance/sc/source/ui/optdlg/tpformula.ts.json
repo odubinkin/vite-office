@@ -1,0 +1,50 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/sc/source/ui/optdlg/tpformula.ts",
+    "status": "mapped",
+    "localSymbols": [
+      "ScTpFormulaOptions"
+    ],
+    "upstreamPath": "sc/source/ui/optdlg/tpformula.cxx",
+    "upstreamSymbols": [
+      "ScTpFormulaOptions::Reset",
+      "ScTpFormulaOptions::FillItemSet",
+      "ScTpFormulaOptions::LaunchCustomCalcSettings"
+    ],
+    "preservedResponsibilities": [
+      "Stages formula grammar, English names, calculation configuration and write scope until the parent Options response."
+    ],
+    "omittedResponsibilities": [
+      "Custom separators, recalculation on file load and desktop configuration persistence are outside this browser page."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sc/source/ui/optdlg/tpformula.ts",
+          "marker": "ScTpFormulaOptions"
+        },
+        {
+          "path": "apps/office/src/sc/browser/presentation/calc-options.test.tsx",
+          "marker": "applies Excel A1 references and confirmed details"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sc/source/ui/optdlg/tpformula.cxx",
+          "marker": "ScTpFormulaOptions::Reset"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/source/ui/optdlg/tpformula.cxx",
+          "marker": "ScTpFormulaOptions::FillItemSet"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/source/ui/optdlg/tpformula.cxx",
+          "marker": "ScTpFormulaOptions::LaunchCustomCalcSettings"
+        }
+      ]
+    }
+  }
+}

@@ -15,10 +15,10 @@
       "ScCompiler::GetRefColRowNames"
     ],
     "preservedResponsibilities": [
-      "Compiles and expands explicit row and column labels from native document pair lists with source sheet precedence and scalar intersection."
+      "Compiles explicit label pairs and optional automatic labels using source sheet precedence, position, and scalar intersection."
     ],
     "omittedResponsibilities": [
-      "Automatic lookup of undeclared labels and its cache remain outside the explicit label-range slice."
+      "The optional upstream automatic name cache is outside the compiler slice."
     ],
     "evidence": {
       "local": [
@@ -29,6 +29,10 @@
         {
           "path": "apps/office/src/sc/browser/presentation/calc-label-ranges.test.tsx",
           "marker": "ports tdf131170"
+        },
+        {
+          "path": "apps/office/src/sc/browser/presentation/calc-options.test.tsx",
+          "marker": "uses the automatic label switch"
         }
       ],
       "upstream": [

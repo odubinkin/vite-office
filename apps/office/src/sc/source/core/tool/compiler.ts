@@ -286,6 +286,8 @@ export class ScCompiler extends FormulaCompiler {
       grammar !== FormulaGrammar.Grammar.GRAM_NATIVE &&
       grammar !== FormulaGrammar.Grammar.GRAM_ENGLISH &&
       grammar !== FormulaGrammar.Grammar.GRAM_OOXML &&
+      grammar !== FormulaGrammar.Grammar.GRAM_NATIVE_XL_A1 &&
+      grammar !== FormulaGrammar.Grammar.GRAM_ENGLISH_XL_A1 &&
       grammar !== FormulaGrammar.Grammar.GRAM_NATIVE_XL_R1C1 &&
       grammar !== FormulaGrammar.Grammar.GRAM_ENGLISH_XL_R1C1
     )
@@ -294,15 +296,15 @@ export class ScCompiler extends FormulaCompiler {
   }
   /** Reads the active Excel reference convention. @returns Whether to use R1C1. */
   private IsR1C1(): boolean {
-    return (
-      FormulaGrammar.extractRefConvention(this.meGrammar) ===
-      FormulaGrammar.AddressConvention.CONV_XL_R1C1
-    );
+    const convention = FormulaGrammar.extractRefConvention(this.meGrammar);
+    return convention === FormulaGrammar.AddressConvention.CONV_XL_R1C1;
   }
   /** Supplies the actual relative origin for R1C1 reference parsing. @returns Reference details. */
   private ReferenceDetails() {
-    return this.IsR1C1()
-      ? new ScAddress.Details(FormulaGrammar.AddressConvention.CONV_XL_R1C1, this.aPos)
+    const C = FormulaGrammar.AddressConvention;
+    const convention = FormulaGrammar.extractRefConvention(this.meGrammar);
+    return convention === C.CONV_XL_R1C1 || convention === C.CONV_XL_A1
+      ? new ScAddress.Details(convention, this.aPos)
       : ScAddress.detailsOOOa1;
   }
   /** Original local native/ODF one-reference convention operation. @param reference - Actual reference data. @param odf - ODF convention. @param singleton - Native none/column/row display. @param omitSheet - Whether the other range endpoint already supplies the sheet. @returns Reference fragment. */

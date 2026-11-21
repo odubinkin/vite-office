@@ -1,0 +1,37 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sc/source/ui/optdlg/tpcalc.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "calc",
+    "subsystem": "document-calculation-options",
+    "capabilityIds": [
+      "CAP-ba65d1e2-0718-4c50-a1ab-31be6773a0b2"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/sc/source/ui/optdlg/tpcalc.ts",
+        "apps/office/src/sc/browser/presentation/calc-options.test.tsx",
+        "vendor/libreoffice-reference/sc/source/ui/optdlg/tpcalc.cxx"
+      ],
+      "justification": "Resets and validates Calculate controls against a copied calculation item and returns a changed native ScTpCalcItem.",
+      "knownViolations": [],
+      "localSymbols": [
+        "ScTpCalcOptions"
+      ],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": "sc/source/ui/optdlg/tpcalc.cxx",
+      "upstreamSymbols": [
+        "ScTpCalcOptions::Reset",
+        "ScTpCalcOptions::FillItemSet",
+        "ScTpCalcOptions::DeactivatePage"
+      ]
+    }
+  }
+}

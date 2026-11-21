@@ -157,6 +157,14 @@ it("connects both sheet reference edits to label formulas and persists their lex
     reopened.Dispose();
   }
 
+  fireEvent.click(screen.getByRole("menuitem", { name: "Tools" }));
+  fireEvent.click(screen.getByRole("menuitem", { name: /^Options/ }));
+  const options = within(screen.getByRole("dialog", { name: "Options" }));
+  fireEvent.click(
+    options.getByRole("checkbox", { name: "Automatically find column and row labels" }),
+  );
+  await act(async () => fireEvent.click(options.getByRole("button", { name: "OK" })));
+
   dialog = open();
   fireEvent.change(within(dialog).getByRole("listbox", { name: "Label ranges" }), {
     target: { value: "0" },

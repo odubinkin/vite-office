@@ -20,9 +20,10 @@
         "apps/office/src/sc/source/ui/view/reference-input.test.ts",
         "apps/office/src/sc/browser/controller/formula-pointing.test.ts",
         "apps/office/src/sc/browser/controller/pointer-selection.test.ts",
-        "apps/office/src/sc/browser/presentation/calc-formula-pointing.test.tsx"
+        "apps/office/src/sc/browser/presentation/calc-formula-pointing.test.tsx",
+        "apps/office/src/sc/browser/presentation/calc-options.test.tsx"
       ],
-      "justification": "Task77 adds normal unmerged local-reference mouse input using actual ScInputHandler selected UTF16 text,ScModule ordered dispatch,ScViewData reference start/end and ScTabView block/function-set owners. Browser formula pointing precedes Commit and preserves the edit origin;ordinary cell dragging retains the active anchor while headers move their native cursor endpoint. Shift extends;Ctrl adds/subtracts native ScMarkData/ScMultiSel selections. This is bounded source-backed foundation work,not full Calc parity. Merged cells,fill/transfer/move,protected/alternate/split views,reference dialogs,external/3D/matrix calculation,EditEngine and complete VCL painting remain unported.",
+      "justification": "Task77 adds normal unmerged local-reference mouse input using actual ScInputHandler selected UTF16 text,ScModule ordered dispatch,ScViewData reference start/end and ScTabView block/function-set owners. Browser formula pointing precedes Commit and preserves the edit origin;ordinary cell dragging retains the active anchor while headers move their native cursor endpoint. Shift extends;Ctrl adds/subtracts native ScMarkData/ScMultiSel selections. This is bounded source-backed foundation work,not full Calc parity. Merged cells,fill/transfer/move,protected/alternate/split views,reference dialogs,external/3D/matrix calculation,EditEngine and complete VCL painting remain unported. Applies the represented Calculate and Formula items to the document, with the source ordering and recalculation triggers.",
       "knownViolations": [],
       "localSymbols": [
         "ScModule"
@@ -30,7 +31,8 @@
       "sourceResponsibility": "unverified",
       "upstreamFile": "sc/source/ui/app/scmod.cxx",
       "upstreamSymbols": [
-        "ScModule"
+        "ScModule",
+        "ScModule::ModifyOptions"
       ]
     }
   }

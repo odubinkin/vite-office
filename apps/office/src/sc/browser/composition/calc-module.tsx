@@ -59,6 +59,7 @@ export function createCalcSession(
     ),
     fileWorkflows.GetShell(),
     sheetWorkflows.GetShell(),
+    sheetWorkflows.options.GetShell(),
   ]);
   const detach = controller.Subscribe(
     /** Invalidates shared command bindings when source/input state changes. @returns Nothing. */ () =>
