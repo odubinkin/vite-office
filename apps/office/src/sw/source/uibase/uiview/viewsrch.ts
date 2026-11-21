@@ -5,14 +5,12 @@ import { APPROXIMATE } from "../../../../offapi/com/sun/star/util/SearchAlgorith
 import { LEV_RELAXED, NORM_WORD_ONLY } from "../../../../offapi/com/sun/star/util/SearchFlags";
 import { OUString } from "../../../../sal/inc/rtl/ustring";
 import { SvxSearchCmd } from "../../../../svl/inc/srchitem";
-import { TextSearch } from "../../../../unotools/inc/textsearch";
 import { FindRanges, SwDocPositions } from "../../../inc/cshtyp";
 import { FindFormat } from "../../core/crsr/findcoll";
 import { WRITER_AVAILABLE_PARAGRAPH_STYLE_POOL } from "../../../inc/poolfmt";
 import { SwStyleNameMapper } from "../../core/doc/SwStyleNameMapper";
-import { FindTextImpl } from "../../core/crsr/findtxt";
-import { SwPaM } from "../../core/crsr/pam";
 import { SwCursor, type SwSearchNodeFilter } from "../../core/crsr/swcrsr";
+import { PopMode } from "../../core/crsr/trvltbl";
 import type { SwDoc } from "../../core/doc/doc";
 import type { SwStartNode } from "../../core/docnode/node";
 import { SwStartNodeType } from "../../../inc/ndtyp";
@@ -133,6 +131,16 @@ function createSearchNodeFilter(
 /** Drops temporary cursor owners left by a non-selection search. @param cursor - Working search ring. @returns Nothing. */
 function disposeSearchRing(cursor: SwCursor): void {
   while (cursor.GetNext() !== cursor) cursor.GetNext().Dispose();
+}
+
+/** Copies the live cursor and any selected ranges into the working search ring. @param cursor - Displayed text cursor. @param inSelection - Whether to search the selection ring. @returns Owned working cursor. */
+function createSearchCursor(cursor: SwCursor, inSelection: boolean): SwCursor {
+  const search = new SwCursor(cursor.GetPoint(), cursor.HasMark() ? cursor.GetMark() : undefined);
+  if (inSelection) {
+    for (let range = cursor.GetNext(); range !== cursor; range = range.GetNext())
+      new SwCursor(range.GetPoint(), range.HasMark() ? range.GetMark() : undefined, search);
+  }
+  return search;
 }
 
 /** Holds the search item and executes the represented SwView::ExecSearch branches. */
@@ -366,6 +374,40 @@ export class SwViewSearch {
     return result;
   }
 
+  /** Validates the selected ranges and replaces the first matching span. @param cursor - Displayed selection ring. @param options - Active search options. @param replacement - New text. @param end - Directional search endpoint. @param acceptsNode - Represented layout admission. @returns Nothing. */
+  private ReplaceSelection(
+    cursor: SwCursor,
+    options: SearchOptions2,
+    replacement: string,
+    end: SwDocPositions,
+    acceptsNode: SwSearchNodeFilter,
+  ): void {
+    if (!cursor.HasMark()) return;
+    const match = createSearchCursor(cursor, true);
+    try {
+      if (
+        match.Find_Text(
+          options,
+          false,
+          SwDocPositions.Curr,
+          end,
+          [false],
+          FindRanges.InSel,
+          false,
+          undefined,
+          acceptsNode,
+        ) > 0
+      ) {
+        const document = this.shell.GetDoc();
+        document.GetDocumentContentOperationsManager().ReplaceRange(match, replacement, false);
+        this.shell.SetPaM(match.GetPoint(), match.GetMark());
+      }
+    } finally {
+      disposeSearchRing(match);
+      match.Dispose();
+    }
+  }
+
   /** Searches the model with the request's original options. @param item - Dispatched search item. @param command - Requested operation. @param backward - Direction. @returns Search feedback. */
   private Search(
     item: WriterSearchItem,
@@ -404,55 +446,29 @@ export class SwViewSearch {
       /** Releases the new cursor and editing notifications together. @returns Search feedback. */ () => {
         const result = document.RunModelTransaction(
           /** Publishes edits only after restoring the view cursor. @returns Search feedback. */ () => {
-            if (style !== undefined && command === SvxSearchCmd.REPLACE && item.replaceStyle) {
-              this.shell.SetParagraphStyle(item.replaceStyle);
-            } else if (
-              style === undefined &&
-              command === SvxSearchCmd.REPLACE &&
-              cursor.HasMark() &&
-              !cursor.IsMultiSelection()
-            ) {
-              const match = new SwPaM(cursor.GetPoint());
+            if (command === SvxSearchCmd.REPLACE) {
+              // Native backward Replace restores the pre-edit range before searching further.
+              if (backward) this.shell.Push();
               try {
-                if (
-                  FindTextImpl(
-                    match,
-                    options,
-                    new TextSearch(options),
-                    backward,
-                    cursor,
-                    acceptsNode,
-                  )
-                ) {
-                  cursor.Assign(match.GetPoint(), match.GetMark());
-                  document
-                    .GetDocumentContentOperationsManager()
-                    .ReplaceRange(cursor, item.replacement, false);
-                }
+                if (style === undefined)
+                  this.ReplaceSelection(cursor, options, item.replacement, last, acceptsNode);
+                else if (item.replaceStyle) this.shell.SetParagraphStyle(item.replaceStyle);
               } finally {
-                match.Dispose();
+                if (backward) this.shell.Pop(PopMode.DeleteCurrent);
               }
             }
 
-            // Keep the displayed PaM registered while the search moves a separate ring.
-            // During Replace All, the displayed content indices follow the actual edits.
+            const replaceAll = command === SvxSearchCmd.REPLACE_ALL;
             const fromTableCaret = !inSelection && this.shell.HasBoxSelection();
-            const search = new SwCursor(
-              fromTableCaret ? this.shell.getShellCursor().GetPoint() : cursor.GetPoint(),
-              !fromTableCaret && cursor.HasMark() ? cursor.GetMark() : undefined,
-            );
-            if (inSelection) {
-              for (let range = cursor.GetNext(); range !== cursor; range = range.GetNext())
-                new SwCursor(
-                  range.GetPoint(),
-                  range.HasMark() ? range.GetMark() : undefined,
-                  search,
-                );
-            }
+            const search = fromTableCaret
+              ? new SwCursor(this.shell.getShellCursor().GetPoint())
+              : createSearchCursor(cursor, inSelection);
+            if (replaceAll) this.shell.Push();
             let transferred = false;
             try {
+              // Keep the table cursor alive so Pop can regenerate its box selections.
+              if (replaceAll && !inSelection && !fromTableCaret) this.shell.ClearMark();
               const all = command === SvxSearchCmd.FIND_ALL || command === SvxSearchCmd.REPLACE_ALL;
-              const replaceAll = command === SvxSearchCmd.REPLACE_ALL;
               search.Normalize(backward);
               const start =
                 all || (this.lastCommand === SvxSearchCmd.FIND_ALL && !inSelection)
@@ -513,12 +529,14 @@ export class SwViewSearch {
                   wrapped = matches > 0;
                 }
               }
-              if (matches > 0 && !replaceAll) {
+              if (replaceAll) {
+                if (matches > 0 && !this.shell.IsTableMode()) disposeSearchRing(cursor);
+              } else if (matches > 0) {
                 this.shell.ClearMark();
                 this.shell.SetPaM(search.GetPoint(), search.GetMark());
                 search.GetRingContainer().merge(this.shell.GetCursor_().GetRingContainer());
                 transferred = true;
-              } else if (!inSelection && !replaceAll) {
+              } else if (!inSelection) {
                 this.shell.ClearMark();
               }
               this.lastCommand = command;
@@ -526,6 +544,7 @@ export class SwViewSearch {
             } finally {
               if (!transferred) disposeSearchRing(search);
               search.Dispose();
+              if (replaceAll) this.shell.Pop(PopMode.DeleteCurrent);
             }
           },
         );

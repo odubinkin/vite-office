@@ -9,7 +9,12 @@ import { FieldUnit } from "../../../tools/inc/fldunit";
 import { WRITER_LAYOUT_PREFERENCES_KEY } from "../storage/writer-layout-preferences-store";
 import { Desktop } from "../../../framework/browser/app/desktop";
 import { createOfficeModuleDescriptors } from "../../../framework/browser/app/modulemanager";
-import { createWriterModuleFactory } from "../composition/writer-module";
+import {
+  createWriterDocumentSession,
+  createWriterModuleFactory,
+} from "../composition/writer-module";
+import { WriterWorkbench } from "./writer-view";
+import { SwPosition } from "../../source/core/crsr/pam";
 
 /** Renders the desktop through the same Writer module registration used by the composition root. @returns Configured desktop element. */
 function App(): React.JSX.Element {
@@ -620,6 +625,91 @@ describe("WriterMenuBar" /** Groups Writer menu and clipboard integration tests.
     const newToolbar = within(screen.getByRole("toolbar", { name: "Find" }));
     expect(newToolbar.getByRole("checkbox", { name: "Match case" })).not.toBeChecked();
     expect(newToolbar.getByRole("checkbox", { name: "Match Diacritics" })).not.toBeChecked();
+  });
+
+  it("preserves the selection when Replace All is scoped to it", /** Ports tdf44837 through the browser dialog and Writer model cursor. @returns Nothing. */ () => {
+    const session = createWriterDocumentSession();
+    const shell = session.view.GetWrtShell();
+    shell.Insert("asd asd");
+    shell.ExtendedSelectAll();
+    const workbench = render(<WriterWorkbench isActive view={session.view} />);
+
+    fireEvent.keyDown(window, { key: "h", ctrlKey: true });
+    const dialog = within(screen.getByRole("dialog", { name: "Find and Replace" }));
+    fireEvent.change(dialog.getByLabelText("Find"), { target: { value: "a" } });
+    fireEvent.change(dialog.getByLabelText("Replace with"), { target: { value: "b" } });
+    fireEvent.click(dialog.getByText("Other options"));
+    fireEvent.click(dialog.getByRole("checkbox", { name: "Current selection only" }));
+    fireEvent.click(dialog.getByRole("button", { name: "Replace All" }));
+    fireEvent.click(dialog.getByRole("button", { name: "Close" }));
+
+    expect(shell.GetActiveParagraph().GetText()).toBe("bsd bsd");
+    expect(window.getSelection()?.toString()).toBe("bsd bsd");
+    workbench.unmount();
+    session.view.Close();
+  });
+
+  it("replaces one match from the Find All ring and restores a single range after Replace All", /** Uses the retained native cursor owners across both replacement commands. @returns Nothing. */ () => {
+    const session = createWriterDocumentSession();
+    const shell = session.view.GetWrtShell();
+    shell.Insert("cat cat cat");
+    const paragraph = shell.GetActiveParagraph();
+    const workbench = render(<WriterWorkbench isActive view={session.view} />);
+
+    fireEvent.keyDown(window, { key: "h", ctrlKey: true });
+    const dialog = within(screen.getByRole("dialog", { name: "Find and Replace" }));
+    fireEvent.change(dialog.getByLabelText("Find"), { target: { value: "cat" } });
+    fireEvent.click(dialog.getByRole("button", { name: "Find All" }));
+    expect([...shell.GetCursor().GetRingContainer()]).toHaveLength(3);
+    fireEvent.change(dialog.getByLabelText("Replace with"), { target: { value: "dog" } });
+    fireEvent.click(dialog.getByRole("button", { name: /^Replace$/ }));
+    expect(paragraph.GetText()).toBe("dog cat cat");
+    expect(shell.GetCursor().Start().GetContentIndex()).toBe(4);
+
+    fireEvent.click(dialog.getByRole("button", { name: "Find All" }));
+    expect([...shell.GetCursor().GetRingContainer()]).toHaveLength(2);
+    fireEvent.change(dialog.getByLabelText("Replace with"), { target: { value: "longer" } });
+    fireEvent.click(dialog.getByRole("button", { name: "Replace All" }));
+    expect(paragraph.GetText()).toBe("dog longer longer");
+    expect(shell.GetCursor().IsMultiSelection()).toBe(false);
+    expect(window.getSelection()?.toString()).toBe("longer");
+    workbench.unmount();
+    session.view.Close();
+  });
+
+  it("restores selected table cells after a document-wide Replace All", /** Keeps the displayed table cursor while editing body and table text. @returns Nothing. */ () => {
+    const session = createWriterDocumentSession();
+    const shell = session.view.GetWrtShell();
+    const body = shell.GetActiveParagraph();
+    body.SetText("cat body");
+    const table = shell.InsertTable({ mnInsMode: 0, mnRowsToRepeat: 0 }, 2, 2);
+    const cells = table?.GetTabLines()[0]?.GetTabBoxes();
+    const left = cells?.[0]?.GetParagraphs()[0];
+    const right = cells?.[1]?.GetParagraphs()[0];
+    if (!left || !right) throw new Error("Missing Writer table row.");
+    left.SetText("cat left");
+    right.SetText("cat right");
+    const point = new SwPosition(left, 0);
+    shell.SetCursor(point);
+    point.Dispose();
+    expect(shell.SelectTableRow()).toBe(true);
+    const workbench = render(<WriterWorkbench isActive view={session.view} />);
+
+    fireEvent.keyDown(window, { key: "h", ctrlKey: true });
+    const dialog = within(screen.getByRole("dialog", { name: "Find and Replace" }));
+    fireEvent.click(dialog.getByRole("checkbox", { name: "Current selection only" }));
+    fireEvent.change(dialog.getByLabelText("Find"), { target: { value: "cat" } });
+    fireEvent.change(dialog.getByLabelText("Replace with"), { target: { value: "longer" } });
+    fireEvent.click(dialog.getByRole("button", { name: "Replace All" }));
+    expect([body.GetText(), left.GetText(), right.GetText()]).toEqual([
+      "longer body",
+      "longer left",
+      "longer right",
+    ]);
+    expect(shell.HasBoxSelection()).toBe(true);
+    expect(shell.GetTableCrs()?.GetSelectedBoxes()).toEqual(cells);
+    workbench.unmount();
+    session.view.Close();
   });
 
   it("implements roving, popup, submenu, typeahead, escape, and outside-click menu semantics" /** Verifies the primary menu keyboard and dismissal interactions. @returns Nothing. */, function navigatesWriterMenus(): void {

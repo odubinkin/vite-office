@@ -4,7 +4,7 @@ title: "Implement Writer search and replace core and browser UI"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 38
+revision: 39
 origin:
   system: "manual"
 depends_on:
@@ -118,6 +118,9 @@ comments:
   -
     author: "CODER"
     body: "Verified Find Bar and modeless dialog lifecycle against FindbarDispatcher, CheckButtonItemWindow, impl_executeSearch and SvxSearchDialog::SetSearchLBEntryTextAndGrabFocus. Both surfaces can stay open. Toolbar-local case and diacritic controls reset on reconstruction and enter the shared search state through actual toolbar dispatch. Ctrl+F in the entry selects the current text, Ctrl+H passes the current text to the dialog, and Find All restores toolbar-entry focus. The view dispatches absolute toolbar search independently of dialog style, width, similarity and selection settings. The document-title handler no longer requires manual memoization after the Writer view structure changed; both title collision regressions pass. Six targeted Vitest suites passed 68 tests. The existing search browser scenario and a real-browser coexistence regression passed using the installed Chrome channel. Office build, two Writer resource tests, dependency/source/provenance checks, JSDoc, file size, scoped lint and formatting, doctor, routing and diff checks passed. This checkpoint uses existing task paths and advances neither task closure nor the full-suite cadence."
+  -
+    author: "CODER"
+    body: "Verified replacement cursor checkpoint against SwView::ExecSearch, SwView::Replace, SwCursorShell::Push/Pop and SwEditShell::Replace. Single replacement validates the real selected cursor ring through Find_Text(InSel), consumes its first confirmed match, and searches onward. Backward replacement restores the saved cursor before the follow-up search. Replace All keeps registered cursor offsets across edits, discards the obsolete ordinary match ring, and restores the saved range or regenerated table selection. Ported tdf44837 and added critical coverage for single replacement after Find All, length-changing bulk replacement, and restoring selected cells after document-wide replacement. Six targeted Vitest files passed all 80 tests, two Writer resource tests passed, and the existing Writer search scenario plus tdf44837 passed in the installed Chrome channel. Build, dependency/source/provenance/JSDoc/file-size checks, scoped lint and format, doctor, routing and diff checks passed. No parent closure or full-suite cadence increment."
 events:
   -
     type: "status"
@@ -256,8 +259,13 @@ events:
     at: "2026-11-21T05:10:21.812Z"
     author: "CODER"
     body: "Verified Find Bar and modeless dialog lifecycle against FindbarDispatcher, CheckButtonItemWindow, impl_executeSearch and SvxSearchDialog::SetSearchLBEntryTextAndGrabFocus. Both surfaces can stay open. Toolbar-local case and diacritic controls reset on reconstruction and enter the shared search state through actual toolbar dispatch. Ctrl+F in the entry selects the current text, Ctrl+H passes the current text to the dialog, and Find All restores toolbar-entry focus. The view dispatches absolute toolbar search independently of dialog style, width, similarity and selection settings. The document-title handler no longer requires manual memoization after the Writer view structure changed; both title collision regressions pass. Six targeted Vitest suites passed 68 tests. The existing search browser scenario and a real-browser coexistence regression passed using the installed Chrome channel. Office build, two Writer resource tests, dependency/source/provenance checks, JSDoc, file size, scoped lint and formatting, doctor, routing and diff checks passed. This checkpoint uses existing task paths and advances neither task closure nor the full-suite cadence."
+  -
+    type: "comment"
+    at: "2026-11-21T05:17:25.721Z"
+    author: "CODER"
+    body: "Verified replacement cursor checkpoint against SwView::ExecSearch, SwView::Replace, SwCursorShell::Push/Pop and SwEditShell::Replace. Single replacement validates the real selected cursor ring through Find_Text(InSel), consumes its first confirmed match, and searches onward. Backward replacement restores the saved cursor before the follow-up search. Replace All keeps registered cursor offsets across edits, discards the obsolete ordinary match ring, and restores the saved range or regenerated table selection. Ported tdf44837 and added critical coverage for single replacement after Find All, length-changing bulk replacement, and restoring selected cells after document-wide replacement. Six targeted Vitest files passed all 80 tests, two Writer resource tests passed, and the existing Writer search scenario plus tdf44837 passed in the installed Chrome channel. Build, dependency/source/provenance/JSDoc/file-size checks, scoped lint and format, doctor, routing and diff checks passed. No parent closure or full-suite cadence increment."
 doc_version: 3
-doc_updated_at: "2026-11-21T05:10:21.812Z"
+doc_updated_at: "2026-11-21T05:17:25.721Z"
 doc_updated_by: "CODER"
 description: "Implement the approved coherent Writer search-and-replace feature from pinned LibreOffice sources: real shared search engine and options, native paragraph/cursor traversal and replacement/history contracts, view-owned search state and dispatch, Find toolbar and Find and Replace dialog with generated upstream command placement and shortcuts. Preserve source semantics and explicit unsupported boundaries; never substitute DOM text search or browser RegExp for ICU contracts. Work only on writer in vite-office-writer; local upstream reading approved, no network or merges. Keep active until approved scope is verified."
 sections:
