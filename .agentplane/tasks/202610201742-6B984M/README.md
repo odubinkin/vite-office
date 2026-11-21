@@ -4,7 +4,7 @@ title: "Implement Writer search and replace core and browser UI"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 112
+revision: 113
 origin:
   system: "manual"
 depends_on:
@@ -415,7 +415,9 @@ comments:
       The UI test adapts the Dot and Below Text reopen check from formatCharacter.py and exercises exact matching, explicit None, visible paint, grouped Undo and Redo. The production Chrome test applies a mark below text through Replace All and verifies computed style and Undo. The final Writer run passed 215 tests in 17 files, with six existing native ICU host-probe cases skipped. All five Chrome search scenarios passed. The production build, dependency and source-tree checks, provenance, Writer resources and registry parity, scoped lint and formatting, doctor, routing, and diff checks passed. The repository-wide JSDoc and file-size checks retain 307 baseline JSDoc errors and four existing files at or above their limit.
 
       The active search task stays open. This checkpoint does not increment the ten-task full-regression cadence.
-
+  -
+    author: "CODER"
+    body: "Follow-up verification caught TypeScript TS7053 in the paint lookup. The sparse CSS style map now accepts integer mask results and preserves absence for unmapped values. The final TypeScript and production Vite build passed, all five production Chrome scenarios passed again, and the direct emphasis/editor rerun passed 12 tests. The earlier 215-case related run passed before this type-only correction."
 events:
   -
     type: "status"
@@ -993,9 +995,13 @@ events:
       The UI test adapts the Dot and Below Text reopen check from formatCharacter.py and exercises exact matching, explicit None, visible paint, grouped Undo and Redo. The production Chrome test applies a mark below text through Replace All and verifies computed style and Undo. The final Writer run passed 215 tests in 17 files, with six existing native ICU host-probe cases skipped. All five Chrome search scenarios passed. The production build, dependency and source-tree checks, provenance, Writer resources and registry parity, scoped lint and formatting, doctor, routing, and diff checks passed. The repository-wide JSDoc and file-size checks retain 307 baseline JSDoc errors and four existing files at or above their limit.
 
       The active search task stays open. This checkpoint does not increment the ten-task full-regression cadence.
-
+  -
+    type: "comment"
+    at: "2026-11-21T21:36:41.935Z"
+    author: "CODER"
+    body: "Follow-up verification caught TypeScript TS7053 in the paint lookup. The sparse CSS style map now accepts integer mask results and preserves absence for unmapped values. The final TypeScript and production Vite build passed, all five production Chrome scenarios passed again, and the direct emphasis/editor rerun passed 12 tests. The earlier 215-case related run passed before this type-only correction."
 doc_version: 3
-doc_updated_at: "2026-11-21T21:33:39.589Z"
+doc_updated_at: "2026-11-21T21:36:41.935Z"
 doc_updated_by: "CODER"
 description: "Implement the approved coherent Writer search-and-replace feature from pinned LibreOffice sources: real shared search engine and options, native paragraph/cursor traversal and replacement/history contracts, view-owned search state and dispatch, Find toolbar and Find and Replace dialog with generated upstream command placement and shortcuts. Preserve source semantics and explicit unsupported boundaries; never substitute DOM text search or browser RegExp for ICU contracts. Work only on writer in vite-office-writer; local upstream reading approved, no network or merges. Keep active until approved scope is verified."
 sections:

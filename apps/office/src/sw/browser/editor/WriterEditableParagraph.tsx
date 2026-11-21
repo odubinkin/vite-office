@@ -351,12 +351,12 @@ function paintTextLine(
   );
 }
 
-const emphasisStyles = {
+const emphasisStyles: Readonly<Partial<Record<number, string>>> = {
   [FontEmphasisMark.Dot]: "filled dot",
   [FontEmphasisMark.Circle]: "open circle",
   [FontEmphasisMark.Disc]: "filled circle",
   [FontEmphasisMark.Accent]: "filled sesame",
-} as Partial<Record<FontEmphasisMark, string>>;
+};
 
 /** Projects one immutable Writer run through semantic browser elements. @param props - Canonical run and inherited paragraph flags. @returns React-owned run subtree. */
 export function WriterTextPortionProjection({
