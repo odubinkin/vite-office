@@ -75,10 +75,11 @@ function WriterCommentCard({
       const release = view.GetPostItMgr().RegisterSidebarWin(format, {
         editor: current.getImpl(),
         view: current.GetSearchView(),
-        /** Applies the shell request through the comment document and its history. @param items - Prepared edit items. @returns Whether changed. */ ApplyAttributes(
+        /** Applies the shell request through the comment document and its history. @param items - Prepared edit items. @param wholeNote - Whether formatting covers the full comment. @returns Whether changed. */ ApplyAttributes(
           items,
+          wholeNote,
         ) {
-          return current.ApplyAttributes(items);
+          return current.ApplyAttributes(items, wholeNote);
         },
         /** Selects the entire annotation. @returns Nothing. */ SelectAll() {
           current.SelectAll();
@@ -254,6 +255,16 @@ function WriterCommentCard({
                     </button>
                   ),
                 )}
+                <button
+                  type="button"
+                  className="w-full rounded px-2 py-1 text-left text-sm hover:bg-slate-100"
+                  onClick={
+                    /** Opens Character formatting for all annotations. @returns Nothing. */
+                    () => execute(WRITER_COMMAND_IDS.formatAllNotes)
+                  }
+                >
+                  {localization.GetText("writer.comments.formatAll", "Format All Comments…")}
+                </button>
               </div>
             )}
           </details>

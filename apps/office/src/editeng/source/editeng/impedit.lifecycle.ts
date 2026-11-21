@@ -75,7 +75,7 @@ import {
   ANYWORD_IGNOREWHITESPACES,
   DICTIONARY_WORD,
 } from "../../../offapi/com/sun/star/i18n/WordType";
-import { SetParaAttribs } from "./impedit5.attributes";
+import { GetAttribs, SetParaAttribs } from "./impedit5.attributes";
 import { CalcHeight } from "./impedit2.height";
 import { PrepareInsertTextLine } from "./impedit2.text";
 import { LINE_SEP } from "./impedit.constants";
@@ -880,6 +880,10 @@ export abstract class ImpEditEngine extends SfxListener implements StyleSheetUse
   TextModified(): void {
     this.mbFormatted = false;
     if (this.maNotifyHdl) this.maNotifyHdl(new EENotify(EENotifyType.EE_NOTIFY_TEXTMODIFIED));
+  }
+  /** Returns the original effective attribute set for a selection. @param selection - Actual selection. @returns Owned item set. */
+  GetAttribs(selection: EditSelection): SfxItemSet {
+    return GetAttribs(this, selection);
   }
   /** Original paragraph-attribute mutation. @param paragraph - Native paragraph. @param items - Actual item set. @returns Nothing. */
   SetParaAttribs(paragraph: number, items: SfxItemSet): void {

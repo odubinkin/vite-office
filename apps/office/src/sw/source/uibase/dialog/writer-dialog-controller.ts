@@ -93,7 +93,8 @@ export type WriterDialogRequest =
   | WriterBreakDialogRequest
   | WriterPageDialogRequest
   | WriterParagraphDialogRequest
-  | Readonly<{ kind: "delete-comments"; commandUrl: string; author?: string }>;
+  | Readonly<{ kind: "delete-comments"; commandUrl: string; author?: string }>
+  | Readonly<{ kind: "annotation-character"; commandUrl: string; input: SfxItemSet }>;
 /** Every accepted result supported by the Writer dialog presenter. */
 export type WriterDialogResult =
   | Readonly<{ name: string }>
@@ -102,7 +103,8 @@ export type WriterDialogResult =
   | WriterBreakDialogResult
   | WriterPageDialogResult
   | WriterParagraphDialogResult
-  | WriterCommentDeleteResult;
+  | WriterCommentDeleteResult
+  | Readonly<{ attributes: SfxItemSet }>;
 /** Observable snapshot published by the Writer dialog controller. */
 export type WriterDialogSnapshot = ReturnType<WriterDialogController["GetSnapshot"]>;
 
@@ -205,6 +207,18 @@ export class WriterDialogController {
     });
     return completion.kind === "accepted"
       ? (completion.result as WriterParagraphDialogResult)
+      : undefined;
+  }
+
+  /** Requests the original annotation-mode Character dialog. @param input - Borrowed initial EditEngine attributes. @returns Owned output item set on acceptance. */
+  public async RequestFormatAllNotes(input: SfxItemSet): Promise<SfxItemSet | undefined> {
+    const completion = await this.controller.Request({
+      kind: "annotation-character",
+      commandUrl: WRITER_COMMAND_IDS.formatAllNotes,
+      input,
+    });
+    return completion.kind === "accepted"
+      ? (completion.result as Readonly<{ attributes: SfxItemSet }>).attributes
       : undefined;
   }
 

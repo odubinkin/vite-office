@@ -5901,3 +5901,16 @@ comments from the persisted parent links.
 
 - [Original root promotion](../../vendor/libreoffice-reference/sw/source/uibase/docvw/AnnotationWin.cxx)
 - [Original anchor sorting, follow flag, and subthread rotation](../../vendor/libreoffice-reference/sw/source/uibase/docvw/PostItMgr.cxx)
+
+### WRITER-731 — Character dialog can report the first paragraph's font for a mixed selection
+
+`ImpEditEngine::GetAttribs` fills character attributes from the first
+paragraph's defaults when the selection has no hard character formatting.
+For later paragraphs it invalidates differing paragraph attributes, while
+a differing character default leaves the first paragraph's item set.
+In the annotation Character dialog, accepting the original input set can
+therefore apply that first font to every comment. Writer preserves the
+selection aggregation and the bulk-format merge.
+
+- [Original EditEngine selection aggregation](../../vendor/libreoffice-reference/editeng/source/editeng/impedit5.cxx)
+- [Original annotation Character dialog and bulk formatting](../../vendor/libreoffice-reference/sw/source/uibase/docvw/PostItMgr.cxx)

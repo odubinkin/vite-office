@@ -476,11 +476,16 @@ export class WriterCommentEditor extends SwTextAPIEditSource {
     this.CommitEdit(before, beforeObject);
   }
 
-  /** Applies prepared native attributes through the annotation's history owner. @param items - Native character or paragraph items. @returns Whether changed. */
-  ApplyAttributes(items: SfxItemSet): boolean {
+  /** Applies prepared native attributes through the annotation's history owner. @param items - Native character or paragraph items. @param wholeNote - Whether to apply across the comment without changing selection. @returns Whether changed. */
+  ApplyAttributes(items: SfxItemSet, wholeNote = false): boolean {
     const before = this.field.GetPar2();
     const beforeObject = this.field.GetTextObject()?.Clone();
-    this.QuickSetAttribs(items, this.getImpl().CreateESel(this.selection));
+    const engine = this.getImpl();
+    const document = engine.GetEditDoc();
+    const selection = wholeNote
+      ? new EditSelection(document.GetStartPaM(), document.GetEndPaM())
+      : this.selection;
+    this.QuickSetAttribs(items, engine.CreateESel(selection));
     this.CommitEdit(before, beforeObject);
     return true;
   }
@@ -774,6 +779,9 @@ function applyTextStyle(
     style.textDecorationLine = attributes.underline ? "underline line-through" : "line-through";
   if (attributes.escapement?.offset) {
     style.verticalAlign = attributes.escapement.offset > 0 ? "super" : "sub";
-    style.fontSize = `${attributes.escapement.height}%`;
+    style.fontSize =
+      attributes.fontSizeTwips === undefined
+        ? `${attributes.escapement.height}%`
+        : `${(attributes.fontSizeTwips * attributes.escapement.height) / 2000}pt`;
   }
 }

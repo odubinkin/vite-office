@@ -207,6 +207,13 @@ export class SwAnnotationShell {
         isEnabled: () => this.CanEdit(),
       },
       {
+        id: CMD.formatAllNotes,
+        /** Opens the actual annotation-mode Character dialog. @returns Whether formatting was applied. */
+        execute: () => this.manager.ExecuteFormatAllDialog(),
+        /** Enabled when an editable annotation owns dispatch. @returns Whether enabled. */
+        isEnabled: () => this.CanEdit(),
+      },
+      {
         id: CMD.deleteAllNotes,
         /** Removes all comments through the shared query and history. @returns Whether changed. */
         execute: () => this.manager.DeleteNotes(),

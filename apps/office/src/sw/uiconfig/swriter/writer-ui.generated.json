@@ -32,6 +32,7 @@
     "promoteComment": ".uno:PromoteComment",
     "deleteAuthor": ".uno:DeleteAuthor",
     "deleteAllNotes": ".uno:DeleteAllNotes",
+    "formatAllNotes": ".uno:FormatAllNotes",
     "insertBookmark": ".uno:InsertBookmark",
     "insertBreak": ".uno:InsertBreak",
     "insertPageBreak": ".uno:InsertPagebreak",
@@ -141,6 +142,7 @@
     { "capabilityId": "CAP-0111", "commandUrl": ".uno:PromoteComment" },
     { "capabilityId": "CAP-0111", "commandUrl": ".uno:DeleteAuthor" },
     { "capabilityId": "CAP-0111", "commandUrl": ".uno:DeleteAllNotes" },
+    { "capabilityId": "CAP-0111", "commandUrl": ".uno:FormatAllNotes" },
     { "capabilityId": "CAP-0113", "commandUrl": ".uno:InsertBookmark" },
     { "capabilityId": "CAP-0112", "commandUrl": ".uno:InsertBreak" },
     { "capabilityId": "CAP-0112", "commandUrl": ".uno:InsertPagebreak" },
@@ -1358,6 +1360,19 @@
       "shortcuts": [],
       "slotId": 22502
     },
+    ".uno:FormatAllNotes": {
+      "browserOwned": false,
+      "argumentSchema": [],
+      "capabilityId": "CAP-0111",
+      "controlLabel": "Format All Comments",
+      "label": "Format All Comments",
+      "popupLabel": "Format All Comments",
+      "placements": ["sw/uiconfig/swriter/menubar/menubar.xml"],
+      "semantics": "action",
+      "showsDialog": true,
+      "shortcuts": [],
+      "slotId": 22508
+    },
     ".uno:StatusBarVisible": {
       "browserOwned": false,
       "argumentSchema": [],
@@ -2265,6 +2280,11 @@
     {
       "classification": "supported-upstream",
       "commandUrl": ".uno:DeleteAllNotes",
+      "sources": ["sw/uiconfig/swriter/menubar/menubar.xml"]
+    },
+    {
+      "classification": "supported-upstream",
+      "commandUrl": ".uno:FormatAllNotes",
       "sources": ["sw/uiconfig/swriter/menubar/menubar.xml"]
     },
     {
@@ -4369,14 +4389,6 @@
       "context": [".uno:FormatMenu"],
       "entryKind": "command",
       "sourceUrl": ".uno:TitlePageDialog",
-      "reason": "outside-p1-supported-command-slice",
-      "sourcePath": "sw/uiconfig/swriter/menubar/menubar.xml"
-    },
-    {
-      "classification": "X",
-      "context": [".uno:FormatMenu"],
-      "entryKind": "command",
-      "sourceUrl": ".uno:FormatAllNotes",
       "reason": "outside-p1-supported-command-slice",
       "sourcePath": "sw/uiconfig/swriter/menubar/menubar.xml"
     },
@@ -8028,7 +8040,8 @@
             "label": "Lists"
           },
           { "kind": "separator" },
-          { "commandUrl": ".uno:PageDialog", "kind": "command", "visible": true }
+          { "commandUrl": ".uno:PageDialog", "kind": "command", "visible": true },
+          { "commandUrl": ".uno:FormatAllNotes", "kind": "command", "visible": true }
         ],
         "kind": "menu",
         "label": "Format"
@@ -9743,12 +9756,6 @@
         "context": [".uno:FormatMenu"],
         "entryKind": "command",
         "sourceUrl": ".uno:TitlePageDialog"
-      },
-      {
-        "classification": "X",
-        "context": [".uno:FormatMenu"],
-        "entryKind": "command",
-        "sourceUrl": ".uno:FormatAllNotes"
       },
       {
         "classification": "X",

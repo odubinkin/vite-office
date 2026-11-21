@@ -153,6 +153,22 @@ test("Writer inserts a comment, finds its text and undoes note formatting", /** 
   await replyActions.click();
   await expect(promote).toHaveCount(0);
 
+  await page.getByRole("button", { name: "Format All Comments…" }).click();
+  const character = page.getByRole("dialog", { name: "Character", exact: true });
+  await expect(character.getByRole("tab", { name: "Font", exact: true })).toBeFocused();
+  await character.getByRole("spinbutton", { name: "Size", exact: true }).fill("17");
+  await character.getByRole("button", { name: "OK", exact: true }).click();
+  await expect(reply.locator("p").last().locator("span").first()).toHaveCSS(
+    "font-size",
+    "22.6667px",
+  );
+  await expect(comment.first().locator("p").first().locator("span").first()).toHaveCSS(
+    "font-size",
+    "22.6667px",
+  );
+  await undo.click();
+
+  await replyActions.click();
   await page.evaluate(
     /** Enables the original shared Writer setting for the browser query. @returns Nothing. */ () =>
       localStorage.setItem("org.openoffice.Office.Common/Misc/QueryDeleteAllComments", "true"),

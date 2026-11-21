@@ -50,6 +50,14 @@ export function createWriterAnnotationCommands(
       },
     },
     {
+      id: WRITER_COMMAND_IDS.formatAllNotes,
+      capabilityId: "CAP-0111",
+      /** Opens the actual annotation-mode Character dialog. @returns Whether formatting was applied. */
+      execute: () => view?.GetPostItMgr().ExecuteFormatAllDialog(),
+      /** Requires a comment window to supply the native EditEngine attributes. @returns Whether enabled. */
+      isEnabled: () => view?.GetPostItMgr().CanFormatAllNotes() === true,
+    },
+    {
       id: WRITER_COMMAND_IDS.deleteAllNotes,
       capabilityId: "CAP-0111",
       /** Deletes all comments from the Writer text shell. @returns Whether changed. */

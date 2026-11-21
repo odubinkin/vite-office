@@ -26,7 +26,7 @@ export interface SwAnnotationWindow {
   readonly editor: ImpEditEngine;
   readonly view: SearchEditView;
   MakeVisible(): void;
-  ApplyAttributes?(items: SfxItemSet): boolean;
+  ApplyAttributes?(items: SfxItemSet, wholeNote?: boolean): boolean;
   SelectAll?(): void;
   SearchHighlight?(): void;
   HasFocus?(): boolean;
@@ -122,6 +122,59 @@ export class SwPostItMgr {
         return deleted;
       },
     );
+  }
+
+  /** Reports whether there is an annotation window to provide dialog data. @returns Whether comment formatting is available. */
+  CanFormatAllNotes(): boolean {
+    return !this.options.IsReadonly() && this.windows.size > 0;
+  }
+
+  /** Formats all mounted notes using the active note or the first anchored note as dialog input. @returns Whether formatting was applied. */
+  async ExecuteFormatAllDialog(): Promise<boolean> {
+    if (!this.CanFormatAllNotes() || !this.dialogs) return false;
+    const document = this.writer.GetDoc();
+    const original = this.GetActiveField();
+    const fields = SwPostItFieldType.Get(document);
+    let source = original;
+    if (!source) {
+      for (const field of fields.GatherFields()) {
+        if (!this.windows.has(field)) continue;
+        source = field;
+        break;
+      }
+    }
+    const window = source && this.windows.get(source);
+    if (!source || !window) return false;
+    this.SetActiveSidebarWin(source);
+    const input = window.editor.GetAttribs(window.view.getImpl().GetEditSelection());
+    try {
+      const output = await this.dialogs.RequestFormatAllNotes(input);
+      if (!output) return false;
+      try {
+        if (document !== this.writer.GetDoc() || !this.CanFormatAllNotes()) return false;
+        input.PutSet(output);
+        return document.RunModelTransaction(
+          /** Applies original input plus dialog output as one Writer undo action. @returns Whether applied. */ () => {
+            const undo = document.GetUndoManager();
+            undo.StartUndo("Format All Comments");
+            try {
+              let changed = false;
+              for (const field of fields.GatherFields())
+                changed =
+                  this.windows.get(field)?.ApplyAttributes?.(input, true) === true || changed;
+              return changed;
+            } finally {
+              undo.EndUndo();
+            }
+          },
+        );
+      } finally {
+        output.Dispose();
+      }
+    } finally {
+      input.Dispose();
+      if (this.GetActiveField() === source && source !== original) this.ClearActiveField();
+    }
   }
 
   /** Confirms when configured and removes the matching fields in one Writer undo group. @param author - Exact author filter, if supplied. @returns Whether any note was deleted. */

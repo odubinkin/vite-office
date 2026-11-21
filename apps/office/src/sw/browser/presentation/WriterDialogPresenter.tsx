@@ -15,6 +15,8 @@ import { WriterBookmarkDialog } from "./WriterBookmarkDialog";
 import { WriterInsertBreakDialog } from "./WriterInsertBreakDialog";
 import { WriterPageStyleDialog } from "./WriterPageStyleDialog";
 
+import { WriterAnnotationCharDialog } from "./WriterAnnotationCharDialog";
+
 /** Forwards original request identity and completion payloads;the paragraph presenter stays with its formatting controls. @param props - Actual controller,snapshot and module metric. @returns Active dialog or no dialog. */
 export function WriterDialogPresenter({
   controller,
@@ -131,6 +133,25 @@ export function WriterDialogPresenter({
             /** Inserts a hard page break. @returns Nothing. */
             () => {
               controller.Complete(request.id, { breakKind: "page" });
+              focusDocument();
+            }
+          }
+        />
+      )}
+      {request?.request.kind !== "annotation-character" ? null : (
+        <WriterAnnotationCharDialog
+          key={request.id}
+          input={request.request.input}
+          onCancel={
+            /** Cancels the Character request and restores the document client. @returns Nothing. */ () => {
+              controller.Cancel(request.id);
+              focusDocument();
+            }
+          }
+          onSubmit={
+            /** Returns the native tab-page output set to the comment manager. @param attributes - Owned set. @returns Nothing. */
+            (attributes) => {
+              if (!controller.Complete(request.id, { attributes })) attributes.Dispose();
               focusDocument();
             }
           }

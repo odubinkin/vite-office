@@ -19,17 +19,21 @@
         "apps/office/src/editeng/source/editeng/impedit5.attributes.ts#SetParaAttribs",
         "apps/office/src/sc/source/ui/docshell/impex.admission.test.ts",
         "editeng/source/editeng/impedit5.cxx",
-        "editeng/source/editeng/editundo.cxx"
+        "editeng/source/editeng/editundo.cxx",
+        "apps/office/src/editeng/source/editeng/impedit5.attributes.ts#GetAttribs",
+        "apps/office/src/editeng/source/editeng/native-engine-object.test.ts"
       ],
-      "justification": "Paragraph defaults use the original pool conversion for undo, actual item-set mutation, spelling invalidation and paragraph notification order. Interactive view formatting remains outside the document text-object slice.",
+      "justification": "Paragraph defaults use the original pool conversion for undo, actual item-set mutation, spelling invalidation and paragraph notification order. The All selection attribute path merges hard runs with the original paragraph and pool defaults for the annotation Character dialog.",
       "knownViolations": [],
       "localSymbols": [
-        "SetParaAttribs"
+        "SetParaAttribs",
+        "GetAttribs"
       ],
       "sourceResponsibility": "aligned",
       "upstreamFile": "editeng/source/editeng/impedit5.cxx",
       "upstreamSymbols": [
-        "ImpEditEngine::SetParaAttribs"
+        "ImpEditEngine::SetParaAttribs",
+        "ImpEditEngine::GetAttribs"
       ]
     }
   }
