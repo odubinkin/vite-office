@@ -20,10 +20,11 @@
         "apps/office/src/sc/browser/presentation/calc-named-ranges.test.tsx",
         "vendor/libreoffice-reference/sc/source/ui/undo/undorangename.cxx"
       ],
-      "justification": "Restores the source indexed name in the same local or document scope.",
+      "justification": "Records indexed insertion and all-scope manager edits with hybrid formulas.",
       "knownViolations": [],
       "localSymbols": [
-        "ScUndoAddRangeData"
+        "ScUndoAddRangeData",
+        "ScUndoAllRangeNames"
       ],
       "sourceResponsibility": "unverified",
       "upstreamFile": "sc/source/ui/undo/undorangename.cxx",

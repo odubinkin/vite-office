@@ -1,4 +1,5 @@
 /** @fileoverview Native scalar formula scanning, qualified A1 references and compiled named expressions. */
+import type { ScRangeNameMap } from "./rangenam";
 import { ScParameterClassification } from "../inc/parclass";
 import { FormulaCompiler, errorSymbols } from "../../../../formula/inc/FormulaCompiler";
 import {
@@ -324,6 +325,26 @@ export class ScCompiler extends FormulaCompiler {
     );
   }
 
+  private rangeNames?: ScRangeNameMap;
+  private rangeNameUpdate?: ScRangeNameMap;
+
+  /** Uses a draft scope map during name compilation. @param names - Staged native collections. @returns Compiler. */
+  SetRangeNameMap(names: ScRangeNameMap | undefined): this {
+    if (names) this.rangeNames = names;
+    return this;
+  }
+
+  /** Supplies new names by original scope/index during hybrid preprocessing. @param names - Replacement collections. @returns Compiler. */
+  SetRangeNameUpdate(names: ScRangeNameMap): this {
+    this.rangeNameUpdate = names;
+    return this;
+  }
+
+  /** Resolves live or draft names consistently. @param scope - Scope index. @returns Native list. */
+  private GetRangeNames(scope: number) {
+    return this.rangeNames ? this.rangeNames.get(scope) : this.rDoc.GetRangeName(scope);
+  }
+
   /** Writes symbolic names and typed inline matrices from the actual lexical tokens. @param token - Source token. @returns Formula spelling. */
   protected override CreateStringFromToken(token: FormulaToken): string {
     if (token instanceof FormulaExternalToken && text(token.GetExternal()) === ANALYSIS_EDATE)
@@ -335,9 +356,13 @@ export class ScCompiler extends FormulaCompiler {
     if (!(token instanceof FormulaIndexToken) || token.GetOpCode() !== OpCode.ocName)
       return super.CreateStringFromToken(token);
     const tab = token.GetSheet();
-    const range = this.rDoc.GetRangeName(tab)?.findByIndex(token.GetIndex());
+    const range = this.GetRangeNames(tab)?.findByIndex(token.GetIndex());
+    const replacement = this.rangeNameUpdate?.get(tab)?.findByIndex(token.GetIndex());
     if (!range) return "#NAME?";
-    return (tab !== -1 && tab !== this.aPos.Tab() ? this.FormatSheet(tab, false) : "") + range.name;
+    return (
+      (tab !== -1 && tab !== this.aPos.Tab() ? this.FormatSheet(tab, false) : "") +
+      (replacement?.name ?? range.name)
+    );
   }
   /** Writes an external single-sheet operand in the active formula convention. @param token - External reference. @returns Serialized reference. */
   private CreateStringFromExternal(
@@ -403,7 +428,7 @@ export class ScCompiler extends FormulaCompiler {
   /** Expands the actual name at RPN compilation time, preserving source order. @param token - Compiled name index. @returns Name expansion. */
   protected override HandleRange(token: FormulaToken): Iterable<FormulaToken> | undefined {
     if (!(token instanceof FormulaIndexToken)) return undefined;
-    const code = this.rDoc.GetRangeName(token.GetSheet())?.findByIndex(token.GetIndex())?.GetCode();
+    const code = this.GetRangeNames(token.GetSheet())?.findByIndex(token.GetIndex())?.GetCode();
     if (!code) return undefined;
     if (code.GetCodeError() !== FormulaError.NONE) {
       this.SetError(code.GetCodeError());
@@ -740,8 +765,7 @@ export class ScCompiler extends FormulaCompiler {
         if (tab !== undefined) {
           const qualifiedName = nameIdentifier.exec(address)?.[0];
           const defined =
-            qualifiedName &&
-            this.rDoc.GetRangeName(tab)?.findByUpperName(qualifiedName.toUpperCase());
+            qualifiedName && this.GetRangeNames(tab)?.findByUpperName(qualifiedName.toUpperCase());
           const range = odf ? null : a1Range.exec(address);
           const cell = range ?? (odf ? null : a1Reference.exec(address));
           if (defined) {
@@ -767,8 +791,8 @@ export class ScCompiler extends FormulaCompiler {
       }
       if (identifier) {
         const key = identifier[0].toUpperCase();
-        const local = this.rDoc.GetRangeName(this.aPos.Tab())?.findByUpperName(key);
-        const range = local ?? this.rDoc.GetRangeName()?.findByUpperName(key);
+        const local = this.GetRangeNames(this.aPos.Tab())?.findByUpperName(key);
+        const range = local ?? this.GetRangeNames(-1)?.findByUpperName(key);
         if (range) {
           if (
             !array.AddToken(

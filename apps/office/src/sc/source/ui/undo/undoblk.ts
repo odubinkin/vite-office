@@ -280,3 +280,61 @@ export class ScUndoConditionalFormat extends ScUndoConditionalFormatList {
     return "Conditional Format";
   }
 }
+
+/** Name-list history uses the cell and attribute parts of the source ALL mask. */
+export const nameListSnapshotFlags = InsertDeleteFlags.ALL & ~InsertDeleteFlags.OBJECTS;
+
+/** Source two-column block history used by Paste List. */
+export class ScUndoListNames extends SfxUndoAction<ScDocShell> {
+  private readonly range: ScRange;
+
+  /** Owns both versions of the affected block. @param range - List destination. @param undo - Before insertion. @param redo - After insertion. @returns Action. */
+  constructor(
+    range: ScRange,
+    private readonly undo: ScDocument,
+    private readonly redo: ScDocument,
+  ) {
+    super();
+    this.range = new ScRange(range);
+  }
+
+  /** Replaces the saved block including empty cells and attributes. @param shell - Workbook. @param source - Snapshot. @returns Nothing. */
+  private DoChange(shell: ScDocShell, source: ScDocument): void {
+    const doc = shell.GetDocument();
+    const { aStart, aEnd } = this.range;
+    const marks = new ScMarkData(doc.GetSheetLimits());
+    marks.SelectTable(aStart.Tab(), true);
+    doc.DeleteArea(
+      aStart.Col(),
+      aStart.Row(),
+      aEnd.Col(),
+      aEnd.Row(),
+      marks,
+      nameListSnapshotFlags,
+    );
+    source.CopyToDocument(this.range, nameListSnapshotFlags, false, doc);
+    AdjustBlockHeight(doc, marks, aStart.Row(), aEnd.Row());
+    doc.BroadcastCells(this.range, SfxHintId.ScDataChanged);
+  }
+
+  /** Restores the original block. @param shell - Workbook. @returns Nothing. */
+  override UndoWithContext(shell: ScDocShell): void {
+    this.DoChange(shell, this.undo);
+  }
+
+  /** Restores the inserted list. @param shell - Workbook. @returns Nothing. */
+  override RedoWithContext(shell: ScDocShell): void {
+    this.DoChange(shell, this.redo);
+  }
+
+  /** Releases both owned snapshots. @returns Nothing. */
+  override Dispose(): void {
+    this.undo.Dispose();
+    this.redo.Dispose();
+  }
+
+  /** Returns the source undo label. @returns Caption. */
+  override GetComment(): string {
+    return "List names";
+  }
+}

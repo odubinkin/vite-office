@@ -2,6 +2,7 @@
 import type { Ref } from "react";
 import type { ScRange } from "../../inc/address";
 import type { ScPrintReferenceInput } from "./ScPrintAreasDlg";
+import { ScNameManagerDlg, ScNamePasteDlg } from "./namedlg/ScNameDialogs";
 import { ScNameDefDlg } from "./namedlg/ScNameDefDlg";
 import { ScCondFormatDlg } from "./condformat/ScCondFormatDlg";
 import { ScCondFormatManagerDlg } from "./condformat/ScCondFormatManagerDlg";
@@ -22,6 +23,8 @@ interface CalcSheetDialogsProps {
   readonly condEditor: ReturnType<CalcSheetWorkflows["conditionals"]["editors"]["GetSnapshot"]>;
   readonly condManager: ReturnType<CalcSheetWorkflows["conditionals"]["managers"]["GetSnapshot"]>;
   readonly nameDialog: ReturnType<CalcSheetWorkflows["nameDialogs"]["GetSnapshot"]>;
+  readonly nameManager: ReturnType<CalcSheetWorkflows["nameManagerDialogs"]["GetSnapshot"]>;
+  readonly namePaste: ReturnType<CalcSheetWorkflows["namePasteDialogs"]["GetSnapshot"]>;
   readonly referenceInput: Ref<ScPrintReferenceInput>;
   readonly onReference: (owner: object, range: ScRange | undefined) => void;
   readonly sheetDialog: ReturnType<CalcSheetWorkflows["dialogs"]["GetSnapshot"]>;
@@ -38,11 +41,31 @@ export function CalcSheetDialogs({
   condEditor,
   condManager,
   nameDialog,
+  nameManager,
+  namePaste,
   referenceInput,
   onReference,
 }: CalcSheetDialogsProps): React.JSX.Element {
   return (
     <>
+      {nameManager && (
+        <ScNameManagerDlg
+          key={nameManager.id}
+          model={nameManager.request}
+          referenceInput={referenceInput}
+          onReference={(range) => onReference(nameManager, range)}
+          onCancel={() => sheetWorkflows.nameManagerDialogs.Cancel(nameManager.id)}
+          onRespond={(result) => sheetWorkflows.nameManagerDialogs.Complete(nameManager.id, result)}
+        />
+      )}
+      {namePaste && (
+        <ScNamePasteDlg
+          key={namePaste.id}
+          rows={namePaste.request}
+          onCancel={() => sheetWorkflows.namePasteDialogs.Cancel(namePaste.id)}
+          onRespond={(result) => sheetWorkflows.namePasteDialogs.Complete(namePaste.id, result)}
+        />
+      )}
       {nameDialog && (
         <ScNameDefDlg
           key={nameDialog.id}

@@ -1,7 +1,8 @@
 /** @fileoverview Undo for the source Calc definition dialog and name entry. */
 import { SfxHint, SfxHintId } from "../../../../svl/inc/hint";
 import { SfxUndoAction } from "../../../../svl/source/undo/undo";
-import type { ScRangeData } from "../../core/tool/rangenam";
+import type { ScRangeData, ScRangeNameMap } from "../../core/tool/rangenam";
+import { SetAllRangeNames, type ScRangeNameFormula } from "../../core/data/document10.rangenames";
 import type { ScDocShell } from "../docshell/docsh";
 
 /** Owns the definition used to remove and restore the original token index. */
@@ -43,6 +44,41 @@ export class ScUndoAddRangeData extends SfxUndoAction<ScDocShell> {
   }
 
   /** Returns original undo caption. @returns Caption. */
+  override GetComment(): string {
+    return "Edit range names";
+  }
+}
+
+/** Native name manager history owns both full scope snapshots and affected hybrids. */
+export class ScUndoAllRangeNames extends SfxUndoAction<ScDocShell> {
+  /** Takes both manager snapshots. @param before - Old names. @param after - Edited names. @param formulas - Original and renamed hybrid strings. @returns Action. */
+  constructor(
+    private readonly before: ScRangeNameMap,
+    private readonly after: ScRangeNameMap,
+    private readonly formulas: readonly ScRangeNameFormula[],
+  ) {
+    super();
+  }
+
+  /** Restores the previous name map and reference spellings. @param shell - Workbook. @returns Nothing. */
+  override UndoWithContext(shell: ScDocShell): void {
+    SetAllRangeNames(shell.GetDocument(), this.before, this.formulas, false);
+    shell.Broadcast(new SfxHint(SfxHintId.ScAreasChanged));
+  }
+
+  /** Reinstates the edited map and reference spellings. @param shell - Workbook. @returns Nothing. */
+  override RedoWithContext(shell: ScDocShell): void {
+    SetAllRangeNames(shell.GetDocument(), this.after, this.formulas, true);
+    shell.Broadcast(new SfxHint(SfxHintId.ScAreasChanged));
+  }
+
+  /** Releases both snapshots. @returns Nothing. */
+  override Dispose(): void {
+    for (const snapshot of [this.before, this.after])
+      for (const names of snapshot.values()) names.clear();
+  }
+
+  /** Returns source undo label. @returns Caption. */
   override GetComment(): string {
     return "Edit range names";
   }

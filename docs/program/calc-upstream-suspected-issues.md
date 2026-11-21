@@ -7690,3 +7690,13 @@ classification for manual entry and checks the actual token array when
 resolving a navigable range.
 
 - [Original ScRangeData::CompileRangeData](../../vendor/libreoffice-reference/sc/source/core/tool/rangenam.cxx)
+
+### CALC-808 — Moving an unchanged name can collide with an existing scope entry
+
+Manage Names performs the duplicate-name check when the spelling changes.
+Moving a name with the same spelling into a scope that already contains it
+can remove the original definition while the existing destination definition
+remains. The browser keeps the source change in the draft until confirmation
+and includes it in the manager's single Undo action.
+
+- [Original ScopeChanged and NameModified handlers](../../vendor/libreoffice-reference/sc/source/ui/namedlg/namedlg.cxx)

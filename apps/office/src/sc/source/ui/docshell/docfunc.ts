@@ -11,6 +11,10 @@ import {
   type ScConditionalFormatList,
 } from "../../../inc/conditio";
 import type { ScRangeList } from "../../../inc/rangelst";
+import { PreprocessAllRangeNamesUpdate } from "../../core/data/document10.rangenames";
+import { CloneRangeNameMap, type ScRangeNameMap } from "../../core/tool/rangenam";
+import { ScUndoAllRangeNames } from "../undo/undorangename";
+import { InsertNameListOperation } from "../operation/InsertNameListOperation";
 import { text } from "../../../../i18nlangtag/source/isolang/isolang.tables";
 import { Color } from "../../../../tools/inc/color";
 import { ScUndoPageBreak } from "../undo/undocell";
@@ -30,6 +34,23 @@ import { DeleteCellOperation } from "../operation/DeleteCellOperation";
 export class ScDocFunc {
   /** Borrows the actual shell. @param shell - Document owner. @returns Function owner. */
   constructor(private readonly shell: ScDocShell) {}
+  /** Commits an all-scope range manager snapshot as one source history action. @param names - Owned draft map. @returns Nothing. */
+  ModifyAllRangeNames(names: ScRangeNameMap): void {
+    const document = this.shell.GetDocument();
+    const undo = new ScUndoAllRangeNames(
+      CloneRangeNameMap(document),
+      names,
+      PreprocessAllRangeNamesUpdate(document, names),
+    );
+    undo.RedoWithContext(this.shell);
+    this.shell.GetUndoManager().AddUndoAction(undo);
+    this.shell.SetDocumentModified();
+  }
+
+  /** Inserts the native sorted name and definition text block. @param position - Upper-left cell. @returns Whether written. */
+  InsertNameList(position: ScAddress): boolean {
+    return new InsertNameListOperation(this.shell, position).run();
+  }
   /** Replaces one source rule group and updates cell keys before publishing the change. @param oldKey - Existing key or zero for a new format. @param format - Owned replacement, or null for removal. @param tab - Active sheet. @param ranges - Replacement associations. @returns Whether the operation was accepted. */
   ReplaceConditionalFormat(
     oldKey: number,

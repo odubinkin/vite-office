@@ -1,0 +1,29 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "browser-adaptation",
+    "status": "local-only",
+    "localPath": "apps/office/src/sc/browser/presentation/namedlg/ScNameDialogs.tsx",
+    "rationale": "Presents the source name manager and paste dialogs with native HTML controls while retaining Calc action order, reference picking, and scope selection.",
+    "responsibilities": [
+      "Presents the source name manager and paste dialogs with native HTML controls while retaining Calc action order, reference picking, and scope selection."
+    ],
+    "stackDivergence": {
+      "kind": "browser-adaptation",
+      "rationale": "Presents the source name manager and paste dialogs with native HTML controls while retaining Calc action order, reference picking, and scope selection."
+    },
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sc/browser/presentation/namedlg/ScNameDialogs.tsx",
+          "marker": "ScNameManagerDlg"
+        },
+        {
+          "path": "apps/office/src/sc/browser/presentation/calc-named-ranges.test.tsx",
+          "marker": "ports tdf87474"
+        }
+      ]
+    }
+  }
+}

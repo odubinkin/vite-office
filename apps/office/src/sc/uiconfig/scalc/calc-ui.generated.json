@@ -2411,6 +2411,7 @@
     ".uno:SheetInsertName": {
       "label": "Insert",
       "showsDialog": true,
+      "targetUrl": ".uno:InsertName",
       "shortcuts": [],
       "semantics": "action"
     },

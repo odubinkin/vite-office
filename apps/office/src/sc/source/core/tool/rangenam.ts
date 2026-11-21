@@ -12,6 +12,7 @@ import { ScCompiler } from "./compiler";
 /** Original flags of a named expression. */
 export enum RangeDataType {
   Name = 0,
+  Database = 1,
   Criteria = 2,
   PrintArea = 4,
   ColHeader = 8,
@@ -45,11 +46,13 @@ export class ScRangeData {
     return this.flags;
   }
 
-  /** Compiles in the actual document after names and sheet identities exist. @param symbol - Formula source. @param grammar - Original grammar. @param manual - Compile token syntax for manual entry. @returns Nothing. */
-  CompileRangeData(symbol: string, grammar: Grammar, manual = false): void {
+  /** Compiles in the actual document after names and sheet identities exist. @param symbol - Formula source. @param grammar - Original grammar. @param manual - Compile token syntax for manual entry. @param names - Reference scope of a manager draft. @returns Nothing. */
+  CompileRangeData(symbol: string, grammar: Grammar, manual = false, names?: ScRangeNameMap): void {
     const value = unicode(symbol);
     try {
-      const code = new ScCompiler(this.document, this.pos, grammar).CompileString(value);
+      const code = new ScCompiler(this.document, this.pos, grammar)
+        .SetRangeNameMap(names)
+        .CompileString(value);
       code.SetFromRangeName(true);
       if (manual && code.GetCodeError() === FormulaError.NONE) {
         const first = code.GetArray()?.find((token) => {
@@ -59,7 +62,9 @@ export class ScRangeData {
         if (first)
           this.flags |=
             first.GetType() === StackVar.svSingleRef ? RangeDataType.AbsPos : RangeDataType.AbsArea;
-        new ScCompiler(this.document, this.pos, code, grammar).CompileTokenArray();
+        new ScCompiler(this.document, this.pos, code, grammar)
+          .SetRangeNameMap(names)
+          .CompileTokenArray();
         code.DelRPN();
       }
       this.code.Clear();
@@ -122,13 +127,17 @@ export class ScRangeData {
     return this.code;
   }
 
-  /** Serializes native code at the requested origin and grammar. @param grammar - Destination grammar. @param position - Requested reference origin. @returns Source formula. */
-  GetSymbol(grammar: Grammar = FormulaGrammar.Grammar.GRAM_ODFF, position = this.pos): string {
+  /** Serializes native code at the requested origin and grammar. @param grammar - Destination grammar. @param position - Requested reference origin. @param names - Optional manager scope snapshot. @returns Source formula. */
+  GetSymbol(
+    grammar: Grammar = FormulaGrammar.Grammar.GRAM_ODFF,
+    position = this.pos,
+    names?: ScRangeNameMap,
+  ): string {
     const result = new OUString();
     try {
-      new ScCompiler(this.document, position, this.code, grammar).CreateStringFromTokenArray(
-        result,
-      );
+      new ScCompiler(this.document, position, this.code, grammar)
+        .SetRangeNameMap(names)
+        .CreateStringFromTokenArray(result);
       return text(result);
     } finally {
       result.dispose();
@@ -141,6 +150,7 @@ export class ScRangeName {
   private readonly data = new Map<string, ScRangeData>();
   private readonly indexToData = new Map<number, ScRangeData>();
   private nextIndex = 1;
+  private highestIndex = 0;
 
   /** Looks up the original key. @param name - Uppercase name. @returns Definition or undefined. */
   findByUpperName(name: string): ScRangeData | undefined {
@@ -160,14 +170,29 @@ export class ScRangeName {
     let index = value.GetIndex();
     if (!index) {
       index = this.nextIndex;
-      if (!reuseFreeIndex)
-        for (const used of this.indexToData.keys()) index = Math.max(index, used + 1);
+      if (!reuseFreeIndex) index = Math.max(index, this.highestIndex + 1);
     }
     if (index > 0xffff || this.indexToData.has(index)) return false;
     value.SetIndex(index);
     this.data.set(name, value);
     this.indexToData.set(index, value);
+    this.highestIndex = Math.max(this.highestIndex, index);
     return true;
+  }
+
+  /** Copies entries and the no-reuse index boundary. @returns Independent name collection. */
+  Clone(): ScRangeName {
+    const copy = new ScRangeName();
+    copy.Assign(this);
+    return copy;
+  }
+
+  /** Replaces the entries with native value copies. @param source - Published snapshot. @returns Nothing. */
+  Assign(source: ScRangeName): void {
+    if (source === this) return;
+    this.clear();
+    for (const value of source) this.insert(value.Clone());
+    this.highestIndex = source.highestIndex;
   }
 
   /** Erases one owned name and its scope-local token lookup. @param entry - Current definition. @returns Nothing. */
@@ -189,7 +214,21 @@ export class ScRangeName {
     this.data.clear();
     this.indexToData.clear();
     this.nextIndex = 1;
+    this.highestIndex = 0;
   }
+}
+
+/** Native all-scope name map keyed by document scope (-1) or sheet. */
+export type ScRangeNameMap = ReadonlyMap<number, ScRangeName>;
+
+/** Copies the original range name map before a transactional change. @param document - Source workbook. @returns Independent all-scope values. */
+export function CloneRangeNameMap(document: ScDocument): Map<number, ScRangeName> {
+  const result = new Map<number, ScRangeName>();
+  for (let scope = -1; scope < document.GetTableCount(); scope++) {
+    const names = document.GetRangeName(scope);
+    if (names) result.set(scope, names.Clone());
+  }
+  return result;
 }
 
 /** One file-filter name definition awaiting two-pass admission. */

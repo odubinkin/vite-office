@@ -115,11 +115,27 @@ const commands = Object.fromEntries(
       ) => {
         const label = findEnglishLabel(url, ...catalogs),
           popupLabel = findEnglishLabelProperty(url, "PopupLabel", ...catalogs);
+        const targetUrl =
+          url === ".uno:SheetInsertName"
+            ? catalogs
+                .map(
+                  (catalog) =>
+                    catalog.split('<node oor:name=".uno:SheetInsertName"')[1]?.split("</node>")[0],
+                )
+                .map(
+                  (block) =>
+                    block?.match(
+                      /<prop oor:name="TargetURL"[^>]*>\s*<value>([^<]+)<\/value>/u,
+                    )?.[1],
+                )
+                .find((target) => target !== undefined)
+            : undefined;
         return [
           url,
           {
             label: stripMnemonic(label),
             showsDialog: label.endsWith("..."),
+            ...(targetUrl ? { targetUrl } : {}),
             ...(popupLabel === undefined
               ? {}
               : {

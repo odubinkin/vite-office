@@ -5,7 +5,7 @@ import { SfxHint, SfxHintId } from "../../../../svl/inc/hint";
 import { ScAddress, ScRange, ScRefFlags } from "../../../inc/address";
 import type { ScDocument } from "../../../inc/document";
 import { ScCompiler } from "../../core/tool/compiler";
-import { RangeDataType, ScRangeData } from "../../core/tool/rangenam";
+import { RangeDataType, ScRangeData, type ScRangeNameMap } from "../../core/tool/rangenam";
 import type { ScDocShell } from "../docshell/docsh";
 import { ScUndoAddRangeData } from "../undo/undorangename";
 import type { ScViewData } from "../inc/viewdata";
@@ -43,8 +43,11 @@ export class ScNameDefDlg {
   readonly expression: string;
   readonly scopes: readonly (readonly [number, string])[];
 
-  /** Reads source selection and available scopes. @param view - Active sheet view. @returns Definition model. */
-  constructor(view: ScViewData) {
+  /** Reads source selection and available scopes. @param view - Active sheet view. @param names - Optional staged scopes. @returns Definition model. */
+  constructor(
+    view: ScViewData,
+    private readonly names?: ScRangeNameMap,
+  ) {
     this.document = view.GetDocument();
     this.position = new ScAddress(view.GetCurX(), view.GetCurY(), view.CurrentTabForData());
     const range = new ScRange();
@@ -58,11 +61,12 @@ export class ScNameDefDlg {
     this.scopes = scopes;
   }
 
-  /** Checks name admission against the selected original scope. @param name - Entered spelling. @param scope - Sheet or -1. @returns Validation error. */
-  CheckName(name: string, scope: number): string {
-    const names = this.document.GetRangeName(scope);
+  /** Checks name admission against the selected original scope. @param name - Entered spelling. @param scope - Sheet or -1. @param previous - Entry being edited. @returns Validation error. */
+  CheckName(name: string, scope: number, previous?: ScRangeData): string {
+    const names = this.names ? this.names.get(scope) : this.document.GetRangeName(scope);
     if (!names) return "Invalid scope.";
-    if (names.findByUpperName(name.toUpperCase())) return "The name is already in use.";
+    const existing = names.findByUpperName(name.toUpperCase());
+    if (existing && existing !== previous) return "The name is already in use.";
     const status = ScRangeData.IsNameValid(name, this.document);
     if (status === "reference") return "The name cannot be a cell reference.";
     return status === "syntax" ? "Invalid name." : "";
@@ -87,11 +91,9 @@ export class ScNameDefDlg {
     }
     const value = unicode(expression);
     try {
-      const code = new ScCompiler(
-        this.document,
-        this.position,
-        this.document.GetGrammar(),
-      ).CompileString(value);
+      const code = new ScCompiler(this.document, this.position, this.document.GetGrammar())
+        .SetRangeNameMap(this.names)
+        .CompileString(value);
       const error = code.GetCodeError();
       code.Clear();
       return error === FormulaError.NONE ? "" : "Invalid range or formula expression.";
@@ -100,18 +102,25 @@ export class ScNameDefDlg {
     }
   }
 
+  /** Compiles the proposed indexed definition without mutating the selected scope. @param data - Entered fields. @param previous - Entry being edited. @returns Owned definition or validation text. */
+  CreateEntry(data: ScNameDef, previous?: ScRangeData): ScRangeData | string {
+    const error =
+      this.CheckName(data.name, data.scope, previous) ||
+      this.CheckExpression(data.expression, data.type);
+    if (error) return error;
+    const entry = new ScRangeData(this.document, data.name, this.position, data.type);
+    entry.CompileRangeData(data.expression, this.document.GetGrammar(), true, this.names);
+    if (entry.GetCode().GetCodeError() === FormulaError.NONE) return entry;
+    entry.GetCode().Clear();
+    return "Invalid range or formula expression.";
+  }
+
   /** Checks and adds an indexed definition with undo. @param shell - Active workbook shell. @param data - Entered fields. @param reuseFreeIndex - Source name-box insertion policy. @returns Error message or accepted empty string. */
   Add(shell: ScDocShell, data: ScNameDef, reuseFreeIndex = false): string {
     if (shell.GetDocument() !== this.document) return "The document has changed.";
-    const error =
-      this.CheckName(data.name, data.scope) || this.CheckExpression(data.expression, data.type);
-    if (error) return error;
-    const entry = new ScRangeData(this.document, data.name, this.position, data.type);
-    entry.CompileRangeData(data.expression, this.document.GetGrammar(), true);
-    if (
-      entry.GetCode().GetCodeError() !== FormulaError.NONE ||
-      !this.document.GetRangeName(data.scope)?.insert(entry, reuseFreeIndex)
-    ) {
+    const entry = this.CreateEntry(data);
+    if (typeof entry === "string") return entry;
+    if (!this.document.GetRangeName(data.scope)?.insert(entry, reuseFreeIndex)) {
       entry.GetCode().Clear();
       return "Invalid range or formula expression.";
     }

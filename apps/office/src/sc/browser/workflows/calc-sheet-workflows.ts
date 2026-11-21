@@ -1,5 +1,5 @@
 /** @fileoverview Browser async adapter for native ScTabViewShell::ExecGoToTab and JumpToTable/Nr;real sheet/cursor ownership remains with Calc. */
-import { STD_COL_WIDTH, MAX_COL_WIDTH, MAX_ROW_HEIGHT } from "../../inc/global";
+import { STD_COL_WIDTH, MAX_COL_WIDTH, MAX_ROW_HEIGHT, ScInputMode } from "../../inc/global";
 import { ScMetricInputDlg } from "../../source/ui/miscdlgs/mtrindlg";
 import { ScOptionsUtil } from "../../source/core/tool/optutil";
 import { FieldUnit } from "../../../tools/inc/fldunit";
@@ -64,6 +64,11 @@ import {
   ScNameDefDlg,
   type ScNameDef,
 } from "../../source/ui/namedlg/namedefdlg";
+import {
+  ScNameDlg,
+  FormatPastedRangeName,
+  type ScRangeNameLine,
+} from "../../source/ui/namedlg/namedlg";
 import type { CalcViewController } from "../controller/calc-view-controller";
 /** Immutable native dialog initialization;names are copied only as dialog widget resources. */
 export interface CalcGoToSheetRequest {
@@ -94,6 +99,10 @@ function printRangeArgument(request: SfxRequest, which: number): string {
   return item instanceof SfxStringItem ? item.GetValue() : "";
 }
 
+/** Source name-paste modal result. */
+export type NamePasteResult =
+  { readonly kind: "names"; readonly rows: readonly ScRangeNameLine[] } | { readonly kind: "list" };
+
 /** Session-owned native Go to Sheet request and asynchronous result application. */
 export class CalcSheetWorkflows {
   readonly dialogs = new SfxDialogController<CalcGoToSheetRequest, string>();
@@ -102,6 +111,12 @@ export class CalcSheetWorkflows {
   readonly headerFooterDialogs = new SfxDialogController<ScHFEditDlg, SfxItemSet>();
   readonly pageStyleDialogs = new SfxDialogController<ScStyleDlgRequest, ScStyleDlgResult>();
   readonly printDialogs = new SfxDialogController<PrintAreasModel, SfxRequest | undefined>();
+  private managing: ScNameDlg | undefined;
+  readonly nameManagerDialogs = new SfxDialogController<ScNameDlg, "add" | "apply">();
+  readonly namePasteDialogs = new SfxDialogController<
+    readonly ScRangeNameLine[],
+    NamePasteResult
+  >();
   readonly nameDialogs = new SfxDialogController<ScNameDefDlg, boolean>();
   readonly conditionals: CalcConditionalWorkflows;
   private readonly shell: SfxShell;
@@ -118,6 +133,23 @@ export class CalcSheetWorkflows {
           getState: (target: CalcSheetWorkflows) => ({ enabled: !target.HasSheetDialog() }),
           execute: (target: CalcSheetWorkflows, request: SfxRequest) =>
             !request.GetArgs().length && target.DefineName(),
+        },
+        {
+          commandUrl: ".uno:DefineName",
+          slotId: 26271,
+          label: "Manage Names",
+          shortcuts: ["Ctrl+F3", "Meta+F3"],
+          getState: (target: CalcSheetWorkflows) => ({ enabled: !target.HasSheetDialog() }),
+          execute: (target: CalcSheetWorkflows, request: SfxRequest) =>
+            !request.GetArgs().length && target.ManageNames(),
+        },
+        {
+          commandUrl: ".uno:InsertName",
+          slotId: 26272,
+          label: "Insert Name",
+          getState: (target: CalcSheetWorkflows) => ({ enabled: !target.HasSheetDialog() }),
+          execute: (target: CalcSheetWorkflows, request: SfxRequest) =>
+            !request.GetArgs().length && target.PasteNames(),
         },
         ...conditionalFormatCommands.map(
           /** Binds one original conditional-format Sfx command. @param slot - Source command. @returns Slot definition. */ ([
@@ -403,6 +435,13 @@ export class CalcSheetWorkflows {
   AddName(id: number, data: ScNameDef): string {
     const dialog = this.nameDialogs.GetSnapshot();
     if (!dialog || dialog.id !== id) return "The dialog has closed.";
+    const manager = this.managing;
+    if (manager) {
+      const answer = manager.Edit(undefined, data);
+      if (typeof answer === "string") return answer;
+      this.nameDialogs.Complete(id, true);
+      return "";
+    }
     const error = dialog.request.Add(this.controller.shell, data);
     if (!error) {
       const range = new ScRange();
@@ -416,6 +455,72 @@ export class CalcSheetWorkflows {
     return error;
   }
 
+  /** Opens and resumes the transactional name manager around its nested Define Name request. @returns Whether the workbook changed. */
+  private async ManageNames(): Promise<boolean> {
+    if (this.HasSheetDialog() || !this.controller.Commit()) return false;
+    const manager = new ScNameDlg(this.controller.viewData);
+    this.managing = manager;
+    try {
+      while (manager.editor.document === this.controller.shell.GetDocument()) {
+        const result = await this.nameManagerDialogs.Request(manager);
+        if (
+          result.kind !== "accepted" ||
+          manager.editor.document !== this.controller.shell.GetDocument()
+        )
+          return false;
+        if (result.result === "apply") {
+          const map = manager.TakeResult();
+          if (!map) return false;
+          this.controller.shell.GetDocFunc().ModifyAllRangeNames(map);
+          this.controller.SyncSheetView();
+          return true;
+        }
+        await this.nameDialogs.Request(manager.editor);
+        if (this.managing !== manager) return false;
+      }
+      return false;
+    } finally {
+      this.managing = undefined;
+      manager.Dispose();
+    }
+  }
+
+  /** Opens the original Insert Name picker and applies its respective response. @returns Whether a command ran. */
+  private async PasteNames(): Promise<boolean> {
+    if (this.HasSheetDialog()) return false;
+    const controller = this.controller;
+    const inEdit = controller.inputHandler.IsInputMode();
+    const model = new ScNameDlg(controller.viewData);
+    try {
+      const result = await this.namePasteDialogs.Request(model.GetRows());
+      if (result.kind !== "accepted" || model.editor.document !== controller.shell.GetDocument())
+        return false;
+      if (inEdit && !controller.inputHandler.IsInputMode()) return false;
+      if (result.result.kind === "list") {
+        if (inEdit || !controller.shell.GetDocFunc().InsertNameList(controller.Position()))
+          return false;
+        controller.SyncSheetView();
+        return true;
+      }
+      if (!result.result.rows.length) return false;
+      if (!inEdit && !controller.StartInput(ScInputMode.SC_INPUT_TYPE, "=")) return false;
+      const [first, last] = controller.inputSelection;
+      const start = Math.min(first, last),
+        end = Math.max(first, last);
+      const inserted =
+        result.result.rows
+          .map((row) => FormatPastedRangeName(row, model.editor.document.GetAddressConvention()))
+          .join(" ") + " ";
+      controller.ChangeInput(
+        controller.inputText.slice(0, start) + inserted + controller.inputText.slice(end),
+      );
+      controller.SetInputSelection(start + inserted.length, start + inserted.length);
+      return true;
+    } finally {
+      model.Dispose();
+    }
+  }
+
   /** Checks whether the sheet workflows already own a modal. @returns Active modal state. */
   private HasSheetDialog(): boolean {
     return Boolean(
@@ -425,6 +530,8 @@ export class CalcSheetWorkflows {
       this.printDialogs.GetSnapshot() ||
       this.pageStyleDialogs.GetSnapshot() ||
       this.headerFooterDialogs.GetSnapshot() ||
+      this.managing ||
+      this.namePasteDialogs.GetSnapshot() ||
       this.nameDialogs.GetSnapshot() ||
       this.conditionals.IsOpen(),
     );
@@ -776,6 +883,11 @@ export class CalcSheetWorkflows {
   /** Cancels the native async request before the session destroys its document. @returns Nothing. */
   Close(): void {
     this.conditionals.Close();
+    this.managing = undefined;
+    const manager = this.nameManagerDialogs.GetSnapshot();
+    if (manager) this.nameManagerDialogs.Cancel(manager.id);
+    const paste = this.namePasteDialogs.GetSnapshot();
+    if (paste) this.namePasteDialogs.Cancel(paste.id);
     const name = this.nameDialogs.GetSnapshot();
     if (name) this.nameDialogs.Cancel(name.id);
     const headerFooter = this.headerFooterDialogs.GetSnapshot();

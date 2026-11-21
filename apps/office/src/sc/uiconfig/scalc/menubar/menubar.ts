@@ -30,13 +30,13 @@ function adaptItems(nodes: readonly ResourceNode[]): CommandMenuItemPlacement[] 
           items: adaptItems(node.items as readonly ResourceNode[]),
         };
       const commandId = node.commandUrl as string;
+      const resource = generated.commands[commandId as keyof typeof generated.commands];
+      const target = "targetUrl" in resource ? resource.targetUrl : undefined;
       return {
         kind: "command",
-        commandId,
-        label: node.label,
-        showsDialog:
-          node.showsDialog ??
-          generated.commands[commandId as keyof typeof generated.commands].showsDialog,
+        commandId: target ?? commandId,
+        label: node.label ?? (target ? resource.label : undefined),
+        showsDialog: node.showsDialog ?? resource.showsDialog,
       };
     },
   );

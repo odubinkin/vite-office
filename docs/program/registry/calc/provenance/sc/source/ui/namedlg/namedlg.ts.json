@@ -1,0 +1,45 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "status": "mapped",
+    "localPath": "apps/office/src/sc/source/ui/namedlg/namedlg.ts",
+    "localSymbols": [
+      "ScNameDlg"
+    ],
+    "upstreamPath": "sc/source/ui/namedlg/namedlg.cxx",
+    "upstreamSymbols": [
+      "ScNameDlg::NameModified",
+      "ScNameDlg::RemovePushed"
+    ],
+    "preservedResponsibilities": [
+      "Owns source scope drafts, row identity, edits, and result transfer."
+    ],
+    "omittedResponsibilities": [
+      "Native drawing and window repaints use the existing browser rendering model."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sc/source/ui/namedlg/namedlg.ts",
+          "marker": "ScNameDlg"
+        },
+        {
+          "path": "apps/office/src/sc/browser/presentation/calc-named-ranges.test.tsx",
+          "marker": "ports tdf87474"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sc/source/ui/namedlg/namedlg.cxx",
+          "marker": "ScNameDlg::NameModified"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/source/ui/namedlg/namedlg.cxx",
+          "marker": "ScNameDlg::RemovePushed"
+        }
+      ]
+    }
+  }
+}

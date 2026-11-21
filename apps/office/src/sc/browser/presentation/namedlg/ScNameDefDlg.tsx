@@ -2,6 +2,7 @@
 import { useImperativeHandle, useLayoutEffect, useRef, useState, type Ref } from "react";
 import { DialogHeader } from "../../../../framework/browser/presentation/DialogHeader";
 import { ScRange, type ScAddress } from "../../../inc/address";
+import { rangeOptions } from "../../../source/ui/namedlg/namedlg";
 import { RangeDataType } from "../../../source/core/tool/rangenam";
 import {
   FormatNameReference,
@@ -9,13 +10,6 @@ import {
   type ScNameDef,
 } from "../../../source/ui/namedlg/namedefdlg";
 import type { ScPrintReferenceInput } from "../ScPrintAreasDlg";
-
-const options = [
-  [RangeDataType.PrintArea, "Print range"],
-  [RangeDataType.Criteria, "Filter"],
-  [RangeDataType.ColHeader, "Repeat column"],
-  [RangeDataType.RowHeader, "Repeat row"],
-] as const;
 
 /** Source draft and picker bindings. */
 interface Props {
@@ -182,7 +176,7 @@ export function ScNameDefDlg({
           <details>
             <summary>Range Options</summary>
             <div className="grid grid-cols-2 gap-2 pt-2">
-              {options.map(([flag, label]) => (
+              {rangeOptions.map(([flag, label]) => (
                 <label key={flag} className="flex gap-2">
                   <input
                     type="checkbox"
