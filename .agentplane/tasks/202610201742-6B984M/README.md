@@ -4,7 +4,7 @@ title: "Implement Writer search and replace core and browser UI"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 104
+revision: 105
 origin:
   system: "manual"
 depends_on:
@@ -357,6 +357,12 @@ comments:
       Evidence: 74 targeted Writer tests in six files, five shared ODF property-map tests, two Writer resource tests, and both Writer search/annotation scenarios in production Chrome passed. The Chrome scenario verifies the standard Character dialog, computed border, focus return, and undo. Build/typecheck, scoped ESLint and Prettier, module boundaries, source provenance, source tree, Writer parity inventory, policy routing, and git diff --check passed. ap doctor retained its previous hook shim warning. Repository-wide JSDoc reports 307 existing findings, and file size reports four unrelated existing files at its limit. The updated UNO map now passes the file-size gate.
 
       Character shadow, complex stroke appearance, and native line layout parity remain outside this checkpoint. This is a verified implementation checkpoint in the ongoing Writer task, with no task closure or full regression count increment.
+  -
+    author: "CODER"
+    body: |-
+      Verified Writer search checkpoint. The source-derived tests for range bounds, paragraph anchor rings, capture replacement, grouped undo/redo, and shared capture offsets now run with the same ECMAScript matcher used in the Writer session. Eleven previously probe-gated scenarios execute on the normal test path. The six original soft-hyphen syntax probes remain optional, including ICU-specific pattern spellings. The production matcher is unchanged.
+
+      Focused verification: Writer cursor, selection, replacement and annotation search (91 passed, six optional ICU cases skipped); Writer browser search and menu (20 passed); shared search and browser matcher (137 passed). Scoped ESLint, Prettier and git diff --check pass. The overall task remains open, including body replacement in paragraphs with existing field markers.
 
 events:
   -
@@ -861,9 +867,17 @@ events:
       Evidence: 74 targeted Writer tests in six files, five shared ODF property-map tests, two Writer resource tests, and both Writer search/annotation scenarios in production Chrome passed. The Chrome scenario verifies the standard Character dialog, computed border, focus return, and undo. Build/typecheck, scoped ESLint and Prettier, module boundaries, source provenance, source tree, Writer parity inventory, policy routing, and git diff --check passed. ap doctor retained its previous hook shim warning. Repository-wide JSDoc reports 307 existing findings, and file size reports four unrelated existing files at its limit. The updated UNO map now passes the file-size gate.
 
       Character shadow, complex stroke appearance, and native line layout parity remain outside this checkpoint. This is a verified implementation checkpoint in the ongoing Writer task, with no task closure or full regression count increment.
+  -
+    type: "comment"
+    at: "2026-11-21T20:21:47.732Z"
+    author: "CODER"
+    body: |-
+      Verified Writer search checkpoint. The source-derived tests for range bounds, paragraph anchor rings, capture replacement, grouped undo/redo, and shared capture offsets now run with the same ECMAScript matcher used in the Writer session. Eleven previously probe-gated scenarios execute on the normal test path. The six original soft-hyphen syntax probes remain optional, including ICU-specific pattern spellings. The production matcher is unchanged.
+
+      Focused verification: Writer cursor, selection, replacement and annotation search (91 passed, six optional ICU cases skipped); Writer browser search and menu (20 passed); shared search and browser matcher (137 passed). Scoped ESLint, Prettier and git diff --check pass. The overall task remains open, including body replacement in paragraphs with existing field markers.
 
 doc_version: 3
-doc_updated_at: "2026-11-21T20:18:03.777Z"
+doc_updated_at: "2026-11-21T20:21:47.732Z"
 doc_updated_by: "CODER"
 description: "Implement the approved coherent Writer search-and-replace feature from pinned LibreOffice sources: real shared search engine and options, native paragraph/cursor traversal and replacement/history contracts, view-owned search state and dispatch, Find toolbar and Find and Replace dialog with generated upstream command placement and shortcuts. Preserve source semantics and explicit unsupported boundaries; never substitute DOM text search or browser RegExp for ICU contracts. Work only on writer in vite-office-writer; local upstream reading approved, no network or merges. Keep active until approved scope is verified."
 sections:

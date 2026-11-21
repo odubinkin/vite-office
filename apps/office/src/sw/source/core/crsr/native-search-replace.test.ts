@@ -1,6 +1,6 @@
 /** @fileoverview Source-contract checks for actual native string replacement, search history/no-ring progression and threshold behavior. */
 import { expect, it, vi } from "vitest";
-import { createNativeRegexMatcher, hasNativeRegexProbe } from "../../../../test/icu-regex-probe";
+import { createBrowserRegexMatcher } from "../../../../i18npool/browser/regex-matcher";
 import { REGEXP } from "../../../../offapi/com/sun/star/util/SearchAlgorithms2";
 import { ReplaceBackReferences } from "./findtxt";
 import { SwDoc } from "../doc/doc";
@@ -392,8 +392,8 @@ it.each(["$", "^$", "$^"])(
   },
 );
 
-it.skipIf(!hasNativeRegexProbe).each([false, true])(
-  "replaces real ICU capture groups and retains grouped undo and redo backward=%s",
+it.each([false, true])(
+  "replaces ECMAScript capture groups and retains grouped undo and redo backward=%s",
   /** Exercises full regex reference expansion in the native model-text replacement strategy. @param backward - Search direction. @returns Nothing. */
   (backward) => {
     const f = fixture("a1 a2");
@@ -414,7 +414,7 @@ it.skipIf(!hasNativeRegexProbe).each([false, true])(
           true,
           undefined,
           undefined,
-          createNativeRegexMatcher,
+          createBrowserRegexMatcher,
         );
       expect(count).toBe(2);
       expect(f.node.GetText()).toBe("😀1a 😀2a");
@@ -429,40 +429,37 @@ it.skipIf(!hasNativeRegexProbe).each([false, true])(
   },
 );
 
-it.skipIf(!hasNativeRegexProbe)(
-  "keeps the native replacement fallback when capture search retains a soft hyphen",
-  /** Replays the two native cleanup policies against actual ICU. @returns Nothing. */ () => {
-    const f = fixture("a\u00adb");
-    const options = new SearchOptions2();
-    options.AlgorithmType2 = REGEXP;
-    options.searchString.assign(string("(ab)"));
-    options.replaceString.assign(string("$1"));
-    try {
-      expect(
-        f.shell
-          .GetCursor()
-          .Find_Text(
-            options,
-            false,
-            SwDocPositions.Start,
-            SwDocPositions.End,
-            [false],
-            FindRanges.InSelAll | FindRanges.InBodyOnly,
-            true,
-            undefined,
-            undefined,
-            createNativeRegexMatcher,
-          ),
-      ).toBe(1);
-      expect(f.node.GetText()).toBe("$1");
-      expect(f.shell.Undo()).toBe(true);
-      expect(f.node.GetText()).toBe("a\u00adb");
-    } finally {
-      f.shell.Close();
-      f.docShell.Close();
-    }
-  },
-);
+it("keeps the native replacement fallback when capture search retains a soft hyphen", /** Replays the two native cleanup policies with the deployed regex matcher. @returns Nothing. */ () => {
+  const f = fixture("a\u00adb");
+  const options = new SearchOptions2();
+  options.AlgorithmType2 = REGEXP;
+  options.searchString.assign(string("(ab)"));
+  options.replaceString.assign(string("$1"));
+  try {
+    expect(
+      f.shell
+        .GetCursor()
+        .Find_Text(
+          options,
+          false,
+          SwDocPositions.Start,
+          SwDocPositions.End,
+          [false],
+          FindRanges.InSelAll | FindRanges.InBodyOnly,
+          true,
+          undefined,
+          undefined,
+          createBrowserRegexMatcher,
+        ),
+    ).toBe(1);
+    expect(f.node.GetText()).toBe("$1");
+    expect(f.shell.Undo()).toBe(true);
+    expect(f.node.GetText()).toBe("a\u00adb");
+  } finally {
+    f.shell.Close();
+    f.docShell.Close();
+  }
+});
 
 it("undoes and redoes a regex replacement that creates several paragraphs", /** Ports the text and undo assertions from the pinned multi-break ReplaceRange scenario. @returns Nothing. */ () => {
   const f = fixture("foo");

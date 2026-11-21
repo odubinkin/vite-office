@@ -1,6 +1,7 @@
 /** @fileoverview Source-derived model-text search checks over real Writer nodes, sections and registered positions. */
 import { expect, it } from "vitest";
 import { createNativeRegexMatcher, hasNativeRegexProbe } from "../../../../test/icu-regex-probe";
+import { createBrowserRegexMatcher } from "../../../../i18npool/browser/regex-matcher";
 import { SwCursor } from "./swcrsr";
 import { FindRanges, SwDocPositions } from "../../../inc/cshtyp";
 import { APPROXIMATE, REGEXP } from "../../../../offapi/com/sun/star/util/SearchAlgorithms2";
@@ -475,9 +476,9 @@ it("retains the native similarity script end when it reaches beyond the requeste
   }
 });
 
-it.skipIf(!hasNativeRegexProbe).each([false, true])(
+it.each([false, true])(
   "requires access to the paragraph end for trailing-dollar alternatives backward=%s",
-  /** Tests the pinned model's character-level anchor detection with real ICU. @param backward - Direction. @returns Nothing. */ (
+  /** Tests the pinned model's character-level anchor detection with the deployed regex matcher. @param backward - Direction. @returns Nothing. */ (
     backward,
   ) => {
     const doc = new SwDoc(),
@@ -494,7 +495,7 @@ it.skipIf(!hasNativeRegexProbe).each([false, true])(
         FindTextImpl(
           cursor,
           options,
-          new TextSearch(options, createNativeRegexMatcher),
+          new TextSearch(options, createBrowserRegexMatcher),
           backward,
           bounded,
         ),
@@ -503,7 +504,7 @@ it.skipIf(!hasNativeRegexProbe).each([false, true])(
         FindTextImpl(
           cursor,
           options,
-          new TextSearch(options, createNativeRegexMatcher),
+          new TextSearch(options, createBrowserRegexMatcher),
           backward,
           full,
         ),
@@ -513,7 +514,7 @@ it.skipIf(!hasNativeRegexProbe).each([false, true])(
         FindTextImpl(
           cursor,
           options,
-          new TextSearch(options, createNativeRegexMatcher),
+          new TextSearch(options, createBrowserRegexMatcher),
           backward,
           bounded,
         ),
@@ -523,7 +524,7 @@ it.skipIf(!hasNativeRegexProbe).each([false, true])(
         FindTextImpl(
           cursor,
           options,
-          new TextSearch(options, createNativeRegexMatcher),
+          new TextSearch(options, createBrowserRegexMatcher),
           backward,
           bounded,
         ),
@@ -574,7 +575,7 @@ it
   },
 );
 
-it.skipIf(!hasNativeRegexProbe).each([
+it.each([
   { pattern: "$", breaks: [0, 1, 2, 3] },
   { pattern: "^$", breaks: [1, 3] },
   { pattern: "$^", breaks: [1, 3] },
@@ -612,7 +613,7 @@ it.skipIf(!hasNativeRegexProbe).each([
             false,
             undefined,
             undefined,
-            createNativeRegexMatcher,
+            createBrowserRegexMatcher,
           ),
         ).toBe(scenario.breaks.length);
         const breaks = backward ? [...scenario.breaks].reverse() : scenario.breaks;
@@ -635,45 +636,42 @@ it.skipIf(!hasNativeRegexProbe).each([
   },
 );
 
-it.skipIf(!hasNativeRegexProbe)(
-  "respects both ends of a search region when selecting a paragraph break",
-  /** Verifies clipping and layout admission on actual model positions. @returns Nothing. */ () => {
-    const doc = new SwDoc();
-    const first = doc.paragraphs[0] as SwTextNode;
-    first.SetText("abc");
-    const next = doc.nodes.MakeTextNode("xyz");
-    const options = new SearchOptions2();
-    options.AlgorithmType2 = REGEXP;
-    options.searchString.assign(string("$"));
-    const engine = new TextSearch(options, createNativeRegexMatcher);
-    const within = range(first, 0);
-    const across = range(first, 2, next, 0);
-    const cursor = range(first, 0);
-    try {
-      expect(FindTextImpl(cursor, options, engine, false, within)).toBe(false);
-      expect(FindTextImpl(cursor, options, engine, true, within)).toBe(false);
-      expect(
-        FindTextImpl(
-          cursor,
-          options,
-          engine,
-          false,
-          across,
-          /** Excludes the second text node from device layout. @param node - Candidate. @returns Whether represented. */ (
-            node,
-          ) => node !== next,
-        ),
-      ).toBe(false);
-      expect(cursor.GetPoint().GetNode()).toBe(first);
-      expect(cursor.GetPoint().GetContentIndex()).toBe(0);
-      expect(FindTextImpl(cursor, options, engine, false, across)).toBe(true);
-      expect(cursor.Start().GetContentIndex()).toBe(3);
-      expect(cursor.End().GetNode()).toBe(next);
-      expect(cursor.End().GetContentIndex()).toBe(0);
-    } finally {
-      cursor.Dispose();
-      across.Dispose();
-      within.Dispose();
-    }
-  },
-);
+it("respects both ends of a search region when selecting a paragraph break", /** Verifies clipping and layout admission on actual model positions. @returns Nothing. */ () => {
+  const doc = new SwDoc();
+  const first = doc.paragraphs[0] as SwTextNode;
+  first.SetText("abc");
+  const next = doc.nodes.MakeTextNode("xyz");
+  const options = new SearchOptions2();
+  options.AlgorithmType2 = REGEXP;
+  options.searchString.assign(string("$"));
+  const engine = new TextSearch(options, createBrowserRegexMatcher);
+  const within = range(first, 0);
+  const across = range(first, 2, next, 0);
+  const cursor = range(first, 0);
+  try {
+    expect(FindTextImpl(cursor, options, engine, false, within)).toBe(false);
+    expect(FindTextImpl(cursor, options, engine, true, within)).toBe(false);
+    expect(
+      FindTextImpl(
+        cursor,
+        options,
+        engine,
+        false,
+        across,
+        /** Excludes the second text node from device layout. @param node - Candidate. @returns Whether represented. */ (
+          node,
+        ) => node !== next,
+      ),
+    ).toBe(false);
+    expect(cursor.GetPoint().GetNode()).toBe(first);
+    expect(cursor.GetPoint().GetContentIndex()).toBe(0);
+    expect(FindTextImpl(cursor, options, engine, false, across)).toBe(true);
+    expect(cursor.Start().GetContentIndex()).toBe(3);
+    expect(cursor.End().GetNode()).toBe(next);
+    expect(cursor.End().GetContentIndex()).toBe(0);
+  } finally {
+    cursor.Dispose();
+    across.Dispose();
+    within.Dispose();
+  }
+});
