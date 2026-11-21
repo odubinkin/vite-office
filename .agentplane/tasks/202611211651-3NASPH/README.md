@@ -1,10 +1,11 @@
 ---
 id: "202611211651-3NASPH"
 title: "Align Calc ODS statistical and duplicate conditions"
-status: "DOING"
+result_summary: "Verified native Calc ODS statistical predicates, range caching, and package round trips."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 7
+revision: 8
 origin:
   system: "manual"
 depends_on: []
@@ -45,11 +46,16 @@ quality_review:
     - "node .agentplane/policy/check-routing.mjs passed"
   findings:
     - "The pinned duplicate regression and independent rank, ties, average, empty-cell and edit assertions passed."
-commit: null
+commit:
+  hash: "d055907e110876efed2313aced1f9aeb7b18165f"
+  message: "🧩 3NASPH code: preserve Calc ODS statistical and duplicate conditions"
 comments:
   -
     author: "CODER"
     body: "Start: continue direct-mode task in current checkout."
+  -
+    author: "CODER"
+    body: "Verified: original ODS duplicate, rank and average rules round-trip through Calc and the Worker."
 events:
   -
     type: "status"
@@ -64,8 +70,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Verified original Calc ODS duplicate and statistical rules through rendering, edit, Worker and package round trips."
+  -
+    type: "status"
+    at: "2026-11-21T16:57:00.025Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: original ODS duplicate, rank and average rules round-trip through Calc and the Worker."
 doc_version: 3
-doc_updated_at: "2026-11-21T16:55:54.114Z"
+doc_updated_at: "2026-11-21T16:57:00.026Z"
 doc_updated_by: "CODER"
 description: "Port original ODS condition grammar, native range statistics and duplicate predicates, and round trips through the model and Worker."
 sections:
