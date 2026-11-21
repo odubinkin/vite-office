@@ -1,10 +1,11 @@
 ---
 id: "202611211917-S1T4WJ"
 title: "Connect Calc cell clipboard commands"
-status: "DOING"
+result_summary: "Connected Calc clipboard commands and completed task seven of the ten-task verification cycle."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 10
+revision: 11
 origin:
   system: "manual"
 depends_on: []
@@ -42,11 +43,16 @@ quality_review:
     - "22e11210e5635b4794112bbd494ae6bae4c1ce8e"
   findings:
     - "Mounted source regression tdf119343 and seven clipboard behavior tests pass alongside the focused core and import modules."
-commit: null
+commit:
+  hash: "59dff6065c7e6e7ce18956dec925854998144a1e"
+  message: "🧩 S1T4WJ test: port Calc clipboard reference recalculation"
 comments:
   -
     author: "CODER"
     body: "Start: connect source Calc cell Copy, Paste and Paste Unformatted through browser transfer, native snapshots and undo."
+  -
+    author: "CODER"
+    body: "Verified: connected Calc Copy, Paste and Paste Unformatted Text through browser transfer, native warnings and shared undo. All 198 targeted tests passed."
 events:
   -
     type: "status"
@@ -61,8 +67,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "198 targeted Calc tests passed. Office types, changed-path formatting and lint, source provenance, Calc resources, dependency boundaries and AgentPlane checks passed."
+  -
+    type: "status"
+    at: "2026-11-21T19:43:17.241Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: connected Calc Copy, Paste and Paste Unformatted Text through browser transfer, native warnings and shared undo. All 198 targeted tests passed."
 doc_version: 3
-doc_updated_at: "2026-11-21T19:41:50.156Z"
+doc_updated_at: "2026-11-21T19:43:17.242Z"
 doc_updated_by: "CODER"
 description: "Activate native cell Copy, Paste and Paste Unformatted with browser transfer and shared undo."
 sections:
