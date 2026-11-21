@@ -1,0 +1,26 @@
+{
+  "schema_version": 1,
+  "task_id": "202611211708-9W0FQ4",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-11-21T17:15:40.548Z",
+  "verdict": "pass",
+  "summary": "Legacy Writer frame brush properties and modern fill precedence match the pinned source for solid and raster fills.",
+  "evaluated_sha": "304f3d7e3bf2d804722c0432757c629427ce45f8",
+  "blueprint_digest": "2fb2d40e6cd094e58fab475d4628395ece5402e1339dc8633839d3836e5f6444",
+  "findings": [
+    "Verified native raster location, independent opacity, compatible child output, precedence and document round trips."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202611211708-9W0FQ4/README.md",
+    "output/playwright/9W0FQ4/writer.log",
+    "output/playwright/9W0FQ4/shared.log",
+    "output/playwright/9W0FQ4/types.log",
+    "output/playwright/9W0FQ4/provenance.log",
+    "output/playwright/9W0FQ4/doctor.log",
+    "node .agentplane/policy/check-routing.mjs passed"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": []
+}
