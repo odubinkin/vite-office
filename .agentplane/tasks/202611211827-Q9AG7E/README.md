@@ -1,10 +1,11 @@
 ---
 id: "202611211827-Q9AG7E"
 title: "Round-trip Calc ODS drawing grid and view options"
-status: "DOING"
+result_summary: "Ported native Calc ODS drawing-grid settings, note and formula-mark display flags, value highlighting and legacy TabColor import."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 8
+revision: 9
 origin:
   system: "manual"
 depends_on: []
@@ -39,11 +40,16 @@ quality_review:
     - "34 focused Calc tests, office TypeScript, ESLint, Prettier, 2977 provenance records and AgentPlane gateway checks"
   findings:
     - "Native defaults, property types, unsigned drawing geometry, legacy tab color precedence and Worker rejection of invalid geometry are covered. The settings fixture exercises the pinned LibreOffice profile with supported sheet content."
-commit: null
+commit:
+  hash: "7381dcf1e15e8c78019789001e52c69962a2b038"
+  message: "🧩 Q9AG7E code: preserve Calc ODS drawing grid and view options"
 comments:
   -
     author: "CODER"
     body: "Start: implement native drawing-grid ownership and ODS view settings with Worker transfer and fixture coverage."
+  -
+    author: "CODER"
+    body: "Verified: ODS drawing grid, display booleans, legacy sheet color and Worker adoption pass 34 targeted tests and static checks."
 events:
   -
     type: "status"
@@ -58,8 +64,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "34 targeted Calc tests passed across six files. Office typechecking, lint, formatting, dependency boundaries, registry provenance and task policy checks passed."
+  -
+    type: "status"
+    at: "2026-11-21T18:33:51.504Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: ODS drawing grid, display booleans, legacy sheet color and Worker adoption pass 34 targeted tests and static checks."
 doc_version: 3
-doc_updated_at: "2026-11-21T18:32:45.484Z"
+doc_updated_at: "2026-11-21T18:33:51.504Z"
 doc_updated_by: "CODER"
 description: "Port the native ScViewData settings for the existing drawing-grid value type and the remaining represented display flags. Import legacy per-sheet TabColor into the native model. Preserve the settings across the Calc Worker and verify the ODF XML contract with pinned LibreOffice fixtures and focused tests."
 sections:
