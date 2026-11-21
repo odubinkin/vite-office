@@ -189,7 +189,7 @@ export class SwTextNode extends SwContentNode {
   /** Replaces canonical ranged attributes without accepting a browser run projection. @param hints - Writer text attributes. @returns Nothing. */
   public SetTextHints(hints: SwpHints): void {
     const replacement = CopyTextNodeHints(this, hints);
-    this.pSwpHints?.TransferFlyHints(replacement);
+    this.pSwpHints?.TransferPointHints(replacement);
     this.pSwpHints = replacement.CanBeDeleted() ? undefined : replacement;
     this.GetDoc().NotifyModelChange({
       kind: "attribute-set-changed",
@@ -794,7 +794,7 @@ export class SwTextNode extends SwContentNode {
       format,
       this.GetSwAttrSet(),
     );
-    this.pSwpHints?.TransferFlyHints(hints);
+    this.pSwpHints?.TransferPointHints(hints);
     this.pSwpHints = hints.CanBeDeleted() ? undefined : hints;
     this.GetDoc().NotifyModelChange({
       kind: "attribute-set-changed",
@@ -845,7 +845,7 @@ export class SwTextNode extends SwContentNode {
     AssertTextNodeRange(this, start, end);
     if (start === end) return;
     const hints = this.GetTextHints().setHyperlink(this.mText.length, start, end, hyperlink);
-    this.pSwpHints?.TransferFlyHints(hints);
+    this.pSwpHints?.TransferPointHints(hints);
     this.pSwpHints = hints.CanBeDeleted() ? undefined : hints;
     this.GetDoc().NotifyModelChange({
       kind: "attribute-set-changed",

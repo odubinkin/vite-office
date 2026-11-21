@@ -36,7 +36,7 @@
         "SwpHints",
         "WriterTextRunLike",
         "GetTextAttrForCharAt",
-        "TransferFlyHints"
+        "TransferPointHints"
       ],
       "sourceResponsibility": "unverified",
       "upstreamFile": "sw/source/core/txtnode/ndhints.cxx",

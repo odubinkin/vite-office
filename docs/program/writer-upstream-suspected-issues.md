@@ -5700,6 +5700,11 @@ applies its authored properties without that collection change.
   pass the original template to the regex replacement operation. The Writer
   model and view regressions preserve both outcomes against the pinned ICU.
 
+- The same search and capture passes apply different rules to comment
+  anchors. An ordinary pattern can match across a removed annotation marker;
+  the capture pass retains the marker and can fail on the same range. The
+  annotation regression exercises both passes over a real point hint.
+
 ### WRITER-712 — Escaped dollar signs can trigger the paragraph-end range gate
 
 - The regex check in `sw/source/core/crsr/findtxt.cxx` inspects the final

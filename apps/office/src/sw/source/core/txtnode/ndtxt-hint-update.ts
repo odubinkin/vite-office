@@ -1,5 +1,4 @@
 /** @fileoverview Ports owned ranged and fly point coordinate updates from pinned SwTextNode::Update and default InsertText in ndtxt.cxx. */
-import { SwTextFlyCnt } from "../../../inc/txtflcnt";
 import type { TextNodeAttribute } from "./ndhints";
 import type { SwFormatCharFormat } from "./fmtatr2";
 import { SwInsertFlags } from "../../../inc/IDocumentContentOperations";
@@ -7,7 +6,7 @@ import type { SwDoc } from "../doc/doc";
 import { RES_TXTATR_INETFMT } from "../../../inc/hintids";
 import { MakeTextAttr } from "./thints";
 import type { SwFormatINetFormat } from "./fmtatr2";
-import type { SwFormatAutoFormat, SwTextAttrEnd } from "./txatbase";
+import { type SwFormatAutoFormat, SwTextAttrEnd } from "./txatbase";
 
 /** Changes actual supported hint coordinates without splitting continuous values. @param doc - Owning document. @param hints - Stable start-ordered objects. @param offset - Change position. @param length - Positive change length. @param negative - Whether text is removed. @param ignoreDontExpand - Owning node state. @returns Existing objects and native end-boundary collectors. */
 export function UpdateTextHints(
@@ -24,7 +23,7 @@ export function UpdateTextHints(
   >();
   let noExpand = false;
   for (const hint of hints) {
-    if (hint instanceof SwTextFlyCnt) {
+    if (!(hint instanceof SwTextAttrEnd)) {
       if (negative && hint.start > offset) hint.SetStart(Math.max(offset, hint.start - length));
       else if (!negative && hint.start >= offset) hint.SetStart(hint.start + length);
       continue;
@@ -57,7 +56,7 @@ export function AdjustInsertTextHints(
   mode = SwInsertFlags.DEFAULT,
 ): readonly TextNodeAttribute[] {
   for (const hint of hints) {
-    if (hint instanceof SwTextFlyCnt) continue;
+    if (!(hint instanceof SwTextAttrEnd)) continue;
     if (hint.end === offset + length) {
       if (
         mode & SwInsertFlags.NOHINTEXPAND ||

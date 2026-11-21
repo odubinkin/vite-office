@@ -143,9 +143,14 @@ export const RES_TXTATR_CHARFMT = 55 as const;
 
 /** Point text attribute attached to an as-character fly. */
 export const RES_TXTATR_FLYCNT = 61 as const;
+/** Original point text identity for an annotation field. */
+export const RES_TXTATR_ANNOTATION = 63 as const;
 
 /** Original word-breaking marker for a text attribute without literal text. */
 export const CH_TXTATR_BREAKWORD = "\u0001";
+
+/** Original marker for a text attribute that does not break a word. */
+export const CH_TXTATR_INWORD = "\ufff9";
 
 /** Original embedded input field delimiters. */
 export const CH_TXT_ATR_INPUTFIELDSTART = "\u0004";

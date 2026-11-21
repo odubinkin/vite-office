@@ -25,6 +25,7 @@ import {
   CH_TXT_ATR_INPUTFIELDEND,
   CH_TXT_ATR_INPUTFIELDSTART,
   CH_TXTATR_BREAKWORD,
+  CH_TXTATR_INWORD,
   RES_TXTATR_AUTOFMT,
   RES_TXTATR_FLYCNT,
 } from "../../../inc/hintids";
@@ -54,7 +55,8 @@ export function GetTextNodeExpandedText(node: SwTextNode, start: number, end: nu
     .replaceAll(CH_TXT_ATR_FIELDEND, "")
     .replaceAll(CH_TXT_ATR_INPUTFIELDSTART, "")
     .replaceAll(CH_TXT_ATR_INPUTFIELDEND, "")
-    .replaceAll(CH_TXTATR_BREAKWORD, "");
+    .replaceAll(CH_TXTATR_BREAKWORD, "")
+    .replaceAll(CH_TXTATR_INWORD, "");
 }
 
 /** Validates a native ReplaceText range before adjusting text or owned hints. @param node - Actual paragraph. @param start - Inclusive offset. @param end - Exclusive offset. @returns Nothing. */
@@ -148,7 +150,8 @@ export function AppendTextNodeHints(
         ...result.entries(),
         ...(copied?.entries() ?? []),
       ]);
-      result.TransferFlyHints(merged);
+      result.TransferPointHints(merged);
+      copied?.TransferPointHints(merged);
       return merged;
     } finally {
       copied?.Dispose();

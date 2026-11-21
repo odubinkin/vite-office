@@ -4,7 +4,7 @@ title: "Implement Writer search and replace core and browser UI"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 75
+revision: 76
 origin:
   system: "manual"
 depends_on:
@@ -229,6 +229,9 @@ comments:
   -
     author: "CODER"
     body: "Verified checkpoint: ported the shared EditEngine search path required by the upstream annotation OutlinerView. It searches actual EditDoc paragraphs through TextSearch, maps expanded positions onto native selections, preserves single-selection Find All and backward continuation, and groups forward Replace All through the editor undo API. The platform regex compiler can be supplied through the existing matcher contract. WRITER-714 and CALC-788 record the source-derived zero-width replacement-loop behavior. Passed 54 targeted shared scenarios in five files, production build, both Writer resource cases, module boundaries, source tree, provenance, JSDoc, file size, focused lint and formatting, and policy routing. Doctor retains the existing hook warning. The Writer annotation field, document anchor and sidebar integration remain pending. No full regression or task closure."
+  -
+    author: "CODER"
+    body: "Verified checkpoint: Writer now owns a native SwPostItField type and value, a nonshareable SwFormatField, and a SwTextField annotation point bound to the original U+FFF9 marker. Actual hint maps move the live owner through insert, split and join and copy fields to the owning destination document. Body-text Find removes annotation markers unless the pattern requests them, retains source directional offsets, and preserves the different regex capture cleanup recorded under WRITER-711. Passed 87 targeted Writer cases across five suites, typecheck, build, two resource cases, Writer WhichIds, module boundaries, source tree and provenance, JSDoc, file size, focused lint and formatting, doctor and routing. Doctor retains the existing hook warning. Comment range marks and file mapping, search traversal into the comment editor, and sidebar activation remain pending. No full regression or task closure."
 events:
   -
     type: "status"
@@ -552,8 +555,13 @@ events:
     at: "2026-11-21T11:47:19.176Z"
     author: "CODER"
     body: "Verified checkpoint: ported the shared EditEngine search path required by the upstream annotation OutlinerView. It searches actual EditDoc paragraphs through TextSearch, maps expanded positions onto native selections, preserves single-selection Find All and backward continuation, and groups forward Replace All through the editor undo API. The platform regex compiler can be supplied through the existing matcher contract. WRITER-714 and CALC-788 record the source-derived zero-width replacement-loop behavior. Passed 54 targeted shared scenarios in five files, production build, both Writer resource cases, module boundaries, source tree, provenance, JSDoc, file size, focused lint and formatting, and policy routing. Doctor retains the existing hook warning. The Writer annotation field, document anchor and sidebar integration remain pending. No full regression or task closure."
+  -
+    type: "comment"
+    at: "2026-11-21T11:56:17.285Z"
+    author: "CODER"
+    body: "Verified checkpoint: Writer now owns a native SwPostItField type and value, a nonshareable SwFormatField, and a SwTextField annotation point bound to the original U+FFF9 marker. Actual hint maps move the live owner through insert, split and join and copy fields to the owning destination document. Body-text Find removes annotation markers unless the pattern requests them, retains source directional offsets, and preserves the different regex capture cleanup recorded under WRITER-711. Passed 87 targeted Writer cases across five suites, typecheck, build, two resource cases, Writer WhichIds, module boundaries, source tree and provenance, JSDoc, file size, focused lint and formatting, doctor and routing. Doctor retains the existing hook warning. Comment range marks and file mapping, search traversal into the comment editor, and sidebar activation remain pending. No full regression or task closure."
 doc_version: 3
-doc_updated_at: "2026-11-21T11:47:19.176Z"
+doc_updated_at: "2026-11-21T11:56:17.285Z"
 doc_updated_by: "CODER"
 description: "Implement the approved coherent Writer search-and-replace feature from pinned LibreOffice sources: real shared search engine and options, native paragraph/cursor traversal and replacement/history contracts, view-owned search state and dispatch, Find toolbar and Find and Replace dialog with generated upstream command placement and shortcuts. Preserve source semantics and explicit unsupported boundaries; never substitute DOM text search or browser RegExp for ICU contracts. Work only on writer in vite-office-writer; local upstream reading approved, no network or merges. Keep active until approved scope is verified."
 sections:

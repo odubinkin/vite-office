@@ -29,7 +29,7 @@
         "InsertTextNodeHint",
         "TryInsertTextNodeHint",
         "DestroyTextNodeAttribute",
-        "InsertFlyHint"
+        "InsertPointHint"
       ],
       "sourceResponsibility": "unverified",
       "upstreamFile": "sw/source/core/txtnode/thints.cxx",

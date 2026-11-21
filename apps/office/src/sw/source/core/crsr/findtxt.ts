@@ -9,7 +9,7 @@ import {
   type SwSearchNodeFilter,
 } from "./swcrsr";
 import { FindRanges, SwDocPositions } from "../../../inc/cshtyp";
-import { RES_TXTATR_FLYCNT } from "../../../inc/hintids";
+import { CH_TXTATR_INWORD, RES_TXTATR_ANNOTATION, RES_TXTATR_FLYCNT } from "../../../inc/hintids";
 import { REG_NOT_BEGINOFLINE } from "../../../../offapi/com/sun/star/util/SearchFlags";
 import { SwTextNode } from "../txtnode/ndtxt";
 import type { SearchOptions2 } from "../../../../i18nutil/inc/searchopt";
@@ -22,23 +22,26 @@ import { APPROXIMATE, REGEXP } from "../../../../offapi/com/sun/star/util/Search
 import { SwScriptIterator } from "../txtnode/txatritr";
 import { g_pBreakIt } from "../bastyp/breakit";
 
-/** Native model-text lcl_CleanStr, retaining removal offsets in cleaned coordinates. @param node - Model text. @param start - Lower range bound. @param end - Upper range bound. @param removeSoftHyphens - Source DoSearch policy. @returns Clean text, adjusted end and removal offsets. */
+/** Native model-text lcl_CleanStr, retaining removal offsets in cleaned coordinates. @param node - Model text. @param start - Lower range bound. @param end - Upper range bound. @param removeSoftHyphens - Source DoSearch policy. @param removeCommentAnchors - Whether the marker is part of the search. @returns Clean text, adjusted end and removal offsets. */
 function lcl_CleanStr(
   node: SwTextNode,
   start: number,
   end: number,
   removeSoftHyphens: boolean,
+  removeCommentAnchors: boolean,
 ): { text: OUString; end: number; removed: readonly number[] } {
   const hints = node.GetpSwpHints(),
-    flyAnchors = new Set<number>();
+    flyAnchors = new Set<number>(),
+    commentAnchors = new Set<number>();
   for (let i = 0; hints !== undefined && i < hints.Count(); i++) {
     const hint = hints.Get(i);
     const offset = hint.GetStart();
     if (offset >= end) break;
     if (offset < start || !hint.HasDummyChar()) continue;
-    if (hint.Which() !== RES_TXTATR_FLYCNT)
-      throw new Error("Writer field/dummy-character search is not implemented.");
-    flyAnchors.add(offset);
+    if (hint.Which() === RES_TXTATR_FLYCNT) flyAnchors.add(offset);
+    else if (hint.Which() === RES_TXTATR_ANNOTATION) {
+      if (removeCommentAnchors) commentAnchors.add(offset);
+    } else throw new Error("Writer field/dummy-character search is not implemented.");
   }
   const original = node.GetText(),
     units: number[] = [],
@@ -54,7 +57,10 @@ function lcl_CleanStr(
         replaced.push(units.length);
         units.push(0x7f);
       }
-    } else if (removeSoftHyphens && i >= start && i < end && unit === 0xad) {
+    } else if (
+      commentAnchors.has(i) ||
+      (removeSoftHyphens && i >= start && i < end && unit === 0xad)
+    ) {
       removed.push(units.length);
     } else {
       units.push(unit);
@@ -135,7 +141,14 @@ function DoSearch(
     pattern !== undefined
       ? /\\(?:xAD|x\{00AD\}|u00AD|u00ad|U000000AD|N\{SOFT HYPHEN\})/.test(pattern)
       : options.searchString.getLength() === 1 && options.searchString.getStr()[0] === 0xad;
-  const clean = lcl_CleanStr(node, low, high, !keepSoftHyphens);
+  const key = options.searchString.getStr().subarray(0, options.searchString.getLength());
+  const clean = lcl_CleanStr(
+    node,
+    low,
+    high,
+    !keepSoftHyphens,
+    !key.includes(CH_TXTATR_INWORD.charCodeAt(0)),
+  );
   const start: [number] = [backward ? clean.end : low],
     end: [number] = [backward ? low : clean.end];
   try {
@@ -277,7 +290,7 @@ export function ReplaceBackReferences(
       TextSearch.ReplaceBackReferences(value, Uint16Array.of(10), result.value);
     } else {
       const low = first.GetContentIndex();
-      const clean = lcl_CleanStr(node, low, last.GetContentIndex(), false);
+      const clean = lcl_CleanStr(node, low, last.GetContentIndex(), false, false);
       try {
         if (
           !(prepared ?? new TextSearch(options)).SearchForward(

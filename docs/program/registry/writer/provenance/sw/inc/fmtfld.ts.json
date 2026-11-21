@@ -1,0 +1,40 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "status": "mapped",
+    "localPath": "apps/office/src/sw/inc/fmtfld.ts",
+    "upstreamPath": "sw/inc/fmtfld.hxx",
+    "localSymbols": [
+      "SwFormatField"
+    ],
+    "upstreamSymbols": [
+      "SwFormatField"
+    ],
+    "preservedResponsibilities": [
+      "Owns an annotation field in a nonshareable native pool item with an independent copied value and text-attribute backlink."
+    ],
+    "omittedResponsibilities": [
+      "Full field families, annotation range marks, import/export, and Writer sidebar interactions remain outside this represented slice."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sw/inc/fmtfld.ts",
+          "marker": "SwFormatField"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/crsr/native-annotation-anchor.test.ts",
+          "marker": "retains the annotation owner"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sw/inc/fmtfld.hxx",
+          "marker": "class SW_DLLPUBLIC SwFormatField"
+        }
+      ]
+    }
+  }
+}
