@@ -336,6 +336,10 @@
         {
           "path": "apps/office/src/sw/source/filter/ww8/docxexport.drawing.test.ts",
           "marker": "n783638"
+        },
+        {
+          "path": "apps/office/src/sw/source/filter/xml/xmlexp.ts",
+          "marker": "lineStyle"
         }
       ],
       "upstream": [
@@ -566,6 +570,10 @@
         {
           "path": "vendor/libreoffice-reference/sw/source/filter/xml/xmltble.cxx",
           "marker": "nPercentWidth"
+        },
+        {
+          "path": "xmloff/source/text/XMLLineNumberingExport.cxx",
+          "marker": "XMLLineNumberingExport::Export"
         }
       ]
     },
@@ -636,7 +644,8 @@
       "Projects document-pool fonts to original ODF paragraph default-style declarations.",
       "Writes a user tab distance as the ODF paragraph default-style property alongside existing font defaults.",
       "Writes native ODF master-page header/footer text and section-owned auto styles in styles.xml.",
-      "V4DQJW as-character graphic checkpoint. ODT export collects as-character flys as paragraph markers in the existing text and picture section traversal."
+      "V4DQJW as-character graphic checkpoint. ODT export collects as-character flys as paragraph markers in the existing text and picture section traversal.",
+      "Supplies the original named character style, numbering type and MM100 distance from Writer's line-numbering owner."
     ],
     "status": "mapped",
     "upstreamPath": "sw/source/filter/xml/xmlexp.cxx",

@@ -906,7 +906,7 @@ export function WriterWorkbench({
             /** Commits line-number settings. @param value - Accepted settings. @returns Nothing. */ (
               value,
             ) => {
-              activeDocument.SetLineNumberInfo(SwLineNumberInfo.FromValue(value));
+              activeDocument.SetLineNumberInfo(SwLineNumberInfo.FromValue(value, activeDocument));
               setLineNumberingDialog(false);
               (editingHostRef.current as HTMLElement).focus();
             }

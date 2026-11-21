@@ -468,8 +468,6 @@ export function* decodeWriterDocumentSteps(
       if (font.bytes !== undefined)
         document.SetEmbeddedFontBytes(font.path, font.bytes, font.canLoad === true);
     }
-    if (record.lineNumberInfo !== undefined)
-      document.SetLineNumberInfo(SwLineNumberInfo.FromValue(record.lineNumberInfo));
     restoreTextEffectDefault(document, record.textEffectDefault);
     restoreTextGridDefault(document, record.textGridDefault);
     const firstPageDescriptor = record.pageDescriptors[0];
@@ -512,6 +510,8 @@ export function* decodeWriterDocumentSteps(
       if (!Object.hasOwn(settings, id)) settings[id] = getDefaultDocumentSettings()[id];
     document.GetDocumentSettingManager().SetValues(settings);
     restoreCharacterStyles(document, record.characterFormats);
+    if (record.lineNumberInfo !== undefined)
+      document.SetLineNumberInfo(SwLineNumberInfo.FromValue(record.lineNumberInfo, document));
     if (record.textFormatCollections[0]?.id !== "default")
       throw new Error("Stored Writer style is invalid.");
     for (const style of record.textFormatCollections) {

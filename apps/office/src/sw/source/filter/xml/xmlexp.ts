@@ -405,9 +405,15 @@ export function exportStylesXml(
           .join("")}</text:list-style>`,
     )
     .join("");
-  const lineInfo = document.GetLineNumberInfo().QueryValue();
+  const info = document.GetLineNumberInfo();
+  const lineInfo = info.QueryValue();
+  const lineStyle = info.GetCharFormat();
   const lineNumbering = exportLineNumberingConfiguration({
     ...lineInfo,
+    numberingType: info.GetNumType().GetNumberingType(),
+    charStyleName: lineStyle ? getCharacterOdfStyleName(lineStyle) : undefined,
+    distance:
+      lineInfo.posFromLeft === 65535 ? 0 : Number(convertTwipToMm100(BigInt(lineInfo.posFromLeft))),
     position:
       lineInfo.position === LineNumberPosition.Right
         ? "right"

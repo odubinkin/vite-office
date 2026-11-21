@@ -3,17 +3,20 @@
 import { Converter } from "../../../sax/source/tools/converter";
 import { FastAttributeList, SvXMLImportContext } from "../core/xmlimp";
 import { XMLToken } from "../core/xmltoken";
-import { importOdfLength } from "../core/xmluconv";
+import { SvXMLUnitConverter } from "../core/xmluconv";
+import { ARABIC } from "../../../offapi/com/sun/star/style/NumberingType";
 
 /** ODF line-numbering configuration independent of Writer document ownership. */
 export interface OdfLineNumberingConfiguration {
   readonly countBlankLines: boolean;
-  readonly countBy: number;
+  readonly countBy?: number | undefined;
   readonly countInFlys: boolean;
   readonly divider: string;
-  readonly dividerCountBy: number;
+  readonly dividerCountBy?: number;
   readonly paintLineNumbers: boolean;
-  readonly posFromLeft: number;
+  readonly distance: number;
+  readonly numberingType: number;
+  readonly charStyleName?: string | undefined;
   readonly position: "left" | "right" | "inside" | "outside";
   readonly restartEachPage: boolean;
 }
@@ -21,7 +24,6 @@ export interface OdfLineNumberingConfiguration {
 /** Imports one document-level text:linenumbering-configuration. */
 export class XMLLineNumberingImportContext extends SvXMLImportContext {
   private values: OdfLineNumberingConfiguration;
-  private separatorSeen = false;
 
   /** Reads global line-number attributes. @param attributes - Fast ODF attributes. @param publish - Completed settings sink. @returns Nothing. */
   public constructor(
@@ -44,27 +46,27 @@ export class XMLLineNumberingImportContext extends SvXMLImportContext {
       ],
       "line numbering",
     );
-    const format = attributes.get(XMLToken.STYLE_NUM_FORMAT) ?? "1";
-    if (format !== "1") throw new Error("Unsupported ODF line-number format.");
-    const position = attributes.get(XMLToken.TEXT_NUMBER_POSITION) ?? "left";
-    if (!["left", "right", "inside", "outside"].includes(position))
-      throw new Error("Unsupported ODF line-number position.");
+    const converter = new SvXMLUnitConverter("mm100");
+    const numbering = { value: ARABIC as number };
+    converter.convertNumFormat(
+      numbering,
+      attributes.get(XMLToken.STYLE_NUM_FORMAT) ?? "1",
+      attributes.get(XMLToken.STYLE_NUM_LETTER_SYNC) ?? "false",
+      false,
+    );
+    const position = attributes.get(XMLToken.TEXT_NUMBER_POSITION);
+    const rawDistance = attributes.get(XMLToken.TEXT_OFFSET);
     this.values = {
       countBlankLines: readBoolean(attributes, XMLToken.TEXT_COUNT_EMPTY_LINES, true),
-      countBy: readIncrement(attributes, 5, 1),
+      countBy: readIncrement(attributes),
       countInFlys: readBoolean(attributes, XMLToken.TEXT_COUNT_IN_TEXT_BOXES, false),
       divider: "",
-      dividerCountBy: 3,
       paintLineNumbers: readBoolean(attributes, XMLToken.TEXT_NUMBER_LINES, true),
-      posFromLeft:
-        attributes.get(XMLToken.TEXT_OFFSET) === null
-          ? 283
-          : importOdfLength(
-              attributes.require(XMLToken.TEXT_OFFSET, "line-number offset"),
-              false,
-              "line-number offset",
-            ),
-      position: position as OdfLineNumberingConfiguration["position"],
+      distance: (rawDistance === null ? null : converter.convertMeasureToCore(rawDistance)) ?? -1,
+      numberingType: numbering.value,
+      charStyleName: attributes.get(XMLToken.TEXT_STYLE_NAME) ?? undefined,
+      position:
+        position === "right" || position === "inside" || position === "outside" ? position : "left",
       restartEachPage: readBoolean(attributes, XMLToken.TEXT_RESTART_ON_PAGE, false),
     };
   }
@@ -75,13 +77,13 @@ export class XMLLineNumberingImportContext extends SvXMLImportContext {
     attributes: FastAttributeList,
   ): SvXMLImportContext | null {
     if (element !== XMLToken.TEXT_LINENUMBERING_SEPARATOR) return null;
-    if (this.separatorSeen) throw new Error("Duplicate ODF line-number separator.");
-    this.separatorSeen = true;
+    attributes.assertOnly([XMLToken.TEXT_INCREMENT], "line-number separator");
+    const increment = readIncrement(attributes);
+    if (increment !== undefined) this.values = { ...this.values, dividerCountBy: increment };
     return new XMLLineNumberingSeparatorImportContext(
-      attributes,
-      /** Captures separator text. @param divider - Text. @param dividerCountBy - Interval. @returns Nothing. */
-      (divider, dividerCountBy) => {
-        this.values = { ...this.values, divider, dividerCountBy };
+      /** Captures separator text. @param divider - Text. @returns Nothing. */
+      (divider) => {
+        this.values = { ...this.values, divider };
       },
     );
   }
@@ -95,16 +97,10 @@ export class XMLLineNumberingImportContext extends SvXMLImportContext {
 /** Imports the optional text:linenumbering-separator. */
 class XMLLineNumberingSeparatorImportContext extends SvXMLImportContext {
   private divider = "";
-  private readonly dividerCountBy: number;
 
-  /** Reads separator interval. @param attributes - Separator attributes. @param publish - Parent sink. @returns Nothing. */
-  public constructor(
-    attributes: FastAttributeList,
-    private readonly publish: (divider: string, dividerCountBy: number) => void,
-  ) {
+  /** Binds the separator text to its parent context. @param publish - Parent sink. @returns Nothing. */
+  public constructor(private readonly publish: (divider: string) => void) {
     super();
-    attributes.assertOnly([XMLToken.TEXT_INCREMENT], "line-number separator");
-    this.dividerCountBy = readIncrement(attributes, 3, 0);
   }
   /** Accumulates decoded separator characters. @param characters - Text. @returns Nothing. */
   public override characters(characters: string): void {
@@ -112,24 +108,22 @@ class XMLLineNumberingSeparatorImportContext extends SvXMLImportContext {
   }
   /** Publishes separator values. @returns Nothing. */
   public override endFastElement(): void {
-    this.publish(this.divider, this.dividerCountBy);
+    this.publish(this.divider);
   }
 }
 
-/** Reads a strict ODF boolean. @param attributes - Source. @param token - Attribute. @param fallback - Upstream default. @returns Boolean. */
+/** Keeps the source default when SAX boolean conversion fails. @param attributes - Source. @param token - Attribute. @param fallback - Upstream default. @returns Boolean. */
 function readBoolean(attributes: FastAttributeList, token: XMLToken, fallback: boolean): boolean {
   const raw = attributes.get(token);
-  if (raw === null) return fallback;
-  if (raw !== "true" && raw !== "false") throw new Error("Unsupported ODF line-number boolean.");
-  return raw === "true";
+  const value: [boolean] = [false];
+  return raw !== null && Converter.convertBool(value, raw) ? value[0] : fallback;
 }
 
-/** Mirrors native SAX conversion,signed16 narrowing and the existing UNO property admission without introducing a second property service. @param attributes - Source. @param fallback - Actual unchanged document default. @param minimum - Interval is positive;separator interval is nonnegative. @returns Applied value or retained default. */
-function readIncrement(attributes: FastAttributeList, fallback: number, minimum: number): number {
+/** Mirrors native SAX conversion and signed16 narrowing before UNO property admission. @param attributes - Source. @returns XML interval or no value on failed conversion. */
+function readIncrement(attributes: FastAttributeList): number | undefined {
   const raw = attributes.get(XMLToken.TEXT_INCREMENT);
-  if (raw === null) return fallback;
   const output: [number] = [0];
-  if (!Converter.convertNumber(output, raw, 0)) return fallback;
-  const narrowed = (output[0] << 16) >> 16;
-  return narrowed >= minimum ? narrowed : fallback;
+  return raw !== null && Converter.convertNumber(output, raw, 0)
+    ? (output[0] << 16) >> 16
+    : undefined;
 }

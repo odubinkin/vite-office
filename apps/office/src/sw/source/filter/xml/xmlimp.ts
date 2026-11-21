@@ -251,7 +251,7 @@ class SwXMLImport
     endTextFrame(cursor as SwXTextCursor);
   }
 
-  private lineNumberingSeen = false;
+  private readonly lineNumbering: OdfLineNumberingConfiguration[] = [];
   private expectedRoot = XMLToken.UNKNOWN;
   private officeTextCount = 0;
   private titleSeen = false;
@@ -504,10 +504,13 @@ class SwXMLImport
     return this.automaticListRules.get(styleName) ?? this.listRules.get(styleName);
   }
 
-  /** Applies global ODF line numbering to the canonical Writer document. @param value - Imported configuration. @returns Nothing. */
+  /** Retains line numbering in declaration order until named character styles are installed. @param value - Imported configuration. @returns Nothing. */
   public registerLineNumbering(value: OdfLineNumberingConfiguration): void {
-    if (this.lineNumberingSeen) throw new Error("Duplicate ODF line numbering configuration.");
-    this.lineNumberingSeen = true;
+    this.lineNumbering.push(value);
+  }
+
+  /** Applies global ODF line numbering through the original Writer properties. @param value - Imported configuration. @returns Nothing. */
+  private applyLineNumbering(value: OdfLineNumberingConfiguration): void {
     const properties = this.model.getLineNumberingProperties();
     for (const [name, field] of [
       ["CountEmptyLines", "countBlankLines"],
@@ -527,6 +530,7 @@ class SwXMLImport
     for (const [name, number] of [
       ["Interval", value.countBy],
       ["SeparatorInterval", value.dividerCountBy],
+      ["NumberingType", value.numberingType],
       [
         "NumberPosition",
         value.position === "right"
@@ -538,6 +542,7 @@ class SwXMLImport
               : 0,
       ],
     ] as const) {
+      if (number === undefined || (number < 0 && name !== "NumberingType")) continue;
       const key = xmlTextString(name),
         any = new Any([(number << 16) >> 16], "sal_Int16");
       try {
@@ -548,19 +553,31 @@ class SwXMLImport
       }
     }
     const distanceKey = xmlTextString("Distance"),
-      distance = new Any([Number(convertTwipToMm100(BigInt(value.posFromLeft)))], "sal_Int32"),
-      separatorKey = xmlTextString("SeparatorText"),
-      separator = xmlTextString(value.divider),
-      any = new Any(separator.getDataAddress(), "OUString");
+      distance = new Any([value.distance], "sal_Int32");
     try {
       properties.setPropertyValue(distanceKey, distance);
-      properties.setPropertyValue(separatorKey, any);
     } finally {
       distanceKey.dispose();
       distance.dispose();
-      separatorKey.dispose();
-      separator.dispose();
-      any.dispose();
+    }
+    const style = value.charStyleName
+      ? this.resolveNamedCharacterStyle(value.charStyleName)
+      : undefined;
+    for (const [name, text] of [
+      ["SeparatorText", value.divider],
+      ["CharStyleName", style],
+    ] as const) {
+      if (text === undefined) continue;
+      const key = xmlTextString(name),
+        string = xmlTextString(text),
+        any = new Any(string.getDataAddress(), "OUString");
+      try {
+        properties.setPropertyValue(key, any);
+      } finally {
+        key.dispose();
+        string.dispose();
+        any.dispose();
+      }
     }
   }
 
@@ -706,6 +723,8 @@ class SwXMLImport
     }
     const paragraphs = this.styles?.GetStyleDefinitions("paragraph") ?? new Map();
     applyNamedCharacterStyles(this.model, this.styles?.GetStyleDefinitions("text") ?? new Map());
+    for (const configuration of this.lineNumbering) this.applyLineNumbering(configuration);
+    this.lineNumbering.length = 0;
     applyNamedParagraphStyles(
       this.model,
       paragraphs,

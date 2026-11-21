@@ -1,4 +1,8 @@
 /** @fileoverview Browser-relevant SwLineNumberInfo fields from pinned sw/inc/lineinfo.hxx. */
+import { SvxNumberType } from "../../editeng/source/items/numitem";
+import type { SvxNumType } from "../../editeng/inc/svxenum";
+import type { SwDoc } from "../source/core/doc/doc";
+import type { SwCharFormat } from "./charfmt";
 
 /** Pinned LineNumberPosition order. */
 export enum LineNumberPosition {
@@ -19,37 +23,34 @@ export interface SwLineNumberInfoValue {
   readonly countBlankLines: boolean;
   readonly countInFlys: boolean;
   readonly restartEachPage: boolean;
+  readonly numberingType?: number;
+  readonly charStyleName?: string;
 }
 
-/** Document-owned line-number configuration; character style and native frame attachments are outside the browser slice. */
+/** Document-owned line-number configuration with native numbering and character style owners. */
 export class SwLineNumberInfo {
-  private value: SwLineNumberInfoValue;
+  private value: Omit<SwLineNumberInfoValue, "numberingType" | "charStyleName">;
+  private numType: SvxNumberType;
+  private charFormat: SwCharFormat | undefined;
 
   /** Creates the pinned Writer defaults or copies a complete value. @param value - Optional imported or copied value. @returns Nothing. */
   public constructor(value?: SwLineNumberInfoValue) {
-    this.value =
-      value === undefined
-        ? {
-            divider: "",
-            dividerCountBy: 3,
-            posFromLeft: 283,
-            countBy: 5,
-            position: LineNumberPosition.Left,
-            paintLineNumbers: false,
-            countBlankLines: true,
-            countInFlys: false,
-            restartEachPage: false,
-          }
-        : {
-            ...value,
-            dividerCountBy: value.dividerCountBy & 65535,
-            posFromLeft: value.posFromLeft & 65535,
-            countBy: value.countBy & 65535,
-          };
+    this.numType = new SvxNumberType(value?.numberingType as SvxNumType | undefined);
+    this.value = {
+      divider: value?.divider ?? "",
+      dividerCountBy: (value?.dividerCountBy ?? 3) & 65535,
+      posFromLeft: (value?.posFromLeft ?? 283) & 65535,
+      countBy: (value?.countBy ?? 5) & 65535,
+      position: value?.position ?? LineNumberPosition.Left,
+      paintLineNumbers: value?.paintLineNumbers ?? false,
+      countBlankLines: value?.countBlankLines ?? true,
+      countInFlys: value?.countInFlys ?? false,
+      restartEachPage: value?.restartEachPage ?? false,
+    };
   }
 
-  /** Restores a validated browser transfer value. @param candidate - Stored value. @returns Line-number configuration. */
-  public static FromValue(candidate: unknown): SwLineNumberInfo {
+  /** Restores validated browser state and binds the document-owned character style. @param candidate - Stored value. @param document - Owner of any transferred character style. @returns Line-number configuration. */
+  public static FromValue(candidate: unknown, document?: SwDoc): SwLineNumberInfo {
     if (typeof candidate !== "object" || candidate === null || Array.isArray(candidate))
       throw new Error("Stored Writer line numbering is invalid.");
     const value = candidate as Record<string, unknown>;
@@ -64,19 +65,42 @@ export class SwLineNumberInfo {
       typeof value.paintLineNumbers !== "boolean" ||
       typeof value.countBlankLines !== "boolean" ||
       typeof value.countInFlys !== "boolean" ||
-      typeof value.restartEachPage !== "boolean"
+      typeof value.restartEachPage !== "boolean" ||
+      (value.numberingType !== undefined &&
+        (!Number.isInteger(value.numberingType) ||
+          (value.numberingType as number) < -32768 ||
+          (value.numberingType as number) > 32767)) ||
+      (value.charStyleName !== undefined && typeof value.charStyleName !== "string")
     )
       throw new Error("Stored Writer line numbering is invalid.");
-    return new SwLineNumberInfo(value as unknown as SwLineNumberInfoValue);
+    const { charStyleName, ...settings } = value as unknown as SwLineNumberInfoValue;
+    const info = new SwLineNumberInfo(settings);
+    if (charStyleName !== undefined) {
+      const style =
+        document?.FindCharFormatByName(charStyleName) ??
+        (document?.GetDfltCharFormat().GetName() === charStyleName
+          ? document.GetDfltCharFormat()
+          : undefined);
+      if (!style) throw new Error("Stored Writer line-number character style is invalid.");
+      info.SetCharFormat(style);
+    }
+    return info;
   }
 
   /** Returns an independent configuration copy. @returns Clone. */
   public Clone(): SwLineNumberInfo {
-    return new SwLineNumberInfo(this.value);
+    const copy = new SwLineNumberInfo(this.value);
+    copy.SetNumType(this.numType);
+    if (this.charFormat) copy.SetCharFormat(this.charFormat);
+    return copy;
   }
   /** Returns the complete immutable transfer value. @returns Value. */
   public QueryValue(): SwLineNumberInfoValue {
-    return { ...this.value };
+    return {
+      ...this.value,
+      numberingType: this.numType.GetNumberingType(),
+      ...(this.charFormat ? { charStyleName: this.charFormat.GetName() } : {}),
+    };
   }
   /** Compares every browser-relevant field. @param other - Candidate. @returns Equality. */
   public equals(other: SwLineNumberInfo): boolean {
@@ -91,8 +115,26 @@ export class SwLineNumberInfo {
       left.paintLineNumbers === right.paintLineNumbers &&
       left.countBlankLines === right.countBlankLines &&
       left.countInFlys === right.countInFlys &&
-      left.restartEachPage === right.restartEachPage
+      left.restartEachPage === right.restartEachPage &&
+      this.numType.GetNumberingType() === other.numType.GetNumberingType() &&
+      this.charFormat === other.charFormat
     );
+  }
+  /** Borrows the explicitly bound character format without creating the pool fallback. @returns Native format if set. */
+  public GetCharFormat(): SwCharFormat | undefined {
+    return this.charFormat;
+  }
+  /** Binds the native character format used by line numbering. @param format - Actual document format. @returns Nothing. */
+  public SetCharFormat(format: SwCharFormat): void {
+    this.charFormat = format;
+  }
+  /** Returns the native numbering format value. @returns Read-only numbering format. */
+  public GetNumType(): Readonly<SvxNumberType> {
+    return this.numType;
+  }
+  /** Copies the native numbering format. @param type - Numbering format. @returns Nothing. */
+  public SetNumType(type: Readonly<SvxNumberType>): void {
+    this.numType = new SvxNumberType(type);
   }
   /** Returns the divider text. @returns Divider. */
   public GetDivider(): string {

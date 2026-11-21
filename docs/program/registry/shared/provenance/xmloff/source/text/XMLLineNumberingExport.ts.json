@@ -8,12 +8,20 @@
         {
           "marker": "exportLineNumberingConfiguration",
           "path": "apps/office/src/xmloff/source/text/XMLLineNumberingExport.ts"
+        },
+        {
+          "path": "apps/office/src/xmloff/source/text/XMLLineNumberingExport.ts",
+          "marker": "convertNumLetterSync"
         }
       ],
       "upstream": [
         {
           "marker": "XMLLineNumberingExport::Export",
           "path": "vendor/libreoffice-reference/xmloff/source/text/XMLLineNumberingExport.cxx"
+        },
+        {
+          "path": "xmloff/source/text/XMLLineNumberingExport.cxx",
+          "marker": "convertNumLetterSync"
         }
       ]
     },
@@ -22,11 +30,12 @@
       "exportLineNumberingConfiguration"
     ],
     "omittedResponsibilities": [
-      "Non-Arabic numbering styles and native UNO style properties are outside the browser slice."
+      "Full native UNO service discovery and layout rendering are outside these filter contexts."
     ],
     "preservedResponsibilities": [
       "Writes the supported document-level ODF line-number attributes and separator.",
-      "TaskJ1K3KF retains signed16 Interval/SeparatorInterval export values returned by native line-number property access over unsigned16 core storage;the existing filter owns serialization and no separate UNO property service is fabricated."
+      "TaskJ1K3KF retains signed16 Interval/SeparatorInterval export values returned by native line-number property access over unsigned16 core storage;the existing filter owns serialization and no separate UNO property service is fabricated.",
+      "Serializes the selected line-numbering style and numbering type through the original XML format and letter-sync converters."
     ],
     "status": "mapped",
     "upstreamPath": "xmloff/source/text/XMLLineNumberingExport.cxx",

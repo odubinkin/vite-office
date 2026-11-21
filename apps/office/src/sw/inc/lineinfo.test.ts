@@ -11,6 +11,7 @@ import { createWriterDocumentSession } from "../browser/composition/writer-modul
 import { SfxBoolItem } from "../../svl/source/items/cenumitm";
 import { RES_LINENUMBER } from "./hintids";
 import { LineNumberPosition, SwLineNumberInfo } from "./lineinfo";
+import { ARABIC } from "../../offapi/com/sun/star/style/NumberingType";
 
 describe("SwLineNumberInfo", /** Groups pinned line-number contract checks. @returns Nothing. */ () => {
   it("starts with pinned Writer defaults and owns independent copies", /** Compares sw/source/core/doc/lineinfo.cxx defaults. @returns Nothing. */ () => {
@@ -26,6 +27,7 @@ describe("SwLineNumberInfo", /** Groups pinned line-number contract checks. @ret
       countBlankLines: true,
       countInFlys: false,
       restartEachPage: false,
+      numberingType: ARABIC,
     });
     info.SetPaintLineNumbers(true);
     expect(document.GetLineNumberInfo().IsPaintLineNumbers()).toBe(false);

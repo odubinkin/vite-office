@@ -364,6 +364,10 @@
         {
           "path": "apps/office/e2e/writer-native-context-menu.spec.ts",
           "marker": "Writer native context menu"
+        },
+        {
+          "path": "apps/office/src/sw/browser/presentation/writer-view.tsx",
+          "marker": "SwLineNumberInfo.FromValue(value, activeDocument)"
         }
       ],
       "upstream": [
@@ -502,6 +506,10 @@
         {
           "path": "vendor/libreoffice-reference/officecfg/registry/data/org/openoffice/Office/UI/GenericCommands.xcu",
           "marker": "<prop oor:name=\"PopupLabel\""
+        },
+        {
+          "path": "sw/source/ui/misc/linenum.cxx",
+          "marker": "SwLineNumberingDlg"
         }
       ]
     },
@@ -544,7 +552,8 @@
       "Iteration253 removes the production React-owned testLayout and duplicate layout prop, borrowing the existing original SwEditWin view-shell layout for all browser formatting. Renderer/cursor ownership follows the same native root and current edit-window view; test ownership is explicit. Targeted verification pending. Native root frame-format/page/body/follows and overall parity remain unverified; historical statuses/defaults/classifications and registered recovery/open/save/settings exceptions preserved. No full253; last247,next257 then fix failures and pause the goal.",
       "Iteration253 verified targeted closure:202 unique related cases including5 fresh actual native editor ownership cases pass,0 unresolved0 passing replay. Initial155pass1 fresh fixture failure retained; failed test now exercises actual editor owner changes with original native session projections, preserving first/second text and receiver identity assertions. Unexecuted document-key/title/modal/focus scenarios and one new native ruler visibility case close current-source coverage. Changed2/app318 all-four100 uses actual current counters,316 whole byte-identical modules and122 complete unchanged declarations/bodies/enclosing conditions/all mapped locations from252; no changed outer function transfer or individual counter sanitization. Two old detached fixtures now explicitly own real SwView/SwDocShell and close after UI teardown; all66 literal assertions retained,509 other test files byte-identical. Native root frame-format/page/body/follows and overall parity remain unverified. Workbench retains initial viewStore on session prop replacement, a separate recorded follow-up. Four canonical history/status/default/classification/evidence prefixes preserved. No full253; next full257 then verified failure repair and requested goal pause.",
       "Iteration254 aligns workbench presentation with the current original native view and optional session store identity, replacing one-time captured state with current owner selection. Owned local store cleanup remains exact; borrowed session stores remain session-owned. Targeted verification pending. Render-time local store creation, native root frame-format/page/body/follows/lifetime and overall parity remain unverified. Last full247,next257 then verified failure repairs and requested goal pause. Historical statuses/defaults/classifications/evidence prefixes and protected I/O/recovery/settings preserved.",
-      "Iteration254 verified:216 unique related cases including6 fresh actual workbench native view/store ownership cases PASS in one upstream-absent targeted profile,0 failures0 skips0 passing replay. Supplied and local stores now follow current original view, subsequent native text/cell format notifications and current shared root; borrowed/local transitions preserve document/history and close only owned stores. Existing store implementation/native observers/projections unchanged. Current-source changed1/app318 all-four100 uses actual changed owner-selection counters,317 entire byte-identical modules and81 complete unchanged declarations/bodies/enclosing conditions/all exact mapped locations from253; no changed outer function transfer or counter normalization.512 prior test files byte-identical. Two canonical records retain all historical statuses/defaults/classifications/evidence prefixes without promotion. Render-time local store creation and native root frame-format/page/body/follows/lifetime/overall parity remain unverified. No full254; next full257 then verified failure repair and requested goal pause."
+      "Iteration254 verified:216 unique related cases including6 fresh actual workbench native view/store ownership cases PASS in one upstream-absent targeted profile,0 failures0 skips0 passing replay. Supplied and local stores now follow current original view, subsequent native text/cell format notifications and current shared root; borrowed/local transitions preserve document/history and close only owned stores. Existing store implementation/native observers/projections unchanged. Current-source changed1/app318 all-four100 uses actual changed owner-selection counters,317 entire byte-identical modules and81 complete unchanged declarations/bodies/enclosing conditions/all exact mapped locations from253; no changed outer function transfer or counter normalization.512 prior test files byte-identical. Two canonical records retain all historical statuses/defaults/classifications/evidence prefixes without promotion. Render-time local store creation and native root frame-format/page/body/follows/lifetime/overall parity remain unverified. No full254; next full257 then verified failure repair and requested goal pause.",
+      "Restores the submitted line-number configuration against the active document so the dialog retains its existing character-style binding."
     ]
   },
   "legacyOrder": 122

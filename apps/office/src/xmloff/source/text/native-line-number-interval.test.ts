@@ -6,22 +6,22 @@ import {
   XMLLineNumberingImportContext,
   type OdfLineNumberingConfiguration,
 } from "./XMLLineNumberingImportContext";
-it("retains source signed16 narrowing and distinct main/separator zero admission", /** Native invalid strings are ignored rather than rejecting the document. @returns Nothing. */ () => {
-  for (const [raw, count, divider] of [
-    ["0", 5, 0],
-    ["32767", 32767, 32767],
-    ["32768", 5, 3],
-    ["65535", 5, 3],
-    ["65536", 5, 0],
-    ["65537", 1, 1],
-    ["2147483648", 5, 3],
-    ["-1", 5, 0],
-    ["", 5, 0],
-    [" 7", 7, 7],
-    ["7 ", 5, 3],
-    ["+7", 5, 3],
-    ["7.5", 5, 3],
-    ["invalid", 5, 3],
+it("retains source signed16 intervals until the Writer property admission", /** Keeps missing or invalid XML distinct from an explicitly parsed zero. @returns Nothing. */ () => {
+  for (const [raw, count] of [
+    ["0", 0],
+    ["32767", 32767],
+    ["32768", -32768],
+    ["65535", -1],
+    ["65536", 0],
+    ["65537", 1],
+    ["2147483648", -1],
+    ["-1", 0],
+    ["", 0],
+    [" 7", 7],
+    ["7 ", undefined],
+    ["+7", undefined],
+    ["7.5", undefined],
+    ["invalid", undefined],
   ] as const) {
     let result: OdfLineNumberingConfiguration | undefined;
     const attributes = new FastAttributeList([
@@ -49,6 +49,8 @@ it("retains source signed16 narrowing and distinct main/separator zero admission
     separator.characters("*");
     separator.endFastElement(XMLToken.TEXT_LINENUMBERING_SEPARATOR);
     context.endFastElement();
-    expect(result).toMatchObject({ countBy: count, dividerCountBy: divider, divider: "*" });
+    expect(result?.countBy).toBe(count);
+    expect(result?.dividerCountBy).toBe(count);
+    expect(result?.divider).toBe("*");
   }
 });

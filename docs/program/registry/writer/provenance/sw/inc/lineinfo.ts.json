@@ -8,12 +8,20 @@
         {
           "marker": "SwLineNumberInfo",
           "path": "apps/office/src/sw/inc/lineinfo.ts"
+        },
+        {
+          "path": "apps/office/src/sw/inc/lineinfo.ts",
+          "marker": "SetCharFormat"
         }
       ],
       "upstream": [
         {
           "marker": "SwLineNumberInfo",
           "path": "vendor/libreoffice-reference/sw/inc/lineinfo.hxx"
+        },
+        {
+          "path": "sw/inc/lineinfo.hxx",
+          "marker": "GetCharFormat"
         }
       ]
     },
@@ -27,7 +35,8 @@
     ],
     "preservedResponsibilities": [
       "Keeps the pinned line-number defaults and copyable document-owned configuration.",
-      "TaskJ1K3KF preserves actual uint16 scalar storage in constructor/setters and validates native-width transfer data;source copy/default behavior remains unchanged."
+      "TaskJ1K3KF preserves actual uint16 scalar storage in constructor/setters and validates native-width transfer data;source copy/default behavior remains unchanged.",
+      "Owns the native numbering type and shares the document character-format owner across line-numbering copies."
     ],
     "status": "mapped",
     "upstreamPath": "sw/inc/lineinfo.hxx",

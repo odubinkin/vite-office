@@ -5870,3 +5870,25 @@ color when its legacy color is explicitly transparent.
 
 - [Original Writer frame RGB fallback](../../vendor/libreoffice-reference/sw/source/core/unocore/unoframe.cxx)
 - [Original Writer text import filtering of the solid style](../../vendor/libreoffice-reference/xmloff/source/text/txtimppr.cxx)
+
+### WRITER-728 — A saturated line-number offset is exported as absent
+
+The line-number settings setter caps a positive offset at 65535 twips.
+The getter interprets that same value as the unspecified-distance
+sentinel and reports zero. The ODT exporter consequently omits the
+offset. An omitted or malformed XML offset also reaches the sentinel
+through the import context's signed minus-one default. Writer preserves
+both paths.
+
+- [Original XML offset default](../../vendor/libreoffice-reference/xmloff/source/text/XMLLineNumberingImportContext.cxx)
+- [Original Writer property setter and getter](../../vendor/libreoffice-reference/sw/source/core/unocore/unosett.cxx)
+
+### WRITER-729 — A later line-number separator can retain the preceding interval
+
+Each separator context replaces the separator text when it closes,
+while its increment reaches the parent only if conversion succeeds.
+If a second separator has an invalid or omitted increment, its text
+replaces the first separator and its interval comes from the first.
+Writer preserves the separate updates.
+
+- [Original separator context](../../vendor/libreoffice-reference/xmloff/source/text/XMLLineNumberingSeparatorImportContext.cxx)

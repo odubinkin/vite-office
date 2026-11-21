@@ -19,6 +19,8 @@ import type { PropertyValue } from "../../../../udkapi/com/sun/star/beans/Proper
 import { SwNumFormat, SvxNumType, SwNumRule, type ConstSwNumFormat } from "../doc/number";
 import { WRITER_MAX_LIST_LEVEL } from "../doc/list";
 import { fontFromUnoDescriptorName } from "../../../../editeng/source/uno/unofdesc";
+import { findCharacterStyle } from "../doc/docfmt";
+import { SvxNumberType } from "../../../../editeng/source/items/numitem";
 
 import type { NumberingPositionProperties } from "../../../../editeng/source/items/numitem";
 
@@ -474,12 +476,19 @@ export class SwXLineNumberingProperties {
     const name = text(property),
       info = this.doc.GetLineNumberInfo();
     if (name === "SeparatorText") info.SetDivider(stringValue(value));
-    else if (name === "Distance")
+    else if (name === "CharStyleName") {
+      const format = findCharacterStyle(this.doc, stringValue(value));
+      if (format) info.SetCharFormat(format);
+    } else if (name === "NumberingType") {
+      const type = new SvxNumberType(info.GetNumType());
+      type.SetNumberingType(scalar(value, "sal_Int16") as SvxNumType);
+      info.SetNumType(type);
+    } else if (name === "Distance")
       info.SetPosFromLeft(
         Math.min(
           65535,
           Number(toTwips(BigInt(scalar(value, "sal_Int32") as number), Length.mm100)),
-        ) & 0xffff,
+        ),
       );
     else if (name === "Interval") {
       const count = scalar(value, "sal_Int16") as number;
@@ -505,8 +514,21 @@ export class SwXLineNumberingProperties {
     const name = text(property),
       info = this.doc.GetLineNumberInfo();
     if (name === "SeparatorText") return stringAny(info.GetDivider());
-    if (name === "Distance")
-      return new Any([Number(convertTwipToMm100(BigInt(info.GetPosFromLeft())))], "sal_Int32");
+    if (name === "CharStyleName") {
+      const format = info.GetCharFormat();
+      return stringAny(
+        format ? SwStyleNameMapper.FillProgName(format.GetName(), SwGetPoolIdFromName.ChrFmt) : "",
+      );
+    }
+    if (name === "NumberingType")
+      return new Any([(info.GetNumType().GetNumberingType() << 16) >> 16], "sal_Int16");
+    if (name === "Distance") {
+      const offset = info.GetPosFromLeft();
+      return new Any(
+        [offset === 65535 ? 0 : Number(convertTwipToMm100(BigInt(offset)))],
+        "sal_Int32",
+      );
+    }
     if (name === "Interval" || name === "SeparatorInterval" || name === "NumberPosition")
       return new Any(
         [

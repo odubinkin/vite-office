@@ -8,12 +8,20 @@
         {
           "marker": "XMLLineNumberingImportContext",
           "path": "apps/office/src/xmloff/source/text/XMLLineNumberingImportContext.ts"
+        },
+        {
+          "path": "apps/office/src/xmloff/source/text/XMLLineNumberingImportContext.ts",
+          "marker": "converter.convertNumFormat"
         }
       ],
       "upstream": [
         {
           "marker": "XMLLineNumberingImportContext::CreateAndInsert",
           "path": "vendor/libreoffice-reference/xmloff/source/text/XMLLineNumberingImportContext.cxx"
+        },
+        {
+          "path": "xmloff/source/text/XMLLineNumberingImportContext.cxx",
+          "marker": "XMLLineNumberingImportContext::SetAttribute"
         }
       ]
     },
@@ -22,11 +30,12 @@
       "XMLLineNumberingImportContext"
     ],
     "omittedResponsibilities": [
-      "Non-Arabic numbering styles and native UNO style properties are outside the browser slice."
+      "Full native UNO service discovery and layout rendering are outside these filter contexts."
     ],
     "preservedResponsibilities": [
       "Imports the supported ODF line-number attributes and optional separator before publishing document settings.",
-      "TaskJ1K3KF reuses native SAX signed32 conversion,min0 clamp,signed16 narrowing and original positive main/nonnegative separator property admission. Invalid/narrowed-negative interval lexemes retain defaults;complete UNO import and other attributes remain bounded."
+      "TaskJ1K3KF reuses native SAX signed32 conversion,min0 clamp,signed16 narrowing and original positive main/nonnegative separator property admission. Invalid/narrowed-negative interval lexemes retain defaults;complete UNO import and other attributes remain bounded.",
+      "Imports line-numbering style names, native numbering types, MM100 distances and independent separator text and interval updates."
     ],
     "status": "mapped",
     "upstreamPath": "xmloff/source/text/XMLLineNumberingImportContext.cxx",

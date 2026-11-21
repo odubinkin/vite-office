@@ -232,6 +232,10 @@
         {
           "path": "apps/office/src/sw/source/filter/xml/odt-page-stories.test.ts",
           "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/source/filter/xml/xmlimp.ts",
+          "marker": "applyLineNumbering"
         }
       ],
       "upstream": [
@@ -410,6 +414,10 @@
         {
           "path": "vendor/libreoffice-reference/sw/source/filter/xml/xmlimp.cxx",
           "marker": "SwXMLImport::SetConfigurationSettings"
+        },
+        {
+          "path": "xmloff/source/text/XMLLineNumberingImportContext.cxx",
+          "marker": "XMLLineNumberingImportContext::CreateAndInsert"
         }
       ]
     },
@@ -466,7 +474,8 @@
       "Finishes common character formats through XStyle before the text body and retains native XML import mode while applying the ordered named layers.",
       "Attaches the real ODF named theme to the document graph.",
       "Applies the ODF default style tab distance to the original Writer UNO text-default owner.",
-      "Applies named styles before master-page text and restores the normal cursor and page layout association."
+      "Applies named styles before master-page text and restores the normal cursor and page layout association.",
+      "Applies global line settings with the original character style lookup after the common style pool is populated."
     ],
     "status": "mapped",
     "upstreamPath": "sw/source/filter/xml/xmlimp.cxx",
