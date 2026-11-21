@@ -249,6 +249,29 @@ export function ReplaceBackReferences(
   }
 }
 
+/** Converts counted replacement text to the content operations' UTF-16 string. @param value - Native replacement text. @returns Model text. */
+export function DecodeSearchReplacement(value: OUString): string {
+  const units = value.getStr();
+  let replacement = "";
+  for (let index = 0; index < value.getLength(); index++)
+    replacement += String.fromCharCode(units[index] as number);
+  return replacement;
+}
+
+/** Resolves captures, preserving the original replacement when the selected span cannot be matched. @param options - Native search and replacement. @param cursor - Selected span. @param engine - Search without attribute region flags. @returns Model replacement text. */
+export function ResolveSearchReplacement(
+  options: SearchOptions2,
+  cursor: SwPaM,
+  engine: TextSearch,
+): string {
+  const expanded = ReplaceBackReferences(options, cursor, engine);
+  try {
+    return DecodeSearchReplacement(expanded ?? options.replaceString);
+  } finally {
+    expanded?.dispose();
+  }
+}
+
 /** Native SwFindParaText normal strategy over the actual shared TextSearch owner. Replacement uses the native document and history owners. */
 export class SwFindParaText implements SwFindParas {
   private readonly m_aSText: TextSearch;
@@ -273,11 +296,9 @@ export class SwFindParaText implements SwFindParas {
       ? (ReplaceBackReferences(this.m_rSearchOpt, cursor, this.m_aSText) ??
         processUnicodeEscapes(original.getStr().subarray(0, original.getLength())))
       : undefined;
-    const decoded = expanded ?? original;
-    let replacement = "";
+    let replacement: string;
     try {
-      for (let i = 0; i < decoded.getLength(); i++)
-        replacement += String.fromCharCode(decoded.getStr()[i] as number);
+      replacement = DecodeSearchReplacement(expanded ?? original);
     } finally {
       expanded?.dispose();
     }

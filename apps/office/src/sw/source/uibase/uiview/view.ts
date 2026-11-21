@@ -16,6 +16,7 @@ import type { SfxViewFrame } from "../../../../sfx2/source/view/viewfrm";
 import { createDocument } from "../../../../sfx2/source/doc/objsh";
 import type { SwModelHint } from "../../../inc/hints";
 import type { SearchOptionsConfiguration } from "../../../../unotools/source/config/searchopt";
+import type { RegexMatcherFactory } from "../../../../unotools/inc/textsearch";
 import { SwViewSearch } from "./viewsrch";
 import { SwViewOption } from "../../../inc/viewopt";
 import { SwDocShell } from "../app/docsh";
@@ -56,11 +57,12 @@ export class SwView {
   private readonly layout: SwRootFrame;
   private readonly wrtShellSubscription: () => void;
 
-  /** Creates one persistent view over a persistent document shell. @param docShell - Owning Writer document shell. @param module - Actual module metric preferences and open-view enumeration. @param searchOptions - User search configuration. @returns Nothing. */
+  /** Creates one persistent view over a persistent document shell. @param docShell - Owning Writer document shell. @param module - Actual module metric preferences and open-view enumeration. @param searchOptions - User search configuration. @param createRegex - Native ICU constructor. @returns Nothing. */
   public constructor(
     private readonly docShell: SwDocShell,
     private readonly module: SwModule = SwModule.get(),
     searchOptions?: SearchOptionsConfiguration,
+    createRegex?: RegexMatcherFactory,
   ) {
     const pref = module.GetUsrPref(false);
     this.horizontalRuler.SetUnit(pref.GetHScrollMetric());
@@ -80,7 +82,7 @@ export class SwView {
       this.viewOptions,
       this,
     );
-    this.search = new SwViewSearch(this.wrtShell, searchOptions);
+    this.search = new SwViewSearch(this.wrtShell, searchOptions, createRegex);
     this.docShell.SetView(this);
     this.editWindow = new SwEditWin(
       this,

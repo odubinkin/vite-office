@@ -7,10 +7,11 @@ import {
   REG_NOT_BEGINOFLINE,
   REG_NOT_ENDOFLINE,
 } from "../../../../offapi/com/sun/star/util/SearchFlags";
+import { REGEXP } from "../../../../offapi/com/sun/star/util/SearchAlgorithms2";
 import { SfxItemIter } from "../../../../svl/inc/itemiter";
 import { SfxItemSet, SfxItemState } from "../../../../svl/source/items/itemset";
 import { IsInvalidItem, SfxPoolItem } from "../../../../svl/source/items/poolitem";
-import { TextSearch } from "../../../../unotools/inc/textsearch";
+import { TextSearch, type RegexMatcherFactory } from "../../../../unotools/inc/textsearch";
 import type { FindRanges, SwDocPositions } from "../../../inc/cshtyp";
 import {
   RES_CHRATR_BACKGROUND,
@@ -23,7 +24,7 @@ import { isParagraphEditItem } from "../doc/DocumentContentOperationsManager.att
 import type { SwTextFormatColl } from "../doc/fmtcol";
 import { SwAttrIter } from "../text/itratr";
 import { SwTextNode } from "../txtnode/ndtxt";
-import { FindTextImpl } from "./findtxt";
+import { DecodeSearchReplacement, FindTextImpl, ResolveSearchReplacement } from "./findtxt";
 import { SwPaM } from "./pam";
 import {
   FIND_FOUND,
@@ -123,12 +124,13 @@ class SwFindParaAttr implements SwFindParas {
   private readonly paragraphs: SearchAttribute[] = [];
   private readonly engine: TextSearch | undefined;
 
-  /** Prepares native matching criteria. @param set - Search items. @param includeCollections - Whether named styles participate. @param options - Optional text criteria. @param acceptsNode - View node admission. @returns Strategy. */
+  /** Prepares native matching criteria. @param set - Search items. @param includeCollections - Whether named styles participate. @param options - Optional text criteria. @param acceptsNode - View node admission. @param createRegex - Native ICU constructor. @returns Strategy. */
   public constructor(
     set: SfxItemSet,
     private readonly includeCollections: boolean,
     private readonly options: SearchOptions2 | undefined,
     private readonly acceptsNode?: SwSearchNodeFilter,
+    createRegex?: RegexMatcherFactory,
   ) {
     for (const iter = new SfxItemIter(set); !iter.IsAtEnd(); iter.Next()) {
       const which = iter.GetCurWhich();
@@ -144,7 +146,7 @@ class SwFindParaAttr implements SwFindParas {
     if (options !== undefined) {
       const scoped = new SearchOptions2(options);
       scoped.searchFlag |= REG_NOT_BEGINOFLINE | REG_NOT_ENDOFLINE;
-      this.engine = new TextSearch(scoped);
+      this.engine = new TextSearch(scoped, createRegex);
     }
   }
 
@@ -237,11 +239,12 @@ function PrepareReplacement(searchSet: SfxItemSet, replaceSet: SfxItemSet): SfxI
   }
 }
 
-/** Applies native text and character formatting replacement to a selected result. @param cursor - Matching range. @param text - Replacement text if requested. @param attributes - Items to apply. @returns Nothing. */
+/** Applies native text and character formatting replacement to a selected result. @param cursor - Matching range. @param text - Replacement text if requested. @param attributes - Items to apply. @param regex - Whether to interpret regex paragraph breaks. @returns Nothing. */
 export function ReplaceAttrs(
   cursor: SwPaM,
   text: string | undefined,
   attributes: SfxItemSet,
+  regex = false,
 ): void {
   const items = attributes.entries();
   if (
@@ -258,13 +261,13 @@ export function ReplaceAttrs(
   const operations = cursor.GetPoint().GetNode().GetDoc().GetDocumentContentOperationsManager();
   if (text !== undefined) {
     const start = cursor.Start().GetContentIndex();
-    operations.ReplaceRange(cursor, text, false);
+    operations.ReplaceRange(cursor, text, regex);
     cursor.Start().SetContent(start);
   }
   if (attributes.Count() > 0) operations.InsertItemSet(cursor, attributes);
 }
 
-/** Runs attribute search on the native cursor ring. @param cursor - Search cursor. @param set - Search formatting. @param includeCollections - Whether named styles participate. @param start - Initial document boundary. @param end - Final document boundary. @param ranges - Search scope. @param options - Optional text criteria. @param acceptsNode - View node admission. @param replacement - Optional bulk-edit arguments. @returns Number of matches. */
+/** Runs attribute search on the native cursor ring. @param cursor - Search cursor. @param set - Search formatting. @param includeCollections - Whether named styles participate. @param start - Initial document boundary. @param end - Final document boundary. @param ranges - Search scope. @param options - Optional text criteria. @param acceptsNode - View node admission. @param replacement - Optional bulk replacement item set. @param createRegex - Native ICU constructor. @returns Number of matches. */
 export function FindAttrs(
   cursor: SwCursor,
   set: SfxItemSet,
@@ -274,22 +277,32 @@ export function FindAttrs(
   ranges: FindRanges,
   options: SearchOptions2 | undefined,
   acceptsNode: SwSearchNodeFilter,
-  replacement?: { readonly text: string | undefined; readonly set: SfxItemSet },
+  replacement?: SfxItemSet,
+  createRegex?: RegexMatcherFactory,
 ): number {
-  const strategy = new SwFindParaAttr(set, includeCollections, options, acceptsNode);
+  const strategy = new SwFindParaAttr(set, includeCollections, options, acceptsNode, createRegex);
   if (replacement === undefined) return cursor.FindAll(strategy, start, end, ranges, [false]);
-  const applied = PrepareReplacement(set, replacement.set);
-  const text = replacement.text === "" && applied.Count() !== 0 ? undefined : replacement.text;
+  const applied = PrepareReplacement(set, replacement);
+  const replaceText =
+    options !== undefined &&
+    (options.replaceString.getLength() !== 0 || set.Count() === 0 || applied.Count() === 0);
+  const regex = replaceText && options.AlgorithmType2 === REGEXP;
+  const text = replaceText && !regex ? DecodeSearchReplacement(options.replaceString) : undefined;
   const undo = cursor.GetPoint().GetNode().GetDoc().GetUndoManager();
   const record = undo.DoesUndo();
   if (record) undo.StartUndo("Replace");
   try {
+    const captures = regex ? new TextSearch(options, createRegex) : undefined;
     return cursor.FindAll(
       {
         /** Replaces the next match through the native content operations. @param match - Result cursor. @param backward - Direction. @param region - Bounds. @returns Native find result flag. */
         DoFind(match, backward, region) {
           if (strategy.DoFind(match, backward, region) === FIND_NOT_FOUND) return FIND_NOT_FOUND;
-          ReplaceAttrs(match, text, applied);
+          const resolved =
+            regex && captures !== undefined
+              ? ResolveSearchReplacement(options, match, captures)
+              : text;
+          ReplaceAttrs(match, resolved, applied, regex);
           return FIND_NO_RING;
         },
         /** Reports an editing strategy. @returns True. */

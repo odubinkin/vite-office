@@ -4,9 +4,14 @@ import {
   SvtSearchOptions,
   type SearchOptionsConfiguration,
 } from "../../../../unotools/source/config/searchopt";
+import { TextSearch, type RegexMatcherFactory } from "../../../../unotools/inc/textsearch";
 import { SearchOptions2 } from "../../../../i18nutil/inc/searchopt";
 import { TransliterationFlags } from "../../../../i18nutil/inc/transliteration";
-import { ABSOLUTE, APPROXIMATE } from "../../../../offapi/com/sun/star/util/SearchAlgorithms2";
+import {
+  ABSOLUTE,
+  APPROXIMATE,
+  REGEXP,
+} from "../../../../offapi/com/sun/star/util/SearchAlgorithms2";
 import {
   LEV_RELAXED,
   NORM_WORD_ONLY,
@@ -30,6 +35,7 @@ import {
 import { SfxItemSet, type WhichRangesContainer } from "../../../../svl/source/items/itemset";
 import type { SearchAttrItemList } from "../../../../svx/source/dialog/srchdlg";
 import { FindAttrs, ReplaceAttrs } from "../../core/crsr/findattr";
+import { ResolveSearchReplacement } from "../../core/crsr/findtxt";
 import { FindFormat } from "../../core/crsr/findcoll";
 import {
   getWriterMaterializedParagraphStyleDefinition,
@@ -245,10 +251,11 @@ export class SwViewSearch {
   private lastRequest:
     { item: WriterSearchItem; command: SvxSearchCmd; backward: boolean } | undefined;
 
-  /** Connects search to the writing shell and user search properties. @param shell - Persistent writing shell. @param configuration - User search configuration. @returns Search owner. */
+  /** Connects search to the writing shell and user search properties. @param shell - Persistent writing shell. @param configuration - User search configuration. @param createRegex - Native ICU constructor. @returns Search owner. */
   public constructor(
     private readonly shell: SwWrtShell,
     public readonly configuration?: SearchOptionsConfiguration,
+    private readonly createRegex?: RegexMatcherFactory,
   ) {
     const options = new SvtSearchOptions(configuration);
     this.item = {
@@ -551,11 +558,14 @@ export class SwViewSearch {
           false,
           undefined,
           acceptsNode,
+          this.createRegex,
         ) > 0
       ) {
         const document = this.shell.GetDoc();
         if (canReplaceAtNode(match.GetPoint().GetNode()))
-          document.GetDocumentContentOperationsManager().ReplaceRange(match, replacement, false);
+          document
+            .GetDocumentContentOperationsManager()
+            .ReplaceRange(match, replacement, options.AlgorithmType2 === REGEXP);
         this.shell.SetPaM(match.GetPoint(), match.GetMark());
       }
     } finally {
@@ -689,6 +699,23 @@ export class SwViewSearch {
               if (command === SvxSearchCmd.REPLACE) {
                 if (backward) this.shell.Push();
                 try {
+                  const regex = options.AlgorithmType2 === REGEXP;
+                  let replacement = item.replacement;
+                  if (regex && style === undefined && cursor.HasMark()) {
+                    const source = new SearchOptions2(options);
+                    const template = toOUString(replacement);
+                    try {
+                      source.replaceString.assign(template);
+                      replacement = ResolveSearchReplacement(
+                        source,
+                        cursor,
+                        new TextSearch(source, this.createRegex),
+                      );
+                    } finally {
+                      template.dispose();
+                      source.replaceString.clear();
+                    }
+                  }
                   if (attributeMode && cursor.HasMark()) {
                     const match = createSearchCursor(cursor, true);
                     try {
@@ -702,6 +729,8 @@ export class SwViewSearch {
                           FindRanges.InSel,
                           textOptions,
                           acceptsNode,
+                          undefined,
+                          this.createRegex,
                         ) > 0 &&
                         canReplaceAtNode(match.GetPoint().GetNode())
                       ) {
@@ -709,9 +738,8 @@ export class SwViewSearch {
                         const record = undo.DoesUndo();
                         if (record) undo.StartUndo("Replace");
                         try {
-                          const text =
-                            item.replacement || (replaceSet.Count() === 0 ? "" : undefined);
-                          ReplaceAttrs(match, text, replaceSet);
+                          const text = replacement || (replaceSet.Count() === 0 ? "" : undefined);
+                          ReplaceAttrs(match, text, replaceSet, regex);
                         } finally {
                           if (record) undo.EndUndo();
                         }
@@ -722,7 +750,7 @@ export class SwViewSearch {
                       match.Dispose();
                     }
                   } else if (style === undefined)
-                    this.ReplaceSelection(cursor, options, item.replacement, last, acceptsNode);
+                    this.ReplaceSelection(cursor, options, replacement, last, acceptsNode);
                   else {
                     const replacement = this.GetParaStyle(item.replaceStyle);
                     setTextFormatCollAtShell(
@@ -781,9 +809,8 @@ export class SwViewSearch {
                           ranges,
                           textOptions,
                           acceptsResult,
-                          replaceAll
-                            ? { text: textOptions && item.replacement, set: replaceSet }
-                            : undefined,
+                          replaceAll ? replaceSet : undefined,
+                          this.createRegex,
                         )
                       : style === undefined
                         ? search.Find_Text(
@@ -796,6 +823,7 @@ export class SwViewSearch {
                             replaceAll,
                             undefined,
                             acceptsResult,
+                            this.createRegex,
                           )
                         : FindFormat(
                             search,

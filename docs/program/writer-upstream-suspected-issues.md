@@ -5689,5 +5689,7 @@ applies its authored properties without that collection change.
   selected range again with soft hyphens retained.
 - For `(ab)` over `a<U+00AD>b`, the initial search succeeds and the capture
   search fails. Replace All falls back to Unicode escape processing without
-  expanding `$1`. The Writer model regression preserves this sequence
-  against the pinned ICU.
+  expanding `$1`. Single Replace in `sw/source/uibase/uiview/viewsrch.cxx`
+  and formatted Replace All in `sw/source/core/crsr/findattr.cxx` instead
+  pass the original template to the regex replacement operation. The Writer
+  model and view regressions preserve both outcomes against the pinned ICU.

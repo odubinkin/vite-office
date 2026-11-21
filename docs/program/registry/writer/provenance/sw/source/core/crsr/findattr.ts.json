@@ -21,10 +21,11 @@
     ],
     "preservedResponsibilities": [
       "Searches native hint boundaries and effective pooled formatting with optional text matching inside each span. Formatted replacement uses the document operations and grouped undo.",
-      "Matches paragraph OtherSet before character ranges, preserves directional paragraph-only endpoints, and applies prepared replacement item sets through the document content operation owner."
+      "Matches paragraph OtherSet before character ranges, preserves directional paragraph-only endpoints, and applies prepared replacement item sets through the document content operation owner.",
+      "Formatted bulk regex replacement resolves captures with a forward search of the matched range, preserves the literal template when capture resolution fails, and uses the native regex replacement flag."
     ],
     "omittedResponsibilities": [
-      "Merged layout extents, non-text content, point-only hints, full native paragraph and frame comparison rules, and regex substitutions remain unported."
+      "Merged layout extents, non-text content, point-only hints, full native paragraph and frame comparison rules, and paragraph-breaking regex substitutions remain unported."
     ],
     "evidence": {
       "local": [

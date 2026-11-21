@@ -4,7 +4,7 @@ title: "Implement Writer search and replace core and browser UI"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 70
+revision: 71
 origin:
   system: "manual"
 depends_on:
@@ -214,6 +214,9 @@ comments:
   -
     author: "CODER"
     body: "Verified checkpoint: native model-text Replace All now decodes Unicode escapes, recomputes ICU capture pairs over the selected span, expands replacement references and replays same-paragraph edits with grouped undo/redo. The shared wrapper isolates cached backends by the explicit matcher factory. The native paragraph-end reference helper preserves the synthetic LF capture. WRITER-711 records the original soft-hyphen cleanup asymmetry and its literal replacement fallback. Local native ICU tests verify forward and backward model replacement, unmatched groups, supplementary UTF-16, and grouped history. Passed 87 shared and 87 Writer tests, two resource cases, production build, dependency/source-tree/provenance/JSDoc/file-size checks, scoped lint/format, doctor and routing. Browser regex still requires the WASM module and runtime binding. Regex paragraph breaks and zero-length cursor traversal, single and attribute replacement integration, and note search remain incomplete, so the parent stays open."
+  -
+    author: "CODER"
+    body: "Verified checkpoint: native ICU capture expansion reaches the single Replace command and formatted Replace and Replace All. The view resolves captures on the original selection before its validation pass and preserves the dialog template. Formatted bulk search consumes the native replacement options and applies grouped undo. The source fallback differences for soft hyphens are exercised and recorded under WRITER-711. The four targeted Writer suites passed all 72 cases with the native ICU probe, including five view regressions. Typecheck, production build, both Writer resource tests, dependency boundaries, source tree and provenance, JSDoc, file size, focused ESLint and Prettier, git diff whitespace, and policy routing passed. Doctor retains the existing hook warning. Production browser ICU still requires the pinned Emscripten SDK and network approval. Zero-length and paragraph-boundary matching, paragraph-breaking or multi-node replacement history, and search in annotations remain incomplete. This is an intermediate checkpoint of the current task. A full suite run is not due for this checkpoint."
 events:
   -
     type: "status"
@@ -512,8 +515,13 @@ events:
     at: "2026-11-21T11:04:43.886Z"
     author: "CODER"
     body: "Verified checkpoint: native model-text Replace All now decodes Unicode escapes, recomputes ICU capture pairs over the selected span, expands replacement references and replays same-paragraph edits with grouped undo/redo. The shared wrapper isolates cached backends by the explicit matcher factory. The native paragraph-end reference helper preserves the synthetic LF capture. WRITER-711 records the original soft-hyphen cleanup asymmetry and its literal replacement fallback. Local native ICU tests verify forward and backward model replacement, unmatched groups, supplementary UTF-16, and grouped history. Passed 87 shared and 87 Writer tests, two resource cases, production build, dependency/source-tree/provenance/JSDoc/file-size checks, scoped lint/format, doctor and routing. Browser regex still requires the WASM module and runtime binding. Regex paragraph breaks and zero-length cursor traversal, single and attribute replacement integration, and note search remain incomplete, so the parent stays open."
+  -
+    type: "comment"
+    at: "2026-11-21T11:13:40.595Z"
+    author: "CODER"
+    body: "Verified checkpoint: native ICU capture expansion reaches the single Replace command and formatted Replace and Replace All. The view resolves captures on the original selection before its validation pass and preserves the dialog template. Formatted bulk search consumes the native replacement options and applies grouped undo. The source fallback differences for soft hyphens are exercised and recorded under WRITER-711. The four targeted Writer suites passed all 72 cases with the native ICU probe, including five view regressions. Typecheck, production build, both Writer resource tests, dependency boundaries, source tree and provenance, JSDoc, file size, focused ESLint and Prettier, git diff whitespace, and policy routing passed. Doctor retains the existing hook warning. Production browser ICU still requires the pinned Emscripten SDK and network approval. Zero-length and paragraph-boundary matching, paragraph-breaking or multi-node replacement history, and search in annotations remain incomplete. This is an intermediate checkpoint of the current task. A full suite run is not due for this checkpoint."
 doc_version: 3
-doc_updated_at: "2026-11-21T11:04:43.886Z"
+doc_updated_at: "2026-11-21T11:13:40.595Z"
 doc_updated_by: "CODER"
 description: "Implement the approved coherent Writer search-and-replace feature from pinned LibreOffice sources: real shared search engine and options, native paragraph/cursor traversal and replacement/history contracts, view-owned search state and dispatch, Find toolbar and Find and Replace dialog with generated upstream command placement and shortcuts. Preserve source semantics and explicit unsupported boundaries; never substitute DOM text search or browser RegExp for ICU contracts. Work only on writer in vite-office-writer; local upstream reading approved, no network or merges. Keep active until approved scope is verified."
 sections:

@@ -3,6 +3,8 @@
 import { describe, expect, it, vi } from "vitest";
 
 import { SvxProtectItem } from "../../../../editeng/source/items/frmitems";
+import { createNativeRegexMatcher, hasNativeRegexProbe } from "../../../../test/icu-regex-probe";
+import { SearchOptions2 } from "../../../../i18nutil/inc/searchopt";
 import { LanguageTag } from "../../../../i18nlangtag/inc/languagetag";
 import { Any } from "../../../../cppu/inc/com/sun/star/uno/Any";
 import { PropertyValue } from "../../../../udkapi/com/sun/star/beans/PropertyValue";
@@ -12,7 +14,7 @@ import { SID_SEARCH_QUIET } from "../../../../sfx2/inc/sfxsids";
 import { SfxBoolItem } from "../../../../svl/source/items/cenumitm";
 import { SvxSearchItem } from "../../../../svl/source/items/srchitem";
 import * as MID from "../../../../svl/inc/memberid";
-import { ABSOLUTE, WILDCARD } from "../../../../offapi/com/sun/star/util/SearchAlgorithms2";
+import { ABSOLUTE, REGEXP, WILDCARD } from "../../../../offapi/com/sun/star/util/SearchAlgorithms2";
 import {
   REG_NOT_BEGINOFLINE,
   REG_NOT_ENDOFLINE,
@@ -311,6 +313,86 @@ it("dispatches a named wildcard Replace All request with native property values 
   expect(shell.GetActiveParagraph().GetText()).toBe("file?.txt fileA.txt file?.tat");
   view.Close();
 });
+
+it.skipIf(!hasNativeRegexProbe).each([
+  { name: "Replace expands captures", format: false, all: false, fallback: false },
+  { name: "Replace with formatting expands captures", format: true, all: false, fallback: false },
+  {
+    name: "Replace All with formatting expands captures",
+    format: true,
+    all: true,
+    fallback: false,
+  },
+  { name: "Replace keeps the template on capture miss", format: false, all: false, fallback: true },
+  {
+    name: "Replace All with formatting keeps the template on capture miss",
+    format: true,
+    all: true,
+    fallback: true,
+  },
+])(
+  "$name and preserves undo",
+  /** Exercises search dispatch and preserves the raw replacement stored by the view. @param scenario - Plain or formatted replacement case. @returns Nothing. */ (
+    scenario,
+  ) => {
+    const doc = createWriterDocument();
+    const view = new SwView(
+      new SwDocShell(
+        doc,
+        createDocument({ id: "regex-replace", suiteId: "writer", title: "Search" }),
+      ),
+      undefined,
+      undefined,
+      createNativeRegexMatcher,
+    );
+    const shell = view.GetWrtShell();
+    const search = view.GetSearch();
+    const node = shell.GetActiveParagraph();
+    const original = scenario.fallback ? "a\u00adb" : "a1 b2";
+    shell.Insert(original);
+    node.SetAttr(new SvxAdjustItem(SvxAdjust.Center, RES_PARATR_ADJUST));
+    const set = new SfxItemSet(doc.GetAttrPool(), [[RES_PARATR_ADJUST, RES_PARATR_ADJUST]]);
+    const searchAttributes = new SearchAttrItemList();
+    const replaceAttributes = new SearchAttrItemList();
+    set.Put(new SvxAdjustItem(SvxAdjust.Center, RES_PARATR_ADJUST));
+    searchAttributes.Put(set);
+    set.Put(new SvxAdjustItem(SvxAdjust.Right, RES_PARATR_ADJUST));
+    replaceAttributes.Put(set);
+    const start = new SwPosition(node, 0);
+    shell.SetPaM(start);
+    start.Dispose();
+    const options = new SearchOptions2();
+    options.AlgorithmType2 = REGEXP;
+    const properties = {
+      ...search.GetSearchItem(),
+      search: scenario.fallback ? "(ab)" : "([a-z])([0-9])",
+      replacement: String.raw`$2\u002D$1`,
+      searchOptions: options,
+      ...(scenario.format ? { replaceAttributes } : {}),
+      ...(scenario.format && !scenario.all ? { searchAttributes } : {}),
+      command: scenario.all ? SvxSearchCmd.REPLACE_ALL : SvxSearchCmd.REPLACE,
+      backward: false,
+    };
+    try {
+      search.SetSearchProperties(properties);
+      const item = search.GetSearchItem();
+      if (!scenario.all) expect(search.ExecSearch(item, SvxSearchCmd.FIND).matches).toBe(1);
+      search.ExecSearch(item, properties.command);
+      const expected = scenario.all ? "1-a 2-b" : "1-a b2";
+      expect(node.GetText()).toBe(scenario.fallback ? properties.replacement : expected);
+      expect((node.GetAttr(RES_PARATR_ADJUST) as SvxAdjustItem).GetAdjust()).toBe(
+        scenario.format ? SvxAdjust.Right : SvxAdjust.Center,
+      );
+      expect(search.GetSearchItem().replacement).toBe(properties.replacement);
+      expect(shell.Undo()).toBe(true);
+      expect(node.GetText()).toBe(original);
+      expect((node.GetAttr(RES_PARATR_ADJUST) as SvxAdjustItem).GetAdjust()).toBe(SvxAdjust.Center);
+    } finally {
+      set.Dispose();
+      view.Close();
+    }
+  },
+);
 
 it("executes independent pooled and aggregate SearchItems through the Sfx view", /** Covers pooled option copying, quiet and named aggregate request admission. @returns Nothing. */ () => {
   const view = new SwView(
