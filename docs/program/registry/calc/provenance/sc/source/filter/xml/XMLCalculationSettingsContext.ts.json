@@ -6,20 +6,24 @@
     "status": "mapped",
     "localPath": "apps/office/src/sc/source/filter/xml/XMLCalculationSettingsContext.ts",
     "localSymbols": [
-      "ScXMLCalculationSettingsContext"
+      "ScXMLCalculationSettingsContext",
+      "ScXMLNullDateContext",
+      "ScXMLIterationContext"
     ],
     "upstreamPath": "sc/source/filter/xml/XMLCalculationSettingsContext.cxx",
     "upstreamSymbols": [
       "ScXMLCalculationSettingsContext::endFastElement",
       "ScXMLNullDateContext::ScXMLNullDateContext",
-      "ScXMLCalculationSettingsContext"
+      "ScXMLCalculationSettingsContext",
+      "ScXMLIterationContext::ScXMLIterationContext"
     ],
     "preservedResponsibilities": [
       "Imports the ODF null-date with the native SAX temporal converter, retaining 30 December 1899 for absent and malformed values, and applies the document option before subsequent cells.",
-      "Reads case-sensitive comparison policy alongside the ODF null date."
+      "Imports case, precision, lookup labels, whole-cell matching, wildcard and regex precedence, and the two-digit year through native document options.",
+      "Imports the original iteration defaults and optional status, count and epsilon via the dedicated child context."
     ],
     "omittedResponsibilities": [
-      "Other calculation-settings fields and iteration are outside this slice."
+      "The local importer applies the native options directly on its document; the complete Calc UNO property service and native iterative formula scheduler are outside the current runtime slice."
     ],
     "evidence": {
       "local": [
@@ -34,6 +38,10 @@
         {
           "path": "apps/office/src/sc/source/filter/oox/excelfilter.test.ts",
           "marker": "recalculates the original tdf70455"
+        },
+        {
+          "path": "apps/office/src/sc/source/filter/xml/ods-calculation-settings.test.ts",
+          "marker": "round-trips ODS calculation properties"
         }
       ],
       "upstream": [
@@ -52,6 +60,10 @@
         {
           "path": "vendor/libreoffice-reference/sc/source/filter/xml/XMLCalculationSettingsContext.cxx",
           "marker": "ScXMLCalculationSettingsContext"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/source/filter/xml/XMLCalculationSettingsContext.cxx",
+          "marker": "ScXMLIterationContext::ScXMLIterationContext"
         }
       ]
     }

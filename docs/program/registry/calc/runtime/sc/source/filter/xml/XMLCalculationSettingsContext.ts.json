@@ -22,18 +22,22 @@
         "vendor/libreoffice-reference/sc/source/filter/xml/XMLCalculationSettingsContext.cxx",
         "vendor/libreoffice-reference/sc/qa/unit/subsequent_export_test2.cxx#testTdf165180_date1904_XLSX",
         "apps/office/src/sc/source/core/tool/numeric-formula.test.ts",
-        "apps/office/src/sc/source/filter/oox/excelfilter.test.ts"
+        "apps/office/src/sc/source/filter/oox/excelfilter.test.ts",
+        "apps/office/src/sc/source/filter/xml/ods-calculation-settings.test.ts"
       ],
-      "justification": "Imports the ODF null-date with the native SAX temporal converter, retaining 30 December 1899 for absent and malformed values, and applies the document option before subsequent cells. Other calculation-settings fields and iteration are outside this slice. Reads case-sensitive comparison policy alongside the ODF null date.",
+      "justification": "Applies the source ODF calculation defaults, case, precision, search and label settings, date and year pivot, and child iteration options to the native document and its formatter. The ODS transport represents iteration settings independently of the iterative evaluation scheduler.",
       "knownViolations": [],
       "localSymbols": [
-        "ScXMLCalculationSettingsContext"
+        "ScXMLCalculationSettingsContext",
+        "ScXMLNullDateContext",
+        "ScXMLIterationContext"
       ],
       "sourceResponsibility": "divergent",
       "upstreamFile": "sc/source/filter/xml/XMLCalculationSettingsContext.cxx",
       "upstreamSymbols": [
         "ScXMLCalculationSettingsContext::endFastElement",
-        "ScXMLNullDateContext::ScXMLNullDateContext"
+        "ScXMLNullDateContext::ScXMLNullDateContext",
+        "ScXMLIterationContext::ScXMLIterationContext"
       ]
     }
   }

@@ -194,6 +194,19 @@ interface Sheet {
     filtered: boolean,
   ][];
 }
+/** Native ODF calculation properties added to the version-one graph. */
+interface CalculationSettings {
+  readonly calcAsShown: boolean;
+  readonly lookUpLabels: boolean;
+  readonly matchWholeCell: boolean;
+  readonly regex: boolean;
+  readonly wildcards: boolean;
+  readonly iterationEnabled: boolean;
+  readonly iterationCount: number;
+  readonly iterationEpsilon: number;
+  readonly year2000: number;
+}
+
 /** Ephemeral transport, never persisted instead of XML. */
 export interface CalcDocumentRecord {
   readonly version: 1;
@@ -207,6 +220,7 @@ export interface CalcDocumentRecord {
   readonly showZeros?: boolean;
   readonly nullDate?: number;
   readonly ignoreCase?: boolean;
+  readonly calculationSettings?: CalculationSettings;
   readonly defaultWritingDirection?: D;
   readonly numberFormats?: readonly NumberFormat[];
   readonly names?: readonly [
@@ -534,6 +548,7 @@ function* encodeSteps(document: ScDocument): Generator<void, CalcDocumentRecord>
         : [file.name, sheets, file.relativeName],
     );
   }
+  const options = document.GetDocOptions();
   return {
     version: 1,
     sheets,
@@ -544,13 +559,54 @@ function* encodeSteps(document: ScDocument): Generator<void, CalcDocumentRecord>
     ...(view.GetOption(ViewOption.HEADER) ? {} : { showHeaders: false }),
     ...(view.GetOption(ViewOption.NULLVALS) ? {} : { showZeros: false }),
     nullDate: document.GetFormatTable().GetNullDate().GetDate(),
-    ...(document.GetDocOptions().IsIgnoreCase() ? { ignoreCase: true } : {}),
+    ...(options.IsIgnoreCase() ? { ignoreCase: true } : {}),
+    calculationSettings: {
+      calcAsShown: options.IsCalcAsShown(),
+      lookUpLabels: options.IsLookUpColRowNames(),
+      matchWholeCell: options.IsMatchWholeCell(),
+      regex: options.IsFormulaRegexEnabled(),
+      wildcards: options.IsFormulaWildcardsEnabled(),
+      iterationEnabled: options.IsIter(),
+      iterationCount: options.GetIterCount(),
+      iterationEpsilon: options.GetIterEps(),
+      year2000: options.GetYear2000(),
+    },
     ...(defaultWritingDirection === undefined ? {} : { defaultWritingDirection }),
     ...(numberFormats.length ? { numberFormats } : {}),
     ...(names.length ? { names } : {}),
     styles: `<office:document-styles${namespaces} office:version="1.3">${fonts.exportXML()}${defaults}<office:automatic-styles>${automatic}${textStyles.exportStyles()}${pageStyles.layouts}</office:automatic-styles>${pageStyles.masters}</office:document-styles>`,
   };
 }
+
+/** Restores and validates the new version-one calculation fields. @param options - Native document options. @param settings - Worker calculation record. @returns Nothing. */
+function restoreCalculationSettings(options: ScDocOptions, settings: CalculationSettings): void {
+  if (
+    settings === null ||
+    typeof settings !== "object" ||
+    typeof settings.calcAsShown !== "boolean" ||
+    typeof settings.lookUpLabels !== "boolean" ||
+    typeof settings.matchWholeCell !== "boolean" ||
+    typeof settings.regex !== "boolean" ||
+    typeof settings.wildcards !== "boolean" ||
+    (settings.regex && settings.wildcards) ||
+    typeof settings.iterationEnabled !== "boolean" ||
+    (settings.iterationCount & 0xffff) !== settings.iterationCount ||
+    typeof settings.iterationEpsilon !== "number" ||
+    (settings.year2000 & 0xffff) !== settings.year2000
+  )
+    throw new Error("Calc worker calculation settings are invalid.");
+
+  options.SetCalcAsShown(settings.calcAsShown);
+  options.SetLookUpColRowNames(settings.lookUpLabels);
+  options.SetMatchWholeCell(settings.matchWholeCell);
+  options.SetFormulaRegexEnabled(settings.regex);
+  options.SetFormulaWildcardsEnabled(settings.wildcards);
+  options.SetIter(settings.iterationEnabled);
+  options.SetIterCount(settings.iterationCount);
+  options.SetIterEps(settings.iterationEpsilon);
+  options.SetYear2000(settings.year2000);
+}
+
 /** Restores a fresh native document before atomic shell adoption. @param record - Worker record. @returns Incremental candidate. */
 function* decodeSteps(record: CalcDocumentRecord): Generator<void, ScDocument> {
   if (record.version !== 1 || !Array.isArray(record.sheets))
@@ -561,7 +617,11 @@ function* decodeSteps(record: CalcDocumentRecord): Generator<void, ScDocument> {
   let complete = false;
   document.SetAutoCalc(false);
   try {
-    if (record.ignoreCase === true || record.nullDate !== undefined) {
+    if (
+      record.ignoreCase === true ||
+      record.nullDate !== undefined ||
+      record.calculationSettings !== undefined
+    ) {
       const options = new ScDocOptions(document.GetDocOptions());
       if (record.nullDate !== undefined) {
         const packed = record.nullDate;
@@ -572,6 +632,8 @@ function* decodeSteps(record: CalcDocumentRecord): Generator<void, ScDocument> {
         options.SetDate(date.GetDay(), date.GetMonth(), date.GetYear());
       }
       if (record.ignoreCase === true) options.SetIgnoreCase(true);
+      if (record.calculationSettings !== undefined)
+        restoreCalculationSettings(options, record.calculationSettings);
       document.SetDocOptions(options);
     }
     importer.importStyles(record.styles);

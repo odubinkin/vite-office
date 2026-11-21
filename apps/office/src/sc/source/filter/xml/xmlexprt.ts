@@ -41,6 +41,7 @@ import { Converter } from "../../../../sax/source/tools/converter";
 import { DateTime } from "../../../../offapi/com/sun/star/util/DateTime";
 import { OUString } from "../../../../sal/inc/rtl/ustring";
 import { OUStringBuffer } from "../../../../sal/inc/rtl/ustrbuf";
+import { approxEqual } from "../../../../sal/inc/rtl/math";
 import { text } from "../../../../i18nlangtag/source/isolang/isolang.tables";
 import type { ScRefCellValue } from "../../../inc/cellvalue";
 import type { ScPatternAttr } from "../../../inc/patattr";
@@ -493,29 +494,61 @@ export class ScXMLExport {
     }
     return `<?xml version="1.0" encoding="UTF-8"?><office:document-content xmlns:calcext="${ODF_NAMESPACES.calcext}" xmlns:office="${ODF_NAMESPACES.office}" xmlns:number="${ODF_NAMESPACES.number}" xmlns:table="${ODF_NAMESPACES.table}" xmlns:text="${ODF_NAMESPACES.text}" xmlns:of="${ODF_NAMESPACES.of}" xmlns:style="${ODF_NAMESPACES.style}" xmlns:fo="${ODF_NAMESPACES.fo}" xmlns:css3t="${ODF_NAMESPACES.css3t}" xmlns:svg="${ODF_NAMESPACES.svg}" xmlns:loext="${ODF_NAMESPACES.loext}" xmlns:xlink="${ODF_NAMESPACES.xlink}" office:version="1.3">${this.fontPool.exportXML()}<office:automatic-styles>${automatic}</office:automatic-styles><office:body><office:spreadsheet>${body}</office:spreadsheet></office:body></office:document-content>`;
   }
-  /** Writes the nondefault document null date via the original temporal converter. @returns Represented ODF calculation settings. */
+  /** Writes calculation settings that differ from the ODF defaults. @returns ODF calculation settings. */
   private WriteCalculationSettings(): string {
     const day: [number] = [0],
       month: [number] = [0],
       year: [number] = [0];
     const options = this.document.GetDocOptions();
     options.GetDate(day, month, year);
-    const caseAttribute = options.IsIgnoreCase() ? ' table:case-sensitive="false"' : "";
-    if (day[0] === 30 && month[0] === 12 && year[0] === 1899)
-      return caseAttribute ? `<table:calculation-settings${caseAttribute}/>` : "";
-    const buffer = new OUStringBuffer();
-    Converter.convertDateTime(
-      buffer,
-      new DateTime(0, 0, 0, 0, day[0], month[0], year[0], false),
-      null,
-    );
-    const value = buffer.makeStringAndClear();
-    try {
-      return `<table:calculation-settings${caseAttribute}><table:null-date table:date-value="${text(value)}"/></table:calculation-settings>`;
-    } finally {
-      value.dispose();
-      buffer.dispose();
+    const attributes: string[] = [];
+    if (options.IsIgnoreCase()) attributes.push('table:case-sensitive="false"');
+    if (options.IsCalcAsShown()) attributes.push('table:precision-as-shown="true"');
+    if (!options.IsMatchWholeCell())
+      attributes.push('table:search-criteria-must-apply-to-whole-cell="false"');
+    if (!options.IsLookUpColRowNames()) attributes.push('table:automatic-find-labels="false"');
+    const wildcards = options.IsFormulaWildcardsEnabled();
+    if (wildcards || !options.IsFormulaRegexEnabled())
+      attributes.push('table:use-regular-expressions="false"');
+    if (wildcards) attributes.push('table:use-wildcards="true"');
+    if (options.GetYear2000() !== 1930)
+      attributes.push(`table:null-year="${options.GetYear2000()}"`);
+
+    let children = "";
+    if (day[0] !== 30 || month[0] !== 12 || year[0] !== 1899) {
+      const buffer = new OUStringBuffer();
+      Converter.convertDateTime(
+        buffer,
+        new DateTime(0, 0, 0, 0, day[0], month[0], year[0], false),
+        null,
+      );
+      const value = buffer.makeStringAndClear();
+      try {
+        children += `<table:null-date table:date-value="${text(value)}"/>`;
+      } finally {
+        value.dispose();
+        buffer.dispose();
+      }
     }
+    const iteration: string[] = [];
+    if (options.IsIter()) iteration.push('table:status="enable"');
+    if (options.GetIterCount() !== 100) iteration.push(`table:steps="${options.GetIterCount()}"`);
+    if (!approxEqual(options.GetIterEps(), 0.001)) {
+      const buffer = new OUStringBuffer();
+      Converter.convertDouble(buffer, options.GetIterEps());
+      const value = buffer.makeStringAndClear();
+      try {
+        iteration.push(`table:maximum-difference="${text(value)}"`);
+      } finally {
+        value.dispose();
+        buffer.dispose();
+      }
+    }
+    if (iteration.length) children += `<table:iteration ${iteration.join(" ")}/>`;
+    const start = attributes.length ? " " + attributes.join(" ") : "";
+    if (children)
+      return `<table:calculation-settings${start}>${children}</table:calculation-settings>`;
+    return start ? `<table:calculation-settings${start}/>` : "";
   }
   /** Writes native named ranges and expressions at workbook or sheet scope. @param scope - Name scope. @returns ODF definitions. */
   private WriteNamedRange(scope: number): string {

@@ -7517,3 +7517,28 @@ Calc preserves both conversions.
 
 - [Original first page number handler](../../vendor/libreoffice-reference/xmloff/source/style/PageMasterPropHdlFactory.cxx)
 - [Original Calc page style setter and getter](../../vendor/libreoffice-reference/sc/source/ui/unoobj/styleuno.cxx)
+
+### CALC-789 — A missing ODS settings element and a new Calc document select different search modes
+
+Calc creates a new spreadsheet with wildcard matching enabled. The ODS
+spreadsheet body nevertheless initializes the calculation settings at end
+of import when the element is absent. This selects the historical ODF
+regular expression default. The ODS exporter writes both search attributes
+for a newly created spreadsheet, and omits them for the ODF default.
+
+- [Original ODS default initialization](../../vendor/libreoffice-reference/sc/source/filter/xml/xmlbodyi.cxx)
+- [Original regex default and wildcard precedence](../../vendor/libreoffice-reference/sc/source/filter/xml/XMLCalculationSettingsContext.cxx)
+- [Original calculation settings export](../../vendor/libreoffice-reference/sc/source/filter/xml/xmlexprt.cxx)
+
+### CALC-790 — ODS iteration steps and two-digit year can wrap
+
+The iteration child reads signed 32-bit steps with the fast attribute
+integer parser before Calc's options setter narrows to unsigned 16 bits.
+For example, `65537tail` yields a count of one. The two-digit year uses
+the SAX number converter and separately narrows to unsigned 16 bits, so
+`-1` becomes `65535`. Both values can be exported even when iteration is
+disabled. Calc preserves the original conversions and export conditions.
+
+- [Original iteration and year import conversions](../../vendor/libreoffice-reference/sc/source/filter/xml/XMLCalculationSettingsContext.cxx)
+- [Original iteration count setter](../../vendor/libreoffice-reference/sc/source/ui/unoobj/optuno.cxx)
+- [Original calculation settings export](../../vendor/libreoffice-reference/sc/source/filter/xml/xmlexprt.cxx)

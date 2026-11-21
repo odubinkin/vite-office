@@ -9,6 +9,7 @@ import { ScXMLCalculationSettingsContext } from "./XMLCalculationSettingsContext
 import { createExternalRefTable } from "./xmlexternaltabi";
 /** Spreadsheet content owns table creation,not a separate workbook model. */
 export class ScXMLBodyContext extends ScXMLImportContext {
+  private hadCalculationSettings = false;
   /** Binds importer. @param owner - Owner. @returns Context. */
   constructor(private readonly owner: ScXMLImport) {
     super(owner);
@@ -20,13 +21,20 @@ export class ScXMLBodyContext extends ScXMLImportContext {
   ): SvXMLImportContext {
     if (element === XMLToken.TABLE_NAMED_EXPRESSIONS)
       return new ScXMLNamedExpressionsContext(this.owner, -1);
-    if (element === XMLToken.TABLE_CALCULATION_SETTINGS)
+    if (element === XMLToken.TABLE_CALCULATION_SETTINGS) {
+      this.hadCalculationSettings = true;
       return new ScXMLCalculationSettingsContext(this.owner);
+    }
     if (element !== XMLToken.TABLE_TABLE)
       throw new Error("ODS spreadsheet feature is not implemented");
     return (
       createExternalRefTable(attributes.get(XMLToken.TABLE_NAME) ?? "", this.owner) ??
       new ScXMLTableContext(this.owner, attributes)
     );
+  }
+  /** Applies the ODF calculation defaults when the settings element is absent. @returns Nothing. */
+  override endFastElement(): void {
+    if (!this.hadCalculationSettings)
+      new ScXMLCalculationSettingsContext(this.owner).endFastElement();
   }
 }

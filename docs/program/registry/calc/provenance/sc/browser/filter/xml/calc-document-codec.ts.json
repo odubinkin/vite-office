@@ -40,6 +40,10 @@
         {
           "path": "apps/office/src/sc/source/ui/view/viewdata.settings.test.ts",
           "marker": "reads the active pane"
+        },
+        {
+          "path": "apps/office/src/sc/source/filter/xml/ods-calculation-settings.test.ts",
+          "marker": "round-trips ODS calculation properties"
         }
       ]
     },
@@ -59,7 +63,8 @@
       "J0Z0KF worksheet pane checkpoint. Transfers per-sheet split modes, absolute fixed indices, viewport origins and the active pane. The isolated Worker reader rejects malformed geometry before document adoption.",
       "Transfers optional native sheet group flags across the same detached Worker graph as the active sheet and pane positions.",
       "Copies the native packed sheet tab color across the Calc Worker, with the automatic default omitted and older records admitted.",
-      "Transports the existing Calc page-style name with native ODF layout and master-page XML, validates the assignment, and admits older transfer records."
+      "Transports the existing Calc page-style name with native ODF layout and master-page XML, validates the assignment, and admits older transfer records.",
+      "Transfers native ODF calculation properties alongside the existing date and case fields. Older Worker graphs without these settings retain native new-document options."
     ],
     "stackDivergence": {
       "kind": "local-infrastructure",
