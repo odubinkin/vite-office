@@ -1,10 +1,11 @@
 ---
 id: "202611210526-GSPND6"
 title: "Align Calc ODS page-style print properties and master retention"
-status: "DOING"
+result_summary: "Verified Calc ODS page style print properties, native scale and unused named masters against the pinned LibreOffice package and Worker transfers."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 7
+revision: 9
 origin:
   system: "manual"
 depends_on: []
@@ -20,9 +21,9 @@ plan_approval:
   note: null
 verification:
   state: "ok"
-  updated_at: "2026-11-21T05:49:06.860Z"
+  updated_at: "2026-11-21T05:49:26.185Z"
   updated_by: "CODER"
-  note: "Verified Calc ODS named page master retention, all native print flags, and native scale modes."
+  note: "Verified Calc ODS page style print properties, native scale and unused named masters against the pinned LibreOffice package and Worker transfers."
   attempts: 0
 quality_review:
   state: "pass"
@@ -44,11 +45,16 @@ quality_review:
     - "output/playwright/GSPND6/final-provenance.log"
   findings:
     - "The pinned unused page style survives Worker and ODS round trips. Independent XML verifies all option groups, token order, direct/default behavior, signed first page numbers and scale precedence. All 53 scoped scenarios passed across the initial run and isolated retry."
-commit: null
+commit:
+  hash: "1c4b1fb3b741f6a0250d70ede31c865f11708d2f"
+  message: "🧩 GSPND6 code: align Calc ODS print properties and page masters"
 comments:
   -
     author: "CODER"
     body: "Start: align Calc ODS print fields, page scale and named mast er collection with pinned LibreOffice."
+  -
+    author: "CODER"
+    body: "Verified: Verified Calc ODS page style print properties, native scale and unused named masters against the pinned LibreOffice package and Worker transfers.. Guided shortcut recorded verification and is closing the direct task with traceable commit metadata."
 events:
   -
     type: "status"
@@ -63,8 +69,21 @@ events:
     author: "CODER"
     state: "ok"
     note: "Verified Calc ODS named page master retention, all native print flags, and native scale modes."
+  -
+    type: "verify"
+    at: "2026-11-21T05:49:26.185Z"
+    author: "CODER"
+    state: "ok"
+    note: "Verified Calc ODS page style print properties, native scale and unused named masters against the pinned LibreOffice package and Worker transfers."
+  -
+    type: "status"
+    at: "2026-11-21T05:49:26.269Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: Verified Calc ODS page style print properties, native scale and unused named masters against the pinned LibreOffice package and Worker transfers.. Guided shortcut recorded verification and is closing the direct task with traceable commit metadata."
 doc_version: 3
-doc_updated_at: "2026-11-21T05:49:06.911Z"
+doc_updated_at: "2026-11-21T05:49:26.269Z"
 doc_updated_by: "CODER"
 description: "Preserve every represented native print option, native page scale conversion and omission, and all named Calc page styles across ODS and Worker. Port the pinned unused-page-style fixture and cover independent XML."
 sections:
@@ -106,6 +125,36 @@ sections:
     - freshness: route=computed_local remote=remote_skipped
     - repeat_allowed: false
     - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+    - risks: none
+
+    ### 2026-11-21T05:49:26.185Z — VERIFY — ok
+
+    By: CODER
+
+    Note: Verified Calc ODS page style print properties, native scale and unused named masters against the pinned LibreOffice package and Worker transfers.
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-21T05:49:06.911Z, excerpt_hash=sha256:e4403315091a2e06bebbd25d87bf96ccc56f644488d7b31ac48a1b6cc836a11b
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202611210526-GSPND6/blueprint/resolved-snapshot.json
+    - old_digest: fc4f8bc863da61a821da11c77062821697ff94aec44c6380ff12a4d18e0aa69a
+    - current_digest: fc4f8bc863da61a821da11c77062821697ff94aec44c6380ff12a4d18e0aa69a
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202611210526-GSPND6
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task complete 202611210526-GSPND6 --result verified-202611210526-GSPND6 --commit ee3e49b958665a3ab90b2aa2b8a4be860f354058
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
     - risks: none
 
     <!-- END VERIFICATION RESULTS -->
@@ -164,6 +213,36 @@ DecisionContextRef:
 - freshness: route=computed_local remote=remote_skipped
 - repeat_allowed: false
 - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- risks: none
+
+### 2026-11-21T05:49:26.185Z — VERIFY — ok
+
+By: CODER
+
+Note: Verified Calc ODS page style print properties, native scale and unused named masters against the pinned LibreOffice package and Worker transfers.
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-21T05:49:06.911Z, excerpt_hash=sha256:e4403315091a2e06bebbd25d87bf96ccc56f644488d7b31ac48a1b6cc836a11b
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202611210526-GSPND6/blueprint/resolved-snapshot.json
+- old_digest: fc4f8bc863da61a821da11c77062821697ff94aec44c6380ff12a4d18e0aa69a
+- current_digest: fc4f8bc863da61a821da11c77062821697ff94aec44c6380ff12a4d18e0aa69a
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202611210526-GSPND6
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task complete 202611210526-GSPND6 --result verified-202611210526-GSPND6 --commit ee3e49b958665a3ab90b2aa2b8a4be860f354058
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
 - risks: none
 
 <!-- END VERIFICATION RESULTS -->
