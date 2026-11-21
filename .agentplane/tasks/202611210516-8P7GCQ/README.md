@@ -1,10 +1,11 @@
 ---
 id: "202611210516-8P7GCQ"
 title: "Connect Calc page style settings to the Format dialog"
-status: "DOING"
+result_summary: "Connect Calc page style settings to the Format dialog"
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 15
+revision: 16
 origin:
   system: "manual"
 depends_on: []
@@ -39,11 +40,16 @@ quality_review:
     - "42 Calc and 87 Writer tests, TypeScript, generated resources, source provenance, file size, lint, dependency checks and the production Chrome replay passed."
   findings:
     - "Page geometry, header/footer settings, print flags, scale, border and solid color use actual native items and ODS persistence. The shared metric adapter preserves CUI dependency direction and Writer behavior."
-commit: null
+commit:
+  hash: "1717a0bc486c34c327e5553ce426d21e06848e44"
+  message: "🧩 8P7GCQ code: connect Calc page style controls"
 comments:
   -
     author: "CODER"
     body: "Start: Connect the canonical page style item sets and source-ordered dialog to the Calc Format slot."
+  -
+    author: "CODER"
+    body: "Verified: The native page style tabs, shared style history and ODS persistence are connected and passed the targeted Calc and Writer tests."
 events:
   -
     type: "status"
@@ -58,8 +64,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Verified: Page Style uses original tab order, shared native Calc item sets, and ODS persistence. 42 targeted Calc tests and 87 Writer regressions passed, along with production Chrome replay and static checks."
+  -
+    type: "status"
+    at: "2026-11-21T05:49:43.929Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: The native page style tabs, shared style history and ODS persistence are connected and passed the targeted Calc and Writer tests."
 doc_version: 3
-doc_updated_at: "2026-11-21T05:49:41.387Z"
+doc_updated_at: "2026-11-21T05:49:43.930Z"
 doc_updated_by: "CODER"
 description: "Connect native Calc page style editing to the shared style and item pool, preserving the LibreOffice tab structure and printed sheet settings."
 sections:
