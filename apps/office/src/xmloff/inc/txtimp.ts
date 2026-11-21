@@ -44,6 +44,10 @@ export interface XMLNamedTextContent {
   setName(name: OUStringConstReference): void;
   setPropertyValue(name: OUStringConstReference, value: Any): void;
 }
+/** Text field attachment surface consumed by annotation ranges. */
+export interface XMLAnnotationTextContent extends XMLNamedTextContent {
+  getAnchor(): XMLTextRange;
+}
 /** Borrowed style service with the original parent/follow/property ownership. */
 export interface XMLStyle extends XMLPropertySet {
   getName(): OUString;

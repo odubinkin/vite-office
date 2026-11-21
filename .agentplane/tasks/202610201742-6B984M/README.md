@@ -4,7 +4,7 @@ title: "Implement Writer search and replace core and browser UI"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 81
+revision: 85
 origin:
   system: "manual"
 depends_on:
@@ -26,7 +26,7 @@ tags:
 verify: []
 plan_approval:
   state: "approved"
-  updated_at: "2026-10-20T17:43:01.279Z"
+  updated_at: "2026-11-21T16:51:24.855Z"
   updated_by: "ORCHESTRATOR"
   note: null
 verification:
@@ -247,6 +247,9 @@ comments:
   -
     author: "CODER"
     body: "Verified checkpoint: an unsuccessful probe of an inactive annotation restores both its native and browser selections before continuing in body text. The mounted regression verifies non-BMP matching in a later comment paragraph, native literal regex replacement, multiline textarea edits, and document undo. WRITER-716 records the native annotation versus body capture-reference behavior. Passed 36 targeted Writer tests, five shared EditEngine and browser matcher tests, two Writer resource tests and the production build. Module boundaries, source tree and provenance, JSDoc, file size, scoped lint and formatting, diff, doctor and routing passed. No task closure or full-suite cadence increment."
+  -
+    author: "CODER"
+    body: "Verified continuation: recorded the user-approved annotation scope and browser RegExp in the task plan. The next full regression is due after ten completed tasks and does not stop the goal. Graphify identified the UNO, xmloff and graph transport owners. The pinned tdf147583_backwardSearch ODT now loads its annotated range, metadata and plain note paragraphs, survives structured clone and ODT save/reopen, and is searchable in a mounted Writer session opened through SwDocShell.Load. Passed 25 targeted tests, production build, two Writer resources, module boundaries, source tree and provenance, scoped ESLint and formatting, diff, doctor and routing. Repository-wide JSDoc and size gates still report 307 and five findings respectively on unchanged paths, zero on changed paths. New-comment command and richer comment formatting remain pending. No task closure or full-suite increment."
 events:
   -
     type: "status"
@@ -600,14 +603,19 @@ events:
     at: "2026-11-21T12:28:28.209Z"
     author: "CODER"
     body: "Verified checkpoint: an unsuccessful probe of an inactive annotation restores both its native and browser selections before continuing in body text. The mounted regression verifies non-BMP matching in a later comment paragraph, native literal regex replacement, multiline textarea edits, and document undo. WRITER-716 records the native annotation versus body capture-reference behavior. Passed 36 targeted Writer tests, five shared EditEngine and browser matcher tests, two Writer resource tests and the production build. Module boundaries, source tree and provenance, JSDoc, file size, scoped lint and formatting, diff, doctor and routing passed. No task closure or full-suite cadence increment."
+  -
+    type: "comment"
+    at: "2026-11-21T17:02:14.633Z"
+    author: "CODER"
+    body: "Verified continuation: recorded the user-approved annotation scope and browser RegExp in the task plan. The next full regression is due after ten completed tasks and does not stop the goal. Graphify identified the UNO, xmloff and graph transport owners. The pinned tdf147583_backwardSearch ODT now loads its annotated range, metadata and plain note paragraphs, survives structured clone and ODT save/reopen, and is searchable in a mounted Writer session opened through SwDocShell.Load. Passed 25 targeted tests, production build, two Writer resources, module boundaries, source tree and provenance, scoped ESLint and formatting, diff, doctor and routing. Repository-wide JSDoc and size gates still report 307 and five findings respectively on unchanged paths, zero on changed paths. New-comment command and richer comment formatting remain pending. No task closure or full-suite increment."
 doc_version: 3
-doc_updated_at: "2026-11-21T12:28:28.209Z"
+doc_updated_at: "2026-11-21T17:02:14.633Z"
 doc_updated_by: "CODER"
 description: "Implement the approved coherent Writer search-and-replace feature from pinned LibreOffice sources: real shared search engine and options, native paragraph/cursor traversal and replacement/history contracts, view-owned search state and dispatch, Find toolbar and Find and Replace dialog with generated upstream command placement and shortcuts. Preserve source semantics and explicit unsupported boundaries; never substitute DOM text search or browser RegExp for ICU contracts. Work only on writer in vite-office-writer; local upstream reading approved, no network or merges. Keep active until approved scope is verified."
 sections:
   Summary: "Implement the approved Writer search and replace feature using the pinned LibreOffice source contracts, with real shared search responsibilities, Writer cursor traversal, view-owned search state, replacement history, and browser Find / Find and Replace presentation."
-  Scope: "Only /Users/odubinkin/Projects/vite-office-writer on branch writer. Up to 50 non-task files across shared search options/backend/wrapper, Writer cursor/shell/view/dialog/browser/resource owners, related tests and provenance/runtime records. Reading the existing local LibreOffice reference is explicitly approved by the user. No network, merges, external writes, storage/recovery changes, deferred Calc LanguageTag work, DOM-based searching, or JavaScript RegExp substitution for ICU regular expressions. Preserve original UTF-16 offsets, directional endpoint conventions, option defaults, selection ownership and undo grouping. All modes and controls must have truthful source-backed capability boundaries; keep this task open while approved search/replace scope remains unfinished."
-  Plan: "Implement approved Writer search and replace as one coherent task: source-backed shared engine/options, Writer find ranges/replacement/undo, view dispatch and Find toolbar/dialog; targeted verification and truthful pending mode dependencies, no fake ICU or DOM search. Keep task active until the approved feature scope is verified."
+  Scope: "Writer worktree and branch writer only. Retain the previously approved shared search, Writer model and view, command, dialog, resources, tests, and registry work. Include the annotation field and annotation mark, UNO text content attachment, ODF annotation parser and exporter, existing Writer document graph transfer, and Insert Annotation command required to exercise comment search through normal document inputs. Use the browser's ECMAScript RegExp as directed. Preserve the existing file-opening, saving, autosave, and recovery workflows. No network, external writes, merges, or deferred Calc work."
+  Plan: "Finish the Writer search and replace block. Preserve source search ranges, preference and command contracts, edit history and the native browser matcher. Connect ODT annotation and annotation-end to the actual field and mark owners through Writer text content; preserve supported comment content and metadata through the existing graph transfer and ODT export. Connect Insert Annotation to the same native owners and verify search, replacement, undo and save/reopen on the normal Writer path. Run targeted checks and ten-task regression cadence. Continue the goal after the next full regression run as instructed."
   Verify Steps: |-
     - Run targeted Vitest tests for changed shared search owners and related Writer cursor, shell, view and browser search owners. Include forward/backward bounds, empty patterns, UTF-16 endpoints, word/case options, wrap, selection/table traversal, find-all rings, replacement growth/deletion and atomic undo/redo, and UI command/focus/cancellation behavior.
     - Run npm run build and npm run check:writer-resources after UI/resource implementation.
@@ -688,11 +696,11 @@ Implement the approved Writer search and replace feature using the pinned LibreO
 
 ## Scope
 
-Only /Users/odubinkin/Projects/vite-office-writer on branch writer. Up to 50 non-task files across shared search options/backend/wrapper, Writer cursor/shell/view/dialog/browser/resource owners, related tests and provenance/runtime records. Reading the existing local LibreOffice reference is explicitly approved by the user. No network, merges, external writes, storage/recovery changes, deferred Calc LanguageTag work, DOM-based searching, or JavaScript RegExp substitution for ICU regular expressions. Preserve original UTF-16 offsets, directional endpoint conventions, option defaults, selection ownership and undo grouping. All modes and controls must have truthful source-backed capability boundaries; keep this task open while approved search/replace scope remains unfinished.
+Writer worktree and branch writer only. Retain the previously approved shared search, Writer model and view, command, dialog, resources, tests, and registry work. Include the annotation field and annotation mark, UNO text content attachment, ODF annotation parser and exporter, existing Writer document graph transfer, and Insert Annotation command required to exercise comment search through normal document inputs. Use the browser's ECMAScript RegExp as directed. Preserve the existing file-opening, saving, autosave, and recovery workflows. No network, external writes, merges, or deferred Calc work.
 
 ## Plan
 
-Implement approved Writer search and replace as one coherent task: source-backed shared engine/options, Writer find ranges/replacement/undo, view dispatch and Find toolbar/dialog; targeted verification and truthful pending mode dependencies, no fake ICU or DOM search. Keep task active until the approved feature scope is verified.
+Finish the Writer search and replace block. Preserve source search ranges, preference and command contracts, edit history and the native browser matcher. Connect ODT annotation and annotation-end to the actual field and mark owners through Writer text content; preserve supported comment content and metadata through the existing graph transfer and ODT export. Connect Insert Annotation to the same native owners and verify search, replacement, undo and save/reopen on the normal Writer path. Run targeted checks and ten-task regression cadence. Continue the goal after the next full regression run as instructed.
 
 ## Verify Steps
 

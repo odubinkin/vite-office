@@ -6,6 +6,7 @@ import type { OdfCharacterProperties, OdfHyperlink, OdfParagraphAlignment } from
 import type { XMLParagraphImportProperties, XMLParagraphListState } from "./txtparai";
 import type {
   XMLTextModel,
+  XMLAnnotationTextContent,
   XMLTextCursor,
   XMLTextRange,
   XMLNamedTextContent,
@@ -86,6 +87,7 @@ export class XMLTextImportHelper {
   private start: XMLTextRange | undefined;
   private applyParagraph: ((cursor: XMLTextCursor) => void) | undefined;
   private hints: TextImportHint[] = [];
+  private readonly annotations = new Map<string, XMLAnnotationTextContent>();
   private readonly bookmarkStarts = new Map<
     string,
     { range: XMLTextRange; text: XMLText; hidden: boolean; condition: string }
@@ -357,6 +359,59 @@ export class XMLTextImportHelper {
       this.applyParagraph = undefined;
     }
   }
+  /** Creates and inserts the original UNO Annotation service. @param name - ODF annotation name. @param prepare - Metadata and content publication. @returns Nothing. */
+  public InsertAnnotation(name: string, prepare: (field: XMLNamedTextContent) => void): void {
+    const service = xmlTextString("com.sun.star.text.TextField.Annotation");
+    const key = xmlTextString(name);
+    try {
+      const field = this.model.createInstance(service) as XMLAnnotationTextContent;
+      field.setName(key);
+      prepare(field);
+      const cursor = this.GetCursor();
+      cursor.getText().insertTextContent(cursor, field, false);
+      this.MovePastAnnotation(cursor, field);
+      if (name) this.annotations.set(name, field);
+    } finally {
+      service.dispose();
+      key.dispose();
+    }
+  }
+
+  /** Reattaches a named annotation to the range ending at the active text cursor. @param name - ODF annotation name. @returns Nothing. */
+  public EndAnnotation(name: string): void {
+    const field = this.annotations.get(name);
+    if (!field) return;
+    this.annotations.delete(name);
+    const cursor = this.GetCursor();
+    const text = cursor.getText();
+    const anchor = field.getAnchor();
+    const range = text.createTextCursorByRange(cursor);
+    try {
+      try {
+        range.gotoRange(anchor, true);
+      } catch (error) {
+        if (!(error instanceof RuntimeException)) throw error;
+      }
+      text.insertTextContent(range, field, true);
+      this.MovePastAnnotation(cursor, field);
+    } finally {
+      range.dispose();
+      anchor.dispose();
+    }
+  }
+
+  /** Keeps the importer after the new point text field. @param cursor - Active import cursor. @param field - Attached annotation. @returns Nothing. */
+  private MovePastAnnotation(cursor: XMLTextCursor, field: XMLAnnotationTextContent): void {
+    const anchor = field.getAnchor();
+    const end = anchor.getEnd();
+    try {
+      cursor.gotoRange(end, false);
+    } finally {
+      end.dispose();
+      anchor.dispose();
+    }
+  }
+
   /** Attaches an original named text-content service. @param name - Bookmark name. @param range - Optional selected range. @param properties - Range bookmark attributes. @returns Nothing. */
   public InsertBookmark(
     name: string,

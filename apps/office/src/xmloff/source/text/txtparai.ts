@@ -6,6 +6,7 @@ import { XMLTextImportHelper, type XMLCharacterStyleLayer } from "./txtimp";
 
 import { FastAttributeList, SvXMLImportContext, SvXMLIgnoreContext } from "../core/xmlimp";
 import { XMLToken } from "../core/xmltoken";
+import { XMLAnnotationImportContext } from "./txtfldi";
 import { XMLTextMarkImportContext } from "./XMLTextMarkImportContext";
 import type {
   OdfCharacterProperties,
@@ -323,6 +324,8 @@ function createInlineContext(
   allowHyperlink = true,
   namedStyles: readonly XMLCharacterStyleLayer[] = [],
 ): SvXMLImportContext | null {
+  if (element === XMLToken.OFFICE_ANNOTATION || element === XMLToken.OFFICE_ANNOTATION_END)
+    return new XMLAnnotationImportContext(paragraph);
   if (element === XMLToken.DRAW_FRAME) return paragraph.CreateTextFrameContext(attributes);
   if (element === XMLToken.TEXT_SPAN) {
     attributes.assertOnly([XMLToken.TEXT_STYLE_NAME], "span");

@@ -2,7 +2,6 @@
  * @fileoverview Reimplements the bounded Writer ODF XML export bridge from pinned LibreOffice `sw/source/filter/xml/xmlexp.cxx`.
  */
 import { ExportNumberFormat } from "../../../../xmloff/source/style/xmlnumfe";
-import { SwBookmark } from "../../core/doc/docbm";
 import { IsSquaredPageMode } from "../../core/doc/docdesc";
 import { UseOnPage } from "../../core/layout/pagedesc";
 import { PageStyleLayout } from "../../../../offapi/com/sun/star/style/PageStyleLayout";
@@ -20,11 +19,10 @@ import type { SvxProtectItem } from "../../../../editeng/source/items/frmitems";
 import * as ParaItems from "../../../../editeng/source/items/paraitem.controls";
 import {
   getTextFrameExportParagraphs,
-  compareParagraphMarkers,
-  projectAnchoredTextFrames,
   sectionParagraphs,
   type XMLBoundWriterFrames,
 } from "./xmltextframe";
+import { projectParagraphMarkers } from "./xmlexp-markers";
 import { exportPageStoryStyles, getOdfPageStories } from "./xmlpageheaderfooter";
 import type { SvXMLGraphicHelper } from "../../../../xmloff/source/core/xmlgrhlp";
 import { CollectGraphicFlyFrames, CollectTextFlyFrames } from "../../core/layout/flycnt";
@@ -86,7 +84,6 @@ import {
   type OdfParagraphAlignment,
   type OdfParagraphProperties,
   type XMLTextParagraphSource,
-  type XMLTextParagraphMarker,
   type XMLTextListRuleSource,
 } from "../../../../xmloff/source/text/txtparae";
 import {
@@ -167,7 +164,7 @@ import { exportLineNumberingConfiguration } from "../../../../xmloff/source/text
 import { ExportThemeElement } from "../../../../xmloff/source/style/XMLThemeContext";
 import { FontFamily, FontPitch } from "../../../../tools/inc/fontenum";
 import { RTL_TEXTENCODING_DONTKNOW } from "../../../../sal/inc/rtl/textenc";
-const OFFICE_NAMESPACES = `xmlns:draw="${ODF_NAMESPACES.draw}" xmlns:office="${ODF_NAMESPACES.office}" xmlns:style="${ODF_NAMESPACES.style}" xmlns:text="${ODF_NAMESPACES.text}" xmlns:table="${ODF_NAMESPACES.table}" xmlns:ooow="${ODF_NAMESPACES.ooow}" xmlns:number="${ODF_NAMESPACES.number}" xmlns:fo="${ODF_NAMESPACES.fo}" xmlns:svg="${ODF_NAMESPACES.svg}" xmlns:xlink="${ODF_NAMESPACES.xlink}" xmlns:loext="${ODF_NAMESPACES.loext}"`;
+const OFFICE_NAMESPACES = `xmlns:draw="${ODF_NAMESPACES.draw}" xmlns:office="${ODF_NAMESPACES.office}" xmlns:style="${ODF_NAMESPACES.style}" xmlns:text="${ODF_NAMESPACES.text}" xmlns:table="${ODF_NAMESPACES.table}" xmlns:ooow="${ODF_NAMESPACES.ooow}" xmlns:number="${ODF_NAMESPACES.number}" xmlns:fo="${ODF_NAMESPACES.fo}" xmlns:svg="${ODF_NAMESPACES.svg}" xmlns:xlink="${ODF_NAMESPACES.xlink}" xmlns:loext="${ODF_NAMESPACES.loext}" xmlns:dc="${ODF_NAMESPACES.dc}" xmlns:meta="${ODF_NAMESPACES.meta}"`;
 
 /** Serializes Writer named paragraph styles into styles.xml. @param document - Canonical SwDoc. @param graphicHelper - Optional package graphic owner. @returns Complete XML. */
 export function exportStylesXml(document: SwDoc, graphicHelper?: SvXMLGraphicHelper): string {
@@ -723,60 +720,7 @@ function projectParagraph(
   const hasDirectLeftMargin =
     node.GetpSwAttrSet()?.GetItemIfSet(RES_MARGIN_TEXTLEFT, false) !== undefined;
   const paragraphProperties = getParagraphProperties(node.GetpSwAttrSet());
-  const marks = node.GetDoc().GetIDocumentMarkAccess();
-  const frames = projectAnchoredTextFrames(node, anchored, projectBlock);
-  const floatingOffsets = new Set<number>();
-  for (const marker of frames)
-    if (marker.kind === "frame" && marker.frame.anchor !== "as-char")
-      floatingOffsets.add(marker.offset);
-  const markers: XMLTextParagraphMarker[] = [
-    ...frames,
-    ...marks.GetAllMarks().flatMap(
-      /** Projects bookmark endpoints on this paragraph. @param mark - Native bookmark. @returns Local ODF markers. */
-      (mark): XMLTextParagraphMarker[] => {
-        if (!(mark instanceof SwBookmark)) return [];
-        const [start, end] = mark.GetMarkStartEnd();
-        const name = mark.GetName();
-        const offset = start.GetContentIndex();
-        const collapsed = start.compare(end) === 0;
-        const collapsedAroundFrame = collapsed && floatingOffsets.has(offset);
-        const local: XMLTextParagraphMarker[] = [];
-        if (start.GetNode() === node)
-          local.push({
-            kind: collapsed && !collapsedAroundFrame ? "bookmark" : "bookmark-start",
-            name,
-            offset,
-            hidden: mark.IsHidden(),
-            condition: mark.GetHideCondition(),
-            collapsedAroundFrame,
-          });
-        if (end.GetNode() === node && (!collapsed || collapsedAroundFrame))
-          local.push({
-            kind: "bookmark-end",
-            name,
-            offset: end.GetContentIndex(),
-            collapsedAroundFrame,
-          });
-        return local;
-      },
-    ),
-    ...marks
-      .GetSoftPageBreaks()
-      .filter(
-        /** Selects soft hints on this paragraph. @param position - Hint. @returns Whether owned. */
-        (position) => position.GetNode() === node,
-      )
-      .map(
-        /** Projects one soft hint. @param position - Hint. @returns Neutral marker. */
-        (position) => ({
-          kind: "soft-page-break" as const,
-          offset: position.GetContentIndex(),
-        }),
-      ),
-  ].sort(
-    /** Orders portions in the source export phases. @param left - First portion. @param right - Second portion. @returns Portion order. */
-    (left, right) => compareParagraphMarkers(left, right, floatingOffsets),
-  );
+  const markers = projectParagraphMarkers(node, anchored, projectBlock);
   const directCharacterProperties = getCharacterProperties(node.GetpSwAttrSet(), false);
   const marker = node.GetSwAttrSet().GetItemIfSet(RES_PARATR_LIST_AUTOFMT, true);
   const markerProperties =

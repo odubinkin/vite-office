@@ -1,4 +1,5 @@
 /** @fileoverview Tests the mounted annotation surface and the native Find and Replace comment option. */
+import { readFileSync } from "node:fs";
 import { act, fireEvent, render, screen, within } from "@testing-library/react";
 import { expect, it } from "vitest";
 import { DateTime } from "../../../tools/source/datetime/datetime";
@@ -182,6 +183,38 @@ it("finds a Unicode regex in a later note paragraph and replaces its selection l
     );
     expect(comment).toHaveValue(previous);
     expect(format.GetField().GetPar2()).toBe(previous);
+  } finally {
+    workbench.unmount();
+    session.view.Close();
+  }
+});
+
+it("finds a comment after the ordinary Writer ODT open", /** Exercises opening the pinned LibreOffice sample and searching the resulting comment. @returns Completion. */ async () => {
+  const session = createWriterDocumentSession();
+  const shell = session.view.GetDocShell();
+  const workbench = render(<WriterWorkbench isActive view={session.view} />);
+  try {
+    await act(
+      /** Loads the ODT through the document shell's filter. @returns Completion. */ async () => {
+        const sample =
+          "../../vendor/libreoffice-reference/sw/qa/extras/uiwriter/data/tdf147583_backwardSearch.odt";
+        await shell.Load(new Uint8Array(readFileSync(sample)), shell.GetDocumentState());
+      },
+    );
+    const comment = screen.getByRole<HTMLTextAreaElement>("textbox", {
+      name: "Comment — Unknown Author",
+    });
+    fireEvent.keyDown(window, { key: "h", ctrlKey: true });
+    const dialog = within(screen.getByRole("dialog", { name: "Find and Replace" }));
+    fireEvent.click(dialog.getByText("Other options"));
+    const comments = dialog.getByRole<HTMLInputElement>("checkbox", { name: "Comments" });
+    if (!comments.checked) fireEvent.click(comments);
+    fireEvent.change(dialog.getByLabelText("Find"), { target: { value: "For empty paragraphs" } });
+    fireEvent.click(dialog.getByRole("button", { name: "Find Next" }));
+    expect(comment).toHaveFocus();
+    expect(comment.value.slice(comment.selectionStart, comment.selectionEnd)).toBe(
+      "For empty paragraphs",
+    );
   } finally {
     workbench.unmount();
     session.view.Close();

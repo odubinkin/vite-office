@@ -1,0 +1,40 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/xmloff/source/text/txtflde.ts",
+    "localSymbols": [
+      "exportAnnotation"
+    ],
+    "status": "mapped",
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/xmloff/source/text/txtflde.ts",
+          "marker": "exportAnnotation"
+        },
+        {
+          "path": "apps/office/src/sw/source/filter/xml/odt-annotation.test.ts",
+          "marker": "imports the named annotation"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/xmloff/source/text/txtflde.cxx",
+          "marker": "XML_ANNOTATION"
+        }
+      ]
+    },
+    "upstreamPath": "xmloff/source/text/txtflde.cxx",
+    "upstreamSymbols": [
+      "XML_ANNOTATION"
+    ],
+    "preservedResponsibilities": [
+      "Serializes the represented annotation metadata, content and named endpoint."
+    ],
+    "omittedResponsibilities": [
+      "Only the represented annotation/marker path is implemented. Complete UNO services and unsupported rich comment formatting remain outside this mapping."
+    ]
+  }
+}

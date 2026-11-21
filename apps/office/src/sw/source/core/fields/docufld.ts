@@ -55,10 +55,12 @@ export class SwPostItField {
     data: SwPostItFieldData,
   ) {
     const { textObject, ...values } = data;
+    const id = data.id || nextPostItId;
+    nextPostItId = Math.max(nextPostItId, id + 1);
     this.data = {
       ...values,
       dateTime: new DateTime(data.dateTime),
-      id: data.id || nextPostItId++,
+      id,
       resolved: data.resolved ?? false,
       parentId: data.parentId ?? 0,
       paraId: data.paraId ?? 0,
@@ -71,6 +73,16 @@ export class SwPostItField {
   /** Reads the original owner type. @returns Document field type. */
   GetTyp(): SwPostItFieldType {
     return this.type;
+  }
+
+  /** Reads the annotation name used to join its point and range. @returns Annotation name. */
+  GetName(): string {
+    return this.data.name;
+  }
+
+  /** Assigns the generated name when the incoming annotation has none. @param name - Field name. @returns Nothing. */
+  SetName(name: string): void {
+    this.data = { ...this.data, name };
   }
 
   /** Reads the plain text fallback used by the original sidebar. @returns Comment text. */

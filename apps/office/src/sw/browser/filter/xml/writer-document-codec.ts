@@ -1,4 +1,9 @@
 /** @fileoverview Internal canonical Writer graph codec used behind boundary-specific envelopes. */
+import {
+  encodeAnnotations,
+  restoreAnnotations,
+  type WriterAnnotationRecord,
+} from "./writer-annotation-codec";
 import { XFillBitmapItem } from "../../../../svx/inc/xbtmpit";
 import { XATTR_FILLBITMAP } from "../../../../svx/inc/xdef";
 import {
@@ -143,6 +148,7 @@ export interface WriterDocumentRecord {
   readonly bodyOrder?: readonly ("text" | "table")[];
   readonly tables?: readonly WriterTableRecord[];
   readonly textFrames?: readonly WriterTextFrameRecord[];
+  readonly annotations?: readonly WriterAnnotationRecord[];
   readonly bookmarks?: readonly Readonly<{
     name: string;
     nodeIndex: number;
@@ -201,6 +207,7 @@ export function* encodeWriterDocumentSteps(document: SwDoc): Generator<void, Wri
   const textOwners = sectionTextNodes(document.nodes.getBodyContent());
   const pageStories = yield* encodePageStories(document, textOwners);
   const textFrames = yield* encodeTextFrames(document, textOwners);
+  const annotations = encodeAnnotations(document, textOwners);
   const fontDefaults: SfxPoolItemSnapshot[] = [];
   for (const which of fontDefaultWhichIds) {
     const font = document.GetAttrPool().GetUserDefaultItem(which);
@@ -225,6 +232,7 @@ export function* encodeWriterDocumentSteps(document: SwDoc): Generator<void, Wri
     ...(fontDefaults.length ? { fontDefaults } : {}),
     ...(tabStopDefault ? { tabStopDefault: encodeSfxPoolItem(tabStopDefault) } : {}),
     ...(textFrames.length ? { textFrames } : {}),
+    ...(annotations.length ? { annotations } : {}),
     ...(pageStories === undefined ? {} : { pageStories }),
     embeddedFonts: document.GetEmbeddedFonts(),
     ...(document.GetBitmapTable().size
@@ -721,6 +729,7 @@ export function* decodeWriterDocumentSteps(
     const textOwners = sectionTextNodes(document.nodes.getBodyContent());
     yield* decodePageStories(document, record.pageStories, textOwners);
     yield* decodeTextFrames(document, record.textFrames, textOwners);
+    restoreAnnotations(document, textOwners, record.annotations);
     if (record.bookmarks !== undefined) {
       if (!Array.isArray(record.bookmarks)) throw new Error("Stored Writer bookmarks are invalid.");
       for (const mark of record.bookmarks) {

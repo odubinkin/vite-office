@@ -1,6 +1,7 @@
 /**
  * @fileoverview Reimplements the bounded ODF text paragraph export boundary from pinned LibreOffice `xmloff/source/text/txtparae.cxx`.
  */
+import { exportAnnotation, type XMLAnnotationExportMarker } from "./txtflde";
 import type { XMLTextFrameExportSource } from "./XMLTextFrameExport";
 import { exportFillProperties, type OdfFillProperties } from "../draw/fill-properties";
 import { paragraphPropertiesKey, parseParagraphPropertiesKey } from "./txtparae-properties";
@@ -149,6 +150,7 @@ export type XMLTextParagraphMarker =
       condition?: string;
       collapsedAroundFrame?: boolean;
     }>
+  | XMLAnnotationExportMarker
   | Readonly<{ kind: "frame"; frame: XMLTextFrameExportSource; offset: number }>;
 
 /** Reiterable model-facing source; definitions are collected before body references. */
@@ -550,7 +552,11 @@ function exportParagraphElement(
         localOffset =
           marker.offset -
           start +
-          Number(marker.kind === "frame" && marker.frame.anchor === "as-char");
+          Number(
+            (marker.kind === "frame" && marker.frame.anchor === "as-char") ||
+              marker.kind === "annotation-end" ||
+              (marker.kind === "annotation" && marker.consumesMarker),
+          );
         markerIndex += 1;
       }
       return encoded + exportText(text.slice(localOffset));
@@ -596,6 +602,8 @@ function exportMarker(
     if (!renderFrame) throw new Error("ODF anchored frame has no text export owner.");
     return renderFrame(marker.frame);
   }
+  if (marker.kind === "annotation" || marker.kind === "annotation-end")
+    return exportAnnotation(marker, escapeXml, exportText);
   if (marker.kind === "soft-page-break") return "<text:soft-page-break/>";
   if (marker.name === undefined || marker.name.length === 0)
     throw new Error("ODF bookmark name is invalid.");
