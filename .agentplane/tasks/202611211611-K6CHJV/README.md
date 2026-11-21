@@ -4,7 +4,7 @@ title: "Configure Graphify as the default repository context"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 7
+revision: 10
 origin:
   system: "manual"
 depends_on: []
@@ -21,10 +21,30 @@ plan_approval:
   note: null
 verification:
   state: "ok"
-  updated_at: "2026-11-21T16:21:16.392Z"
+  updated_at: "2026-11-21T16:21:52.173Z"
   updated_by: "CODER"
-  note: "Graphify 0.9.114 built a code-only index with 58,159 nodes and 224,460 edges. CLI queries for SwDoc and ScDocument returned the exact source files and lines. Routing, ignore rules, package dependencies, README formatting, and git diff checks passed. AgentPlane doctor passed with the existing managed hook shim warning."
+  note: "verified-202611211611-K6CHJV"
   attempts: 0
+quality_review:
+  state: "pass"
+  updated_at: "2026-11-21T16:21:45.200Z"
+  updated_by: "EVALUATOR"
+  note: "The committed repository integration provides query-first navigation and a reproducible repository-local Graphify index."
+  evaluated_sha: "0164a711e6ef663f2a5b9e1c92388d6058cd2448"
+  blueprint_digest: "25259f2ed92987d9327217c0ab4b5298ff48b7470d90bdefaebfbd4b5ca60555"
+  evidence_refs:
+    - ".agentplane/tasks/202611211611-K6CHJV/README.md"
+    - ".agentplane/tasks/202611211611-K6CHJV/quality/20261121-162145200-recovery-context/quality-report.json"
+    - ".agentplane/tasks/202611211611-K6CHJV/quality/20261121-162145200-recovery-context/evaluator-prompt.md"
+    - ".agentplane/tasks/202611211611-K6CHJV/quality/20261121-162145200-recovery-context/evaluator-opinion.md"
+    - ".agentplane/tasks/202611211611-K6CHJV/blueprint/resolved-snapshot.json"
+    - "AGENTS.md"
+    - "README.md"
+    - ".graphifyignore"
+    - "node .agentplane/policy/check-routing.mjs"
+    - "ap doctor"
+  findings:
+    - "Both Writer and Calc queries resolved exact class definitions. Exclusion rules, Graphify dependency consistency, AgentPlane routing, formatting, and diff checks passed."
 commit: null
 comments:
   -
@@ -44,8 +64,20 @@ events:
     author: "CODER"
     state: "ok"
     note: "Graphify 0.9.114 built a code-only index with 58,159 nodes and 224,460 edges. CLI queries for SwDoc and ScDocument returned the exact source files and lines. Routing, ignore rules, package dependencies, README formatting, and git diff checks passed. AgentPlane doctor passed with the existing managed hook shim warning."
+  -
+    type: "verify"
+    at: "2026-11-21T16:21:33.035Z"
+    author: "CODER"
+    state: "ok"
+    note: "verified-202611211611-K6CHJV"
+  -
+    type: "verify"
+    at: "2026-11-21T16:21:52.173Z"
+    author: "CODER"
+    state: "ok"
+    note: "verified-202611211611-K6CHJV"
 doc_version: 3
-doc_updated_at: "2026-11-21T16:21:16.448Z"
+doc_updated_at: "2026-11-21T16:21:52.228Z"
 doc_updated_by: "CODER"
 description: "Install Graphify in a repository-local environment, build a local code graph, and route coding agents to it for code navigation."
 sections:
@@ -93,6 +125,66 @@ sections:
     - freshness: route=computed_local remote=remote_skipped
     - repeat_allowed: false
     - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+    - risks: none
+
+    ### 2026-11-21T16:21:33.035Z — VERIFY — ok
+
+    By: CODER
+
+    Note: verified-202611211611-K6CHJV
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-21T16:21:16.448Z, excerpt_hash=sha256:01fd2c5bc116723812f968d646a19318c656e1799d7084fc5925f12f1254e02a
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202611211611-K6CHJV/blueprint/resolved-snapshot.json
+    - old_digest: 25259f2ed92987d9327217c0ab4b5298ff48b7470d90bdefaebfbd4b5ca60555
+    - current_digest: 25259f2ed92987d9327217c0ab4b5298ff48b7470d90bdefaebfbd4b5ca60555
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202611211611-K6CHJV
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task complete 202611211611-K6CHJV --result verified-202611211611-K6CHJV --commit 0164a711e6ef663f2a5b9e1c92388d6058cd2448
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
+    ### 2026-11-21T16:21:52.173Z — VERIFY — ok
+
+    By: CODER
+
+    Note: verified-202611211611-K6CHJV
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-21T16:21:33.093Z, excerpt_hash=sha256:01fd2c5bc116723812f968d646a19318c656e1799d7084fc5925f12f1254e02a
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202611211611-K6CHJV/blueprint/resolved-snapshot.json
+    - old_digest: 25259f2ed92987d9327217c0ab4b5298ff48b7470d90bdefaebfbd4b5ca60555
+    - current_digest: 25259f2ed92987d9327217c0ab4b5298ff48b7470d90bdefaebfbd4b5ca60555
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202611211611-K6CHJV
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task complete 202611211611-K6CHJV --result verified-202611211611-K6CHJV --commit 0164a711e6ef663f2a5b9e1c92388d6058cd2448
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
     - risks: none
 
     <!-- END VERIFICATION RESULTS -->
@@ -154,6 +246,66 @@ DecisionContextRef:
 - freshness: route=computed_local remote=remote_skipped
 - repeat_allowed: false
 - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- risks: none
+
+### 2026-11-21T16:21:33.035Z — VERIFY — ok
+
+By: CODER
+
+Note: verified-202611211611-K6CHJV
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-21T16:21:16.448Z, excerpt_hash=sha256:01fd2c5bc116723812f968d646a19318c656e1799d7084fc5925f12f1254e02a
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202611211611-K6CHJV/blueprint/resolved-snapshot.json
+- old_digest: 25259f2ed92987d9327217c0ab4b5298ff48b7470d90bdefaebfbd4b5ca60555
+- current_digest: 25259f2ed92987d9327217c0ab4b5298ff48b7470d90bdefaebfbd4b5ca60555
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202611211611-K6CHJV
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task complete 202611211611-K6CHJV --result verified-202611211611-K6CHJV --commit 0164a711e6ef663f2a5b9e1c92388d6058cd2448
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
+
+### 2026-11-21T16:21:52.173Z — VERIFY — ok
+
+By: CODER
+
+Note: verified-202611211611-K6CHJV
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-21T16:21:33.093Z, excerpt_hash=sha256:01fd2c5bc116723812f968d646a19318c656e1799d7084fc5925f12f1254e02a
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202611211611-K6CHJV/blueprint/resolved-snapshot.json
+- old_digest: 25259f2ed92987d9327217c0ab4b5298ff48b7470d90bdefaebfbd4b5ca60555
+- current_digest: 25259f2ed92987d9327217c0ab4b5298ff48b7470d90bdefaebfbd4b5ca60555
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202611211611-K6CHJV
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task complete 202611211611-K6CHJV --result verified-202611211611-K6CHJV --commit 0164a711e6ef663f2a5b9e1c92388d6058cd2448
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
 - risks: none
 
 <!-- END VERIFICATION RESULTS -->
