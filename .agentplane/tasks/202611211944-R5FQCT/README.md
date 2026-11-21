@@ -1,10 +1,11 @@
 ---
 id: "202611211944-R5FQCT"
 title: "Connect Calc Paste Only commands"
-status: "DOING"
+result_summary: "Connected Calc Paste Only commands and completed task eight of the ten-task verification cycle."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 9
+revision: 10
 origin:
   system: "manual"
 depends_on: []
@@ -42,11 +43,16 @@ quality_review:
     - "9afda05bed158df6b1c7f65891d3c4d3e88d976b"
   findings:
     - "The port of CalcPasteOnly preserves the numeric zero, the rebased formula and the text result rules. Full targeted coverage also checks hard errors, multiline results and sparse clipboard rectangles."
-commit: null
+commit:
+  hash: "9afda05bed158df6b1c7f65891d3c4d3e88d976b"
+  message: "🧩 R5FQCT code: connect Calc Paste Only commands"
 comments:
   -
     author: "CODER"
     body: "Start: connect native Calc typed clipboard masks, source Paste Only slots and undo."
+  -
+    author: "CODER"
+    body: "Verified: connected Calc Paste Only Text, Numbers and Formula with native selection, cached results and all-content Undo. All 170 focused tests passed."
 events:
   -
     type: "status"
@@ -61,8 +67,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "170 focused Calc tests passed in 22 files, including the CalcPasteOnly port. Office TypeScript, changed-path formatting and lint, resources, provenance, dependencies, routing and doctor passed."
+  -
+    type: "status"
+    at: "2026-11-21T19:56:59.608Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: connected Calc Paste Only Text, Numbers and Formula with native selection, cached results and all-content Undo. All 170 focused tests passed."
 doc_version: 3
-doc_updated_at: "2026-11-21T19:55:31.948Z"
+doc_updated_at: "2026-11-21T19:56:59.609Z"
 doc_updated_by: "CODER"
 description: "Expose the native selected-type clipboard routes and preserve formula results, destination styles and undo."
 sections:
