@@ -1,0 +1,24 @@
+{
+  "schema_version": 1,
+  "task_id": "202611211708-D9FFA8",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-11-21T17:29:08.897Z",
+  "verdict": "pass",
+  "summary": "Verified the original manager draft, index-based formula updates, and paste workflows through native browser routes and canonical undo.",
+  "evaluated_sha": "77aaae2fdd566a14b3b5aa31854bad4921fb8321",
+  "blueprint_digest": "d5154a64d0bdd47b8ed427e64e21189f2fbdc0dd28763919495f41aa9f82d504",
+  "findings": [
+    "Named formulas retained their group through the upstream rename and Undo/Redo scenario.",
+    "Paste List used a dedicated native block action and restored an overwritten number in a single Undo."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202611211708-D9FFA8/README.md",
+    "output/calc-D9FFA8-verification.md",
+    "output/calc-D9FFA8-test-final.log",
+    "77aaae2fdd566a14b3b5aa31854bad4921fb8321"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": []
+}
