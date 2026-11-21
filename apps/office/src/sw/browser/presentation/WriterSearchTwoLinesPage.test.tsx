@@ -1,6 +1,11 @@
 /** @fileoverview Upstream Asian Layout reopening QA against Writer's browser search and replacement dialog. */
 import { act, fireEvent, render, screen, waitFor, within } from "@testing-library/react";
-import { expect, it } from "vitest";
+import { afterEach, beforeEach, expect, it } from "vitest";
+import {
+  favoritesFull,
+  readCharacterList,
+  rememberCharacter,
+} from "../../../sfx2/browser/control/charmapcontainer";
 import { SvxTwoLinesItem } from "../../../editeng/inc/twolinesitem";
 import { SfxItemSet } from "../../../svl/source/items/itemset";
 import { RES_CHRATR_TWO_LINES } from "../../inc/hintids";
@@ -9,6 +14,15 @@ import { SwAttrIter } from "../../source/core/text/itratr";
 import { createWriterDocumentSession } from "../composition/writer-module";
 import { WriterSearchCharacterMap } from "./writer-search-character-map";
 import { WriterWorkbench } from "./writer-view";
+
+/** Restores the native character preferences between picker scenarios. @returns Nothing. */
+function resetCharacterLists(): void {
+  localStorage.removeItem("org.openoffice.Office.Common/RecentCharacters");
+  localStorage.removeItem("org.openoffice.Office.Common/FavoriteCharacters");
+}
+
+beforeEach(resetCharacterLists);
+afterEach(resetCharacterLists);
 
 it("reopens double-line criteria, matches both enclosures and replaces the complete item", /** Adapts the native Asian Layout QA and verifies both sides of Writer search. @returns Nothing. */ () => {
   const session = createWriterDocumentSession();
@@ -156,10 +170,115 @@ it("uses ICU character names and native font subsets in the enclosure picker", /
       "LEFT-POINTING DOUBLE ANGLE QUOTATION MARK",
     );
     fireEvent.change(searchName, { target: { value: " U+00BB " } });
-    fireEvent.doubleClick(picker.getByRole("button", { name: "U+00BB" }));
+    const closingMark = picker.getByRole("button", { name: "U+00BB" });
+    fireEvent.click(closingMark);
+    fireEvent.doubleClick(closingMark);
+    expect(picker.getByRole("button", { name: "OK" })).toBeVisible();
+    fireEvent.keyDown(closingMark, { key: "Enter" });
     expect(enclosure).toHaveValue("187");
+    expect(readCharacterList("recent")).toEqual([]);
   } finally {
     ui.unmount();
     session.view.Close();
   }
+});
+
+it("loads the native favorites and retains the recent order and font across openings", /** Verifies the real preference lists and context commands through the enclosure picker. @returns Nothing. */ () => {
+  const session = createWriterDocumentSession();
+  const ui = render(<WriterWorkbench isActive view={session.view} />);
+  try {
+    fireEvent.keyDown(window, { key: "h", ctrlKey: true });
+    const search = within(screen.getByRole("dialog", { name: "Find and Replace" }));
+    fireEvent.click(search.getByText("Other options"));
+    fireEvent.click(search.getByRole("button", { name: "Format…" }));
+    const format = within(screen.getByRole("dialog", { name: "Search" }));
+    fireEvent.click(format.getByRole("tab", { name: "Asian Layout" }));
+    fireEvent.click(format.getByRole("checkbox", { name: "Write in double lines" }));
+    const enclosure = format.getByRole("combobox", { name: "Initial character" });
+
+    /** Opens the picker from its source list. @returns Picker queries. */
+    function open() {
+      fireEvent.change(enclosure, { target: { value: "-1" } });
+      return within(screen.getByRole("dialog", { name: "Special Characters" }));
+    }
+
+    let picker = open();
+    const shipped = within(picker.getByRole("group", { name: "Favorite Characters" }));
+    expect(shipped.getAllByRole("button")).toHaveLength(12);
+    expect(
+      within(picker.getByRole("group", { name: "Recent Characters" })).queryAllByRole("button"),
+    ).toHaveLength(0);
+    fireEvent.click(shipped.getByRole("button", { name: "€ — Liberation Serif" }));
+    expect(picker.getByRole("textbox", { name: "Font" })).toHaveValue("Liberation Serif");
+    expect(picker.getByRole("textbox", { name: "Hexadecimal" })).toHaveValue("20AC");
+    fireEvent.change(picker.getByRole("textbox", { name: "Hexadecimal" }), {
+      target: { value: "AB" },
+    });
+    fireEvent.click(picker.getByRole("button", { name: "Add to Favorites" }));
+    expect(shipped.getAllByRole("button")).toHaveLength(13);
+    expect(readCharacterList("recent")).toEqual([]);
+    fireEvent.click(picker.getByRole("button", { name: "OK" }));
+    expect(readCharacterList("recent")).toEqual([{ character: "«", font: "Liberation Serif" }]);
+
+    picker = open();
+    fireEvent.click(
+      within(picker.getByRole("group", { name: "Favorite Characters" })).getByRole("button", {
+        name: "€ — Liberation Serif",
+      }),
+    );
+    fireEvent.click(picker.getByRole("button", { name: "OK" }));
+    picker = open();
+    const recent = within(picker.getByRole("group", { name: "Recent Characters" }));
+    expect(
+      recent.getAllByRole("button").map(
+        /** Reads glyph order from the native recent group. @param button - Recent glyph button. @returns Glyph. */
+        (button) => button.textContent,
+      ),
+    ).toEqual(["€", "«"]);
+    fireEvent.click(recent.getByRole("button", { name: "« — Liberation Serif" }));
+    fireEvent.click(picker.getByRole("button", { name: "OK" }));
+    expect(
+      readCharacterList("recent").map(
+        /** Projects the committed recency order. @param pair - Recent glyph. @returns Character. */
+        (pair) => pair.character,
+      ),
+    ).toEqual(["«", "€"]);
+
+    picker = open();
+    const favorites = within(picker.getByRole("group", { name: "Favorite Characters" }));
+    fireEvent.contextMenu(favorites.getByRole("button", { name: "« — Liberation Serif" }));
+    fireEvent.click(picker.getByRole("menuitem", { name: "Remove" }));
+    expect(favorites.getAllByRole("button")).toHaveLength(12);
+    fireEvent.contextMenu(
+      within(picker.getByRole("group", { name: "Recent Characters" })).getByRole("button", {
+        name: "« — Liberation Serif",
+      }),
+    );
+    fireEvent.click(picker.getByRole("menuitem", { name: "Clear All" }));
+    expect(readCharacterList("recent")).toEqual([]);
+    expect(readCharacterList("favorite")).toHaveLength(12);
+    fireEvent.click(picker.getByRole("button", { name: "Cancel" }));
+  } finally {
+    ui.unmount();
+    session.view.Close();
+  }
+});
+
+it("keeps the sixteen newest unique pairs and distinguishes the same glyph in other fonts", /** Exercises the native SfxCharmapContainer list rules. @returns Nothing. */ () => {
+  const filled = Array.from(
+    { length: 16 },
+    /** Builds an existing recent list. @param unused - Empty slot. @param index - Row index. @returns Character and font. */ (
+      _unused,
+      index,
+    ) => ({
+      character: String.fromCodePoint(0x41 + index),
+      font: "Liberation Serif",
+    }),
+  );
+  const alternate = { character: "A", font: "Liberation Sans" };
+  const retained = rememberCharacter(filled, alternate);
+  expect(retained).toEqual([alternate, ...filled.slice(0, 15)]);
+  expect(rememberCharacter(retained, alternate)).toEqual(retained);
+  expect(favoritesFull(filled)).toBe(true);
+  expect(favoritesFull(filled.slice(0, 15))).toBe(false);
 });

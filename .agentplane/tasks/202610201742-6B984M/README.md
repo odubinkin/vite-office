@@ -4,7 +4,7 @@ title: "Implement Writer search and replace core and browser UI"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 65
+revision: 66
 origin:
   system: "manual"
 depends_on:
@@ -199,6 +199,9 @@ comments:
   -
     author: "CODER"
     body: "Verified checkpoint: Writer's fixed-font enclosure picker now searches native ICU Unicode names and normalized U+ prefixes, lists only native LibreOffice Unicode subsets present in the face, and displays the chosen name. A deterministic generator uses pinned ICU's u_enumCharNames and LibreOffice's subset table and string resources. WRITER-707 records the original duplicated mathematical subset label and both rows remain available. The data loads on demand and the production resource is split from the main bundle. Tests cover algorithmic CJK and Hangul names, unnamed values, subset navigation, name filtering and prefixed code selection. The relevant Writer regression passed 34 cases across four files. Production build, two Writer resource tests, regenerated data comparison, scoped lint/format, dependency/source-tree/provenance/JSDoc/file-size checks, doctor and routing passed. Recent and favorite symbols remain pending, as do native browser regex and note search. The task remains open and the goal stays active until task closure."
+  -
+    author: "CODER"
+    body: "Verified checkpoint: the Writer enclosure picker now binds the native SfxCharmapContainer recent and favorite lists. The twelve Office.Common default favorites, their Liberation Serif font, the sixteen-row limit, append order for favorites and pair-aware recency order are retained. Selecting a saved character restores its font and code. Remove and Clear All act on their own list. Browser application preferences commit each native character/font property pair together. WRITER-708 records the frame-less picker distinction between explicit OK and Return on the character grid. Targeted Writer suites passed 36 cases across four files, plus two Writer resource cases. Production build, dependency/source-tree/provenance/JSDoc/file-size checks, scoped lint and formatting, git diff check, doctor and routing passed. DOCX/ODT and document save/open/recovery policy are unaffected. Native browser regex and note search remain pending, so the parent task stays open."
 events:
   -
     type: "status"
@@ -472,8 +475,13 @@ events:
     at: "2026-11-21T10:35:27.180Z"
     author: "CODER"
     body: "Verified checkpoint: Writer's fixed-font enclosure picker now searches native ICU Unicode names and normalized U+ prefixes, lists only native LibreOffice Unicode subsets present in the face, and displays the chosen name. A deterministic generator uses pinned ICU's u_enumCharNames and LibreOffice's subset table and string resources. WRITER-707 records the original duplicated mathematical subset label and both rows remain available. The data loads on demand and the production resource is split from the main bundle. Tests cover algorithmic CJK and Hangul names, unnamed values, subset navigation, name filtering and prefixed code selection. The relevant Writer regression passed 34 cases across four files. Production build, two Writer resource tests, regenerated data comparison, scoped lint/format, dependency/source-tree/provenance/JSDoc/file-size checks, doctor and routing passed. Recent and favorite symbols remain pending, as do native browser regex and note search. The task remains open and the goal stays active until task closure."
+  -
+    type: "comment"
+    at: "2026-11-21T10:40:19.027Z"
+    author: "CODER"
+    body: "Verified checkpoint: the Writer enclosure picker now binds the native SfxCharmapContainer recent and favorite lists. The twelve Office.Common default favorites, their Liberation Serif font, the sixteen-row limit, append order for favorites and pair-aware recency order are retained. Selecting a saved character restores its font and code. Remove and Clear All act on their own list. Browser application preferences commit each native character/font property pair together. WRITER-708 records the frame-less picker distinction between explicit OK and Return on the character grid. Targeted Writer suites passed 36 cases across four files, plus two Writer resource cases. Production build, dependency/source-tree/provenance/JSDoc/file-size checks, scoped lint and formatting, git diff check, doctor and routing passed. DOCX/ODT and document save/open/recovery policy are unaffected. Native browser regex and note search remain pending, so the parent task stays open."
 doc_version: 3
-doc_updated_at: "2026-11-21T10:35:27.180Z"
+doc_updated_at: "2026-11-21T10:40:19.027Z"
 doc_updated_by: "CODER"
 description: "Implement the approved coherent Writer search-and-replace feature from pinned LibreOffice sources: real shared search engine and options, native paragraph/cursor traversal and replacement/history contracts, view-owned search state and dispatch, Find toolbar and Find and Replace dialog with generated upstream command placement and shortcuts. Preserve source semantics and explicit unsupported boundaries; never substitute DOM text search or browser RegExp for ICU contracts. Work only on writer in vite-office-writer; local upstream reading approved, no network or merges. Keep active until approved scope is verified."
 sections:

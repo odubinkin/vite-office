@@ -4,6 +4,16 @@ import { SvxTwoLinesItem } from "../../../editeng/inc/twolinesitem";
 import { FontCharMap } from "../../../vcl/source/font/fontcharmap";
 import { FontList } from "../../../svtools/browser/font-list";
 import { readBrowserFontCharMap } from "../../../vcl/browser/font-character-map";
+import {
+  favoritesFull,
+  readCharacterList,
+  rememberCharacter,
+  removeCharacter,
+  sameCharAndFont,
+  writeCharacterList,
+  type CharAndFont,
+  type CharacterList,
+} from "../../../sfx2/browser/control/charmapcontainer";
 import { RES_CHRATR_TWO_LINES } from "../../inc/hintids";
 import { WriterSearchCharacterMap } from "./writer-search-character-map";
 import { WriterDialogHeader } from "./WriterDialogHeader";
@@ -29,9 +39,23 @@ function BracketCharacterMap({
 }: Readonly<{ label: Label; family: string; close: (code?: number) => void }>): React.JSX.Element {
   const dialog = useRef<HTMLDialogElement>(null);
   const input = useRef<HTMLInputElement>(null);
-  const [map, setMap] = useState(fallbackMap);
+  const [activeFamily, setActiveFamily] = useState(family);
+  const [fontMap, setFontMap] = useState<{ family: string; characters: FontCharMap }>();
+  const map = fontMap?.family === activeFamily ? fontMap.characters : fallbackMap;
   const [hex, setHex] = useState("");
-  const [offset, setOffset] = useState(0);
+  const [offset, setOffset] = useState<number>();
+  const [historyChoice, setHistoryChoice] = useState<CharAndFont>();
+  const [recent, setRecent] = useState(
+    /** Reads the native recent list when opening the picker. @returns Recent rows. */
+    () => readCharacterList("recent"),
+  );
+  const [favorites, setFavorites] = useState(
+    /** Reads the native default or saved favorites. @returns Favorite rows. */
+    () => readCharacterList("favorite"),
+  );
+  const [menu, setMenu] = useState<{ list: CharacterList; choice: CharAndFont }>();
+  const menuOrigin = useRef<HTMLButtonElement>(null);
+  const [removedFavorite, setRemovedFavorite] = useState(false);
   const [resources, setResources] = useState<WriterSearchCharacterMap>();
   const [query, setQuery] = useState("");
   const subsets = useMemo(
@@ -45,7 +69,23 @@ function BracketCharacterMap({
     [query, resources, map],
   );
   const code = hex === "" ? undefined : Number(`0x${hex}`);
-  const selected = code !== undefined && map.HasChar(code) ? code : undefined;
+  const selected =
+    code !== undefined && (map.HasChar(code) || historyChoice?.character.codePointAt(0) === code)
+      ? code
+      : undefined;
+  const pair =
+    selected === undefined
+      ? undefined
+      : {
+          character: String.fromCodePoint(selected),
+          font: activeFamily,
+        };
+  const favorite =
+    pair !== undefined &&
+    favorites.some(
+      /** Finds the exact character and font pair. @param row - Favorite row. @returns Whether it matches. */
+      (row) => sameCharAndFont(row, pair),
+    );
 
   useLayoutEffect(
     /** Focuses the code input and resolves the immutable device glyph inventory. @returns Cleanup. */
@@ -68,13 +108,24 @@ function BracketCharacterMap({
           /** Keeps numeric selection available if the character resources cannot be loaded. @returns Nothing. */
           () => undefined,
         );
+      return /** Discards results after the picker closes. @returns Nothing. */ () => {
+        active = false;
+      };
+    },
+    [],
+  );
+
+  useLayoutEffect(
+    /** Updates the glyphs after choosing a saved character with its font. @returns Cleanup. */
+    () => {
+      let active = true;
       void (
-        /** Resolves the fixed font character map. @returns Nothing. */ async function loadFace() {
+        /** Resolves the selected font's character map. @returns Nothing. */ async function loadFace() {
           const list = await FontList.FromBrowser();
-          const face = list.GetBrowserFaces(family)[0];
+          const face = list.GetBrowserFaces(activeFamily)[0];
           if (!face) return;
           const characters = await readBrowserFontCharMap(face, false);
-          if (active && characters !== undefined) setMap(characters);
+          if (active && characters !== undefined) setFontMap({ family: activeFamily, characters });
         }
       )().catch(
         /** Keeps the native default character map when device bytes are unavailable. @returns Nothing. */
@@ -84,18 +135,154 @@ function BracketCharacterMap({
         active = false;
       };
     },
-    [family],
+    [activeFamily],
   );
 
   /** Selects a numeric character and scrolls its glyph page into view. @param value - Entered codepoint. @returns Nothing. */
   function choose(value: number): void {
     setHex(value.toString(16).toUpperCase());
-    const index = matches?.indexOf(value) ?? map.GetIndexFromChar(value);
-    if (index >= 0) setOffset(Math.floor(index / pageSize) * pageSize);
+    setOffset(undefined);
+    setHistoryChoice(undefined);
+    setRemovedFavorite(false);
+  }
+
+  /** Selects a saved character and its source font without applying it. @param choice - Stored glyph and font. @returns Nothing. */
+  function chooseHistory(choice: CharAndFont): void {
+    const value = choice.character.codePointAt(0);
+    if (value === undefined) return;
+    choose(value);
+    setActiveFamily(choice.font);
+    setHistoryChoice(choice);
+  }
+
+  /** Updates recent characters for the explicit OK action. @returns Nothing. */
+  function accept(): void {
+    if (pair === undefined || selected === undefined) return;
+    setRecent(writeCharacterList("recent", rememberCharacter(recent, pair)));
+    close(selected);
+  }
+
+  /** Removes, clears or refreshes one of the two preference lists. @param list - Affected list. @param rows - Replacement rows. @returns Nothing. */
+  function updateHistory(list: CharacterList, rows: readonly CharAndFont[]): void {
+    const written = writeCharacterList(list, rows);
+    (list === "recent" ? setRecent : setFavorites)(written);
+  }
+
+  /** Displays saved character pairs and their native context commands. @param list - Recent or favorite list. @param caption - Group label. @param rows - Stored glyphs. @returns Native list controls. */
+  function characterHistory(
+    list: CharacterList,
+    caption: string,
+    rows: readonly CharAndFont[],
+  ): React.JSX.Element {
+    return (
+      <fieldset className="grid gap-1 rounded border border-slate-200 p-2">
+        <legend className="px-1 text-sm">{caption}</legend>
+        <div className="grid grid-cols-8 gap-1">
+          {rows.map(
+            /** Renders a saved glyph in its stored font. @param row - Character and font. @param index - Native list position. @returns Glyph control. */
+            (row, index) => {
+              const name = resources?.GetName(row.character.codePointAt(0) ?? 0);
+              return (
+                <button
+                  key={index}
+                  type="button"
+                  style={{ fontFamily: row.font }}
+                  className="rounded border border-slate-300 p-1"
+                  title={name || row.character}
+                  aria-label={`${row.character} — ${row.font}`}
+                  onClick={
+                    /** Selects the saved character. @returns Nothing. */ () => chooseHistory(row)
+                  }
+                  onContextMenu={
+                    /** Shows the source Remove and Clear All actions. @param event - Pointer or keyboard context event. @returns Nothing. */
+                    (event) => {
+                      event.preventDefault();
+                      chooseHistory(row);
+                      menuOrigin.current = event.currentTarget;
+                      setMenu({ list, choice: row });
+                    }
+                  }
+                >
+                  {row.character}
+                </button>
+              );
+            },
+          )}
+        </div>
+        {menu?.list === list && (
+          <div
+            role="menu"
+            aria-label={caption}
+            className="flex gap-2 rounded border border-slate-300 bg-white p-1 shadow"
+            onBlur={
+              /** Closes the context menu when focus leaves. @param event - Focus change. @returns Nothing. */
+              (event) => {
+                if (!event.currentTarget.contains(event.relatedTarget)) setMenu(undefined);
+              }
+            }
+            onKeyDown={
+              /** Restores the invoking glyph on Cancel and moves between the two menu items. @param event - Navigation event. @returns Nothing. */
+              (event) => {
+                if (event.key === "Escape") {
+                  event.stopPropagation();
+                  event.preventDefault();
+                  menuOrigin.current?.focus();
+                  setMenu(undefined);
+                } else if (event.key === "ArrowDown" || event.key === "ArrowUp") {
+                  event.preventDefault();
+                  const [first, last] =
+                    event.currentTarget.querySelectorAll<HTMLButtonElement>('[role="menuitem"]');
+                  (event.target === first ? last : first)?.focus();
+                }
+              }
+            }
+          >
+            <button
+              type="button"
+              role="menuitem"
+              ref={
+                /** Places keyboard focus on the first context action. @param button - Menu item. @returns Nothing. */
+                (button) => button?.focus()
+              }
+              onClick={
+                /** Removes the invoking glyph. @returns Nothing. */
+                () => {
+                  updateHistory(list, removeCharacter(rows, menu.choice));
+                  setMenu(undefined);
+                  input.current?.focus();
+                }
+              }
+            >
+              {label("character-remove", "Remove")}
+            </button>
+            <button
+              type="button"
+              role="menuitem"
+              onClick={
+                /** Clears the selected history list. @returns Nothing. */
+                () => {
+                  updateHistory(list, []);
+                  setMenu(undefined);
+                  input.current?.focus();
+                }
+              }
+            >
+              {label("character-clear-all", "Clear All")}
+            </button>
+          </div>
+        )}
+      </fieldset>
+    );
   }
 
   const count = matches?.length ?? map.GetCharCount();
-  const start = Math.min(offset, Math.max(0, Math.floor((count - 1) / pageSize) * pageSize));
+  const selectedIndex =
+    selected === undefined ? -1 : (matches?.indexOf(selected) ?? map.GetIndexFromChar(selected));
+  const selectedPage = selectedIndex < 0 ? 0 : Math.floor(selectedIndex / pageSize) * pageSize;
+  const start = Math.min(
+    offset ?? selectedPage,
+    Math.max(0, Math.floor((count - 1) / pageSize) * pageSize),
+  );
   const displayed = selected ?? map.GetCharFromIndex(start);
   const subset = subsets.find(
     /** Finds the subset highlighted by the current character. @param row - Native subset. @returns Membership. */
@@ -116,7 +303,7 @@ function BracketCharacterMap({
           if (event.key === "Enter" && !(event.target instanceof HTMLInputElement)) return;
           event.preventDefault();
           if (event.key === "Escape") close();
-          else if (selected !== undefined) close(selected);
+          else accept();
         }
       }
     >
@@ -127,7 +314,7 @@ function BracketCharacterMap({
       <div className="grid gap-3 px-2 py-3">
         <label className="grid gap-1 text-sm">
           {label("character-font", "Font")}
-          <input disabled value={family} className="rounded border border-slate-300 p-1" />
+          <input disabled value={activeFamily} className="rounded border border-slate-300 p-1" />
         </label>
         <label className="grid gap-1 text-sm">
           {label("character-subset", "Subset")}
@@ -166,12 +353,13 @@ function BracketCharacterMap({
               (event) => {
                 setQuery(event.currentTarget.value);
                 setHex("");
-                setOffset(0);
+                setOffset(undefined);
+                setHistoryChoice(undefined);
               }
             }
           />
         </label>
-        <div className="grid grid-cols-8 gap-1" style={{ fontFamily: family }}>
+        <div className="grid grid-cols-8 gap-1" style={{ fontFamily: activeFamily }}>
           {Array.from(
             { length: Math.min(pageSize, count - start) },
             /** Presents one glyph from the current character range. @param unused - Empty array slot. @param index - Page index. @returns Glyph button. */
@@ -185,7 +373,15 @@ function BracketCharacterMap({
                   aria-pressed={selected === value}
                   className="rounded border border-slate-300 p-1 aria-pressed:border-indigo-700"
                   onClick={/** Selects the glyph. @returns Nothing. */ () => choose(value)}
-                  onDoubleClick={/** Accepts the glyph. @returns Nothing. */ () => close(value)}
+                  onKeyDown={
+                    /** Accepts Return from the character grid without updating the recent list. @param event - Grid key. @returns Nothing. */
+                    (event) => {
+                      if (event.key !== "Enter") return;
+                      event.preventDefault();
+                      event.stopPropagation();
+                      close(value);
+                    }
+                  }
                 >
                   {String.fromCodePoint(value)}
                 </button>
@@ -250,7 +446,7 @@ function BracketCharacterMap({
             />
           </label>
         </div>
-        <output className="p-1 text-center text-2xl" style={{ fontFamily: family }}>
+        <output className="p-1 text-center text-2xl" style={{ fontFamily: activeFamily }}>
           {selected === undefined ? "" : String.fromCodePoint(selected)}
         </output>
         <output
@@ -259,7 +455,34 @@ function BracketCharacterMap({
         >
           {selected === undefined ? "" : resources?.GetName(selected)}
         </output>
-        <div className="flex justify-end gap-2">
+        {characterHistory("recent", label("recent-characters", "Recent Characters"), recent)}
+        {characterHistory(
+          "favorite",
+          label("favorite-characters", "Favorite Characters"),
+          favorites,
+        )}
+        <div className="flex flex-wrap justify-end gap-2">
+          <button
+            type="button"
+            disabled={
+              pair === undefined || removedFavorite || (!favorite && favoritesFull(favorites))
+            }
+            className="mr-auto rounded border px-3 py-1 disabled:opacity-50"
+            onClick={
+              /** Toggles the selected pair in the saved favorites. @returns Nothing. */
+              () => {
+                if (pair === undefined) return;
+                if (favorite) {
+                  updateHistory("favorite", removeCharacter(favorites, pair));
+                  setRemovedFavorite(true);
+                } else updateHistory("favorite", [...favorites, pair]);
+              }
+            }
+          >
+            {favorite
+              ? label("remove-favorite", "Remove from Favorites")
+              : label("add-favorite", "Add to Favorites")}
+          </button>
           <button
             type="button"
             className="rounded border px-3 py-1"
@@ -271,7 +494,7 @@ function BracketCharacterMap({
             type="button"
             disabled={selected === undefined}
             className="rounded bg-indigo-700 px-3 py-1 text-white disabled:opacity-50"
-            onClick={/** Accepts the selected glyph. @returns Nothing. */ () => close(selected)}
+            onClick={accept}
           >
             {label("character-ok", "OK")}
           </button>

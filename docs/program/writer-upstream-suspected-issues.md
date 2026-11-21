@@ -5654,3 +5654,12 @@ applies its authored properties without that collection change.
   Symbols-B and Supplemental Mathematical Operators.
 - Writer preserves both ranges and their shared display string. Selecting a
   row still navigates to its own range.
+
+### WRITER-708 — The enclosure picker records OK and Return differently
+
+- Upstream `svx/source/dialog/cuicharmap.cxx` adds a recent character in
+  `InsertClickHdl` when the picker has no Writer frame. Pressing Return on the
+  character grid also accepts the enclosure, but `ReturnKeypressOnCharHdl`
+  bypasses that recent-list update.
+- Writer preserves both acceptance paths and the resulting difference in
+  recent characters.
