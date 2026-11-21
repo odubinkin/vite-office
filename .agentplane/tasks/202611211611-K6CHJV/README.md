@@ -1,10 +1,11 @@
 ---
 id: "202611211611-K6CHJV"
 title: "Configure Graphify as the default repository context"
-status: "DOING"
+result_summary: "Graphify 0.9.114 is installed locally and configured as the default code context in AGENTS.md."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 10
+revision: 11
 origin:
   system: "manual"
 depends_on: []
@@ -45,11 +46,16 @@ quality_review:
     - "ap doctor"
   findings:
     - "Both Writer and Calc queries resolved exact class definitions. Exclusion rules, Graphify dependency consistency, AgentPlane routing, formatting, and diff checks passed."
-commit: null
+commit:
+  hash: "0164a711e6ef663f2a5b9e1c92388d6058cd2448"
+  message: "🧩 K6CHJV docs: make Graphify the default repository context"
 comments:
   -
     author: "CODER"
     body: "Start: continue direct-mode task in current checkout."
+  -
+    author: "CODER"
+    body: "Verified: Graphify builds a local code graph and resolves the Writer and Calc symbols to their exact source lines. Repository policy and ignore checks pass."
 events:
   -
     type: "status"
@@ -76,8 +82,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "verified-202611211611-K6CHJV"
+  -
+    type: "status"
+    at: "2026-11-21T16:22:11.799Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: Graphify builds a local code graph and resolves the Writer and Calc symbols to their exact source lines. Repository policy and ignore checks pass."
 doc_version: 3
-doc_updated_at: "2026-11-21T16:21:52.228Z"
+doc_updated_at: "2026-11-21T16:22:11.800Z"
 doc_updated_by: "CODER"
 description: "Install Graphify in a repository-local environment, build a local code graph, and route coding agents to it for code navigation."
 sections:
