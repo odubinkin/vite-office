@@ -1,0 +1,26 @@
+{
+  "schema_version": 1,
+  "task_id": "202611211643-Y73ES8",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-11-21T16:48:34.537Z",
+  "verdict": "pass",
+  "summary": "The verified Graphify integration is active in both user-approved checkouts, and both remote refs equal their local branch tips.",
+  "evaluated_sha": "df692053d260aad5cf3244f639082612ab0298f7",
+  "blueprint_digest": "573d6ecbe93c6bdd7f84bcb736d629ca9c6aaac679335614346436935b448463",
+  "findings": [
+    "Real indexed Writer and Calc symbol queries returned exact source lines. The graphs have different file identities and matched their individual roots. Existing Calc output was preserved and excluded."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202611211643-Y73ES8/README.md",
+    "git ls-remote origin refs/heads/writer refs/heads/calc",
+    "node .agentplane/policy/check-routing.mjs",
+    "ap doctor",
+    "scripts/graphify-context.sh"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": [
+    "The sibling checkout SSH authentication failed and HTTPS was used for this verification. Existing pre-push hook is not executable. Graphify reported partial parsing for eight existing files."
+  ]
+}
