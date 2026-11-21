@@ -8,6 +8,7 @@ import { ScViewUtil } from "../../source/ui/view/viewutil";
 import * as pointerInput from "./calc-pointer-selection";
 import type { CalcPointerKind } from "./calc-pointer-selection";
 import * as referenceInput from "./calc-reference-input";
+import { GoToAddress } from "./calc-name-box";
 import * as cellInput from "./calc-cell-input";
 import { ScModule } from "../../inc/scmod";
 import { ScRefType } from "../../source/ui/inc/viewdata";
@@ -42,7 +43,7 @@ import { ScInputHandler } from "../../source/ui/inc/inputhdl";
 import { ScDocShell } from "../../source/ui/docshell/docsh";
 import { ScViewData } from "../../source/ui/inc/viewdata";
 import { ScRangeList } from "../../inc/rangelst";
-import { ScAddress, ScRange, ScRefFlags } from "../../inc/address";
+import { ScAddress, ScRange } from "../../inc/address";
 import { ScUndoSetCell } from "../../source/ui/inc/undocell";
 import { SfxUndoAction, SfxListUndoAction } from "../../../svl/source/undo/undo";
 import { cellInputText } from "../editor/cell-input";
@@ -771,25 +772,9 @@ export class CalcViewController {
     this.addressText = value;
     this.Changed();
   }
-  /** Parses the actual core local-A1 address convention. @returns Whether selected. */
+  /** Dispatches a name-box address, name or new definition. @returns Whether accepted. */
   GoToAddress(): boolean {
-    try {
-      const pos = this.Position(),
-        value = unicode(this.addressText);
-      try {
-        if (
-          !(pos.Parse(value, this.shell.GetDocument(), ScAddress.detailsOOOa1) & ScRefFlags.VALID)
-        )
-          throw new Error("Invalid cell address.");
-      } finally {
-        value.dispose();
-      }
-      return this.Select(pos.Col(), pos.Row());
-    } catch (error) {
-      this.error = (error as Error).message;
-      this.Changed();
-      return false;
-    }
+    return GoToAddress.call(this);
   }
   /** Source ScTabControl context admission and SwitchToPageId policy:already-selected keeps canonical active sheet/group;unselected selects only its target. @param tab - Real clicked/focused sheet. @returns Whether popup may open. */
   PrepareSheetContextMenu(tab?: number): boolean {

@@ -7680,3 +7680,13 @@ quotation marks untouched, so literal input containing a quotation mark can
 change the resulting formula text. Calc preserves that construction.
 
 - [Original quick conditional-format accept handler](../../vendor/libreoffice-reference/sc/source/ui/condformat/condformateasydlg.cxx)
+
+### CALC-807 — A named expression can acquire a range classification from one reference token
+
+Manual name admission assigns the absolute position or area flag from the
+first reference token. The expression can include other tokens, such as an
+arithmetic operator or another reference. Calc preserves first-reference
+classification for manual entry and checks the actual token array when
+resolving a navigable range.
+
+- [Original ScRangeData::CompileRangeData](../../vendor/libreoffice-reference/sc/source/core/tool/rangenam.cxx)

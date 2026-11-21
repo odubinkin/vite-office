@@ -2,6 +2,7 @@
 import type { Ref } from "react";
 import type { ScRange } from "../../inc/address";
 import type { ScPrintReferenceInput } from "./ScPrintAreasDlg";
+import { ScNameDefDlg } from "./namedlg/ScNameDefDlg";
 import { ScCondFormatDlg } from "./condformat/ScCondFormatDlg";
 import { ScCondFormatManagerDlg } from "./condformat/ScCondFormatManagerDlg";
 import type { CalcSheetWorkflows } from "../workflows/calc-sheet-workflows";
@@ -20,6 +21,7 @@ interface CalcSheetDialogsProps {
   readonly pageStyleDialog: ReturnType<CalcSheetWorkflows["pageStyleDialogs"]["GetSnapshot"]>;
   readonly condEditor: ReturnType<CalcSheetWorkflows["conditionals"]["editors"]["GetSnapshot"]>;
   readonly condManager: ReturnType<CalcSheetWorkflows["conditionals"]["managers"]["GetSnapshot"]>;
+  readonly nameDialog: ReturnType<CalcSheetWorkflows["nameDialogs"]["GetSnapshot"]>;
   readonly referenceInput: Ref<ScPrintReferenceInput>;
   readonly onReference: (owner: object, range: ScRange | undefined) => void;
   readonly sheetDialog: ReturnType<CalcSheetWorkflows["dialogs"]["GetSnapshot"]>;
@@ -35,11 +37,22 @@ export function CalcSheetDialogs({
   sheetDialog,
   condEditor,
   condManager,
+  nameDialog,
   referenceInput,
   onReference,
 }: CalcSheetDialogsProps): React.JSX.Element {
   return (
     <>
+      {nameDialog && (
+        <ScNameDefDlg
+          key={nameDialog.id}
+          model={nameDialog.request}
+          referenceInput={referenceInput}
+          onReference={(range) => onReference(nameDialog, range)}
+          onCancel={() => sheetWorkflows.nameDialogs.Cancel(nameDialog.id)}
+          onAdd={(data) => sheetWorkflows.AddName(nameDialog.id, data)}
+        />
+      )}
       {condManager && (
         <ScCondFormatManagerDlg
           key={condManager.id}

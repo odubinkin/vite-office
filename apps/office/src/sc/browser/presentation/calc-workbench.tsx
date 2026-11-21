@@ -75,7 +75,8 @@ export function CalcWorkbench({
   const printDialog = useCalcDialog(sheetWorkflows.printDialogs);
   const condEditor = useCalcDialog(sheetWorkflows.conditionals.editors);
   const condManager = useCalcDialog(sheetWorkflows.conditionals.managers);
-  const referenceDialog = printDialog ?? condEditor;
+  const nameDialog = useCalcDialog(sheetWorkflows.nameDialogs);
+  const referenceDialog = printDialog ?? condEditor ?? nameDialog;
   const printInput = useRef<ScPrintReferenceInput>(null);
   const [referenceSelection, setReferenceSelection] = useState<{
     owner: object;
@@ -954,6 +955,7 @@ export function CalcWorkbench({
           headerFooterDialog,
           condEditor,
           condManager,
+          nameDialog,
         }}
         referenceInput={printInput}
         onReference={(owner, range) => setReferenceSelection({ owner, range })}

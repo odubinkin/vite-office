@@ -1,8 +1,10 @@
 /** @fileoverview Native Calc named formula data and indexed name collections. */
+import { FormulaError } from "../../../../formula/inc/errorcodes";
+import { StackVar } from "../../../../formula/inc/token.enum";
 import { FormulaGrammar, type Grammar } from "../../../../formula/inc/grammar";
 import { unicode, text } from "../../../../i18nlangtag/source/isolang/isolang.tables";
 import { OUString } from "../../../../sal/inc/rtl/ustring";
-import { ScAddress } from "../../../inc/address";
+import { ScAddress, ScRange, ScRefFlags } from "../../../inc/address";
 import type { ScDocument } from "../../../inc/document";
 import { ScTokenArray } from "../../../inc/tokenarray";
 import { ScCompiler } from "./compiler";
@@ -14,6 +16,8 @@ export enum RangeDataType {
   PrintArea = 4,
   ColHeader = 8,
   RowHeader = 16,
+  AbsArea = 32,
+  AbsPos = 128,
   Hidden = 256,
 }
 
@@ -21,6 +25,7 @@ export enum RangeDataType {
 export class ScRangeData {
   private code: ScTokenArray;
   private index = 0;
+  private flags: RangeDataType;
   readonly pos: ScAddress;
 
   /** Starts an empty native code owner, before the filter's second pass. @param document - Destination. @param name - Source spelling. @param position - Reference origin. @param type - Name flags. @returns Name data. */
@@ -28,20 +33,70 @@ export class ScRangeData {
     private readonly document: ScDocument,
     readonly name: string,
     position: ScAddress,
-    readonly type = RangeDataType.Name,
+    type = RangeDataType.Name,
   ) {
+    this.flags = type;
     this.pos = new ScAddress(position);
     this.code = new ScTokenArray(document);
   }
 
-  /** Compiles in the actual document after names and sheet identities exist. @param symbol - Formula source. @param grammar - Original grammar. @returns Nothing. */
-  CompileRangeData(symbol: string, grammar: Grammar): void {
+  /** Returns the native name classification flags. @returns Flags. */
+  get type(): RangeDataType {
+    return this.flags;
+  }
+
+  /** Compiles in the actual document after names and sheet identities exist. @param symbol - Formula source. @param grammar - Original grammar. @param manual - Compile token syntax for manual entry. @returns Nothing. */
+  CompileRangeData(symbol: string, grammar: Grammar, manual = false): void {
     const value = unicode(symbol);
     try {
       const code = new ScCompiler(this.document, this.pos, grammar).CompileString(value);
       code.SetFromRangeName(true);
+      if (manual && code.GetCodeError() === FormulaError.NONE) {
+        const first = code.GetArray()?.find((token) => {
+          const type = token.GetType();
+          return type === StackVar.svSingleRef || type === StackVar.svDoubleRef;
+        });
+        if (first)
+          this.flags |=
+            first.GetType() === StackVar.svSingleRef ? RangeDataType.AbsPos : RangeDataType.AbsArea;
+        new ScCompiler(this.document, this.pos, code, grammar).CompileTokenArray();
+        code.DelRPN();
+      }
       this.code.Clear();
       this.code = code;
+    } finally {
+      value.dispose();
+    }
+  }
+
+  /** Copies the indexed definition and native token array. @returns Independent name data. */
+  Clone(): ScRangeData {
+    const result = new ScRangeData(this.document, this.name, this.pos, this.type);
+    result.code = this.code.Clone();
+    result.index = this.index;
+    return result;
+  }
+
+  /** Checks a source name against identifier and reference syntax. @param name - Proposed spelling. @param document - Workbook. @returns Name validation result. */
+  static IsNameValid(name: string, document: ScDocument): "valid" | "syntax" | "reference" {
+    if (!/^[\p{L}_][\p{L}\p{N}_?]*$/u.test(name)) return "syntax";
+    const value = unicode(name);
+    try {
+      // Lotus uses A1 row and column syntax for the unqualified identifiers admitted above.
+      const conventions = FormulaGrammar.AddressConvention;
+      for (
+        let convention = conventions.CONV_OOO;
+        convention <= conventions.CONV_XL_OOX;
+        convention++
+      ) {
+        const details = new ScAddress.Details(convention, 0, 0);
+        if (
+          new ScRange().Parse(value, document, details) !== ScRefFlags.ZERO ||
+          new ScAddress().Parse(value, document, details) !== ScRefFlags.ZERO
+        )
+          return "reference";
+      }
+      return "valid";
     } finally {
       value.dispose();
     }
@@ -98,11 +153,16 @@ export class ScRangeName {
   }
 
   /** Inserts one definition at a free name and native token index. @param value - Actual definition. @returns Whether inserted. */
-  insert(value: ScRangeData): boolean {
+  insert(value: ScRangeData, reuseFreeIndex = true): boolean {
     const name = value.GetUpperName();
     if (!name || this.data.has(name)) return false;
     while (this.indexToData.has(this.nextIndex)) ++this.nextIndex;
-    const index = value.GetIndex() || this.nextIndex;
+    let index = value.GetIndex();
+    if (!index) {
+      index = this.nextIndex;
+      if (!reuseFreeIndex)
+        for (const used of this.indexToData.keys()) index = Math.max(index, used + 1);
+    }
     if (index > 0xffff || this.indexToData.has(index)) return false;
     value.SetIndex(index);
     this.data.set(name, value);

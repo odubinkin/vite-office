@@ -13,13 +13,14 @@
     "upstreamPath": "sc/source/core/tool/rangenam.cxx",
     "upstreamSymbols": [
       "ScRangeName::insert",
-      "ScRangeData::CompileRangeData"
+      "ScRangeData::CompileRangeData",
+      "ScRangeData::IsNameValid"
     ],
     "preservedResponsibilities": [
-      "Native name storage owns indexed token arrays and compiles all names after their scope indexes exist."
+      "Native name storage owns indexed token arrays, validates identifier and reference syntax, and supports admission by scope and stable index."
     ],
     "omittedResponsibilities": [
-      "Editing dialogs, structural name updates, and advanced formula types remain open."
+      "Structural modification of existing names and advanced formula types remain open."
     ],
     "evidence": {
       "local": [
@@ -30,12 +31,20 @@
         {
           "path": "apps/office/src/sc/source/filter/excel/xename.test.ts",
           "marker": "preserves a forward name"
+        },
+        {
+          "path": "apps/office/src/sc/browser/presentation/calc-named-ranges.test.tsx",
+          "marker": "ports tdf86214"
         }
       ],
       "upstream": [
         {
           "path": "vendor/libreoffice-reference/sc/source/core/tool/rangenam.cxx",
           "marker": "ScRangeName::insert"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/source/core/tool/rangenam.cxx",
+          "marker": "ScRangeData::IsNameValid"
         }
       ]
     }

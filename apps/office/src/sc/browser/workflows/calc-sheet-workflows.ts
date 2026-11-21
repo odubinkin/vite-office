@@ -59,6 +59,11 @@ import { ScHFEditDlg, StandaloneHeaderFooterLayout } from "../../source/ui/paged
 import { ScStyleSaveData } from "../../source/ui/undo/undostyl";
 import type { ScStyleDlgRequest, ScStyleDlgResult } from "../../source/ui/styleui/styledlg";
 import { CalcConditionalWorkflows, conditionalFormatCommands } from "./calc-conditional-workflows";
+import {
+  FormatNameReference,
+  ScNameDefDlg,
+  type ScNameDef,
+} from "../../source/ui/namedlg/namedefdlg";
 import type { CalcViewController } from "../controller/calc-view-controller";
 /** Immutable native dialog initialization;names are copied only as dialog widget resources. */
 export interface CalcGoToSheetRequest {
@@ -97,6 +102,7 @@ export class CalcSheetWorkflows {
   readonly headerFooterDialogs = new SfxDialogController<ScHFEditDlg, SfxItemSet>();
   readonly pageStyleDialogs = new SfxDialogController<ScStyleDlgRequest, ScStyleDlgResult>();
   readonly printDialogs = new SfxDialogController<PrintAreasModel, SfxRequest | undefined>();
+  readonly nameDialogs = new SfxDialogController<ScNameDefDlg, boolean>();
   readonly conditionals: CalcConditionalWorkflows;
   private readonly shell: SfxShell;
   /** Connects a source command to the active document view. @param controller - Actual Calc controller. @returns Workflow. */
@@ -105,6 +111,14 @@ export class CalcSheetWorkflows {
     this.shell = createSfxShell(
       this,
       new SfxInterface<CalcSheetWorkflows>([
+        {
+          commandUrl: ".uno:AddName",
+          slotId: 26276,
+          label: "Define Name",
+          getState: (target: CalcSheetWorkflows) => ({ enabled: !target.HasSheetDialog() }),
+          execute: (target: CalcSheetWorkflows, request: SfxRequest) =>
+            !request.GetArgs().length && target.DefineName(),
+        },
         ...conditionalFormatCommands.map(
           /** Binds one original conditional-format Sfx command. @param slot - Source command. @returns Slot definition. */ ([
             commandUrl,
@@ -378,6 +392,30 @@ export class CalcSheetWorkflows {
       else this.controller.CompleteRowHeight(result.result);
     }
   }
+  /** Opens the source reference dialog. @returns Whether a name was added. */
+  private async DefineName(): Promise<boolean> {
+    if (this.HasSheetDialog() || !this.controller.Commit()) return false;
+    const result = await this.nameDialogs.Request(new ScNameDefDlg(this.controller.viewData));
+    return result.kind === "accepted";
+  }
+
+  /** Routes the Add button through source validation before closing its request. @param id - Active request. @param data - Form values. @returns Validation error. */
+  AddName(id: number, data: ScNameDef): string {
+    const dialog = this.nameDialogs.GetSnapshot();
+    if (!dialog || dialog.id !== id) return "The dialog has closed.";
+    const error = dialog.request.Add(this.controller.shell, data);
+    if (!error) {
+      const range = new ScRange();
+      this.controller.viewData.GetSimpleArea(range);
+      if (data.expression === FormatNameReference(dialog.request.document, range)) {
+        const scope = dialog.request.scopes.find(([tab]) => tab === data.scope)?.[1];
+        this.controller.ChangeAddress(data.scope < 0 ? data.name : `${data.name} (${scope})`);
+      }
+      this.nameDialogs.Complete(id, true);
+    }
+    return error;
+  }
+
   /** Checks whether the sheet workflows already own a modal. @returns Active modal state. */
   private HasSheetDialog(): boolean {
     return Boolean(
@@ -387,6 +425,7 @@ export class CalcSheetWorkflows {
       this.printDialogs.GetSnapshot() ||
       this.pageStyleDialogs.GetSnapshot() ||
       this.headerFooterDialogs.GetSnapshot() ||
+      this.nameDialogs.GetSnapshot() ||
       this.conditionals.IsOpen(),
     );
   }
@@ -737,6 +776,8 @@ export class CalcSheetWorkflows {
   /** Cancels the native async request before the session destroys its document. @returns Nothing. */
   Close(): void {
     this.conditionals.Close();
+    const name = this.nameDialogs.GetSnapshot();
+    if (name) this.nameDialogs.Cancel(name.id);
     const headerFooter = this.headerFooterDialogs.GetSnapshot();
     if (headerFooter) this.headerFooterDialogs.Cancel(headerFooter.id);
     const style = this.pageStyleDialogs.GetSnapshot();

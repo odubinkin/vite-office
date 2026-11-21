@@ -1,0 +1,36 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sc/source/ui/namedlg/namedefdlg.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "calc",
+    "subsystem": "editable-workspace",
+    "capabilityIds": [
+      "CAP-52bb76b0-ff2d-4a8c-86df-79f033c21d86"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/sc/source/ui/namedlg/namedefdlg.ts",
+        "apps/office/src/sc/browser/presentation/calc-named-ranges.test.tsx",
+        "vendor/libreoffice-reference/sc/source/ui/namedlg/namedefdlg.cxx"
+      ],
+      "justification": "Owns source scope and reference defaults, validation, and indexed name admission.",
+      "knownViolations": [],
+      "localSymbols": [
+        "ScNameDefDlg"
+      ],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": "sc/source/ui/namedlg/namedefdlg.cxx",
+      "upstreamSymbols": [
+        "ScNameDefDlg::AddPushed",
+        "ScNameDefDlg::IsNameValid"
+      ]
+    }
+  }
+}
