@@ -13,6 +13,7 @@ import { SfxViewFrame } from "../../../sfx2/source/view/viewfrm";
 import { createSfxShell } from "../../../sfx2/source/control/shell";
 import { BrowserSfxDispatcher } from "../../../framework/browser/dispatch/browser-dispatcher";
 import { CalcViewController } from "../controller/calc-view-controller";
+import { createCalcCalculationInterface } from "../../sdi/docsh";
 import { createCalcInterface } from "../../sdi/scalc";
 import { CalcSheetWorkflows } from "../workflows/calc-sheet-workflows";
 import { CalcFileWorkflows } from "../workflows/calc-file-workflows";
@@ -57,6 +58,7 @@ export function createCalcSession(
           ]?.shortcuts.map(normalizeCommandShortcut),
       ),
     ),
+    createSfxShell(controller, createCalcCalculationInterface()),
     fileWorkflows.GetShell(),
     sheetWorkflows.GetShell(),
     sheetWorkflows.options.GetShell(),

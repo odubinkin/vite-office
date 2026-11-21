@@ -2,7 +2,6 @@
 import type { Grammar } from "../../../../formula/inc/grammar";
 import type { ScCalcConfig } from "../../../inc/calcconfig";
 import { ScDocOptions, type ScTpCalcItem } from "../../../inc/docoptio";
-import { SetFormulaDirtyContext } from "../../../inc/refupdatecontext";
 import { ScInterpreter } from "../../core/tool/interpr4";
 import type { ScDocShell } from "../docshell/docsh";
 import { ScRange } from "../../../inc/address";
@@ -66,10 +65,7 @@ export class ScModule {
           old.IsFormulaWildcardsEnabled() !== next.IsFormulaWildcardsEnabled();
       doc.SetDocOptions(next);
     }
-    if (recalculate) {
-      doc.SetAllFormulasDirty(new SetFormulaDirtyContext());
-      doc.CalcFormulaTree();
-    }
+    if (recalculate) doc.CalcAll();
     shell.SetDocumentModified();
     return true;
   }

@@ -3,6 +3,7 @@ import { ScAddress, ScRange, ScRefFlags } from "../../../inc/address";
 import type { ScDocument } from "../../../inc/document";
 import type { ScTabViewShell } from "../inc/tabvwsh";
 import { ESelection } from "../../../../editeng/inc/ESelection";
+import { CalculateFormulaPreview } from "./inputhdl.preview";
 import { ScInputMode } from "../../../inc/global";
 /** Borrowed browser edit binding for the active single-line view;this is not a replacement EditEngine or EditView. */
 export interface ScInputReferenceInput {
@@ -17,6 +18,21 @@ export class ScInputHandler {
   private pActiveViewSh: ScTabViewShell | null = null;
   private aCursorPos = new ScAddress();
   private bSelIsRef = false;
+  private aManualTip = "";
+  /** Shows the selected or complete native formula edit as quick help. @param doc - Active workbook. @param position - Editing position. @param draft - Current edit. @param selection - UTF-16 endpoints. @returns Nothing. */
+  FormulaPreview(
+    doc: ScDocument,
+    position: ScAddress,
+    draft: string,
+    selection: readonly [number, number],
+  ): void {
+    const selected = draft.slice(Math.min(...selection), Math.max(...selection));
+    this.aManualTip = CalculateFormulaPreview(doc, position, selected || draft);
+  }
+  /** Borrows the current manual formula preview text. @returns Quick-help text. */
+  GetFormulaPreview(): string {
+    return this.aManualTip;
+  }
   /** Borrows the actual active browser edit view and native edit-origin position. @param input - Browser binding or absent view. @param cursor - Original editing cell. @param view - Actual active native view shell or absent view. @returns Nothing. */
   BindReferenceInput(
     input: ScInputReferenceInput | null,
@@ -26,6 +42,30 @@ export class ScInputHandler {
     this.pActiveViewSh = view;
     this.pReferenceInput = input;
     this.aCursorPos.assign(cursor);
+  }
+  /** Inserts accepted quick help into the edit, preserving the initial equals for a partial selection. @returns Whether manual quick help consumed Enter. */
+  PasteManualTip(): boolean {
+    const input = this.pReferenceInput;
+    let value = this.aManualTip;
+    if (!input || !value) return false;
+    this.aManualTip = "";
+    if (value.endsWith("...")) return true;
+    const selection = input.GetSelection();
+    selection.Adjust();
+    const length = input.GetText().length;
+    if (selection.start.nIndex === selection.end.nIndex) {
+      selection.start.nIndex = 0;
+      selection.end.nIndex = length;
+    }
+    if (selection.start.nIndex === 0) {
+      if (selection.end.nIndex === length) value = value.replace(/^"|"$/g, "");
+      else if (selection.end.nIndex > 0) selection.start.nIndex = 1;
+    }
+    input.SetSelection(selection);
+    input.InsertText(value, true);
+    this.SetModified();
+    this.UpdateInputState(input.GetText());
+    return true;
   }
   /** Original selection collapse preserves the end endpoint. @returns Nothing. */
   RemoveSelection(): void {
@@ -106,11 +146,13 @@ export class ScInputHandler {
   /** Explicit browser projection of native StartTable context and UpdateFormulaMode text;EditEngine/protection/highlight/reference services remain unported. @param text - Actual shared draft. @param existingContent - New input context,omitted on subsequent changes. @returns Nothing. */
   UpdateInputState(text: string, existingContent?: boolean): void {
     if (existingContent !== undefined) this.mbEditingExistingContent = existingContent;
+    this.aManualTip = "";
     this.bFormulaMode = this.StartsLikeFormula(text);
     this.bSelIsRef = false;
   }
   /** Explicit browser lifecycle projection of native accepted/cancelled/replaced input state resets. @returns Nothing. */
   ResetInputState(): void {
+    this.aManualTip = "";
     this.ResetModified();
     this.bSelIsRef = false;
     this.bFormulaMode = false;

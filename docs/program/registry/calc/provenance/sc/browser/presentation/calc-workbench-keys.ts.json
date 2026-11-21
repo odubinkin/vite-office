@@ -1,0 +1,29 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "browser-adaptation",
+    "localPath": "apps/office/src/sc/browser/presentation/calc-workbench-keys.ts",
+    "status": "local-only",
+    "rationale": "Projects native workspace accelerators through shared browser Sfx dispatch after editor, grid and modal key admission.",
+    "responsibilities": [
+      "Projects native workspace accelerators through shared browser Sfx dispatch after editor, grid and modal key admission."
+    ],
+    "stackDivergence": {
+      "kind": "browser-adaptation",
+      "rationale": "Projects native workspace accelerators through shared browser Sfx dispatch after editor, grid and modal key admission."
+    },
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sc/browser/presentation/calc-workbench-keys.ts",
+          "marker": "HandleWorkspaceShortcut"
+        },
+        {
+          "path": "apps/office/src/sc/browser/presentation/calc-recalculation.test.tsx",
+          "marker": "previews the selected formula fragment"
+        }
+      ]
+    }
+  }
+}

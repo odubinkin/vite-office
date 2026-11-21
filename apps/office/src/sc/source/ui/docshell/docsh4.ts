@@ -1,4 +1,7 @@
 /** @fileoverview Page style setup and application from the native Calc document shell. */
+import type { ScDocument } from "../../../inc/document";
+import { ScAddress } from "../../../inc/address";
+import { SfxHint, SfxHintId } from "../../../../svl/inc/hint";
 import { text, unicode } from "../../../../i18nlangtag/source/isolang/isolang.tables";
 import { OUString } from "../../../../sal/inc/rtl/ustring";
 import { DecodeMechanism } from "../../../../tools/inc/urlobj";
@@ -110,4 +113,36 @@ export function ApplyHeaderFooter(
   const name = text(style.GetName());
   PageStyleModified(shell, name, name);
   shell.SetDocumentModified();
+}
+
+/** Guard for original document-shell recalculation, shared by all views of the document. */
+const shellRecalculation = new WeakSet<ScDocument>();
+
+/** Runs ordinary dirty-tree calculation and forces the cursor formula from tdf97897. @param shell - Active document shell. @param cursor - Input handler position. @returns Nothing. */
+export function DoRecalc(shell: ScDocShell, cursor: ScAddress): void {
+  const doc = shell.GetDocument();
+  if (shellRecalculation.has(doc)) return;
+  shellRecalculation.add(doc);
+  try {
+    doc.GetFormulaCell(cursor)?.SetDirty();
+    doc.CalcFormulaTree();
+    shell.Broadcast(new SfxHint(SfxHintId.DataChanged));
+  } finally {
+    shellRecalculation.delete(doc);
+  }
+}
+
+/** Recalculates all formulas and invalidates existing sheet streams. @param shell - Active document shell. @returns Nothing. */
+export function DoHardRecalc(shell: ScDocShell): void {
+  const doc = shell.GetDocument();
+  if (shellRecalculation.has(doc)) return;
+  shellRecalculation.add(doc);
+  try {
+    doc.CalcAll();
+    shell.Broadcast(new SfxHint(SfxHintId.ScCalcAll));
+    shell.Broadcast(new SfxHint(SfxHintId.DataChanged));
+    for (let tab = 0; tab < doc.GetTableCount(); ++tab) doc.FetchTable(tab)?.SetStreamValid(false);
+  } finally {
+    shellRecalculation.delete(doc);
+  }
 }

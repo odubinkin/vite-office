@@ -1,0 +1,33 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sc/browser/presentation/calc-workbench-keys.ts",
+    "classification": "browser-adaptation",
+    "state": "foundation",
+    "suite": "calc",
+    "subsystem": "editable-workspace",
+    "capabilityIds": [
+      "CAP-52bb76b0-ff2d-4a8c-86df-79f033c21d86",
+      "CAP-ba65d1e2-0718-4c50-a1ab-31be6773a0b2"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "not-applicable",
+      "defaultStatus": "not-applicable",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/sc/browser/presentation/calc-workbench-keys.ts",
+        "apps/office/src/sc/browser/presentation/calc-recalculation.test.tsx"
+      ],
+      "justification": "Projects native workspace accelerators through shared browser Sfx dispatch after editor, grid and modal key admission.",
+      "knownViolations": [],
+      "localSymbols": [
+        "HandleWorkspaceShortcut"
+      ],
+      "sourceResponsibility": "browser-owned",
+      "upstreamFile": null,
+      "upstreamSymbols": []
+    }
+  }
+}

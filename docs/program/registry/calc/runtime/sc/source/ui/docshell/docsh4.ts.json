@@ -18,20 +18,25 @@
       "evidence": [
         "apps/office/src/sc/source/ui/docshell/docsh4.ts",
         "apps/office/src/sc/browser/presentation/calc-page-style.test.tsx",
-        "vendor/libreoffice-reference/sc/source/ui/docshell/docsh4.cxx"
+        "vendor/libreoffice-reference/sc/source/ui/docshell/docsh4.cxx",
+        "apps/office/src/sc/browser/presentation/calc-recalculation.test.tsx"
       ],
-      "justification": "Applies original Page Style slot output, rebinds renamed shared style usages, and invalidates their page geometry.",
+      "justification": "Applies original Page Style slot output, rebinds renamed shared style usages, and invalidates their page geometry. Routes ordinary and hard recalculation through the document and publishes source refresh hints.",
       "knownViolations": [],
       "localSymbols": [
         "CreatePageStyleRequest",
         "ApplyPageStyle",
-        "PageStyleModified"
+        "PageStyleModified",
+        "DoRecalc",
+        "DoHardRecalc"
       ],
       "sourceResponsibility": "unverified",
       "upstreamFile": "sc/source/ui/docshell/docsh4.cxx",
       "upstreamSymbols": [
         "ScDocShell::ExecutePageStyle",
-        "ScDocShell::PageStyleModified"
+        "ScDocShell::PageStyleModified",
+        "ScDocShell::DoRecalc",
+        "ScDocShell::DoHardRecalc"
       ]
     }
   }

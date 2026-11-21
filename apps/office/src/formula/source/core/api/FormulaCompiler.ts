@@ -61,6 +61,7 @@ const arithmetic = new Set<OpCode>([
   OpCode.ocCountIf,
   OpCode.ocNot,
   OpCode.ocIsEmpty,
+  OpCode.ocIsFormula,
   OpCode.ocGetMonth,
   OpCode.ocGetActDate,
   OpCode.ocExternal,
@@ -465,7 +466,8 @@ export class FormulaCompiler {
     if (this.mpArr.GetCodeError() !== FormulaError.NONE) return;
     const op = this.mpToken.GetOpCode();
     const logical = op === OpCode.ocTrue || op === OpCode.ocFalse;
-    const logicalResult = logical || op === OpCode.ocNot || op === OpCode.ocIsEmpty;
+    const logicalResult =
+      logical || op === OpCode.ocNot || op === OpCode.ocIsEmpty || op === OpCode.ocIsFormula;
     // Native lcl_GetRetFormat classifies nullary logical constants separately from numbers.
     if (op !== OpCode.ocOpen && this.mnNumFmt === SvNumFormatType.UNDEFINED)
       this.mnNumFmt = logicalResult
@@ -505,6 +507,7 @@ export class FormulaCompiler {
       op === OpCode.ocAnd ||
       op === OpCode.ocNot ||
       op === OpCode.ocIsEmpty ||
+      op === OpCode.ocIsFormula ||
       op === OpCode.ocGetMonth ||
       op === OpCode.ocOffset ||
       op === OpCode.ocCountIf ||

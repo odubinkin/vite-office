@@ -1,0 +1,49 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/sc/source/core/data/cellvalues.ts",
+    "status": "mapped",
+    "localSymbols": [
+      "TableValues"
+    ],
+    "upstreamPath": "sc/source/core/data/cellvalues.cxx",
+    "upstreamSymbols": [
+      "TableValues::swapNonEmpty",
+      "TableValues::getRange"
+    ],
+    "preservedResponsibilities": [
+      "Exchanges sparse formula and constant content with original allocated document cells for conversion and history."
+    ],
+    "omittedResponsibilities": [
+      "The current JS representation holds sparse managed positions and cell owners instead of native move-only multi-type vectors."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sc/source/core/data/cellvalues.ts",
+          "marker": "TableValues"
+        },
+        {
+          "path": "apps/office/src/sc/browser/presentation/calc-recalculation.test.tsx",
+          "marker": "ports tdf131326"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sc/source/core/data/cellvalues.cxx",
+          "marker": "TableValues::swapNonEmpty"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/source/core/data/cellvalues.cxx",
+          "marker": "TableValues::getRange"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/source/core/data/column4.cxx",
+          "marker": "ScColumn::ConvertFormulaToValue"
+        }
+      ]
+    }
+  }
+}

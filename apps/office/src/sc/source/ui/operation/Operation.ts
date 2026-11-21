@@ -7,6 +7,7 @@ export enum OperationType {
   DeleteCell = 5,
   SetFormula = 11,
   ChangeIndent = 26,
+  ConvertFormulaToValue = 35,
 }
 /** Original run dispatch for operations whose inherited canRunTheOperation returns true;no alternate-view service is simulated. */
 export abstract class Operation {

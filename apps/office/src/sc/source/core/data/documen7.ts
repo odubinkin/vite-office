@@ -251,24 +251,7 @@ export function TrackFormulas(this: ScDocument, id: SfxHintId): void {
   }
 }
 
-/** Calculates represented dirty scalar formulas from the real tree; re-scan after recursive reads remove other tree nodes. @param onlyForced - Native forced-only mode. @param this - Actual document instance. @returns Nothing. */
-export function CalcFormulaTree(this: ScDocument, onlyForced: boolean): void {
-  const oldAutoCalc = this["bAutoCalc"];
-  this["bAutoCalc"] = true;
-  this["bCalculatingFormulaTree"] = true;
-  try {
-    for (;;) {
-      let cell = this["pFormulaTree"];
-      while (cell && (!cell.GetDirty() || (onlyForced && !cell.GetCode().IsRecalcModeForced())))
-        cell = cell.GetNext();
-      if (!cell) break;
-      cell.Interpret();
-    }
-  } finally {
-    this["bAutoCalc"] = oldAutoCalc;
-    this["bCalculatingFormulaTree"] = false;
-  }
-}
+export { CalcAll, CalcFormulaTree } from "./documen7.calculation";
 
 /** Marks all represented formulas with the actual native default dirty context; deleted-tab restoration is unsupported. @param context - Dirty context. @param this - Actual document instance. @returns Nothing. */
 export function SetAllFormulasDirty(this: ScDocument, context: SetFormulaDirtyContext): void {

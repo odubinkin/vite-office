@@ -1,6 +1,7 @@
 /** @fileoverview Browser input/viewport binding for the current scalar Calc model. Actual cells,marks,formula evaluation and undo stacks remain with native-shaped owners. */
 import type { ScPaneCommand } from "../../source/ui/view/tabview";
 import { ScUndoModifyStyle } from "../../source/ui/undo/undostyl";
+import { UndoFormulaToValue } from "../../source/ui/undo/undoconvert";
 import { ScUndoOutline } from "../../source/ui/undo/undodat";
 import { ScUndoShowHideTab, ScUndoTabColor, ScUndoPrintRange } from "../../source/ui/undo/undotab";
 import { ScMarkData } from "../../inc/markdata";
@@ -750,6 +751,7 @@ export class CalcViewController {
     this.error = "";
     this.Changed();
   }
+  FormulaPreview = referenceInput.FormulaPreview;
   /** Cancels without changing cells/history. @returns Nothing. */
   Cancel(): void {
     this.inputHandler.SetMode(ScInputMode.SC_INPUT_NONE);
@@ -869,6 +871,7 @@ export class CalcViewController {
     while (cursorAction instanceof SfxListUndoAction)
       cursorAction = cursorAction.GetUndoAction(redo ? cursorAction.GetActionCount() - 1 : 0);
     if (cursorAction instanceof ScUndoOutline) cursorAction.RestoreView(this.viewShell, redo);
+    if (cursorAction instanceof UndoFormulaToValue) cursorAction.RestoreView(this.viewShell);
     if (
       cursorAction instanceof ScUndoWidthOrHeight ||
       cursorAction instanceof ScUndoShowHideTab ||
@@ -878,7 +881,8 @@ export class CalcViewController {
       cursorAction instanceof ScUndoRangeNames ||
       cursorAction instanceof ScUndoAddRangeData ||
       cursorAction instanceof ScUndoAllRangeNames ||
-      cursorAction instanceof ScUndoOutline
+      cursorAction instanceof ScUndoOutline ||
+      cursorAction instanceof UndoFormulaToValue
     ) {
       if (cursorAction instanceof ScUndoWidthOrHeight) {
         this.addressText = PositionText.call(this);

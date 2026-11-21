@@ -7728,3 +7728,23 @@ and automatic label lookup are absent from that comparison. Calc preserves
 the source ordering and recalculation conditions.
 
 - [Original ScModule::ModifyOptions](../../vendor/libreoffice-reference/sc/source/ui/app/scmod.cxx)
+
+### CALC-812 — Formula to Value can record an empty undo action
+
+The source operation records its TableValues snapshot and marks the document
+modified even when an editable selection contains no formulas. The core
+conversion leaves the snapshot empty in that case. Calc preserves the same
+command and undo behavior for an editable selection.
+
+- [Original conversion operation](../../vendor/libreoffice-reference/sc/source/ui/operation/ConvertFormulaToValueOperation.cxx)
+- [Original column conversion and empty-result check](../../vendor/libreoffice-reference/sc/source/core/data/column4.cxx)
+
+### CALC-813 — Formula preview reparses a standalone label
+
+The source quick-help evaluator encloses a standalone column or row label
+in parentheses and compiles it again so it acts as a range. The source
+marks the resulting text with an ellipsis, which prevents Enter from
+pasting the result into the draft. Calc preserves the reparse and the
+associated insertion restriction.
+
+- [Original formula preview helper](../../vendor/libreoffice-reference/sc/source/ui/app/inputhdl.cxx)

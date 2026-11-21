@@ -12,6 +12,7 @@ export type CalcInputAction = "sum" | "equals" | "cancel" | "accept";
 export interface ScInputWindowProps {
   readonly addressText: string;
   readonly inputText: string;
+  readonly preview?: string | undefined;
   readonly editing: boolean;
   readonly enabledActions: ReadonlySet<CalcInputAction>;
   readonly onAddressChange: (value: string) => void;
@@ -38,7 +39,7 @@ export function ScInputWindow(props: ScInputWindowProps): React.JSX.Element {
     <div
       role="group"
       aria-label="Formula bar"
-      className="flex min-h-9 shrink-0 items-center gap-1 border-b border-slate-200 bg-slate-50 px-2 py-0.5 text-sm text-slate-700"
+      className="relative flex min-h-9 shrink-0 items-center gap-1 border-b border-slate-200 bg-slate-50 px-2 py-0.5 text-sm text-slate-700"
     >
       <input
         aria-label="Name Box"
@@ -104,6 +105,14 @@ export function ScInputWindow(props: ScInputWindowProps): React.JSX.Element {
         onKeyDown={props.onInputKeyDown}
         className={`${officeTextInputClassName} flex-1`}
       />
+      {props.preview && (
+        <span
+          role="tooltip"
+          className="absolute left-48 top-full z-30 rounded border border-slate-300 bg-white px-2 py-1 shadow"
+        >
+          {props.preview}
+        </span>
+      )}
     </div>
   );
 }

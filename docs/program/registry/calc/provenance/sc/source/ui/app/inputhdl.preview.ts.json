@@ -1,0 +1,50 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/sc/source/ui/app/inputhdl.preview.ts",
+    "status": "mapped",
+    "localSymbols": [
+      "CalculateFormulaPreview"
+    ],
+    "upstreamPath": "sc/source/ui/app/inputhdl.cxx",
+    "upstreamSymbols": [
+      "lcl_Calculate",
+      "ScInputHandler::FormulaPreview"
+    ],
+    "preservedResponsibilities": [
+      "Evaluates the editing expression without committing the edit, using the original formula interpreter and number formatter."
+    ],
+    "omittedResponsibilities": [
+      "Desktop EditView and native QuickHelp window ownership belong to the browser input projection."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sc/source/ui/app/inputhdl.preview.ts",
+          "marker": "CalculateFormulaPreview"
+        },
+        {
+          "path": "apps/office/src/sc/browser/presentation/calc-recalculation.test.tsx",
+          "marker": "previews the selected formula fragment"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sc/source/ui/app/inputhdl.cxx",
+          "marker": "lcl_Calculate"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/source/ui/app/inputhdl.cxx",
+          "marker": "ScInputHandler::FormulaPreview"
+        }
+      ]
+    },
+    "filenameDivergence": {
+      "localPath": "apps/office/src/sc/source/ui/app/inputhdl.preview.ts",
+      "stackNecessity": "responsibility-split",
+      "rationale": "Keeps the isolated calculation helper separate from the input-mode and edit-view owner."
+    }
+  }
+}

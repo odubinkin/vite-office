@@ -500,6 +500,7 @@ const operators = new Set<OpCode>([
   OpCode.ocCountIf,
   OpCode.ocNot,
   OpCode.ocIsEmpty,
+  OpCode.ocIsFormula,
   OpCode.ocGetMonth,
   OpCode.ocGetActDate,
   OpCode.ocRow,

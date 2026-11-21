@@ -39,6 +39,7 @@ import { OfficeWorkspaceHeader } from "../../../framework/browser/presentation/O
 import { calcStandardBarItems } from "../../uiconfig/scalc/toolbar/standardbar";
 import type { CalcFileWorkflows } from "../workflows/calc-file-workflows";
 import { CalcSheetDialogs } from "./CalcSheetDialogs";
+import { HandleWorkspaceShortcut } from "./calc-workbench-keys";
 import { useCalcDialog } from "./use-calc-dialog";
 import { ScPrintAreasDlg, type ScPrintReferenceInput } from "./ScPrintAreasDlg";
 import type { CalcSheetWorkflows } from "../workflows/calc-sheet-workflows";
@@ -426,6 +427,15 @@ export function CalcWorkbench({
       controller.Cancel();
       focusGrid();
     }
+    if (
+      event.key === "Enter" &&
+      !(event.shiftKey || event.ctrlKey || event.metaKey || event.altKey) &&
+      controller.inputHandler.PasteManualTip()
+    ) {
+      event.preventDefault();
+      controller.SyncSheetView();
+      return;
+    }
     if (event.key === "Enter" || event.key === "Tab") {
       event.preventDefault();
       if (controller.Commit()) {
@@ -535,42 +545,7 @@ export function CalcWorkbench({
   }
   return (
     <section
-      onKeyDown={
-        /** Routes file and sheet accelerators through active Sfx slots from any source input. @param event - Platform key. @returns Nothing. */ (
-          event,
-        ) => {
-          if (event.defaultPrevented || event.nativeEvent.isComposing || modal || referenceOpen)
-            return;
-          if (
-            event.key === "F2" &&
-            !event.ctrlKey &&
-            !event.metaKey &&
-            !event.altKey &&
-            !event.shiftKey
-          ) {
-            event.preventDefault();
-            frame.GetDispatcher().Execute(".uno:SetInputMode");
-            return;
-          }
-          // The native grid handler owns platform-specific row/column Space selection.
-          if (!(event.ctrlKey || event.metaKey) || event.code === "Space" || event.key === " ")
-            return;
-          const shortcut = getBrowserShortcut(event);
-          const command =
-            shortcut === undefined
-              ? undefined
-              : frame.GetDispatcher().FindCommandByShortcut(shortcut);
-          if (command) {
-            if (
-              command.command.id === ".uno:SelectAll" &&
-              (event.target as HTMLElement).closest('input, textarea, [contenteditable="true"]')
-            )
-              return;
-            event.preventDefault();
-            source.Execute(command.command.id);
-          }
-        }
-      }
+      onKeyDown={(event) => HandleWorkspaceShortcut(event, frame, source, modal || referenceOpen)}
       ref={root}
       aria-label="Calc workspace"
       className="flex h-dvh w-full min-h-0 min-w-0 flex-col overflow-hidden bg-slate-100"
@@ -626,6 +601,11 @@ export function CalcWorkbench({
           <ScInputWindow
             addressText={controller.addressText}
             inputText={controller.Input()}
+            preview={
+              inputMode === ScInputMode.SC_INPUT_TOP
+                ? controller.inputHandler.GetFormulaPreview()
+                : undefined
+            }
             editing={controller.mode !== ScInputMode.SC_INPUT_NONE}
             enabledActions={
               new Set<CalcInputAction>(
@@ -748,6 +728,11 @@ export function CalcWorkbench({
           viewport={controller.viewport}
           inputMode={controller.mode}
           inputText={controller.inputText}
+          preview={
+            inputMode !== ScInputMode.SC_INPUT_TOP
+              ? controller.inputHandler.GetFormulaPreview()
+              : undefined
+          }
           getCell={
             /** Reads actual formatted scalar/formula results. @param pos - Cell. @returns Presentation. */ (
               pos,

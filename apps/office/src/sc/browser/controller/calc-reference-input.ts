@@ -90,3 +90,14 @@ export function NavigateReference(
   if (view.CanSelectCell(col, row))
     this.PointReference(new ScAddress(col, row, data.GetTabNumber()), false, false);
 }
+
+/** Shows the original F9 formula preview without changing the selection or accepting the edit. @param this - Actual controller. @returns Nothing. */
+export function FormulaPreview(this: CalcViewController): void {
+  this.inputHandler.FormulaPreview(
+    this.shell.GetDocument(),
+    this.Position(),
+    this.inputText,
+    this.inputSelection,
+  );
+  this["Changed"]();
+}

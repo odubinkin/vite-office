@@ -75,6 +75,7 @@ export interface ScGridWindowProps {
   readonly viewport: CalcGridViewport;
   readonly inputMode: ScInputMode;
   readonly inputText: string;
+  readonly preview?: string | undefined;
   readonly getCell: (position: ScAddress) => CalcCellPresentation;
   readonly onSelect: (position: ScAddress, event: PointerEvent<HTMLDivElement>) => void;
   readonly onHeader: (
@@ -837,6 +838,15 @@ export function ScGridWindow(props: ScGridWindowProps): React.JSX.Element {
           className="pointer-events-none absolute inset-x-0 z-[10] bg-slate-400"
           style={{ top: headerHeight + viewport.splitRows.pixels, height: CALC_SPLIT_HANDLE_SIZE }}
         />
+      )}
+      {editing && editorStyle && props.preview && (
+        <span
+          role="tooltip"
+          className="pointer-events-none absolute z-30 translate-y-full rounded border border-slate-300 bg-white px-2 py-1 shadow"
+          style={{ left: editorStyle.left, top: editorStyle.top }}
+        >
+          {props.preview}
+        </span>
       )}
       {editing && (
         <input

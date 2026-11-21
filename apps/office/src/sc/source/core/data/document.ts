@@ -92,12 +92,10 @@ export class ScDocument {
   }
   private readonly xColNameRanges = new ScRangePairList();
   private readonly xRowNameRanges = new ScRangePairList();
-
   /** Borrows the native column label pairs. @returns Document list. */
   GetColNameRanges(): ScRangePairList {
     return this.xColNameRanges;
   }
-
   /** Borrows the native row label pairs. @returns Document list. */
   GetRowNameRanges(): ScRangePairList {
     return this.xRowNameRanges;
@@ -109,7 +107,6 @@ export class ScDocument {
   }
   /** Original exact block lookup with local scope precedence. */
   GetRangeAtBlock = documen3.GetRangeAtBlock;
-
   declare private pUnoBroadcaster: SfxBroadcaster | null;
   AddUnoObject = documen3.AddUnoObject;
   RemoveUnoObject = documen3.RemoveUnoObject;
@@ -829,6 +826,10 @@ export class ScDocument {
   /** Calculates represented dirty scalar formulas from the real tree; re-scan after recursive reads remove other tree nodes. @param onlyForced - Native forced-only mode. @returns Nothing. */
   CalcFormulaTree(onlyForced = false): void {
     return documen7.CalcFormulaTree.call(this, onlyForced);
+  }
+  /** Recalculates every formula in the document. @returns Nothing. */
+  CalcAll(): void {
+    documen7.CalcAll.call(this);
   }
   /** Marks all represented formulas with the actual native default dirty context; deleted-tab restoration is unsupported. @param context - Dirty context. @returns Nothing. */
   SetAllFormulasDirty(context: SetFormulaDirtyContext): void {
