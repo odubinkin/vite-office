@@ -1,10 +1,11 @@
 /** @fileoverview Browser binding of the native SvxCharTwoLinesPage in Writer Search Format. */
-import { useImperativeHandle, useLayoutEffect, useRef, useState, type Ref } from "react";
+import { useImperativeHandle, useLayoutEffect, useMemo, useRef, useState, type Ref } from "react";
 import { SvxTwoLinesItem } from "../../../editeng/inc/twolinesitem";
 import { FontCharMap } from "../../../vcl/source/font/fontcharmap";
 import { FontList } from "../../../svtools/browser/font-list";
 import { readBrowserFontCharMap } from "../../../vcl/browser/font-character-map";
 import { RES_CHRATR_TWO_LINES } from "../../inc/hintids";
+import { WriterSearchCharacterMap } from "./writer-search-character-map";
 import { WriterDialogHeader } from "./WriterDialogHeader";
 
 /** Resolves labels from the active search dialog locale. */
@@ -31,6 +32,18 @@ function BracketCharacterMap({
   const [map, setMap] = useState(fallbackMap);
   const [hex, setHex] = useState("");
   const [offset, setOffset] = useState(0);
+  const [resources, setResources] = useState<WriterSearchCharacterMap>();
+  const [query, setQuery] = useState("");
+  const subsets = useMemo(
+    /** Resolves the subsets with at least one glyph in the active font. @returns Available subsets. */
+    () => resources?.GetSubsets(map) ?? [],
+    [resources, map],
+  );
+  const matches = useMemo(
+    /** Searches the actual character map only when search is active. @returns Matching codes. */
+    () => (query === "" ? undefined : (resources?.Search(map, query) ?? [])),
+    [query, resources, map],
+  );
   const code = hex === "" ? undefined : Number(`0x${hex}`);
   const selected = code !== undefined && map.HasChar(code) ? code : undefined;
 
@@ -44,6 +57,17 @@ function BracketCharacterMap({
       }
       input.current?.focus();
       let active = true;
+      void WriterSearchCharacterMap.Load()
+        .then(
+          /** Enables the native name search and subset controls. @param data - Pinned resources. @returns Nothing. */
+          (data) => {
+            if (active) setResources(data);
+          },
+        )
+        .catch(
+          /** Keeps numeric selection available if the character resources cannot be loaded. @returns Nothing. */
+          () => undefined,
+        );
       void (
         /** Resolves the fixed font character map. @returns Nothing. */ async function loadFace() {
           const list = await FontList.FromBrowser();
@@ -66,12 +90,17 @@ function BracketCharacterMap({
   /** Selects a numeric character and scrolls its glyph page into view. @param value - Entered codepoint. @returns Nothing. */
   function choose(value: number): void {
     setHex(value.toString(16).toUpperCase());
-    const index = map.GetIndexFromChar(value);
+    const index = matches?.indexOf(value) ?? map.GetIndexFromChar(value);
     if (index >= 0) setOffset(Math.floor(index / pageSize) * pageSize);
   }
 
-  const count = map.GetCharCount();
+  const count = matches?.length ?? map.GetCharCount();
   const start = Math.min(offset, Math.max(0, Math.floor((count - 1) / pageSize) * pageSize));
+  const displayed = selected ?? map.GetCharFromIndex(start);
+  const subset = subsets.find(
+    /** Finds the subset highlighted by the current character. @param row - Native subset. @returns Membership. */
+    ([first, last]) => first <= displayed && displayed <= last,
+  );
   const caption = label("special-characters", "Special Characters");
   return (
     <dialog
@@ -100,12 +129,54 @@ function BracketCharacterMap({
           {label("character-font", "Font")}
           <input disabled value={family} className="rounded border border-slate-300 p-1" />
         </label>
+        <label className="grid gap-1 text-sm">
+          {label("character-subset", "Subset")}
+          <select
+            disabled={matches !== undefined || subsets.length === 0}
+            className="rounded border border-slate-400 p-1"
+            value={subset?.[0] ?? ""}
+            onChange={
+              /** Jumps to the first supported codepoint in the chosen subset. @param event - Subset choice. @returns Nothing. */
+              (event) => {
+                if (event.currentTarget.value === "") return;
+                const first = Number(event.currentTarget.value);
+                choose(map.HasChar(first) ? first : map.GetNextChar(first));
+              }
+            }
+          >
+            <option value="" />
+            {subsets.map(
+              /** Presents an available native subset. @param row - Subset range and resource. @returns Option. */
+              ([first, , id, name]) => (
+                <option key={first} value={first}>
+                  {label(`character-subset.${id}`, name)}
+                </option>
+              ),
+            )}
+          </select>
+        </label>
+        <label className="grid gap-1 text-sm">
+          {label("character-search", "Search")}
+          <input
+            disabled={resources === undefined}
+            className="rounded border border-slate-400 p-1"
+            value={query}
+            onChange={
+              /** Switches to search results and clears the previous selection. @param event - Search entry. @returns Nothing. */
+              (event) => {
+                setQuery(event.currentTarget.value);
+                setHex("");
+                setOffset(0);
+              }
+            }
+          />
+        </label>
         <div className="grid grid-cols-8 gap-1" style={{ fontFamily: family }}>
           {Array.from(
             { length: Math.min(pageSize, count - start) },
             /** Presents one glyph from the current character range. @param unused - Empty array slot. @param index - Page index. @returns Glyph button. */
             (_unused, index) => {
-              const value = map.GetCharFromIndex(start + index);
+              const value = matches?.[start + index] ?? map.GetCharFromIndex(start + index);
               return (
                 <button
                   type="button"
@@ -145,6 +216,7 @@ function BracketCharacterMap({
             {label("character-hex", "Hexadecimal")}
             <input
               ref={input}
+              readOnly={matches !== undefined}
               className="rounded border border-slate-400 p-1"
               maxLength={6}
               value={hex}
@@ -164,6 +236,7 @@ function BracketCharacterMap({
             <input
               className="rounded border border-slate-400 p-1"
               inputMode="numeric"
+              readOnly={matches !== undefined}
               value={code ?? ""}
               onChange={
                 /** Resolves the Unicode value from the native decimal field. @param event - Edited field. @returns Nothing. */
@@ -179,6 +252,12 @@ function BracketCharacterMap({
         </div>
         <output className="p-1 text-center text-2xl" style={{ fontFamily: family }}>
           {selected === undefined ? "" : String.fromCodePoint(selected)}
+        </output>
+        <output
+          aria-label={label("character-name", "Character Name")}
+          className="text-center text-sm"
+        >
+          {selected === undefined ? "" : resources?.GetName(selected)}
         </output>
         <div className="flex justify-end gap-2">
           <button

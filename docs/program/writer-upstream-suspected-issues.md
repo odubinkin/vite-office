@@ -5646,3 +5646,11 @@ applies its authored properties without that collection change.
   character or zero before the item is written.
 - Writer retains the same low 16 bits when committing the enclosure. The
   character picker still previews the selected Unicode codepoint.
+
+### WRITER-707 — Two mathematical Unicode subsets share one label
+
+- Upstream `svx/source/dialog/charmap.cxx`, in `SubsetMap::InitList`, uses
+  `RID_SUBSETSTR_MISC_MATH_SYMS_B` for both Miscellaneous Mathematical
+  Symbols-B and Supplemental Mathematical Operators.
+- Writer preserves both ranges and their shared display string. Selecting a
+  row still navigates to its own range.

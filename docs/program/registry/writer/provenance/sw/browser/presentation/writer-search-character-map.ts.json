@@ -1,0 +1,38 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "browser-adaptation",
+    "localPath": "apps/office/src/sw/browser/presentation/writer-search-character-map.ts",
+    "localSymbols": [
+      "WriterSearchCharacterMap"
+    ],
+    "status": "local-only",
+    "rationale": "Uses the pinned native ICU character names and LibreOffice subset ranges for the browser character map. Filters the fixed face by glyph coverage and native search text rules.",
+    "responsibilities": [
+      "Uses the pinned native ICU character names and LibreOffice subset ranges for the browser character map. Filters the fixed face by glyph coverage and native search text rules."
+    ],
+    "stackDivergence": {
+      "kind": "browser-adaptation",
+      "rationale": "Loads native character names and subsets from a generated browser data resource."
+    },
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sw/browser/presentation/writer-search-character-map.ts",
+          "marker": "WriterSearchCharacterMap"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/svx/source/dialog/charmap.cxx",
+          "marker": "SubsetMap::ApplyCharMap"
+        },
+        {
+          "path": "vendor/libreoffice-reference/svx/source/dialog/cuicharmap.cxx",
+          "marker": "SearchUpdateHdl"
+        }
+      ]
+    }
+  }
+}

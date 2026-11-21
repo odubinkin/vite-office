@@ -4,7 +4,7 @@ title: "Implement Writer search and replace core and browser UI"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 64
+revision: 65
 origin:
   system: "manual"
 depends_on:
@@ -196,6 +196,9 @@ comments:
   -
     author: "CODER"
     body: "Verified checkpoint: Search Format includes the source Asian Layout page after Position. Its double-line flag and both brackets travel as SvxTwoLinesItem in Find All, Replace All, undo, and Worker snapshots. The UI test ports the native reopen scenario and distinguishes equal text with different brackets, verifies Reset and picker cancellation, and applies a complete replacement. WRITER-706 records source truncation of supplementary selected codepoints. The fixed-font browser picker has a glyph grid and numeric entry; Unicode subset and name search and recent or favorite characters remain unimplemented. Production build, two Writer resource cases, scoped lint/format, dependency/source-tree/provenance/JSDoc/file-size checks, doctor and routing passed. Relevant Vitest suites passed 33 tests across four files. The parent remains open for native ICU regex, note search and residual UI parity. Pausing the goal is deferred until the approved task closes."
+  -
+    author: "CODER"
+    body: "Verified checkpoint: Writer's fixed-font enclosure picker now searches native ICU Unicode names and normalized U+ prefixes, lists only native LibreOffice Unicode subsets present in the face, and displays the chosen name. A deterministic generator uses pinned ICU's u_enumCharNames and LibreOffice's subset table and string resources. WRITER-707 records the original duplicated mathematical subset label and both rows remain available. The data loads on demand and the production resource is split from the main bundle. Tests cover algorithmic CJK and Hangul names, unnamed values, subset navigation, name filtering and prefixed code selection. The relevant Writer regression passed 34 cases across four files. Production build, two Writer resource tests, regenerated data comparison, scoped lint/format, dependency/source-tree/provenance/JSDoc/file-size checks, doctor and routing passed. Recent and favorite symbols remain pending, as do native browser regex and note search. The task remains open and the goal stays active until task closure."
 events:
   -
     type: "status"
@@ -464,8 +467,13 @@ events:
     at: "2026-11-21T10:27:43.653Z"
     author: "CODER"
     body: "Verified checkpoint: Search Format includes the source Asian Layout page after Position. Its double-line flag and both brackets travel as SvxTwoLinesItem in Find All, Replace All, undo, and Worker snapshots. The UI test ports the native reopen scenario and distinguishes equal text with different brackets, verifies Reset and picker cancellation, and applies a complete replacement. WRITER-706 records source truncation of supplementary selected codepoints. The fixed-font browser picker has a glyph grid and numeric entry; Unicode subset and name search and recent or favorite characters remain unimplemented. Production build, two Writer resource cases, scoped lint/format, dependency/source-tree/provenance/JSDoc/file-size checks, doctor and routing passed. Relevant Vitest suites passed 33 tests across four files. The parent remains open for native ICU regex, note search and residual UI parity. Pausing the goal is deferred until the approved task closes."
+  -
+    type: "comment"
+    at: "2026-11-21T10:35:27.180Z"
+    author: "CODER"
+    body: "Verified checkpoint: Writer's fixed-font enclosure picker now searches native ICU Unicode names and normalized U+ prefixes, lists only native LibreOffice Unicode subsets present in the face, and displays the chosen name. A deterministic generator uses pinned ICU's u_enumCharNames and LibreOffice's subset table and string resources. WRITER-707 records the original duplicated mathematical subset label and both rows remain available. The data loads on demand and the production resource is split from the main bundle. Tests cover algorithmic CJK and Hangul names, unnamed values, subset navigation, name filtering and prefixed code selection. The relevant Writer regression passed 34 cases across four files. Production build, two Writer resource tests, regenerated data comparison, scoped lint/format, dependency/source-tree/provenance/JSDoc/file-size checks, doctor and routing passed. Recent and favorite symbols remain pending, as do native browser regex and note search. The task remains open and the goal stays active until task closure."
 doc_version: 3
-doc_updated_at: "2026-11-21T10:27:43.653Z"
+doc_updated_at: "2026-11-21T10:35:27.180Z"
 doc_updated_by: "CODER"
 description: "Implement the approved coherent Writer search-and-replace feature from pinned LibreOffice sources: real shared search engine and options, native paragraph/cursor traversal and replacement/history contracts, view-owned search state and dispatch, Find toolbar and Find and Replace dialog with generated upstream command placement and shortcuts. Preserve source semantics and explicit unsupported boundaries; never substitute DOM text search or browser RegExp for ICU contracts. Work only on writer in vite-office-writer; local upstream reading approved, no network or merges. Keep active until approved scope is verified."
 sections:

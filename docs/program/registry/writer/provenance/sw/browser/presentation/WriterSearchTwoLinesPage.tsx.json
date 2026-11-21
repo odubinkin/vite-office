@@ -14,7 +14,7 @@
     ],
     "stackDivergence": {
       "kind": "browser-adaptation",
-      "rationale": "Uses browser controls for double lines, bracket selection and a fixed-font character map. Full character-map name search, Unicode subsets and recent or favorite characters remain outside this binding."
+      "rationale": "Uses browser controls for double lines, bracket selection and a fixed-font character map. Recent and favorite characters remain outside this binding."
     },
     "evidence": {
       "local": [

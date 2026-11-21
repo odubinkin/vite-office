@@ -1,5 +1,5 @@
 /** @fileoverview Upstream Asian Layout reopening QA against Writer's browser search and replacement dialog. */
-import { act, fireEvent, render, screen, within } from "@testing-library/react";
+import { act, fireEvent, render, screen, waitFor, within } from "@testing-library/react";
 import { expect, it } from "vitest";
 import { SvxTwoLinesItem } from "../../../editeng/inc/twolinesitem";
 import { SfxItemSet } from "../../../svl/source/items/itemset";
@@ -7,6 +7,7 @@ import { RES_CHRATR_TWO_LINES } from "../../inc/hintids";
 import { SwPaM, SwPosition } from "../../source/core/crsr/pam";
 import { SwAttrIter } from "../../source/core/text/itratr";
 import { createWriterDocumentSession } from "../composition/writer-module";
+import { WriterSearchCharacterMap } from "./writer-search-character-map";
 import { WriterWorkbench } from "./writer-view";
 
 it("reopens double-line criteria, matches both enclosures and replaces the complete item", /** Adapts the native Asian Layout QA and verifies both sides of Writer search. @returns Nothing. */ () => {
@@ -110,6 +111,53 @@ it("reopens double-line criteria, matches both enclosures and replaces the compl
         restored.GetAttrHandler().ReadItem(RES_CHRATR_TWO_LINES) as SvxTwoLinesItem
       ).GetStartBracket(),
     ).toBe(0xab);
+  } finally {
+    ui.unmount();
+    session.view.Close();
+  }
+});
+
+it("uses ICU character names and native font subsets in the enclosure picker", /** Exercises the generated resources with plain, algorithmic and absent names. @returns Nothing. */ async () => {
+  const data = await WriterSearchCharacterMap.Load();
+  expect(data.GetName(0x4e00)).toBe("CJK UNIFIED IDEOGRAPH-4E00");
+  expect(data.GetName(0xac00)).toBe("HANGUL SYLLABLE GA");
+  expect(data.GetName(0xe000)).toBe("");
+
+  const session = createWriterDocumentSession();
+  const ui = render(<WriterWorkbench isActive view={session.view} />);
+  try {
+    fireEvent.keyDown(window, { key: "h", ctrlKey: true });
+    const search = within(screen.getByRole("dialog", { name: "Find and Replace" }));
+    fireEvent.click(search.getByText("Other options"));
+    fireEvent.click(search.getByRole("button", { name: "Format…" }));
+    const format = within(screen.getByRole("dialog", { name: "Search" }));
+    fireEvent.click(format.getByRole("tab", { name: "Asian Layout" }));
+    fireEvent.click(format.getByRole("checkbox", { name: "Write in double lines" }));
+    const enclosure = format.getByRole("combobox", { name: "Initial character" });
+    fireEvent.change(enclosure, { target: { value: "-1" } });
+
+    const picker = within(screen.getByRole("dialog", { name: "Special Characters" }));
+    const subset = picker.getByRole("combobox", { name: "Subset" });
+    await waitFor(
+      /** Waits for the pinned subset list to load. @returns Nothing. */
+      () => expect(subset).toBeEnabled(),
+    );
+    expect(picker.getByRole("option", { name: "General punctuation" })).toBeInTheDocument();
+    fireEvent.change(subset, { target: { value: "8192" } });
+    expect(picker.getByRole("textbox", { name: "Hexadecimal" })).toHaveValue("2000");
+    const searchName = picker.getByRole("textbox", { name: "Search" });
+    fireEvent.change(searchName, {
+      target: { value: "left-pointing double angle quotation mark" },
+    });
+    expect(subset).toBeDisabled();
+    expect(picker.getByRole("textbox", { name: "Hexadecimal" })).toHaveAttribute("readonly");
+    fireEvent.click(picker.getByRole("button", { name: "U+00AB" }));
+    expect(picker.getByLabelText("Character Name")).toHaveTextContent(
+      "LEFT-POINTING DOUBLE ANGLE QUOTATION MARK",
+    );
+    fireEvent.change(searchName, { target: { value: " U+00BB " } });
+    fireEvent.doubleClick(picker.getByRole("button", { name: "U+00BB" }));
+    expect(enclosure).toHaveValue("187");
   } finally {
     ui.unmount();
     session.view.Close();
