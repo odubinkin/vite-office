@@ -1,10 +1,11 @@
 ---
 id: "202611212311-DWTX6F"
 title: "Connect Calc Text to Columns command and range import"
-status: "DOING"
+result_summary: "verified-202611212311-DWTX6F"
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 14
+revision: 16
 origin:
   system: "manual"
 depends_on:
@@ -24,9 +25,9 @@ plan_approval:
   note: null
 verification:
   state: "ok"
-  updated_at: "2026-11-21T23:37:43.344Z"
+  updated_at: "2026-11-21T23:41:01.351Z"
   updated_by: "CODER"
-  note: "Verified: native Calc Text to Columns menu, range, import confirmation and one-step history. All 166 scoped scenarios have passing evidence, including the original ODS fixture, and the rebuilt Chrome workflow passed."
+  note: "verified-202611212311-DWTX6F"
   attempts: 0
 quality_review:
   state: "pass"
@@ -47,11 +48,16 @@ quality_review:
     - "feb0f07a309f6d74fd9220e120e2dd7ae56b5df6"
   findings:
     - "The whole-column, selected range, prior date format and original ODS overwrite regressions passed. Chrome verified the same replacement and Undo path."
-commit: null
+commit:
+  hash: "9b8e597264b19bb0a4a7c548072b0e50afed488e"
+  message: "🧩 DWTX6F task: record verified Text to Columns"
 comments:
   -
     author: "CODER"
     body: "Start: connect the native Calc Text to Columns sheet range, dialog and import transaction."
+  -
+    author: "CODER"
+    body: "Verified: verified-202611212311-DWTX6F. Guided shortcut recorded verification and is closing the direct task with traceable commit metadata."
 events:
   -
     type: "status"
@@ -66,8 +72,21 @@ events:
     author: "CODER"
     state: "ok"
     note: "Verified: native Calc Text to Columns menu, range, import confirmation and one-step history. All 166 scoped scenarios have passing evidence, including the original ODS fixture, and the rebuilt Chrome workflow passed."
+  -
+    type: "verify"
+    at: "2026-11-21T23:41:01.351Z"
+    author: "CODER"
+    state: "ok"
+    note: "verified-202611212311-DWTX6F"
+  -
+    type: "status"
+    at: "2026-11-21T23:41:01.540Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: verified-202611212311-DWTX6F. Guided shortcut recorded verification and is closing the direct task with traceable commit metadata."
 doc_version: 3
-doc_updated_at: "2026-11-21T23:37:43.416Z"
+doc_updated_at: "2026-11-21T23:41:01.540Z"
 doc_updated_by: "CODER"
 description: "Connect the source text-to-columns command to the existing Calc CSV dialog, one-column range admission, formatted-text export, overwrite admission and native list Undo."
 sections:
@@ -123,6 +142,36 @@ sections:
     - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
     - risks: none
 
+    ### 2026-11-21T23:41:01.351Z — VERIFY — ok
+
+    By: CODER
+
+    Note: verified-202611212311-DWTX6F
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-21T23:37:43.416Z, excerpt_hash=sha256:d721219d4b08611b34bfbb02bc25fcf6007d15942bc3bcb7aa6a4d52d8654714
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202611212311-DWTX6F/blueprint/resolved-snapshot.json
+    - old_digest: 8943f06f4038526101db920f9a075bff4693732fa062f55ff9dd5550cf579f55
+    - current_digest: 8943f06f4038526101db920f9a075bff4693732fa062f55ff9dd5550cf579f55
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202611212311-DWTX6F
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task complete 202611212311-DWTX6F --result verified-202611212311-DWTX6F --commit 9b8e597264b19bb0a4a7c548072b0e50afed488e
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Revert the task commits to disable the source Text to Columns slot and restore the previous dialog bindings. Existing committed workbook changes remain under the native Undo history."
   Findings: |-
@@ -131,6 +180,10 @@ sections:
     The importer determines the result rectangle before asking to overwrite columns to the right of the source column. The writing pass uses the normal document setters and the original last-column empty-field rule. The current model snapshots cell contents and attributes in native Undo documents for one Text to Columns list action. The Chrome smoke confirmed the menu and replacement path.
 
     CALC-818 records the source cursor fallback when the mark is exclusively disjoint. The implementation preserves that branch. The browser dialog still samples preview rows and delimited columns as in its existing clipboard view.
+extensions:
+  implementation_commit:
+    hash: "feb0f07a309f6d74fd9220e120e2dd7ae56b5df6"
+    message: "🧩 DWTX6F code: connect Calc Text to Columns dialog and Undo"
 id_source: "generated"
 ---
 ## Summary
@@ -195,6 +248,36 @@ DecisionContextRef:
 - freshness: route=computed_local remote=remote_skipped
 - repeat_allowed: false
 - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- risks: none
+
+### 2026-11-21T23:41:01.351Z — VERIFY — ok
+
+By: CODER
+
+Note: verified-202611212311-DWTX6F
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-21T23:37:43.416Z, excerpt_hash=sha256:d721219d4b08611b34bfbb02bc25fcf6007d15942bc3bcb7aa6a4d52d8654714
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202611212311-DWTX6F/blueprint/resolved-snapshot.json
+- old_digest: 8943f06f4038526101db920f9a075bff4693732fa062f55ff9dd5550cf579f55
+- current_digest: 8943f06f4038526101db920f9a075bff4693732fa062f55ff9dd5550cf579f55
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202611212311-DWTX6F
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task complete 202611212311-DWTX6F --result verified-202611212311-DWTX6F --commit 9b8e597264b19bb0a4a7c548072b0e50afed488e
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
 - risks: none
 
 <!-- END VERIFICATION RESULTS -->
