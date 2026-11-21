@@ -7769,3 +7769,13 @@ and both error fields across Paste, Undo and Redo.
 
 - [Original clipboard error conversion](../../vendor/libreoffice-reference/sc/source/core/data/column3.cxx#L1405)
 - [Original hard formula error setter](../../vendor/libreoffice-reference/sc/source/core/data/formulacell.cxx#L2785)
+
+### CALC-816 — Transpose rotates only the first endpoint of an external range reference
+
+The source token iterator admits both local and external range references.
+The formula cell recognizes only the local double-reference token when
+deciding to rotate a second endpoint. Calc preserves that distinction in
+the reference transformation.
+
+- [Original formula clipboard reference rotation](../../vendor/libreoffice-reference/sc/source/core/data/formulacell.cxx#L3934)
+- [Original reference token iterator](../../vendor/libreoffice-reference/formula/source/core/api/token.cxx#L1761)

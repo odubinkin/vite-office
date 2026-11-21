@@ -1,0 +1,49 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/sc/source/core/data/formulacell.transpose.ts",
+    "status": "mapped",
+    "upstreamPath": "sc/source/core/data/formulacell.cxx",
+    "localSymbols": [
+      "TransposeReference"
+    ],
+    "upstreamSymbols": [
+      "ScFormulaCell::TransposeReference"
+    ],
+    "preservedResponsibilities": [
+      "Swaps fully relative reference offsets on clipboard formula clones while retaining the original mixed-reference and external token rules."
+    ],
+    "omittedResponsibilities": [
+      "This is the clipboard copy transform. The separate cut-move update for other formulas and range names remains unported."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sc/source/core/data/formulacell.transpose.ts",
+          "marker": "TransposeReference"
+        },
+        {
+          "path": "apps/office/src/sc/browser/presentation/calc-cell-clipboard.test.tsx",
+          "marker": "ports testCopyPasteTranspose"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sc/source/core/data/formulacell.cxx",
+          "marker": "ScFormulaCell::TransposeReference"
+        },
+        {
+          "path": "vendor/libreoffice-reference/formula/source/core/api/token.cxx",
+          "marker": "FormulaTokenArrayPlainIterator::GetNextReference"
+        }
+      ]
+    },
+    "filenameDivergence": {
+      "localPath": "apps/office/src/sc/source/core/data/formulacell.transpose.ts",
+      "stackNecessity": "responsibility-split",
+      "rationale": "Retains this clipboard transposition responsibility in a focused TypeScript fragment of the established Calc owner while keeping the main source file within the repository line budget."
+    }
+  }
+}

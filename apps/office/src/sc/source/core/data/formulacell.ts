@@ -47,7 +47,7 @@ import { NfIndexTableOffset, SvNumFormatType } from "../../../../svl/inc/zforlis
 import { OpCode } from "../../../../formula/inc/opcode";
 import { SC_LISTENER_QUERY_FORMULA_GROUP_POS } from "../../../inc/listenerqueryids";
 import { RefQueryFormulaGroup } from "../../../inc/listenerquery";
-
+import { TransposeReference } from "./formulacell.transpose";
 /** Original formula-cell matrix discriminator for scalar cells, masters and references. */
 export enum ScMatrixMode {
   NONE = 0,
@@ -64,6 +64,8 @@ export enum CompareState {
 
 /** Formula content is stored as actual code/RPN tokens with the existing result owner. */
 export class ScFormulaCell extends SvtListener<SfxHint> {
+  /** Rotates references in a copy held by the native transposed clipboard. */
+  TransposeReference = TransposeReference;
   static readonly NotEqual = CompareState.NotEqual;
   static readonly EqualInvariant = CompareState.EqualInvariant;
   static readonly EqualRelativeRef = CompareState.EqualRelativeRef;
@@ -121,7 +123,6 @@ export class ScFormulaCell extends SvtListener<SfxHint> {
   SetHybridDouble(value: number): void {
     this.aResult.SetHybridDouble(value);
   }
-
   /** Keeps a hybrid numeric zero displayed as an empty string until interpretation. @returns Nothing. */
   SetHybridEmptyDisplayedAsString(): void {
     this.aResult.SetHybridEmptyDisplayedAsString();
@@ -131,7 +132,6 @@ export class ScFormulaCell extends SvtListener<SfxHint> {
   ResetDirty(): void {
     this.bDirty = false;
   }
-
   /** Original cached hybrid-string assignment without changing dirty/listening state. @param value - Actual shared string. @returns Nothing. */
   SetHybridString(value: SharedStringConstReference): void {
     this.aResult.SetHybridString(value);

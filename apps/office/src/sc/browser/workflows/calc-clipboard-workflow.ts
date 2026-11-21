@@ -58,6 +58,12 @@ interface OwnedTransfer extends Transfer {
   readonly source: ScDocument;
 }
 
+/** Options for the native clip-only commands in the Paste Special menu. */
+interface OwnedPasteOptions {
+  readonly flags?: InsertDeleteFlags;
+  readonly transpose?: boolean;
+}
+
 /** Original Text Import dialog inputs for a text transfer. */
 export interface PasteTextRequest {
   readonly text: string;
@@ -115,9 +121,16 @@ export class CalcClipboardWorkflow {
       },
       ...pasteOnlySlots.map(({ flags, ...slot }) => ({
         ...slot,
-        getState: (workflow: CalcClipboardWorkflow) => ({ enabled: workflow.CanPasteOnly() }),
-        execute: (workflow: CalcClipboardWorkflow) => workflow.Paste(false, undefined, flags),
+        getState: (workflow: CalcClipboardWorkflow) => ({ enabled: workflow.CanPasteOwned() }),
+        execute: (workflow: CalcClipboardWorkflow) => workflow.Paste(false, undefined, { flags }),
       })),
+      {
+        commandUrl: ".uno:PasteTransposed",
+        slotId: 5808,
+        label: "Paste Transposed",
+        getState: (workflow) => ({ enabled: workflow.CanPasteOwned() }),
+        execute: (workflow) => workflow.Paste(false, undefined, { transpose: true }),
+      },
     ]),
   );
 
@@ -190,8 +203,8 @@ export class CalcClipboardWorkflow {
     return this.CanUseCells() && !this.reading && !!globalThis.navigator?.clipboard;
   }
 
-  /** Checks the native clipboard and editable cursor for the typed cell commands. @returns Whether available. */
-  private CanPasteOnly(): boolean {
+  /** Checks the native clipboard and editable cursor for internal Paste Special commands. @returns Whether available. */
+  private CanPasteOwned(): boolean {
     if (!this.CanRead()) return false;
     const { shell, viewData } = this.controller;
     const doc = shell.GetDocument();
@@ -254,14 +267,13 @@ export class CalcClipboardWorkflow {
     }
   }
 
-  /** Applies the authorized clipboard transfer to the same active document and selection. @param unformatted - Force the portable text path. @param supplied - Native DOM clipboard data, when available. @param only - Native mask for a Paste Only request. @returns Whether pasted. */
+  /** Applies the authorized clipboard transfer to the same active document and selection. @param unformatted - Force the portable text path. @param supplied - Native DOM clipboard data, when available. @param native - Native clip-only request. @returns Whether pasted. */
   private async Paste(
     unformatted: boolean,
     supplied?: Transfer,
-    only?: InsertDeleteFlags,
+    native?: OwnedPasteOptions,
   ): Promise<boolean> {
-    if (!this.CanUseCells() || this.reading || (only !== undefined && !this.CanPasteOnly()))
-      return false;
+    if (!this.CanUseCells() || this.reading || (native && !this.CanPasteOwned())) return false;
     this.reading = true;
     const { controller } = this;
     const doc = controller.shell.GetDocument();
@@ -276,8 +288,8 @@ export class CalcClipboardWorkflow {
       if (!current()) return false;
       const owned = this.owned;
       if (!unformatted && owned?.source === doc && owned.token === transfer.token)
-        return await this.PasteOwned(owned.clip, doc, current, only ?? calcCellClipboardFlags);
-      if (only !== undefined || !transfer.plainText) return false;
+        return await this.PasteOwned(owned.clip, doc, current, native);
+      if (native || !transfer.plainText) return false;
 
       const range = new ScRange();
       if (controller.viewData.GetSimpleArea(range) !== ScMarkType.SC_MARK_SIMPLE) return false;
@@ -341,12 +353,12 @@ export class CalcClipboardWorkflow {
     }
   }
 
-  /** Implements the native confirmation sequence for internal paste. @param clip - In-workbook clipboard. @param doc - Active document. @param current - Revalidates the initiating view after a modal. @param flags - Original insertion mask. @returns Whether pasted. */
+  /** Implements the native confirmation sequence for internal paste. @param clip - In-workbook clipboard. @param doc - Active document. @param current - Revalidates the initiating view after a modal. @param native - Native clip-only options. @returns Whether pasted. */
   private async PasteOwned(
     clip: ScDocument,
     doc: ScDocument,
     current: () => boolean,
-    flags: InsertDeleteFlags,
+    { flags = calcCellClipboardFlags, transpose = false }: OwnedPasteOptions = {},
   ): Promise<boolean> {
     const data = this.controller.viewData;
     const range = new ScRange();
@@ -359,7 +371,7 @@ export class CalcClipboardWorkflow {
     const extraRows = range.aEnd.Row() - startRow;
     const cols: [number] = [0],
       rows: [number] = [0];
-    clip.GetClipArea(cols, rows, false);
+    clip.GetClipArea(transpose ? rows : cols, transpose ? cols : rows, false);
     const enlarge =
       marks.IsMarked() &&
       ((extraCols > 0 && extraCols < cols[0]) || (extraRows > 0 && extraRows < rows[0]));
@@ -381,12 +393,12 @@ export class CalcClipboardWorkflow {
     )
       return false;
 
-    if (!enlarge) return this.PasteDocument(clip, flags);
+    if (!enlarge) return this.PasteDocument(clip, flags, transpose);
     const previous = new ScMarkData(marks);
     let pasted = false;
     try {
       marks.SetMarkArea(range);
-      pasted = this.PasteDocument(clip, flags);
+      pasted = this.PasteDocument(clip, flags, transpose);
       return pasted;
     } finally {
       if (!pasted) marks.assign(previous);
@@ -401,9 +413,11 @@ export class CalcClipboardWorkflow {
     return response.result.accepted;
   }
 
-  /** Pastes a native clip and publishes the resulting selection. @param clip - Actual clipboard document. @param flags - Original insertion mask. @returns Whether pasted. */
-  private PasteDocument(clip: ScDocument, flags: InsertDeleteFlags): boolean {
-    const ok = this.controller.GetViewShell().PasteFromClip(flags, clip);
+  /** Pastes a native clip and publishes the resulting selection. @param clip - Actual clipboard document. @param flags - Original insertion mask. @param transpose - Original transpose flag. @returns Whether pasted. */
+  private PasteDocument(clip: ScDocument, flags: InsertDeleteFlags, transpose: boolean): boolean {
+    const ok = this.controller
+      .GetViewShell()
+      .PasteFromClip(flags, clip, ScPasteFunc.NONE, false, transpose);
     if (ok) this.controller.SyncSheetView();
     return ok;
   }

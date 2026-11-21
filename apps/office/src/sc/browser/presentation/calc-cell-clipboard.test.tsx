@@ -5,6 +5,10 @@ import { FormulaError } from "../../../formula/inc/errorcodes";
 import { text, unicode } from "../../../i18nlangtag/source/isolang/isolang.tables";
 import { SvNumFormatType } from "../../../svl/inc/zforlist";
 import { SvxFontHeightItem } from "../../../editeng/inc/fhgtitem";
+import { SvxBorderLine } from "../../../editeng/source/items/borderline";
+import { SvxBoxItem, SvxBoxItemLine } from "../../../editeng/source/items/frmitems";
+import { Color } from "../../../tools/inc/color";
+import { ATTR_BORDER } from "../../inc/scitems";
 import { ScAddress } from "../../inc/address";
 import { ScPatternAttr } from "../../inc/patattr";
 import { CellType } from "../../inc/global";
@@ -88,9 +92,14 @@ function browserClipboard(native?: ReturnType<typeof transfer>) {
 
 /** Executes the typed command from the native Paste Special submenu. @param name - Original menu caption suffix. @returns Completion. */
 async function pasteOnly(name: "Text" | "Numbers" | "Formula"): Promise<void> {
+  await pasteSpecial("Paste Only " + name);
+}
+
+/** Executes a native Paste Special menu item. @param name - Source menu label. @returns Completion. */
+async function pasteSpecial(name: string): Promise<void> {
   fireEvent.click(screen.getByRole("menuitem", { name: "Edit" }));
   fireEvent.click(screen.getByRole("menuitem", { name: "Paste Special" }));
-  const item = screen.getByRole("menuitem", { name: "Paste Only " + name });
+  const item = screen.getByRole("menuitem", { name });
   await act(async () => fireEvent.click(item));
 }
 
@@ -188,6 +197,131 @@ it("ports CalcPasteOnly through the Text, Number and Formula menu commands", asy
   const formula = cell.GetFormula(doc.GetGrammar());
   expect(text(formula)).toBe("=SUM(E2:E3)");
   formula.dispose();
+});
+
+it("ports testCopyPasteTranspose across sheets with rotated borders and native history", async () => {
+  const clipboard = transfer();
+  browserClipboard(clipboard);
+  const controller = mount(),
+    doc = controller.shell.GetDocument();
+  act(() => {
+    const name = unicode("Sheet2");
+    expect(doc.InsertTab(1, name)).toBe(true);
+    name.dispose();
+    expect(controller.EnterString("1")).toBe(true);
+    controller.Select(1, 0);
+    expect(controller.EnterString("=A1+1")).toBe(true);
+    controller.Select(2, 0);
+    expect(controller.EnterString("test")).toBe(true);
+    const pattern = new ScPatternAttr(doc.getCellAttributeHelper());
+    const box = new SvxBoxItem(ATTR_BORDER);
+    box.SetLine(new SvxBorderLine(new Color(0), 30), SvxBoxItemLine.TOP);
+    box.SetDistance(12, SvxBoxItemLine.TOP);
+    pattern.ItemSetPut(box);
+    doc.ApplyPattern(1, 0, 0, pattern);
+    pattern.Dispose();
+  });
+  select("A1:C1");
+  fireEvent.copy(grid(), { clipboardData: clipboard });
+  act(() => controller.SelectTab(1));
+  select("D2");
+  const count = controller.shell.GetUndoManager().GetUndoActionCount();
+  await pasteSpecial("Paste Transposed");
+  const d2 = new ScAddress(3, 1, 1),
+    d3 = new ScAddress(3, 2, 1),
+    d4 = new ScAddress(3, 3, 1);
+  expect(doc.GetValue(d2)).toBe(1);
+  expect(doc.GetValue(d3)).toBe(2);
+  const string = doc.GetRefCellValue(d4).getSharedString();
+  assert(string);
+  expect(text(string.getString())).toBe("test");
+  const formula = doc.GetFormulaCell(d3)?.GetFormula(doc.GetGrammar());
+  assert(formula);
+  expect(text(formula)).toBe("=D2+1");
+  formula.dispose();
+  const border = doc.GetPattern(d3)?.GetItem(ATTR_BORDER) as SvxBoxItem;
+  expect(border.GetLeft()?.GetWidth()).toBe(30);
+  expect(border.GetDistance(SvxBoxItemLine.LEFT)).toBe(12);
+  expect(border.GetTop()).toBeUndefined();
+  expect(controller.shell.GetUndoManager().GetUndoActionCount()).toBe(count + 1);
+  act(() => expect(controller.Undo()).toBe(true));
+  expect(doc.GetCellType(d3)).toBe(CellType.CELLTYPE_NONE);
+  expect((doc.GetPattern(d3)?.GetItem(ATTR_BORDER) as SvxBoxItem).GetLeft()).toBeUndefined();
+  act(() => expect(controller.Redo()).toBe(true));
+  expect(doc.GetValue(d3)).toBe(2);
+  expect((doc.GetPattern(d3)?.GetItem(ATTR_BORDER) as SvxBoxItem).GetLeft()?.GetWidth()).toBe(30);
+});
+
+it("rotates only fully relative references and repeats the same clipboard without changing its orientation", async () => {
+  const clipboard = transfer();
+  browserClipboard(clipboard);
+  const controller = mount(),
+    doc = controller.shell.GetDocument();
+  select("B2");
+  act(() => {
+    expect(controller.EnterString("7")).toBe(true);
+    controller.Select(2, 1);
+    expect(controller.EnterString("=SUM(B2:B3)+SUM($B2:B3)+$B$2")).toBe(true);
+  });
+  select("B2:C3");
+  fireEvent.copy(grid(), { clipboardData: clipboard });
+  for (const [name, target, expected] of [
+    ["F5", new ScAddress(5, 5, 0), "=SUM(F5:G5)+SUM($B6:E7)+$B$2"],
+    ["J5", new ScAddress(9, 5, 0), "=SUM(J5:K5)+SUM($B6:I7)+$B$2"],
+  ] as const) {
+    select(name);
+    await pasteSpecial("Paste Transposed");
+    const formula = doc.GetFormulaCell(target)?.GetFormula(doc.GetGrammar());
+    assert(formula);
+    expect(text(formula)).toBe(expected);
+    formula.dispose();
+  }
+});
+
+it("confirms the transposed selection size and preserves rich cells and styled empty cells", async () => {
+  const clipboard = transfer();
+  browserClipboard(clipboard);
+  const controller = mount(),
+    doc = controller.shell.GetDocument();
+  const rich = new ScAddress(6, 5, 0),
+    styledEmpty = new ScAddress(6, 4, 0),
+    cleared = new ScAddress(6, 6, 0);
+  act(() => {
+    doc.SetValue(new ScAddress(0, 0, 0), 10);
+    doc.SetValue(new ScAddress(2, 0, 0), 30);
+    doc.SetValue(cleared, 50);
+    const pattern = new ScPatternAttr(doc.getCellAttributeHelper());
+    pattern.ItemSetPut(new SvxFontHeightItem(320, 100, 101));
+    doc.ApplyPattern(0, 1, 0, pattern);
+    pattern.Dispose();
+    const string = unicode("first\nsecond");
+    const engine = doc.GetEditEngine();
+    engine.SetTextCurrentDefaults(string);
+    string.dispose();
+    doc.SetEditText(new ScAddress(1, 1, 0), engine.CreateTextObject());
+  });
+  select("A1:C2");
+  fireEvent.copy(grid(), { clipboardData: clipboard });
+  select("F5:F6");
+  const undo = controller.shell.GetUndoManager();
+  const count = undo.GetUndoActionCount();
+  await pasteSpecial("Paste Transposed");
+  let dialog = within(screen.getByRole("alertdialog", { name: "Paste" }));
+  expect(dialog.getByText(/bigger than the range/)).toBeVisible();
+  await act(async () => fireEvent.click(dialog.getByRole("button", { name: "Yes" })));
+  dialog = within(screen.getByRole("alertdialog", { name: "Paste" }));
+  expect(dialog.getByText(/overwrite the existing data/)).toBeVisible();
+  await act(async () => fireEvent.click(dialog.getByRole("button", { name: "Yes" })));
+  const value = doc.GetRefCellValue(rich).getEditText()?.GetText();
+  assert(value);
+  expect(text(value)).toBe("first\nsecond");
+  value.dispose();
+  expect(doc.GetCellType(styledEmpty)).toBe(CellType.CELLTYPE_NONE);
+  expect((doc.GetPattern(styledEmpty)?.GetItem(101) as SvxFontHeightItem).GetHeight()).toBe(320);
+  expect(doc.GetCellType(cleared)).toBe(CellType.CELLTYPE_NONE);
+  expect(undo.GetUndoActionCount()).toBe(count + 1);
+  act(() => expect(controller.Undo()).toBe(true));
+  expect(doc.GetValue(cleared)).toBe(50);
 });
 
 it("pastes numbers without dates, keeps result errors and restores overwritten cell types on Undo", async () => {

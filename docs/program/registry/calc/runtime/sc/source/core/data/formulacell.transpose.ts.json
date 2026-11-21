@@ -1,0 +1,36 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sc/source/core/data/formulacell.transpose.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "calc",
+    "subsystem": "clipboard",
+    "capabilityIds": [
+      "CAP-1c4b358a-d58f-4cb3-bd8a-a4aac3aa3bf5",
+      "CAP-d9e3bd7a-f47f-4958-81a7-e7ef31935bf3"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/sc/source/core/data/formulacell.transpose.ts#TransposeReference",
+        "apps/office/src/sc/browser/presentation/calc-cell-clipboard.test.tsx",
+        "vendor/libreoffice-reference/sc/source/core/data/formulacell.cxx#ScFormulaCell::TransposeReference"
+      ],
+      "justification": "Swaps fully relative reference offsets on clipboard formula clones while retaining the original mixed-reference and external token rules.",
+      "knownViolations": [],
+      "localSymbols": [
+        "TransposeReference"
+      ],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": "sc/source/core/data/formulacell.cxx",
+      "upstreamSymbols": [
+        "ScFormulaCell::TransposeReference"
+      ]
+    }
+  }
+}
