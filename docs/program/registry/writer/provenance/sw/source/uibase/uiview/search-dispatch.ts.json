@@ -2,7 +2,7 @@
   "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
   "baselineTag": "libreoffice-26.8.0.2",
   "record": {
-    "classification": "browser-adaptation",
+    "classification": "local-infrastructure",
     "localPath": "apps/office/src/sw/source/uibase/uiview/search-dispatch.ts",
     "localSymbols": [
       "TransformWriterSearchParameters"
@@ -35,7 +35,7 @@
       ]
     },
     "stackDivergence": {
-      "kind": "browser-adaptation",
+      "kind": "local-infrastructure",
       "rationale": "Translates the represented fields at the current Writer Sfx dispatcher boundary. The shared Sfx converter outside Writer search remains pending. Whole Any-encoded arguments retain native precedence over dotted members."
     }
   }

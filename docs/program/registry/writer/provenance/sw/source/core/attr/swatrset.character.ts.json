@@ -2,7 +2,7 @@
   "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
   "baselineTag": "libreoffice-26.8.0.2",
   "record": {
-    "classification": "browser-adaptation",
+    "classification": "local-infrastructure",
     "evidence": {
       "local": [
         {
@@ -16,13 +16,13 @@
       "writerCharacterItemFactory"
     ],
     "status": "local-only",
-    "rationale": "Restores concrete Writer character pool items used by the browser Worker graph, preserving the native item identity, line style and rotation fit state.",
+    "rationale": "Snapshot reconstruction maps character Which values to native item constructors, preserving line style and rotation fit state in every realm.",
     "responsibilities": [
-      "Restores concrete Writer character pool items used by the browser Worker graph, preserving the native item identity, line style and rotation fit state."
+      "Snapshot reconstruction maps character Which values to native item constructors, preserving line style and rotation fit state in every realm."
     ],
     "stackDivergence": {
-      "kind": "browser-adaptation",
-      "rationale": "The browser Worker transfers native item values across separate document pools."
+      "kind": "local-infrastructure",
+      "rationale": "SwAttrPool calls the same snapshot factories in the main thread and in Workers."
     }
   },
   "legacyOrder": 150

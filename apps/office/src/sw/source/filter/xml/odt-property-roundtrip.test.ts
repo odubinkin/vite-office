@@ -3,26 +3,28 @@ import * as ParaItems from "../../../../editeng/source/items/paraitem.controls";
 import {
   writerTextColorValue,
   writerHighlightColorValue,
-  createWriterHighlightItem,
+  createWriterTextColorItem,
+  writerColorFromPrimitive,
 } from "../../core/attr/swatrset";
 import { SvxColorItem } from "../../../../editeng/inc/colritem";
-import { createWriterTextColorItem } from "../../core/attr/swatrset";
 import { encodeSfxPoolItem, decodeSfxPoolItem } from "../../../browser/filter/xml/item-codec";
 import { createTabs, tabStops } from "../../../../../test/tab-item-fixtures";
 import { describe, expect, it } from "vitest";
 import { SvxIndentValue } from "../../../../editeng/inc/lrspitem";
-
-import { DocumentArchive } from "../../../../package/source/zippackage/document-archive";
-import { DocumentArchiveWriter } from "../../../../package/source/zippackage/document-archive";
+import {
+  DocumentArchive,
+  DocumentArchiveWriter,
+} from "../../../../package/source/zippackage/document-archive";
 import { createDocument } from "../../../../sfx2/source/doc/objsh";
 import { SvxTabStopItem, SvxTabStop, SvxTabAdjust } from "../../../../editeng/inc/tstpitem";
 import { SvxFirstLineIndentItem } from "../../../../editeng/source/items/frmitems";
+import { SfxItemSet } from "../../../../svl/source/items/itemset";
 import { SfxBoolItem } from "../../../../svl/source/items/cenumitm";
 import { SfxInt16Item } from "../../../../svl/source/items/intitem";
 import { SvxBrushItem } from "../../../../editeng/source/items/frmitems.brush";
 import {
+  RES_CHRATR_BACKGROUND,
   RES_CHRATR_COLOR,
-  RES_CHRATR_HIGHLIGHT,
   RES_MARGIN_FIRSTLINE,
   RES_KEEP,
   RES_BREAK,
@@ -754,7 +756,9 @@ describe("Writer ODT mapped pooled properties", /** Groups symmetric property te
     const paragraph = writer.paragraphs[0];
     if (paragraph === undefined) throw new Error("Writer paragraph is missing.");
     paragraph.SetAttr(createWriterTextColorItem("#123456"));
-    paragraph.SetAttr(createWriterHighlightItem("#fedcba"));
+    paragraph.SetAttr(
+      new SvxBrushItem(writerColorFromPrimitive("#fedcba", "transparent"), RES_CHRATR_BACKGROUND),
+    );
     paragraph.SetAttr(createTabs(RES_PARATR_TABSTOP, [new SvxTabStop(720)]));
     paragraph.SetAttr(new SfxBoolItem(RES_KEEP, true));
     paragraph.SetAttr(new SfxBoolItem(RES_LINENUMBER, false));
@@ -766,7 +770,6 @@ describe("Writer ODT mapped pooled properties", /** Groups symmetric property te
           attributes: {
             bold: false,
             color: "#abcdef",
-            highlight: "transparent",
             italic: false,
             underline: false,
           },
@@ -774,7 +777,11 @@ describe("Writer ODT mapped pooled properties", /** Groups symmetric property te
         },
       ]),
     );
-
+    const background = RES_CHRATR_BACKGROUND;
+    const direct = new SfxItemSet(writer.GetAttrPool(), [[background, background]]);
+    direct.Put(new SvxBrushItem(background));
+    paragraph.SetAttr(direct, 0, 3);
+    direct.Dispose();
     const bytes = await writeOdtDocument(writer, metadata);
     const content = await (await DocumentArchive.open(bytes)).readTextEntry("content.xml");
     expect(content).toContain('fo:color="#123456"');
@@ -786,14 +793,13 @@ describe("Writer ODT mapped pooled properties", /** Groups symmetric property te
     expect(content).toContain(
       '<style:tab-stops><style:tab-stop style:position="1.27cm" style:type="left"/></style:tab-stops>',
     );
-
     const reopened = await readOdtDocument(bytes, metadata);
     const reopenedParagraph = reopened.document.paragraphs[0];
     expect(writerTextColorValue(reopenedParagraph?.GetAttr(RES_CHRATR_COLOR) as SvxColorItem)).toBe(
       "#123456",
     );
     expect(
-      writerHighlightColorValue(reopenedParagraph?.GetAttr(RES_CHRATR_HIGHLIGHT) as SvxBrushItem),
+      writerHighlightColorValue(reopenedParagraph?.GetAttr(RES_CHRATR_BACKGROUND) as SvxBrushItem),
     ).toBe("#fedcba");
     expect(
       (reopenedParagraph?.GetAttr(RES_PARATR_TABSTOP) as SvxTabStopItem).At(0).GetTabPos(),
@@ -810,7 +816,7 @@ describe("Writer ODT mapped pooled properties", /** Groups symmetric property te
     const writer = createWriterDocument();
     const heading = writer.GetTextFormatColl("heading-1");
     heading.SetFormatAttr(createWriterTextColorItem("auto"));
-    heading.SetFormatAttr(createWriterHighlightItem("transparent"));
+    heading.SetFormatAttr(new SvxBrushItem(RES_CHRATR_BACKGROUND));
     const defaultStyle = writer.GetDfltTextFormatColl();
     defaultStyle.SetFormatAttr(createTabs(RES_PARATR_TABSTOP, [new SvxTabStop(360)]));
     defaultStyle.SetFormatAttr(new SfxBoolItem(RES_KEEP, false));

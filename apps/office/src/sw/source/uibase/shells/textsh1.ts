@@ -11,14 +11,13 @@ import { SvxFontItem } from "../../../../editeng/inc/fontitem";
 import { SvxFontHeightItem } from "../../../../editeng/inc/fhgtitem";
 import { MID_FONTHEIGHT } from "../../../../editeng/inc/memberids";
 import { CONVERT_TWIPS } from "../../../../svl/inc/poolitem";
+import { ToggleCharBackground } from "../utlui/uitool";
 import { Any } from "../../../../cppu/inc/com/sun/star/uno/Any";
 import { RES_CHRATR_FONT, RES_CHRATR_CJK_FONT, RES_CHRATR_CTL_FONT } from "../../../inc/hintids";
 import { SID_ATTR_PARA_LINESPACE } from "../../../../editeng/inc/editids";
 import { SvxLineSpaceRule } from "../../../../editeng/inc/svxenum";
 import { projectWriterLineSpacing } from "../../core/text/itrform2";
-
-import type { SfxShell } from "../../../../sfx2/source/control/shell";
-import { createSfxShell } from "../../../../sfx2/source/control/shell";
+import { createSfxShell, type SfxShell } from "../../../../sfx2/source/control/shell";
 import { SfxListUndoAction, type SfxUndoAction } from "../../../../svl/source/undo/undo";
 import { SfxItemState, type SfxItemSet } from "../../../../svl/source/items/itemset";
 import { SfxBoolItem } from "../../../../svl/source/items/cenumitm";
@@ -479,6 +478,7 @@ export class SwTextShell extends SwBaseShell {
       !/^#[0-9a-fA-F]{6}$/.test(value)
     )
       throw new Error("Writer color must be a six-digit hex value or its automatic marker.");
+    if (property === "highlight") return ToggleCharBackground(value, this.target);
     const before = this.target.CaptureCursorState();
     const selected = getWriterSelectedTextRanges(this.target.GetCursor());
     this.ApplyPendingCharacterItems(createCharacterColorItems(property, value));

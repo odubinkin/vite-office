@@ -15,6 +15,7 @@ import {
 it("transfers native document defaults and direct items through the existing Worker graph codec", /** Exercises independent UNO values after structured clone. @returns Nothing. */ () => {
   const doc = createWriterDocument();
   const item = decodeTextEffects({
+    shading: false,
     effects: [
       ["ligatures", "standardContextual"],
       ["numForm"],
@@ -53,6 +54,7 @@ it("validates the transport and rejects unsupported native bag members", /** Ret
     1,
     {},
     { effects: true },
+    { effects: [], shading: "false" },
     { effects: [1] },
     { effects: [[]] },
     { effects: [["numForm", "default", 1]] },

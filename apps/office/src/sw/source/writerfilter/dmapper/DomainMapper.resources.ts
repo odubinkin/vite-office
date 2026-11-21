@@ -1,4 +1,10 @@
 /** @fileoverview Original DomainMapper underline, paragraph-border and highlight resource mappings. */
+import { Any } from "../../../../cppu/inc/com/sun/star/uno/Any";
+import type { DomainMapper_Impl } from "./DomainMapper_Impl";
+import { StyleType } from "./StyleSheetTable";
+import { CellColorHandler } from "./CellColorHandler";
+import { GrabBagType, type PropertyMap } from "./PropertyMap";
+import { resolveReturnedReference, type Sprm } from "../inc/dmapper/resourcemodel";
 import { ParaVertAlign } from "../../../../editeng/source/items/paraitem.controls";
 import { FontUnderline as U } from "../../../../offapi/com/sun/star/awt/FontUnderline";
 import { NS_ooxml as N } from "../inc/ooxml/resourceids";
@@ -48,4 +54,51 @@ const textAlignments = new Map<number, ParaVertAlign>([
 /** Converts an original ST_TextAlignment value to the Writer item enum. @param token - Generated value identity. @returns Alignment, with native automatic fallback. */
 export function paragraphVerticalAlignment(token: number): ParaVertAlign {
   return textAlignments.get(token) ?? ParaVertAlign.Automatic;
+}
+
+/** Resolves Word run shading through the original character color handler. @param modifier - Native shading resource. @param context - Current property map. @returns Nothing. */
+export function ResolveCharacterShading(modifier: Sprm, context: PropertyMap | null): void {
+  if (!context) return;
+  const reference = modifier.getProps();
+  if (!reference) return;
+  const handler = new CellColorHandler();
+  handler.setOutputFormat(CellColorHandler.Character);
+  try {
+    resolveReturnedReference(reference, handler);
+    const properties = handler.getProperties();
+    const marker = new Any([true], "bool");
+    try {
+      context.InsertProps(properties);
+      context.Insert(P.PROP_CHAR_SHADING_MARKER, marker, true, GrabBagType.CHAR_GRAB_BAG);
+    } finally {
+      marker.dispose();
+      properties.dispose();
+    }
+  } finally {
+    handler.dispose();
+  }
+}
+
+/** Resolves the original direct highlight color and Word character-style exclusion. @param value - Native resource value. @param context - Current property map. @param mapper - Import context owner. @returns Nothing. */
+export function ResolveCharacterHighlight(
+  value: number,
+  context: PropertyMap | null,
+  mapper: DomainMapper_Impl,
+): void {
+  if (
+    !context ||
+    (mapper.IsStyleSheetImport() &&
+      mapper.GetStyleSheetTable().GetCurrentEntry()?.m_nStyleTypeCode === StyleType.Character)
+  )
+    return;
+  const color = mapper.IsRTFImport()
+    ? value
+    : highlights[value - N.LN_Value_ST_HighlightColor_black];
+  if (color === undefined) return;
+  const property = new Any([color], "sal_Int32");
+  try {
+    context.Insert(P.PROP_CHAR_HIGHLIGHT, property);
+  } finally {
+    property.dispose();
+  }
 }

@@ -64,7 +64,6 @@ describe("Writer canonical input shell", /** Registers canonical cursor and inpu
     });
     expect(shell.SetCharacterColor("color", "#cc2200")).toBe(true);
     expect(shell.SetCharacterColor("highlight", "#ffff00")).toBe(true);
-    expect(shell.SetCharacterColor("highlight", "#ffff00")).toBe(false);
     expect(projectWriterTextRuns(shell.GetActiveParagraph())[0]?.attributes).toMatchObject({
       color: "#cc2200",
       highlight: "#ffff00",
@@ -74,6 +73,14 @@ describe("Writer canonical input shell", /** Registers canonical cursor and inpu
       projectWriterTextRuns(shell.GetActiveParagraph())[0]?.attributes.highlight,
     ).toBeUndefined();
     expect(shell.Redo()).toBe(true);
+    expect(projectWriterTextRuns(shell.GetActiveParagraph())[0]?.attributes.highlight).toBe(
+      "#ffff00",
+    );
+    expect(shell.SetCharacterColor("highlight", "#ffff00")).toBe(true);
+    expect(
+      projectWriterTextRuns(shell.GetActiveParagraph())[0]?.attributes.highlight,
+    ).toBeUndefined();
+    expect(shell.Undo()).toBe(true);
     expect(projectWriterTextRuns(shell.GetActiveParagraph())[0]?.attributes.highlight).toBe(
       "#ffff00",
     );

@@ -3,7 +3,7 @@
   "baselineTag": "libreoffice-26.8.0.2",
   "record": {
     "path": "apps/office/src/sw/source/uibase/uiview/search-dispatch.ts",
-    "classification": "browser-adaptation",
+    "classification": "local-infrastructure",
     "state": "active",
     "suite": "writer",
     "subsystem": "text-search",

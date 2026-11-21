@@ -22,6 +22,8 @@ import {
 import { SvxKerningItem } from "../../../editeng/source/items/textitem.spacing";
 import { Color } from "../../../tools/inc/color";
 import { FontWeight } from "../../../tools/inc/fontenum";
+import { Any } from "../../../cppu/inc/com/sun/star/uno/Any";
+import { SfxGrabBagItem } from "../../../svl/inc/grabbagitem";
 import { SfxItemSet } from "../../../svl/source/items/itemset";
 import {
   RES_CHRATR_BACKGROUND,
@@ -30,6 +32,7 @@ import {
   RES_CHRATR_END,
   RES_CHRATR_ESCAPEMENT,
   RES_CHRATR_FONTSIZE,
+  RES_CHRATR_GRABBAG,
   RES_CHRATR_HIGHLIGHT,
   RES_CHRATR_KERNING,
   RES_CHRATR_OVERLINE,
@@ -45,6 +48,7 @@ import type { SwTextNode } from "../../source/core/txtnode/ndtxt";
 import { SwAttrIter } from "../../source/core/text/itratr";
 import { createWriterDocumentSession } from "../composition/writer-module";
 import { SEARCH_OPTIONS_KEY } from "../storage/writer-search-options-store";
+import { WRITER_COMMAND_IDS } from "../../uiconfig/swriter/menubar/menubar-commands";
 import { WriterWorkbench } from "./writer-view";
 
 beforeEach(localStorage.removeItem.bind(localStorage, SEARCH_OPTIONS_KEY));
@@ -394,6 +398,73 @@ it("finds paragraph formatting alone and with text, then replaces paragraph attr
     expect(third.GetParagraphAlignment()).toBe("right");
   } finally {
     metric.mockRestore();
+    workbench.unmount();
+    session.view.Close();
+  }
+});
+
+it("finds the color applied by Writer’s highlighting command but skips a visually identical imported highlight", /** Covers the native toolbar-to-format-search path across two distinct character items. @returns Nothing. */ () => {
+  const session = createWriterDocumentSession();
+  const shell = session.view.GetWrtShell();
+  const node = shell.GetActiveParagraph();
+  shell.Insert("native import");
+  const start = new SwPosition(node, 0);
+  const end = new SwPosition(node, 6);
+  const whole = new SwPaM(end, start);
+  const imported = new SfxItemSet(node.GetDoc().GetAttrPool(), [
+    [RES_CHRATR_HIGHLIGHT, RES_CHRATR_GRABBAG],
+  ]);
+  imported.Put(new SvxBrushItem(new Color(0xffff00), RES_CHRATR_HIGHLIGHT));
+  const shading = new Any([true], "bool");
+  imported.Put(new SfxGrabBagItem(RES_CHRATR_GRABBAG, new Map([["CharShadingMarker", shading]])));
+  shading.dispose();
+  whole.GetPoint().SetContent(13);
+  whole.GetMark().SetContent(0);
+  node.GetDoc().GetDocumentContentOperationsManager().InsertItemSet(whole, imported);
+  whole.Dispose();
+  imported.Dispose();
+  shell.SetPaM(end, start);
+
+  const workbench = render(<WriterWorkbench isActive view={session.view} />);
+  try {
+    act(
+      /** Dispatches the actual highlighting slot and restores the starting caret. @returns Nothing. */ () => {
+        session.view.Execute(WRITER_COMMAND_IDS.charBackColor, { color: "#ffff00" });
+        shell.SetCursor(start);
+      },
+    );
+    const attrs = new SwAttrIter(node);
+    attrs.Seek(1);
+    const background = attrs.GetAttrHandler().ReadItem(RES_CHRATR_BACKGROUND);
+    const cleared = attrs.GetAttrHandler().ReadItem(RES_CHRATR_HIGHLIGHT);
+    expect(background).toBeInstanceOf(SvxBrushItem);
+    expect((background as SvxBrushItem).GetColor().toUInt32()).toBe(0xffff00);
+    expect((cleared as SvxBrushItem).GetColor().IsFullyTransparent()).toBe(true);
+    const bag = attrs.GetAttrHandler().ReadItem(RES_CHRATR_GRABBAG) as SfxGrabBagItem;
+    const marker: [boolean] = [true];
+    expect(bag.GetGrabBag().get("CharShadingMarker")?.extract(marker, "bool")).toBe(true);
+    expect(marker[0]).toBe(false);
+    attrs.Seek(8);
+    expect(
+      (attrs.GetAttrHandler().ReadItem(RES_CHRATR_HIGHLIGHT) as SvxBrushItem).GetColor().toUInt32(),
+    ).toBe(0xffff00);
+
+    fireEvent.keyDown(window, { key: "h", ctrlKey: true });
+    const find = within(screen.getByRole("dialog", { name: "Find and Replace" }));
+    fireEvent.click(find.getByText("Other options"));
+    fireEvent.click(find.getByRole("button", { name: "Format…" }));
+    const format = within(screen.getByRole("dialog", { name: "Search" }));
+    fireEvent.click(format.getByRole("tab", { name: "Highlighting" }));
+    fireEvent.change(format.getByLabelText("Highlight color"), { target: { value: "#ffff00" } });
+    fireEvent.click(format.getByRole("button", { name: "OK" }));
+    fireEvent.click(find.getByRole("button", { name: "Find All" }));
+    const matches = [...shell.GetCursor().GetRingContainer()];
+    expect(matches).toHaveLength(1);
+    expect(matches[0]?.Start().GetContentIndex()).toBe(0);
+    expect(matches[0]?.End().GetContentIndex()).toBe(6);
+  } finally {
+    start.Dispose();
+    end.Dispose();
     workbench.unmount();
     session.view.Close();
   }
