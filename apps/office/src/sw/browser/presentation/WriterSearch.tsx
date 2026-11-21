@@ -43,33 +43,38 @@ export function WriterSearch({
   dialog,
   initial,
   focusRequest,
+  focusSearch,
   history,
   onHistoryChange,
   owner,
   canSearchSelection,
   close,
-  showDialog,
+  openSearch,
   searchFeedback,
 }: Readonly<{
   dialog: boolean;
   initial: WriterSearchItem;
   focusRequest: number;
+  focusSearch: string | undefined;
   history: WriterSearchHistory;
   onHistoryChange: (history: WriterSearchHistory) => void;
   owner: SwViewSearch;
   canSearchSelection: boolean;
   close: () => void;
-  showDialog: () => void;
+  openSearch: (surface: "searchDialog", search: string) => void;
   searchFeedback: WriterSearchFeedback | undefined;
 }>): React.JSX.Element {
   const localization = useBrowserLocalization();
-  const [item, setItem] = useState(initial);
+  const [item, setItem] = useState({ ...initial, search: focusSearch ?? initial.search });
   const [lastFocusRequest, setLastFocusRequest] = useState(focusRequest);
   if (focusRequest !== lastFocusRequest) {
     setLastFocusRequest(focusRequest);
-    if (!dialog && initial.search !== item.search) setItem({ ...item, search: initial.search });
+    if (focusSearch !== undefined && focusSearch !== item.search)
+      setItem({ ...item, search: focusSearch });
   }
   if (dialog && !canSearchSelection && item.selection) setItem({ ...item, selection: false });
+  const [findbarMatchCase, setFindbarMatchCase] = useState(false);
+  const [findbarMatchDiacritics, setFindbarMatchDiacritics] = useState(false);
   const [similarityOptionsOpen, setSimilarityOptionsOpen] = useState(false);
   const similarityOptionsButton = useRef<HTMLButtonElement>(null);
   const [japaneseOptionsOpen, setJapaneseOptionsOpen] = useState(false);
@@ -109,8 +114,10 @@ export function WriterSearch({
   function update(changes: Partial<WriterSearchItem>, commit = true): void {
     const next = { ...item, ...changes };
     setItem(next);
-    if (dialog && commit) saveDialogItem(next, replaceBackward);
-    else owner.SetSearchItem(next);
+    if (dialog) {
+      if (commit) saveDialogItem(next, replaceBackward);
+      else owner.SetSearchItem(next);
+    }
     if (changes.search !== undefined || changes.searchStyle !== undefined) owner.ClearFeedback();
   }
 
@@ -181,20 +188,25 @@ export function WriterSearch({
           : { ...history, findbar: remember(history.findbar, item.search) },
       );
     try {
+      if (!dialog) {
+        const all = command === SvxSearchCmd.FIND_ALL;
+        if (all) searchField.current?.focus();
+        owner.ExecFindBarSearch({
+          search: item.search,
+          matchCase: findbarMatchCase,
+          matchDiacritics: findbarMatchDiacritics,
+          all,
+          backward,
+        });
+        return;
+      }
       owner.ExecSearch(
         {
           ...item,
           styleSearch: styleOptions !== undefined,
           searchStyle,
           replaceStyle,
-          matchDiacritics: dialog ? item.matchDiacritics : item.findbarMatchDiacritics,
-          // The pinned CTL gate is always enabled. Find Bar always ignores kashida.
-          matchKashida: dialog && item.matchKashida,
-          matchCharacterWidth: !dialog || item.matchCharacterWidth,
-          useAsianOptions: dialog && item.useAsianOptions,
-          similaritySearch: dialog && item.similaritySearch,
-          wholeWords: dialog && item.wholeWords,
-          selection: dialog && canSearchSelection && item.selection,
+          selection: canSearchSelection && item.selection,
         },
         command,
         backward,
@@ -234,10 +246,12 @@ export function WriterSearch({
       (event.ctrlKey || event.metaKey) &&
       !event.shiftKey &&
       !event.altKey &&
-      event.key.toLowerCase() === "f"
+      ["f", "h"].includes(event.key.toLowerCase())
     ) {
       event.preventDefault();
       event.stopPropagation();
+      if (event.key.toLowerCase() === "f") searchField.current?.select();
+      else openSearch("searchDialog", item.search);
     } else if (event.key === "Escape") {
       event.preventDefault();
       event.stopPropagation();
@@ -297,12 +311,16 @@ export function WriterSearch({
     <label className="flex items-center gap-1 text-sm">
       <input
         type="checkbox"
-        checked={item.matchCase}
+        checked={dialog ? item.matchCase : findbarMatchCase}
         disabled={dialog && (item.styleSearch || item.useAsianOptions)}
         onChange={
           /** Stores the case option. @param event - Updated control. @returns Nothing. */ (
             event,
-          ) => update({ matchCase: event.currentTarget.checked })
+          ) => {
+            const checked = event.currentTarget.checked;
+            if (dialog) update({ matchCase: checked });
+            else setFindbarMatchCase(checked);
+          }
         }
       />
       {text("match-case", "Match case")}
@@ -364,16 +382,23 @@ export function WriterSearch({
         <label className="flex items-center gap-1 text-sm">
           <input
             type="checkbox"
-            checked={item.findbarMatchDiacritics}
+            checked={findbarMatchDiacritics}
             onChange={
               /** Updates the Find toolbar option. @param event - Updated control. @returns Nothing. */ (
                 event,
-              ) => update({ findbarMatchDiacritics: event.currentTarget.checked })
+              ) => setFindbarMatchDiacritics(event.currentTarget.checked)
             }
           />
           {text("match-diacritics", "Match Diacritics")}
         </label>
-        <button type="button" className={buttonStyle} onClick={showDialog}>
+        <button
+          type="button"
+          className={buttonStyle}
+          onClick={
+            /** Passes the live toolbar entry to the modeless dialog. @returns Nothing. */ () =>
+              openSearch("searchDialog", item.search)
+          }
+        >
           {dialogLabel}
         </button>
         {feedback}

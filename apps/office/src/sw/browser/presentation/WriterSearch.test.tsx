@@ -152,6 +152,8 @@ it("refreshes the Find Bar from the current model selection when the editor call
   );
   fireEvent.keyDown(search, { key: "f", ctrlKey: true });
   expect(search).toHaveValue("draft");
+  expect((search as HTMLInputElement).selectionStart).toBe(0);
+  expect((search as HTMLInputElement).selectionEnd).toBe(5);
   const editor = workbench.container.querySelector<HTMLElement>("[data-writer-editing-host]");
   editor?.focus();
   fireEvent.keyDown(editor ?? window, { key: "f", ctrlKey: true });

@@ -4,7 +4,7 @@ title: "Implement Writer search and replace core and browser UI"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 37
+revision: 38
 origin:
   system: "manual"
 depends_on:
@@ -115,6 +115,9 @@ comments:
   -
     author: "CODER"
     body: "Verified dialog-state checkpoint against SvxSearchDialog::LoseFocusHdl_Impl, ClickHdl_Impl, TemplateHdl_Impl and SaveToModule_Impl. Text and style drafts publish the current Find request on focus loss; search option changes and accepted similarity settings publish it immediately. The saved selection scope, replacement direction, and resolved paragraph-style choices now reach the same view owner used by Repeat Search. Explicit Find All and Replace still dispatch their own commands. Tests distinguish uncommitted text, accepted entries, and a case toggle, with unchanged toolbar repeat behavior. Four targeted Vitest files passed all 56 tests. The existing browser search scenario and a local real-focus regression passed in installed Chrome. Office build, two Writer resource tests, dependencies, source tree and provenance, JSDoc, file size, scoped lint and format, doctor and routing passed. This checkpoint does not close the parent task or increment the full-suite cadence."
+  -
+    author: "CODER"
+    body: "Verified Find Bar and modeless dialog lifecycle against FindbarDispatcher, CheckButtonItemWindow, impl_executeSearch and SvxSearchDialog::SetSearchLBEntryTextAndGrabFocus. Both surfaces can stay open. Toolbar-local case and diacritic controls reset on reconstruction and enter the shared search state through actual toolbar dispatch. Ctrl+F in the entry selects the current text, Ctrl+H passes the current text to the dialog, and Find All restores toolbar-entry focus. The view dispatches absolute toolbar search independently of dialog style, width, similarity and selection settings. The document-title handler no longer requires manual memoization after the Writer view structure changed; both title collision regressions pass. Six targeted Vitest suites passed 68 tests. The existing search browser scenario and a real-browser coexistence regression passed using the installed Chrome channel. Office build, two Writer resource tests, dependency/source/provenance checks, JSDoc, file size, scoped lint and formatting, doctor, routing and diff checks passed. This checkpoint uses existing task paths and advances neither task closure nor the full-suite cadence."
 events:
   -
     type: "status"
@@ -248,8 +251,13 @@ events:
     at: "2026-11-21T04:57:49.004Z"
     author: "CODER"
     body: "Verified dialog-state checkpoint against SvxSearchDialog::LoseFocusHdl_Impl, ClickHdl_Impl, TemplateHdl_Impl and SaveToModule_Impl. Text and style drafts publish the current Find request on focus loss; search option changes and accepted similarity settings publish it immediately. The saved selection scope, replacement direction, and resolved paragraph-style choices now reach the same view owner used by Repeat Search. Explicit Find All and Replace still dispatch their own commands. Tests distinguish uncommitted text, accepted entries, and a case toggle, with unchanged toolbar repeat behavior. Four targeted Vitest files passed all 56 tests. The existing browser search scenario and a local real-focus regression passed in installed Chrome. Office build, two Writer resource tests, dependencies, source tree and provenance, JSDoc, file size, scoped lint and format, doctor and routing passed. This checkpoint does not close the parent task or increment the full-suite cadence."
+  -
+    type: "comment"
+    at: "2026-11-21T05:10:21.812Z"
+    author: "CODER"
+    body: "Verified Find Bar and modeless dialog lifecycle against FindbarDispatcher, CheckButtonItemWindow, impl_executeSearch and SvxSearchDialog::SetSearchLBEntryTextAndGrabFocus. Both surfaces can stay open. Toolbar-local case and diacritic controls reset on reconstruction and enter the shared search state through actual toolbar dispatch. Ctrl+F in the entry selects the current text, Ctrl+H passes the current text to the dialog, and Find All restores toolbar-entry focus. The view dispatches absolute toolbar search independently of dialog style, width, similarity and selection settings. The document-title handler no longer requires manual memoization after the Writer view structure changed; both title collision regressions pass. Six targeted Vitest suites passed 68 tests. The existing search browser scenario and a real-browser coexistence regression passed using the installed Chrome channel. Office build, two Writer resource tests, dependency/source/provenance checks, JSDoc, file size, scoped lint and formatting, doctor, routing and diff checks passed. This checkpoint uses existing task paths and advances neither task closure nor the full-suite cadence."
 doc_version: 3
-doc_updated_at: "2026-11-21T04:57:49.004Z"
+doc_updated_at: "2026-11-21T05:10:21.812Z"
 doc_updated_by: "CODER"
 description: "Implement the approved coherent Writer search-and-replace feature from pinned LibreOffice sources: real shared search engine and options, native paragraph/cursor traversal and replacement/history contracts, view-owned search state and dispatch, Find toolbar and Find and Replace dialog with generated upstream command placement and shortcuts. Preserve source semantics and explicit unsupported boundaries; never substitute DOM text search or browser RegExp for ICU contracts. Work only on writer in vite-office-writer; local upstream reading approved, no network or merges. Keep active until approved scope is verified."
 sections:

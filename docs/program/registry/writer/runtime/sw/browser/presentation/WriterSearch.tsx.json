@@ -17,9 +17,10 @@
       "divergenceClass": "B",
       "evidence": [
         "apps/office/src/sw/browser/presentation/WriterSearch.tsx#WriterSearch",
-        "vendor/libreoffice-reference/svx/source/dialog/srchdlg.cxx#SvxSearchDialog::SaveToModule_Impl"
+        "vendor/libreoffice-reference/svx/source/dialog/srchdlg.cxx#SvxSearchDialog::SaveToModule_Impl",
+        "vendor/libreoffice-reference/svx/source/tbxctrls/tbunosearchcontrollers.cxx#impl_executeSearch"
       ],
-      "justification": "Browser controls for the supported findbar.xml and findreplacedialog.ui surfaces use the Writer search owner for all document operations. Exposes the pinned CTL and CJK kashida and width controls in Other options. The toolbar passes its native transliteration subset. The dialog publishes text and style entries on focus loss and makes accepted option changes available to Repeat Search.",
+      "justification": "Browser controls for the supported findbar.xml and findreplacedialog.ui surfaces use the Writer search owner for all document operations. Exposes the pinned CTL and CJK kashida and width controls in Other options. The toolbar passes its native transliteration subset at dispatch and retains local flags while the dialog is open. The dialog publishes text and style entries on focus loss and makes accepted option changes available to Repeat Search.",
       "knownViolations": [],
       "localSymbols": [
         "WriterSearch"

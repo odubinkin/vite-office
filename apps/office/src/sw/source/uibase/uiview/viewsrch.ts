@@ -39,7 +39,6 @@ export interface WriterSearchItem {
   readonly matchCharacterWidth: boolean;
   readonly useAsianOptions: boolean;
   readonly japaneseFlags: number;
-  readonly findbarMatchDiacritics: boolean;
   readonly wholeWords: boolean;
   readonly similaritySearch: boolean;
   readonly styleSearch: boolean;
@@ -147,7 +146,6 @@ export class SwViewSearch {
     matchCharacterWidth: false,
     useAsianOptions: false,
     japaneseFlags: defaultJapaneseFlags,
-    findbarMatchDiacritics: false,
     wholeWords: false,
     similaritySearch: false,
     styleSearch: false,
@@ -264,7 +262,7 @@ export class SwViewSearch {
     } else {
       // Keep the search value consistent with the browser's single-line input.
       const text = this.GetFindBarSelection(cursor).replaceAll("\r", "").replaceAll("\n", "");
-      this.item = { ...this.item, search: text || rememberedSearch || this.item.search };
+      return { ...this.item, search: text || rememberedSearch || "" };
     }
     return this.item;
   }
@@ -298,6 +296,39 @@ export class SwViewSearch {
     const request = this.lastRequest;
     if (request === undefined) return false;
     return this.DispatchSearch(request.item, request.command, request.backward).matches > 0;
+  }
+
+  /** Dispatches the Find Bar's absolute search with its own transliteration flags. @param query - Toolbar text, toggles and direction. @returns Search feedback. */
+  public ExecFindBarSearch(
+    query: Readonly<{
+      search: string;
+      matchCase: boolean;
+      matchDiacritics: boolean;
+      all: boolean;
+      backward: boolean;
+    }>,
+  ): WriterSearchResult {
+    const item = {
+      ...this.item,
+      search: query.search,
+      matchCase: query.matchCase,
+      matchCharacterWidth: true,
+      wholeWords: false,
+      similaritySearch: false,
+      styleSearch: false,
+      selection: false,
+    };
+    this.SetSearchItem(item);
+    return this.ExecSearch(
+      {
+        ...item,
+        matchDiacritics: query.matchDiacritics,
+        matchKashida: false,
+        useAsianOptions: false,
+      },
+      query.all ? SvxSearchCmd.FIND_ALL : SvxSearchCmd.FIND,
+      query.backward,
+    );
   }
 
   /** Runs the represented Find, Find All, Replace and Replace All commands. @param item - Options dispatched by the active surface. @param command - Search operation. @param backward - Direction. @returns Search feedback. */
