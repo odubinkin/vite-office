@@ -22,6 +22,8 @@ import type { SwFormatColl, SwTextFormatColl } from "../doc/fmtcol";
 import { SwTextField } from "../../../inc/txtfld";
 import type { SwTextFlyCnt } from "../../../inc/txtflcnt";
 import { SwUndoDelLayFormat } from "./undobj1";
+import { RndStdIds } from "../../../../svx/inc/swframetypes";
+import type { SpzFrameFormat } from "../layout/atrfrm";
 import { SwUndRng } from "./undobj";
 
 /** Native history discriminants;registered old ranged text,direct format and text collection entries are implemented. */
@@ -106,6 +108,41 @@ export class SwHistoryTextFlyCnt extends SwHistoryHint {
   /** Releases any content still retained by the deletion action. @returns Nothing. */
   override Dispose(): void {
     this.deletion.Dispose();
+  }
+}
+
+/** Captures the old coordinates of a floating object that stays in the document. */
+export class SwHistoryChangeFlyAnchor extends SwHistoryHint {
+  private readonly nodeIndex: number;
+  private readonly offset: number | undefined;
+
+  /** Saves the original anchor without retaining a registered position. @param format - Original special format. @returns History entry. */
+  constructor(private readonly format: SpzFrameFormat) {
+    super(HISTORY_HINT.HSTRY_CHGFLYANCHOR);
+    const anchor = format.GetAnchor();
+    const node = anchor.GetAnchorNode();
+    if (!node) throw new Error("Writer floating anchor history requires a node.");
+    this.nodeIndex = node.GetIndex();
+    this.offset =
+      anchor.GetAnchorId() === RndStdIds.FLY_AT_CHAR ? anchor.GetAnchorContentOffset() : undefined;
+  }
+
+  /** Restores the anchor of the original live format. @param doc - Owning document. @returns Nothing. */
+  override SetInDoc(doc: SwDoc): void {
+    if (!doc.GetSpzFrameFormats().IsAlive(this.format)) return;
+    const anchor = this.format.GetAnchor().Clone();
+    const position = new SwPosition(doc.GetNodes().at(this.nodeIndex), this.offset);
+    const undo = doc.GetUndoManager();
+    const enabled = undo.DoesUndo();
+    undo.DoUndo(false);
+    try {
+      anchor.SetAnchor(position);
+      this.format.SetFormatAttr(anchor);
+    } finally {
+      position.Dispose();
+      anchor.Dispose();
+      undo.DoUndo(enabled);
+    }
   }
 }
 
@@ -439,6 +476,10 @@ export class SwHistory {
   /** Removes the covered inline fly and retains its deletion history first. @param hint - Actual point. @returns Nothing. */
   public AddTextFly(hint: SwTextFlyCnt): void {
     this.m_SwpHstry.push(new SwHistoryTextFlyCnt(hint));
+  }
+  /** Records a floating anchor before its position changes. @param format - Actual special format. @returns Nothing. */
+  public AddChangeFlyAnchor(format: SpzFrameFormat): void {
+    this.m_SwpHstry.push(new SwHistoryChangeFlyAnchor(format));
   }
   /** Original ownership move; neither history's temporary-end counter is reset, even when moving a nonempty suffix. @param position - Destination insertion slot. @param source - Source history. @param start - First moved entry. @returns Nothing. */
   public Move(position: number, source: SwHistory, start = 0): void {

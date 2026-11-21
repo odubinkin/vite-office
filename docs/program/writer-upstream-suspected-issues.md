@@ -5938,3 +5938,22 @@ been reproduced in the port.
 
 - [Original ReplaceText loop](../../vendor/libreoffice-reference/sw/source/core/txtnode/ndtxt.cxx#L3916)
 - [Original DeleteAttribute behavior](../../vendor/libreoffice-reference/sw/source/core/txtnode/thints.cxx#L1785)
+
+### WRITER-733 — Redo can move a character-anchored graphic to the other side of its match
+
+For replacement, `SwUndoSaveContent::DelContentIndex` preserves objects
+anchored to characters in the boundary paragraphs. It moves a covered
+anchor to the mark endpoint. A backward search can leave that endpoint at
+the end of the match. `SwUndoReplace::Impl::RedoImpl` reconstructs the
+selection with its mark at the start regardless of the original direction.
+
+The source-derived Writer test replaces `hit` with `matched` with an
+image anchored at offset 1. In the backward pass, the anchor moves to the
+old match end at offset 3. The insertion at that boundary leaves the
+character anchor in place. Undo restores offset 1 and Redo moves the anchor
+to offset 0. Writer preserves this sequence. The native result is inferred
+from the pinned source and verified in the port.
+
+- [Original anchor movement](../../vendor/libreoffice-reference/sw/source/core/undo/undobj.cxx#L1087)
+- [Original redo selection](../../vendor/libreoffice-reference/sw/source/core/undo/unins.cxx#L729)
+- [Original anchor handling at the insertion boundary](../../vendor/libreoffice-reference/sw/source/core/txtnode/ndtxt.cxx#L1562)

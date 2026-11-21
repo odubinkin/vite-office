@@ -148,47 +148,59 @@ it("retains formatting criteria while similarity search disables their controls"
   }
 });
 
-it("removes a covered inline graphic through Find and Replace and restores it on Undo", /** Runs normal browser search commands against a rendered inline graphic. @returns Nothing. */ () => {
-  const session = createWriterDocumentSession();
-  const shell = session.view.GetWrtShell();
-  shell.Insert("ab tail");
-  const node = shell.GetActiveParagraph();
-  const doc = node.GetDoc();
-  const point = new SwPosition(node, 1);
-  const range = new SwPaM(point);
-  const anchor = new SwFormatAnchor(RndStdIds.FLY_AS_CHAR);
-  const items = new SfxItemSet(doc.GetAttrPool(), aFrameFormatSetRange);
-  const gif = Buffer.from("R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7", "base64");
-  try {
-    anchor.SetAnchor(point);
-    items.Put(anchor);
-    doc
-      .GetDocumentContentOperationsManager()
-      .InsertGraphic(range, new Graphic(gif, "image/gif", new Size(120, 120)), items);
-  } finally {
-    range.Dispose();
-    point.Dispose();
-    anchor.Dispose();
-    items.Dispose();
-  }
-  const workbench = render(<WriterWorkbench isActive view={session.view} />);
-  const editor = within(screen.getByRole("textbox", { name: "Writer document text" }));
-  try {
-    expect(editor.getByRole("img", { name: "Image1" })).toBeInTheDocument();
-    fireEvent.keyDown(window, { key: "h", ctrlKey: true });
-    const dialog = within(screen.getByRole("dialog", { name: "Find and Replace" }));
-    fireEvent.click(dialog.getByText("Other options"));
-    fireEvent.click(dialog.getByRole("checkbox", { name: "Regular expressions" }));
-    fireEvent.change(dialog.getByLabelText("Find"), { target: { value: "a.b" } });
-    fireEvent.change(dialog.getByLabelText("Replace with"), { target: { value: "cat" } });
-    fireEvent.click(dialog.getByRole("button", { name: "Replace All" }));
-    expect(node.GetText()).toBe("cat tail");
-    expect(editor.queryByRole("img", { name: "Image1" })).toBeNull();
-    fireEvent.keyDown(dialog.getByLabelText("Find"), { key: "Escape" });
-    fireEvent.keyDown(window, { key: "z", ctrlKey: true });
-    expect(editor.getByRole("img", { name: "Image1" })).toBeInTheDocument();
-  } finally {
-    workbench.unmount();
-    session.view.Close();
-  }
-});
+it.each([
+  { variant: "inline", type: RndStdIds.FLY_AS_CHAR, pattern: "a.b" },
+  { variant: "floating", type: RndStdIds.FLY_AT_CHAR, pattern: "ab" },
+])(
+  "updates a covered $variant graphic through Find and Replace and restores it on Undo",
+  /** Runs normal search commands with a rendered graphic. @param scenario - Native anchor mode and find pattern. @returns Nothing. */
+  (scenario) => {
+    const session = createWriterDocumentSession();
+    const shell = session.view.GetWrtShell();
+    shell.Insert("ab tail");
+    const node = shell.GetActiveParagraph();
+    const doc = node.GetDoc();
+    const point = new SwPosition(node, 1);
+    const range = new SwPaM(point);
+    const anchor = new SwFormatAnchor(scenario.type);
+    const items = new SfxItemSet(doc.GetAttrPool(), aFrameFormatSetRange);
+    const gif = Buffer.from("R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7", "base64");
+    try {
+      anchor.SetAnchor(point);
+      items.Put(anchor);
+      doc
+        .GetDocumentContentOperationsManager()
+        .InsertGraphic(range, new Graphic(gif, "image/gif", new Size(120, 120)), items);
+    } finally {
+      range.Dispose();
+      point.Dispose();
+      anchor.Dispose();
+      items.Dispose();
+    }
+    const workbench = render(<WriterWorkbench isActive view={session.view} />);
+    try {
+      expect(screen.getByRole("img", { name: "Image1" })).toBeInTheDocument();
+      fireEvent.keyDown(window, { key: "h", ctrlKey: true });
+      const dialog = within(screen.getByRole("dialog", { name: "Find and Replace" }));
+      fireEvent.click(dialog.getByText("Other options"));
+      fireEvent.click(dialog.getByRole("checkbox", { name: "Regular expressions" }));
+      fireEvent.change(dialog.getByLabelText("Find"), { target: { value: scenario.pattern } });
+      fireEvent.change(dialog.getByLabelText("Replace with"), { target: { value: "cat" } });
+      fireEvent.click(dialog.getByRole("button", { name: "Replace All" }));
+      expect(node.GetText()).toBe("cat tail");
+      if (scenario.type === RndStdIds.FLY_AS_CHAR) {
+        expect(screen.queryByRole("img", { name: "Image1" })).toBeNull();
+      } else {
+        expect(screen.getByRole("img", { name: "Image1" })).toBeInTheDocument();
+        expect(doc.GetSpzFrameFormats().GetFormat(0).GetAnchor().GetAnchorContentOffset()).toBe(0);
+      }
+      fireEvent.keyDown(dialog.getByLabelText("Find"), { key: "Escape" });
+      fireEvent.keyDown(window, { key: "z", ctrlKey: true });
+      expect(screen.getByRole("img", { name: "Image1" })).toBeInTheDocument();
+      expect(doc.GetSpzFrameFormats().GetFormat(0).GetAnchor().GetAnchorContentOffset()).toBe(1);
+    } finally {
+      workbench.unmount();
+      session.view.Close();
+    }
+  },
+);

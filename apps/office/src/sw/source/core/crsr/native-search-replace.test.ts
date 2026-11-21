@@ -657,3 +657,105 @@ it.each([false, true])(
     }
   },
 );
+
+it.each([false, true])(
+  "moves a covered character anchor and restores the original offset backward=%s",
+  /** Exercises floating graphic anchors through actual find, replace and history. @param backward - Search direction. @returns Nothing. */
+  (backward) => {
+    const f = fixture("hit tail");
+    const point = new SwPosition(f.node, 1);
+    const selection = new SwPaM(point);
+    const anchor = new SwFormatAnchor(RndStdIds.FLY_AT_CHAR);
+    const items = new SfxItemSet(f.doc.GetAttrPool(), aFrameFormatSetRange);
+    const graphic = new Graphic(Uint8Array.from([137, 80, 78, 71]), "image/png", new Size(40, 20));
+    try {
+      anchor.SetAnchor(point);
+      items.Put(anchor);
+      const format = f.doc
+        .GetDocumentContentOperationsManager()
+        .InsertGraphic(selection, graphic, items);
+      const section = format.GetContent().GetContentIdx()?.GetNode();
+      const options = new SearchOptions2();
+      options.searchString.assign(string("hit"));
+      options.replaceString.assign(string("matched"));
+      expect(
+        f.shell
+          .GetCursor()
+          .Find_Text(
+            options,
+            false,
+            backward ? SwDocPositions.End : SwDocPositions.Start,
+            backward ? SwDocPositions.Start : SwDocPositions.End,
+            [false],
+            FindRanges.InSelAll | FindRanges.InBodyOnly,
+            true,
+          ),
+      ).toBe(1);
+
+      expect(f.node.GetText()).toBe("matched tail");
+      expect(f.doc.GetSpzFrameFormats().IsAlive(format)).toBe(true);
+      expect(format.GetAnchor().GetAnchorNode()).toBe(f.node);
+      expect(format.GetContent().GetContentIdx()?.GetNode()).toBe(section);
+      expect(format.GetAnchor().GetAnchorContentOffset()).toBe(backward ? 3 : 0);
+
+      expect(f.shell.Undo()).toBe(true);
+      expect(f.node.GetText()).toBe("hit tail");
+      expect(format.GetAnchor().GetAnchorContentOffset()).toBe(1);
+      expect(f.shell.Redo()).toBe(true);
+      expect(f.node.GetText()).toBe("matched tail");
+      expect(format.GetAnchor().GetAnchorContentOffset()).toBe(0);
+      expect(f.shell.Undo()).toBe(true);
+      expect(format.GetAnchor().GetAnchorContentOffset()).toBe(1);
+    } finally {
+      items.Dispose();
+      anchor.Dispose();
+      selection.Dispose();
+      point.Dispose();
+      f.shell.Close();
+      f.docShell.Close();
+    }
+  },
+);
+
+it("restores a floating paragraph anchor to the recreated second paragraph", /** Checks the native move for a joined paragraph boundary and repeated undo. @returns Nothing. */ () => {
+  const f = fixture("left");
+  const last = f.doc.GetNodes().MakeTextNode("right");
+  const firstPoint = new SwPosition(f.node, f.node.Len());
+  const lastPoint = new SwPosition(last, 0);
+  const insertion = new SwPaM(lastPoint);
+  const selection = new SwPaM(lastPoint, firstPoint);
+  const graphic = new Graphic(Uint8Array.from([137, 80, 78, 71]), "image/png", new Size(40, 20));
+  try {
+    const operations = f.doc.GetDocumentContentOperationsManager();
+    const format = operations.InsertGraphic(insertion, graphic);
+    expect(format.GetAnchor().GetAnchorId()).toBe(RndStdIds.FLY_AT_PARA);
+    expect(format.GetAnchor().GetAnchorNode()).toBe(last);
+    expect(operations.ReplaceRange(selection, "-")).toBe(true);
+    expect(
+      f.doc.paragraphs.map(
+        /** Reads canonical paragraph text. @param node - Paragraph. @returns Text. */ (node) =>
+          node.GetText(),
+      ),
+    ).toEqual(["left-right"]);
+    expect(format.GetAnchor().GetAnchorNode()).toBe(f.node);
+    for (let cycle = 0; cycle < 2; cycle++) {
+      expect(f.shell.Undo()).toBe(true);
+      expect(
+        f.doc.paragraphs.map(
+          /** Reads canonical paragraph text. @param node - Paragraph. @returns Text. */ (node) =>
+            node.GetText(),
+        ),
+      ).toEqual(["left", "right"]);
+      expect(format.GetAnchor().GetAnchorNode()).toBe(f.doc.paragraphs[1]);
+      expect(f.shell.Redo()).toBe(true);
+      expect(format.GetAnchor().GetAnchorNode()).toBe(f.node);
+    }
+  } finally {
+    selection.Dispose();
+    insertion.Dispose();
+    firstPoint.Dispose();
+    lastPoint.Dispose();
+    f.shell.Close();
+    f.docShell.Close();
+  }
+});
