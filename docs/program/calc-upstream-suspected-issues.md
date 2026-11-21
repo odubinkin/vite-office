@@ -7507,3 +7507,13 @@ the dynamic field and the original attribute behavior.
 
 - [Original date field import](../../vendor/libreoffice-reference/sc/source/filter/xml/celltextparacontext.cxx)
 - [Original edit-field export](../../vendor/libreoffice-reference/sc/source/filter/xml/xmlexprt.cxx)
+
+### CALC-788 — Signed ODS first page numbers narrow into an unsigned Calc item
+
+The ODF handler accepts a signed 16-bit value after saturation. Calc's page
+style setter stores that value in an unsigned item, so `-2` becomes `65534`
+in the item set and appears as `-2` again through the signed export property.
+Calc preserves both conversions.
+
+- [Original first page number handler](../../vendor/libreoffice-reference/xmloff/source/style/PageMasterPropHdlFactory.cxx)
+- [Original Calc page style setter and getter](../../vendor/libreoffice-reference/sc/source/ui/unoobj/styleuno.cxx)

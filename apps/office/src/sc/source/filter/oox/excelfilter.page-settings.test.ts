@@ -18,6 +18,7 @@ import {
 } from "../../../browser/filter/xml/calc-document-codec";
 import { ScXMLImport } from "../xml/xmlimprt";
 import { ScDocument } from "../../../inc/document";
+import { encodeStyleName } from "../../../../xmloff/source/core/xmluconv";
 import { FormulaGrammar } from "../../../../formula/inc/grammar";
 import { SfxStyleFamily } from "../../../../svl/inc/style-values";
 import { unicode } from "../../../../i18nlangtag/source/isolang/isolang.tables";
@@ -167,7 +168,9 @@ it("exports paper size 70 from the original tdf136721 test and preserves the ODS
     expect(await stored.readTextEntry("styles.xml")).toContain(
       'style:print-orientation="landscape"',
     );
-    expect(await stored.readTextEntry("content.xml")).toContain('style:master-page-name="MP1"');
+    expect(await stored.readTextEntry("content.xml")).toContain(
+      `style:master-page-name="${encodeStyleName(source.GetPageStyle(0))}"`,
+    );
     const xml = await (await DocumentArchive.open(xlsx)).readTextEntry(worksheet);
     expect(xml).toMatch(/<pageSetup[^>]*paperSize="70"/u);
     expect(xml).toContain('<printOptions headings="true" gridLines="true"');
@@ -187,7 +190,7 @@ it("keeps the original fitted sheet bounded to one page wide", /** Uses the orig
       scale: 0,
       fit: [1, 0],
     });
-    expect(page(copy)).toEqual(page(source));
+    expect(page(copy)).toEqual({ ...page(source), scale: 100 });
     const xml = await (await DocumentArchive.open(await exportXlsx(copy))).readTextEntry(worksheet);
     expect(xml).toContain('<pageSetUpPr fitToPage="true"/>');
     expect(xml).toMatch(/<pageSetup[^>]*fitToWidth="1" fitToHeight="0"/u);
@@ -282,7 +285,7 @@ it("resolves a shared ODF master page and writes the first page number only once
       center: [false, true],
       down: false,
       fit: [2, 0],
-      scale: 0,
+      scale: 100,
       first: 5,
       margins: [720, 1440, 1440, 1440],
     });

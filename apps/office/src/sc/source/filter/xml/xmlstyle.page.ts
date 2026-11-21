@@ -13,10 +13,18 @@ import {
   SvXMLImportContext,
   type FastAttributeList,
 } from "../../../../xmloff/source/core/xmlimp";
-import { SvXMLUnitConverter } from "../../../../xmloff/source/core/xmluconv";
+import { SvXMLUnitConverter, encodeStyleName } from "../../../../xmloff/source/core/xmluconv";
+import {
+  importPagePrint,
+  pagePrintTokens,
+} from "../../../../xmloff/source/style/PageMasterStyleMap";
 import { escapeXml } from "../../../../xmloff/source/text/txtparae";
-import { SetPageScale } from "../../core/data/stlsheet";
-import type { ScPageScaleToItem } from "../../../inc/attrib";
+import { ScPageScaleToItem, ScViewObjectModeItem } from "../../../inc/attrib";
+import { ScVObjMode } from "../../../inc/global";
+import { SfxStyleFamily } from "../../../../svl/inc/style-values";
+import { SfxStyleSheetBase } from "../../../../svl/source/items/style-model";
+import { text } from "../../../../i18nlangtag/source/isolang/isolang.tables";
+import { Converter } from "../../../../sax/source/tools/converter";
 import { CellTextStylePool } from "./xmlexprt.celltext";
 import type { XMLFontAutoStylePool } from "../../../../xmloff/source/style/XMLFontAutoStylePool";
 import { createHeaderFooterContext, exportHeaderFooter } from "./XMLTableHeaderFooterContext";
@@ -33,6 +41,11 @@ import {
   ATTR_PAGE_GRID,
   ATTR_PAGE_HEADERS,
   ATTR_PAGE_NOTES,
+  ATTR_PAGE_CHARTS,
+  ATTR_PAGE_DRAWINGS,
+  ATTR_PAGE_FORMULAS,
+  ATTR_PAGE_OBJECTS,
+  ATTR_PAGE_NULLVALS,
   ATTR_PAGE_TOPDOWN,
   ATTR_PAGE_SCALE,
   ATTR_PAGE_SCALETOPAGES,
@@ -43,16 +56,53 @@ import {
 } from "../../../inc/scitems";
 
 const units = new SvXMLUnitConverter("twip");
-const flags = [
-  [ATTR_PAGE_NOTES, "annotations"],
-  [ATTR_PAGE_GRID, "grid"],
-  [ATTR_PAGE_HEADERS, "headers"],
-] as const;
+const printItems: Readonly<Record<(typeof pagePrintTokens)[number], number>> = {
+  annotations: ATTR_PAGE_NOTES,
+  charts: ATTR_PAGE_CHARTS,
+  drawings: ATTR_PAGE_DRAWINGS,
+  formulas: ATTR_PAGE_FORMULAS,
+  grid: ATTR_PAGE_GRID,
+  headers: ATTR_PAGE_HEADERS,
+  objects: ATTR_PAGE_OBJECTS,
+  "zero-values": ATTR_PAGE_NULLVALS,
+};
 
-/** Reads a bounded ODF scale or first-page integer. @param value - Source lexical value. @returns Native short value or absent. */
-function short(value: string | null): number | undefined {
-  if (value === null || !/^\+?\d+$/u.test(value)) return undefined;
-  return Math.min(32767, Number(value));
+/** Reads a signed16 UNO print value using the original number or percent handler. @param value - XML value. @param percent - Whether the property uses a percent. @returns Parsed and saturated value or absence. */
+function short(value: string | null, percent = false): number | undefined {
+  if (value === null) return undefined;
+  const number: [number] = [0];
+  const valid = percent
+    ? Converter.convertPercent(number, value)
+    : Converter.convertNumber(number, value);
+  return valid ? Math.max(-32768, Math.min(32767, number[0])) : undefined;
+}
+
+/** Applies the original alphabetical UNO page-scale setters and their direct-item resets. @param items - Native style. @param properties - ODF layout attributes. @returns Nothing. */
+function importPageScale(items: SfxItemSet, properties: ReadonlyMap<T, string>): void {
+  for (const [which, token] of [
+    [ATTR_PAGE_SCALE, T.STYLE_SCALE_TO],
+    [ATTR_PAGE_SCALETOPAGES, T.STYLE_SCALE_TO_PAGES],
+  ] as const) {
+    const value = short(properties.get(token) ?? null, which === ATTR_PAGE_SCALE);
+    if (value === undefined) continue;
+    items.ClearItem(ATTR_PAGE_SCALE);
+    items.ClearItem(ATTR_PAGE_SCALETOPAGES);
+    items.ClearItem(ATTR_PAGE_SCALETO);
+    items.Put(new SfxUInt16Item(which, value & 0xffff));
+  }
+  const x =
+    short(properties.get(T.STYLE_SCALE_TO_X) ?? null) ??
+    short(properties.get(T.LOEXT_SCALE_TO_X) ?? null);
+  const y =
+    short(properties.get(T.STYLE_SCALE_TO_Y) ?? null) ??
+    short(properties.get(T.LOEXT_SCALE_TO_Y) ?? null);
+  if (x === undefined && y === undefined) return;
+  const fit = new ScPageScaleToItem(items.Get(ATTR_PAGE_SCALETO) as ScPageScaleToItem);
+  if (x !== undefined) fit.SetWidth(x);
+  if (y !== undefined) fit.SetHeight(y);
+  items.Put(fit);
+  items.ClearItem(ATTR_PAGE_SCALE);
+  items.ClearItem(ATTR_PAGE_SCALETOPAGES);
 }
 
 /** Applies original page-layout properties to the actual page-family item set. @param items - Native style. @param properties - ODF layout properties. @returns Nothing. */
@@ -102,29 +152,33 @@ function importLayout(items: SfxItemSet, properties: ReadonlyMap<T, string>): vo
     const old = items.Get(ATTR_ULSPACE) as SvxULSpaceItem;
     items.Put(new SvxULSpaceItem(top ?? old.GetUpper(), bottom ?? old.GetLower(), ATTR_ULSPACE));
   }
-  const print = get(T.STYLE_PRINT);
-  if (print !== null) {
-    const values = new Set(print.trim().split(/\s+/u));
-    for (const [which, name] of flags) items.Put(new SfxBoolItem(which, values.has(name)));
-  }
+  const print = importPagePrint(get(T.STYLE_PRINT));
+  if (print)
+    for (const token of pagePrintTokens) {
+      const which = printItems[token];
+      const enabled = print.has(token);
+      items.Put(
+        items.Get(which) instanceof ScViewObjectModeItem
+          ? new ScViewObjectModeItem(
+              which,
+              enabled ? ScVObjMode.VOBJ_MODE_SHOW : ScVObjMode.VOBJ_MODE_HIDE,
+            )
+          : new SfxBoolItem(which, enabled),
+      );
+    }
   const center = get(T.STYLE_TABLE_CENTERING);
-  if (center !== null) {
-    items.Put(new SfxBoolItem(ATTR_PAGE_HORCENTER, center === "horizontal" || center === "both"));
-    items.Put(new SfxBoolItem(ATTR_PAGE_VERCENTER, center === "vertical" || center === "both"));
-  }
+  if (center === "horizontal" || center === "both")
+    items.Put(new SfxBoolItem(ATTR_PAGE_HORCENTER, true));
+  if (center === "vertical" || center === "both")
+    items.Put(new SfxBoolItem(ATTR_PAGE_VERCENTER, true));
   const order = get(T.STYLE_PRINT_PAGE_ORDER);
   if (order === "ttb" || order === "ltr")
     items.Put(new SfxBoolItem(ATTR_PAGE_TOPDOWN, order === "ttb"));
   const first = get(T.STYLE_FIRST_PAGE_NUMBER);
   const firstPage = first === "continue" ? 0 : short(first);
-  if (firstPage !== undefined) items.Put(new SfxUInt16Item(ATTR_PAGE_FIRSTPAGENO, firstPage));
-  const x = short(get(T.STYLE_SCALE_TO_X) ?? get(T.LOEXT_SCALE_TO_X));
-  const y = short(get(T.STYLE_SCALE_TO_Y) ?? get(T.LOEXT_SCALE_TO_Y));
-  const total = short(get(T.STYLE_SCALE_TO_PAGES));
-  const percent = get(T.STYLE_SCALE_TO);
-  const scale = percent?.endsWith("%") ? short(percent.slice(0, -1)) : undefined;
-  if (x !== undefined || y !== undefined || total !== undefined || scale !== undefined)
-    SetPageScale(items, scale ?? 100, x || y ? 0 : (total ?? 0), x ?? 0, y ?? 0);
+  if (firstPage !== undefined)
+    items.Put(new SfxUInt16Item(ATTR_PAGE_FIRSTPAGENO, firstPage & 0xffff));
+  importPageScale(items, properties);
 }
 
 /** Attributes grouped by the native page layout child contexts. */
@@ -263,24 +317,47 @@ function exportLayout(items: SfxItemSet): string {
     /** Formats the actual physical length. @param value - Twip length. @returns ODF measure. */ (
       value: number,
     ): string => units.convertMeasureToXML(value);
-  const flag = /** Reads one effective page flag. @param which - Item identity. @returns Flag. */ (
-    which: number,
-  ): boolean => (items.Get(which) as SfxBoolItem).GetValue();
-  const print: string[] = ["charts", "drawings", "objects", "zero-values"];
-  for (const [which, name] of flags) if (flag(which)) print.push(name);
-  const h = flag(ATTR_PAGE_HORCENTER),
-    v = flag(ATTR_PAGE_VERCENTER);
-  const center = h && v ? "both" : h ? "horizontal" : v ? "vertical" : "none";
-  const first = (items.Get(ATTR_PAGE_FIRSTPAGENO) as SfxUInt16Item).GetValue();
+  const directFlag =
+    /** Reads one explicitly supplied flag. @param which - Item identity. @returns Flag or absence. */ (
+      which: number,
+    ): boolean | undefined =>
+      (items.GetItemIfSet(which, false) as SfxBoolItem | undefined)?.GetValue();
+  const h = directFlag(ATTR_PAGE_HORCENTER),
+    v = directFlag(ATTR_PAGE_VERCENTER);
+  const center = h && v ? "both" : h ? "horizontal" : v ? "vertical" : undefined;
+  const down = directFlag(ATTR_PAGE_TOPDOWN);
+  const first = (
+    items.GetItemIfSet(ATTR_PAGE_FIRSTPAGENO, false) as SfxUInt16Item | undefined
+  )?.GetValue();
+  let attributes = `fo:page-width="${measure(size.Width())}" fo:page-height="${measure(size.Height())}" style:print-orientation="${page.IsLandscape() ? "landscape" : "portrait"}" fo:margin-left="${measure(lr.ResolveLeft())}" fo:margin-right="${measure(lr.ResolveRight())}" fo:margin-top="${measure(ul.GetUpper())}" fo:margin-bottom="${measure(ul.GetLower())}"`;
+  if (pagePrintTokens.some((token) => items.GetItemIfSet(printItems[token], false))) {
+    const print = pagePrintTokens.filter((token) => {
+      const item = items.Get(printItems[token]) as SfxBoolItem | ScViewObjectModeItem;
+      return item instanceof ScViewObjectModeItem
+        ? item.GetValue() === ScVObjMode.VOBJ_MODE_SHOW
+        : item.GetValue();
+    });
+    attributes += ` style:print="${print.join(" ")}"`;
+  }
+  if (down !== undefined) attributes += ` style:print-page-order="${down ? "ttb" : "ltr"}"`;
+  if (center) attributes += ` style:table-centering="${center}"`;
+  if (first !== undefined)
+    attributes += ` style:first-page-number="${first ? (first << 16) >> 16 : "continue"}"`;
+  return attributes + exportPageScale(items);
+}
+
+/** Omits individually zero or default scale properties as the original export mapper does. @param items - Native page style. @returns Scale attributes. */
+function exportPageScale(items: SfxItemSet): string {
   const fit = items.GetItemIfSet(ATTR_PAGE_SCALETO, false) as ScPageScaleToItem | undefined;
-  const pages = (items.Get(ATTR_PAGE_SCALETOPAGES) as SfxUInt16Item).GetValue();
-  const scale = (items.Get(ATTR_PAGE_SCALE) as SfxUInt16Item).GetValue();
-  const fitting = fit?.IsValid()
-    ? ` style:scale-to-X="${fit.GetWidth()}" style:scale-to-Y="${fit.GetHeight()}"`
-    : pages
-      ? ` style:scale-to-pages="${pages}"`
-      : ` style:scale-to="${scale || 100}%"`;
-  return `fo:page-width="${measure(size.Width())}" fo:page-height="${measure(size.Height())}" style:print-orientation="${page.IsLandscape() ? "landscape" : "portrait"}" fo:margin-left="${measure(lr.ResolveLeft())}" fo:margin-right="${measure(lr.ResolveRight())}" fo:margin-top="${measure(ul.GetUpper())}" fo:margin-bottom="${measure(ul.GetLower())}" style:print="${print.join(" ")}" style:print-page-order="${flag(ATTR_PAGE_TOPDOWN) ? "ttb" : "ltr"}" style:table-centering="${center}" style:first-page-number="${first || "continue"}"${fitting}`;
+  const pages = (
+    items.GetItemIfSet(ATTR_PAGE_SCALETOPAGES, false) as SfxUInt16Item | undefined
+  )?.GetValue();
+  const scale = (
+    items.GetItemIfSet(ATTR_PAGE_SCALE, false) as SfxUInt16Item | undefined
+  )?.GetValue();
+  const width = fit?.GetWidth(),
+    height = fit?.GetHeight();
+  return `${scale ? ` style:scale-to="${(scale << 16) >> 16}%"` : ""}${pages ? ` style:scale-to-pages="${(pages << 16) >> 16}"` : ""}${width ? ` style:scale-to-X="${(width << 16) >> 16}"` : ""}${height ? ` style:scale-to-Y="${(height << 16) >> 16}"` : ""}`;
 }
 
 /** Writes header/footer layout dimensions and adjacent body spacing from the actual nested page set. @param items - Page style. @param header - Header or footer selector. @returns XML fragment. */
@@ -298,7 +375,7 @@ function exportHeaderFooterLayout(items: SfxItemSet, header: boolean): string {
   return `<style:${key}-style><style:header-footer-properties ${dynamic ? "fo:min-height" : "svg:height"}="${length}" fo:margin-${header ? "bottom" : "top"}="${units.convertMeasureToXML(distance)}"/></style:${key}-style>`;
 }
 
-/** Collects layout and master records needed by the actual document sheets. @param document - Workbook. @param fonts - Shared package font declarations. @returns XML records and style-name associations. */
+/** Collects all native page styles and their automatic layouts. @param document - Workbook. @param fonts - Shared package font declarations. @returns XML records and style-name associations. */
 export function exportPageStyles(
   document: ScDocument,
   fonts: XMLFontAutoStylePool,
@@ -308,21 +385,26 @@ export function exportPageStyles(
   readonly names: ReadonlyMap<string, string>;
 } {
   const names = new Map<string, string>();
+  const layoutNames = new Map<string, string>();
   const textStyles = new CellTextStylePool(document, fonts, "HF");
-  const pool = document.GetStyleSheetPool();
+  const styles = document.GetStyleSheetPool()?.CreateIterator(SfxStyleFamily.Page);
   let layouts = "",
     masters = "";
-  for (let tab = 0; tab < document.GetTableCount(); tab++) {
-    const name = document.GetPageStyle(tab);
-    if (names.has(name)) continue;
-    const style = pool?.GetPageStyle(name);
-    if (!style) continue;
-    const layout = `pm${names.size + 1}`;
-    const master = `MP${names.size + 1}`;
+  for (let style = styles?.First(); style; style = styles?.Next()) {
+    if (!(style instanceof SfxStyleSheetBase)) continue;
+    const name = text(style.GetName());
+    const master = encodeStyleName(name);
     names.set(name, master);
     const items = style.GetItemSet();
-    layouts += `<style:page-layout style:name="${layout}"><style:page-layout-properties ${exportLayout(items)}/>${exportHeaderFooterLayout(items, true)}${exportHeaderFooterLayout(items, false)}</style:page-layout>`;
-    masters += `<style:master-page style:name="${master}" style:display-name="${escapeXml(name)}" style:page-layout-name="${layout}">${exportHeaderFooter(items, textStyles)}</style:master-page>`;
+    const layoutBody = `<style:page-layout-properties ${exportLayout(items)}/>${exportHeaderFooterLayout(items, true)}${exportHeaderFooterLayout(items, false)}`;
+    let layout = layoutNames.get(layoutBody);
+    if (layout === undefined) {
+      layout = `Mpm${layoutNames.size + 1}`;
+      layoutNames.set(layoutBody, layout);
+      layouts += `<style:page-layout style:name="${layout}">${layoutBody}</style:page-layout>`;
+    }
+    const display = master === name ? "" : ` style:display-name="${escapeXml(name)}"`;
+    masters += `<style:master-page style:name="${master}"${display} style:page-layout-name="${layout}">${exportHeaderFooter(items, textStyles)}</style:master-page>`;
   }
   return {
     layouts: textStyles.exportStyles() + layouts,

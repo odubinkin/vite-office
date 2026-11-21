@@ -8,13 +8,16 @@
     "upstreamPath": "sc/source/filter/xml/xmlstyli.cxx",
     "localSymbols": [
       "ScXMLPageStyles",
-      "exportPageStyles"
+      "exportPageStyles",
+      "importPageScale",
+      "exportPageScale"
     ],
     "upstreamSymbols": [
       "ScMasterPageContext::Finish"
     ],
     "preservedResponsibilities": [
-      "Uses native ODF table/master-page associations to apply and write page-family item sets for represented print properties, header/footer geometry, and story content."
+      "Uses native ODF table/master-page associations to apply and write page-family item sets for represented print properties, header/footer geometry, and story content.",
+      "Collects unused and assigned named masters, merges all eight original print options, and applies the native signed scale properties and direct-state omission rules."
     ],
     "omittedResponsibilities": [
       "Header/footer backgrounds, borders, and unsupported page-style property groups remain unported."
@@ -28,6 +31,10 @@
         {
           "path": "apps/office/src/sc/source/filter/oox/excelfilter.page-settings.test.ts",
           "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sc/source/filter/xml/ods-page-master.test.ts",
+          "marker": "ports testTdf154445_unused_pagestyles"
         }
       ],
       "upstream": [
@@ -38,6 +45,18 @@
         {
           "path": "vendor/libreoffice-reference/xmloff/source/style/PageMasterStyleMap.cxx",
           "marker": "PROP_ScaleToPagesX"
+        },
+        {
+          "path": "vendor/libreoffice-reference/xmloff/source/style/PageMasterExportPropMapper.cxx",
+          "marker": "lcl_RemoveStateIfZero16( pPMScaleToX )"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/source/filter/xml/xmlexprt.cxx",
+          "marker": "exportMasterStyles( false )"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/qa/unit/subsequent_export_test4.cxx",
+          "marker": "testTdf154445_unused_pagestyles"
         }
       ]
     },

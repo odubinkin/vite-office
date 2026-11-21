@@ -13,6 +13,23 @@ const pageUsage = new Map<string, PageStyleLayout>([
   ["mirrored", PageStyleLayout.MIRRORED],
 ]);
 
+/** Original token order for merged style:print properties. */
+export const pagePrintTokens = [
+  "annotations",
+  "charts",
+  "drawings",
+  "formulas",
+  "grid",
+  "headers",
+  "objects",
+  "zero-values",
+] as const;
+
+/** Reads the original space-delimited print tokens, including an explicit empty list. @param value - Authored attribute or absence. @returns Recognized print tokens or absence. */
+export function importPagePrint(value: string | null): ReadonlySet<string> | undefined {
+  return value === null ? undefined : new Set(value.split(" "));
+}
+
 /** Reads the original page-usage attribute from the layout element. @param value - Authored token. @returns Recognized usage. */
 export function importPageUsage(value: string | null): PageStyleLayout | undefined {
   return value === null ? undefined : pageUsage.get(value);

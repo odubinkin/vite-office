@@ -77,7 +77,9 @@ export class ScStyleSheet extends SfxStyleSheet {
         const margin = SvxIndentValue.twips(1134);
         this.pSet.Put(new SvxLRSpaceItem(margin, margin, SvxIndentValue.zero(), ATTR_LRSPACE));
         this.pSet.Put(new SvxULSpaceItem(1134, 1134, ATTR_ULSPACE));
-        this.pSet.Put(new SfxUInt16Item(ATTR_PAGE_SCALETOPAGES, 0));
+        pool.GetPool().SetUserDefaultItem(new SfxUInt16Item(ATTR_PAGE_SCALE, 100));
+        pool.GetPool().SetUserDefaultItem(new SfxUInt16Item(ATTR_PAGE_SCALETOPAGES, 0));
+        pool.GetPool().SetUserDefaultItem(new ScPageScaleToItem());
       }
       this.bMySet = true;
     }
