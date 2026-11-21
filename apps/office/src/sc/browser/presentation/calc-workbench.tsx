@@ -111,7 +111,6 @@ export function CalcWorkbench({
     sheetDialog !== undefined ||
     widthDialog !== undefined ||
     tabDialog !== undefined;
-  if (modal && sheetPopup !== undefined) setSheetPopup(undefined);
   const root = useRef<HTMLElement>(null),
     tabs = useRef<HTMLDivElement>(null),
     previousModal = useRef(modal),
@@ -119,6 +118,8 @@ export function CalcWorkbench({
     restoredViewport = useRef(false);
   const view = controller.viewData,
     doc = controller.shell.GetDocument();
+  const showSheetTabs = view.GetOptions().GetOption(ViewOption.TABCONTROLS);
+  if ((modal || !showSheetTabs) && sheetPopup !== undefined) setSheetPopup(undefined);
   const paneLayoutRevision = view.GetPaneLayoutRevision();
   const cursorColumn = view.GetCurX(),
     cursorRow = view.GetCurY(),
@@ -818,7 +819,7 @@ export function CalcWorkbench({
           }
           onInputKeyDown={inputKey}
         />
-        <div ref={tabs}>
+        <div ref={tabs} hidden={!showSheetTabs}>
           <ScTabControl
             viewData={view}
             canInsert={doc.GetTableCount() <= MAXTAB}
@@ -889,7 +890,7 @@ export function CalcWorkbench({
           <span className="ml-auto">{controller.error || "Ready"}</span>
         </div>
       </div>
-      {sheetPopup === undefined || modal ? null : (
+      {sheetPopup === undefined || modal || !showSheetTabs ? null : (
         <CommandPopupMenu
           ariaLabel="Calc sheet context menu"
           commandSource={source}

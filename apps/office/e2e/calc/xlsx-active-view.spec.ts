@@ -229,7 +229,9 @@ test("Calc restores the XLSX active sheet when several sheets are visible", /** 
   if (path === null) throw new Error("Missing XLSX download.");
   const buffer = await readFile(path);
   const archive = await DocumentArchive.open(new Uint8Array(buffer));
-  expect(await archive.readTextEntry("xl/workbook.xml")).toContain('<workbookView activeTab="4"/>');
+  expect(await archive.readTextEntry("xl/workbook.xml")).toContain(
+    '<workbookView activeTab="4" showSheetTabs="true"/>',
+  );
   expect(await archive.readTextEntry("xl/worksheets/sheet5.xml")).toMatch(
     /<f>VLOOKUP\(42,A1(?::A1)?,1,0\)<\/f>/u,
   );

@@ -24,12 +24,16 @@ const SC_TABLESELECTED = "TableSelected";
 const SC_UNO_SHOWGRID = "ShowGrid";
 const SC_UNO_SHOWZERO = "ShowZeroValues";
 const SC_UNO_COLROWHDR = "HasColumnRowHeaders";
+const SC_UNO_OUTLSYMB = "IsOutlineSymbolsSet";
+const SC_UNO_SHEETTABS = "HasSheetTabs";
 const SC_CURSORPOSITIONX = "CursorPositionX";
 const SC_CURSORPOSITIONY = "CursorPositionY";
 const viewOptions = new Map<string, ViewOption>([
   [SC_UNO_SHOWGRID, ViewOption.GRID],
   [SC_UNO_SHOWZERO, ViewOption.NULLVALS],
   [SC_UNO_COLROWHDR, ViewOption.HEADER],
+  [SC_UNO_OUTLSYMB, ViewOption.OUTLINER],
+  [SC_UNO_SHEETTABS, ViewOption.TABCONTROLS],
 ]);
 
 /** Reads the selected table name from the primary view entry. @param document - Actual document. @param views - Borrowed records. @returns Nothing. */

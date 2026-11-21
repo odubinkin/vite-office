@@ -6,12 +6,14 @@
     "status": "mapped",
     "localPath": "apps/office/src/sc/source/filter/excel/xeview.ts",
     "localSymbols": [
-      "SaveXmlTabViewSettings"
+      "SaveXmlTabViewSettings",
+      "SaveXmlWorkbookViewSettings"
     ],
     "upstreamPath": "sc/source/filter/excel/xeview.cxx",
     "upstreamSymbols": [
       "XclExpTabViewSettings::SaveXml",
-      "XclExpSelection::SaveXml"
+      "XclExpSelection::SaveXml",
+      "XclExpWindow1::SaveXml"
     ],
     "preservedResponsibilities": [
       "Emits the independent per-sheet grid flag in sheetViews for workbook view zero, before the worksheet geometry and sheet data.",
@@ -19,7 +21,8 @@
       "Exports the current sheet cursor using the native singleton selection record for the unsplit case.",
       "J0Z0KF worksheet pane checkpoint. Sheet view export writes fixed counts relative to the first viewport origin, normal twip splits, native pane activation and one cursor selection per represented pane. CALC-753 retains the source comparison of relative counts with absolute coordinates.",
       "Converts live marks to bounded Excel coordinates in native order, emits the first matching range index, and appends a missing active cell.",
-      "Emits the effective grouped-tab selection computed by the workbook exporter."
+      "Emits the effective grouped-tab selection computed by the workbook exporter.",
+      "Writes showSheetTabs in the workbook view and showOutlineSymbols in every sheet view from the original document options."
     ],
     "omittedResponsibilities": [
       "Other sheet view options, alternate workbook views, chart sheets and BIFF records remain outside this mechanism."
@@ -41,6 +44,10 @@
         {
           "path": "apps/office/src/sc/source/ui/view/viewdata.settings.test.ts",
           "marker": "ports fixed and normal"
+        },
+        {
+          "path": "apps/office/src/sc/source/ui/view/viewdata.settings.test.ts",
+          "marker": "uses the first view per sheet and the active sheet"
         }
       ],
       "upstream": [
@@ -63,6 +70,10 @@
         {
           "path": "vendor/libreoffice-reference/sc/source/filter/excel/xehelper.cxx",
           "marker": "XclExpAddressConverter::ConvertRangeList"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/source/filter/excel/xeview.cxx",
+          "marker": "XclExpWindow1::SaveXml"
         }
       ]
     }

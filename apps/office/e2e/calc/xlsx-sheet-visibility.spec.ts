@@ -62,6 +62,6 @@ test("Calc opens and exports a workbook with hidden sheets", /** Checks actual X
   if (path === null) throw new Error("Missing XLSX download.");
   const archive = await DocumentArchive.open(new Uint8Array(await readFile(path)));
   const workbook = await archive.readTextEntry("xl/workbook.xml");
-  expect(workbook).toContain('<workbookView activeTab="1"/>');
+  expect(workbook).toContain('<workbookView activeTab="1" showSheetTabs="true"/>');
   expect(workbook.match(/state="hidden"/g)).toHaveLength(1);
 });

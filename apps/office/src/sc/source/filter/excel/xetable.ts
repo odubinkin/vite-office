@@ -27,7 +27,7 @@ import { SaveXmlConditionalFormats } from "./xecontent.conditional";
 import { CreateString } from "./xehelper";
 import { SaveXmlPageBreaks, XclExpPageSettings } from "./xepage";
 import { SaveXmlNames } from "./xename";
-import { SaveXmlTabViewSettings } from "./xeview";
+import { SaveXmlTabViewSettings, SaveXmlWorkbookViewSettings } from "./xeview";
 import { SaveXmlExternalLinks } from "./xelink";
 import { XclExpOutlineBuffer } from "./xetable.outline";
 import { XclExpXFBuffer, type XclExpFontBuffer } from "./xestyle.xml";
@@ -522,9 +522,7 @@ function SaveXmlWorkbook(
     visible = 0;
     while (visible + 1 < document.GetTableCount() && !document.IsVisible(visible)) ++visible;
   }
-  workbook.startElement(token("bookViews"));
-  workbook.singleElement(token("workbookView"), token("activeTab"), String(visible));
-  workbook.endElement(token("bookViews"));
+  SaveXmlWorkbookViewSettings(workbook, document, visible);
   workbook.startElement(token("sheets"));
   const name = new OUString();
   const styles = new XclExpXFBuffer(document, device);
