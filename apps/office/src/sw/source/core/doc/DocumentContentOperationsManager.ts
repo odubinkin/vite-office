@@ -20,7 +20,7 @@ import { SwContentNode } from "../docnode/node";
 import { SwTextNode, type SwTextFragment } from "../txtnode/ndtxt";
 import type { SwDoc } from "./doc";
 import { SfxItemSet } from "../../../../svl/source/items/itemset";
-import { sw_GetJoinFlags, sw_JoinText } from "./docedt";
+import { PrepareJoinNext, sw_GetJoinFlags, sw_JoinText } from "./docedt";
 import type { Graphic } from "../../../../vcl/source/gdi/graph";
 import { SwPoolFormatId } from "../../../inc/poolfmt";
 import { RndStdIds } from "../../../../svx/inc/swframetypes";
@@ -30,8 +30,6 @@ import {
   RES_PARATR_LIST_ID,
   RES_PARATR_LIST_ISCOUNTED,
   WRITER_TEXT_NODE_WHICH_RANGES,
-  RES_CHRATR_BEGIN,
-  RES_CHRATR_END,
   RES_PAGEDESC,
   RES_BREAK,
   RES_KEEP,
@@ -138,9 +136,13 @@ export class DocumentContentOperationsManager {
       const hints = paragraph.GetpSwpHints();
       if (paragraph === node && hints?.HasFlyContent(start, end))
         throw new Error("Writer structured replacement is not implemented.");
-      for (const hint of hints?.entries() ?? [])
-        if (hint.HasDummyChar())
+      for (const hint of hints?.entries() ?? []) {
+        if (!hint.HasDummyChar()) continue;
+        const offset = hint.GetStart();
+        const replacesAnchor = paragraph === node && start <= offset && offset < end;
+        if (!(hint instanceof SwTextField) || replacesAnchor)
           throw new Error("Writer structured replacement is not implemented.");
+      }
     }
     const parts = regExp ? tokenizeReplacement(replacement) : [replacement];
     return this.document.RunModelTransaction(
@@ -366,18 +368,7 @@ export class DocumentContentOperationsManager {
     )
       throw new Error("Writer join requires adjacent SwTextNodes in one document.");
     const offset = preceding.Len();
-    if (offset !== 0) trailing.FormatToTextAttr(preceding);
-    else {
-      preceding.ResetAttr(RES_CHRATR_BEGIN, RES_CHRATR_END - 1);
-      const direct = trailing.GetpSwAttrSet();
-      if (direct !== undefined) {
-        const items = new SfxItemSet(this.document.GetAttrPool(), [
-          [RES_CHRATR_BEGIN, RES_CHRATR_END - 1],
-        ]);
-        items.PutSet(direct);
-        preceding.SetAttr(items);
-      }
-    }
+    PrepareJoinNext(preceding, trailing);
     preceding.AppendTextNode(trailing);
     preceding.GetNodes().removeTextNode(trailing);
     return offset;

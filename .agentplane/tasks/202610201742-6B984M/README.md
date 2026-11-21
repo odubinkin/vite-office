@@ -4,7 +4,7 @@ title: "Implement Writer search and replace core and browser UI"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 105
+revision: 106
 origin:
   system: "manual"
 depends_on:
@@ -363,6 +363,14 @@ comments:
       Verified Writer search checkpoint. The source-derived tests for range bounds, paragraph anchor rings, capture replacement, grouped undo/redo, and shared capture offsets now run with the same ECMAScript matcher used in the Writer session. Eleven previously probe-gated scenarios execute on the normal test path. The six original soft-hyphen syntax probes remain optional, including ICU-specific pattern spellings. The production matcher is unchanged.
 
       Focused verification: Writer cursor, selection, replacement and annotation search (91 passed, six optional ICU cases skipped); Writer browser search and menu (20 passed); shared search and browser matcher (137 passed). Scoped ESLint, Prettier and git diff --check pass. The overall task remains open, including body replacement in paragraphs with existing field markers.
+  -
+    author: "CODER"
+    body: |-
+      Writer search and replacement checkpoint. Body Replace All now accepts matches before and after a represented annotation. The document preserves the marker, note content, and registered span through the edit and first Undo/Redo. For adjacent paragraph boundaries, sw_JoinText now calls the original JoinNext text-node owner and transfers live attributes. The portable paragraph split/join history caller retains its existing snapshot contract, and both paths share the original direct-format preparation.
+
+      Targeted evidence: nine Writer suites (1101 passed, six optional ICU probes skipped) cover the view, native search and replacement, paragraph joins, text formatting, and delete/split history. The final view suite passes six tests, including the consumed history on the second Undo, documented as an extension of WRITER-010 with pinned native source evidence. TypeScript, the production build, and all three production Chrome search scenarios pass. The new Chrome scenario applies Replace All to both body matches, observes the live comment, and restores the body with a single Undo. Scoped ESLint, Prettier, git diff --check, resources, dependencies, source tree, provenance, Writer/shared parity inventories, policy routing and doctor pass. Global JSDoc and file size retain 307 and four existing findings respectively. Provenance and runtime records now describe the shipped ECMAScript matcher and cite the actual running tests.
+
+      Matches that consume the annotation marker remain an open part of structured replacement. This checkpoint does not close the task or increment the full regression cadence.
 
 events:
   -
@@ -875,9 +883,19 @@ events:
       Verified Writer search checkpoint. The source-derived tests for range bounds, paragraph anchor rings, capture replacement, grouped undo/redo, and shared capture offsets now run with the same ECMAScript matcher used in the Writer session. Eleven previously probe-gated scenarios execute on the normal test path. The six original soft-hyphen syntax probes remain optional, including ICU-specific pattern spellings. The production matcher is unchanged.
 
       Focused verification: Writer cursor, selection, replacement and annotation search (91 passed, six optional ICU cases skipped); Writer browser search and menu (20 passed); shared search and browser matcher (137 passed). Scoped ESLint, Prettier and git diff --check pass. The overall task remains open, including body replacement in paragraphs with existing field markers.
+  -
+    type: "comment"
+    at: "2026-11-21T20:34:15.587Z"
+    author: "CODER"
+    body: |-
+      Writer search and replacement checkpoint. Body Replace All now accepts matches before and after a represented annotation. The document preserves the marker, note content, and registered span through the edit and first Undo/Redo. For adjacent paragraph boundaries, sw_JoinText now calls the original JoinNext text-node owner and transfers live attributes. The portable paragraph split/join history caller retains its existing snapshot contract, and both paths share the original direct-format preparation.
+
+      Targeted evidence: nine Writer suites (1101 passed, six optional ICU probes skipped) cover the view, native search and replacement, paragraph joins, text formatting, and delete/split history. The final view suite passes six tests, including the consumed history on the second Undo, documented as an extension of WRITER-010 with pinned native source evidence. TypeScript, the production build, and all three production Chrome search scenarios pass. The new Chrome scenario applies Replace All to both body matches, observes the live comment, and restores the body with a single Undo. Scoped ESLint, Prettier, git diff --check, resources, dependencies, source tree, provenance, Writer/shared parity inventories, policy routing and doctor pass. Global JSDoc and file size retain 307 and four existing findings respectively. Provenance and runtime records now describe the shipped ECMAScript matcher and cite the actual running tests.
+
+      Matches that consume the annotation marker remain an open part of structured replacement. This checkpoint does not close the task or increment the full regression cadence.
 
 doc_version: 3
-doc_updated_at: "2026-11-21T20:21:47.732Z"
+doc_updated_at: "2026-11-21T20:34:15.587Z"
 doc_updated_by: "CODER"
 description: "Implement the approved coherent Writer search-and-replace feature from pinned LibreOffice sources: real shared search engine and options, native paragraph/cursor traversal and replacement/history contracts, view-owned search state and dispatch, Find toolbar and Find and Replace dialog with generated upstream command placement and shortcuts. Preserve source semantics and explicit unsupported boundaries; never substitute DOM text search or browser RegExp for ICU contracts. Work only on writer in vite-office-writer; local upstream reading approved, no network or merges. Keep active until approved scope is verified."
 sections:

@@ -49,6 +49,35 @@ test("Writer Find and Replace restores editor focus and undoes all replacements 
   await expect(border).toHaveCount(0);
 });
 
+test("Writer replaces body matches around a comment and restores them with one undo", /** Uses the ordinary annotation and replacement controls. @param fixtures - Playwright fixtures. @param fixtures.page - Chromium page. @returns Test completion. */ async ({
+  page,
+}) => {
+  await page.goto("/writer");
+  const editor = page.getByRole("textbox", { name: "Writer document text", exact: true });
+  await editor.fill("hit inside hit");
+  await page.keyboard.press("End");
+  for (let i = 0; i < " hit".length; i++) await page.keyboard.press("ArrowLeft");
+  await page.getByRole("button", { name: "Comment", exact: true }).click();
+  const comment = page.getByRole("textbox", { name: "Comment — Unknown Author" });
+  await expect(comment).toBeFocused();
+  await page.keyboard.insertText("hit in the comment");
+
+  await editor.click();
+  await page.keyboard.press("Control+h");
+  const dialog = page.getByRole("dialog", { name: "Find and Replace", exact: true });
+  await dialog.getByLabel("Find", { exact: true }).fill("hit");
+  await dialog.getByLabel("Replace with", { exact: true }).fill("matched");
+  await dialog.getByRole("button", { name: "Replace All", exact: true }).click();
+  await expect(dialog.getByRole("status")).toHaveText("Search key replaced 2 times.");
+  await expect(editor).toHaveText("matched inside\uFFF9 matched");
+  await expect(comment).toHaveText("hit in the comment");
+
+  await page.keyboard.press("Escape");
+  await page.keyboard.press("Control+z");
+  await expect(editor).toHaveText("hit inside\uFFF9 hit");
+  await expect(comment).toHaveText("hit in the comment");
+});
+
 test("Writer inserts a comment, finds its text and undoes note formatting", /** Drives the ordinary comment and search controls in Chromium. @param fixtures - Playwright fixtures. @param fixtures.page - Chromium page. @returns Test completion. */ async ({
   page,
 }) => {

@@ -329,6 +329,15 @@ a second undo restores the boundary and text, while the newly split paragraph
 can inherit the join survivor's alignment. The paragraph replacement
 regression covers this extended source-derived sequence.
 
+The same retained-history path can affect annotations outside the replaced
+range. `SwHistory::CopyAttr` includes annotation hints with `bCopyFields`,
+and `ClearSwpHintsArr(true)` removes them during Undo. In the portable Writer
+view test, replacing the words on both sides of a ranged comment keeps the
+comment through replacement, the first Undo, and Redo. A second Undo
+restores the text with its annotation marker while leaving the field and
+range unrestored. The pinned native code suggests the same consumed-history
+path, and this result has been verified in the port.
+
 ## WRITER-011: Empty replacement can advance to the next content node
 
 Pinned `sw/source/core/crsr/swcrsr.cxx`, `lcl_FindSelection`, compares the live

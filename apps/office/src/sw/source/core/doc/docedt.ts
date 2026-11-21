@@ -2,7 +2,7 @@
 import type { SwPaM } from "../crsr/pam";
 import { SwTextNode } from "../txtnode/ndtxt";
 import { SfxItemSet } from "../../../../svl/source/items/itemset";
-import { RES_BREAK, RES_PAGEDESC } from "../../../inc/hintids";
+import { RES_BREAK, RES_CHRATR_BEGIN, RES_CHRATR_END, RES_PAGEDESC } from "../../../inc/hintids";
 
 /** Normalizes native deletion direction and selects the surviving boundary. @param range - Actual selection. @returns Join and previous-survivor flags. */
 export function sw_GetJoinFlags(range: SwPaM): { joinText: boolean; joinPrev: boolean } {
@@ -28,7 +28,8 @@ export function sw_JoinText(range: SwPaM, joinPrev: boolean): boolean {
     last = nodes.at(first.GetIndex() + 1);
   if (!(last instanceof SwTextNode)) return false;
   if (!joinPrev) {
-    first.GetDoc().GetDocumentContentOperationsManager().JoinTextNodes(first, last);
+    PrepareJoinNext(first, last);
+    first.JoinNext();
     return true;
   }
   last.ResetAttr([RES_BREAK, RES_PAGEDESC]);
@@ -41,4 +42,24 @@ export function sw_JoinText(range: SwPaM, joinPrev: boolean): boolean {
   first.FormatToTextAttr(last);
   last.JoinPrev();
   return true;
+}
+
+/** Prepares the surviving paragraph's direct attributes as in sw_JoinText. @param first - Surviving node. @param last - Joined node. @returns Nothing. */
+export function PrepareJoinNext(first: SwTextNode, last: SwTextNode): void {
+  if (first.Len() !== 0) {
+    last.FormatToTextAttr(first);
+    return;
+  }
+  first.ResetAttr(RES_CHRATR_BEGIN, RES_CHRATR_END - 1);
+  const direct = last.GetpSwAttrSet();
+  if (direct === undefined) return;
+  const items = new SfxItemSet(first.GetDoc().GetAttrPool(), [
+    [RES_CHRATR_BEGIN, RES_CHRATR_END - 1],
+  ]);
+  try {
+    items.PutSet(direct);
+    first.SetAttr(items);
+  } finally {
+    items.Dispose();
+  }
 }
