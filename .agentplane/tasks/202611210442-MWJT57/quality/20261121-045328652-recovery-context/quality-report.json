@@ -1,0 +1,24 @@
+{
+  "schema_version": 1,
+  "task_id": "202611210442-MWJT57",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-11-21T04:53:28.652Z",
+  "verdict": "pass",
+  "summary": "The connected ordinary bookmark model preserves native ODF pairing, portion order, and property serialization.",
+  "evaluated_sha": "5e931355f4d8f0a01a1eb694ce8dd27a08b08079",
+  "blueprint_digest": "492a610a85b3799642445c6126e0b7f08549b9f70ba91362a7e17c34ddc1a469",
+  "findings": [
+    "Pinned bookmark ordering and hidden ranges round-trip through actual Writer packages. Focused final checks cover anchored frame phases, worker transfer, native properties and edited bookmark history."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202611210442-MWJT57/README.md",
+    "output/playwright/MWJT57/writer-bookmarks.log",
+    "output/playwright/MWJT57/bookmarks-final.log",
+    "output/playwright/MWJT57/bookmark-uno-final.log",
+    "docs/program/writer-upstream-suspected-issues.md"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": []
+}
