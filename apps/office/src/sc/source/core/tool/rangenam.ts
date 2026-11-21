@@ -110,6 +110,14 @@ export class ScRangeName {
     return true;
   }
 
+  /** Erases one owned name and its scope-local token lookup. @param entry - Current definition. @returns Nothing. */
+  erase(entry: ScRangeData): void {
+    if (this.data.get(entry.GetUpperName()) !== entry) return;
+    this.data.delete(entry.GetUpperName());
+    this.indexToData.delete(entry.GetIndex());
+    entry.GetCode().Clear();
+  }
+
   /** Traverses name order as the original ordered map. @returns Name data. */
   *[Symbol.iterator](): IterableIterator<ScRangeData> {
     for (const key of [...this.data.keys()].sort()) yield this.data.get(key) as ScRangeData;

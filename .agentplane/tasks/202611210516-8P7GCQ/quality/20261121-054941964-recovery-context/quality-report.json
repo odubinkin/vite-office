@@ -1,0 +1,23 @@
+{
+  "schema_version": 1,
+  "task_id": "202611210516-8P7GCQ",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-11-21T05:49:41.964Z",
+  "verdict": "pass",
+  "summary": "The original Calc Format Page Style slot edits the shared document style through native item-set transactions and can undo and redo the change.",
+  "evaluated_sha": "1717a0bc486c34c327e5553ce426d21e06848e44",
+  "blueprint_digest": "8a05370b9135125114e8d960cdae937d8afc371c70ebff6e92473d0a66c7dcb9",
+  "findings": [
+    "Page geometry, header/footer settings, print flags, scale, border and solid color use actual native items and ODS persistence. The shared metric adapter preserves CUI dependency direction and Writer behavior."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202611210516-8P7GCQ/README.md",
+    "42 Calc and 87 Writer tests, TypeScript, generated resources, source provenance, file size, lint, dependency checks and the production Chrome replay passed."
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": [
+    "Header/footer content editing, graphic fills and printer-driven pagination are separate native mechanisms."
+  ]
+}

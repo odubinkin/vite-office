@@ -116,11 +116,12 @@ test("dispatches pointing-created formulas through actual owners in Chromium and
   page,
 }) => {
   await page.goto("/");
-  await installKernelFixture(page, "CalcPointingFixture", [
+  const nativeExports = [
     { module: "src/sc/browser/controller/calc-view-controller.ts", names: ["CalcViewController"] },
     { module: "src/sc/inc/address.ts", names: ["ScAddress"] },
     { module: "src/sc/inc/global.ts", names: ["ScInputMode"] },
-  ]);
+  ];
+  await installKernelFixture(page, "CalcPointingFixture", nativeExports, { officeServices: true });
   const result = await page.evaluate(
     /** Runs identical actual owner dispatch in both runtimes. @returns Observations. */ async () => {
       /** Uses the production controller and original input/module/view/document owners. @returns Actual formula/history observations. */ function run() {

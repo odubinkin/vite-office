@@ -62,6 +62,7 @@ import { GetBreakIterator, GetStringScriptType } from "./documen6";
 import * as documen7 from "./documen7";
 import * as documen9 from "./documen9";
 import * as document10 from "./document10";
+import { ScPrintRangeSaver } from "../tool/prnsave";
 import { ScRangeName } from "../tool/rangenam";
 /** Explicit initial document subset;all supported cells live in its actual sheet/column chain. */
 export class ScDocument {
@@ -73,6 +74,21 @@ export class ScDocument {
   IsDefaultTabBgColor = documen3.IsDefaultTabBgColor;
   GetTabProtection = documen3.GetTabProtection;
   SetTabProtection = documen3.SetTabProtection;
+  /** Captures original print settings for all existing sheets. @returns Native print range saver. */
+  CreatePrintRangeSaver(): ScPrintRangeSaver {
+    const saver = new ScPrintRangeSaver(this.GetTableCount());
+    for (let tab = 0; tab < saver.GetTabCount(); tab++) {
+      this.FetchTable(tab)?.FillPrintSaver(saver.GetTabData(tab));
+    }
+    return saver;
+  }
+  /** Restores original settings on matching sheet indexes. @param saver - Workbook snapshot. @returns Nothing. */
+  RestorePrintRanges(saver: ScPrintRangeSaver): void {
+    const count = Math.min(saver.GetTabCount(), this.GetTableCount());
+    for (let tab = 0; tab < count; tab++) {
+      this.FetchTable(tab)?.RestorePrintRanges(saver.GetTabData(tab));
+    }
+  }
   private readonly pRangeName = new ScRangeName();
   /** Looks up the owner of names in this scope. @param tab - Sheet scope or -1. @returns Native names. */
   GetRangeName(tab = -1) {

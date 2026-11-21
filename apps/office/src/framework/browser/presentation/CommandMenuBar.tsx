@@ -20,7 +20,12 @@ export interface MenuCommandResource {
 
 /** Generic recursive generated menu placement. */
 export type CommandMenuItemPlacement =
-  | Readonly<{ commandId: string; kind: "command"; showsDialog?: boolean }>
+  | Readonly<{
+      commandId: string;
+      kind: "command";
+      label?: string | undefined;
+      showsDialog?: boolean;
+    }>
   | Readonly<{ kind: "separator" }>
   | Readonly<{
       id: string;
@@ -788,7 +793,7 @@ export function BindingsMenuCommand({
         : "menuitem";
   const isCheckable = role !== "menuitem";
   const isChecked = presentation.checked;
-  const label = `${resource.label}${item.showsDialog === true ? "…" : ""}`;
+  const label = `${item.label ?? resource.label}${item.showsDialog === true ? "…" : ""}`;
   return (
     <button
       aria-checked={isCheckable ? isChecked : undefined}

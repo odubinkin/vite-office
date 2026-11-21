@@ -1,6 +1,7 @@
 /** @fileoverview ScUndoShowHideTab and ScUndoTabColor from undotab.cxx. */
 import { SfxUndoAction } from "../../../../svl/source/undo/undo";
 import type { Color } from "../../../../tools/inc/color";
+import type { ScPrintRangeSaver } from "../../core/tool/prnsave";
 import type { ScDocShell } from "../docshell/docsh";
 import type { ScTabView } from "../view/tabview3";
 
@@ -67,5 +68,35 @@ export class ScUndoTabColor extends SfxUndoAction<ScDocShell> {
   /** Returns the native singular or grouped caption. @returns Caption. */
   override GetComment(): string {
     return this.colors.length > 1 ? "Color Tabs" : "Color Tab";
+  }
+}
+
+/** Replays the native print-range snapshot and reactivates its originating sheet. */
+export class ScUndoPrintRange extends SfxUndoAction<ScDocShell> {
+  /** Saves both aggregate states without copying cells. @param view - Active view. @param tab - Originating sheet. @param oldRanges - Before. @param newRanges - After. @returns History action. */
+  constructor(
+    private readonly view: ScTabView,
+    private readonly tab: number,
+    private readonly oldRanges: ScPrintRangeSaver,
+    private readonly newRanges: ScPrintRangeSaver,
+  ) {
+    super();
+  }
+
+  /** Reinstates the earlier workbook settings. @param shell - Actual document shell. @returns Nothing. */
+  override UndoWithContext(shell: ScDocShell): void {
+    shell.GetDocument().RestorePrintRanges(this.oldRanges);
+    this.view.SetTabNo(this.tab);
+  }
+
+  /** Reinstates the changed workbook settings. @param shell - Actual document shell. @returns Nothing. */
+  override RedoWithContext(shell: ScDocShell): void {
+    shell.GetDocument().RestorePrintRanges(this.newRanges);
+    this.view.SetTabNo(this.tab);
+  }
+
+  /** Returns the original Calc history caption. @returns Caption. */
+  override GetComment(): string {
+    return "Print range";
   }
 }

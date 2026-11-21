@@ -4,7 +4,12 @@ import { DefinedNamesBuffer } from "./defnamesbuffer";
 import { ExternalLinkBuffer } from "./externallinkbuffer";
 import { WorkbookSettings } from "./workbooksettings";
 import { FragmentHandler } from "../../../../oox/source/core/fragmenthandler";
-import { toInt32 } from "../../../../o3tl/inc/string_view";
+import { ViewSettings } from "./viewsettings";
+import { FastTokenHandler } from "../../../../oox/source/core/fasttokenhandler";
+import { AttributeList } from "../../../../oox/source/helper/attributelist";
+import { getTokenFromUtf8 as token } from "../../../../oox/source/token/tokenmap";
+import { FastAttributeList } from "../../../../sax/source/tools/fastattribs";
+import { Reference } from "../../../../cppu/inc/com/sun/star/uno/Reference";
 import {
   OFFICE_DOCUMENT_RELATION,
   STRICT_OFFICE_DOCUMENT_RELATION,
@@ -42,12 +47,13 @@ export class WorkbookFragment extends FragmentHandler {
   readonly definedNames = new DefinedNamesBuffer();
   readonly externalLinks = new ExternalLinkBuffer();
   readonly settings = new WorkbookSettings();
+  readonly views = new ViewSettings();
   private readonly elementStack: string[] = [];
-  private activeTab: number | undefined;
+  private readonly tokenHandler = new FastTokenHandler();
 
   /** Resolves the first workbook view against the imported sheet index mapping. @returns Active native tab. */
   getActiveCalcSheet(): number {
-    const tab = this.activeTab ?? 0;
+    const tab = this.views.getActiveTab();
     return this.sheets[tab] ? tab : 0;
   }
 
@@ -71,8 +77,7 @@ export class WorkbookFragment extends FragmentHandler {
   /** Retains original workbook sheet order and relationship IDs. @param tag - Current element. @param attributes - Native lexical attributes. @returns Nothing. */
   override startFastElement(tag: SaxesTagNS, attributes: readonly SaxesAttributeNS[]): void {
     this.elementStack.push(tag.local);
-    if (tag.local === "workbookView" && this.activeTab === undefined)
-      this.activeTab = toInt32(attribute(attributes, "activeTab"));
+    if (tag.local === "workbookView") this.importWorkbookView(attributes);
     if (tag.local === "workbookPr")
       this.settings.importWorkbookPr(
         attributes.find(
@@ -95,6 +100,19 @@ export class WorkbookFragment extends FragmentHandler {
       relationshipId: id,
       state: attribute(attributes, "state") || "visible",
     });
+  }
+  /** Delivers native typed attributes to the Calc view settings owner. @param attributes - Unqualified spreadsheet attributes. @returns Nothing. */
+  private importWorkbookView(attributes: readonly SaxesAttributeNS[]): void {
+    const fast = new FastAttributeList(this.tokenHandler);
+    const reference = new Reference(fast);
+    const values = new AttributeList(reference);
+    try {
+      for (const item of attributes) if (item.uri === "") fast.add(token(item.local), item.value);
+      this.views.importWorkbookView(values);
+    } finally {
+      values.dispose();
+      reference.dispose();
+    }
   }
   /** Releases the current workbook context. @returns Nothing. */
   override endFastElement(): void {

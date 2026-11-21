@@ -30,11 +30,26 @@ type SheetViewModel = {
   showGrid: boolean;
   showHeaders: boolean;
   showZeros: boolean;
+  showOutline: boolean;
 };
 
 /** Retains the parsed sheet views until the workbook's active sheet is available. */
 export class ViewSettings {
   private readonly sheets = new Map<number, SheetViewModel>();
+  private bookView: { readonly activeTab: number; readonly showSheetTabs: boolean } | undefined;
+
+  /** Retains the first workbook view with the native tab bar default. @param attributes - Source workbook view. @returns Nothing. */
+  importWorkbookView(attributes: AttributeList): void {
+    this.bookView ??= {
+      activeTab: attributes.getInteger(token("activeTab"), 0),
+      showSheetTabs: attributes.getBool(token("showSheetTabs"), true),
+    };
+  }
+
+  /** Resolves the source first workbook view's active sheet index. @returns Source tab with the default applied. */
+  getActiveTab(): number {
+    return this.bookView?.activeTab ?? 0;
+  }
 
   /** Records the completed worksheet view and applies its independent grid flag. @param document - Target workbook. @param tab - Actual sheet. @param view - Source view settings. @returns Nothing. */
   setSheetViewSettings(document: ScDocument, tab: number, view: SheetViewModel): void {
@@ -54,6 +69,8 @@ export class ViewSettings {
     // The native view reader consumes headers and zero visibility, but ignores ShowFormulas.
     options.SetOption(ViewOption.HEADER, view?.showHeaders ?? true);
     options.SetOption(ViewOption.NULLVALS, view?.showZeros ?? true);
+    options.SetOption(ViewOption.OUTLINER, view?.showOutline ?? true);
+    options.SetOption(ViewOption.TABCONTROLS, this.bookView?.showSheetTabs ?? true);
   }
 }
 
@@ -84,6 +101,7 @@ export class SheetViewSettings {
       showGrid: attributes.getBool(token("showGridLines"), true),
       showHeaders: attributes.getBool(token("showRowColHeaders"), true),
       showZeros: attributes.getBool(token("showZeros"), true),
+      showOutline: attributes.getBool(token("showOutlineSymbols"), true),
     };
     this.firstPosition = this.readAddress(attributes, token("topLeftCell"));
   }

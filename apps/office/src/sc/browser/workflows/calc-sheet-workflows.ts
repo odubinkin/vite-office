@@ -12,6 +12,7 @@ import { SfxInt16Item, SfxUInt16Item } from "../../../svl/source/items/intitem";
 import { OUString } from "../../../sal/inc/rtl/ustring";
 import { text, unicode } from "../../../i18nlangtag/source/isolang/isolang.tables";
 import { SvxColorItem } from "../../../editeng/inc/colritem";
+import { SfxBoolItem } from "../../../svl/source/items/cenumitm";
 import { SfxStringItem } from "../../../svl/source/items/stritem";
 import { SfxIntegerListItem } from "../../../svl/source/items/ilstitem";
 import { Color } from "../../../tools/inc/color";
@@ -32,9 +33,32 @@ import {
 import {
   calcGoToSheetCommand,
   calcOutlineCommands,
+  calcPageBreakCommands,
   calcSheetCommands,
   FID_TAB_SET_TAB_BG_COLOR,
 } from "../../sdi/scalc";
+import {
+  calcPageStyleCommand,
+  calcHeaderFooterCommand,
+  calcPrintRangeCommands,
+  FN_PRINT_ENTIRE_SHEET,
+  FN_PRINT_REPEAT_COL,
+  FN_PRINT_REPEAT_ROW,
+  SID_CHANGE_PRINTAREA,
+  SID_DEFINE_PRINTAREA,
+} from "../../sdi/tabvwsh";
+import { CreatePrintAreasModel, type PrintAreasModel } from "../../source/ui/pagedlg/areasdlg";
+import {
+  ApplyHeaderFooter,
+  ApplyPageStyle,
+  CreatePageStyleRequest,
+  FillHeaderFieldData,
+} from "../../source/ui/docshell/docsh4";
+import type { SfxItemSet } from "../../../svl/source/items/itemset";
+import { ScHFEditDlg, StandaloneHeaderFooterLayout } from "../../source/ui/pagedlg/hfedtdlg";
+import { ScStyleSaveData } from "../../source/ui/undo/undostyl";
+import type { ScStyleDlgRequest, ScStyleDlgResult } from "../../source/ui/styleui/styledlg";
+import { CalcConditionalWorkflows, conditionalFormatCommands } from "./calc-conditional-workflows";
 import type { CalcViewController } from "../controller/calc-view-controller";
 /** Immutable native dialog initialization;names are copied only as dialog widget resources. */
 export interface CalcGoToSheetRequest {
@@ -56,18 +80,61 @@ export type CalcSheetTabDialog =
 type SheetCommand = keyof typeof calcSheetCommands;
 /** Native manual outline operation identifiers. */
 type OutlineCommand = (typeof calcOutlineCommands)[number]["kind"];
+/** Native print-range slot operations. */
+type PrintRangeCommand = (typeof calcPrintRangeCommands)[number]["kind"];
+
+/** Looks up the original SfxStringItem by its Which ID. @param request - Slot request. @param which - Argument identity. @returns Native string with empty default. */
+function printRangeArgument(request: SfxRequest, which: number): string {
+  const item = request.GetArgs().find((candidate) => candidate.Which() === which);
+  return item instanceof SfxStringItem ? item.GetValue() : "";
+}
 
 /** Session-owned native Go to Sheet request and asynchronous result application. */
 export class CalcSheetWorkflows {
   readonly dialogs = new SfxDialogController<CalcGoToSheetRequest, string>();
   readonly tabDialogs = new SfxDialogController<CalcSheetTabDialog, number[] | string>();
   readonly metricDialogs = new SfxDialogController<ScMetricInputDlg, number>();
+  readonly headerFooterDialogs = new SfxDialogController<ScHFEditDlg, SfxItemSet>();
+  readonly pageStyleDialogs = new SfxDialogController<ScStyleDlgRequest, ScStyleDlgResult>();
+  readonly printDialogs = new SfxDialogController<PrintAreasModel, SfxRequest | undefined>();
+  readonly conditionals: CalcConditionalWorkflows;
   private readonly shell: SfxShell;
   /** Connects a source command to the active document view. @param controller - Actual Calc controller. @returns Workflow. */
   constructor(readonly controller: CalcViewController) {
+    this.conditionals = new CalcConditionalWorkflows(controller);
     this.shell = createSfxShell(
       this,
       new SfxInterface<CalcSheetWorkflows>([
+        ...conditionalFormatCommands.map(
+          /** Binds one original conditional-format Sfx command. @param slot - Source command. @returns Slot definition. */ ([
+            commandUrl,
+            slotId,
+            label,
+            kind,
+          ]) => ({
+            commandUrl,
+            slotId,
+            label,
+            getState: (target: CalcSheetWorkflows) => ({
+              enabled: !target.HasSheetDialog() && target.conditionals.CanExecute(kind),
+            }),
+            execute: (target: CalcSheetWorkflows, request: SfxRequest) => {
+              const [argument] = request.GetArgs();
+              if (kind === "easy") {
+                const value = argument instanceof SfxUnoAnyItem ? argument.GetValue() : undefined;
+                const mode =
+                  typeof value === "object" && value !== null && "FormatRule" in value
+                    ? Number(value.FormatRule)
+                    : argument instanceof SfxInt16Item
+                      ? argument.GetValue()
+                      : undefined;
+                if (mode !== undefined && ![0, 1, 2, 6, 23].includes(mode)) return false;
+                return target.conditionals.Execute(kind, mode);
+              }
+              return !argument && target.conditionals.Execute(kind);
+            },
+          }),
+        ),
         ...(
           [
             [".uno:ColumnWidth", 26290, true],
@@ -117,6 +184,61 @@ export class CalcSheetWorkflows {
           }),
         ),
 
+        ...calcPageBreakCommands.map(
+          /** Binds the native cell-shell break commands and state. @param source - Slot definition. @returns Shell slot. */
+          ({ id, slotId, label, columns, insert }) => ({
+            commandUrl: id,
+            slotId,
+            label,
+            getState:
+              /** Queries break flags at the active cell. @param target - Active workflow. @returns Slot state. */
+              (target: CalcSheetWorkflows) => ({
+                enabled: target.CanChangePageBreak(columns, insert),
+              }),
+            execute:
+              /** Routes the admitted command to the native view functions. @param target - Active workflow. @param request - Original request. @returns Nothing. */
+              (target: CalcSheetWorkflows, request: SfxRequest) => {
+                if (!target.controller.Commit()) return;
+                const view = target.controller.GetViewShell();
+                if (insert) view.InsertPageBreak(columns);
+                else view.DeletePageBreak(columns);
+                request.Done();
+              },
+          }),
+        ),
+        {
+          commandUrl: calcHeaderFooterCommand.id,
+          slotId: calcHeaderFooterCommand.slotId,
+          label: calcHeaderFooterCommand.label,
+          getState: (target: CalcSheetWorkflows) => ({ enabled: target.CanEditHeaderFooter() }),
+          execute: (target: CalcSheetWorkflows, request: SfxRequest) =>
+            target.EditHeaderFooter(request),
+        },
+        {
+          commandUrl: calcPageStyleCommand.id,
+          slotId: calcPageStyleCommand.slotId,
+          label: calcPageStyleCommand.label,
+          getState: (target: CalcSheetWorkflows) => ({ enabled: !target.HasSheetDialog() }),
+          execute: (target: CalcSheetWorkflows, request: SfxRequest) =>
+            target.EditPageStyle(request),
+        },
+        ...calcPrintRangeCommands.map(({ id, slotId, label, kind }) => ({
+          commandUrl: id,
+          slotId,
+          label,
+          getState: (target: CalcSheetWorkflows) => ({
+            enabled: target.CanExecutePrintRange(kind),
+          }),
+          execute: (target: CalcSheetWorkflows, request: SfxRequest) =>
+            target.ExecutePrintRange(kind, request),
+        })),
+        {
+          commandUrl: ".uno:ChangePrintArea",
+          slotId: SID_CHANGE_PRINTAREA,
+          label: "Change Print Area",
+          execute: (target: CalcSheetWorkflows, request: SfxRequest) =>
+            target.ChangePrintRange(request),
+        },
         ...calcOutlineCommands.map(
           /** Registers the cell-shell outline slots in the browser dispatch adapter. @param source - Source command. @returns Shell slot. */
           (source) => ({
@@ -261,8 +383,144 @@ export class CalcSheetWorkflows {
     return Boolean(
       this.tabDialogs.GetSnapshot() ||
       this.dialogs.GetSnapshot() ||
-      this.metricDialogs.GetSnapshot(),
+      this.metricDialogs.GetSnapshot() ||
+      this.printDialogs.GetSnapshot() ||
+      this.pageStyleDialogs.GetSnapshot() ||
+      this.headerFooterDialogs.GetSnapshot() ||
+      this.conditionals.IsOpen(),
     );
+  }
+
+  /** Opens the original Format Page slot on the active sheet's shared page style. @param request - Source Sfx request. @returns Completion. */
+  private async EditPageStyle(request: SfxRequest): Promise<void> {
+    if (request.GetArgs().length || !this.controller.Commit()) return;
+    const view = this.controller.viewData;
+    const document = view.GetDocument();
+    const name = document.GetPageStyle(view.CurrentTabForData());
+    const style = document.GetStyleSheetPool()?.GetPageStyle(name, true);
+    if (!style) return;
+    const before = new ScStyleSaveData(style);
+    const copy = new SfxRequest(request.GetSlot(), request.GetArgs(), request.GetCallMode());
+    request.Ignore();
+    let transferred = false;
+    try {
+      const completion = await this.pageStyleDialogs.Request(
+        CreatePageStyleRequest(this.controller.shell, style, before, view.CurrentTabForData()),
+      );
+      if (completion.kind !== "accepted") return;
+      try {
+        if (this.controller.viewData.GetDocument() !== document) return;
+        transferred = ApplyPageStyle(this.controller.shell, style, before, completion.result);
+        if (transferred) copy.Done();
+      } finally {
+        completion.result.items.Dispose();
+      }
+    } finally {
+      if (!transferred) before.items.Dispose();
+    }
+  }
+
+  /** Reads original applicability from the active named page style. @returns Whether the command is available. */
+  private CanEditHeaderFooter(): boolean {
+    if (this.HasSheetDialog()) return false;
+    const view = this.controller.viewData;
+    const document = view.GetDocument();
+    const tab = view.CurrentTabForData();
+    if (!document.FetchTable(tab)) return false;
+    const style = document.GetStyleSheetPool()?.GetPageStyle(document.GetPageStyle(tab));
+    return !style || StandaloneHeaderFooterLayout(style.GetItemSet()) !== undefined;
+  }
+
+  /** Opens and applies the source standalone header/footer editor. @param request - Source request. @returns Completion. */
+  private async EditHeaderFooter(request: SfxRequest): Promise<void> {
+    if (request.GetArgs().length || !this.CanEditHeaderFooter() || !this.controller.Commit())
+      return;
+    const view = this.controller.viewData;
+    const document = view.GetDocument();
+    const tab = view.CurrentTabForData();
+    const name = document.GetPageStyle(tab);
+    const style = document.GetStyleSheetPool()?.GetPageStyle(name, true);
+    if (!style) return;
+    const items = style.GetItemSet().Clone();
+    const layout = StandaloneHeaderFooterLayout(items);
+    if (!layout) {
+      items.Dispose();
+      return;
+    }
+    const shell = this.controller.shell;
+    const model = new ScHFEditDlg(items, name, layout, FillHeaderFieldData(shell, tab));
+    const copy = new SfxRequest(request.GetSlot(), request.GetArgs(), request.GetCallMode());
+    request.Ignore();
+    try {
+      const result = await this.headerFooterDialogs.Request(model);
+      if (result.kind !== "accepted") return;
+      try {
+        if (shell.GetDocument() !== document) return;
+        ApplyHeaderFooter(shell, style, result.result);
+        copy.Done();
+      } finally {
+        result.result.Dispose();
+      }
+    } finally {
+      model.Dispose();
+      items.Dispose();
+    }
+  }
+
+  /** Reads source print-range availability from the current sheet. @param kind - Source command. @returns Slot state. */
+  private CanExecutePrintRange(kind: PrintRangeCommand): boolean {
+    if (this.printDialogs.GetSnapshot()) return kind === "edit";
+    if (this.HasSheetDialog()) return false;
+    const view = this.controller.viewData;
+    const sheet = view.GetDocument().FetchTable(view.GetTabNumber());
+    return !!sheet && (kind !== "clear" || !sheet.IsPrintEntireSheet());
+  }
+
+  /** Executes the original menu slots and toggles the modeless child window. @param kind - Source command. @param request - Actual slot request. @returns Completion. */
+  private async ExecutePrintRange(kind: PrintRangeCommand, request: SfxRequest): Promise<void> {
+    if (!this.controller.Commit()) return;
+    const view = this.controller.GetViewShell();
+    if (kind === "edit") {
+      const open = this.printDialogs.GetSnapshot();
+      if (open) {
+        this.printDialogs.Cancel(open.id);
+        return;
+      }
+      const model = CreatePrintAreasModel(view.GetViewData());
+      if (!model) return;
+      const result = await this.printDialogs.Request(model);
+      if (
+        result.kind === "accepted" &&
+        result.result &&
+        view === this.controller.GetViewShell() &&
+        model.tab === view.GetViewData().GetTabNumber()
+      )
+        this.ChangePrintRange(result.result);
+      return;
+    }
+    const typed = request.GetArgs().length > 0;
+    const print =
+      kind === "clear" ? "" : typed ? printRangeArgument(request, SID_DEFINE_PRINTAREA) : undefined;
+    view.SetPrintRanges(kind === "clear", print, undefined, undefined, kind === "add");
+    if (kind === "clear" || !typed) request.Done();
+    this.controller.SyncSheetView();
+  }
+
+  /** Applies the original dialog result slot. @param request - Typed print, repeat and entire-sheet items. @returns Nothing. */
+  private ChangePrintRange(request: SfxRequest): void {
+    if (!request.GetArgs().length) return;
+    const entire = request.GetArgs().find((item) => item.Which() === FN_PRINT_ENTIRE_SHEET);
+    this.controller
+      .GetViewShell()
+      .SetPrintRanges(
+        entire instanceof SfxBoolItem && entire.GetValue(),
+        printRangeArgument(request, SID_CHANGE_PRINTAREA),
+        printRangeArgument(request, FN_PRINT_REPEAT_COL),
+        printRangeArgument(request, FN_PRINT_REPEAT_ROW),
+        false,
+      );
+    request.Done();
+    this.controller.SyncSheetView();
   }
 
   /** Applies a level or group button through the active Calc shell. @param control - Native outline window action. @returns Nothing. */
@@ -275,6 +533,17 @@ export class CalcSheetWorkflows {
         : view.GetCurY()
       : undefined;
     applyOutlineControl(controller.shell, view.GetTabNumber(), control, editing);
+  }
+
+  /** Uses the native FID break state for the active axis. @param columns - Column axis. @param insert - Insert or remove. @returns Enabled. */
+  private CanChangePageBreak(columns: boolean, insert: boolean): boolean {
+    if (this.HasSheetDialog()) return false;
+    const view = this.controller.viewData;
+    const tab = view.CurrentTabForData();
+    const sheet = view.GetDocument().FetchTable(tab);
+    const index = columns ? view.GetCurX() : view.GetCurY();
+    if (!sheet || !index || sheet.IsProtected()) return false;
+    return (columns ? sheet.HasColManualBreak(index) : sheet.HasRowManualBreak(index)) !== insert;
   }
 
   /** Calculates source state for the outline commands. @param kind - Source slot. @returns Whether enabled. */
@@ -467,6 +736,13 @@ export class CalcSheetWorkflows {
 
   /** Cancels the native async request before the session destroys its document. @returns Nothing. */
   Close(): void {
+    this.conditionals.Close();
+    const headerFooter = this.headerFooterDialogs.GetSnapshot();
+    if (headerFooter) this.headerFooterDialogs.Cancel(headerFooter.id);
+    const style = this.pageStyleDialogs.GetSnapshot();
+    if (style) this.pageStyleDialogs.Cancel(style.id);
+    const print = this.printDialogs.GetSnapshot();
+    if (print) this.printDialogs.Cancel(print.id);
     const tab = this.tabDialogs.GetSnapshot();
     if (tab) this.tabDialogs.Cancel(tab.id);
     const width = this.metricDialogs.GetSnapshot();

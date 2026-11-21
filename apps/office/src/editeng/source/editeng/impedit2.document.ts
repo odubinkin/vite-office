@@ -7,8 +7,8 @@ import {
   ScalingParameters,
 } from "../../inc/editdata";
 import { EditDoc } from "../../inc/editdoc";
-import type { EditPaM } from "../../inc/EditPaM";
-import type { EditSelection } from "../../inc/EditSelection";
+import { EditPaM } from "../../inc/EditPaM";
+import { EditSelection } from "../../inc/EditSelection";
 import { EEControlBits } from "../../inc/editstat";
 import { ParaPortionList } from "../../inc/ParagraphPortionList";
 import type { SfxItemPool } from "../../../svl/source/items/itempool";
@@ -97,19 +97,41 @@ export class DocumentImpEditEngine extends ImpEditEngine {
     this.GetNotifyHdl()?.(new EENotify(EENotifyType.EE_NOTIFY_PROCESSNOTIFICATIONS));
   }
 
-  /** Deletes a same-paragraph selection in the document editor. @param selection - Actual edit selection. @returns The new caret. */
+  /** Native no-view deletion preserves surviving nodes, attributes, and the matching portion list. @param selection - Actual edit selection. @returns Collapsed caret. */
   override ImpDeleteSelection(selection: EditSelection): EditPaM {
-    const start = selection.Min();
-    if (!selection.HasRange()) return start;
-    const end = selection.Max();
-    const node = start.GetNode();
-    if (node !== end.GetNode() || this.IsUndoEnabled())
-      throw new Error("Document EditEngine requires a same-paragraph selection and disabled undo");
-    const deleted = this.CreateESel(selection);
-    node?.checkAndDeleteEmptyAttribs();
-    const count = end.GetIndex() - start.GetIndex();
-    this.maEditDoc.RemoveChars(start, count);
-    this.FindParaPortion(node)?.MarkInvalid(end.GetIndex(), -count);
+    if (!selection.HasRange()) return selection.Min();
+    const range = new EditSelection(selection);
+    const doc = this.GetEditDoc();
+    range.Adjust(doc);
+    const start = range.Min(),
+      end = range.Max();
+    const left = start.GetNode(),
+      right = end.GetNode();
+    if (!left || !right) return start;
+    const deleted = this.CreateESel(range);
+    left.checkAndDeleteEmptyAttribs();
+    if (left === right) {
+      const count = end.GetIndex() - start.GetIndex();
+      doc.RemoveChars(start, count);
+      this.FindParaPortion(left)?.MarkInvalid(end.GetIndex(), -count);
+    } else {
+      right.checkAndDeleteEmptyAttribs();
+      const first = doc.GetPos(left);
+      const last = doc.GetPos(right);
+      for (let index = last - 1; index > first; index--) {
+        const style = doc.GetObject(index)?.GetStyleSheet();
+        if (style) this.EndListening(style);
+        this.GetParaPortions().Remove(index);
+        doc.Remove(index);
+      }
+      doc.RemoveChars(start, left.Len() - start.GetIndex());
+      doc.RemoveChars(new EditPaM(right, 0), end.GetIndex());
+      const style = right.GetStyleSheet();
+      if (style) this.EndListening(style);
+      this.GetParaPortions().Remove(first + 1);
+      doc.ConnectParagraphs(left, right);
+      this.FindParaPortion(left)?.MarkSelectionInvalid(start.GetIndex());
+    }
     this.UpdateSelectionsDelete(deleted);
     this.TextModified();
     return start;

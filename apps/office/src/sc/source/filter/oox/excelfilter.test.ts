@@ -93,7 +93,7 @@ it("retains the original hidden worksheet visibility through XLSX and primary OD
     const bytes = await exportXlsx(stored);
     const archive = await DocumentArchive.open(bytes);
     const xml = await archive.readTextEntry("xl/workbook.xml");
-    expect(xml).toContain('<workbookView activeTab="1"/>');
+    expect(xml).toContain('<workbookView activeTab="1" showSheetTabs="true"/>');
     expect(xml.match(/<sheet name="Sheet\d" sheetId="\d" state="(hidden|visible)"/g)).toEqual([
       '<sheet name="Sheet1" sheetId="1" state="hidden"',
       '<sheet name="Sheet2" sheetId="2" state="visible"',

@@ -21,9 +21,10 @@
         "vendor/libreoffice-reference/sc/source/filter/oox/viewsettings.cxx#SheetViewSettings::importSheetView",
         "apps/office/e2e/calc/xlsx-active-view.spec.ts",
         "vendor/libreoffice-reference/sc/source/filter/oox/viewsettings.cxx#SheetViewSettings::importPane",
-        "vendor/libreoffice-reference/sc/source/filter/oox/viewsettings.cxx#SheetViewSettings::importSelection"
+        "vendor/libreoffice-reference/sc/source/filter/oox/viewsettings.cxx#SheetViewSettings::importSelection",
+        "vendor/libreoffice-reference/sc/source/filter/oox/viewsettings.cxx#ViewSettings::importWorkbookView"
       ],
-      "justification": "Reads the first worksheet view's grid flag with Excel's true default and transfers it to the active document's interactive view data. Applies the first worksheet view's grid and the active worksheet's workbook-wide header and zero-value settings. The native view reader ignores the incoming ShowFormulas property (CALC-743). Resolves the first sheet view’s cursor from the active pane selection and falls back to that view’s top-left cell. J0Z0KF worksheet pane checkpoint. The first-view model resolves fixed and normal axes, independent first/second viewport origins and screen-pane identity before attaching view settings. Reads native tabSelected, includes the active tab, and makes every selected worksheet visible during workbook finalization.",
+      "justification": "Reads the first worksheet view's grid flag with Excel's true default and transfers it to the active document's interactive view data. Applies the first worksheet view's grid and the active worksheet's workbook-wide header and zero-value settings. The native view reader ignores the incoming ShowFormulas property (CALC-743). Resolves the first sheet view’s cursor from the active pane selection and falls back to that view’s top-left cell. J0Z0KF worksheet pane checkpoint. The first-view model resolves fixed and normal axes, independent first/second viewport origins and screen-pane identity before attaching view settings. Reads native tabSelected, includes the active tab, and makes every selected worksheet visible during workbook finalization. Reads tab visibility from the first workbook view and outline visibility from the active sheet’s first view with true defaults.",
       "knownViolations": [],
       "localSymbols": [
         "ViewSettings",
@@ -31,7 +32,8 @@
         "importSheetView",
         "finalizeImport",
         "importPane",
-        "importSelection"
+        "importSelection",
+        "importWorkbookView"
       ],
       "sourceResponsibility": "unverified",
       "upstreamFile": "sc/source/filter/oox/viewsettings.cxx",
@@ -40,7 +42,8 @@
         "SheetViewSettings::finalizeImport",
         "ViewSettings::finalizeImport",
         "SheetViewSettings::importPane",
-        "SheetViewSettings::importSelection"
+        "SheetViewSettings::importSelection",
+        "ViewSettings::importWorkbookView"
       ]
     }
   }

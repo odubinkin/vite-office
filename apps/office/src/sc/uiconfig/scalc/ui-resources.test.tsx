@@ -22,7 +22,7 @@ it("opens connected top menus with shared shortcut captions", /** Uses real prod
       sheetWorkflows={session.sheetWorkflows}
     />,
   );
-  const labels = ["File", "Edit", "View", "Format", "Sheet", "Data"];
+  const labels = ["File", "Edit", "View", "Insert", "Format", "Sheet", "Data"];
   const menubar = screen.getByRole("menubar", { name: "Calc menu" });
   expect(
     within(menubar)
@@ -48,6 +48,8 @@ it("opens connected top menus with shared shortcut captions", /** Uses real prod
       );
     }
     if (label === "Edit") expect(screen.queryByRole("menuitem", { name: /^Cut/ })).toBeNull();
+    if (label === "Insert")
+      expect(screen.getByRole("menuitem", { name: /^Headers and Footers/ })).toBeEnabled();
     fireEvent.keyDown(screen.getAllByRole("menu")[0] as HTMLElement, { key: "Escape" });
   }
   expect(getCalcCommandResource(".uno:About").label).toContain("Vite Office");
@@ -120,6 +122,8 @@ it("retains the complete standardbar resource and projects connected controls wi
     ".uno:ResetAttributes",
     ".uno:Undo",
     ".uno:Redo",
+    ".uno:EditHeaderAndFooter",
+    ".uno:DefinePrintArea",
     ".uno:FreezePanes",
     ".uno:SplitWindow",
   ];
@@ -199,6 +203,7 @@ it("renders connected formatting placements with the bound shared font-size cont
     "Borders (Shift to overwrite)",
     "Border Style",
     "Border Color",
+    "Conditional",
   ];
   expect(
     [...controls].map(

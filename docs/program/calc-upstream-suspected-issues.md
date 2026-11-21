@@ -7595,3 +7595,88 @@ disabled. Calc preserves the original conversions and export conditions.
   again. An empty replacement can leave the position unchanged. The port
   retains the source loop. This finding follows from the source branches and
   has not been exercised as an unbounded native operation.
+
+### CALC-798 — A1 repeat fields can reject their own absolute spelling
+
+The repeat parser counts the leading dollar sign against its endpoint
+length limit. A row such as `12345` is accepted and displayed as
+`$12345`, which the same dialog then rejects. The same mismatch affects
+three-letter columns. Calc preserves the parser limits and absolute
+display.
+
+- [Original A1 repeat parsing and formatting](../../vendor/libreoffice-reference/sc/source/ui/pagedlg/areasdlg.cxx)
+
+### CALC-799 — A trailing repeat-range separator accepts one endpoint
+
+The repeat parser accepts `1:` as row 1 because it validates the last
+endpoint only when the trailing buffer is nonempty. A leading separator
+or multiple separators are rejected. Calc preserves this spelling.
+
+- [Original repeat range parsing](../../vendor/libreoffice-reference/sc/source/ui/pagedlg/areasdlg.cxx)
+
+### CALC-800 — Print-range undo omits removed sheet-local names
+
+Replacing the print area removes sheet-local names flagged as print
+areas. The undo snapshot records explicit areas, the entire-sheet flag
+and repeat titles, so undo restores those settings and leaves the names
+removed. Calc preserves these snapshot contents.
+
+- [Original print range change](../../vendor/libreoffice-reference/sc/source/ui/view/viewfun2.cxx)
+- [Original name removal and print snapshot](../../vendor/libreoffice-reference/sc/source/core/data/table1.cxx)
+
+### CALC-801 — Fit-to-width and height compares the current width twice
+
+The Sheet tab's scaling output compares the current width against both
+saved dimensions. With default-backed items and an unchanged scaling
+mode, a height-only edit can therefore be skipped when the saved
+dimensions match. Different saved dimensions can also cause an
+unchanged pair to be emitted. Calc uses the original comparison.
+
+- [Original Sheet scaling item output](../../vendor/libreoffice-reference/sc/source/ui/pagedlg/tptable.cxx)
+
+### CALC-802 — Unchecked fit dimensions can reset a different scaling mode
+
+The Sheet tab checks whether both fit-dimension fields are disabled
+when it collects settings, even if another scaling mode is selected.
+After unchecking both dimensions, selecting a specific total page count
+can still restore percentage scaling at 100%. Calc preserves that
+condition.
+
+- [Original Sheet tab item-set collection](../../vendor/libreoffice-reference/sc/source/ui/pagedlg/tptable.cxx)
+
+### CALC-803 — Standalone header/footer dialog ignores separate first-page content
+
+The standalone `SID_HFEDIT` resource choice reads the flags for sharing left
+and right content. When both sections share sides, the standalone editor
+can omit first-page content even if Page Style enables a separate first
+page. Calc preserves the same resource choice. The nested editor opens the
+first-page variant based on the checkbox in Page Style.
+
+- [Original standalone resource selection](../../vendor/libreoffice-reference/sc/source/ui/docshell/docsh4.cxx)
+- [Original nested resource selection](../../vendor/libreoffice-reference/sc/source/ui/pagedlg/tphf.cxx)
+
+### CALC-804 — File fields can leave the preset selection stale
+
+The file field menu inserts Title, File Name or Path/File Name without
+updating the preset selection. The adjacent field buttons mark the edited
+content as customized. Calc preserves the file menu behavior.
+
+- [Original header/footer field handlers](../../vendor/libreoffice-reference/sc/source/ui/pagedlg/scuitphfedit.cxx)
+
+### CALC-805 — Reset can retain edits to a previously empty variant
+
+The content editor returns immediately when the original item set contains
+no header or footer item for the active page variant. Reset can therefore
+retain newly entered text in a first-page variant with no saved content.
+Calc preserves the same item-state check.
+
+- [Original header/footer Reset](../../vendor/libreoffice-reference/sc/source/ui/pagedlg/scuitphfedit.cxx)
+
+### CALC-806 — Quick text conditions wrap literal input without escaping quotation marks
+
+The quick conditional-format editor encloses a text operand in quotation
+marks before passing the result to the formula compiler. It leaves embedded
+quotation marks untouched, so literal input containing a quotation mark can
+change the resulting formula text. Calc preserves that construction.
+
+- [Original quick conditional-format accept handler](../../vendor/libreoffice-reference/sc/source/ui/condformat/condformateasydlg.cxx)

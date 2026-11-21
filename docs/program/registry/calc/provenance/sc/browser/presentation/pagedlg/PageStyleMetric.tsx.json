@@ -1,0 +1,29 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "browser-adaptation",
+    "status": "local-only",
+    "localPath": "apps/office/src/sc/browser/presentation/pagedlg/PageStyleMetric.tsx",
+    "rationale": "Presents the existing shared metric spinner with twip values and bounds for Calc page layout and header/footer fields.",
+    "responsibilities": [
+      "Presents the existing shared metric spinner with twip values and bounds for Calc page layout and header/footer fields."
+    ],
+    "stackDivergence": {
+      "kind": "browser-adaptation",
+      "rationale": "Projects source fields into native HTML controls and the existing office dialog style."
+    },
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sc/browser/presentation/pagedlg/PageStyleMetric.tsx",
+          "marker": "PageStyleMetric"
+        },
+        {
+          "path": "apps/office/src/sc/browser/presentation/calc-page-style.test.tsx",
+          "marker": "ports tdf123508"
+        }
+      ]
+    }
+  }
+}

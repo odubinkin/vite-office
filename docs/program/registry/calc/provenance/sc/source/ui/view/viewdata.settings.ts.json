@@ -23,7 +23,9 @@
       "Reads and writes the signed integer CursorPositionX and CursorPositionY properties in the named sheet’s ODF view record.",
       "J0Z0KF worksheet pane checkpoint. Reads native short pane modes and pane IDs, signed column coordinates, pixel and twip forms, and property order. The browser stores normal split lengths in physical twips and uses the matching properties recognized by the native reader.",
       "Uses native PositionLeft and PositionBottom for the unsplit origin and writes the default inactive top position when no vertical split exists.",
-      "Reads the original TableSelected boolean in ODF view settings while retaining the native output omission."
+      "Reads the original TableSelected boolean in ODF view settings while retaining the native output omission.",
+      "Carries the native HasSheetTabs and IsOutlineSymbolsSet booleans through the primary ODF view sequence.",
+      "Persists ShowPageBreaks through the native primary view sequence."
     ],
     "omittedResponsibilities": [
       "Window, zoom, pane split and other view properties remain outside this mechanism."
@@ -45,6 +47,14 @@
         {
           "path": "apps/office/src/sc/source/ui/view/viewdata.settings.test.ts",
           "marker": "reads ODF pane"
+        },
+        {
+          "path": "apps/office/src/sc/source/ui/view/viewdata.settings.test.ts",
+          "marker": "uses the first view per sheet and the active sheet"
+        },
+        {
+          "path": "apps/office/src/sc/browser/presentation/calc-page-breaks.test.tsx",
+          "marker": "inserts and removes the manual breaks"
         }
       ],
       "upstream": [
@@ -63,6 +73,10 @@
         {
           "path": "vendor/libreoffice-reference/sc/source/ui/view/viewdata.cxx",
           "marker": "ScViewDataTable::WriteUserDataSequence"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/source/ui/view/viewdata.cxx",
+          "marker": "SC_UNO_SHOWPAGEBR"
         }
       ]
     },

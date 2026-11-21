@@ -51,7 +51,7 @@ for (const width of [1280, 390]) {
     await page.getByRole("button", { name: "Undo", exact: true }).click();
     await expect(a1).toHaveCSS("justify-content", "center");
     await page.getByRole("button", { name: "Redo", exact: true }).click();
-    await expect(a1).toHaveCSS("justify-content", "flow-end");
+    await expect(a1).toHaveCSS("justify-content", "flex-end");
     for (let count = 0; count < 2; count++) {
       await page.getByRole("menuitem", { name: "Format", exact: true }).click();
       await page.getByRole("menuitem", { name: "Align Text", exact: true }).click();

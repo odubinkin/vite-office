@@ -1,0 +1,24 @@
+{
+  "schema_version": 1,
+  "task_id": "202611210443-QJ6DRG",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-11-21T04:52:05.373Z",
+  "verdict": "pass",
+  "summary": "Native Calc row and column break actions and normal-grid indicators are verified.",
+  "evaluated_sha": "862b79811c4369fd09fd8da5a43ccea37fea107d",
+  "blueprint_digest": "3f57849ae73030f93dd5044748ece2919d478193036caf8304f41f0e82d38466",
+  "findings": [
+    "Both menu pairs update the canonical flags and preserve protected sheets, history and native output."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202611210443-QJ6DRG/README.md",
+    "output/calc-QJ6DRG-verification.md",
+    "output/playwright/calc-QJ6DRG/browser-check.log"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": [
+    "The normal-grid presentation consumes the computed break cache but does not add printer pagination or Page Break Preview."
+  ]
+}

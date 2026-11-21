@@ -1,5 +1,19 @@
-/** @fileoverview Consumed ScDocFunc attribute-only delete operation dispatch;other native document operations remain with their existing owners. */
+/** @fileoverview Consumed Calc document functions and original document-operation dispatch. */
+import {
+  CreateConditionalFormatUndoData,
+  ScUndoConditionalFormat,
+  ScUndoConditionalFormatList,
+} from "../undo/undoblk";
+import {
+  ScCondDateFormatEntry,
+  ScCondFormatEntry,
+  type ScConditionalFormat,
+  type ScConditionalFormatList,
+} from "../../../inc/conditio";
+import type { ScRangeList } from "../../../inc/rangelst";
+import { text } from "../../../../i18nlangtag/source/isolang/isolang.tables";
 import { Color } from "../../../../tools/inc/color";
+import { ScUndoPageBreak } from "../undo/undocell";
 import { ScUndoTabColor, type ScUndoTabColorInfo } from "../undo/undotab";
 import { SetFormulaOperation } from "../operation/SetFormulaOperation";
 import type { ScFormulaCell } from "../../../inc/formulacell";
@@ -16,6 +30,67 @@ import { DeleteCellOperation } from "../operation/DeleteCellOperation";
 export class ScDocFunc {
   /** Borrows the actual shell. @param shell - Document owner. @returns Function owner. */
   constructor(private readonly shell: ScDocShell) {}
+  /** Replaces one source rule group and updates cell keys before publishing the change. @param oldKey - Existing key or zero for a new format. @param format - Owned replacement, or null for removal. @param tab - Active sheet. @param ranges - Replacement associations. @returns Whether the operation was accepted. */
+  ReplaceConditionalFormat(
+    oldKey: number,
+    format: ScConditionalFormat | null,
+    tab: number,
+    ranges: ScRangeList,
+  ): boolean {
+    const doc = this.shell.GetDocument();
+    const sheet = doc.FetchTable(tab);
+    if (!sheet || doc.IsTabProtected(tab)) {
+      format?.Dispose();
+      return false;
+    }
+    const undo = CreateConditionalFormatUndoData(doc, tab);
+    if (oldKey) {
+      const previous = sheet.GetCondFormList().GetFormat(oldKey);
+      if (previous) doc.RemoveCondFormatData(previous.GetRange(), tab, oldKey);
+      sheet.DeleteConditionalFormat(oldKey);
+    }
+    if (format) {
+      this.EnsureConditionStyles(format);
+      doc.AddCondFormatData(ranges, tab, doc.AddCondFormat(format, tab));
+    }
+    sheet.SetStreamValid(false);
+    const redo = CreateConditionalFormatUndoData(doc, tab);
+    this.shell.GetUndoManager().AddUndoAction(new ScUndoConditionalFormat(undo, redo, tab));
+    this.shell.SetDocumentModified();
+    return true;
+  }
+
+  /** Replaces the manager's complete rule list with native undo. @param list - Owned accepted list. @param tab - Active sheet. @returns Whether the operation was accepted. */
+  SetConditionalFormatList(list: ScConditionalFormatList, tab: number): boolean {
+    const doc = this.shell.GetDocument();
+    const sheet = doc.FetchTable(tab);
+    if (!sheet || doc.IsTabProtected(tab)) {
+      list.Dispose();
+      return false;
+    }
+    const undo = CreateConditionalFormatUndoData(doc, tab);
+    sheet.GetCondFormList().RemoveFromDocument(doc);
+    for (const format of list) this.EnsureConditionStyles(format);
+    list.AddToDocument(doc);
+    sheet.SetCondFormList(list);
+    sheet.SetStreamValid(false);
+    const redo = CreateConditionalFormatUndoData(doc, tab);
+    this.shell.GetUndoManager().AddUndoAction(new ScUndoConditionalFormatList(undo, redo, tab));
+    this.shell.SetDocumentModified();
+    return true;
+  }
+
+  /** Ensures accepted rules referring to a native stock style bind a real owner. @param format - Accepted rules. @returns Nothing. */
+  private EnsureConditionStyles(format: ScConditionalFormat): void {
+    const pool = this.shell.GetDocument().GetStyleSheetPool();
+    for (let index = 0; index < format.size(); index++) {
+      const rule = format.GetEntry(index);
+      if (rule instanceof ScCondFormatEntry) pool?.EnsureConditionalStyle(rule.GetStyleName());
+      if (rule instanceof ScCondDateFormatEntry)
+        pool?.EnsureConditionalStyle(text(rule.GetStyleName()));
+    }
+  }
+
   /** Changes one sheet color with the native undo and API flags. @param tab - Sheet. @param color - Native color. @param record - Record history. @param api - Suppress interactive error. @returns Success. */
   SetTabBgColor(tab: number, color: Readonly<Color>, record: boolean, api: boolean): boolean;
   /** Changes a group of sheet colors as one history action. @param colors - Requested colors by tab. @param api - Suppress interactive error. @returns Success. */
@@ -48,6 +123,52 @@ export class ScDocFunc {
     }
     if (record) this.shell.GetUndoManager().AddUndoAction(new ScUndoTabColor(changes));
     this.shell.SetDocumentModified();
+    return true;
+  }
+  /** Inserts the original manual print break before the addressed row or column. @param columns - Column axis. @param position - Native break address. @param record - Whether to record history. @param setModified - Whether to notify the document shell. @returns Success. */
+  InsertPageBreak(
+    columns: boolean,
+    position: ScAddress,
+    record: boolean,
+    setModified: boolean,
+  ): boolean {
+    return this.SetPageBreak(columns, position, true, record, setModified);
+  }
+  /** Removes only the source manual break flag. @param columns - Column axis. @param position - Native break address. @param record - Whether to record history. @param setModified - Whether to notify the document shell. @returns Success. */
+  RemovePageBreak(
+    columns: boolean,
+    position: ScAddress,
+    record: boolean,
+    setModified: boolean,
+  ): boolean {
+    return this.SetPageBreak(columns, position, false, record, setModified);
+  }
+  /** Updates the axis break flag, stream state, and history in native order. @param columns - Column axis. @param position - Native break address. @param insert - Add or remove. @param record - Whether to record history. @param setModified - Whether to notify the document shell. @returns Success. */
+  private SetPageBreak(
+    columns: boolean,
+    position: ScAddress,
+    insert: boolean,
+    record: boolean,
+    setModified: boolean,
+  ): boolean {
+    const doc = this.shell.GetDocument();
+    const sheet = doc.FetchTable(position.Tab());
+    const index = columns ? position.Col() : position.Row();
+    if (!sheet || !(columns ? doc.ValidCol(index) : doc.ValidRow(index)) || (insert && index === 0))
+      return false;
+    const manual = columns ? sheet.HasColManualBreak(index) : sheet.HasRowManualBreak(index);
+    if (manual === insert) return insert;
+    if (record)
+      this.shell.GetUndoManager().AddUndoAction(new ScUndoPageBreak(position, columns, insert));
+    if (columns) {
+      if (insert) sheet.SetColBreak(index, false, true);
+      else sheet.RemoveColBreak(index, false, true);
+    } else {
+      if (insert) sheet.SetRowBreak(index, false, true);
+      else sheet.RemoveRowBreak(index, false, true);
+    }
+    sheet.SetStreamValid(false);
+    if (setModified) this.shell.SetDocumentModified();
     return true;
   }
   /** Original formula dispatch consumes the prepared cell through its concrete operation. @param position - Cell position. @param cell - Transferred formula. @param interaction - User interaction. @returns Success. */

@@ -21,6 +21,7 @@ const labels = [
   "Borders (Shift to overwrite)",
   "Border Style",
   "Border Color",
+  "Conditional",
 ];
 for (const viewport of [
   { width: 1280, height: 800 },
@@ -43,7 +44,7 @@ for (const viewport of [
     const bar = page.getByRole("toolbar", { name: "Calc formatting toolbar" });
     await expect(bar.getByRole("combobox")).toHaveCount(2);
     const buttons = bar.locator("button:not([data-office-combobox-toggle])");
-    await expect(buttons).toHaveCount(16);
+    await expect(buttons).toHaveCount(17);
     expect(
       await bar
         .locator(
@@ -71,7 +72,7 @@ for (const viewport of [
     await expect(bar.getByRole("combobox", { name: "Font Size", exact: true })).toHaveValue(
       "10 pt",
     );
-    for (let index = 0; index < 16; index++) {
+    for (let index = 0; index < 17; index++) {
       const button = buttons.nth(index);
       await expect(button).toBeEnabled();
       if (index < 3) await expect(button).toHaveText(["B", "I", "U"][index] as string);
@@ -93,6 +94,17 @@ for (const viewport of [
     await page.getByRole("textbox", { name: "Input line", exact: true }).fill("9");
     await page.getByRole("button", { name: "Accept input", exact: true }).click();
     await expect(page.getByRole("gridcell", { name: /^A1(?:\s|$)/ })).toHaveText("9");
+    await bar.getByRole("button", { name: "Conditional", exact: true }).click();
+    await page.getByRole("menuitem", { name: /Formatting: Condition$/ }).click();
+    await page.getByRole("menuitem", { name: /Greater Than/ }).click();
+    const rules = page.getByRole("dialog", { name: "Highlight cells…" });
+    await rules.getByRole("textbox", { name: "Value 1" }).fill("5");
+    await rules.getByRole("combobox", { name: "Apply Style" }).selectOption("Good");
+    await rules.getByRole("button", { name: "OK", exact: true }).click();
+    await expect(page.getByRole("gridcell", { name: /^A1(?:\s|$)/ })).toHaveCSS(
+      "background-color",
+      "rgb(204, 255, 204)",
+    );
     await bar.getByRole("button", { name: "Bold", exact: true }).click();
     const cell = page.getByRole("gridcell", { name: /^A1(?:\s|$)/ });
     await expect(cell).toHaveCSS("font-weight", "700");

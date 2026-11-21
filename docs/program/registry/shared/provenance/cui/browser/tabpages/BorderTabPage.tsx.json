@@ -1,0 +1,29 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "browser-adaptation",
+    "status": "local-only",
+    "localPath": "apps/office/src/cui/browser/tabpages/BorderTabPage.tsx",
+    "rationale": "Shares the existing native border-page widgets across Writer and Calc with the original source line and selection actions.",
+    "responsibilities": [
+      "Shares the existing native border-page widgets across Writer and Calc with the original source line and selection actions."
+    ],
+    "stackDivergence": {
+      "kind": "browser-adaptation",
+      "rationale": "Reuses the existing HTML controls, app-provided formatter and shared native border owner."
+    },
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/cui/browser/tabpages/BorderTabPage.tsx",
+          "marker": "BorderTabPage"
+        },
+        {
+          "path": "apps/office/src/sc/browser/presentation/calc-page-style.test.tsx",
+          "marker": "ports tdf123508"
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,36 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sc/source/ui/condformat/condformatdlg.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "calc",
+    "subsystem": "editable-workspace",
+    "capabilityIds": [
+      "CAP-52bb76b0-ff2d-4a8c-86df-79f033c21d86"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/sc/source/ui/condformat/condformatdlg.ts",
+        "apps/office/src/sc/browser/presentation/calc-conditional-format.test.tsx",
+        "vendor/libreoffice-reference/sc/source/ui/condformat/condformatdlg.cxx"
+      ],
+      "justification": "Models the source condition editor and typed reference result.",
+      "knownViolations": [],
+      "localSymbols": [
+        "ScCondFormatDlg"
+      ],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": "sc/source/ui/condformat/condformatdlg.cxx",
+      "upstreamSymbols": [
+        "ScCondFormatDlg::GetConditionalFormat",
+        "ScCondFormatDlg::OkPressed"
+      ]
+    }
+  }
+}

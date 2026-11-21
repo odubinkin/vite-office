@@ -1,5 +1,6 @@
 /** @fileoverview XLSX export of sheet view geometry and native pane selections. */
 import { getTokenFromUtf8 as token } from "../../../../oox/source/token/tokenmap";
+import type { FastSerializerHelper } from "../../../../sax/inc/fshelper";
 import type { ScDocument } from "../../../inc/document";
 import { ViewOption } from "../../../inc/viewopti";
 import { MAXCOL, MAXROW, ScAddress, ScRange, ValidTab } from "../../../inc/address";
@@ -15,6 +16,23 @@ import {
 import { XclXmlUtils, type XclExpXmlStream } from "./xestream";
 
 const paneNames = ["topLeft", "topRight", "bottomLeft", "bottomRight"] as const;
+
+/** Writes the workbook window's active sheet and tab-strip visibility. @param stream - Workbook serializer. @param document - Actual document. @param visible - Exported active sheet. @returns Nothing. */
+export function SaveXmlWorkbookViewSettings(
+  stream: FastSerializerHelper,
+  document: ScDocument,
+  visible: number,
+): void {
+  stream.startElement(token("bookViews"));
+  stream.singleElement(
+    token("workbookView"),
+    token("activeTab"),
+    String(visible),
+    token("showSheetTabs"),
+    String(document.GetViewOptions().GetOption(ViewOption.TABCONTROLS)),
+  );
+  stream.endElement(token("bookViews"));
+}
 
 /** Writes the represented native sheet view for the first workbook view. @param stream - Active worksheet part. @param document - Workbook. @param tab - Actual sheet. @param selected - Export sheet membership. @param view - Attached selection snapshot. @returns Nothing. */
 export function SaveXmlTabViewSettings(
@@ -38,6 +56,8 @@ export function SaveXmlTabViewSettings(
     String(options.GetOption(ViewOption.HEADER)),
     token("showZeros"),
     String(options.GetOption(ViewOption.NULLVALS)),
+    token("showOutlineSymbols"),
+    String(options.GetOption(ViewOption.OUTLINER)),
     token("tabSelected"),
     String(selected),
     token("workbookViewId"),

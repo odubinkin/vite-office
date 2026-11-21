@@ -2,7 +2,13 @@
 import { SfxBoolItem } from "../../../../svl/source/items/cenumitm";
 import { SfxUInt16Item } from "../../../../svl/inc/intitem";
 import type { SfxItemSet } from "../../../../svl/source/items/itemset";
-import { SvxPageItem, SvxSetItem } from "../../../../svx/inc/pageitem";
+import { SvxPageItem, SvxPageUsage, SvxSetItem } from "../../../../svx/inc/pageitem";
+import { Color, COL_TRANSPARENT } from "../../../../tools/inc/color";
+import { SvxBrushItem } from "../../../../editeng/inc/brushitem";
+import { SvxBoxItem } from "../../../../editeng/source/items/frmitems";
+import { SvxFrameDirection } from "../../../../editeng/inc/frmdir";
+import { SvxFrameDirectionItem } from "../../../../editeng/inc/frmdiritem";
+import { importPageBoxProperties, exportPageBoxProperties } from "./xmlstyle.borders";
 import { SvxSizeItem } from "../../../../editeng/inc/sizeitem";
 import { SvxIndentValue, SvxLRSpaceItem } from "../../../../editeng/inc/lrspitem";
 import { SvxULSpaceItem } from "../../../../editeng/inc/ulspitem";
@@ -31,6 +37,9 @@ import { createHeaderFooterContext, exportHeaderFooter } from "./XMLTableHeaderF
 import type { ScXMLImport } from "./xmlimprt";
 import type { ScDocument } from "../../../inc/document";
 import {
+  ATTR_BACKGROUND,
+  ATTR_BORDER,
+  ATTR_WRITINGDIR,
   ATTR_LRSPACE,
   ATTR_ULSPACE,
   ATTR_PAGE,
@@ -53,6 +62,7 @@ import {
   ATTR_PAGE_HEADERSET,
   ATTR_PAGE_FOOTERSET,
   ATTR_PAGE_DYNAMIC,
+  ATTR_PAGE_ON,
 } from "../../../inc/scitems";
 
 const units = new SvXMLUnitConverter("twip");
@@ -66,6 +76,17 @@ const printItems: Readonly<Record<(typeof pagePrintTokens)[number], number>> = {
   objects: ATTR_PAGE_OBJECTS,
   "zero-values": ATTR_PAGE_NULLVALS,
 };
+const usages = new Map([
+  ["all", SvxPageUsage.All],
+  ["left", SvxPageUsage.Left],
+  ["right", SvxPageUsage.Right],
+  ["mirrored", SvxPageUsage.Mirror],
+]);
+const directions = new Map([
+  ["lr-tb", SvxFrameDirection.Horizontal_LR_TB],
+  ["rl-tb", SvxFrameDirection.Horizontal_RL_TB],
+  ["page", SvxFrameDirection.Environment],
+]);
 
 /** Reads a signed16 UNO print value using the original number or percent handler. @param value - XML value. @param percent - Whether the property uses a percent. @returns Parsed and saturated value or absence. */
 function short(value: string | null, percent = false): number | undefined {
@@ -106,17 +127,33 @@ function importPageScale(items: SfxItemSet, properties: ReadonlyMap<T, string>):
 }
 
 /** Applies original page-layout properties to the actual page-family item set. @param items - Native style. @param properties - ODF layout properties. @returns Nothing. */
-function importLayout(items: SfxItemSet, properties: ReadonlyMap<T, string>): void {
+function importLayout(items: SfxItemSet, properties: ReadonlyMap<T, string>, usage: string): void {
   const get =
     /** Reads one stored layout attribute. @param token - XML token. @returns Lexical value or null. */ (
       token: T,
     ): string | null => properties.get(token) ?? null;
   const landscape = get(T.STYLE_PRINT_ORIENTATION);
-  if (landscape === "portrait" || landscape === "landscape") {
-    const page = new SvxPageItem(ATTR_PAGE);
+  const num = get(T.STYLE_NUM_FORMAT);
+  const page = (items.Get(ATTR_PAGE) as SvxPageItem).Clone();
+  const pageUsage = usages.get(usage);
+  if (landscape === "portrait" || landscape === "landscape")
     page.SetLandscape(landscape === "landscape");
-    items.Put(page);
+  if (pageUsage !== undefined) page.SetPageUsage(pageUsage);
+  if (num !== null) {
+    const type = { value: page.GetNumType() };
+    if (units.convertNumFormat(type, num, get(T.STYLE_NUM_LETTER_SYNC) ?? "", true))
+      page.SetNumType(type.value);
   }
+  if (landscape !== null || pageUsage !== undefined || num !== null) items.Put(page);
+  const direction = directions.get(get(T.STYLE_WRITING_MODE) ?? "");
+  if (direction !== undefined) items.Put(new SvxFrameDirectionItem(direction, ATTR_WRITINGDIR));
+  const color = get(T.FO_BACKGROUND_COLOR);
+  if (color === "transparent") items.Put(new SvxBrushItem(COL_TRANSPARENT, ATTR_BACKGROUND));
+  else if (color && /^#[0-9a-f]{6}$/iu.test(color))
+    items.Put(new SvxBrushItem(new Color(Number.parseInt(color.slice(1), 16)), ATTR_BACKGROUND));
+  const box = (items.Get(ATTR_BORDER) as SvxBoxItem).Clone();
+  if (importPageBoxProperties(box, properties, (value) => units.convertMeasureToCore(value)))
+    items.Put(box);
   const measure =
     /** Reads one native measure in the existing page unit. @param token - Source attribute. @returns Twip length or absent. */ (
       token: T,
@@ -183,6 +220,7 @@ function importLayout(items: SfxItemSet, properties: ReadonlyMap<T, string>): vo
 
 /** Attributes grouped by the native page layout child contexts. */
 interface PageLayout {
+  readonly usage: string;
   page?: ReadonlyMap<T, string>;
   header?: ReadonlyMap<T, string>;
   footer?: ReadonlyMap<T, string>;
@@ -229,7 +267,7 @@ export class ScXMLPageStyles {
   /** Creates a page layout SAX context. @param attributes - Layout attributes. @returns Subtree context. */
   CreateLayout(attributes: FastAttributeList): SvXMLImportContext {
     const name = attributes.get(T.STYLE_NAME) ?? "";
-    const layout: PageLayout = {};
+    const layout: PageLayout = { usage: attributes.get(T.STYLE_PAGE_USAGE) ?? "" };
     this.layouts.set(name, layout);
     return new XMLPageLayoutContext(layout);
   }
@@ -248,9 +286,19 @@ export class ScXMLPageStyles {
     const style = this.document.GetStyleSheetPool()?.GetPageStyle(displayName, true);
     if (!style) return new SvXMLIgnoreContext(true);
     const items = style.GetItemSet();
-    if (layout?.page) importLayout(items, layout.page);
+    if (layout?.page) importLayout(items, layout.page, layout.usage);
     if (layout?.header) importHeaderFooterLayout(items, layout.header, true);
     if (layout?.footer) importHeaderFooterLayout(items, layout.footer, false);
+    // A master page enables its header and footer through their child elements.
+    for (const which of [ATTR_PAGE_HEADERSET, ATTR_PAGE_FOOTERSET]) {
+      const group = (items.Get(which) as SvxSetItem).Clone();
+      try {
+        group.GetItemSet().Put(new SfxBoolItem(ATTR_PAGE_ON, false));
+        items.Put(group);
+      } finally {
+        group.Dispose();
+      }
+    }
     this.masterNames.set(name, displayName);
     const importer = this.importer;
     return new /** Native page-specific SAX context. */ (class extends SvXMLImportContext {
@@ -343,7 +391,27 @@ function exportLayout(items: SfxItemSet): string {
   if (center) attributes += ` style:table-centering="${center}"`;
   if (first !== undefined)
     attributes += ` style:first-page-number="${first ? (first << 16) >> 16 : "continue"}"`;
-  return attributes + exportPageScale(items);
+  const brush = items.GetItemIfSet(ATTR_BACKGROUND) as SvxBrushItem | undefined;
+  const color = brush?.GetColor();
+  const rgb = color?.IsFullyTransparent()
+    ? "transparent"
+    : "#" + ((color?.toUInt32() ?? 0) & 0xffffff).toString(16).padStart(6, "0");
+  const background = brush ? ` fo:background-color="${rgb}"` : "";
+  const box = items.GetItemIfSet(ATTR_BORDER) as SvxBoxItem | undefined;
+  const borders = box ? exportPageBoxProperties(box, measure) : "";
+  const dir = (items.Get(ATTR_WRITINGDIR) as SvxFrameDirectionItem).GetValue();
+  const direction = [...directions].find(([, value]) => value === dir)?.[0] ?? "page";
+  const number = page.GetNumType();
+  const sync = SvXMLUnitConverter.convertNumLetterSync(number);
+  const numbering = ` style:num-format="${escapeXml(units.convertNumFormat(number))}"${sync ? ' style:num-letter-sync="true"' : ""}`;
+  return (
+    attributes +
+    exportPageScale(items) +
+    ` style:writing-mode="${direction}"` +
+    numbering +
+    background +
+    borders
+  );
 }
 
 /** Omits individually zero or default scale properties as the original export mapper does. @param items - Native page style. @returns Scale attributes. */
@@ -368,11 +436,12 @@ function exportHeaderFooterLayout(items: SfxItemSet, header: boolean): string {
   ).GetItemSet();
   if (!set.Count()) return "";
   const spacing = set.Get(ATTR_ULSPACE) as SvxULSpaceItem;
+  const margins = set.Get(ATTR_LRSPACE) as SvxLRSpaceItem;
   const distance = header ? spacing.GetLower() : spacing.GetUpper();
   const height = (set.Get(ATTR_PAGE_SIZE) as SvxSizeItem).GetSize().Height();
   const dynamic = (set.Get(ATTR_PAGE_DYNAMIC) as SfxBoolItem).GetValue();
   const length = units.convertMeasureToXML(Math.max(0, height - distance));
-  return `<style:${key}-style><style:header-footer-properties ${dynamic ? "fo:min-height" : "svg:height"}="${length}" fo:margin-${header ? "bottom" : "top"}="${units.convertMeasureToXML(distance)}"/></style:${key}-style>`;
+  return `<style:${key}-style><style:header-footer-properties ${dynamic ? "fo:min-height" : "svg:height"}="${length}" fo:margin-${header ? "bottom" : "top"}="${units.convertMeasureToXML(distance)}" fo:margin-left="${units.convertMeasureToXML(margins.ResolveLeft())}" fo:margin-right="${units.convertMeasureToXML(margins.ResolveRight())}"/></style:${key}-style>`;
 }
 
 /** Collects all native page styles and their automatic layouts. @param document - Workbook. @param fonts - Shared package font declarations. @returns XML records and style-name associations. */
@@ -396,12 +465,15 @@ export function exportPageStyles(
     const master = encodeStyleName(name);
     names.set(name, master);
     const items = style.GetItemSet();
+    const pageUsage = (items.Get(ATTR_PAGE) as SvxPageItem).GetPageUsage();
+    const usage = [...usages].find(([, value]) => value === pageUsage)?.[0] ?? "all";
     const layoutBody = `<style:page-layout-properties ${exportLayout(items)}/>${exportHeaderFooterLayout(items, true)}${exportHeaderFooterLayout(items, false)}`;
-    let layout = layoutNames.get(layoutBody);
+    const layoutKey = `${usage}:${layoutBody}`;
+    let layout = layoutNames.get(layoutKey);
     if (layout === undefined) {
       layout = `Mpm${layoutNames.size + 1}`;
-      layoutNames.set(layoutBody, layout);
-      layouts += `<style:page-layout style:name="${layout}">${layoutBody}</style:page-layout>`;
+      layoutNames.set(layoutKey, layout);
+      layouts += `<style:page-layout style:name="${layout}" style:page-usage="${usage}">${layoutBody}</style:page-layout>`;
     }
     const display = master === name ? "" : ` style:display-name="${escapeXml(name)}"`;
     masters += `<style:master-page style:name="${master}"${display} style:page-layout-name="${layout}">${exportHeaderFooter(items, textStyles)}</style:master-page>`;

@@ -1,0 +1,29 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "browser-adaptation",
+    "status": "local-only",
+    "localPath": "apps/office/src/sc/browser/presentation/pagedlg/ScHFEditDlg.tsx",
+    "rationale": "Presents the original tabbed header and footer controls using browser dialogs, editable regions and command widgets.",
+    "responsibilities": [
+      "Presents the original tabbed header and footer controls using browser dialogs, editable regions and command widgets."
+    ],
+    "stackDivergence": {
+      "kind": "browser-adaptation",
+      "rationale": "Projects source fields into native HTML controls and the existing office dialog style."
+    },
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sc/browser/presentation/pagedlg/ScHFEditDlg.tsx",
+          "marker": "ScHFEditDlg"
+        },
+        {
+          "path": "apps/office/src/sc/browser/presentation/calc-header-footer.test.tsx",
+          "marker": "ports tdf166756"
+        }
+      ]
+    }
+  }
+}

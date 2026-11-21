@@ -166,7 +166,10 @@ export class ScDocShell extends SfxObjectShell {
       { kind: "untitled", name: "Untitled Calc Document" },
     );
     SetDocumentShell.call(document, this);
-    if (!document.GetTableCount()) document.InsertTab(0, unicode("Sheet1"));
+    if (!document.GetTableCount()) {
+      document.InsertTab(0, unicode("Sheet1"));
+      document.GetStyleSheetPool()?.GetPageStyle(document.GetPageStyle(0), true);
+    }
   }
   /** Borrows the actual document. @returns Model. */
   GetDocument(): ScDocument {
@@ -231,7 +234,10 @@ export class ScDocShell extends SfxObjectShell {
     if (document === this.document)
       throw new Error("Replacement document must be a new Calc graph.");
     const replacement = this.PrepareObjectStateReplacement(state, medium);
-    if (!document.GetTableCount()) document.InsertTab(0, unicode("Sheet1"));
+    if (!document.GetTableCount()) {
+      document.InsertTab(0, unicode("Sheet1"));
+      document.GetStyleSheetPool()?.GetPageStyle(document.GetPageStyle(0), true);
+    }
     this.openRequest++;
     const previous = this.document;
     SetDocumentShell.call(document, this);

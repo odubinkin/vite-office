@@ -322,7 +322,7 @@ it("preserves the original Excel sheet names and the fifth active sheet through 
     const bytes = await exportXlsx(stored);
     const archive = await DocumentArchive.open(bytes);
     expect(await archive.readTextEntry("xl/workbook.xml")).toContain(
-      '<workbookView activeTab="4"/>',
+      '<workbookView activeTab="4" showSheetTabs="true"/>',
     );
     reopened = await ExcelFilter.importDocument(bytes);
     for (const graph of [source, worker, stored, reopened]) {
@@ -394,8 +394,16 @@ it("uses the first view per sheet and the active sheet for global display option
       const payload = xml.replace(
         /<sheetViews\b[^>]*>[\s\S]*?<\/sheetViews>/u,
         entry.endsWith("sheet1.xml")
-          ? '<sheetViews><sheetView workbookViewId="0"/><sheetView workbookViewId="1" showGridLines="false"/></sheetViews>'
-          : '<sheetViews><sheetView workbookViewId="0" showFormulas="1" showRowColHeaders="0" showZeros="0"/><sheetView workbookViewId="1" showFormulas="0" showRowColHeaders="1" showZeros="1"/></sheetViews>',
+          ? '<sheetViews><sheetView workbookViewId="0"/><sheetView workbookViewId="1" showGridLines="false" showOutlineSymbols="0"/></sheetViews>'
+          : '<sheetViews><sheetView workbookViewId="0" showFormulas="1" showRowColHeaders="0" showZeros="0" showOutlineSymbols="0"/><sheetView workbookViewId="1" showFormulas="0" showRowColHeaders="1" showZeros="1" showOutlineSymbols="1"/></sheetViews>',
+      );
+      expect(payload).not.toBe(xml);
+      output.putNextEntry(entry, new TextEncoder().encode(payload));
+    } else if (entry === "xl/workbook.xml") {
+      const xml = await source.readTextEntry(entry);
+      const payload = xml.replace(
+        /<bookViews\b[^>]*>[\s\S]*?<\/bookViews>/u,
+        '<bookViews><workbookView activeTab="4" showSheetTabs="off"/><workbookView activeTab="0" showSheetTabs="1"/></bookViews>',
       );
       expect(payload).not.toBe(xml);
       output.putNextEntry(entry, new TextEncoder().encode(payload));
@@ -413,20 +421,17 @@ it("uses the first view per sheet and the active sheet for global display option
     expect(clone.GetViewOptions().GetOption(ViewOption.FORMULAS)).toBe(true);
     const exported = await exportXlsx(clone);
     const xlsx = await DocumentArchive.open(exported);
+    expect(await xlsx.readTextEntry("xl/workbook.xml")).toContain('showSheetTabs="false"');
     for (const part of ["xl/worksheets/sheet1.xml", "xl/worksheets/sheet5.xml"]) {
       const xml = await xlsx.readTextEntry(part);
       expect(xml).toContain('showFormulas="true"');
       expect(xml).toContain('showRowColHeaders="false"');
       expect(xml).toContain('showZeros="false"');
+      expect(xml).toContain('showOutlineSymbols="false"');
     }
     const reopened = await ExcelFilter.importDocument(exported);
     graphs.push(reopened);
     expect(reopened.GetViewOptions().GetOption(ViewOption.FORMULAS)).toBe(false);
-    for (const graph of graphs) {
-      const options = graph.GetViewOptions();
-      expect(options.GetOption(ViewOption.HEADER)).toBe(false);
-      expect(options.GetOption(ViewOption.NULLVALS)).toBe(false);
-    }
     const primary = await writeOdsXml(clone);
     expect(primary.files["settings.xml"]).toContain(
       'config:name="HasColumnRowHeaders" config:type="boolean">false',
@@ -434,11 +439,22 @@ it("uses the first view per sheet and the active sheet for global display option
     expect(primary.files["settings.xml"]).toContain(
       'config:name="ShowZeroValues" config:type="boolean">false',
     );
+    expect(primary.files["settings.xml"]).toContain(
+      'config:name="IsOutlineSymbolsSet" config:type="boolean">false',
+    );
+    expect(primary.files["settings.xml"]).toContain(
+      'config:name="HasSheetTabs" config:type="boolean">false',
+    );
     expect(primary.files["settings.xml"]).not.toContain('config:name="ShowFormulas"');
     const restored = await readOdsDocument(primary);
     graphs.push(restored);
-    expect(restored.GetViewOptions().GetOption(ViewOption.HEADER)).toBe(false);
-    expect(restored.GetViewOptions().GetOption(ViewOption.NULLVALS)).toBe(false);
+    for (const graph of graphs) {
+      const options = graph.GetViewOptions();
+      expect(options.GetOption(ViewOption.HEADER)).toBe(false);
+      expect(options.GetOption(ViewOption.NULLVALS)).toBe(false);
+      expect(options.GetOption(ViewOption.OUTLINER)).toBe(false);
+      expect(options.GetOption(ViewOption.TABCONTROLS)).toBe(false);
+    }
     expect(restored.GetViewOptions().GetOption(ViewOption.FORMULAS)).toBe(false);
   } finally {
     for (const graph of graphs) graph.Dispose();

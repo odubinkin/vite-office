@@ -60,7 +60,7 @@ for (const width of [1280, 390]) {
       ) => errors.push(error.message),
     );
     await page.goto("/calc");
-    await installKernelFixture(page, "CalcShadowFixture", nativeExports);
+    await installKernelFixture(page, "CalcShadowFixture", nativeExports, { officeServices: true });
     const input = page.getByRole("textbox", { name: "Input line", exact: true }),
       cell = page.getByRole("gridcell", { name: /^A1(?:\s|$)/ });
     await input.fill("Shadow text");

@@ -1,5 +1,10 @@
 /** @fileoverview Consumed Calc SDI slots from scalc.sdi,sc.hrc,sfxsids.hrc and solar.hrc; no local command IDs are invented. */
-import { calcViewCommands, createCalcViewSlots, type CalcViewCommandTarget } from "./tabvwsh";
+import {
+  calcPageCommands,
+  calcViewCommands,
+  createCalcViewSlots,
+  type CalcViewCommandTarget,
+} from "./tabvwsh";
 import type { ScTabViewShell } from "../source/ui/view/tabvwsh4";
 import type { ScPaneCommand } from "../source/ui/view/tabview";
 import type { SfxRequest } from "../../sfx2/source/control/request";
@@ -7,14 +12,9 @@ import {
   createCalcTextEffectSlots,
   calcTextEffectCommands,
   type CalcTextEffectCommandTarget,
-} from "./formatsh";
-import {
   createCalcWrapTextSlot,
   calcWrapTextCommand,
   type CalcWrapTextCommandTarget,
-} from "./formatsh";
-
-import {
   createCalcBorderSlots,
   calcBorderCommands,
   type CalcBorderCommandTarget,
@@ -158,7 +158,6 @@ export const calcSheetCommands = {
   color: { id: ".uno:SetTabBgColor", slotId: 26366, label: "Sheet Tab Color" },
 } as const;
 export const FID_TAB_SET_TAB_BG_COLOR = 26367;
-
 /** Native split and freeze window slots from sc.hrc. */
 export const calcPaneCommands = [
   { id: ".uno:FreezePanesRow", label: "Freeze First Row", slotId: 26184, kind: "row" },
@@ -166,7 +165,6 @@ export const calcPaneCommands = [
   { id: ".uno:FreezePanes", label: "Freeze Panes", slotId: 26070, kind: "cursor" },
   { id: ".uno:SplitWindow", label: "Split Window", slotId: 26069, kind: "split" },
 ] as const;
-
 /** Source cell-shell and view-shell manual outline slots. */
 export const calcOutlineCommands = [
   { id: ".uno:Group", slotId: 26355, label: "Group", kind: "group" },
@@ -175,7 +173,37 @@ export const calcOutlineCommands = [
   { id: ".uno:ShowDetail", slotId: 26354, label: "Show Details", kind: "show" },
   { id: ".uno:ClearOutline", slotId: 10234, label: "Remove Outline", kind: "clear" },
 ] as const;
-
+/** Manual breaks at INSERT_MENU_START + 1–4. */
+export const calcPageBreakCommands = [
+  {
+    id: ".uno:InsertRowBreak",
+    slotId: 26261,
+    label: "Insert Row Break",
+    columns: false,
+    insert: true,
+  },
+  {
+    id: ".uno:InsertColumnBreak",
+    slotId: 26262,
+    label: "Insert Column Break",
+    columns: true,
+    insert: true,
+  },
+  {
+    id: ".uno:DeleteRowbreak",
+    slotId: 26263,
+    label: "Remove Row Break",
+    columns: false,
+    insert: false,
+  },
+  {
+    id: ".uno:DeleteColumnbreak",
+    slotId: 26264,
+    label: "Remove Column Break",
+    columns: true,
+    insert: false,
+  },
+] as const;
 /** Native normal-grid selection slots from SID_KEYFUNC_START+26/+27. */
 export const calcCellSelectionCommands = [
   { id: ".uno:Deselect", slotId: 26549, label: "Undo Selection" },
@@ -404,6 +432,8 @@ export const calcUserCommands = [
   ...Object.values(calcSheetCommands),
   ...calcPaneCommands,
   ...calcOutlineCommands,
+  ...calcPageCommands,
+  ...calcPageBreakCommands,
   ...calcCellSelectionCommands,
   ...calcVisibleSelectionCommands,
   calcGoToSheetCommand,

@@ -12,7 +12,7 @@ export function findEnglishLabel(commandUrl: string, ...catalogs: readonly strin
 /** Reads an original native label property without fabricating a popup override when absent. @param commandUrl - Native URL. @param property - Original XCU property. @param catalogs - Pinned catalogs. @returns Original English property, or absent. */
 export function findEnglishLabelProperty(
   commandUrl: string,
-  property: "Label" | "PopupLabel",
+  property: "Label" | "PopupLabel" | "ContextLabel",
   ...catalogs: readonly string[]
 ): string | undefined {
   for (const catalog of catalogs) {

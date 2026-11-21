@@ -1,0 +1,22 @@
+{
+  "schema_version": 1,
+  "task_id": "202611210412-B3P0ZB",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-11-21T04:41:37.472Z",
+  "verdict": "pass",
+  "summary": "Verified native Calc outline and sheet tab view ownership across the workspace and both file formats.",
+  "evaluated_sha": "1bf93878fff42b94804645f4656eef0bdbda58eb",
+  "blueprint_digest": "c37ae1f748fb3f4cf38468f2affe27af08aa4b544fa992d203b5cbd47066e859",
+  "findings": [
+    "Both booleans retain native Excel precedence and ODF property names. Mounted Calc hides only the controls while keyboard navigation and group data remain available."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202611210412-B3P0ZB/README.md",
+    "output/calc-B3P0ZB-verification.md",
+    "output/calc-B3P0ZB-browser.log"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": []
+}

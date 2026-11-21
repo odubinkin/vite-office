@@ -493,6 +493,22 @@ export class ScConditionalFormatList implements Iterable<ScConditionalFormat> {
     for (const format of this) for (const range of format.GetRange()) result.Join(range);
     return result;
   }
+  /** Removes this list's format associations from its marked ranges. @param document - Active workbook. @returns Nothing. */
+  RemoveFromDocument(document: ScDocument): void {
+    for (const format of this) {
+      const ranges = format.GetRange();
+      const first = ranges.at(0);
+      if (first) document.RemoveCondFormatData(ranges, first.aStart.Tab(), format.GetKey());
+    }
+  }
+  /** Installs original format keys on the listed cell ranges. @param document - Active workbook. @returns Nothing. */
+  AddToDocument(document: ScDocument): void {
+    for (const format of this) {
+      const ranges = format.GetRange();
+      const first = ranges.at(0);
+      if (first) document.AddCondFormatData(ranges, first.aStart.Tab(), format.GetKey());
+    }
+  }
   /** Original owned key removal. @param key - Native index. @returns Nothing. */
   erase(key: number): void {
     const format = this.m_ConditionalFormats.get(key);

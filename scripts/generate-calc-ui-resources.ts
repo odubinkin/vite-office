@@ -24,6 +24,9 @@ const surfaces = {
   formatobjectbar: "sc/uiconfig/scalc/toolbar/formatobjectbar.xml",
   textobjectbar: "sc/uiconfig/scalc/toolbar/textobjectbar.xml",
 } as const;
+const printRangesPopup = "sc/uiconfig/scalc/popupmenu/printranges.xml";
+const conditionalPopup = "sc/uiconfig/scalc/popupmenu/conditional.xml";
+const conditionalRulesPopup = "sc/uiconfig/scalc/popupmenu/conditional_easy.xml";
 const catalogPaths = [
   "officecfg/registry/data/org/openoffice/Office/UI/CalcCommands.xcu",
   "officecfg/registry/data/org/openoffice/Office/UI/GenericCommands.xcu",
@@ -31,6 +34,9 @@ const catalogPaths = [
 ] as const;
 const paths = [
   ...Object.values(surfaces),
+  printRangesPopup,
+  conditionalPopup,
+  conditionalRulesPopup,
   ...catalogPaths,
   "officecfg/registry/schema/org/openoffice/Office/UI/Commands.xcs",
 ];
@@ -66,7 +72,12 @@ const excluded = new Map<string, string>([
 ]);
 // Original key-only cell-shell command:catalog metadata is required without adding a visible surface placement.
 const urls = new Set<string>([".uno:Deselect"]);
-for (const path of Object.values(surfaces)) {
+for (const path of [
+  ...Object.values(surfaces),
+  printRangesPopup,
+  conditionalPopup,
+  conditionalRulesPopup,
+]) {
   /** Collects original leaf identities without guessing labels or slot implementations. @param node - Parsed source. @returns Nothing. */
   function collect(node: ReturnType<typeof parseResourceXml>): void {
     if (node.name.endsWith("menuitem") || node.name.endsWith("toolbaritem")) {
@@ -126,6 +137,49 @@ const commands = Object.fromEntries(
       },
     ),
 );
+const resolveMenuLabel =
+  /** Resolves original menu labels. @param url - Source menu URL. @returns English label. */ (
+    url: string,
+  ): string => stripMnemonic(findEnglishLabel(url, ...catalogs));
+const printRanges = buildResourceGraph(
+  texts[printRangesPopup] as string,
+  sourceToCommand,
+  resolveMenuLabel,
+);
+/** Carries a popup's ContextLabel independently of the standard toolbar label. @param node - Menu resource item. @returns Menu placement. */
+function withContextLabel(node: ResourceNode): ResourceNode {
+  if (node.kind !== "command") return node;
+  const title = findEnglishLabelProperty(node.commandUrl, "ContextLabel", ...catalogs);
+  if (title === undefined) return node;
+  const placement = { ...node, label: stripMnemonic(title), showsDialog: title.endsWith("...") };
+  return placement;
+}
+const popupItems = new Map([
+  [".uno:PrintRangesMenu", printRanges.nodes.map(withContextLabel)],
+  [
+    ".uno:ConditionalFormatMenu",
+    buildResourceGraph(texts[conditionalPopup] as string, sourceToCommand, resolveMenuLabel).nodes,
+  ],
+  [
+    ".uno:ConditionalFormatConditionMenu",
+    buildResourceGraph(texts[conditionalRulesPopup] as string, sourceToCommand, resolveMenuLabel)
+      .nodes,
+  ],
+]);
+/** Resolves the source dynamic popup registrations within the Calc menus. @param node - Original graph node. @returns Projected node. */
+function attachCalcPopups(node: ResourceNode): ResourceNode {
+  if (node.kind === "menu") return { ...node, items: node.items.map(attachCalcPopups) };
+  if (node.kind !== "command") return node;
+  const items = popupItems.get(node.commandUrl);
+  if (items)
+    return {
+      id: node.commandUrl,
+      kind: "menu",
+      label: resolveMenuLabel(node.commandUrl),
+      items: items.map(attachCalcPopups),
+    };
+  return node.commandUrl === ".uno:PageFormatDialog" ? withContextLabel(node) : node;
+}
 const dispositions: unknown[] = [];
 const projected = Object.fromEntries(
   Object.entries(surfaces).map(
@@ -151,9 +205,10 @@ const projected = Object.fromEntries(
           }),
         ),
       );
-      for (const url of collectResourceCommands(graph.nodes))
+      const nodes = name === "menubar" ? graph.nodes.map(attachCalcPopups) : graph.nodes;
+      for (const url of collectResourceCommands(nodes))
         if (commands[url] === undefined) throw new Error(`Missing Calc command resource: ${url}`);
-      return [name, graph.nodes];
+      return [name, nodes];
     },
   ),
 );

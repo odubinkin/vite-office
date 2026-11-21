@@ -1,6 +1,6 @@
 /** @fileoverview Consumed native ScViewFunc selection formatting,frame operations and explicit sheet geometry;device/rich-edit/alternate-view services remain unported. */
 import { PasteFromClip } from "./viewfun3";
-import { EnterBlock, EnterAutoSum, HideTable, ShowTable } from "./viewfun2";
+import { EnterBlock, EnterAutoSum, HideTable, ShowTable, SetPrintRanges } from "./viewfun2";
 import type { ScModule } from "../../../inc/scmod";
 import type { ScDocumentPool } from "../../core/data/docpool";
 import {
@@ -100,6 +100,38 @@ export class ScViewFunc extends ScTabView {
     module: ScModule | null = null,
   ) {
     super(data, true, module);
+  }
+  /** Inserts the manual break at the original view cursor, or the supplied address. @param columns - Column axis. @param record - Record history. @param position - Explicit cursor override. @param setModified - Mark the document modified. @returns Success. */
+  InsertPageBreak(
+    columns: boolean,
+    record = true,
+    position = this.PageBreakCursor(),
+    setModified = true,
+  ): boolean {
+    return this.shell.GetDocFunc().InsertPageBreak(columns, position, record, setModified);
+  }
+  /** Deletes the manual break at the original view cursor, or the supplied address. @param columns - Column axis. @param record - Record history. @param position - Explicit cursor override. @param setModified - Mark the document modified. @returns Success. */
+  DeletePageBreak(
+    columns: boolean,
+    record = true,
+    position = this.PageBreakCursor(),
+    setModified = true,
+  ): boolean {
+    return this.shell.GetDocFunc().RemovePageBreak(columns, position, record, setModified);
+  }
+  /** Obtains the break position independently of the marked cell range. @returns Native address. */
+  private PageBreakCursor(): ScAddress {
+    return new ScAddress(this.data.GetCurX(), this.data.GetCurY(), this.data.CurrentTabForData());
+  }
+  /** Applies native ranges and optional repeated titles to the marked sheets. @param entire - Whole sheet. @param print - Print range string or current selection. @param columns - Repeated columns when supplied. @param rows - Repeated rows when supplied. @param add - Append print areas. @returns Nothing. */
+  SetPrintRanges(
+    entire: boolean,
+    print: string | undefined,
+    columns: string | undefined,
+    rows: string | undefined,
+    add: boolean,
+  ): void {
+    SetPrintRanges(this, this.shell, entire, print, columns, rows, add);
   }
   /** Original range inference delegates to the native viewfun2 implementation. @param ranges - Ordered output ranges. @returns Found data. */
   GetAutoSumArea(ranges: ScRangeList): boolean {

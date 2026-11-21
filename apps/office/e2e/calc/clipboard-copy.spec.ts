@@ -45,7 +45,7 @@ test("copies sparse clipboard blocks and completes real dependency notifications
   page,
 }) => {
   await page.goto("/");
-  await installKernelFixture(page, "CalcClipboardFixture", [
+  const nativeExports = [
     { module: "src/sc/source/ui/undo/undoblk.ts", names: ["ScUndoPaste"] },
     { module: "src/editeng/inc/fhgtitem.ts", names: ["SvxFontHeightItem"] },
     { module: "src/sc/source/ui/inc/viewdata.ts", names: ["ScViewData", "ScMarkType"] },
@@ -112,7 +112,8 @@ test("copies sparse clipboard blocks and completes real dependency notifications
     { module: "src/sc/source/core/data/documen7.ts", names: ["BroadcastAction"] },
     { module: "src/formula/inc/grammar.ts", names: ["FormulaGrammar"] },
     { module: "src/i18nlangtag/source/isolang/isolang.tables.ts", names: ["unicode", "text"] },
-  ]);
+  ];
+  await installKernelFixture(page, "CalcClipboardFixture", nativeExports, { officeServices: true });
   const observations = await page.evaluate(
     /** Runs actual compiled source owners without DOM dependencies. @returns Main/Worker observations. */ async () => {
       /** Executes the real default-content phases;document-level paste orchestration and history are not claimed here. @returns Native values. */ async function run() {

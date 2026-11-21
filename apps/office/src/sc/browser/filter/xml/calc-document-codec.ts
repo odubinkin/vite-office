@@ -218,6 +218,9 @@ export interface CalcDocumentRecord {
   readonly showFormulas?: boolean;
   readonly showHeaders?: boolean;
   readonly showZeros?: boolean;
+  readonly showOutline?: boolean;
+  readonly showSheetTabs?: boolean;
+  readonly showPageBreaks?: boolean;
   readonly nullDate?: number;
   readonly ignoreCase?: boolean;
   readonly calculationSettings?: CalculationSettings;
@@ -558,6 +561,9 @@ function* encodeSteps(document: ScDocument): Generator<void, CalcDocumentRecord>
     ...(view.GetOption(ViewOption.FORMULAS) ? { showFormulas: true } : {}),
     ...(view.GetOption(ViewOption.HEADER) ? {} : { showHeaders: false }),
     ...(view.GetOption(ViewOption.NULLVALS) ? {} : { showZeros: false }),
+    ...(view.GetOption(ViewOption.OUTLINER) ? {} : { showOutline: false }),
+    ...(view.GetOption(ViewOption.TABCONTROLS) ? {} : { showSheetTabs: false }),
+    ...(view.GetOption(ViewOption.PAGEBREAKS) ? {} : { showPageBreaks: false }),
     nullDate: document.GetFormatTable().GetNullDate().GetDate(),
     ...(options.IsIgnoreCase() ? { ignoreCase: true } : {}),
     calculationSettings: {
@@ -712,6 +718,12 @@ function* decodeSteps(record: CalcDocumentRecord): Generator<void, ScDocument> {
       view.SetOption(ViewOption.HEADER, record.showHeaders);
     if (typeof record.showZeros === "boolean")
       view.SetOption(ViewOption.NULLVALS, record.showZeros);
+    if (typeof record.showOutline === "boolean")
+      view.SetOption(ViewOption.OUTLINER, record.showOutline);
+    if (typeof record.showSheetTabs === "boolean")
+      view.SetOption(ViewOption.TABCONTROLS, record.showSheetTabs);
+    if (typeof record.showPageBreaks === "boolean")
+      view.SetOption(ViewOption.PAGEBREAKS, record.showPageBreaks);
     for (const [name, sheets, relativeName] of record.externalFiles ?? []) {
       const manager = document.GetExternalRefManager();
       const file = manager.getExternalFileId(name);

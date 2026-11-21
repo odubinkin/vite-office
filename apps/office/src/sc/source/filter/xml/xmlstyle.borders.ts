@@ -238,3 +238,55 @@ export function exportCellBorderColors(pattern: ScPatternAttr): string {
   }
   return xml;
 }
+
+/** Imports page-edge border and padding properties via the same native handlers. @param box - Actual page box. @param properties - ODF page attributes. @param measure - Native twip length converter. @returns Whether any value changed. */
+export function importPageBoxProperties(
+  box: SvxBoxItem,
+  properties: ReadonlyMap<XMLToken, string>,
+  measure: (value: string) => number | null,
+): boolean {
+  const paddings = [
+    XMLToken.FO_PADDING_LEFT,
+    XMLToken.FO_PADDING_RIGHT,
+    XMLToken.FO_PADDING_TOP,
+    XMLToken.FO_PADDING_BOTTOM,
+  ];
+  const commonLine = properties.get(XMLToken.FO_BORDER);
+  const commonWidths = properties.get(XMLToken.STYLE_BORDER_LINE_WIDTH);
+  const commonPadding = properties.get(XMLToken.FO_PADDING);
+  let changed = false;
+  for (const [index, [, token, widthToken, edge, member]] of sides.entries()) {
+    const line = properties.get(token) ?? commonLine;
+    const widths = properties.get(widthToken) ?? commonWidths;
+    const value = { value: new BorderLine2() };
+    if (line !== undefined && border.importXML(line, value)) {
+      if (widths !== undefined) width.importXML(widths, value);
+      box.PutValue(value.value, member | 0x80);
+      changed = true;
+    }
+    const distance = properties.get(paddings[index] as XMLToken) ?? commonPadding;
+    const amount = distance === undefined ? null : measure(distance);
+    if (amount !== null) {
+      box.SetDistance(amount, edge);
+      changed = true;
+    }
+  }
+  return changed;
+}
+
+/** Writes the four page-edge border and padding properties. @param box - Actual style box. @param measure - Native ODF length converter. @returns XML properties. */
+export function exportPageBoxProperties(
+  box: SvxBoxItem,
+  measure: (value: number) => string,
+): string {
+  let result = "";
+  for (const [name, , , edge] of sides) {
+    result += emit(
+      "fo:border-" + name,
+      "style:border-line-width-" + name,
+      SvxBoxItem.SvxLineToLine(box.GetLine(edge), true),
+    );
+    result += ` fo:padding-${name}="${measure(box.GetDistance(edge, true))}"`;
+  }
+  return result;
+}

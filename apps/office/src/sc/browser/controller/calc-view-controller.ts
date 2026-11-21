@@ -1,7 +1,8 @@
 /** @fileoverview Browser input/viewport binding for the current scalar Calc model. Actual cells,marks,formula evaluation and undo stacks remain with native-shaped owners. */
 import type { ScPaneCommand } from "../../source/ui/view/tabview";
+import { ScUndoModifyStyle } from "../../source/ui/undo/undostyl";
 import { ScUndoOutline } from "../../source/ui/undo/undodat";
-import { ScUndoShowHideTab, ScUndoTabColor } from "../../source/ui/undo/undotab";
+import { ScUndoShowHideTab, ScUndoTabColor, ScUndoPrintRange } from "../../source/ui/undo/undotab";
 import { ScMarkData } from "../../inc/markdata";
 import { ScViewUtil } from "../../source/ui/view/viewutil";
 import * as pointerInput from "./calc-pointer-selection";
@@ -13,7 +14,6 @@ import { ScRefType } from "../../source/ui/inc/viewdata";
 import type { CalcViewOption } from "../../sdi/tabvwsh";
 import { ViewOption } from "../../inc/viewopti";
 import type { SvxShadowedItem, SvxCharReliefItem } from "../../../editeng/source/items/textitem";
-
 import { ScUndoIndent } from "../../source/ui/undo/undoblk";
 import { ScUndoWidthOrHeight } from "../../source/ui/undo/undoblk2";
 import type { SfxRequest } from "../../../sfx2/source/control/request";
@@ -31,7 +31,7 @@ import { SvxColorItem } from "../../../editeng/inc/colritem";
 import type { CalcColorKind } from "../../source/ui/view/formatsh";
 import { getCalcSelectionScriptType } from "./calc-selection-script";
 import { SvxFontHeightItem } from "../../../editeng/inc/fhgtitem";
-import { ScUndoCursorAttr } from "../../source/ui/undo/undocell";
+import { ScUndoCursorAttr, ScUndoPageBreak } from "../../source/ui/undo/undocell";
 import { ScUndoSelectionAttr, ScUndoDeleteContents } from "../../source/ui/undo/undoblk3";
 import type { CalcCharacterFormat } from "../../source/ui/view/formatsh";
 import { ScFormatShell } from "../../source/ui/view/formatsh";
@@ -86,7 +86,6 @@ export class CalcViewController {
     else this.viewShell.ToggleFormula(request);
     this.Changed();
   }
-
   /** Routes native indentation through view,document operation and history. @param increment - Direction. @returns Result. */
   ChangeIndent(increment: boolean): boolean {
     if (!this.Commit()) return false;
@@ -195,7 +194,6 @@ export class CalcViewController {
     this.Changed();
     return changed;
   }
-
   /** Reads original selected diagonal attribute state. @param which - Native diagonal identity. @returns Original binding. */
   GetDiagonalState(which: 141 | 142): import("../../../sfx2/source/control/bindings").SfxSlotState {
     return new ScFormatShell(this.viewData, this.shell).GetDiagonalState(which);
@@ -446,7 +444,6 @@ export class CalcViewController {
     );
     this.EndPointer();
   }
-
   /** Admits pending input before original Deselect and projects InitOwnBlockMode's current-cell anchor without moving the cursor. @returns Whether admitted. */
   DeselectCells(): boolean {
     if (!this.Commit()) return false;
@@ -890,6 +887,8 @@ export class CalcViewController {
       cursorAction instanceof ScUndoWidthOrHeight ||
       cursorAction instanceof ScUndoShowHideTab ||
       cursorAction instanceof ScUndoTabColor ||
+      cursorAction instanceof ScUndoPrintRange ||
+      cursorAction instanceof ScUndoModifyStyle ||
       cursorAction instanceof ScUndoOutline
     ) {
       if (cursorAction instanceof ScUndoWidthOrHeight) {
@@ -901,6 +900,7 @@ export class CalcViewController {
     const position =
       cursorAction instanceof ScUndoSetCell ||
       cursorAction instanceof ScUndoCursorAttr ||
+      cursorAction instanceof ScUndoPageBreak ||
       cursorAction instanceof ScUndoIndent ||
       cursorAction instanceof ScUndoSelectionAttr ||
       cursorAction instanceof ScUndoDeleteContents

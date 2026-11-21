@@ -14,7 +14,7 @@ test("fills real formula blocks and restores native paste history in browser and
   page,
 }) => {
   await page.goto("/");
-  await installKernelFixture(page, "CalcPasteBlockFixture", [
+  const nativeExports = [
     { module: "src/sc/inc/document.ts", names: ["ScDocument"] },
     { module: "src/sc/source/ui/docshell/docsh.ts", names: ["ScDocShell"] },
     { module: "src/sc/source/ui/inc/tabvwsh.ts", names: ["ScTabViewShell"] },
@@ -23,7 +23,10 @@ test("fills real formula blocks and restores native paste history in browser and
     { module: "src/sc/inc/attrib.ts", names: ["ScMergeAttr", "ScMF"] },
     { module: "src/sc/inc/patattr.ts", names: ["ScPatternAttr"] },
     { module: "src/i18nlangtag/source/isolang/isolang.tables.ts", names: ["unicode", "text"] },
-  ]);
+  ];
+  await installKernelFixture(page, "CalcPasteBlockFixture", nativeExports, {
+    officeServices: true,
+  });
   const result = await page.evaluate(
     /** Exercises real document ownership without any DOM calls. @returns Observations. */ async () => {
       /** Runs native refresh and examines canonical flag values. @returns Geometry and flags. */ async function run() {

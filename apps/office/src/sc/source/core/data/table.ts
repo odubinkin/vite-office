@@ -70,6 +70,8 @@ export class ScTable {
   declare private bPrintEntireSheet: boolean;
   declare private moRepeatColRange: ScRange | undefined;
   declare private moRepeatRowRange: ScRange | undefined;
+  FillPrintSaver = table1.FillPrintSaver;
+  RestorePrintRanges = table1.RestorePrintRanges;
   GetPrintRangeCount = table1.GetPrintRangeCount;
   GetPrintRange = table1.GetPrintRange;
   IsPrintEntireSheet = table1.IsPrintEntireSheet;
@@ -77,6 +79,7 @@ export class ScTable {
   GetRepeatRowRange = table1.GetRepeatRowRange;
   AddPrintRange = table1.AddPrintRange;
   ClearPrintRanges = table1.ClearPrintRanges;
+  ClearPrintNamedRanges = table1.ClearPrintNamedRanges;
   SetPrintEntireSheet = table1.SetPrintEntireSheet;
   SetRepeatColRange = table1.SetRepeatColRange;
   SetRepeatRowRange = table1.SetRepeatRowRange;
@@ -135,22 +138,12 @@ export class ScTable {
   HasManualBreaks = table5.HasManualBreaks;
   SetRowManualBreaks = table5.SetRowManualBreaks;
   SetColManualBreaks = table5.SetColManualBreaks;
-  /** Original table5 collects row breaks. @param args - Native arguments. @returns Native result. */
-  GetAllRowBreaks(...args: Parameters<typeof table5.GetAllRowBreaks>): void {
-    return table5.GetAllRowBreaks.apply(this, args);
-  }
-  /** Original table5 collects column breaks. @param args - Native arguments. @returns Native result. */
-  GetAllColBreaks(...args: Parameters<typeof table5.GetAllColBreaks>): void {
-    return table5.GetAllColBreaks.apply(this, args);
-  }
-  /** Original table5 sets row break flags. @param args - Native arguments. @returns Native result. */
-  SetRowBreak(...args: Parameters<typeof table5.SetRowBreak>): void {
-    return table5.SetRowBreak.apply(this, args);
-  }
-  /** Original table5 sets column break flags. @param args - Native arguments. @returns Native result. */
-  SetColBreak(...args: Parameters<typeof table5.SetColBreak>): void {
-    return table5.SetColBreak.apply(this, args);
-  }
+  GetAllRowBreaks = table5.GetAllRowBreaks;
+  GetAllColBreaks = table5.GetAllColBreaks;
+  SetRowBreak = table5.SetRowBreak;
+  SetColBreak = table5.SetColBreak;
+  RemoveRowBreak = table5.RemoveRowBreak;
+  RemoveColBreak = table5.RemoveColBreak;
   private mpCondFormatList: ScConditionalFormatList | null = new ScConditionalFormatList();
   /** Original table1 mutable getter creates an absent owned list. @returns Actual owner. */
   GetCondFormList(): ScConditionalFormatList {

@@ -1,5 +1,5 @@
 /** @fileoverview Consumed AdjustBlockHeight standard attribute path from viewfun2.cxx; device-based script and EditEngine layout remain unported. */
-import { ScUndoShowHideTab } from "../undo/undotab";
+import { ScUndoPrintRange, ScUndoShowHideTab } from "../undo/undotab";
 import type { ScDocShell } from "../docshell/docsh";
 import type { ScTabView } from "./tabview3";
 import { ScFormulaCell } from "../../../inc/formulacell";
@@ -15,7 +15,7 @@ import type { ScTable } from "../../../inc/table";
 import { ScDirection, CellType } from "../../../inc/global";
 import { ScRefCellValue } from "../../../inc/cellvalue";
 import { ScAddress } from "../../../inc/address";
-import { ScRange } from "../../../inc/address";
+import { ScRange, ScRefFlags } from "../../../inc/address";
 import { ScRangeList } from "../../../inc/rangelst";
 import { ScTokenArray } from "../../../inc/tokenarray";
 import { ScComplexRefData } from "../../../inc/refdata";
@@ -23,7 +23,7 @@ import { ScCompiler } from "../../../inc/compiler";
 import { OpCode } from "../../../../formula/inc/opcode";
 import { OUString, type OUStringConstReference } from "../../../../sal/inc/rtl/ustring";
 import { unicode, text } from "../../../../i18nlangtag/source/isolang/isolang.tables";
-import type { ScViewData } from "../inc/viewdata";
+import { ScMarkType, type ScViewData } from "../inc/viewdata";
 import { RowHeightContext } from "../../../inc/rowheightcontext";
 /** Recalculates affected whole rows on original selected sheets, retaining source shared-context ordering. @param doc - Actual document. @param marks - Selected sheets. @param first - First row. @param last - Last row. @returns Whether geometry changed. */
 export function AdjustBlockHeight(
@@ -600,5 +600,85 @@ export function HideTable(view: ScTabView, shell: ScDocShell, restore = -1): voi
   }
   if (restore !== -1) view.SetTabNo(restore);
   shell.GetUndoManager().AddUndoAction(new ScUndoShowHideTab(tabs, false, view));
+  shell.SetDocumentModified();
+}
+
+/** Native separator for multiple print areas in one request. */
+export const printRangeSeparator = ";";
+
+/** Reads one explicit source print range in the document convention. @param source - Native reference text. @param document - Workbook. @param tab - Sheet used for unqualified references. @returns Native range or absence. */
+export function ParsePrintRange(
+  source: string,
+  document: ScDocument,
+  tab: number,
+): ScRange | undefined {
+  const value = unicode(source);
+  const area = new ScRange(0, 0, tab);
+  const details = new ScAddress.Details(document.GetAddressConvention(), 0, 0);
+  try {
+    return area.ParseAny(value, document, details) & ScRefFlags.VALID ? area : undefined;
+  } finally {
+    value.dispose();
+  }
+}
+
+/** Obtains the source simple range or ordered multi-area selection. @param view - Active view. @param promote - Original command's multi-mark promotion when applying ranges. @returns Actual ranges. */
+export function GetPrintSelection(view: ScViewData, promote = false): readonly ScRange[] {
+  const area = new ScRange();
+  if (view.GetSimpleArea(area) === ScMarkType.SC_MARK_SIMPLE) return [area];
+  const marks = view.GetMarkData();
+  if (promote && !marks.IsMultiMarked()) return [];
+  if (promote) marks.MarkToMulti();
+  return [...marks.GetMarkedRanges()];
+}
+
+/** Applies original print range and repeat arguments to all marked tabs. @param view - Active source view owner. @param shell - Document shell. @param entire - Explicit whole-sheet mode. @param print - Undefined uses sheet marks; empty clears explicit areas. @param columns - Optional repeated columns. @param rows - Optional repeated rows. @param add - Append to current print areas. @returns Nothing. */
+export function SetPrintRanges(
+  view: ScViewFunc,
+  shell: ScDocShell,
+  entire: boolean,
+  print: string | undefined,
+  columns: string | undefined,
+  rows: string | undefined,
+  add: boolean,
+): void {
+  const data = view.GetViewData();
+  const document = data.GetDocument();
+  const before = document.CreatePrintRangeSaver();
+  for (const tab of data.GetMarkData().GetSelectedTabs()) {
+    const sheet = document.FetchTable(tab);
+    if (!sheet) continue;
+    if (!add) {
+      sheet.ClearPrintRanges();
+      sheet.ClearPrintNamedRanges();
+    }
+    if (entire) sheet.SetPrintEntireSheet();
+    else if (print === undefined) {
+      for (const range of GetPrintSelection(data, true)) sheet.AddPrintRange(range);
+    } else if (print) {
+      for (const token of print.split(printRangeSeparator)) {
+        const range = ParsePrintRange(token, document, tab);
+        if (range) sheet.AddPrintRange(range);
+      }
+    }
+    if (columns !== undefined) {
+      const range = columns && ParsePrintRange(columns, document, tab);
+      if (range || columns === "") sheet.SetRepeatColRange(range || undefined);
+    }
+    if (rows !== undefined) {
+      const range = rows && ParsePrintRange(rows, document, tab);
+      if (range || rows === "") sheet.SetRepeatRowRange(range || undefined);
+    }
+  }
+  shell
+    .GetUndoManager()
+    .AddUndoAction(
+      new ScUndoPrintRange(
+        view,
+        data.CurrentTabForData(),
+        before,
+        document.CreatePrintRangeSaver(),
+      ),
+    );
   shell.SetDocumentModified();
 }

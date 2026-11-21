@@ -8,9 +8,45 @@ import type { ScDocument } from "../../../inc/document";
 import { text, unicode } from "../../../../i18nlangtag/source/isolang/isolang.tables";
 import { scStyleNameResourcesEnglish } from "../../../inc/globstr";
 import { ScStyleSheet } from "./stlsheet";
+import { ESelection } from "../../../../editeng/inc/ESelection";
+import { EE_FEATURE_FIELD } from "../../../../editeng/inc/eeitem";
+import { SvxFieldItem, SvxPageField, SvxTableField } from "../../../../editeng/inc/flditem";
+import { ScPageHFItem } from "../../../inc/attrib";
+import { SvxBrushItem } from "../../../../editeng/inc/brushitem";
+import { SvxColorItem } from "../../../../editeng/inc/colritem";
+import { SvxWeightItem } from "../../../../editeng/inc/wghtitem";
+import { FontWeight } from "../../../../tools/inc/fontenum";
+import { Color } from "../../../../tools/inc/color";
+import {
+  ATTR_BACKGROUND,
+  ATTR_FONT_COLOR,
+  ATTR_FONT_WEIGHT,
+  ATTR_CJK_FONT_WEIGHT,
+  ATTR_CTL_FONT_WEIGHT,
+  ATTR_PAGE_FOOTERRIGHT,
+  ATTR_PAGE_HEADERRIGHT,
+} from "../../../inc/scitems";
+import { ScEditEngineDefaulter } from "../tool/editutil";
 import type { SfxItemSet } from "../../../../svl/source/items/itemset";
 
 const standard = scStyleNameResourcesEnglish.STR_STYLENAME_STANDARD;
+
+/** Source status and accent styles from sc/res/xml/styles.xml. */
+const conditionalStyles = new Map<
+  string,
+  readonly [string, (number | undefined)?, (number | undefined)?, boolean?]
+>([
+  ["Status", [standard]],
+  ["Good", ["Status", 0xccffcc, 0x006600]],
+  ["Neutral", ["Status", 0xffffcc, 0x996600]],
+  ["Bad", ["Status", 0xffcccc, 0xcc0000]],
+  ["Warning", ["Status", undefined, 0xcc0000]],
+  ["Error", ["Status", 0xcc0000, 0xffffff, true]],
+  ["Accent", [standard, undefined, undefined, true]],
+  ["Accent 1", ["Accent", 0x000000, 0xffffff]],
+  ["Accent 2", ["Accent", 0x808080, 0xffffff]],
+  ["Accent 3", ["Accent", 0xdddddd]],
+]);
 
 /** Actual shared style-pool base with the native Calc document pointer. */
 export class ScStyleSheetPool extends SfxStyleSheetPool {
@@ -46,12 +82,93 @@ export class ScStyleSheetPool extends SfxStyleSheetPool {
   GetPageStyle(name: string, create = false): SfxStyleSheetBase | null {
     const key = unicode(name);
     try {
-      return (
-        this.Find(key, SfxStyleFamily.Page) ??
-        (create ? this.Make(key, SfxStyleFamily.Page, SfxStyleSearchBits.UserDefined) : null)
+      const existing = this.Find(key, SfxStyleFamily.Page);
+      if (existing || !create) return existing;
+      const isStandard = name === standard;
+      const style = this.Make(
+        key,
+        SfxStyleFamily.Page,
+        isStandard ? SfxStyleSearchBits.ScStandard : SfxStyleSearchBits.UserDefined,
       );
+      if (isStandard && this.pDoc) this.CreateStandardPageContent(style.GetItemSet(), this.pDoc);
+      return style;
     } finally {
       key.dispose();
+    }
+  }
+
+  /** Sets the Standard page style's original sheet field and Page number footer. @param items - Standard page style. @param document - Owning workbook. @returns Nothing. */
+  private CreateStandardPageContent(items: SfxItemSet, document: ScDocument): void {
+    const editor = new ScEditEngineDefaulter(document.GetEditEnginePool());
+    editor.SetUpdateLayout(false);
+    editor.EnableUndo(false);
+    const empty = editor.CreateTextObject();
+    const blank = unicode("");
+    const page = unicode("Page ");
+    try {
+      for (const [which, prefix, field] of [
+        [ATTR_PAGE_HEADERRIGHT, blank, new SvxTableField()],
+        [ATTR_PAGE_FOOTERRIGHT, page, new SvxPageField()],
+      ] as const) {
+        editor.SetTextCurrentDefaults(prefix);
+        const impl = editor.getImpl();
+        const position = impl.CreateNormalizedSel(ESelection.AtEnd()).Min();
+        impl.GetEditDoc().InsertFeature(position, new SvxFieldItem(field, EE_FEATURE_FIELD, true));
+        impl.UpdateFields();
+        const center = editor.CreateTextObject();
+        const item = new ScPageHFItem(which);
+        try {
+          if (empty && center) {
+            item.SetLeftArea(empty);
+            item.SetCenterArea(center);
+            item.SetRightArea(empty);
+            items.Put(item);
+          }
+        } finally {
+          item.dispose();
+          center?.dispose();
+        }
+      }
+    } finally {
+      empty?.dispose();
+      blank.dispose();
+      page.dispose();
+      editor.Dispose();
+    }
+  }
+
+  /** Reads source stock styles used when authoring conditional-format rules. @returns Original style names. */
+  GetConditionalStyleNames(): Iterable<string> {
+    return conditionalStyles.keys();
+  }
+
+  /** Materializes a requested stock style where an existing workbook style does not provide it. @param name - Accepted style name. @returns Nothing. */
+  EnsureConditionalStyle(name: string): void {
+    const definition = conditionalStyles.get(name);
+    if (!definition) return;
+    const value = unicode(name);
+    try {
+      if (this.Find(value, SfxStyleFamily.Para)) return;
+      const [parent, background, foreground, bold] = definition;
+      this.EnsureConditionalStyle(parent);
+      const style = this.Make(value, SfxStyleFamily.Para, SfxStyleSearchBits.Auto);
+      const parentName = unicode(parent);
+      try {
+        style.SetParent(parentName);
+      } finally {
+        parentName.dispose();
+      }
+      const items = style.GetItemSet();
+      if (background !== undefined)
+        items.Put(new SvxBrushItem(new Color(background), ATTR_BACKGROUND));
+      if (foreground !== undefined)
+        items.Put(new SvxColorItem(new Color(foreground), ATTR_FONT_COLOR));
+      if (bold) {
+        for (const which of [ATTR_FONT_WEIGHT, ATTR_CJK_FONT_WEIGHT, ATTR_CTL_FONT_WEIGHT])
+          items.Put(new SvxWeightItem(FontWeight.WEIGHT_BOLD, which));
+      }
+    } finally {
+      value.dispose();
     }
   }
 

@@ -1,0 +1,37 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sc/source/ui/pagedlg/tptable.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "calc",
+    "subsystem": "editable-workspace",
+    "capabilityIds": [
+      "CAP-52bb76b0-ff2d-4a8c-86df-79f033c21d86"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/sc/source/ui/pagedlg/tptable.ts",
+        "apps/office/src/sc/browser/presentation/calc-page-style.test.tsx",
+        "vendor/libreoffice-reference/sc/source/ui/pagedlg/tptable.cxx"
+      ],
+      "justification": "Preserves native Sheet tab state, control defaults, scaling priority and the original scale output comparison.",
+      "knownViolations": [],
+      "localSymbols": [
+        "ScTablePage"
+      ],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": "sc/source/ui/pagedlg/tptable.cxx",
+      "upstreamSymbols": [
+        "ScTablePage::Reset",
+        "ScTablePage::FillItemSet",
+        "lcl_PutScaleItem2"
+      ]
+    }
+  }
+}

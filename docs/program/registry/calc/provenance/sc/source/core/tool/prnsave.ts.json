@@ -1,0 +1,51 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "status": "mapped",
+    "localPath": "apps/office/src/sc/source/core/tool/prnsave.ts",
+    "localSymbols": [
+      "ScPrintSaverTab",
+      "ScPrintRangeSaver"
+    ],
+    "upstreamPath": "sc/source/core/tool/prnsave.cxx",
+    "upstreamSymbols": [
+      "ScPrintSaverTab::SetAreas",
+      "ScPrintSaverTab::SetRepeat",
+      "ScPrintRangeSaver::GetTabData"
+    ],
+    "preservedResponsibilities": [
+      "Stores the original per-sheet explicit print areas, entire-sheet flag and repeat ranges in workbook index order."
+    ],
+    "omittedResponsibilities": [
+      "LibreOfficeKit JSON introspection and unused snapshot comparisons remain outside the connected print range command."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sc/source/core/tool/prnsave.ts",
+          "marker": "ScPrintSaverTab"
+        },
+        {
+          "path": "apps/office/src/sc/browser/presentation/calc-print-areas.test.tsx",
+          "marker": "restores workbook print history"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sc/source/core/tool/prnsave.cxx",
+          "marker": "ScPrintSaverTab::SetAreas"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/source/core/tool/prnsave.cxx",
+          "marker": "ScPrintSaverTab::SetRepeat"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/source/core/tool/prnsave.cxx",
+          "marker": "ScPrintRangeSaver::GetTabData"
+        }
+      ]
+    }
+  }
+}

@@ -2,7 +2,7 @@
 import type { SfxItemSet } from "../../../svl/source/items/itemset";
 import type { SyntheticEvent } from "react";
 import { useWindowTracking } from "../../../vcl/browser/use-window-tracking";
-import { createCalcGridFrames, calcGridBorderStyle } from "./calc-grid-borders";
+import { createCalcGridFrames, calcGridBorderStyle, calcGridPageBreaks } from "./calc-grid-borders";
 import { ScHeaderResizeHandle, type ScHeaderSizing } from "./ScHeaderResizeHandle";
 import { ScOutlineWindow } from "./ScOutlineWindow";
 import type { ScOutlineControl } from "../../source/ui/docshell/olinefun";
@@ -785,6 +785,28 @@ export function ScGridWindow(props: ScGridWindowProps): React.JSX.Element {
           style={{ width: rowGutter, height: columnGutter }}
         />
       )}
+      {viewData.GetOptions().GetOption(ViewOption.PAGEBREAKS) &&
+        [false, true].flatMap(
+          /** Paints native break rules on each visible axis and pane. @param columns - Axis. @returns Visible rules. */
+          (columns) =>
+            calcGridPageBreaks(table, columns ? xAxis : yAxis, columns).map(
+              /** Paints a single dashed native break boundary. @param rule - Measured rule. @returns Break line. */
+              ({ index, pixel, leading, manual }) => (
+                <div
+                  key={`${columns}:${leading}:${index}`}
+                  aria-hidden="true"
+                  data-calc-break={columns ? "column" : "row"}
+                  data-calc-break-index={index}
+                  data-calc-break-kind={manual ? "manual" : "computed"}
+                  className={`pointer-events-none absolute z-[4] border-dashed ${columns ? "bottom-0 border-l" : "right-0 border-t"} ${manual ? "border-indigo-600" : "border-slate-500"}`}
+                  style={{
+                    left: headerWidth + (columns ? pixel : 0),
+                    top: headerHeight + (columns ? 0 : pixel),
+                  }}
+                />
+              ),
+            ),
+        )}
       {viewport.frozenColumns && (
         <div
           aria-hidden="true"

@@ -24,6 +24,18 @@
       "sha256": "810c86528767c4e390fd6650f1cb663f395ad76c0f920c175607db94b7bfd079"
     },
     {
+      "path": "sc/uiconfig/scalc/popupmenu/printranges.xml",
+      "sha256": "28f7b269de76d1be4c4f5ca7b9132322d07f0b50ed1d900ebbd46f1cc0d84390"
+    },
+    {
+      "path": "sc/uiconfig/scalc/popupmenu/conditional.xml",
+      "sha256": "c68ed4d2d706b5cf107b5de0b87933a58667e656b0924b69a51f9e25bdca71e6"
+    },
+    {
+      "path": "sc/uiconfig/scalc/popupmenu/conditional_easy.xml",
+      "sha256": "2dc6ee66a273e385db41ad9c0e5ca63b4d6437ea6943548bafbec1615d388d90"
+    },
+    {
       "path": "officecfg/registry/data/org/openoffice/Office/UI/CalcCommands.xcu",
       "sha256": "15840b53e3c8fd35b65f6de403a05c3c32b7b94d0ca998da4f01f5ae75c60dde"
     },
@@ -86,6 +98,12 @@
     ".uno:AddName": {
       "label": "Define Name",
       "showsDialog": true,
+      "shortcuts": [],
+      "semantics": "action"
+    },
+    ".uno:AddPrintArea": {
+      "label": "Add",
+      "showsDialog": false,
       "shortcuts": [],
       "semantics": "action"
     },
@@ -461,6 +479,12 @@
       "shortcuts": [],
       "semantics": "action"
     },
+    ".uno:ColorScaleFormatDialog": {
+      "label": "Conditional Formatting: Color Scale",
+      "showsDialog": false,
+      "shortcuts": [],
+      "semantics": "action"
+    },
     ".uno:ColumnOperations": {
       "label": "Column",
       "showsDialog": false,
@@ -547,6 +571,60 @@
       "shortcuts": [],
       "semantics": "action"
     },
+    ".uno:CondDateFormatDialog": {
+      "label": "Conditional Formatting: Date",
+      "showsDialog": false,
+      "shortcuts": [],
+      "semantics": "action"
+    },
+    ".uno:ConditionalFormatConditionMenu": {
+      "label": "Conditional Formatting: Condition",
+      "showsDialog": false,
+      "shortcuts": [],
+      "semantics": "action"
+    },
+    ".uno:ConditionalFormatDialog": {
+      "label": "Conditional Formatting: More Rules",
+      "showsDialog": false,
+      "shortcuts": [],
+      "semantics": "action"
+    },
+    ".uno:ConditionalFormatEasy?FormatRule:short=0": {
+      "label": "Conditional Formatting: Equals",
+      "showsDialog": false,
+      "shortcuts": [],
+      "semantics": "action"
+    },
+    ".uno:ConditionalFormatEasy?FormatRule:short=1": {
+      "label": "Conditional Formatting: Less Than",
+      "showsDialog": false,
+      "shortcuts": [],
+      "semantics": "action"
+    },
+    ".uno:ConditionalFormatEasy?FormatRule:short=2": {
+      "label": "Conditional Formatting: Greater Than",
+      "showsDialog": false,
+      "shortcuts": [],
+      "semantics": "action"
+    },
+    ".uno:ConditionalFormatEasy?FormatRule:short=23": {
+      "label": "Conditional Formatting: Contains Text",
+      "showsDialog": false,
+      "shortcuts": [],
+      "semantics": "action"
+    },
+    ".uno:ConditionalFormatEasy?FormatRule:short=6": {
+      "label": "Conditional Formatting: Between",
+      "showsDialog": false,
+      "shortcuts": [],
+      "semantics": "action"
+    },
+    ".uno:ConditionalFormatManagerDialog": {
+      "label": "Manage",
+      "showsDialog": true,
+      "shortcuts": [],
+      "semantics": "action"
+    },
     ".uno:ConditionalFormatMenu": {
       "label": "Conditional",
       "showsDialog": false,
@@ -604,6 +682,12 @@
     },
     ".uno:DataAreaRefresh": {
       "label": "Refresh Range",
+      "showsDialog": false,
+      "shortcuts": [],
+      "semantics": "action"
+    },
+    ".uno:DataBarFormatDialog": {
+      "label": "Conditional Formatting: Data Bar",
       "showsDialog": false,
       "shortcuts": [],
       "semantics": "action"
@@ -1249,6 +1333,12 @@
       "showsDialog": true,
       "shortcuts": [],
       "semantics": "check"
+    },
+    ".uno:IconSetFormatDialog": {
+      "label": "Conditional Formatting: Icon Set",
+      "showsDialog": false,
+      "shortcuts": [],
+      "semantics": "action"
     },
     ".uno:ImageControl": {
       "label": "Image Control",
@@ -3359,10 +3449,104 @@
           { "kind": "separator" },
           { "commandUrl": ".uno:FontDialog", "kind": "command", "visible": true },
           { "commandUrl": ".uno:ParagraphDialog", "kind": "command", "visible": true },
-          { "commandUrl": ".uno:PageFormatDialog", "kind": "command", "visible": true },
-          { "commandUrl": ".uno:PrintRangesMenu", "kind": "command", "visible": true },
+          {
+            "commandUrl": ".uno:PageFormatDialog",
+            "kind": "command",
+            "visible": true,
+            "label": "Page Style",
+            "showsDialog": true
+          },
+          {
+            "id": ".uno:PrintRangesMenu",
+            "kind": "menu",
+            "label": "Print Ranges",
+            "items": [
+              {
+                "commandUrl": ".uno:DefinePrintArea",
+                "kind": "command",
+                "visible": true,
+                "label": "Define",
+                "showsDialog": false
+              },
+              {
+                "commandUrl": ".uno:AddPrintArea",
+                "kind": "command",
+                "visible": true,
+                "label": "Add",
+                "showsDialog": false
+              },
+              {
+                "commandUrl": ".uno:EditPrintArea",
+                "kind": "command",
+                "visible": true,
+                "label": "Edit",
+                "showsDialog": true
+              },
+              {
+                "commandUrl": ".uno:DeletePrintArea",
+                "kind": "command",
+                "visible": true,
+                "label": "Clear",
+                "showsDialog": false
+              }
+            ]
+          },
           { "kind": "separator" },
-          { "commandUrl": ".uno:ConditionalFormatMenu", "kind": "command", "visible": true },
+          {
+            "id": ".uno:ConditionalFormatMenu",
+            "kind": "menu",
+            "label": "Conditional",
+            "items": [
+              {
+                "id": ".uno:ConditionalFormatConditionMenu",
+                "kind": "menu",
+                "label": "Conditional Formatting: Condition",
+                "items": [
+                  {
+                    "commandUrl": ".uno:ConditionalFormatEasy?FormatRule:short=2",
+                    "kind": "command",
+                    "visible": true
+                  },
+                  {
+                    "commandUrl": ".uno:ConditionalFormatEasy?FormatRule:short=1",
+                    "kind": "command",
+                    "visible": true
+                  },
+                  {
+                    "commandUrl": ".uno:ConditionalFormatEasy?FormatRule:short=0",
+                    "kind": "command",
+                    "visible": true
+                  },
+                  {
+                    "commandUrl": ".uno:ConditionalFormatEasy?FormatRule:short=6",
+                    "kind": "command",
+                    "visible": true
+                  },
+                  {
+                    "commandUrl": ".uno:ConditionalFormatEasy?FormatRule:short=23",
+                    "kind": "command",
+                    "visible": true
+                  },
+                  { "kind": "separator" },
+                  {
+                    "commandUrl": ".uno:ConditionalFormatDialog",
+                    "kind": "command",
+                    "visible": true
+                  }
+                ]
+              },
+              { "commandUrl": ".uno:ColorScaleFormatDialog", "kind": "command", "visible": true },
+              { "commandUrl": ".uno:DataBarFormatDialog", "kind": "command", "visible": true },
+              { "commandUrl": ".uno:IconSetFormatDialog", "kind": "command", "visible": true },
+              { "commandUrl": ".uno:CondDateFormatDialog", "kind": "command", "visible": true },
+              { "kind": "separator" },
+              {
+                "commandUrl": ".uno:ConditionalFormatManagerDialog",
+                "kind": "command",
+                "visible": true
+              }
+            ]
+          },
           { "commandUrl": ".uno:AutoFormat", "kind": "command", "visible": true },
           { "commandUrl": ".uno:ChooseDesign", "kind": "command", "visible": true },
           { "commandUrl": ".uno:ThemeDialog", "kind": "command", "visible": true },

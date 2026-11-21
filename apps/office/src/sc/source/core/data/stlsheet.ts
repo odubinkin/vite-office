@@ -13,17 +13,25 @@ import {
   ATTR_LRSPACE,
   ATTR_ULSPACE,
   ATTR_PAGE_SIZE,
+  ATTR_PAGE_HEADERSET,
+  ATTR_PAGE_FOOTERSET,
   ATTR_PAGE_SCALETO,
   ATTR_PAGE_SCALETOPAGES,
   ATTR_PAGE_SCALE,
   ATTR_PATTERN_END,
   ATTR_PATTERN_START,
 } from "../../../inc/scitems";
+import { LANGUAGE_SYSTEM } from "../../../../i18nlangtag/inc/lang";
+import { MsLangId } from "../../../../i18nlangtag/inc/mslangid";
+import { SvxFrameDirection } from "../../../../editeng/inc/frmdir";
+import { SvxFrameDirectionItem } from "../../../../editeng/inc/frmdiritem";
 import { SvxPaperInfo } from "../../../../editeng/inc/paperinf";
 import { SvxSizeItem } from "../../../../editeng/inc/sizeitem";
 import { SvxIndentValue, SvxLRSpaceItem } from "../../../../editeng/inc/lrspitem";
 import { SvxULSpaceItem } from "../../../../editeng/inc/ulspitem";
 import { SfxUInt16Item } from "../../../../svl/inc/intitem";
+import { Size } from "../../../../tools/inc/gen";
+import { SvxSetItem } from "../../../../svx/inc/pageitem";
 import { ScPageScaleToItem } from "../../../inc/attrib";
 
 /** Native Calc style specialization of the shared style owner. */
@@ -55,6 +63,11 @@ export class ScStyleSheet extends SfxStyleSheet {
     return true;
   }
 
+  /** Native page styles have no inheritance in the style dialog. @returns Whether the family has a parent. */
+  override HasParentSupport(): boolean {
+    return this.GetFamily() !== SfxStyleFamily.Page;
+  }
+
   /** Lazily allocates the family Which ranges on the original pool. @returns Owned style item set. */
   override GetItemSet(): SfxItemSet {
     if (!this.pSet) {
@@ -74,12 +87,30 @@ export class ScStyleSheet extends SfxStyleSheet {
       );
       if (page) {
         this.pSet.Put(new SvxSizeItem(ATTR_PAGE_SIZE, SvxPaperInfo.GetDefaultPaperSize()));
+        const rtl = MsLangId.isRightToLeft(MsLangId.getRealLanguage(LANGUAGE_SYSTEM));
+        this.pSet.Put(
+          new SvxFrameDirectionItem(
+            rtl ? SvxFrameDirection.Horizontal_RL_TB : SvxFrameDirection.Horizontal_LR_TB,
+            ATTR_WRITINGDIR,
+          ),
+        );
         const margin = SvxIndentValue.twips(1134);
         this.pSet.Put(new SvxLRSpaceItem(margin, margin, SvxIndentValue.zero(), ATTR_LRSPACE));
         this.pSet.Put(new SvxULSpaceItem(1134, 1134, ATTR_ULSPACE));
         pool.GetPool().SetUserDefaultItem(new SfxUInt16Item(ATTR_PAGE_SCALE, 100));
         pool.GetPool().SetUserDefaultItem(new SfxUInt16Item(ATTR_PAGE_SCALETOPAGES, 0));
         pool.GetPool().SetUserDefaultItem(new ScPageScaleToItem());
+        for (const which of [ATTR_PAGE_HEADERSET, ATTR_PAGE_FOOTERSET]) {
+          const group = (this.pSet.Get(which) as SvxSetItem).Clone();
+          try {
+            const headerFooter = group.GetItemSet();
+            headerFooter.Put(new SvxSizeItem(ATTR_PAGE_SIZE, new Size(0, 283 + 142)));
+            headerFooter.Put(new SvxULSpaceItem(142, 142, ATTR_ULSPACE));
+            this.pSet.Put(group);
+          } finally {
+            group.Dispose();
+          }
+        }
       }
       this.bMySet = true;
     }

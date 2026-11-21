@@ -1,0 +1,45 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "status": "mapped",
+    "localPath": "apps/office/src/sc/source/ui/condformat/condformatdlgentry.ts",
+    "localSymbols": [
+      "CreateConditionalRule"
+    ],
+    "upstreamPath": "sc/source/ui/condformat/condformatdlgentry.cxx",
+    "upstreamSymbols": [
+      "ScConditionFrmtEntry",
+      "ScColorScale3FrmtEntry::createColorscaleEntry"
+    ],
+    "preservedResponsibilities": [
+      "Converts existing native condition, date and scale rule entries to editable values and back."
+    ],
+    "omittedResponsibilities": [
+      "Native Weld widgets are supplied by the browser adapter."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sc/source/ui/condformat/condformatdlgentry.ts",
+          "marker": "CreateConditionalRule"
+        },
+        {
+          "path": "apps/office/src/sc/browser/presentation/calc-conditional-format.test.tsx",
+          "marker": "ports tdf163897"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sc/source/ui/condformat/condformatdlgentry.cxx",
+          "marker": "ScConditionFrmtEntry"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/source/ui/condformat/condformatdlgentry.cxx",
+          "marker": "ScColorScale3FrmtEntry::createColorscaleEntry"
+        }
+      ]
+    }
+  }
+}

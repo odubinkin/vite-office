@@ -8,6 +8,8 @@ import { ScAddress } from "../../inc/address";
 import { ScInputMode } from "../../inc/global";
 import { getCalcCommandResource } from "../../uiconfig/scalc/menubar/menubar";
 import { cellPresentation } from "../editor/cell-input";
+import { createDocument } from "../../../sfx2/source/doc/objsh";
+import { readOdsDocument } from "../../source/filter/xml/xmlwrap";
 afterEach(cleanup);
 /** Mounts the actual production view. @returns Session. */
 function setup() {
@@ -173,6 +175,41 @@ it("keeps global grid visibility distinct from the current-sheet grid flag", /**
     expect(c.viewData.GetShowGrid()).toBe(true);
     expect(cell.style.borderRightColor).toBe("transparent");
     expect(c.viewData.GetOptions().GetOption(ViewOption.GRID)).toBe(false);
+  } finally {
+    s.Close();
+  }
+});
+
+it("applies persisted outline and tab visibility without removing groups or keyboard navigation", /** Loads the actual ODS state into the mounted browser session. @returns Completion. */ async () => {
+  const s = setup();
+  try {
+    const { controller } = s;
+    const doc = controller.shell.GetDocument();
+    act(
+      /** Creates a second sheet through Calc history. @returns Nothing. */ () => {
+        controller.InsertSheet();
+        controller.SelectTab(0);
+      },
+    );
+    doc.FetchTable(0)?.StartOutlineTable().GetRowArray().Insert(1, 5);
+    doc.GetViewOptions().SetOption(ViewOption.OUTLINER, false);
+    doc.GetViewOptions().SetOption(ViewOption.TABCONTROLS, false);
+    const incoming = await readOdsDocument(await controller.shell.SerializeOds());
+    expect(screen.getByRole("tablist", { name: "Sheets" })).toBeVisible();
+    act(
+      /** Reattaches the imported document and native view. @returns Nothing. */ () => {
+        controller.shell.ReplaceDocument(
+          incoming,
+          createDocument({ id: "hidden-controls", suiteId: "calc", title: "Hidden controls" }),
+          { kind: "untitled", name: "Hidden controls" },
+        );
+      },
+    );
+    expect(screen.queryByRole("tablist", { name: "Sheets" })).toBeNull();
+    expect(screen.queryByRole("group", { name: "Row outline" })).toBeNull();
+    expect(incoming.FetchTable(0)?.GetOutlineTable()?.GetRowArray().GetDepth()).toBe(1);
+    fireEvent.keyDown(screen.getByRole("grid"), { key: "PageDown", ctrlKey: true });
+    expect(controller.viewData.GetTabNumber()).toBe(1);
   } finally {
     s.Close();
   }

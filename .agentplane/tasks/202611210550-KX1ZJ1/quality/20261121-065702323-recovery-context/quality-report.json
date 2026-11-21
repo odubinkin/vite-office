@@ -1,0 +1,25 @@
+{
+  "schema_version": 1,
+  "task_id": "202611210550-KX1ZJ1",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-11-21T06:57:02.323Z",
+  "verdict": "pass",
+  "summary": "The reviewed commits connect the original Calc header/footer commands and content variants to typed EditEngine and page-style owners.",
+  "evaluated_sha": "cb5a74a3e4375daa04bb31ce4a1e214593ed9375",
+  "blueprint_digest": "3ad25e72b198cd30f2a6c33c0a94e236ebf5231b3b9d0aa6c109589ed74807e0",
+  "findings": [
+    "The focused cases establish menu and toolbar placement, first-page sharing and reset behavior, decoded file fields, source rich formatting, nested style transactions, and native ODS and XLSX round trips."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202611210550-KX1ZJ1/README.md",
+    "output/calc-hf-editor-typed.log",
+    "output/calc-hf-related.log",
+    "output/calc-hf-browser-desktop.log"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": [
+    "Browser Text Attributes exposes the common font, color and position controls. Per-region native EditView undo and the other character options remain follow-up work."
+  ]
+}
