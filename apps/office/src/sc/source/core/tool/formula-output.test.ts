@@ -57,10 +57,9 @@ it("serializes actual code tokens and ODFF references without interpreting or re
   token.GetSingleRef().InitAddress(0, 0, 0);
   token.GetSingleRef().SetFlag3D(true);
   expect(text(cell.GetFormula(grammar))).toBe("=[$Data.$A$1]+1");
-  expect(
-    /** Missing localized grammar rejects. @returns Formula. */ () =>
-      cell.GetFormula(FormulaGrammar.Grammar.GRAM_NATIVE_XL_A1),
-  ).toThrow(/implemented/);
+  const excelOutput = cell.GetFormula(FormulaGrammar.Grammar.GRAM_NATIVE_XL_A1);
+  expect(text(excelOutput)).toBe("=Data!$A$1+1");
+  excelOutput.dispose();
   const compiler = new ScCompiler(doc, pos, grammar),
     empty = compiler.CompileString(unicode("=")),
     output = unicode("old");
