@@ -1,10 +1,16 @@
 /** @fileoverview Writer view search dispatch over the native model cursor and replacement history. */
 import { SearchOptions2 } from "../../../../i18nutil/inc/searchopt";
 import { TransliterationFlags } from "../../../../i18nutil/inc/transliteration";
-import { APPROXIMATE } from "../../../../offapi/com/sun/star/util/SearchAlgorithms2";
-import { LEV_RELAXED, NORM_WORD_ONLY } from "../../../../offapi/com/sun/star/util/SearchFlags";
+import { ABSOLUTE, APPROXIMATE } from "../../../../offapi/com/sun/star/util/SearchAlgorithms2";
+import {
+  LEV_RELAXED,
+  NORM_WORD_ONLY,
+  REG_NOT_BEGINOFLINE,
+  REG_NOT_ENDOFLINE,
+} from "../../../../offapi/com/sun/star/util/SearchFlags";
 import { OUString } from "../../../../sal/inc/rtl/ustring";
 import { SvxSearchCmd } from "../../../../svl/inc/srchitem";
+import { GetSettings } from "../../../../vcl/source/app/svapp";
 import { FindRanges, SwDocPositions } from "../../../inc/cshtyp";
 import { FindFormat } from "../../core/crsr/findcoll";
 import { WRITER_AVAILABLE_PARAGRAPH_STYLE_POOL } from "../../../inc/poolfmt";
@@ -385,10 +391,12 @@ export class SwViewSearch {
   ): void {
     if (!cursor.HasMark()) return;
     const match = createSearchCursor(cursor, true);
+    const scopedOptions = new SearchOptions2(options);
+    scopedOptions.searchFlag |= REG_NOT_BEGINOFLINE | REG_NOT_ENDOFLINE;
     try {
       if (
         match.Find_Text(
-          options,
+          scopedOptions,
           false,
           SwDocPositions.Curr,
           end,
@@ -473,8 +481,15 @@ export class SwViewSearch {
     if (inSelection && !this.HasSelection()) return { matches: 0, wrapped: false };
     const options = new SearchOptions2();
     options.searchString.assign(toOUString(item.search));
-    options.replaceString.assign(toOUString(item.replacement));
-    options.searchFlag = item.wholeWords ? NORM_WORD_ONLY : 0;
+    // Only Replace All performs replacement in FUNC_Search. Single Replace
+    // validates a match with Find before replacing it through the edit shell.
+    if (command === SvxSearchCmd.REPLACE_ALL)
+      options.replaceString.assign(toOUString(item.replacement));
+    options.Locale = GetSettings().GetLanguageTag().getLocale();
+    options.AlgorithmType2 = ABSOLUTE;
+    options.searchFlag =
+      (item.wholeWords ? NORM_WORD_ONLY : 0) |
+      (inSelection ? REG_NOT_BEGINOFLINE | REG_NOT_ENDOFLINE : 0);
     if (item.similaritySearch) {
       options.AlgorithmType2 = APPROXIMATE;
       options.changedChars = item.similarity.changedChars;
@@ -500,15 +515,15 @@ export class SwViewSearch {
         const result = document.RunModelTransaction(
           /** Publishes edits only after restoring the view cursor. @returns Search feedback. */ () => {
             if (command === SvxSearchCmd.REPLACE) {
-              // Native backward Replace restores the pre-edit range before searching further.
               if (backward) this.shell.Push();
               try {
                 if (style === undefined)
                   this.ReplaceSelection(cursor, options, item.replacement, last, acceptsNode);
                 else if (item.replaceStyle) this.shell.SetParagraphStyle(item.replaceStyle);
               } finally {
-                if (backward) this.shell.Pop(PopMode.DeleteCurrent);
+                if (backward) this.shell.Pop(PopMode.DeleteStack);
               }
+              if (backward) this.shell.GetCursor_().Exchange();
             }
 
             const replaceAll = command === SvxSearchCmd.REPLACE_ALL;

@@ -4,7 +4,7 @@ title: "Implement Writer search and replace core and browser UI"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 42
+revision: 43
 origin:
   system: "manual"
 depends_on:
@@ -130,6 +130,9 @@ comments:
   -
     author: "CODER"
     body: "Verified Find Bar and dialog history checkpoint. Find Bar keeps the keyboard-activated query separately from the application-session controller history. Next and Previous update the ordered list, while Find All only dispatches. On reopening the selected Writer text takes precedence over the remembered keyboard term and recent entries. Dialog SaveToModule updates the search history and Close retains replacement terms as well. Source-derived behavior is recorded as WRITER-692. The five focused Vitest files passed 71 of 72 initially, and the sole failing history test passed after narrowing the ambiguous DOM query to its combobox role and rerunning that test. This covers 72 distinct passing scenarios. Writer resources passed two tests. Production build, dependency and source tree, provenance, JSDoc, file size, scoped lint and formatting, policy routing and diff checks passed. Doctor retains its prior hook-shim readiness warning. Browser page reload persistence and the desktop expert history-size preference remain pending. This checkpoint leaves the parent active and does not advance the full-suite cadence."
+  -
+    author: "CODER"
+    body: "Verified Writer search dispatch and backward replacement checkpoint. Search now supplies the application data locale from the VCL settings owner, explicit native algorithm identity, both selection flags, and replacement text only in the Replace All model pass. The single-replacement validator uses a scoped Find request. Backward Replace follows SwWrtShell::Pop default DeleteStack and SwapPam, keeping the replaced range as the origin instead of restoring the original wider selection. Source-backed view tests verify the options delivered to the real model cursor and the preceding match inside a wider selection. 76 targeted tests passed in six files and both resource tests passed. Production build, dependency, source tree, provenance, JSDoc, file size, scoped lint/formatting, policy routing and diff checks passed. Doctor retains its existing managed hook readiness warning. The comment search path still requires the Writer annotation model and editable comment view; the current search task stays open and this checkpoint does not advance full-suite cadence."
 events:
   -
     type: "status"
@@ -288,8 +291,13 @@ events:
     at: "2026-11-21T05:46:37.066Z"
     author: "CODER"
     body: "Verified Find Bar and dialog history checkpoint. Find Bar keeps the keyboard-activated query separately from the application-session controller history. Next and Previous update the ordered list, while Find All only dispatches. On reopening the selected Writer text takes precedence over the remembered keyboard term and recent entries. Dialog SaveToModule updates the search history and Close retains replacement terms as well. Source-derived behavior is recorded as WRITER-692. The five focused Vitest files passed 71 of 72 initially, and the sole failing history test passed after narrowing the ambiguous DOM query to its combobox role and rerunning that test. This covers 72 distinct passing scenarios. Writer resources passed two tests. Production build, dependency and source tree, provenance, JSDoc, file size, scoped lint and formatting, policy routing and diff checks passed. Doctor retains its prior hook-shim readiness warning. Browser page reload persistence and the desktop expert history-size preference remain pending. This checkpoint leaves the parent active and does not advance the full-suite cadence."
+  -
+    type: "comment"
+    at: "2026-11-21T05:52:39.502Z"
+    author: "CODER"
+    body: "Verified Writer search dispatch and backward replacement checkpoint. Search now supplies the application data locale from the VCL settings owner, explicit native algorithm identity, both selection flags, and replacement text only in the Replace All model pass. The single-replacement validator uses a scoped Find request. Backward Replace follows SwWrtShell::Pop default DeleteStack and SwapPam, keeping the replaced range as the origin instead of restoring the original wider selection. Source-backed view tests verify the options delivered to the real model cursor and the preceding match inside a wider selection. 76 targeted tests passed in six files and both resource tests passed. Production build, dependency, source tree, provenance, JSDoc, file size, scoped lint/formatting, policy routing and diff checks passed. Doctor retains its existing managed hook readiness warning. The comment search path still requires the Writer annotation model and editable comment view; the current search task stays open and this checkpoint does not advance full-suite cadence."
 doc_version: 3
-doc_updated_at: "2026-11-21T05:46:37.066Z"
+doc_updated_at: "2026-11-21T05:52:39.502Z"
 doc_updated_by: "CODER"
 description: "Implement the approved coherent Writer search-and-replace feature from pinned LibreOffice sources: real shared search engine and options, native paragraph/cursor traversal and replacement/history contracts, view-owned search state and dispatch, Find toolbar and Find and Replace dialog with generated upstream command placement and shortcuts. Preserve source semantics and explicit unsupported boundaries; never substitute DOM text search or browser RegExp for ICU contracts. Work only on writer in vite-office-writer; local upstream reading approved, no network or merges. Keep active until approved scope is verified."
 sections:
