@@ -18,10 +18,11 @@
       "Owns source-relative condition formulas, the represented comparisons, and named cell style binding.",
       "Evaluates the four native text conditions with the original number conversion, transliteration and character classification owners.",
       "Preserves the original ExtCondition discriminator through cloning and native equality.",
-      "Evaluates the original error and no-error rule modes on the actual formula cell at the evaluated address."
+      "Evaluates the original error and no-error rule modes on the actual formula cell at the evaluated address.",
+      "Evaluates duplicate, unique, count, percentage and average conditions over native ranges and retains the original per-render cache lifecycle."
     ],
     "omittedResponsibilities": [
-      "Additional condition families, full shift/move token updates and native listener caches remain unported."
+      "Full shift/move token updates and native listener caches remain outside the current slice."
     ],
     "evidence": {
       "local": [
@@ -64,6 +65,10 @@
         {
           "path": "apps/office/e2e/calc/xlsx-error-conditions.spec.ts",
           "marker": "Calc paints formula errors from XLSX"
+        },
+        {
+          "path": "apps/office/src/sc/source/filter/xml/ods-statistical-conditions.test.ts",
+          "marker": "evaluates range statistics through ODS"
         }
       ],
       "upstream": [
@@ -94,6 +99,14 @@
         {
           "path": "sc/source/core/data/conditio.cxx",
           "marker": "ScConditionEntry::IsError"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/qa/unit/cond_format.cxx",
+          "marker": "testTdf166669"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/source/core/data/conditio.cxx",
+          "marker": "ScConditionEntry::FillCache"
         }
       ]
     },

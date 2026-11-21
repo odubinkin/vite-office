@@ -25,6 +25,7 @@ import type {
 } from "../../../inc/refupdatecontext";
 import { ScFormatEntry, ScFormatEntryType, type ScConditionalFormat } from "./conditio";
 import { ScGlobal } from "./global";
+import { ScHorizontalCellIterator } from "./dociter";
 
 /** Original ScConditionMode identities. */
 export enum ScConditionMode {
@@ -54,6 +55,27 @@ export enum ScConditionMode {
   ContainsText,
   NotContainsText,
   NONE,
+}
+
+/** Native multiplicity cache used by statistical conditions in one rendering pass. */
+interface ScConditionEntryCache {
+  readonly values: readonly (readonly [number, number])[];
+  readonly numbers: ReadonlyMap<number, number>;
+  readonly strings: ReadonlyMap<string, number>;
+  readonly valueItems: number;
+  readonly average: number;
+}
+
+/** Uses the original locale-based lowercase key for duplicate strings. @param value - Cell text. @returns Cache key. */
+function duplicateKey(value: string): string {
+  const source = unicode(value);
+  const lower = ScGlobal.getCharClass().lowercase(source);
+  try {
+    return text(lower);
+  } finally {
+    lower.dispose();
+    source.dispose();
+  }
 }
 
 /** Orders operands of the same native scalar type. @param first - Left operand. @param second - Right operand. @returns Comparison sign. */
@@ -113,6 +135,8 @@ export class ScConditionEntry extends ScFormatEntry {
   private parent: ScConditionalFormat | null = null;
   private readonly arrays: ScTokenArray[] = [];
   private readonly compiled = new Set<ScTokenArray>();
+  private rendering = false;
+  private statistics: ScConditionEntryCache | undefined;
 
   /** Compiles expressions at their original reference origin. @param mode - Condition operator. @param expressions - Formula text in the supplied grammar. @param document - Native document. @param source - Base address. @param grammar - Source grammar. @returns Condition entry. */
   constructor(
@@ -253,6 +277,99 @@ export class ScConditionEntry extends ScFormatEntry {
     }
   }
 
+  /** Fills the original numeric and text histograms over occupied cells of each target range. @returns Statistics. */
+  private FillCache(): ScConditionEntryCache {
+    if (this.statistics) return this.statistics;
+    const numbers = new Map<number, number>();
+    const strings = new Map<string, number>();
+    let valueItems = 0;
+    for (const range of this.parent?.GetRange() ?? []) {
+      const tab = range.aStart.Tab();
+      if (!this.mrDoc.FetchTable(tab)) continue;
+      const cells = new ScHorizontalCellIterator(
+        this.mrDoc,
+        tab,
+        range.aStart.Col(),
+        range.aStart.Row(),
+        range.aEnd.Col(),
+        range.aEnd.Row(),
+      );
+      const col: [number] = [0],
+        row: [number] = [0];
+      for (let cell = cells.GetNext(col, row); cell; cell = cells.GetNext(col, row)) {
+        if (cell.isEmpty()) continue;
+        const value = this.GetCellContent(cell, 0);
+        if (typeof value === "number") {
+          numbers.set(value, (numbers.get(value) ?? 0) + 1);
+          valueItems++;
+        } else if (value !== undefined) {
+          const key = duplicateKey(value);
+          strings.set(key, (strings.get(key) ?? 0) + 1);
+        }
+      }
+    }
+    const values = Array.from(numbers).sort(
+      /** Orders the keys as in the original numeric map. @param left - Left entry. @param right - Right entry. @returns Sort order. */
+      ([left], [right]) => left - right,
+    );
+    let sum = 0;
+    for (const [value, count] of values) sum += value * count;
+    const cache = { numbers, strings, values, valueItems, average: sum / valueItems };
+    if (this.rendering) this.statistics = cache;
+    return cache;
+  }
+
+  /** Applies the original count/percentage rank boundary, retaining ties as a group. @param value - Evaluated value. @param operand - Count or percentage. @param cache - Target range statistics. @returns Match. */
+  private IsRank(value: number, operand: number, cache: ScConditionEntryCache): boolean {
+    const top = this.mode === ScConditionMode.Top10 || this.mode === ScConditionMode.TopPercent;
+    const percent =
+      this.mode === ScConditionMode.TopPercent || this.mode === ScConditionMode.BottomPercent;
+    if (!percent && cache.valueItems <= operand) return true;
+    const limit = percent ? Math.trunc((cache.valueItems * operand) / 100) : operand;
+    const values = cache.values;
+    let cells = 0;
+    for (let offset = 0; offset < values.length; offset++) {
+      if (cells >= limit) return false;
+      const [key, count] = values[top ? values.length - offset - 1 : offset] as readonly [
+        number,
+        number,
+      ];
+      if (top ? key <= value : key >= value) return true;
+      cells += count;
+    }
+    return true;
+  }
+
+  /** Applies duplicate, rank or average semantics with the original scalar admission. @param cell - Evaluated cell. @param first - Condition operand. @returns Match. */
+  private IsStatistical(cell: ScRefCellValue, first: number | string | undefined): boolean {
+    if (!this.parent || typeof first === "string") return false;
+    const value = this.GetCellContent(cell, 0);
+    if (value === undefined) return false;
+    if (this.mode === ScConditionMode.Duplicate || this.mode === ScConditionMode.NotDuplicate) {
+      if (value === "") return false;
+      const cache = this.FillCache();
+      const count =
+        typeof value === "number"
+          ? cache.numbers.get(value)
+          : cache.strings.get(duplicateKey(value));
+      return (count ?? 0) > 1 === (this.mode === ScConditionMode.Duplicate);
+    }
+    if (typeof value !== "number") return false;
+    const cache = this.FillCache();
+    switch (this.mode) {
+      case ScConditionMode.AboveAverage:
+        return value > cache.average;
+      case ScConditionMode.BelowAverage:
+        return value < cache.average;
+      case ScConditionMode.AboveEqualAverage:
+        return value >= cache.average;
+      case ScConditionMode.BelowEqualAverage:
+        return value <= cache.average;
+      default:
+        return this.IsRank(value, first ?? 0, cache);
+    }
+  }
+
   /** Tests a represented comparison or formula using the native cell and interpreter. @param cell - Actual cell. @param position - Evaluated address. @returns Whether the rule matches. */
   IsCellValid(cell: ScRefCellValue, position: ScAddress): boolean {
     const first = this.Interpret(0, position);
@@ -262,6 +379,12 @@ export class ScConditionEntry extends ScFormatEntry {
         (this.mrDoc.GetErrCode(position) !== FormulaError.NONE) ===
         (this.mode === ScConditionMode.Error)
       );
+    if (
+      this.mode === ScConditionMode.Duplicate ||
+      this.mode === ScConditionMode.NotDuplicate ||
+      (this.mode >= ScConditionMode.Top10 && this.mode <= ScConditionMode.BelowEqualAverage)
+    )
+      return this.IsStatistical(cell, first);
     if (first === undefined) return false;
     const value = this.GetCellContent(cell, first);
     if (value === undefined) return false;
@@ -312,6 +435,17 @@ export class ScConditionEntry extends ScFormatEntry {
   /** Binds the enclosing native format's source range. @param parent - Enclosing format. @returns Nothing. */
   override SetParent(parent: ScConditionalFormat | null): void {
     this.parent = parent;
+    this.statistics = undefined;
+  }
+  /** Clears the previous render cache before a new pass. @returns Nothing. */
+  override startRendering(): void {
+    this.rendering = true;
+    this.statistics = undefined;
+  }
+  /** Discards statistics at the end of the native rendering pass. @returns Nothing. */
+  override endRendering(): void {
+    this.rendering = false;
+    this.statistics = undefined;
   }
   /** Reestablishes the base at the enclosing range before reference updates. @param context - Reference update. @returns Nothing. */
   override UpdateReference(context: RefUpdateContext): void {

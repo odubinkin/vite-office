@@ -22,7 +22,8 @@
       "Reads and writes the four original Calc extension text condition spellings.",
       "Original function-style operands use the shared ScXMLConditionHelper scanner before formula compilation.",
       "Imports and exports original Calc date-is conditions, including all native year periods.",
-      "Serializes and imports the original operand-free is-error and is-no-error CALCEXT condition lexemes."
+      "Serializes and imports the original operand-free is-error and is-no-error CALCEXT condition lexemes.",
+      "Imports and writes the source duplicate, unique, rank and average ODS condition forms with original prefixes and formula operands."
     ],
     "omittedResponsibilities": [
       "Legacy table style maps and additional condition families remain unported."
@@ -80,6 +81,10 @@
         {
           "path": "apps/office/src/sc/source/filter/xml/xmlcondformat.admission.test.ts",
           "marker": "retains native defaults on omitted attributes"
+        },
+        {
+          "path": "apps/office/src/sc/source/filter/xml/ods-statistical-conditions.test.ts",
+          "marker": "evaluates range statistics through ODS"
         }
       ],
       "upstream": [
@@ -126,6 +131,10 @@
         {
           "path": "sc/source/filter/xml/xmlexprt.cxx",
           "marker": "is-no-error"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/qa/unit/cond_format.cxx",
+          "marker": "testTdf166669"
         }
       ]
     }

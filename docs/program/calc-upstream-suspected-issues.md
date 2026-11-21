@@ -7680,3 +7680,22 @@ quotation marks untouched, so literal input containing a quotation mark can
 change the resulting formula text. Calc preserves that construction.
 
 - [Original quick conditional-format accept handler](../../vendor/libreoffice-reference/sc/source/ui/condformat/condformateasydlg.cxx)
+
+### CALC-807 — Conditional rank percentages truncate before admitting a tie group
+
+Calc computes the number of eligible values by truncating the numeric
+population times the percent divided by 100. A small nonzero percentage
+can therefore select zero values. Once a tied value enters the selected
+range, its entire group matches, even when the result exceeds the requested
+count. The ODS rule keeps the original operand and evaluation.
+
+- [Original rank and percentage conditions](../../vendor/libreoffice-reference/sc/source/core/data/conditio.cxx)
+
+### CALC-808 — Conditional duplicates exclude blanks from the cache but test an empty cell as zero
+
+The original cache skips unoccupied cells. A condition with a numeric
+operand class nevertheless evaluates an empty cell as zero, so an empty
+target cell can match the duplicate condition when the same format range
+contains two numeric zeros. Empty string results take the string branch.
+
+- [Original cell content and duplicate conditions](../../vendor/libreoffice-reference/sc/source/core/data/conditio.cxx)
