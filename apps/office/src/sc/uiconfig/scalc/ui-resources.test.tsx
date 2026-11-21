@@ -120,6 +120,7 @@ it("retains the complete standardbar resource and projects connected controls wi
     ".uno:ResetAttributes",
     ".uno:Undo",
     ".uno:Redo",
+    ".uno:EditHeaderAndFooter",
     ".uno:DefinePrintArea",
     ".uno:FreezePanes",
     ".uno:SplitWindow",

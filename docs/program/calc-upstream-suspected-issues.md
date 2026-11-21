@@ -7512,3 +7512,31 @@ can still restore percentage scaling at 100%. Calc preserves that
 condition.
 
 - [Original Sheet tab item-set collection](../../vendor/libreoffice-reference/sc/source/ui/pagedlg/tptable.cxx)
+
+### CALC-789 — Standalone header/footer dialog ignores separate first-page content
+
+The standalone `SID_HFEDIT` resource choice reads the flags for sharing left
+and right content. When both sections share sides, the standalone editor
+can omit first-page content even if Page Style enables a separate first
+page. Calc preserves the same resource choice. The nested editor opens the
+first-page variant based on the checkbox in Page Style.
+
+- [Original standalone resource selection](../../vendor/libreoffice-reference/sc/source/ui/docshell/docsh4.cxx)
+- [Original nested resource selection](../../vendor/libreoffice-reference/sc/source/ui/pagedlg/tphf.cxx)
+
+### CALC-790 — File fields can leave the preset selection stale
+
+The file field menu inserts Title, File Name or Path/File Name without
+updating the preset selection. The adjacent field buttons mark the edited
+content as customized. Calc preserves the file menu behavior.
+
+- [Original header/footer field handlers](../../vendor/libreoffice-reference/sc/source/ui/pagedlg/scuitphfedit.cxx)
+
+### CALC-791 — Reset can retain edits to a previously empty variant
+
+The content editor returns immediately when the original item set contains
+no header or footer item for the active page variant. Reset can therefore
+retain newly entered text in a first-page variant with no saved content.
+Calc preserves the same item-state check.
+
+- [Original header/footer Reset](../../vendor/libreoffice-reference/sc/source/ui/pagedlg/scuitphfedit.cxx)

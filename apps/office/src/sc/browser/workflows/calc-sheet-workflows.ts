@@ -39,6 +39,7 @@ import {
 } from "../../sdi/scalc";
 import {
   calcPageStyleCommand,
+  calcHeaderFooterCommand,
   calcPrintRangeCommands,
   FN_PRINT_ENTIRE_SHEET,
   FN_PRINT_REPEAT_COL,
@@ -47,7 +48,14 @@ import {
   SID_DEFINE_PRINTAREA,
 } from "../../sdi/tabvwsh";
 import { CreatePrintAreasModel, type PrintAreasModel } from "../../source/ui/pagedlg/areasdlg";
-import { ApplyPageStyle, CreatePageStyleRequest } from "../../source/ui/docshell/docsh4";
+import {
+  ApplyHeaderFooter,
+  ApplyPageStyle,
+  CreatePageStyleRequest,
+  FillHeaderFieldData,
+} from "../../source/ui/docshell/docsh4";
+import type { SfxItemSet } from "../../../svl/source/items/itemset";
+import { ScHFEditDlg, StandaloneHeaderFooterLayout } from "../../source/ui/pagedlg/hfedtdlg";
 import { ScStyleSaveData } from "../../source/ui/undo/undostyl";
 import type { ScStyleDlgRequest, ScStyleDlgResult } from "../../source/ui/styleui/styledlg";
 import type { CalcViewController } from "../controller/calc-view-controller";
@@ -85,6 +93,7 @@ export class CalcSheetWorkflows {
   readonly dialogs = new SfxDialogController<CalcGoToSheetRequest, string>();
   readonly tabDialogs = new SfxDialogController<CalcSheetTabDialog, number[] | string>();
   readonly metricDialogs = new SfxDialogController<ScMetricInputDlg, number>();
+  readonly headerFooterDialogs = new SfxDialogController<ScHFEditDlg, SfxItemSet>();
   readonly pageStyleDialogs = new SfxDialogController<ScStyleDlgRequest, ScStyleDlgResult>();
   readonly printDialogs = new SfxDialogController<PrintAreasModel, SfxRequest | undefined>();
   private readonly shell: SfxShell;
@@ -164,6 +173,14 @@ export class CalcSheetWorkflows {
               },
           }),
         ),
+        {
+          commandUrl: calcHeaderFooterCommand.id,
+          slotId: calcHeaderFooterCommand.slotId,
+          label: calcHeaderFooterCommand.label,
+          getState: (target: CalcSheetWorkflows) => ({ enabled: target.CanEditHeaderFooter() }),
+          execute: (target: CalcSheetWorkflows, request: SfxRequest) =>
+            target.EditHeaderFooter(request),
+        },
         {
           commandUrl: calcPageStyleCommand.id,
           slotId: calcPageStyleCommand.slotId,
@@ -335,7 +352,8 @@ export class CalcSheetWorkflows {
       this.dialogs.GetSnapshot() ||
       this.metricDialogs.GetSnapshot() ||
       this.printDialogs.GetSnapshot() ||
-      this.pageStyleDialogs.GetSnapshot(),
+      this.pageStyleDialogs.GetSnapshot() ||
+      this.headerFooterDialogs.GetSnapshot(),
     );
   }
 
@@ -353,7 +371,7 @@ export class CalcSheetWorkflows {
     let transferred = false;
     try {
       const completion = await this.pageStyleDialogs.Request(
-        CreatePageStyleRequest(this.controller.shell, style, before),
+        CreatePageStyleRequest(this.controller.shell, style, before, view.CurrentTabForData()),
       );
       if (completion.kind !== "accepted") return;
       try {
@@ -365,6 +383,53 @@ export class CalcSheetWorkflows {
       }
     } finally {
       if (!transferred) before.items.Dispose();
+    }
+  }
+
+  /** Reads original applicability from the active named page style. @returns Whether the command is available. */
+  private CanEditHeaderFooter(): boolean {
+    if (this.HasSheetDialog()) return false;
+    const view = this.controller.viewData;
+    const document = view.GetDocument();
+    const tab = view.CurrentTabForData();
+    if (!document.FetchTable(tab)) return false;
+    const style = document.GetStyleSheetPool()?.GetPageStyle(document.GetPageStyle(tab));
+    return !style || StandaloneHeaderFooterLayout(style.GetItemSet()) !== undefined;
+  }
+
+  /** Opens and applies the source standalone header/footer editor. @param request - Source request. @returns Completion. */
+  private async EditHeaderFooter(request: SfxRequest): Promise<void> {
+    if (request.GetArgs().length || !this.CanEditHeaderFooter() || !this.controller.Commit())
+      return;
+    const view = this.controller.viewData;
+    const document = view.GetDocument();
+    const tab = view.CurrentTabForData();
+    const name = document.GetPageStyle(tab);
+    const style = document.GetStyleSheetPool()?.GetPageStyle(name, true);
+    if (!style) return;
+    const items = style.GetItemSet().Clone();
+    const layout = StandaloneHeaderFooterLayout(items);
+    if (!layout) {
+      items.Dispose();
+      return;
+    }
+    const shell = this.controller.shell;
+    const model = new ScHFEditDlg(items, name, layout, FillHeaderFieldData(shell, tab));
+    const copy = new SfxRequest(request.GetSlot(), request.GetArgs(), request.GetCallMode());
+    request.Ignore();
+    try {
+      const result = await this.headerFooterDialogs.Request(model);
+      if (result.kind !== "accepted") return;
+      try {
+        if (shell.GetDocument() !== document) return;
+        ApplyHeaderFooter(shell, style, result.result);
+        copy.Done();
+      } finally {
+        result.result.Dispose();
+      }
+    } finally {
+      model.Dispose();
+      items.Dispose();
     }
   }
 
@@ -637,6 +702,8 @@ export class CalcSheetWorkflows {
 
   /** Cancels the native async request before the session destroys its document. @returns Nothing. */
   Close(): void {
+    const headerFooter = this.headerFooterDialogs.GetSnapshot();
+    if (headerFooter) this.headerFooterDialogs.Cancel(headerFooter.id);
     const style = this.pageStyleDialogs.GetSnapshot();
     if (style) this.pageStyleDialogs.Cancel(style.id);
     const print = this.printDialogs.GetSnapshot();

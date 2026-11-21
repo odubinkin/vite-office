@@ -9,6 +9,7 @@ interface ScHFPageProps {
   readonly state: ScHFPageState;
   readonly unit: FieldUnit;
   readonly shareSides: boolean;
+  readonly onEdit: (button: HTMLButtonElement) => void;
   readonly onChange: (value: ScHFPageState) => void;
 }
 
@@ -26,6 +27,7 @@ export function ScHFPage({
   unit,
   shareSides,
   onChange,
+  onEdit,
 }: ScHFPageProps): React.JSX.Element {
   return (
     <div className="grid gap-4 text-sm">
@@ -77,6 +79,13 @@ export function ScHFPage({
           />
           AutoFit height
         </label>
+        <button
+          type="button"
+          className="office-dialog-secondary justify-self-start"
+          onClick={(event) => onEdit(event.currentTarget)}
+        >
+          Edit…
+        </button>
       </fieldset>
     </div>
   );

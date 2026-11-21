@@ -2,6 +2,7 @@
 import type { CalcSheetWorkflows } from "../workflows/calc-sheet-workflows";
 import { ScMetricInputDlg } from "./ScMetricInputDlg";
 import { ScSheetTabDialog } from "./ScSheetTabDialog";
+import { ScHFEditDlg } from "./pagedlg/ScHFEditDlg";
 import { ScPageStyleDlg } from "./pagedlg/ScPageStyleDlg";
 import { ScGoToTabDlg } from "./ScGoToTabDlg";
 
@@ -10,6 +11,7 @@ interface CalcSheetDialogsProps {
   readonly sheetWorkflows: CalcSheetWorkflows;
   readonly widthDialog: ReturnType<CalcSheetWorkflows["metricDialogs"]["GetSnapshot"]>;
   readonly tabDialog: ReturnType<CalcSheetWorkflows["tabDialogs"]["GetSnapshot"]>;
+  readonly headerFooterDialog: ReturnType<CalcSheetWorkflows["headerFooterDialogs"]["GetSnapshot"]>;
   readonly pageStyleDialog: ReturnType<CalcSheetWorkflows["pageStyleDialogs"]["GetSnapshot"]>;
   readonly sheetDialog: ReturnType<CalcSheetWorkflows["dialogs"]["GetSnapshot"]>;
 }
@@ -19,11 +21,22 @@ export function CalcSheetDialogs({
   sheetWorkflows,
   widthDialog,
   pageStyleDialog,
+  headerFooterDialog,
   tabDialog,
   sheetDialog,
 }: CalcSheetDialogsProps): React.JSX.Element {
   return (
     <>
+      {headerFooterDialog && (
+        <ScHFEditDlg
+          key={headerFooterDialog.id}
+          model={headerFooterDialog.request}
+          onCancel={() => sheetWorkflows.headerFooterDialogs.Cancel(headerFooterDialog.id)}
+          onSubmit={(result) =>
+            sheetWorkflows.headerFooterDialogs.Complete(headerFooterDialog.id, result)
+          }
+        />
+      )}
       {pageStyleDialog && (
         <ScPageStyleDlg
           key={pageStyleDialog.id}

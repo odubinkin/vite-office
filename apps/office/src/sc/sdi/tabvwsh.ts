@@ -26,8 +26,19 @@ export const calcPrintRangeCommands = [
   { id: ".uno:DeletePrintArea", slotId: 26603, label: "Clear", kind: "clear" },
 ] as const;
 
+/** Original SID_HFEDIT at EDIT_MENU_START + 15. */
+export const calcHeaderFooterCommand = {
+  id: ".uno:EditHeaderAndFooter",
+  slotId: 26235,
+  label: "Headers and Footers",
+} as const;
+
 /** Native page setup command inventory used by the Calc view shell. */
-export const calcPageCommands = [...calcPrintRangeCommands, calcPageStyleCommand] as const;
+export const calcPageCommands = [
+  ...calcPrintRangeCommands,
+  calcPageStyleCommand,
+  calcHeaderFooterCommand,
+] as const;
 
 /** Native dialog-result slot and its typed Which IDs. */
 export const SID_CHANGE_PRINTAREA = 26604;

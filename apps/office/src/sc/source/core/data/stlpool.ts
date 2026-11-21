@@ -8,6 +8,12 @@ import type { ScDocument } from "../../../inc/document";
 import { text, unicode } from "../../../../i18nlangtag/source/isolang/isolang.tables";
 import { scStyleNameResourcesEnglish } from "../../../inc/globstr";
 import { ScStyleSheet } from "./stlsheet";
+import { ESelection } from "../../../../editeng/inc/ESelection";
+import { EE_FEATURE_FIELD } from "../../../../editeng/inc/eeitem";
+import { SvxFieldItem, SvxPageField, SvxTableField } from "../../../../editeng/inc/flditem";
+import { ScPageHFItem } from "../../../inc/attrib";
+import { ATTR_PAGE_FOOTERRIGHT, ATTR_PAGE_HEADERRIGHT } from "../../../inc/scitems";
+import { ScEditEngineDefaulter } from "../tool/editutil";
 import type { SfxItemSet } from "../../../../svl/source/items/itemset";
 
 const standard = scStyleNameResourcesEnglish.STR_STYLENAME_STANDARD;
@@ -46,18 +52,58 @@ export class ScStyleSheetPool extends SfxStyleSheetPool {
   GetPageStyle(name: string, create = false): SfxStyleSheetBase | null {
     const key = unicode(name);
     try {
-      return (
-        this.Find(key, SfxStyleFamily.Page) ??
-        (create
-          ? this.Make(
-              key,
-              SfxStyleFamily.Page,
-              name === standard ? SfxStyleSearchBits.ScStandard : SfxStyleSearchBits.UserDefined,
-            )
-          : null)
+      const existing = this.Find(key, SfxStyleFamily.Page);
+      if (existing || !create) return existing;
+      const isStandard = name === standard;
+      const style = this.Make(
+        key,
+        SfxStyleFamily.Page,
+        isStandard ? SfxStyleSearchBits.ScStandard : SfxStyleSearchBits.UserDefined,
       );
+      if (isStandard && this.pDoc) this.CreateStandardPageContent(style.GetItemSet(), this.pDoc);
+      return style;
     } finally {
       key.dispose();
+    }
+  }
+
+  /** Sets the Standard page style's original sheet field and Page number footer. @param items - Standard page style. @param document - Owning workbook. @returns Nothing. */
+  private CreateStandardPageContent(items: SfxItemSet, document: ScDocument): void {
+    const editor = new ScEditEngineDefaulter(document.GetEditEnginePool());
+    editor.SetUpdateLayout(false);
+    editor.EnableUndo(false);
+    const empty = editor.CreateTextObject();
+    const blank = unicode("");
+    const page = unicode("Page ");
+    try {
+      for (const [which, prefix, field] of [
+        [ATTR_PAGE_HEADERRIGHT, blank, new SvxTableField()],
+        [ATTR_PAGE_FOOTERRIGHT, page, new SvxPageField()],
+      ] as const) {
+        editor.SetTextCurrentDefaults(prefix);
+        const impl = editor.getImpl();
+        const position = impl.CreateNormalizedSel(ESelection.AtEnd()).Min();
+        impl.GetEditDoc().InsertFeature(position, new SvxFieldItem(field, EE_FEATURE_FIELD, true));
+        impl.UpdateFields();
+        const center = editor.CreateTextObject();
+        const item = new ScPageHFItem(which);
+        try {
+          if (empty && center) {
+            item.SetLeftArea(empty);
+            item.SetCenterArea(center);
+            item.SetRightArea(empty);
+            items.Put(item);
+          }
+        } finally {
+          item.dispose();
+          center?.dispose();
+        }
+      }
+    } finally {
+      empty?.dispose();
+      blank.dispose();
+      page.dispose();
+      editor.Dispose();
     }
   }
 

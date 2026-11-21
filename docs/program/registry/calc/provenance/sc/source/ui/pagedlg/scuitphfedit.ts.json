@@ -1,0 +1,50 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "status": "mapped",
+    "localPath": "apps/office/src/sc/source/ui/pagedlg/scuitphfedit.ts",
+    "localSymbols": [
+      "ScHFEditPage"
+    ],
+    "upstreamPath": "sc/source/ui/pagedlg/scuitphfedit.cxx",
+    "upstreamSymbols": [
+      "ScHFEditPage::Reset",
+      "ScHFEditPage::FillItemSet",
+      "ScHFEditPage::ProcessDefinedListSel"
+    ],
+    "preservedResponsibilities": [
+      "Owns original header and footer content regions, predefined content and typed field insertion."
+    ],
+    "omittedResponsibilities": [
+      "Native Weld widgets are supplied by the browser adapter."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sc/source/ui/pagedlg/scuitphfedit.ts",
+          "marker": "ScHFEditPage"
+        },
+        {
+          "path": "apps/office/src/sc/browser/presentation/calc-header-footer.test.tsx",
+          "marker": "ports tdf166756"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sc/source/ui/pagedlg/scuitphfedit.cxx",
+          "marker": "ScHFEditPage::Reset"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/source/ui/pagedlg/scuitphfedit.cxx",
+          "marker": "ScHFEditPage::FillItemSet"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/source/ui/pagedlg/scuitphfedit.cxx",
+          "marker": "ScHFEditPage::ProcessDefinedListSel"
+        }
+      ]
+    }
+  }
+}

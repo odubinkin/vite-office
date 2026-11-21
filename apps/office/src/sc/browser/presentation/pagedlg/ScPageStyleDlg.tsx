@@ -13,6 +13,7 @@ import { Color, COL_TRANSPARENT } from "../../../../tools/inc/color";
 import { SvxPageUsage } from "../../../../svx/inc/pageitem";
 import { FieldUnit } from "../../../../tools/inc/fldunit";
 import { XMLBorderHdl } from "../../../../xmloff/source/style/bordrhdl";
+import type { SfxItemSet } from "../../../../svl/source/items/itemset";
 import { ATTR_BACKGROUND, ATTR_BORDER, ATTR_BORDER_INNER } from "../../../inc/scitems";
 import { ScOptionsUtil } from "../../../source/core/tool/optutil";
 import {
@@ -25,6 +26,11 @@ import {
 import { ScHFPage as ScHeaderFooterSettings } from "../../../source/ui/pagedlg/tphf";
 import { ScTablePage as ScSheetSettings } from "../../../source/ui/pagedlg/tptable";
 import { ScHFPage } from "./ScHFPage";
+import {
+  NestedHeaderFooterLayout,
+  ScHFEditDlg as ScHFEditModel,
+} from "../../../source/ui/pagedlg/hfedtdlg";
+import { ScHFEditDlg } from "./ScHFEditDlg";
 import { ScPageFormatTab } from "./ScPageFormatTab";
 import { ScTablePage } from "./ScTablePage";
 
@@ -44,6 +50,11 @@ function formatBorder(line: SvxBorderLine | undefined): string {
 export function ScPageStyleDlg({ model, onCancel, onSubmit }: DialogProps): React.JSX.Element {
   const id = useId();
   const tabList = useRef<HTMLDivElement>(null);
+  const [nested, setNested] = useState<ScHFEditModel>();
+  const editor = useRef<{ model: ScHFEditModel; input: SfxItemSet; opener: HTMLButtonElement }>(
+    undefined,
+  );
+  const contents = useRef<SfxItemSet>(undefined);
   const [tab, setTab] = useState(0);
   const [name, setName] = useState(model.name);
   const [error, setError] = useState<string>();
@@ -75,6 +86,48 @@ export function ScPageStyleDlg({ model, onCancel, onSubmit }: DialogProps): Reac
   useLayoutEffect(() => {
     tabList.current?.querySelector<HTMLElement>('[aria-selected="true"]')?.focus();
   }, [tab]);
+
+  useLayoutEffect(
+    () => () => {
+      editor.current?.model.Dispose();
+      editor.current?.input.Dispose();
+      contents.current?.Dispose();
+    },
+    [],
+  );
+
+  /** Opens the original nested content editor with the live draft on the parent tab. @param isHeader - Header versus footer. @param opener - Button to restore focus to. @returns Nothing. */
+  function editContent(isHeader: boolean, opener: HTMLButtonElement): void {
+    const input = model.items.Clone();
+    if (contents.current) input.PutSet(contents.current);
+    FillPageStyleGeometry(original, layout, input);
+    const state = isHeader ? headerState : footerState;
+    const resource = NestedHeaderFooterLayout({
+      ...state,
+      header: isHeader,
+      shareSides,
+      usage: layout.usage,
+    });
+    const session = new ScHFEditModel(input, name, resource, model.fieldData);
+    editor.current = { model: session, input, opener };
+    setNested(session);
+  }
+
+  /** Closes the nested editor, optionally staging its output on the parent. @param result - Accepted source item set. @returns Nothing. */
+  function closeContent(result?: SfxItemSet): void {
+    if (result) {
+      contents.current ??= model.items.Clone(false);
+      contents.current.PutSet(result);
+      result.Dispose();
+    }
+    const active = editor.current;
+    active?.model.Dispose();
+    active?.input.Dispose();
+    editor.current = undefined;
+    setNested(undefined);
+    const opener = active?.opener;
+    queueMicrotask(() => opener?.focus());
+  }
 
   /** Activates the source tab and records lazy creation of Sheet's output owner. @param index - Tab index. @returns Nothing. */
   function activate(index: number): void {
@@ -137,11 +190,13 @@ export function ScPageStyleDlg({ model, onCancel, onSubmit }: DialogProps): Reac
     header.FillItemSet(headerState, items);
     footer.FillItemSet(footerState, items);
     if (sheetVisited) sheet.FillItemSet(sheetState, items);
+    if (contents.current) items.PutSet(contents.current);
     onSubmit({ name, items });
   }
 
-  return (
+  const settings = (
     <div
+      inert={nested !== undefined}
       role="dialog"
       aria-label="Page Style"
       aria-modal="true"
@@ -276,6 +331,7 @@ export function ScPageStyleDlg({ model, onCancel, onSubmit }: DialogProps): Reac
               unit={unit}
               shareSides={shareSides}
               onChange={setHeaderState}
+              onEdit={(button) => editContent(true, button)}
             />
           ) : null}
           {pageStyleTabs[tab] === "Footer" ? (
@@ -285,6 +341,7 @@ export function ScPageStyleDlg({ model, onCancel, onSubmit }: DialogProps): Reac
               unit={unit}
               shareSides={shareSides}
               onChange={setFooterState}
+              onEdit={(button) => editContent(false, button)}
             />
           ) : null}
           {pageStyleTabs[tab] === "Sheet" ? (
@@ -307,5 +364,13 @@ export function ScPageStyleDlg({ model, onCancel, onSubmit }: DialogProps): Reac
         </div>
       </form>
     </div>
+  );
+  return (
+    <>
+      {settings}
+      {nested && (
+        <ScHFEditDlg model={nested} onCancel={() => closeContent()} onSubmit={closeContent} />
+      )}
+    </>
   );
 }

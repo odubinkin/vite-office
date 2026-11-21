@@ -1,4 +1,7 @@
 /** @fileoverview Original ScEditEngineDefaulter text and attribute-default operations. */
+import type { ESelection } from "../../../../editeng/inc/ESelection";
+import type { EPaM } from "../../../../editeng/inc/EPaM";
+import { SvxNumType } from "../../../../editeng/inc/svxenum";
 import { EditTextObject } from "../../../../editeng/inc/editobj";
 import { EditEngine } from "../../../../editeng/inc/editeng";
 import { DocumentImpEditEngine } from "../../../../editeng/source/editeng/impedit2.document";
@@ -8,13 +11,15 @@ import type { SfxItemPool } from "../../../../svl/source/items/itempool";
 import { ScGlobal } from "../../../inc/global";
 import { OUString, type OUStringConstReference } from "../../../../sal/inc/rtl/ustring";
 import {
+  SvxExtFileField,
+  SvxFileFormat,
   SvxURLFormat,
   type SvxFieldDataConstReference,
   type SvxFieldItem,
   type SvxTableField,
   type SvxURLField,
 } from "../../../../editeng/inc/flditem";
-import { unicode } from "../../../../i18nlangtag/source/isolang/isolang.tables";
+import { text, unicode } from "../../../../i18nlangtag/source/isolang/isolang.tables";
 import * as FieldType from "../../../../offapi/com/sun/star/text/textfield/Type";
 import type { Color } from "../../../../tools/inc/color";
 import { FontLineStyle } from "../../../../tools/inc/fontenum";
@@ -47,7 +52,7 @@ export type DocumentEditEngine = Pick<
 >;
 
 /** Original Calc editor layer owns optional paragraph defaults and applies them without recording undo. */
-class ScEditEngineDefaulter extends EditEngine {
+export class ScEditEngineDefaulter extends EditEngine {
   private readonly implementation: DocumentImpEditEngine;
   private m_oDefaults: SfxItemSet | null = null;
 
@@ -111,10 +116,11 @@ class ScEditEngineDefaulter extends EditEngine {
     if (layout) this.SetUpdateLayout(true);
   }
 
-  /** Original destruction of the owned optional item set. @returns Nothing. */
-  protected disposeDefaults(): void {
+  /** Releases Calc-owned defaults and the base engine. @returns Nothing. */
+  Dispose(): void {
     this.m_oDefaults?.Dispose();
     this.m_oDefaults = null;
+    this.getImpl().Dispose();
   }
 }
 
@@ -141,12 +147,6 @@ export class ScFieldEditEngine extends ScEditEngineDefaulter {
   ): OUString {
     const field = item.GetField();
     return field ? GetCellFieldValue(field, this.mpDoc, lineStyle) : unicode(" ");
-  }
-
-  /** Releases Calc-owned defaults and the base engine. @returns Nothing. */
-  Dispose(): void {
-    this.disposeDefaults();
-    this.getImpl().Dispose();
   }
 }
 
@@ -198,4 +198,139 @@ function GetCellFieldValue(
   if (!result.isEmpty()) return result;
   result.dispose();
   return unicode(" ");
+}
+
+/** View-owned values captured when Calc opens a header or footer editor. */
+export interface ScHeaderFieldData {
+  readonly date: globalThis.Date;
+  readonly title: string;
+  readonly shortName: string;
+  readonly longName: string;
+  readonly sheet: string;
+  readonly page: number;
+  readonly pages: number;
+}
+
+const romanDigits = [
+  [1000, "M"],
+  [900, "CM"],
+  [500, "D"],
+  [400, "CD"],
+  [100, "C"],
+  [90, "XC"],
+  [50, "L"],
+  [40, "XL"],
+  [10, "X"],
+  [9, "IX"],
+  [5, "V"],
+  [4, "IV"],
+  [1, "I"],
+] as const;
+
+/** Formats native Calc header page numbers, which recognize the basic alphabetic and Roman types. @param value - Page value. @param type - Page style numbering type. @returns Preview string. */
+function numberText(value: number, type: SvxNumType): string {
+  if (!value) return "0";
+  if (type === SvxNumType.SVX_NUM_NUMBER_NONE) return "";
+  if (
+    type === SvxNumType.SVX_NUM_CHARS_UPPER_LETTER ||
+    type === SvxNumType.SVX_NUM_CHARS_LOWER_LETTER
+  ) {
+    let result = "";
+    for (let remaining = value; remaining > 0; remaining = Math.floor((remaining - 1) / 26))
+      result = String.fromCharCode(97 + ((remaining - 1) % 26)) + result;
+    return type === SvxNumType.SVX_NUM_CHARS_UPPER_LETTER ? result.toUpperCase() : result;
+  }
+  if (type === SvxNumType.SVX_NUM_ROMAN_UPPER || type === SvxNumType.SVX_NUM_ROMAN_LOWER) {
+    if (value >= 4000) return "";
+    let result = "";
+    for (const [unit, digit] of romanDigits) {
+      result += digit.repeat(Math.floor(value / unit));
+      value %= unit;
+    }
+    return type === SvxNumType.SVX_NUM_ROMAN_LOWER ? result.toLowerCase() : result;
+  }
+  return String(value);
+}
+
+/** Evaluates exactly the field classes dispatched by ScHeaderEditEngine. @param item - Actual EditEngine field. @param data - Original view field data. @param type - Page style numbering type. @returns Display string. */
+export function HeaderFieldText(
+  item: SvxFieldItem,
+  data: ScHeaderFieldData,
+  type: SvxNumType,
+): string {
+  const field = item.GetField();
+  switch (field?.GetClassId()) {
+    case FieldType.PAGE:
+      return numberText(data.page, type);
+    case FieldType.PAGES:
+      return numberText(data.pages, type);
+    case FieldType.DOCINFO_TITLE:
+      return data.title;
+    case FieldType.EXTENDED_FILE:
+      return (field as SvxExtFileField).GetFormat() === SvxFileFormat.PathFull
+        ? data.longName
+        : data.shortName;
+    case FieldType.TABLE:
+      return data.sheet;
+    case FieldType.DATE: {
+      const locale = getSystemLocale();
+      const wrapper = new LocaleDataWrapper(locale);
+      try {
+        const value = wrapper.getDate(
+          new Date(data.date.getDate(), data.date.getMonth() + 1, data.date.getFullYear()),
+        );
+        try {
+          return text(value);
+        } finally {
+          value.dispose();
+        }
+      } finally {
+        wrapper.dispose();
+        locale.dispose();
+      }
+    }
+    case FieldType.TIME:
+    case FieldType.EXTENDED_TIME:
+      return new Intl.DateTimeFormat(undefined, { timeStyle: "medium" }).format(data.date);
+    default:
+      return "?";
+  }
+}
+
+/** Actual EditEngine for an editable header or footer region. */
+export class ScHeaderEditEngine extends ScEditEngineDefaulter {
+  /** Starts an independent headless editor over the workbook's EditEngine pool. @param pool - Native edit pool. @param data - Current field values. @param type - Page numbering. @param initial - Existing region, if any. @returns Region editor. */
+  constructor(
+    pool: SfxItemPool,
+    readonly data: ScHeaderFieldData,
+    readonly type: SvxNumType,
+    initial?: EditTextObject | null,
+  ) {
+    super(pool);
+    this.SetUpdateLayout(false);
+    this.EnableUndo(false);
+    if (initial) this.SetText(initial);
+  }
+  /** Resolves original native fields for EditEngine expanded text. @param item - Actual field. @returns Owned field string. */
+  override CalcFieldValue(item: SvxFieldItem): OUString {
+    return unicode(HeaderFieldText(item, this.data, this.type));
+  }
+  /** Replaces original selection with text or a feature and returns the resulting source caret. @param range - Source selection. @param value - Literal text or field. @returns Public selection position. */
+  Replace(range: ESelection, value: string | SvxFieldItem): EPaM {
+    const engine = this.getImpl();
+    const selection = engine.CreateNormalizedSel(range);
+    if (typeof value === "string") {
+      const source = unicode(value);
+      try {
+        return engine.CreateEPaM(this.InsertText(selection, source));
+      } finally {
+        source.dispose();
+      }
+    }
+    const start = this.DeleteSelection(selection);
+    const result = engine.GetEditDoc().InsertFeature(start, value);
+    engine.TextModified();
+    engine.UpdateFields();
+    return engine.CreateEPaM(result);
+  }
 }

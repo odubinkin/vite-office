@@ -1,4 +1,5 @@
 /** @fileoverview Native page-family ScStyleDlg input and output item contracts. */
+import type { ScHeaderFieldData } from "../../core/tool/editutil";
 import type { SfxItemSet } from "../../../../svl/source/items/itemset";
 import { SfxBoolItem } from "../../../../svl/source/items/cenumitm";
 import { SvxPageItem, type SvxPageUsage } from "../../../../svx/inc/pageitem";
@@ -35,6 +36,7 @@ export const pageStyleTabs = [
 export interface ScStyleDlgRequest {
   readonly name: string;
   readonly canRename: boolean;
+  readonly fieldData: ScHeaderFieldData;
   readonly items: SfxItemSet;
   readonly nameAvailable: (name: string) => boolean;
 }

@@ -4,7 +4,7 @@ title: "Connect Calc header and footer content editing"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 11
+revision: 12
 origin:
   system: "manual"
 depends_on: []
@@ -37,7 +37,7 @@ events:
     to: "DOING"
     note: "Start: Connect source header/footer dialog variants and native rich-text fields to Calc."
 doc_version: 3
-doc_updated_at: "2026-11-21T05:50:59.843Z"
+doc_updated_at: "2026-11-21T06:30:28.276Z"
 doc_updated_by: "CODER"
 description: "Connect the native standalone and page-style header/footer editors to Calc rich text and print fields."
 sections:
@@ -50,7 +50,7 @@ sections:
     - Run resources, source provenance, size and dependency checks, and patch whitespace validation.
   Verification: "Pending implementation."
   Rollback Plan: "Revert the implementation commit to restore the previous page-style settings and file behavior."
-  Findings: "Pending source review and verification."
+  Findings: "The standalone resource matrix, file field preset state, and reset behavior on unset content follow LibreOffice and are recorded as CALC-789–791. The browser preserves native rich-text objects, uses the standard sheet and page fields for a new workbook, and resolves file names through the current medium. The browser Text Attributes dialog projects the common font, color and position controls, and profile-based presets use empty profile values."
 id_source: "generated"
 ---
 ## Summary
@@ -81,4 +81,4 @@ Revert the implementation commit to restore the previous page-style settings and
 
 ## Findings
 
-Pending source review and verification.
+The standalone resource matrix, file field preset state, and reset behavior on unset content follow LibreOffice and are recorded as CALC-789–791. The browser preserves native rich-text objects, uses the standard sheet and page fields for a new workbook, and resolves file names through the current medium. The browser Text Attributes dialog projects the common font, color and position controls, and profile-based presets use empty profile values.

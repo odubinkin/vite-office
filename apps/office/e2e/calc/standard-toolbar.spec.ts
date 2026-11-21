@@ -1,7 +1,16 @@
 /** @fileoverview Connected Calc standard toolbar commands, compact icon geometry and real bindings. */
 import AxeBuilder from "@axe-core/playwright";
 import { expect, test } from "@playwright/test";
-const labels = ["Open", "Clear", "Undo", "Redo", "Print Area", "Freeze Panes", "Split Window"];
+const labels = [
+  "Open",
+  "Clear",
+  "Undo",
+  "Redo",
+  "Headers and Footers",
+  "Print Area",
+  "Freeze Panes",
+  "Split Window",
+];
 for (const viewport of [
   { width: 1280, height: 800 },
   { width: 390, height: 600 },
@@ -58,6 +67,22 @@ for (const viewport of [
     expect(geometry.body).toBeLessThanOrEqual(viewport.width);
     for (const width of geometry.buttons) expect(width).toBe(28);
     expect(geometry.content).toBe(geometry.width);
+    await toolbar.getByRole("button", { name: "Headers and Footers" }).click();
+    const editor = page.getByRole("dialog", { name: /^Headers\/Footers/ });
+    const left = editor.getByRole("textbox", { name: "Left area" });
+    await left.pressSequentially("Page ");
+    await editor.getByRole("button", { name: "Page Number", exact: true }).click();
+    await expect(left).toHaveText("Page 1");
+    await left.press("ControlOrMeta+a");
+    await editor.getByRole("button", { name: "Bold", exact: true }).click();
+    await expect(left.locator("span").first()).toHaveCSS("font-weight", "700");
+    await editor.getByRole("button", { name: "Text Attributes", exact: true }).click();
+    const attributes = page.getByRole("dialog", { name: "Text Attributes" });
+    await attributes.getByRole("tab", { name: "Position" }).click();
+    await attributes.getByRole("combobox", { name: "Position", exact: true }).selectOption("1");
+    await attributes.getByRole("button", { name: "OK", exact: true }).click();
+    await expect(left.locator("span").first()).toHaveCSS("vertical-align", "super");
+    await editor.getByRole("button", { name: "Cancel", exact: true }).click();
     const menu = page.getByRole("menubar", { name: "Calc menu" });
     await expect(menu.getByRole("menuitem", { name: "Help", exact: true })).toHaveCount(0);
     await menu.getByRole("menuitem", { name: "File", exact: true }).click();

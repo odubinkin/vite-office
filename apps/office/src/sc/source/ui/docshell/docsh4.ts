@@ -1,5 +1,10 @@
 /** @fileoverview Page style setup and application from the native Calc document shell. */
-import { unicode } from "../../../../i18nlangtag/source/isolang/isolang.tables";
+import { text, unicode } from "../../../../i18nlangtag/source/isolang/isolang.tables";
+import { OUString } from "../../../../sal/inc/rtl/ustring";
+import { DecodeMechanism } from "../../../../tools/inc/urlobj";
+import { INetURLObject } from "../../../../tools/source/fsys/urlobj.object";
+import type { SfxItemSet } from "../../../../svl/source/items/itemset";
+import type { ScHeaderFieldData } from "../../core/tool/editutil";
 import type { SfxStyleSheetBase } from "../../../../svl/source/items/style-model";
 import type { ScDocShell } from "./docsh";
 import { ScStyleSaveData, ScUndoModifyStyle } from "../undo/undostyl";
@@ -33,11 +38,13 @@ export function CreatePageStyleRequest(
   shell: ScDocShell,
   style: SfxStyleSheetBase,
   snapshot: ScStyleSaveData,
+  tab: number,
 ): ScStyleDlgRequest {
   return {
     name: snapshot.name,
     canRename: style.IsUserDefined(),
     items: snapshot.items,
+    fieldData: FillHeaderFieldData(shell, tab),
     nameAvailable: (name) => {
       if (!name) return false;
       const existing = shell.GetDocument().GetStyleSheetPool()?.GetPageStyle(name);
@@ -63,4 +70,44 @@ export function ApplyPageStyle(
   PageStyleModified(shell, before.name, result.name);
   shell.SetDocumentModified();
   return true;
+}
+
+/** Collects source print-preview field values from the current workbook and its browser medium. @param shell - Live document shell. @param tab - Active sheet. @returns Original field snapshot. */
+export function FillHeaderFieldData(shell: ScDocShell, tab: number): ScHeaderFieldData {
+  const workbook = shell.GetDocument();
+  const title = shell.GetTitle();
+  const name = new OUString();
+  const medium = shell.GetMedium();
+  const location = medium.kind === "untitled" ? "" : medium.name;
+  const uri = new INetURLObject(location);
+  const decoded = uri.GetMainURL(DecodeMechanism.WithCharset);
+  const shortName = decoded
+    ? uri.GetURLPath(DecodeMechanism.WithCharset).split("/").pop()
+    : location;
+  try {
+    workbook.GetName(tab, name);
+    return {
+      date: new Date(),
+      title,
+      shortName: shortName || title,
+      longName: decoded || location || title,
+      sheet: text(name),
+      page: 1,
+      pages: 99,
+    };
+  } finally {
+    name.dispose();
+  }
+}
+
+/** Applies source standalone header/footer output, which marks the style modified without adding a page-style history action. @param shell - Live shell. @param style - Current page style. @param result - Accepted content items. @returns Nothing. */
+export function ApplyHeaderFooter(
+  shell: ScDocShell,
+  style: SfxStyleSheetBase,
+  result: SfxItemSet,
+): void {
+  style.GetItemSet().PutSet(result);
+  const name = text(style.GetName());
+  PageStyleModified(shell, name, name);
+  shell.SetDocumentModified();
 }
