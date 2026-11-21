@@ -1,10 +1,11 @@
 ---
 id: "202611211734-CJ68YT"
 title: "Connect Calc names from selection labels"
-status: "DOING"
+result_summary: "Connect Calc Create Names from labels with native scope history and R1C1 syntax"
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 8
+revision: 9
 origin:
   system: "manual"
 depends_on: []
@@ -43,11 +44,16 @@ quality_review:
   findings:
     - "The pinned tdf137617 orientation and position-box assertions passed in Calc A1 and Excel R1C1."
     - "Yes, No and Cancel decisions and atomic history passed through the real sheet-menu and cell paths."
-commit: null
+commit:
+  hash: "1990258a1d4e17e09ca4d90243dd51e4f7a9c2b4"
+  message: "🧩 CJ68YT code: serialize Calc formulas in the document R1C1 grammar"
 comments:
   -
     author: "CODER"
     body: "Start: Connect the native Create Names dialog and selection-label name creation with indexed scope history."
+  -
+    author: "CODER"
+    body: "Verified: 40 targeted Calc tests passed with declared type, lint, format, resource, provenance, dependency and policy checks."
 events:
   -
     type: "status"
@@ -62,8 +68,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "All 40 focused Calc tests and declared static checks passed, including the tdf137617 A1/R1C1 path, name conflict responses, grouped scope history and XLSX named arrays."
+  -
+    type: "status"
+    at: "2026-11-21T18:12:31.574Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: 40 targeted Calc tests passed with declared type, lint, format, resource, provenance, dependency and policy checks."
 doc_version: 3
-doc_updated_at: "2026-11-21T18:09:41.510Z"
+doc_updated_at: "2026-11-21T18:12:31.575Z"
 doc_updated_by: "CODER"
 description: "Expose the LibreOffice Create Names command using the existing indexed name collections, reference formatting, dialog service and range-name history."
 sections:
