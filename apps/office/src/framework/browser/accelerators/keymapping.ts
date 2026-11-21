@@ -29,6 +29,9 @@ const modifierAliases = new Map<string, string>([
 const modifierOrder = ["Ctrl", "Alt", "Meta", "Shift"] as const;
 // Original VCL keycode names correspond to these actual browser logical keys.
 const keyAliases = new Map([
+  [" ", "SPACE"],
+  ["+", "ADD"],
+  ["*", "MULTIPLY"],
   ["`", "QUOTELEFT"],
   ["[", "BRACKETLEFT"],
   ["]", "BRACKETRIGHT"],
@@ -74,11 +77,12 @@ export function normalizeCommandShortcut(shortcut: string): string {
  * Converts a browser keyboard event into the command registry's shortcut input.
  *
  * @param event - Browser event fields inspected without mutation.
- * @returns Plus-separated shortcut input, or undefined for modifier-only events.
+ * @returns Plus-separated shortcut input, or undefined for modifier-only and blank events.
  */
 export function getBrowserShortcut(event: BrowserShortcutEvent): string | undefined {
   if (["Alt", "Control", "Meta", "Shift"].includes(event.key)) return undefined;
-  const key = event.key === " " ? "Space" : event.key === "*" ? "MULTIPLY" : event.key;
+  const key = keyAliases.get(event.key) ?? event.key;
+  if (!key.trim()) return undefined;
   return normalizeCommandShortcut(
     [
       event.ctrlKey ? "Ctrl" : undefined,
