@@ -4,7 +4,7 @@ title: "Implement Writer search and replace core and browser UI"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 101
+revision: 102
 origin:
   system: "manual"
 depends_on:
@@ -324,6 +324,17 @@ comments:
       - Command: `npm run build:single-threaded --workspace @vite-office/office` and final `npm exec --workspace @vite-office/office -- vite build`. Result: typecheck and production build passed with existing bundle advisories.
       - Command: `node_modules/.bin/playwright test writer-search.spec.ts --config=output/playwright/writer-rich-comments-chrome.config.ts --project=writer --workers=1`. Result: two passed against the final production preview. The first Chrome run detected an accessible name that included the Close control; the dialog now exposes Character as its name and focuses Font on opening.
       - Command: `npm run check:writer-resources`, `npm run check:dependencies`, `npm run check:source-tree`, `npm run check:source-provenance`, `npm run inventory:parity:writer`, scoped ESLint and Prettier, `ap doctor`, `node .agentplane/policy/check-routing.mjs`, and `git diff --check`. Result: source and resource checks passed, with the existing doctor shim warning.
+      - Command: `npm run check:docs` and `npm run check:file-size`. Result: baseline failures remain outside changed files (307 JSDoc findings and five oversized files).
+
+      Parent task remains in progress. This checkpoint does not advance the ten-task full regression counter.
+  -
+    author: "CODER"
+    body: |-
+      Verified the annotation selection Character checkpoint against pinned SwAnnotationShell::Exec/ExecPost, the FontDialog/FontEffectsDialog/FontPositionDialog SDI declarations and the original Character dialog tabs. Format > Character opens when an annotation owns dispatch and keeps its EditEngine range across the modal focus transfer. The single-note path applies accepted output items to that range. The bulk action continues to merge input and output and works over all mounted notes. The Page string item retains its native identity, and typed EditEngine attribute requests can run without a dialog. The body-text Character dialog and advanced annotation tab controls remain outside this checkpoint.
+
+      - Command: `npm run test:writer -- src/sw/browser/presentation/WriterCommentFormatAll.test.tsx src/sw/browser/presentation/WriterCommentsSidebar.test.tsx src/sw/browser/presentation/WriterMenuBar.test.tsx src/sw/uiconfig/swriter/menubar/menubar-commands.test.ts`. Result: 36 passed in four files. Covers selection and focus restoration, single-note undo, original Page and fixed tab routes, direct item arguments and preceding bulk behavior.
+      - Command: `npm run build:single-threaded --workspace @vite-office/office` and `node_modules/.bin/playwright test writer-search.spec.ts --config=output/playwright/writer-rich-comments-chrome.config.ts --project=writer --workers=1`. Result: typecheck and production build passed with existing Vite advisories. Both Chrome scenarios passed against the final preview.
+      - Command: `npm run check:writer-resources`, `npm run check:dependencies`, `npm run check:source-tree`, `npm run check:source-provenance`, `npm run inventory:parity:writer`, scoped ESLint and Prettier, `ap doctor`, `node .agentplane/policy/check-routing.mjs`, and `git diff --check`. Result: passed with the existing AgentPlane hook shim warning.
       - Command: `npm run check:docs` and `npm run check:file-size`. Result: baseline failures remain outside changed files (307 JSDoc findings and five oversized files).
 
       Parent task remains in progress. This checkpoint does not advance the ten-task full regression counter.
@@ -795,9 +806,22 @@ events:
       - Command: `npm run check:docs` and `npm run check:file-size`. Result: baseline failures remain outside changed files (307 JSDoc findings and five oversized files).
 
       Parent task remains in progress. This checkpoint does not advance the ten-task full regression counter.
+  -
+    type: "comment"
+    at: "2026-11-21T19:58:54.128Z"
+    author: "CODER"
+    body: |-
+      Verified the annotation selection Character checkpoint against pinned SwAnnotationShell::Exec/ExecPost, the FontDialog/FontEffectsDialog/FontPositionDialog SDI declarations and the original Character dialog tabs. Format > Character opens when an annotation owns dispatch and keeps its EditEngine range across the modal focus transfer. The single-note path applies accepted output items to that range. The bulk action continues to merge input and output and works over all mounted notes. The Page string item retains its native identity, and typed EditEngine attribute requests can run without a dialog. The body-text Character dialog and advanced annotation tab controls remain outside this checkpoint.
+
+      - Command: `npm run test:writer -- src/sw/browser/presentation/WriterCommentFormatAll.test.tsx src/sw/browser/presentation/WriterCommentsSidebar.test.tsx src/sw/browser/presentation/WriterMenuBar.test.tsx src/sw/uiconfig/swriter/menubar/menubar-commands.test.ts`. Result: 36 passed in four files. Covers selection and focus restoration, single-note undo, original Page and fixed tab routes, direct item arguments and preceding bulk behavior.
+      - Command: `npm run build:single-threaded --workspace @vite-office/office` and `node_modules/.bin/playwright test writer-search.spec.ts --config=output/playwright/writer-rich-comments-chrome.config.ts --project=writer --workers=1`. Result: typecheck and production build passed with existing Vite advisories. Both Chrome scenarios passed against the final preview.
+      - Command: `npm run check:writer-resources`, `npm run check:dependencies`, `npm run check:source-tree`, `npm run check:source-provenance`, `npm run inventory:parity:writer`, scoped ESLint and Prettier, `ap doctor`, `node .agentplane/policy/check-routing.mjs`, and `git diff --check`. Result: passed with the existing AgentPlane hook shim warning.
+      - Command: `npm run check:docs` and `npm run check:file-size`. Result: baseline failures remain outside changed files (307 JSDoc findings and five oversized files).
+
+      Parent task remains in progress. This checkpoint does not advance the ten-task full regression counter.
 
 doc_version: 3
-doc_updated_at: "2026-11-21T19:51:56.995Z"
+doc_updated_at: "2026-11-21T19:58:54.128Z"
 doc_updated_by: "CODER"
 description: "Implement the approved coherent Writer search-and-replace feature from pinned LibreOffice sources: real shared search engine and options, native paragraph/cursor traversal and replacement/history contracts, view-owned search state and dispatch, Find toolbar and Find and Replace dialog with generated upstream command placement and shortcuts. Preserve source semantics and explicit unsupported boundaries; never substitute DOM text search or browser RegExp for ICU contracts. Work only on writer in vite-office-writer; local upstream reading approved, no network or merges. Keep active until approved scope is verified."
 sections:

@@ -41,6 +41,17 @@ test("Writer inserts a comment, finds its text and undoes note formatting", /** 
   await expect(comment).toBeFocused();
   await page.keyboard.insertText("Find this annotation");
   await expect(comment).toHaveText("Find this annotation");
+  await page.keyboard.press("Control+a");
+  await page.getByRole("menuitem", { name: "Format", exact: true }).click();
+  await page.getByRole("menuitem", { name: "Character…", exact: true }).click();
+  const noteCharacter = page.getByRole("dialog", { name: "Character", exact: true });
+  await expect(noteCharacter.getByRole("tab", { name: "Font", exact: true })).toBeFocused();
+  await noteCharacter.getByRole("spinbutton", { name: "Size", exact: true }).fill("20");
+  await noteCharacter.getByRole("button", { name: "OK", exact: true }).click();
+  await expect(comment).toBeFocused();
+  await expect(comment.locator("span").first()).toHaveCSS("font-size", "26.6667px");
+  await page.keyboard.press("Control+z");
+  await expect(comment.locator("span").first()).not.toHaveCSS("font-size", "26.6667px");
   await page.keyboard.press("Escape");
   await expect(page.getByLabel("Writer document body", { exact: true })).toBeFocused();
 

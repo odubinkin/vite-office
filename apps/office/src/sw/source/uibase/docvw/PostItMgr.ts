@@ -7,7 +7,9 @@ import { MID_SEARCH_BACKWARD, MID_SEARCH_COMMAND } from "../../../../svl/inc/mem
 import { SvxSearchCmd } from "../../../../svl/inc/srchitem";
 import { SvxSearchItem } from "../../../../svl/source/items/srchitem";
 import type { RegexMatcherFactory } from "../../../../unotools/inc/textsearch";
-import type { SfxItemSet } from "../../../../svl/source/items/itemset";
+import { SfxItemSet } from "../../../../svl/source/items/itemset";
+import type { SfxPoolItem } from "../../../../svl/source/items/poolitem";
+import { WRITER_COMMAND_IDS } from "../../../uiconfig/swriter/menubar/menubar-commands";
 import type { SwFormatField } from "../../../inc/fmtfld";
 import type { SwViewOption } from "../../../inc/viewopt";
 import { SwPaM, SwPosition } from "../../core/crsr/pam";
@@ -124,6 +126,54 @@ export class SwPostItMgr {
     );
   }
 
+  /** Executes the Character slot for the active annotation. @param command - Original slot. @param initialPage - Native tab ID. @param items - Native request items. @returns Whether formatting was applied. */
+  async ExecuteCharacterDialog(
+    command: string,
+    initialPage: string | undefined,
+    items: readonly SfxPoolItem[],
+  ): Promise<boolean> {
+    const field = this.GetActiveField();
+    const window = field && this.windows.get(field);
+    if (!field || !window?.ApplyAttributes || this.options.IsReadonly()) return false;
+    if (items.length > 0) {
+      const output = new SfxItemSet(window.editor.GetEmptyItemSet());
+      try {
+        for (const item of items) output.Put(item);
+        return output.Count() > 0 && window.ApplyAttributes(output);
+      } finally {
+        output.Dispose();
+      }
+    }
+    if (!this.dialogs) return false;
+    const document = this.writer.GetDoc();
+    const editorView = window.view.getImpl();
+    const selection = window.editor.CreateESel(editorView.GetEditSelection());
+    const input = window.editor.GetAttribs(editorView.GetEditSelection());
+    try {
+      const output = await this.dialogs.RequestAnnotationCharacter(command, input, initialPage);
+      if (!output) return false;
+      try {
+        if (
+          document !== this.writer.GetDoc() ||
+          this.windows.get(field) !== window ||
+          this.options.IsReadonly() ||
+          output.Count() === 0
+        )
+          return false;
+        editorView.SetEditSelection(window.editor.CreateNormalizedSel(selection));
+        return window.ApplyAttributes(output);
+      } finally {
+        output.Dispose();
+      }
+    } finally {
+      input.Dispose();
+      if (this.GetActiveField() === field && this.windows.get(field) === window) {
+        editorView.SetEditSelection(window.editor.CreateNormalizedSel(selection));
+        this.GrabFocusOnActiveSidebarWin();
+      }
+    }
+  }
+
   /** Reports whether there is an annotation window to provide dialog data. @returns Whether comment formatting is available. */
   CanFormatAllNotes(): boolean {
     return !this.options.IsReadonly() && this.windows.size > 0;
@@ -148,7 +198,10 @@ export class SwPostItMgr {
     this.SetActiveSidebarWin(source);
     const input = window.editor.GetAttribs(window.view.getImpl().GetEditSelection());
     try {
-      const output = await this.dialogs.RequestFormatAllNotes(input);
+      const output = await this.dialogs.RequestAnnotationCharacter(
+        WRITER_COMMAND_IDS.formatAllNotes,
+        input,
+      );
       if (!output) return false;
       try {
         if (document !== this.writer.GetDoc() || !this.CanFormatAllNotes()) return false;

@@ -1,4 +1,6 @@
 /** @fileoverview Writer command shell for the active annotation edit view. */
+import { FN_PARAM_1 } from "../../../inc/cmdid";
+import { SfxStringItem } from "../../../../svl/source/items/stritem";
 import { Any } from "../../../../cppu/inc/com/sun/star/uno/Any";
 import { SvxColorItem } from "../../../../editeng/inc/colritem";
 import { SvxEscapementItem } from "../../../../editeng/inc/escapementitem";
@@ -206,6 +208,31 @@ export class SwAnnotationShell {
         /** Enables deletion in the editable annotation. @returns Whether enabled. */
         isEnabled: () => this.CanEdit(),
       },
+      ...(
+        [
+          [CMD.fontDialog, undefined],
+          [CMD.fontEffectsDialog, "fonteffects"],
+          [CMD.fontPositionDialog, "position"],
+        ] as const
+      ).map<WriterSlotHandler<SwAnnotationShell>>(
+        /** Binds the original Character slots to the active annotation. @param entry - Slot and its default starting page. @returns Slot handler. */
+        ([id, defaultPage]) => ({
+          id,
+          /** Opens the native page or applies supplied item-set attributes. @param _context - Bound annotation shell. @param args - Original request items. @returns Whether formatting was applied. */
+          execute: (_context, args) => {
+            const page = args.find(
+              /** Resolves the original optional Page argument. @param item - Request item. @returns Whether it selects a page. */
+              (item): item is SfxStringItem =>
+                item instanceof SfxStringItem && item.Which() === FN_PARAM_1,
+            );
+            const initialPage =
+              id === CMD.fontPositionDialog ? defaultPage : (page?.GetValue() ?? defaultPage);
+            return this.manager.ExecuteCharacterDialog(id, initialPage, page ? [] : args);
+          },
+          /** Requires an editable annotation selection. @returns Whether enabled. */
+          isEnabled: () => this.CanEdit(),
+        }),
+      ),
       {
         id: CMD.formatAllNotes,
         /** Opens the actual annotation-mode Character dialog. @returns Whether formatting was applied. */

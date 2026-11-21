@@ -15,6 +15,7 @@ import { WriterBookmarkDialog } from "./WriterBookmarkDialog";
 import { WriterInsertBreakDialog } from "./WriterInsertBreakDialog";
 import { WriterPageStyleDialog } from "./WriterPageStyleDialog";
 
+import { WRITER_COMMAND_IDS } from "../../uiconfig/swriter/menubar/menubar-commands";
 import { WriterAnnotationCharDialog } from "./WriterAnnotationCharDialog";
 
 /** Forwards original request identity and completion payloads;the paragraph presenter stays with its formatting controls. @param props - Actual controller,snapshot and module metric. @returns Active dialog or no dialog. */
@@ -142,17 +143,18 @@ export function WriterDialogPresenter({
         <WriterAnnotationCharDialog
           key={request.id}
           input={request.request.input}
+          initialPage={request.request.initialPage}
           onCancel={
-            /** Cancels the Character request and restores the document client. @returns Nothing. */ () => {
+            /** Cancels the request and restores the bulk command's document client. @returns Nothing. */ () => {
               controller.Cancel(request.id);
-              focusDocument();
+              if (request.request.commandUrl === WRITER_COMMAND_IDS.formatAllNotes) focusDocument();
             }
           }
           onSubmit={
             /** Returns the native tab-page output set to the comment manager. @param attributes - Owned set. @returns Nothing. */
             (attributes) => {
               if (!controller.Complete(request.id, { attributes })) attributes.Dispose();
-              focusDocument();
+              if (request.request.commandUrl === WRITER_COMMAND_IDS.formatAllNotes) focusDocument();
             }
           }
         />

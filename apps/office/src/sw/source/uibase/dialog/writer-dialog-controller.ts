@@ -94,7 +94,12 @@ export type WriterDialogRequest =
   | WriterPageDialogRequest
   | WriterParagraphDialogRequest
   | Readonly<{ kind: "delete-comments"; commandUrl: string; author?: string }>
-  | Readonly<{ kind: "annotation-character"; commandUrl: string; input: SfxItemSet }>;
+  | Readonly<{
+      kind: "annotation-character";
+      commandUrl: string;
+      input: SfxItemSet;
+      initialPage?: string;
+    }>;
 /** Every accepted result supported by the Writer dialog presenter. */
 export type WriterDialogResult =
   | Readonly<{ name: string }>
@@ -210,12 +215,17 @@ export class WriterDialogController {
       : undefined;
   }
 
-  /** Requests the original annotation-mode Character dialog. @param input - Borrowed initial EditEngine attributes. @returns Owned output item set on acceptance. */
-  public async RequestFormatAllNotes(input: SfxItemSet): Promise<SfxItemSet | undefined> {
+  /** Requests the original annotation-mode Character dialog. @param commandUrl - Original slot. @param input - Borrowed initial EditEngine attributes. @param initialPage - Original tab ID, if supplied. @returns Owned output item set on acceptance. */
+  public async RequestAnnotationCharacter(
+    commandUrl: string,
+    input: SfxItemSet,
+    initialPage?: string,
+  ): Promise<SfxItemSet | undefined> {
     const completion = await this.controller.Request({
       kind: "annotation-character",
-      commandUrl: WRITER_COMMAND_IDS.formatAllNotes,
+      commandUrl,
       input,
+      ...(initialPage !== undefined && { initialPage }),
     });
     return completion.kind === "accepted"
       ? (completion.result as Readonly<{ attributes: SfxItemSet }>).attributes

@@ -33,6 +33,9 @@
     "deleteAuthor": ".uno:DeleteAuthor",
     "deleteAllNotes": ".uno:DeleteAllNotes",
     "formatAllNotes": ".uno:FormatAllNotes",
+    "fontDialog": ".uno:FontDialog",
+    "fontEffectsDialog": ".uno:FontEffectsDialog",
+    "fontPositionDialog": ".uno:FontPositionDialog",
     "insertBookmark": ".uno:InsertBookmark",
     "insertBreak": ".uno:InsertBreak",
     "insertPageBreak": ".uno:InsertPagebreak",
@@ -143,6 +146,9 @@
     { "capabilityId": "CAP-0111", "commandUrl": ".uno:DeleteAuthor" },
     { "capabilityId": "CAP-0111", "commandUrl": ".uno:DeleteAllNotes" },
     { "capabilityId": "CAP-0111", "commandUrl": ".uno:FormatAllNotes" },
+    { "capabilityId": "CAP-0111", "commandUrl": ".uno:FontDialog" },
+    { "capabilityId": "CAP-0111", "commandUrl": ".uno:FontEffectsDialog" },
+    { "capabilityId": "CAP-0111", "commandUrl": ".uno:FontPositionDialog" },
     { "capabilityId": "CAP-0113", "commandUrl": ".uno:InsertBookmark" },
     { "capabilityId": "CAP-0112", "commandUrl": ".uno:InsertBreak" },
     { "capabilityId": "CAP-0112", "commandUrl": ".uno:InsertPagebreak" },
@@ -1373,6 +1379,48 @@
       "shortcuts": [],
       "slotId": 22508
     },
+    ".uno:FontDialog": {
+      "browserOwned": false,
+      "argumentSchema": ["Page:SfxStringItem"],
+      "capabilityId": "CAP-0111",
+      "controlLabel": "Character",
+      "label": "Character",
+      "iconName": "lc_fontdialog.svg",
+      "placements": [
+        "sw/uiconfig/swriter/menubar/menubar.xml",
+        "sw/uiconfig/swriter/toolbar/textobjectbar.xml",
+        "sw/uiconfig/swriter/popupmenu/text.xml",
+        "sw/uiconfig/swriter/popupmenu/table.xml"
+      ],
+      "semantics": "action",
+      "showsDialog": true,
+      "shortcuts": ["Alt+C"],
+      "slotId": 10296
+    },
+    ".uno:FontEffectsDialog": {
+      "browserOwned": false,
+      "argumentSchema": [],
+      "capabilityId": "CAP-0111",
+      "controlLabel": "Character Font Effects",
+      "label": "Character Font Effects",
+      "placements": ["svx/sdi/svx.sdi"],
+      "semantics": "action",
+      "showsDialog": true,
+      "shortcuts": [],
+      "slotId": 11133
+    },
+    ".uno:FontPositionDialog": {
+      "browserOwned": false,
+      "argumentSchema": [],
+      "capabilityId": "CAP-0111",
+      "controlLabel": "Character Font Position",
+      "label": "Character Font Position",
+      "placements": ["svx/sdi/svx.sdi"],
+      "semantics": "action",
+      "showsDialog": true,
+      "shortcuts": [],
+      "slotId": 11134
+    },
     ".uno:StatusBarVisible": {
       "browserOwned": false,
       "argumentSchema": [],
@@ -2286,6 +2334,26 @@
       "classification": "supported-upstream",
       "commandUrl": ".uno:FormatAllNotes",
       "sources": ["sw/uiconfig/swriter/menubar/menubar.xml"]
+    },
+    {
+      "classification": "supported-upstream",
+      "commandUrl": ".uno:FontDialog",
+      "sources": [
+        "sw/uiconfig/swriter/menubar/menubar.xml",
+        "sw/uiconfig/swriter/toolbar/textobjectbar.xml",
+        "sw/uiconfig/swriter/popupmenu/text.xml",
+        "sw/uiconfig/swriter/popupmenu/table.xml"
+      ]
+    },
+    {
+      "classification": "supported-upstream",
+      "commandUrl": ".uno:FontEffectsDialog",
+      "sources": ["svx/sdi/svx.sdi"]
+    },
+    {
+      "classification": "supported-upstream",
+      "commandUrl": ".uno:FontPositionDialog",
+      "sources": ["svx/sdi/svx.sdi"]
     },
     {
       "classification": "supported-upstream",
@@ -4277,14 +4345,6 @@
       "context": [".uno:FormatMenu"],
       "entryKind": "menu",
       "sourceUrl": ".uno:SpotlightMenu",
-      "reason": "outside-p1-supported-command-slice",
-      "sourcePath": "sw/uiconfig/swriter/menubar/menubar.xml"
-    },
-    {
-      "classification": "X",
-      "context": [".uno:FormatMenu"],
-      "entryKind": "command",
-      "sourceUrl": ".uno:FontDialog",
       "reason": "outside-p1-supported-command-slice",
       "sourcePath": "sw/uiconfig/swriter/menubar/menubar.xml"
     },
@@ -6620,14 +6680,6 @@
       "classification": "X",
       "context": [],
       "entryKind": "command",
-      "sourceUrl": ".uno:FontDialog",
-      "reason": "outside-p1-supported-command-slice",
-      "sourcePath": "sw/uiconfig/swriter/toolbar/textobjectbar.xml"
-    },
-    {
-      "classification": "X",
-      "context": [],
-      "entryKind": "command",
       "sourceUrl": ".uno:DecrementSubLevels",
       "reason": "outside-p1-supported-command-slice",
       "sourcePath": "sw/uiconfig/swriter/toolbar/numobjectbar.xml"
@@ -6844,14 +6896,6 @@
       "classification": "X",
       "context": [".uno:CharacterMenu"],
       "entryKind": "command",
-      "sourceUrl": ".uno:FontDialog",
-      "reason": "outside-p1-supported-command-slice",
-      "sourcePath": "sw/uiconfig/swriter/popupmenu/text.xml"
-    },
-    {
-      "classification": "X",
-      "context": [".uno:CharacterMenu"],
-      "entryKind": "command",
       "sourceUrl": ".uno:DefaultCharStyle",
       "reason": "outside-p1-supported-command-slice",
       "sourcePath": "sw/uiconfig/swriter/popupmenu/text.xml"
@@ -6885,14 +6929,6 @@
       "context": [".uno:CharacterMenu"],
       "entryKind": "command",
       "sourceUrl": ".uno:SourceCharStyle",
-      "reason": "outside-p1-supported-command-slice",
-      "sourcePath": "sw/uiconfig/swriter/popupmenu/text.xml"
-    },
-    {
-      "classification": "X",
-      "context": [],
-      "entryKind": "menu",
-      "sourceUrl": ".uno:CharacterMenu",
       "reason": "outside-p1-supported-command-slice",
       "sourcePath": "sw/uiconfig/swriter/popupmenu/text.xml"
     },
@@ -7372,14 +7408,6 @@
       "classification": "X",
       "context": [".uno:CharacterMenu"],
       "entryKind": "command",
-      "sourceUrl": ".uno:FontDialog",
-      "reason": "outside-p1-supported-command-slice",
-      "sourcePath": "sw/uiconfig/swriter/popupmenu/table.xml"
-    },
-    {
-      "classification": "X",
-      "context": [".uno:CharacterMenu"],
-      "entryKind": "command",
       "sourceUrl": ".uno:DefaultCharStyle",
       "reason": "outside-p1-supported-command-slice",
       "sourcePath": "sw/uiconfig/swriter/popupmenu/table.xml"
@@ -7413,14 +7441,6 @@
       "context": [".uno:CharacterMenu"],
       "entryKind": "command",
       "sourceUrl": ".uno:SourceCharStyle",
-      "reason": "outside-p1-supported-command-slice",
-      "sourcePath": "sw/uiconfig/swriter/popupmenu/table.xml"
-    },
-    {
-      "classification": "X",
-      "context": [],
-      "entryKind": "menu",
-      "sourceUrl": ".uno:CharacterMenu",
       "reason": "outside-p1-supported-command-slice",
       "sourcePath": "sw/uiconfig/swriter/popupmenu/table.xml"
     },
@@ -8023,6 +8043,7 @@
           { "commandUrl": ".uno:FormatPaintbrush", "kind": "command", "visible": true },
           { "commandUrl": ".uno:ResetAttributes", "kind": "command", "visible": true },
           { "kind": "separator" },
+          { "commandUrl": ".uno:FontDialog", "kind": "command", "visible": true },
           { "commandUrl": ".uno:ParagraphDialog", "kind": "command", "visible": true },
           {
             "id": ".uno:FormatBulletsMenu",
@@ -8136,6 +8157,12 @@
       { "commandUrl": ".uno:FormatPaintbrush", "kind": "command", "visible": true },
       { "commandUrl": ".uno:ResetAttributes", "kind": "command", "visible": true },
       {
+        "id": ".uno:CharacterMenu",
+        "items": [{ "commandUrl": ".uno:FontDialog", "kind": "command", "visible": true }],
+        "kind": "menu",
+        "label": "Character"
+      },
+      {
         "id": ".uno:ParagraphMenu",
         "items": [{ "commandUrl": ".uno:ParagraphDialog", "kind": "command", "visible": true }],
         "kind": "menu",
@@ -8204,6 +8231,12 @@
       { "kind": "separator" },
       { "commandUrl": ".uno:FormatPaintbrush", "kind": "command", "visible": true },
       { "commandUrl": ".uno:ResetAttributes", "kind": "command", "visible": true },
+      {
+        "id": ".uno:CharacterMenu",
+        "items": [{ "commandUrl": ".uno:FontDialog", "kind": "command", "visible": true }],
+        "kind": "menu",
+        "label": "Character"
+      },
       {
         "id": ".uno:ParagraphMenu",
         "items": [{ "commandUrl": ".uno:ParagraphDialog", "kind": "command", "visible": true }],
@@ -8301,6 +8334,7 @@
       { "commandUrl": ".uno:LineSpacing", "kind": "command", "visible": true },
       { "kind": "separator" },
       { "commandUrl": ".uno:SelectAll", "kind": "command", "visible": false },
+      { "commandUrl": ".uno:FontDialog", "kind": "command", "visible": false },
       { "commandUrl": ".uno:ParagraphDialog", "kind": "command", "visible": false }
     ],
     "tableobjectbar": [
@@ -9672,12 +9706,6 @@
         "context": [".uno:FormatMenu"],
         "entryKind": "menu",
         "sourceUrl": ".uno:SpotlightMenu"
-      },
-      {
-        "classification": "X",
-        "context": [".uno:FormatMenu"],
-        "entryKind": "command",
-        "sourceUrl": ".uno:FontDialog"
       },
       {
         "classification": "X",
@@ -11383,12 +11411,6 @@
         "context": [],
         "entryKind": "command",
         "sourceUrl": ".uno:ParaRightToLeft"
-      },
-      {
-        "classification": "X",
-        "context": [],
-        "entryKind": "command",
-        "sourceUrl": ".uno:FontDialog"
       }
     ],
     "sw/uiconfig/swriter/toolbar/numobjectbar.xml": [
@@ -11550,12 +11572,6 @@
         "classification": "X",
         "context": [".uno:CharacterMenu"],
         "entryKind": "command",
-        "sourceUrl": ".uno:FontDialog"
-      },
-      {
-        "classification": "X",
-        "context": [".uno:CharacterMenu"],
-        "entryKind": "command",
         "sourceUrl": ".uno:DefaultCharStyle"
       },
       {
@@ -11581,12 +11597,6 @@
         "context": [".uno:CharacterMenu"],
         "entryKind": "command",
         "sourceUrl": ".uno:SourceCharStyle"
-      },
-      {
-        "classification": "X",
-        "context": [],
-        "entryKind": "menu",
-        "sourceUrl": ".uno:CharacterMenu"
       },
       {
         "classification": "X",
@@ -11943,12 +11953,6 @@
         "classification": "X",
         "context": [".uno:CharacterMenu"],
         "entryKind": "command",
-        "sourceUrl": ".uno:FontDialog"
-      },
-      {
-        "classification": "X",
-        "context": [".uno:CharacterMenu"],
-        "entryKind": "command",
         "sourceUrl": ".uno:DefaultCharStyle"
       },
       {
@@ -11974,12 +11978,6 @@
         "context": [".uno:CharacterMenu"],
         "entryKind": "command",
         "sourceUrl": ".uno:SourceCharStyle"
-      },
-      {
-        "classification": "X",
-        "context": [],
-        "entryKind": "menu",
-        "sourceUrl": ".uno:CharacterMenu"
       },
       {
         "classification": "X",

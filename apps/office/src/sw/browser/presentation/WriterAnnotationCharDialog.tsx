@@ -19,15 +19,22 @@ import { FontItalic, FontLineStyle, FontStrikeout, FontWeight } from "../../../t
 import { ColorControl } from "../../../svx/browser/tbxctrls/ColorControl";
 import { writerColorFromPrimitive, writerColorValue } from "../../source/core/attr/swatrset";
 
-const annotationCharTabs = ["Font", "Font Effects", "Position", "Background"] as const;
+const annotationCharTabs = [
+  ["font", "Font"],
+  ["fonteffects", "Font Effects"],
+  ["position", "Position"],
+  ["background", "Background"],
+] as const;
 
 /** Presents the annotation mode of characterproperties.ui over native EditEngine input and output sets. @param props - Initial attributes and request completion. @returns Character dialog. */
 export function WriterAnnotationCharDialog({
   input,
+  initialPage,
   onCancel,
   onSubmit,
 }: Readonly<{
   input: SfxItemSet;
+  initialPage?: string | undefined;
   onCancel: () => void;
   onSubmit: (output: SfxItemSet) => void;
 }>): React.JSX.Element {
@@ -35,7 +42,15 @@ export function WriterAnnotationCharDialog({
   const dialog = useRef<HTMLDialogElement>(null);
   const tabs = useRef<HTMLDivElement>(null);
   const formId = useId();
-  const [tab, setTab] = useState(0);
+  const [tab, setTab] = useState(
+    Math.max(
+      0,
+      annotationCharTabs.findIndex(
+        /** Matches the original notebook page name. @param page - Native page entry. @returns Whether requested. */
+        ([id]) => id === initialPage,
+      ),
+    ),
+  );
   const [resets, setResets] = useState([0, 0, 0, 0]);
   const font = input.GetItemIfSet(EE.EE_CHAR_FONTINFO);
   const height = input.GetItemIfSet(EE.EE_CHAR_FONTHEIGHT);
@@ -67,7 +82,7 @@ export function WriterAnnotationCharDialog({
   const title = localization.GetText("writer.character.title", "Character");
 
   useLayoutEffect(
-    /** Opens the platform modal and focuses the Font tab. @returns Nothing. */ () => {
+    /** Opens the platform modal and focuses the selected tab. @returns Nothing. */ () => {
       const element = dialog.current;
       if (!element) return;
       if (typeof element.showModal === "function") element.showModal();
@@ -196,10 +211,10 @@ export function WriterAnnotationCharDialog({
           }
         >
           {annotationCharTabs.map(
-            /** Renders an original annotation tab. @param label - Page label. @param index - Native page order. @returns Tab. */
-            (label, index) => (
+            /** Renders an original annotation tab. @param page - Native page name and label. @param index - Native page order. @returns Tab. */
+            ([id, label], index) => (
               <button
-                key={label}
+                key={id}
                 type="button"
                 role="tab"
                 id={`${formId}-tab-${index}`}
