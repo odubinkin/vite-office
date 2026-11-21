@@ -20,7 +20,10 @@ import type { RegexMatcherFactory } from "../../../../unotools/inc/textsearch";
 import { SwViewSearch } from "./viewsrch";
 import { SwViewOption } from "../../../inc/viewopt";
 import { SwDocShell } from "../app/docsh";
-import { WriterDialogController } from "../dialog/writer-dialog-controller";
+import {
+  WriterDialogController,
+  type WriterCommentDeleteConfiguration,
+} from "../dialog/writer-dialog-controller";
 import { SwPostItMgr } from "../docvw/PostItMgr";
 import { SwEditWin } from "../docvw/edtwin";
 import { SwAnnotationShell } from "../shells/annotsh";
@@ -62,12 +65,13 @@ export class SwView {
   private readonly layout: SwRootFrame;
   private readonly wrtShellSubscription: () => void;
 
-  /** Creates one persistent view over a persistent document shell. @param docShell - Owning Writer document shell. @param module - Actual module metric preferences and open-view enumeration. @param searchOptions - User search configuration. @param createRegex - Native ICU constructor. @returns Nothing. */
+  /** Creates one persistent view over a persistent document shell. @param docShell - Owning Writer document shell. @param module - Actual module metric preferences and open-view enumeration. @param searchOptions - User search configuration. @param createRegex - Browser regular-expression compiler. @param commentDeleteConfiguration - Shared comment deletion query preference. @returns Nothing. */
   public constructor(
     private readonly docShell: SwDocShell,
     private readonly module: SwModule = SwModule.get(),
     searchOptions?: SearchOptionsConfiguration,
     createRegex?: RegexMatcherFactory,
+    commentDeleteConfiguration?: WriterCommentDeleteConfiguration,
   ) {
     const pref = module.GetUsrPref(false);
     this.horizontalRuler.SetUnit(pref.GetHScrollMetric());
@@ -93,6 +97,8 @@ export class SwView {
       createRegex,
       /** Recomputes the native shell and annotation formatting states. @returns Nothing. */ () =>
         this.Invalidate("selection"),
+      this.dialogController,
+      commentDeleteConfiguration,
     );
     this.annotationShell = new SwAnnotationShell(this.postItMgr, this.wrtShell);
     this.search = new SwViewSearch(this.wrtShell, searchOptions, createRegex, this.postItMgr);
@@ -379,6 +385,8 @@ export class SwView {
 
   /** Releases view, dispatcher, and document-shell subscriptions at explicit session close. @returns Nothing. */
   public Close(): void {
+    const dialog = this.dialogController.GetSnapshot();
+    if (dialog?.request.kind === "delete-comments") this.dialogController.Cancel(dialog.id);
     this.releaseMetricView();
     this.editWindow.MouseButtonUp(true);
     this.horizontalRuler.CancelDrag();

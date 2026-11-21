@@ -34,6 +34,7 @@ import { WRITER_COMMAND_IDS as CMD } from "../../../uiconfig/swriter/menubar/men
 import { writerColorFromPrimitive, writerColorValue } from "../../core/attr/swatrset";
 import type { SwAnnotationWindow, SwPostItMgr } from "../docvw/PostItMgr";
 import type { SwWrtShell } from "../wrtsh/wrtsh1";
+import { GetDeleteAuthor } from "./textfld";
 
 /** Represented annotation alignment slot values. */
 const alignments = [
@@ -204,6 +205,29 @@ export class SwAnnotationShell {
         execute: () => this.manager.Delete(undefined, true),
         /** Enables deletion in the editable annotation. @returns Whether enabled. */
         isEnabled: () => this.CanEdit(),
+      },
+      {
+        id: CMD.deleteAllNotes,
+        /** Removes all comments through the shared query and history. @returns Whether changed. */
+        execute: () => this.manager.DeleteNotes(),
+        /** Enables deletion from an editable comment. @returns Whether enabled. */
+        isEnabled: () => this.CanEdit(),
+      },
+      {
+        id: CMD.deleteAuthor,
+        /** Routes the original Author item, defaulting to the active note's author. @param _context - Bound annotation shell. @param args - Original request items. @returns Whether changed. */
+        execute: (_context, args) => {
+          const author =
+            GetDeleteAuthor(args) ?? this.manager.GetActiveField()?.GetField().GetData().author;
+          return author === undefined ? false : this.manager.DeleteNotes(author);
+        },
+        /** Enables deletion from an editable comment. @returns Whether enabled. */
+        isEnabled: () => this.CanEdit(),
+        /** Returns the original active-author menu state. @returns The native menu label, if active. */
+        getStateValue: () => {
+          const author = this.manager.GetActiveField()?.GetField().GetData().author;
+          return author === undefined ? undefined : "Delete All Comments by " + author;
+        },
       },
       {
         id: CMD.selectAll,

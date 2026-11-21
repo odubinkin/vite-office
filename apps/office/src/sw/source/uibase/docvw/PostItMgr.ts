@@ -13,7 +13,11 @@ import type { SwViewOption } from "../../../inc/viewopt";
 import { SwPaM, SwPosition } from "../../core/crsr/pam";
 import type { SwWrtShell } from "../wrtsh/wrtsh1";
 import { InsertPostIt } from "../wrtsh/wrtsh-editing";
-import { SwPostItField } from "../../core/fields/docufld";
+import type {
+  WriterCommentDeleteConfiguration,
+  WriterDialogController,
+} from "../dialog/writer-dialog-controller";
+import { SwPostItField, SwPostItFieldType } from "../../core/fields/docufld";
 import type { EditTextObject } from "../../../../editeng/source/editeng/editobj";
 import { DateTime } from "../../../../tools/source/datetime/datetime";
 
@@ -39,12 +43,14 @@ export class SwPostItMgr {
   private active: SwFormatField | undefined;
   private pendingFocus: Readonly<{ field: SwFormatField; atEnd: boolean }> | undefined;
 
-  /** Binds the current Writer view options and search engine. @param options - View-local options. @param writer - Model editing shell. @param createRegex - Platform compiler. @param activeChanged - Dispatch context notification. @returns Manager. */
+  /** Binds the current Writer view options and search engine. @param options - View-local options. @param writer - Model editing shell. @param createRegex - Platform compiler. @param activeChanged - Dispatch context notification. @param dialogs - View-owned dialog controller. @param deleteConfiguration - Shared deletion query preference. @returns Manager. */
   constructor(
     private readonly options: SwViewOption,
     private readonly writer: SwWrtShell,
     private readonly createRegex?: RegexMatcherFactory,
     private readonly activeChanged?: () => void,
+    private readonly dialogs?: WriterDialogController,
+    private readonly deleteConfiguration?: WriterCommentDeleteConfiguration,
   ) {}
 
   /** Registers the sidebar window for a model field. @param field - Actual model comment. @param window - Mounted editor. @returns Release callback. */
@@ -114,6 +120,36 @@ export class SwPostItMgr {
         let deleted = false;
         for (const note of notes) deleted = this.DeleteField(note) || deleted;
         return deleted;
+      },
+    );
+  }
+
+  /** Confirms when configured and removes the matching fields in one Writer undo group. @param author - Exact author filter, if supplied. @returns Whether any note was deleted. */
+  async DeleteNotes(author?: string): Promise<boolean> {
+    if (this.options.IsReadonly()) return false;
+    const document = this.writer.GetDoc();
+    if (this.deleteConfiguration?.GetQueryDeleteAllComments()) {
+      const answer = await this.dialogs?.RequestDeleteComments(author);
+      if (answer?.dontShowAgain) this.deleteConfiguration.SetQueryDeleteAllComments(false);
+      if (!answer?.confirmed || document !== this.writer.GetDoc() || this.options.IsReadonly())
+        return false;
+    }
+    const fields = [...SwPostItFieldType.Get(document).GatherFields()].filter(
+      /** Matches the original author exactly. @param field - Anchored comment. @returns Whether to delete it. */
+      (field) => author === undefined || field.GetField().GetData().author === author,
+    );
+    if (fields.length === 0) return false;
+    const undo = document.GetUndoManager();
+    return document.RunModelTransaction(
+      /** Removes anchored notes from the end of the original field stack. @returns Whether changed. */ () => {
+        undo.StartUndo(author === undefined ? "All Comments" : "Comments by " + author);
+        try {
+          let deleted = false;
+          for (const field of fields.reverse()) deleted = this.DeleteField(field) || deleted;
+          return deleted;
+        } finally {
+          undo.EndUndo();
+        }
       },
     );
   }

@@ -1,6 +1,7 @@
 /** @fileoverview Typed Writer dialog requests completed by an external presentation adapter. */
 
 import { SfxDialogController } from "../../../../sfx2/source/dialog/basedlgs";
+import { WRITER_COMMAND_IDS } from "../../../uiconfig/swriter/menubar/menubar-commands";
 import type { SfxItemSet } from "../../../../svl/inc/itemset";
 import type { WriterHyperlink } from "../../core/txtnode/fmtatr2";
 import type { WriterPageDescriptorValue } from "../../core/layout/pagedesc";
@@ -67,6 +68,18 @@ export interface WriterParagraphDialogResult {
   readonly paintLineNumbers: boolean;
 }
 
+/** Setting in Office.Common/Misc shared by both bulk annotation commands. */
+export interface WriterCommentDeleteConfiguration {
+  GetQueryDeleteAllComments(): boolean;
+  SetQueryDeleteAllComments(value: boolean): void;
+}
+
+/** Answer and checkbox value returned by the bulk comment confirmation. */
+interface WriterCommentDeleteResult {
+  readonly confirmed: boolean;
+  readonly dontShowAgain: boolean;
+}
+
 /** Every Writer child-window request supported by the presenter. */
 export type WriterDialogRequest =
   | Readonly<{
@@ -79,7 +92,8 @@ export type WriterDialogRequest =
   | WriterBookmarkDialogRequest
   | WriterBreakDialogRequest
   | WriterPageDialogRequest
-  | WriterParagraphDialogRequest;
+  | WriterParagraphDialogRequest
+  | Readonly<{ kind: "delete-comments"; commandUrl: string; author?: string }>;
 /** Every accepted result supported by the Writer dialog presenter. */
 export type WriterDialogResult =
   | Readonly<{ name: string }>
@@ -87,7 +101,8 @@ export type WriterDialogResult =
   | WriterBookmarkDialogResult
   | WriterBreakDialogResult
   | WriterPageDialogResult
-  | WriterParagraphDialogResult;
+  | WriterParagraphDialogResult
+  | WriterCommentDeleteResult;
 /** Observable snapshot published by the Writer dialog controller. */
 export type WriterDialogSnapshot = ReturnType<WriterDialogController["GetSnapshot"]>;
 
@@ -190,6 +205,21 @@ export class WriterDialogController {
     });
     return completion.kind === "accepted"
       ? (completion.result as WriterParagraphDialogResult)
+      : undefined;
+  }
+
+  /** Opens Writer's configured query before deleting several comments. @param author - Author filter, if supplied. @returns Query answer, if completed. */
+  public async RequestDeleteComments(
+    author?: string,
+  ): Promise<WriterCommentDeleteResult | undefined> {
+    const completion = await this.controller.Request({
+      kind: "delete-comments",
+      commandUrl:
+        author === undefined ? WRITER_COMMAND_IDS.deleteAllNotes : WRITER_COMMAND_IDS.deleteAuthor,
+      ...(author !== undefined && { author }),
+    });
+    return completion.kind === "accepted"
+      ? (completion.result as WriterCommentDeleteResult)
       : undefined;
   }
 

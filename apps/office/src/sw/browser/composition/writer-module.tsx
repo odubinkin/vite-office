@@ -92,6 +92,9 @@ export interface WriterDocumentSession {
   readonly services: WriterSessionServices;
 }
 
+/** Native bulk comment query setting, false by default. */
+const QUERY_DELETE_ALL_COMMENTS = "org.openoffice.Office.Common/Misc/QueryDeleteAllComments";
+
 /** Creates the production browser adapters without leaking them into document or Writer shell code. @returns Injected session services. */
 export function createWriterBrowserSessionServices(): WriterSessionServices {
   return {
@@ -100,6 +103,24 @@ export function createWriterBrowserSessionServices(): WriterSessionServices {
       : {
           layoutPreferences: new WriterLayoutPreferenceStore(globalThis.localStorage),
           searchOptions: new WriterSearchOptionsStore(globalThis.localStorage),
+          commentDeleteConfiguration: {
+            /** Reads the original shared query setting. @returns Whether to confirm deletion. */
+            GetQueryDeleteAllComments() {
+              try {
+                return globalThis.localStorage.getItem(QUERY_DELETE_ALL_COMMENTS) === "true";
+              } catch {
+                return false;
+              }
+            },
+            /** Updates the original shared query setting. @param value - Whether to confirm deletion. @returns Nothing. */
+            SetQueryDeleteAllComments(value) {
+              try {
+                globalThis.localStorage.setItem(QUERY_DELETE_ALL_COMMENTS, String(value));
+              } catch {
+                // An unavailable preference store does not change the chosen dialog response.
+              }
+            },
+          },
         }),
     copyRichText,
     createDownloadFilename,
@@ -167,7 +188,13 @@ export function createWriterDocumentSession(
     { kind: "untitled", name: "Untitled Writer Document" },
     odtFilter,
   );
-  const view = new SwView(docShell, module, services.searchOptions, createBrowserRegexMatcher);
+  const view = new SwView(
+    docShell,
+    module,
+    services.searchOptions,
+    createBrowserRegexMatcher,
+    services.commentDeleteConfiguration,
+  );
   const fileDialogs = new WriterFileDialogController();
   const sessionServices = { ...services, fileDialogs };
   const workflowCommandShell = new WriterWorkflowCommandShell(

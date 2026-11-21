@@ -4,7 +4,7 @@ title: "Implement Writer search and replace core and browser UI"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 99
+revision: 100
 origin:
   system: "manual"
 depends_on:
@@ -300,6 +300,18 @@ comments:
       - Command: `node_modules/.bin/playwright test writer-search.spec.ts --config=output/playwright/writer-rich-comments-chrome.config.ts --project=writer --workers=1`. Result: both scenarios passed against the final preview bundle.
       - Command: `npm run check:writer-resources`, `npm run check:dependencies`, `npm run check:source-tree`, `npm run check:source-provenance`, `npm run inventory:parity:writer`, scoped ESLint and Prettier, `ap doctor`, `node .agentplane/policy/check-routing.mjs`, and `git diff --check`. Result: passed, two resource tests, no registry semantic violations, and the existing doctor shim warning.
       - Command: `npm run check:docs` and `npm run check:file-size`. Result: baseline failures remain outside the changed paths (307 JSDoc findings and five oversized files). Local evidence is in output/playwright/writer-comment-promote-docs.log and output/playwright/writer-comment-promote-size.log.
+
+      Parent task remains in progress. This checkpoint does not advance the ten-task full regression counter.
+  -
+    author: "CODER"
+    body: |-
+      Verified the Writer comment bulk-deletion checkpoint against pinned textfld, annotsh, AnnotationWin2, PostItMgr, ConfirmationDlg, Common.xcs and querydialog.ui. DeleteAuthor uses the native Author string item and defaults to the active note only in the annotation shell. Delete All Comments and the author-specific action appear in the original menu positions. Both commands use one Writer history group and the shared query preference, which defaults to false. Ports cover the ordinary author deletion and delete-all scenarios from uiwriter11 and deleteAllComments.py. The tracked-deletion branches of those native tests require Writer's redline subsystem, which is outside the represented document model.
+
+      - Command: `npm run test:writer -- src/sw/browser/presentation/WriterCommentReply.test.tsx src/sw/browser/presentation/WriterCommentsSidebar.test.tsx src/sw/browser/presentation/WriterCommentDeletion.test.tsx src/sw/browser/presentation/WriterMenuBar.test.tsx src/sw/source/filter/xml/odt-annotation.test.ts src/sw/browser/presentation/writer-command-presentation.test.ts src/sw/source/uibase/shells/native-paragraph-sidebar-slots.test.ts`. Result: 50 passed across seven files. Scope: ordinary delete, grouped undo/redo, original text and marks, browser query and preference, and other comment, menu and dialog owners.
+      - Command: `npm run build:single-threaded --workspace @vite-office/office` and `npm exec --workspace @vite-office/office -- vite build`. Result: typecheck and production bundle passed, with existing Vite advisories. Initial typechecking found the missing commandUrl on the new dialog discriminant and an unsupported exact flag in Testing Library options; both were corrected before final verification.
+      - Command: `node_modules/.bin/playwright test writer-search.spec.ts --config=output/playwright/writer-rich-comments-chrome.config.ts --project=writer --workers=1`. Result: both scenarios passed against the final bundle, including native query focus, Escape and Yes, body focus, and grouped Undo.
+      - Command: `npm run check:writer-resources`, `npm run check:dependencies`, `npm run check:source-tree`, `npm run check:source-provenance`, `npm run inventory:parity:writer`, scoped ESLint and Prettier, `ap doctor`, `node .agentplane/policy/check-routing.mjs`, and `git diff --check`. Result: passed, two resource tests, zero registry semantic violations, and the existing doctor shim warning.
+      - Command: `npm run check:docs` and `npm run check:file-size`. Result: baseline failures remain outside changed files (307 JSDoc findings and five oversized files). Local evidence is in output/playwright/writer-bulk-comment-docs.log and output/playwright/writer-bulk-comment-size.log.
 
       Parent task remains in progress. This checkpoint does not advance the ten-task full regression counter.
 
@@ -741,9 +753,23 @@ events:
       - Command: `npm run check:docs` and `npm run check:file-size`. Result: baseline failures remain outside the changed paths (307 JSDoc findings and five oversized files). Local evidence is in output/playwright/writer-comment-promote-docs.log and output/playwright/writer-comment-promote-size.log.
 
       Parent task remains in progress. This checkpoint does not advance the ten-task full regression counter.
+  -
+    type: "comment"
+    at: "2026-11-21T19:39:24.857Z"
+    author: "CODER"
+    body: |-
+      Verified the Writer comment bulk-deletion checkpoint against pinned textfld, annotsh, AnnotationWin2, PostItMgr, ConfirmationDlg, Common.xcs and querydialog.ui. DeleteAuthor uses the native Author string item and defaults to the active note only in the annotation shell. Delete All Comments and the author-specific action appear in the original menu positions. Both commands use one Writer history group and the shared query preference, which defaults to false. Ports cover the ordinary author deletion and delete-all scenarios from uiwriter11 and deleteAllComments.py. The tracked-deletion branches of those native tests require Writer's redline subsystem, which is outside the represented document model.
+
+      - Command: `npm run test:writer -- src/sw/browser/presentation/WriterCommentReply.test.tsx src/sw/browser/presentation/WriterCommentsSidebar.test.tsx src/sw/browser/presentation/WriterCommentDeletion.test.tsx src/sw/browser/presentation/WriterMenuBar.test.tsx src/sw/source/filter/xml/odt-annotation.test.ts src/sw/browser/presentation/writer-command-presentation.test.ts src/sw/source/uibase/shells/native-paragraph-sidebar-slots.test.ts`. Result: 50 passed across seven files. Scope: ordinary delete, grouped undo/redo, original text and marks, browser query and preference, and other comment, menu and dialog owners.
+      - Command: `npm run build:single-threaded --workspace @vite-office/office` and `npm exec --workspace @vite-office/office -- vite build`. Result: typecheck and production bundle passed, with existing Vite advisories. Initial typechecking found the missing commandUrl on the new dialog discriminant and an unsupported exact flag in Testing Library options; both were corrected before final verification.
+      - Command: `node_modules/.bin/playwright test writer-search.spec.ts --config=output/playwright/writer-rich-comments-chrome.config.ts --project=writer --workers=1`. Result: both scenarios passed against the final bundle, including native query focus, Escape and Yes, body focus, and grouped Undo.
+      - Command: `npm run check:writer-resources`, `npm run check:dependencies`, `npm run check:source-tree`, `npm run check:source-provenance`, `npm run inventory:parity:writer`, scoped ESLint and Prettier, `ap doctor`, `node .agentplane/policy/check-routing.mjs`, and `git diff --check`. Result: passed, two resource tests, zero registry semantic violations, and the existing doctor shim warning.
+      - Command: `npm run check:docs` and `npm run check:file-size`. Result: baseline failures remain outside changed files (307 JSDoc findings and five oversized files). Local evidence is in output/playwright/writer-bulk-comment-docs.log and output/playwright/writer-bulk-comment-size.log.
+
+      Parent task remains in progress. This checkpoint does not advance the ten-task full regression counter.
 
 doc_version: 3
-doc_updated_at: "2026-11-21T19:29:19.716Z"
+doc_updated_at: "2026-11-21T19:39:24.857Z"
 doc_updated_by: "CODER"
 description: "Implement the approved coherent Writer search-and-replace feature from pinned LibreOffice sources: real shared search engine and options, native paragraph/cursor traversal and replacement/history contracts, view-owned search state and dispatch, Find toolbar and Find and Replace dialog with generated upstream command placement and shortcuts. Preserve source semantics and explicit unsupported boundaries; never substitute DOM text search or browser RegExp for ICU contracts. Work only on writer in vite-office-writer; local upstream reading approved, no network or merges. Keep active until approved scope is verified."
 sections:

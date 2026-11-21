@@ -3,7 +3,7 @@ import { DateTime } from "../../../../tools/source/datetime/datetime";
 import type { SfxPoolItem } from "../../../../svl/source/items/poolitem";
 import { SfxStringItem } from "../../../../svl/source/items/stritem";
 import { SID_ATTR_POSTIT_ID } from "../../../../svx/inc/svxids";
-import type { WriterSlotHandler } from "../../../sdi/swriter";
+import { getWriterSlotId, type WriterSlotHandler } from "../../../sdi/swriter";
 import { WRITER_COMMAND_IDS } from "../../../uiconfig/swriter/menubar/menubar-commands";
 import { SwPaM } from "../../core/crsr/pam";
 import { SwPostItField, SwPostItFieldType } from "../../core/fields/docufld";
@@ -48,6 +48,25 @@ export function createWriterAnnotationCommands(
           range.Dispose();
         }
       },
+    },
+    {
+      id: WRITER_COMMAND_IDS.deleteAllNotes,
+      capabilityId: "CAP-0111",
+      /** Deletes all comments from the Writer text shell. @returns Whether changed. */
+      execute: () => view?.GetPostItMgr().DeleteNotes(),
+      /** Observes the slot's native editability. @returns Whether enabled. */
+      isEnabled: () => view !== undefined && !shell.GetViewOptions().IsReadonly(),
+    },
+    {
+      id: WRITER_COMMAND_IDS.deleteAuthor,
+      capabilityId: "CAP-0111",
+      /** Requires the native Author string on the text shell. @param _context - Bound text shell. @param args - Request items. @returns Whether changed. */
+      execute: (_context, args) => {
+        const author = GetDeleteAuthor(args);
+        return author === undefined ? false : view?.GetPostItMgr().DeleteNotes(author);
+      },
+      /** Observes the slot's native editability. @returns Whether enabled. */
+      isEnabled: () => view !== undefined && !shell.GetViewOptions().IsReadonly(),
     },
     ...(
       [
@@ -105,4 +124,14 @@ function getAnnotationId(args: readonly SfxPoolItem[]): number | undefined {
   );
   const value = item?.GetValue();
   return value ? Number(value) : undefined;
+}
+
+/** Reads the original DeleteAuthor string item. @param args - Request items. @returns The exact author, if supplied. */
+export function GetDeleteAuthor(args: readonly SfxPoolItem[]): string | undefined {
+  const which = getWriterSlotId(WRITER_COMMAND_IDS.deleteAuthor);
+  const item = args.find(
+    /** Tests for the slot's string argument. @param value - Request item. @returns Whether it is the author. */
+    (value): value is SfxStringItem => value instanceof SfxStringItem && value.Which() === which,
+  );
+  return item?.GetValue();
 }

@@ -485,9 +485,9 @@ export function WriterWorkbench({
   const getLocalizedCommandResource = useCallback(
     /** Resolves generated command metadata through the application locale service. @param commandUrl - Canonical command URL. @returns Localized resource. */
     (commandUrl: string) => {
-      return selectWriterCommandResource(localization, commandUrl);
+      return selectWriterCommandResource(localization, commandUrl, view);
     },
-    [localization],
+    [localization, view],
   );
 
   const getLocalizedMenuLabel = useCallback(

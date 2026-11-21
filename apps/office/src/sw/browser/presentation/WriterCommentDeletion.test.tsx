@@ -1,5 +1,5 @@
 /** @fileoverview Verifies the native annotation deletion commands and their Writer history. */
-import { act, fireEvent, render, screen, within } from "@testing-library/react";
+import { act, fireEvent, render, screen, waitFor, within } from "@testing-library/react";
 import { expect, it } from "vitest";
 import { SfxStringItem } from "../../../svl/source/items/stritem";
 import { SID_ATTR_POSTIT_ID } from "../../../svx/inc/svxids";
@@ -10,14 +10,25 @@ import { SwPostItField, SwPostItFieldType } from "../../source/core/fields/docuf
 import type { SwTextNode } from "../../source/core/txtnode/ndtxt";
 import { GetTextNodeExpandedText } from "../../source/core/txtnode/ndtxt-hints";
 import { WRITER_COMMAND_IDS } from "../../uiconfig/swriter/menubar/menubar-commands";
-import { createWriterDocumentSession } from "../composition/writer-module";
+import { getWriterSlotId } from "../../sdi/swriter";
+import {
+  createWriterBrowserSessionServices,
+  createWriterDocumentSession,
+} from "../composition/writer-module";
 import { WriterWorkbench } from "./writer-view";
 
-/** Attaches a native field and optional selection range. @param node - Source paragraph. @param name - Stable name and author. @param start - Start position. @param end - End position. @param parentName - Original thread parent. @returns Attached format. */
-function annotate(node: SwTextNode, name: string, start: number, end = start, parentName = "") {
+/** Attaches a native field and optional selection range. @param node - Source paragraph. @param name - Stable name and author. @param start - Start position. @param end - End position. @param parentName - Original thread parent. @param author - Exact author name. @returns Attached format. */
+function annotate(
+  node: SwTextNode,
+  name: string,
+  start: number,
+  end = start,
+  parentName = "",
+  author = name,
+) {
   const doc = node.GetDoc();
   const field = new SwPostItField(SwPostItFieldType.Get(doc), {
-    author: name,
+    author,
     initials: "",
     name,
     parentName,
@@ -158,6 +169,114 @@ it("can undo insertion after deletion undo recreated the inserted field", /** Ch
     );
     expect(notes(doc)).toEqual([]);
     expect(shell.GetActiveParagraph().GetText()).toBe("alpha");
+  } finally {
+    workbench.unmount();
+    view.Close();
+  }
+});
+
+it("deletes comments by author and then all comments in grouped Writer history", /** Ports the ordinary author and bulk deletion paths from uiwriter11 and deleteAllComments.py. @returns Completion. */ async () => {
+  const { view } = createWriterDocumentSession();
+  const shell = view.GetWrtShell();
+  shell.Insert("Test LibreOffice");
+  const node = shell.GetActiveParagraph();
+  const doc = shell.GetDoc();
+  annotate(node, "Ada first", 0, 4, "", "Ada");
+  annotate(node, "Grace", 5, 8);
+  annotate(node, "Ada last", node.Len(), node.Len(), "", "Ada");
+  const workbench = render(<WriterWorkbench isActive view={view} />);
+  const author = new SfxStringItem(getWriterSlotId(WRITER_COMMAND_IDS.deleteAuthor), "Ada");
+  try {
+    expect(view.Execute(WRITER_COMMAND_IDS.deleteAuthor)).toMatchObject({ value: false });
+    await act(
+      /** Filters by the original Author item in the document text shell. @returns Completion. */ async () => {
+        view.Execute(WRITER_COMMAND_IDS.deleteAuthor, [author]);
+      },
+    );
+    expect(notes(doc)).toEqual(["Grace"]);
+    expect(screen.queryByRole("dialog", { name: "Confirm delete" })).not.toBeInTheDocument();
+    act(
+      /** Restores both notes in a single undo. @returns Nothing. */ () => {
+        expect(shell.Undo()).toBe(true);
+      },
+    );
+    expect(notes(doc)).toEqual(["Ada first", "Grace", "Ada last"]);
+
+    await act(
+      /** Exercises the default immediate Delete All Notes path. @returns Completion. */ async () => {
+        view.Execute(WRITER_COMMAND_IDS.deleteAllNotes);
+      },
+    );
+    expect(notes(doc)).toEqual([]);
+    expect(GetTextNodeExpandedText(node, 0, node.Len())).toBe("Test LibreOffice");
+    act(
+      /** Restores the complete set of notes and marks. @returns Nothing. */ () => {
+        expect(shell.Undo()).toBe(true);
+      },
+    );
+    expect(notes(doc)).toEqual(["Ada first", "Grace", "Ada last"]);
+    expect(doc.GetIDocumentMarkAccess().GetAllMarks()).toHaveLength(2);
+    act(
+      /** Replays the whole delete group. @returns Nothing. */ () => {
+        expect(shell.Redo()).toBe(true);
+      },
+    );
+    expect(notes(doc)).toEqual([]);
+  } finally {
+    author.Dispose();
+    workbench.unmount();
+    view.Close();
+  }
+});
+
+it("uses the shared query for author and all-comment popup actions", /** Tests the native preference, author label, No and Yes responses, and disabling the query. @returns Completion. */ async () => {
+  let query = true;
+  const { view } = createWriterDocumentSession({
+    ...createWriterBrowserSessionServices(),
+    commentDeleteConfiguration: {
+      /** Returns the original preference override. @returns Whether to ask. */
+      GetQueryDeleteAllComments: () => query,
+      /** Stores the checkbox decision. @param value - Whether to ask. @returns Nothing. */
+      SetQueryDeleteAllComments(value) {
+        query = value;
+      },
+    },
+  });
+  const shell = view.GetWrtShell();
+  const doc = shell.GetDoc();
+  shell.Insert("Body");
+  const node = shell.GetActiveParagraph();
+  annotate(node, "Ada", 1);
+  annotate(node, "Grace", 3);
+  const workbench = render(<WriterWorkbench isActive view={view} />);
+  try {
+    const card = screen.getByRole("textbox", { name: "Comment — Ada" }).closest("article");
+    if (!card) throw new Error("Missing comment card.");
+    const menu = within(card).getByLabelText("Comment actions");
+    fireEvent.click(menu);
+    fireEvent.click(within(card).getByRole("button", { name: "Delete All Comments by Ada" }));
+    const dialog = screen.getByRole("dialog", { name: "Confirm delete" });
+    expect(dialog).toHaveAccessibleDescription(
+      "Are you sure you want to delete all comments by Ada?",
+    );
+    expect(within(dialog).getByRole("button", { name: "No" })).toHaveFocus();
+    fireEvent.click(within(dialog).getByRole("button", { name: "No" }));
+    expect(notes(doc)).toEqual(["Ada", "Grace"]);
+    expect(screen.getByLabelText("Writer document body")).toHaveFocus();
+
+    fireEvent.click(menu);
+    fireEvent.click(within(card).getByRole("button", { name: "Delete All Comments" }));
+    const all = screen.getByRole("dialog", { name: "Confirm delete" });
+    expect(all).toHaveAccessibleDescription("Are you sure you want to delete all comments?");
+    fireEvent.click(within(all).getByRole("checkbox", { name: "Do not show again" }));
+    fireEvent.click(within(all).getByRole("button", { name: "Yes" }));
+    await waitFor(
+      /** Observes the completed asynchronous deletion. @returns Nothing. */ () => {
+        expect(notes(doc)).toEqual([]);
+      },
+    );
+    expect(query).toBe(false);
+    expect(screen.queryByRole("dialog", { name: "Confirm delete" })).toBeNull();
   } finally {
     workbench.unmount();
     view.Close();

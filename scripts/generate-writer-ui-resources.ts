@@ -122,6 +122,8 @@ const specs: readonly CommandSpec[] = [
   { commandUrl: ".uno:DeleteCommentThread" },
   { commandUrl: ".uno:ReplyComment" },
   { commandUrl: ".uno:PromoteComment" },
+  { commandUrl: ".uno:DeleteAuthor" },
+  { commandUrl: ".uno:DeleteAllNotes" },
   { commandUrl: ".uno:StatusBarVisible", semantics: "check" },
   { browserControlLabel: "Paragraph style", commandUrl: ".uno:StyleApply", semantics: "radio" },
   { commandUrl: ".uno:ResetAttributes" },
@@ -178,6 +180,8 @@ const commandAliases = {
   deleteCommentThread: ".uno:DeleteCommentThread",
   replyComment: ".uno:ReplyComment",
   promoteComment: ".uno:PromoteComment",
+  deleteAuthor: ".uno:DeleteAuthor",
+  deleteAllNotes: ".uno:DeleteAllNotes",
   insertBookmark: ".uno:InsertBookmark",
   insertBreak: ".uno:InsertBreak",
   insertPageBreak: ".uno:InsertPagebreak",
@@ -329,6 +333,8 @@ const commandCapabilities: Readonly<Record<string, `CAP-${string}`>> = {
   ".uno:DeleteCommentThread": "CAP-0111",
   ".uno:ReplyComment": "CAP-0111",
   ".uno:PromoteComment": "CAP-0111",
+  ".uno:DeleteAuthor": "CAP-0111",
+  ".uno:DeleteAllNotes": "CAP-0111",
   ".uno:StartPara": "CAP-0112",
   ".uno:StatusBarVisible": "CAP-0104",
   ".uno:Underline": "CAP-0109",
@@ -384,6 +390,8 @@ const inventoryAliasNames = [
   "deleteCommentThread",
   "replyComment",
   "promoteComment",
+  "deleteAuthor",
+  "deleteAllNotes",
   "insertBookmark",
   "insertBreak",
   "insertPageBreak",
@@ -708,7 +716,7 @@ function findArgumentSchema(commandUrl: string, catalogs: readonly string[]): re
   for (const catalog of catalogs) {
     const match = catalog.match(
       new RegExp(
-        `^\\S+\\s+${escapeRegExp(commandName)}\\s+[A-Z][A-Z0-9_]+\\s*\\n(?:\\(([^\\n]*)\\))?`,
+        `^\\S+\\s+${escapeRegExp(commandName)}\\s+[A-Z][A-Z0-9_]+\\s*(?:\\(([^\\n]*)\\))?`,
         "m",
       ),
     );

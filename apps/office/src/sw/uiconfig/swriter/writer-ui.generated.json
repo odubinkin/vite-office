@@ -30,6 +30,8 @@
     "deleteCommentThread": ".uno:DeleteCommentThread",
     "replyComment": ".uno:ReplyComment",
     "promoteComment": ".uno:PromoteComment",
+    "deleteAuthor": ".uno:DeleteAuthor",
+    "deleteAllNotes": ".uno:DeleteAllNotes",
     "insertBookmark": ".uno:InsertBookmark",
     "insertBreak": ".uno:InsertBreak",
     "insertPageBreak": ".uno:InsertPagebreak",
@@ -137,6 +139,8 @@
     { "capabilityId": "CAP-0111", "commandUrl": ".uno:DeleteCommentThread" },
     { "capabilityId": "CAP-0111", "commandUrl": ".uno:ReplyComment" },
     { "capabilityId": "CAP-0111", "commandUrl": ".uno:PromoteComment" },
+    { "capabilityId": "CAP-0111", "commandUrl": ".uno:DeleteAuthor" },
+    { "capabilityId": "CAP-0111", "commandUrl": ".uno:DeleteAllNotes" },
     { "capabilityId": "CAP-0113", "commandUrl": ".uno:InsertBookmark" },
     { "capabilityId": "CAP-0112", "commandUrl": ".uno:InsertBreak" },
     { "capabilityId": "CAP-0112", "commandUrl": ".uno:InsertPagebreak" },
@@ -1330,6 +1334,30 @@
       "shortcuts": [],
       "slotId": 22512
     },
+    ".uno:DeleteAuthor": {
+      "browserOwned": false,
+      "argumentSchema": ["Author:SfxStringItem"],
+      "capabilityId": "CAP-0111",
+      "controlLabel": "Delete All Comments by This Author",
+      "label": "Delete All Comments by This Author",
+      "placements": ["sw/uiconfig/swriter/menubar/menubar.xml"],
+      "semantics": "action",
+      "showsDialog": false,
+      "shortcuts": [],
+      "slotId": 22501
+    },
+    ".uno:DeleteAllNotes": {
+      "browserOwned": false,
+      "argumentSchema": [],
+      "capabilityId": "CAP-0111",
+      "controlLabel": "Delete All Comments",
+      "label": "Delete All Comments",
+      "placements": ["sw/uiconfig/swriter/menubar/menubar.xml"],
+      "semantics": "action",
+      "showsDialog": false,
+      "shortcuts": [],
+      "slotId": 22502
+    },
     ".uno:StatusBarVisible": {
       "browserOwned": false,
       "argumentSchema": [],
@@ -1412,7 +1440,7 @@
     },
     ".uno:FormatPaintbrush": {
       "browserOwned": false,
-      "argumentSchema": [],
+      "argumentSchema": ["PersistentCopy:SfxBoolItem"],
       "controlLabel": "Clone Formatting",
       "label": "Clone Formatting",
       "iconName": "lc_formatpaintbrush.svg",
@@ -2231,6 +2259,16 @@
     },
     {
       "classification": "supported-upstream",
+      "commandUrl": ".uno:DeleteAuthor",
+      "sources": ["sw/uiconfig/swriter/menubar/menubar.xml"]
+    },
+    {
+      "classification": "supported-upstream",
+      "commandUrl": ".uno:DeleteAllNotes",
+      "sources": ["sw/uiconfig/swriter/menubar/menubar.xml"]
+    },
+    {
+      "classification": "supported-upstream",
       "commandUrl": ".uno:StatusBarVisible",
       "sources": ["sw/uiconfig/swriter/menubar/menubar.xml"]
     },
@@ -3003,22 +3041,6 @@
       "context": [".uno:EditMenu"],
       "entryKind": "menu",
       "sourceUrl": ".uno:ChangesMenu",
-      "reason": "outside-p1-supported-command-slice",
-      "sourcePath": "sw/uiconfig/swriter/menubar/menubar.xml"
-    },
-    {
-      "classification": "X",
-      "context": [".uno:EditMenu", ".uno:EditCommentsMenu"],
-      "entryKind": "command",
-      "sourceUrl": ".uno:DeleteAuthor",
-      "reason": "outside-p1-supported-command-slice",
-      "sourcePath": "sw/uiconfig/swriter/menubar/menubar.xml"
-    },
-    {
-      "classification": "X",
-      "context": [".uno:EditMenu", ".uno:EditCommentsMenu"],
-      "entryKind": "command",
-      "sourceUrl": ".uno:DeleteAllNotes",
       "reason": "outside-p1-supported-command-slice",
       "sourcePath": "sw/uiconfig/swriter/menubar/menubar.xml"
     },
@@ -7901,7 +7923,9 @@
               { "commandUrl": ".uno:ResolveCommentThread", "kind": "command", "visible": true },
               { "commandUrl": ".uno:PromoteComment", "kind": "command", "visible": true },
               { "commandUrl": ".uno:DeleteComment", "kind": "command", "visible": true },
-              { "commandUrl": ".uno:DeleteCommentThread", "kind": "command", "visible": true }
+              { "commandUrl": ".uno:DeleteCommentThread", "kind": "command", "visible": true },
+              { "commandUrl": ".uno:DeleteAuthor", "kind": "command", "visible": true },
+              { "commandUrl": ".uno:DeleteAllNotes", "kind": "command", "visible": true }
             ],
             "kind": "menu",
             "label": "Comment"
@@ -8723,18 +8747,6 @@
         "context": [".uno:EditMenu"],
         "entryKind": "menu",
         "sourceUrl": ".uno:ChangesMenu"
-      },
-      {
-        "classification": "X",
-        "context": [".uno:EditMenu", ".uno:EditCommentsMenu"],
-        "entryKind": "command",
-        "sourceUrl": ".uno:DeleteAuthor"
-      },
-      {
-        "classification": "X",
-        "context": [".uno:EditMenu", ".uno:EditCommentsMenu"],
-        "entryKind": "command",
-        "sourceUrl": ".uno:DeleteAllNotes"
       },
       {
         "classification": "X",

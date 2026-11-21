@@ -152,4 +152,23 @@ test("Writer inserts a comment, finds its text and undoes note formatting", /** 
   await expect(reply.locator("p").last()).toHaveText("Browser reply");
   await replyActions.click();
   await expect(promote).toHaveCount(0);
+
+  await page.evaluate(
+    /** Enables the original shared Writer setting for the browser query. @returns Nothing. */ () =>
+      localStorage.setItem("org.openoffice.Office.Common/Misc/QueryDeleteAllComments", "true"),
+  );
+  await page.getByRole("button", { name: "Delete All Comments", exact: true }).click();
+  const deleteQuery = page.getByRole("dialog", { name: "Confirm delete" });
+  await expect(deleteQuery.getByRole("button", { name: "No", exact: true })).toBeFocused();
+  await page.keyboard.press("Escape");
+  await expect(deleteQuery).toHaveCount(0);
+  await expect(comment).toHaveCount(2);
+
+  await replyActions.click();
+  await page.getByRole("button", { name: "Delete All Comments", exact: true }).click();
+  await deleteQuery.getByRole("button", { name: "Yes", exact: true }).click();
+  await expect(comment).toHaveCount(0);
+  await expect(page.getByLabel("Writer document body", { exact: true })).toBeFocused();
+  await undo.click();
+  await expect(comment).toHaveCount(2);
 });

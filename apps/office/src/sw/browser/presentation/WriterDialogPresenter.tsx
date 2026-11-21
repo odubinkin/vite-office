@@ -1,4 +1,6 @@
 /** @fileoverview Presents actual shell-owned Writer dialog requests without adding another dialog model or controller. */
+import { useId, useLayoutEffect, useRef } from "react";
+import { CircleHelp } from "lucide-react";
 import { WriterDialogHeader } from "./WriterDialogHeader";
 import { useBrowserLocalization } from "../../../framework/browser/localization/browser-localization-context";
 import { NewStyleDialog } from "../../../sfx2/browser/presentation/NewStyleDialog";
@@ -134,6 +136,19 @@ export function WriterDialogPresenter({
           }
         />
       )}
+      {request?.request.kind !== "delete-comments" ? null : (
+        <WriterDeleteCommentsQuery
+          key={request.id}
+          author={request.request.author}
+          onAnswer={
+            /** Returns both the native query response and checkbox state. @param confirmed - Whether Yes was chosen. @param dontShowAgain - Common preference override. @returns Nothing. */
+            (confirmed, dontShowAgain) => {
+              controller.Complete(request.id, { confirmed, dontShowAgain });
+              focusDocument();
+            }
+          }
+        />
+      )}
       {request?.request.kind !== "page-style" ? null : (
         <WriterPageStyleDialog
           key={request.id}
@@ -156,5 +171,103 @@ export function WriterDialogPresenter({
         />
       )}
     </>
+  );
+}
+
+/** Presents the pinned CUI query structure for Writer comment deletion. @param props - Author filter and answer receiver. @returns Modal question. */
+function WriterDeleteCommentsQuery({
+  author,
+  onAnswer,
+}: Readonly<{
+  author: string | undefined;
+  onAnswer: (confirmed: boolean, dontShowAgain: boolean) => void;
+}>): React.JSX.Element {
+  const localization = useBrowserLocalization();
+  const titleId = useId();
+  const descriptionId = useId();
+  const dialog = useRef<HTMLDialogElement>(null);
+  const no = useRef<HTMLButtonElement>(null);
+  const dontShow = useRef<HTMLInputElement>(null);
+  const title = localization.GetText("writer.comments.confirmDeleteTitle", "Confirm delete");
+  const description =
+    author === undefined
+      ? localization.GetText(
+          "writer.comments.confirmDeleteAll",
+          "Are you sure you want to delete all comments?",
+        )
+      : localization
+          .GetText(
+            "writer.comments.confirmDeleteAuthor",
+            "Are you sure you want to delete all comments by %AUTHOR?",
+          )
+          .replace(
+            "%AUTHOR",
+            /** Substitutes the author name literally. @returns Annotation author. */ () => author,
+          );
+  useLayoutEffect(
+    /** Opens the platform modal and places focus on No. @returns Nothing. */ () => {
+      const element = dialog.current;
+      if (!element) return;
+      if (typeof element.showModal === "function") element.showModal();
+      else element.open = true;
+      no.current?.focus();
+    },
+    [],
+  );
+  /** Closes the native modal before returning the selected answer. @param confirmed - Whether Yes was chosen. @returns Nothing. */
+  function answer(confirmed: boolean): void {
+    const element = dialog.current;
+    if (element?.open) {
+      if (typeof element.close === "function") element.close();
+      else element.open = false;
+    }
+    onAnswer(confirmed, dontShow.current?.checked === true);
+  }
+  return (
+    <dialog
+      ref={dialog}
+      aria-labelledby={titleId}
+      aria-describedby={descriptionId}
+      className="m-auto w-[calc(100%-2rem)] max-w-md overflow-hidden rounded-2xl border border-slate-200 bg-white p-0 shadow-2xl backdrop:bg-slate-950/40"
+      onCancel={
+        /** Routes Escape as a negative answer. @param event - Native cancel event. @returns Nothing. */
+        (event) => {
+          event.preventDefault();
+          answer(false);
+        }
+      }
+    >
+      <div className="writer-dialog-content grid-cols-[auto_1fr] gap-3">
+        <CircleHelp className="mt-1 shrink-0 text-slate-600" aria-hidden="true" />
+        <div>
+          <h2 id={titleId} className="font-semibold">
+            {title}
+          </h2>
+          <p id={descriptionId} className="mt-2 text-sm">
+            {description}
+          </p>
+          <label className="mt-4 flex items-center gap-2 text-sm">
+            <input type="checkbox" ref={dontShow} />
+            {localization.GetText("cui.query-dialog.dont-show-again", "Do not show again")}
+          </label>
+        </div>
+      </div>
+      <div className="writer-dialog-actions">
+        <button
+          type="button"
+          ref={no}
+          onClick={/** Declines deletion. @returns Nothing. */ () => answer(false)}
+        >
+          {localization.GetText("cui.query-dialog.no", "No")}
+        </button>
+        <button
+          type="button"
+          className="writer-dialog-danger"
+          onClick={/** Accepts deletion. @returns Nothing. */ () => answer(true)}
+        >
+          {localization.GetText("cui.query-dialog.yes", "Yes")}
+        </button>
+      </div>
+    </dialog>
   );
 }

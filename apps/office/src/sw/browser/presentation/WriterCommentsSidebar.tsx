@@ -7,6 +7,7 @@ import { SwPosition } from "../../source/core/crsr/pam";
 import type { SwView } from "../../source/uibase/uiview/view";
 import { useBrowserLocalization } from "../../../framework/browser/localization/browser-localization-context";
 import { useToolboxPopup } from "../../../svx/browser/tbxctrls/use-toolbox-popup";
+import { writerDeleteAuthorLabel } from "./writer-command-presentation";
 import { WriterCommentEditor } from "./writer-comment-editor";
 import { WRITER_COMMAND_IDS } from "../../uiconfig/swriter/menubar/menubar-commands";
 
@@ -227,6 +228,14 @@ function WriterCommentCard({
                     [
                       WRITER_COMMAND_IDS.deleteCommentThread,
                       localization.GetText("writer.comments.deleteThread", "Delete Comment Thread"),
+                    ],
+                    [
+                      WRITER_COMMAND_IDS.deleteAuthor,
+                      writerDeleteAuthorLabel(localization, data.author),
+                    ],
+                    [
+                      WRITER_COMMAND_IDS.deleteAllNotes,
+                      localization.GetText("writer.comments.deleteAll", "Delete All Comments"),
                     ],
                   ] as const
                 ).map(
