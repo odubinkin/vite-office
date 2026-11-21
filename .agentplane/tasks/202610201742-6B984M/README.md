@@ -4,7 +4,7 @@ title: "Implement Writer search and replace core and browser UI"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 90
+revision: 91
 origin:
   system: "manual"
 depends_on:
@@ -265,6 +265,9 @@ comments:
   -
     author: "CODER"
     body: "Verified intermediate Writer annotation editing checkpoint. The existing sidebar window now presents native EditEngine paragraphs and character attributes in a browser editing host. Browser selection maps to native note positions while the document body keeps its separate shell selection. Beforeinput, clipboard text, composition, paragraph and soft line breaks, selected bold/italic/underline and undo use Writer history and the same field objects as search and ODT. Same-text formatting updates retain the selection, corresponding to SwAnnotationWin::SetPostItText. The primary Vitest run passed 33 cases and timed out on one Find Bar history case under load. The unchanged timed-out case passed in isolation, and all seven sidebar cases passed on final sources. Two focused browser tests passed on the final build in the already installed Chrome channel after the default Chromium executable was unavailable. Writer resources passed 2 cases. Production single-threaded build with type checking, dependencies, source tree and provenance, scoped ESLint and Prettier, doctor, routing and diff checks passed. Repo-wide JSDoc and file size report existing findings outside these changes. Full annotation toolbar/slot dispatch, hyperlinks, lists and complete formatting parity remain pending. No task closure or full-run count increment."
+  -
+    author: "CODER"
+    body: "Verified intermediate Writer annotation shell checkpoint. The active note selects SwAnnotationShell in the actual Sfx view stack based on the pinned view.cxx PostIt branch. Generated Writer formatting, Select All, refocus and history command IDs now act on the native note selection, with mixed and checked state, script-set font/height/weight/posture handling, underline, strikeout and paragraph alignment. Note input uses the same binding as toolbar controls and the body resumes its prior shell after focus returns. Browser paint follows EditEngine script segments. The affected Writer runs passed 45 and 18 tests in disjoint files. Two Writer resource tests and both production writer-search Chrome scenarios passed, including toolbar Bold and Undo in the note. Production single-threaded build, dependencies, source tree and provenance, scoped lint/format, routing, doctor and diff checks passed. Repo-wide JSDoc and file size report baseline issues outside the changed paths. The represented annotation slots do not cover the complete native annotation clipboard, list, hyperlink, color and dialog surface. The task remains open and the ten-task cadence is unchanged."
 events:
   -
     type: "status"
@@ -648,8 +651,13 @@ events:
     at: "2026-11-21T18:12:02.055Z"
     author: "CODER"
     body: "Verified intermediate Writer annotation editing checkpoint. The existing sidebar window now presents native EditEngine paragraphs and character attributes in a browser editing host. Browser selection maps to native note positions while the document body keeps its separate shell selection. Beforeinput, clipboard text, composition, paragraph and soft line breaks, selected bold/italic/underline and undo use Writer history and the same field objects as search and ODT. Same-text formatting updates retain the selection, corresponding to SwAnnotationWin::SetPostItText. The primary Vitest run passed 33 cases and timed out on one Find Bar history case under load. The unchanged timed-out case passed in isolation, and all seven sidebar cases passed on final sources. Two focused browser tests passed on the final build in the already installed Chrome channel after the default Chromium executable was unavailable. Writer resources passed 2 cases. Production single-threaded build with type checking, dependencies, source tree and provenance, scoped ESLint and Prettier, doctor, routing and diff checks passed. Repo-wide JSDoc and file size report existing findings outside these changes. Full annotation toolbar/slot dispatch, hyperlinks, lists and complete formatting parity remain pending. No task closure or full-run count increment."
+  -
+    type: "comment"
+    at: "2026-11-21T18:22:41.314Z"
+    author: "CODER"
+    body: "Verified intermediate Writer annotation shell checkpoint. The active note selects SwAnnotationShell in the actual Sfx view stack based on the pinned view.cxx PostIt branch. Generated Writer formatting, Select All, refocus and history command IDs now act on the native note selection, with mixed and checked state, script-set font/height/weight/posture handling, underline, strikeout and paragraph alignment. Note input uses the same binding as toolbar controls and the body resumes its prior shell after focus returns. Browser paint follows EditEngine script segments. The affected Writer runs passed 45 and 18 tests in disjoint files. Two Writer resource tests and both production writer-search Chrome scenarios passed, including toolbar Bold and Undo in the note. Production single-threaded build, dependencies, source tree and provenance, scoped lint/format, routing, doctor and diff checks passed. Repo-wide JSDoc and file size report baseline issues outside the changed paths. The represented annotation slots do not cover the complete native annotation clipboard, list, hyperlink, color and dialog surface. The task remains open and the ten-task cadence is unchanged."
 doc_version: 3
-doc_updated_at: "2026-11-21T18:12:02.055Z"
+doc_updated_at: "2026-11-21T18:22:41.314Z"
 doc_updated_by: "CODER"
 description: "Implement the approved coherent Writer search-and-replace feature from pinned LibreOffice sources: real shared search engine and options, native paragraph/cursor traversal and replacement/history contracts, view-owned search state and dispatch, Find toolbar and Find and Replace dialog with generated upstream command placement and shortcuts. Preserve source semantics and explicit unsupported boundaries; never substitute DOM text search or browser RegExp for ICU contracts. Work only on writer in vite-office-writer; local upstream reading approved, no network or merges. Keep active until approved scope is verified."
 sections:

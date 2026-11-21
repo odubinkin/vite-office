@@ -2,7 +2,11 @@
 import { readFileSync } from "node:fs";
 import { act, fireEvent, render, screen, within } from "@testing-library/react";
 import { expect, it } from "vitest";
-import { EE_CHAR_WEIGHT } from "../../../editeng/inc/eeitem";
+import {
+  EE_CHAR_FONTHEIGHT_CJK,
+  EE_CHAR_WEIGHT,
+  EE_CHAR_WEIGHT_CJK,
+} from "../../../editeng/inc/eeitem";
 import { SvxWeightItem } from "../../../editeng/inc/wghtitem";
 import { unicode } from "../../../i18nlangtag/source/isolang/isolang.tables";
 import { FontWeight } from "../../../tools/inc/fontenum";
@@ -421,5 +425,99 @@ it("paints native note formatting and records formatting and line breaks in Writ
   } finally {
     workbench.unmount();
     session.view.Close();
+  }
+});
+
+it("routes toolbar formatting and state through the active annotation shell", /** Uses generated commands against the focused note and returns to the body without copying formatting. @returns Nothing. */ () => {
+  const { session, shell, format } = openAnnotatedDocument("one two");
+  const view = session.view;
+  const workbench = render(<WriterWorkbench isActive view={view} />);
+  try {
+    const comment = screen.getByRole<HTMLDivElement>("textbox", { name: "Comment — Ada" });
+    const bold = within(
+      screen.getByRole("toolbar", { name: "Writer formatting toolbar" }),
+    ).getByRole("button", { name: "Bold" });
+    const command = WRITER_COMMAND_IDS.bold;
+    const bodyState = view.QueryState(command);
+    act(
+      /** Selects the first note word. @returns Nothing. */ () => {
+        comment.focus();
+        selectNote(comment, 0, 3);
+      },
+    );
+    expect(view.QueryState(command)).toMatchObject({ enabled: true, checked: false, mixed: false });
+    act(
+      /** Moves focus to the actual toolbar, preserving the annotation selection. @returns Nothing. */ () =>
+        bold.focus(),
+    );
+    fireEvent.click(bold);
+    expect(bold).toHaveAttribute("aria-pressed", "true");
+    expect(within(comment).getByText("one").style.fontWeight).toBe("bold");
+    expect(shell.GetTextShell().GetCharacterFormatState("bold")).toBe("off");
+    act(
+      /** Selects both differently formatted runs. @returns Nothing. */ () => {
+        comment.focus();
+        selectNote(comment, 0, 7);
+      },
+    );
+    expect(view.QueryState(command)).toMatchObject({ checked: false, mixed: true });
+    fireEvent.click(bold);
+    expect(view.QueryState(command)).toMatchObject({ checked: true, mixed: false });
+    act(
+      /** Selects centered alignment through its generated Writer slot. @returns Nothing. */ () => {
+        expect(view.Execute(WRITER_COMMAND_IDS.alignCenter).status).toBe("executed");
+      },
+    );
+    expect(comment.querySelector("p")?.style.textAlign).toBe("center");
+    act(
+      /** Undoes the note paragraph change through frame dispatch. @returns Nothing. */ () => {
+        expect(view.Execute(WRITER_COMMAND_IDS.undo).status).toBe("executed");
+      },
+    );
+    expect(comment.querySelector("p")?.style.textAlign).not.toBe("center");
+    expect(format.GetField().GetPar2()).toBe("one two");
+    fireEvent.keyDown(comment, { key: "Escape" });
+    expect(view.QueryState(command)).toEqual(bodyState);
+  } finally {
+    workbench.unmount();
+    view.Close();
+  }
+});
+
+it("applies annotation font sizes and weights to the selected script", /** Verifies script-aware annotation command state, native items and browser paint. @returns Nothing. */ () => {
+  const { session, format } = openAnnotatedDocument("abc漢字");
+  const view = session.view;
+  const workbench = render(<WriterWorkbench isActive view={view} />);
+  try {
+    const note = screen.getByRole<HTMLDivElement>("textbox", { name: "Comment — Ada" });
+    act(
+      /** Selects only the Asian text in the annotation. @returns Nothing. */ () => {
+        note.focus();
+        selectNote(note, 3, 5);
+        expect(view.Execute(WRITER_COMMAND_IDS.bold).status).toBe("executed");
+        expect(view.Execute(WRITER_COMMAND_IDS.fontHeight, { fontSizePt: 18 }).status).toBe(
+          "executed",
+        );
+      },
+    );
+    expect(view.QueryState(WRITER_COMMAND_IDS.bold)).toMatchObject({ checked: true });
+    expect(view.QueryState(WRITER_COMMAND_IDS.fontHeight).value).toBe(18);
+    const span = within(note).getByText("漢字");
+    expect(span.style.fontWeight).toBe("bold");
+    expect(span.style.fontSize).toBe("18pt");
+    const record = format.GetField().GetTextObject();
+    if (!record) throw new Error("The native note format was not published.");
+    const attributes: import("../../../editeng/inc/editdata").EECharAttrib[] = [];
+    record.GetCharAttribs(0, attributes);
+    expect(
+      attributes.map(
+        /** Reads native Which ids. @param item - Native attribute. @returns Which id. */ (item) =>
+          item.pAttr?.Which(),
+      ),
+    ).toEqual(expect.arrayContaining([EE_CHAR_WEIGHT_CJK, EE_CHAR_FONTHEIGHT_CJK]));
+    expect(within(note).getByText("abc").style.fontWeight).toBe("");
+  } finally {
+    workbench.unmount();
+    view.Close();
   }
 });

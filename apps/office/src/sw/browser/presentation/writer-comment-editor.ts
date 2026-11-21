@@ -1,23 +1,28 @@
 /** @fileoverview Adapts the browser rich comment surface to the native Writer annotation EditEngine. */
 import type { SearchEditView } from "../../../editeng/source/editeng/impedit4.search";
 import { SvxAdjust, SvxAdjustItem } from "../../../editeng/inc/adjustitem";
-import {
-  EE_CHAR_ITALIC,
-  EE_CHAR_UNDERLINE,
-  EE_CHAR_WEIGHT,
-  EE_FEATURE_LINEBR,
-  EE_PARA_JUST,
-  EE_PARA_ULSPACE,
-} from "../../../editeng/inc/eeitem";
-import { SvxPostureItem } from "../../../editeng/inc/postitem";
-import { SvxWeightItem } from "../../../editeng/inc/wghtitem";
-import { SvxUnderlineItem } from "../../../editeng/source/items/textitem";
+import { EE_FEATURE_LINEBR, EE_PARA_JUST, EE_PARA_ULSPACE } from "../../../editeng/inc/eeitem";
 import { SvxULSpaceItem } from "../../../editeng/inc/ulspitem";
 import type { ContentNode } from "../../../editeng/source/editeng/ContentNode";
 import { SfxItemSet } from "../../../svl/source/items/itemset";
 import { SfxVoidItem } from "../../../svl/source/items/voiditem";
-import { FontItalic, FontLineStyle, FontWeight } from "../../../tools/inc/fontenum";
-import { WRITER_CHARACTER_WHICH_RANGES } from "../../inc/hintids";
+import { FontLineStyle } from "../../../tools/inc/fontenum";
+import { ASIAN, COMPLEX } from "../../../offapi/com/sun/star/i18n/ScriptType";
+import {
+  RES_CHRATR_CJK_FONT,
+  RES_CHRATR_CJK_FONTSIZE,
+  RES_CHRATR_CJK_POSTURE,
+  RES_CHRATR_CJK_WEIGHT,
+  RES_CHRATR_CTL_FONT,
+  RES_CHRATR_CTL_FONTSIZE,
+  RES_CHRATR_CTL_POSTURE,
+  RES_CHRATR_CTL_WEIGHT,
+  RES_CHRATR_FONT,
+  RES_CHRATR_FONTSIZE,
+  RES_CHRATR_POSTURE,
+  RES_CHRATR_WEIGHT,
+  WRITER_CHARACTER_WHICH_RANGES,
+} from "../../inc/hintids";
 import { projectWriterCharacterAttributes } from "../../source/core/txtnode/txatbase";
 import { browserTextLineStyle } from "./writer-view-projection";
 import { browserFontFamily } from "../editor/writer-font-family";
@@ -30,7 +35,8 @@ import { text, unicode } from "../../../i18nlangtag/source/isolang/isolang.table
 import { Rectangle } from "../../../tools/inc/gen";
 import type { SwPostItField, SwPostItFieldType } from "../../source/core/fields/docufld";
 import { putAnnotationCharacterItems, SwTextAPIEditSource } from "../../source/core/fields/textapi";
-import type { SwWrtShell } from "../../source/uibase/wrtsh/wrtsh1";
+import type { SwView } from "../../source/uibase/uiview/view";
+import { WRITER_COMMAND_IDS as CMD } from "../../uiconfig/swriter/menubar/menubar-commands";
 import { SwUndo } from "../../source/core/undo/undobj";
 
 /** Writer model undo for the value committed by its comment editor. */
@@ -104,11 +110,12 @@ export class WriterCommentEditor extends SwTextAPIEditSource {
   private storedObject: EditTextObject | undefined;
   private compositionSelection: EditSelection | undefined;
 
-  /** Connects the browser editing host to the native annotation owner. @param field - Actual field. @param input - Mounted editable host. @param shell - Writer document history owner. @returns Connected editor. */
+  /** Connects the browser editing host to the native annotation owner. @param field - Actual field. @param input - Mounted editable host. @param view - Active Writer view. @param selectionChanged - Selection invalidation callback. @returns Connected editor. */
   constructor(
     private readonly field: SwPostItField,
     private readonly input: HTMLDivElement,
-    private readonly shell: SwWrtShell,
+    private readonly view: SwView,
+    private readonly selectionChanged: () => void,
   ) {
     super();
     this.SyncContent();
@@ -199,7 +206,9 @@ export class WriterCommentEditor extends SwTextAPIEditSource {
 
   /** Updates the original editor selection. @param value - Selection. @returns Nothing. */
   SetEditSelection(value: EditSelection): void {
+    if (this.selection.equals(value)) return;
     this.selection.assign(value);
+    this.selectionChanged();
   }
 
   /** The platform paints the selected DOM text. @returns Nothing. */
@@ -218,10 +227,19 @@ export class WriterCommentEditor extends SwTextAPIEditSource {
     event.preventDefault();
     event.stopPropagation();
     if (this.input.getAttribute("aria-readonly") === "true") return;
-    if (key === "b") this.ToggleFormat(EE_CHAR_WEIGHT);
-    else if (key === "i") this.ToggleFormat(EE_CHAR_ITALIC);
-    else if (key === "u") this.ToggleFormat(EE_CHAR_UNDERLINE);
-    else this.RestoreHistory(key === "y" || event.shiftKey);
+    this.ReadSelection();
+    const command =
+      key === "b"
+        ? CMD.bold
+        : key === "i"
+          ? CMD.italic
+          : key === "u"
+            ? CMD.underline
+            : key === "y" || event.shiftKey
+              ? CMD.redo
+              : CMD.undo;
+    this.view.Execute(command);
+    this.SyncContent();
   }
 
   /** Releases the registered browser events and actual editor. @returns Nothing. */
@@ -307,17 +325,18 @@ export class WriterCommentEditor extends SwTextAPIEditSource {
           if (this.selection.HasRange()) this.InsertString("");
           break;
         case "formatBold":
-          this.ToggleFormat(EE_CHAR_WEIGHT);
+          this.view.Execute(CMD.bold);
           break;
         case "formatItalic":
-          this.ToggleFormat(EE_CHAR_ITALIC);
+          this.view.Execute(CMD.italic);
           break;
         case "formatUnderline":
-          this.ToggleFormat(EE_CHAR_UNDERLINE);
+          this.view.Execute(CMD.underline);
           break;
         case "historyUndo":
         case "historyRedo":
-          this.RestoreHistory(event.inputType === "historyRedo");
+          this.view.Execute(event.inputType === "historyRedo" ? CMD.redo : CMD.undo);
+          this.SyncContent();
           break;
       }
     };
@@ -333,13 +352,6 @@ export class WriterCommentEditor extends SwTextAPIEditSource {
       this.ReadSelection();
       this.InsertString(value);
     };
-
-  /** Sends document undo or redo and refreshes the note even without a React render. @param redo - Whether to redo. @returns Nothing. */
-  private RestoreHistory(redo: boolean): void {
-    if (redo) this.shell.Redo();
-    else this.shell.Undo();
-    this.SyncContent();
-  }
 
   /** Deletes the selection or one adjacent character or word using the platform boundary. @param backward - Delete toward the start. @param word - Request a word boundary when the browser provides no range. @returns Nothing. */
   private Delete(backward: boolean, word: boolean): void {
@@ -392,45 +404,20 @@ export class WriterCommentEditor extends SwTextAPIEditSource {
     this.CommitEdit(before, beforeObject);
   }
 
-  /** Applies an EditEngine character item to the current note selection. @param which - Native formatting item identity. @returns Nothing. */
-  private ToggleFormat(
-    which: typeof EE_CHAR_ITALIC | typeof EE_CHAR_UNDERLINE | typeof EE_CHAR_WEIGHT,
-  ): void {
-    this.ReadSelection();
-    const start = this.selection.Min();
-    const node = start.GetNode();
-    if (!node) return;
-    const source = node.GetContentAttribs().GetItems();
-    const old =
-      node.GetCharAttribs().FindAttrib(which, start.GetIndex())?.GetItem() ?? source.Get(which);
-    const item =
-      old instanceof SvxWeightItem
-        ? new SvxWeightItem(
-            old.GetBoolValue() ? FontWeight.WEIGHT_NORMAL : FontWeight.WEIGHT_BOLD,
-            which,
-          )
-        : old instanceof SvxPostureItem
-          ? new SvxPostureItem(
-              old.GetBoolValue() ? FontItalic.ITALIC_NONE : FontItalic.ITALIC_NORMAL,
-              which,
-            )
-          : new SvxUnderlineItem(
-              old instanceof SvxUnderlineItem && old.GetBoolValue()
-                ? FontLineStyle.LINESTYLE_NONE
-                : FontLineStyle.LINESTYLE_SINGLE,
-              which,
-            );
+  /** Applies prepared native attributes through the annotation's history owner. @param items - Native character or paragraph items. @returns Whether changed. */
+  ApplyAttributes(items: SfxItemSet): boolean {
     const before = this.field.GetPar2();
     const beforeObject = this.field.GetTextObject()?.Clone();
-    const items = new SfxItemSet(this.GetEmptyItemSet());
-    try {
-      items.Put(item, true);
-      const range = this.getImpl().CreateESel(this.selection);
-      this.QuickSetAttribs(items, range);
-    } finally {
-      items.Dispose();
-    }
+    this.QuickSetAttribs(items, this.getImpl().CreateESel(this.selection));
     this.CommitEdit(before, beforeObject);
+    return true;
+  }
+
+  /** Selects the entire actual annotation. @returns Nothing. */
+  SelectAll(): void {
+    const doc = this.getImpl().GetEditDoc();
+    this.SetEditSelection(new EditSelection(doc.GetStartPaM(), doc.GetEndPaM()));
+    this.MakeVisible();
   }
 
   /** Commits an engine change to document history and refreshes the projection. @param before - Previous field text. @param beforeObject - Previous owned snapshot. @returns Nothing. */
@@ -476,7 +463,7 @@ export class WriterCommentEditor extends SwTextAPIEditSource {
     if (!first || !last) return false;
     const selection = new EditSelection(first, last);
     selection.Adjust(this.getImpl().GetEditDoc());
-    this.selection.assign(selection);
+    this.SetEditSelection(selection);
     return true;
   }
 
@@ -547,14 +534,14 @@ export class WriterCommentEditor extends SwTextAPIEditSource {
       const node = doc.GetObject(index);
       if (!node) continue;
       const paragraph = document.createElement("p");
-      this.RenderParagraph(node, paragraph);
+      this.RenderParagraph(index, node, paragraph);
       layer.append(paragraph);
     }
     this.input.replaceChildren(layer);
   }
 
-  /** Paints one model paragraph. @param node - Native paragraph. @param paragraph - Browser projection. @returns Nothing. */
-  private RenderParagraph(node: ContentNode, paragraph: HTMLParagraphElement): void {
+  /** Paints one model paragraph. @param index - EditEngine paragraph index. @param node - Native paragraph. @param paragraph - Browser projection. @returns Nothing. */
+  private RenderParagraph(index: number, node: ContentNode, paragraph: HTMLParagraphElement): void {
     const source = node.GetContentAttribs().GetItems();
     const align = source.GetItemIfSet(EE_PARA_JUST, true);
     if (align instanceof SvxAdjustItem)
@@ -575,6 +562,13 @@ export class WriterCommentEditor extends SwTextAPIEditSource {
         paragraph.style.fontSize = `${base.fontSizeTwips / 20}pt`;
       const attributes = node.GetCharAttribs().GetAttribs();
       const boundaries = new Set([0, node.Len()]);
+      const engine = this.getImpl();
+      engine.InitScriptTypes(index);
+      const scripts = engine.GetParaPortions().SafeGetObject(index)?.getScriptTypePosInfos() ?? [];
+      for (const script of scripts) {
+        boundaries.add(script.nStartPos);
+        boundaries.add(script.nEndPos);
+      }
       for (const attribute of attributes) {
         boundaries.add(attribute.GetStart());
         boundaries.add(attribute.GetEnd());
@@ -598,7 +592,11 @@ export class WriterCommentEditor extends SwTextAPIEditSource {
           }
           const run = paragraph.ownerDocument.createElement("span");
           run.textContent = text(value);
-          applyTextStyle(run, projectWriterCharacterAttributes(items));
+          const script = scripts.find(
+            /** Selects the native script for this portion's first unit. @param span - Script span. @returns Whether it contains the beginning. */
+            (span) => start >= span.nStartPos && start < span.nEndPos,
+          );
+          applyTextStyle(run, projectAnnotationRun(items, script?.nScriptType));
           paragraph.append(run);
         } finally {
           value.dispose();
@@ -620,6 +618,28 @@ function expandedLength(node: ContentNode, index: number): number {
   } finally {
     value.dispose();
   }
+}
+
+/** Matches Writer character format items across native script groups. */
+const displayScripts = [
+  [RES_CHRATR_FONT, RES_CHRATR_CJK_FONT, RES_CHRATR_CTL_FONT],
+  [RES_CHRATR_FONTSIZE, RES_CHRATR_CJK_FONTSIZE, RES_CHRATR_CTL_FONTSIZE],
+  [RES_CHRATR_POSTURE, RES_CHRATR_CJK_POSTURE, RES_CHRATR_CTL_POSTURE],
+  [RES_CHRATR_WEIGHT, RES_CHRATR_CJK_WEIGHT, RES_CHRATR_CTL_WEIGHT],
+] as const;
+
+/** Projects the EditEngine script's font and weight through the shared Writer text display shape. @param items - Owned run format. @param script - Native script value. @returns Equivalent display attributes. */
+function projectAnnotationRun(
+  items: SfxItemSet,
+  script: number | undefined,
+): ReturnType<typeof projectWriterCharacterAttributes> {
+  if (script === ASIAN || script === COMPLEX) {
+    for (const [latin, asian, complex] of displayScripts) {
+      const item = items.GetItemIfSet(script === ASIAN ? asian : complex, false);
+      if (item) items.PutAsTargetWhich(item, latin);
+    }
+  }
+  return projectWriterCharacterAttributes(items);
 }
 
 /** Paints effective Writer text attributes using browser font and decoration primitives. @param element - Display portion. @param attributes - Effective native items. @returns Nothing. */

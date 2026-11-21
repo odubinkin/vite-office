@@ -57,12 +57,15 @@ test("Writer inserts a comment, finds its text and undoes note formatting", /** 
       document.getSelection()?.toString(),
   );
   expect(selected).toBe("annotation");
-  await page.keyboard.press("Control+b");
+  const toolbar = page.getByRole("toolbar", { name: "Writer formatting toolbar" });
+  const bold = toolbar.getByRole("button", { name: "Bold", exact: true });
+  await bold.click();
+  await expect(bold).toHaveAttribute("aria-pressed", "true");
   await expect(comment.locator("span").filter({ hasText: /^annotation$/u })).toHaveCSS(
     "font-weight",
     "700",
   );
-  await page.keyboard.press("Control+z");
+  await page.getByRole("button", { name: "Undo", exact: true }).click();
   await expect(comment).toHaveText("Find this annotation");
   await expect(comment.locator("span[style*='font-weight']")).toHaveCount(0);
 });

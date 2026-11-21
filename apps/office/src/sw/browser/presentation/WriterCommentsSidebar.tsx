@@ -26,11 +26,25 @@ function WriterCommentCard({
   useLayoutEffect(
     /** Binds this mounted text surface to its native field, edit document and comment window. @returns Release callback. */ () => {
       if (!input.current) return;
-      const current = new WriterCommentEditor(field, input.current, view.GetWrtShell());
+      const current = new WriterCommentEditor(
+        field,
+        input.current,
+        view,
+        /** Invalidates the active note formatting state. @returns Nothing. */ () =>
+          view.GetPostItMgr().SelectionChanged(format),
+      );
       editor.current = current;
       const release = view.GetPostItMgr().RegisterSidebarWin(format, {
         editor: current.getImpl(),
         view: current.GetSearchView(),
+        /** Applies the shell request through the comment document and its history. @param items - Prepared edit items. @returns Whether changed. */ ApplyAttributes(
+          items,
+        ) {
+          return current.ApplyAttributes(items);
+        },
+        /** Selects the entire annotation. @returns Nothing. */ SelectAll() {
+          current.SelectAll();
+        },
         /** Makes a continued match visible when a browser dialog owns focus. @returns Nothing. */ SearchHighlight() {
           current.MakeVisible();
         },

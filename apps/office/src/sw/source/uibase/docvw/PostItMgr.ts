@@ -7,6 +7,7 @@ import { MID_SEARCH_BACKWARD, MID_SEARCH_COMMAND } from "../../../../svl/inc/mem
 import { SvxSearchCmd } from "../../../../svl/inc/srchitem";
 import { SvxSearchItem } from "../../../../svl/source/items/srchitem";
 import type { RegexMatcherFactory } from "../../../../unotools/inc/textsearch";
+import type { SfxItemSet } from "../../../../svl/source/items/itemset";
 import type { SwFormatField } from "../../../inc/fmtfld";
 
 /** Editor and viewport bound to one native comment field. */
@@ -14,6 +15,8 @@ export interface SwAnnotationWindow {
   readonly editor: ImpEditEngine;
   readonly view: SearchEditView;
   MakeVisible(): void;
+  ApplyAttributes?(items: SfxItemSet): boolean;
+  SelectAll?(): void;
   SearchHighlight?(): void;
 }
 
@@ -23,8 +26,11 @@ export class SwPostItMgr {
   private active: SwFormatField | undefined;
   private pendingFocus: SwFormatField | undefined;
 
-  /** Binds the regex factory supplied by the current Writer view. @param createRegex - Platform compiler. @returns Manager. */
-  constructor(private readonly createRegex?: RegexMatcherFactory) {}
+  /** Binds the regex factory supplied by the current Writer view. @param createRegex - Platform compiler. @param activeChanged - Dispatch context notification. @returns Manager. */
+  constructor(
+    private readonly createRegex?: RegexMatcherFactory,
+    private readonly activeChanged?: () => void,
+  ) {}
 
   /** Registers the sidebar window for a model field. @param field - Actual model comment. @param window - Mounted editor. @returns Release callback. */
   RegisterSidebarWin(field: SwFormatField, window: SwAnnotationWindow): () => void {
@@ -36,7 +42,7 @@ export class SwPostItMgr {
     return /** Releases exactly this mounted view. @returns Nothing. */ () => {
       if (this.windows.get(field) !== window) return;
       this.windows.delete(field);
-      if (this.active === field) this.active = undefined;
+      if (this.active === field) this.ClearActiveField();
     };
   }
 
@@ -45,11 +51,23 @@ export class SwPostItMgr {
     return this.active?.GetTextField()?.GetTextNode() ? this.active : undefined;
   }
 
+  /** Returns the active window for annotation shell command execution. @returns Mounted annotation window. */
+  GetActiveSidebarWin(): SwAnnotationWindow | undefined {
+    const active = this.GetActiveField();
+    return active && this.windows.get(active);
+  }
+
+  /** Invalidates command state when the active edit view changes its selection. @param field - Editor field. @returns Nothing. */
+  SelectionChanged(field: SwFormatField): void {
+    if (this.GetActiveField() === field) this.activeChanged?.();
+  }
+
   /** Activates a registered, anchored comment. @param field - Focused annotation field. @returns Whether the active window changed. */
   SetActiveSidebarWin(field: SwFormatField): boolean {
     if (this.active === field || !this.windows.has(field) || !field.GetTextField()?.GetTextNode())
       return false;
     this.active = field;
+    this.activeChanged?.();
     return true;
   }
 
@@ -75,8 +93,10 @@ export class SwPostItMgr {
 
   /** Releases an active comment editor when document search resumes. @returns Nothing. */
   ClearActiveField(): void {
+    const hadActive = this.active !== undefined;
     this.active = undefined;
     this.pendingFocus = undefined;
+    if (hadActive) this.activeChanged?.();
   }
 
   /** Releases the view's document and sidebar references. @returns Nothing. */

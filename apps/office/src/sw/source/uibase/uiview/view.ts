@@ -23,6 +23,7 @@ import { SwDocShell } from "../app/docsh";
 import { WriterDialogController } from "../dialog/writer-dialog-controller";
 import { SwPostItMgr } from "../docvw/PostItMgr";
 import { SwEditWin } from "../docvw/edtwin";
+import { SwAnnotationShell } from "../shells/annotsh";
 import { SwTableShell } from "../shells/tabsh";
 import { SwViewCommandShell } from "../shells/view";
 import { SwWrtShell } from "../wrtsh/wrtsh1";
@@ -48,6 +49,7 @@ export class SwView {
   private frame: SfxViewFrame<SwView> | undefined;
   private selectionType: SelectionType | undefined;
   private readonly viewCommandShell: SwViewCommandShell;
+  private readonly annotationShell: SwAnnotationShell;
   private readonly tableShell: SwTableShell;
   private readonly viewOptions: SwViewOption;
   private readonly wrtShell: SwWrtShell;
@@ -84,7 +86,12 @@ export class SwView {
       this.viewOptions,
       this,
     );
-    this.postItMgr = new SwPostItMgr(createRegex);
+    this.postItMgr = new SwPostItMgr(
+      createRegex,
+      /** Recomputes the native shell and annotation formatting states. @returns Nothing. */ () =>
+        this.Invalidate("selection"),
+    );
+    this.annotationShell = new SwAnnotationShell(this.postItMgr, this.wrtShell);
     this.search = new SwViewSearch(this.wrtShell, searchOptions, createRegex, this.postItMgr);
     this.docShell.SetView(this);
     this.editWindow = new SwEditWin(
@@ -118,19 +125,27 @@ export class SwView {
     if (this.frame !== undefined) throw new Error("SwView is already attached to an SfxViewFrame.");
     this.frame = frame;
   }
-  /** Selects represented native text/list/table contexts in list-before-text dispatcher order. @returns Nothing. */
+  /** Selects the annotation shell or the represented native text/list/table stack. @returns Nothing. */
   public SelectShell(): void {
     if (this.frame === undefined || this.frame.GetActiveView() !== this) return;
-    const selectionType = this.wrtShell.GetSelectionType() & ~SelectionType.TableCell;
+    const selectionType = this.postItMgr.GetActiveField()
+      ? SelectionType.PostIt
+      : this.wrtShell.GetSelectionType() & ~SelectionType.TableCell;
     if (selectionType === this.selectionType) return;
     this.selectionType = selectionType;
     const dispatcher = this.frame.GetDispatcher(),
+      annotation = this.annotationShell.GetShell(),
       table = this.tableShell.GetCommandShell(),
       list = this.wrtShell.GetListShell().GetCommandShell(),
       text = this.wrtShell.GetCommandShell();
+    dispatcher.Pop(annotation);
     dispatcher.Pop(table);
     dispatcher.Pop(text);
     dispatcher.Pop(list);
+    if (selectionType === SelectionType.PostIt) {
+      dispatcher.Push(annotation);
+      return;
+    }
     if ((selectionType & SelectionType.NumberList) !== 0) dispatcher.Push(list);
     dispatcher.Push(text);
     if ((selectionType & SelectionType.Table) !== 0) dispatcher.Push(table);

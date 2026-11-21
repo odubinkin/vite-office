@@ -413,7 +413,11 @@ export function WriterPlainTextEditor(props: WriterPlainTextEditorProps): React.
         focused instanceof HTMLElement &&
         focused !== root.ownerDocument.body &&
         !root.contains(focused);
-      if (outside && focused.closest("[data-writer-editing-host]") !== null) {
+      if (
+        outside &&
+        (focused.closest("[data-writer-editing-host]") !== null ||
+          props.editWindow.GetView().GetPostItMgr().GetActiveField() !== undefined)
+      ) {
         return;
       }
       controller.RestoreSelection(props.cursorSelection);
@@ -421,7 +425,14 @@ export function WriterPlainTextEditor(props: WriterPlainTextEditorProps): React.
       // intact while still projecting commands such as Select All into the DOM.
       if (outside) focused.focus();
     },
-    [controller, measuredLines, props.cursorSelection, props.paragraphs, rootElement],
+    [
+      controller,
+      measuredLines,
+      props.cursorSelection,
+      props.editWindow,
+      props.paragraphs,
+      rootElement,
+    ],
   );
 
   useLayoutEffect(
