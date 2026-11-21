@@ -1,4 +1,17 @@
 /** @fileoverview Consumed Calc document functions and original document-operation dispatch. */
+import {
+  CreateConditionalFormatUndoData,
+  ScUndoConditionalFormat,
+  ScUndoConditionalFormatList,
+} from "../undo/undoblk";
+import {
+  ScCondDateFormatEntry,
+  ScCondFormatEntry,
+  type ScConditionalFormat,
+  type ScConditionalFormatList,
+} from "../../../inc/conditio";
+import type { ScRangeList } from "../../../inc/rangelst";
+import { text } from "../../../../i18nlangtag/source/isolang/isolang.tables";
 import { Color } from "../../../../tools/inc/color";
 import { ScUndoPageBreak } from "../undo/undocell";
 import { ScUndoTabColor, type ScUndoTabColorInfo } from "../undo/undotab";
@@ -17,6 +30,67 @@ import { DeleteCellOperation } from "../operation/DeleteCellOperation";
 export class ScDocFunc {
   /** Borrows the actual shell. @param shell - Document owner. @returns Function owner. */
   constructor(private readonly shell: ScDocShell) {}
+  /** Replaces one source rule group and updates cell keys before publishing the change. @param oldKey - Existing key or zero for a new format. @param format - Owned replacement, or null for removal. @param tab - Active sheet. @param ranges - Replacement associations. @returns Whether the operation was accepted. */
+  ReplaceConditionalFormat(
+    oldKey: number,
+    format: ScConditionalFormat | null,
+    tab: number,
+    ranges: ScRangeList,
+  ): boolean {
+    const doc = this.shell.GetDocument();
+    const sheet = doc.FetchTable(tab);
+    if (!sheet || doc.IsTabProtected(tab)) {
+      format?.Dispose();
+      return false;
+    }
+    const undo = CreateConditionalFormatUndoData(doc, tab);
+    if (oldKey) {
+      const previous = sheet.GetCondFormList().GetFormat(oldKey);
+      if (previous) doc.RemoveCondFormatData(previous.GetRange(), tab, oldKey);
+      sheet.DeleteConditionalFormat(oldKey);
+    }
+    if (format) {
+      this.EnsureConditionStyles(format);
+      doc.AddCondFormatData(ranges, tab, doc.AddCondFormat(format, tab));
+    }
+    sheet.SetStreamValid(false);
+    const redo = CreateConditionalFormatUndoData(doc, tab);
+    this.shell.GetUndoManager().AddUndoAction(new ScUndoConditionalFormat(undo, redo, tab));
+    this.shell.SetDocumentModified();
+    return true;
+  }
+
+  /** Replaces the manager's complete rule list with native undo. @param list - Owned accepted list. @param tab - Active sheet. @returns Whether the operation was accepted. */
+  SetConditionalFormatList(list: ScConditionalFormatList, tab: number): boolean {
+    const doc = this.shell.GetDocument();
+    const sheet = doc.FetchTable(tab);
+    if (!sheet || doc.IsTabProtected(tab)) {
+      list.Dispose();
+      return false;
+    }
+    const undo = CreateConditionalFormatUndoData(doc, tab);
+    sheet.GetCondFormList().RemoveFromDocument(doc);
+    for (const format of list) this.EnsureConditionStyles(format);
+    list.AddToDocument(doc);
+    sheet.SetCondFormList(list);
+    sheet.SetStreamValid(false);
+    const redo = CreateConditionalFormatUndoData(doc, tab);
+    this.shell.GetUndoManager().AddUndoAction(new ScUndoConditionalFormatList(undo, redo, tab));
+    this.shell.SetDocumentModified();
+    return true;
+  }
+
+  /** Ensures accepted rules referring to a native stock style bind a real owner. @param format - Accepted rules. @returns Nothing. */
+  private EnsureConditionStyles(format: ScConditionalFormat): void {
+    const pool = this.shell.GetDocument().GetStyleSheetPool();
+    for (let index = 0; index < format.size(); index++) {
+      const rule = format.GetEntry(index);
+      if (rule instanceof ScCondFormatEntry) pool?.EnsureConditionalStyle(rule.GetStyleName());
+      if (rule instanceof ScCondDateFormatEntry)
+        pool?.EnsureConditionalStyle(text(rule.GetStyleName()));
+    }
+  }
+
   /** Changes one sheet color with the native undo and API flags. @param tab - Sheet. @param color - Native color. @param record - Record history. @param api - Suppress interactive error. @returns Success. */
   SetTabBgColor(tab: number, color: Readonly<Color>, record: boolean, api: boolean): boolean;
   /** Changes a group of sheet colors as one history action. @param colors - Requested colors by tab. @param api - Suppress interactive error. @returns Success. */

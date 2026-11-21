@@ -203,3 +203,80 @@ export class ScUndoPaste extends SfxUndoAction<ScDocShell> {
     this.redo = null;
   }
 }
+
+/** Captures the native format list in an undo document without copying cell content. @param doc - Live workbook. @param tab - Origin sheet. @returns Owned undo document. */
+export function CreateConditionalFormatUndoData(doc: ScDocument, tab: number): ScDocument {
+  const snapshot = new ScDocument(ScDocumentMode.SCDOCMODE_UNDO);
+  snapshot.InitUndo(doc, tab, tab);
+  snapshot
+    .FetchTable(tab)
+    ?.SetCondFormList(doc.FetchTable(tab)?.GetCondFormList().Clone(snapshot) ?? null);
+  return snapshot;
+}
+
+/** Original conditional-format-list history restores both range associations and rule entries. */
+export class ScUndoConditionalFormatList extends SfxUndoAction<ScDocShell> {
+  /** Owns both history states. @param undo - Before. @param redo - After. @param tab - Origin sheet. @returns Action. */
+  constructor(
+    private readonly undo: ScDocument,
+    private readonly redo: ScDocument,
+    protected readonly tab: number,
+  ) {
+    super();
+  }
+
+  /** Restores an original snapshot and refreshes the shared browser view. @param shell - Live shell. @param source - Desired snapshot. @param previous - Replaced snapshot. @returns Nothing. */
+  protected DoChange(shell: ScDocShell, source: ScDocument, previous: ScDocument): void {
+    const doc = shell.GetDocument();
+    const sheet = doc.FetchTable(this.tab);
+    const list = source.FetchTable(this.tab)?.GetCondFormList();
+    if (!sheet || !list) return;
+    previous.FetchTable(this.tab)?.GetCondFormList().RemoveFromDocument(doc);
+    list.AddToDocument(doc);
+    sheet.SetCondFormList(list.Clone(doc));
+    sheet.SetStreamValid(false);
+  }
+
+  /** Restores the original format list. @param shell - Live shell. @returns Nothing. */
+  override UndoWithContext(shell: ScDocShell): void {
+    this.DoChange(shell, this.undo, this.redo);
+  }
+
+  /** Reinstates the accepted format list. @param shell - Live shell. @returns Nothing. */
+  override RedoWithContext(shell: ScDocShell): void {
+    this.DoChange(shell, this.redo, this.undo);
+  }
+
+  /** Original manager action caption. @returns History label. */
+  override GetComment(): string {
+    return "Conditional Formats";
+  }
+
+  /** Releases both owned history states. @returns Nothing. */
+  override Dispose(): void {
+    this.undo.Dispose();
+    this.redo.Dispose();
+  }
+}
+
+/** Original single-rule history restores the complete sheet format list. */
+export class ScUndoConditionalFormat extends ScUndoConditionalFormatList {
+  /** Removes existing keys throughout the previous combined range before installing the retained snapshot. @param shell - Live shell. @param source - Desired snapshot. @returns Nothing. */
+  protected override DoChange(shell: ScDocShell, source: ScDocument): void {
+    const doc = shell.GetDocument();
+    const sheet = doc.FetchTable(this.tab);
+    const list = source.FetchTable(this.tab)?.GetCondFormList();
+    if (!sheet || !list) return;
+    const old = sheet.GetCondFormList();
+    const ranges = old.GetCombinedRange();
+    for (const format of old) doc.RemoveCondFormatData(ranges, this.tab, format.GetKey());
+    list.AddToDocument(doc);
+    sheet.SetCondFormList(list.Clone(doc));
+    sheet.SetStreamValid(false);
+  }
+
+  /** Original single-format caption. @returns History label. */
+  override GetComment(): string {
+    return "Conditional Format";
+  }
+}

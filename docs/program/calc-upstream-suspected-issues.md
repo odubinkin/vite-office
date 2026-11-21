@@ -7540,3 +7540,12 @@ retain newly entered text in a first-page variant with no saved content.
 Calc preserves the same item-state check.
 
 - [Original header/footer Reset](../../vendor/libreoffice-reference/sc/source/ui/pagedlg/scuitphfedit.cxx)
+
+### CALC-792 — Quick text conditions wrap literal input without escaping quotation marks
+
+The quick conditional-format editor encloses a text operand in quotation
+marks before passing the result to the formula compiler. It leaves embedded
+quotation marks untouched, so literal input containing a quotation mark can
+change the resulting formula text. Calc preserves that construction.
+
+- [Original quick conditional-format accept handler](../../vendor/libreoffice-reference/sc/source/ui/condformat/condformateasydlg.cxx)

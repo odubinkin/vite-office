@@ -39,6 +39,7 @@ import { OfficeWorkspaceHeader } from "../../../framework/browser/presentation/O
 import { calcStandardBarItems } from "../../uiconfig/scalc/toolbar/standardbar";
 import type { CalcFileWorkflows } from "../workflows/calc-file-workflows";
 import { CalcSheetDialogs } from "./CalcSheetDialogs";
+import { useCalcDialog } from "./use-calc-dialog";
 import { ScPrintAreasDlg, type ScPrintReferenceInput } from "./ScPrintAreasDlg";
 import type { CalcSheetWorkflows } from "../workflows/calc-sheet-workflows";
 import { CalcFileDialog } from "./CalcFileDialog";
@@ -65,47 +66,22 @@ export function CalcWorkbench({
   sheetWorkflows,
 }: CalcWorkbenchProps): React.JSX.Element {
   useSyncExternalStore(controller.Subscribe, controller.GetSnapshot, controller.GetSnapshot);
-  const dialog = useSyncExternalStore(
-    fileWorkflows.dialogs.Subscribe,
-    fileWorkflows.dialogs.GetSnapshot,
-    fileWorkflows.dialogs.GetSnapshot,
-  );
-  const sheetDialog = useSyncExternalStore(
-    sheetWorkflows.dialogs.Subscribe,
-    sheetWorkflows.dialogs.GetSnapshot,
-    sheetWorkflows.dialogs.GetSnapshot,
-  );
-  const tabDialog = useSyncExternalStore(
-    sheetWorkflows.tabDialogs.Subscribe,
-    sheetWorkflows.tabDialogs.GetSnapshot,
-    sheetWorkflows.tabDialogs.GetSnapshot,
-  );
-  const widthDialog = useSyncExternalStore(
-    sheetWorkflows.metricDialogs.Subscribe,
-    sheetWorkflows.metricDialogs.GetSnapshot,
-    sheetWorkflows.metricDialogs.GetSnapshot,
-  );
-  const headerFooterDialog = useSyncExternalStore(
-    sheetWorkflows.headerFooterDialogs.Subscribe,
-    sheetWorkflows.headerFooterDialogs.GetSnapshot,
-    sheetWorkflows.headerFooterDialogs.GetSnapshot,
-  );
-  const pageStyleDialog = useSyncExternalStore(
-    sheetWorkflows.pageStyleDialogs.Subscribe,
-    sheetWorkflows.pageStyleDialogs.GetSnapshot,
-    sheetWorkflows.pageStyleDialogs.GetSnapshot,
-  );
-  const printDialog = useSyncExternalStore(
-    sheetWorkflows.printDialogs.Subscribe,
-    sheetWorkflows.printDialogs.GetSnapshot,
-    sheetWorkflows.printDialogs.GetSnapshot,
-  );
+  const dialog = useCalcDialog(fileWorkflows.dialogs);
+  const sheetDialog = useCalcDialog(sheetWorkflows.dialogs);
+  const tabDialog = useCalcDialog(sheetWorkflows.tabDialogs);
+  const widthDialog = useCalcDialog(sheetWorkflows.metricDialogs);
+  const headerFooterDialog = useCalcDialog(sheetWorkflows.headerFooterDialogs);
+  const pageStyleDialog = useCalcDialog(sheetWorkflows.pageStyleDialogs);
+  const printDialog = useCalcDialog(sheetWorkflows.printDialogs);
+  const condEditor = useCalcDialog(sheetWorkflows.conditionals.editors);
+  const condManager = useCalcDialog(sheetWorkflows.conditionals.managers);
+  const referenceDialog = printDialog ?? condEditor;
   const printInput = useRef<ScPrintReferenceInput>(null);
-  const [printReference, setPrintReference] = useState<{
-    id: number;
+  const [referenceSelection, setReferenceSelection] = useState<{
+    owner: object;
     range: ScRange | undefined;
   }>();
-  const printOpen = printDialog !== undefined;
+  const referenceOpen = referenceDialog !== undefined;
   useBrowserSaveShortcut({
     isActive: true,
     autosave: fileWorkflows,
@@ -132,16 +108,18 @@ export function CalcWorkbench({
     widthDialog !== undefined ||
     tabDialog !== undefined ||
     pageStyleDialog !== undefined ||
-    headerFooterDialog !== undefined;
+    headerFooterDialog !== undefined ||
+    condManager !== undefined;
   const root = useRef<HTMLElement>(null),
     tabs = useRef<HTMLDivElement>(null),
-    previousModal = useRef(modal || printOpen),
+    previousModal = useRef(modal || referenceOpen),
     browserTopFocus = useRef(false),
     restoredViewport = useRef(false);
   const view = controller.viewData,
     doc = controller.shell.GetDocument();
   const showSheetTabs = view.GetOptions().GetOption(ViewOption.TABCONTROLS);
-  if ((modal || printOpen || !showSheetTabs) && sheetPopup !== undefined) setSheetPopup(undefined);
+  if ((modal || referenceOpen || !showSheetTabs) && sheetPopup !== undefined)
+    setSheetPopup(undefined);
   const paneLayoutRevision = view.GetPaneLayoutRevision();
   const cursorColumn = view.GetCurX(),
     cursorRow = view.GetCurY(),
@@ -181,11 +159,11 @@ export function CalcWorkbench({
   }
   useLayoutEffect(
     /** Restores the document client only after React removes the modal and its background inert attribute. @returns Nothing. */ () => {
-      const restore = previousModal.current && !modal && !printOpen;
-      previousModal.current = modal || printOpen;
+      const restore = previousModal.current && !modal && !referenceOpen;
+      previousModal.current = modal || referenceOpen;
       if (restore) grid().focus();
     },
-    [modal, printOpen],
+    [modal, referenceOpen],
   );
   useLayoutEffect(
     /** Projects native selection requests after controlled text renders. Actual browser focus owns its initial caret/selection,as ScTextWnd GetFocus delegates to the edit view without moving it. @returns Nothing. */ () => {
@@ -450,7 +428,7 @@ export function CalcWorkbench({
   }
   /** Routes document keys to native-shaped input/view operations or the shared dispatcher. @param event - Grid key. @returns Nothing. */
   function key(event: KeyboardEvent<HTMLDivElement>): void {
-    if (printOpen) return;
+    if (referenceOpen) return;
     if (event.defaultPrevented || event.nativeEvent.isComposing) return;
     if (
       (event.ctrlKey || event.metaKey) &&
@@ -552,7 +530,8 @@ export function CalcWorkbench({
         /** Routes file and sheet accelerators through active Sfx slots from any source input. @param event - Platform key. @returns Nothing. */ (
           event,
         ) => {
-          if (event.defaultPrevented || event.nativeEvent.isComposing || modal || printOpen) return;
+          if (event.defaultPrevented || event.nativeEvent.isComposing || modal || referenceOpen)
+            return;
           if (
             event.key === "F2" &&
             !event.ctrlKey &&
@@ -588,7 +567,7 @@ export function CalcWorkbench({
       className="flex h-dvh w-full min-h-0 min-w-0 flex-col overflow-hidden bg-slate-100"
     >
       <div className="contents" inert={modal}>
-        <div className="contents" inert={printOpen}>
+        <div className="contents" inert={referenceOpen}>
           <OfficeWorkspaceHeader
             documentTitle={controller.shell.GetTitle()}
             onDocumentTitleChange={
@@ -703,18 +682,18 @@ export function CalcWorkbench({
           onOutline={
             /** Routes native outline window controls. @param control - Selected group or level. @returns Nothing. */
             (control) => {
-              if (!printOpen) sheetWorkflows.OutlineControl(control);
+              if (!referenceOpen) sheetWorkflows.OutlineControl(control);
             }
           }
           onActivatePane={
             /** Updates the active native pane before selecting its cell. @param part - Pointer pane. @returns Nothing. */
             (part) => view.SetActivePart(part)
           }
-          referenceMode={printOpen || controller.inputHandler.IsFormulaMode()}
+          referenceMode={referenceOpen || controller.inputHandler.IsFormulaMode()}
           referenceRange={
-            printDialog
-              ? printReference?.id === printDialog.id
-                ? (printReference.range ?? null)
+            referenceDialog
+              ? referenceSelection?.owner === referenceDialog
+                ? (referenceSelection.range ?? null)
                 : null
               : controller.ReferenceRange()
           }
@@ -724,14 +703,15 @@ export function CalcWorkbench({
           }
           onPointerEnd={
             /** Ends actual native pointer selection. @returns Nothing. */ () =>
-              printOpen ? printInput.current?.End() : controller.EndPointer()
+              referenceOpen ? printInput.current?.End() : controller.EndPointer()
           }
           onDrag={
             /** Updates the real reference endpoint during native window tracking. @param position - Endpoint. @returns Nothing. */ (
               position,
-            ) => (printOpen ? printInput.current?.Move(position) : controller.MovePointer(position))
+            ) =>
+              referenceOpen ? printInput.current?.Move(position) : controller.MovePointer(position)
           }
-          {...(printOpen
+          {...(referenceOpen
             ? {}
             : {
                 headerSizing: {
@@ -776,7 +756,7 @@ export function CalcWorkbench({
               event,
             ) => {
               const append = event.ctrlKey || event.metaKey;
-              if (printOpen) printInput.current?.Start(pos, "cell", append);
+              if (referenceOpen) printInput.current?.Start(pos, "cell", append);
               else controller.StartPointer(pos, event.shiftKey, append);
             }
           }
@@ -786,7 +766,7 @@ export function CalcWorkbench({
               index,
               event,
             ) => {
-              if (printOpen) {
+              if (referenceOpen) {
                 printInput.current?.Start(
                   new ScAddress(
                     kind === "column" ? index : 0,
@@ -825,7 +805,7 @@ export function CalcWorkbench({
             /** Starts inline editing through the input owner. @param pos - Cell. @returns Nothing. */ (
               pos,
             ) => {
-              if (printOpen || controller.inputHandler.IsFormulaMode()) return;
+              if (referenceOpen || controller.inputHandler.IsFormulaMode()) return;
               if (controller.Select(pos.Col(), pos.Row()))
                 controller.StartInput(ScInputMode.SC_INPUT_TABLE);
             }
@@ -871,7 +851,7 @@ export function CalcWorkbench({
           }
           onInputKeyDown={inputKey}
         />
-        <div ref={tabs} hidden={!showSheetTabs} inert={printOpen}>
+        <div ref={tabs} hidden={!showSheetTabs} inert={referenceOpen}>
           <ScTabControl
             viewData={view}
             canInsert={doc.GetTableCount() <= MAXTAB}
@@ -972,14 +952,18 @@ export function CalcWorkbench({
           sheetDialog,
           pageStyleDialog,
           headerFooterDialog,
+          condEditor,
+          condManager,
         }}
+        referenceInput={printInput}
+        onReference={(owner, range) => setReferenceSelection({ owner, range })}
       />
       {printDialog && (
         <ScPrintAreasDlg
           key={printDialog.id}
           model={printDialog.request}
           referenceInput={printInput}
-          onReference={(range) => setPrintReference({ id: printDialog.id, range })}
+          onReference={(range) => setReferenceSelection({ owner: printDialog, range })}
           onCancel={() => sheetWorkflows.printDialogs.Cancel(printDialog.id)}
           onSubmit={(request) => sheetWorkflows.printDialogs.Complete(printDialog.id, request)}
         />

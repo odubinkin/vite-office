@@ -1,0 +1,45 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "status": "mapped",
+    "localPath": "apps/office/src/sc/source/ui/condformat/condformatdlg.ts",
+    "localSymbols": [
+      "ScCondFormatDlg"
+    ],
+    "upstreamPath": "sc/source/ui/condformat/condformatdlg.cxx",
+    "upstreamSymbols": [
+      "ScCondFormatDlg::GetConditionalFormat",
+      "ScCondFormatDlg::OkPressed"
+    ],
+    "preservedResponsibilities": [
+      "Models the source condition editor and typed reference result."
+    ],
+    "omittedResponsibilities": [
+      "Native Weld widgets are supplied by the browser adapter."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sc/source/ui/condformat/condformatdlg.ts",
+          "marker": "ScCondFormatDlg"
+        },
+        {
+          "path": "apps/office/src/sc/browser/presentation/calc-conditional-format.test.tsx",
+          "marker": "ports tdf163897"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sc/source/ui/condformat/condformatdlg.cxx",
+          "marker": "ScCondFormatDlg::GetConditionalFormat"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/source/ui/condformat/condformatdlg.cxx",
+          "marker": "ScCondFormatDlg::OkPressed"
+        }
+      ]
+    }
+  }
+}

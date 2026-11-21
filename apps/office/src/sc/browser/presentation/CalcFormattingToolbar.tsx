@@ -1,10 +1,12 @@
 /** @fileoverview Actual shared Writer formatting controls over native Calc formatobjectbar and Sfx bindings. */
-import { useCallback } from "react";
+import { useCallback, useMemo, useState } from "react";
 import { BorderSelect, BorderLineStyleSelect } from "../../../svx/browser/tbxctrls/BorderSelect";
 import type { BorderDispatch } from "../../../svx/source/tbxctrls/tbcontrl";
 import { useBrowserCommandPresentation } from "../../../framework/browser/presentation/command-surface";
 import { SvxColorItem } from "../../../editeng/inc/colritem";
 import { COL_DEFAULT_FRAMELINE } from "../../../svx/inc/xdef";
+import { CommandPopupMenu } from "../../../framework/browser/presentation/CommandPopupMenu";
+import { selectAvailableMenuItems } from "../../../framework/browser/presentation/available-menu-items";
 import { CommandSelectControl } from "../../../framework/browser/presentation/CommandSelectControl";
 import { CommandToolbarItems } from "../../../framework/browser/presentation/CommandToolbar";
 import { FontNameSelect, FontSizeSelect } from "../../../svx/browser/tbxctrls/FontSelects";
@@ -14,7 +16,7 @@ import { officeToolbarButtonClassName } from "../../../framework/browser/present
 import { officeCommandIcons } from "../../../framework/browser/presentation/office-command-icons";
 import { getOfficeFormattingButtonContent } from "../../../framework/browser/presentation/office-formatting-content";
 import type { BrowserCommandSurfaceProps } from "../../../framework/browser/presentation/command-surface";
-import { getCalcCommandResource } from "../../uiconfig/scalc/menubar/menubar";
+import { calcMenus, getCalcCommandResource } from "../../uiconfig/scalc/menubar/menubar";
 import { calcFormatObjectBarItems } from "../../uiconfig/scalc/toolbar/formatobjectbar";
 const BorderPresetIcon = officeCommandIcons.get(".uno:SetBorderStyle");
 const BorderStyleIcon = officeCommandIcons.get(".uno:LineStyle");
@@ -59,6 +61,13 @@ export function CalcFormattingToolbar({
         /** Uses the exact shared Writer font controls for source font placements. @param item - Generated special placement. @returns Bound selector. */ (
           item,
         ) => {
+          if (item.kind === "command-select")
+            return (
+              <CalcConditionalToolbarMenu
+                key="conditional"
+                {...{ commandSource, resolveArguments }}
+              />
+            );
           if (item.kind === "color-select")
             return (
               <CommandSelectControl
@@ -199,5 +208,61 @@ function CalcBorderToolbarItem({
           )
       }
     </CommandSelectControl>
+  );
+}
+
+const conditionalCommand = ".uno:ConditionalFormatMenu";
+const conditionalMenu = calcMenus
+  .flatMap((menu) => menu.items)
+  .find((item) => item.kind === "submenu" && item.id === conditionalCommand);
+const ConditionalIcon = officeCommandIcons.get(conditionalCommand);
+
+/** Renders the native conditional toolbar popup over the same registered commands as Format. @param props - Actual command bindings. @returns Toolbar menu control. */
+function CalcConditionalToolbarMenu({
+  commandSource,
+  resolveArguments,
+}: BrowserCommandSurfaceProps): React.JSX.Element {
+  const resource = getCalcCommandResource(conditionalCommand);
+  const state = useBrowserCommandPresentation(
+    commandSource,
+    ".uno:ConditionalFormatManagerDialog",
+    getCalcCommandResource,
+  );
+  const [position, setPosition] = useState<{ x: number; y: number }>();
+  const items = useMemo(
+    /** Keeps the original popup order and current registered native commands. @returns Available popup placements. */
+    () =>
+      selectAvailableMenuItems(
+        conditionalMenu?.kind === "submenu" ? conditionalMenu.items : [],
+        commandSource,
+      ),
+    [commandSource],
+  );
+  return (
+    <>
+      <button
+        type="button"
+        className={officeToolbarButtonClassName}
+        aria-label={resource.label}
+        aria-haspopup="menu"
+        aria-expanded={position !== undefined}
+        disabled={!state.enabled}
+        data-office-tooltip={resource.label}
+        onClick={(event) => {
+          const rect = event.currentTarget.getBoundingClientRect();
+          setPosition({ x: rect.left, y: rect.bottom });
+        }}
+      >
+        {ConditionalIcon && <ConditionalIcon aria-hidden={true} size={16} />}
+      </button>
+      {position && state.enabled && (
+        <CommandPopupMenu
+          ariaLabel={resource.label}
+          {...{ commandSource, resolveArguments, position, items }}
+          getCommandResource={getCalcCommandResource}
+          onClose={() => setPosition(undefined)}
+        />
+      )}
+    </>
   );
 }

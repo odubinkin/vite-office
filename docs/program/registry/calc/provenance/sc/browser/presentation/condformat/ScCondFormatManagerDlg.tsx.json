@@ -1,0 +1,29 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "browser-adaptation",
+    "status": "local-only",
+    "localPath": "apps/office/src/sc/browser/presentation/condformat/ScCondFormatManagerDlg.tsx",
+    "rationale": "Presents the original format manager columns and buttons using browser controls.",
+    "responsibilities": [
+      "Presents the original format manager columns and buttons using browser controls."
+    ],
+    "stackDivergence": {
+      "kind": "browser-adaptation",
+      "rationale": "Projects source fields into native HTML controls and the existing office dialog style."
+    },
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sc/browser/presentation/condformat/ScCondFormatManagerDlg.tsx",
+          "marker": "ScCondFormatManagerDlg"
+        },
+        {
+          "path": "apps/office/src/sc/browser/presentation/calc-conditional-format.test.tsx",
+          "marker": "ports tdf163897"
+        }
+      ]
+    }
+  }
+}

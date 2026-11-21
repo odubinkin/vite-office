@@ -203,6 +203,7 @@ it("renders connected formatting placements with the bound shared font-size cont
     "Borders (Shift to overwrite)",
     "Border Style",
     "Border Color",
+    "Conditional",
   ];
   expect(
     [...controls].map(

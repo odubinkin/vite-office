@@ -1,4 +1,9 @@
 /** @fileoverview Browser hosts for sheet-workflow modal requests. */
+import type { Ref } from "react";
+import type { ScRange } from "../../inc/address";
+import type { ScPrintReferenceInput } from "./ScPrintAreasDlg";
+import { ScCondFormatDlg } from "./condformat/ScCondFormatDlg";
+import { ScCondFormatManagerDlg } from "./condformat/ScCondFormatManagerDlg";
 import type { CalcSheetWorkflows } from "../workflows/calc-sheet-workflows";
 import { ScMetricInputDlg } from "./ScMetricInputDlg";
 import { ScSheetTabDialog } from "./ScSheetTabDialog";
@@ -13,6 +18,10 @@ interface CalcSheetDialogsProps {
   readonly tabDialog: ReturnType<CalcSheetWorkflows["tabDialogs"]["GetSnapshot"]>;
   readonly headerFooterDialog: ReturnType<CalcSheetWorkflows["headerFooterDialogs"]["GetSnapshot"]>;
   readonly pageStyleDialog: ReturnType<CalcSheetWorkflows["pageStyleDialogs"]["GetSnapshot"]>;
+  readonly condEditor: ReturnType<CalcSheetWorkflows["conditionals"]["editors"]["GetSnapshot"]>;
+  readonly condManager: ReturnType<CalcSheetWorkflows["conditionals"]["managers"]["GetSnapshot"]>;
+  readonly referenceInput: Ref<ScPrintReferenceInput>;
+  readonly onReference: (owner: object, range: ScRange | undefined) => void;
   readonly sheetDialog: ReturnType<CalcSheetWorkflows["dialogs"]["GetSnapshot"]>;
 }
 
@@ -24,9 +33,33 @@ export function CalcSheetDialogs({
   headerFooterDialog,
   tabDialog,
   sheetDialog,
+  condEditor,
+  condManager,
+  referenceInput,
+  onReference,
 }: CalcSheetDialogsProps): React.JSX.Element {
   return (
     <>
+      {condManager && (
+        <ScCondFormatManagerDlg
+          key={condManager.id}
+          model={condManager.request}
+          onCancel={() => sheetWorkflows.conditionals.managers.Cancel(condManager.id)}
+          onResponse={(result) =>
+            sheetWorkflows.conditionals.managers.Complete(condManager.id, result)
+          }
+        />
+      )}
+      {condEditor && (
+        <ScCondFormatDlg
+          key={condEditor.id}
+          model={condEditor.request}
+          referenceInput={referenceInput}
+          onReference={(range) => onReference(condEditor, range)}
+          onCancel={() => sheetWorkflows.conditionals.editors.Cancel(condEditor.id)}
+          onSubmit={(result) => sheetWorkflows.conditionals.editors.Complete(condEditor.id, result)}
+        />
+      )}
       {headerFooterDialog && (
         <ScHFEditDlg
           key={headerFooterDialog.id}

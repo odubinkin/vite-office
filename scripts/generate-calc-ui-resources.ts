@@ -25,6 +25,8 @@ const surfaces = {
   textobjectbar: "sc/uiconfig/scalc/toolbar/textobjectbar.xml",
 } as const;
 const printRangesPopup = "sc/uiconfig/scalc/popupmenu/printranges.xml";
+const conditionalPopup = "sc/uiconfig/scalc/popupmenu/conditional.xml";
+const conditionalRulesPopup = "sc/uiconfig/scalc/popupmenu/conditional_easy.xml";
 const catalogPaths = [
   "officecfg/registry/data/org/openoffice/Office/UI/CalcCommands.xcu",
   "officecfg/registry/data/org/openoffice/Office/UI/GenericCommands.xcu",
@@ -33,6 +35,8 @@ const catalogPaths = [
 const paths = [
   ...Object.values(surfaces),
   printRangesPopup,
+  conditionalPopup,
+  conditionalRulesPopup,
   ...catalogPaths,
   "officecfg/registry/schema/org/openoffice/Office/UI/Commands.xcs",
 ];
@@ -68,7 +72,12 @@ const excluded = new Map<string, string>([
 ]);
 // Original key-only cell-shell command:catalog metadata is required without adding a visible surface placement.
 const urls = new Set<string>([".uno:Deselect"]);
-for (const path of [...Object.values(surfaces), printRangesPopup]) {
+for (const path of [
+  ...Object.values(surfaces),
+  printRangesPopup,
+  conditionalPopup,
+  conditionalRulesPopup,
+]) {
   /** Collects original leaf identities without guessing labels or slot implementations. @param node - Parsed source. @returns Nothing. */
   function collect(node: ReturnType<typeof parseResourceXml>): void {
     if (node.name.endsWith("menuitem") || node.name.endsWith("toolbaritem")) {
@@ -145,20 +154,31 @@ function withContextLabel(node: ResourceNode): ResourceNode {
   const placement = { ...node, label: stripMnemonic(title), showsDialog: title.endsWith("...") };
   return placement;
 }
-const printRangeItems = printRanges.nodes.map(withContextLabel);
-/** Resolves the native dynamically loaded PrintRangesMenu popup within Format. @param node - Original graph node. @returns Projected node. */
+const popupItems = new Map([
+  [".uno:PrintRangesMenu", printRanges.nodes.map(withContextLabel)],
+  [
+    ".uno:ConditionalFormatMenu",
+    buildResourceGraph(texts[conditionalPopup] as string, sourceToCommand, resolveMenuLabel).nodes,
+  ],
+  [
+    ".uno:ConditionalFormatConditionMenu",
+    buildResourceGraph(texts[conditionalRulesPopup] as string, sourceToCommand, resolveMenuLabel)
+      .nodes,
+  ],
+]);
+/** Resolves the source dynamic popup registrations within the Calc menus. @param node - Original graph node. @returns Projected node. */
 function attachCalcPopups(node: ResourceNode): ResourceNode {
   if (node.kind === "menu") return { ...node, items: node.items.map(attachCalcPopups) };
-  if (node.kind === "command" && node.commandUrl === ".uno:PrintRangesMenu")
+  if (node.kind !== "command") return node;
+  const items = popupItems.get(node.commandUrl);
+  if (items)
     return {
       id: node.commandUrl,
       kind: "menu",
       label: resolveMenuLabel(node.commandUrl),
-      items: printRangeItems,
+      items: items.map(attachCalcPopups),
     };
-  return node.kind === "command" && node.commandUrl === ".uno:PageFormatDialog"
-    ? withContextLabel(node)
-    : node;
+  return node.commandUrl === ".uno:PageFormatDialog" ? withContextLabel(node) : node;
 }
 const dispositions: unknown[] = [];
 const projected = Object.fromEntries(

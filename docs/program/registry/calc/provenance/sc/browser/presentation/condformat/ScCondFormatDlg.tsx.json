@@ -1,0 +1,29 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "browser-adaptation",
+    "status": "local-only",
+    "localPath": "apps/office/src/sc/browser/presentation/condformat/ScCondFormatDlg.tsx",
+    "rationale": "Presents the browser controls for native rule editing and selection of reference ranges.",
+    "responsibilities": [
+      "Presents the browser controls for native rule editing and selection of reference ranges."
+    ],
+    "stackDivergence": {
+      "kind": "browser-adaptation",
+      "rationale": "Projects source fields into native HTML controls and the existing office dialog style."
+    },
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sc/browser/presentation/condformat/ScCondFormatDlg.tsx",
+          "marker": "ScCondFormatDlg"
+        },
+        {
+          "path": "apps/office/src/sc/browser/presentation/calc-conditional-format.test.tsx",
+          "marker": "ports tdf163897"
+        }
+      ]
+    }
+  }
+}

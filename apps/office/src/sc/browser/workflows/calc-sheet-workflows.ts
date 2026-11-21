@@ -58,6 +58,7 @@ import type { SfxItemSet } from "../../../svl/source/items/itemset";
 import { ScHFEditDlg, StandaloneHeaderFooterLayout } from "../../source/ui/pagedlg/hfedtdlg";
 import { ScStyleSaveData } from "../../source/ui/undo/undostyl";
 import type { ScStyleDlgRequest, ScStyleDlgResult } from "../../source/ui/styleui/styledlg";
+import { CalcConditionalWorkflows, conditionalFormatCommands } from "./calc-conditional-workflows";
 import type { CalcViewController } from "../controller/calc-view-controller";
 /** Immutable native dialog initialization;names are copied only as dialog widget resources. */
 export interface CalcGoToSheetRequest {
@@ -96,12 +97,44 @@ export class CalcSheetWorkflows {
   readonly headerFooterDialogs = new SfxDialogController<ScHFEditDlg, SfxItemSet>();
   readonly pageStyleDialogs = new SfxDialogController<ScStyleDlgRequest, ScStyleDlgResult>();
   readonly printDialogs = new SfxDialogController<PrintAreasModel, SfxRequest | undefined>();
+  readonly conditionals: CalcConditionalWorkflows;
   private readonly shell: SfxShell;
   /** Connects a source command to the active document view. @param controller - Actual Calc controller. @returns Workflow. */
   constructor(readonly controller: CalcViewController) {
+    this.conditionals = new CalcConditionalWorkflows(controller);
     this.shell = createSfxShell(
       this,
       new SfxInterface<CalcSheetWorkflows>([
+        ...conditionalFormatCommands.map(
+          /** Binds one original conditional-format Sfx command. @param slot - Source command. @returns Slot definition. */ ([
+            commandUrl,
+            slotId,
+            label,
+            kind,
+          ]) => ({
+            commandUrl,
+            slotId,
+            label,
+            getState: (target: CalcSheetWorkflows) => ({
+              enabled: !target.HasSheetDialog() && target.conditionals.CanExecute(kind),
+            }),
+            execute: (target: CalcSheetWorkflows, request: SfxRequest) => {
+              const [argument] = request.GetArgs();
+              if (kind === "easy") {
+                const value = argument instanceof SfxUnoAnyItem ? argument.GetValue() : undefined;
+                const mode =
+                  typeof value === "object" && value !== null && "FormatRule" in value
+                    ? Number(value.FormatRule)
+                    : argument instanceof SfxInt16Item
+                      ? argument.GetValue()
+                      : undefined;
+                if (mode !== undefined && ![0, 1, 2, 6, 23].includes(mode)) return false;
+                return target.conditionals.Execute(kind, mode);
+              }
+              return !argument && target.conditionals.Execute(kind);
+            },
+          }),
+        ),
         ...(
           [
             [".uno:ColumnWidth", 26290, true],
@@ -353,7 +386,8 @@ export class CalcSheetWorkflows {
       this.metricDialogs.GetSnapshot() ||
       this.printDialogs.GetSnapshot() ||
       this.pageStyleDialogs.GetSnapshot() ||
-      this.headerFooterDialogs.GetSnapshot(),
+      this.headerFooterDialogs.GetSnapshot() ||
+      this.conditionals.IsOpen(),
     );
   }
 
@@ -702,6 +736,7 @@ export class CalcSheetWorkflows {
 
   /** Cancels the native async request before the session destroys its document. @returns Nothing. */
   Close(): void {
+    this.conditionals.Close();
     const headerFooter = this.headerFooterDialogs.GetSnapshot();
     if (headerFooter) this.headerFooterDialogs.Cancel(headerFooter.id);
     const style = this.pageStyleDialogs.GetSnapshot();

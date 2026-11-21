@@ -6,6 +6,7 @@ import generated from "../calc-ui.generated.json" with { type: "json" };
 /** Native source placement plus exact font-control payload consumed by shared controls. */
 export type CalcFormattingPlacement =
   | Extract<CommandToolbarPlacement, { kind: "command" | "separator" }>
+  | Readonly<{ kind: "command-select" }>
   | Readonly<{
       kind: "font-select" | "font-size-select" | "color-select";
       commandId: string;
@@ -20,6 +21,7 @@ export const calcFormatObjectBarItems: readonly CalcFormattingPlacement[] = norm
       if (node.kind === "separator") return [{ kind: "separator" }];
       if (node.visible === false) return [];
       const commandId = node.commandUrl as string;
+      if (commandId === ".uno:ConditionalFormatMenu") return [{ kind: "command-select" }];
       if (commandId === ".uno:Color" || commandId === ".uno:BackgroundColor")
         return [
           { kind: "color-select", commandId, label: getCalcCommandResource(commandId).label },
