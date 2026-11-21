@@ -1,0 +1,6 @@
+# Keep task history and vendored sources out of the code index.
+/.agentplane/
+/third_party/
+
+# The repository's JSON data includes large program registries and native test fixtures.
+*.json

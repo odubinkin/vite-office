@@ -109,6 +109,12 @@ node .agentplane/policy/check-routing.mjs
 - Use `ap quickstart` as the compact installed startup path and `ap role <ROLE>` to activate the current role before role-scoped planning or execution.
 - For policy changes, routing validation MUST pass via `node .agentplane/policy/check-routing.mjs`.
 
+## REPOSITORY CONTEXT
+
+- After preflight and task routing, start codebase exploration with a scoped `.graphify/venv/bin/graphify query "<symbols or topic>" --budget 1000` from the repository root, before broad source searches.
+- Use `graphify explain` or `graphify path` through the same executable for symbol and dependency questions. Confirm relevant results in source before making changes.
+- If the local CLI or index is missing, stale, or does not answer the question, use targeted source inspection. See the Graphify setup in `README.md` for building or refreshing the local index.
+
 
 ## SHARED PROMPT CONTRACT
 

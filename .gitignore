@@ -56,6 +56,10 @@ vendor/libreoffice-reference/
 /vendor/boost-reference
 .playwright-cli
 
+# Local Graphify environment and generated index.
+/.graphify/
+/graphify-out/
+
 # Deterministic compatibility views; author docs/program/registry records instead
 /docs/program/parity/writer-command-slice.json
 /docs/program/parity/runtime-inventory.json

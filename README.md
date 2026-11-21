@@ -151,3 +151,21 @@ Inventory records are independently authored under `docs/program/registry/{write
 registry gate is `npm run inventory:registry:check`; it also detects collisions and orphan
 references across applications. See the [registry contract](docs/program/registry/README.md) for
 record ownership and shared-contract coordination.
+
+### Graphify code index
+
+[Graphify](https://github.com/Graphify-Labs/graphify) indexes code locally for agent navigation.
+From the repository root, use `uv` and an installed Python 3.14 interpreter to set up a new
+checkout.
+
+```bash
+uv venv --python 3.14 .graphify/venv
+uv --cache-dir .graphify/cache pip install --python .graphify/venv/bin/python graphifyy==0.9.114
+.graphify/venv/bin/graphify extract . --code-only
+.graphify/venv/bin/graphify query "SwDoc" --budget 1000
+```
+
+Run the extraction command again after changing branches or making substantial code changes. The
+environment and `graphify-out/` index are local to each checkout. The index covers source code and
+skips JSON data, vendored sources, and AgentPlane history. The build uses local parsing without API
+credentials. See [AGENTS.md](AGENTS.md#repository-context) for how agents use the index.
