@@ -14,6 +14,7 @@ export interface SwAnnotationWindow {
   readonly editor: ImpEditEngine;
   readonly view: SearchEditView;
   MakeVisible(): void;
+  SearchHighlight?(): void;
 }
 
 /** Owns active comment search state and resolves sidebar windows by actual field identity. */
@@ -21,7 +22,7 @@ export class SwPostItMgr {
   private readonly windows = new Map<SwFormatField, SwAnnotationWindow>();
   private active: SwFormatField | undefined;
 
-  /** Binds the ICU-compatible regex factory supplied by the current Writer view. @param createRegex - Platform compiler. @returns Manager. */
+  /** Binds the regex factory supplied by the current Writer view. @param createRegex - Platform compiler. @returns Manager. */
   constructor(private readonly createRegex?: RegexMatcherFactory) {}
 
   /** Registers the sidebar window for a model field. @param field - Actual model comment. @param window - Mounted editor. @returns Release callback. */
@@ -37,6 +38,22 @@ export class SwPostItMgr {
   /** Reads the active, anchored comment. @returns Active comment or undefined. */
   GetActiveField(): SwFormatField | undefined {
     return this.active?.GetTextField()?.GetTextNode() ? this.active : undefined;
+  }
+
+  /** Activates a registered, anchored comment. @param field - Focused annotation field. @returns Whether the active window changed. */
+  SetActiveSidebarWin(field: SwFormatField): boolean {
+    if (this.active === field || !this.windows.has(field) || !field.GetTextField()?.GetTextNode())
+      return false;
+    this.active = field;
+    return true;
+  }
+
+  /** Returns focus to the original active annotation. @returns Whether a sidebar window took focus. */
+  GrabFocusOnActiveSidebarWin(): boolean {
+    const field = this.GetActiveField();
+    const window = field && this.windows.get(field);
+    window?.MakeVisible();
+    return window !== undefined;
   }
 
   /** Releases an active comment editor when document search resumes. @returns Nothing. */
@@ -62,7 +79,7 @@ export class SwPostItMgr {
       view.SetEditSelection(previous);
       return false;
     }
-    this.active = field;
+    this.SetActiveSidebarWin(field);
     window.MakeVisible();
     return true;
   }
@@ -81,7 +98,10 @@ export class SwPostItMgr {
   private RunActive(options: SearchOptions2, backward: boolean, command: SvxSearchCmd): boolean {
     const field = this.GetActiveField();
     const window = field === undefined ? undefined : this.windows.get(field);
-    if (window && this.Run(window, options, backward, command)) return true;
+    if (window && this.Run(window, options, backward, command)) {
+      if (command === SvxSearchCmd.FIND) window.SearchHighlight?.();
+      return true;
+    }
     this.ClearActiveField();
     return false;
   }

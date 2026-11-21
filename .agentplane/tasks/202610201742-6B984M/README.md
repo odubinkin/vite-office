@@ -4,7 +4,7 @@ title: "Implement Writer search and replace core and browser UI"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 78
+revision: 79
 origin:
   system: "manual"
 depends_on:
@@ -238,6 +238,9 @@ comments:
   -
     author: "CODER"
     body: "Verified checkpoint: the browser comment sidebar registers native edit documents with SwPostItMgr. Find and Replace loads and saves the native Notes option and follows upstream bulk-command admission. A mounted model annotation receives focus and selection, replacement updates its canonical field, and document Undo and Redo restore the editor. Writer uses browser RegExp; ICU is referenced only by the optional host comparison probe. Passed 57 targeted Writer tests, two browser matcher unit tests, two Writer resource cases and the existing Writer search end-to-end case in installed Chrome. Production build, dependencies, source tree and provenance, JSDoc, size, scoped lint and formatting, diff, doctor and routing passed. Doctor reports the existing managed-shim warning. Comment insertion and ODT annotation load and roundtrip are pending; the panel test seeds a native model field. No task closure or full-suite cadence increment."
+  -
+    author: "CODER"
+    body: "Verified checkpoint: SidebarTextControl focus activates the anchored annotation and moves the Writer cursor to its model position. Continued Find uses the textarea selection, reveals its result, and restores the active comment when the modeless dialog closes. Document pointer input clears the active annotation; transient DOM selection projection does not. Passed 43 targeted tests in six Writer suites, the existing mounted Writer search end-to-end case in installed Chrome, and two Writer resource tests. Production build, module boundaries, source tree and provenance, JSDoc, file size, scoped lint and format, diff, doctor and routing passed. Comment insertion and ODT annotation import, export and transport require explicit expansion of the recorded search owner scope under dod.core. Current task remains open with no full suite cadence increment."
 events:
   -
     type: "status"
@@ -576,8 +579,13 @@ events:
     at: "2026-11-21T12:13:52.705Z"
     author: "CODER"
     body: "Verified checkpoint: the browser comment sidebar registers native edit documents with SwPostItMgr. Find and Replace loads and saves the native Notes option and follows upstream bulk-command admission. A mounted model annotation receives focus and selection, replacement updates its canonical field, and document Undo and Redo restore the editor. Writer uses browser RegExp; ICU is referenced only by the optional host comparison probe. Passed 57 targeted Writer tests, two browser matcher unit tests, two Writer resource cases and the existing Writer search end-to-end case in installed Chrome. Production build, dependencies, source tree and provenance, JSDoc, size, scoped lint and formatting, diff, doctor and routing passed. Doctor reports the existing managed-shim warning. Comment insertion and ODT annotation load and roundtrip are pending; the panel test seeds a native model field. No task closure or full-suite cadence increment."
+  -
+    type: "comment"
+    at: "2026-11-21T12:21:47.545Z"
+    author: "CODER"
+    body: "Verified checkpoint: SidebarTextControl focus activates the anchored annotation and moves the Writer cursor to its model position. Continued Find uses the textarea selection, reveals its result, and restores the active comment when the modeless dialog closes. Document pointer input clears the active annotation; transient DOM selection projection does not. Passed 43 targeted tests in six Writer suites, the existing mounted Writer search end-to-end case in installed Chrome, and two Writer resource tests. Production build, module boundaries, source tree and provenance, JSDoc, file size, scoped lint and format, diff, doctor and routing passed. Comment insertion and ODT annotation import, export and transport require explicit expansion of the recorded search owner scope under dod.core. Current task remains open with no full suite cadence increment."
 doc_version: 3
-doc_updated_at: "2026-11-21T12:13:52.705Z"
+doc_updated_at: "2026-11-21T12:21:47.545Z"
 doc_updated_by: "CODER"
 description: "Implement the approved coherent Writer search-and-replace feature from pinned LibreOffice sources: real shared search engine and options, native paragraph/cursor traversal and replacement/history contracts, view-owned search state and dispatch, Find toolbar and Find and Replace dialog with generated upstream command placement and shortcuts. Preserve source semantics and explicit unsupported boundaries; never substitute DOM text search or browser RegExp for ICU contracts. Work only on writer in vite-office-writer; local upstream reading approved, no network or merges. Keep active until approved scope is verified."
 sections:

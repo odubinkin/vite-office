@@ -180,14 +180,14 @@ export function WriterWorkbench({
     },
     [searchDialog, searchOwner, view],
   );
-  /** Closes one search surface and restores document focus. @param dialog - Whether the dialog closes. @returns Nothing. */
+  /** Closes one search surface and restores Writer focus. @param dialog - Whether the dialog closes. @returns Nothing. */
   function closeSearch(dialog: boolean): void {
     setSearchSurfaces(
       /** Removes only the closed surface. @param previous - Open surfaces. @returns Remaining surfaces. */ (
         previous,
       ) => ({ ...previous, [dialog ? "searchDialog" : "findbar"]: undefined }),
     );
-    editingHostRef.current?.focus();
+    if (!view.GetPostItMgr().GrabFocusOnActiveSidebarWin()) editingHostRef.current?.focus();
   }
   const [optionsDialog, setOptionsDialog] = useState(false);
   const [tableDialog, setTableDialog] = useState<"insert" | "properties">();

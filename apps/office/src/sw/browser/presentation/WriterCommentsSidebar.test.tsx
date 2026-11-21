@@ -8,7 +8,8 @@ import { SwPostItField, SwPostItFieldType } from "../../source/core/fields/docuf
 import { createWriterDocumentSession } from "../composition/writer-module";
 import { WriterWorkbench } from "./writer-view";
 
-it("focuses the matched comment, replaces its selection and undoes through Writer", /** Exercises the mounted sidebar, dialog option, selection, document field and undo. @returns Nothing. */ () => {
+/** Opens a Writer session with one native annotation attached to a body paragraph. @param note - Initial comment text. @returns Mounted workbench and native field. */
+function openAnnotatedDocument(note: string) {
   const session = createWriterDocumentSession();
   const shell = session.view.GetWrtShell();
   shell.Insert("Document text");
@@ -16,13 +17,18 @@ it("focuses the matched comment, replaces its selection and undoes through Write
   const field = new SwPostItField(SwPostItFieldType.Get(node.GetDoc()), {
     author: "Ada",
     initials: "A",
-    text: "prefix target suffix",
+    text: note,
     name: "comment1",
     dateTime: new DateTime(DateTime.EMPTY),
   });
   const format = new SwFormatField(field);
   field.Dispose();
-  node.InsertHint(new SwTextField(format, 4));
+  expect(node.InsertHint(new SwTextField(format, 4))).toBe(true);
+  return { session, shell, format };
+}
+
+it("focuses the matched comment, replaces its selection and undoes through Writer", /** Exercises the mounted sidebar, dialog option, selection, document field and undo. @returns Nothing. */ () => {
+  const { session, shell, format } = openAnnotatedDocument("prefix target suffix");
   const workbench = render(<WriterWorkbench isActive view={session.view} />);
   try {
     const sidebar = screen.getByRole("complementary", { name: "Comments" });
@@ -57,6 +63,50 @@ it("focuses the matched comment, replaces its selection and undoes through Write
       },
     );
     expect(comment).toHaveValue("prefix new suffix");
+  } finally {
+    workbench.unmount();
+    session.view.Close();
+  }
+});
+
+it("searches from the focused comment caret and releases it on document input", /** Exercises native annotation activation and continued match visibility. @returns Nothing. */ () => {
+  const { session, shell, format } = openAnnotatedDocument("target between target");
+  const workbench = render(<WriterWorkbench isActive view={session.view} />);
+  try {
+    const comment = screen.getByRole<HTMLTextAreaElement>("textbox", { name: "Comment — Ada" });
+    const manager = session.view.GetPostItMgr();
+    act(
+      /** Focuses the note and puts the caret after its first match. @returns Nothing. */ () => {
+        comment.focus();
+        comment.setSelectionRange(6, 6);
+        fireEvent.select(comment);
+      },
+    );
+    expect(manager.GetActiveField() === format).toBe(true);
+    expect(shell.GetCursor().GetPoint().GetContentIndex()).toBe(4);
+    fireEvent.keyDown(window, { key: "h", ctrlKey: true });
+    const dialog = within(screen.getByRole("dialog", { name: "Find and Replace" }));
+    fireEvent.click(dialog.getByText("Other options"));
+    const comments = dialog.getByRole<HTMLInputElement>("checkbox", { name: "Comments" });
+    if (!comments.checked) fireEvent.click(comments);
+    fireEvent.change(dialog.getByLabelText("Find"), { target: { value: "target" } });
+    const findNext = dialog.getByRole("button", { name: "Find Next" });
+    act(
+      /** Mimics the browser moving focus to a clicked dialog button. @returns Nothing. */ () =>
+        findNext.focus(),
+    );
+    expect(manager.GetActiveField() === format).toBe(true);
+    fireEvent.click(findNext);
+    expect(comment).toHaveFocus();
+    expect(comment.selectionStart).toBe(15);
+    expect(comment.selectionEnd).toBe(21);
+
+    const close = dialog.getByRole("button", { name: "Close" });
+    act(/** Moves focus to the dialog's Close button. @returns Nothing. */ () => close.focus());
+    fireEvent.click(close);
+    expect(comment).toHaveFocus();
+    fireEvent.mouseDown(screen.getByLabelText("Writer document body"));
+    expect(manager.GetActiveField()).toBeUndefined();
   } finally {
     workbench.unmount();
     session.view.Close();

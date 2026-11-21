@@ -2,6 +2,7 @@
 import { useLayoutEffect, useRef } from "react";
 import type { SwFormatField } from "../../inc/fmtfld";
 import { RES_TXTATR_ANNOTATION } from "../../inc/hintids";
+import { SwPosition } from "../../source/core/crsr/pam";
 import type { SwDoc } from "../../source/core/doc/doc";
 import type { SwView } from "../../source/uibase/uiview/view";
 import { useBrowserLocalization } from "../../../framework/browser/localization/browser-localization-context";
@@ -29,6 +30,9 @@ function WriterCommentCard({
       const release = view.GetPostItMgr().RegisterSidebarWin(format, {
         editor: current.getImpl(),
         view: current.GetSearchView(),
+        /** Makes a continued match visible when a browser dialog owns focus. @returns Nothing. */ SearchHighlight() {
+          current.MakeVisible();
+        },
         /** Reveals the matched note in the browser. @returns Nothing. */ MakeVisible() {
           current.MakeVisible();
         },
@@ -55,6 +59,23 @@ function WriterCommentCard({
         defaultValue={field.GetPar2()}
         rows={3}
         readOnly={view.GetWrtShell().GetViewOptions().IsReadonly()}
+        onFocus={
+          /** Activates the model anchor when the user focuses the comment editor. @returns Nothing. */ () => {
+            const hint = format.GetTextField();
+            const node = hint?.GetTextNode();
+            if (!hint || !node || !view.GetPostItMgr().SetActiveSidebarWin(format)) return;
+            const anchor = new SwPosition(node, hint.GetStart());
+            try {
+              view.GetWrtShell().SetCursor(anchor);
+            } finally {
+              anchor.Dispose();
+            }
+          }
+        }
+        onBlur={
+          /** Captures the final caret when focus moves to the modeless search dialog. @returns Nothing. */ () =>
+            editor.current?.ReadSelection()
+        }
         onSelect={
           /** Captures user selection for Find and Replace. @returns Nothing. */ () =>
             editor.current?.ReadSelection()

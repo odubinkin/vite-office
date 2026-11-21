@@ -619,6 +619,7 @@ export function WriterPlainTextEditor(props: WriterPlainTextEditorProps): React.
           /** Routes admitted native label gestures before pointer text selection. @param event - Actual document mouse input. @returns Nothing. */ (
             event,
           ) => {
+            props.editWindow.GetView().GetPostItMgr().ClearActiveField();
             if (props.onNumLabelMouseDown?.(event)) return;
             controller.HandlePointerDown(event);
           }
