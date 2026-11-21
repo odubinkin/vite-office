@@ -3,16 +3,20 @@ import type { SearchEditView } from "../../../editeng/source/editeng/impedit4.se
 import { SvxAdjust, SvxAdjustItem } from "../../../editeng/inc/adjustitem";
 import {
   EE_FEATURE_LINEBR,
+  EE_CHAR_FONTHEIGHT,
+  EE_CHAR_ITALIC,
   EE_PARA_JUST,
   EE_PARA_SBL,
   EE_PARA_ULSPACE,
 } from "../../../editeng/inc/eeitem";
 import { SvxLineSpacingItem } from "../../../editeng/inc/lspcitem";
+import { SvxFontHeightItem } from "../../../editeng/inc/fhgtitem";
+import { SvxPostureItem } from "../../../editeng/source/items/textitem";
 import { SvxULSpaceItem } from "../../../editeng/inc/ulspitem";
 import type { ContentNode } from "../../../editeng/source/editeng/ContentNode";
 import { SfxItemSet } from "../../../svl/source/items/itemset";
 import { SfxVoidItem } from "../../../svl/source/items/voiditem";
-import { FontLineStyle } from "../../../tools/inc/fontenum";
+import { FontItalic, FontLineStyle } from "../../../tools/inc/fontenum";
 import { ASIAN, COMPLEX } from "../../../offapi/com/sun/star/i18n/ScriptType";
 import {
   RES_CHRATR_CJK_FONT,
@@ -37,6 +41,7 @@ import { getWriterTextCaretPoint } from "../editor/writer-selection";
 import { EditPaM } from "../../../editeng/inc/EditPaM";
 import { EditSelection } from "../../../editeng/inc/EditSelection";
 import type { EditTextObject } from "../../../editeng/source/editeng/editobj";
+import { InsertTextObject } from "../../../editeng/source/editeng/impedit4.textobject";
 import type { OUStringConstReference } from "../../../sal/inc/rtl/ustring";
 import { text, unicode } from "../../../i18nlangtag/source/isolang/isolang.tables";
 import { Rectangle } from "../../../tools/inc/gen";
@@ -176,6 +181,63 @@ export class WriterCommentEditor extends SwTextAPIEditSource {
     this.input.focus({ preventScroll: true });
     this.input.scrollIntoView?.({ block: "nearest" });
     this.ShowCursor();
+  }
+
+  /** Prepares the original reply quotation with the copied EditEngine content. @param label - Localized Reply to author label. @returns Owned text object and its plain text. */
+  CreateReplyText(label: string): Readonly<{ text: string; object: EditTextObject }> | undefined {
+    const original = this.CreateTextObject();
+    const source = new SwTextAPIEditSource();
+    const engine = source.getImpl();
+    const doc = engine.GetEditDoc();
+    /** Inserts a quote boundary at the native position. @param point - EditEngine position. @param value - Boundary text. @returns End position. */
+    function insert(point: EditPaM, value: string): EditPaM {
+      const native = unicode(value);
+      try {
+        return engine.InsertText(new EditSelection(point), native);
+      } finally {
+        native.dispose();
+      }
+    }
+    try {
+      if (original.GetParagraphCount() === 1 && !original.HasText(0)) return undefined;
+      const stamp = this.field.GetData().dateTime;
+      const timestamp = new Date(0);
+      timestamp.setFullYear(stamp.GetYear(), stamp.GetMonth() - 1, stamp.GetDay());
+      timestamp.setHours(stamp.GetHour(), stamp.GetMin(), 0, 0);
+      const date = new Intl.DateTimeFormat().format(timestamp);
+      const time = new Intl.DateTimeFormat(undefined, {
+        hour: "numeric",
+        minute: "2-digit",
+      }).format(timestamp);
+      const start = insert(doc.GetStartPaM(), `${label} (${date}, ${time}): "`);
+      const quoteEnd = original.HasText(0)
+        ? InsertTextObject(engine, original, start).Max()
+        : insert(start, "...");
+      const end = insert(quoteEnd, '"');
+      insert(end, "\n");
+      const items = new SfxItemSet(engine.GetEmptyItemSet());
+      try {
+        items.Put(new SvxFontHeightItem(200, 80, EE_CHAR_FONTHEIGHT), true);
+        items.Put(new SvxPostureItem(FontItalic.ITALIC_NORMAL, EE_CHAR_ITALIC), true);
+        source.QuickSetAttribs(items, engine.CreateESel(new EditSelection(doc.GetStartPaM(), end)));
+      } finally {
+        items.Dispose();
+      }
+      const plain = source.GetText();
+      try {
+        return { text: text(plain), object: source.CreateTextObject() };
+      } finally {
+        plain.dispose();
+      }
+    } finally {
+      source.Dispose();
+      original.dispose();
+    }
+  }
+
+  /** Places the reply caret after its generated quotation. @returns Nothing. */
+  PlaceCursorAtEnd(): void {
+    this.selection.assign(this.getImpl().GetEditDoc().GetEndPaM());
   }
 
   /** Paints the native cursor when this annotation owns browser focus. @returns Nothing. */

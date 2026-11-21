@@ -1,6 +1,9 @@
 /** @fileoverview Implements structural Writer shell algorithms using the actual native SwWrtShell owner directly. */
 
-import { SwPosition, type WriterTextRange } from "../../core/crsr/pam";
+import { SwPosition, type SwPaM, type WriterTextRange } from "../../core/crsr/pam";
+import type { SwFormatField } from "../../../inc/fmtfld";
+import type { SwPostItField } from "../../core/fields/docufld";
+import { SwUndoInsAnnotation } from "../../core/undo/unattr-field";
 import {
   SwTextNode,
   type SwTextFragment,
@@ -24,6 +27,25 @@ import { getWriterTypingCharacterClass } from "./delete";
 import type { SwWrtShell } from "./wrtsh1";
 import { SvxFirstLineIndentItem } from "../../../../editeng/inc/lrspitem";
 import { RES_MARGIN_FIRSTLINE, RES_TXTATR_ANNOTATION } from "../../../inc/hintids";
+
+/** Inserts an owned annotation value as one Writer history action. @param shell - Editing shell. @param range - Comment anchor or selected range. @param field - Owned field value. @returns Attached annotation format. */
+export function InsertPostIt(
+  shell: SwWrtShell,
+  range: SwPaM,
+  field: SwPostItField,
+): SwFormatField | undefined {
+  const before = shell.CaptureCursorState();
+  const action = new SwUndoInsAnnotation(range, field, before);
+  try {
+    shell.ApplyAction(action);
+    return action.GetFormat();
+  } catch (error) {
+    action.Dispose();
+    throw error;
+  } finally {
+    before.pendingCharacterItems.Dispose();
+  }
+}
 
 /** Applies the existing shell ruler-margin algorithm through actual paragraph items and shell history. @param shell - Original shell owner. @param edge - Dragged marker. @param delta - Original twip delta. @returns Whether paragraph attributes changed. */
 export function AdjustParagraphRulerIndent(

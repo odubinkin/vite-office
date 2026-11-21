@@ -28,6 +28,7 @@
     "resolveCommentThread": ".uno:ResolveCommentThread",
     "deleteComment": ".uno:DeleteComment",
     "deleteCommentThread": ".uno:DeleteCommentThread",
+    "replyComment": ".uno:ReplyComment",
     "insertBookmark": ".uno:InsertBookmark",
     "insertBreak": ".uno:InsertBreak",
     "insertPageBreak": ".uno:InsertPagebreak",
@@ -133,6 +134,7 @@
     { "capabilityId": "CAP-0111", "commandUrl": ".uno:ResolveCommentThread" },
     { "capabilityId": "CAP-0111", "commandUrl": ".uno:DeleteComment" },
     { "capabilityId": "CAP-0111", "commandUrl": ".uno:DeleteCommentThread" },
+    { "capabilityId": "CAP-0111", "commandUrl": ".uno:ReplyComment" },
     { "capabilityId": "CAP-0113", "commandUrl": ".uno:InsertBookmark" },
     { "capabilityId": "CAP-0112", "commandUrl": ".uno:InsertBreak" },
     { "capabilityId": "CAP-0112", "commandUrl": ".uno:InsertPagebreak" },
@@ -1301,6 +1303,19 @@
       "shortcuts": [],
       "slotId": 22511
     },
+    ".uno:ReplyComment": {
+      "browserOwned": false,
+      "argumentSchema": [],
+      "capabilityId": "CAP-0111",
+      "controlLabel": "Reply Comment",
+      "label": "Reply Comment",
+      "iconName": "lc_replycomment.svg",
+      "placements": ["sw/uiconfig/swriter/menubar/menubar.xml"],
+      "semantics": "action",
+      "showsDialog": false,
+      "shortcuts": [],
+      "slotId": 22507
+    },
     ".uno:StatusBarVisible": {
       "browserOwned": false,
       "argumentSchema": [],
@@ -2192,6 +2207,11 @@
     },
     {
       "classification": "supported-upstream",
+      "commandUrl": ".uno:ReplyComment",
+      "sources": ["sw/uiconfig/swriter/menubar/menubar.xml"]
+    },
+    {
+      "classification": "supported-upstream",
       "commandUrl": ".uno:StatusBarVisible",
       "sources": ["sw/uiconfig/swriter/menubar/menubar.xml"]
     },
@@ -2964,14 +2984,6 @@
       "context": [".uno:EditMenu"],
       "entryKind": "menu",
       "sourceUrl": ".uno:ChangesMenu",
-      "reason": "outside-p1-supported-command-slice",
-      "sourcePath": "sw/uiconfig/swriter/menubar/menubar.xml"
-    },
-    {
-      "classification": "X",
-      "context": [".uno:EditMenu", ".uno:EditCommentsMenu"],
-      "entryKind": "command",
-      "sourceUrl": ".uno:ReplyComment",
       "reason": "outside-p1-supported-command-slice",
       "sourcePath": "sw/uiconfig/swriter/menubar/menubar.xml"
     },
@@ -7873,6 +7885,7 @@
           {
             "id": ".uno:EditCommentsMenu",
             "items": [
+              { "commandUrl": ".uno:ReplyComment", "kind": "command", "visible": true },
               { "commandUrl": ".uno:ResolveComment", "kind": "command", "visible": true },
               { "commandUrl": ".uno:ResolveCommentThread", "kind": "command", "visible": true },
               { "commandUrl": ".uno:DeleteComment", "kind": "command", "visible": true },
@@ -8698,12 +8711,6 @@
         "context": [".uno:EditMenu"],
         "entryKind": "menu",
         "sourceUrl": ".uno:ChangesMenu"
-      },
-      {
-        "classification": "X",
-        "context": [".uno:EditMenu", ".uno:EditCommentsMenu"],
-        "entryKind": "command",
-        "sourceUrl": ".uno:ReplyComment"
       },
       {
         "classification": "X",

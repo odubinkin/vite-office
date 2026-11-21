@@ -6,7 +6,7 @@ import type { WriterSlotHandler } from "../../../sdi/swriter";
 import { WRITER_COMMAND_IDS } from "../../../uiconfig/swriter/menubar/menubar-commands";
 import { SwPaM } from "../../core/crsr/pam";
 import { SwPostItField, SwPostItFieldType } from "../../core/fields/docufld";
-import { SwUndoInsAnnotation } from "../../core/undo/unattr-field";
+import { InsertPostIt } from "../wrtsh/wrtsh-editing";
 import type { SwView } from "../uiview/view";
 import type { SwWrtShell } from "../wrtsh/wrtsh1";
 import type { SwTextShell } from "./textsh1";
@@ -39,23 +39,30 @@ export function createWriterAnnotationCommands(
           name: "",
           dateTime: new DateTime(DateTime.SYSTEM),
         });
-        const before = shell.CaptureCursorState();
         try {
-          const action = new SwUndoInsAnnotation(range, field, before);
-          try {
-            shell.ApplyAction(action);
-          } catch (error) {
-            action.Dispose();
-            throw error;
-          }
-          const format = action.GetFormat();
+          const format = InsertPostIt(shell, range, field);
           if (format) manager?.Focus(format);
           return true;
         } finally {
-          before.pendingCharacterItems.Dispose();
           range.Dispose();
         }
       },
+    },
+    {
+      id: WRITER_COMMAND_IDS.replyComment,
+      capabilityId: "CAP-0111",
+      /** Uses the original annotation ID request to open an interactive reply. @param _context - Bound text shell. @param args - Request items. @returns Whether inserted. */
+      execute: (_context, args) => {
+        const item = args.find(
+          /** Finds the native parent ID argument. @param value - Request item. @returns Whether this is a comment ID. */
+          (value): value is SfxStringItem =>
+            value instanceof SfxStringItem && value.Which() === SID_ATTR_POSTIT_ID,
+        );
+        const id = item?.GetValue();
+        return id ? view?.GetPostItMgr().Reply(Number(id)) === true : false;
+      },
+      /** Disables reply in a read-only view. @returns Whether enabled. */
+      isEnabled: () => view !== undefined && !shell.GetViewOptions().IsReadonly(),
     },
     ...(
       [

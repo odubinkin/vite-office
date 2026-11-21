@@ -10,8 +10,12 @@ import type { RegexMatcherFactory } from "../../../../unotools/inc/textsearch";
 import type { SfxItemSet } from "../../../../svl/source/items/itemset";
 import type { SwFormatField } from "../../../inc/fmtfld";
 import type { SwViewOption } from "../../../inc/viewopt";
-import { SwPosition } from "../../core/crsr/pam";
+import { SwPaM, SwPosition } from "../../core/crsr/pam";
 import type { SwWrtShell } from "../wrtsh/wrtsh1";
+import { InsertPostIt } from "../wrtsh/wrtsh-editing";
+import { SwPostItField } from "../../core/fields/docufld";
+import type { EditTextObject } from "../../../../editeng/source/editeng/editobj";
+import { DateTime } from "../../../../tools/source/datetime/datetime";
 
 /** Editor and viewport bound to one native comment field. */
 export interface SwAnnotationWindow {
@@ -24,13 +28,15 @@ export interface SwAnnotationWindow {
   HasFocus?(): boolean;
   GrabFocusToDocument?(): void;
   SetResolved?(value: boolean): void;
+  CreateReplyText?(): Readonly<{ text: string; object: EditTextObject }> | undefined;
+  PlaceCursorAtEnd?(): void;
 }
 
 /** Owns active comment search state and resolves sidebar windows by actual field identity. */
 export class SwPostItMgr {
   private readonly windows = new Map<SwFormatField, SwAnnotationWindow>();
   private active: SwFormatField | undefined;
-  private pendingFocus: SwFormatField | undefined;
+  private pendingFocus: Readonly<{ field: SwFormatField; atEnd: boolean }> | undefined;
 
   /** Binds the current Writer view options and search engine. @param options - View-local options. @param writer - Model editing shell. @param createRegex - Platform compiler. @param activeChanged - Dispatch context notification. @returns Manager. */
   constructor(
@@ -57,6 +63,44 @@ export class SwPostItMgr {
       this.options.IsPostIts() &&
       (this.options.IsResolvedPostIts() || !field.GetField().IsResolved())
     );
+  }
+
+  /** Inserts a native reply immediately after the parent field. @param id - Optional annotation ID supplied by the body command. @returns Whether inserted. */
+  Reply(id?: number): boolean {
+    const format = this.GetFieldForCommand(id);
+    const hint = format?.GetTextField();
+    const node = hint?.GetTextNode();
+    if (!format || !hint || !node || this.options.IsReadonly()) return false;
+    const parent = format.GetField();
+    const parentPostItId = parent.GetPostItId();
+    const parentId =
+      parent.GetData().paraId || (crypto.getRandomValues(new Uint32Array(1))[0] ?? 0);
+    parent.SetParaId(parentId);
+    if (!parent.GetName()) parent.SetName(`__Annotation__${parentPostItId}`);
+    const quote = this.windows.get(format)?.CreateReplyText?.();
+    const reply = new SwPostItField(parent.GetTyp(), {
+      author: "Unknown Author",
+      initials: "",
+      name: "",
+      text: quote?.text ?? "",
+      parentId,
+      parentPostItId,
+      parentName: parent.GetName(),
+      dateTime: new DateTime(DateTime.SYSTEM),
+      ...(quote && { textObject: quote.object }),
+    });
+    quote?.object.dispose();
+    this.ClearActiveField();
+    const point = new SwPosition(node, hint.GetStart() + 1);
+    const range = new SwPaM(point);
+    try {
+      const result = InsertPostIt(this.writer, range, reply);
+      if (result) this.Focus(result, true);
+      return result !== undefined;
+    } finally {
+      range.Dispose();
+      point.Dispose();
+    }
   }
 
   /** Deletes an annotation or its consecutive thread through the Writer cursor. @param id - Optional document annotation ID. @param thread - Whether to delete the thread. @returns Whether anything was deleted. */
@@ -201,11 +245,13 @@ export class SwPostItMgr {
 
   /** Completes a native focus request once the editor is mounted and visible. @param field - Projected annotation. @returns Nothing. */
   SidebarWinShown(field: SwFormatField): void {
-    if (this.pendingFocus !== field) return;
+    const pending = this.pendingFocus;
+    if (pending?.field !== field) return;
     const window = this.windows.get(field);
     if (window === undefined) return;
     this.pendingFocus = undefined;
     this.SetActiveSidebarWin(field);
+    if (pending.atEnd) window.PlaceCursorAtEnd?.();
     window.MakeVisible();
   }
 
@@ -242,11 +288,11 @@ export class SwPostItMgr {
     return true;
   }
 
-  /** Routes the original field focus request after its browser window is mounted. @param field - Newly inserted annotation. @returns Nothing. */
-  Focus(field: SwFormatField): void {
+  /** Routes the original field focus request after its browser window is mounted. @param field - Newly inserted annotation. @param atEnd - Positions a reply after its quotation. @returns Nothing. */
+  Focus(field: SwFormatField, atEnd = false): void {
     if (!field.GetTextField()?.GetTextNode()) return;
     const visible = this.IsVisible(field);
-    this.pendingFocus = field;
+    this.pendingFocus = { field, atEnd };
     this.options.SetPostIts(true);
     if (field.GetField().IsResolved()) this.options.SetResolvedPostIts(true);
     if (visible) this.SidebarWinShown(field);

@@ -5878,3 +5878,11 @@ parent. Writer preserves anchor order and the follow-window rule.
 
 - [Original parent metadata and sidebar ordering](../../vendor/libreoffice-reference/sw/source/uibase/docvw/PostItMgr.cxx)
 - [Original root navigation](../../vendor/libreoffice-reference/sw/source/uibase/docvw/AnnotationWin2.cxx)
+
+### WRITER-729 — A reply can quote an ellipsis before a nonempty paragraph
+
+`SwAnnotationWin::InitAnswer` tests only the first paragraph before copying
+the original text object. When that paragraph is empty, the quotation is
+`...` even if a later paragraph contains text. Writer preserves this rule.
+
+- [Original reply quotation](../../vendor/libreoffice-reference/sw/source/uibase/docvw/AnnotationWin.cxx)

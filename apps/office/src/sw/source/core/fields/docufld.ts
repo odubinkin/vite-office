@@ -132,6 +132,11 @@ export class SwPostItField {
     this.data = { ...this.data, name };
   }
 
+  /** Assigns the paragraph ID used by replies. @param paraId - Native paragraph identifier. @returns Nothing. */
+  SetParaId(paraId: number): void {
+    this.data = { ...this.data, paraId };
+  }
+
   /** Reads the plain text fallback used by the original sidebar. @returns Comment text. */
   GetPar2(): string {
     return this.data.text;

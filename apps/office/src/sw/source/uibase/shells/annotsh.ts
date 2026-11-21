@@ -157,6 +157,13 @@ export class SwAnnotationShell {
         isEnabled: () => this.CanEdit(),
       },
       {
+        id: CMD.replyComment,
+        /** Inserts a reply at the active comment. @returns Whether inserted. */
+        execute: () => this.manager.Reply(),
+        /** Enables reply in an editable annotation. @returns Whether enabled. */
+        isEnabled: () => this.CanEdit(),
+      },
+      {
         id: CMD.resolveComment,
         /** Toggles resolution in the original active annotation window. @returns Whether changed. */
         execute: () => this.manager.ToggleResolved(),

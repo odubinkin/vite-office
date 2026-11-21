@@ -133,4 +133,11 @@ test("Writer inserts a comment, finds its text and undoes note formatting", /** 
   await expect(page.getByLabel("Writer document body", { exact: true })).toBeFocused();
   await undo.click();
   await expect(comment).toHaveText("Find this annotation");
+  await commentActions.click();
+  await page.getByRole("button", { name: "Reply", exact: true }).click();
+  const reply = comment.last();
+  await expect(reply).toBeFocused();
+  await expect(reply).toContainText('"Find this annotation"');
+  await page.keyboard.insertText("Browser reply");
+  await expect(reply.locator("p").last()).toHaveText("Browser reply");
 });

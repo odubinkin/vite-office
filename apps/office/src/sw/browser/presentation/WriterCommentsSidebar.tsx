@@ -50,7 +50,13 @@ function WriterCommentCard({
   function execute(command: string): void {
     close();
     activate();
-    view.Execute(command);
+    const result = view.Execute(command);
+    if (
+      command === WRITER_COMMAND_IDS.replyComment &&
+      result.status === "executed" &&
+      result.value === true
+    )
+      return;
     manager.ClearActiveField();
     focusDocument();
   }
@@ -86,6 +92,19 @@ function WriterCommentCard({
           return card.current?.contains(card.current.ownerDocument.activeElement) ?? false;
         },
         GrabFocusToDocument: focusDocument,
+        /** Builds the localized quotation for a newly inserted reply. @returns Owned reply text. */ CreateReplyText() {
+          const label = localization.GetText("writer.comments.replyTo", "Reply to $1");
+          return current.CreateReplyText(
+            label.replace(
+              "$1",
+              /** Substitutes the parent author literally. @returns Parent author. */
+              () => field.GetData().author,
+            ),
+          );
+        },
+        /** Positions a new reply after its quotation. @returns Nothing. */ PlaceCursorAtEnd() {
+          current.PlaceCursorAtEnd();
+        },
         /** Publishes the original resolution change through annotation history. @param value - Whether resolved. @returns Nothing. */ SetResolved(
           value,
         ) {
@@ -98,7 +117,7 @@ function WriterCommentCard({
         current.Dispose();
       };
     },
-    [field, focusDocument, format, view],
+    [field, focusDocument, format, localization, view],
   );
   useLayoutEffect(
     /** Completes pending annotation focus after a hidden card is shown. @returns Nothing. */ () => {
@@ -152,6 +171,17 @@ function WriterCommentCard({
                 }
                 className="inset-auto z-50 m-0 min-w-32 rounded border border-slate-300 bg-white p-1 shadow-lg"
               >
+                <button
+                  type="button"
+                  className="w-full rounded px-2 py-1 text-left text-sm hover:bg-slate-100"
+                  onClick={
+                    /** Opens a reply to this comment. @returns Nothing. */
+                    () => execute(WRITER_COMMAND_IDS.replyComment)
+                  }
+                >
+                  {localization.GetText("writer.comments.reply", "Reply")}
+                </button>
+                <hr className="my-1 border-slate-200" />
                 <button
                   type="button"
                   className="w-full rounded px-2 py-1 text-left text-sm hover:bg-slate-100"
