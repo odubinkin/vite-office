@@ -9,6 +9,12 @@
           "path": "apps/office/src/sw/browser/presentation/WriterSearch.tsx",
           "marker": "WriterSearch"
         }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/svx/source/dialog/srchdlg.cxx",
+          "marker": "SvxSearchDialog::SaveToModule_Impl"
+        }
       ]
     },
     "localPath": "apps/office/src/sw/browser/presentation/WriterSearch.tsx",
@@ -19,7 +25,8 @@
     "rationale": "Browser controls for the supported findbar.xml and findreplacedialog.ui surfaces use the Writer search owner for all document operations.",
     "responsibilities": [
       "Browser controls for the supported findbar.xml and findreplacedialog.ui surfaces use the Writer search owner for all document operations.",
-      "Exposes the pinned CTL and CJK kashida and width controls in Other options. The toolbar passes its native transliteration subset."
+      "Exposes the pinned CTL and CJK kashida and width controls in Other options. The toolbar passes its native transliteration subset.",
+      "Publishes the dialog's text and style entries on focus loss and saves accepted option changes as a Find request for Repeat Search."
     ],
     "stackDivergence": {
       "kind": "browser-adaptation",

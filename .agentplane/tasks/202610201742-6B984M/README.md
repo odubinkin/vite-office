@@ -4,7 +4,7 @@ title: "Implement Writer search and replace core and browser UI"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 36
+revision: 37
 origin:
   system: "manual"
 depends_on:
@@ -112,6 +112,9 @@ comments:
   -
     author: "CODER"
     body: "Verified read-only search state checkpoint: the represented Writer view option now supplies the replacement permission corresponding to SwView::StateSearch. The replacement group and both command buttons retain their layout and become insensitive as in SvxSearchDialog::EnableControls_Impl. The shared view dispatch rejects fresh or repeated replacement before changing the saved request, cursor, document, or undo history. Find, Find All, backward repeat, and grouped replacement after an editable view update are covered. Six targeted Vitest suites passed 69 tests, two Writer resource tests passed, npm run build passed, and the existing Writer search browser test passed using the installed Chrome channel. Dependencies, source tree and provenance, JSDoc, file-size, scoped lint and formatting, doctor, routing and diff checks passed. This checkpoint stays inside existing task paths. No parent closure or full-suite cadence increment."
+  -
+    author: "CODER"
+    body: "Verified dialog-state checkpoint against SvxSearchDialog::LoseFocusHdl_Impl, ClickHdl_Impl, TemplateHdl_Impl and SaveToModule_Impl. Text and style drafts publish the current Find request on focus loss; search option changes and accepted similarity settings publish it immediately. The saved selection scope, replacement direction, and resolved paragraph-style choices now reach the same view owner used by Repeat Search. Explicit Find All and Replace still dispatch their own commands. Tests distinguish uncommitted text, accepted entries, and a case toggle, with unchanged toolbar repeat behavior. Four targeted Vitest files passed all 56 tests. The existing browser search scenario and a local real-focus regression passed in installed Chrome. Office build, two Writer resource tests, dependencies, source tree and provenance, JSDoc, file size, scoped lint and format, doctor and routing passed. This checkpoint does not close the parent task or increment the full-suite cadence."
 events:
   -
     type: "status"
@@ -240,8 +243,13 @@ events:
     at: "2026-11-21T04:53:21.399Z"
     author: "CODER"
     body: "Verified read-only search state checkpoint: the represented Writer view option now supplies the replacement permission corresponding to SwView::StateSearch. The replacement group and both command buttons retain their layout and become insensitive as in SvxSearchDialog::EnableControls_Impl. The shared view dispatch rejects fresh or repeated replacement before changing the saved request, cursor, document, or undo history. Find, Find All, backward repeat, and grouped replacement after an editable view update are covered. Six targeted Vitest suites passed 69 tests, two Writer resource tests passed, npm run build passed, and the existing Writer search browser test passed using the installed Chrome channel. Dependencies, source tree and provenance, JSDoc, file-size, scoped lint and formatting, doctor, routing and diff checks passed. This checkpoint stays inside existing task paths. No parent closure or full-suite cadence increment."
+  -
+    type: "comment"
+    at: "2026-11-21T04:57:49.004Z"
+    author: "CODER"
+    body: "Verified dialog-state checkpoint against SvxSearchDialog::LoseFocusHdl_Impl, ClickHdl_Impl, TemplateHdl_Impl and SaveToModule_Impl. Text and style drafts publish the current Find request on focus loss; search option changes and accepted similarity settings publish it immediately. The saved selection scope, replacement direction, and resolved paragraph-style choices now reach the same view owner used by Repeat Search. Explicit Find All and Replace still dispatch their own commands. Tests distinguish uncommitted text, accepted entries, and a case toggle, with unchanged toolbar repeat behavior. Four targeted Vitest files passed all 56 tests. The existing browser search scenario and a local real-focus regression passed in installed Chrome. Office build, two Writer resource tests, dependencies, source tree and provenance, JSDoc, file size, scoped lint and format, doctor and routing passed. This checkpoint does not close the parent task or increment the full-suite cadence."
 doc_version: 3
-doc_updated_at: "2026-11-21T04:53:21.399Z"
+doc_updated_at: "2026-11-21T04:57:49.004Z"
 doc_updated_by: "CODER"
 description: "Implement the approved coherent Writer search-and-replace feature from pinned LibreOffice sources: real shared search engine and options, native paragraph/cursor traversal and replacement/history contracts, view-owned search state and dispatch, Find toolbar and Find and Replace dialog with generated upstream command placement and shortcuts. Preserve source semantics and explicit unsupported boundaries; never substitute DOM text search or browser RegExp for ICU contracts. Work only on writer in vite-office-writer; local upstream reading approved, no network or merges. Keep active until approved scope is verified."
 sections:

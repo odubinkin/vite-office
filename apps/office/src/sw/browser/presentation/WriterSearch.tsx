@@ -105,29 +105,48 @@ export function WriterSearch({
     return localization.GetText(`writer.search.${key}`, fallback);
   }
 
-  /** Updates the native search item and clears obsolete feedback. @param changes - Edited fields. @returns Nothing. */
-  function update(changes: Partial<WriterSearchItem>): void {
+  /** Updates the draft and optionally publishes the dialog settings for Repeat Search. @param changes - Edited fields. @param commit - Whether the edit immediately reaches the module. @returns Nothing. */
+  function update(changes: Partial<WriterSearchItem>, commit = true): void {
     const next = { ...item, ...changes };
     setItem(next);
-    owner.SetSearchItem(next);
+    if (dialog && commit) saveDialogItem(next, replaceBackward);
+    else owner.SetSearchItem(next);
     if (changes.search !== undefined || changes.searchStyle !== undefined) owner.ClearFeedback();
   }
 
+  /** Resolves the selected collection against the native list. @param styles - Available collections. @param id - Draft selection. @returns Applicable style identity. */
+  function effectiveStyle(styles: readonly { id: string }[] | undefined, id: string): string {
+    return styles?.some(
+      /** Tests the exact collection identity. @param style - Available style. @returns Whether it is selected. */ (
+        style,
+      ) => style.id === id,
+    )
+      ? id
+      : (styles?.[0]?.id ?? "");
+  }
+
   const styleOptions = dialog && item.styleSearch ? owner.GetParagraphStyles() : undefined;
-  const searchStyle = styleOptions?.search.some(
-    /** Checks whether the selected search style remains used. @param style - Available style. @returns Identity match. */ (
-      style,
-    ) => style.id === item.searchStyle,
-  )
-    ? item.searchStyle
-    : (styleOptions?.search[0]?.id ?? "");
-  const replaceStyle = styleOptions?.replace.some(
-    /** Checks whether the replacement collection is still available. @param style - Available style. @returns Identity match. */ (
-      style,
-    ) => style.id === item.replaceStyle,
-  )
-    ? item.replaceStyle
-    : (styleOptions?.replace[0]?.id ?? "");
+  const searchStyle = effectiveStyle(styleOptions?.search, item.searchStyle);
+  const replaceStyle = effectiveStyle(styleOptions?.replace, item.replaceStyle);
+
+  /** Saves the native dialog settings as a Find request. @param draft - Dialog controls. @param backward - Direction saved from Replace backwards. @returns Nothing. */
+  function saveDialogItem(draft: WriterSearchItem, backward: boolean): void {
+    const styles = draft.styleSearch ? (styleOptions ?? owner.GetParagraphStyles()) : undefined;
+    owner.SaveSearchItem(
+      {
+        ...draft,
+        searchStyle: effectiveStyle(styles?.search, draft.searchStyle),
+        replaceStyle: effectiveStyle(styles?.replace, draft.replaceStyle),
+        selection: canSearchSelection && draft.selection,
+      },
+      backward,
+    );
+  }
+
+  /** Publishes text and style entries when they lose focus. @returns Nothing. */
+  function saveDialogEntries(): void {
+    saveDialogItem(item, replaceBackward);
+  }
 
   /** Closes the surface, preserving the modeless dialog's input and histories. @returns Nothing. */
   function closeSearch(): void {
@@ -138,10 +157,7 @@ export function WriterSearch({
           search: remember(history.search, item.search),
           replacement: remember(history.replacement, item.replacement),
         });
-      owner.SaveSearchItem(
-        { ...item, searchStyle, replaceStyle, selection: canSearchSelection && item.selection },
-        replaceBackward,
-      );
+      saveDialogEntries();
     }
     close();
   }
@@ -258,10 +274,11 @@ export function WriterSearch({
       list={searchList}
       type="text"
       value={item.search}
+      onBlur={dialog ? saveDialogEntries : undefined}
       onChange={
         /** Stores the Writer search string. @param event - Updated control. @returns Nothing. */ (
           event,
-        ) => update({ search: event.currentTarget.value })
+        ) => update({ search: event.currentTarget.value }, false)
       }
     />
   );
@@ -388,10 +405,11 @@ export function WriterSearch({
               ref={searchStyleField}
               className={fieldStyle}
               value={searchStyle}
+              onBlur={saveDialogEntries}
               onChange={
                 /** Updates the native find collection. @param event - Selection. @returns Nothing. */ (
                   event,
-                ) => update({ searchStyle: event.currentTarget.value })
+                ) => update({ searchStyle: event.currentTarget.value }, false)
               }
             >
               {styleOptions.search.map(
@@ -431,10 +449,11 @@ export function WriterSearch({
                 list={replacementList}
                 className={fieldStyle}
                 value={item.replacement}
+                onBlur={saveDialogEntries}
                 onChange={
                   /** Stores replacement text. @param event - Updated control. @returns Nothing. */ (
                     event,
-                  ) => update({ replacement: event.currentTarget.value })
+                  ) => update({ replacement: event.currentTarget.value }, false)
                 }
               />
               <datalist id={replacementList}>
@@ -452,10 +471,11 @@ export function WriterSearch({
               aria-label={text("replace-with", "Replace with")}
               className={fieldStyle}
               value={replaceStyle}
+              onBlur={saveDialogEntries}
               onChange={
                 /** Updates the native replacement collection. @param event - Selection. @returns Nothing. */ (
                   event,
-                ) => update({ replaceStyle: event.currentTarget.value })
+                ) => update({ replaceStyle: event.currentTarget.value }, false)
               }
             >
               {styleOptions.replace.map(
@@ -521,7 +541,11 @@ export function WriterSearch({
                 onChange={
                   /** Sets the native replacement direction. @param event - Updated control. @returns Nothing. */ (
                     event,
-                  ) => setReplaceBackward(event.currentTarget.checked)
+                  ) => {
+                    const backward = event.currentTarget.checked;
+                    setReplaceBackward(backward);
+                    saveDialogItem(item, backward);
+                  }
                 }
               />
               {text("replace-backward", "Replace backwards")}

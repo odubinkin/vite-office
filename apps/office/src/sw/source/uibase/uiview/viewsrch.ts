@@ -287,7 +287,7 @@ export class SwViewSearch {
     this.item = item;
   }
 
-  /** Saves the dialog's current query as a Find request when the modeless dialog closes. @param item - Accepted dialog state. @param backward - Dialog direction. @returns Nothing. */
+  /** Publishes the dialog's accepted state as a Find request, as in SaveToModule. @param item - Accepted dialog state. @param backward - Dialog direction. @returns Nothing. */
   public SaveSearchItem(item: WriterSearchItem, backward: boolean): void {
     this.SetSearchItem(item);
     this.lastRequest = { item, command: SvxSearchCmd.FIND, backward };

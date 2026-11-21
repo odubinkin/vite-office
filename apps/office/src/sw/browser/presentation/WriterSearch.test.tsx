@@ -436,6 +436,28 @@ it("updates the open dialog when the dispatcher repeats Find All", /** Verifies 
   fireEvent.change(search, { target: { value: "two" } });
   expect(status).toBeEmptyDOMElement();
   expect(search).toBeValid();
+
+  const end = new SwPosition(paragraph, paragraph.Len());
+  act(
+    /** Checks that typing alone leaves the dispatched Find All request in place. @returns Nothing. */ () => {
+      expect(session.view.GetSearch().RepeatSearch()).toBe(false);
+    },
+  );
+  fireEvent.blur(search);
+  act(
+    /** Reads the newly accepted query, then changes the document for the case toggle. @returns Nothing. */ () => {
+      expect(session.view.GetSearch().RepeatSearch()).toBe(true);
+      expect([...shell.GetCursor().GetRingContainer()]).toHaveLength(1);
+      paragraph.SetText("two TWO");
+      end.SetContent(paragraph.Len());
+      shell.SetCursor(end);
+    },
+  );
+  fireEvent.change(search, { target: { value: "TWO" } });
+  fireEvent.click(dialog.getByRole("checkbox", { name: "Match case" }));
+  fireEvent.keyDown(window, { key: "f", ctrlKey: true, shiftKey: true });
+  expect(shell.GetCursor().Start().GetContentIndex()).toBe(4);
+  end.Dispose();
   workbench.unmount();
   session.view.Close();
 });
