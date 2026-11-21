@@ -1,0 +1,24 @@
+{
+  "schema_version": 1,
+  "task_id": "202611211813-7C1WVT",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-11-21T18:30:23.258Z",
+  "verdict": "pass",
+  "summary": "The native row and column label dialog, indexed reference behavior, document pair state, and ODS filter passed focused production-path checks.",
+  "evaluated_sha": "ad3928c0ec14d459539b7bbf0de65c9510cb3a11",
+  "blueprint_digest": "d026304f79aa5bf721cc78c602f7e3d75221136ead65985beaaf932d37704044",
+  "findings": [
+    "The pinned fixture label-list deletion assertions passed through the real Sheet menu and the browser confirmation.",
+    "Column and row references, label-range deletion, ODS reopening and preceding-sheet changes use native persisted pairs."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202611211813-7C1WVT/README.md",
+    "output/calc-7C1WVT-verification.md",
+    "output/calc-7C1WVT-tests-final.log",
+    "ad3928c0ec14d459539b7bbf0de65c9510cb3a11"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": []
+}
