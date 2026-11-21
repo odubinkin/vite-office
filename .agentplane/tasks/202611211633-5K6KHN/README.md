@@ -1,10 +1,11 @@
 ---
 id: "202611211633-5K6KHN"
 title: "Refresh Graphify before task closure and after branch checkout"
-status: "DOING"
+result_summary: "Graphify refreshes after branch checkout and before AgentPlane direct task closeout."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 8
+revision: 9
 origin:
   system: "manual"
 depends_on: []
@@ -45,11 +46,16 @@ quality_review:
     - "ap doctor"
   findings:
     - "Real Git branch switches updated the graph and removed stale symbols. Ordinary commits and path checkouts skipped refresh. The closeout wrapper kept the task open on refresh failure and forwarded its original arguments on success. Main checkout refresh and a source-verified query passed."
-commit: null
+commit:
+  hash: "759eab18b790634b2a4b215479f540fe051aaa50"
+  message: "🧩 5K6KHN code: refresh Graphify at checkout and task closeout"
 comments:
   -
     author: "CODER"
     body: "Start: continue direct-mode task in current checkout."
+  -
+    author: "CODER"
+    body: "Verified: both checkout directions refresh the graph, ordinary commits skip it, and the closeout wrapper refreshes before invoking AgentPlane."
 events:
   -
     type: "status"
@@ -64,8 +70,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Real Git checkouts updated the fixture graph in both directions. Ordinary commits and path checkouts skipped refresh. A simulated refresh failure prevented the closeout command, and success preserved its arguments. The installed hook refreshed the vite-office index, and SwDoc resolved to its source."
+  -
+    type: "status"
+    at: "2026-11-21T16:38:37.483Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: both checkout directions refresh the graph, ordinary commits skip it, and the closeout wrapper refreshes before invoking AgentPlane."
 doc_version: 3
-doc_updated_at: "2026-11-21T16:38:04.097Z"
+doc_updated_at: "2026-11-21T16:38:37.483Z"
 doc_updated_by: "CODER"
 description: "Run a shared local Graphify refresh before direct AgentPlane closeout and from a repository-local post-checkout hook. Verify checkout coverage and preserve existing hooks."
 sections:
