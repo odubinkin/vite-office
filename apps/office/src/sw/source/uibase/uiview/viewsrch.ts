@@ -11,7 +11,7 @@ import { FindFormat } from "../../core/crsr/findcoll";
 import { WRITER_AVAILABLE_PARAGRAPH_STYLE_POOL } from "../../../inc/poolfmt";
 import { SwStyleNameMapper } from "../../core/doc/SwStyleNameMapper";
 import { FindTextImpl } from "../../core/crsr/findtxt";
-import { getWriterSelectedTextRange, SwPaM } from "../../core/crsr/pam";
+import { SwPaM } from "../../core/crsr/pam";
 import { SwCursor, type SwSearchNodeFilter } from "../../core/crsr/swcrsr";
 import type { SwDoc } from "../../core/doc/doc";
 import type { SwStartNode } from "../../core/docnode/node";
@@ -19,6 +19,7 @@ import { SwStartNodeType } from "../../../inc/ndtyp";
 import { CollectTextFlyFrames } from "../../core/layout/flycnt";
 import type { SwTextNode } from "../../core/txtnode/ndtxt";
 import type { SwWrtShell } from "../wrtsh/wrtsh1";
+import { SwASCWriter } from "../../filter/ascii/wrtasc";
 
 /** Native options accepted by the Similarity Search dialog. */
 export interface WriterSimilarityOptions {
@@ -243,26 +244,37 @@ export class SwViewSearch {
     );
   }
 
-  /** Initializes the displayed search item from the Writer selection. @param dialog - Whether the modeless dialog is opening. @returns Current settings. */
-  public OpenSearch(dialog: boolean): WriterSearchItem {
+  /** Initializes the displayed search item from the Writer selection. @param dialog - Whether the modeless dialog is opening. @param rememberedSearch - Last Find Bar entry. @returns Current settings. */
+  public OpenSearch(dialog: boolean, rememberedSearch?: string): WriterSearchItem {
     this.ClearFeedback();
     const cursor = this.shell.GetCursor();
-    const range = getWriterSelectedTextRange(cursor);
-    const selectedCount = [...cursor.GetRingContainer()].filter(
-      /** Counts nonempty native selection ranges. @param member - Registered range. @returns Whether it selects content. */ (
-        member,
-      ) => member.HasMark() && member.Start().compare(member.End()) !== 0,
-    ).length;
-    if (range !== undefined && selectedCount === 1) {
+    if (dialog) {
+      const text =
+        cursor.IsMultiSelection() || this.shell.IsTableMode() ? "" : this.shell.GetSelText();
       this.item = {
         ...this.item,
-        search: range.node.GetText().slice(range.start, range.end),
-        selection: dialog ? false : this.item.selection,
+        search: text || this.item.search,
+        selection: text.length === 0 && this.HasSelection(),
       };
-    } else if (dialog) {
-      this.item = { ...this.item, selection: this.HasSelection() };
+    } else {
+      // Keep the search value consistent with the browser's single-line input.
+      const text = this.GetFindBarSelection(cursor).replaceAll("\r", "").replaceAll("\n", "");
+      this.item = { ...this.item, search: text || rememberedSearch || this.item.search };
     }
     return this.item;
+  }
+
+  /** Reads the represented UNO view-cursor text using the native selection writer. @param cursor - Native editing ring. @returns Text to seed the Find Bar. */
+  private GetFindBarSelection(cursor: SwCursor): string {
+    if (!cursor.HasMark() || this.shell.IsTableMode()) return "";
+    const writer = new SwASCWriter();
+    writer.m_bASCII_NoLastLineEnd = true;
+    writer.m_bExportParagraphNumbering = false;
+    let text = "";
+    for (const range of cursor.GetRingContainer()) {
+      if (range.HasMark() && range.Start().compare(range.End()) !== 0) text += writer.Write(range);
+    }
+    return text;
   }
 
   /** Updates the shared search item without editing the document. @param item - Search controls. @returns Nothing. */

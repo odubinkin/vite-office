@@ -154,14 +154,15 @@ export function WriterWorkbench({
     /** Opens the requested surface and reads the current model selection. @param dialog - Whether to open the full dialog. @returns Nothing. */ (
       dialog: boolean,
     ): void => {
-      if (searchSurface === undefined) searchOwner.OpenSearch(dialog);
+      if (!dialog || searchSurface === undefined)
+        searchOwner.OpenSearch(dialog, searchHistory.findbar[0]);
       setSearchSurface(
         /** Requests focus even if the same surface is already open. @param previous - Current search surface. @returns Next search surface. */ (
           previous,
         ) => ({ dialog, revision: (previous?.revision ?? 0) + 1 }),
       );
     },
-    [searchOwner, searchSurface],
+    [searchHistory.findbar, searchOwner, searchSurface],
   );
   /** Closes the modeless search surface and returns to the document selection. @returns Nothing. */
   function closeSearch(): void {

@@ -18,7 +18,16 @@ import type { WriterHyperlink } from "./fmtatr2";
 import { SwpHints, type WriterTextRunLike } from "./ndhints";
 import { SetAttrMode } from "../../../inc/swtypes";
 import { SwTextFlyCnt } from "../../../inc/txtflcnt";
-import { RES_TXTATR_AUTOFMT, RES_TXTATR_FLYCNT } from "../../../inc/hintids";
+import {
+  CH_TXT_ATR_FIELDEND,
+  CH_TXT_ATR_FIELDSEP,
+  CH_TXT_ATR_FIELDSTART,
+  CH_TXT_ATR_INPUTFIELDEND,
+  CH_TXT_ATR_INPUTFIELDSTART,
+  CH_TXTATR_BREAKWORD,
+  RES_TXTATR_AUTOFMT,
+  RES_TXTATR_FLYCNT,
+} from "../../../inc/hintids";
 import { SwFormatAutoFormat, SwTextAttrEnd } from "./txatbase";
 import { SfxItemSet as NativeItemSet } from "../../../../svl/source/items/itemset";
 import { WRITER_CHARACTER_WHICH_RANGES } from "../../../inc/hintids";
@@ -33,6 +42,19 @@ export function AssertTextNodeRange(node: SwTextNode, start: number, end: number
     end > node.Len()
   )
     throw new Error("Writer text range is outside the text node.");
+}
+
+/** Returns the represented GetExpandText result for a model-local span. @param node - Source paragraph. @param start - Inclusive model offset. @param end - Exclusive model offset. @returns Text without field delimiters or break-word placeholders. */
+export function GetTextNodeExpandedText(node: SwTextNode, start: number, end: number): string {
+  return node
+    .GetText()
+    .slice(start, end)
+    .replaceAll(CH_TXT_ATR_FIELDSTART, "")
+    .replaceAll(CH_TXT_ATR_FIELDSEP, "")
+    .replaceAll(CH_TXT_ATR_FIELDEND, "")
+    .replaceAll(CH_TXT_ATR_INPUTFIELDSTART, "")
+    .replaceAll(CH_TXT_ATR_INPUTFIELDEND, "")
+    .replaceAll(CH_TXTATR_BREAKWORD, "");
 }
 
 /** Validates a native ReplaceText range before adjusting text or owned hints. @param node - Actual paragraph. @param start - Inclusive offset. @param end - Exclusive offset. @returns Nothing. */

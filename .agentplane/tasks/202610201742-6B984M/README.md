@@ -4,7 +4,7 @@ title: "Implement Writer search and replace core and browser UI"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 34
+revision: 35
 origin:
   system: "manual"
 depends_on:
@@ -106,6 +106,9 @@ comments:
   -
     author: "CODER"
     body: "Verified checkpoint 5f9148ef2: Writer whole-word search treats as-character fly anchors as native separators, preserves pinned leading/trailing cleanup and directional UTF-16 restoration, and projects matches through Find Next, Find Previous and Find All. Replace All, undo and redo preserve the live inline frame and update its anchor offset. Replacement that covers the anchor still requires native fly history and is rejected before mutation. Format-state queries use the live hint map without cloning the point. The source-derived backward asymmetry is recorded in WRITER-009. Six focused Vitest suites passed 102 tests and two Writer resource tests passed. Office typecheck and Vite production build passed, and a focused compile covered the final changed files and their dependencies. Dependency, source-tree, provenance, JSDoc, size, scoped lint and formatting, doctor, routing and diff checks passed. Doctor retains the existing hook-shim warning. The parent task stays open and this checkpoint adds no completed task to the full-regression cadence."
+  -
+    author: "CODER"
+    body: "Verified selection-prefill checkpoint: the Find Bar uses the same bounded Writer ASCII export as the native view-cursor string path, without numbering or a trailing paragraph break. The ASCII hint branch skips anchored fly placeholders without touching the document. Refocusing from the document reads the new selection; invoking Ctrl+F inside the entry keeps its draft and preserves the distinct repeat shortcut. The dialog uses the native single-paragraph expanded-text contract and scopes empty expanded or multi-paragraph selections to the current selection. Vitest passed 69 tests in seven targeted files across Writer search, cursor ownership, ASCII export, and clipboard. Two Writer resources tests, npm run build, dependencies, source tree and provenance, JSDoc, file-size, scoped lint and format, doctor and routing passed. The existing Writer search end-to-end test passed in the installed Chrome channel with a temporary configuration after the default Playwright Chromium executable was found missing. No browser download was needed. The parent task remains open; this checkpoint does not increment the full-suite cadence."
 events:
   -
     type: "status"
@@ -224,8 +227,13 @@ events:
     at: "2026-11-21T04:39:44.649Z"
     author: "CODER"
     body: "Verified checkpoint 5f9148ef2: Writer whole-word search treats as-character fly anchors as native separators, preserves pinned leading/trailing cleanup and directional UTF-16 restoration, and projects matches through Find Next, Find Previous and Find All. Replace All, undo and redo preserve the live inline frame and update its anchor offset. Replacement that covers the anchor still requires native fly history and is rejected before mutation. Format-state queries use the live hint map without cloning the point. The source-derived backward asymmetry is recorded in WRITER-009. Six focused Vitest suites passed 102 tests and two Writer resource tests passed. Office typecheck and Vite production build passed, and a focused compile covered the final changed files and their dependencies. Dependency, source-tree, provenance, JSDoc, size, scoped lint and formatting, doctor, routing and diff checks passed. Doctor retains the existing hook-shim warning. The parent task stays open and this checkpoint adds no completed task to the full-regression cadence."
+  -
+    type: "comment"
+    at: "2026-11-21T04:48:12.581Z"
+    author: "CODER"
+    body: "Verified selection-prefill checkpoint: the Find Bar uses the same bounded Writer ASCII export as the native view-cursor string path, without numbering or a trailing paragraph break. The ASCII hint branch skips anchored fly placeholders without touching the document. Refocusing from the document reads the new selection; invoking Ctrl+F inside the entry keeps its draft and preserves the distinct repeat shortcut. The dialog uses the native single-paragraph expanded-text contract and scopes empty expanded or multi-paragraph selections to the current selection. Vitest passed 69 tests in seven targeted files across Writer search, cursor ownership, ASCII export, and clipboard. Two Writer resources tests, npm run build, dependencies, source tree and provenance, JSDoc, file-size, scoped lint and format, doctor and routing passed. The existing Writer search end-to-end test passed in the installed Chrome channel with a temporary configuration after the default Playwright Chromium executable was found missing. No browser download was needed. The parent task remains open; this checkpoint does not increment the full-suite cadence."
 doc_version: 3
-doc_updated_at: "2026-11-21T04:39:44.649Z"
+doc_updated_at: "2026-11-21T04:48:12.581Z"
 doc_updated_by: "CODER"
 description: "Implement the approved coherent Writer search-and-replace feature from pinned LibreOffice sources: real shared search engine and options, native paragraph/cursor traversal and replacement/history contracts, view-owned search state and dispatch, Find toolbar and Find and Replace dialog with generated upstream command placement and shortcuts. Preserve source semantics and explicit unsupported boundaries; never substitute DOM text search or browser RegExp for ICU contracts. Work only on writer in vite-office-writer; local upstream reading approved, no network or merges. Keep active until approved scope is verified."
 sections:

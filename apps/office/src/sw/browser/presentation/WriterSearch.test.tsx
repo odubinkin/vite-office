@@ -60,8 +60,25 @@ it("finds whole words on both sides of an as-character image", /** Exercises the
 
   const workbench = render(<WriterWorkbench isActive view={session.view} />);
   expect(workbench.container.querySelector("[data-writer-inline-graphic] img")).toBeInTheDocument();
+  const beforeImage = new SwPosition(node, 0);
+  const afterImage = new SwPosition(node, 9);
+  act(
+    /** Selects text across the live inline image. @returns Nothing. */ () =>
+      shell.SetPaM(afterImage, beforeImage),
+  );
+  fireEvent.keyDown(window, { key: "f", ctrlKey: true });
+  const findbar = within(screen.getByRole("toolbar", { name: "Find" }));
+  expect(findbar.getByLabelText("Find")).toHaveValue("needlene");
+  fireEvent.keyDown(findbar.getByLabelText("Find"), { key: "Escape" });
   fireEvent.keyDown(window, { key: "h", ctrlKey: true });
   const dialog = within(screen.getByRole("dialog", { name: "Find and Replace" }));
+  expect(dialog.getByLabelText("Find")).toHaveValue("needlene");
+  act(
+    /** Restores the starting caret for forward search. @returns Nothing. */ () =>
+      shell.SetCursor(beforeImage),
+  );
+  beforeImage.Dispose();
+  afterImage.Dispose();
   fireEvent.change(dialog.getByLabelText("Find"), { target: { value: "needle" } });
   fireEvent.click(dialog.getByRole("checkbox", { name: "Whole words only" }));
 
@@ -97,6 +114,54 @@ it("finds whole words on both sides of an as-character image", /** Exercises the
   expect(node.GetpSwpHints()?.GetTextAttrForCharAt(5)).toBe(inline);
   expect(format.GetAnchor().GetAnchorContentOffset()).toBe(5);
 
+  const anchorStart = new SwPosition(node, 5);
+  const anchorEnd = new SwPosition(node, 6);
+  act(
+    /** Selects only the anchor to check the empty expanded-text case. @returns Nothing. */ () =>
+      shell.SetPaM(anchorEnd, anchorStart),
+  );
+  fireEvent.keyDown(window, { key: "h", ctrlKey: true });
+  const reopened = within(screen.getByRole("dialog", { name: "Find and Replace" }));
+  expect(reopened.getByLabelText("Find")).toHaveValue("needle");
+  expect(reopened.getByRole("checkbox", { name: "Current selection only" })).toBeChecked();
+  anchorStart.Dispose();
+  anchorEnd.Dispose();
+  workbench.unmount();
+  session.view.Close();
+});
+
+it("refreshes the Find Bar from the current model selection when the editor calls it again", /** Uses the ASCII writer for a two-paragraph selection and keeps the current entry while it has focus. @returns Nothing. */ () => {
+  const session = createWriterDocumentSession();
+  const shell = session.view.GetWrtShell();
+  const first = shell.GetActiveParagraph();
+  shell.Insert("first text");
+  shell.SplitNode();
+  const second = shell.GetActiveParagraph();
+  shell.Insert("second text");
+  const start = new SwPosition(first, 6);
+  const end = new SwPosition(second, 6);
+  const workbench = render(<WriterWorkbench isActive view={session.view} />);
+
+  fireEvent.keyDown(window, { key: "f", ctrlKey: true });
+  const search = within(screen.getByRole("toolbar", { name: "Find" })).getByLabelText("Find");
+  fireEvent.change(search, { target: { value: "draft" } });
+
+  act(
+    /** Changes the registered selection while the toolbar is open. @returns Nothing. */ () =>
+      shell.SetPaM(end, start),
+  );
+  fireEvent.keyDown(search, { key: "f", ctrlKey: true });
+  expect(search).toHaveValue("draft");
+  const editor = workbench.container.querySelector<HTMLElement>("[data-writer-editing-host]");
+  editor?.focus();
+  fireEvent.keyDown(editor ?? window, { key: "f", ctrlKey: true });
+  expect(search).toHaveValue("textsecond");
+  expect(search).toHaveFocus();
+  expect(shell.GetCursor().Start().compare(start)).toBe(0);
+  expect(shell.GetCursor().End().compare(end)).toBe(0);
+
+  start.Dispose();
+  end.Dispose();
   workbench.unmount();
   session.view.Close();
 });

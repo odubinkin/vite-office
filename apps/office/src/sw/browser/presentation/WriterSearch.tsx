@@ -64,6 +64,11 @@ export function WriterSearch({
 }>): React.JSX.Element {
   const localization = useBrowserLocalization();
   const [item, setItem] = useState(initial);
+  const [lastFocusRequest, setLastFocusRequest] = useState(focusRequest);
+  if (focusRequest !== lastFocusRequest) {
+    setLastFocusRequest(focusRequest);
+    if (!dialog && initial.search !== item.search) setItem({ ...item, search: initial.search });
+  }
   if (dialog && !canSearchSelection && item.selection) setItem({ ...item, selection: false });
   const [similarityOptionsOpen, setSimilarityOptionsOpen] = useState(false);
   const similarityOptionsButton = useRef<HTMLButtonElement>(null);
@@ -206,7 +211,17 @@ export function WriterSearch({
   /** Processes the native search surface's Escape and find-entry Return keys. @param event - Browser key. @returns Nothing. */
   function onKeyDown(event: KeyboardEvent<HTMLElement>): void {
     if (event.nativeEvent.isComposing) return;
-    if (event.key === "Escape") {
+    if (
+      !dialog &&
+      event.target === searchField.current &&
+      (event.ctrlKey || event.metaKey) &&
+      !event.shiftKey &&
+      !event.altKey &&
+      event.key.toLowerCase() === "f"
+    ) {
+      event.preventDefault();
+      event.stopPropagation();
+    } else if (event.key === "Escape") {
       event.preventDefault();
       event.stopPropagation();
       closeSearch();
