@@ -135,6 +135,19 @@ it("transports native annotation editor text through the ODT Worker record", /**
     expect(actual?.GetPool()).not.toBe(rich.GetPool());
     expect(restoredField?.GetPar2()).toBe("A😀\tB\nC\n");
     expect(createOdtWriterTransfer(restored).graph.annotations).toEqual(wire.graph.annotations);
+
+    const bytes = await writeOdtDocument(restored, { title: "Rich comments" });
+    const xml = await (await DocumentArchive.open(bytes)).readTextEntry("content.xml");
+    const annotation = xml?.match(/<office:annotation\s[^>]*>.*?<\/office:annotation>/su)?.[0];
+    expect(annotation).toMatch(/<text:p text:style-name="P\d+">/u);
+    expect(annotation).toMatch(/<text:span text:style-name="T\d+">😀<\/text:span>/u);
+    expect(annotation).toContain("<text:tab/>B<text:line-break/>C");
+    expect(annotation).toMatch(/<text:p text:style-name="[^"]+"><\/text:p>/u);
+    expect(xml).toContain('fo:text-align="center"');
+    expect(xml).toContain('fo:font-weight="bold"');
+    expect(xml).toContain('fo:color="#285ac8"');
+    expect(xml).toContain('style:text-underline-color="#dd0049"');
+    expect(xml).not.toContain(feature);
   } finally {
     empty.dispose();
     style.dispose();

@@ -198,7 +198,7 @@ export class XMLTextParagraphExport {
     }
     const listRules = new Map<string, XMLTextListRuleSource>();
     const numRuleExport = new SvxXMLNumRuleExport(escapeXml, this.existingFontFaceName);
-    for (const paragraph of source.paragraphs()) {
+    for (const paragraph of paragraphsForAutoStyles(source.paragraphs())) {
       if (isCancelled()) throw new Error("ODT operation was cancelled.");
       if (paragraph.list !== undefined) {
         const list = paragraph.list;
@@ -375,6 +375,17 @@ export class XMLTextParagraphExport {
   }
 }
 
+/** Includes annotation text in the same automatic-style collection pass as its owning paragraph. @param paragraphs - Live text location. @returns Paragraphs in export order. */
+function* paragraphsForAutoStyles(
+  paragraphs: Iterable<XMLTextParagraphSource>,
+): Iterable<XMLTextParagraphSource> {
+  for (const paragraph of paragraphs) {
+    yield paragraph;
+    for (const marker of paragraph.markers ?? [])
+      if (marker.kind === "annotation" && marker.paragraphs) yield* marker.paragraphs;
+  }
+}
+
 /** Exports live Writer paragraphs through xmloff ownership. @param source - Model source. @param isCancelled - Cancellation probe. @param fontFaceName - Font registration. @param existingFontFaceName - Existing face lookup for numbering. @returns XML fragments. */
 export function exportTextParagraphs(
   source: XMLTextExportSource,
@@ -534,6 +545,10 @@ function exportParagraphElement(
   let content = "";
   let activeHyperlink: OdfHyperlink | undefined;
   const markers = paragraph.markers ?? [];
+  const exportAnnotationParagraph =
+    /** Renders a note paragraph using the same automatic-style families. @param note - Note paragraph. @returns XML paragraph. */
+    (note: XMLTextParagraphSource): string =>
+      exportParagraphElement(note, paragraphStyleNames, characterStyleNames);
   let markerIndex = 0;
   let textOffset = 0;
   const encodeWithMarkers =
@@ -548,7 +563,7 @@ function exportParagraphElement(
         const marker = markers[markerIndex] as XMLTextParagraphMarker;
         if (marker.offset < start + localOffset) throw new Error("ODF marker order is invalid.");
         encoded += exportText(text.slice(localOffset, marker.offset - start));
-        encoded += exportMarker(marker, renderFrame);
+        encoded += exportMarker(marker, renderFrame, exportAnnotationParagraph);
         localOffset =
           marker.offset -
           start +
@@ -581,7 +596,7 @@ function exportParagraphElement(
   while (markerIndex < markers.length) {
     const marker = markers[markerIndex] as XMLTextParagraphMarker;
     if (marker.offset !== textOffset) throw new Error("ODF marker is outside its paragraph.");
-    content += exportMarker(marker, renderFrame);
+    content += exportMarker(marker, renderFrame, exportAnnotationParagraph);
     markerIndex += 1;
   }
   const markerStyle =
@@ -593,17 +608,18 @@ function exportParagraphElement(
     : `<text:p text:style-name="${escapeXml(styleName)}"${marker}>${content}</text:p>`;
 }
 
-/** Emits one zero-width Writer marker. @param marker - Canonical position. @param renderFrame - Native frame body exporter. @returns ODF element. */
+/** Emits one zero-width Writer marker. @param marker - Canonical position. @param renderFrame - Native frame body exporter. @param exportAnnotationParagraph - Shared annotation paragraph serializer. @returns ODF element. */
 function exportMarker(
   marker: XMLTextParagraphMarker,
   renderFrame: ((frame: XMLTextFrameExportSource) => string) | undefined,
+  exportAnnotationParagraph: (paragraph: XMLTextParagraphSource) => string,
 ): string {
   if (marker.kind === "frame") {
     if (!renderFrame) throw new Error("ODF anchored frame has no text export owner.");
     return renderFrame(marker.frame);
   }
   if (marker.kind === "annotation" || marker.kind === "annotation-end")
-    return exportAnnotation(marker, escapeXml, exportText);
+    return exportAnnotation(marker, escapeXml, exportText, exportAnnotationParagraph);
   if (marker.kind === "soft-page-break") return "<text:soft-page-break/>";
   if (marker.name === undefined || marker.name.length === 0)
     throw new Error("ODF bookmark name is invalid.");

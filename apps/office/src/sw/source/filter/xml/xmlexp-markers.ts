@@ -1,11 +1,39 @@
 /** @fileoverview Projects Writer bookmark and annotation portions for ODF paragraph export. */
-import type { XMLTextParagraphMarker } from "../../../../xmloff/source/text/txtparae";
+import {
+  EE_CHAR_BKGCOLOR,
+  EE_FEATURE_LINEBR,
+  EE_FEATURE_START,
+  EE_FEATURE_TAB,
+  EE_PARA_JUST,
+} from "../../../../editeng/inc/eeitem";
+import { SvxAdjust, SvxAdjustItem } from "../../../../editeng/inc/adjustitem";
+import { SvxColorItem } from "../../../../editeng/inc/colritem";
+import type { Section } from "../../../../editeng/inc/section";
+import type { EditTextObject } from "../../../../editeng/source/editeng/editobj";
+import { SvxBrushItem } from "../../../../editeng/source/items/frmitems.brush";
+import { OUString } from "../../../../sal/inc/rtl/ustring";
+import { SfxStyleFamily } from "../../../../svl/inc/style-values";
+import { SfxItemSet } from "../../../../svl/source/items/itemset";
+import type { SfxPoolItem } from "../../../../svl/source/items/poolitem";
+import type {
+  XMLTextParagraphMarker,
+  XMLTextParagraphSource,
+  XMLTextRunSource,
+} from "../../../../xmloff/source/text/txtparae";
 import type { XMLTextExportBlock } from "../../../../xmloff/source/table/XMLTableExport";
 import { Converter } from "../../../../sax/source/tools/converter";
 import { OUStringBuffer } from "../../../../sal/inc/rtl/ustrbuf";
 import { text } from "../../../../i18nlangtag/source/isolang/isolang.tables";
-import { RES_TXTATR_ANNOTATION } from "../../../inc/hintids";
+import {
+  RES_CHRATR_BACKGROUND,
+  RES_TXTATR_ANNOTATION,
+  WRITER_CHARACTER_WHICH_RANGES,
+} from "../../../inc/hintids";
 import { SwTextField } from "../../../inc/txtfld";
+import { getWriterAnnotationItemWhich } from "../../core/fields/textapi";
+import type { SwDoc } from "../../core/doc/doc";
+import { getCharacterProperties } from "./xmlexp-character";
+import { getParagraphOdfStyleName } from "./xmlexp-style-names";
 import { AnnotationMark } from "../../core/crsr/annotationmark";
 import { SwBookmark } from "../../core/doc/docbm";
 import type { SwTableNode } from "../../core/docnode/node";
@@ -119,7 +147,9 @@ function makeAnnotationStart(
   offset: number,
   consumesMarker: boolean,
 ): XMLTextParagraphMarker {
-  const value = hint.GetAttr().GetField().GetData();
+  const field = hint.GetAttr().GetField();
+  const value = field.GetData();
+  const paragraphs = projectAnnotationText(field.GetTextObject(), field.GetTyp().GetDoc());
   let date = "";
   if (value.dateTime.GetDay() !== 0) {
     const buffer = new OUStringBuffer();
@@ -146,5 +176,99 @@ function makeAnnotationStart(
     parentName: value.parentName ?? "",
     resolved: value.resolved ?? false,
     text: value.text,
+    ...(paragraphs === undefined ? {} : { paragraphs }),
   };
+}
+
+/** Projects native EditEngine annotation paragraphs through the Writer text auto-style exporter. @param edit - Borrowed annotation snapshot. @param document - Writer style and item owner. @returns Annotation paragraphs when their native features are represented. */
+function projectAnnotationText(
+  edit: EditTextObject | undefined,
+  document: SwDoc,
+): XMLTextParagraphSource[] | undefined {
+  if (!edit || edit.GetParagraphCount() === 0) return undefined;
+  const sections: Section[] = [];
+  edit.GetAllSections(sections);
+  if (sections.length === 0) return undefined;
+  const result: XMLTextParagraphSource[] = [];
+  let sectionIndex = 0;
+  for (let index = 0; index < edit.GetParagraphCount(); ++index) {
+    const raw = edit.GetText(index);
+    const nativeStyle = new OUString();
+    let value: string;
+    let style: string;
+    try {
+      value = text(raw);
+      edit.GetStyleSheet(index, nativeStyle, [SfxStyleFamily.Para]);
+      style = text(nativeStyle);
+    } finally {
+      raw.dispose();
+      nativeStyle.dispose();
+    }
+    const paragraph = edit.GetParaAttribs(index);
+    const runs: XMLTextRunSource[] = [];
+    const base = new SfxItemSet(document.GetAttrPool(), WRITER_CHARACTER_WHICH_RANGES);
+    try {
+      putAnnotationCharacterItems(base, paragraph.entries());
+      const properties = getCharacterProperties(base, false);
+      while (sections[sectionIndex]?.mnParagraph === index) {
+        const section = sections[sectionIndex++] as Section;
+        if (section.mnStart === section.mnEnd) continue;
+        let content = value.slice(section.mnStart, section.mnEnd);
+        for (const item of section.maAttributes) {
+          const which = item.Which();
+          if (which === EE_FEATURE_TAB) content = "\t";
+          else if (which === EE_FEATURE_LINEBR) content = "\n";
+          else if (which >= EE_FEATURE_START) return undefined;
+        }
+        const direct = new SfxItemSet(base);
+        try {
+          putAnnotationCharacterItems(direct, section.maAttributes);
+          runs.push({ text: content, properties: getCharacterProperties(direct, false) ?? {} });
+        } finally {
+          direct.Dispose();
+        }
+      }
+      const justify = paragraph.GetItemIfSet(EE_PARA_JUST, false);
+      const native = justify instanceof SvxAdjustItem ? justify.GetAdjust() : undefined;
+      const alignment = native === undefined ? undefined : annotationAlignment.get(native);
+      const collection = style ? document.FindTextFormatColl(style) : undefined;
+      result.push({
+        style: collection ? style : "default",
+        ...(collection ? { styleName: getParagraphOdfStyleName(document, style) } : {}),
+        runs,
+        ...(alignment === undefined ? {} : { alignment }),
+        ...(properties ? { properties, inheritedProperties: properties } : {}),
+      });
+    } finally {
+      base.Dispose();
+    }
+  }
+  return result;
+}
+
+/** Maps native edit paragraph alignment to the ODF paragraph style property. */
+const annotationAlignment = new Map<SvxAdjust, NonNullable<XMLTextParagraphSource["alignment"]>>([
+  [SvxAdjust.Left, "left"],
+  [SvxAdjust.ParaStart, "left"],
+  [SvxAdjust.Right, "right"],
+  [SvxAdjust.ParaEnd, "right"],
+  [SvxAdjust.Center, "center"],
+  [SvxAdjust.Block, "justify"],
+  [SvxAdjust.BlockLine, "justify"],
+]);
+
+/** Projects native EditEngine character values into the common Writer text mapping. @param set - Output character-property set. @param items - Actual edit items. @returns Nothing. */
+function putAnnotationCharacterItems(set: SfxItemSet, items: readonly SfxPoolItem[]): void {
+  for (const item of items) {
+    const which = item.Which();
+    if (which === EE_CHAR_BKGCOLOR && item instanceof SvxColorItem) {
+      set.Put(
+        new SvxBrushItem(item.GetValue(), item.getComplexColor(), RES_CHRATR_BACKGROUND),
+        true,
+      );
+    } else {
+      const mapped = getWriterAnnotationItemWhich(which);
+      if (mapped !== undefined) set.PutAsTargetWhich(item, mapped);
+    }
+  }
 }

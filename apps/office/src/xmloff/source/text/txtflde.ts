@@ -1,5 +1,7 @@
 /** @fileoverview Emits native ODF annotation fields and range end markers. */
 
+import type { XMLTextParagraphSource } from "./txtparae";
+
 /** Neutral annotation portion before the current paragraph is serialized. */
 export type XMLAnnotationExportMarker =
   | Readonly<{
@@ -13,14 +15,16 @@ export type XMLAnnotationExportMarker =
       parentName: string;
       resolved: boolean;
       text: string;
+      paragraphs?: readonly XMLTextParagraphSource[];
     }>
   | Readonly<{ kind: "annotation-end"; name: string; offset: number }>;
 
-/** Writes the represented Writer annotation payload. @param marker - Annotation portion. @param escapeXml - XML escaping. @param exportText - ODF whitespace encoding. @returns ODF annotation field XML. */
+/** Writes the represented Writer annotation payload. @param marker - Annotation portion. @param escapeXml - XML escaping. @param exportText - ODF whitespace encoding. @param exportParagraph - Shared paragraph serializer. @returns ODF annotation field XML. */
 export function exportAnnotation(
   marker: XMLAnnotationExportMarker,
   escapeXml: (text: string) => string,
   exportText: (text: string) => string,
+  exportParagraph: (paragraph: XMLTextParagraphSource) => string,
 ): string {
   if (marker.kind === "annotation-end")
     return `<office:annotation-end office:name="${escapeXml(marker.name)}"/>`;
@@ -30,13 +34,15 @@ export function exportAnnotation(
   const initials = marker.initials
     ? `<meta:creator-initials>${escapeXml(marker.initials)}</meta:creator-initials>`
     : "";
-  const paragraphs = marker.text
-    .split("\n")
-    .map(
-      /** Emits each note paragraph, including empty paragraphs. @param line - Plain comment text. @returns XML paragraph. */ (
-        line,
-      ) => `<text:p>${exportText(line)}</text:p>`,
-    )
-    .join("");
+  const paragraphs =
+    marker.paragraphs?.map(exportParagraph).join("") ??
+    marker.text
+      .split("\n")
+      .map(
+        /** Emits each note paragraph, including empty paragraphs. @param line - Plain comment text. @returns XML paragraph. */ (
+          line,
+        ) => `<text:p>${exportText(line)}</text:p>`,
+      )
+      .join("");
   return `<office:annotation${name}${parent} loext:resolved="${marker.resolved}"><dc:creator>${escapeXml(marker.author)}</dc:creator>${date}${initials}${paragraphs}</office:annotation>`;
 }

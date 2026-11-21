@@ -12,45 +12,8 @@ import type { SfxItemPool } from "../../../../svl/source/items/itempool";
 import type { SfxPoolItem, SfxPoolItemSnapshot } from "../../../../svl/source/items/poolitem";
 import { SfxVoidItem } from "../../../../svl/source/items/voiditem";
 import type { MapUnit } from "../../../../tools/inc/mapunit";
-import * as Writer from "../../../inc/hintids";
+import { getWriterAnnotationItemWhich } from "../../../source/core/fields/textapi";
 import { decodeSfxPoolItem, encodeSfxPoolItem } from "./item-codec";
-
-/** Matching concrete EditEngine and Writer items whose value codecs are registered in SwAttrPool. */
-const writerWhich = new Map<number, number>([
-  [EE.EE_PARA_ULSPACE, Writer.RES_UL_SPACE],
-  [EE.EE_PARA_SBL, Writer.RES_PARATR_LINESPACING],
-  [EE.EE_PARA_JUST, Writer.RES_PARATR_ADJUST],
-  [EE.EE_PARA_TABS, Writer.RES_PARATR_TABSTOP],
-  [EE.EE_CHAR_COLOR, Writer.RES_CHRATR_COLOR],
-  [EE.EE_CHAR_FONTINFO, Writer.RES_CHRATR_FONT],
-  [EE.EE_CHAR_FONTHEIGHT, Writer.RES_CHRATR_FONTSIZE],
-  [EE.EE_CHAR_FONTWIDTH, Writer.RES_CHRATR_SCALEW],
-  [EE.EE_CHAR_WEIGHT, Writer.RES_CHRATR_WEIGHT],
-  [EE.EE_CHAR_UNDERLINE, Writer.RES_CHRATR_UNDERLINE],
-  [EE.EE_CHAR_STRIKEOUT, Writer.RES_CHRATR_CROSSEDOUT],
-  [EE.EE_CHAR_ITALIC, Writer.RES_CHRATR_POSTURE],
-  [EE.EE_CHAR_OUTLINE, Writer.RES_CHRATR_CONTOUR],
-  [EE.EE_CHAR_SHADOW, Writer.RES_CHRATR_SHADOWED],
-  [EE.EE_CHAR_ESCAPEMENT, Writer.RES_CHRATR_ESCAPEMENT],
-  [EE.EE_CHAR_PAIRKERNING, Writer.RES_CHRATR_AUTOKERN],
-  [EE.EE_CHAR_KERNING, Writer.RES_CHRATR_KERNING],
-  [EE.EE_CHAR_WLM, Writer.RES_CHRATR_WORDLINEMODE],
-  [EE.EE_CHAR_LANGUAGE, Writer.RES_CHRATR_LANGUAGE],
-  [EE.EE_CHAR_LANGUAGE_CJK, Writer.RES_CHRATR_CJK_LANGUAGE],
-  [EE.EE_CHAR_LANGUAGE_CTL, Writer.RES_CHRATR_CTL_LANGUAGE],
-  [EE.EE_CHAR_FONTINFO_CJK, Writer.RES_CHRATR_CJK_FONT],
-  [EE.EE_CHAR_FONTINFO_CTL, Writer.RES_CHRATR_CTL_FONT],
-  [EE.EE_CHAR_FONTHEIGHT_CJK, Writer.RES_CHRATR_CJK_FONTSIZE],
-  [EE.EE_CHAR_FONTHEIGHT_CTL, Writer.RES_CHRATR_CTL_FONTSIZE],
-  [EE.EE_CHAR_WEIGHT_CJK, Writer.RES_CHRATR_CJK_WEIGHT],
-  [EE.EE_CHAR_WEIGHT_CTL, Writer.RES_CHRATR_CTL_WEIGHT],
-  [EE.EE_CHAR_ITALIC_CJK, Writer.RES_CHRATR_CJK_POSTURE],
-  [EE.EE_CHAR_ITALIC_CTL, Writer.RES_CHRATR_CTL_POSTURE],
-  [EE.EE_CHAR_EMPHASISMARK, Writer.RES_CHRATR_EMPHASIS_MARK],
-  [EE.EE_CHAR_RELIEF, Writer.RES_CHRATR_RELIEF],
-  [EE.EE_CHAR_OVERLINE, Writer.RES_CHRATR_OVERLINE],
-  [EE.EE_CHAR_CASEMAP, Writer.RES_CHRATR_CASEMAP],
-]);
 
 /** Native paragraph value and UTF-16 attribute coordinates. */
 interface ParagraphRecord {
@@ -79,7 +42,7 @@ export interface WriterAnnotationTextRecord {
 function encodeEditItem(item: SfxPoolItem): SfxPoolItemSnapshot | undefined {
   const which = item.Which();
   if (which === EE.EE_FEATURE_TAB || which === EE.EE_FEATURE_LINEBR) return { which, value: true };
-  const writer = writerWhich.get(which);
+  const writer = getWriterAnnotationItemWhich(which);
   if (writer === undefined) return undefined;
   const value = item.Clone();
   if (!value) return undefined;
@@ -98,7 +61,7 @@ function decodeEditItem(pool: SfxItemPool, item: SfxPoolItemSnapshot): SfxPoolIt
     if (item.value !== true) throw new Error("Stored annotation text feature is invalid.");
     return new SfxVoidItem(which);
   }
-  const writer = writerWhich.get(which);
+  const writer = getWriterAnnotationItemWhich(which);
   if (writer === undefined) throw new Error("Stored annotation text item is invalid.");
   const value = decodeSfxPoolItem(pool, { ...item, which: writer });
   value.SetWhich(which);
@@ -197,7 +160,7 @@ export function decodeAnnotationText(
       }
       paragraph.SetFamily(stored.family);
       for (const item of stored.paragraphItems as readonly SfxPoolItemSnapshot[]) {
-        if (!item || !writerWhich.has(item.which))
+        if (!item || getWriterAnnotationItemWhich(item.which) === undefined)
           throw new Error("Stored annotation paragraph item is invalid.");
         paragraph.GetParaAttribs().Put(decodeEditItem(pool, item), true);
       }

@@ -1,6 +1,4 @@
 /** @fileoverview Adapts the browser comment textarea to the native Writer annotation EditEngine. */
-import { EditEngine } from "../../../editeng/source/editeng/editeng.lifecycle";
-import { DocumentImpEditEngine } from "../../../editeng/source/editeng/impedit2.document";
 import type { SearchEditView } from "../../../editeng/source/editeng/impedit4.search";
 import { EditPaM } from "../../../editeng/inc/EditPaM";
 import { EditSelection } from "../../../editeng/inc/EditSelection";
@@ -9,36 +7,8 @@ import type { OUStringConstReference } from "../../../sal/inc/rtl/ustring";
 import { text, unicode } from "../../../i18nlangtag/source/isolang/isolang.tables";
 import { Rectangle } from "../../../tools/inc/gen";
 import type { SwPostItField, SwPostItFieldType } from "../../source/core/fields/docufld";
+import { SwTextAPIEditSource } from "../../source/core/fields/textapi";
 import { SwUndo } from "../../source/core/undo/undobj";
-
-/** Actual comment editor document with paragraph-aware selection deletion. */
-class AnnotationEditDocument extends DocumentImpEditEngine {
-  /** Deletes a normalized editor selection while retaining the first paragraph. @param selection - Native edit selection. @returns Original start. */
-  override ImpDeleteSelection(selection: EditSelection): EditPaM {
-    const doc = this.GetEditDoc();
-    const ordered = new EditSelection(selection);
-    ordered.Adjust(doc);
-    const start = ordered.Min();
-    const end = ordered.Max();
-    const first = start.GetNode();
-    const last = end.GetNode();
-    if (!first || !last) throw new Error("Writer comment selection has no paragraph.");
-    if (first === last) doc.RemoveChars(start, end.GetIndex() - start.GetIndex());
-    else {
-      const firstIndex = doc.GetPos(first);
-      const lastIndex = doc.GetPos(last);
-      doc.RemoveChars(start, first.Len() - start.GetIndex());
-      doc.RemoveChars(new EditPaM(last, 0), end.GetIndex());
-      for (let index = lastIndex - 1; index > firstIndex; index--) {
-        doc.Remove(index);
-        this.GetParaPortions().Remove(index);
-      }
-      doc.ConnectParagraphs(first, last);
-      this.GetParaPortions().Remove(firstIndex + 1);
-    }
-    return new EditPaM(start);
-  }
-}
 
 /** Writer model undo for the value committed by its comment editor. */
 class AnnotationTextUndo extends SwUndo {
@@ -89,9 +59,7 @@ class AnnotationTextUndo extends SwUndo {
 }
 
 /** Binds the public text engine APIs and sidebar search operations to one mounted comment. */
-export class WriterCommentEditor extends EditEngine {
-  private readonly pool = EditEngine.CreatePool();
-  private readonly engine = new AnnotationEditDocument(this, this.pool);
+export class WriterCommentEditor extends SwTextAPIEditSource {
   private readonly selection = new EditSelection();
   private storedText: string | undefined;
 
@@ -101,32 +69,7 @@ export class WriterCommentEditor extends EditEngine {
     private readonly input: HTMLTextAreaElement,
   ) {
     super();
-    this.engine.SetUpdateLayout(false);
-    this.engine.EnableUndo(false);
     this.SyncContent();
-  }
-
-  /** Returns the actual edit document. @returns Editor implementation. */
-  getImpl(): AnnotationEditDocument {
-    return this.engine;
-  }
-
-  /** Splits the selected editor paragraph. @param paragraph - Paragraph index. @param position - UTF-16 offset. @returns Position after split. */
-  SplitContent(paragraph: number, position: number): EditPaM {
-    return this.engine.ImpInsertParaBreak(
-      new EditPaM(this.engine.GetEditDoc().GetObject(paragraph), position),
-    );
-  }
-
-  /** Joins adjacent editor paragraphs. @param left - First paragraph index. @returns Join position. */
-  ConnectContents(left: number): EditPaM {
-    const doc = this.engine.GetEditDoc();
-    const first = doc.GetObject(left);
-    const second = doc.GetObject(left + 1);
-    if (!first || !second) throw new Error("Writer comment join is outside its editor.");
-    const position = doc.ConnectParagraphs(first, second);
-    this.engine.GetParaPortions().Remove(left + 1);
-    return position;
   }
 
   /** Loads committed text after model undo, redo or a field update. @returns Nothing. */
@@ -135,17 +78,17 @@ export class WriterCommentEditor extends EditEngine {
     if (this.storedText === value) return;
     this.storedText = value;
     const object = this.field.GetTextObject();
-    if (object) this.engine.SetTextObject(object);
+    if (object) this.SetText(object);
     else {
       const plain = unicode(value);
       try {
-        this.engine.SetText(plain);
+        this.SetText(plain);
       } finally {
         plain.dispose();
       }
     }
     this.input.value = this.GetValue();
-    this.selection.assign(this.engine.GetEditDoc().GetStartPaM());
+    this.selection.assign(this.getImpl().GetEditDoc().GetStartPaM());
   }
 
   /** Maps browser LF textarea offsets onto the native editor selection. @returns Nothing. */
@@ -235,16 +178,11 @@ export class WriterCommentEditor extends EditEngine {
     return null;
   }
 
-  /** Releases the native edit document. @returns Nothing. */
-  Dispose(): void {
-    this.engine.Dispose();
-  }
-
   /** Replaces the actual editor range and publishes the new Writer field. @param selection - Note text range. @param value - Inserted text. @returns Nothing. */
   private ReplaceSelection(selection: EditSelection, value: OUStringConstReference): void {
     const before = this.field.GetPar2();
     const beforeObject = this.field.GetTextObject()?.Clone();
-    const insertedEnd = this.engine.InsertText(selection, value);
+    const insertedEnd = this.getImpl().InsertText(selection, value);
     const after = this.GetValue();
     this.selection.assign(insertedEnd);
     this.input.value = after;
@@ -253,8 +191,8 @@ export class WriterCommentEditor extends EditEngine {
       beforeObject?.dispose();
       return;
     }
-    const doc = this.engine.GetEditDoc();
-    const afterObject = this.engine.CreateTextObject(
+    const doc = this.getImpl().GetEditDoc();
+    const afterObject = this.getImpl().CreateTextObject(
       new EditSelection(doc.GetStartPaM(), doc.GetEndPaM()),
       null,
     );
@@ -278,7 +216,7 @@ export class WriterCommentEditor extends EditEngine {
 
   /** Resolves a browser text offset against the actual edit paragraphs. @param offset - LF-delimited UTF-16 offset. @returns Native position. */
   private Position(offset: number): EditPaM {
-    const doc = this.engine.GetEditDoc();
+    const doc = this.getImpl().GetEditDoc();
     for (let index = 0; index < doc.Count(); index++) {
       const node = doc.GetObject(index);
       if (!node) break;
@@ -290,7 +228,7 @@ export class WriterCommentEditor extends EditEngine {
 
   /** Resolves a native point in a browser textarea. @param position - Native position. @returns LF-delimited UTF-16 offset. */
   private Offset(position: EditPaM): number {
-    const doc = this.engine.GetEditDoc();
+    const doc = this.getImpl().GetEditDoc();
     const paragraph = doc.GetPos(position.GetNode());
     let offset = position.GetIndex();
     for (let index = 0; index < paragraph; index++)

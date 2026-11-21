@@ -4,7 +4,7 @@ title: "Implement Writer search and replace core and browser UI"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 87
+revision: 88
 origin:
   system: "manual"
 depends_on:
@@ -256,6 +256,9 @@ comments:
   -
     author: "CODER"
     body: "Verified intermediate Writer annotation transfer checkpoint. The normal ODT Worker graph carries the native EditTextObject with paragraph and style metadata, mapped character and paragraph items, tab and line-break features and UTF-16 coordinates. Restoration uses an independently owned EditEngine pool and the existing concrete Writer value codecs. Legacy records retain their plain text fallback. A regression test on the pinned upstream annotation fixture exercises structured cloning, formatting and native equality. The three affected Writer suites passed 16 tests, and the Writer resource suite passed 2. Production build, scoped lint and formatting, dependency, source tree, provenance, routing, doctor and diff checks passed. Repo-wide JSDoc and file size still report existing findings outside the changed paths. Rich ODT XML, visible rich annotation editing and the remainder of the approved task remain open. No full regression run or task closure in this checkpoint."
+  -
+    author: "CODER"
+    body: "Verified intermediate ODT export checkpoint. Writer now projects annotation EditEngine text sections through the shared paragraph and automatic-style export passes, corresponding to the pinned txtflde.cxx TextRange collection and export calls. ODT output preserves represented inline formatting, paragraph alignment, tabs, soft line breaks and empty paragraphs. The browser comment editor now uses the Writer text edit source and shared DocumentImpEditEngine deletion logic. The pinned ODT fixture with a formatted native comment passes Writer Worker equality and content.xml assertions. Targeted Writer and shared runs each passed 29 tests; Writer resource suite passed 2. Production build, dependencies, source-tree, provenance, routing, doctor, scoped lint and format, and diff checks passed. Repo-wide documentation and size checks found only pre-existing problems outside these changes. Rich ODT re-import and browser formatting presentation remain pending. This is a checkpoint rather than task closure, and the ten-task full-run count is unchanged."
 events:
   -
     type: "status"
@@ -624,8 +627,13 @@ events:
     at: "2026-11-21T17:23:41.852Z"
     author: "CODER"
     body: "Verified intermediate Writer annotation transfer checkpoint. The normal ODT Worker graph carries the native EditTextObject with paragraph and style metadata, mapped character and paragraph items, tab and line-break features and UTF-16 coordinates. Restoration uses an independently owned EditEngine pool and the existing concrete Writer value codecs. Legacy records retain their plain text fallback. A regression test on the pinned upstream annotation fixture exercises structured cloning, formatting and native equality. The three affected Writer suites passed 16 tests, and the Writer resource suite passed 2. Production build, scoped lint and formatting, dependency, source tree, provenance, routing, doctor and diff checks passed. Repo-wide JSDoc and file size still report existing findings outside the changed paths. Rich ODT XML, visible rich annotation editing and the remainder of the approved task remain open. No full regression run or task closure in this checkpoint."
+  -
+    type: "comment"
+    at: "2026-11-21T17:32:44.547Z"
+    author: "CODER"
+    body: "Verified intermediate ODT export checkpoint. Writer now projects annotation EditEngine text sections through the shared paragraph and automatic-style export passes, corresponding to the pinned txtflde.cxx TextRange collection and export calls. ODT output preserves represented inline formatting, paragraph alignment, tabs, soft line breaks and empty paragraphs. The browser comment editor now uses the Writer text edit source and shared DocumentImpEditEngine deletion logic. The pinned ODT fixture with a formatted native comment passes Writer Worker equality and content.xml assertions. Targeted Writer and shared runs each passed 29 tests; Writer resource suite passed 2. Production build, dependencies, source-tree, provenance, routing, doctor, scoped lint and format, and diff checks passed. Repo-wide documentation and size checks found only pre-existing problems outside these changes. Rich ODT re-import and browser formatting presentation remain pending. This is a checkpoint rather than task closure, and the ten-task full-run count is unchanged."
 doc_version: 3
-doc_updated_at: "2026-11-21T17:23:41.852Z"
+doc_updated_at: "2026-11-21T17:32:44.547Z"
 doc_updated_by: "CODER"
 description: "Implement the approved coherent Writer search-and-replace feature from pinned LibreOffice sources: real shared search engine and options, native paragraph/cursor traversal and replacement/history contracts, view-owned search state and dispatch, Find toolbar and Find and Replace dialog with generated upstream command placement and shortcuts. Preserve source semantics and explicit unsupported boundaries; never substitute DOM text search or browser RegExp for ICU contracts. Work only on writer in vite-office-writer; local upstream reading approved, no network or merges. Keep active until approved scope is verified."
 sections:

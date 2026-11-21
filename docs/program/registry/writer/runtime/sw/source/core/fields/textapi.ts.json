@@ -1,0 +1,35 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sw/source/core/fields/textapi.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "writer",
+    "subsystem": "text-search",
+    "capabilityIds": [
+      "CAP-0111"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/sw/source/core/fields/textapi.ts#SwTextAPIEditSource",
+        "apps/office/src/sw/browser/presentation/WriterCommentsSidebar.test.tsx",
+        "vendor/libreoffice-reference/sw/source/core/fields/textapi.cxx"
+      ],
+      "justification": "Owns no-view EditEngine paragraphs for annotation text, reusing native edit operations and the corresponding Writer text attribute identities.",
+      "knownViolations": [],
+      "localSymbols": [
+        "SwTextAPIEditSource"
+      ],
+      "sourceResponsibility": "aligned",
+      "upstreamFile": "sw/source/core/fields/textapi.cxx",
+      "upstreamSymbols": [
+        "SwTextAPIEditSource"
+      ]
+    }
+  }
+}
