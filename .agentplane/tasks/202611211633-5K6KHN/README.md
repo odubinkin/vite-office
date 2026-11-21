@@ -4,7 +4,7 @@ title: "Refresh Graphify before task closure and after branch checkout"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 7
+revision: 8
 origin:
   system: "manual"
 depends_on: []
@@ -25,6 +25,26 @@ verification:
   updated_by: "CODER"
   note: "Real Git checkouts updated the fixture graph in both directions. Ordinary commits and path checkouts skipped refresh. A simulated refresh failure prevented the closeout command, and success preserved its arguments. The installed hook refreshed the vite-office index, and SwDoc resolved to its source."
   attempts: 0
+quality_review:
+  state: "pass"
+  updated_at: "2026-11-21T16:38:17.491Z"
+  updated_by: "EVALUATOR"
+  note: "The installed checkout hook and repository closeout wrapper implement the approved refresh triggers."
+  evaluated_sha: "759eab18b790634b2a4b215479f540fe051aaa50"
+  blueprint_digest: "552dd94556a609abe8b08b37020960b2ebbfb9fd1537e382c28014d96efef08c"
+  evidence_refs:
+    - ".agentplane/tasks/202611211633-5K6KHN/README.md"
+    - ".agentplane/tasks/202611211633-5K6KHN/quality/20261121-163817491-recovery-context/quality-report.json"
+    - ".agentplane/tasks/202611211633-5K6KHN/quality/20261121-163817491-recovery-context/evaluator-prompt.md"
+    - ".agentplane/tasks/202611211633-5K6KHN/quality/20261121-163817491-recovery-context/evaluator-opinion.md"
+    - ".agentplane/tasks/202611211633-5K6KHN/blueprint/resolved-snapshot.json"
+    - "scripts/graphify-context.sh"
+    - "AGENTS.md"
+    - "README.md"
+    - "node .agentplane/policy/check-routing.mjs"
+    - "ap doctor"
+  findings:
+    - "Real Git branch switches updated the graph and removed stale symbols. Ordinary commits and path checkouts skipped refresh. The closeout wrapper kept the task open on refresh failure and forwarded its original arguments on success. Main checkout refresh and a source-verified query passed."
 commit: null
 comments:
   -
