@@ -22,7 +22,7 @@ it("opens connected top menus with shared shortcut captions", /** Uses real prod
       sheetWorkflows={session.sheetWorkflows}
     />,
   );
-  const labels = ["File", "Edit", "View", "Format", "Sheet", "Data"];
+  const labels = ["File", "Edit", "View", "Insert", "Format", "Sheet", "Data"];
   const menubar = screen.getByRole("menubar", { name: "Calc menu" });
   expect(
     within(menubar)
@@ -48,6 +48,8 @@ it("opens connected top menus with shared shortcut captions", /** Uses real prod
       );
     }
     if (label === "Edit") expect(screen.queryByRole("menuitem", { name: /^Cut/ })).toBeNull();
+    if (label === "Insert")
+      expect(screen.getByRole("menuitem", { name: /^Headers and Footers/ })).toBeEnabled();
     fireEvent.keyDown(screen.getAllByRole("menu")[0] as HTMLElement, { key: "Escape" });
   }
   expect(getCalcCommandResource(".uno:About").label).toContain("Vite Office");
