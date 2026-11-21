@@ -1,6 +1,7 @@
 /** @fileoverview Native Calc cell clipboard through the mounted workspace and browser data transfer. */
 import { act, cleanup, fireEvent, render, screen, within } from "@testing-library/react";
 import { afterEach, assert, expect, it, vi } from "vitest";
+import { FormulaError } from "../../../formula/inc/errorcodes";
 import { text, unicode } from "../../../i18nlangtag/source/isolang/isolang.tables";
 import { SvNumFormatType } from "../../../svl/inc/zforlist";
 import { SvxFontHeightItem } from "../../../editeng/inc/fhgtitem";
@@ -55,8 +56,8 @@ function select(range: string): void {
   fireEvent.keyDown(box, { key: "Enter" });
 }
 
-/** Installs a test clipboard at the native browser API boundary. @returns Clipboard fixture. */
-function browserClipboard() {
+/** Installs a test clipboard at the native browser API boundary. @param native - Optional native grid transfer. @returns Clipboard fixture. */
+function browserClipboard(native?: ReturnType<typeof transfer>) {
   const descriptor = Object.getOwnPropertyDescriptor(navigator, "clipboard");
   let plain = "";
   const clipboard = {
@@ -64,6 +65,18 @@ function browserClipboard() {
       plain = value;
     }),
     readText: vi.fn(async () => plain),
+    read: vi.fn(async () =>
+      native
+        ? [
+            {
+              types: native.types.map((type) => (type === "text/plain" ? type : "web " + type)),
+              getType: async (type: string) => ({
+                text: async () => native.getData(type.replace(/^web /, "")),
+              }),
+            },
+          ]
+        : [],
+    ),
   };
   Object.defineProperty(navigator, "clipboard", { configurable: true, value: clipboard });
   restoreClipboard = () => {
@@ -71,6 +84,14 @@ function browserClipboard() {
     else Reflect.deleteProperty(navigator, "clipboard");
   };
   return clipboard;
+}
+
+/** Executes the typed command from the native Paste Special submenu. @param name - Original menu caption suffix. @returns Completion. */
+async function pasteOnly(name: "Text" | "Numbers" | "Formula"): Promise<void> {
+  fireEvent.click(screen.getByRole("menuitem", { name: "Edit" }));
+  fireEvent.click(screen.getByRole("menuitem", { name: "Paste Special" }));
+  const item = screen.getByRole("menuitem", { name: "Paste Only " + name });
+  await act(async () => fireEvent.click(item));
 }
 
 it("copies cells and their formats, then pastes relative formulas through one native Undo action", async () => {
@@ -141,6 +162,104 @@ it("ports tdf119343 by recalculating the pasted reference against the next row",
     assert(cell);
     expect(text(cell.GetString().getString())).toBe(expected);
   }
+});
+
+it("ports CalcPasteOnly through the Text, Number and Formula menu commands", async () => {
+  const clipboard = transfer();
+  browserClipboard(clipboard);
+  const controller = mount(),
+    doc = controller.shell.GetDocument();
+  act(() => expect(controller.EnterString("=SUM(A2:A3)")).toBe(true));
+  select("A1");
+  fireEvent.copy(grid(), { clipboardData: clipboard });
+
+  select("C1");
+  await pasteOnly("Text");
+  expect(doc.GetCellType(new ScAddress(2, 0, 0))).toBe(CellType.CELLTYPE_NONE);
+  select("D1");
+  await pasteOnly("Numbers");
+  expect(doc.GetCellType(new ScAddress(3, 0, 0))).toBe(CellType.CELLTYPE_VALUE);
+  expect(doc.GetValue(new ScAddress(3, 0, 0))).toBe(0);
+  select("E1");
+  await pasteOnly("Formula");
+  const cell = doc.GetFormulaCell(new ScAddress(4, 0, 0));
+  assert(cell);
+  expect(cell.GetValue()).toBe(0);
+  const formula = cell.GetFormula(doc.GetGrammar());
+  expect(text(formula)).toBe("=SUM(E2:E3)");
+  formula.dispose();
+});
+
+it("pastes numbers without dates, keeps result errors and restores overwritten cell types on Undo", async () => {
+  const clipboard = transfer();
+  browserClipboard(clipboard);
+  const controller = mount(),
+    doc = controller.shell.GetDocument();
+  const dateFormat = doc.GetFormatTable().GetStandardFormat(SvNumFormatType.DATE);
+  act(() => {
+    controller.EnterString("=1+2");
+    controller.Select(0, 1);
+    controller.EnterString("=1/0");
+    doc.SetValue(new ScAddress(0, 3, 0), 45001);
+    doc.SetNumberFormat(new ScAddress(0, 3, 0), dateFormat);
+    controller.Select(2, 0);
+    controller.EnterString("old text");
+    controller.Select(2, 1);
+    controller.EnterString("=9");
+    doc.SetValue(new ScAddress(2, 2, 0), 45002);
+    doc.SetNumberFormat(new ScAddress(2, 2, 0), dateFormat);
+    doc.SetValue(new ScAddress(2, 3, 0), 42);
+  });
+  select("A1:A4");
+  fireEvent.copy(grid(), { clipboardData: clipboard });
+  select("C1");
+  await pasteOnly("Numbers");
+  const dialog = within(screen.getByRole("alertdialog", { name: "Paste" }));
+  await act(async () => fireEvent.click(dialog.getByRole("button", { name: "Yes" })));
+  const c1 = new ScAddress(2, 0, 0),
+    c2 = new ScAddress(2, 1, 0);
+  expect(doc.GetCellType(c1)).toBe(CellType.CELLTYPE_VALUE);
+  expect(doc.GetValue(c1)).toBe(3);
+  const error = doc.GetFormulaCell(c2);
+  expect(error?.GetErrCode()).toBe(FormulaError.DivisionByZero);
+  expect(error?.GetCode().GetLen()).toBe(0);
+  expect(doc.GetValue(new ScAddress(2, 2, 0))).toBe(45002);
+  expect(doc.GetCellType(new ScAddress(2, 3, 0))).toBe(CellType.CELLTYPE_NONE);
+  act(() => expect(controller.Undo()).toBe(true));
+  expect(doc.GetCellType(c1)).toBe(CellType.CELLTYPE_STRING);
+  expect(doc.GetFormulaCell(c2)?.GetValue()).toBe(9);
+  expect(doc.GetValue(new ScAddress(2, 3, 0))).toBe(42);
+  act(() => expect(controller.Redo()).toBe(true));
+  expect(doc.GetFormulaCell(c2)?.GetErrCode()).toBe(FormulaError.DivisionByZero);
+});
+
+it("pastes a multiline formula result as rich text and refuses a later external identity", async () => {
+  const clipboard = transfer();
+  browserClipboard(clipboard);
+  const controller = mount(),
+    doc = controller.shell.GetDocument();
+  act(() => {
+    const string = unicode("alpha\nbeta");
+    const engine = doc.GetEditEngine();
+    engine.SetTextCurrentDefaults(string);
+    string.dispose();
+    doc.SetEditText(new ScAddress(0, 1, 0), engine.CreateTextObject());
+    expect(controller.EnterString("=A2")).toBe(true);
+  });
+  select("A1");
+  fireEvent.copy(grid(), { clipboardData: clipboard });
+  select("B1");
+  await pasteOnly("Text");
+  const b1 = new ScAddress(1, 0, 0);
+  expect(doc.GetCellType(b1)).toBe(CellType.CELLTYPE_EDIT);
+  const value = doc.GetRefCellValue(b1).getEditText()?.GetText();
+  assert(value);
+  expect(text(value)).toBe("alpha\nbeta");
+  value.dispose();
+  clipboard.setData("application/x-vite-office-calc-clipboard", "another source");
+  select("C1");
+  await pasteOnly("Text");
+  expect(doc.GetCellType(new ScAddress(2, 0, 0))).toBe(CellType.CELLTYPE_NONE);
 });
 
 it("asks for Text Import settings, preserves leading zeroes and skips empty cells on confirmation", async () => {

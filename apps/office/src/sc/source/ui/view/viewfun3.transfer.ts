@@ -5,6 +5,7 @@ import { text } from "../../../../i18nlangtag/source/isolang/isolang.tables";
 import { ScAddress, ScRange } from "../../../inc/address";
 import { ScHorizontalCellIterator } from "../../../inc/dociter";
 import { ScDocument, ScDocumentMode } from "../../../inc/document";
+import type { ScFormulaCell } from "../../../inc/formulacell";
 import { InsertDeleteFlags } from "../../../inc/global";
 import { ScCellFormat } from "../../core/tool/cellform";
 import { ScAsciiOptions } from "../dbgui/asciiopt";
@@ -27,6 +28,25 @@ export function CopyToClipSingleRange(view: ScViewData): ScDocument | undefined 
   const clip = new ScDocument(ScDocumentMode.SCDOCMODE_CLIP);
   try {
     clip.ResetClip(doc, tab);
+    if (doc.GetAutoCalc()) {
+      const cells = new ScHorizontalCellIterator(
+        doc,
+        tab,
+        range.aStart.Col(),
+        range.aStart.Row(),
+        range.aEnd.Col(),
+        range.aEnd.Row(),
+      );
+      const col: [number] = [0],
+        row: [number] = [0];
+      const dirty: ScFormulaCell[] = [];
+      for (let cell = cells.GetNext(col, row); cell; cell = cells.GetNext(col, row)) {
+        const formula = cell.getFormula();
+        if (formula?.GetDirty()) dirty.push(formula);
+      }
+      // Formula interpretation can resize a spill range. Finish traversal before doing it.
+      for (const formula of dirty) if (formula.GetDirty()) formula.Interpret();
+    }
     doc.CopyToDocument(range, calcCellClipboardFlags, false, clip);
     clip.SetClipArea(range);
     return clip;

@@ -977,6 +977,15 @@ export class ScFormulaCell extends SvtListener<SfxHint> {
     this.MaybeInterpret();
     return this.pCode.GetCodeError() || this.aResult.GetResultError();
   }
+  /** Stores an original hard error in code and result, including tokenless clipboard errors. @param error - Result error. @returns Nothing. */
+  SetErrCode(error: FormulaError): void {
+    this.pCode.SetCodeError(error);
+    this.aResult.SetResultError(error);
+  }
+  /** Tests the original nonnumeric result for an embedded line feed. @returns Multiline result. */
+  IsMultilineResult(): boolean {
+    return !this.IsValue() && this.aResult.IsMultiline();
+  }
   /** Original value/error classification with native untouched value output on errors or text. @param output - Grouped native error/value references. @returns Has error or numeric value. */
   GetErrorOrValue(output: FormulaResultNumber): boolean {
     this.MaybeInterpret();

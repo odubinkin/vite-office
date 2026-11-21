@@ -1,4 +1,4 @@
-/** @fileoverview Original clipboard contexts over real column cursors,cell values and listening spans;default content-only profile. */
+/** @fileoverview Original clipboard contexts over real column cursors, cell values and listening spans. */
 import { ColumnBlockPositionSet } from "../../../inc/mtvelements";
 import type { ScDocument } from "../../../inc/document";
 import type { ScColumn } from "../../../inc/column";
@@ -9,6 +9,38 @@ import { CellTextAttr } from "../../../inc/celltextattr";
 import { ColumnSpanSet, type SpanAction } from "../../../inc/columnspanset";
 import { StartListeningContext, EndListeningContext } from "../../../inc/listenercontext";
 import { InsertDeleteFlags } from "../../../inc/global";
+import { ATTR_VALUE_FORMAT } from "../../../inc/scitems";
+import type { SfxUInt32Item } from "../../../../svl/inc/intitem";
+import { SvNumFormatType } from "../../../../svl/inc/zforlist";
+
+/** Checks the represented scalar clipboard insertion flags. @param flags - Source mask. @returns Whether supported. */
+export function IsClipboardContentMask(flags: InsertDeleteFlags): boolean {
+  const content = flags & ~InsertDeleteFlags.ATTRIB;
+  const scalar =
+    InsertDeleteFlags.VALUE |
+    InsertDeleteFlags.DATETIME |
+    InsertDeleteFlags.STRING |
+    InsertDeleteFlags.FORMULA;
+  return (
+    content === InsertDeleteFlags.CONTENTS ||
+    (content !== InsertDeleteFlags.NONE && (content & ~scalar) === 0)
+  );
+}
+
+/** Classifies the source cell using the format index stored in its own document. @param column - Source column. @param row - Source row. @returns Whether a date or time cell. */
+export function IsDateCell(column: ScColumn, row: number): boolean {
+  const format = column.GetPattern(row)?.GetItem(ATTR_VALUE_FORMAT) as SfxUInt32Item | undefined;
+  const type = column
+    .GetDoc()
+    .GetFormatTable()
+    .GetType(format?.GetValue() ?? 0);
+  return (
+    type === SvNumFormatType.DATE ||
+    type === SvNumFormatType.TIME ||
+    type === SvNumFormatType.DATETIME
+  );
+}
+
 /** Original shared cursor cache belongs to this operation,not to an alternate workbook. */
 export class ClipContextBase {
   private readonly mpSet: ColumnBlockPositionSet;
@@ -25,7 +57,7 @@ export class ClipContextBase {
     return this.mpSet;
   }
 }
-/** Original operation context for default internal content paste. */
+/** Original operation context for native content paste. */
 export class CopyFromClipContext extends ClipContextBase {
   private readonly maListeningFormulaSpans = new ColumnSpanSet();
   private mnDestCol1 = -1;
@@ -49,7 +81,7 @@ export class CopyFromClipContext extends ClipContextBase {
   ) {
     super(mrDestDoc);
     if (
-      (mnInsertFlag & ~InsertDeleteFlags.ATTRIB) !== InsertDeleteFlags.CONTENTS ||
+      !IsClipboardContentMask(mnInsertFlag) ||
       mbAsLink ||
       (mbSkipEmptyCells && mnInsertFlag & InsertDeleteFlags.ATTRIB)
     )

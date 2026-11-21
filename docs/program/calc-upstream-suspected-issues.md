@@ -7758,3 +7758,14 @@ user can undo the partial insertion. Calc preserves the partial insertion,
 error message and Undo action.
 
 - [Original clipboard Text Import completion](../../vendor/libreoffice-reference/sc/source/ui/view/viewfun5.cxx#L793)
+
+### CALC-815 — Paste Only Numbers stores result errors as tokenless formulas
+
+Copying an erroneous formula as a number creates a formula cell with no
+formula tokens. Calc sets both the compiler error and the result error to
+carry the cached error through the clipboard. The source setter marks this
+dual use of the compiler error as a FIXME. Calc preserves the tokenless cell
+and both error fields across Paste, Undo and Redo.
+
+- [Original clipboard error conversion](../../vendor/libreoffice-reference/sc/source/core/data/column3.cxx#L1405)
+- [Original hard formula error setter](../../vendor/libreoffice-reference/sc/source/core/data/formulacell.cxx#L2785)

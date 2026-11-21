@@ -24,8 +24,8 @@ import {
 } from "../../../inc/mtvelements";
 import type { base_element_block } from "../../../../external/mdds/include/mdds/multi_type_vector/types";
 import { ScFormulaCell, ScFormulaCellGroup, ScMatrixMode } from "../../../inc/formulacell";
-import type { CopyFromClipContext } from "../../../inc/clipcontext";
-import { CellType, InsertDeleteFlags } from "../../../inc/global";
+import { IsClipboardContentMask, type CopyFromClipContext } from "../../../inc/clipcontext";
+import { CellType } from "../../../inc/global";
 import { RowSpan, type ColumnSpanSet } from "../../../inc/columnspanset";
 import { string_element_callbacks } from "../../../inc/mtvelements";
 import { double_element_callbacks } from "../../../../external/mdds/include/mdds/multi_type_vector/standard_element_blocks";
@@ -283,11 +283,11 @@ export function DeleteBeforeCopyFromClip(
   const position = context.getBlockPosition(this.GetTab(), this.GetCol());
   if (!position) return;
   const flags = context.getDeleteFlag();
-  if ((flags & ~InsertDeleteFlags.ATTRIB) !== InsertDeleteFlags.CONTENTS)
+  if (!IsClipboardContentMask(flags))
     throw new Error("Nondefault pre-paste deletion is not implemented");
   /** Clears a destination span and records its original broadcast and listener spans. @param first - First row. @param last - Last row. @returns Nothing. */
   const remove = (first: number, last: number): void => {
-    const result = this.DeleteCells(position, first, last, InsertDeleteFlags.CONTENTS);
+    const result = this.DeleteCells(position, first, last, flags);
     broadcasts.set(doc, this.GetTab(), this.GetCol(), result.aDeletedRows, true);
     for (const [start, end] of result.aFormulaRanges)
       context.setListeningFormulaSpans(this.GetTab(), this.GetCol(), start, this.GetCol(), end);

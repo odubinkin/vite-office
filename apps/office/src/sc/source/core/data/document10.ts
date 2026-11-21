@@ -182,7 +182,7 @@ export function CopyOneCellFromClip(
   row2: number,
 ): boolean {
   const clip = context.getClipDoc();
-  if (clip.GetClipParam().mbCutMode || context.getInsertFlag() & InsertDeleteFlags.ATTRIB)
+  if (clip.GetClipParam().mbCutMode || context.getInsertFlag() !== InsertDeleteFlags.CONTENTS)
     return false;
   const range = clip.GetClipParam().getWholeRange();
   if (range.aStart.Row() !== range.aEnd.Row()) return false;
@@ -201,7 +201,8 @@ export function CopyOneCellFromClip(
   for (let offset = 0; offset < width; ++offset, source.IncCol()) {
     context.setSingleCellPattern(offset, clip.GetPattern(source));
     const column = table.FetchColumn(source.Col());
-    if (!column || column.GetCellType(source.Row()) === CellType.CELLTYPE_EDIT) return false;
+    if (!column) throw Error("Clipboard source column assertion");
+    if (column.GetCellType(source.Row()) === CellType.CELLTYPE_EDIT) return false;
     UpdateScriptTypes.call(column, source.Row(), source.Row());
     context.setSingleCell(source, column);
   }
@@ -220,7 +221,6 @@ export function CopyOneCellFromClip(
   this.UpdateReference(update, context.getUndoDoc(), false);
   return true;
 }
-
 /** Original document.cxx single-sheet clipboard listener forwarding,partitioned on the same ScDocument instance. @param this - Actual document. @param start - Actual start context. @param end - Actual end context. @param tab - Sheet. @param col1 - First column. @param row1 - First row. @param col2 - Last column. @param row2 - Last row. @returns Nothing. */
 export function StartListeningFromClip(
   this: ScDocument,
@@ -413,7 +413,9 @@ export function CopyFromClip(
     }
     this.SetInsertingFromOtherDoc(true);
     const broadcasts = new ColumnSpanSet();
-    const clipCol = range.aStart.Col(),
+    const allocated = clip.FetchTable(range.aStart.Tab())?.GetAllocatedColumnsCount() ?? 0;
+    const hasFullRow = range.aEnd.Col() < allocated,
+      clipCol = range.aStart.Col(),
       clipEnd = range.aEnd.Row();
     let clipRow = range.aStart.Row();
     try {
@@ -424,7 +426,7 @@ export function CopyFromClip(
           row2 = target.aEnd.Row();
         context.setDestRange(col1, row1, col2, row2);
         this.DeleteBeforeCopyFromClip(context, marks, broadcasts);
-        if (CopyOneCellFromClip.call(this, context, col1, row1, col2, row2)) continue;
+        if (hasFullRow && CopyOneCellFromClip.call(this, context, col1, row1, col2, row2)) continue;
         let c1 = col1,
           r1 = row1,
           c2 = Math.min(c1 + width, col2),

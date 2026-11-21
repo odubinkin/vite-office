@@ -37,7 +37,7 @@ import {
 import { SingleColumnSpanSet, RowSpan } from "../../../inc/columnspanset";
 import { ScItemPoolCache } from "../../../inc/poolcach";
 import { MatrixEdge, NoListening, type StartListeningType } from "../../../inc/types";
-import type { CopyToDocContext } from "../../../inc/clipcontext";
+import { IsDateCell, type CopyToDocContext } from "../../../inc/clipcontext";
 import type { ScMarkData } from "../../../inc/markdata";
 import { ScMultiSelIter } from "../../../inc/markmulti";
 import { EndListeningContext } from "../../../inc/listenercontext";
@@ -173,27 +173,32 @@ export class DeleteCellsResult {
     this.aDeletedRows = new SingleColumnSpanSet(doc.GetSheetLimits());
   }
 }
-/** Original block deletion classifier for represented default CONTENTS;selective date/number formatting remains unavailable. */
+/** Classifies typed deletion spans with the original date and number distinction. */
 class DeleteAreaHandler implements BlockFunction {
   private readonly maFormulaCells: ScFormulaCell[] = [];
   private readonly maDeleteRanges: SingleColumnSpanSet;
-  /** Borrows source document and original deletion mask. @param doc - Actual document. @param flags - Original flags. @returns Handler. */
+  /** Borrows the actual column and original deletion mask. @param column - Destination column. @param flags - Original flags. @returns Handler. */
   constructor(
-    private readonly doc: ScDocument,
+    private readonly column: ScColumn,
     private readonly flags: InsertDeleteFlags,
   ) {
-    const numeric = !!(flags & InsertDeleteFlags.VALUE),
-      dateTime = !!(flags & InsertDeleteFlags.DATETIME);
-    if (numeric !== dateTime)
-      throw new Error("Selective date/number deletion requires the native formatter");
-    this.maDeleteRanges = new SingleColumnSpanSet(doc.GetSheetLimits());
+    this.maDeleteRanges = new SingleColumnSpanSet(column.GetDoc().GetSheetLimits());
   }
   /** Tags genuine nonempty blocks without walking empty rows. @param node - Store node. @param offset - Span offset. @param size - Span length. @returns Nothing. */
   call(node: CellStoreNode, offset: number, size: number): void {
+    const first = node.position + offset;
     switch (node.type) {
-      case element_type_numeric:
-        if (!(this.flags & InsertDeleteFlags.VALUE)) return;
+      case element_type_numeric: {
+        const numeric = !!(this.flags & InsertDeleteFlags.VALUE),
+          dateTime = !!(this.flags & InsertDeleteFlags.DATETIME);
+        if (numeric !== dateTime) {
+          for (let row = first; row < first + size; ++row)
+            if (IsDateCell(this.column, row) === dateTime) this.maDeleteRanges.set(row, row, true);
+          return;
+        }
+        if (!numeric) return;
         break;
+      }
       case element_type_string:
         if (!(this.flags & InsertDeleteFlags.STRING)) return;
         break;
@@ -210,7 +215,6 @@ class DeleteAreaHandler implements BlockFunction {
       default:
         return;
     }
-    const first = node.position + offset;
     this.maDeleteRanges.set(first, first + size - 1, true);
   }
   /** Captures original full group bounds before any listener or grouping mutation. @returns Inclusive pairs. */
@@ -227,7 +231,7 @@ class DeleteAreaHandler implements BlockFunction {
   }
   /** Original bulk end and explicit purge. @returns Nothing. */
   endFormulas(): void {
-    this.doc.EndListeningFormulaCells(this.maFormulaCells);
+    this.column.GetDoc().EndListeningFormulaCells(this.maFormulaCells);
   }
   /** Borrows original deletion owner. @returns Span owner. */
   getSpans(): SingleColumnSpanSet {
@@ -243,7 +247,7 @@ export function DeleteCells(
   flags: InsertDeleteFlags,
 ): DeleteCellsResult {
   const result = new DeleteCellsResult(this.GetDoc()),
-    action = new DeleteAreaHandler(this.GetDoc(), flags),
+    action = new DeleteAreaHandler(this, flags),
     cells = this.GetCellStore();
   ProcessBlock(
     cells.position(position.miCellPos as ReturnType<CellStoreType["begin"]>, first).first,

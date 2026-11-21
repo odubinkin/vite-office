@@ -22,7 +22,7 @@
         "vendor/libreoffice-reference/sc/source/core/data/column3.cxx#CopyCellsFromClipHandler",
         "vendor/libreoffice-reference/sc/source/core/data/column3.cxx#ScColumn::CopyFromClip"
       ],
-      "justification": "Copies typed cell blocks, edit text and original pattern spans through the native clipboard column cursors.",
+      "justification": "Copies typed cell blocks, edit text and original pattern spans through the native clipboard column cursors. The general copy handler observes the native content masks and copies scalar formula results, rich multiline text and hard errors with native cell ownership.",
       "knownViolations": [],
       "localSymbols": [
         "CopyCellsFromClipHandler",

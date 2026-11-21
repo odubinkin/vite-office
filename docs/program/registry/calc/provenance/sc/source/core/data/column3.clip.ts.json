@@ -15,7 +15,8 @@
       "ScColumn::CopyFromClip"
     ],
     "preservedResponsibilities": [
-      "Copies typed cell blocks, edit text and original pattern spans through the native clipboard column cursors."
+      "Copies typed cell blocks, edit text and original pattern spans through the native clipboard column cursors.",
+      "The general copy handler observes the native content masks and copies scalar formula results, rich multiline text and hard errors with native cell ownership."
     ],
     "omittedResponsibilities": [
       "Notes, sparklines, copy-as-link, filtered masks and nondefault clone families remain outside the active copy slice."
@@ -29,6 +30,10 @@
         {
           "path": "apps/office/src/sc/browser/presentation/calc-cell-clipboard.test.tsx",
           "marker": "copies cells and their formats"
+        },
+        {
+          "path": "apps/office/src/sc/browser/presentation/calc-cell-clipboard.test.tsx",
+          "marker": "ports CalcPasteOnly"
         }
       ],
       "upstream": [

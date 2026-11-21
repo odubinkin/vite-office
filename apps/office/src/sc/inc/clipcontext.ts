@@ -3,4 +3,6 @@ export {
   ClipContextBase,
   CopyFromClipContext,
   CopyToDocContext,
+  IsClipboardContentMask,
+  IsDateCell,
 } from "../source/core/data/clipcontext";

@@ -15,6 +15,7 @@ import type { ScTable } from "../../../inc/table";
 import { ScColumn } from "../../../inc/column";
 import { ScAddress, ScRange } from "../../../inc/address";
 import { CopyFromClipContext } from "../../../inc/clipcontext";
+import { SvNumFormatType } from "../../../../svl/inc/zforlist";
 import { ColumnSpanSet, SingleColumnSpanSet, RowSpan } from "../../../inc/columnspanset";
 import { ColumnBlockPosition } from "../../../inc/mtvelements";
 import { ScMarkData } from "../../../inc/markdata";
@@ -99,10 +100,13 @@ it("deletes only real spans and restarts surviving shared formulas after a middl
   clip.Dispose();
   doc.Dispose();
 });
-it("preserves holes and selective string/formula masks in original DeleteCells results", /** Full numeric selection needs no formatter. @returns Nothing. */ () => {
+it("preserves holes and selective text, formula, numeric and date masks in DeleteCells", /** Actual formatter classifies stored numeric rows. @returns Nothing. */ () => {
   const doc = new ScDocument();
   doc.InsertTab(0, unicode("Data"));
   doc.SetValue(new ScAddress(), 7);
+  const date = new ScAddress(0, 1, 0);
+  doc.SetValue(date, 45001);
+  doc.SetNumberFormat(date, doc.GetFormatTable().GetStandardFormat(SvNumFormatType.DATE));
   doc.SetTextCell(new ScAddress(0, 2, 0), unicode("text"));
   doc.SetFormula(new ScAddress(0, 4, 0), unicode("=1/0"), FormulaGrammar.Grammar.GRAM_NATIVE);
   const column = (doc.FetchTable(0) as ScTable).CreateColumnIfNotExists(0),
@@ -125,13 +129,13 @@ it("preserves holes and selective string/formula masks in original DeleteCells r
   expect(column.DeleteCells(position, 0, 9, InsertDeleteFlags.NONE).aDeletedRows.empty()).toBe(
     true,
   );
-  expect(
-    /** Exercises the genuine formatter boundary. @returns Native result. */ () =>
-      column.DeleteCells(position, 0, 9, InsertDeleteFlags.VALUE),
-  ).toThrow("native formatter");
-  const all = column.DeleteCells(position, 0, doc.MaxRow(), InsertDeleteFlags.CONTENTS);
-  all.aDeletedRows.getSpans(spans);
+  const numeric = column.DeleteCells(position, 0, 9, InsertDeleteFlags.VALUE);
+  numeric.aDeletedRows.getSpans(spans);
   expect(spans).toEqual([new RowSpan(0, 0)]);
+  expect(doc.GetValue(date)).toBe(45001);
+  const dates = column.DeleteCells(position, 0, doc.MaxRow(), InsertDeleteFlags.DATETIME);
+  dates.aDeletedRows.getSpans(spans);
+  expect(spans).toEqual([new RowSpan(1, 1)]);
   expect(column.IsEmptyData()).toBe(true);
   doc.EndListeningFormulaCells([]);
   doc.Dispose();

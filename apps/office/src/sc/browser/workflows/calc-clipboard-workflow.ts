@@ -25,6 +25,27 @@ const calcType = "application/x-vite-office-calc-clipboard";
 const webCalcType = "web " + calcType;
 const plainType = "text/plain";
 
+const pasteOnlySlots = [
+  {
+    commandUrl: ".uno:PasteOnlyText",
+    slotId: 5802,
+    label: "Paste Only Text",
+    flags: InsertDeleteFlags.STRING,
+  },
+  {
+    commandUrl: ".uno:PasteOnlyFormula",
+    slotId: 5803,
+    label: "Paste Only Formula",
+    flags: InsertDeleteFlags.FORMULA,
+  },
+  {
+    commandUrl: ".uno:PasteOnlyValue",
+    slotId: 5804,
+    label: "Paste Only Numbers",
+    flags: InsertDeleteFlags.VALUE,
+  },
+] as const;
+
 /** Portable clipboard text with an optional browser-owned native transfer identity. */
 interface Transfer {
   readonly plainText: string;
@@ -92,6 +113,11 @@ export class CalcClipboardWorkflow {
         getState: (workflow) => ({ enabled: workflow.CanRead() }),
         execute: (workflow) => workflow.Paste(true),
       },
+      ...pasteOnlySlots.map(({ flags, ...slot }) => ({
+        ...slot,
+        getState: (workflow: CalcClipboardWorkflow) => ({ enabled: workflow.CanPasteOnly() }),
+        execute: (workflow: CalcClipboardWorkflow) => workflow.Paste(false, undefined, flags),
+      })),
     ]),
   );
 
@@ -164,6 +190,25 @@ export class CalcClipboardWorkflow {
     return this.CanUseCells() && !this.reading && !!globalThis.navigator?.clipboard;
   }
 
+  /** Checks the native clipboard and editable cursor for the typed cell commands. @returns Whether available. */
+  private CanPasteOnly(): boolean {
+    if (!this.CanRead()) return false;
+    const { shell, viewData } = this.controller;
+    const doc = shell.GetDocument();
+    return (
+      this.owned?.source === doc &&
+      doc.IsBlockEditable(
+        viewData.CurrentTabForData(),
+        viewData.GetCurX(),
+        viewData.GetCurY(),
+        viewData.GetCurX(),
+        viewData.GetCurY(),
+      ) &&
+      viewData.GetSimpleArea(new ScRange()) === ScMarkType.SC_MARK_SIMPLE &&
+      !viewData.SelectionForbidsPaste(this.owned.clip)
+    );
+  }
+
   /** Captures the current selection with a fresh browser-session clipboard identity. @returns Native transfer on success. */
   private CopySelection(): OwnedTransfer | undefined {
     if (!this.CanCopy()) return undefined;
@@ -209,9 +254,14 @@ export class CalcClipboardWorkflow {
     }
   }
 
-  /** Applies the authorized clipboard transfer to the same active document and selection. @param unformatted - Force the portable text path. @param supplied - Native DOM clipboard data, when available. @returns Whether pasted. */
-  private async Paste(unformatted: boolean, supplied?: Transfer): Promise<boolean> {
-    if (!this.CanUseCells() || this.reading) return false;
+  /** Applies the authorized clipboard transfer to the same active document and selection. @param unformatted - Force the portable text path. @param supplied - Native DOM clipboard data, when available. @param only - Native mask for a Paste Only request. @returns Whether pasted. */
+  private async Paste(
+    unformatted: boolean,
+    supplied?: Transfer,
+    only?: InsertDeleteFlags,
+  ): Promise<boolean> {
+    if (!this.CanUseCells() || this.reading || (only !== undefined && !this.CanPasteOnly()))
+      return false;
     this.reading = true;
     const { controller } = this;
     const doc = controller.shell.GetDocument();
@@ -226,8 +276,8 @@ export class CalcClipboardWorkflow {
       if (!current()) return false;
       const owned = this.owned;
       if (!unformatted && owned?.source === doc && owned.token === transfer.token)
-        return await this.PasteOwned(owned.clip, doc, current);
-      if (!transfer.plainText) return false;
+        return await this.PasteOwned(owned.clip, doc, current, only ?? calcCellClipboardFlags);
+      if (only !== undefined || !transfer.plainText) return false;
 
       const range = new ScRange();
       if (controller.viewData.GetSimpleArea(range) !== ScMarkType.SC_MARK_SIMPLE) return false;
@@ -291,11 +341,12 @@ export class CalcClipboardWorkflow {
     }
   }
 
-  /** Implements the native confirmation sequence for normal internal paste. @param clip - In-workbook clipboard. @param doc - Active document. @param current - Revalidates the initiating view after a modal. @returns Whether pasted. */
+  /** Implements the native confirmation sequence for internal paste. @param clip - In-workbook clipboard. @param doc - Active document. @param current - Revalidates the initiating view after a modal. @param flags - Original insertion mask. @returns Whether pasted. */
   private async PasteOwned(
     clip: ScDocument,
     doc: ScDocument,
     current: () => boolean,
+    flags: InsertDeleteFlags,
   ): Promise<boolean> {
     const data = this.controller.viewData;
     const range = new ScRange();
@@ -330,12 +381,12 @@ export class CalcClipboardWorkflow {
     )
       return false;
 
-    if (!enlarge) return this.PasteDocument(clip);
+    if (!enlarge) return this.PasteDocument(clip, flags);
     const previous = new ScMarkData(marks);
     let pasted = false;
     try {
       marks.SetMarkArea(range);
-      pasted = this.PasteDocument(clip);
+      pasted = this.PasteDocument(clip, flags);
       return pasted;
     } finally {
       if (!pasted) marks.assign(previous);
@@ -350,9 +401,9 @@ export class CalcClipboardWorkflow {
     return response.result.accepted;
   }
 
-  /** Pastes a native clip with its original formats and publishes the resulting selection. @param clip - Actual clipboard document. @returns Whether pasted. */
-  private PasteDocument(clip: ScDocument): boolean {
-    const ok = this.controller.GetViewShell().PasteFromClip(calcCellClipboardFlags, clip);
+  /** Pastes a native clip and publishes the resulting selection. @param clip - Actual clipboard document. @param flags - Original insertion mask. @returns Whether pasted. */
+  private PasteDocument(clip: ScDocument, flags: InsertDeleteFlags): boolean {
+    const ok = this.controller.GetViewShell().PasteFromClip(flags, clip);
     if (ok) this.controller.SyncSheetView();
     return ok;
   }

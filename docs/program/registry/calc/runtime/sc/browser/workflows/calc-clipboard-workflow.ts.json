@@ -20,7 +20,7 @@
         "apps/office/src/sc/browser/workflows/calc-clipboard-workflow.ts#CalcClipboardWorkflow",
         "apps/office/src/sc/browser/presentation/calc-cell-clipboard.test.tsx"
       ],
-      "justification": "Routes real browser clipboard and menu events to source slots, native clipboard documents and paste confirmations.",
+      "justification": "Routes real browser clipboard and menu events to source slots, native clipboard documents and paste confirmations. Paste Only uses the original Text, Number and Formula slots and requires a current in-workbook clipboard identity.",
       "knownViolations": [],
       "localSymbols": [
         "CalcClipboardWorkflow"

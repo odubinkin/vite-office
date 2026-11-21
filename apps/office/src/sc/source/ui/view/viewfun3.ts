@@ -9,6 +9,7 @@ import { scPasteResourcesEnglish as R } from "../../../inc/globstr";
 import { ScMarkType } from "../inc/viewdata";
 import { ScViewUtil } from "./viewutil";
 import { ScEditableTester } from "../inc/editable";
+import { IsClipboardContentMask } from "../../../inc/clipcontext";
 import { ScUndoPaste, ScUndoPasteOptions } from "../undo/undoblk";
 import { AdjustBlockHeight } from "./viewfun2";
 /** Original default-content PasteFromClip through real marks,clipboard,snapshots and history. Enabled Undo and the active normal view are current construction invariants;no fake native service supplies those defaults. Physical paint/OLE/UNO publication is projected by the shell's browser notification. @param this - Actual view. @param flags - Native paste flags. @param clip - Actual clipboard or null. @param operation - Native defaultNONE. @param skipEmpty - Native defaultfalse. @param transpose - Native defaultfalse. @param asLink - Native defaultfalse. @param move - Native defaultINS_NONE. @param undoExtra - Native defaultNONE. @param allowDialogs - Native defaultfalse. @returns Whether pasted. */
@@ -28,7 +29,7 @@ export function PasteFromClip(
   const data = this.GetViewData();
   if (data.SelectionForbidsPaste(clip)) return false;
   if (
-    (flags & ~F.ATTRIB) !== F.CONTENTS ||
+    !IsClipboardContentMask(flags) ||
     (undoExtra !== F.NONE && undoExtra !== F.ATTRIB) ||
     operation !== ScPasteFunc.NONE ||
     (skipEmpty && flags & F.ATTRIB) ||
@@ -38,9 +39,9 @@ export function PasteFromClip(
     allowDialogs
   )
     throw Error("Nondefault native paste services are not implemented");
-  const content = (flags & F.CONTENTS) as F;
-  // Capture the destination patterns when paste or native extra-undo can change them.
-  const undoFlags = (content | ((flags | undoExtra) & F.ATTRIB) | F.NOCAPTIONS) as F;
+  // The original Undo saves all content because a typed insert can replace a different cell type.
+  const formats = (flags | undoExtra) & F.ATTRIB ? F.ATTRIB : F.NONE;
+  const undoFlags = (F.CONTENTS | formats | F.NOCAPTIONS) as F;
   const parameter = clip.GetClipParam(),
     marks = data.GetMarkData();
   if (parameter.isMultiRange() || marks.IsMultiMarked())
