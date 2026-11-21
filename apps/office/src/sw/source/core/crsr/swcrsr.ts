@@ -1,7 +1,7 @@
 /** @fileoverview Implements Writer cell traversal over the actual SwPaM/SwNodes owners from swcrsr.cxx. */
 import { SwPaM, SwPosition, GoNextPos, GoPreviousPos } from "./pam";
 import { SwNodes } from "../docnode/nodes";
-import { FindText } from "./findtxt";
+import { FindText, type SwNoteSearch } from "./findtxt";
 import type { RegexMatcherFactory } from "../../../../unotools/inc/textsearch";
 import { FindRanges, SwDocPositions } from "../../../inc/cshtyp";
 import type { SearchOptions2 } from "../../../../i18nutil/inc/searchopt";
@@ -183,7 +183,7 @@ export class SwCursor extends SwPaM {
     }
     target.Assign(boundary, 0);
   }
-  /** Native Find_Text entry point for model-text search. Notes and merged layout remain unported and reject explicitly. @param options - Native option value. @param searchInNotes - Search annotations. @param start - Start selector. @param end - End selector. @param cancel - Native cancellation output. @param ranges - Scope/all flags. @param replace - Native replace mode. @param layout - Optional layout owner for merged-text searching. @param acceptsNode - Represented layout admission. @param createRegex - Native ICU constructor. @returns Number of matches. */
+  /** Native Find_Text entry point for model-text search. Merged layout remains unported. @param options - Native option value. @param searchInNotes - Search annotations. @param start - Start selector. @param end - End selector. @param cancel - Native cancellation output. @param ranges - Scope/all flags. @param replace - Native replace mode. @param layout - Optional layout owner for merged-text searching. @param acceptsNode - Represented layout admission. @param createRegex - Platform regex compiler. @param notes - Active view comment manager. @returns Number of matches. */
   public Find_Text(
     options: SearchOptions2,
     searchInNotes: boolean,
@@ -195,10 +195,23 @@ export class SwCursor extends SwPaM {
     layout?: SwRootFrame,
     acceptsNode?: SwSearchNodeFilter,
     createRegex?: RegexMatcherFactory,
+    notes?: SwNoteSearch,
   ): number {
-    if (searchInNotes || layout !== undefined)
-      throw new Error("Writer notes and layout-text search are not implemented.");
-    return FindText(this, options, start, end, cancel, ranges, replace, acceptsNode, createRegex);
+    if (layout !== undefined) throw new Error("Writer layout-text search is not implemented.");
+    if (searchInNotes && notes === undefined)
+      throw new Error("Writer notes search is not implemented without a comment view.");
+    return FindText(
+      this,
+      options,
+      start,
+      end,
+      cancel,
+      ranges,
+      replace,
+      acceptsNode,
+      createRegex,
+      searchInNotes ? notes : undefined,
+    );
   }
   /** Native default threshold response, RET_YES=2: continue after discarding undo. Shell/UNO overrides may return RET_CANCEL=0 or RET_NO=3. @returns Native VCL response identity. */
   public MaxReplaceArived(): number {

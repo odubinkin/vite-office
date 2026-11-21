@@ -5735,3 +5735,12 @@ applies its authored properties without that collection change.
   again. An empty replacement can leave the position unchanged. The port
   retains the source loop. This finding follows from the source branches and
   has not been exercised as an unbounded native operation.
+
+### WRITER-715 — Annotation search compares an absolute bound with the span length
+
+- When notes are included, `sw/source/core/crsr/findtxt.cxx` sets the text
+  length passed to `DoSearch` to the subrange length for each span between
+  comment markers. The bound passed separately remains a paragraph offset.
+- The trailing-dollar check compares those values. A pattern such as `b$`
+  can match at the paragraph end during ordinary text search and fail with
+  notes enabled. Writer preserves this check in the annotation traversal.

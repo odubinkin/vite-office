@@ -1,0 +1,40 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sw/source/uibase/docvw/PostItMgr.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "writer",
+    "subsystem": "text-search",
+    "capabilityIds": [
+      "CAP-0111"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/sw/source/uibase/docvw/PostItMgr.ts#SwPostItMgr",
+        "apps/office/src/sw/source/uibase/uiview/view-note-search.test.ts",
+        "vendor/libreoffice-reference/sw/source/uibase/docvw/PostItMgr.cxx"
+      ],
+      "justification": "Resolves open sidebar editors by annotation field identity, searches from the directional editor boundary, continues the active match, and delegates single replacement to the original EditEngine.",
+      "knownViolations": [],
+      "localSymbols": [
+        "SwPostItMgr",
+        "SearchReplace",
+        "FinishSearchReplace",
+        "Replace"
+      ],
+      "sourceResponsibility": "aligned",
+      "upstreamFile": "sw/source/uibase/docvw/PostItMgr.cxx",
+      "upstreamSymbols": [
+        "SwPostItMgr::SearchReplace",
+        "SwPostItMgr::FinishSearchReplace",
+        "SwPostItMgr::Replace"
+      ]
+    }
+  }
+}

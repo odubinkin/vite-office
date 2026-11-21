@@ -55,6 +55,7 @@ import type { SwTableBox } from "../../core/table/swtable-boxline";
 import type { SwTextNode } from "../../core/txtnode/ndtxt";
 import { findParagraphStyle } from "../app/docst";
 import type { SwWrtShell } from "../wrtsh/wrtsh1";
+import type { SwPostItMgr } from "../docvw/PostItMgr";
 import { SwASCWriter } from "../../filter/ascii/wrtasc";
 
 /** Native view search attribute ranges for both modeless formatting editors. */
@@ -253,11 +254,12 @@ export class SwViewSearch {
   private lastRequest:
     { item: WriterSearchItem; command: SvxSearchCmd; backward: boolean } | undefined;
 
-  /** Connects search to the writing shell and user search properties. @param shell - Persistent writing shell. @param configuration - User search configuration. @param createRegex - Native ICU constructor. @returns Search owner. */
+  /** Connects search to the writing shell and user search properties. @param shell - Persistent writing shell. @param configuration - User search configuration. @param createRegex - Platform regex compiler. @param postItMgr - Active view comment manager. @returns Search owner. */
   public constructor(
     private readonly shell: SwWrtShell,
     public readonly configuration?: SearchOptionsConfiguration,
     private readonly createRegex?: RegexMatcherFactory,
+    private readonly postItMgr?: SwPostItMgr,
   ) {
     const options = new SvtSearchOptions(configuration);
     this.item = {
@@ -665,14 +667,14 @@ export class SwViewSearch {
     command: SvxSearchCmd,
     backward: boolean,
   ): WriterSearchResult {
-    if (item.searchInNotes)
-      throw new Error("Writer notes and layout-text search are not implemented.");
     const searchesAttributes = Boolean(item.searchAttributes?.GetEntries().length);
     const replacing = command === SvxSearchCmd.REPLACE || command === SvxSearchCmd.REPLACE_ALL;
     const replacesAttributes = replacing && Boolean(item.replaceAttributes?.GetEntries().length);
     const attributeMode = searchesAttributes || replacesAttributes;
     if (!attributeMode && (item.styleSearch ? !item.searchStyle : item.search.length === 0))
       return { matches: 0, wrapped: false };
+    const searchNotes = item.searchInNotes === true && !attributeMode && !item.styleSearch;
+    if (!searchNotes) this.postItMgr?.ClearActiveField();
     const inSelection = item.selection;
     if (inSelection && !this.HasSelection()) return { matches: 0, wrapped: false };
     const options = this.CreateSearchOptions(item);
@@ -701,7 +703,21 @@ export class SwViewSearch {
         /** Releases the new cursor and editing notifications together. @returns Search feedback. */ () => {
           const result = document.RunModelTransaction(
             /** Publishes edits only after restoring the view cursor. @returns Search feedback. */ () => {
-              if (command === SvxSearchCmd.REPLACE) {
+              if (
+                command === SvxSearchCmd.REPLACE &&
+                searchNotes &&
+                this.postItMgr?.GetActiveField()
+              ) {
+                const noteOptions = new SearchOptions2(options);
+                const template = toOUString(item.replacement);
+                try {
+                  noteOptions.replaceString.assign(template);
+                  this.postItMgr.Replace(noteOptions, backward);
+                } finally {
+                  template.dispose();
+                  noteOptions.replaceString.clear();
+                }
+              } else if (command === SvxSearchCmd.REPLACE) {
                 if (backward) this.shell.Push();
                 try {
                   const regex = options.AlgorithmType2 === REGEXP;
@@ -820,7 +836,7 @@ export class SwViewSearch {
                       : style === undefined
                         ? search.Find_Text(
                             options,
-                            false,
+                            searchNotes,
                             from,
                             last,
                             [false],
@@ -829,6 +845,7 @@ export class SwViewSearch {
                             undefined,
                             acceptsResult,
                             this.createRegex,
+                            this.postItMgr,
                           )
                         : FindFormat(
                             search,

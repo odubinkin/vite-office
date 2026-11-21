@@ -4,7 +4,7 @@ title: "Implement Writer search and replace core and browser UI"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 76
+revision: 77
 origin:
   system: "manual"
 depends_on:
@@ -232,6 +232,9 @@ comments:
   -
     author: "CODER"
     body: "Verified checkpoint: Writer now owns a native SwPostItField type and value, a nonshareable SwFormatField, and a SwTextField annotation point bound to the original U+FFF9 marker. Actual hint maps move the live owner through insert, split and join and copy fields to the owning destination document. Body-text Find removes annotation markers unless the pattern requests them, retains source directional offsets, and preserves the different regex capture cleanup recorded under WRITER-711. Passed 87 targeted Writer cases across five suites, typecheck, build, two resource cases, Writer WhichIds, module boundaries, source tree and provenance, JSDoc, file size, focused lint and formatting, doctor and routing. Doctor retains the existing hook warning. Comment range marks and file mapping, search traversal into the comment editor, and sidebar activation remain pending. No full regression or task closure."
+  -
+    author: "CODER"
+    body: "Verified checkpoint: Writer view owns SwPostItMgr and resolves registered annotation editors by the original field. The text cursor interleaves body spans and note editors in both directions, continues the active note selection, and routes an active single replacement through EditEngine. WRITER-715 records the native absolute-bound versus annotation-span-length check for trailing-dollar patterns. Passed 76 targeted Writer cases in six suites and repeated three note cases after the type-only boundary adjustment. Production build, two Writer resource cases, dependency and source-tree checks, provenance, JSDoc, file size, scoped lint and formatting, doctor and routing passed. The existing doctor hook warning remains. Browser comment viewport mounting and the dialog Notes control remain pending. No full regression or task closure."
 events:
   -
     type: "status"
@@ -560,8 +563,13 @@ events:
     at: "2026-11-21T11:56:17.285Z"
     author: "CODER"
     body: "Verified checkpoint: Writer now owns a native SwPostItField type and value, a nonshareable SwFormatField, and a SwTextField annotation point bound to the original U+FFF9 marker. Actual hint maps move the live owner through insert, split and join and copy fields to the owning destination document. Body-text Find removes annotation markers unless the pattern requests them, retains source directional offsets, and preserves the different regex capture cleanup recorded under WRITER-711. Passed 87 targeted Writer cases across five suites, typecheck, build, two resource cases, Writer WhichIds, module boundaries, source tree and provenance, JSDoc, file size, focused lint and formatting, doctor and routing. Doctor retains the existing hook warning. Comment range marks and file mapping, search traversal into the comment editor, and sidebar activation remain pending. No full regression or task closure."
+  -
+    type: "comment"
+    at: "2026-11-21T12:03:22.147Z"
+    author: "CODER"
+    body: "Verified checkpoint: Writer view owns SwPostItMgr and resolves registered annotation editors by the original field. The text cursor interleaves body spans and note editors in both directions, continues the active note selection, and routes an active single replacement through EditEngine. WRITER-715 records the native absolute-bound versus annotation-span-length check for trailing-dollar patterns. Passed 76 targeted Writer cases in six suites and repeated three note cases after the type-only boundary adjustment. Production build, two Writer resource cases, dependency and source-tree checks, provenance, JSDoc, file size, scoped lint and formatting, doctor and routing passed. The existing doctor hook warning remains. Browser comment viewport mounting and the dialog Notes control remain pending. No full regression or task closure."
 doc_version: 3
-doc_updated_at: "2026-11-21T11:56:17.285Z"
+doc_updated_at: "2026-11-21T12:03:22.147Z"
 doc_updated_by: "CODER"
 description: "Implement the approved coherent Writer search-and-replace feature from pinned LibreOffice sources: real shared search engine and options, native paragraph/cursor traversal and replacement/history contracts, view-owned search state and dispatch, Find toolbar and Find and Replace dialog with generated upstream command placement and shortcuts. Preserve source semantics and explicit unsupported boundaries; never substitute DOM text search or browser RegExp for ICU contracts. Work only on writer in vite-office-writer; local upstream reading approved, no network or merges. Keep active until approved scope is verified."
 sections:
