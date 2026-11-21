@@ -106,7 +106,7 @@ export class DocumentContentOperationsManager {
   public InsertItemSet(range: SwPaM, set: SfxItemSet, mode = SetAttrMode.DEFAULT): void {
     InsertItemSet(this.document, range, set, mode);
   }
-  /** Replaces a native marked string range, or applies an already formatted fragment through the existing fragment adapter. Paragraph-breaking regex and structured replacement remain unported. @param range - Original native range. @param replacement - Literal string or formatted fragment. @param regExp - Native regex replacement policy. @returns Native success for strings, content-change result for fragment adaptation. */
+  /** Replaces a native marked string range, or applies an already formatted fragment through the existing fragment adapter. Supports regex paragraph breaks and selected boundaries between adjacent text nodes. @param range - Original native range. @param replacement - Literal string or formatted fragment. @param regExp - Native regex replacement policy. @returns Native success for strings, content-change result for fragment adaptation. */
   public ReplaceRange(range: SwPaM, replacement: string | SwTextFragment, regExp = false): boolean {
     if (typeof replacement !== "string") {
       const { end, node, start } = this.GetSameTextNodeRange(range, "replacement");
@@ -116,26 +116,33 @@ export class DocumentContentOperationsManager {
       node.ReplaceRange(start, end, replacement);
       return true;
     }
-    if (regExp) {
-      // lcl_GetTokenToParaBreak tests the unit immediately before each backslash.
-      for (
-        let index = replacement.indexOf("\\n");
-        index !== -1;
-        index = replacement.indexOf("\\n", index + 1)
-      ) {
-        if (index === 0 || replacement.charCodeAt(index - 1) !== 92)
-          throw new Error("Writer paragraph-breaking regex replacement is not implemented.");
-      }
-    }
     if (!range.HasMark()) return false;
-    const { end, node, start } = this.GetSameTextNodeRange(range, "replacement");
-    const hints = node.GetpSwpHints();
-    if (hints?.HasFlyContent(start, end))
-      throw new Error("Writer structured replacement is not implemented.");
-    for (const hint of hints?.entries() ?? [])
-      if (hint.HasDummyChar()) throw new Error("Writer structured replacement is not implemented.");
+    const node = this.GetTextNode(range.Start(), "replacement");
+    const last = this.GetTextNode(range.End(), "replacement");
+    const crossesBreak = node !== last;
+    const start = range.Start().GetContentIndex();
+    const end = crossesBreak ? node.Len() : range.End().GetContentIndex();
+    if (
+      crossesBreak &&
+      (last.GetIndex() !== node.GetIndex() + 1 ||
+        last.StartOfSectionNode() !== node.StartOfSectionNode() ||
+        range.End().GetContentIndex() !== 0)
+    )
+      throw new Error(
+        "Writer replacement requires a text range or an adjacent paragraph boundary.",
+      );
+    for (const paragraph of crossesBreak ? [node, last] : [node]) {
+      const hints = paragraph.GetpSwpHints();
+      if (paragraph === node && hints?.HasFlyContent(start, end))
+        throw new Error("Writer structured replacement is not implemented.");
+      for (const hint of hints?.entries() ?? [])
+        if (hint.HasDummyChar())
+          throw new Error("Writer structured replacement is not implemented.");
+    }
+    const parts = regExp ? tokenizeReplacement(replacement) : [replacement];
     return this.document.RunModelTransaction(
       /** Runs native replacement/history/modified publication in one model action. @returns Native success. */ () => {
+        const { joinPrev } = sw_GetJoinFlags(range);
         const undo = this.document.GetUndoManager();
         const action = undo.DoesUndo() ? new SwUndoReplace(range, replacement, regExp) : undefined;
         if (action !== undefined) undo.AddUndoAction(action);
@@ -144,20 +151,33 @@ export class DocumentContentOperationsManager {
         undo.DoUndo(false);
         try {
           const position = new SwPosition(node, start);
+          const first = new SwPosition(node, start);
           try {
-            if (start === node.Len()) this.InsertString(position, replacement);
-            else if (start < end || replacement.length !== 0)
-              node.ReplaceText(position, end - start, replacement);
-          } finally {
-            position.Dispose();
-          }
-          const first = new SwPosition(node, start),
-            last = new SwPosition(node, start + node.Len() - oldLength + end - start);
-          try {
-            range.Assign(first, last);
+            const initial = parts[0] ?? "";
+            if (start === oldLength) this.InsertString(position, initial);
+            else if (start < end || initial.length !== 0)
+              node.ReplaceText(position, end - start, initial);
+            position.SetContent(node.Len() - oldLength + end);
+            for (const text of parts.slice(1)) {
+              const trailing = this.SplitNode(position);
+              const tailLength = trailing.Len();
+              this.InsertString(position, text);
+              position.SetContent(trailing.Len() - tailLength);
+            }
+            // The original start remains on the first node even when the split is at offset zero.
+            first.Assign(node, start);
+            if (crossesBreak) {
+              const trailing = position.GetNode() as SwTextNode;
+              const offset = position.GetContentIndex();
+              range.Assign(position, first);
+              if (!sw_JoinText(range, joinPrev))
+                throw new Error("Writer replacement could not join its paragraph boundary.");
+              position.Assign(joinPrev ? last : trailing, offset);
+              range.Assign(position, first);
+            } else range.Assign(first, position);
           } finally {
             first.Dispose();
-            last.Dispose();
+            position.Dispose();
           }
           action?.SetEnd(range);
         } finally {
@@ -420,6 +440,23 @@ export class DocumentContentOperationsManager {
     if (node.GetNodes().indexOfOrUndefined(node) === undefined)
       throw new Error(`Writer ${operation} requires a connected SwTextNode.`);
   }
+}
+
+/** Splits on the native replacement newline token with the original immediate-escape rule. @param replacement - Expanded replacement string. @returns Paragraph segments. */
+function tokenizeReplacement(replacement: string): string[] {
+  const parts: string[] = [];
+  let start = 0;
+  for (
+    let index = replacement.indexOf("\\n");
+    index !== -1;
+    index = replacement.indexOf("\\n", index + 1)
+  ) {
+    if (index > 0 && replacement.charCodeAt(index - 1) === 92) continue;
+    parts.push(replacement.slice(start, index));
+    start = index + 2;
+  }
+  parts.push(replacement.slice(start));
+  return parts;
 }
 
 /** Builds native reset defaults for registered character/paragraph/frame items, excluding list83..87. Languages, direction and other unregistered native items remain outside this profile. @param document - Owning attribute pool. @returns Independent deletion item set. */

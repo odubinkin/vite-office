@@ -38,64 +38,79 @@ function isCharacterItem(which: number): boolean {
   return H.RES_CHRATR_BEGIN <= which && which < H.RES_CHRATR_END;
 }
 
-/** Applies represented character and paragraph items to a same-node selected edit. @param doc - Active document. @param range - Native selected range. @param items - Direct formatting deltas. @returns Nothing. */
+/** Applies represented character and paragraph items to the selected paragraphs. @param doc - Active document. @param range - Native selected range. @param items - Direct formatting deltas. @returns Nothing. */
 function insertSelectedItems(doc: SwDoc, range: SwPaM, items: readonly SfxPoolItem[]): void {
   const start = range.Start();
   const end = range.End();
-  const node = start.GetNode();
-  if (!(node instanceof SwTextNode) || end.GetNode() !== node || node.GetDoc() !== doc)
-    throw new Error("InsertItemSet selected formatting requires a same-node range.");
+  const point = range.GetPoint();
+  const mark = range.GetMark();
+  const pointNode = point.GetNode();
+  const markNode = mark.GetNode();
+  if (
+    !(pointNode instanceof SwTextNode) ||
+    !(markNode instanceof SwTextNode) ||
+    pointNode.GetDoc() !== doc
+  )
+    throw new Error("InsertItemSet selected formatting requires a document text range.");
+  const nodes = pointNode === markNode ? [pointNode] : getTextFormatCollNodes(doc, range);
 
   const characterItems = new SfxItemSet(doc.GetAttrPool(), H.WRITER_CHARACTER_WHICH_RANGES);
   const pending = new SfxItemSet(doc.GetAttrPool(), H.WRITER_CHARACTER_WHICH_RANGES);
   const state = createWriterUndoCursorState(
-    node,
-    range.GetPoint().GetContentIndex(),
-    node,
-    range.GetMark().GetContentIndex(),
-    node,
+    pointNode,
+    point.GetContentIndex(),
+    markNode,
+    mark.GetContentIndex(),
+    pointNode,
     pending,
   );
   const undo = doc.GetUndoManager();
   const grouped =
     undo.DoesUndo() &&
-    items.some(
-      /** Detects the paragraph half of a mixed set. @param item - Direct delta. @returns Whether it belongs to the paragraph. */ (
-        item,
-      ) => isParagraphEditItem(item.Which()),
-    ) &&
-    items.length > 1;
+    (nodes.length > 1 ||
+      (items.length > 1 &&
+        items.some(
+          /** Detects the paragraph half of a mixed set. @param item - Direct delta. @returns Whether it belongs to the paragraph. */ (
+            item,
+          ) => isParagraphEditItem(item.Which()),
+        )));
   if (grouped) undo.StartUndo("Formatting");
   try {
     for (const item of items) if (isCharacterItem(item.Which())) characterItems.Put(item);
-    if (characterItems.Count() > 0) {
-      const action = MakeCharacterFormattingUndo(
-        { node, start: start.GetContentIndex(), end: end.GetContentIndex() },
-        characterItems,
-        state,
-        state,
-      );
-      try {
-        action.ApplyExact();
-      } catch (error) {
-        action.Dispose();
-        throw error;
+    for (const node of nodes) {
+      if (characterItems.Count() > 0) {
+        const action = MakeCharacterFormattingUndo(
+          {
+            node,
+            start: node === start.GetNode() ? start.GetContentIndex() : 0,
+            end: node === end.GetNode() ? end.GetContentIndex() : node.Len(),
+          },
+          characterItems,
+          state,
+          state,
+        );
+        try {
+          action.ApplyExact();
+        } catch (error) {
+          action.Dispose();
+          throw error;
+        }
+        if (undo.DoesUndo()) undo.AddUndoAction(action);
+        else action.Dispose();
       }
-      if (undo.DoesUndo()) undo.AddUndoAction(action);
-      else action.Dispose();
-    }
-    for (const item of items) {
-      if (!isParagraphEditItem(item.Which())) continue;
-      const old = node.GetpSwAttrSet()?.GetItemIfSet(item.Which(), false);
-      const action = undo.DoesUndo()
-        ? new SwUndoParagraphItem(node, old, item, state, state)
-        : undefined;
-      let changed = false;
-      try {
-        changed = node.SetAttr(item);
-      } finally {
-        if (changed && action !== undefined) undo.AddUndoAction(action);
-        else action?.Dispose();
+      for (const item of items) {
+        if (!isParagraphEditItem(item.Which())) continue;
+        const old = node.GetpSwAttrSet()?.GetItemIfSet(item.Which(), false);
+        const action = undo.DoesUndo()
+          ? new SwUndoParagraphItem(node, old, item, state, state)
+          : undefined;
+        let changed = false;
+        try {
+          changed = node.SetAttr(item);
+        } finally {
+          if (changed && action !== undefined) undo.AddUndoAction(action);
+          else action?.Dispose();
+        }
       }
     }
     doc.NotifyModelChange({ kind: "document-modified", modified: true });

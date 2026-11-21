@@ -323,6 +323,13 @@ it.skipIf(!hasNativeRegexProbe).each([
     all: true,
     fallback: false,
   },
+  {
+    name: "Replace All with formatting spans inserted paragraphs",
+    format: true,
+    all: true,
+    fallback: false,
+    paragraphBreak: true,
+  },
   { name: "Replace keeps the template on capture miss", format: false, all: false, fallback: true },
   {
     name: "Replace All with formatting keeps the template on capture miss",
@@ -366,7 +373,7 @@ it.skipIf(!hasNativeRegexProbe).each([
     const properties = {
       ...search.GetSearchItem(),
       search: scenario.fallback ? "(ab)" : "([a-z])([0-9])",
-      replacement: String.raw`$2\u002D$1`,
+      replacement: scenario.paragraphBreak ? String.raw`$2\n$1` : String.raw`$2\u002D$1`,
       searchOptions: options,
       ...(scenario.format ? { replaceAttributes } : {}),
       ...(scenario.format && !scenario.all ? { searchAttributes } : {}),
@@ -379,12 +386,22 @@ it.skipIf(!hasNativeRegexProbe).each([
       if (!scenario.all) expect(search.ExecSearch(item, SvxSearchCmd.FIND).matches).toBe(1);
       search.ExecSearch(item, properties.command);
       const expected = scenario.all ? "1-a 2-b" : "1-a b2";
-      expect(node.GetText()).toBe(scenario.fallback ? properties.replacement : expected);
+      if (scenario.paragraphBreak) {
+        expect(doc.paragraphs).toHaveLength(3);
+        expect(doc.paragraphs[0]?.GetText()).toBe("1");
+        expect(doc.paragraphs[1]?.GetText()).toBe("a 2");
+        expect(doc.paragraphs[2]?.GetText()).toBe("b");
+        for (const paragraph of doc.paragraphs)
+          expect((paragraph.GetAttr(RES_PARATR_ADJUST) as SvxAdjustItem).GetAdjust()).toBe(
+            SvxAdjust.Right,
+          );
+      } else expect(node.GetText()).toBe(scenario.fallback ? properties.replacement : expected);
       expect((node.GetAttr(RES_PARATR_ADJUST) as SvxAdjustItem).GetAdjust()).toBe(
         scenario.format ? SvxAdjust.Right : SvxAdjust.Center,
       );
       expect(search.GetSearchItem().replacement).toBe(properties.replacement);
       expect(shell.Undo()).toBe(true);
+      expect(doc.paragraphs).toHaveLength(1);
       expect(node.GetText()).toBe(original);
       expect((node.GetAttr(RES_PARATR_ADJUST) as SvxAdjustItem).GetAdjust()).toBe(SvxAdjust.Center);
     } finally {

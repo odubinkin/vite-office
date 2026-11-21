@@ -32,3 +32,66 @@ it("runs Unicode regular expressions through the Find and Replace dialog", /** E
     session.view.Close();
   }
 });
+
+it("replaces multiple regex matches with paragraph breaks and undoes them together", /** Exercises Replace All cursor progress as matches move to newly split nodes. @returns Nothing. */ () => {
+  const session = createWriterDocumentSession();
+  const shell = session.view.GetWrtShell();
+  const doc = session.view.GetDocShell().GetDoc();
+  shell.Insert("a1 b2");
+  const workbench = render(<WriterWorkbench isActive view={session.view} />);
+  const texts = /** Reads actual model paragraphs. @returns Body texts. */ () =>
+    doc.paragraphs.map(
+      /** Reads a native text node. @param node - Body paragraph. @returns Text. */ (node) =>
+        node.GetText(),
+    );
+  try {
+    fireEvent.keyDown(window, { key: "h", ctrlKey: true });
+    const dialog = within(screen.getByRole("dialog", { name: "Find and Replace" }));
+    fireEvent.click(dialog.getByText("Other options"));
+    fireEvent.click(dialog.getByRole("checkbox", { name: "Regular expressions" }));
+    fireEvent.change(dialog.getByLabelText("Find"), { target: { value: "([a-z])([0-9])" } });
+    fireEvent.change(dialog.getByLabelText("Replace with"), {
+      target: { value: String.raw`$2\n$1` },
+    });
+    fireEvent.click(dialog.getByRole("button", { name: "Replace All" }));
+    expect(texts()).toEqual(["1", "a 2", "b"]);
+    expect(shell.Undo()).toBe(true);
+    expect(texts()).toEqual(["a1 b2"]);
+    expect(shell.Redo()).toBe(true);
+    expect(texts()).toEqual(["1", "a 2", "b"]);
+  } finally {
+    workbench.unmount();
+    session.view.Close();
+  }
+});
+
+it("joins matching paragraph ends and restores the original paragraphs with one undo", /** Exercises paragraph markers through the dialog's Replace All command. @returns Nothing. */ () => {
+  const session = createWriterDocumentSession();
+  const shell = session.view.GetWrtShell();
+  const doc = session.view.GetDocShell().GetDoc();
+  shell.Insert("a");
+  shell.SplitNode();
+  shell.Insert("b");
+  shell.SplitNode();
+  shell.Insert("c");
+  const workbench = render(<WriterWorkbench isActive view={session.view} />);
+  try {
+    fireEvent.keyDown(window, { key: "h", ctrlKey: true });
+    const dialog = within(screen.getByRole("dialog", { name: "Find and Replace" }));
+    fireEvent.click(dialog.getByText("Other options"));
+    fireEvent.click(dialog.getByRole("checkbox", { name: "Regular expressions" }));
+    fireEvent.change(dialog.getByLabelText("Find"), { target: { value: "$" } });
+    fireEvent.change(dialog.getByLabelText("Replace with"), { target: { value: "-" } });
+    fireEvent.click(dialog.getByRole("button", { name: "Replace All" }));
+    expect(doc.paragraphs).toHaveLength(1);
+    expect(doc.paragraphs[0]?.GetText()).toBe("a-b-c");
+    expect(shell.Undo()).toBe(true);
+    expect(doc.paragraphs).toHaveLength(3);
+    expect(doc.paragraphs[0]?.GetText()).toBe("a");
+    expect(doc.paragraphs[1]?.GetText()).toBe("b");
+    expect(doc.paragraphs[2]?.GetText()).toBe("c");
+  } finally {
+    workbench.unmount();
+    session.view.Close();
+  }
+});

@@ -235,7 +235,7 @@ it("preserves native content-node progress when an empty replacement leaves the 
     last.docShell.Close();
   }
 });
-it("handles no-mark, empty marked and unsupported regex ranges before partial mutation", /** Verifies native success/modified behavior for empty marked replacements and explicit unsupported boundaries. @returns Nothing. */ () => {
+it("handles unmarked and empty marked ranges", /** Verifies native success and modified state for empty marked replacements. @returns Nothing. */ () => {
   const f = fixture("abc"),
     selected = range(f.node, 1, 1),
     collapsed = new SwPaM(selected.GetPoint());
@@ -247,10 +247,6 @@ it("handles no-mark, empty marked and unsupported regex ranges before partial mu
     expect(f.docShell.IsModified()).toBe(true);
     expect(f.shell.Undo()).toBe(true);
     expect(f.node.GetText()).toBe("abc");
-    expect(
-      /** Rejects a paragraph split before modifying history. @returns Native success. */ () =>
-        manager.ReplaceRange(selected, String.raw`x\n`, true),
-    ).toThrow("regex replacement");
   } finally {
     selected.Dispose();
     collapsed.Dispose();
@@ -462,6 +458,112 @@ it.skipIf(!hasNativeRegexProbe)(
       expect(f.shell.Undo()).toBe(true);
       expect(f.node.GetText()).toBe("a\u00adb");
     } finally {
+      f.shell.Close();
+      f.docShell.Close();
+    }
+  },
+);
+
+it("undoes and redoes a regex replacement that creates several paragraphs", /** Ports the text and undo assertions from the pinned multi-break ReplaceRange scenario. @returns Nothing. */ () => {
+  const f = fixture("foo");
+  const selection = range(f.node, 0, 3);
+  const operations = f.doc.GetDocumentContentOperationsManager();
+  const replacement = String.raw`xyz\n\nquux\n`;
+  const readParagraphs = /** Reads canonical body text. @returns Paragraph texts. */ () =>
+    f.doc.paragraphs.map(
+      /** Borrows model text. @param paragraph - Paragraph. @returns Text. */ (paragraph) =>
+        paragraph.GetText(),
+    );
+  try {
+    expect(operations.ReplaceRange(selection, replacement, true)).toBe(true);
+    expect(readParagraphs()).toEqual(["xyz", "", "quux", ""]);
+    expect(selection.Start().GetNode()).toBe(f.node);
+    expect(selection.Start().GetContentIndex()).toBe(0);
+    expect(selection.End().GetNode()).toBe(f.doc.paragraphs[3]);
+    expect(selection.End().GetContentIndex()).toBe(0);
+    for (let cycle = 0; cycle < 2; cycle++) {
+      expect(f.shell.Undo()).toBe(true);
+      expect(readParagraphs()).toEqual(["foo"]);
+      expect(f.shell.Redo()).toBe(true);
+      expect(readParagraphs()).toEqual(["xyz", "", "quux", ""]);
+    }
+  } finally {
+    selection.Dispose();
+    f.shell.Close();
+    f.docShell.Close();
+  }
+});
+
+it("splits at the replacement and preserves the suffix and escaped replacement newline", /** Tests the exact immediate preceding backslash rule and live suffix positions. @returns Nothing. */ () => {
+  const f = fixture("afooz");
+  const selection = range(f.node, 1, 4);
+  const suffix = new SwPosition(f.node, 5);
+  const operations = f.doc.GetDocumentContentOperationsManager();
+  try {
+    expect(operations.ReplaceRange(selection, String.raw`\nxy\\n`, true)).toBe(true);
+    expect(f.doc.paragraphs[0]?.GetText()).toBe("a");
+    expect(f.doc.paragraphs[1]?.GetText()).toBe(String.raw`xy\\nz`);
+    expect(suffix.GetNode()).toBe(f.doc.paragraphs[1]);
+    expect(suffix.GetContentIndex()).toBe(String.raw`xy\\nz`.length);
+    expect(f.shell.Undo()).toBe(true);
+    expect(f.doc.paragraphs).toHaveLength(1);
+    expect(f.doc.paragraphs[0]?.GetText()).toBe("afooz");
+  } finally {
+    selection.Dispose();
+    suffix.Dispose();
+    f.shell.Close();
+    f.docShell.Close();
+  }
+});
+
+it.each([
+  { original: "abc", from: 1, replacement: "x", expected: ["axdef"] },
+  { original: "", from: 0, replacement: "x", expected: ["xdef"] },
+  {
+    original: "abc",
+    from: 1,
+    replacement: String.raw`x\ny`,
+    expected: ["ax", "ydef"],
+  },
+])(
+  "replaces an adjacent paragraph boundary in $original with $replacement",
+  /** Verifies reconstruction of both original paragraphs after native ReplaceRange. @param scenario - Original and expected model strings. @returns Nothing. */ (
+    scenario,
+  ) => {
+    const f = fixture(scenario.original);
+    const second = f.doc.nodes.MakeTextNode("def");
+    f.node.SetParagraphAlignment("center");
+    second.SetParagraphAlignment("right");
+    const start = new SwPosition(f.node, scenario.from);
+    const end = new SwPosition(second, 0);
+    const selection = new SwPaM(end, start);
+    start.Dispose();
+    end.Dispose();
+    const operations = f.doc.GetDocumentContentOperationsManager();
+    const readParagraphs = /** Reads canonical paragraphs. @returns Body text. */ () =>
+      f.doc.paragraphs.map(
+        /** Reads one text node. @param node - Paragraph. @returns Text. */ (node) =>
+          node.GetText(),
+      );
+    try {
+      expect(operations.ReplaceRange(selection, scenario.replacement, true)).toBe(true);
+      expect(readParagraphs()).toEqual(scenario.expected);
+      for (let cycle = 0; cycle < 2; cycle++) {
+        expect(f.shell.Undo()).toBe(true);
+        expect(readParagraphs()).toEqual([scenario.original, "def"]);
+        // WRITER-010 preserves the consumed formatting history on repeated undo.
+        const inherited = scenario.from === 0 ? "right" : "center";
+        expect(f.doc.paragraphs[0]?.GetParagraphAlignment()).toBe(
+          cycle === 0 ? "center" : inherited,
+        );
+        expect(f.doc.paragraphs[1]?.GetParagraphAlignment()).toBe(
+          cycle === 0 ? "right" : inherited,
+        );
+        expect(f.shell.Redo()).toBe(true);
+        expect(readParagraphs()).toEqual(scenario.expected);
+      }
+    } finally {
+      selection.Dispose();
       f.shell.Close();
       f.docShell.Close();
     }

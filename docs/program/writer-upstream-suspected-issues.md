@@ -323,6 +323,12 @@ state. They do not execute the native binary; full consumer invariants and a
 compiled native differential remain unverified. Decision: do not add a
 `SetTmpEnd(Count())` reset that does not exist in this source branch.
 
+The adjacent-paragraph variant retains the same consumed end. A first undo
+restores both paragraph alignments from the saved format history. After redo,
+a second undo restores the boundary and text, while the newly split paragraph
+can inherit the join survivor's alignment. The paragraph replacement
+regression covers this extended source-derived sequence.
+
 ## WRITER-011: Empty replacement can advance to the next content node
 
 Pinned `sw/source/core/crsr/swcrsr.cxx`, `lcl_FindSelection`, compares the live
