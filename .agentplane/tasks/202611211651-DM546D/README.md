@@ -1,10 +1,11 @@
 ---
 id: "202611211651-DM546D"
 title: "Connect Calc named range definition and navigation"
-status: "DOING"
+result_summary: "Connect native Calc named range definition and position-box navigation"
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 14
+revision: 15
 origin:
   system: "manual"
 depends_on: []
@@ -40,11 +41,16 @@ quality_review:
     - "output/calc-DM546D-test.log"
   findings:
     - "Forty-one focused tests verify the actual Sheet menu, position box, navigation, history, and both document filters."
-commit: null
+commit:
+  hash: "f648269b8e0a02514b32de7b76753c55735a72af"
+  message: "🧩 DM546D code: connect native Calc range definition and name-box navigation"
 comments:
   -
     author: "CODER"
     body: "Start: Connect native Calc range-name definition, selection and name-box navigation with source undo."
+  -
+    author: "CODER"
+    body: "Verified: Connected native Calc range definition and position-box navigation, with 41 targeted checks for command, references, history, and workbook persistence."
 events:
   -
     type: "status"
@@ -59,8 +65,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "The 41 scoped tests passed with Office TypeScript, lint, formatting, module boundaries, and provenance. The global file-size check reports seven unchanged baseline files."
+  -
+    type: "status"
+    at: "2026-11-21T17:06:29.283Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: Connected native Calc range definition and position-box navigation, with 41 targeted checks for command, references, history, and workbook persistence."
 doc_version: 3
-doc_updated_at: "2026-11-21T17:04:23.440Z"
+doc_updated_at: "2026-11-21T17:06:29.284Z"
 doc_updated_by: "CODER"
 description: "Expose native named range definition and name-box navigation through the existing Calc range collections and undo contracts."
 sections:
