@@ -1,0 +1,21 @@
+{
+  "schema_version": 1,
+  "task_id": "202611211835-BN5ECR",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-11-21T18:42:19.066Z",
+  "verdict": "pass",
+  "summary": "Writer retains overline, contour, shadow and relief in ODT using the native UNO properties and EditEngine items.",
+  "evaluated_sha": "27f1e95037908d4877e680bd6c2658b6a2da0772",
+  "blueprint_digest": "9adca2c97518b301dc2ec314d0f0e40853426209780b22a195e4ea126357a6d0",
+  "findings": [
+    "The pinned paragraph-style fragment, authored named and automatic properties, package XML and pool-item assertions cover the real Writer and Worker path. The handler keeps native shadow and overline-color behavior as documented."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202611211835-BN5ECR/README.md",
+    "63 Writer tests, 4 Calc reuse tests, office typecheck, lint and format, 2978 provenance records, gateway checks"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": []
+}
