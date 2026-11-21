@@ -4,6 +4,13 @@ import { beforeEach, expect, it } from "vitest";
 import { createWriterDocumentSession } from "../composition/writer-module";
 import { SEARCH_OPTIONS_KEY } from "../storage/writer-search-options-store";
 import { WriterWorkbench } from "./writer-view";
+import { SfxItemSet } from "../../../svl/source/items/itemset";
+import { RndStdIds } from "../../../svx/inc/swframetypes";
+import { Size } from "../../../tools/inc/gen";
+import { Graphic } from "../../../vcl/source/gdi/graph";
+import { SwFormatAnchor } from "../../inc/fmtanchr";
+import { aFrameFormatSetRange } from "../../source/core/bastyp/init";
+import { SwPaM, SwPosition } from "../../source/core/crsr/pam";
 
 beforeEach(localStorage.removeItem.bind(localStorage, SEARCH_OPTIONS_KEY));
 
@@ -135,6 +142,51 @@ it("retains formatting criteria while similarity search disables their controls"
     expect(attributes).toBeEnabled();
     expect(noFormat).toBeEnabled();
     expect(dialog.getByText("Underline")).toBeVisible();
+  } finally {
+    workbench.unmount();
+    session.view.Close();
+  }
+});
+
+it("removes a covered inline graphic through Find and Replace and restores it on Undo", /** Runs normal browser search commands against a rendered inline graphic. @returns Nothing. */ () => {
+  const session = createWriterDocumentSession();
+  const shell = session.view.GetWrtShell();
+  shell.Insert("ab tail");
+  const node = shell.GetActiveParagraph();
+  const doc = node.GetDoc();
+  const point = new SwPosition(node, 1);
+  const range = new SwPaM(point);
+  const anchor = new SwFormatAnchor(RndStdIds.FLY_AS_CHAR);
+  const items = new SfxItemSet(doc.GetAttrPool(), aFrameFormatSetRange);
+  const gif = Buffer.from("R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7", "base64");
+  try {
+    anchor.SetAnchor(point);
+    items.Put(anchor);
+    doc
+      .GetDocumentContentOperationsManager()
+      .InsertGraphic(range, new Graphic(gif, "image/gif", new Size(120, 120)), items);
+  } finally {
+    range.Dispose();
+    point.Dispose();
+    anchor.Dispose();
+    items.Dispose();
+  }
+  const workbench = render(<WriterWorkbench isActive view={session.view} />);
+  const editor = within(screen.getByRole("textbox", { name: "Writer document text" }));
+  try {
+    expect(editor.getByRole("img", { name: "Image1" })).toBeInTheDocument();
+    fireEvent.keyDown(window, { key: "h", ctrlKey: true });
+    const dialog = within(screen.getByRole("dialog", { name: "Find and Replace" }));
+    fireEvent.click(dialog.getByText("Other options"));
+    fireEvent.click(dialog.getByRole("checkbox", { name: "Regular expressions" }));
+    fireEvent.change(dialog.getByLabelText("Find"), { target: { value: "a.b" } });
+    fireEvent.change(dialog.getByLabelText("Replace with"), { target: { value: "cat" } });
+    fireEvent.click(dialog.getByRole("button", { name: "Replace All" }));
+    expect(node.GetText()).toBe("cat tail");
+    expect(editor.queryByRole("img", { name: "Image1" })).toBeNull();
+    fireEvent.keyDown(dialog.getByLabelText("Find"), { key: "Escape" });
+    fireEvent.keyDown(window, { key: "z", ctrlKey: true });
+    expect(editor.getByRole("img", { name: "Image1" })).toBeInTheDocument();
   } finally {
     workbench.unmount();
     session.view.Close();

@@ -4,7 +4,7 @@ title: "Implement Writer search and replace core and browser UI"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 107
+revision: 108
 origin:
   system: "manual"
 depends_on:
@@ -379,6 +379,12 @@ comments:
       Verification: 129 tests pass in eight targeted Writer suites. Six optional ICU-specific probes are skipped. All four production Chrome search and annotation scenarios pass. Production build, independent final typecheck, scoped lint and formatting, git diff --check, dependency boundaries, source provenance and tree, Writer resources, and policy routing pass. AgentPlane doctor reports zero errors with the existing hook shim warning. The repository-wide JSDoc and file-size gates retain 307 and four prior findings respectively.
 
       Inline-fly replacement and other unrepresented structured content still use their existing admission checks. The open search task and full-regression cadence retain their current status.
+  -
+    author: "CODER"
+    body: |-
+      Writer search and replacement checkpoint. A covered as-character graphic now enters DelContentIndex fly history before ReplaceText. The history entry retains the original frame format and transfers the actual graphic section into Writer undo storage. Undo restores the same graphic section and reinserts its point hint. Replacement coordinates retain the native offset between original and current node numbers while graphic sections are detached. Model regressions cover adjacent matches, forward and backward covered matches, two Undo/Redo cycles, original node/format identity, and disposal when the history is cleared. A Writer UI regression runs Find and Replace against the mounted inline image and verifies the image returns on Undo.
+
+      Verification: 148 tests pass in ten focused suites and six optional ICU probes remain skipped. The production TypeScript and Vite build and all four Writer Chrome search smoke scenarios pass. Dependency boundaries, source provenance and tree, Writer resources and inventory, doctor, policy routing, lint, formatting, and git diff --check pass. The repository-wide JSDoc and file-size checks retain their 307 and four existing findings. The new undo owner has mapped provenance and unverified full semantic parity. The implemented history is bounded to as-character graphics with their live single-graphic sections. Floating objects and nested fly contents remain open. This checkpoint does not close the AgentPlane task.
 
 events:
   -
@@ -911,9 +917,17 @@ events:
       Verification: 129 tests pass in eight targeted Writer suites. Six optional ICU-specific probes are skipped. All four production Chrome search and annotation scenarios pass. Production build, independent final typecheck, scoped lint and formatting, git diff --check, dependency boundaries, source provenance and tree, Writer resources, and policy routing pass. AgentPlane doctor reports zero errors with the existing hook shim warning. The repository-wide JSDoc and file-size gates retain 307 and four prior findings respectively.
 
       Inline-fly replacement and other unrepresented structured content still use their existing admission checks. The open search task and full-regression cadence retain their current status.
+  -
+    type: "comment"
+    at: "2026-11-21T20:53:59.747Z"
+    author: "CODER"
+    body: |-
+      Writer search and replacement checkpoint. A covered as-character graphic now enters DelContentIndex fly history before ReplaceText. The history entry retains the original frame format and transfers the actual graphic section into Writer undo storage. Undo restores the same graphic section and reinserts its point hint. Replacement coordinates retain the native offset between original and current node numbers while graphic sections are detached. Model regressions cover adjacent matches, forward and backward covered matches, two Undo/Redo cycles, original node/format identity, and disposal when the history is cleared. A Writer UI regression runs Find and Replace against the mounted inline image and verifies the image returns on Undo.
+
+      Verification: 148 tests pass in ten focused suites and six optional ICU probes remain skipped. The production TypeScript and Vite build and all four Writer Chrome search smoke scenarios pass. Dependency boundaries, source provenance and tree, Writer resources and inventory, doctor, policy routing, lint, formatting, and git diff --check pass. The repository-wide JSDoc and file-size checks retain their 307 and four existing findings. The new undo owner has mapped provenance and unverified full semantic parity. The implemented history is bounded to as-character graphics with their live single-graphic sections. Floating objects and nested fly contents remain open. This checkpoint does not close the AgentPlane task.
 
 doc_version: 3
-doc_updated_at: "2026-11-21T20:43:55.218Z"
+doc_updated_at: "2026-11-21T20:53:59.747Z"
 doc_updated_by: "CODER"
 description: "Implement the approved coherent Writer search-and-replace feature from pinned LibreOffice sources: real shared search engine and options, native paragraph/cursor traversal and replacement/history contracts, view-owned search state and dispatch, Find toolbar and Find and Replace dialog with generated upstream command placement and shortcuts. Preserve source semantics and explicit unsupported boundaries; never substitute DOM text search or browser RegExp for ICU contracts. Work only on writer in vite-office-writer; local upstream reading approved, no network or merges. Keep active until approved scope is verified."
 sections:

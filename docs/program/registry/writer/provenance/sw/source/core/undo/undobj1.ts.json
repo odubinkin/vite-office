@@ -1,0 +1,47 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sw/source/core/undo/undobj1.ts",
+          "marker": "SwUndoDelLayFormat"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/crsr/native-search-replace.test.ts",
+          "marker": "preserves inline graphics adjacent to matches and restores a covered graphic"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/undo/undobj1.cxx",
+          "marker": "void SwUndoFlyBase::DelFly"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/undo/undobj1.cxx",
+          "marker": "void SwUndoFlyBase::InsFly"
+        }
+      ]
+    },
+    "localPath": "apps/office/src/sw/source/core/undo/undobj1.ts",
+    "localSymbols": [
+      "SwUndoDelLayFormat"
+    ],
+    "omittedResponsibilities": [
+      "Floating and drawing anchors, nested fly content, native layout frame selection, redlines, and complete SwNodes undo-array parity are unverified."
+    ],
+    "preservedResponsibilities": [
+      "Retains the actual inline graphic format and moves its graphic section into Writer undo ownership, unlinks the dummy, then restores the original section and reinserts an as-character hint."
+    ],
+    "status": "mapped",
+    "upstreamPath": "sw/source/core/undo/undobj1.cxx",
+    "upstreamSymbols": [
+      "SwUndoDelLayFormat",
+      "SwUndoFlyBase::DelFly",
+      "SwUndoFlyBase::InsFly"
+    ]
+  },
+  "legacyOrder": 230
+}

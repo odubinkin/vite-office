@@ -73,16 +73,25 @@ export function EraseTextNodeReplacementDummies(
     const hint = hints.Get(i);
     const offset = hint.GetStart();
     if (offset >= end) break;
-    if (offset >= start && hint.HasDummyChar() && !(hint instanceof SwTextField))
+    if (
+      offset >= start &&
+      hint.HasDummyChar() &&
+      !(hint instanceof SwTextField) &&
+      !(hint instanceof SwTextFlyCnt && hint.GetGraphicSection())
+    )
       throw new Error("Writer dummy-character replacement is not implemented.");
   }
   let remainingEnd = end;
   for (let offset = start; offset < remainingEnd; offset++) {
-    if (
-      node.GetText().charAt(offset) !== CH_TXTATR_INWORD ||
-      !node.GetpSwpHints()?.GetTextAttrForCharAt(offset, RES_TXTATR_ANNOTATION)
-    )
-      continue;
+    const marker = node.GetText().charAt(offset);
+    const hints = node.GetpSwpHints();
+    const hint =
+      marker === CH_TXTATR_BREAKWORD
+        ? hints?.GetTextAttrForCharAt(offset)
+        : marker === CH_TXTATR_INWORD
+          ? hints?.GetTextAttrForCharAt(offset, RES_TXTATR_ANNOTATION)
+          : undefined;
+    if (!hint) continue;
     node.EraseText(offset, 1);
     remainingEnd--;
   }

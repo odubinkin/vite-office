@@ -5,12 +5,16 @@
 
 import { SfxUndoManager } from "../../../../svl/source/undo/undo";
 import type { SwDoc } from "../doc/doc";
+import type { SwNode } from "../docnode/node";
 import type { SwTextFragment, SwTextNode } from "../txtnode/ndtxt";
 import { CopyUndoFragment, type SwUndoRedoContext } from "./undobj";
 
 /** Content removed from the live node array but needed by a retained Writer action. */
 export class SwUndoNodes {
-  private readonly entries = new Map<number, SwTextFragment | SwTextNode>();
+  private readonly entries = new Map<
+    number,
+    SwTextFragment | SwTextNode | { section: readonly SwNode[] }
+  >();
   private nextId = 0;
 
   /** Retains an independent removed-text snapshot; native moved boundaries use RetainNode. @param fragment - Removed text. @returns Stable undo node ID. */
@@ -27,17 +31,34 @@ export class SwUndoNodes {
     return id;
   }
 
+  /** Retains the actual detached graphic section until restoration or disposal. @param section - Original detached nodes. @returns Undo storage ID. */
+  public RetainSection(section: readonly SwNode[]): number {
+    const id = ++this.nextId;
+    this.entries.set(id, { section });
+    return id;
+  }
+
+  /** Transfers an undo section back to its action for restoration. @param id - Undo storage ID. @returns Actual section nodes. */
+  public TakeSection(id: number): readonly SwNode[] {
+    const entry = this.entries.get(id);
+    if (!entry || !("section" in entry)) throw new Error("Missing Writer undo section.");
+    this.entries.delete(id);
+    return entry.section;
+  }
+
   /** Resolves formatted text retained by a Writer action. @param id - Undo node ID. @returns Retained fragment. */
   public GetText(id: number): SwTextFragment {
     const entry = this.entries.get(id);
-    if (entry === undefined || !isTextFragment(entry)) throw new Error("Missing Writer undo text.");
+    if (entry === undefined || "section" in entry || !isTextFragment(entry))
+      throw new Error("Missing Writer undo text.");
     return entry;
   }
 
   /** Resolves a disconnected paragraph retained by a Writer action. @param id - Undo node ID. @returns Retained paragraph. */
   public GetNode(id: number): SwTextNode {
     const entry = this.entries.get(id);
-    if (entry === undefined || isTextFragment(entry)) throw new Error("Missing Writer undo node.");
+    if (entry === undefined || "section" in entry || isTextFragment(entry))
+      throw new Error("Missing Writer undo node.");
     return entry;
   }
 
@@ -46,7 +67,9 @@ export class SwUndoNodes {
     const entry = this.entries.get(id);
     this.entries.delete(id);
     if (entry === undefined) return;
-    if (isTextFragment(entry)) entry.hints.Dispose();
+    if ("section" in entry) {
+      entry.section[0]?.GetNodes().DestroyDetachedSection(entry.section);
+    } else if (isTextFragment(entry)) entry.hints.Dispose();
     else if (entry.GetNodes().indexOfOrUndefined(entry) === undefined) {
       // A restored node is owned by the live SwNodes; this bounded ID binding only borrows it.
       entry.RemoveFromList();

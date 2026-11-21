@@ -14,6 +14,7 @@ import type { SwDoc } from "../doc/doc";
 import { SwHistory } from "./rolbck";
 import { AnnotationMark } from "../crsr/annotationmark";
 import { UnoMark } from "../crsr/bookmark";
+import { RndStdIds } from "../../../../svx/inc/swframetypes";
 
 /** Original undobj.hxx content-index deletion flags. */
 export enum DelContentType {
@@ -64,18 +65,39 @@ export class SwUndRng {
 /** Owns removed append-only content until the native move from undo storage consumes it. Full SwNodes undo sections and non-end moves remain unverified. */
 export class SwUndoSaveContent {
   protected m_pHistory: SwHistory | undefined;
-  /** Native mark history branches for content removal. @param rMark - Native mark. @param rPoint - Native point. @param nDelContentType - Original deletion flags. @returns Nothing. */
+  /** Native inline fly and mark history branches for content removal. @param rMark - Native mark. @param rPoint - Native point. @param nDelContentType - Original deletion flags. @returns Nothing. */
   protected DelContentIndex(
     rMark: SwPosition,
     rPoint: SwPosition,
     nDelContentType = DelContentType.AllMask,
   ): void {
-    if ((nDelContentType & DelContentType.Bkm) === 0) return;
     const doc = rPoint.GetNode().GetDoc();
     if (rMark.GetNode().GetDoc() !== doc)
       throw new Error("Writer deletion history endpoints belong to different documents.");
     const pStart = rMark.compare(rPoint) <= 0 ? rMark : rPoint,
       pEnd = pStart === rMark ? rPoint : rMark;
+    if (nDelContentType & DelContentType.Fly) {
+      for (const format of [...doc.GetSpzFrameFormats()].reverse()) {
+        const anchor = format.GetAnchor();
+        const position = anchor.GetContentAnchor();
+        if (anchor.GetAnchorId() !== RndStdIds.FLY_AS_CHAR || !position) continue;
+        const covered =
+          nDelContentType & DelContentType.CheckNoCntnt
+            ? pStart.GetNodeIndex() <= position.GetNodeIndex() &&
+              position.GetNodeIndex() < pEnd.GetNodeIndex()
+            : pStart.compare(position) <= 0 && position.compare(pEnd) < 0;
+        if (!covered) continue;
+        const hint = position
+          .GetNode()
+          .GetTextNode()
+          ?.GetpSwpHints()
+          ?.GetTextAttrForCharAt(position.GetContentIndex());
+        if (hint?.GetAttr().GetFrameFormat() !== format || !hint.GetGraphicSection()) continue;
+        this.m_pHistory ??= new SwHistory();
+        this.m_pHistory.AddTextFly(hint);
+      }
+    }
+    if ((nDelContentType & DelContentType.Bkm) === 0) return;
     const access = doc.GetIDocumentMarkAccess();
     for (const bookmark of [...access.GetAllMarks()]) {
       if (bookmark instanceof UnoMark) continue;

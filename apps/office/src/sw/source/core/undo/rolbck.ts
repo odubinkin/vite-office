@@ -20,6 +20,8 @@ import { SfxItemSet } from "../../../../svl/source/items/itemset";
 import { SwContentNode, SwTableNode, type SwNode, type SwNodeType } from "../docnode/node";
 import type { SwFormatColl, SwTextFormatColl } from "../doc/fmtcol";
 import { SwTextField } from "../../../inc/txtfld";
+import type { SwTextFlyCnt } from "../../../inc/txtflcnt";
+import { SwUndoDelLayFormat } from "./undobj1";
 import { SwUndRng } from "./undobj";
 
 /** Native history discriminants;registered old ranged text,direct format and text collection entries are implemented. */
@@ -86,6 +88,24 @@ export class SwHistorySetFormat extends SwHistoryHint {
   public override Dispose(): void {
     this.m_pAttr?.Dispose();
     this.m_pAttr = undefined;
+  }
+}
+
+/** Original fly hint history delegates to the layout-format deletion owner. */
+export class SwHistoryTextFlyCnt extends SwHistoryHint {
+  private readonly deletion: SwUndoDelLayFormat;
+  /** Captures and removes an inline graphic. @param hint - Actual text point. @returns History entry. */
+  constructor(hint: SwTextFlyCnt) {
+    super(HISTORY_HINT.HSTRY_FLYCNT);
+    this.deletion = new SwUndoDelLayFormat(hint);
+  }
+  /** Restores the original object without selecting its layout frame. @returns Nothing. */
+  override SetInDoc(): void {
+    this.deletion.Restore();
+  }
+  /** Releases any content still retained by the deletion action. @returns Nothing. */
+  override Dispose(): void {
+    this.deletion.Dispose();
   }
 }
 
@@ -415,6 +435,10 @@ export class SwHistory {
     saveOtherPos: boolean,
   ): void {
     this.m_SwpHstry.push(new SwHistoryBookmark(bookmark, savePos, saveOtherPos));
+  }
+  /** Removes the covered inline fly and retains its deletion history first. @param hint - Actual point. @returns Nothing. */
+  public AddTextFly(hint: SwTextFlyCnt): void {
+    this.m_SwpHstry.push(new SwHistoryTextFlyCnt(hint));
   }
   /** Original ownership move; neither history's temporary-end counter is reset, even when moving a nonempty suffix. @param position - Destination insertion slot. @param source - Source history. @param start - First moved entry. @returns Nothing. */
   public Move(position: number, source: SwHistory, start = 0): void {

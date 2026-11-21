@@ -12,6 +12,7 @@ import { DelBookmarks } from "./docbm";
 import { SwNodeIndex } from "../crsr/pam";
 import { SwFormatField } from "../../../inc/fmtfld";
 import { SwTextField } from "../../../inc/txtfld";
+import { SwTextFlyCnt } from "../../../inc/txtflcnt";
 import type { SwPostItField } from "../fields/docufld";
 import type { SwNode } from "../docnode/node";
 import type { SwNodeRange } from "../../../inc/ndindex";
@@ -134,11 +135,16 @@ export class DocumentContentOperationsManager {
       );
     for (const paragraph of crossesBreak ? [node, last] : [node]) {
       const hints = paragraph.GetpSwpHints();
-      if (paragraph === node && hints?.HasFlyContent(start, end))
+      for (let index = 0; hints && index < hints.Count(); index++) {
+        const hint = hints.Get(index);
+        if (!hint.HasDummyChar() || hint instanceof SwTextField) continue;
+        if (hint instanceof SwTextFlyCnt) {
+          const offset = hint.GetStart();
+          if (paragraph !== node || offset < start || offset >= end || hint.GetGraphicSection())
+            continue;
+        }
         throw new Error("Writer structured replacement is not implemented.");
-      for (const hint of hints?.entries() ?? [])
-        if (hint.HasDummyChar() && !(hint instanceof SwTextField))
-          throw new Error("Writer structured replacement is not implemented.");
+      }
     }
     const parts = regExp ? tokenizeReplacement(replacement) : [replacement];
     return this.document.RunModelTransaction(
@@ -148,7 +154,8 @@ export class DocumentContentOperationsManager {
         const action = undo.DoesUndo() ? new SwUndoReplace(range, replacement, regExp) : undefined;
         if (action !== undefined) undo.AddUndoAction(action);
         const enabled = undo.DoesUndo(),
-          oldLength = node.Len();
+          oldLength = node.Len(),
+          replaceEnd = crossesBreak ? oldLength : range.End().GetContentIndex();
         undo.DoUndo(false);
         try {
           const position = new SwPosition(node, start);
@@ -156,9 +163,9 @@ export class DocumentContentOperationsManager {
           try {
             const initial = parts[0] ?? "";
             if (start === oldLength) this.InsertString(position, initial);
-            else if (start < end || initial.length !== 0)
-              node.ReplaceText(position, end - start, initial);
-            position.SetContent(node.Len() - oldLength + end);
+            else if (start < replaceEnd || initial.length !== 0)
+              node.ReplaceText(position, replaceEnd - start, initial);
+            position.SetContent(node.Len() - oldLength + replaceEnd);
             for (const text of parts.slice(1)) {
               const trailing = this.SplitNode(position);
               const tailLength = trailing.Len();
