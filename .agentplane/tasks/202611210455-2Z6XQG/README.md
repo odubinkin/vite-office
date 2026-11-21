@@ -1,10 +1,11 @@
 ---
 id: "202611210455-2Z6XQG"
 title: "Connect Calc print ranges and source edit dialog"
-status: "DOING"
+result_summary: "Connect Calc print ranges and the source edit dialog"
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 9
+revision: 10
 origin:
   system: "manual"
 depends_on:
@@ -40,11 +41,16 @@ quality_review:
     - "Production build and Playwright CLI dialog replay passed."
   findings:
     - "The Format submenu and standard toolbar share the original Sfx slots. The browser selects references through existing grid tracking while retaining the active sheet and cursor. Original repeat parser and print snapshot quirks remain documented."
-commit: null
+commit:
+  hash: "053b8df4b0091e69fd2df8afa21de6d693570e30"
+  message: "🧩 2Z6XQG code: connect Calc print ranges"
 comments:
   -
     author: "CODER"
     body: "Start: continue direct-mode task in current checkout."
+  -
+    author: "CODER"
+    body: "Verified: Calc print range commands, repeat titles, modeless selection, and workbook undo are connected and verified in the focused suites and production Chrome."
 events:
   -
     type: "status"
@@ -59,8 +65,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Verified: Native print range commands, typed history and modeless grid references passed 132 focused tests across Calc, shared menus, tooling and installed Chrome, plus production build and source checks."
+  -
+    type: "status"
+    at: "2026-11-21T05:15:14.306Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: Calc print range commands, repeat titles, modeless selection, and workbook undo are connected and verified in the focused suites and production Chrome."
 doc_version: 3
-doc_updated_at: "2026-11-21T05:14:55.990Z"
+doc_updated_at: "2026-11-21T05:15:14.306Z"
 doc_updated_by: "CODER"
 description: "Project the native Format Print Ranges popup, connect define/add/edit/clear commands with workbook print snapshots, and implement the native modeless range and repeat-title dialog with live grid references and file round trips."
 sections:
