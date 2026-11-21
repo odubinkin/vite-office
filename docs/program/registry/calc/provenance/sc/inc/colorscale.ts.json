@@ -10,19 +10,25 @@
       "ScColorFormat",
       "ScColorScaleEntry",
       "ScColorScaleEntryType",
-      "ScColorScaleFormat"
+      "ScColorScaleFormat",
+      "ScDataBarFormat",
+      "ScDataBarFormatData",
+      "ScAxisPosition"
     ],
     "upstreamSymbols": [
       "ScColorFormat",
       "ScColorScaleEntry",
       "ScColorScaleEntryType",
-      "ScColorScaleFormat"
+      "ScColorScaleFormat",
+      "ScDataBarFormat",
+      "ScDataBarFormatData"
     ],
     "preservedResponsibilities": [
-      "Exposes the implemented original color-scale threshold and format owners at the native header boundary."
+      "Exposes the implemented original color-scale threshold and format owners at the native header boundary.",
+      "Exposes the native data-bar rule, data and axis values alongside color scales."
     ],
     "omittedResponsibilities": [
-      "Data bars, icon sets, the native repaint callbacks, and unported shift and move engines for detached formula cells remain open."
+      "Icon sets, the native repaint callbacks, and unported shift and move engines for detached formula cells remain open."
     ],
     "evidence": {
       "local": [
@@ -37,6 +43,10 @@
         {
           "path": "apps/office/e2e/calc/xlsx-color-scale.spec.ts",
           "marker": "paints and reopens the original XLSX color scale"
+        },
+        {
+          "path": "apps/office/src/sc/source/filter/xml/ods-data-bars.test.ts",
+          "marker": "preserves the data-bar rules from LibreOffice"
         }
       ],
       "upstream": [
@@ -59,6 +69,10 @@
         {
           "path": "sc/qa/unit/cond_format.cxx",
           "marker": "testTdf155321_CondFormatColor_XLSX"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/inc/colorscale.hxx",
+          "marker": "ScDataBarFormatData"
         }
       ]
     }

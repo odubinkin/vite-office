@@ -184,6 +184,10 @@
         {
           "path": "apps/office/src/xmloff/source/core/xmltoken.ts",
           "marker": "TEXT_LINE_NUMBER"
+        },
+        {
+          "path": "apps/office/src/sc/source/filter/xml/ods-data-bars.test.ts",
+          "marker": "preserves the data-bar rules from LibreOffice"
         }
       ],
       "upstream": [
@@ -322,6 +326,10 @@
         {
           "path": "xmloff/source/core/xmltoken.cxx",
           "marker": "XML_LINE_NUMBER"
+        },
+        {
+          "path": "vendor/libreoffice-reference/xmloff/source/core/xmltoken.cxx",
+          "marker": "XML_DATA_BAR_ENTRY"
         }
       ]
     },
@@ -376,7 +384,8 @@
       "Admits original calcext color scale and threshold elements, color and type attributes.",
       "Registers original Calc extension tokens date-is, date and style without changing existing token values.",
       "Recognizes the style namespace base-cell-address token used for automatic cell-style conditions.",
-      "Recognizes the original text namespace line-number attribute."
+      "Recognizes the original text namespace line-number attribute.",
+      "Resolves the LibreOffice Calc extension names for conditional data bars and their threshold elements."
     ],
     "status": "mapped",
     "upstreamPath": "xmloff/source/core/xmltoken.cxx",

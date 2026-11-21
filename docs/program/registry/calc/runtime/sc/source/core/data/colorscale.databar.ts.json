@@ -1,0 +1,39 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sc/source/core/data/colorscale.databar.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "calc",
+    "subsystem": "conditional-data-bar",
+    "capabilityIds": [
+      "CAP-df5573ca-0907-47d8-a385-6cd7af847f1d"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/sc/source/core/data/colorscale.databar.ts",
+        "apps/office/src/sc/source/filter/xml/ods-data-bars.test.ts",
+        "vendor/libreoffice-reference/sc/source/core/data/colorscale.cxx#ScDataBarFormat::GetDataBarInfo"
+      ],
+      "justification": "Owns the native data-bar settings and thresholds, with native defaults, reference updates, copy, equality and per-cell axis geometry.",
+      "knownViolations": [],
+      "localSymbols": [
+        "ScDataBarFormat",
+        "ScDataBarFormatData",
+        "ScAxisPosition"
+      ],
+      "upstreamFile": "sc/source/core/data/colorscale.cxx",
+      "upstreamSymbols": [
+        "ScDataBarFormat::GetDataBarInfo",
+        "ScDataBarFormat::IsEqual",
+        "ScDataBarFormat::Clone"
+      ],
+      "sourceResponsibility": "unverified"
+    }
+  }
+}

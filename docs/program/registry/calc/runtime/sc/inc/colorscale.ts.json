@@ -20,22 +20,28 @@
         "sc/inc/colorscale.hxx",
         "apps/office/src/sc/source/filter/oox/condformatbuffer.colorscale.test.ts",
         "apps/office/e2e/calc/xlsx-color-scale.spec.ts",
-        "sc/qa/unit/cond_format.cxx"
+        "sc/qa/unit/cond_format.cxx",
+        "apps/office/src/sc/source/filter/xml/ods-data-bars.test.ts"
       ],
-      "justification": "Exposes the implemented original color-scale threshold and format owners at the native header boundary.",
+      "justification": "Exposes the implemented original color-scale threshold and format owners at the native header boundary. Exposes the native data-bar rule, data and axis values alongside color scales.",
       "knownViolations": [],
       "localSymbols": [
         "ScColorFormat",
         "ScColorScaleEntry",
         "ScColorScaleEntryType",
-        "ScColorScaleFormat"
+        "ScColorScaleFormat",
+        "ScDataBarFormat",
+        "ScDataBarFormatData",
+        "ScAxisPosition"
       ],
       "upstreamFile": "sc/inc/colorscale.hxx",
       "upstreamSymbols": [
         "ScColorFormat",
         "ScColorScaleEntry",
         "ScColorScaleEntryType",
-        "ScColorScaleFormat"
+        "ScColorScaleFormat",
+        "ScDataBarFormat",
+        "ScDataBarFormatData"
       ],
       "sourceResponsibility": "unverified"
     }

@@ -1,0 +1,53 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/sc/source/core/data/colorscale.databar.ts",
+    "status": "mapped",
+    "upstreamPath": "sc/source/core/data/colorscale.cxx",
+    "localSymbols": [
+      "ScDataBarFormat",
+      "ScDataBarFormatData",
+      "ScAxisPosition"
+    ],
+    "upstreamSymbols": [
+      "ScDataBarFormat::GetDataBarInfo",
+      "ScDataBarFormat::IsEqual",
+      "ScDataBarFormat::Clone"
+    ],
+    "preservedResponsibilities": [
+      "Owns the native data-bar settings and thresholds, with native defaults, reference updates, copy, equality and per-cell axis geometry."
+    ],
+    "omittedResponsibilities": [
+      "Native repaint callbacks and renderer integration remain outside the current filter path."
+    ],
+    "filenameDivergence": {
+      "localPath": "apps/office/src/sc/source/core/data/colorscale.databar.ts",
+      "stackNecessity": "responsibility-split",
+      "rationale": "Keeps the original data-bar portion of colorscale.cxx in a focused source module."
+    },
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sc/source/core/data/colorscale.databar.ts",
+          "marker": "ScDataBarFormat"
+        },
+        {
+          "path": "apps/office/src/sc/source/filter/xml/ods-data-bars.test.ts",
+          "marker": "preserves the data-bar rules from LibreOffice"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sc/source/core/data/colorscale.cxx",
+          "marker": "ScDataBarFormat::GetDataBarInfo"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/inc/colorscale.hxx",
+          "marker": "ScDataBarFormatData"
+        }
+      ]
+    }
+  }
+}

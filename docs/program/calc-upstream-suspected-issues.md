@@ -7734,3 +7734,31 @@ expression.
 
 - [Original named expression compilation and reference checks](../../vendor/libreoffice-reference/sc/source/core/tool/rangenam.cxx)
 - [ODS name scope and serialization regression](../../apps/office/src/sc/source/filter/xml/ods-named-expressions.test.ts)
+
+### CALC-812 — Data-bar equality conflates different threshold types
+
+`ScDataBarFormat::IsEqual` compares a threshold's color and value only
+when the two threshold types agree. It also leaves the configured
+minimum and maximum lengths out of the comparison. Calc preserves both
+behaviors.
+
+- [Original data-bar equality](../../vendor/libreoffice-reference/sc/source/core/data/colorscale.cxx)
+- [Calc data-bar regression](../../apps/office/src/sc/source/filter/xml/ods-data-bars.test.ts)
+
+### CALC-813 — ODS data bars normalize zero maximum length and drop the comparison mode
+
+An explicit zero maximum length imports as 100. The threshold reader
+accepts `calcext:greater_equal`, but the data-bar export writes only the
+value and type of each threshold. Calc keeps the source import and export
+behavior.
+
+- [Original data-bar and threshold import](../../vendor/libreoffice-reference/sc/source/filter/xml/xmlcondformat.cxx)
+- [Original data-bar export](../../vendor/libreoffice-reference/sc/source/filter/xml/xmlexprt.cxx)
+
+### CALC-814 — A centered data bar with two zero limits computes a non-finite length
+
+The middle-axis geometry divides the bounded cell value by the greater
+of the two absolute limits. Both limits can be zero. The model preserves
+the resulting non-finite length.
+
+- [Original data-bar axis geometry](../../vendor/libreoffice-reference/sc/source/core/data/colorscale.cxx)

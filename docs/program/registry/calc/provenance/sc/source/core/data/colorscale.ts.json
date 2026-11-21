@@ -17,10 +17,11 @@
       "ScColorScaleFormat::GetColor"
     ],
     "preservedResponsibilities": [
-      "Owns subscribed sorted range data, numeric and formula stop evaluation, and the original inclusive percentile and RGB interpolation."
+      "Owns subscribed sorted range data, numeric and formula stop evaluation, and the original inclusive percentile and RGB interpolation.",
+      "Shares native numeric cell values and inclusive percentile interpolation with the ScDataBarFormat owner."
     ],
     "omittedResponsibilities": [
-      "Data bars, icon sets, the native repaint callbacks, and unported shift and move engines for detached formula cells remain open."
+      "Icon sets, the native repaint callbacks, and unported shift and move engines for detached formula cells remain open."
     ],
     "evidence": {
       "local": [
@@ -35,6 +36,10 @@
         {
           "path": "apps/office/e2e/calc/xlsx-color-scale.spec.ts",
           "marker": "paints and reopens the original XLSX color scale"
+        },
+        {
+          "path": "apps/office/src/sc/source/filter/xml/ods-data-bars.test.ts",
+          "marker": "preserves the data-bar rules from LibreOffice"
         }
       ],
       "upstream": [
@@ -53,6 +58,10 @@
         {
           "path": "sc/qa/unit/cond_format.cxx",
           "marker": "testTdf155321_CondFormatColor_XLSX"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/source/core/data/colorscale.cxx",
+          "marker": "ScDataBarFormat::getMin"
         }
       ]
     }

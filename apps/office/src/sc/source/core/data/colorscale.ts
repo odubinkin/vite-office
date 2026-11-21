@@ -147,7 +147,7 @@ export class ScColorScaleEntry {
 }
 
 /** Reads a numeric cell or its evaluated value as the native ScRefCellValue does. @param cell - Numeric cell. @returns Value. */
-function numericValue(cell: ScRefCellValue): number {
+export function numericValue(cell: ScRefCellValue): number {
   return cell.getFormula()?.GetValue() ?? cell.getDouble();
 }
 
@@ -202,7 +202,7 @@ function GetColorValue(value: number, min: number, low: number, max: number, hig
 }
 
 /** Implements the original inclusive percentile over the sorted numeric values. @param values - Sorted range. @param position - Fractional percentile. @returns Interpolated value or absence. */
-function GetPercentile(values: readonly number[], position: number): number | undefined {
+export function GetPercentile(values: readonly number[], position: number): number | undefined {
   if (!values.length) return undefined;
   if (position < 0) return values[0];
   const last = values.length - 1;

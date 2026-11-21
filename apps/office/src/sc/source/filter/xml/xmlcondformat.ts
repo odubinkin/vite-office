@@ -1,11 +1,13 @@
 /** @fileoverview ODF Calc extension contexts for condition formulas and the native conditional format list. */
 import { FormulaGrammar } from "../../../../formula/inc/grammar";
 import { OUString } from "../../../../sal/inc/rtl/ustring";
+import { rtl_math_uStringToDouble } from "../../../../sal/inc/rtl/math.h";
+import { rtl_str_toBoolean } from "../../../../sal/inc/rtl/string.h";
 import { getCellStyleXMLName } from "./xmlstyle";
 import { text, unicode } from "../../../../i18nlangtag/source/isolang/isolang.tables";
 import { SfxStyleFamily } from "../../../../svl/inc/style-values";
 import { Converter } from "../../../../sax/source/tools/converter";
-import { Color } from "../../../../tools/inc/color";
+import { COL_LIGHTRED, Color, ColorTransparency } from "../../../../tools/inc/color";
 import {
   SvXMLIgnoreContext,
   type FastAttributeList,
@@ -34,6 +36,8 @@ import {
   ScColorScaleEntry,
   ScColorScaleEntryType as ScaleType,
   ScColorScaleFormat,
+  ScAxisPosition,
+  ScDataBarFormat,
 } from "../../../inc/colorscale";
 
 const odf = FormulaGrammar.AddressConvention.CONV_ODF;
@@ -94,6 +98,46 @@ const scaleTypes = [
   "formula",
 ] as const;
 
+/** Reads the native threshold value and builds a formula at the containing sheet's origin. @param attrs - Source attributes. @param document - Workbook. @param tab - Containing sheet. @param color - Threshold color. @param mode - Native threshold comparison. @returns Owned threshold. */
+function readScaleEntry(
+  attrs: FastAttributeList,
+  document: ScDocument,
+  tab: number,
+  color: Color,
+  mode = Mode.EqGreater,
+): ScColorScaleEntry {
+  const kind = attrs.get(XMLToken.CALCEXT_TYPE);
+  const index = scaleTypes.findIndex(
+    /** Resolves a native threshold spelling. @param name - Type name. @returns Match. */
+    (name) => name === kind,
+  );
+  const type = kind === "auto-maximum" ? ScaleType.AUTO : index === -1 ? ScaleType.VALUE : index;
+  const source = attrs.get(XMLToken.CALCEXT_VALUE) ?? "";
+  const value: [number] = [0];
+  if (source) Converter.convertDouble(value, source);
+  const entry = new ScColorScaleEntry(value[0], color, type, mode);
+  if (type === ScaleType.FORMULA)
+    entry.SetFormula(source, document, new ScAddress(0, 0, tab), grammar);
+  return entry;
+}
+
+/** Reads a native RGB attribute with the initial default color. @param source - XML color. @returns Color. */
+function readColor(source: string): Color {
+  const rgb: [number] = [0];
+  Converter.convertColor(rgb, source);
+  return new Color(ColorTransparency, rgb[0], "ColorTransparencyTag");
+}
+
+/** Reads the original OUString::toDouble length with no grouping separator. @param source - XML length. @returns Native value. */
+function readLength(source: string): number {
+  const value = unicode(source);
+  try {
+    return rtl_math_uStringToDouble(value.getStr(), value.getLength(), 46, 0);
+  } finally {
+    value.dispose();
+  }
+}
+
 /** Original ODF color-scale context, retaining thresholds until sheet names are available. */
 class ScXMLColorScaleFormatContext extends ScXMLImportContext {
   private readonly stops: FastAttributeList[] = [];
@@ -111,34 +155,86 @@ class ScXMLColorScaleFormatContext extends ScXMLImportContext {
   Finalize(document: ScDocument, tab: number): ScColorScaleFormat {
     const scale = new ScColorScaleFormat(document);
     try {
-      for (const attrs of this.stops) {
-        const kind = attrs.get(XMLToken.CALCEXT_TYPE);
-        const index = scaleTypes.findIndex(
-          /** Selects the original threshold spelling. @param name - Stored spelling. @returns Match. */ (
-            name,
-          ) => name === kind,
+      for (const attrs of this.stops)
+        scale.AddEntry(
+          readScaleEntry(attrs, document, tab, readColor(attrs.get(XMLToken.CALCEXT_COLOR) ?? "")),
         );
-        const type =
-          kind === "auto-maximum"
-            ? ScaleType.AUTO
-            : index === -1
-              ? ScaleType.VALUE
-              : (index as ScaleType);
-        const source = attrs.get(XMLToken.CALCEXT_VALUE) ?? "";
-        const rgb: [number] = [0],
-          value: [number] = [0];
-        Converter.convertColor(rgb, attrs.get(XMLToken.CALCEXT_COLOR) ?? "");
-        if (source) Converter.convertDouble(value, source);
-        const entry = new ScColorScaleEntry(value[0], new Color(rgb[0]), type);
-        scale.AddEntry(entry);
-        if (type === ScaleType.FORMULA)
-          entry.SetFormula(source, document, new ScAddress(0, 0, tab), grammar);
-      }
       return scale;
     } catch (error) {
       scale.Dispose();
       throw error;
     }
+  }
+}
+
+/** Native data-bar context with the current and legacy threshold element spellings. */
+class ScXMLDataBarFormatContext extends ScXMLImportContext {
+  private readonly limits: FastAttributeList[] = [];
+
+  /** Retains the ODF attributes until formula compilation has a complete document. @param owner - Importer. @param attributes - Native rule attributes. */
+  constructor(
+    owner: ScXMLImport,
+    private readonly attributes: FastAttributeList,
+  ) {
+    super(owner);
+  }
+
+  /** Collects the lower and upper thresholds in source order. @param token - Child element. @param attributes - Native threshold attributes. @returns Ignored child content. */
+  override createFastChildContext(
+    token: XMLToken,
+    attributes: FastAttributeList,
+  ): SvXMLImportContext {
+    if (
+      (token === XMLToken.CALCEXT_FORMATTING_ENTRY || token === XMLToken.CALCEXT_DATA_BAR_ENTRY) &&
+      this.limits.length < 2
+    )
+      this.limits.push(attributes);
+    return new SvXMLIgnoreContext(true);
+  }
+
+  /** Creates an owned data-bar rule from the native settings and limits. @param document - Workbook. @param tab - Containing sheet. @returns Owned data bar. */
+  Finalize(document: ScDocument, tab: number): ScDataBarFormat {
+    const rule = new ScDataBarFormat(document);
+    const data = rule.GetDataBarData();
+    const attributes = this.attributes;
+    const negative = attributes.get(XMLToken.CALCEXT_NEGATIVE_COLOR);
+    const gradient = attributes.get(XMLToken.CALCEXT_GRADIENT);
+    const showValue = attributes.get(XMLToken.CALCEXT_SHOW_VALUE);
+    const axis = attributes.get(XMLToken.CALCEXT_AXIS_POSITION);
+    data.maPositiveColor = readColor(attributes.get(XMLToken.CALCEXT_POSITIVE_COLOR) ?? "");
+    data.maAxisColor = readColor(attributes.get(XMLToken.CALCEXT_AXIS_COLOR) ?? "");
+    data.mbNeg = Boolean(negative);
+    if (negative) data.mxNegativeColor = readColor(negative);
+    if (gradient) data.mbGradient = gradient === "true";
+    if (showValue) data.mbOnlyBar = showValue !== "true";
+    if (axis === "middle") data.meAxisPosition = ScAxisPosition.MIDDLE;
+    else if (axis === "none") data.meAxisPosition = ScAxisPosition.NONE;
+    data.mnMinLength = readLength(attributes.get(XMLToken.CALCEXT_MIN_LENGTH) ?? "");
+    const max = readLength(attributes.get(XMLToken.CALCEXT_MAX_LENGTH) ?? "");
+    data.mnMaxLength = max === 0 ? 100 : max;
+    try {
+      const [lower, upper] = this.limits;
+      if (lower) data.mpLowerLimit = this.readLimit(lower, document, tab);
+      if (upper) data.mpUpperLimit = this.readLimit(upper, document, tab);
+      return rule;
+    } catch (error) {
+      rule.Dispose();
+      throw error;
+    }
+  }
+
+  /** Compiles one limit with the FastAttributeList boolean conversion for the comparison. @param attributes - XML threshold. @param document - Workbook. @param tab - Containing sheet. @returns Owned limit. */
+  private readLimit(
+    attributes: FastAttributeList,
+    document: ScDocument,
+    tab: number,
+  ): ScColorScaleEntry {
+    const equal = attributes.get(XMLToken.CALCEXT_GREATER_EQUAL);
+    const mode =
+      equal === undefined || rtl_str_toBoolean(new TextEncoder().encode(equal + "\0"))
+        ? Mode.EqGreater
+        : Mode.Greater;
+    return readScaleEntry(attributes, document, tab, new Color(), mode);
   }
 }
 
@@ -209,7 +305,9 @@ export class ScXMLConditionalFormatsContext extends ScXMLImportContext {
 /** Collects original XML rules in document order. */
 class ScXMLConditionalFormatContext extends ScXMLImportContext {
   private readonly ranges: string;
-  private readonly conditions: (Condition | DateCondition | ScXMLColorScaleFormatContext)[] = [];
+  private readonly conditions: (
+    Condition | DateCondition | ScXMLColorScaleFormatContext | ScXMLDataBarFormatContext
+  )[] = [];
   /** Adopts the XML range record. @param owner - Importer. @param attributes - Original attributes. @returns Context. */
   constructor(owner: ScXMLImport, attributes: FastAttributeList) {
     super(owner);
@@ -224,6 +322,11 @@ class ScXMLConditionalFormatContext extends ScXMLImportContext {
       const scale = new ScXMLColorScaleFormatContext(this.GetScImport());
       this.conditions.push(scale);
       return scale;
+    }
+    if (element === XMLToken.CALCEXT_DATA_BAR) {
+      const bar = new ScXMLDataBarFormatContext(this.GetScImport(), attributes);
+      this.conditions.push(bar);
+      return bar;
     }
     if (element === XMLToken.CALCEXT_DATE_IS) {
       const value = dateTypes.indexOf(attributes.get(XMLToken.CALCEXT_DATE) ?? "");
@@ -253,7 +356,10 @@ class ScXMLConditionalFormatContext extends ScXMLImportContext {
     format.SetRange(ranges);
     try {
       for (const condition of this.conditions) {
-        if (condition instanceof ScXMLColorScaleFormatContext) {
+        if (
+          condition instanceof ScXMLColorScaleFormatContext ||
+          condition instanceof ScXMLDataBarFormatContext
+        ) {
           format.AddEntry(condition.Finalize(document, tab));
           continue;
         }
@@ -309,14 +415,53 @@ function WriteCondition(entry: ScCondFormatEntry): string {
 /** Emits the original Calc extension thresholds with their ODF formula grammar. @param scale - Scale rule. @returns XML fragment. */
 function WriteColorScale(scale: ScColorScaleFormat): string {
   let stops = "";
-  for (const entry of scale) {
-    const type = entry.GetType();
-    const value = type === ScaleType.FORMULA ? entry.GetFormula(grammar) : String(entry.GetValue());
-    const color: [string] = [""];
-    Converter.convertColor(color, entry.GetColor().toUInt32());
-    stops += `<calcext:color-scale-entry calcext:value="${escapeXml(value)}" calcext:type="${scaleTypes[type]}" calcext:color="${color[0]}"/>`;
-  }
+  for (const entry of scale)
+    stops += `<calcext:color-scale-entry${writeScaleEntry(entry)} calcext:color="${writeColor(entry.GetColor())}"/>`;
   return `<calcext:color-scale>${stops}</calcext:color-scale>`;
+}
+
+/** Formats a native numeric attribute with the OUString double overload. @param number - Native value. @returns XML number. */
+function writeNumber(number: number): string {
+  const value = OUString.numberDouble(number);
+  try {
+    return text(value);
+  } finally {
+    value.dispose();
+  }
+}
+
+/** Serializes a native threshold, including the upper automatic spelling. @param entry - Threshold. @param first - Whether this is the lower endpoint. @returns Threshold attributes. */
+function writeScaleEntry(entry: ScColorScaleEntry, first = true): string {
+  const type = entry.GetType();
+  const value =
+    type === ScaleType.FORMULA ? entry.GetFormula(grammar) : writeNumber(entry.GetValue());
+  const kind = type === ScaleType.AUTO && !first ? "auto-maximum" : scaleTypes[type];
+  return ` calcext:value="${escapeXml(value)}" calcext:type="${kind}"`;
+}
+
+/** Formats an XML RGB attribute using the native color converter. @param color - Color. @returns XML color. */
+function writeColor(color: Readonly<Color>): string {
+  const result: [string] = [""];
+  Converter.convertColor(result, color.toUInt32());
+  return result[0];
+}
+
+/** Writes the data-bar settings with the native defaults and the two ordered formatting entries. @param bar - Rule. @returns XML fragment. */
+function WriteDataBar(bar: ScDataBarFormat): string {
+  const data = bar.GetDataBarData();
+  let attributes = "";
+  if (!data.mbGradient) attributes += ' calcext:gradient="false"';
+  if (data.mbOnlyBar) attributes += ' calcext:show-value="false"';
+  if (data.mnMinLength !== 0)
+    attributes += ` calcext:min-length="${writeNumber(data.mnMinLength)}"`;
+  if (data.mnMaxLength !== 0)
+    attributes += ` calcext:max-length="${writeNumber(data.mnMaxLength)}"`;
+  if (data.mbNeg)
+    attributes += ` calcext:negative-color="${writeColor(data.mxNegativeColor ?? COL_LIGHTRED)}"`;
+  if (data.meAxisPosition !== ScAxisPosition.AUTOMATIC)
+    attributes += ` calcext:axis-position="${data.meAxisPosition === ScAxisPosition.NONE ? "none" : "middle"}"`;
+  attributes += ` calcext:positive-color="${writeColor(data.maPositiveColor)}" calcext:axis-color="${writeColor(data.maAxisColor)}"`;
+  return `<calcext:data-bar${attributes}><calcext:formatting-entry${writeScaleEntry(data.mpLowerLimit)}/><calcext:formatting-entry${writeScaleEntry(data.mpUpperLimit, false)}/></calcext:data-bar>`;
 }
 
 /** Writes the original Calc extension from the sheet's native conditional ranges. @param document - Workbook. @param table - Sheet. @param standalone - Declare the namespace for worker XML. @returns Conditional-format XML. */
@@ -332,6 +477,10 @@ export function ExportConditionalFormat(
       const entry = format.GetEntry(i);
       if (entry instanceof ScColorScaleFormat) {
         rules += WriteColorScale(entry);
+        continue;
+      }
+      if (entry instanceof ScDataBarFormat) {
+        rules += WriteDataBar(entry);
         continue;
       }
       if (entry instanceof ScCondDateFormatEntry) {

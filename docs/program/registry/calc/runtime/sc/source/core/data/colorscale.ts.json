@@ -20,9 +20,10 @@
         "sc/source/core/data/colorscale.cxx",
         "apps/office/src/sc/source/filter/oox/condformatbuffer.colorscale.test.ts",
         "apps/office/e2e/calc/xlsx-color-scale.spec.ts",
-        "sc/qa/unit/cond_format.cxx"
+        "sc/qa/unit/cond_format.cxx",
+        "apps/office/src/sc/source/filter/xml/ods-data-bars.test.ts"
       ],
-      "justification": "Owns subscribed sorted range data, numeric and formula stop evaluation, and the original inclusive percentile and RGB interpolation.",
+      "justification": "Owns subscribed sorted range data, numeric and formula stop evaluation, and the original inclusive percentile and RGB interpolation. Shares native numeric cell values and inclusive percentile interpolation with the ScDataBarFormat owner.",
       "knownViolations": [],
       "localSymbols": [
         "ScColorFormat",

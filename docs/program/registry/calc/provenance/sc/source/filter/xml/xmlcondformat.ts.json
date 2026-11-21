@@ -24,10 +24,11 @@
       "Imports and exports original Calc date-is conditions, including all native year periods.",
       "Serializes and imports the original operand-free is-error and is-no-error CALCEXT condition lexemes.",
       "Imports and writes the source duplicate, unique, rank and average ODS condition forms with original prefixes and formula operands.",
-      "Entering the original extension context sets the document-level legacy-map gate even when the element has no entries."
+      "Entering the original extension context sets the document-level legacy-map gate even when the element has no entries.",
+      "Reads native and legacy data-bar threshold elements and persists the native data-bar attributes, formulas and signed numeric thresholds through ODS and Worker XML."
     ],
     "omittedResponsibilities": [
-      "Legacy table style maps and additional condition families remain unported."
+      "Other unrepresented conditional format families remain pending."
     ],
     "evidence": {
       "local": [
@@ -90,6 +91,10 @@
         {
           "path": "apps/office/src/sc/source/filter/xml/xmlcondformat.ts",
           "marker": "SetNewCondFormatData"
+        },
+        {
+          "path": "apps/office/src/sc/source/filter/xml/ods-data-bars.test.ts",
+          "marker": "preserves the data-bar rules from LibreOffice"
         }
       ],
       "upstream": [
@@ -144,6 +149,14 @@
         {
           "path": "sc/source/filter/xml/xmlcondformat.cxx",
           "marker": "GetScImport().SetNewCondFormatData()"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/source/filter/xml/xmlcondformat.cxx",
+          "marker": "ScXMLDataBarFormatContext::ScXMLDataBarFormatContext"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/source/filter/xml/xmlexprt.cxx",
+          "marker": "Type::Databar"
         }
       ]
     }
