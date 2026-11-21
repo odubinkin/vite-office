@@ -175,6 +175,20 @@ export class SwAnnotationShell {
         isChecked: () => this.manager.IsThreadResolved(),
       },
       {
+        id: CMD.deleteComment,
+        /** Deletes the active annotation at its model anchor. @returns Whether deleted. */
+        execute: () => this.manager.Delete(),
+        /** Enables deletion in the editable annotation. @returns Whether enabled. */
+        isEnabled: () => this.CanEdit(),
+      },
+      {
+        id: CMD.deleteCommentThread,
+        /** Deletes the active annotation thread in sidebar order. @returns Whether deleted. */
+        execute: () => this.manager.Delete(undefined, true),
+        /** Enables deletion in the editable annotation. @returns Whether enabled. */
+        isEnabled: () => this.CanEdit(),
+      },
+      {
         id: CMD.selectAll,
         /** Selects the annotation text in its own edit view. @returns Nothing. */
         execute: () => this.manager.GetActiveSidebarWin()?.SelectAll?.(),

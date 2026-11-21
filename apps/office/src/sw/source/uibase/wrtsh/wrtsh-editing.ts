@@ -23,7 +23,7 @@ import { SwUndoSplitNode } from "../../core/undo/unspnd";
 import { getWriterTypingCharacterClass } from "./delete";
 import type { SwWrtShell } from "./wrtsh1";
 import { SvxFirstLineIndentItem } from "../../../../editeng/inc/lrspitem";
-import { RES_MARGIN_FIRSTLINE } from "../../../inc/hintids";
+import { RES_MARGIN_FIRSTLINE, RES_TXTATR_ANNOTATION } from "../../../inc/hintids";
 
 /** Applies the existing shell ruler-margin algorithm through actual paragraph items and shell history. @param shell - Original shell owner. @param edge - Dragged marker. @param delta - Original twip delta. @returns Whether paragraph attributes changed. */
 export function AdjustParagraphRulerIndent(
@@ -178,13 +178,18 @@ export function DeleteAtCursor(shell: SwWrtShell, direction: SwUndoDeleteDirecti
     direction === "backspace"
       ? getWriterPreviousGraphemeBoundary(paragraph.GetText(), offset)
       : offset;
+  const annotation = paragraph.GetpSwpHints()?.GetTextAttrForCharAt(start, RES_TXTATR_ANNOTATION);
   const end =
-    direction === "backspace" ? offset : getWriterNextGraphemeBoundary(paragraph.GetText(), offset);
+    direction === "backspace"
+      ? offset
+      : annotation
+        ? offset + 1
+        : getWriterNextGraphemeBoundary(paragraph.GetText(), offset);
   /* istanbul ignore next -- Valid non-boundary cursor offsets still lie inside one grapheme. */
   if (start === end) return false;
   const deletedText = paragraph.GetText().slice(start, end);
   const group =
-    deletedText.length === 1
+    annotation === undefined && deletedText.length === 1
       ? /[\p{L}\p{N}]/u.test(deletedText)
         ? "word"
         : "delimiter"

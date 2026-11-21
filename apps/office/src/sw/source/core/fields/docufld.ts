@@ -44,10 +44,13 @@ export class SwPostItFieldType {
 
   /** Resolves an annotation restored by document history. @param id - Retained field identifier. @returns Live annotation value. */
   FindField(id: number): SwPostItField | undefined {
-    for (const format of this.GatherFields()) {
-      const field = format.GetField();
-      if (field.GetPostItId() === id) return field;
-    }
+    return this.FindFormat(id)?.GetField();
+  }
+
+  /** Resolves the attached format after undo has recreated it. @param id - Retained field identifier. @returns Live annotation format. */
+  FindFormat(id: number): SwFormatField | undefined {
+    for (const format of this.GatherFields())
+      if (format.GetField().GetPostItId() === id) return format;
     return undefined;
   }
 

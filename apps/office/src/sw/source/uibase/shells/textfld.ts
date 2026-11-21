@@ -57,27 +57,34 @@ export function createWriterAnnotationCommands(
         }
       },
     },
-    ...([false, true] as const).map<WriterSlotHandler<SwTextShell>>(
-      /** Binds one of the original annotation resolution slots. @param thread - Whether to toggle the whole thread. @returns Slot handler. */
-      (thread) => ({
-        id: thread ? WRITER_COMMAND_IDS.resolveCommentThread : WRITER_COMMAND_IDS.resolveComment,
+    ...(
+      [
+        [WRITER_COMMAND_IDS.resolveComment, false, false],
+        [WRITER_COMMAND_IDS.resolveCommentThread, true, false],
+        [WRITER_COMMAND_IDS.deleteComment, false, true],
+        [WRITER_COMMAND_IDS.deleteCommentThread, true, true],
+      ] as const
+    ).map<WriterSlotHandler<SwTextShell>>(
+      /** Binds an original annotation command. @param entry - Command URL, thread flag and deletion flag. @returns Slot handler. */
+      ([id, thread, deletion]) => ({
+        id,
         capabilityId: "CAP-0111",
         /** Disables document changes in a read-only view. @returns Whether enabled. */
         isEnabled: () => view !== undefined && !shell.GetViewOptions().IsReadonly(),
-        /** Resolves a document comment by the original post-it ID argument. @param _context - Bound text shell. @param args - Request items. @returns Whether changed. */
+        /** Applies the command to the comment identified by the request. @param _context - Bound text shell. @param args - Request items. @returns Whether changed. */
         execute: (_context, args) => {
           const item = args.find(
             /** Finds the original ID argument. @param value - Request item. @returns Whether this is the comment ID. */
             (value): value is SfxStringItem =>
               value instanceof SfxStringItem && value.Which() === SID_ATTR_POSTIT_ID,
           );
-          const id = item?.GetValue();
-          if (id === undefined || id.length === 0) return false;
           const manager = view?.GetPostItMgr();
           if (!manager) return false;
-          return thread
-            ? manager.ToggleResolvedForThread(Number(id))
-            : manager.ToggleResolved(Number(id));
+          const value = item?.GetValue();
+          if (!value) return deletion && manager.Delete();
+          const id = Number(value);
+          if (deletion) return manager.Delete(id, thread);
+          return thread ? manager.ToggleResolvedForThread(id) : manager.ToggleResolved(id);
         },
       }),
     ),

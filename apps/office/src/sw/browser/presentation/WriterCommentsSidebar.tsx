@@ -46,11 +46,11 @@ function WriterCommentCard({
       anchor.Dispose();
     }
   }
-  /** Dispatches a card action in its annotation shell and returns input to Writer. @param command - Resolution command from the menu. @returns Nothing. */
-  function resolve(command: string): void {
+  /** Dispatches a card action in its annotation shell and returns input to Writer. @param command - Command from the menu. @returns Nothing. */
+  function execute(command: string): void {
+    close();
     activate();
     view.Execute(command);
-    close();
     manager.ClearActiveField();
     focusDocument();
   }
@@ -141,13 +141,23 @@ function WriterCommentCard({
               <Ellipsis aria-hidden="true" size={16} />
             </summary>
             {open && (
-              <div className="z-50 min-w-32 rounded border border-slate-300 bg-white p-1 shadow-lg">
+              <div
+                ref={
+                  /** Places the mounted menu above the editor and other sidebars. @param panel - Popup element. @returns Nothing. */
+                  (panel) => {
+                    if (!panel?.showPopover) return;
+                    panel.popover = "manual";
+                    panel.showPopover();
+                  }
+                }
+                className="inset-auto z-50 m-0 min-w-32 rounded border border-slate-300 bg-white p-1 shadow-lg"
+              >
                 <button
                   type="button"
                   className="w-full rounded px-2 py-1 text-left text-sm hover:bg-slate-100"
                   onClick={
                     /** Toggles resolution of the selected comment. @returns Nothing. */
-                    () => resolve(WRITER_COMMAND_IDS.resolveComment)
+                    () => execute(WRITER_COMMAND_IDS.resolveComment)
                   }
                 >
                   {field.IsResolved()
@@ -159,13 +169,40 @@ function WriterCommentCard({
                   className="w-full rounded px-2 py-1 text-left text-sm hover:bg-slate-100"
                   onClick={
                     /** Toggles resolution of the selected thread. @returns Nothing. */
-                    () => resolve(WRITER_COMMAND_IDS.resolveCommentThread)
+                    () => execute(WRITER_COMMAND_IDS.resolveCommentThread)
                   }
                 >
                   {threadResolved
                     ? localization.GetText("writer.comments.unresolveThread", "Unresolve Thread")
                     : localization.GetText("writer.comments.resolveThread", "Resolve Thread")}
                 </button>
+                {(
+                  [
+                    [
+                      WRITER_COMMAND_IDS.deleteComment,
+                      localization.GetText("writer.comments.delete", "Delete Comment"),
+                    ],
+                    [
+                      WRITER_COMMAND_IDS.deleteCommentThread,
+                      localization.GetText("writer.comments.deleteThread", "Delete Comment Thread"),
+                    ],
+                  ] as const
+                ).map(
+                  /** Renders native deletion actions in popup order. @param action - Command and its localized label. @returns Menu button. */
+                  ([command, label]) => (
+                    <button
+                      key={command}
+                      type="button"
+                      className="w-full rounded px-2 py-1 text-left text-sm hover:bg-slate-100"
+                      onClick={
+                        /** Dispatches this deletion command. @returns Nothing. */
+                        () => execute(command)
+                      }
+                    >
+                      {label}
+                    </button>
+                  ),
+                )}
               </div>
             )}
           </details>

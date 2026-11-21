@@ -242,7 +242,7 @@ export class SwTextNode extends SwContentNode {
     return DontExpandTextNodeFormat(this, offset, flag, convert);
   }
 
-  /** Clears implemented text attributes while retaining the allocated map. @param deleteFields - Native field policy;no field hints are currently implemented. @returns Nothing. */
+  /** Clears text attributes while retaining the allocated map. @param deleteFields - Whether to remove field hints. @returns Nothing. */
   public ClearSwpHintsArr(deleteFields: boolean): void {
     thints.ClearTextNodeHints(this, deleteFields);
   }

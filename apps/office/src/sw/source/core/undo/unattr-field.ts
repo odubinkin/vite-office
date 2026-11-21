@@ -26,7 +26,7 @@ export class SwUndoInsAnnotation extends SwUndo {
 
   /** Removes the inserted native point and the range it owns. @returns Nothing. */
   protected override UndoImpl(): void {
-    const hint = this.format?.GetTextField();
+    const hint = this.field.GetTyp().FindFormat(this.field.GetPostItId())?.GetTextField();
     const owner = hint?.GetTextNode();
     if (!hint || !owner) throw new Error("Writer annotation insertion history has no field.");
     owner.EraseText(hint.GetStart(), 1);

@@ -4,7 +4,7 @@ import { SwFormatCharFormat } from "../txtnode/fmtatr2";
 import { SwClient, type SwModify } from "../../../inc/calbck";
 import { SwFormat } from "../attr/format";
 import type { SwModelHint } from "../../../inc/hints";
-import { RES_BOXATR_FORMULA, RES_BOXATR_VALUE } from "../../../inc/hintids";
+import { RES_BOXATR_FORMULA, RES_BOXATR_VALUE, RES_TXTATR_ANNOTATION } from "../../../inc/hintids";
 import { SetAttrMode } from "../../../inc/swtypes";
 import type { SwDoc } from "../doc/doc";
 import type { SwBookmark } from "../doc/docbm";
@@ -17,6 +17,8 @@ import type { SfxPoolItem } from "../../../../svl/source/items/poolitem";
 import { SfxItemSet } from "../../../../svl/source/items/itemset";
 import { SwContentNode, SwTableNode, type SwNode, type SwNodeType } from "../docnode/node";
 import type { SwFormatColl, SwTextFormatColl } from "../doc/fmtcol";
+import { SwTextField } from "../../../inc/txtfld";
+import { SwUndRng } from "./undobj";
 
 /** Native history discriminants;registered old ranged text,direct format and text collection entries are implemented. */
 export enum HISTORY_HINT {
@@ -214,6 +216,70 @@ export class SwHistorySetText extends SwHistoryHint {
     this.m_pAttr.Dispose();
   }
 }
+
+/** Retains a native annotation field and its optional range for text history. */
+export class SwHistorySetTextField extends SwHistoryHint {
+  private readonly field: ReturnType<SwTextField["GetAttr"]>;
+  private readonly offset: number;
+  private readonly markRange: SwUndRng | undefined;
+
+  /** Captures the field and its annotation mark before the point is erased. @param hint - Attached field. @param nodeIndex - Field anchor node index. @returns History entry. */
+  public constructor(
+    hint: SwTextField,
+    private readonly nodeIndex: number,
+  ) {
+    super(HISTORY_HINT.HSTRY_SETTXTFLDHNT);
+    const format = hint.GetAttr();
+    this.field = format.Clone();
+    this.offset = hint.GetStart();
+    const mark = format
+      .GetField()
+      .GetTyp()
+      .GetDoc()
+      .GetIDocumentMarkAccess()
+      .GetAnnotationMark(format);
+    if (mark) {
+      const range = new SwPaM(mark.GetMarkEnd(), mark.GetMarkStart());
+      try {
+        this.markRange = new SwUndRng(range);
+      } finally {
+        range.Dispose();
+      }
+    }
+  }
+
+  /** Reattaches the field to its restored dummy and recreates its anchored range. @param doc - Destination graph. @returns Nothing. */
+  public override SetInDoc(doc: SwDoc): void {
+    const node = doc.GetNodes().at(this.nodeIndex);
+    if (!(node instanceof SwTextNode)) return;
+    const existing = node.GetpSwpHints()?.GetTextAttrForCharAt(this.offset, RES_TXTATR_ANNOTATION);
+    const format = existing?.GetAttr() ?? this.field.Clone();
+    if (existing && format.GetField().GetPostItId() !== this.field.GetField().GetPostItId())
+      throw new Error(
+        "Writer annotation history encountered a different field at the restored anchor.",
+      );
+    if (
+      !existing &&
+      !node.InsertHint(new SwTextField(format, this.offset), SetAttrMode.NOTXTATRCHR)
+    )
+      return;
+    if (!this.markRange) return;
+    const point = new SwPosition(node, this.offset);
+    const range = new SwPaM(point);
+    try {
+      this.markRange.SetPaM(range);
+      doc.GetIDocumentMarkAccess().MakeAnnotationMark(range, format);
+    } finally {
+      range.Dispose();
+      point.Dispose();
+    }
+  }
+
+  /** Releases the retained field value. @returns Nothing. */
+  public override Dispose(): void {
+    this.field.Dispose();
+  }
+}
 /** Original reset history retains family and exact coordinates, never the inserted item. */
 export class SwHistoryResetText extends SwHistoryHint {
   /** Records native reset identity. @param m_nAttr - Original Which. @param m_nStart - Exact start. @param m_nEnd - Exact end. @param m_nNodeIndex - Original node slot. @returns Entry. */
@@ -372,7 +438,7 @@ export class SwHistory {
   public AddColl(collection: SwFormatColl, nodeIndex: number, nodeType: SwNodeType): void {
     this.m_SwpHstry.push(new SwHistoryChangeFormatColl(collection, nodeIndex, nodeType));
   }
-  /** Copies old ranged items using native half-open overlap tests. @param hints - Optional original maps. @param nodeIndex - Original node index. @param start - Range start. @param end - Range end. @param copyFields - Native field policy;no field hints are currently implemented. @returns Nothing. */
+  /** Copies old hints using native half-open overlap tests. @param hints - Optional original maps. @param nodeIndex - Original node index. @param start - Range start. @param end - Range end. @param copyFields - Whether to copy fields. @returns Nothing. */
   public CopyAttr(
     hints: SwpHints | undefined,
     nodeIndex: number,
@@ -380,12 +446,16 @@ export class SwHistory {
     end: number,
     copyFields: boolean,
   ): void {
-    void copyFields;
     if (hints === undefined) return;
     for (let index = 0; index < hints.Count(); index++) {
       const hint = hints.Get(index),
         attrStart = hint.GetStart();
       if (attrStart > end) break;
+      if (hint instanceof SwTextField) {
+        if (copyFields && start <= attrStart && attrStart < end)
+          this.m_SwpHstry.push(new SwHistorySetTextField(hint, nodeIndex));
+        continue;
+      }
       if (!(hint instanceof SwTextAttrEnd)) continue;
       if (start <= attrStart) {
         if (end > attrStart) this.AddTextAttr(hint, nodeIndex, false);

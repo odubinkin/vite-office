@@ -4,7 +4,7 @@ title: "Implement Writer search and replace core and browser UI"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 96
+revision: 97
 origin:
   system: "manual"
 depends_on:
@@ -283,6 +283,9 @@ comments:
   -
     author: "CODER"
     body: "Verified thread resolution against the pinned annotation menu, GetTopReplyNote, UpdatePostItsParentInfo and UpdateResolvedStatus. The existing comment action popup and generated ResolveCommentThread slot now operate on the same ordered follow windows. The menu restores Writer body focus as in AnnotationMenuButton.cxx. Both the active-note all-members check and the ID-based root toggle preserve their native outcomes. WRITER-727 and WRITER-728 record their divergence and adjacency-based navigation. Regressions cover nested and interleaved replies, independent comments, ODT reopen, and browser popup behavior. Four targeted Writer suites passed 37 cases, two resource checks and two Chrome scenarios passed, and production build, dependencies, source tree and provenance, Writer registry, scoped lint and formatting, routing, doctor, and diff checks passed. The existing JSDoc and file-size findings remain outside changed paths. No parent task closure or full-suite cadence increment."
+  -
+    author: "CODER"
+    body: "Verified Delete Comment and Delete Comment Thread against the pinned annotation popup, SwAnnotationWin deletion and thread traversal, SwPostItMgr ID routing, and SwHistorySetTextField. The commands use Writer cursor deletion of each annotation marker. Ordinary undo and redo preserve field IDs, contents and registered annotation ranges, including neighboring comments and undoing earlier insertion after a field is recreated. The thread uses separate deletion actions in the original sidebar order. The comment popup uses the browser top layer where supported; real Chrome verified the delete action remains clickable above the properties sidebar and undo restores the note. Seven targeted Writer suites passed 2610 tests and the two comment suites passed again after the popup correction. Two resource tests and two Chrome scenarios passed. Production build, dependency boundaries, source tree and provenance, Writer registry, scoped lint and formatting, policy routing, doctor and diff checks passed. The existing global JSDoc and file-size findings remain outside the changed files. This covers ordinary editing; change-tracking-specific deletion and bulk author/all-comment deletion remain outside the checkpoint. No parent closure or full-suite cadence increment."
 events:
   -
     type: "status"
@@ -696,8 +699,13 @@ events:
     at: "2026-11-21T19:00:20.648Z"
     author: "CODER"
     body: "Verified thread resolution against the pinned annotation menu, GetTopReplyNote, UpdatePostItsParentInfo and UpdateResolvedStatus. The existing comment action popup and generated ResolveCommentThread slot now operate on the same ordered follow windows. The menu restores Writer body focus as in AnnotationMenuButton.cxx. Both the active-note all-members check and the ID-based root toggle preserve their native outcomes. WRITER-727 and WRITER-728 record their divergence and adjacency-based navigation. Regressions cover nested and interleaved replies, independent comments, ODT reopen, and browser popup behavior. Four targeted Writer suites passed 37 cases, two resource checks and two Chrome scenarios passed, and production build, dependencies, source tree and provenance, Writer registry, scoped lint and formatting, routing, doctor, and diff checks passed. The existing JSDoc and file-size findings remain outside changed paths. No parent task closure or full-suite cadence increment."
+  -
+    type: "comment"
+    at: "2026-11-21T19:13:00.537Z"
+    author: "CODER"
+    body: "Verified Delete Comment and Delete Comment Thread against the pinned annotation popup, SwAnnotationWin deletion and thread traversal, SwPostItMgr ID routing, and SwHistorySetTextField. The commands use Writer cursor deletion of each annotation marker. Ordinary undo and redo preserve field IDs, contents and registered annotation ranges, including neighboring comments and undoing earlier insertion after a field is recreated. The thread uses separate deletion actions in the original sidebar order. The comment popup uses the browser top layer where supported; real Chrome verified the delete action remains clickable above the properties sidebar and undo restores the note. Seven targeted Writer suites passed 2610 tests and the two comment suites passed again after the popup correction. Two resource tests and two Chrome scenarios passed. Production build, dependency boundaries, source tree and provenance, Writer registry, scoped lint and formatting, policy routing, doctor and diff checks passed. The existing global JSDoc and file-size findings remain outside the changed files. This covers ordinary editing; change-tracking-specific deletion and bulk author/all-comment deletion remain outside the checkpoint. No parent closure or full-suite cadence increment."
 doc_version: 3
-doc_updated_at: "2026-11-21T19:00:20.648Z"
+doc_updated_at: "2026-11-21T19:13:00.537Z"
 doc_updated_by: "CODER"
 description: "Implement the approved coherent Writer search-and-replace feature from pinned LibreOffice sources: real shared search engine and options, native paragraph/cursor traversal and replacement/history contracts, view-owned search state and dispatch, Find toolbar and Find and Replace dialog with generated upstream command placement and shortcuts. Preserve source semantics and explicit unsupported boundaries; never substitute DOM text search or browser RegExp for ICU contracts. Work only on writer in vite-office-writer; local upstream reading approved, no network or merges. Keep active until approved scope is verified."
 sections:

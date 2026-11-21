@@ -89,6 +89,7 @@ export class SwView {
     );
     this.postItMgr = new SwPostItMgr(
       this.viewOptions,
+      this.wrtShell,
       createRegex,
       /** Recomputes the native shell and annotation formatting states. @returns Nothing. */ () =>
         this.Invalidate("selection"),

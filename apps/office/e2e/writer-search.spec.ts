@@ -126,4 +126,11 @@ test("Writer inserts a comment, finds its text and undoes note formatting", /** 
   await expect(paragraph).toHaveCSS("line-height", `${originalHeight * 1.5}px`);
   await undo.click();
   await expect(paragraph).toHaveCSS("line-height", `${originalHeight}px`);
+  await dialog.getByRole("button", { name: "Close", exact: true }).click();
+  await commentActions.click();
+  await page.getByRole("button", { name: "Delete Comment", exact: true }).click();
+  await expect(comment).toHaveCount(0);
+  await expect(page.getByLabel("Writer document body", { exact: true })).toBeFocused();
+  await undo.click();
+  await expect(comment).toHaveText("Find this annotation");
 });

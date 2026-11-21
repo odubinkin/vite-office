@@ -10,6 +10,8 @@ import type { RegexMatcherFactory } from "../../../../unotools/inc/textsearch";
 import type { SfxItemSet } from "../../../../svl/source/items/itemset";
 import type { SwFormatField } from "../../../inc/fmtfld";
 import type { SwViewOption } from "../../../inc/viewopt";
+import { SwPosition } from "../../core/crsr/pam";
+import type { SwWrtShell } from "../wrtsh/wrtsh1";
 
 /** Editor and viewport bound to one native comment field. */
 export interface SwAnnotationWindow {
@@ -30,9 +32,10 @@ export class SwPostItMgr {
   private active: SwFormatField | undefined;
   private pendingFocus: SwFormatField | undefined;
 
-  /** Binds the current Writer view options and search engine. @param options - View-local options. @param createRegex - Platform compiler. @param activeChanged - Dispatch context notification. @returns Manager. */
+  /** Binds the current Writer view options and search engine. @param options - View-local options. @param writer - Model editing shell. @param createRegex - Platform compiler. @param activeChanged - Dispatch context notification. @returns Manager. */
   constructor(
     private readonly options: SwViewOption,
+    private readonly writer: SwWrtShell,
     private readonly createRegex?: RegexMatcherFactory,
     private readonly activeChanged?: () => void,
   ) {}
@@ -54,6 +57,35 @@ export class SwPostItMgr {
       this.options.IsPostIts() &&
       (this.options.IsResolvedPostIts() || !field.GetField().IsResolved())
     );
+  }
+
+  /** Deletes an annotation or its consecutive thread through the Writer cursor. @param id - Optional document annotation ID. @param thread - Whether to delete the thread. @returns Whether anything was deleted. */
+  Delete(id?: number, thread = false): boolean {
+    const field = this.GetFieldForCommand(id);
+    if (!field || this.options.IsReadonly()) return false;
+    const notes = thread ? this.GetThread(field) : [field];
+    return this.writer.GetDoc().RunModelTransaction(
+      /** Deletes each anchored dummy with its own native delete history. @returns Whether changed. */ () => {
+        let deleted = false;
+        for (const note of notes) deleted = this.DeleteField(note) || deleted;
+        return deleted;
+      },
+    );
+  }
+
+  /** Deletes one native field at its current anchor. @param field - Target annotation field. @returns Whether changed. */
+  private DeleteField(field: SwFormatField): boolean {
+    const hint = field.GetTextField();
+    const node = hint?.GetTextNode();
+    if (!hint || !node) return false;
+    if (this.GetActiveField() === field) this.ClearActiveField();
+    const anchor = new SwPosition(node, hint.GetStart());
+    try {
+      this.writer.SetCursor(anchor);
+      return this.writer.DelRight();
+    } finally {
+      anchor.Dispose();
+    }
   }
 
   /** Shows or hides comment windows as a view option. @param value - Whether to show comments. @returns Nothing. */

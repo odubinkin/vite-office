@@ -16,6 +16,7 @@ import type { SwDoc } from "../doc/doc";
 import { SwFormatCharFormat, SwFormatINetFormat } from "./fmtatr2";
 import { SwTextCharFormat, SwTextINetFormat } from "./txtatr2";
 import { SwFormatAutoFormat, SwTextAttrEnd } from "./txatbase";
+import { SwTextField } from "../../../inc/txtfld";
 
 /** Builds a fresh ranged attribute, interning set/character inputs and converting foreign automatic handles into the destination pool. @param doc - Destination document. @param attr - Document-pool concrete set or supported pool item. @param start - Inclusive offset. @param end - Exclusive offset. @returns Fresh automatic or internet hint with native constructor flags. */
 export function MakeTextAttr(
@@ -79,11 +80,15 @@ export function InsertTextNodeItem(
 
 /** Implements ClearSwpHintsArr for registered hints and keeps inline fly points. @param node - Actual owner. @param deleteFields - Native field policy;unsupported field hints are absent. @returns Nothing. */
 export function ClearTextNodeHints(node: SwTextNode, deleteFields: boolean): void {
-  void deleteFields;
   const map = node.GetpSwpHints();
   if (!map) return;
-  for (const hint of map.entries()) {
-    map.DeleteAtPos(map.GetIndexOf(hint));
+  for (let index = 0; index < map.Count();) {
+    const hint = map.Get(index);
+    if (!(hint instanceof SwTextAttrEnd) && !(deleteFields && hint instanceof SwTextField)) {
+      index++;
+      continue;
+    }
+    map.DeleteAtPos(index);
     DestroyTextNodeAttribute(hint);
   }
 }

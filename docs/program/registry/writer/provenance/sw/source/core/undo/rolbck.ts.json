@@ -8,6 +8,7 @@
       "HISTORY_HINT",
       "SwHistoryHint",
       "SwHistorySetText",
+      "SwHistorySetTextField",
       "SwHistory",
       "SwHistorySetFormat",
       "SwHistoryChangeFormatColl",
@@ -24,6 +25,7 @@
     "upstreamSymbols": [
       "SwHistoryHint",
       "SwHistorySetText",
+      "SwHistorySetTextField",
       "SwHistory",
       "SwHistorySetFormat::SwHistorySetFormat",
       "SwHistoryChangeFormatColl::SetInDoc",
