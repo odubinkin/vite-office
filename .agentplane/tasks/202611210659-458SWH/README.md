@@ -4,7 +4,7 @@ title: "Connect Calc conditional formatting manager and rule editor"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 12
+revision: 14
 origin:
   system: "manual"
 depends_on: []
@@ -37,7 +37,7 @@ events:
     to: "DOING"
     note: "Start: Connect native Calc conditional formatting authoring and manager commands and verify the tenth regression checkpoint."
 doc_version: 3
-doc_updated_at: "2026-11-21T08:06:18.883Z"
+doc_updated_at: "2026-11-21T10:42:44.300Z"
 doc_updated_by: "CODER"
 description: "Expose the existing Calc conditional rule families, native range assignments and transactional manager through the upstream dialog, slot, and history structure."
 sections:
@@ -59,7 +59,9 @@ sections:
     - Full inventory: exit 1, 117 passed and 13 failed. The 31-test retry passed 26. Four failures reproduce the same stale Writer parity marker on the clean baseline. One Writer parity CLI case exceeded its fixed 120-second timeout again.
     - Full tooling: exit 1, 192 passed and two compiler checks exceeded the 5-second timeout. Both checks passed on the targeted retry.
 
-    The first Office coverage and full browser runs were interrupted after widespread test timeouts under memory pressure. Both exited 130. The full Office test restart uses one worker, a 600-second per-test timeout, and coverage disabled. The full browser restart follows it with one worker and longer waits. The final counts for those runs are pending.
+    The first Office coverage and full browser runs were interrupted after widespread test timeouts under memory pressure. Both exited 130. The full Office test restart uses one worker, a 600-second per-test timeout, and coverage disabled. The full browser restart follows it with one worker and longer waits. The Office restart finished with exit 1, 33,792 passed and 2 failed across 2,233 files. Both failed scenarios passed on the targeted retries described below. The 613-scenario browser restart is still running.
+
+    The Office restart reported a chart collection hook timeout and a Calc optional-toolbar-icon test error. The chart collection suite passed all 9 cases with the hook timeout raised. The toolbar test reset the module graph without reinstating the native UNO services. Commit `9d016043f` restores the existing test bootstrap after that reset. Its isolated test, Prettier, ESLint, and incremental office TypeScript checks all passed.
   Rollback Plan: "Revert the implementation commits to restore the prior condition import and paint behavior and remove the newly exposed management commands."
   Findings: |-
     The implementation follows the pinned Calc condition slot routes, edit and manager ownership, conditional list and attributed cell associations, and undo command boundaries. The browser uses the worksheet's range selection and the existing Sfx dialog response lifecycle. The implemented rule families are cell comparisons, formulas, dates and two- or three-point color scales.
@@ -101,7 +103,9 @@ Implementation `448e6b30dcaf` and test type corrections `81623a51659f`.
 - Full inventory: exit 1, 117 passed and 13 failed. The 31-test retry passed 26. Four failures reproduce the same stale Writer parity marker on the clean baseline. One Writer parity CLI case exceeded its fixed 120-second timeout again.
 - Full tooling: exit 1, 192 passed and two compiler checks exceeded the 5-second timeout. Both checks passed on the targeted retry.
 
-The first Office coverage and full browser runs were interrupted after widespread test timeouts under memory pressure. Both exited 130. The full Office test restart uses one worker, a 600-second per-test timeout, and coverage disabled. The full browser restart follows it with one worker and longer waits. The final counts for those runs are pending.
+The first Office coverage and full browser runs were interrupted after widespread test timeouts under memory pressure. Both exited 130. The full Office test restart uses one worker, a 600-second per-test timeout, and coverage disabled. The full browser restart follows it with one worker and longer waits. The Office restart finished with exit 1, 33,792 passed and 2 failed across 2,233 files. Both failed scenarios passed on the targeted retries described below. The 613-scenario browser restart is still running.
+
+The Office restart reported a chart collection hook timeout and a Calc optional-toolbar-icon test error. The chart collection suite passed all 9 cases with the hook timeout raised. The toolbar test reset the module graph without reinstating the native UNO services. Commit `9d016043f` restores the existing test bootstrap after that reset. Its isolated test, Prettier, ESLint, and incremental office TypeScript checks all passed.
 
 ## Rollback Plan
 
