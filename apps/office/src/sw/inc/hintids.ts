@@ -179,6 +179,12 @@ export const RES_PARATR_TABSTOP = 71 as const;
 /** Proportional paragraph line spacing, `RES_PARATR_BEGIN`. */
 export const RES_PARATR_LINESPACING = 66 as const;
 
+/** Paragraph hyphenation item, matching pinned RES_PARATR_BEGIN + 6. */
+export const RES_PARATR_HYPHENZONE = 72 as const;
+
+/** Paragraph page line-spacing participation, matching pinned RES_PARATR_BEGIN + 8. */
+export const RES_PARATR_REGISTER = 74 as const;
+
 /** Paragraph numbering-rule name, `RES_PARATR_BEGIN + 9`. */
 export const RES_PARATR_NUMRULE = 75 as const;
 

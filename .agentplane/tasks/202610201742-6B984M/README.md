@@ -4,7 +4,7 @@ title: "Implement Writer search and replace core and browser UI"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 113
+revision: 114
 origin:
   system: "manual"
 depends_on:
@@ -418,6 +418,15 @@ comments:
   -
     author: "CODER"
     body: "Follow-up verification caught TypeScript TS7053 in the paint lookup. The sparse CSS style map now accepts integer mask results and preserves absence for unmapped values. The final TypeScript and production Vite build passed, all five production Chrome scenarios passed again, and the direct emphasis/editor rerun passed 12 tests. The earlier 215-case related run passed before this type-only correction."
+  -
+    author: "CODER"
+    body: |-
+      Verified the separation between the pinned Writer search dialog ranges and the broader cursor search ranges. Attributes uses the document pool slots and the original page-model slot range, while Format applies the same dialog ranges plus the brush and fill ranges. The cursor preserves the native character and model comparison partitions. Tests verify tab-stop and keep-with-next presence together, absence of Page Break and the pair-kerning label from Attributes, discarded pair-kerning output from Format, and the Page Style behavior with text alone and with another attribute. The upstream observations are recorded under WRITER-701 and WRITER-734. Hyphenation and paragraph page line-spacing are inside the native dialog ranges, but the current Writer pool has no registered items for those two attributes.
+
+      The final Writer run passed 148 tests across 15 files with six existing native ICU host-probe skips. TypeScript and the production Vite build passed, and all five production Chrome search scenarios passed. Dependency, source tree, source provenance, Writer identities and resources, Writer registry parity, scoped lint and format, routing and diff checks passed.
+
+      Existing repository-wide JSDoc and file-size checks still report 307 documentation issues and four files at or above the limit. AgentPlane doctor retains its existing hook-shim warning. The search task remains open and this checkpoint does not advance the ten-task full-regression cadence.
+
 events:
   -
     type: "status"
@@ -1000,8 +1009,19 @@ events:
     at: "2026-11-21T21:36:41.935Z"
     author: "CODER"
     body: "Follow-up verification caught TypeScript TS7053 in the paint lookup. The sparse CSS style map now accepts integer mask results and preserves absence for unmapped values. The final TypeScript and production Vite build passed, all five production Chrome scenarios passed again, and the direct emphasis/editor rerun passed 12 tests. The earlier 215-case related run passed before this type-only correction."
+  -
+    type: "comment"
+    at: "2026-11-21T21:51:27.745Z"
+    author: "CODER"
+    body: |-
+      Verified the separation between the pinned Writer search dialog ranges and the broader cursor search ranges. Attributes uses the document pool slots and the original page-model slot range, while Format applies the same dialog ranges plus the brush and fill ranges. The cursor preserves the native character and model comparison partitions. Tests verify tab-stop and keep-with-next presence together, absence of Page Break and the pair-kerning label from Attributes, discarded pair-kerning output from Format, and the Page Style behavior with text alone and with another attribute. The upstream observations are recorded under WRITER-701 and WRITER-734. Hyphenation and paragraph page line-spacing are inside the native dialog ranges, but the current Writer pool has no registered items for those two attributes.
+
+      The final Writer run passed 148 tests across 15 files with six existing native ICU host-probe skips. TypeScript and the production Vite build passed, and all five production Chrome search scenarios passed. Dependency, source tree, source provenance, Writer identities and resources, Writer registry parity, scoped lint and format, routing and diff checks passed.
+
+      Existing repository-wide JSDoc and file-size checks still report 307 documentation issues and four files at or above the limit. AgentPlane doctor retains its existing hook-shim warning. The search task remains open and this checkpoint does not advance the ten-task full-regression cadence.
+
 doc_version: 3
-doc_updated_at: "2026-11-21T21:36:41.935Z"
+doc_updated_at: "2026-11-21T21:51:27.745Z"
 doc_updated_by: "CODER"
 description: "Implement the approved coherent Writer search-and-replace feature from pinned LibreOffice sources: real shared search engine and options, native paragraph/cursor traversal and replacement/history contracts, view-owned search state and dispatch, Find toolbar and Find and Replace dialog with generated upstream command placement and shortcuts. Preserve source semantics and explicit unsupported boundaries; never substitute DOM text search or browser RegExp for ICU contracts. Work only on writer in vite-office-writer; local upstream reading approved, no network or merges. Keep active until approved scope is verified."
 sections:

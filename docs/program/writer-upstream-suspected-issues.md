@@ -5599,13 +5599,17 @@ applies its authored properties without that collection change.
   paragraph-only attribute branch. The view regression covers both
   directions. This is a source-derived observation.
 
-### WRITER-701 — The Attributes dialog labels pair kerning as character blinking
+### WRITER-701 — The attribute resource labels pair kerning as character blinking
 
 - Upstream `include/svx/svxitems.hrc` assigns “Character blinking” to
   `SID_ATTR_CHAR_AUTOKERN`. Writer’s pool maps that slot to `RES_CHRATR_AUTOKERN`.
   The actual blinking item uses `SID_ATTR_FLASH` and appears as “Blinking”.
-- Writer retains the two separate source slots and the original labels. The
-  Attributes dialog regression checks that both entries are available.
+- The Writer Attributes dialog now uses the pinned dialog ranges. Writer
+  lists “Blinking” and excludes the pair-kerning slot. The original strings
+  remain available to other callers.
+- The Font Position page shows the pair-kerning control, but the same Writer
+  ranges exclude its item from the output set. Toggling it alone does not
+  produce a formatting criterion.
 
 ### WRITER-702 — Format can append an exact criterion after a presence criterion for the same slot
 
@@ -5957,3 +5961,19 @@ from the pinned source and verified in the port.
 - [Original anchor movement](../../vendor/libreoffice-reference/sw/source/core/undo/undobj.cxx#L1087)
 - [Original redo selection](../../vendor/libreoffice-reference/sw/source/core/undo/unins.cxx#L729)
 - [Original anchor handling at the insertion boundary](../../vendor/libreoffice-reference/sw/source/core/txtnode/ndtxt.cxx#L1562)
+
+### WRITER-734 — Page Style presence can produce no search matches
+
+The Attributes checklist receives a slot range that includes
+`SID_ATTR_PARA_MODEL`. It can add an invalid-item presence criterion for
+that slot. Writer's search conversion handles a set `SvxPageModelItem`.
+It leaves the invalid presence marker in the search set. The paragraph
+comparison set then drops the raw slot because its range ends with the
+graphic attributes. A Page Style criterion alone produces
+no matches even when combined with text. Alongside a model criterion it
+does not constrain the match. Writer preserves both branches and tests
+them with an explicit page style on the paragraph.
+
+- [Original checklist construction and confirmation](../../vendor/libreoffice-reference/cui/source/dialogs/srchxtra.cxx#L112)
+- [Original conversion to a page descriptor](../../vendor/libreoffice-reference/sw/source/uibase/utlui/uitool.cxx#L701)
+- [Original comparison ranges](../../vendor/libreoffice-reference/sw/source/core/crsr/findattr.cxx#L1080)

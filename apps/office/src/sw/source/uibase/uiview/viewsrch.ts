@@ -1,4 +1,5 @@
 /** @fileoverview Writer view search dispatch over the native model cursor and replacement history. */
+import { SID_ATTR_PARA_KEEP, SID_ATTR_PARA_MODEL } from "../../../../editeng/inc/editids";
 import type { SvxProtectItem } from "../../../../editeng/source/items/frmitems";
 import {
   SvtSearchOptions,
@@ -24,13 +25,39 @@ import { SvxSearchCmd } from "../../../../svl/inc/srchitem";
 import { GetSettings } from "../../../../vcl/source/app/svapp";
 import { FindRanges, SwDocPositions } from "../../../inc/cshtyp";
 import {
+  RES_CHRATR_BACKGROUND,
   RES_CHRATR_BEGIN,
+  RES_CHRATR_BLINK,
+  RES_CHRATR_CASEMAP,
+  RES_CHRATR_CJK_FONT,
+  RES_CHRATR_CJK_WEIGHT,
+  RES_CHRATR_COLOR,
+  RES_CHRATR_CTL_FONT,
+  RES_CHRATR_CTL_WEIGHT,
+  RES_CHRATR_EMPHASIS_MARK,
   RES_CHRATR_END,
+  RES_CHRATR_OVERLINE,
+  RES_CHRATR_POSTURE,
+  RES_CHRATR_RELIEF,
+  RES_CHRATR_ROTATE,
+  RES_CHRATR_SCALEW,
+  RES_CHRATR_SHADOWED,
+  RES_CHRATR_TWO_LINES,
+  RES_CHRATR_WORDLINEMODE,
+  RES_MARGIN_FIRSTLINE,
+  RES_MARGIN_RIGHT,
   RES_PARATR_BEGIN,
   RES_PARATR_END,
+  RES_PARATR_FORBIDDEN_RULES,
+  RES_PARATR_HYPHENZONE,
+  RES_PARATR_LINESPACING,
+  RES_PARATR_REGISTER,
+  RES_PARATR_SCRIPTSPACE,
+  RES_PARATR_VERTALIGN,
   RES_FRMATR_BEGIN,
   RES_FRMATR_END,
   RES_PROTECT,
+  RES_UL_SPACE,
 } from "../../../inc/hintids";
 import { SfxItemSet, type WhichRangesContainer } from "../../../../svl/source/items/itemset";
 import type { SearchAttrItemList } from "../../../../svx/source/dialog/srchdlg";
@@ -58,11 +85,34 @@ import type { SwWrtShell } from "../wrtsh/wrtsh1";
 import type { SwPostItMgr } from "../docvw/PostItMgr";
 import { SwASCWriter } from "../../filter/ascii/wrtasc";
 
-/** Native view search attribute ranges for both modeless formatting editors. */
-export const WRITER_SEARCH_ATTR_WHICH_RANGES: WhichRangesContainer = [
+/** FID_SEARCH_SEARCHSET and FID_SEARCH_REPLACESET ranges with the pinned CJK and CTL options enabled. */
+export const WRITER_SEARCH_DIALOG_WHICH_RANGES: WhichRangesContainer = [
+  [RES_CHRATR_CASEMAP, RES_CHRATR_CASEMAP],
+  [RES_CHRATR_COLOR, RES_CHRATR_POSTURE],
+  [RES_CHRATR_SHADOWED, RES_CHRATR_WORDLINEMODE],
+  [RES_CHRATR_BLINK, RES_CHRATR_BLINK],
+  [RES_CHRATR_BACKGROUND, RES_CHRATR_BACKGROUND],
+  [RES_CHRATR_CJK_FONT, RES_CHRATR_CJK_WEIGHT],
+  [RES_CHRATR_CTL_FONT, RES_CHRATR_CTL_WEIGHT],
+  [RES_CHRATR_ROTATE, RES_CHRATR_ROTATE],
+  [RES_CHRATR_EMPHASIS_MARK, RES_CHRATR_TWO_LINES],
+  [RES_CHRATR_SCALEW, RES_CHRATR_RELIEF],
+  [RES_CHRATR_OVERLINE, RES_CHRATR_OVERLINE],
+  [RES_PARATR_LINESPACING, RES_PARATR_HYPHENZONE],
+  [RES_PARATR_REGISTER, RES_PARATR_REGISTER],
+  [RES_PARATR_SCRIPTSPACE, RES_PARATR_FORBIDDEN_RULES],
+  [RES_PARATR_VERTALIGN, RES_PARATR_VERTALIGN],
+  [RES_MARGIN_FIRSTLINE, RES_MARGIN_RIGHT],
+  [RES_UL_SPACE, RES_UL_SPACE],
+  [SID_ATTR_PARA_MODEL, SID_ATTR_PARA_KEEP],
+];
+
+/** SwView::FUNC_Search ranges for evaluating search and replacement criteria. */
+const WRITER_SEARCH_ATTR_WHICH_RANGES: WhichRangesContainer = [
   [RES_CHRATR_BEGIN, RES_CHRATR_END - 1],
   [RES_PARATR_BEGIN, RES_PARATR_END - 1],
   [RES_FRMATR_BEGIN, RES_FRMATR_END - 1],
+  [SID_ATTR_PARA_MODEL, SID_ATTR_PARA_KEEP],
 ];
 
 /** Native options accepted by the Similarity Search dialog. */

@@ -15,6 +15,8 @@ import { SvxLineSpacingItem } from "../../../editeng/inc/lspcitem";
 import { SvxULSpaceItem } from "../../../editeng/inc/ulspitem";
 import { MetricSpinButton } from "../../../svtools/browser/control/MetricSpinButton";
 import { ConvertValue } from "../../../vcl/source/control/field";
+import { SID_ATTR_BRUSH } from "../../../editeng/inc/editids";
+import { XATTR_FILL_FIRST, XATTR_FILL_LAST } from "../../../svx/inc/xdef";
 import { FieldUnit } from "../../../tools/inc/fldunit";
 import { SvxOverlineItem, SvxUnderlineItem } from "../../../editeng/source/items/textitem";
 import { Color, COL_TRANSPARENT } from "../../../tools/inc/color";
@@ -66,7 +68,7 @@ import {
   RES_PARATR_VERTALIGN,
   RES_UL_SPACE,
 } from "../../inc/hintids";
-import { WRITER_SEARCH_ATTR_WHICH_RANGES } from "../../source/uibase/uiview/viewsrch";
+import { WRITER_SEARCH_DIALOG_WHICH_RANGES } from "../../source/uibase/uiview/viewsrch";
 import { WriterDialogHeader } from "./WriterDialogHeader";
 import { WriterSearchFontPage, type WriterSearchFontPageHandle } from "./WriterSearchFontPage";
 import {
@@ -164,8 +166,11 @@ export function WriterSearchFormatDialog(
     for (const [which, value] of draft) output.set(which, value);
     const twoLines = twoLinesPage.current?.GetItem();
     if (twoLines !== undefined) output.set(twoLines.Which(), twoLines);
-    const set = new SfxItemSet(props.pool, WRITER_SEARCH_ATTR_WHICH_RANGES);
+    const set = new SfxItemSet(props.pool, WRITER_SEARCH_DIALOG_WHICH_RANGES);
     try {
+      const brush = props.pool.GetWhichIDFromSlotID(SID_ATTR_BRUSH);
+      set.MergeRange(brush, brush);
+      set.MergeRange(XATTR_FILL_FIRST, XATTR_FILL_LAST);
       for (const [which, value] of output) {
         if (value !== "")
           set.Put(
@@ -236,8 +241,13 @@ export function WriterSearchFormatDialog(
     return localization.GetText(`writer.search.format.${key}`, fallback);
   }
 
-  /** Presents an indeterminate checkbox for an unset search item. @param which - Native WhichId. @param caption - Control label. @param disabled - Native dependency state. @returns Checkbox field. */
-  function check(which: number, caption: string, disabled = false): React.JSX.Element {
+  /** Presents an indeterminate checkbox for an unset search item. @param which - Native WhichId. @param caption - Control label. @param disabled - Native dependency state. @param allowMixed - Whether the native checkbox supports an unspecified state. @returns Checkbox field. */
+  function check(
+    which: number,
+    caption: string,
+    disabled = false,
+    allowMixed = true,
+  ): React.JSX.Element {
     const value = scalar(which);
     return (
       <label className="flex items-center gap-2 text-sm">
@@ -249,7 +259,7 @@ export function WriterSearchFormatDialog(
             /** Applies the native indeterminate state. @param input - Browser checkbox. @returns Nothing. */ (
               input,
             ) => {
-              if (input) input.indeterminate = value === "";
+              if (input) input.indeterminate = allowMixed && value === "";
             }
           }
           onChange={
@@ -740,7 +750,7 @@ export function WriterSearchFormatDialog(
           <fieldset className="grid gap-2 rounded border border-slate-200 p-2">
             <legend className="text-sm">{label("spacing", "Spacing")}</legend>
             {metric(RES_CHRATR_KERNING, label("spacing-by", "By"), -1000, 1000, 0.1, "pt")}
-            {check(RES_CHRATR_AUTOKERN, label("pair-kerning", "Pair kerning"))}
+            {check(RES_CHRATR_AUTOKERN, label("pair-kerning", "Pair kerning"), false, false)}
           </fieldset>
         </div>
         <div role="tabpanel" hidden={page !== "asianlayout"}>

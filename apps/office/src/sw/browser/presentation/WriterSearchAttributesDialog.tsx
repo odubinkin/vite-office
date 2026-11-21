@@ -7,7 +7,7 @@ import {
   GetSearchAttributeRows,
 } from "../../../cui/source/dialogs/srchxtra";
 import { useBrowserLocalization } from "../../../framework/browser/localization/browser-localization-context";
-import { WRITER_SEARCH_ATTR_WHICH_RANGES } from "../../source/uibase/uiview/viewsrch";
+import { WRITER_SEARCH_DIALOG_WHICH_RANGES } from "../../source/uibase/uiview/viewsrch";
 import { WriterDialogHeader } from "./WriterDialogHeader";
 
 /** Edits the search side's attribute names in a modal checklist. @param props - Pool, attributes and result handler. @returns Attribute checklist. */
@@ -22,7 +22,7 @@ export function WriterSearchAttributesDialog(
   const root = useRef<HTMLFormElement>(null);
   const localization = useBrowserLocalization();
   const collator = new Intl.Collator(localization.locale);
-  const rows = GetSearchAttributeRows(props.pool, WRITER_SEARCH_ATTR_WHICH_RANGES, props.initial)
+  const rows = GetSearchAttributeRows(props.pool, WRITER_SEARCH_DIALOG_WHICH_RANGES, props.initial)
     .map(
       /** Resolves the native label for the application's locale. @param row - Native attribute. @returns Localized row. */
       (row) => ({

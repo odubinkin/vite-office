@@ -18,6 +18,7 @@ import {
   RES_CHRATR_BEGIN,
   RES_CHRATR_END,
   RES_CHRATR_FONT,
+  RES_GRFATR_END,
   RES_TXTATR_END,
 } from "../../../inc/hintids";
 import { isParagraphEditItem } from "../doc/DocumentContentOperationsManager.attr";
@@ -123,6 +124,7 @@ class SwFindParaAttr implements SwFindParas {
   private readonly characters: SearchAttribute[] = [];
   private readonly paragraphs: SearchAttribute[] = [];
   private readonly engine: TextSearch | undefined;
+  private readonly hasAttributes: boolean;
 
   /** Prepares native matching criteria. @param set - Search items. @param includeCollections - Whether named styles participate. @param options - Optional text criteria. @param acceptsNode - View node admission. @param createRegex - Native ICU constructor. @returns Strategy. */
   public constructor(
@@ -132,8 +134,11 @@ class SwFindParaAttr implements SwFindParas {
     private readonly acceptsNode?: SwSearchNodeFilter,
     createRegex?: RegexMatcherFactory,
   ) {
+    this.hasAttributes = set.Count() !== 0;
     for (const iter = new SfxItemIter(set); !iter.IsAtEnd(); iter.Next()) {
       const which = iter.GetCurWhich();
+      // FindAttrsImpl copies only character and model attributes into its comparison sets.
+      if (which >= RES_GRFATR_END) continue;
       const item = iter.GetCurItem();
       const anyValue = IsInvalidItem(item);
       const target = which < RES_TXTATR_END ? this.characters : this.paragraphs;
@@ -152,7 +157,11 @@ class SwFindParaAttr implements SwFindParas {
 
   /** Finds the first directional match inside the supplied region. @param cursor - Result. @param backward - Direction. @param region - Search range. @returns Native result flag. */
   public DoFind(cursor: SwPaM, backward: boolean, region: SwPaM): number {
-    if (this.characters.length === 0 && this.paragraphs.length === 0 && this.options === undefined)
+    if (
+      this.characters.length === 0 &&
+      this.paragraphs.length === 0 &&
+      (this.hasAttributes || this.options === undefined)
+    )
       return FIND_NOT_FOUND;
     const first = region.Start();
     const last = region.End();
