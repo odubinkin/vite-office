@@ -1,10 +1,11 @@
 ---
 id: "202611212120-ADJVW8"
 title: "Connect Calc clipboard Text Import dialog and separator modes"
-status: "DOING"
+result_summary: "Connected source Calc clipboard Text Import and its three separator modes. Passed 189 focused scenarios and the rebuilt Chrome resize and Undo workflow."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 14
+revision: 15
 origin:
   system: "manual"
 depends_on:
@@ -47,11 +48,16 @@ quality_review:
     - "d9fa462a5b60909050e4a5bcad94a1e3f83f5ff0"
   findings:
     - "Both upstream regression adaptations and the mounted resize and stale-selection scenarios pass. Chrome confirmed the same Unicode column boundaries and Undo after resizing to 390px."
-commit: null
+commit:
+  hash: "d9fa462a5b60909050e4a5bcad94a1e3f83f5ff0"
+  message: "🧩 ADJVW8 code: connect Calc import modes and fixed width ruler"
 comments:
   -
     author: "CODER"
     body: "Start: connect the native Calc clipboard Text Import slot and separator options."
+  -
+    author: "CODER"
+    body: "Verified: Calc clipboard Text Import dispatch, automatic and manual separators, fixed-width Unicode ruler, chosen locale, stale selection protection, resize behavior and Undo."
 events:
   -
     type: "status"
@@ -66,8 +72,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Verified: the source Calc Text Import slot, separator modes, locale, fixed-width ruler, viewport-safe paste and Undo through 189 focused scenarios and the rebuilt Chrome workflow."
+  -
+    type: "status"
+    at: "2026-11-21T23:10:39.534Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: Calc clipboard Text Import dispatch, automatic and manual separators, fixed-width Unicode ruler, chosen locale, stale selection protection, resize behavior and Undo."
 doc_version: 3
-doc_updated_at: "2026-11-21T23:08:38.595Z"
+doc_updated_at: "2026-11-21T23:10:39.536Z"
 doc_updated_by: "CODER"
 description: "Expose the LibreOffice Use Text Import Dialog command in the external Paste Special format chooser. Connect the existing Calc CSV import kernel to the native dialog modes, fixed-width splits, and clipboard-specific settings, while preserving ordinary paste and undo semantics."
 sections:
