@@ -35,7 +35,7 @@ import {
 } from "../../inc/hintids";
 import { projectWriterCharacterAttributes } from "../../source/core/txtnode/txatbase";
 import { projectWriterLineSpacing } from "../../source/core/text/itrform2";
-import { browserTextEmphasis, browserTextLineStyle } from "./writer-view-projection";
+import { browserTextDecoration, browserTextEmphasis } from "./writer-view-projection";
 import { browserFontFamily } from "../editor/writer-font-family";
 import { getWriterTextCaretPoint } from "../editor/writer-selection";
 import { EditPaM } from "../../../editeng/inc/EditPaM";
@@ -773,12 +773,25 @@ function applyTextStyle(
   if (attributes.fontSizeTwips !== undefined) style.fontSize = `${attributes.fontSizeTwips / 20}pt`;
   if (attributes.kerningTwips !== undefined)
     style.letterSpacing = `${attributes.kerningTwips / 20}pt`;
-  if (attributes.underline) {
-    style.textDecorationLine = "underline";
-    style.textDecorationStyle = browserTextLineStyle(
-      attributes.underlineStyle ?? FontLineStyle.LINESTYLE_SINGLE,
+  if (attributes.underline)
+    Object.assign(
+      style,
+      browserTextDecoration("underline", {
+        style: attributes.underlineStyle ?? FontLineStyle.LINESTYLE_SINGLE,
+        ...(attributes.underlineColor === undefined ? {} : { color: attributes.underlineColor }),
+      }),
     );
-    if (attributes.underlineColor) style.textDecorationColor = attributes.underlineColor;
+  if (attributes.overlineStyle !== undefined) {
+    const line = element.ownerDocument.createElement("span");
+    Object.assign(
+      line.style,
+      browserTextDecoration("overline", {
+        style: attributes.overlineStyle,
+        ...(attributes.overlineColor === undefined ? {} : { color: attributes.overlineColor }),
+      }),
+    );
+    line.append(...element.childNodes);
+    element.append(line);
   }
   if (attributes.strikeout)
     style.textDecorationLine = attributes.underline ? "underline line-through" : "line-through";

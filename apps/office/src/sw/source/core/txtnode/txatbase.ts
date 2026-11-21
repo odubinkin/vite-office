@@ -4,6 +4,7 @@
 import { releaseStyleHandle } from "../../../../svl/source/items/stylepool";
 import type { SwFormatCharFormat } from "./fmtatr2";
 import {
+  writerColorValue,
   writerTextColorValue,
   writerHighlightColorValue,
   createWriterHighlightItem,
@@ -25,6 +26,7 @@ import {
   SvxFontHeightItem,
   SvxPostureItem,
   SvxUnderlineItem,
+  SvxOverlineItem,
   SvxWeightItem,
   SvxWordLineModeItem,
 } from "../../../../editeng/source/items/textitem";
@@ -49,6 +51,7 @@ import {
   RES_CHRATR_KERNING,
   RES_CHRATR_POSTURE,
   RES_CHRATR_UNDERLINE,
+  RES_CHRATR_OVERLINE,
   RES_CHRATR_WORDLINEMODE,
   RES_CHRATR_WEIGHT,
   RES_TXTATR_AUTOFMT,
@@ -62,7 +65,7 @@ import { SwFormatINetFormat, SwFormatAutoFormat } from "./fmtatr2";
 import type { SwpHints } from "./ndhints";
 import { FontFamily, FontPitch } from "../../../../tools/inc/fontenum";
 import { RTL_TEXTENCODING_DONTKNOW } from "../../../../sal/inc/rtl/textenc";
-import { COL_TRANSPARENT, Color } from "../../../../tools/inc/color";
+import { Color } from "../../../../tools/inc/color";
 export { RES_TXTATR_AUTOFMT } from "../../../inc/hintids";
 export { RES_TXTATR_INETFMT } from "../../../inc/hintids";
 
@@ -88,6 +91,9 @@ export interface WriterCharacterAttributes {
   readonly underlineStyle?: FontLineStyle;
   /** Native underline RGB value or the automatic/transparent sentinel. */
   readonly underlineColor?: string;
+  /** Independent overline style and color. */
+  readonly overlineStyle?: FontLineStyle;
+  readonly overlineColor?: string;
   /** Whether single underline applies only to words. */
   readonly underlineWordMode?: boolean;
   /** Complete native decoration value; omitted only at legacy display boundaries. */
@@ -533,6 +539,9 @@ export function projectWriterCharacterAttributes(
     items.GetItemIfSet(RES_CHRATR_CROSSEDOUT, false) ??
     inherited?.GetItemIfSet(RES_CHRATR_CROSSEDOUT, true);
   const underline = get(RES_CHRATR_UNDERLINE) as SvxUnderlineItem;
+  const overline =
+    items.GetItemIfSet(RES_CHRATR_OVERLINE, false) ??
+    inherited?.GetItemIfSet(RES_CHRATR_OVERLINE, true);
   const underlineStyle = underline.GetLineStyle();
   const underlineColor = underline.GetColor();
   const authoredUnderline = items.GetItemIfSet(RES_CHRATR_UNDERLINE, false);
@@ -557,6 +566,14 @@ export function projectWriterCharacterAttributes(
     bold: (get(RES_CHRATR_WEIGHT) as SvxWeightItem).GetBoolValue(),
     italic: (get(RES_CHRATR_POSTURE) as SvxPostureItem).GetBoolValue(),
     underline: underline.GetBoolValue(),
+    ...(overline instanceof SvxOverlineItem && overline.GetBoolValue()
+      ? {
+          overlineStyle: overline.GetLineStyle(),
+          ...(!overline.GetColor().IsFullyTransparent()
+            ? { overlineColor: writerColorValue(overline.GetColor()) }
+            : {}),
+        }
+      : {}),
     ...(underlineStyle !== FontLineStyle.LINESTYLE_SINGLE &&
     underlineStyle !== FontLineStyle.LINESTYLE_NONE
       ? { underlineStyle }
@@ -565,7 +582,7 @@ export function projectWriterCharacterAttributes(
           inheritedUnderline?.GetBoolValue()
         ? { underlineStyle }
         : {}),
-    ...(!underlineColor.equals(COL_TRANSPARENT)
+    ...(!underlineColor.IsFullyTransparent()
       ? {
           underlineColor: `#${(underlineColor.toUInt32() & 0xffffff).toString(16).padStart(6, "0")}`,
         }

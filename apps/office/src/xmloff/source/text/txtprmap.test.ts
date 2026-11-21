@@ -155,7 +155,7 @@ it("transports all native independent script values without boolean normalizatio
   ).not.toContain("text-underline-color");
   expect(exportTextCharacterProperties({ underlineStyle: 19 })).toBe("");
   expect(importTextCharacterProperties(attributes([["fo:font-size", "12pt"]]))).toEqual({});
-  expect(textCharacterPropertyTokens).toHaveLength(63);
+  expect(textCharacterPropertyTokens).toHaveLength(67);
   expect(textCharacterPropertyTokens).toContain(XMLToken.STYLE_TEXT_EMPHASIZE);
   expect(textCharacterPropertyTokens).toContain(XMLToken.FO_LETTER_SPACING);
   expect(textCharacterPropertyTokens.slice(9, 13)).toEqual([
@@ -271,4 +271,38 @@ it("uses the native CharEmphasis tokens in both directions", /** Checks each UNO
     expect(importTextCharacterProperties(attributes([["style:text-emphasize", lexical]]))).toEqual(
       {},
     );
+});
+
+it("merges the native underline and overline property sequences independently", /** Verifies interleaved SAX tokens and the original overline color filter difference. @returns Nothing. */ () => {
+  const properties = importTextCharacterProperties(
+    attributes([
+      ["style:text-underline-style", "dotted"],
+      ["style:text-overline-style", "solid"],
+      ["style:text-overline-type", "double"],
+      ["style:text-underline-color", "font-color"],
+      ["style:text-overline-color", "#cc0033"],
+    ]),
+  );
+  expect(properties).toEqual({
+    underlineStyle: 3,
+    underlineHasColor: false,
+    overlineStyle: 2,
+    overlineHasColor: true,
+    overlineColor: 0xcc0033,
+  });
+  const xml = exportTextCharacterProperties(properties);
+  expect(xml).toContain('style:text-underline-style="dotted"');
+  expect(xml).toContain('style:text-underline-color="font-color"');
+  expect(xml).toContain('style:text-overline-type="double"');
+  expect(xml).toContain('style:text-overline-color="#cc0033"');
+  expect(
+    exportTextCharacterProperties({
+      underlineStyle: 0,
+      underlineHasColor: true,
+      underlineColor: 0xcc0033,
+      overlineStyle: 0,
+      overlineHasColor: true,
+      overlineColor: 0xcc0033,
+    }),
+  ).toContain('style:text-overline-style="none" style:text-overline-color="#cc0033"');
 });

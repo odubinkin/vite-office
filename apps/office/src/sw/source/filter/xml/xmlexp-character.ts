@@ -17,7 +17,11 @@ import { SvxEmphasisMarkItem } from "../../../../editeng/inc/emphasismarkitem";
 import { MID_EMPHASIS } from "../../../../editeng/inc/memberids";
 import { Any } from "../../../../cppu/inc/com/sun/star/uno/Any";
 import { SvxCrossedOutItem } from "../../../../editeng/inc/crossedoutitem";
-import { RES_CHRATR_CROSSEDOUT, RES_CHRATR_EMPHASIS_MARK } from "../../../inc/hintids";
+import {
+  RES_CHRATR_CROSSEDOUT,
+  RES_CHRATR_EMPHASIS_MARK,
+  RES_CHRATR_OVERLINE,
+} from "../../../inc/hintids";
 import {
   RES_CHRATR_WORDLINEMODE,
   RES_CHRATR_AUTOKERN,
@@ -39,6 +43,7 @@ import {
   SvxWeightItem,
   SvxPostureItem,
   SvxUnderlineItem,
+  SvxOverlineItem,
 } from "../../../../editeng/source/items/textitem";
 import { ConvertFontWeight, ConvertFontSlant } from "../../../../vcl/inc/unohelp";
 import { getFontFamilyGeneric } from "../../../../xmloff/source/style/fonthdl";
@@ -88,6 +93,7 @@ export function getCharacterProperties(
   const wordMode = set.GetItemIfSet(RES_CHRATR_WORDLINEMODE, inherited),
     autoKerning = set.GetItemIfSet(RES_CHRATR_AUTOKERN, inherited);
   const kerning = set.GetItemIfSet(RES_CHRATR_KERNING, inherited);
+  const overline = set.GetItemIfSet(RES_CHRATR_OVERLINE, inherited);
   const directUnderline = set.GetItemIfSet(RES_CHRATR_UNDERLINE, false) !== undefined;
   const color = set.GetItemIfSet(RES_CHRATR_COLOR, inherited);
   const highlight = set.GetItemIfSet(RES_CHRATR_HIGHLIGHT, inherited);
@@ -113,6 +119,7 @@ export function getCharacterProperties(
     !directWeight &&
     !directPosture &&
     !directUnderline &&
+    overline === undefined &&
     box === undefined &&
     crossedOut === undefined &&
     emphasisItem === undefined &&
@@ -261,6 +268,13 @@ export function getCharacterProperties(
     ...(autoKerning instanceof SvxAutoKernItem ? { autoKerning: autoKerning.GetValue() } : {}),
     ...(kerning instanceof SvxKerningItem
       ? { kerning: Number(BigInt.asIntN(16, convertTwipToMm100(BigInt(kerning.GetValue())))) }
+      : {}),
+    ...(overline instanceof SvxOverlineItem
+      ? {
+          overlineStyle: overline.GetLineStyle(),
+          overlineColor: overline.GetColor().toUInt32() & 0xffffff,
+          overlineHasColor: overline.GetColor().GetAlpha() === 255,
+        }
       : {}),
     ...(inherited || directUnderline
       ? {

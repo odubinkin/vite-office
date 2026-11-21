@@ -21,9 +21,13 @@ import {
 } from "../../inc/hintids";
 import { SwPosition } from "../../source/core/crsr/pam";
 import { DateTime } from "../../../tools/source/datetime/datetime";
-import { FontEmphasisMark } from "../../../tools/inc/fontenum";
+import { FontLineStyle, FontEmphasisMark } from "../../../tools/inc/fontenum";
 import { createOdtWriterTransfer, restoreOdtWriterTransfer } from "../filter/xml/odt-transfer";
-import { EE_CHAR_EMPHASISMARK, EE_CHAR_FONTHEIGHT } from "../../../editeng/inc/eeitem";
+import {
+  EE_CHAR_EMPHASISMARK,
+  EE_CHAR_FONTHEIGHT,
+  EE_CHAR_OVERLINE,
+} from "../../../editeng/inc/eeitem";
 import { SvxFontHeightItem } from "../../../editeng/inc/fhgtitem";
 import { SfxStringItem } from "../../../svl/source/items/stritem";
 import { FN_PARAM_1 } from "../../inc/cmdid";
@@ -165,6 +169,11 @@ it("opens Character from the Format menu and applies only the selected annotatio
     expect(position).toBeDisabled();
     fireEvent.change(style, { target: { value: FontEmphasisMark.Dot } });
     fireEvent.change(position, { target: { value: FontEmphasisMark.PosBelow } });
+    fireEvent.change(controls.getByLabelText("Overlining"), {
+      target: { value: FontLineStyle.LINESTYLE_DOUBLE },
+    });
+    fireEvent.click(controls.getByLabelText("Overline color palette"));
+    fireEvent.click(controls.getByRole("button", { name: "Overline color #ff0000" }));
     await act(
       /** Completes the real annotation Character request. @returns Completion. */ async () => {
         fireEvent.click(within(character).getByRole("button", { name: "OK" }));
@@ -173,6 +182,11 @@ it("opens Character from the Format menu and applies only the selected annotatio
     expect(ada).toHaveFocus();
     const selected = within(ada).getByText("da");
     expect(selected).toHaveStyle({
+      textDecorationLine: "overline",
+      textDecorationStyle: "double",
+      textDecorationColor: "#ff0000",
+    });
+    expect(selected.parentElement).toHaveStyle({
       fontSize: "20pt",
       textEmphasisStyle: "filled dot",
       textEmphasisPosition: "under right",
@@ -193,17 +207,28 @@ it("opens Character from the Format menu and applies only the selected annotatio
       );
       try {
         const notes = createOdtWriterTransfer(reopened).graph.annotations;
-        expect(
-          notes?.find(
-            /** Locates the selected annotation. @param note - Reopened note. @returns Author match. */
-            (note) => note.author === "Ada",
-          )?.editText?.paragraphs[0]?.characterItems,
-        ).toContainEqual({
+        const items = notes?.find(
+          /** Locates the selected annotation. @param note - Reopened note. @returns Author match. */
+          (note) => note.author === "Ada",
+        )?.editText?.paragraphs[0]?.characterItems;
+        expect(items).toContainEqual({
           start: 1,
           end: 3,
           item: {
             which: EE_CHAR_EMPHASISMARK,
             value: FontEmphasisMark.Dot | FontEmphasisMark.PosBelow,
+          },
+        });
+        expect(items).toContainEqual({
+          start: 1,
+          end: 3,
+          item: {
+            which: EE_CHAR_OVERLINE,
+            value: {
+              style: FontLineStyle.LINESTYLE_DOUBLE,
+              kind: "svx-text-line",
+              color: 0xff0000,
+            },
           },
         });
       } finally {

@@ -31,7 +31,11 @@ import { CollectGraphicFlyFrames, CollectTextFlyFrames } from "../../core/layout
 import type { XMLTextExportBlock } from "../../../../xmloff/source/table/XMLTableExport";
 import { getFillProperties, XML_FILL_WHICH_IDS } from "./xmlexp-fill";
 import { RES_CHRATR_BOX, RES_CHRATR_ESCAPEMENT, RES_CHRATR_KERNING } from "../../../inc/hintids";
-import { RES_CHRATR_CROSSEDOUT, RES_CHRATR_EMPHASIS_MARK } from "../../../inc/hintids";
+import {
+  RES_CHRATR_CROSSEDOUT,
+  RES_CHRATR_EMPHASIS_MARK,
+  RES_CHRATR_OVERLINE,
+} from "../../../inc/hintids";
 import { RES_CHRATR_WORDLINEMODE, RES_CHRATR_AUTOKERN } from "../../../inc/hintids";
 import {
   RES_CHRATR_LANGUAGE,
@@ -800,6 +804,7 @@ function assertSupportedItems(
     RES_CHRATR_ESCAPEMENT,
     RES_CHRATR_CROSSEDOUT,
     RES_CHRATR_EMPHASIS_MARK,
+    RES_CHRATR_OVERLINE,
     RES_CHRATR_WEIGHT,
     RES_CHRATR_WORDLINEMODE,
     RES_CHRATR_AUTOKERN,

@@ -5988,3 +5988,15 @@ handlers strip the conversion flag without converting units. Writer
 preserves the source narrowing and tests the results through UNO Any.
 
 - [Original member conversion and assignment](../../vendor/libreoffice-reference/editeng/source/items/paraitem.cxx#L639)
+
+### WRITER-736 — ODF suppresses colors for absent underlines only
+
+The text-property map assigns the underline color entries context IDs used
+by the export filter to clear colors when the underline is absent or has
+style NONE. The analogous overline entries carry context ID zero. An
+explicit overline color can therefore be exported alongside
+`style:text-overline-style="none"`. Writer preserves this asymmetry.
+
+- [Original text-property mappings](../../vendor/libreoffice-reference/xmloff/source/text/txtprmap.cxx#L178)
+- [Original overline mappings](../../vendor/libreoffice-reference/xmloff/source/text/txtprmap.cxx#L260)
+- [Original underline color filter](../../vendor/libreoffice-reference/xmloff/source/text/txtexppr.cxx#L893)

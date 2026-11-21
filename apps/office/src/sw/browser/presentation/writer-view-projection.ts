@@ -197,6 +197,22 @@ export function browserTextEmphasis(mark: FontEmphasisMark | undefined) {
   };
 }
 
+/** Returns the CSS for one independently decorated line. @param line - Decoration position. @param value - Native line projection. @returns Browser paint values. */
+export function browserTextDecoration(
+  line: "underline" | "overline",
+  value: WriterTextLineProjection,
+) {
+  return {
+    textDecorationLine: line,
+    textDecorationStyle: browserTextLineStyle(value.style),
+    textDecorationColor: value.color ?? "currentColor",
+    ...(value.style >= FontLineStyle.LINESTYLE_BOLD &&
+    value.style <= FontLineStyle.LINESTYLE_BOLDWAVE
+      ? { textDecorationThickness: "0.13em" }
+      : {}),
+  };
+}
+
 /** Native per-line color and style at the browser paint boundary. */
 export interface WriterTextLineProjection {
   readonly style: FontLineStyle;
@@ -787,8 +803,11 @@ export class WriterViewStore {
 
 /** Projects a decorated line, preserving automatic color inheritance. @param item - Native line item. @returns Browser paint values. */
 function projectTextLine(item: SvxTextLineItem): WriterTextLineProjection {
-  const color = writerColorValue(item.GetColor());
-  return Object.freeze({ style: item.GetLineStyle(), ...(color === "auto" ? {} : { color }) });
+  const color = item.GetColor();
+  return Object.freeze({
+    style: item.GetLineStyle(),
+    ...(color.IsFullyTransparent() ? {} : { color: writerColorValue(color) }),
+  });
 }
 
 /** Projects character borders in the original physical edge order. @param item - Actual character box. @returns Browser border and padding values for each side. */

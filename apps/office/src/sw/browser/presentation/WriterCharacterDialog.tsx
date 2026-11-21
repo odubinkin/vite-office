@@ -17,9 +17,13 @@ import { SvxEscapementItem } from "../../../editeng/inc/escapementitem";
 import { SvxEscapement } from "../../../editeng/inc/svxenum";
 import {
   SvxPostureItem,
+  SvxOverlineItem,
+  SvxTextLineItem,
   SvxUnderlineItem,
   SvxWeightItem,
 } from "../../../editeng/source/items/textitem";
+import { ComplexColor } from "../../../docmodel/inc/color/ComplexColor";
+import { underlines } from "./writer-search-format-values";
 import { WriterSearchEmphasisControls } from "./WriterSearchEmphasisControls";
 import { SvxEmphasisMarkItem } from "../../../editeng/inc/emphasismarkitem";
 import { SvxCrossedOutItem } from "../../../editeng/source/items/textitem.effects";
@@ -41,6 +45,7 @@ const characterItems = {
     weight: EE.EE_CHAR_WEIGHT,
     posture: EE.EE_CHAR_ITALIC,
     underline: EE.EE_CHAR_UNDERLINE,
+    overline: EE.EE_CHAR_OVERLINE,
     strike: EE.EE_CHAR_STRIKEOUT,
     emphasis: EE.EE_CHAR_EMPHASISMARK,
     position: EE.EE_CHAR_ESCAPEMENT,
@@ -54,6 +59,7 @@ const characterItems = {
     weight: SW.RES_CHRATR_WEIGHT,
     posture: SW.RES_CHRATR_POSTURE,
     underline: SW.RES_CHRATR_UNDERLINE,
+    overline: SW.RES_CHRATR_OVERLINE,
     strike: SW.RES_CHRATR_CROSSEDOUT,
     emphasis: SW.RES_CHRATR_EMPHASIS_MARK,
     position: SW.RES_CHRATR_ESCAPEMENT,
@@ -62,6 +68,15 @@ const characterItems = {
     background: SW.RES_CHRATR_BACKGROUND,
   },
 } as const;
+
+const characterLines = ["overline", "underline"] as const;
+/** Decoration item identities on the Font Effects tab. */
+type CharacterLine = (typeof characterLines)[number];
+/** Pending changes from one line selector and its color palette. */
+interface CharacterLineChange {
+  readonly style?: FontLineStyle;
+  readonly color?: string;
+}
 
 /** Presents the represented characterproperties.ui controls over native input and output sets. @param props - Initial attributes and request completion. @returns Character dialog. */
 export function WriterCharacterDialog({
@@ -112,7 +127,7 @@ export function WriterCharacterDialog({
   const height = read(which.size);
   const weight = read(which.weight);
   const posture = read(which.posture);
-  const underline = read(which.underline);
+  const lines = { overline: read(which.overline), underline: read(which.underline) };
   const strike = read(which.strike);
   const escapement = read(which.position);
   const kerning = read(which.spacing);
@@ -125,7 +140,6 @@ export function WriterCharacterDialog({
       ? String(Number(weight.GetBoolValue()) * 2 + Number(posture.GetBoolValue()))
       : "";
   const spacing = kerning instanceof SvxKerningItem ? String(kerning.GetValue() / 20) : "";
-  const underlining = underline instanceof SvxUnderlineItem ? String(underline.GetValue()) : "";
   const strikethrough = strike instanceof SvxCrossedOutItem ? String(strike.GetValue()) : "";
   const position =
     escapement instanceof SvxEscapementItem ? String(escapement.GetEscapement()) : "";
@@ -141,6 +155,9 @@ export function WriterCharacterDialog({
   const initialEmphasis =
     emphasisItem instanceof SvxEmphasisMarkItem ? String(emphasisItem.GetEmphasisMark()) : "";
   const [emphasis, setEmphasis] = useState(initialEmphasis);
+  const [lineChanges, setLineChanges] = useState<
+    Partial<Record<CharacterLine, CharacterLineChange>>
+  >({});
   const [color, setColor] = useState(initialColor);
   const [background, setBackground] = useState(initialBackground);
   const title = localization.GetText("writer.character.title", "Character");
@@ -183,12 +200,75 @@ export function WriterCharacterDialog({
     if (tab === 1) {
       setColor(initialColor);
       setEmphasis(initialEmphasis);
+      setLineChanges({});
     }
     if (tab === 3) setBackground(initialBackground);
     if (tab === 4) {
       border?.Reset();
       setBorderEdited(false);
     }
+  }
+
+  /** Retains the pending fields for one native line item. @param name - Decoration. @param change - Edited values. @returns Nothing. */
+  function changeLine(name: CharacterLine, change: CharacterLineChange): void {
+    setLineChanges(
+      /** Updates one decoration while retaining its other field. @param previous - Pending decorations. @returns Updated decorations. */
+      (previous) => ({ ...previous, [name]: { ...previous[name], ...change } }),
+    );
+  }
+
+  /** Presents a native line selector and its color palette. @param name - Decoration. @param caption - Style caption. @param colorCaption - Palette caption. @returns Controls. */
+  function lineControls(
+    name: CharacterLine,
+    caption: string,
+    colorCaption: string,
+  ): React.JSX.Element {
+    const item = lines[name];
+    const original = item instanceof SvxTextLineItem ? item : undefined;
+    const pending = lineChanges[name];
+    const style = pending?.style ?? original?.GetLineStyle();
+    const originalColor = original?.GetColor();
+    const color =
+      pending?.color ??
+      (originalColor === undefined || originalColor.IsFullyTransparent()
+        ? "auto"
+        : writerColorValue(originalColor));
+    return (
+      <>
+        <label className={fieldClass}>
+          {caption}
+          <select
+            value={style ?? ""}
+            className="rounded border border-slate-300 px-2 py-1"
+            onChange={
+              /** Saves the selected native line style. @param event - Style selection. @returns Nothing. */
+              (event) => changeLine(name, { style: Number(event.currentTarget.value) })
+            }
+          >
+            <option value="" disabled />
+            {underlines.map(
+              /** Presents a native decoration choice. @param entry - Style and caption. @returns Option. */
+              ([value, label]) => (
+                <option key={value} value={value}>
+                  {localization.GetText(`writer.search.format.${name}.${value}`, label)}
+                </option>
+              ),
+            )}
+          </select>
+        </label>
+        <ColorControl
+          label={colorCaption}
+          property="color"
+          value={color}
+          fallback="#000000"
+          disabled={style === undefined || style === FontLineStyle.LINESTYLE_NONE}
+          onColor={
+            /** Saves the selected line color. @param _property - Palette family. @param value - Native color choice. @returns Nothing. */
+            (_property, value) => changeLine(name, { color: value })
+          }
+        />
+      </>
+    );
   }
 
   /** Builds tab-page output items for changed controls. @param event - Character form submission. @returns Nothing. */
@@ -225,9 +305,35 @@ export function WriterCharacterDialog({
         true,
       );
     }
-    const nextUnderline = String(values.get("underline") ?? "");
-    if (nextUnderline && nextUnderline !== underlining)
-      output.Put(new SvxUnderlineItem(Number(nextUnderline), which.underline), true);
+    for (const name of characterLines) {
+      const change = lineChanges[name];
+      if (change === undefined) continue;
+      const original = lines[name];
+      const originalStyle =
+        original instanceof SvxTextLineItem ? original.GetLineStyle() : undefined;
+      const style = change.style ?? originalStyle;
+      if (style === undefined) continue;
+      const color =
+        change.color === undefined
+          ? undefined
+          : writerColorFromPrimitive(
+              change.color === "auto" ? "transparent" : change.color,
+              "transparent",
+            );
+      const item =
+        original instanceof SvxTextLineItem
+          ? original.Clone()
+          : name === "overline"
+            ? new SvxOverlineItem(style, which[name])
+            : new SvxUnderlineItem(style, which[name]);
+      item.SetLineStyle(style);
+      if (style !== FontLineStyle.LINESTYLE_NONE && color !== undefined) {
+        item.SetColor(color);
+        item.setComplexColor(new ComplexColor());
+      }
+      if (original instanceof SvxTextLineItem && item.equals(original)) item.Dispose();
+      else output.Put(item, true);
+    }
     const nextStrike = String(values.get("strike") ?? "");
     if (nextStrike && nextStrike !== strikethrough)
       output.Put(new SvxCrossedOutItem(Number(nextStrike), which.strike), true);
@@ -381,20 +487,11 @@ export function WriterCharacterDialog({
                   ) => setColor(value)
                 }
               />
-              <label className={fieldClass}>
-                {localization.GetText("writer.character.underlining", "Underlining")}
-                <select
-                  name="underline"
-                  defaultValue={underlining}
-                  className="rounded border border-slate-300 px-2 py-1"
-                >
-                  <option value="" />
-                  <option value={FontLineStyle.LINESTYLE_NONE}>None</option>
-                  <option value={FontLineStyle.LINESTYLE_SINGLE}>Single</option>
-                  <option value={FontLineStyle.LINESTYLE_DOUBLE}>Double</option>
-                  <option value={FontLineStyle.LINESTYLE_DOTTED}>Dotted</option>
-                </select>
-              </label>
+              {lineControls(
+                "overline",
+                localization.GetText("writer.search.format.overlining", "Overlining"),
+                localization.GetText("writer.search.format.overline-color", "Overline color"),
+              )}
               <label className={fieldClass}>
                 {localization.GetText("writer.character.strikethrough", "Strikethrough")}
                 <select
@@ -408,6 +505,11 @@ export function WriterCharacterDialog({
                   <option value={FontStrikeout.STRIKEOUT_DOUBLE}>Double</option>
                 </select>
               </label>
+              {lineControls(
+                "underline",
+                localization.GetText("writer.character.underlining", "Underlining"),
+                localization.GetText("writer.search.format.underline-color", "Underline color"),
+              )}
               <WriterSearchEmphasisControls
                 value={emphasis}
                 label={

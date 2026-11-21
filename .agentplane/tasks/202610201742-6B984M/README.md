@@ -4,7 +4,7 @@ title: "Implement Writer search and replace core and browser UI"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 118
+revision: 119
 origin:
   system: "manual"
 depends_on:
@@ -460,6 +460,18 @@ comments:
       Seven targeted Writer suites passed 60 tests, including selected-note formatting and grouped undo, surrounding text and neighboring note isolation, Worker and ODT round-trip, ordinary Writer search emphasis, and the shared character projection with a sparse pool. The projection reads optional authored emphasis without requiring an emphasis default in older or restricted pools.
 
       Production TypeScript and Vite build passed. All six production Chromium search scenarios passed, including emphasis applied through Format All Comments and removed in one Undo. Scoped ESLint and Prettier, source tree and provenance, module boundaries, Writer UI resources and registry parity, workflow routing and diff checks passed. The global JSDoc and file-size gates still report the existing 307 findings and four files at or above the size limit. AgentPlane doctor passed with the existing hook-shim warning. This is an implementation checkpoint on the existing search task. The ten-task full-run cadence is unchanged.
+  -
+    author: "CODER"
+    body: |-
+      Verified Writer Font Effects line formatting across the regular Character dialog, annotation Character dialog, search replacement, and ODT. The two decorations keep independent styles and colors. Both dialogs use the original native item identities, preserve the other fields when one field changes, and disable the color palette for an absent line. Automatic line color uses the text foreground. Annotation, body, and Worker paths retain the native line items.
+
+      ODF uses the original shared underline/overline lexical handlers with separate merge state in SAX order. Writer and EditEngine import apply the original CharOverline, CharOverlineColor and CharOverlineHasColor property members. WRITER-736 records the pinned export filter's asymmetric handling of the color of a disabled underline and overline. Verification covers selected comment formatting and isolation, Undo, ODT and Worker retention, and a named character style with direct NONE across export.
+
+      The first local verification caught a missing color-helper import, a text-line handler name colliding with the UNO paragraph LineSpacing type helper, and a test file crossing the file-size limit. Corrected the imports and handler name, and moved the dedicated ODT assertion into the ODT suite. The Writer task remains active and this checkpoint does not advance the ten-task full-run cadence.
+
+      Targeted verification passed 93 Writer scenarios across the selected suites and 7 shared ODF property tests. Production TypeScript and Vite build passed. Six existing production Chromium scenarios passed and the newly added independent line colors scenario passed in the focused rerun after correcting its palette swatches. It checks the regular Character dialog, disabled color selector, ODT download/reopen, and automatic color following the foreground.
+
+      Scoped ESLint and Prettier, dependency boundaries, source tree and provenance, Writer resources, Writer/shared registry parity (zero semantic violations), routing and diff checks passed. Global documentation and file-size checks report the same pre-existing 307 findings and four files at the size limit. AgentPlane doctor passed with the existing hook-shim warning.
 
 events:
   -
@@ -1095,9 +1107,23 @@ events:
       Seven targeted Writer suites passed 60 tests, including selected-note formatting and grouped undo, surrounding text and neighboring note isolation, Worker and ODT round-trip, ordinary Writer search emphasis, and the shared character projection with a sparse pool. The projection reads optional authored emphasis without requiring an emphasis default in older or restricted pools.
 
       Production TypeScript and Vite build passed. All six production Chromium search scenarios passed, including emphasis applied through Format All Comments and removed in one Undo. Scoped ESLint and Prettier, source tree and provenance, module boundaries, Writer UI resources and registry parity, workflow routing and diff checks passed. The global JSDoc and file-size gates still report the existing 307 findings and four files at or above the size limit. AgentPlane doctor passed with the existing hook-shim warning. This is an implementation checkpoint on the existing search task. The ten-task full-run cadence is unchanged.
+  -
+    type: "comment"
+    at: "2026-11-21T22:52:50.102Z"
+    author: "CODER"
+    body: |-
+      Verified Writer Font Effects line formatting across the regular Character dialog, annotation Character dialog, search replacement, and ODT. The two decorations keep independent styles and colors. Both dialogs use the original native item identities, preserve the other fields when one field changes, and disable the color palette for an absent line. Automatic line color uses the text foreground. Annotation, body, and Worker paths retain the native line items.
+
+      ODF uses the original shared underline/overline lexical handlers with separate merge state in SAX order. Writer and EditEngine import apply the original CharOverline, CharOverlineColor and CharOverlineHasColor property members. WRITER-736 records the pinned export filter's asymmetric handling of the color of a disabled underline and overline. Verification covers selected comment formatting and isolation, Undo, ODT and Worker retention, and a named character style with direct NONE across export.
+
+      The first local verification caught a missing color-helper import, a text-line handler name colliding with the UNO paragraph LineSpacing type helper, and a test file crossing the file-size limit. Corrected the imports and handler name, and moved the dedicated ODT assertion into the ODT suite. The Writer task remains active and this checkpoint does not advance the ten-task full-run cadence.
+
+      Targeted verification passed 93 Writer scenarios across the selected suites and 7 shared ODF property tests. Production TypeScript and Vite build passed. Six existing production Chromium scenarios passed and the newly added independent line colors scenario passed in the focused rerun after correcting its palette swatches. It checks the regular Character dialog, disabled color selector, ODT download/reopen, and automatic color following the foreground.
+
+      Scoped ESLint and Prettier, dependency boundaries, source tree and provenance, Writer resources, Writer/shared registry parity (zero semantic violations), routing and diff checks passed. Global documentation and file-size checks report the same pre-existing 307 findings and four files at the size limit. AgentPlane doctor passed with the existing hook-shim warning.
 
 doc_version: 3
-doc_updated_at: "2026-11-21T22:42:57.941Z"
+doc_updated_at: "2026-11-21T22:52:50.102Z"
 doc_updated_by: "CODER"
 description: "Implement the approved coherent Writer search-and-replace feature from pinned LibreOffice sources: real shared search engine and options, native paragraph/cursor traversal and replacement/history contracts, view-owned search state and dispatch, Find toolbar and Find and Replace dialog with generated upstream command placement and shortcuts. Preserve source semantics and explicit unsupported boundaries; never substitute DOM text search or browser RegExp for ICU contracts. Work only on writer in vite-office-writer; local upstream reading approved, no network or merges. Keep active until approved scope is verified."
 sections:

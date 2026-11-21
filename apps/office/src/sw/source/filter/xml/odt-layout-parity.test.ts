@@ -9,16 +9,26 @@ import { describe, expect, it, vi } from "vitest";
 
 import { SvxLineSpacingItem } from "../../../../editeng/inc/lspcitem";
 import { SvxULSpaceItem } from "../../../../editeng/source/items/frmitems";
-import { SvxFontHeightItem } from "../../../../editeng/source/items/textitem";
+import {
+  FontLineStyle,
+  SvxFontHeightItem,
+  SvxOverlineItem,
+} from "../../../../editeng/source/items/textitem";
 import { createDocument } from "../../../../sfx2/source/doc/objsh";
 import { ODF_NAMESPACES } from "../../../../xmloff/source/core/xmltoken";
-import { RES_CHRATR_FONTSIZE, RES_PARATR_LINESPACING, RES_UL_SPACE } from "../../../inc/hintids";
+import {
+  RES_CHRATR_FONTSIZE,
+  RES_CHRATR_OVERLINE,
+  RES_PARATR_LINESPACING,
+  RES_UL_SPACE,
+} from "../../../inc/hintids";
 import { exportContentXml, exportStylesXml } from "./xmlexp";
 import { importWriterXml } from "./xmlimp";
 import { readOdtDocument } from "./swxml";
 import { writeOdtDocument } from "./wrtxml";
 import { projectSwTextPrintBounds } from "../../core/layout/newfrm";
 import { WriterViewProjection } from "../../../browser/presentation/writer-view-projection";
+import { SwAttrIter } from "../../core/text/itratr";
 import { SwPaM, SwPosition } from "../../core/crsr/pam";
 import {
   decodeWriterDocument,
@@ -417,4 +427,36 @@ describe("Writer ODT layout parity", /** Groups ODT layout regressions. @returns
       doc.Dispose();
     }
   });
+});
+
+it("preserves a named ODT character style and a direct overline override across export", /** Checks independent styles, colors and an explicit NONE run. @returns Nothing. */ () => {
+  const named =
+    '<style:style style:name="NamedLine" style:family="text"><style:text-properties style:text-overline-style="solid" style:text-overline-type="double" style:text-overline-color="#cc0033"/></style:style>';
+  const automatic =
+    '<style:style style:name="NoLine" style:family="text"><style:text-properties style:text-overline-style="none"/></style:style>';
+  const body =
+    '<text:p><text:span text:style-name="NamedLine">A<text:span text:style-name="NoLine">B</text:span>C</text:span></text:p>';
+  const { document: source } = importWriterXml(styles(named), content(automatic, body), metadata);
+  try {
+    const exported = exportContentXml(source);
+    const { document: reopened } = importWriterXml(exportStylesXml(source), exported, metadata);
+    try {
+      const iterator = new SwAttrIter(reopened.paragraphs[0]!);
+      for (const offset of [0, 1, 2]) {
+        iterator.Seek(offset);
+        const item = iterator.GetAttrHandler().ReadItem(RES_CHRATR_OVERLINE);
+        expect(item).toBeInstanceOf(SvxOverlineItem);
+        const line = item as SvxOverlineItem;
+        if (offset === 1) expect(line.GetLineStyle()).toBe(FontLineStyle.LINESTYLE_NONE);
+        else {
+          expect(line.GetLineStyle()).toBe(FontLineStyle.LINESTYLE_DOUBLE);
+          expect(line.GetColor().toUInt32()).toBe(0xcc0033);
+        }
+      }
+    } finally {
+      reopened.Dispose();
+    }
+  } finally {
+    source.Dispose();
+  }
 });

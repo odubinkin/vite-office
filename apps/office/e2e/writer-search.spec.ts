@@ -368,3 +368,64 @@ test("Writer applies Text Flow hyphenation and finds the formatted paragraph", /
   await dialog.getByRole("button", { name: "Find All", exact: true }).click();
   await expect(dialog.getByRole("status")).toHaveText("One match found.");
 });
+
+test("Writer preserves independent underline and overline colors when reopening an ODT", /** Drives the native Character Font Effects page and ODT round-trip. @param fixtures - Playwright fixtures. @param fixtures.page - Chromium page. @returns Test completion. */ async ({
+  page,
+}) => {
+  await page.goto("/writer");
+  const editor = page.getByRole("textbox", { name: "Writer document text", exact: true });
+  await editor.fill("two lines");
+  await editor.press("Control+a");
+  await page.getByRole("menuitem", { name: "Format", exact: true }).click();
+  await page.getByRole("menuitem", { name: "Character…", exact: true }).click();
+  const character = page.getByRole("dialog", { name: "Character", exact: true });
+  await character.getByRole("tab", { name: "Font Effects", exact: true }).click();
+
+  const overlinePalette = character.getByLabel("Overline color palette", { exact: true });
+  await expect(overlinePalette).toHaveAttribute("aria-disabled", "true");
+  await character.getByRole("combobox", { name: "Overlining", exact: true }).selectOption("2");
+  await overlinePalette.click();
+  await character.getByRole("button", { name: "Overline color #ff0000", exact: true }).click();
+  await character.getByRole("combobox", { name: "Underlining", exact: true }).selectOption("1");
+  await character.getByLabel("Underline color palette", { exact: true }).click();
+  await character.getByRole("button", { name: "Underline color #2a6099", exact: true }).click();
+  await character.getByRole("button", { name: "OK", exact: true }).click();
+
+  const overline = editor.locator('[style*="text-decoration-line: overline"]');
+  const underline = editor.locator('[style*="text-decoration-line: underline"]');
+  await expect(overline).toHaveCSS("text-decoration-style", "double");
+  await expect(overline).toHaveCSS("text-decoration-color", "rgb(255, 0, 0)");
+  await expect(underline).toHaveCSS("text-decoration-color", "rgb(42, 96, 153)");
+
+  const pending = page.waitForEvent("download");
+  await page.getByRole("menuitem", { name: "File", exact: true }).click();
+  await page.getByRole("menuitem", { name: "Export…" }).click();
+  await page.getByRole("button", { name: "Download ODT" }).click();
+  const path = await (await pending).path();
+  if (path === null) throw new Error("Missing exported ODT.");
+
+  await page.getByRole("button", { name: "Open", exact: true }).click();
+  await page.getByRole("tab", { name: "On computer" }).click();
+  await page.getByLabel("Browse").setInputFiles({
+    buffer: await readFile(path),
+    mimeType: "application/vnd.oasis.opendocument.text",
+    name: "line-effects.odt",
+  });
+  await expect(page.getByRole("dialog", { name: "Open", exact: true })).toHaveCount(0);
+  await expect(editor).toHaveText("two lines");
+  await expect(overline).toHaveCSS("text-decoration-style", "double");
+  await expect(overline).toHaveCSS("text-decoration-color", "rgb(255, 0, 0)");
+  await expect(underline).toHaveCSS("text-decoration-color", "rgb(42, 96, 153)");
+
+  await editor.press("Control+a");
+  await page.getByRole("menuitem", { name: "Format", exact: true }).click();
+  await page.getByRole("menuitem", { name: "Character…", exact: true }).click();
+  await character.getByRole("tab", { name: "Font Effects", exact: true }).click();
+  await character.getByLabel("Font Color palette", { exact: true }).click();
+  await character.getByRole("button", { name: "Font Color #00a933", exact: true }).click();
+  await overlinePalette.click();
+  await character.getByRole("button", { name: "Automatic", exact: true }).click();
+  await character.getByRole("button", { name: "OK", exact: true }).click();
+  await expect(overline).toHaveCSS("text-decoration-color", "rgb(0, 169, 51)");
+  await expect(underline).toHaveCSS("text-decoration-color", "rgb(42, 96, 153)");
+});

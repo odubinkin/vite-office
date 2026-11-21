@@ -7,7 +7,7 @@ import { FontItalic, FontWeight } from "../../../tools/inc/fontenum";
 import { StrikeoutText } from "../../../vcl/browser/strikeout-text";
 import { Fragment, useLayoutEffect, useRef } from "react";
 import { resolveSwNumberingTabPosition } from "../../source/core/text/txttab";
-import { browserTextEmphasis, browserTextLineStyle } from "../presentation/writer-view-projection";
+import { browserTextDecoration, browserTextEmphasis } from "../presentation/writer-view-projection";
 import { browserFontFamily } from "./writer-font-family";
 import { FontLineStyle } from "../../../editeng/source/items/textitem";
 
@@ -334,21 +334,7 @@ function paintTextLine(
   value: WriterTextLineProjection,
   content: React.ReactNode,
 ): React.ReactNode {
-  return (
-    <span
-      style={{
-        textDecorationLine: line,
-        textDecorationStyle: browserTextLineStyle(value.style),
-        textDecorationColor: value.color,
-        ...(value.style >= FontLineStyle.LINESTYLE_BOLD &&
-        value.style <= FontLineStyle.LINESTYLE_BOLDWAVE
-          ? { textDecorationThickness: "0.13em" }
-          : {}),
-      }}
-    >
-      {content}
-    </span>
-  );
+  return <span style={browserTextDecoration(line, value)}>{content}</span>;
 }
 
 /** Projects one immutable Writer run through semantic browser elements. @param props - Canonical run and inherited paragraph flags. @returns React-owned run subtree. */
@@ -389,18 +375,18 @@ export function WriterTextPortionProjection({
     );
   const emphasis = browserTextEmphasis(run.attributes.emphasisMark);
   if (emphasis !== undefined) content = <span style={emphasis}>{content}</span>;
-  if (run.attributes.color !== undefined)
-    content = (
-      <span style={{ color: run.attributes.color === "auto" ? "initial" : run.attributes.color }}>
-        {content}
-      </span>
-    );
   if (run.attributes.underlineLine !== undefined)
     content = paintTextLine("underline", run.attributes.underlineLine, content);
   else if (run.attributes.underline)
     content = <span style={{ textDecoration: "underline" }}>{content}</span>;
   if (run.attributes.overlineLine !== undefined)
     content = paintTextLine("overline", run.attributes.overlineLine, content);
+  if (run.attributes.color !== undefined)
+    content = (
+      <span style={{ color: run.attributes.color === "auto" ? "initial" : run.attributes.color }}>
+        {content}
+      </span>
+    );
   if (run.attributes.fontSizeTwips !== undefined)
     content = <span style={{ fontSize: `${run.attributes.fontSizeTwips / 20}pt` }}>{content}</span>;
   if (run.attributes.kerningTwips !== undefined)

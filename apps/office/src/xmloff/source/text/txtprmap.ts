@@ -45,8 +45,8 @@ import { createOdfThemeColor } from "./XMLComplexColorContext";
 import { createXComplexColor } from "../../../docmodel/inc/uno/UnoComplexColor";
 import { XComplexColor } from "../../../offapi/com/sun/star/util/XComplexColor";
 /** Stateless original handlers and actual owning core unit. */
-const underlineColor = new XMLColorTransparentPropHdl("font-color"),
-  underlineHasColor = new XMLIsTransparentPropHdl("font-color", false);
+const textLineColor = new XMLColorTransparentPropHdl("font-color"),
+  textLineHasColor = new XMLIsTransparentPropHdl("font-color", false);
 const escapement = new XMLEscapementPropHdl(),
   escapementHeight = new XMLEscapementHeightPropHdl();
 const weight = new XMLFontWeightPropHdl(),
@@ -69,12 +69,27 @@ const scriptProperties = [
     slantType,
   ],
 ] as const;
-/** Native multi-property underline mapping order. */
-const lineProperties = [
-  [T.STYLE_TEXT_UNDERLINE_STYLE, "style:text-underline-style", new XMLUnderlineStylePropHdl()],
-  [T.STYLE_TEXT_UNDERLINE_TYPE, "style:text-underline-type", new XMLUnderlineTypePropHdl()],
-  [T.STYLE_TEXT_UNDERLINE_WIDTH, "style:text-underline-width", new XMLUnderlineWidthPropHdl()],
-] as const;
+const lineStyleHandler = new XMLUnderlineStylePropHdl(),
+  lineTypeHandler = new XMLUnderlineTypePropHdl(),
+  lineWidthHandler = new XMLUnderlineWidthPropHdl();
+/** Original underline and overline maps share handlers but merge their values independently. */
+const lineProperties = {
+  underline: [
+    [T.STYLE_TEXT_UNDERLINE_STYLE, "style:text-underline-style", lineStyleHandler],
+    [T.STYLE_TEXT_UNDERLINE_TYPE, "style:text-underline-type", lineTypeHandler],
+    [T.STYLE_TEXT_UNDERLINE_WIDTH, "style:text-underline-width", lineWidthHandler],
+  ],
+  overline: [
+    [T.STYLE_TEXT_OVERLINE_STYLE, "style:text-overline-style", lineStyleHandler],
+    [T.STYLE_TEXT_OVERLINE_TYPE, "style:text-overline-type", lineTypeHandler],
+    [T.STYLE_TEXT_OVERLINE_WIDTH, "style:text-overline-width", lineWidthHandler],
+  ],
+} as const;
+const lineColorTokens = {
+  underline: T.STYLE_TEXT_UNDERLINE_COLOR,
+  overline: T.STYLE_TEXT_OVERLINE_COLOR,
+} as const;
+const textLines = ["underline", "overline"] as const;
 /** Original chained CharStrikeout style/type/width/text associations. */
 const strikeoutProperties = [
   [
@@ -173,7 +188,7 @@ export const textCharacterPropertyTokens = [
     /** Selects a native property token. @param entry - Mapping. @returns Token. */ ([token]) =>
       token,
   ),
-  ...lineProperties.map(
+  ...lineProperties.underline.map(
     /** Selects a native property token. @param entry - Mapping. @returns Token. */ ([token]) =>
       token,
   ),
@@ -181,7 +196,10 @@ export const textCharacterPropertyTokens = [
     /** Reads the original decoration token. @param entry - Mapping. @returns Token. */
     ([token]) => token,
   ),
-  T.STYLE_TEXT_UNDERLINE_COLOR,
+  ...lineProperties.overline.map(
+    /** Selects an overline token. @param entry - Mapping. @returns Token. */ ([token]) => token,
+  ),
+  ...Object.values(lineColorTokens),
   T.STYLE_TEXT_POSITION,
   T.STYLE_TEXT_EMPHASIZE,
   T.FO_LETTER_SPACING,
@@ -271,23 +289,27 @@ export function exportTextCharacterProperties(properties: OdfCharacterProperties
       for (const [, name, handler] of strikeoutProperties)
         if (handler.exportXML(output, value, converter)) result += ` ${name}="${output[0]}"`;
     }
-    if (properties.underlineStyle !== undefined) {
-      value.insert([properties.underlineStyle], "sal_Int16");
-      for (const [, name, handler] of lineProperties)
-        if (handler.exportXML(output, value, converter)) result += ` ${name}="${output[0]}"`;
-    }
-    // XMLTextExportPropertySetMapper::ContextFilter suppresses color without a visible line.
-    if (properties.underlineStyle !== undefined && properties.underlineStyle !== 0) {
+    for (const line of textLines) {
+      const style = properties[`${line}Style`];
+      if (style !== undefined) {
+        value.insert([style], "sal_Int16");
+        for (const [, name, handler] of lineProperties[line])
+          if (handler.exportXML(output, value, converter)) result += ` ${name}="${output[0]}"`;
+      }
+      // The native ContextFilter guards underline colors only.
+      if (line === "underline" && (style === undefined || style === 0)) continue;
+      const hasColor = properties[`${line}HasColor`];
+      const color = properties[`${line}Color`];
       output[0] = "";
-      if (properties.underlineHasColor !== undefined) {
-        value.insert([properties.underlineHasColor], "bool");
-        underlineHasColor.exportXML(output, value, converter);
+      if (hasColor !== undefined) {
+        value.insert([hasColor], "bool");
+        textLineHasColor.exportXML(output, value, converter);
       }
-      if (properties.underlineColor !== undefined) {
-        value.insert([properties.underlineColor], "sal_Int32");
-        underlineColor.exportXML(output, value, converter);
+      if (color !== undefined) {
+        value.insert([color], "sal_Int32");
+        textLineColor.exportXML(output, value, converter);
       }
-      if (output[0] !== "") result += ` style:text-underline-color="${output[0]}"`;
+      if (output[0] !== "") result += ` style:text-${line}-color="${output[0]}"`;
     }
     return result;
   } finally {
@@ -300,7 +322,7 @@ export function importTextCharacterProperties(
 ): Partial<OdfCharacterProperties> {
   const result: Record<string, number | boolean | OdfBoxProperties> = {},
     value = new Any(),
-    line = new Any(),
+    lineValues = { underline: new Any(), overline: new Any() },
     crossedOut = new Any();
   try {
     const characterBox: Record<string, string | number> = {};
@@ -371,25 +393,28 @@ export function importTextCharacterProperties(
         crossedOut.extract(scalar, "sal_Int16");
         result.strikeout = scalar[0];
       }
-      const underline = lineProperties.find(
-        /** Finds a line property. @param entry - Mapping. @returns Token equality. */ ([item]) =>
-          item === token,
-      );
-      if (underline !== undefined && underline[2].importXML(text, line, converter)) {
-        const scalar: [number] = [0];
-        line.extract(scalar, "sal_Int16");
-        result.underlineStyle = scalar[0];
-      }
-      if (token === T.STYLE_TEXT_UNDERLINE_COLOR) {
-        const color: [number] = [0],
-          hasColor: [boolean] = [false];
-        if (underlineColor.importXML(text, value, converter)) {
-          value.extract(color, "sal_Int32");
-          result.underlineColor = color[0];
+      for (const line of textLines) {
+        const property = lineProperties[line].find(
+          /** Finds a native line attribute. @param entry - Mapping. @returns Token equality. */
+          ([item]) => item === token,
+        );
+        const merged = lineValues[line];
+        if (property !== undefined && property[2].importXML(text, merged, converter)) {
+          const scalar: [number] = [0];
+          merged.extract(scalar, "sal_Int16");
+          result[`${line}Style`] = scalar[0];
         }
-        underlineHasColor.importXML(text, value, converter);
-        value.extract(hasColor, "bool");
-        result.underlineHasColor = hasColor[0];
+        if (token === lineColorTokens[line]) {
+          const color: [number] = [0];
+          const hasColor: [boolean] = [false];
+          if (textLineColor.importXML(text, value, converter)) {
+            value.extract(color, "sal_Int32");
+            result[`${line}Color`] = color[0];
+          }
+          textLineHasColor.importXML(text, value, converter);
+          value.extract(hasColor, "bool");
+          result[`${line}HasColor`] = hasColor[0];
+        }
       }
     }
     for (const [suffix, properties] of languageProperties) {
@@ -410,7 +435,8 @@ export function importTextCharacterProperties(
     return result as Partial<OdfCharacterProperties>;
   } finally {
     value.dispose();
-    line.dispose();
+    lineValues.underline.dispose();
+    lineValues.overline.dispose();
     crossedOut.dispose();
   }
 }
@@ -691,6 +717,9 @@ export function applyTextImportProperties(
       ["underlineStyle", "CharUnderline", "sal_Int16"],
       ["underlineColor", "CharUnderlineColor", "sal_Int32"],
       ["underlineHasColor", "CharUnderlineHasColor", "bool"],
+      ["overlineStyle", "CharOverline", "sal_Int16"],
+      ["overlineColor", "CharOverlineColor", "sal_Int32"],
+      ["overlineHasColor", "CharOverlineHasColor", "bool"],
       ["wordMode", "CharWordMode", "bool"],
       ["autoKerning", "CharAutoKerning", "bool"],
       ["kerning", "CharKerning", "sal_Int16"],
