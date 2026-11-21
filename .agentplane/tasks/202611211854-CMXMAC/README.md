@@ -4,7 +4,7 @@ title: "Run the Writer and Calc ODF full regression checkpoint"
 status: "DOING"
 priority: "high"
 owner: "CODER"
-revision: 5
+revision: 7
 origin:
   system: "manual"
 depends_on: []
@@ -37,7 +37,7 @@ events:
     to: "DOING"
     note: "Start: run full Office, Chromium, tooling and inventory regressions from the tenth ODF task checkpoint."
 doc_version: 3
-doc_updated_at: "2026-11-21T18:54:52.637Z"
+doc_updated_at: "2026-11-21T19:08:50.674Z"
 doc_updated_by: "CODER"
 description: "After ten completed Writer and Calc ODF tasks, run all application unit and integration projects with coverage, all browser projects, tooling, and inventory checks. Diagnose and fix regressions and validate repaired owners. Keep the active alignment goal running after the checkpoint."
 sections:
@@ -55,7 +55,16 @@ sections:
     - Run `node .agentplane/policy/check-routing.mjs`, `ap doctor` and `git diff --check`, and record the finished tracked status.
   Verification: "Pending full regression."
   Rollback Plan: "Revert any scoped repair commit independently of the checkpoint evidence."
-  Findings: "The preceding task records baseline repository file-size debt."
+  Findings: |-
+    The preceding task records baseline repository file-size debt.
+
+    - Observation: Started the scheduled complete regression on source checkpoint 45ca914ef039, with task metadata at 4f7b7d4c148d.
+      Impact: The commanded Office coverage, tooling, inventory and Chromium stages run serially and continue regardless of prior exit codes.
+      Resolution: Poll the live shell session 58047 and inspect output/full-regression-CMXMAC. Each stage writes its own started timestamp, log, JSON and exit code.
+
+    - Observation: npm run inventory:parity initially failed because CAP-0141 referenced the pre-refactor literal for the Writer underline-style property.
+      Impact: Registry validation failed across scopes even though the shared production map still handles the same ODF token.
+      Resolution: Updated the canonical evidence and its compatibility view to point at the actual T.STYLE_TEXT_UNDERLINE_STYLE entry. Repeated npm run inventory:parity successfully for all suites. Application sources remained at the checkpoint revision.
 id_source: "generated"
 ---
 ## Summary
@@ -91,3 +100,11 @@ Revert any scoped repair commit independently of the checkpoint evidence.
 ## Findings
 
 The preceding task records baseline repository file-size debt.
+
+- Observation: Started the scheduled complete regression on source checkpoint 45ca914ef039, with task metadata at 4f7b7d4c148d.
+  Impact: The commanded Office coverage, tooling, inventory and Chromium stages run serially and continue regardless of prior exit codes.
+  Resolution: Poll the live shell session 58047 and inspect output/full-regression-CMXMAC. Each stage writes its own started timestamp, log, JSON and exit code.
+
+- Observation: npm run inventory:parity initially failed because CAP-0141 referenced the pre-refactor literal for the Writer underline-style property.
+  Impact: Registry validation failed across scopes even though the shared production map still handles the same ODF token.
+  Resolution: Updated the canonical evidence and its compatibility view to point at the actual T.STYLE_TEXT_UNDERLINE_STYLE entry. Repeated npm run inventory:parity successfully for all suites. Application sources remained at the checkpoint revision.
