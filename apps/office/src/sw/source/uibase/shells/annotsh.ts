@@ -1,5 +1,6 @@
 /** @fileoverview Writer command shell for the active annotation edit view. */
 import { Any } from "../../../../cppu/inc/com/sun/star/uno/Any";
+import { SvxColorItem } from "../../../../editeng/inc/colritem";
 import { SvxFontHeightItem } from "../../../../editeng/inc/fhgtitem";
 import { SvxFontItem } from "../../../../editeng/inc/fontitem";
 import { MID_FONTHEIGHT } from "../../../../editeng/inc/memberids";
@@ -27,6 +28,7 @@ import {
   type WriterSlotHandler,
 } from "../../../sdi/swriter";
 import { WRITER_COMMAND_IDS as CMD } from "../../../uiconfig/swriter/menubar/menubar-commands";
+import { writerColorFromPrimitive, writerColorValue } from "../../core/attr/swatrset";
 import type { SwAnnotationWindow, SwPostItMgr } from "../docvw/PostItMgr";
 import type { SwWrtShell } from "../wrtsh/wrtsh1";
 
@@ -53,6 +55,8 @@ export class SwAnnotationShell {
       this.CharacterCommand(CMD.underline, EE.EE_CHAR_UNDERLINE),
       this.CharacterCommand(CMD.underlineSingle, EE.EE_CHAR_UNDERLINE),
       this.CharacterCommand(CMD.strikeout, EE.EE_CHAR_STRIKEOUT),
+      this.ColorCommand(CMD.color, EE.EE_CHAR_COLOR, "auto"),
+      this.ColorCommand(CMD.charBackColor, EE.EE_CHAR_BKGCOLOR, "transparent"),
       {
         id: CMD.fontName,
         /** Applies a font to the selected scripts in the annotation. @param _context - Bound annotation shell. @param args - Font request items. @returns Whether changed. */
@@ -178,6 +182,48 @@ export class SwAnnotationShell {
     );
   }
 
+  /** Binds an annotation color slot to the foreground or background item. @param id - Writer command URL. @param which - EditEngine item identity. @param automatic - Palette reset value. @returns Slot handler. */
+  private ColorCommand(
+    id: string,
+    which: number,
+    automatic: "auto" | "transparent",
+  ): WriterSlotHandler<SwAnnotationShell> {
+    return {
+      id,
+      /** Applies a native color item or the value chosen in the browser palette. @param _context - Bound annotation shell. @param args - Request items. @returns Whether changed. */
+      execute: (_context, args) => {
+        const native = args.find(
+          /** Finds the requested color item. @param item - Request item. @returns Whether it is a color. */
+          (item) => item instanceof SvxColorItem,
+        );
+        if (native) return this.ApplyItem(which, native);
+        const color = getWriterCommandArguments<Readonly<{ color?: string }>>(args)?.color;
+        if (color === undefined) return false;
+        const item = new SvxColorItem(writerColorFromPrimitive(color, automatic), which);
+        try {
+          return this.ApplyItem(which, item);
+        } finally {
+          item.Dispose();
+        }
+      },
+      /** Enables the palette for an editable note. @returns Whether enabled. */
+      isEnabled: () => this.CanEdit(),
+      /** Reports different colors across the selection. @returns Whether mixed. */
+      isMixed: () => {
+        const active = this.manager.GetActiveSidebarWin();
+        return active !== undefined && getSelectionItem(active, which) === undefined;
+      },
+      /** Projects the uniform annotation color for the palette. @returns Palette color or mixed. */
+      getStateValue: () => {
+        const active = this.manager.GetActiveSidebarWin();
+        const item = active && getSelectionItem(active, which);
+        return item instanceof SvxColorItem
+          ? writerColorValue(item.GetValue(), automatic)
+          : undefined;
+      },
+    };
+  }
+
   /** Creates the toggle and state bindings for one original character slot. @param id - Generated Writer command URL. @param which - EditEngine item identity. @param scriptSlot - Optional Latin script slot. @returns Slot handler. */
   private CharacterCommand(
     id: string,
@@ -258,16 +304,23 @@ export class SwAnnotationShell {
         );
       }
       if (scriptSlot !== undefined) return this.ApplyScriptItem(scriptSlot, item);
-      const set = new SfxItemSet(active.editor.GetEmptyItemSet());
-      try {
-        set.Put(item);
-        return active.ApplyAttributes(set);
-      } finally {
-        set.Dispose();
-      }
+      return this.ApplyItem(which, item);
     } finally {
       existing?.Dispose();
       item?.Dispose();
+    }
+  }
+
+  /** Applies an item under the annotation's EditEngine identity. @param which - Target native identity. @param item - Borrowed item. @returns Whether changed. */
+  private ApplyItem(which: number, item: SfxPoolItem): boolean {
+    const active = this.manager.GetActiveSidebarWin();
+    if (!active?.ApplyAttributes) return false;
+    const set = new SfxItemSet(active.editor.GetEmptyItemSet());
+    try {
+      set.PutAsTargetWhich(item, which);
+      return active.ApplyAttributes(set);
+    } finally {
+      set.Dispose();
     }
   }
 

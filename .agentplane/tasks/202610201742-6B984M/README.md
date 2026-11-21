@@ -4,7 +4,7 @@ title: "Implement Writer search and replace core and browser UI"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 91
+revision: 92
 origin:
   system: "manual"
 depends_on:
@@ -268,6 +268,9 @@ comments:
   -
     author: "CODER"
     body: "Verified intermediate Writer annotation shell checkpoint. The active note selects SwAnnotationShell in the actual Sfx view stack based on the pinned view.cxx PostIt branch. Generated Writer formatting, Select All, refocus and history command IDs now act on the native note selection, with mixed and checked state, script-set font/height/weight/posture handling, underline, strikeout and paragraph alignment. Note input uses the same binding as toolbar controls and the body resumes its prior shell after focus returns. Browser paint follows EditEngine script segments. The affected Writer runs passed 45 and 18 tests in disjoint files. Two Writer resource tests and both production writer-search Chrome scenarios passed, including toolbar Bold and Undo in the note. Production single-threaded build, dependencies, source tree and provenance, scoped lint/format, routing, doctor and diff checks passed. Repo-wide JSDoc and file size report baseline issues outside the changed paths. The represented annotation slots do not cover the complete native annotation clipboard, list, hyperlink, color and dialog surface. The task remains open and the ten-task cadence is unchanged."
+  -
+    author: "CODER"
+    body: "Verified annotation color checkpoint against pinned SwAnnotationShell::Exec and GetState. The existing Writer toolbar and Character sidebar now route foreground and background palette choices to EE_CHAR_COLOR and EE_CHAR_BKGCOLOR on the active note. Uniform and mixed values, automatic and transparent resets, recent palette entries, range retention, undo, body isolation and ODT reopen are covered. The browser palette sends explicit choices through the existing Writer command payload. The native argument-free recent-color replay slot is outside this checkpoint. Four targeted Writer suites passed 24 tests, the generated resource suite passed two tests, and two Chrome end-to-end scenarios passed against the final production build. Build, dependencies, source tree and provenance, scoped ESLint and formatting, routing, doctor and diff checks passed. Repository-wide JSDoc and file-size checks retain their existing findings outside changed paths. This checkpoint does not close the parent task or advance the full-suite cadence."
 events:
   -
     type: "status"
@@ -656,8 +659,13 @@ events:
     at: "2026-11-21T18:22:41.314Z"
     author: "CODER"
     body: "Verified intermediate Writer annotation shell checkpoint. The active note selects SwAnnotationShell in the actual Sfx view stack based on the pinned view.cxx PostIt branch. Generated Writer formatting, Select All, refocus and history command IDs now act on the native note selection, with mixed and checked state, script-set font/height/weight/posture handling, underline, strikeout and paragraph alignment. Note input uses the same binding as toolbar controls and the body resumes its prior shell after focus returns. Browser paint follows EditEngine script segments. The affected Writer runs passed 45 and 18 tests in disjoint files. Two Writer resource tests and both production writer-search Chrome scenarios passed, including toolbar Bold and Undo in the note. Production single-threaded build, dependencies, source tree and provenance, scoped lint/format, routing, doctor and diff checks passed. Repo-wide JSDoc and file size report baseline issues outside the changed paths. The represented annotation slots do not cover the complete native annotation clipboard, list, hyperlink, color and dialog surface. The task remains open and the ten-task cadence is unchanged."
+  -
+    type: "comment"
+    at: "2026-11-21T18:30:04.496Z"
+    author: "CODER"
+    body: "Verified annotation color checkpoint against pinned SwAnnotationShell::Exec and GetState. The existing Writer toolbar and Character sidebar now route foreground and background palette choices to EE_CHAR_COLOR and EE_CHAR_BKGCOLOR on the active note. Uniform and mixed values, automatic and transparent resets, recent palette entries, range retention, undo, body isolation and ODT reopen are covered. The browser palette sends explicit choices through the existing Writer command payload. The native argument-free recent-color replay slot is outside this checkpoint. Four targeted Writer suites passed 24 tests, the generated resource suite passed two tests, and two Chrome end-to-end scenarios passed against the final production build. Build, dependencies, source tree and provenance, scoped ESLint and formatting, routing, doctor and diff checks passed. Repository-wide JSDoc and file-size checks retain their existing findings outside changed paths. This checkpoint does not close the parent task or advance the full-suite cadence."
 doc_version: 3
-doc_updated_at: "2026-11-21T18:22:41.314Z"
+doc_updated_at: "2026-11-21T18:30:04.496Z"
 doc_updated_by: "CODER"
 description: "Implement the approved coherent Writer search-and-replace feature from pinned LibreOffice sources: real shared search engine and options, native paragraph/cursor traversal and replacement/history contracts, view-owned search state and dispatch, Find toolbar and Find and Replace dialog with generated upstream command placement and shortcuts. Preserve source semantics and explicit unsupported boundaries; never substitute DOM text search or browser RegExp for ICU contracts. Work only on writer in vite-office-writer; local upstream reading approved, no network or merges. Keep active until approved scope is verified."
 sections:

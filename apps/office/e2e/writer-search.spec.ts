@@ -65,7 +65,21 @@ test("Writer inserts a comment, finds its text and undoes note formatting", /** 
     "font-weight",
     "700",
   );
-  await page.getByRole("button", { name: "Undo", exact: true }).click();
+  await toolbar.getByLabel("Font Color palette", { exact: true }).click();
+  await toolbar.getByRole("button", { name: "Font Color #ff0000", exact: true }).click();
+  await toolbar.getByLabel("Character Highlighting Color palette", { exact: true }).click();
+  await toolbar
+    .getByRole("button", { name: "Character Highlighting Color #ffff00", exact: true })
+    .click();
+  const formatted = comment.locator("span").filter({ hasText: /^annotation$/u });
+  await expect(formatted).toHaveCSS("color", "rgb(255, 0, 0)");
+  await expect(formatted).toHaveCSS("background-color", "rgb(255, 255, 0)");
+  const undo = page.getByRole("button", { name: "Undo", exact: true });
+  await undo.click();
+  await expect(formatted).toHaveCSS("background-color", "rgba(0, 0, 0, 0)");
+  await undo.click();
+  await expect(formatted).not.toHaveCSS("color", "rgb(255, 0, 0)");
+  await undo.click();
   await expect(comment).toHaveText("Find this annotation");
   await expect(comment.locator("span[style*='font-weight']")).toHaveCount(0);
 });

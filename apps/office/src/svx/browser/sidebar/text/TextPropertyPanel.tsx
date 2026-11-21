@@ -129,12 +129,19 @@ export function TextPropertyPanel(props: TextPropertyPanelProps): React.JSX.Elem
         <div className="flex gap-2">
           {(
             [
-              { command: ".uno:Color", property: "color", state: color, fallback: "#000000" },
+              {
+                command: ".uno:Color",
+                property: "color",
+                state: color,
+                fallback: "#000000",
+                automatic: "auto",
+              },
               {
                 command: ".uno:CharBackColor",
                 property: "highlight",
                 state: highlight,
                 fallback: "#ffff00",
+                automatic: "transparent",
               },
             ] as const
           ).map(
@@ -145,7 +152,7 @@ export function TextPropertyPanel(props: TextPropertyPanelProps): React.JSX.Elem
                 key={entry.command}
                 label={getCommandResource(entry.command).controlLabel as string}
                 property={entry.property}
-                value={String(entry.state.value)}
+                value={typeof entry.state.value === "string" ? entry.state.value : entry.automatic}
                 fallback={entry.fallback}
                 disabled={!entry.state.enabled || entry.state.pending === true}
                 onColor={

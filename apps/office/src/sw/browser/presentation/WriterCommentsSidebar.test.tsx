@@ -3,10 +3,14 @@ import { readFileSync } from "node:fs";
 import { act, fireEvent, render, screen, within } from "@testing-library/react";
 import { expect, it } from "vitest";
 import {
+  EE_CHAR_BKGCOLOR,
+  EE_CHAR_COLOR,
   EE_CHAR_FONTHEIGHT_CJK,
   EE_CHAR_WEIGHT,
   EE_CHAR_WEIGHT_CJK,
 } from "../../../editeng/inc/eeitem";
+import { SvxColorItem } from "../../../editeng/inc/colritem";
+import type { EECharAttrib } from "../../../editeng/inc/editdata";
 import { SvxWeightItem } from "../../../editeng/inc/wghtitem";
 import { unicode } from "../../../i18nlangtag/source/isolang/isolang.tables";
 import { FontWeight } from "../../../tools/inc/fontenum";
@@ -18,6 +22,8 @@ import { SwPostItField, SwPostItFieldType } from "../../source/core/fields/docuf
 import { WRITER_COMMAND_IDS } from "../../uiconfig/swriter/menubar/menubar-commands";
 import { createWriterDocumentSession } from "../composition/writer-module";
 import { SwTextAPIEditSource } from "../../source/core/fields/textapi";
+import { readOdtDocument } from "../../source/filter/xml/swxml";
+import { writeOdtDocument } from "../../source/filter/xml/wrtxml";
 import { ESelection } from "../../../editeng/inc/ESelection";
 import { SfxItemSet } from "../../../svl/source/items/itemset";
 import { getWriterTextCaretPoint } from "../editor/writer-selection";
@@ -478,6 +484,98 @@ it("routes toolbar formatting and state through the active annotation shell", /*
     expect(format.GetField().GetPar2()).toBe("one two");
     fireEvent.keyDown(comment, { key: "Escape" });
     expect(view.QueryState(command)).toEqual(bodyState);
+  } finally {
+    workbench.unmount();
+    view.Close();
+  }
+});
+
+it("applies Writer palette colors to the selected comment text and reopens them from ODT", /** Exercises palette state, resets, recent swatches and native persistence. @returns Completion. */ async () => {
+  const { session, shell } = openAnnotatedDocument("one two");
+  const view = session.view;
+  const workbench = render(<WriterWorkbench isActive view={view} />);
+  try {
+    const comment = screen.getByRole<HTMLDivElement>("textbox", { name: "Comment — Ada" });
+    act(
+      /** Selects the first comment word. @returns Nothing. */ () => {
+        comment.focus();
+        selectNote(comment, 0, 3);
+      },
+    );
+    const toolbar = within(screen.getByRole("toolbar", { name: "Writer formatting toolbar" }));
+    const foreground = toolbar.getByLabelText("Font Color palette");
+    const background = toolbar.getByLabelText("Character Highlighting Color palette");
+    fireEvent.click(foreground);
+    fireEvent.click(screen.getByRole("button", { name: "Font Color #ff0000" }));
+    fireEvent.click(background);
+    fireEvent.change(screen.getByLabelText("Character Highlighting Color custom color"), {
+      target: { value: "#ffd966" },
+    });
+    expect(view.QueryState(WRITER_COMMAND_IDS.color)).toMatchObject({
+      enabled: true,
+      value: "#ff0000",
+    });
+    expect(view.QueryState(WRITER_COMMAND_IDS.charBackColor)).toMatchObject({
+      enabled: true,
+      value: "#ffd966",
+    });
+    expect(within(comment).getByText("one").style.color).toBe("rgb(255, 0, 0)");
+    expect(within(comment).getByText("one").style.backgroundColor).toBe("rgb(255, 217, 102)");
+    expect(background).toHaveFocus();
+
+    fireEvent.click(foreground);
+    fireEvent.click(screen.getByRole("button", { name: "Automatic" }));
+    expect(view.QueryState(WRITER_COMMAND_IDS.color).value).toBe("auto");
+    fireEvent.click(background);
+    fireEvent.click(screen.getByRole("button", { name: "None" }));
+    expect(view.QueryState(WRITER_COMMAND_IDS.charBackColor).value).toBe("transparent");
+    fireEvent.click(foreground);
+    fireEvent.click(screen.getByRole("button", { name: "Font Color recent #ff0000" }));
+    fireEvent.click(background);
+    fireEvent.click(
+      screen.getByRole("button", { name: "Character Highlighting Color recent #ffd966" }),
+    );
+    act(
+      /** Selects both the colored and default runs. @returns Nothing. */ () => {
+        comment.focus();
+        selectNote(comment, 0, 7);
+      },
+    );
+    expect(view.QueryState(WRITER_COMMAND_IDS.color).mixed).toBe(true);
+    expect(view.QueryState(WRITER_COMMAND_IDS.charBackColor).mixed).toBe(true);
+    fireEvent.keyDown(comment, { key: "Escape" });
+    expect(view.QueryState(WRITER_COMMAND_IDS.color).value).toBe("auto");
+    expect(view.QueryState(WRITER_COMMAND_IDS.charBackColor).value).toBe("transparent");
+
+    const metadata = { title: "Comment colors" };
+    const reopened = await readOdtDocument(
+      await writeOdtDocument(shell.GetDoc(), metadata),
+      metadata,
+    );
+    const [reopenedComment] = SwPostItFieldType.Get(reopened.document).GatherFields();
+    const note = reopenedComment?.GetField();
+    const spans: EECharAttrib[] = [];
+    note?.GetTextObject()?.GetCharAttribs(0, spans);
+    const colors = spans
+      .filter(
+        /** Selects native color attributes. @param span - EditEngine span. @returns Whether it stores a color. */
+        (span) => span.pAttr instanceof SvxColorItem,
+      )
+      .map(
+        /** Projects a color and its persisted range. @param span - Color span. @returns Color tuple. */
+        ({ pAttr, nStart, nEnd }) => [
+          pAttr?.Which(),
+          (pAttr as SvxColorItem).GetValue().toUInt32(),
+          nStart,
+          nEnd,
+        ],
+      );
+    expect(colors).toEqual(
+      expect.arrayContaining([
+        [EE_CHAR_COLOR, 0xff0000, 0, 3],
+        [EE_CHAR_BKGCOLOR, 0xffd966, 0, 3],
+      ]),
+    );
   } finally {
     workbench.unmount();
     view.Close();
