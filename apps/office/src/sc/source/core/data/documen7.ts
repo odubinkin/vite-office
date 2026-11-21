@@ -668,6 +668,7 @@ export function CopyBlockFromClip(
     );
     clipTab = (clipTab + 1) % count;
   }
+  if (!(context.getInsertFlag() & InsertDeleteFlags.CONTENTS)) return;
   clipTab = 0;
   for (
     let tab = context.getTabStart();

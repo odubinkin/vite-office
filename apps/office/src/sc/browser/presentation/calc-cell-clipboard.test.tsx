@@ -103,6 +103,19 @@ async function pasteSpecial(name: string): Promise<void> {
   await act(async () => fireEvent.click(item));
 }
 
+/** Opens the source Paste Special dialog from the active grid shortcut. @returns Contents dialog. */
+async function openPasteSpecial() {
+  await act(async () =>
+    fireEvent.keyDown(grid(), {
+      key: "V",
+      code: "KeyV",
+      ctrlKey: true,
+      shiftKey: true,
+    }),
+  );
+  return within(screen.getByRole("dialog", { name: "Paste Special" }));
+}
+
 it("copies cells and their formats, then pastes relative formulas through one native Undo action", async () => {
   const controller = mount(),
     doc = controller.shell.GetDocument();
@@ -322,6 +335,129 @@ it("confirms the transposed selection size and preserves rich cells and styled e
   expect(undo.GetUndoActionCount()).toBe(count + 1);
   act(() => expect(controller.Undo()).toBe(true));
   expect(doc.GetValue(cleared)).toBe(50);
+});
+
+it("ports tdf69450 by pasting formats from populated and empty cells without deleting text", async () => {
+  const clipboard = transfer();
+  browserClipboard(clipboard);
+  const controller = mount(),
+    doc = controller.shell.GetDocument();
+  const b1 = new ScAddress(1, 0, 0);
+  act(() => {
+    expect(controller.EnterString("A")).toBe(true);
+    controller.Select(1, 0);
+    expect(controller.EnterString("B")).toBe(true);
+    const pattern = new ScPatternAttr(doc.getCellAttributeHelper());
+    pattern.ItemSetPut(new SvxFontHeightItem(320, 100, 101));
+    doc.ApplyPattern(0, 1, 0, pattern);
+    pattern.Dispose();
+  });
+  select("A1");
+  fireEvent.copy(grid(), { clipboardData: clipboard });
+  select("B1");
+  let dialog = await openPasteSpecial();
+  for (const name of ["Numbers", "Text", "Date & time"]) {
+    const field = dialog.getByRole("checkbox", { name });
+    expect(field).toBeChecked();
+    fireEvent.click(field);
+  }
+  fireEvent.click(dialog.getByRole("checkbox", { name: "Formats" }));
+  await act(async () => fireEvent.click(dialog.getByRole("button", { name: "OK" })));
+  expect(screen.queryByRole("alertdialog", { name: "Paste" })).toBeNull();
+  select("A2");
+  fireEvent.copy(grid(), { clipboardData: clipboard });
+  select("B1");
+  dialog = await openPasteSpecial();
+  expect(dialog.getByRole("checkbox", { name: "Formats" })).toBeChecked();
+  expect(dialog.getByRole("checkbox", { name: "Numbers" })).not.toBeChecked();
+  await act(async () => fireEvent.click(dialog.getByRole("button", { name: "OK" })));
+  const value = doc.GetRefCellValue(b1).getSharedString();
+  assert(value);
+  expect(text(value.getString())).toBe("B");
+  expect((doc.GetPattern(b1)?.GetItem(101) as SvxFontHeightItem).GetHeight()).toBe(320);
+  act(() => expect(controller.Undo()).toBe(true));
+  expect(doc.GetCellType(b1)).toBe(CellType.CELLTYPE_STRING);
+  expect((doc.GetPattern(b1)?.GetItem(101) as SvxFontHeightItem).GetHeight()).not.toBe(320);
+  act(() => expect(controller.Redo()).toBe(true));
+  expect((doc.GetPattern(b1)?.GetItem(101) as SvxFontHeightItem).GetHeight()).toBe(320);
+});
+
+it("applies a preset draft with Skip Empty Cells to values and formats", async () => {
+  const clipboard = transfer();
+  browserClipboard(clipboard);
+  const controller = mount(),
+    doc = controller.shell.GetDocument();
+  const target = new ScAddress(3, 0, 0),
+    hole = new ScAddress(4, 0, 0);
+  act(() => {
+    expect(controller.EnterString("=2+3")).toBe(true);
+    doc.SetValue(hole, 27);
+    const pattern = new ScPatternAttr(doc.getCellAttributeHelper());
+    pattern.ItemSetPut(new SvxFontHeightItem(320, 100, 101));
+    doc.ApplyPattern(0, 0, 0, pattern);
+    doc.ApplyPattern(1, 0, 0, pattern);
+    pattern.Dispose();
+  });
+  select("A1:B1");
+  fireEvent.copy(grid(), { clipboardData: clipboard });
+  select("D1");
+  const dialog = await openPasteSpecial();
+  expect(dialog.getByRole("checkbox", { name: "Run immediately" })).toBeChecked();
+  fireEvent.click(dialog.getByRole("checkbox", { name: "Run immediately" }));
+  fireEvent.click(dialog.getByRole("button", { name: "Values & Formats" }));
+  expect(dialog.getByRole("checkbox", { name: "Formats" })).toBeChecked();
+  fireEvent.click(dialog.getByRole("checkbox", { name: "Skip empty cells" }));
+  await act(async () => fireEvent.click(dialog.getByRole("button", { name: "OK" })));
+  const warning = within(screen.getByRole("alertdialog", { name: "Paste" }));
+  await act(async () => fireEvent.click(warning.getByRole("button", { name: "Yes" })));
+  expect(doc.GetValue(target)).toBe(5);
+  expect(doc.GetFormulaCell(target)).toBeNull();
+  expect(doc.GetValue(hole)).toBe(27);
+  expect((doc.GetPattern(target)?.GetItem(101) as SvxFontHeightItem).GetHeight()).toBe(320);
+  expect((doc.GetPattern(hole)?.GetItem(101) as SvxFontHeightItem).GetHeight()).not.toBe(320);
+});
+
+it("uses the available external text format and then opens the existing import controls", async () => {
+  browserClipboard(transfer("1\t2\n3\t4"));
+  const controller = mount(),
+    doc = controller.shell.GetDocument();
+  const dialog = await openPasteSpecial();
+  expect(dialog.getByRole("option", { name: "Unformatted text" })).toBeVisible();
+  await act(async () => fireEvent.click(dialog.getByRole("button", { name: "OK" })));
+  const textImport = within(screen.getByRole("dialog", { name: "Text Import" }));
+  await act(async () => fireEvent.click(textImport.getByRole("button", { name: "OK" })));
+  expect(doc.GetValue(new ScAddress(1, 1, 0))).toBe(4);
+});
+
+it("runs Formats Only from the menu immediately and keeps the original formula owner", async () => {
+  const clipboard = transfer();
+  browserClipboard(clipboard);
+  const controller = mount(),
+    doc = controller.shell.GetDocument();
+  const target = new ScAddress(2, 0, 0);
+  act(() => {
+    controller.Select(target.Col(), target.Row());
+    expect(controller.EnterString("=2+3")).toBe(true);
+    const pattern = new ScPatternAttr(doc.getCellAttributeHelper());
+    pattern.ItemSetPut(new SvxFontHeightItem(340, 100, 101));
+    doc.ApplyPattern(0, 0, 0, pattern);
+    pattern.Dispose();
+  });
+  const original = doc.GetFormulaCell(target);
+  assert(original);
+  select("A1");
+  fireEvent.copy(grid(), { clipboardData: clipboard });
+  select("C1");
+  await pasteSpecial("Paste Special…");
+  const dialog = within(screen.getByRole("dialog", { name: "Paste Special" }));
+  await act(async () => fireEvent.click(dialog.getByRole("button", { name: "Formats Only" })));
+  expect(screen.queryByRole("dialog", { name: "Paste Special" })).toBeNull();
+  expect(screen.queryByRole("alertdialog", { name: "Paste" })).toBeNull();
+  expect(doc.GetFormulaCell(target)).toBe(original);
+  expect((doc.GetPattern(target)?.GetItem(101) as SvxFontHeightItem).GetHeight()).toBe(340);
+  act(() => expect(controller.Undo()).toBe(true));
+  expect(doc.GetFormulaCell(target)).toBe(original);
+  expect((doc.GetPattern(target)?.GetItem(101) as SvxFontHeightItem).GetHeight()).not.toBe(340);
 });
 
 it("pastes numbers without dates, keeps result errors and restores overwritten cell types on Undo", async () => {

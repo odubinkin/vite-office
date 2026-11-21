@@ -431,7 +431,7 @@ it("preserves native clipboard no-op guards and explicit unported admission boun
   clip.SetValue(new ScAddress(), 8);
   for (const flags of [
     InsertDeleteFlags.NOTE | InsertDeleteFlags.ADDNOTES,
-    InsertDeleteFlags.ATTRIB,
+    InsertDeleteFlags.OBJECTS,
   ])
     expect(
       /** Nondefault contexts retain their real admission boundary. @returns Nothing. */ () =>

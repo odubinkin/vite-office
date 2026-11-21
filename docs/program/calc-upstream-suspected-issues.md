@@ -7779,3 +7779,13 @@ the reference transformation.
 
 - [Original formula clipboard reference rotation](../../vendor/libreoffice-reference/sc/source/core/data/formulacell.cxx#L3934)
 - [Original reference token iterator](../../vendor/libreoffice-reference/formula/source/core/api/token.cxx#L1761)
+
+### CALC-817 — The Paste Special All checkbox can reopen unchecked
+
+The source saves the All checkbox to the registry on confirmation. Its
+in-memory previous-content mask stores the individual checkboxes without
+the full All flag. Later openings in the same session use that mask, so
+All can reopen unchecked even after the previous paste used it. Calc
+preserves the session behavior.
+
+- [Original Paste Special preference and content mask handling](../../vendor/libreoffice-reference/sc/source/ui/miscdlgs/inscodlg.cxx#L204)

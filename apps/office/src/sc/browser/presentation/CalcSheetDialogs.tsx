@@ -1,6 +1,8 @@
 /** @fileoverview Browser hosts for sheet-workflow modal requests. */
 import { ScImportAsciiDlg } from "./ScImportAsciiDlg";
 import { ScPasteConfirmationDlg } from "./ScPasteConfirmationDlg";
+import { ScInsertContentsDlg } from "./ScInsertContentsDlg";
+import { ScClipboardFormatDlg } from "./ScClipboardFormatDlg";
 import type { Ref } from "react";
 import type { ScRange } from "../../inc/address";
 import type { ScPrintReferenceInput } from "./ScPrintAreasDlg";
@@ -69,7 +71,21 @@ export function CalcSheetDialogs({
           onCancel={() => sheetWorkflows.clipboard.dialogs.Cancel(pasteText.id)}
         />
       )}
-      {pasteText && pasteText.request.kind !== "text" && (
+      {pasteText?.request.kind === "special" && (
+        <ScInsertContentsDlg
+          key={pasteText.id}
+          initial={pasteText.request.initial}
+          onRespond={(value) => sheetWorkflows.clipboard.dialogs.Complete(pasteText.id, value)}
+        />
+      )}
+      {pasteText?.request.kind === "format" && (
+        <ScClipboardFormatDlg
+          key={pasteText.id}
+          onAccept={() => sheetWorkflows.clipboard.dialogs.Complete(pasteText.id, "text/plain")}
+          onCancel={() => sheetWorkflows.clipboard.dialogs.Cancel(pasteText.id)}
+        />
+      )}
+      {(pasteText?.request.kind === "replace" || pasteText?.request.kind === "larger") && (
         <ScPasteConfirmationDlg
           key={pasteText.id}
           kind={pasteText.request.kind}

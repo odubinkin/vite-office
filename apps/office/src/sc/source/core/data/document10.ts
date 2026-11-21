@@ -458,15 +458,15 @@ export function CopyFromClip(
     } finally {
       this.SetInsertingFromOtherDoc(false);
     }
-    // The actual context constructor admits exactly CONTENTS,so the native content guard is proven true here.
-    for (const tab of marks.GetSelectedTabs())
-      context.setListeningFormulaSpans(
-        tab,
-        destination.aStart.Col(),
-        destination.aStart.Row(),
-        destination.aEnd.Col(),
-        destination.aEnd.Row(),
-      );
+    if (flags & InsertDeleteFlags.CONTENTS)
+      for (const tab of marks.GetSelectedTabs())
+        context.setListeningFormulaSpans(
+          tab,
+          destination.aStart.Col(),
+          destination.aStart.Row(),
+          destination.aEnd.Col(),
+          destination.aEnd.Row(),
+        );
     context.startListeningFormulas();
     const bulk = new ScBulkBroadcast(this.GetBASM(), SfxHintId.ScDataChanged);
     try {

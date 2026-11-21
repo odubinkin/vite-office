@@ -24,8 +24,9 @@ import {
 } from "../../../inc/mtvelements";
 import type { base_element_block } from "../../../../external/mdds/include/mdds/multi_type_vector/types";
 import { ScFormulaCell, ScFormulaCellGroup, ScMatrixMode } from "../../../inc/formulacell";
-import { IsClipboardContentMask, type CopyFromClipContext } from "../../../inc/clipcontext";
-import { CellType } from "../../../inc/global";
+import { IsClipboardPasteMask, type CopyFromClipContext } from "../../../inc/clipcontext";
+import { CellType, InsertDeleteFlags } from "../../../inc/global";
+import { GetClipNonEmptySpans } from "./column3.clip";
 import { RowSpan, type ColumnSpanSet } from "../../../inc/columnspanset";
 import { string_element_callbacks } from "../../../inc/mtvelements";
 import { double_element_callbacks } from "../../../../external/mdds/include/mdds/multi_type_vector/standard_element_blocks";
@@ -283,8 +284,9 @@ export function DeleteBeforeCopyFromClip(
   const position = context.getBlockPosition(this.GetTab(), this.GetCol());
   if (!position) return;
   const flags = context.getDeleteFlag();
-  if (!IsClipboardContentMask(flags))
+  if (!IsClipboardPasteMask(flags))
     throw new Error("Nondefault pre-paste deletion is not implemented");
+  if (!(flags & InsertDeleteFlags.CONTENTS)) return;
   /** Clears a destination span and records its original broadcast and listener spans. @param first - First row. @param last - Last row. @returns Nothing. */
   const remove = (first: number, last: number): void => {
     const result = this.DeleteCells(position, first, last, flags);
@@ -299,21 +301,7 @@ export function DeleteBeforeCopyFromClip(
   const source = context.getClipDoc().GetClipParam().getWholeRange();
   const startRow = source.aStart.Row(),
     endRow = source.aEnd.Row();
-  const sourceCells = clipColumn.GetCellStore(),
-    spans: RowSpan[] = [];
-  ParseBlock(
-    sourceCells.cbegin(),
-    sourceCells,
-    {
-      /** Collects original nonempty clipboard runs. @param node - Storage block. @param offset - Offset within the block. @param count - Intersection length. @returns Nothing. */
-      call(node, offset, count) {
-        if (node.type !== element_type_empty)
-          spans.push(new RowSpan(node.position + offset, node.position + offset + count - 1));
-      },
-    },
-    startRow,
-    endRow,
-  );
+  const spans = GetClipNonEmptySpans(clipColumn, startRow, endRow);
   if (!spans.length) return;
   for (let dy = range.mnRow1 - startRow; startRow + dy <= range.mnRow2; dy += endRow - startRow + 1)
     for (const { mnRow1, mnRow2 } of spans) {

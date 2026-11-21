@@ -9,7 +9,7 @@ import { scPasteResourcesEnglish as R } from "../../../inc/globstr";
 import { ScMarkType } from "../inc/viewdata";
 import { ScViewUtil } from "./viewutil";
 import { ScEditableTester } from "../inc/editable";
-import { IsClipboardContentMask } from "../../../inc/clipcontext";
+import { IsClipboardPasteMask } from "../../../inc/clipcontext";
 import { TransposeClip } from "../../core/data/document.transpose";
 import { ScUndoPaste, ScUndoPasteOptions } from "../undo/undoblk";
 import { AdjustBlockHeight } from "./viewfun2";
@@ -30,10 +30,9 @@ export function PasteFromClip(
   const data = this.GetViewData();
   if (data.SelectionForbidsPaste(clip)) return false;
   if (
-    !IsClipboardContentMask(flags) ||
+    !IsClipboardPasteMask(flags) ||
     (undoExtra !== F.NONE && undoExtra !== F.ATTRIB) ||
     operation !== ScPasteFunc.NONE ||
-    (skipEmpty && flags & F.ATTRIB) ||
     asLink ||
     move !== InsCellCmd.INS_NONE ||
     allowDialogs
@@ -77,7 +76,8 @@ function PastePrepared(
     marks = data.GetMarkData();
   // The original Undo saves all content because a typed insert can replace a different cell type.
   const formats = (flags | undoExtra) & F.ATTRIB ? F.ATTRIB : F.NONE;
-  const undoFlags = (F.CONTENTS | formats | F.NOCAPTIONS) as F;
+  const contents = flags & F.CONTENTS ? F.CONTENTS : F.NONE;
+  const undoFlags = (contents | formats | F.NOCAPTIONS) as F;
   const clipX: [number] = [0],
     clipY: [number] = [0],
     destX: [number] = [0],

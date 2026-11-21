@@ -11,6 +11,12 @@ import { InsertDeleteFlags, InsCellCmd, ScInputMode, ScPasteFunc } from "../../i
 import { ScAsciiOptions } from "../../source/ui/dbgui/asciiopt";
 import { ScMarkType } from "../../source/ui/inc/viewdata";
 import {
+  defaultPasteSpecial,
+  GetInsContentsCmdBits,
+  type ScInsertContentsResponse,
+  type ScInsertContentsState,
+} from "../../source/ui/miscdlgs/inscodlg";
+import {
   ApplyImportedNumberFormats,
   calcCellClipboardFlags,
   ClipboardTextOptions,
@@ -62,6 +68,8 @@ interface OwnedTransfer extends Transfer {
 interface OwnedPasteOptions {
   readonly flags?: InsertDeleteFlags;
   readonly transpose?: boolean;
+  readonly skipEmpty?: boolean;
+  readonly dialog?: boolean;
 }
 
 /** Original Text Import dialog inputs for a text transfer. */
@@ -75,7 +83,10 @@ export type PasteConfirmation = "replace" | "larger";
 
 /** A pending text import or source paste confirmation. */
 type PasteDialogRequest =
-  ({ readonly kind: "text" } & PasteTextRequest) | { readonly kind: PasteConfirmation };
+  | ({ readonly kind: "text" } & PasteTextRequest)
+  | { readonly kind: PasteConfirmation }
+  | { readonly kind: "special"; readonly initial: ScInsertContentsState }
+  | { readonly kind: "format" };
 
 /** The warning checkbox applies independently of the Yes or No response. */
 export interface PasteConfirmationResult {
@@ -87,10 +98,11 @@ export interface PasteConfirmationResult {
 export class CalcClipboardWorkflow {
   readonly dialogs = new SfxDialogController<
     PasteDialogRequest,
-    ScAsciiOptions | PasteConfirmationResult
+    ScAsciiOptions | PasteConfirmationResult | ScInsertContentsResponse | "text/plain"
   >();
   private owned: OwnedTransfer | undefined;
   private preferences: ScAsciiOptions | undefined;
+  private special = defaultPasteSpecial;
   private warnReplace = true;
   private closed = false;
   private reading = false;
@@ -130,6 +142,14 @@ export class CalcClipboardWorkflow {
         label: "Paste Transposed",
         getState: (workflow) => ({ enabled: workflow.CanPasteOwned() }),
         execute: (workflow) => workflow.Paste(false, undefined, { transpose: true }),
+      },
+      {
+        commandUrl: ".uno:PasteSpecial",
+        slotId: 5311,
+        label: "Paste Special",
+        shortcuts: ["Ctrl+Shift+V", "Meta+Shift+V"],
+        getState: (workflow) => ({ enabled: workflow.CanRead() }),
+        execute: (workflow) => workflow.Paste(false, undefined, { dialog: true }),
       },
     ]),
   );
@@ -273,7 +293,8 @@ export class CalcClipboardWorkflow {
     supplied?: Transfer,
     native?: OwnedPasteOptions,
   ): Promise<boolean> {
-    if (!this.CanUseCells() || this.reading || (native && !this.CanPasteOwned())) return false;
+    if (!this.CanUseCells() || this.reading || (native && !native.dialog && !this.CanPasteOwned()))
+      return false;
     this.reading = true;
     const { controller } = this;
     const doc = controller.shell.GetDocument();
@@ -287,9 +308,17 @@ export class CalcClipboardWorkflow {
         revision === controller.GetSnapshot();
       if (!current()) return false;
       const owned = this.owned;
-      if (!unformatted && owned?.source === doc && owned.token === transfer.token)
-        return await this.PasteOwned(owned.clip, doc, current, native);
-      if (native || !transfer.plainText) return false;
+      if (!unformatted && owned?.source === doc && owned.token === transfer.token) {
+        const chosen = native?.dialog ? await this.PasteSpecialOptions() : native;
+        if ((native?.dialog && !chosen) || !current()) return false;
+        return await this.PasteOwned(owned.clip, doc, current, chosen);
+      }
+      if ((native && !native.dialog) || !transfer.plainText) return false;
+      if (native?.dialog) {
+        const response = await this.dialogs.Request({ kind: "format" });
+        if (response.kind !== "accepted" || response.result !== plainType || !current())
+          return false;
+      }
 
       const range = new ScRange();
       if (controller.viewData.GetSimpleArea(range) !== ScMarkType.SC_MARK_SIMPLE) return false;
@@ -353,13 +382,44 @@ export class CalcClipboardWorkflow {
     }
   }
 
+  /** Collects source choices and retains the original dialog options between requests. @returns Confirmed native options. */
+  private async PasteSpecialOptions(): Promise<OwnedPasteOptions | undefined> {
+    const response = await this.dialogs.Request({ kind: "special", initial: this.special });
+    if (
+      response.kind !== "accepted" ||
+      typeof response.result !== "object" ||
+      !("selection" in response.result)
+    )
+      return undefined;
+    const { accepted, selection } = response.result;
+    // The source destructor retains the options even on Cancel. The checks are committed on OK.
+    this.special = {
+      all: false,
+      flags: accepted ? selection.flags : this.special.flags,
+      skipEmpty: selection.skipEmpty,
+      transpose: selection.transpose,
+    };
+    return accepted
+      ? {
+          flags: GetInsContentsCmdBits(selection),
+          transpose: selection.transpose,
+          skipEmpty: selection.skipEmpty,
+        }
+      : undefined;
+  }
+
   /** Implements the native confirmation sequence for internal paste. @param clip - In-workbook clipboard. @param doc - Active document. @param current - Revalidates the initiating view after a modal. @param native - Native clip-only options. @returns Whether pasted. */
   private async PasteOwned(
     clip: ScDocument,
     doc: ScDocument,
     current: () => boolean,
-    { flags = calcCellClipboardFlags, transpose = false }: OwnedPasteOptions = {},
+    {
+      flags = calcCellClipboardFlags,
+      transpose = false,
+      skipEmpty = false,
+    }: OwnedPasteOptions = {},
   ): Promise<boolean> {
+    if (flags === InsertDeleteFlags.NONE) return false;
     const data = this.controller.viewData;
     const range = new ScRange();
     if (data.GetSimpleArea(range) !== ScMarkType.SC_MARK_SIMPLE || data.SelectionForbidsPaste(clip))
@@ -387,18 +447,19 @@ export class CalcClipboardWorkflow {
     }
     if (ScViewUtil.HasFiltered(range, doc)) return false;
     if (
+      flags & InsertDeleteFlags.CONTENTS &&
       this.warnReplace &&
       [...marks].some((tab) => !doc.IsBlockEmpty(startCol, startRow, endCol, endRow, tab)) &&
       (!(await this.Confirm("replace")) || !current())
     )
       return false;
 
-    if (!enlarge) return this.PasteDocument(clip, flags, transpose);
+    if (!enlarge) return this.PasteDocument(clip, flags, transpose, skipEmpty);
     const previous = new ScMarkData(marks);
     let pasted = false;
     try {
       marks.SetMarkArea(range);
-      pasted = this.PasteDocument(clip, flags, transpose);
+      pasted = this.PasteDocument(clip, flags, transpose, skipEmpty);
       return pasted;
     } finally {
       if (!pasted) marks.assign(previous);
@@ -408,16 +469,26 @@ export class CalcClipboardWorkflow {
   /** Collects a native confirmation and the application input preference. @param kind - Active warning. @returns Whether to proceed. */
   private async Confirm(kind: PasteConfirmation): Promise<boolean> {
     const response = await this.dialogs.Request({ kind });
-    if (response.kind !== "accepted" || response.result instanceof ScAsciiOptions) return false;
+    if (
+      response.kind !== "accepted" ||
+      typeof response.result !== "object" ||
+      !("warnAgain" in response.result)
+    )
+      return false;
     if (kind === "replace") this.warnReplace = response.result.warnAgain;
     return response.result.accepted;
   }
 
-  /** Pastes a native clip and publishes the resulting selection. @param clip - Actual clipboard document. @param flags - Original insertion mask. @param transpose - Original transpose flag. @returns Whether pasted. */
-  private PasteDocument(clip: ScDocument, flags: InsertDeleteFlags, transpose: boolean): boolean {
+  /** Pastes a native clip and publishes the resulting selection. @param clip - Actual clipboard document. @param flags - Original insertion mask. @param transpose - Original transpose flag. @param skipEmpty - Original skip-empty option. @returns Whether pasted. */
+  private PasteDocument(
+    clip: ScDocument,
+    flags: InsertDeleteFlags,
+    transpose: boolean,
+    skipEmpty: boolean,
+  ): boolean {
     const ok = this.controller
       .GetViewShell()
-      .PasteFromClip(flags, clip, ScPasteFunc.NONE, false, transpose);
+      .PasteFromClip(flags, clip, ScPasteFunc.NONE, skipEmpty, transpose);
     if (ok) this.controller.SyncSheetView();
     return ok;
   }

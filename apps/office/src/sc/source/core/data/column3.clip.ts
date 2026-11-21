@@ -26,6 +26,28 @@ import {
 import type { base_element_block } from "../../../../external/mdds/include/mdds/multi_type_vector/types";
 import type { SharedStringPool } from "../../../../svl/inc/sharedstringpool";
 import type { SharedStringConstReference } from "../../../../svl/inc/sharedstring";
+import { RowSpan } from "../../../inc/columnspanset";
+import { element_type_empty } from "../../../../external/mdds/include/mdds/multi_type_vector/types";
+
+/** Collects the original nonempty source spans used by Skip Empty Cells. @param column - Source column. @param first - First source row. @param last - Last source row. @returns Nonempty runs. */
+export function GetClipNonEmptySpans(column: ScColumn, first: number, last: number): RowSpan[] {
+  const cells = column.GetCellStore();
+  const spans: RowSpan[] = [];
+  ParseBlock(
+    cells.cbegin(),
+    cells,
+    {
+      /** Appends the nonempty intersection of one storage block. @param node - Source block. @param offset - First element. @param size - Number of elements. @returns Nothing. */
+      call(node, offset, size) {
+        if (node.type !== element_type_empty)
+          spans.push(new RowSpan(node.position + offset, node.position + offset + size - 1));
+      },
+    },
+    first,
+    last,
+  );
+  return spans;
+}
 /** Copies native iterator values rather than aliasing mutable JavaScript cursor objects. @param target - Existing value. @param source - Initialized native value. @returns Nothing. */
 export function assignBlockPosition(
   target: ColumnBlockPosition,
@@ -234,8 +256,16 @@ export function CopyFromClip(
     source.GetDoc().GetPool() !== this.GetDoc().GetPool()
       ? this.GetDoc().GetSharedStringPool()
       : null;
-  if (context.getInsertFlag() & InsertDeleteFlags.ATTRIB)
-    source["pAttrArray"].CopyArea(first, last, delta, this["pAttrArray"]);
+  const flags = context.getInsertFlag();
+  if (flags & InsertDeleteFlags.ATTRIB) {
+    const sourceAttrs = source["pAttrArray"],
+      targetAttrs = this["pAttrArray"];
+    if (context.isSkipEmptyCells()) {
+      for (const { mnRow1, mnRow2 } of GetClipNonEmptySpans(source, first - delta, last - delta))
+        sourceAttrs.CopyArea(mnRow1 + delta, mnRow2 + delta, delta, targetAttrs);
+    } else sourceAttrs.CopyArea(first, last, delta, targetAttrs);
+  }
+  if (!(flags & InsertDeleteFlags.CONTENTS)) return;
   const cells = new CopyCellsFromClipHandler(
       context,
       source,

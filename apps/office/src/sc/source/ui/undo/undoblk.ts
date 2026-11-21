@@ -97,6 +97,7 @@ export class ScUndoPaste extends SfxUndoAction<ScDocShell> {
     if (
       flags !== InsertDeleteFlags.CONTENTS &&
       flags !== (InsertDeleteFlags.CONTENTS | InsertDeleteFlags.NOCAPTIONS) &&
+      flags !== (InsertDeleteFlags.ATTRIB | InsertDeleteFlags.NOCAPTIONS) &&
       flags !==
         (InsertDeleteFlags.CONTENTS | InsertDeleteFlags.ATTRIB | InsertDeleteFlags.NOCAPTIONS)
     ) {
@@ -114,7 +115,8 @@ export class ScUndoPaste extends SfxUndoAction<ScDocShell> {
     const doc = this.shell.GetDocument(),
       count = doc.GetTableCount();
     // Constructor admission retains native all-or-none content and attribute normalization.
-    let flags = InsertDeleteFlags.CONTENTS;
+    let flags =
+      this.flags & InsertDeleteFlags.CONTENTS ? InsertDeleteFlags.CONTENTS : InsertDeleteFlags.NONE;
     if (this.flags & InsertDeleteFlags.ATTRIB) flags |= InsertDeleteFlags.ATTRIB;
     flags &= ~InsertDeleteFlags.OBJECTS;
     flags |= InsertDeleteFlags.NOCAPTIONS;

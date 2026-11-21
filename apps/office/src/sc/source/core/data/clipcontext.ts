@@ -14,7 +14,7 @@ import type { SfxUInt32Item } from "../../../../svl/inc/intitem";
 import { SvNumFormatType } from "../../../../svl/inc/zforlist";
 
 /** Checks the represented scalar clipboard insertion flags. @param flags - Source mask. @returns Whether supported. */
-export function IsClipboardContentMask(flags: InsertDeleteFlags): boolean {
+export function IsClipboardPasteMask(flags: InsertDeleteFlags): boolean {
   const content = flags & ~InsertDeleteFlags.ATTRIB;
   const scalar =
     InsertDeleteFlags.VALUE |
@@ -22,6 +22,7 @@ export function IsClipboardContentMask(flags: InsertDeleteFlags): boolean {
     InsertDeleteFlags.STRING |
     InsertDeleteFlags.FORMULA;
   return (
+    flags === InsertDeleteFlags.ATTRIB ||
     content === InsertDeleteFlags.CONTENTS ||
     (content !== InsertDeleteFlags.NONE && (content & ~scalar) === 0)
   );
@@ -80,11 +81,7 @@ export class CopyFromClipContext extends ClipContextBase {
     private readonly mbSkipEmptyCells: boolean,
   ) {
     super(mrDestDoc);
-    if (
-      !IsClipboardContentMask(mnInsertFlag) ||
-      mbAsLink ||
-      (mbSkipEmptyCells && mnInsertFlag & InsertDeleteFlags.ATTRIB)
-    )
+    if (!IsClipboardPasteMask(mnInsertFlag) || mbAsLink)
       throw new Error("Nondefault clipboard paste context is not implemented");
   }
   /** Original sheet span setter. @param first - First sheet. @param last - Last sheet. @returns Nothing. */
