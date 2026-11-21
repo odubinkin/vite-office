@@ -803,6 +803,38 @@ describe("WriterMenuBar" /** Groups Writer menu and clipboard integration tests.
     session.view.Close();
   });
 
+  it("restarts scoped Find after a zero-result Replace All follows Find All", /** Checks native scope restoration and the extra-phase miss. @returns Nothing. */ () => {
+    const session = createWriterDocumentSession();
+    const shell = session.view.GetWrtShell();
+    shell.Insert("outside cat cat outside");
+    const start = new SwPosition(shell.GetActiveParagraph(), 8);
+    const end = new SwPosition(start.GetNode(), 15);
+    shell.SetPaM(end, start);
+    start.Dispose();
+    end.Dispose();
+    const workbench = render(<WriterWorkbench isActive view={session.view} />);
+    fireEvent.keyDown(window, { key: "h", ctrlKey: true });
+    const dialog = within(screen.getByRole("dialog", { name: "Find and Replace" }));
+    fireEvent.click(dialog.getByText("Other options"));
+    const scope = dialog.getByLabelText("Current selection only");
+    fireEvent.click(scope);
+    const query = dialog.getByLabelText("Find");
+    fireEvent.change(query, { target: { value: "cat" } });
+    fireEvent.click(dialog.getByRole("button", { name: "Find All" }));
+    fireEvent.change(query, { target: { value: "outside" } });
+    fireEvent.click(dialog.getByRole("button", { name: "Replace All" }));
+    fireEvent.change(query, { target: { value: "cat" } });
+    const next = dialog.getByRole("button", { name: "Find Next" });
+    fireEvent.click(next);
+    expect(dialog.getByRole("status")).toHaveTextContent("Reached the end of the document");
+    fireEvent.change(query, { target: { value: "outside" } });
+    fireEvent.click(next);
+    expect(dialog.getByRole("status")).toHaveTextContent("Search key not found");
+    expect(scope).toBeDisabled();
+    workbench.unmount();
+    session.view.Close();
+  });
+
   it("implements roving, popup, submenu, typeahead, escape, and outside-click menu semantics" /** Verifies the primary menu keyboard and dismissal interactions. @returns Nothing. */, function navigatesWriterMenus(): void {
     render(<App />);
     const file = screen.getByRole("menuitem", { name: "File" });

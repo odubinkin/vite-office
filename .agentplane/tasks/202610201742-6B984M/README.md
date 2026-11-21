@@ -4,7 +4,7 @@ title: "Implement Writer search and replace core and browser UI"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 40
+revision: 41
 origin:
   system: "manual"
 depends_on:
@@ -124,6 +124,9 @@ comments:
   -
     author: "CODER"
     body: "Verified the search wrap checkpoint. Single searches preserve the active extra-area phase across manual cursor movement. Bulk commands reset the phase, and wrap suppression uses the registered endpoint before search-direction normalization. 71 focused Vitest tests passed across five search-related suites. Chrome Playwright passed for the existing Writer search flow and the reversed-selection keyboard probe. Build, the two Writer resource tests, dependency, source tree, provenance, docs, file-size, scoped lint and formatting, routing and diff checks passed. AgentPlane doctor reported the existing hook-readiness warning. Native behavior was inspected at the pinned source, and WRITER-688 and WRITER-689 record the two suspected upstream behaviors. This is an intermediate checkpoint."
+  -
+    author: "CODER"
+    body: "Verified scoped search checkpoint. Single selection-only searches use SwView::SearchAndWrap with InSel for both passes. The view resolves the last-command repositioning, restores saved search endpoints on wrap, publishes the resulting scoped cursor, and retains Find All command state when Replace All returns without matches. The modeless-dialog regression exercises the scoped Find All, zero-result Replace All, wrap feedback, and extra-phase miss together. WRITER-690 and WRITER-691 document the two source-derived interactions. The final Vitest run passed 72 tests in five scoped files (WriterMenuBar, WriterSearch, native search ring ownership, findtxt and native replacement). Production build, two Writer resource tests, dependency, source tree, provenance, JSDoc, file size, scoped ESLint and Prettier, policy routing and diff checks passed. Doctor retains its existing managed hook-shim readiness warning. The parent remains open and the full-suite cadence does not advance."
 events:
   -
     type: "status"
@@ -272,8 +275,13 @@ events:
     at: "2026-11-21T05:24:16.080Z"
     author: "CODER"
     body: "Verified the search wrap checkpoint. Single searches preserve the active extra-area phase across manual cursor movement. Bulk commands reset the phase, and wrap suppression uses the registered endpoint before search-direction normalization. 71 focused Vitest tests passed across five search-related suites. Chrome Playwright passed for the existing Writer search flow and the reversed-selection keyboard probe. Build, the two Writer resource tests, dependency, source tree, provenance, docs, file-size, scoped lint and formatting, routing and diff checks passed. AgentPlane doctor reported the existing hook-readiness warning. Native behavior was inspected at the pinned source, and WRITER-688 and WRITER-689 record the two suspected upstream behaviors. This is an intermediate checkpoint."
+  -
+    type: "comment"
+    at: "2026-11-21T05:31:27.722Z"
+    author: "CODER"
+    body: "Verified scoped search checkpoint. Single selection-only searches use SwView::SearchAndWrap with InSel for both passes. The view resolves the last-command repositioning, restores saved search endpoints on wrap, publishes the resulting scoped cursor, and retains Find All command state when Replace All returns without matches. The modeless-dialog regression exercises the scoped Find All, zero-result Replace All, wrap feedback, and extra-phase miss together. WRITER-690 and WRITER-691 document the two source-derived interactions. The final Vitest run passed 72 tests in five scoped files (WriterMenuBar, WriterSearch, native search ring ownership, findtxt and native replacement). Production build, two Writer resource tests, dependency, source tree, provenance, JSDoc, file size, scoped ESLint and Prettier, policy routing and diff checks passed. Doctor retains its existing managed hook-shim readiness warning. The parent remains open and the full-suite cadence does not advance."
 doc_version: 3
-doc_updated_at: "2026-11-21T05:24:16.080Z"
+doc_updated_at: "2026-11-21T05:31:27.722Z"
 doc_updated_by: "CODER"
 description: "Implement the approved coherent Writer search-and-replace feature from pinned LibreOffice sources: real shared search engine and options, native paragraph/cursor traversal and replacement/history contracts, view-owned search state and dispatch, Find toolbar and Find and Replace dialog with generated upstream command placement and shortcuts. Preserve source semantics and explicit unsupported boundaries; never substitute DOM text search or browser RegExp for ICU contracts. Work only on writer in vite-office-writer; local upstream reading approved, no network or merges. Keep active until approved scope is verified."
 sections:

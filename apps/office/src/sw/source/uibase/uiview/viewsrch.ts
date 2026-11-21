@@ -409,44 +409,54 @@ export class SwViewSearch {
     }
   }
 
-  /** Runs the body, extras and wrap passes of the native view search. @param cursor - Working cursor. @param first - Directional beginning of the document. @param find - Model search strategy. @returns Match count and wrap state. */
+  /** Runs the current-area and wrap passes of the native view search. @param cursor - Working cursor. @param first - Directional beginning of the document. @param inSelection - Whether the live selection ring bounds both passes. @param find - Model search strategy. @returns Match count and wrap state. */
   private SearchAndWrap(
     cursor: SwCursor,
     first: SwDocPositions,
+    inSelection: boolean,
     find: (from: SwDocPositions, ranges: FindRanges) => number,
   ): WriterSearchResult {
-    const origin = cursor.GetPoint().clone();
+    const saved = this.shell.getShellCursor();
+    const origin = saved.GetPoint();
     const boundary = origin.clone();
+    const forward = first === SwDocPositions.Start;
     try {
       cursor.FillFindPos(first, boundary);
-      const dontWrap = origin.compare(boundary) === 0;
-      if (this.lastCommand === SvxSearchCmd.FIND_ALL)
-        cursor.MoveSection(first === SwDocPositions.Start);
-      cursor.Normalize(first === SwDocPositions.End);
-      cursor.DeleteMark();
+      const dontWrap = cursor.GetPoint().compare(boundary) === 0;
+      if (this.lastCommand === SvxSearchCmd.FIND_ALL) {
+        disposeSearchRing(cursor);
+        cursor.DeleteMark();
+        cursor.MoveSection(forward);
+      }
+      cursor.Normalize(!forward);
+      if (!inSelection) cursor.DeleteMark();
+
       const startedInOther = this.searchInOther;
       let matches = find(
         SwDocPositions.Curr,
-        startedInOther ? FindRanges.InOther : FindRanges.InBody,
+        inSelection ? FindRanges.InSel : startedInOther ? FindRanges.InOther : FindRanges.InBody,
       );
       if (matches > 0) return { matches, wrapped: false };
-      if (!startedInOther) {
+      if (!inSelection && !startedInOther) {
         this.searchInOther = true;
         matches = find(SwDocPositions.Curr, FindRanges.InOther);
         if (matches > 0) return { matches, wrapped: false };
-      }
-      this.searchInOther = false;
+        this.searchInOther = false;
+      } else this.searchInOther = !startedInOther;
       if (dontWrap) return { matches: 0, wrapped: false };
 
-      cursor.Assign(startedInOther ? boundary : origin);
-      matches = find(first, FindRanges.InBody);
-      if (matches === 0) {
+      cursor.Assign(origin, inSelection && saved.HasMark() ? saved.GetMark() : undefined);
+      if (startedInOther) {
+        cursor.DeleteMark();
+        cursor.SttEndDoc(forward);
+      }
+      matches = find(first, inSelection ? FindRanges.InSel : FindRanges.InBody);
+      if (!inSelection && matches === 0) {
         matches = find(first, FindRanges.InOther);
         this.searchInOther = matches > 0;
       }
       return { matches, wrapped: matches > 0 };
     } finally {
-      origin.Dispose();
       boundary.Dispose();
     }
   }
@@ -513,7 +523,7 @@ export class SwViewSearch {
               if (replaceAll && !inSelection && !fromTableCaret) this.shell.ClearMark();
               const all = command === SvxSearchCmd.FIND_ALL || command === SvxSearchCmd.REPLACE_ALL;
               if (all) this.searchInOther = false;
-              if (all || inSelection) search.Normalize(backward);
+              if (all) search.Normalize(backward);
               const replacement =
                 style !== undefined && replaceAll && item.replaceStyle
                   ? document.GetTextFormatColl(item.replaceStyle)
@@ -551,30 +561,31 @@ export class SwViewSearch {
                   if (ranges === FindRanges.InOther) disposeSearchRing(search);
                   return matches;
                 };
-              const result =
-                all || inSelection
-                  ? {
-                      matches: find(
-                        all ? first : SwDocPositions.Curr,
-                        (inSelection ? FindRanges.InSel : FindRanges.InBody) |
-                          (all ? FindRanges.InSelAll : 0),
-                      ),
-                      wrapped: false,
-                    }
-                  : this.SearchAndWrap(search, first, find);
+              const result = all
+                ? {
+                    matches: find(
+                      first,
+                      (inSelection ? FindRanges.InSel : FindRanges.InBody) | FindRanges.InSelAll,
+                    ),
+                    wrapped: false,
+                  }
+                : this.SearchAndWrap(search, first, inSelection, find);
               const { matches } = result;
               if (replaceAll) {
                 if (matches > 0 && !this.shell.IsTableMode()) disposeSearchRing(cursor);
-              } else if (matches > 0) {
+              } else if (matches > 0 || (!all && inSelection)) {
                 this.shell.ClearMark();
-                this.shell.SetPaM(search.GetPoint(), search.GetMark());
+                this.shell.SetPaM(
+                  search.GetPoint(),
+                  search.HasMark() ? search.GetMark() : undefined,
+                );
                 search.GetRingContainer().merge(this.shell.GetCursor_().GetRingContainer());
                 transferred = true;
               } else if (!inSelection) {
                 this.shell.ClearMark();
                 if (!all) this.shell.SetCursor(search.GetPoint());
               }
-              this.lastCommand = command;
+              if (!replaceAll || matches > 0) this.lastCommand = command;
               return result;
             } finally {
               if (!transferred) disposeSearchRing(search);

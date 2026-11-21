@@ -50,7 +50,7 @@
       "Uses the native SvxSearchCmd enum. Initializes the dialog with the expanded single-paragraph cursor text or scopes it to the selection. Find Bar uses the Writer ASCII range writer with numbering and trailing paragraph breaks disabled and refreshes the search entry on focus from the editor.",
       "Projects the represented read-only Writer view state to the replacement controls and applies the same admission to fresh and repeated replacement dispatch.",
       "Searches the actual selected cursor ring to validate a single replacement and restores the registered cursor for backward replacement and Replace All. A saved table cursor regenerates its box selection after the text edits.",
-      "Tracks the body and extra-area phases across single commands, resets the phase on bulk commands, and uses the pre-normalization document boundary and resulting cursor position in wrap feedback (WRITER-688 and WRITER-689)."
+      "Tracks the body and extra-area phases across single commands, resets the phase on bulk commands, and uses the pre-normalization document boundary and resulting cursor position in wrap feedback (WRITER-688 and WRITER-689). Uses the native wrap path for selection-only search, including the extra-area flag transition and restored cursor, and keeps the prior command after a zero-result Replace All (WRITER-690 and WRITER-691)."
     ],
     "upstreamPath": "sw/source/uibase/uiview/viewsrch.cxx",
     "upstreamSymbols": [

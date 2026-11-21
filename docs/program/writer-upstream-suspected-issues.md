@@ -5436,3 +5436,26 @@ applies its authored properties without that collection change.
 - Preserve the initial boundary decision and the normalized cursor after
   the unsuccessful pass. A subsequent forward search from that cursor
   can wrap. The browser regression exercises this source ordering.
+
+### WRITER-690 — A failed selection-only search can set the extra-area flag
+
+- Upstream: `sw/source/uibase/uiview/viewsrch.cxx`, `SwView::SearchAndWrap`
+  and `SwView::FUNC_Search` at the pinned baseline.
+- Observation: `FUNC_Search` uses `InSel` for both passes when selection-only
+  is on. If the first pass misses, `SearchAndWrap` still flips `s_bExtra`.
+  A later miss that entered with this flag set can clear the current mark
+  and move the point to the document boundary before retrying `InSel`.
+  Matches outside the selection remain excluded.
+- Preserve the shared flag, the restored cursor on wrap, and the resulting
+  mark and point. The browser regression covers the source-derived order
+  through the modeless dialog.
+
+### WRITER-691 — A zero-result Replace All can leave Find All as the last command
+
+- Upstream: `sw/source/uibase/uiview/viewsrch.cxx`, `SwView::ExecSearch`
+  and `SwView::SearchAndWrap` at the pinned baseline.
+- Observation: the zero-result Replace All branch returns before committing
+  `m_eLastSearchCommand`. A following single search can still perform the
+  repositioning normally associated with Find All.
+- Preserve this command-state distinction. This observation is based on
+  source control flow.
