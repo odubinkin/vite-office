@@ -62,9 +62,6 @@ import {
   RES_MARGIN_TEXTLEFT,
   RES_PARATR_ADJUST,
   RES_PARATR_LINESPACING,
-  RES_PARATR_ORPHANS,
-  RES_PARATR_SPLIT,
-  RES_PARATR_WIDOWS,
   RES_PARATR_VERTALIGN,
   RES_UL_SPACE,
 } from "../../inc/hintids";
@@ -79,6 +76,7 @@ import {
   WriterSearchTwoLinesPage,
   type WriterSearchTwoLinesPageHandle,
 } from "./WriterSearchTwoLinesPage";
+import { WriterSearchTextFlowPage } from "./WriterSearchTextFlowPage";
 import { WriterSearchParagraphAlignment } from "./WriterSearchParagraphAlignment";
 
 /** Edits exact search or replacement formatting. @param props - Criteria and owning pool. @returns Modal formatting form. */
@@ -99,6 +97,7 @@ export function WriterSearchFormatDialog(
   const twoLinesPage = useRef<WriterSearchTwoLinesPageHandle>(null);
   const [complexFont, setComplexFont] = useState(readPreferredCTLFontTab);
   const [fontReset, setFontReset] = useState(0);
+  const [textFlowReset, setTextFlowReset] = useState(0);
   const [lineMode, setLineMode] = useState<ParagraphLineSpaceMode>();
   const [draft, setDraft] = useState<ReadonlyMap<number, string | SfxPoolItem>>(new Map());
   const title =
@@ -149,6 +148,7 @@ export function WriterSearchFormatDialog(
     for (const which of formatPages[page][1]) restored.delete(which);
     if (page === "indents") setLineMode(undefined);
     if (page === "font") setFontReset(fontReset + 1);
+    if (page === "textflow") setTextFlowReset(textFlowReset + 1);
     if (page === "asianlayout") twoLinesPage.current?.Reset();
     setDraft(restored);
   }
@@ -899,29 +899,13 @@ export function WriterSearchFormatDialog(
           </fieldset>
         </div>
         <div role="tabpanel" hidden={page !== "textflow"}>
-          <fieldset
-            disabled={scalar(RES_PARATR_SPLIT) === "false"}
-            className="grid gap-2 rounded border border-slate-200 p-2"
-          >
-            <legend className="text-sm">{label("textflow-options", "Options")}</legend>
-            {metric(
-              RES_PARATR_ORPHANS,
-              label("orphans", "Don’t split at beginning of paragraph"),
-              0,
-              9,
-              1,
-              label("lines", "lines"),
-            )}
-            {metric(
-              RES_PARATR_WIDOWS,
-              label("widows", "Don’t split at end of paragraph"),
-              0,
-              9,
-              1,
-              label("lines", "lines"),
-            )}
-          </fieldset>
-          {check(RES_PARATR_SPLIT, label("split-paragraph", "Allow to split paragraph"))}
+          <WriterSearchTextFlowPage
+            key={textFlowReset}
+            label={label}
+            value={scalar}
+            initial={initialScalar}
+            onChange={change}
+          />
         </div>
         <fieldset hidden={page !== "asiantypo"} className="rounded border border-slate-200 p-2">
           <legend className="px-1 text-sm">{label("line-change", "Line Change")}</legend>

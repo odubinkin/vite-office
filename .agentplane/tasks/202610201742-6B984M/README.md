@@ -4,7 +4,7 @@ title: "Implement Writer search and replace core and browser UI"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 110
+revision: 111
 origin:
   system: "manual"
 depends_on:
@@ -399,6 +399,14 @@ comments:
       Writer multi-paragraph edit checkpoint. The browser typing path uses the native delete-and-insert sequence for a selection spanning paragraphs. SwUndoDelete now saves supported floating text frames and graphics whose anchors belong to fully selected interior paragraphs before joining the boundary text nodes. SwUndoDelLayFormat retains the original special format and moves its real section to Writer undo storage. Undo restores the body paragraphs, fly section, object identity and anchor in the correct order. Redo removes the fly again. The model regression adapts the pinned testSetStringDeletesShape selection to the ordinary Writer shell and exercises both text and graphic content. A browser editor regression uses the actual beforeinput path with a rendered floating text story.
 
       Verification: 1804 tests passed across eight focused Writer suites, including native deletion, split history, graphics and search replacement. The production build and six Chrome search and style-history smoke scenarios pass. Scoped ESLint and Prettier, git diff --check, dependency boundaries, provenance, source tree, Writer resources and inventory, and policy routing pass. AgentPlane doctor retains its hook-shim warning and reports zero errors. The repository-wide JSDoc and file-size checks retain their 307 and four existing findings. The supported floating histories cover plain sections and graphics anchored to fully selected middle paragraphs. Nested fly content and section mark history remain open. This checkpoint leaves the search task active.
+  -
+    author: "CODER"
+    body: |-
+      Verified Text Flow checkpoint for Find and Replace. The format dialog now binds Allow to split, orphan control and widow control to the existing Writer paragraph items, with the pinned native checkbox cycle, sensitivity handlers, 2–9 line fields and explicit zero output. Keep with next paragraph is disabled by FormatHdl_Impl. The original asymmetric widow/orphan sensitivity remains as documented in WRITER090. Mounted UI evidence covers search by combined criteria, field drafts, page reset, replacement with zero and grouped Undo.
+
+      Targeted Writer run passed 147 tests in 14 files, with six existing native ICU host-probe cases skipped. Four production Chrome search scenarios passed. Production TypeScript and Vite build, Writer resource checks, dependency and source-tree checks, provenance, Writer registry parity (zero violations), scoped ESLint and Prettier, routing and diff checks passed. Repository-wide JSDoc and file-size checks still report 307 existing documentation errors and four existing files at the limit. AgentPlane doctor passed with the existing hook-shim warning.
+
+      This checkpoint keeps the search task open. It does not advance the ten-task full-regression cadence.
 
 events:
   -
@@ -957,9 +965,19 @@ events:
       Writer multi-paragraph edit checkpoint. The browser typing path uses the native delete-and-insert sequence for a selection spanning paragraphs. SwUndoDelete now saves supported floating text frames and graphics whose anchors belong to fully selected interior paragraphs before joining the boundary text nodes. SwUndoDelLayFormat retains the original special format and moves its real section to Writer undo storage. Undo restores the body paragraphs, fly section, object identity and anchor in the correct order. Redo removes the fly again. The model regression adapts the pinned testSetStringDeletesShape selection to the ordinary Writer shell and exercises both text and graphic content. A browser editor regression uses the actual beforeinput path with a rendered floating text story.
 
       Verification: 1804 tests passed across eight focused Writer suites, including native deletion, split history, graphics and search replacement. The production build and six Chrome search and style-history smoke scenarios pass. Scoped ESLint and Prettier, git diff --check, dependency boundaries, provenance, source tree, Writer resources and inventory, and policy routing pass. AgentPlane doctor retains its hook-shim warning and reports zero errors. The repository-wide JSDoc and file-size checks retain their 307 and four existing findings. The supported floating histories cover plain sections and graphics anchored to fully selected middle paragraphs. Nested fly content and section mark history remain open. This checkpoint leaves the search task active.
+  -
+    type: "comment"
+    at: "2026-11-21T21:23:49.642Z"
+    author: "CODER"
+    body: |-
+      Verified Text Flow checkpoint for Find and Replace. The format dialog now binds Allow to split, orphan control and widow control to the existing Writer paragraph items, with the pinned native checkbox cycle, sensitivity handlers, 2–9 line fields and explicit zero output. Keep with next paragraph is disabled by FormatHdl_Impl. The original asymmetric widow/orphan sensitivity remains as documented in WRITER090. Mounted UI evidence covers search by combined criteria, field drafts, page reset, replacement with zero and grouped Undo.
+
+      Targeted Writer run passed 147 tests in 14 files, with six existing native ICU host-probe cases skipped. Four production Chrome search scenarios passed. Production TypeScript and Vite build, Writer resource checks, dependency and source-tree checks, provenance, Writer registry parity (zero violations), scoped ESLint and Prettier, routing and diff checks passed. Repository-wide JSDoc and file-size checks still report 307 existing documentation errors and four existing files at the limit. AgentPlane doctor passed with the existing hook-shim warning.
+
+      This checkpoint keeps the search task open. It does not advance the ten-task full-regression cadence.
 
 doc_version: 3
-doc_updated_at: "2026-11-21T21:11:42.362Z"
+doc_updated_at: "2026-11-21T21:23:49.642Z"
 doc_updated_by: "CODER"
 description: "Implement the approved coherent Writer search-and-replace feature from pinned LibreOffice sources: real shared search engine and options, native paragraph/cursor traversal and replacement/history contracts, view-owned search state and dispatch, Find toolbar and Find and Replace dialog with generated upstream command placement and shortcuts. Preserve source semantics and explicit unsupported boundaries; never substitute DOM text search or browser RegExp for ICU contracts. Work only on writer in vite-office-writer; local upstream reading approved, no network or merges. Keep active until approved scope is verified."
 sections:

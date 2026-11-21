@@ -1,0 +1,42 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "browser-adaptation",
+    "localPath": "apps/office/src/sw/browser/presentation/WriterSearchTextFlowPage.tsx",
+    "localSymbols": [
+      "WriterSearchTextFlowPage"
+    ],
+    "status": "local-only",
+    "rationale": "Renders the pinned Text Flow options for paragraph splitting and widow and orphan criteria with native browser controls. Preserves the unset and zero states, source sensitivities, and existing paragraph items.",
+    "responsibilities": [
+      "Renders the pinned Text Flow options for paragraph splitting and widow and orphan criteria with native browser controls. Preserves the unset and zero states, source sensitivities, and existing paragraph items."
+    ],
+    "stackDivergence": {
+      "kind": "browser-adaptation",
+      "rationale": "Browser controls provide the pinned VCL dialog structure."
+    },
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sw/browser/presentation/WriterSearchTextFlowPage.tsx",
+          "marker": "WriterSearchTextFlowPage"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/cui/source/tabpages/paragrph.cxx",
+          "marker": "SvxExtParagraphTabPage::AllowSplitHdl"
+        },
+        {
+          "path": "vendor/libreoffice-reference/cui/uiconfig/ui/textflowpage.ui",
+          "marker": "spinWidow"
+        },
+        {
+          "path": "vendor/libreoffice-reference/svx/source/dialog/srchdlg.cxx",
+          "marker": "FormatHdl_Impl"
+        }
+      ]
+    }
+  }
+}
