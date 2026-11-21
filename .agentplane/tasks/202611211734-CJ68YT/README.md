@@ -4,7 +4,7 @@ title: "Connect Calc names from selection labels"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 4
+revision: 5
 origin:
   system: "manual"
 depends_on: []
@@ -37,7 +37,7 @@ events:
     to: "DOING"
     note: "Start: Connect the native Create Names dialog and selection-label name creation with indexed scope history."
 doc_version: 3
-doc_updated_at: "2026-11-21T17:34:49.097Z"
+doc_updated_at: "2026-11-21T18:03:03.326Z"
 doc_updated_by: "CODER"
 description: "Expose the LibreOffice Create Names command using the existing indexed name collections, reference formatting, dialog service and range-name history."
 sections:
@@ -47,7 +47,12 @@ sections:
   Verify Steps: "Run focused Calc named-range, formula, selection, workbook and menu tests including the pinned tdf137617 Create Names scenarios, conflict handling and Undo. Run Office TypeScript, changed-path lint and format, generated Calc resources, source provenance, dependency boundaries, policy routing and AgentPlane doctor."
   Verification: "Pending implementation and focused checks."
   Rollback Plan: "Revert the source commit for this task to remove the new command and restore previous range-name entry points."
-  Findings: "Pending source comparison."
+  Findings: |-
+    - CALC-809 captures the original partial application when Cancel is selected in the replacement prompt. The browser preserves the earlier draft entries and stops further labels, with one scope Undo.
+    - Range name creation reuses actual cell values and the indexed name model. The name box resolves local then global definitions by exact selected block, and formula input consults the document grammar.
+    - The tdf137617 browser port sets the document grammar directly for the Excel R1C1 scenario. The Calc options UI is outside this task's scope.
+    - AgentPlane doctor returned its existing hook shim readiness warning and no errors.
+    - This is task 3 of the ten-task verification cycle. Full verification is due after seven more AgentPlane tasks.
 id_source: "generated"
 ---
 ## Summary
@@ -76,4 +81,8 @@ Revert the source commit for this task to remove the new command and restore pre
 
 ## Findings
 
-Pending source comparison.
+- CALC-809 captures the original partial application when Cancel is selected in the replacement prompt. The browser preserves the earlier draft entries and stops further labels, with one scope Undo.
+- Range name creation reuses actual cell values and the indexed name model. The name box resolves local then global definitions by exact selected block, and formula input consults the document grammar.
+- The tdf137617 browser port sets the document grammar directly for the Excel R1C1 scenario. The Calc options UI is outside this task's scope.
+- AgentPlane doctor returned its existing hook shim readiness warning and no errors.
+- This is task 3 of the ten-task verification cycle. Full verification is due after seven more AgentPlane tasks.

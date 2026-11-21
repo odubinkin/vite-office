@@ -114,6 +114,8 @@ export class FormulaCompiler {
       this.meGrammar !== FormulaGrammar.Grammar.GRAM_ODFF &&
       this.meGrammar !== FormulaGrammar.Grammar.GRAM_ODFF_A1 &&
       this.meGrammar !== FormulaGrammar.Grammar.GRAM_NATIVE &&
+      this.meGrammar !== FormulaGrammar.Grammar.GRAM_NATIVE_XL_R1C1 &&
+      this.meGrammar !== FormulaGrammar.Grammar.GRAM_ENGLISH_XL_R1C1 &&
       this.meGrammar !== FormulaGrammar.Grammar.GRAM_ENGLISH &&
       this.meGrammar !== FormulaGrammar.Grammar.GRAM_OOXML
     )
