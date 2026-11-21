@@ -1,10 +1,11 @@
 ---
 id: "202611211813-7C1WVT"
 title: "Connect Calc row and column label ranges"
-status: "DOING"
+result_summary: "Connect Calc's explicit row and column label pairs through the native dialog, formula tokens and ODS"
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 8
+revision: 9
 origin:
   system: "manual"
 depends_on: []
@@ -42,11 +43,16 @@ quality_review:
   findings:
     - "The pinned fixture label-list deletion assertions passed through the real Sheet menu and the browser confirmation."
     - "Column and row references, label-range deletion, ODS reopening and preceding-sheet changes use native persisted pairs."
-commit: null
+commit:
+  hash: "ad3928c0ec14d459539b7bbf0de65c9510cb3a11"
+  message: "🧩 7C1WVT code: connect Calc row and column label ranges"
 comments:
   -
     author: "CODER"
     body: "Start: Connect native paired label ranges across Calc document, formula, ODS and reference dialog."
+  -
+    author: "CODER"
+    body: "Verified: 44 scoped Calc tests passed with the declared type, format, lint, generated-resource, provenance and dependency checks."
 events:
   -
     type: "status"
@@ -61,8 +67,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "All 44 focused Calc tests and all declared static checks passed, including the tdf131170 dialog, live label formulas, ODS and range-pair movement."
+  -
+    type: "status"
+    at: "2026-11-21T18:32:02.126Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: 44 scoped Calc tests passed with the declared type, format, lint, generated-resource, provenance and dependency checks."
 doc_version: 3
-doc_updated_at: "2026-11-21T18:30:22.177Z"
+doc_updated_at: "2026-11-21T18:32:02.127Z"
 doc_updated_by: "CODER"
 description: "Connect document label range pairs, native formula references, ODS persistence and the Define Label Range ref dialog."
 sections:
