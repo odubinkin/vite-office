@@ -152,7 +152,14 @@ function importLayout(items: SfxItemSet, properties: ReadonlyMap<T, string>, usa
   else if (color && /^#[0-9a-f]{6}$/iu.test(color))
     items.Put(new SvxBrushItem(new Color(Number.parseInt(color.slice(1), 16)), ATTR_BACKGROUND));
   const box = (items.Get(ATTR_BORDER) as SvxBoxItem).Clone();
-  if (importPageBoxProperties(box, properties, (value) => units.convertMeasureToCore(value)))
+  if (
+    importPageBoxProperties(
+      box,
+      properties,
+      /** Converts an ODF border measure. @param value - Lexical length. @returns Twip length or absence. */
+      (value) => units.convertMeasureToCore(value),
+    )
+  )
     items.Put(box);
   const measure =
     /** Reads one native measure in the existing page unit. @param token - Source attribute. @returns Twip length or absent. */ (
@@ -378,13 +385,21 @@ function exportLayout(items: SfxItemSet): string {
     items.GetItemIfSet(ATTR_PAGE_FIRSTPAGENO, false) as SfxUInt16Item | undefined
   )?.GetValue();
   let attributes = `fo:page-width="${measure(size.Width())}" fo:page-height="${measure(size.Height())}" style:print-orientation="${page.IsLandscape() ? "landscape" : "portrait"}" fo:margin-left="${measure(lr.ResolveLeft())}" fo:margin-right="${measure(lr.ResolveRight())}" fo:margin-top="${measure(ul.GetUpper())}" fo:margin-bottom="${measure(ul.GetLower())}"`;
-  if (pagePrintTokens.some((token) => items.GetItemIfSet(printItems[token], false))) {
-    const print = pagePrintTokens.filter((token) => {
-      const item = items.Get(printItems[token]) as SfxBoolItem | ScViewObjectModeItem;
-      return item instanceof ScViewObjectModeItem
-        ? item.GetValue() === ScVObjMode.VOBJ_MODE_SHOW
-        : item.GetValue();
-    });
+  if (
+    pagePrintTokens.some(
+      /** Checks whether this option was explicitly set. @param token - ODF print option. @returns Direct item or absence. */
+      (token) => items.GetItemIfSet(printItems[token], false),
+    )
+  ) {
+    const print = pagePrintTokens.filter(
+      /** Selects enabled print options. @param token - ODF print option. @returns Whether the option is enabled. */
+      (token) => {
+        const item = items.Get(printItems[token]) as SfxBoolItem | ScViewObjectModeItem;
+        return item instanceof ScViewObjectModeItem
+          ? item.GetValue() === ScVObjMode.VOBJ_MODE_SHOW
+          : item.GetValue();
+      },
+    );
     attributes += ` style:print="${print.join(" ")}"`;
   }
   if (down !== undefined) attributes += ` style:print-page-order="${down ? "ttb" : "ltr"}"`;
@@ -400,7 +415,11 @@ function exportLayout(items: SfxItemSet): string {
   const box = items.GetItemIfSet(ATTR_BORDER) as SvxBoxItem | undefined;
   const borders = box ? exportPageBoxProperties(box, measure) : "";
   const dir = (items.Get(ATTR_WRITINGDIR) as SvxFrameDirectionItem).GetValue();
-  const direction = [...directions].find(([, value]) => value === dir)?.[0] ?? "page";
+  const direction =
+    [...directions].find(
+      /** Matches the native writing direction. @param entry - ODF token and native direction. @returns Whether the entry matches. */
+      ([, value]) => value === dir,
+    )?.[0] ?? "page";
   const number = page.GetNumType();
   const sync = SvXMLUnitConverter.convertNumLetterSync(number);
   const numbering = ` style:num-format="${escapeXml(units.convertNumFormat(number))}"${sync ? ' style:num-letter-sync="true"' : ""}`;
@@ -466,7 +485,11 @@ export function exportPageStyles(
     names.set(name, master);
     const items = style.GetItemSet();
     const pageUsage = (items.Get(ATTR_PAGE) as SvxPageItem).GetPageUsage();
-    const usage = [...usages].find(([, value]) => value === pageUsage)?.[0] ?? "all";
+    const usage =
+      [...usages].find(
+        /** Matches the native page usage. @param entry - ODF token and native usage. @returns Whether the entry matches. */
+        ([, value]) => value === pageUsage,
+      )?.[0] ?? "all";
     const layoutBody = `<style:page-layout-properties ${exportLayout(items)}/>${exportHeaderFooterLayout(items, true)}${exportHeaderFooterLayout(items, false)}`;
     const layoutKey = `${usage}:${layoutBody}`;
     let layout = layoutNames.get(layoutKey);

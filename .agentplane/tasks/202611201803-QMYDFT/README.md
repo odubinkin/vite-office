@@ -4,7 +4,7 @@ title: "Integrate current Writer and Calc development into main"
 status: "DOING"
 priority: "high"
 owner: "CODER"
-revision: 7
+revision: 8
 origin:
   system: "manual"
 depends_on: []
@@ -42,7 +42,7 @@ events:
     state: "needs_rework"
     note: "Completed whole-project verification and rechecked all nine functional failures. Application-wide coverage still falls below the 100 percent thresholds."
 doc_version: 3
-doc_updated_at: "2026-11-20T20:08:32.684Z"
+doc_updated_at: "2026-11-21T13:28:14.455Z"
 doc_updated_by: "CODER"
 description: "Publish current feature branches, integrate both into main, run complete verification and fix regressions, record suspected upstream issues, publish main and synchronize both development checkouts."
 sections:
@@ -95,7 +95,10 @@ sections:
 
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Retain the original branch history and use only non-force pushes. Use a revert for any published correction that needs rollback."
-  Findings: "Merged the published Writer checkpoint fc26d329f and Calc tip 93903dd90 into main. Both conflicts involved independently allocated journal identifiers. Preserved all entries and updated cross-references for WRITER-685 through WRITER-687 and CALC-779 through CALC-783. Static repairs kept the native algorithms and preserved ownership in the registry. The global coverage deficit extends beyond this integration and remains open. Pre-existing untracked Calc output is preserved."
+  Findings: |-
+    The previous integration merged Writer fc26d329f and Calc 93903dd90, resolved journal collisions in WRITER-685 through WRITER-687 and CALC-779 through CALC-783, and left the existing global coverage gap open.
+
+    The current integration published Writer 6bf035cb4 and Calc 16ce79238. Merge commits 165b37f30 and 8bbcd7640 retain both branch histories, the original ODF print settings contract, Calc page geometry and header/footer settings, and EditEngine text-portion invalidation and deletion behavior. Historical issue identifiers are branch-local: Calc journal entries 784–788 from Writer became CALC-793 through CALC-797, entries 784–792 from Calc became CALC-798 through CALC-806, and the former main Writer entries 688–695 became WRITER-717 through WRITER-724. All issue titles from the three starting trees were preserved. Existing duplicate CALC-300 through CALC-306 precede this integration. The branch worktrees retain their original tracked branch names and the Calc output artifacts.
 id_source: "generated"
 ---
 ## Summary
@@ -165,4 +168,6 @@ Retain the original branch history and use only non-force pushes. Use a revert f
 
 ## Findings
 
-Merged the published Writer checkpoint fc26d329f and Calc tip 93903dd90 into main. Both conflicts involved independently allocated journal identifiers. Preserved all entries and updated cross-references for WRITER-685 through WRITER-687 and CALC-779 through CALC-783. Static repairs kept the native algorithms and preserved ownership in the registry. The global coverage deficit extends beyond this integration and remains open. Pre-existing untracked Calc output is preserved.
+The previous integration merged Writer fc26d329f and Calc 93903dd90, resolved journal collisions in WRITER-685 through WRITER-687 and CALC-779 through CALC-783, and left the existing global coverage gap open.
+
+The current integration published Writer 6bf035cb4 and Calc 16ce79238. Merge commits 165b37f30 and 8bbcd7640 retain both branch histories, the original ODF print settings contract, Calc page geometry and header/footer settings, and EditEngine text-portion invalidation and deletion behavior. Historical issue identifiers are branch-local: Calc journal entries 784–788 from Writer became CALC-793 through CALC-797, entries 784–792 from Calc became CALC-798 through CALC-806, and the former main Writer entries 688–695 became WRITER-717 through WRITER-724. All issue titles from the three starting trees were preserved. Existing duplicate CALC-300 through CALC-306 precede this integration. The branch worktrees retain their original tracked branch names and the Calc output artifacts.

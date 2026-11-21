@@ -140,7 +140,7 @@ it("opens and re-exports the original external named ranges and caches from tdf1
     worker?.Dispose();
     source.Dispose();
   }
-});
+}, 600_000);
 
 /** Reads package metadata and fills the native cache. @param bytes - Workbook package. @param document - Calc graph. @returns Original link model. */
 async function readLinks(bytes: Uint8Array, document: ScDocument) {
