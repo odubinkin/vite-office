@@ -677,7 +677,7 @@ it("searches used paragraph styles and replaces matched collections in one undo 
   const find = dialog.getByRole("combobox", { name: "Find" });
   const replacement = dialog.getByRole("combobox", { name: "Replace with" });
   expect(within(find).queryByRole("option", { name: "Heading 2" })).toBeNull();
-  expect(within(replacement).getByRole("option", { name: "Heading 2" })).toBeInTheDocument();
+  expect(replacement.querySelector('[value="heading-2"] ~ [value="heading-10"]')).toBeTruthy();
   fireEvent.change(find, { target: { value: "heading-1" } });
   fireEvent.click(dialog.getByRole("button", { name: "Find All" }));
   expect(dialog.getByRole("status")).toHaveTextContent("2 results");

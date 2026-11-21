@@ -5472,3 +5472,31 @@ applies its authored properties without that collection change.
   query over the most recent history item.
 - Preserve the separate updates and verify them together through the
   Writer toolbar. This observation is based on source control flow.
+
+### WRITER-693 — Replace All can count style matches when the replacement is missing
+
+- Upstream: `sw/source/uibase/wrtsh/select.cxx`, `SwWrtShell::SearchTempl`;
+  `sw/source/uibase/uiview/viewsrch.cxx`, `SwView::ExecSearch` and
+  `SwView::Replace`; `sw/source/core/crsr/findcoll.cxx`,
+  `SwFindParaFormatColl::DoFind` at the pinned baseline.
+- Observation: if the requested replacement style cannot be resolved,
+  style Replace All searches with a null replacement collection. It
+  returns the number of matches to the replacement feedback even though
+  it did not change their styles. Single Replace goes through
+  `SwEditShell::SetTextFormatColl`, which uses the default collection
+  when its argument is null.
+- Preserve the separate paths and test them at the Writer view command
+  boundary. The evidence is source-derived.
+
+### WRITER-694 — A favourite built-in style can bypass hidden-style filtering
+
+- Upstream: `sw/source/uibase/app/docstyle.cxx`,
+  `SwStyleSheetIterator::First` and `SwStyleSheetIterator::AppendStyleList`;
+  `svx/source/dialog/srchdlg.cxx`, `SvxSearchDialog::TemplatesChanged_Impl`
+  at the pinned baseline.
+- Observation: the document-style enumeration omits a hidden style that
+  is unused. The built-in pool enumeration can append that name again
+  because its favourite flag bypasses the visibility check. The dialog
+  still requires use before putting it in the search-style selector.
+- Preserve its availability for replacement and its absence from the
+  search selector. This observation is based on source control flow.

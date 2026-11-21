@@ -162,13 +162,27 @@ export function WriterSearch({
       : (styles?.[0]?.id ?? "");
   }
 
-  const styleOptions = dialog && item.styleSearch ? owner.GetParagraphStyles() : undefined;
+  /** Sorts the style selectors in UI-language natural order, as in the native combo boxes. @returns Sorted paragraph styles. */
+  function getStyleOptions(): ReturnType<SwViewSearch["GetParagraphStyles"]> {
+    const styles = owner.GetParagraphStyles();
+    const compare = new Intl.Collator(localization.locale, { numeric: true }).compare;
+    /** Compares visible names with the UI locale and numeric runs. @param first - Style entry. @param second - Style entry. @returns Sort order. */
+    function byName(first: { name: string }, second: { name: string }): number {
+      return compare(first.name, second.name);
+    }
+    return {
+      search: [...styles.search].sort(byName),
+      replace: [...styles.replace].sort(byName),
+    };
+  }
+
+  const styleOptions = dialog && item.styleSearch ? getStyleOptions() : undefined;
   const searchStyle = effectiveStyle(styleOptions?.search, item.searchStyle);
   const replaceStyle = effectiveStyle(styleOptions?.replace, item.replaceStyle);
 
   /** Saves the native dialog settings as a Find request. @param draft - Dialog controls. @param backward - Direction saved from Replace backwards. @param closing - Whether Close also records the replacement. @returns Nothing. */
   function saveDialogItem(draft: WriterSearchItem, backward: boolean, closing = false): void {
-    const styles = draft.styleSearch ? (styleOptions ?? owner.GetParagraphStyles()) : undefined;
+    const styles = draft.styleSearch ? (styleOptions ?? getStyleOptions()) : undefined;
     if (styles === undefined)
       onHistoryChange(
         /** Remembers the current dialog term when it is saved. @param previous - Dialog history. @returns Updated history. */ (

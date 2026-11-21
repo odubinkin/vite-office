@@ -82,6 +82,59 @@ it("continues backwards from the replaced match inside a larger selection", /** 
   }
 });
 
+it("lists hidden paragraph collections when used or offered by the favourite pool path", /** Checks the native visible stylesheet pool and the two style lists. @returns Nothing. */ () => {
+  const document = createWriterDocument();
+  const view = new SwView(
+    new SwDocShell(document, createDocument({ id: "styles", suiteId: "writer", title: "Styles" })),
+  );
+  const search = view.GetSearch();
+  const used = document.GetTextFormatColl("heading-1");
+  const unused = document.GetTextFormatColl("heading-2");
+  const favourite = document.GetTextFormatColl("heading-3");
+  favourite.SetHidden(true);
+  favourite.SetFavourite(true);
+  used.SetHidden(true);
+  unused.SetHidden(true);
+  view.GetWrtShell().SetParagraphStyle(used.id);
+  const lists = search.GetParagraphStyles();
+  expect(lists.search).toContainEqual({ id: used.id, name: used.GetName() });
+  expect(lists.replace).toContainEqual({ id: used.id, name: used.GetName() });
+  expect(lists.replace).not.toContainEqual({ id: unused.id, name: unused.GetName() });
+  expect(lists.replace).toContainEqual({ id: favourite.id, name: favourite.GetName() });
+  expect(lists.search).not.toContainEqual({ id: favourite.id, name: favourite.GetName() });
+  view.Close();
+});
+
+it("resolves styles by display name and handles stale style requests", /** Exercises the source fallback collection and missing replacement paths. @returns Nothing. */ () => {
+  const view = new SwView(
+    new SwDocShell(
+      createWriterDocument(),
+      createDocument({ id: "styles", suiteId: "writer", title: "Styles" }),
+    ),
+  );
+  const shell = view.GetWrtShell();
+  const search = view.GetSearch();
+  shell.Insert("Default style");
+  const item = {
+    ...search.GetSearchItem(),
+    styleSearch: true,
+    searchStyle: "Missing style",
+    replaceStyle: "Heading 2",
+  };
+  expect(search.ExecSearch(item, SvxSearchCmd.REPLACE_ALL).matches).toBe(1);
+  expect(shell.GetActiveParagraph().GetParagraphStyle()).toBe("heading-2");
+  expect(
+    search.ExecSearch(
+      { ...item, searchStyle: "Heading 2", replaceStyle: "Missing style" },
+      SvxSearchCmd.REPLACE_ALL,
+    ).matches,
+  ).toBe(1);
+  expect(shell.GetActiveParagraph().GetParagraphStyle()).toBe("heading-2");
+  search.ExecSearch({ ...item, replaceStyle: "Missing style" }, SvxSearchCmd.REPLACE);
+  expect(shell.GetActiveParagraph().GetParagraphStyle()).toBe("default");
+  view.Close();
+});
+
 describe("SwView frame ownership", /** Groups SwView frame ownership. @returns Test callback result. */ () => {
   it("requires one attached frame for dispatch and exposes its command state", /** Checks requires one attached frame for dispatch and exposes its command state. @returns Test callback result. */ () => {
     const shell = new SwDocShell(

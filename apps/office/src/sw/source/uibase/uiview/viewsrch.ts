@@ -13,8 +13,12 @@ import { SvxSearchCmd } from "../../../../svl/inc/srchitem";
 import { GetSettings } from "../../../../vcl/source/app/svapp";
 import { FindRanges, SwDocPositions } from "../../../inc/cshtyp";
 import { FindFormat } from "../../core/crsr/findcoll";
-import { WRITER_AVAILABLE_PARAGRAPH_STYLE_POOL } from "../../../inc/poolfmt";
+import {
+  getWriterMaterializedParagraphStyleDefinition,
+  WRITER_AVAILABLE_PARAGRAPH_STYLE_POOL,
+} from "../../../inc/poolfmt";
 import { SwStyleNameMapper } from "../../core/doc/SwStyleNameMapper";
+import type { SwTextFormatColl } from "../../core/doc/fmtcol";
 import { SwCursor, type SwSearchNodeFilter } from "../../core/crsr/swcrsr";
 import { PopMode } from "../../core/crsr/trvltbl";
 import type { SwDoc } from "../../core/doc/doc";
@@ -22,6 +26,7 @@ import type { SwStartNode } from "../../core/docnode/node";
 import { SwStartNodeType } from "../../../inc/ndtyp";
 import { CollectTextFlyFrames } from "../../core/layout/flycnt";
 import type { SwTextNode } from "../../core/txtnode/ndtxt";
+import { findParagraphStyle } from "../app/docst";
 import type { SwWrtShell } from "../wrtsh/wrtsh1";
 import { SwASCWriter } from "../../filter/ascii/wrtasc";
 
@@ -231,8 +236,12 @@ export class SwViewSearch {
       all.set(definition.id, SwStyleNameMapper.GetUIName(definition.poolId, definition.name));
     for (const style of doc.GetTextFormatColls()) {
       const name = style.GetName();
-      all.set(style.id, name);
-      if (doc.IsUsed(style)) used.push({ id: style.id, name });
+      const isUsed = doc.IsUsed(style);
+      // AppendStyleList admits favourite built-ins independently of visibility.
+      if (style.IsHidden() && !isUsed && !(all.has(style.id) && style.IsFavourite()))
+        all.delete(style.id);
+      else all.set(style.id, name);
+      if (isUsed) used.push({ id: style.id, name });
     }
     const replace = Array.from(
       all,
@@ -241,11 +250,17 @@ export class SwViewSearch {
         name,
       ]) => ({ id, name }),
     );
-    /** Orders displayed style names. @param a - First entry. @param b - Second entry. @returns Name order. */
-    function compare(a: { name: string }, b: { name: string }): number {
-      return a.name.localeCompare(b.name);
-    }
-    return { search: used.sort(compare), replace: replace.sort(compare) };
+    return { search: used, replace };
+  }
+
+  /** Resolves a search template as native GetParaStyle with GETSTYLE_CREATESOME. @param name - Browser identity or Writer UI name. @returns Document-owned paragraph collection. */
+  private GetParaStyle(name: string): SwTextFormatColl | undefined {
+    const document = this.shell.GetDoc();
+    const owned = document.FindTextFormatColl(name);
+    if (owned !== undefined) return owned;
+    const id =
+      findParagraphStyle(document, name) ?? getWriterMaterializedParagraphStyleDefinition(name)?.id;
+    return id === undefined ? undefined : document.GetTextFormatColl(id);
   }
 
   /** Reflects native text and table selection availability for the search dialog. @returns Whether a document selection exists. */
@@ -507,8 +522,9 @@ export class SwViewSearch {
     const first = backward ? SwDocPositions.End : SwDocPositions.Start;
     const last = backward ? SwDocPositions.Start : SwDocPositions.End;
     const document = this.shell.GetDoc();
-    const style = item.styleSearch ? document.FindTextFormatColl(item.searchStyle) : undefined;
-    if (item.styleSearch && style === undefined) return { matches: 0, wrapped: false };
+    const style = item.styleSearch
+      ? (this.GetParaStyle(item.searchStyle) ?? document.GetDfltTextFormatColl())
+      : undefined;
     const acceptsNode = createSearchNodeFilter(document, this.pageStories);
     return this.shell.RunNotificationTransaction(
       /** Releases the new cursor and editing notifications together. @returns Search feedback. */ () => {
@@ -519,7 +535,12 @@ export class SwViewSearch {
               try {
                 if (style === undefined)
                   this.ReplaceSelection(cursor, options, item.replacement, last, acceptsNode);
-                else if (item.replaceStyle) this.shell.SetParagraphStyle(item.replaceStyle);
+                else {
+                  const replacement = this.GetParaStyle(item.replaceStyle);
+                  this.shell.SetParagraphStyle(
+                    (replacement ?? document.GetDfltTextFormatColl()).id,
+                  );
+                }
               } finally {
                 if (backward) this.shell.Pop(PopMode.DeleteStack);
               }
@@ -540,8 +561,8 @@ export class SwViewSearch {
               if (all) this.searchInOther = false;
               if (all) search.Normalize(backward);
               const replacement =
-                style !== undefined && replaceAll && item.replaceStyle
-                  ? document.GetTextFormatColl(item.replaceStyle)
+                style !== undefined && replaceAll
+                  ? this.GetParaStyle(item.replaceStyle)
                   : undefined;
               const find =
                 /** Dispatches to the native model strategy in the given area. @param from - Start boundary. @param ranges - Search scope. @returns Match count. */ (

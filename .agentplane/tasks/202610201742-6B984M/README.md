@@ -4,7 +4,7 @@ title: "Implement Writer search and replace core and browser UI"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 43
+revision: 44
 origin:
   system: "manual"
 depends_on:
@@ -133,6 +133,9 @@ comments:
   -
     author: "CODER"
     body: "Verified Writer search dispatch and backward replacement checkpoint. Search now supplies the application data locale from the VCL settings owner, explicit native algorithm identity, both selection flags, and replacement text only in the Replace All model pass. The single-replacement validator uses a scoped Find request. Backward Replace follows SwWrtShell::Pop default DeleteStack and SwapPam, keeping the replaced range as the origin instead of restoring the original wider selection. Source-backed view tests verify the options delivered to the real model cursor and the preceding match inside a wider selection. 76 targeted tests passed in six files and both resource tests passed. Production build, dependency, source tree, provenance, JSDoc, file size, scoped lint/formatting, policy routing and diff checks passed. Doctor retains its existing managed hook readiness warning. The comment search path still requires the Writer annotation model and editable comment view; the current search task stays open and this checkpoint does not advance full-suite cadence."
+  -
+    author: "CODER"
+    body: "Verified paragraph-style search checkpoint. The Writer view uses the native visible stylesheet admission: used hidden styles stay available, unused hidden styles are omitted, and favourite built-in styles keep the exception on the replacement side. The modeless style selectors apply natural numeric ordering in the browser UI language. Style commands accept native visible names in addition to stable browser identities and preserve the default search collection and the distinct unresolved replacement paths. The two source-derived behaviours are recorded as WRITER-693 and WRITER-694. The final focused run passed 78 tests across six view, search UI, cursor, and replacement suites. The production build, two resource tests, dependency, source-tree/provenance, JSDoc/file-size, scoped lint and formatting, policy routing, and diff checks passed. Doctor retains its existing managed-hook readiness warning. This checkpoint leaves the search task open and does not advance full-suite cadence."
 events:
   -
     type: "status"
@@ -296,8 +299,13 @@ events:
     at: "2026-11-21T05:52:39.502Z"
     author: "CODER"
     body: "Verified Writer search dispatch and backward replacement checkpoint. Search now supplies the application data locale from the VCL settings owner, explicit native algorithm identity, both selection flags, and replacement text only in the Replace All model pass. The single-replacement validator uses a scoped Find request. Backward Replace follows SwWrtShell::Pop default DeleteStack and SwapPam, keeping the replaced range as the origin instead of restoring the original wider selection. Source-backed view tests verify the options delivered to the real model cursor and the preceding match inside a wider selection. 76 targeted tests passed in six files and both resource tests passed. Production build, dependency, source tree, provenance, JSDoc, file size, scoped lint/formatting, policy routing and diff checks passed. Doctor retains its existing managed hook readiness warning. The comment search path still requires the Writer annotation model and editable comment view; the current search task stays open and this checkpoint does not advance full-suite cadence."
+  -
+    type: "comment"
+    at: "2026-11-21T05:58:22.819Z"
+    author: "CODER"
+    body: "Verified paragraph-style search checkpoint. The Writer view uses the native visible stylesheet admission: used hidden styles stay available, unused hidden styles are omitted, and favourite built-in styles keep the exception on the replacement side. The modeless style selectors apply natural numeric ordering in the browser UI language. Style commands accept native visible names in addition to stable browser identities and preserve the default search collection and the distinct unresolved replacement paths. The two source-derived behaviours are recorded as WRITER-693 and WRITER-694. The final focused run passed 78 tests across six view, search UI, cursor, and replacement suites. The production build, two resource tests, dependency, source-tree/provenance, JSDoc/file-size, scoped lint and formatting, policy routing, and diff checks passed. Doctor retains its existing managed-hook readiness warning. This checkpoint leaves the search task open and does not advance full-suite cadence."
 doc_version: 3
-doc_updated_at: "2026-11-21T05:52:39.502Z"
+doc_updated_at: "2026-11-21T05:58:22.819Z"
 doc_updated_by: "CODER"
 description: "Implement the approved coherent Writer search-and-replace feature from pinned LibreOffice sources: real shared search engine and options, native paragraph/cursor traversal and replacement/history contracts, view-owned search state and dispatch, Find toolbar and Find and Replace dialog with generated upstream command placement and shortcuts. Preserve source semantics and explicit unsupported boundaries; never substitute DOM text search or browser RegExp for ICU contracts. Work only on writer in vite-office-writer; local upstream reading approved, no network or merges. Keep active until approved scope is verified."
 sections:
