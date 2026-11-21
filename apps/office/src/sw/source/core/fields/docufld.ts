@@ -114,6 +114,11 @@ export class SwPostItField {
     return this.data.resolved === true;
   }
 
+  /** Sets the original resolution member. @param value - Whether resolved. @returns Nothing. */
+  SetResolved(value: boolean): void {
+    this.data = { ...this.data, resolved: value };
+  }
+
   /** Reads the annotation name used to join its point and range. @returns Annotation name. */
   GetName(): string {
     return this.data.name;

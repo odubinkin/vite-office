@@ -5845,3 +5845,14 @@ visibility option. The argument-free menu action still toggles the current
 option. Writer preserves both branches.
 
 - [Original Writer view options dispatcher](../../vendor/libreoffice-reference/sw/source/uibase/uiview/view0.cxx)
+
+### WRITER-726 — Ordinary comment undo snapshots both contain the new resolution state
+
+`SwAnnotationWin::SetResolved` changes the field before calling `UpdateData`.
+The latter copies the old field for `SwUndoFieldFromDoc` after the change.
+Outside the Yrs transaction path, undo can restore the previous text
+snapshot while leaving the new resolution state in place. Writer preserves
+this ordering in the local annotation history.
+
+- [Original annotation update and history capture](../../vendor/libreoffice-reference/sw/source/uibase/docvw/AnnotationWin.cxx)
+- [Original field undo replay](../../vendor/libreoffice-reference/sw/source/core/undo/SwUndoField.cxx)

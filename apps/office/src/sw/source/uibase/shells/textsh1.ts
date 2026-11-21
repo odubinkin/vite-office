@@ -145,11 +145,11 @@ export class SwTextShell extends SwBaseShell {
     this.target.SetPendingCharacterItems(pending);
   }
   private readonly shell: SfxShell;
-  /** Creates the text-shell slot owner. @param target - Active Writer editing shell. @param dialogs - Writer dialog controller. @param annotation - Optional original field slot. @returns Nothing. */
+  /** Creates the text-shell slot owner. @param target - Active Writer editing shell. @param dialogs - Writer dialog controller. @param annotation - Original annotation slots. @returns Nothing. */
   public constructor(
     target: SwTextShellTarget,
     dialogs: WriterDialogController,
-    annotation?: WriterSlotHandler<SwTextShell>,
+    annotation: readonly WriterSlotHandler<SwTextShell>[] = [],
   ) {
     super(target);
     this.shell = createSfxShell(this, createWriterTextCommandRegistry(this, dialogs, annotation));

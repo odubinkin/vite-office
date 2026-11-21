@@ -44,6 +44,14 @@ test("Writer inserts a comment, finds its text and undoes note formatting", /** 
   await page.keyboard.press("Escape");
   await expect(page.getByLabel("Writer document body", { exact: true })).toBeFocused();
 
+  const commentActions = page.getByLabel("Comment actions", { exact: true });
+  await commentActions.click();
+  await page.getByRole("button", { name: "Resolve", exact: true }).click();
+  await expect(page.getByText("Resolved", { exact: true })).toBeVisible();
+  await commentActions.click();
+  await page.getByRole("button", { name: "Unresolve", exact: true }).click();
+  await expect(page.getByText("Resolved", { exact: true })).toBeHidden();
+
   const viewMenu = page.getByRole("menuitem", { name: "View", exact: true });
   await viewMenu.click();
   const showComments = page.getByRole("menuitemcheckbox", { name: "Show Comments", exact: true });

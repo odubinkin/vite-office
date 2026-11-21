@@ -21,6 +21,7 @@ export interface SwAnnotationWindow {
   SearchHighlight?(): void;
   HasFocus?(): boolean;
   GrabFocusToDocument?(): void;
+  SetResolved?(value: boolean): void;
 }
 
 /** Owns active comment search state and resolves sidebar windows by actual field identity. */
@@ -65,6 +66,25 @@ export class SwPostItMgr {
   ShowHideResolvedNotes(value: boolean): void {
     if (!value && this.GetActiveField()?.GetField().IsResolved()) this.ReturnFocusToDocument();
     this.options.SetResolvedPostIts(value);
+  }
+
+  /** Toggles the active annotation or the original field ID supplied by the caller. @param id - Optional document annotation ID. @returns Whether the comment changed. */
+  ToggleResolved(id?: number): boolean {
+    const field =
+      id === undefined
+        ? this.GetActiveField()
+        : [...this.windows.keys()].find(
+            /** Finds the original annotation ID. @param candidate - Registered field. @returns Whether it matches. */
+            (candidate) => candidate.GetField().GetPostItId() === id,
+          );
+    if (!field?.GetTextField()?.GetTextNode() || this.options.IsReadonly()) return false;
+    const window = this.windows.get(field);
+    if (!window?.SetResolved) return false;
+    const resolved = !field.GetField().IsResolved();
+    if (resolved && !this.options.IsResolvedPostIts() && this.GetActiveField() === field)
+      this.ReturnFocusToDocument();
+    window.SetResolved(resolved);
+    return true;
   }
 
   /** Completes a native focus request once the editor is mounted and visible. @param field - Projected annotation. @returns Nothing. */

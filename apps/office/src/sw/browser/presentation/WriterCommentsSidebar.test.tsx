@@ -24,6 +24,8 @@ import { unicode } from "../../../i18nlangtag/source/isolang/isolang.tables";
 import { FontWeight } from "../../../tools/inc/fontenum";
 import { DateTime } from "../../../tools/source/datetime/datetime";
 import { SfxBoolItem } from "../../../svl/source/items/cenumitm";
+import { SfxStringItem } from "../../../svl/source/items/stritem";
+import { SID_ATTR_POSTIT_ID } from "../../../svx/inc/svxids";
 import { SwFormatField } from "../../inc/fmtfld";
 import { SwTextField } from "../../inc/txtfld";
 import { SwPosition } from "../../source/core/crsr/pam";
@@ -112,6 +114,72 @@ it("disables both comment visibility commands in an empty Writer document", /** 
     expect(screen.getByRole("menuitemcheckbox", { name: "Show Comments" })).toBeDisabled();
     expect(screen.getByRole("menuitemcheckbox", { name: "Show resolved comments" })).toBeDisabled();
   } finally {
+    workbench.unmount();
+    view.Close();
+  }
+});
+
+it("resolves and reopens a comment through its menu and the native field slot", /** Exercises the upstream resolution sequence, history and ODT persistence. @returns Completion. */ async () => {
+  const { session, format, shell } = openAnnotatedDocument("Keep this comment");
+  const view = session.view;
+  const workbench = render(<WriterWorkbench isActive view={view} />);
+  const command = WRITER_COMMAND_IDS.resolveComment;
+  const commentId = new SfxStringItem(SID_ATTR_POSTIT_ID, String(format.GetField().GetPostItId()));
+  try {
+    const comment = screen.getByRole("textbox", { name: "Comment — Ada" });
+    const actions = screen.getByLabelText("Comment actions");
+    expect(format.GetField().IsResolved()).toBe(false);
+    fireEvent.click(actions);
+    fireEvent.click(screen.getByRole("button", { name: "Resolve" }));
+    expect(format.GetField().IsResolved()).toBe(true);
+    expect(screen.getByText("Resolved", { exact: true })).toBeVisible();
+    expect(comment).toHaveTextContent("Keep this comment");
+    act(
+      /** Checks the active annotation command and replays the original field undo. @returns Nothing. */ () => {
+        comment.focus();
+        expect(view.QueryState(command)).toMatchObject({ enabled: true, checked: true });
+        expect(shell.Undo()).toBe(true);
+      },
+    );
+    // The non-Yrs upstream history captures both field copies after the resolution change.
+    expect(format.GetField().IsResolved()).toBe(true);
+    expect(screen.getByText("Resolved", { exact: true })).toBeVisible();
+    fireEvent.click(actions);
+    fireEvent.click(screen.getByRole("button", { name: "Unresolve" }));
+    expect(format.GetField().IsResolved()).toBe(false);
+    expect(view.QueryState(command).checked).toBe(false);
+
+    fireEvent.keyDown(comment, { key: "Escape" });
+    act(
+      /** Resolves the comment by ID from the body shell with resolved comments hidden. @returns Nothing. */ () => {
+        view.Execute(WRITER_COMMAND_IDS.showResolvedAnnotations);
+        expect(view.Execute(command, [commentId])).toMatchObject({
+          status: "executed",
+          value: true,
+        });
+      },
+    );
+    expect(comment).not.toBeVisible();
+    expect(format.GetField().IsResolved()).toBe(true);
+    expect(screen.getByLabelText("Writer document body")).toHaveFocus();
+
+    const metadata = { title: "Resolved comment" };
+    const { document: reopened } = await readOdtDocument(
+      await writeOdtDocument(shell.GetDoc(), metadata),
+      metadata,
+    );
+    try {
+      const [restored] = SwPostItFieldType.Get(reopened).GatherFields();
+      expect(restored?.GetField().GetData()).toMatchObject({
+        resolved: true,
+        text: "Keep this comment",
+        author: "Ada",
+      });
+    } finally {
+      reopened.Dispose();
+    }
+  } finally {
+    commentId.Dispose();
     workbench.unmount();
     view.Close();
   }

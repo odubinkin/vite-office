@@ -50,6 +50,7 @@ import { SwUndo } from "../../source/core/undo/undobj";
 class AnnotationTextUndo extends SwUndo {
   private readonly type: SwPostItFieldType;
   private readonly id: number;
+  private readonly resolved: boolean;
 
   /** Owns before and after native text snapshots. @param field - Model comment. @param beforeText - Previous note text. @param beforeObject - Previous rich text. @param afterText - Updated note text. @param afterObject - Updated rich text. @returns Undo record. */
   constructor(
@@ -62,6 +63,7 @@ class AnnotationTextUndo extends SwUndo {
     super("Edit Comment");
     this.type = field.GetTyp();
     this.id = field.GetPostItId();
+    this.resolved = field.IsResolved();
   }
 
   /** Publishes a saved note value through the document state owner. @param value - Plain text. @param object - Rich text snapshot. @param field - Mounted field for the initial edit, resolved from history on replay. @param beforeNotify - Allows the mounted editor to acknowledge the field copy. @returns Nothing. */
@@ -74,6 +76,7 @@ class AnnotationTextUndo extends SwUndo {
     if (!field) throw new Error("Writer comment history has no attached field.");
     field.SetPar2(value);
     field.SetTextObject(object);
+    field.SetResolved(this.resolved);
     beforeNotify?.();
     this.type.GetDoc().NotifyModelChange({ kind: "document-modified", modified: true });
   }
@@ -420,6 +423,13 @@ export class WriterCommentEditor extends SwTextAPIEditSource {
     return true;
   }
 
+  /** Updates the field state before publishing the annotation snapshot, as in SwAnnotationWin. @param value - Whether resolved. @returns Nothing. */
+  SetResolved(value: boolean): void {
+    if (value === this.field.IsResolved()) return;
+    this.field.SetResolved(value);
+    this.CommitEdit(this.field.GetPar2(), this.field.GetTextObject()?.Clone(), true);
+  }
+
   /** Selects the entire actual annotation. @returns Nothing. */
   SelectAll(): void {
     const doc = this.getImpl().GetEditDoc();
@@ -427,13 +437,22 @@ export class WriterCommentEditor extends SwTextAPIEditSource {
     this.MakeVisible();
   }
 
-  /** Commits an engine change to document history and refreshes the projection. @param before - Previous field text. @param beforeObject - Previous owned snapshot. @returns Nothing. */
-  private CommitEdit(before: string, beforeObject: EditTextObject | undefined): void {
+  /** Commits an engine or resolution change to document history and refreshes the projection. @param before - Previous field text. @param beforeObject - Previous owned snapshot. @param resolvedStateUpdated - Whether the resolution flag was updated before the snapshot. @returns Nothing. */
+  private CommitEdit(
+    before: string,
+    beforeObject: EditTextObject | undefined,
+    resolvedStateUpdated = false,
+  ): void {
     const after = this.GetValue();
     const afterObject = this.CreateTextObject();
     this.Render();
     this.ShowCursor();
-    if (after === before && beforeObject && afterObject.Equals(beforeObject)) {
+    if (
+      !resolvedStateUpdated &&
+      after === before &&
+      beforeObject &&
+      afterObject.Equals(beforeObject)
+    ) {
       beforeObject?.dispose();
       afterObject.dispose();
       return;

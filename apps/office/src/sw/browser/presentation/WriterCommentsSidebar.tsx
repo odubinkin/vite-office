@@ -1,10 +1,12 @@
 /** @fileoverview Browser comment cards registered with the view's native annotation manager. */
 import { useLayoutEffect, useRef } from "react";
+import { Ellipsis } from "lucide-react";
 import type { SwFormatField } from "../../inc/fmtfld";
 import { RES_TXTATR_ANNOTATION } from "../../inc/hintids";
 import { SwPosition } from "../../source/core/crsr/pam";
 import type { SwView } from "../../source/uibase/uiview/view";
 import { useBrowserLocalization } from "../../../framework/browser/localization/browser-localization-context";
+import { useToolboxPopup } from "../../../svx/browser/tbxctrls/use-toolbox-popup";
 import { WriterCommentEditor } from "./writer-comment-editor";
 
 /** One anchored comment card and its mounted editor. @param props - Field and owning view. @returns Comment card. */
@@ -19,11 +21,14 @@ function WriterCommentCard({
   readonly view: SwView;
   readonly visible: boolean;
 }) {
+  const card = useRef<HTMLElement>(null);
   const input = useRef<HTMLDivElement>(null);
   const editor = useRef<WriterCommentEditor | null>(null);
   const localization = useBrowserLocalization();
+  const { ref: menu, open, toggle, close } = useToolboxPopup();
   const field = format.GetField();
   const data = field.GetData();
+  const readOnly = view.GetWrtShell().GetViewOptions().IsReadonly();
   const noteLabel = localization.GetText("writer.comments.comment", "Comment");
   useLayoutEffect(
     /** Binds this mounted text surface to its native field, edit document and comment window. @returns Release callback. */ () => {
@@ -54,9 +59,14 @@ function WriterCommentCard({
           current.MakeVisible();
         },
         /** Checks whether this comment owns browser focus. @returns Whether focused. */ HasFocus() {
-          return input.current?.ownerDocument.activeElement === input.current;
+          return card.current?.contains(card.current.ownerDocument.activeElement) ?? false;
         },
         GrabFocusToDocument: focusDocument,
+        /** Publishes the original resolution change through annotation history. @param value - Whether resolved. @returns Nothing. */ SetResolved(
+          value,
+        ) {
+          current.SetResolved(value);
+        },
       });
       return /** Releases the anchored editor before its text surface unmounts. @returns Nothing. */ () => {
         release();
@@ -77,13 +87,60 @@ function WriterCommentCard({
       editor.current?.SyncContent(),
   );
   return (
-    <article hidden={!visible} className="rounded border border-amber-300 bg-amber-50 p-2">
-      {data.author && <div className="mb-1 text-sm font-medium text-slate-800">{data.author}</div>}
-      {field.IsResolved() && (
-        <div className="text-xs text-slate-600">
-          {localization.GetText("writer.comments.resolved", "Resolved")}
+    <article
+      ref={card}
+      hidden={!visible}
+      className="rounded border border-amber-300 bg-amber-50 p-2"
+    >
+      <div className="mb-1 flex items-start justify-between gap-2">
+        <div>
+          {data.author && <div className="text-sm font-medium text-slate-800">{data.author}</div>}
+          {field.IsResolved() && (
+            <div className="text-xs text-slate-600">
+              {localization.GetText("writer.comments.resolved", "Resolved")}
+            </div>
+          )}
         </div>
-      )}
+        {!readOnly && (
+          <details ref={menu}>
+            <summary
+              aria-label={localization.GetText("writer.comments.actions", "Comment actions")}
+              className="grid size-6 cursor-pointer list-none place-items-center rounded hover:bg-amber-100"
+              onClick={
+                /** Opens and closes the comment action popup. @param event - Summary activation. @returns Nothing. */
+                (event) => {
+                  event.preventDefault();
+                  toggle();
+                }
+              }
+            >
+              <Ellipsis aria-hidden="true" size={16} />
+            </summary>
+            {open && (
+              <div className="z-50 min-w-32 rounded border border-slate-300 bg-white p-1 shadow-lg">
+                <button
+                  type="button"
+                  className="w-full rounded px-2 py-1 text-left text-sm hover:bg-slate-100"
+                  onClick={
+                    /** Executes the menu action for this comment and restores the remaining visible focus target. @returns Nothing. */
+                    () => {
+                      const manager = view.GetPostItMgr();
+                      manager.ToggleResolved(field.GetPostItId());
+                      const remainsVisible = manager.IsVisible(format);
+                      close(remainsVisible);
+                      if (!remainsVisible) focusDocument();
+                    }
+                  }
+                >
+                  {field.IsResolved()
+                    ? localization.GetText("writer.comments.unresolve", "Unresolve")
+                    : localization.GetText("writer.comments.resolve", "Resolve")}
+                </button>
+              </div>
+            )}
+          </details>
+        )}
+      </div>
       <div
         ref={input}
         aria-label={data.author ? `${noteLabel} — ${data.author}` : noteLabel}
@@ -91,8 +148,8 @@ function WriterCommentCard({
         data-writer-editing-host="annotation"
         role="textbox"
         aria-multiline="true"
-        aria-readonly={view.GetWrtShell().GetViewOptions().IsReadonly()}
-        contentEditable={!view.GetWrtShell().GetViewOptions().IsReadonly()}
+        aria-readonly={readOnly}
+        contentEditable={!readOnly}
         tabIndex={0}
         onFocus={
           /** Activates the model anchor when the user focuses the comment editor. @returns Nothing. */ () => {

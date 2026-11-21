@@ -4,7 +4,7 @@ title: "Implement Writer search and replace core and browser UI"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 94
+revision: 95
 origin:
   system: "manual"
 depends_on:
@@ -277,6 +277,9 @@ comments:
   -
     author: "CODER"
     body: "Verified annotation visibility checkpoint against the pinned SwView::StateViewOptions and ExecViewOptions, SwPostItMgr::Focus and layout, and annotation metadata UI. View now exposes the two original menu slots in source order with true defaults and the native HasNotes availability gate. Resolved labels use the document field, the two visibility flags remain view-local, and hiding preserves mounted annotation editor state. Inserting a comment restores visibility and focuses the new note. WRITER-725 records and preserves the explicit Boolean inversion for ShowResolvedAnnotations. Four targeted Writer suites passed 35 tests, two resource checks and two Chrome scenarios passed, and production build, dependencies, source tree, provenance, Writer/shared registry checks, scoped lint and formatting, routing, doctor and diff checks passed. The repository-wide JSDoc and file-size findings remain outside the changed files. The parent task and its full-suite cadence are unchanged."
+  -
+    author: "CODER"
+    body: "Verified individual annotation resolution against AnnotationWin, PostItMgr, the annotation/text shell SDI, and the Writer comments UI test. Resolve and Unresolve update the actual field through the comment menu. The generated ResolveComment slot uses the active note in the annotation shell and the original string ID item in the body shell. The resolution badge, configured visibility, retained comment text and ODT reopen are covered. WRITER-726 records the native ordering of the ordinary non-Yrs field undo snapshots, which both contain the new resolution flag. Five targeted Writer suites passed 41 tests, the two resource checks and two Chrome scenarios passed, and production build, dependency boundaries, source tree and provenance, Writer registry, scoped lint and formatting, routing, doctor, and diff checks passed. The existing repository-wide JSDoc and file-size findings remain outside the changed paths. Thread-wide resolution remains outside this checkpoint. The parent task and its full-suite cadence are unchanged."
 events:
   -
     type: "status"
@@ -680,8 +683,13 @@ events:
     at: "2026-11-21T18:45:12.243Z"
     author: "CODER"
     body: "Verified annotation visibility checkpoint against the pinned SwView::StateViewOptions and ExecViewOptions, SwPostItMgr::Focus and layout, and annotation metadata UI. View now exposes the two original menu slots in source order with true defaults and the native HasNotes availability gate. Resolved labels use the document field, the two visibility flags remain view-local, and hiding preserves mounted annotation editor state. Inserting a comment restores visibility and focuses the new note. WRITER-725 records and preserves the explicit Boolean inversion for ShowResolvedAnnotations. Four targeted Writer suites passed 35 tests, two resource checks and two Chrome scenarios passed, and production build, dependencies, source tree, provenance, Writer/shared registry checks, scoped lint and formatting, routing, doctor and diff checks passed. The repository-wide JSDoc and file-size findings remain outside the changed files. The parent task and its full-suite cadence are unchanged."
+  -
+    type: "comment"
+    at: "2026-11-21T18:54:58.393Z"
+    author: "CODER"
+    body: "Verified individual annotation resolution against AnnotationWin, PostItMgr, the annotation/text shell SDI, and the Writer comments UI test. Resolve and Unresolve update the actual field through the comment menu. The generated ResolveComment slot uses the active note in the annotation shell and the original string ID item in the body shell. The resolution badge, configured visibility, retained comment text and ODT reopen are covered. WRITER-726 records the native ordering of the ordinary non-Yrs field undo snapshots, which both contain the new resolution flag. Five targeted Writer suites passed 41 tests, the two resource checks and two Chrome scenarios passed, and production build, dependency boundaries, source tree and provenance, Writer registry, scoped lint and formatting, routing, doctor, and diff checks passed. The existing repository-wide JSDoc and file-size findings remain outside the changed paths. Thread-wide resolution remains outside this checkpoint. The parent task and its full-suite cadence are unchanged."
 doc_version: 3
-doc_updated_at: "2026-11-21T18:45:12.243Z"
+doc_updated_at: "2026-11-21T18:54:58.393Z"
 doc_updated_by: "CODER"
 description: "Implement the approved coherent Writer search-and-replace feature from pinned LibreOffice sources: real shared search engine and options, native paragraph/cursor traversal and replacement/history contracts, view-owned search state and dispatch, Find toolbar and Find and Replace dialog with generated upstream command placement and shortcuts. Preserve source semantics and explicit unsupported boundaries; never substitute DOM text search or browser RegExp for ICU contracts. Work only on writer in vite-office-writer; local upstream reading approved, no network or merges. Keep active until approved scope is verified."
 sections:

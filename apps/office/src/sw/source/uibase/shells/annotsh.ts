@@ -157,6 +157,15 @@ export class SwAnnotationShell {
         isEnabled: () => this.CanEdit(),
       },
       {
+        id: CMD.resolveComment,
+        /** Toggles resolution in the original active annotation window. @returns Whether changed. */
+        execute: () => this.manager.ToggleResolved(),
+        /** Enables the command in an editable annotation. @returns Whether enabled. */
+        isEnabled: () => this.CanEdit(),
+        /** Checks the model field's resolution. @returns Whether resolved. */
+        isChecked: () => this.manager.GetActiveField()?.GetField().IsResolved() === true,
+      },
+      {
         id: CMD.selectAll,
         /** Selects the annotation text in its own edit view. @returns Nothing. */
         execute: () => this.manager.GetActiveSidebarWin()?.SelectAll?.(),

@@ -7,6 +7,8 @@ export const SID_RULER_BORDERS = 10080 as const;
 export const SID_RULER_ROWS = 10992 as const;
 /** Native vertical ruler row item slot. */
 export const SID_RULER_ROWS_VERTICAL = 10993 as const;
+/** Native annotation ID string slot. */
+export const SID_ATTR_POSTIT_ID = 11203 as const;
 
 /** Original SID_SVX_START +164 drawing fill-style slot. */
 export const SID_ATTR_FILL_STYLE = 10164 as const;

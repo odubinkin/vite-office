@@ -16,15 +16,15 @@
       "defaultStatus": "unverified",
       "divergenceClass": "none",
       "evidence": [
-        "apps/office/src/sw/source/uibase/shells/textfld.ts#createWriterAnnotationCommand",
+        "apps/office/src/sw/source/uibase/shells/textfld.ts#createWriterAnnotationCommands",
         "apps/office/src/sw/browser/presentation/WriterCommentsSidebar.test.tsx",
         "vendor/libreoffice-reference/sw/source/uibase/shells/textfld.cxx",
         "vendor/libreoffice-reference/sw/qa/uitest/writer_tests/comments.py"
       ],
-      "justification": "Routes the original Insert Annotation slot through Writer selection, field insertion, undo, and sidebar focus.",
+      "justification": "Routes Insert Annotation through Writer selection, field insertion, undo, and sidebar focus. Resolve Comment addresses an existing annotation through its original string ID slot.",
       "knownViolations": [],
       "localSymbols": [
-        "createWriterAnnotationCommand"
+        "createWriterAnnotationCommands"
       ],
       "sourceResponsibility": "unverified",
       "upstreamFile": "sw/source/uibase/shells/textfld.cxx",
