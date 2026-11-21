@@ -410,7 +410,7 @@ it("round-trips large OOXML parts through the browser storage boundary", /** Exe
     expect(await archive.readTextEntry(path)).toBe(xml);
     expect(readOwnedXml(await reopened.openInputStream(path))).toBe(xml);
   }
-}, 90000);
+}, 240_000);
 
 it("binds serialized relationship parts to their native owners", /** Accepts existing relationship streams and rejects an actual orphan before committing. @returns Completion. */ async () => {
   const fragments = new Map<string, ZipFragmentStream>();

@@ -36,12 +36,13 @@ for (const width of [1280, 390]) {
     await expect(a1).toHaveCSS("text-align", "right");
     await page.getByRole("button", { name: "Align Center", exact: true }).click();
     await expect(a1).toHaveCSS("text-align", "center");
+    const cellText = a1.locator(":scope > div");
     await page.getByRole("button", { name: "Align Top", exact: true }).click();
-    const top = await a1.locator(":scope > div").boundingBox();
+    const top = await cellText.boundingBox();
     await page.getByRole("button", { name: "Center Vertically", exact: true }).click();
-    const middle = await a1.locator(":scope > div").boundingBox();
+    const middle = await cellText.boundingBox();
     await page.getByRole("button", { name: "Align Bottom", exact: true }).click();
-    const bottom = await a1.locator(":scope > div").boundingBox();
+    const bottom = await cellText.boundingBox();
     expect(top).not.toBeNull();
     expect(middle).not.toBeNull();
     expect(bottom).not.toBeNull();
@@ -49,9 +50,19 @@ for (const width of [1280, 390]) {
     expect(middle.y).toBeGreaterThan(top.y + 5);
     expect(bottom.y).toBeGreaterThan(middle.y + 5);
     await page.getByRole("button", { name: "Undo", exact: true }).click();
-    await expect(a1).toHaveCSS("justify-content", "center");
+    await expect
+      .poll(
+        /** Reads the restored text position. @returns Cell text bounds. */
+        () => cellText.boundingBox(),
+      )
+      .toMatchObject({ y: middle.y });
     await page.getByRole("button", { name: "Redo", exact: true }).click();
-    await expect(a1).toHaveCSS("justify-content", "flex-end");
+    await expect
+      .poll(
+        /** Reads the redone text position. @returns Cell text bounds. */
+        () => cellText.boundingBox(),
+      )
+      .toMatchObject({ y: bottom.y });
     for (let count = 0; count < 2; count++) {
       await page.getByRole("menuitem", { name: "Format", exact: true }).click();
       await page.getByRole("menuitem", { name: "Align Text", exact: true }).click();

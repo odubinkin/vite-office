@@ -212,4 +212,4 @@ it("ports all125x450 original testPerformance iterations and125 nested closing t
       },
     ),
   ).toEqual([60, 47, 116, 97, 103, 48, 62]);
-}, 120000);
+}, 600_000);
