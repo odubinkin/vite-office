@@ -1,0 +1,26 @@
+{
+  "schema_version": 1,
+  "task_id": "202611210550-9ABZE8",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-11-21T06:04:56.788Z",
+  "verdict": "pass",
+  "summary": "Verified original Writer page-background assertions and retained bitmap resources through ODT and Worker.",
+  "evaluated_sha": "812018a71b3e72c3026e2145ffa1b6593adcf083",
+  "blueprint_digest": "1c8c71763c3c0b7ca60af6b43128526a30dcf4f5cf4ae52f428afc7a701930b5",
+  "findings": [
+    "Canonical page and story items, typed page style queries, and the existing graphic package helper retain embedded fills from modern and legacy XML. Original bytes survive and the package stores shared images once."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202611210550-9ABZE8/README.md",
+    "output/playwright/9ABZE8/writer.log",
+    "output/playwright/9ABZE8/shared.log",
+    "output/playwright/9ABZE8/final-types.log",
+    "output/playwright/9ABZE8/final-provenance.log"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": [
+    "Other bitmap placement and sizing values, external/inline images, broader DrawingLayer fills and native rendering remain separate parity work."
+  ]
+}
