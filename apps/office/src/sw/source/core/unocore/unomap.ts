@@ -10,7 +10,7 @@ import { UnoType, type UnoTypeArgument } from "../../../../cppu/inc/unotype";
 import { cppu_detail_getUnoType_BreakType as breakType } from "../../../../offapi/com/sun/star/style/BreakType";
 import { OUString } from "../../../../sal/inc/rtl/ustring";
 import { SfxItemPropertySet } from "../../../../svl/source/items/itemprop";
-import { SfxItemPropertyMapEntry, type PropertyMoreFlags } from "../../../../svl/inc/itemprop";
+import { PropertyMoreFlags, SfxItemPropertyMapEntry } from "../../../../svl/inc/itemprop";
 import { cppu_detail_getUnoType_Locale as localeType } from "../../../../udkapi/com/sun/star/lang/Locale";
 import { FN_UNO_PARA_NUM_AUTO_FORMAT } from "../../../inc/cmdid";
 import { cppu_detail_getUnoType_NamedValue as namedValueType } from "../../../../udkapi/com/sun/star/beans/NamedValue";
@@ -747,7 +747,7 @@ function nativeEntries(
           UnoType.get(entry.type),
           entry.attributes ?? 1,
           entry.member,
-          entry.more,
+          entry.more ?? PropertyMoreFlags.NONE,
         ),
       );
     } finally {
