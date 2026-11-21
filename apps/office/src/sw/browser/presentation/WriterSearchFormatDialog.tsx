@@ -1,4 +1,4 @@
-/** @fileoverview Writer browser binding for character pages of SvxSearchFormatDialog. */
+/** @fileoverview Writer browser binding for character and paragraph pages of SvxSearchFormatDialog. */
 import { useLayoutEffect, useRef, useState, type RefObject } from "react";
 import { useBrowserLocalization } from "../../../framework/browser/localization/browser-localization-context";
 import {
@@ -9,6 +9,11 @@ import {
   DFLT_ESC_SUPER,
   SvxEscapementItem,
 } from "../../../editeng/source/items/textitem.escapement";
+import { SvxLineSpacingItem } from "../../../editeng/inc/lspcitem";
+import { SvxULSpaceItem } from "../../../editeng/inc/ulspitem";
+import { MetricSpinButton } from "../../../svtools/browser/control/MetricSpinButton";
+import { ConvertValue } from "../../../vcl/source/control/field";
+import { FieldUnit } from "../../../tools/inc/fldunit";
 import { SvxOverlineItem, SvxUnderlineItem } from "../../../editeng/source/items/textitem";
 import { Color, COL_TRANSPARENT } from "../../../tools/inc/color";
 import { ComplexColor } from "../../../docmodel/inc/color/ComplexColor";
@@ -21,6 +26,11 @@ import {
   caseEffects,
   fontWeights,
   makeSearchFormatItem,
+  paragraphAdjustments,
+  paragraphVerticalAlignments,
+  ParagraphLineSpaceMode,
+  readParagraphLineSpacing,
+  setParagraphLineSpacing,
   postures,
   readSearchFormatValue,
   reliefs,
@@ -42,14 +52,23 @@ import {
   RES_CHRATR_SCALEW,
   RES_CHRATR_SHADOWED,
   RES_CHRATR_WORDLINEMODE,
-  RES_CHRATR_BEGIN,
-  RES_CHRATR_END,
   RES_CHRATR_FONT,
   RES_CHRATR_FONTSIZE,
   RES_CHRATR_POSTURE,
   RES_CHRATR_UNDERLINE,
   RES_CHRATR_WEIGHT,
+  RES_MARGIN_FIRSTLINE,
+  RES_MARGIN_RIGHT,
+  RES_MARGIN_TEXTLEFT,
+  RES_PARATR_ADJUST,
+  RES_PARATR_LINESPACING,
+  RES_PARATR_ORPHANS,
+  RES_PARATR_SPLIT,
+  RES_PARATR_WIDOWS,
+  RES_PARATR_VERTALIGN,
+  RES_UL_SPACE,
 } from "../../inc/hintids";
+import { WRITER_SEARCH_ATTR_WHICH_RANGES } from "../../source/uibase/uiview/viewsrch";
 import { WriterDialogHeader } from "./WriterDialogHeader";
 
 const formatPages = {
@@ -78,6 +97,18 @@ const formatPages = {
       RES_CHRATR_AUTOKERN,
     ],
   ],
+  indents: [
+    "Indents & Spacing",
+    [
+      RES_MARGIN_TEXTLEFT,
+      RES_MARGIN_RIGHT,
+      RES_MARGIN_FIRSTLINE,
+      RES_UL_SPACE,
+      RES_PARATR_LINESPACING,
+    ],
+  ],
+  alignment: ["Alignment", [RES_PARATR_ADJUST, RES_PARATR_VERTALIGN]],
+  textflow: ["Text Flow", [RES_PARATR_SPLIT, RES_PARATR_ORPHANS, RES_PARATR_WIDOWS]],
   highlighting: ["Highlighting", [RES_CHRATR_BACKGROUND]],
 } as const;
 
@@ -85,6 +116,7 @@ const formatPages = {
 export function WriterSearchFormatDialog(
   props: Readonly<{
     pool: SfxItemPool;
+    unit?: FieldUnit;
     initial: SearchAttrItemList | undefined;
     target: "search" | "replace";
     restoreFocus: RefObject<HTMLInputElement | null>;
@@ -94,6 +126,7 @@ export function WriterSearchFormatDialog(
   const localization = useBrowserLocalization();
   const root = useRef<HTMLFormElement>(null);
   const [page, setPage] = useState<keyof typeof formatPages>("font");
+  const [lineMode, setLineMode] = useState<ParagraphLineSpaceMode>();
   const [draft, setDraft] = useState<ReadonlyMap<number, string | SfxPoolItem>>(new Map());
   const title =
     props.target === "search"
@@ -141,12 +174,13 @@ export function WriterSearchFormatDialog(
   function reset(): void {
     const restored = new Map(draft);
     for (const which of formatPages[page][1]) restored.delete(which);
+    if (page === "indents") setLineMode(undefined);
     setDraft(restored);
   }
 
   /** Writes the changed native attributes back to the owning list. @returns Nothing. */
   function accept(): void {
-    const set = new SfxItemSet(props.pool, [[RES_CHRATR_BEGIN, RES_CHRATR_END - 1]]);
+    const set = new SfxItemSet(props.pool, WRITER_SEARCH_ATTR_WHICH_RANGES);
     try {
       props.initial?.Get(set);
       for (const [which, value] of draft) {
@@ -326,6 +360,73 @@ export function WriterSearchFormatDialog(
       },
       style === 0,
     );
+  }
+
+  /** Presents paragraph lengths using the current Writer measurement unit. @param caption - Field label. @param twips - Existing length. @param minimum - Minimum in twips. @param update - Native length delta callback. @returns Metric entry. */
+  function paragraphLength(
+    caption: string,
+    twips: number | undefined,
+    minimum: number,
+    update: (twips: number) => void,
+  ): React.JSX.Element {
+    return (
+      <label className="grid gap-1 text-sm">
+        {caption}
+        <MetricSpinButton
+          aria-label={caption}
+          className="w-28 rounded border border-slate-400 p-1"
+          unit={props.unit ?? FieldUnit.CM}
+          value={twips}
+          minimum={minimum}
+          maximum={65535}
+          onValueChange={update}
+        />
+      </label>
+    );
+  }
+
+  /** Edits one absolute native indent field. @param which - Paragraph item. @param caption - Field label. @returns Indent control. */
+  function indent(which: number, caption: string): React.JSX.Element {
+    const value = scalar(which);
+    return paragraphLength(
+      caption,
+      value === "" ? undefined : Math.round(Number(value) * 20),
+      -65535,
+      /** Receives the committed native length. @param twips - Selected length. @returns Nothing. */ (
+        twips,
+      ) => change(which, String(twips / 20)),
+    );
+  }
+
+  const paraSpacingValue = draft.get(RES_UL_SPACE) ?? existing(RES_UL_SPACE);
+  const paraSpacing = paraSpacingValue instanceof SvxULSpaceItem ? paraSpacingValue : undefined;
+
+  /** Edits one member without overwriting the remaining fields of the native spacing item. @param member - Upper or lower margin. @param value - Native twips. @returns Nothing. */
+  function changeParagraphSpacing(member: "upper" | "lower", value: number): void {
+    const next = paraSpacing?.Clone() ?? new SvxULSpaceItem(RES_UL_SPACE);
+    if (member === "upper") next.SetUpper(value);
+    else next.SetLower(value);
+    change(RES_UL_SPACE, next);
+  }
+
+  const lineSpacingValue = draft.get(RES_PARATR_LINESPACING) ?? existing(RES_PARATR_LINESPACING);
+  const lineSpacingItem =
+    lineSpacingValue instanceof SvxLineSpacingItem ? lineSpacingValue : undefined;
+  const currentLineSpacing = readParagraphLineSpacing(lineSpacingItem);
+  const lineSpacing =
+    currentLineSpacing === undefined
+      ? undefined
+      : { mode: lineMode ?? currentLineSpacing.mode, value: currentLineSpacing.value };
+
+  /** Writes the chosen line-spacing page mode and its native measure. @param mode - Selected row. @param value - Percent or twip amount. @returns Nothing. */
+  function updateLineSpacing(mode: ParagraphLineSpaceMode, value: number): void {
+    const base =
+      existing(RES_PARATR_LINESPACING) ??
+      props.pool.GetUserOrPoolDefaultItem(RES_PARATR_LINESPACING);
+    if (base instanceof SvxLineSpacingItem) {
+      setLineMode(mode);
+      change(RES_PARATR_LINESPACING, setParagraphLineSpacing(base, mode, value));
+    }
   }
 
   /** Renders a numeric metric field, leaving an untouched criterion empty. @param which - Writer WhichId. @param caption - Field label. @param minimum - Native lower bound. @param maximum - Native upper bound. @param step - Native step. @param unit - Displayed unit. @returns Metric control. */
@@ -655,6 +756,185 @@ export function WriterSearchFormatDialog(
             {metric(RES_CHRATR_KERNING, label("spacing-by", "By"), -1000, 1000, 0.1, "pt")}
             {check(RES_CHRATR_AUTOKERN, label("pair-kerning", "Pair kerning"))}
           </fieldset>
+        </div>
+        <div
+          role="tabpanel"
+          hidden={page !== "indents"}
+          className={page === "indents" ? "grid gap-2" : undefined}
+        >
+          <fieldset className="grid grid-cols-2 gap-2 rounded border border-slate-200 p-2">
+            <legend className="text-sm">{label("paragraph-indent", "Indent")}</legend>
+            {indent(RES_MARGIN_TEXTLEFT, label("before-text", "Before text"))}
+            {indent(RES_MARGIN_RIGHT, label("after-text", "After text"))}
+            {indent(RES_MARGIN_FIRSTLINE, label("first-line", "First line"))}
+          </fieldset>
+          <fieldset className="grid grid-cols-2 gap-2 rounded border border-slate-200 p-2">
+            <legend className="text-sm">{label("paragraph-spacing", "Spacing")}</legend>
+            {paragraphLength(
+              label("above-paragraph", "Above paragraph"),
+              paraSpacing?.GetUpper(),
+              0,
+              /** Stores the paragraph's before spacing. @param value - Native length. @returns Nothing. */ (
+                value,
+              ) => changeParagraphSpacing("upper", value),
+            )}
+            {paragraphLength(
+              label("below-paragraph", "Below paragraph"),
+              paraSpacing?.GetLower(),
+              0,
+              /** Stores the paragraph's after spacing. @param value - Native length. @returns Nothing. */ (
+                value,
+              ) => changeParagraphSpacing("lower", value),
+            )}
+          </fieldset>
+          <fieldset className="grid grid-cols-2 gap-2 rounded border border-slate-200 p-2">
+            <legend className="text-sm">{label("line-spacing", "Line spacing")}</legend>
+            <select
+              aria-label={label("line-spacing", "Line spacing")}
+              value={lineSpacing?.mode ?? ""}
+              onChange={
+                /** Applies the native line-spacing selection. @param event - Selected row. @returns Nothing. */ (
+                  event,
+                ) => {
+                  const value = event.currentTarget.value;
+                  if (value === "") {
+                    setLineMode(undefined);
+                    change(RES_PARATR_LINESPACING, "");
+                    return;
+                  }
+                  const mode = Number(value) as ParagraphLineSpaceMode;
+                  const currentMetric =
+                    lineSpacing && lineSpacing.mode > ParagraphLineSpaceMode.Proportional
+                      ? lineSpacing.value
+                      : undefined;
+                  const leading = Number(
+                    ConvertValue(1n, 0n, 0, props.unit ?? FieldUnit.CM, FieldUnit.TWIP),
+                  );
+                  const initial =
+                    mode === ParagraphLineSpaceMode.Proportional
+                      ? 100
+                      : mode === ParagraphLineSpaceMode.Leading
+                        ? (currentMetric ?? leading)
+                        : mode === ParagraphLineSpaceMode.Minimum
+                          ? (currentMetric ?? 10)
+                          : (currentMetric ?? 0);
+                  updateLineSpacing(mode, initial);
+                }
+              }
+            >
+              <option value="" />
+              {[
+                "Single",
+                "1.15 Lines",
+                "1.5 Lines",
+                "Double",
+                "Proportional",
+                "At Least",
+                "Leading",
+                "Fixed",
+              ].map(
+                /** Renders the native order of line spacing choices. @param name - Caption. @param index - Mode. @returns Option. */ (
+                  name,
+                  index,
+                ) => (
+                  <option key={name} value={index}>
+                    {label(`line-spacing.${index}`, name)}
+                  </option>
+                ),
+              )}
+            </select>
+            {lineSpacing?.mode === ParagraphLineSpaceMode.Proportional ? (
+              <label className="text-sm">
+                {label("line-space-at", "At")}
+                <input
+                  type="number"
+                  aria-label={label("line-spacing-value", "Line Spacing Value")}
+                  min={6}
+                  max={65535}
+                  value={lineSpacing.value}
+                  onChange={
+                    /** Updates the native proportional percentage. @param event - Metric edit. @returns Nothing. */ (
+                      event,
+                    ) => {
+                      if (event.currentTarget.validity.valid && event.currentTarget.value !== "")
+                        updateLineSpacing(
+                          ParagraphLineSpaceMode.Proportional,
+                          event.currentTarget.valueAsNumber,
+                        );
+                    }
+                  }
+                />{" "}
+                %
+              </label>
+            ) : lineSpacing !== undefined &&
+              lineSpacing.mode > ParagraphLineSpaceMode.Proportional ? (
+              paragraphLength(
+                label("line-space-at", "At"),
+                lineSpacing.value,
+                0,
+                /** Updates the existing native metric mode. @param value - Twip amount. @returns Nothing. */ (
+                  value,
+                ) => updateLineSpacing(lineSpacing.mode, value),
+              )
+            ) : null}
+          </fieldset>
+        </div>
+        <div role="tabpanel" hidden={page !== "alignment"}>
+          <fieldset className="grid gap-1 rounded border border-slate-200 p-2">
+            <legend className="text-sm">{label("alignment-options", "Options")}</legend>
+            {paragraphAdjustments.map(
+              /** Presents a native horizontal paragraph alignment. @param option - Native value and caption. @returns Radio button. */ ([
+                value,
+                caption,
+              ]) => (
+                <label key={value} className="flex items-center gap-2 text-sm">
+                  <input
+                    type="radio"
+                    name="search-paragraph-alignment"
+                    checked={scalar(RES_PARATR_ADJUST) === String(value)}
+                    onChange={
+                      /** Stores the explicit alignment. @returns Nothing. */ () =>
+                        change(RES_PARATR_ADJUST, String(value))
+                    }
+                  />
+                  {label(`paragraph-alignment.${value}`, caption)}
+                </label>
+              ),
+            )}
+          </fieldset>
+          <fieldset className="grid gap-1 rounded border border-slate-200 p-2">
+            <legend className="text-sm">{label("text-to-text", "Text-to-text")}</legend>
+            {select(
+              RES_PARATR_VERTALIGN,
+              label("vertical-alignment", "Alignment"),
+              paragraphVerticalAlignments,
+            )}
+          </fieldset>
+        </div>
+        <div role="tabpanel" hidden={page !== "textflow"}>
+          <fieldset
+            disabled={scalar(RES_PARATR_SPLIT) === "false"}
+            className="grid gap-2 rounded border border-slate-200 p-2"
+          >
+            <legend className="text-sm">{label("textflow-options", "Options")}</legend>
+            {metric(
+              RES_PARATR_ORPHANS,
+              label("orphans", "Don’t split at beginning of paragraph"),
+              0,
+              9,
+              1,
+              label("lines", "lines"),
+            )}
+            {metric(
+              RES_PARATR_WIDOWS,
+              label("widows", "Don’t split at end of paragraph"),
+              0,
+              9,
+              1,
+              label("lines", "lines"),
+            )}
+          </fieldset>
+          {check(RES_PARATR_SPLIT, label("split-paragraph", "Allow to split paragraph"))}
         </div>
         <div role="tabpanel" hidden={page !== "highlighting"}>
           {color(

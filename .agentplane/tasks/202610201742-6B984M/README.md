@@ -4,7 +4,7 @@ title: "Implement Writer search and replace core and browser UI"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 56
+revision: 57
 origin:
   system: "manual"
 depends_on:
@@ -172,6 +172,9 @@ comments:
   -
     author: "CODER"
     body: "Verified checkpoint: expanded Writer search Format with native color, line decorations, case and relief, Position controls, and the Highlighting brush. Per-page Reset keeps edits on the other pages. Native character Which ranges retain applied items in text-node, paragraph-style and automatic-format sets. Writer paints the represented colored underline/overline and the source highlight-over-background precedence. The Worker codec retains overline color, character background and rotation fit. WRITER-699 records visible imported highlighting that the background-specific search ignores; the regression keeps the two source WhichIds distinct. Verification passed 116 targeted cases in 13 files, with three formatting tests repeated after extending that regression. Both Writer resource checks, production build, dependency boundaries, source provenance and tree, Writer WhichIds, JSDoc, file sizes, scoped ESLint and Prettier, policy routing and whitespace passed. Doctor retains the existing hook warning. Paragraph format pages, complete character rendering and ODF mappings, search in annotations, and ICU regex remain open. The existing Writer toolbar highlight still writes the highlight item rather than the native toolbar background item. The pending SDK approval does not block the independent formatting work. The task and goal remain active; no full regression was due for this checkpoint."
+  -
+    author: "CODER"
+    body: "Verified checkpoint: Writer Find and Replace exposes represented Indents & Spacing, Alignment and Text Flow controls and accepts paragraph presence and exact criteria in the original search item ranges. The cursor checks node-owned paragraph formatting separately from character spans and matches optional text in the eligible range. The document operations apply selected paragraph item sets and grouped undo through the existing native history actions. WRITER-700 records the source paragraph-only directional endpoint outside the selected substring, and the view tests cover forward, backward, and bounded mixed criteria. Browser tests cover paragraph-only and text-plus-format search, exact native metrics and proportional spacing, bulk formatting replacement and single undo/redo. All 84 targeted Writer tests passed across eight files. Writer resources, production build, module boundaries, provenance and source tree, JSDoc, file sizes, scoped lint and formatting, routing and whitespace passed. Doctor retains the existing hook warning. Full registry-wide regression was not due. Remaining scope includes unsupported dialog fields and further formatting parity, annotation search, and the native ICU regex backend. The task remains open and the user stop condition applies at full task closure."
 events:
   -
     type: "status"
@@ -400,8 +403,13 @@ events:
     at: "2026-11-21T08:50:21.622Z"
     author: "CODER"
     body: "Verified checkpoint: expanded Writer search Format with native color, line decorations, case and relief, Position controls, and the Highlighting brush. Per-page Reset keeps edits on the other pages. Native character Which ranges retain applied items in text-node, paragraph-style and automatic-format sets. Writer paints the represented colored underline/overline and the source highlight-over-background precedence. The Worker codec retains overline color, character background and rotation fit. WRITER-699 records visible imported highlighting that the background-specific search ignores; the regression keeps the two source WhichIds distinct. Verification passed 116 targeted cases in 13 files, with three formatting tests repeated after extending that regression. Both Writer resource checks, production build, dependency boundaries, source provenance and tree, Writer WhichIds, JSDoc, file sizes, scoped ESLint and Prettier, policy routing and whitespace passed. Doctor retains the existing hook warning. Paragraph format pages, complete character rendering and ODF mappings, search in annotations, and ICU regex remain open. The existing Writer toolbar highlight still writes the highlight item rather than the native toolbar background item. The pending SDK approval does not block the independent formatting work. The task and goal remain active; no full regression was due for this checkpoint."
+  -
+    type: "comment"
+    at: "2026-11-21T09:03:01.609Z"
+    author: "CODER"
+    body: "Verified checkpoint: Writer Find and Replace exposes represented Indents & Spacing, Alignment and Text Flow controls and accepts paragraph presence and exact criteria in the original search item ranges. The cursor checks node-owned paragraph formatting separately from character spans and matches optional text in the eligible range. The document operations apply selected paragraph item sets and grouped undo through the existing native history actions. WRITER-700 records the source paragraph-only directional endpoint outside the selected substring, and the view tests cover forward, backward, and bounded mixed criteria. Browser tests cover paragraph-only and text-plus-format search, exact native metrics and proportional spacing, bulk formatting replacement and single undo/redo. All 84 targeted Writer tests passed across eight files. Writer resources, production build, module boundaries, provenance and source tree, JSDoc, file sizes, scoped lint and formatting, routing and whitespace passed. Doctor retains the existing hook warning. Full registry-wide regression was not due. Remaining scope includes unsupported dialog fields and further formatting parity, annotation search, and the native ICU regex backend. The task remains open and the user stop condition applies at full task closure."
 doc_version: 3
-doc_updated_at: "2026-11-21T08:50:21.622Z"
+doc_updated_at: "2026-11-21T09:03:01.609Z"
 doc_updated_by: "CODER"
 description: "Implement the approved coherent Writer search-and-replace feature from pinned LibreOffice sources: real shared search engine and options, native paragraph/cursor traversal and replacement/history contracts, view-owned search state and dispatch, Find toolbar and Find and Replace dialog with generated upstream command placement and shortcuts. Preserve source semantics and explicit unsupported boundaries; never substitute DOM text search or browser RegExp for ICU contracts. Work only on writer in vite-office-writer; local upstream reading approved, no network or merges. Keep active until approved scope is verified."
 sections:

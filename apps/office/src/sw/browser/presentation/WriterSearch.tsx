@@ -922,6 +922,7 @@ export function WriterSearch({
       {formatDialog === "format" && (
         <WriterSearchFormatDialog
           pool={pool}
+          unit={view.GetMetric()}
           target={formatTarget}
           initial={formatTarget === "search" ? item.searchAttributes : item.replaceAttributes}
           restoreFocus={formatTarget === "search" ? searchField : replaceField}

@@ -27,7 +27,7 @@
         "sw/source/core/crsr/findattr.cxx#FindAttrsImpl",
         "sw/source/core/crsr/findattr.cxx#CmpAttr"
       ],
-      "justification": "Searches native hint boundaries and effective pooled formatting with optional text matching inside each span. Formatted replacement uses the document operations and grouped undo.",
+      "justification": "Searches native hint boundaries and effective pooled formatting with optional text matching inside each span. Formatted replacement uses the document operations and grouped undo. Matches paragraph OtherSet before character ranges, preserves directional paragraph-only endpoints, and applies prepared replacement item sets through the document content operation owner.",
       "knownViolations": [],
       "localSymbols": [
         "FindAttrs",

@@ -22,8 +22,18 @@ import { SearchOptionFlags } from "../../../../svl/inc/srchdefs";
 import { SfxUInt16Item } from "../../../../svl/source/items/intitem";
 import { SvxSearchCmd } from "../../../../svl/inc/srchitem";
 import { GetSettings } from "../../../../vcl/source/app/svapp";
+import { FontWeight } from "../../../../tools/inc/fontenum";
+import { SvxWeightItem } from "../../../../editeng/source/items/textitem";
+import { SvxAdjust, SvxAdjustItem } from "../../../../editeng/inc/adjustitem";
+import { SearchAttrItemList } from "../../../../svx/source/dialog/srchdlg";
 import { RndStdIds } from "../../../../svx/inc/swframetypes";
-import { RES_FRMATR_BEGIN, RES_FRMATR_END, RES_PROTECT } from "../../../inc/hintids";
+import {
+  RES_CHRATR_WEIGHT,
+  RES_FRMATR_BEGIN,
+  RES_FRMATR_END,
+  RES_PARATR_ADJUST,
+  RES_PROTECT,
+} from "../../../inc/hintids";
 import { SwPosition } from "../../core/crsr/pam";
 import { SwCursor } from "../../core/crsr/swcrsr";
 import { BrowserSfxDispatcher } from "../../../../framework/browser/dispatch/browser-dispatcher";
@@ -513,4 +523,63 @@ describe("SwView frame ownership", /** Groups SwView frame ownership. @returns T
     expect(layout.Format(input, page, undefined, info).revision).toBe(attributed.revision + 2);
     view.Close();
   });
+});
+
+it("extends paragraph-only attribute candidates to the directional edge of the selected paragraph", /** Preserves the pinned FindAttrsImpl OtherSet endpoint rule. @returns Nothing. */ () => {
+  const doc = createWriterDocument();
+  const view = new SwView(
+    new SwDocShell(
+      doc,
+      createDocument({ id: "paragraph-bounds", suiteId: "writer", title: "Search" }),
+    ),
+  );
+  const shell = view.GetWrtShell();
+  const search = view.GetSearch();
+  const node = shell.GetActiveParagraph();
+  shell.Insert("red word");
+  const centered = new SvxAdjustItem(SvxAdjust.Center, RES_PARATR_ADJUST);
+  node.SetAttr(centered);
+  const set = new SfxItemSet(doc.GetAttrPool(), [
+    [RES_CHRATR_WEIGHT, RES_CHRATR_WEIGHT],
+    [RES_PARATR_ADJUST, RES_PARATR_ADJUST],
+  ]);
+  set.Put(centered);
+  const searchAttributes = new SearchAttrItemList();
+  searchAttributes.Put(set);
+  const point = new SwPosition(node, 0);
+  const mark = new SwPosition(node, 3);
+  try {
+    const item = { ...search.GetSearchItem(), searchAttributes, selection: true };
+    shell.SetPaM(mark, point);
+    expect(search.ExecSearch({ ...item, search: "word" }, SvxSearchCmd.FIND_ALL).matches).toBe(1);
+    expect(shell.GetCursor().Start().GetContentIndex()).toBe(4);
+    expect(shell.GetCursor().End().GetContentIndex()).toBe(8);
+
+    point.SetContent(4);
+    mark.SetContent(8);
+    shell.SetPaM(mark, point);
+    expect(search.ExecSearch({ ...item, search: "red" }, SvxSearchCmd.FIND_ALL, true).matches).toBe(
+      1,
+    );
+    expect(shell.GetCursor().Start().GetContentIndex()).toBe(0);
+    expect(shell.GetCursor().End().GetContentIndex()).toBe(3);
+
+    const weight = new SvxWeightItem(FontWeight.WEIGHT_BOLD, RES_CHRATR_WEIGHT);
+    node.SetAttr(weight);
+    set.Put(weight);
+    const mixed = new SearchAttrItemList();
+    mixed.Put(set);
+    point.SetContent(0);
+    mark.SetContent(3);
+    shell.SetPaM(mark, point);
+    expect(
+      search.ExecSearch({ ...item, search: "word", searchAttributes: mixed }, SvxSearchCmd.FIND_ALL)
+        .matches,
+    ).toBe(0);
+  } finally {
+    point.Dispose();
+    mark.Dispose();
+    set.Dispose();
+    view.Close();
+  }
 });

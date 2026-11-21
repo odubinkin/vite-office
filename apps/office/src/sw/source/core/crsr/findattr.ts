@@ -19,6 +19,8 @@ import {
   RES_CHRATR_FONT,
   RES_TXTATR_END,
 } from "../../../inc/hintids";
+import { isParagraphEditItem } from "../doc/DocumentContentOperationsManager.attr";
+import type { SwTextFormatColl } from "../doc/fmtcol";
 import { SwAttrIter } from "../text/itratr";
 import { SwTextNode } from "../txtnode/ndtxt";
 import { FindTextImpl } from "./findtxt";
@@ -62,6 +64,24 @@ interface SearchAttribute {
 /** Half-open character offsets in one text node. */
 type TextSpan = readonly [start: number, end: number];
 
+/** Compares one stored or effective attribute using the source invalid-item convention. @param item - Attribute at the candidate. @param criterion - Expected formatting. @returns Whether it matches. */
+function matchesAttribute(item: SfxPoolItem | undefined, criterion: SearchAttribute): boolean {
+  return item !== undefined && CmpAttr(criterion.value, item) !== criterion.anyValue;
+}
+
+/** Looks up one item in the node or its collection, keeping presence distinct from defaults. @param node - Candidate paragraph. @param criterion - Required item. @param includeCollections - Whether collection items participate. @returns Candidate item. */
+function readNodeAttribute(
+  node: SwTextNode,
+  criterion: SearchAttribute,
+  includeCollections: boolean,
+): SfxPoolItem | undefined {
+  if (!includeCollections && !node.HasSwAttrSet()) return undefined;
+  const set = node.GetSwAttrSet();
+  return criterion.anyValue
+    ? set.GetItemIfSet(criterion.which, includeCollections)
+    : set.Get(criterion.which, includeCollections);
+}
+
 /** Finds contiguous spans in one text node using the native hint stacks. @param node - Candidate. @param criteria - Required attributes. @param includeCollections - Whether styles participate. @param low - Initial offset. @param high - Final offset. @returns Matching spans in model order. */
 function* FindAttrsImpl(
   node: SwTextNode,
@@ -73,8 +93,6 @@ function* FindAttrsImpl(
   if (low >= high) return;
   const iterator = new SwAttrIter(node, includeCollections);
   const handler = iterator.GetAttrHandler();
-  const attributes = node.GetSwAttrSet();
-  const hasNodeAttributes = includeCollections || node.HasSwAttrSet();
   let start: number | undefined;
   let offset = low;
   while (offset < high) {
@@ -83,16 +101,10 @@ function* FindAttrsImpl(
       /** Checks the value at the current boundary. @param criterion - Required value. @returns Whether the criterion matches. */ (
         criterion,
       ) => {
-        const { which, value, anyValue } = criterion;
-        const actual = which < RES_TXTATR_END ? handler.ReadHintItem(which) : undefined;
         const item =
-          actual ??
-          (hasNodeAttributes
-            ? anyValue
-              ? attributes.GetItemIfSet(which, includeCollections)
-              : attributes.Get(which, includeCollections)
-            : undefined);
-        return item !== undefined && CmpAttr(value, item) !== anyValue;
+          handler.ReadHintItem(criterion.which) ??
+          readNodeAttribute(node, criterion, includeCollections);
+        return matchesAttribute(item, criterion);
       },
     );
     if (matches) start ??= offset;
@@ -107,7 +119,8 @@ function* FindAttrsImpl(
 
 /** Native generic cursor strategy for combined text and formatting search. */
 class SwFindParaAttr implements SwFindParas {
-  private readonly criteria: SearchAttribute[] = [];
+  private readonly characters: SearchAttribute[] = [];
+  private readonly paragraphs: SearchAttribute[] = [];
   private readonly engine: TextSearch | undefined;
 
   /** Prepares native matching criteria. @param set - Search items. @param includeCollections - Whether named styles participate. @param options - Optional text criteria. @param acceptsNode - View node admission. @returns Strategy. */
@@ -121,7 +134,8 @@ class SwFindParaAttr implements SwFindParas {
       const which = iter.GetCurWhich();
       const item = iter.GetCurItem();
       const anyValue = IsInvalidItem(item);
-      this.criteria.push({
+      const target = which < RES_TXTATR_END ? this.characters : this.paragraphs;
+      target.push({
         which,
         value: anyValue ? set.GetPool().GetUserOrPoolDefaultItem(which) : item,
         anyValue,
@@ -136,11 +150,13 @@ class SwFindParaAttr implements SwFindParas {
 
   /** Finds the first directional match inside the supplied region. @param cursor - Result. @param backward - Direction. @param region - Search range. @returns Native result flag. */
   public DoFind(cursor: SwPaM, backward: boolean, region: SwPaM): number {
-    if (this.criteria.length === 0 && this.options === undefined) return FIND_NOT_FOUND;
+    if (this.characters.length === 0 && this.paragraphs.length === 0 && this.options === undefined)
+      return FIND_NOT_FOUND;
     const first = region.Start();
     const last = region.End();
     const nodes = first.GetNode().GetNodes();
     const bounded = new SwPaM(first);
+    const visitedCollections = new Set<SwTextFormatColl>();
     try {
       for (
         let index = backward ? last.GetNodeIndex() : first.GetNodeIndex();
@@ -151,7 +167,29 @@ class SwFindParaAttr implements SwFindParas {
         if (!(node instanceof SwTextNode) || this.acceptsNode?.(node) === false) continue;
         const low = node === first.GetNode() ? first.GetContentIndex() : 0;
         const high = node === last.GetNode() ? last.GetContentIndex() : node.Len();
-        const spans = FindAttrsImpl(node, this.criteria, this.includeCollections, low, high);
+        const paragraphOnly = this.characters.length === 0 && this.paragraphs.length > 0;
+        if (low >= high && (!paragraphOnly || node.Len() !== 0)) continue;
+        if (paragraphOnly && !node.HasSwAttrSet()) {
+          const collection = node.GetTextFormatColl();
+          if (visitedCollections.has(collection)) continue;
+          visitedCollections.add(collection);
+        }
+        if (
+          !this.paragraphs.every(
+            /** Checks the node-owned OtherSet before matching character ranges. @param criterion - Paragraph criterion. @returns Whether it matches. */ (
+              criterion,
+            ) =>
+              matchesAttribute(
+                readNodeAttribute(node, criterion, this.includeCollections),
+                criterion,
+              ),
+          )
+        )
+          continue;
+        // Paragraph-only FindAttrsImpl runs from the directional start to the paragraph edge.
+        const spans: Iterable<TextSpan> = paragraphOnly
+          ? [[backward ? 0 : low, backward ? high : node.Len()]]
+          : FindAttrsImpl(node, this.characters, this.includeCollections, low, high);
         for (const [start, end] of backward ? [...spans].reverse() : spans) {
           if (this.options === undefined || this.engine === undefined) {
             cursor.GetPoint().Assign(node, backward ? start : end);
@@ -211,10 +249,12 @@ export function ReplaceAttrs(
     items.some(
       /** Admits the represented character editing families. @param item - Replacement attribute. @returns Whether outside the supported range. */ (
         item,
-      ) => item.Which() < RES_CHRATR_BEGIN || item.Which() >= RES_CHRATR_END,
+      ) =>
+        (item.Which() < RES_CHRATR_BEGIN || item.Which() >= RES_CHRATR_END) &&
+        !isParagraphEditItem(item.Which()),
     )
   )
-    throw new Error("Writer search replacement requires character attributes.");
+    throw new Error("Writer search replacement received an unsupported formatting item.");
   const operations = cursor.GetPoint().GetNode().GetDoc().GetDocumentContentOperationsManager();
   if (text !== undefined) {
     const start = cursor.Start().GetContentIndex();

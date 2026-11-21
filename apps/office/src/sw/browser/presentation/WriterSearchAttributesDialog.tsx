@@ -4,8 +4,8 @@ import type { SfxItemPool } from "../../../svl/source/items/itempool";
 import { SfxItemSet } from "../../../svl/source/items/itemset";
 import { SearchAttrItemList } from "../../../svx/source/dialog/srchdlg";
 import { useBrowserLocalization } from "../../../framework/browser/localization/browser-localization-context";
-import { RES_CHRATR_BEGIN, RES_CHRATR_END } from "../../inc/hintids";
 import { searchAttributes } from "./writer-search-format-values";
+import { WRITER_SEARCH_ATTR_WHICH_RANGES } from "../../source/uibase/uiview/viewsrch";
 import { WriterDialogHeader } from "./WriterDialogHeader";
 
 /** Edits the search side's attribute names in a modal checklist. @param props - Pool, attributes and result handler. @returns Attribute checklist. */
@@ -53,7 +53,7 @@ export function WriterSearchAttributesDialog(
 
   /** Applies presence criteria and retains exact values for attributes still checked. @returns Nothing. */
   function accept(): void {
-    const set = new SfxItemSet(props.pool, [[RES_CHRATR_BEGIN, RES_CHRATR_END - 1]]);
+    const set = new SfxItemSet(props.pool, WRITER_SEARCH_ATTR_WHICH_RANGES);
     try {
       props.initial?.Get(set);
       for (const [which] of searchAttributes) {

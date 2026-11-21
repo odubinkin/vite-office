@@ -1,6 +1,7 @@
 /** @fileoverview Native Writer formatting criteria and the browser search surfaces. */
 import { act, fireEvent, render, screen, within } from "@testing-library/react";
-import { beforeEach, expect, it } from "vitest";
+import { beforeEach, expect, it, vi } from "vitest";
+import { FieldUnit } from "../../../tools/inc/fldunit";
 import {
   FontLineStyle,
   SvxUnderlineItem,
@@ -8,6 +9,10 @@ import {
   SvxWeightItem,
   SvxFontHeightItem,
 } from "../../../editeng/source/items/textitem";
+import { SvxAdjust, SvxAdjustItem } from "../../../editeng/inc/adjustitem";
+import { SvxFirstLineIndentItem } from "../../../editeng/inc/lrspitem";
+import { SvxLineSpacingItem } from "../../../editeng/inc/lspcitem";
+import { SvxULSpaceItem } from "../../../editeng/inc/ulspitem";
 import { SvxColorItem } from "../../../editeng/source/items/textitem.color";
 import { SvxBrushItem } from "../../../editeng/source/items/frmitems.brush";
 import {
@@ -30,6 +35,10 @@ import {
   RES_CHRATR_OVERLINE,
   RES_CHRATR_UNDERLINE,
   RES_CHRATR_WEIGHT,
+  RES_MARGIN_FIRSTLINE,
+  RES_PARATR_ADJUST,
+  RES_PARATR_LINESPACING,
+  RES_UL_SPACE,
 } from "../../inc/hintids";
 import { SwPaM, SwPosition } from "../../source/core/crsr/pam";
 import type { SwTextNode } from "../../source/core/txtnode/ndtxt";
@@ -280,6 +289,111 @@ it("combines effects, position and highlighting and resets only the active searc
       (iterator.GetAttrHandler().ReadItem(RES_CHRATR_OVERLINE) as SvxOverlineItem).GetLineStyle(),
     ).toBe(FontLineStyle.LINESTYLE_NONE);
   } finally {
+    workbench.unmount();
+    session.view.Close();
+  }
+});
+
+it("finds paragraph formatting alone and with text, then replaces paragraph attributes with grouped undo", /** Drives the native paragraph OtherSet through both formatting dialogs. @returns Nothing. */ () => {
+  const session = createWriterDocumentSession();
+  const metric = vi.spyOn(session.view, "GetMetric").mockReturnValue(FieldUnit.INCH);
+  const shell = session.view.GetWrtShell();
+  const first = shell.GetActiveParagraph();
+  shell.Insert("red word");
+  shell.SplitNode();
+  const second = shell.GetActiveParagraph();
+  shell.Insert("red word");
+  shell.SplitNode();
+  const third = shell.GetActiveParagraph();
+  shell.Insert("red word");
+  for (const paragraph of [first, third]) {
+    paragraph.SetAttr(new SvxAdjustItem(SvxAdjust.Center, RES_PARATR_ADJUST));
+    paragraph.SetAttr(new SvxULSpaceItem(288, 0, RES_UL_SPACE));
+  }
+  const start = new SwPosition(first, 0);
+  shell.SetCursor(start);
+  start.Dispose();
+
+  const workbench = render(<WriterWorkbench isActive view={session.view} />);
+  try {
+    fireEvent.keyDown(window, { key: "h", ctrlKey: true });
+    const dialog = within(screen.getByRole("dialog", { name: "Find and Replace" }));
+    fireEvent.click(dialog.getByText("Other options"));
+    fireEvent.click(dialog.getByRole("button", { name: "Format…" }));
+    const format = within(screen.getByRole("dialog", { name: "Search" }));
+    fireEvent.click(format.getByRole("tab", { name: "Alignment" }));
+    fireEvent.click(format.getByRole("radio", { name: "Centered" }));
+    fireEvent.click(format.getByRole("tab", { name: "Indents & Spacing" }));
+    fireEvent.change(format.getByRole("spinbutton", { name: "Above paragraph" }), {
+      target: { value: "0.20 in" },
+    });
+    fireEvent.click(format.getByRole("button", { name: "OK" }));
+    expect(dialog.getByText("Alignment Centered, Paragraph spacing 14.4 / 0 pt")).toBeVisible();
+
+    fireEvent.click(dialog.getByRole("button", { name: "Find All" }));
+    const all = [...shell.GetCursor().GetRingContainer()];
+    expect(all).toHaveLength(2);
+    expect(all[0]?.Start().GetNode()).toBe(first);
+    expect(all[0]?.Start().GetContentIndex()).toBe(0);
+    expect(all[0]?.End().GetContentIndex()).toBe(8);
+    expect(all[1]?.Start().GetNode()).toBe(third);
+
+    fireEvent.change(dialog.getByLabelText("Find"), { target: { value: "word" } });
+    fireEvent.click(dialog.getByRole("button", { name: "Find All" }));
+    const occurrences = [...shell.GetCursor().GetRingContainer()];
+    expect(occurrences).toHaveLength(2);
+    expect(occurrences[0]?.Start().GetContentIndex()).toBe(4);
+    expect(occurrences[1]?.Start().GetContentIndex()).toBe(4);
+
+    fireEvent.focus(dialog.getByLabelText("Replace with"));
+    fireEvent.click(dialog.getByRole("button", { name: "Format…" }));
+    const replacement = within(screen.getByRole("dialog", { name: "Replace" }));
+    fireEvent.click(replacement.getByRole("tab", { name: "Alignment" }));
+    fireEvent.click(replacement.getByRole("radio", { name: "Right" }));
+    fireEvent.click(replacement.getByRole("tab", { name: "Indents & Spacing" }));
+    fireEvent.change(replacement.getByRole("spinbutton", { name: "First line" }), {
+      target: { value: "0.10 in" },
+    });
+    fireEvent.change(replacement.getByRole("combobox", { name: "Line spacing" }), {
+      target: { value: "4" },
+    });
+    fireEvent.change(replacement.getByRole("spinbutton", { name: "Line Spacing Value" }), {
+      target: { value: "137" },
+    });
+    fireEvent.click(replacement.getByRole("button", { name: "OK" }));
+    fireEvent.click(dialog.getByRole("button", { name: "Replace All" }));
+    expect(first.GetParagraphAlignment()).toBe("right");
+    expect(third.GetParagraphAlignment()).toBe("right");
+    expect(second.GetParagraphAlignment()).toBe("left");
+    expect(first.GetText()).toBe("red word");
+    expect(
+      (third.GetAttr(RES_MARGIN_FIRSTLINE) as SvxFirstLineIndentItem)
+        .GetTextFirstLineOffset()
+        .ResolveFixedPart(),
+    ).toBe(144);
+    expect((third.GetAttr(RES_PARATR_LINESPACING) as SvxLineSpacingItem).GetPropLineSpace()).toBe(
+      137,
+    );
+    expect((first.GetAttr(RES_UL_SPACE) as SvxULSpaceItem).GetUpper()).toBe(0);
+
+    act(
+      /** Restores both native paragraph edits in one undo. @returns Nothing. */ () => {
+        expect(shell.Undo()).toBe(true);
+      },
+    );
+    expect(first.GetParagraphAlignment()).toBe("center");
+    expect(third.GetParagraphAlignment()).toBe("center");
+    expect((first.GetAttr(RES_UL_SPACE) as SvxULSpaceItem).GetUpper()).toBe(288);
+    expect(third.GetpSwAttrSet()?.GetItemIfSet(RES_MARGIN_FIRSTLINE, false)).toBeUndefined();
+    act(
+      /** Reapplies the whole replacement group. @returns Nothing. */ () => {
+        expect(shell.Redo()).toBe(true);
+      },
+    );
+    expect(first.GetParagraphAlignment()).toBe("right");
+    expect(third.GetParagraphAlignment()).toBe("right");
+  } finally {
+    metric.mockRestore();
     workbench.unmount();
     session.view.Close();
   }

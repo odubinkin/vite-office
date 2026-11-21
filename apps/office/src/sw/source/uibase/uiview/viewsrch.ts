@@ -51,6 +51,13 @@ import { findParagraphStyle } from "../app/docst";
 import type { SwWrtShell } from "../wrtsh/wrtsh1";
 import { SwASCWriter } from "../../filter/ascii/wrtasc";
 
+/** Native view search attribute ranges for both modeless formatting editors. */
+export const WRITER_SEARCH_ATTR_WHICH_RANGES: WhichRangesContainer = [
+  [RES_CHRATR_BEGIN, RES_CHRATR_END - 1],
+  [RES_PARATR_BEGIN, RES_PARATR_END - 1],
+  [RES_FRMATR_BEGIN, RES_FRMATR_END - 1],
+];
+
 /** Native options accepted by the Similarity Search dialog. */
 export interface WriterSimilarityOptions {
   readonly changedChars: number;
@@ -669,13 +676,8 @@ export class SwViewSearch {
         : undefined;
     const acceptsNode = createSearchNodeFilter(document, this.pageStories);
     const replaceAll = command === SvxSearchCmd.REPLACE_ALL;
-    const attrRanges: WhichRangesContainer = [
-      [RES_CHRATR_BEGIN, RES_CHRATR_END - 1],
-      [RES_PARATR_BEGIN, RES_PARATR_END - 1],
-      [RES_FRMATR_BEGIN, RES_FRMATR_END - 1],
-    ];
-    const searchSet = new SfxItemSet(document.GetAttrPool(), attrRanges);
-    const replaceSet = new SfxItemSet(document.GetAttrPool(), attrRanges);
+    const searchSet = new SfxItemSet(document.GetAttrPool(), WRITER_SEARCH_ATTR_WHICH_RANGES);
+    const replaceSet = new SfxItemSet(document.GetAttrPool(), WRITER_SEARCH_ATTR_WHICH_RANGES);
     try {
       item.searchAttributes?.Get(searchSet);
       if (replacing) item.replaceAttributes?.Get(replaceSet);

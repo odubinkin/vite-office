@@ -1,5 +1,26 @@
 /** @fileoverview Shared browser presentation of native search formatting choices and summaries. */
-import { SvxCaseMap } from "../../../editeng/inc/svxenum";
+import { SvxAdjustItem } from "../../../editeng/inc/adjustitem";
+import { SvxULSpaceItem } from "../../../editeng/inc/ulspitem";
+import { SvxLineSpacingItem } from "../../../editeng/inc/lspcitem";
+import {
+  SvxFirstLineIndentItem,
+  SvxIndentValue,
+  SvxRightMarginItem,
+  SvxTextLeftMarginItem,
+} from "../../../editeng/inc/lrspitem";
+import {
+  SvxFormatSplitItem,
+  ParaVertAlign,
+  SvxOrphansItem,
+  SvxParaVertAlignItem,
+  SvxWidowsItem,
+} from "../../../editeng/source/items/paraitem.controls";
+import {
+  SvxInterLineSpaceRule,
+  SvxLineSpaceRule,
+  SvxAdjust,
+  SvxCaseMap,
+} from "../../../editeng/inc/svxenum";
 import { SvxCaseMapItem } from "../../../editeng/source/items/textitem.modes";
 import { SvxCrossedOutItem } from "../../../editeng/source/items/textitem.effects";
 import { SvxEscapementItem } from "../../../editeng/source/items/textitem.escapement";
@@ -49,6 +70,16 @@ import {
   RES_CHRATR_POSTURE,
   RES_CHRATR_UNDERLINE,
   RES_CHRATR_WEIGHT,
+  RES_PARATR_ADJUST,
+  RES_PARATR_LINESPACING,
+  RES_PARATR_SPLIT,
+  RES_PARATR_ORPHANS,
+  RES_PARATR_WIDOWS,
+  RES_PARATR_VERTALIGN,
+  RES_MARGIN_TEXTLEFT,
+  RES_MARGIN_FIRSTLINE,
+  RES_MARGIN_RIGHT,
+  RES_UL_SPACE,
 } from "../../inc/hintids";
 
 export const fontWeights = [
@@ -109,8 +140,106 @@ export const reliefs = [
   [FontRelief.Engraved, "Engraved"],
 ] as const;
 
+/** Paragraph alignment choices from the native alignment page. */
+export const paragraphAdjustments = [
+  [SvxAdjust.Left, "Left"],
+  [SvxAdjust.Right, "Right"],
+  [SvxAdjust.Center, "Centered"],
+  [SvxAdjust.Block, "Justified"],
+] as const;
+
+/** Native text-to-text vertical alignment choices. */
+export const paragraphVerticalAlignments = [
+  [ParaVertAlign.Automatic, "Automatic"],
+  [ParaVertAlign.Baseline, "Base line"],
+  [ParaVertAlign.Top, "Top"],
+  [ParaVertAlign.Center, "Center"],
+  [ParaVertAlign.Bottom, "Bottom"],
+] as const;
+
+/** Original line-spacing combobox entries. */
+export enum ParagraphLineSpaceMode {
+  Single,
+  Space115,
+  Space150,
+  Double,
+  Proportional,
+  Minimum,
+  Leading,
+  Fixed,
+}
+
+/** Maps the original line-spacing item to its active dialog mode and value. @param item - Original pooled format. @returns Selected mode and numeric member. */
+export function readParagraphLineSpacing(
+  item: SvxLineSpacingItem | undefined,
+): { mode: ParagraphLineSpaceMode; value: number } | undefined {
+  if (item === undefined) return undefined;
+  switch (item.GetLineSpaceRule()) {
+    case SvxLineSpaceRule.Fix:
+      return { mode: ParagraphLineSpaceMode.Fixed, value: item.GetLineHeight() };
+    case SvxLineSpaceRule.Min:
+      return { mode: ParagraphLineSpaceMode.Minimum, value: item.GetLineHeight() };
+  }
+  if (item.GetInterLineSpaceRule() === SvxInterLineSpaceRule.Fix)
+    return { mode: ParagraphLineSpaceMode.Leading, value: item.GetInterLineSpace() };
+  const value =
+    item.GetInterLineSpaceRule() === SvxInterLineSpaceRule.Off ? 100 : item.GetPropLineSpace();
+  const preset = [100, 115, 150, 200].indexOf(value);
+  return { mode: preset === -1 ? ParagraphLineSpaceMode.Proportional : preset, value };
+}
+
+/** Applies the source dialog's line-spacing mutations to a copy of the pooled item. @param base - Existing native item or pool default. @param mode - Selected menu row. @param value - Twips or percent depending on the mode. @returns Changed native item. */
+export function setParagraphLineSpacing(
+  base: SvxLineSpacingItem,
+  mode: ParagraphLineSpaceMode,
+  value: number,
+): SvxLineSpacingItem {
+  const result = base.Clone();
+  switch (mode) {
+    case ParagraphLineSpaceMode.Single:
+      result.SetLineSpaceRule(SvxLineSpaceRule.Auto);
+      result.SetInterLineSpaceRule(SvxInterLineSpaceRule.Off);
+      break;
+    case ParagraphLineSpaceMode.Space115:
+    case ParagraphLineSpaceMode.Space150:
+    case ParagraphLineSpaceMode.Double:
+    case ParagraphLineSpaceMode.Proportional:
+      result.SetLineSpaceRule(SvxLineSpaceRule.Auto);
+      result.SetPropLineSpace(
+        mode === ParagraphLineSpaceMode.Proportional
+          ? value
+          : ([100, 115, 150, 200][mode] as number),
+      );
+      break;
+    case ParagraphLineSpaceMode.Leading:
+      result.SetLineSpaceRule(SvxLineSpaceRule.Auto);
+      result.SetInterLineSpace(value);
+      break;
+    case ParagraphLineSpaceMode.Minimum:
+    case ParagraphLineSpaceMode.Fixed:
+      result.SetLineHeight(value);
+      if (mode === ParagraphLineSpaceMode.Fixed) result.SetLineSpaceRule(SvxLineSpaceRule.Fix);
+      result.SetInterLineSpaceRule(SvxInterLineSpaceRule.Off);
+      break;
+  }
+  return result;
+}
+
 /** Reads the value used by the dialog's scalar input controls. @param item - Current criterion. @returns HTML input value. */
 export function readSearchFormatValue(item: SfxPoolItem | undefined): string {
+  if (item instanceof SvxAdjustItem) return String(item.GetAdjust());
+  if (item instanceof SvxFirstLineIndentItem)
+    return String(item.GetTextFirstLineOffset().ResolveFixedPart() / 20);
+  if (item instanceof SvxTextLeftMarginItem)
+    return String(item.GetTextLeft().ResolveFixedPart() / 20);
+  if (item instanceof SvxRightMarginItem) return String(item.GetRight().ResolveFixedPart() / 20);
+  if (item instanceof SvxParaVertAlignItem) return String(item.GetValue());
+  if (
+    item instanceof SvxFormatSplitItem ||
+    item instanceof SvxOrphansItem ||
+    item instanceof SvxWidowsItem
+  )
+    return String(item.GetValue());
   if (item instanceof SvxFontItem) return item.GetFamilyName();
   if (item instanceof SvxFontHeightItem) return String(item.GetHeight() / 20);
   if (item instanceof SvxKerningItem) return String(item.GetValue() / 20);
@@ -149,6 +278,32 @@ export function makeSearchFormatItem(
   old: SfxPoolItem | undefined,
 ): SfxPoolItem {
   switch (which) {
+    case RES_PARATR_ADJUST: {
+      const item =
+        old instanceof SvxAdjustItem ? old.Clone() : new SvxAdjustItem(SvxAdjust.Left, which);
+      item.SetAdjust(Number(value));
+      return item;
+    }
+    case RES_PARATR_VERTALIGN:
+      return new SvxParaVertAlignItem(Number(value), which);
+    case RES_MARGIN_FIRSTLINE: {
+      const item = new SvxFirstLineIndentItem(
+        SvxIndentValue.twips(Math.round(Number(value) * 20)),
+        which,
+      );
+      if (old instanceof SvxFirstLineIndentItem) item.SetAutoFirst(old.IsAutoFirst());
+      return item;
+    }
+    case RES_MARGIN_TEXTLEFT:
+      return new SvxTextLeftMarginItem(SvxIndentValue.twips(Math.round(Number(value) * 20)), which);
+    case RES_MARGIN_RIGHT:
+      return new SvxRightMarginItem(SvxIndentValue.twips(Math.round(Number(value) * 20)), which);
+    case RES_PARATR_SPLIT:
+      return new SvxFormatSplitItem(value === "true", which);
+    case RES_PARATR_ORPHANS:
+      return new SvxOrphansItem(Number(value), which);
+    case RES_PARATR_WIDOWS:
+      return new SvxWidowsItem(Number(value), which);
     case RES_CHRATR_FONT: {
       const item = new SvxFontItem(which);
       item.SetFamilyName(value);
@@ -214,6 +369,57 @@ function describeSearchFormat(
   item: SfxPoolItem,
   text: (key: string, fallback: string) => string,
 ): string | undefined {
+  if (item instanceof SvxAdjustItem)
+    return describeChoice(paragraphAdjustments, item.GetAdjust(), "alignment", "Alignment", text);
+  if (item instanceof SvxULSpaceItem)
+    return `${text("attribute.paragraph-spacing", "Paragraph spacing")} ${item.GetUpper() / 20} / ${item.GetLower() / 20} pt`;
+  if (item instanceof SvxParaVertAlignItem)
+    return describeChoice(
+      paragraphVerticalAlignments,
+      item.GetValue(),
+      "vertical-alignment",
+      "Text-to-text",
+      text,
+    );
+  if (item instanceof SvxLineSpacingItem) {
+    const spacing = readParagraphLineSpacing(item);
+    if (spacing === undefined) return undefined;
+    const value =
+      spacing.mode <= ParagraphLineSpaceMode.Proportional
+        ? `${spacing.value}%`
+        : `${spacing.value / 20} pt`;
+    return `${text("attribute.line-spacing", "Line spacing")} ${value}`;
+  }
+  if (
+    item instanceof SvxFirstLineIndentItem ||
+    item instanceof SvxTextLeftMarginItem ||
+    item instanceof SvxRightMarginItem
+  ) {
+    const key =
+      item instanceof SvxFirstLineIndentItem
+        ? "first-line"
+        : item instanceof SvxTextLeftMarginItem
+          ? "left-indent"
+          : "right-indent";
+    const name =
+      item instanceof SvxFirstLineIndentItem
+        ? "First line"
+        : item instanceof SvxTextLeftMarginItem
+          ? "Before text"
+          : "After text";
+    return `${text(`attribute.${key}`, name)} ${readSearchFormatValue(item)} pt`;
+  }
+  if (item instanceof SvxFormatSplitItem)
+    return item.GetValue()
+      ? text("attribute-value.split.true", "Allow to split paragraph")
+      : text("attribute-value.split.false", "Keep lines together");
+  if (item instanceof SvxOrphansItem || item instanceof SvxWidowsItem) {
+    const name =
+      item instanceof SvxOrphansItem
+        ? text("attribute.orphans", "Orphans")
+        : text("attribute.widows", "Widows");
+    return `${name} ${item.GetValue()}`;
+  }
   if (item instanceof SvxFontItem) return item.GetFamilyName();
   if (item instanceof SvxFontHeightItem) return `${item.GetHeight() / 20} pt`;
   if (item instanceof SvxWeightItem) {
@@ -342,6 +548,16 @@ export const searchAttributes: ReadonlyArray<readonly [which: number, key: strin
     [RES_CHRATR_CROSSEDOUT, "strikeout", "Strikethrough"],
     [RES_CHRATR_UNDERLINE, "underline", "Underlining"],
     [RES_CHRATR_WEIGHT, "weight", "Font weight"],
+    [RES_PARATR_ADJUST, "alignment", "Alignment"],
+    [RES_PARATR_VERTALIGN, "vertical-alignment", "Text-to-text"],
+    [RES_PARATR_LINESPACING, "line-spacing", "Line spacing"],
+    [RES_MARGIN_TEXTLEFT, "left-indent", "Before text"],
+    [RES_MARGIN_FIRSTLINE, "first-line", "First line"],
+    [RES_MARGIN_RIGHT, "right-indent", "After text"],
+    [RES_UL_SPACE, "paragraph-spacing", "Paragraph spacing"],
+    [RES_PARATR_SPLIT, "split", "Allow to split paragraph"],
+    [RES_PARATR_ORPHANS, "orphans", "Orphans"],
+    [RES_PARATR_WIDOWS, "widows", "Widows"],
   ];
 
 /** Renders the active search formatting beneath the associated entry. @param pool - Writer attribute pool. @param list - Active search list. @param text - Localization callback. @returns Localized formatting names. */

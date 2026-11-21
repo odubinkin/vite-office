@@ -8,9 +8,9 @@
       "WriterSearchFormatDialog"
     ],
     "status": "local-only",
-    "rationale": "Presents the represented Font, Font Effects, Position and Highlighting controls of the pinned SvxSearchFormatDialog and edits concrete native items on the focused find or replace side.",
+    "rationale": "Presents the represented Font, Font Effects, Position, Indents & Spacing, Alignment, Text Flow and Highlighting controls of the pinned SvxSearchFormatDialog and edits concrete native items on the focused find or replace side.",
     "responsibilities": [
-      "Presents the represented Font, Font Effects, Position and Highlighting controls of the pinned SvxSearchFormatDialog and edits concrete native items on the focused find or replace side."
+      "Presents the represented Font, Font Effects, Position, Indents & Spacing, Alignment, Text Flow and Highlighting controls of the pinned SvxSearchFormatDialog and edits concrete native items on the focused find or replace side."
     ],
     "stackDivergence": {
       "kind": "browser-adaptation",

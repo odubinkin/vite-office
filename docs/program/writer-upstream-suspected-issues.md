@@ -5568,3 +5568,18 @@ applies its authored properties without that collection change.
 - Writer preserves the separate WhichIds and the display precedence.
   The browser regression exercises identical effective colors and different
   native item families. The original desktop behavior is source-derived.
+
+### WRITER-700 — A paragraph-format search can find text beyond the selected substring
+
+- Upstream: `sw/source/core/crsr/findattr.cxx`, `FindAttrsImpl` and
+  `SwFindParaAttr::DoFind`, and `sw/source/core/crsr/pam.cxx`, `GetNode`.
+- Observation: `GetNode` admits a paragraph intersecting the search range.
+  The paragraph-only `OtherSet` branch keeps the directional starting
+  endpoint and sets the other endpoint to the paragraph edge. The
+  subsequent text search receives that candidate range. In a centered
+  paragraph containing `red word`, a forward search for `word` with only
+  `red` selected can return the word outside the original selection.
+  A backward search can similarly extend to the paragraph start.
+- Writer retains both directional endpoints for the represented
+  paragraph-only attribute branch. The view regression covers both
+  directions. This is a source-derived observation.
