@@ -11,6 +11,8 @@ import {
 import { browserBorderLine } from "../../../svx/browser/dialog/border-line";
 import { SvxBoxItem, SvxBoxItemLine } from "../../../editeng/source/items/frmitems";
 import { SvxColorItem } from "../../../editeng/inc/colritem";
+import { SvxEmphasisMarkItem } from "../../../editeng/inc/emphasismarkitem";
+import { FontEmphasisMark } from "../../../tools/inc/fontenum";
 import { SvxEscapementItem } from "../../../editeng/inc/escapementitem";
 import { SvxKerningItem } from "../../../editeng/inc/kernitem";
 import { RES_CHRATR_BOX, RES_CHRATR_ESCAPEMENT, RES_CHRATR_KERNING } from "../../inc/hintids";
@@ -51,6 +53,7 @@ import {
 import {
   RES_CHRATR_BACKGROUND,
   RES_CHRATR_OVERLINE,
+  RES_CHRATR_EMPHASIS_MARK,
   RES_CHRATR_UNDERLINE,
   RES_TXTATR_INETFMT,
 } from "../../inc/hintids";
@@ -191,6 +194,7 @@ export interface WriterTextPortion {
     underline: boolean;
     underlineLine?: WriterTextLineProjection;
     overlineLine?: WriterTextLineProjection;
+    emphasisMark?: FontEmphasisMark;
     escapement?: Readonly<{ offset: number; height: number }>;
     strikeout?: import("../../../tools/inc/fontenum").FontStrikeout;
     color?: string;
@@ -813,6 +817,9 @@ function projectTextPortions(node: SwTextNode): readonly WriterTextPortion[] {
     const generic = getFontFamilyGeneric(font.GetFamily());
     const underline = handler.ReadItem(RES_CHRATR_UNDERLINE) as SvxUnderlineItem;
     const overline = handler.ReadItem(RES_CHRATR_OVERLINE) as SvxOverlineItem;
+    const emphasisMark = (
+      handler.ReadItem(RES_CHRATR_EMPHASIS_MARK) as SvxEmphasisMarkItem
+    ).GetEmphasisMark();
     const highlight = writerHighlightColorValue(
       handler.ReadItem(RES_CHRATR_HIGHLIGHT) as SvxBrushItem,
     );
@@ -838,6 +845,10 @@ function projectTextPortions(node: SwTextNode): readonly WriterTextPortion[] {
             ? { underlineLine: projectTextLine(underline) }
             : {}),
           ...(overline.GetBoolValue() ? { overlineLine: projectTextLine(overline) } : {}),
+          ...(inlineGraphic === undefined &&
+          (emphasisMark & FontEmphasisMark.Style) !== FontEmphasisMark.NONE
+            ? { emphasisMark }
+            : {}),
           ...(authored(RES_CHRATR_ESCAPEMENT)
             ? {
                 escapement: Object.freeze({

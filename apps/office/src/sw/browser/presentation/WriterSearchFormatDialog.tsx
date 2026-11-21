@@ -46,6 +46,7 @@ import {
   RES_CHRATR_COLOR,
   RES_CHRATR_CONTOUR,
   RES_CHRATR_CROSSEDOUT,
+  RES_CHRATR_EMPHASIS_MARK,
   RES_CHRATR_ESCAPEMENT,
   RES_CHRATR_KERNING,
   RES_CHRATR_OVERLINE,
@@ -76,6 +77,7 @@ import {
   WriterSearchTwoLinesPage,
   type WriterSearchTwoLinesPageHandle,
 } from "./WriterSearchTwoLinesPage";
+import { WriterSearchEmphasisControls } from "./WriterSearchEmphasisControls";
 import { WriterSearchTextFlowPage } from "./WriterSearchTextFlowPage";
 import { WriterSearchParagraphAlignment } from "./WriterSearchParagraphAlignment";
 
@@ -97,6 +99,7 @@ export function WriterSearchFormatDialog(
   const twoLinesPage = useRef<WriterSearchTwoLinesPageHandle>(null);
   const [complexFont, setComplexFont] = useState(readPreferredCTLFontTab);
   const [fontReset, setFontReset] = useState(0);
+  const [effectsReset, setEffectsReset] = useState(0);
   const [textFlowReset, setTextFlowReset] = useState(0);
   const [lineMode, setLineMode] = useState<ParagraphLineSpaceMode>();
   const [draft, setDraft] = useState<ReadonlyMap<number, string | SfxPoolItem>>(new Map());
@@ -148,6 +151,7 @@ export function WriterSearchFormatDialog(
     for (const which of formatPages[page][1]) restored.delete(which);
     if (page === "indents") setLineMode(undefined);
     if (page === "font") setFontReset(fontReset + 1);
+    if (page === "effects") setEffectsReset(effectsReset + 1);
     if (page === "textflow") setTextFlowReset(textFlowReset + 1);
     if (page === "asianlayout") twoLinesPage.current?.Reset();
     setDraft(restored);
@@ -587,6 +591,15 @@ export function WriterSearchFormatDialog(
               label("shadow", "Shadow"),
               Number(scalar(RES_CHRATR_RELIEF)) !== 0,
             )}
+            <WriterSearchEmphasisControls
+              key={effectsReset}
+              label={label}
+              value={scalar(RES_CHRATR_EMPHASIS_MARK)}
+              onChange={
+                /** Stages both native emphasis flags. @param value - Complete item value. @returns Nothing. */
+                (value) => change(RES_CHRATR_EMPHASIS_MARK, String(value))
+              }
+            />
           </fieldset>
         </div>
         <div

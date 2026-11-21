@@ -276,3 +276,33 @@ test("Writer inserts a comment, finds its text and undoes note formatting", /** 
   await undo.click();
   await expect(comment).toHaveCount(2);
 });
+
+test("Writer paints emphasis below the text after a formatted replacement", /** Checks the computed style through the production search UI. @param fixtures - Playwright fixtures. @param fixtures.page - Chromium page. @returns Test completion. */ async ({
+  page,
+}) => {
+  await page.goto("/writer");
+  const editor = page.getByRole("textbox", { name: "Writer document text", exact: true });
+  await editor.fill("plain marked plain");
+  await page.keyboard.press("Control+h");
+  const dialog = page.getByRole("dialog", { name: "Find and Replace", exact: true });
+  await dialog.getByLabel("Find", { exact: true }).fill("marked");
+  await dialog.getByText("Other options", { exact: true }).click();
+  await dialog.getByLabel("Replace with", { exact: true }).fill("marked");
+  await dialog.getByRole("button", { name: "Format…" }).click();
+  const replacement = page.getByRole("dialog", { name: "Replace", exact: true });
+  await replacement.getByRole("tab", { name: "Font Effects" }).click();
+  await replacement.getByRole("combobox", { name: "Emphasis mark" }).selectOption({ label: "Dot" });
+  await replacement
+    .getByRole("combobox", { name: "Position" })
+    .selectOption({ label: "Below text" });
+  await replacement.getByRole("button", { name: "OK" }).click();
+  await dialog.getByRole("button", { name: "Replace All", exact: true }).click();
+
+  const marked = editor.getByText("marked", { exact: true });
+  await expect(marked).toHaveCSS("text-emphasis-style", /^(filled )?dot$/);
+  await expect(marked).toHaveCSS("text-emphasis-position", /^under( right)?$/);
+  await page.keyboard.press("Escape");
+  await page.keyboard.press("Control+z");
+  await expect(editor).toHaveText("plain marked plain");
+  await expect(editor.locator('[style*="text-emphasis-style"]')).toHaveCount(0);
+});

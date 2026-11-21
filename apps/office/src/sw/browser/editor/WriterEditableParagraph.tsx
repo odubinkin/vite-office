@@ -2,7 +2,7 @@
 import { WriterInlineGraphic } from "./WriterFloatingGraphic";
 import { EscapementText } from "./EscapementText";
 
-import { FontItalic, FontWeight } from "../../../tools/inc/fontenum";
+import { FontEmphasisMark, FontItalic, FontWeight } from "../../../tools/inc/fontenum";
 
 import { StrikeoutText } from "../../../vcl/browser/strikeout-text";
 import { Fragment, useLayoutEffect, useRef } from "react";
@@ -351,6 +351,13 @@ function paintTextLine(
   );
 }
 
+const emphasisStyles = {
+  [FontEmphasisMark.Dot]: "filled dot",
+  [FontEmphasisMark.Circle]: "open circle",
+  [FontEmphasisMark.Disc]: "filled circle",
+  [FontEmphasisMark.Accent]: "filled sesame",
+} as Partial<Record<FontEmphasisMark, string>>;
+
 /** Projects one immutable Writer run through semantic browser elements. @param props - Canonical run and inherited paragraph flags. @returns React-owned run subtree. */
 export function WriterTextPortionProjection({
   inheritedBold,
@@ -387,6 +394,22 @@ export function WriterTextPortionProjection({
         {content}
       </span>
     );
+  const emphasis = run.attributes.emphasisMark;
+  if (emphasis !== undefined) {
+    const style = emphasisStyles[emphasis & FontEmphasisMark.Style];
+    if (style !== undefined)
+      content = (
+        <span
+          style={{
+            textEmphasisStyle: style,
+            textEmphasisPosition:
+              emphasis & FontEmphasisMark.PosBelow ? "under right" : "over right",
+          }}
+        >
+          {content}
+        </span>
+      );
+  }
   if (run.attributes.color !== undefined)
     content = (
       <span style={{ color: run.attributes.color === "auto" ? "initial" : run.attributes.color }}>

@@ -4,7 +4,7 @@ title: "Implement Writer search and replace core and browser UI"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 111
+revision: 112
 origin:
   system: "manual"
 depends_on:
@@ -407,6 +407,14 @@ comments:
       Targeted Writer run passed 147 tests in 14 files, with six existing native ICU host-probe cases skipped. Four production Chrome search scenarios passed. Production TypeScript and Vite build, Writer resource checks, dependency and source-tree checks, provenance, Writer registry parity (zero violations), scoped ESLint and Prettier, routing and diff checks passed. Repository-wide JSDoc and file-size checks still report 307 existing documentation errors and four existing files at the limit. AgentPlane doctor passed with the existing hook-shim warning.
 
       This checkpoint keeps the search task open. It does not advance the ten-task full-regression cadence.
+  -
+    author: "CODER"
+    body: |-
+      Verified Font Effects emphasis checkpoint for Writer search. The pinned style and placement selectors edit one SvxEmphasisMarkItem, preserve the placement while switching styles, and restore it upon reopening or resetting the page. Search criteria use the pinned item summary strings and distinguish marks above and below. The editable Writer document projects the effective item from its existing attribute iterator and paints emphasis with browser CSS. The browser supplies glyph geometry and uses a filled sesame mark for the native accent style.
+
+      The UI test adapts the Dot and Below Text reopen check from formatCharacter.py and exercises exact matching, explicit None, visible paint, grouped Undo and Redo. The production Chrome test applies a mark below text through Replace All and verifies computed style and Undo. The final Writer run passed 215 tests in 17 files, with six existing native ICU host-probe cases skipped. All five Chrome search scenarios passed. The production build, dependency and source-tree checks, provenance, Writer resources and registry parity, scoped lint and formatting, doctor, routing, and diff checks passed. The repository-wide JSDoc and file-size checks retain 307 baseline JSDoc errors and four existing files at or above their limit.
+
+      The active search task stays open. This checkpoint does not increment the ten-task full-regression cadence.
 
 events:
   -
@@ -975,9 +983,19 @@ events:
       Targeted Writer run passed 147 tests in 14 files, with six existing native ICU host-probe cases skipped. Four production Chrome search scenarios passed. Production TypeScript and Vite build, Writer resource checks, dependency and source-tree checks, provenance, Writer registry parity (zero violations), scoped ESLint and Prettier, routing and diff checks passed. Repository-wide JSDoc and file-size checks still report 307 existing documentation errors and four existing files at the limit. AgentPlane doctor passed with the existing hook-shim warning.
 
       This checkpoint keeps the search task open. It does not advance the ten-task full-regression cadence.
+  -
+    type: "comment"
+    at: "2026-11-21T21:33:39.589Z"
+    author: "CODER"
+    body: |-
+      Verified Font Effects emphasis checkpoint for Writer search. The pinned style and placement selectors edit one SvxEmphasisMarkItem, preserve the placement while switching styles, and restore it upon reopening or resetting the page. Search criteria use the pinned item summary strings and distinguish marks above and below. The editable Writer document projects the effective item from its existing attribute iterator and paints emphasis with browser CSS. The browser supplies glyph geometry and uses a filled sesame mark for the native accent style.
+
+      The UI test adapts the Dot and Below Text reopen check from formatCharacter.py and exercises exact matching, explicit None, visible paint, grouped Undo and Redo. The production Chrome test applies a mark below text through Replace All and verifies computed style and Undo. The final Writer run passed 215 tests in 17 files, with six existing native ICU host-probe cases skipped. All five Chrome search scenarios passed. The production build, dependency and source-tree checks, provenance, Writer resources and registry parity, scoped lint and formatting, doctor, routing, and diff checks passed. The repository-wide JSDoc and file-size checks retain 307 baseline JSDoc errors and four existing files at or above their limit.
+
+      The active search task stays open. This checkpoint does not increment the ten-task full-regression cadence.
 
 doc_version: 3
-doc_updated_at: "2026-11-21T21:23:49.642Z"
+doc_updated_at: "2026-11-21T21:33:39.589Z"
 doc_updated_by: "CODER"
 description: "Implement the approved coherent Writer search-and-replace feature from pinned LibreOffice sources: real shared search engine and options, native paragraph/cursor traversal and replacement/history contracts, view-owned search state and dispatch, Find toolbar and Find and Replace dialog with generated upstream command placement and shortcuts. Preserve source semantics and explicit unsupported boundaries; never substitute DOM text search or browser RegExp for ICU contracts. Work only on writer in vite-office-writer; local upstream reading approved, no network or merges. Keep active until approved scope is verified."
 sections:

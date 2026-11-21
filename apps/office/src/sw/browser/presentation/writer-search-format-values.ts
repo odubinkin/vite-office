@@ -28,6 +28,7 @@ import {
 } from "../../../editeng/inc/svxenum";
 import { SvxCaseMapItem } from "../../../editeng/source/items/textitem.modes";
 import { SvxCrossedOutItem } from "../../../editeng/source/items/textitem.effects";
+import { SvxEmphasisMarkItem } from "../../../editeng/inc/emphasismarkitem";
 import { SvxEscapementItem } from "../../../editeng/source/items/textitem.escapement";
 import { SvxTwoLinesItem } from "../../../editeng/inc/twolinesitem";
 import { SvxCharRotateItem } from "../../../editeng/source/items/textitem.layout";
@@ -59,11 +60,18 @@ import {
 import type { SfxPoolItem } from "../../../svl/source/items/poolitem";
 import { GetAttributeName } from "../../../svx/source/dialog/strarray";
 import type { SearchAttrItemList } from "../../../svx/source/dialog/srchdlg";
-import { FontItalic, FontLineStyle, FontStrikeout, FontWeight } from "../../../tools/inc/fontenum";
+import {
+  FontEmphasisMark,
+  FontItalic,
+  FontLineStyle,
+  FontStrikeout,
+  FontWeight,
+} from "../../../tools/inc/fontenum";
 import {
   RES_CHRATR_AUTOKERN,
   RES_CHRATR_BACKGROUND,
   RES_CHRATR_CASEMAP,
+  RES_CHRATR_EMPHASIS_MARK,
   RES_CHRATR_ESCAPEMENT,
   RES_CHRATR_ROTATE,
   RES_CHRATR_CONTOUR,
@@ -106,6 +114,14 @@ import {
   RES_MARGIN_RIGHT,
   RES_UL_SPACE,
 } from "../../inc/hintids";
+
+export const emphasisMarks = [
+  [FontEmphasisMark.NONE, "(Without)"],
+  [FontEmphasisMark.Dot, "Dot"],
+  [FontEmphasisMark.Circle, "Circle"],
+  [FontEmphasisMark.Disc, "Disc"],
+  [FontEmphasisMark.Accent, "Accent"],
+] as const;
 
 export const fontWeights = [
   [FontWeight.WEIGHT_NORMAL, "Regular"],
@@ -255,6 +271,7 @@ export function setParagraphLineSpacing(
 /** Reads the value used by the dialog's scalar input controls. @param item - Current criterion. @returns HTML input value. */
 export function readSearchFormatValue(item: SfxPoolItem | undefined): string {
   if (item instanceof SvxAdjustItem) return String(item.GetAdjust());
+  if (item instanceof SvxEmphasisMarkItem) return String(item.GetEmphasisMark());
   if (item instanceof SvxFirstLineIndentItem)
     return String(item.GetTextFirstLineOffset().ResolveFixedPart() / 20);
   if (item instanceof SvxTextLeftMarginItem)
@@ -400,6 +417,8 @@ export function makeSearchFormatItem(
       return new SvxCrossedOutItem(Number(value), which);
     case RES_CHRATR_CASEMAP:
       return new SvxCaseMapItem(Number(value), which);
+    case RES_CHRATR_EMPHASIS_MARK:
+      return new SvxEmphasisMarkItem(Number(value), which);
     case RES_CHRATR_RELIEF:
       return new SvxCharReliefItem(Number(value), which);
     case RES_CHRATR_CONTOUR:
@@ -425,6 +444,18 @@ function describeSearchFormat(
   slot: number,
   text: (key: string, fallback: string) => string,
 ): string | undefined {
+  if (item instanceof SvxEmphasisMarkItem) {
+    const mark = item.GetEmphasisMark();
+    const style = mark & FontEmphasisMark.Style;
+    const caption = ["none", "Dots", "Circle", "Filled circle", "Accent"][style];
+    if (caption === undefined) return undefined;
+    const description = text(`attribute-value.emphasis.${style}`, caption);
+    if (mark & FontEmphasisMark.PosAbove)
+      return `${description} ${text("attribute-value.emphasis.above", "Above")}`;
+    if (mark & FontEmphasisMark.PosBelow)
+      return `${description} ${text("attribute-value.emphasis.below", "Below")}`;
+    return description;
+  }
   if (item instanceof SvxTwoLinesItem) {
     if (!item.GetValue()) return text("attribute-value.two-lines.off", "Double-lined off");
     const start = item.GetStartBracket();
@@ -689,6 +720,7 @@ export const formatPages = {
       RES_CHRATR_CROSSEDOUT,
       RES_CHRATR_CASEMAP,
       RES_CHRATR_RELIEF,
+      RES_CHRATR_EMPHASIS_MARK,
       RES_CHRATR_CONTOUR,
       RES_CHRATR_SHADOWED,
       RES_CHRATR_WORDLINEMODE,
