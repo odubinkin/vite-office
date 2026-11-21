@@ -38,7 +38,14 @@ it("focuses the matched comment, replaces its selection and undoes through Write
     fireEvent.keyDown(window, { key: "h", ctrlKey: true });
     const dialog = within(screen.getByRole("dialog", { name: "Find and Replace" }));
     fireEvent.click(dialog.getByText("Other options"));
-    fireEvent.click(dialog.getByRole("checkbox", { name: "Comments" }));
+    const styles = dialog.getByRole("checkbox", { name: "Search for styles" });
+    const comments = dialog.getByRole("checkbox", { name: "Comments" });
+    fireEvent.click(styles);
+    expect(comments).toBeDisabled();
+    fireEvent.click(styles);
+    expect(comments).toBeEnabled();
+    fireEvent.click(comments);
+    expect(styles).toBeDisabled();
     expect(dialog.getByRole("button", { name: "Find All" })).toBeDisabled();
     expect(dialog.getByRole("button", { name: "Replace All" })).toBeDisabled();
     fireEvent.change(dialog.getByLabelText("Find"), { target: { value: "target" } });

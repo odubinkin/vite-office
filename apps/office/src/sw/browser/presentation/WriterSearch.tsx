@@ -169,6 +169,7 @@ export function WriterSearch({
       ? searchOptionsState.value.GetValue()
       : SearchOptionFlags.NONE;
   const canReplace = hasOption(SearchOptionFlags.REPLACE);
+  const canFormat = !item.similaritySearch && hasOption(SearchOptionFlags.FORMAT);
   const canReplaceAll = !item.searchInNotes && hasOption(SearchOptionFlags.REPLACE_ALL);
 
   /** Reads the view shell's option mask. @param option - Native search capability. @returns Whether the control is available. */
@@ -754,17 +755,19 @@ export function WriterSearch({
                 disabled={
                   item.regularExpression ||
                   item.similaritySearch ||
+                  item.searchInNotes ||
                   !hasOption(SearchOptionFlags.FAMILIES)
                 }
                 onChange={
                   /** Switches between text fields and native paragraph style lists. @param event - Updated control. @returns Nothing. */ (
                     event,
                   ) =>
-                    update(
-                      event.currentTarget.checked
-                        ? { styleSearch: true, wholeWords: false, matchCase: false }
-                        : { styleSearch: false },
-                    )
+                    update({
+                      styleSearch: event.currentTarget.checked,
+                      ...(event.currentTarget.checked && !hasAttributes
+                        ? { wholeWords: false, matchCase: false }
+                        : {}),
+                    })
                 }
               />
               {hasAttributes && item.search.length > 0
@@ -838,6 +841,7 @@ export function WriterSearch({
               <input
                 type="checkbox"
                 checked={item.searchInNotes ?? false}
+                disabled={styleOptions !== undefined}
                 onChange={
                   /** Includes anchored comment text. @param event - Changed checkbox. @returns Nothing. */ (
                     event,
@@ -851,11 +855,7 @@ export function WriterSearch({
             <button
               type="button"
               className={buttonStyle}
-              disabled={
-                formatTarget !== "search" ||
-                styleOptions !== undefined ||
-                !hasOption(SearchOptionFlags.FORMAT)
-              }
+              disabled={formatTarget !== "search" || styleOptions !== undefined || !canFormat}
               onClick={
                 /** Opens the native attribute checklist. @returns Nothing. */ () =>
                   setFormatDialog("attributes")
@@ -866,7 +866,7 @@ export function WriterSearch({
             <button
               type="button"
               className={buttonStyle}
-              disabled={styleOptions !== undefined || !hasOption(SearchOptionFlags.FORMAT)}
+              disabled={styleOptions !== undefined || !canFormat}
               onClick={
                 /** Opens exact formatting for the active field. @returns Nothing. */ () =>
                   setFormatDialog("format")
@@ -877,7 +877,10 @@ export function WriterSearch({
             <button
               type="button"
               className={buttonStyle}
-              disabled={formatTarget === "search" ? !hasSearchAttributes : !hasReplaceAttributes}
+              disabled={
+                !canFormat ||
+                (formatTarget === "search" ? !hasSearchAttributes : !hasReplaceAttributes)
+              }
               onClick={
                 /** Clears formatting for the focused entry. @returns Nothing. */ () => {
                   if (formatTarget === "search") {

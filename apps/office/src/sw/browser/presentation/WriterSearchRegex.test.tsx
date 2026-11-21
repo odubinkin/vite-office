@@ -95,3 +95,48 @@ it("joins matching paragraph ends and restores the original paragraphs with one 
     session.view.Close();
   }
 });
+
+it("retains formatting criteria while similarity search disables their controls", /** Exercises the native algorithm transition with inclusive styles and existing formatting. @returns Nothing. */ () => {
+  const session = createWriterDocumentSession();
+  const workbench = render(<WriterWorkbench isActive view={session.view} />);
+  try {
+    fireEvent.keyDown(window, { key: "h", ctrlKey: true });
+    const dialog = within(screen.getByRole("dialog", { name: "Find and Replace" }));
+    fireEvent.click(dialog.getByText("Other options"));
+    const format = dialog.getByRole("button", { name: "Format…" });
+    const attributes = dialog.getByRole("button", { name: "Attributes…" });
+    const noFormat = dialog.getByRole("button", { name: "No Format" });
+    fireEvent.click(attributes);
+    const picker = within(screen.getByRole("dialog", { name: "Attributes" }));
+    fireEvent.click(picker.getByRole("checkbox", { name: "Underline" }));
+    fireEvent.click(picker.getByRole("button", { name: "OK" }));
+    fireEvent.change(dialog.getByLabelText("Find"), { target: { value: "test" } });
+    const styles = dialog.getByRole("checkbox", { name: "Including Styles" });
+    const wholeWords = dialog.getByRole("checkbox", { name: "Whole words only" });
+    const matchCase = dialog.getByRole("checkbox", { name: "Match case" });
+    fireEvent.click(wholeWords);
+    fireEvent.click(matchCase);
+    fireEvent.click(styles);
+    expect(styles).toBeChecked();
+    expect(wholeWords).toBeChecked();
+    expect(matchCase).toBeChecked();
+    const similarity = dialog.getByRole("checkbox", { name: "Similarity search" });
+    fireEvent.click(similarity);
+    expect(styles).not.toBeChecked();
+    expect(styles).toBeDisabled();
+    expect(format).toBeDisabled();
+    expect(attributes).toBeDisabled();
+    expect(noFormat).toBeDisabled();
+    expect(dialog.getByText("Underline")).toBeVisible();
+
+    fireEvent.click(similarity);
+    expect(styles).toBeEnabled();
+    expect(format).toBeEnabled();
+    expect(attributes).toBeEnabled();
+    expect(noFormat).toBeEnabled();
+    expect(dialog.getByText("Underline")).toBeVisible();
+  } finally {
+    workbench.unmount();
+    session.view.Close();
+  }
+});

@@ -70,7 +70,12 @@ export function WriterSearchAlgorithmOptions({
             onChange={
               /** Enables the native similarity algorithm. @param event - Updated control. @returns Nothing. */ (
                 event,
-              ) => update({ similaritySearch: event.currentTarget.checked })
+              ) =>
+                update(
+                  event.currentTarget.checked
+                    ? { similaritySearch: true, styleSearch: false }
+                    : { similaritySearch: false },
+                )
             }
           />
           {text("similarity-search", "Similarity search")}
