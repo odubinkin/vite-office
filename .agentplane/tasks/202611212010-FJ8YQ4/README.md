@@ -4,7 +4,7 @@ title: "Connect Calc Paste Special dialog and presets"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 6
+revision: 8
 origin:
   system: "manual"
 depends_on: []
@@ -38,7 +38,7 @@ events:
     to: "DOING"
     note: "Start: connect Calc Paste Special presets and run the ten-task verification checkpoint."
 doc_version: 3
-doc_updated_at: "2026-11-21T20:22:20.329Z"
+doc_updated_at: "2026-11-21T20:45:04.244Z"
 doc_updated_by: "CODER"
 description: "Enable the source Paste Special dialog for implemented clipboard mechanisms and run the ten-task test checkpoint."
 sections:
@@ -46,7 +46,13 @@ sections:
   Scope: "Connect the original same-workbook Paste Special dialog with its preset, paste, shift, options and operation groups. Enable the represented content types, Formats Only, values and formats, transpose and skip-empty. Keep unrepresented link, shift, arithmetic, comment and object services disabled. Route portable text through the source format selection and existing text import. Port tdf69450, exercise source preset defaults and history, and run the full Office, inventory, tooling and browser test suites. Preserve deliberate application I/O deviations."
   Plan: "Connect represented Paste Special controls and presets, format-only and skip-empty pattern operations, then run the tenth-task full checkpoint."
   Verify Steps: "Run focused clipboard, paste, format, Undo and workspace tests. Run Office TypeScript, changed-path ESLint and Prettier, resources, provenance, dependencies, policy routing and AgentPlane doctor. Run the full Office Vitest project, inventory, tooling and all browser projects as the tenth-task checkpoint."
-  Verification: "Pending implementation."
+  Verification: |-
+    - Command: `cd apps/office && ../../node_modules/.bin/vitest run --config vitest.calc.config.ts --maxWorkers 2 --testTimeout 180000 clipboard paste-block paste-selection paste-editability reference-protocol impex calc-workbench calc-recalculation`. Result: pass. Evidence: 274 tests in 22 files, including tdf69450 and the Paste Special presets, external text format, formula owner and history.
+    - Office TypeScript, changed-path Prettier and ESLint, Calc resources, source provenance, dependencies, policy routing and AgentPlane doctor passed. Doctor shows the existing managed hook readiness warning.
+    - Production build and static output verification passed. Full browser discovery found 613 scenarios and the suite is running on installed Google Chrome in the separate 4174 preview.
+    - Inventory full run: 127 passed and three failed while checking Calc resource runtime declarations. After correction e5df97f80, all three cases passed together in the focused rerun. Together the runs verify 130 scenarios.
+    - Command: `node_modules/.bin/vitest run --config vitest.tooling.config.ts --maxWorkers 1 --testTimeout 240000 --hookTimeout 180000`. Result: pass. Evidence: 194 tests in 47 files. The first npm-wrapper invocation rejected the duplicate worker setting before running any tests.
+    - Full Office Vitest and full Playwright are still running. Terminal status and logs are tracked in output/calc-task10-checkpoint.md. Task verification remains pending.
   Rollback Plan: "Revert the clipboard implementation commits to restore the earlier command availability and admission mask without changing workbook data or I/O policy."
   Findings: |-
     The browser uses the original Calc Paste Special slot and accelerators. Internal cell transfers open the Insert Contents workflow with the pinned first-open defaults, four presets, the original Run immediately control, and session preferences. The unsupported arithmetic, link, shift, comment and object controls are disabled. External browser text presents the available format and then uses the existing text importer.
@@ -74,7 +80,12 @@ Run focused clipboard, paste, format, Undo and workspace tests. Run Office TypeS
 
 ## Verification
 
-Pending implementation.
+- Command: `cd apps/office && ../../node_modules/.bin/vitest run --config vitest.calc.config.ts --maxWorkers 2 --testTimeout 180000 clipboard paste-block paste-selection paste-editability reference-protocol impex calc-workbench calc-recalculation`. Result: pass. Evidence: 274 tests in 22 files, including tdf69450 and the Paste Special presets, external text format, formula owner and history.
+- Office TypeScript, changed-path Prettier and ESLint, Calc resources, source provenance, dependencies, policy routing and AgentPlane doctor passed. Doctor shows the existing managed hook readiness warning.
+- Production build and static output verification passed. Full browser discovery found 613 scenarios and the suite is running on installed Google Chrome in the separate 4174 preview.
+- Inventory full run: 127 passed and three failed while checking Calc resource runtime declarations. After correction e5df97f80, all three cases passed together in the focused rerun. Together the runs verify 130 scenarios.
+- Command: `node_modules/.bin/vitest run --config vitest.tooling.config.ts --maxWorkers 1 --testTimeout 240000 --hookTimeout 180000`. Result: pass. Evidence: 194 tests in 47 files. The first npm-wrapper invocation rejected the duplicate worker setting before running any tests.
+- Full Office Vitest and full Playwright are still running. Terminal status and logs are tracked in output/calc-task10-checkpoint.md. Task verification remains pending.
 
 ## Rollback Plan
 
