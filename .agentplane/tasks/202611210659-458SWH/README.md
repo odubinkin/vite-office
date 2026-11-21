@@ -4,7 +4,7 @@ title: "Connect Calc conditional formatting manager and rule editor"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 10
+revision: 12
 origin:
   system: "manual"
 depends_on: []
@@ -37,7 +37,7 @@ events:
     to: "DOING"
     note: "Start: Connect native Calc conditional formatting authoring and manager commands and verify the tenth regression checkpoint."
 doc_version: 3
-doc_updated_at: "2026-11-21T06:59:54.286Z"
+doc_updated_at: "2026-11-21T08:06:18.883Z"
 doc_updated_by: "CODER"
 description: "Expose the existing Calc conditional rule families, native range assignments and transactional manager through the upstream dialog, slot, and history structure."
 sections:
@@ -48,9 +48,27 @@ sections:
     - Run focused conditional-format dialog, range, grid, history, and selected ODS/XLSX settings regressions. Include upstream UI cases for manager edit/delete, range changes, condition-type changes, dates and color scales as applicable.
     - Run changed-path lint and format, tooling and office TypeScript, Calc resources, provenance, dependency and file-size checks.
     - Run the regular full office, inventory, tooling and browser suites and the static build after the tenth task implementation. Record exit status and counts for each.
-  Verification: "Pending implementation and local verification."
+  Verification: |-
+    Implementation `448e6b30dcaf` and test type corrections `81623a51659f`.
+
+    - Calc Vitest conditional-format suite: 5 passed. Covers the native quick rule, paint, range picking, formula reference origin, manager draft operations, Undo/Redo, and ODS/XLSX reopening.
+    - Calc UI resource suite: 3 passed. The related run also passed all 3 print-area cases.
+    - Playwright formatting toolbar: 2 passed, desktop and mobile Chrome.
+    - Changed-path Prettier and ESLint, office and tooling TypeScript, Calc generated resources, module boundaries, source provenance and file size: passed.
+    - Production build and static smoke: passed. Four relative JavaScript bundles and no backend endpoints.
+    - Full inventory: exit 1, 117 passed and 13 failed. The 31-test retry passed 26. Four failures reproduce the same stale Writer parity marker on the clean baseline. One Writer parity CLI case exceeded its fixed 120-second timeout again.
+    - Full tooling: exit 1, 192 passed and two compiler checks exceeded the 5-second timeout. Both checks passed on the targeted retry.
+
+    The first Office coverage and full browser runs were interrupted after widespread test timeouts under memory pressure. Both exited 130. The full Office test restart uses one worker, a 600-second per-test timeout, and coverage disabled. The full browser restart follows it with one worker and longer waits. The final counts for those runs are pending.
   Rollback Plan: "Revert the implementation commits to restore the prior condition import and paint behavior and remove the newly exposed management commands."
-  Findings: "Pending source review and verification."
+  Findings: |-
+    The implementation follows the pinned Calc condition slot routes, edit and manager ownership, conditional list and attributed cell associations, and undo command boundaries. The browser uses the worksheet's range selection and the existing Sfx dialog response lifecycle. The implemented rule families are cell comparisons, formulas, dates and two- or three-point color scales.
+
+    The upstream quick editor wraps literal text in quotes without escaping embedded quotation marks. The port preserves this behavior and records it as CALC-792 in the Calc upstream suspected issues log.
+
+    The tdf163897 regression repeats the upstream manager interactions with tdf105544.ods. The test reconstructs the archive without the unrelated database-range element so it reaches the conditional-format code in the existing importer. tdf119178 is covered through the browser's range picker and the resulting relative formula origin.
+
+    The full inventory gate exposed an existing Writer parity evidence error. All four registry scopes report the missing `Color` marker in `apps/office/src/sw/browser/presentation/WriterBorderPage.tsx`. Running the same registry tests against clean baseline `b4398ddc1c6e` reproduced this error. Writer source and evidence are outside the conditional-format task scope.
 id_source: "generated"
 ---
 ## Summary
@@ -73,7 +91,17 @@ Model source command selection, range and rule drafts, and manager result exchan
 
 ## Verification
 
-Pending implementation and local verification.
+Implementation `448e6b30dcaf` and test type corrections `81623a51659f`.
+
+- Calc Vitest conditional-format suite: 5 passed. Covers the native quick rule, paint, range picking, formula reference origin, manager draft operations, Undo/Redo, and ODS/XLSX reopening.
+- Calc UI resource suite: 3 passed. The related run also passed all 3 print-area cases.
+- Playwright formatting toolbar: 2 passed, desktop and mobile Chrome.
+- Changed-path Prettier and ESLint, office and tooling TypeScript, Calc generated resources, module boundaries, source provenance and file size: passed.
+- Production build and static smoke: passed. Four relative JavaScript bundles and no backend endpoints.
+- Full inventory: exit 1, 117 passed and 13 failed. The 31-test retry passed 26. Four failures reproduce the same stale Writer parity marker on the clean baseline. One Writer parity CLI case exceeded its fixed 120-second timeout again.
+- Full tooling: exit 1, 192 passed and two compiler checks exceeded the 5-second timeout. Both checks passed on the targeted retry.
+
+The first Office coverage and full browser runs were interrupted after widespread test timeouts under memory pressure. Both exited 130. The full Office test restart uses one worker, a 600-second per-test timeout, and coverage disabled. The full browser restart follows it with one worker and longer waits. The final counts for those runs are pending.
 
 ## Rollback Plan
 
@@ -81,4 +109,10 @@ Revert the implementation commits to restore the prior condition import and pain
 
 ## Findings
 
-Pending source review and verification.
+The implementation follows the pinned Calc condition slot routes, edit and manager ownership, conditional list and attributed cell associations, and undo command boundaries. The browser uses the worksheet's range selection and the existing Sfx dialog response lifecycle. The implemented rule families are cell comparisons, formulas, dates and two- or three-point color scales.
+
+The upstream quick editor wraps literal text in quotes without escaping embedded quotation marks. The port preserves this behavior and records it as CALC-792 in the Calc upstream suspected issues log.
+
+The tdf163897 regression repeats the upstream manager interactions with tdf105544.ods. The test reconstructs the archive without the unrelated database-range element so it reaches the conditional-format code in the existing importer. tdf119178 is covered through the browser's range picker and the resulting relative formula origin.
+
+The full inventory gate exposed an existing Writer parity evidence error. All four registry scopes report the missing `Color` marker in `apps/office/src/sw/browser/presentation/WriterBorderPage.tsx`. Running the same registry tests against clean baseline `b4398ddc1c6e` reproduced this error. Writer source and evidence are outside the conditional-format task scope.

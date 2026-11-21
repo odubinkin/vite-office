@@ -3,6 +3,8 @@ import { render, screen, cleanup } from "@testing-library/react";
 import { it, expect, vi } from "vitest";
 it("retains native border controls when their optional icon registry entries are absent", /** Uses the actual shared registry and source bindings. @returns Completion. */ async () => {
   vi.resetModules();
+  const { initializeOfficeServices } = await import("../../../test/native-office-services");
+  initializeOfficeServices();
   const { officeCommandIcons } =
       await import("../../../framework/browser/presentation/office-command-icons"),
     keys = [".uno:SetBorderStyle", ".uno:LineStyle", ".uno:FrameLineColor"];
