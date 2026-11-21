@@ -8,9 +8,9 @@
       "WriterSearchFontPage"
     ],
     "status": "local-only",
-    "rationale": "Maps the pinned Western font search controls to character items, including original one-sided search style behavior and language slot resolution.",
+    "rationale": "Maps the Western, Asian and Complex groups to separate native character items and preserves the shared search style offset and the script notebook preference.",
     "responsibilities": [
-      "Maps the pinned Western font search controls to character items, including original one-sided search style behavior and language slot resolution."
+      "Maps the Western, Asian and Complex groups to separate native character items and preserves the shared search style offset and the script notebook preference."
     ],
     "stackDivergence": {
       "kind": "browser-adaptation",

@@ -1,6 +1,6 @@
-/** @fileoverview Browser binding of SvxCharNamePage's Western search controls over Writer character items. */
-import { useEffect, useId, useMemo, useState } from "react";
-import { ASIAN, COMPLEX, LATIN } from "../../../offapi/com/sun/star/i18n/ScriptType";
+/** @fileoverview Browser binding of SvxCharNamePage's three script groups over Writer character items. */
+import { useEffect, useId, useImperativeHandle, useMemo, useRef, useState, type Ref } from "react";
+import { ASIAN, COMPLEX } from "../../../offapi/com/sun/star/i18n/ScriptType";
 import { getScriptType } from "../../../i18nlangtag/source/isolang/mslangid.script";
 import { FontItalic, FontWeight } from "../../../tools/inc/fontenum";
 import { FontList, FALLBACK_FONT_FAMILIES } from "../../../svtools/browser/font-list";
@@ -11,17 +11,14 @@ import {
   resolveEditedLanguage,
   sortLanguageChoices,
 } from "../../../svx/source/dialog/langbox";
-import { fontWeights, postures } from "./writer-search-format-values";
-import { useBrowserLocalization } from "../../../framework/browser/localization/browser-localization-context";
+import type { SfxItemPool } from "../../../svl/source/items/itempool";
 import {
-  RES_CHRATR_FONT,
-  RES_CHRATR_FONTSIZE,
-  RES_CHRATR_LANGUAGE,
-  RES_CHRATR_CJK_LANGUAGE,
-  RES_CHRATR_CTL_LANGUAGE,
-  RES_CHRATR_POSTURE,
-  RES_CHRATR_WEIGHT,
-} from "../../inc/hintids";
+  fontGroups,
+  fontWeights,
+  postures,
+  readSearchFormatValue,
+} from "./writer-search-format-values";
+import { useBrowserLocalization } from "../../../framework/browser/localization/browser-localization-context";
 
 const normal = FontWeight.WEIGHT_NORMAL;
 const bold = FontWeight.WEIGHT_BOLD;
@@ -102,49 +99,81 @@ function getStyles(list: FontList | undefined, family: string): readonly StyleCh
   ];
 }
 
-/** Edits the Western font page's actual search criteria. @param props - Current values, saved baseline and dialog output port. @returns Font controls. */
-export function WriterSearchFontPage(
-  props: Readonly<{
-    value: (which: number) => string;
-    initial: (which: number) => string;
-    change: (which: number, value: string) => void;
-    label: (key: string, fallback: string) => string;
-  }>,
-): React.JSX.Element {
-  const localization = useBrowserLocalization();
-  const familyList = useId();
-  const languageList = useId();
-  const [fontList, setFontList] = useState<FontList>();
-  const [editedStyle, setEditedStyle] = useState<string>();
-  const [editedLanguage, setEditedLanguage] = useState<string>();
-  const family = props.value(RES_CHRATR_FONT);
-  const styles = [...getStyles(fontList, family)];
-  const oldWeight = props.initial(RES_CHRATR_WEIGHT);
-  const oldPosture = props.initial(RES_CHRATR_POSTURE);
-  const savedStyle = oldWeight !== "" && oldPosture !== "" ? `${oldWeight}:${oldPosture}` : "";
+/** Native Which mappings per script group. */
+type FontGroup = (typeof fontGroups)[number];
+
+/** Parent page values and delta port. */
+interface FontPageProperties {
+  readonly value: (which: number) => string;
+  readonly initial: (which: number) => string;
+  readonly change: (which: number, value: string) => void;
+  readonly label: (key: string, fallback: string) => string;
+}
+
+/** A native font page publishes its staged style changes together. */
+export interface WriterSearchFontPageHandle {
+  GetStyleChanges(): ReadonlyMap<number, string>;
+}
+
+/** Reads the saved style from both concrete criteria. @param group - Active script group. @param props - Native input items. @returns Pair identity or an unset style. */
+function getSavedStyle(group: FontGroup, props: FontPageProperties): string {
+  const weight = props.initial(group.weight);
+  const posture = props.initial(group.posture);
+  return weight !== "" && posture !== "" ? `${weight}:${posture}` : "";
+}
+
+/** Gets the style list and retains an earlier exact pair which the device did not enumerate. @param list - Browser device inventory. @param group - Active script group. @param props - Native input items. @returns Original entries and the saved pair if needed. */
+function getGroupStyles(
+  list: FontList | undefined,
+  group: FontGroup,
+  props: FontPageProperties,
+): readonly StyleChoice[] {
+  const styles = [...getStyles(list, props.value(group.family))];
+  const savedStyle = getSavedStyle(group, props);
   if (
     savedStyle &&
     !styles.some(
-      /** Tests whether the previous style still appears for this device family. @param choice - Available style. @returns Whether it represents the saved pair. */
+      /** Tests whether the saved values have an existing row. @param choice - Available style. @returns Whether it represents the exact pair. */
       (choice) => styleId(choice) === savedStyle,
     )
   ) {
-    const weight = Number(oldWeight);
-    const posture = Number(oldPosture);
+    const weight = Number(props.initial(group.weight));
+    const posture = Number(props.initial(group.posture));
     const weightText = new Map<number, string>(fontWeights).get(weight) ?? String(weight);
     const postureText = new Map<number, string>(postures).get(posture) ?? String(posture);
-    styles.unshift({
+    // A saved pair is an editable entry when it is absent from the device list.
+    styles.push({
       caption: posture === upright ? weightText : `${weightText} ${postureText}`,
       weight,
       posture,
     });
   }
-  const currentStyle = editedStyle ?? savedStyle;
-  const languageValue = props.value(RES_CHRATR_LANGUAGE);
+  return styles;
+}
+
+/** Binds one visible font group's controls to its distinct native attributes. @param props - Script, inventory and native value callbacks. @returns Font controls. */
+function FontGroupControls(
+  props: FontPageProperties &
+    Readonly<{
+      group: FontGroup;
+      fontList?: FontList | undefined;
+      styles: readonly StyleChoice[];
+      style: string;
+      changeFamily: (value: string) => void;
+      changeStyle: (value: string) => void;
+    }>,
+): React.JSX.Element {
+  const localization = useBrowserLocalization();
+  const { group } = props;
+  const familyList = useId();
+  const languageList = useId();
+  const [editedLanguage, setEditedLanguage] = useState<string>();
+  const family = props.value(group.family);
+  const languageValue = props.value(group.language);
   const languageChoices = useMemo(
     /** Projects source labels in the current browser locale. @returns Special and sorted script choices. */
     () => {
-      const choices = getLanguageChoices(LATIN).map(
+      const choices = getLanguageChoices(group.script).map(
         /** Localizes a native resource through the browser catalog. @param row - Native language choice. @returns Display choice. */
         (row) => ({
           ...row,
@@ -156,71 +185,15 @@ export function WriterSearchFontPage(
         ...sortLanguageChoices(choices.slice(4), localization.locale),
       ];
     },
-    [localization],
+    [localization, group.script],
   );
 
-  useEffect(
-    /** Acquires the actual device font families for the open dialog. @returns Cleanup. */
-    () => {
-      let active = true;
-      void FontList.FromBrowser().then(
-        /** Publishes the inventory only for the current dialog instance. @param list - Device font list. @returns Nothing. */
-        (list) => {
-          if (active) setFontList(list);
-        },
-      );
-      return /** Ends the inventory subscription. @returns Nothing. */ () => {
-        active = false;
-      };
-    },
-    [],
-  );
-
-  /** Applies the original independent search-mode weight and posture rules. @param id - Selected style identity. @returns Nothing. */
-  function changeStyle(id: string): void {
-    setEditedStyle(id);
-    const choice = styles.find(
-      /** Finds the selected physical or search-only style. @param row - Candidate. @returns Whether selected. */
-      (row) => styleId(row) === id,
-    );
-    if (choice === notBold || choice === notItalic) {
-      props.change(RES_CHRATR_WEIGHT, choice === notBold ? String(normal) : "");
-      props.change(RES_CHRATR_POSTURE, choice === notItalic ? String(upright) : "");
-      return;
-    }
-    const weight = choice?.weight;
-    const posture = choice?.posture;
-    const previousWeight = oldWeight === "" ? normal : Number(oldWeight);
-    const previousPosture = oldPosture === "" ? upright : Number(oldPosture);
-    props.change(
-      RES_CHRATR_WEIGHT,
-      weight !== undefined &&
-        (weight !== previousWeight ||
-          (savedStyle === "" && !(weight === normal && posture !== upright)))
-        ? String(weight)
-        : "",
-    );
-    props.change(
-      RES_CHRATR_POSTURE,
-      posture !== undefined &&
-        (posture !== previousPosture ||
-          (savedStyle === "" && !(posture === upright && weight !== normal)))
-        ? String(posture)
-        : "",
-    );
-  }
-
-  /** Applies the current language entry using its real LanguageType. @param id - Native language identity. @returns Nothing. */
-  function chooseLanguage(id: number): void {
-    setEditedLanguage(undefined);
+  /** Stages a typed tag in the script group where it belongs. @param id - Native language identity. @returns Nothing. */
+  function chooseTypedLanguage(id: number): void {
     const script = getScriptType(id);
-    const which =
-      script === ASIAN
-        ? RES_CHRATR_CJK_LANGUAGE
-        : script === COMPLEX
-          ? RES_CHRATR_CTL_LANGUAGE
-          : RES_CHRATR_LANGUAGE;
-    props.change(which, String(id));
+    const target =
+      script === ASIAN ? fontGroups[1] : script === COMPLEX ? fontGroups[2] : fontGroups[0];
+    props.change(target.language, String(id));
   }
 
   const languageText =
@@ -241,11 +214,11 @@ export function WriterSearchFontPage(
           onChange={
             /** Stages the font family. @param event - Edited family. @returns Nothing. */ (
               event,
-            ) => props.change(RES_CHRATR_FONT, event.currentTarget.value)
+            ) => props.changeFamily(event.currentTarget.value)
           }
         />
         <datalist id={familyList}>
-          {(fontList?.GetFontNames() ?? FALLBACK_FONT_FAMILIES).map(
+          {(props.fontList?.GetFontNames() ?? FALLBACK_FONT_FAMILIES).map(
             /** Renders an available family. @param name - Font family. @returns Choice. */ (
               name,
             ) => (
@@ -258,14 +231,14 @@ export function WriterSearchFontPage(
         {props.label("font-style", "Style")}
         <select
           className="rounded border border-slate-400 p-1"
-          value={currentStyle}
+          value={props.style}
           onChange={
             /** Selects the font style. @param event - Selected row. @returns Nothing. */ (event) =>
-              changeStyle(event.currentTarget.value)
+              props.changeStyle(event.currentTarget.value)
           }
         >
           <option value="" />
-          {styles.map(
+          {props.styles.map(
             /** Renders one style. @param style - Native style binding. @returns Choice. */ (
               style,
             ) => (
@@ -284,11 +257,11 @@ export function WriterSearchFontPage(
           max={999.9}
           step={0.1}
           className="rounded border border-slate-400 p-1"
-          value={props.value(RES_CHRATR_FONTSIZE)}
+          value={props.value(group.size)}
           onChange={
             /** Stages the absolute point height. @param event - Current value. @returns Nothing. */ (
               event,
-            ) => props.change(RES_CHRATR_FONTSIZE, event.currentTarget.value)
+            ) => props.change(group.size, event.currentTarget.value)
           }
         />
       </label>
@@ -307,7 +280,10 @@ export function WriterSearchFontPage(
                 (row) => row.name === value,
               );
               if (choice === undefined) setEditedLanguage(value);
-              else chooseLanguage(choice.id);
+              else {
+                setEditedLanguage(undefined);
+                props.change(group.language, String(choice.id));
+              }
             }
           }
           onBlur={
@@ -316,7 +292,7 @@ export function WriterSearchFontPage(
               if (editedLanguage === undefined) return;
               setEditedLanguage(undefined);
               const id = resolveEditedLanguage(editedLanguage);
-              if (id !== undefined) chooseLanguage(id);
+              if (id !== undefined) chooseTypedLanguage(id);
             }
           }
           onKeyDown={
@@ -340,5 +316,218 @@ export function WriterSearchFontPage(
         </datalist>
       </label>
     </>
+  );
+}
+
+/** Shows the native Western group beside the Asian and Complex notebook. @param props - Criteria, selected script and native page output. @returns Font tab. */
+export function WriterSearchFontPage({
+  ref,
+  ...props
+}: FontPageProperties &
+  Readonly<{
+    pool: SfxItemPool;
+    complex: boolean;
+    onComplexChange: (complex: boolean) => void;
+    ref: Ref<WriterSearchFontPageHandle>;
+  }>): React.JSX.Element {
+  const tabs = useId();
+  const [fontList, setFontList] = useState<FontList>();
+  const [edits, setEdits] = useState<ReadonlyMap<number, string>>(new Map());
+  const lastFilledGroup = useRef<FontGroup>(fontGroups[2]);
+  const asianTab = useRef<HTMLButtonElement>(null);
+  const complexTab = useRef<HTMLButtonElement>(null);
+
+  useEffect(
+    /** Acquires the device inventory once for the full native page. @returns Cleanup. */
+    () => {
+      let active = true;
+      void FontList.FromBrowser().then(
+        /** Supplies the shared font inventory to all three script groups. @param list - Device fonts. @returns Nothing. */
+        (list) => {
+          if (active) setFontList(list);
+        },
+      );
+      return /** Discards late results after closing the page. @returns Nothing. */ () => {
+        active = false;
+      };
+    },
+    [],
+  );
+
+  useImperativeHandle(
+    ref,
+    /** Collects the committed style items with the source's shared extra-entry offset. @returns Native page output port. */
+    () => ({
+      /** Reads all three groups when the dialog accepts. @returns Style deltas keyed by Which. */
+      GetStyleChanges() {
+        const result = new Map<number, string>();
+        // The original FontStyleBox fill records a single search-only entry index for the page.
+        const boundary =
+          getStyles(fontList, props.value(lastFilledGroup.current.family)).length - 2;
+        for (const group of fontGroups) {
+          const styles = getGroupStyles(fontList, group, props);
+          const saved = getSavedStyle(group, props);
+          const id = edits.get(group.script) ?? saved;
+          const position = styles.findIndex(
+            /** Finds the source-style row used during conversion. @param style - Style choice. @returns Whether it is selected. */
+            (style) => styleId(style) === id,
+          );
+          const choice = styles[position];
+          if (!choice) continue;
+          // Saved values absent from the inventory are editable text, whose native find_text is -1.
+          const nativePosition = getStyles(fontList, props.value(group.family)).findIndex(
+            /** Looks up the selected row in the device list. @param style - Native row. @returns Whether it is selected. */
+            (style) => styleId(style) === id,
+          );
+          if (nativePosition >= boundary) {
+            if (nativePosition === boundary) result.set(group.weight, String(normal));
+            if (nativePosition === boundary + 1) result.set(group.posture, String(upright));
+            continue;
+          }
+          const weight = choice.weight ?? normal;
+          const posture = choice.posture ?? upright;
+          const previousWeight = Number(
+            props.initial(group.weight) ||
+              readSearchFormatValue(props.pool.GetUserOrPoolDefaultItem(group.weight)),
+          );
+          const previousPosture = Number(
+            props.initial(group.posture) ||
+              readSearchFormatValue(props.pool.GetUserOrPoolDefaultItem(group.posture)),
+          );
+          if (
+            weight !== previousWeight ||
+            (saved === "" && !(weight === normal && posture !== upright))
+          )
+            result.set(group.weight, String(weight));
+          if (
+            posture !== previousPosture ||
+            (saved === "" && !(posture === upright && weight !== normal))
+          )
+            result.set(group.posture, String(posture));
+        }
+        return result;
+      },
+    }),
+    [fontList, edits, props],
+  );
+
+  /** Renders one independent script group using the shared device font list. @param group - Script-specific Which bindings. @returns Group controls. */
+  function controls(group: FontGroup): React.JSX.Element {
+    return (
+      <FontGroupControls
+        {...props}
+        group={group}
+        fontList={fontList}
+        styles={getGroupStyles(fontList, group, props)}
+        style={edits.get(group.script) ?? getSavedStyle(group, props)}
+        changeFamily={
+          /** Fills that script's style list for the newly selected family. @param value - Edit text. @returns Nothing. */
+          (value) => {
+            lastFilledGroup.current = group;
+            props.change(group.family, value);
+          }
+        }
+        changeStyle={
+          /** Records that script's active style independently. @param value - Style identity. @returns Nothing. */
+          (value) =>
+            setEdits(
+              /** Keeps the other scripts' selections. @param current - Previous choices. @returns Updated choices. */
+              (current) => new Map(current).set(group.script, value),
+            )
+        }
+      />
+    );
+  }
+
+  const west = props.label("font-western", "Western");
+  const asian = props.label("font-asian", "Asian");
+  const complex = props.label("font-complex", "Complex");
+  return (
+    <div className="grid min-w-0 gap-3 sm:grid-cols-2">
+      <fieldset
+        aria-label={west}
+        className="grid min-w-0 content-start gap-2 rounded border border-slate-200 p-2"
+      >
+        <legend className="text-sm">{west}</legend>
+        {controls(fontGroups[0])}
+      </fieldset>
+      <div className="min-w-0 rounded border border-slate-200 p-2">
+        <div
+          className="flex gap-2 border-b"
+          role="tablist"
+          aria-label={props.label("font-other-scripts", "Asian and Complex")}
+        >
+          <button
+            ref={asianTab}
+            type="button"
+            role="tab"
+            id={`${tabs}-asian`}
+            aria-controls={`${tabs}-asian-panel`}
+            aria-selected={!props.complex}
+            tabIndex={props.complex ? -1 : 0}
+            className="px-2 py-1 aria-selected:border-b-2"
+            onClick={
+              /** Shows Asian font controls. @returns Nothing. */ () => props.onComplexChange(false)
+            }
+            onKeyDown={
+              /** Navigates the native two-page notebook. @param event - Key event. @returns Nothing. */
+              (event) => {
+                if (event.key !== "ArrowLeft" && event.key !== "ArrowRight" && event.key !== "End")
+                  return;
+                event.preventDefault();
+                props.onComplexChange(true);
+                complexTab.current?.focus();
+              }
+            }
+          >
+            {asian}
+          </button>
+          <button
+            ref={complexTab}
+            type="button"
+            role="tab"
+            id={`${tabs}-complex`}
+            aria-controls={`${tabs}-complex-panel`}
+            aria-selected={props.complex}
+            tabIndex={props.complex ? 0 : -1}
+            className="px-2 py-1 aria-selected:border-b-2"
+            onClick={
+              /** Shows Complex font controls. @returns Nothing. */ () =>
+                props.onComplexChange(true)
+            }
+            onKeyDown={
+              /** Navigates the native two-page notebook. @param event - Key event. @returns Nothing. */
+              (event) => {
+                if (event.key !== "ArrowLeft" && event.key !== "ArrowRight" && event.key !== "Home")
+                  return;
+                event.preventDefault();
+                props.onComplexChange(false);
+                asianTab.current?.focus();
+              }
+            }
+          >
+            {complex}
+          </button>
+        </div>
+        <div
+          id={`${tabs}-asian-panel`}
+          role="tabpanel"
+          aria-labelledby={`${tabs}-asian`}
+          hidden={props.complex}
+          className={props.complex ? undefined : "grid gap-2 pt-2"}
+        >
+          {controls(fontGroups[1])}
+        </div>
+        <div
+          id={`${tabs}-complex-panel`}
+          role="tabpanel"
+          aria-labelledby={`${tabs}-complex`}
+          hidden={!props.complex}
+          className={props.complex ? "grid gap-2 pt-2" : undefined}
+        >
+          {controls(fontGroups[2])}
+        </div>
+      </div>
+    </div>
   );
 }

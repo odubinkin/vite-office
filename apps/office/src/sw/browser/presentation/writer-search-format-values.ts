@@ -36,6 +36,8 @@ import { Color, COL_AUTO, COL_TRANSPARENT } from "../../../tools/inc/color";
 import { FontRelief } from "../../../vcl/inc/fntstyle";
 import { SvxLanguageItem } from "../../../editeng/inc/langitem";
 import { describeLanguage } from "../../../svx/source/dialog/langbox";
+import { ASIAN, COMPLEX, LATIN } from "../../../offapi/com/sun/star/i18n/ScriptType";
+import { getBrowserFont } from "../../../svtools/browser/font-list";
 import { SvxFontItem } from "../../../editeng/source/items/textitem.font";
 import {
   SvxFontHeightItem,
@@ -66,8 +68,16 @@ import {
   RES_CHRATR_FONT,
   RES_CHRATR_FONTSIZE,
   RES_CHRATR_LANGUAGE,
+  RES_CHRATR_CJK_FONT,
+  RES_CHRATR_CJK_FONTSIZE,
   RES_CHRATR_CJK_LANGUAGE,
+  RES_CHRATR_CJK_POSTURE,
+  RES_CHRATR_CJK_WEIGHT,
+  RES_CHRATR_CTL_FONT,
+  RES_CHRATR_CTL_FONTSIZE,
   RES_CHRATR_CTL_LANGUAGE,
+  RES_CHRATR_CTL_POSTURE,
+  RES_CHRATR_CTL_WEIGHT,
   RES_CHRATR_KERNING,
   RES_CHRATR_OVERLINE,
   RES_CHRATR_POSTURE,
@@ -308,20 +318,34 @@ export function makeSearchFormatItem(
       return new SvxOrphansItem(Number(value), which);
     case RES_PARATR_WIDOWS:
       return new SvxWidowsItem(Number(value), which);
-    case RES_CHRATR_FONT: {
-      const item = new SvxFontItem(which);
-      item.SetFamilyName(value);
-      return item;
+    case RES_CHRATR_FONT:
+    case RES_CHRATR_CJK_FONT:
+    case RES_CHRATR_CTL_FONT: {
+      const font = getBrowserFont(value);
+      return new SvxFontItem(
+        font.GetFamilyType(),
+        font.GetFamilyName(),
+        font.GetStyleName(),
+        font.GetPitch(),
+        font.GetCharSet(),
+        which,
+      );
     }
     case RES_CHRATR_LANGUAGE:
     case RES_CHRATR_CJK_LANGUAGE:
     case RES_CHRATR_CTL_LANGUAGE:
       return new SvxLanguageItem(Number(value), which);
     case RES_CHRATR_FONTSIZE:
+    case RES_CHRATR_CJK_FONTSIZE:
+    case RES_CHRATR_CTL_FONTSIZE:
       return new SvxFontHeightItem(Math.round(Number(value) * 20), 100, which);
     case RES_CHRATR_WEIGHT:
+    case RES_CHRATR_CJK_WEIGHT:
+    case RES_CHRATR_CTL_WEIGHT:
       return new SvxWeightItem(Number(value), which);
     case RES_CHRATR_POSTURE:
+    case RES_CHRATR_CJK_POSTURE:
+    case RES_CHRATR_CTL_POSTURE:
       return new SvxPostureItem(Number(value), which);
     case RES_CHRATR_COLOR:
       return new SvxColorItem(
@@ -560,3 +584,37 @@ export function describeSearchAttributes(
       .join(", ") ?? ""
   );
 }
+
+/** Native document Which identities for the three character-dialog script groups. */
+export const fontGroups = [
+  {
+    script: LATIN,
+    family: RES_CHRATR_FONT,
+    size: RES_CHRATR_FONTSIZE,
+    weight: RES_CHRATR_WEIGHT,
+    posture: RES_CHRATR_POSTURE,
+    language: RES_CHRATR_LANGUAGE,
+  },
+  {
+    script: ASIAN,
+    family: RES_CHRATR_CJK_FONT,
+    size: RES_CHRATR_CJK_FONTSIZE,
+    weight: RES_CHRATR_CJK_WEIGHT,
+    posture: RES_CHRATR_CJK_POSTURE,
+    language: RES_CHRATR_CJK_LANGUAGE,
+  },
+  {
+    script: COMPLEX,
+    family: RES_CHRATR_CTL_FONT,
+    size: RES_CHRATR_CTL_FONTSIZE,
+    weight: RES_CHRATR_CTL_WEIGHT,
+    posture: RES_CHRATR_CTL_POSTURE,
+    language: RES_CHRATR_CTL_LANGUAGE,
+  },
+] as const;
+
+/** Character Which identities belonging to the native Font tab. */
+export const fontPageItems = fontGroups.flatMap(
+  /** Projects one script group's items. @param group - Native Which bindings. @returns Which IDs. */
+  ({ family, size, weight, posture, language }) => [family, size, weight, posture, language],
+);

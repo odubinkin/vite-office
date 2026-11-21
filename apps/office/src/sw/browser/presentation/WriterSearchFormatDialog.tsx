@@ -26,6 +26,7 @@ import { SfxPoolItem } from "../../../svl/source/items/poolitem";
 import { SearchAttrItemList } from "../../../svx/source/dialog/srchdlg";
 import {
   caseEffects,
+  fontPageItems,
   makeSearchFormatItem,
   paragraphVerticalAlignments,
   ParagraphLineSpaceMode,
@@ -51,14 +52,7 @@ import {
   RES_CHRATR_SCALEW,
   RES_CHRATR_SHADOWED,
   RES_CHRATR_WORDLINEMODE,
-  RES_CHRATR_FONT,
-  RES_CHRATR_FONTSIZE,
-  RES_CHRATR_LANGUAGE,
-  RES_CHRATR_CJK_LANGUAGE,
-  RES_CHRATR_CTL_LANGUAGE,
-  RES_CHRATR_POSTURE,
   RES_CHRATR_UNDERLINE,
-  RES_CHRATR_WEIGHT,
   RES_MARGIN_FIRSTLINE,
   RES_MARGIN_RIGHT,
   RES_MARGIN_TEXTLEFT,
@@ -72,22 +66,15 @@ import {
 } from "../../inc/hintids";
 import { WRITER_SEARCH_ATTR_WHICH_RANGES } from "../../source/uibase/uiview/viewsrch";
 import { WriterDialogHeader } from "./WriterDialogHeader";
-import { WriterSearchFontPage } from "./WriterSearchFontPage";
+import { WriterSearchFontPage, type WriterSearchFontPageHandle } from "./WriterSearchFontPage";
+import {
+  readPreferredCTLFontTab,
+  writePreferredCTLFontTab,
+} from "../storage/writer-search-options-store";
 import { WriterSearchParagraphAlignment } from "./WriterSearchParagraphAlignment";
 
 const formatPages = {
-  font: [
-    "Font",
-    [
-      RES_CHRATR_FONT,
-      RES_CHRATR_FONTSIZE,
-      RES_CHRATR_WEIGHT,
-      RES_CHRATR_POSTURE,
-      RES_CHRATR_LANGUAGE,
-      RES_CHRATR_CJK_LANGUAGE,
-      RES_CHRATR_CTL_LANGUAGE,
-    ],
-  ],
+  font: ["Font", fontPageItems],
   effects: [
     "Font Effects",
     [
@@ -141,6 +128,8 @@ export function WriterSearchFormatDialog(
   const localization = useBrowserLocalization();
   const root = useRef<HTMLFormElement>(null);
   const [page, setPage] = useState<keyof typeof formatPages>("font");
+  const fontPage = useRef<WriterSearchFontPageHandle>(null);
+  const [complexFont, setComplexFont] = useState(readPreferredCTLFontTab);
   const [fontReset, setFontReset] = useState(0);
   const [lineMode, setLineMode] = useState<ParagraphLineSpaceMode>();
   const [draft, setDraft] = useState<ReadonlyMap<number, string | SfxPoolItem>>(new Map());
@@ -197,9 +186,12 @@ export function WriterSearchFormatDialog(
 
   /** Writes the changed native attributes back to the owning list. @returns Nothing. */
   function accept(): void {
+    if (page === "font") writePreferredCTLFontTab(complexFont);
+    const output = new Map<number, string | SfxPoolItem>(fontPage.current?.GetStyleChanges());
+    for (const [which, value] of draft) output.set(which, value);
     const set = new SfxItemSet(props.pool, WRITER_SEARCH_ATTR_WHICH_RANGES);
     try {
-      for (const [which, value] of draft) {
+      for (const [which, value] of output) {
         if (value !== "")
           set.Put(
             value instanceof SfxPoolItem
@@ -515,7 +507,7 @@ export function WriterSearchFormatDialog(
         aria-modal="true"
         aria-label={title}
         tabIndex={-1}
-        className="grid w-full max-w-md max-h-[90dvh] overflow-auto gap-3 rounded-lg border border-slate-300 bg-white p-4 shadow-xl"
+        className="grid w-full max-w-2xl max-h-[90dvh] overflow-auto gap-3 rounded-lg border border-slate-300 bg-white p-4 shadow-xl"
         onSubmit={
           /** Applies the formatting delta. @param event - Form event. @returns Nothing. */ (
             event,
@@ -548,7 +540,15 @@ export function WriterSearchFormatDialog(
                 role="tab"
                 aria-selected={page === tab}
                 className="px-2 py-1 aria-selected:border-b-2 aria-selected:border-indigo-700"
-                onClick={/** Activates this page. @returns Nothing. */ () => setPage(tab)}
+                onClick={
+                  /** Activates the page and saves the Font notebook preference on leave. @returns Nothing. */
+                  () => {
+                    if (page === tab) return;
+                    if (page === "font") writePreferredCTLFontTab(complexFont);
+                    if (tab === "font") setComplexFont(readPreferredCTLFontTab());
+                    setPage(tab);
+                  }
+                }
               >
                 {label(tab, formatPages[tab][0])}
               </button>
@@ -562,6 +562,10 @@ export function WriterSearchFormatDialog(
         >
           <WriterSearchFontPage
             key={fontReset}
+            ref={fontPage}
+            pool={props.pool}
+            complex={complexFont}
+            onComplexChange={setComplexFont}
             value={scalar}
             initial={initialScalar}
             change={change}

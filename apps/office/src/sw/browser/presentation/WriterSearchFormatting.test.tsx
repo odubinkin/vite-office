@@ -35,7 +35,12 @@ import {
   RES_CHRATR_BACKGROUND,
   RES_CHRATR_BEGIN,
   RES_CHRATR_COLOR,
+  RES_CHRATR_CJK_FONTSIZE,
   RES_CHRATR_CJK_LANGUAGE,
+  RES_CHRATR_CJK_WEIGHT,
+  RES_CHRATR_CTL_FONTSIZE,
+  RES_CHRATR_CTL_LANGUAGE,
+  RES_CHRATR_CTL_POSTURE,
   RES_CHRATR_END,
   RES_CHRATR_ESCAPEMENT,
   RES_CHRATR_FONTSIZE,
@@ -57,7 +62,10 @@ import { SwPaM, SwPosition } from "../../source/core/crsr/pam";
 import type { SwTextNode } from "../../source/core/txtnode/ndtxt";
 import { SwAttrIter } from "../../source/core/text/itratr";
 import { createWriterDocumentSession } from "../composition/writer-module";
-import { SEARCH_OPTIONS_KEY } from "../storage/writer-search-options-store";
+import {
+  writePreferredCTLFontTab,
+  SEARCH_OPTIONS_KEY,
+} from "../storage/writer-search-options-store";
 import { WRITER_COMMAND_IDS } from "../../uiconfig/swriter/menubar/menubar-commands";
 import { WriterWorkbench } from "./writer-view";
 
@@ -184,14 +192,20 @@ it("combines exact formatting criteria and replaces them with one undo", /** Ada
   const format = dialog.getByRole("button", { name: "Format…" });
   fireEvent.click(format);
   const searchFormat = within(screen.getByRole("dialog", { name: "Search" }));
-  fireEvent.change(searchFormat.getByLabelText("Style"), {
-    target: { value: `${FontWeight.WEIGHT_BOLD}:0` },
-  });
+  fireEvent.change(
+    within(searchFormat.getByRole("group", { name: "Western" })).getByLabelText("Style"),
+    {
+      target: { value: `${FontWeight.WEIGHT_BOLD}:0` },
+    },
+  );
   fireEvent.click(searchFormat.getByRole("button", { name: "OK" }));
   expect(dialog.getByText("bold", { exact: true })).toBeVisible();
   fireEvent.click(format);
   const sizeFormat = within(screen.getByRole("dialog", { name: "Search" }));
-  fireEvent.change(sizeFormat.getByLabelText("Size"), { target: { value: 16 } });
+  fireEvent.change(
+    within(sizeFormat.getByRole("group", { name: "Western" })).getByLabelText("Size"),
+    { target: { value: 16 } },
+  );
   fireEvent.click(sizeFormat.getByRole("button", { name: "OK" }));
   expect(dialog.getByText("bold, 16 pt")).toBeVisible();
   fireEvent.change(dialog.getByLabelText("Find"), { target: { value: "word" } });
@@ -741,10 +755,18 @@ it("finds language and the native Not Bold font criterion, then replaces languag
     fireEvent.click(dialog.getByText("Other options"));
     fireEvent.click(dialog.getByRole("button", { name: "Format…" }));
     const searchFormat = within(screen.getByRole("dialog", { name: "Search" }));
-    fireEvent.change(searchFormat.getByRole("combobox", { name: "Style" }), {
-      target: { value: `${FontWeight.WEIGHT_NORMAL}:` },
-    });
-    const language = searchFormat.getByRole("combobox", { name: "Language" });
+    fireEvent.change(
+      within(searchFormat.getByRole("group", { name: "Western" })).getByRole("combobox", {
+        name: "Style",
+      }),
+      {
+        target: { value: `${FontWeight.WEIGHT_NORMAL}:` },
+      },
+    );
+    const language = within(searchFormat.getByRole("group", { name: "Western" })).getByRole(
+      "combobox",
+      { name: "Language" },
+    );
     fireEvent.change(language, { target: { value: "fr-FR" } });
     fireEvent.blur(language);
     expect(language).toHaveValue("French (France)");
@@ -765,12 +787,22 @@ it("finds language and the native Not Bold font criterion, then replaces languag
     fireEvent.focus(dialog.getByLabelText("Replace with"));
     fireEvent.click(dialog.getByRole("button", { name: "Format…" }));
     const replacement = within(screen.getByRole("dialog", { name: "Replace" }));
-    fireEvent.change(replacement.getByRole("combobox", { name: "Style" }), {
-      target: { value: `:${FontItalic.ITALIC_NONE}` },
-    });
-    fireEvent.change(replacement.getByRole("combobox", { name: "Language" }), {
-      target: { value: "English (USA)" },
-    });
+    fireEvent.change(
+      within(replacement.getByRole("group", { name: "Western" })).getByRole("combobox", {
+        name: "Style",
+      }),
+      {
+        target: { value: `:${FontItalic.ITALIC_NONE}` },
+      },
+    );
+    fireEvent.change(
+      within(replacement.getByRole("group", { name: "Western" })).getByRole("combobox", {
+        name: "Language",
+      }),
+      {
+        target: { value: "English (USA)" },
+      },
+    );
     fireEvent.click(replacement.getByRole("button", { name: "OK" }));
     fireEvent.click(dialog.getByRole("button", { name: "Replace All" }));
     const applied = new SwAttrIter(node);
@@ -800,7 +832,10 @@ it("finds language and the native Not Bold font criterion, then replaces languag
     fireEvent.click(dialog.getByRole("button", { name: "No Format" }));
     fireEvent.click(dialog.getByRole("button", { name: "Format…" }));
     const typedLanguage = within(screen.getByRole("dialog", { name: "Search" }));
-    const languageField = typedLanguage.getByRole("combobox", { name: "Language" });
+    const languageField = within(typedLanguage.getByRole("group", { name: "Western" })).getByRole(
+      "combobox",
+      { name: "Language" },
+    );
     fireEvent.change(languageField, { target: { value: "ja-JP" } });
     fireEvent.blur(languageField);
     fireEvent.click(typedLanguage.getByRole("button", { name: "OK" }));
@@ -813,5 +848,91 @@ it("finds language and the native Not Bold font criterion, then replaces languag
   } finally {
     workbench.unmount();
     session.view.Close();
+  }
+});
+
+it("searches Asian and Complex formatting together and remembers the selected script tab", /** Ports the script notebook preference QA and verifies exact search through Writer. @returns Nothing. */ () => {
+  writePreferredCTLFontTab(false);
+  const session = createWriterDocumentSession();
+  const shell = session.view.GetWrtShell();
+  const node = shell.GetActiveParagraph();
+  shell.Insert("word word word");
+  const items = new SfxItemSet(node.GetDoc().GetAttrPool(), [
+    [RES_CHRATR_BEGIN, RES_CHRATR_END - 1],
+  ]);
+  const beginning = new SwPosition(node, 0);
+  const range = new SwPaM(beginning);
+  range.SetMark();
+  items.Put(new SvxWeightItem(FontWeight.WEIGHT_BOLD, RES_CHRATR_CJK_WEIGHT));
+  items.Put(new SvxLanguageItem(0x0411, RES_CHRATR_CJK_LANGUAGE));
+  items.Put(new SvxLanguageItem(0x0401, RES_CHRATR_CTL_LANGUAGE));
+  items.Put(new SvxPostureItem(FontItalic.ITALIC_NORMAL, RES_CHRATR_CTL_POSTURE));
+  for (const [start, asianHeight, complexHeight] of [
+    [0, 360, 420],
+    [5, 340, 420],
+    [10, 360, 400],
+  ] as const) {
+    range.GetMark().SetContent(start);
+    range.GetPoint().SetContent(start + 4);
+    items.Put(new SvxFontHeightItem(asianHeight, 100, RES_CHRATR_CJK_FONTSIZE));
+    items.Put(new SvxFontHeightItem(complexHeight, 100, RES_CHRATR_CTL_FONTSIZE));
+    node.GetDoc().GetDocumentContentOperationsManager().InsertItemSet(range, items);
+  }
+  range.Dispose();
+  items.Dispose();
+  shell.SetCursor(beginning);
+  beginning.Dispose();
+
+  const workbench = render(<WriterWorkbench isActive view={session.view} />);
+  try {
+    fireEvent.keyDown(window, { key: "h", ctrlKey: true });
+    const dialog = within(screen.getByRole("dialog", { name: "Find and Replace" }));
+    fireEvent.click(dialog.getByText("Other options"));
+    const formatButton = dialog.getByRole("button", { name: "Format…" });
+    fireEvent.click(formatButton);
+    const format = within(screen.getByRole("dialog", { name: "Search" }));
+    expect(format.getByRole("group", { name: "Western" })).toBeVisible();
+    const asian = within(format.getByRole("tabpanel", { name: "Asian" }));
+    fireEvent.change(asian.getByRole("combobox", { name: "Style" }), {
+      target: { value: `${FontWeight.WEIGHT_BOLD}:${FontItalic.ITALIC_NONE}` },
+    });
+    fireEvent.change(asian.getByRole("spinbutton", { name: "Size" }), { target: { value: 18 } });
+    fireEvent.change(asian.getByRole("combobox", { name: "Language" }), {
+      target: { value: "Japanese" },
+    });
+    fireEvent.keyDown(format.getByRole("tab", { name: "Asian" }), { key: "ArrowRight" });
+    const complex = within(format.getByRole("tabpanel", { name: "Complex" }));
+    expect(format.getByRole("tab", { name: "Complex" })).toHaveFocus();
+    fireEvent.change(complex.getByRole("combobox", { name: "Style" }), {
+      target: { value: `${FontWeight.WEIGHT_NORMAL}:${FontItalic.ITALIC_NORMAL}` },
+    });
+    fireEvent.change(complex.getByRole("spinbutton", { name: "Size" }), { target: { value: 21 } });
+    fireEvent.change(complex.getByRole("combobox", { name: "Language" }), {
+      target: { value: "Arabic (Saudi Arabia)" },
+    });
+    fireEvent.click(format.getByRole("button", { name: "OK" }));
+    fireEvent.click(dialog.getByRole("button", { name: "Find All" }));
+    const matches = [...shell.GetCursor().GetRingContainer()];
+    expect(matches).toHaveLength(1);
+    expect(matches[0]?.Start().GetContentIndex()).toBe(0);
+    expect(matches[0]?.End().GetContentIndex()).toBe(4);
+
+    fireEvent.click(formatButton);
+    const reopened = within(screen.getByRole("dialog", { name: "Search" }));
+    expect(reopened.getByRole("tab", { name: "Complex", selected: true })).toBeVisible();
+    expect(
+      within(reopened.getByRole("tabpanel", { name: "Complex" })).getByRole("spinbutton", {
+        name: "Size",
+      }),
+    ).toHaveValue(21);
+    fireEvent.click(reopened.getByRole("tab", { name: "Asian" }));
+    fireEvent.click(reopened.getByRole("tab", { name: "Font Effects" }));
+    fireEvent.click(reopened.getByRole("button", { name: "Cancel" }));
+    fireEvent.click(formatButton);
+    expect(screen.getByRole("tab", { name: "Asian", selected: true })).toBeVisible();
+  } finally {
+    workbench.unmount();
+    session.view.Close();
+    writePreferredCTLFontTab(false);
   }
 });

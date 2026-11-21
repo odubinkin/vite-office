@@ -4,7 +4,7 @@ title: "Implement Writer search and replace core and browser UI"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 61
+revision: 62
 origin:
   system: "manual"
 depends_on:
@@ -187,6 +187,9 @@ comments:
   -
     author: "CODER"
     body: "Verified checkpoint: the Writer Search Format Font page now uses Family, Style, Size and Language controls for the represented Western group. It uses the existing browser FontList, the pinned SvtLanguageTable names, native script admission and obsolete-language mappings, grouped localized ordering, and real LanguageTag parsing for edited BCP47 tags. Language output uses the appropriate character slot, including typed ja-JP. The source Not Bold/Not Italic choices emit only normal weight or upright posture respectively. Recorded WRITER-704. Source owners: cui/source/tabpages/chardlg.cxx, svtools/source/control/ctrlbox.cxx, svtools/source/misc/langtab.cxx and svx/source/dialog/langbox.cxx. Adapted the focused tdf119462 font-format regression to the native Style field. A new end-to-end test distinguishes regular, light, bold and language variants; verifies language/posture replacement and undo; and searches a typed Asian language criterion. Targeted Writer suites passed 48 across four files and shared language script tests passed 3. Final build, Writer resources, dependency and source checks, lint and formatting, JSDoc, file size, inventory parity, doctor and policy routing passed. Logs are output/playwright/writer-search-font-final-{tests,build,static,inventory}.log, writer-search-font-shared.log and writer-search-font-complete-quality.log. Separate Asian and CTL font panels, ICU regular expression support and comment search remain pending. This checkpoint does not close the task or increment the full regression cadence."
+  -
+    author: "CODER"
+    body: "Verified checkpoint: the Writer Search Format Font page presents a persistent Western group alongside Asian and Complex tabs. All three groups write their native family, point height, weight, posture and language items. The source notebook preference is persisted on deactivation, and the browser regression adapts the upstream notebook reopening QA and verifies combined exact matches. WRITER-705 records the shared extra style row index. Targeted tests passed: 50 in five Writer files and two Writer resource cases. Production build, dependency/source-tree/provenance/JSDoc/file-size checks, scoped ESLint/Prettier, diff check, doctor and policy routing passed. Doctor reported the existing hook-shim warning. This is part of the still-open task; the next full regression remains tied to task closures."
 events:
   -
     type: "status"
@@ -440,8 +443,13 @@ events:
     at: "2026-11-21T10:02:49.426Z"
     author: "CODER"
     body: "Verified checkpoint: the Writer Search Format Font page now uses Family, Style, Size and Language controls for the represented Western group. It uses the existing browser FontList, the pinned SvtLanguageTable names, native script admission and obsolete-language mappings, grouped localized ordering, and real LanguageTag parsing for edited BCP47 tags. Language output uses the appropriate character slot, including typed ja-JP. The source Not Bold/Not Italic choices emit only normal weight or upright posture respectively. Recorded WRITER-704. Source owners: cui/source/tabpages/chardlg.cxx, svtools/source/control/ctrlbox.cxx, svtools/source/misc/langtab.cxx and svx/source/dialog/langbox.cxx. Adapted the focused tdf119462 font-format regression to the native Style field. A new end-to-end test distinguishes regular, light, bold and language variants; verifies language/posture replacement and undo; and searches a typed Asian language criterion. Targeted Writer suites passed 48 across four files and shared language script tests passed 3. Final build, Writer resources, dependency and source checks, lint and formatting, JSDoc, file size, inventory parity, doctor and policy routing passed. Logs are output/playwright/writer-search-font-final-{tests,build,static,inventory}.log, writer-search-font-shared.log and writer-search-font-complete-quality.log. Separate Asian and CTL font panels, ICU regular expression support and comment search remain pending. This checkpoint does not close the task or increment the full regression cadence."
+  -
+    type: "comment"
+    at: "2026-11-21T10:13:40.687Z"
+    author: "CODER"
+    body: "Verified checkpoint: the Writer Search Format Font page presents a persistent Western group alongside Asian and Complex tabs. All three groups write their native family, point height, weight, posture and language items. The source notebook preference is persisted on deactivation, and the browser regression adapts the upstream notebook reopening QA and verifies combined exact matches. WRITER-705 records the shared extra style row index. Targeted tests passed: 50 in five Writer files and two Writer resource cases. Production build, dependency/source-tree/provenance/JSDoc/file-size checks, scoped ESLint/Prettier, diff check, doctor and policy routing passed. Doctor reported the existing hook-shim warning. This is part of the still-open task; the next full regression remains tied to task closures."
 doc_version: 3
-doc_updated_at: "2026-11-21T10:02:49.426Z"
+doc_updated_at: "2026-11-21T10:13:40.687Z"
 doc_updated_by: "CODER"
 description: "Implement the approved coherent Writer search-and-replace feature from pinned LibreOffice sources: real shared search engine and options, native paragraph/cursor traversal and replacement/history contracts, view-owned search state and dispatch, Find toolbar and Find and Replace dialog with generated upstream command placement and shortcuts. Preserve source semantics and explicit unsupported boundaries; never substitute DOM text search or browser RegExp for ICU contracts. Work only on writer in vite-office-writer; local upstream reading approved, no network or merges. Keep active until approved scope is verified."
 sections:

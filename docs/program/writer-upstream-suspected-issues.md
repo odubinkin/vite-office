@@ -5625,3 +5625,15 @@ applies its authored properties without that collection change.
 - Writer retains the exact, one-sided criteria. The browser regression
   distinguishes regular, light and bold text and verifies that italic
   text can match “Not Bold”.
+
+### WRITER-705 — The Font search page shares the extra style row index across scripts
+
+- Upstream `cui/source/tabpages/chardlg.cxx`, in
+  `SvxCharNamePage::FillStyleBox_Impl`, updates a single `m_nExtraEntryPos`
+  after filling whichever script's family is active. Reset fills Western,
+  Asian and Complex in that order.
+- `FillItemSet_Impl` reads that index when interpreting style rows for each
+  script. Families with different style counts can cause an ordinary style or
+  a search-only row to be interpreted using the other family's boundary.
+- Writer preserves the shared index and uses it when collecting all three
+  scripts' formatting.

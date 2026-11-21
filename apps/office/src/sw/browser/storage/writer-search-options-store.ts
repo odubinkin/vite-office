@@ -40,3 +40,24 @@ export class WriterSearchOptionsStore implements SearchOptionsConfiguration {
     }
   }
 }
+
+/** The native Office.Common CTL font pane preference. */
+export const PREFER_CTL_FONT_TAB_KEY = "org.openoffice.Office.Common/I18N/CTL/PreferCTLFontTab";
+
+/** Reads the font pane preference, including the original Asian default. @returns Whether to show the CTL pane. */
+export function readPreferredCTLFontTab(): boolean {
+  try {
+    return globalThis.localStorage?.getItem(PREFER_CTL_FONT_TAB_KEY) === "true";
+  } catch {
+    return false;
+  }
+}
+
+/** Stores the application font pane selection on page deactivation. @param complex - Whether the selected pane is CTL. @returns Nothing. */
+export function writePreferredCTLFontTab(complex: boolean): void {
+  try {
+    globalThis.localStorage?.setItem(PREFER_CTL_FONT_TAB_KEY, String(complex));
+  } catch {
+    // Preference storage may be unavailable in a private browser context.
+  }
+}
