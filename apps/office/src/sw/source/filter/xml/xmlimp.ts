@@ -1,5 +1,12 @@
 /** @fileoverview Implements Writer's streaming SwXMLImport bridge over fast SAX contexts. */
-import { importPageLayoutBox } from "./xmlimpit";
+import { importPageBackground, importPageLayoutBox } from "./xmlimpit";
+import { getActivePageStory, type SwFrameFormat } from "../../core/layout/atrfrm";
+import type { OdfPageBackground } from "../../../../xmloff/source/style/PageMasterStyleMap";
+import type { XMLImageStyleDefinition } from "../../../../xmloff/source/style/ImageStyle";
+import { XFillBitmapItem } from "../../../../svx/inc/xbtmpit";
+import { Graphic } from "../../../../vcl/source/gdi/graph";
+import { Size } from "../../../../tools/inc/gen";
+import type { XMLGraphic } from "../../../../xmloff/source/core/xmlgrhlp";
 import { UseOnPage } from "../../core/layout/pagedesc";
 import { cppu_detail_getUnoType_PageStyleLayout as pageLayoutType } from "../../../../offapi/com/sun/star/style/PageStyleLayout";
 import { XMLDocumentSettingsContext } from "../../../../xmloff/source/core/DocumentSettingsContext";
@@ -254,6 +261,59 @@ class SwXMLImport
     Readonly<{ followName?: string; pageLayoutName: string }>
   >();
   private readonly pageLayouts = new Map<string, OdfPageLayout>();
+  private readonly imageStyles = new Map<string, XFillBitmapItem>();
+  private readonly importedBitmaps = new Map<XMLGraphic, XFillBitmapItem>();
+  private readonly bitmapNames = new Set<string>();
+  private nextBitmap = 1;
+
+  /** Adds a named fill bitmap from the original styles stream. @param style - Parsed ODF image style. @returns Nothing. */
+  public registerImageStyle(style: XMLImageStyleDefinition): void {
+    const graphic = this.graphicHelper.loadGraphicByURL(style.href);
+    if (!graphic) return;
+    const item = this.document.RegisterBitmap(
+      new XFillBitmapItem(
+        style.displayName,
+        new Graphic(graphic.bytes, graphic.mediaType, new Size()),
+      ),
+    );
+    this.imageStyles.set(style.name, item);
+    this.bitmapNames.add(style.displayName);
+    if (!this.importedBitmaps.has(graphic)) this.importedBitmaps.set(graphic, item);
+  }
+
+  /** Resolves content-based legacy bitmap reuse in the active document. @param href - Package link. @returns Native bitmap if embedded. */
+  private resolveBackgroundImage(href: string): XFillBitmapItem | undefined {
+    const graphic = this.graphicHelper.loadGraphicByURL(href);
+    if (!graphic) return undefined;
+    const known = this.importedBitmaps.get(graphic);
+    if (known) return known;
+    const embedded = new Graphic(graphic.bytes, graphic.mediaType, new Size());
+    for (const item of this.importedBitmaps.values()) {
+      if (!item.equals(new XFillBitmapItem(item.GetName(), embedded))) continue;
+      this.importedBitmaps.set(graphic, item);
+      return item;
+    }
+    let name: string;
+    do name = `Bitmap ${this.nextBitmap++}`;
+    while (this.bitmapNames.has(name));
+    const item = this.document.RegisterBitmap(new XFillBitmapItem(name, embedded));
+    this.bitmapNames.add(name);
+    this.importedBitmaps.set(graphic, item);
+    return item;
+  }
+
+  /** Applies one shared page or story background to its native frame. @param frame - Frame owner. @param background - Authored fill. @returns Nothing. */
+  private applyBackground(frame: SwFrameFormat | null, background?: OdfPageBackground): void {
+    if (!frame || !background) return;
+    importPageBackground(
+      frame,
+      background,
+      background.bitmapName === undefined ? undefined : this.imageStyles.get(background.bitmapName),
+      background.image === undefined
+        ? undefined
+        : this.resolveBackgroundImage(background.image.href),
+    );
+  }
   public title: string | undefined;
   public language: string | undefined;
 
@@ -701,6 +761,27 @@ class SwXMLImport
             page.GetFirstLeft().SetFormatAttr(page.GetLeft().GetLRSpace());
           }
           applyPageStoryGeometry(style, layout);
+          if (page) {
+            const frames = [
+              page.GetMaster(),
+              page.GetLeft(),
+              page.GetFirstMaster(),
+              page.GetFirstLeft(),
+            ];
+            for (const frame of frames) this.applyBackground(frame, layout.background);
+            for (const [header, story] of [
+              [true, layout.header],
+              [false, layout.footer],
+            ] as const) {
+              for (const frame of new Set(
+                frames.map(
+                  /** Finds the effective story format for one physical page. @param owner - Page frame. @returns Story frame. */
+                  (owner) => getActivePageStory(owner, header),
+                ),
+              ))
+                this.applyBackground(frame, story?.background);
+            }
+          }
         } finally {
           key.dispose();
         }

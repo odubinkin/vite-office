@@ -39,6 +39,7 @@ import { SwGrfFormatColl } from "../../../inc/fmtcol";
 import { SwAttrPool } from "../attr/swatrset";
 import { SwTableLineFormat, SwTableBoxFormat } from "../../../inc/swtblfmt";
 import { XFillStyleItem } from "../../../../svx/inc/xfillit0";
+import type { XFillBitmapItem } from "../../../../svx/inc/xbtmpit";
 import { FillStyle } from "../../../../offapi/com/sun/star/drawing/FillStyle";
 import { SwFrameFormat, type SwFlyFrameFormat } from "../layout/atrfrm";
 import { SetTableName } from "./docchart";
@@ -301,6 +302,7 @@ export class SwDoc {
   private lineNumberInfo = new SwLineNumberInfo();
   private readonly pageDescs: SwPageDesc[];
   private readonly embeddedFonts = new Map<string, WriterEmbeddedFont>();
+  private readonly bitmapTable = new Map<string, XFillBitmapItem>();
   public readonly nodes: SwNodes;
   /** Creates the canonical fixed sections and optionally one empty body node. @param createInitialTextNode - Whether to create initial body content. @returns Nothing. */
   public constructor(createInitialTextNode: boolean | SwDocOptions = true) {
@@ -379,6 +381,18 @@ export class SwDoc {
       /** Protects document-owned bytes. @param font - Stored font. @returns Independent record. */
       (font) => ({ ...font, ...(font.bytes === undefined ? {} : { bytes: font.bytes.slice() }) }),
     );
+  }
+  /** Returns the document-owned named drawing bitmaps. @returns Bitmap table. */
+  public GetBitmapTable(): ReadonlyMap<string, XFillBitmapItem> {
+    return this.bitmapTable;
+  }
+  /** Inserts a named bitmap while retaining the existing named definition on collision. @param item - Bitmap definition. @returns Registered bitmap. */
+  public RegisterBitmap(item: XFillBitmapItem): XFillBitmapItem {
+    const name = item.GetName();
+    const existing = this.bitmapTable.get(name);
+    if (existing) return existing;
+    this.bitmapTable.set(name, item.Clone());
+    return item;
   }
   /** Returns a copy of the document-owned line-number configuration. @returns Line-number settings. */
   public GetLineNumberInfo(): SwLineNumberInfo {
@@ -975,6 +989,8 @@ export class SwDoc {
     ClearFrameFormatIndices(this);
     for (const page of this.pageDescs) page.DisposeModify();
     this.pageDescs.length = 0;
+    for (const bitmap of this.bitmapTable.values()) bitmap.Dispose();
+    this.bitmapTable.clear();
     for (const node of this.nodes.entries()) if (node instanceof SwTextNode) node.RemoveFromList();
     this.markAccess.Dispose();
     DestroyFrameFormatTables(this);

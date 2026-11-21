@@ -5,6 +5,8 @@ import { SvXMLUnitConverter } from "../core/xmluconv";
 import { Converter } from "../../../sax/source/tools/converter";
 import { PageStyleLayout } from "../../../offapi/com/sun/star/style/PageStyleLayout";
 import { TextGridMode } from "../../../offapi/com/sun/star/text/TextGridMode";
+import { BitmapMode } from "../../../offapi/com/sun/star/drawing/BitmapMode";
+import { importFillProperties, type OdfFillProperties } from "../draw/fill-properties";
 
 const pageUsage = new Map<string, PageStyleLayout>([
   ["all", PageStyleLayout.ALL],
@@ -131,12 +133,108 @@ export function importPageGrid(attributes: FastAttributeList): OdfPageGridProper
   return grid;
 }
 
+/** Authored common DrawingLayer page fill plus the older brush properties. */
+export interface OdfPageBackground extends OdfFillProperties {
+  readonly bitmapName?: string;
+  readonly bitmapMode?: BitmapMode;
+  readonly backgroundColor?: number | "transparent";
+  readonly backgroundTransparency?: number;
+  readonly image?: {
+    readonly href: string;
+    readonly mode: BitmapMode;
+    readonly transparency?: number;
+  };
+}
+
+/** Reads the native drawing bitmap mode token. @param value - Authored repeat token. @returns Native mode. */
+function importBitmapMode(value: string | null): BitmapMode | undefined {
+  if (value === "repeat") return BitmapMode.REPEAT;
+  if (value === "stretch") return BitmapMode.STRETCH;
+  if (value === "no-repeat") return BitmapMode.NO_REPEAT;
+  return undefined;
+}
+
+/** Imports the modern and legacy page fills while preserving which fields were supplied. */
+export class XMLPagePropertySetContext extends SvXMLImportContext {
+  private readonly background: OdfPageBackground;
+  private image: OdfPageBackground["image"];
+
+  /** Reads the non-element fill properties before visiting background children. @param attributes - Page or story properties. @param collect - Completed background receiver. @returns Context. */
+  constructor(
+    attributes: FastAttributeList,
+    private readonly collect: (fill: OdfPageBackground) => void,
+  ) {
+    super();
+    const bitmapName = attributes.get(XMLToken.DRAW_FILL_IMAGE_NAME);
+    const bitmapMode = importBitmapMode(attributes.get(XMLToken.STYLE_REPEAT));
+    const background = attributes.get(XMLToken.FO_BACKGROUND_COLOR);
+    const color: [number] = [0],
+      transparency: [number] = [0];
+    const alpha = attributes.get(XMLToken.STYLE_BACKGROUND_TRANSPARENCY);
+    this.background = {
+      ...importFillProperties(attributes),
+      ...(bitmapName === null ? {} : { bitmapName }),
+      ...(bitmapMode === undefined ? {} : { bitmapMode }),
+      ...(background === "transparent"
+        ? { backgroundColor: "transparent" }
+        : background !== null && Converter.convertColor(color, background)
+          ? { backgroundColor: color[0] }
+          : {}),
+      ...(alpha !== null &&
+      Converter.convertPercent(transparency, alpha) &&
+      transparency[0] >= 0 &&
+      transparency[0] <= 100
+        ? { backgroundTransparency: transparency[0] }
+        : {}),
+    };
+  }
+
+  /** Reads the legacy page background link and its placement. @param token - Child token. @param attributes - Image attributes. @returns Leaf context. */
+  override createFastChildContext(
+    token: XMLToken,
+    attributes: FastAttributeList,
+  ): SvXMLImportContext {
+    if (token === XMLToken.STYLE_BACKGROUND_IMAGE) {
+      const href = attributes.get(XMLToken.XLINK_HREF);
+      if (href) {
+        const opacity = attributes.get(XMLToken.DRAW_OPACITY);
+        const value: [number] = [0];
+        const transparent =
+          opacity !== null &&
+          Converter.convertPercent(value, opacity) &&
+          value[0] >= 0 &&
+          value[0] < 100;
+        const position = attributes.get(XMLToken.STYLE_POSITION);
+        this.image = {
+          href,
+          mode:
+            importBitmapMode(attributes.get(XMLToken.STYLE_REPEAT)) ??
+            (position === "center center" || position === "center"
+              ? BitmapMode.NO_REPEAT
+              : BitmapMode.REPEAT),
+          ...(transparent ? { transparency: 100 - value[0] } : {}),
+        };
+      }
+    }
+    return new SvXMLIgnoreContext();
+  }
+
+  /** Publishes the background after all child properties are available. @returns Nothing. */
+  override endFastElement(): void {
+    this.collect({
+      ...this.background,
+      ...(this.image === undefined ? {} : { image: this.image }),
+    });
+  }
+}
+
 /** Original page-style height, body distance and two independent dynamic flags. */
 export interface OdfPageStoryGeometry {
   readonly height?: number;
   readonly bodyDistance?: number;
   readonly isDynamicHeight?: boolean;
   readonly dynamicSpacing?: boolean;
+  readonly background?: OdfPageBackground;
 }
 
 /** Receives geometry in the header or footer's original page-layout properties child. */
@@ -165,7 +263,7 @@ export class XMLPageHeaderFooterStyleContext extends SvXMLImportContext {
     const height = min === null ? null : converter.convertMeasureToCore(min);
     const fixedHeight = fixed === null ? null : converter.convertMeasureToCore(fixed);
     const bodyDistance = distance === null ? null : converter.convertMeasureToCore(distance);
-    this.collect({
+    const geometry = {
       ...(height !== null
         ? { height, isDynamicHeight: true }
         : fixedHeight !== null
@@ -173,7 +271,11 @@ export class XMLPageHeaderFooterStyleContext extends SvXMLImportContext {
           : {}),
       ...(bodyDistance === null ? {} : { bodyDistance }),
       ...(dynamic === "true" || dynamic === "false" ? { dynamicSpacing: dynamic === "true" } : {}),
-    });
-    return new SvXMLIgnoreContext();
+    };
+    return new XMLPagePropertySetContext(
+      attributes,
+      /** Publishes complete header or footer properties. @param background - Completed fill. @returns Nothing. */
+      (background) => this.collect({ ...geometry, background }),
+    );
   }
 }

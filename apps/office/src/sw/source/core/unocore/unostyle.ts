@@ -46,6 +46,17 @@ import { SwUnoPageStylePropertyMap } from "./unomap";
 import { UseOnPage } from "../layout/pagedesc";
 import { SvxPageItem, SvxPageUsage } from "../../../../svx/inc/pageitem";
 import { MID_PAGE_LAYOUT } from "../../../../svx/inc/unomid";
+import {
+  BitmapMode,
+  cppu_detail_getUnoType_BitmapMode as bitmapModeType,
+} from "../../../../offapi/com/sun/star/drawing/BitmapMode";
+import {
+  XATTR_FILLBITMAP,
+  XATTR_FILLBMP_STRETCH,
+  XATTR_FILLBMP_TILE,
+} from "../../../../svx/inc/xdef";
+import { getBitmapMode, type XFillBitmapItem } from "../../../../svx/inc/xbtmpit";
+import { SfxBoolItem } from "../../../../svl/source/items/cenumitm";
 /** Represented native style families over actual document formats; frame/table/conditional family suppliers remain unported. */
 export type SwStyleFamily =
   "CharacterStyles" | "ParagraphStyles" | "PageStyles" | "NumberingStyles";
@@ -95,6 +106,17 @@ export class SwXStyle {
     if (!this.owner)
       return this.pending.has(n) ? PropertyState.DIRECT_VALUE : PropertyState.DEFAULT_VALUE;
     if (this.family === "PageStyles") {
+      const items = (this.owner as SwPageDesc).GetMaster().GetAttrSet();
+      if (n === "FillBitmapName" || n === "FillBitmapMode") {
+        const ids =
+          n === "FillBitmapName" ? [XATTR_FILLBITMAP] : [XATTR_FILLBMP_STRETCH, XATTR_FILLBMP_TILE];
+        return ids.some(
+          /** Checks direct bitmap item presence. @param which - Native identity. @returns Direct state. */
+          (which) => items.GetItemIfSet(which, false),
+        )
+          ? PropertyState.DIRECT_VALUE
+          : PropertyState.DEFAULT_VALUE;
+      }
       const story = pageStoryPropertyEntries.get(n);
       if (story) {
         const frame = getActivePageStory((this.owner as SwPageDesc).GetMaster(), story.header);
@@ -142,6 +164,22 @@ export class SwXStyle {
       return;
     }
     if (this.family === "PageStyles") {
+      if (n === "FillBitmapName" || n === "FillBitmapMode") {
+        const page = this.owner as SwPageDesc;
+        for (const frame of [
+          page.GetMaster(),
+          page.GetLeft(),
+          page.GetFirstMaster(),
+          page.GetFirstLeft(),
+        ]) {
+          if (n === "FillBitmapName") frame.ResetFormatAttr(XATTR_FILLBITMAP);
+          else {
+            frame.ResetFormatAttr(XATTR_FILLBMP_TILE);
+            frame.ResetFormatAttr(XATTR_FILLBMP_STRETCH);
+          }
+        }
+        return;
+      }
       const entry = SwUnoPageStylePropertyMap.get(n) ?? pageStoryPropertyEntries.get(n);
       if (entry && !pageFields[n]) {
         (this.owner as SwPageDesc).GetMaster().ResetFormatAttr(entry.which);
@@ -373,6 +411,8 @@ export class SwXStyle {
         putItem(this.doc.GetAttrPool().GetUserOrPoolDefaultItem(entry.which), entry, value);
       else if (n === "FollowStyle") stringValue(value);
       else if (n === "IsLandscape") scalar(value, "bool");
+      else if (n === "FillBitmapName") stringValue(value);
+      else if (n === "FillBitmapMode") readBitmapMode(value);
       else if (pageFields[n]) scalar(value, "sal_Int32");
       else if (n === "PageStyleLayout") {
         const item = SvxPageItem.CreateDefault();
@@ -505,6 +545,21 @@ export class SwXStyle {
     const page = (this.owner as SwPageDesc | undefined) ?? this.doc.GetPageDesc(),
       value = page.GetValue(),
       out = new UnoAny();
+    if (n === "FillBitmapName") {
+      out.dispose();
+      return stringAny(
+        this.owner
+          ? (page.GetMaster().GetAttrSet().Get(XATTR_FILLBITMAP) as XFillBitmapItem).GetName()
+          : "",
+      );
+    }
+    if (n === "FillBitmapMode") {
+      out.insert(
+        [this.owner ? getBitmapMode(page.GetMaster().GetAttrSet()) : BitmapMode.REPEAT],
+        bitmapModeType,
+      );
+      return out;
+    }
     const entry = SwUnoPageStylePropertyMap.get(n);
     if (entry) {
       out.dispose();
@@ -538,6 +593,21 @@ export class SwXStyle {
   private setPageValue(n: string, v: Any): void {
     const page = this.owner as SwPageDesc,
       old = page.GetValue();
+    if (n === "FillBitmapName" || n === "FillBitmapMode") {
+      const frames = [page.GetMaster(), page.GetLeft(), page.GetFirstMaster(), page.GetFirstLeft()];
+      if (n === "FillBitmapName") {
+        const bitmap = this.doc.GetBitmapTable().get(stringValue(v));
+        if (!bitmap) illegal("Unknown fill bitmap");
+        for (const frame of frames) frame.SetFormatAttr(bitmap);
+      } else {
+        const mode = readBitmapMode(v);
+        for (const frame of frames) {
+          frame.SetFormatAttr(new SfxBoolItem(XATTR_FILLBMP_STRETCH, mode === BitmapMode.STRETCH));
+          frame.SetFormatAttr(new SfxBoolItem(XATTR_FILLBMP_TILE, mode === BitmapMode.REPEAT));
+        }
+      }
+      return;
+    }
     const entry = SwUnoPageStylePropertyMap.get(n);
     if (entry) {
       const item = putItem(page.GetMaster().GetAttrSet().Get(entry.which), entry, v);
@@ -567,6 +637,14 @@ export class SwXStyle {
       });
     }
   }
+}
+
+/** Extracts the native enum or its legacy integer representation. @param value - Caller value. @returns Bitmap mode. */
+function readBitmapMode(value: Any): number {
+  const output: [number] = [0];
+  if (!value.extract(output, bitmapModeType) && !value.extract(output, "sal_Int32"))
+    illegal("Invalid bitmap mode");
+  return output[0];
 }
 /** Native page-style identity over the existing descriptor/property implementation. */
 export class SwXPageStyle extends SwXStyle {

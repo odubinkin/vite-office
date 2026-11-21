@@ -1,0 +1,39 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/offapi/com/sun/star/drawing/BitmapMode.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "shared",
+    "subsystem": "native-fill-values",
+    "capabilityIds": [
+      "CAP-0112"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "none",
+      "evidence": [
+        "apps/office/src/offapi/com/sun/star/drawing/BitmapMode.ts",
+        "apps/office/src/sw/source/filter/xml/odt-page-background.test.ts",
+        "vendor/libreoffice-reference/offapi/com/sun/star/drawing/BitmapMode.idl"
+      ],
+      "justification": "Publishes the original three bitmap modes and the typed UNO enum used by page styles. Broader generated SDK reflection remains unverified.",
+      "knownViolations": [],
+      "localSymbols": [
+        "BitmapMode",
+        "cppu_detail_getUnoType_BitmapMode"
+      ],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": "offapi/com/sun/star/drawing/BitmapMode.idl",
+      "upstreamSymbols": [
+        "BitmapMode",
+        "REPEAT",
+        "STRETCH",
+        "NO_REPEAT"
+      ]
+    }
+  }
+}

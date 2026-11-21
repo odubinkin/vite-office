@@ -1,5 +1,8 @@
 /** @fileoverview Consumed Writer cursor/paragraph/style property entries from pinned unomap.cxx/unomap1.cxx; unrepresented properties are not advertised. */
 import { cppu_detail_getUnoType_FillStyle as fillStyleType } from "../../../../offapi/com/sun/star/drawing/FillStyle";
+import { cppu_detail_getUnoType_BitmapMode as bitmapModeType } from "../../../../offapi/com/sun/star/drawing/BitmapMode";
+import { OWN_ATTR_VALUE_START } from "../../../../svl/inc/solar";
+import { XATTR_FILLBITMAP } from "../../../../svx/inc/xdef";
 import { XATTR_FILLSTYLE, XATTR_FILLCOLOR, XATTR_FILLTRANSPARENCE } from "../../../../svx/inc/xdef";
 import { cppu_detail_getUnoType_PropertyValue as propertyType } from "../../../../udkapi/com/sun/star/beans/PropertyValue";
 import { XComplexColor } from "../../../../offapi/com/sun/star/util/XComplexColor";
@@ -88,6 +91,12 @@ export const SwUnoPageStylePropertyMap: ReadonlyMap<string, PageStylePropertyEnt
   string,
   PageStylePropertyEntry
 >([
+  ["FillStyle", { type: fillStyleType, which: XATTR_FILLSTYLE, member: 0, kind: "any" }],
+  ["FillColor", { type: "sal_Int32", which: XATTR_FILLCOLOR, member: 0, kind: "any" }],
+  [
+    "FillTransparence",
+    { type: "sal_Int16", which: XATTR_FILLTRANSPARENCE, member: 0, kind: "any" },
+  ],
   ["RtlGutter", { which: H.RES_RTL_GUTTER, member: 0, kind: "bool", type: "bool" }],
   [
     "WritingMode",
@@ -930,6 +939,8 @@ export class SwUnoPropertyMapProvider {
           ["Height", row(SID_ATTR_PAGE_SIZE, "sal_Int32", MID_SIZE_HEIGHT | CONVERT_TWIPS)],
           ["IsLandscape", row(SID_ATTR_PAGE, "bool", MID_PAGE_ORIENTATION)],
           ["PageStyleLayout", row(SID_ATTR_PAGE, pageLayoutType, MID_PAGE_LAYOUT)],
+          ["FillBitmapName", row(XATTR_FILLBITMAP, "OUString", 16)],
+          ["FillBitmapMode", row(OWN_ATTR_VALUE_START + 45, bitmapModeType)],
         ]);
         break;
       case MapId.PROPERTY_MAP_NUM_STYLE:

@@ -1,0 +1,42 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "status": "mapped",
+    "localPath": "apps/office/src/svx/inc/xbtmpit.ts",
+    "upstreamPath": "include/svx/xbtmpit.hxx",
+    "localSymbols": [
+      "XFillBitmapItem",
+      "getBitmapMode",
+      "setBitmapMode"
+    ],
+    "upstreamSymbols": [
+      "XFillBitmapItem"
+    ],
+    "preservedResponsibilities": [
+      "Retains named embedded graphics in a DrawingLayer pool item and the independent tile and stretch values."
+    ],
+    "omittedResponsibilities": [
+      "Full GraphicObject decoding, historical bitmap patterns and other bitmap layout items remain outside this slice."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/svx/inc/xbtmpit.ts",
+          "marker": "XFillBitmapItem"
+        },
+        {
+          "path": "apps/office/src/sw/source/filter/xml/odt-page-background.test.ts",
+          "marker": "ports testPageBackground"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/include/svx/xbtmpit.hxx",
+          "marker": "XFillBitmapItem"
+        }
+      ]
+    }
+  }
+}

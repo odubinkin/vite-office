@@ -1,4 +1,6 @@
 /** @fileoverview Internal canonical Writer graph codec used behind boundary-specific envelopes. */
+import { XFillBitmapItem } from "../../../../svx/inc/xbtmpit";
+import { XATTR_FILLBITMAP } from "../../../../svx/inc/xdef";
 import {
   encodeTableStyles,
   restoreTableStyles,
@@ -150,6 +152,7 @@ export interface WriterDocumentRecord {
     condition?: string;
   }>[];
   readonly embeddedFonts?: readonly WriterEmbeddedFont[];
+  readonly bitmapTable?: readonly SfxPoolItemSnapshot[];
   readonly documentSettings: Readonly<Record<DocumentSettingId, boolean>>;
   readonly lineNumberInfo?: SwLineNumberInfoValue;
   readonly locale: string;
@@ -224,6 +227,9 @@ export function* encodeWriterDocumentSteps(document: SwDoc): Generator<void, Wri
     ...(textFrames.length ? { textFrames } : {}),
     ...(pageStories === undefined ? {} : { pageStories }),
     embeddedFonts: document.GetEmbeddedFonts(),
+    ...(document.GetBitmapTable().size
+      ? { bitmapTable: [...document.GetBitmapTable().values()].map(encodeSfxPoolItem) }
+      : {}),
     bookmarks: document
       .GetIDocumentMarkAccess()
       .GetBookmarks()
@@ -430,6 +436,24 @@ export function* decodeWriterDocumentSteps(
         throw new Error("Stored Writer tab stop default is invalid.");
       const pool = document.GetAttrPool();
       pool.SetUserDefaultItem(decodeSfxPoolItem(pool, tab as SfxPoolItemSnapshot));
+    }
+    if (record.bitmapTable !== undefined && !Array.isArray(record.bitmapTable))
+      throw new Error("Stored Writer bitmap table is invalid.");
+    for (const snapshot of record.bitmapTable ?? []) {
+      if (!isRecord(snapshot) || snapshot.which !== XATTR_FILLBITMAP || !("value" in snapshot))
+        throw new Error("Stored Writer bitmap table entry is invalid.");
+      const item = decodeSfxPoolItem(document.GetAttrPool(), {
+        which: XATTR_FILLBITMAP,
+        value: snapshot.value as SfxPoolItemSnapshot["value"],
+      });
+      if (
+        !(item instanceof XFillBitmapItem) ||
+        !item.GetGraphic() ||
+        !item.GetName() ||
+        document.GetBitmapTable().has(item.GetName())
+      )
+        throw new Error("Stored Writer bitmap definition is invalid.");
+      document.RegisterBitmap(item);
     }
     for (const font of record.embeddedFonts ?? []) {
       if (

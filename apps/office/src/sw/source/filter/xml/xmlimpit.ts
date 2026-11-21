@@ -12,6 +12,14 @@ import type { OdfTableVisualProperties } from "../../../../xmloff/source/table/X
 import { RES_BACKGROUND, RES_FRAMEDIR, RES_BOX, RES_SHADOW } from "../../../inc/hintids";
 import { writerColorFromPrimitive } from "../../core/attr/swatrset";
 import type { SwFrameFormat } from "../../core/layout/atrfrm";
+import { SfxItemSet } from "../../../../svl/source/items/itemset";
+import { XATTR_FILL_FIRST, XATTR_FILL_LAST } from "../../../../svx/inc/xdef";
+import { XFillStyleItem } from "../../../../svx/inc/xfillit0";
+import { XFillColorItem } from "../../../../svx/inc/xflclit";
+import { XFillTransparenceItem } from "../../../../svx/inc/xfltrit";
+import { setBitmapMode, type XFillBitmapItem } from "../../../../svx/inc/xbtmpit";
+import { FillStyle } from "../../../../offapi/com/sun/star/drawing/FillStyle";
+import type { OdfPageBackground } from "../../../../xmloff/source/style/PageMasterStyleMap";
 import {
   XMLBorderHdl,
   XMLBorderWidthHdl,
@@ -40,6 +48,48 @@ export function importFrameVisualProperties(
     } finally {
       item.Dispose();
     }
+  }
+}
+
+/** Applies page and story fill items after the shared ODF image names have been resolved. @param frame - Actual frame. @param source - Authored properties. @param named - Referenced DrawingLayer bitmap. @param legacy - Resolved legacy bitmap. @returns Nothing. */
+export function importPageBackground(
+  frame: SwFrameFormat,
+  source: OdfPageBackground,
+  named: XFillBitmapItem | undefined,
+  legacy: XFillBitmapItem | undefined,
+): void {
+  const fillStyle =
+    source.fillStyle ??
+    (legacy
+      ? FillStyle.BITMAP
+      : source.backgroundColor === undefined
+        ? undefined
+        : source.backgroundColor === "transparent"
+          ? FillStyle.NONE
+          : FillStyle.SOLID);
+  const color =
+    source.fillColor ??
+    (typeof source.backgroundColor === "number" ? source.backgroundColor : undefined);
+  const transparency =
+    source.fillTransparency ??
+    (legacy ? source.image?.transparency : source.backgroundTransparency);
+  const target = new SfxItemSet(frame.GetAttrSet().GetPool(), [
+    [XATTR_FILL_FIRST, XATTR_FILL_LAST],
+  ]);
+  try {
+    if (fillStyle !== undefined) target.Put(new XFillStyleItem(fillStyle));
+    if (color !== undefined)
+      target.Put(new XFillColorItem("", writerColorFromPrimitive(color, "transparent")));
+    if (transparency !== undefined) target.Put(new XFillTransparenceItem(transparency));
+    if (fillStyle === FillStyle.BITMAP) {
+      const image = named ?? legacy;
+      if (image) target.Put(image);
+      const mode = (legacy ? source.image?.mode : undefined) ?? source.bitmapMode;
+      if (mode !== undefined) setBitmapMode(target, mode);
+    }
+    if (target.Count()) frame.SetFormatAttrSet(target);
+  } finally {
+    target.Dispose();
   }
 }
 

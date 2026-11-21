@@ -224,10 +224,11 @@ export function applyPageStoryGeometry(style: SwXStyle, layout: OdfPageLayout): 
   }
 }
 
-/** Writes the native ODF page layout style children from actual header and footer items. @param master - Page frame. @param length - ODF measure formatting. @returns Original page-layout children. */
+/** Writes the native ODF page layout style children from actual header and footer items. @param master - Page frame. @param length - ODF measure formatting. @param backgrounds - Page layout fill writer. @returns Original page-layout children. */
 export function exportPageStoryStyles(
   master: SwFrameFormat,
   length: (twips: number) => string,
+  backgrounds?: import("./xmlexpit").XMLPageBackgroundExport,
 ): string {
   let result = "";
   for (const header of [true, false]) {
@@ -249,9 +250,11 @@ export function exportPageStoryStyles(
     const dynamic = items.GetItemIfSet(RES_HEADER_FOOTER_EAT_SPACING, false) as
       SwHeaderAndFooterEatSpacingItem | undefined;
     if (dynamic) attributes.push(`style:dynamic-spacing="${dynamic.GetValue()}"`);
-    if (attributes.length) {
+    const background = backgrounds?.exportBackground(story);
+    if (attributes.length || background?.attributes) {
       const element = header ? "header-style" : "footer-style";
-      result += `<style:${element}><style:header-footer-properties ${attributes.join(" ")}/></style:${element}>`;
+      const properties = `<style:header-footer-properties${attributes.length ? ` ${attributes.join(" ")}` : ""}${background?.attributes ?? ""}`;
+      result += `<style:${element}>${background?.children ? `${properties}>${background.children}</style:header-footer-properties>` : `${properties}/>`}</style:${element}>`;
     }
   }
   return result;

@@ -19,6 +19,11 @@ export const XATTR_FILL_FIRST = 1014 as const;
 export const XATTR_FILLSTYLE = 1014 as const;
 /** Original fill-color identity. */
 export const XATTR_FILLCOLOR = 1015 as const;
+/** Original named bitmap fill identity. */
+export const XATTR_FILLBITMAP = 1018 as const;
+/** Original bitmap tiling and stretching identities. */
+export const XATTR_FILLBMP_TILE = 1021 as const;
+export const XATTR_FILLBMP_STRETCH = 1030 as const;
 /** Original solid-fill transparency identity. */
 export const XATTR_FILLTRANSPARENCE = 1019 as const;
 /** Original inclusive last fill identity, including slide-background policy. */

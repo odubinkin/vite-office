@@ -10,6 +10,7 @@ import {
   SID_ATTR_FILL_USE_SLIDE_BACKGROUND,
   SID_ATTR_FILL_STYLE,
   SID_ATTR_FILL_COLOR,
+  SID_ATTR_FILL_BITMAP,
   SID_ATTR_FILL_TRANSPARENCE,
 } from "../../inc/svxids";
 import { OUString } from "../../../sal/inc/rtl/ustring";
@@ -17,7 +18,13 @@ import { XFillStyleItem } from "../../inc/xfillit0";
 import { XFillColorItem } from "../../inc/xflclit";
 import { XFillTransparenceItem } from "../../inc/xfltrit";
 import { XFillUseSlideBackgroundItem } from "../../inc/xfilluseslidebackgrounditem";
-import { COL_DEFAULT_SHAPE_FILLING } from "../../inc/xdef";
+import {
+  COL_DEFAULT_SHAPE_FILLING,
+  XATTR_FILLBMP_STRETCH,
+  XATTR_FILLBMP_TILE,
+} from "../../inc/xdef";
+import { XFillBitmapItem } from "../../inc/xbtmpit";
+import { SfxBoolItem } from "../../../svl/source/items/cenumitm";
 
 /** Original signed hundredths-of-degree item; values are stored without angle normalization. */
 export class SdrAngleItem extends SfxInt32Item {
@@ -57,6 +64,14 @@ export class SdrItemPool extends SfxItemPool {
         SFX_ITEMINFOFLAG_SUPPORT_SURROGATE,
       );
       this.RegisterDefaultItem(new XFillTransparenceItem(), undefined, SID_ATTR_FILL_TRANSPARENCE);
+      this.RegisterDefaultItem(
+        new XFillBitmapItem(),
+        undefined,
+        SID_ATTR_FILL_BITMAP,
+        SFX_ITEMINFOFLAG_SUPPORT_SURROGATE,
+      );
+      this.RegisterDefaultItem(new SfxBoolItem(XATTR_FILLBMP_TILE, true));
+      this.RegisterDefaultItem(new SfxBoolItem(XATTR_FILLBMP_STRETCH, true));
       this.RegisterDefaultItem(
         new XFillUseSlideBackgroundItem(),
         undefined,

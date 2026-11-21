@@ -10,6 +10,23 @@ import type { SwFrameFormat } from "../../core/layout/atrfrm";
 import { SvxTabAdjust, type SvxTabStopItem } from "../../../../editeng/inc/tstpitem";
 import type { OdfTabStop } from "../../../../xmloff/source/text/txtparae";
 import { SvxBoxItem } from "../../../../editeng/source/items/frmitems";
+import { BitmapMode } from "../../../../offapi/com/sun/star/drawing/BitmapMode";
+import { FillStyle } from "../../../../offapi/com/sun/star/drawing/FillStyle";
+import {
+  XATTR_FILLBITMAP,
+  XATTR_FILLCOLOR,
+  XATTR_FILLSTYLE,
+  XATTR_FILLTRANSPARENCE,
+} from "../../../../svx/inc/xdef";
+import { getBitmapMode, type XFillBitmapItem } from "../../../../svx/inc/xbtmpit";
+import type { XFillStyleItem } from "../../../../svx/inc/xfillit0";
+import type { XFillColorItem } from "../../../../svx/inc/xflclit";
+import type { XFillTransparenceItem } from "../../../../svx/inc/xfltrit";
+import type { SvXMLGraphicHelper } from "../../../../xmloff/source/core/xmlgrhlp";
+import { encodeStyleName } from "../../../../xmloff/source/core/xmluconv";
+import { exportImageStyle } from "../../../../xmloff/source/style/ImageStyle";
+import { exportFillProperties } from "../../../../xmloff/source/draw/fill-properties";
+import { escapeXml } from "../../../../xmloff/source/text/txtparae";
 import type { SvxBorderLine } from "../../../../editeng/source/items/borderline";
 import type { SvxBrushItem } from "../../../../editeng/source/items/frmitems.brush";
 import type { SvxFrameDirectionItem } from "../../../../editeng/inc/frmdiritem";
@@ -70,6 +87,86 @@ export function exportPageWritingAndGrid(master: SwFrameFormat): string {
   if (!grid.IsSquaredMode())
     attributes += ` style:layout-grid-base-width="${Converter.convertMeasureToXML(grid.GetBaseWidth(), "twip")}" style:layout-grid-snap-to="${grid.IsSnapToChars()}"`;
   return attributes;
+}
+
+/** Named drawing image definitions shared by the exported page and story formats. */
+export class XMLPageBackgroundExport {
+  private readonly images = new Map<string, string>();
+
+  /** Binds the current styles stream to the original package graphic helper. @param graphics - Optional graphic sink. @returns Export helper. */
+  constructor(private readonly graphics?: SvXMLGraphicHelper) {}
+
+  /** Collects a named bitmap and reserves its XML image definition. @param bitmap - Native bitmap item. @returns Package path and public name when embedded. */
+  registerBitmap(bitmap: XFillBitmapItem): { name: string; href: string } | undefined {
+    const graphic = bitmap.GetGraphic();
+    if (!this.graphics || !graphic) return undefined;
+    const href = this.graphics.saveGraphic({
+      bytes: graphic.GetNativeData(),
+      mediaType: graphic.mediaType,
+    });
+    const baseName = bitmap.GetName() || "Bitmap";
+    let name = baseName;
+    for (let suffix = 1; this.images.has(name) && this.images.get(name) !== href; ++suffix)
+      name = `${baseName} ${suffix}`;
+    this.images.set(name, href);
+    return { name, href };
+  }
+
+  /** Writes declarations collected by the page-layout writers. @returns Named drawing styles. */
+  exportStyles(): string {
+    let result = "";
+    for (const [name, href] of this.images) result += exportImageStyle(name, href);
+    return result;
+  }
+
+  /** Formats both current DrawingLayer properties and the original compatibility brush. @param frame - Actual page or story frame. @returns Layout attributes and children. */
+  exportBackground(frame: SwFrameFormat): { attributes: string; children: string } {
+    const items = frame.GetAttrSet();
+    const style = (
+      items.GetItemIfSet(XATTR_FILLSTYLE, false) as XFillStyleItem | undefined
+    )?.GetValue();
+    if (style === undefined) return { attributes: "", children: "" };
+    const color = items.GetItemIfSet(XATTR_FILLCOLOR, false) as XFillColorItem | undefined;
+    const transparency = (
+      items.GetItemIfSet(XATTR_FILLTRANSPARENCE, false) as XFillTransparenceItem | undefined
+    )?.GetValue();
+    const rgb = color && !color.IsIndex() ? color.GetColorValue().toInt32() : undefined;
+    const attributes = exportFillProperties({
+      fillStyle: style,
+      ...(rgb !== undefined && style === FillStyle.SOLID ? { fillColor: rgb } : {}),
+      ...(transparency === undefined ? {} : { fillTransparency: transparency }),
+    });
+    if (style === FillStyle.NONE) attributes.push('fo:background-color="transparent"');
+    else if (rgb !== undefined) {
+      const value: [string] = [""];
+      Converter.convertColor(value, rgb);
+      attributes.push(`fo:background-color="${value[0]}"`);
+      if (style === FillStyle.SOLID && transparency !== undefined)
+        attributes.push(`style:background-transparency="${transparency}%"`);
+    }
+    const bitmap = items.GetItemIfSet(XATTR_FILLBITMAP, false) as XFillBitmapItem | undefined;
+    let children = "";
+    const image = style === FillStyle.BITMAP && bitmap ? this.registerBitmap(bitmap) : undefined;
+    if (image) {
+      const { name, href } = image;
+      const mode = getBitmapMode(items);
+      const repeat =
+        mode === BitmapMode.STRETCH
+          ? "stretch"
+          : mode === BitmapMode.NO_REPEAT
+            ? "no-repeat"
+            : "repeat";
+      attributes.push(
+        `draw:fill-image-name="${encodeStyleName(name)}"`,
+        `style:repeat="${repeat}"`,
+      );
+      const position = mode === BitmapMode.NO_REPEAT ? ' style:position="center center"' : "";
+      const legacyMode = mode === BitmapMode.REPEAT ? "" : ` style:repeat="${repeat}"`;
+      const opacity = transparency === undefined ? "" : ` draw:opacity="${100 - transparency}%"`;
+      children = `<style:background-image xlink:href="${escapeXml(href)}" xlink:type="simple" xlink:actuate="onLoad"${position}${legacyMode}${opacity}/>`;
+    }
+    return { attributes: attributes.length ? ` ${attributes.join(" ")}` : "", children };
+  }
 }
 
 /** Formats native twip values for the existing presentation shorthand control. @param line - Native line. @returns Presentation input. */

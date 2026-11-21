@@ -12,7 +12,8 @@
       "importPageGrid",
       "importPageUsage",
       "pagePrintTokens",
-      "importPagePrint"
+      "importPagePrint",
+      "XMLPagePropertySetContext"
     ],
     "upstreamPath": "xmloff/source/style/PageMasterStyleMap.cxx",
     "upstreamSymbols": [
@@ -22,12 +23,14 @@
       "CTF_PM_PAGEUSAGE",
       "CTF_PM_STANDARD_MODE",
       "CTF_PM_PRINT_ANNOTATIONS",
-      "CTF_PM_PRINT_ZEROVALUES"
+      "CTF_PM_PRINT_ZEROVALUES",
+      "CTF_PM_FILLBITMAPMODE"
     ],
     "preservedResponsibilities": [
       "Reads the original header/footer ODF height, body margin and dynamic-spacing declarations. The map uses the native fixed/minimum height choice from PageMasterImportPropMapper.",
       "Maps page usage, independent margins and shorthand fallback in UNO units, and Writer text grid properties. Keeps explicit margin presence for gutter adjustment.",
-      "Shares the original print token order and space-delimited parsing with the Calc page-layout filter."
+      "Shares the original print token order and space-delimited parsing with the Calc page-layout filter.",
+      "Reads modern solid and bitmap page and story fills plus legacy brush color, embedded image, repeat mode and opacity."
     ],
     "omittedResponsibilities": [
       "Full native story layout, overlapping text frames, and complete DOCX/ODF parity remain unverified."
@@ -49,6 +52,10 @@
         {
           "path": "apps/office/src/sc/source/filter/xml/ods-page-master.test.ts",
           "marker": "preserves direct print options and signed scale values"
+        },
+        {
+          "path": "apps/office/src/sw/source/filter/xml/odt-page-background.test.ts",
+          "marker": "ports testPageBackground"
         }
       ],
       "upstream": [
@@ -71,6 +78,10 @@
         {
           "path": "vendor/libreoffice-reference/xmloff/source/style/PageMasterPropHdl.cxx",
           "marker": "XMLPMPropHdl_Print::importXML"
+        },
+        {
+          "path": "vendor/libreoffice-reference/xmloff/source/style/XMLBackgroundImageContext.cxx",
+          "marker": "XMLBackgroundImageContext::endFastElement"
         }
       ]
     }

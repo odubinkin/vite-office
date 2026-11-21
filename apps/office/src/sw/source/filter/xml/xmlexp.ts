@@ -50,6 +50,7 @@ import {
   exportPageLayoutBox,
   exportPageWritingAndGrid,
   exportParagraphTabStops,
+  XMLPageBackgroundExport,
 } from "./xmlexpit";
 import { HoriOrientation } from "../../../../offapi/com/sun/star/text/HoriOrientation";
 import { SwFrameSize, type SwFormatFrameSize } from "../../../inc/fmtfsize";
@@ -170,6 +171,8 @@ const OFFICE_NAMESPACES = `xmlns:draw="${ODF_NAMESPACES.draw}" xmlns:office="${O
 /** Serializes Writer named paragraph styles into styles.xml. @param document - Canonical SwDoc. @param graphicHelper - Optional package graphic owner. @returns Complete XML. */
 export function exportStylesXml(document: SwDoc, graphicHelper?: SvXMLGraphicHelper): string {
   const fonts = createWriterFontAutoStylePool(document);
+  const pageBackgrounds = new XMLPageBackgroundExport(graphicHelper);
+  for (const bitmap of document.GetBitmapTable().values()) pageBackgrounds.registerBitmap(bitmap);
   const stories = Array.from(
     { length: document.GetPageDescCnt() },
     /** Selects native sections per page. @param _unused - Array placeholder. @param index - Page position. @returns Story list. */
@@ -338,8 +341,13 @@ export function exportStylesXml(document: SwDoc, graphicHelper?: SvXMLGraphicHel
             ? PageStyleLayout.RIGHT
             : PageStyleLayout.ALL;
     const layoutName = `pm${index + 1}`;
+    const background = pageBackgrounds.exportBackground(master);
+    const properties = `<style:page-layout-properties fo:page-width="${exportOdfLength(page.width)}" fo:page-height="${exportOdfLength(page.height)}" style:print-orientation="${page.landscape ? "landscape" : "portrait"}" fo:margin-top="${top}" fo:margin-bottom="${exportPageMargin(page.bottomMargin)}" fo:margin-left="${left}" fo:margin-right="${right}"${exportPageLayoutBox(master, exportOdfLength)}${exportPageWritingAndGrid(master)}${background.attributes}`;
+    const content = background.children
+      ? `${properties}>${background.children}</style:page-layout-properties>`
+      : `${properties}/>`;
     pageLayouts.push(
-      `<style:page-layout style:name="${layoutName}"${exportPageUsage(layout)}><style:page-layout-properties fo:page-width="${exportOdfLength(page.width)}" fo:page-height="${exportOdfLength(page.height)}" style:print-orientation="${page.landscape ? "landscape" : "portrait"}" fo:margin-top="${top}" fo:margin-bottom="${exportPageMargin(page.bottomMargin)}" fo:margin-left="${left}" fo:margin-right="${right}"${exportPageLayoutBox(master, exportOdfLength)}${exportPageWritingAndGrid(master)}/>${exportPageStoryStyles(master, exportOdfLength)}</style:page-layout>`,
+      `<style:page-layout style:name="${layoutName}"${exportPageUsage(layout)}>${content}${exportPageStoryStyles(master, exportOdfLength, pageBackgrounds)}</style:page-layout>`,
     );
     const followName = descriptor.GetFollow().GetName();
     const follow =
@@ -396,7 +404,7 @@ export function exportStylesXml(document: SwDoc, graphicHelper?: SvXMLGraphicHel
   const defaultPageLayout = IsSquaredPageMode(document)
     ? ""
     : '<style:default-page-layout><style:page-layout-properties style:layout-grid-standard-mode="true"/></style:default-page-layout>';
-  return `<?xml version="1.0" encoding="UTF-8"?><office:document-styles ${OFFICE_NAMESPACES} office:version="1.3">${fonts.exportXML()}<office:styles>${defaultPageLayout}${defaults}${styles.join("")}${characterStyles.join("")}${numberingStyles}${inheritedStyles.namedStyles}${lineNumbering}${ExportThemeElement(document.theme)}</office:styles><office:automatic-styles>${pageLayouts.join("")}${sections.length ? inheritedStyles.automaticStyles : ""}</office:automatic-styles><office:master-styles>${masterPages.join("")}</office:master-styles></office:document-styles>`;
+  return `<?xml version="1.0" encoding="UTF-8"?><office:document-styles ${OFFICE_NAMESPACES} office:version="1.3">${fonts.exportXML()}<office:styles>${defaultPageLayout}${defaults}${styles.join("")}${characterStyles.join("")}${numberingStyles}${inheritedStyles.namedStyles}${lineNumbering}${pageBackgrounds.exportStyles()}${ExportThemeElement(document.theme)}</office:styles><office:automatic-styles>${pageLayouts.join("")}${sections.length ? inheritedStyles.automaticStyles : ""}</office:automatic-styles><office:master-styles>${masterPages.join("")}</office:master-styles></office:document-styles>`;
 }
 
 /** Exports the page margin and independently converted binding allowance in UNO units. @param twips - Base margin in Twips. @param gutter - Gutter in hundredths of a millimetre. @returns XML measure. */

@@ -5446,3 +5446,12 @@ from the shorthand therefore keeps its authored value before Writer adds
 the gutter during layout. Writer preserves this ordering.
 
 - [Original margin synthesis and gutter adjustment](../../vendor/libreoffice-reference/xmloff/source/style/PageMasterImportPropMapper.cxx)
+
+### WRITER-692 — A legacy page background image can override a modern bitmap mode
+
+When a page declares a modern bitmap mode and also has a loaded legacy
+background image, the legacy image context replaces the modern mode with
+the recognized legacy placement. An image with a package link and no
+placement defaults to repeat. Writer keeps this precedence.
+
+- [Original legacy image placement and bitmap mode override](../../vendor/libreoffice-reference/xmloff/source/style/XMLBackgroundImageContext.cxx)

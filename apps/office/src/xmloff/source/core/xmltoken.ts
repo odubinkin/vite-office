@@ -501,9 +501,23 @@ export enum XMLToken {
   STYLE_LAYOUT_GRID_BASE_WIDTH,
   STYLE_LAYOUT_GRID_SNAP_TO,
   STYLE_LAYOUT_GRID_STANDARD_MODE,
+  DRAW_FILL_IMAGE,
+  DRAW_FILL_IMAGE_NAME,
+  DRAW_DISPLAY_NAME,
+  STYLE_BACKGROUND_IMAGE,
+  STYLE_REPEAT,
+  XLINK_ACTUATE,
+  STYLE_BACKGROUND_TRANSPARENCY,
 }
 
 const entries: readonly (readonly [string, string, XMLToken])[] = [
+  [ODF_NAMESPACES.draw, "fill-image", XMLToken.DRAW_FILL_IMAGE],
+  [ODF_NAMESPACES.draw, "fill-image-name", XMLToken.DRAW_FILL_IMAGE_NAME],
+  [ODF_NAMESPACES.draw, "display-name", XMLToken.DRAW_DISPLAY_NAME],
+  [ODF_NAMESPACES.style, "background-image", XMLToken.STYLE_BACKGROUND_IMAGE],
+  [ODF_NAMESPACES.style, "background-transparency", XMLToken.STYLE_BACKGROUND_TRANSPARENCY],
+  [ODF_NAMESPACES.style, "repeat", XMLToken.STYLE_REPEAT],
+  [ODF_NAMESPACES.xlink, "actuate", XMLToken.XLINK_ACTUATE],
   [ODF_NAMESPACES.style, "page-usage", XMLToken.STYLE_PAGE_USAGE],
   [ODF_NAMESPACES.style, "layout-grid-color", XMLToken.STYLE_LAYOUT_GRID_COLOR],
   [ODF_NAMESPACES.style, "layout-grid-lines", XMLToken.STYLE_LAYOUT_GRID_LINES],

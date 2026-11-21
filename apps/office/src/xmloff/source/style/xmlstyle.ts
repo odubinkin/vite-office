@@ -1,11 +1,13 @@
 /** @fileoverview Implements streaming ODF style and numbering contexts from xmloff. */
 import {
   XMLPageHeaderFooterStyleContext,
+  XMLPagePropertySetContext,
   importPageBool,
   importPageGrid,
   importPageMargins,
   importPageUsage,
   type OdfPageGridProperty,
+  type OdfPageBackground,
   type OdfPageMargins,
   type OdfPageStoryGeometry,
 } from "./PageMasterStyleMap";
@@ -33,6 +35,7 @@ import {
 import { XMLTextFrameStyleContext, type XMLTextFrameStyle } from "../text/XMLTextFrameContext";
 import { XMLTextPropertySetContext } from "../text/XMLTextPropertySetContext";
 import { XMLThemeContext } from "./XMLThemeContext";
+import { importImageStyle, type XMLImageStyleDefinition } from "./ImageStyle";
 import type { Theme } from "../../../docmodel/inc/theme/Theme";
 import { XMLNumberWithAutoForVoidPropHdl } from "./xmlbahdl";
 import { SvxXMLListStyleContext, type XMLListStyleImportTarget } from "./xmlnumi";
@@ -55,6 +58,7 @@ export interface XMLStyleImportTarget extends XMLListStyleImportTarget {
   ): import("./XMLFontStylesContext").OdfFontFaceMetadata | undefined;
   registerDefaultStyle(definition: OdfStyleDefinition): void;
   registerPageLayout(name: string, layout: OdfPageLayout): void;
+  registerImageStyle?(style: XMLImageStyleDefinition): void;
   registerDefaultPageMode?(standard: boolean): void;
 }
 
@@ -65,6 +69,7 @@ export interface OdfPageLayout {
   readonly box?: OdfBoxProperties;
   readonly shadow?: ShadowFormat;
   readonly gutter?: number;
+  readonly background?: OdfPageBackground;
   readonly margins: OdfPageMargins;
   readonly explicitMargins: ReadonlySet<string>;
   readonly usage?: PageStyleLayout;
@@ -176,6 +181,11 @@ export class XMLStylesContext extends SvXMLImportContext {
       return new SvxXMLListStyleContext(this.target, attributes, this.automatic);
     if (element === XMLToken.STYLE_PAGE_LAYOUT)
       return new XMLPageLayoutContext(this.target, attributes);
+    if (element === XMLToken.DRAW_FILL_IMAGE && this.target.registerImageStyle) {
+      const image = importImageStyle(attributes);
+      if (image) this.target.registerImageStyle(image);
+      return new SvXMLIgnoreContext(true);
+    }
     if (element === XMLToken.TEXT_LINENUMBERING_CONFIGURATION)
       return new XMLLineNumberingImportContext(
         attributes,
@@ -276,7 +286,13 @@ class XMLPageLayoutContext extends SvXMLImportContext {
       landscape: orientation === "landscape",
       width,
     };
-    return new SvXMLIgnoreContext();
+    return new XMLPagePropertySetContext(
+      attributes,
+      /** Retains a complete page fill alongside the composed layout. @param background - Fill. @returns Nothing. */
+      (background) => {
+        if (this.layout) this.layout = { ...this.layout, background };
+      },
+    );
   }
 
   /** Registers the completed page layout when its element closes. @returns Nothing. */

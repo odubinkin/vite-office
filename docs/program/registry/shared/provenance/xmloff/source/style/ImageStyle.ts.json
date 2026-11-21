@@ -1,0 +1,42 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "status": "mapped",
+    "localPath": "apps/office/src/xmloff/source/style/ImageStyle.ts",
+    "upstreamPath": "xmloff/source/style/ImageStyle.cxx",
+    "localSymbols": [
+      "importImageStyle",
+      "exportImageStyle"
+    ],
+    "upstreamSymbols": [
+      "XMLImageStyle::importXML",
+      "XMLImageStyle::exportXML"
+    ],
+    "preservedResponsibilities": [
+      "Maps the original draw fill-image name, encoded alias, and package reference."
+    ],
+    "omittedResponsibilities": [
+      "Inline base64 and linked graphics remain outside the represented package path."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/xmloff/source/style/ImageStyle.ts",
+          "marker": "importImageStyle"
+        },
+        {
+          "path": "apps/office/src/sw/source/filter/xml/odt-page-background.test.ts",
+          "marker": "ports testPageBackground"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/xmloff/source/style/ImageStyle.cxx",
+          "marker": "XMLImageStyle::importXML"
+        }
+      ]
+    }
+  }
+}

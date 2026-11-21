@@ -10,6 +10,8 @@ export const SID_RULER_ROWS_VERTICAL = 10993 as const;
 
 /** Original SID_SVX_START +164 drawing fill-style slot. */
 export const SID_ATTR_FILL_STYLE = 10164 as const;
+/** Original SID_SVX_START +168 drawing fill-bitmap slot. */
+export const SID_ATTR_FILL_BITMAP = 10168 as const;
 /** Original SID_SVX_START +165 drawing fill-color slot. */
 export const SID_ATTR_FILL_COLOR = 10165 as const;
 /** Original SID_SVX_START +1124 solid-fill transparency slot. */
