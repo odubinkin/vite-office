@@ -429,6 +429,38 @@ it("uses the available external text format and then opens the existing import c
   expect(doc.GetValue(new ScAddress(1, 1, 0))).toBe(4);
 });
 
+it("dispatches the explicit text import command for a single clipboard line and keeps it undoable", async () => {
+  const clipboard = browserClipboard(transfer("14\t28"));
+  const controller = mount(),
+    doc = controller.shell.GetDocument();
+  const start = new ScAddress(1, 1, 0);
+  const end = new ScAddress(2, 1, 0);
+  select("B2");
+  const dialog = await openPasteSpecial();
+  fireEvent.change(dialog.getByRole("listbox", { name: "Selection" }), {
+    target: { value: ".uno:PasteTextImportDialog" },
+  });
+  await act(async () => fireEvent.click(dialog.getByRole("button", { name: "OK" })));
+  const textImport = within(screen.getByRole("dialog", { name: "Text Import" }));
+  expect(clipboard.read).toHaveBeenCalledTimes(2);
+  expect(doc.GetCellType(start)).toBe(CellType.CELLTYPE_NONE);
+  await act(async () => fireEvent.click(textImport.getByRole("button", { name: "Cancel" })));
+  expect(doc.GetCellType(start)).toBe(CellType.CELLTYPE_NONE);
+
+  const reopened = await openPasteSpecial();
+  fireEvent.change(reopened.getByRole("listbox", { name: "Selection" }), {
+    target: { value: ".uno:PasteTextImportDialog" },
+  });
+  await act(async () => fireEvent.click(reopened.getByRole("button", { name: "OK" })));
+  const confirmed = within(screen.getByRole("dialog", { name: "Text Import" }));
+  await act(async () => fireEvent.click(confirmed.getByRole("button", { name: "OK" })));
+  expect(doc.GetValue(start)).toBe(14);
+  expect(doc.GetValue(end)).toBe(28);
+  act(() => expect(controller.Undo()).toBe(true));
+  expect(doc.GetCellType(start)).toBe(CellType.CELLTYPE_NONE);
+  expect(doc.GetCellType(end)).toBe(CellType.CELLTYPE_NONE);
+});
+
 it("runs Formats Only from the menu immediately and keeps the original formula owner", async () => {
   const clipboard = transfer();
   browserClipboard(clipboard);

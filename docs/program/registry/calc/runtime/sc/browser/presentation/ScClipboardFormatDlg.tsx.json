@@ -20,7 +20,7 @@
         "apps/office/src/sc/browser/presentation/ScClipboardFormatDlg.tsx#ScClipboardFormatDlg",
         "apps/office/src/sc/browser/presentation/calc-cell-clipboard.test.tsx"
       ],
-      "justification": "Projects the external source format selection dialog for the portable text provided by the browser clipboard.",
+      "justification": "Projects the source Paste Special format list and the separate Text Import command for browser clipboard text.",
       "knownViolations": [],
       "localSymbols": [
         "ScClipboardFormatDlg"

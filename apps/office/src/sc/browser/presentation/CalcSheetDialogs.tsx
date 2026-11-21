@@ -81,7 +81,7 @@ export function CalcSheetDialogs({
       {pasteText?.request.kind === "format" && (
         <ScClipboardFormatDlg
           key={pasteText.id}
-          onAccept={() => sheetWorkflows.clipboard.dialogs.Complete(pasteText.id, "text/plain")}
+          onAccept={(value) => sheetWorkflows.clipboard.dialogs.Complete(pasteText.id, value)}
           onCancel={() => sheetWorkflows.clipboard.dialogs.Cancel(pasteText.id)}
         />
       )}

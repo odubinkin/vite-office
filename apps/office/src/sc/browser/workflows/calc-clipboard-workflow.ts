@@ -3,7 +3,8 @@ import { copyPlainText } from "../../../vcl/browser/browser-clipboard";
 import { SfxDialogController } from "../../../sfx2/source/dialog/basedlgs";
 import { SfxInterface } from "../../../sfx2/source/control/objface";
 import { createSfxShell, type SfxShell } from "../../../sfx2/source/control/shell";
-import { ScRange } from "../../inc/address";
+import type { SfxDispatcher } from "../../../sfx2/source/control/dispatch";
+import { ScAddress, ScRange } from "../../inc/address";
 import type { ScDocument } from "../../inc/document";
 import { scPasteResourcesEnglish } from "../../inc/globstr";
 import { ScMarkData } from "../../inc/markdata";
@@ -30,6 +31,10 @@ import type { CalcViewController } from "../controller/calc-view-controller";
 const calcType = "application/x-vite-office-calc-clipboard";
 const webCalcType = "web " + calcType;
 const plainType = "text/plain";
+export const pasteTextImportCommand = ".uno:PasteTextImportDialog";
+
+/** The portable text format and the separate native command offered by Paste Special. */
+export type ClipboardFormatChoice = typeof plainType | typeof pasteTextImportCommand;
 
 const pasteOnlySlots = [
   {
@@ -69,8 +74,13 @@ interface OwnedPasteOptions {
   readonly flags?: InsertDeleteFlags;
   readonly transpose?: boolean;
   readonly skipEmpty?: boolean;
-  readonly dialog?: boolean;
 }
+
+/** The source paste slots share the clipboard read and selection validation. */
+type PasteRequest =
+  | { readonly kind: "normal"; readonly transfer?: Transfer }
+  | { readonly kind: "unformatted" | "special" | "textImport" }
+  | ({ readonly kind: "owned" } & OwnedPasteOptions);
 
 /** Original Text Import dialog inputs for a text transfer. */
 export interface PasteTextRequest {
@@ -98,7 +108,7 @@ export interface PasteConfirmationResult {
 export class CalcClipboardWorkflow {
   readonly dialogs = new SfxDialogController<
     PasteDialogRequest,
-    ScAsciiOptions | PasteConfirmationResult | ScInsertContentsResponse | "text/plain"
+    ScAsciiOptions | PasteConfirmationResult | ScInsertContentsResponse | ClipboardFormatChoice
   >();
   private owned: OwnedTransfer | undefined;
   private preferences: ScAsciiOptions | undefined;
@@ -121,7 +131,7 @@ export class CalcClipboardWorkflow {
         slotId: 5712,
         label: "Paste",
         getState: (workflow) => ({ enabled: workflow.CanRead() }),
-        execute: (workflow) => workflow.Paste(false),
+        execute: (workflow) => workflow.Paste({ kind: "normal" }),
       },
       {
         commandUrl: ".uno:PasteUnformatted",
@@ -129,19 +139,26 @@ export class CalcClipboardWorkflow {
         label: "Paste Unformatted Text",
         shortcuts: ["Ctrl+Alt+Shift+V", "Meta+Alt+Shift+V"],
         getState: (workflow) => ({ enabled: workflow.CanRead() }),
-        execute: (workflow) => workflow.Paste(true),
+        execute: (workflow) => workflow.Paste({ kind: "unformatted" }),
+      },
+      {
+        commandUrl: pasteTextImportCommand,
+        slotId: 5805,
+        label: "Use Text Import Dialog",
+        getState: (workflow) => ({ enabled: workflow.CanRead() }),
+        execute: (workflow) => workflow.Paste({ kind: "textImport" }),
       },
       ...pasteOnlySlots.map(({ flags, ...slot }) => ({
         ...slot,
         getState: (workflow: CalcClipboardWorkflow) => ({ enabled: workflow.CanPasteOwned() }),
-        execute: (workflow: CalcClipboardWorkflow) => workflow.Paste(false, undefined, { flags }),
+        execute: (workflow: CalcClipboardWorkflow) => workflow.Paste({ kind: "owned", flags }),
       })),
       {
         commandUrl: ".uno:PasteTransposed",
         slotId: 5808,
         label: "Paste Transposed",
         getState: (workflow) => ({ enabled: workflow.CanPasteOwned() }),
-        execute: (workflow) => workflow.Paste(false, undefined, { transpose: true }),
+        execute: (workflow) => workflow.Paste({ kind: "owned", transpose: true }),
       },
       {
         commandUrl: ".uno:PasteSpecial",
@@ -149,15 +166,16 @@ export class CalcClipboardWorkflow {
         label: "Paste Special",
         shortcuts: ["Ctrl+Shift+V", "Meta+Shift+V"],
         getState: (workflow) => ({ enabled: workflow.CanRead() }),
-        execute: (workflow) => workflow.Paste(false, undefined, { dialog: true }),
+        execute: (workflow) => workflow.PasteSpecial(),
       },
     ]),
   );
 
-  /** Binds the clipboard slots to their native workbook and view owners. @param controller - Active view. @param canOpen - Native dialog admission. @returns Workflow. */
+  /** Binds the clipboard slots to their native workbook and view owners. @param controller - Active view. @param canOpen - Native dialog admission. @param dispatcher - Active view dispatcher. @returns Workflow. */
   constructor(
     private readonly controller: CalcViewController,
     private readonly canOpen: () => boolean,
+    private readonly dispatcher: SfxDispatcher,
   ) {}
 
   /** Returns the source slot shell. @returns Shell. */
@@ -200,7 +218,7 @@ export class CalcClipboardWorkflow {
       plainText: clipboard.getData(plainType),
       token: clipboard.getData(calcType),
     };
-    void this.Paste(false, transfer);
+    void this.Paste({ kind: "normal", transfer });
     return true;
   }
 
@@ -287,20 +305,26 @@ export class CalcClipboardWorkflow {
     }
   }
 
-  /** Applies the authorized clipboard transfer to the same active document and selection. @param unformatted - Force the portable text path. @param supplied - Native DOM clipboard data, when available. @param native - Native clip-only request. @returns Whether pasted. */
-  private async Paste(
-    unformatted: boolean,
-    supplied?: Transfer,
-    native?: OwnedPasteOptions,
-  ): Promise<boolean> {
-    if (!this.CanUseCells() || this.reading || (native && !native.dialog && !this.CanPasteOwned()))
+  /** Runs the chosen format or dispatches the source command after the format dialog closes. @returns Whether pasted. */
+  private async PasteSpecial(): Promise<boolean> {
+    const result = await this.Paste({ kind: "special" });
+    if (result !== pasteTextImportCommand) return result;
+    const dispatched = this.dispatcher.Execute(pasteTextImportCommand);
+    return dispatched.status === "executed" && (await dispatched.value) === true;
+  }
+
+  /** Applies the clipboard transfer to the active selection or returns the selected native command. @param request - Source paste slot and optional native transfer data. @returns Paste outcome. */
+  private async Paste(request: PasteRequest): Promise<boolean | typeof pasteTextImportCommand> {
+    const { kind } = request;
+    if (!this.CanUseCells() || this.reading || (kind === "owned" && !this.CanPasteOwned()))
       return false;
     this.reading = true;
     const { controller } = this;
     const doc = controller.shell.GetDocument();
     const revision = controller.GetSnapshot();
     try {
-      const transfer = supplied ?? (await ReadSystemTransfer());
+      const transfer =
+        (request.kind === "normal" ? request.transfer : undefined) ?? (await ReadSystemTransfer());
       /** Checks that the browser response still targets the initiating selection. @returns Whether current. */
       const current = (): boolean =>
         !this.closed &&
@@ -308,25 +332,38 @@ export class CalcClipboardWorkflow {
         revision === controller.GetSnapshot();
       if (!current()) return false;
       const owned = this.owned;
-      if (!unformatted && owned?.source === doc && owned.token === transfer.token) {
-        const chosen = native?.dialog ? await this.PasteSpecialOptions() : native;
-        if ((native?.dialog && !chosen) || !current()) return false;
+      if (
+        kind !== "unformatted" &&
+        kind !== "textImport" &&
+        owned?.source === doc &&
+        owned.token === transfer.token
+      ) {
+        const chosen =
+          kind === "special"
+            ? await this.PasteSpecialOptions()
+            : kind === "owned"
+              ? request
+              : undefined;
+        if ((kind === "special" && !chosen) || !current()) return false;
         return await this.PasteOwned(owned.clip, doc, current, chosen);
       }
-      if ((native && !native.dialog) || !transfer.plainText) return false;
-      if (native?.dialog) {
+      if (kind === "owned" || !transfer.plainText) return false;
+      if (kind === "special") {
         const response = await this.dialogs.Request({ kind: "format" });
-        if (response.kind !== "accepted" || response.result !== plainType || !current())
-          return false;
+        if (response.kind !== "accepted" || !current()) return false;
+        if (response.result === pasteTextImportCommand) return pasteTextImportCommand;
+        if (response.result !== plainType) return false;
       }
 
       const range = new ScRange();
-      if (controller.viewData.GetSimpleArea(range) !== ScMarkType.SC_MARK_SIMPLE) return false;
-      const origin = range.aStart;
-      origin.SetTab(controller.viewData.CurrentTabForData());
+      const view = controller.viewData;
+      const simple = view.GetSimpleArea(range) === ScMarkType.SC_MARK_SIMPLE;
+      if (!simple && kind !== "textImport") return false;
+      const origin = simple ? range.aStart : new ScAddress(view.GetCurX(), view.GetCurY(), 0);
+      origin.SetTab(view.CurrentTabForData());
       let options = ClipboardTextOptions();
       const newline = transfer.plainText.indexOf("\n");
-      if (newline >= 0 && newline < transfer.plainText.length - 1) {
+      if (kind === "textImport" || (newline >= 0 && newline < transfer.plainText.length - 1)) {
         options = this.preferences
           ? new ScAsciiOptions(this.preferences)
           : ClipboardTextOptions(transfer.plainText);

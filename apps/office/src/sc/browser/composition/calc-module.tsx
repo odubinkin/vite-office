@@ -46,7 +46,7 @@ export function createCalcSession(
     frame = new SfxViewFrame<CalcViewController>(new BrowserSfxDispatcher());
   const autosave = store === undefined ? undefined : createCalcAutosave(controller.shell, store),
     fileWorkflows = new CalcFileWorkflows(controller, store, autosave),
-    sheetWorkflows = new CalcSheetWorkflows(controller);
+    sheetWorkflows = new CalcSheetWorkflows(controller, frame.GetDispatcher());
   frame.SetActiveView(controller, [
     createSfxShell(
       controller,

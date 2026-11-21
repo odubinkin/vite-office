@@ -8,6 +8,7 @@ import { ScOptionsUtil } from "../../source/core/tool/optutil";
 import { FieldUnit } from "../../../tools/inc/fldunit";
 import { SfxDialogController } from "../../../sfx2/source/dialog/basedlgs";
 import { SfxInterface } from "../../../sfx2/source/control/objface";
+import type { SfxDispatcher } from "../../../sfx2/source/control/dispatch";
 import { createSfxShell, type SfxShell } from "../../../sfx2/source/control/shell";
 import { SfxRequest } from "../../../sfx2/source/control/request";
 import { SfxUnoAnyItem } from "../../../sfx2/source/view/frame";
@@ -140,10 +141,17 @@ export class CalcSheetWorkflows {
   readonly nameDialogs = new SfxDialogController<ScNameDefDlg, boolean>();
   readonly conditionals: CalcConditionalWorkflows;
   private readonly shell: SfxShell;
-  /** Connects a source command to the active document view. @param controller - Actual Calc controller. @returns Workflow. */
-  constructor(readonly controller: CalcViewController) {
+  /** Connects a source command to the active document view. @param controller - Actual Calc controller. @param dispatcher - Active view dispatcher. @returns Workflow. */
+  constructor(
+    readonly controller: CalcViewController,
+    dispatcher: SfxDispatcher,
+  ) {
     this.options = new CalcOptionsWorkflow(controller, () => !this.HasSheetDialog());
-    this.clipboard = new CalcClipboardWorkflow(controller, () => !this.HasSheetDialog());
+    this.clipboard = new CalcClipboardWorkflow(
+      controller,
+      () => !this.HasSheetDialog(),
+      dispatcher,
+    );
     this.conditionals = new CalcConditionalWorkflows(controller);
     this.labelRanges = new CalcLabelRangeWorkflow(this.controller);
     this.shell = createSfxShell(

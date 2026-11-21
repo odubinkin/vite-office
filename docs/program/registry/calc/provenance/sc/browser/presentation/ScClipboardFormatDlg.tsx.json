@@ -5,13 +5,13 @@
     "classification": "browser-adaptation",
     "localPath": "apps/office/src/sc/browser/presentation/ScClipboardFormatDlg.tsx",
     "status": "local-only",
-    "rationale": "Projects the external source format selection dialog for the portable text provided by the browser clipboard.",
+    "rationale": "Projects the source Paste Special format list and its separate Text Import command for browser clipboard text.",
     "responsibilities": [
-      "Projects the external source format selection dialog for the portable text provided by the browser clipboard."
+      "Offers the browser clipboard text format and the separately dispatched Calc Text Import command."
     ],
     "stackDivergence": {
       "kind": "browser-adaptation",
-      "rationale": "Projects the external source format selection dialog for the portable text provided by the browser clipboard."
+      "rationale": "Uses a native browser listbox for the selection supplied by the pinned Paste Special dialog."
     },
     "evidence": {
       "local": [
@@ -22,6 +22,10 @@
         {
           "path": "apps/office/src/sc/browser/presentation/calc-cell-clipboard.test.tsx",
           "marker": "uses the available external text format"
+        },
+        {
+          "path": "apps/office/src/sc/browser/presentation/calc-cell-clipboard.test.tsx",
+          "marker": "dispatches the explicit text import command"
         }
       ]
     }

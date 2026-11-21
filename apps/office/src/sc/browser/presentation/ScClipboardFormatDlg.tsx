@@ -1,15 +1,21 @@
 /** @fileoverview Browser projection of the source Paste Special clipboard-format list. */
+import { useState } from "react";
 import { DialogHeader } from "../../../framework/browser/presentation/DialogHeader";
+import {
+  pasteTextImportCommand,
+  type ClipboardFormatChoice,
+} from "../workflows/calc-clipboard-workflow";
 
 /** Selection and cancellation callbacks for the browser's represented clipboard format. */
 interface Props {
-  readonly onAccept: () => void;
+  readonly onAccept: (choice: ClipboardFormatChoice) => void;
   readonly onCancel: () => void;
 }
 
 /** Shows the available portable clipboard format before opening text import. @param props - Native dialog response. @returns Clipboard format dialog. */
 export function ScClipboardFormatDlg({ onAccept, onCancel }: Props): React.JSX.Element {
   const title = "Paste Special";
+  const [choice, setChoice] = useState<ClipboardFormatChoice>("text/plain");
   return (
     <form
       role="dialog"
@@ -24,20 +30,29 @@ export function ScClipboardFormatDlg({ onAccept, onCancel }: Props): React.JSX.E
       }}
       onSubmit={(event) => {
         event.preventDefault();
-        onAccept();
+        onAccept(choice);
       }}
     >
       <DialogHeader title={title} onClose={onCancel} />
+      <p className="px-4 pt-3">Source: Unknown source</p>
       <label className="block space-y-1 px-4 py-3">
         <span>Selection</span>
         <select
           size={3}
-          defaultValue="text/plain"
-          onDoubleClick={onAccept}
+          value={choice}
+          onChange={(event) =>
+            setChoice(
+              event.currentTarget.value === pasteTextImportCommand
+                ? pasteTextImportCommand
+                : "text/plain",
+            )
+          }
+          onDoubleClick={() => onAccept(choice)}
           autoFocus
           className="block w-full rounded border border-slate-300"
         >
           <option value="text/plain">Unformatted text</option>
+          <option value={pasteTextImportCommand}>Use text import dialog</option>
         </select>
       </label>
       <div className="office-dialog-actions">
