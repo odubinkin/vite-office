@@ -1,0 +1,23 @@
+{
+  "schema_version": 1,
+  "task_id": "202611210659-458SWH",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-11-21T12:05:20.835Z",
+  "verdict": "pass",
+  "summary": "The Calc conditional format editor and manager are verified through native command, range, undo, and workbook round-trip boundaries.",
+  "evaluated_sha": "cb3b6e4f19bff4a9fbe194e77e663bbbe070a16b",
+  "blueprint_digest": "b058b5a0b23a3dc978c6d0b25384bd398adbc7e0e37554b3ee5920fba6fe6fd7",
+  "findings": [
+    "All 114 Calc browser cases passed across the full run and focused retries. The checkpoint records the pre-existing Writer parity and row-alignment failures and the interrupted coverage attempt."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202611210659-458SWH/README.md",
+    "output/calc-458SWH-verification-final.md",
+    "output/calc-458SWH-browser-retry.log",
+    "output/calc-458SWH-browser-responsiveness.log"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": []
+}
