@@ -1,10 +1,11 @@
 ---
 id: "202611211835-BN5ECR"
 title: "Round-trip Writer ODT character line and relief effects"
-status: "DOING"
+result_summary: "Preserved ODT overline, glyph contour, shadow and relief with the native UNO and EditEngine values."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 8
+revision: 9
 origin:
   system: "manual"
 depends_on: []
@@ -39,11 +40,16 @@ quality_review:
     - "63 Writer tests, 4 Calc reuse tests, office typecheck, lint and format, 2978 provenance records, gateway checks"
   findings:
     - "The pinned paragraph-style fragment, authored named and automatic properties, package XML and pool-item assertions cover the real Writer and Worker path. The handler keeps native shadow and overline-color behavior as documented."
-commit: null
+commit:
+  hash: "27f1e95037908d4877e680bd6c2658b6a2da0772"
+  message: "🧩 BN5ECR code: preserve Writer ODT character effects"
 comments:
   -
     author: "CODER"
     body: "Start: port Writer character overline, contour, shadow and relief effects through the native item and ODF property maps."
+  -
+    author: "CODER"
+    body: "Verified: named and automatic Writer text effects survive ODT and Worker round trips. All 67 focused Writer and Calc tests and static checks passed."
 events:
   -
     type: "status"
@@ -58,8 +64,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "63 focused Writer tests, four Calc ODS reuse tests, office typechecking, lint and format checks, module boundaries, registry provenance and AgentPlane policy checks passed."
+  -
+    type: "status"
+    at: "2026-11-21T18:43:41.677Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: named and automatic Writer text effects survive ODT and Worker round trips. All 67 focused Writer and Calc tests and static checks passed."
 doc_version: 3
-doc_updated_at: "2026-11-21T18:42:18.116Z"
+doc_updated_at: "2026-11-21T18:43:41.678Z"
 doc_updated_by: "CODER"
 description: "Port the native character overline style, type, width and color mappings and the native contour, shadow and relief effects. Reuse EditEngine items, the Writer property maps and the xmloff handlers for named and automatic styles. Verify direct formatting and ODT package round trips."
 sections:
