@@ -88,11 +88,8 @@ export class ScHFEditPage {
           [ATTR_FONT_HEIGHT, EE.EE_CHAR_FONTHEIGHT],
           [ATTR_CJK_FONT_HEIGHT, EE.EE_CHAR_FONTHEIGHT_CJK],
           [ATTR_CTL_FONT_HEIGHT, EE.EE_CHAR_FONTHEIGHT_CTL],
-        ] as const) {
-          const height = pattern.GetItem(from).Clone();
-          height.SetWhich(to);
-          attributes.Put(height, true);
-        }
+        ] as const)
+          attributes.PutAsTargetWhich(pattern.GetItem(from), to);
         attributes.Put(new SvxColorItem(COL_BLACK, EE.EE_CHAR_COLOR));
         editor.SetDefaults(attributes);
       } finally {
