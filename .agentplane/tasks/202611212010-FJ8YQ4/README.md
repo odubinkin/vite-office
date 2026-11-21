@@ -1,10 +1,11 @@
 ---
 id: "202611212010-FJ8YQ4"
 title: "Connect Calc Paste Special dialog and presets"
-status: "DOING"
+result_summary: "Connected Calc Paste Special and its four presets. Completed the tenth-task checkpoint and scoped fixes for browser accelerator errors and stale expectations. Two baseline Writer alignment cases remain recorded."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 21
+revision: 22
 origin:
   system: "manual"
 depends_on: []
@@ -44,11 +45,16 @@ quality_review:
     - "output/calc-task10-full-browser.log"
   findings:
     - "Verified exact format-only behavior, undo ownership, combined flags, clipboard preferences, and default control availability against the task contract. Inspected the full Office and Chrome logs and scoped retries for all Calc failures and both uncaught keyboard events."
-commit: null
+commit:
+  hash: "67eece481542ea68be090e2effd6070de9a4ac4d"
+  message: "🧩 FJ8YQ4 fix: preserve Calc editor typing through accelerator dispatch"
 comments:
   -
     author: "CODER"
     body: "Start: connect Calc Paste Special presets and run the ten-task verification checkpoint."
+  -
+    author: "CODER"
+    body: "Verified: source Paste Special presets and undo, finished the tenth-task all-project checkpoint, and confirmed every Calc failure and both keyboard errors through scoped retries."
 events:
   -
     type: "status"
@@ -69,8 +75,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Verified: Calc Paste Special, undo ownership, the scheduled full checkpoint, and all Calc findings through the scoped retries. The two baseline Writer failures are recorded separately."
+  -
+    type: "status"
+    at: "2026-11-21T22:47:57.952Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: source Paste Special presets and undo, finished the tenth-task all-project checkpoint, and confirmed every Calc failure and both keyboard errors through scoped retries."
 doc_version: 3
-doc_updated_at: "2026-11-21T22:47:11.211Z"
+doc_updated_at: "2026-11-21T22:47:57.953Z"
 doc_updated_by: "CODER"
 description: "Enable the source Paste Special dialog for implemented clipboard mechanisms and run the ten-task test checkpoint."
 sections:
