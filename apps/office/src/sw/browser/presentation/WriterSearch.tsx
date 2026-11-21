@@ -29,6 +29,9 @@ import { ABSOLUTE } from "../../../offapi/com/sun/star/util/SearchAlgorithms2";
 import { SearchAlgorithms } from "../../../offapi/com/sun/star/util/SearchAlgorithms";
 import { SvxSearchCellType, SvxSearchCmd } from "../../../svl/inc/srchitem";
 import { TransliterationFlags } from "../../../i18nutil/inc/transliteration";
+import { describeSearchAttributes } from "./writer-search-format-values";
+import { WriterSearchAttributesDialog } from "./WriterSearchAttributesDialog";
+import { WriterSearchFormatDialog } from "./WriterSearchFormatDialog";
 import { WriterSimilaritySearchDialog } from "./WriterSimilaritySearchDialog";
 import { WriterJapaneseSearchDialog } from "./WriterJapaneseSearchDialog";
 
@@ -132,6 +135,12 @@ export function WriterSearch({
   const [japaneseOptionsOpen, setJapaneseOptionsOpen] = useState(false);
   const japaneseOptionsButton = useRef<HTMLButtonElement>(null);
   const [replaceBackward, setReplaceBackward] = useState("backward" in initial && initial.backward);
+  const [formatDialog, setFormatDialog] = useState<"attributes" | "format">();
+  const [formatTarget, setFormatTarget] = useState<"search" | "replace">("search");
+  const pool = view.GetDocShell().GetDoc().GetAttrPool();
+  const hasSearchAttributes = Boolean(item.searchAttributes?.GetEntries().length);
+  const hasReplaceAttributes = Boolean(item.replaceAttributes?.GetEntries().length);
+  const hasAttributes = dialog && (hasSearchAttributes || hasReplaceAttributes);
   const [otherOptionsOpen] = useState(
     initial.selection ||
       !initial.matchDiacritics ||
@@ -139,7 +148,8 @@ export function WriterSearch({
       initial.useAsianOptions ||
       initial.similaritySearch ||
       initial.styleSearch ||
-      initial.matchCharacterWidth,
+      initial.matchCharacterWidth ||
+      hasAttributes,
   );
   const searchField = useRef<HTMLInputElement>(null);
   const searchStyleField = useRef<HTMLSelectElement>(null);
@@ -227,13 +237,14 @@ export function WriterSearch({
     };
   }
 
-  const styleOptions = dialog && item.styleSearch ? getStyleOptions() : undefined;
+  const styleOptions = dialog && item.styleSearch && !hasAttributes ? getStyleOptions() : undefined;
   const searchStyle = effectiveStyle(styleOptions?.search, item.searchStyle);
   const replaceStyle = effectiveStyle(styleOptions?.replace, item.replaceStyle);
 
   /** Saves the native dialog settings as a Find request. @param draft - Dialog controls. @param backward - Direction saved from Replace backwards. @param closing - Whether Close also records the replacement. @returns Nothing. */
   function saveDialogItem(draft: WriterSearchItem, backward: boolean, closing = false): void {
-    const styles = draft.styleSearch ? (styleOptions ?? getStyleOptions()) : undefined;
+    const styles =
+      draft.styleSearch && !hasAttributes ? (styleOptions ?? getStyleOptions()) : undefined;
     if (styles === undefined)
       onHistoryChange(
         /** Remembers the current dialog term when it is saved. @param previous - Dialog history. @returns Updated history. */ (
@@ -319,7 +330,7 @@ export function WriterSearch({
       const request: WriterExecuteSearchArguments = {
         SearchItem: {
           ...item,
-          styleSearch: styleOptions !== undefined,
+          styleSearch: item.styleSearch,
           searchStyle,
           replaceStyle,
           selection: canSearchSelection && item.selection,
@@ -393,7 +404,8 @@ export function WriterSearch({
   const nextLabel = text("next", "Find Next");
   const dialogLabel = text("dialog", "Find and Replace");
   const closeLabel = text("close", "Close");
-  const cannotSearch = styleOptions === undefined ? item.search.length === 0 : !searchStyle;
+  const cannotSearch =
+    styleOptions === undefined ? item.search.length === 0 && !hasSearchAttributes : !searchStyle;
   const statusId = useId();
   const message = formatFeedback(searchFeedback);
   const invalid =
@@ -411,6 +423,9 @@ export function WriterSearch({
       list={searchList}
       type="text"
       value={item.search}
+      onFocus={
+        /** Targets find-side formatting. @returns Nothing. */ () => setFormatTarget("search")
+      }
       onBlur={dialog ? saveDialogEntries : undefined}
       onChange={
         /** Stores the Writer search string. @param event - Updated control. @returns Nothing. */ (
@@ -545,7 +560,7 @@ export function WriterSearch({
       <section
         aria-label={dialogLabel}
         role="dialog"
-        inert={japaneseOptionsOpen || similarityOptionsOpen}
+        inert={japaneseOptionsOpen || similarityOptionsOpen || formatDialog !== undefined}
         className="fixed bottom-8 right-4 z-40 grid max-h-[85dvh] max-w-[calc(100vw-2rem)] gap-3 overflow-auto rounded-lg border border-slate-300 bg-white p-4 shadow-xl"
         onKeyDown={onKeyDown}
       >
@@ -583,12 +598,17 @@ export function WriterSearch({
               )}
             </select>
           )}
+          {hasSearchAttributes && (
+            <span className="text-sm">
+              {describeSearchAttributes(pool, item.searchAttributes, text)}
+            </span>
+          )}
           {matchCase}
           <label className="flex items-center gap-1 text-sm">
             <input
               type="checkbox"
               checked={item.wholeWords}
-              disabled={item.styleSearch || !hasOption(SearchOptionFlags.WHOLE_WORDS)}
+              disabled={styleOptions !== undefined || !hasOption(SearchOptionFlags.WHOLE_WORDS)}
               onChange={
                 /** Stores the whole-word option. @param event - Updated control. @returns Nothing. */ (
                   event,
@@ -610,6 +630,10 @@ export function WriterSearch({
                 className={fieldStyle}
                 value={item.replacement}
                 onBlur={saveDialogEntries}
+                onFocus={
+                  /** Targets replace-side formatting. @returns Nothing. */ () =>
+                    setFormatTarget("replace")
+                }
                 onChange={
                   /** Stores replacement text. @param event - Updated control. @returns Nothing. */ (
                     event,
@@ -648,6 +672,11 @@ export function WriterSearch({
                 ),
               )}
             </select>
+          )}
+          {hasReplaceAttributes && (
+            <span className="text-sm">
+              {describeSearchAttributes(pool, item.replaceAttributes, text)}
+            </span>
           )}
         </fieldset>
         <div className="flex flex-wrap gap-1">
@@ -727,7 +756,9 @@ export function WriterSearch({
                     )
                 }
               />
-              {text("search-for-styles", "Search for styles")}
+              {hasAttributes && item.search.length > 0
+                ? text("including-styles", "Including Styles")
+                : text("search-for-styles", "Search for styles")}
             </label>
             <label className="flex items-center gap-1 text-sm sm:col-start-2 sm:row-start-3">
               <input
@@ -747,7 +778,7 @@ export function WriterSearch({
                 <input
                   type="checkbox"
                   checked={item.similaritySearch}
-                  disabled={item.styleSearch || !hasOption(SearchOptionFlags.SIMILARITY)}
+                  disabled={styleOptions !== undefined || !hasOption(SearchOptionFlags.SIMILARITY)}
                   onChange={
                     /** Enables the native similarity algorithm. @param event - Updated control. @returns Nothing. */ (
                       event,
@@ -820,6 +851,52 @@ export function WriterSearch({
               {text("kashida-sensitive", "Kashida-sensitive")}
             </label>
           </div>
+          <div className="mt-2 flex flex-wrap gap-1">
+            <button
+              type="button"
+              className={buttonStyle}
+              disabled={
+                formatTarget !== "search" ||
+                styleOptions !== undefined ||
+                !hasOption(SearchOptionFlags.FORMAT)
+              }
+              onClick={
+                /** Opens the native attribute checklist. @returns Nothing. */ () =>
+                  setFormatDialog("attributes")
+              }
+            >
+              {text("attributes", "Attributes…")}
+            </button>
+            <button
+              type="button"
+              className={buttonStyle}
+              disabled={styleOptions !== undefined || !hasOption(SearchOptionFlags.FORMAT)}
+              onClick={
+                /** Opens exact formatting for the active field. @returns Nothing. */ () =>
+                  setFormatDialog("format")
+              }
+            >
+              {text("format", "Format…")}
+            </button>
+            <button
+              type="button"
+              className={buttonStyle}
+              disabled={formatTarget === "search" ? !hasSearchAttributes : !hasReplaceAttributes}
+              onClick={
+                /** Clears formatting for the focused entry. @returns Nothing. */ () => {
+                  if (formatTarget === "search") {
+                    update({ searchAttributes: undefined, styleSearch: false });
+                    searchField.current?.focus();
+                  } else {
+                    update({ replaceAttributes: undefined, styleSearch: false });
+                    replaceField.current?.focus();
+                  }
+                }
+              }
+            >
+              {text("no-format", "No Format")}
+            </button>
+          </div>
         </details>
         <footer className="flex justify-end border-t border-slate-200 pt-2">
           <button type="button" className={buttonStyle} onClick={closeSearch}>
@@ -827,6 +904,42 @@ export function WriterSearch({
           </button>
         </footer>
       </section>
+      {formatDialog === "attributes" && (
+        <WriterSearchAttributesDialog
+          pool={pool}
+          initial={item.searchAttributes}
+          restoreFocus={searchField}
+          onClose={
+            /** Applies accepted criteria and closes the checklist. @param searchAttributes - Accepted criteria. @returns Nothing. */ (
+              searchAttributes,
+            ) => {
+              if (searchAttributes !== undefined) update({ searchAttributes });
+              setFormatDialog(undefined);
+            }
+          }
+        />
+      )}
+      {formatDialog === "format" && (
+        <WriterSearchFormatDialog
+          pool={pool}
+          target={formatTarget}
+          initial={formatTarget === "search" ? item.searchAttributes : item.replaceAttributes}
+          restoreFocus={formatTarget === "search" ? searchField : replaceField}
+          onClose={
+            /** Applies formatting to the active field. @param criteria - Accepted criteria. @returns Nothing. */ (
+              criteria,
+            ) => {
+              if (criteria !== undefined)
+                update(
+                  formatTarget === "search"
+                    ? { searchAttributes: criteria }
+                    : { replaceAttributes: criteria },
+                );
+              setFormatDialog(undefined);
+            }
+          }
+        />
+      )}
       {similarityOptionsOpen && (
         <WriterSimilaritySearchDialog
           initial={item.similarity}

@@ -4,7 +4,7 @@ title: "Implement Writer search and replace core and browser UI"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 54
+revision: 55
 origin:
   system: "manual"
 depends_on:
@@ -166,6 +166,9 @@ comments:
   -
     author: "CODER"
     body: "Verified checkpoint: SvtSearchOptions owns the 30 searchable Common configuration properties, shipped schema defaults, separate loaded state, mutual exclusion for algorithm setters and retryable commits. Writer injects a browser preference port at composition. The view seeds represented dialog flags and SvxSearchItem reads the same config on dispatch. SaveToModule commits the CTL booleans immediately and SearchOff commits the represented dialog preferences; a new Writer session reads both. Source Sounds uses EnableSaveOptions(false), so accepted Japanese options remain on the live dialog item. The browser adapter stores only configuration booleans under the original Common path. Native provider registration/notifications, additional dialog controls, search attributes, notes and ICU regex remain open. Verification: 51 targeted Writer cases, 61 shared options/UNO/config parser cases and two Writer resource tests passed. Production build, boundaries, source provenance/tree, JSDoc, scoped ESLint/Prettier, size, routing and whitespace passed. No full suite due for this checkpoint; the task stays DOING and the goal pauses only after full task closure."
+  -
+    author: "CODER"
+    body: "Verified checkpoint: Writer Find and Replace now carries separate native slot-keyed attribute lists. The Attributes checklist selects non-default values. Format edits concrete font family, weight, posture, size and underline values on the focused find or replace side. No Format clears that list. The cursor strategy combines live character and node attributes with bounded text search and preserves directional selection and grouped replacement undo. The document operations reuse the existing SwUndoAttr construction. Find Bar supplies UseAttrItemList=false. Targeted Writer verification passed 126 cases in eight files plus four filter InsertItemSet cases. The two native formatting UI adaptations passed again after final exact-description changes. Both Writer resource checks, production build, scoped lint and formatting, dependencies, source-tree/provenance, JSDoc, file size, policy routing and whitespace passed. Doctor retains its existing hook warning. Full search task remains open for the complete formatting pages, annotation model integration, and the pinned ICU regex backend. The repo-local Emscripten SDK documented for native WASM builds is absent. No full suite was due for this intermediate checkpoint. The user stop condition still applies only after complete task closure."
 events:
   -
     type: "status"
@@ -384,8 +387,13 @@ events:
     at: "2026-11-21T08:11:28.562Z"
     author: "CODER"
     body: "Verified checkpoint: SvtSearchOptions owns the 30 searchable Common configuration properties, shipped schema defaults, separate loaded state, mutual exclusion for algorithm setters and retryable commits. Writer injects a browser preference port at composition. The view seeds represented dialog flags and SvxSearchItem reads the same config on dispatch. SaveToModule commits the CTL booleans immediately and SearchOff commits the represented dialog preferences; a new Writer session reads both. Source Sounds uses EnableSaveOptions(false), so accepted Japanese options remain on the live dialog item. The browser adapter stores only configuration booleans under the original Common path. Native provider registration/notifications, additional dialog controls, search attributes, notes and ICU regex remain open. Verification: 51 targeted Writer cases, 61 shared options/UNO/config parser cases and two Writer resource tests passed. Production build, boundaries, source provenance/tree, JSDoc, scoped ESLint/Prettier, size, routing and whitespace passed. No full suite due for this checkpoint; the task stays DOING and the goal pauses only after full task closure."
+  -
+    type: "comment"
+    at: "2026-11-21T08:36:37.723Z"
+    author: "CODER"
+    body: "Verified checkpoint: Writer Find and Replace now carries separate native slot-keyed attribute lists. The Attributes checklist selects non-default values. Format edits concrete font family, weight, posture, size and underline values on the focused find or replace side. No Format clears that list. The cursor strategy combines live character and node attributes with bounded text search and preserves directional selection and grouped replacement undo. The document operations reuse the existing SwUndoAttr construction. Find Bar supplies UseAttrItemList=false. Targeted Writer verification passed 126 cases in eight files plus four filter InsertItemSet cases. The two native formatting UI adaptations passed again after final exact-description changes. Both Writer resource checks, production build, scoped lint and formatting, dependencies, source-tree/provenance, JSDoc, file size, policy routing and whitespace passed. Doctor retains its existing hook warning. Full search task remains open for the complete formatting pages, annotation model integration, and the pinned ICU regex backend. The repo-local Emscripten SDK documented for native WASM builds is absent. No full suite was due for this intermediate checkpoint. The user stop condition still applies only after complete task closure."
 doc_version: 3
-doc_updated_at: "2026-11-21T08:11:28.562Z"
+doc_updated_at: "2026-11-21T08:36:37.723Z"
 doc_updated_by: "CODER"
 description: "Implement the approved coherent Writer search-and-replace feature from pinned LibreOffice sources: real shared search engine and options, native paragraph/cursor traversal and replacement/history contracts, view-owned search state and dispatch, Find toolbar and Find and Replace dialog with generated upstream command placement and shortcuts. Preserve source semantics and explicit unsupported boundaries; never substitute DOM text search or browser RegExp for ICU contracts. Work only on writer in vite-office-writer; local upstream reading approved, no network or merges. Keep active until approved scope is verified."
 sections:

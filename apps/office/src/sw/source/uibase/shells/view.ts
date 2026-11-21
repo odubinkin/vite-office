@@ -99,18 +99,26 @@ export function createWriterViewCommandRegistry(
             argument instanceof SfxBoolItem && argument.Which() === SID_SEARCH_QUIET,
         );
         const request = pooled
-          ? { SearchItem: ProjectWriterSearchItem(pooled, defaults), Quiet: quiet?.GetValue() }
+          ? {
+              SearchItem: ProjectWriterSearchItem(pooled, defaults),
+              Quiet: quiet?.GetValue(),
+              UseAttrItemList: true,
+            }
           : TransformWriterSearchParameters(
               getWriterCommandArguments(args),
               defaults,
               search.configuration,
             );
         if (request?.SearchItem === undefined) return false;
-        const { SearchItem: item, Quiet } = request;
+        const { SearchItem: item, Quiet, UseAttrItemList } = request;
+        const active =
+          UseAttrItemList === false
+            ? { ...item, searchAttributes: undefined, replaceAttributes: undefined }
+            : item;
         return (
           (Quiet
-            ? search.ExecSearch(item, item.command, item.backward, true)
-            : search.ExecSearch(item, item.command, item.backward)
+            ? search.ExecSearch(active, active.command, active.backward, true)
+            : search.ExecSearch(active, active.command, active.backward)
           ).matches > 0
         );
       },

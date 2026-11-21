@@ -1,0 +1,71 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/sw/source/core/crsr/findattr.ts",
+    "localSymbols": [
+      "FindAttrs",
+      "SwFindParaAttr",
+      "FindAttrsImpl",
+      "CmpAttr",
+      "ReplaceAttrs"
+    ],
+    "status": "mapped",
+    "upstreamPath": "sw/source/core/crsr/findattr.cxx",
+    "upstreamSymbols": [
+      "SwCursor::FindAttrs",
+      "SwFindParaAttr::DoFind",
+      "FindAttrsImpl",
+      "CmpAttr"
+    ],
+    "preservedResponsibilities": [
+      "Searches native hint boundaries and effective pooled formatting with optional text matching inside each span. Formatted replacement uses the document operations and grouped undo."
+    ],
+    "omittedResponsibilities": [
+      "Merged layout extents, non-text content, point-only hints, full native paragraph and frame comparison rules, and regex substitutions remain unported."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sw/source/core/crsr/findattr.ts",
+          "marker": "FindAttrs"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/crsr/findattr.ts",
+          "marker": "SwFindParaAttr"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/crsr/findattr.ts",
+          "marker": "FindAttrsImpl"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/crsr/findattr.ts",
+          "marker": "CmpAttr"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/crsr/findattr.ts",
+          "marker": "ReplaceAttrs"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/crsr/findattr.cxx",
+          "marker": "SwCursor::FindAttrs"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/crsr/findattr.cxx",
+          "marker": "SwFindParaAttr::DoFind"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/crsr/findattr.cxx",
+          "marker": "FindAttrsImpl"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/crsr/findattr.cxx",
+          "marker": "CmpAttr"
+        }
+      ]
+    }
+  }
+}

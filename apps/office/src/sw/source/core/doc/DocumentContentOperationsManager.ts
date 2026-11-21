@@ -102,7 +102,7 @@ export class DocumentContentOperationsManager {
     }
   }
 
-  /** Native filter InsertItemSet boundary entry; general editing/undo/layout profiles remain separate. @param range - Actual collapsed paragraph boundary. @param set - Native target items. @param mode - Native flags. @returns Nothing. */
+  /** Native InsertItemSet boundary for selected character formatting and the HTML filter. @param range - Actual model range. @param set - Native target items. @param mode - Native flags. @returns Nothing. */
   public InsertItemSet(range: SwPaM, set: SfxItemSet, mode = SetAttrMode.DEFAULT): void {
     InsertItemSet(this.document, range, set, mode);
   }

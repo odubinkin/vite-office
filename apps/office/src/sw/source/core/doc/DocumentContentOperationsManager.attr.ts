@@ -1,9 +1,11 @@
-/** @fileoverview Consumed native InsertItemSet/lcl_InsAttr no-undo paragraph item-set paths from DocumentContentOperationsManager.cxx, used by HTML target-attribute restoration. */
+/** @fileoverview Consumed native InsertItemSet paths for selected character edits and HTML paragraph attribute restoration. */
 import type { SwDoc } from "./doc";
 import { getTextFormatCollNodes } from "./docfmt";
 import type { SwPaM } from "../crsr/pam";
 import { SwTextNode } from "../txtnode/ndtxt";
 import { SfxItemSet } from "../../../../svl/source/items/itemset";
+import { MakeCharacterFormattingUndo } from "../undo/unattr";
+import { createWriterUndoCursorState } from "../undo/undobj";
 import { SwRegHistory } from "../undo/rolbck";
 import { SetAttrMode } from "../../../inc/swtypes";
 import * as H from "../../../inc/hintids";
@@ -11,14 +13,63 @@ import { XATTR_FILL_FIRST, XATTR_FILL_LAST } from "../../../../svx/inc/xdef";
 import { SwFormatAutoFormat } from "../txtnode/fmtatr2";
 import { releaseStyleHandle } from "../../../../svl/source/items/stylepool";
 import { SwAutoStyleFamily } from "../../../inc/istyleaccess";
-/** Original filter-consumed branch. Unsupported general editing/word-interior inputs are rejected before mutation; no word/undo/layout service is simulated. @param doc - Actual document. @param range - Native filter selection. @param set - Actual attribute set. @param mode - Native flags. @returns Nothing. */
+/** Applies selected character attributes or deltas from the original HTML filter path. @param doc - Actual document. @param range - Native filter selection. @param set - Actual attribute set. @param mode - Native flags. @returns Nothing. */
 export function InsertItemSet(doc: SwDoc, range: SwPaM, set: SfxItemSet, mode: SetAttrMode): void {
+  const items = set.entries();
+  if (
+    !range.IsInFrontOfLabel() &&
+    range.HasMark() &&
+    mode === SetAttrMode.DEFAULT &&
+    items.length === set.Count() &&
+    items.every(
+      /** Identifies the represented native character-edit path. @param item - Formatting item. @returns Whether the character set accepts it. */ (
+        item,
+      ) => H.RES_CHRATR_BEGIN <= item.Which() && item.Which() < H.RES_CHRATR_END,
+    )
+  ) {
+    if (items.length === 0) return;
+    const start = range.Start();
+    const end = range.End();
+    const node = start.GetNode();
+    if (!(node instanceof SwTextNode) || end.GetNode() !== node || node.GetDoc() !== doc)
+      throw new Error("InsertItemSet character formatting requires a same-node range.");
+    const pending = new SfxItemSet(doc.GetAttrPool(), H.WRITER_CHARACTER_WHICH_RANGES);
+    const state = createWriterUndoCursorState(
+      node,
+      range.GetPoint().GetContentIndex(),
+      node,
+      range.GetMark().GetContentIndex(),
+      node,
+      pending,
+    );
+    try {
+      const action = MakeCharacterFormattingUndo(
+        { node, start: start.GetContentIndex(), end: end.GetContentIndex() },
+        set,
+        state,
+        state,
+      );
+      const undo = doc.GetUndoManager();
+      try {
+        action.ApplyExact();
+      } catch (error) {
+        action.Dispose();
+        throw error;
+      }
+      if (undo.DoesUndo()) undo.AddUndoAction(action);
+      else action.Dispose();
+      doc.NotifyModelChange({ kind: "document-modified", modified: true });
+    } finally {
+      state.pendingCharacterItems.Dispose();
+      pending.Dispose();
+    }
+    return;
+  }
   if (doc.GetUndoManager().DoesUndo() || range.IsInFrontOfLabel())
     throw new Error(
       "InsertItemSet filter path requires disabled undo and an ordinary paragraph range",
     );
   if (range.HasMark()) {
-    const items = set.entries();
     if (
       items.length !== set.Count() ||
       items.some(

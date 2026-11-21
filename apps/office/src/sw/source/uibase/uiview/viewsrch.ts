@@ -18,7 +18,18 @@ import { SearchOptionFlags } from "../../../../svl/inc/srchdefs";
 import { SvxSearchCmd } from "../../../../svl/inc/srchitem";
 import { GetSettings } from "../../../../vcl/source/app/svapp";
 import { FindRanges, SwDocPositions } from "../../../inc/cshtyp";
-import { RES_PROTECT } from "../../../inc/hintids";
+import {
+  RES_CHRATR_BEGIN,
+  RES_CHRATR_END,
+  RES_PARATR_BEGIN,
+  RES_PARATR_END,
+  RES_FRMATR_BEGIN,
+  RES_FRMATR_END,
+  RES_PROTECT,
+} from "../../../inc/hintids";
+import { SfxItemSet, type WhichRangesContainer } from "../../../../svl/source/items/itemset";
+import type { SearchAttrItemList } from "../../../../svx/source/dialog/srchdlg";
+import { FindAttrs, ReplaceAttrs } from "../../core/crsr/findattr";
 import { FindFormat } from "../../core/crsr/findcoll";
 import {
   getWriterMaterializedParagraphStyleDefinition,
@@ -67,6 +78,8 @@ export interface WriterSearchItem {
   readonly selection: boolean;
   readonly searchOptions?: SearchOptions2;
   readonly searchInNotes?: boolean;
+  readonly searchAttributes?: SearchAttrItemList | undefined;
+  readonly replaceAttributes?: SearchAttrItemList | undefined;
 }
 
 /** The represented SvxSearchItem value exchanged by Writer search slots. */
@@ -632,7 +645,11 @@ export class SwViewSearch {
   ): WriterSearchResult {
     if (item.searchInNotes)
       throw new Error("Writer notes and layout-text search are not implemented.");
-    if (item.styleSearch ? !item.searchStyle : item.search.length === 0)
+    const searchesAttributes = Boolean(item.searchAttributes?.GetEntries().length);
+    const replacing = command === SvxSearchCmd.REPLACE || command === SvxSearchCmd.REPLACE_ALL;
+    const replacesAttributes = replacing && Boolean(item.replaceAttributes?.GetEntries().length);
+    const attributeMode = searchesAttributes || replacesAttributes;
+    if (!attributeMode && (item.styleSearch ? !item.searchStyle : item.search.length === 0))
       return { matches: 0, wrapped: false };
     const inSelection = item.selection;
     if (inSelection && !this.HasSelection()) return { matches: 0, wrapped: false };
@@ -646,131 +663,193 @@ export class SwViewSearch {
     const first = backward ? SwDocPositions.End : SwDocPositions.Start;
     const last = backward ? SwDocPositions.Start : SwDocPositions.End;
     const document = this.shell.GetDoc();
-    const style = item.styleSearch
-      ? (this.GetParaStyle(item.searchStyle) ?? document.GetDfltTextFormatColl())
-      : undefined;
+    const style =
+      item.styleSearch && !attributeMode
+        ? (this.GetParaStyle(item.searchStyle) ?? document.GetDfltTextFormatColl())
+        : undefined;
     const acceptsNode = createSearchNodeFilter(document, this.pageStories);
     const replaceAll = command === SvxSearchCmd.REPLACE_ALL;
-    return this.shell.RunNotificationTransaction(
-      /** Releases the new cursor and editing notifications together. @returns Search feedback. */ () => {
-        const result = document.RunModelTransaction(
-          /** Publishes edits only after restoring the view cursor. @returns Search feedback. */ () => {
-            if (command === SvxSearchCmd.REPLACE) {
-              if (backward) this.shell.Push();
-              try {
-                if (style === undefined)
-                  this.ReplaceSelection(cursor, options, item.replacement, last, acceptsNode);
-                else {
-                  const replacement = this.GetParaStyle(item.replaceStyle);
-                  setTextFormatCollAtShell(
-                    this.shell,
-                    replacement ?? document.GetDfltTextFormatColl(),
-                    false,
-                    /** Rejects a style replacement with a protected selection endpoint. @param range - Shell selection. @returns Whether it admits editing. */ (
-                      range,
-                    ) =>
-                      canReplaceAtNode(range.GetPoint().GetNode()) &&
-                      canReplaceAtNode(range.GetMark().GetNode()),
-                  );
-                }
-              } finally {
-                if (backward) this.shell.Pop(PopMode.DeleteStack);
-              }
-              if (backward) this.shell.GetCursor_().Exchange();
-            }
-
-            const fromTableCaret = !inSelection && this.shell.HasBoxSelection();
-            const search = fromTableCaret
-              ? new SwCursor(this.shell.getShellCursor().GetPoint())
-              : createSearchCursor(cursor, inSelection);
-            if (replaceAll) this.shell.Push();
-            let transferred = false;
-            try {
-              // Keep the table cursor alive so Pop can regenerate its box selections.
-              if (replaceAll && !inSelection && !fromTableCaret) this.shell.ClearMark();
-              const all = command === SvxSearchCmd.FIND_ALL || command === SvxSearchCmd.REPLACE_ALL;
-              if (all) this.searchInOther = false;
-              if (all) search.Normalize(backward);
-              const replacement =
-                style !== undefined && replaceAll
-                  ? this.GetParaStyle(item.replaceStyle)
-                  : undefined;
-              const replacesMatches =
-                replaceAll && (style === undefined || replacement !== undefined);
-              const acceptsResult: SwSearchNodeFilter = replacesMatches
-                ? /** Skips protected results when the model strategy can edit them. @param node - Candidate. @returns Whether the candidate is editable and visible. */ (
-                    node,
-                  ) => acceptsNode(node) && canReplaceAtNode(node)
-                : acceptsNode;
-              const find =
-                /** Dispatches to the native model strategy in the given area. @param from - Start boundary. @param ranges - Search scope. @returns Match count. */ (
-                  from: SwDocPositions,
-                  ranges: FindRanges,
-                ): number => {
-                  const matches =
-                    style === undefined
-                      ? search.Find_Text(
-                          options,
-                          false,
-                          from,
+    const attrRanges: WhichRangesContainer = [
+      [RES_CHRATR_BEGIN, RES_CHRATR_END - 1],
+      [RES_PARATR_BEGIN, RES_PARATR_END - 1],
+      [RES_FRMATR_BEGIN, RES_FRMATR_END - 1],
+    ];
+    const searchSet = new SfxItemSet(document.GetAttrPool(), attrRanges);
+    const replaceSet = new SfxItemSet(document.GetAttrPool(), attrRanges);
+    try {
+      item.searchAttributes?.Get(searchSet);
+      if (replacing) item.replaceAttributes?.Get(replaceSet);
+      const textOptions = item.search.length === 0 ? undefined : options;
+      return this.shell.RunNotificationTransaction(
+        /** Releases the new cursor and editing notifications together. @returns Search feedback. */ () => {
+          const result = document.RunModelTransaction(
+            /** Publishes edits only after restoring the view cursor. @returns Search feedback. */ () => {
+              if (command === SvxSearchCmd.REPLACE) {
+                if (backward) this.shell.Push();
+                try {
+                  if (attributeMode && cursor.HasMark()) {
+                    const match = createSearchCursor(cursor, true);
+                    try {
+                      if (
+                        FindAttrs(
+                          match,
+                          searchSet,
+                          item.styleSearch,
+                          SwDocPositions.Curr,
                           last,
-                          [false],
-                          ranges,
-                          replaceAll,
-                          undefined,
-                          acceptsResult,
-                        )
-                      : FindFormat(
-                          search,
-                          style,
-                          replacement,
-                          from,
-                          last,
-                          ranges,
-                          this.shell.CaptureCursorState(),
-                          acceptsResult,
-                        );
-                  // Native InOther keeps its saved point in the working ring (WRITER-024).
-                  // The view publishes only the match for this single-result pass.
-                  if (ranges === FindRanges.InOther) disposeSearchRing(search);
-                  return matches;
-                };
-              const result = all
-                ? {
-                    matches: find(
-                      first,
-                      (inSelection ? FindRanges.InSel : FindRanges.InBody) | FindRanges.InSelAll,
-                    ),
-                    wrapped: false,
+                          FindRanges.InSel,
+                          textOptions,
+                          acceptsNode,
+                        ) > 0 &&
+                        canReplaceAtNode(match.GetPoint().GetNode())
+                      ) {
+                        const undo = document.GetUndoManager();
+                        const record = undo.DoesUndo();
+                        if (record) undo.StartUndo("Replace");
+                        try {
+                          const text =
+                            item.replacement || (replaceSet.Count() === 0 ? "" : undefined);
+                          ReplaceAttrs(match, text, replaceSet);
+                        } finally {
+                          if (record) undo.EndUndo();
+                        }
+                        this.shell.SetPaM(match.GetPoint(), match.GetMark());
+                      }
+                    } finally {
+                      disposeSearchRing(match);
+                      match.Dispose();
+                    }
+                  } else if (style === undefined)
+                    this.ReplaceSelection(cursor, options, item.replacement, last, acceptsNode);
+                  else {
+                    const replacement = this.GetParaStyle(item.replaceStyle);
+                    setTextFormatCollAtShell(
+                      this.shell,
+                      replacement ?? document.GetDfltTextFormatColl(),
+                      false,
+                      /** Rejects a style replacement with a protected selection endpoint. @param range - Shell selection. @returns Whether it admits editing. */ (
+                        range,
+                      ) =>
+                        canReplaceAtNode(range.GetPoint().GetNode()) &&
+                        canReplaceAtNode(range.GetMark().GetNode()),
+                    );
                   }
-                : this.SearchAndWrap(search, first, inSelection, find);
-              const { matches } = result;
-              if (replaceAll) {
-                if (matches > 0 && !this.shell.IsTableMode()) disposeSearchRing(cursor);
-              } else if (matches > 0 || (!all && inSelection)) {
-                this.shell.ClearMark();
-                this.shell.SetPaM(
-                  search.GetPoint(),
-                  search.HasMark() ? search.GetMark() : undefined,
-                );
-                search.GetRingContainer().merge(this.shell.GetCursor_().GetRingContainer());
-                transferred = true;
-              } else if (!inSelection) {
-                this.shell.ClearMark();
-                if (!all) this.shell.SetCursor(search.GetPoint());
+                } finally {
+                  if (backward) this.shell.Pop(PopMode.DeleteStack);
+                }
+                if (backward) this.shell.GetCursor_().Exchange();
               }
-              if (!replaceAll || matches > 0) this.lastCommand = command;
-              return result;
-            } finally {
-              if (!transferred) disposeSearchRing(search);
-              search.Dispose();
-              if (replaceAll) this.shell.Pop(PopMode.DeleteCurrent);
-            }
-          },
-        );
-        this.shell.NotifySelectionChanged();
-        return result;
-      },
-    );
+
+              const fromTableCaret = !inSelection && this.shell.HasBoxSelection();
+              const search = fromTableCaret
+                ? new SwCursor(this.shell.getShellCursor().GetPoint())
+                : createSearchCursor(cursor, inSelection);
+              if (replaceAll) this.shell.Push();
+              let transferred = false;
+              try {
+                // Keep the table cursor alive so Pop can regenerate its box selections.
+                if (replaceAll && !inSelection && !fromTableCaret) this.shell.ClearMark();
+                const all =
+                  command === SvxSearchCmd.FIND_ALL || command === SvxSearchCmd.REPLACE_ALL;
+                if (all) this.searchInOther = false;
+                if (all) search.Normalize(backward);
+                const replacement =
+                  style !== undefined && replaceAll
+                    ? this.GetParaStyle(item.replaceStyle)
+                    : undefined;
+                const replacesMatches =
+                  replaceAll && (style === undefined || replacement !== undefined);
+                const acceptsResult: SwSearchNodeFilter = replacesMatches
+                  ? /** Skips protected results when the model strategy can edit them. @param node - Candidate. @returns Whether the candidate is editable and visible. */ (
+                      node,
+                    ) => acceptsNode(node) && canReplaceAtNode(node)
+                  : acceptsNode;
+                const find =
+                  /** Dispatches to the native model strategy in the given area. @param from - Start boundary. @param ranges - Search scope. @returns Match count. */ (
+                    from: SwDocPositions,
+                    ranges: FindRanges,
+                  ): number => {
+                    const matches = attributeMode
+                      ? FindAttrs(
+                          search,
+                          searchSet,
+                          item.styleSearch,
+                          from,
+                          last,
+                          ranges,
+                          textOptions,
+                          acceptsResult,
+                          replaceAll
+                            ? { text: textOptions && item.replacement, set: replaceSet }
+                            : undefined,
+                        )
+                      : style === undefined
+                        ? search.Find_Text(
+                            options,
+                            false,
+                            from,
+                            last,
+                            [false],
+                            ranges,
+                            replaceAll,
+                            undefined,
+                            acceptsResult,
+                          )
+                        : FindFormat(
+                            search,
+                            style,
+                            replacement,
+                            from,
+                            last,
+                            ranges,
+                            this.shell.CaptureCursorState(),
+                            acceptsResult,
+                          );
+                    // Native InOther keeps its saved point in the working ring (WRITER-024).
+                    // The view publishes only the match for this single-result pass.
+                    if (ranges === FindRanges.InOther) disposeSearchRing(search);
+                    return matches;
+                  };
+                const result = all
+                  ? {
+                      matches: find(
+                        first,
+                        (inSelection ? FindRanges.InSel : FindRanges.InBody) | FindRanges.InSelAll,
+                      ),
+                      wrapped: false,
+                    }
+                  : this.SearchAndWrap(search, first, inSelection, find);
+                const { matches } = result;
+                if (replaceAll) {
+                  if (matches > 0 && !this.shell.IsTableMode()) disposeSearchRing(cursor);
+                } else if (matches > 0 || (!all && inSelection)) {
+                  this.shell.ClearMark();
+                  this.shell.SetPaM(
+                    search.GetPoint(),
+                    search.HasMark() ? search.GetMark() : undefined,
+                  );
+                  search.GetRingContainer().merge(this.shell.GetCursor_().GetRingContainer());
+                  transferred = true;
+                } else if (!inSelection) {
+                  this.shell.ClearMark();
+                  if (!all) this.shell.SetCursor(search.GetPoint());
+                }
+                if (!replaceAll || matches > 0) this.lastCommand = command;
+                return result;
+              } finally {
+                if (!transferred) disposeSearchRing(search);
+                search.Dispose();
+                if (replaceAll) this.shell.Pop(PopMode.DeleteCurrent);
+              }
+            },
+          );
+          this.shell.NotifySelectionChanged();
+          return result;
+        },
+      );
+    } finally {
+      searchSet.Dispose();
+      replaceSet.Dispose();
+    }
   }
 }

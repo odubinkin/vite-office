@@ -1,0 +1,28 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "browser-adaptation",
+    "localPath": "apps/office/src/sw/browser/presentation/writer-search-format-values.ts",
+    "localSymbols": [
+      "describeSearchAttributes"
+    ],
+    "status": "local-only",
+    "rationale": "Shares the represented formatting choices and localized descriptions between the dialog and the search and replacement entries.",
+    "responsibilities": [
+      "Shares the represented formatting choices and localized descriptions between the dialog and the search and replacement entries."
+    ],
+    "stackDivergence": {
+      "kind": "browser-adaptation",
+      "rationale": "Browser controls provide the pinned VCL dialog structure."
+    },
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sw/browser/presentation/writer-search-format-values.ts",
+          "marker": "describeSearchAttributes"
+        }
+      ]
+    }
+  }
+}

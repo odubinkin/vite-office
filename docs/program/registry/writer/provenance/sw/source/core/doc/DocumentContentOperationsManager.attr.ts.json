@@ -34,11 +34,12 @@
       "InsertItemSet"
     ],
     "omittedResponsibilities": [
-      "General editing/undo/word-interior profiles, unrepresented sections/flys/redlines and desktop shell/layout services are not implemented by this consumed filter profile. Full filter/module parity remains unverified."
+      "General paragraph editing, word-interior collapsed edits, unrepresented sections, fly frames, redlines and desktop layout services remain outside the represented profiles."
     ],
     "preservedResponsibilities": [
       "S3HW1E HTML39 connects original HTML insertion double split, target GetParaAttr snapshot, Standard collection, prefix join and accepted suffix cleanup over actual document/cursor owners. SetTextCollAttrs clones and suppresses equal target items by value before native no-undo collapsed-boundary InsertItemSet. Native Cut joins transfer source hard items and preserve source portion boundaries until destination insertion, with original moved/recreated flags. Actual all-mark lookup includes UNO positions while the user bookmark catalog stays separate. Browser open/save/autosave/recovery deviations are unchanged. Table token materialization, actual text measurement, automatic table layout and final current-model/filter/UI reconciliation remain pending; whole-module and compiled desktop parity remain unverified.",
-      "Applies drawing fill as native paragraph OtherSet across the actual selection."
+      "Applies drawing fill as native paragraph OtherSet across the actual selection.",
+      "Applies native selected character items through the same SwUndoAttr construction used by SwEditShell, including full-node formatting and grouped formatted replacements."
     ],
     "status": "mapped",
     "upstreamPath": "sw/source/core/doc/DocumentContentOperationsManager.cxx",

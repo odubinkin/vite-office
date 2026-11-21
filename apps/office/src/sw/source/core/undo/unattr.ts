@@ -17,13 +17,20 @@ import {
 import type { SvxFontItem } from "../../../../editeng/inc/fontitem";
 import type { SwTextFragment, SwTextNode, WriterParagraphAlignment } from "../txtnode/ndtxt";
 import type { SfxPoolItem } from "../../../../svl/source/items/poolitem";
-import { SwPaM, SwPosition } from "../crsr/pam";
+import { SwPaM, SwPosition, type WriterTextRange } from "../crsr/pam";
 import type { SwDoc } from "../doc/doc";
 import { SwRegHistory, SwHistory } from "./rolbck";
 import { SfxItemSet } from "../../../../svl/source/items/itemset";
-import { RES_CHRATR_BEGIN, RES_CHRATR_END } from "../../../inc/hintids";
+import {
+  RES_CHRATR_BEGIN,
+  RES_CHRATR_END,
+  WRITER_CHARACTER_WHICH_RANGES,
+} from "../../../inc/hintids";
 import { getTextFormatCollNodes } from "../doc/docfmt";
 import { SwpHints } from "../txtnode/ndhints";
+import { setCharacterItems } from "../txtnode/ndhints-font";
+import { SwFormatAutoFormat } from "../txtnode/txatbase";
+import { MakeTextAttr } from "../txtnode/thints";
 import { clipHintOutsideRange } from "../txtnode/ndhints-range";
 import { AssertTextNodeRange } from "../txtnode/ndtxt-hints";
 import {
@@ -123,6 +130,75 @@ export class SwUndoResetAttr extends SwUndo {
       range.Dispose();
       point.Dispose();
     }
+  }
+}
+
+/** Captures a native character attribute edit for shell commands and document operations. @param range - Same-node range. @param items - Direct attributes. @param before - Cursor before. @param after - Cursor after. @returns Attribute history action. */
+export function MakeCharacterFormattingUndo(
+  range: WriterTextRange,
+  items: SfxItemSet,
+  before: SwUndoCursorState,
+  after: SwUndoCursorState,
+): SwUndoAttr {
+  const { node, start, end } = range;
+  const doc = node.GetDoc();
+  const pool = doc.GetAttrPool();
+  const collapsed = start === end;
+  const original = collapsed
+    ? { text: "", hints: new SwpHints(pool) }
+    : node.CaptureTextFragment(start, end);
+  const replacement = { text: original.text, hints: new SwpHints(pool) };
+  const insertion = new SfxItemSet(pool, WRITER_CHARACTER_WHICH_RANGES);
+  try {
+    if (collapsed) {
+      for (const hint of node.GetpSwpHints()?.entries() ?? []) {
+        if (hint.GetStart() !== start || hint.GetEnd() !== end) continue;
+        const copy = hint.clone();
+        copy.SetStart(0);
+        copy.SetEnd(0);
+        original.hints.Insert(copy);
+        if (hint.format instanceof SwFormatAutoFormat)
+          insertion.PutSet(hint.format.GetStyleHandle());
+        else replacement.hints.Insert(copy.clone());
+      }
+      insertion.PutSet(items);
+      replacement.hints.Insert(MakeTextAttr(doc, insertion, 0, 0));
+    } else {
+      replacement.hints.Dispose();
+      replacement.hints = setCharacterItems(
+        original.hints,
+        pool,
+        original.text.length,
+        0,
+        original.text.length,
+        items.entries(),
+        node.GetSwAttrSet(),
+      );
+    }
+    const fullNode =
+      start === 0 &&
+      end === node.Len() &&
+      !node
+        .GetpSwpHints()
+        ?.entries()
+        .some(
+          /** Native full-node SetAttr uses hints when a character format is present. @param hint - Original hint. @returns Native flag. */ (
+            hint,
+          ) => hint.IsCharFormatAttr(),
+        );
+    return new SwUndoAttr(
+      node,
+      start,
+      original,
+      replacement,
+      before,
+      after,
+      fullNode ? items : undefined,
+    );
+  } finally {
+    original.hints.Dispose();
+    replacement.hints.Dispose();
+    insertion.Dispose();
   }
 }
 

@@ -5,6 +5,7 @@ import {
   CH_TXT_ATR_FIELDSEP,
   CH_TXT_ATR_FIELDSTART,
   CH_TXT_ATR_FORMELEMENT,
+  RES_TXTATR_CHARFMT,
 } from "../../../inc/hintids";
 import { SwTextAttrEnd } from "../txtnode/txatbase";
 import { SwAttrHandler } from "./atrstck";
@@ -16,8 +17,11 @@ export class SwAttrIter {
   private m_nEndIndex = 0;
   private m_nPosition = 0;
 
-  /** Initializes the iterator over the actual node and inherited paragraph items. @param m_pTextNode - Canonical owner. @returns Nothing. */
-  public constructor(private readonly m_pTextNode: SwTextNode) {
+  /** Initializes the iterator over the actual node and inherited paragraph items. @param m_pTextNode - Canonical owner. @param includeCollections - Whether named character collections participate. @returns Nothing. */
+  public constructor(
+    private readonly m_pTextNode: SwTextNode,
+    private readonly includeCollections = true,
+  ) {
     this.m_aAttrHandler.Init(m_pTextNode.GetSwAttrSet());
   }
 
@@ -60,7 +64,11 @@ export class SwAttrIter {
         hints.Get(this.m_nStartIndex).GetStart() <= position
       ) {
         const hint = hints.Get(this.m_nStartIndex++);
-        if (hint instanceof SwTextAttrEnd && hint.GetEnd() > position)
+        if (
+          hint instanceof SwTextAttrEnd &&
+          hint.GetEnd() > position &&
+          (this.includeCollections || hint.Which() !== RES_TXTATR_CHARFMT)
+        )
           this.m_aAttrHandler.PushAndChg(hint);
       }
     }
