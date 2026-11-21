@@ -31,7 +31,7 @@ test("Writer Find and Replace restores editor focus and undoes all replacements 
   await expect(editor).toHaveText("cat scatter cat");
 });
 
-test("Writer inserts a comment from the toolbar and finds its text", /** Drives the ordinary comment and search controls in Chromium. @param fixtures - Playwright fixtures. @param fixtures.page - Chromium page. @returns Test completion. */ async ({
+test("Writer inserts a comment, finds its text and undoes note formatting", /** Drives the ordinary comment and search controls in Chromium. @param fixtures - Playwright fixtures. @param fixtures.page - Chromium page. @returns Test completion. */ async ({
   page,
 }) => {
   await page.goto("/writer");
@@ -39,7 +39,8 @@ test("Writer inserts a comment from the toolbar and finds its text", /** Drives 
   await page.getByRole("button", { name: "Comment", exact: true }).click();
   const comment = page.getByRole("textbox", { name: "Comment — Unknown Author" });
   await expect(comment).toBeFocused();
-  await comment.fill("Find this annotation");
+  await page.keyboard.insertText("Find this annotation");
+  await expect(comment).toHaveText("Find this annotation");
   await page.keyboard.press("Escape");
   await expect(page.getByLabel("Writer document body", { exact: true })).toBeFocused();
 
@@ -51,10 +52,17 @@ test("Writer inserts a comment from the toolbar and finds its text", /** Drives 
   await dialog.getByLabel("Find", { exact: true }).fill("annotation");
   await dialog.getByRole("button", { name: "Find Next", exact: true }).click();
   await expect(comment).toBeFocused();
-  const selected = await comment.evaluate(
-    /** Reads the selected comment text. @param input - Native textarea. @returns Matched text. */ (
-      input: HTMLTextAreaElement,
-    ) => input.value.slice(input.selectionStart, input.selectionEnd),
+  const selected = await page.evaluate(
+    /** Reads the annotation's native browser selection. @returns Matched text. */ () =>
+      document.getSelection()?.toString(),
   );
   expect(selected).toBe("annotation");
+  await page.keyboard.press("Control+b");
+  await expect(comment.locator("span").filter({ hasText: /^annotation$/u })).toHaveCSS(
+    "font-weight",
+    "700",
+  );
+  await page.keyboard.press("Control+z");
+  await expect(comment).toHaveText("Find this annotation");
+  await expect(comment.locator("span[style*='font-weight']")).toHaveCount(0);
 });

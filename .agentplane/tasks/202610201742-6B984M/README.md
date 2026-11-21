@@ -4,7 +4,7 @@ title: "Implement Writer search and replace core and browser UI"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 89
+revision: 90
 origin:
   system: "manual"
 depends_on:
@@ -262,6 +262,9 @@ comments:
   -
     author: "CODER"
     body: "Verified intermediate Writer annotation import checkpoint. The shared ODT paragraph parser switches to the detached annotation TextRange cursor, inserts text and structural controls into native EditEngine, applies represented item members, removes the parser's trailing separator and restores the containing cursor before the ordinary annotation attachment. The pinned annotation fixture verifies stable range and graph transport. Save/reopen verifies native UTF-16 spans, bold, underline, background color, centered alignment, vertical spacing, tab and line-break items and trailing empty paragraph. Shared export projects the represented paragraph spacing properties. The native SvxColorItem now owns MID_GRAPHIC_TRANSPARENT according to pinned textitem.cxx. Final focused runs passed 42 Writer and 34 shared tests plus 2 resource tests. Build, dependencies, source tree, provenance, scoped ESLint and Prettier, routing, doctor and diff checks passed. Repository JSDoc and size checks report existing issues outside the changed files. Named formatting is resolved to represented values. Lists, hyperlinks and visible rich annotation editing remain pending. The task remains open and the ten-task cadence is unchanged."
+  -
+    author: "CODER"
+    body: "Verified intermediate Writer annotation editing checkpoint. The existing sidebar window now presents native EditEngine paragraphs and character attributes in a browser editing host. Browser selection maps to native note positions while the document body keeps its separate shell selection. Beforeinput, clipboard text, composition, paragraph and soft line breaks, selected bold/italic/underline and undo use Writer history and the same field objects as search and ODT. Same-text formatting updates retain the selection, corresponding to SwAnnotationWin::SetPostItText. The primary Vitest run passed 33 cases and timed out on one Find Bar history case under load. The unchanged timed-out case passed in isolation, and all seven sidebar cases passed on final sources. Two focused browser tests passed on the final build in the already installed Chrome channel after the default Chromium executable was unavailable. Writer resources passed 2 cases. Production single-threaded build with type checking, dependencies, source tree and provenance, scoped ESLint and Prettier, doctor, routing and diff checks passed. Repo-wide JSDoc and file size report existing findings outside these changes. Full annotation toolbar/slot dispatch, hyperlinks, lists and complete formatting parity remain pending. No task closure or full-run count increment."
 events:
   -
     type: "status"
@@ -640,8 +643,13 @@ events:
     at: "2026-11-21T17:45:23.705Z"
     author: "CODER"
     body: "Verified intermediate Writer annotation import checkpoint. The shared ODT paragraph parser switches to the detached annotation TextRange cursor, inserts text and structural controls into native EditEngine, applies represented item members, removes the parser's trailing separator and restores the containing cursor before the ordinary annotation attachment. The pinned annotation fixture verifies stable range and graph transport. Save/reopen verifies native UTF-16 spans, bold, underline, background color, centered alignment, vertical spacing, tab and line-break items and trailing empty paragraph. Shared export projects the represented paragraph spacing properties. The native SvxColorItem now owns MID_GRAPHIC_TRANSPARENT according to pinned textitem.cxx. Final focused runs passed 42 Writer and 34 shared tests plus 2 resource tests. Build, dependencies, source tree, provenance, scoped ESLint and Prettier, routing, doctor and diff checks passed. Repository JSDoc and size checks report existing issues outside the changed files. Named formatting is resolved to represented values. Lists, hyperlinks and visible rich annotation editing remain pending. The task remains open and the ten-task cadence is unchanged."
+  -
+    type: "comment"
+    at: "2026-11-21T18:12:02.055Z"
+    author: "CODER"
+    body: "Verified intermediate Writer annotation editing checkpoint. The existing sidebar window now presents native EditEngine paragraphs and character attributes in a browser editing host. Browser selection maps to native note positions while the document body keeps its separate shell selection. Beforeinput, clipboard text, composition, paragraph and soft line breaks, selected bold/italic/underline and undo use Writer history and the same field objects as search and ODT. Same-text formatting updates retain the selection, corresponding to SwAnnotationWin::SetPostItText. The primary Vitest run passed 33 cases and timed out on one Find Bar history case under load. The unchanged timed-out case passed in isolation, and all seven sidebar cases passed on final sources. Two focused browser tests passed on the final build in the already installed Chrome channel after the default Chromium executable was unavailable. Writer resources passed 2 cases. Production single-threaded build with type checking, dependencies, source tree and provenance, scoped ESLint and Prettier, doctor, routing and diff checks passed. Repo-wide JSDoc and file size report existing findings outside these changes. Full annotation toolbar/slot dispatch, hyperlinks, lists and complete formatting parity remain pending. No task closure or full-run count increment."
 doc_version: 3
-doc_updated_at: "2026-11-21T17:45:23.705Z"
+doc_updated_at: "2026-11-21T18:12:02.055Z"
 doc_updated_by: "CODER"
 description: "Implement the approved coherent Writer search-and-replace feature from pinned LibreOffice sources: real shared search engine and options, native paragraph/cursor traversal and replacement/history contracts, view-owned search state and dispatch, Find toolbar and Find and Replace dialog with generated upstream command placement and shortcuts. Preserve source semantics and explicit unsupported boundaries; never substitute DOM text search or browser RegExp for ICU contracts. Work only on writer in vite-office-writer; local upstream reading approved, no network or merges. Keep active until approved scope is verified."
 sections:

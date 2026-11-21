@@ -145,6 +145,35 @@ export interface WriterParagraphListLayout {
   readonly listTabPositionPt: number;
 }
 
+/** Maps native visible line variants to CSS decoration families. @param style - Native decoration style. @returns Browser decoration style. */
+export function browserTextLineStyle(
+  style: FontLineStyle,
+): "solid" | "double" | "dotted" | "dashed" | "wavy" {
+  switch (style) {
+    case FontLineStyle.LINESTYLE_DOUBLE:
+      return "double";
+    case FontLineStyle.LINESTYLE_DOTTED:
+    case FontLineStyle.LINESTYLE_BOLDDOTTED:
+      return "dotted";
+    case FontLineStyle.LINESTYLE_DASH:
+    case FontLineStyle.LINESTYLE_LONGDASH:
+    case FontLineStyle.LINESTYLE_DASHDOT:
+    case FontLineStyle.LINESTYLE_DASHDOTDOT:
+    case FontLineStyle.LINESTYLE_BOLDDASH:
+    case FontLineStyle.LINESTYLE_BOLDLONGDASH:
+    case FontLineStyle.LINESTYLE_BOLDDASHDOT:
+    case FontLineStyle.LINESTYLE_BOLDDASHDOTDOT:
+      return "dashed";
+    case FontLineStyle.LINESTYLE_SMALLWAVE:
+    case FontLineStyle.LINESTYLE_WAVE:
+    case FontLineStyle.LINESTYLE_DOUBLEWAVE:
+    case FontLineStyle.LINESTYLE_BOLDWAVE:
+      return "wavy";
+    default:
+      return "solid";
+  }
+}
+
 /** Native per-line color and style at the browser paint boundary. */
 export interface WriterTextLineProjection {
   readonly style: FontLineStyle;

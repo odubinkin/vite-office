@@ -1,6 +1,5 @@
 /** @fileoverview Projects Writer bookmark and annotation portions for ODF paragraph export. */
 import {
-  EE_CHAR_BKGCOLOR,
   EE_FEATURE_LINEBR,
   EE_FEATURE_START,
   EE_FEATURE_TAB,
@@ -10,17 +9,14 @@ import {
   EE_PARA_ULSPACE,
 } from "../../../../editeng/inc/eeitem";
 import { SvxAdjust, SvxAdjustItem } from "../../../../editeng/inc/adjustitem";
-import { SvxColorItem } from "../../../../editeng/inc/colritem";
 import { SvxLineSpacingItem } from "../../../../editeng/inc/lspcitem";
 import { SvxTabStopItem } from "../../../../editeng/inc/tstpitem";
 import { SvxULSpaceItem } from "../../../../editeng/inc/ulspitem";
 import type { Section } from "../../../../editeng/inc/section";
 import type { EditTextObject } from "../../../../editeng/source/editeng/editobj";
-import { SvxBrushItem } from "../../../../editeng/source/items/frmitems.brush";
 import { OUString } from "../../../../sal/inc/rtl/ustring";
 import { SfxStyleFamily } from "../../../../svl/inc/style-values";
 import { SfxItemSet } from "../../../../svl/source/items/itemset";
-import type { SfxPoolItem } from "../../../../svl/source/items/poolitem";
 import type {
   XMLTextParagraphMarker,
   XMLTextParagraphSource,
@@ -30,13 +26,9 @@ import type { XMLTextExportBlock } from "../../../../xmloff/source/table/XMLTabl
 import { Converter } from "../../../../sax/source/tools/converter";
 import { OUStringBuffer } from "../../../../sal/inc/rtl/ustrbuf";
 import { text } from "../../../../i18nlangtag/source/isolang/isolang.tables";
-import {
-  RES_CHRATR_BACKGROUND,
-  RES_TXTATR_ANNOTATION,
-  WRITER_CHARACTER_WHICH_RANGES,
-} from "../../../inc/hintids";
+import { RES_TXTATR_ANNOTATION, WRITER_CHARACTER_WHICH_RANGES } from "../../../inc/hintids";
 import { SwTextField } from "../../../inc/txtfld";
-import { getWriterAnnotationItemWhich } from "../../core/fields/textapi";
+import { putAnnotationCharacterItems } from "../../core/fields/textapi";
 import type { SwDoc } from "../../core/doc/doc";
 import { getCharacterProperties } from "./xmlexp-character";
 import {
@@ -278,19 +270,3 @@ const annotationAlignment = new Map<SvxAdjust, NonNullable<XMLTextParagraphSourc
   [SvxAdjust.Block, "justify"],
   [SvxAdjust.BlockLine, "justify"],
 ]);
-
-/** Projects native EditEngine character values into the common Writer text mapping. @param set - Output character-property set. @param items - Actual edit items. @returns Nothing. */
-function putAnnotationCharacterItems(set: SfxItemSet, items: readonly SfxPoolItem[]): void {
-  for (const item of items) {
-    const which = item.Which();
-    if (which === EE_CHAR_BKGCOLOR && item instanceof SvxColorItem) {
-      set.Put(
-        new SvxBrushItem(item.GetValue(), item.getComplexColor(), RES_CHRATR_BACKGROUND),
-        true,
-      );
-    } else {
-      const mapped = getWriterAnnotationItemWhich(which);
-      if (mapped !== undefined) set.PutAsTargetWhich(item, mapped);
-    }
-  }
-}

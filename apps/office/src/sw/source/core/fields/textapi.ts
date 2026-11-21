@@ -11,6 +11,8 @@ import { Any } from "../../../../cppu/inc/com/sun/star/uno/Any";
 import { EPaM } from "../../../../editeng/inc/EPaM";
 import { ESelection } from "../../../../editeng/inc/ESelection";
 import * as M from "../../../../editeng/inc/memberids";
+import { SvxColorItem } from "../../../../editeng/inc/colritem";
+import { SvxBrushItem } from "../../../../editeng/source/items/frmitems.brush";
 import { SvxULSpaceItem } from "../../../../editeng/inc/ulspitem";
 import { text, unicode } from "../../../../i18nlangtag/source/isolang/isolang.tables";
 import {
@@ -473,4 +475,20 @@ function putTextProperty(item: SfxPoolItem, value: Any, member: number, name: st
     return value.extract(margin, "sal_Int32") && item.PutValue(margin[0], member);
   }
   return item.PutValue(value, member);
+}
+
+/** Projects native EditEngine character values into the common Writer text mapping. @param set - Output character-property set. @param items - Actual edit items. @returns Nothing. */
+export function putAnnotationCharacterItems(set: SfxItemSet, items: readonly SfxPoolItem[]): void {
+  for (const item of items) {
+    const which = item.Which();
+    if (which === EE.EE_CHAR_BKGCOLOR && item instanceof SvxColorItem) {
+      set.Put(
+        new SvxBrushItem(item.GetValue(), item.getComplexColor(), Writer.RES_CHRATR_BACKGROUND),
+        true,
+      );
+    } else {
+      const mapped = writerWhich.get(which);
+      if (mapped !== undefined) set.PutAsTargetWhich(item, mapped);
+    }
+  }
 }

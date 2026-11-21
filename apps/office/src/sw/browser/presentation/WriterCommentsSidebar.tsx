@@ -17,16 +17,16 @@ function WriterCommentCard({
   readonly focusDocument: () => void;
   readonly view: SwView;
 }) {
-  const input = useRef<HTMLTextAreaElement>(null);
+  const input = useRef<HTMLDivElement>(null);
   const editor = useRef<WriterCommentEditor | null>(null);
   const localization = useBrowserLocalization();
   const field = format.GetField();
   const data = field.GetData();
   const noteLabel = localization.GetText("writer.comments.comment", "Comment");
   useLayoutEffect(
-    /** Binds this mounted textarea to its native field, edit document and comment window. @returns Release callback. */ () => {
+    /** Binds this mounted text surface to its native field, edit document and comment window. @returns Release callback. */ () => {
       if (!input.current) return;
-      const current = new WriterCommentEditor(field, input.current);
+      const current = new WriterCommentEditor(field, input.current, view.GetWrtShell());
       editor.current = current;
       const release = view.GetPostItMgr().RegisterSidebarWin(format, {
         editor: current.getImpl(),
@@ -38,7 +38,7 @@ function WriterCommentCard({
           current.MakeVisible();
         },
       });
-      return /** Releases the anchored editor before its textarea unmounts. @returns Nothing. */ () => {
+      return /** Releases the anchored editor before its text surface unmounts. @returns Nothing. */ () => {
         release();
         editor.current = null;
         current.Dispose();
@@ -53,13 +53,16 @@ function WriterCommentCard({
   return (
     <article className="rounded border border-amber-300 bg-amber-50 p-2">
       {data.author && <div className="mb-1 text-sm font-medium text-slate-800">{data.author}</div>}
-      <textarea
+      <div
         ref={input}
         aria-label={data.author ? `${noteLabel} — ${data.author}` : noteLabel}
-        className="w-full resize-y rounded border border-transparent bg-transparent p-1 text-sm text-slate-900 outline-offset-1 focus:border-amber-400"
-        defaultValue={field.GetPar2()}
-        rows={3}
-        readOnly={view.GetWrtShell().GetViewOptions().IsReadonly()}
+        className="min-h-16 w-full whitespace-pre-wrap break-words rounded border border-transparent bg-transparent p-1 text-sm text-slate-900 outline-offset-1 focus:border-amber-400"
+        data-writer-editing-host="annotation"
+        role="textbox"
+        aria-multiline="true"
+        aria-readonly={view.GetWrtShell().GetViewOptions().IsReadonly()}
+        contentEditable={!view.GetWrtShell().GetViewOptions().IsReadonly()}
+        tabIndex={0}
         onFocus={
           /** Activates the model anchor when the user focuses the comment editor. @returns Nothing. */ () => {
             const hint = format.GetTextField();
@@ -81,8 +84,10 @@ function WriterCommentCard({
               event.nativeEvent.isComposing ||
               (event.key !== "Escape" &&
                 !((event.ctrlKey || event.metaKey) && ["PageUp", "PageDown"].includes(event.key)))
-            )
+            ) {
+              editor.current?.HandleKeyDown(event.nativeEvent);
               return;
+            }
             const hint = format.GetTextField();
             const node = hint?.GetTextNode();
             if (!hint || !node) return;
@@ -108,10 +113,6 @@ function WriterCommentCard({
         onSelect={
           /** Captures user selection for Find and Replace. @returns Nothing. */ () =>
             editor.current?.ReadSelection()
-        }
-        onChange={
-          /** Commits the native textarea edit. @returns Nothing. */ () =>
-            editor.current?.ReadInput()
         }
       />
     </article>

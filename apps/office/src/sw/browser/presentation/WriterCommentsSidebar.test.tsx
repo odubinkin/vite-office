@@ -2,6 +2,10 @@
 import { readFileSync } from "node:fs";
 import { act, fireEvent, render, screen, within } from "@testing-library/react";
 import { expect, it } from "vitest";
+import { EE_CHAR_WEIGHT } from "../../../editeng/inc/eeitem";
+import { SvxWeightItem } from "../../../editeng/inc/wghtitem";
+import { unicode } from "../../../i18nlangtag/source/isolang/isolang.tables";
+import { FontWeight } from "../../../tools/inc/fontenum";
 import { DateTime } from "../../../tools/source/datetime/datetime";
 import { SwFormatField } from "../../inc/fmtfld";
 import { SwTextField } from "../../inc/txtfld";
@@ -9,6 +13,10 @@ import { SwPosition } from "../../source/core/crsr/pam";
 import { SwPostItField, SwPostItFieldType } from "../../source/core/fields/docufld";
 import { WRITER_COMMAND_IDS } from "../../uiconfig/swriter/menubar/menubar-commands";
 import { createWriterDocumentSession } from "../composition/writer-module";
+import { SwTextAPIEditSource } from "../../source/core/fields/textapi";
+import { ESelection } from "../../../editeng/inc/ESelection";
+import { SfxItemSet } from "../../../svl/source/items/itemset";
+import { getWriterTextCaretPoint } from "../editor/writer-selection";
 import { WriterWorkbench } from "./writer-view";
 
 /** Opens a Writer session with one native annotation attached to a body paragraph. @param note - Initial comment text. @returns Mounted workbench and native field. */
@@ -30,12 +38,46 @@ function openAnnotatedDocument(note: string) {
   return { session, shell, format };
 }
 
+/** Reads displayed note text including paragraph separators. @param comment - Mounted comment. @returns Displayed string. */
+function noteText(comment: HTMLElement): string {
+  return Array.from(
+    comment.children,
+    /** Reads one rendered paragraph. @param paragraph - Paragraph. @returns Paragraph text. */ (
+      paragraph,
+    ) => paragraph.textContent,
+  ).join("\n");
+}
+
+/** Selects a native browser range in one rendered paragraph. @param comment - Mounted comment. @param start - Paragraph-relative start. @param end - Paragraph-relative end. @param index - Paragraph index. @returns Nothing. */
+function selectNote(comment: HTMLElement, start: number, end = start, index = 0): void {
+  const paragraph = comment.children[index];
+  if (!(paragraph instanceof HTMLParagraphElement)) throw new Error("Missing note paragraph.");
+  const first = getWriterTextCaretPoint(paragraph, start);
+  const last = getWriterTextCaretPoint(paragraph, end);
+  comment.ownerDocument
+    .getSelection()
+    ?.setBaseAndExtent(first.node, first.offset, last.node, last.offset);
+  fireEvent(comment.ownerDocument, new Event("selectionchange"));
+}
+
+/** Dispatches a browser edit intent as the editable host receives it. @param comment - Mounted comment. @param type - Platform input type. @param data - Inserted text. @returns Whether the native event was canceled. */
+function noteInput(comment: HTMLElement, type: string, data?: string): boolean {
+  const event = new InputEvent("beforeinput", {
+    bubbles: true,
+    cancelable: true,
+    inputType: type,
+    data: data ?? null,
+  });
+  fireEvent(comment, event);
+  return event.defaultPrevented;
+}
+
 it("focuses the matched comment, replaces its selection and undoes through Writer", /** Exercises the mounted sidebar, dialog option, selection, document field and undo. @returns Nothing. */ () => {
   const { session, shell, format } = openAnnotatedDocument("prefix target suffix");
   const workbench = render(<WriterWorkbench isActive view={session.view} />);
   try {
     const sidebar = screen.getByRole("complementary", { name: "Comments" });
-    const comment = within(sidebar).getByRole<HTMLTextAreaElement>("textbox", {
+    const comment = within(sidebar).getByRole<HTMLDivElement>("textbox", {
       name: "Comment — Ada",
     });
     fireEvent.keyDown(window, { key: "h", ctrlKey: true });
@@ -55,10 +97,9 @@ it("focuses the matched comment, replaces its selection and undoes through Write
     fireEvent.change(dialog.getByLabelText("Replace with"), { target: { value: "new" } });
     fireEvent.click(dialog.getByRole("button", { name: "Find Next" }));
     expect(comment).toHaveFocus();
-    expect(comment.selectionStart).toBe(7);
-    expect(comment.selectionEnd).toBe(13);
+    expect(document.getSelection()?.toString()).toBe("target");
     fireEvent.click(dialog.getByRole("button", { name: /^Replace$/ }));
-    expect(comment).toHaveValue("prefix new suffix");
+    expect(noteText(comment)).toBe("prefix new suffix");
     expect(format.GetField().GetPar2()).toBe("prefix new suffix");
     act(
       /** Undoes through the document's native undo owner. @returns Nothing. */ () => {
@@ -66,13 +107,13 @@ it("focuses the matched comment, replaces its selection and undoes through Write
       },
     );
     expect(format.GetField().GetPar2()).toBe("prefix target suffix");
-    expect(comment).toHaveValue("prefix target suffix");
+    expect(noteText(comment)).toBe("prefix target suffix");
     act(
       /** Redoes through the same document history. @returns Nothing. */ () => {
         expect(shell.Redo()).toBe(true);
       },
     );
-    expect(comment).toHaveValue("prefix new suffix");
+    expect(noteText(comment)).toBe("prefix new suffix");
   } finally {
     workbench.unmount();
     session.view.Close();
@@ -83,13 +124,12 @@ it("searches from the focused comment caret and releases it on document input", 
   const { session, shell, format } = openAnnotatedDocument("target between target");
   const workbench = render(<WriterWorkbench isActive view={session.view} />);
   try {
-    const comment = screen.getByRole<HTMLTextAreaElement>("textbox", { name: "Comment — Ada" });
+    const comment = screen.getByRole<HTMLDivElement>("textbox", { name: "Comment — Ada" });
     const manager = session.view.GetPostItMgr();
     act(
       /** Focuses the note and puts the caret after its first match. @returns Nothing. */ () => {
         comment.focus();
-        comment.setSelectionRange(6, 6);
-        fireEvent.select(comment);
+        selectNote(comment, 6);
       },
     );
     expect(manager.GetActiveField() === format).toBe(true);
@@ -108,8 +148,7 @@ it("searches from the focused comment caret and releases it on document input", 
     expect(manager.GetActiveField() === format).toBe(true);
     fireEvent.click(findNext);
     expect(comment).toHaveFocus();
-    expect(comment.selectionStart).toBe(15);
-    expect(comment.selectionEnd).toBe(21);
+    expect(document.getSelection()?.toString()).toBe("target");
 
     const close = dialog.getByRole("button", { name: "Close" });
     act(/** Moves focus to the dialog's Close button. @returns Nothing. */ () => close.focus());
@@ -127,15 +166,18 @@ it("preserves the inactive comment selection when it has no match", /** Exercise
   const { session, shell } = openAnnotatedDocument("miss between words");
   const workbench = render(<WriterWorkbench isActive view={session.view} />);
   try {
-    const comment = screen.getByRole<HTMLTextAreaElement>("textbox", { name: "Comment — Ada" });
+    const comment = screen.getByRole<HTMLDivElement>("textbox", { name: "Comment — Ada" });
     act(
       /** Leaves a noncollapsed selection in the inactive annotation. @returns Nothing. */ () => {
         comment.focus();
-        comment.setSelectionRange(5, 12);
-        fireEvent.select(comment);
+        selectNote(comment, 5, 12);
       },
     );
     fireEvent.mouseDown(screen.getByLabelText("Writer document body"));
+    act(
+      /** Moves device focus back to the body editing host. @returns Nothing. */ () =>
+        screen.getByLabelText("Writer document body").focus(),
+    );
     fireEvent.keyDown(window, { key: "h", ctrlKey: true });
     const dialog = within(screen.getByRole("dialog", { name: "Find and Replace" }));
     fireEvent.click(dialog.getByText("Other options"));
@@ -144,8 +186,15 @@ it("preserves the inactive comment selection when it has no match", /** Exercise
     fireEvent.change(dialog.getByLabelText("Find"), { target: { value: "text" } });
     fireEvent.click(dialog.getByRole("button", { name: "Find Next" }));
     expect(shell.GetSelText()).toBe("text");
-    expect(comment.selectionStart).toBe(5);
-    expect(comment.selectionEnd).toBe(12);
+    expect(comment).not.toHaveFocus();
+    act(
+      /** Returns to the note without letting the failed search overwrite its previous range. @returns Nothing. */ () => {
+        const [field] = SwPostItFieldType.Get(shell.GetDoc()).GatherFields();
+        if (!field) throw new Error("Missing comment.");
+        session.view.GetPostItMgr().Focus(field);
+      },
+    );
+    expect(document.getSelection()?.toString()).toBe("between");
   } finally {
     workbench.unmount();
     session.view.Close();
@@ -158,7 +207,7 @@ it("finds a Unicode regex in a later note paragraph and replaces its selection l
   const { session, shell, format } = openAnnotatedDocument(previous);
   const workbench = render(<WriterWorkbench isActive view={session.view} />);
   try {
-    const comment = screen.getByRole<HTMLTextAreaElement>("textbox", { name: "Comment — Ada" });
+    const comment = screen.getByRole<HTMLDivElement>("textbox", { name: "Comment — Ada" });
     fireEvent.keyDown(window, { key: "h", ctrlKey: true });
     const dialog = within(screen.getByRole("dialog", { name: "Find and Replace" }));
     fireEvent.click(dialog.getByText("Other options"));
@@ -170,12 +219,21 @@ it("finds a Unicode regex in a later note paragraph and replaces its selection l
     fireEvent.change(dialog.getByLabelText("Replace with"), { target: { value: "$1" } });
     fireEvent.click(dialog.getByRole("button", { name: "Find Next" }));
     expect(comment).toHaveFocus();
-    expect(comment.selectionStart).toBe(6);
-    expect(comment.selectionEnd).toBe(9);
+    expect(document.getSelection()?.toString()).toBe("😀7");
     fireEvent.click(dialog.getByRole("button", { name: /^Replace$/ }));
     expect(format.GetField().GetPar2()).toBe("intro\n$1 tail");
-    expect(comment).toHaveValue("intro\n$1 tail");
-    fireEvent.change(comment, { target: { value: replacement } });
+    expect(noteText(comment)).toBe("intro\n$1 tail");
+    act(
+      /** Places the caret after the literal replacement inside the second paragraph. @returns Nothing. */ () => {
+        comment.focus();
+        selectNote(comment, 2, 2, 1);
+      },
+    );
+    fireEvent.paste(comment, {
+      clipboardData: {
+        getData: /** Returns the platform paste text. @returns Inserted text. */ () => "\nnext",
+      },
+    });
     expect(format.GetField().GetPar2()).toBe(replacement);
     act(
       /** Reverses the note edit and then the regex replacement. @returns Nothing. */ () => {
@@ -183,7 +241,7 @@ it("finds a Unicode regex in a later note paragraph and replaces its selection l
         expect(shell.Undo()).toBe(true);
       },
     );
-    expect(comment).toHaveValue(previous);
+    expect(noteText(comment)).toBe(previous);
     expect(format.GetField().GetPar2()).toBe(previous);
   } finally {
     workbench.unmount();
@@ -203,7 +261,7 @@ it("finds a comment after the ordinary Writer ODT open", /** Exercises opening t
         await shell.Load(new Uint8Array(readFileSync(sample)), shell.GetDocumentState());
       },
     );
-    const comment = screen.getByRole<HTMLTextAreaElement>("textbox", {
+    const comment = screen.getByRole<HTMLDivElement>("textbox", {
       name: "Comment — Unknown Author",
     });
     fireEvent.keyDown(window, { key: "h", ctrlKey: true });
@@ -214,9 +272,7 @@ it("finds a comment after the ordinary Writer ODT open", /** Exercises opening t
     fireEvent.change(dialog.getByLabelText("Find"), { target: { value: "For empty paragraphs" } });
     fireEvent.click(dialog.getByRole("button", { name: "Find Next" }));
     expect(comment).toHaveFocus();
-    expect(comment.value.slice(comment.selectionStart, comment.selectionEnd)).toBe(
-      "For empty paragraphs",
-    );
+    expect(window.document.getSelection()?.toString()).toBe("For empty paragraphs");
   } finally {
     workbench.unmount();
     session.view.Close();
@@ -241,7 +297,7 @@ it("inserts and refocuses the native comment, then replays the insertion and its
   const workbench = render(<WriterWorkbench isActive view={session.view} />);
   try {
     fireEvent.keyDown(window, { key: "c", ctrlKey: true, altKey: true });
-    const comment = screen.getByRole<HTMLTextAreaElement>("textbox", {
+    const comment = screen.getByRole<HTMLDivElement>("textbox", {
       name: "Comment — Unknown Author",
     });
     expect(comment).toHaveFocus();
@@ -256,7 +312,7 @@ it("inserts and refocuses the native comment, then replays the insertion and its
     expect(comment).toHaveFocus();
     expect([...type.GatherFields()]).toHaveLength(1);
 
-    fireEvent.change(comment, { target: { value: "Clarify the range" } });
+    expect(noteInput(comment, "insertText", "Clarify the range")).toBe(true);
     act(
       /** Undoes the comment edit and then removes its insertion. @returns Nothing. */ () => {
         expect(shell.Undo()).toBe(true);
@@ -272,7 +328,7 @@ it("inserts and refocuses the native comment, then replays the insertion and its
         expect(shell.Redo()).toBe(true);
       },
     );
-    expect(screen.getByRole("textbox", { name: "Comment — Unknown Author" })).toHaveValue(
+    expect(noteText(screen.getByRole("textbox", { name: "Comment — Unknown Author" }))).toBe(
       "Clarify the range",
     );
     const restored = Array.from(type.GatherFields())[0];
@@ -290,7 +346,7 @@ it("inserts and refocuses the native comment, then replays the insertion and its
     expect(shell.GetCursor().GetPoint().GetContentIndex()).toBe(8);
     expect(session.view.GetPostItMgr().GetActiveField()).toBeUndefined();
     fireEvent.click(screen.getByRole("button", { name: /^Comment$/ }));
-    const editors = screen.getAllByRole<HTMLTextAreaElement>("textbox", {
+    const editors = screen.getAllByRole<HTMLDivElement>("textbox", {
       name: "Comment — Unknown Author",
     });
     expect(editors).toHaveLength(2);
@@ -307,6 +363,61 @@ it("inserts and refocuses the native comment, then replays the insertion and its
     expect(shell.GetCursor().GetPoint().GetContentIndex()).toBe(9);
     shell.GetViewOptions().SetReadonly(true);
     expect(session.view.QueryState(WRITER_COMMAND_IDS.insertAnnotation).enabled).toBe(false);
+  } finally {
+    workbench.unmount();
+    session.view.Close();
+  }
+});
+
+it("paints native note formatting and records formatting and line breaks in Writer history", /** Mounts a real rich annotation, formats a selection, and checks the EditEngine and DOM after undo. @returns Nothing. */ () => {
+  const { session, shell, format } = openAnnotatedDocument("One 😀 two");
+  const source = new SwTextAPIEditSource();
+  const initial = unicode("One 😀 two");
+  const items = new SfxItemSet(source.GetEmptyItemSet());
+  try {
+    source.SetText(initial);
+    items.Put(new SvxWeightItem(FontWeight.WEIGHT_BOLD, EE_CHAR_WEIGHT), true);
+    source.QuickSetAttribs(items, new ESelection(0, 0, 0, 3));
+    const snapshot = source.CreateTextObject();
+    try {
+      format.GetField().SetTextObject(snapshot);
+    } finally {
+      snapshot.dispose();
+    }
+  } finally {
+    initial.dispose();
+    items.Dispose();
+    source.Dispose();
+  }
+  const workbench = render(<WriterWorkbench isActive view={session.view} />);
+  try {
+    const comment = screen.getByRole<HTMLDivElement>("textbox", { name: "Comment — Ada" });
+    expect(within(comment).getByText("One").style.fontWeight).toBe("bold");
+    act(
+      /** Selects only the non-BMP character in the second run. @returns Nothing. */ () => {
+        comment.focus();
+        selectNote(comment, 4, 6);
+      },
+    );
+    expect(noteInput(comment, "formatUnderline")).toBe(true);
+    expect(within(comment).getByText("😀").style.textDecorationLine).toBe("underline");
+    expect(document.getSelection()?.toString()).toBe("😀");
+    act(
+      /** Replays a formatting-only edit without changing the note text. @returns Nothing. */ () => {
+        expect(shell.Undo()).toBe(true);
+      },
+    );
+    expect(noteText(comment)).toBe("One 😀 two");
+    expect(within(comment).queryByText("😀", { exact: true })).toBeNull();
+    expect(document.getSelection()?.toString()).toBe("😀");
+    act(
+      /** Places the caret before the final word. @returns Nothing. */ () => selectNote(comment, 7),
+    );
+    expect(noteInput(comment, "insertLineBreak")).toBe(true);
+    expect(noteText(comment)).toBe("One 😀 \ntwo");
+    expect(format.GetField().GetTextObject()?.GetParagraphCount()).toBe(1);
+    expect(noteInput(comment, "deleteContentBackward")).toBe(true);
+    expect(noteText(comment)).toBe("One 😀 two");
   } finally {
     workbench.unmount();
     session.view.Close();
