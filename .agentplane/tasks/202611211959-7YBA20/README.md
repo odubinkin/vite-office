@@ -1,10 +1,11 @@
 ---
 id: "202611211959-7YBA20"
 title: "Connect Calc Paste Transposed"
-status: "DOING"
+result_summary: "Connected Calc Paste Transposed and completed task nine of the ten-task verification cycle."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 9
+revision: 10
 origin:
   system: "manual"
 depends_on: []
@@ -42,11 +43,16 @@ quality_review:
     - "62fda08091d3d09b8a56bd58d171510d52d693de"
   findings:
     - "Cross-sheet testCopyPasteTranspose, mixed references, repeated transfer, dimensions and overflow pass in the native owners and mounted menu."
-commit: null
+commit:
+  hash: "62fda08091d3d09b8a56bd58d171510d52d693de"
+  message: "🧩 7YBA20 code: connect Calc Paste Transposed"
 comments:
   -
     author: "CODER"
     body: "Start: connect native transposed clipboard cells, references, patterns and the Calc command."
+  -
+    author: "CODER"
+    body: "Verified: connected Calc Paste Transposed through native clip geometry, border and formula rotation, and normal paste Undo. All 198 focused tests passed."
 events:
   -
     type: "status"
@@ -61,8 +67,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "198 focused Calc tests passed across 25 files, including the upstream copy-transpose port. Office TypeScript, changed paths, provenance, resources, dependencies and AgentPlane checks passed."
+  -
+    type: "status"
+    at: "2026-11-21T20:09:10.190Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: connected Calc Paste Transposed through native clip geometry, border and formula rotation, and normal paste Undo. All 198 focused tests passed."
 doc_version: 3
-doc_updated_at: "2026-11-21T20:07:48.732Z"
+doc_updated_at: "2026-11-21T20:09:10.190Z"
 doc_updated_by: "CODER"
 description: "Build the native transposed clipboard and connect the original Calc Paste Transposed command."
 sections:
