@@ -8,12 +8,21 @@ import { useBrowserLocalization } from "../../../framework/browser/localization/
 import { SfxItemSet, SfxItemState } from "../../../svl/source/items/itemset";
 import * as EE from "../../../editeng/inc/eeitem";
 import { SvxBrushItem } from "../../../editeng/inc/brushitem";
+import { SvxAutoKernItem } from "../../../editeng/inc/autokernitem";
 import { SvxKerningItem } from "../../../editeng/inc/kernitem";
 import * as SW from "../../inc/hintids";
 import { SvxColorItem } from "../../../editeng/inc/colritem";
 import { SvxFontItem } from "../../../editeng/inc/fontitem";
 import { SvxFontHeightItem } from "../../../editeng/inc/fhgtitem";
-import { SvxEscapementItem } from "../../../editeng/inc/escapementitem";
+import {
+  DFLT_ESC_AUTO_SUB,
+  DFLT_ESC_AUTO_SUPER,
+  DFLT_ESC_PROP,
+  DFLT_ESC_SUB,
+  DFLT_ESC_SUPER,
+  MAX_ESC_POS,
+  SvxEscapementItem,
+} from "../../../editeng/inc/escapementitem";
 import { SvxCaseMapItem } from "../../../editeng/inc/cmapitem";
 import { SvxEscapement } from "../../../editeng/inc/svxenum";
 import {
@@ -65,6 +74,7 @@ const characterItems = {
     relief: EE.EE_CHAR_RELIEF,
     position: EE.EE_CHAR_ESCAPEMENT,
     spacing: EE.EE_CHAR_KERNING,
+    pairKerning: EE.EE_CHAR_PAIRKERNING,
     color: EE.EE_CHAR_COLOR,
     background: EE.EE_CHAR_BKGCOLOR,
   },
@@ -84,10 +94,44 @@ const characterItems = {
     relief: SW.RES_CHRATR_RELIEF,
     position: SW.RES_CHRATR_ESCAPEMENT,
     spacing: SW.RES_CHRATR_KERNING,
+    pairKerning: SW.RES_CHRATR_AUTOKERN,
     color: SW.RES_CHRATR_COLOR,
     background: SW.RES_CHRATR_BACKGROUND,
   },
 } as const;
+
+const scriptDirections = [
+  [SvxEscapement.Superscript, "superscript", "Superscript"],
+  [SvxEscapement.Off, "normal", "Normal"],
+  [SvxEscapement.Subscript, "subscript", "Subscript"],
+] as const;
+
+/** The manual value and proportional size for one native script direction. */
+interface ScriptSize {
+  readonly offset: number;
+  readonly height: number;
+}
+
+/** Restores the native Position controls from an optional uniform item. @param item - Native escapement. @returns Initial direction, automatic mode and spin values. */
+function initialPosition(item: SvxEscapementItem | undefined) {
+  const offset = item?.GetEsc() ?? 0;
+  const height = item?.GetProportionalHeight() ?? 100;
+  const direction = item?.GetEscapement();
+  const automatic = offset === 0 || offset === DFLT_ESC_AUTO_SUPER || offset === DFLT_ESC_AUTO_SUB;
+  const absoluteOffset =
+    offset === DFLT_ESC_AUTO_SUPER || offset === DFLT_ESC_AUTO_SUB
+      ? Math.max(1, Math.trunc((offset > 0 ? 0.8 : 0.2) * (100 - height)))
+      : Math.abs(offset);
+  const upper: ScriptSize =
+    direction === SvxEscapement.Superscript
+      ? { offset: absoluteOffset, height }
+      : { offset: DFLT_ESC_SUPER, height: DFLT_ESC_PROP };
+  const lower: ScriptSize =
+    direction === SvxEscapement.Subscript
+      ? { offset: absoluteOffset, height }
+      : { offset: -DFLT_ESC_SUB, height: DFLT_ESC_PROP };
+  return { direction, automatic, upper, lower };
+}
 
 const fontPaintChecks = ["outline", "shadow"] as const;
 const characterLines = ["overline", "underline"] as const;
@@ -168,8 +212,15 @@ export function WriterCharacterDialog({
   const initialWordMode =
     wordModeItem instanceof SvxWordLineModeItem ? wordModeItem.GetValue() : undefined;
   const [wordMode, setWordMode] = useState(initialWordMode);
-  const position =
-    escapement instanceof SvxEscapementItem ? String(escapement.GetEscapement()) : "";
+  const escapementItem = escapement instanceof SvxEscapementItem ? escapement : undefined;
+  const [positionDraft, setPositionDraft] = useState<ReturnType<typeof initialPosition>>();
+  const position = positionDraft ?? initialPosition(escapementItem);
+  const direction = position.direction;
+  const scripted = direction !== undefined && direction !== SvxEscapement.Off;
+  const script = direction === SvxEscapement.Subscript ? "lower" : "upper";
+  const scriptSize = position[script];
+  const pairKerning = read(which.pairKerning);
+  const initialPairKerning = pairKerning instanceof SvxAutoKernItem && pairKerning.GetValue();
   const initialColor =
     colorItem instanceof SvxColorItem ? writerColorValue(colorItem.GetValue()) : "";
   const initialBackground =
@@ -258,6 +309,7 @@ export function WriterCharacterDialog({
       setPaint(initialPaint);
       setRelief(initialRelief);
     }
+    if (tab === 2) setPositionDraft(undefined);
     if (tab === 3) setBackground(initialBackground);
     if (tab === 4) {
       border?.Reset();
@@ -411,9 +463,18 @@ export function WriterCharacterDialog({
       output.Put(new SvxCaseMapItem(Number(nextCase), which.caseMap), true);
     if (emphasis !== "" && emphasis !== initialEmphasis)
       output.Put(new SvxEmphasisMarkItem(Number(emphasis), which.emphasis), true);
-    const nextPosition = String(values.get("position") ?? "");
-    if (nextPosition && nextPosition !== position)
-      output.Put(new SvxEscapementItem(Number(nextPosition), which.position), true);
+    if (positionDraft && direction !== undefined) {
+      const sign = script === "lower" ? -1 : 1;
+      const offset = scripted
+        ? sign * (position.automatic ? DFLT_ESC_AUTO_SUPER : scriptSize.offset)
+        : 0;
+      const height = scripted ? scriptSize.height : 100;
+      if (offset !== escapementItem?.GetEsc() || height !== escapementItem?.GetProportionalHeight())
+        output.Put(new SvxEscapementItem(offset, height, which.position), true);
+    }
+    const nextPairKerning = values.has("pairKerning");
+    if (nextPairKerning !== initialPairKerning)
+      output.Put(new SvxAutoKernItem(nextPairKerning, which.pairKerning), true);
     if (color && color !== initialColor)
       output.Put(new SvxColorItem(writerColorFromPrimitive(color, "auto"), which.color), true);
     const nextSpacing = String(values.get("spacing") ?? "");
@@ -709,31 +770,104 @@ export function WriterCharacterDialog({
             hidden={tab !== 2}
             key={`position-${resets[2]}`}
           >
-            <label className={fieldClass}>
-              {localization.GetText("writer.character.position", "Position")}
-              <select
-                name="position"
-                defaultValue={position}
-                className="rounded border border-slate-300 px-2 py-1"
-              >
-                <option value="" />
-                <option value={SvxEscapement.Off}>Normal</option>
-                <option value={SvxEscapement.Superscript}>Superscript</option>
-                <option value={SvxEscapement.Subscript}>Subscript</option>
-              </select>
-            </label>
-            <label className={`${fieldClass} mt-3`}>
-              {localization.GetText("writer.character.spacing", "Character spacing")}
-              <input
-                type="number"
-                name="spacing"
-                defaultValue={spacing}
-                min="-1000"
-                max="1000"
-                step="0.1"
-                className="rounded border border-slate-300 px-2 py-1"
-              />
-            </label>
+            <fieldset className="grid gap-2">
+              <legend>{localization.GetText("writer.character.position", "Position")}</legend>
+              <div className="flex flex-wrap gap-3">
+                {scriptDirections.map(
+                  /** Presents one native position option. @param entry - Direction and label. @returns Radio. */
+                  ([value, key, label]) => (
+                    <label key={value} className="flex items-center gap-1">
+                      <input
+                        type="radio"
+                        name="position"
+                        checked={direction === value}
+                        onChange={
+                          /** Switches the script direction. @returns Nothing. */
+                          () => setPositionDraft({ ...position, direction: value })
+                        }
+                      />
+                      {localization.GetText(`writer.character.${key}`, label)}
+                    </label>
+                  ),
+                )}
+              </div>
+              <label className={fieldClass}>
+                {localization.GetText("writer.character.raise-lower", "Raise/lower by")}
+                <input
+                  type="number"
+                  min={1}
+                  max={MAX_ESC_POS}
+                  value={scripted ? scriptSize.offset : ""}
+                  disabled={!scripted || position.automatic}
+                  className="rounded border border-slate-300 px-2 py-1"
+                  onChange={
+                    /** Stores a manual shift in the active direction. @param event - Numeric edit. @returns Nothing. */
+                    (event) =>
+                      setPositionDraft({
+                        ...position,
+                        [script]: { ...scriptSize, offset: event.currentTarget.valueAsNumber || 1 },
+                      })
+                  }
+                />
+              </label>
+              <label className="flex items-center gap-2">
+                <input
+                  type="checkbox"
+                  checked={position.automatic}
+                  disabled={!scripted}
+                  onChange={
+                    /** Switches between the automatic marker and a manual shift. @param event - Toggle. @returns Nothing. */
+                    (event) =>
+                      setPositionDraft({ ...position, automatic: event.currentTarget.checked })
+                  }
+                />
+                {localization.GetText("writer.character.automatic", "Automatic")}
+              </label>
+              <label className={fieldClass}>
+                {localization.GetText("writer.character.relative-size", "Relative font size")}
+                <input
+                  type="number"
+                  min={1}
+                  max={100}
+                  value={
+                    scripted
+                      ? scriptSize.height
+                      : direction === SvxEscapement.Off && positionDraft
+                        ? 100
+                        : (escapementItem?.GetProportionalHeight() ?? "")
+                  }
+                  disabled={!scripted}
+                  className="rounded border border-slate-300 px-2 py-1"
+                  onChange={
+                    /** Stores the active direction's proportional height. @param event - Numeric edit. @returns Nothing. */
+                    (event) =>
+                      setPositionDraft({
+                        ...position,
+                        [script]: { ...scriptSize, height: event.currentTarget.valueAsNumber || 1 },
+                      })
+                  }
+                />
+              </label>
+            </fieldset>
+            <fieldset className="mt-3 grid gap-2">
+              <legend>{localization.GetText("writer.character.spacing", "Spacing")}</legend>
+              <label className={fieldClass}>
+                {localization.GetText("writer.character.character-spacing", "Character spacing")}
+                <input
+                  type="number"
+                  name="spacing"
+                  defaultValue={spacing}
+                  min="-1000"
+                  max="1000"
+                  step="0.1"
+                  className="rounded border border-slate-300 px-2 py-1"
+                />
+              </label>
+              <label className="flex items-center gap-2">
+                <input type="checkbox" name="pairKerning" defaultChecked={initialPairKerning} />
+                {localization.GetText("writer.character.pair-kerning", "Pair kerning")}
+              </label>
+            </fieldset>
           </section>
           <section
             role="tabpanel"

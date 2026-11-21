@@ -155,10 +155,10 @@ it("transports all native independent script values without boolean normalizatio
   ).not.toContain("text-underline-color");
   expect(exportTextCharacterProperties({ underlineStyle: 19 })).toBe("");
   expect(importTextCharacterProperties(attributes([["fo:font-size", "12pt"]]))).toEqual({});
-  expect(textCharacterPropertyTokens).toHaveLength(72);
+  expect(textCharacterPropertyTokens).toHaveLength(75);
   expect(textCharacterPropertyTokens).toContain(XMLToken.STYLE_TEXT_EMPHASIZE);
   expect(textCharacterPropertyTokens).toContain(XMLToken.FO_LETTER_SPACING);
-  expect(textCharacterPropertyTokens.slice(9, 13)).toEqual([
+  expect(textCharacterPropertyTokens.slice(11, 15)).toEqual([
     XMLToken.STYLE_TEXT_LINE_THROUGH_STYLE,
     XMLToken.STYLE_TEXT_LINE_THROUGH_TYPE,
     XMLToken.STYLE_TEXT_LINE_THROUGH_WIDTH,
@@ -361,4 +361,38 @@ it("uses the native outline, shadow and font relief ODF spellings", /** Covers e
   expect(exportTextCharacterProperties({ outline: false, shadow: false, relief: 0 })).toBe(
     ' style:text-outline="false" fo:text-shadow="none" style:font-relief="none"',
   );
+});
+
+it("converts ODF character rotation and scale with the native lexical handlers", /** Pins rotation thresholds and the fit flag's named tokens. @returns Nothing. */ () => {
+  expect(
+    importTextCharacterProperties(
+      attributes([
+        ["style:text-rotation-angle", "-90"],
+        ["style:text-rotation-scale", "fixed"],
+        ["style:text-scale", "115%"],
+      ]),
+    ),
+  ).toEqual({ rotation: 2700, rotationFitToLine: true, scaleWidth: 115 });
+  expect(importTextCharacterProperties(attributes([["style:text-rotation-angle", "315"]]))).toEqual(
+    { rotation: 2700 },
+  );
+  expect(importTextCharacterProperties(attributes([["style:text-rotation-angle", "316"]]))).toEqual(
+    { rotation: 0 },
+  );
+  expect(
+    importTextCharacterProperties(
+      attributes([
+        ["style:text-rotation-angle", "invalid"],
+        ["style:text-rotation-scale", "invalid"],
+      ]),
+    ),
+  ).toEqual({});
+  const xml = exportTextCharacterProperties({
+    rotation: 900,
+    rotationFitToLine: false,
+    scaleWidth: 82,
+  });
+  expect(xml).toContain('style:text-rotation-angle="90"');
+  expect(xml).toContain('style:text-rotation-scale="line-height"');
+  expect(xml).toContain('style:text-scale="82%"');
 });

@@ -11,6 +11,8 @@ import { getCharacterOdfStyleName } from "./xmlexp-style-names";
 import { writerTextColorValue, writerHighlightColorValue } from "../../core/attr/swatrset";
 import { SvxColorItem } from "../../../../editeng/inc/colritem";
 import { SvxBrushItem } from "../../../../editeng/source/items/frmitems.brush";
+import { SvxCharRotateItem } from "../../../../editeng/inc/charrotateitem";
+import { SvxCharScaleWidthItem } from "../../../../editeng/inc/charscaleitem";
 import { SvxEscapementItem } from "../../../../editeng/inc/escapementitem";
 import { RES_CHRATR_ESCAPEMENT } from "../../../inc/hintids";
 import { SvxCaseMapItem } from "../../../../editeng/inc/cmapitem";
@@ -25,6 +27,8 @@ import {
   RES_CHRATR_CONTOUR,
   RES_CHRATR_SHADOWED,
   RES_CHRATR_RELIEF,
+  RES_CHRATR_ROTATE,
+  RES_CHRATR_SCALEW,
   RES_CHRATR_OVERLINE,
 } from "../../../inc/hintids";
 import {
@@ -99,6 +103,8 @@ export function getCharacterProperties(
   const crossedOut = set.GetItemIfSet(RES_CHRATR_CROSSEDOUT, inherited);
   const contour = set.GetItemIfSet(RES_CHRATR_CONTOUR, inherited);
   const shadow = set.GetItemIfSet(RES_CHRATR_SHADOWED, inherited);
+  const rotation = set.GetItemIfSet(RES_CHRATR_ROTATE, inherited);
+  const scale = set.GetItemIfSet(RES_CHRATR_SCALEW, inherited);
   const relief = set.GetItemIfSet(RES_CHRATR_RELIEF, inherited);
   const caseItem = set.GetItemIfSet(RES_CHRATR_CASEMAP, inherited);
   const emphasisItem = set.GetItemIfSet(RES_CHRATR_EMPHASIS_MARK, inherited);
@@ -200,6 +206,12 @@ export function getCharacterProperties(
     ...(relief instanceof SvxCharReliefItem
       ? { relief: queryCharacterShort(relief, MID_RELIEF) }
       : {}),
+    ...(rotation instanceof SvxCharRotateItem
+      ? { rotation: rotation.GetValue(), rotationFitToLine: rotation.IsFitToLine() }
+      : {}),
+    ...(scale instanceof SvxCharScaleWidthItem
+      ? { scaleWidth: queryCharacterShort(scale, 0) }
+      : {}),
     ...(color instanceof SvxColorItem
       ? color.GetValue().GetAlpha() === 255 || writerTextColorValue(color) === "auto"
         ? { color: writerTextColorValue(color) }
@@ -300,9 +312,22 @@ export function getCharacterProperties(
   };
 }
 
+/** Character effects and position items exported with Writer text runs and paragraph styles. */
+export const XML_CHARACTER_EFFECT_WHICH_IDS = [
+  RES_CHRATR_CROSSEDOUT,
+  RES_CHRATR_EMPHASIS_MARK,
+  RES_CHRATR_CASEMAP,
+  RES_CHRATR_CONTOUR,
+  RES_CHRATR_SHADOWED,
+  RES_CHRATR_RELIEF,
+  RES_CHRATR_ROTATE,
+  RES_CHRATR_SCALEW,
+  RES_CHRATR_OVERLINE,
+] as const;
+
 /** Reads the original UNO short without passing native flag encodings into ODF. @param item - Concrete Writer character item. @param member - Original UNO member. @returns Signed short. */
 function queryCharacterShort(
-  item: SvxEmphasisMarkItem | SvxCaseMapItem | SvxCharReliefItem,
+  item: SvxEmphasisMarkItem | SvxCaseMapItem | SvxCharReliefItem | SvxCharScaleWidthItem,
   member: number,
 ): number {
   const value = new Any();

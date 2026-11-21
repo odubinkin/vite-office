@@ -8,12 +8,15 @@ import { SvxBoxItem } from "../../../editeng/source/items/frmitems";
 import { readOdtDocument } from "../../source/filter/xml/swxml";
 import { writeOdtDocument } from "../../source/filter/xml/wrtxml";
 import { SvxBrushItem } from "../../../editeng/inc/brushitem";
+import { SvxEscapementItem } from "../../../editeng/inc/escapementitem";
 import { SvxKerningItem } from "../../../editeng/inc/kernitem";
 import { SfxGrabBagItem } from "../../../svl/inc/grabbagitem";
 import { SfxItemSet } from "../../../svl/inc/itemset";
 import { Color } from "../../../tools/inc/color";
 import {
+  RES_CHRATR_AUTOKERN,
   RES_CHRATR_BACKGROUND,
+  RES_CHRATR_ESCAPEMENT,
   RES_CHRATR_BOX,
   RES_CHRATR_FONTSIZE,
   RES_CHRATR_GRABBAG,
@@ -44,6 +47,7 @@ import { SwTextField } from "../../inc/txtfld";
 import { SwPostItField, SwPostItFieldType } from "../../source/core/fields/docufld";
 import { WRITER_COMMAND_IDS } from "../../uiconfig/swriter/menubar/menubar-commands";
 import { createWriterDocumentSession } from "../composition/writer-module";
+import { SwAttrIter } from "../../source/core/text/itratr";
 import { WriterWorkbench } from "./writer-view";
 
 /** Creates two anchored comments over a plain Writer paragraph. @returns Writer session view and document shell. */
@@ -109,9 +113,9 @@ it("uses the active note's attributes and formats all notes in one Writer undo a
       target: { value: "18" },
     });
     fireEvent.click(within(dialog).getByRole("tab", { name: "Position" }));
-    fireEvent.change(within(dialog).getByRole("combobox", { name: "Position" }), {
-      target: { value: "2" },
-    });
+    fireEvent.click(within(dialog).getByRole("radio", { name: "Subscript" }));
+    expect(within(dialog).getByRole("checkbox", { name: "Automatic" })).toBeChecked();
+    fireEvent.click(within(dialog).getByRole("checkbox", { name: "Pair kerning" }));
     await act(
       /** Finishes the asynchronous Character request before checking the notes. @returns Completion. */ async () => {
         fireEvent.click(within(dialog).getByRole("button", { name: "OK" }));
@@ -119,6 +123,7 @@ it("uses the active note's attributes and formats all notes in one Writer undo a
     );
     expect(within(ada).getByText("Ada").style.fontSize).toBe("10.44pt");
     expect(within(ada).getByText("Ada").style.verticalAlign).toBe("sub");
+    expect(within(ada).getByText("Ada").style.fontKerning).toBe("normal");
     expect(within(ada).getByText("Ada").style.fontWeight).toBe("bold");
     expect(within(grace).getByText("Grace").style.fontSize).toBe("10.44pt");
     expect(within(grace).getByText("Grace").style.fontWeight).toBe("bold");
@@ -584,6 +589,69 @@ it("cycles mixed word-line formatting and preserves the exact spacing on undo", 
     workbench.unmount();
     end.Dispose();
     middle.Dispose();
+    start.Dispose();
+    view.Close();
+  }
+});
+
+it("applies and restores manual script size and pair kerning through Writer Character", /** Covers native values, reset, presentation and undo. @returns Completion. */ async () => {
+  const { view } = createWriterDocumentSession();
+  const shell = view.GetWrtShell();
+  shell.Insert("VA");
+  const paragraph = shell.GetActiveParagraph();
+  const start = new SwPosition(paragraph, 0);
+  const end = new SwPosition(paragraph, 2);
+  shell.SetPaM(end, start);
+  const workbench = render(<WriterWorkbench isActive view={view} />);
+  try {
+    fireEvent.click(screen.getByRole("menuitem", { name: "Format" }));
+    fireEvent.click(screen.getByRole("menuitem", { name: "Character…" }));
+    const controls = within(screen.getByRole("dialog", { name: "Character" }));
+    fireEvent.click(controls.getByRole("tab", { name: "Position" }));
+    const normal = controls.getByRole("radio", { name: "Normal" });
+    expect(normal).toBeChecked();
+    fireEvent.click(controls.getByRole("radio", { name: "Superscript" }));
+    expect(controls.getByRole("spinbutton", { name: "Raise/lower by" })).toBeDisabled();
+    fireEvent.click(controls.getByRole("button", { name: "Reset" }));
+    expect(controls.getByRole("radio", { name: "Normal" })).toBeChecked();
+    fireEvent.click(controls.getByRole("radio", { name: "Superscript" }));
+    fireEvent.click(controls.getByRole("checkbox", { name: "Automatic" }));
+    fireEvent.change(controls.getByRole("spinbutton", { name: "Raise/lower by" }), {
+      target: { value: "37" },
+    });
+    fireEvent.change(controls.getByRole("spinbutton", { name: "Relative font size" }), {
+      target: { value: "70" },
+    });
+    expect(controls.getByRole("checkbox", { name: "Pair kerning" })).toBeChecked();
+    fireEvent.click(controls.getByRole("checkbox", { name: "Pair kerning" }));
+    await act(
+      /** Applies the native output set in one operation. @returns Completion. */ async () => {
+        fireEvent.click(controls.getByRole("button", { name: "OK" }));
+      },
+    );
+    const iterator = new SwAttrIter(paragraph);
+    iterator.Seek(1);
+    const handler = iterator.GetAttrHandler();
+    const offset = handler.ReadItem(RES_CHRATR_ESCAPEMENT) as SvxEscapementItem;
+    expect([offset.GetEsc(), offset.GetProportionalHeight()]).toEqual([37, 70]);
+    expect(handler.ReadItem(RES_CHRATR_AUTOKERN).QueryValue()).toBe(false);
+    expect(screen.getByText("VA").closest("[data-native-escapement]")).toHaveAttribute(
+      "data-native-escapement-height",
+      "70",
+    );
+    expect(screen.getByText("VA").closest('[style*="font-kerning"]')).toHaveStyle(
+      "font-kerning: none",
+    );
+    act(
+      /** Undoes formatting without changing the selected text. @returns Nothing. */ () => {
+        expect(shell.Undo()).toBe(true);
+      },
+    );
+    expect(screen.getByText("VA").closest("[data-native-escapement]")).toBeNull();
+    expect(screen.getByText("VA").closest("p")).toHaveStyle("font-kerning: normal");
+  } finally {
+    workbench.unmount();
+    end.Dispose();
     start.Dispose();
     view.Close();
   }

@@ -35,6 +35,7 @@ import {
   RES_CHRATR_WEIGHT,
   WRITER_CHARACTER_WHICH_RANGES,
 } from "../../inc/hintids";
+import { DFLT_ESC_AUTO_SUPER } from "../../../editeng/inc/escapementitem";
 import { projectWriterCharacterAttributes } from "../../source/core/txtnode/txatbase";
 import { projectWriterLineSpacing } from "../../source/core/text/itrform2";
 import { browserFontPaint, browserTextDecoration, browserTextEmphasis } from "./writer-font-paint";
@@ -656,6 +657,7 @@ export class WriterCommentEditor extends SwTextAPIEditSource {
     try {
       putAnnotationCharacterItems(parent, source.entries());
       const base = projectWriterCharacterAttributes(parent);
+      paragraph.style.fontKerning = base.autoKerning === true ? "normal" : "none";
       if (base.fontSizeTwips !== undefined)
         paragraph.style.fontSize = `${base.fontSizeTwips / 20}pt`;
       const attributes = node.GetCharAttribs().GetAttribs();
@@ -777,6 +779,8 @@ function applyTextStyle(
   if (attributes.fontFamily)
     style.fontFamily = browserFontFamily(attributes.fontFamily, undefined) ?? "";
   if (attributes.fontSizeTwips !== undefined) style.fontSize = `${attributes.fontSizeTwips / 20}pt`;
+  if (attributes.autoKerning !== undefined)
+    style.fontKerning = attributes.autoKerning ? "normal" : "none";
   if (attributes.kerningTwips !== undefined)
     style.letterSpacing = `${attributes.kerningTwips / 20}pt`;
   const effects = browserFontPaint(attributes, attributes.color);
@@ -807,11 +811,19 @@ function applyTextStyle(
     paintAnnotationTextLines(element, attributes);
   }
   if (attributes.escapement?.offset) {
-    style.verticalAlign = attributes.escapement.offset > 0 ? "super" : "sub";
+    const { offset, height } = attributes.escapement;
+    style.verticalAlign =
+      Math.abs(offset) === DFLT_ESC_AUTO_SUPER
+        ? offset > 0
+          ? "super"
+          : "sub"
+        : height > 0
+          ? `${offset / height}em`
+          : `${((attributes.fontSizeTwips ?? 0) * offset) / 2000}pt`;
     style.fontSize =
       attributes.fontSizeTwips === undefined
-        ? `${attributes.escapement.height}%`
-        : `${(attributes.fontSizeTwips * attributes.escapement.height) / 2000}pt`;
+        ? `${height}%`
+        : `${(attributes.fontSizeTwips * height) / 2000}pt`;
   }
 }
 

@@ -565,3 +565,68 @@ test("Writer retains outline and shadow across ODT and gives relief paint preced
   await expect(engraved).toHaveCSS("-webkit-text-stroke-width", "0px");
   await expect(editor).toHaveText("text paint");
 });
+
+test("Writer restores manual position and pair kerning when reopening Character", /** Checks the native Position form and the browser's text geometry. @param fixtures - Playwright fixtures. @param fixtures.page - Chromium page. @returns Test completion. */ async ({
+  page,
+}) => {
+  await page.goto("/writer");
+  const editor = page.getByRole("textbox", { name: "Writer document text", exact: true });
+  await editor.fill("Position remains");
+  await expect(editor).toHaveCSS("font-kerning", "normal");
+  await editor.press("Home");
+  for (let offset = 0; offset < "Position".length; offset++) await editor.press("Shift+ArrowRight");
+  await page.getByRole("menuitem", { name: "Format", exact: true }).click();
+  await page.getByRole("menuitem", { name: "Character…", exact: true }).click();
+  const character = page.getByRole("dialog", { name: "Character", exact: true });
+  const positionTab = character.getByRole("tab", { name: "Position", exact: true });
+  await positionTab.click();
+
+  const automatic = character.getByRole("checkbox", { name: "Automatic", exact: true });
+  const shift = character.getByRole("spinbutton", { name: "Raise/lower by", exact: true });
+  const size = character.getByRole("spinbutton", { name: "Relative font size", exact: true });
+  const pairKerning = character.getByRole("checkbox", { name: "Pair kerning", exact: true });
+  await character.getByRole("radio", { name: "Superscript", exact: true }).check();
+  await expect(automatic).toBeChecked();
+  await expect(shift).toBeDisabled();
+  await automatic.uncheck();
+  await shift.fill("37");
+  await size.fill("70");
+  await expect(pairKerning).toBeChecked();
+  await pairKerning.uncheck();
+  await character.getByRole("button", { name: "OK", exact: true }).click();
+
+  const scripted = editor.locator('[data-native-escapement="37"]');
+  await expect(scripted).toHaveAttribute("data-native-escapement-height", "70");
+  await expect(scripted.locator(":scope > span")).not.toHaveCSS("vertical-align", "baseline");
+  await expect(scripted.getByText("Position", { exact: true })).toHaveCSS("font-kerning", "none");
+  await expect(editor).toHaveText("Position remains");
+
+  const pending = page.waitForEvent("download");
+  await page.getByRole("menuitem", { name: "File", exact: true }).click();
+  await page.getByRole("menuitem", { name: "Export…" }).click();
+  await page.getByRole("button", { name: "Download ODT" }).click();
+  const path = await (await pending).path();
+  if (path === null) throw new Error("Missing exported ODT.");
+  await page.getByRole("button", { name: "Open", exact: true }).click();
+  await page.getByRole("tab", { name: "On computer" }).click();
+  await page.getByLabel("Browse").setInputFiles({
+    buffer: await readFile(path),
+    mimeType: "application/vnd.oasis.opendocument.text",
+    name: "character-position.odt",
+  });
+  await expect(page.getByRole("dialog", { name: "Open", exact: true })).toHaveCount(0);
+  await expect(editor).toHaveText("Position remains");
+  await expect(editor).toHaveCSS("font-kerning", "normal");
+  await expect(scripted.getByText("Position", { exact: true })).toHaveCSS("font-kerning", "none");
+
+  await editor.press("Home");
+  for (let offset = 0; offset < "Position".length; offset++) await editor.press("Shift+ArrowRight");
+  await page.getByRole("menuitem", { name: "Format", exact: true }).click();
+  await page.getByRole("menuitem", { name: "Character…", exact: true }).click();
+  await positionTab.click();
+  await expect(character.getByRole("radio", { name: "Superscript", exact: true })).toBeChecked();
+  await expect(automatic).not.toBeChecked();
+  await expect(shift).toHaveValue("37");
+  await expect(size).toHaveValue("70");
+  await expect(pairKerning).not.toBeChecked();
+});

@@ -4,7 +4,7 @@ title: "Implement Writer search and replace core and browser UI"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 122
+revision: 123
 origin:
   system: "manual"
 depends_on:
@@ -500,6 +500,16 @@ comments:
       Evidence covers selected comment formatting and its Worker and ODT round-trip, the relief property alongside persisted outline and shadow, and ordinary Character controls and formatted replacement. This checkpoint leaves the current Writer search task and the ten-task cadence active.
 
       Targeted checks passed 53 Writer tests and 15 shared tests. Production TypeScript and Vite build and all 9 Writer Chromium scenarios passed. Scoped lint and formatting, module boundaries, source tree, source provenance, Writer UI resources, Writer/shared registry parity with zero semantic violations, routing and diff checks passed. Repository-wide documentation and file-size checks still show the existing 307 findings and four files at or above the size limit. AgentPlane doctor passed with the existing hook-shim warning.
+  -
+    author: "CODER"
+    body: |-
+      Verified checkpoint — Writer Character Position
+
+      - Connects the standard and annotation Position pages to native escapement (automatic and manual, relative size) and pair-kerning items. Renders the chosen values in document text and comments. New Writer documents use the native document-shell kerning default, which survives the Worker graph and ODT text defaults. Existing documents retain their serialized default or model fallback.
+      - Adds the ODF rotation angle, rotation fit flag and character width transport through native property handlers and Writer item/UNO mappings. Records the counterintuitive rotation scale mapping as WRITER-739. Ordinary rotation and scaling controls, their browser layout and Fit to Line geometry still require implementation.
+      - Source contracts checked against cui/source/tabpages/chardlg.cxx, cui/uiconfig/ui/positionpage.ui, sw/source/uibase/app/docshini.cxx, sw/source/core/text/atrstck.cxx, editeng/source/editeng/impedit3.cxx, sw/qa/uitest/writer_tests2/formatCharacter.py and xmloff/source/text/txtprhdl.cxx.
+      - Passed focused Vitest groups (93 distinct Writer tests, 16 shared tests), scoped formatting and lint, Writer resource, dependency, source tree and provenance checks, Writer and shared inventory checks, AgentPlane doctor and policy routing. Global JSDoc reports the same 307 existing findings. File-size checks report three existing violations outside the changed files. No full run at this checkpoint.
+      - Production build passed with the single-threaded TypeScript checker. Nine unchanged Chromium search and rich-format scenarios passed together. The final Position regression passed separately and verifies manual rise and font size, saved pair kerning on selected text, the inherited kerning of the surrounding document, and reopening the Character page through the browser after ODT export/import.
 
 events:
   -
@@ -1183,9 +1193,21 @@ events:
       Evidence covers selected comment formatting and its Worker and ODT round-trip, the relief property alongside persisted outline and shadow, and ordinary Character controls and formatted replacement. This checkpoint leaves the current Writer search task and the ten-task cadence active.
 
       Targeted checks passed 53 Writer tests and 15 shared tests. Production TypeScript and Vite build and all 9 Writer Chromium scenarios passed. Scoped lint and formatting, module boundaries, source tree, source provenance, Writer UI resources, Writer/shared registry parity with zero semantic violations, routing and diff checks passed. Repository-wide documentation and file-size checks still show the existing 307 findings and four files at or above the size limit. AgentPlane doctor passed with the existing hook-shim warning.
+  -
+    type: "comment"
+    at: "2026-11-21T23:44:48.439Z"
+    author: "CODER"
+    body: |-
+      Verified checkpoint — Writer Character Position
+
+      - Connects the standard and annotation Position pages to native escapement (automatic and manual, relative size) and pair-kerning items. Renders the chosen values in document text and comments. New Writer documents use the native document-shell kerning default, which survives the Worker graph and ODT text defaults. Existing documents retain their serialized default or model fallback.
+      - Adds the ODF rotation angle, rotation fit flag and character width transport through native property handlers and Writer item/UNO mappings. Records the counterintuitive rotation scale mapping as WRITER-739. Ordinary rotation and scaling controls, their browser layout and Fit to Line geometry still require implementation.
+      - Source contracts checked against cui/source/tabpages/chardlg.cxx, cui/uiconfig/ui/positionpage.ui, sw/source/uibase/app/docshini.cxx, sw/source/core/text/atrstck.cxx, editeng/source/editeng/impedit3.cxx, sw/qa/uitest/writer_tests2/formatCharacter.py and xmloff/source/text/txtprhdl.cxx.
+      - Passed focused Vitest groups (93 distinct Writer tests, 16 shared tests), scoped formatting and lint, Writer resource, dependency, source tree and provenance checks, Writer and shared inventory checks, AgentPlane doctor and policy routing. Global JSDoc reports the same 307 existing findings. File-size checks report three existing violations outside the changed files. No full run at this checkpoint.
+      - Production build passed with the single-threaded TypeScript checker. Nine unchanged Chromium search and rich-format scenarios passed together. The final Position regression passed separately and verifies manual rise and font size, saved pair kerning on selected text, the inherited kerning of the surrounding document, and reopening the Character page through the browser after ODT export/import.
 
 doc_version: 3
-doc_updated_at: "2026-11-21T23:21:46.299Z"
+doc_updated_at: "2026-11-21T23:44:48.439Z"
 doc_updated_by: "CODER"
 description: "Implement the approved coherent Writer search-and-replace feature from pinned LibreOffice sources: real shared search engine and options, native paragraph/cursor traversal and replacement/history contracts, view-owned search state and dispatch, Find toolbar and Find and Replace dialog with generated upstream command placement and shortcuts. Preserve source semantics and explicit unsupported boundaries; never substitute DOM text search or browser RegExp for ICU contracts. Work only on writer in vite-office-writer; local upstream reading approved, no network or merges. Keep active until approved scope is verified."
 sections:

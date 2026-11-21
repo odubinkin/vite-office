@@ -1,4 +1,5 @@
 /** @fileoverview Consumed Writer text-frame orientation, wrap and character emphasis handlers from native txtprhdl.cxx. */
+import { Converter } from "../../../sax/source/tools/converter";
 import { FontEmphasis } from "../../../offapi/com/sun/star/text/FontEmphasis";
 import { HoriOrientation as H } from "../../../offapi/com/sun/star/text/HoriOrientation";
 import { VertOrientation as V } from "../../../offapi/com/sun/star/text/VertOrientation";
@@ -8,6 +9,36 @@ import { WrapTextMode as W } from "../../../offapi/com/sun/star/text/WrapTextMod
 import { XMLConstantsPropertyHandler } from "../style/XMLConstantsPropertyHandler";
 import { SvXMLUnitConverter } from "../core/xmluconv";
 import { Any } from "../../../cppu/inc/com/sun/star/uno/Any";
+import * as CaseMap from "../../../offapi/com/sun/star/style/CaseMap";
+import { XMLToken as T } from "../core/xmltoken";
+
+/** Native CharCaseMap property split between the case transformation and font variant. */
+export const textCaseMapProperties = [
+  [
+    T.FO_FONT_VARIANT,
+    "fo:font-variant",
+    new XMLConstantsPropertyHandler(
+      [
+        ["normal", CaseMap.NONE],
+        ["small-caps", CaseMap.SMALLCAPS],
+      ],
+      null,
+    ),
+  ],
+  [
+    T.FO_TEXT_TRANSFORM,
+    "fo:text-transform",
+    new XMLConstantsPropertyHandler(
+      [
+        ["none", CaseMap.NONE],
+        ["uppercase", CaseMap.UPPERCASE],
+        ["lowercase", CaseMap.LOWERCASE],
+        ["capitalize", CaseMap.TITLE],
+      ],
+      null,
+    ),
+  ],
+] as const;
 
 const pXML_HoriPos_Enum = [
   ["from-left", H.NONE],
@@ -165,4 +196,25 @@ export function exportTextEmphasis(value: number): string {
     if (wire === type)
       return type === FontEmphasis.NONE ? token : `${token} ${below ? "below" : "above"}`;
   return below ? "dot below" : "dot above";
+}
+
+/** Original XMLTextRotationAnglePropHdl_Impl normalizes XML degrees to the three native text orientations. */
+export class XMLTextRotationAnglePropHdl {
+  /** Parses degrees, normalizes the revolution and chooses the native orientation. @param input - ODF degrees. @param value - Native tenths of a degree. @returns Whether parsing succeeded. */
+  importXML(input: string, value: Any): boolean {
+    const parsed: [number] = [0];
+    if (!Converter.convertNumber(parsed, input)) return false;
+    const angle = ((parsed[0] % 360) + 360) % 360;
+    const orientation = angle < 45 || angle > 315 ? 0 : angle < 180 ? 900 : 2700;
+    value.insert([orientation], "sal_Int16");
+    return true;
+  }
+
+  /** Writes the native tenths as whole XML degrees. @param output - Existing attribute. @param value - Native short. @returns Whether a short was extracted. */
+  exportXML(output: [string], value: Any): boolean {
+    const angle: [number] = [0];
+    if (!value.extract(angle, "sal_Int16")) return false;
+    output[0] = String(Math.trunc(angle[0] / 10));
+    return true;
+  }
 }

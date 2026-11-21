@@ -259,6 +259,9 @@ export const SwUnoPropertyMap: ReadonlyMap<string, SwUnoPropertyEntry> = new Map
   ["CharContoured", row(H.RES_CHRATR_CONTOUR, "bool", 0, 1)],
   ["CharShadowed", row(H.RES_CHRATR_SHADOWED, "bool", 0, 1)],
   ["CharRelief", row(H.RES_CHRATR_RELIEF, "sal_Int16", M.MID_RELIEF, 1)],
+  ["CharRotation", row(H.RES_CHRATR_ROTATE, "sal_Int16", M.MID_ROTATE, 1)],
+  ["CharRotationIsFitToLine", row(H.RES_CHRATR_ROTATE, "bool", M.MID_FITTOLINE, 1)],
+  ["CharScaleWidth", row(H.RES_CHRATR_SCALEW, "sal_Int16", 0, 1)],
   ["CharCaseMap", row(H.RES_CHRATR_CASEMAP, "sal_Int16", 0, 1)],
   ["CharOverline", row(H.RES_CHRATR_OVERLINE, "sal_Int16", M.MID_TL_STYLE, 1)],
   ["CharOverlineColor", row(H.RES_CHRATR_OVERLINE, "sal_Int32", M.MID_TL_COLOR, 1)],
@@ -341,16 +344,7 @@ export const SwUnoPropertyMap: ReadonlyMap<string, SwUnoPropertyEntry> = new Map
       kind: "any",
     },
   ],
-  [
-    "CharEmphasis",
-    {
-      type: "sal_Int16",
-      attributes: 1,
-      which: H.RES_CHRATR_EMPHASIS_MARK,
-      member: M.MID_EMPHASIS,
-      kind: "any",
-    },
-  ],
+  ["CharEmphasis", row(H.RES_CHRATR_EMPHASIS_MARK, "sal_Int16", M.MID_EMPHASIS, 1)],
   [
     "CharWordMode",
     { type: "bool", attributes: 1, which: H.RES_CHRATR_WORDLINEMODE, member: 0, kind: "bool" },
@@ -559,6 +553,9 @@ const characterMaybeVoidProperties = new Set([
   "CharStrikeout",
 ]);
 const paragraphStyleProperties = new Set([
+  "CharRotation",
+  "CharRotationIsFitToLine",
+  "CharScaleWidth",
   "CharContoured",
   "CharShadowed",
   "CharRelief",
@@ -744,6 +741,9 @@ const staticMapEntries: (readonly SfxItemPropertyMapEntry[] | undefined)[] = [];
 const staticPropertySets: (SfxItemPropertySet | undefined)[] = [];
 /** Original COMMON_CRSR_PARA_PROPERTIES_WITHOUT_FN and hyperlink rows represented by this core. */
 const textDefaultProperties = new Set([
+  "CharRotation",
+  "CharRotationIsFitToLine",
+  "CharScaleWidth",
   "CharContoured",
   "CharShadowed",
   "CharRelief",

@@ -31,22 +31,17 @@ import { CollectGraphicFlyFrames, CollectTextFlyFrames } from "../../core/layout
 import type { XMLTextExportBlock } from "../../../../xmloff/source/table/XMLTableExport";
 import { getFillProperties, XML_FILL_WHICH_IDS } from "./xmlexp-fill";
 import { RES_CHRATR_BOX, RES_CHRATR_ESCAPEMENT, RES_CHRATR_KERNING } from "../../../inc/hintids";
-import {
-  RES_CHRATR_CROSSEDOUT,
-  RES_CHRATR_EMPHASIS_MARK,
-  RES_CHRATR_CASEMAP,
-  RES_CHRATR_CONTOUR,
-  RES_CHRATR_SHADOWED,
-  RES_CHRATR_RELIEF,
-  RES_CHRATR_OVERLINE,
-} from "../../../inc/hintids";
 import { RES_CHRATR_WORDLINEMODE, RES_CHRATR_AUTOKERN } from "../../../inc/hintids";
 import {
   RES_CHRATR_LANGUAGE,
   RES_CHRATR_CJK_LANGUAGE,
   RES_CHRATR_CTL_LANGUAGE,
 } from "../../../inc/hintids";
-import { getCharacterProperties, projectXmlTextRuns } from "./xmlexp-character";
+import {
+  getCharacterProperties,
+  projectXmlTextRuns,
+  XML_CHARACTER_EFFECT_WHICH_IDS,
+} from "./xmlexp-character";
 export { getCharacterProperties } from "./xmlexp-character";
 import { sw_GetTableBoxColStr } from "../../core/table/swtable";
 import { SwXMLTableLines } from "./xmltble";
@@ -431,6 +426,7 @@ function exportDefaultParagraphStyle(
   const pool = document.GetAttrPool();
   const ranges = [
     [RES_CHRATR_FONT, RES_CHRATR_FONTSIZE],
+    [RES_CHRATR_AUTOKERN, RES_CHRATR_AUTOKERN],
     [RES_CHRATR_CJK_FONT, RES_CHRATR_CJK_FONTSIZE],
     [RES_CHRATR_CTL_FONT, RES_CHRATR_CTL_FONTSIZE],
   ] as const;
@@ -806,13 +802,7 @@ function assertSupportedItems(
     RES_CHRATR_FONTSIZE,
     RES_CHRATR_UNDERLINE,
     RES_CHRATR_ESCAPEMENT,
-    RES_CHRATR_CROSSEDOUT,
-    RES_CHRATR_EMPHASIS_MARK,
-    RES_CHRATR_CASEMAP,
-    RES_CHRATR_CONTOUR,
-    RES_CHRATR_SHADOWED,
-    RES_CHRATR_RELIEF,
-    RES_CHRATR_OVERLINE,
+    ...XML_CHARACTER_EFFECT_WHICH_IDS,
     RES_CHRATR_WEIGHT,
     RES_CHRATR_WORDLINEMODE,
     RES_CHRATR_AUTOKERN,

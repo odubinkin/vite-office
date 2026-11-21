@@ -7,6 +7,7 @@ import fs from "node:fs";
 import path from "node:path";
 import { describe, expect, it, vi } from "vitest";
 
+import { SvxCharRotateItem } from "../../../../editeng/inc/charrotateitem";
 import { SvxLineSpacingItem } from "../../../../editeng/inc/lspcitem";
 import { SvxULSpaceItem } from "../../../../editeng/source/items/frmitems";
 import {
@@ -17,9 +18,12 @@ import {
 import { createDocument } from "../../../../sfx2/source/doc/objsh";
 import { ODF_NAMESPACES } from "../../../../xmloff/source/core/xmltoken";
 import {
+  RES_CHRATR_AUTOKERN,
   RES_CHRATR_CONTOUR,
   RES_CHRATR_FONTSIZE,
   RES_CHRATR_RELIEF,
+  RES_CHRATR_ROTATE,
+  RES_CHRATR_SCALEW,
   RES_CHRATR_SHADOWED,
   RES_CHRATR_OVERLINE,
   RES_PARATR_LINESPACING,
@@ -31,6 +35,7 @@ import { readOdtDocument } from "./swxml";
 import { writeOdtDocument } from "./wrtxml";
 import { projectSwTextPrintBounds } from "../../core/layout/newfrm";
 import { WriterViewProjection } from "../../../browser/presentation/writer-view-projection";
+import { SwDocShell } from "../../uibase/app/docsh";
 import { SwAttrIter } from "../../core/text/itratr";
 import { SwPaM, SwPosition } from "../../core/crsr/pam";
 import {
@@ -491,6 +496,64 @@ it("keeps outline and shadow values under relief and restores each native item",
       }
     } finally {
       reopened.Dispose();
+    }
+  } finally {
+    original.Dispose();
+  }
+});
+
+it("round-trips native character rotation and scale in an automatic text style", /** Inspects effective pool items after reimporting Writer's emitted XML. @returns Nothing. */ () => {
+  const rotated =
+    '<style:style style:name="Rotated" style:family="text"><style:text-properties style:text-rotation-angle="90" style:text-rotation-scale="fixed" style:text-scale="84%"/></style:style>';
+  const body = '<text:p><text:span text:style-name="Rotated">Rotated</text:span> Plain</text:p>';
+  const { document: original } = importWriterXml(styles(""), content(rotated, body), metadata);
+  try {
+    const exported = exportContentXml(original);
+    expect(exported).toContain('style:text-rotation-angle="90"');
+    expect(exported).toContain('style:text-rotation-scale="fixed"');
+    expect(exported).toContain('style:text-scale="84%"');
+    const { document: reopened } = importWriterXml(exportStylesXml(original), exported, metadata);
+    try {
+      const iterator = new SwAttrIter(reopened.paragraphs[0]!);
+      iterator.Seek(2);
+      const handler = iterator.GetAttrHandler();
+      const rotation = handler.ReadItem(RES_CHRATR_ROTATE) as SvxCharRotateItem;
+      expect([rotation.GetValue(), rotation.IsFitToLine()]).toEqual([900, true]);
+      expect(handler.ReadItem(RES_CHRATR_SCALEW).QueryValue()).toBe(84);
+      iterator.Seek(9);
+      expect(handler.ReadItem(RES_CHRATR_ROTATE).QueryValue()).toBe(0);
+      expect(handler.ReadItem(RES_CHRATR_SCALEW).QueryValue()).toBe(100);
+    } finally {
+      reopened.Dispose();
+    }
+  } finally {
+    original.Dispose();
+  }
+});
+
+it("preserves new Writer document pair kerning as an ODT text default", /** Pins the shell default and its native pool ownership after reopening. @returns Nothing. */ () => {
+  const original = SwDocShell.CreateNewDocument({});
+  try {
+    expect(original.GetDefault(RES_CHRATR_AUTOKERN).QueryValue()).toBe(true);
+    const transferred = decodeWriterDocument(encodeWriterDocument(original));
+    try {
+      expect(transferred.GetDefault(RES_CHRATR_AUTOKERN).QueryValue()).toBe(true);
+      const exported = exportStylesXml(transferred);
+      expect(exported).toMatch(
+        /<style:default-style style:family="paragraph">.*style:letter-kerning="true"/,
+      );
+      const { document: reopened } = importWriterXml(
+        exported,
+        exportContentXml(transferred),
+        metadata,
+      );
+      try {
+        expect(reopened.GetDefault(RES_CHRATR_AUTOKERN).QueryValue()).toBe(true);
+      } finally {
+        reopened.Dispose();
+      }
+    } finally {
+      transferred.Dispose();
     }
   } finally {
     original.Dispose();

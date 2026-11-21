@@ -451,6 +451,7 @@ const textProperties = new Map<string, readonly [number, number]>([
   ["CharOverlineHasColor", [EE.EE_CHAR_OVERLINE, M.MID_TL_HASCOLOR]],
   ["CharWordMode", [EE.EE_CHAR_WLM, 0]],
   ["CharAutoKerning", [EE.EE_CHAR_PAIRKERNING, 0]],
+  ["CharScaleWidth", [EE.EE_CHAR_FONTWIDTH, 0]],
   ["CharKerning", [EE.EE_CHAR_KERNING, CONVERT_TWIPS]],
   ["ParaAdjust", [EE.EE_PARA_JUST, M.MID_PARA_ADJUST]],
   ["ParaTopMargin", [EE.EE_PARA_ULSPACE, M.MID_UP_MARGIN | CONVERT_TWIPS]],

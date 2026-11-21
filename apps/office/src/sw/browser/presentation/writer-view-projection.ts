@@ -17,8 +17,14 @@ import { SvxCaseMap } from "../../../editeng/inc/svxenum";
 import { SvxEmphasisMarkItem } from "../../../editeng/inc/emphasismarkitem";
 import { FontEmphasisMark } from "../../../tools/inc/fontenum";
 import { SvxEscapementItem } from "../../../editeng/inc/escapementitem";
+import { SvxAutoKernItem } from "../../../editeng/inc/autokernitem";
 import { SvxKerningItem } from "../../../editeng/inc/kernitem";
-import { RES_CHRATR_BOX, RES_CHRATR_ESCAPEMENT, RES_CHRATR_KERNING } from "../../inc/hintids";
+import {
+  RES_CHRATR_AUTOKERN,
+  RES_CHRATR_BOX,
+  RES_CHRATR_ESCAPEMENT,
+  RES_CHRATR_KERNING,
+} from "../../inc/hintids";
 
 import { SvxCrossedOutItem } from "../../../editeng/inc/crossedoutitem";
 import { SvxWordLineModeItem } from "../../../editeng/inc/wrlmitem";
@@ -190,6 +196,7 @@ export interface WriterTextPortion {
       fontFamilyGeneric?: string;
       fontSizeTwips?: number;
       kerningTwips?: number;
+      autoKerning?: boolean;
       joinsPreviousCharacterBox?: boolean;
       characterBox?: Readonly<
         Record<"Top" | "Bottom" | "Left" | "Right", Readonly<{ line: string; padding: number }>>
@@ -217,6 +224,7 @@ export interface WriterInlineGraphicProjection {
 export interface WriterParagraphComputedStyle {
   /** Effective automatic first-line mode; omitted detached DTOs retain the manual default. */
   readonly autoFirstLineIndent?: boolean;
+  readonly autoKerning?: boolean;
   readonly color?: string;
   readonly contextualSpacing?: boolean;
   readonly firstLineIndentPt: number;
@@ -415,6 +423,7 @@ export class WriterViewProjection {
           id: this.GetNodeId(node),
           computedStyle: Object.freeze({
             autoFirstLineIndent: firstLine.IsAutoFirst(),
+            autoKerning: (node.GetAttr(RES_CHRATR_AUTOKERN) as SvxAutoKernItem).GetValue(),
             ...(color === "auto" ? {} : { color }),
             contextualSpacing: spacing.GetContext(),
             firstLineIndentPt: firstLine.ResolveTextFirstLineOffset() / 20,
@@ -797,6 +806,7 @@ function projectTextPortions(node: SwTextNode): readonly WriterTextPortion[] {
       handler.ReadItem(which) !== node.GetAttr(which)
     );
   }
+  const inheritedAutoKerning = (node.GetAttr(RES_CHRATR_AUTOKERN) as SvxAutoKernItem).GetValue();
   let previousBox: SvxBoxItem | undefined;
   for (let start = 0; start < node.Len();) {
     iterator.Seek(start);
@@ -808,6 +818,7 @@ function projectTextPortions(node: SwTextNode): readonly WriterTextPortion[] {
     const generic = getFontFamilyGeneric(font.GetFamily());
     const underline = handler.ReadItem(RES_CHRATR_UNDERLINE) as SvxUnderlineItem;
     const overline = handler.ReadItem(RES_CHRATR_OVERLINE) as SvxOverlineItem;
+    const autoKerning = (handler.ReadItem(RES_CHRATR_AUTOKERN) as SvxAutoKernItem).GetValue();
     const caseMap = (handler.ReadItem(RES_CHRATR_CASEMAP) as SvxCaseMapItem).GetCaseMap();
     const emphasisMark = (
       handler.ReadItem(RES_CHRATR_EMPHASIS_MARK) as SvxEmphasisMarkItem
@@ -885,6 +896,7 @@ function projectTextPortions(node: SwTextNode): readonly WriterTextPortion[] {
                 ).GetHeight(),
               }
             : {}),
+          ...(autoKerning !== inheritedAutoKerning ? { autoKerning } : {}),
           ...(authored(RES_CHRATR_KERNING)
             ? { kerningTwips: (handler.ReadItem(RES_CHRATR_KERNING) as SvxKerningItem).GetValue() }
             : {}),

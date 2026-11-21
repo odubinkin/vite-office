@@ -57,6 +57,10 @@ export interface OdfCharacterProperties {
   /** Native CharEscapement and CharEscapementHeight. */
   readonly escapement?: number;
   readonly escapementHeight?: number;
+  /** Native character rotation is carried in tenths of a degree. */
+  readonly rotation?: number;
+  readonly rotationFitToLine?: boolean;
+  readonly scaleWidth?: number;
   readonly underlineStyle?: number;
   readonly underlineColor?: number;
   readonly underlineHasColor?: boolean;

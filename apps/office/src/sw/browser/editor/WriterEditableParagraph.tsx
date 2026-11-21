@@ -284,6 +284,7 @@ export function WriterEditableParagraph({
               paragraph.computedStyle.fontFamilyGeneric,
             ),
             fontSize: `${paragraph.computedStyle.fontSizePt}pt`,
+            fontKerning: paragraph.computedStyle.autoKerning === true ? "normal" : "none",
             fontStyle: paragraph.computedStyle.fontStyle,
             fontWeight: paragraph.computedStyle.fontWeight,
             lineHeight: paragraph.computedStyle.lineHeight,
@@ -473,9 +474,17 @@ export function WriterTextPortionProjection({
     );
   if (run.attributes.fontSizeTwips !== undefined)
     content = <span style={{ fontSize: `${run.attributes.fontSizeTwips / 20}pt` }}>{content}</span>;
-  if (run.attributes.kerningTwips !== undefined)
+  const { autoKerning, kerningTwips } = run.attributes;
+  if (autoKerning !== undefined || kerningTwips !== undefined)
     content = (
-      <span style={{ letterSpacing: `${run.attributes.kerningTwips / 20}pt` }}>{content}</span>
+      <span
+        style={{
+          fontKerning: autoKerning === undefined ? undefined : autoKerning ? "normal" : "none",
+          letterSpacing: kerningTwips === undefined ? undefined : `${kerningTwips / 20}pt`,
+        }}
+      >
+        {content}
+      </span>
     );
   const runFamily = run.attributes.fontFamily ?? inheritedFontFamily;
   if (run.attributes.fontFamily !== undefined)

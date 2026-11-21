@@ -66,6 +66,7 @@ import {
   type WriterParagraphStyleGroup,
 } from "../../../inc/poolfmt";
 import {
+  RES_CHRATR_AUTOKERN,
   RES_CHRATR_FONT,
   RES_CHRATR_FONTSIZE,
   RES_CHRATR_CJK_FONTSIZE,
@@ -177,6 +178,7 @@ export interface WriterDocumentRecord {
   readonly compatSettings?: readonly CompatSetting[];
   readonly tableStyles?: readonly WriterInteropProperty[];
   readonly fontDefaults?: readonly SfxPoolItemSnapshot[];
+  readonly pairKerningDefault?: SfxPoolItemSnapshot;
   readonly tabStopDefault?: SfxPoolItemSnapshot;
   readonly textEffectDefault?: SfxPoolItemSnapshot;
   readonly textGridDefault?: SfxPoolItemSnapshot;
@@ -213,6 +215,7 @@ export function* encodeWriterDocumentSteps(document: SwDoc): Generator<void, Wri
     const font = document.GetAttrPool().GetUserDefaultItem(which);
     if (font) fontDefaults.push(encodeSfxPoolItem(font));
   }
+  const pairKerningDefault = document.GetAttrPool().GetUserDefaultItem(RES_CHRATR_AUTOKERN);
   const tabStopDefault = document.GetAttrPool().GetUserDefaultItem(RES_PARATR_TABSTOP);
   const textEffectDefault = encodeTextEffectDefault(document);
   const textGridDefault = encodeTextGridDefault(document);
@@ -230,6 +233,7 @@ export function* encodeWriterDocumentSteps(document: SwDoc): Generator<void, Wri
     ...(compatSettings === undefined ? {} : { compatSettings }),
     ...(tableStyles === undefined ? {} : { tableStyles }),
     ...(fontDefaults.length ? { fontDefaults } : {}),
+    ...(pairKerningDefault ? { pairKerningDefault: encodeSfxPoolItem(pairKerningDefault) } : {}),
     ...(tabStopDefault ? { tabStopDefault: encodeSfxPoolItem(tabStopDefault) } : {}),
     ...(textFrames.length ? { textFrames } : {}),
     ...(annotations.length ? { annotations } : {}),
@@ -437,6 +441,17 @@ export function* decodeWriterDocumentSteps(
         throw new Error("Stored Writer font default is invalid.");
       const pool = document.GetAttrPool();
       pool.SetUserDefaultItem(decodeSfxPoolItem(pool, font));
+    }
+    if (record.pairKerningDefault !== undefined) {
+      const kerning = record.pairKerningDefault;
+      if (
+        !isRecord(kerning) ||
+        kerning.which !== RES_CHRATR_AUTOKERN ||
+        typeof kerning.value !== "boolean"
+      )
+        throw new Error("Stored Writer pair kerning default is invalid.");
+      const pool = document.GetAttrPool();
+      pool.SetUserDefaultItem(decodeSfxPoolItem(pool, kerning));
     }
     if (record.tabStopDefault !== undefined) {
       const tab = record.tabStopDefault;

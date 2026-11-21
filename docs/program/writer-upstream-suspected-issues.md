@@ -6024,3 +6024,14 @@ handler for this boolean character property.
 
 - [Original boolean shadow handler](../../vendor/libreoffice-reference/xmloff/source/style/shdwdhdl.cxx#L37)
 - [Original character property mapping](../../vendor/libreoffice-reference/xmloff/source/text/txtprmap.cxx#L175)
+
+### WRITER-739 — Fit to Line exports as fixed character rotation scale
+
+The character Position page stores the Fit to Line checkbox in the
+`SvxCharRotateItem` boolean exposed as `CharRotationIsFitToLine`.
+The XML handler maps true to `fixed` and false to `line-height`.
+The mapping appears reversed relative to the token names. Writer
+preserves both directions of the original conversion.
+
+- [Original character rotation property](../../vendor/libreoffice-reference/xmloff/source/text/txtprmap.cxx#L244)
+- [Original rotation scale handler factory](../../vendor/libreoffice-reference/xmloff/source/text/txtprhdl.cxx#L1403)

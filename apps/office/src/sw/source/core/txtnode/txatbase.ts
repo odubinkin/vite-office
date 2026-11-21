@@ -12,6 +12,7 @@ import {
 import { SvxColorItem } from "../../../../editeng/inc/colritem";
 import { createWriterTextColorItem } from "../attr/swatrset";
 import { SvxEscapementItem } from "../../../../editeng/inc/escapementitem";
+import { SvxAutoKernItem } from "../../../../editeng/inc/autokernitem";
 import { SvxKerningItem } from "../../../../editeng/inc/kernitem";
 import { RES_CHRATR_ESCAPEMENT } from "../../../inc/hintids";
 
@@ -58,6 +59,7 @@ import {
   RES_CHRATR_RELIEF,
   RES_CHRATR_BACKGROUND,
   RES_CHRATR_KERNING,
+  RES_CHRATR_AUTOKERN,
   RES_CHRATR_POSTURE,
   RES_CHRATR_UNDERLINE,
   RES_CHRATR_OVERLINE,
@@ -111,6 +113,7 @@ export interface WriterCharacterAttributes extends WriterFontPaint {
   readonly fontSizeTwips?: number;
   /** Native signed character spacing in twips. */
   readonly kerningTwips?: number;
+  readonly autoKerning?: boolean;
   /** CSS-compatible explicit highlight color or Writer's transparent marker. */
   readonly highlight?: string;
   /** Whether the text uses a bold font weight. */
@@ -463,6 +466,8 @@ export function createSwFormatAutoFormat(
   )
     for (const which of [RES_CHRATR_FONTSIZE, RES_CHRATR_CJK_FONTSIZE, RES_CHRATR_CTL_FONTSIZE])
       items.Put(new SvxFontHeightItem(attributes.fontSizeTwips, 100, which));
+  if (attributes.autoKerning !== undefined && attributes.autoKerning !== inherited.autoKerning)
+    items.Put(new SvxAutoKernItem(attributes.autoKerning, RES_CHRATR_AUTOKERN));
   if (attributes.kerningTwips !== undefined && attributes.kerningTwips !== inherited.kerningTwips)
     items.Put(new SvxKerningItem(attributes.kerningTwips, RES_CHRATR_KERNING));
   if (attributes.highlight !== inherited.highlight && attributes.highlight !== undefined)
@@ -545,6 +550,9 @@ export function projectWriterCharacterAttributes(
   const fontSize =
     items.GetItemIfSet(RES_CHRATR_FONTSIZE, false) ??
     inherited?.GetItemIfSet(RES_CHRATR_FONTSIZE, true);
+  const pairKerning =
+    items.GetItemIfSet(RES_CHRATR_AUTOKERN, false) ??
+    inherited?.GetItemIfSet(RES_CHRATR_AUTOKERN, true);
   const kerning =
     items.GetItemIfSet(RES_CHRATR_KERNING, false) ??
     inherited?.GetItemIfSet(RES_CHRATR_KERNING, true);
@@ -596,6 +604,7 @@ export function projectWriterCharacterAttributes(
     ...(caseItem instanceof SvxCaseMapItem ? { caseMap: caseItem.GetCaseMap() } : {}),
     ...((emphasisMark & FontEmphasisMark.Style) !== FontEmphasisMark.NONE ? { emphasisMark } : {}),
     ...(fontSize instanceof SvxFontHeightItem ? { fontSizeTwips: fontSize.GetHeight() } : {}),
+    ...(pairKerning instanceof SvxAutoKernItem ? { autoKerning: pairKerning.GetValue() } : {}),
     ...(kerning instanceof SvxKerningItem ? { kerningTwips: kerning.GetValue() } : {}),
     ...(visibleBackground instanceof SvxBrushItem
       ? { highlight: writerHighlightColorValue(visibleBackground) }

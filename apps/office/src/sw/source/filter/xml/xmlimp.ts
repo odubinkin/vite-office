@@ -37,7 +37,10 @@ import {
   applyNamedCharacterStyles,
   commonCharacterStyleName,
 } from "../../../../xmloff/source/text/txtstyli";
-import { applyNamedParagraphStyles } from "../../../../xmloff/source/style/prstylei";
+import {
+  applyNamedParagraphStyles,
+  applyParagraphTextDefaults,
+} from "../../../../xmloff/source/style/prstylei";
 
 import {
   FastAttributeList,
@@ -677,17 +680,7 @@ class SwXMLImport
   /** Finalizes declared styles before the first text attachment. @returns Nothing. */
   private finishStyleDefinitions(): void {
     if (this.styleDefinitionsApplied) return;
-    const distance = this.defaultParagraphStyle?.defaultTabDistance;
-    if (distance !== undefined) {
-      const name = xmlTextString("TabStopDistance");
-      const value = new Any([Number(convertTwipToMm100(BigInt(distance)))], "sal_Int32");
-      try {
-        this.model.createTextDefaults().setPropertyValue(name, value);
-      } finally {
-        value.dispose();
-        name.dispose();
-      }
-    }
+    applyParagraphTextDefaults(this.model.createTextDefaults(), this.defaultParagraphStyle);
     const paragraphs = this.styles?.GetStyleDefinitions("paragraph") ?? new Map();
     applyNamedCharacterStyles(this.model, this.styles?.GetStyleDefinitions("text") ?? new Map());
     applyNamedParagraphStyles(

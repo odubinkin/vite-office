@@ -1,12 +1,16 @@
 /** @fileoverview Consumed native text character property map and handler transport from txtprmap.cxx; no browser boolean formatting model or substitute UNO provider. */
 import { cppu_detail_getUnoType_FillStyle } from "../../../offapi/com/sun/star/drawing/FillStyle";
-import * as CaseMap from "../../../offapi/com/sun/star/style/CaseMap";
 import { XMLShadowedPropHdl } from "../style/shdwdhdl";
 import { XMLConstantsPropertyHandler } from "../style/XMLConstantsPropertyHandler";
 import { PropertyValue } from "../../../udkapi/com/sun/star/beans/PropertyValue";
 import { PropertyState } from "../../../udkapi/com/sun/star/beans/PropertyState";
 
-import { exportTextEmphasis, importTextEmphasis } from "./txtprhdl";
+import {
+  exportTextEmphasis,
+  importTextEmphasis,
+  textCaseMapProperties,
+  XMLTextRotationAnglePropHdl,
+} from "./txtprhdl";
 import { XMLEscapementPropHdl, XMLEscapementHeightPropHdl } from "../style/escphdl";
 
 import {
@@ -32,7 +36,7 @@ import { SvXMLUnitConverter } from "../core/xmluconv";
 import { XMLColorTransparentPropHdl, XMLIsTransparentPropHdl } from "../style/xmlbahdl";
 import { XMLFontWeightPropHdl } from "../style/weighhdl";
 import { XMLNamedBoolPropertyHdl } from "../style/NamedBoolPropertyHdl";
-import { XMLBoolPropHdl } from "../style/xmlbahdl";
+import { XMLBoolPropHdl, XMLPercent16PropHdl } from "../style/xmlbahdl";
 import { XMLPosturePropHdl } from "../style/postuhdl";
 import { XMLKerningPropHdl } from "../style/kernihdl";
 import {
@@ -65,8 +69,8 @@ const fontRelief = new XMLConstantsPropertyHandler(
   null,
 );
 const kerningConverter = new SvXMLUnitConverter("mm100");
-/** Independent source CharWeight/CharPosture associations; floats and typed FontSlant are retained. */
-const scriptProperties = [
+/** Native typed character properties with independent lexical handlers. */
+const numericProperties = [
   [T.FO_FONT_WEIGHT, "fo:font-weight", "fontWeight", weight, "float"],
   [T.STYLE_FONT_WEIGHT_ASIAN, "style:font-weight-asian", "fontWeightAsian", weight, "float"],
   [T.STYLE_FONT_WEIGHT_COMPLEX, "style:font-weight-complex", "fontWeightComplex", weight, "float"],
@@ -78,6 +82,14 @@ const scriptProperties = [
     "fontPostureComplex",
     posture,
     slantType,
+  ],
+  [T.STYLE_TEXT_SCALE, "style:text-scale", "scaleWidth", new XMLPercent16PropHdl(), "sal_Int16"],
+  [
+    T.STYLE_TEXT_ROTATION_ANGLE,
+    "style:text-rotation-angle",
+    "rotation",
+    new XMLTextRotationAnglePropHdl(),
+    "sal_Int16",
   ],
 ] as const;
 const lineStyleHandler = new XMLUnderlineStylePropHdl(),
@@ -101,33 +113,6 @@ const lineColorTokens = {
   overline: T.STYLE_TEXT_OVERLINE_COLOR,
 } as const;
 const textLines = ["underline", "overline"] as const;
-/** Native CharCaseMap property split between the case transformation and font variant. */
-const caseMapProperties = [
-  [
-    T.FO_FONT_VARIANT,
-    "fo:font-variant",
-    new XMLConstantsPropertyHandler(
-      [
-        ["normal", CaseMap.NONE],
-        ["small-caps", CaseMap.SMALLCAPS],
-      ],
-      null,
-    ),
-  ],
-  [
-    T.FO_TEXT_TRANSFORM,
-    "fo:text-transform",
-    new XMLConstantsPropertyHandler(
-      [
-        ["none", CaseMap.NONE],
-        ["uppercase", CaseMap.UPPERCASE],
-        ["lowercase", CaseMap.LOWERCASE],
-        ["capitalize", CaseMap.TITLE],
-      ],
-      null,
-    ),
-  ],
-] as const;
 /** Original chained CharStrikeout style/type/width/text associations. */
 const strikeoutProperties = [
   [
@@ -153,6 +138,12 @@ const boolProperties = [
   [T.STYLE_LETTER_KERNING, "style:letter-kerning", "autoKerning", bool],
   [T.STYLE_TEXT_OUTLINE, "style:text-outline", "outline", bool],
   [T.FO_TEXT_SHADOW, "fo:text-shadow", "shadow", new XMLShadowedPropHdl()],
+  [
+    T.STYLE_TEXT_ROTATION_SCALE,
+    "style:text-rotation-scale",
+    "rotationFitToLine",
+    new XMLNamedBoolPropertyHdl("fixed", "line-height"),
+  ],
 ] as const;
 /** Source merged CharLocale mappings for the three independent script families. */
 const languageProperties = [
@@ -224,7 +215,7 @@ const characterBoxFields = [
 
 /** Tokens consumed by this bounded source property map. */
 export const textCharacterPropertyTokens = [
-  ...scriptProperties.map(
+  ...numericProperties.map(
     /** Selects a native property token. @param entry - Mapping. @returns Token. */ ([token]) =>
       token,
   ),
@@ -306,7 +297,7 @@ export function exportTextCharacterProperties(properties: OdfCharacterProperties
         result += ` ${name}="${output[0]}"`;
       }
     }
-    for (const [, name, key, handler, type] of scriptProperties) {
+    for (const [, name, key, handler, type] of numericProperties) {
       const scalar = properties[key];
       if (scalar === undefined) continue;
       value.insert([scalar], type);
@@ -333,7 +324,7 @@ export function exportTextCharacterProperties(properties: OdfCharacterProperties
     }
     if (properties.caseMap !== undefined) {
       value.insert([properties.caseMap], "sal_Int16");
-      for (const [, name, handler] of caseMapProperties)
+      for (const [, name, handler] of textCaseMapProperties)
         if (handler.exportXML(output, value, converter)) result += ` ${name}="${output[0]}"`;
     }
     if (properties.emphasis !== undefined)
@@ -408,13 +399,13 @@ export function importTextCharacterProperties(
         }
         continue;
       }
-      const script = scriptProperties.find(
+      const numeric = numericProperties.find(
         /** Finds one source property entry. @param entry - Mapping. @returns Token equality. */ ([
           item,
         ]) => item === token,
       );
-      if (script !== undefined) {
-        const [, , key, handler, type] = script;
+      if (numeric !== undefined) {
+        const [, , key, handler, type] = numeric;
         if (handler.importXML(text, value, converter)) {
           const scalar: [number] = [0];
           value.extract(scalar, type);
@@ -422,7 +413,7 @@ export function importTextCharacterProperties(
         }
         continue;
       }
-      const caseMap = caseMapProperties.find(
+      const caseMap = textCaseMapProperties.find(
         /** Resolves one of the native case attributes. @param property - Map entry. @returns Token match. */
         ([item]) => item === token,
       );
@@ -790,6 +781,9 @@ export function applyTextImportProperties(
       ["relief", "CharRelief", "sal_Int16"],
       ["escapement", "CharEscapement", "sal_Int16"],
       ["escapementHeight", "CharEscapementHeight", "sal_Int8"],
+      ["rotation", "CharRotation", "sal_Int16"],
+      ["rotationFitToLine", "CharRotationIsFitToLine", "bool"],
+      ["scaleWidth", "CharScaleWidth", "sal_Int16"],
       ["underlineStyle", "CharUnderline", "sal_Int16"],
       ["underlineColor", "CharUnderlineColor", "sal_Int32"],
       ["underlineHasColor", "CharUnderlineHasColor", "bool"],
