@@ -5527,3 +5527,16 @@ applies its authored properties without that collection change.
   that query even when the dialog still shows a previous message.
 - Preserve the independent entry state and the status row. The evidence
   is source-derived and covered through the Writer search UI.
+
+### WRITER-697 — Named argument admission depends on the last recognized member
+
+- Upstream: `sfx2/source/appl/appuno.cxx`, `TransformParameters`, complex
+  formal argument with individually named members.
+- Observation: the loop replaces the conversion status for each recognized
+  member. A trailing malformed member suppresses the assembled item even
+  after earlier members converted. The same malformed member listed before
+  a valid member can leave the assembled item admitted, with defaults for
+  the member that failed. Unrecognized names do not change that status.
+- Writer preserves this ordering for the represented `SearchItem.*` members
+  of `.uno:ExecuteSearch`. This observation applies to the shared Sfx
+  source. Calc-side dispatch was not changed in this checkpoint.

@@ -25,7 +25,9 @@ import type {
 } from "../../source/uibase/uiview/viewsrch";
 import type { SwView } from "../../source/uibase/uiview/view";
 import { WRITER_COMMAND_IDS } from "../../uiconfig/swriter/menubar/menubar-commands";
-import { SvxSearchCmd } from "../../../svl/inc/srchitem";
+import { ABSOLUTE } from "../../../offapi/com/sun/star/util/SearchAlgorithms2";
+import { SearchAlgorithms } from "../../../offapi/com/sun/star/util/SearchAlgorithms";
+import { SvxSearchCellType, SvxSearchCmd } from "../../../svl/inc/srchitem";
 import { TransliterationFlags } from "../../../i18nutil/inc/transliteration";
 import { WriterSimilaritySearchDialog } from "./WriterSimilaritySearchDialog";
 import { WriterJapaneseSearchDialog } from "./WriterJapaneseSearchDialog";
@@ -290,23 +292,40 @@ export function WriterSearch({
       );
     }
     try {
-      if (!dialog && command === SvxSearchCmd.FIND_ALL) searchField.current?.focus();
-      const searchItem = dialog
-        ? {
-            ...item,
-            styleSearch: styleOptions !== undefined,
-            searchStyle,
-            replaceStyle,
-            selection: canSearchSelection && item.selection,
-          }
-        : owner.CreateFindBarSearchItem({
-            search: item.search,
-            matchCase: findbarMatchCase,
-            matchDiacritics: findbarMatchDiacritics,
-          });
+      if (!dialog) {
+        if (command === SvxSearchCmd.FIND_ALL) searchField.current?.focus();
+        const toolbarItem = owner.CreateFindBarSearchItem({
+          search: item.search,
+          matchCase: findbarMatchCase,
+          matchDiacritics: findbarMatchDiacritics,
+        });
+        view.Execute(WRITER_COMMAND_IDS.executeSearch, {
+          "SearchItem.SearchString": toolbarItem.search,
+          "SearchItem.CellType": SvxSearchCellType.VALUE,
+          "SearchItem.Backward": backward,
+          "SearchItem.SearchFlags": 0,
+          "SearchItem.TransliterateFlags":
+            (toolbarItem.matchCase ? 0 : TransliterationFlags.IGNORE_CASE) |
+            (toolbarItem.matchDiacritics ? 0 : TransliterationFlags.IGNORE_DIACRITICS_CTL) |
+            (toolbarItem.matchKashida ? 0 : TransliterationFlags.IGNORE_KASHIDA_CTL),
+          "SearchItem.Command": command,
+          "SearchItem.AlgorithmType": SearchAlgorithms.ABSOLUTE,
+          "SearchItem.AlgorithmType2": ABSOLUTE,
+          "SearchItem.SearchFormatted": false,
+          UseAttrItemList: false,
+        });
+        return;
+      }
       const request: WriterExecuteSearchArguments = {
-        SearchItem: { ...searchItem, command, backward },
-        ...(!dialog ? { UseAttrItemList: false } : {}),
+        SearchItem: {
+          ...item,
+          styleSearch: styleOptions !== undefined,
+          searchStyle,
+          replaceStyle,
+          selection: canSearchSelection && item.selection,
+          command,
+          backward,
+        },
       };
       view.Execute(WRITER_COMMAND_IDS.executeSearch, request);
     } catch {

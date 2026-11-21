@@ -7464,3 +7464,16 @@ therefore become visible. Calc preserves the span and keeps filtered rows
 hidden.
 
 - [Original marked outline expansion](../../vendor/libreoffice-reference/sc/source/ui/docshell/olinefun.cxx)
+
+### CALC-784 — Named argument admission depends on the last recognized member
+
+- Upstream: `sfx2/source/appl/appuno.cxx`, `TransformParameters`, complex
+  formal argument with individually named members.
+- Observation: the loop replaces the conversion status for each recognized
+  member. A trailing malformed member suppresses the assembled item even
+  after earlier members converted. The same malformed member listed before
+  a valid member can leave the assembled item admitted, with defaults for
+  the member that failed. Unrecognized names do not change that status.
+- Writer preserves this ordering for the represented `SearchItem.*` members
+  of `.uno:ExecuteSearch`. This observation applies to the shared Sfx
+  source. Calc-side dispatch was not changed in this checkpoint.

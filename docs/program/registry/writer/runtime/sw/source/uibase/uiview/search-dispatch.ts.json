@@ -1,0 +1,33 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sw/source/uibase/uiview/search-dispatch.ts",
+    "classification": "browser-adaptation",
+    "state": "active",
+    "suite": "writer",
+    "subsystem": "text-search",
+    "capabilityIds": [
+      "CAP-0111"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "not-applicable",
+      "defaultStatus": "not-applicable",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/sw/source/uibase/uiview/search-dispatch.ts#TransformWriterSearchParameters",
+        "sfx2/source/appl/appuno.cxx#TransformParameters",
+        "svl/source/items/srchitem.cxx#SvxSearchItem::PutValue"
+      ],
+      "justification": "Translates named native SearchItem members for Writer ExecuteSearch from actual UNO PropertyValues or browser scalar records. Retains caller property order and the source admission rule. Copies original engine options to Writer without projecting wildcard into dialog settings.",
+      "knownViolations": [],
+      "localSymbols": [
+        "TransformWriterSearchParameters"
+      ],
+      "sourceResponsibility": "browser-owned",
+      "upstreamFile": null,
+      "upstreamSymbols": []
+    }
+  }
+}

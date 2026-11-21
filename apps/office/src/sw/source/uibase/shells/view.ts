@@ -10,6 +10,7 @@ import {
   type WriterViewCommandTarget,
 } from "../../../sdi/swriter";
 import { SfxUInt16Item } from "../../../../svl/source/items/intitem";
+import { TransformWriterSearchParameters } from "../uiview/search-dispatch";
 import type { WriterExecuteSearchArguments, WriterSearchSlotItem } from "../uiview/viewsrch";
 import { SvxULSpaceItem } from "../../../../editeng/inc/ulspitem";
 import { SID_ATTR_PARA_ULSPACE } from "../../../../editeng/inc/editids";
@@ -78,10 +79,13 @@ export function createWriterViewCommandRegistry(
       capabilityId: "CAP-0111",
       /** Dispatches the native SearchItem request. @param context - Active view. @param args - Request items. @returns Whether the search matched. */
       execute(context, args): boolean {
-        const request = getWriterCommandArguments<WriterExecuteSearchArguments>(args);
+        const search = context.GetSearch();
+        const request = TransformWriterSearchParameters(
+          getWriterCommandArguments(args),
+          search.GetSearchItem(),
+        );
         if (request?.SearchItem === undefined) return false;
         const { SearchItem: item, Quiet } = request;
-        const search = context.GetSearch();
         return (
           (Quiet
             ? search.ExecSearch(item, item.command, item.backward, true)

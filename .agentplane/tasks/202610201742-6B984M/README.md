@@ -4,7 +4,7 @@ title: "Implement Writer search and replace core and browser UI"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 49
+revision: 51
 origin:
   system: "manual"
 depends_on:
@@ -151,6 +151,12 @@ comments:
   -
     author: "CODER"
     body: "Verified checkpoint: Writer now publishes the pinned SID_SEARCH_OPTIONS (10281) SfxUInt16Item through the view shell. Its shared SearchOptionFlags match include/svl/srchdefs.hxx. The editable view returns ALL and the existing read-only view flag removes exactly REPLACE and REPLACE_ALL. The browser search dialog subscribes through the existing Sfx browser controller, preserving the separate Find Bar option surface, and consumes distinct bits for both replacement operations and the other represented controls. Verified that a live bindings invalidation restores both replace buttons without reopening the dialog. Sfx slots can supply state without an execution handler; direct execution of SearchOptions returns disabled. Cross-checked the pinned Writer StateSearch, _viewsh.sdi and svx EnableControls_Impl/EnableControl_Impl. Final checks: 79 targeted Writer tests in six files, 28 shared dispatcher/bindings tests in three files and two Writer resource tests passed. Final production build, dependency boundaries, JSDoc, file sizes, provenance and source tree, scoped ESLint/Prettier, policy routing and whitespace passed. This checkpoint keeps the existing browser read-only view state owner. Native format attributes, unrepresented option controls and the complete SvxSearchItem UNO property bridge remain open. No full-suite run; task stays DOING."
+  -
+    author: "CODER"
+    body: "User stop condition (2026-11-21): continue the approved Writer search task through full scope verification and AgentPlane closure, then pause the thread goal immediately. Intermediate checkpoints and passing targeted tests do not satisfy this condition. Do not start another AgentPlane implementation task after closing 202610201742-6B984M. Preserve the existing targeted-test and one-full-run-per-ten-completed-tasks cadence."
+  -
+    author: "CODER"
+    body: "Verified checkpoint: the Writer Find Bar dispatches the original named SearchItem.* properties and UseAttrItemList=false. ExecuteSearch consumes the represented flat fields from a browser scalar record or real UNO PropertyValue sequence and passes typed options to the existing cursor engine. The toolbar remains absolute; native callers can select wildcard through AlgorithmType2, with the source backslash default and literal replacement. No Writer wildcard checkbox was added because the pinned SvxSearchDialog makes it visible only for Calc. The view test covers a typed wildcard Replace All, escaped literal question mark, literal replacement and grouped undo. Native last-member conversion ordering is preserved and recorded as WRITER-697 and CALC-784. The full SvxSearchItem aggregate/configuration and additional unrepresented formal members, native attribute lists and ICU regex remain open. Targeted verification: 80/81 Writer tests passed on the combined run; its clipboard menu test hit the existing 15-second deadline and passed on isolated retry without altering that deadline. All 55 shared tests passed with the threads pool after the initial forks worker startup timeouts; two resource checks passed. Production build, source tree/provenance, dependencies, JSDoc, file sizes, scoped lint/format, routing and whitespace passed. No full suite at this checkpoint. The task remains DOING; pause the goal only after full AgentPlane closure as the user requested."
 events:
   -
     type: "status"
@@ -344,8 +350,18 @@ events:
     at: "2026-11-21T07:08:26.379Z"
     author: "CODER"
     body: "Verified checkpoint: Writer now publishes the pinned SID_SEARCH_OPTIONS (10281) SfxUInt16Item through the view shell. Its shared SearchOptionFlags match include/svl/srchdefs.hxx. The editable view returns ALL and the existing read-only view flag removes exactly REPLACE and REPLACE_ALL. The browser search dialog subscribes through the existing Sfx browser controller, preserving the separate Find Bar option surface, and consumes distinct bits for both replacement operations and the other represented controls. Verified that a live bindings invalidation restores both replace buttons without reopening the dialog. Sfx slots can supply state without an execution handler; direct execution of SearchOptions returns disabled. Cross-checked the pinned Writer StateSearch, _viewsh.sdi and svx EnableControls_Impl/EnableControl_Impl. Final checks: 79 targeted Writer tests in six files, 28 shared dispatcher/bindings tests in three files and two Writer resource tests passed. Final production build, dependency boundaries, JSDoc, file sizes, provenance and source tree, scoped ESLint/Prettier, policy routing and whitespace passed. This checkpoint keeps the existing browser read-only view state owner. Native format attributes, unrepresented option controls and the complete SvxSearchItem UNO property bridge remain open. No full-suite run; task stays DOING."
+  -
+    type: "comment"
+    at: "2026-11-21T07:18:36.912Z"
+    author: "CODER"
+    body: "User stop condition (2026-11-21): continue the approved Writer search task through full scope verification and AgentPlane closure, then pause the thread goal immediately. Intermediate checkpoints and passing targeted tests do not satisfy this condition. Do not start another AgentPlane implementation task after closing 202610201742-6B984M. Preserve the existing targeted-test and one-full-run-per-ten-completed-tasks cadence."
+  -
+    type: "comment"
+    at: "2026-11-21T07:34:29.102Z"
+    author: "CODER"
+    body: "Verified checkpoint: the Writer Find Bar dispatches the original named SearchItem.* properties and UseAttrItemList=false. ExecuteSearch consumes the represented flat fields from a browser scalar record or real UNO PropertyValue sequence and passes typed options to the existing cursor engine. The toolbar remains absolute; native callers can select wildcard through AlgorithmType2, with the source backslash default and literal replacement. No Writer wildcard checkbox was added because the pinned SvxSearchDialog makes it visible only for Calc. The view test covers a typed wildcard Replace All, escaped literal question mark, literal replacement and grouped undo. Native last-member conversion ordering is preserved and recorded as WRITER-697 and CALC-784. The full SvxSearchItem aggregate/configuration and additional unrepresented formal members, native attribute lists and ICU regex remain open. Targeted verification: 80/81 Writer tests passed on the combined run; its clipboard menu test hit the existing 15-second deadline and passed on isolated retry without altering that deadline. All 55 shared tests passed with the threads pool after the initial forks worker startup timeouts; two resource checks passed. Production build, source tree/provenance, dependencies, JSDoc, file sizes, scoped lint/format, routing and whitespace passed. No full suite at this checkpoint. The task remains DOING; pause the goal only after full AgentPlane closure as the user requested."
 doc_version: 3
-doc_updated_at: "2026-11-21T07:08:26.379Z"
+doc_updated_at: "2026-11-21T07:34:29.102Z"
 doc_updated_by: "CODER"
 description: "Implement the approved coherent Writer search-and-replace feature from pinned LibreOffice sources: real shared search engine and options, native paragraph/cursor traversal and replacement/history contracts, view-owned search state and dispatch, Find toolbar and Find and Replace dialog with generated upstream command placement and shortcuts. Preserve source semantics and explicit unsupported boundaries; never substitute DOM text search or browser RegExp for ICU contracts. Work only on writer in vite-office-writer; local upstream reading approved, no network or merges. Keep active until approved scope is verified."
 sections:

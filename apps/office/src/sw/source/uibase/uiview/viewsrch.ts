@@ -61,6 +61,7 @@ export interface WriterSearchItem {
   readonly replaceStyle: string;
   readonly similarity: WriterSimilarityOptions;
   readonly selection: boolean;
+  readonly searchOptions?: SearchOptions2;
 }
 
 /** The represented SvxSearchItem value exchanged by Writer search slots. */
@@ -569,27 +570,18 @@ export class SwViewSearch {
     }
   }
 
-  /** Searches the model with the request's original options. @param item - Dispatched search item. @param command - Requested operation. @param backward - Direction. @returns Search feedback. */
-  private Search(
-    item: WriterSearchItem,
-    command: SvxSearchCmd,
-    backward: boolean,
-  ): WriterSearchResult {
-    if (item.styleSearch ? !item.searchStyle : item.search.length === 0)
-      return { matches: 0, wrapped: false };
-    const inSelection = item.selection;
-    if (inSelection && !this.HasSelection()) return { matches: 0, wrapped: false };
-    const options = new SearchOptions2();
+  /** Copies native options or builds them from the represented dialog controls. @param item - Search item. @returns Independent options for this execution. */
+  private CreateSearchOptions(item: WriterSearchItem): SearchOptions2 {
+    const options =
+      item.searchOptions === undefined
+        ? new SearchOptions2()
+        : new SearchOptions2(item.searchOptions);
     options.searchString.assign(toOUString(item.search));
-    // Only Replace All performs replacement in FUNC_Search. Single Replace
-    // validates a match with Find before replacing it through the edit shell.
-    if (command === SvxSearchCmd.REPLACE_ALL)
-      options.replaceString.assign(toOUString(item.replacement));
-    options.Locale = GetSettings().GetLanguageTag().getLocale();
+    if (item.searchOptions !== undefined) return options;
     options.AlgorithmType2 = ABSOLUTE;
     options.searchFlag =
       (item.wholeWords ? NORM_WORD_ONLY : 0) |
-      (inSelection ? REG_NOT_BEGINOFLINE | REG_NOT_ENDOFLINE : 0);
+      (item.selection ? REG_NOT_BEGINOFLINE | REG_NOT_ENDOFLINE : 0);
     if (item.similaritySearch) {
       options.AlgorithmType2 = APPROXIMATE;
       options.changedChars = item.similarity.changedChars;
@@ -603,6 +595,25 @@ export class SwViewSearch {
       (item.matchKashida ? 0 : TransliterationFlags.IGNORE_KASHIDA_CTL) |
       (item.matchCharacterWidth ? 0 : TransliterationFlags.IGNORE_WIDTH) |
       (item.useAsianOptions ? item.japaneseFlags : 0);
+    return options;
+  }
+
+  /** Searches the model with the request's original options. @param item - Dispatched search item. @param command - Requested operation. @param backward - Direction. @returns Search feedback. */
+  private Search(
+    item: WriterSearchItem,
+    command: SvxSearchCmd,
+    backward: boolean,
+  ): WriterSearchResult {
+    if (item.styleSearch ? !item.searchStyle : item.search.length === 0)
+      return { matches: 0, wrapped: false };
+    const inSelection = item.selection;
+    if (inSelection && !this.HasSelection()) return { matches: 0, wrapped: false };
+    const options = this.CreateSearchOptions(item);
+    options.Locale = GetSettings().GetLanguageTag().getLocale();
+    // Native FUNC_Search supplies replacement text only for Replace All.
+    if (command === SvxSearchCmd.REPLACE_ALL)
+      options.replaceString.assign(toOUString(item.replacement));
+    else options.replaceString.clear();
     const cursor = this.shell.GetCursor();
     const first = backward ? SwDocPositions.End : SwDocPositions.Start;
     const last = backward ? SwDocPositions.Start : SwDocPositions.End;

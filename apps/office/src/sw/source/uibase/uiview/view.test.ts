@@ -4,7 +4,11 @@ import { describe, expect, it, vi } from "vitest";
 
 import { SvxProtectItem } from "../../../../editeng/source/items/frmitems";
 import { LanguageTag } from "../../../../i18nlangtag/inc/languagetag";
-import { ABSOLUTE } from "../../../../offapi/com/sun/star/util/SearchAlgorithms2";
+import { Any } from "../../../../cppu/inc/com/sun/star/uno/Any";
+import { PropertyValue } from "../../../../udkapi/com/sun/star/beans/PropertyValue";
+import { PropertyState } from "../../../../udkapi/com/sun/star/beans/PropertyState";
+import { unicode } from "../../core/unocore/unocrsrhelper";
+import { ABSOLUTE, WILDCARD } from "../../../../offapi/com/sun/star/util/SearchAlgorithms2";
 import {
   REG_NOT_BEGINOFLINE,
   REG_NOT_ENDOFLINE,
@@ -256,6 +260,62 @@ it("dispatches ExecuteSearch through the native view slot and honors Quiet", /**
   expect(view.GetSearch().GetFeedback()).toBeUndefined();
   expect(view.Execute(WRITER_COMMAND_IDS.repeatSearch)).toMatchObject({ value: true });
   expect(view.GetSearch().GetFeedback()).toMatchObject({ backward: true });
+  view.Close();
+});
+
+it("dispatches a named wildcard Replace All request with native property values and grouped undo", /** Verifies dotted UNO member order, the backslash escape and actual cursor replacement. @returns Nothing. */ () => {
+  const view = new SwView(
+    new SwDocShell(
+      createWriterDocument(),
+      createDocument({ id: "wildcard-dispatch", suiteId: "writer", title: "Search" }),
+    ),
+  );
+  const frame = new SfxViewFrame<SwView>(new BrowserSfxDispatcher());
+  view.AttachFrame(frame);
+  frame.SetActiveView(view, [view.GetCommandShell(), view.GetWrtShell().GetCommandShell()]);
+  const shell = view.GetWrtShell();
+  shell.Insert("file?.txt fileA.txt file?.tat");
+  const property =
+    /** Builds one real UNO property. @param name - Formal argument name. @param value - UNO Any value. @returns Property. */
+    (name: string, value: Any): PropertyValue =>
+      new PropertyValue(unicode(name), 0, value, PropertyState.DIRECT_VALUE);
+  const arguments_ = [
+    property(
+      "SearchItem.SearchString",
+      new Any(unicode("file\\?.t?t").getDataAddress(), "OUString"),
+    ),
+    property("SearchItem.ReplaceString", new Any(unicode("$1").getDataAddress(), "OUString")),
+    property("SearchItem.Command", new Any([SvxSearchCmd.REPLACE_ALL], "sal_Int16")),
+    property("SearchItem.AlgorithmType", new Any([0], "sal_Int16")),
+    property("SearchItem.AlgorithmType2", new Any([WILDCARD], "sal_Int16")),
+    property("Quiet", new Any(true)),
+  ];
+  expect(view.Execute(WRITER_COMMAND_IDS.executeSearch, arguments_)).toMatchObject({ value: true });
+  expect(shell.GetActiveParagraph().GetText()).toBe("$1 fileA.txt $1");
+  expect(view.GetSearch().GetFeedback()).toBeUndefined();
+  expect(shell.Undo()).toBe(true);
+  expect(shell.GetActiveParagraph().GetText()).toBe("file?.txt fileA.txt file?.tat");
+  view.Close();
+});
+
+it("retains native admission by the last recognized named member", /** Exercises the two orders of a malformed SearchItem member and a valid search term. @returns Nothing. */ () => {
+  const view = new SwView(
+    new SwDocShell(
+      createWriterDocument(),
+      createDocument({ id: "search-member-order", suiteId: "writer", title: "Search" }),
+    ),
+  );
+  const frame = new SfxViewFrame<SwView>(new BrowserSfxDispatcher());
+  view.AttachFrame(frame);
+  frame.SetActiveView(view, [view.GetCommandShell(), view.GetWrtShell().GetCommandShell()]);
+  view.GetWrtShell().Insert("cat cat");
+  const command = WRITER_COMMAND_IDS.executeSearch;
+  expect(
+    view.Execute(command, { "SearchItem.SearchString": "cat", "SearchItem.Backward": "false" }),
+  ).toMatchObject({ value: false });
+  expect(
+    view.Execute(command, { "SearchItem.Backward": "false", "SearchItem.SearchString": "cat" }),
+  ).toMatchObject({ value: true });
   view.Close();
 });
 
