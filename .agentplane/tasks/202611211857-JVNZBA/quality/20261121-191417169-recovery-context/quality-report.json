@@ -1,0 +1,24 @@
+{
+  "schema_version": 1,
+  "task_id": "202611211857-JVNZBA",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-11-21T19:14:17.169Z",
+  "verdict": "pass",
+  "summary": "The native Calculate submenu changes the active Calc document and editing state through its consumed slots. Command, calculation, result, dependency and undo evidence support the approved scope.",
+  "evaluated_sha": "81b6187abaf34c296e0ab6b499b992e3236d8998",
+  "blueprint_digest": "ae59d3f999ac914fe290fdde7cd2486fadac578ead0179cf78f725d80c51c1f2",
+  "findings": [
+    "Compared the source document shell, calculation tree and constant conversion with the mounted workbench and original UI and core regressions."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202611211857-JVNZBA/README.md",
+    "output/calc-JVNZBA-verification.md",
+    "output/calc-JVNZBA-verified-tests.log"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": [
+    "Desktop-specific progress, chart, detective and script callbacks remain outside the current browser calculation slice."
+  ]
+}
