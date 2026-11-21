@@ -77,6 +77,7 @@ export class SwPostItMgr {
     view.SetEditSelection(new EditSelection(backward ? doc.GetEndPaM() : doc.GetStartPaM()));
     if (!this.Run(window, options, backward, SvxSearchCmd.FIND)) {
       view.SetEditSelection(previous);
+      window.view.ShowCursor(false, false);
       return false;
     }
     this.SetActiveSidebarWin(field);

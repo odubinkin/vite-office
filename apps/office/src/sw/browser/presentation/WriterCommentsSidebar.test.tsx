@@ -119,3 +119,71 @@ it("searches from the focused comment caret and releases it on document input", 
     session.view.Close();
   }
 });
+
+it("preserves the inactive comment selection when it has no match", /** Exercises the failed sidebar probe followed by a body match. @returns Nothing. */ () => {
+  const { session, shell } = openAnnotatedDocument("miss between words");
+  const workbench = render(<WriterWorkbench isActive view={session.view} />);
+  try {
+    const comment = screen.getByRole<HTMLTextAreaElement>("textbox", { name: "Comment — Ada" });
+    act(
+      /** Leaves a noncollapsed selection in the inactive annotation. @returns Nothing. */ () => {
+        comment.focus();
+        comment.setSelectionRange(5, 12);
+        fireEvent.select(comment);
+      },
+    );
+    fireEvent.mouseDown(screen.getByLabelText("Writer document body"));
+    fireEvent.keyDown(window, { key: "h", ctrlKey: true });
+    const dialog = within(screen.getByRole("dialog", { name: "Find and Replace" }));
+    fireEvent.click(dialog.getByText("Other options"));
+    const comments = dialog.getByRole<HTMLInputElement>("checkbox", { name: "Comments" });
+    if (!comments.checked) fireEvent.click(comments);
+    fireEvent.change(dialog.getByLabelText("Find"), { target: { value: "text" } });
+    fireEvent.click(dialog.getByRole("button", { name: "Find Next" }));
+    expect(shell.GetSelText()).toBe("text");
+    expect(comment.selectionStart).toBe(5);
+    expect(comment.selectionEnd).toBe(12);
+  } finally {
+    workbench.unmount();
+    session.view.Close();
+  }
+});
+
+it("finds a Unicode regex in a later note paragraph and replaces its selection literally", /** Verifies native EditEngine replacement and Writer document undo. @returns Nothing. */ () => {
+  const previous = "intro\n😀7 tail";
+  const replacement = "intro\n$1\nnext tail";
+  const { session, shell, format } = openAnnotatedDocument(previous);
+  const workbench = render(<WriterWorkbench isActive view={session.view} />);
+  try {
+    const comment = screen.getByRole<HTMLTextAreaElement>("textbox", { name: "Comment — Ada" });
+    fireEvent.keyDown(window, { key: "h", ctrlKey: true });
+    const dialog = within(screen.getByRole("dialog", { name: "Find and Replace" }));
+    fireEvent.click(dialog.getByText("Other options"));
+    const comments = dialog.getByRole<HTMLInputElement>("checkbox", { name: "Comments" });
+    const regex = dialog.getByRole<HTMLInputElement>("checkbox", { name: "Regular expressions" });
+    if (!comments.checked) fireEvent.click(comments);
+    if (!regex.checked) fireEvent.click(regex);
+    fireEvent.change(dialog.getByLabelText("Find"), { target: { value: "(😀)7" } });
+    fireEvent.change(dialog.getByLabelText("Replace with"), { target: { value: "$1" } });
+    fireEvent.click(dialog.getByRole("button", { name: "Find Next" }));
+    expect(comment).toHaveFocus();
+    expect(comment.selectionStart).toBe(6);
+    expect(comment.selectionEnd).toBe(9);
+    fireEvent.click(dialog.getByRole("button", { name: /^Replace$/ }));
+    expect(format.GetField().GetPar2()).toBe("intro\n$1 tail");
+    expect(comment).toHaveValue("intro\n$1 tail");
+    fireEvent.change(comment, { target: { value: replacement } });
+    expect(format.GetField().GetPar2()).toBe(replacement);
+    act(
+      /** Reverses the note edit and then the regex replacement. @returns Nothing. */ () => {
+        expect(shell.Undo()).toBe(true);
+        expect(shell.Undo()).toBe(true);
+      },
+    );
+    expect(comment).toHaveValue(previous);
+    expect(format.GetField().GetPar2()).toBe(previous);
+  } finally {
+    workbench.unmount();
+    session.view.Close();
+  }
+});

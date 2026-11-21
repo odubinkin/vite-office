@@ -4,7 +4,7 @@ title: "Implement Writer search and replace core and browser UI"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 80
+revision: 81
 origin:
   system: "manual"
 depends_on:
@@ -244,6 +244,9 @@ comments:
   -
     author: "CODER"
     body: "Verified checkpoint: the browser Find and Replace dialog follows the source layout and notes admission, with Comments disabling the style toggle and pure paragraph style mode disabling Comments. The similarity transition clears Including Styles and disables the formatting controls while retaining their criteria. Switching to inclusive styles preserves the whole-word and case choices. Forty targeted Writer tests passed in six suites, along with the production build, two Writer resource tests, module boundaries, source tree, provenance, JSDoc, file size, scoped ESLint and Prettier, diff, doctor and routing. The task remains open while the insertion and ODT comment mapping scope awaits approval. No full-suite cadence increment."
+  -
+    author: "CODER"
+    body: "Verified checkpoint: an unsuccessful probe of an inactive annotation restores both its native and browser selections before continuing in body text. The mounted regression verifies non-BMP matching in a later comment paragraph, native literal regex replacement, multiline textarea edits, and document undo. WRITER-716 records the native annotation versus body capture-reference behavior. Passed 36 targeted Writer tests, five shared EditEngine and browser matcher tests, two Writer resource tests and the production build. Module boundaries, source tree and provenance, JSDoc, file size, scoped lint and formatting, diff, doctor and routing passed. No task closure or full-suite cadence increment."
 events:
   -
     type: "status"
@@ -592,8 +595,13 @@ events:
     at: "2026-11-21T12:25:55.451Z"
     author: "CODER"
     body: "Verified checkpoint: the browser Find and Replace dialog follows the source layout and notes admission, with Comments disabling the style toggle and pure paragraph style mode disabling Comments. The similarity transition clears Including Styles and disables the formatting controls while retaining their criteria. Switching to inclusive styles preserves the whole-word and case choices. Forty targeted Writer tests passed in six suites, along with the production build, two Writer resource tests, module boundaries, source tree, provenance, JSDoc, file size, scoped ESLint and Prettier, diff, doctor and routing. The task remains open while the insertion and ODT comment mapping scope awaits approval. No full-suite cadence increment."
+  -
+    type: "comment"
+    at: "2026-11-21T12:28:28.209Z"
+    author: "CODER"
+    body: "Verified checkpoint: an unsuccessful probe of an inactive annotation restores both its native and browser selections before continuing in body text. The mounted regression verifies non-BMP matching in a later comment paragraph, native literal regex replacement, multiline textarea edits, and document undo. WRITER-716 records the native annotation versus body capture-reference behavior. Passed 36 targeted Writer tests, five shared EditEngine and browser matcher tests, two Writer resource tests and the production build. Module boundaries, source tree and provenance, JSDoc, file size, scoped lint and formatting, diff, doctor and routing passed. No task closure or full-suite cadence increment."
 doc_version: 3
-doc_updated_at: "2026-11-21T12:25:55.451Z"
+doc_updated_at: "2026-11-21T12:28:28.209Z"
 doc_updated_by: "CODER"
 description: "Implement the approved coherent Writer search-and-replace feature from pinned LibreOffice sources: real shared search engine and options, native paragraph/cursor traversal and replacement/history contracts, view-owned search state and dispatch, Find toolbar and Find and Replace dialog with generated upstream command placement and shortcuts. Preserve source semantics and explicit unsupported boundaries; never substitute DOM text search or browser RegExp for ICU contracts. Work only on writer in vite-office-writer; local upstream reading approved, no network or merges. Keep active until approved scope is verified."
 sections:

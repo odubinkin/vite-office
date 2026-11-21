@@ -5744,3 +5744,14 @@ applies its authored properties without that collection change.
 - The trailing-dollar check compares those values. A pattern such as `b$`
   can match at the paragraph end during ordinary text search and fail with
   notes enabled. Writer preserves this check in the annotation traversal.
+
+### WRITER-716 — Regex replacement inserts capture references literally in comments
+
+- Writer delegates a single replacement in the active annotation to
+  `SwPostItMgr::Replace` in `sw/source/uibase/docvw/PostItMgr.cxx`. The
+  EditEngine branch in `editeng/source/editeng/impedit4.cxx` inserts
+  `SvxSearchItem::GetReplaceString()` into the current editor selection.
+- Writer body text resolves capture references in its replacement path. A
+  replacement of `(😀)7` with `$1` therefore inserts the characters `$1` in
+  the comment editor, while body replacement inserts the captured emoji.
+  The browser preserves the annotation behavior.
