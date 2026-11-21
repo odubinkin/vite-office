@@ -4,6 +4,10 @@ import { FastAttributeList, SvXMLImportContext } from "../core/xmlimp";
 import { XMLToken } from "../core/xmltoken";
 import { SvxXMLTabStopImportContext, type XMLTabStop } from "../style/xmltabi";
 import {
+  XMLBackgroundImageContext,
+  type OdfBackgroundImage,
+} from "../style/XMLBackgroundImageContext";
+import {
   XMLComplexColorContext,
   getOdfThemeColor,
   type OdfThemeColor,
@@ -11,10 +15,11 @@ import {
 
 /** Imports element-valued text properties such as paragraph tab stops. */
 export class XMLTextPropertySetContext extends SvXMLImportContext {
-  /** Creates a property context. @param setTabStops - Optional tab-stop sink. @param setThemeColor - Optional character color sink. @returns Context. */
+  /** Creates a property context. @param setTabStops - Optional tab-stop sink. @param setThemeColor - Optional character color sink. @param setBackgroundImage - Optional legacy background sink. @returns Context. */
   public constructor(
     private readonly setTabStops?: (stops: readonly XMLTabStop[]) => void,
     private readonly setThemeColor?: (color: OdfThemeColor) => void,
+    private readonly setBackgroundImage?: (image: OdfBackgroundImage | undefined) => void,
   ) {
     super();
   }
@@ -24,6 +29,8 @@ export class XMLTextPropertySetContext extends SvXMLImportContext {
     element: XMLToken,
     attributes: FastAttributeList,
   ): SvXMLImportContext | null {
+    if (element === XMLToken.STYLE_BACKGROUND_IMAGE && this.setBackgroundImage)
+      return new XMLBackgroundImageContext(attributes, this.setBackgroundImage);
     if (element === XMLToken.LOEXT_CHAR_COMPLEX_COLOR && this.setThemeColor)
       return new XMLComplexColorContext(
         attributes,

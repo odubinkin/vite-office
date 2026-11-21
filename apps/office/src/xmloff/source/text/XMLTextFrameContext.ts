@@ -7,6 +7,7 @@ import {
 } from "../draw/fill-properties";
 import type { OdfBoxProperties } from "../style/bordrhdl";
 import { Converter } from "../../../sax/source/tools/converter";
+import { FillStyle } from "../../../offapi/com/sun/star/drawing/FillStyle";
 import type { XMLTextCursor } from "../../inc/txtimp";
 import { FastAttributeList, SvXMLImportContext } from "../core/xmlimp";
 import { XMLToken as T } from "../core/xmltoken";
@@ -14,12 +15,20 @@ import { SvXMLUnitConverter } from "../core/xmluconv";
 import type { XMLTextImportHelper } from "./txtimp";
 import { XMLBase64ImportContext } from "../core/XMLBase64ImportContext";
 import type { XMLGraphicSource } from "../core/xmlgrhlp";
+import {
+  importBackgroundColor,
+  type OdfBackgroundColor,
+  type OdfBackgroundImage,
+} from "../style/XMLBackgroundImageContext";
+import { XMLTextPropertySetContext } from "./XMLTextPropertySetContext";
 import { importWritingDirection } from "../style/prhdlfac";
 import { importTextConstant } from "./txtprhdl";
 
 /** Represented ODF automatic graphic style values shared with text-frame export. */
 export interface XMLTextFrameStyle
-  extends OdfFillProperties, OdfBitmapFillProperties, OdfBoxProperties {
+  extends OdfFillProperties, OdfBitmapFillProperties, OdfBoxProperties, OdfBackgroundColor {
+  readonly backgroundImage?: OdfBackgroundImage | null;
+  readonly fillOpacityName?: string;
   readonly horizontal?: number | undefined;
   readonly horizontalRelation?: number | undefined;
   readonly toggle?: boolean | undefined;
@@ -105,8 +114,11 @@ export class XMLTextFrameStyleContext extends SvXMLImportContext {
     this.parent = attrs.get(T.STYLE_PARENT_STYLE_NAME) ?? undefined;
   }
 
-  /** Reads the consumed native graphic properties. @param element - Original token. @param attrs - Property attributes. @returns Inert child for scalar properties. */
-  public override createFastChildContext(element: T, attrs: FastAttributeList): null {
+  /** Reads scalar graphic properties and delegates element-valued properties. @param element - Original token. @param attrs - Property attributes. @returns Property context. */
+  public override createFastChildContext(
+    element: T,
+    attrs: FastAttributeList,
+  ): SvXMLImportContext | null {
     if (element !== T.STYLE_GRAPHIC_PROPERTIES) return null;
     const horizontal = attrs.get(T.STYLE_HORIZONTAL_POS);
     const horizontalMode = importTextConstant("horizontal", horizontal);
@@ -122,9 +134,19 @@ export class XMLTextFrameStyleContext extends SvXMLImportContext {
     for (const [token, value] of attrs)
       if (token === T.STYLE_WRITING_MODE || token === T.LOEXT_WRITING_MODE)
         writingMode = importWritingDirection(value) ?? writingMode;
+    const { fillStyle, ...fill } = importFillProperties(attrs);
+    const background = importBackgroundColor(attrs);
+    const opacityName = attrs.get(T.DRAW_OPACITY_NAME);
+    const skipSolid =
+      fillStyle === FillStyle.SOLID &&
+      fill.fillColor === undefined &&
+      background.backgroundColor === "transparent";
     this.style = {
-      ...importFillProperties(attrs),
+      ...fill,
+      ...(fillStyle === undefined || skipSolid ? {} : { fillStyle }),
       ...importBitmapFillProperties(attrs),
+      ...background,
+      ...(opacityName === null ? {} : { fillOpacityName: opacityName }),
       padding: length(attrs, T.FO_PADDING),
       paddingTop: length(attrs, T.FO_PADDING_TOP),
       paddingBottom: length(attrs, T.FO_PADDING_BOTTOM),
@@ -174,7 +196,14 @@ export class XMLTextFrameStyleContext extends SvXMLImportContext {
       marginTop: length(attrs, T.FO_MARGIN_TOP),
       marginBottom: length(attrs, T.FO_MARGIN_BOTTOM),
     };
-    return null;
+    return new XMLTextPropertySetContext(
+      undefined,
+      undefined,
+      /** Captures the legacy graphic separately from the modern fill properties. @param image - Legacy image state. @returns Nothing. */
+      (image) => {
+        this.style = { ...this.style, backgroundImage: image ?? null };
+      },
+    );
   }
 
   /** Publishes the represented frame style. @returns Nothing. */

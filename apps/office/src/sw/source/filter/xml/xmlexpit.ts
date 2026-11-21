@@ -10,7 +10,6 @@ import type { SwFrameFormat } from "../../core/layout/atrfrm";
 import { SvxTabAdjust, type SvxTabStopItem } from "../../../../editeng/inc/tstpitem";
 import type { OdfTabStop } from "../../../../xmloff/source/text/txtparae";
 import { SvxBoxItem } from "../../../../editeng/source/items/frmitems";
-import { BitmapMode } from "../../../../offapi/com/sun/star/drawing/BitmapMode";
 import { FillStyle } from "../../../../offapi/com/sun/star/drawing/FillStyle";
 import {
   XATTR_FILLBITMAP,
@@ -23,7 +22,7 @@ import {
   getBitmapMode,
   type XFillBitmapItem,
 } from "../../../../svx/inc/xbtmpit";
-import { exportLegacyBitmapPosition } from "../../../../xmloff/source/style/PageMasterStyleMap";
+import { exportBackgroundImage } from "../../../../xmloff/source/style/XMLBackgroundImageExport";
 import type { XFillBmpPosItem } from "../../../../svx/inc/xbtmpit";
 import type { XFillStyleItem } from "../../../../svx/inc/xfillit0";
 import type { XFillColorItem } from "../../../../svx/inc/xflclit";
@@ -31,10 +30,8 @@ import type { XFillTransparenceItem } from "../../../../svx/inc/xfltrit";
 import { getBitmapGeometry, type XMLBitmapStyleExport } from "./xmlexp-fill";
 import {
   exportBitmapFillProperties,
-  exportBitmapMode,
   exportFillProperties,
 } from "../../../../xmloff/source/draw/fill-properties";
-import { escapeXml } from "../../../../xmloff/source/text/txtparae";
 import type { SvxBorderLine } from "../../../../editeng/source/items/borderline";
 import type { SvxBrushItem } from "../../../../editeng/source/items/frmitems.brush";
 import type { SvxFrameDirectionItem } from "../../../../editeng/inc/frmdiritem";
@@ -141,16 +138,13 @@ export class XMLPageBackgroundExport {
       }),
     );
     if (image && mode !== undefined) {
-      const { href } = image;
-      const repeat = exportBitmapMode(mode);
       const point = (items.Get(bitmapGeometryWhich.point) as XFillBmpPosItem).GetValue();
-      const position =
-        mode === BitmapMode.NO_REPEAT
-          ? ` style:position="${exportLegacyBitmapPosition(point)}"`
-          : "";
-      const legacyMode = mode === BitmapMode.REPEAT ? "" : ` style:repeat="${repeat}"`;
-      const opacity = transparency === undefined ? "" : ` draw:opacity="${100 - transparency}%"`;
-      children = `<style:background-image xlink:href="${escapeXml(href)}" xlink:type="simple" xlink:actuate="onLoad"${position}${legacyMode}${opacity}/>`;
+      children = exportBackgroundImage({
+        href: image.href,
+        mode,
+        point,
+        ...(transparency === undefined ? {} : { transparency }),
+      });
     }
     return { attributes: attributes.length ? ` ${attributes.join(" ")}` : "", children };
   }

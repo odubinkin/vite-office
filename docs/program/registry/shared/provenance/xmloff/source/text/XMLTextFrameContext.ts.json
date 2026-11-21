@@ -21,7 +21,8 @@
       "Handles a package-local draw:image child and the native run-through foreground/background style.",
       "V4DQJW as-character graphic checkpoint. Raster children in a text paragraph use the original as-character default and accept explicit as-char along with the existing paragraph and character anchor values.",
       "Imports inline PNG/JPEG files and the older direct-text form into original anchored graphic nodes.",
-      "Reads the named bitmap fill and individual graphic-style deltas for inherited frame properties."
+      "Reads the named bitmap fill and individual graphic-style deltas for inherited frame properties.",
+      "Collects the original frame brush color, transparency and background child states separately from the modern DrawingLayer fields."
     ],
     "omittedResponsibilities": [
       "Graphical and embedded destinations, frame chaining, page and as-character anchors, and unrepresented frame properties remain outside this slice."
@@ -67,6 +68,10 @@
         {
           "path": "apps/office/src/sw/source/filter/xml/odt-frame-bitmap.test.ts",
           "marker": "ports the bitmap frame assertions from testFramebackgrounds"
+        },
+        {
+          "path": "apps/office/src/sw/source/filter/xml/odt-frame-bitmap.test.ts",
+          "marker": "converts legacy frame brushes"
         }
       ],
       "upstream": [

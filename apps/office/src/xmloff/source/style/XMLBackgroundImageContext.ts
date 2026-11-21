@@ -1,4 +1,4 @@
-/** @fileoverview Original legacy ODF page background image and placement context. */
+/** @fileoverview Original legacy ODF background image and placement context. */
 import { Converter } from "../../../sax/source/tools/converter";
 import { BitmapMode } from "../../../offapi/com/sun/star/drawing/BitmapMode";
 import { RectanglePoint as P } from "../../../offapi/com/sun/star/drawing/RectanglePoint";
@@ -9,10 +9,37 @@ import { XMLToken } from "../core/xmltoken";
 import { importBitmapMode } from "../draw/fill-properties";
 
 /** Legacy graphic source, anchor, repeat mode and opacity. */
-export interface OdfPageBackgroundImage extends XMLGraphicSource {
+export interface OdfBackgroundImage extends XMLGraphicSource {
   readonly mode: BitmapMode;
   readonly point?: P;
   readonly transparency?: number;
+}
+
+/** The original brush color and transparency members shared by text graphic styles. */
+export interface OdfBackgroundColor {
+  readonly backgroundColor?: number | "transparent";
+  readonly backgroundTransparency?: number;
+}
+
+/** Reads the legacy color and percentage handlers. @param attributes - Original properties. @returns Authored brush members. */
+export function importBackgroundColor(attributes: FastAttributeList): OdfBackgroundColor {
+  const background = attributes.get(XMLToken.FO_BACKGROUND_COLOR);
+  const alpha = attributes.get(XMLToken.STYLE_BACKGROUND_TRANSPARENCY);
+  const color: [number] = [0],
+    transparency: [number] = [0];
+  return {
+    ...(background === "transparent"
+      ? { backgroundColor: "transparent" as const }
+      : background !== null && Converter.convertColor(color, background)
+        ? { backgroundColor: color[0] }
+        : {}),
+    ...(alpha !== null &&
+    Converter.convertPercent(transparency, alpha) &&
+    transparency[0] >= 0 &&
+    transparency[0] <= 100
+      ? { backgroundTransparency: transparency[0] }
+      : {}),
+  };
 }
 
 /** Translates the original legacy position tokens to their drawing point. @param raw - Legacy style position. @returns Position if recognized. */
@@ -68,14 +95,14 @@ function mergeLegacyVertical(point: P, vertical: P): P {
 
 /** Loads the first inline background image only if the legacy URL is empty. */
 export class XMLBackgroundImageContext extends SvXMLImportContext {
-  private readonly image: OdfPageBackgroundImage;
+  private readonly image: OdfBackgroundImage;
   private hasStream = false;
   private inline: Uint8Array | undefined;
 
   /** Collects placement in original attribute order. @param attributes - Legacy image attributes. @param publish - Receiver for this background. @returns Context. */
   constructor(
     attributes: FastAttributeList,
-    private readonly publish: (image: OdfPageBackgroundImage) => void,
+    private readonly publish: (image: OdfBackgroundImage | undefined) => void,
   ) {
     super();
     const href = attributes.get(XMLToken.XLINK_HREF) ?? "";
@@ -123,9 +150,10 @@ export class XMLBackgroundImageContext extends SvXMLImportContext {
     );
   }
 
-  /** Publishes the graphic source only if it could have an image. @returns Nothing. */
+  /** Publishes the source or an explicitly empty graphic. @returns Nothing. */
   override endFastElement(): void {
     if (this.image.href) this.publish(this.image);
     else if (this.inline !== undefined) this.publish({ ...this.image, inline: this.inline });
+    else this.publish(undefined);
   }
 }

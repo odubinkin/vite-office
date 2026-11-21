@@ -1,5 +1,5 @@
 /** @fileoverview Implements Writer's streaming SwXMLImport bridge over fast SAX contexts. */
-import { importPageBackground, importPageLayoutBox } from "./xmlimpit";
+import { hasDrawingFrameFill, importPageBackground, importPageLayoutBox } from "./xmlimpit";
 import { getActivePageStory, type SwFrameFormat } from "../../core/layout/atrfrm";
 import type { OdfPageBackground } from "../../../../xmloff/source/style/PageMasterStyleMap";
 import type { XMLImageStyleDefinition } from "../../../../xmloff/source/style/ImageStyle";
@@ -200,7 +200,7 @@ class SwXMLImport
       this.GetTextImport().GetCursor() as SwXTextCursor,
       value,
       style,
-      this.resolveNamedBitmap(style.bitmapName),
+      this.resolveFrameBitmap(style),
     );
   }
 
@@ -214,7 +214,7 @@ class SwXMLImport
       value,
       style,
       graphic,
-      this.resolveNamedBitmap(style.bitmapName),
+      this.resolveFrameBitmap(style),
     );
     return true;
   }
@@ -334,6 +334,11 @@ class SwXMLImport
   private resolveNamedBitmap(name: string | undefined): XFillBitmapItem | undefined {
     if (name === undefined) return undefined;
     return this.document.GetBitmapTable().get(this.imageStyles.get(name) ?? name);
+  }
+  /** Selects the effective raster source following the frame descriptor precedence. @param style - Inherited graphic properties. @returns Native bitmap item. */
+  private resolveFrameBitmap(style: XMLTextFrameStyle): XFillBitmapItem | undefined {
+    if (hasDrawingFrameFill(style)) return this.resolveNamedBitmap(style.bitmapName);
+    return style.backgroundImage ? this.resolveBackgroundImage(style.backgroundImage) : undefined;
   }
   public title: string | undefined;
   public language: string | undefined;

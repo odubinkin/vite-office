@@ -17,7 +17,8 @@
       "Writes original draw:frame and draw:text-box markup and the consumed automatic style attributes.",
       "Writes the source extension split and overlap flags and represented frame box and drawing fill properties.",
       "Emits relative-size relation attributes only with corresponding relative sizes and emits the graphic style writing mode.",
-      "Emits draw:image within native draw:frame, with the package-relative href, link attributes and ODF 1.3 MIME."
+      "Emits draw:image within native draw:frame, with the package-relative href, link attributes and ODF 1.3 MIME.",
+      "Emits compatible brush color and background image properties alongside the represented drawing fill."
     ],
     "omittedResponsibilities": [
       "Full frame property-map coverage and measured fallback size from native desktop fly layout remain outside this slice."
@@ -47,6 +48,10 @@
         {
           "path": "apps/office/src/sw/source/filter/ww8/docxexport.drawing.test.ts",
           "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/source/filter/xml/odt-frame-bitmap.test.ts",
+          "marker": "converts legacy frame brushes"
         }
       ],
       "upstream": [

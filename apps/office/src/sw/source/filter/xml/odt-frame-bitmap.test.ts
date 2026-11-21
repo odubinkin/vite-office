@@ -1,6 +1,7 @@
 /** @fileoverview Named Writer fly frame bitmap fills and native ODT geometry round trips. */
 import { readFileSync } from "node:fs";
 import { assert, expect, it } from "vitest";
+import { encodeBase64 } from "../../../../comphelper/source/misc/base64";
 import { BitmapMode } from "../../../../offapi/com/sun/star/drawing/BitmapMode";
 import { FillStyle } from "../../../../offapi/com/sun/star/drawing/FillStyle";
 import { RectanglePoint } from "../../../../offapi/com/sun/star/drawing/RectanglePoint";
@@ -39,7 +40,26 @@ it("ports the bitmap frame assertions from testFramebackgrounds", /** Checks the
   const source = (await readOdtDocument(bytes, metadata)).document;
   let reopened: SwDoc | undefined;
   try {
-    reopened = (await readOdtDocument(await writeOdtDocument(source, metadata), metadata)).document;
+    const saved = await writeOdtDocument(source, metadata);
+    reopened = (await readOdtDocument(saved, metadata)).document;
+    const archive = await DocumentArchive.open(saved);
+    const styles = new DOMParser().parseFromString(
+      await archive.readTextEntry("content.xml"),
+      "application/xml",
+    );
+    const backgrounds = Array.from(styles.getElementsByTagNameNS(NS.style, "background-image"));
+    expect(backgrounds).toHaveLength(3);
+    for (const background of backgrounds)
+      expect(background.getAttributeNS(NS.style, "repeat")).toBe("stretch");
+    const translucent = backgrounds.find(
+      /** Selects the original scalar 55-percent opacity case. @param element - Compatible brush element. @returns Match. */
+      (element) => element.getAttributeNS(NS.draw, "opacity") === "55%",
+    );
+    assert(translucent);
+    expect(translucent.parentElement?.getAttributeNS(NS.fo, "background-color")).toBe(
+      "transparent",
+    );
+    expect(translucent.parentElement?.getAttributeNS(NS.draw, "opacity")).toBe("55%");
     for (const document of [source, reopened]) {
       expect([...document.GetSpzFrameFormats()]).toHaveLength(16);
       for (const [name, alpha] of [
@@ -140,5 +160,101 @@ it("combines inherited frame bitmap geometry and shares a single package declara
     reopened?.Dispose();
     worker?.Dispose();
     original.Dispose();
+  }
+});
+
+it("converts legacy frame brushes and preserves DrawingLayer precedence", /** Checks compatible image placement, inline streams, RGB and opacity using native items after ODT and Worker. @returns Completion. */ async () => {
+  const fixtureArchive = await DocumentArchive.open(new Uint8Array(readFileSync(fixture)));
+  const png = await fixtureArchive.readEntry(pngPath);
+  const helper = new SvXMLGraphicHelper(
+    new Map([[pngPath, { bytes: png, mediaType: "image/png" }]]),
+  );
+  const ns = `xmlns:office="${NS.office}" xmlns:text="${NS.text}" xmlns:style="${NS.style}" xmlns:draw="${NS.draw}" xmlns:xlink="${NS.xlink}" xmlns:svg="${NS.svg}" xmlns:fo="${NS.fo}"`;
+  const positioned = `<style:background-image xlink:href="${pngPath}" style:position="bottom right" style:repeat="no-repeat" draw:opacity="65%"/>`;
+  const inline = `<style:background-image style:repeat="repeat"><office:binary-data>${encodeBase64(png)}</office:binary-data></style:background-image>`;
+  const rules = [
+    ["LegacyRaster", 'fo:background-color="#802010"', positioned],
+    ["InlineRaster", "", inline],
+    ["LegacyColor", 'fo:background-color="#102030" style:background-transparency="45%"', ""],
+    [
+      "ModernRaster",
+      'draw:fill="bitmap" draw:fill-image-name="Sky" style:repeat="repeat" style:background-transparency="80%"',
+      positioned,
+    ],
+    [
+      "ModernSolid",
+      'draw:fill="solid" draw:fill-color="#405060" style:background-transparency="45%"',
+      positioned,
+    ],
+    ["TransparentSolid", 'draw:fill="solid" fo:background-color="transparent"', ""],
+    ["LegacyRgbOnly", 'draw:fill="solid" fo:background-color="#102030"', ""],
+  ] as const;
+  const declaration = `<office:document-styles ${ns}><office:styles><draw:fill-image draw:name="Sky" xlink:href="${pngPath}"/></office:styles></office:document-styles>`;
+  const automatic = rules
+    .map(
+      /** Renders independent authored graphic styles. @param rule - Style definition. @returns ODF style. */
+      ([name, attrs, image]) =>
+        `<style:style style:family="graphic" style:name="${name}"><style:graphic-properties ${attrs}>${image}</style:graphic-properties></style:style>`,
+    )
+    .join("");
+  const frames = rules
+    .map(
+      /** Anchors a real Writer text box in the body. @param rule - Style definition. @returns Frame XML. */
+      ([name]) =>
+        `<draw:frame draw:name="${name}" draw:style-name="${name}" text:anchor-type="paragraph" svg:width="2cm" svg:height="2cm"><draw:text-box><text:p>${name}</text:p></draw:text-box></draw:frame>`,
+    )
+    .join("");
+  const content = `<office:document-content ${ns}><office:automatic-styles>${automatic}</office:automatic-styles><office:body><office:text><text:p>${frames}</text:p></office:text></office:body></office:document-content>`;
+  const source = importWriterXml(declaration, content, metadata, undefined, {
+    graphicHelper: helper,
+  }).document;
+  let worker: SwDoc | undefined;
+  let reopened: SwDoc | undefined;
+  try {
+    worker = decodeWriterDocument(structuredClone(encodeWriterDocument(source)));
+    const bytes = await writeOdtDocument(worker, metadata);
+    reopened = (await readOdtDocument(bytes, metadata)).document;
+    for (const document of [source, worker, reopened]) {
+      const raster = frameItems(document, "LegacyRaster");
+      expect(getBitmapFillItem(raster)?.GetGraphic()?.GetNativeData()).toEqual(png);
+      expect(getBitmapMode(raster)).toBe(BitmapMode.NO_REPEAT);
+      expect(getBitmapGeometry(raster)?.point).toBe(RectanglePoint.RIGHT_BOTTOM);
+      expect(getFillProperties(raster).fillTransparency).toBe(35);
+      const tiled = frameItems(document, "InlineRaster");
+      expect(getBitmapFillItem(tiled)?.GetGraphic()?.GetNativeData()).toEqual(png);
+      expect(getBitmapMode(tiled)).toBe(BitmapMode.REPEAT);
+      expect(getBitmapGeometry(tiled)?.point).toBe(RectanglePoint.LEFT_TOP);
+      const modern = frameItems(document, "ModernRaster");
+      expect(getBitmapFillItem(modern)?.GetName()).toBe("Sky");
+      expect(getBitmapMode(modern)).toBe(BitmapMode.REPEAT);
+      expect(getFillProperties(modern).fillTransparency ?? 0).toBe(0);
+      expect(getFillProperties(frameItems(document, "LegacyColor"))).toEqual({
+        fillStyle: FillStyle.SOLID,
+        fillColor: 0x102030,
+        fillTransparency: 45,
+      });
+      expect(getFillProperties(frameItems(document, "ModernSolid"))).toEqual({
+        fillStyle: FillStyle.SOLID,
+        fillColor: 0x405060,
+        fillTransparency: 45,
+      });
+      expect(getFillProperties(frameItems(document, "TransparentSolid")).fillStyle).toBe(
+        FillStyle.NONE,
+      );
+      expect(getFillProperties(frameItems(document, "LegacyRgbOnly"))).toMatchObject({
+        fillStyle: FillStyle.NONE,
+        fillColor: 0x102030,
+      });
+    }
+    const output = await DocumentArchive.open(bytes);
+    const xml = await output.readTextEntry("content.xml");
+    expect(xml).toMatch(
+      /style:background-image[^>]+style:position="bottom right" style:repeat="no-repeat" draw:opacity="65%"/u,
+    );
+    expect(xml).toContain('style:background-transparency="45%"');
+  } finally {
+    reopened?.Dispose();
+    worker?.Dispose();
+    source.Dispose();
   }
 });

@@ -79,19 +79,17 @@ export function getBitmapFillItem(items: SfxItemSet): XFillBitmapItem | undefine
   return bitmap instanceof XFillBitmapItem ? bitmap : undefined;
 }
 
-/** Projects the represented graphic style name, mode and authored geometry. @param items - Actual frame attributes. @param styles - Document bitmap names. @returns Graphic style deltas. */
+/** Projects the represented graphic style name, mode and authored geometry. @param items - Actual frame attributes. @param name - Registered bitmap name. @returns Graphic style deltas. */
 export function getBitmapFillProperties(
   items: SfxItemSet,
-  styles: XMLBitmapStyleExport | undefined,
+  name: string | undefined,
 ): OdfBitmapFillProperties {
-  const bitmap = getBitmapFillItem(items);
-  const image = bitmap && styles?.registerBitmap(bitmap);
   const geometry = getBitmapGeometry(items);
   const directMode =
     items.GetItemIfSet(XATTR_FILLBMP_TILE, false) ||
     items.GetItemIfSet(XATTR_FILLBMP_STRETCH, false);
   return {
-    ...(image === undefined ? {} : { bitmapName: image.name }),
+    ...(name === undefined ? {} : { bitmapName: name }),
     ...(geometry === undefined ? {} : { bitmapGeometry: geometry }),
     ...(directMode ? { bitmapMode: getBitmapMode(items) } : {}),
   };

@@ -5,7 +5,14 @@ import { cppu_detail_getUnoType_ShadowFormat as shadowType } from "../../../../o
 import type { SwPageDesc } from "../../core/layout/pagedesc";
 import type { OdfPageLayout } from "../../../../xmloff/source/style/xmlstyle";
 import { SvxBoxItem } from "../../../../editeng/source/items/frmitems";
-import type { SvxBrushItem } from "../../../../editeng/source/items/frmitems.brush";
+import { SvxBrushItem } from "../../../../editeng/source/items/frmitems.brush";
+import { MID_BACK_COLOR_TRANSPARENCY } from "../../../../editeng/inc/memberids";
+import { COL_TRANSPARENT, Color } from "../../../../tools/inc/color";
+import {
+  setGraphicBrushFill,
+  setSvxBrushItemAsFillAttributesToTargetSet,
+} from "../../../../svx/source/unodraw/unobrushitemhelper";
+import type { XMLTextFrameStyle } from "../../../../xmloff/source/text/XMLTextFrameContext";
 import { SvxFrameDirectionItem } from "../../../../editeng/inc/frmdiritem";
 import { SvxFrameDirection } from "../../../../editeng/inc/frmdir";
 import type { OdfTableVisualProperties } from "../../../../xmloff/source/table/XMLTableImport";
@@ -120,7 +127,7 @@ export function importPageBackground(
 }
 
 /** Applies DrawingLayer geometry to the native Writer item set. @param set - Destination. @param geometry - Authored geometric deltas. @returns Nothing. */
-export function putBitmapGeometry(set: SfxItemSet, geometry: OdfBitmapGeometry | undefined): void {
+function putBitmapGeometry(set: SfxItemSet, geometry: OdfBitmapGeometry | undefined): void {
   if (!geometry) return;
   for (const key of Object.keys(bitmapGeometryWhich) as (keyof typeof bitmapGeometryWhich)[]) {
     const value = geometry[key];
@@ -136,6 +143,83 @@ export function putBitmapGeometry(set: SfxItemSet, geometry: OdfBitmapGeometry |
       item.Dispose();
     }
   }
+}
+
+/** The represented FillBaseProperties members select DrawingLayer over the legacy brush. @param style - Effective frame style. @returns Whether a modern member is present. */
+export function hasDrawingFrameFill(style: XMLTextFrameStyle): boolean {
+  return (
+    style.fillStyle !== undefined ||
+    style.fillColor !== undefined ||
+    style.fillTransparency !== undefined ||
+    style.bitmapName !== undefined ||
+    style.bitmapGeometry !== undefined ||
+    style.bitmapMode !== undefined ||
+    style.fillOpacityName !== undefined
+  );
+}
+
+/** Constructs the original non-graphic brush from color and transparency members. @param set - Destination. @param color - Authored color. @param transparency - Legacy transparency percent. @param preserveBrushAlpha - Retain the default brush alpha on RGB-only writes. @returns Nothing. */
+function putFrameColorBrush(
+  set: SfxItemSet,
+  color: number | "transparent" | undefined,
+  transparency: number | undefined,
+  preserveBrushAlpha = false,
+): void {
+  const rgb = typeof color === "number" ? new Color(color) : new Color(COL_TRANSPARENT);
+  if (preserveBrushAlpha) rgb.SetAlpha(COL_TRANSPARENT.GetAlpha());
+  const brush = new SvxBrushItem(rgb, RES_BACKGROUND);
+  try {
+    if (transparency !== undefined && color !== "transparent") {
+      const value = new Any();
+      try {
+        value.insert([transparency], "sal_Int32");
+        brush.PutValue(value, MID_BACK_COLOR_TRANSPARENCY);
+      } finally {
+        value.dispose();
+      }
+    }
+    setSvxBrushItemAsFillAttributesToTargetSet(brush, set);
+  } finally {
+    brush.Dispose();
+  }
+}
+
+/** Fills a Writer frame descriptor from either its modern DrawingLayer members or the legacy background. @param set - Native frame items. @param style - Effective style. @param bitmap - Resolved bitmap for the active branch. @returns Nothing. */
+export function putFrameFillProperties(
+  set: SfxItemSet,
+  style: XMLTextFrameStyle,
+  bitmap: XFillBitmapItem | undefined,
+): void {
+  const image = style.backgroundImage;
+  if (!hasDrawingFrameFill(style)) {
+    if (image && bitmap)
+      setGraphicBrushFill(set, bitmap, image.mode, image.point, image.transparency);
+    else if (style.backgroundColor !== undefined || style.backgroundTransparency !== undefined)
+      putFrameColorBrush(set, style.backgroundColor, style.backgroundTransparency);
+    return;
+  }
+
+  const legacyAlpha =
+    style.fillOpacityName === undefined && style.fillStyle !== FillStyle.BITMAP
+      ? style.backgroundTransparency
+      : undefined;
+  const solid = style.fillStyle === FillStyle.SOLID;
+  const oldColor =
+    solid && style.fillColor === undefined && typeof style.backgroundColor === "number"
+      ? style.backgroundColor
+      : undefined;
+  const solidAlpha = solid && style.fillTransparency === undefined ? legacyAlpha : undefined;
+  if (oldColor !== undefined || solidAlpha !== undefined)
+    putFrameColorBrush(set, style.fillColor ?? oldColor, solidAlpha, oldColor !== undefined);
+  else {
+    if (style.fillStyle !== undefined) set.Put(new XFillStyleItem(style.fillStyle as FillStyle));
+    if (style.fillColor !== undefined) set.Put(new XFillColorItem("", new Color(style.fillColor)));
+  }
+  const transparency = style.fillTransparency ?? (solid ? undefined : legacyAlpha);
+  if (transparency !== undefined) set.Put(new XFillTransparenceItem(transparency));
+  if (bitmap && style.fillStyle === FillStyle.BITMAP) set.Put(bitmap);
+  if (style.bitmapMode !== undefined) setBitmapMode(set, style.bitmapMode);
+  putBitmapGeometry(set, style.bitmapGeometry);
 }
 
 /** Converts four independent filter properties to an owned item. @param value - ODF properties or presentation shorthand. @param which - Destination native identity. @param strict - Whether the existing cell profile rejects invalid XML. @returns Native item or absent for an empty declaration. */

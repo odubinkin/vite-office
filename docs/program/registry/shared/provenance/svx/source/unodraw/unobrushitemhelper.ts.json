@@ -15,10 +15,11 @@
     ],
     "preservedResponsibilities": [
       "Native GPOS_NONE conversion for every brush constructor represented by the kernel: original exclusive clear bound, NONE/SOLID branches, RGB rescue, complex-color finalization/copy and rounded 254-domain transparency mapping.",
-      "Projects the represented native empty and solid drawing fills back to a brush."
+      "Projects the represented native empty and solid drawing fills back to a brush.",
+      "Applies the original graphic brush branch to the resolved raster, tile/stretch, anchor and transparency items."
     ],
     "omittedResponsibilities": [
-      "Graphics/bitmap positioning and reverse fill conversion remain outside this non-graphic brush family; compiled native document-level differential remains unverified."
+      "Full graphic brush object storage, linked graphics and reverse graphic conversion remain outside this item-set boundary; compiled native document-level differential remains unverified."
     ],
     "evidence": {
       "local": [
@@ -33,6 +34,10 @@
         {
           "path": "apps/office/src/sw/source/writerfilter/rtftok/rtf-paragraph-shading.test.ts",
           "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/source/filter/xml/odt-frame-bitmap.test.ts",
+          "marker": "converts legacy frame brushes"
         }
       ],
       "upstream": [

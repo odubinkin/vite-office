@@ -1,5 +1,11 @@
 /** @fileoverview Native Writer text-frame element and graphic style export from txtparae.cxx. */
 import { exportBitmapFillProperties, exportFillProperties } from "../draw/fill-properties";
+import { Converter } from "../../../sax/source/tools/converter";
+import { FillStyle } from "../../../offapi/com/sun/star/drawing/FillStyle";
+import {
+  exportBackgroundImage,
+  type OdfBackgroundImageExport,
+} from "../style/XMLBackgroundImageExport";
 import { HoriOrientation } from "../../../offapi/com/sun/star/text/HoriOrientation";
 import { VertOrientation } from "../../../offapi/com/sun/star/text/VertOrientation";
 import type { XMLTextExportBlock } from "../table/XMLTableExport";
@@ -12,6 +18,7 @@ import type { XMLTextFrameAttributes, XMLTextFrameStyle } from "./XMLTextFrameCo
 export interface XMLTextFrameExportSource extends Omit<XMLTextFrameAttributes, "styleName"> {
   readonly parentStyle: string;
   readonly style: XMLTextFrameStyle;
+  readonly backgroundImage?: OdfBackgroundImageExport;
   readonly graphic?: { readonly href: string; readonly mediaType: string };
   readonly content: readonly XMLTextExportBlock[];
 }
@@ -85,6 +92,15 @@ export function exportTextFrameStyle(frame: XMLTextFrameExportSource, styleName:
     length("fo:margin-bottom", style.marginBottom);
   for (const fill of exportFillProperties(style)) values += ` ${fill}`;
   for (const fill of exportBitmapFillProperties(style)) values += ` ${fill}`;
+  if (style.fillStyle === FillStyle.SOLID && style.fillColor !== undefined) {
+    const color: [string] = [""];
+    Converter.convertColor(color, style.fillColor);
+    values += attribute("fo:background-color", color[0]);
+    if (style.fillTransparency)
+      values += attribute("style:background-transparency", `${style.fillTransparency}%`);
+  } else if (style.fillStyle === FillStyle.NONE || frame.backgroundImage?.transparency) {
+    values += attribute("fo:background-color", "transparent");
+  }
   for (const side of ["Top", "Bottom", "Left", "Right"] as const) {
     const suffix = side.toLowerCase();
     values +=
@@ -93,7 +109,10 @@ export function exportTextFrameStyle(frame: XMLTextFrameExportSource, styleName:
       attribute(`style:border-line-width-${suffix}`, style[`borderLineWidth${side}`]);
   }
   const parent = attribute("style:parent-style-name", frame.parentStyle || undefined);
-  return `<style:style style:name="${styleName}" style:family="graphic"${parent}><style:graphic-properties${values}/></style:style>`;
+  const properties = frame.backgroundImage
+    ? `<style:graphic-properties${values}>${exportBackgroundImage(frame.backgroundImage)}</style:graphic-properties>`
+    : `<style:graphic-properties${values}/>`;
+  return `<style:style style:name="${styleName}" style:family="graphic"${parent}>${properties}</style:style>`;
 }
 
 /** Emits the original text frame and text box with already-exported native text and tables. @param frame - Actual frame properties. @param styleName - Automatic style name. @param content - Ordered text-box XML. @returns ODF frame element. */

@@ -5,7 +5,6 @@ import { SvXMLUnitConverter } from "../core/xmluconv";
 import { Converter } from "../../../sax/source/tools/converter";
 import { PageStyleLayout } from "../../../offapi/com/sun/star/style/PageStyleLayout";
 import { TextGridMode } from "../../../offapi/com/sun/star/text/TextGridMode";
-import { RectanglePoint as P } from "../../../offapi/com/sun/star/drawing/RectanglePoint";
 import {
   importBitmapFillProperties,
   importFillProperties,
@@ -14,7 +13,9 @@ import {
 } from "../draw/fill-properties";
 import {
   XMLBackgroundImageContext,
-  type OdfPageBackgroundImage,
+  importBackgroundColor,
+  type OdfBackgroundImage,
+  type OdfBackgroundColor,
 } from "./XMLBackgroundImageContext";
 
 const pageUsage = new Map<string, PageStyleLayout>([
@@ -143,15 +144,9 @@ export function importPageGrid(attributes: FastAttributeList): OdfPageGridProper
 }
 
 /** Authored common DrawingLayer page fill plus the older brush properties. */
-export interface OdfPageBackground extends OdfFillProperties, OdfBitmapFillProperties {
-  readonly backgroundColor?: number | "transparent";
-  readonly backgroundTransparency?: number;
-  readonly image?: OdfPageBackgroundImage;
-}
-
-/** Writes the native legacy vertical then horizontal position. @param point - Bitmap anchor. @returns Position tokens. */
-export function exportLegacyBitmapPosition(point: P): string {
-  return `${["top", "center", "bottom"][Math.floor(point / 3)]} ${["left", "center", "right"][point % 3]}`;
+export interface OdfPageBackground
+  extends OdfFillProperties, OdfBitmapFillProperties, OdfBackgroundColor {
+  readonly image?: OdfBackgroundImage;
 }
 
 /** Imports the modern and legacy page fills while preserving which fields were supplied. */
@@ -165,24 +160,10 @@ export class XMLPagePropertySetContext extends SvXMLImportContext {
     private readonly collect: (fill: OdfPageBackground) => void,
   ) {
     super();
-    const background = attributes.get(XMLToken.FO_BACKGROUND_COLOR);
-    const color: [number] = [0],
-      transparency: [number] = [0];
-    const alpha = attributes.get(XMLToken.STYLE_BACKGROUND_TRANSPARENCY);
     this.background = {
       ...importFillProperties(attributes),
       ...importBitmapFillProperties(attributes),
-      ...(background === "transparent"
-        ? { backgroundColor: "transparent" }
-        : background !== null && Converter.convertColor(color, background)
-          ? { backgroundColor: color[0] }
-          : {}),
-      ...(alpha !== null &&
-      Converter.convertPercent(transparency, alpha) &&
-      transparency[0] >= 0 &&
-      transparency[0] <= 100
-        ? { backgroundTransparency: transparency[0] }
-        : {}),
+      ...importBackgroundColor(attributes),
     };
   }
 

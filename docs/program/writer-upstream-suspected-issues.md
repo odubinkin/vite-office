@@ -5848,3 +5848,25 @@ default for this combination.
 
 - [Original bitmap frame assertions](../../vendor/libreoffice-reference/sw/qa/extras/odfexport/odfexport.cxx)
 - [Original text background context selection](../../vendor/libreoffice-reference/xmloff/source/text/XMLTextPropertySetContext.cxx)
+
+### WRITER-726 — The old frame transparency attribute is ignored for a modern bitmap
+
+The original frame descriptor uses the old `style:background-transparency`
+value to recover a missing modern opacity on non-bitmap fills. It ignores
+this fallback for bitmap fills because historical writers generated the
+wrong value. A legacy-only bitmap gets its transparency from the opacity
+on the background-image child.
+
+- [Original Writer frame fill precedence and compatibility fallback](../../vendor/libreoffice-reference/sw/source/core/unocore/unoframe.cxx)
+
+### WRITER-727 — A frame RGB fallback can keep a modern solid fill transparent
+
+When a modern solid fill has no modern color, Writer's descriptor
+applies the legacy RGB member through a default transparent brush. The
+RGB member preserves the brush alpha, and the converter writes a
+transparent fill unless a subsequent legacy transparency value supplies
+the alpha. The text import map also drops a solid style with no modern
+color when its legacy color is explicitly transparent.
+
+- [Original Writer frame RGB fallback](../../vendor/libreoffice-reference/sw/source/core/unocore/unoframe.cxx)
+- [Original Writer text import filtering of the solid style](../../vendor/libreoffice-reference/xmloff/source/text/txtimppr.cxx)

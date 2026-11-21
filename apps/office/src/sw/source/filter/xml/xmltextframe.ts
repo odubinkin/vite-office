@@ -7,20 +7,15 @@ import { SvxFrameDirectionItem } from "../../../../editeng/inc/frmdiritem";
 import { SvxFrameDirection } from "../../../../editeng/inc/frmdir";
 import { aFrameFormatSetRange } from "../../core/bastyp/init";
 import {
+  getBitmapFillItem,
   getBitmapFillProperties,
   getFillProperties,
   type XMLBitmapStyleExport,
 } from "./xmlexp-fill";
-import { setBitmapMode, type XFillBitmapItem } from "../../../../svx/inc/xbtmpit";
-import { putBitmapGeometry } from "./xmlimpit";
-import { importBoxProperties } from "./xmlimpit";
+import type { XFillBitmapItem } from "../../../../svx/inc/xbtmpit";
+import { importBoxProperties, putFrameFillProperties } from "./xmlimpit";
 import { exportBoxProperties } from "./xmlexpit";
 import type { SvxBoxItem } from "../../../../editeng/source/items/frmitems";
-import { XFillStyleItem } from "../../../../svx/inc/xfillit0";
-import { XFillColorItem } from "../../../../svx/inc/xflclit";
-import { XFillTransparenceItem } from "../../../../svx/inc/xfltrit";
-import { FillStyle } from "../../../../offapi/com/sun/star/drawing/FillStyle";
-import { Color } from "../../../../tools/inc/color";
 import { SwFormatFlySplit } from "../../../inc/formatflysplit";
 import { SwFormatFollowTextFlow } from "../../../inc/fmtfollowtextflow";
 import {
@@ -149,13 +144,7 @@ function importFrame(
       put(new SvxULSpaceItem(style.marginTop ?? 0, style.marginBottom ?? 0, RES_UL_SPACE));
     const box = importBoxProperties(style, RES_BOX);
     if (box !== undefined) put(box);
-    if (style.fillStyle !== undefined) put(new XFillStyleItem(style.fillStyle as FillStyle));
-    if (style.fillColor !== undefined) put(new XFillColorItem("", new Color(style.fillColor)));
-    if (style.fillTransparency !== undefined)
-      put(new XFillTransparenceItem(style.fillTransparency));
-    if (bitmap && style.fillStyle === FillStyle.BITMAP) set.Put(bitmap);
-    if (style.bitmapMode !== undefined) setBitmapMode(set, style.bitmapMode);
-    putBitmapGeometry(set, style.bitmapGeometry);
+    putFrameFillProperties(set, style, bitmap);
     if (value.splitAllowed) put(new SwFormatFlySplit(true));
     if (style.followTextFlow !== undefined) put(new SwFormatFollowTextFlow(style.followTextFlow));
     if (style.allowOverlap !== undefined || style.wrapInfluence !== undefined) {
@@ -259,6 +248,10 @@ export function exportTextFrame(
   const heightType = size.GetHeightSizeType();
   const relativeHeight = size.GetHeightPercent();
   const anchor = format.GetAnchor().GetAnchorId();
+  const fill = getFillProperties(items);
+  const bitmap = getBitmapFillItem(items);
+  const image = bitmap && bitmapStyles?.registerBitmap(bitmap);
+  const bitmapFill = getBitmapFillProperties(items, image?.name);
   return {
     name: format.GetName(),
     parentStyle: format.DerivedFrom()?.GetName() ?? "",
@@ -287,9 +280,21 @@ export function exportTextFrame(
     relativeWidth: size.GetWidthPercent(),
     relativeHeight,
     splitAllowed: format.GetFlySplit().GetValue(),
+    ...(image === undefined
+      ? {}
+      : {
+          backgroundImage: {
+            href: image.href,
+            ...(bitmapFill.bitmapMode === undefined ? {} : { mode: bitmapFill.bitmapMode }),
+            ...(bitmapFill.bitmapGeometry?.point === undefined
+              ? {}
+              : { point: bitmapFill.bitmapGeometry.point }),
+            ...(fill.fillTransparency === undefined ? {} : { transparency: fill.fillTransparency }),
+          },
+        }),
     style: {
-      ...getFillProperties(items),
-      ...getBitmapFillProperties(items, bitmapStyles),
+      ...fill,
+      ...bitmapFill,
       ...exportBoxProperties(items.GetItemIfSet(RES_BOX, false) as SvxBoxItem | undefined),
       horizontal: horizontal.GetHoriOrient(),
       horizontalRelation: horizontal.GetRelationOrient(),

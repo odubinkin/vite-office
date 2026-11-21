@@ -13,7 +13,8 @@
       "XMLBackgroundImageContext::endFastElement"
     ],
     "preservedResponsibilities": [
-      "Imports legacy background image placement, opacity and a first inline stream only when the href is empty."
+      "Imports legacy background image placement, opacity and a first inline stream only when the href is empty.",
+      "Shares original legacy color and embedded bitmap parsing across page and graphic property contexts."
     ],
     "omittedResponsibilities": [
       "External graphic links remain outside the represented loader."
@@ -27,6 +28,10 @@
         {
           "path": "apps/office/src/sw/source/filter/xml/odt-inline-graphics.test.ts",
           "marker": "uses distinct URL precedence"
+        },
+        {
+          "path": "apps/office/src/sw/source/filter/xml/odt-frame-bitmap.test.ts",
+          "marker": "converts legacy frame brushes"
         }
       ],
       "upstream": [

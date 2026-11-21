@@ -1,4 +1,4 @@
-/** @fileoverview Native non-graphic SvxBrushItem and DrawingLayer fill conversion from unobrushitemhelper.cxx. */
+/** @fileoverview Native brush and DrawingLayer fill conversion from unobrushitemhelper.cxx. */
 import { SvxBrushItem } from "../../../editeng/inc/brushitem";
 import type { SfxItemSet } from "../../../svl/source/items/itemset";
 import {
@@ -13,6 +13,42 @@ import { XFillColorItem } from "../../inc/xflclit";
 import { XFillTransparenceItem } from "../../inc/xfltrit";
 import { FillStyle } from "../../../offapi/com/sun/star/drawing/FillStyle";
 import { COL_AUTO, Color } from "../../../tools/inc/color";
+import { BitmapMode } from "../../../offapi/com/sun/star/drawing/BitmapMode";
+import { RectanglePoint } from "../../../offapi/com/sun/star/drawing/RectanglePoint";
+import { setBitmapMode, XFillBmpPosItem, type XFillBitmapItem } from "../../inc/xbtmpit";
+
+/** Clears the original fill range before applying a legacy brush. @param target - Destination item set. @returns Nothing. */
+function clearFill(target: SfxItemSet): void {
+  // Preserve the original exclusive upper bound despite the inclusive fill range.
+  for (
+    let which = XATTR_FILL_FIRST as number;
+    target.Count() !== 0 && which < XATTR_FILL_LAST;
+    which++
+  )
+    target.ClearItem(which);
+}
+
+/** Applies the graphic branch of the original brush converter to native fill items. @param target - Destination. @param bitmap - Resolved raster entry. @param mode - Legacy location mode. @param point - Legacy position when unscaled. @param transparency - Graphic transparency percent. @returns Nothing. */
+export function setGraphicBrushFill(
+  target: SfxItemSet,
+  bitmap: XFillBitmapItem,
+  mode: BitmapMode,
+  point: RectanglePoint | undefined,
+  transparency: number | undefined,
+): void {
+  clearFill(target);
+  target.Put(new XFillStyleItem(FillStyle.BITMAP));
+  target.Put(bitmap);
+  setBitmapMode(target, mode);
+  target.Put(
+    new XFillBmpPosItem(
+      mode === BitmapMode.NO_REPEAT
+        ? (point ?? RectanglePoint.MIDDLE_MIDDLE)
+        : RectanglePoint.LEFT_TOP,
+    ),
+  );
+  if (transparency) target.Put(new XFillTransparenceItem(transparency));
+}
 /** Converts every represented brush constructor/value state through the original GPOS_NONE branch.
  * @param brush - Actual non-graphic brush; graphics are not represented by this kernel's SvxBrushItem.
  * @param target - Actual destination item set.
@@ -22,13 +58,7 @@ export function setSvxBrushItemAsFillAttributesToTargetSet(
   brush: SvxBrushItem,
   target: SfxItemSet,
 ): void {
-  // Preserve the original exclusive upper bound despite the inclusive fill range.
-  for (
-    let which = XATTR_FILL_FIRST as number;
-    target.Count() !== 0 && which < XATTR_FILL_LAST;
-    which++
-  )
-    target.ClearItem(which);
+  clearFill(target);
   const transparency = 255 - brush.GetColor().GetAlpha();
   if (transparency !== 0xff) {
     target.Put(new XFillStyleItem(FillStyle.SOLID));
