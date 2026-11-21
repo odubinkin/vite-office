@@ -176,6 +176,10 @@
         {
           "path": "apps/office/e2e/calc/xlsx-date-conditions.spec.ts",
           "marker": "evaluates and round-trips a tomorrow date rule"
+        },
+        {
+          "path": "apps/office/src/xmloff/source/core/xmltoken.ts",
+          "marker": "STYLE_BASE_CELL_ADDRESS"
         }
       ],
       "upstream": [
@@ -306,6 +310,10 @@
         {
           "path": "sc/qa/unit/cond_format.cxx",
           "marker": "testTdf164334CondFormatTomorrow"
+        },
+        {
+          "path": "xmloff/source/core/xmltoken.cxx",
+          "marker": "XML_BASE_CELL_ADDRESS"
         }
       ]
     },
@@ -358,7 +366,8 @@
       "Registers both ODF table tab-color namespaces without renumbering existing portable tokens.",
       "Registers original ODF page scale, order, centering, print and first-page tokens and the legacy loext fit aliases without renumbering the existing vocabulary.",
       "Admits original calcext color scale and threshold elements, color and type attributes.",
-      "Registers original Calc extension tokens date-is, date and style without changing existing token values."
+      "Registers original Calc extension tokens date-is, date and style without changing existing token values.",
+      "Recognizes the style namespace base-cell-address token used for automatic cell-style conditions."
     ],
     "status": "mapped",
     "upstreamPath": "xmloff/source/core/xmltoken.cxx",

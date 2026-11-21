@@ -180,6 +180,7 @@ export class ScXMLConditionalFormatsContext extends ScXMLImportContext {
     private readonly tab: number,
   ) {
     super(owner);
+    owner.SetNewCondFormatData(tab);
   }
   /** Opens one original conditional format. @param element - Child token. @param attributes - Range attributes. @returns Child context. */
   override createFastChildContext(

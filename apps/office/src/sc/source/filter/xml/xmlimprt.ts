@@ -27,7 +27,7 @@ import { RowHeightContext } from "../../../inc/rowheightcontext";
 import { ScFlatBoolRowSegments } from "../../core/data/segmenttree";
 import type { Color } from "../../../../tools/inc/color";
 import { ScXMLPageStyles } from "./xmlstyle.page";
-import { XMLTableStylesContext } from "./xmlstyli";
+import { XMLTableStylesContext, type ScXMLMapContext } from "./xmlstyli";
 import { CellAttributeHolder, ScPatternAttr } from "../../../inc/patattr";
 import { ScXMLImportContext } from "./importcontext";
 import {
@@ -43,6 +43,8 @@ import {
 import { XMLToken, ODF_NAMESPACES } from "../../../../xmloff/source/core/xmltoken";
 import { ScDocumentImport } from "../../../inc/documentimport";
 import type { ScAddress, ScRange } from "../../../inc/address";
+import { ScConditionalFormat } from "../../../inc/conditio";
+import { ScRangeList } from "../../../inc/rangelst";
 import { FormulaGrammar } from "../../../../formula/inc/grammar";
 import { InsertRangeNames } from "../../core/tool/rangenam";
 import { GetNamedExpressionBase, type ScMyNamedExpression } from "./xmlnexpi";
@@ -72,6 +74,12 @@ interface MatrixFormulaRange {
   readonly range: ScRange;
   readonly master: MatrixCellResult;
   readonly members: MatrixCellResult[];
+}
+
+/** Conditional entries and joined rectangles held until the formula compile phase. */
+interface StyleConditionalFormat {
+  readonly maps: readonly ScXMLMapContext[];
+  readonly ranges: ScRangeList;
 }
 
 /** Actual import root/state for scalar content;no intermediate sheet/cell data model is retained. */
@@ -192,6 +200,7 @@ export class ScXMLImport extends SvXMLImport implements SvXMLImportRootFactory {
         pattern,
       );
     this.SetType(range, type, currency);
+    this.ApplyCondFormat(name, range);
   }
 
   /** Applies the source type-based number-format override after cell styles. @param range - Original formatted rectangle. @param type - ODF number category. @param currency - Source currency. @returns Nothing. */
@@ -253,6 +262,41 @@ export class ScXMLImport extends SvXMLImport implements SvXMLImportRootFactory {
   }
 
   private readonly conditionalFormats: ScXMLConditionalFormatsContext[] = [];
+  private readonly styleConditionalFormats = new Map<number, StyleConditionalFormat[]>();
+  private readonly conditionalStyles = new Map<string, readonly ScXMLMapContext[]>();
+  private readonly attachedConditionalStyles = new Set<readonly ScXMLMapContext[]>();
+  private hasNewCondFormatData = false;
+
+  /** Sets the document-wide gate when the original extension starts, even for an empty element. @param tab - Current sheet. @returns Nothing. */
+  SetNewCondFormatData(tab: number): void {
+    this.hasNewCondFormatData = true;
+    this.styleConditionalFormats.delete(tab);
+  }
+
+  /** Applies one automatic style rectangle using the native pre-compilation equality and ownership order. @param name - Automatic style name. @param range - Styled rectangle. @returns Nothing. */
+  private ApplyCondFormat(name: string, range: ScRange): void {
+    const maps = this.conditionalStyles.get(name);
+    if (!maps?.length || this.hasNewCondFormatData) return;
+    const tab = range.aStart.Tab();
+    let formats = this.styleConditionalFormats.get(tab);
+    if (!formats) this.styleConditionalFormats.set(tab, (formats = []));
+    const existing = formats.find(
+      /** Matches ordered entries on the current sheet before compiling their formulas. @param format - Candidate format. @returns Equality. */
+      (format) =>
+        format.maps.length === maps.length &&
+        format.maps.every(
+          /** Compares the map at one position. @param map - Candidate entry. @param index - Original position. @returns Equality. */
+          (map, index) => map.EqualEntry(maps[index]),
+        ),
+    );
+    if (existing) existing.ranges.Join(range);
+    else if (!this.attachedConditionalStyles.has(maps)) {
+      const ranges = new ScRangeList();
+      ranges.Join(range);
+      formats.push({ maps, ranges });
+      this.attachedConditionalStyles.add(maps);
+    }
+  }
 
   /** Defers conditional formulas until sheet and name indexes exist. @param formats - Original sheet element. @returns Nothing. */
   AddConditionalFormats(formats: ScXMLConditionalFormatsContext): void {
@@ -261,6 +305,21 @@ export class ScXMLImport extends SvXMLImport implements SvXMLImportRootFactory {
 
   /** Realizes deferred conditional ranges and cell indexes. @returns Nothing. */
   FinalizeConditionalFormats(): void {
+    for (const [tab, formats] of this.styleConditionalFormats) {
+      for (const { maps, ranges } of formats) {
+        const format = new ScConditionalFormat(0, this.document);
+        let key = 0;
+        try {
+          for (const map of maps) format.AddEntry(map.CreateConditionEntry(this));
+          format.SetRange(ranges);
+          key = this.document.AddCondFormat(format, tab);
+        } finally {
+          if (!key) format.Dispose();
+        }
+        if (key) this.document.AddCondFormatData(ranges, tab, key);
+      }
+    }
+    this.styleConditionalFormats.clear();
     for (const formats of this.conditionalFormats) formats.Finalize();
     this.conditionalFormats.length = 0;
   }
@@ -419,17 +478,20 @@ export class ScXMLImport extends SvXMLImport implements SvXMLImportRootFactory {
     this.docImport = new ScDocumentImport(document);
     this.pageStyles = new ScXMLPageStyles(document, this);
   }
-  /** Retains an automatic pattern until its named style and number format can be resolved. @param name - Source name. @param pattern - Adopted source pattern. @param reference - ODF data style. @param parent - Named parent. @returns Nothing. */
+  /** Retains an automatic pattern until its named style and number format can be resolved. @param name - Source name. @param pattern - Adopted source pattern. @param reference - ODF data style. @param parent - Named parent. @param maps - Ordered conditional maps. @returns Nothing. */
   AddAutoStyle(
     name: string,
     pattern: ScPatternAttr,
     reference: string | null = null,
     parent: string | null = null,
+    maps: readonly ScXMLMapContext[] = [],
   ): void {
     this.pendingAutoStyles.get(name)?.pattern.Dispose();
     this.autoStyles.get(name)?.Dispose();
     this.autoStyles.delete(name);
     this.pendingAutoStyles.set(name, { pattern, reference, parent });
+    if (maps.length) this.conditionalStyles.set(name, maps);
+    else this.conditionalStyles.delete(name);
   }
   /** Retains native edit items from an automatic text style. @param name - Source style. @param items - Adopted item set. @returns Nothing. */
   AddTextStyle(name: string, items: SfxItemSet): void {
@@ -719,6 +781,9 @@ export class ScXMLImport extends SvXMLImport implements SvXMLImportRootFactory {
   DisposeStyles(): void {
     for (const { pattern } of this.pendingAutoStyles.values()) pattern.Dispose();
     this.pendingAutoStyles.clear();
+    this.conditionalStyles.clear();
+    this.styleConditionalFormats.clear();
+    this.attachedConditionalStyles.clear();
     this.numberStyles.clear();
     this.namedCellStyles.clear();
     for (const holder of this.autoStyles.values()) holder.Dispose();

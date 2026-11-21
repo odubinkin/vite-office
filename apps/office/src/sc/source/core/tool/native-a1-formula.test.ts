@@ -113,11 +113,32 @@ it("round-trips native A1 references through ODFF without replacing token or dep
     expect(text(cell.GetFormula(grammar))).toBe("=$A$#REF!");
   }
 });
+it("reads pre-OpenFormula MINIFS and writes it in both ODF formula grammars", /** Checks the original formula resource selection around ODF references. @returns Nothing. */ () => {
+  const doc = new ScDocument();
+  const position = new ScAddress(1, 0);
+  const sheet = unicode("Data");
+  const formula = unicode("=MINIFS([.A1:.A2];[.A1:.A2];2)");
+  try {
+    doc.InsertTab(0, sheet);
+    doc.SetValue(new ScAddress(0, 0), 2);
+    doc.SetValue(new ScAddress(0, 1), 3);
+    doc.SetFormula(position, formula, G.GRAM_PODF);
+    const cell = doc.GetFormulaCell(position);
+    assert(cell);
+    expect(doc.GetValue(position)).toBe(2);
+    expect(text(cell.GetFormula(G.GRAM_PODF))).toBe("=MINIFS([.A1:.A2];[.A1:.A2];2)");
+    expect(text(cell.GetFormula(G.GRAM_ODFF))).toBe("=COM.MICROSOFT.MINIFS([.A1:.A2];[.A1:.A2];2)");
+  } finally {
+    formula.dispose();
+    sheet.dispose();
+    doc.Dispose();
+  }
+});
 it("rejects unimplemented grammars and semantic reference families without silently converting text", /** No formula syntax is rewritten by a UI adapter. @returns Nothing. */ () => {
   const doc = new ScDocument(),
     pos = new ScAddress(0, 0, 0);
   doc.InsertTab(0, unicode("Sheet1"));
-  for (const grammar of [G.GRAM_PODF, G.GRAM_NATIVE_XL_A1])
+  for (const grammar of [G.GRAM_PODF_A1, G.GRAM_NATIVE_XL_A1])
     expect(
       /** Unavailable convention has no implementation. @returns Compiler. */ () =>
         new ScCompiler(doc, pos, grammar),

@@ -104,6 +104,10 @@ export class ScMyStylesImportHelper {
   /** Flushes the last sheet range and applies the resolved cell styles. @returns Nothing. */
   EndTable(): void {
     this.FlushRange();
+    this.ranges.sort(
+      /** Applies the source ScMyStylesMap order by encoded style name. @param left - First range. @param right - Second range. @returns Style name order. */
+      (left, right) => (left.style < right.style ? -1 : Number(left.style > right.style)),
+    );
     for (const { range, style, type, currency } of this.ranges)
       this.owner.SetStyleToRange(range, style, type, currency);
   }

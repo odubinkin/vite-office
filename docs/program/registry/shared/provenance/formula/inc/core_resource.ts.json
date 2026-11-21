@@ -18,7 +18,8 @@
       "Block73 extends the prior bounded slices with native local/ODFF rectangular and whole-axis double references,shared RangeLine compilation,default scalar intersection,range aggregate execution over actual typed stores,and ordinary area-slot dependency ownership. Native logarithmic slot geometry,shared identity,bulk/deferred erasure,reference-update chaining,sheet shifts and semantic destruction are consumed without individual-cell listener expansion. ScValueIterator and RangeColumnSpanSet use actual document/column stores;portable array accumulation retains original four-stream Kahan order. Typed double out-references preserve encoded NaN payload storage. Earlier exclusions of these specific services are superseded here. Group/3D/external/named-reference expressions,matrix evaluation,nondefault subtotal/text-zero and number-format services remain unsupported;broader parity remains unverified. CALC250-252 record retained upstream edge behavior and limits on numerical evidence.",
       "Includes native ODFF and OOXML text concatenation spellings.",
       "Admits the native VLOOKUP and HLOOKUP opcodes through the existing lexical and formula-token path, preserving the original arguments in the RPN function token.",
-      "Adds the pinned ODFF and OOXML spellings for AVERAGEIF, MINIFS and MAXIFS."
+      "Adds the pinned ODFF and OOXML spellings for AVERAGEIF, MINIFS and MAXIFS.",
+      "The represented pre-OpenFormula resource retains the original plain MINIFS and MAXIFS spellings alongside common ODFF symbols."
     ],
     "omittedResponsibilities": [
       "Other grammars/localized symbol services,functions/names/external/range/matrix/table references and missing-argument rewrite services remain unsupported. Compiler string token output does not imply string-expression evaluation. Localized empty-code errors reject explicitly. ODS filters and UI are not implemented by this task; no broad native parity is certified."
@@ -44,6 +45,10 @@
         {
           "path": "apps/office/src/sc/source/core/tool/lookup-formula.test.ts",
           "marker": "native matrix lookup ordering"
+        },
+        {
+          "path": "apps/office/src/formula/inc/core_resource.ts",
+          "marker": "RID_STRLIST_FUNCTION_NAMES_ENGLISH_PODF"
         }
       ],
       "upstream": [
@@ -54,6 +59,10 @@
         {
           "path": "vendor/libreoffice-reference/formula/inc/core_resource.hrc",
           "marker": "CONCATENATE"
+        },
+        {
+          "path": "formula/inc/core_resource.hrc",
+          "marker": "RID_STRLIST_FUNCTION_NAMES_ENGLISH_PODF"
         }
       ]
     }

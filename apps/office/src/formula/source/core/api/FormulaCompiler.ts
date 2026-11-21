@@ -20,6 +20,7 @@ import { FormulaGrammar, type Grammar } from "../../../inc/grammar";
 import {
   RID_STRLIST_FUNCTION_NAMES_ENGLISH_ODFF,
   RID_STRLIST_FUNCTION_NAMES_ENGLISH_OOXML,
+  RID_STRLIST_FUNCTION_NAMES_ENGLISH_PODF,
 } from "../../../inc/core_resource";
 import { doubleToString } from "../../../../sal/rtl/strtmpl.math";
 import { OUString, type OUStringConstReference } from "../../../../sal/inc/rtl/ustring";
@@ -113,6 +114,7 @@ export class FormulaCompiler {
       this.mpArr.GetLen() &&
       this.meGrammar !== FormulaGrammar.Grammar.GRAM_ODFF &&
       this.meGrammar !== FormulaGrammar.Grammar.GRAM_ODFF_A1 &&
+      this.meGrammar !== FormulaGrammar.Grammar.GRAM_PODF &&
       this.meGrammar !== FormulaGrammar.Grammar.GRAM_NATIVE &&
       this.meGrammar !== FormulaGrammar.Grammar.GRAM_ENGLISH &&
       this.meGrammar !== FormulaGrammar.Grammar.GRAM_OOXML
@@ -182,7 +184,9 @@ export class FormulaCompiler {
     const symbols =
       this.meGrammar === FormulaGrammar.Grammar.GRAM_OOXML
         ? RID_STRLIST_FUNCTION_NAMES_ENGLISH_OOXML
-        : RID_STRLIST_FUNCTION_NAMES_ENGLISH_ODFF;
+        : this.meGrammar === FormulaGrammar.Grammar.GRAM_PODF
+          ? RID_STRLIST_FUNCTION_NAMES_ENGLISH_PODF
+          : RID_STRLIST_FUNCTION_NAMES_ENGLISH_ODFF;
     const symbol = symbols.get(op);
     if (symbol === undefined) throw new Error("Formula output opcode is not implemented");
     return symbol;

@@ -16,11 +16,15 @@ import {
   type SvXMLImportContext,
   type FastAttributeList,
 } from "../../../../xmloff/source/core/xmlimp";
-import { XMLToken } from "../../../../xmloff/source/core/xmltoken";
+import { ODF_NAMESPACES, XMLToken } from "../../../../xmloff/source/core/xmltoken";
+import { FormulaGrammar, type Grammar } from "../../../../formula/inc/grammar";
+import { ScAddress, ScRefFlags } from "../../../inc/address";
+import { ScCondFormatEntry } from "../../../inc/conditio";
+import { ScXMLConditionHelper } from "./XMLConverter";
 import { SvXMLUnitConverter } from "../../../../xmloff/source/core/xmluconv";
 import { ScPatternAttr } from "../../../inc/patattr";
 import { IsNumberStyle, SvXMLNumFormatContext } from "../../../../xmloff/source/style/xmlnumfi";
-import { text } from "../../../../i18nlangtag/source/isolang/isolang.tables";
+import { text, unicode } from "../../../../i18nlangtag/source/isolang/isolang.tables";
 import { SC_STYLE_PROG_STANDARD } from "../../../inc/stylehelper";
 import { SfxItemSet } from "../../../../svl/source/items/itemset";
 import { importCellTextStyle } from "./xmlcelli.edit";
@@ -227,10 +231,78 @@ class XMLCellTextStyleContext extends ScXMLImportContext {
     return new SvXMLIgnoreContext(true);
   }
 }
+/** Original style-map condition held as XML operands until Calc can compile its references. */
+export class ScXMLMapContext extends SvXMLIgnoreContext {
+  private readonly condition: ReturnType<typeof ScXMLConditionHelper.parseCondition>;
+  private readonly grammar: Grammar;
+  private readonly base: string;
+  private readonly style: string;
+
+  /** Reads original map attributes and the formula grammar at their XML namespace scope. @param owner - Importer. @param attributes - Map attributes. @returns Context. */
+  constructor(owner: ScXMLImport, attributes: FastAttributeList) {
+    super(true);
+    const source = attributes.get(XMLToken.STYLE_CONDITION) ?? "";
+    const separator = source.indexOf(":");
+    const namespace = separator < 0 ? null : attributes.getNamespaceUri(source.slice(0, separator));
+    const openFormula = namespace === ODF_NAMESPACES.of;
+    const legacyFormula = namespace === "http://openoffice.org/2004/calc";
+    this.grammar = legacyFormula
+      ? FormulaGrammar.Grammar.GRAM_PODF
+      : FormulaGrammar.Grammar.GRAM_ODFF;
+    this.condition = ScXMLConditionHelper.parseCondition(
+      openFormula || legacyFormula ? source.slice(separator + 1) : source,
+    );
+    const style = attributes.get(XMLToken.STYLE_APPLY_STYLE_NAME) ?? "";
+    const named = owner.GetNamedCellStyle(style);
+    this.style = named ? text(named.GetName()) : style;
+    this.base = attributes.get(XMLToken.STYLE_BASE_CELL_ADDRESS) ?? "";
+  }
+
+  /** Compares the XML string tokens and base as the native entry does before CompileXML. @param other - Candidate entry. @returns Equality. */
+  EqualEntry(other: ScXMLMapContext | undefined): boolean {
+    const { mode, operands } = this.condition;
+    return (
+      mode === other?.condition.mode &&
+      this.style === other.style &&
+      operands.length === other.condition.operands.length &&
+      (!operands.length || this.base === other.base) &&
+      operands.every(
+        /** Compares one original operand. @param value - Operand. @param index - Operand slot. @returns Equality. */
+        (value, index) => value === other.condition.operands[index],
+      )
+    );
+  }
+
+  /** Compiles the original map at its stored OOo A1 address. @param owner - Importer with resolved sheet and name tables. @returns Owned native entry. */
+  CreateConditionEntry(owner: ScXMLImport): ScCondFormatEntry {
+    const document = owner.GetDocument();
+    let position = new ScAddress();
+    if (this.base) {
+      const base = unicode(this.base);
+      try {
+        const parsed = new ScAddress();
+        const details = new ScAddress.Details(FormulaGrammar.AddressConvention.CONV_OOO);
+        if (parsed.Parse(base, document, details) & ScRefFlags.VALID) position = parsed;
+      } finally {
+        base.dispose();
+      }
+    }
+    return new ScCondFormatEntry(
+      this.condition.mode,
+      this.condition.operands,
+      document,
+      position,
+      this.grammar,
+      this.style,
+    );
+  }
+}
+
 /** Native cell style holds a real ScPatternAttr, rather than a browser formatting object. */
 class XMLTableStyleContext extends ScXMLImportContext {
   private readonly pattern: ScPatternAttr;
   private readonly horizontal = new Any();
+  private readonly maps: ScXMLMapContext[] = [];
   /** Creates genuine native item state. @param owner - Importer. @param name - Automatic-style name or Standard. @param dataStyle - Referenced data style. @param documentDefaults - Pool-default properties. @param named - Named styles stream. @param parent - Encoded parent name. @param displayName - External unencoded name. @returns Context. */
   constructor(
     private readonly owner: ScXMLImport,
@@ -256,6 +328,11 @@ class XMLTableStyleContext extends ScXMLImportContext {
     element: XMLToken,
     attributes: FastAttributeList,
   ): SvXMLImportContext {
+    if (element === XMLToken.STYLE_MAP) {
+      const map = new ScXMLMapContext(this.owner, attributes);
+      this.maps.push(map);
+      return map;
+    }
     if (element === XMLToken.STYLE_PARAGRAPH_PROPERTIES) {
       importCellParagraphProperties(
         this.pattern,
@@ -321,7 +398,7 @@ class XMLTableStyleContext extends ScXMLImportContext {
       const item = new SvxHorJustifyItem(129);
       if (item.PutValue(this.horizontal)) this.pattern.ItemSetPut(item);
       if (this.name !== null && !this.named)
-        this.owner.AddAutoStyle(this.name, this.pattern, this.dataStyle, this.parent);
+        this.owner.AddAutoStyle(this.name, this.pattern, this.dataStyle, this.parent, this.maps);
       else {
         try {
           if (this.name !== null)

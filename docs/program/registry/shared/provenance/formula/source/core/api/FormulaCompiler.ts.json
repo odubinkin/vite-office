@@ -51,7 +51,8 @@
       "Compiles the native concatenation function arity and the expression's separate ConcatLine precedence.",
       "Admits the native VLOOKUP and HLOOKUP opcodes through the existing lexical and formula-token path, preserving the original arguments in the RPN function token.",
       "Compiles scalar IF using the native conditional jump offsets, comparisons and variable-arity reference calls.",
-      "Compiles AVERAGEIF, MINIFS and MAXIFS using the existing variable-arity function path and native parameter classification."
+      "Compiles AVERAGEIF, MINIFS and MAXIFS using the existing variable-arity function path and native parameter classification.",
+      "Serializes represented pre-OpenFormula opcodes using the original pre-OpenFormula resource."
     ],
     "omittedResponsibilities": [
       "All opcode families and services outside the scalar token subset, including text scanning, function calls, II and matrix compilation; complete upstream QA is not executed.",
@@ -134,6 +135,10 @@
         {
           "path": "apps/office/src/sc/source/filter/oox/excelfilter.test.ts",
           "marker": "recalculates the original tdf70455"
+        },
+        {
+          "path": "apps/office/src/formula/source/core/api/FormulaCompiler.ts",
+          "marker": "GRAM_PODF"
         }
       ],
       "upstream": [
@@ -208,6 +213,10 @@
         {
           "path": "vendor/libreoffice-reference/formula/source/core/api/FormulaCompiler.cxx",
           "marker": "FormulaCompiler::ConcatLine"
+        },
+        {
+          "path": "formula/source/core/api/FormulaCompiler.cxx",
+          "marker": "RID_STRLIST_FUNCTION_NAMES_ENGLISH_PODF"
         }
       ]
     }

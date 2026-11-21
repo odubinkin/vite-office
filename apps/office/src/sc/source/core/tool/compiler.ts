@@ -27,6 +27,7 @@ import { ScTokenArray } from "../../../inc/tokenarray";
 import {
   RID_STRLIST_FUNCTION_NAMES_ENGLISH_ODFF,
   RID_STRLIST_FUNCTION_NAMES_ENGLISH_OOXML,
+  RID_STRLIST_FUNCTION_NAMES_ENGLISH_PODF,
 } from "../../../../formula/inc/core_resource";
 import {
   ScSingleRefToken,
@@ -63,6 +64,7 @@ function createSymbolMap(resource: ReadonlyMap<OpCode, string>): Readonly<Record
 }
 const odffSymbols = createSymbolMap(RID_STRLIST_FUNCTION_NAMES_ENGLISH_ODFF);
 const ooxmlSymbols = createSymbolMap(RID_STRLIST_FUNCTION_NAMES_ENGLISH_OOXML);
+const podfSymbols = createSymbolMap(RID_STRLIST_FUNCTION_NAMES_ENGLISH_PODF);
 const arraySeparators = new Set<OpCode>([OpCode.ocArrayRowSep, OpCode.ocArrayColSep]);
 const emptyParameterPredecessors = new Set<OpCode>([
   OpCode.ocOpen,
@@ -272,6 +274,7 @@ export class ScCompiler extends FormulaCompiler {
     if (
       grammar !== FormulaGrammar.Grammar.GRAM_ODFF &&
       grammar !== FormulaGrammar.Grammar.GRAM_ODFF_A1 &&
+      grammar !== FormulaGrammar.Grammar.GRAM_PODF &&
       grammar !== FormulaGrammar.Grammar.GRAM_NATIVE &&
       grammar !== FormulaGrammar.Grammar.GRAM_ENGLISH &&
       grammar !== FormulaGrammar.Grammar.GRAM_OOXML
@@ -596,7 +599,11 @@ export class ScCompiler extends FormulaCompiler {
   /** Scans the represented numeric ODFF subset into its actual Calc array, preserving native leading equals, forced recalc and default bracket completion. @param formula - Unicode formula. @returns Source-order token owner. */
   CompileString(formula: OUStringConstReference): ScTokenArray {
     const ooxml = this.meGrammar === FormulaGrammar.Grammar.GRAM_OOXML;
-    const symbols = ooxml ? ooxmlSymbols : odffSymbols;
+    const symbols = ooxml
+      ? ooxmlSymbols
+      : this.meGrammar === FormulaGrammar.Grammar.GRAM_PODF
+        ? podfSymbols
+        : odffSymbols;
     const original = text(formula);
     let first = 0,
       end = original.length;

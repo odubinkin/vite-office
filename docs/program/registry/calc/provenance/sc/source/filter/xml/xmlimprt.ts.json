@@ -28,7 +28,8 @@
       "The importer owns automatic text styles and provides native edit item sets to cell span imports.",
       "Routes the native ODF document-default wrap property to the Calc reference-string option.",
       "Applies native table-family display and tab color properties to the actual destination sheet.",
-      "Resolves master-page names and applies the original table-family style assignment to the destination sheet."
+      "Resolves master-page names and applies the original table-family style assignment to the destination sheet.",
+      "Applies legacy automatic-style conditional maps with pre-compile entry equality and sheet ownership, joining their ranges before native formula compilation."
     ],
     "omittedResponsibilities": [
       "Supported content only:full style/number-format/layout/font metadata,objects,rich/multiline text,merged/matrix/group/external/legacy formulas,repeated formula services,full cache/version/recalc policies and complete document/shell/import constructors remain unported. Unsupported metadata emits concrete diagnostics;unsupported cell semantics reject. This is not lossless full-ODF or UI parity. Browser ceilings and explicit grammar/byte transport are documented adaptations. No native C++/binary QA execution or physical memory management is claimed."
@@ -58,6 +59,10 @@
         {
           "path": "apps/office/src/sc/source/filter/oox/excelfilter.alignment.test.ts",
           "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sc/source/filter/xml/xmlimprt.ts",
+          "marker": "ApplyCondFormat"
         }
       ],
       "upstream": [
@@ -72,6 +77,10 @@
         {
           "path": "vendor/libreoffice-reference/sc/source/ui/unoobj/defltuno.cxx",
           "marker": "aDocOpt.SetIgnoreLineBreaks(true)"
+        },
+        {
+          "path": "sc/source/filter/xml/xmlstyli.cxx",
+          "marker": "XMLTableStyleContext::ApplyCondFormat"
         }
       ]
     }

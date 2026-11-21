@@ -7699,3 +7699,25 @@ target cell can match the duplicate condition when the same format range
 contains two numeric zeros. Empty string results take the string branch.
 
 - [Original cell content and duplicate conditions](../../vendor/libreoffice-reference/sc/source/core/data/conditio.cxx)
+
+### CALC-809 — A legacy conditional style transfers its format to the first matching sheet
+
+Applying two ranges with the same automatic cell style on different sheets
+only installs the format on the first sheet. After handing off its format,
+the style can still join an equal format already present on a subsequent
+sheet. It cannot create a new one there. Calc preserves the source transfer
+and equality checks.
+
+- [Original legacy style format application](../../vendor/libreoffice-reference/sc/source/filter/xml/xmlstyli.cxx)
+- [Scope and precedence regression](../../apps/office/src/sc/source/filter/xml/ods-legacy-conditions.test.ts)
+
+### CALC-810 — An empty extended conditional format element gates legacy maps
+
+Creating a sheet's `calcext:conditional-formats` context clears that sheet's
+conditional formats and sets an importer-wide flag. Even if the element is
+empty, the flag suppresses legacy conditional maps on that sheet and on
+later sheets. Earlier sheets that have already applied their maps retain
+their formats. Calc keeps this ordering.
+
+- [Original extended element constructor](../../vendor/libreoffice-reference/sc/source/filter/xml/xmlcondformat.cxx)
+- [Original automatic style import gate](../../vendor/libreoffice-reference/sc/source/filter/xml/xmlstyli.cxx)

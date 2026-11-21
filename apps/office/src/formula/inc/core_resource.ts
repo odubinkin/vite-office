@@ -55,6 +55,13 @@ export const RID_STRLIST_FUNCTION_NAMES_ENGLISH_ODFF: ReadonlyMap<OpCode, string
   [OpCode.ocNegSub, "-"],
 ]);
 
+/** Native pre-OpenFormula names for the represented opcodes. */
+export const RID_STRLIST_FUNCTION_NAMES_ENGLISH_PODF: ReadonlyMap<OpCode, string> = new Map([
+  ...RID_STRLIST_FUNCTION_NAMES_ENGLISH_ODFF,
+  [OpCode.ocMinIfs_MS, "MINIFS"],
+  [OpCode.ocMaxIfs_MS, "MAXIFS"],
+]);
+
 /** Native OOXML symbols for the same implemented scalar and aggregate opcodes. */
 export const RID_STRLIST_FUNCTION_NAMES_ENGLISH_OOXML: ReadonlyMap<OpCode, string> = new Map([
   [OpCode.ocOpen, "("],

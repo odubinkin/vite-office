@@ -23,7 +23,8 @@
       "Original function-style operands use the shared ScXMLConditionHelper scanner before formula compilation.",
       "Imports and exports original Calc date-is conditions, including all native year periods.",
       "Serializes and imports the original operand-free is-error and is-no-error CALCEXT condition lexemes.",
-      "Imports and writes the source duplicate, unique, rank and average ODS condition forms with original prefixes and formula operands."
+      "Imports and writes the source duplicate, unique, rank and average ODS condition forms with original prefixes and formula operands.",
+      "Entering the original extension context sets the document-level legacy-map gate even when the element has no entries."
     ],
     "omittedResponsibilities": [
       "Legacy table style maps and additional condition families remain unported."
@@ -85,6 +86,10 @@
         {
           "path": "apps/office/src/sc/source/filter/xml/ods-statistical-conditions.test.ts",
           "marker": "evaluates range statistics through ODS"
+        },
+        {
+          "path": "apps/office/src/sc/source/filter/xml/xmlcondformat.ts",
+          "marker": "SetNewCondFormatData"
         }
       ],
       "upstream": [
@@ -135,6 +140,10 @@
         {
           "path": "vendor/libreoffice-reference/sc/qa/unit/cond_format.cxx",
           "marker": "testTdf166669"
+        },
+        {
+          "path": "sc/source/filter/xml/xmlcondformat.cxx",
+          "marker": "GetScImport().SetNewCondFormatData()"
         }
       ]
     }
