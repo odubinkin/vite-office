@@ -4,7 +4,7 @@ title: "Implement Writer search and replace core and browser UI"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 41
+revision: 42
 origin:
   system: "manual"
 depends_on:
@@ -127,6 +127,9 @@ comments:
   -
     author: "CODER"
     body: "Verified scoped search checkpoint. Single selection-only searches use SwView::SearchAndWrap with InSel for both passes. The view resolves the last-command repositioning, restores saved search endpoints on wrap, publishes the resulting scoped cursor, and retains Find All command state when Replace All returns without matches. The modeless-dialog regression exercises the scoped Find All, zero-result Replace All, wrap feedback, and extra-phase miss together. WRITER-690 and WRITER-691 document the two source-derived interactions. The final Vitest run passed 72 tests in five scoped files (WriterMenuBar, WriterSearch, native search ring ownership, findtxt and native replacement). Production build, two Writer resource tests, dependency, source tree, provenance, JSDoc, file size, scoped ESLint and Prettier, policy routing and diff checks passed. Doctor retains its existing managed hook-shim readiness warning. The parent remains open and the full-suite cadence does not advance."
+  -
+    author: "CODER"
+    body: "Verified Find Bar and dialog history checkpoint. Find Bar keeps the keyboard-activated query separately from the application-session controller history. Next and Previous update the ordered list, while Find All only dispatches. On reopening the selected Writer text takes precedence over the remembered keyboard term and recent entries. Dialog SaveToModule updates the search history and Close retains replacement terms as well. Source-derived behavior is recorded as WRITER-692. The five focused Vitest files passed 71 of 72 initially, and the sole failing history test passed after narrowing the ambiguous DOM query to its combobox role and rerunning that test. This covers 72 distinct passing scenarios. Writer resources passed two tests. Production build, dependency and source tree, provenance, JSDoc, file size, scoped lint and formatting, policy routing and diff checks passed. Doctor retains its prior hook-shim readiness warning. Browser page reload persistence and the desktop expert history-size preference remain pending. This checkpoint leaves the parent active and does not advance the full-suite cadence."
 events:
   -
     type: "status"
@@ -280,8 +283,13 @@ events:
     at: "2026-11-21T05:31:27.722Z"
     author: "CODER"
     body: "Verified scoped search checkpoint. Single selection-only searches use SwView::SearchAndWrap with InSel for both passes. The view resolves the last-command repositioning, restores saved search endpoints on wrap, publishes the resulting scoped cursor, and retains Find All command state when Replace All returns without matches. The modeless-dialog regression exercises the scoped Find All, zero-result Replace All, wrap feedback, and extra-phase miss together. WRITER-690 and WRITER-691 document the two source-derived interactions. The final Vitest run passed 72 tests in five scoped files (WriterMenuBar, WriterSearch, native search ring ownership, findtxt and native replacement). Production build, two Writer resource tests, dependency, source tree, provenance, JSDoc, file size, scoped ESLint and Prettier, policy routing and diff checks passed. Doctor retains its existing managed hook-shim readiness warning. The parent remains open and the full-suite cadence does not advance."
+  -
+    type: "comment"
+    at: "2026-11-21T05:46:37.066Z"
+    author: "CODER"
+    body: "Verified Find Bar and dialog history checkpoint. Find Bar keeps the keyboard-activated query separately from the application-session controller history. Next and Previous update the ordered list, while Find All only dispatches. On reopening the selected Writer text takes precedence over the remembered keyboard term and recent entries. Dialog SaveToModule updates the search history and Close retains replacement terms as well. Source-derived behavior is recorded as WRITER-692. The five focused Vitest files passed 71 of 72 initially, and the sole failing history test passed after narrowing the ambiguous DOM query to its combobox role and rerunning that test. This covers 72 distinct passing scenarios. Writer resources passed two tests. Production build, dependency and source tree, provenance, JSDoc, file size, scoped lint and formatting, policy routing and diff checks passed. Doctor retains its prior hook-shim readiness warning. Browser page reload persistence and the desktop expert history-size preference remain pending. This checkpoint leaves the parent active and does not advance the full-suite cadence."
 doc_version: 3
-doc_updated_at: "2026-11-21T05:31:27.722Z"
+doc_updated_at: "2026-11-21T05:46:37.066Z"
 doc_updated_by: "CODER"
 description: "Implement the approved coherent Writer search-and-replace feature from pinned LibreOffice sources: real shared search engine and options, native paragraph/cursor traversal and replacement/history contracts, view-owned search state and dispatch, Find toolbar and Find and Replace dialog with generated upstream command placement and shortcuts. Preserve source semantics and explicit unsupported boundaries; never substitute DOM text search or browser RegExp for ICU contracts. Work only on writer in vite-office-writer; local upstream reading approved, no network or merges. Keep active until approved scope is verified."
 sections:

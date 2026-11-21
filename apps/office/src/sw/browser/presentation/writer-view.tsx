@@ -142,7 +142,6 @@ export function WriterWorkbench({
   );
   const suggestedTableName = activeDocument.GetUniqueTableName();
   const [searchHistory, setSearchHistory] = useState<WriterSearchHistory>({
-    findbar: [],
     search: [],
     replacement: [],
   });
@@ -159,9 +158,7 @@ export function WriterWorkbench({
       search?: string,
     ) => {
       const text =
-        surface === "findbar"
-          ? searchOwner.OpenSearch(false, searchHistory.findbar[0]).search
-          : search;
+        surface === "findbar" ? searchOwner.OpenSearch(false).search || undefined : search;
       if (surface === "searchDialog" && !searchDialog) searchOwner.OpenSearch(true);
       setSearchSurfaces(
         /** Requests focus for one surface. @param previous - Open surfaces. @returns Updated focus requests. */ (
@@ -172,7 +169,7 @@ export function WriterWorkbench({
         }),
       );
     },
-    [searchDialog, searchHistory.findbar, searchOwner],
+    [searchDialog, searchOwner],
   );
   /** Closes one search surface and restores document focus. @param dialog - Whether the dialog closes. @returns Nothing. */
   function closeSearch(dialog: boolean): void {

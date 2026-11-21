@@ -5459,3 +5459,16 @@ applies its authored properties without that collection change.
   repositioning normally associated with Find All.
 - Preserve this command-state distinction. This observation is based on
   source control flow.
+
+### WRITER-692 — Find Bar buttons and keyboard activation remember different queries
+
+- Upstream: `svx/source/tbxctrls/tbunosearchcontrollers.cxx`,
+  `FindTextFieldControl::ActivateFind`, `UpDownSearchToolboxController::execute`,
+  `FindAllToolboxController::execute`, and
+  `FindTextFieldControl::SetTextToSelected_Impl` at the pinned baseline.
+- Observation: Next and Previous append to the toolbar history without
+  changing the remembered activation string. Find All does neither.
+  With no selection, reopening Find Bar prefers the last keyboard-activated
+  query over the most recent history item.
+- Preserve the separate updates and verify them together through the
+  Writer toolbar. This observation is based on source control flow.

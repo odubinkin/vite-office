@@ -446,6 +446,7 @@ it("updates the open dialog when the dispatcher repeats Find All", /** Verifies 
     },
   );
   fireEvent.blur(search);
+  expect((search as HTMLInputElement).list?.options[0]).toHaveValue("two");
   act(
     /** Reads the newly accepted query, then changes the document for the case toggle. @returns Nothing. */ () => {
       expect(session.view.GetSearch().RepeatSearch()).toBe(true);
@@ -464,10 +465,9 @@ it("updates the open dialog when the dispatcher repeats Find All", /** Verifies 
   session.view.Close();
 });
 
-it("keeps the upstream ten most recent distinct Find Bar entries across reopening", /** Ports tdf154269 and checks move-to-front for a remembered entry. @returns Nothing. */ () => {
+it("keeps recent Find Bar entries separately from the keyboard search used on reopening", /** Ports tdf154269 and tdf154818 and verifies the toolbar command paths. @returns Nothing. */ () => {
   const session = createWriterDocumentSession();
   const workbench = render(<WriterWorkbench isActive view={session.view} />);
-
   for (const letter of "ABCDEFGHIJKLMNOPQRSTUVWXYZ") {
     fireEvent.keyDown(window, { key: "f", ctrlKey: true });
     const toolbar = within(screen.getByRole("toolbar", { name: "Find" }));
@@ -476,23 +476,24 @@ it("keeps the upstream ten most recent distinct Find Bar entries across reopenin
     fireEvent.keyDown(search, { key: "Enter" });
     fireEvent.click(toolbar.getByRole("button", { name: "Close" }));
   }
-
   fireEvent.keyDown(window, { key: "f", ctrlKey: true });
-  const toolbar = screen.getByRole("toolbar", { name: "Find" });
-  const search = within(toolbar).getByLabelText("Find");
-  /** Reads the native datalist's ordered entries. @returns The stored terms. */
-  function terms(): string[] {
-    return Array.from(
-      toolbar.querySelectorAll<HTMLOptionElement>("datalist option"),
-      /** Projects the actual Browser option. @param option - History option. @returns Term. */ (
-        option,
-      ) => option.value,
-    );
-  }
-  expect(terms()).toEqual(Array.from("ZYXWVUTSRQ"));
+  const toolbar = within(screen.getByRole("toolbar", { name: "Find" }));
+  const search = toolbar.getByLabelText("Find");
   fireEvent.change(search, { target: { value: "U" } });
-  fireEvent.keyDown(search, { key: "Enter" });
-  expect(terms()).toEqual(Array.from("UZYXWVTSRQ"));
+  fireEvent.click(toolbar.getByRole("button", { name: "Find Next" }));
+  fireEvent.change(search, { target: { value: "new" } });
+  fireEvent.click(toolbar.getByRole("button", { name: "Find All" }));
+  fireEvent.click(toolbar.getByRole("button", { name: "Close" }));
+  fireEvent.keyDown(window, { key: "f", ctrlKey: true });
+  expect(screen.getByRole("combobox", { name: "Find" })).toHaveValue("Z");
+  expect(
+    Array.from(
+      screen.getByRole("toolbar", { name: "Find" }).querySelectorAll("datalist option"),
+      /** Reads the option's search term. @param option - Browser option. @returns Term. */ (
+        option,
+      ) => option.getAttribute("value"),
+    ),
+  ).toEqual(Array.from("UZYXWVTSRQ"));
   workbench.unmount();
   session.view.Close();
 });

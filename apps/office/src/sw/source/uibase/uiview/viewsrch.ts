@@ -256,8 +256,8 @@ export class SwViewSearch {
     return !this.shell.GetViewOptions().IsReadonly();
   }
 
-  /** Initializes the displayed search item from the Writer selection. @param dialog - Whether the modeless dialog is opening. @param rememberedSearch - Last Find Bar entry. @returns Current settings. */
-  public OpenSearch(dialog: boolean, rememberedSearch?: string): WriterSearchItem {
+  /** Initializes the displayed search item from the Writer selection. @param dialog - Whether the modeless dialog is opening. @returns Current settings. */
+  public OpenSearch(dialog: boolean): WriterSearchItem {
     this.ClearFeedback();
     const cursor = this.shell.GetCursor();
     if (dialog) {
@@ -271,7 +271,7 @@ export class SwViewSearch {
     } else {
       // Keep the search value consistent with the browser's single-line input.
       const text = this.GetFindBarSelection(cursor).replaceAll("\r", "").replaceAll("\n", "");
-      return { ...this.item, search: text || rememberedSearch || "" };
+      return { ...this.item, search: text };
     }
     return this.item;
   }

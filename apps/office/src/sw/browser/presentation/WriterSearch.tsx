@@ -1,5 +1,13 @@
 /** @fileoverview Browser Find toolbar and modeless Find and Replace dialog. */
-import { useId, useLayoutEffect, useRef, useState, type KeyboardEvent } from "react";
+import {
+  useId,
+  useLayoutEffect,
+  useRef,
+  useState,
+  type Dispatch,
+  type KeyboardEvent,
+  type SetStateAction,
+} from "react";
 import { useBrowserLocalization } from "../../../framework/browser/localization/browser-localization-context";
 import type {
   SwViewSearch,
@@ -15,15 +23,19 @@ const buttonStyle =
   "rounded border border-slate-300 bg-white px-2 py-1 text-sm hover:bg-slate-100 disabled:opacity-50";
 const fieldStyle = "min-w-0 rounded border border-slate-400 bg-white px-2 py-1 text-sm";
 
-/** Browseable histories of the two native search surfaces. */
+/** Browseable histories of the modeless search dialog. */
 export interface WriterSearchHistory {
-  readonly findbar: readonly string[];
   readonly search: readonly string[];
   readonly replacement: readonly string[];
 }
 
 // officecfg/registry/data/org/openoffice/Office/Common.xcu: FindReplaceRememberedSearches
 const rememberedSearches = 10;
+
+// The native toolbar manager saves the list on destruction. Entry activation
+// separately remembers a search across all Find Bar controllers.
+let savedFindBarHistory: readonly string[] = [];
+let rememberedFindBarSearch = "";
 
 /** Moves a nonempty entry to the front of the native history. @param values - Current values. @param entry - Submitted value. @returns Ordered history. */
 function remember(values: readonly string[], entry: string): readonly string[] {
@@ -57,7 +69,7 @@ export function WriterSearch({
   focusRequest: number;
   focusSearch: string | undefined;
   history: WriterSearchHistory;
-  onHistoryChange: (history: WriterSearchHistory) => void;
+  onHistoryChange: Dispatch<SetStateAction<WriterSearchHistory>>;
   owner: SwViewSearch;
   canSearchSelection: boolean;
   close: () => void;
@@ -65,12 +77,20 @@ export function WriterSearch({
   searchFeedback: WriterSearchFeedback | undefined;
 }>): React.JSX.Element {
   const localization = useBrowserLocalization();
-  const [item, setItem] = useState({ ...initial, search: focusSearch ?? initial.search });
+  const [findBarHistory, setFindBarHistory] = useState(
+    /** Loads the toolbar manager's saved list. @returns Recent toolbar searches. */ () =>
+      dialog ? [] : savedFindBarHistory,
+  );
+  const currentFindBarHistory = useRef(findBarHistory);
+  const search = focusSearch ?? (dialog ? undefined : rememberedFindBarSearch || findBarHistory[0]);
+  const [item, setItem] = useState({
+    ...initial,
+    search: search ?? (dialog ? initial.search : ""),
+  });
   const [lastFocusRequest, setLastFocusRequest] = useState(focusRequest);
   if (focusRequest !== lastFocusRequest) {
     setLastFocusRequest(focusRequest);
-    if (focusSearch !== undefined && focusSearch !== item.search)
-      setItem({ ...item, search: focusSearch });
+    if (search !== undefined && search !== item.search) setItem({ ...item, search });
   }
   if (dialog && !canSearchSelection && item.selection) setItem({ ...item, selection: false });
   const [findbarMatchCase, setFindbarMatchCase] = useState(false);
@@ -95,6 +115,16 @@ export function WriterSearch({
   const searchList = useId();
   const replacementList = useId();
   const canReplace = dialog && owner.CanReplace();
+
+  useLayoutEffect(
+    /** Saves the toolbar history when its controller is destroyed. @returns Optional cleanup. */ () => {
+      if (dialog) return;
+      return /** Retains this toolbar's latest history. @returns Nothing. */ () => {
+        savedFindBarHistory = currentFindBarHistory.current;
+      };
+    },
+    [dialog],
+  );
 
   useLayoutEffect(
     /** Gives the search entry focus after the calling menu releases it. @returns Nothing. */ () => {
@@ -136,9 +166,20 @@ export function WriterSearch({
   const searchStyle = effectiveStyle(styleOptions?.search, item.searchStyle);
   const replaceStyle = effectiveStyle(styleOptions?.replace, item.replaceStyle);
 
-  /** Saves the native dialog settings as a Find request. @param draft - Dialog controls. @param backward - Direction saved from Replace backwards. @returns Nothing. */
-  function saveDialogItem(draft: WriterSearchItem, backward: boolean): void {
+  /** Saves the native dialog settings as a Find request. @param draft - Dialog controls. @param backward - Direction saved from Replace backwards. @param closing - Whether Close also records the replacement. @returns Nothing. */
+  function saveDialogItem(draft: WriterSearchItem, backward: boolean, closing = false): void {
     const styles = draft.styleSearch ? (styleOptions ?? owner.GetParagraphStyles()) : undefined;
+    if (styles === undefined)
+      onHistoryChange(
+        /** Remembers the current dialog term when it is saved. @param previous - Dialog history. @returns Updated history. */ (
+          previous,
+        ) => ({
+          search: remember(previous.search, draft.search),
+          replacement: closing
+            ? remember(previous.replacement, draft.replacement)
+            : previous.replacement,
+        }),
+      );
     owner.SaveSearchItem(
       {
         ...draft,
@@ -157,36 +198,33 @@ export function WriterSearch({
 
   /** Closes the surface, preserving the modeless dialog's input and histories. @returns Nothing. */
   function closeSearch(): void {
-    if (dialog) {
-      if (!item.styleSearch)
-        onHistoryChange({
-          ...history,
-          search: remember(history.search, item.search),
-          replacement: remember(history.replacement, item.replacement),
-        });
-      saveDialogEntries();
-    }
+    if (dialog) saveDialogItem(item, replaceBackward, true);
     close();
   }
 
-  /** Executes one search operation with the active surface's options. @param command - Operation. @param backward - Direction. @returns Nothing. */
-  function execute(command: SvxSearchCmd, backward = false): void {
-    if (styleOptions === undefined)
+  /** Executes one search operation with the active surface's options. @param command - Operation. @param backward - Direction. @param activateEntry - Whether the toolbar entry initiated the operation. @returns Nothing. */
+  function execute(command: SvxSearchCmd, backward = false, activateEntry = false): void {
+    if (!dialog && command !== SvxSearchCmd.FIND_ALL) {
+      if (activateEntry) rememberedFindBarSearch = item.search;
+      const entries = remember(currentFindBarHistory.current, item.search);
+      currentFindBarHistory.current = entries;
+      setFindBarHistory(entries);
+    } else if (dialog && styleOptions === undefined) {
       onHistoryChange(
-        dialog
-          ? {
-              ...history,
-              search:
-                command === SvxSearchCmd.REPLACE
-                  ? history.search
-                  : remember(history.search, item.search),
-              replacement:
-                command === SvxSearchCmd.REPLACE || command === SvxSearchCmd.REPLACE_ALL
-                  ? remember(history.replacement, item.replacement)
-                  : history.replacement,
-            }
-          : { ...history, findbar: remember(history.findbar, item.search) },
+        /** Records the fields used by this dialog command. @param previous - Dialog history. @returns Updated history. */ (
+          previous,
+        ) => ({
+          search:
+            command === SvxSearchCmd.REPLACE
+              ? previous.search
+              : remember(previous.search, item.search),
+          replacement:
+            command === SvxSearchCmd.REPLACE || command === SvxSearchCmd.REPLACE_ALL
+              ? remember(previous.replacement, item.replacement)
+              : previous.replacement,
+        }),
       );
+    }
     try {
       if (!dialog) {
         const all = command === SvxSearchCmd.FIND_ALL;
@@ -265,7 +303,7 @@ export function WriterSearch({
           ((event.ctrlKey || event.metaKey) && event.key.toLowerCase() === "g")))
     ) {
       event.preventDefault();
-      if (!cannotSearch) execute(SvxSearchCmd.FIND, !dialog && event.shiftKey);
+      if (!cannotSearch) execute(SvxSearchCmd.FIND, !dialog && event.shiftKey, !dialog);
     }
   }
 
@@ -298,7 +336,7 @@ export function WriterSearch({
   );
   const searchHistory = (
     <datalist id={searchList}>
-      {(dialog ? history.search : history.findbar).map(
+      {(dialog ? history.search : findBarHistory).map(
         /** Projects a recent search. @param value - Stored value. @returns Browser option. */ (
           value,
         ) => (
