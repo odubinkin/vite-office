@@ -1,10 +1,11 @@
 ---
 id: "202611211751-YJKJ7E"
 title: "Align Writer ODT line numbering import and export"
-status: "DOING"
+result_summary: "Aligned Writer ODT line-numbering import and export with LibreOffice for the represented settings."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 7
+revision: 8
 origin:
   system: "manual"
 depends_on: []
@@ -43,11 +44,16 @@ quality_review:
     - "output/playwright/YJKJ7E/provenance.log"
   findings:
     - "The pinned paragraph fixture, explicit and omitted offsets, synchronized format and Worker style reconstruction pass."
-commit: null
+commit:
+  hash: "f9930972faee503f0e955f0bba4fea03c3ca8ba8"
+  message: "🧩 YJKJ7E code: preserve Writer ODT line numbering settings"
 comments:
   -
     author: "CODER"
     body: "Start: implement native ODT line-number style, numbering format, and property conversion."
+  -
+    author: "CODER"
+    body: "Verified: Writer line-number ODT styles, native numbering and distance, Worker style ownership and pinned paragraph participation."
 events:
   -
     type: "status"
@@ -62,8 +68,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Verified source Writer line-numbering settings through native properties, ODT packages and Worker transport."
+  -
+    type: "status"
+    at: "2026-11-21T18:11:41.371Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: Writer line-number ODT styles, native numbering and distance, Worker style ownership and pinned paragraph participation."
 doc_version: 3
-doc_updated_at: "2026-11-21T18:08:09.069Z"
+doc_updated_at: "2026-11-21T18:11:41.374Z"
 doc_updated_by: "CODER"
 description: "Port native line-number format and character-style ownership, ODF conversion and defaults, UNO distance sentinel and interval behavior, and Worker transport. Verify scoped ODT and native numbering tests and pinned LibreOffice fixtures."
 sections:
