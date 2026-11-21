@@ -11,6 +11,7 @@ import {
 } from "../../../source/ui/condformat/condformatdlg";
 import {
   conditionChoices,
+  dataBarChoices,
   dateChoices,
   scaleChoices,
   ConditionOperands,
@@ -30,7 +31,13 @@ const ruleKinds = [
 const scaleKinds = [
   ["scale2", "Color Scale (2 Entries)"],
   ["scale3", "Color Scale (3 Entries)"],
+  ["databar", "Data Bar"],
 ] as const;
+
+/** Recognizes the native All Cells rule pages. @param kind - Current page. @returns Whether it shows threshold controls. */
+function isColorFormat(kind: ConditionalRuleKind): boolean {
+  return kind === "scale2" || kind === "scale3" || kind === "databar";
+}
 
 /** Original editor callbacks and reference-input binding. */
 interface Props {
@@ -201,7 +208,7 @@ export function ScCondFormatDlg({
                         <select
                           aria-label="Rule type"
                           className={control}
-                          value={rule.kind === "scale2" ? "scale3" : rule.kind}
+                          value={isColorFormat(rule.kind) ? "scale3" : rule.kind}
                           onChange={(event) =>
                             change(index, model.NewRule(event.target.value as ConditionalRuleKind))
                           }
@@ -213,7 +220,7 @@ export function ScCondFormatDlg({
                           ))}
                         </select>
                       )}
-                      {(rule.kind === "scale2" || rule.kind === "scale3") && (
+                      {isColorFormat(rule.kind) && (
                         <select
                           aria-label="Color format"
                           className={control}
@@ -281,9 +288,20 @@ export function ScCondFormatDlg({
                               }
                             />
                           ))}
-                      {rule.kind === "scale2" || rule.kind === "scale3" ? (
+                      {isColorFormat(rule.kind) ? (
                         <div className="grid gap-2">
                           {rule.stops.map((stop, number) => {
+                            const bar = rule.kind === "databar";
+                            const choices = bar
+                              ? dataBarChoices.filter(
+                                  ([type]) =>
+                                    type === stop.type ||
+                                    type !==
+                                      (number === 0
+                                        ? ScColorScaleEntryType.MAX
+                                        : ScColorScaleEntryType.MIN),
+                                )
+                              : scaleChoices;
                             const label =
                               number === 0
                                 ? "Minimum"
@@ -307,7 +325,7 @@ export function ScCondFormatDlg({
                                     update({ ...stop, type: Number(event.target.value) })
                                   }
                                 >
-                                  {scaleChoices.map(([type, caption]) => (
+                                  {choices.map(([type, caption]) => (
                                     <option key={type} value={type}>
                                       {caption}
                                     </option>
@@ -318,6 +336,7 @@ export function ScCondFormatDlg({
                                   className={control}
                                   value={stop.value}
                                   disabled={
+                                    stop.type === ScColorScaleEntryType.AUTO ||
                                     stop.type === ScColorScaleEntryType.MIN ||
                                     stop.type === ScColorScaleEntryType.MAX
                                   }
@@ -325,14 +344,16 @@ export function ScCondFormatDlg({
                                     update({ ...stop, value: event.target.value })
                                   }
                                 />
-                                <input
-                                  type="color"
-                                  aria-label={label + " color"}
-                                  value={stop.color}
-                                  onChange={(event) =>
-                                    update({ ...stop, color: event.target.value })
-                                  }
-                                />
+                                {!bar && (
+                                  <input
+                                    type="color"
+                                    aria-label={label + " color"}
+                                    value={stop.color}
+                                    onChange={(event) =>
+                                      update({ ...stop, color: event.target.value })
+                                    }
+                                  />
+                                )}
                               </div>
                             );
                           })}

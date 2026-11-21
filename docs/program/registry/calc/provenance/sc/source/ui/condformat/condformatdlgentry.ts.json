@@ -11,10 +11,12 @@
     "upstreamPath": "sc/source/ui/condformat/condformatdlgentry.cxx",
     "upstreamSymbols": [
       "ScConditionFrmtEntry",
-      "ScColorScale3FrmtEntry::createColorscaleEntry"
+      "ScColorScale3FrmtEntry::createColorscaleEntry",
+      "ScDataBarFrmtEntry::createDatabarEntry"
     ],
     "preservedResponsibilities": [
-      "Converts existing native condition, date and scale rule entries to editable values and back."
+      "Converts existing native condition, date, scale and data-bar rules to editable values and back.",
+      "Edits both data-bar limits while preserving the native settings of the imported rule."
     ],
     "omittedResponsibilities": [
       "Native Weld widgets are supplied by the browser adapter."
@@ -28,6 +30,10 @@
         {
           "path": "apps/office/src/sc/browser/presentation/calc-conditional-format.test.tsx",
           "marker": "ports tdf163897"
+        },
+        {
+          "path": "apps/office/src/sc/browser/presentation/calc-conditional-format.test.tsx",
+          "marker": "edits an imported ODS data-bar limit"
         }
       ],
       "upstream": [
@@ -38,6 +44,10 @@
         {
           "path": "vendor/libreoffice-reference/sc/source/ui/condformat/condformatdlgentry.cxx",
           "marker": "ScColorScale3FrmtEntry::createColorscaleEntry"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/source/ui/condformat/condformatdlgentry.cxx",
+          "marker": "ScDataBarFrmtEntry::createDatabarEntry"
         }
       ]
     }

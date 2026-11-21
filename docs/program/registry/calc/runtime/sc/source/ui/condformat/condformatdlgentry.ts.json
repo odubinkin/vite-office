@@ -20,7 +20,7 @@
         "apps/office/src/sc/browser/presentation/calc-conditional-format.test.tsx",
         "vendor/libreoffice-reference/sc/source/ui/condformat/condformatdlgentry.cxx"
       ],
-      "justification": "Converts existing native condition, date and scale rule entries to editable values and back.",
+      "justification": "Converts existing native condition, date, scale and data-bar rules to editable values and back. Data-bar limit editing preserves the existing bar settings.",
       "knownViolations": [],
       "localSymbols": [
         "CreateConditionalRule"
@@ -29,7 +29,8 @@
       "upstreamFile": "sc/source/ui/condformat/condformatdlgentry.cxx",
       "upstreamSymbols": [
         "ScConditionFrmtEntry",
-        "ScColorScale3FrmtEntry::createColorscaleEntry"
+      "ScColorScale3FrmtEntry::createColorscaleEntry",
+      "ScDataBarFrmtEntry::createDatabarEntry"
       ]
     }
   }

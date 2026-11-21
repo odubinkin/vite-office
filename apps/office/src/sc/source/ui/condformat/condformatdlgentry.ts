@@ -16,7 +16,9 @@ import {
   ScColorScaleEntry,
   ScColorScaleEntryType,
   ScColorScaleFormat,
-} from "../../core/data/colorscale";
+  ScDataBarFormat,
+  ScDataBarFormatData,
+} from "../../../inc/colorscale";
 
 const grammar = FormulaGrammar.Grammar.GRAM_NATIVE;
 const Mode = ScConditionMode;
@@ -77,8 +79,12 @@ export const scaleChoices = [
   [Stop.FORMULA, "Formula"],
 ] as const;
 
+/** Native data-bar limit choices, including automatic extrema. */
+export const dataBarChoices = [[Stop.AUTO, "Automatic"], ...scaleChoices] as const;
+
 /** Rule pages backed by the existing native format entry families. */
-export type ConditionalRuleKind = "condition" | "formula" | "date" | "scale2" | "scale3";
+export type ConditionalRuleKind =
+  "condition" | "formula" | "date" | "scale2" | "scale3" | "databar";
 
 /** Browser values for one original color stop. */
 export interface ConditionalScaleDraft {
@@ -97,6 +103,7 @@ export interface ConditionalRuleDraft {
   readonly style: string;
   readonly date: ScCondFormatDateType;
   readonly stops: readonly ConditionalScaleDraft[];
+  readonly dataBar?: Readonly<ScDataBarFormatData>;
   readonly source?: ScAddress;
   readonly type?: ScFormatEntryType;
 }
@@ -125,9 +132,25 @@ export function NewConditionalRule(kind: ConditionalRuleKind, style: string): Co
     second: "",
     style,
     date: ScCondFormatDateType.TODAY,
-    stops: two
-      ? [low, high]
-      : [low, { type: Stop.PERCENTILE, value: "50", color: "#ffff00" }, high],
+    stops:
+      kind === "databar"
+        ? [
+            { type: Stop.AUTO, value: "", color: "#000000" },
+            { type: Stop.AUTO, value: "", color: "#000000" },
+          ]
+        : two
+          ? [low, high]
+          : [low, { type: Stop.PERCENTILE, value: "50", color: "#ffff00" }, high],
+  };
+}
+
+/** Reads one native threshold in the editor's formula grammar. @param stop - Native threshold. @returns Editable values. */
+function readStop(stop: ScColorScaleEntry): ConditionalScaleDraft {
+  return {
+    type: stop.GetType(),
+    mode: stop.GetMode(),
+    value: stop.GetType() === Stop.FORMULA ? stop.GetFormula(grammar) : String(stop.GetValue()),
+    color: "#" + (stop.GetColor().toUInt32() & 0xffffff).toString(16).padStart(6, "0"),
   };
 }
 
@@ -136,13 +159,16 @@ export function ReadConditionalRule(entry: ScFormatEntry): ConditionalRuleDraft 
   if (entry instanceof ScCondDateFormatEntry)
     return { ...NewConditionalRule("date", text(entry.GetStyleName())), date: entry.GetDateType() };
   if (entry instanceof ScColorScaleFormat) {
-    const stops = Array.from(entry, (stop) => ({
-      type: stop.GetType(),
-      mode: stop.GetMode(),
-      value: stop.GetType() === Stop.FORMULA ? stop.GetFormula(grammar) : String(stop.GetValue()),
-      color: "#" + (stop.GetColor().toUInt32() & 0xffffff).toString(16).padStart(6, "0"),
-    }));
+    const stops = Array.from(entry, readStop);
     return { ...NewConditionalRule(stops.length === 2 ? "scale2" : "scale3", ""), stops };
+  }
+  if (entry instanceof ScDataBarFormat) {
+    const dataBar = entry.GetDataBarData();
+    return {
+      ...NewConditionalRule("databar", ""),
+      dataBar,
+      stops: [readStop(dataBar.mpLowerLimit), readStop(dataBar.mpUpperLimit)],
+    };
   }
   if (!(entry instanceof ScCondFormatEntry))
     throw new Error("Unsupported conditional-format entry");
@@ -156,6 +182,22 @@ export function ReadConditionalRule(entry: ScFormatEntry): ConditionalRuleDraft 
     source,
     type: entry.GetType(),
   };
+}
+
+/** Rebuilds one edited native conditional threshold. @param stop - Editable threshold. @param doc - Workbook. @param origin - Formula context. @returns Owned threshold. */
+function createStop(
+  stop: ConditionalScaleDraft,
+  doc: ScDocument,
+  origin: ScAddress,
+): ScColorScaleEntry {
+  const entry = new ScColorScaleEntry(
+    Number(stop.value) || 0,
+    new Color(Number.parseInt(stop.color.slice(1), 16)),
+    stop.type,
+    stop.mode,
+  );
+  if (stop.type === Stop.FORMULA) entry.SetFormula(stop.value, doc, origin, grammar);
+  return entry;
 }
 
 /** Builds an owned native rule. @param draft - Entered values. @param doc - Workbook. @param origin - Original or accepted rule range origin. @returns Native entry. */
@@ -177,17 +219,26 @@ export function CreateConditionalRule(
   }
   if (draft.kind === "scale2" || draft.kind === "scale3") {
     const entry = new ScColorScaleFormat(doc);
-    for (const stop of draft.stops) {
-      const threshold = new ScColorScaleEntry(
-        Number(stop.value) || 0,
-        new Color(Number.parseInt(stop.color.slice(1), 16)),
-        stop.type,
-        stop.mode,
-      );
-      if (stop.type === Stop.FORMULA) threshold.SetFormula(stop.value, doc, origin, grammar);
-      entry.AddEntry(threshold);
-    }
+    for (const stop of draft.stops) entry.AddEntry(createStop(stop, doc, origin));
     return entry;
+  }
+  if (draft.kind === "databar") {
+    const [lower, upper] = draft.stops;
+    if (!lower || !upper) throw new Error("A data bar needs two thresholds.");
+    const data = draft.dataBar?.Clone(doc) ?? new ScDataBarFormatData();
+    if (!draft.dataBar) data.maPositiveColor = new Color(0x2a6099);
+    try {
+      data.mpLowerLimit.Dispose();
+      data.mpLowerLimit = createStop(lower, doc, origin);
+      data.mpUpperLimit.Dispose();
+      data.mpUpperLimit = createStop(upper, doc, origin);
+      const entry = new ScDataBarFormat(doc);
+      entry.SetDataBarData(data);
+      return entry;
+    } catch (error) {
+      data.Dispose();
+      throw error;
+    }
   }
   const mode = draft.kind === "formula" ? Mode.Direct : draft.mode;
   return new ScCondFormatEntry(

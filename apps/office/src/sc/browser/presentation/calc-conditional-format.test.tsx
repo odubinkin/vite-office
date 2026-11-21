@@ -10,6 +10,7 @@ import {
 import { unicode } from "../../../i18nlangtag/source/isolang/isolang.tables";
 import { createDocument } from "../../../sfx2/source/doc/objsh";
 import { ScAddress } from "../../inc/address";
+import { ScColorScaleEntryType, ScDataBarFormat } from "../../inc/colorscale";
 import { ATTR_BACKGROUND } from "../../inc/scitems";
 import { ScCondFormatEntry, ScConditionMode, ScFormatEntryType } from "../../inc/conditio";
 import { SvxBrushItem } from "../../../editeng/inc/brushitem";
@@ -156,6 +157,63 @@ it("keeps rule order and supports changing the active source rule to a date", as
   const [format] = sheet.GetCondFormList();
   expect(format?.GetEntry(0)?.GetType()).toBe(ScFormatEntryType.Date);
   expect(format?.GetEntry(1)?.GetType()).toBe(ScFormatEntryType.Colorscale);
+});
+
+it("edits an imported ODS data-bar limit through the manager and preserves the rest of the rule", async () => {
+  const fixture = readFileSync(
+    "../../vendor/libreoffice-reference/sc/qa/unit/data/ods/databar.ods",
+  );
+  const doc = mount(await readOdsDocument(new Uint8Array(fixture)));
+  const address = new ScAddress(1, 2, 0);
+  /** Reads the B3 rule in its current document. @param document - Native workbook. @returns Data bar. */
+  function dataBar(document: ScDocument): ScDataBarFormat {
+    const list = document.FetchTable(0)?.GetCondFormList();
+    assert(list);
+    const rule = [...list]
+      .find(
+        /** Finds the rule's B3 range. @param format - Conditional-format group. @returns Match. */
+        (format) => format.GetRange().Combine().Contains(address),
+      )
+      ?.GetEntry(0);
+    assert(rule instanceof ScDataBarFormat);
+    return rule;
+  }
+  const original = dataBar(doc).GetDataBarData();
+  const positive = original.maPositiveColor.toUInt32();
+  const negative = original.mxNegativeColor?.toUInt32();
+  const originalAxis = original.meAxisPosition;
+
+  open(".uno:ConditionalFormatManagerDialog");
+  const manager = () => screen.getByRole("dialog", { name: "Manage Conditional Formatting" });
+  expect(within(manager()).getAllByText("Data Bar")).toHaveLength(5);
+  fireEvent.click(within(manager()).getByRole("button", { name: "B3:B6" }));
+  await respond(manager(), "Edit");
+  const editor = screen.getByRole("dialog", { name: /^Conditional Formatting for/ });
+  expect(within(editor).getByLabelText("Color format")).toHaveValue("databar");
+  expect(within(editor).getByLabelText("Minimum type")).toHaveValue(
+    String(ScColorScaleEntryType.AUTO),
+  );
+  fireEvent.change(within(editor).getByLabelText("Minimum type"), {
+    target: { value: String(ScColorScaleEntryType.VALUE) },
+  });
+  fireEvent.change(within(editor).getByLabelText("Minimum value"), {
+    target: { value: "2" },
+  });
+  await respond(editor, "OK");
+  await respond(manager(), "OK");
+
+  const reopened = await readOdsDocument(await writeOdsDocument(doc));
+  try {
+    const saved = dataBar(reopened).GetDataBarData();
+    expect(saved.mpLowerLimit.GetType()).toBe(ScColorScaleEntryType.VALUE);
+    expect(saved.mpLowerLimit.GetValue()).toBe(2);
+    expect(saved.mpUpperLimit.GetType()).toBe(ScColorScaleEntryType.AUTO);
+    expect(saved.maPositiveColor.toUInt32()).toBe(positive);
+    expect(saved.mxNegativeColor?.toUInt32()).toBe(negative);
+    expect(saved.meAxisPosition).toBe(originalAxis);
+  } finally {
+    reopened.Dispose();
+  }
 });
 
 it("projects the original conditional commands into the formatting toolbar menu", async () => {

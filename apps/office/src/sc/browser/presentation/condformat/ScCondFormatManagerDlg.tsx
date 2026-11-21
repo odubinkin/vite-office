@@ -39,6 +39,8 @@ function getCondition(format: ScConditionalFormat): string {
       return "Formula is " + rule.first;
     case "date":
       return "Date is " + (dateChoices.find(([date]) => date === rule.date)?.[1] ?? "");
+    case "databar":
+      return "Data Bar";
     default:
       return "Color Scale";
   }
