@@ -7,6 +7,8 @@ import { FastAttributeList, SvXMLImportContext } from "../core/xmlimp";
 import { XMLToken as T } from "../core/xmltoken";
 import { SvXMLUnitConverter } from "../core/xmluconv";
 import type { XMLTextImportHelper } from "./txtimp";
+import { XMLBase64ImportContext } from "../core/XMLBase64ImportContext";
+import type { XMLGraphicSource } from "../core/xmlgrhlp";
 import { importWritingDirection } from "../style/prhdlfac";
 import { importTextConstant } from "./txtprhdl";
 
@@ -50,7 +52,7 @@ export interface XMLTextFrameAttributes {
 
 /** Shared SAX calls into the native Writer frame and text ownership. */
 export interface XMLTextFrameImportTarget {
-  insertGraphicFrame?(value: XMLTextFrameAttributes, href: string): boolean;
+  insertGraphicFrame?(value: XMLTextFrameAttributes, source: XMLGraphicSource): boolean;
   beginTextFrame(value: XMLTextFrameAttributes): XMLTextCursor;
   endTextFrame(cursor: XMLTextCursor): void;
 }
@@ -224,15 +226,64 @@ export class XMLTextFrameContext extends SvXMLImportContext {
         boolean(attrs, T.LOEXT_MAY_BREAK_BETWEEN_PAGES, T.DRAW_MAY_BREAK_BETWEEN_PAGES),
     };
     if (element === T.DRAW_IMAGE) {
-      const href = attrs.get(T.XLINK_HREF);
-      if (href && !this.graphicInserted && this.target.insertGraphicFrame) {
-        this.graphicInserted = this.target.insertGraphicFrame(value, href);
-      }
-      return null;
+      if (this.graphicInserted || !this.target.insertGraphicFrame) return null;
+      return new XMLTextFrameGraphicContext(
+        attrs.get(T.XLINK_HREF) ?? "",
+        /** Inserts the first successfully resolved graphic at the current cursor. @param source - Graphic source. @returns Nothing. */
+        (source) => {
+          this.graphicInserted = this.target.insertGraphicFrame?.(value, source) === true;
+        },
+      );
     }
     const cursor = this.target.beginTextFrame(value);
     this.helper.PushTextFrameCursor(cursor);
     return new XMLTextBoxContext(this.target, this.helper, cursor);
+  }
+}
+
+/** Owns a graphic frame child until its linked or inline image is available. */
+class XMLTextFrameGraphicContext extends SvXMLImportContext {
+  private binary: XMLBase64ImportContext | undefined;
+  private direct: XMLBase64ImportContext | undefined;
+  private inline: Uint8Array | undefined;
+
+  /** Binds the original draw:image source. @param href - Authored link. @param publish - Frame insertion callback. @returns Context. */
+  constructor(
+    private readonly href: string,
+    private readonly publish: (source: XMLGraphicSource) => void,
+  ) {
+    super();
+  }
+
+  /** Gets one output stream for an unlinked graphic. @param element - Child token. @returns Binary context or absence. */
+  override createFastChildContext(element: T): SvXMLImportContext | null {
+    if (element !== T.OFFICE_BINARY_DATA || this.href || this.binary) return null;
+    this.binary = this.createBinaryContext();
+    return this.binary;
+  }
+
+  /** Buffers the older graphic representation with direct text. @param value - SAX characters. @returns Nothing. */
+  override characters(value: string): void {
+    if (this.href || this.binary) return;
+    this.direct ??= this.createBinaryContext();
+    this.direct.characters(value);
+  }
+
+  /** Inserts the graphic after the original source is complete. @returns Nothing. */
+  override endFastElement(): void {
+    if (!this.binary) this.direct?.endFastElement();
+    if (this.href) this.publish({ href: this.href });
+    else if (this.inline !== undefined) this.publish({ href: "", inline: this.inline });
+  }
+
+  /** Opens the image's decoded output sink. @returns Binary context. */
+  private createBinaryContext(): XMLBase64ImportContext {
+    return new XMLBase64ImportContext(
+      /** Retains the decoded image for frame insertion. @param bytes - Encoded graphic bytes. @returns Nothing. */
+      (bytes) => {
+        this.inline = bytes;
+      },
+    );
   }
 }
 

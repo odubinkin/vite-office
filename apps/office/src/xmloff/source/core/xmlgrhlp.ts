@@ -7,6 +7,14 @@ export interface XMLGraphic {
   readonly mediaType: string;
 }
 
+/** A graphic URL and its optional inline fallback at the import boundary. */
+export interface XMLGraphicSource {
+  readonly href: string;
+  readonly inline?: Uint8Array;
+}
+
+const pngSignature = [0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a];
+
 const extensions: ReadonlyMap<string, string> = new Map([
   ["image/jpeg", "jpg"],
   ["image/png", "png"],
@@ -33,6 +41,20 @@ export class SvXMLGraphicHelper {
     } catch {
       return undefined;
     }
+  }
+
+  /** Imports the represented encoded raster streams using the original VCL signatures. @param bytes - Decoded binary stream. @returns Recognized raster or absence. */
+  loadGraphicFromBase64(bytes: Uint8Array): XMLGraphic | undefined {
+    if (
+      pngSignature.every(
+        /** Checks one native PNG signature byte. @param byte - Signature byte. @param index - Stream offset. @returns Match. */
+        (byte, index) => bytes[index] === byte,
+      )
+    )
+      return { bytes, mediaType: "image/png" };
+    if (bytes.length >= 4 && bytes[0] === 0xff && bytes[1] === 0xd8 && bytes[2] === 0xff)
+      return { bytes, mediaType: "image/jpeg" };
+    return undefined;
   }
 
   /** Stores native raster bytes in Pictures once; the encoded checksum identifies the portable graphic value. @param graphic - Owned encoded input. @returns Internal graphic stream. */

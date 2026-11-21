@@ -35,7 +35,8 @@ import {
 import { XMLTextFrameStyleContext, type XMLTextFrameStyle } from "../text/XMLTextFrameContext";
 import { XMLTextPropertySetContext } from "../text/XMLTextPropertySetContext";
 import { XMLThemeContext } from "./XMLThemeContext";
-import { importImageStyle, type XMLImageStyleDefinition } from "./ImageStyle";
+import type { XMLImageStyleDefinition } from "./ImageStyle";
+import { XMLBitmapStyleContext } from "./FillStyleContext";
 import type { Theme } from "../../../docmodel/inc/theme/Theme";
 import { XMLNumberWithAutoForVoidPropHdl } from "./xmlbahdl";
 import { SvxXMLListStyleContext, type XMLListStyleImportTarget } from "./xmlnumi";
@@ -181,11 +182,11 @@ export class XMLStylesContext extends SvXMLImportContext {
       return new SvxXMLListStyleContext(this.target, attributes, this.automatic);
     if (element === XMLToken.STYLE_PAGE_LAYOUT)
       return new XMLPageLayoutContext(this.target, attributes);
-    if (element === XMLToken.DRAW_FILL_IMAGE && this.target.registerImageStyle) {
-      const image = importImageStyle(attributes);
-      if (image) this.target.registerImageStyle(image);
-      return new SvXMLIgnoreContext(true);
-    }
+    if (element === XMLToken.DRAW_FILL_IMAGE && this.target.registerImageStyle)
+      return new XMLBitmapStyleContext(
+        attributes,
+        this.target.registerImageStyle.bind(this.target),
+      );
     if (element === XMLToken.TEXT_LINENUMBERING_CONFIGURATION)
       return new XMLLineNumberingImportContext(
         attributes,

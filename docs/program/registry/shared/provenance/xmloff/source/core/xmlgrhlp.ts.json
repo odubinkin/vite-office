@@ -12,13 +12,15 @@
     ],
     "upstreamSymbols": [
       "SvXMLGraphicHelper::implSaveGraphic",
-      "SvXMLGraphicHelper::loadGraphic"
+      "SvXMLGraphicHelper::loadGraphic",
+      "SvXMLGraphicHelper::loadGraphicFromOutputStreamAtPage"
     ],
     "preservedResponsibilities": [
-      "Retains embedded JPEG and PNG byte streams in the native ODF Pictures storage and resolves package-relative image URLs for Writer."
+      "Retains embedded JPEG and PNG byte streams in the native ODF Pictures storage and resolves package-relative image URLs for Writer.",
+      "Recognizes the represented inline PNG and JPEG byte streams through original VCL signatures."
     ],
     "omittedResponsibilities": [
-      "Encoded checksums and exact byte comparison bind package identity in the represented raster transport. Native graphic decoders, additional GfxLink encodings and inline binary-data are outside this checkpoint."
+      "Native pixel decoders, additional GfxLink encodings, and external URLs remain outside this browser raster transport."
     ],
     "evidence": {
       "local": [
@@ -33,6 +35,10 @@
         {
           "path": "apps/office/src/sw/source/filter/ww8/docxexport.drawing.test.ts",
           "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/source/filter/xml/odt-inline-graphics.test.ts",
+          "marker": "loads pixels from the original testDrawImageEmbeddedNotBlocked fixture"
         }
       ],
       "upstream": [
@@ -43,6 +49,18 @@
         {
           "path": "vendor/libreoffice-reference/xmloff/source/core/xmlgrhlp.cxx",
           "marker": "SvXMLGraphicHelper::loadGraphic"
+        },
+        {
+          "path": "vendor/libreoffice-reference/xmloff/source/core/xmlgrhlp.cxx",
+          "marker": "SvXMLGraphicHelper::loadGraphicFromOutputStreamAtPage"
+        },
+        {
+          "path": "vendor/libreoffice-reference/vcl/source/filter/GraphicFormatDetector.cxx",
+          "marker": "GraphicFormatDetector::checkPNG"
+        },
+        {
+          "path": "vendor/libreoffice-reference/vcl/source/filter/GraphicFormatDetector.cxx",
+          "marker": "GraphicFormatDetector::checkJPG"
         }
       ]
     }

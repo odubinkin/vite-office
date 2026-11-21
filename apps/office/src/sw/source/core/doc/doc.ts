@@ -386,12 +386,13 @@ export class SwDoc {
   public GetBitmapTable(): ReadonlyMap<string, XFillBitmapItem> {
     return this.bitmapTable;
   }
-  /** Inserts a named bitmap while retaining the existing named definition on collision. @param item - Bitmap definition. @returns Registered bitmap. */
-  public RegisterBitmap(item: XFillBitmapItem): XFillBitmapItem {
+  /** Inserts a named bitmap or replaces the named container entry. @param item - Bitmap definition. @param replace - XML named-style replacement. @returns Registered bitmap. */
+  public RegisterBitmap(item: XFillBitmapItem, replace = false): XFillBitmapItem {
     const name = item.GetName();
     const existing = this.bitmapTable.get(name);
-    if (existing) return existing;
+    if (existing && !replace) return existing;
     this.bitmapTable.set(name, item.Clone());
+    existing?.Dispose();
     return item;
   }
   /** Returns a copy of the document-owned line-number configuration. @returns Line-number settings. */

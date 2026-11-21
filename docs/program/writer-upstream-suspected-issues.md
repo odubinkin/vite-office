@@ -5474,3 +5474,14 @@ therefore change on reopen. Writer retains the two values in memory and
 applies the same selection when writing ODT.
 
 - [Original tile-offset export selection](../../vendor/libreoffice-reference/xmloff/source/style/PageMasterExportPropMapper.cxx)
+
+### WRITER-695 — ODT named bitmap fills and legacy backgrounds use different inline fallback rules
+
+The named fill-image context consults its first inline stream when its href
+did not resolve to a graphic. The legacy background context only opens a
+stream when the href is empty, so a missing package resource can suppress
+otherwise valid inline image data. Writer follows the source behavior for
+both package-local cases.
+
+- [Original named bitmap context](../../vendor/libreoffice-reference/xmloff/source/style/FillStyleContext.cxx)
+- [Original legacy background image context](../../vendor/libreoffice-reference/xmloff/source/style/XMLBackgroundImageContext.cxx)

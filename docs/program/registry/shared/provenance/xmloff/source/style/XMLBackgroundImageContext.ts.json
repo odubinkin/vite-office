@@ -1,0 +1,40 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "status": "mapped",
+    "localPath": "apps/office/src/xmloff/source/style/XMLBackgroundImageContext.ts",
+    "upstreamPath": "xmloff/source/style/XMLBackgroundImageContext.cxx",
+    "localSymbols": [
+      "XMLBackgroundImageContext"
+    ],
+    "upstreamSymbols": [
+      "XMLBackgroundImageContext::endFastElement"
+    ],
+    "preservedResponsibilities": [
+      "Imports legacy background image placement, opacity and a first inline stream only when the href is empty."
+    ],
+    "omittedResponsibilities": [
+      "External graphic links remain outside the represented loader."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/xmloff/source/style/XMLBackgroundImageContext.ts",
+          "marker": "XMLBackgroundImageContext"
+        },
+        {
+          "path": "apps/office/src/sw/source/filter/xml/odt-inline-graphics.test.ts",
+          "marker": "uses distinct URL precedence"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/xmloff/source/style/XMLBackgroundImageContext.cxx",
+          "marker": "XMLBackgroundImageContext::endFastElement"
+        }
+      ]
+    }
+  }
+}

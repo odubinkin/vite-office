@@ -6,7 +6,7 @@ import type { XMLImageStyleDefinition } from "../../../../xmloff/source/style/Im
 import { XFillBitmapItem } from "../../../../svx/inc/xbtmpit";
 import { Graphic } from "../../../../vcl/source/gdi/graph";
 import { Size } from "../../../../tools/inc/gen";
-import type { XMLGraphic } from "../../../../xmloff/source/core/xmlgrhlp";
+import type { XMLGraphic, XMLGraphicSource } from "../../../../xmloff/source/core/xmlgrhlp";
 import { UseOnPage } from "../../core/layout/pagedesc";
 import { cppu_detail_getUnoType_PageStyleLayout as pageLayoutType } from "../../../../offapi/com/sun/star/style/PageStyleLayout";
 import { XMLDocumentSettingsContext } from "../../../../xmloff/source/core/DocumentSettingsContext";
@@ -201,9 +201,9 @@ class SwXMLImport
     );
   }
 
-  /** Resolves a package image and inserts it at the real Writer text cursor. @param value - Source frame attributes. @param href - Embedded URL. @returns Whether imported. */
-  public insertGraphicFrame(value: XMLTextFrameAttributes, href: string): boolean {
-    const graphic = this.graphicHelper.loadGraphicByURL(href);
+  /** Resolves a graphic and inserts it at the real Writer text cursor. @param value - Source frame attributes. @param source - Embedded graphic source. @returns Whether imported. */
+  public insertGraphicFrame(value: XMLTextFrameAttributes, source: XMLGraphicSource): boolean {
+    const graphic = this.loadGraphic(source);
     if (!graphic) return false;
     importGraphicFrame(
       this.GetTextImport().GetCursor() as SwXTextCursor,
@@ -261,29 +261,39 @@ class SwXMLImport
     Readonly<{ followName?: string; pageLayoutName: string }>
   >();
   private readonly pageLayouts = new Map<string, OdfPageLayout>();
-  private readonly imageStyles = new Map<string, XFillBitmapItem>();
+  private readonly imageStyles = new Map<string, string>();
   private readonly importedBitmaps = new Map<XMLGraphic, XFillBitmapItem>();
   private readonly bitmapNames = new Set<string>();
   private nextBitmap = 1;
 
   /** Adds a named fill bitmap from the original styles stream. @param style - Parsed ODF image style. @returns Nothing. */
   public registerImageStyle(style: XMLImageStyleDefinition): void {
-    const graphic = this.graphicHelper.loadGraphicByURL(style.href);
+    const graphic = this.loadGraphic(style);
     if (!graphic) return;
+    if (this.bitmapNames.has(style.displayName))
+      for (const [source, bitmap] of this.importedBitmaps)
+        if (bitmap.GetName() === style.displayName) this.importedBitmaps.delete(source);
     const item = this.document.RegisterBitmap(
       new XFillBitmapItem(
         style.displayName,
         new Graphic(graphic.bytes, graphic.mediaType, new Size()),
       ),
+      true,
     );
-    this.imageStyles.set(style.name, item);
+    this.imageStyles.set(style.name, style.displayName);
     this.bitmapNames.add(style.displayName);
     if (!this.importedBitmaps.has(graphic)) this.importedBitmaps.set(graphic, item);
   }
 
-  /** Resolves content-based legacy bitmap reuse in the active document. @param href - Package link. @returns Native bitmap if embedded. */
-  private resolveBackgroundImage(href: string): XFillBitmapItem | undefined {
-    const graphic = this.graphicHelper.loadGraphicByURL(href);
+  /** Resolves a package link before the permitted inline stream. @param source - Graphic source. @returns Encoded raster if represented. */
+  private loadGraphic(source: XMLGraphicSource): XMLGraphic | undefined {
+    const graphic = this.graphicHelper.loadGraphicByURL(source.href);
+    return graphic ?? (source.inline && this.graphicHelper.loadGraphicFromBase64(source.inline));
+  }
+
+  /** Resolves content-based legacy bitmap reuse in the active document. @param source - Legacy image source. @returns Native bitmap if embedded. */
+  private resolveBackgroundImage(source: XMLGraphicSource): XFillBitmapItem | undefined {
+    const graphic = this.loadGraphic(source);
     if (!graphic) return undefined;
     const known = this.importedBitmaps.get(graphic);
     if (known) return known;
@@ -305,13 +315,13 @@ class SwXMLImport
   /** Applies one shared page or story background to its native frame. @param frame - Frame owner. @param background - Authored fill. @returns Nothing. */
   private applyBackground(frame: SwFrameFormat | null, background?: OdfPageBackground): void {
     if (!frame || !background) return;
+    const bitmapName =
+      background.bitmapName === undefined ? undefined : this.imageStyles.get(background.bitmapName);
     importPageBackground(
       frame,
       background,
-      background.bitmapName === undefined ? undefined : this.imageStyles.get(background.bitmapName),
-      background.image === undefined
-        ? undefined
-        : this.resolveBackgroundImage(background.image.href),
+      bitmapName === undefined ? undefined : this.document.GetBitmapTable().get(bitmapName),
+      background.image === undefined ? undefined : this.resolveBackgroundImage(background.image),
     );
   }
   public title: string | undefined;

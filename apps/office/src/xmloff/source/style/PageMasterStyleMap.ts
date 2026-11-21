@@ -8,6 +8,11 @@ import { TextGridMode } from "../../../offapi/com/sun/star/text/TextGridMode";
 import { BitmapMode } from "../../../offapi/com/sun/star/drawing/BitmapMode";
 import { RectanglePoint as P } from "../../../offapi/com/sun/star/drawing/RectanglePoint";
 import { importFillProperties, type OdfFillProperties } from "../draw/fill-properties";
+import {
+  XMLBackgroundImageContext,
+  importBitmapMode,
+  type OdfPageBackgroundImage,
+} from "./XMLBackgroundImageContext";
 
 const pageUsage = new Map<string, PageStyleLayout>([
   ["all", PageStyleLayout.ALL],
@@ -141,12 +146,7 @@ export interface OdfPageBackground extends OdfFillProperties {
   readonly bitmapGeometry?: OdfBitmapGeometry;
   readonly backgroundColor?: number | "transparent";
   readonly backgroundTransparency?: number;
-  readonly image?: {
-    readonly href: string;
-    readonly mode: BitmapMode;
-    readonly point?: P;
-    readonly transparency?: number;
-  };
+  readonly image?: OdfPageBackgroundImage;
 }
 
 /** Drawing bitmap dimensions use signed percentages or whole hundredths of a millimetre. */
@@ -235,67 +235,9 @@ export function exportBitmapGeometry(geometry: OdfBitmapGeometry): string[] {
   return result;
 }
 
-/** Translates the original legacy position tokens to their drawing point. @param raw - Legacy style position. @returns Position if recognized. */
-function importLegacyPoint(raw: string): P | undefined {
-  let point = P.MIDDLE_MIDDLE,
-    horizontal = false,
-    vertical = false;
-  for (const token of raw.split(" ")) {
-    if (horizontal && vertical) return undefined;
-    if (token.includes("%")) {
-      const value = parsePercent(token);
-      if (value === undefined) return undefined;
-      if (!horizontal) {
-        point = value < 25 ? P.LEFT_TOP : value < 75 ? P.MIDDLE_MIDDLE : P.RIGHT_BOTTOM;
-        horizontal = true;
-      } else {
-        // The second percent passes a left-column point to the native vertical merge.
-        point = mergeLegacyVertical(
-          point,
-          value < 25 ? P.LEFT_TOP : value < 75 ? P.LEFT_MIDDLE : P.LEFT_BOTTOM,
-        );
-        vertical = true;
-      }
-    } else if (token === "center") {
-      if (horizontal) point = mergeLegacyVertical(point, P.MIDDLE_MIDDLE);
-      else if (vertical) point = Math.floor(point / 3) * 3 + 1;
-      else point = P.MIDDLE_MIDDLE;
-    } else if (token === "left" || token === "right") {
-      const column = token === "left" ? 0 : 2;
-      if (vertical) point = Math.floor(point / 3) * 3 + column;
-      else if (!horizontal) point = 3 + column;
-      else return undefined;
-      horizontal = true;
-    } else if (token === "top" || token === "bottom") {
-      const row = token === "top" ? 0 : 2;
-      if (horizontal) point = mergeLegacyVertical(point, row * 3 + 1);
-      else if (!vertical) point = row * 3 + 1;
-      else return undefined;
-      vertical = true;
-    } else return undefined;
-  }
-  return point;
-}
-
-/** Applies the source GraphicLocation vertical merge. @param point - Current point. @param vertical - Point contributed by the vertical token. @returns Merged point. */
-function mergeLegacyVertical(point: P, vertical: P): P {
-  const column = point % 3;
-  if (column === 1) return vertical;
-  const row = vertical === P.MIDDLE_TOP ? 0 : vertical === P.MIDDLE_MIDDLE ? 1 : 2;
-  return row * 3 + column;
-}
-
 /** Writes the native legacy vertical then horizontal position. @param point - Bitmap anchor. @returns Position tokens. */
 export function exportLegacyBitmapPosition(point: P): string {
   return `${["top", "center", "bottom"][Math.floor(point / 3)]} ${["left", "center", "right"][point % 3]}`;
-}
-
-/** Reads the native drawing bitmap mode token. @param value - Authored repeat token. @returns Native mode. */
-function importBitmapMode(value: string | null): BitmapMode | undefined {
-  if (value === "repeat") return BitmapMode.REPEAT;
-  if (value === "stretch") return BitmapMode.STRETCH;
-  if (value === "no-repeat") return BitmapMode.NO_REPEAT;
-  return undefined;
 }
 
 /** Imports the modern and legacy page fills while preserving which fields were supplied. */
@@ -334,49 +276,19 @@ export class XMLPagePropertySetContext extends SvXMLImportContext {
     };
   }
 
-  /** Reads the legacy page background link and its placement. @param token - Child token. @param attributes - Image attributes. @returns Leaf context. */
+  /** Routes the legacy bitmap to its source context. @param token - Child token. @param attributes - Image attributes. @returns Child context. */
   override createFastChildContext(
     token: XMLToken,
     attributes: FastAttributeList,
   ): SvXMLImportContext {
-    if (token === XMLToken.STYLE_BACKGROUND_IMAGE) {
-      const href = attributes.get(XMLToken.XLINK_HREF);
-      if (href) {
-        const opacity = attributes.get(XMLToken.DRAW_OPACITY);
-        const value: [number] = [0];
-        const transparent =
-          opacity !== null &&
-          Converter.convertPercent(value, opacity) &&
-          value[0] >= 0 &&
-          value[0] < 100;
-        let mode = BitmapMode.REPEAT;
-        let point: P | undefined;
-        for (const [key, raw] of attributes) {
-          if (key === XMLToken.STYLE_POSITION) {
-            const authored = importLegacyPoint(raw);
-            if (authored !== undefined) {
-              point = authored;
-              mode = BitmapMode.NO_REPEAT;
-            }
-          } else if (key === XMLToken.STYLE_REPEAT) {
-            const authored = importBitmapMode(raw);
-            if (
-              authored !== undefined &&
-              !(authored === BitmapMode.NO_REPEAT && point !== undefined)
-            ) {
-              mode = authored;
-              point = authored === BitmapMode.NO_REPEAT ? P.MIDDLE_MIDDLE : undefined;
-            }
-          }
-        }
-        this.image = {
-          href,
-          mode,
-          ...(point === undefined ? {} : { point }),
-          ...(transparent ? { transparency: 100 - value[0] } : {}),
-        };
-      }
-    }
+    if (token === XMLToken.STYLE_BACKGROUND_IMAGE)
+      return new XMLBackgroundImageContext(
+        attributes,
+        /** Retains the completed legacy property. @param image - Original placement and source. @returns Nothing. */
+        (image) => {
+          this.image = image;
+        },
+      );
     return new SvXMLIgnoreContext();
   }
 

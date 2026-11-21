@@ -21,9 +21,10 @@
         "apps/office/src/xmloff/source/core/xmlgrhlp.ts",
         "vendor/libreoffice-reference/xmloff/source/core/xmlgrhlp.cxx",
         "apps/office/src/xmloff/source/core/xmlgrhlp.test.ts",
+        "apps/office/src/sw/source/filter/xml/odt-inline-graphics.test.ts",
         "apps/office/src/sw/source/filter/ww8/docxexport.drawing.test.ts"
       ],
-      "justification": "Retains embedded JPEG and PNG byte streams in the native ODF Pictures storage and resolves package-relative image URLs for Writer. Encoded checksums and exact byte comparison bind package identity in the represented raster transport. Native graphic decoders, additional GfxLink encodings and inline binary-data are outside this checkpoint.",
+      "justification": "Resolves package-relative raster URLs and recognizes inline PNG and JPEG streams through the original VCL signatures. Encoded checksums and byte comparison bind identity in Pictures storage. Native pixel decoders, additional GfxLink encodings and external URLs remain outside this browser raster transport.",
       "knownViolations": [],
       "localSymbols": [
         "SvXMLGraphicHelper",
@@ -33,7 +34,8 @@
       "upstreamFile": "xmloff/source/core/xmlgrhlp.cxx",
       "upstreamSymbols": [
         "SvXMLGraphicHelper::implSaveGraphic",
-        "SvXMLGraphicHelper::loadGraphic"
+        "SvXMLGraphicHelper::loadGraphic",
+        "SvXMLGraphicHelper::loadGraphicFromOutputStreamAtPage"
       ]
     }
   }

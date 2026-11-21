@@ -18,7 +18,7 @@
       "Maps the original draw fill-image name, encoded alias, and package reference."
     ],
     "omittedResponsibilities": [
-      "Inline base64 and linked graphics remain outside the represented package path."
+      "External linked images remain outside the represented loader. The inline source is owned by XMLBitmapStyleContext."
     ],
     "evidence": {
       "local": [
@@ -29,6 +29,10 @@
         {
           "path": "apps/office/src/sw/source/filter/xml/odt-page-background.test.ts",
           "marker": "ports testPageBackground"
+        },
+        {
+          "path": "apps/office/src/sw/source/filter/xml/odt-inline-graphics.test.ts",
+          "marker": "uses distinct URL precedence"
         }
       ],
       "upstream": [

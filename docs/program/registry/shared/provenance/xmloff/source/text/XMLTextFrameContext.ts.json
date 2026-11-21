@@ -19,7 +19,8 @@
       "Reads original split and graphic frame property values for native RTF-created text flies.",
       "Reads the original graphic style writing mode and both relative-size relation properties.",
       "Handles a package-local draw:image child and the native run-through foreground/background style.",
-      "V4DQJW as-character graphic checkpoint. Raster children in a text paragraph use the original as-character default and accept explicit as-char along with the existing paragraph and character anchor values."
+      "V4DQJW as-character graphic checkpoint. Raster children in a text paragraph use the original as-character default and accept explicit as-char along with the existing paragraph and character anchor values.",
+      "Imports inline PNG/JPEG files and the older direct-text form into original anchored graphic nodes."
     ],
     "omittedResponsibilities": [
       "Graphical and embedded destinations, frame chaining, page and as-character anchors, and unrepresented frame properties remain outside this slice."
@@ -57,6 +58,10 @@
         {
           "path": "apps/office/src/sw/source/filter/ww8/docxexport.drawing.test.ts",
           "marker": "n783638"
+        },
+        {
+          "path": "apps/office/src/sw/source/filter/xml/odt-inline-graphics.test.ts",
+          "marker": "loads pixels from the original testDrawImageEmbeddedNotBlocked fixture"
         }
       ],
       "upstream": [
@@ -71,6 +76,10 @@
         {
           "path": "vendor/libreoffice-reference/xmloff/source/text/txtprmap.cxx",
           "marker": "CTF_RELWIDTHREL"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/qa/extras/odfimport/odfimport.cxx",
+          "marker": "testDrawImageEmbeddedNotBlocked"
         }
       ]
     }
