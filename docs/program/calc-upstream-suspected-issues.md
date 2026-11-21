@@ -7497,3 +7497,12 @@ hidden.
 - With transparent bounds, `(?=y)` matches at offset 1 in `xy` over the
   region from 0 to 1. The native ICU binding retains that empty match in
   both directions. See WRITER-709 for the corresponding Writer finding.
+
+### CALC-787 — A complex-only regex can use the previous non-regex key
+
+- The shared `i18npool/source/search/textsearch.cxx` regular-expression
+  preparation can choose the stored complex key `sSrchStr2`, even though regex
+  setup does not populate that key. Reusing the search object can retain the
+  previous non-regex complex key.
+- The shared search owner preserves the pattern selection and skips the regex
+  second pass. See WRITER-710 for the original source path and behavior.

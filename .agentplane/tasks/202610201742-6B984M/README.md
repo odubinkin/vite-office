@@ -4,7 +4,7 @@ title: "Implement Writer search and replace core and browser UI"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 67
+revision: 68
 origin:
   system: "manual"
 depends_on:
@@ -205,6 +205,9 @@ comments:
   -
     author: "CODER"
     body: "Verified checkpoint: a portable native ICU 78.3 regex binding now owns Unicode word and case flags, legacy chevron conversion, the original timeout, transparent non-anchoring regions, directional selection, and signed UTF-16 capture pairs. The host probe validates both source pins, compiles the original LibreOffice regex bodies against the same real ICU libraries, and agrees in 32,364 differential cases, including the upstream regex QA boundaries. Header and C++ implementation compile with warnings as errors. WRITER-709 and CALC-786 record that a zero-width lookahead can meet the native offset-based end condition described as a dollar anchor. Related Vitest verification passed 73 shared and 47 Writer cases. Dependency, source-tree, provenance, JSDoc, file-size, scoped lint and formatting, doctor, routing and diff hygiene passed. No browser binary or browser command was enabled. Building for WebAssembly still requires the approved pinned Emscripten toolchain, then the existing TextSearch and Writer cursor consumers need integration. Notes search still requires the document annotation and sidebar owners. The parent remains open."
+  -
+    author: "CODER"
+    body: "Verified checkpoint: the shared TextSearch owner accepts an explicitly supplied ICU matcher, leaves case matching to that matcher, preserves native regex pattern syntax, skips apostrophe substitution and the complex second pass, pads forward transliteration context, remaps every directional capture, and releases matcher handles on reconfiguration. The optional host integration tests call the compiled ICU 78.3 C ABI through local standard I/O. The pinned native differential passed 32,364 cases, and the final targeted runtime checks passed 80 shared and 47 Writer scenarios, production build and two Writer resource cases. Dependency, source-tree, provenance, JSDoc, file-size, scoped lint/format, doctor, routing and diff checks passed. WRITER-710 and CALC-787 preserve the source complex-only regex pattern selection. There is still no browser WASM binary or deployment capability gate enabled. Native browser regex needs the approved SDK and adapter, and note search needs the annotation and sidebar owners. The parent remains open."
 events:
   -
     type: "status"
@@ -488,8 +491,13 @@ events:
     at: "2026-11-21T10:45:21.043Z"
     author: "CODER"
     body: "Verified checkpoint: a portable native ICU 78.3 regex binding now owns Unicode word and case flags, legacy chevron conversion, the original timeout, transparent non-anchoring regions, directional selection, and signed UTF-16 capture pairs. The host probe validates both source pins, compiles the original LibreOffice regex bodies against the same real ICU libraries, and agrees in 32,364 differential cases, including the upstream regex QA boundaries. Header and C++ implementation compile with warnings as errors. WRITER-709 and CALC-786 record that a zero-width lookahead can meet the native offset-based end condition described as a dollar anchor. Related Vitest verification passed 73 shared and 47 Writer cases. Dependency, source-tree, provenance, JSDoc, file-size, scoped lint and formatting, doctor, routing and diff hygiene passed. No browser binary or browser command was enabled. Building for WebAssembly still requires the approved pinned Emscripten toolchain, then the existing TextSearch and Writer cursor consumers need integration. Notes search still requires the document annotation and sidebar owners. The parent remains open."
+  -
+    type: "comment"
+    at: "2026-11-21T10:52:21.661Z"
+    author: "CODER"
+    body: "Verified checkpoint: the shared TextSearch owner accepts an explicitly supplied ICU matcher, leaves case matching to that matcher, preserves native regex pattern syntax, skips apostrophe substitution and the complex second pass, pads forward transliteration context, remaps every directional capture, and releases matcher handles on reconfiguration. The optional host integration tests call the compiled ICU 78.3 C ABI through local standard I/O. The pinned native differential passed 32,364 cases, and the final targeted runtime checks passed 80 shared and 47 Writer scenarios, production build and two Writer resource cases. Dependency, source-tree, provenance, JSDoc, file-size, scoped lint/format, doctor, routing and diff checks passed. WRITER-710 and CALC-787 preserve the source complex-only regex pattern selection. There is still no browser WASM binary or deployment capability gate enabled. Native browser regex needs the approved SDK and adapter, and note search needs the annotation and sidebar owners. The parent remains open."
 doc_version: 3
-doc_updated_at: "2026-11-21T10:45:21.043Z"
+doc_updated_at: "2026-11-21T10:52:21.661Z"
 doc_updated_by: "CODER"
 description: "Implement the approved coherent Writer search-and-replace feature from pinned LibreOffice sources: real shared search engine and options, native paragraph/cursor traversal and replacement/history contracts, view-owned search state and dispatch, Find toolbar and Find and Replace dialog with generated upstream command placement and shortcuts. Preserve source semantics and explicit unsupported boundaries; never substitute DOM text search or browser RegExp for ICU contracts. Work only on writer in vite-office-writer; local upstream reading approved, no network or merges. Keep active until approved scope is verified."
 sections:

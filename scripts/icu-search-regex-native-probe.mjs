@@ -40,9 +40,11 @@ writeFileSync(
 #include <array>
 #include <cstdio>
 #include <cstdlib>
+#include <iostream>
 #include <memory>
 #include <mutex>
 #include <string>
+#include <string_view>
 #include <vector>
 
 using sal_Int32 = int32_t;
@@ -102,8 +104,41 @@ void checkGroups(LoRegexSearch* search, const OUString& text, int32_t start, int
     }
 }
 
-int main()
+// Expose the same C ABI to the TypeScript integration tests through local standard I/O.
+int bridge()
 {
+    int32_t patternLength, textLength, ignoreCase, start, end, backward;
+    if (!(std::cin >> patternLength >> textLength >> ignoreCase >> start >> end >> backward)
+        || patternLength < 0 || textLength < 0)
+        return 1;
+    OUString pattern(patternLength, u'\0');
+    OUString text(textLength, u'\0');
+    for (auto* string : {&pattern, &text}) {
+        for (char16_t& unit : *string) {
+            unsigned input;
+            if (!(std::cin >> input) || input > 0xffff)
+                return 1;
+            unit = static_cast<char16_t>(input);
+        }
+    }
+    auto search = std::unique_ptr<LoRegexSearch, decltype(&lo_regex_destroy)>(
+        lo_regex_create(pattern.data(), pattern.size(), ignoreCase), &lo_regex_destroy);
+    if (!search) {
+        std::puts("invalid");
+        return 0;
+    }
+    const auto count = lo_regex_search(search.get(), text.data(), text.size(), start, end, backward);
+    const auto* offsets = lo_regex_offsets(search.get());
+    for (int32_t i = 0; i < count; ++i)
+        std::printf("%d %d ", offsets[i].start, offsets[i].end);
+    std::putchar('\n');
+    return 0;
+}
+
+int main(int argc, char** argv)
+{
+    if (argc == 2 && std::string_view(argv[1]) == "--bridge")
+        return bridge();
     UVersionInfo icuVersion;
     u_getVersion(icuVersion);
     require(icuVersion[0] == 78 && icuVersion[1] == 3, "host ICU version differs from the pin");

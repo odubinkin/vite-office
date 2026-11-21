@@ -1,4 +1,4 @@
-/** @fileoverview Native absolute/wildcard TextSearch backend: directional native loops, full folding, punctuation and source offsets. ICU regular expressions remain unported. */
+/** @fileoverview Native TextSearch backend with directional literal, wildcard, similarity and ICU regex integration. */
 import { OUString, type OUStringConstReference } from "../../../sal/inc/rtl/ustring";
 import { SearchOptions2 } from "../../../i18nutil/inc/searchopt";
 import { SearchAlgorithms } from "../../../offapi/com/sun/star/util/SearchAlgorithms";
@@ -10,6 +10,7 @@ import {
 import { TransliterationFlags } from "../../../i18nutil/inc/transliteration";
 import * as Algorithms from "../../../offapi/com/sun/star/util/SearchAlgorithms2";
 import {
+  ALL_IGNORE_CASE,
   LEV_RELAXED,
   NORM_WORD_ONLY,
   WILD_MATCH_SELECTION,
@@ -111,20 +112,36 @@ interface PreparedPattern {
   reverse?: Uint16Array;
 }
 
-/** Native primary absolute/wildcard-search owner; realm-local Map storage replaces the native jump-table allocation. */
+/** One ICU matcher with an independent lifetime. Search returns interleaved, directional UTF-16 capture pairs. */
+export interface RegexMatcher {
+  search(input: Uint16Array, start: number, end: number, backward: boolean): Int32Array;
+  dispose(): void;
+}
+
+/** Creates one ICU matcher from the prepared UTF-16 pattern. Invalid patterns return no matcher. */
+export type RegexMatcherFactory = (
+  pattern: Uint16Array,
+  ignoreCase: boolean,
+) => RegexMatcher | undefined;
+
+/** Native text-search owner with realm-local jump tables and an optional ICU matcher. */
 export class TextSearch {
   private aSrchPara = new SearchOptions2();
   private primaryPattern: PreparedPattern = { units: new Uint16Array() };
   private complexPattern: { flags: number; pattern: PreparedPattern } | undefined;
   private pattern = this.primaryPattern;
   private distance: WLevDistance | undefined;
+  private regex: RegexMatcher | undefined;
   private static wordBreak: Reference<XBreakIteratorService> | undefined;
   private bSearchApostrophe = false;
   private mcWildcardEscapeChar = 0;
   private mbWildcardAllowSubstring = true;
 
-  /** Initializes source options before the first search. @param options - Native option value. @returns Search owner. */
-  public constructor(options = new SearchOptions2()) {
+  /** Initializes source options before the first search. @param options - Native option value. @param createRegex - ICU constructor in a realm with a native regex backend. @returns Search owner. */
+  public constructor(
+    options = new SearchOptions2(),
+    private readonly createRegex?: RegexMatcherFactory,
+  ) {
     this.setOptions2(options);
   }
   /** Original legacy XTextSearch entry point: upgrade its algorithm, copy all fields and set wildcard escape to zero before calling setOptions2. @param options - Legacy UNO value. @returns Nothing. */
@@ -157,11 +174,34 @@ export class TextSearch {
   }
   /** Copies options and resets native prepared key/jump state. @param options - New native options. @returns Nothing. */
   public setOptions2(options: SearchOptions2 | SearchOptions2ConstReference): void {
-    if (options.AlgorithmType2 === Algorithms.REGEXP)
+    if (options.AlgorithmType2 === Algorithms.REGEXP && this.createRegex === undefined)
       throw new Error("This TextSearch algorithm is not implemented.");
     if ((options.transliterateFlags & ~supportedTransliteration) !== 0)
       throw new Error("This TextSearch transliteration is not implemented.");
     const para = new SearchOptions2().assign(options);
+    const complexFlags =
+      para.transliterateFlags &
+      (complexTransMask |
+        TransliterationFlags.IGNORE_KANA |
+        TransliterationFlags.FULLWIDTH_HALFWIDTH);
+    if (para.AlgorithmType2 === Algorithms.REGEXP && this.createRegex !== undefined) {
+      const prepared = this.RESrchPrepare(para, this.createRegex);
+      this.dispose();
+      this.regex = prepared;
+      const retainedFlags =
+        (complexFlags & complexTransMask) !== 0 ? complexFlags : this.complexPattern?.flags;
+      if (retainedFlags !== undefined) {
+        // The source loads the requested complex modules but leaves their regex key untouched.
+        this.complexPattern = {
+          flags: retainedFlags,
+          pattern: { units: this.complexPattern?.pattern.units ?? new Uint16Array() },
+        };
+      }
+      this.bSearchApostrophe = false;
+      this.aSrchPara = para;
+      return;
+    }
+    this.dispose();
     const original = para.searchString.getStr().subarray(0, para.searchString.getLength());
     this.bSearchApostrophe = original.includes(39) || original.includes(34);
     const simpleFlags = para.transliterateFlags & ~complexTransMask;
@@ -176,22 +216,17 @@ export class TextSearch {
       );
     this.primaryPattern = { units: key.getStr().slice(0, key.getLength()) };
     this.pattern = this.primaryPattern;
-    if ((para.transliterateFlags & complexTransMask) !== 0) {
-      const flags =
-        para.transliterateFlags &
-        (complexTransMask |
-          TransliterationFlags.IGNORE_KANA |
-          TransliterationFlags.FULLWIDTH_HALFWIDTH);
+    if ((complexFlags & complexTransMask) !== 0) {
       const complexKey = transliterate(
         para.searchString,
         0,
         original.length,
-        flags,
+        complexFlags,
         para.Locale,
         false,
       ).text;
       this.complexPattern = {
-        flags,
+        flags: complexFlags,
         pattern: { units: complexKey.getStr().slice(0, complexKey.getLength()) },
       };
       complexKey.dispose();
@@ -215,6 +250,42 @@ export class TextSearch {
     this.mcWildcardEscapeChar = para.WildcardEscapeCharacter >>> 0;
     this.mbWildcardAllowSubstring = (para.searchFlag & WILD_MATCH_SELECTION) === 0;
   }
+  /** Releases the active native matcher. @returns Nothing. */
+  public dispose(): void {
+    this.regex?.dispose();
+    this.regex = undefined;
+  }
+
+  /** Selects the source regex key and delegates case matching to ICU. @param options - Native options. @param create - ICU constructor. @returns Prepared matcher or invalid-pattern result. */
+  private RESrchPrepare(
+    options: SearchOptions2,
+    create: RegexMatcherFactory,
+  ): RegexMatcher | undefined {
+    const flags = options.transliterateFlags;
+    const simple = flags & ~complexTransMask;
+    const patternFlags = simple & ~TransliterationFlags.IGNORE_CASE;
+    const original = options.searchString;
+    const key =
+      patternFlags !== 0
+        ? transliterate(original, 0, original.getLength(), patternFlags, options.Locale, false).text
+        : undefined;
+    // RESrchPrepare considers the original flags, including IGNORE_CASE. A complex-only
+    // regex uses the stored complex key, which setOptions2 does not recalculate for regex.
+    const pattern =
+      simple === 0 && (flags & complexTransMask) !== 0
+        ? (this.complexPattern?.pattern.units ?? new Uint16Array())
+        : (key ?? original).getStr().subarray(0, (key ?? original).getLength());
+    try {
+      return create(
+        pattern,
+        (options.searchFlag & ALL_IGNORE_CASE) !== 0 ||
+          (flags & TransliterationFlags.IGNORE_CASE) !== 0,
+      );
+    } finally {
+      key?.dispose();
+    }
+  }
+
   /** Calls the forward engine and remaps transliterated UTF-16 endpoints. @param text - Original text. @param startPos - Inclusive lower bound. @param endPos - Exclusive upper bound. @returns Directional result. */
   public searchForward(
     text: OUStringConstReference,
@@ -274,11 +345,29 @@ export class TextSearch {
       throw new RangeError("TextSearch bounds are outside the original string.");
     const original = text.getStr().subarray(0, text.getLength());
     const replace = this.bSearchApostrophe && isReplacePunctuation(original);
-    const simpleFlags = this.aSrchPara.transliterateFlags & ~complexTransMask;
+    const regex = this.aSrchPara.AlgorithmType2 === Algorithms.REGEXP;
+    if (regex && this.regex === undefined) return notFound();
+    const flags = this.aSrchPara.transliterateFlags & ~complexTransMask;
+    const simpleFlags = regex ? flags & ~TransliterationFlags.IGNORE_CASE : flags;
+    let inputStart = lower;
+    let inputEnd = upper;
+    if (regex && forward && simpleFlags !== 0) {
+      const key = this.aSrchPara.searchString.getStr();
+      const keyLength = this.aSrchPara.searchString.getLength();
+      inputStart = Math.max(0, lower - (key[0] === 40 && key[1] === 63 ? 100 : 3));
+      inputEnd = Math.min(text.getLength(), upper + (key[keyLength - 1] === 41 ? 100 : 3));
+    }
     const mapped =
       simpleFlags === 0
         ? undefined
-        : transliterate(text, lower, upper - lower, simpleFlags, this.aSrchPara.Locale, true);
+        : transliterate(
+            text,
+            inputStart,
+            inputEnd - inputStart,
+            simpleFlags,
+            this.aSrchPara.Locale,
+            true,
+          );
     let input: Uint16Array =
       mapped === undefined
         ? original.slice()
@@ -303,13 +392,17 @@ export class TextSearch {
           ? this.FindPos(offsets, upper)
           : input.length;
     const prepared = new OUString(input, input.length);
-    const result = this.SearchPrepared(prepared, lo, hi, forward);
-    prepared.dispose();
-    mapped?.text.dispose();
+    let result: SearchResult;
+    try {
+      result = this.SearchPrepared(prepared, lo, hi, forward);
+    } finally {
+      prepared.dispose();
+      mapped?.text.dispose();
+    }
     if (offsets !== undefined) replaceTransliterationOffsets(text, offsets, result, forward);
 
     const complex = this.complexPattern;
-    if (complex === undefined) return result;
+    if (complex === undefined || regex) return result;
     // Native complex transliteration starts with the complete source string.
     const second = transliterate(
       text,
@@ -359,6 +452,26 @@ export class TextSearch {
     hi: number,
     forward: boolean,
   ): SearchResult {
+    if (this.aSrchPara.AlgorithmType2 === Algorithms.REGEXP) {
+      const pairs = this.regex?.search(
+        text.getStr().subarray(0, text.getLength()),
+        forward ? lo : hi,
+        forward ? hi : lo,
+        !forward,
+      );
+      const result = notFound();
+      if (pairs === undefined || pairs.length === 0) return result;
+      result.subRegExpressions = pairs.length / 2;
+      result.startOffset.realloc(result.subRegExpressions);
+      result.endOffset.realloc(result.subRegExpressions);
+      const starts = asNonConstRange(result.startOffset);
+      const ends = asNonConstRange(result.endOffset);
+      for (let group = 0; group < result.subRegExpressions; group++) {
+        starts.operatorIndex(group, 4)[0] = pairs[group * 2] as number;
+        ends.operatorIndex(group, 4)[0] = pairs[group * 2 + 1] as number;
+      }
+      return result;
+    }
     if (this.distance !== undefined) return this.ApproxSearch(text, lo, hi, forward, this.distance);
     return this.aSrchPara.AlgorithmType2 === Algorithms.WILDCARD
       ? forward

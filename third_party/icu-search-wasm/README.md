@@ -20,3 +20,10 @@ native regression scenarios.
 
 The browser still needs the Emscripten build and the TypeScript integration with the shared search
 owner before Writer can expose this mode.
+
+After building the host probe, use it to exercise the TypeScript search owner against ICU through
+local standard I/O.
+
+```sh
+WRITER_ICU_REGEX_PROBE="$PWD/output/playwright/writer-icu-regex/probe" npm run test:shared -- src/i18npool/source/search/textsearch-regex.test.ts
+```

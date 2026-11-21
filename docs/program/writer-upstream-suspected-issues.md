@@ -5672,3 +5672,12 @@ applies its authored properties without that collection change.
 - With transparent bounds, `(?=y)` matches at offset 1 in `xy` over the
   region from 0 to 1. The native ICU binding retains that empty match in
   both directions.
+
+### WRITER-710 — A complex-only regex can use the previous non-regex key
+
+- In upstream `i18npool/source/search/textsearch.cxx`, regex setup does not
+  compute `sSrchStr2`, but `RESrchPrepare` selects it when all enabled
+  transliteration flags are complex. The compiled pattern can be empty on a
+  fresh instance or retain the key from a previous non-regex search.
+- The shared search owner preserves that pattern selection and skips the
+  second transliteration pass for regex, as the source does.
