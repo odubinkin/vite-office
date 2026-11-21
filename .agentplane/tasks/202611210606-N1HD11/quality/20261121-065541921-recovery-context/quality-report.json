@@ -1,0 +1,29 @@
+{
+  "schema_version": 1,
+  "task_id": "202611210606-N1HD11",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-11-21T06:55:41.921Z",
+  "verdict": "pass",
+  "summary": "Writer ODT page and story bitmap geometry matches the pinned LibreOffice handlers and native value contracts for the represented input.",
+  "evaluated_sha": "a9e9f13d8618a9e2e29bb24854891880e37e98c6",
+  "blueprint_digest": "e56e02eba7ad0f09b4cc120e20116588d5de1527e96557438ec270307a4aa842",
+  "findings": [
+    "Verified the legacy percentage anchor, typed UNO values, independent Worker axes and ODT single-axis export."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202611210606-N1HD11/README.md",
+    "output/playwright/N1HD11/writer.log",
+    "output/playwright/N1HD11/writer-recheck.log",
+    "output/playwright/N1HD11/shared.log",
+    "output/playwright/N1HD11/types-final.log",
+    "output/playwright/N1HD11/provenance.log",
+    "output/playwright/N1HD11/doctor.log",
+    "node .agentplane/policy/check-routing.mjs passed"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": [
+    "Linked and inline image sources and drawing text frames are outside the approved geometry scope."
+  ]
+}
