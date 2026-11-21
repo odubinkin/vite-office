@@ -35,7 +35,7 @@ import {
 } from "../../inc/hintids";
 import { projectWriterCharacterAttributes } from "../../source/core/txtnode/txatbase";
 import { projectWriterLineSpacing } from "../../source/core/text/itrform2";
-import { browserTextLineStyle } from "./writer-view-projection";
+import { browserTextEmphasis, browserTextLineStyle } from "./writer-view-projection";
 import { browserFontFamily } from "../editor/writer-font-family";
 import { getWriterTextCaretPoint } from "../editor/writer-selection";
 import { EditPaM } from "../../../editeng/inc/EditPaM";
@@ -759,6 +759,11 @@ function applyTextStyle(
   attributes: ReturnType<typeof projectWriterCharacterAttributes>,
 ): void {
   const style = element.style;
+  const emphasis = browserTextEmphasis(attributes.emphasisMark);
+  if (emphasis !== undefined) {
+    style.textEmphasisStyle = emphasis.textEmphasisStyle;
+    style.textEmphasisPosition = emphasis.textEmphasisPosition;
+  }
   if (attributes.bold) style.fontWeight = "bold";
   if (attributes.italic) style.fontStyle = "italic";
   if (attributes.color && attributes.color !== "auto") style.color = attributes.color;

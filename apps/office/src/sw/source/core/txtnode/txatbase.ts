@@ -14,8 +14,9 @@ import { SvxEscapementItem } from "../../../../editeng/inc/escapementitem";
 import { SvxKerningItem } from "../../../../editeng/inc/kernitem";
 import { RES_CHRATR_ESCAPEMENT } from "../../../inc/hintids";
 
+import { SvxEmphasisMarkItem } from "../../../../editeng/inc/emphasismarkitem";
 import { SvxCrossedOutItem } from "../../../../editeng/inc/crossedoutitem";
-import { FontStrikeout } from "../../../../tools/inc/fontenum";
+import { FontEmphasisMark, FontStrikeout } from "../../../../tools/inc/fontenum";
 import { RES_CHRATR_CROSSEDOUT } from "../../../inc/hintids";
 import { FontItalic, FontWeight } from "../../../../tools/inc/fontenum";
 import {
@@ -43,6 +44,7 @@ import {
   RES_CHRATR_FONTSIZE,
   RES_CHRATR_CTL_WEIGHT,
   RES_CHRATR_HIGHLIGHT,
+  RES_CHRATR_EMPHASIS_MARK,
   RES_CHRATR_BACKGROUND,
   RES_CHRATR_KERNING,
   RES_CHRATR_POSTURE,
@@ -90,6 +92,8 @@ export interface WriterCharacterAttributes {
   readonly underlineWordMode?: boolean;
   /** Complete native decoration value; omitted only at legacy display boundaries. */
   readonly strikeout?: FontStrikeout;
+  /** Native emphasis style and position flags. */
+  readonly emphasisMark?: FontEmphasisMark;
   /** Complete native offset and relative height. */
   readonly escapement?: Readonly<{ offset: number; height: number }>;
 }
@@ -521,6 +525,10 @@ export function projectWriterCharacterAttributes(
     items.GetItemIfSet(RES_CHRATR_ESCAPEMENT, false) ??
     inherited?.GetItemIfSet(RES_CHRATR_ESCAPEMENT, true);
   const strikeout = get(RES_CHRATR_CROSSEDOUT) as SvxCrossedOutItem;
+  const emphasis =
+    items.GetItemIfSet(RES_CHRATR_EMPHASIS_MARK, false) ??
+    inherited?.GetItemIfSet(RES_CHRATR_EMPHASIS_MARK, true);
+  const emphasisMark = emphasis instanceof SvxEmphasisMarkItem ? emphasis.GetEmphasisMark() : 0;
   const authoredStrikeout =
     items.GetItemIfSet(RES_CHRATR_CROSSEDOUT, false) ??
     inherited?.GetItemIfSet(RES_CHRATR_CROSSEDOUT, true);
@@ -535,6 +543,7 @@ export function projectWriterCharacterAttributes(
   return {
     ...(color instanceof SvxColorItem ? { color: writerTextColorValue(color) } : {}),
     ...(font instanceof SvxFontItem ? { fontFamily: font.GetFamilyName() } : {}),
+    ...((emphasisMark & FontEmphasisMark.Style) !== FontEmphasisMark.NONE ? { emphasisMark } : {}),
     ...(fontSize instanceof SvxFontHeightItem ? { fontSizeTwips: fontSize.GetHeight() } : {}),
     ...(kerning instanceof SvxKerningItem ? { kerningTwips: kerning.GetValue() } : {}),
     ...(visibleBackground instanceof SvxBrushItem

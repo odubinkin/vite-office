@@ -21,7 +21,9 @@ import {
 } from "../../inc/hintids";
 import { SwPosition } from "../../source/core/crsr/pam";
 import { DateTime } from "../../../tools/source/datetime/datetime";
-import { EE_CHAR_FONTHEIGHT } from "../../../editeng/inc/eeitem";
+import { FontEmphasisMark } from "../../../tools/inc/fontenum";
+import { createOdtWriterTransfer, restoreOdtWriterTransfer } from "../filter/xml/odt-transfer";
+import { EE_CHAR_EMPHASISMARK, EE_CHAR_FONTHEIGHT } from "../../../editeng/inc/eeitem";
 import { SvxFontHeightItem } from "../../../editeng/inc/fhgtitem";
 import { SfxStringItem } from "../../../svl/source/items/stritem";
 import { FN_PARAM_1 } from "../../inc/cmdid";
@@ -153,25 +155,71 @@ it("opens Character from the Format menu and applies only the selected annotatio
     fireEvent.click(screen.getByRole("menuitem", { name: /^Character/u }));
     const character = screen.getByRole("dialog", { name: "Character" });
     expect(within(character).getByRole("tab", { name: "Font" })).toHaveFocus();
-    fireEvent.change(within(character).getByRole("spinbutton", { name: "Size" }), {
+    const controls = within(character);
+    fireEvent.change(controls.getByRole("spinbutton", { name: "Size" }), {
       target: { value: "20" },
     });
+    fireEvent.click(controls.getByRole("tab", { name: "Font Effects" }));
+    const style = controls.getByRole("combobox", { name: "Emphasis mark" });
+    const position = controls.getByRole("combobox", { name: "Position" });
+    expect(position).toBeDisabled();
+    fireEvent.change(style, { target: { value: FontEmphasisMark.Dot } });
+    fireEvent.change(position, { target: { value: FontEmphasisMark.PosBelow } });
     await act(
       /** Completes the real annotation Character request. @returns Completion. */ async () => {
         fireEvent.click(within(character).getByRole("button", { name: "OK" }));
       },
     );
     expect(ada).toHaveFocus();
-    expect(within(ada).getByText("da").style.fontSize).toBe("20pt");
-    expect(within(ada).getByText("A").style.fontSize).not.toBe("20pt");
-    expect(within(grace).getByText("Grace").style.fontSize).not.toBe("20pt");
+    const selected = within(ada).getByText("da");
+    expect(selected).toHaveStyle({
+      fontSize: "20pt",
+      textEmphasisStyle: "filled dot",
+      textEmphasisPosition: "under right",
+    });
+    for (const untouched of [within(ada).getByText("A"), within(grace).getByText("Grace")]) {
+      expect(untouched.style.fontSize).not.toBe("20pt");
+      expect(untouched.style.textEmphasisStyle).toBe("");
+    }
     expect(document.getSelection()?.toString()).toBe("da");
+
+    const transfer = createOdtWriterTransfer(shell.GetDoc());
+    const restored = restoreOdtWriterTransfer(structuredClone(transfer));
+    try {
+      const metadata = { title: "Annotation emphasis" };
+      const { document: reopened } = await readOdtDocument(
+        await writeOdtDocument(restored, metadata),
+        metadata,
+      );
+      try {
+        const notes = createOdtWriterTransfer(reopened).graph.annotations;
+        expect(
+          notes?.find(
+            /** Locates the selected annotation. @param note - Reopened note. @returns Author match. */
+            (note) => note.author === "Ada",
+          )?.editText?.paragraphs[0]?.characterItems,
+        ).toContainEqual({
+          start: 1,
+          end: 3,
+          item: {
+            which: EE_CHAR_EMPHASISMARK,
+            value: FontEmphasisMark.Dot | FontEmphasisMark.PosBelow,
+          },
+        });
+      } finally {
+        reopened.Dispose();
+      }
+    } finally {
+      restored.Dispose();
+    }
     act(
       /** Undoes only this selected range edit. @returns Nothing. */ () => {
         expect(shell.Undo()).toBe(true);
       },
     );
-    expect(within(ada).getByText("Ada").style.fontSize).not.toBe("20pt");
+    const undone = within(ada).getByText("Ada");
+    expect(undone.style.fontSize).not.toBe("20pt");
+    expect(undone.style.textEmphasisStyle).toBe("");
   } finally {
     workbench.unmount();
     view.Close();

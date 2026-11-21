@@ -179,6 +179,24 @@ export function browserTextLineStyle(
   }
 }
 
+const emphasisStyles: Readonly<Partial<Record<number, string>>> = {
+  [FontEmphasisMark.Dot]: "filled dot",
+  [FontEmphasisMark.Circle]: "open circle",
+  [FontEmphasisMark.Disc]: "filled circle",
+  [FontEmphasisMark.Accent]: "filled sesame",
+};
+
+/** Projects native emphasis flags to CSS shared by body and annotation text. @param mark - Effective font emphasis. @returns CSS emphasis properties when painted. */
+export function browserTextEmphasis(mark: FontEmphasisMark | undefined) {
+  if (mark === undefined) return undefined;
+  const textEmphasisStyle = emphasisStyles[mark & FontEmphasisMark.Style];
+  if (textEmphasisStyle === undefined) return undefined;
+  return {
+    textEmphasisStyle,
+    textEmphasisPosition: mark & FontEmphasisMark.PosBelow ? "under right" : "over right",
+  };
+}
+
 /** Native per-line color and style at the browser paint boundary. */
 export interface WriterTextLineProjection {
   readonly style: FontLineStyle;

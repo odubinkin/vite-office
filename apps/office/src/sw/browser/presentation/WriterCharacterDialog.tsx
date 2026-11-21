@@ -42,6 +42,7 @@ const characterItems = {
     posture: EE.EE_CHAR_ITALIC,
     underline: EE.EE_CHAR_UNDERLINE,
     strike: EE.EE_CHAR_STRIKEOUT,
+    emphasis: EE.EE_CHAR_EMPHASISMARK,
     position: EE.EE_CHAR_ESCAPEMENT,
     spacing: EE.EE_CHAR_KERNING,
     color: EE.EE_CHAR_COLOR,
@@ -54,6 +55,7 @@ const characterItems = {
     posture: SW.RES_CHRATR_POSTURE,
     underline: SW.RES_CHRATR_UNDERLINE,
     strike: SW.RES_CHRATR_CROSSEDOUT,
+    emphasis: SW.RES_CHRATR_EMPHASIS_MARK,
     position: SW.RES_CHRATR_ESCAPEMENT,
     spacing: SW.RES_CHRATR_KERNING,
     color: SW.RES_CHRATR_COLOR,
@@ -135,7 +137,7 @@ export function WriterCharacterDialog({
       : backgroundItem instanceof SvxColorItem
         ? writerColorValue(backgroundItem.GetValue(), "transparent")
         : "";
-  const emphasisItem = mode === "standard" ? read(SW.RES_CHRATR_EMPHASIS_MARK) : undefined;
+  const emphasisItem = read(which.emphasis);
   const initialEmphasis =
     emphasisItem instanceof SvxEmphasisMarkItem ? String(emphasisItem.GetEmphasisMark()) : "";
   const [emphasis, setEmphasis] = useState(initialEmphasis);
@@ -229,8 +231,8 @@ export function WriterCharacterDialog({
     const nextStrike = String(values.get("strike") ?? "");
     if (nextStrike && nextStrike !== strikethrough)
       output.Put(new SvxCrossedOutItem(Number(nextStrike), which.strike), true);
-    if (mode === "standard" && emphasis !== "" && emphasis !== initialEmphasis)
-      output.Put(new SvxEmphasisMarkItem(Number(emphasis), SW.RES_CHRATR_EMPHASIS_MARK), true);
+    if (emphasis !== "" && emphasis !== initialEmphasis)
+      output.Put(new SvxEmphasisMarkItem(Number(emphasis), which.emphasis), true);
     const nextPosition = String(values.get("position") ?? "");
     if (nextPosition && nextPosition !== position)
       output.Put(new SvxEscapementItem(Number(nextPosition), which.position), true);
@@ -406,19 +408,17 @@ export function WriterCharacterDialog({
                   <option value={FontStrikeout.STRIKEOUT_DOUBLE}>Double</option>
                 </select>
               </label>
-              {mode === "standard" && (
-                <WriterSearchEmphasisControls
-                  value={emphasis}
-                  label={
-                    /** Resolves the shared Font Effects captions. @param key - Label key. @param fallback - Default caption. @returns Localized caption. */
-                    (key, fallback) => localization.GetText(`writer.search.format.${key}`, fallback)
-                  }
-                  onChange={
-                    /** Records a native emphasis selection. @param value - Combined style and position. @returns Nothing. */
-                    (value) => setEmphasis(String(value))
-                  }
-                />
-              )}
+              <WriterSearchEmphasisControls
+                value={emphasis}
+                label={
+                  /** Resolves the shared Font Effects captions. @param key - Label key. @param fallback - Default caption. @returns Localized caption. */
+                  (key, fallback) => localization.GetText(`writer.search.format.${key}`, fallback)
+                }
+                onChange={
+                  /** Records a native emphasis selection. @param value - Combined style and position. @returns Nothing. */
+                  (value) => setEmphasis(String(value))
+                }
+              />
             </div>
           </section>
           <section

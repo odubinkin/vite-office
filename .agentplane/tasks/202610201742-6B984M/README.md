@@ -4,7 +4,7 @@ title: "Implement Writer search and replace core and browser UI"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 117
+revision: 118
 origin:
   system: "manual"
 depends_on:
@@ -452,6 +452,14 @@ comments:
       Targeted Writer verification passed 97 tests in 11 files. Six optional native ICU host-probe scenarios were skipped by the runner because the host probe was not configured. Targeted shared verification passed 9 tests in 2 files. All six production Chrome search scenarios passed, including export and reopen with the emphasis intact after redo. Production typecheck and Vite build, scoped ESLint and Prettier, module boundaries, source tree and provenance, Writer resources, Writer and shared registry parity (zero semantic violations), routing and diff checks passed. The first iteration exposed the missing Worker constructor and an incorrect property-map tuple; both were corrected and the related tests reran successfully.
 
       Repository-wide documentation and file-size gates still report the existing 307 JSDoc issues and four files at the size limit. No changed path appears in either failure list. AgentPlane doctor passed with the existing hook-shim warning. The task stays open and the ten-task full-run counter is unchanged.
+  -
+    author: "CODER"
+    body: |-
+      Verified an annotation Font Effects checkpoint. The Character dialog now uses the original EditEngine emphasis WhichId in annotation mode, and normal body and annotation text share the same CSS projection for the existing native style/position flags. CharEmphasis is bound to the original EditEngine UNO member from include/editeng/unotext.hxx, so the ODT import can restore the emphasis exported by the existing text mapping. The existing Worker annotation graph retains the native range and concrete item type.
+
+      Seven targeted Writer suites passed 60 tests, including selected-note formatting and grouped undo, surrounding text and neighboring note isolation, Worker and ODT round-trip, ordinary Writer search emphasis, and the shared character projection with a sparse pool. The projection reads optional authored emphasis without requiring an emphasis default in older or restricted pools.
+
+      Production TypeScript and Vite build passed. All six production Chromium search scenarios passed, including emphasis applied through Format All Comments and removed in one Undo. Scoped ESLint and Prettier, source tree and provenance, module boundaries, Writer UI resources and registry parity, workflow routing and diff checks passed. The global JSDoc and file-size gates still report the existing 307 findings and four files at or above the size limit. AgentPlane doctor passed with the existing hook-shim warning. This is an implementation checkpoint on the existing search task. The ten-task full-run cadence is unchanged.
 
 events:
   -
@@ -1077,9 +1085,19 @@ events:
       Targeted Writer verification passed 97 tests in 11 files. Six optional native ICU host-probe scenarios were skipped by the runner because the host probe was not configured. Targeted shared verification passed 9 tests in 2 files. All six production Chrome search scenarios passed, including export and reopen with the emphasis intact after redo. Production typecheck and Vite build, scoped ESLint and Prettier, module boundaries, source tree and provenance, Writer resources, Writer and shared registry parity (zero semantic violations), routing and diff checks passed. The first iteration exposed the missing Worker constructor and an incorrect property-map tuple; both were corrected and the related tests reran successfully.
 
       Repository-wide documentation and file-size gates still report the existing 307 JSDoc issues and four files at the size limit. No changed path appears in either failure list. AgentPlane doctor passed with the existing hook-shim warning. The task stays open and the ten-task full-run counter is unchanged.
+  -
+    type: "comment"
+    at: "2026-11-21T22:42:57.941Z"
+    author: "CODER"
+    body: |-
+      Verified an annotation Font Effects checkpoint. The Character dialog now uses the original EditEngine emphasis WhichId in annotation mode, and normal body and annotation text share the same CSS projection for the existing native style/position flags. CharEmphasis is bound to the original EditEngine UNO member from include/editeng/unotext.hxx, so the ODT import can restore the emphasis exported by the existing text mapping. The existing Worker annotation graph retains the native range and concrete item type.
+
+      Seven targeted Writer suites passed 60 tests, including selected-note formatting and grouped undo, surrounding text and neighboring note isolation, Worker and ODT round-trip, ordinary Writer search emphasis, and the shared character projection with a sparse pool. The projection reads optional authored emphasis without requiring an emphasis default in older or restricted pools.
+
+      Production TypeScript and Vite build passed. All six production Chromium search scenarios passed, including emphasis applied through Format All Comments and removed in one Undo. Scoped ESLint and Prettier, source tree and provenance, module boundaries, Writer UI resources and registry parity, workflow routing and diff checks passed. The global JSDoc and file-size gates still report the existing 307 findings and four files at or above the size limit. AgentPlane doctor passed with the existing hook-shim warning. This is an implementation checkpoint on the existing search task. The ten-task full-run cadence is unchanged.
 
 doc_version: 3
-doc_updated_at: "2026-11-21T22:36:25.049Z"
+doc_updated_at: "2026-11-21T22:42:57.941Z"
 doc_updated_by: "CODER"
 description: "Implement the approved coherent Writer search-and-replace feature from pinned LibreOffice sources: real shared search engine and options, native paragraph/cursor traversal and replacement/history contracts, view-owned search state and dispatch, Find toolbar and Find and Replace dialog with generated upstream command placement and shortcuts. Preserve source semantics and explicit unsupported boundaries; never substitute DOM text search or browser RegExp for ICU contracts. Work only on writer in vite-office-writer; local upstream reading approved, no network or merges. Keep active until approved scope is verified."
 sections:

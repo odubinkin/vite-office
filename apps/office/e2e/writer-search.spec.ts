@@ -246,16 +246,20 @@ test("Writer inserts a comment, finds its text and undoes note formatting", /** 
   const character = page.getByRole("dialog", { name: "Character", exact: true });
   await expect(character.getByRole("tab", { name: "Font", exact: true })).toBeFocused();
   await character.getByRole("spinbutton", { name: "Size", exact: true }).fill("17");
+  await character.getByRole("tab", { name: "Font Effects", exact: true }).click();
+  await character.getByRole("combobox", { name: "Emphasis mark" }).selectOption({ label: "Dot" });
+  await character.getByRole("combobox", { name: "Position" }).selectOption({ label: "Below text" });
   await character.getByRole("button", { name: "OK", exact: true }).click();
-  await expect(reply.locator("p").last().locator("span").first()).toHaveCSS(
-    "font-size",
-    "22.6667px",
-  );
-  await expect(comment.first().locator("p").first().locator("span").first()).toHaveCSS(
-    "font-size",
-    "22.6667px",
-  );
+  const replyText = reply.locator("p").last().locator("span").first();
+  const firstNoteText = comment.first().locator("p").first().locator("span").first();
+  for (const portion of [replyText, firstNoteText]) {
+    await expect(portion).toHaveCSS("font-size", "22.6667px");
+    await expect(portion).toHaveCSS("text-emphasis-style", /^(filled )?dot$/);
+    await expect(portion).toHaveCSS("text-emphasis-position", /^under( right)?$/);
+  }
   await undo.click();
+  await expect(replyText).toHaveCSS("text-emphasis-style", "none");
+  await expect(firstNoteText).toHaveCSS("text-emphasis-style", "none");
 
   await replyActions.click();
   await page.evaluate(

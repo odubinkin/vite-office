@@ -436,6 +436,7 @@ const textProperties = new Map<string, readonly [number, number]>([
   ["CharBackColor", [EE.EE_CHAR_BKGCOLOR, 0]],
   ["CharBackTransparent", [EE.EE_CHAR_BKGCOLOR, M.MID_GRAPHIC_TRANSPARENT]],
   ["CharStrikeout", [EE.EE_CHAR_STRIKEOUT, M.MID_CROSS_OUT]],
+  ["CharEmphasis", [EE.EE_CHAR_EMPHASISMARK, M.MID_EMPHASIS]],
   ["CharEscapement", [EE.EE_CHAR_ESCAPEMENT, M.MID_ESC]],
   ["CharEscapementHeight", [EE.EE_CHAR_ESCAPEMENT, M.MID_ESC_HEIGHT]],
   ["CharUnderline", [EE.EE_CHAR_UNDERLINE, M.MID_TL_STYLE]],
