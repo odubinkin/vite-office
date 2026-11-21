@@ -8,6 +8,11 @@ import { SwTextField } from "../../../inc/txtfld";
 import { SwPaM, SwPosition } from "../../../source/core/crsr/pam";
 import type { SwDoc } from "../../../source/core/doc/doc";
 import { SwPostItField, SwPostItFieldType } from "../../../source/core/fields/docufld";
+import {
+  decodeAnnotationText,
+  encodeAnnotationText,
+  type WriterAnnotationTextRecord,
+} from "./writer-annotation-text-codec";
 import type { SwTextNode } from "../../../source/core/txtnode/ndtxt";
 
 /** Structured-cloneable annotation field at the original dummy character. */
@@ -18,6 +23,7 @@ export interface WriterAnnotationRecord {
   readonly author: string;
   readonly initials: string;
   readonly text: string;
+  readonly editText?: WriterAnnotationTextRecord;
   readonly name: string;
   readonly id: number;
   readonly resolved: boolean;
@@ -49,10 +55,12 @@ export function encodeAnnotations(
       const field = format.GetField();
       const { dateTime, ...data } = field.GetData();
       const start = marks.GetAnnotationMark(format)?.GetMarkStart();
+      const editText = encodeAnnotationText(field.GetTextObject());
       records.push({
         author: data.author,
         initials: data.initials,
         text: data.text,
+        ...(editText === undefined ? {} : { editText }),
         name: data.name,
         id: data.id ?? 0,
         resolved: data.resolved ?? false,
@@ -152,8 +160,20 @@ export function restoreAnnotations(
         new UnoDateTime(date[0], date[1], date[2], date[3], date[4], date[5], date[6], false),
       ),
     });
-    const format = new SwFormatField(value);
-    value.Dispose();
+    let format: SwFormatField;
+    try {
+      if (record.editText !== undefined) {
+        const editText = decodeAnnotationText(document.GetAttrPool(), record.editText);
+        try {
+          value.SetTextObject(editText);
+        } finally {
+          editText.dispose();
+        }
+      }
+      format = new SwFormatField(value);
+    } finally {
+      value.Dispose();
+    }
     if (!node.InsertHint(new SwTextField(format, record.offset), SetAttrMode.NOTXTATRCHR))
       throw new Error("Stored Writer annotation could not be attached.");
     if (first && start) {

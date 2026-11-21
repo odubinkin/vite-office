@@ -4,7 +4,7 @@ title: "Implement Writer search and replace core and browser UI"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 86
+revision: 87
 origin:
   system: "manual"
 depends_on:
@@ -253,6 +253,9 @@ comments:
   -
     author: "CODER"
     body: "Verified checkpoint: native FN_POSTIT is connected through Writer menu, standard toolbar and keyboard resources. Point and ranged insertion use the same content operation as UNO annotation attachment, preserve the selected body text, use the pinned Unknown Author fallback and focus the active window. Escape returns after consecutive annotation points. Document history rebinds later note text edits by the retained field ID after undo and redo recreate the comment. Adapted the supported insertion, default author and leave behavior of sw/qa/uitest/writer_tests/comments.py. Passed 44 focused Vitest cases in nine suites, then repeated all six browser comment unit cases after the final query typing adjustment. Two Chrome search scenarios and two resource checks passed, with production build, dependencies, source tree, provenance, scoped lint and formatting, diff, doctor and routing. The existing whole-repository JSDoc and physical file-size findings are outside the changed paths. Rich comment formatting is pending. No AgentPlane closure or full-suite cadence increment."
+  -
+    author: "CODER"
+    body: "Verified intermediate Writer annotation transfer checkpoint. The normal ODT Worker graph carries the native EditTextObject with paragraph and style metadata, mapped character and paragraph items, tab and line-break features and UTF-16 coordinates. Restoration uses an independently owned EditEngine pool and the existing concrete Writer value codecs. Legacy records retain their plain text fallback. A regression test on the pinned upstream annotation fixture exercises structured cloning, formatting and native equality. The three affected Writer suites passed 16 tests, and the Writer resource suite passed 2. Production build, scoped lint and formatting, dependency, source tree, provenance, routing, doctor and diff checks passed. Repo-wide JSDoc and file size still report existing findings outside the changed paths. Rich ODT XML, visible rich annotation editing and the remainder of the approved task remain open. No full regression run or task closure in this checkpoint."
 events:
   -
     type: "status"
@@ -616,8 +619,13 @@ events:
     at: "2026-11-21T17:15:30.480Z"
     author: "CODER"
     body: "Verified checkpoint: native FN_POSTIT is connected through Writer menu, standard toolbar and keyboard resources. Point and ranged insertion use the same content operation as UNO annotation attachment, preserve the selected body text, use the pinned Unknown Author fallback and focus the active window. Escape returns after consecutive annotation points. Document history rebinds later note text edits by the retained field ID after undo and redo recreate the comment. Adapted the supported insertion, default author and leave behavior of sw/qa/uitest/writer_tests/comments.py. Passed 44 focused Vitest cases in nine suites, then repeated all six browser comment unit cases after the final query typing adjustment. Two Chrome search scenarios and two resource checks passed, with production build, dependencies, source tree, provenance, scoped lint and formatting, diff, doctor and routing. The existing whole-repository JSDoc and physical file-size findings are outside the changed paths. Rich comment formatting is pending. No AgentPlane closure or full-suite cadence increment."
+  -
+    type: "comment"
+    at: "2026-11-21T17:23:41.852Z"
+    author: "CODER"
+    body: "Verified intermediate Writer annotation transfer checkpoint. The normal ODT Worker graph carries the native EditTextObject with paragraph and style metadata, mapped character and paragraph items, tab and line-break features and UTF-16 coordinates. Restoration uses an independently owned EditEngine pool and the existing concrete Writer value codecs. Legacy records retain their plain text fallback. A regression test on the pinned upstream annotation fixture exercises structured cloning, formatting and native equality. The three affected Writer suites passed 16 tests, and the Writer resource suite passed 2. Production build, scoped lint and formatting, dependency, source tree, provenance, routing, doctor and diff checks passed. Repo-wide JSDoc and file size still report existing findings outside the changed paths. Rich ODT XML, visible rich annotation editing and the remainder of the approved task remain open. No full regression run or task closure in this checkpoint."
 doc_version: 3
-doc_updated_at: "2026-11-21T17:15:30.480Z"
+doc_updated_at: "2026-11-21T17:23:41.852Z"
 doc_updated_by: "CODER"
 description: "Implement the approved coherent Writer search-and-replace feature from pinned LibreOffice sources: real shared search engine and options, native paragraph/cursor traversal and replacement/history contracts, view-owned search state and dispatch, Find toolbar and Find and Replace dialog with generated upstream command placement and shortcuts. Preserve source semantics and explicit unsupported boundaries; never substitute DOM text search or browser RegExp for ICU contracts. Work only on writer in vite-office-writer; local upstream reading approved, no network or merges. Keep active until approved scope is verified."
 sections:

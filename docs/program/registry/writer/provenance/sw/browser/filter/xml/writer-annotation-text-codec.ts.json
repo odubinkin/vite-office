@@ -1,0 +1,32 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "local-infrastructure",
+    "localPath": "apps/office/src/sw/browser/filter/xml/writer-annotation-text-codec.ts",
+    "localSymbols": [
+      "encodeAnnotationText"
+    ],
+    "status": "local-only",
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sw/browser/filter/xml/writer-annotation-text-codec.ts",
+          "marker": "encodeAnnotationText"
+        },
+        {
+          "path": "apps/office/src/sw/source/filter/xml/odt-annotation.test.ts",
+          "marker": "transports native annotation editor text"
+        }
+      ]
+    },
+    "rationale": "Transfers native annotation EditEngine paragraphs and formatting items through the existing browser graph boundary.",
+    "responsibilities": [
+      "Transfers native annotation EditEngine paragraphs and formatting items through the existing browser graph boundary."
+    ],
+    "stackDivergence": {
+      "kind": "local-infrastructure",
+      "rationale": "Structured clone is the browser transport boundary."
+    }
+  }
+}

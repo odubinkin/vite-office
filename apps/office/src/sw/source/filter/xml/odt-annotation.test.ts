@@ -1,6 +1,29 @@
 /** @fileoverview Exercises native annotations through Writer's ODT import. */
 import { readFileSync } from "node:fs";
 import { expect, it } from "vitest";
+import { CH_FEATURE } from "../../../../editeng/inc/editattr";
+import { TextRotation } from "../../../../editeng/inc/editobj";
+import {
+  EE_CHAR_COLOR,
+  EE_CHAR_UNDERLINE,
+  EE_CHAR_WEIGHT,
+  EE_FEATURE_LINEBR,
+  EE_FEATURE_TAB,
+  EE_PARA_JUST,
+} from "../../../../editeng/inc/eeitem";
+import { EditTextObjectImpl } from "../../../../editeng/source/editeng/editobj.owner";
+import { SvxAdjust } from "../../../../editeng/inc/svxenum";
+import { SvxColorItem } from "../../../../editeng/inc/colritem";
+import { SvxUnderlineItem } from "../../../../editeng/source/items/textitem";
+import { SvxAdjustItem } from "../../../../editeng/inc/adjustitem";
+import { SvxWeightItem } from "../../../../editeng/inc/wghtitem";
+import { unicode } from "../../../../i18nlangtag/source/isolang/isolang.tables";
+import { SvtScriptType } from "../../../../svl/inc/languageoptions";
+import { SfxStyleFamily } from "../../../../svl/inc/style-values";
+import { SfxVoidItem } from "../../../../svl/source/items/voiditem";
+import { Color } from "../../../../tools/inc/color";
+import { FontLineStyle, FontWeight } from "../../../../tools/inc/fontenum";
+import { MapUnit } from "../../../../tools/inc/mapunit";
 import { DocumentArchive } from "../../../../package/source/zippackage/document-archive";
 import {
   createOdtWriterTransfer,
@@ -8,6 +31,7 @@ import {
 } from "../../../browser/filter/xml/odt-transfer";
 import { RES_TXTATR_ANNOTATION } from "../../../inc/hintids";
 import { SwTextField } from "../../../inc/txtfld";
+import { SwPostItFieldType } from "../../core/fields/docufld";
 import { readOdtDocument } from "./swxml";
 import { writeOdtDocument } from "./wrtxml";
 
@@ -55,4 +79,66 @@ it("imports the named annotation and range from the upstream backward-search doc
   const before = transfer.graph.annotations?.[0];
   const after = createOdtWriterTransfer(reloaded.document).graph.annotations?.[0];
   expect(after).toEqual({ ...before, id: after?.id });
+});
+
+it("transports native annotation editor text through the ODT Worker record", /** Verifies format and feature ownership across structured clone. @returns Completion. */ async () => {
+  const sample =
+    "../../vendor/libreoffice-reference/sw/qa/extras/uiwriter/data/tdf147583_backwardSearch.odt";
+  const { document } = await readOdtDocument(
+    new Uint8Array(readFileSync(sample)),
+    { title: "Rich comments" },
+    undefined,
+    { onDiagnostic: /** Omits unrelated diagnostics. @returns Nothing. */ () => undefined },
+  );
+  const record = createOdtWriterTransfer(document).graph.annotations?.[0];
+  if (!record) throw new Error("Fixture annotation is missing.");
+  const type = SwPostItFieldType.Get(document);
+  const field = type.FindField(record.id);
+  if (!field) throw new Error("Fixture field is missing.");
+  const rich = new EditTextObjectImpl(
+    null,
+    MapUnit.MapTwip,
+    false,
+    TextRotation.NONE,
+    SvtScriptType.LATIN,
+  );
+  const paragraph = rich.CreateAndInsertContent();
+  const feature = String.fromCharCode(CH_FEATURE);
+  const value = unicode(`A😀${feature}B${feature}C`);
+  const style = unicode("Comment");
+  const empty = unicode("");
+  try {
+    paragraph.SetText(value);
+    paragraph.SetStyle(style);
+    paragraph.SetFamily(SfxStyleFamily.Para);
+    paragraph.GetParaAttribs().Put(new SvxAdjustItem(SvxAdjust.Center, EE_PARA_JUST), true);
+    const underline = new SvxUnderlineItem(FontLineStyle.LINESTYLE_SINGLE, EE_CHAR_UNDERLINE);
+    underline.SetColor(new Color(221, 0, 73));
+    paragraph
+      .GetCharAttribs()
+      .push(
+        rich.CreateAttrib(new SvxColorItem(new Color(40, 90, 200), EE_CHAR_COLOR), 0, 3),
+        rich.CreateAttrib(new SvxWeightItem(FontWeight.WEIGHT_BOLD, EE_CHAR_WEIGHT), 1, 3),
+        rich.CreateAttrib(underline, 1, 3),
+        rich.CreateAttrib(new SfxVoidItem(EE_FEATURE_TAB), 3, 4),
+        rich.CreateAttrib(new SfxVoidItem(EE_FEATURE_LINEBR), 5, 6),
+      );
+    rich.CreateAndInsertContent().SetText(empty);
+    field.SetPar2("A😀\tB\nC\n");
+    field.SetTextObject(rich);
+
+    const wire = structuredClone(createOdtWriterTransfer(document));
+    const restored = restoreOdtWriterTransfer(wire);
+    const restoredField = SwPostItFieldType.Get(restored).FindField(record.id);
+    const actual = restoredField?.GetTextObject();
+    expect(actual?.Equals(rich)).toBe(true);
+    expect(actual?.GetPool()).not.toBe(rich.GetPool());
+    expect(restoredField?.GetPar2()).toBe("A😀\tB\nC\n");
+    expect(createOdtWriterTransfer(restored).graph.annotations).toEqual(wire.graph.annotations);
+  } finally {
+    empty.dispose();
+    style.dispose();
+    value.dispose();
+    rich.dispose();
+  }
 });
