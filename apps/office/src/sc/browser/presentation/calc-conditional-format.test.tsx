@@ -51,7 +51,7 @@ function open(command: string): void {
 /** Responds to a source dialog and lets its Sfx callback complete. @param dialog - Dialog wrapper. @param caption - Actual response label. @returns Completion. */
 async function respond(dialog: HTMLElement, caption: string): Promise<void> {
   await act(async () => {
-    fireEvent.click(within(dialog).getByRole("button", { name: caption, exact: true }));
+    fireEvent.click(within(dialog).getByRole("button", { name: caption }));
   });
   const dispatcher = session?.frame.GetDispatcher();
   if (dispatcher instanceof BrowserSfxDispatcher)
@@ -146,7 +146,7 @@ it("keeps rule order and supports changing the active source rule to a date", as
   fireEvent.change(within(editor).getByRole("combobox", { name: "Rule type" }), {
     target: { value: "date" },
   });
-  fireEvent.change(within(editor).getByRole("combobox", { name: "Date", exact: true }), {
+  fireEvent.change(within(editor).getByRole("combobox", { name: "Date" }), {
     target: { value: "1" },
   });
   await respond(editor, "Up");
@@ -160,8 +160,8 @@ it("keeps rule order and supports changing the active source rule to a date", as
 
 it("projects the original conditional commands into the formatting toolbar menu", async () => {
   mount();
-  fireEvent.click(screen.getByRole("button", { name: "Conditional", exact: true }));
-  const popup = screen.getByRole("menu", { name: "Conditional", exact: true });
+  fireEvent.click(screen.getByRole("button", { name: "Conditional" }));
+  const popup = screen.getByRole("menu", { name: "Conditional" });
   fireEvent.click(within(popup).getByRole("menuitem", { name: /^Manage/ }));
   await respond(screen.getByRole("dialog", { name: "Manage Conditional Formatting" }), "Cancel");
 });
