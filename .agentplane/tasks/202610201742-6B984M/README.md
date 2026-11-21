@@ -4,7 +4,7 @@ title: "Implement Writer search and replace core and browser UI"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 33
+revision: 34
 origin:
   system: "manual"
 depends_on:
@@ -103,6 +103,9 @@ comments:
   -
     author: "CODER"
     body: "Verified follow-up: full application type checking with one checker and the production Vite build passed on the final header/footer search source. Final diff whitespace validation passed. Pausing the goal now at the user request after the targeted checks, with the search parent open for remaining scope."
+  -
+    author: "CODER"
+    body: "Verified checkpoint 5f9148ef2: Writer whole-word search treats as-character fly anchors as native separators, preserves pinned leading/trailing cleanup and directional UTF-16 restoration, and projects matches through Find Next, Find Previous and Find All. Replace All, undo and redo preserve the live inline frame and update its anchor offset. Replacement that covers the anchor still requires native fly history and is rejected before mutation. Format-state queries use the live hint map without cloning the point. The source-derived backward asymmetry is recorded in WRITER-009. Six focused Vitest suites passed 102 tests and two Writer resource tests passed. Office typecheck and Vite production build passed, and a focused compile covered the final changed files and their dependencies. Dependency, source-tree, provenance, JSDoc, size, scoped lint and formatting, doctor, routing and diff checks passed. Doctor retains the existing hook-shim warning. The parent task stays open and this checkpoint adds no completed task to the full-regression cadence."
 events:
   -
     type: "status"
@@ -216,8 +219,13 @@ events:
     at: "2026-11-20T15:07:49.412Z"
     author: "CODER"
     body: "Verified follow-up: full application type checking with one checker and the production Vite build passed on the final header/footer search source. Final diff whitespace validation passed. Pausing the goal now at the user request after the targeted checks, with the search parent open for remaining scope."
+  -
+    type: "comment"
+    at: "2026-11-21T04:39:44.649Z"
+    author: "CODER"
+    body: "Verified checkpoint 5f9148ef2: Writer whole-word search treats as-character fly anchors as native separators, preserves pinned leading/trailing cleanup and directional UTF-16 restoration, and projects matches through Find Next, Find Previous and Find All. Replace All, undo and redo preserve the live inline frame and update its anchor offset. Replacement that covers the anchor still requires native fly history and is rejected before mutation. Format-state queries use the live hint map without cloning the point. The source-derived backward asymmetry is recorded in WRITER-009. Six focused Vitest suites passed 102 tests and two Writer resource tests passed. Office typecheck and Vite production build passed, and a focused compile covered the final changed files and their dependencies. Dependency, source-tree, provenance, JSDoc, size, scoped lint and formatting, doctor, routing and diff checks passed. Doctor retains the existing hook-shim warning. The parent task stays open and this checkpoint adds no completed task to the full-regression cadence."
 doc_version: 3
-doc_updated_at: "2026-11-20T15:07:49.412Z"
+doc_updated_at: "2026-11-21T04:39:44.649Z"
 doc_updated_by: "CODER"
 description: "Implement the approved coherent Writer search-and-replace feature from pinned LibreOffice sources: real shared search engine and options, native paragraph/cursor traversal and replacement/history contracts, view-owned search state and dispatch, Find toolbar and Find and Replace dialog with generated upstream command placement and shortcuts. Preserve source semantics and explicit unsupported boundaries; never substitute DOM text search or browser RegExp for ICU contracts. Work only on writer in vite-office-writer; local upstream reading approved, no network or merges. Keep active until approved scope is verified."
 sections:
