@@ -1,10 +1,11 @@
 ---
 id: "202611211845-XEPNMP"
 title: "Preserve Calc ODS conditional data bars"
-status: "DOING"
+result_summary: "Ported Calc data-bar ownership, native limit geometry and ODS import and export."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 7
+revision: 8
 origin:
   system: "manual"
 depends_on: []
@@ -39,11 +40,16 @@ quality_review:
     - "45 focused tests, office typecheck, lint and formatting, dependency and provenance checks, AgentPlane gate"
   findings:
     - "The Calc fixture reproduces native ODS import and export scenarios. Geometry, threshold defaults, formula retargeting on value changes and legacy spelling are verified. Browser painting and XLSX remain outside this filter scope."
-commit: null
+commit:
+  hash: "724bfde7f7822ce6f375bcc09320edac085e8f9f"
+  message: "🧩 XEPNMP code: preserve Calc ODS data bars"
 comments:
   -
     author: "CODER"
     body: "Start: implement Calc ODS data-bar import, rule evaluation and round-trip serialization."
+  -
+    author: "CODER"
+    body: "Verified: five pinned ODS data-bar rules retain their limits and settings through Worker transfer and reopening, and all 45 focused tests passed."
 events:
   -
     type: "status"
@@ -58,8 +64,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "45 focused Calc tests and all declared static checks passed. The original LibreOffice ODS fixture retains five data bars, including a live formula limit, after Worker transfer and save/reopen."
+  -
+    type: "status"
+    at: "2026-11-21T18:54:13.357Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: five pinned ODS data-bar rules retain their limits and settings through Worker transfer and reopening, and all 45 focused tests passed."
 doc_version: 3
-doc_updated_at: "2026-11-21T18:52:41.477Z"
+doc_updated_at: "2026-11-21T18:54:13.358Z"
 doc_updated_by: "CODER"
 description: "Port the native ScDataBarFormat owner, threshold evaluation and ODS import/export contexts. Preserve rules through the Calc Worker and use the pinned LibreOffice ODS data-bar regression and model checks. Scope is core and filter, not user interface or XLSX."
 sections:
