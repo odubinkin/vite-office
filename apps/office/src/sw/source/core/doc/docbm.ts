@@ -12,6 +12,8 @@ import { SwNodeIndex } from "../crsr/pam";
 
 /** Named bookmark with the native registered mark positions. */
 export class SwBookmark extends MarkBase {
+  private hidden = false;
+  private hideCondition = "";
   /** Creates the document-owned bookmark. @param name - Unique document name. @param range - Native selection. @returns Nothing. */
   public constructor(
     private name: string,
@@ -28,6 +30,26 @@ export class SwBookmark extends MarkBase {
   /** Renames the bookmark after document-level validation. @param name - New name. @returns Nothing. */
   public SetName(name: string): void {
     this.name = name;
+  }
+
+  /** Reads the stored bookmark visibility flag. @returns Hidden flag. */
+  public IsHidden(): boolean {
+    return this.hidden;
+  }
+
+  /** Assigns the bookmark visibility flag. @param hidden - Requested flag. @returns Nothing. */
+  public Hide(hidden: boolean): void {
+    this.hidden = hidden;
+  }
+
+  /** Reads the stored hide condition. @returns Unevaluated condition. */
+  public GetHideCondition(): string {
+    return this.hideCondition;
+  }
+
+  /** Stores the condition until the native condition consumer evaluates it. @param condition - Expression. @returns Nothing. */
+  public SetHideCondition(condition: string): void {
+    this.hideCondition = condition;
   }
 }
 

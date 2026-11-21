@@ -5404,3 +5404,24 @@ applies its authored properties without that collection change.
   `def` with zero similarity tolerances can report `[4,7)`.
 - Preserve the script-transition argument and cover the resulting source
   offsets on an actual Writer text node.
+
+### WRITER-688 — ODT drops a bookmark condition when the bookmark is visible
+
+Import stores the hide condition on a matched bookmark range even when the
+hidden flag is false. Export writes the condition only on a hidden bookmark
+start. A visible bookmark therefore loses its stored condition on an ODT
+save and reopen. Writer preserves this behavior, including the case covered
+by the pinned `tdf101856.odt` fixture.
+
+- [Original bookmark import](../../vendor/libreoffice-reference/xmloff/source/text/XMLTextMarkImportContext.cxx)
+- [Original bookmark export](../../vendor/libreoffice-reference/xmloff/source/text/txtparae.cxx)
+
+### WRITER-689 — A repeated ODT bookmark start replaces the earlier start
+
+Bookmark starts are keyed by name and the latest start replaces an existing
+entry with the same name. An end consumes that entry even when it belongs to
+a different text owner and cannot produce a bookmark. Names left pending
+at the end of import produce no marks. Writer preserves these pairing rules.
+
+- [Original pending range map](../../vendor/libreoffice-reference/xmloff/source/text/txtimp.cxx)
+- [Original range validation](../../vendor/libreoffice-reference/xmloff/source/text/XMLTextMarkImportContext.cxx)

@@ -145,6 +145,9 @@ export type XMLTextParagraphMarker =
       kind: "bookmark" | "bookmark-start" | "bookmark-end" | "soft-page-break";
       name?: string;
       offset: number;
+      hidden?: boolean;
+      condition?: string;
+      collapsedAroundFrame?: boolean;
     }>
   | Readonly<{ kind: "frame"; frame: XMLTextFrameExportSource; offset: number }>;
 
@@ -596,7 +599,11 @@ function exportMarker(
   if (marker.kind === "soft-page-break") return "<text:soft-page-break/>";
   if (marker.name === undefined || marker.name.length === 0)
     throw new Error("ODF bookmark name is invalid.");
-  return `<text:${marker.kind} text:name="${escapeXml(marker.name)}"/>`;
+  const attributes =
+    marker.kind === "bookmark-start" && marker.hidden
+      ? ` loext:hidden="true" loext:condition="${escapeXml(marker.condition ?? "")}"`
+      : "";
+  return `<text:${marker.kind} text:name="${escapeXml(marker.name)}"${attributes}/>`;
 }
 
 /** Emits the supported upstream hyperlink attributes. @param hyperlink - Link metadata. @returns Opening text:a tag. */

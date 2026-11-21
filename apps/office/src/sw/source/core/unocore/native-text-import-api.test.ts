@@ -22,7 +22,7 @@ import { PropertyValue } from "../../../../udkapi/com/sun/star/beans/PropertyVal
 import { PropertyState } from "../../../../udkapi/com/sun/star/beans/PropertyState";
 import { Any } from "../../../../cppu/inc/com/sun/star/uno/Any";
 import { text, unicode } from "../../../../i18nlangtag/source/isolang/isolang.tables";
-import { stringAny } from "./unocrsrhelper";
+import { stringAny, stringValue } from "./unocrsrhelper";
 import { SwXText } from "./unotext";
 import { RuntimeException } from "../../../../cppu/inc/com/sun/star/uno/RuntimeException";
 import { IllegalArgumentException } from "../../../../cppu/inc/com/sun/star/lang/IllegalArgumentException";
@@ -428,16 +428,36 @@ it("attaches collapsed bookmark descriptors through the canonical mark manager" 
   const cursor = body.createTextCursor();
   cursor.goRight(1, false);
   bookmark.setName(unicode("ImportedBookmark"));
-  body.insertTextContent(cursor, bookmark, true);
-  expect(
-    present(doc.GetIDocumentMarkAccess().FindMark("ImportedBookmark"))
-      .GetMarkPos()
-      .GetContentIndex(),
-  ).toBe(1);
-  body.insertString(body.getStart(), unicode("X"), false);
-  expect(bookmark.getAnchor().GetPaM().GetPoint().GetContentIndex()).toBe(2);
-  bookmark.dispose();
-  expect(doc.GetIDocumentMarkAccess().FindMark("ImportedBookmark")).toBeUndefined();
+  const hidden = unicode("BookmarkHidden");
+  const condition = unicode("BookmarkCondition");
+  const enabled = new Any(true);
+  const expression = stringAny("1==1");
+  try {
+    bookmark.setPropertyValue(hidden, enabled);
+    body.insertTextContent(cursor, bookmark, true);
+    bookmark.setPropertyValue(condition, expression);
+    const mark = present(doc.GetIDocumentMarkAccess().FindMark("ImportedBookmark"));
+    expect(mark.GetMarkPos().GetContentIndex()).toBe(1);
+    expect(mark.IsHidden()).toBe(true);
+    expect(mark.GetHideCondition()).toBe("1==1");
+    const actual = bookmark.getPropertyValue(condition);
+    try {
+      expect(stringValue(actual)).toBe("1==1");
+    } finally {
+      actual.dispose();
+    }
+    body.insertString(body.getStart(), unicode("X"), false);
+    expect(bookmark.getAnchor().GetPaM().GetPoint().GetContentIndex()).toBe(2);
+  } finally {
+    bookmark.dispose();
+    expect(doc.GetIDocumentMarkAccess().FindMark("ImportedBookmark")).toBeUndefined();
+    cursor.dispose();
+    hidden.dispose();
+    condition.dispose();
+    expression.dispose();
+    enabled.dispose();
+    doc.Dispose();
+  }
 });
 
 it("splits partial paragraph cell ranges through canonical nodes and rejects gaps before mutation" /** Processes one ordered native value at this boundary. @returns The represented native operation result. */, () => {

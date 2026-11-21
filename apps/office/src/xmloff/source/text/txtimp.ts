@@ -9,6 +9,8 @@ import type {
   XMLTextCursor,
   XMLTextRange,
   XMLNamedTextContent,
+  XMLPropertySet,
+  XMLText,
 } from "../../inc/txtimp";
 import { cppu_detail_getUnoType as indexReplaceType } from "../../../cppu/inc/com/sun/star/container/XIndexReplace";
 import { Any } from "../../../cppu/inc/com/sun/star/uno/Any";
@@ -84,13 +86,15 @@ export class XMLTextImportHelper {
   private start: XMLTextRange | undefined;
   private applyParagraph: ((cursor: XMLTextCursor) => void) | undefined;
   private hints: TextImportHint[] = [];
-  private bookmarkStarts = new Map<string, XMLTextRange>();
+  private readonly bookmarkStarts = new Map<
+    string,
+    { range: XMLTextRange; text: XMLText; hidden: boolean; condition: string }
+  >();
   private readonly frameContexts: {
     cursor: XMLTextCursor | undefined;
     start: XMLTextRange | undefined;
     applyParagraph: ((cursor: XMLTextCursor) => void) | undefined;
     hints: TextImportHint[];
-    bookmarkStarts: Map<string, XMLTextRange>;
   }[] = [];
 
   /** Saves the original cursor, enclosing paragraph ranges and list context for a nested text frame. @param cursor - Frame text cursor. @returns Nothing. */
@@ -100,13 +104,11 @@ export class XMLTextImportHelper {
       start: this.start,
       applyParagraph: this.applyParagraph,
       hints: this.hints,
-      bookmarkStarts: this.bookmarkStarts,
     });
     this.cursor = cursor;
     this.start = undefined;
     this.applyParagraph = undefined;
     this.hints = [];
-    this.bookmarkStarts = new Map();
     this.lists.PushListContext();
   }
 
@@ -119,7 +121,6 @@ export class XMLTextImportHelper {
     this.start = saved.start;
     this.applyParagraph = saved.applyParagraph;
     this.hints = saved.hints;
-    this.bookmarkStarts = saved.bookmarkStarts;
     this.lists.PopListContext();
   }
   /** Borrows the current native text cursor. @returns Active cursor. */
@@ -136,6 +137,8 @@ export class XMLTextImportHelper {
     this.cellParaStyleDefault = "";
     while (this.frameContexts.length !== 0) this.PopTextFrameCursor();
     this.ClearCursor();
+    for (const start of this.bookmarkStarts.values()) start.range.dispose();
+    this.bookmarkStarts.clear();
   }
 
   /** Releases the current text location without clearing suspended parent contexts. @returns Nothing. */
@@ -150,8 +153,6 @@ export class XMLTextImportHelper {
       hint.end.dispose();
     }
     this.hints.length = 0;
-    for (const start of this.bookmarkStarts.values()) start.dispose();
-    this.bookmarkStarts.clear();
   }
   /** Starts a paragraph and defers its native style application until after the break. @param style - Paragraph style. @param alignment - Direct alignment. @param left - Direct margin. @param paragraph - Paragraph properties. @param properties - Direct character map. @param list - Native list state. @param listGeometryWins - Legacy parser precedence. @param forceListRule - Explicit automatic list declaration. @param markerProperties - Direct text properties of the paragraph mark. @param applyStyle - Whether the paragraph supplies its own style. @returns Nothing. */
   public BeginParagraph(
@@ -248,7 +249,7 @@ export class XMLTextImportHelper {
   }
   /** Writes an actual typed property without exposing model items to xmloff. @param cursor - Real property owner. @param name - Native property name. @param value - Scalar. @param numeric - Optional numeric type. @returns Nothing. */
   public SetProperty(
-    cursor: XMLTextCursor,
+    cursor: Pick<XMLPropertySet, "setPropertyValue">,
     name: string,
     value: string | boolean | number,
     numeric?: "sal_Int16",
@@ -356,40 +357,63 @@ export class XMLTextImportHelper {
       this.applyParagraph = undefined;
     }
   }
-  /** Validates pending range marks after the whole text has been parsed. @returns Nothing. */
-  public FinishBookmarkRanges(): void {
-    if (this.bookmarkStarts.size) throw new Error("ODF bookmark start has no end.");
-  }
-  /** Attaches an original named text-content service. @param name - Bookmark name. @param range - Optional selected range. @returns Nothing. */
-  public InsertBookmark(name: string, range: XMLTextRange = this.GetCursor()): void {
+  /** Attaches an original named text-content service. @param name - Bookmark name. @param range - Optional selected range. @param properties - Range bookmark attributes. @returns Nothing. */
+  public InsertBookmark(
+    name: string,
+    range?: XMLTextRange,
+    properties?: Readonly<{ hidden: boolean; condition: string }>,
+  ): void {
     const service = xmlTextString("com.sun.star.text.Bookmark"),
-      key = xmlTextString(name);
+      key = xmlTextString(name),
+      selected = range ?? this.GetCursor().getStart();
     try {
       const bookmark = this.model.createInstance(service) as XMLNamedTextContent;
       bookmark.setName(key);
-      this.GetCursor().getText().insertTextContent(range, bookmark, true);
+      this.GetCursor().getText().insertTextContent(selected, bookmark, true);
+      if (properties) {
+        this.SetProperty(bookmark, "BookmarkHidden", properties.hidden);
+        this.SetProperty(bookmark, "BookmarkCondition", properties.condition);
+      }
     } finally {
       service.dispose();
       key.dispose();
+      if (range === undefined) selected.dispose();
     }
   }
-  /** Retains a range-mark start using the original live API range. @param name - Bookmark name. @returns Nothing. */
-  public StartBookmark(name: string): void {
-    if (this.bookmarkStarts.has(name)) throw new Error(`ODF bookmark start is duplicated: ${name}`);
-    this.bookmarkStarts.set(name, this.GetCursor().getStart());
+  /** Retains the latest live start for this name. @param name - Bookmark name. @param hidden - Source visibility flag. @param condition - Source hide expression. @returns Nothing. */
+  public StartBookmark(name: string, hidden: boolean, condition: string): void {
+    const cursor = this.GetCursor();
+    const range = cursor.getStart();
+    this.bookmarkStarts.get(name)?.range.dispose();
+    this.bookmarkStarts.set(name, { range, text: cursor.getText(), hidden, condition });
   }
   /** Attaches an ODF bookmark to the completed live range. @param name - Bookmark name. @returns Nothing. */
   public EndBookmark(name: string): void {
     const start = this.bookmarkStarts.get(name);
-    if (!start) throw new Error(`ODF bookmark end has no start: ${name}`);
-    const range = this.GetCursor().getText().createTextCursorByRange(start);
+    if (!start) return;
+    this.bookmarkStarts.delete(name);
     try {
-      range.gotoRange(this.GetCursor(), true);
-      this.InsertBookmark(name, range);
+      const cursor = this.GetCursor();
+      const text = cursor.getText();
+      if (start.text !== text) return;
+      const end = cursor.getStart();
+      try {
+        const range = text.createTextCursorByRange(end);
+        try {
+          try {
+            range.gotoRange(start.range, true);
+          } catch (error) {
+            if (!(error instanceof RuntimeException)) throw error;
+          }
+          this.InsertBookmark(name, range, start);
+        } finally {
+          range.dispose();
+        }
+      } finally {
+        end.dispose();
+      }
     } finally {
-      range.dispose();
-      start.dispose();
-      this.bookmarkStarts.delete(name);
+      start.range.dispose();
     }
   }
   /** Removes a trailing empty cell paragraph through the same text/cursor API. @returns Nothing. */

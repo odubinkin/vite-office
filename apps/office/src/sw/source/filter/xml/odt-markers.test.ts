@@ -1,6 +1,7 @@
 /** @fileoverview Checks canonical Writer mark positions, Worker transfer and ODT marker export. */
 
 import { describe, expect, it } from "vitest";
+import { readFileSync } from "node:fs";
 import { DocumentArchive } from "../../../../package/source/zippackage/document-archive";
 import { DocumentArchiveWriter } from "../../../../package/source/zippackage/document-archive";
 import { createWriterDocument } from "../../core/doc/doc";
@@ -12,8 +13,11 @@ import {
 } from "../../../browser/filter/xml/writer-document-codec";
 import { readOdtDocument } from "./swxml";
 import { writeOdtDocument } from "./wrtxml";
+import { importWriterXml } from "./xmlimp";
+import { ODF_NAMESPACES } from "../../../../xmloff/source/core/xmltoken";
 
 const metadata = { title: "Inline positions" };
+const fixtures = "../../vendor/libreoffice-reference/sw/qa/extras/odfexport/data";
 
 /** Replaces content.xml while preserving the bounded ODT package. @param source - Original bytes. @param transform - XML mutation. @returns Candidate package. */
 async function withContent(
@@ -75,7 +79,7 @@ describe("Writer inline marker positions", /** Groups mark and pagination hint t
     expect(reopened.document.GetIDocumentMarkAccess().GetSoftPageBreaks()).toHaveLength(0);
   });
 
-  it("validates names, duplicate positions and malformed or unsupported ODF markers", /** Retains explicit failures for semantic marker loss. @returns Completion. */ async () => {
+  it("validates model names and follows source recovery for incomplete ODF bookmarks", /** Checks native bookmark admission and pairing. @returns Completion. */ async () => {
     const document = createWriterDocument();
     const node = document.paragraphs[0];
     if (node === undefined) throw new Error("Writer paragraph is missing.");
@@ -136,11 +140,9 @@ describe("Writer inline marker positions", /** Groups mark and pagination hint t
           '<text:p text:style-name="Standard"><text:bookmark/>',
         ),
     );
-    await expect(
-      readOdtDocument(candidate, metadata, undefined, {
-        onDiagnostic: /** Ignores unrelated diagnostics. @returns Nothing. */ () => undefined,
-      }),
-    ).rejects.toThrow("requires text:name");
+    const unnamed = (await readOdtDocument(candidate, metadata)).document;
+    expect(unnamed.GetIDocumentMarkAccess().GetBookmarks()).toHaveLength(0);
+    unnamed.Dispose();
     const ranged = await withContent(
       base,
       /** Inserts a ranged mark. @param xml - ODF content. @returns Modified content. */ (xml) =>
@@ -166,16 +168,22 @@ describe("Writer inline marker positions", /** Groups mark and pagination hint t
           '<text:p text:style-name="Standard"><text:bookmark-end text:name="orphan"/>',
         ),
     );
-    await expect(readOdtDocument(strayEnd, metadata)).rejects.toThrow("has no start");
+    const unmatched = (await readOdtDocument(strayEnd, metadata)).document;
+    expect(unmatched.GetIDocumentMarkAccess().GetBookmarks()).toHaveLength(0);
+    unmatched.Dispose();
     const doubleStart = await withContent(
       base,
       /** Inserts duplicate starts. @param xml - ODF content. @returns Modified content. */ (xml) =>
         xml.replace(
           '<text:p text:style-name="Standard">',
-          '<text:p text:style-name="Standard"><text:bookmark-start text:name="pair"/><text:bookmark-start text:name="pair"/>',
+          '<text:p text:style-name="Standard"><text:bookmark-start text:name="pair"/>a<text:bookmark-start text:name="pair"/>b<text:bookmark-end text:name="pair"/>',
         ),
     );
-    await expect(readOdtDocument(doubleStart, metadata)).rejects.toThrow("start is duplicated");
+    const latest = (await readOdtDocument(doubleStart, metadata)).document;
+    const latestMark = latest.GetIDocumentMarkAccess().FindMark("pair");
+    expect(latestMark?.GetMarkStart().GetContentIndex()).toBe(1);
+    expect(latestMark?.GetMarkEnd().GetContentIndex()).toBe(2);
+    latest.Dispose();
     const collapsedPair = await withContent(
       base,
       /** Inserts a collapsed start/end pair. @param xml - ODF content. @returns Modified content. */ (
@@ -201,7 +209,9 @@ describe("Writer inline marker positions", /** Groups mark and pagination hint t
           '<text:p text:style-name="Standard"><text:bookmark-start text:name="pair"/>',
         ),
     );
-    await expect(readOdtDocument(unclosed, metadata)).rejects.toThrow("has no end");
+    const unfinished = (await readOdtDocument(unclosed, metadata)).document;
+    expect(unfinished.GetIDocumentMarkAccess().GetBookmarks()).toHaveLength(0);
+    unfinished.Dispose();
     const snapshot = encodeWriterDocument(document);
     expect(
       decodeWriterDocument({ ...snapshot, bookmarks: undefined })
@@ -220,4 +230,116 @@ describe("Writer inline marker positions", /** Groups mark and pagination hint t
         }),
     ).toThrow("bookmark position");
   });
+});
+
+it("preserves testTdf159438 bookmark order at a shared position", /** Replays the pinned flat XML paragraph through package export and reopen. @returns Completion. */ async () => {
+  const xml = readFileSync(`${fixtures}/bookmark_order.fodt`, "utf8").replace(
+    /(<\/?office:document)(?=[\s>])/gu,
+    "$1-content",
+  );
+  const document = importWriterXml(undefined, xml, metadata).document;
+  let reopened: ReturnType<typeof createWriterDocument> | undefined;
+  try {
+    const bytes = await writeOdtDocument(document, metadata);
+    const content = await (await DocumentArchive.open(bytes)).readTextEntry("content.xml");
+    const dom = new DOMParser().parseFromString(content, "application/xml");
+    const paragraph = dom.getElementsByTagNameNS(ODF_NAMESPACES.text, "p")[0];
+    expect(paragraph?.textContent).toBe("foobar");
+    expect(
+      [...(paragraph?.children ?? [])].map(
+        /** Reads the native portion kind and name from the saved paragraph. @param marker - Output marker. @returns Marker tuple. */
+        (marker) => [marker.localName, marker.getAttributeNS(ODF_NAMESPACES.text, "name")],
+      ),
+    ).toEqual([
+      ["bookmark-start", "bookmark1"],
+      ["bookmark-end", "bookmark1"],
+      ["bookmark", "bookmark2"],
+      ["bookmark-start", "bookmark3"],
+      ["bookmark-end", "bookmark3"],
+    ]);
+    reopened = (await readOdtDocument(bytes, metadata)).document;
+    const marks = reopened.GetIDocumentMarkAccess();
+    expect(marks.FindMark("bookmark1")?.GetMarkEnd().GetContentIndex()).toBe(3);
+    expect(marks.FindMark("bookmark2")?.IsExpanded()).toBe(false);
+    expect(marks.FindMark("bookmark3")?.GetMarkStart().GetContentIndex()).toBe(3);
+    expect(marks.FindMark("bookmark3")?.GetMarkEnd().GetContentIndex()).toBe(6);
+  } finally {
+    reopened?.Dispose();
+    document.Dispose();
+  }
+});
+
+it.each(["tdf101856", "tdf101856_overlapped"])(
+  "preserves the represented hidden bookmark properties from %s",
+  /** Replays the original ODF fixture through Worker state and package export. @param fixture - Original fixture stem. @returns Completion. */
+  async (fixture) => {
+    const bytes = new Uint8Array(readFileSync(`${fixtures}/${fixture}.odt`));
+    const { document } = await readOdtDocument(bytes, metadata);
+    const transferred = decodeWriterDocument(encodeWriterDocument(document));
+    let reopened: ReturnType<typeof createWriterDocument> | undefined;
+    try {
+      const exported = await writeOdtDocument(transferred, metadata);
+      reopened = (await readOdtDocument(exported, metadata)).document;
+      for (const model of [document, transferred, reopened]) {
+        const marks = model.GetIDocumentMarkAccess();
+        expect(marks.FindMark("BookmarkHidden")?.IsHidden()).toBe(true);
+        expect(marks.FindMark("BookmarkHidden")?.GetHideCondition()).toBe("");
+        if (fixture === "tdf101856_overlapped") {
+          expect(marks.GetBookmarks()).toHaveLength(2);
+          expect(marks.FindMark("BookmarkNonHidden")?.IsHidden()).toBe(false);
+        } else {
+          expect(marks.GetBookmarks()).toHaveLength(5);
+          expect(marks.FindMark("BookmarkVisible")?.IsHidden()).toBe(false);
+          expect(marks.FindMark("BookmarkVisibleWithCondition")?.IsHidden()).toBe(true);
+          expect(marks.FindMark("BookmarkVisibleWithCondition")?.GetHideCondition()).toBe("0==1");
+          expect(marks.FindMark("BookmarkHiddenWithCondition")?.GetHideCondition()).toBe("1==1");
+        }
+      }
+      if (fixture === "tdf101856") {
+        expect(
+          transferred
+            .GetIDocumentMarkAccess()
+            .FindMark("BookmarkNotHiddenWithCondition")
+            ?.GetHideCondition(),
+        ).toBe("1==1");
+        expect(
+          reopened
+            .GetIDocumentMarkAccess()
+            .FindMark("BookmarkNotHiddenWithCondition")
+            ?.GetHideCondition(),
+        ).toBe("");
+      }
+    } finally {
+      reopened?.Dispose();
+      transferred.Dispose();
+      document.Dispose();
+    }
+  },
+);
+
+it("exports a collapsed bookmark around a character-anchored frame", /** Applies the source two-pass bookmark behavior to a represented text frame. @returns Completion. */ async () => {
+  const xml = `<office:document-content xmlns:office="${ODF_NAMESPACES.office}" xmlns:text="${ODF_NAMESPACES.text}" xmlns:draw="${ODF_NAMESPACES.draw}" xmlns:svg="${ODF_NAMESPACES.svg}">
+  <office:body><office:text><text:p><text:bookmark-start text:name="cross-story"/><text:bookmark text:name="around"/><draw:frame draw:name="Fly" text:anchor-type="char" svg:width="1in" svg:height="1in"><draw:text-box><text:p><text:bookmark-end text:name="cross-story"/>frame</text:p></draw:text-box></draw:frame>outside<text:bookmark-end text:name="cross-story"/></text:p></office:text></office:body></office:document-content>`;
+  const document = importWriterXml(undefined, xml, metadata).document;
+  let reopened: ReturnType<typeof createWriterDocument> | undefined;
+  try {
+    const marks = document.GetIDocumentMarkAccess();
+    expect(marks.FindMark("cross-story")).toBeUndefined();
+    expect(marks.FindMark("around")?.IsExpanded()).toBe(false);
+    const bytes = await writeOdtDocument(document, metadata);
+    const content = await (await DocumentArchive.open(bytes)).readTextEntry("content.xml");
+    const dom = new DOMParser().parseFromString(content, "application/xml");
+    const paragraph = dom.getElementsByTagNameNS(ODF_NAMESPACES.text, "p")[0];
+    expect(
+      [...(paragraph?.children ?? [])].map(
+        /** Reads the paragraph marker order. @param child - Child element. @returns Local name. */
+        (child) => child.localName,
+      ),
+    ).toEqual(["bookmark-start", "frame", "bookmark-end"]);
+    reopened = (await readOdtDocument(bytes, metadata)).document;
+    expect(reopened.GetIDocumentMarkAccess().FindMark("around")?.IsExpanded()).toBe(false);
+  } finally {
+    reopened?.Dispose();
+    document.Dispose();
+  }
 });

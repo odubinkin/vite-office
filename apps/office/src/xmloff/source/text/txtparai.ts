@@ -6,6 +6,7 @@ import { XMLTextImportHelper, type XMLCharacterStyleLayer } from "./txtimp";
 
 import { FastAttributeList, SvXMLImportContext, SvXMLIgnoreContext } from "../core/xmlimp";
 import { XMLToken } from "../core/xmltoken";
+import { XMLTextMarkImportContext } from "./XMLTextMarkImportContext";
 import type {
   OdfCharacterProperties,
   OdfHyperlink,
@@ -365,37 +366,14 @@ function createInlineContext(
     element === XMLToken.TEXT_BOOKMARK ||
     element === XMLToken.TEXT_BOOKMARK_START ||
     element === XMLToken.TEXT_BOOKMARK_END
-  ) {
-    attributes.assertOnly([XMLToken.TEXT_NAME], "bookmark");
-    const name = attributes.get(XMLToken.TEXT_NAME);
-    if (name === null) throw new Error("ODF bookmark requires text:name.");
-    return new XMLMarkerContext(
-      /** Inserts the named bookmark marker. @returns Nothing. */ () => {
-        if (element === XMLToken.TEXT_BOOKMARK_START) paragraph.StartBookmark(name);
-        else if (element === XMLToken.TEXT_BOOKMARK_END) paragraph.EndBookmark(name);
-        else paragraph.InsertBookmark(name);
-      },
-    );
-  }
+  )
+    return new XMLTextMarkImportContext(paragraph);
   if (element === XMLToken.TEXT_SOFT_PAGE_BREAK) {
     attributes.assertOnly([], "soft page break");
     // Native text import ignores pagination hints; these are produced by layout on export.
     return new SvXMLIgnoreContext();
   }
   return null;
-}
-
-/** Applies one zero-width structural marker at the current text offset. */
-class XMLMarkerContext extends SvXMLImportContext {
-  /** Stores the canonical marker callback. @param insert - Model operation. @returns Nothing. */
-  public constructor(private readonly insert: () => void) {
-    super();
-  }
-
-  /** Retains the marker without inserting a display character. @returns Nothing. */
-  public override startFastElement(): void {
-    this.insert();
-  }
 }
 
 /** Appends one empty-element character construct on start. */

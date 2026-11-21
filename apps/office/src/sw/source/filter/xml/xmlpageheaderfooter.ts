@@ -187,7 +187,6 @@ class XMLTextHeaderFooterContext extends SvXMLImportContext {
       return;
     }
     try {
-      this.helper.FinishBookmarkRanges();
       endTextFrame(this.cursor);
     } finally {
       this.helper.PopTextFrameCursor();

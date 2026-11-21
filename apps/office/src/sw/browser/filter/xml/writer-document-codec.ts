@@ -146,6 +146,8 @@ export interface WriterDocumentRecord {
     nodeIndex: number;
     offset: number;
     end?: Readonly<{ nodeIndex: number; offset: number }>;
+    hidden?: boolean;
+    condition?: string;
   }>[];
   readonly embeddedFonts?: readonly WriterEmbeddedFont[];
   readonly documentSettings: Readonly<Record<DocumentSettingId, boolean>>;
@@ -231,6 +233,8 @@ export function* encodeWriterDocumentSteps(document: SwDoc): Generator<void, Wri
           name: mark.GetName(),
           nodeIndex: textOwners.indexOf(mark.GetMarkStart().GetNode() as SwTextNode),
           offset: mark.GetMarkStart().GetContentIndex(),
+          ...(mark.IsHidden() ? { hidden: true } : {}),
+          ...(mark.GetHideCondition() ? { condition: mark.GetHideCondition() } : {}),
           ...(mark.IsExpanded()
             ? {
                 end: {
@@ -699,10 +703,17 @@ export function* decodeWriterDocumentSteps(
         const start = decodeBookmarkPosition(textOwners, mark);
         let end: SwPosition | undefined;
         try {
+          if (
+            (mark.hidden !== undefined && typeof mark.hidden !== "boolean") ||
+            (mark.condition !== undefined && typeof mark.condition !== "string")
+          )
+            throw new Error("Stored Writer bookmark properties are invalid.");
           end = mark.end === undefined ? undefined : decodeBookmarkPosition(textOwners, mark.end);
           const range = new SwPaM(start, end);
           try {
-            document.GetIDocumentMarkAccess().MakeBookmark(range, mark.name);
+            const restored = document.GetIDocumentMarkAccess().MakeBookmark(range, mark.name);
+            restored.Hide(mark.hidden ?? false);
+            restored.SetHideCondition(mark.condition ?? "");
           } finally {
             range.Dispose();
           }

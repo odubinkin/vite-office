@@ -42,6 +42,7 @@ export interface XMLText {
 /** The currently represented XNamed/XTextContent service. */
 export interface XMLNamedTextContent {
   setName(name: OUStringConstReference): void;
+  setPropertyValue(name: OUStringConstReference, value: Any): void;
 }
 /** Borrowed style service with the original parent/follow/property ownership. */
 export interface XMLStyle extends XMLPropertySet {

@@ -240,6 +240,8 @@ export class SwHistoryResetText extends SwHistoryHint {
 /** Native history payload for ordinary Writer bookmark endpoints. */
 export class SwHistoryBookmark extends SwHistoryHint {
   private readonly m_aName: string;
+  private readonly hidden: boolean;
+  private readonly hideCondition: string;
   private readonly m_nNode: number;
   private readonly m_nContent: number;
   private readonly other: Readonly<{ node: number; content: number }> | undefined;
@@ -252,6 +254,8 @@ export class SwHistoryBookmark extends SwHistoryHint {
   ) {
     super(HISTORY_HINT.HSTRY_BOOKMARK);
     this.m_aName = bookmark.GetName();
+    this.hidden = bookmark.IsHidden();
+    this.hideCondition = bookmark.GetHideCondition();
     this.m_nNode = m_bSavePos ? bookmark.GetMarkPos().GetNodeIndex() : 0;
     this.m_nContent = m_bSavePos ? bookmark.GetMarkPos().GetContentIndex() : 0;
     this.hadOther = bookmark.IsExpanded();
@@ -300,7 +304,9 @@ export class SwHistoryBookmark extends SwHistoryHint {
           range.GetMark().Assign(mark.GetOtherMarkPos());
         }
         if (mark !== undefined) access.DeleteMark(this.m_aName);
-        access.MakeBookmark(range, this.m_aName);
+        const restored = access.MakeBookmark(range, this.m_aName);
+        restored.Hide(this.hidden);
+        restored.SetHideCondition(this.hideCondition);
       } finally {
         range.Dispose();
       }

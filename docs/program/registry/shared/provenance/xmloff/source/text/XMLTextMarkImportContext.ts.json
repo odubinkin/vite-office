@@ -1,0 +1,40 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "status": "mapped",
+    "localPath": "apps/office/src/xmloff/source/text/XMLTextMarkImportContext.ts",
+    "upstreamPath": "xmloff/source/text/XMLTextMarkImportContext.cxx",
+    "localSymbols": [
+      "XMLTextMarkImportContext"
+    ],
+    "upstreamSymbols": [
+      "XMLTextMarkImportContext::endFastElement"
+    ],
+    "preservedResponsibilities": [
+      "Parses ordinary ODF bookmark declarations and attaches the native Writer service through the stream bookmark range owner. The name, hidden flag, condition, and native start and end dispatch are preserved."
+    ],
+    "omittedResponsibilities": [
+      "Specialized heading cross-references, RDFa, reference marks and fieldmark services are outside this ordinary bookmark context."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/xmloff/source/text/XMLTextMarkImportContext.ts",
+          "marker": "XMLTextMarkImportContext"
+        },
+        {
+          "path": "apps/office/src/sw/source/filter/xml/odt-markers.test.ts",
+          "marker": "testTdf159438"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/xmloff/source/text/XMLTextMarkImportContext.cxx",
+          "marker": "XMLTextMarkImportContext::endFastElement"
+        }
+      ]
+    }
+  }
+}

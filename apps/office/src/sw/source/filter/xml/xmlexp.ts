@@ -2,6 +2,7 @@
  * @fileoverview Reimplements the bounded Writer ODF XML export bridge from pinned LibreOffice `sw/source/filter/xml/xmlexp.cxx`.
  */
 import { ExportNumberFormat } from "../../../../xmloff/source/style/xmlnumfe";
+import { SwBookmark } from "../../core/doc/docbm";
 import { writeNumberFormatAttributes } from "../../../../xmloff/source/style/numehelp";
 import {
   getSwDefaultTextFormat,
@@ -683,22 +684,39 @@ function projectParagraph(
     node.GetpSwAttrSet()?.GetItemIfSet(RES_MARGIN_TEXTLEFT, false) !== undefined;
   const paragraphProperties = getParagraphProperties(node.GetpSwAttrSet());
   const marks = node.GetDoc().GetIDocumentMarkAccess();
+  const frames = projectAnchoredTextFrames(node, anchored, projectBlock);
+  const floatingOffsets = new Set<number>();
+  for (const marker of frames)
+    if (marker.kind === "frame" && marker.frame.anchor !== "as-char")
+      floatingOffsets.add(marker.offset);
   const markers: XMLTextParagraphMarker[] = [
-    ...projectAnchoredTextFrames(node, anchored, projectBlock),
-    ...marks.GetBookmarks().flatMap(
+    ...frames,
+    ...marks.GetAllMarks().flatMap(
       /** Projects bookmark endpoints on this paragraph. @param mark - Native bookmark. @returns Local ODF markers. */
       (mark): XMLTextParagraphMarker[] => {
+        if (!(mark instanceof SwBookmark)) return [];
         const [start, end] = mark.GetMarkStartEnd();
         const name = mark.GetName();
+        const offset = start.GetContentIndex();
+        const collapsed = start.compare(end) === 0;
+        const collapsedAroundFrame = collapsed && floatingOffsets.has(offset);
         const local: XMLTextParagraphMarker[] = [];
         if (start.GetNode() === node)
           local.push({
-            kind: start.compare(end) === 0 ? "bookmark" : "bookmark-start",
+            kind: collapsed && !collapsedAroundFrame ? "bookmark" : "bookmark-start",
             name,
-            offset: start.GetContentIndex(),
+            offset,
+            hidden: mark.IsHidden(),
+            condition: mark.GetHideCondition(),
+            collapsedAroundFrame,
           });
-        if (end.GetNode() === node && start.compare(end) !== 0)
-          local.push({ kind: "bookmark-end", name, offset: end.GetContentIndex() });
+        if (end.GetNode() === node && (!collapsed || collapsedAroundFrame))
+          local.push({
+            kind: "bookmark-end",
+            name,
+            offset: end.GetContentIndex(),
+            collapsedAroundFrame,
+          });
         return local;
       },
     ),
@@ -715,7 +733,10 @@ function projectParagraph(
           offset: position.GetContentIndex(),
         }),
       ),
-  ].sort(compareParagraphMarkers);
+  ].sort(
+    /** Orders portions in the source export phases. @param left - First portion. @param right - Second portion. @returns Portion order. */
+    (left, right) => compareParagraphMarkers(left, right, floatingOffsets),
+  );
   const directCharacterProperties = getCharacterProperties(node.GetpSwAttrSet(), false);
   const marker = node.GetSwAttrSet().GetItemIfSet(RES_PARATR_LIST_AUTOFMT, true);
   const markerProperties =

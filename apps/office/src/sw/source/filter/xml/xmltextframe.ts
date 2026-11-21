@@ -381,14 +381,28 @@ export function* getTextFrameExportParagraphs(
     for (const frame of frames) yield* sectionParagraphs(frame.content);
 }
 
-/** Sorts markers linked to the same position before its inline fly consumes the dummy. @param left - First marker. @param right - Second marker. @returns Offset order with inline fly markers last at a shared offset. */
+/** Orders the original bookmark phases around floating frames and inline fly characters. @param left - First marker. @param right - Second marker. @param framed - Positions of floating frames. @returns Portion order. */
 export function compareParagraphMarkers(
   left: XMLTextParagraphMarker,
   right: XMLTextParagraphMarker,
+  framed: ReadonlySet<number>,
 ): number {
-  return (
-    left.offset - right.offset ||
-    Number(left.kind === "frame" && left.frame.anchor === "as-char") -
-      Number(right.kind === "frame" && right.frame.anchor === "as-char")
-  );
+  if (left.offset !== right.offset) return left.offset - right.offset;
+  const frameAtOffset = framed.has(left.offset);
+  /** Returns the native phase of a zero-width portion. @param marker - Paragraph portion. @returns Phase order. */
+  function phase(marker: XMLTextParagraphMarker): number {
+    switch (marker.kind) {
+      case "bookmark-end":
+        return frameAtOffset ? (marker.collapsedAroundFrame ? 4 : 3) : 0;
+      case "bookmark":
+        return 1;
+      case "bookmark-start":
+        return frameAtOffset ? (marker.collapsedAroundFrame ? 0 : 1) : 2;
+      case "frame":
+        return marker.frame.anchor === "as-char" ? 6 : 2;
+      case "soft-page-break":
+        return 5;
+    }
+  }
+  return phase(left) - phase(right);
 }

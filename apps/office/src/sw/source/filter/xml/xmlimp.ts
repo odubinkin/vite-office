@@ -231,7 +231,6 @@ class SwXMLImport
 
   /** Closes the original Writer text frame content section. @param cursor - Active frame text cursor. @returns Nothing. */
   public endTextFrame(cursor: XMLTextCursor): void {
-    this.GetTextImport().FinishBookmarkRanges();
     endTextFrame(cursor as SwXTextCursor);
   }
 
@@ -696,7 +695,6 @@ class SwXMLImport
   public finishContent(): void {
     if (this.officeTextCount !== 1)
       throw new Error("ODF content must contain exactly one office:text.");
-    this.GetTextImport().FinishBookmarkRanges();
     const cursor =
         this.GetTextImport().GetCursor() as import("../../core/unocore/unoobj").SwXTextCursor,
       node = cursor.GetPaM().GetPoint().GetNode() as SwTextNode,

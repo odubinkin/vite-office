@@ -410,8 +410,10 @@ it("recollects the current mark identity and coordinate on redo", /** A saved sn
 it("uses the surviving current position when primary position was not saved", /** Bookmark SetInDoc recreates the mark under an undo guard without changing the caller's recording state. @returns Nothing. */ () => {
   const f = fixture(),
     access = f.doc.GetIDocumentMarkAccess(),
-    original = access.MakeMark(f.node, 1, "current"),
-    entry = new SwHistoryBookmark(original, false, false);
+    original = access.MakeMark(f.node, 1, "current");
+  original.Hide(true);
+  original.SetHideCondition("1==1");
+  const entry = new SwHistoryBookmark(original, false, false);
   access.DeleteMark("current");
   const survivor = access.MakeMark(f.node, 3, "current");
   f.doc.GetUndoManager().DoUndo(false);
@@ -419,6 +421,8 @@ it("uses the surviving current position when primary position was not saved", /*
     entry.SetInDoc(f.doc, true);
     expect(access.FindMark("current")).not.toBe(survivor);
     expect(marks(f.doc)).toEqual([["current", 3]]);
+    expect(access.FindMark("current")?.IsHidden()).toBe(true);
+    expect(access.FindMark("current")?.GetHideCondition()).toBe("1==1");
     expect(f.doc.GetUndoManager().DoesUndo()).toBe(false);
   } finally {
     f.shell.Close();
