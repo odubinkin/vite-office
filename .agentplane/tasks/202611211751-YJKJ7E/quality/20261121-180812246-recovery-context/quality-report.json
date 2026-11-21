@@ -1,0 +1,25 @@
+{
+  "schema_version": 1,
+  "task_id": "202611211751-YJKJ7E",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-11-21T18:08:12.246Z",
+  "verdict": "pass",
+  "summary": "Writer ODT line numbering uses the native numbering and style data, admitted through Writer document properties.",
+  "evaluated_sha": "f9930972faee503f0e955f0bba4fea03c3ca8ba8",
+  "blueprint_digest": "6f71b6c7db528e5202c2cb03ca1e4d836d4d871682834b9c3d43f3e7b4e3c0cd",
+  "findings": [
+    "The pinned paragraph fixture, explicit and omitted offsets, synchronized format and Worker style reconstruction pass."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202611211751-YJKJ7E/README.md",
+    "output/playwright/YJKJ7E/final.log",
+    "output/playwright/YJKJ7E/related.log",
+    "output/playwright/YJKJ7E/shared.log",
+    "output/playwright/YJKJ7E/types-final.log",
+    "output/playwright/YJKJ7E/provenance.log"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": []
+}
