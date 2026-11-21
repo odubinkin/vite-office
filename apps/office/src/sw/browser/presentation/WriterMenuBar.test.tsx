@@ -596,7 +596,6 @@ describe("WriterMenuBar" /** Groups Writer menu and clipboard integration tests.
     enterWriterParagraphText(editor, "Libre libre Libré");
     fireEvent.click(screen.getByRole("menuitem", { name: "Edit" }));
     fireEvent.click(screen.getByRole("menuitem", { name: "Find" }));
-
     const toolbar = within(screen.getByRole("toolbar", { name: "Find" }));
     const query = toolbar.getByLabelText("Find");
     const matchCase = toolbar.getByRole("checkbox", { name: "Match case" });
@@ -609,20 +608,21 @@ describe("WriterMenuBar" /** Groups Writer menu and clipboard integration tests.
     expect(dialog.getByLabelText("Find")).toHaveValue("Libre");
     expect(dialog.getByRole("checkbox", { name: "Match case" })).not.toBeChecked();
     fireEvent.click(dialog.getByRole("button", { name: "Close" }));
-    expect(query).toBeInTheDocument();
     expect(matchCase).toBeChecked();
     expect(matchDiacritics).toBeChecked();
-
     fireEvent.click(toolbar.getByRole("button", { name: "Find All" }));
     expect(toolbar.getByRole("status")).toHaveTextContent("One match found.");
     expect(query).toHaveFocus();
     fireEvent.click(toolbar.getByRole("button", { name: "Find and Replace" }));
     const reopened = within(screen.getByRole("dialog", { name: "Find and Replace" }));
     expect(reopened.getByRole("checkbox", { name: "Match case" })).toBeChecked();
+    expect(reopened.getByRole("status")).toBeEmptyDOMElement();
+    expect(toolbar.getByRole("status")).toHaveTextContent("One match found.");
+    fireEvent.change(reopened.getByLabelText("Find"), { target: { value: "other" } });
+    expect(toolbar.getByRole("status")).toBeEmptyDOMElement();
     fireEvent.change(query, { target: { value: "libre" } });
     fireEvent.keyDown(query, { key: "h", ctrlKey: true });
     expect(reopened.getByLabelText("Find")).toHaveValue("libre");
-
     fireEvent.click(toolbar.getByRole("button", { name: "Close" }));
     expect(reopened.getByLabelText("Find")).toBeInTheDocument();
     fireEvent.keyDown(window, { key: "f", ctrlKey: true });

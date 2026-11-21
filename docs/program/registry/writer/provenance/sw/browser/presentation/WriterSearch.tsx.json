@@ -33,7 +33,8 @@
       "Publishes the dialog's text and style entries on focus loss and saves accepted option changes as a Find request for Repeat Search.",
       "The modeless dialog and the Find Bar can stay open together. Toolbar toggles belong to each mounted toolbar and contribute to the shared command state only when the toolbar executes a search.",
       "Keeps the keyboard-activated Find Bar query separate from the toolbar controller history, which is saved on destruction. Find All does not record a history entry. Dialog saves remember the search term.",
-      "Sorts the paragraph style controls by visible name in the browser UI locale, including native natural numeric ordering."
+      "Sorts the paragraph style controls by visible name in the browser UI locale, including native natural numeric ordering.",
+      "The dialog opens with an empty, height-reserved information row. A query edit clears the field error locally and only clears the shared message when the Find Bar displays one (WRITER-696)."
     ],
     "stackDivergence": {
       "kind": "browser-adaptation",

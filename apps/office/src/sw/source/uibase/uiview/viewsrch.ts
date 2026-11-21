@@ -322,7 +322,6 @@ export class SwViewSearch {
 
   /** Initializes the displayed search item from the Writer selection. @param dialog - Whether the modeless dialog is opening. @returns Current settings. */
   public OpenSearch(dialog: boolean): WriterSearchItem {
-    this.ClearFeedback();
     const cursor = this.shell.GetCursor();
     if (dialog) {
       const text =

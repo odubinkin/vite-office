@@ -8,6 +8,7 @@ import {
   type KeyboardEvent,
   type SetStateAction,
 } from "react";
+import { Info } from "lucide-react";
 import { useBrowserLocalization } from "../../../framework/browser/localization/browser-localization-context";
 import type {
   SwViewSearch,
@@ -37,6 +38,11 @@ const rememberedSearches = 10;
 let savedFindBarHistory: readonly string[] = [];
 let rememberedFindBarSearch = "";
 
+/** Stores the query activated by the Find Bar entry. @param search - Activated query. @returns Nothing. */
+function rememberFindBarActivation(search: string): void {
+  rememberedFindBarSearch = search;
+}
+
 /** Moves a nonempty entry to the front of the native history. @param values - Current values. @param entry - Submitted value. @returns Ordered history. */
 function remember(values: readonly string[], entry: string): readonly string[] {
   if (entry.length === 0 || values[0] === entry) return values;
@@ -63,6 +69,7 @@ export function WriterSearch({
   close,
   openSearch,
   searchFeedback,
+  findBarFeedback,
 }: Readonly<{
   dialog: boolean;
   initial: WriterSearchItem;
@@ -75,8 +82,10 @@ export function WriterSearch({
   close: () => void;
   openSearch: (surface: "searchDialog", search: string) => void;
   searchFeedback: WriterSearchFeedback | undefined;
+  findBarFeedback: WriterSearchFeedback | undefined;
 }>): React.JSX.Element {
   const localization = useBrowserLocalization();
+  const [feedbackOnEdit, setFeedbackOnEdit] = useState<WriterSearchFeedback>();
   const [findBarHistory, setFindBarHistory] = useState(
     /** Loads the toolbar manager's saved list. @returns Recent toolbar searches. */ () =>
       dialog ? [] : savedFindBarHistory,
@@ -128,11 +137,12 @@ export function WriterSearch({
 
   useLayoutEffect(
     /** Gives the search entry focus after the calling menu releases it. @returns Nothing. */ () => {
+      if (!dialog && focusSearch !== undefined) owner.ClearFeedback();
       searchStyleField.current?.focus();
       searchField.current?.focus();
       searchField.current?.select();
     },
-    [focusRequest],
+    [dialog, focusRequest, focusSearch, owner],
   );
 
   /** Resolves a search control label. @param key - Control identity. @param fallback - English label. @returns Localized text. */
@@ -148,7 +158,10 @@ export function WriterSearch({
       if (commit) saveDialogItem(next, replaceBackward);
       else owner.SetSearchItem(next);
     }
-    if (changes.search !== undefined || changes.searchStyle !== undefined) owner.ClearFeedback();
+    if (changes.search !== undefined) {
+      if (!dialog || formatFeedback(findBarFeedback)) owner.ClearFeedback();
+      else setFeedbackOnEdit(searchFeedback);
+    }
   }
 
   /** Resolves the selected collection against the native list. @param styles - Available collections. @param id - Draft selection. @returns Applicable style identity. */
@@ -219,7 +232,7 @@ export function WriterSearch({
   /** Executes one search operation with the active surface's options. @param command - Operation. @param backward - Direction. @param activateEntry - Whether the toolbar entry initiated the operation. @returns Nothing. */
   function execute(command: SvxSearchCmd, backward = false, activateEntry = false): void {
     if (!dialog && command !== SvxSearchCmd.FIND_ALL) {
-      if (activateEntry) rememberedFindBarSearch = item.search;
+      if (activateEntry) rememberFindBarActivation(item.search);
       const entries = remember(currentFindBarHistory.current, item.search);
       currentFindBarHistory.current = entries;
       setFindBarHistory(entries);
@@ -328,14 +341,19 @@ export function WriterSearch({
   const dialogLabel = text("dialog", "Find and Replace");
   const closeLabel = text("close", "Close");
   const cannotSearch = styleOptions === undefined ? item.search.length === 0 : !searchStyle;
+  const statusId = useId();
+  const message = formatFeedback(searchFeedback);
+  const invalid =
+    dialog &&
+    searchFeedback !== feedbackOnEdit &&
+    searchFeedback?.kind === "result" &&
+    searchFeedback.result.matches === 0;
   const field = (
     <input
       aria-label={findLabel}
-      aria-invalid={
-        (dialog && searchFeedback?.kind === "result" && searchFeedback.result.matches === 0) ||
-        undefined
-      }
-      className={fieldStyle}
+      aria-describedby={message ? statusId : undefined}
+      aria-invalid={invalid || undefined}
+      className={`${fieldStyle} aria-invalid:border-rose-500 aria-invalid:bg-rose-50`}
       ref={searchField}
       list={searchList}
       type="text"
@@ -408,9 +426,18 @@ export function WriterSearch({
       {findAllLabel}
     </button>
   );
-  const feedback = (
-    <span role="status" className="text-sm text-slate-700">
-      {formatFeedback(searchFeedback)}
+  const feedback = dialog ? (
+    <div
+      id={statusId}
+      role="status"
+      className={`flex min-h-8 items-center gap-2 rounded px-2 text-sm text-slate-700 ${message ? "bg-sky-100" : ""}`}
+    >
+      {message && <Info aria-hidden="true" className="size-4 shrink-0" />}
+      {message}
+    </div>
+  ) : (
+    <span id={statusId} role="status" className="text-sm text-slate-700">
+      {message}
     </span>
   );
 

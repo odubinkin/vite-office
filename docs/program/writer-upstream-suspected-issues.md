@@ -5515,3 +5515,15 @@ applies its authored properties without that collection change.
 - Preserve the endpoint admission for single style replacement in the
   represented table and fly profile. Bulk style replacement checks the
   individual match. This finding is source-derived.
+
+### WRITER-696 — Editing the dialog can clear its entry error while retaining its old message
+
+- Upstream: `svx/source/dialog/srchdlg.cxx`,
+  `SvxSearchDialog::SetModifyFlag_Impl` and
+  `SvxSearchDialogWrapper::GetSearchLabel` at the pinned baseline.
+- Observation: editing the search entry directly resets its message type.
+  The shared label is cleared only if the wrapper reads a nonempty
+  label from the Find Bar. A closed toolbar yields an empty string from
+  that query even when the dialog still shows a previous message.
+- Preserve the independent entry state and the status row. The evidence
+  is source-derived and covered through the Writer search UI.

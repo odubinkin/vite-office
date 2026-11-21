@@ -436,7 +436,7 @@ it("updates the open dialog when the dispatcher repeats Find All", /** Verifies 
   expect(status).toHaveTextContent("Search key not found");
   expect(search).toBeInvalid();
   fireEvent.change(search, { target: { value: "two" } });
-  expect(status).toBeEmptyDOMElement();
+  expect(status).toHaveTextContent("Search key not found");
   expect(search).toBeValid();
 
   const end = new SwPosition(paragraph, paragraph.Len());
@@ -468,17 +468,13 @@ it("updates the open dialog when the dispatcher repeats Find All", /** Verifies 
 it("keeps recent Find Bar entries separately from the keyboard search used on reopening", /** Ports tdf154269 and tdf154818 and verifies the toolbar command paths. @returns Nothing. */ () => {
   const session = createWriterDocumentSession();
   const workbench = render(<WriterWorkbench isActive view={session.view} />);
-  for (const letter of "ABCDEFGHIJKLMNOPQRSTUVWXYZ") {
-    fireEvent.keyDown(window, { key: "f", ctrlKey: true });
-    const toolbar = within(screen.getByRole("toolbar", { name: "Find" }));
-    const search = toolbar.getByLabelText("Find");
-    fireEvent.change(search, { target: { value: letter } });
-    fireEvent.keyDown(search, { key: "Enter" });
-    fireEvent.click(toolbar.getByRole("button", { name: "Close" }));
-  }
   fireEvent.keyDown(window, { key: "f", ctrlKey: true });
   const toolbar = within(screen.getByRole("toolbar", { name: "Find" }));
   const search = toolbar.getByLabelText("Find");
+  for (const letter of "ABCDEFGHIJKLMNOPQRSTUVWXYZ") {
+    fireEvent.change(search, { target: { value: letter } });
+    fireEvent.keyDown(search, { key: "Enter" });
+  }
   fireEvent.change(search, { target: { value: "U" } });
   fireEvent.click(toolbar.getByRole("button", { name: "Find Next" }));
   fireEvent.change(search, { target: { value: "new" } });

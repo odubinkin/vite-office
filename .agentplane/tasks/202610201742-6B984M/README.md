@@ -4,7 +4,7 @@ title: "Implement Writer search and replace core and browser UI"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 45
+revision: 46
 origin:
   system: "manual"
 depends_on:
@@ -139,6 +139,9 @@ comments:
   -
     author: "CODER"
     body: "Verified protected-content search checkpoint. Writer Find retains the source default that permits the cursor in protected content. Replacement reads the actual native table, row, cell and anchored text fly protection formats. Single text replacement checks its matched selection before editing, single style replacement admits each cursor-ring range through the existing edit-shell history owner, and both bulk strategies skip protected matches. A missing style replacement collection retains find-only admission. The source-derived endpoint distinction is documented in WRITER-695. Actual protected cell and anchored-frame fixtures passed with the related view, browser search, cursor, and style reset/history coverage. The final focused run passed 141 tests in nine files. Production build, two Writer resource tests, dependencies, source tree, provenance, JSDoc, file size, scoped lint/format, routing and diff checks passed. AgentPlane doctor retains its current hook-readiness warning. Section, form and other unrepresented protection owners are not claimed. The search task remains open and the full-suite cadence does not advance."
+  -
+    author: "CODER"
+    body: "Verified search feedback checkpoint. A newly opened search surface starts with an empty label without clearing the already open surface. The dialog reserves its information row, and query edits clear the field error while the shared message follows the native Find Bar label lookup. WRITER-696 records the source-derived label retention. The initial six-suite focused run passed all 80 tests. The post-lint run of the same suites reported 67 passes and 13 timeouts at existing limits under host load; all failures were timeouts. Both modified feedback scenarios passed in isolation. Three other search scenarios and the optimized history scenario also passed in isolated runs with longer run-level limits. Final production build, Writer resource tests, dependency/source tree/provenance, documentation/file size, scoped lint/formatting, routing, and diff checks passed. Doctor retains the existing managed hook readiness warning. An accidentally targeted test-only edit in the adjacent main checkout was reverted after an exact diff check. The Writer search task remains open and full-suite cadence does not advance."
 events:
   -
     type: "status"
@@ -312,8 +315,13 @@ events:
     at: "2026-11-21T06:04:56.460Z"
     author: "CODER"
     body: "Verified protected-content search checkpoint. Writer Find retains the source default that permits the cursor in protected content. Replacement reads the actual native table, row, cell and anchored text fly protection formats. Single text replacement checks its matched selection before editing, single style replacement admits each cursor-ring range through the existing edit-shell history owner, and both bulk strategies skip protected matches. A missing style replacement collection retains find-only admission. The source-derived endpoint distinction is documented in WRITER-695. Actual protected cell and anchored-frame fixtures passed with the related view, browser search, cursor, and style reset/history coverage. The final focused run passed 141 tests in nine files. Production build, two Writer resource tests, dependencies, source tree, provenance, JSDoc, file size, scoped lint/format, routing and diff checks passed. AgentPlane doctor retains its current hook-readiness warning. Section, form and other unrepresented protection owners are not claimed. The search task remains open and the full-suite cadence does not advance."
+  -
+    type: "comment"
+    at: "2026-11-21T06:39:31.405Z"
+    author: "CODER"
+    body: "Verified search feedback checkpoint. A newly opened search surface starts with an empty label without clearing the already open surface. The dialog reserves its information row, and query edits clear the field error while the shared message follows the native Find Bar label lookup. WRITER-696 records the source-derived label retention. The initial six-suite focused run passed all 80 tests. The post-lint run of the same suites reported 67 passes and 13 timeouts at existing limits under host load; all failures were timeouts. Both modified feedback scenarios passed in isolation. Three other search scenarios and the optimized history scenario also passed in isolated runs with longer run-level limits. Final production build, Writer resource tests, dependency/source tree/provenance, documentation/file size, scoped lint/formatting, routing, and diff checks passed. Doctor retains the existing managed hook readiness warning. An accidentally targeted test-only edit in the adjacent main checkout was reverted after an exact diff check. The Writer search task remains open and full-suite cadence does not advance."
 doc_version: 3
-doc_updated_at: "2026-11-21T06:04:56.460Z"
+doc_updated_at: "2026-11-21T06:39:31.405Z"
 doc_updated_by: "CODER"
 description: "Implement the approved coherent Writer search-and-replace feature from pinned LibreOffice sources: real shared search engine and options, native paragraph/cursor traversal and replacement/history contracts, view-owned search state and dispatch, Find toolbar and Find and Replace dialog with generated upstream command placement and shortcuts. Preserve source semantics and explicit unsupported boundaries; never substitute DOM text search or browser RegExp for ICU contracts. Work only on writer in vite-office-writer; local upstream reading approved, no network or merges. Keep active until approved scope is verified."
 sections:

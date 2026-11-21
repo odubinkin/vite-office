@@ -145,8 +145,10 @@ export function WriterWorkbench({
     search: [],
     replacement: [],
   });
-  /** A focus change and its optional replacement for the entry text. */
-  type SearchFocusRequest = { revision: number; search: string | undefined };
+  /** A published search result or an empty status. */
+  type Feedback = typeof searchFeedback;
+  /** A focus request with a query and the result visible before this surface opened. */
+  type SearchFocusRequest = { revision: number; search: string | undefined; feedback: Feedback };
   /** A surface with its own open state and focus request. */
   type SearchSurface = "findbar" | "searchDialog";
   const [{ findbar, searchDialog }, setSearchSurfaces] = useState<
@@ -160,12 +162,17 @@ export function WriterWorkbench({
       const text =
         surface === "findbar" ? searchOwner.OpenSearch(false).search || undefined : search;
       if (surface === "searchDialog" && !searchDialog) searchOwner.OpenSearch(true);
+      const feedback = searchOwner.GetFeedback();
       setSearchSurfaces(
         /** Requests focus for one surface. @param previous - Open surfaces. @returns Updated focus requests. */ (
           previous,
         ) => ({
           ...previous,
-          [surface]: { search: text, revision: (previous[surface]?.revision ?? 0) + 1 },
+          [surface]: {
+            search: text,
+            revision: (previous[surface]?.revision ?? 0) + 1,
+            feedback: previous[surface] ? previous[surface]?.feedback : feedback,
+          },
         }),
       );
     },
@@ -572,6 +579,7 @@ export function WriterWorkbench({
   );
   /** Projects the requested surface over the shared view owner. @param dialog - Whether to render Find and Replace. @param request - Surface-specific focus request. @returns Mounted search controls. */
   function renderSearch(dialog: boolean, request: SearchFocusRequest): React.JSX.Element {
+    const barStatus = findbar?.feedback === searchFeedback ? undefined : findbar && searchFeedback;
     return (
       <WriterSearch
         dialog={dialog}
@@ -583,7 +591,8 @@ export function WriterWorkbench({
         owner={searchOwner}
         canSearchSelection={dialog && searchOwner.HasSelection()}
         close={/** Closes this surface. @returns Nothing. */ () => closeSearch(dialog)}
-        searchFeedback={searchFeedback}
+        searchFeedback={request.feedback === searchFeedback ? undefined : searchFeedback}
+        findBarFeedback={barStatus}
         openSearch={openSearch}
       />
     );
