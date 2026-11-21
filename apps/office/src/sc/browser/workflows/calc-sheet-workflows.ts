@@ -22,6 +22,9 @@ import { SfxIntegerListItem } from "../../../svl/source/items/ilstitem";
 import { Color } from "../../../tools/inc/color";
 import { createBrowserColorItem } from "../../../svx/browser/tbxctrls/color-item";
 import { ScRange } from "../../inc/address";
+import { SvStream } from "../../../tools/source/stream/stream";
+import { ScImportExport } from "../../source/ui/docshell/impex";
+import { GetTextToColumnsRange, ImportTextToColumns } from "../../source/ui/view/cellsh2";
 import {
   applyOutlineControl,
   changeOutline,
@@ -157,6 +160,15 @@ export class CalcSheetWorkflows {
     this.shell = createSfxShell(
       this,
       new SfxInterface<CalcSheetWorkflows>([
+        {
+          commandUrl: ".uno:TextToColumns",
+          slotId: 26347,
+          label: "Text to Columns",
+          getState: (target: CalcSheetWorkflows) => ({
+            enabled: target.CanTextToColumns(),
+          }),
+          execute: (target: CalcSheetWorkflows) => target.TextToColumns(),
+        },
         {
           commandUrl: ".uno:AddName",
           slotId: 26276,
@@ -609,6 +621,47 @@ export class CalcSheetWorkflows {
     } finally {
       if (this.creatingNames === owner) this.creatingNames = undefined;
     }
+  }
+
+  /** Resolves the source command state against the active native selection. @returns Whether the command is available. */
+  private CanTextToColumns(): boolean {
+    return (
+      !this.HasSheetDialog() &&
+      this.controller.mode === ScInputMode.SC_INPUT_NONE &&
+      GetTextToColumnsRange(this.controller.viewData, new ScRange(), true)
+    );
+  }
+
+  /** Routes the native single-column import and its overwrite warning through browser dialogs. @returns Whether cells changed. */
+  private async TextToColumns(): Promise<boolean> {
+    if (!this.CanTextToColumns()) return false;
+    const { controller } = this;
+    const doc = controller.shell.GetDocument();
+    const source = new ScRange();
+    if (!GetTextToColumnsRange(controller.viewData, source, false)) return false;
+    const revision = controller.GetCommandStateRevision();
+    /** Protects the originating range as modal responses arrive. @returns Whether the target remains current. */
+    const current = (): boolean =>
+      doc === controller.shell.GetDocument() && revision === controller.GetCommandStateRevision();
+    const importer = new ScImportExport(doc, source.aStart);
+    const value = importer.ExportTextToColumns(source);
+    const options = await this.clipboard.RequestTextOptions("textToColumns", value, current);
+    if (!options || !current()) return false;
+    importer.SetExtOptions(options);
+    importer.SetOverwriting(true);
+    const stream = new SvStream(new TextEncoder().encode(value), options.eCharSet);
+    const range = importer.DetermineImportRange(stream);
+    if (!range) return false;
+    const { aStart, aEnd } = range;
+    if (
+      aStart.Col() < aEnd.Col() &&
+      !doc.IsBlockEmpty(aStart.Col() + 1, aStart.Row(), aEnd.Col(), aEnd.Row(), aStart.Tab()) &&
+      (!(await this.clipboard.ConfirmReplacement()) || !current())
+    )
+      return false;
+    if (!ImportTextToColumns(controller.shell, importer, stream, range)) return false;
+    controller.SyncSheetView();
+    return true;
   }
 
   /** Checks whether the sheet workflows already own a modal. @returns Active modal state. */

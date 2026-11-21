@@ -84,6 +84,8 @@ type PasteRequest =
 
 /** Native source separator selection, separate from the final filter option flags. */
 export type TextImportSeparatorMode = "detected" | "separated" | "fixed";
+/** Original Text Import dialog invocation profiles exposed in the Calc workspace. */
+export type TextImportCall = "clipboard" | "textToColumns";
 
 /** ClipboardTextImport dialog settings saved on acceptance. */
 export interface PasteTextPreferences {
@@ -93,6 +95,7 @@ export interface PasteTextPreferences {
 
 /** Original Text Import dialog inputs for a text transfer. */
 export interface PasteTextRequest {
+  readonly call: TextImportCall;
   readonly text: string;
   readonly preferences: PasteTextPreferences;
   readonly fixedSplits: readonly number[];
@@ -131,9 +134,12 @@ export class CalcClipboardWorkflow {
     PasteTextResult | PasteConfirmationResult | ScInsertContentsResponse | ClipboardFormatChoice
   >();
   private owned: OwnedTransfer | undefined;
-  private preferences: PasteTextPreferences = {
-    mode: "detected",
-    options: ClipboardTextOptions(true),
+  private readonly textPreferences: Record<TextImportCall, PasteTextPreferences> = {
+    clipboard: { mode: "detected", options: ClipboardTextOptions(true) },
+    textToColumns: {
+      mode: "detected",
+      options: Object.assign(ClipboardTextOptions(true), { bSkipEmptyCells: false }),
+    },
   };
   private fixedSplits: readonly number[] = [];
   private special = defaultPasteSpecial;
@@ -388,23 +394,9 @@ export class CalcClipboardWorkflow {
       let options = ClipboardTextOptions();
       const newline = transfer.plainText.indexOf("\n");
       if (kind === "textImport" || (newline >= 0 && newline < transfer.plainText.length - 1)) {
-        const response = await this.dialogs.Request({
-          kind: "text",
-          text: transfer.plainText,
-          preferences: this.preferences,
-          fixedSplits: this.fixedSplits,
-        });
-        if (
-          response.kind !== "accepted" ||
-          typeof response.result !== "object" ||
-          !("fixedSplits" in response.result) ||
-          !current()
-        )
-          return false;
-        this.fixedSplits = response.result.fixedSplits;
-        if (!response.result.accepted) return false;
-        options = response.result.options;
-        this.preferences = response.result.preferences;
+        const chosen = await this.RequestTextOptions("clipboard", transfer.plainText, current);
+        if (!chosen) return false;
+        options = chosen;
       }
       const imported = ImportClipboardText(doc, origin, transfer.plainText, options);
       if (!imported) return false;
@@ -442,6 +434,37 @@ export class CalcClipboardWorkflow {
     } finally {
       this.reading = false;
     }
+  }
+
+  /** Opens the shared ASCII dialog with the source call mode's settings. @param call - Original invocation profile. @param text - Source text. @param current - Command target validation. @returns Options if accepted. */
+  async RequestTextOptions(
+    call: TextImportCall,
+    text: string,
+    current: () => boolean,
+  ): Promise<ScAsciiOptions | undefined> {
+    const response = await this.dialogs.Request({
+      kind: "text",
+      call,
+      text,
+      preferences: this.textPreferences[call],
+      fixedSplits: this.fixedSplits,
+    });
+    if (
+      response.kind !== "accepted" ||
+      typeof response.result !== "object" ||
+      !("fixedSplits" in response.result) ||
+      !current()
+    )
+      return undefined;
+    this.fixedSplits = response.result.fixedSplits;
+    if (!response.result.accepted) return undefined;
+    this.textPreferences[call] = response.result.preferences;
+    return response.result.options;
+  }
+
+  /** Uses the same source ScReplaceWarnBox input preference for paste and text overwrite. @returns Whether to proceed. */
+  async ConfirmReplacement(): Promise<boolean> {
+    return !this.warnReplace || (await this.Confirm("replace"));
   }
 
   /** Collects source choices and retains the original dialog options between requests. @returns Confirmed native options. */

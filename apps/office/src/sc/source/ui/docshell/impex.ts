@@ -15,7 +15,7 @@ import { CalendarWrapper } from "../../../../unotools/source/i18n/calendarwrappe
 import { PutDate } from "./impex.date";
 import { SvNumberFormatter } from "../../../../svl/source/numbers/zforlist";
 import { SvStream } from "../../../../tools/source/stream/stream";
-import { MAXCOLCOUNT, ScAddress, type ScRange } from "../../../inc/address";
+import { MAXCOLCOUNT, ScAddress, ScRange } from "../../../inc/address";
 import type { ScDocument } from "../../../inc/document";
 import { ScCellFormat } from "../../core/tool/cellform";
 import { ScDocumentImport } from "../../../inc/documentimport";
@@ -477,8 +477,8 @@ export class ScImportExport {
     return this.importedSize;
   }
 
-  /** Imports CSV through the source SvStream; raw bytes remain a browser call-site convenience. @param input - Source stream or bytes. @returns Success. */
-  ImportStream(input: SvStream | Uint8Array): boolean {
+  /** Imports CSV through the source SvStream; raw bytes remain a browser call-site convenience. @param input - Source stream or bytes. @param destination - Range determined for live import. @returns Success. */
+  ImportStream(input: SvStream | Uint8Array, destination?: ScRange): boolean {
     this.importedSize = [0, 0];
     const options = this.options;
     if (!options) return false;
@@ -486,20 +486,12 @@ export class ScImportExport {
     const initialPosition = stream.Tell();
     stream.StartReadingUnicodeText(stream.GetStreamEncoding());
     if (initialPosition !== stream.Tell()) this.includeBOM = true;
-    const separators: [string] = [options.aFieldSeps],
-      detectSeparator: [number] = [0xffff];
-    const readLine = /** Implements read Line. @returns The string result. */ (): string =>
-      ReadCsvLine(stream, !options.bFixedLen, separators, options.cTextSep, detectSeparator);
     const formatter = new SvNumberFormatter(options.eLang),
       docImport = new ScDocumentImport(this.document),
       transliteration = new TransliterationWrapper(TransliterationFlags.IGNORE_CASE),
       calendar = new CalendarWrapper();
     let secondTransliteration: TransliterationWrapper | null = null,
       secondCalendar: CalendarWrapper | null = null;
-    const maxRow = this.document.MaxRow() - this.origin.Row(),
-      maxCol = this.document.MaxCol() - this.origin.Col();
-    let row = 0,
-      endCol = 0;
     try {
       transliteration.loadModuleIfNeeded(options.eLang);
       const locale = convertLanguageToLocale(options.eLang, false);
@@ -519,129 +511,28 @@ export class ScImportExport {
           english.dispose();
         }
       }
-      let skipLines = options.nStartRow;
-      while (--skipLines > 0) {
-        readLine();
-        if (stream.eof()) break;
-      }
-      // ExtText2Doc captures nLastCol once per pass; nEndCol still grows after each row.
-      const lastCol = endCol;
-      for (;;) {
-        const sourceLine = readLine();
-        if (stream.eof() && !sourceLine) break;
-        if (row > maxRow) {
-          this.overflowRow = true;
-          break;
-        }
-        const line = sourceLine.replaceAll("\0", "");
-        const cellOverflow: [boolean] = [false];
-        let column = 0;
-        if (options.bFixedLen) {
-          let startIndex = 0;
-          for (
-            let source = 0;
-            source < options.mvColStart.length && column <= maxCol + 1;
-            source++
-          ) {
-            const nextIndex: [number] = [startIndex];
-            if (source + 1 < options.mvColStart.length)
-              ScImportExport.CountVisualWidth(
-                line,
-                nextIndex,
-                (options.mvColStart[source + 1] as number) - (options.mvColStart[source] as number),
-              );
-            else nextIndex[0] = line.length;
-            const format = options.mvColFormat[source] ?? SC_COL_STANDARD;
-            if (format !== SC_COL_SKIP) {
-              if (column > maxCol) this.overflowCol = true;
-              else {
-                const field = ScImportExport.GetFixed(line, startIndex, nextIndex[0], cellOverflow);
-                lcl_PutString(
-                  docImport,
-                  new ScAddress(
-                    this.origin.Col() + column,
-                    this.origin.Row() + row,
-                    this.origin.Tab(),
-                  ),
-                  field,
-                  field.quoted && options.bQuotedFieldAsText ? SC_COL_TEXT : format,
-                  options,
-                  formatter,
-                  transliteration,
-                  calendar,
-                  secondTransliteration,
-                  secondCalendar,
-                  this.formulaDocument,
-                  !this.overwriting,
-                );
-              }
-              column++;
-            }
-            startIndex = nextIndex[0];
-          }
-        } else {
-          let next = 0,
-            source = 0,
-            infoStart = 0,
-            lastColEmpty = line.length === 0 && !options.bSkipEmptyCells;
-          while ((next < line.length || lastColEmpty) && column <= maxCol + 1) {
-            const scanned = ScImportExport.ScanNextFieldFromString(
-              line,
-              next,
-              options.cTextSep,
-              options.aFieldSeps,
-              options.bMergeFieldSeps,
-              options.bRemoveSpace,
-              cellOverflow,
-            );
-            next = scanned.next;
-            let format = SC_COL_STANDARD;
-            for (let i = infoStart; i < options.mvColStart.length; i++)
-              if (options.mvColStart[i] === source + 1) {
-                format = options.mvColFormat[i] ?? SC_COL_STANDARD;
-                infoStart = i + 1;
-                break;
-              }
-            if (format !== SC_COL_SKIP) {
-              if (column > maxCol) this.overflowCol = true;
-              else {
-                const field = scanned.field.value.endsWith("\n")
-                  ? { ...scanned.field, value: scanned.field.value.slice(0, -1) }
-                  : scanned.field;
-                lcl_PutString(
-                  docImport,
-                  new ScAddress(
-                    this.origin.Col() + column,
-                    this.origin.Row() + row,
-                    this.origin.Tab(),
-                  ),
-                  field,
-                  field.quoted && options.bQuotedFieldAsText ? SC_COL_TEXT : format,
-                  options,
-                  formatter,
-                  transliteration,
-                  calendar,
-                  secondTransliteration,
-                  secondCalendar,
-                  this.formulaDocument,
-                  !this.overwriting,
-                );
-              }
-              column++;
-              if (lastColEmpty) lastColEmpty = false;
-              else
-                lastColEmpty =
-                  column === lastCol && next === line.length && !options.bSkipEmptyCells;
-            }
-            source++;
-          }
-        }
-        this.overflowCell ||= cellOverflow[0];
-        endCol = Math.max(endCol, column);
-        row++;
-      }
+      this.importedSize = this.ReadFields(
+        stream,
+        options,
+        (column, row, field, format) => {
+          lcl_PutString(
+            docImport,
+            new ScAddress(this.origin.Col() + column, this.origin.Row() + row, this.origin.Tab()),
+            field,
+            field.quoted && options.bQuotedFieldAsText ? SC_COL_TEXT : format,
+            options,
+            formatter,
+            transliteration,
+            calendar,
+            secondTransliteration,
+            secondCalendar,
+            this.formulaDocument,
+            !this.overwriting,
+          );
+        },
+        destination ? destination.aEnd.Col() - this.origin.Col() : 0,
+      );
       if (!this.overwriting) docImport.finalize();
-      this.importedSize = [Math.min(endCol, maxCol + 1), row];
     } finally {
       secondCalendar?.dispose();
       secondTransliteration?.dispose();
@@ -650,6 +541,124 @@ export class ScImportExport {
       formatter.dispose();
     }
     return true;
+  }
+
+  /** Determines the destination rectangle before the live import's overwrite confirmation. @param stream - Source stream, restored after the read. @returns Bounded parsed range. */
+  DetermineImportRange(stream: SvStream): ScRange | undefined {
+    if (!this.options) return undefined;
+    const start = stream.Tell();
+    try {
+      stream.StartReadingUnicodeText(stream.GetStreamEncoding());
+      const [columns, rows] = this.ReadFields(stream, this.options);
+      if (!columns || !rows) return undefined;
+      const end = new ScAddress(
+        this.origin.Col() + columns - 1,
+        this.origin.Row() + rows - 1,
+        this.origin.Tab(),
+      );
+      return new ScRange(this.origin, end);
+    } finally {
+      stream.Seek(start);
+    }
+  }
+
+  /** Scans the original determination or writing pass. @param stream - Native source. @param options - Filter options. @param write - Cell writer for the second pass. @param lastCol - Last relative column found by the first pass. @returns Bounded column and row counts. */
+  private ReadFields(
+    stream: SvStream,
+    options: ScAsciiOptions,
+    write?: (column: number, row: number, field: CsvField, format: number) => void,
+    lastCol = 0,
+  ): readonly [number, number] {
+    const separators: [string] = [options.aFieldSeps],
+      detectSeparator: [number] = [0xffff];
+    const readLine = /** Implements read Line. @returns The string result. */ (): string =>
+      ReadCsvLine(stream, !options.bFixedLen, separators, options.cTextSep, detectSeparator);
+    const maxRow = this.document.MaxRow() - this.origin.Row(),
+      maxCol = this.document.MaxCol() - this.origin.Col();
+    let row = 0,
+      endCol = 0;
+    let skipLines = options.nStartRow;
+    while (--skipLines > 0) {
+      readLine();
+      if (stream.eof()) break;
+    }
+    for (;;) {
+      const sourceLine = readLine();
+      if (stream.eof() && !sourceLine) break;
+      if (row > maxRow) {
+        this.overflowRow = true;
+        break;
+      }
+      const line = sourceLine.replaceAll("\0", "");
+      const cellOverflow: [boolean] = [false];
+      let column = 0;
+      if (options.bFixedLen) {
+        let startIndex = 0;
+        for (let source = 0; source < options.mvColStart.length && column <= maxCol + 1; source++) {
+          const nextIndex: [number] = [startIndex];
+          if (source + 1 < options.mvColStart.length)
+            ScImportExport.CountVisualWidth(
+              line,
+              nextIndex,
+              (options.mvColStart[source + 1] as number) - (options.mvColStart[source] as number),
+            );
+          else nextIndex[0] = line.length;
+          const format = options.mvColFormat[source] ?? SC_COL_STANDARD;
+          if (format !== SC_COL_SKIP) {
+            if (column > maxCol) this.overflowCol = true;
+            else {
+              const field = ScImportExport.GetFixed(line, startIndex, nextIndex[0], cellOverflow);
+              write?.(column, row, field, format);
+            }
+            column++;
+          }
+          startIndex = nextIndex[0];
+        }
+      } else {
+        let next = 0,
+          source = 0,
+          infoStart = 0,
+          lastColEmpty = !!write && line.length === 0 && !options.bSkipEmptyCells;
+        while ((next < line.length || lastColEmpty) && column <= maxCol + 1) {
+          const scanned = ScImportExport.ScanNextFieldFromString(
+            line,
+            next,
+            options.cTextSep,
+            options.aFieldSeps,
+            options.bMergeFieldSeps,
+            options.bRemoveSpace,
+            cellOverflow,
+          );
+          next = scanned.next;
+          let format = SC_COL_STANDARD;
+          for (let i = infoStart; i < options.mvColStart.length; i++)
+            if (options.mvColStart[i] === source + 1) {
+              format = options.mvColFormat[i] ?? SC_COL_STANDARD;
+              infoStart = i + 1;
+              break;
+            }
+          if (format !== SC_COL_SKIP) {
+            if (column > maxCol) this.overflowCol = true;
+            else {
+              const field = scanned.field.value.endsWith("\n")
+                ? { ...scanned.field, value: scanned.field.value.slice(0, -1) }
+                : scanned.field;
+              write?.(column, row, field, format);
+            }
+            column++;
+            if (lastColEmpty) lastColEmpty = false;
+            else
+              lastColEmpty =
+                !!write && column === lastCol && next === line.length && !options.bSkipEmptyCells;
+          }
+          source++;
+        }
+      }
+      this.overflowCell ||= cellOverflow[0];
+      endCol = Math.max(endCol, column);
+      row++;
+    }
+    return [Math.min(endCol, maxCol + 1), row];
   }
 
   /** Counts the original ICU visual width and advances a UTF-16 cursor, including one following ignorable code point. @param line - Input text. @param index - Source cursor. @param maxWidth - Visual-column limit. @returns Counted width. */

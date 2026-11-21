@@ -120,6 +120,8 @@ function Preview(input: string, options: ScAsciiOptions, fixedStarts: readonly n
 /** Presents the source separator, conversion and field choices and commits them only on OK. @param props - Active request. @returns Text Import dialog. */
 export function ScImportAsciiDlg({ request, onRespond }: Props): React.JSX.Element {
   const { locale } = useBrowserLocalization();
+  const textToColumns = request.call === "textToColumns";
+  const title = textToColumns ? "Text to Columns" : "Text Import";
   const [options, setOptions] = useState(() => new ScAsciiOptions(request.preferences.options));
   const [mode, setMode] = useState(request.preferences.mode);
   const [splits, setSplits] = useState(request.fixedSplits);
@@ -133,11 +135,13 @@ export function ScImportAsciiDlg({ request, onRespond }: Props): React.JSX.Eleme
   const [column, setColumn] = useState(1);
   const languages = useMemo(
     () =>
-      sortLanguageChoices(
-        [LATIN, ASIAN, COMPLEX].flatMap((script) => getLanguageChoices(script).slice(4)),
-        locale,
-      ),
-    [locale],
+      textToColumns
+        ? []
+        : sortLanguageChoices(
+            [LATIN, ASIAN, COMPLEX].flatMap((script) => getLanguageChoices(script).slice(4)),
+            locale,
+          ),
+    [locale, textToColumns],
   );
   const { text } = request;
   const { eCharSet, cTextSep } = options;
@@ -222,7 +226,7 @@ export function ScImportAsciiDlg({ request, onRespond }: Props): React.JSX.Eleme
   return (
     <form
       role="dialog"
-      aria-label="Text Import"
+      aria-label={title}
       aria-modal="true"
       className="fixed left-1/2 top-1/2 z-50 max-h-[calc(100dvh-2rem)] w-[46rem] max-w-[calc(100vw-2rem)] -translate-x-1/2 -translate-y-1/2 space-y-3 overflow-y-auto rounded-lg border border-slate-300 bg-white p-4 text-sm shadow-xl"
       onSubmit={(event) => {
@@ -236,43 +240,45 @@ export function ScImportAsciiDlg({ request, onRespond }: Props): React.JSX.Eleme
         }
       }}
     >
-      <DialogHeader title="Text Import" onClose={cancel} />
-      <fieldset className="grid gap-2 rounded border border-slate-200 p-2 sm:grid-cols-3">
-        <legend>Import</legend>
-        <label className="grid gap-1">
-          Character set
-          <select className={controlClass} disabled>
-            <option>Unicode</option>
-          </select>
-        </label>
-        <label className="grid gap-1">
-          Locale
-          <select
-            className={controlClass + " min-w-0"}
-            value={options.eLang}
-            onChange={(event) => update({ eLang: Number(event.currentTarget.value) })}
-          >
-            <option value={LANGUAGE_SYSTEM}>{describeLanguage(LANGUAGE_SYSTEM)}</option>
-            {languages.map(({ id, name }) => (
-              <option key={id} value={id}>
-                {name}
-              </option>
-            ))}
-          </select>
-        </label>
-        <label className="grid gap-1">
-          From row
-          <input
-            type="number"
-            min={1}
-            className={controlClass + " w-20"}
-            value={options.nStartRow}
-            onChange={(event) =>
-              update({ nStartRow: Math.max(1, Number(event.currentTarget.value)) })
-            }
-          />
-        </label>
-      </fieldset>
+      <DialogHeader title={title} onClose={cancel} />
+      {!textToColumns && (
+        <fieldset className="grid gap-2 rounded border border-slate-200 p-2 sm:grid-cols-3">
+          <legend>Import</legend>
+          <label className="grid gap-1">
+            Character set
+            <select className={controlClass} disabled>
+              <option>Unicode</option>
+            </select>
+          </label>
+          <label className="grid gap-1">
+            Locale
+            <select
+              className={controlClass + " min-w-0"}
+              value={options.eLang}
+              onChange={(event) => update({ eLang: Number(event.currentTarget.value) })}
+            >
+              <option value={LANGUAGE_SYSTEM}>{describeLanguage(LANGUAGE_SYSTEM)}</option>
+              {languages.map(({ id, name }) => (
+                <option key={id} value={id}>
+                  {name}
+                </option>
+              ))}
+            </select>
+          </label>
+          <label className="grid gap-1">
+            From row
+            <input
+              type="number"
+              min={1}
+              className={controlClass + " w-20"}
+              value={options.nStartRow}
+              onChange={(event) =>
+                update({ nStartRow: Math.max(1, Number(event.currentTarget.value)) })
+              }
+            />
+          </label>
+        </fieldset>
+      )}
       <div className="grid gap-3 sm:grid-cols-2">
         <fieldset className="space-y-2 rounded border border-slate-200 p-2">
           <legend>Separator Options</legend>
@@ -372,7 +378,11 @@ export function ScImportAsciiDlg({ request, onRespond }: Props): React.JSX.Eleme
             <label key={key} className="flex items-center gap-2">
               <input
                 type="checkbox"
-                disabled={key === "bDetectScientificNumber" && options.bDetectSpecialNumber}
+                disabled={
+                  (key === "bDetectScientificNumber" && options.bDetectSpecialNumber) ||
+                  (textToColumns &&
+                    (key === "bDetectSpecialNumber" || key === "bQuotedFieldAsText"))
+                }
                 checked={options[key]}
                 onChange={(event) => {
                   const checked = event.currentTarget.checked;
