@@ -372,6 +372,7 @@ export class ScDocument {
   GetDataArea(...args: Parameters<typeof documen7.GetDataArea>): void {
     return documen7.GetDataArea.apply(this, args);
   }
+  ShrinkToUsedDataArea = documen7.ShrinkToUsedDataArea;
   declare private pScriptTypeData: ScScriptTypeData | undefined;
   /** Original lazily owned script service. The actual process-context factory is an explicit borrowed host port;the kernel depends only on XBreakIterator. @param args - Existing real service factory or unavailable host port. @returns Stable borrowed service or empty reference. */
   GetBreakIterator(...args: Parameters<typeof GetBreakIterator>): XBreakIterator | null {

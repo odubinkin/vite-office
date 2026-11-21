@@ -474,6 +474,7 @@ export class ScTable {
   ): void {
     table1.GetDataArea.call(this, firstCol, firstRow, lastCol, lastRow, includeOld, onlyDown);
   }
+  ShrinkToUsedDataArea = table1.ShrinkToUsedDataArea;
   /** Original bounded last-data-row aggregation. @param first - First allocated column. @param last - Final valid column. @param row - Inclusive row bound. @returns Row or native invalid-column sentinel. */
   GetLastDataRow(first: number, last: number, row: number): number {
     if (first < 0 || first >= this.aCol.length || !this.rDocument.ValidCol(last)) return -1;

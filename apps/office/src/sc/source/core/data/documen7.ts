@@ -297,6 +297,35 @@ export function GetDataArea(
   this.FetchTable(tab)?.GetDataArea(firstCol, firstRow, lastCol, lastRow, includeOld, onlyDown);
 }
 
+/** Delegates the source used-data-area query to the requested sheet. @param this - Document. @param shrunk - Bound change result. @param tab - Sheet. @param args - Native bound references and sticky-edge options. @returns Whether the area contains data. */
+export function ShrinkToUsedDataArea(
+  this: ScDocument,
+  shrunk: [boolean],
+  tab: number,
+  startCol: [number],
+  startRow: [number],
+  endCol: [number],
+  endRow: [number],
+  columnsOnly: boolean,
+  stickyTopRow: boolean,
+  stickyLeftCol: boolean,
+): boolean {
+  const table = this.FetchTable(tab);
+  if (table)
+    return table.ShrinkToUsedDataArea(
+      shrunk,
+      startCol,
+      startRow,
+      endCol,
+      endRow,
+      columnsOnly,
+      stickyTopRow,
+      stickyLeftCol,
+    );
+  shrunk[0] = false;
+  return false;
+}
+
 /** Original document.cxx address-only cached script query. @param this - Actual document. @param position - Cell. @returns Stored flags. */
 export function GetScriptType(this: ScDocument, position: ScAddress): SvtScriptType {
   return (

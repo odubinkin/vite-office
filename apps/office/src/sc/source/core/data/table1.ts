@@ -13,6 +13,78 @@ import type { RefUpdateContext } from "../../../inc/refupdatecontext";
 import { ScRange } from "../../../inc/address";
 import { UpdateRefMode } from "../../../inc/global";
 import { CRFlags } from "../../../inc/global";
+import { ScHorizontalCellIterator } from "./dociter";
+
+/** Shrinks the source rectangle to actual cell data, with optional sticky leading edges. @param this - Native sheet. @param shrunk - Whether the input bounds changed. @param startCol - First column. @param startRow - First row. @param endCol - Last column. @param endRow - Last row. @param columnsOnly - Preserve row bounds after clamping. @param stickyTopRow - Keep the leading row. @param stickyLeftCol - Keep the leading column. @returns Whether the adjusted area contains data. */
+export function ShrinkToUsedDataArea(
+  this: ScTable,
+  shrunk: [boolean],
+  startCol: [number],
+  startRow: [number],
+  endCol: [number],
+  endRow: [number],
+  columnsOnly: boolean,
+  stickyTopRow: boolean,
+  stickyLeftCol: boolean,
+): boolean {
+  const doc = this.GetDoc();
+  const lastAllocated = this.GetAllocatedColumnsCount() - 1;
+  shrunk[0] = false;
+  if (lastAllocated < 0) return false;
+  startCol[0] = Math.min(startCol[0], lastAllocated);
+  if (startCol[0] > endCol[0]) [startCol[0], endCol[0]] = [endCol[0], startCol[0]];
+  if (startRow[0] > endRow[0]) [startRow[0], endRow[0]] = [endRow[0], startRow[0]];
+  const left = Math.max(0, startCol[0]);
+  const top = Math.max(0, startRow[0]);
+  const right = Math.min(endCol[0], lastAllocated);
+  const bottom = Math.min(endRow[0], doc.MaxRow());
+  shrunk[0] =
+    left !== startCol[0] || top !== startRow[0] || right !== endCol[0] || bottom !== endRow[0];
+  [startCol[0], startRow[0], endCol[0], endRow[0]] = [left, top, right, bottom];
+
+  while (
+    startCol[0] < endCol[0] &&
+    this.IsBlockEmpty(endCol[0], startRow[0], endCol[0], endRow[0])
+  ) {
+    endCol[0]--;
+    shrunk[0] = true;
+  }
+  if (!stickyLeftCol) {
+    while (
+      startCol[0] < endCol[0] &&
+      this.IsBlockEmpty(startCol[0], startRow[0], startCol[0], endRow[0])
+    ) {
+      startCol[0]++;
+      shrunk[0] = true;
+    }
+  }
+  if (!columnsOnly && startRow[0] < endRow[0]) {
+    const lastData = this.GetLastDataRow(startCol[0], endCol[0], endRow[0]);
+    if (lastData >= 0 && lastData < endRow[0]) {
+      endRow[0] = Math.max(startRow[0], lastData);
+      shrunk[0] = true;
+    }
+    if (!stickyTopRow && startRow[0] < endRow[0]) {
+      const cells = new ScHorizontalCellIterator(
+        doc,
+        this["nTab"],
+        startCol[0],
+        startRow[0],
+        endCol[0],
+        endRow[0],
+      );
+      const first: [number] = [startRow[0]];
+      const next = cells.GetPos([0], first) ? first[0] : endRow[0];
+      shrunk[0] ||= startRow[0] !== next;
+      startRow[0] = next;
+    }
+  }
+  return (
+    startCol[0] !== endCol[0] ||
+    (!columnsOnly && startRow[0] !== endRow[0]) ||
+    !this.IsBlockEmpty(startCol[0], startRow[0], endCol[0], endRow[0])
+  );
+}
 
 /** Allocates the original next key before taking ownership. @param this - Native sheet. @param format - Owned conditional format. @returns Assigned key. */
 export function AddCondFormat(this: ScTable, format: ScConditionalFormat): number {

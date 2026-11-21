@@ -1,0 +1,40 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/sc/source/ui/view/cellsh2.ts",
+    "status": "mapped",
+    "upstreamPath": "sc/source/ui/view/cellsh2.cxx",
+    "localSymbols": [
+      "GetTextToColumnsRange"
+    ],
+    "upstreamSymbols": [
+      "lcl_GetTextToColumnsRange"
+    ],
+    "preservedResponsibilities": [
+      "Resolves the source Text to Columns cursor or one-column mark and trims it to occupied rows for execution."
+    ],
+    "omittedResponsibilities": [
+      "Other database shell operations belong to separate source slices."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sc/source/ui/view/cellsh2.ts",
+          "marker": "GetTextToColumnsRange"
+        },
+        {
+          "path": "apps/office/src/sc/source/ui/view/text-to-columns.test.ts",
+          "marker": "shrinks whole-column selection"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sc/source/ui/view/cellsh2.cxx",
+          "marker": "lcl_GetTextToColumnsRange"
+        }
+      ]
+    }
+  }
+}

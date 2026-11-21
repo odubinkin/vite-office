@@ -7789,3 +7789,12 @@ All can reopen unchecked even after the previous paste used it. Calc
 preserves the session behavior.
 
 - [Original Paste Special preference and content mask handling](../../vendor/libreoffice-reference/sc/source/ui/miscdlgs/inscodlg.cxx#L204)
+
+### CALC-818 — A disjoint mark can make Text to Columns use the cursor cell
+
+The source checks for a multi-mark inside its simple-mark branch. A
+selection stored entirely as a multi-mark reaches the cursor branch and
+can process the active cell alone. Calc preserves that behavior for
+command availability and execution.
+
+- [Original Text to Columns range selection](../../vendor/libreoffice-reference/sc/source/ui/view/cellsh2.cxx#L76)
