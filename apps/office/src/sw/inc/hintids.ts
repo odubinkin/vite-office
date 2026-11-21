@@ -232,6 +232,9 @@ export const RES_SHADOW = 117 as const;
 /** Original page text grid, RES_FRMATR_BEGIN +33. */
 export const RES_TEXTGRID = 125 as const;
 
+/** Original binding direction item, RES_FRMATR_BEGIN + 51. */
+export const RES_RTL_GUTTER = 143 as const;
+
 /** Direct paragraph text-left margin, matching `RES_MARGIN_TEXTLEFT`. */
 export const RES_MARGIN_TEXTLEFT = 96 as const;
 

@@ -4,7 +4,12 @@ import { Reference } from "../../../../cppu/inc/com/sun/star/uno/Reference";
 import { PropertyVetoException } from "../../../../cppu/inc/com/sun/star/beans/PropertyVetoException";
 import { READONLY } from "../../../../udkapi/com/sun/star/beans/PropertyAttribute";
 import type { OUStringConstReference } from "../../../../sal/inc/rtl/ustring";
-import { RES_CHRATR_BEGIN, RES_CHRATR_END, RES_PARATR_TABSTOP } from "../../../inc/hintids";
+import {
+  RES_CHRATR_BEGIN,
+  RES_CHRATR_END,
+  RES_PARATR_TABSTOP,
+  RES_TEXTGRID,
+} from "../../../inc/hintids";
 import { PROPERTY_MAP_TEXT_DEFAULT } from "../../../inc/unomap";
 import type { SwDoc } from "../doc/doc";
 import { text, unicode, unknown } from "./unocrsrhelper";
@@ -25,6 +30,7 @@ export class SwXTextDefaults {
     if (
       !entry ||
       (entry.nWID !== RES_PARATR_TABSTOP &&
+        entry.nWID !== RES_TEXTGRID &&
         (entry.nWID < RES_CHRATR_BEGIN || entry.nWID >= RES_CHRATR_END))
     )
       return unknown(text(name));

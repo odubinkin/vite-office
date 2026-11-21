@@ -7,15 +7,22 @@
     "localPath": "apps/office/src/xmloff/source/style/PageMasterStyleMap.ts",
     "localSymbols": [
       "OdfPageStoryGeometry",
-      "XMLPageHeaderFooterStyleContext"
+      "XMLPageHeaderFooterStyleContext",
+      "importPageMargins",
+      "importPageGrid",
+      "importPageUsage"
     ],
     "upstreamPath": "xmloff/source/style/PageMasterStyleMap.cxx",
     "upstreamSymbols": [
       "CTF_PM_HEADERHEIGHT",
-      "CTF_PM_FOOTERHEIGHT"
+      "CTF_PM_FOOTERHEIGHT",
+      "CTF_PM_MARGINALL",
+      "CTF_PM_PAGEUSAGE",
+      "CTF_PM_STANDARD_MODE"
     ],
     "preservedResponsibilities": [
-      "Reads the original header/footer ODF height, body margin and dynamic-spacing declarations. The map uses the native fixed/minimum height choice from PageMasterImportPropMapper."
+      "Reads the original header/footer ODF height, body margin and dynamic-spacing declarations. The map uses the native fixed/minimum height choice from PageMasterImportPropMapper.",
+      "Maps page usage, independent margins and shorthand fallback in UNO units, and Writer text grid properties. Keeps explicit margin presence for gutter adjustment."
     ],
     "omittedResponsibilities": [
       "Full native story layout, overlapping text frames, and complete DOCX/ODF parity remain unverified."
@@ -29,6 +36,10 @@
         {
           "path": "apps/office/src/sw/source/filter/ww8/docxexport.page-stories.test.ts",
           "marker": "ports testHeaderBorder"
+        },
+        {
+          "path": "apps/office/src/sw/source/filter/xml/odt-page-master.test.ts",
+          "marker": "ports testGutterLeft with the pinned gutter-left fixture"
         }
       ],
       "upstream": [
@@ -39,6 +50,14 @@
         {
           "path": "vendor/libreoffice-reference/xmloff/source/style/PageMasterStyleMap.cxx",
           "marker": "CTF_PM_FOOTERHEIGHT"
+        },
+        {
+          "path": "vendor/libreoffice-reference/xmloff/source/style/PageMasterImportPropMapper.cxx",
+          "marker": "nTopMargin -= nGutterMargin"
+        },
+        {
+          "path": "vendor/libreoffice-reference/xmloff/source/style/PageMasterPropHdlFactory.cxx",
+          "marker": "aXML_TextGridMode_ConstantMap"
         }
       ]
     }

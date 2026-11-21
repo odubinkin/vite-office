@@ -88,6 +88,7 @@ export const SwUnoPageStylePropertyMap: ReadonlyMap<string, PageStylePropertyEnt
   string,
   PageStylePropertyEntry
 >([
+  ["RtlGutter", { which: H.RES_RTL_GUTTER, member: 0, kind: "bool", type: "bool" }],
   [
     "WritingMode",
     { which: H.RES_FRAMEDIR, member: 0, kind: "short", type: "sal_Int16", attributes: 0 },

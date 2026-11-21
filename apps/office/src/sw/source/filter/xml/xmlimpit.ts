@@ -90,7 +90,7 @@ export function importBoxProperties(
   return item;
 }
 
-/** Applies original page layout box, shadow and gutter to the four native page formats. @param page - Destination descriptor. @param layout - Parsed page layout. @returns Nothing. */
+/** Applies original page layout box and shadow to the four native page formats. @param page - Destination descriptor. @param layout - Parsed page layout. @returns Nothing. */
 export function importPageLayoutBox(page: SwPageDesc, layout: OdfPageLayout): void {
   const box = layout.box && importBoxProperties(layout.box, RES_BOX, false);
   const shadow = layout.shadow && new SvxShadowItem(RES_SHADOW);
@@ -111,15 +111,6 @@ export function importPageLayoutBox(page: SwPageDesc, layout: OdfPageLayout): vo
     ]) {
       if (box) frame.SetFormatAttr(box);
       if (shadow) frame.SetFormatAttr(shadow);
-      if (layout.gutter !== undefined) {
-        const spacing = frame.GetLRSpace().Clone();
-        try {
-          spacing.SetGutterMargin(layout.gutter);
-          frame.SetFormatAttr(spacing);
-        } finally {
-          spacing.Dispose();
-        }
-      }
     }
   } finally {
     box?.Dispose();

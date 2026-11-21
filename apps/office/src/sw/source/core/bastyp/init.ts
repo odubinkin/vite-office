@@ -53,7 +53,7 @@ import { SwFormatFillOrder } from "../../../inc/fmtfordr";
 import { SvxFrameDirectionItem } from "../../../../editeng/inc/frmdiritem";
 import { SvxFrameDirection } from "../../../../editeng/inc/frmdir";
 import { SwHeaderAndFooterEatSpacingItem } from "../../../inc/hfspacingitem";
-import { RES_FRAMEDIR } from "../../../inc/hintids";
+import { RES_FRAMEDIR, RES_RTL_GUTTER } from "../../../inc/hintids";
 import { SwFormatAutoFormat } from "../txtnode/txatbase";
 import { RES_PARATR_LIST_AUTOFMT, RES_TXTATR_AUTOFMT } from "../../../inc/hintids";
 import { SwFormatFlyCnt } from "../../../inc/fmtflcnt";
@@ -223,6 +223,7 @@ class ItemInfoPackageSwAttributes extends ItemInfoPackage {
     add(new SvxOpticalSizingItem(false, W.RES_CHRATR_OPTICAL_SIZING));
     add(new SvxFontVariationsItem(W.RES_CHRATR_FONT_VARIATIONS));
     add(new SwTextGridItem());
+    add(new SfxBoolItem(RES_RTL_GUTTER, false));
     add(new SvxEscapementItem(RES_CHRATR_ESCAPEMENT));
     add(new SvxProtectItem(RES_PROTECT));
     add(new SwTableBoxNumFormat());

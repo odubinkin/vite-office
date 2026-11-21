@@ -1,5 +1,7 @@
 /** @fileoverview Implements Writer's streaming SwXMLImport bridge over fast SAX contexts. */
 import { importPageLayoutBox } from "./xmlimpit";
+import { UseOnPage } from "../../core/layout/pagedesc";
+import { cppu_detail_getUnoType_PageStyleLayout as pageLayoutType } from "../../../../offapi/com/sun/star/style/PageStyleLayout";
 import { XMLDocumentSettingsContext } from "../../../../xmloff/source/core/DocumentSettingsContext";
 import type { PropertyValue } from "../../../../udkapi/com/sun/star/beans/PropertyValue";
 import type {
@@ -489,6 +491,18 @@ class SwXMLImport
     this.pageLayouts.set(name, layout);
   }
 
+  /** Applies the original default page-grid mode before publishing page styles. @param standard - Native standard-page mode. @returns Nothing. */
+  public registerDefaultPageMode(standard: boolean): void {
+    const name = xmlTextString("StandardPageMode");
+    const value = new Any([standard], "bool");
+    try {
+      this.model.createTextDefaults().setPropertyValue(name, value);
+    } finally {
+      value.dispose();
+      name.dispose();
+    }
+  }
+
   /** Associates a named master page with its layout and optional follow style. @param name - Master-page name. @param pageLayoutName - Referenced layout. @param followName - Optional next master page. @returns Nothing. */
   public registerMasterPage(
     name: string,
@@ -640,29 +654,54 @@ class SwXMLImport
           pages.insertByName(key, descriptor as import("../../core/unocore/unostyle").SwXStyle);
         }
         const style = pages.getByName(key);
-        for (const [field, property] of [
-          ["width", "Width"],
-          ["height", "Height"],
-          ["leftMargin", "LeftMargin"],
-          ["rightMargin", "RightMargin"],
-          ["topMargin", "TopMargin"],
-          ["bottomMargin", "BottomMargin"],
-        ] as const) {
-          const value = new Any([Number(convertTwipToMm100(BigInt(layout[field])))], "sal_Int32");
+        /** Publishes one typed property to the original Writer page-style owner. @param property - UNO name. @param type - UNO value type. @param propertyValue - Authored value. @returns Nothing. */
+        function setProperty(
+          property: string,
+          type: "bool" | "sal_Int16" | "sal_Int32" | ReturnType<typeof pageLayoutType>,
+          propertyValue: number | boolean,
+        ): void {
+          const propertyName = xmlTextString(property);
+          const value = new Any([propertyValue], type);
           try {
-            style.setPropertyValue(xmlTextString(property), value);
+            style.setPropertyValue(propertyName, value);
           } finally {
+            propertyName.dispose();
             value.dispose();
           }
         }
-        const landscape = new Any([layout.landscape], "bool");
         try {
-          style.setPropertyValue(xmlTextString("IsLandscape"), landscape);
+          setProperty("Width", "sal_Int32", Number(convertTwipToMm100(BigInt(layout.width))));
+          setProperty("Height", "sal_Int32", Number(convertTwipToMm100(BigInt(layout.height))));
+          setProperty("IsLandscape", "bool", layout.landscape);
+          if (layout.direction !== undefined)
+            setProperty("WritingMode", "sal_Int16", layout.direction);
+          if (layout.rtlGutter !== undefined) setProperty("RtlGutter", "bool", layout.rtlGutter);
+          if (layout.gutter !== undefined) setProperty("GutterMargin", "sal_Int32", layout.gutter);
+          const gutterSide = this.document.GetDocumentSettingManager().get("GUTTER_AT_TOP")
+            ? "TopMargin"
+            : layout.rtlGutter
+              ? "RightMargin"
+              : "LeftMargin";
+          for (const [property, margin] of Object.entries(layout.margins))
+            setProperty(
+              property,
+              "sal_Int32",
+              margin -
+                (property === gutterSide && layout.explicitMargins.has(property)
+                  ? (layout.gutter ?? 0)
+                  : 0),
+            );
+          for (const [property, type, value] of layout.grid) setProperty(property, type, value);
+          if (layout.usage !== undefined)
+            setProperty("PageStyleLayout", pageLayoutType(), layout.usage);
           const page = this.model.GetDoc().FindPageDesc(name);
           if (page) importPageLayoutBox(page, layout);
+          if (page?.GetUseOn() === UseOnPage.Mirror) {
+            page.Mirror();
+            page.GetFirstLeft().SetFormatAttr(page.GetLeft().GetLRSpace());
+          }
           applyPageStoryGeometry(style, layout);
         } finally {
-          landscape.dispose();
           key.dispose();
         }
       };

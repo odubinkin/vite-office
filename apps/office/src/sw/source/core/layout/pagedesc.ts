@@ -1,6 +1,6 @@
 /** @fileoverview Native SwPageDesc frame-format and use/follow ownership from pagedesc.cxx; immutable geometry is only a browser projection of canonical pooled items. */
 import { SvxBoxItemLine as BoxEdge } from "../../../../editeng/source/items/frmitems";
-import { getActivePageStory, SwFrameFormat } from "./atrfrm";
+import { getActivePageStory, getPageFrameGutters, SwFrameFormat } from "./atrfrm";
 import { SwPoolFormatId } from "../../../inc/poolfmt";
 import { SfxItemSet } from "../../../../svl/source/items/itemset";
 import {
@@ -9,6 +9,8 @@ import {
   RES_UL_SPACE,
   RES_BOX,
   RES_BACKGROUND,
+  RES_FRAMEDIR,
+  RES_SHADOW,
 } from "../../../inc/hintids";
 import type { SwDoc } from "../doc/doc";
 import { BroadcastingModify } from "../../../inc/calbck";
@@ -130,7 +132,14 @@ export class SwPageDesc extends BroadcastingModify {
     margin.SetRightGutterMargin(source.GetGutterMargin());
     try {
       items.Put(margin);
-      for (const which of [RES_FRM_SIZE, RES_UL_SPACE, RES_BOX, RES_BACKGROUND])
+      for (const which of [
+        RES_FRM_SIZE,
+        RES_UL_SPACE,
+        RES_BOX,
+        RES_BACKGROUND,
+        RES_SHADOW,
+        RES_FRAMEDIR,
+      ])
         items.Put(this.m_Master.GetAttrSet().Get(which));
       this.m_Left.SetFormatAttrSet(items);
     } finally {
@@ -286,22 +295,20 @@ export function getPageBodyGeometry(page: SwPageDesc): WriterPageDescriptorValue
   const value = page.GetValue();
   const master = page.GetMaster();
   const box = master.GetBox();
-  const gutter = master.GetLRSpace().GetGutterMargin();
-  const gutterAtTop = master.GetDoc().GetDocumentSettingManager().get("GUTTER_AT_TOP");
+  const gutter = getPageFrameGutters(master);
   return {
     ...value,
     topMargin:
       value.topMargin +
       box.CalcLineSpace(BoxEdge.TOP, true) +
       (getActivePageStory(master, true)?.GetFrameSize().GetHeight() ?? 0) +
-      (gutterAtTop ? gutter : 0),
+      gutter.top,
     bottomMargin:
       value.bottomMargin +
       box.CalcLineSpace(BoxEdge.BOTTOM, true) +
       (getActivePageStory(master, false)?.GetFrameSize().GetHeight() ?? 0),
-    leftMargin:
-      value.leftMargin + box.CalcLineSpace(BoxEdge.LEFT, true) + (gutterAtTop ? 0 : gutter),
-    rightMargin: value.rightMargin + box.CalcLineSpace(BoxEdge.RIGHT, true),
+    leftMargin: value.leftMargin + box.CalcLineSpace(BoxEdge.LEFT, true) + gutter.left,
+    rightMargin: value.rightMargin + box.CalcLineSpace(BoxEdge.RIGHT, true) + gutter.right,
   };
 }
 

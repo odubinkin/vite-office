@@ -2,7 +2,7 @@
 import { SvxBoxItemLine as BoxEdge } from "../../../../editeng/source/items/frmitems";
 import type { SwDoc } from "../doc/doc";
 import type { SwStartNode } from "../docnode/node";
-import { getActivePageStory } from "./atrfrm";
+import { getActivePageStory, getPageFrameGutters } from "./atrfrm";
 import type { SwPageFrame } from "./newfrm";
 import type { WriterPageDescriptorValue } from "./pagedesc";
 
@@ -38,12 +38,10 @@ export function PreparePageStories(
   const margins = format.GetLRSpace();
   const vertical = format.GetULSpace();
   const box = format.GetBox();
-  const gutter = margins.GetGutterMargin();
-  const topGutter = doc.GetDocumentSettingManager().get("GUTTER_AT_TOP");
-  const left =
-    margins.ResolveLeft() + box.CalcLineSpace(BoxEdge.LEFT, true) + (topGutter ? 0 : gutter);
-  const right = margins.ResolveRight() + box.CalcLineSpace(BoxEdge.RIGHT, true);
-  const top = vertical.GetUpper() + box.CalcLineSpace(BoxEdge.TOP, true) + (topGutter ? gutter : 0);
+  const gutter = getPageFrameGutters(format);
+  const left = margins.ResolveLeft() + box.CalcLineSpace(BoxEdge.LEFT, true) + gutter.left;
+  const right = margins.ResolveRight() + box.CalcLineSpace(BoxEdge.RIGHT, true) + gutter.right;
+  const top = vertical.GetUpper() + box.CalcLineSpace(BoxEdge.TOP, true) + gutter.top;
   const bottom = vertical.GetLower() + box.CalcLineSpace(BoxEdge.BOTTOM, true);
   const width = page.descriptor.width - left - right;
   const pageGeometry = {

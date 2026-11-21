@@ -15,6 +15,7 @@ import {
   RES_FRAMEDIR,
   RES_HEADER,
   RES_OPAQUE,
+  RES_RTL_GUTTER,
   RES_SURROUND,
   RES_WRAP_INFLUENCE_ON_OBJPOS,
 } from "../../../inc/hintids";
@@ -209,6 +210,14 @@ export class SwAttrPool extends SfxItemPool {
       (value) => new SwFormatFollowTextFlow(Boolean(value)),
     );
     register(RES_WRAP_INFLUENCE_ON_OBJPOS);
+    register(
+      RES_RTL_GUTTER,
+      /** Restores the original binding direction item. @param value - Serialized flag. @returns Native item. */
+      (value) => {
+        if (typeof value !== "boolean") throw new Error("Writer gutter direction is invalid.");
+        return new SfxBoolItem(RES_RTL_GUTTER, value);
+      },
+    );
     register(WriterWhich.RES_PARATR_LIST_AUTOFMT);
     register(WriterWhich.RES_TXTATR_AUTOFMT);
     register(

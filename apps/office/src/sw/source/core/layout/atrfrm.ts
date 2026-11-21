@@ -1,5 +1,6 @@
 /** @fileoverview Native frame identity, complete attribute ranges and special/fly-format construction from atrfrm.cxx/frmfmt.hxx; layout/contact and full destructor families remain unverified. */
 import { NameChanged } from "../../../inc/hints";
+import type { SfxBoolItem } from "../../../../svl/source/items/cenumitm";
 import type { SwFormatsBase } from "../../../inc/docary";
 import { RES_FRMFMT, RES_FLYFRMFMT, RES_DRAWFRMFMT } from "../../../inc/hintids";
 import { aFrameFormatSetRange } from "../bastyp/init";
@@ -14,13 +15,17 @@ import { SwFormatRowSplit } from "../../../inc/fmtrowsplt";
 import { RES_ROW_SPLIT, RES_FRM_SIZE } from "../../../inc/hintids";
 import { RES_TEXTGRID } from "../../../inc/hintids";
 import type { SwTextGridItem } from "../../../inc/tgrditem";
-import { RES_FOOTER, RES_HEADER } from "../../../inc/hintids";
+import { RES_FOOTER, RES_HEADER, RES_RTL_GUTTER } from "../../../inc/hintids";
 import type { SwModify } from "../../../inc/calbck";
 import type { SwModelHint } from "../../../inc/hints";
 import { RndStdIds } from "../../../../svx/inc/swframetypes";
 
 /** Native frame identity owns its name and document attribute pool. */
 export class SwFrameFormat extends SwFormat {
+  /** Reads the native page gutter direction item. @returns Whether the binding is right-to-left. */
+  GetRtlGutter(): boolean {
+    return (this.GetAttrSet().Get(RES_RTL_GUTTER) as SfxBoolItem).GetValue();
+  }
   private m_wXObject: WeakRef<object> | undefined;
   /** Original friend-managed list back-reference; deletion leaves it for the owning container to clear. */
   m_ffList: SwFormatsBase | null = null;
@@ -94,6 +99,22 @@ export class SwFrameFormat extends SwFormat {
   public GetVertOrient(): SwFormatVertOrient {
     return this.GetAttrSet().Get(RES_VERT_ORIENT) as SwFormatVertOrient;
   }
+}
+
+/** Resolves the gutter used by the native page print area. @param frame - Actual page format. @returns Gutter added to each physical side. */
+export function getPageFrameGutters(frame: SwFrameFormat): {
+  left: number;
+  right: number;
+  top: number;
+} {
+  const lr = frame.GetLRSpace();
+  const gutter = lr.GetGutterMargin();
+  if (frame.GetDoc().GetDocumentSettingManager().get("GUTTER_AT_TOP"))
+    return { left: 0, right: 0, top: gutter };
+  const right = lr.GetRightGutterMargin();
+  return frame.GetRtlGutter()
+    ? { left: right, right: gutter, top: 0 }
+    : { left: gutter, right, top: 0 };
 }
 
 /** Original special-format base admits only fly or drawing frame identities. */

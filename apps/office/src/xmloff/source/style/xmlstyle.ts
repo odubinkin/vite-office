@@ -1,5 +1,16 @@
 /** @fileoverview Implements streaming ODF style and numbering contexts from xmloff. */
-import { XMLPageHeaderFooterStyleContext, type OdfPageStoryGeometry } from "./PageMasterStyleMap";
+import {
+  XMLPageHeaderFooterStyleContext,
+  importPageBool,
+  importPageGrid,
+  importPageMargins,
+  importPageUsage,
+  type OdfPageGridProperty,
+  type OdfPageMargins,
+  type OdfPageStoryGeometry,
+} from "./PageMasterStyleMap";
+import type { PageStyleLayout } from "../../../offapi/com/sun/star/style/PageStyleLayout";
+import { importWritingDirection } from "./prhdlfac";
 import type { OdfBoxProperties } from "./bordrhdl";
 import { XMLShadowPropHdl } from "./shadwhdl";
 import type { ShadowFormat } from "../../../offapi/com/sun/star/table/ShadowFormat";
@@ -26,7 +37,6 @@ import type { Theme } from "../../../docmodel/inc/theme/Theme";
 import { XMLNumberWithAutoForVoidPropHdl } from "./xmlbahdl";
 import { SvxXMLListStyleContext, type XMLListStyleImportTarget } from "./xmlnumi";
 const ignoredStyleDefinitions = new Set([
-  XMLToken.STYLE_DEFAULT_PAGE_LAYOUT,
   XMLToken.TEXT_OUTLINE_STYLE,
   XMLToken.TEXT_NOTES_CONFIGURATION,
 ]);
@@ -45,6 +55,7 @@ export interface XMLStyleImportTarget extends XMLListStyleImportTarget {
   ): import("./XMLFontStylesContext").OdfFontFaceMetadata | undefined;
   registerDefaultStyle(definition: OdfStyleDefinition): void;
   registerPageLayout(name: string, layout: OdfPageLayout): void;
+  registerDefaultPageMode?(standard: boolean): void;
 }
 
 /** Physical ODF page-layout subset consumed by Writer's Standard page descriptor. */
@@ -54,12 +65,14 @@ export interface OdfPageLayout {
   readonly box?: OdfBoxProperties;
   readonly shadow?: ShadowFormat;
   readonly gutter?: number;
-  readonly bottomMargin: number;
+  readonly margins: OdfPageMargins;
+  readonly explicitMargins: ReadonlySet<string>;
+  readonly usage?: PageStyleLayout;
+  readonly direction?: number;
+  readonly rtlGutter?: boolean;
+  readonly grid: readonly OdfPageGridProperty[];
   readonly height: number;
   readonly landscape: boolean;
-  readonly leftMargin: number;
-  readonly rightMargin: number;
-  readonly topMargin: number;
   readonly width: number;
 }
 
@@ -173,8 +186,29 @@ export class XMLStylesContext extends SvXMLImportContext {
       return this.target.registerTheme
         ? new XMLThemeContext(attributes, this.target.registerTheme.bind(this.target))
         : new SvXMLIgnoreContext(true);
+    if (element === XMLToken.STYLE_DEFAULT_PAGE_LAYOUT)
+      return new XMLDefaultPageLayoutContext(this.target);
     if (ignoredStyleDefinitions.has(element)) return new SvXMLIgnoreContext();
     return null;
+  }
+}
+
+/** Imports the global standard page grid setting published by the native defaults service. */
+class XMLDefaultPageLayoutContext extends SvXMLImportContext {
+  /** Binds the native style import target. @param target - Document style owner. @returns Context. */
+  constructor(private readonly target: XMLStyleImportTarget) {
+    super();
+  }
+  /** Applies the original global grid mode. @param element - Style child. @param attributes - Layout properties. @returns Leaf context. */
+  override createFastChildContext(
+    element: XMLToken,
+    attributes: FastAttributeList,
+  ): SvXMLImportContext {
+    if (element === XMLToken.STYLE_PAGE_LAYOUT_PROPERTIES) {
+      const standard = importPageBool(attributes.get(XMLToken.STYLE_LAYOUT_GRID_STANDARD_MODE));
+      if (standard !== undefined) this.target.registerDefaultPageMode?.(standard);
+    }
+    return new SvXMLIgnoreContext();
   }
 }
 
@@ -184,6 +218,7 @@ class XMLPageLayoutContext extends SvXMLImportContext {
   private header: OdfPageStoryGeometry | undefined;
   private footer: OdfPageStoryGeometry | undefined;
   private readonly name: string;
+  private readonly usage: PageStyleLayout | undefined;
 
   /** Creates a named page-layout context. @param target - Style import target. @param attributes - Layout attributes. @returns Nothing. */
   public constructor(
@@ -191,8 +226,9 @@ class XMLPageLayoutContext extends SvXMLImportContext {
     attributes: FastAttributeList,
   ) {
     super();
-    attributes.assertOnly([XMLToken.STYLE_NAME], "page layout");
+    attributes.assertOnly([XMLToken.STYLE_NAME, XMLToken.STYLE_PAGE_USAGE], "page layout");
     this.name = attributes.require(XMLToken.STYLE_NAME, "page layout name");
+    this.usage = importPageUsage(attributes.get(XMLToken.STYLE_PAGE_USAGE));
   }
 
   /** Imports the single physical page-layout-properties child. @param element - Child token. @param attributes - Physical attributes. @returns Import context. */
@@ -222,17 +258,22 @@ class XMLPageLayoutContext extends SvXMLImportContext {
     const shadowValue = attributes.get(XMLToken.STYLE_SHADOW);
     const shadow = shadowValue === null ? undefined : new XMLShadowPropHdl().importXML(shadowValue);
     const gutterValue = attributes.get(XMLToken.LOEXT_MARGIN_GUTTER);
-    const gutter = gutterValue === null ? null : Converter.convertMeasure(gutterValue, "twip", 0);
+    const gutter = gutterValue === null ? null : Converter.convertMeasure(gutterValue, "mm100", 0);
+    const writing = attributes.get(XMLToken.STYLE_WRITING_MODE);
+    const direction = writing === null ? undefined : importWritingDirection(writing);
+    const { margins, explicit: explicitMargins } = importPageMargins(attributes);
     this.layout = {
       ...(Object.keys(box).length ? { box } : {}),
       ...(shadow === undefined ? {} : { shadow }),
       ...(gutter === null ? {} : { gutter }),
-      bottomMargin: importOptionalPageLength(attributes, XMLToken.FO_MARGIN_BOTTOM),
+      ...(this.usage === undefined ? {} : { usage: this.usage }),
+      ...(direction === undefined ? {} : { direction }),
+      ...(writing === null ? {} : { rtlGutter: ["rl-tb", "tb-rl", "rl", "tb"].includes(writing) }),
+      margins,
+      explicitMargins,
+      grid: importPageGrid(attributes),
       height,
       landscape: orientation === "landscape",
-      leftMargin: importOptionalPageLength(attributes, XMLToken.FO_MARGIN_LEFT, true),
-      rightMargin: importOptionalPageLength(attributes, XMLToken.FO_MARGIN_RIGHT, true),
-      topMargin: importOptionalPageLength(attributes, XMLToken.FO_MARGIN_TOP),
       width,
     };
     return new SvXMLIgnoreContext();
@@ -288,16 +329,6 @@ function readPageLayoutBox(attributes: FastAttributeList): OdfBoxProperties {
 /** Imports one required non-percent page length in twips. @param attributes - Source attributes. @param token - Attribute token. @param label - Error label. @returns Twip length. */
 function importPageLength(attributes: FastAttributeList, token: XMLToken, label: string): number {
   return importOdfLength(attributes.require(token, label), false, label);
-}
-
-/** Imports one optional page length, defaulting an omitted margin to zero. @param attributes - Source attributes. @param token - Attribute token. @param signed - Whether negative distances are allowed. @returns Twip length. */
-function importOptionalPageLength(
-  attributes: FastAttributeList,
-  token: XMLToken,
-  signed = false,
-): number {
-  const value = attributes.get(token);
-  return value === null ? 0 : importOdfLength(value, signed, "page margin");
 }
 
 /** Accumulates one bounded style definition. */

@@ -15,7 +15,16 @@ import type { SvxBrushItem } from "../../../../editeng/source/items/frmitems.bru
 import type { SvxFrameDirectionItem } from "../../../../editeng/inc/frmdiritem";
 import type { OdfTableVisualProperties } from "../../../../xmloff/source/table/XMLTableImport";
 import { Any } from "../../../../cppu/inc/com/sun/star/uno/Any";
-import { RES_BACKGROUND, RES_FRAMEDIR, RES_BOX, RES_SHADOW } from "../../../inc/hintids";
+import {
+  RES_BACKGROUND,
+  RES_FRAMEDIR,
+  RES_BOX,
+  RES_SHADOW,
+  RES_TEXTGRID,
+} from "../../../inc/hintids";
+import { SwTextGrid } from "../../../inc/tgrditem";
+import { Converter } from "../../../../sax/source/tools/converter";
+import { exportWritingDirection } from "../../../../xmloff/source/style/prhdlfac";
 import { writerColorValue, type SwAttrSet } from "../../core/attr/swatrset";
 import {
   XMLBorderHdl,
@@ -45,6 +54,22 @@ export function exportFrameVisualProperties(items: SwAttrSet): OdfTableVisualPro
   } finally {
     any.dispose();
   }
+}
+
+/** Exports the represented writing direction and native page grid properties. @param master - Actual master frame. @returns Layout attributes. */
+export function exportPageWritingAndGrid(master: SwFrameFormat): string {
+  const mode = exportFrameVisualProperties(master.GetAttrSet()).writingMode;
+  let attributes =
+    mode === undefined ? "" : ` style:writing-mode="${exportWritingDirection(mode)}"`;
+  if (!master.GetAttrSet().GetItemIfSet(RES_TEXTGRID, false)) return attributes;
+  const grid = master.GetTextGrid();
+  const color: [string] = [""];
+  Converter.convertColor(color, grid.GetColor().toInt32());
+  const type = grid.GetGridType();
+  attributes += ` style:layout-grid-color="${color[0]}" style:layout-grid-lines="${grid.GetLines()}" style:layout-grid-base-height="${Converter.convertMeasureToXML(grid.GetBaseHeight(), "twip")}" style:layout-grid-ruby-height="${Converter.convertMeasureToXML(grid.GetRubyHeight(), "twip")}" style:layout-grid-mode="${type === SwTextGrid.LinesOnly ? "line" : type === SwTextGrid.LinesAndChars ? "both" : "none"}" style:layout-grid-ruby-below="${grid.IsRubyTextBelow()}" style:layout-grid-print="${grid.IsPrintGrid()}" style:layout-grid-display="${grid.IsDisplayGrid()}"`;
+  if (!grid.IsSquaredMode())
+    attributes += ` style:layout-grid-base-width="${Converter.convertMeasureToXML(grid.GetBaseWidth(), "twip")}" style:layout-grid-snap-to="${grid.IsSnapToChars()}"`;
+  return attributes;
 }
 
 /** Formats native twip values for the existing presentation shorthand control. @param line - Native line. @returns Presentation input. */
@@ -98,7 +123,8 @@ export function exportPageLayoutBox(
     }
   }
   const gutter = master.GetLRSpace().GetGutterMargin();
-  if (gutter) attributes.push(`loext:margin-gutter="${formatLength(gutter)}"`);
+  if (gutter)
+    attributes.push(`loext:margin-gutter="${Converter.convertMeasureToXML(gutter, "twip")}"`);
   return attributes.length ? ` ${attributes.join(" ")}` : "";
 }
 

@@ -5425,3 +5425,24 @@ at the end of import produce no marks. Writer preserves these pairing rules.
 
 - [Original pending range map](../../vendor/libreoffice-reference/xmloff/source/text/txtimp.cxx)
 - [Original range validation](../../vendor/libreoffice-reference/xmloff/source/text/XMLTextMarkImportContext.cxx)
+
+### WRITER-690 — ODT infers right-to-left gutter direction from writing mode
+
+The page exporter uses the native `RtlGutter` flag when choosing the side
+that receives the gutter. Its property handler emits no separate attribute
+for the flag. Import infers the flag from `style:writing-mode`, including
+the legacy `rl` and `tb` tokens. An independently set gutter direction can
+therefore change on reopen if it disagrees with the writing mode. Writer
+preserves both sides of this contract.
+
+- [Original getter and setter mapping](../../vendor/libreoffice-reference/xmloff/source/style/XMLRtlGutterPropertyHandler.cxx)
+- [Original margin adjustment](../../vendor/libreoffice-reference/xmloff/source/style/PageMasterImportPropMapper.cxx)
+
+### WRITER-691 — ODT adjusts only explicit page margins for a gutter
+
+Shorthand `fo:margin` creates a property for each missing side. The gutter
+adjustment visits only the original side properties. A margin inherited
+from the shorthand therefore keeps its authored value before Writer adds
+the gutter during layout. Writer preserves this ordering.
+
+- [Original margin synthesis and gutter adjustment](../../vendor/libreoffice-reference/xmloff/source/style/PageMasterImportPropMapper.cxx)
