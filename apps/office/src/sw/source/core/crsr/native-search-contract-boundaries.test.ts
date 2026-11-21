@@ -650,7 +650,7 @@ it("checks real undo range ownership and the original default normal replacement
     expect(
       /** A collapsed unmarked range is outside this represented undo operation. @returns Action. */ () =>
         new SwUndoReplace(unmarked, "x"),
-    ).toThrow("requires a normal marked same-node range");
+    ).toThrow("requires a marked range");
     expect(new SwUndoReplace(selected, "x").GetPayloadSize()).toBeGreaterThan(0);
     expect(node.GetText()).toBe("abc");
   } finally {
