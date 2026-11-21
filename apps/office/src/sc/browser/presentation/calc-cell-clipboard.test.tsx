@@ -110,6 +110,39 @@ it("copies cells and their formats, then pastes relative formulas through one na
   expect((doc.GetPattern(c3)?.GetItem(101) as SvxFontHeightItem).GetHeight()).toBe(320);
 });
 
+it("ports tdf119343 by recalculating the pasted reference against the next row", async () => {
+  const controller = mount();
+  act(() => {
+    for (const [row, value] of [
+      [293, "Q108420"],
+      [294, "Q1099565"],
+      [295, "Q11005355"],
+    ] as const) {
+      controller.Select(9, row);
+      expect(controller.EnterString(value)).toBe(true);
+    }
+    for (const row of [293, 294]) {
+      controller.Select(12, row);
+      expect(controller.EnterString("=+J" + (row + 1))).toBe(true);
+    }
+  });
+  select("M295");
+  const clipboard = transfer();
+  fireEvent.copy(grid(), { clipboardData: clipboard });
+  fireEvent.keyDown(grid(), { key: "ArrowDown" });
+  await act(async () => fireEvent.paste(grid(), { clipboardData: clipboard }));
+  const doc = controller.shell.GetDocument();
+  for (const [row, expected] of [
+    [293, "Q108420"],
+    [294, "Q1099565"],
+    [295, "Q11005355"],
+  ] as const) {
+    const cell = doc.GetFormulaCell(new ScAddress(12, row, 0));
+    assert(cell);
+    expect(text(cell.GetString().getString())).toBe(expected);
+  }
+});
+
 it("asks for Text Import settings, preserves leading zeroes and skips empty cells on confirmation", async () => {
   const controller = mount(),
     doc = controller.shell.GetDocument();

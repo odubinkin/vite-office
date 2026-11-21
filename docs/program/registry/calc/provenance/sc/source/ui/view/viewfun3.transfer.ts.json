@@ -29,6 +29,10 @@
         {
           "path": "apps/office/src/sc/browser/presentation/calc-cell-clipboard.test.tsx",
           "marker": "asks for Text Import settings"
+        },
+        {
+          "path": "apps/office/src/sc/browser/presentation/calc-cell-clipboard.test.tsx",
+          "marker": "ports tdf119343"
         }
       ],
       "upstream": [
@@ -43,6 +47,10 @@
         {
           "path": "vendor/libreoffice-reference/sc/source/ui/view/viewfun5.cxx",
           "marker": "ScViewFunc::PasteDataFormatFormattedText"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/qa/uitest/calc_tests8/tdf119343_calculate_pasted_formula.py",
+          "marker": "test_tdf119343_copy_paste_formula"
         }
       ]
     },
