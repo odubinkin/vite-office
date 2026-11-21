@@ -5614,3 +5614,14 @@ applies its authored properties without that collection change.
 - Writer retains the summary fields and compares the complete items. The
   browser regression distinguishes paragraphs that differ only in a
   justification member or the automatic-first-line flag.
+
+### WRITER-704 — “Not Bold” and “Not Italic” produce exact default font members
+
+- Upstream `cui/source/tabpages/chardlg.cxx`, in
+  `SvxCharNamePage::FillItemSet_Impl`, the two search-only style entries
+  write normal weight and upright posture respectively. The other member
+  is left alone. Writer’s attribute search compares the native values,
+  so “Not Bold” can exclude light weight alongside bold weight.
+- Writer retains the exact, one-sided criteria. The browser regression
+  distinguishes regular, light and bold text and verifies that italic
+  text can match “Not Bold”.

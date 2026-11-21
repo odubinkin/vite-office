@@ -1,0 +1,42 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/svx/source/dialog/langbox.ts",
+    "classification": "upstream-mechanism",
+    "state": "active",
+    "suite": "shared",
+    "subsystem": "text-search",
+    "capabilityIds": [
+      "CAP-0111"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/svx/source/dialog/langbox.ts#getLanguageChoices",
+        "apps/office/src/svx/source/dialog/langbox.ts#resolveEditedLanguage",
+        "svx/source/dialog/langbox.cxx#SvxLanguageBox::SetLanguageList",
+        "svx/source/dialog/langbox.cxx#SvxLanguageBox::SaveEditedAsEntry",
+        "apps/office/src/svx/source/dialog/langbox.ts#sortLanguageChoices",
+        "svx/source/dialog/langbox.cxx#SortLanguages"
+      ],
+      "justification": "Preserves script-specific language admission, special choices and valid BCP47-to-LanguageType resolution for the browser search font page.",
+      "knownViolations": [],
+      "localSymbols": [
+        "getLanguageChoices",
+        "resolveEditedLanguage",
+        "sortLanguageChoices"
+      ],
+      "sourceResponsibility": "divergent",
+      "upstreamFile": "svx/source/dialog/langbox.cxx",
+      "upstreamSymbols": [
+        "SvxLanguageBox::SetLanguageList",
+        "SvxLanguageBox::SaveEditedAsEntry",
+        "SortLanguages"
+      ]
+    }
+  }
+}

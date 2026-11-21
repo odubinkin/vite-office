@@ -1,0 +1,56 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "status": "mapped",
+    "localPath": "apps/office/src/svx/source/dialog/langbox.ts",
+    "localSymbols": [
+      "getLanguageChoices",
+      "resolveEditedLanguage",
+      "sortLanguageChoices"
+    ],
+    "upstreamPath": "svx/source/dialog/langbox.cxx",
+    "upstreamSymbols": [
+      "SvxLanguageBox::SetLanguageList",
+      "SvxLanguageBox::SaveEditedAsEntry",
+      "SortLanguages"
+    ],
+    "preservedResponsibilities": [
+      "Preserves script-specific language admission, special choices and valid BCP47-to-LanguageType resolution for the browser search font page."
+    ],
+    "omittedResponsibilities": [
+      "Native translation catalog loading and spellchecker availability badges remain browser and service concerns."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/svx/source/dialog/langbox.ts",
+          "marker": "getLanguageChoices"
+        },
+        {
+          "path": "apps/office/src/svx/source/dialog/langbox.ts",
+          "marker": "resolveEditedLanguage"
+        },
+        {
+          "path": "apps/office/src/svx/source/dialog/langbox.ts",
+          "marker": "sortLanguageChoices"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/svx/source/dialog/langbox.cxx",
+          "marker": "SvxLanguageBox::SetLanguageList"
+        },
+        {
+          "path": "vendor/libreoffice-reference/svx/source/dialog/langbox.cxx",
+          "marker": "SvxLanguageBox::SaveEditedAsEntry"
+        },
+        {
+          "path": "vendor/libreoffice-reference/svx/source/dialog/langbox.cxx",
+          "marker": "SortLanguages"
+        }
+      ]
+    }
+  }
+}

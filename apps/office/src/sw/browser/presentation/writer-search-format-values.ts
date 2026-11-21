@@ -34,6 +34,8 @@ import { SvxColorItem } from "../../../editeng/source/items/textitem.color";
 import { SvxBrushItem } from "../../../editeng/source/items/frmitems.brush";
 import { Color, COL_AUTO, COL_TRANSPARENT } from "../../../tools/inc/color";
 import { FontRelief } from "../../../vcl/inc/fntstyle";
+import { SvxLanguageItem } from "../../../editeng/inc/langitem";
+import { describeLanguage } from "../../../svx/source/dialog/langbox";
 import { SvxFontItem } from "../../../editeng/source/items/textitem.font";
 import {
   SvxFontHeightItem,
@@ -63,6 +65,9 @@ import {
   RES_CHRATR_CROSSEDOUT,
   RES_CHRATR_FONT,
   RES_CHRATR_FONTSIZE,
+  RES_CHRATR_LANGUAGE,
+  RES_CHRATR_CJK_LANGUAGE,
+  RES_CHRATR_CTL_LANGUAGE,
   RES_CHRATR_KERNING,
   RES_CHRATR_OVERLINE,
   RES_CHRATR_POSTURE,
@@ -239,6 +244,7 @@ export function readSearchFormatValue(item: SfxPoolItem | undefined): string {
   )
     return String(item.GetValue());
   if (item instanceof SvxFontItem) return item.GetFamilyName();
+  if (item instanceof SvxLanguageItem) return String(item.GetLanguage());
   if (item instanceof SvxFontHeightItem) return String(item.GetHeight() / 20);
   if (item instanceof SvxKerningItem) return String(item.GetValue() / 20);
   if (item instanceof SvxUnderlineItem || item instanceof SvxOverlineItem)
@@ -307,6 +313,10 @@ export function makeSearchFormatItem(
       item.SetFamilyName(value);
       return item;
     }
+    case RES_CHRATR_LANGUAGE:
+    case RES_CHRATR_CJK_LANGUAGE:
+    case RES_CHRATR_CTL_LANGUAGE:
+      return new SvxLanguageItem(Number(value), which);
     case RES_CHRATR_FONTSIZE:
       return new SvxFontHeightItem(Math.round(Number(value) * 20), 100, which);
     case RES_CHRATR_WEIGHT:
@@ -419,6 +429,11 @@ function describeSearchFormat(
         : text("attribute.widows", "Widows");
     return `${name} ${item.GetValue()}`;
   }
+  if (item instanceof SvxLanguageItem)
+    return text(
+      `format.language-value.${item.GetLanguage()}`,
+      describeLanguage(item.GetLanguage()),
+    );
   if (item instanceof SvxFontItem) return item.GetFamilyName();
   if (item instanceof SvxFontHeightItem) return `${item.GetHeight() / 20} pt`;
   if (item instanceof SvxWeightItem) {

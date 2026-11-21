@@ -26,13 +26,11 @@ import { SfxPoolItem } from "../../../svl/source/items/poolitem";
 import { SearchAttrItemList } from "../../../svx/source/dialog/srchdlg";
 import {
   caseEffects,
-  fontWeights,
   makeSearchFormatItem,
   paragraphVerticalAlignments,
   ParagraphLineSpaceMode,
   readParagraphLineSpacing,
   setParagraphLineSpacing,
-  postures,
   readSearchFormatValue,
   reliefs,
   strikeouts,
@@ -55,6 +53,9 @@ import {
   RES_CHRATR_WORDLINEMODE,
   RES_CHRATR_FONT,
   RES_CHRATR_FONTSIZE,
+  RES_CHRATR_LANGUAGE,
+  RES_CHRATR_CJK_LANGUAGE,
+  RES_CHRATR_CTL_LANGUAGE,
   RES_CHRATR_POSTURE,
   RES_CHRATR_UNDERLINE,
   RES_CHRATR_WEIGHT,
@@ -71,10 +72,22 @@ import {
 } from "../../inc/hintids";
 import { WRITER_SEARCH_ATTR_WHICH_RANGES } from "../../source/uibase/uiview/viewsrch";
 import { WriterDialogHeader } from "./WriterDialogHeader";
+import { WriterSearchFontPage } from "./WriterSearchFontPage";
 import { WriterSearchParagraphAlignment } from "./WriterSearchParagraphAlignment";
 
 const formatPages = {
-  font: ["Font", [RES_CHRATR_FONT, RES_CHRATR_FONTSIZE, RES_CHRATR_WEIGHT, RES_CHRATR_POSTURE]],
+  font: [
+    "Font",
+    [
+      RES_CHRATR_FONT,
+      RES_CHRATR_FONTSIZE,
+      RES_CHRATR_WEIGHT,
+      RES_CHRATR_POSTURE,
+      RES_CHRATR_LANGUAGE,
+      RES_CHRATR_CJK_LANGUAGE,
+      RES_CHRATR_CTL_LANGUAGE,
+    ],
+  ],
   effects: [
     "Font Effects",
     [
@@ -128,6 +141,7 @@ export function WriterSearchFormatDialog(
   const localization = useBrowserLocalization();
   const root = useRef<HTMLFormElement>(null);
   const [page, setPage] = useState<keyof typeof formatPages>("font");
+  const [fontReset, setFontReset] = useState(0);
   const [lineMode, setLineMode] = useState<ParagraphLineSpaceMode>();
   const [draft, setDraft] = useState<ReadonlyMap<number, string | SfxPoolItem>>(new Map());
   const title =
@@ -152,6 +166,11 @@ export function WriterSearchFormatDialog(
     return list?.GetEntries()[list.FindLast(slot)]?.item;
   }
 
+  /** Reads a saved scalar criterion before the current page edits. @param which - Item family. @returns Saved field value. */
+  function initialScalar(which: number): string {
+    return readSearchFormatValue(existing(which));
+  }
+
   /** Reads the current value for a scalar control. @param which - Item family. @returns Current field value. */
   function scalar(which: number): string {
     const delta = draft.get(which);
@@ -172,6 +191,7 @@ export function WriterSearchFormatDialog(
     const restored = new Map(draft);
     for (const which of formatPages[page][1]) restored.delete(which);
     if (page === "indents") setLineMode(undefined);
+    if (page === "font") setFontReset(fontReset + 1);
     setDraft(restored);
   }
 
@@ -540,44 +560,13 @@ export function WriterSearchFormatDialog(
           hidden={page !== "font"}
           className={page === "font" ? "grid gap-2" : undefined}
         >
-          <label className="grid gap-1 text-sm">
-            {localization.GetText("writer.search.format.family", "Family")}
-            <input
-              className="rounded border border-slate-400 p-1"
-              value={scalar(RES_CHRATR_FONT)}
-              onChange={
-                /** Tracks the chosen family. @param event - Input event. @returns Nothing. */ (
-                  event,
-                ) => change(RES_CHRATR_FONT, event.currentTarget.value)
-              }
-            />
-          </label>
-          {select(
-            RES_CHRATR_WEIGHT,
-            localization.GetText("writer.search.format.weight", "Weight"),
-            fontWeights,
-          )}
-          {select(
-            RES_CHRATR_POSTURE,
-            localization.GetText("writer.search.format.posture", "Posture"),
-            postures,
-          )}
-          <label className="grid gap-1 text-sm">
-            {localization.GetText("writer.search.format.size", "Size")}
-            <input
-              type="number"
-              min={1}
-              max={999.9}
-              step={0.1}
-              className="rounded border border-slate-400 p-1"
-              value={scalar(RES_CHRATR_FONTSIZE)}
-              onChange={
-                /** Tracks the absolute point height. @param event - Input event. @returns Nothing. */ (
-                  event,
-                ) => change(RES_CHRATR_FONTSIZE, event.currentTarget.value)
-              }
-            />
-          </label>
+          <WriterSearchFontPage
+            key={fontReset}
+            value={scalar}
+            initial={initialScalar}
+            change={change}
+            label={label}
+          />
         </div>
         <div
           role="tabpanel"

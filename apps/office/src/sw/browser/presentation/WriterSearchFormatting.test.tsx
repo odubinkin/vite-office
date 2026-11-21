@@ -7,8 +7,10 @@ import {
   SvxUnderlineItem,
   SvxOverlineItem,
   SvxWeightItem,
+  SvxPostureItem,
   SvxFontHeightItem,
 } from "../../../editeng/source/items/textitem";
+import { SvxLanguageItem } from "../../../editeng/inc/langitem";
 import { SvxBreak } from "../../../editeng/inc/svxenum";
 import { SvxTabAdjust, SvxTabStop, SvxTabStopItem } from "../../../editeng/inc/tstpitem";
 import { SfxInt16Item } from "../../../svl/source/items/intitem";
@@ -24,7 +26,7 @@ import {
 } from "../../../editeng/source/items/textitem.escapement";
 import { SvxKerningItem } from "../../../editeng/source/items/textitem.spacing";
 import { Color } from "../../../tools/inc/color";
-import { FontWeight } from "../../../tools/inc/fontenum";
+import { FontItalic, FontWeight } from "../../../tools/inc/fontenum";
 import { Any } from "../../../cppu/inc/com/sun/star/uno/Any";
 import { SfxGrabBagItem } from "../../../svl/inc/grabbagitem";
 import { SfxItemSet } from "../../../svl/source/items/itemset";
@@ -33,12 +35,15 @@ import {
   RES_CHRATR_BACKGROUND,
   RES_CHRATR_BEGIN,
   RES_CHRATR_COLOR,
+  RES_CHRATR_CJK_LANGUAGE,
   RES_CHRATR_END,
   RES_CHRATR_ESCAPEMENT,
   RES_CHRATR_FONTSIZE,
   RES_CHRATR_GRABBAG,
   RES_CHRATR_HIGHLIGHT,
   RES_CHRATR_KERNING,
+  RES_CHRATR_LANGUAGE,
+  RES_CHRATR_POSTURE,
   RES_CHRATR_OVERLINE,
   RES_CHRATR_UNDERLINE,
   RES_CHRATR_WEIGHT,
@@ -179,8 +184,8 @@ it("combines exact formatting criteria and replaces them with one undo", /** Ada
   const format = dialog.getByRole("button", { name: "Format…" });
   fireEvent.click(format);
   const searchFormat = within(screen.getByRole("dialog", { name: "Search" }));
-  fireEvent.change(searchFormat.getByLabelText("Weight"), {
-    target: { value: FontWeight.WEIGHT_BOLD },
+  fireEvent.change(searchFormat.getByLabelText("Style"), {
+    target: { value: `${FontWeight.WEIGHT_BOLD}:0` },
   });
   fireEvent.click(searchFormat.getByRole("button", { name: "OK" }));
   expect(dialog.getByText("bold", { exact: true })).toBeVisible();
@@ -685,6 +690,127 @@ it("finds the complete justification and automatic first-line criteria", /** Por
     );
   } finally {
     metric.mockRestore();
+    workbench.unmount();
+    session.view.Close();
+  }
+});
+
+it("finds language and the native Not Bold font criterion, then replaces language and posture", /** Verifies independent font criteria through both sides of the formatting dialog and undo. @returns Nothing. */ () => {
+  const session = createWriterDocumentSession();
+  const shell = session.view.GetWrtShell();
+  const node = shell.GetActiveParagraph();
+  shell.Insert("word word word word");
+  const pool = node.GetDoc().GetAttrPool();
+  const items = new SfxItemSet(pool, [[RES_CHRATR_BEGIN, RES_CHRATR_END - 1]]);
+  const beginning = new SwPosition(node, 0);
+  const range = new SwPaM(beginning);
+  range.SetMark();
+  const french = 0x040c;
+  const english = 0x0409;
+  for (const [start, weight, language] of [
+    [0, FontWeight.WEIGHT_NORMAL, french],
+    [5, FontWeight.WEIGHT_LIGHT, french],
+    [10, FontWeight.WEIGHT_BOLD, french],
+    [15, FontWeight.WEIGHT_NORMAL, english],
+  ] as const) {
+    range.GetMark().SetContent(start);
+    range.GetPoint().SetContent(start + 4);
+    items.Put(new SvxLanguageItem(language, RES_CHRATR_LANGUAGE));
+    items.Put(new SvxWeightItem(weight, RES_CHRATR_WEIGHT));
+    items.Put(new SvxPostureItem(FontItalic.ITALIC_NORMAL, RES_CHRATR_POSTURE));
+    if (start === 15) items.Put(new SvxLanguageItem(0x0411, RES_CHRATR_CJK_LANGUAGE));
+    node.GetDoc().GetDocumentContentOperationsManager().InsertItemSet(range, items);
+  }
+  range.Dispose();
+  items.Dispose();
+  shell.SetCursor(beginning);
+  beginning.Dispose();
+
+  const before = new SwAttrIter(node);
+  before.Seek(1);
+  expect(
+    (before.GetAttrHandler().ReadItem(RES_CHRATR_LANGUAGE) as SvxLanguageItem).GetLanguage(),
+  ).toBe(french);
+  expect((before.GetAttrHandler().ReadItem(RES_CHRATR_WEIGHT) as SvxWeightItem).GetWeight()).toBe(
+    FontWeight.WEIGHT_NORMAL,
+  );
+  const workbench = render(<WriterWorkbench isActive view={session.view} />);
+  try {
+    fireEvent.keyDown(window, { key: "h", ctrlKey: true });
+    const dialog = within(screen.getByRole("dialog", { name: "Find and Replace" }));
+    fireEvent.click(dialog.getByText("Other options"));
+    fireEvent.click(dialog.getByRole("button", { name: "Format…" }));
+    const searchFormat = within(screen.getByRole("dialog", { name: "Search" }));
+    fireEvent.change(searchFormat.getByRole("combobox", { name: "Style" }), {
+      target: { value: `${FontWeight.WEIGHT_NORMAL}:` },
+    });
+    const language = searchFormat.getByRole("combobox", { name: "Language" });
+    fireEvent.change(language, { target: { value: "fr-FR" } });
+    fireEvent.blur(language);
+    expect(language).toHaveValue("French (France)");
+    fireEvent.click(searchFormat.getByRole("button", { name: "OK" }));
+    expect(dialog.getByText("regular, French (France)")).toBeVisible();
+    fireEvent.click(dialog.getByRole("checkbox", { name: "Search for styles" }));
+    fireEvent.click(dialog.getByRole("button", { name: "Find All" }));
+    const matches = [...shell.GetCursor().GetRingContainer()];
+    expect(matches).toHaveLength(1);
+    expect(matches[0]?.Start().GetContentIndex()).toBe(0);
+    expect(matches[0]?.End().GetContentIndex()).toBe(4);
+    const attrs = new SwAttrIter(node);
+    attrs.Seek(1);
+    expect(
+      (attrs.GetAttrHandler().ReadItem(RES_CHRATR_POSTURE) as SvxPostureItem).GetPosture(),
+    ).toBe(FontItalic.ITALIC_NORMAL);
+
+    fireEvent.focus(dialog.getByLabelText("Replace with"));
+    fireEvent.click(dialog.getByRole("button", { name: "Format…" }));
+    const replacement = within(screen.getByRole("dialog", { name: "Replace" }));
+    fireEvent.change(replacement.getByRole("combobox", { name: "Style" }), {
+      target: { value: `:${FontItalic.ITALIC_NONE}` },
+    });
+    fireEvent.change(replacement.getByRole("combobox", { name: "Language" }), {
+      target: { value: "English (USA)" },
+    });
+    fireEvent.click(replacement.getByRole("button", { name: "OK" }));
+    fireEvent.click(dialog.getByRole("button", { name: "Replace All" }));
+    const applied = new SwAttrIter(node);
+    applied.Seek(1);
+    expect(
+      (applied.GetAttrHandler().ReadItem(RES_CHRATR_LANGUAGE) as SvxLanguageItem).GetLanguage(),
+    ).toBe(english);
+    expect(
+      (applied.GetAttrHandler().ReadItem(RES_CHRATR_POSTURE) as SvxPostureItem).GetPosture(),
+    ).toBe(FontItalic.ITALIC_NONE);
+    act(
+      /** Restores original text formatting in one operation. @returns Nothing. */
+      () => {
+        expect(shell.Undo()).toBe(true);
+      },
+    );
+    const restored = new SwAttrIter(node);
+    restored.Seek(1);
+    expect(
+      (restored.GetAttrHandler().ReadItem(RES_CHRATR_LANGUAGE) as SvxLanguageItem).GetLanguage(),
+    ).toBe(french);
+    expect(
+      (restored.GetAttrHandler().ReadItem(RES_CHRATR_POSTURE) as SvxPostureItem).GetPosture(),
+    ).toBe(FontItalic.ITALIC_NORMAL);
+
+    fireEvent.focus(dialog.getByLabelText("Find"));
+    fireEvent.click(dialog.getByRole("button", { name: "No Format" }));
+    fireEvent.click(dialog.getByRole("button", { name: "Format…" }));
+    const typedLanguage = within(screen.getByRole("dialog", { name: "Search" }));
+    const languageField = typedLanguage.getByRole("combobox", { name: "Language" });
+    fireEvent.change(languageField, { target: { value: "ja-JP" } });
+    fireEvent.blur(languageField);
+    fireEvent.click(typedLanguage.getByRole("button", { name: "OK" }));
+    expect(dialog.getByText("Japanese")).toBeVisible();
+    fireEvent.click(dialog.getByRole("button", { name: "Find All" }));
+    const asian = [...shell.GetCursor().GetRingContainer()];
+    expect(asian).toHaveLength(1);
+    expect(asian[0]?.Start().GetContentIndex()).toBe(15);
+    expect(asian[0]?.End().GetContentIndex()).toBe(19);
+  } finally {
     workbench.unmount();
     session.view.Close();
   }

@@ -1,0 +1,32 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sw/browser/presentation/WriterSearchFontPage.tsx",
+    "classification": "browser-adaptation",
+    "state": "active",
+    "suite": "writer",
+    "subsystem": "text-search",
+    "capabilityIds": [
+      "CAP-0111"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "not-applicable",
+      "defaultStatus": "not-applicable",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/sw/browser/presentation/WriterSearchFontPage.tsx#WriterSearchFontPage",
+        "apps/office/src/sw/browser/presentation/WriterSearchFormatting.test.tsx"
+      ],
+      "justification": "Maps the pinned Western font search controls to character items, including original one-sided search style behavior and language slot resolution.",
+      "knownViolations": [],
+      "localSymbols": [
+        "WriterSearchFontPage"
+      ],
+      "sourceResponsibility": "browser-owned",
+      "upstreamFile": null,
+      "upstreamSymbols": []
+    }
+  }
+}
