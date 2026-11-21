@@ -4,7 +4,7 @@ title: "Implement Writer search and replace core and browser UI"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 55
+revision: 56
 origin:
   system: "manual"
 depends_on:
@@ -169,6 +169,9 @@ comments:
   -
     author: "CODER"
     body: "Verified checkpoint: Writer Find and Replace now carries separate native slot-keyed attribute lists. The Attributes checklist selects non-default values. Format edits concrete font family, weight, posture, size and underline values on the focused find or replace side. No Format clears that list. The cursor strategy combines live character and node attributes with bounded text search and preserves directional selection and grouped replacement undo. The document operations reuse the existing SwUndoAttr construction. Find Bar supplies UseAttrItemList=false. Targeted Writer verification passed 126 cases in eight files plus four filter InsertItemSet cases. The two native formatting UI adaptations passed again after final exact-description changes. Both Writer resource checks, production build, scoped lint and formatting, dependencies, source-tree/provenance, JSDoc, file size, policy routing and whitespace passed. Doctor retains its existing hook warning. Full search task remains open for the complete formatting pages, annotation model integration, and the pinned ICU regex backend. The repo-local Emscripten SDK documented for native WASM builds is absent. No full suite was due for this intermediate checkpoint. The user stop condition still applies only after complete task closure."
+  -
+    author: "CODER"
+    body: "Verified checkpoint: expanded Writer search Format with native color, line decorations, case and relief, Position controls, and the Highlighting brush. Per-page Reset keeps edits on the other pages. Native character Which ranges retain applied items in text-node, paragraph-style and automatic-format sets. Writer paints the represented colored underline/overline and the source highlight-over-background precedence. The Worker codec retains overline color, character background and rotation fit. WRITER-699 records visible imported highlighting that the background-specific search ignores; the regression keeps the two source WhichIds distinct. Verification passed 116 targeted cases in 13 files, with three formatting tests repeated after extending that regression. Both Writer resource checks, production build, dependency boundaries, source provenance and tree, Writer WhichIds, JSDoc, file sizes, scoped ESLint and Prettier, policy routing and whitespace passed. Doctor retains the existing hook warning. Paragraph format pages, complete character rendering and ODF mappings, search in annotations, and ICU regex remain open. The existing Writer toolbar highlight still writes the highlight item rather than the native toolbar background item. The pending SDK approval does not block the independent formatting work. The task and goal remain active; no full regression was due for this checkpoint."
 events:
   -
     type: "status"
@@ -392,8 +395,13 @@ events:
     at: "2026-11-21T08:36:37.723Z"
     author: "CODER"
     body: "Verified checkpoint: Writer Find and Replace now carries separate native slot-keyed attribute lists. The Attributes checklist selects non-default values. Format edits concrete font family, weight, posture, size and underline values on the focused find or replace side. No Format clears that list. The cursor strategy combines live character and node attributes with bounded text search and preserves directional selection and grouped replacement undo. The document operations reuse the existing SwUndoAttr construction. Find Bar supplies UseAttrItemList=false. Targeted Writer verification passed 126 cases in eight files plus four filter InsertItemSet cases. The two native formatting UI adaptations passed again after final exact-description changes. Both Writer resource checks, production build, scoped lint and formatting, dependencies, source-tree/provenance, JSDoc, file size, policy routing and whitespace passed. Doctor retains its existing hook warning. Full search task remains open for the complete formatting pages, annotation model integration, and the pinned ICU regex backend. The repo-local Emscripten SDK documented for native WASM builds is absent. No full suite was due for this intermediate checkpoint. The user stop condition still applies only after complete task closure."
+  -
+    type: "comment"
+    at: "2026-11-21T08:50:21.622Z"
+    author: "CODER"
+    body: "Verified checkpoint: expanded Writer search Format with native color, line decorations, case and relief, Position controls, and the Highlighting brush. Per-page Reset keeps edits on the other pages. Native character Which ranges retain applied items in text-node, paragraph-style and automatic-format sets. Writer paints the represented colored underline/overline and the source highlight-over-background precedence. The Worker codec retains overline color, character background and rotation fit. WRITER-699 records visible imported highlighting that the background-specific search ignores; the regression keeps the two source WhichIds distinct. Verification passed 116 targeted cases in 13 files, with three formatting tests repeated after extending that regression. Both Writer resource checks, production build, dependency boundaries, source provenance and tree, Writer WhichIds, JSDoc, file sizes, scoped ESLint and Prettier, policy routing and whitespace passed. Doctor retains the existing hook warning. Paragraph format pages, complete character rendering and ODF mappings, search in annotations, and ICU regex remain open. The existing Writer toolbar highlight still writes the highlight item rather than the native toolbar background item. The pending SDK approval does not block the independent formatting work. The task and goal remain active; no full regression was due for this checkpoint."
 doc_version: 3
-doc_updated_at: "2026-11-21T08:36:37.723Z"
+doc_updated_at: "2026-11-21T08:50:21.622Z"
 doc_updated_by: "CODER"
 description: "Implement the approved coherent Writer search-and-replace feature from pinned LibreOffice sources: real shared search engine and options, native paragraph/cursor traversal and replacement/history contracts, view-owned search state and dispatch, Find toolbar and Find and Replace dialog with generated upstream command placement and shortcuts. Preserve source semantics and explicit unsupported boundaries; never substitute DOM text search or browser RegExp for ICU contracts. Work only on writer in vite-office-writer; local upstream reading approved, no network or merges. Keep active until approved scope is verified."
 sections:

@@ -74,6 +74,7 @@ import { RTL_TEXTENCODING_DONTKNOW } from "../../../../sal/inc/rtl/textenc";
 import { SwHeaderAndFooterEatSpacingItem } from "../../../inc/hfspacingitem";
 import { SfxBoolItem } from "../../../../svl/source/items/cenumitm";
 import { restoreParagraphControlItem, writerColorFromPrimitive } from "./swatrset.paragraph";
+import { writerCharacterItemFactory } from "./swatrset.character";
 export { writerColorFromPrimitive } from "./swatrset.paragraph";
 import { SfxInt16Item, SfxUInt16Item } from "../../../../svl/source/items/intitem";
 import { SfxItemPool } from "../../../../svl/source/items/itempool";
@@ -197,7 +198,7 @@ export class SwAttrPool extends SfxItemPool {
       RES_ANCHOR,
       RES_SURROUND,
     ])
-      register(which);
+      register(which, writerCharacterItemFactory(which));
     register(
       RES_FLY_SPLIT,
       /** Restores the original boolean fly split item. @param value - Native wire value. @returns Actual item. */

@@ -3,6 +3,7 @@ import { getPageBodyGeometry } from "../../source/core/layout/pagedesc";
 import { SwStyleNameMapper } from "../../source/core/doc/SwStyleNameMapper";
 import { IsPoolUserFormat } from "../../inc/poolfmt";
 import {
+  writerColorValue,
   writerTextColorValue,
   writerHighlightColorValue,
   writerParagraphBackgroundColor,
@@ -39,8 +40,18 @@ import { SwTextNode } from "../../source/core/txtnode/ndtxt";
 import { SwAttrIter } from "../../source/core/text/itratr";
 import { GetTextAttrMode } from "../../inc/swtypes";
 import { SwFormatINetFormat } from "../../source/core/txtnode/fmtatr2";
-import { SvxUnderlineItem } from "../../../editeng/source/items/textitem";
-import { RES_CHRATR_UNDERLINE, RES_TXTATR_INETFMT } from "../../inc/hintids";
+import {
+  FontLineStyle,
+  SvxOverlineItem,
+  SvxUnderlineItem,
+  type SvxTextLineItem,
+} from "../../../editeng/source/items/textitem";
+import {
+  RES_CHRATR_BACKGROUND,
+  RES_CHRATR_OVERLINE,
+  RES_CHRATR_UNDERLINE,
+  RES_TXTATR_INETFMT,
+} from "../../inc/hintids";
 import { projectWriterParagraphList, type WriterParagraphList } from "../../source/core/doc/list";
 import type { WriterParagraphStyle } from "../../source/core/doc/fmtcol";
 import type { SwPaM } from "../../source/core/crsr/pam";
@@ -134,6 +145,12 @@ export interface WriterParagraphListLayout {
   readonly listTabPositionPt: number;
 }
 
+/** Native per-line color and style at the browser paint boundary. */
+export interface WriterTextLineProjection {
+  readonly style: FontLineStyle;
+  readonly color?: string;
+}
+
 /** One immutable display portion; no filter or transfer record participates in rendering. */
 export interface WriterTextPortion {
   readonly inlineGraphic?: WriterInlineGraphicProjection;
@@ -141,6 +158,8 @@ export interface WriterTextPortion {
     bold: boolean;
     italic: boolean;
     underline: boolean;
+    underlineLine?: WriterTextLineProjection;
+    overlineLine?: WriterTextLineProjection;
     escapement?: Readonly<{ offset: number; height: number }>;
     strikeout?: import("../../../tools/inc/fontenum").FontStrikeout;
     color?: string;
@@ -709,6 +728,12 @@ export class WriterViewStore {
   }
 }
 
+/** Projects a decorated line, preserving automatic color inheritance. @param item - Native line item. @returns Browser paint values. */
+function projectTextLine(item: SvxTextLineItem): WriterTextLineProjection {
+  const color = writerColorValue(item.GetColor());
+  return Object.freeze({ style: item.GetLineStyle(), ...(color === "auto" ? {} : { color }) });
+}
+
 /** Projects native item stacks at text boundaries into immutable platform display values. @param node - Actual body or cell owner. @returns Frozen display portions. */
 function projectTextPortions(node: SwTextNode): readonly WriterTextPortion[] {
   const iterator = new SwAttrIter(node),
@@ -730,6 +755,15 @@ function projectTextPortions(node: SwTextNode): readonly WriterTextPortion[] {
     const inet = node.GetTextAttrAt(start, RES_TXTATR_INETFMT, GetTextAttrMode.Default)?.GetAttr();
     const link = inet instanceof SwFormatINetFormat ? inet.GetHyperlink() : undefined;
     const generic = getFontFamilyGeneric(font.GetFamily());
+    const underline = handler.ReadItem(RES_CHRATR_UNDERLINE) as SvxUnderlineItem;
+    const overline = handler.ReadItem(RES_CHRATR_OVERLINE) as SvxOverlineItem;
+    const highlight = writerHighlightColorValue(
+      handler.ReadItem(RES_CHRATR_HIGHLIGHT) as SvxBrushItem,
+    );
+    const background =
+      highlight !== "transparent" || !authored(RES_CHRATR_BACKGROUND)
+        ? highlight
+        : writerHighlightColorValue(handler.ReadItem(RES_CHRATR_BACKGROUND) as SvxBrushItem);
     portions.push(
       Object.freeze({
         startOffset: start,
@@ -738,7 +772,13 @@ function projectTextPortions(node: SwTextNode): readonly WriterTextPortion[] {
         attributes: Object.freeze({
           bold: (handler.ReadItem(RES_CHRATR_WEIGHT) as SvxWeightItem).GetBoolValue(),
           italic: (handler.ReadItem(RES_CHRATR_POSTURE) as SvxPostureItem).GetBoolValue(),
-          underline: (handler.ReadItem(RES_CHRATR_UNDERLINE) as SvxUnderlineItem).GetBoolValue(),
+          underline: underline.GetBoolValue(),
+          ...(underline.GetBoolValue() &&
+          (underline.GetLineStyle() !== FontLineStyle.LINESTYLE_SINGLE ||
+            !underline.GetColor().IsFullyTransparent())
+            ? { underlineLine: projectTextLine(underline) }
+            : {}),
+          ...(overline.GetBoolValue() ? { overlineLine: projectTextLine(overline) } : {}),
           ...(authored(RES_CHRATR_ESCAPEMENT)
             ? {
                 escapement: Object.freeze({
@@ -759,12 +799,8 @@ function projectTextPortions(node: SwTextNode): readonly WriterTextPortion[] {
           ...(authored(RES_CHRATR_COLOR)
             ? { color: writerTextColorValue(handler.ReadItem(RES_CHRATR_COLOR) as SvxColorItem) }
             : {}),
-          ...(authored(RES_CHRATR_HIGHLIGHT)
-            ? {
-                highlight: writerHighlightColorValue(
-                  handler.ReadItem(RES_CHRATR_HIGHLIGHT) as SvxBrushItem,
-                ),
-              }
+          ...(authored(RES_CHRATR_HIGHLIGHT) || authored(RES_CHRATR_BACKGROUND)
+            ? { highlight: background }
             : {}),
           ...(authored(RES_CHRATR_FONT)
             ? {

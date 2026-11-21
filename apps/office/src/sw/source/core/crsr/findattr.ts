@@ -13,6 +13,7 @@ import { IsInvalidItem, SfxPoolItem } from "../../../../svl/source/items/poolite
 import { TextSearch } from "../../../../unotools/inc/textsearch";
 import type { FindRanges, SwDocPositions } from "../../../inc/cshtyp";
 import {
+  RES_CHRATR_BACKGROUND,
   RES_CHRATR_BEGIN,
   RES_CHRATR_END,
   RES_CHRATR_FONT,
@@ -42,6 +43,7 @@ function CmpAttr(left: SfxPoolItem, right: SfxPoolItem): boolean {
   if (left instanceof SvxColorItem && right instanceof SvxColorItem)
     return left.GetValue().IsRGBEqual(right.GetValue());
   if (
+    left.Which() === RES_CHRATR_BACKGROUND &&
     left instanceof SvxBrushItem &&
     right instanceof SvxBrushItem &&
     !(left.getComplexColor().isUsed() && right.getComplexColor().isUsed())

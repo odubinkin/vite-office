@@ -5551,3 +5551,20 @@ applies its authored properties without that collection change.
   other properties.
 - The shared item preserves the mutation order. The Writer dispatcher
   admits an aggregate argument only when conversion reports success.
+
+### WRITER-699 — The Highlighting search page can miss an identical visible highlight
+
+- Upstream: `cui/source/dialogs/srchxtra.cxx` configures the search Format
+  dialog with `SHOW_HIGHLIGHTING`. `SvxBkgTabPage` in
+  `cui/source/tabpages/backgrnd.cxx` reads and writes `SID_ATTR_BRUSH_CHAR`,
+  whose Writer pool item is `RES_CHRATR_BACKGROUND`.
+- Observation: `SwTextPaintInfo::DrawBackground` in
+  `sw/source/core/text/inftxt.cxx` paints a nontransparent
+  `RES_CHRATR_HIGHLIGHT` before considering `RES_CHRATR_BACKGROUND`.
+  `FindAttrsImpl` and `CmpAttr` in `sw/source/core/crsr/findattr.cxx`
+  compare the requested WhichId. A run with only the separate highlight
+  item can therefore look identical to a run with the background brush
+  and be absent from the same Highlighting query.
+- Writer preserves the separate WhichIds and the display precedence.
+  The browser regression exercises identical effective colors and different
+  native item families. The original desktop behavior is source-derived.
