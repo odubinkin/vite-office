@@ -1,10 +1,11 @@
 ---
 id: "202611211833-1AZNPZ"
 title: "Connect Calc Calculate and Formula options"
-status: "DOING"
+result_summary: "Calc Calculate and Formula options connected through the source Options command. Task five of the ten-task cycle."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 8
+revision: 9
 origin:
   system: "manual"
 depends_on: []
@@ -40,11 +41,16 @@ quality_review:
     - "output/calc-1AZNPZ-final-tests.log"
   findings:
     - "Compared the Calculate and Formula draft commits, grammar admission, automatic label selection and interpreter area expansion with the pinned source. The existing file-size findings do not include task paths."
-commit: null
+commit:
+  hash: "253e837a94d401e6fc03358db0827c2b671850c9"
+  message: "🧩 1AZNPZ code: connect Calc Calculate and Formula options"
 comments:
   -
     author: "CODER"
     body: "Start: Connect the native Calc Calculate and Formula options pages to live document settings and formula syntax."
+  -
+    author: "CODER"
+    body: "Verified: connected the Calc Calculate and Formula pages through Tools Options and passed 183 focused tests covering grammar, calculation, labels, and ODS."
 events:
   -
     type: "status"
@@ -59,8 +65,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "183 focused tests across 21 suites passed, including the original Options interaction in tdf137617, document recalculation and criteria, source automatic labels, Excel A1 and R1C1, and ODS reopen. Office typecheck, changed-path lint and format, Calc resources, provenance, dependency boundaries and policy routing passed. The optional whole-repository file-size scan reports seven unchanged baseline violations."
+  -
+    type: "status"
+    at: "2026-11-21T18:55:19.152Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: connected the Calc Calculate and Formula pages through Tools Options and passed 183 focused tests covering grammar, calculation, labels, and ODS."
 doc_version: 3
-doc_updated_at: "2026-11-21T18:53:54.014Z"
+doc_updated_at: "2026-11-21T18:55:19.153Z"
 doc_updated_by: "CODER"
 description: "Connect the original Calc options pages to document calculation settings, formula syntax and existing recalculation paths."
 sections:
