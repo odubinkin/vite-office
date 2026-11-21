@@ -1,9 +1,12 @@
 /** @fileoverview Writer command shell for the active annotation edit view. */
 import { Any } from "../../../../cppu/inc/com/sun/star/uno/Any";
 import { SvxColorItem } from "../../../../editeng/inc/colritem";
+import { SvxEscapementItem } from "../../../../editeng/inc/escapementitem";
 import { SvxFontHeightItem } from "../../../../editeng/inc/fhgtitem";
 import { SvxFontItem } from "../../../../editeng/inc/fontitem";
+import { SvxLineSpacingItem } from "../../../../editeng/inc/lspcitem";
 import { MID_FONTHEIGHT } from "../../../../editeng/inc/memberids";
+import { SvxEscapement } from "../../../../editeng/inc/svxenum";
 import { CONVERT_TWIPS } from "../../../../svl/inc/poolitem";
 import * as EE from "../../../../editeng/inc/eeitem";
 import {
@@ -55,8 +58,30 @@ export class SwAnnotationShell {
       this.CharacterCommand(CMD.underline, EE.EE_CHAR_UNDERLINE),
       this.CharacterCommand(CMD.underlineSingle, EE.EE_CHAR_UNDERLINE),
       this.CharacterCommand(CMD.strikeout, EE.EE_CHAR_STRIKEOUT),
+      this.EscapementCommand(CMD.superscript, SvxEscapement.Superscript),
+      this.EscapementCommand(CMD.subscript, SvxEscapement.Subscript),
       this.ColorCommand(CMD.color, EE.EE_CHAR_COLOR, "auto"),
       this.ColorCommand(CMD.charBackColor, EE.EE_CHAR_BKGCOLOR, "transparent"),
+      {
+        id: CMD.lineSpacing,
+        /** Copies the complete native spacing request into the selected paragraphs. @param _context - Bound annotation shell. @param args - Request items. @returns Whether changed. */
+        execute: (_context, args) => {
+          const item = args.find(
+            /** Finds the line-spacing item supplied by the shared popup. @param candidate - Request item. @returns Whether it contains spacing. */
+            (candidate) => candidate instanceof SvxLineSpacingItem,
+          );
+          return item !== undefined && this.ApplyItem(EE.EE_PARA_SBL, item);
+        },
+        /** Enables paragraph spacing in an editable note. @returns Whether enabled. */
+        isEnabled: () => this.CanEdit(),
+        /** Reports different spacing values across the selected paragraphs. @returns Whether mixed. */
+        isMixed: () => {
+          const active = this.manager.GetActiveSidebarWin();
+          return active !== undefined && getSelectionItem(active, EE.EE_PARA_SBL) === undefined;
+        },
+        /** Returns the native spacing item for the popup's rule and value controls. @returns Owned item or mixed state. */
+        getStateValue: () => this.GetCharacter(EE.EE_PARA_SBL),
+      },
       {
         id: CMD.fontName,
         /** Applies a font to the selected scripts in the annotation. @param _context - Bound annotation shell. @param args - Font request items. @returns Whether changed. */
@@ -180,6 +205,35 @@ export class SwAnnotationShell {
       !this.writer.GetViewOptions().IsReadonly() &&
       this.manager.GetActiveSidebarWin()?.ApplyAttributes !== undefined
     );
+  }
+
+  /** Connects the annotation's original position toggle to EditEngine. @param id - Generated Writer command URL. @param mode - Requested superscript or subscript. @returns Slot handler. */
+  private EscapementCommand(id: string, mode: SvxEscapement): WriterSlotHandler<SwAnnotationShell> {
+    const current =
+      /** Reads the uniform current escapement while the note owns dispatch. @returns Current escapement item or mixed state. */ () => {
+        const active = this.manager.GetActiveSidebarWin();
+        const item = active && getSelectionItem(active, EE.EE_CHAR_ESCAPEMENT);
+        return item instanceof SvxEscapementItem ? item : undefined;
+      };
+    return {
+      id,
+      /** Toggles this mode, using the native automatic offset and proportional height. @returns Whether changed. */
+      execute: () => {
+        const next = current()?.GetEscapement() === mode ? SvxEscapement.Off : mode;
+        const item = new SvxEscapementItem(next, EE.EE_CHAR_ESCAPEMENT);
+        try {
+          return this.ApplyItem(EE.EE_CHAR_ESCAPEMENT, item);
+        } finally {
+          item.Dispose();
+        }
+      },
+      /** Enables the position command in an editable note. @returns Whether enabled. */
+      isEnabled: () => this.CanEdit(),
+      /** Checks the native sign-based mode as in the annotation shell. @returns Whether selected. */
+      isChecked: () => current()?.GetEscapement() === mode,
+      /** Reports an invalid aggregate item over unlike runs. @returns Whether mixed. */
+      isMixed: () => this.manager.GetActiveSidebarWin() !== undefined && current() === undefined,
+    };
   }
 
   /** Binds an annotation color slot to the foreground or background item. @param id - Writer command URL. @param which - EditEngine item identity. @param automatic - Palette reset value. @returns Slot handler. */

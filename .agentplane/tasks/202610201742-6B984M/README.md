@@ -4,7 +4,7 @@ title: "Implement Writer search and replace core and browser UI"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 92
+revision: 93
 origin:
   system: "manual"
 depends_on:
@@ -271,6 +271,9 @@ comments:
   -
     author: "CODER"
     body: "Verified annotation color checkpoint against pinned SwAnnotationShell::Exec and GetState. The existing Writer toolbar and Character sidebar now route foreground and background palette choices to EE_CHAR_COLOR and EE_CHAR_BKGCOLOR on the active note. Uniform and mixed values, automatic and transparent resets, recent palette entries, range retention, undo, body isolation and ODT reopen are covered. The browser palette sends explicit choices through the existing Writer command payload. The native argument-free recent-color replay slot is outside this checkpoint. Four targeted Writer suites passed 24 tests, the generated resource suite passed two tests, and two Chrome end-to-end scenarios passed against the final production build. Build, dependencies, source tree and provenance, scoped ESLint and formatting, routing, doctor and diff checks passed. Repository-wide JSDoc and file-size checks retain their existing findings outside changed paths. This checkpoint does not close the parent task or advance the full-suite cadence."
+  -
+    author: "CODER"
+    body: "Verified annotation position and line-spacing checkpoint against SwAnnotationShell::Exec and GetState, and EditEngine line-spacing layout in impedit3.cxx. The original Writer position buttons dispatch to the active note's EE_CHAR_ESCAPEMENT, including automatic offsets and the native toggling behavior. The shared spacing popup sends a complete SvxLineSpacingItem to EE_PARA_SBL. Browser paragraph rendering resolves the active rule using CSS line heights. Uniform and mixed spacing, body isolation, undo, and preservation of both items on ODT reopen are covered. Four targeted Writer suites passed 20 tests, two resource checks and two Chrome scenarios passed, and the production build, dependency boundaries, source-tree, provenance, routing, doctor, scoped lint and format, and diff checks passed. The baseline repository-wide JSDoc and size findings remain outside the changed paths. The parent task remains active and the full-suite cadence is unchanged."
 events:
   -
     type: "status"
@@ -664,8 +667,13 @@ events:
     at: "2026-11-21T18:30:04.496Z"
     author: "CODER"
     body: "Verified annotation color checkpoint against pinned SwAnnotationShell::Exec and GetState. The existing Writer toolbar and Character sidebar now route foreground and background palette choices to EE_CHAR_COLOR and EE_CHAR_BKGCOLOR on the active note. Uniform and mixed values, automatic and transparent resets, recent palette entries, range retention, undo, body isolation and ODT reopen are covered. The browser palette sends explicit choices through the existing Writer command payload. The native argument-free recent-color replay slot is outside this checkpoint. Four targeted Writer suites passed 24 tests, the generated resource suite passed two tests, and two Chrome end-to-end scenarios passed against the final production build. Build, dependencies, source tree and provenance, scoped ESLint and formatting, routing, doctor and diff checks passed. Repository-wide JSDoc and file-size checks retain their existing findings outside changed paths. This checkpoint does not close the parent task or advance the full-suite cadence."
+  -
+    type: "comment"
+    at: "2026-11-21T18:36:51.093Z"
+    author: "CODER"
+    body: "Verified annotation position and line-spacing checkpoint against SwAnnotationShell::Exec and GetState, and EditEngine line-spacing layout in impedit3.cxx. The original Writer position buttons dispatch to the active note's EE_CHAR_ESCAPEMENT, including automatic offsets and the native toggling behavior. The shared spacing popup sends a complete SvxLineSpacingItem to EE_PARA_SBL. Browser paragraph rendering resolves the active rule using CSS line heights. Uniform and mixed spacing, body isolation, undo, and preservation of both items on ODT reopen are covered. Four targeted Writer suites passed 20 tests, two resource checks and two Chrome scenarios passed, and the production build, dependency boundaries, source-tree, provenance, routing, doctor, scoped lint and format, and diff checks passed. The baseline repository-wide JSDoc and size findings remain outside the changed paths. The parent task remains active and the full-suite cadence is unchanged."
 doc_version: 3
-doc_updated_at: "2026-11-21T18:30:04.496Z"
+doc_updated_at: "2026-11-21T18:36:51.093Z"
 doc_updated_by: "CODER"
 description: "Implement the approved coherent Writer search-and-replace feature from pinned LibreOffice sources: real shared search engine and options, native paragraph/cursor traversal and replacement/history contracts, view-owned search state and dispatch, Find toolbar and Find and Replace dialog with generated upstream command placement and shortcuts. Preserve source semantics and explicit unsupported boundaries; never substitute DOM text search or browser RegExp for ICU contracts. Work only on writer in vite-office-writer; local upstream reading approved, no network or merges. Keep active until approved scope is verified."
 sections:

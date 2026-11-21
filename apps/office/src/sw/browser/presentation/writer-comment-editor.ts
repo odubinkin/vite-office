@@ -1,7 +1,13 @@
 /** @fileoverview Adapts the browser rich comment surface to the native Writer annotation EditEngine. */
 import type { SearchEditView } from "../../../editeng/source/editeng/impedit4.search";
 import { SvxAdjust, SvxAdjustItem } from "../../../editeng/inc/adjustitem";
-import { EE_FEATURE_LINEBR, EE_PARA_JUST, EE_PARA_ULSPACE } from "../../../editeng/inc/eeitem";
+import {
+  EE_FEATURE_LINEBR,
+  EE_PARA_JUST,
+  EE_PARA_SBL,
+  EE_PARA_ULSPACE,
+} from "../../../editeng/inc/eeitem";
+import { SvxLineSpacingItem } from "../../../editeng/inc/lspcitem";
 import { SvxULSpaceItem } from "../../../editeng/inc/ulspitem";
 import type { ContentNode } from "../../../editeng/source/editeng/ContentNode";
 import { SfxItemSet } from "../../../svl/source/items/itemset";
@@ -24,6 +30,7 @@ import {
   WRITER_CHARACTER_WHICH_RANGES,
 } from "../../inc/hintids";
 import { projectWriterCharacterAttributes } from "../../source/core/txtnode/txatbase";
+import { projectWriterLineSpacing } from "../../source/core/text/itrform2";
 import { browserTextLineStyle } from "./writer-view-projection";
 import { browserFontFamily } from "../editor/writer-font-family";
 import { getWriterTextCaretPoint } from "../editor/writer-selection";
@@ -551,6 +558,8 @@ export class WriterCommentEditor extends SwTextAPIEditSource {
       paragraph.style.marginBlockStart = `${spacing.GetUpper() / 20}pt`;
       paragraph.style.marginBlockEnd = `${spacing.GetLower() / 20}pt`;
     }
+    const line = source.GetItemIfSet(EE_PARA_SBL, true);
+    if (line instanceof SvxLineSpacingItem) paragraph.style.lineHeight = annotationLineHeight(line);
     const parent = new SfxItemSet(
       this.field.GetTyp().GetDoc().GetAttrPool(),
       WRITER_CHARACTER_WHICH_RANGES,
@@ -607,6 +616,22 @@ export class WriterCommentEditor extends SwTextAPIEditSource {
     } finally {
       parent.Dispose();
     }
+  }
+}
+
+/** Projects EditEngine spacing against the browser editor's natural line height. @param item - Native spacing rule with measurements in twips. @returns CSS line height. */
+function annotationLineHeight(item: SvxLineSpacingItem): string {
+  const { mode, value } = projectWriterLineSpacing(item);
+  const distance = `${value / 20}pt`;
+  switch (mode) {
+    case "fixed":
+      return distance;
+    case "minimum":
+      return `max(1lh, ${distance})`;
+    case "leading":
+      return `calc(1lh + ${distance})`;
+    case "proportional":
+      return `${(value || 100) / 100}lh`;
   }
 }
 

@@ -5,12 +5,20 @@ import { expect, it } from "vitest";
 import {
   EE_CHAR_BKGCOLOR,
   EE_CHAR_COLOR,
+  EE_CHAR_ESCAPEMENT,
   EE_CHAR_FONTHEIGHT_CJK,
   EE_CHAR_WEIGHT,
   EE_CHAR_WEIGHT_CJK,
+  EE_PARA_SBL,
 } from "../../../editeng/inc/eeitem";
 import { SvxColorItem } from "../../../editeng/inc/colritem";
 import type { EECharAttrib } from "../../../editeng/inc/editdata";
+import {
+  DFLT_ESC_AUTO_SUB,
+  DFLT_ESC_PROP,
+  SvxEscapementItem,
+} from "../../../editeng/inc/escapementitem";
+import { SvxLineSpacingItem } from "../../../editeng/inc/lspcitem";
 import { SvxWeightItem } from "../../../editeng/inc/wghtitem";
 import { unicode } from "../../../i18nlangtag/source/isolang/isolang.tables";
 import { FontWeight } from "../../../tools/inc/fontenum";
@@ -58,12 +66,23 @@ function noteText(comment: HTMLElement): string {
   ).join("\n");
 }
 
-/** Selects a native browser range in one rendered paragraph. @param comment - Mounted comment. @param start - Paragraph-relative start. @param end - Paragraph-relative end. @param index - Paragraph index. @returns Nothing. */
-function selectNote(comment: HTMLElement, start: number, end = start, index = 0): void {
-  const paragraph = comment.children[index];
-  if (!(paragraph instanceof HTMLParagraphElement)) throw new Error("Missing note paragraph.");
-  const first = getWriterTextCaretPoint(paragraph, start);
-  const last = getWriterTextCaretPoint(paragraph, end);
+/** Selects a native browser range in the note. @param comment - Mounted comment. @param start - Paragraph-relative start. @param end - Paragraph-relative end. @param index - Starting paragraph index. @param endIndex - Ending paragraph index. @returns Nothing. */
+function selectNote(
+  comment: HTMLElement,
+  start: number,
+  end = start,
+  index = 0,
+  endIndex = index,
+): void {
+  const startParagraph = comment.children[index];
+  const endParagraph = comment.children[endIndex];
+  if (
+    !(startParagraph instanceof HTMLParagraphElement) ||
+    !(endParagraph instanceof HTMLParagraphElement)
+  )
+    throw new Error("Missing note paragraph.");
+  const first = getWriterTextCaretPoint(startParagraph, start);
+  const last = getWriterTextCaretPoint(endParagraph, end);
   comment.ownerDocument
     .getSelection()
     ?.setBaseAndExtent(first.node, first.offset, last.node, last.offset);
@@ -576,6 +595,87 @@ it("applies Writer palette colors to the selected comment text and reopens them 
         [EE_CHAR_BKGCOLOR, 0xffd966, 0, 3],
       ]),
     );
+  } finally {
+    workbench.unmount();
+    view.Close();
+  }
+});
+
+it("uses Writer's position and line spacing controls on the active comment", /** Checks the annotation slot state, separate body formatting and native ODT items. @returns Completion. */ async () => {
+  const { session, shell } = openAnnotatedDocument("H2O\nNext paragraph");
+  const view = session.view;
+  const workbench = render(<WriterWorkbench isActive view={view} />);
+  try {
+    const comment = screen.getByRole<HTMLDivElement>("textbox", { name: "Comment — Ada" });
+    const toolbar = within(screen.getByRole("toolbar", { name: "Writer formatting toolbar" }));
+    const sidebar = within(
+      screen.getByRole("complementary", { name: "Writer properties sidebar" }),
+    );
+    const subscript = sidebar.getByRole("button", { name: "Subscript" });
+    const superscript = sidebar.getByRole("button", { name: "Superscript" });
+    const bodySpacing = view.QueryState(WRITER_COMMAND_IDS.lineSpacing).value;
+    act(
+      /** Selects the digit in the note formula. @returns Nothing. */ () => {
+        comment.focus();
+        selectNote(comment, 1, 2);
+      },
+    );
+    fireEvent.click(superscript);
+    expect(superscript).toHaveAttribute("aria-pressed", "true");
+    expect(within(comment).getByText("2").style.verticalAlign).toBe("super");
+    fireEvent.click(superscript);
+    expect(superscript).toHaveAttribute("aria-pressed", "false");
+    fireEvent.click(subscript);
+    expect(subscript).toHaveAttribute("aria-pressed", "true");
+    expect(within(comment).getByText("2").style.verticalAlign).toBe("sub");
+    expect(within(comment).getByText("2").style.fontSize).toBe(`${DFLT_ESC_PROP}%`);
+
+    fireEvent.click(toolbar.getByRole("button", { name: "Line Spacing" }));
+    const spacing = screen.getByRole("dialog", { name: "Line Spacing" });
+    fireEvent.click(within(spacing).getByRole("button", { name: "Spacing: 1.5" }));
+    expect((comment.children[0] as HTMLElement).style.lineHeight).toBe("1.5lh");
+    expect((comment.children[1] as HTMLElement).style.lineHeight).toBe("");
+    const selected = view.QueryState(WRITER_COMMAND_IDS.lineSpacing).value;
+    expect(selected).toBeInstanceOf(SvxLineSpacingItem);
+    expect((selected as SvxLineSpacingItem).GetPropLineSpace()).toBe(150);
+    act(
+      /** Selects across paragraphs with different spacing. @returns Nothing. */ () => {
+        comment.focus();
+        selectNote(comment, 1, 2, 0, 1);
+      },
+    );
+    expect(view.QueryState(WRITER_COMMAND_IDS.lineSpacing)).toMatchObject({
+      enabled: true,
+      mixed: true,
+      value: undefined,
+    });
+    fireEvent.keyDown(comment, { key: "Escape" });
+    expect(view.QueryState(WRITER_COMMAND_IDS.lineSpacing).value).toEqual(bodySpacing);
+    expect(view.QueryState(WRITER_COMMAND_IDS.subscript).checked).toBe(false);
+
+    const metadata = { title: "Comment layout" };
+    const { document: reopened } = await readOdtDocument(
+      await writeOdtDocument(shell.GetDoc(), metadata),
+      metadata,
+    );
+    try {
+      const [format] = SwPostItFieldType.Get(reopened).GatherFields();
+      const object = format?.GetField().GetTextObject();
+      const attrs: EECharAttrib[] = [];
+      object?.GetCharAttribs(0, attrs);
+      const escapement = attrs.find(
+        /** Locates the native position over the digit. @param attribute - Comment run. @returns Whether it describes the position. */
+        ({ pAttr, nStart, nEnd }) =>
+          pAttr?.Which() === EE_CHAR_ESCAPEMENT && nStart === 1 && nEnd === 2,
+      )?.pAttr;
+      expect(escapement).toBeInstanceOf(SvxEscapementItem);
+      expect((escapement as SvxEscapementItem).GetEsc()).toBe(DFLT_ESC_AUTO_SUB);
+      const line = object?.GetParaAttribs(0).GetItemIfSet(EE_PARA_SBL, false);
+      expect(line).toBeInstanceOf(SvxLineSpacingItem);
+      expect((line as SvxLineSpacingItem).GetPropLineSpace()).toBe(150);
+    } finally {
+      reopened.Dispose();
+    }
   } finally {
     workbench.unmount();
     view.Close();

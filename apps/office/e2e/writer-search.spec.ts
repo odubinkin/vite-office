@@ -82,4 +82,22 @@ test("Writer inserts a comment, finds its text and undoes note formatting", /** 
   await undo.click();
   await expect(comment).toHaveText("Find this annotation");
   await expect(comment.locator("span[style*='font-weight']")).toHaveCount(0);
+
+  const subscript = toolbar.getByRole("button", { name: "Subscript", exact: true });
+  await subscript.click();
+  await expect(subscript).toHaveAttribute("aria-pressed", "true");
+  await expect(formatted).toHaveCSS("vertical-align", "sub");
+  const paragraph = comment.locator("p");
+  const originalHeight = await paragraph.evaluate(
+    /** Reads the browser's natural line height with Writer styles applied. @param element - Note paragraph. @returns Height in CSS pixels. */
+    (element) => Number.parseFloat(getComputedStyle(element).lineHeight),
+  );
+  await toolbar.getByRole("button", { name: "Line Spacing", exact: true }).click();
+  await page
+    .getByRole("dialog", { name: "Line Spacing", exact: true })
+    .getByRole("button", { name: "Spacing: 1.5", exact: true })
+    .click();
+  await expect(paragraph).toHaveCSS("line-height", `${originalHeight * 1.5}px`);
+  await undo.click();
+  await expect(paragraph).toHaveCSS("line-height", `${originalHeight}px`);
 });
