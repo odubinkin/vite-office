@@ -70,17 +70,97 @@ export class SwPostItMgr {
 
   /** Toggles the active annotation or the original field ID supplied by the caller. @param id - Optional document annotation ID. @returns Whether the comment changed. */
   ToggleResolved(id?: number): boolean {
-    const field =
+    const field = this.GetFieldForCommand(id);
+    if (!field || this.options.IsReadonly()) return false;
+    return this.SetResolved(field, !field.GetField().IsResolved());
+  }
+
+  /** Groups consecutive follow windows after resolving the native parent metadata. @param fields - Layout fields in anchor order. @returns Sidebar threads in order. */
+  GetThreads(fields: readonly SwFormatField[]): readonly (readonly SwFormatField[])[] {
+    const names = new Set<string>();
+    const paraIds = new Set<number>();
+    for (const format of fields) {
+      const data = format.GetField().GetData();
+      if (data.name) names.add(data.name);
+      if (data.paraId) paraIds.add(data.paraId);
+    }
+    const threads: SwFormatField[][] = [];
+    for (const format of fields) {
+      const { parentId, parentName, parentPostItId } = format.GetField().GetData();
+      const follows =
+        !!parentPostItId ||
+        (parentId !== undefined && paraIds.has(parentId)) ||
+        (parentName !== undefined && names.has(parentName));
+      const previous = threads.at(-1);
+      if (follows && previous) previous.push(format);
+      else threads.push([format]);
+    }
+    return threads;
+  }
+
+  /** Checks the thread containing the active note. @returns Whether each note in the thread is resolved. */
+  IsThreadResolved(): boolean {
+    const field = this.GetActiveField();
+    return (
+      field !== undefined &&
+      this.GetThread(field).every(
+        /** Queries the native field value. @param note - Thread member. @returns Whether resolved. */
+        (note) => note.GetField().IsResolved(),
+      )
+    );
+  }
+
+  /** Resolves or reopens a thread through the active note or the ID-based body command. @param id - Optional document annotation ID. @returns Whether the thread changed. */
+  ToggleResolvedForThread(id?: number): boolean {
+    const field = this.GetFieldForCommand(id);
+    if (!field || this.options.IsReadonly()) return false;
+    const thread = this.GetThread(field);
+    const root = thread[0];
+    if (!root) return false;
+    const resolved =
       id === undefined
-        ? this.GetActiveField()
-        : [...this.windows.keys()].find(
-            /** Finds the original annotation ID. @param candidate - Registered field. @returns Whether it matches. */
-            (candidate) => candidate.GetField().GetPostItId() === id,
-          );
-    if (!field?.GetTextField()?.GetTextNode() || this.options.IsReadonly()) return false;
+        ? !thread.every(
+            /** Checks the whole thread in the annotation shell. @param note - Thread member. @returns Whether resolved. */
+            (note) => note.GetField().IsResolved(),
+          )
+        : !root.GetField().IsResolved();
+    return field
+      .GetField()
+      .GetTyp()
+      .GetDoc()
+      .RunModelTransaction(
+        /** Updates the root and propagates its state to the rest of the thread. @returns Whether any field changed. */ () => {
+          let changed = false;
+          for (const note of thread) changed = this.SetResolved(note, resolved) || changed;
+          return changed;
+        },
+      );
+  }
+
+  /** Finds the layout thread containing the supplied annotation. @param field - Anchored comment. @returns Comments in sidebar order. */
+  private GetThread(field: SwFormatField): readonly SwFormatField[] {
+    const fields = [...field.GetField().GetTyp().GatherFields()];
+    return (
+      this.GetThreads(fields).find(
+        /** Finds the thread owning the requested field. @param thread - Sidebar thread. @returns Whether it contains the field. */
+        (thread) => thread.includes(field),
+      ) ?? []
+    );
+  }
+
+  /** Finds the active window's field or a registered annotation by model ID. @param id - Optional document annotation ID. @returns Anchored field. */
+  private GetFieldForCommand(id?: number): SwFormatField | undefined {
+    if (id === undefined) return this.GetActiveField();
+    for (const field of this.windows.keys())
+      if (field.GetTextField()?.GetTextNode() && field.GetField().GetPostItId() === id)
+        return field;
+    return undefined;
+  }
+
+  /** Applies the resolution change through the annotation window. @param field - Target comment. @param resolved - New resolution state. @returns Whether changed. */
+  private SetResolved(field: SwFormatField, resolved: boolean): boolean {
     const window = this.windows.get(field);
-    if (!window?.SetResolved) return false;
-    const resolved = !field.GetField().IsResolved();
+    if (!window?.SetResolved || resolved === field.GetField().IsResolved()) return false;
     if (resolved && !this.options.IsResolvedPostIts() && this.GetActiveField() === field)
       this.ReturnFocusToDocument();
     window.SetResolved(resolved);

@@ -166,6 +166,15 @@ export class SwAnnotationShell {
         isChecked: () => this.manager.GetActiveField()?.GetField().IsResolved() === true,
       },
       {
+        id: CMD.resolveCommentThread,
+        /** Toggles resolution through the active comment's complete sidebar thread. @returns Whether changed. */
+        execute: () => this.manager.ToggleResolvedForThread(),
+        /** Enables the command in an editable annotation. @returns Whether enabled. */
+        isEnabled: () => this.CanEdit(),
+        /** Checks the resolution state of the whole thread. @returns Whether the thread is resolved. */
+        isChecked: () => this.manager.IsThreadResolved(),
+      },
+      {
         id: CMD.selectAll,
         /** Selects the annotation text in its own edit view. @returns Nothing. */
         execute: () => this.manager.GetActiveSidebarWin()?.SelectAll?.(),

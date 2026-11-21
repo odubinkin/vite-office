@@ -8,6 +8,7 @@ import type { SwView } from "../../source/uibase/uiview/view";
 import { useBrowserLocalization } from "../../../framework/browser/localization/browser-localization-context";
 import { useToolboxPopup } from "../../../svx/browser/tbxctrls/use-toolbox-popup";
 import { WriterCommentEditor } from "./writer-comment-editor";
+import { WRITER_COMMAND_IDS } from "../../uiconfig/swriter/menubar/menubar-commands";
 
 /** One anchored comment card and its mounted editor. @param props - Field and owning view. @returns Comment card. */
 function WriterCommentCard({
@@ -15,11 +16,13 @@ function WriterCommentCard({
   view,
   focusDocument,
   visible,
+  threadResolved,
 }: {
   readonly format: SwFormatField;
   readonly focusDocument: () => void;
   readonly view: SwView;
   readonly visible: boolean;
+  readonly threadResolved: boolean;
 }) {
   const card = useRef<HTMLElement>(null);
   const input = useRef<HTMLDivElement>(null);
@@ -30,6 +33,27 @@ function WriterCommentCard({
   const data = field.GetData();
   const readOnly = view.GetWrtShell().GetViewOptions().IsReadonly();
   const noteLabel = localization.GetText("writer.comments.comment", "Comment");
+  const manager = view.GetPostItMgr();
+  /** Activates this comment and places the Writer cursor at its anchor. @returns Nothing. */
+  function activate(): void {
+    const hint = format.GetTextField();
+    const node = hint?.GetTextNode();
+    if (!hint || !node || !manager.SetActiveSidebarWin(format)) return;
+    const anchor = new SwPosition(node, hint.GetStart());
+    try {
+      view.GetWrtShell().SetCursor(anchor);
+    } finally {
+      anchor.Dispose();
+    }
+  }
+  /** Dispatches a card action in its annotation shell and returns input to Writer. @param command - Resolution command from the menu. @returns Nothing. */
+  function resolve(command: string): void {
+    activate();
+    view.Execute(command);
+    close();
+    manager.ClearActiveField();
+    focusDocument();
+  }
   useLayoutEffect(
     /** Binds this mounted text surface to its native field, edit document and comment window. @returns Release callback. */ () => {
       if (!input.current) return;
@@ -122,19 +146,25 @@ function WriterCommentCard({
                   type="button"
                   className="w-full rounded px-2 py-1 text-left text-sm hover:bg-slate-100"
                   onClick={
-                    /** Executes the menu action for this comment and restores the remaining visible focus target. @returns Nothing. */
-                    () => {
-                      const manager = view.GetPostItMgr();
-                      manager.ToggleResolved(field.GetPostItId());
-                      const remainsVisible = manager.IsVisible(format);
-                      close(remainsVisible);
-                      if (!remainsVisible) focusDocument();
-                    }
+                    /** Toggles resolution of the selected comment. @returns Nothing. */
+                    () => resolve(WRITER_COMMAND_IDS.resolveComment)
                   }
                 >
                   {field.IsResolved()
                     ? localization.GetText("writer.comments.unresolve", "Unresolve")
                     : localization.GetText("writer.comments.resolve", "Resolve")}
+                </button>
+                <button
+                  type="button"
+                  className="w-full rounded px-2 py-1 text-left text-sm hover:bg-slate-100"
+                  onClick={
+                    /** Toggles resolution of the selected thread. @returns Nothing. */
+                    () => resolve(WRITER_COMMAND_IDS.resolveCommentThread)
+                  }
+                >
+                  {threadResolved
+                    ? localization.GetText("writer.comments.unresolveThread", "Unresolve Thread")
+                    : localization.GetText("writer.comments.resolveThread", "Resolve Thread")}
                 </button>
               </div>
             )}
@@ -151,19 +181,7 @@ function WriterCommentCard({
         aria-readonly={readOnly}
         contentEditable={!readOnly}
         tabIndex={0}
-        onFocus={
-          /** Activates the model anchor when the user focuses the comment editor. @returns Nothing. */ () => {
-            const hint = format.GetTextField();
-            const node = hint?.GetTextNode();
-            if (!hint || !node || !view.GetPostItMgr().SetActiveSidebarWin(format)) return;
-            const anchor = new SwPosition(node, hint.GetStart());
-            try {
-              view.GetWrtShell().SetCursor(anchor);
-            } finally {
-              anchor.Dispose();
-            }
-          }
-        }
+        onFocus={activate}
         onKeyDown={
           /** Returns to the body after the last adjacent annotation point. @param event - Sidebar key. @returns Nothing. */ (
             event,
@@ -229,18 +247,31 @@ export function WriterCommentsSidebar({
       }
       className="sticky top-0 w-64 shrink-0 space-y-2 px-2"
     >
-      {comments.map(
-        /** Mounts the annotation editor for the original anchored field. @param format - Actual field format. @returns Note. */ (
-          format,
-        ) => (
-          <WriterCommentCard
-            key={format.GetField().GetPostItId()}
-            format={format}
-            view={view}
-            focusDocument={focusDocument}
-            visible={manager.IsVisible(format)}
-          />
-        ),
+      {manager.GetThreads(comments).map(
+        /** Keeps consecutive follow windows in one visual thread. @param thread - Ordered annotation fields. @returns Thread cards. */
+        (thread) => {
+          const resolved = thread.every(
+            /** Reads the resolution of a thread member. @param format - Anchored field. @returns Whether resolved. */
+            (format) => format.GetField().IsResolved(),
+          );
+          return (
+            <div key={thread[0]?.GetField().GetPostItId()}>
+              {thread.map(
+                /** Mounts the annotation editor for the original anchored field. @param format - Actual field format. @returns Note. */
+                (format) => (
+                  <WriterCommentCard
+                    key={format.GetField().GetPostItId()}
+                    format={format}
+                    view={view}
+                    focusDocument={focusDocument}
+                    visible={manager.IsVisible(format)}
+                    threadResolved={resolved}
+                  />
+                ),
+              )}
+            </div>
+          );
+        },
       )}
     </aside>
   );

@@ -25,6 +25,7 @@
     "hyperlinkDialog": ".uno:HyperlinkDialog",
     "insertAnnotation": ".uno:InsertAnnotation",
     "resolveComment": ".uno:ResolveComment",
+    "resolveCommentThread": ".uno:ResolveCommentThread",
     "insertBookmark": ".uno:InsertBookmark",
     "insertBreak": ".uno:InsertBreak",
     "insertPageBreak": ".uno:InsertPagebreak",
@@ -127,6 +128,7 @@
     { "capabilityId": "CAP-0135", "commandUrl": ".uno:HyperlinkDialog" },
     { "capabilityId": "CAP-0111", "commandUrl": ".uno:InsertAnnotation" },
     { "capabilityId": "CAP-0111", "commandUrl": ".uno:ResolveComment" },
+    { "capabilityId": "CAP-0111", "commandUrl": ".uno:ResolveCommentThread" },
     { "capabilityId": "CAP-0113", "commandUrl": ".uno:InsertBookmark" },
     { "capabilityId": "CAP-0112", "commandUrl": ".uno:InsertBreak" },
     { "capabilityId": "CAP-0112", "commandUrl": ".uno:InsertPagebreak" },
@@ -1259,6 +1261,18 @@
       "shortcuts": [],
       "slotId": 22509
     },
+    ".uno:ResolveCommentThread": {
+      "browserOwned": false,
+      "argumentSchema": ["Id:SvxPostItIdItem"],
+      "capabilityId": "CAP-0111",
+      "controlLabel": "Resolved Thread",
+      "label": "Resolved Thread",
+      "placements": ["sw/uiconfig/swriter/menubar/menubar.xml"],
+      "semantics": "check",
+      "showsDialog": false,
+      "shortcuts": [],
+      "slotId": 22510
+    },
     ".uno:StatusBarVisible": {
       "browserOwned": false,
       "argumentSchema": [],
@@ -2135,6 +2149,11 @@
     },
     {
       "classification": "supported-upstream",
+      "commandUrl": ".uno:ResolveCommentThread",
+      "sources": ["sw/uiconfig/swriter/menubar/menubar.xml"]
+    },
+    {
+      "classification": "supported-upstream",
       "commandUrl": ".uno:StatusBarVisible",
       "sources": ["sw/uiconfig/swriter/menubar/menubar.xml"]
     },
@@ -2915,14 +2934,6 @@
       "context": [".uno:EditMenu", ".uno:EditCommentsMenu"],
       "entryKind": "command",
       "sourceUrl": ".uno:ReplyComment",
-      "reason": "outside-p1-supported-command-slice",
-      "sourcePath": "sw/uiconfig/swriter/menubar/menubar.xml"
-    },
-    {
-      "classification": "X",
-      "context": [".uno:EditMenu", ".uno:EditCommentsMenu"],
-      "entryKind": "command",
-      "sourceUrl": ".uno:ResolveCommentThread",
       "reason": "outside-p1-supported-command-slice",
       "sourcePath": "sw/uiconfig/swriter/menubar/menubar.xml"
     },
@@ -7839,7 +7850,10 @@
           { "kind": "separator" },
           {
             "id": ".uno:EditCommentsMenu",
-            "items": [{ "commandUrl": ".uno:ResolveComment", "kind": "command", "visible": true }],
+            "items": [
+              { "commandUrl": ".uno:ResolveComment", "kind": "command", "visible": true },
+              { "commandUrl": ".uno:ResolveCommentThread", "kind": "command", "visible": true }
+            ],
             "kind": "menu",
             "label": "Comment"
           },
@@ -8666,12 +8680,6 @@
         "context": [".uno:EditMenu", ".uno:EditCommentsMenu"],
         "entryKind": "command",
         "sourceUrl": ".uno:ReplyComment"
-      },
-      {
-        "classification": "X",
-        "context": [".uno:EditMenu", ".uno:EditCommentsMenu"],
-        "entryKind": "command",
-        "sourceUrl": ".uno:ResolveCommentThread"
       },
       {
         "classification": "X",

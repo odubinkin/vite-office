@@ -147,6 +147,11 @@ it("resolves and reopens a comment through its menu and the native field slot", 
     fireEvent.click(actions);
     fireEvent.click(screen.getByRole("button", { name: "Unresolve" }));
     expect(format.GetField().IsResolved()).toBe(false);
+    expect(screen.getByLabelText("Writer document body")).toHaveFocus();
+    act(
+      /** Refocuses the annotation to read its native slot state. @returns Nothing. */ () =>
+        comment.focus(),
+    );
     expect(view.QueryState(command).checked).toBe(false);
 
     fireEvent.keyDown(comment, { key: "Escape" });
@@ -180,6 +185,99 @@ it("resolves and reopens a comment through its menu and the native field slot", 
     }
   } finally {
     commentId.Dispose();
+    workbench.unmount();
+    view.Close();
+  }
+});
+
+it("resolves a mixed thread from a reply and preserves the root-based ID command", /** Checks native sidebar grouping, both command paths and ODT persistence. @returns Completion. */ async () => {
+  const { session, format: root, shell } = openAnnotatedDocument("Root note", true);
+  const node = shell.GetActiveParagraph();
+  /** Inserts another anchored field in the represented native ordering. @param author - Comment author. @param offset - Position after the root. @param metadata - Parent metadata from the document. @returns Attached comment format. */
+  function attach(
+    author: string,
+    offset: number,
+    metadata: Pick<ReturnType<SwPostItField["GetData"]>, "parentName" | "paraId" | "parentId"> = {},
+  ): SwFormatField {
+    const field = new SwPostItField(root.GetField().GetTyp(), {
+      author,
+      initials: "",
+      name: author,
+      text: `${author} note`,
+      dateTime: new DateTime(DateTime.EMPTY),
+      ...metadata,
+    });
+    const format = new SwFormatField(field);
+    field.Dispose();
+    expect(node.InsertHint(new SwTextField(format, offset))).toBe(true);
+    return format;
+  }
+  const reply = attach("Reply", 5, { parentName: root.GetField().GetName(), paraId: 7 });
+  const nested = attach("Nested", 6, { parentId: 7 });
+  const other = attach("Independent", 7);
+  const interleaved = attach("Interleaved", 8, { parentName: root.GetField().GetName() });
+  const view = session.view;
+  const workbench = render(<WriterWorkbench isActive view={view} />);
+  const command = WRITER_COMMAND_IDS.resolveCommentThread;
+  const id = new SfxStringItem(SID_ATTR_POSTIT_ID, String(reply.GetField().GetPostItId()));
+  try {
+    // GetTopReplyNote walks the preceding sidebar windows even for interleaved parent links.
+    expect(view.GetPostItMgr().GetThreads([root, reply, nested, other, interleaved])).toEqual([
+      [root, reply, nested],
+      [other, interleaved],
+    ]);
+    const replyCard = screen.getByRole("textbox", { name: "Comment — Reply" }).closest("article");
+    if (!replyCard) throw new Error("Missing reply card.");
+    const actions = within(replyCard).getByLabelText("Comment actions");
+    fireEvent.click(actions);
+    fireEvent.click(within(replyCard).getByRole("button", { name: "Resolve Thread" }));
+    expect(root.GetField().IsResolved()).toBe(true);
+    expect(reply.GetField().IsResolved()).toBe(true);
+    expect(nested.GetField().IsResolved()).toBe(true);
+    expect(other.GetField().IsResolved()).toBe(false);
+    expect(interleaved.GetField().IsResolved()).toBe(false);
+    expect(screen.getByLabelText("Writer document body")).toHaveFocus();
+
+    fireEvent.click(actions);
+    fireEvent.click(within(replyCard).getByRole("button", { name: "Unresolve" }));
+    expect(reply.GetField().IsResolved()).toBe(false);
+    act(
+      /** Sends the original body-shell command with the reply ID. @returns Nothing. */ () => {
+        expect(view.Execute(command, [id])).toMatchObject({ status: "executed", value: true });
+      },
+    );
+    expect(root.GetField().IsResolved()).toBe(false);
+    expect(nested.GetField().IsResolved()).toBe(false);
+    expect(other.GetField().IsResolved()).toBe(false);
+    act(
+      /** Focuses a reply and checks the active annotation shell state. @returns Nothing. */ () => {
+        within(replyCard).getByRole("textbox").focus();
+        expect(view.QueryState(command)).toMatchObject({ enabled: true, checked: false });
+        expect(view.Execute(command)).toMatchObject({ status: "executed", value: true });
+      },
+    );
+    expect(view.QueryState(command).checked).toBe(true);
+
+    const metadata = { title: "Resolved comment thread" };
+    const { document: reopened } = await readOdtDocument(
+      await writeOdtDocument(shell.GetDoc(), metadata),
+      metadata,
+    );
+    try {
+      const fields = [...SwPostItFieldType.Get(reopened).GatherFields()];
+      const [savedRoot, savedReply, savedNested, savedOther, savedInterleaved] = fields;
+      expect(savedReply?.GetField().GetData()).toMatchObject({
+        parentName: savedRoot?.GetField().GetName(),
+        resolved: true,
+      });
+      expect(savedNested?.GetField().IsResolved()).toBe(true);
+      expect(savedOther?.GetField().IsResolved()).toBe(false);
+      expect(savedInterleaved?.GetField().IsResolved()).toBe(false);
+    } finally {
+      reopened.Dispose();
+    }
+  } finally {
+    id.Dispose();
     workbench.unmount();
     view.Close();
   }

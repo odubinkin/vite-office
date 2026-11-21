@@ -57,22 +57,29 @@ export function createWriterAnnotationCommands(
         }
       },
     },
-    {
-      id: WRITER_COMMAND_IDS.resolveComment,
-      capabilityId: "CAP-0111",
-      /** Disables document changes in a read-only view. @returns Whether enabled. */
-      isEnabled: () => view !== undefined && !shell.GetViewOptions().IsReadonly(),
-      /** Resolves a document comment by the original post-it ID argument. @param _context - Bound text shell. @param args - Request items. @returns Whether changed. */
-      execute: (_context, args) => {
-        const item = args.find(
-          /** Finds the original ID argument. @param value - Request item. @returns Whether this is the comment ID. */
-          (value): value is SfxStringItem =>
-            value instanceof SfxStringItem && value.Which() === SID_ATTR_POSTIT_ID,
-        );
-        const id = item?.GetValue();
-        if (id === undefined || id.length === 0) return false;
-        return view?.GetPostItMgr().ToggleResolved(Number(id)) ?? false;
-      },
-    },
+    ...([false, true] as const).map<WriterSlotHandler<SwTextShell>>(
+      /** Binds one of the original annotation resolution slots. @param thread - Whether to toggle the whole thread. @returns Slot handler. */
+      (thread) => ({
+        id: thread ? WRITER_COMMAND_IDS.resolveCommentThread : WRITER_COMMAND_IDS.resolveComment,
+        capabilityId: "CAP-0111",
+        /** Disables document changes in a read-only view. @returns Whether enabled. */
+        isEnabled: () => view !== undefined && !shell.GetViewOptions().IsReadonly(),
+        /** Resolves a document comment by the original post-it ID argument. @param _context - Bound text shell. @param args - Request items. @returns Whether changed. */
+        execute: (_context, args) => {
+          const item = args.find(
+            /** Finds the original ID argument. @param value - Request item. @returns Whether this is the comment ID. */
+            (value): value is SfxStringItem =>
+              value instanceof SfxStringItem && value.Which() === SID_ATTR_POSTIT_ID,
+          );
+          const id = item?.GetValue();
+          if (id === undefined || id.length === 0) return false;
+          const manager = view?.GetPostItMgr();
+          if (!manager) return false;
+          return thread
+            ? manager.ToggleResolvedForThread(Number(id))
+            : manager.ToggleResolved(Number(id));
+        },
+      }),
+    ),
   ];
 }

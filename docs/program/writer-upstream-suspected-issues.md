@@ -5856,3 +5856,25 @@ this ordering in the local annotation history.
 
 - [Original annotation update and history capture](../../vendor/libreoffice-reference/sw/source/uibase/docvw/AnnotationWin.cxx)
 - [Original field undo replay](../../vendor/libreoffice-reference/sw/source/core/undo/SwUndoField.cxx)
+
+### WRITER-727 — Resolving a mixed comment thread by ID can reopen it
+
+The annotation window's menu resolves a thread whenever any of its notes
+are unresolved. The text shell's ID-based command toggles the root note
+and copies that state to the other notes. A resolved root with unresolved
+replies therefore produces opposite results through the two commands.
+Writer preserves both paths.
+
+- [Original annotation menu action](../../vendor/libreoffice-reference/sw/source/uibase/docvw/AnnotationWin2.cxx)
+- [Original root-based toggle](../../vendor/libreoffice-reference/sw/source/uibase/docvw/AnnotationWin.cxx)
+
+### WRITER-728 — Thread navigation follows adjacent comment windows
+
+LibreOffice uses parent metadata to mark a reply as a follow window.
+Finding its thread root then walks backward in sidebar order while the
+current window is a follow window. For interleaved comments this can
+associate a reply with a preceding root whose ID differs from its stored
+parent. Writer preserves anchor order and the follow-window rule.
+
+- [Original parent metadata and sidebar ordering](../../vendor/libreoffice-reference/sw/source/uibase/docvw/PostItMgr.cxx)
+- [Original root navigation](../../vendor/libreoffice-reference/sw/source/uibase/docvw/AnnotationWin2.cxx)
