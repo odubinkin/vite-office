@@ -1,10 +1,12 @@
 /** @fileoverview Exercises Font Effects through Writer's native Character and search items. */
 import { act, fireEvent, render, screen, within } from "@testing-library/react";
 import { expect, it } from "vitest";
+import { SvxCaseMapItem } from "../../../editeng/inc/cmapitem";
+import { SvxCaseMap } from "../../../editeng/inc/svxenum";
 import { SvxEmphasisMarkItem } from "../../../editeng/inc/emphasismarkitem";
 import { FontEmphasisMark } from "../../../tools/inc/fontenum";
 import { SfxItemSet } from "../../../svl/source/items/itemset";
-import { RES_CHRATR_EMPHASIS_MARK } from "../../inc/hintids";
+import { RES_CHRATR_CASEMAP, RES_CHRATR_EMPHASIS_MARK } from "../../inc/hintids";
 import { SwPaM, SwPosition } from "../../source/core/crsr/pam";
 import { SwAttrIter } from "../../source/core/text/itratr";
 import { exportContentXml, exportStylesXml } from "../../source/filter/xml/xmlexp";
@@ -225,3 +227,45 @@ it("applies word-only underline through formatted search replacement", /** Drive
     session.view.Close();
   }
 });
+
+it.each([
+  { first: "a", initials: [] },
+  { first: "ß", initials: ["n"] },
+])(
+  "honors title case within a word after $first elsewhere in the paragraph",
+  /** Preserves the native expansion-dependent snippet branch and the original editable text. @param scenario - Initial and expected rendered titles. @returns Nothing. */ (
+    scenario,
+  ) => {
+    const session = createWriterDocumentSession();
+    const shell = session.view.GetWrtShell();
+    const value = `${scenario.first} final`;
+    shell.Insert(value);
+    const node = shell.GetActiveParagraph();
+    const start = new SwPosition(node, 4);
+    const end = new SwPosition(node, value.length);
+    const items = new SfxItemSet(shell.GetDoc().GetAttrPool(), [
+      [RES_CHRATR_CASEMAP, RES_CHRATR_CASEMAP],
+    ]);
+    items.Put(new SvxCaseMapItem(SvxCaseMap.Capitalize, RES_CHRATR_CASEMAP), true);
+    shell.SetPaM(end, start);
+    shell.SetAttrSet(items);
+    const workbench = render(<WriterWorkbench isActive view={session.view} />);
+    try {
+      const body = screen.getByLabelText("Writer document body");
+      expect(body.textContent).toBe(value);
+      expect(
+        Array.from(
+          body.querySelectorAll('[style*="text-transform: uppercase"]'),
+          /** Reads the unchanged DOM initial. @param span - Uppercase text portion. @returns Original text. */
+          (span) => span.textContent,
+        ),
+      ).toEqual(scenario.initials);
+    } finally {
+      workbench.unmount();
+      items.Dispose();
+      end.Dispose();
+      start.Dispose();
+      session.view.Close();
+    }
+  },
+);

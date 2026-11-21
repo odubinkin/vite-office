@@ -1,5 +1,7 @@
 /** @fileoverview Consumed native text character property map and handler transport from txtprmap.cxx; no browser boolean formatting model or substitute UNO provider. */
 import { cppu_detail_getUnoType_FillStyle } from "../../../offapi/com/sun/star/drawing/FillStyle";
+import * as CaseMap from "../../../offapi/com/sun/star/style/CaseMap";
+import { XMLConstantsPropertyHandler } from "../style/XMLConstantsPropertyHandler";
 import { PropertyValue } from "../../../udkapi/com/sun/star/beans/PropertyValue";
 import { PropertyState } from "../../../udkapi/com/sun/star/beans/PropertyState";
 
@@ -90,6 +92,33 @@ const lineColorTokens = {
   overline: T.STYLE_TEXT_OVERLINE_COLOR,
 } as const;
 const textLines = ["underline", "overline"] as const;
+/** Native CharCaseMap property split between the case transformation and font variant. */
+const caseMapProperties = [
+  [
+    T.FO_FONT_VARIANT,
+    "fo:font-variant",
+    new XMLConstantsPropertyHandler(
+      [
+        ["normal", CaseMap.NONE],
+        ["small-caps", CaseMap.SMALLCAPS],
+      ],
+      null,
+    ),
+  ],
+  [
+    T.FO_TEXT_TRANSFORM,
+    "fo:text-transform",
+    new XMLConstantsPropertyHandler(
+      [
+        ["none", CaseMap.NONE],
+        ["uppercase", CaseMap.UPPERCASE],
+        ["lowercase", CaseMap.LOWERCASE],
+        ["capitalize", CaseMap.TITLE],
+      ],
+      null,
+    ),
+  ],
+] as const;
 /** Original chained CharStrikeout style/type/width/text associations. */
 const strikeoutProperties = [
   [
@@ -202,6 +231,8 @@ export const textCharacterPropertyTokens = [
   ...Object.values(lineColorTokens),
   T.STYLE_TEXT_POSITION,
   T.STYLE_TEXT_EMPHASIZE,
+  T.FO_FONT_VARIANT,
+  T.FO_TEXT_TRANSFORM,
   T.FO_LETTER_SPACING,
   ...boolProperties.map(
     /** Reads original bool property tokens. @param entry - Entry. @returns Token. */ ([token]) =>
@@ -281,6 +312,11 @@ export function exportTextCharacterProperties(properties: OdfCharacterProperties
       }
       // At least one native signed scalar was inserted above; both original handlers necessarily emit numeric text.
       result += ` style:text-position="${output[0]}"`;
+    }
+    if (properties.caseMap !== undefined) {
+      value.insert([properties.caseMap], "sal_Int16");
+      for (const [, name, handler] of caseMapProperties)
+        if (handler.exportXML(output, value, converter)) result += ` ${name}="${output[0]}"`;
     }
     if (properties.emphasis !== undefined)
       result += ` style:text-emphasize="${exportTextEmphasis(properties.emphasis)}"`;
@@ -365,6 +401,18 @@ export function importTextCharacterProperties(
           const scalar: [number] = [0];
           value.extract(scalar, type);
           result[key] = scalar[0];
+        }
+        continue;
+      }
+      const caseMap = caseMapProperties.find(
+        /** Resolves one of the native case attributes. @param property - Map entry. @returns Token match. */
+        ([item]) => item === token,
+      );
+      if (caseMap !== undefined) {
+        if (caseMap[2].importXML(text, value, converter)) {
+          const scalar: [number] = [0];
+          value.extract(scalar, "sal_Int16");
+          result.caseMap = scalar[0];
         }
         continue;
       }
@@ -712,6 +760,7 @@ export function applyTextImportProperties(
       ["textTransparency", "CharTransparence", "sal_Int16"],
       ["strikeout", "CharStrikeout", "sal_Int16"],
       ["emphasis", "CharEmphasis", "sal_Int16"],
+      ["caseMap", "CharCaseMap", "sal_Int16"],
       ["escapement", "CharEscapement", "sal_Int16"],
       ["escapementHeight", "CharEscapementHeight", "sal_Int8"],
       ["underlineStyle", "CharUnderline", "sal_Int16"],

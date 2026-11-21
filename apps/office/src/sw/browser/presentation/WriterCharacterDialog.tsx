@@ -14,6 +14,7 @@ import { SvxColorItem } from "../../../editeng/inc/colritem";
 import { SvxFontItem } from "../../../editeng/inc/fontitem";
 import { SvxFontHeightItem } from "../../../editeng/inc/fhgtitem";
 import { SvxEscapementItem } from "../../../editeng/inc/escapementitem";
+import { SvxCaseMapItem } from "../../../editeng/inc/cmapitem";
 import { SvxEscapement } from "../../../editeng/inc/svxenum";
 import {
   SvxPostureItem,
@@ -23,7 +24,7 @@ import {
   SvxWeightItem,
 } from "../../../editeng/source/items/textitem";
 import { ComplexColor } from "../../../docmodel/inc/color/ComplexColor";
-import { nextWordLineMode, underlines } from "./writer-search-format-values";
+import { caseEffects, nextWordLineMode, underlines } from "./writer-search-format-values";
 import { WriterSearchEmphasisControls } from "./WriterSearchEmphasisControls";
 import { SvxEmphasisMarkItem } from "../../../editeng/inc/emphasismarkitem";
 import { SvxWordLineModeItem } from "../../../editeng/inc/wrlmitem";
@@ -50,6 +51,7 @@ const characterItems = {
     strike: EE.EE_CHAR_STRIKEOUT,
     wordMode: EE.EE_CHAR_WLM,
     emphasis: EE.EE_CHAR_EMPHASISMARK,
+    caseMap: EE.EE_CHAR_CASEMAP,
     position: EE.EE_CHAR_ESCAPEMENT,
     spacing: EE.EE_CHAR_KERNING,
     color: EE.EE_CHAR_COLOR,
@@ -65,6 +67,7 @@ const characterItems = {
     strike: SW.RES_CHRATR_CROSSEDOUT,
     wordMode: SW.RES_CHRATR_WORDLINEMODE,
     emphasis: SW.RES_CHRATR_EMPHASIS_MARK,
+    caseMap: SW.RES_CHRATR_CASEMAP,
     position: SW.RES_CHRATR_ESCAPEMENT,
     spacing: SW.RES_CHRATR_KERNING,
     color: SW.RES_CHRATR_COLOR,
@@ -160,6 +163,8 @@ export function WriterCharacterDialog({
       : backgroundItem instanceof SvxColorItem
         ? writerColorValue(backgroundItem.GetValue(), "transparent")
         : "";
+  const caseItem = read(which.caseMap);
+  const initialCase = caseItem instanceof SvxCaseMapItem ? String(caseItem.GetCaseMap()) : "";
   const emphasisItem = read(which.emphasis);
   const initialEmphasis =
     emphasisItem instanceof SvxEmphasisMarkItem ? String(emphasisItem.GetEmphasisMark()) : "";
@@ -361,6 +366,9 @@ export function WriterCharacterDialog({
       output.Put(new SvxCrossedOutItem(Number(strikethrough), which.strike), true);
     if (wordMode !== undefined && wordMode !== initialWordMode)
       output.Put(new SvxWordLineModeItem(wordMode, which.wordMode), true);
+    const nextCase = String(values.get("caseMap") ?? "");
+    if (nextCase !== "" && nextCase !== initialCase)
+      output.Put(new SvxCaseMapItem(Number(nextCase), which.caseMap), true);
     if (emphasis !== "" && emphasis !== initialEmphasis)
       output.Put(new SvxEmphasisMarkItem(Number(emphasis), which.emphasis), true);
     const nextPosition = String(values.get("position") ?? "");
@@ -563,6 +571,24 @@ export function WriterCharacterDialog({
                   )}
                 </label>
               )}
+              <label className={fieldClass}>
+                {localization.GetText("writer.search.format.case", "Effects")}
+                <select
+                  name="caseMap"
+                  defaultValue={initialCase}
+                  className="rounded border border-slate-300 px-2 py-1"
+                >
+                  <option value="" disabled />
+                  {caseEffects.map(
+                    /** Presents one native case effect. @param entry - Value and caption. @returns Option. */
+                    ([value, label]) => (
+                      <option key={value} value={value}>
+                        {label}
+                      </option>
+                    ),
+                  )}
+                </select>
+              </label>
               <WriterSearchEmphasisControls
                 value={emphasis}
                 label={

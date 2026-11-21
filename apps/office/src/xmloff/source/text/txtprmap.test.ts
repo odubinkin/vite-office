@@ -155,7 +155,7 @@ it("transports all native independent script values without boolean normalizatio
   ).not.toContain("text-underline-color");
   expect(exportTextCharacterProperties({ underlineStyle: 19 })).toBe("");
   expect(importTextCharacterProperties(attributes([["fo:font-size", "12pt"]]))).toEqual({});
-  expect(textCharacterPropertyTokens).toHaveLength(67);
+  expect(textCharacterPropertyTokens).toHaveLength(69);
   expect(textCharacterPropertyTokens).toContain(XMLToken.STYLE_TEXT_EMPHASIZE);
   expect(textCharacterPropertyTokens).toContain(XMLToken.FO_LETTER_SPACING);
   expect(textCharacterPropertyTokens.slice(9, 13)).toEqual([
@@ -305,4 +305,33 @@ it("merges the native underline and overline property sequences independently", 
       overlineColor: 0xcc0033,
     }),
   ).toContain('style:text-overline-style="none" style:text-overline-color="#cc0033"');
+});
+
+it("preserves the two native CharCaseMap ODF attributes", /** Checks all published case modes and the SAX application order. @returns Nothing. */ () => {
+  for (const [mode, name, value, xml] of [
+    [0, "fo:text-transform", "none", ' fo:font-variant="normal" fo:text-transform="none"'],
+    [1, "fo:text-transform", "uppercase", ' fo:text-transform="uppercase"'],
+    [2, "fo:text-transform", "lowercase", ' fo:text-transform="lowercase"'],
+    [3, "fo:text-transform", "capitalize", ' fo:text-transform="capitalize"'],
+    [4, "fo:font-variant", "small-caps", ' fo:font-variant="small-caps"'],
+  ] as const) {
+    expect(importTextCharacterProperties(attributes([[name, value]]))).toEqual({ caseMap: mode });
+    expect(exportTextCharacterProperties({ caseMap: mode })).toBe(xml);
+  }
+  expect(
+    importTextCharacterProperties(
+      attributes([
+        ["fo:font-variant", "small-caps"],
+        ["fo:text-transform", "uppercase"],
+      ]),
+    ),
+  ).toEqual({ caseMap: 1 });
+  expect(
+    importTextCharacterProperties(
+      attributes([
+        ["fo:text-transform", "uppercase"],
+        ["fo:font-variant", "small-caps"],
+      ]),
+    ),
+  ).toEqual({ caseMap: 4 });
 });

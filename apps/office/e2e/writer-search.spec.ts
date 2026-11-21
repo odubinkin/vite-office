@@ -447,3 +447,57 @@ test("Writer preserves independent word-only lines when reopening an ODT", /** D
   await expect(overline.first()).toHaveCSS("text-decoration-color", "rgb(0, 169, 51)");
   await expect(underline.first()).toHaveCSS("text-decoration-color", "rgb(42, 96, 153)");
 });
+
+test("Writer keeps original text through case effects, ODT reopen and search replacement", /** Checks native case items through the production dialogs and browser paint. @param fixtures - Playwright fixtures. @param fixtures.page - Chromium page. @returns Test completion. */ async ({
+  page,
+}) => {
+  await page.goto("/writer");
+  const editor = page.getByRole("textbox", { name: "Writer document text", exact: true });
+  await editor.fill("alpha-beta gamma");
+  await editor.press("Control+a");
+  await page.getByRole("menuitem", { name: "Format", exact: true }).click();
+  await page.getByRole("menuitem", { name: "Character…", exact: true }).click();
+  const character = page.getByRole("dialog", { name: "Character", exact: true });
+  await character.getByRole("tab", { name: "Font Effects", exact: true }).click();
+  await character.getByRole("combobox", { name: "Effects", exact: true }).selectOption({
+    label: "Capitalize Every Word",
+  });
+  await character.getByRole("button", { name: "OK", exact: true }).click();
+  const initials = editor.locator('[style*="text-transform: uppercase"]');
+  await expect(initials).toHaveText(["a", "g"]);
+  expect(await editor.textContent()).toBe("alpha-beta gamma");
+
+  const pending = page.waitForEvent("download");
+  await page.getByRole("menuitem", { name: "File", exact: true }).click();
+  await page.getByRole("menuitem", { name: "Export…" }).click();
+  await page.getByRole("button", { name: "Download ODT" }).click();
+  const path = await (await pending).path();
+  if (path === null) throw new Error("Missing exported ODT.");
+  await page.getByRole("button", { name: "Open", exact: true }).click();
+  await page.getByRole("tab", { name: "On computer" }).click();
+  await page.getByLabel("Browse").setInputFiles({
+    buffer: await readFile(path),
+    mimeType: "application/vnd.oasis.opendocument.text",
+    name: "case-effects.odt",
+  });
+  await expect(page.getByRole("dialog", { name: "Open", exact: true })).toHaveCount(0);
+  await expect(initials).toHaveText(["a", "g"]);
+  expect(await editor.textContent()).toBe("alpha-beta gamma");
+
+  await page.keyboard.press("Control+h");
+  const search = page.getByRole("dialog", { name: "Find and Replace", exact: true });
+  await search.getByLabel("Find", { exact: true }).fill("gamma");
+  await search.getByText("Other options", { exact: true }).click();
+  await search.getByLabel("Replace with", { exact: true }).fill("gamma");
+  await search.getByRole("button", { name: "Format…" }).click();
+  const replacement = page.getByRole("dialog", { name: "Replace", exact: true });
+  await replacement.getByRole("tab", { name: "Font Effects", exact: true }).click();
+  await replacement.getByRole("combobox", { name: "Effects", exact: true }).selectOption({
+    label: "Small capitals",
+  });
+  await replacement.getByRole("button", { name: "OK", exact: true }).click();
+  await search.getByRole("button", { name: "Replace All", exact: true }).click();
+  const smallCaps = editor.locator('[style*="font-variant-caps: small-caps"]');
+  await expect(smallCaps).toHaveText("gamma");
+  expect(await editor.textContent()).toBe("alpha-beta gamma");
+});

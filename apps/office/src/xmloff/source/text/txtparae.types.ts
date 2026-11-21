@@ -48,6 +48,8 @@ export interface OdfCharacterProperties {
   readonly strikeout?: number;
   /** Native UNO CharEmphasis short. */
   readonly emphasis?: number;
+  /** Original UNO CharCaseMap short, shared by both ODF attributes. */
+  readonly caseMap?: number;
   /** Native CharEscapement and CharEscapementHeight. */
   readonly escapement?: number;
   readonly escapementHeight?: number;

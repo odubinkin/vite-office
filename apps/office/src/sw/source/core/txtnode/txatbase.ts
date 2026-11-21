@@ -15,6 +15,8 @@ import { SvxEscapementItem } from "../../../../editeng/inc/escapementitem";
 import { SvxKerningItem } from "../../../../editeng/inc/kernitem";
 import { RES_CHRATR_ESCAPEMENT } from "../../../inc/hintids";
 
+import { SvxCaseMapItem } from "../../../../editeng/inc/cmapitem";
+import type { SvxCaseMap } from "../../../../editeng/inc/svxenum";
 import { SvxEmphasisMarkItem } from "../../../../editeng/inc/emphasismarkitem";
 import { SvxCrossedOutItem } from "../../../../editeng/inc/crossedoutitem";
 import { FontEmphasisMark, FontStrikeout } from "../../../../tools/inc/fontenum";
@@ -47,6 +49,7 @@ import {
   RES_CHRATR_CTL_WEIGHT,
   RES_CHRATR_HIGHLIGHT,
   RES_CHRATR_EMPHASIS_MARK,
+  RES_CHRATR_CASEMAP,
   RES_CHRATR_BACKGROUND,
   RES_CHRATR_KERNING,
   RES_CHRATR_POSTURE,
@@ -100,6 +103,8 @@ export interface WriterCharacterAttributes {
   readonly strikeout?: FontStrikeout;
   /** Native emphasis style and position flags. */
   readonly emphasisMark?: FontEmphasisMark;
+  /** Effective native case effect. */
+  readonly caseMap?: SvxCaseMap;
   /** Complete native offset and relative height. */
   readonly escapement?: Readonly<{ offset: number; height: number }>;
 }
@@ -531,6 +536,9 @@ export function projectWriterCharacterAttributes(
     items.GetItemIfSet(RES_CHRATR_ESCAPEMENT, false) ??
     inherited?.GetItemIfSet(RES_CHRATR_ESCAPEMENT, true);
   const strikeout = get(RES_CHRATR_CROSSEDOUT) as SvxCrossedOutItem;
+  const caseItem =
+    items.GetItemIfSet(RES_CHRATR_CASEMAP, false) ??
+    inherited?.GetItemIfSet(RES_CHRATR_CASEMAP, true);
   const emphasis =
     items.GetItemIfSet(RES_CHRATR_EMPHASIS_MARK, false) ??
     inherited?.GetItemIfSet(RES_CHRATR_EMPHASIS_MARK, true);
@@ -552,6 +560,7 @@ export function projectWriterCharacterAttributes(
   return {
     ...(color instanceof SvxColorItem ? { color: writerTextColorValue(color) } : {}),
     ...(font instanceof SvxFontItem ? { fontFamily: font.GetFamilyName() } : {}),
+    ...(caseItem instanceof SvxCaseMapItem ? { caseMap: caseItem.GetCaseMap() } : {}),
     ...((emphasisMark & FontEmphasisMark.Style) !== FontEmphasisMark.NONE ? { emphasisMark } : {}),
     ...(fontSize instanceof SvxFontHeightItem ? { fontSizeTwips: fontSize.GetHeight() } : {}),
     ...(kerning instanceof SvxKerningItem ? { kerningTwips: kerning.GetValue() } : {}),

@@ -6000,3 +6000,16 @@ explicit overline color can therefore be exported alongside
 - [Original text-property mappings](../../vendor/libreoffice-reference/xmloff/source/text/txtprmap.cxx#L178)
 - [Original overline mappings](../../vendor/libreoffice-reference/xmloff/source/text/txtprmap.cxx#L260)
 - [Original underline color filter](../../vendor/libreoffice-reference/xmloff/source/text/txtexppr.cxx#L893)
+
+### WRITER-737 — Expanding title case restarts at a Writer portion boundary
+
+The title-case scan in `SvxFont::CalcCaseMap` resets its word flag at
+ASCII space and tab only. Writer normally applies that scan to the
+whole paragraph before drawing an individual portion. When a mapped
+initial expands, the drawing code maps the selected portion again as
+a standalone snippet. A portion beginning inside an existing word
+can then acquire an uppercase initial. Writer preserves the
+space/tab boundary and expansion-triggered restart.
+
+- [Original title-case scan and midword comment](../../vendor/libreoffice-reference/editeng/source/items/svxfont.cxx#L166)
+- [Original Writer portion handling after a length change](../../vendor/libreoffice-reference/sw/source/core/txtnode/swfont.cxx#L1182)

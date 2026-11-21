@@ -16,6 +16,8 @@ import { SvxULSpaceItem } from "../../../editeng/inc/ulspitem";
 import type { ContentNode } from "../../../editeng/source/editeng/ContentNode";
 import { SfxItemSet } from "../../../svl/source/items/itemset";
 import { SfxVoidItem } from "../../../svl/source/items/voiditem";
+import { SvxCaseMap } from "../../../editeng/inc/svxenum";
+import { browserCaseStyle, getTitleCaseParts } from "./writer-case-effects";
 import { FontItalic, FontLineStyle } from "../../../tools/inc/fontenum";
 import { ASIAN, COMPLEX } from "../../../offapi/com/sun/star/i18n/ScriptType";
 import {
@@ -695,7 +697,9 @@ export class WriterCommentEditor extends SwTextAPIEditSource {
             /** Selects the native script for this portion's first unit. @param span - Script span. @returns Whether it contains the beginning. */
             (span) => start >= span.nStartPos && start < span.nEndPos,
           );
-          applyTextStyle(run, projectAnnotationRun(items, script?.nScriptType));
+          const preceding =
+            start === 0 ? undefined : String.fromCharCode(node.GetString().charAt(start - 1));
+          applyTextStyle(run, projectAnnotationRun(items, script?.nScriptType), preceding);
           paragraph.append(run);
         } finally {
           value.dispose();
@@ -757,10 +761,11 @@ function projectAnnotationRun(
   return projectWriterCharacterAttributes(items);
 }
 
-/** Paints effective Writer text attributes using browser font and decoration primitives. @param element - Display portion. @param attributes - Effective native items. @returns Nothing. */
+/** Paints effective Writer text attributes using browser font and decoration primitives. @param element - Display portion. @param attributes - Effective native items. @param preceding - Previous source character. @returns Nothing. */
 function applyTextStyle(
   element: HTMLElement,
   attributes: ReturnType<typeof projectWriterCharacterAttributes>,
+  preceding: string | undefined,
 ): void {
   const style = element.style;
   const emphasis = browserTextEmphasis(attributes.emphasisMark);
@@ -777,29 +782,60 @@ function applyTextStyle(
   if (attributes.fontSizeTwips !== undefined) style.fontSize = `${attributes.fontSizeTwips / 20}pt`;
   if (attributes.kerningTwips !== undefined)
     style.letterSpacing = `${attributes.kerningTwips / 20}pt`;
+  const caseStyle = browserCaseStyle(attributes.caseMap);
+  if (caseStyle !== undefined) Object.assign(style, caseStyle);
+  const value = element.textContent ?? "";
   if (
     attributes.underlineWordMode &&
     (attributes.underline || attributes.overlineStyle || attributes.strikeout)
   ) {
-    const parts = splitWordLineText(element.textContent ?? "");
     element.replaceChildren();
-    for (const [index, part] of parts.entries()) {
+    let offset = 0;
+    for (const [index, part] of splitWordLineText(value).entries()) {
+      const previous = offset === 0 ? preceding : value[offset - 1];
+      offset += part.length;
       if (part === "") continue;
       if (index % 2 !== 0) element.append(part);
       else {
         const word = element.ownerDocument.createElement("span");
-        word.textContent = part;
+        setCaseText(word, part, attributes.caseMap, previous);
         paintAnnotationTextLines(word, attributes);
         element.append(word);
       }
     }
-  } else paintAnnotationTextLines(element, attributes);
+  } else {
+    setCaseText(element, value, attributes.caseMap, preceding);
+    paintAnnotationTextLines(element, attributes);
+  }
   if (attributes.escapement?.offset) {
     style.verticalAlign = attributes.escapement.offset > 0 ? "super" : "sub";
     style.fontSize =
       attributes.fontSizeTwips === undefined
         ? `${attributes.escapement.height}%`
         : `${(attributes.fontSizeTwips * attributes.escapement.height) / 2000}pt`;
+  }
+}
+
+/** Paints native title-case initials while retaining the original DOM text. @param element - Display portion. @param value - Original text. @param mode - Native case effect. @param preceding - Previous source character. @returns Nothing. */
+function setCaseText(
+  element: HTMLElement,
+  value: string,
+  mode: SvxCaseMap | undefined,
+  preceding: string | undefined,
+): void {
+  if (mode !== SvxCaseMap.Capitalize) {
+    if (element.textContent !== value) element.textContent = value;
+    return;
+  }
+  element.replaceChildren();
+  for (const part of getTitleCaseParts(value, preceding)) {
+    if (!part.uppercase) element.append(part.text);
+    else {
+      const initial = element.ownerDocument.createElement("span");
+      initial.style.textTransform = "uppercase";
+      initial.textContent = part.text;
+      element.append(initial);
+    }
   }
 }
 

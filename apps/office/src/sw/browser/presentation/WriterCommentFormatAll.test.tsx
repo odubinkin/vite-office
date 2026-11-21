@@ -28,10 +28,12 @@ import { DateTime } from "../../../tools/source/datetime/datetime";
 import { FontLineStyle, FontEmphasisMark } from "../../../tools/inc/fontenum";
 import { createOdtWriterTransfer, restoreOdtWriterTransfer } from "../filter/xml/odt-transfer";
 import {
+  EE_CHAR_CASEMAP,
   EE_CHAR_EMPHASISMARK,
   EE_CHAR_FONTHEIGHT,
   EE_CHAR_OVERLINE,
 } from "../../../editeng/inc/eeitem";
+import { SvxCaseMap } from "../../../editeng/inc/svxenum";
 import { SvxFontHeightItem } from "../../../editeng/inc/fhgtitem";
 import { SfxStringItem } from "../../../svl/source/items/stritem";
 import { FN_PARAM_1 } from "../../inc/cmdid";
@@ -173,6 +175,9 @@ it("opens Character from the Format menu and applies only the selected annotatio
     expect(position).toBeDisabled();
     fireEvent.change(style, { target: { value: FontEmphasisMark.Dot } });
     fireEvent.change(position, { target: { value: FontEmphasisMark.PosBelow } });
+    fireEvent.change(controls.getByLabelText("Effects"), {
+      target: { value: SvxCaseMap.Uppercase },
+    });
     fireEvent.change(controls.getByLabelText("Overlining"), {
       target: { value: FontLineStyle.LINESTYLE_DOUBLE },
     });
@@ -192,6 +197,7 @@ it("opens Character from the Format menu and applies only the selected annotatio
     });
     expect(selected.parentElement).toHaveStyle({
       fontSize: "20pt",
+      textTransform: "uppercase",
       textEmphasisStyle: "filled dot",
       textEmphasisPosition: "under right",
     });
@@ -215,6 +221,11 @@ it("opens Character from the Format menu and applies only the selected annotatio
           /** Locates the selected annotation. @param note - Reopened note. @returns Author match. */
           (note) => note.author === "Ada",
         )?.editText?.paragraphs[0]?.characterItems;
+        expect(items).toContainEqual({
+          start: 1,
+          end: 3,
+          item: { which: EE_CHAR_CASEMAP, value: SvxCaseMap.Uppercase },
+        });
         expect(items).toContainEqual({
           start: 1,
           end: 3,

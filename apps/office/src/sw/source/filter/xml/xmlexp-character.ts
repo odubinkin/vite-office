@@ -13,6 +13,7 @@ import { SvxColorItem } from "../../../../editeng/inc/colritem";
 import { SvxBrushItem } from "../../../../editeng/source/items/frmitems.brush";
 import { SvxEscapementItem } from "../../../../editeng/inc/escapementitem";
 import { RES_CHRATR_ESCAPEMENT } from "../../../inc/hintids";
+import { SvxCaseMapItem } from "../../../../editeng/inc/cmapitem";
 import { SvxEmphasisMarkItem } from "../../../../editeng/inc/emphasismarkitem";
 import { MID_EMPHASIS } from "../../../../editeng/inc/memberids";
 import { Any } from "../../../../cppu/inc/com/sun/star/uno/Any";
@@ -20,6 +21,7 @@ import { SvxCrossedOutItem } from "../../../../editeng/inc/crossedoutitem";
 import {
   RES_CHRATR_CROSSEDOUT,
   RES_CHRATR_EMPHASIS_MARK,
+  RES_CHRATR_CASEMAP,
   RES_CHRATR_OVERLINE,
 } from "../../../inc/hintids";
 import {
@@ -89,6 +91,7 @@ export function getCharacterProperties(
   const box = set.GetItemIfSet(RES_CHRATR_BOX, inherited);
   const escapement = set.GetItemIfSet(RES_CHRATR_ESCAPEMENT, inherited);
   const crossedOut = set.GetItemIfSet(RES_CHRATR_CROSSEDOUT, inherited);
+  const caseItem = set.GetItemIfSet(RES_CHRATR_CASEMAP, inherited);
   const emphasisItem = set.GetItemIfSet(RES_CHRATR_EMPHASIS_MARK, inherited);
   const wordMode = set.GetItemIfSet(RES_CHRATR_WORDLINEMODE, inherited),
     autoKerning = set.GetItemIfSet(RES_CHRATR_AUTOKERN, inherited);
@@ -123,6 +126,7 @@ export function getCharacterProperties(
     box === undefined &&
     crossedOut === undefined &&
     emphasisItem === undefined &&
+    caseItem === undefined &&
     escapement === undefined &&
     !directFontSize &&
     color === undefined &&
@@ -174,18 +178,11 @@ export function getCharacterProperties(
         : undefined;
   const themeColor =
     color instanceof SvxColorItem ? getOdfThemeColor(color.getComplexColor()) : undefined;
-  const emphasis: [number] = [0];
-  if (emphasisItem instanceof SvxEmphasisMarkItem) {
-    const value = new Any();
-    try {
-      emphasisItem.QueryValue(value, MID_EMPHASIS);
-      value.extract(emphasis, "sal_Int16");
-    } finally {
-      value.dispose();
-    }
-  }
   return {
-    ...(emphasisItem instanceof SvxEmphasisMarkItem ? { emphasis: emphasis[0] } : {}),
+    ...(emphasisItem instanceof SvxEmphasisMarkItem
+      ? { emphasis: queryCharacterShort(emphasisItem, MID_EMPHASIS) }
+      : {}),
+    ...(caseItem instanceof SvxCaseMapItem ? { caseMap: queryCharacterShort(caseItem, 0) } : {}),
     ...(color instanceof SvxColorItem
       ? color.GetValue().GetAlpha() === 255 || writerTextColorValue(color) === "auto"
         ? { color: writerTextColorValue(color) }
@@ -284,6 +281,19 @@ export function getCharacterProperties(
         }
       : {}),
   };
+}
+
+/** Reads the original UNO short without passing native flag encodings into ODF. @param item - Concrete Writer character item. @param member - Original UNO member. @returns Signed short. */
+function queryCharacterShort(item: SvxEmphasisMarkItem | SvxCaseMapItem, member: number): number {
+  const value = new Any();
+  const scalar: [number] = [0];
+  try {
+    item.QueryValue(value, member);
+    value.extract(scalar, "sal_Int16");
+    return scalar[0];
+  } finally {
+    value.dispose();
+  }
 }
 
 /** Enumerates actual native hint boundaries without merging through browser booleans. @param node - Canonical text owner. @returns Source item-based XML runs. */

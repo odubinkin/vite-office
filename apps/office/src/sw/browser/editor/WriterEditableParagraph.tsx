@@ -2,6 +2,8 @@
 import { WriterInlineGraphic } from "./WriterFloatingGraphic";
 import { EscapementText } from "./EscapementText";
 
+import { SvxCaseMap } from "../../../editeng/inc/svxenum";
+import { browserCaseStyle, getTitleCaseParts } from "../presentation/writer-case-effects";
 import { FontItalic, FontWeight } from "../../../tools/inc/fontenum";
 
 import { StrikeoutText } from "../../../vcl/browser/strikeout-text";
@@ -119,6 +121,16 @@ export function WriterEditableParagraph({
     },
     [paragraph, isFollow, markerStartPt, contentStartPt, markerWidthPt, listLayout],
   );
+  // DrawText maps the complete paragraph first, then starts a new case scan for an expanding snippet.
+  const expandingTitleCase =
+    paragraph.runs.some(
+      /** Checks whether any run uses title case. @param run - Native portion. @returns Whether title casing participates. */
+      (run) => run.attributes.caseMap === SvxCaseMap.Capitalize,
+    ) &&
+    getTitleCaseParts(paragraph.text, undefined).some(
+      /** Checks the width-changing uppercase mapping before drawing a fragment. @param part - Case portion. @returns Whether the number of code units changes. */
+      (part) => part.uppercase && part.text.toUpperCase().length !== part.text.length,
+    );
   return (
     <div
       className="relative shrink-0"
@@ -312,6 +324,11 @@ export function WriterEditableParagraph({
                     inheritedBold={paragraph.computedStyle.fontWeight === 700}
                     inheritedFontFamily={paragraph.computedStyle.fontFamily}
                     inheritedItalic={paragraph.computedStyle.fontStyle === "italic"}
+                    precedingCharacter={
+                      expandingTitleCase
+                        ? undefined
+                        : paragraph.text[Math.max(fragmentStart, run.startOffset) - 1]
+                    }
                     joinLeftBorder={index > 0 && run.attributes.joinsPreviousCharacterBox === true}
                     joinRightBorder={runs[index + 1]?.attributes.joinsPreviousCharacterBox === true}
                     run={{
@@ -355,11 +372,32 @@ function paintWriterLines(
   return content;
 }
 
+/** Renders the original text with uppercase paint on native title-case initials. @param mode - Effective case effect. @param value - Original text. @param preceding - Previous character in the source paragraph. @returns Original text and paint wrappers. */
+function renderCaseText(
+  mode: SvxCaseMap | undefined,
+  value: string,
+  preceding: string | undefined,
+): React.ReactNode {
+  if (mode !== SvxCaseMap.Capitalize) return value;
+  return getTitleCaseParts(value, preceding).map(
+    /** Applies uppercase to a selected original unit. @param part - Paint portion. @param index - Portion index. @returns Original text with optional CSS. */
+    (part, index) =>
+      part.uppercase ? (
+        <span key={index} style={{ textTransform: "uppercase" }}>
+          {part.text}
+        </span>
+      ) : (
+        part.text
+      ),
+  );
+}
+
 /** Projects one immutable Writer run through semantic browser elements. @param props - Canonical run and inherited paragraph flags. @returns React-owned run subtree. */
 export function WriterTextPortionProjection({
   inheritedBold,
   inheritedFontFamily,
   inheritedItalic,
+  precedingCharacter,
   joinLeftBorder = false,
   joinRightBorder = false,
   run,
@@ -367,6 +405,7 @@ export function WriterTextPortionProjection({
   inheritedBold: boolean;
   inheritedFontFamily: string | undefined;
   inheritedItalic: boolean;
+  precedingCharacter?: string | undefined;
   joinLeftBorder?: boolean;
   joinRightBorder?: boolean;
   run: Pick<WriterTextPortion, "text" | "attributes" | "hyperlink" | "inlineGraphic">;
@@ -374,7 +413,7 @@ export function WriterTextPortionProjection({
   let content: React.ReactNode = run.inlineGraphic ? (
     <WriterInlineGraphic value={run.inlineGraphic} marker={run.text} />
   ) : (
-    run.text
+    renderCaseText(run.attributes.caseMap, run.text, precedingCharacter)
   );
   const { attributes } = run;
   const wordLines =
@@ -384,15 +423,19 @@ export function WriterTextPortionProjection({
       attributes.overlineLine !== undefined ||
       Boolean(attributes.strikeout));
   if (wordLines) {
+    let offset = 0;
     content = splitWordLineText(run.text).map(
       /** Paints nonspacing fragments without duplicating model text. @param part - Original text fragment. @param index - Fragment index. @returns Decorated word or untouched spacing. */
       (part, index) => {
+        const preceding = offset === 0 ? precedingCharacter : run.text[offset - 1];
+        offset += part.length;
         if (index % 2 !== 0 || part === "") return part;
+        const text = renderCaseText(attributes.caseMap, part, preceding);
         const word =
           attributes.strikeout === undefined ? (
-            part
+            text
           ) : (
-            <StrikeoutText value={attributes.strikeout}>{part}</StrikeoutText>
+            <StrikeoutText value={attributes.strikeout}>{text}</StrikeoutText>
           );
         return <Fragment key={index}>{paintWriterLines(attributes, word)}</Fragment>;
       },
@@ -415,6 +458,9 @@ export function WriterTextPortionProjection({
   const emphasis = browserTextEmphasis(run.attributes.emphasisMark);
   if (emphasis !== undefined) content = <span style={emphasis}>{content}</span>;
   if (!wordLines) content = paintWriterLines(attributes, content);
+  const caseStyle =
+    run.inlineGraphic === undefined ? browserCaseStyle(attributes.caseMap) : undefined;
+  if (caseStyle !== undefined) content = <span style={caseStyle}>{content}</span>;
   if (run.attributes.color !== undefined)
     content = (
       <span style={{ color: run.attributes.color === "auto" ? "initial" : run.attributes.color }}>

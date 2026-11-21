@@ -555,6 +555,8 @@ const entries: readonly (readonly [string, string, XMLToken])[] = [
   [ODF_NAMESPACES.fo, "font-weight", XMLToken.FO_FONT_WEIGHT],
   [ODF_NAMESPACES.fo, "letter-spacing", XMLToken.FO_LETTER_SPACING],
   [ODF_NAMESPACES.fo, "font-style", XMLToken.FO_FONT_STYLE],
+  [ODF_NAMESPACES.fo, "font-variant", XMLToken.FO_FONT_VARIANT],
+  [ODF_NAMESPACES.fo, "text-transform", XMLToken.FO_TEXT_TRANSFORM],
   [ODF_NAMESPACES.fo, "font-family", XMLToken.FO_FONT_FAMILY],
   [ODF_NAMESPACES.fo, "font-size", XMLToken.FO_FONT_SIZE],
   [ODF_NAMESPACES.style, "rfc-language-tag", XMLToken.STYLE_RFC_LANGUAGE_TAG],

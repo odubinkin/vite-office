@@ -11,6 +11,8 @@ import {
 import { browserBorderLine } from "../../../svx/browser/dialog/border-line";
 import { SvxBoxItem, SvxBoxItemLine } from "../../../editeng/source/items/frmitems";
 import { SvxColorItem } from "../../../editeng/inc/colritem";
+import { SvxCaseMapItem } from "../../../editeng/inc/cmapitem";
+import { SvxCaseMap } from "../../../editeng/inc/svxenum";
 import { SvxEmphasisMarkItem } from "../../../editeng/inc/emphasismarkitem";
 import { FontEmphasisMark } from "../../../tools/inc/fontenum";
 import { SvxEscapementItem } from "../../../editeng/inc/escapementitem";
@@ -19,7 +21,11 @@ import { RES_CHRATR_BOX, RES_CHRATR_ESCAPEMENT, RES_CHRATR_KERNING } from "../..
 
 import { SvxCrossedOutItem } from "../../../editeng/inc/crossedoutitem";
 import { SvxWordLineModeItem } from "../../../editeng/inc/wrlmitem";
-import { RES_CHRATR_CROSSEDOUT, RES_CHRATR_WORDLINEMODE } from "../../inc/hintids";
+import {
+  RES_CHRATR_CASEMAP,
+  RES_CHRATR_CROSSEDOUT,
+  RES_CHRATR_WORDLINEMODE,
+} from "../../inc/hintids";
 import type { RulerUnitData } from "../../../svtools/source/control/ruler";
 import type { FieldUnit } from "../../../tools/inc/fldunit";
 import { projectWriterLineSpacing } from "../../source/core/text/itrform2";
@@ -235,6 +241,7 @@ export interface WriterTextPortion {
     underlineLine?: WriterTextLineProjection;
     overlineLine?: WriterTextLineProjection;
     wordLineMode?: boolean;
+    caseMap?: SvxCaseMap;
     emphasisMark?: FontEmphasisMark;
     escapement?: Readonly<{ offset: number; height: number }>;
     strikeout?: import("../../../tools/inc/fontenum").FontStrikeout;
@@ -861,6 +868,7 @@ function projectTextPortions(node: SwTextNode): readonly WriterTextPortion[] {
     const generic = getFontFamilyGeneric(font.GetFamily());
     const underline = handler.ReadItem(RES_CHRATR_UNDERLINE) as SvxUnderlineItem;
     const overline = handler.ReadItem(RES_CHRATR_OVERLINE) as SvxOverlineItem;
+    const caseMap = (handler.ReadItem(RES_CHRATR_CASEMAP) as SvxCaseMapItem).GetCaseMap();
     const emphasisMark = (
       handler.ReadItem(RES_CHRATR_EMPHASIS_MARK) as SvxEmphasisMarkItem
     ).GetEmphasisMark();
@@ -883,6 +891,7 @@ function projectTextPortions(node: SwTextNode): readonly WriterTextPortion[] {
           bold: (handler.ReadItem(RES_CHRATR_WEIGHT) as SvxWeightItem).GetBoolValue(),
           italic: (handler.ReadItem(RES_CHRATR_POSTURE) as SvxPostureItem).GetBoolValue(),
           underline: underline.GetBoolValue(),
+          ...(caseMap === SvxCaseMap.NotMapped ? {} : { caseMap }),
           ...(underline.GetBoolValue() &&
           (underline.GetLineStyle() !== FontLineStyle.LINESTYLE_SINGLE ||
             !underline.GetColor().IsFullyTransparent())

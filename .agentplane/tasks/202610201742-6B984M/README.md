@@ -4,7 +4,7 @@ title: "Implement Writer search and replace core and browser UI"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 120
+revision: 121
 origin:
   system: "manual"
 depends_on:
@@ -480,6 +480,16 @@ comments:
       Evidence includes the normal mixed-state cycle, restoration of a nonbreaking space and the prior range formatting through Undo, formatted text search replacement and its ODF property, formatting all annotations with one Undo, and regular document underline/overline with independent colors and word mode across Writer export and reopen. Source contracts inspected are SvxCharEffectsPage, weld::TriStateEnabled, SvxSearchDialog::FormatHdl_Impl, CommonSalLayout and OutputDevice::ImplDrawTextLines. No newly suspected native issue was found in this scope.
 
       Targeted verification passed 55 Writer tests in 7 suites and all 7 Writer search/comment scenarios in production Chromium. TypeScript and Vite build, scoped ESLint and Prettier, module boundaries, source tree and provenance, Writer resources, registry parity with zero semantic violations, routing and diff checks passed. The browser fragment operation was recorded in the runtime inventory. Repository-wide documentation and size checks still report the existing 307 JSDoc findings and four files at or above the size limit. AgentPlane doctor passed with the existing hook-shim warning. This checkpoint leaves the task active and the ten-task cadence unchanged.
+  -
+    author: "CODER"
+    body: |-
+      Verified the Writer character case-effect checkpoint. Character and annotation dialogs submit the existing SvxCaseMapItem, and ordinary text, annotation text, and formatted replacement display the effect while retaining the original editable UTF-16 text. The original Writer and EditEngine CharCaseMap property records connect the shared ODF font-variant and text-transform handlers to document, style, and annotation import/export. The Worker graph retains native items.
+
+      Browser paint uses CSS uppercase, lowercase and small caps. Title case follows the original ASCII space/tab scan and UTF-16 unit rule, including the regular Writer paragraph context and the length-changing snippet restart in WRITER-737. Browser CSS supplies glyph shaping and the capitalization locale for the represented effects.
+
+      The first verification run exposed missing test imports and an overly wide CSS style type, which were corrected. This is an implementation checkpoint in the current Writer search task and the ten-task cadence remains unchanged.
+
+      Verification passed 103 targeted Writer tests, 15 shared tests, and 8 production Chromium scenarios. The new Chromium scenario uses Character title case across ODT reopen, then applies small capitals using formatted search replacement. TypeScript and Vite build, scoped ESLint and Prettier, dependencies, source tree and provenance, Writer resources, Writer and shared registry parity (zero semantic violations), routing and diff checks passed. Repository-wide documentation and file-size checks still list the pre-existing 307 JSDoc findings and four files at or above the size limit. AgentPlane doctor passed with the existing hook-shim warning.
 
 events:
   -
@@ -1139,9 +1149,21 @@ events:
       Evidence includes the normal mixed-state cycle, restoration of a nonbreaking space and the prior range formatting through Undo, formatted text search replacement and its ODF property, formatting all annotations with one Undo, and regular document underline/overline with independent colors and word mode across Writer export and reopen. Source contracts inspected are SvxCharEffectsPage, weld::TriStateEnabled, SvxSearchDialog::FormatHdl_Impl, CommonSalLayout and OutputDevice::ImplDrawTextLines. No newly suspected native issue was found in this scope.
 
       Targeted verification passed 55 Writer tests in 7 suites and all 7 Writer search/comment scenarios in production Chromium. TypeScript and Vite build, scoped ESLint and Prettier, module boundaries, source tree and provenance, Writer resources, registry parity with zero semantic violations, routing and diff checks passed. The browser fragment operation was recorded in the runtime inventory. Repository-wide documentation and size checks still report the existing 307 JSDoc findings and four files at or above the size limit. AgentPlane doctor passed with the existing hook-shim warning. This checkpoint leaves the task active and the ten-task cadence unchanged.
+  -
+    type: "comment"
+    at: "2026-11-21T23:12:21.557Z"
+    author: "CODER"
+    body: |-
+      Verified the Writer character case-effect checkpoint. Character and annotation dialogs submit the existing SvxCaseMapItem, and ordinary text, annotation text, and formatted replacement display the effect while retaining the original editable UTF-16 text. The original Writer and EditEngine CharCaseMap property records connect the shared ODF font-variant and text-transform handlers to document, style, and annotation import/export. The Worker graph retains native items.
+
+      Browser paint uses CSS uppercase, lowercase and small caps. Title case follows the original ASCII space/tab scan and UTF-16 unit rule, including the regular Writer paragraph context and the length-changing snippet restart in WRITER-737. Browser CSS supplies glyph shaping and the capitalization locale for the represented effects.
+
+      The first verification run exposed missing test imports and an overly wide CSS style type, which were corrected. This is an implementation checkpoint in the current Writer search task and the ten-task cadence remains unchanged.
+
+      Verification passed 103 targeted Writer tests, 15 shared tests, and 8 production Chromium scenarios. The new Chromium scenario uses Character title case across ODT reopen, then applies small capitals using formatted search replacement. TypeScript and Vite build, scoped ESLint and Prettier, dependencies, source tree and provenance, Writer resources, Writer and shared registry parity (zero semantic violations), routing and diff checks passed. Repository-wide documentation and file-size checks still list the pre-existing 307 JSDoc findings and four files at or above the size limit. AgentPlane doctor passed with the existing hook-shim warning.
 
 doc_version: 3
-doc_updated_at: "2026-11-21T23:02:35.735Z"
+doc_updated_at: "2026-11-21T23:12:21.557Z"
 doc_updated_by: "CODER"
 description: "Implement the approved coherent Writer search-and-replace feature from pinned LibreOffice sources: real shared search engine and options, native paragraph/cursor traversal and replacement/history contracts, view-owned search state and dispatch, Find toolbar and Find and Replace dialog with generated upstream command placement and shortcuts. Preserve source semantics and explicit unsupported boundaries; never substitute DOM text search or browser RegExp for ICU contracts. Work only on writer in vite-office-writer; local upstream reading approved, no network or merges. Keep active until approved scope is verified."
 sections:
