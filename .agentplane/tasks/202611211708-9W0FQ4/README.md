@@ -1,10 +1,11 @@
 ---
 id: "202611211708-9W0FQ4"
 title: "Align Writer ODT legacy frame background conversion"
-status: "DOING"
+result_summary: "Verified legacy Writer frame brush conversion, background image export, and ODT and Worker round trips."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 7
+revision: 8
 origin:
   system: "manual"
 depends_on: []
@@ -45,11 +46,16 @@ quality_review:
     - "node .agentplane/policy/check-routing.mjs passed"
   findings:
     - "Verified native raster location, independent opacity, compatible child output, precedence and document round trips."
-commit: null
+commit:
+  hash: "304f3d7e3bf2d804722c0432757c629427ce45f8"
+  message: "🧩 9W0FQ4 code: align Writer legacy frame background conversion"
 comments:
   -
     author: "CODER"
     body: "Start: continue direct-mode task in current checkout."
+  -
+    author: "CODER"
+    body: "Verified: Writer legacy frame brush import, modern fill precedence and compatible ODT output."
 events:
   -
     type: "status"
@@ -64,8 +70,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Verified Writer legacy frame color and bitmap backgrounds, precedence, compatible ODT serialization and Worker transfer."
+  -
+    type: "status"
+    at: "2026-11-21T17:16:43.642Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: Writer legacy frame brush import, modern fill precedence and compatible ODT output."
 doc_version: 3
-doc_updated_at: "2026-11-21T17:15:39.911Z"
+doc_updated_at: "2026-11-21T17:16:43.643Z"
 doc_updated_by: "CODER"
 description: "Port old graphic and color brush behavior for ODT frame styles, native fill precedence, and compatible frame background XML serialization."
 sections:
