@@ -1,0 +1,24 @@
+{
+  "schema_version": 1,
+  "task_id": "202611211736-V4SBB6",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-11-21T17:46:17.962Z",
+  "verdict": "pass",
+  "summary": "ODS named definitions use the native name, address, formula and token owners.",
+  "evaluated_sha": "694877f423755ec2e26538b0fbeeedbebdb3e0e2",
+  "blueprint_digest": "5be1dc266426120cd4e1e368dd6a7119816b4a96a6f242505951632f5c1b26dd",
+  "findings": [
+    "Pinned hidden and global fixtures, Worker transfer and cross-sheet endpoints confirm name scope and serialization."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202611211736-V4SBB6/README.md",
+    "output/playwright/V4SBB6/calc.log",
+    "output/playwright/V4SBB6/names-final.log",
+    "output/playwright/V4SBB6/types-final.log",
+    "output/playwright/V4SBB6/provenance.log"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": []
+}
