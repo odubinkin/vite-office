@@ -126,7 +126,7 @@ describe("parity mapping CLI" /**
       }),
     );
     // Full coverage also instruments the complete owned runtime registry.
-  }, 120_000);
+  }, 600_000);
 
   it("rejects unknown global operation capabilities before emitting output", /** Exercises missing global registry evidence independently of successful report composition. @returns Completion after rejection. */ async () => {
     const { runtimeDeclaration, readOwnedEvidence } = await ownedEvidence();

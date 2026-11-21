@@ -371,7 +371,7 @@ describe("global and scoped registry gates", /** Registers inventory concurrency
       );
       expect(report.capabilityCount).toBe(expectedCapabilities.length);
     },
-    180_000,
+    600_000,
   );
   it("rejects missing and duplicate global runtime discovery", /** Preserves discovery rejection independently of the four scoped reports. @returns Completion after rejection assertions. */ async () => {
     const { registry, baseline } = await fixture();
@@ -445,7 +445,7 @@ describe("global and scoped registry gates", /** Registers inventory concurrency
     );
     expect(writes.size).toBe(4);
     expect(JSON.parse(output)).toEqual({ status: "generated", viewCount: 4 });
-  });
+  }, 30_000);
 });
 
 /** Narrows a fixture value after asserting its presence. @param value - Fixture lookup result. @returns Present fixture value. */

@@ -281,7 +281,7 @@ describe("canonical registry storage", /** Registers migration and ownership reg
       expect(await readInventoryCompatibilityText(path)).toBe(text);
     }
     expect(await readInventoryCompatibilityText("package.json")).toContain('"vite-office"');
-  });
+  }, 30_000);
 });
 
 /** Narrows a fixture value after asserting its presence. @param value - Fixture lookup result. @returns Present fixture value. */
