@@ -1,10 +1,11 @@
 ---
 id: "202611211719-8PK0GM"
 title: "Import legacy Calc ODS style-map conditional formats"
-status: "DOING"
+result_summary: "Ported LibreOffice conditional style-map import into the native Calc conditional format model and verified extended ODS reopening."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 7
+revision: 8
 origin:
   system: "manual"
 depends_on: []
@@ -42,11 +43,16 @@ quality_review:
     - "output/playwright/8PK0GM/provenance.log"
   findings:
     - "Ordered rules keep the original source address and join equal ranges. The regression covers both sheet-ownership and empty-extension behavior."
-commit: null
+commit:
+  hash: "ca23652dcfc67d9caa35ea4ce9ffb68f9fcd78a2"
+  message: "🧩 8PK0GM code: port legacy Calc conditional style maps"
 comments:
   -
     author: "CODER"
     body: "Start: import legacy ODS conditional style maps and verify native evaluation, Worker transfer and extended ODS export."
+  -
+    author: "CODER"
+    body: "Verified: legacy Calc automatic cell-style maps, native formula grammar, range joining, sheet ownership and extended precedence through scoped Calc, Worker and ODS tests."
 events:
   -
     type: "status"
@@ -61,8 +67,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Verified legacy conditional style maps, native grammar and sheet precedence through Calc, Worker and ODS."
+  -
+    type: "status"
+    at: "2026-11-21T17:34:30.262Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: legacy Calc automatic cell-style maps, native formula grammar, range joining, sheet ownership and extended precedence through scoped Calc, Worker and ODS tests."
 doc_version: 3
-doc_updated_at: "2026-11-21T17:32:35.840Z"
+doc_updated_at: "2026-11-21T17:34:30.263Z"
 doc_updated_by: "CODER"
 description: "Port LibreOffice automatic cell-style conditional maps, pre-compilation range merging, source anchoring and precedence of extended conditional formats. Verify native Calc evaluation, Worker transport and ODS round-trip."
 sections:
