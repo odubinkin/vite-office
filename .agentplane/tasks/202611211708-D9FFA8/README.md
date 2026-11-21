@@ -1,10 +1,11 @@
 ---
 id: "202611211708-D9FFA8"
 title: "Connect Calc named range manager and name insertion"
-status: "DOING"
+result_summary: "Connect native Calc name management, grouped formula updates, and undoable list insertion"
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 14
+revision: 15
 origin:
   system: "manual"
 depends_on: []
@@ -42,11 +43,16 @@ quality_review:
   findings:
     - "Named formulas retained their group through the upstream rename and Undo/Redo scenario."
     - "Paste List used a dedicated native block action and restored an overwritten number in a single Undo."
-commit: null
+commit:
+  hash: "77aaae2fdd566a14b3b5aa31854bad4921fb8321"
+  message: "🧩 D9FFA8 code: connect native Calc name management and insertion"
 comments:
   -
     author: "CODER"
     body: "Start: Connect native Calc named range draft management, hybrid formula updates and name insertion."
+  -
+    author: "CODER"
+    body: "Verified: 89 focused Calc tests and all declared static checks passed for native name management, grouped formula updates, and undoable list insertion."
 events:
   -
     type: "status"
@@ -61,8 +67,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "All 89 focused Calc tests passed, including upstream rename and grouped hybrid formulas, nested draft handling, editor insertion, and atomic Paste List history. Changed-path static checks and provenance passed."
+  -
+    type: "status"
+    at: "2026-11-21T17:33:40.873Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: 89 focused Calc tests and all declared static checks passed for native name management, grouped formula updates, and undoable list insertion."
 doc_version: 3
-doc_updated_at: "2026-11-21T17:29:06.767Z"
+doc_updated_at: "2026-11-21T17:33:40.875Z"
 doc_updated_by: "CODER"
 description: "Expose native named expression editing and insertion, preserving scopes, token identities, dependent formulas and undo."
 sections:
