@@ -5603,3 +5603,14 @@ applies its authored properties without that collection change.
 - Writer retains the ordered entries and the different lookup directions.
   The formatting dialog regression checks the combined summary, checkbox
   state, and effective search.
+
+### WRITER-703 — Search formatting summaries can hide settings that affect a match
+
+- Upstream `SvxAdjustItem::GetPresentation` reports the primary alignment
+  even when the search criterion also includes last-line alignment, word and
+  letter spacing, glyph scaling, or the paragraph composer. The method has
+  a TODO for word spacing. `SvxFirstLineIndentItem::GetPresentation` reports
+  the measure without its automatic-indentation flag.
+- Writer retains the summary fields and compares the complete items. The
+  browser regression distinguishes paragraphs that differ only in a
+  justification member or the automatic-first-line flag.

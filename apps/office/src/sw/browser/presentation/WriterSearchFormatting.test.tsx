@@ -13,7 +13,7 @@ import { SvxBreak } from "../../../editeng/inc/svxenum";
 import { SvxTabAdjust, SvxTabStop, SvxTabStopItem } from "../../../editeng/inc/tstpitem";
 import { SfxInt16Item } from "../../../svl/source/items/intitem";
 import { SvxAdjust, SvxAdjustItem } from "../../../editeng/inc/adjustitem";
-import { SvxFirstLineIndentItem } from "../../../editeng/inc/lrspitem";
+import { SvxFirstLineIndentItem, SvxIndentValue } from "../../../editeng/inc/lrspitem";
 import { SvxLineSpacingItem } from "../../../editeng/inc/lspcitem";
 import { SvxULSpaceItem } from "../../../editeng/inc/ulspitem";
 import { SvxColorItem } from "../../../editeng/source/items/textitem.color";
@@ -539,6 +539,152 @@ it("finds tab stops and page breaks through the sorted native slot checklist", /
     expect(shell.GetCursor().Start().GetContentIndex()).toBe(0);
     expect(shell.GetCursor().End().GetContentIndex()).toBe(6);
   } finally {
+    workbench.unmount();
+    session.view.Close();
+  }
+});
+
+it("finds the complete justification and automatic first-line criteria", /** Ports the native alignment and first-line control dependencies through exact paragraph matching. @returns Nothing. */ () => {
+  const session = createWriterDocumentSession();
+  const metric = vi.spyOn(session.view, "GetMetric").mockReturnValue(FieldUnit.INCH);
+  const shell = session.view.GetWrtShell();
+  const match = shell.GetActiveParagraph();
+  shell.Insert("match");
+  shell.SplitNode();
+  const spacingVariant = shell.GetActiveParagraph();
+  shell.Insert("other spacing");
+  shell.SplitNode();
+  const indentVariant = shell.GetActiveParagraph();
+  shell.Insert("manual first line");
+  for (const paragraph of [match, spacingVariant, indentVariant]) {
+    const adjustment = new SvxAdjustItem(SvxAdjust.Block, RES_PARATR_ADJUST);
+    adjustment.SetLastBlock(SvxAdjust.Block);
+    adjustment.SetOneWord(SvxAdjust.Block);
+    adjustment.SetPropWordSpacingMinimum(110);
+    adjustment.SetPropWordSpacing(120);
+    adjustment.SetPropWordSpacingMaximum(paragraph === spacingVariant ? 140 : 120);
+    adjustment.SetPropLetterSpacingMinimum(-10);
+    adjustment.SetPropScaleWidthMinimum(90);
+    adjustment.SetPropScaleWidthMaximum(150);
+    adjustment.SetParagraphComposer(true);
+    paragraph.SetAttr(adjustment);
+    const indent = new SvxFirstLineIndentItem(SvxIndentValue.twips(144), RES_MARGIN_FIRSTLINE);
+    indent.SetAutoFirst(paragraph !== indentVariant);
+    paragraph.SetAttr(indent);
+  }
+  const start = new SwPosition(match, 0);
+  shell.SetCursor(start);
+  start.Dispose();
+  const workbench = render(<WriterWorkbench isActive view={session.view} />);
+  try {
+    fireEvent.keyDown(window, { key: "h", ctrlKey: true });
+    const dialog = within(screen.getByRole("dialog", { name: "Find and Replace" }));
+    fireEvent.click(dialog.getByText("Other options"));
+    fireEvent.click(dialog.getByRole("button", { name: "Format…" }));
+    const format = within(screen.getByRole("dialog", { name: "Search" }));
+    fireEvent.click(format.getByRole("tab", { name: "Alignment" }));
+
+    const lastLine = format.getByRole("combobox", { name: "Last line" });
+    const expand = format.getByRole("checkbox", { name: "Expand single word" });
+    expect(lastLine).toBeDisabled();
+    fireEvent.click(format.getByRole("radio", { name: "Justified" }));
+    fireEvent.change(lastLine, { target: { value: SvxAdjust.Block } });
+    fireEvent.click(expand);
+    fireEvent.change(lastLine, { target: { value: SvxAdjust.Center } });
+    expect(expand).toBeDisabled();
+    expect(expand).not.toBeChecked();
+    fireEvent.change(lastLine, { target: { value: SvxAdjust.Block } });
+    fireEvent.click(expand);
+
+    const minimum = format.getByRole("spinbutton", { name: "Minimum word spacing" });
+    const desired = format.getByRole("spinbutton", { name: "Desired word spacing" });
+    const maximum = format.getByRole("spinbutton", { name: "Maximum word spacing" });
+    fireEvent.change(desired, { target: { value: 80 } });
+    expect(minimum).toHaveValue(80);
+    fireEvent.change(minimum, { target: { value: 125 } });
+    expect(desired).toHaveValue(125);
+    expect(maximum).toHaveValue(125);
+    fireEvent.change(maximum, { target: { value: 110 } });
+    expect(minimum).toHaveValue(110);
+    expect(desired).toHaveValue(110);
+    fireEvent.change(desired, { target: { value: 120 } });
+    expect(maximum).toHaveValue(120);
+    fireEvent.change(format.getByRole("spinbutton", { name: "Minimum letter spacing" }), {
+      target: { value: -10 },
+    });
+    const glyphMinimum = format.getByRole("spinbutton", { name: "Minimum glyph scaling" });
+    fireEvent.change(glyphMinimum, { target: { value: 9 } });
+    expect(glyphMinimum).toHaveValue(9);
+    fireEvent.change(glyphMinimum, { target: { value: 90 } });
+    fireEvent.change(format.getByRole("spinbutton", { name: "Maximum glyph scaling" }), {
+      target: { value: 150 },
+    });
+    fireEvent.click(format.getByRole("checkbox", { name: "Paragraph Composer" }));
+
+    fireEvent.click(format.getByRole("tab", { name: "Indents & Spacing" }));
+    const firstLine = format.getByRole("spinbutton", { name: "First line" });
+    fireEvent.change(firstLine, { target: { value: "0.10 in" } });
+    const automatic = format.getByRole("checkbox", { name: "Automatic" });
+    fireEvent.click(automatic);
+    expect(firstLine).toBeDisabled();
+    fireEvent.click(format.getByRole("button", { name: "OK" }));
+
+    fireEvent.click(dialog.getByRole("button", { name: "Find All" }));
+    const matches = [...shell.GetCursor().GetRingContainer()];
+    expect(matches).toHaveLength(1);
+    expect(matches[0]?.Start().GetNode()).toBe(match);
+    expect(matches[0]?.End().GetContentIndex()).toBe(5);
+
+    fireEvent.click(dialog.getByRole("button", { name: "Format…" }));
+    const reopened = within(screen.getByRole("dialog", { name: "Search" }));
+    fireEvent.click(reopened.getByRole("tab", { name: "Alignment" }));
+    expect(reopened.getByRole("spinbutton", { name: "Desired word spacing" })).toHaveValue(120);
+    expect(reopened.getByRole("checkbox", { name: "Expand single word" })).toBeChecked();
+    fireEvent.click(reopened.getByRole("tab", { name: "Indents & Spacing" }));
+    expect(reopened.getByRole("checkbox", { name: "Automatic" })).toBeChecked();
+    fireEvent.click(reopened.getByRole("button", { name: "Cancel" }));
+
+    fireEvent.focus(dialog.getByLabelText("Replace with"));
+    fireEvent.click(dialog.getByRole("button", { name: "Format…" }));
+    const replacement = within(screen.getByRole("dialog", { name: "Replace" }));
+    fireEvent.click(replacement.getByRole("tab", { name: "Alignment" }));
+    fireEvent.click(replacement.getByRole("radio", { name: "Justified" }));
+    fireEvent.change(replacement.getByRole("combobox", { name: "Last line" }), {
+      target: { value: SvxAdjust.Center },
+    });
+    fireEvent.change(replacement.getByRole("spinbutton", { name: "Desired word spacing" }), {
+      target: { value: 104 },
+    });
+    fireEvent.click(replacement.getByRole("tab", { name: "Indents & Spacing" }));
+    fireEvent.change(replacement.getByRole("spinbutton", { name: "First line" }), {
+      target: { value: "0.20 in" },
+    });
+    fireEvent.click(replacement.getByRole("button", { name: "OK" }));
+    fireEvent.click(dialog.getByRole("button", { name: "Replace All" }));
+
+    const applied = match.GetAttr(RES_PARATR_ADJUST) as SvxAdjustItem;
+    expect(applied.GetLastBlock()).toBe(SvxAdjust.Center);
+    expect(applied.GetPropWordSpacing()).toBe(104);
+    expect((match.GetAttr(RES_MARGIN_FIRSTLINE) as SvxFirstLineIndentItem).IsAutoFirst()).toBe(
+      false,
+    );
+    expect(
+      (spacingVariant.GetAttr(RES_PARATR_ADJUST) as SvxAdjustItem).GetPropWordSpacingMaximum(),
+    ).toBe(140);
+    act(
+      /** Restores both original items in one undo. @returns Nothing. */
+      () => {
+        expect(shell.Undo()).toBe(true);
+      },
+    );
+    const restored = match.GetAttr(RES_PARATR_ADJUST) as SvxAdjustItem;
+    expect(restored.GetLastBlock()).toBe(SvxAdjust.Block);
+    expect(restored.GetPropWordSpacing()).toBe(120);
+    expect((match.GetAttr(RES_MARGIN_FIRSTLINE) as SvxFirstLineIndentItem).IsAutoFirst()).toBe(
+      true,
+    );
+  } finally {
+    metric.mockRestore();
     workbench.unmount();
     session.view.Close();
   }

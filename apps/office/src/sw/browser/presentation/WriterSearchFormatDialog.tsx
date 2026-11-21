@@ -9,6 +9,8 @@ import {
   DFLT_ESC_SUPER,
   SvxEscapementItem,
 } from "../../../editeng/source/items/textitem.escapement";
+import { SvxAdjustItem } from "../../../editeng/inc/adjustitem";
+import { SvxFirstLineIndentItem } from "../../../editeng/inc/lrspitem";
 import { SvxLineSpacingItem } from "../../../editeng/inc/lspcitem";
 import { SvxULSpaceItem } from "../../../editeng/inc/ulspitem";
 import { MetricSpinButton } from "../../../svtools/browser/control/MetricSpinButton";
@@ -26,7 +28,6 @@ import {
   caseEffects,
   fontWeights,
   makeSearchFormatItem,
-  paragraphAdjustments,
   paragraphVerticalAlignments,
   ParagraphLineSpaceMode,
   readParagraphLineSpacing,
@@ -70,6 +71,7 @@ import {
 } from "../../inc/hintids";
 import { WRITER_SEARCH_ATTR_WHICH_RANGES } from "../../source/uibase/uiview/viewsrch";
 import { WriterDialogHeader } from "./WriterDialogHeader";
+import { WriterSearchParagraphAlignment } from "./WriterSearchParagraphAlignment";
 
 const formatPages = {
   font: ["Font", [RES_CHRATR_FONT, RES_CHRATR_FONTSIZE, RES_CHRATR_WEIGHT, RES_CHRATR_POSTURE]],
@@ -387,9 +389,21 @@ export function WriterSearchFormatDialog(
       -65535,
       /** Receives the committed native length. @param twips - Selected length. @returns Nothing. */ (
         twips,
-      ) => change(which, String(twips / 20)),
+      ) =>
+        change(
+          which,
+          makeSearchFormatItem(
+            which,
+            String(twips / 20),
+            which === RES_MARGIN_FIRSTLINE ? firstLine : existing(which),
+          ),
+        ),
     );
   }
+
+  const alignment = draft.get(RES_PARATR_ADJUST) ?? existing(RES_PARATR_ADJUST);
+  const firstLineInput = draft.get(RES_MARGIN_FIRSTLINE) ?? existing(RES_MARGIN_FIRSTLINE);
+  const firstLine = firstLineInput instanceof SvxFirstLineIndentItem ? firstLineInput : undefined;
 
   const paraSpacingValue = draft.get(RES_UL_SPACE) ?? existing(RES_UL_SPACE);
   const paraSpacing = paraSpacingValue instanceof SvxULSpaceItem ? paraSpacingValue : undefined;
@@ -759,7 +773,25 @@ export function WriterSearchFormatDialog(
             <legend className="text-sm">{label("paragraph-indent", "Indent")}</legend>
             {indent(RES_MARGIN_TEXTLEFT, label("before-text", "Before text"))}
             {indent(RES_MARGIN_RIGHT, label("after-text", "After text"))}
-            {indent(RES_MARGIN_FIRSTLINE, label("first-line", "First line"))}
+            <fieldset disabled={firstLine?.IsAutoFirst()}>
+              {indent(RES_MARGIN_FIRSTLINE, label("first-line", "First line"))}
+            </fieldset>
+            <label className="flex items-center gap-2 text-sm">
+              <input
+                type="checkbox"
+                checked={firstLine?.IsAutoFirst() ?? false}
+                onChange={
+                  /** Stages the native automatic flag while retaining the entered measure. @param event - Checkbox change. @returns Nothing. */
+                  (event) => {
+                    const item =
+                      firstLine?.Clone() ?? new SvxFirstLineIndentItem(RES_MARGIN_FIRSTLINE);
+                    item.SetAutoFirst(event.currentTarget.checked);
+                    change(RES_MARGIN_FIRSTLINE, item);
+                  }
+                }
+              />
+              {label("automatic-first-line", "Automatic")}
+            </label>
           </fieldset>
           <fieldset className="grid grid-cols-2 gap-2 rounded border border-slate-200 p-2">
             <legend className="text-sm">{label("paragraph-spacing", "Spacing")}</legend>
@@ -873,28 +905,14 @@ export function WriterSearchFormatDialog(
           </fieldset>
         </div>
         <div role="tabpanel" hidden={page !== "alignment"}>
-          <fieldset className="grid gap-1 rounded border border-slate-200 p-2">
-            <legend className="text-sm">{label("alignment-options", "Options")}</legend>
-            {paragraphAdjustments.map(
-              /** Presents a native horizontal paragraph alignment. @param option - Native value and caption. @returns Radio button. */ ([
-                value,
-                caption,
-              ]) => (
-                <label key={value} className="flex items-center gap-2 text-sm">
-                  <input
-                    type="radio"
-                    name="search-paragraph-alignment"
-                    checked={scalar(RES_PARATR_ADJUST) === String(value)}
-                    onChange={
-                      /** Stores the explicit alignment. @returns Nothing. */ () =>
-                        change(RES_PARATR_ADJUST, String(value))
-                    }
-                  />
-                  {label(`paragraph-alignment.${value}`, caption)}
-                </label>
-              ),
-            )}
-          </fieldset>
+          <WriterSearchParagraphAlignment
+            value={alignment instanceof SvxAdjustItem ? alignment : undefined}
+            label={label}
+            onChange={
+              /** Stages the complete alignment and justification item. @param item - Native value. @returns Nothing. */
+              (item) => change(RES_PARATR_ADJUST, item)
+            }
+          />
           <fieldset className="grid gap-1 rounded border border-slate-200 p-2">
             <legend className="text-sm">{label("text-to-text", "Text-to-text")}</legend>
             {select(

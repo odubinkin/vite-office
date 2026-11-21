@@ -139,7 +139,9 @@ export const reliefs = [
 /** Paragraph alignment choices from the native alignment page. */
 export const paragraphAdjustments = [
   [SvxAdjust.Left, "Left"],
+  [SvxAdjust.ParaStart, "Start"],
   [SvxAdjust.Right, "Right"],
+  [SvxAdjust.ParaEnd, "End"],
   [SvxAdjust.Center, "Centered"],
   [SvxAdjust.Block, "Justified"],
 ] as const;
