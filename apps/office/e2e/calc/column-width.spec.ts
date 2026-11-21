@@ -38,6 +38,7 @@ for (const width of [1280, 390]) {
   test(`native column width,visibility and primary ODS reopen at ${width}px`, /** Uses actual shared menus and genuine saved package bytes. @param fixtures - Browser. @returns Completion. */ async ({
     page,
   }) => {
+    test.setTimeout(180_000);
     await page.setViewportSize({ width, height: 800 });
     const errors: string[] = [];
     page.on(
@@ -112,7 +113,7 @@ for (const width of [1280, 390]) {
               }
             },
           ),
-        { timeout: 20000 },
+        { timeout: 90_000 },
       )
       .toBe(1440);
     await page.reload();

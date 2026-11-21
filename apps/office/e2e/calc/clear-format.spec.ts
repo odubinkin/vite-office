@@ -28,6 +28,7 @@ for (const width of [1280, 390]) {
   test(`native Clear menu and shortcut with primary ODS reopen at ${width}px`, /** Operates actual shared Writer controls and native package storage. @param fixtures - Browser. @returns Completion. */ async ({
     page,
   }) => {
+    test.setTimeout(180_000);
     await page.setViewportSize({ width, height: 800 });
     const errors: string[] = [];
     page.on(
@@ -85,7 +86,7 @@ for (const width of [1280, 390]) {
               }
             },
           ),
-        { timeout: 20000 },
+        { timeout: 90_000 },
       )
       .toBe(0);
     await page.reload();

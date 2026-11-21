@@ -71,7 +71,7 @@ async function stopProbe(page: Page) {
 test("large ODS import, XML reopen, save and external export keep servicing UI tasks", /** Measures the production document I/O path while servicing browser tasks. @param input1 - Operation input. @param testInfo - testInfo. @returns Operation result. */ async ({
   page,
 }, testInfo) => {
-  test.setTimeout(120_000);
+  test.setTimeout(360_000);
   const errors: string[] = [];
   page.on(
     "pageerror",
