@@ -14,7 +14,8 @@
       "ScXMLNamedExpressionsContext::createFastChildContext"
     ],
     "preservedResponsibilities": [
-      "ODS named-range and named-expression contexts retain scopes, reference bases, flags and expressions before compiler finalization."
+      "ODS named-range and named-expression contexts retain scopes, reference bases, flags and expressions before compiler finalization.",
+      "Resolves name origins through the original address converter and admits range addresses and expressions in their own grammars with element-specific type flags."
     ],
     "omittedResponsibilities": [
       "External ODF name-expression grammars remain open."
@@ -28,12 +29,20 @@
         {
           "path": "apps/office/src/sc/source/filter/excel/xename.test.ts",
           "marker": "preserves a forward name"
+        },
+        {
+          "path": "apps/office/src/sc/source/filter/xml/xmlnexpi.ts",
+          "marker": "GetNamedExpressionBase"
         }
       ],
       "upstream": [
         {
           "path": "vendor/libreoffice-reference/sc/source/filter/xml/xmlnexpi.cxx",
           "marker": "ScXMLNamedExpressionsContext::createFastChildContext"
+        },
+        {
+          "path": "sc/source/filter/xml/xmlimprt.cxx",
+          "marker": "RangeNameInserter"
         }
       ]
     }

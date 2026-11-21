@@ -35,7 +35,7 @@ it("imports the Calc name and print area from built-in_ranges.xlsx", /** Replays
     assert(tab);
     const definition = tab.GetRangeName().findByUpperName("EXCEL_BUILTIN_PRINT_AREA");
     assert(definition);
-    expect(definition.type).toBe(RangeDataType.PrintArea);
+    expect(definition.type).toBe(RangeDataType.PrintArea | RangeDataType.AbsArea);
     expect(GetPrintRanges(tab)).toEqual([new ScRange(0, 0, 0, 0, 4, 0)]);
     expect(tab.GetPrintRangeCount()).toBe(1);
     expect(tab.GetPrintRange(1)).toBeUndefined();

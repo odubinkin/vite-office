@@ -523,6 +523,23 @@ const operators = new Set<OpCode>([
 ]);
 /** Calc array retains document-independent sheet limits with ordinary JS references. */
 export class ScTokenArray extends FormulaTokenArray {
+  /** Resolves a sole internal reference token, including references with deleted coordinates. @param range - Destination range. @param position - Formula origin. @returns Whether the array contains one reference. */
+  IsReference(range: ScRange, position: ScAddress): boolean {
+    if (this.GetLen() !== 1) return false;
+    const token = this.TokenAt(0);
+    if (token instanceof ScSingleRefToken) {
+      const address = token.GetSingleRef().toAbs(this.mxSheetLimits, position);
+      range.aStart.assign(address);
+      range.aEnd.assign(address);
+      return true;
+    }
+    if (!(token instanceof ScDoubleRefToken)) return false;
+    const reference = token.GetDoubleRef();
+    range.aStart.assign(reference.Ref1.toAbs(this.mxSheetLimits, position));
+    range.aEnd.assign(reference.Ref2.toAbs(this.mxSheetLimits, position));
+    return true;
+  }
+
   mxSheetLimits: ScSheetLimits;
   private mnHashValue = 0n;
   /** Constructs the represented numeric state or a native shallow token copy. @param source - Document, limits or copied array. @returns Owner. */

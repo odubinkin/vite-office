@@ -32,7 +32,6 @@ import { FormulaError } from "../../../../formula/inc/errorcodes";
 import { ODF_NAMESPACES } from "../../../../xmloff/source/core/xmltoken";
 import { SvXMLUnitConverter } from "../../../../xmloff/source/core/xmluconv";
 import { escapeXml, exportText } from "../../../../xmloff/source/text/txtparae";
-import { StackVar } from "../../../../formula/inc/token";
 import { RangeDataType } from "../../core/tool/rangenam";
 import { writeNumberFormatAttributes } from "../../../../xmloff/source/style/numehelp";
 import { ScGlobal } from "../../core/data/global";
@@ -553,18 +552,15 @@ export class ScXMLExport {
   /** Writes native named ranges and expressions at workbook or sheet scope. @param scope - Name scope. @returns ODF definitions. */
   private WriteNamedRange(scope: number): string {
     let output = "";
+    const range = new ScRange();
     for (const entry of this.document.GetRangeName(scope) ?? []) {
-      const base = entry.pos.Format(ScRefFlags.ADDR_ABS);
-      const table = this.document.FetchTable(entry.pos.Tab()) ?? this.document.FetchTable(0);
-      const name = table ? text(table.GetName()) : "";
-      const sheet = /^[\p{L}\p{N}_]+$/u.test(name) ? name : "'" + name.replaceAll("'", "''") + "'";
-      const address = "$" + sheet + "." + text(base);
+      entry.ValidateTabRefs();
+      const base = entry.pos.Format(ScRefFlags.ADDR_ABS_3D, this.document);
+      const address = text(base);
       base.dispose();
       const properties = ` table:name="${escapeXml(entry.name)}" table:base-cell-address="${escapeXml(address)}"`;
       const symbol = entry.GetSymbol();
-      const code = entry.GetCode();
-      const reference = code.GetLen() === 1 ? code.TokenAt(0)?.GetType() : undefined;
-      if (reference === StackVar.svSingleRef || reference === StackVar.svDoubleRef) {
+      if (entry.IsReference(range)) {
         const flags = [
           [RangeDataType.ColHeader, "repeat-column"],
           [RangeDataType.RowHeader, "repeat-row"],
@@ -583,7 +579,8 @@ export class ScXMLExport {
         output += `<table:named-expression${properties} table:expression="${escapeXml(symbol)}"${entry.type & RangeDataType.Hidden ? ' loext:hidden="true"' : ""}/>`;
       }
     }
-    return output && "<table:named-expressions>" + output + "</table:named-expressions>";
+    if (output) return "<table:named-expressions>" + output + "</table:named-expressions>";
+    return scope < 0 ? "<table:named-expressions/>" : "";
   }
   /** Serializes the original scalar/formula alternatives with actual result computation. @param cell - Native cell view. @param address - Actual source coordinate. @param element - ODF cell element. @param attribute - Generated cell attributes. @returns Cell XML. */
   private exportCell(

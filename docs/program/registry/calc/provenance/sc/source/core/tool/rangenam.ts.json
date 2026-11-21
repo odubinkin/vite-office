@@ -16,7 +16,8 @@
       "ScRangeData::CompileRangeData"
     ],
     "preservedResponsibilities": [
-      "Native name storage owns indexed token arrays and compiles all names after their scope indexes exist."
+      "Native name storage owns indexed token arrays and compiles all names after their scope indexes exist.",
+      "Named formulas keep the native first-reference flags, test sole reference tokens separately and validate internal relative sheet bases on output."
     ],
     "omittedResponsibilities": [
       "Editing dialogs, structural name updates, and advanced formula types remain open."
@@ -30,12 +31,20 @@
         {
           "path": "apps/office/src/sc/source/filter/excel/xename.test.ts",
           "marker": "preserves a forward name"
+        },
+        {
+          "path": "apps/office/src/sc/source/core/tool/rangenam.ts",
+          "marker": "ValidateTabRefs"
         }
       ],
       "upstream": [
         {
           "path": "vendor/libreoffice-reference/sc/source/core/tool/rangenam.cxx",
           "marker": "ScRangeName::insert"
+        },
+        {
+          "path": "sc/source/core/tool/rangenam.cxx",
+          "marker": "ScRangeData::ValidateTabRefs"
         }
       ]
     }

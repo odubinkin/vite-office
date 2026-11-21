@@ -77,7 +77,8 @@
       "Builds real Calc byte tokens for the two native concatenation opcodes.",
       "Collapses validated literal suffixes into the existing ScMatrixToken over the real matrix owner.",
       "Admits the native VLOOKUP and HLOOKUP opcodes through the existing lexical and formula-token path, preserving the original arguments in the RPN function token.",
-      "Constructs ordinary opcode tokens for AVERAGEIF, MINIFS and MAXIFS."
+      "Constructs ordinary opcode tokens for AVERAGEIF, MINIFS and MAXIFS.",
+      "Identifies a sole internal reference token and resolves both endpoints without imposing the separate valid-reference predicate."
     ],
     "omittedResponsibilities": [
       "Task82 user-authorized GC adaptation removes inherited FormulaToken ownership counters/policies/delete hooks and Boost runtime. Semantic fields/value cleanup remain unchanged; native tests explicitly omit only removed base count/policy columns. Direct JS token references retain identity and no FAP cascading deletion or GC finalizer is introduced. Original C++ memory bookkeeping is intentionally outside parity claims; existing shared string owners remain a separate unchanged boundary.",
@@ -197,6 +198,10 @@
         {
           "path": "apps/office/src/sc/source/core/tool/lookup-formula.test.ts",
           "marker": "native matrix lookup ordering"
+        },
+        {
+          "path": "apps/office/src/sc/source/core/tool/token.ts",
+          "marker": "IsReference"
         }
       ],
       "upstream": [
@@ -255,6 +260,10 @@
         {
           "path": "sc/source/core/tool/token.cxx",
           "marker": "ScTokenArray::MergeArray"
+        },
+        {
+          "path": "sc/source/core/tool/token.cxx",
+          "marker": "ScTokenArray::ImplGetReference"
         }
       ]
     }

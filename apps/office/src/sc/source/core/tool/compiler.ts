@@ -41,7 +41,7 @@ import type { FormulaToken } from "../../../../formula/inc/token";
 import type { ScMatrix } from "./scmatrix";
 import { doubleToString } from "../../../../sal/rtl/strtmpl.math";
 import { ANALYSIS_EDATE, EDATE } from "./odffmap";
-import { QuoteTabName } from "./address.ooo";
+import { findRangeSeparator, QuoteTabName } from "./address.ooo";
 import { parseExternalReference } from "./compiler.external";
 import { getExternalFileUrl } from "../../ui/docshell/externalrefmgr";
 
@@ -86,6 +86,10 @@ const a1Reference = /^\$?[A-Za-z]+\$?[1-9][0-9]*/u;
 const nameIdentifier = /^[\p{L}_][\p{L}\p{N}_.]*/u;
 const a1Range =
   /^(?:\$?[A-Za-z]+\$?[1-9][0-9]*:\$?[A-Za-z]+\$?[1-9][0-9]*|\$?[A-Za-z]+:\$?[A-Za-z]+|\$?[1-9][0-9]*:\$?[1-9][0-9]*)/u;
+const a1RangeWithEndSheet = new RegExp(
+  "^" + a1Reference.source.slice(1) + ":" + sheetIdentifier + "\\." + a1Reference.source.slice(1),
+  "u",
+);
 // Existing per-realm compiler symbol bootstrap binds the classification part of
 // native ScGlobal::Init after symbols,without a replacement global service.
 ScParameterClassification.Init();
@@ -502,7 +506,9 @@ export class ScCompiler extends FormulaCompiler {
     absolute = false,
     deletedTab = false,
   ): boolean {
-    const range = new ScRange(this.aPos, this.aPos),
+    const start = new ScAddress(this.aPos);
+    start.SetTab(tab);
+    const range = new ScRange(start, start),
       input = unicode(name);
     let flags: ScRefFlags;
     try {
@@ -511,8 +517,6 @@ export class ScCompiler extends FormulaCompiler {
       input.dispose();
     }
     if (!(flags & ScRefFlags.VALID)) throw new Error("Range/name fallback is not implemented");
-    range.aStart.SetTab(tab);
-    range.aEnd.SetTab(tab);
     const reference = new ScComplexRefData();
     reference.InitRange(range);
     reference.Ref1.SetColRel(!(flags & ScRefFlags.COL_ABS));
@@ -521,7 +525,9 @@ export class ScCompiler extends FormulaCompiler {
     reference.Ref1.SetFlag3D(qualified);
     reference.Ref2.SetColRel(!(flags & ScRefFlags.COL2_ABS));
     reference.Ref2.SetRowRel(!(flags & ScRefFlags.ROW2_ABS));
-    reference.Ref2.SetTabRel(!absolute);
+    const qualifiedEnd = Boolean(flags & ScRefFlags.TAB2_3D);
+    reference.Ref2.SetTabRel(qualifiedEnd ? !(flags & ScRefFlags.TAB2_ABS) : !absolute);
+    reference.Ref2.SetFlag3D(qualifiedEnd);
     reference.SetRange(this.rDoc.GetSheetLimits(), range, this.aPos);
     if (deletedTab) {
       reference.Ref1.SetTabDeleted(true);
@@ -721,6 +727,7 @@ export class ScCompiler extends FormulaCompiler {
       const odf =
         FormulaGrammar.extractRefConvention(this.meGrammar) ===
         FormulaGrammar.AddressConvention.CONV_ODF;
+      const oooRange = !odf && !ooxml ? a1RangeWithEndSheet : undefined;
       const deleted = odf ? this.ParsePredetectedErrRefReference(remaining) : 0;
       if (deleted) {
         index += deleted;
@@ -749,7 +756,7 @@ export class ScCompiler extends FormulaCompiler {
           const defined =
             qualifiedName &&
             this.rDoc.GetRangeName(tab)?.findByUpperName(qualifiedName.toUpperCase());
-          const range = odf ? null : a1Range.exec(address);
+          const range = odf ? null : (oooRange?.exec(address) ?? a1Range.exec(address));
           const cell = range ?? (odf ? null : a1Reference.exec(address));
           if (defined) {
             if (!array.AddToken(new FormulaIndexToken(OpCode.ocName, defined.GetIndex(), tab))) {
@@ -791,7 +798,7 @@ export class ScCompiler extends FormulaCompiler {
         }
       }
       if (!odf) {
-        const range = a1Range.exec(remaining);
+        const range = oooRange?.exec(remaining) ?? a1Range.exec(remaining);
         if (range) {
           this.ParseDoubleReference(range[0]);
           last = OpCode.ocPush;
@@ -819,12 +826,17 @@ export class ScCompiler extends FormulaCompiler {
           const sheet = qualifier?.[1] ?? "";
           if (!qualifier && !body.startsWith("."))
             throw new Error("Only internal ODF references are implemented");
-          const name = body.slice(qualifier?.[0].length ?? 1).replace(":.", ":");
+          const name = body.slice(qualifier?.[0].length ?? 1);
           const tab = qualifier ? this.FindSheet(sheet) : this.aPos.Tab();
           if (tab === undefined) throw new Error("Unknown formula sheet");
-          if (name.includes(":"))
-            this.ParseDoubleReference(name, tab, !!qualifier, sheet.startsWith("$"));
-          else this.ParseSingleReference(name, tab, !!qualifier, sheet.startsWith("$"));
+          const separator = findRangeSeparator(name);
+          if (separator < name.length) {
+            const range =
+              name[separator + 1] === "."
+                ? name.slice(0, separator + 1) + name.slice(separator + 2)
+                : name;
+            this.ParseDoubleReference(range, tab, !!qualifier, sheet.startsWith("$"));
+          } else this.ParseSingleReference(name, tab, !!qualifier, sheet.startsWith("$"));
         }
         last = OpCode.ocPush;
         index = close + 1;

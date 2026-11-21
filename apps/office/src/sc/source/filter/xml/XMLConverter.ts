@@ -2,6 +2,20 @@
 import { implIsWhitespace } from "../../../../o3tl/inc/string_view";
 import { ScConditionMode as Mode } from "../../../inc/conditio";
 
+/** Removes local-reference dots outside quoted names in a table:cell-range-address. @param source - Original ODF address. @returns Calc A1 address. */
+export function ConvertCellRangeAddress(source: string): string {
+  let result = "";
+  let quoted = false;
+  let previous = "=";
+  for (const unit of source) {
+    if (unit === "'") quoted = !quoted;
+    if (quoted || unit !== "." || (previous !== ":" && previous !== " " && previous !== "="))
+      result += unit;
+    previous = unit;
+  }
+  return result;
+}
+
 const conditionOperators = new Map([
   ["<=", Mode.EqLess],
   [">=", Mode.EqGreater],

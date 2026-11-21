@@ -1,6 +1,6 @@
 /** @fileoverview Original ODS named range and expression import contexts. */
-import { unicode } from "../../../../i18nlangtag/source/isolang/isolang.tables";
 import { XMLToken, ODF_NAMESPACES } from "../../../../xmloff/source/core/xmltoken";
+import { FormulaGrammar, type Grammar } from "../../../../formula/inc/grammar";
 import {
   SvXMLIgnoreContext,
   type FastAttributeList,
@@ -9,8 +9,10 @@ import {
 import { ScAddress } from "../../../inc/address";
 import type { ScDocument } from "../../../inc/document";
 import { RangeDataType } from "../../core/tool/rangenam";
+import { ScRangeStringConverter } from "../../core/tool/rangeutl";
 import { ScXMLImportContext } from "./importcontext";
 import type { ScXMLImport } from "./xmlimprt";
+import { ConvertCellRangeAddress } from "./XMLConverter";
 
 /** Parsed name metadata whose sheet references are resolved after sheet creation. */
 export interface ScMyNamedExpression {
@@ -19,6 +21,7 @@ export interface ScMyNamedExpression {
   readonly base: string;
   readonly symbol: string;
   readonly type: RangeDataType;
+  readonly grammar: Grammar;
 }
 
 const tableRangeTypes = new Map<string, RangeDataType>([
@@ -34,31 +37,18 @@ export function GetNamedExpressionBase(
   document: ScDocument,
   expression: ScMyNamedExpression,
 ): ScAddress {
-  const fallback = new ScAddress(0, 0, Math.max(expression.scope, 0));
-  const split = expression.base.lastIndexOf(".");
-  const spelling = expression.base.slice(0, split).replace(/^\$/u, "");
-  const tab: [number] = [fallback.Tab()];
-  if (split >= 0 && spelling) {
-    const name = unicode(
-      spelling.startsWith("'") ? spelling.slice(1, -1).replaceAll("''", "'") : spelling,
-    );
-    try {
-      if (!document.GetTable(name, tab)) return fallback;
-    } finally {
-      name.dispose();
-    }
-  }
-  const origin = new ScAddress(0, 0, tab[0]);
-  const cell = expression.base.slice(split + 1);
-  if (!/^\$?[A-Za-z]+\$?[1-9][0-9]*$/u.test(cell)) return fallback;
-  const source = unicode(cell);
-  try {
-    return origin.Parse(source, document, ScAddress.detailsOOOa1) ? origin : fallback;
-  } catch {
-    return fallback;
-  } finally {
-    source.dispose();
-  }
+  const position = new ScAddress();
+  if (
+    !ScRangeStringConverter.GetAddressFromString(
+      position,
+      expression.base,
+      document,
+      FormulaGrammar.AddressConvention.CONV_OOO,
+      [0],
+    )
+  )
+    position.SetTab(Math.max(expression.scope, 0));
+  return position;
 }
 
 /** Admits named expressions for a sheet or the whole document. */
@@ -86,17 +76,24 @@ export class ScXMLNamedExpressionsContext extends ScXMLImportContext {
     );
     if (!name || source === null)
       throw new Error("ODS named expression is missing a name or formula");
-    let type =
-      attributes.get(XMLToken.LOEXT_HIDDEN) === "true" ? RangeDataType.Hidden : RangeDataType.Name;
-    for (const flag of (attributes.get(XMLToken.TABLE_RANGE_USABLE_AS) ?? "").split(/\s+/u))
-      type |= tableRangeTypes.get(flag) ?? 0;
-    const colon = source.indexOf(":");
-    const symbol = range
-      ? "[" + source + "]"
-      : colon >= 0 && attributes.getNamespaceUri(source.slice(0, colon)) === ODF_NAMESPACES.of
-        ? source.slice(colon + 1)
-        : source;
-    this.owner.AddNamedExpression({ name, base, symbol, type, scope: this.scope });
+    let type = RangeDataType.Name;
+    let grammar: Grammar = FormulaGrammar.Grammar.GRAM_ODFF;
+    let symbol = source;
+    if (range) {
+      for (const flag of (attributes.get(XMLToken.TABLE_RANGE_USABLE_AS) ?? "").split(" "))
+        type |= tableRangeTypes.get(flag) ?? 0;
+      grammar = FormulaGrammar.Grammar.GRAM_ODFF_A1;
+      symbol = ConvertCellRangeAddress(source);
+    } else {
+      if (attributes.get(XMLToken.LOEXT_HIDDEN) === "true") type |= RangeDataType.Hidden;
+      const colon = source.indexOf(":");
+      const namespace = colon < 0 ? null : attributes.getNamespaceUri(source.slice(0, colon));
+      if (namespace === ODF_NAMESPACES.of || namespace === "http://openoffice.org/2004/calc")
+        symbol = source.slice(colon + 1);
+      if (namespace === "http://openoffice.org/2004/calc")
+        grammar = FormulaGrammar.Grammar.GRAM_PODF;
+    }
+    this.owner.AddNamedExpression({ name, base, symbol, type, grammar, scope: this.scope });
     return new SvXMLIgnoreContext(true);
   }
 }

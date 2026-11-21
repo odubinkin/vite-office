@@ -32,7 +32,8 @@
       "Recognizes the represented legacy ODFF deleted-sheet qualifier, retaining native reference flags and serializing deleted references in their current ODFF and OOXML spellings. Qualified OOXML reference errors retain the resolved tab and mark row and column deleted; the original tdf58243 workbook now round-trips through Calc file operations.",
       "Normalizes admitted formula symbol lookup keys as well as source spelling, covering the native lowercase _xlfn function prefix.",
       "Preserves the original sheet absolute marker in native A1 formula output and omits it under the Excel qualifier convention.",
-      "Selects the native pre-OpenFormula lexical symbols for the represented formula opcodes, which legacy automatic style maps can request."
+      "Selects the native pre-OpenFormula lexical symbols for the represented formula opcodes, which legacy automatic style maps can request.",
+      "Compiles OOO A1 and ODFF internal ranges with separately qualified endpoints and retains the second endpoint's sheet and absolute flag."
     ],
     "omittedResponsibilities": [
       "All services outside the explicitly represented numeric formula/arithmetic subset remain unsupported; no broad parity claim.",
@@ -107,6 +108,10 @@
         {
           "path": "apps/office/src/sc/source/core/tool/compiler.ts",
           "marker": "podfSymbols"
+        },
+        {
+          "path": "apps/office/src/sc/source/core/tool/compiler.ts",
+          "marker": "a1RangeWithEndSheet"
         }
       ],
       "upstream": [
@@ -145,6 +150,10 @@
         {
           "path": "formula/inc/core_resource.hrc",
           "marker": "RID_STRLIST_FUNCTION_NAMES_ENGLISH_PODF"
+        },
+        {
+          "path": "sc/source/core/tool/compiler.cxx",
+          "marker": "ConventionOOO_A1"
         }
       ]
     }

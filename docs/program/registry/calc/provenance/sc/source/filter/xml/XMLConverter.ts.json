@@ -14,7 +14,8 @@
     ],
     "preservedResponsibilities": [
       "ScXMLConditionHelper owns the original UTF-16 expression boundary, including nested parentheses, braces, quoted segments and the native whitespace predicate.",
-      "Reads the original style-map comparison and function syntax and retains its ordered operands for conditional entry construction."
+      "Reads the original style-map comparison and function syntax and retains its ordered operands for conditional entry construction.",
+      "Converts the original table:cell-range-address to Calc A1 by removing local-reference dots outside quoted text."
     ],
     "omittedResponsibilities": [
       "Other XMLConverter operations and nonrepresented condition grammar remain outside this source slice."
@@ -36,6 +37,10 @@
         {
           "path": "apps/office/src/sc/source/filter/xml/XMLConverter.ts",
           "marker": "parseCondition"
+        },
+        {
+          "path": "apps/office/src/sc/source/filter/xml/XMLConverter.ts",
+          "marker": "ConvertCellRangeAddress"
         }
       ],
       "upstream": [
@@ -50,6 +55,10 @@
         {
           "path": "sc/source/filter/xml/XMLConverter.cxx",
           "marker": "ScXMLConditionHelper::parseCondition"
+        },
+        {
+          "path": "sc/source/filter/xml/XMLConverter.cxx",
+          "marker": "ScXMLConverter::ConvertCellRangeAddress"
         }
       ]
     }

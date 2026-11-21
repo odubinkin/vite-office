@@ -7721,3 +7721,16 @@ their formats. Calc keeps this ordering.
 
 - [Original extended element constructor](../../vendor/libreoffice-reference/sc/source/filter/xml/xmlcondformat.cxx)
 - [Original automatic style import gate](../../vendor/libreoffice-reference/sc/source/filter/xml/xmlstyli.cxx)
+
+### CALC-811 — A formula name gets a reference type flag from its first reference token
+
+`ScRangeData::CompileRangeData` sets the position or area flag from the
+first reference token it finds, including when the surrounding expression
+performs arithmetic. The source has a FIXME about requiring exactly one
+reference at this point. Calc keeps the original flag assignment and uses
+the separate single-token `IsReference` check when choosing the ODS element.
+For example, `[.$B$2]+1` has the position flag and exports as a named
+expression.
+
+- [Original named expression compilation and reference checks](../../vendor/libreoffice-reference/sc/source/core/tool/rangenam.cxx)
+- [ODS name scope and serialization regression](../../apps/office/src/sc/source/filter/xml/ods-named-expressions.test.ts)
