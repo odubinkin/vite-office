@@ -1,10 +1,11 @@
 ---
 id: "202611210659-458SWH"
 title: "Connect Calc conditional formatting manager and rule editor"
-status: "DOING"
+result_summary: "verified-202611210659-458SWH"
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 19
+revision: 21
 origin:
   system: "manual"
 depends_on: []
@@ -19,9 +20,9 @@ plan_approval:
   note: null
 verification:
   state: "ok"
-  updated_at: "2026-11-21T12:05:20.188Z"
+  updated_at: "2026-11-21T12:05:50.382Z"
   updated_by: "CODER"
-  note: "Verified Calc conditional format authoring and the scoped regression tests. All 33,794 application and 114 Calc browser cases passed across the checkpoint and targeted retries. Four inventory cases and two browser cases retain pre-existing Writer evidence failures."
+  note: "verified-202611210659-458SWH"
   attempts: 0
 quality_review:
   state: "pass"
@@ -41,11 +42,16 @@ quality_review:
     - "output/calc-458SWH-browser-responsiveness.log"
   findings:
     - "All 114 Calc browser cases passed across the full run and focused retries. The checkpoint records the pre-existing Writer parity and row-alignment failures and the interrupted coverage attempt."
-commit: null
+commit:
+  hash: "a17430d99c047bddb4e82bb74d1cb0b4cfb9d943"
+  message: "🧩 458SWH task: record Calc conditional formatting and regression verification"
 comments:
   -
     author: "CODER"
     body: "Start: Connect native Calc conditional formatting authoring and manager commands and verify the tenth regression checkpoint."
+  -
+    author: "CODER"
+    body: "Verified: verified-202611210659-458SWH. Guided shortcut recorded verification and is closing the direct task with traceable commit metadata."
 events:
   -
     type: "status"
@@ -66,8 +72,21 @@ events:
     author: "CODER"
     state: "ok"
     note: "Verified Calc conditional format authoring and the scoped regression tests. All 33,794 application and 114 Calc browser cases passed across the checkpoint and targeted retries. Four inventory cases and two browser cases retain pre-existing Writer evidence failures."
+  -
+    type: "verify"
+    at: "2026-11-21T12:05:50.382Z"
+    author: "CODER"
+    state: "ok"
+    note: "verified-202611210659-458SWH"
+  -
+    type: "status"
+    at: "2026-11-21T12:05:50.535Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: verified-202611210659-458SWH. Guided shortcut recorded verification and is closing the direct task with traceable commit metadata."
 doc_version: 3
-doc_updated_at: "2026-11-21T12:05:20.238Z"
+doc_updated_at: "2026-11-21T12:05:50.535Z"
 doc_updated_by: "CODER"
 description: "Expose the existing Calc conditional rule families, native range assignments and transactional manager through the upstream dialog, slot, and history structure."
 sections:
@@ -161,6 +180,36 @@ sections:
     - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
     - risks: none
 
+    ### 2026-11-21T12:05:50.382Z — VERIFY — ok
+
+    By: CODER
+
+    Note: verified-202611210659-458SWH
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-21T12:05:20.238Z, excerpt_hash=sha256:1ccae7c0ddd59ead75a762a5b9a8f65a714dac1703851c9d35a308fe2bfac551
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202611210659-458SWH/blueprint/resolved-snapshot.json
+    - old_digest: b058b5a0b23a3dc978c6d0b25384bd398adbc7e0e37554b3ee5920fba6fe6fd7
+    - current_digest: b058b5a0b23a3dc978c6d0b25384bd398adbc7e0e37554b3ee5920fba6fe6fd7
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202611210659-458SWH
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task complete 202611210659-458SWH --result verified-202611210659-458SWH --commit a17430d99c047bddb4e82bb74d1cb0b4cfb9d943
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Revert the implementation commits to restore the prior condition import and paint behavior and remove the newly exposed management commands."
   Findings: |-
@@ -175,6 +224,10 @@ sections:
     Both Writer viewport tests in `writer-native-cell-alignment.spec.ts` expect `safe flow-end`. The existing Writer renderer in `WriterEditableTable.tsx` sets `safe flex-end`, which Chromium reported in the full run. The assertion and the rendered value are present verbatim at baseline `b4398ddc1c6e`. The full Playwright run covers Writer regression evidence as part of the scheduled checkpoint.
 
     The full Calc browser run exposed legacy fixture setup errors. Tests that execute the native Office kernel in an isolated script now initialize the existing service manager where required. The grid alignment test now verifies the existing `flex-end` CSS value. The affected cases all passed in focused retries.
+extensions:
+  implementation_commit:
+    hash: "cb3b6e4f19bff4a9fbe194e77e663bbbe070a16b"
+    message: "🧩 458SWH test: initialize office services for isolated Calc browser fixtures"
 id_source: "generated"
 ---
 ## Summary
@@ -272,6 +325,36 @@ DecisionContextRef:
 - operator_action: run_exact_argv
 - can_execute_now: true
 - safe_command: agentplane task complete 202611210659-458SWH --result verified-202611210659-458SWH --commit cb3b6e4f19bff4a9fbe194e77e663bbbe070a16b
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
+
+### 2026-11-21T12:05:50.382Z — VERIFY — ok
+
+By: CODER
+
+Note: verified-202611210659-458SWH
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-21T12:05:20.238Z, excerpt_hash=sha256:1ccae7c0ddd59ead75a762a5b9a8f65a714dac1703851c9d35a308fe2bfac551
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202611210659-458SWH/blueprint/resolved-snapshot.json
+- old_digest: b058b5a0b23a3dc978c6d0b25384bd398adbc7e0e37554b3ee5920fba6fe6fd7
+- current_digest: b058b5a0b23a3dc978c6d0b25384bd398adbc7e0e37554b3ee5920fba6fe6fd7
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202611210659-458SWH
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task complete 202611210659-458SWH --result verified-202611210659-458SWH --commit a17430d99c047bddb4e82bb74d1cb0b4cfb9d943
 - diagnostic_command: none
 - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
 - freshness: route=computed_local remote=remote_skipped
