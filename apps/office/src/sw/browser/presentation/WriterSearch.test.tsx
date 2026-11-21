@@ -1,6 +1,6 @@
 /** @fileoverview Ports the represented pinned Writer Find and Find & Replace UI scenarios. */
 import { act, fireEvent, render, screen, within } from "@testing-library/react";
-import { expect, it, vi } from "vitest";
+import { beforeEach, expect, it, vi } from "vitest";
 import { SvxSearchCmd } from "../../../svl/inc/srchitem";
 import { SfxItemSet } from "../../../svl/source/items/itemset";
 import { RndStdIds } from "../../../svx/inc/swframetypes";
@@ -14,6 +14,9 @@ import { MakeFlySection } from "../../source/core/doc/doclay";
 import { SwPaM, SwPosition } from "../../source/core/crsr/pam";
 import { createWriterDocumentSession } from "../composition/writer-module";
 import { WriterWorkbench } from "./writer-view";
+import { SEARCH_OPTIONS_KEY } from "../storage/writer-search-options-store";
+
+beforeEach(localStorage.removeItem.bind(localStorage, SEARCH_OPTIONS_KEY));
 
 it("opens Find from Edit, wraps in both directions and restores document focus on Escape", /** Exercises directional traversal and focus. @returns Nothing. */ () => {
   const session = createWriterDocumentSession();

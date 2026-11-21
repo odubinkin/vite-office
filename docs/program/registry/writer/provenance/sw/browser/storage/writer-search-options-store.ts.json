@@ -1,0 +1,38 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "browser-adaptation",
+    "localPath": "apps/office/src/sw/browser/storage/writer-search-options-store.ts",
+    "localSymbols": [
+      "WriterSearchOptionsStore"
+    ],
+    "status": "local-only",
+    "rationale": "Browser localStorage adapter for user search preferences, using the source Common configuration path and boolean property names.",
+    "responsibilities": [
+      "Browser localStorage adapter for user search preferences, using the source Common configuration path and boolean property names."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sw/browser/storage/writer-search-options-store.ts",
+          "marker": "WriterSearchOptionsStore"
+        },
+        {
+          "path": "apps/office/src/sw/browser/presentation/WriterSearchPreferences.test.tsx",
+          "marker": "commits CTL changes immediately"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "unotools/source/config/searchopt.cxx",
+          "marker": "SvtSearchOptions_Impl::Save"
+        }
+      ]
+    },
+    "stackDivergence": {
+      "kind": "browser-adaptation",
+      "rationale": "Stores user configuration through the browser platform."
+    }
+  }
+}

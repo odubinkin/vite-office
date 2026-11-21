@@ -1,0 +1,41 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/unotools/source/config/searchopt.ts",
+    "status": "mapped",
+    "upstreamPath": "unotools/source/config/searchopt.cxx",
+    "localSymbols": [
+      "SvtSearchOptions",
+      "searchOptionNames"
+    ],
+    "upstreamSymbols": [
+      "SvtSearchOptions"
+    ],
+    "preservedResponsibilities": [
+      "Owns the native ordered search preference flags, source algorithm exclusion, schema defaults and configuration commit through an injected property boundary."
+    ],
+    "omittedResponsibilities": [
+      "Uses the browser configuration bridge. Native ConfigItem registration and notifications are pending."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/unotools/source/config/searchopt.ts",
+          "marker": "class SvtSearchOptions"
+        },
+        {
+          "path": "apps/office/src/unotools/source/config/searchopt.test.ts",
+          "marker": "loads config without committing"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "unotools/source/config/searchopt.cxx",
+          "marker": "SvtSearchOptions_Impl::Load"
+        }
+      ]
+    }
+  }
+}

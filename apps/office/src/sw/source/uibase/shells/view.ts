@@ -77,7 +77,7 @@ export function createWriterViewCommandRegistry(
         const request =
           getWriterCommandArguments<Pick<WriterExecuteSearchArguments, "SearchItem">>(args);
         if (request?.SearchItem !== undefined)
-          context.GetSearch().SetSearchProperties(request.SearchItem);
+          context.GetSearch().SetSearchProperties(request.SearchItem, true);
       },
     },
     {
@@ -100,7 +100,11 @@ export function createWriterViewCommandRegistry(
         );
         const request = pooled
           ? { SearchItem: ProjectWriterSearchItem(pooled, defaults), Quiet: quiet?.GetValue() }
-          : TransformWriterSearchParameters(getWriterCommandArguments(args), defaults);
+          : TransformWriterSearchParameters(
+              getWriterCommandArguments(args),
+              defaults,
+              search.configuration,
+            );
         if (request?.SearchItem === undefined) return false;
         const { SearchItem: item, Quiet } = request;
         return (

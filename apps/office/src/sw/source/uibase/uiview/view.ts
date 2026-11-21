@@ -15,6 +15,7 @@ import {
 import type { SfxViewFrame } from "../../../../sfx2/source/view/viewfrm";
 import { createDocument } from "../../../../sfx2/source/doc/objsh";
 import type { SwModelHint } from "../../../inc/hints";
+import type { SearchOptionsConfiguration } from "../../../../unotools/source/config/searchopt";
 import { SwViewSearch } from "./viewsrch";
 import { SwViewOption } from "../../../inc/viewopt";
 import { SwDocShell } from "../app/docsh";
@@ -55,10 +56,11 @@ export class SwView {
   private readonly layout: SwRootFrame;
   private readonly wrtShellSubscription: () => void;
 
-  /** Creates one persistent view over a persistent document shell. @param docShell - Owning Writer document shell. @param module - Actual module metric preferences and open-view enumeration. @returns Nothing. */
+  /** Creates one persistent view over a persistent document shell. @param docShell - Owning Writer document shell. @param module - Actual module metric preferences and open-view enumeration. @param searchOptions - User search configuration. @returns Nothing. */
   public constructor(
     private readonly docShell: SwDocShell,
     private readonly module: SwModule = SwModule.get(),
+    searchOptions?: SearchOptionsConfiguration,
   ) {
     const pref = module.GetUsrPref(false);
     this.horizontalRuler.SetUnit(pref.GetHScrollMetric());
@@ -78,7 +80,7 @@ export class SwView {
       this.viewOptions,
       this,
     );
-    this.search = new SwViewSearch(this.wrtShell);
+    this.search = new SwViewSearch(this.wrtShell, searchOptions);
     this.docShell.SetView(this);
     this.editWindow = new SwEditWin(
       this,

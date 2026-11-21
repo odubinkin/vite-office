@@ -17,12 +17,25 @@ import {
   upgradeSearchAlgorithms,
 } from "../../../i18nutil/inc/searchopt";
 import { TransliterationFlags } from "../../../i18nutil/inc/transliteration";
-import { ABSOLUTE } from "../../../offapi/com/sun/star/util/SearchAlgorithms2";
+import {
+  SvtSearchOptions,
+  type SearchOptionsConfiguration,
+} from "../../../unotools/source/config/searchopt";
+import {
+  ABSOLUTE,
+  APPROXIMATE,
+  REGEXP,
+  WILDCARD,
+} from "../../../offapi/com/sun/star/util/SearchAlgorithms2";
 import {
   SearchOptions2 as UnoSearchOptions2,
   cppu_detail_getUnoType_SearchOptions2 as optionsType,
 } from "../../../offapi/com/sun/star/util/SearchOptions2";
-import { LEV_RELAXED, REG_NOT_BEGINOFLINE } from "../../../offapi/com/sun/star/util/SearchFlags";
+import {
+  LEV_RELAXED,
+  NORM_WORD_ONLY,
+  REG_NOT_BEGINOFLINE,
+} from "../../../offapi/com/sun/star/util/SearchFlags";
 import { OUString, type OUStringConstReference } from "../../../sal/inc/rtl/ustring";
 import { Locale } from "../../../udkapi/com/sun/star/lang/Locale";
 import * as MID from "../../inc/memberid";
@@ -104,9 +117,7 @@ export class SvxSearchItem extends SfxPoolItem {
     2,
     2,
     2,
-    TransliterationFlags.IGNORE_CASE |
-      TransliterationFlags.IGNORE_WIDTH |
-      TransliterationFlags.IGNORE_KASHIDA_CTL,
+    TransliterationFlags.IGNORE_CASE,
     ABSOLUTE,
     0x5c,
   );
@@ -130,9 +141,25 @@ export class SvxSearchItem extends SfxPoolItem {
   private app = Number(SvxSearchApp.WRITER);
   private notes = false;
 
-  /** Creates a configured item with the original Which. @param which - Pool identity. @returns Search item. */
-  public constructor(which: number) {
+  /** Creates a configured item with the original Which. @param which - Pool identity. @param configuration - User search options. @returns Search item. */
+  public constructor(which: number, configuration?: SearchOptionsConfiguration) {
     super(which);
+    const preferences = new SvtSearchOptions(configuration);
+    const asian = preferences.GetFlag("IsUseAsianOptions");
+    this.flags[MID.MID_SEARCH_ASIANOPTIONS] = asian;
+    this.flags[MID.MID_SEARCH_BACKWARD] = preferences.GetFlag("IsBackwards");
+    this.notes = preferences.GetFlag("IsNotes");
+    if (preferences.GetFlag("IsUseWildcard")) this.options.AlgorithmType2 = WILDCARD;
+    if (preferences.GetFlag("IsUseRegularExpression")) this.options.AlgorithmType2 = REGEXP;
+    if (preferences.GetFlag("IsSimilaritySearch")) this.options.AlgorithmType2 = APPROXIMATE;
+    if (preferences.GetFlag("IsWholeWordsOnly")) this.options.searchFlag |= NORM_WORD_ONLY;
+    const basicFlags =
+      TransliterationFlags.IGNORE_CASE |
+      TransliterationFlags.IGNORE_WIDTH |
+      TransliterationFlags.IGNORE_DIACRITICS_CTL |
+      TransliterationFlags.IGNORE_KASHIDA_CTL;
+    const configured = preferences.GetTransliterationFlags();
+    this.options.transliterateFlags |= asian ? configured : configured & basicFlags;
   }
 
   /** Original zero-Which item factory. @returns Default search item. */

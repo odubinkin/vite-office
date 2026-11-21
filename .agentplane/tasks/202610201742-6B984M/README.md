@@ -4,7 +4,7 @@ title: "Implement Writer search and replace core and browser UI"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 53
+revision: 54
 origin:
   system: "manual"
 depends_on:
@@ -163,6 +163,9 @@ comments:
   -
     author: "CODER"
     body: "Verified checkpoint: SearchAlgorithms, SearchOptions and derived SearchOptions2 now provide actual CPPU type metadata and member addresses at the original IDL boundaries. SvxSearchItem reads/writes the original typed scalar Any values and the real thirteen-property UNO sequence, preserving field widths, inheritance, default property metadata, and prior partial-conversion behavior. Writer ExecuteSearch accepts a whole SearchItem in an Any through the native PropertyValue request path. A whole formal argument takes precedence over dotted members even when the argument fails conversion. Existing browser drafts and scalar projections remain accepted. Verification: all 50 Writer tests in three files and 35 shared search/UNO tests in three files passed; the final three SvxSearchItem tests passed again independently. Both generated resource tests and the production build passed. Dependency boundaries, JSDoc, file sizes, source provenance/tree, scoped ESLint/Prettier, policy routing and whitespace passed. Live search preferences, search attributes, notes and ICU regex remain open. No full suite at this checkpoint. The task stays DOING and the goal remains active until the user-requested pause after task closure."
+  -
+    author: "CODER"
+    body: "Verified checkpoint: SvtSearchOptions owns the 30 searchable Common configuration properties, shipped schema defaults, separate loaded state, mutual exclusion for algorithm setters and retryable commits. Writer injects a browser preference port at composition. The view seeds represented dialog flags and SvxSearchItem reads the same config on dispatch. SaveToModule commits the CTL booleans immediately and SearchOff commits the represented dialog preferences; a new Writer session reads both. Source Sounds uses EnableSaveOptions(false), so accepted Japanese options remain on the live dialog item. The browser adapter stores only configuration booleans under the original Common path. Native provider registration/notifications, additional dialog controls, search attributes, notes and ICU regex remain open. Verification: 51 targeted Writer cases, 61 shared options/UNO/config parser cases and two Writer resource tests passed. Production build, boundaries, source provenance/tree, JSDoc, scoped ESLint/Prettier, size, routing and whitespace passed. No full suite due for this checkpoint; the task stays DOING and the goal pauses only after full task closure."
 events:
   -
     type: "status"
@@ -376,8 +379,13 @@ events:
     at: "2026-11-21T08:03:16.179Z"
     author: "CODER"
     body: "Verified checkpoint: SearchAlgorithms, SearchOptions and derived SearchOptions2 now provide actual CPPU type metadata and member addresses at the original IDL boundaries. SvxSearchItem reads/writes the original typed scalar Any values and the real thirteen-property UNO sequence, preserving field widths, inheritance, default property metadata, and prior partial-conversion behavior. Writer ExecuteSearch accepts a whole SearchItem in an Any through the native PropertyValue request path. A whole formal argument takes precedence over dotted members even when the argument fails conversion. Existing browser drafts and scalar projections remain accepted. Verification: all 50 Writer tests in three files and 35 shared search/UNO tests in three files passed; the final three SvxSearchItem tests passed again independently. Both generated resource tests and the production build passed. Dependency boundaries, JSDoc, file sizes, source provenance/tree, scoped ESLint/Prettier, policy routing and whitespace passed. Live search preferences, search attributes, notes and ICU regex remain open. No full suite at this checkpoint. The task stays DOING and the goal remains active until the user-requested pause after task closure."
+  -
+    type: "comment"
+    at: "2026-11-21T08:11:28.562Z"
+    author: "CODER"
+    body: "Verified checkpoint: SvtSearchOptions owns the 30 searchable Common configuration properties, shipped schema defaults, separate loaded state, mutual exclusion for algorithm setters and retryable commits. Writer injects a browser preference port at composition. The view seeds represented dialog flags and SvxSearchItem reads the same config on dispatch. SaveToModule commits the CTL booleans immediately and SearchOff commits the represented dialog preferences; a new Writer session reads both. Source Sounds uses EnableSaveOptions(false), so accepted Japanese options remain on the live dialog item. The browser adapter stores only configuration booleans under the original Common path. Native provider registration/notifications, additional dialog controls, search attributes, notes and ICU regex remain open. Verification: 51 targeted Writer cases, 61 shared options/UNO/config parser cases and two Writer resource tests passed. Production build, boundaries, source provenance/tree, JSDoc, scoped ESLint/Prettier, size, routing and whitespace passed. No full suite due for this checkpoint; the task stays DOING and the goal pauses only after full task closure."
 doc_version: 3
-doc_updated_at: "2026-11-21T08:03:16.179Z"
+doc_updated_at: "2026-11-21T08:11:28.562Z"
 doc_updated_by: "CODER"
 description: "Implement the approved coherent Writer search-and-replace feature from pinned LibreOffice sources: real shared search engine and options, native paragraph/cursor traversal and replacement/history contracts, view-owned search state and dispatch, Find toolbar and Find and Replace dialog with generated upstream command placement and shortcuts. Preserve source semantics and explicit unsupported boundaries; never substitute DOM text search or browser RegExp for ICU contracts. Work only on writer in vite-office-writer; local upstream reading approved, no network or merges. Keep active until approved scope is verified."
 sections:

@@ -1,4 +1,5 @@
 /** @fileoverview Writer adapter for the named Sfx formal arguments of ExecuteSearch. */
+import type { SearchOptionsConfiguration } from "../../../../unotools/source/config/searchopt";
 import { Any } from "../../../../cppu/inc/com/sun/star/uno/Any";
 import { TransliterationFlags } from "../../../../i18nutil/inc/transliteration";
 import { APPROXIMATE } from "../../../../offapi/com/sun/star/util/SearchAlgorithms2";
@@ -62,10 +63,11 @@ function readBool(value: unknown, fallback: boolean): boolean {
   return typeof value === "boolean" ? value : fallback;
 }
 
-/** Reconstructs SID_SEARCH_ITEM from its formal arguments, retaining their native order. @param value - Request from Sfx. @param dialogDefaults - Current Writer dialog preferences. @returns Search request if converted. */
+/** Reconstructs SID_SEARCH_ITEM from its formal arguments, retaining their native order. @param value - Request from Sfx. @param dialogDefaults - Current Writer dialog preferences. @param configuration - User search properties. @returns Search request if converted. */
 export function TransformWriterSearchParameters(
   value: unknown,
   dialogDefaults: WriterSearchItem,
+  configuration?: SearchOptionsConfiguration,
 ): WriterExecuteSearchArguments | undefined {
   if (typeof value !== "object" || value === null) return undefined;
   const args = [...properties(value)];
@@ -73,7 +75,10 @@ export function TransformWriterSearchParameters(
     /** Finds the complete formal SearchItem arguments. @param property - Named argument. @returns Whether it carries the whole item. */
     ([name]) => name === "SearchItem",
   );
-  const item = new SvxSearchItem(getWriterSlotId(WRITER_COMMAND_IDS.searchProperties));
+  const item = new SvxSearchItem(
+    getWriterSlotId(WRITER_COMMAND_IDS.searchProperties),
+    configuration,
+  );
   let projected: WriterSearchSlotItem | undefined;
   if (whole.length > 0) {
     for (const [, argument] of whole) {

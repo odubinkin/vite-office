@@ -1,5 +1,9 @@
 /** @fileoverview Writer view search dispatch over the native model cursor and replacement history. */
 import type { SvxProtectItem } from "../../../../editeng/source/items/frmitems";
+import {
+  SvtSearchOptions,
+  type SearchOptionsConfiguration,
+} from "../../../../unotools/source/config/searchopt";
 import { SearchOptions2 } from "../../../../i18nutil/inc/searchopt";
 import { TransliterationFlags } from "../../../../i18nutil/inc/transliteration";
 import { ABSOLUTE, APPROXIMATE } from "../../../../offapi/com/sun/star/util/SearchAlgorithms2";
@@ -100,26 +104,6 @@ function toOUString(value: string): OUString {
   for (let index = 0; index < value.length; index++) units[index] = value.charCodeAt(index);
   return new OUString(units, units.length);
 }
-
-// Common.xcs SearchOptions/Japanese enables each equivalence by default.
-const defaultJapaneseFlags =
-  TransliterationFlags.IGNORE_KANA |
-  TransliterationFlags.ignoreSize_ja_JP |
-  TransliterationFlags.ignoreMinusSign_ja_JP |
-  TransliterationFlags.ignoreIterationMark_ja_JP |
-  TransliterationFlags.ignoreTraditionalKanji_ja_JP |
-  TransliterationFlags.ignoreTraditionalKana_ja_JP |
-  TransliterationFlags.ignoreZiZu_ja_JP |
-  TransliterationFlags.ignoreBaFa_ja_JP |
-  TransliterationFlags.ignoreTiJi_ja_JP |
-  TransliterationFlags.ignoreHyuByu_ja_JP |
-  TransliterationFlags.ignoreSeZe_ja_JP |
-  TransliterationFlags.ignoreIandEfollowedByYa_ja_JP |
-  TransliterationFlags.ignoreKiKuFollowedBySa_ja_JP |
-  TransliterationFlags.ignoreProlongedSoundMark_ja_JP |
-  TransliterationFlags.ignoreSeparator_ja_JP |
-  TransliterationFlags.ignoreSpace_ja_JP |
-  TransliterationFlags.ignoreMiddleDot_ja_JP;
 
 /** Admits body paragraphs, connected text frames, and active page stories. @param document - Current native model. @param pageStories - Visible page-story sections. @returns Admission for the represented profile. */
 function createSearchNodeFilter(
@@ -223,7 +207,7 @@ export class SwViewSearch {
     matchKashida: false,
     matchCharacterWidth: false,
     useAsianOptions: false,
-    japaneseFlags: defaultJapaneseFlags,
+    japaneseFlags: 0,
     wholeWords: false,
     similaritySearch: false,
     styleSearch: false,
@@ -241,8 +225,25 @@ export class SwViewSearch {
   private lastRequest:
     { item: WriterSearchItem; command: SvxSearchCmd; backward: boolean } | undefined;
 
-  /** Connects search to the same Writer shell as editing. @param shell - Persistent writing shell. @returns Search owner. */
-  public constructor(private readonly shell: SwWrtShell) {}
+  /** Connects search to the writing shell and user search properties. @param shell - Persistent writing shell. @param configuration - User search configuration. @returns Search owner. */
+  public constructor(
+    private readonly shell: SwWrtShell,
+    public readonly configuration?: SearchOptionsConfiguration,
+  ) {
+    const options = new SvtSearchOptions(configuration);
+    this.item = {
+      ...this.item,
+      matchCase: options.GetFlag("IsMatchCase"),
+      matchDiacritics: !options.GetFlag("IsIgnoreDiacritics_CTL"),
+      matchKashida: !options.GetFlag("IsIgnoreKashida_CTL"),
+      matchCharacterWidth: !options.GetFlag("Japanese/IsMatchFullHalfWidthForms"),
+      useAsianOptions: options.GetFlag("IsUseAsianOptions"),
+      japaneseFlags: options.GetJapaneseTransliterationFlags() & ~TransliterationFlags.IGNORE_WIDTH,
+      wholeWords: options.GetFlag("IsWholeWordsOnly"),
+      similaritySearch: options.GetFlag("IsSimilaritySearch"),
+      styleSearch: options.GetFlag("IsSearchForStyles"),
+    };
+  }
 
   /** Registers the current device layout's page-story model owners. @param sections - Visible story roots. @returns Registration cleanup. */
   public RegisterPageStories(sections: ReadonlySet<SwStartNode>): () => void {
@@ -358,7 +359,18 @@ export class SwViewSearch {
         cursor.IsMultiSelection() || this.shell.IsTableMode() ? "" : this.shell.GetSelText();
       const hasSelection = this.HasSelection();
       const selection = text.length === 0 && hasSelection;
-      this.item = { ...this.item, search: text || this.item.search, selection };
+      const options = new SvtSearchOptions(this.configuration);
+      this.item = {
+        ...this.item,
+        search: text || this.item.search,
+        selection,
+        ...(this.configuration === undefined
+          ? {}
+          : {
+              matchDiacritics: !options.GetFlag("IsIgnoreDiacritics_CTL"),
+              matchKashida: !options.GetFlag("IsIgnoreKashida_CTL"),
+            }),
+      };
       if (this.lastRequest !== undefined && hasSelection)
         this.lastRequest = {
           ...this.lastRequest,
@@ -373,7 +385,9 @@ export class SwViewSearch {
       ...this.item,
       similarity: { ...this.item.similarity },
       command: this.lastRequest?.command ?? SvxSearchCmd.FIND,
-      backward: this.lastRequest?.backward ?? false,
+      backward:
+        this.lastRequest?.backward ??
+        new SvtSearchOptions(this.configuration).GetFlag("IsBackwards"),
     };
   }
 
@@ -397,11 +411,22 @@ export class SwViewSearch {
     return text;
   }
 
-  /** Stores the represented SID_SEARCH_ITEM for dialog state and repeated searches. @param properties - Dispatched search item. @returns Nothing. */
-  public SetSearchProperties(properties: WriterSearchSlotItem): void {
+  /** Stores the dialog item and commits the properties saved by the source dialog. @param properties - Dispatched search item. @param closing - Whether the dialog is closing. @returns Nothing. */
+  public SetSearchProperties(properties: WriterSearchSlotItem, closing = false): void {
     const { command, backward, ...item } = properties;
     this.item = { ...item, similarity: { ...item.similarity } };
     this.lastRequest = { item: this.item, command, backward };
+    const options = new SvtSearchOptions(this.configuration);
+    options.SetFlag("IsIgnoreDiacritics_CTL", !item.matchDiacritics);
+    options.SetFlag("IsIgnoreKashida_CTL", !item.matchKashida);
+    if (closing) {
+      options.SetFlag("IsWholeWordsOnly", item.wholeWords);
+      options.SetFlag("IsBackwards", backward);
+      options.SetFlag("IsSearchForStyles", item.styleSearch);
+      options.SetFlag("IsSimilaritySearch", item.similaritySearch);
+      options.SetFlag("IsUseAsianOptions", item.useAsianOptions);
+    }
+    options.Commit();
   }
 
   /** Repeats the source command with its last dispatched search item. @returns Whether a match was found. */
