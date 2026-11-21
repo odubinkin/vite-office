@@ -13,8 +13,7 @@
       "importPageUsage",
       "pagePrintTokens",
       "importPagePrint",
-      "XMLPagePropertySetContext",
-      "exportBitmapGeometry"
+      "XMLPagePropertySetContext"
     ],
     "upstreamPath": "xmloff/source/style/PageMasterStyleMap.cxx",
     "upstreamSymbols": [
@@ -32,7 +31,7 @@
       "Maps page usage, independent margins and shorthand fallback in UNO units, and Writer text grid properties. Keeps explicit margin presence for gutter adjustment.",
       "Shares the original print token order and space-delimited parsing with the Calc page-layout filter.",
       "Reads modern solid and bitmap page and story fills plus legacy brush color, embedded image, repeat mode and opacity.",
-      "Maps signed dimensions and the two offset groups for page and story fills, preserves legacy reference-point parsing, and selects one axis for ODF output."
+      "Uses the shared bitmap property handlers for signed dimensions, independent offsets and ODF serialization for page and story fills."
     ],
     "omittedResponsibilities": [
       "Full native story layout, overlapping text frames, and complete DOCX/ODF parity remain unverified."

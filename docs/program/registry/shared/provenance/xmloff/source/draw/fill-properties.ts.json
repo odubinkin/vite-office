@@ -8,13 +8,16 @@
     "upstreamPath": "xmloff/source/draw/sdpropls.cxx",
     "localSymbols": [
       "importFillProperties",
-      "exportFillProperties"
+      "exportFillProperties",
+      "importBitmapFillProperties",
+      "exportBitmapFillProperties"
     ],
     "upstreamSymbols": [
       "aXML_FillStyle_EnumMap"
     ],
     "preservedResponsibilities": [
-      "Consumed paragraph FillStyle map, SAX RGB and XMLNegPercentPropHdl conversions are split from large original shared owners; exact map order and percent bounds/inversion are retained."
+      "Consumed paragraph FillStyle map, SAX RGB and XMLNegPercentPropHdl conversions are split from large original shared owners; exact map order and percent bounds/inversion are retained.",
+      "Uses common encoded-name, mode, reference-point and dimension handlers for Writer graphic, page and story bitmap properties."
     ],
     "omittedResponsibilities": [
       "Full drawing style/property factory/service graph and bitmap/gradient/hatch values are not claimed; only represented enum values are mapped."
@@ -24,6 +27,10 @@
         {
           "path": "apps/office/src/xmloff/source/draw/fill-properties.ts",
           "marker": "importFillProperties"
+        },
+        {
+          "path": "apps/office/src/sw/source/filter/xml/odt-frame-bitmap.test.ts",
+          "marker": "combines inherited frame bitmap geometry"
         }
       ],
       "upstream": [
@@ -38,6 +45,10 @@
         {
           "path": "vendor/libreoffice-reference/xmloff/source/text/txtprmap.cxx",
           "marker": "XML_SW_TYPE_FILLSTYLE"
+        },
+        {
+          "path": "vendor/libreoffice-reference/xmloff/source/text/txtprmap.cxx",
+          "marker": "PROP_FillBitmapRectanglePoint"
         }
       ]
     },

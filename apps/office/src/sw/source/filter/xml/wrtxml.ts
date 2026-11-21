@@ -11,6 +11,7 @@ import { packXmlPackage } from "../../../../package/source/zippackage/xml-packag
 import type { XmlPackage } from "../../../../svl/source/misc/storage";
 import type { SwDoc } from "../../core/doc/doc";
 import { SvXMLGraphicHelper, type XMLGraphic } from "../../../../xmloff/source/core/xmlgrhlp";
+import { XMLBitmapStyleExport } from "./xmlexp-fill";
 import { exportContentXml, exportMetaXml, exportStylesXml } from "./xmlexp";
 import { exportSettingsXml } from "./xmlexp-settings";
 
@@ -59,10 +60,11 @@ export class SwXMLWriter {
     };
     const fonts = document.GetEmbeddedFonts();
     const graphics = new SvXMLGraphicHelper();
+    const bitmapStyles = new XMLBitmapStyleExport(graphics);
     checkpoint(control, "styles");
-    const styles = exportStylesXml(document, graphics);
+    const styles = exportStylesXml(document, graphics, bitmapStyles);
     checkpoint(control, "content");
-    const content = exportContentXml(document, control.isCancelled, graphics);
+    const content = exportContentXml(document, control.isCancelled, graphics, bitmapStyles);
     const pictures = graphics.getEntries();
     output.putNextEntry("mimetype", ODT_MIMETYPE);
     output.putNextEntry(

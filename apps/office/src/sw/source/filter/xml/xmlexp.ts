@@ -29,7 +29,12 @@ import { exportPageStoryStyles, getOdfPageStories } from "./xmlpageheaderfooter"
 import type { SvXMLGraphicHelper } from "../../../../xmloff/source/core/xmlgrhlp";
 import { CollectGraphicFlyFrames, CollectTextFlyFrames } from "../../core/layout/flycnt";
 import type { XMLTextExportBlock } from "../../../../xmloff/source/table/XMLTableExport";
-import { getFillProperties, XML_FILL_WHICH_IDS } from "./xmlexp-fill";
+import {
+  getBitmapFillItem,
+  getFillProperties,
+  XMLBitmapStyleExport,
+  XML_FILL_WHICH_IDS,
+} from "./xmlexp-fill";
 import { RES_CHRATR_ESCAPEMENT, RES_CHRATR_KERNING } from "../../../inc/hintids";
 import { RES_CHRATR_CROSSEDOUT } from "../../../inc/hintids";
 import { RES_CHRATR_WORDLINEMODE, RES_CHRATR_AUTOKERN } from "../../../inc/hintids";
@@ -169,11 +174,21 @@ import { FontFamily, FontPitch } from "../../../../tools/inc/fontenum";
 import { RTL_TEXTENCODING_DONTKNOW } from "../../../../sal/inc/rtl/textenc";
 const OFFICE_NAMESPACES = `xmlns:draw="${ODF_NAMESPACES.draw}" xmlns:office="${ODF_NAMESPACES.office}" xmlns:style="${ODF_NAMESPACES.style}" xmlns:text="${ODF_NAMESPACES.text}" xmlns:table="${ODF_NAMESPACES.table}" xmlns:ooow="${ODF_NAMESPACES.ooow}" xmlns:number="${ODF_NAMESPACES.number}" xmlns:fo="${ODF_NAMESPACES.fo}" xmlns:svg="${ODF_NAMESPACES.svg}" xmlns:xlink="${ODF_NAMESPACES.xlink}" xmlns:loext="${ODF_NAMESPACES.loext}"`;
 
-/** Serializes Writer named paragraph styles into styles.xml. @param document - Canonical SwDoc. @param graphicHelper - Optional package graphic owner. @returns Complete XML. */
-export function exportStylesXml(document: SwDoc, graphicHelper?: SvXMLGraphicHelper): string {
+/** Serializes Writer named paragraph styles into styles.xml. @param document - Canonical SwDoc. @param graphicHelper - Optional package graphic owner. @param bitmapStyles - Package bitmap catalogue. @returns Complete XML. */
+export function exportStylesXml(
+  document: SwDoc,
+  graphicHelper?: SvXMLGraphicHelper,
+  bitmapStyles = new XMLBitmapStyleExport(graphicHelper),
+): string {
   const fonts = createWriterFontAutoStylePool(document);
-  const pageBackgrounds = new XMLPageBackgroundExport(graphicHelper);
-  for (const bitmap of document.GetBitmapTable().values()) pageBackgrounds.registerBitmap(bitmap);
+  const pageBackgrounds = new XMLPageBackgroundExport(bitmapStyles);
+  for (const bitmap of document.GetBitmapTable().values()) bitmapStyles.registerBitmap(bitmap);
+  if (graphicHelper) {
+    for (const frame of document.GetSpzFrameFormats()) {
+      const bitmap = getBitmapFillItem(frame.GetAttrSet());
+      if (bitmap) bitmapStyles.registerBitmap(bitmap);
+    }
+  }
   const stories = Array.from(
     { length: document.GetPageDescCnt() },
     /** Selects native sections per page. @param _unused - Array placeholder. @param index - Page position. @returns Story list. */
@@ -204,6 +219,7 @@ export function exportStylesXml(document: SwDoc, graphicHelper?: SvXMLGraphicHel
       ) || undefined,
     sections.length ? sections : undefined,
     graphicHelper,
+    bitmapStyles,
   );
   const namedRules = new Map(
     document
@@ -405,7 +421,7 @@ export function exportStylesXml(document: SwDoc, graphicHelper?: SvXMLGraphicHel
   const defaultPageLayout = IsSquaredPageMode(document)
     ? ""
     : '<style:default-page-layout><style:page-layout-properties style:layout-grid-standard-mode="true"/></style:default-page-layout>';
-  return `<?xml version="1.0" encoding="UTF-8"?><office:document-styles ${OFFICE_NAMESPACES} office:version="1.3">${fonts.exportXML()}<office:styles>${defaultPageLayout}${defaults}${styles.join("")}${characterStyles.join("")}${numberingStyles}${inheritedStyles.namedStyles}${lineNumbering}${pageBackgrounds.exportStyles()}${ExportThemeElement(document.theme)}</office:styles><office:automatic-styles>${pageLayouts.join("")}${sections.length ? inheritedStyles.automaticStyles : ""}</office:automatic-styles><office:master-styles>${masterPages.join("")}</office:master-styles></office:document-styles>`;
+  return `<?xml version="1.0" encoding="UTF-8"?><office:document-styles ${OFFICE_NAMESPACES} office:version="1.3">${fonts.exportXML()}<office:styles>${defaultPageLayout}${defaults}${styles.join("")}${characterStyles.join("")}${numberingStyles}${inheritedStyles.namedStyles}${lineNumbering}${bitmapStyles.exportStyles()}${ExportThemeElement(document.theme)}</office:styles><office:automatic-styles>${pageLayouts.join("")}${sections.length ? inheritedStyles.automaticStyles : ""}</office:automatic-styles><office:master-styles>${masterPages.join("")}</office:master-styles></office:document-styles>`;
 }
 
 /** Exports the page margin and independently converted binding allowance in UNO units. @param twips - Base margin in Twips. @param gutter - Gutter in hundredths of a millimetre. @returns XML measure. */
@@ -453,11 +469,12 @@ function exportDefaultParagraphStyle(
   }
 }
 
-/** Serializes body nodes and automatic styles into content.xml. @param document - Canonical SwDoc. @param isCancelled - Cooperative cancellation probe. @param graphicHelper - Optional package graphic owner. @returns Complete XML. */
+/** Serializes body nodes and automatic styles into content.xml. @param document - Canonical SwDoc. @param isCancelled - Cooperative cancellation probe. @param graphicHelper - Optional package graphic owner. @param bitmapStyles - Package bitmap catalogue. @returns Complete XML. */
 export function exportContentXml(
   document: SwDoc,
   isCancelled: () => boolean = /** Never cancels. @returns False. */ () => false,
   graphicHelper?: SvXMLGraphicHelper,
+  bitmapStyles?: XMLBitmapStyleExport,
 ): string {
   const fonts = createWriterFontAutoStylePool(document);
   const exported = exportWriterText(
@@ -477,11 +494,12 @@ export function exportContentXml(
       ) || undefined,
     undefined,
     graphicHelper,
+    bitmapStyles,
   );
   return `<?xml version="1.0" encoding="UTF-8"?><office:document-content ${OFFICE_NAMESPACES} office:version="1.3">${fonts.exportXML()}<office:automatic-styles>${exported.automaticStyles}</office:automatic-styles><office:body><office:text>${exported.body}</office:text></office:body></office:document-content>`;
 }
 
-/** Projects the same model source for both package streams. @param document - Writer model. @param isCancelled - Cancellation probe. @param fontFaceName - Font registry. @param existingFontFaceName - Existing face lookup. @param sections - Master-page text owners in the styles stream. @param graphicHelper - Optional package graphic owner. @returns Style/body fragments. */
+/** Projects the same model source for both package streams. @param document - Writer model. @param isCancelled - Cancellation probe. @param fontFaceName - Font registry. @param existingFontFaceName - Existing face lookup. @param sections - Master-page text owners in the styles stream. @param graphicHelper - Optional package graphic owner. @param bitmapStyles - Package bitmap catalogue. @returns Style/body fragments. */
 function exportWriterText(
   document: SwDoc,
   isCancelled: () => boolean,
@@ -495,9 +513,11 @@ function exportWriterText(
   existingFontFaceName: (family: string) => string | undefined,
   sections?: readonly SwStartNode[],
   graphicHelper?: SvXMLGraphicHelper,
+  bitmapStyles?: XMLBitmapStyleExport,
 ): OdfTextExport {
   const anchored: XMLBoundWriterFrames = {
     text: CollectTextFlyFrames(document),
+    ...(bitmapStyles ? { bitmapStyles } : {}),
     ...(graphicHelper ? { graphicHelper, graphics: CollectGraphicFlyFrames(document, true) } : {}),
   };
   const dataStyles = new Map<number, { name: string; xml: string } | null>();

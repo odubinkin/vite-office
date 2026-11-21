@@ -5836,3 +5836,15 @@ both package-local cases.
 
 - [Original named bitmap context](../../vendor/libreoffice-reference/xmloff/source/style/FillStyleContext.cxx)
 - [Original legacy background image context](../../vendor/libreoffice-reference/xmloff/source/style/XMLBackgroundImageContext.cxx)
+
+### WRITER-725 — A legacy frame background can say stretch while the bitmap mode is tiled
+
+The three bitmap frames in the original `framebackgrounds.odt` fixture
+declare `style:repeat="stretch"` on the legacy child and omit the modern
+repeat property on `style:graphic-properties`. The original test expects
+tiling in the model. The generic text background context is constructed
+without a modern bitmap-mode index. Writer preserves the DrawingLayer
+default for this combination.
+
+- [Original bitmap frame assertions](../../vendor/libreoffice-reference/sw/qa/extras/odfexport/odfexport.cxx)
+- [Original text background context selection](../../vendor/libreoffice-reference/xmloff/source/text/XMLTextPropertySetContext.cxx)

@@ -1,5 +1,5 @@
 /** @fileoverview Native Writer text-frame element and graphic style export from txtparae.cxx. */
-import { exportFillProperties } from "../draw/fill-properties";
+import { exportBitmapFillProperties, exportFillProperties } from "../draw/fill-properties";
 import { HoriOrientation } from "../../../offapi/com/sun/star/text/HoriOrientation";
 import { VertOrientation } from "../../../offapi/com/sun/star/text/VertOrientation";
 import type { XMLTextExportBlock } from "../table/XMLTableExport";
@@ -84,6 +84,7 @@ export function exportTextFrameStyle(frame: XMLTextFrameExportSource, styleName:
     length("fo:margin-top", style.marginTop) +
     length("fo:margin-bottom", style.marginBottom);
   for (const fill of exportFillProperties(style)) values += ` ${fill}`;
+  for (const fill of exportBitmapFillProperties(style)) values += ` ${fill}`;
   for (const side of ["Top", "Bottom", "Left", "Right"] as const) {
     const suffix = side.toLowerCase();
     values +=

@@ -29,6 +29,7 @@ import { BitmapMode } from "../../../../offapi/com/sun/star/drawing/BitmapMode";
 import { RectanglePoint } from "../../../../offapi/com/sun/star/drawing/RectanglePoint";
 import { FillStyle } from "../../../../offapi/com/sun/star/drawing/FillStyle";
 import type { OdfPageBackground } from "../../../../xmloff/source/style/PageMasterStyleMap";
+import type { OdfBitmapGeometry } from "../../../../xmloff/source/draw/fill-properties";
 import {
   XMLBorderHdl,
   XMLBorderWidthHdl,
@@ -111,22 +112,29 @@ export function importPageBackground(
           ),
         );
     }
-    const geometry = source.bitmapGeometry;
-    if (geometry)
-      for (const key of Object.keys(bitmapGeometryWhich) as (keyof typeof bitmapGeometryWhich)[]) {
-        const value = geometry[key];
-        if (value === undefined) continue;
-        const which = bitmapGeometryWhich[key];
-        target.Put(
-          createBitmapGeometryItem(
-            which,
-            typeof value === "number" && isBitmapSize(which) ? bitmapSizeToTwips(value) : value,
-          ),
-        );
-      }
+    putBitmapGeometry(target, source.bitmapGeometry);
     if (target.Count()) frame.SetFormatAttrSet(target);
   } finally {
     target.Dispose();
+  }
+}
+
+/** Applies DrawingLayer geometry to the native Writer item set. @param set - Destination. @param geometry - Authored geometric deltas. @returns Nothing. */
+export function putBitmapGeometry(set: SfxItemSet, geometry: OdfBitmapGeometry | undefined): void {
+  if (!geometry) return;
+  for (const key of Object.keys(bitmapGeometryWhich) as (keyof typeof bitmapGeometryWhich)[]) {
+    const value = geometry[key];
+    if (value === undefined) continue;
+    const which = bitmapGeometryWhich[key];
+    const item = createBitmapGeometryItem(
+      which,
+      typeof value === "number" && isBitmapSize(which) ? bitmapSizeToTwips(value) : value,
+    );
+    try {
+      set.Put(item);
+    } finally {
+      item.Dispose();
+    }
   }
 }
 

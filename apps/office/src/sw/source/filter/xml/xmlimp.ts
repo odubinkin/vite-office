@@ -3,6 +3,7 @@ import { importPageBackground, importPageLayoutBox } from "./xmlimpit";
 import { getActivePageStory, type SwFrameFormat } from "../../core/layout/atrfrm";
 import type { OdfPageBackground } from "../../../../xmloff/source/style/PageMasterStyleMap";
 import type { XMLImageStyleDefinition } from "../../../../xmloff/source/style/ImageStyle";
+import type { OdfBitmapGeometry } from "../../../../xmloff/source/draw/fill-properties";
 import { XFillBitmapItem } from "../../../../svx/inc/xbtmpit";
 import { Graphic } from "../../../../vcl/source/gdi/graph";
 import { Size } from "../../../../tools/inc/gen";
@@ -194,10 +195,12 @@ class SwXMLImport
 
   /** Enters the native Writer frame anchored at the current paragraph cursor. @param value - Original frame attributes. @returns Native frame text cursor. */
   public beginTextFrame(value: XMLTextFrameAttributes): XMLTextCursor {
+    const style = this.getTextFrameStyle(value.styleName);
     return importTextFrame(
       this.GetTextImport().GetCursor() as SwXTextCursor,
       value,
-      this.getTextFrameStyle(value.styleName),
+      style,
+      this.resolveNamedBitmap(style.bitmapName),
     );
   }
 
@@ -205,11 +208,13 @@ class SwXMLImport
   public insertGraphicFrame(value: XMLTextFrameAttributes, source: XMLGraphicSource): boolean {
     const graphic = this.loadGraphic(source);
     if (!graphic) return false;
+    const style = this.getTextFrameStyle(value.styleName);
     importGraphicFrame(
       this.GetTextImport().GetCursor() as SwXTextCursor,
       value,
-      this.getTextFrameStyle(value.styleName),
+      style,
       graphic,
+      this.resolveNamedBitmap(style.bitmapName),
     );
     return true;
   }
@@ -226,7 +231,7 @@ class SwXMLImport
       chain.unshift(entry.style);
       name = entry.parent;
     }
-    return Object.fromEntries(
+    const style: XMLTextFrameStyle = Object.fromEntries(
       chain.flatMap(
         /** Retains only the actual style deltas, allowing parent properties to survive. @param entry - Current style. @returns Defined values. */
         (entry) =>
@@ -236,6 +241,9 @@ class SwXMLImport
           ),
       ),
     );
+    const bitmapGeometry: OdfBitmapGeometry = {};
+    for (const entry of chain) Object.assign(bitmapGeometry, entry.bitmapGeometry);
+    return Object.keys(bitmapGeometry).length ? { ...style, bitmapGeometry } : style;
   }
 
   /** Closes the original Writer text frame content section. @param cursor - Active frame text cursor. @returns Nothing. */
@@ -315,14 +323,17 @@ class SwXMLImport
   /** Applies one shared page or story background to its native frame. @param frame - Frame owner. @param background - Authored fill. @returns Nothing. */
   private applyBackground(frame: SwFrameFormat | null, background?: OdfPageBackground): void {
     if (!frame || !background) return;
-    const bitmapName =
-      background.bitmapName === undefined ? undefined : this.imageStyles.get(background.bitmapName);
     importPageBackground(
       frame,
       background,
-      bitmapName === undefined ? undefined : this.document.GetBitmapTable().get(bitmapName),
+      this.resolveNamedBitmap(background.bitmapName),
       background.image === undefined ? undefined : this.resolveBackgroundImage(background.image),
     );
+  }
+  /** Resolves a bitmap graphic style alias to the current named table item. @param name - ODF name. @returns Native bitmap item. */
+  private resolveNamedBitmap(name: string | undefined): XFillBitmapItem | undefined {
+    if (name === undefined) return undefined;
+    return this.document.GetBitmapTable().get(this.imageStyles.get(name) ?? name);
   }
   public title: string | undefined;
   public language: string | undefined;

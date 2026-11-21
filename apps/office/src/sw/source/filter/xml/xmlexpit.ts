@@ -20,24 +20,20 @@ import {
 } from "../../../../svx/inc/xdef";
 import {
   bitmapGeometryWhich,
-  bitmapSizeToMm100,
   getBitmapMode,
-  isBitmapSize,
   type XFillBitmapItem,
 } from "../../../../svx/inc/xbtmpit";
-import {
-  exportBitmapGeometry,
-  exportLegacyBitmapPosition,
-  type OdfBitmapGeometry,
-} from "../../../../xmloff/source/style/PageMasterStyleMap";
-import type { createBitmapGeometryItem, XFillBmpPosItem } from "../../../../svx/inc/xbtmpit";
+import { exportLegacyBitmapPosition } from "../../../../xmloff/source/style/PageMasterStyleMap";
+import type { XFillBmpPosItem } from "../../../../svx/inc/xbtmpit";
 import type { XFillStyleItem } from "../../../../svx/inc/xfillit0";
 import type { XFillColorItem } from "../../../../svx/inc/xflclit";
 import type { XFillTransparenceItem } from "../../../../svx/inc/xfltrit";
-import type { SvXMLGraphicHelper } from "../../../../xmloff/source/core/xmlgrhlp";
-import { encodeStyleName } from "../../../../xmloff/source/core/xmluconv";
-import { exportImageStyle } from "../../../../xmloff/source/style/ImageStyle";
-import { exportFillProperties } from "../../../../xmloff/source/draw/fill-properties";
+import { getBitmapGeometry, type XMLBitmapStyleExport } from "./xmlexp-fill";
+import {
+  exportBitmapFillProperties,
+  exportBitmapMode,
+  exportFillProperties,
+} from "../../../../xmloff/source/draw/fill-properties";
 import { escapeXml } from "../../../../xmloff/source/text/txtparae";
 import type { SvxBorderLine } from "../../../../editeng/source/items/borderline";
 import type { SvxBrushItem } from "../../../../editeng/source/items/frmitems.brush";
@@ -101,35 +97,10 @@ export function exportPageWritingAndGrid(master: SwFrameFormat): string {
   return attributes;
 }
 
-/** Named drawing image definitions shared by the exported page and story formats. */
+/** Serializes page and story backgrounds with the shared named graphic catalogue. */
 export class XMLPageBackgroundExport {
-  private readonly images = new Map<string, string>();
-
-  /** Binds the current styles stream to the original package graphic helper. @param graphics - Optional graphic sink. @returns Export helper. */
-  constructor(private readonly graphics?: SvXMLGraphicHelper) {}
-
-  /** Collects a named bitmap and reserves its XML image definition. @param bitmap - Native bitmap item. @returns Package path and public name when embedded. */
-  registerBitmap(bitmap: XFillBitmapItem): { name: string; href: string } | undefined {
-    const graphic = bitmap.GetGraphic();
-    if (!this.graphics || !graphic) return undefined;
-    const href = this.graphics.saveGraphic({
-      bytes: graphic.GetNativeData(),
-      mediaType: graphic.mediaType,
-    });
-    const baseName = bitmap.GetName() || "Bitmap";
-    let name = baseName;
-    for (let suffix = 1; this.images.has(name) && this.images.get(name) !== href; ++suffix)
-      name = `${baseName} ${suffix}`;
-    this.images.set(name, href);
-    return { name, href };
-  }
-
-  /** Writes declarations collected by the page-layout writers. @returns Named drawing styles. */
-  exportStyles(): string {
-    let result = "";
-    for (const [name, href] of this.images) result += exportImageStyle(name, href);
-    return result;
-  }
+  /** Binds the named bitmap style owner. @param bitmapStyles - Package style catalogue. @returns Export helper. */
+  constructor(private readonly bitmapStyles: XMLBitmapStyleExport) {}
 
   /** Formats both current DrawingLayer properties and the original compatibility brush. @param frame - Actual page or story frame. @returns Layout attributes and children. */
   exportBackground(frame: SwFrameFormat): { attributes: string; children: string } {
@@ -156,31 +127,22 @@ export class XMLPageBackgroundExport {
       if (style === FillStyle.SOLID && transparency !== undefined)
         attributes.push(`style:background-transparency="${transparency}%"`);
     }
-    const geometry: Record<string, number | boolean> = {};
-    for (const [key, which] of Object.entries(bitmapGeometryWhich)) {
-      const item = items.GetItemIfSet(which, false);
-      if (item === undefined) continue;
-      const value = (item as ReturnType<typeof createBitmapGeometryItem>).GetValue();
-      geometry[key] =
-        typeof value === "number" && isBitmapSize(which) ? bitmapSizeToMm100(value) : value;
-    }
-    attributes.push(...exportBitmapGeometry(geometry as OdfBitmapGeometry));
     const bitmap = items.GetItemIfSet(XATTR_FILLBITMAP, false) as XFillBitmapItem | undefined;
     let children = "";
-    const image = style === FillStyle.BITMAP && bitmap ? this.registerBitmap(bitmap) : undefined;
-    if (image) {
-      const { name, href } = image;
-      const mode = getBitmapMode(items);
-      const repeat =
-        mode === BitmapMode.STRETCH
-          ? "stretch"
-          : mode === BitmapMode.NO_REPEAT
-            ? "no-repeat"
-            : "repeat";
-      attributes.push(
-        `draw:fill-image-name="${encodeStyleName(name)}"`,
-        `style:repeat="${repeat}"`,
-      );
+    const image =
+      style === FillStyle.BITMAP && bitmap ? this.bitmapStyles.registerBitmap(bitmap) : undefined;
+    const mode = image ? getBitmapMode(items) : undefined;
+    const geometry = getBitmapGeometry(items);
+    attributes.push(
+      ...exportBitmapFillProperties({
+        ...(geometry === undefined ? {} : { bitmapGeometry: geometry }),
+        ...(image === undefined ? {} : { bitmapName: image.name }),
+        ...(mode === undefined ? {} : { bitmapMode: mode }),
+      }),
+    );
+    if (image && mode !== undefined) {
+      const { href } = image;
+      const repeat = exportBitmapMode(mode);
       const point = (items.Get(bitmapGeometryWhich.point) as XFillBmpPosItem).GetValue();
       const position =
         mode === BitmapMode.NO_REPEAT

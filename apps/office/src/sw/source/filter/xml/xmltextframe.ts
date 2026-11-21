@@ -6,14 +6,20 @@ import type { XMLGraphic, SvXMLGraphicHelper } from "../../../../xmloff/source/c
 import { SvxFrameDirectionItem } from "../../../../editeng/inc/frmdiritem";
 import { SvxFrameDirection } from "../../../../editeng/inc/frmdir";
 import { aFrameFormatSetRange } from "../../core/bastyp/init";
-import { getFillProperties } from "./xmlexp-fill";
+import {
+  getBitmapFillProperties,
+  getFillProperties,
+  type XMLBitmapStyleExport,
+} from "./xmlexp-fill";
+import { setBitmapMode, type XFillBitmapItem } from "../../../../svx/inc/xbtmpit";
+import { putBitmapGeometry } from "./xmlimpit";
 import { importBoxProperties } from "./xmlimpit";
 import { exportBoxProperties } from "./xmlexpit";
 import type { SvxBoxItem } from "../../../../editeng/source/items/frmitems";
 import { XFillStyleItem } from "../../../../svx/inc/xfillit0";
 import { XFillColorItem } from "../../../../svx/inc/xflclit";
 import { XFillTransparenceItem } from "../../../../svx/inc/xfltrit";
-import type { FillStyle } from "../../../../offapi/com/sun/star/drawing/FillStyle";
+import { FillStyle } from "../../../../offapi/com/sun/star/drawing/FillStyle";
 import { Color } from "../../../../tools/inc/color";
 import { SwFormatFlySplit } from "../../../inc/formatflysplit";
 import { SwFormatFollowTextFlow } from "../../../inc/fmtfollowtextflow";
@@ -50,34 +56,37 @@ import { MakeFlySection } from "../../core/doc/doclay";
 import type { SwXTextCursor } from "../../core/unocore/unoobj";
 import { SwXText } from "../../core/unocore/unotext";
 
-/** Creates native frame attributes from the original size and automatic style members, then opens its original XText cursor. @param parent - Enclosing paragraph cursor. @param value - Frame and textbox attributes. @param style - Resolved frame style. @returns New native frame cursor. */
+/** Creates native frame attributes from the original size and automatic style members, then opens its original XText cursor. @param parent - Enclosing paragraph cursor. @param value - Frame and textbox attributes. @param style - Resolved frame style. @param bitmap - Named fill item. @returns New native frame cursor. */
 export function importTextFrame(
   parent: SwXTextCursor,
   value: XMLTextFrameAttributes,
   style: XMLTextFrameStyle,
+  bitmap?: XFillBitmapItem,
 ): SwXTextCursor {
   const doc = parent.GetDoc();
-  const format = importFrame(parent, value, style);
+  const format = importFrame(parent, value, style, bitmap);
   const start = format.GetContent().GetContentIdx()?.GetNode();
   if (!start?.IsStartNode()) throw new Error("assert(Writer text frame section)");
   return new SwXText(doc, start).createTextCursor();
 }
 
-/** Inserts a native Writer graphic in the same frame attributes used by the text frame owner. @param parent - Actual text cursor. @param value - Source dimensions and anchor. @param style - Effective frame properties. @param graphic - Embedded package asset. @returns Nothing. */
+/** Inserts a native Writer graphic in the same frame attributes used by the text frame owner. @param parent - Actual text cursor. @param value - Source dimensions and anchor. @param style - Effective frame properties. @param graphic - Embedded package asset. @param bitmap - Named fill item. @returns Nothing. */
 export function importGraphicFrame(
   parent: SwXTextCursor,
   value: XMLTextFrameAttributes,
   style: XMLTextFrameStyle,
   graphic: XMLGraphic,
+  bitmap?: XFillBitmapItem,
 ): void {
-  importFrame(parent, value, style, graphic);
+  importFrame(parent, value, style, bitmap, graphic);
 }
 
-/** Constructs a native anchored frame with the appropriate native content owner. @param parent - Enclosing paragraph cursor. @param value - Original frame attributes. @param style - Effective style. @param graphic - Optional encoded image. @returns Registered fly frame. */
+/** Constructs a native anchored frame with the appropriate native content owner. @param parent - Enclosing paragraph cursor. @param value - Original frame attributes. @param style - Effective style. @param bitmap - Named fill item. @param graphic - Optional encoded image. @returns Registered fly frame. */
 function importFrame(
   parent: SwXTextCursor,
   value: XMLTextFrameAttributes,
   style: XMLTextFrameStyle,
+  bitmap?: XFillBitmapItem,
   graphic?: XMLGraphic,
 ): SwFlyFrameFormat {
   const doc = parent.GetDoc();
@@ -144,6 +153,9 @@ function importFrame(
     if (style.fillColor !== undefined) put(new XFillColorItem("", new Color(style.fillColor)));
     if (style.fillTransparency !== undefined)
       put(new XFillTransparenceItem(style.fillTransparency));
+    if (bitmap && style.fillStyle === FillStyle.BITMAP) set.Put(bitmap);
+    if (style.bitmapMode !== undefined) setBitmapMode(set, style.bitmapMode);
+    putBitmapGeometry(set, style.bitmapGeometry);
     if (value.splitAllowed) put(new SwFormatFlySplit(true));
     if (style.followTextFlow !== undefined) put(new SwFormatFollowTextFlow(style.followTextFlow));
     if (style.allowOverlap !== undefined || style.wrapInfluence !== undefined) {
@@ -230,10 +242,11 @@ export function endTextFrame(cursor: SwXTextCursor): void {
   }
 }
 
-/** Projects original native fly members for shared XML frame export. @param format - Actual native format. @param content - Already projected direct section content. @returns Neutral frame element properties. */
+/** Projects original native fly members for shared XML frame export. @param format - Actual native format. @param content - Already projected direct section content. @param bitmapStyles - Named bitmap catalogue. @returns Neutral frame element properties. */
 export function exportTextFrame(
   format: SwFlyFrameFormat,
   content: readonly XMLTextExportBlock[],
+  bitmapStyles?: XMLBitmapStyleExport,
 ): XMLTextFrameExportSource {
   const size = format.GetFrameSize();
   const horizontal = format.GetHoriOrient();
@@ -276,6 +289,7 @@ export function exportTextFrame(
     splitAllowed: format.GetFlySplit().GetValue(),
     style: {
       ...getFillProperties(items),
+      ...getBitmapFillProperties(items, bitmapStyles),
       ...exportBoxProperties(items.GetItemIfSet(RES_BOX, false) as SvxBoxItem | undefined),
       horizontal: horizontal.GetHoriOrient(),
       horizontalRelation: horizontal.GetRelationOrient(),
@@ -310,6 +324,7 @@ export function exportTextFrame(
 /** Package-aware bindings for the existing automatic graphic style exporter. */
 export interface XMLBoundWriterFrames {
   readonly text: BoundTextFrames;
+  readonly bitmapStyles?: XMLBitmapStyleExport;
   readonly graphics?: ReadonlyMap<SwTextNode, readonly BoundGraphicFrame[]>;
   readonly graphicHelper?: SvXMLGraphicHelper;
 }
@@ -334,6 +349,7 @@ export function projectAnchoredTextFrames(
           /** Projects a native text or table child. @param block - Actual direct child. @returns Neutral ODF block. */
           (block) => projectBlock(block, anchored),
         ),
+        anchored.bitmapStyles,
       ),
       offset: format.GetAnchor().GetAnchorContentOffset(),
     }),
@@ -344,7 +360,7 @@ export function projectAnchoredTextFrames(
       const picture = graphic.GetGraphic();
       const mediaType = picture.mediaType;
       const href = helper.saveGraphic({ bytes: picture.GetNativeData(), mediaType });
-      const frame = exportTextFrame(format, []);
+      const frame = exportTextFrame(format, [], anchored.bitmapStyles);
       markers.push({
         kind: "frame",
         offset: format.GetAnchor().GetAnchorContentOffset(),

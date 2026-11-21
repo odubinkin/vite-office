@@ -5,12 +5,15 @@ import { SvXMLUnitConverter } from "../core/xmluconv";
 import { Converter } from "../../../sax/source/tools/converter";
 import { PageStyleLayout } from "../../../offapi/com/sun/star/style/PageStyleLayout";
 import { TextGridMode } from "../../../offapi/com/sun/star/text/TextGridMode";
-import { BitmapMode } from "../../../offapi/com/sun/star/drawing/BitmapMode";
 import { RectanglePoint as P } from "../../../offapi/com/sun/star/drawing/RectanglePoint";
-import { importFillProperties, type OdfFillProperties } from "../draw/fill-properties";
+import {
+  importBitmapFillProperties,
+  importFillProperties,
+  type OdfBitmapFillProperties,
+  type OdfFillProperties,
+} from "../draw/fill-properties";
 import {
   XMLBackgroundImageContext,
-  importBitmapMode,
   type OdfPageBackgroundImage,
 } from "./XMLBackgroundImageContext";
 
@@ -140,99 +143,10 @@ export function importPageGrid(attributes: FastAttributeList): OdfPageGridProper
 }
 
 /** Authored common DrawingLayer page fill plus the older brush properties. */
-export interface OdfPageBackground extends OdfFillProperties {
-  readonly bitmapName?: string;
-  readonly bitmapMode?: BitmapMode;
-  readonly bitmapGeometry?: OdfBitmapGeometry;
+export interface OdfPageBackground extends OdfFillProperties, OdfBitmapFillProperties {
   readonly backgroundColor?: number | "transparent";
   readonly backgroundTransparency?: number;
   readonly image?: OdfPageBackgroundImage;
-}
-
-/** Drawing bitmap dimensions use signed percentages or whole hundredths of a millimetre. */
-export interface OdfBitmapGeometry {
-  readonly sizeX?: number;
-  readonly sizeY?: number;
-  readonly logicalSize?: boolean;
-  readonly point?: P;
-  readonly positionX?: number;
-  readonly positionY?: number;
-  readonly offsetX?: number;
-  readonly offsetY?: number;
-}
-
-const rectanglePoints = [
-  "top-left",
-  "top",
-  "top-right",
-  "left",
-  "center",
-  "right",
-  "bottom-left",
-  "bottom",
-  "bottom-right",
-];
-const units100 = new SvXMLUnitConverter("mm100");
-
-/** Reads one native percent through the shared SAX converter. @param raw - XML text. @returns Numeric percent when recognized. */
-function parsePercent(raw: string): number | undefined {
-  const value: [number] = [0];
-  return Converter.convertPercent(value, raw) ? value[0] : undefined;
-}
-
-/** Reads the bitmap portion of the original property map in SAX order. @param attributes - Page layout attributes. @returns Authored native properties. */
-function importBitmapGeometry(attributes: FastAttributeList): OdfBitmapGeometry {
-  const geometry: { -readonly [K in keyof OdfBitmapGeometry]: OdfBitmapGeometry[K] } = {};
-  for (const [token, raw] of attributes) {
-    if (token === XMLToken.DRAW_FILL_IMAGE_WIDTH || token === XMLToken.DRAW_FILL_IMAGE_HEIGHT) {
-      geometry.logicalSize = !raw.includes("%");
-      const value = geometry.logicalSize ? units100.convertMeasureToCore(raw) : parsePercent(raw);
-      if (value !== null && value !== undefined)
-        geometry[token === XMLToken.DRAW_FILL_IMAGE_WIDTH ? "sizeX" : "sizeY"] =
-          geometry.logicalSize ? value : -value | 0;
-    } else if (token === XMLToken.DRAW_FILL_IMAGE_REF_POINT) {
-      const point = rectanglePoints.indexOf(raw);
-      if (point >= 0) geometry.point = point as P;
-    } else if (
-      token === XMLToken.DRAW_FILL_IMAGE_REF_POINT_X ||
-      token === XMLToken.DRAW_FILL_IMAGE_REF_POINT_Y
-    ) {
-      const value = parsePercent(raw);
-      if (value !== undefined)
-        geometry[token === XMLToken.DRAW_FILL_IMAGE_REF_POINT_X ? "positionX" : "positionY"] =
-          value;
-    } else if (token === XMLToken.DRAW_TILE_REPEAT_OFFSET) {
-      const [percent, axis] = raw.split(" ");
-      const value = parsePercent(percent ?? "");
-      if (value !== undefined && (axis === "horizontal" || axis === "vertical"))
-        geometry[axis === "horizontal" ? "offsetX" : "offsetY"] = value;
-    }
-  }
-  return geometry;
-}
-
-/** Exports the original signed bitmap size and repeat-offset properties. @param geometry - Direct page layout values. @returns Attribute fragments. */
-export function exportBitmapGeometry(geometry: OdfBitmapGeometry): string[] {
-  const result: string[] = [];
-  for (const [axis, value] of [
-    ["width", geometry.sizeX],
-    ["height", geometry.sizeY],
-  ] as const)
-    if (value !== undefined)
-      result.push(
-        `draw:fill-image-${axis}="${value < 0 ? `${-value}%` : units100.convertMeasureToXML(value)}"`,
-      );
-  if (geometry.point !== undefined)
-    result.push(`draw:fill-image-ref-point="${rectanglePoints[geometry.point]}"`);
-  if (geometry.positionX !== undefined)
-    result.push(`draw:fill-image-ref-point-x="${geometry.positionX}%"`);
-  if (geometry.positionY !== undefined)
-    result.push(`draw:fill-image-ref-point-y="${geometry.positionY}%"`);
-  if (geometry.offsetX !== undefined && (geometry.offsetX !== 0 || geometry.offsetY === undefined))
-    result.push(`draw:tile-repeat-offset="${geometry.offsetX}% horizontal"`);
-  else if (geometry.offsetY !== undefined)
-    result.push(`draw:tile-repeat-offset="${geometry.offsetY}% vertical"`);
-  return result;
 }
 
 /** Writes the native legacy vertical then horizontal position. @param point - Bitmap anchor. @returns Position tokens. */
@@ -251,17 +165,13 @@ export class XMLPagePropertySetContext extends SvXMLImportContext {
     private readonly collect: (fill: OdfPageBackground) => void,
   ) {
     super();
-    const bitmapName = attributes.get(XMLToken.DRAW_FILL_IMAGE_NAME);
-    const bitmapMode = importBitmapMode(attributes.get(XMLToken.STYLE_REPEAT));
     const background = attributes.get(XMLToken.FO_BACKGROUND_COLOR);
     const color: [number] = [0],
       transparency: [number] = [0];
     const alpha = attributes.get(XMLToken.STYLE_BACKGROUND_TRANSPARENCY);
     this.background = {
       ...importFillProperties(attributes),
-      ...(bitmapName === null ? {} : { bitmapName }),
-      ...(bitmapMode === undefined ? {} : { bitmapMode }),
-      bitmapGeometry: importBitmapGeometry(attributes),
+      ...importBitmapFillProperties(attributes),
       ...(background === "transparent"
         ? { backgroundColor: "transparent" }
         : background !== null && Converter.convertColor(color, background)

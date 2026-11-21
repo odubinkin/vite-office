@@ -6,6 +6,7 @@ import { XMLBase64ImportContext } from "../core/XMLBase64ImportContext";
 import { SvXMLImportContext, type FastAttributeList } from "../core/xmlimp";
 import type { XMLGraphicSource } from "../core/xmlgrhlp";
 import { XMLToken } from "../core/xmltoken";
+import { importBitmapMode } from "../draw/fill-properties";
 
 /** Legacy graphic source, anchor, repeat mode and opacity. */
 export interface OdfPageBackgroundImage extends XMLGraphicSource {
@@ -63,14 +64,6 @@ function mergeLegacyVertical(point: P, vertical: P): P {
   if (column === 1) return vertical;
   const row = vertical === P.MIDDLE_TOP ? 0 : vertical === P.MIDDLE_MIDDLE ? 1 : 2;
   return row * 3 + column;
-}
-
-/** Reads the native drawing bitmap mode token. @param value - Authored repeat token. @returns Native mode. */
-export function importBitmapMode(value: string | null): BitmapMode | undefined {
-  if (value === "repeat") return BitmapMode.REPEAT;
-  if (value === "stretch") return BitmapMode.STRETCH;
-  if (value === "no-repeat") return BitmapMode.NO_REPEAT;
-  return undefined;
 }
 
 /** Loads the first inline background image only if the legacy URL is empty. */

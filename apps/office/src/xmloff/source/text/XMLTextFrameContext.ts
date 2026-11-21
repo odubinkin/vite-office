@@ -1,5 +1,10 @@
 /** @fileoverview Native draw:frame and draw:text-box import for the represented Writer text frame. */
-import { importFillProperties, type OdfFillProperties } from "../draw/fill-properties";
+import {
+  importBitmapFillProperties,
+  importFillProperties,
+  type OdfBitmapFillProperties,
+  type OdfFillProperties,
+} from "../draw/fill-properties";
 import type { OdfBoxProperties } from "../style/bordrhdl";
 import { Converter } from "../../../sax/source/tools/converter";
 import type { XMLTextCursor } from "../../inc/txtimp";
@@ -13,7 +18,8 @@ import { importWritingDirection } from "../style/prhdlfac";
 import { importTextConstant } from "./txtprhdl";
 
 /** Represented ODF automatic graphic style values shared with text-frame export. */
-export interface XMLTextFrameStyle extends OdfFillProperties, OdfBoxProperties {
+export interface XMLTextFrameStyle
+  extends OdfFillProperties, OdfBitmapFillProperties, OdfBoxProperties {
   readonly horizontal?: number | undefined;
   readonly horizontalRelation?: number | undefined;
   readonly toggle?: boolean | undefined;
@@ -118,6 +124,7 @@ export class XMLTextFrameStyleContext extends SvXMLImportContext {
         writingMode = importWritingDirection(value) ?? writingMode;
     this.style = {
       ...importFillProperties(attrs),
+      ...importBitmapFillProperties(attrs),
       padding: length(attrs, T.FO_PADDING),
       paddingTop: length(attrs, T.FO_PADDING_TOP),
       paddingBottom: length(attrs, T.FO_PADDING_BOTTOM),
