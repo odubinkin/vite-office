@@ -1,0 +1,29 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "browser-adaptation",
+    "status": "local-only",
+    "localPath": "apps/office/src/sc/browser/presentation/pagedlg/ScPageStyleDlg.tsx",
+    "rationale": "Presents the original seven Calc tabs and collects their actual native item-set results for the active page style.",
+    "responsibilities": [
+      "Presents the original seven Calc tabs and collects their actual native item-set results for the active page style."
+    ],
+    "stackDivergence": {
+      "kind": "browser-adaptation",
+      "rationale": "Projects source fields into native HTML controls and the existing office dialog style."
+    },
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sc/browser/presentation/pagedlg/ScPageStyleDlg.tsx",
+          "marker": "ScPageStyleDlg"
+        },
+        {
+          "path": "apps/office/src/sc/browser/presentation/calc-page-style.test.tsx",
+          "marker": "ports tdf123508"
+        }
+      ]
+    }
+  }
+}

@@ -11,6 +11,13 @@ export const calcViewCommands = [
 ] as const;
 export const SID_DEFINE_PRINTAREA = 26602;
 
+/** Original SID_FORMATPAGE at FORMAT_MENU_START + 17. */
+export const calcPageStyleCommand = {
+  id: ".uno:PageFormatDialog",
+  slotId: 26302,
+  label: "Page Style",
+} as const;
+
 /** Source view-shell print range slots from SID_NEW_SLOTS. */
 export const calcPrintRangeCommands = [
   { id: ".uno:DefinePrintArea", slotId: SID_DEFINE_PRINTAREA, label: "Print Area", kind: "define" },
@@ -18,6 +25,9 @@ export const calcPrintRangeCommands = [
   { id: ".uno:EditPrintArea", slotId: 26605, label: "Edit", kind: "edit" },
   { id: ".uno:DeletePrintArea", slotId: 26603, label: "Clear", kind: "clear" },
 ] as const;
+
+/** Native page setup command inventory used by the Calc view shell. */
+export const calcPageCommands = [...calcPrintRangeCommands, calcPageStyleCommand] as const;
 
 /** Native dialog-result slot and its typed Which IDs. */
 export const SID_CHANGE_PRINTAREA = 26604;

@@ -1,6 +1,6 @@
 /** @fileoverview Consumed Calc SDI slots from scalc.sdi,sc.hrc,sfxsids.hrc and solar.hrc; no local command IDs are invented. */
 import {
-  calcPrintRangeCommands,
+  calcPageCommands,
   calcViewCommands,
   createCalcViewSlots,
   type CalcViewCommandTarget,
@@ -158,7 +158,6 @@ export const calcSheetCommands = {
   color: { id: ".uno:SetTabBgColor", slotId: 26366, label: "Sheet Tab Color" },
 } as const;
 export const FID_TAB_SET_TAB_BG_COLOR = 26367;
-
 /** Native split and freeze window slots from sc.hrc. */
 export const calcPaneCommands = [
   { id: ".uno:FreezePanesRow", label: "Freeze First Row", slotId: 26184, kind: "row" },
@@ -433,7 +432,7 @@ export const calcUserCommands = [
   ...Object.values(calcSheetCommands),
   ...calcPaneCommands,
   ...calcOutlineCommands,
-  ...calcPrintRangeCommands,
+  ...calcPageCommands,
   ...calcPageBreakCommands,
   ...calcCellSelectionCommands,
   ...calcVisibleSelectionCommands,

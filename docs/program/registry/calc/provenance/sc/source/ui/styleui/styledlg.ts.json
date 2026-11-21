@@ -1,0 +1,46 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "status": "mapped",
+    "localPath": "apps/office/src/sc/source/ui/styleui/styledlg.ts",
+    "localSymbols": [
+      "GetPageStyleGeometry",
+      "FillPageStyleGeometry"
+    ],
+    "upstreamPath": "sc/source/ui/styleui/styledlg.cxx",
+    "upstreamSymbols": [
+      "ScStyleDlg::ScStyleDlg",
+      "ScStyleDlg::PageCreated"
+    ],
+    "preservedResponsibilities": [
+      "Retains the native page style tab layout and typed Page tab property flow for the Calc center mode."
+    ],
+    "omittedResponsibilities": [
+      "Cell style editing and native style-dialog controller lifetime are outside the Page Style command."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sc/source/ui/styleui/styledlg.ts",
+          "marker": "GetPageStyleGeometry"
+        },
+        {
+          "path": "apps/office/src/sc/browser/presentation/calc-page-style.test.tsx",
+          "marker": "keeps common geometry"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sc/source/ui/styleui/styledlg.cxx",
+          "marker": "ScStyleDlg::ScStyleDlg"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/source/ui/styleui/styledlg.cxx",
+          "marker": "ScStyleDlg::PageCreated"
+        }
+      ]
+    }
+  }
+}

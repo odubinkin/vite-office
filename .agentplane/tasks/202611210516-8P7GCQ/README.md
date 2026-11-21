@@ -4,7 +4,7 @@ title: "Connect Calc page style settings to the Format dialog"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 11
+revision: 12
 origin:
   system: "manual"
 depends_on: []
@@ -37,7 +37,7 @@ events:
     to: "DOING"
     note: "Start: Connect the canonical page style item sets and source-ordered dialog to the Calc Format slot."
 doc_version: 3
-doc_updated_at: "2026-11-21T05:17:08.832Z"
+doc_updated_at: "2026-11-21T05:42:17.612Z"
 doc_updated_by: "CODER"
 description: "Connect native Calc page style editing to the shared style and item pool, preserving the LibreOffice tab structure and printed sheet settings."
 sections:
@@ -50,7 +50,10 @@ sections:
     - Verify Calc resource generation, provenance, file size, and patch whitespace.
   Verification: "Pending implementation and targeted verification."
   Rollback Plan: "Revert the implementation commit to remove the connected dialog and preserve previously stored page settings."
-  Findings: "Pending source review and verification."
+  Findings: |-
+    The original Format Page Style slot edits the active sheet's shared Page-family style. Page formatting, borders, solid page background, header and footer settings, and the three Sheet scaling modes use the current native items. ODS master pages without a header or footer child are imported with the corresponding component off, even when the initialized style has native default geometry. CALC-787 and CALC-788 retain the observed source scaling comparisons and fallback order.
+
+    The covered upstream UI scenarios are tdf123508 and tdf144940. The standalone and nested header/footer content editors, printer-driven pagination, and graphic page fills remain separate source work. The shared border presenter uses the existing Writer and Calc metric controls via their browser adapters, respecting the CUI module boundary.
 id_source: "generated"
 ---
 ## Summary
@@ -81,4 +84,6 @@ Revert the implementation commit to remove the connected dialog and preserve pre
 
 ## Findings
 
-Pending source review and verification.
+The original Format Page Style slot edits the active sheet's shared Page-family style. Page formatting, borders, solid page background, header and footer settings, and the three Sheet scaling modes use the current native items. ODS master pages without a header or footer child are imported with the corresponding component off, even when the initialized style has native default geometry. CALC-787 and CALC-788 retain the observed source scaling comparisons and fallback order.
+
+The covered upstream UI scenarios are tdf123508 and tdf144940. The standalone and nested header/footer content editors, printer-driven pagination, and graphic page fills remain separate source work. The shared border presenter uses the existing Writer and Calc metric controls via their browser adapters, respecting the CUI module boundary.

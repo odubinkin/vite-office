@@ -2,6 +2,7 @@
 import type { CalcSheetWorkflows } from "../workflows/calc-sheet-workflows";
 import { ScMetricInputDlg } from "./ScMetricInputDlg";
 import { ScSheetTabDialog } from "./ScSheetTabDialog";
+import { ScPageStyleDlg } from "./pagedlg/ScPageStyleDlg";
 import { ScGoToTabDlg } from "./ScGoToTabDlg";
 
 /** Requests from the existing native sheet workflow controllers. */
@@ -9,6 +10,7 @@ interface CalcSheetDialogsProps {
   readonly sheetWorkflows: CalcSheetWorkflows;
   readonly widthDialog: ReturnType<CalcSheetWorkflows["metricDialogs"]["GetSnapshot"]>;
   readonly tabDialog: ReturnType<CalcSheetWorkflows["tabDialogs"]["GetSnapshot"]>;
+  readonly pageStyleDialog: ReturnType<CalcSheetWorkflows["pageStyleDialogs"]["GetSnapshot"]>;
   readonly sheetDialog: ReturnType<CalcSheetWorkflows["dialogs"]["GetSnapshot"]>;
 }
 
@@ -16,11 +18,22 @@ interface CalcSheetDialogsProps {
 export function CalcSheetDialogs({
   sheetWorkflows,
   widthDialog,
+  pageStyleDialog,
   tabDialog,
   sheetDialog,
 }: CalcSheetDialogsProps): React.JSX.Element {
   return (
     <>
+      {pageStyleDialog && (
+        <ScPageStyleDlg
+          key={pageStyleDialog.id}
+          model={pageStyleDialog.request}
+          onCancel={() => sheetWorkflows.pageStyleDialogs.Cancel(pageStyleDialog.id)}
+          onSubmit={(result) =>
+            sheetWorkflows.pageStyleDialogs.Complete(pageStyleDialog.id, result)
+          }
+        />
+      )}
       {widthDialog === undefined ? null : (
         <ScMetricInputDlg
           key={widthDialog.id}

@@ -1,5 +1,6 @@
 /** @fileoverview Browser input/viewport binding for the current scalar Calc model. Actual cells,marks,formula evaluation and undo stacks remain with native-shaped owners. */
 import type { ScPaneCommand } from "../../source/ui/view/tabview";
+import { ScUndoModifyStyle } from "../../source/ui/undo/undostyl";
 import { ScUndoOutline } from "../../source/ui/undo/undodat";
 import { ScUndoShowHideTab, ScUndoTabColor, ScUndoPrintRange } from "../../source/ui/undo/undotab";
 import { ScMarkData } from "../../inc/markdata";
@@ -193,7 +194,6 @@ export class CalcViewController {
     this.Changed();
     return changed;
   }
-
   /** Reads original selected diagonal attribute state. @param which - Native diagonal identity. @returns Original binding. */
   GetDiagonalState(which: 141 | 142): import("../../../sfx2/source/control/bindings").SfxSlotState {
     return new ScFormatShell(this.viewData, this.shell).GetDiagonalState(which);
@@ -444,7 +444,6 @@ export class CalcViewController {
     );
     this.EndPointer();
   }
-
   /** Admits pending input before original Deselect and projects InitOwnBlockMode's current-cell anchor without moving the cursor. @returns Whether admitted. */
   DeselectCells(): boolean {
     if (!this.Commit()) return false;
@@ -889,6 +888,7 @@ export class CalcViewController {
       cursorAction instanceof ScUndoShowHideTab ||
       cursorAction instanceof ScUndoTabColor ||
       cursorAction instanceof ScUndoPrintRange ||
+      cursorAction instanceof ScUndoModifyStyle ||
       cursorAction instanceof ScUndoOutline
     ) {
       if (cursorAction instanceof ScUndoWidthOrHeight) {

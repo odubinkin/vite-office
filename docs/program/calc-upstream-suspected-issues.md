@@ -7492,3 +7492,23 @@ removed. Calc preserves these snapshot contents.
 
 - [Original print range change](../../vendor/libreoffice-reference/sc/source/ui/view/viewfun2.cxx)
 - [Original name removal and print snapshot](../../vendor/libreoffice-reference/sc/source/core/data/table1.cxx)
+
+### CALC-787 — Fit-to-width and height compares the current width twice
+
+The Sheet tab's scaling output compares the current width against both
+saved dimensions. With default-backed items and an unchanged scaling
+mode, a height-only edit can therefore be skipped when the saved
+dimensions match. Different saved dimensions can also cause an
+unchanged pair to be emitted. Calc uses the original comparison.
+
+- [Original Sheet scaling item output](../../vendor/libreoffice-reference/sc/source/ui/pagedlg/tptable.cxx)
+
+### CALC-788 — Unchecked fit dimensions can reset a different scaling mode
+
+The Sheet tab checks whether both fit-dimension fields are disabled
+when it collects settings, even if another scaling mode is selected.
+After unchecking both dimensions, selecting a specific total page count
+can still restore percentage scaling at 100%. Calc preserves that
+condition.
+
+- [Original Sheet tab item-set collection](../../vendor/libreoffice-reference/sc/source/ui/pagedlg/tptable.cxx)

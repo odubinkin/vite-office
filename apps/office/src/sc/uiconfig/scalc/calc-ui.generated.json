@@ -3369,7 +3369,13 @@
           { "kind": "separator" },
           { "commandUrl": ".uno:FontDialog", "kind": "command", "visible": true },
           { "commandUrl": ".uno:ParagraphDialog", "kind": "command", "visible": true },
-          { "commandUrl": ".uno:PageFormatDialog", "kind": "command", "visible": true },
+          {
+            "commandUrl": ".uno:PageFormatDialog",
+            "kind": "command",
+            "visible": true,
+            "label": "Page Style",
+            "showsDialog": true
+          },
           {
             "id": ".uno:PrintRangesMenu",
             "kind": "menu",

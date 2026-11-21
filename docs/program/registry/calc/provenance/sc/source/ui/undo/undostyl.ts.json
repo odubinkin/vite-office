@@ -1,0 +1,46 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "status": "mapped",
+    "localPath": "apps/office/src/sc/source/ui/undo/undostyl.ts",
+    "localSymbols": [
+      "ScStyleSaveData",
+      "ScUndoModifyStyle"
+    ],
+    "upstreamPath": "sc/source/ui/undo/undostyl.cxx",
+    "upstreamSymbols": [
+      "ScStyleSaveData::InitFromStyle",
+      "ScUndoModifyStyle::DoChange"
+    ],
+    "preservedResponsibilities": [
+      "Restores the original Page-family style snapshot and shared sheet style usage in both directions."
+    ],
+    "omittedResponsibilities": [
+      "Style families outside Page and printer-dependent recalc remain separate from this command."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sc/source/ui/undo/undostyl.ts",
+          "marker": "ScStyleSaveData"
+        },
+        {
+          "path": "apps/office/src/sc/browser/presentation/calc-page-style.test.tsx",
+          "marker": "keeps common geometry"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sc/source/ui/undo/undostyl.cxx",
+          "marker": "ScStyleSaveData::InitFromStyle"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/source/ui/undo/undostyl.cxx",
+          "marker": "ScUndoModifyStyle::DoChange"
+        }
+      ]
+    }
+  }
+}

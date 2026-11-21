@@ -1,0 +1,29 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "browser-adaptation",
+    "status": "local-only",
+    "localPath": "apps/office/src/sc/browser/presentation/pagedlg/ScHFPage.tsx",
+    "rationale": "Presents the original Calc Header and Footer settings including first-page sharing, margins, spacing and height.",
+    "responsibilities": [
+      "Presents the original Calc Header and Footer settings including first-page sharing, margins, spacing and height."
+    ],
+    "stackDivergence": {
+      "kind": "browser-adaptation",
+      "rationale": "Projects source fields into native HTML controls and the existing office dialog style."
+    },
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sc/browser/presentation/pagedlg/ScHFPage.tsx",
+          "marker": "ScHFPage"
+        },
+        {
+          "path": "apps/office/src/sc/browser/presentation/calc-page-style.test.tsx",
+          "marker": "ports tdf123508"
+        }
+      ]
+    }
+  }
+}

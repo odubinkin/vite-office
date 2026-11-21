@@ -48,7 +48,13 @@ export class ScStyleSheetPool extends SfxStyleSheetPool {
     try {
       return (
         this.Find(key, SfxStyleFamily.Page) ??
-        (create ? this.Make(key, SfxStyleFamily.Page, SfxStyleSearchBits.UserDefined) : null)
+        (create
+          ? this.Make(
+              key,
+              SfxStyleFamily.Page,
+              name === standard ? SfxStyleSearchBits.ScStandard : SfxStyleSearchBits.UserDefined,
+            )
+          : null)
       );
     } finally {
       key.dispose();

@@ -488,6 +488,7 @@ export enum XMLToken {
   CALCEXT_DATE_IS,
   CALCEXT_DATE,
   CALCEXT_STYLE,
+  STYLE_PAGE_USAGE,
 }
 
 const entries: readonly (readonly [string, string, XMLToken])[] = [
@@ -670,6 +671,7 @@ const entries: readonly (readonly [string, string, XMLToken])[] = [
   [ODF_NAMESPACES.style, "default-page-layout", XMLToken.STYLE_DEFAULT_PAGE_LAYOUT],
   [ODF_NAMESPACES.style, "page-layout", XMLToken.STYLE_PAGE_LAYOUT],
   [ODF_NAMESPACES.style, "page-layout-properties", XMLToken.STYLE_PAGE_LAYOUT_PROPERTIES],
+  [ODF_NAMESPACES.style, "page-usage", XMLToken.STYLE_PAGE_USAGE],
   [ODF_NAMESPACES.style, "master-page", XMLToken.STYLE_MASTER_PAGE],
   [ODF_NAMESPACES.style, "header-style", XMLToken.STYLE_HEADER_STYLE],
   [ODF_NAMESPACES.style, "footer-style", XMLToken.STYLE_FOOTER_STYLE],
@@ -984,14 +986,12 @@ const entries: readonly (readonly [string, string, XMLToken])[] = [
   [ODF_NAMESPACES.table, "table-header-columns", XMLToken.TABLE_TABLE_HEADER_COLUMNS],
   [ODF_NAMESPACES.table, "table-column-group", XMLToken.TABLE_TABLE_COLUMN_GROUP],
 ];
-
 const tokens = new Map(
   entries.map(
     /** Creates one expanded-name lookup entry. @param entry - Namespace, local name, and token. @returns Lookup pair. */
     ([namespaceURI, localName, token]) => [`${namespaceURI}\0${localName}`, token],
   ),
 );
-
 /** Resolves an expanded XML name. @param namespaceURI - Namespace URI. @param localName - Local name. @returns Stable token. */
 export function getXMLToken(namespaceURI: string, localName: string): XMLToken {
   return tokens.get(`${namespaceURI}\0${localName}`) ?? XMLToken.UNKNOWN;

@@ -1,0 +1,47 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "status": "mapped",
+    "localPath": "apps/office/src/sc/source/ui/docshell/docsh4.ts",
+    "localSymbols": [
+      "CreatePageStyleRequest",
+      "ApplyPageStyle",
+      "PageStyleModified"
+    ],
+    "upstreamPath": "sc/source/ui/docshell/docsh4.cxx",
+    "upstreamSymbols": [
+      "ScDocShell::ExecutePageStyle",
+      "ScDocShell::PageStyleModified"
+    ],
+    "preservedResponsibilities": [
+      "Applies original Page Style slot output, rebinds renamed shared style usages, and invalidates their page geometry."
+    ],
+    "omittedResponsibilities": [
+      "Printer-dependent page layout, warnings and the standalone header/footer command remain outside this source slice."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sc/source/ui/docshell/docsh4.ts",
+          "marker": "CreatePageStyleRequest"
+        },
+        {
+          "path": "apps/office/src/sc/browser/presentation/calc-page-style.test.tsx",
+          "marker": "keeps common geometry"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sc/source/ui/docshell/docsh4.cxx",
+          "marker": "ScDocShell::ExecutePageStyle"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/source/ui/docshell/docsh4.cxx",
+          "marker": "ScDocShell::PageStyleModified"
+        }
+      ]
+    }
+  }
+}

@@ -85,6 +85,11 @@ export function CalcWorkbench({
     sheetWorkflows.metricDialogs.GetSnapshot,
     sheetWorkflows.metricDialogs.GetSnapshot,
   );
+  const pageStyleDialog = useSyncExternalStore(
+    sheetWorkflows.pageStyleDialogs.Subscribe,
+    sheetWorkflows.pageStyleDialogs.GetSnapshot,
+    sheetWorkflows.pageStyleDialogs.GetSnapshot,
+  );
   const printDialog = useSyncExternalStore(
     sheetWorkflows.printDialogs.Subscribe,
     sheetWorkflows.printDialogs.GetSnapshot,
@@ -120,7 +125,8 @@ export function CalcWorkbench({
     dialog !== undefined ||
     sheetDialog !== undefined ||
     widthDialog !== undefined ||
-    tabDialog !== undefined;
+    tabDialog !== undefined ||
+    pageStyleDialog !== undefined;
   const root = useRef<HTMLElement>(null),
     tabs = useRef<HTMLDivElement>(null),
     previousModal = useRef(modal || printOpen),
@@ -952,7 +958,9 @@ export function CalcWorkbench({
           }
         />
       )}
-      <CalcSheetDialogs {...{ sheetWorkflows, widthDialog, tabDialog, sheetDialog }} />
+      <CalcSheetDialogs
+        {...{ sheetWorkflows, widthDialog, tabDialog, sheetDialog, pageStyleDialog }}
+      />
       {printDialog && (
         <ScPrintAreasDlg
           key={printDialog.id}

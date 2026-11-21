@@ -1,0 +1,37 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sc/source/ui/undo/undostyl.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "calc",
+    "subsystem": "editable-workspace",
+    "capabilityIds": [
+      "CAP-52bb76b0-ff2d-4a8c-86df-79f033c21d86"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/sc/source/ui/undo/undostyl.ts",
+        "apps/office/src/sc/browser/presentation/calc-page-style.test.tsx",
+        "vendor/libreoffice-reference/sc/source/ui/undo/undostyl.cxx"
+      ],
+      "justification": "Restores the original Page-family style snapshot and shared sheet style usage in both directions.",
+      "knownViolations": [],
+      "localSymbols": [
+        "ScStyleSaveData",
+        "ScUndoModifyStyle"
+      ],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": "sc/source/ui/undo/undostyl.cxx",
+      "upstreamSymbols": [
+        "ScStyleSaveData::InitFromStyle",
+        "ScUndoModifyStyle::DoChange"
+      ]
+    }
+  }
+}

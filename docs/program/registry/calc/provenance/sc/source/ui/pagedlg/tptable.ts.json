@@ -1,0 +1,50 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "status": "mapped",
+    "localPath": "apps/office/src/sc/source/ui/pagedlg/tptable.ts",
+    "localSymbols": [
+      "ScTablePage"
+    ],
+    "upstreamPath": "sc/source/ui/pagedlg/tptable.cxx",
+    "upstreamSymbols": [
+      "ScTablePage::Reset",
+      "ScTablePage::FillItemSet",
+      "lcl_PutScaleItem2"
+    ],
+    "preservedResponsibilities": [
+      "Preserves native Sheet tab state, control defaults, scaling priority and the original scale output comparison."
+    ],
+    "omittedResponsibilities": [
+      "Native Weld widgets are supplied by the browser adapter."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sc/source/ui/pagedlg/tptable.ts",
+          "marker": "ScTablePage"
+        },
+        {
+          "path": "apps/office/src/sc/browser/presentation/calc-page-style.test.tsx",
+          "marker": "ports tdf123508"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sc/source/ui/pagedlg/tptable.cxx",
+          "marker": "ScTablePage::Reset"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/source/ui/pagedlg/tptable.cxx",
+          "marker": "ScTablePage::FillItemSet"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/source/ui/pagedlg/tptable.cxx",
+          "marker": "lcl_PutScaleItem2"
+        }
+      ]
+    }
+  }
+}

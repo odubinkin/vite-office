@@ -137,16 +137,15 @@ const printRanges = buildResourceGraph(
   sourceToCommand,
   resolveMenuLabel,
 );
-const printRangeItems = printRanges.nodes.map(
-  /** Carries the popup's native context labels independently of the toolbar labels. @param node - Popup item. @returns Menu placement. */
-  (node) => {
-    if (node.kind !== "command") return node;
-    const title = findEnglishLabelProperty(node.commandUrl, "ContextLabel", ...catalogs);
-    return title === undefined
-      ? node
-      : { ...node, label: stripMnemonic(title), showsDialog: title.endsWith("...") };
-  },
-);
+/** Carries a popup's ContextLabel independently of the standard toolbar label. @param node - Menu resource item. @returns Menu placement. */
+function withContextLabel(node: ResourceNode): ResourceNode {
+  if (node.kind !== "command") return node;
+  const title = findEnglishLabelProperty(node.commandUrl, "ContextLabel", ...catalogs);
+  if (title === undefined) return node;
+  const placement = { ...node, label: stripMnemonic(title), showsDialog: title.endsWith("...") };
+  return placement;
+}
+const printRangeItems = printRanges.nodes.map(withContextLabel);
 /** Resolves the native dynamically loaded PrintRangesMenu popup within Format. @param node - Original graph node. @returns Projected node. */
 function attachCalcPopups(node: ResourceNode): ResourceNode {
   if (node.kind === "menu") return { ...node, items: node.items.map(attachCalcPopups) };
@@ -157,7 +156,9 @@ function attachCalcPopups(node: ResourceNode): ResourceNode {
       label: resolveMenuLabel(node.commandUrl),
       items: printRangeItems,
     };
-  return node;
+  return node.kind === "command" && node.commandUrl === ".uno:PageFormatDialog"
+    ? withContextLabel(node)
+    : node;
 }
 const dispositions: unknown[] = [];
 const projected = Object.fromEntries(

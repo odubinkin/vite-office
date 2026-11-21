@@ -79,18 +79,19 @@ export class SvxBorderTabPage {
   private customWidth = false;
   private readonly color = new Color();
   private preset: number | undefined;
-  /** Captures owned input, independent of document mutation. @param input - Native original items. @param boxWhich - Pool's outer box identity. @param mergeWhich - Mapped Writer table-mode item. @returns Nothing. */
+  /** Captures owned input, independent of document mutation. @param input - Native original items. @param boxWhich - Pool's outer box identity. @param mergeWhich - Mapped Writer table-mode item. @param infoWhich - Pool's inner border item identity. @returns Nothing. */
   public constructor(
     input: SfxItemSet,
     private readonly boxWhich: number,
     private readonly mergeWhich?: number,
+    private readonly infoWhich: number = SID_ATTR_BORDER_INNER,
   ) {
     this.original = input.Clone();
     const box =
       input.GetItemState(boxWhich) >= SfxItemState.DEFAULT ? input.Get(boxWhich) : undefined;
     const info =
-      input.GetItemState(SID_ATTR_BORDER_INNER) >= SfxItemState.DEFAULT
-        ? input.Get(SID_ATTR_BORDER_INNER)
+      input.GetItemState(this.infoWhich) >= SfxItemState.DEFAULT
+        ? input.Get(this.infoWhich)
         : undefined;
     const merge =
       mergeWhich !== undefined && input.GetItemState(mergeWhich) >= SfxItemState.DEFAULT
@@ -362,7 +363,7 @@ export class SvxBorderTabPage {
       changed = true;
     }
     const box = new SvxBoxItem(this.boxWhich),
-      info = new SvxBoxInfoItem(SID_ATTR_BORDER_INNER),
+      info = new SvxBoxInfoItem(this.infoWhich),
       selector = this.frameSelector;
     for (const [edge, itemEdge, valid] of edges) {
       const enabled = selector.GetEnabledBorders().includes(edge);
@@ -403,7 +404,7 @@ export class SvxBorderTabPage {
     if (this.original.GetItemState(this.boxWhich, false) === SfxItemState.DEFAULT)
       put = !box.equals(this.original.Get(this.boxWhich));
     if (
-      this.original.GetItemState(SID_ATTR_BORDER_INNER, false) === SfxItemState.DEFAULT &&
+      this.original.GetItemState(this.infoWhich, false) === SfxItemState.DEFAULT &&
       this.oldInfo !== undefined
     ) {
       info.SetMinDist(this.oldInfo.IsMinDist());
@@ -412,7 +413,7 @@ export class SvxBorderTabPage {
     }
     if (!put) {
       output.ClearItem(this.boxWhich);
-      output.ClearItem(SID_ATTR_BORDER_INNER);
+      output.ClearItem(this.infoWhich);
       return changed;
     }
     if (this.oldBox === undefined || !box.equals(this.oldBox)) {

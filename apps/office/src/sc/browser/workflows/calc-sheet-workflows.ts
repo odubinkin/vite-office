@@ -38,6 +38,7 @@ import {
   FID_TAB_SET_TAB_BG_COLOR,
 } from "../../sdi/scalc";
 import {
+  calcPageStyleCommand,
   calcPrintRangeCommands,
   FN_PRINT_ENTIRE_SHEET,
   FN_PRINT_REPEAT_COL,
@@ -46,6 +47,9 @@ import {
   SID_DEFINE_PRINTAREA,
 } from "../../sdi/tabvwsh";
 import { CreatePrintAreasModel, type PrintAreasModel } from "../../source/ui/pagedlg/areasdlg";
+import { ApplyPageStyle, CreatePageStyleRequest } from "../../source/ui/docshell/docsh4";
+import { ScStyleSaveData } from "../../source/ui/undo/undostyl";
+import type { ScStyleDlgRequest, ScStyleDlgResult } from "../../source/ui/styleui/styledlg";
 import type { CalcViewController } from "../controller/calc-view-controller";
 /** Immutable native dialog initialization;names are copied only as dialog widget resources. */
 export interface CalcGoToSheetRequest {
@@ -81,6 +85,7 @@ export class CalcSheetWorkflows {
   readonly dialogs = new SfxDialogController<CalcGoToSheetRequest, string>();
   readonly tabDialogs = new SfxDialogController<CalcSheetTabDialog, number[] | string>();
   readonly metricDialogs = new SfxDialogController<ScMetricInputDlg, number>();
+  readonly pageStyleDialogs = new SfxDialogController<ScStyleDlgRequest, ScStyleDlgResult>();
   readonly printDialogs = new SfxDialogController<PrintAreasModel, SfxRequest | undefined>();
   private readonly shell: SfxShell;
   /** Connects a source command to the active document view. @param controller - Actual Calc controller. @returns Workflow. */
@@ -159,6 +164,14 @@ export class CalcSheetWorkflows {
               },
           }),
         ),
+        {
+          commandUrl: calcPageStyleCommand.id,
+          slotId: calcPageStyleCommand.slotId,
+          label: calcPageStyleCommand.label,
+          getState: (target: CalcSheetWorkflows) => ({ enabled: !target.HasSheetDialog() }),
+          execute: (target: CalcSheetWorkflows, request: SfxRequest) =>
+            target.EditPageStyle(request),
+        },
         ...calcPrintRangeCommands.map(({ id, slotId, label, kind }) => ({
           commandUrl: id,
           slotId,
@@ -321,8 +334,38 @@ export class CalcSheetWorkflows {
       this.tabDialogs.GetSnapshot() ||
       this.dialogs.GetSnapshot() ||
       this.metricDialogs.GetSnapshot() ||
-      this.printDialogs.GetSnapshot(),
+      this.printDialogs.GetSnapshot() ||
+      this.pageStyleDialogs.GetSnapshot(),
     );
+  }
+
+  /** Opens the original Format Page slot on the active sheet's shared page style. @param request - Source Sfx request. @returns Completion. */
+  private async EditPageStyle(request: SfxRequest): Promise<void> {
+    if (request.GetArgs().length || !this.controller.Commit()) return;
+    const view = this.controller.viewData;
+    const document = view.GetDocument();
+    const name = document.GetPageStyle(view.CurrentTabForData());
+    const style = document.GetStyleSheetPool()?.GetPageStyle(name, true);
+    if (!style) return;
+    const before = new ScStyleSaveData(style);
+    const copy = new SfxRequest(request.GetSlot(), request.GetArgs(), request.GetCallMode());
+    request.Ignore();
+    let transferred = false;
+    try {
+      const completion = await this.pageStyleDialogs.Request(
+        CreatePageStyleRequest(this.controller.shell, style, before),
+      );
+      if (completion.kind !== "accepted") return;
+      try {
+        if (this.controller.viewData.GetDocument() !== document) return;
+        transferred = ApplyPageStyle(this.controller.shell, style, before, completion.result);
+        if (transferred) copy.Done();
+      } finally {
+        completion.result.items.Dispose();
+      }
+    } finally {
+      if (!transferred) before.items.Dispose();
+    }
   }
 
   /** Reads source print-range availability from the current sheet. @param kind - Source command. @returns Slot state. */
@@ -594,6 +637,8 @@ export class CalcSheetWorkflows {
 
   /** Cancels the native async request before the session destroys its document. @returns Nothing. */
   Close(): void {
+    const style = this.pageStyleDialogs.GetSnapshot();
+    if (style) this.pageStyleDialogs.Cancel(style.id);
     const print = this.printDialogs.GetSnapshot();
     if (print) this.printDialogs.Cancel(print.id);
     const tab = this.tabDialogs.GetSnapshot();
