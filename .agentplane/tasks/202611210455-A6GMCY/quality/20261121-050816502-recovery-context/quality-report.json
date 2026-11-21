@@ -1,0 +1,23 @@
+{
+  "schema_version": 1,
+  "task_id": "202611210455-A6GMCY",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-11-21T05:08:16.502Z",
+  "verdict": "pass",
+  "summary": "The connected Calc edit-field classes match the pinned ODF owners for field payloads and text boundaries.",
+  "evaluated_sha": "7b6007ea42e5d434fbb24d4d6620599d0df9fcbb",
+  "blueprint_digest": "7cddaf7aa3859bd2f8af49dd26aeb7a418f3b01efd76f405d7fbf4dd0003e178",
+  "findings": [
+    "Two pinned packages and independent source-shaped ODF cases verify hyperlink targets, escaped reference paths, edit fields, and formula paragraph boundaries. All 125 Calc and 46 shared cases passed."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202611210455-A6GMCY/README.md",
+    "output/playwright/A6GMCY/calc-verified.log",
+    "output/playwright/A6GMCY/editeng-final.log",
+    "docs/program/calc-upstream-suspected-issues.md"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": []
+}
