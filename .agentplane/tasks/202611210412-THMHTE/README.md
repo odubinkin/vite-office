@@ -1,10 +1,11 @@
 ---
 id: "202611210412-THMHTE"
 title: "Align Calc ODS outline groups and print header boundaries"
-status: "DOING"
+result_summary: "Verified Calc ODS outline groups, print title nesting, and sparse column extent against LibreOffice"
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 7
+revision: 9
 origin:
   system: "manual"
 depends_on: []
@@ -20,9 +21,9 @@ plan_approval:
   note: null
 verification:
   state: "ok"
-  updated_at: "2026-11-21T04:39:45.528Z"
+  updated_at: "2026-11-21T04:40:07.201Z"
   updated_by: "CODER"
-  note: "Verified native Calc ODS outline, print titles and sparse column extent. All related application cases passed across the focused run and timeout replay."
+  note: "All 121 related cases passed across the original run and exact retry. Final typecheck, source provenance and focused checks passed."
   attempts: 0
 quality_review:
   state: "pass"
@@ -43,11 +44,16 @@ quality_review:
     - "docs/program/calc-upstream-suspected-issues.md"
   findings:
     - "The independent ODS outline and print fixtures confirm row and column visibility, title reconstruction and preserved cursor edge cases. All 121 related Calc cases are verified, including the exact timeout replay."
-commit: null
+commit:
+  hash: "ff047bc5e9b8320c50d8b458bf28c1ac53642acb"
+  message: "🧩 THMHTE code: align Calc ODS outline and print title boundaries"
 comments:
   -
     author: "CODER"
     body: "Start: port Calc row and column XML grouping and print title boundaries with pinned fixture checks."
+  -
+    author: "CODER"
+    body: "Verified: Verified Calc ODS outline groups, print title nesting, and sparse column extent against LibreOffice. Guided shortcut recorded verification and is closing the direct task with traceable commit metadata."
 events:
   -
     type: "status"
@@ -62,8 +68,21 @@ events:
     author: "CODER"
     state: "ok"
     note: "Verified native Calc ODS outline, print titles and sparse column extent. All related application cases passed across the focused run and timeout replay."
+  -
+    type: "verify"
+    at: "2026-11-21T04:40:07.201Z"
+    author: "CODER"
+    state: "ok"
+    note: "All 121 related cases passed across the original run and exact retry. Final typecheck, source provenance and focused checks passed."
+  -
+    type: "status"
+    at: "2026-11-21T04:40:07.429Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: Verified Calc ODS outline groups, print title nesting, and sparse column extent against LibreOffice. Guided shortcut recorded verification and is closing the direct task with traceable commit metadata."
 doc_version: 3
-doc_updated_at: "2026-11-21T04:39:45.721Z"
+doc_updated_at: "2026-11-21T04:40:07.430Z"
 doc_updated_by: "CODER"
 description: "Match pinned LibreOffice ODF row and column grouping, collapse and control visibility, header wrappers, axis ordering, and bounded export for the connected Calc outline and print range model. Port applicable native regressions and verify save and reopen."
 sections:
@@ -112,6 +131,36 @@ sections:
     - freshness: route=computed_local remote=remote_skipped
     - repeat_allowed: false
     - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+    - risks: none
+
+    ### 2026-11-21T04:40:07.201Z — VERIFY — ok
+
+    By: CODER
+
+    Note: All 121 related cases passed across the original run and exact retry. Final typecheck, source provenance and focused checks passed.
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-21T04:39:45.721Z, excerpt_hash=sha256:7331529b9de4792db03eb3e0b14e3460f43f9995073e1014222d092fc0452e4a
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202611210412-THMHTE/blueprint/resolved-snapshot.json
+    - old_digest: ec37d4896aded89d88247299c402cfbd2ac83aaf5ba98662210f6747fba5a8f4
+    - current_digest: ec37d4896aded89d88247299c402cfbd2ac83aaf5ba98662210f6747fba5a8f4
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202611210412-THMHTE
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task complete 202611210412-THMHTE --result verified-202611210412-THMHTE --commit d92deccf43d3f803ea34b0d6bbfecb735607326b
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
     - risks: none
 
     <!-- END VERIFICATION RESULTS -->
@@ -176,6 +225,36 @@ DecisionContextRef:
 - freshness: route=computed_local remote=remote_skipped
 - repeat_allowed: false
 - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- risks: none
+
+### 2026-11-21T04:40:07.201Z — VERIFY — ok
+
+By: CODER
+
+Note: All 121 related cases passed across the original run and exact retry. Final typecheck, source provenance and focused checks passed.
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-21T04:39:45.721Z, excerpt_hash=sha256:7331529b9de4792db03eb3e0b14e3460f43f9995073e1014222d092fc0452e4a
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202611210412-THMHTE/blueprint/resolved-snapshot.json
+- old_digest: ec37d4896aded89d88247299c402cfbd2ac83aaf5ba98662210f6747fba5a8f4
+- current_digest: ec37d4896aded89d88247299c402cfbd2ac83aaf5ba98662210f6747fba5a8f4
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202611210412-THMHTE
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task complete 202611210412-THMHTE --result verified-202611210412-THMHTE --commit d92deccf43d3f803ea34b0d6bbfecb735607326b
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
 - risks: none
 
 <!-- END VERIFICATION RESULTS -->
