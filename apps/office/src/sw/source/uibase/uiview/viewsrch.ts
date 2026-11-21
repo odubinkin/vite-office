@@ -274,6 +274,7 @@ export class SwViewSearch {
       regularExpression: options.GetFlag("IsUseRegularExpression"),
       similaritySearch: options.GetFlag("IsSimilaritySearch"),
       styleSearch: options.GetFlag("IsSearchForStyles"),
+      searchInNotes: options.GetFlag("IsNotes"),
     };
   }
 
@@ -458,6 +459,7 @@ export class SwViewSearch {
       options.SetFlag("IsUseRegularExpression", item.regularExpression);
       options.SetFlag("IsSimilaritySearch", item.similaritySearch);
       options.SetFlag("IsUseAsianOptions", item.useAsianOptions);
+      options.SetFlag("IsNotes", item.searchInNotes ?? false);
     }
     options.Commit();
   }
@@ -486,6 +488,7 @@ export class SwViewSearch {
       regularExpression: false,
       similaritySearch: false,
       styleSearch: false,
+      searchInNotes: false,
       selection: false,
     };
     this.item = item;

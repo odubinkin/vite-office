@@ -147,6 +147,7 @@ export function WriterSearch({
       !initial.matchDiacritics ||
       initial.matchKashida ||
       initial.useAsianOptions ||
+      initial.searchInNotes ||
       initial.regularExpression ||
       initial.similaritySearch ||
       initial.styleSearch ||
@@ -168,7 +169,7 @@ export function WriterSearch({
       ? searchOptionsState.value.GetValue()
       : SearchOptionFlags.NONE;
   const canReplace = hasOption(SearchOptionFlags.REPLACE);
-  const canReplaceAll = hasOption(SearchOptionFlags.REPLACE_ALL);
+  const canReplaceAll = !item.searchInNotes && hasOption(SearchOptionFlags.REPLACE_ALL);
 
   /** Reads the view shell's option mask. @param option - Native search capability. @returns Whether the control is available. */
   function hasOption(option: SearchOptionFlags): boolean {
@@ -493,7 +494,9 @@ export function WriterSearch({
     <button
       type="button"
       className={buttonStyle}
-      disabled={cannotSearch || !hasOption(SearchOptionFlags.SEARCHALL)}
+      disabled={
+        cannotSearch || Boolean(item.searchInNotes) || !hasOption(SearchOptionFlags.SEARCHALL)
+      }
       onClick={/** Selects all matches. @returns Nothing. */ () => execute(SvxSearchCmd.FIND_ALL)}
     >
       {findAllLabel}
@@ -830,6 +833,18 @@ export function WriterSearch({
                 }
               />
               {text("kashida-sensitive", "Kashida-sensitive")}
+            </label>
+            <label className="flex items-center gap-1 text-sm sm:col-start-1 sm:row-start-6">
+              <input
+                type="checkbox"
+                checked={item.searchInNotes ?? false}
+                onChange={
+                  /** Includes anchored comment text. @param event - Changed checkbox. @returns Nothing. */ (
+                    event,
+                  ) => update({ searchInNotes: event.currentTarget.checked })
+                }
+              />
+              {text("notes", "Comments")}
             </label>
           </div>
           <div className="mt-2 flex flex-wrap gap-1">

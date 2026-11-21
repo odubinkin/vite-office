@@ -4,7 +4,7 @@ title: "Implement Writer search and replace core and browser UI"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 77
+revision: 78
 origin:
   system: "manual"
 depends_on:
@@ -235,6 +235,9 @@ comments:
   -
     author: "CODER"
     body: "Verified checkpoint: Writer view owns SwPostItMgr and resolves registered annotation editors by the original field. The text cursor interleaves body spans and note editors in both directions, continues the active note selection, and routes an active single replacement through EditEngine. WRITER-715 records the native absolute-bound versus annotation-span-length check for trailing-dollar patterns. Passed 76 targeted Writer cases in six suites and repeated three note cases after the type-only boundary adjustment. Production build, two Writer resource cases, dependency and source-tree checks, provenance, JSDoc, file size, scoped lint and formatting, doctor and routing passed. The existing doctor hook warning remains. Browser comment viewport mounting and the dialog Notes control remain pending. No full regression or task closure."
+  -
+    author: "CODER"
+    body: "Verified checkpoint: the browser comment sidebar registers native edit documents with SwPostItMgr. Find and Replace loads and saves the native Notes option and follows upstream bulk-command admission. A mounted model annotation receives focus and selection, replacement updates its canonical field, and document Undo and Redo restore the editor. Writer uses browser RegExp; ICU is referenced only by the optional host comparison probe. Passed 57 targeted Writer tests, two browser matcher unit tests, two Writer resource cases and the existing Writer search end-to-end case in installed Chrome. Production build, dependencies, source tree and provenance, JSDoc, size, scoped lint and formatting, diff, doctor and routing passed. Doctor reports the existing managed-shim warning. Comment insertion and ODT annotation load and roundtrip are pending; the panel test seeds a native model field. No task closure or full-suite cadence increment."
 events:
   -
     type: "status"
@@ -568,8 +571,13 @@ events:
     at: "2026-11-21T12:03:22.147Z"
     author: "CODER"
     body: "Verified checkpoint: Writer view owns SwPostItMgr and resolves registered annotation editors by the original field. The text cursor interleaves body spans and note editors in both directions, continues the active note selection, and routes an active single replacement through EditEngine. WRITER-715 records the native absolute-bound versus annotation-span-length check for trailing-dollar patterns. Passed 76 targeted Writer cases in six suites and repeated three note cases after the type-only boundary adjustment. Production build, two Writer resource cases, dependency and source-tree checks, provenance, JSDoc, file size, scoped lint and formatting, doctor and routing passed. The existing doctor hook warning remains. Browser comment viewport mounting and the dialog Notes control remain pending. No full regression or task closure."
+  -
+    type: "comment"
+    at: "2026-11-21T12:13:52.705Z"
+    author: "CODER"
+    body: "Verified checkpoint: the browser comment sidebar registers native edit documents with SwPostItMgr. Find and Replace loads and saves the native Notes option and follows upstream bulk-command admission. A mounted model annotation receives focus and selection, replacement updates its canonical field, and document Undo and Redo restore the editor. Writer uses browser RegExp; ICU is referenced only by the optional host comparison probe. Passed 57 targeted Writer tests, two browser matcher unit tests, two Writer resource cases and the existing Writer search end-to-end case in installed Chrome. Production build, dependencies, source tree and provenance, JSDoc, size, scoped lint and formatting, diff, doctor and routing passed. Doctor reports the existing managed-shim warning. Comment insertion and ODT annotation load and roundtrip are pending; the panel test seeds a native model field. No task closure or full-suite cadence increment."
 doc_version: 3
-doc_updated_at: "2026-11-21T12:03:22.147Z"
+doc_updated_at: "2026-11-21T12:13:52.705Z"
 doc_updated_by: "CODER"
 description: "Implement the approved coherent Writer search-and-replace feature from pinned LibreOffice sources: real shared search engine and options, native paragraph/cursor traversal and replacement/history contracts, view-owned search state and dispatch, Find toolbar and Find and Replace dialog with generated upstream command placement and shortcuts. Preserve source semantics and explicit unsupported boundaries; never substitute DOM text search or browser RegExp for ICU contracts. Work only on writer in vite-office-writer; local upstream reading approved, no network or merges. Keep active until approved scope is verified."
 sections:

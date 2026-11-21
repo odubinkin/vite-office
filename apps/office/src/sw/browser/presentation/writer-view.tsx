@@ -47,6 +47,7 @@ import {
   type SearchSurfaces,
   type WriterSearchHistory,
 } from "./WriterSearch";
+import { RenderWriterComments } from "./WriterCommentsSidebar";
 import { WriterWorkspaceChrome } from "./WriterWorkspaceChrome";
 import { CommandMenuBar } from "../../../framework/browser/presentation/CommandMenuBar";
 import { useWriterContextMenu } from "./WriterContextMenu";
@@ -601,6 +602,7 @@ export function WriterWorkbench({
     <div hidden={!isActive}>
       {searchDialog && renderSearch(true, searchDialog)}
       <WriterWorkspaceChrome
+        commentsSidebar={RenderWriterComments(activeDocument, view)}
         documentTitle={snapshot.documentState.title}
         findToolbar={findbar && renderSearch(false, findbar)}
         numberingToolbar={
@@ -698,28 +700,26 @@ export function WriterWorkbench({
         }
         onDocumentTitleChange={handleDocumentTitleChange}
         propertiesSidebar={
-          <>
-            <WriterPropertiesPanel
-              objectShell={view.GetDocShell()}
-              isTable={currentTable !== undefined}
-              unit={snapshot.metricUnit}
-              paragraphStyleOptions={snapshot.paragraphStyleOptions}
-              paragraphStyleNames={snapshot.paragraphStyleNames}
-              embeddedFontFamilies={activeDocument.GetEmbeddedFonts().map(
-                /** Projects actual embedded family names. @param font - Package font. @returns Family name. */
-                (font) => font.familyName,
-              )}
-              fontAvailability={
-                fontAvailability?.document === activeDocument ? fontAvailability.values : {}
-              }
-              commandSource={commandSource}
-              focusDocument={
-                /** Returns panel header focus to this Writer frame's mounted client. @returns Nothing. */ () =>
-                  (editingHostRef.current as HTMLElement).focus()
-              }
-              resolveArguments={resolveCommandArguments}
-            />
-          </>
+          <WriterPropertiesPanel
+            objectShell={view.GetDocShell()}
+            isTable={currentTable !== undefined}
+            unit={snapshot.metricUnit}
+            paragraphStyleOptions={snapshot.paragraphStyleOptions}
+            paragraphStyleNames={snapshot.paragraphStyleNames}
+            embeddedFontFamilies={activeDocument.GetEmbeddedFonts().map(
+              /** Projects actual embedded family names. @param font - Package font. @returns Family name. */
+              (font) => font.familyName,
+            )}
+            fontAvailability={
+              fontAvailability?.document === activeDocument ? fontAvailability.values : {}
+            }
+            commandSource={commandSource}
+            focusDocument={
+              /** Returns panel header focus to this Writer frame's mounted client. @returns Nothing. */ () =>
+                (editingHostRef.current as HTMLElement).focus()
+            }
+            resolveArguments={resolveCommandArguments}
+          />
         }
         rulers={
           <WriterRulers

@@ -46,7 +46,7 @@ export interface SwPostItFieldData {
 
 /** Owns the source comment payload and an optional rich-text object snapshot. */
 export class SwPostItField {
-  private readonly data: SwPostItFieldData;
+  private data: SwPostItFieldData;
   private textObject: EditTextObject | undefined;
 
   /** Creates the source field with the original defaults for independent comments. @param type - Document field type. @param data - Native comment content and thread data. @returns Field. */
@@ -76,6 +76,18 @@ export class SwPostItField {
   /** Reads the plain text fallback used by the original sidebar. @returns Comment text. */
   GetPar2(): string {
     return this.data.text;
+  }
+
+  /** Updates the plain text fallback published by the annotation editor. @param value - Current editor text. @returns Nothing. */
+  SetPar2(value: string): void {
+    this.data = { ...this.data, text: value };
+  }
+
+  /** Stores an independent native editor snapshot. @param value - Current rich text. @returns Nothing. */
+  SetTextObject(value: EditTextObject | undefined): void {
+    const previous = this.textObject;
+    this.textObject = value?.Clone();
+    previous?.dispose();
   }
 
   /** Reads the current native rich text snapshot. @returns Optional borrowed edit text. */

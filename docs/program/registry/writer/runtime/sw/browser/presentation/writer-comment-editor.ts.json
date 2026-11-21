@@ -1,0 +1,32 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sw/browser/presentation/writer-comment-editor.ts",
+    "classification": "browser-adaptation",
+    "state": "active",
+    "suite": "writer",
+    "subsystem": "text-search",
+    "capabilityIds": [
+      "CAP-0111"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "not-applicable",
+      "defaultStatus": "not-applicable",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/sw/browser/presentation/writer-comment-editor.ts#WriterCommentEditor",
+        "apps/office/src/sw/browser/presentation/WriterCommentsSidebar.test.tsx"
+      ],
+      "justification": "Adapts a native textarea and its UTF-16 selection to the existing EditEngine, preserving edit snapshots and Writer history when a search replaces a comment match.",
+      "knownViolations": [],
+      "localSymbols": [
+        "WriterCommentEditor"
+      ],
+      "sourceResponsibility": "browser-owned",
+      "upstreamFile": null,
+      "upstreamSymbols": []
+    }
+  }
+}
