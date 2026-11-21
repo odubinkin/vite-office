@@ -48,6 +48,12 @@ export interface OdfCharacterProperties {
   readonly underlineStyle?: number;
   readonly underlineColor?: number;
   readonly underlineHasColor?: boolean;
+  readonly overlineStyle?: number;
+  readonly overlineColor?: number;
+  readonly overlineHasColor?: boolean;
+  readonly contoured?: boolean;
+  readonly shadowed?: boolean;
+  readonly relief?: number;
   /** Original shared line-decoration mode and automatic kerning bool properties. */
   readonly wordMode?: boolean;
   readonly autoKerning?: boolean;

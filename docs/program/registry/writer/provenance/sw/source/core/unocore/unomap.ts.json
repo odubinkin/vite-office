@@ -37,7 +37,8 @@
       "Publishes the original CharComplexColor property through MID_COMPLEX_COLOR on the shared native SvxColorItem.",
       "Maps the original CharInteropGrabBag sequence to RES_CHRATR_GRABBAG for text, style and default properties.",
       "Exposes the typed InteropGrabBag in the native document UNO property map.",
-      "Exposes both property types and member IDs in paragraph and default maps."
+      "Exposes both property types and member IDs in paragraph and default maps.",
+      "Writer exposes the native overline, contour, shadow and relief WhichIds and member types for text, paragraph and automatic styles."
     ],
     "omittedResponsibilities": [
       "Only the current canonical Writer core slice is represented. Full UNO service metadata/query interfaces, listeners, interactive undo/actions, Unicode cursor navigation, layout, unsupported character/table/conditional styles, ranges in unsupported sections, expanded bookmarks and wider properties remain unverified or unported. DomainMapper, OOXML package parser and export are outside this task; no whole-module parity claim."
@@ -111,6 +112,10 @@
         {
           "path": "apps/office/src/sw/source/core/unocore/unomap.ts",
           "marker": "ParaLineNumberStartValue"
+        },
+        {
+          "path": "apps/office/src/sw/source/filter/xml/odt-property-roundtrip.test.ts",
+          "marker": "round-trips native overline, glyph outline, shadow and relief"
         }
       ],
       "upstream": [
@@ -153,6 +158,10 @@
         {
           "path": "sw/source/core/unocore/unomapproperties.hxx",
           "marker": "MID_LINENUMBER_STARTVALUE"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/unocore/unomapproperties.hxx",
+          "marker": "UNO_NAME_CHAR_OVERLINE"
         }
       ]
     }

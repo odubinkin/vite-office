@@ -34,6 +34,10 @@ import {
   SvxWeightItem,
   SvxPostureItem,
   SvxUnderlineItem,
+  SvxOverlineItem,
+  SvxContourItem,
+  SvxShadowedItem,
+  SvxCharReliefItem,
 } from "../../../../editeng/source/items/textitem";
 import { ConvertFontWeight, ConvertFontSlant } from "../../../../vcl/inc/unohelp";
 import { getFontFamilyGeneric } from "../../../../xmloff/source/style/fonthdl";
@@ -57,6 +61,10 @@ import {
   RES_CHRATR_HIGHLIGHT,
   RES_CHRATR_POSTURE,
   RES_CHRATR_UNDERLINE,
+  RES_CHRATR_OVERLINE,
+  RES_CHRATR_CONTOUR,
+  RES_CHRATR_SHADOWED,
+  RES_CHRATR_RELIEF,
   RES_CHRATR_WEIGHT,
 } from "../../../inc/hintids";
 
@@ -82,6 +90,10 @@ export function getCharacterProperties(
     autoKerning = set.GetItemIfSet(RES_CHRATR_AUTOKERN, inherited);
   const kerning = set.GetItemIfSet(RES_CHRATR_KERNING, inherited);
   const directUnderline = set.GetItemIfSet(RES_CHRATR_UNDERLINE, false) !== undefined;
+  const overline = set.GetItemIfSet(RES_CHRATR_OVERLINE, inherited);
+  const contour = set.GetItemIfSet(RES_CHRATR_CONTOUR, inherited);
+  const shadow = set.GetItemIfSet(RES_CHRATR_SHADOWED, inherited);
+  const relief = set.GetItemIfSet(RES_CHRATR_RELIEF, inherited);
   const color = set.GetItemIfSet(RES_CHRATR_COLOR, inherited);
   const highlight = set.GetItemIfSet(RES_CHRATR_HIGHLIGHT, inherited);
   const background = set.GetItemIfSet(RES_CHRATR_BACKGROUND, inherited);
@@ -106,6 +118,10 @@ export function getCharacterProperties(
     !directWeight &&
     !directPosture &&
     !directUnderline &&
+    overline === undefined &&
+    contour === undefined &&
+    shadow === undefined &&
+    relief === undefined &&
     crossedOut === undefined &&
     escapement === undefined &&
     !directFontSize &&
@@ -248,6 +264,16 @@ export function getCharacterProperties(
           underlineHasColor: underline.GetColor().GetAlpha() === 255,
         }
       : {}),
+    ...(overline instanceof SvxOverlineItem
+      ? {
+          overlineStyle: overline.GetLineStyle(),
+          overlineColor: overline.GetColor().toUInt32() & 0xffffff,
+          overlineHasColor: overline.GetColor().GetAlpha() === 255,
+        }
+      : {}),
+    ...(contour instanceof SvxContourItem ? { contoured: contour.GetValue() } : {}),
+    ...(shadow instanceof SvxShadowedItem ? { shadowed: shadow.GetValue() } : {}),
+    ...(relief instanceof SvxCharReliefItem ? { relief: relief.GetEnumValue() } : {}),
   };
 }
 

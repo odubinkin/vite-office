@@ -155,14 +155,67 @@ it("transports all native independent script values without boolean normalizatio
   ).not.toContain("text-underline-color");
   expect(exportTextCharacterProperties({ underlineStyle: 19 })).toBe("");
   expect(importTextCharacterProperties(attributes([["fo:font-size", "12pt"]]))).toEqual({});
-  expect(textCharacterPropertyTokens).toHaveLength(32);
   expect(textCharacterPropertyTokens).toContain(XMLToken.FO_LETTER_SPACING);
-  expect(textCharacterPropertyTokens.slice(9, 13)).toEqual([
-    XMLToken.STYLE_TEXT_LINE_THROUGH_STYLE,
-    XMLToken.STYLE_TEXT_LINE_THROUGH_TYPE,
-    XMLToken.STYLE_TEXT_LINE_THROUGH_WIDTH,
-    XMLToken.STYLE_TEXT_LINE_THROUGH_TEXT,
-  ]);
+  expect(textCharacterPropertyTokens).toEqual(
+    expect.arrayContaining([
+      XMLToken.STYLE_TEXT_LINE_THROUGH_STYLE,
+      XMLToken.STYLE_TEXT_LINE_THROUGH_TYPE,
+      XMLToken.STYLE_TEXT_LINE_THROUGH_WIDTH,
+      XMLToken.STYLE_TEXT_LINE_THROUGH_TEXT,
+    ]),
+  );
+});
+
+it("uses separate overline and underline states and the native glyph effect spellings", /** Exercises the native decoration merge and character effect handlers. @returns Nothing. */ () => {
+  const props = importTextCharacterProperties(
+    attributes([
+      ["style:text-underline-style", "solid"],
+      ["style:text-overline-style", "wave"],
+      ["style:text-overline-type", "double"],
+      ["style:text-overline-color", "#cc0033"],
+      ["style:text-outline", "true"],
+      ["fo:text-shadow", "#00ff00 2pt 4pt"],
+      ["style:font-relief", "engraved"],
+    ]),
+  );
+  expect(props).toEqual({
+    underlineStyle: 1,
+    overlineStyle: 11,
+    overlineColor: 0xcc0033,
+    overlineHasColor: true,
+    contoured: true,
+    shadowed: true,
+    relief: 2,
+  });
+  const xml = exportTextCharacterProperties(props);
+  expect(xml).toContain('style:text-overline-type="double"');
+  expect(xml).toContain('style:text-overline-color="#cc0033"');
+  expect(xml).toContain('style:text-outline="true"');
+  expect(xml).toContain('fo:text-shadow="1pt 1pt"');
+  expect(xml).toContain('style:font-relief="engraved"');
+  expect(
+    importTextCharacterProperties(
+      attributes([
+        ["style:text-outline", "invalid"],
+        ["fo:text-shadow", "none"],
+        ["style:font-relief", "invalid"],
+        ["style:text-overline-color", "font-color"],
+      ]),
+    ),
+  ).toEqual({ shadowed: false, overlineHasColor: false });
+  expect(
+    exportTextCharacterProperties({
+      underlineStyle: 0,
+      underlineColor: 0xcc0033,
+      underlineHasColor: true,
+      overlineStyle: 0,
+      overlineColor: 0xcc0033,
+      overlineHasColor: true,
+      relief: 0,
+    }),
+  ).toBe(
+    ' style:font-relief="none" style:text-underline-style="none" style:text-overline-style="none" style:text-overline-color="#cc0033"',
+  );
 });
 
 it("merges native crossed-out type and width in actual SAX order without affecting underline", /** Preserves native DOUBLE precedence and text replacement. @returns Nothing. */ () => {

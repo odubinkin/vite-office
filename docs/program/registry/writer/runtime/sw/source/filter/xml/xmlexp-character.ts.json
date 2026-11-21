@@ -31,9 +31,11 @@
         "apps/office/src/sw/source/filter/xml/xmlexp-character.ts",
         "apps/office/src/sw/source/filter/ww8/docxexport.styles.test.ts",
         "vendor/libreoffice-reference/sw/source/filter/xml/xmlexp.cxx",
-        "apps/office/src/sw/source/filter/ww8/docxexport.theme.test.ts"
+        "apps/office/src/sw/source/filter/ww8/docxexport.theme.test.ts",
+        "apps/office/src/sw/source/filter/xml/odt-property-roundtrip.test.ts",
+        "vendor/libreoffice-reference/xmloff/source/text/txtprmap.cxx#PROP_CharShadowed"
       ],
-      "justification": "Native Writer text export forwards Western, Asian and complex language items through the shared ODF text style mapping. Existing character item projection remains with the XML export owner. Unrepresented ODF text properties and named character style persistence remain open. Projects the native color item to resolved ODF RGB and ordered character theme metadata.",
+      "justification": "Native Writer text export forwards Western, Asian and complex language items through the shared ODF text style mapping. Existing character item projection remains with the XML export owner. Unrepresented ODF text properties and named character style persistence remain open. Projects the native color item to resolved ODF RGB and ordered character theme metadata. Projects the existing EditEngine overline, contour, shadow and relief values on named and automatic character styles, preserving explicit off values.",
       "knownViolations": [],
       "localSymbols": [
         "getCharacterProperties",

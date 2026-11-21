@@ -1,4 +1,5 @@
 /** @fileoverview Verifies upstream-mapped Writer color and paragraph compatibility properties through ODT. */
+import { readFileSync } from "node:fs";
 import { SwFormatLineNumber } from "../../../inc/fmtline";
 import * as ParaItems from "../../../../editeng/source/items/paraitem.controls";
 import {
@@ -24,8 +25,20 @@ import { SfxBoolItem } from "../../../../svl/source/items/cenumitm";
 import { SfxInt16Item } from "../../../../svl/source/items/intitem";
 import { SvxBrushItem } from "../../../../editeng/source/items/frmitems.brush";
 import {
+  FontLineStyle,
+  SvxCharReliefItem,
+  SvxContourItem,
+  SvxOverlineItem,
+  SvxShadowedItem,
+} from "../../../../editeng/source/items/textitem";
+import { FontRelief } from "../../../../vcl/inc/fntstyle";
+import {
   RES_CHRATR_BACKGROUND,
   RES_CHRATR_COLOR,
+  RES_CHRATR_CONTOUR,
+  RES_CHRATR_OVERLINE,
+  RES_CHRATR_RELIEF,
+  RES_CHRATR_SHADOWED,
   RES_MARGIN_FIRSTLINE,
   RES_KEEP,
   RES_BREAK,
@@ -36,12 +49,17 @@ import {
   RES_LINENUMBER,
   RES_PARATR_TABSTOP,
 } from "../../../inc/hintids";
-import { createWriterDocument } from "../../core/doc/doc";
+import { createWriterDocument, type SwDoc } from "../../core/doc/doc";
 import { SwFormatPageDesc } from "../../core/attr/fmtpdsc";
 import { projectWriterTextRuns } from "../../core/txtnode/ndtxt";
 import { createWriterTextFragment } from "../basflt/writer-transfer";
 import { readOdtDocument } from "./swxml";
 import { writeOdtDocument } from "./wrtxml";
+import { projectXmlTextRuns } from "./xmlexp-character";
+import {
+  createOdtWriterTransfer,
+  restoreOdtWriterTransfer,
+} from "../../../browser/filter/xml/odt-transfer";
 
 const metadata = createDocument({ id: "odt-properties", suiteId: "writer", title: "Properties" });
 
@@ -64,6 +82,103 @@ async function rewriteEntry(
 }
 
 describe("Writer ODT mapped pooled properties", /** Groups symmetric property tests. @returns Nothing. */ () => {
+  it("round-trips native overline, glyph outline, shadow and relief in ODT styles and spans", /** Checks the native item graph, source-authored markup, Worker transfer and canonical ODF output. @returns Completion. */ async () => {
+    const source = createWriterDocument();
+    let loaded: SwDoc | undefined;
+    let transferred: SwDoc | undefined;
+    let reopened: SwDoc | undefined;
+    try {
+      const reference = readFileSync(
+        "../../vendor/libreoffice-reference/sw/qa/extras/odfexport/data/tdf167910.fodt",
+        "utf8",
+      );
+      const nativeDecoration =
+        /<style:text-properties [^>]*style:text-overline-style="solid"[^>]*\/>/u.exec(
+          reference,
+        )?.[0];
+      if (!nativeDecoration) throw new Error("Missing LibreOffice overline style.");
+      let input = await writeOdtDocument(source, metadata);
+      input = await rewriteEntry(
+        input,
+        "styles.xml",
+        /** Adds a native paragraph decoration and a named character style. @param xml - Styles stream. @returns Styles with authored effects. */
+        (xml) =>
+          xml.replace(
+            "</office:styles>",
+            '<style:style style:name="LineParagraph" style:family="paragraph">' +
+              nativeDecoration +
+              "</style:style>" +
+              '<style:style style:name="Effects" style:family="text"><style:text-properties ' +
+              'style:text-outline="true" fo:text-shadow="#000000 2pt 3pt" style:font-relief="embossed" ' +
+              'style:text-overline-style="solid" style:text-overline-type="double" style:text-overline-color="#cc0033"/>' +
+              "</style:style></office:styles>",
+          ),
+      );
+      input = await rewriteEntry(
+        input,
+        "content.xml",
+        /** Adds direct text formatting alongside named properties. @param xml - Content stream. @returns Authored automatic text style and runs. */
+        (xml) =>
+          xml
+            .replace(
+              "</office:automatic-styles>",
+              '<style:style style:name="EffectsDirect" style:family="text"><style:text-properties ' +
+                'style:text-outline="false" fo:text-shadow="none" style:font-relief="engraved" ' +
+                'style:text-overline-style="dotted" style:text-overline-width="bold" style:text-overline-color="font-color"/>' +
+                "</style:style></office:automatic-styles>",
+            )
+            .replace(
+              /<office:text>[\s\S]*<\/office:text>/u,
+              '<office:text><text:p text:style-name="LineParagraph">' +
+                '<text:span text:style-name="Effects">Named</text:span><text:span text:style-name="EffectsDirect">Direct</text:span>' +
+                "</text:p></office:text>",
+            ),
+      );
+      loaded = (await readOdtDocument(input, metadata)).document;
+      transferred = restoreOdtWriterTransfer(structuredClone(createOdtWriterTransfer(loaded)));
+      const bytes = await writeOdtDocument(transferred, metadata);
+      const archive = await DocumentArchive.open(bytes);
+      expect(await archive.readTextEntry("styles.xml")).toContain('fo:text-shadow="1pt 1pt"');
+      expect(await archive.readTextEntry("content.xml")).toContain(
+        'style:text-overline-width="bold"',
+      );
+      reopened = (await readOdtDocument(bytes, metadata)).document;
+      for (const document of [loaded, transferred, reopened]) {
+        const named = document.FindCharFormatByName("Effects")?.GetAttrSet();
+        const line = named?.Get(RES_CHRATR_OVERLINE) as SvxOverlineItem;
+        expect(line.GetLineStyle()).toBe(FontLineStyle.LINESTYLE_DOUBLE);
+        expect(line.GetColor().toUInt32()).toBe(0xcc0033);
+        expect((named?.Get(RES_CHRATR_CONTOUR) as SvxContourItem).GetValue()).toBe(true);
+        expect((named?.Get(RES_CHRATR_SHADOWED) as SvxShadowedItem).GetValue()).toBe(true);
+        expect((named?.Get(RES_CHRATR_RELIEF) as SvxCharReliefItem).GetEnumValue()).toBe(
+          FontRelief.Embossed,
+        );
+        const paragraph = document.paragraphs[0];
+        if (!paragraph) throw new Error("Missing Writer test paragraph.");
+        expect((paragraph.GetAttr(RES_CHRATR_OVERLINE) as SvxOverlineItem).GetLineStyle()).toBe(
+          FontLineStyle.LINESTYLE_SINGLE,
+        );
+        expect(projectXmlTextRuns(paragraph)).toContainEqual(
+          expect.objectContaining({
+            text: "Direct",
+            properties: expect.objectContaining({
+              overlineStyle: FontLineStyle.LINESTYLE_BOLDDOTTED,
+              overlineHasColor: false,
+              shadowed: false,
+              contoured: false,
+              relief: FontRelief.Engraved,
+            }),
+          }),
+        );
+      }
+    } finally {
+      reopened?.Dispose();
+      transferred?.Dispose();
+      loaded?.Dispose();
+      source.Dispose();
+    }
+  });
+
   it("imports and round-trips signed tab positions in paragraph and inherited style properties", /** Preserves negative ODF positions and their alignment/leader choices across package cycles. @returns Completion after reimport. */ async () => {
     const writer = createWriterDocument();
     const inherited = createTabs(RES_PARATR_TABSTOP, [

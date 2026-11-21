@@ -27,7 +27,8 @@
       "Native Writer metadata checkpoint removes the ordinary host-array property-info projection and createPropertySetInfo/-1 handles. Genuine SfxItemPropertySetInfo/WeakImplHelper, lazy property-set strong ownership, actual Reference<XPropertySetInfo>/Sequence<Property> suppliers and consumers, original static provider identities and six admitted map families are implemented. Explicit source types and literal source-derived family flags replace name heuristics. Original dispatch/member identities, RubyBelow/ParaIsConnectBorder names and BorderLine metadata are retained; cursor Para*Border aliases and family-inappropriate advertised rows are removed. Actual Writer/UNO/weak/RTF/ODF/Worker regressions accompany critical source-backed metadata tests. Other map families/TEXT_DEFAULT/SwXTextDefaults, full model/state-array/Stream/service ABI, DOCX-XLSX import/export and mounted UI remain incomplete; no broad parity/default/service promotion.",
       "The shared ODF text-property map binds native CharLocale, CharLocaleAsian and CharLocaleComplex to the four source locale attributes and writes a native Locale Any through the existing Writer import property dispatch.",
       "Sends the original typed CharComplexColor member through native UNO character style and text cursor properties.",
-      "Transfers the original signed UNO property into the Writer item-backed style or range."
+      "Transfers the original signed UNO property into the Writer item-backed style or range.",
+      "Native text effects retain independent underline and overline merge state, the overline color filter asymmetry, boolean character shadow, contour and the signed UNO FontRelief constants."
     ],
     "omittedResponsibilities": [
       "Full Calc font-family/style actions,rich-text UI,named cell-style inheritance and other formatting actions remain pending.",
@@ -72,6 +73,14 @@
         {
           "path": "apps/office/src/xmloff/source/text/txtprmap.ts",
           "marker": "ParaLineNumberStartValue"
+        },
+        {
+          "path": "apps/office/src/sw/source/filter/xml/odt-property-roundtrip.test.ts",
+          "marker": "round-trips native overline, glyph outline, shadow and relief"
+        },
+        {
+          "path": "apps/office/src/xmloff/source/text/txtprmap.test.ts",
+          "marker": "uses separate overline and underline states"
         }
       ],
       "upstream": [
@@ -90,6 +99,18 @@
         {
           "path": "xmloff/source/text/txtprmap.cxx",
           "marker": "PROP_ParaLineNumberStartValue"
+        },
+        {
+          "path": "vendor/libreoffice-reference/xmloff/source/text/txtprmap.cxx",
+          "marker": "PROP_CharOverline"
+        },
+        {
+          "path": "vendor/libreoffice-reference/xmloff/source/style/prhdlfac.cxx",
+          "marker": "XML_TYPE_TEXT_OVERLINE_STYLE"
+        },
+        {
+          "path": "vendor/libreoffice-reference/xmloff/source/text/txtprhdl.cxx",
+          "marker": "pXML_FontRelief_Enum"
         }
       ]
     }

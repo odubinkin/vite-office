@@ -5903,3 +5903,25 @@ and conversion.
 
 - [Original line-number field](../../vendor/libreoffice-reference/sw/inc/fmtline.hxx)
 - [Original UNO start-value setter](../../vendor/libreoffice-reference/sw/source/core/layout/atrfrm.cxx)
+
+### WRITER-731 — Character shadow loses its input color and offsets
+
+The ODF character property projects every value except the exact token
+`none` to the same boolean. On output an enabled shadow always becomes
+`1pt 1pt`. A colored shadow with other offsets therefore reopens with
+the enabled flag and exports with the fixed spelling. Writer preserves
+the native conversion.
+
+- [Original character shadow property map](../../vendor/libreoffice-reference/xmloff/source/text/txtprmap.cxx)
+- [Original shadow handler](../../vendor/libreoffice-reference/xmloff/source/style/shdwdhdl.cxx)
+
+### WRITER-732 — Inactive overlines can export explicit colors
+
+The text export mapper suppresses both underline color states when the
+underline style is absent or none. Overline uses the same color handlers
+but has no equivalent context filter. An explicit overline color can
+therefore survive export with an inactive overline. Writer preserves
+the separate behavior.
+
+- [Original line-decoration property map](../../vendor/libreoffice-reference/xmloff/source/text/txtprmap.cxx)
+- [Original underline-only export filter](../../vendor/libreoffice-reference/xmloff/source/text/txtexppr.cxx)

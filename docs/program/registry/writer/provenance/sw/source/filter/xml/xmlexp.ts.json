@@ -344,6 +344,10 @@
         {
           "path": "apps/office/src/sw/source/filter/xml/xmlexp.ts",
           "marker": "lineNumber.GetStartValue()"
+        },
+        {
+          "path": "apps/office/src/sw/source/filter/xml/odt-property-roundtrip.test.ts",
+          "marker": "round-trips native overline, glyph outline, shadow and relief"
         }
       ],
       "upstream": [
@@ -582,6 +586,10 @@
         {
           "path": "xmloff/source/text/txtprmap.cxx",
           "marker": "PROP_ParaLineNumberStartValue"
+        },
+        {
+          "path": "vendor/libreoffice-reference/xmloff/source/text/txtprmap.cxx",
+          "marker": "PROP_CharOverline"
         }
       ]
     },
@@ -654,7 +662,8 @@
       "Writes native ODF master-page header/footer text and section-owned auto styles in styles.xml.",
       "V4DQJW as-character graphic checkpoint. ODT export collects as-character flys as paragraph markers in the existing text and picture section traversal.",
       "Supplies the original named character style, numbering type and MM100 distance from Writer's line-numbering owner.",
-      "Exports both XML properties from a single paragraph line-number item."
+      "Exports both XML properties from a single paragraph line-number item.",
+      "ODT export admits the represented native overline, contour, shadow and relief items on text collections and direct paragraph formatting."
     ],
     "status": "mapped",
     "upstreamPath": "sw/source/filter/xml/xmlexp.cxx",

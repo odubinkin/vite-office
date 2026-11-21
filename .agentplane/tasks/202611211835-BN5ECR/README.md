@@ -4,7 +4,7 @@ title: "Round-trip Writer ODT character line and relief effects"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 5
+revision: 6
 origin:
   system: "manual"
 depends_on: []
@@ -37,7 +37,7 @@ events:
     to: "DOING"
     note: "Start: port Writer character overline, contour, shadow and relief effects through the native item and ODF property maps."
 doc_version: 3
-doc_updated_at: "2026-11-21T18:36:08.434Z"
+doc_updated_at: "2026-11-21T18:41:11.427Z"
 doc_updated_by: "CODER"
 description: "Port the native character overline style, type, width and color mappings and the native contour, shadow and relief effects. Reuse EditEngine items, the Writer property maps and the xmloff handlers for named and automatic styles. Verify direct formatting and ODT package round trips."
 sections:
@@ -53,7 +53,12 @@ sections:
     - Run `npm run check:dependencies`, `npm run check:source-provenance`, `node .agentplane/policy/check-routing.mjs`, `ap doctor` and `git diff --check`.
   Verification: "Pending."
   Rollback Plan: "Revert the scoped implementation commit."
-  Findings: "None recorded yet."
+  Findings: |-
+    None recorded yet.
+
+    - Observation: The dependency checker rejected using VCL font relief constants from xmloff.
+      Impact: The ODF handler needs the original UNO short constants from offapi.
+      Resolution: Port offapi/com/sun/star/text/FontRelief.idl as the existing TypeScript constant-group pattern. Keep VCL and UNO values in their native modules.
 id_source: "generated"
 ---
 ## Summary
@@ -87,3 +92,7 @@ Revert the scoped implementation commit.
 ## Findings
 
 None recorded yet.
+
+- Observation: The dependency checker rejected using VCL font relief constants from xmloff.
+  Impact: The ODF handler needs the original UNO short constants from offapi.
+  Resolution: Port offapi/com/sun/star/text/FontRelief.idl as the existing TypeScript constant-group pattern. Keep VCL and UNO values in their native modules.

@@ -1,0 +1,41 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/offapi/com/sun/star/text/FontRelief.ts",
+    "status": "mapped",
+    "upstreamPath": "offapi/com/sun/star/text/FontRelief.idl",
+    "localSymbols": [
+      "FontRelief"
+    ],
+    "upstreamSymbols": [
+      "FontRelief",
+      "ENGRAVED"
+    ],
+    "preservedResponsibilities": [
+      "Provides the original signed-short UNO constants for the ODF character relief mapping."
+    ],
+    "omittedResponsibilities": [
+      "EditEngine item conversion and ODF lexical mapping belong to the consuming modules."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/offapi/com/sun/star/text/FontRelief.ts",
+          "marker": "ENGRAVED"
+        },
+        {
+          "path": "apps/office/src/xmloff/source/text/txtprmap.test.ts",
+          "marker": "uses separate overline and underline states"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/offapi/com/sun/star/text/FontRelief.idl",
+          "marker": "const short ENGRAVED"
+        }
+      ]
+    }
+  }
+}
