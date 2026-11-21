@@ -1,10 +1,11 @@
 ---
 id: "202611210455-A6GMCY"
 title: "Align Calc ODS rich cell text and fields"
-status: "DOING"
+result_summary: "Verified native Calc ODS rich text fields, styles and formula result paragraphs against LibreOffice"
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 7
+revision: 9
 origin:
   system: "manual"
 depends_on: []
@@ -20,9 +21,9 @@ plan_approval:
   note: null
 verification:
   state: "ok"
-  updated_at: "2026-11-21T05:08:15.891Z"
+  updated_at: "2026-11-21T05:08:35.156Z"
   updated_by: "CODER"
-  note: "Verified native Calc ODS rich cell fields, formatting and multiline results across package and Worker boundaries."
+  note: "Both pinned hyperlink packages, 125 Calc and 46 shared cases, source provenance and Office typecheck passed."
   attempts: 0
 quality_review:
   state: "pass"
@@ -42,11 +43,16 @@ quality_review:
     - "docs/program/calc-upstream-suspected-issues.md"
   findings:
     - "Two pinned packages and independent source-shaped ODF cases verify hyperlink targets, escaped reference paths, edit fields, and formula paragraph boundaries. All 125 Calc and 46 shared cases passed."
-commit: null
+commit:
+  hash: "7b6007ea42e5d434fbb24d4d6620599d0df9fcbb"
+  message: "🧩 A6GMCY code: preserve native Calc ODS cell fields and text"
 comments:
   -
     author: "CODER"
     body: "Start: map supported Calc ODS text fields and boundaries to EditEngine and transfer."
+  -
+    author: "CODER"
+    body: "Verified: Verified native Calc ODS rich text fields, styles and formula result paragraphs against LibreOffice. Guided shortcut recorded verification and is closing the direct task with traceable commit metadata."
 events:
   -
     type: "status"
@@ -61,8 +67,21 @@ events:
     author: "CODER"
     state: "ok"
     note: "Verified native Calc ODS rich cell fields, formatting and multiline results across package and Worker boundaries."
+  -
+    type: "verify"
+    at: "2026-11-21T05:08:35.156Z"
+    author: "CODER"
+    state: "ok"
+    note: "Both pinned hyperlink packages, 125 Calc and 46 shared cases, source provenance and Office typecheck passed."
+  -
+    type: "status"
+    at: "2026-11-21T05:08:35.243Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: Verified native Calc ODS rich text fields, styles and formula result paragraphs against LibreOffice. Guided shortcut recorded verification and is closing the direct task with traceable commit metadata."
 doc_version: 3
-doc_updated_at: "2026-11-21T05:08:15.942Z"
+doc_updated_at: "2026-11-21T05:08:35.243Z"
 doc_updated_by: "CODER"
 description: "Use native edit features for ODS URL, sheet, date and document title fields, and preserve XML text boundaries and styles across package and Worker transfer. Port the pinned Calc hyperlink-frame and rich text checks."
 sections:
@@ -108,6 +127,36 @@ sections:
     - freshness: route=computed_local remote=remote_skipped
     - repeat_allowed: false
     - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+    - risks: none
+
+    ### 2026-11-21T05:08:35.156Z — VERIFY — ok
+
+    By: CODER
+
+    Note: Both pinned hyperlink packages, 125 Calc and 46 shared cases, source provenance and Office typecheck passed.
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-21T05:08:15.942Z, excerpt_hash=sha256:317e4bb64450326177f4d5de12fb461796422d159c366a37e34fe06f34fd56c4
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202611210455-A6GMCY/blueprint/resolved-snapshot.json
+    - old_digest: 7cddaf7aa3859bd2f8af49dd26aeb7a418f3b01efd76f405d7fbf4dd0003e178
+    - current_digest: 7cddaf7aa3859bd2f8af49dd26aeb7a418f3b01efd76f405d7fbf4dd0003e178
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202611210455-A6GMCY
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task complete 202611210455-A6GMCY --result verified-202611210455-A6GMCY --commit 3a3946204f58b17a867eb150887f51412bd4c91d
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
     - risks: none
 
     <!-- END VERIFICATION RESULTS -->
@@ -170,6 +219,36 @@ DecisionContextRef:
 - freshness: route=computed_local remote=remote_skipped
 - repeat_allowed: false
 - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- risks: none
+
+### 2026-11-21T05:08:35.156Z — VERIFY — ok
+
+By: CODER
+
+Note: Both pinned hyperlink packages, 125 Calc and 46 shared cases, source provenance and Office typecheck passed.
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-21T05:08:15.942Z, excerpt_hash=sha256:317e4bb64450326177f4d5de12fb461796422d159c366a37e34fe06f34fd56c4
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202611210455-A6GMCY/blueprint/resolved-snapshot.json
+- old_digest: 7cddaf7aa3859bd2f8af49dd26aeb7a418f3b01efd76f405d7fbf4dd0003e178
+- current_digest: 7cddaf7aa3859bd2f8af49dd26aeb7a418f3b01efd76f405d7fbf4dd0003e178
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202611210455-A6GMCY
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task complete 202611210455-A6GMCY --result verified-202611210455-A6GMCY --commit 3a3946204f58b17a867eb150887f51412bd4c91d
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
 - risks: none
 
 <!-- END VERIFICATION RESULTS -->
