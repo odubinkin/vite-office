@@ -1,0 +1,24 @@
+{
+  "schema_version": 1,
+  "task_id": "202611211833-1AZNPZ",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-11-21T18:53:55.240Z",
+  "verdict": "pass",
+  "summary": "The native Calc Calculate and Formula option controls reach the current document through the actual source command. Focused regression and static evidence support accepting the approved scope.",
+  "evaluated_sha": "253e837a94d401e6fc03358db0827c2b671850c9",
+  "blueprint_digest": "6153338cbc5647593dc961cce3ea18c501a10436ee5128ad1e69e85365ed5ac6",
+  "findings": [
+    "Compared the Calculate and Formula draft commits, grammar admission, automatic label selection and interpreter area expansion with the pinned source. The existing file-size findings do not include task paths."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202611211833-1AZNPZ/README.md",
+    "output/calc-1AZNPZ-verification.md",
+    "output/calc-1AZNPZ-final-tests.log"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": [
+    "Full iteration, precision-as-shown calculation rounding, the automatic name cache, and desktop-only preference surfaces remain outside the current core slice."
+  ]
+}
