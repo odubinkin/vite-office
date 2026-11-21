@@ -1,10 +1,11 @@
 ---
 id: "202611211736-V4SBB6"
 title: "Align Calc ODS named ranges and expressions with LibreOffice"
-status: "DOING"
+result_summary: "Aligned named range and expression grammar, base addresses, flags and XML export with LibreOffice."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 7
+revision: 8
 origin:
   system: "manual"
 depends_on: []
@@ -42,11 +43,16 @@ quality_review:
     - "output/playwright/V4SBB6/provenance.log"
   findings:
     - "Pinned hidden and global fixtures, Worker transfer and cross-sheet endpoints confirm name scope and serialization."
-commit: null
+commit:
+  hash: "694877f423755ec2e26538b0fbeeedbebdb3e0e2"
+  message: "🧩 V4SBB6 code: align Calc ODS named definitions"
 comments:
   -
     author: "CODER"
     body: "Start: port native named definitions across ODS parsing, formula compilation and export."
+  -
+    author: "CODER"
+    body: "Verified: native Calc named definitions through original ODS fixtures, scoped Calc suites, Worker transfer and package reopening."
 events:
   -
     type: "status"
@@ -61,8 +67,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Verified native Calc ODS named range and expression import, reference typing and export."
+  -
+    type: "status"
+    at: "2026-11-21T17:48:07.630Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: native Calc named definitions through original ODS fixtures, scoped Calc suites, Worker transfer and package reopening."
 doc_version: 3
-doc_updated_at: "2026-11-21T17:46:17.399Z"
+doc_updated_at: "2026-11-21T17:48:07.633Z"
 doc_updated_by: "CODER"
 description: "Port named range address conversion, per-definition formula grammar and base resolution, native reference classification and export of named ranges and expressions. Verify pinned hidden and global fixtures, qualified references, and Worker transfer."
 sections:
