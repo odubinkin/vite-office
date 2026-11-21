@@ -21,3 +21,24 @@ export function createSwParagraphLRSpaceItem(paragraph: SwTextNode): SvxLRSpaceI
   item.SetRight(right.GetRight(), right.GetPropRight());
   return item;
 }
+
+/** Primitive values accepted by the supported Writer paragraph dialog. */
+export interface WriterParagraphFormatValue {
+  readonly upperPt: number;
+  readonly lowerPt: number;
+  readonly contextual: boolean;
+  readonly lineMode: "proportional" | "fixed" | "minimum" | "leading";
+  readonly lineValue: number;
+  readonly tabStopsPt: readonly number[];
+  readonly keepWithNext: boolean;
+  readonly keepTogether?: boolean;
+  readonly orphans?: number;
+  readonly widows?: number;
+  readonly breakBefore?: "auto" | "page";
+  readonly breakAfter?: "auto" | "page";
+  readonly firstLineIndentPt?: number;
+  readonly autoTextIndent?: boolean;
+  readonly pageStyleName?: string;
+  readonly pageNumber?: number | "auto";
+  readonly countLineNumbers: boolean;
+}

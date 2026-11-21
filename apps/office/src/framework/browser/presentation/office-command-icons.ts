@@ -87,6 +87,7 @@ export const officeCommandIcons: ReadonlyMap<string, CommandIcon> = new Map<stri
   [".uno:Redo", Redo2],
   [".uno:HyperlinkDialog", Link],
   [".uno:InsertBookmark", Bookmark],
+  [".uno:InsertAnnotation", MessageSquare],
   [".uno:ExportDirectToPDF", FileDown],
   [".uno:PrintPreview", ScanSearch],
   [".uno:StyleUpdateByExample", RefreshCw],

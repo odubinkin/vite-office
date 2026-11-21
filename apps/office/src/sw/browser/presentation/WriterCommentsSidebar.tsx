@@ -3,7 +3,6 @@ import { useLayoutEffect, useRef } from "react";
 import type { SwFormatField } from "../../inc/fmtfld";
 import { RES_TXTATR_ANNOTATION } from "../../inc/hintids";
 import { SwPosition } from "../../source/core/crsr/pam";
-import type { SwDoc } from "../../source/core/doc/doc";
 import type { SwView } from "../../source/uibase/uiview/view";
 import { useBrowserLocalization } from "../../../framework/browser/localization/browser-localization-context";
 import { WriterCommentEditor } from "./writer-comment-editor";
@@ -12,8 +11,10 @@ import { WriterCommentEditor } from "./writer-comment-editor";
 function WriterCommentCard({
   format,
   view,
+  focusDocument,
 }: {
   readonly format: SwFormatField;
+  readonly focusDocument: () => void;
   readonly view: SwView;
 }) {
   const input = useRef<HTMLTextAreaElement>(null);
@@ -72,6 +73,34 @@ function WriterCommentCard({
             }
           }
         }
+        onKeyDown={
+          /** Returns to the body after the last adjacent annotation point. @param event - Sidebar key. @returns Nothing. */ (
+            event,
+          ) => {
+            if (
+              event.nativeEvent.isComposing ||
+              (event.key !== "Escape" &&
+                !((event.ctrlKey || event.metaKey) && ["PageUp", "PageDown"].includes(event.key)))
+            )
+              return;
+            const hint = format.GetTextField();
+            const node = hint?.GetTextNode();
+            if (!hint || !node) return;
+            event.preventDefault();
+            event.stopPropagation();
+            const hints = node.GetpSwpHints();
+            let offset = hint.GetStart() + 1;
+            while (hints?.GetTextAttrForCharAt(offset, RES_TXTATR_ANNOTATION)) offset++;
+            const position = new SwPosition(node, offset);
+            try {
+              view.GetPostItMgr().ClearActiveField();
+              view.GetWrtShell().SetCursor(position);
+              focusDocument();
+            } finally {
+              position.Dispose();
+            }
+          }
+        }
         onBlur={
           /** Captures the final caret when focus moves to the modeless search dialog. @returns Nothing. */ () =>
             editor.current?.ReadSelection()
@@ -89,31 +118,28 @@ function WriterCommentCard({
   );
 }
 
-/** Renders sidebar notes in their model-anchor order when the document contains annotations. @param document - Current Writer model. @param view - The model's active view. @returns Sidebar or undefined. */
-export function RenderWriterComments(document: SwDoc, view: SwView): React.JSX.Element | undefined {
-  const comments: SwFormatField[] = [];
-  for (const node of document.GetNodes().entries()) {
-    const hints = node.GetTextNode()?.GetpSwpHints();
-    if (!hints) continue;
-    for (
-      let index = hints.GetFirstPosSortedByWhichAndStart(RES_TXTATR_ANNOTATION);
-      index < hints.Count();
-      index++
-    ) {
-      const hint = hints.GetSortedByWhichAndStart(index);
-      if (hint.Which() !== RES_TXTATR_ANNOTATION) break;
-      const format = hints.GetTextAttrForCharAt(hint.GetStart(), RES_TXTATR_ANNOTATION)?.GetAttr();
-      if (format) comments.push(format);
-    }
-  }
-  if (comments.length === 0) return undefined;
+/** Renders the mounted comments in model order. @param props - Workbench-owned sidebar inputs. @returns Sidebar. */
+export function WriterCommentsSidebar({
+  comments,
+  view,
+  focusDocument,
+}: {
+  readonly comments: readonly SwFormatField[];
+  readonly view: SwView;
+  readonly focusDocument: () => void;
+}): React.JSX.Element {
   return (
     <aside aria-label="Comments" className="sticky top-0 w-64 shrink-0 space-y-2 px-2">
       {comments.map(
         /** Mounts the annotation editor for the original anchored field. @param format - Actual field format. @returns Note. */ (
           format,
         ) => (
-          <WriterCommentCard key={format.GetField().GetData().id} format={format} view={view} />
+          <WriterCommentCard
+            key={format.GetField().GetPostItId()}
+            format={format}
+            view={view}
+            focusDocument={focusDocument}
+          />
         ),
       )}
     </aside>

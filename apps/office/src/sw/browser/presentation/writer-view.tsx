@@ -47,7 +47,8 @@ import {
   type SearchSurfaces,
   type WriterSearchHistory,
 } from "./WriterSearch";
-import { RenderWriterComments } from "./WriterCommentsSidebar";
+import { WriterCommentsSidebar } from "./WriterCommentsSidebar";
+import { SwPostItFieldType } from "../../source/core/fields/docufld";
 import { WriterWorkspaceChrome } from "./WriterWorkspaceChrome";
 import { CommandMenuBar } from "../../../framework/browser/presentation/CommandMenuBar";
 import { useWriterContextMenu } from "./WriterContextMenu";
@@ -142,6 +143,7 @@ export function WriterWorkbench({
     searchOwner.GetFeedback,
   );
   const activeDocument = view.GetDocShell().GetDoc();
+  const comments = [...SwPostItFieldType.Get(activeDocument).GatherFields()];
   const occupiedTableNames = activeDocument.GetTables().map(
     /** Reads native table names for insertion. @param table - Existing table. @returns Name. */
     (table) => table.GetName(),
@@ -180,6 +182,10 @@ export function WriterWorkbench({
     },
     [searchDialog, searchOwner, view],
   );
+  /** Focuses the active Writer text client. @returns Nothing. */
+  function focusDocument(): void {
+    editingHostRef.current?.focus();
+  }
   /** Closes one search surface and restores Writer focus. @param dialog - Whether the dialog closes. @returns Nothing. */
   function closeSearch(dialog: boolean): void {
     setSearchSurfaces(
@@ -187,7 +193,7 @@ export function WriterWorkbench({
         previous,
       ) => ({ ...previous, [dialog ? "searchDialog" : "findbar"]: undefined }),
     );
-    if (!view.GetPostItMgr().GrabFocusOnActiveSidebarWin()) editingHostRef.current?.focus();
+    if (!view.GetPostItMgr().GrabFocusOnActiveSidebarWin()) focusDocument();
   }
   const [optionsDialog, setOptionsDialog] = useState(false);
   const [tableDialog, setTableDialog] = useState<"insert" | "properties">();
@@ -602,7 +608,11 @@ export function WriterWorkbench({
     <div hidden={!isActive}>
       {searchDialog && renderSearch(true, searchDialog)}
       <WriterWorkspaceChrome
-        commentsSidebar={RenderWriterComments(activeDocument, view)}
+        commentsSidebar={
+          comments.length > 0 && (
+            <WriterCommentsSidebar comments={comments} view={view} focusDocument={focusDocument} />
+          )
+        }
         documentTitle={snapshot.documentState.title}
         findToolbar={findbar && renderSearch(false, findbar)}
         numberingToolbar={
@@ -626,10 +636,7 @@ export function WriterWorkbench({
             objectShell={view.GetDocShell()}
             unit={snapshot.metricUnit}
             isInputEnabled={isInputEnabled}
-            focusDocument={
-              /** Releases accepted style-box focus to this mounted Writer frame. @returns Nothing. */ () =>
-                (editingHostRef.current as HTMLElement).focus()
-            }
+            focusDocument={focusDocument}
             embeddedFontFamilies={activeDocument
               .GetEmbeddedFonts()
               .map(
@@ -676,10 +683,7 @@ export function WriterWorkbench({
           />
         }
         isPropertiesSidebarVisible={snapshot.isPropertiesSidebarVisible}
-        focusDocument={
-          /** Returns sidebar focus to this Writer frame's mounted client. @returns Nothing. */ () =>
-            (editingHostRef.current as HTMLElement).focus()
-        }
+        focusDocument={focusDocument}
         isVerticalRulerVisible={snapshot.isVerticalRulerVisible}
         isStatusBarVisible={snapshot.isStatusBarVisible}
         menuBar={
@@ -688,10 +692,7 @@ export function WriterWorkbench({
             commandSource={commandSource}
             getCommandResource={getLocalizedCommandResource}
             getMenuLabel={getLocalizedMenuLabel}
-            focusDocument={
-              /** Focuses this Writer frame's mounted client. @returns Nothing. */ () =>
-                (editingHostRef.current as HTMLElement).focus()
-            }
+            focusDocument={focusDocument}
             idPrefix="writer"
             isInputEnabled={isInputEnabled}
             menus={writerMenuPlacements}
@@ -714,10 +715,7 @@ export function WriterWorkbench({
               fontAvailability?.document === activeDocument ? fontAvailability.values : {}
             }
             commandSource={commandSource}
-            focusDocument={
-              /** Returns panel header focus to this Writer frame's mounted client. @returns Nothing. */ () =>
-                (editingHostRef.current as HTMLElement).focus()
-            }
+            focusDocument={focusDocument}
             resolveArguments={resolveCommandArguments}
           />
         }
@@ -914,10 +912,7 @@ export function WriterWorkbench({
         />
       ) : null}
       <WriterDialogPresenter
-        focusDocument={
-          /** Returns closed hyperlink/bookmark dialog focus to its actual mounted document client. @returns Nothing. */ () =>
-            (editingHostRef.current as HTMLElement).focus()
-        }
+        focusDocument={focusDocument}
         bookmarkNames={view.GetWrtShell().GetTextShell().GetBookmarkNames()}
         onBookmarkOperation={
           /** Applies immediate native bookmark operations without completing the open request. @param result - Actual operation. @returns Nothing. */ (

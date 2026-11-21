@@ -23,6 +23,7 @@
     "growFont": ".uno:Grow",
     "shrinkFont": ".uno:Shrink",
     "hyperlinkDialog": ".uno:HyperlinkDialog",
+    "insertAnnotation": ".uno:InsertAnnotation",
     "insertBookmark": ".uno:InsertBookmark",
     "insertBreak": ".uno:InsertBreak",
     "insertPageBreak": ".uno:InsertPagebreak",
@@ -121,6 +122,7 @@
     { "capabilityId": "CAP-0125", "commandUrl": ".uno:LineNumberingDialog" },
     { "capabilityId": "CAP-0107", "commandUrl": ".uno:IncrementIndent" },
     { "capabilityId": "CAP-0135", "commandUrl": ".uno:HyperlinkDialog" },
+    { "capabilityId": "CAP-0111", "commandUrl": ".uno:InsertAnnotation" },
     { "capabilityId": "CAP-0113", "commandUrl": ".uno:InsertBookmark" },
     { "capabilityId": "CAP-0112", "commandUrl": ".uno:InsertBreak" },
     { "capabilityId": "CAP-0112", "commandUrl": ".uno:InsertPagebreak" },
@@ -535,6 +537,24 @@
       "showsDialog": true,
       "shortcuts": ["Ctrl+K", "Meta+K"],
       "slotId": 5678
+    },
+    ".uno:InsertAnnotation": {
+      "browserOwned": false,
+      "argumentSchema": [],
+      "capabilityId": "CAP-0111",
+      "controlLabel": "Comment",
+      "label": "Comment",
+      "popupLabel": "Insert Comment",
+      "placements": [
+        "sw/uiconfig/swriter/menubar/menubar.xml",
+        "sw/uiconfig/swriter/toolbar/standardbar.xml",
+        "sw/uiconfig/swriter/popupmenu/text.xml",
+        "sw/uiconfig/swriter/popupmenu/table.xml"
+      ],
+      "semantics": "action",
+      "showsDialog": false,
+      "shortcuts": ["Ctrl+Alt+C", "Meta+Alt+C"],
+      "slotId": 20329
     },
     ".uno:InsertBookmark": {
       "browserOwned": false,
@@ -1740,6 +1760,16 @@
       "sources": [
         "sw/uiconfig/swriter/menubar/menubar.xml",
         "sw/uiconfig/swriter/toolbar/standardbar.xml"
+      ]
+    },
+    {
+      "classification": "supported-upstream",
+      "commandUrl": ".uno:InsertAnnotation",
+      "sources": [
+        "sw/uiconfig/swriter/menubar/menubar.xml",
+        "sw/uiconfig/swriter/toolbar/standardbar.xml",
+        "sw/uiconfig/swriter/popupmenu/text.xml",
+        "sw/uiconfig/swriter/popupmenu/table.xml"
       ]
     },
     {
@@ -3587,14 +3617,6 @@
       "context": [".uno:InsertMenu"],
       "entryKind": "command",
       "sourceUrl": ".uno:DrawText",
-      "reason": "outside-p1-supported-command-slice",
-      "sourcePath": "sw/uiconfig/swriter/menubar/menubar.xml"
-    },
-    {
-      "classification": "X",
-      "context": [".uno:InsertMenu"],
-      "entryKind": "command",
-      "sourceUrl": ".uno:InsertAnnotation",
       "reason": "outside-p1-supported-command-slice",
       "sourcePath": "sw/uiconfig/swriter/menubar/menubar.xml"
     },
@@ -6274,14 +6296,6 @@
       "classification": "X",
       "context": [],
       "entryKind": "command",
-      "sourceUrl": ".uno:InsertAnnotation",
-      "reason": "outside-p1-supported-command-slice",
-      "sourcePath": "sw/uiconfig/swriter/toolbar/standardbar.xml"
-    },
-    {
-      "classification": "X",
-      "context": [],
-      "entryKind": "command",
       "sourceUrl": ".uno:ShowTrackedChanges",
       "reason": "outside-p1-supported-command-slice",
       "sourcePath": "sw/uiconfig/swriter/toolbar/standardbar.xml"
@@ -6890,14 +6904,6 @@
       "classification": "X",
       "context": [],
       "entryKind": "command",
-      "sourceUrl": ".uno:InsertAnnotation",
-      "reason": "outside-p1-supported-command-slice",
-      "sourcePath": "sw/uiconfig/swriter/popupmenu/text.xml"
-    },
-    {
-      "classification": "X",
-      "context": [],
-      "entryKind": "command",
       "sourceUrl": ".uno:AcceptTrackedChange",
       "reason": "outside-p1-supported-command-slice",
       "sourcePath": "sw/uiconfig/swriter/popupmenu/text.xml"
@@ -7434,14 +7440,6 @@
       "classification": "X",
       "context": [],
       "entryKind": "command",
-      "sourceUrl": ".uno:InsertAnnotation",
-      "reason": "outside-p1-supported-command-slice",
-      "sourcePath": "sw/uiconfig/swriter/popupmenu/table.xml"
-    },
-    {
-      "classification": "X",
-      "context": [],
-      "entryKind": "command",
       "sourceUrl": ".uno:UpdateSelectedField",
       "reason": "outside-p1-supported-command-slice",
       "sourcePath": "sw/uiconfig/swriter/popupmenu/table.xml"
@@ -7849,6 +7847,8 @@
             "label": "More Breaks"
           },
           { "kind": "separator" },
+          { "commandUrl": ".uno:InsertAnnotation", "kind": "command", "visible": true },
+          { "kind": "separator" },
           { "commandUrl": ".uno:HyperlinkDialog", "kind": "command", "visible": true },
           { "commandUrl": ".uno:InsertBookmark", "kind": "command", "visible": true }
         ],
@@ -8019,6 +8019,8 @@
         "label": "List"
       },
       { "kind": "separator" },
+      { "commandUrl": ".uno:InsertAnnotation", "kind": "command", "visible": true },
+      { "kind": "separator" },
       { "commandUrl": ".uno:EditHyperlink", "kind": "command", "visible": true },
       { "commandUrl": ".uno:RemoveHyperlink", "kind": "command", "visible": true },
       { "kind": "separator" },
@@ -8086,6 +8088,8 @@
         "label": "List"
       },
       { "kind": "separator" },
+      { "commandUrl": ".uno:InsertAnnotation", "kind": "command", "visible": true },
+      { "kind": "separator" },
       { "commandUrl": ".uno:EditHyperlink", "kind": "command", "visible": true },
       { "commandUrl": ".uno:RemoveHyperlink", "kind": "command", "visible": true },
       { "kind": "separator" },
@@ -8115,7 +8119,9 @@
       { "commandUrl": ".uno:InsertPagebreak", "kind": "command", "visible": true },
       { "kind": "separator" },
       { "commandUrl": ".uno:HyperlinkDialog", "kind": "command", "visible": true },
-      { "commandUrl": ".uno:InsertBookmark", "kind": "command", "visible": true }
+      { "commandUrl": ".uno:InsertBookmark", "kind": "command", "visible": true },
+      { "kind": "separator" },
+      { "commandUrl": ".uno:InsertAnnotation", "kind": "command", "visible": true }
     ],
     "textobjectbar": [
       { "commandUrl": ".uno:StyleApply", "kind": "command", "visible": true },
@@ -9194,12 +9200,6 @@
         "context": [".uno:InsertMenu"],
         "entryKind": "command",
         "sourceUrl": ".uno:DrawText"
-      },
-      {
-        "classification": "X",
-        "context": [".uno:InsertMenu"],
-        "entryKind": "command",
-        "sourceUrl": ".uno:InsertAnnotation"
       },
       {
         "classification": "X",
@@ -11181,12 +11181,6 @@
         "classification": "X",
         "context": [],
         "entryKind": "command",
-        "sourceUrl": ".uno:InsertAnnotation"
-      },
-      {
-        "classification": "X",
-        "context": [],
-        "entryKind": "command",
         "sourceUrl": ".uno:ShowTrackedChanges"
       },
       {
@@ -11624,12 +11618,6 @@
         "classification": "X",
         "context": [],
         "entryKind": "command",
-        "sourceUrl": ".uno:InsertAnnotation"
-      },
-      {
-        "classification": "X",
-        "context": [],
-        "entryKind": "command",
         "sourceUrl": ".uno:AcceptTrackedChange"
       },
       {
@@ -12024,12 +12012,6 @@
         "context": [],
         "entryKind": "command",
         "sourceUrl": ".uno:InsertFormula"
-      },
-      {
-        "classification": "X",
-        "context": [],
-        "entryKind": "command",
-        "sourceUrl": ".uno:InsertAnnotation"
       },
       {
         "classification": "X",

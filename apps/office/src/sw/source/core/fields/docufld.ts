@@ -1,4 +1,7 @@
 /** @fileoverview Native document annotation field values retained by Writer text hints. */
+import type { SwFormatField } from "../../../inc/fmtfld";
+import { RES_TXTATR_ANNOTATION } from "../../../inc/hintids";
+import { SwTextField } from "../../../inc/txtfld";
 import type { SwDoc } from "../doc/doc";
 import type { EditTextObject } from "../../../../editeng/source/editeng/editobj";
 import { DateTime } from "../../../../tools/source/datetime/datetime";
@@ -21,6 +24,32 @@ export class SwPostItFieldType {
 
   /** Associates the annotation type with one Writer document. @param document - Owning document. @returns Field type. */
   private constructor(private readonly document: SwDoc) {}
+
+  /** Enumerates live format owners in model order. @returns Annotation formats. */
+  *GatherFields(): IterableIterator<SwFormatField> {
+    for (const node of this.document.GetNodes().entries()) {
+      const hints = node.GetTextNode()?.GetpSwpHints();
+      if (!hints) continue;
+      for (
+        let index = hints.GetFirstPosSortedByWhichAndStart(RES_TXTATR_ANNOTATION);
+        index < hints.Count();
+        index++
+      ) {
+        const hint = hints.GetSortedByWhichAndStart(index);
+        if (!(hint instanceof SwTextField)) break;
+        yield hint.GetAttr();
+      }
+    }
+  }
+
+  /** Resolves an annotation restored by document history. @param id - Retained field identifier. @returns Live annotation value. */
+  FindField(id: number): SwPostItField | undefined {
+    for (const format of this.GatherFields()) {
+      const field = format.GetField();
+      if (field.GetPostItId() === id) return field;
+    }
+    return undefined;
+  }
 
   /** Returns the document associated with the field type. @returns Owning document. */
   GetDoc(): SwDoc {
@@ -73,6 +102,11 @@ export class SwPostItField {
   /** Reads the original owner type. @returns Document field type. */
   GetTyp(): SwPostItFieldType {
     return this.type;
+  }
+
+  /** Returns the native field identity retained through undo and redo. @returns Annotation ID. */
+  GetPostItId(): number {
+    return this.data.id ?? 0;
   }
 
   /** Reads the annotation name used to join its point and range. @returns Annotation name. */

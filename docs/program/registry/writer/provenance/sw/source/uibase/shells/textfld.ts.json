@@ -1,0 +1,44 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "status": "mapped",
+    "localPath": "apps/office/src/sw/source/uibase/shells/textfld.ts",
+    "upstreamPath": "sw/source/uibase/shells/textfld.cxx",
+    "localSymbols": [
+      "createWriterAnnotationCommand"
+    ],
+    "upstreamSymbols": [
+      "SwTextShell::ExecField"
+    ],
+    "preservedResponsibilities": [
+      "Routes the original Insert Annotation slot through Writer selection, field insertion, undo, and sidebar focus."
+    ],
+    "omittedResponsibilities": [
+      "Typed remote requests with HTML and comment-thread management are outside this insertion path."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sw/source/uibase/shells/textfld.ts",
+          "marker": "createWriterAnnotationCommand"
+        },
+        {
+          "path": "apps/office/src/sw/browser/presentation/WriterCommentsSidebar.test.tsx",
+          "marker": "inserts and refocuses the native comment"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sw/source/uibase/shells/textfld.cxx",
+          "marker": "SwTextShell::ExecField"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/qa/uitest/writer_tests/comments.py",
+          "marker": "def test_comments_features"
+        }
+      ]
+    }
+  }
+}

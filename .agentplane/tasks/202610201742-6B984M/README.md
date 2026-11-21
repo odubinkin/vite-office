@@ -4,7 +4,7 @@ title: "Implement Writer search and replace core and browser UI"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 85
+revision: 86
 origin:
   system: "manual"
 depends_on:
@@ -250,6 +250,9 @@ comments:
   -
     author: "CODER"
     body: "Verified continuation: recorded the user-approved annotation scope and browser RegExp in the task plan. The next full regression is due after ten completed tasks and does not stop the goal. Graphify identified the UNO, xmloff and graph transport owners. The pinned tdf147583_backwardSearch ODT now loads its annotated range, metadata and plain note paragraphs, survives structured clone and ODT save/reopen, and is searchable in a mounted Writer session opened through SwDocShell.Load. Passed 25 targeted tests, production build, two Writer resources, module boundaries, source tree and provenance, scoped ESLint and formatting, diff, doctor and routing. Repository-wide JSDoc and size gates still report 307 and five findings respectively on unchanged paths, zero on changed paths. New-comment command and richer comment formatting remain pending. No task closure or full-suite increment."
+  -
+    author: "CODER"
+    body: "Verified checkpoint: native FN_POSTIT is connected through Writer menu, standard toolbar and keyboard resources. Point and ranged insertion use the same content operation as UNO annotation attachment, preserve the selected body text, use the pinned Unknown Author fallback and focus the active window. Escape returns after consecutive annotation points. Document history rebinds later note text edits by the retained field ID after undo and redo recreate the comment. Adapted the supported insertion, default author and leave behavior of sw/qa/uitest/writer_tests/comments.py. Passed 44 focused Vitest cases in nine suites, then repeated all six browser comment unit cases after the final query typing adjustment. Two Chrome search scenarios and two resource checks passed, with production build, dependencies, source tree, provenance, scoped lint and formatting, diff, doctor and routing. The existing whole-repository JSDoc and physical file-size findings are outside the changed paths. Rich comment formatting is pending. No AgentPlane closure or full-suite cadence increment."
 events:
   -
     type: "status"
@@ -608,8 +611,13 @@ events:
     at: "2026-11-21T17:02:14.633Z"
     author: "CODER"
     body: "Verified continuation: recorded the user-approved annotation scope and browser RegExp in the task plan. The next full regression is due after ten completed tasks and does not stop the goal. Graphify identified the UNO, xmloff and graph transport owners. The pinned tdf147583_backwardSearch ODT now loads its annotated range, metadata and plain note paragraphs, survives structured clone and ODT save/reopen, and is searchable in a mounted Writer session opened through SwDocShell.Load. Passed 25 targeted tests, production build, two Writer resources, module boundaries, source tree and provenance, scoped ESLint and formatting, diff, doctor and routing. Repository-wide JSDoc and size gates still report 307 and five findings respectively on unchanged paths, zero on changed paths. New-comment command and richer comment formatting remain pending. No task closure or full-suite increment."
+  -
+    type: "comment"
+    at: "2026-11-21T17:15:30.480Z"
+    author: "CODER"
+    body: "Verified checkpoint: native FN_POSTIT is connected through Writer menu, standard toolbar and keyboard resources. Point and ranged insertion use the same content operation as UNO annotation attachment, preserve the selected body text, use the pinned Unknown Author fallback and focus the active window. Escape returns after consecutive annotation points. Document history rebinds later note text edits by the retained field ID after undo and redo recreate the comment. Adapted the supported insertion, default author and leave behavior of sw/qa/uitest/writer_tests/comments.py. Passed 44 focused Vitest cases in nine suites, then repeated all six browser comment unit cases after the final query typing adjustment. Two Chrome search scenarios and two resource checks passed, with production build, dependencies, source tree, provenance, scoped lint and formatting, diff, doctor and routing. The existing whole-repository JSDoc and physical file-size findings are outside the changed paths. Rich comment formatting is pending. No AgentPlane closure or full-suite cadence increment."
 doc_version: 3
-doc_updated_at: "2026-11-21T17:02:14.633Z"
+doc_updated_at: "2026-11-21T17:15:30.480Z"
 doc_updated_by: "CODER"
 description: "Implement the approved coherent Writer search-and-replace feature from pinned LibreOffice sources: real shared search engine and options, native paragraph/cursor traversal and replacement/history contracts, view-owned search state and dispatch, Find toolbar and Find and Replace dialog with generated upstream command placement and shortcuts. Preserve source semantics and explicit unsupported boundaries; never substitute DOM text search or browser RegExp for ICU contracts. Work only on writer in vite-office-writer; local upstream reading approved, no network or merges. Keep active until approved scope is verified."
 sections:

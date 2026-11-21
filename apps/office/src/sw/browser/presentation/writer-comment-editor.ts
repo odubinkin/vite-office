@@ -8,7 +8,7 @@ import type { EditTextObject } from "../../../editeng/source/editeng/editobj";
 import type { OUStringConstReference } from "../../../sal/inc/rtl/ustring";
 import { text, unicode } from "../../../i18nlangtag/source/isolang/isolang.tables";
 import { Rectangle } from "../../../tools/inc/gen";
-import type { SwPostItField } from "../../source/core/fields/docufld";
+import type { SwPostItField, SwPostItFieldType } from "../../source/core/fields/docufld";
 import { SwUndo } from "../../source/core/undo/undobj";
 
 /** Actual comment editor document with paragraph-aware selection deletion. */
@@ -42,22 +42,32 @@ class AnnotationEditDocument extends DocumentImpEditEngine {
 
 /** Writer model undo for the value committed by its comment editor. */
 class AnnotationTextUndo extends SwUndo {
+  private readonly type: SwPostItFieldType;
+  private readonly id: number;
+
   /** Owns before and after native text snapshots. @param field - Model comment. @param beforeText - Previous note text. @param beforeObject - Previous rich text. @param afterText - Updated note text. @param afterObject - Updated rich text. @returns Undo record. */
   constructor(
-    private readonly field: SwPostItField,
+    field: SwPostItField,
     private readonly beforeText: string,
     private readonly beforeObject: EditTextObject | undefined,
     private readonly afterText: string,
     private readonly afterObject: EditTextObject,
   ) {
     super("Edit Comment");
+    this.type = field.GetTyp();
+    this.id = field.GetPostItId();
   }
 
-  /** Publishes a saved note value through the document state owner. @param value - Plain text. @param object - Rich text snapshot. @returns Nothing. */
-  Apply(value: string, object: EditTextObject | undefined): void {
-    this.field.SetPar2(value);
-    this.field.SetTextObject(object);
-    this.field.GetTyp().GetDoc().NotifyModelChange({ kind: "document-modified", modified: true });
+  /** Publishes a saved note value through the document state owner. @param value - Plain text. @param object - Rich text snapshot. @param field - Mounted field for the initial edit, resolved from history on replay. @returns Nothing. */
+  Apply(
+    value: string,
+    object: EditTextObject | undefined,
+    field = this.type.FindField(this.id),
+  ): void {
+    if (!field) throw new Error("Writer comment history has no attached field.");
+    field.SetPar2(value);
+    field.SetTextObject(object);
+    this.type.GetDoc().NotifyModelChange({ kind: "document-modified", modified: true });
   }
 
   /** Restores the previous note value. @returns Nothing. */
@@ -251,7 +261,7 @@ export class WriterCommentEditor extends EditEngine {
     const action = new AnnotationTextUndo(this.field, before, beforeObject, after, afterObject);
     const undo = this.field.GetTyp().GetDoc().GetUndoManager();
     this.storedText = after;
-    action.Apply(after, afterObject);
+    action.Apply(after, afterObject, this.field);
     if (undo.DoesUndo()) undo.AddUndoAction(action);
     else action.Dispose();
   }

@@ -16,13 +16,13 @@
       "defaultStatus": "not-applicable",
       "divergenceClass": "B",
       "evidence": [
-        "apps/office/src/sw/browser/presentation/WriterCommentsSidebar.tsx#RenderWriterComments",
+        "apps/office/src/sw/browser/presentation/WriterCommentsSidebar.tsx#WriterCommentsSidebar",
         "apps/office/src/sw/browser/presentation/WriterCommentsSidebar.test.tsx"
       ],
       "justification": "Projects live annotation fields in the document margin and registers each mounted comment editor by native field identity.",
       "knownViolations": [],
       "localSymbols": [
-        "RenderWriterComments"
+        "WriterCommentsSidebar"
       ],
       "sourceResponsibility": "browser-owned",
       "upstreamFile": null,

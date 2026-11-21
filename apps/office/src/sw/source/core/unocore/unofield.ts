@@ -6,8 +6,7 @@ import {
 } from "../../../../offapi/com/sun/star/util/DateTime";
 import type { OUStringConstReference } from "../../../../sal/inc/rtl/ustring";
 import { DateTime } from "../../../../tools/source/datetime/datetime";
-import { SwFormatField } from "../../../inc/fmtfld";
-import { SwTextField } from "../../../inc/txtfld";
+import type { SwTextField } from "../../../inc/txtfld";
 import { SwPaM, SwPosition } from "../crsr/pam";
 import { SwPostItField, SwPostItFieldType, type SwPostItFieldData } from "../fields/docufld";
 import { SwXTextRange, type SwXTextOwner } from "./unoobj2";
@@ -68,45 +67,24 @@ export class SwXTextField {
   /** Inserts at the selection end, retaining the selected text as an annotation mark. @param range - Registered insertion or selected range. @returns Nothing. */
   attach(range: SwXTextRange): void {
     const doc = range.GetDoc();
-    const selection = range.GetPaM();
-    const start = selection.Start();
-    const end = selection.End();
-    const endNode = end.GetNode().GetTextNode();
-    if (!endNode) illegal("Annotation requires a text position");
     const oldHint = this.hint;
     const oldNode = oldHint?.GetTextNode();
     if (oldHint && oldNode?.GetDoc() !== doc) illegal("Annotation belongs to another document");
-    const expanded = start.compare(end) !== 0;
-    const first = start.clone("mark");
-    first.nContent.SetAffinity("before");
+    const oldField = oldHint?.GetAttr().GetField();
+    const value = oldField ?? new SwPostItField(SwPostItFieldType.Get(doc), this.data);
     try {
       doc.RunModelTransaction(
-        /** Inserts the new point before erasing the old one, then registers the live range. @returns Nothing. */ () => {
-          const oldField = oldHint?.GetAttr().GetField();
-          const value = oldField ?? new SwPostItField(SwPostItFieldType.Get(doc), this.data);
-          const format = new SwFormatField(value);
-          if (!oldField) value.Dispose();
-          const hint = new SwTextField(format, end.GetContentIndex());
-          if (!endNode.InsertHint(hint)) illegal("No space for the annotation");
+        /** Attaches the current range and releases the earlier annotation point. @returns Nothing. */ () => {
+          const format = doc
+            .GetDocumentContentOperationsManager()
+            .InsertPostItField(range.GetPaM(), value);
           if (oldHint && oldNode) oldNode.EraseText(oldHint.GetStart(), 1);
-          this.hint = hint;
+          this.hint = format.GetTextField();
           this.parent = range.getText();
-          if (expanded) {
-            const last = new SwPosition(endNode, hint.GetStart() + 1);
-            const selected = new SwPaM(first, last);
-            try {
-              const field = format.GetField();
-              if (!field.GetName()) field.SetName(`__Annotation__${field.GetData().id}`);
-              doc.GetIDocumentMarkAccess().MakeAnnotationMark(selected, format);
-            } finally {
-              selected.Dispose();
-              last.Dispose();
-            }
-          }
         },
       );
     } finally {
-      first.Dispose();
+      if (!oldField) value.Dispose();
     }
   }
 

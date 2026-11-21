@@ -5,7 +5,9 @@ import { expect, it } from "vitest";
 import { DateTime } from "../../../tools/source/datetime/datetime";
 import { SwFormatField } from "../../inc/fmtfld";
 import { SwTextField } from "../../inc/txtfld";
+import { SwPosition } from "../../source/core/crsr/pam";
 import { SwPostItField, SwPostItFieldType } from "../../source/core/fields/docufld";
+import { WRITER_COMMAND_IDS } from "../../uiconfig/swriter/menubar/menubar-commands";
 import { createWriterDocumentSession } from "../composition/writer-module";
 import { WriterWorkbench } from "./writer-view";
 
@@ -215,6 +217,96 @@ it("finds a comment after the ordinary Writer ODT open", /** Exercises opening t
     expect(comment.value.slice(comment.selectionStart, comment.selectionEnd)).toBe(
       "For empty paragraphs",
     );
+  } finally {
+    workbench.unmount();
+    session.view.Close();
+  }
+});
+
+it("inserts and refocuses the native comment, then replays the insertion and its edit", /** Drives the pinned shortcut and the document history through the mounted view. @returns Nothing. */ () => {
+  const session = createWriterDocumentSession();
+  const shell = session.view.GetWrtShell();
+  shell.Insert("comment range");
+  const paragraph = shell.GetActiveParagraph();
+  const start = new SwPosition(paragraph, 0);
+  const end = new SwPosition(paragraph, 7);
+  try {
+    shell.SetPaM(end, start);
+  } finally {
+    start.Dispose();
+    end.Dispose();
+  }
+  const document = shell.GetDoc();
+  const type = SwPostItFieldType.Get(document);
+  const workbench = render(<WriterWorkbench isActive view={session.view} />);
+  try {
+    fireEvent.keyDown(window, { key: "c", ctrlKey: true, altKey: true });
+    const comment = screen.getByRole<HTMLTextAreaElement>("textbox", {
+      name: "Comment — Unknown Author",
+    });
+    expect(comment).toHaveFocus();
+    const [format] = type.GatherFields();
+    if (!format) throw new Error("Missing inserted comment.");
+    const mark = document.GetIDocumentMarkAccess().GetAnnotationMark(format);
+    expect(mark?.GetMarkStart().GetContentIndex()).toBe(0);
+    expect(mark?.GetMarkEnd().GetContentIndex()).toBe(8);
+    expect(paragraph.GetText()).toBe("comment￹ range");
+    expect(format.GetField().GetData().dateTime.GetYear()).toBeGreaterThan(2000);
+    fireEvent.keyDown(window, { key: "c", ctrlKey: true, altKey: true });
+    expect(comment).toHaveFocus();
+    expect([...type.GatherFields()]).toHaveLength(1);
+
+    fireEvent.change(comment, { target: { value: "Clarify the range" } });
+    act(
+      /** Undoes the comment edit and then removes its insertion. @returns Nothing. */ () => {
+        expect(shell.Undo()).toBe(true);
+        expect(shell.Undo()).toBe(true);
+      },
+    );
+    expect(screen.queryByRole("textbox", { name: "Comment — Unknown Author" })).toBeNull();
+    expect(paragraph.GetText()).toBe("comment range");
+    expect(shell.GetSelText()).toBe("comment");
+    act(
+      /** Recreates the field and restores its later edit against the recreated identity. @returns Nothing. */ () => {
+        expect(shell.Redo()).toBe(true);
+        expect(shell.Redo()).toBe(true);
+      },
+    );
+    expect(screen.getByRole("textbox", { name: "Comment — Unknown Author" })).toHaveValue(
+      "Clarify the range",
+    );
+    const restored = Array.from(type.GatherFields())[0];
+    expect(restored?.GetField().GetPostItId()).toBe(format.GetField().GetPostItId());
+    expect(
+      document
+        .GetIDocumentMarkAccess()
+        .GetAnnotationMark(restored ?? format)
+        ?.GetMarkStart()
+        .GetContentIndex(),
+    ).toBe(0);
+    const restoredEditor = screen.getByRole("textbox", { name: "Comment — Unknown Author" });
+    fireEvent.keyDown(restoredEditor, { key: "Escape" });
+    expect(screen.getByLabelText("Writer document body")).toHaveFocus();
+    expect(shell.GetCursor().GetPoint().GetContentIndex()).toBe(8);
+    expect(session.view.GetPostItMgr().GetActiveField()).toBeUndefined();
+    fireEvent.click(screen.getByRole("button", { name: /^Comment$/ }));
+    const editors = screen.getAllByRole<HTMLTextAreaElement>("textbox", {
+      name: "Comment — Unknown Author",
+    });
+    expect(editors).toHaveLength(2);
+    expect(editors[1]).toHaveFocus();
+    const [, pointField] = type.GatherFields();
+    if (!pointField) throw new Error("Missing point comment.");
+    expect(document.GetIDocumentMarkAccess().GetAnnotationMark(pointField)).toBeUndefined();
+    act(
+      /** Focuses the earlier comment before leaving two adjacent point markers. @returns Nothing. */ () =>
+        editors[0]?.focus(),
+    );
+    if (!editors[0]) throw new Error("Missing earlier comment editor.");
+    fireEvent.keyDown(editors[0], { key: "Escape" });
+    expect(shell.GetCursor().GetPoint().GetContentIndex()).toBe(9);
+    shell.GetViewOptions().SetReadonly(true);
+    expect(session.view.QueryState(WRITER_COMMAND_IDS.insertAnnotation).enabled).toBe(false);
   } finally {
     workbench.unmount();
     session.view.Close();

@@ -35,6 +35,7 @@ describe("Writer uiconfig resources" /** Groups pure Writer resource tests. @ret
     expect(writerMenuCommandIds).toContain(WRITER_COMMAND_IDS.bold);
     expect(writerMenuCommandIds).toContain(WRITER_COMMAND_IDS.focusFindbar);
     expect(writerMenuCommandIds).toContain(WRITER_COMMAND_IDS.searchDialog);
+    expect(writerMenuCommandIds).toContain(WRITER_COMMAND_IDS.insertAnnotation);
     expect(writerMenuCommandIds).toContain(WRITER_COMMAND_IDS.toggleHorizontalRuler);
     expect(writerMenuCommandIds).not.toContain(WRITER_COMMAND_IDS.alignLeft);
     expect(writerMenuCommandIds).not.toContain(WRITER_COMMAND_IDS.underline);
@@ -66,6 +67,7 @@ describe("Writer uiconfig resources" /** Groups pure Writer resource tests. @ret
       WRITER_COMMAND_IDS.insertPageBreak,
       WRITER_COMMAND_IDS.hyperlinkDialog,
       WRITER_COMMAND_IDS.insertBookmark,
+      WRITER_COMMAND_IDS.insertAnnotation,
     ]);
     expect(
       writerTextObjectBarItems.some(

@@ -30,3 +30,31 @@ test("Writer Find and Replace restores editor focus and undoes all replacements 
   await page.keyboard.press("Control+z");
   await expect(editor).toHaveText("cat scatter cat");
 });
+
+test("Writer inserts a comment from the toolbar and finds its text", /** Drives the ordinary comment and search controls in Chromium. @param fixtures - Playwright fixtures. @param fixtures.page - Chromium page. @returns Test completion. */ async ({
+  page,
+}) => {
+  await page.goto("/writer");
+  await page.getByRole("textbox", { name: "Writer document text", exact: true }).fill("Body text");
+  await page.getByRole("button", { name: "Comment", exact: true }).click();
+  const comment = page.getByRole("textbox", { name: "Comment — Unknown Author" });
+  await expect(comment).toBeFocused();
+  await comment.fill("Find this annotation");
+  await page.keyboard.press("Escape");
+  await expect(page.getByLabel("Writer document body", { exact: true })).toBeFocused();
+
+  await page.keyboard.press("Control+h");
+  const dialog = page.getByRole("dialog", { name: "Find and Replace", exact: true });
+  const notes = dialog.getByRole("checkbox", { name: "Comments" });
+  if (!(await notes.isVisible())) await dialog.getByText("Other options").click();
+  await notes.check();
+  await dialog.getByLabel("Find", { exact: true }).fill("annotation");
+  await dialog.getByRole("button", { name: "Find Next", exact: true }).click();
+  await expect(comment).toBeFocused();
+  const selected = await comment.evaluate(
+    /** Reads the selected comment text. @param input - Native textarea. @returns Matched text. */ (
+      input: HTMLTextAreaElement,
+    ) => input.value.slice(input.selectionStart, input.selectionEnd),
+  );
+  expect(selected).toBe("annotation");
+});

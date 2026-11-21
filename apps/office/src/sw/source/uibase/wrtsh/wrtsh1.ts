@@ -32,6 +32,7 @@ import { WRITER_MAX_LIST_LEVEL, type WriterParagraphListKind } from "../../core/
 import { SwListShell } from "../shells/listsh";
 import type { WriterListLevelCommand } from "../../core/edit/ednumber";
 import { SwFEShell } from "../../core/frmedt/fetab";
+import { createWriterAnnotationCommand } from "../shells/textfld";
 import { SwTextShell, type WriterParagraphFormatValue } from "../shells/textsh1";
 import { SvxTabStopItem, SvxTabStop } from "../../../../editeng/inc/tstpitem";
 import type { SwDocShell } from "../app/docsh";
@@ -128,7 +129,11 @@ export class SwWrtShell extends SwFEShell {
           state,
         ) => this.RestoreCursorState(state),
     };
-    this.textShell = new SwTextShell(this, dialogController);
+    this.textShell = new SwTextShell(
+      this,
+      dialogController,
+      createWriterAnnotationCommand(this, m_rView),
+    );
     this.listShell = new SwListShell(this);
     this.docShellSubscription = docShell.Subscribe(
       /** Relays one document-shell hint into the editing shell. @param hint - Typed shell hint. @returns Nothing. */ (

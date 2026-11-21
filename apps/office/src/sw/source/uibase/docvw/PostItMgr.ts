@@ -21,6 +21,7 @@ export interface SwAnnotationWindow {
 export class SwPostItMgr {
   private readonly windows = new Map<SwFormatField, SwAnnotationWindow>();
   private active: SwFormatField | undefined;
+  private pendingFocus: SwFormatField | undefined;
 
   /** Binds the regex factory supplied by the current Writer view. @param createRegex - Platform compiler. @returns Manager. */
   constructor(private readonly createRegex?: RegexMatcherFactory) {}
@@ -28,6 +29,10 @@ export class SwPostItMgr {
   /** Registers the sidebar window for a model field. @param field - Actual model comment. @param window - Mounted editor. @returns Release callback. */
   RegisterSidebarWin(field: SwFormatField, window: SwAnnotationWindow): () => void {
     this.windows.set(field, window);
+    if (this.pendingFocus === field) {
+      this.pendingFocus = undefined;
+      this.Focus(field);
+    }
     return /** Releases exactly this mounted view. @returns Nothing. */ () => {
       if (this.windows.get(field) !== window) return;
       this.windows.delete(field);
@@ -48,6 +53,18 @@ export class SwPostItMgr {
     return true;
   }
 
+  /** Routes the original field focus request after its browser window is mounted. @param field - Newly inserted annotation. @returns Nothing. */
+  Focus(field: SwFormatField): void {
+    if (!field.GetTextField()?.GetTextNode()) return;
+    const window = this.windows.get(field);
+    if (!window) {
+      this.pendingFocus = field;
+      return;
+    }
+    this.SetActiveSidebarWin(field);
+    window.MakeVisible();
+  }
+
   /** Returns focus to the original active annotation. @returns Whether a sidebar window took focus. */
   GrabFocusOnActiveSidebarWin(): boolean {
     const field = this.GetActiveField();
@@ -59,6 +76,7 @@ export class SwPostItMgr {
   /** Releases an active comment editor when document search resumes. @returns Nothing. */
   ClearActiveField(): void {
     this.active = undefined;
+    this.pendingFocus = undefined;
   }
 
   /** Releases the view's document and sidebar references. @returns Nothing. */

@@ -13,6 +13,7 @@ import {
   getWriterCommandArguments,
   type WriterCharacterCommandArguments,
   type WriterHyperlinkCommandArguments,
+  type WriterSlotHandler,
 } from "../../../sdi/swriter";
 import { WRITER_COMMAND_IDS } from "../../../uiconfig/swriter/menubar/menubar-commands";
 import type { SwTextShell, WriterParagraphFormatValue } from "./textsh1";
@@ -27,10 +28,11 @@ import { SvxLineSpacingItem } from "../../../../editeng/inc/lspcitem";
 import { SvxLRSpaceItem } from "../../../../editeng/inc/lrspitem";
 import { SID_ATTR_PARA_LINESPACE, SID_ATTR_PARA_LRSPACE } from "../../../../editeng/inc/editids";
 
-/** Creates the active SwWrtShell command registry. @param target - Persistent Writer editing shell. @param dialogController - Writer-owned dialog lifecycle. @returns Validated immutable descriptors. */
+/** Creates the active SwWrtShell command registry. @param target - Persistent Writer editing shell. @param dialogController - Writer-owned dialog lifecycle. @param annotation - Optional original field command. @returns Validated immutable descriptors. */
 export function createWriterTextCommandRegistry(
   target: SwTextShell,
   dialogController: WriterDialogController,
+  annotation?: WriterSlotHandler<SwTextShell>,
 ): SfxInterface<SwTextShell> {
   const active =
     /** Reads the currently targeted paragraph. @returns Active paragraph projection. */ (): ReturnType<
@@ -80,6 +82,7 @@ export function createWriterTextCommandRegistry(
     return state;
   }
   return createWriterInterface([
+    ...(annotation ? [annotation] : []),
     ...createWriterEscapementCommands(target),
     ...([true, false] as const).map(
       /** Original distinct Grow/Shrink slots share native execute/state logic. @param grow - Native grow direction. @returns Original handler. */ (

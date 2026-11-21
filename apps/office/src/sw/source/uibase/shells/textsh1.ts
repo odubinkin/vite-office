@@ -33,7 +33,7 @@ import {
   SvxRightMarginItem,
   SvxLRSpaceItem,
 } from "../../../../editeng/inc/lrspitem";
-import { createSwParagraphLRSpaceItem } from "./txtattr-paragraph";
+import { createSwParagraphLRSpaceItem, type WriterParagraphFormatValue } from "./txtattr-paragraph";
 import { SvxULSpaceItem } from "../../../../editeng/source/items/frmitems";
 import {
   RES_KEEP,
@@ -74,11 +74,13 @@ import { getWriterINetFormatStateAtCursor } from "../../core/edit/edattr";
 import { getParagraphAttributeNodes } from "../../core/edit/edattr-paragraph";
 import { createWriterHyperlinkAction, getWriterHyperlinkAtCursor } from "../../core/edit/editsh";
 import { getWriterSelectedTextRanges } from "../../core/crsr/pam";
+import type { WriterSlotHandler } from "../../../sdi/swriter";
 import { createWriterTextCommandRegistry } from "./textsh1-commands";
 import { SwTextNode } from "../../core/txtnode/ndtxt";
 import { SwPaM } from "../../core/crsr/pam";
 import { isWriterParagraphListKind, type WriterParagraphListKind } from "../../core/doc/list";
 import type { SwEditShell } from "../../core/edit/ednumber";
+export type { WriterParagraphFormatValue } from "./txtattr-paragraph";
 /** Cursor/model primitives consumed by the text shell without importing SwWrtShell. */
 export interface SwTextShellTarget extends Pick<
   SwEditShell,
@@ -134,26 +136,6 @@ export interface SwTextShellTarget extends Pick<
   readonly SetPendingCharacterItems: (items: SfxItemSet) => void;
   readonly Undo: () => boolean;
 }
-/** Primitive values accepted by the supported Writer paragraph dialog. */
-export interface WriterParagraphFormatValue {
-  readonly upperPt: number;
-  readonly lowerPt: number;
-  readonly contextual: boolean;
-  readonly lineMode: "proportional" | "fixed" | "minimum" | "leading";
-  readonly lineValue: number;
-  readonly tabStopsPt: readonly number[];
-  readonly keepWithNext: boolean;
-  readonly keepTogether?: boolean;
-  readonly orphans?: number;
-  readonly widows?: number;
-  readonly breakBefore?: "auto" | "page";
-  readonly breakAfter?: "auto" | "page";
-  readonly firstLineIndentPt?: number;
-  readonly autoTextIndent?: boolean;
-  readonly pageStyleName?: string;
-  readonly pageNumber?: number | "auto";
-  readonly countLineNumbers: boolean;
-}
 /** Dedicated text context shell owning its execute/state registration. */
 export class SwTextShell extends SwBaseShell {
   /** Applies only the requested native pending item delta. @param items - Complete changed values. @returns Nothing. */
@@ -163,10 +145,14 @@ export class SwTextShell extends SwBaseShell {
     this.target.SetPendingCharacterItems(pending);
   }
   private readonly shell: SfxShell;
-  /** Creates the text-shell slot owner. @param target - Active Writer editing shell. @param dialogs - Writer dialog controller. @returns Nothing. */
-  public constructor(target: SwTextShellTarget, dialogs: WriterDialogController) {
+  /** Creates the text-shell slot owner. @param target - Active Writer editing shell. @param dialogs - Writer dialog controller. @param annotation - Optional original field slot. @returns Nothing. */
+  public constructor(
+    target: SwTextShellTarget,
+    dialogs: WriterDialogController,
+    annotation?: WriterSlotHandler<SwTextShell>,
+  ) {
     super(target);
-    this.shell = createSfxShell(this, createWriterTextCommandRegistry(this, dialogs));
+    this.shell = createSfxShell(this, createWriterTextCommandRegistry(this, dialogs, annotation));
     this.shell.GetInterface().RegisterPopupMenu("text");
   }
   /** Returns the dispatcher-facing shell. @returns Registered Sfx shell. */

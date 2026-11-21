@@ -68,6 +68,7 @@ describe("generated Writer slots", /** Exercises generated SDI identities and or
       ".uno:InsertPagebreak",
       ".uno:HyperlinkDialog",
       ".uno:InsertBookmark",
+      ".uno:InsertAnnotation",
     ]);
   });
 
