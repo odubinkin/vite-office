@@ -1,0 +1,29 @@
+{
+  "schema_version": 1,
+  "task_id": "202611210707-09F4ME",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-11-21T07:33:53.913Z",
+  "verdict": "pass",
+  "summary": "Pinned Writer inline raster import is verified through original anchoring, context-specific source precedence, and both Worker and package storage.",
+  "evaluated_sha": "6b6633ffbf056e2c3f948ec643e62e39b7fc9566",
+  "blueprint_digest": "ba2da7bd275a48235b7434e673e6a9417c6fa289b0c9011a6bb905490a52479f",
+  "findings": [
+    "Original embedded-image regression retained PNG bytes and the as-character anchor. Independent fixtures cover name replacement, source fallback, and linked or inline selection."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202611210707-09F4ME/README.md",
+    "output/playwright/09F4ME/writer.log",
+    "output/playwright/09F4ME/writer-final.log",
+    "output/playwright/09F4ME/shared.log",
+    "output/playwright/09F4ME/types.log",
+    "output/playwright/09F4ME/provenance.log",
+    "output/playwright/09F4ME/doctor.log",
+    "node .agentplane/policy/check-routing.mjs passed"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": [
+    "The encoded raster model covers PNG and JPEG and does not implement external link updates or other encodings."
+  ]
+}
