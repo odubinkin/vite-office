@@ -1,10 +1,11 @@
 ---
 id: "202611210657-S39THP"
 title: "Align Calc ODS workbook calculation settings"
-status: "DOING"
+result_summary: "Verified Calc ODS calculation defaults and overrides, native formatter and criteria behavior, and backward-compatible Worker transport."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 7
+revision: 9
 origin:
   system: "manual"
 depends_on: []
@@ -20,9 +21,9 @@ plan_approval:
   note: null
 verification:
   state: "ok"
-  updated_at: "2026-11-21T07:05:12.021Z"
+  updated_at: "2026-11-21T07:05:33.674Z"
   updated_by: "CODER"
-  note: "Verified Calc ODS native calculation settings, formatter, supported formula behavior and Worker round trips."
+  note: "Verified Calc ODS calculation defaults and overrides, native formatter and criteria behavior, and backward-compatible Worker transport."
   attempts: 0
 quality_review:
   state: "pass"
@@ -45,11 +46,16 @@ quality_review:
     - "node .agentplane/policy/check-routing.mjs passed"
   findings:
     - "Verified absent settings, native search mode selection and wildcard calculation, formatter epoch/year, iteration narrowing, and backward-compatible worker records."
-commit: null
+commit:
+  hash: "2a527a9343e859a2303a02e11a420ceeb2e5670d"
+  message: "🧩 S39THP code: align Calc ODS workbook calculation settings"
 comments:
   -
     author: "CODER"
     body: "Start: continue direct-mode task in current checkout."
+  -
+    author: "CODER"
+    body: "Verified: Verified Calc ODS calculation defaults and overrides, native formatter and criteria behavior, and backward-compatible Worker transport.. Guided shortcut recorded verification and is closing the direct task with traceable commit metadata."
 events:
   -
     type: "status"
@@ -64,8 +70,21 @@ events:
     author: "CODER"
     state: "ok"
     note: "Verified Calc ODS native calculation settings, formatter, supported formula behavior and Worker round trips."
+  -
+    type: "verify"
+    at: "2026-11-21T07:05:33.674Z"
+    author: "CODER"
+    state: "ok"
+    note: "Verified Calc ODS calculation defaults and overrides, native formatter and criteria behavior, and backward-compatible Worker transport."
+  -
+    type: "status"
+    at: "2026-11-21T07:05:33.767Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: Verified Calc ODS calculation defaults and overrides, native formatter and criteria behavior, and backward-compatible Worker transport.. Guided shortcut recorded verification and is closing the direct task with traceable commit metadata."
 doc_version: 3
-doc_updated_at: "2026-11-21T07:05:12.073Z"
+doc_updated_at: "2026-11-21T07:05:33.767Z"
 doc_updated_by: "CODER"
 description: "Port native ODS document calculation defaults, search modes, precision, labels, two-digit year and iteration settings through import, export and Worker transport."
 sections:
@@ -107,6 +126,36 @@ sections:
     - freshness: route=computed_local remote=remote_skipped
     - repeat_allowed: false
     - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+    - risks: none
+
+    ### 2026-11-21T07:05:33.674Z — VERIFY — ok
+
+    By: CODER
+
+    Note: Verified Calc ODS calculation defaults and overrides, native formatter and criteria behavior, and backward-compatible Worker transport.
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-21T07:05:12.073Z, excerpt_hash=sha256:e04f41988f6ac08e18c61324964ea3ca772fb153cb975073231e5822a3f1351d
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202611210657-S39THP/blueprint/resolved-snapshot.json
+    - old_digest: 6f2e69f7493758f82752c1b01efc4d00209cdb8df35f0d878ef40493a6c893f9
+    - current_digest: 6f2e69f7493758f82752c1b01efc4d00209cdb8df35f0d878ef40493a6c893f9
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202611210657-S39THP
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task complete 202611210657-S39THP --result verified-202611210657-S39THP --commit 6141c70498b6b8eac837c11a7aadb5fca488ab9c
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
     - risks: none
 
     <!-- END VERIFICATION RESULTS -->
@@ -165,6 +214,36 @@ DecisionContextRef:
 - freshness: route=computed_local remote=remote_skipped
 - repeat_allowed: false
 - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- risks: none
+
+### 2026-11-21T07:05:33.674Z — VERIFY — ok
+
+By: CODER
+
+Note: Verified Calc ODS calculation defaults and overrides, native formatter and criteria behavior, and backward-compatible Worker transport.
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-21T07:05:12.073Z, excerpt_hash=sha256:e04f41988f6ac08e18c61324964ea3ca772fb153cb975073231e5822a3f1351d
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202611210657-S39THP/blueprint/resolved-snapshot.json
+- old_digest: 6f2e69f7493758f82752c1b01efc4d00209cdb8df35f0d878ef40493a6c893f9
+- current_digest: 6f2e69f7493758f82752c1b01efc4d00209cdb8df35f0d878ef40493a6c893f9
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202611210657-S39THP
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task complete 202611210657-S39THP --result verified-202611210657-S39THP --commit 6141c70498b6b8eac837c11a7aadb5fca488ab9c
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
 - risks: none
 
 <!-- END VERIFICATION RESULTS -->
