@@ -1,10 +1,11 @@
 ---
 id: "202611211658-NVQZJN"
 title: "Align Writer ODT frame bitmap fill properties"
-status: "DOING"
+result_summary: "Verified named Writer frame bitmap properties, inheritance, and shared ODT package declarations."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 7
+revision: 8
 origin:
   system: "manual"
 depends_on: []
@@ -45,11 +46,16 @@ quality_review:
     - "node .agentplane/policy/check-routing.mjs passed"
   findings:
     - "The pinned bitmap frame assertions, independently authored offsets, shared package resources and distinct same-name assets all passed."
-commit: null
+commit:
+  hash: "98b9d1c1fd90ac84d81007389f02712d86fe556f"
+  message: "🧩 NVQZJN code: preserve Writer ODT frame bitmap fills"
 comments:
   -
     author: "CODER"
     body: "Start: continue direct-mode task in current checkout."
+  -
+    author: "CODER"
+    body: "Verified: the native Writer frame bitmap name and geometry survive ODT and Worker round trips."
 events:
   -
     type: "status"
@@ -64,8 +70,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Verified named Writer frame bitmap fills, native geometry, catalogue identity and ODT and Worker round trips."
+  -
+    type: "status"
+    at: "2026-11-21T17:06:38.497Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: the native Writer frame bitmap name and geometry survive ODT and Worker round trips."
 doc_version: 3
-doc_updated_at: "2026-11-21T17:05:32.589Z"
+doc_updated_at: "2026-11-21T17:06:38.497Z"
 doc_updated_by: "CODER"
 description: "Connect named DrawingLayer bitmap fills and geometry to Writer graphic style import, native text frames, Worker and ODT export using common XML mapping and bitmap declarations."
 sections:
