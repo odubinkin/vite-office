@@ -1,0 +1,12 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "id": "shared.internal.sfx2.remove-character",
+    "modulePath": "apps/office/src/sfx2/browser/control/charmapcontainer.ts",
+    "symbol": "removeCharacter",
+    "classification": "browser-adaptation",
+    "capabilityId": "CAP-0111",
+    "description": "Removes a matching character and font pair from the browser character-map preferences while preserving the order of remaining entries."
+  }
+}

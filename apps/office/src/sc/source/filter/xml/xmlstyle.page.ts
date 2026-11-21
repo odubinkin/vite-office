@@ -126,7 +126,7 @@ function importPageScale(items: SfxItemSet, properties: ReadonlyMap<T, string>):
   items.ClearItem(ATTR_PAGE_SCALETOPAGES);
 }
 
-/** Applies original page-layout properties to the actual page-family item set. @param items - Native style. @param properties - ODF layout properties. @returns Nothing. */
+/** Applies original page-layout properties to the actual page-family item set. @param items - Native style. @param properties - ODF layout properties. @param usage - ODF page usage. @returns Nothing. */
 function importLayout(items: SfxItemSet, properties: ReadonlyMap<T, string>, usage: string): void {
   const get =
     /** Reads one stored layout attribute. @param token - XML token. @returns Lexical value or null. */ (
