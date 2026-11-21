@@ -157,6 +157,14 @@ export const underlines = [
   [FontLineStyle.LINESTYLE_DOUBLEWAVE, "Double Wave"],
 ] as const;
 
+/** Advances the native Font Effects word-line checkbox. @param current - Current state, or undefined when mixed. @param mixed - Whether the input supports the mixed state. @returns Next state. */
+export function nextWordLineMode(
+  current: boolean | undefined,
+  mixed: boolean,
+): boolean | undefined {
+  return current === true && mixed ? undefined : current === false;
+}
+
 /** Strikeout styles listed separately by the native Font Effects tab. */
 export const strikeouts = [
   [FontStrikeout.STRIKEOUT_NONE, "(Without)"],

@@ -249,6 +249,8 @@ test("Writer inserts a comment, finds its text and undoes note formatting", /** 
   await character.getByRole("tab", { name: "Font Effects", exact: true }).click();
   await character.getByRole("combobox", { name: "Emphasis mark" }).selectOption({ label: "Dot" });
   await character.getByRole("combobox", { name: "Position" }).selectOption({ label: "Below text" });
+  await character.getByRole("combobox", { name: "Underlining" }).selectOption("1");
+  await character.getByRole("checkbox", { name: "Individual words" }).check();
   await character.getByRole("button", { name: "OK", exact: true }).click();
   const replyText = reply.locator("p").last().locator("span").first();
   const firstNoteText = comment.first().locator("p").first().locator("span").first();
@@ -257,7 +259,13 @@ test("Writer inserts a comment, finds its text and undoes note formatting", /** 
     await expect(portion).toHaveCSS("text-emphasis-style", /^(filled )?dot$/);
     await expect(portion).toHaveCSS("text-emphasis-position", /^under( right)?$/);
   }
+  await expect(
+    reply.locator("p").last().locator('[style*="text-decoration-line: underline"]'),
+  ).toHaveText(["Browser", "reply"]);
   await undo.click();
+  await expect(
+    reply.locator("p").last().locator('[style*="text-decoration-line: underline"]'),
+  ).toHaveCount(0);
   await expect(replyText).toHaveCSS("text-emphasis-style", "none");
   await expect(firstNoteText).toHaveCSS("text-emphasis-style", "none");
 
@@ -369,7 +377,7 @@ test("Writer applies Text Flow hyphenation and finds the formatted paragraph", /
   await expect(dialog.getByRole("status")).toHaveText("One match found.");
 });
 
-test("Writer preserves independent underline and overline colors when reopening an ODT", /** Drives the native Character Font Effects page and ODT round-trip. @param fixtures - Playwright fixtures. @param fixtures.page - Chromium page. @returns Test completion. */ async ({
+test("Writer preserves independent word-only lines when reopening an ODT", /** Drives the native Character Font Effects page and ODT round-trip. @param fixtures - Playwright fixtures. @param fixtures.page - Chromium page. @returns Test completion. */ async ({
   page,
 }) => {
   await page.goto("/writer");
@@ -381,6 +389,8 @@ test("Writer preserves independent underline and overline colors when reopening 
   const character = page.getByRole("dialog", { name: "Character", exact: true });
   await character.getByRole("tab", { name: "Font Effects", exact: true }).click();
 
+  const wordLines = character.getByRole("checkbox", { name: "Individual words", exact: true });
+  await expect(wordLines).toBeDisabled();
   const overlinePalette = character.getByLabel("Overline color palette", { exact: true });
   await expect(overlinePalette).toHaveAttribute("aria-disabled", "true");
   await character.getByRole("combobox", { name: "Overlining", exact: true }).selectOption("2");
@@ -389,13 +399,18 @@ test("Writer preserves independent underline and overline colors when reopening 
   await character.getByRole("combobox", { name: "Underlining", exact: true }).selectOption("1");
   await character.getByLabel("Underline color palette", { exact: true }).click();
   await character.getByRole("button", { name: "Underline color #2a6099", exact: true }).click();
+  await wordLines.check();
   await character.getByRole("button", { name: "OK", exact: true }).click();
 
   const overline = editor.locator('[style*="text-decoration-line: overline"]');
   const underline = editor.locator('[style*="text-decoration-line: underline"]');
-  await expect(overline).toHaveCSS("text-decoration-style", "double");
-  await expect(overline).toHaveCSS("text-decoration-color", "rgb(255, 0, 0)");
-  await expect(underline).toHaveCSS("text-decoration-color", "rgb(42, 96, 153)");
+  await expect(overline.first()).toHaveCSS("text-decoration-style", "double");
+  await expect(overline.first()).toHaveCSS("text-decoration-color", "rgb(255, 0, 0)");
+  await expect(underline.first()).toHaveCSS("text-decoration-color", "rgb(42, 96, 153)");
+
+  await expect(overline).toHaveText(["two", "lines"]);
+  await expect(underline).toHaveText(["two", "lines"]);
+  expect(await editor.textContent()).toBe("two lines");
 
   const pending = page.waitForEvent("download");
   await page.getByRole("menuitem", { name: "File", exact: true }).click();
@@ -413,19 +428,22 @@ test("Writer preserves independent underline and overline colors when reopening 
   });
   await expect(page.getByRole("dialog", { name: "Open", exact: true })).toHaveCount(0);
   await expect(editor).toHaveText("two lines");
-  await expect(overline).toHaveCSS("text-decoration-style", "double");
-  await expect(overline).toHaveCSS("text-decoration-color", "rgb(255, 0, 0)");
-  await expect(underline).toHaveCSS("text-decoration-color", "rgb(42, 96, 153)");
+  await expect(overline).toHaveText(["two", "lines"]);
+  await expect(underline).toHaveText(["two", "lines"]);
+  await expect(overline.first()).toHaveCSS("text-decoration-style", "double");
+  await expect(overline.first()).toHaveCSS("text-decoration-color", "rgb(255, 0, 0)");
+  await expect(underline.first()).toHaveCSS("text-decoration-color", "rgb(42, 96, 153)");
 
   await editor.press("Control+a");
   await page.getByRole("menuitem", { name: "Format", exact: true }).click();
   await page.getByRole("menuitem", { name: "Character…", exact: true }).click();
   await character.getByRole("tab", { name: "Font Effects", exact: true }).click();
+  await expect(wordLines).toBeChecked();
   await character.getByLabel("Font Color palette", { exact: true }).click();
   await character.getByRole("button", { name: "Font Color #00a933", exact: true }).click();
   await overlinePalette.click();
   await character.getByRole("button", { name: "Automatic", exact: true }).click();
   await character.getByRole("button", { name: "OK", exact: true }).click();
-  await expect(overline).toHaveCSS("text-decoration-color", "rgb(0, 169, 51)");
-  await expect(underline).toHaveCSS("text-decoration-color", "rgb(42, 96, 153)");
+  await expect(overline.first()).toHaveCSS("text-decoration-color", "rgb(0, 169, 51)");
+  await expect(underline.first()).toHaveCSS("text-decoration-color", "rgb(42, 96, 153)");
 });

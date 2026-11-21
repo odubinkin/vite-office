@@ -1,4 +1,4 @@
-/** @fileoverview Exercises the Font Effects emphasis controls through Writer's native search items. */
+/** @fileoverview Exercises Font Effects through Writer's native Character and search items. */
 import { act, fireEvent, render, screen, within } from "@testing-library/react";
 import { expect, it } from "vitest";
 import { SvxEmphasisMarkItem } from "../../../editeng/inc/emphasismarkitem";
@@ -181,6 +181,46 @@ it("retains the Character dialog emphasis through ODT and the Worker document gr
   } finally {
     end.Dispose();
     start.Dispose();
+    workbench.unmount();
+    session.view.Close();
+  }
+});
+
+it("applies word-only underline through formatted search replacement", /** Drives the native word-mode search item through painting and the ODT text property. @returns Nothing. */ () => {
+  localStorage.removeItem(SEARCH_OPTIONS_KEY);
+  const session = createWriterDocumentSession();
+  const shell = session.view.GetWrtShell();
+  shell.Insert("plain cat dog tail");
+  const workbench = render(<WriterWorkbench isActive view={session.view} />);
+  try {
+    fireEvent.keyDown(window, { key: "h", ctrlKey: true });
+    const dialog = within(screen.getByRole("dialog", { name: "Find and Replace" }));
+    fireEvent.click(dialog.getByText("Other options"));
+    fireEvent.change(dialog.getByLabelText("Find"), { target: { value: "cat dog" } });
+    const replacement = dialog.getByLabelText("Replace with");
+    fireEvent.change(replacement, { target: { value: "cat dog" } });
+    fireEvent.focus(replacement);
+    fireEvent.click(dialog.getByRole("button", { name: "Format…" }));
+    const format = within(screen.getByRole("dialog", { name: "Replace" }));
+    fireEvent.click(format.getByRole("tab", { name: "Font Effects" }));
+    const wordMode = format.getByRole("checkbox", { name: "Individual words" });
+    expect(wordMode).toBeDisabled();
+    fireEvent.change(format.getByLabelText("Underlining"), { target: { value: "1" } });
+    expect(wordMode).toBePartiallyChecked();
+    fireEvent.click(wordMode);
+    expect(wordMode).not.toBeChecked();
+    expect(wordMode).not.toBePartiallyChecked();
+    fireEvent.click(wordMode);
+    expect(wordMode).toBeChecked();
+    fireEvent.click(format.getByRole("button", { name: "OK" }));
+    fireEvent.click(dialog.getByRole("button", { name: "Replace All" }));
+    expect(screen.getByText("cat")).toHaveStyle({ textDecoration: "underline" });
+    expect(screen.getByText("dog")).toHaveStyle({ textDecoration: "underline" });
+    expect(screen.getByLabelText("Writer document body").textContent).toBe("plain cat dog tail");
+    expect(exportContentXml(shell.GetDoc())).toContain(
+      'style:text-underline-mode="skip-white-space"',
+    );
+  } finally {
     workbench.unmount();
     session.view.Close();
   }

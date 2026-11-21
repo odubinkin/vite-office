@@ -18,7 +18,8 @@ import { SvxKerningItem } from "../../../editeng/inc/kernitem";
 import { RES_CHRATR_BOX, RES_CHRATR_ESCAPEMENT, RES_CHRATR_KERNING } from "../../inc/hintids";
 
 import { SvxCrossedOutItem } from "../../../editeng/inc/crossedoutitem";
-import { RES_CHRATR_CROSSEDOUT } from "../../inc/hintids";
+import { SvxWordLineModeItem } from "../../../editeng/inc/wrlmitem";
+import { RES_CHRATR_CROSSEDOUT, RES_CHRATR_WORDLINEMODE } from "../../inc/hintids";
 import type { RulerUnitData } from "../../../svtools/source/control/ruler";
 import type { FieldUnit } from "../../../tools/inc/fldunit";
 import { projectWriterLineSpacing } from "../../source/core/text/itrform2";
@@ -213,6 +214,11 @@ export function browserTextDecoration(
   };
 }
 
+/** Separates decorated text from spacing glyphs as in CommonSalLayout. @param text - Model text portion. @returns Alternating nonspacing and spacing text, starting with nonspacing text. */
+export function splitWordLineText(text: string): string[] {
+  return text.split(/(\p{White_Space}+)/u);
+}
+
 /** Native per-line color and style at the browser paint boundary. */
 export interface WriterTextLineProjection {
   readonly style: FontLineStyle;
@@ -228,6 +234,7 @@ export interface WriterTextPortion {
     underline: boolean;
     underlineLine?: WriterTextLineProjection;
     overlineLine?: WriterTextLineProjection;
+    wordLineMode?: boolean;
     emphasisMark?: FontEmphasisMark;
     escapement?: Readonly<{ offset: number; height: number }>;
     strikeout?: import("../../../tools/inc/fontenum").FontStrikeout;
@@ -882,6 +889,9 @@ function projectTextPortions(node: SwTextNode): readonly WriterTextPortion[] {
             ? { underlineLine: projectTextLine(underline) }
             : {}),
           ...(overline.GetBoolValue() ? { overlineLine: projectTextLine(overline) } : {}),
+          ...((handler.ReadItem(RES_CHRATR_WORDLINEMODE) as SvxWordLineModeItem).GetValue()
+            ? { wordLineMode: true }
+            : {}),
           ...(inlineGraphic === undefined &&
           (emphasisMark & FontEmphasisMark.Style) !== FontEmphasisMark.NONE
             ? { emphasisMark }

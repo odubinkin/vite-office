@@ -7,7 +7,11 @@ import { FontItalic, FontWeight } from "../../../tools/inc/fontenum";
 import { StrikeoutText } from "../../../vcl/browser/strikeout-text";
 import { Fragment, useLayoutEffect, useRef } from "react";
 import { resolveSwNumberingTabPosition } from "../../source/core/text/txttab";
-import { browserTextDecoration, browserTextEmphasis } from "../presentation/writer-view-projection";
+import {
+  browserTextDecoration,
+  browserTextEmphasis,
+  splitWordLineText,
+} from "../presentation/writer-view-projection";
 import { browserFontFamily } from "./writer-font-family";
 import { FontLineStyle } from "../../../editeng/source/items/textitem";
 
@@ -337,6 +341,20 @@ function paintTextLine(
   return <span style={browserTextDecoration(line, value)}>{content}</span>;
 }
 
+/** Paints independently authored underline and overline styles. @param attributes - Source portion attributes. @param content - Text or previously decorated content. @returns Decorated text. */
+function paintWriterLines(
+  attributes: WriterTextPortion["attributes"],
+  content: React.ReactNode,
+): React.ReactNode {
+  if (attributes.underlineLine !== undefined)
+    content = paintTextLine("underline", attributes.underlineLine, content);
+  else if (attributes.underline)
+    content = <span style={{ textDecoration: "underline" }}>{content}</span>;
+  if (attributes.overlineLine !== undefined)
+    content = paintTextLine("overline", attributes.overlineLine, content);
+  return content;
+}
+
 /** Projects one immutable Writer run through semantic browser elements. @param props - Canonical run and inherited paragraph flags. @returns React-owned run subtree. */
 export function WriterTextPortionProjection({
   inheritedBold,
@@ -358,8 +376,29 @@ export function WriterTextPortionProjection({
   ) : (
     run.text
   );
-  if (run.attributes.strikeout !== undefined)
-    content = <StrikeoutText value={run.attributes.strikeout}>{content}</StrikeoutText>;
+  const { attributes } = run;
+  const wordLines =
+    run.inlineGraphic === undefined &&
+    attributes.wordLineMode &&
+    (attributes.underline ||
+      attributes.overlineLine !== undefined ||
+      Boolean(attributes.strikeout));
+  if (wordLines) {
+    content = splitWordLineText(run.text).map(
+      /** Paints nonspacing fragments without duplicating model text. @param part - Original text fragment. @param index - Fragment index. @returns Decorated word or untouched spacing. */
+      (part, index) => {
+        if (index % 2 !== 0 || part === "") return part;
+        const word =
+          attributes.strikeout === undefined ? (
+            part
+          ) : (
+            <StrikeoutText value={attributes.strikeout}>{part}</StrikeoutText>
+          );
+        return <Fragment key={index}>{paintWriterLines(attributes, word)}</Fragment>;
+      },
+    );
+  } else if (attributes.strikeout !== undefined)
+    content = <StrikeoutText value={attributes.strikeout}>{content}</StrikeoutText>;
   if (run.attributes.escapement !== undefined)
     content = <EscapementText value={run.attributes.escapement}>{content}</EscapementText>;
   if (run.attributes.highlight !== undefined)
@@ -375,12 +414,7 @@ export function WriterTextPortionProjection({
     );
   const emphasis = browserTextEmphasis(run.attributes.emphasisMark);
   if (emphasis !== undefined) content = <span style={emphasis}>{content}</span>;
-  if (run.attributes.underlineLine !== undefined)
-    content = paintTextLine("underline", run.attributes.underlineLine, content);
-  else if (run.attributes.underline)
-    content = <span style={{ textDecoration: "underline" }}>{content}</span>;
-  if (run.attributes.overlineLine !== undefined)
-    content = paintTextLine("overline", run.attributes.overlineLine, content);
+  if (!wordLines) content = paintWriterLines(attributes, content);
   if (run.attributes.color !== undefined)
     content = (
       <span style={{ color: run.attributes.color === "auto" ? "initial" : run.attributes.color }}>

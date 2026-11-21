@@ -4,7 +4,7 @@ title: "Implement Writer search and replace core and browser UI"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 119
+revision: 120
 origin:
   system: "manual"
 depends_on:
@@ -472,6 +472,14 @@ comments:
       Targeted verification passed 93 Writer scenarios across the selected suites and 7 shared ODF property tests. Production TypeScript and Vite build passed. Six existing production Chromium scenarios passed and the newly added independent line colors scenario passed in the focused rerun after correcting its palette swatches. It checks the regular Character dialog, disabled color selector, ODT download/reopen, and automatic color following the foreground.
 
       Scoped ESLint and Prettier, dependency boundaries, source tree and provenance, Writer resources, Writer/shared registry parity (zero semantic violations), routing and diff checks passed. Global documentation and file-size checks report the same pre-existing 307 findings and four files at the size limit. AgentPlane doctor passed with the existing hook-shim warning.
+  -
+    author: "CODER"
+    body: |-
+      Verified the Writer Font Effects word-line mode checkpoint. Standard Character, annotation Character and search formatting use the existing native word-line items and the original checkbox sensitivity and mixed-state cycle. Word lines paint underline, overline and strikeout on the nonspacing text only. The browser groups text using Unicode White_Space, the same classification CommonSalLayout uses when marking spacing glyphs for ImplDrawTextLines. It preserves every original text unit and does not insert synthetic whitespace. Existing ODF and Worker contracts carry the item's native bool.
+
+      Evidence includes the normal mixed-state cycle, restoration of a nonbreaking space and the prior range formatting through Undo, formatted text search replacement and its ODF property, formatting all annotations with one Undo, and regular document underline/overline with independent colors and word mode across Writer export and reopen. Source contracts inspected are SvxCharEffectsPage, weld::TriStateEnabled, SvxSearchDialog::FormatHdl_Impl, CommonSalLayout and OutputDevice::ImplDrawTextLines. No newly suspected native issue was found in this scope.
+
+      Targeted verification passed 55 Writer tests in 7 suites and all 7 Writer search/comment scenarios in production Chromium. TypeScript and Vite build, scoped ESLint and Prettier, module boundaries, source tree and provenance, Writer resources, registry parity with zero semantic violations, routing and diff checks passed. The browser fragment operation was recorded in the runtime inventory. Repository-wide documentation and size checks still report the existing 307 JSDoc findings and four files at or above the size limit. AgentPlane doctor passed with the existing hook-shim warning. This checkpoint leaves the task active and the ten-task cadence unchanged.
 
 events:
   -
@@ -1121,9 +1129,19 @@ events:
       Targeted verification passed 93 Writer scenarios across the selected suites and 7 shared ODF property tests. Production TypeScript and Vite build passed. Six existing production Chromium scenarios passed and the newly added independent line colors scenario passed in the focused rerun after correcting its palette swatches. It checks the regular Character dialog, disabled color selector, ODT download/reopen, and automatic color following the foreground.
 
       Scoped ESLint and Prettier, dependency boundaries, source tree and provenance, Writer resources, Writer/shared registry parity (zero semantic violations), routing and diff checks passed. Global documentation and file-size checks report the same pre-existing 307 findings and four files at the size limit. AgentPlane doctor passed with the existing hook-shim warning.
+  -
+    type: "comment"
+    at: "2026-11-21T23:02:35.735Z"
+    author: "CODER"
+    body: |-
+      Verified the Writer Font Effects word-line mode checkpoint. Standard Character, annotation Character and search formatting use the existing native word-line items and the original checkbox sensitivity and mixed-state cycle. Word lines paint underline, overline and strikeout on the nonspacing text only. The browser groups text using Unicode White_Space, the same classification CommonSalLayout uses when marking spacing glyphs for ImplDrawTextLines. It preserves every original text unit and does not insert synthetic whitespace. Existing ODF and Worker contracts carry the item's native bool.
+
+      Evidence includes the normal mixed-state cycle, restoration of a nonbreaking space and the prior range formatting through Undo, formatted text search replacement and its ODF property, formatting all annotations with one Undo, and regular document underline/overline with independent colors and word mode across Writer export and reopen. Source contracts inspected are SvxCharEffectsPage, weld::TriStateEnabled, SvxSearchDialog::FormatHdl_Impl, CommonSalLayout and OutputDevice::ImplDrawTextLines. No newly suspected native issue was found in this scope.
+
+      Targeted verification passed 55 Writer tests in 7 suites and all 7 Writer search/comment scenarios in production Chromium. TypeScript and Vite build, scoped ESLint and Prettier, module boundaries, source tree and provenance, Writer resources, registry parity with zero semantic violations, routing and diff checks passed. The browser fragment operation was recorded in the runtime inventory. Repository-wide documentation and size checks still report the existing 307 JSDoc findings and four files at or above the size limit. AgentPlane doctor passed with the existing hook-shim warning. This checkpoint leaves the task active and the ten-task cadence unchanged.
 
 doc_version: 3
-doc_updated_at: "2026-11-21T22:52:50.102Z"
+doc_updated_at: "2026-11-21T23:02:35.735Z"
 doc_updated_by: "CODER"
 description: "Implement the approved coherent Writer search-and-replace feature from pinned LibreOffice sources: real shared search engine and options, native paragraph/cursor traversal and replacement/history contracts, view-owned search state and dispatch, Find toolbar and Find and Replace dialog with generated upstream command placement and shortcuts. Preserve source semantics and explicit unsupported boundaries; never substitute DOM text search or browser RegExp for ICU contracts. Work only on writer in vite-office-writer; local upstream reading approved, no network or merges. Keep active until approved scope is verified."
 sections:

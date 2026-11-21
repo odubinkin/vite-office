@@ -23,9 +23,10 @@ import {
   SvxWeightItem,
 } from "../../../editeng/source/items/textitem";
 import { ComplexColor } from "../../../docmodel/inc/color/ComplexColor";
-import { underlines } from "./writer-search-format-values";
+import { nextWordLineMode, underlines } from "./writer-search-format-values";
 import { WriterSearchEmphasisControls } from "./WriterSearchEmphasisControls";
 import { SvxEmphasisMarkItem } from "../../../editeng/inc/emphasismarkitem";
+import { SvxWordLineModeItem } from "../../../editeng/inc/wrlmitem";
 import { SvxCrossedOutItem } from "../../../editeng/source/items/textitem.effects";
 import { FontItalic, FontLineStyle, FontStrikeout, FontWeight } from "../../../tools/inc/fontenum";
 import { ColorControl } from "../../../svx/browser/tbxctrls/ColorControl";
@@ -47,6 +48,7 @@ const characterItems = {
     underline: EE.EE_CHAR_UNDERLINE,
     overline: EE.EE_CHAR_OVERLINE,
     strike: EE.EE_CHAR_STRIKEOUT,
+    wordMode: EE.EE_CHAR_WLM,
     emphasis: EE.EE_CHAR_EMPHASISMARK,
     position: EE.EE_CHAR_ESCAPEMENT,
     spacing: EE.EE_CHAR_KERNING,
@@ -61,6 +63,7 @@ const characterItems = {
     underline: SW.RES_CHRATR_UNDERLINE,
     overline: SW.RES_CHRATR_OVERLINE,
     strike: SW.RES_CHRATR_CROSSEDOUT,
+    wordMode: SW.RES_CHRATR_WORDLINEMODE,
     emphasis: SW.RES_CHRATR_EMPHASIS_MARK,
     position: SW.RES_CHRATR_ESCAPEMENT,
     spacing: SW.RES_CHRATR_KERNING,
@@ -140,7 +143,13 @@ export function WriterCharacterDialog({
       ? String(Number(weight.GetBoolValue()) * 2 + Number(posture.GetBoolValue()))
       : "";
   const spacing = kerning instanceof SvxKerningItem ? String(kerning.GetValue() / 20) : "";
-  const strikethrough = strike instanceof SvxCrossedOutItem ? String(strike.GetValue()) : "";
+  const initialStrike = strike instanceof SvxCrossedOutItem ? String(strike.GetValue()) : "";
+  const [strikethrough, setStrikethrough] = useState(initialStrike);
+  const wordModeState = input.GetItemState(which.wordMode);
+  const wordModeItem = read(which.wordMode);
+  const initialWordMode =
+    wordModeItem instanceof SvxWordLineModeItem ? wordModeItem.GetValue() : undefined;
+  const [wordMode, setWordMode] = useState(initialWordMode);
   const position =
     escapement instanceof SvxEscapementItem ? String(escapement.GetEscapement()) : "";
   const initialColor =
@@ -158,6 +167,18 @@ export function WriterCharacterDialog({
   const [lineChanges, setLineChanges] = useState<
     Partial<Record<CharacterLine, CharacterLineChange>>
   >({});
+  const hasWordLine =
+    Number(strikethrough) > 0 ||
+    characterLines.some(
+      /** Checks the selected decoration style. @param name - Underline or overline. @returns Whether drawn. */
+      (name) => {
+        const item = lines[name];
+        return (
+          (lineChanges[name]?.style ??
+            (item instanceof SvxTextLineItem ? item.GetLineStyle() : 0)) > 0
+        );
+      },
+    );
   const [color, setColor] = useState(initialColor);
   const [background, setBackground] = useState(initialBackground);
   const title = localization.GetText("writer.character.title", "Character");
@@ -201,6 +222,8 @@ export function WriterCharacterDialog({
       setColor(initialColor);
       setEmphasis(initialEmphasis);
       setLineChanges({});
+      setStrikethrough(initialStrike);
+      setWordMode(initialWordMode);
     }
     if (tab === 3) setBackground(initialBackground);
     if (tab === 4) {
@@ -334,9 +357,10 @@ export function WriterCharacterDialog({
       if (original instanceof SvxTextLineItem && item.equals(original)) item.Dispose();
       else output.Put(item, true);
     }
-    const nextStrike = String(values.get("strike") ?? "");
-    if (nextStrike && nextStrike !== strikethrough)
-      output.Put(new SvxCrossedOutItem(Number(nextStrike), which.strike), true);
+    if (strikethrough && strikethrough !== initialStrike)
+      output.Put(new SvxCrossedOutItem(Number(strikethrough), which.strike), true);
+    if (wordMode !== undefined && wordMode !== initialWordMode)
+      output.Put(new SvxWordLineModeItem(wordMode, which.wordMode), true);
     if (emphasis !== "" && emphasis !== initialEmphasis)
       output.Put(new SvxEmphasisMarkItem(Number(emphasis), which.emphasis), true);
     const nextPosition = String(values.get("position") ?? "");
@@ -495,8 +519,11 @@ export function WriterCharacterDialog({
               <label className={fieldClass}>
                 {localization.GetText("writer.character.strikethrough", "Strikethrough")}
                 <select
-                  name="strike"
-                  defaultValue={strikethrough}
+                  value={strikethrough}
+                  onChange={
+                    /** Tracks the chosen strikeout for the word-line checkbox. @param event - Style selection. @returns Nothing. */
+                    (event) => setStrikethrough(event.currentTarget.value)
+                  }
                   className="rounded border border-slate-300 px-2 py-1"
                 >
                   <option value="" />
@@ -509,6 +536,32 @@ export function WriterCharacterDialog({
                 "underline",
                 localization.GetText("writer.character.underlining", "Underlining"),
                 localization.GetText("writer.search.format.underline-color", "Underline color"),
+              )}
+              {wordModeState !== SfxItemState.UNKNOWN && (
+                <label className="flex items-center gap-2 text-sm">
+                  <input
+                    type="checkbox"
+                    checked={wordMode === true}
+                    disabled={!hasWordLine || wordModeState === SfxItemState.DISABLED}
+                    ref={
+                      /** Paints a mixed selection as indeterminate. @param input - Checkbox element. @returns Nothing. */
+                      (input) => {
+                        if (input) input.indeterminate = wordMode === undefined;
+                      }
+                    }
+                    onChange={
+                      /** Advances the original false, true and mixed cycle. @returns Nothing. */
+                      () =>
+                        setWordMode(
+                          nextWordLineMode(wordMode, wordModeState === SfxItemState.INVALID),
+                        )
+                    }
+                  />
+                  {localization.GetText(
+                    "writer.search.format.individual-words",
+                    "Individual words",
+                  )}
+                </label>
               )}
               <WriterSearchEmphasisControls
                 value={emphasis}

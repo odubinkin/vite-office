@@ -2,6 +2,8 @@
 import { act, fireEvent, render, screen, within } from "@testing-library/react";
 import { expect, it } from "vitest";
 import { Any } from "../../../cppu/inc/com/sun/star/uno/Any";
+import { SvxUnderlineItem } from "../../../editeng/inc/udlnitem";
+import { SvxWordLineModeItem } from "../../../editeng/inc/wrlmitem";
 import { SvxBoxItem } from "../../../editeng/source/items/frmitems";
 import { readOdtDocument } from "../../source/filter/xml/swxml";
 import { writeOdtDocument } from "../../source/filter/xml/wrtxml";
@@ -17,6 +19,8 @@ import {
   RES_CHRATR_GRABBAG,
   RES_CHRATR_HIGHLIGHT,
   RES_CHRATR_KERNING,
+  RES_CHRATR_UNDERLINE,
+  RES_CHRATR_WORDLINEMODE,
   WRITER_CHARACTER_WHICH_RANGES,
 } from "../../inc/hintids";
 import { SwPosition } from "../../source/core/crsr/pam";
@@ -499,6 +503,70 @@ it("applies character borders to the selected text and restores the native box f
     workbench.unmount();
     start.Dispose();
     end.Dispose();
+    view.Close();
+  }
+});
+
+it("cycles mixed word-line formatting and preserves the exact spacing on undo", /** Exercises the native tri-state, word painting and selected item history. @returns Completion. */ async () => {
+  const { view } = createWriterDocumentSession();
+  const shell = view.GetWrtShell();
+  const value = "one two three";
+  shell.Insert(value);
+  const node = shell.GetActiveParagraph();
+  const start = new SwPosition(node, 0);
+  const middle = new SwPosition(node, 7);
+  const end = new SwPosition(node, value.length);
+  const attributes = new SfxItemSet(shell.GetDoc().GetAttrPool(), WRITER_CHARACTER_WHICH_RANGES);
+  shell.SetPaM(end, start);
+  attributes.Put(new SvxUnderlineItem(FontLineStyle.LINESTYLE_SINGLE, RES_CHRATR_UNDERLINE), true);
+  shell.SetAttrSet(attributes);
+  attributes.ClearItem();
+  shell.SetPaM(middle, start);
+  attributes.Put(new SvxWordLineModeItem(true, RES_CHRATR_WORDLINEMODE), true);
+  shell.SetAttrSet(attributes);
+  attributes.Dispose();
+  shell.SetPaM(end, start);
+  const workbench = render(<WriterWorkbench isActive view={view} />);
+  try {
+    const body = screen.getByLabelText("Writer document body");
+    expect(body.textContent).toBe(value);
+    expect(screen.getByText("one")).toHaveStyle({ textDecoration: "underline" });
+    expect(screen.getByText("two")).toHaveStyle({ textDecoration: "underline" });
+
+    fireEvent.click(screen.getByRole("menuitem", { name: "Format" }));
+    fireEvent.click(screen.getByRole("menuitem", { name: "Character…" }));
+    const controls = within(screen.getByRole("dialog", { name: "Character" }));
+    fireEvent.click(controls.getByRole("tab", { name: "Font Effects" }));
+    const box = controls.getByRole("checkbox", { name: "Individual words" });
+    expect(box).toBePartiallyChecked();
+    fireEvent.click(box);
+    expect(box).not.toBePartiallyChecked();
+    expect(box).not.toBeChecked();
+    fireEvent.click(box);
+    expect(box).toBeChecked();
+    fireEvent.click(box);
+    expect(box).toBePartiallyChecked();
+    fireEvent.click(box);
+    await act(
+      /** Applies explicit false to both portions as one native operation. @returns Completion. */ async () => {
+        fireEvent.click(controls.getByRole("button", { name: "OK" }));
+      },
+    );
+    expect(body.textContent).toBe(value);
+    expect(screen.queryByText("one", { exact: true })).toBeNull();
+    expect(screen.getByText("one two three")).toHaveStyle({ textDecoration: "underline" });
+    act(
+      /** Restores the earlier uneven word-line formatting. @returns Nothing. */ () => {
+        expect(shell.Undo()).toBe(true);
+      },
+    );
+    expect(screen.getByText("one")).toHaveStyle({ textDecoration: "underline" });
+    expect(body.textContent).toBe(value);
+  } finally {
+    workbench.unmount();
+    end.Dispose();
+    middle.Dispose();
+    start.Dispose();
     view.Close();
   }
 });

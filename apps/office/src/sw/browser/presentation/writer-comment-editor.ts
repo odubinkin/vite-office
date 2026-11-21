@@ -35,7 +35,11 @@ import {
 } from "../../inc/hintids";
 import { projectWriterCharacterAttributes } from "../../source/core/txtnode/txatbase";
 import { projectWriterLineSpacing } from "../../source/core/text/itrform2";
-import { browserTextDecoration, browserTextEmphasis } from "./writer-view-projection";
+import {
+  browserTextDecoration,
+  browserTextEmphasis,
+  splitWordLineText,
+} from "./writer-view-projection";
 import { browserFontFamily } from "../editor/writer-font-family";
 import { getWriterTextCaretPoint } from "../editor/writer-selection";
 import { EditPaM } from "../../../editeng/inc/EditPaM";
@@ -773,6 +777,38 @@ function applyTextStyle(
   if (attributes.fontSizeTwips !== undefined) style.fontSize = `${attributes.fontSizeTwips / 20}pt`;
   if (attributes.kerningTwips !== undefined)
     style.letterSpacing = `${attributes.kerningTwips / 20}pt`;
+  if (
+    attributes.underlineWordMode &&
+    (attributes.underline || attributes.overlineStyle || attributes.strikeout)
+  ) {
+    const parts = splitWordLineText(element.textContent ?? "");
+    element.replaceChildren();
+    for (const [index, part] of parts.entries()) {
+      if (part === "") continue;
+      if (index % 2 !== 0) element.append(part);
+      else {
+        const word = element.ownerDocument.createElement("span");
+        word.textContent = part;
+        paintAnnotationTextLines(word, attributes);
+        element.append(word);
+      }
+    }
+  } else paintAnnotationTextLines(element, attributes);
+  if (attributes.escapement?.offset) {
+    style.verticalAlign = attributes.escapement.offset > 0 ? "super" : "sub";
+    style.fontSize =
+      attributes.fontSizeTwips === undefined
+        ? `${attributes.escapement.height}%`
+        : `${(attributes.fontSizeTwips * attributes.escapement.height) / 2000}pt`;
+  }
+}
+
+/** Paints the selected line styles on one annotation text fragment. @param element - Display portion. @param attributes - Effective native items. @returns Nothing. */
+function paintAnnotationTextLines(
+  element: HTMLElement,
+  attributes: ReturnType<typeof projectWriterCharacterAttributes>,
+): void {
+  const style = element.style;
   if (attributes.underline)
     Object.assign(
       style,
@@ -795,11 +831,4 @@ function applyTextStyle(
   }
   if (attributes.strikeout)
     style.textDecorationLine = attributes.underline ? "underline line-through" : "line-through";
-  if (attributes.escapement?.offset) {
-    style.verticalAlign = attributes.escapement.offset > 0 ? "super" : "sub";
-    style.fontSize =
-      attributes.fontSizeTwips === undefined
-        ? `${attributes.escapement.height}%`
-        : `${(attributes.fontSizeTwips * attributes.escapement.height) / 2000}pt`;
-  }
 }
