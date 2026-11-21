@@ -1,0 +1,26 @@
+{
+  "schema_version": 1,
+  "task_id": "202611211719-8PK0GM",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-11-21T17:32:37.201Z",
+  "verdict": "pass",
+  "summary": "The scoped legacy ODS import reuses native condition owners and preserves deferred compilation and extension priority.",
+  "evaluated_sha": "ca23652dcfc67d9caa35ea4ce9ffb68f9fcd78a2",
+  "blueprint_digest": "7f3dad1e66ca30e562c0cc9825fe45f11d5e581f64e99136681a212772b04a24",
+  "findings": [
+    "Ordered rules keep the original source address and join equal ranges. The regression covers both sheet-ownership and empty-extension behavior."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202611211719-8PK0GM/README.md",
+    "output/playwright/8PK0GM/calc.log",
+    "output/playwright/8PK0GM/recheck-final.log",
+    "output/playwright/8PK0GM/types-final.log",
+    "output/playwright/8PK0GM/provenance.log"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": [
+    "The full tdf132278 workbook uses unported annotations. The reduced fixture covers its original valid string map. Full suites are scheduled at the tenth task."
+  ]
+}
