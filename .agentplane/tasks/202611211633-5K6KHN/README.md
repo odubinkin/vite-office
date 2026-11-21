@@ -4,7 +4,7 @@ title: "Refresh Graphify before task closure and after branch checkout"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 6
+revision: 7
 origin:
   system: "manual"
 depends_on: []
@@ -20,10 +20,10 @@ plan_approval:
   updated_by: "ORCHESTRATOR"
   note: null
 verification:
-  state: "pending"
-  updated_at: null
-  updated_by: null
-  note: null
+  state: "ok"
+  updated_at: "2026-11-21T16:38:04.040Z"
+  updated_by: "CODER"
+  note: "Real Git checkouts updated the fixture graph in both directions. Ordinary commits and path checkouts skipped refresh. A simulated refresh failure prevented the closeout command, and success preserved its arguments. The installed hook refreshed the vite-office index, and SwDoc resolved to its source."
   attempts: 0
 commit: null
 comments:
@@ -38,8 +38,14 @@ events:
     from: "TODO"
     to: "DOING"
     note: "Start: continue direct-mode task in current checkout."
+  -
+    type: "verify"
+    at: "2026-11-21T16:38:04.040Z"
+    author: "CODER"
+    state: "ok"
+    note: "Real Git checkouts updated the fixture graph in both directions. Ordinary commits and path checkouts skipped refresh. A simulated refresh failure prevented the closeout command, and success preserved its arguments. The installed hook refreshed the vite-office index, and SwDoc resolved to its source."
 doc_version: 3
-doc_updated_at: "2026-11-21T16:34:01.860Z"
+doc_updated_at: "2026-11-21T16:38:04.097Z"
 doc_updated_by: "CODER"
 description: "Run a shared local Graphify refresh before direct AgentPlane closeout and from a repository-local post-checkout hook. Verify checkout coverage and preserve existing hooks."
 sections:
@@ -58,6 +64,38 @@ sections:
     4. Verify the closeout wrapper passes arguments and never invokes AgentPlane on refresh failure. Use it to close this task after recording verification.
   Verification: |-
     <!-- BEGIN VERIFICATION RESULTS -->
+    ### 2026-11-21T16:38:04.040Z — VERIFY — ok
+
+    By: CODER
+
+    Note: Real Git checkouts updated the fixture graph in both directions. Ordinary commits and path checkouts skipped refresh. A simulated refresh failure prevented the closeout command, and success preserved its arguments. The installed hook refreshed the vite-office index, and SwDoc resolved to its source.
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-21T16:34:01.860Z, excerpt_hash=sha256:de8d18c7f0477ab7b25328cc6786f7d0ca9133cc166753f8c7b3928bac5729bb
+
+    Details:
+
+    Checks passed: sh -n scripts/graphify-context.sh; node .agentplane/policy/check-routing.mjs; ap doctor (existing hook shim warning); prettier --check README.md; git diff --check; idempotent hook install and unchanged AgentPlane hook hashes; real Graphify checkout fixture; main checkout hook and real query. The final live closeout will use the repository wrapper after evaluation.
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202611211633-5K6KHN/blueprint/resolved-snapshot.json
+    - old_digest: 552dd94556a609abe8b08b37020960b2ebbfb9fd1537e382c28014d96efef08c
+    - current_digest: 552dd94556a609abe8b08b37020960b2ebbfb9fd1537e382c28014d96efef08c
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202611211633-5K6KHN
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task verify-show 202611211633-5K6KHN
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: false
+    - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+    - risks: none
+
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Revert the integration commit and remove only the installed vite-office post-checkout hook. Existing hooks and the local Graphify installation can be retained."
   Findings: ""
@@ -88,6 +126,38 @@ Add a repository-local Graphify refresh/closeout command and install a checkout-
 ## Verification
 
 <!-- BEGIN VERIFICATION RESULTS -->
+### 2026-11-21T16:38:04.040Z — VERIFY — ok
+
+By: CODER
+
+Note: Real Git checkouts updated the fixture graph in both directions. Ordinary commits and path checkouts skipped refresh. A simulated refresh failure prevented the closeout command, and success preserved its arguments. The installed hook refreshed the vite-office index, and SwDoc resolved to its source.
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-21T16:34:01.860Z, excerpt_hash=sha256:de8d18c7f0477ab7b25328cc6786f7d0ca9133cc166753f8c7b3928bac5729bb
+
+Details:
+
+Checks passed: sh -n scripts/graphify-context.sh; node .agentplane/policy/check-routing.mjs; ap doctor (existing hook shim warning); prettier --check README.md; git diff --check; idempotent hook install and unchanged AgentPlane hook hashes; real Graphify checkout fixture; main checkout hook and real query. The final live closeout will use the repository wrapper after evaluation.
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202611211633-5K6KHN/blueprint/resolved-snapshot.json
+- old_digest: 552dd94556a609abe8b08b37020960b2ebbfb9fd1537e382c28014d96efef08c
+- current_digest: 552dd94556a609abe8b08b37020960b2ebbfb9fd1537e382c28014d96efef08c
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202611211633-5K6KHN
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task verify-show 202611211633-5K6KHN
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: false
+- repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- risks: none
+
 <!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan

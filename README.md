@@ -161,11 +161,16 @@ checkout.
 ```bash
 uv venv --python 3.14 .graphify/venv
 uv --cache-dir .graphify/cache pip install --python .graphify/venv/bin/python graphifyy==0.9.114
-.graphify/venv/bin/graphify extract . --code-only
+sh scripts/graphify-context.sh refresh
+sh scripts/graphify-context.sh install-hook
 .graphify/venv/bin/graphify query "SwDoc" --budget 1000
 ```
 
-Run the extraction command again after changing branches or making substantial code changes. The
-environment and `graphify-out/` index are local to each checkout. The index covers source code and
-skips JSON data, vendored sources, and AgentPlane history. The build uses local parsing without API
-credentials. See [AGENTS.md](AGENTS.md#repository-context) for how agents use the index.
+The installed Git hook refreshes the graph after branch or detached HEAD checkout. Direct-mode task
+closeout uses `sh scripts/graphify-context.sh finish` with the usual `ap finish` arguments. That
+command updates the graph before closing the task. Run the `refresh` command for changes you want to
+query before closeout. Rerun `install-hook` after updating the hook script.
+
+The environment and `graphify-out/` index are local to each checkout. The index covers source code
+and skips JSON data, vendored sources, and AgentPlane history. The build uses local parsing without
+API credentials. See [AGENTS.md](AGENTS.md#repository-context) for how agents use the index.

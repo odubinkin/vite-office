@@ -73,7 +73,7 @@ ap task plan set <task-id> --text "..." --updated-by <ROLE>
 ap task plan approve <task-id> --by ORCHESTRATOR
 ap task start-ready <task-id> --author <ROLE> --body "Start: ..."
 ap verify <task-id> --ok|--rework --by <ROLE> --note "..." [--observation "..." --impact "..." --resolution "..."] [--local-only]
-ap finish <task-id> --author <ROLE> --body "Verified: ..." --result "..." --commit <git-rev>
+sh scripts/graphify-context.sh finish <task-id> --author <ROLE> --body "Verified: ..." --result "..." --commit <git-rev>
 ```
 
 ### branch_pr lifecycle
@@ -113,7 +113,8 @@ node .agentplane/policy/check-routing.mjs
 
 - After preflight and task routing, start codebase exploration with a scoped `.graphify/venv/bin/graphify query "<symbols or topic>" --budget 1000` from the repository root, before broad source searches.
 - Use `graphify explain` or `graphify path` through the same executable for symbol and dependency questions. Confirm relevant results in source before making changes.
-- If the local CLI or index is missing, stale, or does not answer the question, use targeted source inspection. See the Graphify setup in `README.md` for building or refreshing the local index.
+- If the local CLI or index is missing, `.graphify/refresh-pending` exists, or the graph is stale or does not answer the question, use targeted source inspection. See the Graphify setup in `README.md`.
+- For direct-mode closeout, use the repository's `finish` command above after verification and evaluation. It refreshes Graphify before invoking AgentPlane.
 
 
 ## SHARED PROMPT CONTRACT
