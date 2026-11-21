@@ -5,26 +5,26 @@
     "classification": "browser-adaptation",
     "localPath": "apps/office/src/i18npool/browser/regex-matcher.ts",
     "status": "local-only",
-    "rationale": "Marshals prepared UTF-16 and copies signed directional captures from the native ICU regular expression ABI. Both explicit disposal and browser garbage collection release the independent native matcher.",
+    "rationale": "Runs the platform RegExp engine over prepared UTF-16 text, preserves the surrounding search context, and returns signed directional capture offsets.",
     "responsibilities": [
-      "Marshals prepared UTF-16 and copies signed directional captures from the native ICU regular expression ABI. Both explicit disposal and browser garbage collection release the independent native matcher."
+      "Runs the platform RegExp engine over prepared UTF-16 text, preserves the surrounding search context, and returns signed directional capture offsets."
     ],
     "stackDivergence": {
       "kind": "browser-adaptation",
-      "rationale": "Emscripten linear memory crosses the JavaScript boundary while the linked ICU retains regex semantics."
+      "rationale": "Writer uses ECMAScript regex syntax and Unicode matching in the browser. The ICU binding serves host verification."
     },
     "localSymbols": [
-      "createIcuRegexMatcherFactory"
+      "createBrowserRegexMatcher"
     ],
     "evidence": {
       "local": [
         {
           "path": "apps/office/src/i18npool/browser/regex-matcher.ts",
-          "marker": "createIcuRegexMatcherFactory"
+          "marker": "createBrowserRegexMatcher"
         },
         {
           "path": "apps/office/src/i18npool/browser/regex-matcher.test.ts",
-          "marker": "writes length-specified UTF-16"
+          "marker": "keeps lookaround context outside a bounded greedy match"
         }
       ],
       "upstream": [

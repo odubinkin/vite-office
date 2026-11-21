@@ -1,5 +1,5 @@
 /** @fileoverview Writer model-text FindTextImpl and inline fly/soft-hyphen cleanup from native findtxt.cxx; layout-merged text and fields/notes remain unported. */
-import { SwPaM } from "./pam";
+import { fnMoveBackward, fnMoveForward, SwPaM } from "./pam";
 import {
   FIND_FOUND,
   FIND_NOT_FOUND,
@@ -113,7 +113,7 @@ function searchText(
   return false;
 }
 
-/** Native DoSearch model-text branch recovers point/mark using its directional removal predicates. @param target - Result PaM. @param node - Current node. @param options - Original options. @param engine - Shared wrapper. @param low - Lower content bound. @param high - Upper content bound. @param backward - Search direction. @returns Whether a nonempty match was selected. */
+/** Native DoSearch model-text branch recovers point/mark using its directional removal predicates. @param target - Result PaM. @param node - Current node. @param options - Original options. @param engine - Shared wrapper. @param low - Lower content bound. @param high - Upper content bound. @param backward - Search direction. @param pattern - Decoded regex pattern when applicable. @returns Whether a nonempty match was selected. */
 function DoSearch(
   target: SwPaM,
   node: SwTextNode,
@@ -122,19 +122,19 @@ function DoSearch(
   low: number,
   high: number,
   backward: boolean,
+  pattern: string | undefined,
 ): boolean {
-  const regex = options.AlgorithmType2 === REGEXP;
-  const pattern = regex ? DecodeSearchText(options.searchString) : "";
-  if (regex && high !== node.Len() && pattern.endsWith("$")) {
+  if (high !== node.Len() && pattern?.endsWith("$")) {
     let alternative = pattern.indexOf("|");
     while (alternative > 0 && pattern[alternative - 1] === "$")
       alternative = pattern.indexOf("|", alternative + 1);
     if (alternative === -1) return false;
   }
 
-  const keepSoftHyphens = regex
-    ? /\\(?:xAD|x\{00AD\}|u00AD|u00ad|U000000AD|N\{SOFT HYPHEN\})/.test(pattern)
-    : options.searchString.getLength() === 1 && options.searchString.getStr()[0] === 0xad;
+  const keepSoftHyphens =
+    pattern !== undefined
+      ? /\\(?:xAD|x\{00AD\}|u00AD|u00ad|U000000AD|N\{SOFT HYPHEN\})/.test(pattern)
+      : options.searchString.getLength() === 1 && options.searchString.getStr()[0] === 0xad;
   const clean = lcl_CleanStr(node, low, high, !keepSoftHyphens);
   const start: [number] = [backward ? clean.end : low],
     end: [number] = [backward ? low : clean.end];
@@ -169,6 +169,41 @@ function DoSearch(
   if (backward) target.Exchange();
   return true;
 }
+/** Selects a native paragraph break as a range between consecutive text nodes. @param target - Result cursor. @param node - Current text node. @param backward - Search direction. @param empty - Whether the paragraph before the break must be empty. @param region - Registered search bounds. @param acceptsNode - Represented layout admission. @returns Whether the break was selected. */
+function FindParagraphBreak(
+  target: SwPaM,
+  node: SwTextNode,
+  backward: boolean,
+  empty: boolean,
+  region: SwPaM,
+  acceptsNode?: SwSearchNodeFilter,
+): boolean {
+  if (empty && !backward && node.Len() !== 0) return false;
+  const edge = new SwPaM(region.GetPoint());
+  try {
+    edge.GetPoint().Assign(node, backward ? 0 : node.Len());
+    edge.SetMark();
+    if (!edge.Move(backward ? fnMoveBackward : fnMoveForward)) return false;
+    const next = edge.GetPoint();
+    const nextNode = next.GetNode();
+    if (
+      !(nextNode instanceof SwTextNode) ||
+      Math.abs(next.GetNodeIndex() - node.GetIndex()) !== 1 ||
+      (empty && backward && next.GetContentIndex() !== 0) ||
+      next.compare(region.Start()) < 0 ||
+      next.compare(region.End()) > 0 ||
+      acceptsNode?.(nextNode) === false
+    )
+      return false;
+    target.GetPoint().Assign(next);
+    target.SetMark();
+    target.GetMark().Assign(edge.GetMark());
+    return true;
+  } finally {
+    edge.Dispose();
+  }
+}
+
 /** Native represented model-text traversal through actual SwNodes, including table content. No projection IDs or concatenated document string are used. @param searchPam - Result cursor; the region owns traversal bounds. @param options - Native search options. @param engine - Prepared shared engine. @param backward - Direction. @param region - Registered model bounds. @param acceptsNode - Represented layout admission. @returns Whether one match was found; failure preserves the caller cursor. */
 export function FindTextImpl(
   searchPam: SwPaM,
@@ -185,6 +220,10 @@ export function FindTextImpl(
   if (searchPam.GetPoint().GetNode().GetNodes() !== nodes)
     throw new Error("Writer search cursor belongs to another document.");
   if (first.compare(last) === 0) return false;
+  const pattern =
+    options.AlgorithmType2 === REGEXP ? DecodeSearchText(options.searchString) : undefined;
+  const emptyParagraph = pattern === "^$" || pattern === "$^";
+  const paragraphBreak = pattern === "$" || emptyParagraph;
   // Native MakeRegion chooses the traversal start from the region, not the result cursor.
   for (
     let index = backward ? last.GetNodeIndex() : first.GetNodeIndex();
@@ -195,7 +234,14 @@ export function FindTextImpl(
     if (!(node instanceof SwTextNode) || acceptsNode?.(node) === false) continue;
     const low = node === first.GetNode() ? first.GetContentIndex() : 0;
     const high = node === last.GetNode() ? last.GetContentIndex() : node.Len();
-    if (low < high && DoSearch(searchPam, node, options, engine, low, high, backward)) return true;
+    if (low < high && DoSearch(searchPam, node, options, engine, low, high, backward, pattern))
+      return true;
+    if (
+      paragraphBreak &&
+      (!pattern?.endsWith("$") || high === node.Len()) &&
+      FindParagraphBreak(searchPam, node, backward, emptyParagraph, region, acceptsNode)
+    )
+      return true;
   }
   return false;
 }

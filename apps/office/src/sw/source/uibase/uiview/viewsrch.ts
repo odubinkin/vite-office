@@ -83,6 +83,7 @@ export interface WriterSearchItem {
   readonly useAsianOptions: boolean;
   readonly japaneseFlags: number;
   readonly wholeWords: boolean;
+  readonly regularExpression: boolean;
   readonly similaritySearch: boolean;
   readonly styleSearch: boolean;
   readonly searchStyle: string;
@@ -235,6 +236,7 @@ export class SwViewSearch {
     useAsianOptions: false,
     japaneseFlags: 0,
     wholeWords: false,
+    regularExpression: false,
     similaritySearch: false,
     styleSearch: false,
     searchStyle: "",
@@ -267,6 +269,7 @@ export class SwViewSearch {
       useAsianOptions: options.GetFlag("IsUseAsianOptions"),
       japaneseFlags: options.GetJapaneseTransliterationFlags() & ~TransliterationFlags.IGNORE_WIDTH,
       wholeWords: options.GetFlag("IsWholeWordsOnly"),
+      regularExpression: options.GetFlag("IsUseRegularExpression"),
       similaritySearch: options.GetFlag("IsSimilaritySearch"),
       styleSearch: options.GetFlag("IsSearchForStyles"),
     };
@@ -450,6 +453,7 @@ export class SwViewSearch {
       options.SetFlag("IsWholeWordsOnly", item.wholeWords);
       options.SetFlag("IsBackwards", backward);
       options.SetFlag("IsSearchForStyles", item.styleSearch);
+      options.SetFlag("IsUseRegularExpression", item.regularExpression);
       options.SetFlag("IsSimilaritySearch", item.similaritySearch);
       options.SetFlag("IsUseAsianOptions", item.useAsianOptions);
     }
@@ -477,6 +481,7 @@ export class SwViewSearch {
       matchCase: query.matchCase,
       matchCharacterWidth: true,
       wholeWords: false,
+      regularExpression: false,
       similaritySearch: false,
       styleSearch: false,
       selection: false,
@@ -634,11 +639,11 @@ export class SwViewSearch {
         : new SearchOptions2(item.searchOptions);
     options.searchString.assign(toOUString(item.search));
     if (item.searchOptions !== undefined) return options;
-    options.AlgorithmType2 = ABSOLUTE;
+    options.AlgorithmType2 = item.regularExpression ? REGEXP : ABSOLUTE;
     options.searchFlag =
       (item.wholeWords ? NORM_WORD_ONLY : 0) |
       (item.selection ? REG_NOT_BEGINOFLINE | REG_NOT_ENDOFLINE : 0);
-    if (item.similaritySearch) {
+    if (!item.regularExpression && item.similaritySearch) {
       options.AlgorithmType2 = APPROXIMATE;
       options.changedChars = item.similarity.changedChars;
       options.insertedChars = item.similarity.insertedChars;

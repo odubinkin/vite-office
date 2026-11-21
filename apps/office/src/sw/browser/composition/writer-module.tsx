@@ -9,6 +9,7 @@ import { useEffect, useState } from "react";
 
 import type { OfficeModuleFactory } from "../../../framework/browser/app/modulemanager";
 import { BrowserSfxDispatcher } from "../../../framework/browser/dispatch/browser-dispatcher";
+import { createBrowserRegexMatcher } from "../../../i18npool/browser/regex-matcher";
 import { createDocument } from "../../../sfx2/source/doc/objsh";
 import { SfxViewFrame } from "../../../sfx2/source/view/viewfrm";
 import { copyRichText, readRichClipboard } from "../../../vcl/browser/browser-clipboard";
@@ -166,7 +167,7 @@ export function createWriterDocumentSession(
     { kind: "untitled", name: "Untitled Writer Document" },
     odtFilter,
   );
-  const view = new SwView(docShell, module, services.searchOptions);
+  const view = new SwView(docShell, module, services.searchOptions, createBrowserRegexMatcher);
   const fileDialogs = new WriterFileDialogController();
   const sessionServices = { ...services, fileDialogs };
   const workflowCommandShell = new WriterWorkflowCommandShell(

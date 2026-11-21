@@ -4,7 +4,7 @@ title: "Implement Writer search and replace core and browser UI"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 72
+revision: 73
 origin:
   system: "manual"
 depends_on:
@@ -220,6 +220,9 @@ comments:
   -
     author: "CODER"
     body: "Verified checkpoint: Writer model-text regex keeps soft hyphens for all six source escape spellings, and applies the pinned paragraph-end range gate and its raw character treatment of escaped dollar signs (WRITER-712). The focused model, replacement and Writer view suites passed 62 cases with the native ICU probe, including eight new tests. Typecheck, source provenance, scoped ESLint and Prettier, policy routing and whitespace passed. Paragraph-break matching and replacement history, notes search, and browser ICU activation are still open."
+  -
+    author: "CODER"
+    body: "Verified checkpoint: following the user decision, Writer now runs browser regex search with ECMAScript RegExp flags and original directional UTF-16 captures. The native ICU host probe remains available to verify source behavior. Removed the Emscripten build script and SDK pins for browser regex. The Find and Replace dialog exposes the regular-expression flag and persists it; whole-word and similarity controls follow the source admissions. Model search selects adjacent paragraph break ranges for the three source anchors in both directions. WRITER-713 records the missing final break. Passed 98 targeted Writer tests in seven files, six shared regex tests with the host probe, production build, two resource checks, boundaries, source tree, provenance, JSDoc, file size, focused lint and formatting, doctor and routing. The existing doctor hook warning remains. Browser regex uses ECMAScript syntax. Structural paragraph replacement with undo and annotation search remain pending. No full regression run or task closure."
 events:
   -
     type: "status"
@@ -528,8 +531,13 @@ events:
     at: "2026-11-21T11:17:30.463Z"
     author: "CODER"
     body: "Verified checkpoint: Writer model-text regex keeps soft hyphens for all six source escape spellings, and applies the pinned paragraph-end range gate and its raw character treatment of escaped dollar signs (WRITER-712). The focused model, replacement and Writer view suites passed 62 cases with the native ICU probe, including eight new tests. Typecheck, source provenance, scoped ESLint and Prettier, policy routing and whitespace passed. Paragraph-break matching and replacement history, notes search, and browser ICU activation are still open."
+  -
+    type: "comment"
+    at: "2026-11-21T11:28:09.351Z"
+    author: "CODER"
+    body: "Verified checkpoint: following the user decision, Writer now runs browser regex search with ECMAScript RegExp flags and original directional UTF-16 captures. The native ICU host probe remains available to verify source behavior. Removed the Emscripten build script and SDK pins for browser regex. The Find and Replace dialog exposes the regular-expression flag and persists it; whole-word and similarity controls follow the source admissions. Model search selects adjacent paragraph break ranges for the three source anchors in both directions. WRITER-713 records the missing final break. Passed 98 targeted Writer tests in seven files, six shared regex tests with the host probe, production build, two resource checks, boundaries, source tree, provenance, JSDoc, file size, focused lint and formatting, doctor and routing. The existing doctor hook warning remains. Browser regex uses ECMAScript syntax. Structural paragraph replacement with undo and annotation search remain pending. No full regression run or task closure."
 doc_version: 3
-doc_updated_at: "2026-11-21T11:17:30.463Z"
+doc_updated_at: "2026-11-21T11:28:09.351Z"
 doc_updated_by: "CODER"
 description: "Implement the approved coherent Writer search-and-replace feature from pinned LibreOffice sources: real shared search engine and options, native paragraph/cursor traversal and replacement/history contracts, view-owned search state and dispatch, Find toolbar and Find and Replace dialog with generated upstream command placement and shortcuts. Preserve source semantics and explicit unsupported boundaries; never substitute DOM text search or browser RegExp for ICU contracts. Work only on writer in vite-office-writer; local upstream reading approved, no network or merges. Keep active until approved scope is verified."
 sections:

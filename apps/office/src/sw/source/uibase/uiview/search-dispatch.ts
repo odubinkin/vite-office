@@ -2,7 +2,7 @@
 import type { SearchOptionsConfiguration } from "../../../../unotools/source/config/searchopt";
 import { Any } from "../../../../cppu/inc/com/sun/star/uno/Any";
 import { TransliterationFlags } from "../../../../i18nutil/inc/transliteration";
-import { APPROXIMATE } from "../../../../offapi/com/sun/star/util/SearchAlgorithms2";
+import { APPROXIMATE, REGEXP } from "../../../../offapi/com/sun/star/util/SearchAlgorithms2";
 import { LEV_RELAXED, NORM_WORD_ONLY } from "../../../../offapi/com/sun/star/util/SearchFlags";
 import * as MID from "../../../../svl/inc/memberid";
 import { SvxSearchCmd } from "../../../../svl/inc/srchitem";
@@ -140,6 +140,7 @@ export function ProjectWriterSearchItem(
     matchCharacterWidth: !(flags & TransliterationFlags.IGNORE_WIDTH),
     useAsianOptions: item.QueryValue(MID.MID_SEARCH_ASIANOPTIONS) === true,
     wholeWords: Boolean(options.searchFlag & NORM_WORD_ONLY),
+    regularExpression: options.AlgorithmType2 === REGEXP,
     similaritySearch: options.AlgorithmType2 === APPROXIMATE,
     similarity: {
       changedChars: options.changedChars,

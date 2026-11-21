@@ -5703,3 +5703,13 @@ applies its authored properties without that collection change.
 - An escaped dollar at the end of a pattern therefore requires the range to
   reach the paragraph end even when the literal dollar is inside the range.
   Writer preserves these checks in both directions.
+
+### WRITER-713 — Paragraph-anchor search omits the final paragraph
+
+- For `$`, `^$` and `$^`, upstream `sw/source/core/crsr/findtxt.cxx`
+  selects a range spanning two adjacent nodes. At the end of the document, no
+  following text node exists, even when the last paragraph is empty.
+- `testTdf147583_backwardSearch` in
+  `sw/qa/extras/uiwriter/uiwriter7.cxx` expects the paragraph-end find-all
+  count to be one less than the paragraph count and explicitly calls out the
+  omitted last empty paragraph. Writer preserves this document boundary.

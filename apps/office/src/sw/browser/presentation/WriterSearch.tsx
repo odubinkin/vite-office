@@ -32,6 +32,7 @@ import { TransliterationFlags } from "../../../i18nutil/inc/transliteration";
 import { describeSearchAttributes } from "./writer-search-format-values";
 import { WriterSearchAttributesDialog } from "./WriterSearchAttributesDialog";
 import { WriterSearchFormatDialog } from "./WriterSearchFormatDialog";
+import { WriterSearchAlgorithmOptions } from "./WriterSearchAlgorithmOptions";
 import { WriterSimilaritySearchDialog } from "./WriterSimilaritySearchDialog";
 import { WriterJapaneseSearchDialog } from "./WriterJapaneseSearchDialog";
 
@@ -146,6 +147,7 @@ export function WriterSearch({
       !initial.matchDiacritics ||
       initial.matchKashida ||
       initial.useAsianOptions ||
+      initial.regularExpression ||
       initial.similaritySearch ||
       initial.styleSearch ||
       initial.matchCharacterWidth ||
@@ -606,7 +608,11 @@ export function WriterSearch({
             <input
               type="checkbox"
               checked={item.wholeWords}
-              disabled={styleOptions !== undefined || !hasOption(SearchOptionFlags.WHOLE_WORDS)}
+              disabled={
+                item.regularExpression ||
+                styleOptions !== undefined ||
+                !hasOption(SearchOptionFlags.WHOLE_WORDS)
+              }
               onChange={
                 /** Stores the whole-word option. @param event - Updated control. @returns Nothing. */ (
                   event,
@@ -742,7 +748,11 @@ export function WriterSearch({
               <input
                 type="checkbox"
                 checked={item.styleSearch}
-                disabled={item.similaritySearch || !hasOption(SearchOptionFlags.FAMILIES)}
+                disabled={
+                  item.regularExpression ||
+                  item.similaritySearch ||
+                  !hasOption(SearchOptionFlags.FAMILIES)
+                }
                 onChange={
                   /** Switches between text fields and native paragraph style lists. @param event - Updated control. @returns Nothing. */ (
                     event,
@@ -758,46 +768,19 @@ export function WriterSearch({
                 ? text("including-styles", "Including Styles")
                 : text("search-for-styles", "Search for styles")}
             </label>
-            <label className="flex items-center gap-1 text-sm sm:col-start-2 sm:row-start-3">
-              <input
-                type="checkbox"
-                checked={item.matchCharacterWidth}
-                disabled={item.useAsianOptions}
-                onChange={
-                  /** Updates the dialog width option. @param event - Updated control. @returns Nothing. */ (
-                    event,
-                  ) => update({ matchCharacterWidth: event.currentTarget.checked })
-                }
-              />
-              {text("match-character-width", "Match character width")}
-            </label>
-            <div className="flex items-center gap-2 sm:col-start-1 sm:row-start-4">
-              <label className="flex items-center gap-1 text-sm">
-                <input
-                  type="checkbox"
-                  checked={item.similaritySearch}
-                  disabled={styleOptions !== undefined || !hasOption(SearchOptionFlags.SIMILARITY)}
-                  onChange={
-                    /** Enables the native similarity algorithm. @param event - Updated control. @returns Nothing. */ (
-                      event,
-                    ) => update({ similaritySearch: event.currentTarget.checked })
-                  }
-                />
-                {text("similarity-search", "Similarity search")}
-              </label>
-              <button
-                type="button"
-                ref={similarityOptionsButton}
-                className={buttonStyle}
-                disabled={!item.similaritySearch || !hasOption(SearchOptionFlags.SIMILARITY)}
-                onClick={
-                  /** Opens the similarity limits dialog. @returns Nothing. */ () =>
-                    setSimilarityOptionsOpen(true)
-                }
-              >
-                {text("similarities", "Similarities…")}
-              </button>
-            </div>
+            <WriterSearchAlgorithmOptions
+              item={item}
+              styleMode={styleOptions !== undefined}
+              hasOption={hasOption}
+              update={update}
+              text={text}
+              buttonStyle={buttonStyle}
+              similarityOptionsButton={similarityOptionsButton}
+              openSimilarity={
+                /** Opens the similarity limits dialog. @returns Nothing. */ () =>
+                  setSimilarityOptionsOpen(true)
+              }
+            />
             <div className="flex items-center gap-2 sm:col-start-2 sm:row-start-4">
               <label className="flex items-center gap-1 text-sm">
                 <input

@@ -573,3 +573,107 @@ it
     }
   },
 );
+
+it.skipIf(!hasNativeRegexProbe).each([
+  { pattern: "$", breaks: [0, 1, 2, 3] },
+  { pattern: "^$", breaks: [1, 3] },
+  { pattern: "$^", breaks: [1, 3] },
+])(
+  "finds $pattern as directional ranges between adjacent paragraph nodes",
+  /** Ports the paragraph-break assertion from tdf147583 to the model ring. @param scenario - Anchor and expected preceding paragraphs. @returns Nothing. */ (
+    scenario,
+  ) => {
+    const doc = new SwDoc();
+    const first = doc.paragraphs[0] as SwTextNode;
+    first.SetText("abc");
+    const nodes = [
+      first,
+      doc.nodes.MakeTextNode(""),
+      doc.nodes.MakeTextNode("xyz"),
+      doc.nodes.MakeTextNode(""),
+      doc.nodes.MakeTextNode(""),
+    ];
+    const options = new SearchOptions2();
+    options.AlgorithmType2 = REGEXP;
+    options.searchString.assign(string(scenario.pattern));
+    for (const backward of [false, true]) {
+      const point = new SwPosition(first, 0);
+      const cursor = new SwCursor(point);
+      point.Dispose();
+      try {
+        expect(
+          cursor.Find_Text(
+            options,
+            false,
+            backward ? SwDocPositions.End : SwDocPositions.Start,
+            backward ? SwDocPositions.Start : SwDocPositions.End,
+            [false],
+            FindRanges.InSelAll | FindRanges.InBodyOnly,
+            false,
+            undefined,
+            undefined,
+            createNativeRegexMatcher,
+          ),
+        ).toBe(scenario.breaks.length);
+        const breaks = backward ? [...scenario.breaks].reverse() : scenario.breaks;
+        const found = [...cursor.GetRingContainer()];
+        for (const [index, before] of breaks.entries()) {
+          const match = found[index];
+          const start = nodes[before];
+          if (!match || !start) throw new Error("Expected a paragraph break in the cursor ring.");
+          expect(match.Start().GetNode()).toBe(start);
+          expect(match.Start().GetContentIndex()).toBe(start.Len());
+          expect(match.End().GetNode()).toBe(nodes[before + 1]);
+          expect(match.End().GetContentIndex()).toBe(0);
+          expect(match.GetPoint()).toBe(backward ? match.Start() : match.End());
+        }
+      } finally {
+        while (cursor.GetNext() !== cursor) cursor.GetNext().Dispose();
+        cursor.Dispose();
+      }
+    }
+  },
+);
+
+it.skipIf(!hasNativeRegexProbe)(
+  "respects both ends of a search region when selecting a paragraph break",
+  /** Verifies clipping and layout admission on actual model positions. @returns Nothing. */ () => {
+    const doc = new SwDoc();
+    const first = doc.paragraphs[0] as SwTextNode;
+    first.SetText("abc");
+    const next = doc.nodes.MakeTextNode("xyz");
+    const options = new SearchOptions2();
+    options.AlgorithmType2 = REGEXP;
+    options.searchString.assign(string("$"));
+    const engine = new TextSearch(options, createNativeRegexMatcher);
+    const within = range(first, 0);
+    const across = range(first, 2, next, 0);
+    const cursor = range(first, 0);
+    try {
+      expect(FindTextImpl(cursor, options, engine, false, within)).toBe(false);
+      expect(FindTextImpl(cursor, options, engine, true, within)).toBe(false);
+      expect(
+        FindTextImpl(
+          cursor,
+          options,
+          engine,
+          false,
+          across,
+          /** Excludes the second text node from device layout. @param node - Candidate. @returns Whether represented. */ (
+            node,
+          ) => node !== next,
+        ),
+      ).toBe(false);
+      expect(cursor.GetPoint().GetNode()).toBe(first);
+      expect(cursor.GetPoint().GetContentIndex()).toBe(0);
+      expect(FindTextImpl(cursor, options, engine, false, across)).toBe(true);
+      expect(cursor.Start().GetContentIndex()).toBe(3);
+      expect(cursor.End().GetNode()).toBe(next);
+      expect(cursor.End().GetContentIndex()).toBe(0);
+    } finally {
+      cursor.Dispose();
+      across.Dispose();
+      within.Dispose();
+    }
+  },
+);
