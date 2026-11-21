@@ -7,6 +7,7 @@ import {
   createWriterInterface,
   getWriterCommandArguments,
   getWriterSlotId,
+  type WriterSlotHandler,
   type WriterViewCommandTarget,
 } from "../../../sdi/swriter";
 import { SfxUInt16Item } from "../../../../svl/source/items/intitem";
@@ -197,5 +198,32 @@ export function createWriterViewCommandRegistry(
       /** Reads sidebar visibility. @returns Checked state. */
       isChecked: (): boolean => target.IsSidebarVisible(),
     },
+    ...([false, true] as const).map<WriterSlotHandler<WriterViewCommandTarget>>(
+      /** Binds the two native comment visibility options. @param resolved - Whether this slot filters resolved comments. @returns Slot handler. */
+      (resolved) => {
+        const id = resolved
+          ? WRITER_COMMAND_IDS.showResolvedAnnotations
+          : WRITER_COMMAND_IDS.showAnnotations;
+        return {
+          id,
+          capabilityId: "CAP-0104",
+          /** Executes the original toggle or explicit slot request. @param _context - Active view. @param args - Request items. @returns Nothing. */
+          execute: (_context, args) => {
+            const requested = args.find(
+              /** Finds the native bool for the requested slot. @param item - Request item. @returns Whether it belongs to this slot. */
+              (item): item is SfxBoolItem =>
+                item instanceof SfxBoolItem && item.Which() === getWriterSlotId(id),
+            );
+            const value = requested?.GetValue();
+            if (resolved) target.SetResolvedPostIts(!(value ?? target.IsResolvedPostIts()));
+            else target.SetPostIts(value ?? !target.IsPostIts());
+          },
+          /** Both commands are available when the document has comments. @returns Whether enabled. */
+          isEnabled: () => target.HasNotes(),
+          /** Reports the source view option value. @returns Whether checked. */
+          isChecked: () => (resolved ? target.IsResolvedPostIts() : target.IsPostIts()),
+        };
+      },
+    ),
   ]);
 }

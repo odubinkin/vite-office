@@ -86,6 +86,8 @@
     "toggleHorizontalRuler": ".uno:Ruler",
     "toggleVerticalRuler": ".uno:VRuler",
     "toggleSidebar": ".uno:Sidebar",
+    "showAnnotations": ".uno:ShowAnnotations",
+    "showResolvedAnnotations": ".uno:ShowResolvedAnnotations",
     "toggleStatusBar": ".uno:StatusBarVisible",
     "superscript": ".uno:SuperScript",
     "subscript": ".uno:SubScript",
@@ -158,6 +160,8 @@
     { "capabilityId": "CAP-0104", "commandUrl": ".uno:Ruler" },
     { "capabilityId": "CAP-0104", "commandUrl": ".uno:VRuler" },
     { "capabilityId": "CAP-0104", "commandUrl": ".uno:Sidebar" },
+    { "capabilityId": "CAP-0104", "commandUrl": ".uno:ShowAnnotations" },
+    { "capabilityId": "CAP-0104", "commandUrl": ".uno:ShowResolvedAnnotations" },
     { "capabilityId": "CAP-0104", "commandUrl": ".uno:StatusBarVisible" },
     { "capabilityId": "CAP-0109", "commandUrl": ".uno:SuperScript" },
     { "capabilityId": "CAP-0109", "commandUrl": ".uno:SubScript" },
@@ -1216,6 +1220,31 @@
       "shortcuts": ["Ctrl+F5", "Meta+F5"],
       "slotId": 10336
     },
+    ".uno:ShowAnnotations": {
+      "browserOwned": false,
+      "argumentSchema": [],
+      "capabilityId": "CAP-0104",
+      "controlLabel": "Show Comments",
+      "label": "Show Comments",
+      "iconName": "lc_showannotations.svg",
+      "placements": ["sw/uiconfig/swriter/menubar/menubar.xml"],
+      "semantics": "check",
+      "showsDialog": false,
+      "shortcuts": [],
+      "slotId": 11098
+    },
+    ".uno:ShowResolvedAnnotations": {
+      "browserOwned": false,
+      "argumentSchema": [],
+      "capabilityId": "CAP-0104",
+      "controlLabel": "Show resolved comments",
+      "label": "Show resolved comments",
+      "placements": ["sw/uiconfig/swriter/menubar/menubar.xml"],
+      "semantics": "check",
+      "showsDialog": false,
+      "shortcuts": [],
+      "slotId": 11190
+    },
     ".uno:StatusBarVisible": {
       "browserOwned": false,
       "argumentSchema": [],
@@ -2073,6 +2102,16 @@
     {
       "classification": "supported-upstream",
       "commandUrl": ".uno:Sidebar",
+      "sources": ["sw/uiconfig/swriter/menubar/menubar.xml"]
+    },
+    {
+      "classification": "supported-upstream",
+      "commandUrl": ".uno:ShowAnnotations",
+      "sources": ["sw/uiconfig/swriter/menubar/menubar.xml"]
+    },
+    {
+      "classification": "supported-upstream",
+      "commandUrl": ".uno:ShowResolvedAnnotations",
       "sources": ["sw/uiconfig/swriter/menubar/menubar.xml"]
     },
     {
@@ -3177,22 +3216,6 @@
       "context": [".uno:ViewMenu"],
       "entryKind": "command",
       "sourceUrl": ".uno:ViewTrackChanges",
-      "reason": "outside-p1-supported-command-slice",
-      "sourcePath": "sw/uiconfig/swriter/menubar/menubar.xml"
-    },
-    {
-      "classification": "X",
-      "context": [".uno:ViewMenu"],
-      "entryKind": "command",
-      "sourceUrl": ".uno:ShowAnnotations",
-      "reason": "outside-p1-supported-command-slice",
-      "sourcePath": "sw/uiconfig/swriter/menubar/menubar.xml"
-    },
-    {
-      "classification": "X",
-      "context": [".uno:ViewMenu"],
-      "entryKind": "command",
-      "sourceUrl": ".uno:ShowResolvedAnnotations",
       "reason": "outside-p1-supported-command-slice",
       "sourcePath": "sw/uiconfig/swriter/menubar/menubar.xml"
     },
@@ -7831,6 +7854,9 @@
             "label": "Rulers"
           },
           { "kind": "separator" },
+          { "commandUrl": ".uno:ShowAnnotations", "kind": "command", "visible": true },
+          { "commandUrl": ".uno:ShowResolvedAnnotations", "kind": "command", "visible": true },
+          { "kind": "separator" },
           { "commandUrl": ".uno:Sidebar", "kind": "command", "visible": true }
         ],
         "kind": "menu",
@@ -8870,18 +8896,6 @@
         "context": [".uno:ViewMenu"],
         "entryKind": "command",
         "sourceUrl": ".uno:ViewTrackChanges"
-      },
-      {
-        "classification": "X",
-        "context": [".uno:ViewMenu"],
-        "entryKind": "command",
-        "sourceUrl": ".uno:ShowAnnotations"
-      },
-      {
-        "classification": "X",
-        "context": [".uno:ViewMenu"],
-        "entryKind": "command",
-        "sourceUrl": ".uno:ShowResolvedAnnotations"
       },
       {
         "classification": "X",

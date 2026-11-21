@@ -109,6 +109,11 @@ export class SwPostItField {
     return this.data.id ?? 0;
   }
 
+  /** Reads the persisted resolution state of this annotation. @returns Whether resolved. */
+  IsResolved(): boolean {
+    return this.data.resolved === true;
+  }
+
   /** Reads the annotation name used to join its point and range. @returns Annotation name. */
   GetName(): string {
     return this.data.name;

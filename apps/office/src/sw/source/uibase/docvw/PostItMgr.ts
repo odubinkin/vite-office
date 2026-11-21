@@ -9,6 +9,7 @@ import { SvxSearchItem } from "../../../../svl/source/items/srchitem";
 import type { RegexMatcherFactory } from "../../../../unotools/inc/textsearch";
 import type { SfxItemSet } from "../../../../svl/source/items/itemset";
 import type { SwFormatField } from "../../../inc/fmtfld";
+import type { SwViewOption } from "../../../inc/viewopt";
 
 /** Editor and viewport bound to one native comment field. */
 export interface SwAnnotationWindow {
@@ -18,6 +19,8 @@ export interface SwAnnotationWindow {
   ApplyAttributes?(items: SfxItemSet): boolean;
   SelectAll?(): void;
   SearchHighlight?(): void;
+  HasFocus?(): boolean;
+  GrabFocusToDocument?(): void;
 }
 
 /** Owns active comment search state and resolves sidebar windows by actual field identity. */
@@ -26,8 +29,9 @@ export class SwPostItMgr {
   private active: SwFormatField | undefined;
   private pendingFocus: SwFormatField | undefined;
 
-  /** Binds the regex factory supplied by the current Writer view. @param createRegex - Platform compiler. @param activeChanged - Dispatch context notification. @returns Manager. */
+  /** Binds the current Writer view options and search engine. @param options - View-local options. @param createRegex - Platform compiler. @param activeChanged - Dispatch context notification. @returns Manager. */
   constructor(
+    private readonly options: SwViewOption,
     private readonly createRegex?: RegexMatcherFactory,
     private readonly activeChanged?: () => void,
   ) {}
@@ -35,15 +39,50 @@ export class SwPostItMgr {
   /** Registers the sidebar window for a model field. @param field - Actual model comment. @param window - Mounted editor. @returns Release callback. */
   RegisterSidebarWin(field: SwFormatField, window: SwAnnotationWindow): () => void {
     this.windows.set(field, window);
-    if (this.pendingFocus === field) {
-      this.pendingFocus = undefined;
-      this.Focus(field);
-    }
+    if (this.IsVisible(field)) this.SidebarWinShown(field);
     return /** Releases exactly this mounted view. @returns Nothing. */ () => {
       if (this.windows.get(field) !== window) return;
       this.windows.delete(field);
       if (this.active === field) this.ClearActiveField();
     };
+  }
+
+  /** Reads the visibility of a field's annotation window. @param field - Actual comment field. @returns Whether shown. */
+  IsVisible(field: SwFormatField): boolean {
+    return (
+      this.options.IsPostIts() &&
+      (this.options.IsResolvedPostIts() || !field.GetField().IsResolved())
+    );
+  }
+
+  /** Shows or hides comment windows as a view option. @param value - Whether to show comments. @returns Nothing. */
+  ShowNotes(value: boolean): void {
+    if (!value) this.ReturnFocusToDocument();
+    this.options.SetPostIts(value);
+  }
+
+  /** Shows or hides resolved annotation windows. @param value - Whether to show resolved comments. @returns Nothing. */
+  ShowHideResolvedNotes(value: boolean): void {
+    if (!value && this.GetActiveField()?.GetField().IsResolved()) this.ReturnFocusToDocument();
+    this.options.SetResolvedPostIts(value);
+  }
+
+  /** Completes a native focus request once the editor is mounted and visible. @param field - Projected annotation. @returns Nothing. */
+  SidebarWinShown(field: SwFormatField): void {
+    if (this.pendingFocus !== field) return;
+    const window = this.windows.get(field);
+    if (window === undefined) return;
+    this.pendingFocus = undefined;
+    this.SetActiveSidebarWin(field);
+    window.MakeVisible();
+  }
+
+  /** Returns focused annotation input to the document when its window is hidden. @returns Nothing. */
+  private ReturnFocusToDocument(): void {
+    const window = this.GetActiveSidebarWin();
+    if (!window?.HasFocus?.()) return;
+    this.ClearActiveField();
+    window.GrabFocusToDocument?.();
   }
 
   /** Reads the active, anchored comment. @returns Active comment or undefined. */
@@ -74,19 +113,18 @@ export class SwPostItMgr {
   /** Routes the original field focus request after its browser window is mounted. @param field - Newly inserted annotation. @returns Nothing. */
   Focus(field: SwFormatField): void {
     if (!field.GetTextField()?.GetTextNode()) return;
-    const window = this.windows.get(field);
-    if (!window) {
-      this.pendingFocus = field;
-      return;
-    }
-    this.SetActiveSidebarWin(field);
-    window.MakeVisible();
+    const visible = this.IsVisible(field);
+    this.pendingFocus = field;
+    this.options.SetPostIts(true);
+    if (field.GetField().IsResolved()) this.options.SetResolvedPostIts(true);
+    if (visible) this.SidebarWinShown(field);
   }
 
   /** Returns focus to the original active annotation. @returns Whether a sidebar window took focus. */
   GrabFocusOnActiveSidebarWin(): boolean {
     const field = this.GetActiveField();
-    const window = field && this.windows.get(field);
+    if (field === undefined || !this.IsVisible(field)) return false;
+    const window = this.windows.get(field);
     window?.MakeVisible();
     return window !== undefined;
   }

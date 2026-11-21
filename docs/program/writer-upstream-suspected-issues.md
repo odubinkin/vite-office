@@ -5836,3 +5836,12 @@ both package-local cases.
 
 - [Original named bitmap context](../../vendor/libreoffice-reference/xmloff/source/style/FillStyleContext.cxx)
 - [Original legacy background image context](../../vendor/libreoffice-reference/xmloff/source/style/XMLBackgroundImageContext.cxx)
+
+### WRITER-725 — An explicit resolved-comments visibility argument is inverted
+
+`SwView::ExecViewOptions` applies an explicit Boolean directly for Comments.
+For Resolved Comments it negates the explicit value before changing the
+visibility option. The argument-free menu action still toggles the current
+option. Writer preserves both branches.
+
+- [Original Writer view options dispatcher](../../vendor/libreoffice-reference/sw/source/uibase/uiview/view0.cxx)

@@ -23,11 +23,13 @@ import { SvxWeightItem } from "../../../editeng/inc/wghtitem";
 import { unicode } from "../../../i18nlangtag/source/isolang/isolang.tables";
 import { FontWeight } from "../../../tools/inc/fontenum";
 import { DateTime } from "../../../tools/source/datetime/datetime";
+import { SfxBoolItem } from "../../../svl/source/items/cenumitm";
 import { SwFormatField } from "../../inc/fmtfld";
 import { SwTextField } from "../../inc/txtfld";
 import { SwPosition } from "../../source/core/crsr/pam";
 import { SwPostItField, SwPostItFieldType } from "../../source/core/fields/docufld";
 import { WRITER_COMMAND_IDS } from "../../uiconfig/swriter/menubar/menubar-commands";
+import { getWriterSlotId } from "../../sdi/swriter";
 import { createWriterDocumentSession } from "../composition/writer-module";
 import { SwTextAPIEditSource } from "../../source/core/fields/textapi";
 import { readOdtDocument } from "../../source/filter/xml/swxml";
@@ -37,8 +39,8 @@ import { SfxItemSet } from "../../../svl/source/items/itemset";
 import { getWriterTextCaretPoint } from "../editor/writer-selection";
 import { WriterWorkbench } from "./writer-view";
 
-/** Opens a Writer session with one native annotation attached to a body paragraph. @param note - Initial comment text. @returns Mounted workbench and native field. */
-function openAnnotatedDocument(note: string) {
+/** Opens a Writer session with one native annotation attached to a body paragraph. @param note - Initial comment text. @param resolved - Initial document resolution state. @returns Mounted workbench and native field. */
+function openAnnotatedDocument(note: string, resolved = false) {
   const session = createWriterDocumentSession();
   const shell = session.view.GetWrtShell();
   shell.Insert("Document text");
@@ -48,6 +50,7 @@ function openAnnotatedDocument(note: string) {
     initials: "A",
     text: note,
     name: "comment1",
+    resolved,
     dateTime: new DateTime(DateTime.EMPTY),
   });
   const format = new SwFormatField(field);
@@ -100,6 +103,93 @@ function noteInput(comment: HTMLElement, type: string, data?: string): boolean {
   fireEvent(comment, event);
   return event.defaultPrevented;
 }
+
+it("disables both comment visibility commands in an empty Writer document", /** Checks the native HasNotes gate through the generated menu. @returns Nothing. */ () => {
+  const { view } = createWriterDocumentSession();
+  const workbench = render(<WriterWorkbench isActive view={view} />);
+  try {
+    fireEvent.click(screen.getByRole("menuitem", { name: "View" }));
+    expect(screen.getByRole("menuitemcheckbox", { name: "Show Comments" })).toBeDisabled();
+    expect(screen.getByRole("menuitemcheckbox", { name: "Show resolved comments" })).toBeDisabled();
+  } finally {
+    workbench.unmount();
+    view.Close();
+  }
+});
+
+it("hides and shows resolved comments through the View menu without changing the document", /** Exercises view state, retained annotation windows and the explicit native slot request. @returns Nothing. */ () => {
+  const { session, format, shell } = openAnnotatedDocument("Resolved note text", true);
+  const view = session.view;
+  const workbench = render(<WriterWorkbench isActive view={view} />);
+  const showResolved = WRITER_COMMAND_IDS.showResolvedAnnotations;
+  const undo = shell.GetDoc().GetUndoManager();
+  const undoCount = undo.GetUndoActionCount();
+  try {
+    const comment = screen.getByRole("textbox", { name: "Comment — Ada" });
+    expect(screen.getByText("Resolved", { exact: true })).toBeVisible();
+    act(
+      /** Focuses the resolved comment before hiding it. @returns Nothing. */ () => comment.focus(),
+    );
+    const window = view.GetPostItMgr().GetActiveSidebarWin();
+    const openView = screen.getByRole("menuitem", { name: "View" });
+    fireEvent.click(openView);
+    const resolvedToggle = screen.getByRole("menuitemcheckbox", { name: "Show resolved comments" });
+    expect(resolvedToggle).toHaveAttribute("aria-checked", "true");
+    fireEvent.click(resolvedToggle);
+    expect(comment).not.toBeVisible();
+    expect(view.QueryState(showResolved)).toMatchObject({ checked: false, enabled: true });
+    expect(view.QueryState(WRITER_COMMAND_IDS.showAnnotations).checked).toBe(true);
+    expect(format.GetField().IsResolved()).toBe(true);
+    expect(undo.GetUndoActionCount()).toBe(undoCount);
+    const requested = new SfxBoolItem(getWriterSlotId(showResolved), false);
+    try {
+      act(
+        /** Sends the original explicit Boolean slot request. @returns Nothing. */ () => {
+          expect(view.Execute(showResolved, [requested]).status).toBe("executed");
+        },
+      );
+    } finally {
+      requested.Dispose();
+    }
+    expect(view.QueryState(showResolved).checked).toBe(true);
+    expect(screen.getByRole("textbox", { name: "Comment — Ada" })).toBe(comment);
+    act(
+      /** Refocuses the existing comment editor after showing it. @returns Nothing. */ () =>
+        comment.focus(),
+    );
+    expect(view.GetPostItMgr().GetActiveSidebarWin()).toBe(window);
+    expect(format.GetField().GetPar2()).toBe("Resolved note text");
+    expect(undo.GetUndoActionCount()).toBe(undoCount);
+  } finally {
+    workbench.unmount();
+    view.Close();
+  }
+});
+
+it("returns focus to the document when comments are hidden and reveals a newly inserted comment", /** Drives the normal insertion command after hiding the annotation windows. @returns Nothing. */ () => {
+  const { session } = openAnnotatedDocument("Visible note");
+  const view = session.view;
+  const workbench = render(<WriterWorkbench isActive view={view} />);
+  try {
+    const comment = screen.getByRole("textbox", { name: "Comment — Ada" });
+    act(
+      /** Focuses the existing annotation and toggles the view option. @returns Nothing. */ () => {
+        comment.focus();
+        expect(view.Execute(WRITER_COMMAND_IDS.showAnnotations).status).toBe("executed");
+      },
+    );
+    expect(comment).not.toBeVisible();
+    expect(screen.getByLabelText("Writer document body")).toHaveFocus();
+    expect(view.GetPostItMgr().GetActiveSidebarWin()).toBeUndefined();
+    fireEvent.click(screen.getByRole("button", { name: "Comment" }));
+    expect(view.QueryState(WRITER_COMMAND_IDS.showAnnotations).checked).toBe(true);
+    expect(comment).toBeVisible();
+    expect(screen.getByRole("textbox", { name: "Comment — Unknown Author" })).toHaveFocus();
+  } finally {
+    workbench.unmount();
+    view.Close();
+  }
+});
 
 it("focuses the matched comment, replaces its selection and undoes through Writer", /** Exercises the mounted sidebar, dialog option, selection, document field and undo. @returns Nothing. */ () => {
   const { session, shell, format } = openAnnotatedDocument("prefix target suffix");

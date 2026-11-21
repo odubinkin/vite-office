@@ -29,6 +29,7 @@ import { SwViewCommandShell } from "../shells/view";
 import { SwWrtShell } from "../wrtsh/wrtsh1";
 import { WRITER_COMMAND_IDS } from "../../../uiconfig/swriter/menubar/menubar-commands";
 import { SwRootFrame } from "../../core/layout/newfrm";
+import { SwPostItFieldType } from "../../core/fields/docufld";
 import { SelectionType } from "../inc/wrtsh";
 import type { SwTabCols } from "../../core/bastyp/tabcol";
 import type { SvxColumnItem } from "../../../../svx/source/dialog/rulritem";
@@ -87,6 +88,7 @@ export class SwView {
       this,
     );
     this.postItMgr = new SwPostItMgr(
+      this.viewOptions,
       createRegex,
       /** Recomputes the native shell and annotation formatting states. @returns Nothing. */ () =>
         this.Invalidate("selection"),
@@ -315,6 +317,31 @@ export class SwView {
   /** Returns status-bar command state. @returns Visibility. */
   public IsStatusBarVisible(): boolean {
     return this.viewOptions.IsStatusBarVisible();
+  }
+
+  /** Checks for native comment fields in the current document. @returns Whether there are comments. */
+  public HasNotes(): boolean {
+    return SwPostItFieldType.Get(this.docShell.GetDoc()).GatherFields().next().done === false;
+  }
+
+  /** Reads the current Comments view option. @returns Whether comments are shown. */
+  public IsPostIts(): boolean {
+    return this.viewOptions.IsPostIts();
+  }
+
+  /** Reads the current Resolved Comments view option. @returns Whether resolved comments are shown. */
+  public IsResolvedPostIts(): boolean {
+    return this.viewOptions.IsResolvedPostIts();
+  }
+
+  /** Applies the Comments view option through the annotation manager. @param value - Whether to show comments. @returns Nothing. */
+  public SetPostIts(value: boolean): void {
+    this.postItMgr.ShowNotes(value);
+  }
+
+  /** Applies the Resolved Comments view option through the annotation manager. @param value - Whether to show resolved comments. @returns Nothing. */
+  public SetResolvedPostIts(value: boolean): void {
+    this.postItMgr.ShowHideResolvedNotes(value);
   }
 
   /** Returns whether a medium operation gates lifecycle commands. @returns Pending state. */

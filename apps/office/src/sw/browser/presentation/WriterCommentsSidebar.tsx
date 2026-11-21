@@ -12,10 +12,12 @@ function WriterCommentCard({
   format,
   view,
   focusDocument,
+  visible,
 }: {
   readonly format: SwFormatField;
   readonly focusDocument: () => void;
   readonly view: SwView;
+  readonly visible: boolean;
 }) {
   const input = useRef<HTMLDivElement>(null);
   const editor = useRef<WriterCommentEditor | null>(null);
@@ -51,6 +53,10 @@ function WriterCommentCard({
         /** Reveals the matched note in the browser. @returns Nothing. */ MakeVisible() {
           current.MakeVisible();
         },
+        /** Checks whether this comment owns browser focus. @returns Whether focused. */ HasFocus() {
+          return input.current?.ownerDocument.activeElement === input.current;
+        },
+        GrabFocusToDocument: focusDocument,
       });
       return /** Releases the anchored editor before its text surface unmounts. @returns Nothing. */ () => {
         release();
@@ -58,15 +64,26 @@ function WriterCommentCard({
         current.Dispose();
       };
     },
-    [field, format, view],
+    [field, focusDocument, format, view],
+  );
+  useLayoutEffect(
+    /** Completes pending annotation focus after a hidden card is shown. @returns Nothing. */ () => {
+      if (visible) view.GetPostItMgr().SidebarWinShown(format);
+    },
+    [format, view, visible],
   );
   useLayoutEffect(
     /** Synchronizes this note after Writer undoes or redoes an edit. @returns Nothing. */ () =>
       editor.current?.SyncContent(),
   );
   return (
-    <article className="rounded border border-amber-300 bg-amber-50 p-2">
+    <article hidden={!visible} className="rounded border border-amber-300 bg-amber-50 p-2">
       {data.author && <div className="mb-1 text-sm font-medium text-slate-800">{data.author}</div>}
+      {field.IsResolved() && (
+        <div className="text-xs text-slate-600">
+          {localization.GetText("writer.comments.resolved", "Resolved")}
+        </div>
+      )}
       <div
         ref={input}
         aria-label={data.author ? `${noteLabel} — ${data.author}` : noteLabel}
@@ -143,8 +160,18 @@ export function WriterCommentsSidebar({
   readonly view: SwView;
   readonly focusDocument: () => void;
 }): React.JSX.Element {
+  const manager = view.GetPostItMgr();
   return (
-    <aside aria-label="Comments" className="sticky top-0 w-64 shrink-0 space-y-2 px-2">
+    <aside
+      aria-label="Comments"
+      hidden={
+        !comments.some(
+          /** Leaves the comment column out of layout if no card is shown. @param format - Comment field. @returns Whether visible. */
+          (format) => manager.IsVisible(format),
+        )
+      }
+      className="sticky top-0 w-64 shrink-0 space-y-2 px-2"
+    >
       {comments.map(
         /** Mounts the annotation editor for the original anchored field. @param format - Actual field format. @returns Note. */ (
           format,
@@ -154,6 +181,7 @@ export function WriterCommentsSidebar({
             format={format}
             view={view}
             focusDocument={focusDocument}
+            visible={manager.IsVisible(format)}
           />
         ),
       )}

@@ -182,10 +182,12 @@ export function WriterWorkbench({
     },
     [searchDialog, searchOwner, view],
   );
-  /** Focuses the active Writer text client. @returns Nothing. */
-  function focusDocument(): void {
-    editingHostRef.current?.focus();
-  }
+  const focusDocument = useCallback(
+    /** Focuses the active Writer text client. @returns Nothing. */ () => {
+      editingHostRef.current?.focus();
+    },
+    [],
+  );
   /** Closes one search surface and restores Writer focus. @param dialog - Whether the dialog closes. @returns Nothing. */
   function closeSearch(dialog: boolean): void {
     setSearchSurfaces(

@@ -36,6 +36,8 @@ export class SwViewOption {
   private verticalRulerVisible = true;
   private sidebarVisible = true;
   private statusBarVisible = true;
+  private postIts = true;
+  private resolvedPostIts = true;
 
   /** Creates view options with one bindings invalidation callback. @param changed - State-change callback. @returns Nothing. */
   public constructor(private readonly changed: () => void) {}
@@ -104,6 +106,30 @@ export class SwViewOption {
   /** Returns status-bar visibility. @returns Whether visible. */
   public IsStatusBarVisible(): boolean {
     return this.statusBarVisible;
+  }
+
+  /** Reads the native comment visibility option. @returns Whether comments are visible. */
+  public IsPostIts(): boolean {
+    return this.postIts;
+  }
+
+  /** Updates the native comment visibility option. @param value - Whether to show comments. @returns Nothing. */
+  public SetPostIts(value: boolean): void {
+    if (value === this.postIts) return;
+    this.postIts = value;
+    this.changed();
+  }
+
+  /** Reads the native visibility option for resolved comments. @returns Whether resolved comments are shown. */
+  public IsResolvedPostIts(): boolean {
+    return this.resolvedPostIts;
+  }
+
+  /** Updates the native visibility option for resolved comments. @param value - Whether to show resolved comments. @returns Nothing. */
+  public SetResolvedPostIts(value: boolean): void {
+    if (value === this.resolvedPostIts) return;
+    this.resolvedPostIts = value;
+    this.changed();
   }
 
   /** Toggles horizontal-ruler visibility. @returns Nothing. */
