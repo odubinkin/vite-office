@@ -2,6 +2,7 @@
 import {
   SvxForbiddenRuleItem,
   SvxHangingPunctuationItem,
+  SvxHyphenZoneItem,
   SvxScriptSpaceItem,
 } from "../../../editeng/source/items/paraitem";
 import { SvxAdjustItem } from "../../../editeng/inc/adjustitem";
@@ -102,6 +103,7 @@ import {
   RES_CHRATR_WEIGHT,
   RES_PARATR_ADJUST,
   RES_PARATR_LINESPACING,
+  RES_PARATR_HYPHENZONE,
   RES_PARATR_FORBIDDEN_RULES,
   RES_PARATR_HANGINGPUNCTUATION,
   RES_PARATR_SCRIPTSPACE,
@@ -438,6 +440,66 @@ export function makeSearchFormatItem(
   }
 }
 
+/** Describes the complete native hyphenation value shown beside Find or Replace. @param item - Hyphenation criterion. @param text - Localization callback. @returns Item presentation. */
+function describeHyphenation(
+  item: SvxHyphenZoneItem,
+  text: (key: string, fallback: string) => string,
+): string {
+  const value = item.QueryValue();
+  const parts = [
+    value.hyphen
+      ? text("attribute-value.hyphenation.true", "Hyphenation")
+      : text("attribute-value.hyphenation.false", "No hyphenation"),
+  ];
+  for (const [key, caption, count] of [
+    ["lead", "%1 characters at end of line", value.minLead],
+    ["trail", "%1 characters at beginning of line", value.minTrail],
+    ["compound-lead", "%1 compound characters at end of line", value.compoundMinLead],
+    ["compound-trail", "%1 compound characters at beginning of line", value.compoundMinTrail],
+    ["max", "%1 hyphens", value.maxHyphens],
+    ["min-word", "%1 characters in words", value.minWordLength],
+  ] as const)
+    parts.push(text("attribute-value.hyphenation." + key, caption).replaceAll("%1", String(count)));
+  const zones = [
+    ["zone", "Hyphenation zone", value.zone],
+    ["paragraph-zone", "Paragraph end zone", value.paragraphEndZone],
+    ["column-zone", "Column end zone", value.columnEndZone],
+    ["page-zone", "Page end zone", value.pageEndZone],
+    ["spread-zone", "Spread end zone", value.spreadEndZone],
+  ] as const;
+  if (
+    zones.some(
+      /** Checks whether to show the complete zone group. @param zone - Native zone. @returns Whether the zone is set. */
+      ([, , amount]) => amount > 0,
+    )
+  )
+    for (const [key, caption, amount] of zones)
+      parts.push(text("attribute-value.hyphenation." + key, caption) + " " + amount / 20 + " pt");
+  if (value.noCaps)
+    parts.push(text("attribute-value.hyphenation.no-caps", "No hyphenation in CAPS"));
+  if (value.noLastWord)
+    parts.push(text("attribute-value.hyphenation.no-last-word", "No hyphenation of last word"));
+  if (!value.keep) {
+    parts.push(text("attribute-value.hyphenation.keep-auto", "Hyphenation across page"));
+    return parts.join(", ");
+  }
+  const keepDescriptions = [
+    "Hyphenation across page",
+    "Avoid hyphenation across page when the next page is not visible to the reader at the same time",
+    "Avoid hyphenation across page",
+    "Avoid hyphenation across column and page",
+    "Avoid hyphenation across last full paragraph line, column and page",
+  ];
+  const keep = keepDescriptions[value.keepType];
+  if (keep) parts.push(text("attribute-value.hyphenation.keep." + value.keepType, keep));
+  parts.push(
+    value.keepLine
+      ? text("attribute-value.hyphenation.keep-word", "by shifting the last hyphenated word")
+      : text("attribute-value.hyphenation.move-line", "by shifting the last hyphenated line"),
+  );
+  return parts.join(", ");
+}
+
 /** Displays the native presentation of a concrete criterion. @param item - Search criterion. @param slot - Native slot. @param text - Localization callback. @returns Text for the summary. */
 function describeSearchFormat(
   item: SfxPoolItem,
@@ -524,6 +586,7 @@ function describeSearchFormat(
     return item.GetValue()
       ? text("attribute-value.split.true", "Allow to split paragraph")
       : text("attribute-value.split.false", "Keep lines together");
+  if (item instanceof SvxHyphenZoneItem) return describeHyphenation(item, text);
   if (item instanceof SvxOrphansItem || item instanceof SvxWidowsItem) {
     const name =
       item instanceof SvxOrphansItem
@@ -748,7 +811,10 @@ export const formatPages = {
     ],
   ],
   alignment: ["Alignment", [RES_PARATR_ADJUST, RES_PARATR_VERTALIGN]],
-  textflow: ["Text Flow", [RES_PARATR_SPLIT, RES_PARATR_ORPHANS, RES_PARATR_WIDOWS]],
+  textflow: [
+    "Text Flow",
+    [RES_PARATR_HYPHENZONE, RES_PARATR_SPLIT, RES_PARATR_ORPHANS, RES_PARATR_WIDOWS],
+  ],
   asiantypo: [
     "Asian Typography",
     asianTypographyOptions.map(

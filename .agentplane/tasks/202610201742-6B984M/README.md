@@ -4,7 +4,7 @@ title: "Implement Writer search and replace core and browser UI"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 115
+revision: 116
 origin:
   system: "manual"
 depends_on:
@@ -434,6 +434,16 @@ comments:
       The UNO text-default schema regression now accounts for the eight native character-border rows already exposed by a7cddb231 and the new register row. The ODF and UI run passed 25 other checks and the corrected schema suite passed all three checks. All 13 related shared ODF tests passed. The search run passed 141 tests in 15 files with six existing native ICU host-probe skips. The final TypeScript and Vite production build and all five Chrome search scenarios passed. Dependency, source-tree, provenance, Writer identities and resources, registry parity, scoped lint and formatting, routing, and diff checks passed. Existing JSDoc and file-size checks retain 307 baseline JSDoc issues and four existing oversized files. AgentPlane doctor retains its existing hook-shim warning.
 
       The search task remains open. This checkpoint does not advance the ten-task full-regression cadence.
+  -
+    author: "CODER"
+    body: |-
+      Verified the Writer search hyphenation checkpoint. The original SvxHyphenZoneItem preserves its 17 fields, the Writer-specific zero maximum, and native UNO integer conversion. Writer owns the paragraph item and its style and transfer forms. The existing ODF mapping preserves the source FO and LibreOffice extension attributes. The ODF round-trip test adapts the 0/7 character and 0/567 twip assertions from tdf149324 and tdf149420.
+
+      Find and Replace now shows Hyphenation in Attributes and the original two hyphenation groups on Text Flow. An exact criterion retains the line and compound limits, word and caps flags, five zones, boundary cascade and Move Line behavior. Tests verify exact matching, paragraph replacement and Undo. WRITER-735 records and preserves native byte and word narrowing. Dictionary-driven layout remains outside this search checkpoint.
+
+      The focused Writer run passed 138 tests in 16 files and the shared run passed 16 tests in five files. The production Vite/TypeScript build, final standalone typecheck and all six Chrome search scenarios passed. The dependency, source tree, provenance, Writer identities and resources, scoped lint and format, registry parity, doctor, routing and diff checks passed. Repository-wide JSDoc and file-size checks retain 307 baseline documentation issues and four existing oversized files. Doctor retains the existing AgentPlane hook-shim warning.
+
+      The task remains open and this intermediate checkpoint does not advance the ten-task full-regression cadence.
 
 events:
   -
@@ -1037,9 +1047,21 @@ events:
       The UNO text-default schema regression now accounts for the eight native character-border rows already exposed by a7cddb231 and the new register row. The ODF and UI run passed 25 other checks and the corrected schema suite passed all three checks. All 13 related shared ODF tests passed. The search run passed 141 tests in 15 files with six existing native ICU host-probe skips. The final TypeScript and Vite production build and all five Chrome search scenarios passed. Dependency, source-tree, provenance, Writer identities and resources, registry parity, scoped lint and formatting, routing, and diff checks passed. Existing JSDoc and file-size checks retain 307 baseline JSDoc issues and four existing oversized files. AgentPlane doctor retains its existing hook-shim warning.
 
       The search task remains open. This checkpoint does not advance the ten-task full-regression cadence.
+  -
+    type: "comment"
+    at: "2026-11-21T22:22:36.686Z"
+    author: "CODER"
+    body: |-
+      Verified the Writer search hyphenation checkpoint. The original SvxHyphenZoneItem preserves its 17 fields, the Writer-specific zero maximum, and native UNO integer conversion. Writer owns the paragraph item and its style and transfer forms. The existing ODF mapping preserves the source FO and LibreOffice extension attributes. The ODF round-trip test adapts the 0/7 character and 0/567 twip assertions from tdf149324 and tdf149420.
+
+      Find and Replace now shows Hyphenation in Attributes and the original two hyphenation groups on Text Flow. An exact criterion retains the line and compound limits, word and caps flags, five zones, boundary cascade and Move Line behavior. Tests verify exact matching, paragraph replacement and Undo. WRITER-735 records and preserves native byte and word narrowing. Dictionary-driven layout remains outside this search checkpoint.
+
+      The focused Writer run passed 138 tests in 16 files and the shared run passed 16 tests in five files. The production Vite/TypeScript build, final standalone typecheck and all six Chrome search scenarios passed. The dependency, source tree, provenance, Writer identities and resources, scoped lint and format, registry parity, doctor, routing and diff checks passed. Repository-wide JSDoc and file-size checks retain 307 baseline documentation issues and four existing oversized files. Doctor retains the existing AgentPlane hook-shim warning.
+
+      The task remains open and this intermediate checkpoint does not advance the ten-task full-regression cadence.
 
 doc_version: 3
-doc_updated_at: "2026-11-21T22:04:00.554Z"
+doc_updated_at: "2026-11-21T22:22:36.686Z"
 doc_updated_by: "CODER"
 description: "Implement the approved coherent Writer search-and-replace feature from pinned LibreOffice sources: real shared search engine and options, native paragraph/cursor traversal and replacement/history contracts, view-owned search state and dispatch, Find toolbar and Find and Replace dialog with generated upstream command placement and shortcuts. Preserve source semantics and explicit unsupported boundaries; never substitute DOM text search or browser RegExp for ICU contracts. Work only on writer in vite-office-writer; local upstream reading approved, no network or merges. Keep active until approved scope is verified."
 sections:

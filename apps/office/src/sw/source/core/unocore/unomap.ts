@@ -1,4 +1,6 @@
 /** @fileoverview Consumed Writer cursor/paragraph/style property entries from pinned unomap.cxx/unomap1.cxx; unrepresented properties are not advertised. */
+import { MAYBEVOID } from "../../../../udkapi/com/sun/star/beans/PropertyAttribute";
+import { CONVERT_TWIPS } from "../../../../svl/inc/poolitem";
 import { cppu_detail_getUnoType_FillStyle as fillStyleType } from "../../../../offapi/com/sun/star/drawing/FillStyle";
 import { cppu_detail_getUnoType_BitmapMode as bitmapModeType } from "../../../../offapi/com/sun/star/drawing/BitmapMode";
 import { OWN_ATTR_VALUE_START } from "../../../../svl/inc/solar";
@@ -6,11 +8,10 @@ import { XATTR_FILLBITMAP } from "../../../../svx/inc/xdef";
 import { XATTR_FILLSTYLE, XATTR_FILLCOLOR, XATTR_FILLTRANSPARENCE } from "../../../../svx/inc/xdef";
 import { cppu_detail_getUnoType_PropertyValue as propertyType } from "../../../../udkapi/com/sun/star/beans/PropertyValue";
 import { XComplexColor } from "../../../../offapi/com/sun/star/util/XComplexColor";
-import { UnoType, type UnoTypeArgument } from "../../../../cppu/inc/unotype";
+import type { UnoTypeArgument } from "../../../../cppu/inc/unotype";
 import { cppu_detail_getUnoType_BreakType as breakType } from "../../../../offapi/com/sun/star/style/BreakType";
-import { OUString } from "../../../../sal/inc/rtl/ustring";
 import { SfxItemPropertySet } from "../../../../svl/source/items/itemprop";
-import { PropertyMoreFlags, SfxItemPropertyMapEntry } from "../../../../svl/inc/itemprop";
+import type { PropertyMoreFlags, SfxItemPropertyMapEntry } from "../../../../svl/inc/itemprop";
 import { cppu_detail_getUnoType_Locale as localeType } from "../../../../udkapi/com/sun/star/lang/Locale";
 import { FN_UNO_PARA_NUM_AUTO_FORMAT } from "../../../inc/cmdid";
 import { cppu_detail_getUnoType_NamedValue as namedValueType } from "../../../../udkapi/com/sun/star/beans/NamedValue";
@@ -21,7 +22,14 @@ import { cppu_detail_getUnoType_TabStop as tabStopType } from "../../../../offap
 import { cppu_detail_getUnoType_ShadowFormat as shadowFormatType } from "../../../../offapi/com/sun/star/table/ShadowFormat";
 import * as H from "../../../inc/hintids";
 import { WID_DOC_DEFAULT_PAGE_MODE, WID_DOC_INTEROP_GRAB_BAG } from "../../../inc/unomap";
-import { boxMembers, charBoxMembers, charBoxNames } from "./unomap1";
+import {
+  boxMembers,
+  charBoxMembers,
+  charBoxNames,
+  hyphenationMembers,
+  hyphenationNames,
+  nativeEntries,
+} from "./unomap1";
 import { pageBitmapGeometryProperties, pageStoryPropertyEntries } from "./unostyle.page-stories";
 import * as Grid from "../../../inc/unomid";
 import { MID_PAGEDESC_PAGEDESCNAME, MID_PAGEDESC_PAGENUMOFFSET } from "../../../inc/unomid";
@@ -290,6 +298,7 @@ export const SwUnoPropertyMap: ReadonlyMap<string, SwUnoPropertyEntry> = new Map
   ],
   ...boxMembers(1),
   ...charBoxMembers,
+  ...hyphenationMembers,
   ["BreakType", { type: breakType, attributes: 1, which: H.RES_BREAK, member: 0, kind: "break" }],
   [
     "PageDescName",
@@ -551,6 +560,7 @@ const characterMaybeVoidProperties = new Set([
   "CharStrikeout",
 ]);
 const paragraphStyleProperties = new Set([
+  ...hyphenationNames,
   ...charBoxNames,
   "CharLocale",
   "CharWeight",
@@ -638,6 +648,7 @@ const paragraphStyleProperties = new Set([
   "FollowStyle",
 ]);
 const paragraphMaybeVoidProperties = new Set([
+  ...hyphenationNames,
   "CharLocale",
   "CharWeight",
   "CharPosture",
@@ -717,30 +728,6 @@ import { MID_PAGE_ORIENTATION, MID_PAGE_LAYOUT } from "../../../../svx/inc/unomi
 import { MID_SIZE_WIDTH, MID_SIZE_HEIGHT } from "../../../../svl/inc/memberid";
 import { cppu_detail_getUnoType as indexReplaceType } from "../../../../cppu/inc/com/sun/star/container/XIndexReplace";
 import { cppu_detail_getUnoType_PageStyleLayout as pageLayoutType } from "../../../../offapi/com/sun/star/style/PageStyleLayout";
-/** Compiler binding for original static property-table initializers over the current admitted core entries. Names/types remain genuine owned values with static lifetime. @param entries - Native Which/member descriptors. @returns Static schema values. */
-function nativeEntries(
-  entries: ReadonlyMap<string, SwUnoPropertyEntry>,
-): readonly SfxItemPropertyMapEntry[] {
-  const values: SfxItemPropertyMapEntry[] = [];
-  for (const [name, entry] of entries) {
-    const key = unicode(name);
-    try {
-      values.push(
-        new SfxItemPropertyMapEntry(
-          key,
-          entry.which,
-          UnoType.get(entry.type),
-          entry.attributes ?? 1,
-          entry.member,
-          entry.more ?? PropertyMoreFlags.NONE,
-        ),
-      );
-    } finally {
-      key.dispose();
-    }
-  }
-  return values;
-}
 /** Original static-table initializer row. @param which - Native Which/dispatch identity. @param type - Original declared type. @param member - Original member. @param attributes - Original flags. @returns Descriptor row. */
 function row(which: number, type: UnoTypeArgument, member = 0, attributes = 0): SwUnoPropertyEntry {
   return { which, type, member, attributes, kind: "any" };
@@ -750,6 +737,7 @@ const staticMapEntries: (readonly SfxItemPropertyMapEntry[] | undefined)[] = [];
 const staticPropertySets: (SfxItemPropertySet | undefined)[] = [];
 /** Original COMMON_CRSR_PARA_PROPERTIES_WITHOUT_FN and hyperlink rows represented by this core. */
 const textDefaultProperties = new Set([
+  ...hyphenationNames,
   ...charBoxNames,
   "CharLocale",
   "CharWeight",
@@ -985,11 +973,3 @@ export class SwUnoPropertyMapProvider {
 }
 /** Original process-static provider. Its schema and property-set owners retain process lifetime. */
 export const aSwMapProvider = new SwUnoPropertyMapProvider();
-/** Creates the existing known-length Unicode value from browser UTF16 units. @param value - Logical text. @returns Owned native string. */
-function unicode(value: string): OUString {
-  const units = new Uint16Array(value.length);
-  for (let i = 0; i < value.length; i++) units[i] = value.charCodeAt(i);
-  return new OUString(units, units.length);
-}
-import { CONVERT_TWIPS } from "../../../../svl/inc/poolitem";
-import { MAYBEVOID } from "../../../../udkapi/com/sun/star/beans/PropertyAttribute";

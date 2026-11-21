@@ -65,6 +65,7 @@ import {
   RES_MARGIN_TEXTLEFT,
   RES_PARATR_ADJUST,
   RES_PARATR_LINESPACING,
+  RES_PARATR_HYPHENZONE,
   RES_PARATR_VERTALIGN,
   RES_UL_SPACE,
 } from "../../inc/hintids";
@@ -925,6 +926,9 @@ export function WriterSearchFormatDialog(
           <WriterSearchTextFlowPage
             key={textFlowReset}
             label={label}
+            hyphenation={existing(RES_PARATR_HYPHENZONE)}
+            hyphenationDefault={props.pool.GetUserOrPoolDefaultItem(RES_PARATR_HYPHENZONE)}
+            unit={props.unit}
             value={scalar}
             initial={initialScalar}
             onChange={change}

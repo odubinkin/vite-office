@@ -1,4 +1,5 @@
 /** @fileoverview Consumed SwUnoCursorHelper property and CR insertion contracts from pinned unocrsrhelper.cxx; canonical nodes/items remain the only state. */
+import { SvxHyphenZoneItem } from "../../../../editeng/source/items/paraitem";
 import { SetParaListAutoFormat, GetParaListAutoFormat } from "./unoobj-listautofmt";
 import { StylePool } from "../../../../svl/source/items/stylepool";
 import { SwAutoStyleFamily } from "../../../inc/istyleaccess";
@@ -152,6 +153,7 @@ export function queryItem(item: SfxPoolItem, entry: SwUnoPropertyEntry): Any {
     return out;
   }
   if (
+    item instanceof SvxHyphenZoneItem ||
     item instanceof SfxByteItem ||
     item instanceof SvxUnderlineItem ||
     item instanceof SvxFrameDirectionItem
@@ -250,6 +252,10 @@ export function putItem(item: SfxPoolItem, entry: SwUnoPropertyEntry, value: Any
   }
   if (copy instanceof SvxUnderlineItem) {
     if (!copy.PutValue(value, entry.member)) illegal("Invalid underline value");
+    return copy;
+  }
+  if (copy instanceof SvxHyphenZoneItem) {
+    if (!copy.PutValue(value, entry.member)) illegal("Invalid hyphenation value");
     return copy;
   }
   if (copy instanceof SvxKerningItem) {

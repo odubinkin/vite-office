@@ -27,7 +27,11 @@ import { XMLTableStyleContext, type OdfTableStyle } from "../table/XMLTableImpor
 import type { OdfCharacterProperties, OdfParagraphAlignment } from "../text/txtparae";
 import { importTextConstant } from "../text/txtprhdl";
 import type { OdfStyleDefinition, XMLParagraphImportProperties } from "../text/txtparai";
-import { importTextCharacterProperties, textCharacterPropertyTokens } from "../text/txtprmap";
+import {
+  importParagraphHyphenation,
+  importTextCharacterProperties,
+  textCharacterPropertyTokens,
+} from "../text/txtprmap";
 import {
   XMLLineNumberingImportContext,
   type OdfLineNumberingConfiguration,
@@ -635,6 +639,7 @@ function importParagraphProperties(
     attributes.get(XMLToken.TEXT_NUMBER_LINES),
     "paragraph line-number participation",
   );
+  const hyphenation = importParagraphHyphenation(attributes);
   const register: [boolean] = [false];
   const hasRegister = Converter.convertBool(
     register,
@@ -691,6 +696,7 @@ function importParagraphProperties(
     ...(breakBefore === undefined ? {} : { breakBefore }),
     ...(breakAfter === undefined ? {} : { breakAfter }),
     ...(countLineNumbers === undefined ? {} : { countLineNumbers }),
+    ...(hyphenation === undefined ? {} : { hyphenation }),
     ...(hasRegister ? { registerModeActive: register[0] } : {}),
     ...(joinBorder === undefined ? {} : { joinBorder }),
     ...borders,

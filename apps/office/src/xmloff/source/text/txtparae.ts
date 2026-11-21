@@ -3,22 +3,29 @@
  */
 import { exportAnnotation, type XMLAnnotationExportMarker } from "./txtflde";
 import type { XMLTextFrameExportSource } from "./XMLTextFrameExport";
-import { exportFillProperties, type OdfFillProperties } from "../draw/fill-properties";
+import { exportFillProperties } from "../draw/fill-properties";
 import { paragraphPropertiesKey, parseParagraphPropertiesKey } from "./txtparae-properties";
 import { exportTextConstant } from "./txtprhdl";
 import { Any } from "../../../cppu/inc/com/sun/star/uno/Any";
 import { SvXMLUnitConverter } from "../core/xmluconv";
-import type { OdfBoxProperties } from "../style/bordrhdl";
 import { XMLNumberWithAutoForVoidPropHdl } from "../style/xmlbahdl";
 import { SvxXMLNumRuleExport, type XMLListLevelExport } from "../style/xmlnume";
 import { exportTableBlocks, type XMLTextExportBlock } from "../table/XMLTableExport";
-import type { FontFaceNameResolver, OdfCharacterProperties } from "./txtparae.types";
+import type {
+  FontFaceNameResolver,
+  OdfCharacterProperties,
+  OdfParagraphProperties,
+} from "./txtparae.types";
 import { createOdfThemeColor, exportComplexColor } from "./XMLComplexColorContext";
-import { exportTextCharacterProperties, exportTextLanguageProperties } from "./txtprmap";
+import {
+  exportParagraphHyphenation,
+  exportTextCharacterProperties,
+  exportTextLanguageProperties,
+} from "./txtprmap";
 import { XMLTextNumRuleInfo } from "./XMLTextNumRuleInfo";
 export { ODF_NAMESPACES } from "../core/xmltoken";
 
-export type { OdfCharacterProperties } from "./txtparae.types";
+export type { OdfCharacterProperties, OdfParagraphProperties, OdfTabStop } from "./txtparae.types";
 
 /** Hyperlink metadata supported by the bounded text importer and exporter. */
 export interface OdfHyperlink {
@@ -44,42 +51,6 @@ type StyleKey = [string, OdfParagraphAlignment | "", string, string, string, str
 
 /** Paragraph alignment values shared with the Writer model. */
 export type OdfParagraphAlignment = "left" | "center" | "right" | "justify";
-
-/** Direct paragraph properties represented by the bounded Writer model. */
-export interface OdfTabStop {
-  readonly position: number;
-  readonly alignment: "left" | "right" | "center" | "char" | "default";
-  readonly decimal: string;
-  readonly fill: string;
-}
-
-/** Direct paragraph properties represented by the bounded Writer model. */
-export interface OdfParagraphProperties extends OdfBoxProperties, OdfFillProperties {
-  readonly joinBorder?: boolean;
-  readonly countLineNumbers?: boolean;
-  readonly contextualSpacing?: boolean;
-  readonly firstLineIndent?: number;
-  readonly autoTextIndent?: boolean;
-  readonly pageStyleName?: string;
-  readonly pageNumber?: number | "auto";
-  readonly lineHeightPercent?: number;
-  readonly lineHeightTwips?: number;
-  readonly lineHeightAtLeastTwips?: number;
-  readonly lineSpacingTwips?: number;
-  readonly fontIndependentLineSpacing?: boolean;
-  readonly keepWithNext?: boolean;
-  readonly registerModeActive?: boolean;
-  readonly keepTogether?: boolean;
-  readonly widows?: number;
-  readonly verticalAlign?: number;
-  readonly orphans?: number;
-  readonly breakBefore?: "auto" | "page";
-  readonly breakAfter?: "auto" | "page";
-  readonly lowerSpacing?: number;
-  readonly rightMargin?: number;
-  readonly tabStopDetails?: readonly OdfTabStop[];
-  readonly upperSpacing?: number;
-}
 
 /** Marker family stored by one ODF list level style. */
 export type OdfListLevelKind = "bullet" | "numbered";
@@ -760,6 +731,7 @@ export function exportParagraphAttributes(properties: OdfParagraphProperties): s
     ...(properties.contextualSpacing === undefined
       ? []
       : [`style:contextual-spacing="${properties.contextualSpacing}"`]),
+    ...exportParagraphHyphenation(properties.hyphenation),
     ...(properties.registerModeActive === undefined
       ? []
       : [`style:register-true="${properties.registerModeActive}"`]),

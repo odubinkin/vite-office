@@ -9,6 +9,8 @@ import {
 import {
   SvxForbiddenRuleItem,
   SvxHangingPunctuationItem,
+  SvxHyphenZoneItem,
+  type HyphenZoneSettings,
   SvxScriptSpaceItem,
 } from "../../../../editeng/source/items/paraitem";
 import { SwRegisterItem } from "../para/paratr";
@@ -19,6 +21,7 @@ import {
   RES_LINENUMBER,
   RES_PARATR_FORBIDDEN_RULES,
   RES_PARATR_HANGINGPUNCTUATION,
+  RES_PARATR_HYPHENZONE,
   RES_PARATR_SCRIPTSPACE,
   RES_PARATR_REGISTER,
   RES_PARATR_SPLIT,
@@ -28,6 +31,7 @@ import {
 } from "../../../inc/hintids";
 /** Paragraph and adjacent frame settings restored through the same native item factory. */
 export const paragraphControlItems = [
+  RES_PARATR_HYPHENZONE,
   RES_PARATR_REGISTER,
   RES_PARATR_SPLIT,
   RES_PARATR_VERTALIGN,
@@ -40,6 +44,24 @@ export const paragraphControlItems = [
 
 /** Restores the registered scalar controls using their native item constructors. @param which - One registered control identity. @param value - Persisted scalar. @returns Actual native item. */
 export function restoreParagraphControlItem(which: number, value: unknown): SfxPoolItem {
+  if (which === RES_PARATR_HYPHENZONE) {
+    if (typeof value !== "object" || value === null)
+      throw new Error("Writer hyphenation settings are invalid.");
+    const snapshot = value as HyphenZoneSettings;
+    const defaults = SvxHyphenZoneItem.CreateDefault().QueryValue();
+    for (const key of Object.keys(defaults) as (keyof HyphenZoneSettings)[]) {
+      const field = snapshot[key];
+      if (
+        typeof field !== typeof defaults[key] ||
+        (typeof field === "number" &&
+          (!Number.isInteger(field) ||
+            field < 0 ||
+            field > (key.toLowerCase().endsWith("zone") ? 65535 : 255)))
+      )
+        throw new Error("Writer hyphenation settings are invalid.");
+    }
+    return new SvxHyphenZoneItem(snapshot.hyphen, which, snapshot);
+  }
   if (which === RES_PARATR_ORPHANS) return new SvxOrphansItem(Number(value), which);
   if (which === RES_PARATR_WIDOWS) return new SvxWidowsItem(Number(value), which);
   if (which === RES_PARATR_VERTALIGN) {

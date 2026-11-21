@@ -207,3 +207,22 @@ export const MID_GUTTER_MARGIN = 12;
 export const MID_UP_MARGIN = 3;
 /** Original lower UL-space margin member. */
 export const MID_LO_MARGIN = 4;
+
+/** Original SvxHyphenZoneItem member identities from editeng/memberids.h. */
+export const MID_IS_HYPHEN = 0;
+export const MID_HYPHEN_MIN_LEAD = 1;
+export const MID_HYPHEN_MIN_TRAIL = 2;
+export const MID_HYPHEN_MAX_HYPHENS = 3;
+export const MID_HYPHEN_NO_CAPS = 4;
+export const MID_HYPHEN_NO_LAST_WORD = 5;
+export const MID_HYPHEN_MIN_WORD_LENGTH = 6;
+export const MID_HYPHEN_ZONE = 7;
+export const MID_HYPHEN_ZONE_ALWAYS = 8;
+export const MID_HYPHEN_ZONE_COLUMN = 9;
+export const MID_HYPHEN_ZONE_PAGE = 10;
+export const MID_HYPHEN_ZONE_SPREAD = 11;
+export const MID_HYPHEN_KEEP = 12;
+export const MID_HYPHEN_KEEP_TYPE = 13;
+export const MID_HYPHEN_COMPOUND_MIN_LEAD = 14;
+export const MID_HYPHEN_COMPOUND_MIN_TRAIL = 15;
+export const MID_HYPHEN_KEEP_LINE = 16;

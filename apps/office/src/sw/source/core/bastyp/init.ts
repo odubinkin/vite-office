@@ -1,4 +1,5 @@
 /** @fileoverview Native module-global static Writer defaults from pinned bastyp/init.cxx, limited to represented item classes. */
+import { SvxHyphenZoneItem } from "../../../../editeng/source/items/paraitem";
 import {
   SvxForbiddenRuleItem,
   SvxHangingPunctuationItem,
@@ -165,7 +166,7 @@ import {
   ItemInfoStatic,
   type ItemInfo,
 } from "../../../../svl/source/items/itempool";
-import { RES_CHRATR_BEGIN, POOLATTR_END } from "../../../inc/hintids";
+import { RES_CHRATR_BEGIN, POOLATTR_END, RES_PARATR_HYPHENZONE } from "../../../inc/hintids";
 /** Original complete frame-format ranges from init.cxx, including unknown XML attributes and all drawing-layer fill items. */
 export const aFrameFormatSetRange: WhichRangesContainer = [
   [RES_FRMATR_BEGIN, RES_FRMATR_END - 1],
@@ -300,6 +301,7 @@ class ItemInfoPackageSwAttributes extends ItemInfoPackage {
     );
     add(new SfxInt16Item(RES_BREAK, 0));
     add(new SwFormatPageDesc());
+    add(new SvxHyphenZoneItem(false, RES_PARATR_HYPHENZONE, { maxHyphens: 0 }));
     add(new SwRegisterItem());
     add(new SwNumRuleItem());
     add(new SfxStringItem(RES_PARATR_LIST_ID, ""));

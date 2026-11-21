@@ -5977,3 +5977,14 @@ them with an explicit page style on the paragraph.
 - [Original checklist construction and confirmation](../../vendor/libreoffice-reference/cui/source/dialogs/srchxtra.cxx#L112)
 - [Original conversion to a page descriptor](../../vendor/libreoffice-reference/sw/source/uibase/utlui/uitool.cxx#L701)
 - [Original comparison ranges](../../vendor/libreoffice-reference/sw/source/core/crsr/findattr.cxx#L1080)
+
+### WRITER-735 — Hyphenation zone UNO values narrow through unsigned storage
+
+`SvxHyphenZoneItem::PutValue` takes a signed 32-bit value and assigns it
+to a byte or a 16-bit word without range validation. `QueryValue` reads
+both widths as signed 16-bit values. A leading-character count of 257
+becomes 1, and a zone value of 65535 is read back as -1. The member
+handlers strip the conversion flag without converting units. Writer
+preserves the source narrowing and tests the results through UNO Any.
+
+- [Original member conversion and assignment](../../vendor/libreoffice-reference/editeng/source/items/paraitem.cxx#L639)

@@ -1,4 +1,6 @@
 /** @fileoverview Bounded native-value ODF character handoff for text export/import; independent UNO script scalars,underline properties and original font metadata are preserved. No browser boolean formatting model or substitute UNO provider. */
+import type { OdfParagraphHyphenation } from "./txtprmap";
+import type { OdfFillProperties } from "../draw/fill-properties";
 import type { LanguageType } from "../../../i18nlangtag/inc/lang";
 import type { FontSlant } from "../../../offapi/com/sun/star/awt/FontSlant";
 import type { FontPitch } from "../../../tools/inc/fontenum";
@@ -65,3 +67,40 @@ export type FontFaceNameResolver = (
   pitch?: FontPitch,
   charSet?: rtl_TextEncoding,
 ) => string;
+
+/** Direct paragraph properties represented by the bounded Writer model. */
+export interface OdfTabStop {
+  readonly position: number;
+  readonly alignment: "left" | "right" | "center" | "char" | "default";
+  readonly decimal: string;
+  readonly fill: string;
+}
+
+/** Direct paragraph properties represented by the bounded Writer model. */
+export interface OdfParagraphProperties extends OdfBoxProperties, OdfFillProperties {
+  readonly joinBorder?: boolean;
+  readonly countLineNumbers?: boolean;
+  readonly contextualSpacing?: boolean;
+  readonly firstLineIndent?: number;
+  readonly autoTextIndent?: boolean;
+  readonly pageStyleName?: string;
+  readonly pageNumber?: number | "auto";
+  readonly lineHeightPercent?: number;
+  readonly lineHeightTwips?: number;
+  readonly lineHeightAtLeastTwips?: number;
+  readonly lineSpacingTwips?: number;
+  readonly fontIndependentLineSpacing?: boolean;
+  readonly keepWithNext?: boolean;
+  readonly registerModeActive?: boolean;
+  readonly hyphenation?: OdfParagraphHyphenation;
+  readonly keepTogether?: boolean;
+  readonly widows?: number;
+  readonly verticalAlign?: number;
+  readonly orphans?: number;
+  readonly breakBefore?: "auto" | "page";
+  readonly breakAfter?: "auto" | "page";
+  readonly lowerSpacing?: number;
+  readonly rightMargin?: number;
+  readonly tabStopDetails?: readonly OdfTabStop[];
+  readonly upperSpacing?: number;
+}

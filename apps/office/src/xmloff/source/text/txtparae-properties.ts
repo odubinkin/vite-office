@@ -37,6 +37,9 @@ export function paragraphPropertiesKey(properties?: OdfParagraphProperties): str
     properties?.fillTransparency,
     properties?.verticalAlign,
     properties?.registerModeActive === undefined ? "" : Number(properties.registerModeActive),
+    properties?.hyphenation === undefined
+      ? ""
+      : encodeURIComponent(JSON.stringify(properties.hyphenation)),
   ]
     .map(
       /** Encodes one optional paragraph metric. @param value - Metric. @returns Stable field. */ (
@@ -112,6 +115,13 @@ export function parseParagraphPropertiesKey(key: string): OdfParagraphProperties
     ...(breakAfter === undefined || breakAfter === ""
       ? {}
       : { breakAfter: breakAfter as "auto" | "page" }),
+    ...(fields[26]
+      ? {
+          hyphenation: JSON.parse(decodeURIComponent(fields[26])) as NonNullable<
+            OdfParagraphProperties["hyphenation"]
+          >,
+        }
+      : {}),
     ...(fields[25] === "0" || fields[25] === "1" ? { registerModeActive: fields[25] === "1" } : {}),
     ...(autoTextIndent === undefined || autoTextIndent === ""
       ? {}

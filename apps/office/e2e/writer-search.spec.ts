@@ -306,3 +306,39 @@ test("Writer paints emphasis below the text after a formatted replacement", /** 
   await expect(editor).toHaveText("plain marked plain");
   await expect(editor.locator('[style*="text-emphasis-style"]')).toHaveCount(0);
 });
+
+test("Writer applies Text Flow hyphenation and finds the formatted paragraph", /** Exercises the native checkbox and spin controls through the production search dialog. @param fixtures - Playwright fixtures. @param fixtures.page - Chromium page. @returns Test completion. */ async ({
+  page,
+}) => {
+  await page.goto("/writer");
+  const editor = page.getByRole("textbox", { name: "Writer document text", exact: true });
+  await editor.fill("Paragraph to format");
+  await page.keyboard.press("Control+h");
+  const dialog = page.getByRole("dialog", { name: "Find and Replace", exact: true });
+  await dialog.getByLabel("Find", { exact: true }).fill("format");
+  await dialog.getByText("Other options", { exact: true }).click();
+  await dialog.getByLabel("Replace with", { exact: true }).fill("format");
+  await dialog.getByRole("button", { name: "Format…" }).click();
+  const replacement = page.getByRole("dialog", { name: "Replace", exact: true });
+  await replacement.getByRole("tab", { name: "Text Flow" }).click();
+
+  const automatic = replacement.getByRole("checkbox", { name: "Automatically", exact: true });
+  const lead = replacement.getByRole("spinbutton", { name: "Characters at line end", exact: true });
+  await expect(lead).toBeDisabled();
+  await automatic.click();
+  await automatic.click();
+  await expect(lead).toBeEnabled();
+  await lead.fill("3");
+  await replacement.getByRole("button", { name: "OK" }).click();
+  await expect(dialog.getByText(/3 characters at end of line/)).toBeVisible();
+  await dialog.getByRole("button", { name: "Replace All", exact: true }).click();
+  await expect(dialog.getByRole("status")).toHaveText(/replaced 1 time/);
+
+  await dialog.getByLabel("Find", { exact: true }).focus();
+  await dialog.getByRole("button", { name: "Attributes…" }).click();
+  const attributes = page.getByRole("dialog", { name: "Attributes", exact: true });
+  await attributes.getByRole("checkbox", { name: "Hyphenation", exact: true }).check();
+  await attributes.getByRole("button", { name: "OK" }).click();
+  await dialog.getByRole("button", { name: "Find All", exact: true }).click();
+  await expect(dialog.getByRole("status")).toHaveText("One match found.");
+});
