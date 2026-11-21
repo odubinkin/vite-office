@@ -1,0 +1,25 @@
+{
+  "schema_version": 1,
+  "task_id": "202611211813-QM7K49",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-11-21T18:23:19.045Z",
+  "verdict": "pass",
+  "summary": "Writer preserves paragraph line-number participation and start through the original native item and ODT properties.",
+  "evaluated_sha": "5e3d760dee19c9f314f982a3ee09420fdd9af2ed",
+  "blueprint_digest": "c957649d7d4b8b12944254ece30e39f596f3e3823295399e1ac554063e64c273",
+  "findings": [
+    "Pinned style, automatic style keys, native UNO narrowing, Worker records, paragraph edits and frame continuation were verified."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202611211813-QM7K49/README.md",
+    "output/playwright/QM7K49/writer.log",
+    "output/playwright/QM7K49/property-final.log",
+    "output/playwright/QM7K49/shared.log",
+    "output/playwright/QM7K49/types-final.log",
+    "output/playwright/QM7K49/provenance.log"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": []
+}
