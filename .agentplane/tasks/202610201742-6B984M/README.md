@@ -4,7 +4,7 @@ title: "Implement Writer search and replace core and browser UI"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 63
+revision: 64
 origin:
   system: "manual"
 depends_on:
@@ -193,6 +193,9 @@ comments:
   -
     author: "CODER"
     body: "Verified checkpoint: Search Format opens the upstream Asian Typography page with three initially indeterminate native paragraph criteria. Writer registers the original types, Which IDs, slots and true defaults. The existing node, style, replacement, undo and Worker snapshot paths consume the concrete items. The browser regression exercises explicit false matching and true replacement with undo. Targeted tests passed: 29 in four related suites, plus the two-test native paragraph suite rerun with the added slot/default/snapshot regression, and two Writer resource tests. Production build and declared targeted static gates passed. ODT/DOCX filter mappings are outside this checkpoint. The parent remains open for browser ICU regex, note search and remaining native UI such as Asian Layout. The local workspace has pinned ICU sources and no Emscripten 4.0.19 toolchain. Network authorization for the SDK is pending."
+  -
+    author: "CODER"
+    body: "Verified checkpoint: Search Format includes the source Asian Layout page after Position. Its double-line flag and both brackets travel as SvxTwoLinesItem in Find All, Replace All, undo, and Worker snapshots. The UI test ports the native reopen scenario and distinguishes equal text with different brackets, verifies Reset and picker cancellation, and applies a complete replacement. WRITER-706 records source truncation of supplementary selected codepoints. The fixed-font browser picker has a glyph grid and numeric entry; Unicode subset and name search and recent or favorite characters remain unimplemented. Production build, two Writer resource cases, scoped lint/format, dependency/source-tree/provenance/JSDoc/file-size checks, doctor and routing passed. Relevant Vitest suites passed 33 tests across four files. The parent remains open for native ICU regex, note search and residual UI parity. Pausing the goal is deferred until the approved task closes."
 events:
   -
     type: "status"
@@ -456,8 +459,13 @@ events:
     at: "2026-11-21T10:18:51.604Z"
     author: "CODER"
     body: "Verified checkpoint: Search Format opens the upstream Asian Typography page with three initially indeterminate native paragraph criteria. Writer registers the original types, Which IDs, slots and true defaults. The existing node, style, replacement, undo and Worker snapshot paths consume the concrete items. The browser regression exercises explicit false matching and true replacement with undo. Targeted tests passed: 29 in four related suites, plus the two-test native paragraph suite rerun with the added slot/default/snapshot regression, and two Writer resource tests. Production build and declared targeted static gates passed. ODT/DOCX filter mappings are outside this checkpoint. The parent remains open for browser ICU regex, note search and remaining native UI such as Asian Layout. The local workspace has pinned ICU sources and no Emscripten 4.0.19 toolchain. Network authorization for the SDK is pending."
+  -
+    type: "comment"
+    at: "2026-11-21T10:27:43.653Z"
+    author: "CODER"
+    body: "Verified checkpoint: Search Format includes the source Asian Layout page after Position. Its double-line flag and both brackets travel as SvxTwoLinesItem in Find All, Replace All, undo, and Worker snapshots. The UI test ports the native reopen scenario and distinguishes equal text with different brackets, verifies Reset and picker cancellation, and applies a complete replacement. WRITER-706 records source truncation of supplementary selected codepoints. The fixed-font browser picker has a glyph grid and numeric entry; Unicode subset and name search and recent or favorite characters remain unimplemented. Production build, two Writer resource cases, scoped lint/format, dependency/source-tree/provenance/JSDoc/file-size checks, doctor and routing passed. Relevant Vitest suites passed 33 tests across four files. The parent remains open for native ICU regex, note search and residual UI parity. Pausing the goal is deferred until the approved task closes."
 doc_version: 3
-doc_updated_at: "2026-11-21T10:18:51.604Z"
+doc_updated_at: "2026-11-21T10:27:43.653Z"
 doc_updated_by: "CODER"
 description: "Implement the approved coherent Writer search-and-replace feature from pinned LibreOffice sources: real shared search engine and options, native paragraph/cursor traversal and replacement/history contracts, view-owned search state and dispatch, Find toolbar and Find and Replace dialog with generated upstream command placement and shortcuts. Preserve source semantics and explicit unsupported boundaries; never substitute DOM text search or browser RegExp for ICU contracts. Work only on writer in vite-office-writer; local upstream reading approved, no network or merges. Keep active until approved scope is verified."
 sections:

@@ -5637,3 +5637,12 @@ applies its authored properties without that collection change.
   a search-only row to be interpreted using the other family's boundary.
 - Writer preserves the shared index and uses it when collecting all three
   scripts' formatting.
+
+### WRITER-706 — Double-line enclosures truncate supplementary characters
+
+- Upstream `cui/source/tabpages/chardlg.cxx`, in `SvxCharTwoLinesPage::SelectCharacter`,
+  casts the full Unicode codepoint from `SvxCharacterMap::GetChar` to
+  `sal_Unicode`. A supplementary codepoint can become an unrelated BMP
+  character or zero before the item is written.
+- Writer retains the same low 16 bits when committing the enclosure. The
+  character picker still previews the selected Unicode codepoint.

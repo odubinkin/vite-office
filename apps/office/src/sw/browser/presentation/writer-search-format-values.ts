@@ -29,6 +29,7 @@ import {
 import { SvxCaseMapItem } from "../../../editeng/source/items/textitem.modes";
 import { SvxCrossedOutItem } from "../../../editeng/source/items/textitem.effects";
 import { SvxEscapementItem } from "../../../editeng/source/items/textitem.escapement";
+import { SvxTwoLinesItem } from "../../../editeng/inc/twolinesitem";
 import { SvxCharRotateItem } from "../../../editeng/source/items/textitem.layout";
 import {
   SvxAutoKernItem,
@@ -63,6 +64,8 @@ import {
   RES_CHRATR_AUTOKERN,
   RES_CHRATR_BACKGROUND,
   RES_CHRATR_CASEMAP,
+  RES_CHRATR_ESCAPEMENT,
+  RES_CHRATR_ROTATE,
   RES_CHRATR_CONTOUR,
   RES_CHRATR_RELIEF,
   RES_CHRATR_SCALEW,
@@ -86,9 +89,11 @@ import {
   RES_CHRATR_KERNING,
   RES_CHRATR_OVERLINE,
   RES_CHRATR_POSTURE,
+  RES_CHRATR_TWO_LINES,
   RES_CHRATR_UNDERLINE,
   RES_CHRATR_WEIGHT,
   RES_PARATR_ADJUST,
+  RES_PARATR_LINESPACING,
   RES_PARATR_FORBIDDEN_RULES,
   RES_PARATR_HANGINGPUNCTUATION,
   RES_PARATR_SCRIPTSPACE,
@@ -99,6 +104,7 @@ import {
   RES_MARGIN_TEXTLEFT,
   RES_MARGIN_FIRSTLINE,
   RES_MARGIN_RIGHT,
+  RES_UL_SPACE,
 } from "../../inc/hintids";
 
 export const fontWeights = [
@@ -419,6 +425,13 @@ function describeSearchFormat(
   slot: number,
   text: (key: string, fallback: string) => string,
 ): string | undefined {
+  if (item instanceof SvxTwoLinesItem) {
+    if (!item.GetValue()) return text("attribute-value.two-lines.off", "Double-lined off");
+    const start = item.GetStartBracket();
+    const end = item.GetEndBracket();
+    const caption = text("attribute-value.two-lines.on", "Double-lined");
+    return `${start ? String.fromCharCode(start) : ""}${caption}${end ? String.fromCharCode(end) : ""}`;
+  }
   if (item instanceof SvxAdjustItem)
     return describeChoice(paragraphAdjustments, item.GetAdjust(), "alignment", "Alignment", text);
   if (item instanceof SvxULSpaceItem)
@@ -663,3 +676,53 @@ export const asianTypographyOptions = [
   [RES_PARATR_HANGINGPUNCTUATION, "hanging-punctuation", "Allow hanging punctuation"],
   [RES_PARATR_SCRIPTSPACE, "script-space", "Apply spacing between Asian and non-Asian text"],
 ] as const;
+
+/** Search formatting pages in the pinned dialog order with native Reset ranges. */
+export const formatPages = {
+  font: ["Font", fontPageItems],
+  effects: [
+    "Font Effects",
+    [
+      RES_CHRATR_COLOR,
+      RES_CHRATR_UNDERLINE,
+      RES_CHRATR_OVERLINE,
+      RES_CHRATR_CROSSEDOUT,
+      RES_CHRATR_CASEMAP,
+      RES_CHRATR_RELIEF,
+      RES_CHRATR_CONTOUR,
+      RES_CHRATR_SHADOWED,
+      RES_CHRATR_WORDLINEMODE,
+    ],
+  ],
+  position: [
+    "Position",
+    [
+      RES_CHRATR_ESCAPEMENT,
+      RES_CHRATR_ROTATE,
+      RES_CHRATR_SCALEW,
+      RES_CHRATR_KERNING,
+      RES_CHRATR_AUTOKERN,
+    ],
+  ],
+  asianlayout: ["Asian Layout", [RES_CHRATR_TWO_LINES]],
+  indents: [
+    "Indents & Spacing",
+    [
+      RES_MARGIN_TEXTLEFT,
+      RES_MARGIN_RIGHT,
+      RES_MARGIN_FIRSTLINE,
+      RES_UL_SPACE,
+      RES_PARATR_LINESPACING,
+    ],
+  ],
+  alignment: ["Alignment", [RES_PARATR_ADJUST, RES_PARATR_VERTALIGN]],
+  textflow: ["Text Flow", [RES_PARATR_SPLIT, RES_PARATR_ORPHANS, RES_PARATR_WIDOWS]],
+  asiantypo: [
+    "Asian Typography",
+    asianTypographyOptions.map(
+      /** Identifies the native criteria reset with the Asian Typography page. @param option - Checkbox binding. @returns WhichId. */
+      ([which]) => which,
+    ),
+  ],
+  highlighting: ["Highlighting", [RES_CHRATR_BACKGROUND]],
+} as const;

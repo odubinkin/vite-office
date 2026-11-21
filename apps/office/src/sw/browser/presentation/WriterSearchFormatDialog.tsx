@@ -19,6 +19,7 @@ import { FieldUnit } from "../../../tools/inc/fldunit";
 import { SvxOverlineItem, SvxUnderlineItem } from "../../../editeng/source/items/textitem";
 import { Color, COL_TRANSPARENT } from "../../../tools/inc/color";
 import { ComplexColor } from "../../../docmodel/inc/color/ComplexColor";
+import { SvxTwoLinesItem } from "../../../editeng/inc/twolinesitem";
 import { SvxCharRotateItem } from "../../../editeng/source/items/textitem.layout";
 import type { SfxItemPool } from "../../../svl/source/items/itempool";
 import { SfxItemSet } from "../../../svl/source/items/itemset";
@@ -27,7 +28,7 @@ import { SearchAttrItemList } from "../../../svx/source/dialog/srchdlg";
 import {
   asianTypographyOptions,
   caseEffects,
-  fontPageItems,
+  formatPages,
   makeSearchFormatItem,
   paragraphVerticalAlignments,
   ParagraphLineSpaceMode,
@@ -53,7 +54,9 @@ import {
   RES_CHRATR_SCALEW,
   RES_CHRATR_SHADOWED,
   RES_CHRATR_WORDLINEMODE,
+  RES_CHRATR_TWO_LINES,
   RES_CHRATR_UNDERLINE,
+  RES_CHRATR_FONT,
   RES_MARGIN_FIRSTLINE,
   RES_MARGIN_RIGHT,
   RES_MARGIN_TEXTLEFT,
@@ -72,55 +75,11 @@ import {
   readPreferredCTLFontTab,
   writePreferredCTLFontTab,
 } from "../storage/writer-search-options-store";
+import {
+  WriterSearchTwoLinesPage,
+  type WriterSearchTwoLinesPageHandle,
+} from "./WriterSearchTwoLinesPage";
 import { WriterSearchParagraphAlignment } from "./WriterSearchParagraphAlignment";
-
-const formatPages = {
-  font: ["Font", fontPageItems],
-  effects: [
-    "Font Effects",
-    [
-      RES_CHRATR_COLOR,
-      RES_CHRATR_UNDERLINE,
-      RES_CHRATR_OVERLINE,
-      RES_CHRATR_CROSSEDOUT,
-      RES_CHRATR_CASEMAP,
-      RES_CHRATR_RELIEF,
-      RES_CHRATR_CONTOUR,
-      RES_CHRATR_SHADOWED,
-      RES_CHRATR_WORDLINEMODE,
-    ],
-  ],
-  position: [
-    "Position",
-    [
-      RES_CHRATR_ESCAPEMENT,
-      RES_CHRATR_ROTATE,
-      RES_CHRATR_SCALEW,
-      RES_CHRATR_KERNING,
-      RES_CHRATR_AUTOKERN,
-    ],
-  ],
-  indents: [
-    "Indents & Spacing",
-    [
-      RES_MARGIN_TEXTLEFT,
-      RES_MARGIN_RIGHT,
-      RES_MARGIN_FIRSTLINE,
-      RES_UL_SPACE,
-      RES_PARATR_LINESPACING,
-    ],
-  ],
-  alignment: ["Alignment", [RES_PARATR_ADJUST, RES_PARATR_VERTALIGN]],
-  textflow: ["Text Flow", [RES_PARATR_SPLIT, RES_PARATR_ORPHANS, RES_PARATR_WIDOWS]],
-  asiantypo: [
-    "Asian Typography",
-    asianTypographyOptions.map(
-      /** Identifies the native criteria reset with the Asian Typography page. @param option - Checkbox binding. @returns WhichId. */
-      ([which]) => which,
-    ),
-  ],
-  highlighting: ["Highlighting", [RES_CHRATR_BACKGROUND]],
-} as const;
 
 /** Edits exact search or replacement formatting. @param props - Criteria and owning pool. @returns Modal formatting form. */
 export function WriterSearchFormatDialog(
@@ -137,6 +96,7 @@ export function WriterSearchFormatDialog(
   const root = useRef<HTMLFormElement>(null);
   const [page, setPage] = useState<keyof typeof formatPages>("font");
   const fontPage = useRef<WriterSearchFontPageHandle>(null);
+  const twoLinesPage = useRef<WriterSearchTwoLinesPageHandle>(null);
   const [complexFont, setComplexFont] = useState(readPreferredCTLFontTab);
   const [fontReset, setFontReset] = useState(0);
   const [lineMode, setLineMode] = useState<ParagraphLineSpaceMode>();
@@ -189,6 +149,7 @@ export function WriterSearchFormatDialog(
     for (const which of formatPages[page][1]) restored.delete(which);
     if (page === "indents") setLineMode(undefined);
     if (page === "font") setFontReset(fontReset + 1);
+    if (page === "asianlayout") twoLinesPage.current?.Reset();
     setDraft(restored);
   }
 
@@ -197,6 +158,8 @@ export function WriterSearchFormatDialog(
     if (page === "font") writePreferredCTLFontTab(complexFont);
     const output = new Map<number, string | SfxPoolItem>(fontPage.current?.GetStyleChanges());
     for (const [which, value] of draft) output.set(which, value);
+    const twoLines = twoLinesPage.current?.GetItem();
+    if (twoLines !== undefined) output.set(twoLines.Which(), twoLines);
     const set = new SfxItemSet(props.pool, WRITER_SEARCH_ATTR_WHICH_RANGES);
     try {
       for (const [which, value] of output) {
@@ -421,6 +384,8 @@ export function WriterSearchFormatDialog(
     );
   }
 
+  const initialTwoLines =
+    existing(RES_CHRATR_TWO_LINES) ?? props.pool.GetUserOrPoolDefaultItem(RES_CHRATR_TWO_LINES);
   const alignment = draft.get(RES_PARATR_ADJUST) ?? existing(RES_PARATR_ADJUST);
   const firstLineInput = draft.get(RES_MARGIN_FIRSTLINE) ?? existing(RES_MARGIN_FIRSTLINE);
   const firstLine = firstLineInput instanceof SvxFirstLineIndentItem ? firstLineInput : undefined;
@@ -764,6 +729,16 @@ export function WriterSearchFormatDialog(
             {metric(RES_CHRATR_KERNING, label("spacing-by", "By"), -1000, 1000, 0.1, "pt")}
             {check(RES_CHRATR_AUTOKERN, label("pair-kerning", "Pair kerning"))}
           </fieldset>
+        </div>
+        <div role="tabpanel" hidden={page !== "asianlayout"}>
+          {initialTwoLines instanceof SvxTwoLinesItem && (
+            <WriterSearchTwoLinesPage
+              ref={twoLinesPage}
+              initial={initialTwoLines}
+              family={readSearchFormatValue(props.pool.GetUserOrPoolDefaultItem(RES_CHRATR_FONT))}
+              label={label}
+            />
+          )}
         </div>
         <div
           role="tabpanel"
