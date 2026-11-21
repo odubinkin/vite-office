@@ -20,7 +20,7 @@
         "sfx2/source/appl/appuno.cxx#TransformParameters",
         "svl/source/items/srchitem.cxx#SvxSearchItem::PutValue"
       ],
-      "justification": "Translates named native SearchItem members for Writer ExecuteSearch from actual UNO PropertyValues or browser scalar records. Retains caller property order and the source admission rule. Copies original engine options to Writer without projecting wildcard into dialog settings.",
+      "justification": "Translates named native SearchItem members for Writer ExecuteSearch from actual UNO PropertyValues or browser scalar records. Retains caller property order and the source admission rule. Populates and projects the shared pooled SvxSearchItem. The modeless dialog exchanges its browser draft, while named requests and raw pooled requests use the item values.",
       "knownViolations": [],
       "localSymbols": [
         "TransformWriterSearchParameters"

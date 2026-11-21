@@ -10,7 +10,13 @@ import {
   type WriterViewCommandTarget,
 } from "../../../sdi/swriter";
 import { SfxUInt16Item } from "../../../../svl/source/items/intitem";
-import { TransformWriterSearchParameters } from "../uiview/search-dispatch";
+import { SvxSearchItem } from "../../../../svl/source/items/srchitem";
+import { SfxBoolItem } from "../../../../svl/source/items/cenumitm";
+import { SID_SEARCH_QUIET } from "../../../../sfx2/inc/sfxsids";
+import {
+  ProjectWriterSearchItem,
+  TransformWriterSearchParameters,
+} from "../uiview/search-dispatch";
 import type { WriterExecuteSearchArguments, WriterSearchSlotItem } from "../uiview/viewsrch";
 import { SvxULSpaceItem } from "../../../../editeng/inc/ulspitem";
 import { SID_ATTR_PARA_ULSPACE } from "../../../../editeng/inc/editids";
@@ -80,10 +86,21 @@ export function createWriterViewCommandRegistry(
       /** Dispatches the native SearchItem request. @param context - Active view. @param args - Request items. @returns Whether the search matched. */
       execute(context, args): boolean {
         const search = context.GetSearch();
-        const request = TransformWriterSearchParameters(
-          getWriterCommandArguments(args),
-          search.GetSearchItem(),
+        const defaults = search.GetSearchItem();
+        const pooled = args.find(
+          /** Resolves the native SID_SEARCH_ITEM argument. @param argument - Candidate. @returns Whether it is the native search item. */
+          (argument): argument is SvxSearchItem =>
+            argument instanceof SvxSearchItem &&
+            argument.Which() === getWriterSlotId(WRITER_COMMAND_IDS.searchProperties),
         );
+        const quiet = args.find(
+          /** Resolves the optional native Quiet argument. @param argument - Candidate. @returns Whether it is the Quiet item. */
+          (argument): argument is SfxBoolItem =>
+            argument instanceof SfxBoolItem && argument.Which() === SID_SEARCH_QUIET,
+        );
+        const request = pooled
+          ? { SearchItem: ProjectWriterSearchItem(pooled, defaults), Quiet: quiet?.GetValue() }
+          : TransformWriterSearchParameters(getWriterCommandArguments(args), defaults);
         if (request?.SearchItem === undefined) return false;
         const { SearchItem: item, Quiet } = request;
         return (

@@ -4,7 +4,7 @@ title: "Implement Writer search and replace core and browser UI"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 51
+revision: 52
 origin:
   system: "manual"
 depends_on:
@@ -157,6 +157,9 @@ comments:
   -
     author: "CODER"
     body: "Verified checkpoint: the Writer Find Bar dispatches the original named SearchItem.* properties and UseAttrItemList=false. ExecuteSearch consumes the represented flat fields from a browser scalar record or real UNO PropertyValue sequence and passes typed options to the existing cursor engine. The toolbar remains absolute; native callers can select wildcard through AlgorithmType2, with the source backslash default and literal replacement. No Writer wildcard checkbox was added because the pinned SvxSearchDialog makes it visible only for Calc. The view test covers a typed wildcard Replace All, escaped literal question mark, literal replacement and grouped undo. Native last-member conversion ordering is preserved and recorded as WRITER-697 and CALC-784. The full SvxSearchItem aggregate/configuration and additional unrepresented formal members, native attribute lists and ICU regex remain open. Targeted verification: 80/81 Writer tests passed on the combined run; its clipboard menu test hit the existing 15-second deadline and passed on isolated retry without altering that deadline. All 55 shared tests passed with the threads pool after the initial forks worker startup timeouts; two resource checks passed. Production build, source tree/provenance, dependencies, JSDoc, file sizes, scoped lint/format, routing and whitespace passed. No full suite at this checkpoint. The task remains DOING; pause the goal only after full AgentPlane closure as the user requested."
+  -
+    author: "CODER"
+    body: "Verified checkpoint: shared SvxSearchItem owns original defaults, Which, cloned SearchOptions2, the scalar MID_SEARCH member values, locale conversion, equality and the thirteen-property browser aggregate. Writer ExecuteSearch now handles a direct SID_SEARCH_ITEM with the SfxBoolItem Quiet argument, reconstructs dotted member requests through the same pooled item, and accepts the aggregate browser projection. RepeatSearch owns independent options after the caller changes its item. The item preserves mutation before aggregate conversion failure (WRITER-698 and CALC-785). The modeless dialog still owns its browser draft. Live ConfigItem preferences/notifications, native Any-encoded aggregate exchange, search through notes, formatting criteria and native ICU regex remain open. Verification: all 62 targeted Writer tests, 38 shared item/engine tests and two generated resource tests passed. Production build, dependency boundaries, provenance/source tree, JSDoc, file sizes, scoped ESLint/Prettier, policy routing and whitespace passed. The full suite was not due for this intermediate checkpoint. The parent remains DOING and the goal will be paused only after complete task closure per user instruction."
 events:
   -
     type: "status"
@@ -360,8 +363,13 @@ events:
     at: "2026-11-21T07:34:29.102Z"
     author: "CODER"
     body: "Verified checkpoint: the Writer Find Bar dispatches the original named SearchItem.* properties and UseAttrItemList=false. ExecuteSearch consumes the represented flat fields from a browser scalar record or real UNO PropertyValue sequence and passes typed options to the existing cursor engine. The toolbar remains absolute; native callers can select wildcard through AlgorithmType2, with the source backslash default and literal replacement. No Writer wildcard checkbox was added because the pinned SvxSearchDialog makes it visible only for Calc. The view test covers a typed wildcard Replace All, escaped literal question mark, literal replacement and grouped undo. Native last-member conversion ordering is preserved and recorded as WRITER-697 and CALC-784. The full SvxSearchItem aggregate/configuration and additional unrepresented formal members, native attribute lists and ICU regex remain open. Targeted verification: 80/81 Writer tests passed on the combined run; its clipboard menu test hit the existing 15-second deadline and passed on isolated retry without altering that deadline. All 55 shared tests passed with the threads pool after the initial forks worker startup timeouts; two resource checks passed. Production build, source tree/provenance, dependencies, JSDoc, file sizes, scoped lint/format, routing and whitespace passed. No full suite at this checkpoint. The task remains DOING; pause the goal only after full AgentPlane closure as the user requested."
+  -
+    type: "comment"
+    at: "2026-11-21T07:53:30.837Z"
+    author: "CODER"
+    body: "Verified checkpoint: shared SvxSearchItem owns original defaults, Which, cloned SearchOptions2, the scalar MID_SEARCH member values, locale conversion, equality and the thirteen-property browser aggregate. Writer ExecuteSearch now handles a direct SID_SEARCH_ITEM with the SfxBoolItem Quiet argument, reconstructs dotted member requests through the same pooled item, and accepts the aggregate browser projection. RepeatSearch owns independent options after the caller changes its item. The item preserves mutation before aggregate conversion failure (WRITER-698 and CALC-785). The modeless dialog still owns its browser draft. Live ConfigItem preferences/notifications, native Any-encoded aggregate exchange, search through notes, formatting criteria and native ICU regex remain open. Verification: all 62 targeted Writer tests, 38 shared item/engine tests and two generated resource tests passed. Production build, dependency boundaries, provenance/source tree, JSDoc, file sizes, scoped ESLint/Prettier, policy routing and whitespace passed. The full suite was not due for this intermediate checkpoint. The parent remains DOING and the goal will be paused only after complete task closure per user instruction."
 doc_version: 3
-doc_updated_at: "2026-11-21T07:34:29.102Z"
+doc_updated_at: "2026-11-21T07:53:30.837Z"
 doc_updated_by: "CODER"
 description: "Implement the approved coherent Writer search-and-replace feature from pinned LibreOffice sources: real shared search engine and options, native paragraph/cursor traversal and replacement/history contracts, view-owned search state and dispatch, Find toolbar and Find and Replace dialog with generated upstream command placement and shortcuts. Preserve source semantics and explicit unsupported boundaries; never substitute DOM text search or browser RegExp for ICU contracts. Work only on writer in vite-office-writer; local upstream reading approved, no network or merges. Keep active until approved scope is verified."
 sections:

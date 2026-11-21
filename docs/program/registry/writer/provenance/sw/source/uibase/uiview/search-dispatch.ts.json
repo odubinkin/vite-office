@@ -8,9 +8,9 @@
       "TransformWriterSearchParameters"
     ],
     "status": "local-only",
-    "rationale": "Translates named native SearchItem members for Writer ExecuteSearch from actual UNO PropertyValues or browser scalar records. Retains caller property order and the source admission rule. Copies original engine options to Writer without projecting wildcard into dialog settings.",
+    "rationale": "Translates named native SearchItem members for Writer ExecuteSearch from actual UNO PropertyValues or browser scalar records. Retains caller property order and the source admission rule. Populates and projects the shared pooled SvxSearchItem. The modeless dialog exchanges its browser draft, while named requests and raw pooled requests use the item values.",
     "responsibilities": [
-      "Translates named native SearchItem members for Writer ExecuteSearch from actual UNO PropertyValues or browser scalar records. Retains caller property order and the source admission rule. Copies original engine options to Writer without projecting wildcard into dialog settings."
+      "Translates named native SearchItem members for Writer ExecuteSearch from actual UNO PropertyValues or browser scalar records. Retains caller property order and the source admission rule. Populates and projects the shared pooled SvxSearchItem. The modeless dialog exchanges its browser draft, while named requests and raw pooled requests use the item values."
     ],
     "evidence": {
       "local": [
@@ -36,7 +36,7 @@
     },
     "stackDivergence": {
       "kind": "browser-adaptation",
-      "rationale": "Translates the represented fields at the current Writer Sfx dispatcher boundary. The full shared Sfx converter and aggregate SvxSearchItem exchange remain pending."
+      "rationale": "Translates the represented fields at the current Writer Sfx dispatcher boundary. The full shared Sfx converter and Any-encoded aggregate exchange remain pending."
     }
   }
 }

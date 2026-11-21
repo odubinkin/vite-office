@@ -8,6 +8,10 @@ import { Any } from "../../../../cppu/inc/com/sun/star/uno/Any";
 import { PropertyValue } from "../../../../udkapi/com/sun/star/beans/PropertyValue";
 import { PropertyState } from "../../../../udkapi/com/sun/star/beans/PropertyState";
 import { unicode } from "../../core/unocore/unocrsrhelper";
+import { SID_SEARCH_QUIET } from "../../../../sfx2/inc/sfxsids";
+import { SfxBoolItem } from "../../../../svl/source/items/cenumitm";
+import { SvxSearchItem } from "../../../../svl/source/items/srchitem";
+import * as MID from "../../../../svl/inc/memberid";
 import { ABSOLUTE, WILDCARD } from "../../../../offapi/com/sun/star/util/SearchAlgorithms2";
 import {
   REG_NOT_BEGINOFLINE,
@@ -295,6 +299,34 @@ it("dispatches a named wildcard Replace All request with native property values 
   expect(view.GetSearch().GetFeedback()).toBeUndefined();
   expect(shell.Undo()).toBe(true);
   expect(shell.GetActiveParagraph().GetText()).toBe("file?.txt fileA.txt file?.tat");
+  view.Close();
+});
+
+it("executes independent pooled and aggregate SearchItems through the Sfx view", /** Covers pooled option copying, quiet and named aggregate request admission. @returns Nothing. */ () => {
+  const view = new SwView(
+    new SwDocShell(
+      createWriterDocument(),
+      createDocument({ id: "pooled-search", suiteId: "writer", title: "Search" }),
+    ),
+  );
+  const frame = new SfxViewFrame<SwView>(new BrowserSfxDispatcher());
+  view.AttachFrame(frame);
+  frame.SetActiveView(view, [view.GetCommandShell(), view.GetWrtShell().GetCommandShell()]);
+  const shell = view.GetWrtShell();
+  shell.Insert("cat cat dog");
+  const item = new SvxSearchItem(10_291);
+  item.PutValue("cat", MID.MID_SEARCH_SEARCHSTRING);
+  item.PutValue(SvxSearchCmd.FIND_ALL, MID.MID_SEARCH_COMMAND);
+  const command = WRITER_COMMAND_IDS.executeSearch;
+  expect(view.Execute(command, [item, new SfxBoolItem(SID_SEARCH_QUIET, true)])).toMatchObject({
+    value: true,
+  });
+  expect(view.GetSearch().GetFeedback()).toBeUndefined();
+  item.PutValue("dog", MID.MID_SEARCH_SEARCHSTRING);
+  expect(view.Execute(WRITER_COMMAND_IDS.repeatSearch)).toMatchObject({ value: true });
+  expect(view.GetSearch().GetFeedback()).toMatchObject({ result: { matches: 2 } });
+  expect(view.Execute(command, { SearchItem: item.QueryValue() })).toMatchObject({ value: true });
+  expect(view.GetSearch().GetFeedback()).toMatchObject({ result: { matches: 1 } });
   view.Close();
 });
 

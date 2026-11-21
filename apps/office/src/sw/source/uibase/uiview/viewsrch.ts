@@ -62,6 +62,7 @@ export interface WriterSearchItem {
   readonly similarity: WriterSimilarityOptions;
   readonly selection: boolean;
   readonly searchOptions?: SearchOptions2;
+  readonly searchInNotes?: boolean;
 }
 
 /** The represented SvxSearchItem value exchanged by Writer search slots. */
@@ -604,6 +605,8 @@ export class SwViewSearch {
     command: SvxSearchCmd,
     backward: boolean,
   ): WriterSearchResult {
+    if (item.searchInNotes)
+      throw new Error("Writer notes and layout-text search are not implemented.");
     if (item.styleSearch ? !item.searchStyle : item.search.length === 0)
       return { matches: 0, wrapped: false };
     const inSelection = item.selection;

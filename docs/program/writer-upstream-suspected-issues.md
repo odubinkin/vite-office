@@ -5540,3 +5540,14 @@ applies its authored properties without that collection change.
 - Writer preserves this ordering for the represented `SearchItem.*` members
   of `.uno:ExecuteSearch`. This observation applies to the shared Sfx
   source. Calc-side dispatch was not changed in this checkpoint.
+
+### WRITER-698 — Failed aggregate SearchItem conversion retains successful writes
+
+- Upstream: `svl/source/items/srchitem.cxx`, `SvxSearchItem::PutValue`,
+  member zero with a thirteen-property sequence.
+- Observation: each successfully converted property updates the item
+  before the source counts the distinct successful names. A duplicate or
+  malformed entry may make the function return false after changing the
+  other properties.
+- The shared item preserves the mutation order. The Writer dispatcher
+  admits an aggregate argument only when conversion reports success.
