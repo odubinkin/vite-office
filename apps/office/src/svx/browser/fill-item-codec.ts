@@ -5,7 +5,14 @@ import { XFillStyleItem } from "../inc/xfillit0";
 import { XFillColorItem } from "../inc/xflclit";
 import { XFillTransparenceItem } from "../inc/xfltrit";
 import { XFillUseSlideBackgroundItem } from "../inc/xfilluseslidebackgrounditem";
-import { XFillBitmapItem } from "../inc/xbtmpit";
+import {
+  XFillBitmapItem,
+  XFillBmpPosItem,
+  bitmapGeometryIds,
+  bitmapGeometryWhich,
+  createBitmapGeometryItem,
+} from "../inc/xbtmpit";
+import { SfxInt32Item, SfxUInt16Item } from "../../svl/source/items/intitem";
 import { SfxBoolItem } from "../../svl/source/items/cenumitm";
 import { Graphic } from "../../vcl/source/gdi/graph";
 import { Size } from "../../tools/inc/gen";
@@ -22,6 +29,14 @@ import type { FillStyle } from "../../offapi/com/sun/star/drawing/FillStyle";
 import { encodeComplexColor, decodeComplexColor } from "../../docmodel/browser/complex-color-codec";
 /** Encodes actual native values without flattening palette names/indices or complex colors. @param item - Native item. @returns Record or null for other families. */
 export function encodeFillItem(item: SfxPoolItem): SfxPoolItemSnapshot | null {
+  if (
+    bitmapGeometryIds.includes(item.Which()) &&
+    (item instanceof XFillBmpPosItem ||
+      item instanceof SfxInt32Item ||
+      item instanceof SfxUInt16Item ||
+      item instanceof SfxBoolItem)
+  )
+    return { which: item.Which(), value: item.GetValue() };
   if (item instanceof XFillBitmapItem) {
     const graphic = item.GetGraphic();
     if (!graphic) return { which: XATTR_FILLBITMAP, value: [item.GetName()] };
@@ -70,6 +85,19 @@ export function encodeFillItem(item: SfxPoolItem): SfxPoolItemSnapshot | null {
 /** Restores native drawing item types and validates only their actual wire fields. @param snapshot - Untrusted item record. @returns Native item or null for other families. */
 export function decodeFillItem(snapshot: SfxPoolItemSnapshot): SfxPoolItem | null {
   const value = snapshot.value;
+  if (bitmapGeometryIds.includes(snapshot.which)) {
+    const valid =
+      snapshot.which === bitmapGeometryWhich.logicalSize
+        ? typeof value === "boolean"
+        : snapshot.which === bitmapGeometryWhich.offsetX ||
+            snapshot.which === bitmapGeometryWhich.offsetY
+          ? integer(value, 0, 65535)
+          : snapshot.which === bitmapGeometryWhich.point
+            ? integer(value, 0, 8)
+            : integer(value, -2147483648, 2147483647);
+    if (!valid) throw new Error("Fill bitmap geometry record is invalid.");
+    return createBitmapGeometryItem(snapshot.which, value as number | boolean);
+  }
   switch (snapshot.which) {
     case XATTR_FILLBMP_TILE:
     case XATTR_FILLBMP_STRETCH:

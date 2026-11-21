@@ -10,6 +10,18 @@ import { SwHeaderAndFooterEatSpacingItem } from "../../../inc/hfspacingitem";
 import type { SwPageDesc } from "../layout/pagedesc";
 import { getActivePageStory, type SwFrameFormat } from "../layout/atrfrm";
 import { scalar } from "./unocrsrhelper";
+import { illegal } from "./unocrsrhelper";
+import { cppu_detail_getUnoType_RectanglePoint as rectanglePointType } from "../../../../offapi/com/sun/star/drawing/RectanglePoint";
+import {
+  bitmapGeometryIds,
+  bitmapGeometryWhich as B,
+  bitmapSizeToMm100,
+  bitmapSizeToTwips,
+  createBitmapGeometryItem,
+  isBitmapSize,
+} from "../../../../svx/inc/xbtmpit";
+import type { SfxPoolItem } from "../../../../svl/source/items/poolitem";
+import { PropertyMoreFlags } from "../../../../svl/inc/itemprop";
 import type { SwUnoPropertyEntry } from "./unomap";
 
 const geometry = [
@@ -21,10 +33,67 @@ const geometry = [
 /** Original property metadata together with its owning story selector. */
 type PageStoryProperty = SwUnoPropertyEntry & { readonly header: boolean };
 
+/** Original geometry properties common to the page, header and footer. */
+export const pageBitmapGeometryProperties: ReadonlyMap<string, SwUnoPropertyEntry> = new Map([
+  [
+    "FillBitmapSizeX",
+    {
+      which: B.sizeX,
+      type: "sal_Int32",
+      kind: "long",
+      member: 0,
+      more: PropertyMoreFlags.METRIC_ITEM,
+    },
+  ],
+  [
+    "FillBitmapSizeY",
+    {
+      which: B.sizeY,
+      type: "sal_Int32",
+      kind: "long",
+      member: 0,
+      more: PropertyMoreFlags.METRIC_ITEM,
+    },
+  ],
+  ["FillBitmapLogicalSize", { which: B.logicalSize, type: "bool", kind: "bool", member: 0 }],
+  [
+    "FillBitmapRectanglePoint",
+    { which: B.point, type: rectanglePointType, kind: "any", member: 0 },
+  ],
+  ["FillBitmapPositionOffsetX", { which: B.positionX, type: "sal_Int32", kind: "long", member: 0 }],
+  ["FillBitmapPositionOffsetY", { which: B.positionY, type: "sal_Int32", kind: "long", member: 0 }],
+  ["FillBitmapOffsetX", { which: B.offsetX, type: "sal_Int32", kind: "long", member: 0 }],
+  ["FillBitmapOffsetY", { which: B.offsetY, type: "sal_Int32", kind: "long", member: 0 }],
+]);
+
+/** Reads the original UNO value and performs Writer's positive metric conversion. @param item - Native bitmap item. @returns Typed value. */
+export function queryPageBitmapGeometry(item: SfxPoolItem): Any {
+  const which = item.Which();
+  const raw = (item as ReturnType<typeof createBitmapGeometryItem>).GetValue();
+  if (which === B.logicalSize) return new Any(raw as boolean);
+  const value = isBitmapSize(which) ? bitmapSizeToMm100(raw as number) : (raw as number);
+  return new Any([value], which === B.point ? rectanglePointType : "sal_Int32");
+}
+
+/** Applies the original storage type and metric conversion to one bitmap property. @param which - Native item. @param value - Typed UNO input. @returns Native item value. */
+export function putPageBitmapGeometry(which: number, value: Any): SfxPoolItem {
+  if (which === B.logicalSize)
+    return createBitmapGeometryItem(which, scalar(value, "bool") as boolean);
+  const number: [number] = [0];
+  if (!value.extract(number, which === B.point ? rectanglePointType : "sal_Int32"))
+    illegal("Invalid bitmap geometry value");
+  return createBitmapGeometryItem(
+    which,
+    isBitmapSize(which) ? bitmapSizeToTwips(number[0]) : number[0],
+  );
+}
+
 /** Original metadata for the represented nested header/footer properties. */
 export const pageStoryPropertyEntries = new Map<string, PageStoryProperty>();
 for (const prefix of ["Header", "Footer"] as const) {
   const header = prefix === "Header";
+  for (const [name, entry] of pageBitmapGeometryProperties)
+    pageStoryPropertyEntries.set(prefix + name, { ...entry, header });
   for (const [suffix, which, kind] of geometry) {
     const member =
       suffix === "BodyDistance"
@@ -49,6 +118,8 @@ export function readPageStoryProperty(page: SwPageDesc | undefined, name: string
   if (!property) return undefined;
   const frame = page && getActivePageStory(page.GetMaster(), property.header);
   if (!frame) return new Any();
+  if (bitmapGeometryIds.includes(property.which))
+    return queryPageBitmapGeometry(frame.GetAttrSet().Get(property.which));
   if (property.which === SID_ATTR_PAGE_DYNAMIC)
     return new Any(frame.GetFrameSize().GetHeightSizeType() !== SwFrameSize.Fixed);
   if (property.which === RES_HEADER_FOOTER_EAT_SPACING)
@@ -64,9 +135,14 @@ export function readPageStoryProperty(page: SwPageDesc | undefined, name: string
 }
 
 /** Routes one native story property to all active format variants without replacing their content. @param page - Existing page style. @param name - Property. @param value - UNO value. @returns Whether handled. */
-export function writePageStoryProperty(page: SwPageDesc, name: string, value: Any): boolean {
+export function writePageStoryProperty(
+  page: SwPageDesc,
+  name: string,
+  value: Any | undefined,
+): boolean {
   const property = pageStoryPropertyEntries.get(name);
-  if (!property) return false;
+  if (!property || (value === undefined && !bitmapGeometryIds.includes(property.which)))
+    return false;
   if (!getActivePageStory(page.GetMaster(), property.header)) return true;
   const targets = new Set<SwFrameFormat>();
   for (const variant of [
@@ -79,7 +155,11 @@ export function writePageStoryProperty(page: SwPageDesc, name: string, value: An
     if (frame) targets.add(frame);
   }
   for (const frame of targets) {
-    if (property.which === RES_UL_SPACE) {
+    if (bitmapGeometryIds.includes(property.which)) {
+      if (value === undefined) frame.ResetFormatAttr(property.which);
+      else frame.SetFormatAttr(putPageBitmapGeometry(property.which, value));
+    } else if (value === undefined) continue;
+    else if (property.which === RES_UL_SPACE) {
       const spacing = frame.GetULSpace().Clone();
       try {
         if (spacing.PutValue(value.get("sal_Int32"), property.member)) frame.SetFormatAttr(spacing);

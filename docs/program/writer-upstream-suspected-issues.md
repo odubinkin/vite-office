@@ -5451,7 +5451,26 @@ the gutter during layout. Writer preserves this ordering.
 
 When a page declares a modern bitmap mode and also has a loaded legacy
 background image, the legacy image context replaces the modern mode with
-the recognized legacy placement. An image with a package link and no
+repeat, stretch, or center placement. An image with a package link and no
 placement defaults to repeat. Writer keeps this precedence.
 
 - [Original legacy image placement and bitmap mode override](../../vendor/libreoffice-reference/xmloff/source/style/XMLBackgroundImageContext.cxx)
+
+### WRITER-693 — Legacy percentage positions can select the bottom edge
+
+The legacy background-image importer passes a left-column point to its
+vertical merge when processing the second percentage. For example, it
+maps `20% 50%` to bottom left. Writer preserves that result when converting
+the legacy image to a DrawingLayer reference point.
+
+- [Original legacy position conversion](../../vendor/libreoffice-reference/xmloff/source/style/XMLBackgroundImageContext.cxx)
+
+### WRITER-694 — ODT writes only one bitmap tile-offset axis
+
+DrawingLayer stores horizontal and vertical offsets independently. If both
+are present, the page exporter emits the horizontal offset when it is
+nonzero and emits the vertical offset otherwise. The omitted offset can
+therefore change on reopen. Writer retains the two values in memory and
+applies the same selection when writing ODT.
+
+- [Original tile-offset export selection](../../vendor/libreoffice-reference/xmloff/source/style/PageMasterExportPropMapper.cxx)

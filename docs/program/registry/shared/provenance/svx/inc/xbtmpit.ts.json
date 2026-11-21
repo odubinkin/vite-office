@@ -9,13 +9,15 @@
     "localSymbols": [
       "XFillBitmapItem",
       "getBitmapMode",
-      "setBitmapMode"
+      "setBitmapMode",
+      "XFillBmpPosItem"
     ],
     "upstreamSymbols": [
       "XFillBitmapItem"
     ],
     "preservedResponsibilities": [
-      "Retains named embedded graphics in a DrawingLayer pool item and the independent tile and stretch values."
+      "Retains named embedded graphics in a DrawingLayer pool item and the independent tile and stretch values.",
+      "Holds the original independent bitmap geometry item values, defaults, reference point and signed-size conversion."
     ],
     "omittedResponsibilities": [
       "Full GraphicObject decoding, historical bitmap patterns and other bitmap layout items remain outside this slice."
@@ -29,12 +31,20 @@
         {
           "path": "apps/office/src/sw/source/filter/xml/odt-page-background.test.ts",
           "marker": "ports testPageBackground"
+        },
+        {
+          "path": "apps/office/src/sw/source/filter/xml/odt-page-background.test.ts",
+          "marker": "preserves page and story bitmap geometry"
         }
       ],
       "upstream": [
         {
           "path": "vendor/libreoffice-reference/include/svx/xbtmpit.hxx",
           "marker": "XFillBitmapItem"
+        },
+        {
+          "path": "vendor/libreoffice-reference/svx/source/xoutdev/xattr2.cxx",
+          "marker": "XFillBmpPosItem::XFillBmpPosItem"
         }
       ]
     }

@@ -10,7 +10,7 @@ import { UnoType, type UnoTypeArgument } from "../../../../cppu/inc/unotype";
 import { cppu_detail_getUnoType_BreakType as breakType } from "../../../../offapi/com/sun/star/style/BreakType";
 import { OUString } from "../../../../sal/inc/rtl/ustring";
 import { SfxItemPropertySet } from "../../../../svl/source/items/itemprop";
-import { SfxItemPropertyMapEntry } from "../../../../svl/inc/itemprop";
+import { SfxItemPropertyMapEntry, type PropertyMoreFlags } from "../../../../svl/inc/itemprop";
 import { cppu_detail_getUnoType_Locale as localeType } from "../../../../udkapi/com/sun/star/lang/Locale";
 import { FN_UNO_PARA_NUM_AUTO_FORMAT } from "../../../inc/cmdid";
 import { cppu_detail_getUnoType_NamedValue as namedValueType } from "../../../../udkapi/com/sun/star/beans/NamedValue";
@@ -22,7 +22,7 @@ import { cppu_detail_getUnoType_BorderLine as borderLineType } from "../../../..
 import { cppu_detail_getUnoType_ShadowFormat as shadowFormatType } from "../../../../offapi/com/sun/star/table/ShadowFormat";
 import * as H from "../../../inc/hintids";
 import { WID_DOC_DEFAULT_PAGE_MODE, WID_DOC_INTEROP_GRAB_BAG } from "../../../inc/unomap";
-import { pageStoryPropertyEntries } from "./unostyle.page-stories";
+import { pageBitmapGeometryProperties, pageStoryPropertyEntries } from "./unostyle.page-stories";
 import * as Grid from "../../../inc/unomid";
 import { MID_PAGEDESC_PAGEDESCNAME, MID_PAGEDESC_PAGENUMOFFSET } from "../../../inc/unomid";
 /** Native item member transport already provided by the bounded core item. */
@@ -31,6 +31,7 @@ export interface SwUnoPropertyEntry {
   readonly type: UnoTypeArgument;
   readonly attributes?: number;
   readonly member: number;
+  readonly more?: PropertyMoreFlags;
   readonly kind:
     | "any"
     | "long"
@@ -91,6 +92,7 @@ export const SwUnoPageStylePropertyMap: ReadonlyMap<string, PageStylePropertyEnt
   string,
   PageStylePropertyEntry
 >([
+  ...pageBitmapGeometryProperties,
   ["FillStyle", { type: fillStyleType, which: XATTR_FILLSTYLE, member: 0, kind: "any" }],
   ["FillColor", { type: "sal_Int32", which: XATTR_FILLCOLOR, member: 0, kind: "any" }],
   [
@@ -745,6 +747,7 @@ function nativeEntries(
           UnoType.get(entry.type),
           entry.attributes ?? 1,
           entry.member,
+          entry.more,
         ),
       );
     } finally {

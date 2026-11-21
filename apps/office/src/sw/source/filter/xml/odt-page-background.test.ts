@@ -10,6 +10,11 @@ import {
   cppu_detail_getUnoType_FillStyle as fillStyleType,
 } from "../../../../offapi/com/sun/star/drawing/FillStyle";
 import { SvXMLGraphicHelper } from "../../../../xmloff/source/core/xmlgrhlp";
+import {
+  RectanglePoint,
+  cppu_detail_getUnoType_RectanglePoint as pointType,
+} from "../../../../offapi/com/sun/star/drawing/RectanglePoint";
+import { Any } from "../../../../cppu/inc/com/sun/star/uno/Any";
 import { getBitmapMode, type XFillBitmapItem } from "../../../../svx/inc/xbtmpit";
 import {
   XATTR_FILLBITMAP,
@@ -39,6 +44,98 @@ const metadata = { title: "Page background" };
 const fixturePath =
   "../../vendor/libreoffice-reference/sw/qa/extras/odfimport/data/PageBackground.odt";
 const imagePath = "Pictures/100000000000005E0000005E71533790.png";
+
+/** Reads a page geometry long through its native style. @param page - Property owner. @param name - Property name. @returns Value. */
+function longProperty(page: SwXPageStyle, name: string): number {
+  const key = unicode(name);
+  const value = page.getPropertyValue(key);
+  try {
+    return value.get("sal_Int32") as number;
+  } finally {
+    key.dispose();
+    value.dispose();
+  }
+}
+
+/** Sets a native bitmap geometry long without retaining temporary UNO values. @param page - Property owner. @param name - Name. @param number - Value. @returns Nothing. */
+function setLongProperty(page: SwXPageStyle, name: string, number: number): void {
+  const key = unicode(name);
+  const value = new Any([number], "sal_Int32");
+  try {
+    page.setPropertyValue(key, value);
+  } finally {
+    key.dispose();
+    value.dispose();
+  }
+}
+
+it("preserves page and story bitmap geometry and resolves both repeat axes only at ODT export", /** Covers metric and percent dimensions, legacy anchors, typed UNO and worker preservation. @returns Completion. */ async () => {
+  const source = await DocumentArchive.open(new Uint8Array(readFileSync(fixturePath)));
+  const image = await source.readEntry(imagePath);
+  const helper = new SvXMLGraphicHelper(
+    new Map([[imagePath, { bytes: image, mediaType: "image/png" }]]),
+  );
+  const xml = `<office:document-styles xmlns:office="${ODF_NAMESPACES.office}" xmlns:style="${ODF_NAMESPACES.style}" xmlns:fo="${ODF_NAMESPACES.fo}" xmlns:draw="${ODF_NAMESPACES.draw}" xmlns:xlink="${ODF_NAMESPACES.xlink}" xmlns:text="${ODF_NAMESPACES.text}"><office:styles><draw:fill-image draw:name="Sky" xlink:href="${imagePath}"/></office:styles><office:automatic-styles><style:page-layout style:name="pm"><style:page-layout-properties fo:page-width="8in" fo:page-height="11in" draw:fill="bitmap" draw:fill-image-name="Sky" style:repeat="repeat" draw:fill-image-width="75%" draw:fill-image-height="2.54cm" draw:fill-image-ref-point="top-right" draw:fill-image-ref-point-x="-12%" draw:fill-image-ref-point-y="19%" draw:tile-repeat-offset="37% horizontal"/><style:header-style><style:header-footer-properties><style:background-image xlink:href="${imagePath}" style:position="20% 50%" style:repeat="no-repeat"/></style:header-footer-properties></style:header-style></style:page-layout></office:automatic-styles><office:master-styles><style:master-page style:name="Standard" style:page-layout-name="pm"><style:header><text:p>Header</text:p></style:header></style:master-page></office:master-styles></office:document-styles>`;
+  const document = importWriterXml(xml, undefined, metadata, undefined, {
+    graphicHelper: helper,
+  }).document;
+  const style = new SwXPageStyle(document, document.GetPageDesc(0));
+  try {
+    expect(longProperty(style, "FillBitmapSizeX")).toBe(-75);
+    expect(longProperty(style, "FillBitmapSizeY")).toBe(2540);
+    expect(longProperty(style, "FillBitmapPositionOffsetX")).toBe(-12);
+    expect(longProperty(style, "FillBitmapPositionOffsetY")).toBe(19);
+    setLongProperty(style, "FillBitmapOffsetY", 64);
+    for (const [name, expected] of [
+      ["FillBitmapRectanglePoint", RectanglePoint.RIGHT_TOP],
+      ["HeaderFillBitmapRectanglePoint", RectanglePoint.LEFT_BOTTOM],
+    ] as const) {
+      const key = unicode(name);
+      const point = style.getPropertyValue(key);
+      try {
+        const actual: [number] = [-1];
+        expect(point.extract(actual, pointType)).toBe(true);
+        expect(actual[0]).toBe(expected);
+      } finally {
+        key.dispose();
+        point.dispose();
+      }
+    }
+    const copy = decodeWriterDocument(structuredClone(encodeWriterDocument(document)));
+    const copiedStyle = new SwXPageStyle(copy, copy.GetPageDesc(0));
+    try {
+      expect(longProperty(copiedStyle, "FillBitmapOffsetX")).toBe(37);
+      expect(longProperty(copiedStyle, "FillBitmapOffsetY")).toBe(64);
+      const archive = await DocumentArchive.open(await writeOdtDocument(copy, metadata));
+      const styles = await archive.readTextEntry("styles.xml");
+      expect(styles).toContain('draw:fill-image-width="75%"');
+      expect(styles).toContain('draw:fill-image-height="2.54cm"');
+      expect(styles).toContain('draw:tile-repeat-offset="37% horizontal"');
+      expect(styles).toContain('style:position="bottom left"');
+      setLongProperty(copiedStyle, "FillBitmapOffsetX", 0);
+      const bytes = await writeOdtDocument(copy, metadata);
+      const vertical = await DocumentArchive.open(bytes);
+      expect(await vertical.readTextEntry("styles.xml")).toContain(
+        'draw:tile-repeat-offset="64% vertical"',
+      );
+      const reopened = (await readOdtDocument(bytes, metadata)).document;
+      const reopenedStyle = new SwXPageStyle(reopened, reopened.GetPageDesc(0));
+      try {
+        expect(longProperty(reopenedStyle, "FillBitmapOffsetX")).toBe(0);
+        expect(longProperty(reopenedStyle, "FillBitmapOffsetY")).toBe(64);
+      } finally {
+        reopenedStyle.dispose();
+        reopened.Dispose();
+      }
+    } finally {
+      copiedStyle.dispose();
+      copy.Dispose();
+    }
+  } finally {
+    style.dispose();
+    document.Dispose();
+  }
+});
 
 /** Checks both original page styles and compares the native images. @param document - Writer document. @returns Embedded image bytes. */
 function checkBitmapPages(document: SwDoc): Uint8Array {

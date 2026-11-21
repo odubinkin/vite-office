@@ -508,9 +508,21 @@ export enum XMLToken {
   STYLE_REPEAT,
   XLINK_ACTUATE,
   STYLE_BACKGROUND_TRANSPARENCY,
+  DRAW_FILL_IMAGE_WIDTH,
+  DRAW_FILL_IMAGE_HEIGHT,
+  DRAW_FILL_IMAGE_REF_POINT,
+  DRAW_FILL_IMAGE_REF_POINT_X,
+  DRAW_FILL_IMAGE_REF_POINT_Y,
+  DRAW_TILE_REPEAT_OFFSET,
 }
 
 const entries: readonly (readonly [string, string, XMLToken])[] = [
+  [ODF_NAMESPACES.draw, "fill-image-width", XMLToken.DRAW_FILL_IMAGE_WIDTH],
+  [ODF_NAMESPACES.draw, "fill-image-height", XMLToken.DRAW_FILL_IMAGE_HEIGHT],
+  [ODF_NAMESPACES.draw, "fill-image-ref-point", XMLToken.DRAW_FILL_IMAGE_REF_POINT],
+  [ODF_NAMESPACES.draw, "fill-image-ref-point-x", XMLToken.DRAW_FILL_IMAGE_REF_POINT_X],
+  [ODF_NAMESPACES.draw, "fill-image-ref-point-y", XMLToken.DRAW_FILL_IMAGE_REF_POINT_Y],
+  [ODF_NAMESPACES.draw, "tile-repeat-offset", XMLToken.DRAW_TILE_REPEAT_OFFSET],
   [ODF_NAMESPACES.draw, "fill-image", XMLToken.DRAW_FILL_IMAGE],
   [ODF_NAMESPACES.draw, "fill-image-name", XMLToken.DRAW_FILL_IMAGE_NAME],
   [ODF_NAMESPACES.draw, "display-name", XMLToken.DRAW_DISPLAY_NAME],

@@ -41,6 +41,8 @@ import {
   pageStoryPropertyEntries,
   readPageStoryProperty,
   writePageStoryProperty,
+  putPageBitmapGeometry,
+  queryPageBitmapGeometry,
 } from "./unostyle.page-stories";
 import { SwUnoPageStylePropertyMap } from "./unomap";
 import { UseOnPage } from "../layout/pagedesc";
@@ -55,7 +57,11 @@ import {
   XATTR_FILLBMP_STRETCH,
   XATTR_FILLBMP_TILE,
 } from "../../../../svx/inc/xdef";
-import { getBitmapMode, type XFillBitmapItem } from "../../../../svx/inc/xbtmpit";
+import {
+  bitmapGeometryIds,
+  getBitmapMode,
+  type XFillBitmapItem,
+} from "../../../../svx/inc/xbtmpit";
 import { SfxBoolItem } from "../../../../svl/source/items/cenumitm";
 /** Represented native style families over actual document formats; frame/table/conditional family suppliers remain unported. */
 export type SwStyleFamily =
@@ -164,6 +170,19 @@ export class SwXStyle {
       return;
     }
     if (this.family === "PageStyles") {
+      if (writePageStoryProperty(this.owner as SwPageDesc, n, undefined)) return;
+      const geometry = SwUnoPageStylePropertyMap.get(n);
+      if (geometry && bitmapGeometryIds.includes(geometry.which)) {
+        const page = this.owner as SwPageDesc;
+        for (const frame of [
+          page.GetMaster(),
+          page.GetLeft(),
+          page.GetFirstMaster(),
+          page.GetFirstLeft(),
+        ])
+          frame.ResetFormatAttr(geometry.which);
+        return;
+      }
       if (n === "FillBitmapName" || n === "FillBitmapMode") {
         const page = this.owner as SwPageDesc;
         for (const frame of [
@@ -407,7 +426,9 @@ export class SwXStyle {
     if (!this.owner) {
       const entry =
         this.family === "PageStyles" ? SwUnoPageStylePropertyMap.get(n) : SwUnoPropertyMap.get(n);
-      if (entry && this.family !== "CharacterStyles")
+      if (entry && this.family === "PageStyles" && bitmapGeometryIds.includes(entry.which))
+        putPageBitmapGeometry(entry.which, value).Dispose();
+      else if (entry && this.family !== "CharacterStyles")
         putItem(this.doc.GetAttrPool().GetUserOrPoolDefaultItem(entry.which), entry, value);
       else if (n === "FollowStyle") stringValue(value);
       else if (n === "IsLandscape") scalar(value, "bool");
@@ -563,12 +584,12 @@ export class SwXStyle {
     const entry = SwUnoPageStylePropertyMap.get(n);
     if (entry) {
       out.dispose();
-      return queryItem(
-        this.owner
-          ? page.GetMaster().GetAttrSet().Get(entry.which)
-          : this.doc.GetAttrPool().GetUserOrPoolDefaultItem(entry.which),
-        entry,
-      );
+      const item = this.owner
+        ? page.GetMaster().GetAttrSet().Get(entry.which)
+        : this.doc.GetAttrPool().GetUserOrPoolDefaultItem(entry.which);
+      return bitmapGeometryIds.includes(entry.which)
+        ? queryPageBitmapGeometry(item)
+        : queryItem(item, entry);
     }
     const story = readPageStoryProperty(this.owner ? page : undefined, n);
     if (story) {
@@ -610,7 +631,9 @@ export class SwXStyle {
     }
     const entry = SwUnoPageStylePropertyMap.get(n);
     if (entry) {
-      const item = putItem(page.GetMaster().GetAttrSet().Get(entry.which), entry, v);
+      const item = bitmapGeometryIds.includes(entry.which)
+        ? putPageBitmapGeometry(entry.which, v)
+        : putItem(page.GetMaster().GetAttrSet().Get(entry.which), entry, v);
       for (const frame of [
         page.GetMaster(),
         page.GetLeft(),

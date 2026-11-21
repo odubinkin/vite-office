@@ -23,7 +23,7 @@ import {
   XATTR_FILLBMP_STRETCH,
   XATTR_FILLBMP_TILE,
 } from "../../inc/xdef";
-import { XFillBitmapItem } from "../../inc/xbtmpit";
+import { XFillBitmapItem, bitmapGeometryIds, createBitmapGeometryItem } from "../../inc/xbtmpit";
 import { SfxBoolItem } from "../../../svl/source/items/cenumitm";
 
 /** Original signed hundredths-of-degree item; values are stored without angle normalization. */
@@ -72,6 +72,8 @@ export class SdrItemPool extends SfxItemPool {
       );
       this.RegisterDefaultItem(new SfxBoolItem(XATTR_FILLBMP_TILE, true));
       this.RegisterDefaultItem(new SfxBoolItem(XATTR_FILLBMP_STRETCH, true));
+      for (const which of bitmapGeometryIds)
+        this.RegisterDefaultItem(createBitmapGeometryItem(which));
       this.RegisterDefaultItem(
         new XFillUseSlideBackgroundItem(),
         undefined,

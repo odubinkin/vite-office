@@ -17,7 +17,16 @@ import { XATTR_FILL_FIRST, XATTR_FILL_LAST } from "../../../../svx/inc/xdef";
 import { XFillStyleItem } from "../../../../svx/inc/xfillit0";
 import { XFillColorItem } from "../../../../svx/inc/xflclit";
 import { XFillTransparenceItem } from "../../../../svx/inc/xfltrit";
-import { setBitmapMode, type XFillBitmapItem } from "../../../../svx/inc/xbtmpit";
+import {
+  bitmapGeometryWhich,
+  bitmapSizeToTwips,
+  createBitmapGeometryItem,
+  isBitmapSize,
+  setBitmapMode,
+  type XFillBitmapItem,
+} from "../../../../svx/inc/xbtmpit";
+import { BitmapMode } from "../../../../offapi/com/sun/star/drawing/BitmapMode";
+import { RectanglePoint } from "../../../../offapi/com/sun/star/drawing/RectanglePoint";
 import { FillStyle } from "../../../../offapi/com/sun/star/drawing/FillStyle";
 import type { OdfPageBackground } from "../../../../xmloff/source/style/PageMasterStyleMap";
 import {
@@ -84,9 +93,37 @@ export function importPageBackground(
     if (fillStyle === FillStyle.BITMAP) {
       const image = named ?? legacy;
       if (image) target.Put(image);
-      const mode = (legacy ? source.image?.mode : undefined) ?? source.bitmapMode;
+      const placement = legacy ? source.image : undefined;
+      const legacyMode =
+        placement &&
+        (source.bitmapMode === undefined ||
+          placement.mode !== BitmapMode.NO_REPEAT ||
+          placement.point === RectanglePoint.MIDDLE_MIDDLE)
+          ? placement.mode
+          : undefined;
+      const mode = legacyMode ?? source.bitmapMode;
       if (mode !== undefined) setBitmapMode(target, mode);
+      if (placement && source.bitmapMode === undefined)
+        target.Put(
+          createBitmapGeometryItem(
+            bitmapGeometryWhich.point,
+            placement.point ?? RectanglePoint.LEFT_TOP,
+          ),
+        );
     }
+    const geometry = source.bitmapGeometry;
+    if (geometry)
+      for (const key of Object.keys(bitmapGeometryWhich) as (keyof typeof bitmapGeometryWhich)[]) {
+        const value = geometry[key];
+        if (value === undefined) continue;
+        const which = bitmapGeometryWhich[key];
+        target.Put(
+          createBitmapGeometryItem(
+            which,
+            typeof value === "number" && isBitmapSize(which) ? bitmapSizeToTwips(value) : value,
+          ),
+        );
+      }
     if (target.Count()) frame.SetFormatAttrSet(target);
   } finally {
     target.Dispose();

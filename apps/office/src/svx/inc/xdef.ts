@@ -23,7 +23,16 @@ export const XATTR_FILLCOLOR = 1015 as const;
 export const XATTR_FILLBITMAP = 1018 as const;
 /** Original bitmap tiling and stretching identities. */
 export const XATTR_FILLBMP_TILE = 1021 as const;
+/** Original bitmap geometry identities. */
+export const XATTR_FILLBMP_POS = 1022 as const;
+export const XATTR_FILLBMP_SIZEX = 1023 as const;
+export const XATTR_FILLBMP_SIZEY = 1024 as const;
+export const XATTR_FILLBMP_SIZELOG = 1027 as const;
+export const XATTR_FILLBMP_TILEOFFSETX = 1028 as const;
+export const XATTR_FILLBMP_TILEOFFSETY = 1029 as const;
 export const XATTR_FILLBMP_STRETCH = 1030 as const;
+export const XATTR_FILLBMP_POSOFFSETX = 1031 as const;
+export const XATTR_FILLBMP_POSOFFSETY = 1032 as const;
 /** Original solid-fill transparency identity. */
 export const XATTR_FILLTRANSPARENCE = 1019 as const;
 /** Original inclusive last fill identity, including slide-background policy. */

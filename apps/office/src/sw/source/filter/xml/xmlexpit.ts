@@ -18,7 +18,19 @@ import {
   XATTR_FILLSTYLE,
   XATTR_FILLTRANSPARENCE,
 } from "../../../../svx/inc/xdef";
-import { getBitmapMode, type XFillBitmapItem } from "../../../../svx/inc/xbtmpit";
+import {
+  bitmapGeometryWhich,
+  bitmapSizeToMm100,
+  getBitmapMode,
+  isBitmapSize,
+  type XFillBitmapItem,
+} from "../../../../svx/inc/xbtmpit";
+import {
+  exportBitmapGeometry,
+  exportLegacyBitmapPosition,
+  type OdfBitmapGeometry,
+} from "../../../../xmloff/source/style/PageMasterStyleMap";
+import type { createBitmapGeometryItem, XFillBmpPosItem } from "../../../../svx/inc/xbtmpit";
 import type { XFillStyleItem } from "../../../../svx/inc/xfillit0";
 import type { XFillColorItem } from "../../../../svx/inc/xflclit";
 import type { XFillTransparenceItem } from "../../../../svx/inc/xfltrit";
@@ -144,6 +156,15 @@ export class XMLPageBackgroundExport {
       if (style === FillStyle.SOLID && transparency !== undefined)
         attributes.push(`style:background-transparency="${transparency}%"`);
     }
+    const geometry: Record<string, number | boolean> = {};
+    for (const [key, which] of Object.entries(bitmapGeometryWhich)) {
+      const item = items.GetItemIfSet(which, false);
+      if (item === undefined) continue;
+      const value = (item as ReturnType<typeof createBitmapGeometryItem>).GetValue();
+      geometry[key] =
+        typeof value === "number" && isBitmapSize(which) ? bitmapSizeToMm100(value) : value;
+    }
+    attributes.push(...exportBitmapGeometry(geometry as OdfBitmapGeometry));
     const bitmap = items.GetItemIfSet(XATTR_FILLBITMAP, false) as XFillBitmapItem | undefined;
     let children = "";
     const image = style === FillStyle.BITMAP && bitmap ? this.registerBitmap(bitmap) : undefined;
@@ -160,7 +181,11 @@ export class XMLPageBackgroundExport {
         `draw:fill-image-name="${encodeStyleName(name)}"`,
         `style:repeat="${repeat}"`,
       );
-      const position = mode === BitmapMode.NO_REPEAT ? ' style:position="center center"' : "";
+      const point = (items.Get(bitmapGeometryWhich.point) as XFillBmpPosItem).GetValue();
+      const position =
+        mode === BitmapMode.NO_REPEAT
+          ? ` style:position="${exportLegacyBitmapPosition(point)}"`
+          : "";
       const legacyMode = mode === BitmapMode.REPEAT ? "" : ` style:repeat="${repeat}"`;
       const opacity = transparency === undefined ? "" : ` draw:opacity="${100 - transparency}%"`;
       children = `<style:background-image xlink:href="${escapeXml(href)}" xlink:type="simple" xlink:actuate="onLoad"${position}${legacyMode}${opacity}/>`;

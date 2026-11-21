@@ -6,6 +6,7 @@ import { Converter } from "../../../sax/source/tools/converter";
 import { PageStyleLayout } from "../../../offapi/com/sun/star/style/PageStyleLayout";
 import { TextGridMode } from "../../../offapi/com/sun/star/text/TextGridMode";
 import { BitmapMode } from "../../../offapi/com/sun/star/drawing/BitmapMode";
+import { RectanglePoint as P } from "../../../offapi/com/sun/star/drawing/RectanglePoint";
 import { importFillProperties, type OdfFillProperties } from "../draw/fill-properties";
 
 const pageUsage = new Map<string, PageStyleLayout>([
@@ -137,13 +138,156 @@ export function importPageGrid(attributes: FastAttributeList): OdfPageGridProper
 export interface OdfPageBackground extends OdfFillProperties {
   readonly bitmapName?: string;
   readonly bitmapMode?: BitmapMode;
+  readonly bitmapGeometry?: OdfBitmapGeometry;
   readonly backgroundColor?: number | "transparent";
   readonly backgroundTransparency?: number;
   readonly image?: {
     readonly href: string;
     readonly mode: BitmapMode;
+    readonly point?: P;
     readonly transparency?: number;
   };
+}
+
+/** Drawing bitmap dimensions use signed percentages or whole hundredths of a millimetre. */
+export interface OdfBitmapGeometry {
+  readonly sizeX?: number;
+  readonly sizeY?: number;
+  readonly logicalSize?: boolean;
+  readonly point?: P;
+  readonly positionX?: number;
+  readonly positionY?: number;
+  readonly offsetX?: number;
+  readonly offsetY?: number;
+}
+
+const rectanglePoints = [
+  "top-left",
+  "top",
+  "top-right",
+  "left",
+  "center",
+  "right",
+  "bottom-left",
+  "bottom",
+  "bottom-right",
+];
+const units100 = new SvXMLUnitConverter("mm100");
+
+/** Reads one native percent through the shared SAX converter. @param raw - XML text. @returns Numeric percent when recognized. */
+function parsePercent(raw: string): number | undefined {
+  const value: [number] = [0];
+  return Converter.convertPercent(value, raw) ? value[0] : undefined;
+}
+
+/** Reads the bitmap portion of the original property map in SAX order. @param attributes - Page layout attributes. @returns Authored native properties. */
+function importBitmapGeometry(attributes: FastAttributeList): OdfBitmapGeometry {
+  const geometry: { -readonly [K in keyof OdfBitmapGeometry]: OdfBitmapGeometry[K] } = {};
+  for (const [token, raw] of attributes) {
+    if (token === XMLToken.DRAW_FILL_IMAGE_WIDTH || token === XMLToken.DRAW_FILL_IMAGE_HEIGHT) {
+      geometry.logicalSize = !raw.includes("%");
+      const value = geometry.logicalSize ? units100.convertMeasureToCore(raw) : parsePercent(raw);
+      if (value !== null && value !== undefined)
+        geometry[token === XMLToken.DRAW_FILL_IMAGE_WIDTH ? "sizeX" : "sizeY"] =
+          geometry.logicalSize ? value : -value | 0;
+    } else if (token === XMLToken.DRAW_FILL_IMAGE_REF_POINT) {
+      const point = rectanglePoints.indexOf(raw);
+      if (point >= 0) geometry.point = point as P;
+    } else if (
+      token === XMLToken.DRAW_FILL_IMAGE_REF_POINT_X ||
+      token === XMLToken.DRAW_FILL_IMAGE_REF_POINT_Y
+    ) {
+      const value = parsePercent(raw);
+      if (value !== undefined)
+        geometry[token === XMLToken.DRAW_FILL_IMAGE_REF_POINT_X ? "positionX" : "positionY"] =
+          value;
+    } else if (token === XMLToken.DRAW_TILE_REPEAT_OFFSET) {
+      const [percent, axis] = raw.split(" ");
+      const value = parsePercent(percent ?? "");
+      if (value !== undefined && (axis === "horizontal" || axis === "vertical"))
+        geometry[axis === "horizontal" ? "offsetX" : "offsetY"] = value;
+    }
+  }
+  return geometry;
+}
+
+/** Exports the original signed bitmap size and repeat-offset properties. @param geometry - Direct page layout values. @returns Attribute fragments. */
+export function exportBitmapGeometry(geometry: OdfBitmapGeometry): string[] {
+  const result: string[] = [];
+  for (const [axis, value] of [
+    ["width", geometry.sizeX],
+    ["height", geometry.sizeY],
+  ] as const)
+    if (value !== undefined)
+      result.push(
+        `draw:fill-image-${axis}="${value < 0 ? `${-value}%` : units100.convertMeasureToXML(value)}"`,
+      );
+  if (geometry.point !== undefined)
+    result.push(`draw:fill-image-ref-point="${rectanglePoints[geometry.point]}"`);
+  if (geometry.positionX !== undefined)
+    result.push(`draw:fill-image-ref-point-x="${geometry.positionX}%"`);
+  if (geometry.positionY !== undefined)
+    result.push(`draw:fill-image-ref-point-y="${geometry.positionY}%"`);
+  if (geometry.offsetX !== undefined && (geometry.offsetX !== 0 || geometry.offsetY === undefined))
+    result.push(`draw:tile-repeat-offset="${geometry.offsetX}% horizontal"`);
+  else if (geometry.offsetY !== undefined)
+    result.push(`draw:tile-repeat-offset="${geometry.offsetY}% vertical"`);
+  return result;
+}
+
+/** Translates the original legacy position tokens to their drawing point. @param raw - Legacy style position. @returns Position if recognized. */
+function importLegacyPoint(raw: string): P | undefined {
+  let point = P.MIDDLE_MIDDLE,
+    horizontal = false,
+    vertical = false;
+  for (const token of raw.split(" ")) {
+    if (horizontal && vertical) return undefined;
+    if (token.includes("%")) {
+      const value = parsePercent(token);
+      if (value === undefined) return undefined;
+      if (!horizontal) {
+        point = value < 25 ? P.LEFT_TOP : value < 75 ? P.MIDDLE_MIDDLE : P.RIGHT_BOTTOM;
+        horizontal = true;
+      } else {
+        // The second percent passes a left-column point to the native vertical merge.
+        point = mergeLegacyVertical(
+          point,
+          value < 25 ? P.LEFT_TOP : value < 75 ? P.LEFT_MIDDLE : P.LEFT_BOTTOM,
+        );
+        vertical = true;
+      }
+    } else if (token === "center") {
+      if (horizontal) point = mergeLegacyVertical(point, P.MIDDLE_MIDDLE);
+      else if (vertical) point = Math.floor(point / 3) * 3 + 1;
+      else point = P.MIDDLE_MIDDLE;
+    } else if (token === "left" || token === "right") {
+      const column = token === "left" ? 0 : 2;
+      if (vertical) point = Math.floor(point / 3) * 3 + column;
+      else if (!horizontal) point = 3 + column;
+      else return undefined;
+      horizontal = true;
+    } else if (token === "top" || token === "bottom") {
+      const row = token === "top" ? 0 : 2;
+      if (horizontal) point = mergeLegacyVertical(point, row * 3 + 1);
+      else if (!vertical) point = row * 3 + 1;
+      else return undefined;
+      vertical = true;
+    } else return undefined;
+  }
+  return point;
+}
+
+/** Applies the source GraphicLocation vertical merge. @param point - Current point. @param vertical - Point contributed by the vertical token. @returns Merged point. */
+function mergeLegacyVertical(point: P, vertical: P): P {
+  const column = point % 3;
+  if (column === 1) return vertical;
+  const row = vertical === P.MIDDLE_TOP ? 0 : vertical === P.MIDDLE_MIDDLE ? 1 : 2;
+  return row * 3 + column;
+}
+
+/** Writes the native legacy vertical then horizontal position. @param point - Bitmap anchor. @returns Position tokens. */
+export function exportLegacyBitmapPosition(point: P): string {
+  return `${["top", "center", "bottom"][Math.floor(point / 3)]} ${["left", "center", "right"][point % 3]}`;
 }
 
 /** Reads the native drawing bitmap mode token. @param value - Authored repeat token. @returns Native mode. */
@@ -175,6 +319,7 @@ export class XMLPagePropertySetContext extends SvXMLImportContext {
       ...importFillProperties(attributes),
       ...(bitmapName === null ? {} : { bitmapName }),
       ...(bitmapMode === undefined ? {} : { bitmapMode }),
+      bitmapGeometry: importBitmapGeometry(attributes),
       ...(background === "transparent"
         ? { backgroundColor: "transparent" }
         : background !== null && Converter.convertColor(color, background)
@@ -204,14 +349,30 @@ export class XMLPagePropertySetContext extends SvXMLImportContext {
           Converter.convertPercent(value, opacity) &&
           value[0] >= 0 &&
           value[0] < 100;
-        const position = attributes.get(XMLToken.STYLE_POSITION);
+        let mode = BitmapMode.REPEAT;
+        let point: P | undefined;
+        for (const [key, raw] of attributes) {
+          if (key === XMLToken.STYLE_POSITION) {
+            const authored = importLegacyPoint(raw);
+            if (authored !== undefined) {
+              point = authored;
+              mode = BitmapMode.NO_REPEAT;
+            }
+          } else if (key === XMLToken.STYLE_REPEAT) {
+            const authored = importBitmapMode(raw);
+            if (
+              authored !== undefined &&
+              !(authored === BitmapMode.NO_REPEAT && point !== undefined)
+            ) {
+              mode = authored;
+              point = authored === BitmapMode.NO_REPEAT ? P.MIDDLE_MIDDLE : undefined;
+            }
+          }
+        }
         this.image = {
           href,
-          mode:
-            importBitmapMode(attributes.get(XMLToken.STYLE_REPEAT)) ??
-            (position === "center center" || position === "center"
-              ? BitmapMode.NO_REPEAT
-              : BitmapMode.REPEAT),
+          mode,
+          ...(point === undefined ? {} : { point }),
           ...(transparent ? { transparency: 100 - value[0] } : {}),
         };
       }
