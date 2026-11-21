@@ -1,5 +1,6 @@
-/** @fileoverview Consumed ScDocFunc attribute-only delete operation dispatch;other native document operations remain with their existing owners. */
+/** @fileoverview Consumed Calc document functions and original document-operation dispatch. */
 import { Color } from "../../../../tools/inc/color";
+import { ScUndoPageBreak } from "../undo/undocell";
 import { ScUndoTabColor, type ScUndoTabColorInfo } from "../undo/undotab";
 import { SetFormulaOperation } from "../operation/SetFormulaOperation";
 import type { ScFormulaCell } from "../../../inc/formulacell";
@@ -48,6 +49,52 @@ export class ScDocFunc {
     }
     if (record) this.shell.GetUndoManager().AddUndoAction(new ScUndoTabColor(changes));
     this.shell.SetDocumentModified();
+    return true;
+  }
+  /** Inserts the original manual print break before the addressed row or column. @param columns - Column axis. @param position - Native break address. @param record - Whether to record history. @param setModified - Whether to notify the document shell. @returns Success. */
+  InsertPageBreak(
+    columns: boolean,
+    position: ScAddress,
+    record: boolean,
+    setModified: boolean,
+  ): boolean {
+    return this.SetPageBreak(columns, position, true, record, setModified);
+  }
+  /** Removes only the source manual break flag. @param columns - Column axis. @param position - Native break address. @param record - Whether to record history. @param setModified - Whether to notify the document shell. @returns Success. */
+  RemovePageBreak(
+    columns: boolean,
+    position: ScAddress,
+    record: boolean,
+    setModified: boolean,
+  ): boolean {
+    return this.SetPageBreak(columns, position, false, record, setModified);
+  }
+  /** Updates the axis break flag, stream state, and history in native order. @param columns - Column axis. @param position - Native break address. @param insert - Add or remove. @param record - Whether to record history. @param setModified - Whether to notify the document shell. @returns Success. */
+  private SetPageBreak(
+    columns: boolean,
+    position: ScAddress,
+    insert: boolean,
+    record: boolean,
+    setModified: boolean,
+  ): boolean {
+    const doc = this.shell.GetDocument();
+    const sheet = doc.FetchTable(position.Tab());
+    const index = columns ? position.Col() : position.Row();
+    if (!sheet || !(columns ? doc.ValidCol(index) : doc.ValidRow(index)) || (insert && index === 0))
+      return false;
+    const manual = columns ? sheet.HasColManualBreak(index) : sheet.HasRowManualBreak(index);
+    if (manual === insert) return insert;
+    if (record)
+      this.shell.GetUndoManager().AddUndoAction(new ScUndoPageBreak(position, columns, insert));
+    if (columns) {
+      if (insert) sheet.SetColBreak(index, false, true);
+      else sheet.RemoveColBreak(index, false, true);
+    } else {
+      if (insert) sheet.SetRowBreak(index, false, true);
+      else sheet.RemoveRowBreak(index, false, true);
+    }
+    sheet.SetStreamValid(false);
+    if (setModified) this.shell.SetDocumentModified();
     return true;
   }
   /** Original formula dispatch consumes the prepared cell through its concrete operation. @param position - Cell position. @param cell - Transferred formula. @param interaction - User interaction. @returns Success. */

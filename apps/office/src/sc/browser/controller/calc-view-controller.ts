@@ -13,7 +13,6 @@ import { ScRefType } from "../../source/ui/inc/viewdata";
 import type { CalcViewOption } from "../../sdi/tabvwsh";
 import { ViewOption } from "../../inc/viewopti";
 import type { SvxShadowedItem, SvxCharReliefItem } from "../../../editeng/source/items/textitem";
-
 import { ScUndoIndent } from "../../source/ui/undo/undoblk";
 import { ScUndoWidthOrHeight } from "../../source/ui/undo/undoblk2";
 import type { SfxRequest } from "../../../sfx2/source/control/request";
@@ -31,7 +30,7 @@ import { SvxColorItem } from "../../../editeng/inc/colritem";
 import type { CalcColorKind } from "../../source/ui/view/formatsh";
 import { getCalcSelectionScriptType } from "./calc-selection-script";
 import { SvxFontHeightItem } from "../../../editeng/inc/fhgtitem";
-import { ScUndoCursorAttr } from "../../source/ui/undo/undocell";
+import { ScUndoCursorAttr, ScUndoPageBreak } from "../../source/ui/undo/undocell";
 import { ScUndoSelectionAttr, ScUndoDeleteContents } from "../../source/ui/undo/undoblk3";
 import type { CalcCharacterFormat } from "../../source/ui/view/formatsh";
 import { ScFormatShell } from "../../source/ui/view/formatsh";
@@ -901,6 +900,7 @@ export class CalcViewController {
     const position =
       cursorAction instanceof ScUndoSetCell ||
       cursorAction instanceof ScUndoCursorAttr ||
+      cursorAction instanceof ScUndoPageBreak ||
       cursorAction instanceof ScUndoIndent ||
       cursorAction instanceof ScUndoSelectionAttr ||
       cursorAction instanceof ScUndoDeleteContents

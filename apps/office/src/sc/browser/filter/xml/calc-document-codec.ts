@@ -207,6 +207,7 @@ export interface CalcDocumentRecord {
   readonly showZeros?: boolean;
   readonly showOutline?: boolean;
   readonly showSheetTabs?: boolean;
+  readonly showPageBreaks?: boolean;
   readonly nullDate?: number;
   readonly ignoreCase?: boolean;
   readonly defaultWritingDirection?: D;
@@ -547,6 +548,7 @@ function* encodeSteps(document: ScDocument): Generator<void, CalcDocumentRecord>
     ...(view.GetOption(ViewOption.NULLVALS) ? {} : { showZeros: false }),
     ...(view.GetOption(ViewOption.OUTLINER) ? {} : { showOutline: false }),
     ...(view.GetOption(ViewOption.TABCONTROLS) ? {} : { showSheetTabs: false }),
+    ...(view.GetOption(ViewOption.PAGEBREAKS) ? {} : { showPageBreaks: false }),
     nullDate: document.GetFormatTable().GetNullDate().GetDate(),
     ...(document.GetDocOptions().IsIgnoreCase() ? { ignoreCase: true } : {}),
     ...(defaultWritingDirection === undefined ? {} : { defaultWritingDirection }),
@@ -658,6 +660,8 @@ function* decodeSteps(record: CalcDocumentRecord): Generator<void, ScDocument> {
       view.SetOption(ViewOption.OUTLINER, record.showOutline);
     if (typeof record.showSheetTabs === "boolean")
       view.SetOption(ViewOption.TABCONTROLS, record.showSheetTabs);
+    if (typeof record.showPageBreaks === "boolean")
+      view.SetOption(ViewOption.PAGEBREAKS, record.showPageBreaks);
     for (const [name, sheets, relativeName] of record.externalFiles ?? []) {
       const manager = document.GetExternalRefManager();
       const file = manager.getExternalFileId(name);

@@ -101,6 +101,28 @@ export class ScViewFunc extends ScTabView {
   ) {
     super(data, true, module);
   }
+  /** Inserts the manual break at the original view cursor, or the supplied address. @param columns - Column axis. @param record - Record history. @param position - Explicit cursor override. @param setModified - Mark the document modified. @returns Success. */
+  InsertPageBreak(
+    columns: boolean,
+    record = true,
+    position = this.PageBreakCursor(),
+    setModified = true,
+  ): boolean {
+    return this.shell.GetDocFunc().InsertPageBreak(columns, position, record, setModified);
+  }
+  /** Deletes the manual break at the original view cursor, or the supplied address. @param columns - Column axis. @param record - Record history. @param position - Explicit cursor override. @param setModified - Mark the document modified. @returns Success. */
+  DeletePageBreak(
+    columns: boolean,
+    record = true,
+    position = this.PageBreakCursor(),
+    setModified = true,
+  ): boolean {
+    return this.shell.GetDocFunc().RemovePageBreak(columns, position, record, setModified);
+  }
+  /** Obtains the break position independently of the marked cell range. @returns Native address. */
+  private PageBreakCursor(): ScAddress {
+    return new ScAddress(this.data.GetCurX(), this.data.GetCurY(), this.data.CurrentTabForData());
+  }
   /** Original range inference delegates to the native viewfun2 implementation. @param ranges - Ordered output ranges. @returns Found data. */
   GetAutoSumArea(ranges: ScRangeList): boolean {
     return GetAutoSumArea(this.GetViewData(), ranges);

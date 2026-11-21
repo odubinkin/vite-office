@@ -32,6 +32,7 @@ import {
 import {
   calcGoToSheetCommand,
   calcOutlineCommands,
+  calcPageBreakCommands,
   calcSheetCommands,
   FID_TAB_SET_TAB_BG_COLOR,
 } from "../../sdi/scalc";
@@ -117,6 +118,28 @@ export class CalcSheetWorkflows {
           }),
         ),
 
+        ...calcPageBreakCommands.map(
+          /** Binds the native cell-shell break commands and state. @param source - Slot definition. @returns Shell slot. */
+          ({ id, slotId, label, columns, insert }) => ({
+            commandUrl: id,
+            slotId,
+            label,
+            getState:
+              /** Queries break flags at the active cell. @param target - Active workflow. @returns Slot state. */
+              (target: CalcSheetWorkflows) => ({
+                enabled: target.CanChangePageBreak(columns, insert),
+              }),
+            execute:
+              /** Routes the admitted command to the native view functions. @param target - Active workflow. @param request - Original request. @returns Nothing. */
+              (target: CalcSheetWorkflows, request: SfxRequest) => {
+                if (!target.controller.Commit()) return;
+                const view = target.controller.GetViewShell();
+                if (insert) view.InsertPageBreak(columns);
+                else view.DeletePageBreak(columns);
+                request.Done();
+              },
+          }),
+        ),
         ...calcOutlineCommands.map(
           /** Registers the cell-shell outline slots in the browser dispatch adapter. @param source - Source command. @returns Shell slot. */
           (source) => ({
@@ -275,6 +298,17 @@ export class CalcSheetWorkflows {
         : view.GetCurY()
       : undefined;
     applyOutlineControl(controller.shell, view.GetTabNumber(), control, editing);
+  }
+
+  /** Uses the native FID break state for the active axis. @param columns - Column axis. @param insert - Insert or remove. @returns Enabled. */
+  private CanChangePageBreak(columns: boolean, insert: boolean): boolean {
+    if (this.HasSheetDialog()) return false;
+    const view = this.controller.viewData;
+    const tab = view.CurrentTabForData();
+    const sheet = view.GetDocument().FetchTable(tab);
+    const index = columns ? view.GetCurX() : view.GetCurY();
+    if (!sheet || !index || sheet.IsProtected()) return false;
+    return (columns ? sheet.HasColManualBreak(index) : sheet.HasRowManualBreak(index)) !== insert;
   }
 
   /** Calculates source state for the outline commands. @param kind - Source slot. @returns Whether enabled. */

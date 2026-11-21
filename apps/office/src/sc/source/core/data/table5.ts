@@ -98,6 +98,26 @@ export function SetColBreak(this: ScTable, col: number, page: boolean, manual: b
   }
 }
 
+/** Removes the row break flags independently. @param this - Native sheet. @param row - Row. @param page - Remove computed break. @param manual - Remove manual break. @returns Nothing. */
+export function RemoveRowBreak(this: ScTable, row: number, page: boolean, manual: boolean): void {
+  if (!this["rDocument"].ValidRow(row)) return;
+  if (page) this["maRowPageBreaks"].delete(row);
+  if (manual) {
+    this["maRowManualBreaks"].delete(row);
+    this.InvalidatePageBreaks();
+  }
+}
+
+/** Removes the column break flags independently. @param this - Native sheet. @param col - Column. @param page - Remove computed break. @param manual - Remove manual break. @returns Nothing. */
+export function RemoveColBreak(this: ScTable, col: number, page: boolean, manual: boolean): void {
+  if (!this["rDocument"].ValidCol(col)) return;
+  if (page) this["maColPageBreaks"].delete(col);
+  if (manual) {
+    this["maColManualBreaks"].delete(col);
+    this.InvalidatePageBreaks();
+  }
+}
+
 /** Gets the sheet protection state. @param this - Sheet. @returns Whether the sheet is protected. */
 export function IsProtected(this: ScTable): boolean {
   return this["pTabProtection"]?.isProtected() ?? false;

@@ -17,9 +17,11 @@
       "divergenceClass": "B",
       "evidence": [
         "apps/office/src/sc/source/core/data/native-table-undo.test.ts",
-        "apps/office/src/sc/source/filter/oox/excelfilter.sheet-protection.test.ts"
+        "apps/office/src/sc/source/filter/oox/excelfilter.sheet-protection.test.ts",
+        "apps/office/src/sc/browser/presentation/calc-page-breaks.test.tsx",
+        "vendor/libreoffice-reference/sc/source/core/data/table5.cxx#ScTable::RemoveRowBreak"
       ],
-      "justification": "Task76 native UndoToColumn/UndoToTable restore the edited payload,formula-only cells outside its rows/columns,whole conditional-format ownership,and full-axis raw geometry/manual breaks with actual null geometry checks. Marked copying retains the original null-mark-data asymmetry (CALC-265). Real table5 page/manual sets,ordered set value/move binding,stream-validity state/document locking and width-change pagination invalidation are represented. Named-expression maps,pagination/device calculation,full XML streaming and native document-level Undo/paste/history orchestration remain unported;no fake owner or alternate workbook is introduced. Copies or clears native sheet protection and invalidates the sheet stream. This owner also exposes the original manual break queries. Resolves the original named page style or the Standard fallback and invalidates the sheet stream on change.",
+      "justification": "Task76 native UndoToColumn/UndoToTable restore the edited payload,formula-only cells outside its rows/columns,whole conditional-format ownership,and full-axis raw geometry/manual breaks with actual null geometry checks. Marked copying retains the original null-mark-data asymmetry (CALC-265). Real table5 page/manual sets,ordered set value/move binding,stream-validity state/document locking and width-change pagination invalidation are represented. Named-expression maps,pagination/device calculation,full XML streaming and native document-level Undo/paste/history orchestration remain unported;no fake owner or alternate workbook is introduced. Copies or clears native sheet protection and invalidates the sheet stream. This owner also exposes the original manual break queries. Resolves the original named page style or the Standard fallback and invalidates the sheet stream on change. Removes manual and computed break flags independently and invalidates pagination for manual changes.",
       "knownViolations": [],
       "localSymbols": [
         "RemoveManualBreaks",
@@ -36,7 +38,9 @@
         "GetProtection",
         "SetProtection",
         "StartListening",
-        "EndListening"
+        "EndListening",
+        "RemoveRowBreak",
+        "RemoveColBreak"
       ],
       "sourceResponsibility": "divergent",
       "upstreamFile": "sc/source/core/data/table5.cxx",
@@ -55,7 +59,9 @@
         "ScTable::GetProtection",
         "ScTable::SetProtection",
         "ScTable::StartListening",
-        "ScTable::EndListening"
+        "ScTable::EndListening",
+        "ScTable::RemoveRowBreak",
+        "ScTable::RemoveColBreak"
       ]
     }
   }

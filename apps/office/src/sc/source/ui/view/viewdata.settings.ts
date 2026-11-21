@@ -26,6 +26,7 @@ const SC_UNO_SHOWZERO = "ShowZeroValues";
 const SC_UNO_COLROWHDR = "HasColumnRowHeaders";
 const SC_UNO_OUTLSYMB = "IsOutlineSymbolsSet";
 const SC_UNO_SHEETTABS = "HasSheetTabs";
+const SC_UNO_SHOWPAGEBR = "ShowPageBreaks";
 const SC_CURSORPOSITIONX = "CursorPositionX";
 const SC_CURSORPOSITIONY = "CursorPositionY";
 const viewOptions = new Map<string, ViewOption>([
@@ -34,6 +35,7 @@ const viewOptions = new Map<string, ViewOption>([
   [SC_UNO_COLROWHDR, ViewOption.HEADER],
   [SC_UNO_OUTLSYMB, ViewOption.OUTLINER],
   [SC_UNO_SHEETTABS, ViewOption.TABCONTROLS],
+  [SC_UNO_SHOWPAGEBR, ViewOption.PAGEBREAKS],
 ]);
 
 /** Reads the selected table name from the primary view entry. @param document - Actual document. @param views - Borrowed records. @returns Nothing. */

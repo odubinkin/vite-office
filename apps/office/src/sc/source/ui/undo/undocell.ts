@@ -133,3 +133,41 @@ export class ScUndoCursorAttr extends SfxUndoAction<ScDocShell> {
     this.aApplyPattern.Dispose();
   }
 }
+
+/** Native single-break history action; the browser restores the source cursor through the affected range. */
+export class ScUndoPageBreak extends SfxUndoAction<ScDocShell> {
+  private readonly position: ScAddress;
+
+  /** Retains the native cursor and axis for both replay directions. @param position - Break cursor. @param columns - Column axis. @param insert - Whether the original action inserted. @returns Action. */
+  constructor(
+    position: ScAddress,
+    private readonly columns: boolean,
+    private readonly insert: boolean,
+  ) {
+    super();
+    this.position = new ScAddress(position);
+  }
+  /** Restores the original manual flag. @param shell - Actual document shell. @returns Nothing. */
+  override UndoWithContext(shell: ScDocShell): void {
+    this.DoChange(shell, !this.insert);
+  }
+  /** Reapplies the original manual flag. @param shell - Actual document shell. @returns Nothing. */
+  override RedoWithContext(shell: ScDocShell): void {
+    this.DoChange(shell, this.insert);
+  }
+  /** Replays the document action without allocating a second undo record. @param shell - Actual document shell. @param insert - Replay direction. @returns Nothing. */
+  private DoChange(shell: ScDocShell, insert: boolean): void {
+    const funcs = shell.GetDocFunc();
+    if (insert) funcs.InsertPageBreak(this.columns, this.position, false, false);
+    else funcs.RemovePageBreak(this.columns, this.position, false, false);
+  }
+  /** Returns the original native cursor for interactive history. @returns Affected cursor. */
+  getAffectedRange(): ScRange {
+    return new ScRange(this.position);
+  }
+  /** Returns the original action label. @returns History label. */
+  override GetComment(): string {
+    if (this.insert) return this.columns ? "Insert Column Break" : "Insert Row Break";
+    return this.columns ? "Delete column break" : "Delete row break";
+  }
+}

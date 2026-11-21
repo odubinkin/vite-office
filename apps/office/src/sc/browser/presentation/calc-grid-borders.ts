@@ -5,6 +5,8 @@ import { Style } from "../../../svx/source/dialog/framelink";
 import { browserBorderLine } from "../../../svx/browser/dialog/border-line";
 import type { SvxBoxItem } from "../../../editeng/source/items/frmitems";
 import { ScAddress } from "../../inc/address";
+import type { ScTable } from "../../inc/table";
+import type { CalcGridAxis } from "./calc-grid-axis";
 import type { ScViewData } from "../../source/ui/inc/viewdata";
 /** Transient native frame array and coordinate mapping for the actual visible paint window. */
 export interface CalcGridFrames {
@@ -76,4 +78,28 @@ export function calcGridBorderStyle(
         ? undefined
         : "1px solid transparent",
   };
+}
+
+/** Projects the first break at each visible boundary, including breaks before hidden detail. @param table - Actual sheet. @param axis - Painted pane geometry. @param columns - Column break axis. @returns Visible break rules. */
+export function calcGridPageBreaks(table: ScTable, axis: CalcGridAxis, columns: boolean) {
+  const indices = new Set<number>();
+  if (columns) table.GetAllColBreaks(indices, true, true);
+  else table.GetAllRowBreaks(indices, true, true);
+
+  const rules: { index: number; pixel: number; leading: boolean; manual: boolean }[] = [];
+  for (const [number, band] of axis.bands.entries()) {
+    const end = band.clipEnd ?? axis.bands[number + 1]?.clipStart ?? Infinity;
+    let lastPixel: number | undefined;
+    for (const index of indices) {
+      if (index <= band.first) continue;
+      if (index > band.last + 1) break;
+      const pixel = axis.Position(band, index);
+      if (pixel > end) break;
+      if (pixel <= band.clipStart || pixel === lastPixel) continue;
+      lastPixel = pixel;
+      const manual = columns ? table.HasColManualBreak(index) : table.HasRowManualBreak(index);
+      rules.push({ index, pixel: pixel - 1, leading: band.leading, manual });
+    }
+  }
+  return rules;
 }
