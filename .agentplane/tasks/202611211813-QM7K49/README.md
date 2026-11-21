@@ -1,10 +1,11 @@
 ---
 id: "202611211813-QM7K49"
 title: "Preserve Writer ODT paragraph line-number restarts"
-status: "DOING"
+result_summary: "Preserved Writer paragraph line-number participation and restarts in model, ODT and browser transfer."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 7
+revision: 8
 origin:
   system: "manual"
 depends_on: []
@@ -43,11 +44,16 @@ quality_review:
     - "output/playwright/QM7K49/provenance.log"
   findings:
     - "Pinned style, automatic style keys, native UNO narrowing, Worker records, paragraph edits and frame continuation were verified."
-commit: null
+commit:
+  hash: "5e3d760dee19c9f314f982a3ee09420fdd9af2ed"
+  message: "🧩 QM7K49 code: preserve Writer ODT paragraph line restarts"
 comments:
   -
     author: "CODER"
     body: "Start: port SwFormatLineNumber and its ODT, Writer layout and transfer boundaries."
+  -
+    author: "CODER"
+    body: "Verified: native Writer paragraph line-number state, ODT and Worker round trips, and counted master and follow frame behavior."
 events:
   -
     type: "status"
@@ -62,8 +68,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Verified native paragraph line numbering across Writer ODT, layout, legacy and current Worker records and original UNO members."
+  -
+    type: "status"
+    at: "2026-11-21T18:24:25.133Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: native Writer paragraph line-number state, ODT and Worker round trips, and counted master and follow frame behavior."
 doc_version: 3
-doc_updated_at: "2026-11-21T18:23:17.211Z"
+doc_updated_at: "2026-11-21T18:24:25.134Z"
 doc_updated_by: "CODER"
 description: "Port SwFormatLineNumber, UNO members, ODF paragraph count and restart values, existing model consumers and Worker snapshot compatibility. Verify layout restarts and scoped paragraph-format tests."
 sections:
