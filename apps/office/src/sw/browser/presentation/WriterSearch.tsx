@@ -599,9 +599,7 @@ export function WriterSearch({
             </select>
           )}
           {hasSearchAttributes && (
-            <span className="text-sm">
-              {describeSearchAttributes(pool, item.searchAttributes, text)}
-            </span>
+            <span className="text-sm">{describeSearchAttributes(item.searchAttributes, text)}</span>
           )}
           {matchCase}
           <label className="flex items-center gap-1 text-sm">
@@ -675,7 +673,7 @@ export function WriterSearch({
           )}
           {hasReplaceAttributes && (
             <span className="text-sm">
-              {describeSearchAttributes(pool, item.replaceAttributes, text)}
+              {describeSearchAttributes(item.replaceAttributes, text)}
             </span>
           )}
         </fieldset>

@@ -1,10 +1,12 @@
 /** @fileoverview Writer's search-attribute picker from cui/uiconfig/ui/searchattrdialog.ui. */
 import { useLayoutEffect, useRef, useState, type RefObject } from "react";
 import type { SfxItemPool } from "../../../svl/source/items/itempool";
-import { SfxItemSet } from "../../../svl/source/items/itemset";
-import { SearchAttrItemList } from "../../../svx/source/dialog/srchdlg";
+import type { SearchAttrItemList } from "../../../svx/source/dialog/srchdlg";
+import {
+  ApplySearchAttributeChecks,
+  GetSearchAttributeRows,
+} from "../../../cui/source/dialogs/srchxtra";
 import { useBrowserLocalization } from "../../../framework/browser/localization/browser-localization-context";
-import { searchAttributes } from "./writer-search-format-values";
 import { WRITER_SEARCH_ATTR_WHICH_RANGES } from "../../source/uibase/uiview/viewsrch";
 import { WriterDialogHeader } from "./WriterDialogHeader";
 
@@ -19,15 +21,31 @@ export function WriterSearchAttributesDialog(
 ): React.JSX.Element {
   const root = useRef<HTMLFormElement>(null);
   const localization = useBrowserLocalization();
+  const collator = new Intl.Collator(localization.locale);
+  const rows = GetSearchAttributeRows(props.pool, WRITER_SEARCH_ATTR_WHICH_RANGES, props.initial)
+    .map(
+      /** Resolves the native label for the application's locale. @param row - Native attribute. @returns Localized row. */
+      (row) => ({
+        ...row,
+        label: localization.GetText(`writer.search.attribute.slot.${row.slot}`, row.label),
+      }),
+    )
+    .sort(
+      /** Sorts localized names as the native tree view does. @param left - First row. @param right - Second row. @returns Sort order. */
+      (left, right) => collator.compare(left.label, right.label),
+    );
   const [selected, setSelected] = useState(
-    /** Starts with the dialog's native attribute list. @returns Selected slots. */ () =>
+    /** Starts with only native presence criteria checked. @returns Selected slots. */
+    () =>
       new Set(
-        props.initial
-          ?.GetEntries()
+        rows
+          .filter(
+            /** Identifies checked rows. @param row - Attribute. @returns Whether checked. */
+            (row) => row.checked,
+          )
           .map(
-            /** Returns the slot stored by the search list. @param entry - Original criterion. @returns Slot. */ (
-              entry,
-            ) => entry.slot,
+            /** Returns the underlying slot. @param row - Attribute. @returns Slot identity. */
+            (row) => row.slot,
           ),
       ),
   );
@@ -51,31 +69,9 @@ export function WriterSearchAttributesDialog(
     props.onClose();
   }
 
-  /** Applies presence criteria and retains exact values for attributes still checked. @returns Nothing. */
+  /** Accepts the native checklist draft. @returns Nothing. */
   function accept(): void {
-    const set = new SfxItemSet(props.pool, WRITER_SEARCH_ATTR_WHICH_RANGES);
-    try {
-      props.initial?.Get(set);
-      for (const [which] of searchAttributes) {
-        const slot = props.pool.GetSlotId(which);
-        if (!selected.has(slot)) set.ClearItem(which);
-        else if (
-          !props.initial
-            ?.GetEntries()
-            .some(
-              /** Preserves checked criteria's existing values. @param entry - Persisted criterion. @returns Whether it is already present. */ (
-                entry,
-              ) => entry.slot === slot,
-            )
-        )
-          set.InvalidateItem(which);
-      }
-      const result = new SearchAttrItemList();
-      result.Put(set);
-      props.onClose(result);
-    } finally {
-      set.Dispose();
-    }
+    props.onClose(ApplySearchAttributeChecks(rows, selected, props.initial));
   }
 
   return (
@@ -109,15 +105,13 @@ export function WriterSearchAttributesDialog(
       >
         <WriterDialogHeader title={title} onClose={cancel} />
         <div className="grid max-h-64 gap-1 overflow-auto rounded border border-slate-300 p-2">
-          {searchAttributes.map(
-            /** Renders one native attribute choice. @param entry - Attribute descriptor. @returns Checkbox. */ ([
-              which,
-              key,
+          {rows.map(
+            /** Renders one native attribute choice. @param entry - Attribute descriptor. @returns Checkbox. */ ({
+              slot,
               label,
-            ]) => {
-              const slot = props.pool.GetSlotId(which);
+            }) => {
               return (
-                <label key={which} className="flex items-center gap-2 text-sm">
+                <label key={slot} className="flex items-center gap-2 text-sm">
                   <input
                     type="checkbox"
                     checked={selected.has(slot)}
@@ -132,7 +126,7 @@ export function WriterSearchAttributesDialog(
                       }
                     }
                   />
-                  {localization.GetText(`writer.search.attribute.${key}`, label)}
+                  {label}
                 </label>
               );
             },

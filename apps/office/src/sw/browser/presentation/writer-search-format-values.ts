@@ -46,8 +46,8 @@ import {
   SvxUnderlineItem,
   SvxWeightItem,
 } from "../../../editeng/source/items/textitem";
-import type { SfxItemPool } from "../../../svl/source/items/itempool";
 import type { SfxPoolItem } from "../../../svl/source/items/poolitem";
+import { GetAttributeName } from "../../../svx/source/dialog/strarray";
 import type { SearchAttrItemList } from "../../../svx/source/dialog/srchdlg";
 import { FontItalic, FontLineStyle, FontStrikeout, FontWeight } from "../../../tools/inc/fontenum";
 import {
@@ -56,13 +56,11 @@ import {
   RES_CHRATR_CASEMAP,
   RES_CHRATR_CONTOUR,
   RES_CHRATR_RELIEF,
-  RES_CHRATR_ROTATE,
   RES_CHRATR_SCALEW,
   RES_CHRATR_SHADOWED,
   RES_CHRATR_WORDLINEMODE,
   RES_CHRATR_COLOR,
   RES_CHRATR_CROSSEDOUT,
-  RES_CHRATR_ESCAPEMENT,
   RES_CHRATR_FONT,
   RES_CHRATR_FONTSIZE,
   RES_CHRATR_KERNING,
@@ -71,7 +69,6 @@ import {
   RES_CHRATR_UNDERLINE,
   RES_CHRATR_WEIGHT,
   RES_PARATR_ADJUST,
-  RES_PARATR_LINESPACING,
   RES_PARATR_SPLIT,
   RES_PARATR_ORPHANS,
   RES_PARATR_WIDOWS,
@@ -79,7 +76,6 @@ import {
   RES_MARGIN_TEXTLEFT,
   RES_MARGIN_FIRSTLINE,
   RES_MARGIN_RIGHT,
-  RES_UL_SPACE,
 } from "../../inc/hintids";
 
 export const fontWeights = [
@@ -364,9 +360,10 @@ export function makeSearchFormatItem(
   }
 }
 
-/** Displays the native presentation of a concrete criterion. @param item - Search criterion. @param text - Localization callback. @returns Text for the summary. */
+/** Displays the native presentation of a concrete criterion. @param item - Search criterion. @param slot - Native slot. @param text - Localization callback. @returns Text for the summary. */
 function describeSearchFormat(
   item: SfxPoolItem,
+  slot: number,
   text: (key: string, fallback: string) => string,
 ): string | undefined {
   if (item instanceof SvxAdjustItem)
@@ -494,15 +491,11 @@ function describeSearchFormat(
     item instanceof SvxWordLineModeItem ||
     item instanceof SvxAutoKernItem
   ) {
-    const label = searchAttributes.find(
-      /** Finds the displayed name of this boolean item. @param choice - Attribute choice. @returns Whether the family matches. */ ([
-        which,
-      ]) => which === item.Which(),
-    );
+    const label = GetAttributeName(slot);
     if (label === undefined) return undefined;
     return text(
-      `attribute-value.${label[1]}.${item.GetValue()}`,
-      `${label[2]} ${item.GetValue() ? "on" : "off"}`,
+      `attribute-value.slot.${slot}.${item.GetValue()}`,
+      `${label} ${item.GetValue() ? "on" : "off"}`,
     );
   }
   return undefined;
@@ -527,42 +520,8 @@ function describeChoice(
   );
 }
 
-export const searchAttributes: ReadonlyArray<readonly [which: number, key: string, label: string]> =
-  [
-    [RES_CHRATR_CASEMAP, "case", "Effects"],
-    [RES_CHRATR_CONTOUR, "outline", "Outline"],
-    [RES_CHRATR_RELIEF, "relief", "Relief"],
-    [RES_CHRATR_ROTATE, "rotation", "Rotation"],
-    [RES_CHRATR_SCALEW, "scale", "Scaling"],
-    [RES_CHRATR_SHADOWED, "shadow", "Shadow"],
-    [RES_CHRATR_WORDLINEMODE, "word-line", "Individual words"],
-    [RES_CHRATR_AUTOKERN, "pair-kerning", "Pair kerning"],
-    [RES_CHRATR_BACKGROUND, "background", "Character background"],
-    [RES_CHRATR_COLOR, "color", "Font color"],
-    [RES_CHRATR_ESCAPEMENT, "position", "Position"],
-    [RES_CHRATR_FONT, "font", "Font"],
-    [RES_CHRATR_FONTSIZE, "size", "Font size"],
-    [RES_CHRATR_KERNING, "spacing", "Character spacing"],
-    [RES_CHRATR_OVERLINE, "overline", "Overlining"],
-    [RES_CHRATR_POSTURE, "posture", "Font posture"],
-    [RES_CHRATR_CROSSEDOUT, "strikeout", "Strikethrough"],
-    [RES_CHRATR_UNDERLINE, "underline", "Underlining"],
-    [RES_CHRATR_WEIGHT, "weight", "Font weight"],
-    [RES_PARATR_ADJUST, "alignment", "Alignment"],
-    [RES_PARATR_VERTALIGN, "vertical-alignment", "Text-to-text"],
-    [RES_PARATR_LINESPACING, "line-spacing", "Line spacing"],
-    [RES_MARGIN_TEXTLEFT, "left-indent", "Before text"],
-    [RES_MARGIN_FIRSTLINE, "first-line", "First line"],
-    [RES_MARGIN_RIGHT, "right-indent", "After text"],
-    [RES_UL_SPACE, "paragraph-spacing", "Paragraph spacing"],
-    [RES_PARATR_SPLIT, "split", "Allow to split paragraph"],
-    [RES_PARATR_ORPHANS, "orphans", "Orphans"],
-    [RES_PARATR_WIDOWS, "widows", "Widows"],
-  ];
-
-/** Renders the active search formatting beneath the associated entry. @param pool - Writer attribute pool. @param list - Active search list. @param text - Localization callback. @returns Localized formatting names. */
+/** Renders the active search formatting beneath the associated entry. @param list - Active search list. @param text - Localization callback. @returns Localized formatting names. */
 export function describeSearchAttributes(
-  pool: SfxItemPool,
   list: SearchAttrItemList | undefined,
   text: (key: string, fallback: string) => string,
 ): string {
@@ -573,17 +532,11 @@ export function describeSearchAttributes(
         /** Looks up one native slot's localized label. @param entry - Active criterion. @returns Recognized labels. */ (
           entry,
         ) => {
-          const which = pool.GetWhichIDFromSlotID(entry.slot);
-          const label = searchAttributes.find(
-            /** Matches by the pool's native identity. @param attribute - Supported attribute. @returns Whether it is selected. */ ([
-              id,
-            ]) => id === which,
-          );
-          if (label === undefined) return [];
+          const label = GetAttributeName(entry.slot);
           const value =
             entry.item === undefined
-              ? text(`attribute.${label[1]}`, label[2])
-              : describeSearchFormat(entry.item, text);
+              ? label && text(`attribute.slot.${entry.slot}`, label)
+              : describeSearchFormat(entry.item, entry.slot, text);
           return value ? [value] : [];
         },
       )

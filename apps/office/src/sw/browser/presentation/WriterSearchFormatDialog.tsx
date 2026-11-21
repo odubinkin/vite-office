@@ -146,13 +146,8 @@ export function WriterSearchFormatDialog(
   /** Looks up an existing concrete attribute. @param which - Writer WhichId. @returns Existing item. */
   function existing(which: number): SfxPoolItem | undefined {
     const slot = props.pool.GetSlotId(which);
-    return props.initial
-      ?.GetEntries()
-      .find(
-        /** Finds a criterion by native slot. @param entry - Native slot item. @returns Whether it matches. */ (
-          entry,
-        ) => entry.slot === slot,
-      )?.item;
+    const list = props.initial;
+    return list?.GetEntries()[list.FindLast(slot)]?.item;
   }
 
   /** Reads the current value for a scalar control. @param which - Item family. @returns Current field value. */
@@ -182,18 +177,16 @@ export function WriterSearchFormatDialog(
   function accept(): void {
     const set = new SfxItemSet(props.pool, WRITER_SEARCH_ATTR_WHICH_RANGES);
     try {
-      props.initial?.Get(set);
       for (const [which, value] of draft) {
-        if (value === "") set.ClearItem(which);
-        else
+        if (value !== "")
           set.Put(
             value instanceof SfxPoolItem
               ? value
               : makeSearchFormatItem(which, value, existing(which)),
           );
       }
-      const result = new SearchAttrItemList();
-      result.Put(set);
+      const result = new SearchAttrItemList(props.initial);
+      result.MergeFormat(set);
       props.onClose(result);
     } finally {
       set.Dispose();

@@ -9,6 +9,9 @@ import {
   SvxWeightItem,
   SvxFontHeightItem,
 } from "../../../editeng/source/items/textitem";
+import { SvxBreak } from "../../../editeng/inc/svxenum";
+import { SvxTabAdjust, SvxTabStop, SvxTabStopItem } from "../../../editeng/inc/tstpitem";
+import { SfxInt16Item } from "../../../svl/source/items/intitem";
 import { SvxAdjust, SvxAdjustItem } from "../../../editeng/inc/adjustitem";
 import { SvxFirstLineIndentItem } from "../../../editeng/inc/lrspitem";
 import { SvxLineSpacingItem } from "../../../editeng/inc/lspcitem";
@@ -26,6 +29,7 @@ import { Any } from "../../../cppu/inc/com/sun/star/uno/Any";
 import { SfxGrabBagItem } from "../../../svl/inc/grabbagitem";
 import { SfxItemSet } from "../../../svl/source/items/itemset";
 import {
+  RES_BREAK,
   RES_CHRATR_BACKGROUND,
   RES_CHRATR_BEGIN,
   RES_CHRATR_COLOR,
@@ -41,6 +45,7 @@ import {
   RES_MARGIN_FIRSTLINE,
   RES_PARATR_ADJUST,
   RES_PARATR_LINESPACING,
+  RES_PARATR_TABSTOP,
   RES_UL_SPACE,
 } from "../../inc/hintids";
 import { SwPaM, SwPosition } from "../../source/core/crsr/pam";
@@ -67,6 +72,10 @@ it("finds underlined text through the attribute checklist and isolates the Find 
   range.SetMark();
   range.GetMark().SetContent(6);
   node.GetDoc().GetDocumentContentOperationsManager().InsertItemSet(range, set);
+  set.Put(new SvxUnderlineItem(FontLineStyle.LINESTYLE_DOUBLE, RES_CHRATR_UNDERLINE));
+  range.GetPoint().SetContent(23);
+  range.GetMark().SetContent(18);
+  node.GetDoc().GetDocumentContentOperationsManager().InsertItemSet(range, set);
   set.Dispose();
   range.Dispose();
   position.SetContent(0);
@@ -85,19 +94,34 @@ it("finds underlined text through the attribute checklist and isolates the Find 
   });
   fireEvent.click(exact.getByRole("button", { name: "OK" }));
   expect(dialog.getByText("Single underline")).toBeVisible();
-  fireEvent.click(dialog.getByRole("button", { name: "No Format" }));
-  expect(dialog.queryByText("Single underline")).toBeNull();
+  fireEvent.click(dialog.getByRole("button", { name: "Attributes…" }));
+  const unchecked = within(screen.getByRole("dialog", { name: "Attributes" }));
+  expect(unchecked.getByRole("checkbox", { name: "Underline" })).not.toBeChecked();
+  fireEvent.click(unchecked.getByRole("button", { name: "OK" }));
+  expect(dialog.getByText("Single underline")).toBeVisible();
   fireEvent.click(dialog.getByRole("button", { name: "Attributes…" }));
   const attributes = within(screen.getByRole("dialog", { name: "Attributes" }));
-  fireEvent.click(attributes.getByRole("checkbox", { name: "Underlining" }));
+  fireEvent.click(attributes.getByRole("checkbox", { name: "Underline" }));
   fireEvent.click(attributes.getByRole("button", { name: "OK" }));
-  expect(dialog.getByText("Underlining")).toBeVisible();
+  expect(dialog.getByText("Underline")).toBeVisible();
   fireEvent.click(dialog.getByRole("button", { name: "Attributes…" }));
   const draft = within(screen.getByRole("dialog", { name: "Attributes" }));
-  expect(draft.getByRole("checkbox", { name: "Underlining" })).toBeChecked();
-  fireEvent.click(draft.getByRole("checkbox", { name: "Underlining" }));
+  expect(draft.getByRole("checkbox", { name: "Underline" })).toBeChecked();
+  fireEvent.click(draft.getByRole("checkbox", { name: "Underline" }));
   fireEvent.click(draft.getByRole("button", { name: "Cancel" }));
-  expect(dialog.getByText("Underlining")).toBeVisible();
+  expect(dialog.getByText("Underline")).toBeVisible();
+  fireEvent.click(dialog.getByRole("button", { name: "Format…" }));
+  const withPresence = within(screen.getByRole("dialog", { name: "Search" }));
+  fireEvent.click(withPresence.getByRole("tab", { name: "Font Effects" }));
+  fireEvent.change(withPresence.getByLabelText("Underlining"), {
+    target: { value: FontLineStyle.LINESTYLE_SINGLE },
+  });
+  fireEvent.click(withPresence.getByRole("button", { name: "OK" }));
+  expect(dialog.getByText("Underline, Single underline")).toBeVisible();
+  fireEvent.click(dialog.getByRole("button", { name: "Attributes…" }));
+  const combined = within(screen.getByRole("dialog", { name: "Attributes" }));
+  expect(combined.getByRole("checkbox", { name: "Underline" })).toBeChecked();
+  fireEvent.click(combined.getByRole("button", { name: "Cancel" }));
   fireEvent.click(dialog.getByRole("button", { name: "Find Next" }));
   expect(shell.GetCursor().Start().GetContentIndex()).toBe(6);
   expect(shell.GetCursor().End().GetContentIndex()).toBe(11);
@@ -112,7 +136,7 @@ it("finds underlined text through the attribute checklist and isolates the Find 
   fireEvent.click(toolbar.getByRole("button", { name: "Find All" }));
   expect([...shell.GetCursor().GetRingContainer()]).toHaveLength(2);
   fireEvent.click(dialog.getByRole("button", { name: "No Format" }));
-  expect(dialog.queryByText("Underlining")).toBeNull();
+  expect(dialog.queryByText("Underline, Single underline")).toBeNull();
   workbench.unmount();
   session.view.Close();
 });
@@ -479,3 +503,43 @@ function attributeAt(node: SwTextNode, offset: number, which: number): number | 
   if (item instanceof SvxWeightItem) return item.GetWeight();
   return undefined;
 }
+
+it("finds tab stops and page breaks through the sorted native slot checklist", /** Exercises paragraph attributes available through the pool and preserves their sorted order in the query. @returns Nothing. */ () => {
+  const session = createWriterDocumentSession();
+  const shell = session.view.GetWrtShell();
+  const first = shell.GetActiveParagraph();
+  shell.Insert("first");
+  shell.SplitNode();
+  const second = shell.GetActiveParagraph();
+  shell.Insert("second");
+  const tabs = new SvxTabStopItem(0, 0, SvxTabAdjust.Left, RES_PARATR_TABSTOP);
+  tabs.Insert(new SvxTabStop(720, SvxTabAdjust.Left));
+  second.SetAttr(tabs);
+  second.SetAttr(new SfxInt16Item(RES_BREAK, SvxBreak.PageBefore));
+  const start = new SwPosition(first, 0);
+  shell.SetCursor(start);
+  start.Dispose();
+
+  const workbench = render(<WriterWorkbench isActive view={session.view} />);
+  try {
+    fireEvent.keyDown(window, { key: "h", ctrlKey: true });
+    const dialog = within(screen.getByRole("dialog", { name: "Find and Replace" }));
+    fireEvent.click(dialog.getByText("Other options"));
+    fireEvent.click(dialog.getByRole("button", { name: "Attributes…" }));
+    const attributes = within(screen.getByRole("dialog", { name: "Attributes" }));
+    expect(attributes.getByRole("checkbox", { name: "Language of Asian font" })).toBeVisible();
+    expect(attributes.getByRole("checkbox", { name: "Character blinking" })).toBeVisible();
+    expect(attributes.getByRole("checkbox", { name: "Blinking" })).toBeVisible();
+    fireEvent.click(attributes.getByRole("checkbox", { name: "Tab stops" }));
+    fireEvent.click(attributes.getByRole("checkbox", { name: "Page Break" }));
+    fireEvent.click(attributes.getByRole("button", { name: "OK" }));
+    expect(dialog.getByText("Page Break, Tab stops")).toBeVisible();
+    fireEvent.click(dialog.getByRole("button", { name: "Find Next" }));
+    expect(shell.GetCursor().Start().GetNode()).toBe(second);
+    expect(shell.GetCursor().Start().GetContentIndex()).toBe(0);
+    expect(shell.GetCursor().End().GetContentIndex()).toBe(6);
+  } finally {
+    workbench.unmount();
+    session.view.Close();
+  }
+});

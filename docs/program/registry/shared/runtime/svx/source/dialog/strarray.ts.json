@@ -1,0 +1,36 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/svx/source/dialog/strarray.ts",
+    "classification": "upstream-mechanism",
+    "state": "active",
+    "suite": "shared",
+    "subsystem": "text-search",
+    "capabilityIds": [
+      "CAP-0111"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/svx/source/dialog/strarray.ts#GetAttributeName",
+        "svx/source/dialog/strarray.cxx#SvxAttrNameTable::FindIndex",
+        "svx/source/dialog/strarray.cxx#SvxAttrNameTable::GetString"
+      ],
+      "justification": "Looks up the pinned RID_ATTR_NAMES labels by original slot identity. Localized presentation uses the caller’s browser catalog.",
+      "knownViolations": [],
+      "localSymbols": [
+        "GetAttributeName"
+      ],
+      "sourceResponsibility": "divergent",
+      "upstreamFile": "svx/source/dialog/strarray.cxx",
+      "upstreamSymbols": [
+        "SvxAttrNameTable::FindIndex",
+        "SvxAttrNameTable::GetString"
+      ]
+    }
+  }
+}

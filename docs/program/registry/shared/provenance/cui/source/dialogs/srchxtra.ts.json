@@ -1,0 +1,46 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/cui/source/dialogs/srchxtra.ts",
+    "localSymbols": [
+      "GetSearchAttributeRows",
+      "ApplySearchAttributeChecks"
+    ],
+    "status": "mapped",
+    "upstreamPath": "cui/source/dialogs/srchxtra.cxx",
+    "upstreamSymbols": [
+      "SvxSearchAttributeDialog::SvxSearchAttributeDialog",
+      "SvxSearchAttributeDialog, OKHdl"
+    ],
+    "preservedResponsibilities": [
+      "Enumerates resource-backed slots in the document pool, projects first-entry presence state and updates the last criterion on confirmation."
+    ],
+    "omittedResponsibilities": [
+      "Native widget construction and translation catalog lookup are represented by browser presentation."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/cui/source/dialogs/srchxtra.ts",
+          "marker": "GetSearchAttributeRows"
+        },
+        {
+          "path": "apps/office/src/cui/source/dialogs/srchxtra.ts",
+          "marker": "ApplySearchAttributeChecks"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/cui/source/dialogs/srchxtra.cxx",
+          "marker": "SvxSearchAttributeDialog::SvxSearchAttributeDialog"
+        },
+        {
+          "path": "vendor/libreoffice-reference/cui/source/dialogs/srchxtra.cxx",
+          "marker": "SvxSearchAttributeDialog, OKHdl"
+        }
+      ]
+    }
+  }
+}

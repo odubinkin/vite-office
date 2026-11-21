@@ -5583,3 +5583,23 @@ applies its authored properties without that collection change.
 - Writer retains both directional endpoints for the represented
   paragraph-only attribute branch. The view regression covers both
   directions. This is a source-derived observation.
+
+### WRITER-701 — The Attributes dialog labels pair kerning as character blinking
+
+- Upstream `include/svx/svxitems.hrc` assigns “Character blinking” to
+  `SID_ATTR_CHAR_AUTOKERN`. Writer’s pool maps that slot to `RES_CHRATR_AUTOKERN`.
+  The actual blinking item uses `SID_ATTR_FLASH` and appears as “Blinking”.
+- Writer retains the two separate source slots and the original labels. The
+  Attributes dialog regression checks that both entries are available.
+
+### WRITER-702 — Format can append an exact criterion after a presence criterion for the same slot
+
+- Upstream `svx/source/dialog/srchdlg.cxx`, `FormatHdl_Impl`, updates only
+  concrete existing entries before appending unused output items. A slot with
+  an existing invalid-item presence criterion can then appear twice.
+- `SearchAttrItemList::Get` transfers both entries in order, so the appended
+  exact value takes effect. `cui/source/dialogs/srchxtra.cxx` reads the first
+  occurrence for the checkbox and edits the last occurrence on confirmation.
+- Writer retains the ordered entries and the different lookup directions.
+  The formatting dialog regression checks the combined summary, checkbox
+  state, and effective search.
