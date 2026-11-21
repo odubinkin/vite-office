@@ -145,6 +145,7 @@ export function WriterDialogPresenter({
           key={request.id}
           input={characterRequest.input}
           mode={characterRequest.mode}
+          unit={unit}
           initialPage={characterRequest.initialPage}
           onCancel={
             /** Cancels the request and restores the bulk command's document client. @returns Nothing. */ () => {

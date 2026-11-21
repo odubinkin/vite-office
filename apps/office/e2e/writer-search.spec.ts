@@ -36,12 +36,17 @@ test("Writer Find and Replace restores editor focus and undoes all replacements 
   const character = page.getByRole("dialog", { name: "Character", exact: true });
   await expect(character.getByRole("tab", { name: "Font", exact: true })).toBeFocused();
   await character.getByRole("spinbutton", { name: "Size", exact: true }).fill("24");
+  await character.getByRole("tab", { name: "Borders", exact: true }).click();
+  await character.getByRole("button", { name: "All Four Borders", exact: true }).click();
   await character.getByRole("button", { name: "OK", exact: true }).click();
   await expect(page.getByLabel("Writer document body", { exact: true })).toBeFocused();
   const run = editor.getByText("cat scatter cat", { exact: true });
   await expect(run).toHaveCSS("font-size", "32px");
+  const border = editor.locator('span[style*="box-decoration-break"]');
+  await expect(border).toHaveCSS("border-top-style", "solid");
   await page.keyboard.press("Control+z");
   await expect(run).not.toHaveCSS("font-size", "32px");
+  await expect(border).toHaveCount(0);
 });
 
 test("Writer inserts a comment, finds its text and undoes note formatting", /** Drives the ordinary comment and search controls in Chromium. @param fixtures - Playwright fixtures. @param fixtures.page - Chromium page. @returns Test completion. */ async ({

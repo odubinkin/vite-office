@@ -1,5 +1,8 @@
 /** @fileoverview Browser presentation of Writer's standard and annotation Character modes. */
 import { useId, useLayoutEffect, useRef, useState } from "react";
+import { SvxBorderTabPage } from "../../../cui/source/tabpages/border";
+import { WriterBorderPage } from "./WriterBorderPage";
+import type { FieldUnit } from "../../../tools/inc/fldunit";
 import { WriterDialogHeader } from "./WriterDialogHeader";
 import { useBrowserLocalization } from "../../../framework/browser/localization/browser-localization-context";
 import { SfxItemSet, SfxItemState } from "../../../svl/source/items/itemset";
@@ -60,12 +63,14 @@ const characterItems = {
 export function WriterCharacterDialog({
   input,
   mode,
+  unit,
   initialPage,
   onCancel,
   onSubmit,
 }: Readonly<{
   input: SfxItemSet;
   mode: "annotation" | "standard";
+  unit: FieldUnit;
   initialPage?: string | undefined;
   onCancel: () => void;
   onSubmit: (output: SfxItemSet) => void;
@@ -74,16 +79,26 @@ export function WriterCharacterDialog({
   const dialog = useRef<HTMLDialogElement>(null);
   const tabs = useRef<HTMLDivElement>(null);
   const formId = useId();
+  const characterTabs =
+    mode === "standard"
+      ? [...annotationCharTabs, ["borders", "Borders"] as const]
+      : annotationCharTabs;
   const [tab, setTab] = useState(
     Math.max(
       0,
-      annotationCharTabs.findIndex(
+      characterTabs.findIndex(
         /** Matches the original notebook page name. @param page - Native page entry. @returns Whether requested. */
         ([id]) => id === initialPage,
       ),
     ),
   );
-  const [resets, setResets] = useState([0, 0, 0, 0]);
+  const [resets, setResets] = useState([0, 0, 0, 0, 0]);
+  const [border] = useState(
+    /** Opens the native character border page only in standard mode. @returns Border page owner. */
+    () => (mode === "standard" ? new SvxBorderTabPage(input, SW.RES_CHRATR_BOX) : undefined),
+  );
+  const [borderEdited, setBorderEdited] = useState(false);
+  const [, refreshBorder] = useState(0);
   const which = characterItems[mode];
   /** Reads a uniform effect, including the original pool default. @param id - Native item identity. @returns Uniform item or undefined for mixed input. */
   function read(id: number) {
@@ -159,6 +174,10 @@ export function WriterCharacterDialog({
     );
     if (tab === 1) setColor(initialColor);
     if (tab === 3) setBackground(initialBackground);
+    if (tab === 4) {
+      border?.Reset();
+      setBorderEdited(false);
+    }
   }
 
   /** Builds tab-page output items for changed controls. @param event - Character form submission. @returns Nothing. */
@@ -220,6 +239,7 @@ export function WriterCharacterDialog({
         true,
       );
     }
+    if (borderEdited) border?.FillItemSet(output);
     close();
     onSubmit(output);
   }
@@ -250,14 +270,14 @@ export function WriterCharacterDialog({
             (event) => {
               if (event.key !== "ArrowLeft" && event.key !== "ArrowRight") return;
               event.preventDefault();
-              const count = annotationCharTabs.length;
+              const count = characterTabs.length;
               const next = (tab + (event.key === "ArrowRight" ? 1 : -1) + count) % count;
               setTab(next);
               tabs.current?.querySelectorAll("button")[next]?.focus();
             }
           }
         >
-          {annotationCharTabs.map(
+          {characterTabs.map(
             /** Renders an original annotation tab. @param page - Native page name and label. @param index - Native page order. @returns Tab. */
             ([id, label], index) => (
               <button
@@ -435,6 +455,30 @@ export function WriterCharacterDialog({
               }
             />
           </section>
+          {border && (
+            <section
+              role="tabpanel"
+              id={`${formId}-page-4`}
+              aria-labelledby={`${formId}-tab-4`}
+              hidden={tab !== 4}
+              key={`borders-${resets[4]}`}
+            >
+              <WriterBorderPage
+                page={border}
+                unit={unit}
+                resetKey={resets[4]}
+                onChange={
+                  /** Retains native edits in the tab's draft only. @returns Nothing. */ () => {
+                    setBorderEdited(true);
+                    refreshBorder(
+                      /** Invalidates the border projection. @param previous - Current revision. @returns New revision. */
+                      (previous) => previous + 1,
+                    );
+                  }
+                }
+              />
+            </section>
+          )}
         </div>
         <div className="writer-dialog-actions">
           <button type="button" className="mr-auto" onClick={reset}>

@@ -8,10 +8,12 @@ import {
   writerHighlightColorValue,
   writerParagraphBackgroundColor,
 } from "../../source/core/attr/swatrset";
+import { browserBorderLine } from "../../../svx/browser/dialog/border-line";
+import { SvxBoxItem, SvxBoxItemLine } from "../../../editeng/source/items/frmitems";
 import { SvxColorItem } from "../../../editeng/inc/colritem";
 import { SvxEscapementItem } from "../../../editeng/inc/escapementitem";
 import { SvxKerningItem } from "../../../editeng/inc/kernitem";
-import { RES_CHRATR_ESCAPEMENT, RES_CHRATR_KERNING } from "../../inc/hintids";
+import { RES_CHRATR_BOX, RES_CHRATR_ESCAPEMENT, RES_CHRATR_KERNING } from "../../inc/hintids";
 
 import { SvxCrossedOutItem } from "../../../editeng/inc/crossedoutitem";
 import { RES_CHRATR_CROSSEDOUT } from "../../inc/hintids";
@@ -197,6 +199,10 @@ export interface WriterTextPortion {
     fontFamilyGeneric?: string;
     fontSizeTwips?: number;
     kerningTwips?: number;
+    joinsPreviousCharacterBox?: boolean;
+    characterBox?: Readonly<
+      Record<"Top" | "Bottom" | "Left" | "Right", Readonly<{ line: string; padding: number }>>
+    >;
   }>;
   readonly hyperlink?: Readonly<{ url: string; targetFrame?: string }>;
   readonly startOffset: number;
@@ -763,6 +769,26 @@ function projectTextLine(item: SvxTextLineItem): WriterTextLineProjection {
   return Object.freeze({ style: item.GetLineStyle(), ...(color === "auto" ? {} : { color }) });
 }
 
+/** Projects character borders in the original physical edge order. @param item - Actual character box. @returns Browser border and padding values for each side. */
+function projectCharacterBox(
+  item: SvxBoxItem,
+): NonNullable<WriterTextPortion["attributes"]["characterBox"]> {
+  /** Reads the native stroke and corresponding distance. @param edge - Native physical side. @returns Browser stroke and point distance. */
+  function side(edge: SvxBoxItemLine) {
+    const line = item.GetLine(edge);
+    return Object.freeze({
+      line: browserBorderLine(line, false),
+      padding: line === undefined ? 0 : item.GetDistance(edge) / 20,
+    });
+  }
+  return Object.freeze({
+    Top: side(SvxBoxItemLine.TOP),
+    Bottom: side(SvxBoxItemLine.BOTTOM),
+    Left: side(SvxBoxItemLine.LEFT),
+    Right: side(SvxBoxItemLine.RIGHT),
+  });
+}
+
 /** Projects native item stacks at text boundaries into immutable platform display values. @param node - Actual body or cell owner. @returns Frozen display portions. */
 function projectTextPortions(node: SwTextNode): readonly WriterTextPortion[] {
   const iterator = new SwAttrIter(node),
@@ -776,6 +802,7 @@ function projectTextPortions(node: SwTextNode): readonly WriterTextPortion[] {
       handler.ReadItem(which) !== node.GetAttr(which)
     );
   }
+  let previousBox: SvxBoxItem | undefined;
   for (let start = 0; start < node.Len();) {
     iterator.Seek(start);
     const inlineGraphic = projectInlineGraphic(node, start);
@@ -793,6 +820,9 @@ function projectTextPortions(node: SwTextNode): readonly WriterTextPortion[] {
       highlight !== "transparent" || !authored(RES_CHRATR_BACKGROUND)
         ? highlight
         : writerHighlightColorValue(handler.ReadItem(RES_CHRATR_BACKGROUND) as SvxBrushItem);
+    const box = handler.ReadItem(RES_CHRATR_BOX);
+    const characterBox =
+      inlineGraphic === undefined && box instanceof SvxBoxItem && box.HasBorder() ? box : undefined;
     portions.push(
       Object.freeze({
         startOffset: start,
@@ -847,6 +877,13 @@ function projectTextPortions(node: SwTextNode): readonly WriterTextPortion[] {
           ...(authored(RES_CHRATR_KERNING)
             ? { kerningTwips: (handler.ReadItem(RES_CHRATR_KERNING) as SvxKerningItem).GetValue() }
             : {}),
+          ...(characterBox === undefined
+            ? {}
+            : {
+                characterBox: projectCharacterBox(characterBox),
+                joinsPreviousCharacterBox:
+                  previousBox !== undefined && characterBox.equals(previousBox),
+              }),
         }),
         ...(link === undefined
           ? {}
@@ -858,6 +895,7 @@ function projectTextPortions(node: SwTextNode): readonly WriterTextPortion[] {
             }),
       }),
     );
+    previousBox = characterBox;
     start = end;
   }
   return Object.freeze(portions);

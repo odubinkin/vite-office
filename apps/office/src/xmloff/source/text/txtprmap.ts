@@ -19,7 +19,8 @@ import {
   BorderLine2,
   cppu_detail_getUnoType_BorderLine2,
 } from "../../../offapi/com/sun/star/table/BorderLine2";
-import { XMLBorderHdl, XMLBorderWidthHdl } from "../style/bordrhdl";
+import { Converter } from "../../../sax/source/tools/converter";
+import { XMLBorderHdl, XMLBorderWidthHdl, type OdfBoxProperties } from "../style/bordrhdl";
 import { cppu_detail_getUnoType_FontSlant as slantType } from "../../../offapi/com/sun/star/awt/FontSlant";
 import type { FastAttributeList } from "../core/xmlimp";
 import { XMLToken as T } from "../core/xmltoken";
@@ -127,6 +128,44 @@ const languageProperties = [
     ],
   ],
 ] as const;
+const characterBoxFields = [
+  ["border", "border", T.LOEXT_BORDER, T.FO_BORDER],
+  ["padding", "padding", T.LOEXT_PADDING, T.FO_PADDING],
+  ["borderLineWidth", "border-line-width", T.LOEXT_BORDER_LINE_WIDTH, T.STYLE_BORDER_LINE_WIDTH],
+  ["borderTop", "border-top", T.LOEXT_BORDER_TOP, T.FO_BORDER_TOP],
+  ["paddingTop", "padding-top", T.LOEXT_PADDING_TOP, T.FO_PADDING_TOP],
+  [
+    "borderLineWidthTop",
+    "border-line-width-top",
+    T.LOEXT_BORDER_LINE_WIDTH_TOP,
+    T.STYLE_BORDER_LINE_WIDTH_TOP,
+  ],
+  ["borderBottom", "border-bottom", T.LOEXT_BORDER_BOTTOM, T.FO_BORDER_BOTTOM],
+  ["paddingBottom", "padding-bottom", T.LOEXT_PADDING_BOTTOM, T.FO_PADDING_BOTTOM],
+  [
+    "borderLineWidthBottom",
+    "border-line-width-bottom",
+    T.LOEXT_BORDER_LINE_WIDTH_BOTTOM,
+    T.STYLE_BORDER_LINE_WIDTH_BOTTOM,
+  ],
+  ["borderLeft", "border-left", T.LOEXT_BORDER_LEFT, T.FO_BORDER_LEFT],
+  ["paddingLeft", "padding-left", T.LOEXT_PADDING_LEFT, T.FO_PADDING_LEFT],
+  [
+    "borderLineWidthLeft",
+    "border-line-width-left",
+    T.LOEXT_BORDER_LINE_WIDTH_LEFT,
+    T.STYLE_BORDER_LINE_WIDTH_LEFT,
+  ],
+  ["borderRight", "border-right", T.LOEXT_BORDER_RIGHT, T.FO_BORDER_RIGHT],
+  ["paddingRight", "padding-right", T.LOEXT_PADDING_RIGHT, T.FO_PADDING_RIGHT],
+  [
+    "borderLineWidthRight",
+    "border-line-width-right",
+    T.LOEXT_BORDER_LINE_WIDTH_RIGHT,
+    T.STYLE_BORDER_LINE_WIDTH_RIGHT,
+  ],
+] as const;
+
 /** Tokens consumed by this bounded source property map. */
 export const textCharacterPropertyTokens = [
   ...scriptProperties.map(
@@ -159,6 +198,10 @@ export const textCharacterPropertyTokens = [
         ]) => token,
       ),
   ),
+  ...characterBoxFields.flatMap(
+    /** Admits the native extended and legacy text attributes. @param field - Original map row. @returns Both original tokens. */
+    ([, , extended, legacy]) => [extended, legacy],
+  ),
 ];
 /** Collects all attributes of each native script locale in XML order. @param properties - Native text properties. @returns Qualified attribute/value pairs. */
 export function exportTextLanguageProperties(
@@ -183,6 +226,11 @@ export function exportTextCharacterProperties(properties: OdfCharacterProperties
     output: [string] = [""];
   let result = "";
   try {
+    for (const [key, name] of characterBoxFields) {
+      const field = properties.characterBox?.[key];
+      if (field !== undefined)
+        result += ` loext:${name}="${typeof field === "number" ? Converter.convertMeasureToXML(field, "twip") : field}"`;
+    }
     if (properties.kerning !== undefined) {
       value.insert([properties.kerning], "sal_Int16");
       if (kerning.exportXML(output, value, kerningConverter))
@@ -246,11 +294,19 @@ export function exportTextCharacterProperties(properties: OdfCharacterProperties
 export function importTextCharacterProperties(
   attributes: FastAttributeList,
 ): Partial<OdfCharacterProperties> {
-  const result: Record<string, number | boolean> = {},
+  const result: Record<string, number | boolean | OdfBoxProperties> = {},
     value = new Any(),
     line = new Any(),
     crossedOut = new Any();
   try {
+    const characterBox: Record<string, string | number> = {};
+    for (const [key, , extended, legacy] of characterBoxFields) {
+      const raw = attributes.get(extended) ?? attributes.get(legacy);
+      if (raw === null) continue;
+      const value = key.startsWith("padding") ? Converter.convertMeasure(raw, "twip") : raw;
+      if (value !== null) characterBox[key] = value;
+    }
+    if (Object.keys(characterBox).length) result.characterBox = characterBox;
     for (const [token, text] of attributes) {
       if (token === T.FO_LETTER_SPACING) {
         if (kerning.importXML(text, value, kerningConverter)) {
@@ -506,6 +562,20 @@ export function applyTextImportProperties(
     if (paragraph.keepTogether !== undefined) add("ParaSplit", !paragraph.keepTogether, "bool");
     if (paragraph.joinBorder !== undefined)
       add("ParaIsConnectBorder", paragraph.joinBorder, "bool");
+    if (character.characterBox) {
+      const box = character.characterBox;
+      for (const side of ["Top", "Bottom", "Left", "Right"] as const) {
+        const distance = box[`padding${side}`] ?? box.padding;
+        if (distance !== undefined) add(`Char${side}BorderDistance`, mm(distance), "sal_Int32");
+        const rawBorder = box[`border${side}`] ?? box.border;
+        if (rawBorder === undefined) continue;
+        const target = { value: new BorderLine2() };
+        if (!new XMLBorderHdl().importXML(rawBorder, target)) continue;
+        const rawWidth = box[`borderLineWidth${side}`] ?? box.borderLineWidth;
+        if (rawWidth !== undefined) new XMLBorderWidthHdl().importXML(rawWidth, target);
+        add(`Char${side}Border`, target.value, cppu_detail_getUnoType_BorderLine2);
+      }
+    }
     for (const side of ["Top", "Bottom", "Left", "Right"] as const) {
       const rawBorder = paragraph[`border${side}`];
       const rawWidth = paragraph[`borderLineWidth${side}`];

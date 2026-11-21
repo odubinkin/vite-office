@@ -1,6 +1,8 @@
 /** @fileoverview Projects native Writer character attributes into the ODF text-property map. */
-import { RES_TXTATR_AUTOFMT, RES_TXTATR_INETFMT } from "../../../inc/hintids";
+import { RES_CHRATR_BOX, RES_TXTATR_AUTOFMT, RES_TXTATR_INETFMT } from "../../../inc/hintids";
 import { GetTextAttrMode } from "../../../inc/swtypes";
+import { SvxBoxItem } from "../../../../editeng/source/items/frmitems";
+import { exportBoxProperties } from "./xmlexpit";
 import { SwFormatAutoFormat } from "../../core/txtnode/txatbase";
 import { SwFormatINetFormat } from "../../core/txtnode/fmtatr2";
 import { SwTextCharFormat } from "../../core/txtnode/txtatr2";
@@ -76,6 +78,7 @@ export function getCharacterProperties(
     /** Detects a direct script posture. @param which - Posture WhichId. @returns Whether set. */
     (which) => set.GetItemIfSet(which, false) !== undefined,
   );
+  const box = set.GetItemIfSet(RES_CHRATR_BOX, inherited);
   const escapement = set.GetItemIfSet(RES_CHRATR_ESCAPEMENT, inherited);
   const crossedOut = set.GetItemIfSet(RES_CHRATR_CROSSEDOUT, inherited);
   const wordMode = set.GetItemIfSet(RES_CHRATR_WORDLINEMODE, inherited),
@@ -106,6 +109,7 @@ export function getCharacterProperties(
     !directWeight &&
     !directPosture &&
     !directUnderline &&
+    box === undefined &&
     crossedOut === undefined &&
     escapement === undefined &&
     !directFontSize &&
@@ -232,6 +236,7 @@ export function getCharacterProperties(
     ...(inherited || set.GetItemIfSet(RES_CHRATR_CTL_POSTURE, false) !== undefined
       ? { fontPostureComplex: ConvertFontSlant(complexPosture.GetValue(), "FontItalic") }
       : {}),
+    ...(box instanceof SvxBoxItem ? { characterBox: exportBoxProperties(box) } : {}),
     ...(escapement instanceof SvxEscapementItem
       ? { escapement: escapement.GetEsc(), escapementHeight: escapement.GetProportionalHeight() }
       : {}),

@@ -6,6 +6,11 @@ import { SfxStringItem } from "../../../../svl/source/items/stritem";
 import { FN_PARAM_1 } from "../../../inc/cmdid";
 import { SwPaM } from "../../core/crsr/pam";
 import { ConvertAttrCharToGen, ConvertAttrGenToChar } from "../utlui/uitool";
+import {
+  SvxBoxInfoItem,
+  SvxBoxInfoItemValidFlags,
+} from "../../../../editeng/source/items/frmitems";
+import { SID_ATTR_BORDER_INNER } from "../../../../svx/inc/svxids";
 import { SvxCrossedOutItem } from "../../../../editeng/inc/crossedoutitem";
 import { RES_CHRATR_CROSSEDOUT, WRITER_CHARACTER_WHICH_RANGES } from "../../../inc/hintids";
 import { SfxItemSet, SfxItemState } from "../../../../svl/inc/itemset";
@@ -80,9 +85,18 @@ export function createWriterTextCommandRegistry(
   /** Opens the original standard Character dialog over Writer's current selection. @param command - Original slot. @param initialPage - Original notebook page. @returns Whether selected text changed. */
   async function openCharacterDialog(command: string, initialPage?: string): Promise<boolean> {
     const document = target.GetActiveParagraph().GetDoc();
-    const input = new SfxItemSet(document.GetAttrPool(), WRITER_CHARACTER_WHICH_RANGES);
+    const input = new SfxItemSet(document.GetAttrPool(), [
+      ...WRITER_CHARACTER_WHICH_RANGES,
+      [SID_ATTR_BORDER_INNER, SID_ATTR_BORDER_INNER],
+    ]);
     target.GetTextCtrlState(input);
     ConvertAttrCharToGen(input);
+    const border = new SvxBoxInfoItem(SID_ATTR_BORDER_INNER);
+    border.SetDist(true);
+    border.SetMinDist(true);
+    border.SetDefDist(28);
+    border.SetValid(SvxBoxInfoItemValidFlags.DISABLE);
+    input.Put(border, true);
     const selection: SwPaM[] = [];
     for (const range of target.GetCharacterDialogSelection().GetRingContainer()) {
       const copy = new SwPaM(
@@ -107,6 +121,8 @@ export function createWriterTextCommandRegistry(
           !target.CanFormatCharacters()
         )
           return false;
+        output.ClearItem(SID_ATTR_BORDER_INNER);
+        if (!output.Count()) return false;
         ConvertAttrGenToChar(output, input);
         return target.ExecTextCtrl(output, selection[0]);
       } finally {

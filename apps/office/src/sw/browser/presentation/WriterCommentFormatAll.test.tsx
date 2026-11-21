@@ -2,6 +2,9 @@
 import { act, fireEvent, render, screen, within } from "@testing-library/react";
 import { expect, it } from "vitest";
 import { Any } from "../../../cppu/inc/com/sun/star/uno/Any";
+import { SvxBoxItem } from "../../../editeng/source/items/frmitems";
+import { readOdtDocument } from "../../source/filter/xml/swxml";
+import { writeOdtDocument } from "../../source/filter/xml/wrtxml";
 import { SvxBrushItem } from "../../../editeng/inc/brushitem";
 import { SvxKerningItem } from "../../../editeng/inc/kernitem";
 import { SfxGrabBagItem } from "../../../svl/inc/grabbagitem";
@@ -9,6 +12,7 @@ import { SfxItemSet } from "../../../svl/inc/itemset";
 import { Color } from "../../../tools/inc/color";
 import {
   RES_CHRATR_BACKGROUND,
+  RES_CHRATR_BOX,
   RES_CHRATR_FONTSIZE,
   RES_CHRATR_GRABBAG,
   RES_CHRATR_HIGHLIGHT,
@@ -347,6 +351,81 @@ it("uses visible imported highlighting as input and clears its marker only when 
     initial.Dispose();
     point.Dispose();
     mark.Dispose();
+    view.Close();
+  }
+});
+
+it("applies character borders to the selected text and restores the native box from ODT", /** Exercises the standard Character border page, its browser projection, grouped history and Writer save/open. @returns Completion. */ async () => {
+  const { view } = createWriterDocumentSession();
+  const shell = view.GetWrtShell();
+  shell.Insert("plain boxed tail");
+  const node = shell.GetActiveParagraph();
+  const start = new SwPosition(node, 6);
+  const end = new SwPosition(node, 11);
+  shell.SetPaM(end, start);
+  const workbench = render(<WriterWorkbench isActive view={view} />);
+  try {
+    act(
+      /** Uses the original Character slot Page argument. @returns Nothing. */ () => {
+        const page = new SfxStringItem(FN_PARAM_1, "borders");
+        try {
+          view.Execute(WRITER_COMMAND_IDS.fontDialog, [page]);
+        } finally {
+          page.Dispose();
+        }
+      },
+    );
+    const dialog = screen.getByRole("dialog", { name: "Character" });
+    expect(within(dialog).getByRole("tab", { name: "Borders" })).toHaveFocus();
+    fireEvent.click(within(dialog).getByRole("button", { name: "All Four Borders" }));
+    await act(
+      /** Commits the border page's native box delta. @returns Completion. */ async () => {
+        fireEvent.click(within(dialog).getByRole("button", { name: "OK" }));
+      },
+    );
+    const decorated = screen.getByText("boxed");
+    expect(decorated.style.borderTopStyle).toBe("solid");
+    expect(decorated.style.borderRightStyle).toBe("solid");
+    const items = node.GetCharacterItemsAt(8);
+    const outside = node.GetCharacterItemsAt(2);
+    try {
+      const box = items.Get(RES_CHRATR_BOX) as SvxBoxItem;
+      expect(box.GetLeft()).toBeDefined();
+      expect(box.GetDistance(0)).toBeGreaterThan(0);
+      expect((outside.Get(RES_CHRATR_BOX) as SvxBoxItem).GetLeft()).toBeUndefined();
+      const metadata = { title: "Character borders" };
+      const { document: reopened } = await readOdtDocument(
+        await writeOdtDocument(shell.GetDoc(), metadata),
+        metadata,
+      );
+      try {
+        const reopenedParagraph = reopened.paragraphs[0];
+        expect(reopenedParagraph).toBeDefined();
+        if (!reopenedParagraph) throw new Error("Expected the reopened document paragraph");
+        const reopenedItems = reopenedParagraph.GetCharacterItemsAt(8);
+        try {
+          expect((reopenedItems.Get(RES_CHRATR_BOX) as SvxBoxItem).equals(box)).toBe(true);
+        } finally {
+          reopenedItems.Dispose();
+        }
+      } finally {
+        reopened.Dispose();
+      }
+    } finally {
+      items.Dispose();
+      outside.Dispose();
+    }
+    act(
+      /** Restores the selected character formatting as a native undo action. @returns Nothing. */ () => {
+        expect(shell.Undo()).toBe(true);
+      },
+    );
+    expect(screen.queryByText("boxed")).toBeNull();
+    expect(screen.getByLabelText("Writer document body")).toHaveTextContent("plain boxed tail");
+  } finally {
+    workbench.unmount();
+    start.Dispose();
+    end.Dispose();
     view.Close();
   }
 });

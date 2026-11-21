@@ -28,7 +28,7 @@ import type { SvXMLGraphicHelper } from "../../../../xmloff/source/core/xmlgrhlp
 import { CollectGraphicFlyFrames, CollectTextFlyFrames } from "../../core/layout/flycnt";
 import type { XMLTextExportBlock } from "../../../../xmloff/source/table/XMLTableExport";
 import { getFillProperties, XML_FILL_WHICH_IDS } from "./xmlexp-fill";
-import { RES_CHRATR_ESCAPEMENT, RES_CHRATR_KERNING } from "../../../inc/hintids";
+import { RES_CHRATR_BOX, RES_CHRATR_ESCAPEMENT, RES_CHRATR_KERNING } from "../../../inc/hintids";
 import { RES_CHRATR_CROSSEDOUT } from "../../../inc/hintids";
 import { RES_CHRATR_WORDLINEMODE, RES_CHRATR_AUTOKERN } from "../../../inc/hintids";
 import {
@@ -799,6 +799,7 @@ function assertSupportedItems(
     RES_CHRATR_WORDLINEMODE,
     RES_CHRATR_AUTOKERN,
     RES_CHRATR_KERNING,
+    RES_CHRATR_BOX,
     RES_CHRATR_CJK_POSTURE,
     RES_CHRATR_CJK_FONT,
     RES_CHRATR_CJK_FONTSIZE,

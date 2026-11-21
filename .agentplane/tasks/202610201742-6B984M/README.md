@@ -4,7 +4,7 @@ title: "Implement Writer search and replace core and browser UI"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 103
+revision: 104
 origin:
   system: "manual"
 depends_on:
@@ -349,6 +349,14 @@ comments:
       - Command: `npm run check:docs` and `npm run check:file-size`. Result: baseline failures remain outside changed files (307 JSDoc findings and five oversized files).
 
       Parent task remains in progress. This checkpoint does not advance the ten-task full regression counter.
+  -
+    author: "CODER"
+    body: |-
+      Verified Writer Character dialog checkpoint. The standard Character dialog reuses SvxBorderTabPage and the shared browser border controls. The shell applies the original character box item to the selected text with existing history. The browser projects physical border lines and distances, and ODT preserves the same item through UNO character border properties and loext text attributes with legacy import aliases.
+
+      Evidence: 74 targeted Writer tests in six files, five shared ODF property-map tests, two Writer resource tests, and both Writer search/annotation scenarios in production Chrome passed. The Chrome scenario verifies the standard Character dialog, computed border, focus return, and undo. Build/typecheck, scoped ESLint and Prettier, module boundaries, source provenance, source tree, Writer parity inventory, policy routing, and git diff --check passed. ap doctor retained its previous hook shim warning. Repository-wide JSDoc reports 307 existing findings, and file size reports four unrelated existing files at its limit. The updated UNO map now passes the file-size gate.
+
+      Character shadow, complex stroke appearance, and native line layout parity remain outside this checkpoint. This is a verified implementation checkpoint in the ongoing Writer task, with no task closure or full regression count increment.
 
 events:
   -
@@ -843,9 +851,19 @@ events:
       - Command: `npm run check:docs` and `npm run check:file-size`. Result: baseline failures remain outside changed files (307 JSDoc findings and five oversized files).
 
       Parent task remains in progress. This checkpoint does not advance the ten-task full regression counter.
+  -
+    type: "comment"
+    at: "2026-11-21T20:18:03.777Z"
+    author: "CODER"
+    body: |-
+      Verified Writer Character dialog checkpoint. The standard Character dialog reuses SvxBorderTabPage and the shared browser border controls. The shell applies the original character box item to the selected text with existing history. The browser projects physical border lines and distances, and ODT preserves the same item through UNO character border properties and loext text attributes with legacy import aliases.
+
+      Evidence: 74 targeted Writer tests in six files, five shared ODF property-map tests, two Writer resource tests, and both Writer search/annotation scenarios in production Chrome passed. The Chrome scenario verifies the standard Character dialog, computed border, focus return, and undo. Build/typecheck, scoped ESLint and Prettier, module boundaries, source provenance, source tree, Writer parity inventory, policy routing, and git diff --check passed. ap doctor retained its previous hook shim warning. Repository-wide JSDoc reports 307 existing findings, and file size reports four unrelated existing files at its limit. The updated UNO map now passes the file-size gate.
+
+      Character shadow, complex stroke appearance, and native line layout parity remain outside this checkpoint. This is a verified implementation checkpoint in the ongoing Writer task, with no task closure or full regression count increment.
 
 doc_version: 3
-doc_updated_at: "2026-11-21T20:05:54.109Z"
+doc_updated_at: "2026-11-21T20:18:03.777Z"
 doc_updated_by: "CODER"
 description: "Implement the approved coherent Writer search-and-replace feature from pinned LibreOffice sources: real shared search engine and options, native paragraph/cursor traversal and replacement/history contracts, view-owned search state and dispatch, Find toolbar and Find and Replace dialog with generated upstream command placement and shortcuts. Preserve source semantics and explicit unsupported boundaries; never substitute DOM text search or browser RegExp for ICU contracts. Work only on writer in vite-office-writer; local upstream reading approved, no network or merges. Keep active until approved scope is verified."
 sections:

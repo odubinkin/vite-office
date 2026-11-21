@@ -18,10 +18,10 @@ import * as M from "../../../../editeng/inc/memberids";
 import { cppu_detail_getUnoType_FontSlant as fontSlantType } from "../../../../offapi/com/sun/star/awt/FontSlant";
 import { cppu_detail_getUnoType_LineSpacing as lineSpacingType } from "../../../../offapi/com/sun/star/style/LineSpacing";
 import { cppu_detail_getUnoType_TabStop as tabStopType } from "../../../../offapi/com/sun/star/style/TabStop";
-import { cppu_detail_getUnoType_BorderLine as borderLineType } from "../../../../offapi/com/sun/star/table/BorderLine";
 import { cppu_detail_getUnoType_ShadowFormat as shadowFormatType } from "../../../../offapi/com/sun/star/table/ShadowFormat";
 import * as H from "../../../inc/hintids";
 import { WID_DOC_DEFAULT_PAGE_MODE, WID_DOC_INTEROP_GRAB_BAG } from "../../../inc/unomap";
+import { boxMembers, charBoxMembers, charBoxNames } from "./unomap1";
 import { pageBitmapGeometryProperties, pageStoryPropertyEntries } from "./unostyle.page-stories";
 import * as Grid from "../../../inc/unomid";
 import { MID_PAGEDESC_PAGEDESCNAME, MID_PAGEDESC_PAGENUMOFFSET } from "../../../inc/unomid";
@@ -60,34 +60,6 @@ export const SwUnoTextDocumentPropertyMap: ReadonlyMap<
 ]);
 /** Original page-style grid and direction entries from unomap1.cxx. */
 type PageStylePropertyEntry = SwUnoPropertyEntry & { readonly type: UnoTypeArgument };
-/** Shared box member descriptors for page and paragraph style property maps. @param attributes - Native property flags. @returns Original UNO descriptors. */
-function boxMembers(attributes: number): [string, PageStylePropertyEntry][] {
-  return (["Left", "Right", "Top", "Bottom"] as const).flatMap(
-    /** Binds each original box member. @param side - Physical side. @param index - Native member order. @returns UNO property entries. */
-    (side, index): [string, PageStylePropertyEntry][] => [
-      [
-        `${side}Border`,
-        {
-          which: H.RES_BOX,
-          member: (index + 1) | 0x80,
-          kind: "border",
-          type: borderLineType,
-          attributes,
-        },
-      ],
-      [
-        `${side}BorderDistance`,
-        {
-          which: H.RES_BOX,
-          member: (index + 6) | 0x80,
-          kind: "long",
-          type: "sal_Int32",
-          attributes,
-        },
-      ],
-    ],
-  );
-}
 export const SwUnoPageStylePropertyMap: ReadonlyMap<string, PageStylePropertyEntry> = new Map<
   string,
   PageStylePropertyEntry
@@ -317,6 +289,7 @@ export const SwUnoPropertyMap: ReadonlyMap<string, SwUnoPropertyEntry> = new Map
     { type: "sal_Int32", attributes: 1, which: H.RES_BOX, member: 5 | 0x80, kind: "long" },
   ],
   ...boxMembers(1),
+  ...charBoxMembers,
   ["BreakType", { type: breakType, attributes: 1, which: H.RES_BREAK, member: 0, kind: "break" }],
   [
     "PageDescName",
@@ -574,6 +547,7 @@ const characterMaybeVoidProperties = new Set([
   "CharStrikeout",
 ]);
 const paragraphStyleProperties = new Set([
+  ...charBoxNames,
   "CharLocale",
   "CharWeight",
   "CharPosture",
@@ -770,6 +744,7 @@ const staticMapEntries: (readonly SfxItemPropertyMapEntry[] | undefined)[] = [];
 const staticPropertySets: (SfxItemPropertySet | undefined)[] = [];
 /** Original COMMON_CRSR_PARA_PROPERTIES_WITHOUT_FN and hyperlink rows represented by this core. */
 const textDefaultProperties = new Set([
+  ...charBoxNames,
   "CharLocale",
   "CharWeight",
   "CharPosture",

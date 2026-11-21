@@ -18,7 +18,7 @@ function attributes(pairs: readonly (readonly [string, string])[]): FastAttribut
         name,
         value,
       ]) => {
-        const [prefix, local] = name.split(":") as ["style" | "fo", string];
+        const [prefix, local] = name.split(":") as ["style" | "fo" | "loext", string];
         return { name, value, prefix, local, uri: ODF_NAMESPACES[prefix] };
       },
     ),
@@ -155,7 +155,7 @@ it("transports all native independent script values without boolean normalizatio
   ).not.toContain("text-underline-color");
   expect(exportTextCharacterProperties({ underlineStyle: 19 })).toBe("");
   expect(importTextCharacterProperties(attributes([["fo:font-size", "12pt"]]))).toEqual({});
-  expect(textCharacterPropertyTokens).toHaveLength(32);
+  expect(textCharacterPropertyTokens).toHaveLength(62);
   expect(textCharacterPropertyTokens).toContain(XMLToken.FO_LETTER_SPACING);
   expect(textCharacterPropertyTokens.slice(9, 13)).toEqual([
     XMLToken.STYLE_TEXT_LINE_THROUGH_STYLE,
@@ -210,4 +210,30 @@ it("merges native crossed-out type and width in actual SAX order without affecti
   expect(exportTextCharacterProperties({ strikeout: 2, underlineStyle: 1 })).toContain(
     'style:text-underline-style="solid"',
   );
+});
+
+it("imports legacy and extended character borders and exports extended text attributes", /** Verifies mixed namespace input and independently represented sides. @returns Nothing. */ () => {
+  const values = importTextCharacterProperties(
+    attributes([
+      ["fo:border-left", "none"],
+      ["loext:border-left", "0.05cm double #123456"],
+      ["style:border-line-width-left", "0.01cm 0.02cm 0.02cm"],
+      ["fo:padding-left", "2pt"],
+      ["loext:padding-right", "3pt"],
+      ["loext:border-right", "none"],
+    ]),
+  );
+  expect(values.characterBox).toEqual({
+    borderLeft: "0.05cm double #123456",
+    borderLineWidthLeft: "0.01cm 0.02cm 0.02cm",
+    borderRight: "none",
+    paddingLeft: 40,
+    paddingRight: 60,
+  });
+  const xml = exportTextCharacterProperties(values);
+  expect(xml).toContain('loext:border-left="0.05cm double #123456"');
+  expect(xml).toContain('loext:border-right="none"');
+  expect(xml).toContain('loext:border-line-width-left="0.01cm 0.02cm 0.02cm"');
+  expect(xml).toContain("loext:padding-left=");
+  expect(xml).toContain("loext:padding-right=");
 });

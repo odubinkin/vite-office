@@ -297,14 +297,19 @@ export function WriterEditableParagraph({
                 run.startOffset < fragmentEnd && run.startOffset + run.text.length > fragmentStart,
             )
             .map(
-              /** Projects one canonical text run with a deterministic view key. @param run - Immutable run. @returns Semantic run projection. */ (
-                run,
-              ) => (
+              /** Projects one canonical text run with a deterministic view key.
+               * @param run - Immutable run.
+               * @param index - Run index in the visible fragment.
+               * @param runs - Runs intersecting the visible fragment.
+               * @returns Semantic run projection.
+               */ (run, index, runs) => (
                 <Fragment key={getWriterPortionProjectionKey(paragraph.id, run)}>
                   <WriterTextPortionProjection
                     inheritedBold={paragraph.computedStyle.fontWeight === 700}
                     inheritedFontFamily={paragraph.computedStyle.fontFamily}
                     inheritedItalic={paragraph.computedStyle.fontStyle === "italic"}
+                    joinLeftBorder={index > 0 && run.attributes.joinsPreviousCharacterBox === true}
+                    joinRightBorder={runs[index + 1]?.attributes.joinsPreviousCharacterBox === true}
                     run={{
                       ...run,
                       text: run.text.slice(
@@ -351,11 +356,15 @@ export function WriterTextPortionProjection({
   inheritedBold,
   inheritedFontFamily,
   inheritedItalic,
+  joinLeftBorder = false,
+  joinRightBorder = false,
   run,
 }: Readonly<{
   inheritedBold: boolean;
   inheritedFontFamily: string | undefined;
   inheritedItalic: boolean;
+  joinLeftBorder?: boolean;
+  joinRightBorder?: boolean;
   run: Pick<WriterTextPortion, "text" | "attributes" | "hyperlink" | "inlineGraphic">;
 }>): React.ReactNode {
   let content: React.ReactNode = run.inlineGraphic ? (
@@ -407,6 +416,26 @@ export function WriterTextPortionProjection({
   else if (inheritedItalic) content = <span style={{ fontStyle: "normal" }}>{content}</span>;
   if (run.attributes.bold) content = <strong>{content}</strong>;
   else if (inheritedBold) content = <span style={{ fontWeight: 400 }}>{content}</span>;
+  const box = run.attributes.characterBox;
+  if (box !== undefined)
+    content = (
+      <span
+        style={{
+          borderTop: box.Top.line,
+          borderBottom: box.Bottom.line,
+          borderLeft: joinLeftBorder ? "none" : box.Left.line,
+          borderRight: joinRightBorder ? "none" : box.Right.line,
+          paddingTop: `${box.Top.padding}pt`,
+          paddingBottom: `${box.Bottom.padding}pt`,
+          paddingLeft: joinLeftBorder ? 0 : `${box.Left.padding}pt`,
+          paddingRight: joinRightBorder ? 0 : `${box.Right.padding}pt`,
+          boxDecorationBreak: "clone",
+          WebkitBoxDecorationBreak: "clone",
+        }}
+      >
+        {content}
+      </span>
+    );
   if (run.hyperlink !== undefined)
     content = (
       <a
@@ -424,5 +453,5 @@ export function WriterTextPortionProjection({
 /** Builds a deterministic view-only key from the projected run boundary and semantic state. @param paragraphId - Stable text-node identity. @param run - Projected run. @returns Stable projection key. */
 function getWriterPortionProjectionKey(paragraphId: string, run: WriterTextPortion): string {
   const attributes = run.attributes;
-  return `${paragraphId}:${run.startOffset}:${attributes.bold ? 1 : 0}${attributes.italic ? 1 : 0}${attributes.underline ? 1 : 0}:${attributes.strikeout ?? 0}:${attributes.escapement?.offset ?? 0}/${attributes.escapement?.height ?? 100}:${attributes.color ?? ""}:${attributes.highlight ?? ""}:${attributes.fontFamily ?? ""}:${attributes.fontFamilyGeneric ?? ""}:${attributes.fontSizeTwips ?? ""}:${attributes.kerningTwips ?? ""}:${run.hyperlink?.url ?? ""}:${run.hyperlink?.targetFrame ?? ""}`;
+  return `${paragraphId}:${run.startOffset}:${attributes.bold ? 1 : 0}${attributes.italic ? 1 : 0}${attributes.underline ? 1 : 0}:${attributes.strikeout ?? 0}:${attributes.escapement?.offset ?? 0}/${attributes.escapement?.height ?? 100}:${attributes.color ?? ""}:${attributes.highlight ?? ""}:${attributes.fontFamily ?? ""}:${attributes.fontFamilyGeneric ?? ""}:${attributes.fontSizeTwips ?? ""}:${attributes.kerningTwips ?? ""}:${JSON.stringify(attributes.characterBox) ?? ""}:${run.hyperlink?.url ?? ""}:${run.hyperlink?.targetFrame ?? ""}`;
 }
