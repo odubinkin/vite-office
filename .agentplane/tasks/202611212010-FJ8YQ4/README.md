@@ -4,7 +4,7 @@ title: "Connect Calc Paste Special dialog and presets"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 20
+revision: 21
 origin:
   system: "manual"
 depends_on: []
@@ -20,9 +20,9 @@ plan_approval:
   note: null
 verification:
   state: "ok"
-  updated_at: "2026-11-21T22:44:47.693Z"
+  updated_at: "2026-11-21T22:47:11.152Z"
   updated_by: "CODER"
-  note: "Verified Calc Paste Special presets, format-only Undo and external format handling. Full Office completed and all three failing Calc assertions and both unhandled keyboard events passed targeted retries. All four browser Calc-associated failures passed targeted retries on corrected expectations. Two previously documented Writer alignment failures remain. Inventory, tooling, static, and scoped post-fix Chrome checks passed."
+  note: "Verified: Calc Paste Special, undo ownership, the scheduled full checkpoint, and all Calc findings through the scoped retries. The two baseline Writer failures are recorded separately."
   attempts: 0
 quality_review:
   state: "pass"
@@ -63,8 +63,14 @@ events:
     author: "CODER"
     state: "ok"
     note: "Verified Calc Paste Special presets, format-only Undo and external format handling. Full Office completed and all three failing Calc assertions and both unhandled keyboard events passed targeted retries. All four browser Calc-associated failures passed targeted retries on corrected expectations. Two previously documented Writer alignment failures remain. Inventory, tooling, static, and scoped post-fix Chrome checks passed."
+  -
+    type: "verify"
+    at: "2026-11-21T22:47:11.152Z"
+    author: "CODER"
+    state: "ok"
+    note: "Verified: Calc Paste Special, undo ownership, the scheduled full checkpoint, and all Calc findings through the scoped retries. The two baseline Writer failures are recorded separately."
 doc_version: 3
-doc_updated_at: "2026-11-21T22:45:06.126Z"
+doc_updated_at: "2026-11-21T22:47:11.211Z"
 doc_updated_by: "CODER"
 description: "Enable the source Paste Special dialog for implemented clipboard mechanisms and run the ten-task test checkpoint."
 sections:
@@ -86,6 +92,53 @@ sections:
     - Full Playwright: 607 passed and six failed across 613 scenarios (exit 1). The two Calc toolbar failures passed in the earlier targeted retry. Two shared scenarios for Calc narrow menus had a stale native root list that omitted Tools. Updated the complete Calc root list in 930fa7f2141f and ran all five shared menu cases, with three Calc and two Writer passes. Across the full run and retries, 611 distinct browser scenarios passed and two known Writer alignment failures remain.
     - Full Office Vitest: 33,957 passed, three failed and 23 skipped across 2,258 files (exit 1). All three failed Calc assertions passed after the test corrections. The full run also found two uncaught Calc keyboard events in otherwise passing scenarios. Reproduced both exceptions in isolation and fixed DOM key adaptation in 67eece481542. The scoped retry passed 60 tests in seven files, with zero unhandled errors. Across the full run and fixes, 33,960 active scenarios have passing evidence.
     - Post-fix TypeScript, changed-path lint and formatting, provenance, resources, dependencies, policy routing, AgentPlane doctor, Vite production build, and static smoke passed. The scoped Chrome retry passed all six cases on the rebuilt application, including Calc row and column selection and standard toolbar at both widths and Writer submenu Enter and Space.
+
+    <!-- BEGIN VERIFICATION RESULTS -->
+    ### 2026-11-21T22:47:11.152Z — VERIFY — ok
+
+    By: CODER
+
+    Note: Verified: Calc Paste Special, undo ownership, the scheduled full checkpoint, and all Calc findings through the scoped retries. The two baseline Writer failures are recorded separately.
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-21T22:45:06.126Z, excerpt_hash=sha256:6c7ab77ee48078786d8ecd2e1ac2684dafd6dc62d84a9f976672810854ccb224
+
+    Details:
+
+    - Command: `cd apps/office && ../../node_modules/.bin/vitest run --config vitest.calc.config.ts --maxWorkers 2 --testTimeout 180000 clipboard paste-block paste-selection paste-editability reference-protocol impex calc-workbench calc-recalculation`. Result: pass. Evidence: 274 tests in 22 files, including tdf69450 and the Paste Special presets, external text format, formula owner and history.
+    - Office TypeScript, changed-path Prettier and ESLint, Calc resources, source provenance, dependencies, policy routing and AgentPlane doctor passed. Doctor shows the existing managed hook readiness warning.
+    - Production build and static output verification passed. The full browser checkpoint used the installed Google Chrome and the separate 4174 preview.
+    - Inventory full run: 127 passed and three failed while checking Calc resource runtime declarations. After correction e5df97f80, all three cases passed together in the focused rerun. Together the runs verify 130 scenarios.
+    - Command: `node_modules/.bin/vitest run --config vitest.tooling.config.ts --maxWorkers 1 --testTimeout 240000 --hookTimeout 180000`. Result: pass. Evidence: 194 tests in 47 files. The first npm-wrapper invocation rejected the duplicate worker setting before running any tests.
+    - The full Office run exposed stale resource expectations for Tools, Copy and Paste. Updated these tests and the mirrored browser toolbar expectations in 4c277369f. The resource and clipboard Vitest retry passed all 21 tests in two files. The real browser toolbar passed at both configured viewport sizes, including accessibility checks.
+    - The full Office run also exposed a stale assertion that native Excel A1 formula output was unsupported. Updated the check to assert the exact exported sheet-qualified formula in 19f546e1658e. The formula, range utility and Calc options retry passed all 40 tests in three files.
+    - Both Writer cell-alignment browser scenarios reproduce the known mismatch from task 458SWH. The traces show Chromium returning `safe flex-end` for the assertion expecting `safe flow-end`.
+    - Direct Chrome smoke with clipboard permissions on the built application passed. The Copy toolbar button and Ctrl+Shift+V opened the original preset dialog, Values Only pasted the source formula result as a constant, and Undo cleared the destination while preserving the source. Evidence: output/playwright/calc-task10/paste-special-*-evidence.log.
+    - The Calc browser project finished with 112 passes and two stale standard-toolbar expectations in the original mirror. Both traces report the expected eight buttons and actual ten buttons. The two updated toolbar tests passed on the same built application, for 114 verified Calc browser scenarios across both runs.
+    - Full Playwright: 607 passed and six failed across 613 scenarios (exit 1). The two Calc toolbar failures passed in the earlier targeted retry. Two shared scenarios for Calc narrow menus had a stale native root list that omitted Tools. Updated the complete Calc root list in 930fa7f2141f and ran all five shared menu cases, with three Calc and two Writer passes. Across the full run and retries, 611 distinct browser scenarios passed and two known Writer alignment failures remain.
+    - Full Office Vitest: 33,957 passed, three failed and 23 skipped across 2,258 files (exit 1). All three failed Calc assertions passed after the test corrections. The full run also found two uncaught Calc keyboard events in otherwise passing scenarios. Reproduced both exceptions in isolation and fixed DOM key adaptation in 67eece481542. The scoped retry passed 60 tests in seven files, with zero unhandled errors. Across the full run and fixes, 33,960 active scenarios have passing evidence.
+    - Post-fix TypeScript, changed-path lint and formatting, provenance, resources, dependencies, policy routing, AgentPlane doctor, Vite production build, and static smoke passed. The scoped Chrome retry passed all six cases on the rebuilt application, including Calc row and column selection and standard toolbar at both widths and Writer submenu Enter and Space.
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202611212010-FJ8YQ4/blueprint/resolved-snapshot.json
+    - old_digest: d95f8aa94500ed4cd503d16670e6ab6d03850381376451c9bc1d4ed99ca4c6d2
+    - current_digest: d95f8aa94500ed4cd503d16670e6ab6d03850381376451c9bc1d4ed99ca4c6d2
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202611212010-FJ8YQ4
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task complete 202611212010-FJ8YQ4 --result verified-202611212010-FJ8YQ4 --commit 6907683dd1bac5a8d9dff5382119f5ff13473b99
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
+    <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Revert the clipboard implementation commits to restore the earlier command availability and admission mask without changing workbook data or I/O policy."
   Findings: |-
     The browser uses the original Calc Paste Special slot and accelerators. Internal cell transfers open the Insert Contents workflow with the pinned first-open defaults, four presets, the original Run immediately control, and session preferences. The unsupported arithmetic, link, shift, comment and object controls are disabled. External browser text presents the available format and then uses the existing text importer.
@@ -128,6 +181,53 @@ Run focused clipboard, paste, format, Undo and workspace tests. Run Office TypeS
 - Full Playwright: 607 passed and six failed across 613 scenarios (exit 1). The two Calc toolbar failures passed in the earlier targeted retry. Two shared scenarios for Calc narrow menus had a stale native root list that omitted Tools. Updated the complete Calc root list in 930fa7f2141f and ran all five shared menu cases, with three Calc and two Writer passes. Across the full run and retries, 611 distinct browser scenarios passed and two known Writer alignment failures remain.
 - Full Office Vitest: 33,957 passed, three failed and 23 skipped across 2,258 files (exit 1). All three failed Calc assertions passed after the test corrections. The full run also found two uncaught Calc keyboard events in otherwise passing scenarios. Reproduced both exceptions in isolation and fixed DOM key adaptation in 67eece481542. The scoped retry passed 60 tests in seven files, with zero unhandled errors. Across the full run and fixes, 33,960 active scenarios have passing evidence.
 - Post-fix TypeScript, changed-path lint and formatting, provenance, resources, dependencies, policy routing, AgentPlane doctor, Vite production build, and static smoke passed. The scoped Chrome retry passed all six cases on the rebuilt application, including Calc row and column selection and standard toolbar at both widths and Writer submenu Enter and Space.
+
+<!-- BEGIN VERIFICATION RESULTS -->
+### 2026-11-21T22:47:11.152Z — VERIFY — ok
+
+By: CODER
+
+Note: Verified: Calc Paste Special, undo ownership, the scheduled full checkpoint, and all Calc findings through the scoped retries. The two baseline Writer failures are recorded separately.
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-21T22:45:06.126Z, excerpt_hash=sha256:6c7ab77ee48078786d8ecd2e1ac2684dafd6dc62d84a9f976672810854ccb224
+
+Details:
+
+- Command: `cd apps/office && ../../node_modules/.bin/vitest run --config vitest.calc.config.ts --maxWorkers 2 --testTimeout 180000 clipboard paste-block paste-selection paste-editability reference-protocol impex calc-workbench calc-recalculation`. Result: pass. Evidence: 274 tests in 22 files, including tdf69450 and the Paste Special presets, external text format, formula owner and history.
+- Office TypeScript, changed-path Prettier and ESLint, Calc resources, source provenance, dependencies, policy routing and AgentPlane doctor passed. Doctor shows the existing managed hook readiness warning.
+- Production build and static output verification passed. The full browser checkpoint used the installed Google Chrome and the separate 4174 preview.
+- Inventory full run: 127 passed and three failed while checking Calc resource runtime declarations. After correction e5df97f80, all three cases passed together in the focused rerun. Together the runs verify 130 scenarios.
+- Command: `node_modules/.bin/vitest run --config vitest.tooling.config.ts --maxWorkers 1 --testTimeout 240000 --hookTimeout 180000`. Result: pass. Evidence: 194 tests in 47 files. The first npm-wrapper invocation rejected the duplicate worker setting before running any tests.
+- The full Office run exposed stale resource expectations for Tools, Copy and Paste. Updated these tests and the mirrored browser toolbar expectations in 4c277369f. The resource and clipboard Vitest retry passed all 21 tests in two files. The real browser toolbar passed at both configured viewport sizes, including accessibility checks.
+- The full Office run also exposed a stale assertion that native Excel A1 formula output was unsupported. Updated the check to assert the exact exported sheet-qualified formula in 19f546e1658e. The formula, range utility and Calc options retry passed all 40 tests in three files.
+- Both Writer cell-alignment browser scenarios reproduce the known mismatch from task 458SWH. The traces show Chromium returning `safe flex-end` for the assertion expecting `safe flow-end`.
+- Direct Chrome smoke with clipboard permissions on the built application passed. The Copy toolbar button and Ctrl+Shift+V opened the original preset dialog, Values Only pasted the source formula result as a constant, and Undo cleared the destination while preserving the source. Evidence: output/playwright/calc-task10/paste-special-*-evidence.log.
+- The Calc browser project finished with 112 passes and two stale standard-toolbar expectations in the original mirror. Both traces report the expected eight buttons and actual ten buttons. The two updated toolbar tests passed on the same built application, for 114 verified Calc browser scenarios across both runs.
+- Full Playwright: 607 passed and six failed across 613 scenarios (exit 1). The two Calc toolbar failures passed in the earlier targeted retry. Two shared scenarios for Calc narrow menus had a stale native root list that omitted Tools. Updated the complete Calc root list in 930fa7f2141f and ran all five shared menu cases, with three Calc and two Writer passes. Across the full run and retries, 611 distinct browser scenarios passed and two known Writer alignment failures remain.
+- Full Office Vitest: 33,957 passed, three failed and 23 skipped across 2,258 files (exit 1). All three failed Calc assertions passed after the test corrections. The full run also found two uncaught Calc keyboard events in otherwise passing scenarios. Reproduced both exceptions in isolation and fixed DOM key adaptation in 67eece481542. The scoped retry passed 60 tests in seven files, with zero unhandled errors. Across the full run and fixes, 33,960 active scenarios have passing evidence.
+- Post-fix TypeScript, changed-path lint and formatting, provenance, resources, dependencies, policy routing, AgentPlane doctor, Vite production build, and static smoke passed. The scoped Chrome retry passed all six cases on the rebuilt application, including Calc row and column selection and standard toolbar at both widths and Writer submenu Enter and Space.
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202611212010-FJ8YQ4/blueprint/resolved-snapshot.json
+- old_digest: d95f8aa94500ed4cd503d16670e6ab6d03850381376451c9bc1d4ed99ca4c6d2
+- current_digest: d95f8aa94500ed4cd503d16670e6ab6d03850381376451c9bc1d4ed99ca4c6d2
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202611212010-FJ8YQ4
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task complete 202611212010-FJ8YQ4 --result verified-202611212010-FJ8YQ4 --commit 6907683dd1bac5a8d9dff5382119f5ff13473b99
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
+
+<!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
 
