@@ -7,7 +7,8 @@
     "status": "mapped",
     "upstreamPath": "offapi/com/sun/star/util/SearchOptions2.idl",
     "localSymbols": [
-      "SearchOptions2"
+      "SearchOptions2",
+      "cppu_detail_getUnoType_SearchOptions2"
     ],
     "upstreamSymbols": [
       "SearchOptions2",
@@ -15,7 +16,8 @@
       "WildcardEscapeCharacter"
     ],
     "preservedResponsibilities": [
-      "Original SearchOptions inheritance and two extra fields, default/copy/full constructor shape and independent value ownership. New AlgorithmType2 defaults to zero and remains independent of inherited obsolete algorithmType; wildcard escape defaults to zero. This is a real value struct, not an initialized search/configuration service."
+      "Original SearchOptions inheritance and two extra fields, default/copy/full constructor shape and independent value ownership. New AlgorithmType2 defaults to zero and remains independent of inherited obsolete algorithmType; wildcard escape defaults to zero. This is a real value struct, not an initialized search/configuration service.",
+      "Provides the normal CPPU type for SearchOptions2 and supports real Any transport of the derived search options."
     ],
     "omittedResponsibilities": [
       "Complete generated UNO ABI/service and whole application/UI fidelity remain unverified; source/portable value tests do not promote full parity."
@@ -29,6 +31,10 @@
         {
           "path": "apps/office/src/i18nutil/source/utility/native-search-options.test.ts",
           "marker": "retains distinct old/new/typed zero defaults"
+        },
+        {
+          "path": "apps/office/src/svl/source/items/srchitem.test.ts",
+          "marker": "round-trips the native Any sequence"
         }
       ],
       "upstream": [

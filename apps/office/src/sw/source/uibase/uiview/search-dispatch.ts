@@ -68,30 +68,46 @@ export function TransformWriterSearchParameters(
   dialogDefaults: WriterSearchItem,
 ): WriterExecuteSearchArguments | undefined {
   if (typeof value !== "object" || value === null) return undefined;
-  if ("SearchItem" in value) {
-    const request = value as WriterExecuteSearchArguments;
-    if (!Array.isArray(request.SearchItem)) return request;
-    const item = new SvxSearchItem(getWriterSlotId(WRITER_COMMAND_IDS.searchProperties));
-    const projected =
-      item.PutValue(request.SearchItem, 0) && ProjectWriterSearchItem(item, dialogDefaults);
-    return projected ? { ...request, SearchItem: projected } : undefined;
-  }
+  const args = [...properties(value)];
+  const whole = args.filter(
+    /** Finds the complete formal SearchItem arguments. @param property - Named argument. @returns Whether it carries the whole item. */
+    ([name]) => name === "SearchItem",
+  );
   const item = new SvxSearchItem(getWriterSlotId(WRITER_COMMAND_IDS.searchProperties));
-  let quiet: boolean | undefined;
-  let useAttrItemList: boolean | undefined;
-  let converted = false;
-  for (const [name, argument] of properties(value)) {
-    if (name === "Quiet") quiet ??= readBool(argument, false);
-    else if (name === "UseAttrItemList") useAttrItemList ??= readBool(argument, true);
-    else if (name.startsWith("SearchItem.")) {
+  let projected: WriterSearchSlotItem | undefined;
+  if (whole.length > 0) {
+    for (const [, argument] of whole) {
+      if (argument instanceof SvxSearchItem)
+        projected = ProjectWriterSearchItem(argument, dialogDefaults);
+      else if (argument instanceof Any || Array.isArray(argument)) {
+        if (item.PutValue(argument, 0)) projected = ProjectWriterSearchItem(item, dialogDefaults);
+      } else if (typeof argument === "object" && argument !== null && "search" in argument)
+        projected = argument as WriterSearchSlotItem;
+    }
+  } else {
+    let converted = false;
+    for (const [name, argument] of args) {
+      if (!name.startsWith("SearchItem.")) continue;
       const member = searchMembers.get(name.slice("SearchItem.".length));
       // TransformParameters retains the result from the last recognized member.
       if (member !== undefined) converted = item.PutValue(argument, member);
     }
+    if (converted) projected = ProjectWriterSearchItem(item, dialogDefaults);
   }
-  const projected = converted && ProjectWriterSearchItem(item, dialogDefaults);
+  const quiet = args.find(
+    /** Finds the first Quiet formal argument. @param property - Named argument. @returns Whether it supplies Quiet. */
+    ([name]) => name === "Quiet",
+  );
+  const useAttrItemList = args.find(
+    /** Finds the first attribute-list formal argument. @param property - Named argument. @returns Whether it controls attribute-list use. */
+    ([name]) => name === "UseAttrItemList",
+  );
   return projected
-    ? { SearchItem: projected, Quiet: quiet ?? false, UseAttrItemList: useAttrItemList ?? true }
+    ? {
+        SearchItem: projected,
+        Quiet: readBool(quiet?.[1], false),
+        UseAttrItemList: readBool(useAttrItemList?.[1], true),
+      }
     : undefined;
 }
 

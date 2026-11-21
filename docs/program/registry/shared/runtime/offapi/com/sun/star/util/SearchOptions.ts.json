@@ -18,12 +18,14 @@
       "evidence": [
         "apps/office/src/offapi/com/sun/star/util/SearchOptions.ts#SearchOptions",
         "apps/office/src/i18nutil/source/utility/native-search-options.test.ts",
-        "offapi/com/sun/star/util/SearchOptions.idl#SearchOptions"
+        "offapi/com/sun/star/util/SearchOptions.idl#SearchOptions",
+        "apps/office/src/svl/source/items/srchitem.test.ts"
       ],
-      "justification": "Original nine-field inherited UNO value boundary, IDL field-order default/copy/full construction and actual OUString/Locale value fields. String/Locale assignments keep independent owned fields without canonicalization, ambient locale lookup or direct JS strings. Generated C++ struct initializer syntax is represented by local copy/initializer methods; allocator/ABI and complete UNO service machinery are not claimed.",
+      "justification": "Original nine-field inherited UNO value boundary, IDL field-order default/copy/full construction and actual OUString/Locale value fields. String/Locale assignments keep independent owned fields without canonicalization, ambient locale lookup or direct JS strings. Generated C++ struct initializer syntax is represented by local copy/initializer methods; allocator/ABI and complete UNO service machinery are not claimed. Provides the normal CPPU type for SearchOptions and supports real Any transport of the derived search options.",
       "knownViolations": [],
       "localSymbols": [
-        "SearchOptions"
+        "SearchOptions",
+        "cppu_detail_getUnoType_SearchOptions"
       ],
       "sourceResponsibility": "unverified",
       "upstreamFile": "offapi/com/sun/star/util/SearchOptions.idl",

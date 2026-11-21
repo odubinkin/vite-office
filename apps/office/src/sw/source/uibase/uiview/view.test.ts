@@ -327,6 +327,19 @@ it("executes independent pooled and aggregate SearchItems through the Sfx view",
   expect(view.GetSearch().GetFeedback()).toMatchObject({ result: { matches: 2 } });
   expect(view.Execute(command, { SearchItem: item.QueryValue() })).toMatchObject({ value: true });
   expect(view.GetSearch().GetFeedback()).toMatchObject({ result: { matches: 1 } });
+  const encoded = new Any();
+  expect(item.QueryValue(encoded)).toBe(true);
+  const whole = new PropertyValue(unicode("SearchItem"), 0, encoded, PropertyState.DIRECT_VALUE);
+  const dotted = new PropertyValue(
+    unicode("SearchItem.SearchString"),
+    0,
+    new Any(unicode("missing").getDataAddress(), "OUString"),
+    PropertyState.DIRECT_VALUE,
+  );
+  expect(view.Execute(command, [dotted, whole])).toMatchObject({ value: true });
+  expect(view.Execute(command, [whole, dotted])).toMatchObject({ value: true });
+  whole.Value = new Any(false);
+  expect(view.Execute(command, [whole, dotted])).toMatchObject({ value: false });
   view.Close();
 });
 

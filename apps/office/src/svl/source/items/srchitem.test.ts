@@ -1,5 +1,15 @@
 /** @fileoverview Verifies original scalar and aggregate SvxSearchItem value semantics. */
 import { expect, it } from "vitest";
+import { Sequence } from "../../../cppu/inc/com/sun/star/uno/Sequence";
+import {
+  cppu_detail_getUnoType_PropertyValue as propertyType,
+  PropertyValue,
+} from "../../../udkapi/com/sun/star/beans/PropertyValue";
+import {
+  cppu_detail_getUnoType_SearchOptions2 as optionsType,
+  SearchOptions2,
+} from "../../../offapi/com/sun/star/util/SearchOptions2";
+import { TypeClass } from "../../../udkapi/com/sun/star/uno/TypeClass";
 import { Any } from "../../../cppu/inc/com/sun/star/uno/Any";
 import { LANGUAGE_NONE } from "../../../i18nlangtag/inc/lang";
 import { SearchAlgorithms } from "../../../offapi/com/sun/star/util/SearchAlgorithms";
@@ -76,4 +86,46 @@ it("requires thirteen distinct converted aggregate names while retaining partial
   expect(target.QueryValue(MID.MID_SEARCH_BACKWARD)).toBe(true);
   expect(target.equals(source)).toBe(true);
   expect(target.PutValue(properties, 0)).toBe(true);
+});
+
+it("round-trips the native Any sequence and preserves the extended UNO type", /** Exercises genuine struct inheritance, member types, sequence extraction and value independence. @returns Nothing. */ () => {
+  const item = SvxSearchItem.CreateDefault();
+  item.PutValue("a\0😀", MID.MID_SEARCH_SEARCHSTRING);
+  item.PutValue("new", MID.MID_SEARCH_REPLACESTRING);
+  item.PutValue(WILDCARD, MID.MID_SEARCH_ALGORITHMTYPE2);
+  item.PutValue(1033, MID.MID_SEARCH_LOCALE);
+  item.PutValue(-2147483648, MID.MID_SEARCH_TRANSLITERATEFLAGS);
+  const output = new Any();
+  expect(item.QueryValue(output)).toBe(true);
+  expect(output.getValueTypeClass()).toBe(TypeClass.SEQUENCE);
+  const Properties = Sequence.specialize<{ get(offset: number): unknown }>(propertyType, 48);
+  const properties = new Properties();
+  expect(output.extract(properties.getAddress(), ["Sequence", propertyType])).toBe(true);
+  expect(properties.getLength()).toBe(13);
+  const optionsValue = new PropertyValue(PropertyValue.unacquired(properties.operatorIndex(0)));
+  const options = new SearchOptions2();
+  expect(optionsValue.Value.extract(options, optionsType)).toBe(true);
+  expect(options).toMatchObject({
+    algorithmType: SearchAlgorithms.ABSOLUTE,
+    AlgorithmType2: WILDCARD,
+    WildcardEscapeCharacter: 92,
+    transliterateFlags: -2147483648,
+  });
+  expect(options.searchString.getLength()).toBe(4);
+  expect(options.Locale.Language.getLength()).toBe(2);
+  const clone = SvxSearchItem.CreateDefault();
+  expect(clone.PutValue(output, 0)).toBe(true);
+  expect(clone.equals(item)).toBe(true);
+  item.PutValue("changed", MID.MID_SEARCH_SEARCHSTRING);
+  expect(clone.GetSearchOptions().searchString.equals(options.searchString)).toBe(true);
+  expect(clone.QueryValue(MID.MID_SEARCH_LOCALE)).toBe(1033);
+  expect(clone.QueryValue(output, MID.MID_SEARCH_ALGORITHMTYPE2)).toBe(true);
+  expect(output.getValueTypeClass()).toBe(TypeClass.SHORT);
+  expect(clone.QueryValue(output, MID.MID_SEARCH_STARTPOINTX)).toBe(false);
+  const algorithm: [number] = [0];
+  expect(output.extract(algorithm, "sal_Int16")).toBe(true);
+  expect(algorithm).toEqual([WILDCARD]);
+  optionsValue.dispose();
+  properties.dispose();
+  output.dispose();
 });

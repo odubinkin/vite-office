@@ -7,7 +7,8 @@
     "status": "mapped",
     "upstreamPath": "offapi/com/sun/star/util/SearchOptions.idl",
     "localSymbols": [
-      "SearchOptions"
+      "SearchOptions",
+      "cppu_detail_getUnoType_SearchOptions"
     ],
     "upstreamSymbols": [
       "SearchOptions",
@@ -16,7 +17,8 @@
       "transliterateFlags"
     ],
     "preservedResponsibilities": [
-      "Original nine-field inherited UNO value boundary, IDL field-order default/copy/full construction and actual OUString/Locale value fields. String/Locale assignments keep independent owned fields without canonicalization, ambient locale lookup or direct JS strings. Generated C++ struct initializer syntax is represented by local copy/initializer methods; allocator/ABI and complete UNO service machinery are not claimed."
+      "Original nine-field inherited UNO value boundary, IDL field-order default/copy/full construction and actual OUString/Locale value fields. String/Locale assignments keep independent owned fields without canonicalization, ambient locale lookup or direct JS strings. Generated C++ struct initializer syntax is represented by local copy/initializer methods; allocator/ABI and complete UNO service machinery are not claimed.",
+      "Provides the normal CPPU type for SearchOptions and supports real Any transport of the derived search options."
     ],
     "omittedResponsibilities": [
       "Complete generated UNO ABI/service and whole application/UI fidelity remain unverified; source/portable value tests do not promote full parity."
@@ -30,6 +32,10 @@
         {
           "path": "apps/office/src/i18nutil/source/utility/native-search-options.test.ts",
           "marker": "retains distinct old/new/typed zero defaults"
+        },
+        {
+          "path": "apps/office/src/svl/source/items/srchitem.test.ts",
+          "marker": "round-trips the native Any sequence"
         }
       ],
       "upstream": [

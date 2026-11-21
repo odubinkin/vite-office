@@ -4,7 +4,7 @@ title: "Implement Writer search and replace core and browser UI"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 52
+revision: 53
 origin:
   system: "manual"
 depends_on:
@@ -160,6 +160,9 @@ comments:
   -
     author: "CODER"
     body: "Verified checkpoint: shared SvxSearchItem owns original defaults, Which, cloned SearchOptions2, the scalar MID_SEARCH member values, locale conversion, equality and the thirteen-property browser aggregate. Writer ExecuteSearch now handles a direct SID_SEARCH_ITEM with the SfxBoolItem Quiet argument, reconstructs dotted member requests through the same pooled item, and accepts the aggregate browser projection. RepeatSearch owns independent options after the caller changes its item. The item preserves mutation before aggregate conversion failure (WRITER-698 and CALC-785). The modeless dialog still owns its browser draft. Live ConfigItem preferences/notifications, native Any-encoded aggregate exchange, search through notes, formatting criteria and native ICU regex remain open. Verification: all 62 targeted Writer tests, 38 shared item/engine tests and two generated resource tests passed. Production build, dependency boundaries, provenance/source tree, JSDoc, file sizes, scoped ESLint/Prettier, policy routing and whitespace passed. The full suite was not due for this intermediate checkpoint. The parent remains DOING and the goal will be paused only after complete task closure per user instruction."
+  -
+    author: "CODER"
+    body: "Verified checkpoint: SearchAlgorithms, SearchOptions and derived SearchOptions2 now provide actual CPPU type metadata and member addresses at the original IDL boundaries. SvxSearchItem reads/writes the original typed scalar Any values and the real thirteen-property UNO sequence, preserving field widths, inheritance, default property metadata, and prior partial-conversion behavior. Writer ExecuteSearch accepts a whole SearchItem in an Any through the native PropertyValue request path. A whole formal argument takes precedence over dotted members even when the argument fails conversion. Existing browser drafts and scalar projections remain accepted. Verification: all 50 Writer tests in three files and 35 shared search/UNO tests in three files passed; the final three SvxSearchItem tests passed again independently. Both generated resource tests and the production build passed. Dependency boundaries, JSDoc, file sizes, source provenance/tree, scoped ESLint/Prettier, policy routing and whitespace passed. Live search preferences, search attributes, notes and ICU regex remain open. No full suite at this checkpoint. The task stays DOING and the goal remains active until the user-requested pause after task closure."
 events:
   -
     type: "status"
@@ -368,8 +371,13 @@ events:
     at: "2026-11-21T07:53:30.837Z"
     author: "CODER"
     body: "Verified checkpoint: shared SvxSearchItem owns original defaults, Which, cloned SearchOptions2, the scalar MID_SEARCH member values, locale conversion, equality and the thirteen-property browser aggregate. Writer ExecuteSearch now handles a direct SID_SEARCH_ITEM with the SfxBoolItem Quiet argument, reconstructs dotted member requests through the same pooled item, and accepts the aggregate browser projection. RepeatSearch owns independent options after the caller changes its item. The item preserves mutation before aggregate conversion failure (WRITER-698 and CALC-785). The modeless dialog still owns its browser draft. Live ConfigItem preferences/notifications, native Any-encoded aggregate exchange, search through notes, formatting criteria and native ICU regex remain open. Verification: all 62 targeted Writer tests, 38 shared item/engine tests and two generated resource tests passed. Production build, dependency boundaries, provenance/source tree, JSDoc, file sizes, scoped ESLint/Prettier, policy routing and whitespace passed. The full suite was not due for this intermediate checkpoint. The parent remains DOING and the goal will be paused only after complete task closure per user instruction."
+  -
+    type: "comment"
+    at: "2026-11-21T08:03:16.179Z"
+    author: "CODER"
+    body: "Verified checkpoint: SearchAlgorithms, SearchOptions and derived SearchOptions2 now provide actual CPPU type metadata and member addresses at the original IDL boundaries. SvxSearchItem reads/writes the original typed scalar Any values and the real thirteen-property UNO sequence, preserving field widths, inheritance, default property metadata, and prior partial-conversion behavior. Writer ExecuteSearch accepts a whole SearchItem in an Any through the native PropertyValue request path. A whole formal argument takes precedence over dotted members even when the argument fails conversion. Existing browser drafts and scalar projections remain accepted. Verification: all 50 Writer tests in three files and 35 shared search/UNO tests in three files passed; the final three SvxSearchItem tests passed again independently. Both generated resource tests and the production build passed. Dependency boundaries, JSDoc, file sizes, source provenance/tree, scoped ESLint/Prettier, policy routing and whitespace passed. Live search preferences, search attributes, notes and ICU regex remain open. No full suite at this checkpoint. The task stays DOING and the goal remains active until the user-requested pause after task closure."
 doc_version: 3
-doc_updated_at: "2026-11-21T07:53:30.837Z"
+doc_updated_at: "2026-11-21T08:03:16.179Z"
 doc_updated_by: "CODER"
 description: "Implement the approved coherent Writer search-and-replace feature from pinned LibreOffice sources: real shared search engine and options, native paragraph/cursor traversal and replacement/history contracts, view-owned search state and dispatch, Find toolbar and Find and Replace dialog with generated upstream command placement and shortcuts. Preserve source semantics and explicit unsupported boundaries; never substitute DOM text search or browser RegExp for ICU contracts. Work only on writer in vite-office-writer; local upstream reading approved, no network or merges. Keep active until approved scope is verified."
 sections:
