@@ -1,10 +1,11 @@
 ---
 id: "202611210550-KX1ZJ1"
 title: "Connect Calc header and footer content editing"
-status: "DOING"
+result_summary: "verified-202611210550-KX1ZJ1"
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 16
+revision: 18
 origin:
   system: "manual"
 depends_on: []
@@ -19,7 +20,7 @@ plan_approval:
   note: null
 verification:
   state: "ok"
-  updated_at: "2026-11-21T06:56:47.860Z"
+  updated_at: "2026-11-21T06:57:22.203Z"
   updated_by: "CODER"
   note: "verified-202611210550-KX1ZJ1"
   attempts: 0
@@ -41,11 +42,16 @@ quality_review:
     - "output/calc-hf-browser-desktop.log"
   findings:
     - "The focused cases establish menu and toolbar placement, first-page sharing and reset behavior, decoded file fields, source rich formatting, nested style transactions, and native ODS and XLSX round trips."
-commit: null
+commit:
+  hash: "67bb3d759d1999b04677c176ba1cdcadf25ac95a"
+  message: "🧩 KX1ZJ1 task: record Calc header and footer verification"
 comments:
   -
     author: "CODER"
     body: "Start: Connect source header/footer dialog variants and native rich-text fields to Calc."
+  -
+    author: "CODER"
+    body: "Verified: verified-202611210550-KX1ZJ1. Guided shortcut recorded verification and is closing the direct task with traceable commit metadata."
 events:
   -
     type: "status"
@@ -66,8 +72,21 @@ events:
     author: "CODER"
     state: "ok"
     note: "verified-202611210550-KX1ZJ1"
+  -
+    type: "verify"
+    at: "2026-11-21T06:57:22.203Z"
+    author: "CODER"
+    state: "ok"
+    note: "verified-202611210550-KX1ZJ1"
+  -
+    type: "status"
+    at: "2026-11-21T06:57:22.333Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: verified-202611210550-KX1ZJ1. Guided shortcut recorded verification and is closing the direct task with traceable commit metadata."
 doc_version: 3
-doc_updated_at: "2026-11-21T06:56:47.962Z"
+doc_updated_at: "2026-11-21T06:57:22.333Z"
 doc_updated_by: "CODER"
 description: "Connect the native standalone and page-style header/footer editors to Calc rich text and print fields."
 sections:
@@ -146,9 +165,43 @@ sections:
     - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
     - risks: none
 
+    ### 2026-11-21T06:57:22.203Z — VERIFY — ok
+
+    By: CODER
+
+    Note: verified-202611210550-KX1ZJ1
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-21T06:56:47.962Z, excerpt_hash=sha256:22cc917dfe4267b054cc0690b235867e5cd74727989eefa36d5550a3389aacd1
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202611210550-KX1ZJ1/blueprint/resolved-snapshot.json
+    - old_digest: 3ad25e72b198cd30f2a6c33c0a94e236ebf5231b3b9d0aa6c109589ed74807e0
+    - current_digest: 3ad25e72b198cd30f2a6c33c0a94e236ebf5231b3b9d0aa6c109589ed74807e0
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202611210550-KX1ZJ1
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task complete 202611210550-KX1ZJ1 --result verified-202611210550-KX1ZJ1 --commit 67bb3d759d1999b04677c176ba1cdcadf25ac95a
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Revert the implementation commit to restore the previous page-style settings and file behavior."
   Findings: "The standalone resource matrix, file field preset state, and reset behavior on unset content follow LibreOffice and are recorded as CALC-789–791. The browser preserves native rich-text objects, uses the standard sheet and page fields for a new workbook, and resolves file names through the current medium. The browser Text Attributes dialog projects the common font, color and position controls, and profile-based presets use empty profile values."
+extensions:
+  implementation_commit:
+    hash: "cb5a74a3e4375daa04bb31ce4a1e214593ed9375"
+    message: "🧩 KX1ZJ1 test: verify the connected Insert menu placement"
 id_source: "generated"
 ---
 ## Summary
@@ -231,6 +284,36 @@ DecisionContextRef:
 - operator_action: run_exact_argv
 - can_execute_now: true
 - safe_command: agentplane task complete 202611210550-KX1ZJ1 --result verified-202611210550-KX1ZJ1 --commit cb5a74a3e4375daa04bb31ce4a1e214593ed9375
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
+
+### 2026-11-21T06:57:22.203Z — VERIFY — ok
+
+By: CODER
+
+Note: verified-202611210550-KX1ZJ1
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-21T06:56:47.962Z, excerpt_hash=sha256:22cc917dfe4267b054cc0690b235867e5cd74727989eefa36d5550a3389aacd1
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202611210550-KX1ZJ1/blueprint/resolved-snapshot.json
+- old_digest: 3ad25e72b198cd30f2a6c33c0a94e236ebf5231b3b9d0aa6c109589ed74807e0
+- current_digest: 3ad25e72b198cd30f2a6c33c0a94e236ebf5231b3b9d0aa6c109589ed74807e0
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202611210550-KX1ZJ1
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task complete 202611210550-KX1ZJ1 --result verified-202611210550-KX1ZJ1 --commit 67bb3d759d1999b04677c176ba1cdcadf25ac95a
 - diagnostic_command: none
 - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
 - freshness: route=computed_local remote=remote_skipped
