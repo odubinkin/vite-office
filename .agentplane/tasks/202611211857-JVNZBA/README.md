@@ -1,10 +1,11 @@
 ---
 id: "202611211857-JVNZBA"
 title: "Connect the Calc Calculate submenu"
-status: "DOING"
+result_summary: "Connected the Calc Calculate submenu. Completed task six of the ten-task test cycle."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 9
+revision: 10
 origin:
   system: "manual"
 depends_on: []
@@ -41,11 +42,16 @@ quality_review:
     - "output/calc-JVNZBA-verified-tests.log"
   findings:
     - "Compared the source document shell, calculation tree and constant conversion with the mounted workbench and original UI and core regressions."
-commit: null
+commit:
+  hash: "81b6187abaf34c296e0ab6b499b992e3236d8998"
+  message: "🧩 JVNZBA code: connect Calc Calculate submenu"
 comments:
   -
     author: "CODER"
     body: "Start: connect the source Calc Calculate menu, calculation input, and undoable formula result conversion."
+  -
+    author: "CODER"
+    body: "Verified: connected the native Calculate submenu, F9 editor preview, full recalculation, automatic mode and undoable Formula to Value. All 84 focused tests passed."
 events:
   -
     type: "status"
@@ -60,8 +66,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "84 focused tests across 15 suites passed. Verified native AutoCalculate, ordinary and hard recalc, volatility and manual caches, F9 preview and Enter insertion, tdf131326, split formula groups and integrated undo. TypeScript, changed-path lint and format, generated Calc resources, source provenance, module dependencies and policy routing passed."
+  -
+    type: "status"
+    at: "2026-11-21T19:15:37.835Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: connected the native Calculate submenu, F9 editor preview, full recalculation, automatic mode and undoable Formula to Value. All 84 focused tests passed."
 doc_version: 3
-doc_updated_at: "2026-11-21T19:14:16.310Z"
+doc_updated_at: "2026-11-21T19:15:37.836Z"
 doc_updated_by: "CODER"
 description: "Wire AutoCalculate, Recalculate, Recalculate Hard and Formula to Value from the native submenu, with formula preview and undo."
 sections:
