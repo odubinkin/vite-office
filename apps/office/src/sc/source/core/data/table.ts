@@ -70,6 +70,8 @@ export class ScTable {
   declare private bPrintEntireSheet: boolean;
   declare private moRepeatColRange: ScRange | undefined;
   declare private moRepeatRowRange: ScRange | undefined;
+  FillPrintSaver = table1.FillPrintSaver;
+  RestorePrintRanges = table1.RestorePrintRanges;
   GetPrintRangeCount = table1.GetPrintRangeCount;
   GetPrintRange = table1.GetPrintRange;
   IsPrintEntireSheet = table1.IsPrintEntireSheet;
@@ -77,6 +79,7 @@ export class ScTable {
   GetRepeatRowRange = table1.GetRepeatRowRange;
   AddPrintRange = table1.AddPrintRange;
   ClearPrintRanges = table1.ClearPrintRanges;
+  ClearPrintNamedRanges = table1.ClearPrintNamedRanges;
   SetPrintEntireSheet = table1.SetPrintEntireSheet;
   SetRepeatColRange = table1.SetRepeatColRange;
   SetRepeatRowRange = table1.SetRepeatRowRange;

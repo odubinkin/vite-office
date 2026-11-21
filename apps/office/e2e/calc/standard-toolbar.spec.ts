@@ -1,7 +1,7 @@
 /** @fileoverview Connected Calc standard toolbar commands, compact icon geometry and real bindings. */
 import AxeBuilder from "@axe-core/playwright";
 import { expect, test } from "@playwright/test";
-const labels = ["Open", "Clear", "Undo", "Redo", "Freeze Panes", "Split Window"];
+const labels = ["Open", "Clear", "Undo", "Redo", "Print Area", "Freeze Panes", "Split Window"];
 for (const viewport of [
   { width: 1280, height: 800 },
   { width: 390, height: 600 },

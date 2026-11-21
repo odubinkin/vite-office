@@ -1,7 +1,7 @@
 /** @fileoverview Browser input/viewport binding for the current scalar Calc model. Actual cells,marks,formula evaluation and undo stacks remain with native-shaped owners. */
 import type { ScPaneCommand } from "../../source/ui/view/tabview";
 import { ScUndoOutline } from "../../source/ui/undo/undodat";
-import { ScUndoShowHideTab, ScUndoTabColor } from "../../source/ui/undo/undotab";
+import { ScUndoShowHideTab, ScUndoTabColor, ScUndoPrintRange } from "../../source/ui/undo/undotab";
 import { ScMarkData } from "../../inc/markdata";
 import { ScViewUtil } from "../../source/ui/view/viewutil";
 import * as pointerInput from "./calc-pointer-selection";
@@ -85,7 +85,6 @@ export class CalcViewController {
     else this.viewShell.ToggleFormula(request);
     this.Changed();
   }
-
   /** Routes native indentation through view,document operation and history. @param increment - Direction. @returns Result. */
   ChangeIndent(increment: boolean): boolean {
     if (!this.Commit()) return false;
@@ -889,6 +888,7 @@ export class CalcViewController {
       cursorAction instanceof ScUndoWidthOrHeight ||
       cursorAction instanceof ScUndoShowHideTab ||
       cursorAction instanceof ScUndoTabColor ||
+      cursorAction instanceof ScUndoPrintRange ||
       cursorAction instanceof ScUndoOutline
     ) {
       if (cursorAction instanceof ScUndoWidthOrHeight) {

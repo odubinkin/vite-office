@@ -24,6 +24,10 @@
       "sha256": "810c86528767c4e390fd6650f1cb663f395ad76c0f920c175607db94b7bfd079"
     },
     {
+      "path": "sc/uiconfig/scalc/popupmenu/printranges.xml",
+      "sha256": "28f7b269de76d1be4c4f5ca7b9132322d07f0b50ed1d900ebbd46f1cc0d84390"
+    },
+    {
       "path": "officecfg/registry/data/org/openoffice/Office/UI/CalcCommands.xcu",
       "sha256": "15840b53e3c8fd35b65f6de403a05c3c32b7b94d0ca998da4f01f5ae75c60dde"
     },
@@ -86,6 +90,12 @@
     ".uno:AddName": {
       "label": "Define Name",
       "showsDialog": true,
+      "shortcuts": [],
+      "semantics": "action"
+    },
+    ".uno:AddPrintArea": {
+      "label": "Add",
+      "showsDialog": false,
       "shortcuts": [],
       "semantics": "action"
     },
@@ -3360,7 +3370,41 @@
           { "commandUrl": ".uno:FontDialog", "kind": "command", "visible": true },
           { "commandUrl": ".uno:ParagraphDialog", "kind": "command", "visible": true },
           { "commandUrl": ".uno:PageFormatDialog", "kind": "command", "visible": true },
-          { "commandUrl": ".uno:PrintRangesMenu", "kind": "command", "visible": true },
+          {
+            "id": ".uno:PrintRangesMenu",
+            "kind": "menu",
+            "label": "Print Ranges",
+            "items": [
+              {
+                "commandUrl": ".uno:DefinePrintArea",
+                "kind": "command",
+                "visible": true,
+                "label": "Define",
+                "showsDialog": false
+              },
+              {
+                "commandUrl": ".uno:AddPrintArea",
+                "kind": "command",
+                "visible": true,
+                "label": "Add",
+                "showsDialog": false
+              },
+              {
+                "commandUrl": ".uno:EditPrintArea",
+                "kind": "command",
+                "visible": true,
+                "label": "Edit",
+                "showsDialog": true
+              },
+              {
+                "commandUrl": ".uno:DeletePrintArea",
+                "kind": "command",
+                "visible": true,
+                "label": "Clear",
+                "showsDialog": false
+              }
+            ]
+          },
           { "kind": "separator" },
           { "commandUrl": ".uno:ConditionalFormatMenu", "kind": "command", "visible": true },
           { "commandUrl": ".uno:AutoFormat", "kind": "command", "visible": true },

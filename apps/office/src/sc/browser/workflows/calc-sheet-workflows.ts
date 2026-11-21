@@ -12,6 +12,7 @@ import { SfxInt16Item, SfxUInt16Item } from "../../../svl/source/items/intitem";
 import { OUString } from "../../../sal/inc/rtl/ustring";
 import { text, unicode } from "../../../i18nlangtag/source/isolang/isolang.tables";
 import { SvxColorItem } from "../../../editeng/inc/colritem";
+import { SfxBoolItem } from "../../../svl/source/items/cenumitm";
 import { SfxStringItem } from "../../../svl/source/items/stritem";
 import { SfxIntegerListItem } from "../../../svl/source/items/ilstitem";
 import { Color } from "../../../tools/inc/color";
@@ -36,6 +37,15 @@ import {
   calcSheetCommands,
   FID_TAB_SET_TAB_BG_COLOR,
 } from "../../sdi/scalc";
+import {
+  calcPrintRangeCommands,
+  FN_PRINT_ENTIRE_SHEET,
+  FN_PRINT_REPEAT_COL,
+  FN_PRINT_REPEAT_ROW,
+  SID_CHANGE_PRINTAREA,
+  SID_DEFINE_PRINTAREA,
+} from "../../sdi/tabvwsh";
+import { CreatePrintAreasModel, type PrintAreasModel } from "../../source/ui/pagedlg/areasdlg";
 import type { CalcViewController } from "../controller/calc-view-controller";
 /** Immutable native dialog initialization;names are copied only as dialog widget resources. */
 export interface CalcGoToSheetRequest {
@@ -57,12 +67,21 @@ export type CalcSheetTabDialog =
 type SheetCommand = keyof typeof calcSheetCommands;
 /** Native manual outline operation identifiers. */
 type OutlineCommand = (typeof calcOutlineCommands)[number]["kind"];
+/** Native print-range slot operations. */
+type PrintRangeCommand = (typeof calcPrintRangeCommands)[number]["kind"];
+
+/** Looks up the original SfxStringItem by its Which ID. @param request - Slot request. @param which - Argument identity. @returns Native string with empty default. */
+function printRangeArgument(request: SfxRequest, which: number): string {
+  const item = request.GetArgs().find((candidate) => candidate.Which() === which);
+  return item instanceof SfxStringItem ? item.GetValue() : "";
+}
 
 /** Session-owned native Go to Sheet request and asynchronous result application. */
 export class CalcSheetWorkflows {
   readonly dialogs = new SfxDialogController<CalcGoToSheetRequest, string>();
   readonly tabDialogs = new SfxDialogController<CalcSheetTabDialog, number[] | string>();
   readonly metricDialogs = new SfxDialogController<ScMetricInputDlg, number>();
+  readonly printDialogs = new SfxDialogController<PrintAreasModel, SfxRequest | undefined>();
   private readonly shell: SfxShell;
   /** Connects a source command to the active document view. @param controller - Actual Calc controller. @returns Workflow. */
   constructor(readonly controller: CalcViewController) {
@@ -140,6 +159,23 @@ export class CalcSheetWorkflows {
               },
           }),
         ),
+        ...calcPrintRangeCommands.map(({ id, slotId, label, kind }) => ({
+          commandUrl: id,
+          slotId,
+          label,
+          getState: (target: CalcSheetWorkflows) => ({
+            enabled: target.CanExecutePrintRange(kind),
+          }),
+          execute: (target: CalcSheetWorkflows, request: SfxRequest) =>
+            target.ExecutePrintRange(kind, request),
+        })),
+        {
+          commandUrl: ".uno:ChangePrintArea",
+          slotId: SID_CHANGE_PRINTAREA,
+          label: "Change Print Area",
+          execute: (target: CalcSheetWorkflows, request: SfxRequest) =>
+            target.ChangePrintRange(request),
+        },
         ...calcOutlineCommands.map(
           /** Registers the cell-shell outline slots in the browser dispatch adapter. @param source - Source command. @returns Shell slot. */
           (source) => ({
@@ -284,8 +320,65 @@ export class CalcSheetWorkflows {
     return Boolean(
       this.tabDialogs.GetSnapshot() ||
       this.dialogs.GetSnapshot() ||
-      this.metricDialogs.GetSnapshot(),
+      this.metricDialogs.GetSnapshot() ||
+      this.printDialogs.GetSnapshot(),
     );
+  }
+
+  /** Reads source print-range availability from the current sheet. @param kind - Source command. @returns Slot state. */
+  private CanExecutePrintRange(kind: PrintRangeCommand): boolean {
+    if (this.printDialogs.GetSnapshot()) return kind === "edit";
+    if (this.HasSheetDialog()) return false;
+    const view = this.controller.viewData;
+    const sheet = view.GetDocument().FetchTable(view.GetTabNumber());
+    return !!sheet && (kind !== "clear" || !sheet.IsPrintEntireSheet());
+  }
+
+  /** Executes the original menu slots and toggles the modeless child window. @param kind - Source command. @param request - Actual slot request. @returns Completion. */
+  private async ExecutePrintRange(kind: PrintRangeCommand, request: SfxRequest): Promise<void> {
+    if (!this.controller.Commit()) return;
+    const view = this.controller.GetViewShell();
+    if (kind === "edit") {
+      const open = this.printDialogs.GetSnapshot();
+      if (open) {
+        this.printDialogs.Cancel(open.id);
+        return;
+      }
+      const model = CreatePrintAreasModel(view.GetViewData());
+      if (!model) return;
+      const result = await this.printDialogs.Request(model);
+      if (
+        result.kind === "accepted" &&
+        result.result &&
+        view === this.controller.GetViewShell() &&
+        model.tab === view.GetViewData().GetTabNumber()
+      )
+        this.ChangePrintRange(result.result);
+      return;
+    }
+    const typed = request.GetArgs().length > 0;
+    const print =
+      kind === "clear" ? "" : typed ? printRangeArgument(request, SID_DEFINE_PRINTAREA) : undefined;
+    view.SetPrintRanges(kind === "clear", print, undefined, undefined, kind === "add");
+    if (kind === "clear" || !typed) request.Done();
+    this.controller.SyncSheetView();
+  }
+
+  /** Applies the original dialog result slot. @param request - Typed print, repeat and entire-sheet items. @returns Nothing. */
+  private ChangePrintRange(request: SfxRequest): void {
+    if (!request.GetArgs().length) return;
+    const entire = request.GetArgs().find((item) => item.Which() === FN_PRINT_ENTIRE_SHEET);
+    this.controller
+      .GetViewShell()
+      .SetPrintRanges(
+        entire instanceof SfxBoolItem && entire.GetValue(),
+        printRangeArgument(request, SID_CHANGE_PRINTAREA),
+        printRangeArgument(request, FN_PRINT_REPEAT_COL),
+        printRangeArgument(request, FN_PRINT_REPEAT_ROW),
+        false,
+      );
+    request.Done();
+    this.controller.SyncSheetView();
   }
 
   /** Applies a level or group button through the active Calc shell. @param control - Native outline window action. @returns Nothing. */
@@ -501,6 +594,8 @@ export class CalcSheetWorkflows {
 
   /** Cancels the native async request before the session destroys its document. @returns Nothing. */
   Close(): void {
+    const print = this.printDialogs.GetSnapshot();
+    if (print) this.printDialogs.Cancel(print.id);
     const tab = this.tabDialogs.GetSnapshot();
     if (tab) this.tabDialogs.Cancel(tab.id);
     const width = this.metricDialogs.GetSnapshot();

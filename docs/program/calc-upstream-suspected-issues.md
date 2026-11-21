@@ -7464,3 +7464,31 @@ therefore become visible. Calc preserves the span and keeps filtered rows
 hidden.
 
 - [Original marked outline expansion](../../vendor/libreoffice-reference/sc/source/ui/docshell/olinefun.cxx)
+
+### CALC-784 — A1 repeat fields can reject their own absolute spelling
+
+The repeat parser counts the leading dollar sign against its endpoint
+length limit. A row such as `12345` is accepted and displayed as
+`$12345`, which the same dialog then rejects. The same mismatch affects
+three-letter columns. Calc preserves the parser limits and absolute
+display.
+
+- [Original A1 repeat parsing and formatting](../../vendor/libreoffice-reference/sc/source/ui/pagedlg/areasdlg.cxx)
+
+### CALC-785 — A trailing repeat-range separator accepts one endpoint
+
+The repeat parser accepts `1:` as row 1 because it validates the last
+endpoint only when the trailing buffer is nonempty. A leading separator
+or multiple separators are rejected. Calc preserves this spelling.
+
+- [Original repeat range parsing](../../vendor/libreoffice-reference/sc/source/ui/pagedlg/areasdlg.cxx)
+
+### CALC-786 — Print-range undo omits removed sheet-local names
+
+Replacing the print area removes sheet-local names flagged as print
+areas. The undo snapshot records explicit areas, the entire-sheet flag
+and repeat titles, so undo restores those settings and leaves the names
+removed. Calc preserves these snapshot contents.
+
+- [Original print range change](../../vendor/libreoffice-reference/sc/source/ui/view/viewfun2.cxx)
+- [Original name removal and print snapshot](../../vendor/libreoffice-reference/sc/source/core/data/table1.cxx)

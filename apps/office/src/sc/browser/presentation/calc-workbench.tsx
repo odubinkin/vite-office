@@ -38,15 +38,14 @@ import { CommandToolbarItems } from "../../../framework/browser/presentation/Com
 import { OfficeWorkspaceHeader } from "../../../framework/browser/presentation/OfficeWorkspaceHeader";
 import { calcStandardBarItems } from "../../uiconfig/scalc/toolbar/standardbar";
 import type { CalcFileWorkflows } from "../workflows/calc-file-workflows";
-import { ScMetricInputDlg } from "./ScMetricInputDlg";
-import { ScSheetTabDialog } from "./ScSheetTabDialog";
-import { ScGoToTabDlg } from "./ScGoToTabDlg";
+import { CalcSheetDialogs } from "./CalcSheetDialogs";
+import { ScPrintAreasDlg, type ScPrintReferenceInput } from "./ScPrintAreasDlg";
 import type { CalcSheetWorkflows } from "../workflows/calc-sheet-workflows";
 import { CalcFileDialog } from "./CalcFileDialog";
 import { CommandMenuBar } from "../../../framework/browser/presentation/CommandMenuBar";
 import { selectAvailableMenuItems } from "../../../framework/browser/presentation/available-menu-items";
 import { calcMenus, getCalcCommandResource } from "../../uiconfig/scalc/menubar/menubar";
-import { ScAddress, MAXTAB } from "../../inc/address";
+import { ScAddress, MAXTAB, type ScRange } from "../../inc/address";
 /** Production document/view and its shared Sfx frame. */
 export interface CalcWorkbenchProps {
   readonly sheetWorkflows: CalcSheetWorkflows;
@@ -86,6 +85,17 @@ export function CalcWorkbench({
     sheetWorkflows.metricDialogs.GetSnapshot,
     sheetWorkflows.metricDialogs.GetSnapshot,
   );
+  const printDialog = useSyncExternalStore(
+    sheetWorkflows.printDialogs.Subscribe,
+    sheetWorkflows.printDialogs.GetSnapshot,
+    sheetWorkflows.printDialogs.GetSnapshot,
+  );
+  const printInput = useRef<ScPrintReferenceInput>(null);
+  const [printReference, setPrintReference] = useState<{
+    id: number;
+    range: ScRange | undefined;
+  }>();
+  const printOpen = printDialog !== undefined;
   useBrowserSaveShortcut({
     isActive: true,
     autosave: fileWorkflows,
@@ -113,13 +123,13 @@ export function CalcWorkbench({
     tabDialog !== undefined;
   const root = useRef<HTMLElement>(null),
     tabs = useRef<HTMLDivElement>(null),
-    previousModal = useRef(modal),
+    previousModal = useRef(modal || printOpen),
     browserTopFocus = useRef(false),
     restoredViewport = useRef(false);
   const view = controller.viewData,
     doc = controller.shell.GetDocument();
   const showSheetTabs = view.GetOptions().GetOption(ViewOption.TABCONTROLS);
-  if ((modal || !showSheetTabs) && sheetPopup !== undefined) setSheetPopup(undefined);
+  if ((modal || printOpen || !showSheetTabs) && sheetPopup !== undefined) setSheetPopup(undefined);
   const paneLayoutRevision = view.GetPaneLayoutRevision();
   const cursorColumn = view.GetCurX(),
     cursorRow = view.GetCurY(),
@@ -159,11 +169,11 @@ export function CalcWorkbench({
   }
   useLayoutEffect(
     /** Restores the document client only after React removes the modal and its background inert attribute. @returns Nothing. */ () => {
-      const restore = previousModal.current && !modal;
-      previousModal.current = modal;
+      const restore = previousModal.current && !modal && !printOpen;
+      previousModal.current = modal || printOpen;
       if (restore) grid().focus();
     },
-    [modal],
+    [modal, printOpen],
   );
   useLayoutEffect(
     /** Projects native selection requests after controlled text renders. Actual browser focus owns its initial caret/selection,as ScTextWnd GetFocus delegates to the edit view without moving it. @returns Nothing. */ () => {
@@ -428,6 +438,7 @@ export function CalcWorkbench({
   }
   /** Routes document keys to native-shaped input/view operations or the shared dispatcher. @param event - Grid key. @returns Nothing. */
   function key(event: KeyboardEvent<HTMLDivElement>): void {
+    if (printOpen) return;
     if (event.defaultPrevented || event.nativeEvent.isComposing) return;
     if (
       (event.ctrlKey || event.metaKey) &&
@@ -529,7 +540,7 @@ export function CalcWorkbench({
         /** Routes file and sheet accelerators through active Sfx slots from any source input. @param event - Platform key. @returns Nothing. */ (
           event,
         ) => {
-          if (event.defaultPrevented || event.nativeEvent.isComposing || modal) return;
+          if (event.defaultPrevented || event.nativeEvent.isComposing || modal || printOpen) return;
           if (
             event.key === "F2" &&
             !event.ctrlKey &&
@@ -565,158 +576,172 @@ export function CalcWorkbench({
       className="flex h-dvh w-full min-h-0 min-w-0 flex-col overflow-hidden bg-slate-100"
     >
       <div className="contents" inert={modal}>
-        <OfficeWorkspaceHeader
-          documentTitle={controller.shell.GetTitle()}
-          onDocumentTitleChange={
-            /** Renames the actual shell through Writer-compatible title editing. @param title - Accepted name. @returns Nothing. */ (
-              title,
-            ) => {
-              controller.shell.Rename(title);
+        <div className="contents" inert={printOpen}>
+          <OfficeWorkspaceHeader
+            documentTitle={controller.shell.GetTitle()}
+            onDocumentTitleChange={
+              /** Renames the actual shell through Writer-compatible title editing. @param title - Accepted name. @returns Nothing. */ (
+                title,
+              ) => {
+                controller.shell.Rename(title);
+              }
             }
-          }
-          titleLabel="Document title"
-          editTitleLabel="Edit document title"
-          subtitle="Calc · browser workbench"
-          standardToolbarLabel="Calc standard toolbar"
-          formattingToolbarLabel="Calc formatting toolbar"
-          menuBar={
-            <CommandMenuBar
-              ariaLabel="Calc menu"
-              commandSource={source}
-              focusDocument={focusGrid}
-              getCommandResource={getCalcCommandResource}
-              idPrefix="calc-menu"
-              isInputEnabled={!modal}
-              menus={menus}
-              resolveArguments={resolveCalcCommandArguments}
-            />
-          }
-          formattingToolbar={
-            <CalcFormattingToolbar
-              focusDocument={focusGrid}
-              objectShell={controller.shell}
-              commandSource={source}
-              resolveArguments={resolveCalcCommandArguments}
-            />
-          }
-          toolbar={
-            <CommandToolbarItems
-              commandSource={source}
-              hideUnregistered
-              items={calcStandardBarItems}
-              icons={officeCommandIcons}
-              getCommandResource={getCalcCommandResource}
-              resolveArguments={resolveCalcCommandArguments}
-            />
-          }
-        />
+            titleLabel="Document title"
+            editTitleLabel="Edit document title"
+            subtitle="Calc · browser workbench"
+            standardToolbarLabel="Calc standard toolbar"
+            formattingToolbarLabel="Calc formatting toolbar"
+            menuBar={
+              <CommandMenuBar
+                ariaLabel="Calc menu"
+                commandSource={source}
+                focusDocument={focusGrid}
+                getCommandResource={getCalcCommandResource}
+                idPrefix="calc-menu"
+                isInputEnabled={!modal}
+                menus={menus}
+                resolveArguments={resolveCalcCommandArguments}
+              />
+            }
+            formattingToolbar={
+              <CalcFormattingToolbar
+                focusDocument={focusGrid}
+                objectShell={controller.shell}
+                commandSource={source}
+                resolveArguments={resolveCalcCommandArguments}
+              />
+            }
+            toolbar={
+              <CommandToolbarItems
+                commandSource={source}
+                hideUnregistered
+                items={calcStandardBarItems}
+                icons={officeCommandIcons}
+                getCommandResource={getCalcCommandResource}
+                resolveArguments={resolveCalcCommandArguments}
+              />
+            }
+          />
 
-        <ScInputWindow
-          addressText={controller.addressText}
-          inputText={controller.Input()}
-          editing={controller.mode !== ScInputMode.SC_INPUT_NONE}
-          enabledActions={
-            new Set<CalcInputAction>(
-              controller.mode === ScInputMode.SC_INPUT_NONE
-                ? [...(controller.CanAutoSum() ? ["sum" as const] : []), "equals"]
-                : ["cancel", "accept"],
-            )
-          }
-          onAddressChange={
-            /** Updates transient position text. @param value - Draft. @returns Nothing. */ (
-              value,
-            ) => controller.ChangeAddress(value)
-          }
-          onAddressKeyDown={
-            /** Accepts/cancels the name box through actual A1 parsing. @param event - Key. @returns Nothing. */ (
-              event,
-            ) => {
-              if (event.key === "Enter") {
-                event.preventDefault();
-                if (controller.GoToAddress()) focusGrid();
-              }
-              if (event.key === "Escape") {
-                controller.ChangeAddress(controller.Address());
-                focusGrid();
-              }
+          <ScInputWindow
+            addressText={controller.addressText}
+            inputText={controller.Input()}
+            editing={controller.mode !== ScInputMode.SC_INPUT_NONE}
+            enabledActions={
+              new Set<CalcInputAction>(
+                controller.mode === ScInputMode.SC_INPUT_NONE
+                  ? [...(controller.CanAutoSum() ? ["sum" as const] : []), "equals"]
+                  : ["cancel", "accept"],
+              )
             }
-          }
-          onInput={
-            /** Changes the input owner's sole draft. @param value - Draft. @param selection - Actual DOM UTF16 selection. @returns Nothing. */ (
-              value,
-              selection,
-            ) => {
-              controller.ChangeInput(value);
-              controller.SetInputSelection(selection[0], selection[1]);
+            onAddressChange={
+              /** Updates transient position text. @param value - Draft. @returns Nothing. */ (
+                value,
+              ) => controller.ChangeAddress(value)
             }
-          }
-          onInputFocus={
-            /** Enters TOP without overriding the browser-owned focus selection. Programmatic native input has already selected TOP before its focus is projected. @param event - Actual edit view focus. @returns Nothing. */ (
-              event,
-            ) => {
-              if (controller.mode !== ScInputMode.SC_INPUT_TOP) {
-                browserTopFocus.current =
-                  event.currentTarget === event.currentTarget.ownerDocument.activeElement;
-                controller.StartInput(ScInputMode.SC_INPUT_TOP);
+            onAddressKeyDown={
+              /** Accepts/cancels the name box through actual A1 parsing. @param event - Key. @returns Nothing. */ (
+                event,
+              ) => {
+                if (event.key === "Enter") {
+                  event.preventDefault();
+                  if (controller.GoToAddress()) focusGrid();
+                }
+                if (event.key === "Escape") {
+                  controller.ChangeAddress(controller.Address());
+                  focusGrid();
+                }
               }
             }
-          }
-          onInputCommand={inputCommand}
-          onInputSelection={
-            /** Borrows actual native edit selection after its controlled text has rendered. @param start - UTF16 start. @param end - UTF16 end. @param value - DOM text associated with these endpoints. @returns Nothing. */ (
-              start,
-              end,
-              value,
-            ) => {
-              if (value === controller.Input()) controller.SetInputSelection(start, end);
+            onInput={
+              /** Changes the input owner's sole draft. @param value - Draft. @param selection - Actual DOM UTF16 selection. @returns Nothing. */ (
+                value,
+                selection,
+              ) => {
+                controller.ChangeInput(value);
+                controller.SetInputSelection(selection[0], selection[1]);
+              }
             }
-          }
-          onInputKeyDown={inputKey}
-          onAction={inputAction}
-        />
+            onInputFocus={
+              /** Enters TOP without overriding the browser-owned focus selection. Programmatic native input has already selected TOP before its focus is projected. @param event - Actual edit view focus. @returns Nothing. */ (
+                event,
+              ) => {
+                if (controller.mode !== ScInputMode.SC_INPUT_TOP) {
+                  browserTopFocus.current =
+                    event.currentTarget === event.currentTarget.ownerDocument.activeElement;
+                  controller.StartInput(ScInputMode.SC_INPUT_TOP);
+                }
+              }
+            }
+            onInputCommand={inputCommand}
+            onInputSelection={
+              /** Borrows actual native edit selection after its controlled text has rendered. @param start - UTF16 start. @param end - UTF16 end. @param value - DOM text associated with these endpoints. @returns Nothing. */ (
+                start,
+                end,
+                value,
+              ) => {
+                if (value === controller.Input()) controller.SetInputSelection(start, end);
+              }
+            }
+            onInputKeyDown={inputKey}
+            onAction={inputAction}
+          />
+        </div>
         <ScGridWindow
           onOutline={
             /** Routes native outline window controls. @param control - Selected group or level. @returns Nothing. */
-            (control) => sheetWorkflows.OutlineControl(control)
+            (control) => {
+              if (!printOpen) sheetWorkflows.OutlineControl(control);
+            }
           }
           onActivatePane={
             /** Updates the active native pane before selecting its cell. @param part - Pointer pane. @returns Nothing. */
             (part) => view.SetActivePart(part)
           }
-          referenceMode={controller.inputHandler.IsFormulaMode()}
-          referenceRange={controller.ReferenceRange()}
+          referenceMode={printOpen || controller.inputHandler.IsFormulaMode()}
+          referenceRange={
+            printDialog
+              ? printReference?.id === printDialog.id
+                ? (printReference.range ?? null)
+                : null
+              : controller.ReferenceRange()
+          }
           onReveal={
             /** Reveals native selection endpoints without moving the active cursor. @param position - Endpoint. @param kind - Pointer surface. @returns Nothing. */
             (position, kind) => revealCell(position.Col(), position.Row(), kind)
           }
           onPointerEnd={
             /** Ends actual native pointer selection. @returns Nothing. */ () =>
-              controller.EndPointer()
+              printOpen ? printInput.current?.End() : controller.EndPointer()
           }
           onDrag={
             /** Updates the real reference endpoint during native window tracking. @param position - Endpoint. @returns Nothing. */ (
               position,
-            ) => controller.MovePointer(position)
+            ) => (printOpen ? printInput.current?.Move(position) : controller.MovePointer(position))
           }
-          headerSizing={{
-            GetEntrySize:
-              /** Reads native header dimensions. @param width - Axis. @param index - Entry. @returns Pixels. */ (
-                width,
-                index,
-              ) => controller.GetHeaderEntrySize(width, index),
-            SetEntrySize:
-              /** Commits native header dimensions. @param width - Axis. @param index - Entry. @param pixels - Size. @returns Nothing. */ (
-                width,
-                index,
-                pixels,
-              ) => controller.SetHeaderEntrySize(width, index, pixels),
-            HideEntries:
-              /** Hides the native dragged range. @param width - Axis. @param first - First entry. @param last - Last entry. @returns Nothing. */ (
-                width,
-                first,
-                last,
-              ) => controller.HideHeaderEntries(width, first, last),
-          }}
+          {...(printOpen
+            ? {}
+            : {
+                headerSizing: {
+                  GetEntrySize:
+                    /** Reads native header dimensions. @param width - Axis. @param index - Entry. @returns Pixels. */ (
+                      width,
+                      index,
+                    ) => controller.GetHeaderEntrySize(width, index),
+                  SetEntrySize:
+                    /** Commits native header dimensions. @param width - Axis. @param index - Entry. @param pixels - Size. @returns Nothing. */ (
+                      width,
+                      index,
+                      pixels,
+                    ) => controller.SetHeaderEntrySize(width, index, pixels),
+                  HideEntries:
+                    /** Hides the native dragged range. @param width - Axis. @param first - First entry. @param last - Last entry. @returns Nothing. */ (
+                      width,
+                      first,
+                      last,
+                    ) => controller.HideHeaderEntries(width, first, last),
+                },
+              })}
           idPrefix="calc"
           viewData={view}
           viewport={controller.viewport}
@@ -738,7 +763,9 @@ export function CalcWorkbench({
               pos,
               event,
             ) => {
-              controller.StartPointer(pos, event.shiftKey, event.ctrlKey || event.metaKey);
+              const append = event.ctrlKey || event.metaKey;
+              if (printOpen) printInput.current?.Start(pos, "cell", append);
+              else controller.StartPointer(pos, event.shiftKey, append);
             }
           }
           onHeader={
@@ -747,6 +774,19 @@ export function CalcWorkbench({
               index,
               event,
             ) => {
+              if (printOpen) {
+                printInput.current?.Start(
+                  new ScAddress(
+                    kind === "column" ? index : 0,
+                    kind === "row" ? index : 0,
+                    activeTab,
+                  ),
+                  kind,
+                  event.ctrlKey || event.metaKey,
+                );
+                if (event.type === "click" || kind === "all") printInput.current?.End();
+                return;
+              }
               if (kind === "all") {
                 if (controller.inputHandler.IsFormulaMode()) {
                   controller.PointReference(new ScAddress(0, 0, view.GetTabNumber()));
@@ -773,7 +813,7 @@ export function CalcWorkbench({
             /** Starts inline editing through the input owner. @param pos - Cell. @returns Nothing. */ (
               pos,
             ) => {
-              if (controller.inputHandler.IsFormulaMode()) return;
+              if (printOpen || controller.inputHandler.IsFormulaMode()) return;
               if (controller.Select(pos.Col(), pos.Row()))
                 controller.StartInput(ScInputMode.SC_INPUT_TABLE);
             }
@@ -819,7 +859,7 @@ export function CalcWorkbench({
           }
           onInputKeyDown={inputKey}
         />
-        <div ref={tabs} hidden={!showSheetTabs}>
+        <div ref={tabs} hidden={!showSheetTabs} inert={printOpen}>
           <ScTabControl
             viewData={view}
             canInsert={doc.GetTableCount() <= MAXTAB}
@@ -912,58 +952,15 @@ export function CalcWorkbench({
           }
         />
       )}
-      {widthDialog === undefined ? null : (
-        <ScMetricInputDlg
-          key={widthDialog.id}
-          model={widthDialog.request}
-          onCancel={
-            /** Cancels native width request and restores actual grid focus. @returns Nothing. */ () => {
-              sheetWorkflows.metricDialogs.Cancel(widthDialog.id);
-            }
-          }
-          onSubmit={
-            /** Returns integral native twips to the originating command. @param twips - Native result. @returns Nothing. */ (
-              twips,
-            ) => {
-              sheetWorkflows.metricDialogs.Complete(widthDialog.id, twips);
-            }
-          }
-        />
-      )}
-      {tabDialog === undefined ? null : (
-        <ScSheetTabDialog
-          key={tabDialog.id}
-          model={tabDialog.request}
-          onCancel={
-            /** Cancels the active tab request. @returns Nothing. */
-            () => {
-              sheetWorkflows.tabDialogs.Cancel(tabDialog.id);
-            }
-          }
-          onSubmit={
-            /** Accepts the active tab request. @param value - Native widget selection. @returns Nothing. */
-            (value) => {
-              sheetWorkflows.tabDialogs.Complete(tabDialog.id, value);
-            }
-          }
-        />
-      )}
-      {sheetDialog === undefined ? null : (
-        <ScGoToTabDlg
-          key={sheetDialog.id}
-          {...sheetDialog.request}
-          onCancel={
-            /** Cancels only this native dialog and restores document focus. @returns Nothing. */ () => {
-              sheetWorkflows.dialogs.Cancel(sheetDialog.id);
-            }
-          }
-          onSubmit={
-            /** Returns native selected name to the originating async slot. @param name - Dialog result. @returns Nothing. */ (
-              name,
-            ) => {
-              sheetWorkflows.dialogs.Complete(sheetDialog.id, name);
-            }
-          }
+      <CalcSheetDialogs {...{ sheetWorkflows, widthDialog, tabDialog, sheetDialog }} />
+      {printDialog && (
+        <ScPrintAreasDlg
+          key={printDialog.id}
+          model={printDialog.request}
+          referenceInput={printInput}
+          onReference={(range) => setPrintReference({ id: printDialog.id, range })}
+          onCancel={() => sheetWorkflows.printDialogs.Cancel(printDialog.id)}
+          onSubmit={(request) => sheetWorkflows.printDialogs.Complete(printDialog.id, request)}
         />
       )}
       {controller.error ? (

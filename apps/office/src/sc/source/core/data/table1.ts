@@ -1,4 +1,6 @@
 /** @fileoverview Native SetOptimalHeightsToRows reducer over actual compressed row flags and calculated heights; drawing services remain unported. */
+import type { ScPrintSaverTab } from "../tool/prnsave";
+import { RangeDataType } from "../tool/rangenam";
 import { ScOutlineTable } from "./olinetab";
 import { Color } from "../../../../tools/inc/color";
 import type { RowHeightContext } from "../../../inc/rowheightcontext";
@@ -95,6 +97,12 @@ export function ClearPrintRanges(this: ScTable): void {
   this.InvalidatePageBreaks();
 }
 
+/** Removes the sheet-local names that also designate print areas. @param this - Native sheet. @returns Nothing. */
+export function ClearPrintNamedRanges(this: ScTable): void {
+  const names = this.GetRangeName();
+  for (const entry of names) if (entry.type & RangeDataType.PrintArea) names.erase(entry);
+}
+
 /** Enables the original exclusive whole-sheet print selection. @param this - Native sheet. @returns Nothing. */
 export function SetPrintEntireSheet(this: ScTable): void {
   if (!this.IsPrintEntireSheet()) {
@@ -110,6 +118,24 @@ export function AddPrintRange(this: ScTable, range: ScRange): void {
   this.SetStreamValid(false);
   this.InvalidatePageBreaks();
 }
+/** Copies an original sheet's print data into its workbook snapshot entry. @param this - Native sheet. @param saver - Sheet snapshot. @returns Nothing. */
+export function FillPrintSaver(this: ScTable, saver: ScPrintSaverTab): void {
+  saver.SetAreas(
+    this["aPrintRanges"].map((range) => new ScRange(range)),
+    this.IsPrintEntireSheet(),
+  );
+  saver.SetRepeat(this.GetRepeatColRange(), this.GetRepeatRowRange());
+}
+
+/** Restores an original sheet's print data and clears page layout caches. @param this - Native sheet. @param saver - Sheet snapshot. @returns Nothing. */
+export function RestorePrintRanges(this: ScTable, saver: ScPrintSaverTab): void {
+  this["aPrintRanges"].length = 0;
+  for (const range of saver.ranges) this["aPrintRanges"].push(new ScRange(range));
+  this["bPrintEntireSheet"] = saver.entire;
+  this.SetRepeatColRange(saver.columns);
+  this.SetRepeatRowRange(saver.rows);
+}
+
 /** Applies native grouping, manual/force flags and extra-height semantics. @param context - Shared calculation. @param apply - Actual sheet height mutation. @param flags - Row flags. @param first - First row. @param last - Last row. @param api - Allow interactive single-row shrinking. @returns Whether geometry changed. */
 export function SetOptimalHeightsToRows(
   context: RowHeightContext,

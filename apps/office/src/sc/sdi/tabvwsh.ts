@@ -9,6 +9,22 @@ export const calcViewCommands = [
   { id: ".uno:ToggleFormula", slotId: 26250, label: "Show Formulas", option: "formulas" },
   { id: ".uno:ToggleSheetGrid", slotId: 25018, label: "View Grid Lines", option: "grid" },
 ] as const;
+export const SID_DEFINE_PRINTAREA = 26602;
+
+/** Source view-shell print range slots from SID_NEW_SLOTS. */
+export const calcPrintRangeCommands = [
+  { id: ".uno:DefinePrintArea", slotId: SID_DEFINE_PRINTAREA, label: "Print Area", kind: "define" },
+  { id: ".uno:AddPrintArea", slotId: 26651, label: "Add", kind: "add" },
+  { id: ".uno:EditPrintArea", slotId: 26605, label: "Edit", kind: "edit" },
+  { id: ".uno:DeletePrintArea", slotId: 26603, label: "Clear", kind: "clear" },
+] as const;
+
+/** Native dialog-result slot and its typed Which IDs. */
+export const SID_CHANGE_PRINTAREA = 26604;
+export const FN_PRINT_REPEAT_ROW = 21161;
+export const FN_PRINT_REPEAT_COL = 21162;
+export const FN_PRINT_ENTIRE_SHEET = 21163;
+
 /** Active view contract;the core owns all persistent values. */
 export interface CalcViewCommandTarget {
   GetViewOptionState(option: CalcViewOption): boolean;

@@ -1,5 +1,10 @@
 /** @fileoverview Consumed Calc SDI slots from scalc.sdi,sc.hrc,sfxsids.hrc and solar.hrc; no local command IDs are invented. */
-import { calcViewCommands, createCalcViewSlots, type CalcViewCommandTarget } from "./tabvwsh";
+import {
+  calcPrintRangeCommands,
+  calcViewCommands,
+  createCalcViewSlots,
+  type CalcViewCommandTarget,
+} from "./tabvwsh";
 import type { ScTabViewShell } from "../source/ui/view/tabvwsh4";
 import type { ScPaneCommand } from "../source/ui/view/tabview";
 import type { SfxRequest } from "../../sfx2/source/control/request";
@@ -7,14 +12,9 @@ import {
   createCalcTextEffectSlots,
   calcTextEffectCommands,
   type CalcTextEffectCommandTarget,
-} from "./formatsh";
-import {
   createCalcWrapTextSlot,
   calcWrapTextCommand,
   type CalcWrapTextCommandTarget,
-} from "./formatsh";
-
-import {
   createCalcBorderSlots,
   calcBorderCommands,
   type CalcBorderCommandTarget,
@@ -433,6 +433,7 @@ export const calcUserCommands = [
   ...Object.values(calcSheetCommands),
   ...calcPaneCommands,
   ...calcOutlineCommands,
+  ...calcPrintRangeCommands,
   ...calcPageBreakCommands,
   ...calcCellSelectionCommands,
   ...calcVisibleSelectionCommands,

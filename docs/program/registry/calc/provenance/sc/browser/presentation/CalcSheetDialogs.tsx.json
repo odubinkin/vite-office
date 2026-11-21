@@ -1,0 +1,29 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "browser-adaptation",
+    "status": "local-only",
+    "localPath": "apps/office/src/sc/browser/presentation/CalcSheetDialogs.tsx",
+    "rationale": "Hosts the existing Calc sheet dialog presenters within the browser workspace and forwards their native Sfx responses.",
+    "responsibilities": [
+      "Mounts existing Calc sheet modal presenters for active Sfx dialog requests."
+    ],
+    "stackDivergence": {
+      "kind": "browser-adaptation",
+      "rationale": "Hosts React widgets in the existing document workspace."
+    },
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sc/browser/presentation/CalcSheetDialogs.tsx",
+          "marker": "CalcSheetDialogs"
+        },
+        {
+          "path": "apps/office/src/sc/browser/presentation/calc-print-areas.test.tsx",
+          "marker": "ports the upstream Define"
+        }
+      ]
+    }
+  }
+}

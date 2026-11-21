@@ -12,6 +12,7 @@ interface ResourceNode {
   readonly label?: string;
   readonly commandUrl?: string;
   readonly visible?: boolean;
+  readonly showsDialog?: boolean;
   readonly items?: readonly ResourceNode[];
 }
 /** Projects original nested menu order with source identities kept literal. @param nodes - Generated source nodes. @returns Shared menu placements. */
@@ -32,7 +33,10 @@ function adaptItems(nodes: readonly ResourceNode[]): CommandMenuItemPlacement[] 
       return {
         kind: "command",
         commandId,
-        showsDialog: generated.commands[commandId as keyof typeof generated.commands].showsDialog,
+        label: node.label,
+        showsDialog:
+          node.showsDialog ??
+          generated.commands[commandId as keyof typeof generated.commands].showsDialog,
       };
     },
   );
