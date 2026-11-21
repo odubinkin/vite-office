@@ -19,7 +19,7 @@ import {
 } from "../../../vcl/browser/browser-download";
 import { createBrowserDocumentOpenPort } from "../../../vcl/browser/browser-file";
 import { Font } from "../../../vcl/source/font/font";
-import { measureBrowserTextWidth } from "../../../vcl/browser/text-width";
+import { tryMeasureBrowserTextWidth } from "../../../vcl/browser/text-width";
 import {
   createBrowserDefaultFontDevice,
   createDefaultFontLocale,
@@ -166,7 +166,7 @@ export function createWriterDocumentSession(
           font.SetWeight(attributes.weight);
           font.SetItalic(attributes.italic);
           font.SetFontHeight(attributes.heightTwips);
-          return measureBrowserTextWidth(globalThis.document, font, text, start, length);
+          return tryMeasureBrowserTextWidth(globalThis.document, font, text, start, length);
         },
         /** Binds AttrSetToLineHeight to the browser's physical font metrics.  @param family - Family. @param heightTwips - Height Twips. @returns The computed result. */
         measureTextHeight(family, heightTwips) {

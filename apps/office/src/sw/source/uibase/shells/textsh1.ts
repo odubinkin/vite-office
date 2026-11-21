@@ -79,11 +79,12 @@ import { createWriterTextCommandRegistry } from "./textsh1-commands";
 import { SwTextNode } from "../../core/txtnode/ndtxt";
 import { SwPaM } from "../../core/crsr/pam";
 import { isWriterParagraphListKind, type WriterParagraphListKind } from "../../core/doc/list";
-import type { SwEditShell } from "../../core/edit/ednumber";
+import type { SwEditShell } from "../../core/edit/edattr";
 export type { WriterParagraphFormatValue } from "./txtattr-paragraph";
 /** Cursor/model primitives consumed by the text shell without importing SwWrtShell. */
 export interface SwTextShellTarget extends Pick<
   SwEditShell,
+  | "GetScalingOfSelectedText"
   | "SetCurNumRule"
   | "DelNumRules"
   | "SelectionHasNumber"
@@ -153,7 +154,8 @@ export class SwTextShell extends SwBaseShell {
     annotation: readonly WriterSlotHandler<SwTextShell>[] = [],
   ) {
     super(target);
-    this.shell = createSfxShell(this, createWriterTextCommandRegistry(this, dialogs, annotation));
+    const registry = createWriterTextCommandRegistry(this, dialogs, annotation, target);
+    this.shell = createSfxShell(this, registry);
     this.shell.GetInterface().RegisterPopupMenu("text");
   }
   /** Reads the current native selection for the Character dialog. @returns Borrowed selection ring. */

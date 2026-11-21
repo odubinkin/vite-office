@@ -6,7 +6,7 @@ import { quoteFontFamily } from "./font-preview-device";
 
 const contexts = new WeakMap<Document, CanvasRenderingContext2D>();
 
-/** Measures actual shaped Canvas text with the selected VCL font and native range. @param document - Host document. @param font - Native VCL font in twips. @param text - Source string. @param start - UTF16 start. @param length - UTF16 length. @returns Width in twips. */
+/** Measures actual shaped Canvas text and requires a usable device. @param document - Host document. @param font - VCL font in twips. @param text - Source string. @param start - UTF16 start. @param length - UTF16 length. @returns Width in twips. */
 export function measureBrowserTextWidth(
   document: Document,
   font: ConstFont,
@@ -14,13 +14,27 @@ export function measureBrowserTextWidth(
   start: number,
   length: number,
 ): number {
-  if (!length) return 0;
-  if (font.GetFontHeight() <= 0)
+  if (length && font.GetFontHeight() <= 0)
     throw new Error("Writer output device requires a positive font height.");
+  const width = tryMeasureBrowserTextWidth(document, font, text, start, length);
+  if (width === undefined) throw new Error("Writer output device is unavailable.");
+  return width;
+}
+
+/** Measures actual shaped Canvas text with the selected VCL font and native range. @param document - Host document. @param font - Native VCL font in twips. @param text - Source string. @param start - UTF16 start. @param length - UTF16 length. @returns Width in twips or undefined if the device is unavailable. */
+export function tryMeasureBrowserTextWidth(
+  document: Document,
+  font: ConstFont,
+  text: string,
+  start: number,
+  length: number,
+): number | undefined {
+  if (!length) return 0;
+  if (font.GetFontHeight() <= 0) return undefined;
   let context = contexts.get(document);
   if (context === undefined) {
     const created = document.createElement("canvas").getContext("2d");
-    if (created === null) throw new Error("Writer output device is unavailable.");
+    if (created === null) return undefined;
     contexts.set(document, created);
     context = created;
   }

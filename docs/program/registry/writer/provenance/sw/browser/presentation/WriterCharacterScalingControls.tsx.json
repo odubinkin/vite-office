@@ -1,0 +1,26 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "browser-adaptation",
+    "status": "local-only",
+    "localPath": "apps/office/src/sw/browser/presentation/WriterCharacterScalingControls.tsx",
+    "rationale": "Presents the native Position page rotation, scale-width and Fit to Line controls over Writer item-set values. The native text frame supplies the selection-dependent percentage.",
+    "responsibilities": [
+      "Presents the native Position page rotation, scale-width and Fit to Line controls over Writer item-set values. The native text frame supplies the selection-dependent percentage."
+    ],
+    "stackDivergence": {
+      "kind": "browser-adaptation",
+      "rationale": "Presents the native Position page rotation, scale-width and Fit to Line controls over Writer item-set values. The native text frame supplies the selection-dependent percentage."
+    },
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sw/browser/presentation/WriterCharacterScalingControls.tsx",
+          "marker": "WriterCharacterScalingControls"
+        }
+      ]
+    },
+    "preservedResponsibilities": []
+  }
+}

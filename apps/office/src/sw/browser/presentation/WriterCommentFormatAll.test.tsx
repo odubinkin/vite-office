@@ -115,6 +115,10 @@ it("uses the active note's attributes and formats all notes in one Writer undo a
     fireEvent.click(within(dialog).getByRole("tab", { name: "Position" }));
     fireEvent.click(within(dialog).getByRole("radio", { name: "Subscript" }));
     expect(within(dialog).getByRole("checkbox", { name: "Automatic" })).toBeChecked();
+    expect(within(dialog).queryByRole("radio", { name: "90°" })).toBeNull();
+    fireEvent.change(within(dialog).getByRole("spinbutton", { name: "Scaling" }), {
+      target: { value: "132" },
+    });
     fireEvent.click(within(dialog).getByRole("checkbox", { name: "Pair kerning" }));
     await act(
       /** Finishes the asynchronous Character request before checking the notes. @returns Completion. */ async () => {
@@ -124,6 +128,7 @@ it("uses the active note's attributes and formats all notes in one Writer undo a
     expect(within(ada).getByText("Ada").style.fontSize).toBe("10.44pt");
     expect(within(ada).getByText("Ada").style.verticalAlign).toBe("sub");
     expect(within(ada).getByText("Ada").style.fontKerning).toBe("normal");
+    expect(within(ada).getByText("Ada").style.transform).toBe("scaleX(1.32)");
     expect(within(ada).getByText("Ada").style.fontWeight).toBe("bold");
     expect(within(grace).getByText("Grace").style.fontSize).toBe("10.44pt");
     expect(within(grace).getByText("Grace").style.fontWeight).toBe("bold");

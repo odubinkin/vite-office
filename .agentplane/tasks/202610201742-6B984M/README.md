@@ -4,7 +4,7 @@ title: "Implement Writer search and replace core and browser UI"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 123
+revision: 124
 origin:
   system: "manual"
 depends_on:
@@ -510,6 +510,16 @@ comments:
       - Source contracts checked against cui/source/tabpages/chardlg.cxx, cui/uiconfig/ui/positionpage.ui, sw/source/uibase/app/docshini.cxx, sw/source/core/text/atrstck.cxx, editeng/source/editeng/impedit3.cxx, sw/qa/uitest/writer_tests2/formatCharacter.py and xmloff/source/text/txtprhdl.cxx.
       - Passed focused Vitest groups (93 distinct Writer tests, 16 shared tests), scoped formatting and lint, Writer resource, dependency, source tree and provenance checks, Writer and shared inventory checks, AgentPlane doctor and policy routing. Global JSDoc reports the same 307 existing findings. File-size checks report three existing violations outside the changed files. No full run at this checkpoint.
       - Production build passed with the single-threaded TypeScript checker. Nine unchanged Chromium search and rich-format scenarios passed together. The final Position regression passed separately and verifies manual rise and font size, saved pair kerning on selected text, the inherited kerning of the surrounding document, and reopening the Character page through the browser after ODT export/import.
+  -
+    author: "CODER"
+    body: |-
+      Verified checkpoint — Writer Character rotation and scaling
+
+      - Writer Character now exposes the native 0°, 90° and 270° choices, width percentage and the Fit to Line checkbox. Annotation Character exposes scaling through the independent EditEngine width item. Applies native rotation and scale deltas to the active text and leaves mixed values alone until edited.
+      - The text shell supplies the original SID_ATTR_CHAR_WIDTH_FIT_TO_LINE input from the editing shell and the starting text frame. The core uses script and attribute boundaries, the physical unscaled width device, the widest selected hard line and the height of the formatted line. The unformatted path uses physical font height. The browser paints one real text tree, accounts for the changed advance and measures rotated text as a single line portion.
+      - Source contract matched against editeng/editids.hrc, cui/source/tabpages/chardlg.cxx, sw/source/uibase/shells/textsh1.cxx, sw/source/core/edit/edattr.cxx, sw/source/core/text/itratr.cxx and sw/qa/uitest/writer_tests2/formatCharacter.py. Native field and footnote width contributions, merged redline text frames and fully differential complex rotated layout remain unverified.
+      - Passed 67 related Writer tests (7 files), scoped lint and format, source provenance and dependency validation, Writer resources, required source tree, Writer parity inventory (zero semantic violations), AgentPlane doctor, routing and diff checks. Global JSDoc and file-size checks retain their existing 307 and 3 unrelated findings. No full repository run at this checkpoint.
+      - Two shared test files passed (13 tests). Production typecheck and Vite build passed. All 11 Chromium Writer search and Character scenarios passed against the final build.
 
 events:
   -
@@ -1205,9 +1215,21 @@ events:
       - Source contracts checked against cui/source/tabpages/chardlg.cxx, cui/uiconfig/ui/positionpage.ui, sw/source/uibase/app/docshini.cxx, sw/source/core/text/atrstck.cxx, editeng/source/editeng/impedit3.cxx, sw/qa/uitest/writer_tests2/formatCharacter.py and xmloff/source/text/txtprhdl.cxx.
       - Passed focused Vitest groups (93 distinct Writer tests, 16 shared tests), scoped formatting and lint, Writer resource, dependency, source tree and provenance checks, Writer and shared inventory checks, AgentPlane doctor and policy routing. Global JSDoc reports the same 307 existing findings. File-size checks report three existing violations outside the changed files. No full run at this checkpoint.
       - Production build passed with the single-threaded TypeScript checker. Nine unchanged Chromium search and rich-format scenarios passed together. The final Position regression passed separately and verifies manual rise and font size, saved pair kerning on selected text, the inherited kerning of the surrounding document, and reopening the Character page through the browser after ODT export/import.
+  -
+    type: "comment"
+    at: "2026-11-21T23:58:14.872Z"
+    author: "CODER"
+    body: |-
+      Verified checkpoint — Writer Character rotation and scaling
+
+      - Writer Character now exposes the native 0°, 90° and 270° choices, width percentage and the Fit to Line checkbox. Annotation Character exposes scaling through the independent EditEngine width item. Applies native rotation and scale deltas to the active text and leaves mixed values alone until edited.
+      - The text shell supplies the original SID_ATTR_CHAR_WIDTH_FIT_TO_LINE input from the editing shell and the starting text frame. The core uses script and attribute boundaries, the physical unscaled width device, the widest selected hard line and the height of the formatted line. The unformatted path uses physical font height. The browser paints one real text tree, accounts for the changed advance and measures rotated text as a single line portion.
+      - Source contract matched against editeng/editids.hrc, cui/source/tabpages/chardlg.cxx, sw/source/uibase/shells/textsh1.cxx, sw/source/core/edit/edattr.cxx, sw/source/core/text/itratr.cxx and sw/qa/uitest/writer_tests2/formatCharacter.py. Native field and footnote width contributions, merged redline text frames and fully differential complex rotated layout remain unverified.
+      - Passed 67 related Writer tests (7 files), scoped lint and format, source provenance and dependency validation, Writer resources, required source tree, Writer parity inventory (zero semantic violations), AgentPlane doctor, routing and diff checks. Global JSDoc and file-size checks retain their existing 307 and 3 unrelated findings. No full repository run at this checkpoint.
+      - Two shared test files passed (13 tests). Production typecheck and Vite build passed. All 11 Chromium Writer search and Character scenarios passed against the final build.
 
 doc_version: 3
-doc_updated_at: "2026-11-21T23:44:48.439Z"
+doc_updated_at: "2026-11-21T23:58:14.872Z"
 doc_updated_by: "CODER"
 description: "Implement the approved coherent Writer search-and-replace feature from pinned LibreOffice sources: real shared search engine and options, native paragraph/cursor traversal and replacement/history contracts, view-owned search state and dispatch, Find toolbar and Find and Replace dialog with generated upstream command placement and shortcuts. Preserve source semantics and explicit unsupported boundaries; never substitute DOM text search or browser RegExp for ICU contracts. Work only on writer in vite-office-writer; local upstream reading approved, no network or merges. Keep active until approved scope is verified."
 sections:

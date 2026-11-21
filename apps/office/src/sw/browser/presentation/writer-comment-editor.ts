@@ -39,6 +39,7 @@ import { DFLT_ESC_AUTO_SUPER } from "../../../editeng/inc/escapementitem";
 import { projectWriterCharacterAttributes } from "../../source/core/txtnode/txatbase";
 import { projectWriterLineSpacing } from "../../source/core/text/itrform2";
 import { browserFontPaint, browserTextDecoration, browserTextEmphasis } from "./writer-font-paint";
+import { connectWriterCharacterGeometry } from "../editor/writer-line-measurement";
 import { splitWordLineText } from "./writer-view-projection";
 import { browserFontFamily } from "../editor/writer-font-family";
 import { getWriterTextCaretPoint } from "../editor/writer-selection";
@@ -128,6 +129,10 @@ export class WriterCommentEditor extends SwTextAPIEditSource {
   private storedText: string | undefined;
   private storedObject: EditTextObject | undefined;
   private compositionSelection: EditSelection | undefined;
+  private readonly characterGeometry = new Map<
+    HTMLSpanElement,
+    { width: number; release?: () => void }
+  >();
 
   /** Connects the browser editing host to the native annotation owner. @param field - Actual field. @param input - Mounted editable host. @param view - Active Writer view. @param selectionChanged - Selection invalidation callback. @returns Connected editor. */
   constructor(
@@ -320,6 +325,7 @@ export class WriterCommentEditor extends SwTextAPIEditSource {
 
   /** Releases the registered browser events and actual editor. @returns Nothing. */
   override Dispose(): void {
+    this.ClearCharacterGeometry();
     this.input.removeEventListener("beforeinput", this.OnBeforeInput);
     this.input.removeEventListener("paste", this.OnPaste);
     this.input.removeEventListener("compositionstart", this.OnCompositionStart);
@@ -624,6 +630,7 @@ export class WriterCommentEditor extends SwTextAPIEditSource {
 
   /** Draws the actual EditEngine text portions and paragraph properties with native DOM elements. @returns Nothing. */
   private Render(): void {
+    this.ClearCharacterGeometry();
     const document = this.input.ownerDocument;
     const layer = document.createDocumentFragment();
     const doc = this.getImpl().GetEditDoc();
@@ -635,6 +642,14 @@ export class WriterCommentEditor extends SwTextAPIEditSource {
       layer.append(paragraph);
     }
     this.input.replaceChildren(layer);
+    for (const [element, geometry] of this.characterGeometry)
+      geometry.release = connectWriterCharacterGeometry(element, geometry.width);
+  }
+
+  /** Drops the device observers before the owned annotation DOM is replaced. @returns Nothing. */
+  private ClearCharacterGeometry(): void {
+    for (const geometry of this.characterGeometry.values()) geometry.release?.();
+    this.characterGeometry.clear();
   }
 
   /** Paints one model paragraph. @param index - EditEngine paragraph index. @param node - Native paragraph. @param paragraph - Browser projection. @returns Nothing. */
@@ -698,7 +713,10 @@ export class WriterCommentEditor extends SwTextAPIEditSource {
           );
           const preceding =
             start === 0 ? undefined : String.fromCharCode(node.GetString().charAt(start - 1));
-          applyTextStyle(run, projectAnnotationRun(items, script?.nScriptType), preceding);
+          const style = projectAnnotationRun(items, script?.nScriptType);
+          applyTextStyle(run, style, preceding);
+          if (style.scaleWidth !== undefined && style.scaleWidth !== 100)
+            this.characterGeometry.set(run, { width: style.scaleWidth });
           paragraph.append(run);
         } finally {
           value.dispose();

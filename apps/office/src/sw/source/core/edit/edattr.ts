@@ -7,6 +7,7 @@ import type { SwDoc } from "../doc/doc";
 import type { SwTextFormatColl } from "../doc/fmtcol";
 import { getMoveLeftMarginDistance } from "../doc/docfmt";
 import { SwTextNode } from "../txtnode/ndtxt";
+import { GetScalingOfSelectedText } from "../text/itratr";
 import type { SvxLRSpaceItem } from "../../../../editeng/inc/lrspitem";
 import { RES_TXTATR_INETFMT, RES_LR_SPACE } from "../../../inc/hintids";
 import type { SwPaM } from "../crsr/pam";
@@ -169,6 +170,26 @@ function mergeINetFormatState(target: SfxItemSet, source: SfxItemSet): void {
 
 /** Consumed character-only GetCurAttr path. Native paragraph/merged/redline queries remain in their existing or unported owners. */
 export abstract class SwEditShell extends SwNumberingEditShell {
+  /** Reads the native selection scale from its starting text frame. @returns Fit-to-line percentage if measured by the device. */
+  public GetScalingOfSelectedText(): number | undefined {
+    const cursor = this.getShellCursor();
+    const start = cursor.Start();
+    const node = start.GetNode();
+    if (!(node instanceof SwTextNode)) return 100;
+    const end = cursor.End();
+    const frame = this.GetLayout().GetCursorTextFrame(node)?.GetFrameAtPos(start);
+    if (frame !== undefined)
+      return frame.GetScalingOfSelectedText(
+        frame.MapModelToViewPos(start),
+        end.GetNode() === node ? frame.MapModelToViewPos(end) : frame.GetText().length,
+      );
+    return GetScalingOfSelectedText(
+      node,
+      start.GetContentIndex(),
+      end.GetNode() === node ? end.GetContentIndex() : node.Len(),
+    );
+  }
+
   /** Returns the first selected text collection in native ring/node order. @returns Borrowed collection or no result at the lookup limit. */
   public GetCurTextFormatColl(): SwTextFormatColl | undefined {
     return this.GetPaMTextFormatColl(this.GetCursor());

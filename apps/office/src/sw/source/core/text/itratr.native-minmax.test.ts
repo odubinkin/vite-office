@@ -1,4 +1,5 @@
 /** @fileoverview Writer import-time min/max font binding and anchored frame width inputs on actual model owners. */
+import { GetScalingOfSelectedText } from "./itratr";
 import { implementations } from "../../../../desktop/browser/app/uno-components";
 import { InitApplicationServiceManager } from "../../../../desktop/source/app/appinit";
 import { SfxItemSet } from "../../../../svl/source/items/itemset";
@@ -470,4 +471,20 @@ it("walks a nested table node without remeasuring its boxes and follows a user s
   layout.AutoLayoutPass1();
   expect([layout.GetMin(), layout.GetMax()]).toEqual([170, 170]);
   expect(measured.map(measuredText).join("")).toBe("ab cdabc");
+});
+
+it("fits the widest unscaled row to the measured line containing the selection start", /** Exercises the native selection-width scan and line-height quotient. @returns Nothing. */ () => {
+  const { doc, measured } = measurementFixture();
+  const node = doc.paragraphs[0];
+  assert(node);
+  node.SetText("AB\tCD\nE\u00adF");
+  const lineHeight =
+    /** Supplies the actual line height at the selected first unit. @param offset - Model offset. @returns Twips. */
+    (offset: number) => {
+      expect(offset).toBe(0);
+      return 240;
+    };
+  expect(GetScalingOfSelectedText(node, 0, node.Len(), lineHeight)).toBe(160);
+  expect(measured.map(measuredText)).toEqual(["AB", " ", "CD", "E", "F"]);
+  expect(GetScalingOfSelectedText(node, 0, 0, lineHeight)).toBe(100);
 });

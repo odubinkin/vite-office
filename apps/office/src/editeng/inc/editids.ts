@@ -81,6 +81,9 @@ export const SID_ATTR_CHAR_EMPHASISMARK = 10899 as const;
 export const SID_ATTR_CHAR_RELIEF = 10920 as const;
 export const SID_ATTR_CHAR_OVERLINE = 11568 as const;
 
+/** Scale derived by Writer from the selected text and its current visual line. */
+export const SID_ATTR_CHAR_WIDTH_FIT_TO_LINE = 10919 as const;
+
 /** Native character color slot from editids.hrc. */
 export const SID_ATTR_CHAR_COLOR = 10017 as const;
 

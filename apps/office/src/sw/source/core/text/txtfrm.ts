@@ -14,7 +14,9 @@ import { SfxBoolItem } from "../../../../svl/source/items/cenumitm";
 import { SfxInt16Item } from "../../../../svl/source/items/intitem";
 import { SwFormatPageDesc } from "../attr/fmtpdsc";
 import { SwPosition, type SwPaM } from "../crsr/pam";
-import { SwTextCursor } from "./itrtxt";
+import { SwTextCursor, SwTextIter } from "./itrtxt";
+import { SwTextSizeInfo } from "./inftxt";
+import { GetScalingOfSelectedText } from "./itratr";
 import { SwLineLayout, SwParaPortion } from "./porlay";
 import { MoveTextFrameMargin } from "./frmcrsr";
 import {
@@ -257,6 +259,20 @@ export class SwTextFrame extends SwContentFrame {
       else break;
     }
     return frame;
+  }
+  /** Calculates character scale from the unscaled selection and actual formatted line. @param start - Selection start in frame coordinates. @param end - Selection end in the same text node. @returns Native percentage when the device can measure the selection. */
+  public GetScalingOfSelectedText(start: number, end: number): number | undefined {
+    const line = this.GetPara() ? new SwTextIter(this, new SwTextSizeInfo(this)) : undefined;
+    return GetScalingOfSelectedText(
+      this.GetTextNodeFirst(),
+      start,
+      end,
+      /** Finds the formatted line containing the first affected character. @param offset - Native frame position. @returns Measured line height or undefined. */
+      (offset) => {
+        line?.CharToLine(offset);
+        return line?.GetCurr().GetRealHeight();
+      },
+    );
   }
   /** Moves to the current visual line start. @param pam - Native cursor. @returns Admission result. */
   public LeftMargin(pam: SwPaM): boolean {

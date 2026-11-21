@@ -8,6 +8,11 @@ import { useBrowserLocalization } from "../../../framework/browser/localization/
 import { SfxItemSet, SfxItemState } from "../../../svl/source/items/itemset";
 import * as EE from "../../../editeng/inc/eeitem";
 import { SvxBrushItem } from "../../../editeng/inc/brushitem";
+import { SvxCharRotateItem } from "../../../editeng/inc/charrotateitem";
+import { SvxCharScaleWidthItem } from "../../../editeng/inc/charscaleitem";
+import { SID_ATTR_CHAR_WIDTH_FIT_TO_LINE } from "../../../editeng/inc/editids";
+import { SfxUInt16Item } from "../../../svl/source/items/intitem";
+import { WriterCharacterScalingControls } from "./WriterCharacterScalingControls";
 import { SvxAutoKernItem } from "../../../editeng/inc/autokernitem";
 import { SvxKerningItem } from "../../../editeng/inc/kernitem";
 import * as SW from "../../inc/hintids";
@@ -74,6 +79,7 @@ const characterItems = {
     relief: EE.EE_CHAR_RELIEF,
     position: EE.EE_CHAR_ESCAPEMENT,
     spacing: EE.EE_CHAR_KERNING,
+    scaleWidth: EE.EE_CHAR_FONTWIDTH,
     pairKerning: EE.EE_CHAR_PAIRKERNING,
     color: EE.EE_CHAR_COLOR,
     background: EE.EE_CHAR_BKGCOLOR,
@@ -94,11 +100,17 @@ const characterItems = {
     relief: SW.RES_CHRATR_RELIEF,
     position: SW.RES_CHRATR_ESCAPEMENT,
     spacing: SW.RES_CHRATR_KERNING,
+    scaleWidth: SW.RES_CHRATR_SCALEW,
     pairKerning: SW.RES_CHRATR_AUTOKERN,
     color: SW.RES_CHRATR_COLOR,
     background: SW.RES_CHRATR_BACKGROUND,
   },
 } as const;
+
+/** Restores or changes the scale displayed by the native percentage spin control. @param scale - Item value in percent. @returns Percentage within the original spin control limits. */
+function displayCharacterScale(scale: number): number {
+  return Math.min(999, Math.max(1, scale));
+}
 
 const scriptDirections = [
   [SvxEscapement.Superscript, "superscript", "Superscript"],
@@ -219,6 +231,19 @@ export function WriterCharacterDialog({
   const scripted = direction !== undefined && direction !== SvxEscapement.Off;
   const script = direction === SvxEscapement.Subscript ? "lower" : "upper";
   const scriptSize = position[script];
+  const scale = read(which.scaleWidth);
+  const scaleWidth = displayCharacterScale(
+    scale instanceof SvxCharScaleWidthItem ? scale.GetValue() : 100,
+  );
+  const rotationState =
+    mode === "standard" ? input.GetItemState(SW.RES_CHRATR_ROTATE) : SfxItemState.UNKNOWN;
+  const rotationItem =
+    rotationState >= SfxItemState.DEFAULT ? input.Get(SW.RES_CHRATR_ROTATE) : undefined;
+  const angle = rotationItem instanceof SvxCharRotateItem ? rotationItem.GetValue() : undefined;
+  const fitToLine = rotationItem instanceof SvxCharRotateItem && rotationItem.IsFitToLine();
+  const fitItem = input.GetItemIfSet(SID_ATTR_CHAR_WIDTH_FIT_TO_LINE, false);
+  const fitScale =
+    fitItem instanceof SfxUInt16Item ? displayCharacterScale(fitItem.GetValue()) : undefined;
   const pairKerning = read(which.pairKerning);
   const initialPairKerning = pairKerning instanceof SvxAutoKernItem && pairKerning.GetValue();
   const initialColor =
@@ -471,6 +496,16 @@ export function WriterCharacterDialog({
       const height = scripted ? scriptSize.height : 100;
       if (offset !== escapementItem?.GetEsc() || height !== escapementItem?.GetProportionalHeight())
         output.Put(new SvxEscapementItem(offset, height, which.position), true);
+    }
+    const nextScale = values.get("scaleWidth");
+    if (nextScale && Number(nextScale) !== scaleWidth)
+      output.Put(new SvxCharScaleWidthItem(Number(nextScale), which.scaleWidth), true);
+    if (values.has("rotationFit")) {
+      const rawAngle = values.get("rotation");
+      const nextAngle = rawAngle === null ? undefined : Number(rawAngle);
+      const fit = values.get("rotationFit") === "true";
+      if (nextAngle !== angle || fit !== fitToLine)
+        output.Put(new SvxCharRotateItem(nextAngle ?? 0, fit, SW.RES_CHRATR_ROTATE), true);
     }
     const nextPairKerning = values.has("pairKerning");
     if (nextPairKerning !== initialPairKerning)
@@ -849,6 +884,13 @@ export function WriterCharacterDialog({
                 />
               </label>
             </fieldset>
+            <WriterCharacterScalingControls
+              rotation={angle}
+              fitToLine={fitToLine}
+              fitScale={fitScale}
+              scale={scaleWidth}
+              showRotation={rotationState !== SfxItemState.UNKNOWN}
+            />
             <fieldset className="mt-3 grid gap-2">
               <legend>{localization.GetText("writer.character.spacing", "Spacing")}</legend>
               <label className={fieldClass}>

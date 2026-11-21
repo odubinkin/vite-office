@@ -32,8 +32,13 @@ export interface DefaultFontDevice {
   ): string | undefined;
   /** Measures the selected physical font height in document twips for filter output. */
   measureTextHeight?(family: string, heightTwips: number): number;
-  /** Measures the selected physical font's shaped width in twips. */
-  measureTextWidth?(font: SwMeasurementFont, text: string, start: number, length: number): number;
+  /** Measures the selected physical font's shaped width in twips when the device is available. */
+  measureTextWidth?(
+    font: SwMeasurementFont,
+    text: string,
+    start: number,
+    length: number,
+  ): number | undefined;
 }
 
 const fallbackFamilies: Readonly<

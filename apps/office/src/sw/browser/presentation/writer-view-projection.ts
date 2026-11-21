@@ -17,6 +17,8 @@ import { SvxCaseMap } from "../../../editeng/inc/svxenum";
 import { SvxEmphasisMarkItem } from "../../../editeng/inc/emphasismarkitem";
 import { FontEmphasisMark } from "../../../tools/inc/fontenum";
 import { SvxEscapementItem } from "../../../editeng/inc/escapementitem";
+import { SvxCharRotateItem } from "../../../editeng/inc/charrotateitem";
+import { SvxCharScaleWidthItem } from "../../../editeng/inc/charscaleitem";
 import { SvxAutoKernItem } from "../../../editeng/inc/autokernitem";
 import { SvxKerningItem } from "../../../editeng/inc/kernitem";
 import {
@@ -24,6 +26,8 @@ import {
   RES_CHRATR_BOX,
   RES_CHRATR_ESCAPEMENT,
   RES_CHRATR_KERNING,
+  RES_CHRATR_ROTATE,
+  RES_CHRATR_SCALEW,
 } from "../../inc/hintids";
 
 import { SvxCrossedOutItem } from "../../../editeng/inc/crossedoutitem";
@@ -197,6 +201,8 @@ export interface WriterTextPortion {
       fontSizeTwips?: number;
       kerningTwips?: number;
       autoKerning?: boolean;
+      rotation?: number;
+      scaleWidth?: number;
       joinsPreviousCharacterBox?: boolean;
       characterBox?: Readonly<
         Record<"Top" | "Bottom" | "Left" | "Right", Readonly<{ line: string; padding: number }>>
@@ -819,6 +825,8 @@ function projectTextPortions(node: SwTextNode): readonly WriterTextPortion[] {
     const underline = handler.ReadItem(RES_CHRATR_UNDERLINE) as SvxUnderlineItem;
     const overline = handler.ReadItem(RES_CHRATR_OVERLINE) as SvxOverlineItem;
     const autoKerning = (handler.ReadItem(RES_CHRATR_AUTOKERN) as SvxAutoKernItem).GetValue();
+    const rotation = (handler.ReadItem(RES_CHRATR_ROTATE) as SvxCharRotateItem).GetValue();
+    const scaleWidth = (handler.ReadItem(RES_CHRATR_SCALEW) as SvxCharScaleWidthItem).GetValue();
     const caseMap = (handler.ReadItem(RES_CHRATR_CASEMAP) as SvxCaseMapItem).GetCaseMap();
     const emphasisMark = (
       handler.ReadItem(RES_CHRATR_EMPHASIS_MARK) as SvxEmphasisMarkItem
@@ -896,6 +904,8 @@ function projectTextPortions(node: SwTextNode): readonly WriterTextPortion[] {
                 ).GetHeight(),
               }
             : {}),
+          ...(rotation !== 0 ? { rotation } : {}),
+          ...(scaleWidth !== 100 ? { scaleWidth } : {}),
           ...(autoKerning !== inheritedAutoKerning ? { autoKerning } : {}),
           ...(authored(RES_CHRATR_KERNING)
             ? { kerningTwips: (handler.ReadItem(RES_CHRATR_KERNING) as SvxKerningItem).GetValue() }

@@ -630,3 +630,67 @@ test("Writer restores manual position and pair kerning when reopening Character"
   await expect(size).toHaveValue("70");
   await expect(pairKerning).not.toBeChecked();
 });
+
+test("Writer lays out scaled and rotated text and fits rotation to the current line", /** Drives the native Position page against mounted text and the Writer selection. @param fixtures - Playwright fixtures. @param fixtures.page - Chromium page. @returns Test completion. */ async ({
+  page,
+}) => {
+  await page.goto("/writer");
+  const editor = page.getByRole("textbox", { name: "Writer document text", exact: true });
+  const text = "Rotated characters";
+  await editor.fill(text);
+  const character = page.getByRole("dialog", { name: "Character", exact: true });
+  /** Opens Position over the selected model text. @returns Completion after the tab opens. */
+  async function openPosition(): Promise<void> {
+    await editor.press("Control+a");
+    await page.getByRole("menuitem", { name: "Format", exact: true }).click();
+    await page.getByRole("menuitem", { name: "Character…", exact: true }).click();
+    await character.getByRole("tab", { name: "Position", exact: true }).click();
+  }
+  await openPosition();
+  const scale = character.getByRole("spinbutton", { name: "Scaling", exact: true });
+  const fit = character.getByRole("checkbox", { name: "Fit to line", exact: true });
+  await expect(scale).toHaveValue("100");
+  await expect(fit).toBeDisabled();
+  await scale.fill("140");
+  await character.getByRole("button", { name: "OK", exact: true }).click();
+  const scaled = editor
+    .locator('[data-writer-character-scale="140"]')
+    .filter({ hasText: "Rotated" });
+  await expect(scaled).toHaveCSS("transform", "matrix(1.4, 0, 0, 1, 0, 0)");
+  expect(
+    parseFloat(
+      await scaled.evaluate(
+        /** Reads actual inline layout space reserved by the scaled glyphs. @param element - Browser text portion. @returns CSS margin. */
+        (element) => getComputedStyle(element).marginInlineEnd,
+      ),
+    ),
+  ).toBeGreaterThan(0);
+  await expect(editor).toHaveText(text);
+
+  await openPosition();
+  await expect(scale).toHaveValue("140");
+  await character.getByRole("radio", { name: "90°", exact: true }).check();
+  await fit.check();
+  const fitted = Number(await scale.inputValue());
+  expect(fitted).toBeGreaterThan(0);
+  expect(fitted).toBeLessThan(100);
+  await fit.uncheck();
+  await expect(scale).toHaveValue("140");
+  await fit.check();
+  await character.getByRole("button", { name: "OK", exact: true }).click();
+  const rotated = editor.locator('[data-writer-character-rotation="900"]');
+  await expect(rotated).toHaveCSS("writing-mode", "sideways-lr");
+  await expect(rotated).toHaveAttribute("data-writer-character-scale", String(fitted));
+  await expect(editor).toHaveText(text);
+
+  await openPosition();
+  await expect(fit).toBeChecked();
+  await expect(scale).toHaveValue(String(fitted));
+  await character.getByRole("radio", { name: "270°", exact: true }).check();
+  await character.getByRole("button", { name: "OK", exact: true }).click();
+  await expect(editor.locator('[data-writer-character-rotation="2700"]')).toHaveCSS(
+    "writing-mode",
+    "sideways-rl",
+  );
+  await expect(editor).toHaveText(text);
+});

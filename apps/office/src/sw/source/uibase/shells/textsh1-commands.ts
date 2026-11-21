@@ -2,6 +2,7 @@
 import { createWriterTabulatorInput } from "./textsh1-tabs";
 import { createWriterEscapementCommands } from "./txtattr";
 
+import { SfxUInt16Item } from "../../../../svl/source/items/intitem";
 import { SfxStringItem } from "../../../../svl/source/items/stritem";
 import { FN_PARAM_1 } from "../../../inc/cmdid";
 import { SwPaM } from "../../core/crsr/pam";
@@ -25,7 +26,7 @@ import {
   type WriterSlotHandler,
 } from "../../../sdi/swriter";
 import { WRITER_COMMAND_IDS } from "../../../uiconfig/swriter/menubar/menubar-commands";
-import type { SwTextShell, WriterParagraphFormatValue } from "./textsh1";
+import type { SwTextShell, SwTextShellTarget, WriterParagraphFormatValue } from "./textsh1";
 import type {
   WriterDialogController,
   WriterBookmarkDialogResult,
@@ -35,13 +36,18 @@ import type { WriterHyperlink } from "../../core/txtnode/fmtatr2";
 import { SvxLineSpacingItem } from "../../../../editeng/inc/lspcitem";
 
 import { SvxLRSpaceItem } from "../../../../editeng/inc/lrspitem";
-import { SID_ATTR_PARA_LINESPACE, SID_ATTR_PARA_LRSPACE } from "../../../../editeng/inc/editids";
+import {
+  SID_ATTR_CHAR_WIDTH_FIT_TO_LINE,
+  SID_ATTR_PARA_LINESPACE,
+  SID_ATTR_PARA_LRSPACE,
+} from "../../../../editeng/inc/editids";
 
-/** Creates the active SwWrtShell command registry. @param target - Persistent Writer editing shell. @param dialogController - Writer-owned dialog lifecycle. @param annotation - Original annotation slots. @returns Validated immutable descriptors. */
+/** Creates the active SwWrtShell command registry. @param target - Persistent Writer editing shell. @param dialogController - Writer-owned dialog lifecycle. @param annotation - Original annotation slots. @param editShell - Native selection measurement. @returns Validated immutable descriptors. */
 export function createWriterTextCommandRegistry(
   target: SwTextShell,
   dialogController: WriterDialogController,
   annotation: readonly WriterSlotHandler<SwTextShell>[],
+  editShell: Pick<SwTextShellTarget, "GetScalingOfSelectedText">,
 ): SfxInterface<SwTextShell> {
   const active =
     /** Reads the currently targeted paragraph. @returns Active paragraph projection. */ (): ReturnType<
@@ -88,8 +94,11 @@ export function createWriterTextCommandRegistry(
     const input = new SfxItemSet(document.GetAttrPool(), [
       ...WRITER_CHARACTER_WHICH_RANGES,
       [SID_ATTR_BORDER_INNER, SID_ATTR_BORDER_INNER],
+      [SID_ATTR_CHAR_WIDTH_FIT_TO_LINE, SID_ATTR_CHAR_WIDTH_FIT_TO_LINE],
     ]);
     target.GetTextCtrlState(input);
+    const fit = editShell.GetScalingOfSelectedText();
+    if (fit !== undefined) input.Put(new SfxUInt16Item(SID_ATTR_CHAR_WIDTH_FIT_TO_LINE, fit), true);
     ConvertAttrCharToGen(input);
     const border = new SvxBoxInfoItem(SID_ATTR_BORDER_INNER);
     border.SetDist(true);

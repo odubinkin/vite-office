@@ -1,5 +1,6 @@
 /** @fileoverview Projects one canonical Writer paragraph inside the browser editing host. */
 import { WriterInlineGraphic } from "./WriterFloatingGraphic";
+import { WriterCharacterGeometryText } from "./WriterCharacterGeometryText";
 import { EscapementText } from "./EscapementText";
 
 import { SvxCaseMap } from "../../../editeng/inc/svxenum";
@@ -418,6 +419,8 @@ export function WriterTextPortionProjection({
     renderCaseText(run.attributes.caseMap, run.text, precedingCharacter)
   );
   const { attributes } = run;
+  const rotation = run.inlineGraphic === undefined ? (attributes.rotation ?? 0) : 0;
+  const scaleWidth = run.inlineGraphic === undefined ? (attributes.scaleWidth ?? 100) : 100;
   const wordLines =
     run.inlineGraphic === undefined &&
     attributes.wordLineMode &&
@@ -439,10 +442,40 @@ export function WriterTextPortionProjection({
           ) : (
             <StrikeoutText value={attributes.strikeout}>{text}</StrikeoutText>
           );
-        return <Fragment key={index}>{paintWriterLines(attributes, word)}</Fragment>;
+        const lines = paintWriterLines(attributes, word);
+        if (scaleWidth !== 100 && rotation === 0)
+          return (
+            <WriterCharacterGeometryText key={index} rotation={0} scaleWidth={scaleWidth}>
+              {lines}
+            </WriterCharacterGeometryText>
+          );
+        return <Fragment key={index}>{lines}</Fragment>;
       },
     );
-  } else if (attributes.strikeout !== undefined)
+  }
+  if (rotation !== 0) {
+    content = (
+      <WriterCharacterGeometryText rotation={rotation} scaleWidth={scaleWidth}>
+        {content}
+      </WriterCharacterGeometryText>
+    );
+  } else if (scaleWidth !== 100 && !wordLines) {
+    let offset = 0;
+    content = run.text.split(/([\r\n\t]+| +)/u).map(
+      /** Keeps whitespace and the text's original offsets between scaled word advances. @param part - Original source segment. @param index - Stable segment index. @returns Scaled inline text or mandatory break controls. */
+      (part, index) => {
+        const preceding = offset === 0 ? precedingCharacter : run.text[offset - 1];
+        offset += part.length;
+        if (part === "" || /[\r\n\t]/u.test(part)) return part;
+        return (
+          <WriterCharacterGeometryText key={index} rotation={0} scaleWidth={scaleWidth}>
+            {renderCaseText(attributes.caseMap, part, preceding)}
+          </WriterCharacterGeometryText>
+        );
+      },
+    );
+  }
+  if (!wordLines && attributes.strikeout !== undefined)
     content = <StrikeoutText value={attributes.strikeout}>{content}</StrikeoutText>;
   if (run.attributes.escapement !== undefined)
     content = <EscapementText value={run.attributes.escapement}>{content}</EscapementText>;
