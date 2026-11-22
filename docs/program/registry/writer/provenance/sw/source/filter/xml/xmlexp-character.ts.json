@@ -16,6 +16,10 @@
         {
           "path": "apps/office/src/sw/source/filter/xml/odt-property-roundtrip.test.ts",
           "marker": "round-trips native overline, glyph outline, shadow and relief"
+        },
+        {
+          "path": "apps/office/src/sw/source/filter/xml/odt-native-character-values.test.ts",
+          "marker": "preserves typography deltas"
         }
       ],
       "upstream": [
@@ -40,7 +44,8 @@
     "preservedResponsibilities": [
       "Native Writer text export forwards Western, Asian and complex language items through the shared ODF text style mapping. Existing character item projection remains with the XML export owner.",
       "Projects the native color item to resolved ODF RGB and ordered character theme metadata.",
-      "Projects the existing EditEngine overline, contour, shadow and relief values on named and automatic character styles, preserving explicit off values."
+      "Projects the existing EditEngine overline, contour, shadow and relief values on named and automatic character styles, preserving explicit off values.",
+      "Exports rotation, fit, emphasis, character scale and two-line combination from the native Writer items."
     ],
     "status": "mapped",
     "upstreamPath": "sw/source/filter/xml/xmlexp.cxx",

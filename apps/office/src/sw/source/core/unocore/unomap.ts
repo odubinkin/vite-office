@@ -150,6 +150,20 @@ export const SwUnoPageStylePropertyMap: ReadonlyMap<string, PageStylePropertyEnt
   ),
 ]);
 /** Exact property identity and member selection; numeric values stay in their original item owners. */
+const characterTypographyEntries = [
+  ["CharRotation", row(H.RES_CHRATR_ROTATE, "sal_Int16", M.MID_ROTATE, 1)],
+  ["CharRotationIsFitToLine", row(H.RES_CHRATR_ROTATE, "bool", M.MID_FITTOLINE, 1)],
+  ["CharEmphasis", row(H.RES_CHRATR_EMPHASIS_MARK, "sal_Int16", M.MID_EMPHASIS, 1)],
+  ["CharCombineIsOn", row(H.RES_CHRATR_TWO_LINES, "bool", M.MID_TWOLINES, 1)],
+  ["CharCombinePrefix", row(H.RES_CHRATR_TWO_LINES, "OUString", M.MID_START_BRACKET, 1)],
+  ["CharCombineSuffix", row(H.RES_CHRATR_TWO_LINES, "OUString", M.MID_END_BRACKET, 1)],
+  ["CharScaleWidth", row(H.RES_CHRATR_SCALEW, "sal_Int16", 0, 1)],
+] as const;
+const characterTypographyNames = characterTypographyEntries.map(
+  /** Shares the represented common typography membership. @param entry - Original row. @returns Property name. */ ([
+    name,
+  ]) => name,
+);
 export const SwUnoPropertyMap: ReadonlyMap<string, SwUnoPropertyEntry> = new Map([
   [
     "ListAutoFormat",
@@ -342,6 +356,7 @@ export const SwUnoPropertyMap: ReadonlyMap<string, SwUnoPropertyEntry> = new Map
       kind: "any",
     },
   ],
+  ...characterTypographyEntries,
   [
     "ParaIsAutoFirstLineIndent",
     {
@@ -638,6 +653,7 @@ const characterMaybeVoidProperties = new Set([
   "CharStrikeout",
 ]);
 const paragraphStyleProperties = new Set([
+  ...characterTypographyNames,
   "CharLocale",
   "CharWeight",
   "CharPosture",
@@ -730,6 +746,7 @@ const paragraphStyleProperties = new Set([
   "FollowStyle",
 ]);
 const paragraphMaybeVoidProperties = new Set([
+  ...characterTypographyNames,
   "CharLocale",
   "CharWeight",
   "CharPosture",
@@ -841,6 +858,7 @@ const staticMapEntries: (readonly SfxItemPropertyMapEntry[] | undefined)[] = [];
 const staticPropertySets: (SfxItemPropertySet | undefined)[] = [];
 /** Original COMMON_CRSR_PARA_PROPERTIES_WITHOUT_FN and hyperlink rows represented by this core. */
 const textDefaultProperties = new Set([
+  ...characterTypographyNames,
   "CharLocale",
   "CharWeight",
   "CharPosture",

@@ -266,9 +266,13 @@ export function putItem(item: SfxPoolItem, entry: SwUnoPropertyEntry, value: Any
     if (!copy.PutValue(value, entry.member)) illegal("Expected byte");
     return copy;
   }
-  if (copy instanceof SfxInt16Item)
+  if (copy instanceof SfxInt16Item && entry.kind !== "any")
     return new SfxInt16Item(item.Which(), scalar(value, "sal_Int16") as number);
-  if (copy instanceof SfxUInt16Item && !(copy instanceof SvxParaVertAlignItem))
+  if (
+    copy instanceof SfxUInt16Item &&
+    !(copy instanceof SvxParaVertAlignItem) &&
+    entry.kind !== "any"
+  )
     return new SfxUInt16Item(item.Which(), scalar(value, "sal_Int16") as number);
   const input =
     entry.kind === "any"

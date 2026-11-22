@@ -3,10 +3,16 @@ import {
   createOdtWriterTransfer,
   restoreOdtWriterTransfer,
 } from "../../../browser/filter/xml/odt-transfer";
-import { expect, it } from "vitest";
+import { readFileSync } from "node:fs";
+import { assert, expect, it } from "vitest";
 import { createWriterDocument } from "../../core/doc/doc";
 import { createDocument } from "../../../../sfx2/source/doc/objsh";
-import { FontWeight, FontItalic } from "../../../../tools/inc/fontenum";
+import { FontWeight, FontItalic, FontEmphasisMark } from "../../../../tools/inc/fontenum";
+import { SvxAutoKernItem } from "../../../../editeng/inc/autokernitem";
+import { SvxCharRotateItem } from "../../../../editeng/inc/charrotateitem";
+import { SvxCharScaleWidthItem } from "../../../../editeng/inc/charscaleitem";
+import { SvxEmphasisMarkItem } from "../../../../editeng/inc/emphasismarkitem";
+import { SvxTwoLinesItem } from "../../../../editeng/inc/twolinesitem";
 import {
   SvxWeightItem,
   SvxPostureItem,
@@ -30,6 +36,11 @@ import {
   RES_CHRATR_CJK_FONTSIZE,
   RES_CHRATR_CTL_FONTSIZE,
   RES_CHRATR_UNDERLINE,
+  RES_CHRATR_AUTOKERN,
+  RES_CHRATR_ROTATE,
+  RES_CHRATR_SCALEW,
+  RES_CHRATR_EMPHASIS_MARK,
+  RES_CHRATR_TWO_LINES,
   RES_TXTATR_AUTOFMT,
   WRITER_CHARACTER_WHICH_RANGES,
 } from "../../../inc/hintids";
@@ -51,6 +62,82 @@ function itemAt(node: SwTextNode, offset: number, which: number) {
     ? (hint.format.GetStyleHandle().GetItemIfSet(which, false) ?? node.GetAttr(which))
     : node.GetAttr(which);
 }
+
+it("retains the original tdf106001-2.odt text scale through Writer ODT", /** Ports the ODT-source scale used by LibreOffice's tdf106001 export fixture. @returns Completion. */ async () => {
+  const fixture = new Uint8Array(
+    readFileSync(
+      "../../vendor/libreoffice-reference/sw/qa/extras/ooxmlexport/data/tdf106001-2.odt",
+    ),
+  );
+  const source = (await readOdtDocument(fixture, metadata)).document;
+  let reopened: typeof source | undefined;
+  try {
+    const node = source.paragraphs[0] as SwTextNode;
+    const item = itemAt(node, 1, RES_CHRATR_SCALEW);
+    assert(item instanceof SvxCharScaleWidthItem);
+    expect(item.GetValue()).toBe(900);
+    const bytes = await writeOdtDocument(source, metadata);
+    expect(await (await DocumentArchive.open(bytes)).readTextEntry("content.xml")).toContain(
+      'style:text-scale="900%"',
+    );
+    reopened = (await readOdtDocument(bytes, metadata)).document;
+    const saved = itemAt(reopened.paragraphs[0] as SwTextNode, 1, RES_CHRATR_SCALEW);
+    assert(saved instanceof SvxCharScaleWidthItem);
+    expect(saved.GetValue()).toBe(900);
+  } finally {
+    reopened?.Dispose();
+    source.Dispose();
+  }
+});
+
+it("preserves typography deltas in named and automatic styles through Worker transfer and ODT", /** Exercises native member flags and XML escaping with explicit style resets. @returns Completion. */ async () => {
+  const namespaces =
+    'xmlns:office="urn:oasis:names:tc:opendocument:xmlns:office:1.0" xmlns:style="urn:oasis:names:tc:opendocument:xmlns:style:1.0" xmlns:text="urn:oasis:names:tc:opendocument:xmlns:text:1.0"';
+  const styles = `<office:document-styles ${namespaces}><office:styles><style:style style:name="Typography" style:family="paragraph"><style:text-properties style:letter-kerning="true" style:text-scale="160%" style:text-emphasize="below accent" style:text-rotation-angle="-90" style:text-rotation-scale="fixed" style:text-combine="lines" style:text-combine-start-char="&lt;extra" style:text-combine-end-char="&gt;"/></style:style></office:styles></office:document-styles>`;
+  const content = `<office:document-content ${namespaces}><office:automatic-styles><style:style style:name="Reset" style:family="text"><style:text-properties style:letter-kerning="false" style:text-scale="100%" style:text-emphasize="none" style:text-rotation-angle="0" style:text-rotation-scale="line-height" style:text-combine="none"/></style:style></office:automatic-styles><office:body><office:text><text:p text:style-name="Typography"><text:span text:style-name="Reset">ab</text:span>cd</text:p></office:text></office:body></office:document-content>`;
+  const { document } = importWriterXml(styles, content, metadata);
+  let transferred: typeof document | undefined;
+  let reopened: typeof document | undefined;
+  try {
+    transferred = restoreOdtWriterTransfer(structuredClone(createOdtWriterTransfer(document)));
+    const bytes = await writeOdtDocument(transferred, metadata);
+    const archive = await DocumentArchive.open(bytes);
+    const styleXml = await archive.readTextEntry("styles.xml");
+    expect(styleXml).toContain('style:text-combine-start-char="&lt;"');
+    expect(styleXml).toContain('style:text-combine-end-char="&gt;"');
+    expect(styleXml).toContain('style:text-emphasize="accent below"');
+    expect(styleXml).toContain('style:text-rotation-angle="270"');
+    reopened = (await readOdtDocument(bytes, metadata)).document;
+    for (const candidate of [document, transferred, reopened]) {
+      const node = candidate.paragraphs[0] as SwTextNode;
+      expect(node.GetText()).toBe("abcd");
+      for (const [offset, angle, fit, scale, emphasis, combine, kern] of [
+        [1, 0, false, 100, FontEmphasisMark.NONE, false, false],
+        [3, 2700, true, 160, FontEmphasisMark.Accent | FontEmphasisMark.PosBelow, true, true],
+      ] as const) {
+        const rotation = itemAt(node, offset, RES_CHRATR_ROTATE);
+        const width = itemAt(node, offset, RES_CHRATR_SCALEW);
+        const marks = itemAt(node, offset, RES_CHRATR_EMPHASIS_MARK);
+        const lines = itemAt(node, offset, RES_CHRATR_TWO_LINES);
+        const automatic = itemAt(node, offset, RES_CHRATR_AUTOKERN);
+        assert(rotation instanceof SvxCharRotateItem);
+        assert(width instanceof SvxCharScaleWidthItem);
+        assert(marks instanceof SvxEmphasisMarkItem);
+        assert(lines instanceof SvxTwoLinesItem);
+        assert(automatic instanceof SvxAutoKernItem);
+        expect([rotation.GetValue(), rotation.IsFitToLine()]).toEqual([angle, fit]);
+        expect(width.GetValue()).toBe(scale);
+        expect(marks.GetEmphasisMark()).toBe(emphasis);
+        expect(lines.GetValue()).toBe(combine);
+        expect(automatic.GetValue()).toBe(kern);
+      }
+    }
+  } finally {
+    reopened?.Dispose();
+    transferred?.Dispose();
+    document.Dispose();
+  }
+});
 it("preserves independent script weights,postures,heights and a native colored double wave through actual ODT", /** Exercises direct native items and original handlers rather than a boolean projection. @returns Completion. */ async () => {
   const doc = createWriterDocument(),
     node = doc.paragraphs[0] as SwTextNode;

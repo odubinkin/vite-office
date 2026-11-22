@@ -27,6 +27,12 @@ import {
 import { SvxWordLineModeItem } from "../../../../editeng/inc/wrlmitem";
 import { SvxAutoKernItem } from "../../../../editeng/inc/autokernitem";
 import { SvxKerningItem } from "../../../../editeng/inc/kernitem";
+import { SvxCharRotateItem } from "../../../../editeng/inc/charrotateitem";
+import { SvxCharScaleWidthItem } from "../../../../editeng/inc/charscaleitem";
+import { SvxEmphasisMarkItem } from "../../../../editeng/inc/emphasismarkitem";
+import { SvxTwoLinesItem } from "../../../../editeng/inc/twolinesitem";
+import { MID_EMPHASIS } from "../../../../editeng/inc/memberids";
+import { Any } from "../../../../cppu/inc/com/sun/star/uno/Any";
 import { convertTwipToMm100 } from "../../../../tools/inc/UnitConversion";
 import {
   SvxFontItem,
@@ -65,6 +71,10 @@ import {
   RES_CHRATR_CONTOUR,
   RES_CHRATR_SHADOWED,
   RES_CHRATR_RELIEF,
+  RES_CHRATR_ROTATE,
+  RES_CHRATR_SCALEW,
+  RES_CHRATR_EMPHASIS_MARK,
+  RES_CHRATR_TWO_LINES,
   RES_CHRATR_WEIGHT,
 } from "../../../inc/hintids";
 
@@ -94,6 +104,10 @@ export function getCharacterProperties(
   const contour = set.GetItemIfSet(RES_CHRATR_CONTOUR, inherited);
   const shadow = set.GetItemIfSet(RES_CHRATR_SHADOWED, inherited);
   const relief = set.GetItemIfSet(RES_CHRATR_RELIEF, inherited);
+  const rotation = set.GetItemIfSet(RES_CHRATR_ROTATE, inherited);
+  const scaleWidth = set.GetItemIfSet(RES_CHRATR_SCALEW, inherited);
+  const emphasis = set.GetItemIfSet(RES_CHRATR_EMPHASIS_MARK, inherited);
+  const twoLines = set.GetItemIfSet(RES_CHRATR_TWO_LINES, inherited);
   const color = set.GetItemIfSet(RES_CHRATR_COLOR, inherited);
   const highlight = set.GetItemIfSet(RES_CHRATR_HIGHLIGHT, inherited);
   const background = set.GetItemIfSet(RES_CHRATR_BACKGROUND, inherited);
@@ -122,6 +136,10 @@ export function getCharacterProperties(
     contour === undefined &&
     shadow === undefined &&
     relief === undefined &&
+    rotation === undefined &&
+    scaleWidth === undefined &&
+    emphasis === undefined &&
+    twoLines === undefined &&
     crossedOut === undefined &&
     escapement === undefined &&
     !directFontSize &&
@@ -274,7 +292,38 @@ export function getCharacterProperties(
     ...(contour instanceof SvxContourItem ? { contoured: contour.GetValue() } : {}),
     ...(shadow instanceof SvxShadowedItem ? { shadowed: shadow.GetValue() } : {}),
     ...(relief instanceof SvxCharReliefItem ? { relief: relief.GetEnumValue() } : {}),
+    ...(rotation instanceof SvxCharRotateItem
+      ? { rotation: rotation.GetValue(), rotationFitsLine: rotation.IsFitToLine() }
+      : {}),
+    ...(scaleWidth instanceof SvxCharScaleWidthItem
+      ? { scaleWidth: (scaleWidth.GetValue() << 16) >> 16 }
+      : {}),
+    ...(emphasis instanceof SvxEmphasisMarkItem ? { emphasis: emphasisValue(emphasis) } : {}),
+    ...(twoLines instanceof SvxTwoLinesItem
+      ? {
+          combineLines: twoLines.GetValue(),
+          combinePrefix: twoLines.GetStartBracket()
+            ? String.fromCharCode(twoLines.GetStartBracket())
+            : "",
+          combineSuffix: twoLines.GetEndBracket()
+            ? String.fromCharCode(twoLines.GetEndBracket())
+            : "",
+        }
+      : {}),
   };
+}
+
+/** Reads the UNO enum from the pooled emphasis flags. @param item - Native character item. @returns Mapped UNO value. */
+function emphasisValue(item: SvxEmphasisMarkItem): number {
+  const value = new Any();
+  try {
+    item.QueryValue(value, MID_EMPHASIS);
+    const scalar: [number] = [0];
+    value.extract(scalar, "sal_Int16");
+    return scalar[0];
+  } finally {
+    value.dispose();
+  }
 }
 
 /** Enumerates actual native hint boundaries without merging through browser booleans. @param node - Canonical text owner. @returns Source item-based XML runs. */

@@ -5,6 +5,7 @@ import {
   SvxTwoLinesItem,
 } from "../../../../editeng/source/items/textitem.layout";
 import { SvxCharScaleWidthItem } from "../../../../editeng/source/items/textitem.spacing";
+import { SvxEmphasisMarkItem } from "../../../../editeng/inc/emphasismarkitem";
 import { SvxBrushItem } from "../../../../editeng/source/items/frmitems.brush";
 import {
   SvxCharReliefItem,
@@ -82,6 +83,10 @@ export function writerCharacterItemFactory(which: number): SfxPoolItemFactory | 
       return /** Restores the native character scale. @param value - Stored value. @returns Scale item. */ (
         value,
       ) => new SvxCharScaleWidthItem(Number(value), which);
+    case Which.RES_CHRATR_EMPHASIS_MARK:
+      return /** Restores the native emphasis flags. @param value - Stored value. @returns Emphasis item. */ (
+        value,
+      ) => new SvxEmphasisMarkItem(Number(value), which);
     case Which.RES_CHRATR_OVERLINE:
       return /** Restores the native line style. @param value - Stored value. @returns Overline item. */ (
         value,

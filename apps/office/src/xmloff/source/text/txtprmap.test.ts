@@ -24,6 +24,64 @@ function attributes(pairs: readonly (readonly [string, string])[]): FastAttribut
     ),
   );
 }
+it("normalizes native rotation angles and preserves the original typography token rules", /** Checks native boundaries and typed XML export against the original handlers. @returns Nothing. */ () => {
+  for (const [input, expected] of [
+    ["44", 0],
+    ["45", 900],
+    ["179", 900],
+    ["180", 2700],
+    ["315", 2700],
+    ["316", 0],
+    ["-90", 2700],
+  ] as const)
+    expect(
+      importTextCharacterProperties(attributes([["style:text-rotation-angle", input]])),
+    ).toEqual({ rotation: expected });
+  expect(
+    importTextCharacterProperties(
+      attributes([
+        ["style:text-emphasize", "below disc"],
+        ["style:text-scale", "45000%"],
+        ["style:text-rotation-scale", "fixed"],
+        ["style:text-combine", "lines"],
+        ["style:text-combine-start-char", "😀"],
+      ]),
+    ),
+  ).toEqual({
+    emphasis: 13,
+    scaleWidth: 32767,
+    rotationFitsLine: true,
+    combineLines: true,
+    combinePrefix: "\ud83d",
+  });
+  expect(
+    importTextCharacterProperties(
+      attributes([
+        ["style:text-emphasize", "dot  above"],
+        ["style:text-combine", "letters"],
+      ]),
+    ),
+  ).toEqual({});
+  const output = exportTextCharacterProperties({
+    rotation: 2700,
+    rotationFitsLine: false,
+    emphasis: 13,
+    scaleWidth: 900,
+    combineLines: false,
+    combinePrefix: "",
+    combineSuffix: '"',
+  });
+  expect(output).toContain('style:text-rotation-angle="270"');
+  expect(output).toContain('style:text-rotation-scale="line-height"');
+  expect(output).toContain('style:text-emphasize="disc below"');
+  expect(output).toContain('style:text-scale="900%"');
+  expect(output).toContain('style:text-combine="none"');
+  expect(output).toContain('style:text-combine-end-char="&quot;"');
+  expect(output).not.toContain("style:text-combine-start-char");
+  expect(exportTextCharacterProperties({ combinePrefix: "\t" })).toContain(
+    'style:text-combine-start-char="&#9;"',
+  );
+});
 it("preserves native line-mode merge order, named-token rejection and typed kerning bool transport", /** Checks the shared bool property map used by primary Writer storage. @returns Nothing. */ () => {
   expect(
     importTextCharacterProperties(

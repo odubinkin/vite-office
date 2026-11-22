@@ -7,6 +7,102 @@ import { WrapTextMode as W } from "../../../offapi/com/sun/star/text/WrapTextMod
 import { XMLConstantsPropertyHandler } from "../style/XMLConstantsPropertyHandler";
 import { SvXMLUnitConverter } from "../core/xmluconv";
 import { Any } from "../../../cppu/inc/com/sun/star/uno/Any";
+import { FontEmphasis } from "../../../offapi/com/sun/star/text/FontEmphasis";
+import { Converter } from "../../../sax/source/tools/converter";
+import { text, unicode } from "../../../i18nlangtag/source/isolang/isolang.tables";
+import { OUString } from "../../../sal/inc/rtl/ustring";
+
+const pXML_Emphasize_Enum = [
+  ["none", FontEmphasis.NONE],
+  ["dot", FontEmphasis.DOT_ABOVE],
+  ["circle", FontEmphasis.CIRCLE_ABOVE],
+  ["disc", FontEmphasis.DISK_ABOVE],
+  ["accent", FontEmphasis.ACCENT_ABOVE],
+] as const;
+
+/** Native emphasis handler for one optional mark and one optional position in either order. */
+export class XMLTextEmphasizePropHdl {
+  /** Imports the original signed UNO emphasis value. @param input - Source attribute. @param value - UNO property. @returns Whether matched. */
+  importXML(input: string, value: Any): boolean {
+    let position: "above" | "below" | undefined;
+    let style: number | undefined;
+    for (const token of input.split(" ")) {
+      if (position === undefined && (token === "above" || token === "below")) {
+        position = token;
+        continue;
+      }
+      const entry = pXML_Emphasize_Enum.find(
+        /** Reads the original mark identity. @param entry - Mapping. @returns Token match. */ ([
+          name,
+        ]) => name === token,
+      );
+      if (style !== undefined || !entry) return false;
+      style = entry[1];
+    }
+    const mark = style ?? FontEmphasis.NONE;
+    value.insert([mark && position === "below" ? mark + 10 : mark], "sal_Int16");
+    return true;
+  }
+
+  /** Writes the native token and its position. @param output - XML output. @param value - UNO property. @returns Native success. */
+  exportXML(output: [string], value: Any): boolean {
+    const scalar: [number] = [0];
+    if (!value.extract(scalar, "sal_uInt16")) return true;
+    const below = scalar[0] > 10;
+    const style = below ? scalar[0] - 10 : scalar[0];
+    const entry = pXML_Emphasize_Enum.find(
+      /** Resolves the original mark. @param entry - Mapping. @returns Value match. */ ([, mark]) =>
+        mark === style,
+    );
+    output[0] = (entry?.[0] ?? "dot") + (style ? (below ? " below" : " above") : "");
+    return true;
+  }
+}
+
+/** Native character rotation-angle conversion between degrees and tenths of a degree. */
+export class XMLTextRotationAnglePropHdl {
+  /** Imports the native normalized quarter-turn. @param input - Degrees. @param value - UNO property. @returns Whether parsed. */
+  importXML(input: string, value: Any): boolean {
+    const scalar: [number] = [0];
+    if (!Converter.convertNumber(scalar, input)) return false;
+    const angle = ((scalar[0] % 360) + 360) % 360;
+    value.insert([angle < 45 || angle > 315 ? 0 : angle < 180 ? 900 : 2700], "sal_Int16");
+    return true;
+  }
+
+  /** Writes degrees using the native integer division. @param output - XML output. @param value - UNO property. @returns Whether written. */
+  exportXML(output: [string], value: Any): boolean {
+    const scalar: [number] = [0];
+    if (!value.extract(scalar, "sal_Int16")) return false;
+    output[0] = String(Math.trunc(scalar[0] / 10));
+    return true;
+  }
+}
+
+/** Native two-line bracket handler, using one UTF-16 character unit. */
+export class XMLTextCombineCharPropHdl {
+  /** Imports the first UTF-16 unit or the empty string. @param input - Source string. @param value - UNO property. @returns True. */
+  importXML(input: string, value: Any): boolean {
+    const string = unicode(input.slice(0, 1));
+    try {
+      value.insert(string.getDataAddress(), "OUString");
+    } finally {
+      string.dispose();
+    }
+    return true;
+  }
+
+  /** Writes a bracket only when the extracted string has one UTF-16 unit. @param output - XML output. @param value - UNO property. @returns Whether to emit the attribute. */
+  exportXML(output: [string], value: Any): boolean {
+    const string = new OUString();
+    try {
+      if (value.extract(string, "OUString")) output[0] = text(string);
+      return output[0].length === 1;
+    } finally {
+      string.dispose();
+    }
+  }
+}
 
 const pXML_HoriPos_Enum = [
   ["from-left", H.NONE],

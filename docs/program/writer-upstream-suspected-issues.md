@@ -5925,3 +5925,23 @@ the separate behavior.
 
 - [Original line-decoration property map](../../vendor/libreoffice-reference/xmloff/source/text/txtprmap.cxx)
 - [Original underline-only export filter](../../vendor/libreoffice-reference/xmloff/source/text/txtexppr.cxx)
+
+### WRITER-733 — Text-combine brackets are truncated to a UTF-16 unit
+
+The ODF text-combine bracket handler keeps only the first UTF-16 unit.
+A supplementary character therefore enters the Writer item as its high
+surrogate. The export handler admits just one unit and omits an empty
+bracket, including an explicitly imported empty attribute. Writer
+preserves these native handler rules.
+
+- [Original combine bracket handlers](../../vendor/libreoffice-reference/xmloff/source/text/txtprhdl.cxx)
+
+### WRITER-734 — Extra spaces invalidate text emphasis
+
+The parser treats each literal space as a delimiter and receives empty
+tokens between consecutive spaces. It rejects an emphasis attribute
+with such a token, including an otherwise valid mark and position.
+Writer preserves the native tokenization and failed assignment.
+
+- [Original emphasis handler](../../vendor/libreoffice-reference/xmloff/source/text/txtprhdl.cxx)
+- [Original XML token enumerator](../../vendor/libreoffice-reference/xmloff/source/core/xmluconv.cxx)

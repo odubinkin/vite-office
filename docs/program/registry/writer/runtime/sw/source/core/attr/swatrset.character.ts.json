@@ -17,9 +17,10 @@
       "divergenceClass": "B",
       "evidence": [
         "apps/office/src/sw/source/core/attr/swatrset.character.ts#writerCharacterItemFactory",
-        "apps/office/src/sw/browser/filter/xml/writer-codec.boundaries.test.ts"
+        "apps/office/src/sw/browser/filter/xml/writer-codec.boundaries.test.ts",
+        "apps/office/src/sw/source/filter/xml/odt-native-character-values.test.ts"
       ],
-      "justification": "Snapshot reconstruction maps character Which values to native item constructors, preserving line style and rotation fit state in every realm.",
+      "justification": "Snapshot reconstruction maps character Which values to native item constructors, preserving line style and rotation fit state in every realm. Restores native emphasis flags with the concrete pooled item in the Writer Worker graph.",
       "knownViolations": [],
       "localSymbols": [
         "writerCharacterItemFactory"

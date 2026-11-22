@@ -28,7 +28,8 @@
       "The shared ODF text-property map binds native CharLocale, CharLocaleAsian and CharLocaleComplex to the four source locale attributes and writes a native Locale Any through the existing Writer import property dispatch.",
       "Sends the original typed CharComplexColor member through native UNO character style and text cursor properties.",
       "Transfers the original signed UNO property into the Writer item-backed style or range.",
-      "Native text effects retain independent underline and overline merge state, the overline color filter asymmetry, boolean character shadow, contour and the signed UNO FontRelief constants."
+      "Native text effects retain independent underline and overline merge state, the overline color filter asymmetry, boolean character shadow, contour and the signed UNO FontRelief constants.",
+      "Transfers rotation, fit, emphasis, text-combine state and brackets, and character scale through the native property map."
     ],
     "omittedResponsibilities": [
       "Full Calc font-family/style actions,rich-text UI,named cell-style inheritance and other formatting actions remain pending.",
@@ -81,6 +82,10 @@
         {
           "path": "apps/office/src/xmloff/source/text/txtprmap.test.ts",
           "marker": "uses separate overline and underline states"
+        },
+        {
+          "path": "apps/office/src/xmloff/source/text/txtprmap.test.ts",
+          "marker": "normalizes native rotation angles"
         }
       ],
       "upstream": [

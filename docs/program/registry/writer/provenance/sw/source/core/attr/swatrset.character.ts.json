@@ -8,6 +8,10 @@
         {
           "path": "apps/office/src/sw/source/core/attr/swatrset.character.ts",
           "marker": "writerCharacterItemFactory"
+        },
+        {
+          "path": "apps/office/src/sw/source/filter/xml/odt-native-character-values.test.ts",
+          "marker": "preserves typography deltas"
         }
       ]
     },
@@ -18,7 +22,8 @@
     "status": "local-only",
     "rationale": "Snapshot reconstruction maps character Which values to native item constructors, preserving line style and rotation fit state in every realm.",
     "responsibilities": [
-      "Snapshot reconstruction maps character Which values to native item constructors, preserving line style and rotation fit state in every realm."
+      "Snapshot reconstruction maps character Which values to native item constructors, preserving line style and rotation fit state in every realm.",
+      "Restores native emphasis flags with the concrete pooled item in the Writer Worker graph."
     ],
     "stackDivergence": {
       "kind": "local-infrastructure",

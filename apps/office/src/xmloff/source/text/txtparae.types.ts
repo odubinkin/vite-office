@@ -54,6 +54,13 @@ export interface OdfCharacterProperties {
   readonly contoured?: boolean;
   readonly shadowed?: boolean;
   readonly relief?: number;
+  readonly rotation?: number;
+  readonly rotationFitsLine?: boolean;
+  readonly emphasis?: number;
+  readonly combineLines?: boolean;
+  readonly combinePrefix?: string;
+  readonly combineSuffix?: string;
+  readonly scaleWidth?: number;
   /** Original shared line-decoration mode and automatic kerning bool properties. */
   readonly wordMode?: boolean;
   readonly autoKerning?: boolean;

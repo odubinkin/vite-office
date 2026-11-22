@@ -2,6 +2,38 @@
 import { Any } from "../../../cppu/inc/com/sun/star/uno/Any";
 import { Converter } from "../../../sax/source/tools/converter";
 import type { SvXMLUnitConverter } from "../core/xmluconv";
+
+/** Native signed percentage handler for the configured number of integer bytes. */
+export class XMLPercentPropHdl {
+  /** Selects the native integer representation. @param bytes - Width of the represented scalar. @returns Handler. */
+  constructor(private readonly bytes: 1 | 2 | 4) {}
+
+  /** Imports a percentage and saturates it to the requested signed member. @param input - Source percent. @param value - UNO property. @returns Whether parsed. */
+  importXML(input: string, value: Any): boolean {
+    const scalar: [number] = [0];
+    const success = Converter.convertPercent(scalar, input);
+    const limit = 2 ** (this.bytes * 8 - 1);
+    value.insert(
+      [Math.max(-limit, Math.min(limit - 1, scalar[0]))],
+      this.bytes === 1 ? "sal_Int8" : this.bytes === 2 ? "sal_Int16" : "sal_Int32",
+    );
+    return success;
+  }
+
+  /** Writes the typed integer percentage. @param output - Destination. @param value - UNO property. @returns Whether written. */
+  exportXML(output: [string], value: Any): boolean {
+    const scalar: [number] = [0];
+    if (
+      !value.extract(
+        scalar,
+        this.bytes === 1 ? "sal_Int8" : this.bytes === 2 ? "sal_Int16" : "sal_Int32",
+      )
+    )
+      return false;
+    Converter.convertPercent(output, scalar[0]);
+    return true;
+  }
+}
 /** Original multi-property font-color conversion: an existing automatic sentinel wins. */
 export class XMLColorAutoPropHdl {
   /** Imports only while AUTO has not already won the merge. @param input - XML value. @param value - Shared property Any. @param converter - Source contract. @returns Native conversion result. */

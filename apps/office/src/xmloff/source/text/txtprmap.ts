@@ -27,7 +27,7 @@ import { SvXMLUnitConverter } from "../core/xmluconv";
 import { XMLColorTransparentPropHdl, XMLIsTransparentPropHdl } from "../style/xmlbahdl";
 import { XMLFontWeightPropHdl } from "../style/weighhdl";
 import { XMLNamedBoolPropertyHdl } from "../style/NamedBoolPropertyHdl";
-import { XMLBoolPropHdl } from "../style/xmlbahdl";
+import { XMLBoolPropHdl, XMLPercentPropHdl } from "../style/xmlbahdl";
 import { XMLShadowedPropHdl } from "../style/shdwdhdl";
 import { XMLConstantsPropertyHandler } from "../style/XMLConstantsPropertyHandler";
 import { FontRelief } from "../../../offapi/com/sun/star/text/FontRelief";
@@ -39,12 +39,19 @@ import {
   XMLUnderlineWidthPropHdl,
 } from "../style/undlihdl";
 import { LanguageTag } from "../../../i18nlangtag/inc/languagetag";
+import { text as nativeText } from "../../../i18nlangtag/source/isolang/isolang.tables";
 import { cppu_detail_getUnoType_Locale as localeType } from "../../../udkapi/com/sun/star/lang/Locale";
 import { XMLCharLocale, exportCharLocale } from "../style/chrlohdl";
 import type { OdfCharacterProperties } from "./txtparae.types";
 import { createOdfThemeColor } from "./XMLComplexColorContext";
 import { createXComplexColor } from "../../../docmodel/inc/uno/UnoComplexColor";
 import { XComplexColor } from "../../../offapi/com/sun/star/util/XComplexColor";
+import { escapeXml } from "./txtparae";
+import {
+  XMLTextCombineCharPropHdl,
+  XMLTextEmphasizePropHdl,
+  XMLTextRotationAnglePropHdl,
+} from "./txtprhdl";
 /** Stateless original handlers and actual owning core unit. */
 const decorationColor = new XMLColorTransparentPropHdl("font-color"),
   decorationHasColor = new XMLIsTransparentPropHdl("font-color", false);
@@ -115,6 +122,26 @@ const effects = [
     ),
     "sal_Int16",
   ],
+  [
+    T.STYLE_TEXT_ROTATION_ANGLE,
+    "style:text-rotation-angle",
+    "rotation",
+    new XMLTextRotationAnglePropHdl(),
+    "sal_Int16",
+  ],
+  [
+    T.STYLE_TEXT_EMPHASIZE,
+    "style:text-emphasize",
+    "emphasis",
+    new XMLTextEmphasizePropHdl(),
+    "sal_Int16",
+  ],
+  [T.STYLE_TEXT_SCALE, "style:text-scale", "scaleWidth", new XMLPercentPropHdl(2), "sal_Int16"],
+] as const;
+const combineChar = new XMLTextCombineCharPropHdl();
+const combineCharacters = [
+  [T.STYLE_TEXT_COMBINE_START_CHAR, "style:text-combine-start-char", "combinePrefix"],
+  [T.STYLE_TEXT_COMBINE_END_CHAR, "style:text-combine-end-char", "combineSuffix"],
 ] as const;
 /** Original chained CharStrikeout style/type/width/text associations. */
 const strikeoutProperties = [
@@ -139,6 +166,18 @@ const boolProperties = [
   [T.STYLE_TEXT_OVERLINE_MODE, "style:text-overline-mode", "wordMode", wordMode],
   [T.STYLE_TEXT_LINE_THROUGH_MODE, "style:text-line-through-mode", "wordMode", wordMode],
   [T.STYLE_LETTER_KERNING, "style:letter-kerning", "autoKerning", autoKerning],
+  [
+    T.STYLE_TEXT_ROTATION_SCALE,
+    "style:text-rotation-scale",
+    "rotationFitsLine",
+    new XMLNamedBoolPropertyHdl("fixed", "line-height"),
+  ],
+  [
+    T.STYLE_TEXT_COMBINE,
+    "style:text-combine",
+    "combineLines",
+    new XMLNamedBoolPropertyHdl("lines", "none"),
+  ],
 ] as const;
 /** Source merged CharLocale mappings for the three independent script families. */
 const languageProperties = [
@@ -184,6 +223,8 @@ export const textCharacterPropertyTokens = [
     /** Selects a native effect token. @param entry - Mapping. @returns Token. */ ([token]) =>
       token,
   ),
+  T.STYLE_TEXT_COMBINE_START_CHAR,
+  T.STYLE_TEXT_COMBINE_END_CHAR,
   ...strikeoutProperties.map(
     /** Reads the original decoration token. @param entry - Mapping. @returns Token. */
     ([token]) => token,
@@ -239,6 +280,24 @@ export function exportTextCharacterProperties(properties: OdfCharacterProperties
         value.insert([properties[key]], "bool");
         handler.exportXML(output, value, converter);
         result += ` ${name}="${output[0]}"`;
+      }
+    }
+    for (const [, name, key] of combineCharacters) {
+      const scalar = properties[key];
+      if (scalar === undefined) continue;
+      const string = xmlTextString(scalar);
+      try {
+        value.insert(string.getDataAddress(), "OUString");
+        output[0] = "";
+        if (combineChar.exportXML(output, value)) {
+          const attribute = escapeXml(output[0])
+            .replaceAll("\t", "&#9;")
+            .replaceAll("\n", "&#10;")
+            .replaceAll("\r", "&#13;");
+          result += ` ${name}="${attribute}"`;
+        }
+      } finally {
+        string.dispose();
       }
     }
     for (const [, name, key, handler, type] of scriptProperties) {
@@ -303,11 +362,26 @@ export function exportTextCharacterProperties(properties: OdfCharacterProperties
 export function importTextCharacterProperties(
   attributes: FastAttributeList,
 ): Partial<OdfCharacterProperties> {
-  const result: Record<string, number | boolean> = {},
+  const result: Record<string, number | boolean | string> = {},
     value = new Any(),
     crossedOut = new Any();
   try {
     for (const [token, text] of attributes) {
+      const bracket = combineCharacters.find(
+        /** Selects the source bracket member. @param entry - Mapping. @returns Token match. */ ([
+          item,
+        ]) => item === token,
+      );
+      if (bracket) {
+        combineChar.importXML(text, value);
+        const scalar = new OUString();
+        try {
+          if (value.extract(scalar, "OUString")) result[bracket[2]] = nativeText(scalar);
+        } finally {
+          scalar.dispose();
+        }
+        continue;
+      }
       if (token === T.FO_LETTER_SPACING) {
         if (kerning.importXML(text, value, kerningConverter)) {
           const scalar: [number] = [0];
@@ -404,7 +478,7 @@ function importDecoration(
   attributes: FastAttributeList,
   decoration: (typeof decorations)[number],
   value: Any,
-  result: Record<string, number | boolean>,
+  result: Record<string, number | boolean | string>,
 ): void {
   const line = new Any();
   try {
@@ -560,6 +634,13 @@ export function applyTextImportProperties(
       ["contoured", "CharContoured", "bool"],
       ["shadowed", "CharShadowed", "bool"],
       ["relief", "CharRelief", "sal_Int16"],
+      ["rotation", "CharRotation", "sal_Int16"],
+      ["rotationFitsLine", "CharRotationIsFitToLine", "bool"],
+      ["emphasis", "CharEmphasis", "sal_Int16"],
+      ["combineLines", "CharCombineIsOn", "bool"],
+      ["combinePrefix", "CharCombinePrefix", "OUString"],
+      ["combineSuffix", "CharCombineSuffix", "OUString"],
+      ["scaleWidth", "CharScaleWidth", "sal_Int16"],
       ["wordMode", "CharWordMode", "bool"],
       ["autoKerning", "CharAutoKerning", "bool"],
       ["kerning", "CharKerning", "sal_Int16"],
