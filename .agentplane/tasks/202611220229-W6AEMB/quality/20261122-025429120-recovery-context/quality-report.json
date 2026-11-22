@@ -1,0 +1,23 @@
+{
+  "schema_version": 1,
+  "task_id": "202611220229-W6AEMB",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-11-22T02:54:29.120Z",
+  "verdict": "pass",
+  "summary": "Paragraph Borders follows the native shared item exchange and is connected to both document paint and ODT automatic paragraph style storage.",
+  "evaluated_sha": "1b0d7496cb8268b868c48a45aae384a60c5e806a",
+  "blueprint_digest": "baa59f612ddfaa2a562b92789798397f8ffef40f21344159edbe339ec24a547f",
+  "findings": [
+    "The covered upstream reopen pattern, real browser paint/history, native shadow default, and box transport checks passed. Existing Calc JSDoc and oversized source items remain outside the changed files."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202611220229-W6AEMB/README.md",
+    "55 focused Writer checks; 82 shared CUI/box checks; Chromium and production build"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": [
+    "Browser CSS approximates output-device shadow/compound line paint and current-page border connections."
+  ]
+}
