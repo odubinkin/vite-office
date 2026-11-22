@@ -1,0 +1,21 @@
+{
+  "schema_version": 1,
+  "task_id": "202611220300-C7EE7Q",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-11-22T03:10:28.069Z",
+  "verdict": "pass",
+  "summary": "Native annotation range and field ownership verified through Writer ODT and Worker.",
+  "evaluated_sha": "2afdb62fe60163295a159f2644620070be5dc2c1",
+  "blueprint_digest": "77a0ccf584b88a195c6c6e40a37b0fc01f4ed8fee73ba0d1e85ded1b707ff2d4",
+  "findings": [
+    "Pinned single and multi-paragraph ranges and related native mark tests pass, along with static and source provenance checks."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202611220300-C7EE7Q/README.md",
+    "output/playwright/writer-odt-annotation-ranges/verification.md"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": []
+}
