@@ -1,0 +1,25 @@
+{
+  "schema_version": 1,
+  "task_id": "202611220048-3WEPCK",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-11-22T01:00:51.683Z",
+  "verdict": "pass",
+  "summary": "The represented native typography items survive the Writer ODT and Worker boundaries.",
+  "evaluated_sha": "c6d4ad9c87931185d69dabd6b064448e0bb4f4d0",
+  "blueprint_digest": "34f099fa4c47b37dea5aac2e79962b28388a23ca0b9d60526367f32ce66720f5",
+  "findings": [
+    "Typed member writes retain concrete items. The pinned source fixture and focused packages cover scale, style inheritance, explicit resets, and normalized values."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202611220048-3WEPCK/README.md",
+    "apps/office/src/sw/source/filter/xml/odt-native-character-values.test.ts",
+    "apps/office/src/xmloff/source/text/txtprmap.test.ts",
+    "output/playwright/3WEPCK/registry.log"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": [
+    "The task covers ODT and core representation. Browser text layout for these effects requires its own source-backed work."
+  ]
+}
