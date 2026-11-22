@@ -280,6 +280,8 @@ export function ScGridWindow(props: ScGridWindowProps): React.JSX.Element {
     rowOutline,
     columnOutline,
   } = calcGridInsets(viewData, viewport.rowHeight);
+  // One grid area lets horizontally sticky items share the origin with absolute cells.
+  const columnLayout = viewport.frozenColumns ? "grid grid-cols-1 grid-rows-1" : "";
   const normal = !!(viewport.splitColumns || viewport.splitRows);
   const activePart = viewData.GetActivePart();
   /** Combines left/right and top/bottom view identities. @param x - Horizontal band. @param y - Vertical band. @returns Native pane. */
@@ -502,7 +504,7 @@ export function ScGridWindow(props: ScGridWindowProps): React.JSX.Element {
             <div
               role="row"
               aria-rowindex={1}
-              className="sticky top-0 z-10 bg-slate-50"
+              className={`sticky top-0 z-10 bg-slate-50 ${columnLayout}`}
               style={{
                 height: columnHeader,
                 top: columnGutter,
@@ -511,7 +513,7 @@ export function ScGridWindow(props: ScGridWindowProps): React.JSX.Element {
               <div
                 role="columnheader"
                 aria-label="Select all cells"
-                className="sticky left-0 z-[11] border-b border-r border-slate-300 bg-slate-50"
+                className="sticky left-0 z-[11] col-start-1 row-start-1 border-b border-r border-slate-300 bg-slate-50"
                 style={{ left: rowGutter, width: rowHeader, height: columnHeader }}
               >
                 <button
@@ -529,51 +531,57 @@ export function ScGridWindow(props: ScGridWindowProps): React.JSX.Element {
               </div>
               {headings.map(
                 /** Renders the native column header in its own pane. @param heading - Column and band. @returns Heading. */
-                ({ col, band }) => (
-                  <div
-                    key={`${col}:${band.leading}`}
-                    role="columnheader"
-                    aria-colindex={col + 1 + Number(headers)}
-                    aria-label={`Column ${columnLabel(col)}`}
-                    style={{
-                      left: headerWidth + viewport.scrollLeft + xAxis.Position(band, col),
-                      clipPath: columnClip(band, col),
-                      width: NativeViewData.ToPixel(table.GetColWidth(col), 1 / 15),
-                      height: viewport.rowHeight,
-                    }}
-                    className="absolute top-0 border-b border-r border-slate-300 bg-slate-50 text-center font-normal"
-                  >
-                    <button
-                      type="button"
+                ({ col, band }) => {
+                  const fixedColumn = viewport.frozenColumns && band.leading;
+                  return (
+                    <div
+                      key={`${col}:${band.leading}`}
+                      role="columnheader"
+                      aria-colindex={col + 1 + Number(headers)}
                       aria-label={`Column ${columnLabel(col)}`}
-                      onPointerDown={
-                        /** Starts native whole-column reference tracking. @param event - Header press. @returns Nothing. */ (
-                          event,
-                        ) => pointHeader("column", col, event)
-                      }
-                      onClick={
-                        /** Routes column selection with native modifiers intact. @param event - Platform click. @returns Nothing. */ (
-                          event,
-                        ) => {
-                          if (event.detail === 0) props.onHeader("column", col, event);
-                        }
-                      }
-                      className="block h-full w-full"
+                      style={{
+                        left:
+                          headerWidth +
+                          (fixedColumn ? 0 : viewport.scrollLeft) +
+                          xAxis.Position(band, col),
+                        clipPath: columnClip(band, col),
+                        width: NativeViewData.ToPixel(table.GetColWidth(col), 1 / 15),
+                        height: viewport.rowHeight,
+                      }}
+                      className={`${fixedColumn ? "sticky z-[1] col-start-1 row-start-1 self-start" : "absolute top-0"} border-b border-r border-slate-300 bg-slate-50 text-center font-normal`}
                     >
-                      {columnLabel(col)}
-                    </button>
-                    {props.headerSizing && (
-                      <ScHeaderResizeHandle
-                        owner={viewData}
-                        width={true}
-                        index={col}
-                        label={`column ${columnLabel(col)}`}
-                        disabled={inputMode !== ScInputMode.SC_INPUT_NONE}
-                        sizing={props.headerSizing}
-                      />
-                    )}
-                  </div>
-                ),
+                      <button
+                        type="button"
+                        aria-label={`Column ${columnLabel(col)}`}
+                        onPointerDown={
+                          /** Starts native whole-column reference tracking. @param event - Header press. @returns Nothing. */ (
+                            event,
+                          ) => pointHeader("column", col, event)
+                        }
+                        onClick={
+                          /** Routes column selection with native modifiers intact. @param event - Platform click. @returns Nothing. */ (
+                            event,
+                          ) => {
+                            if (event.detail === 0) props.onHeader("column", col, event);
+                          }
+                        }
+                        className="block h-full w-full"
+                      >
+                        {columnLabel(col)}
+                      </button>
+                      {props.headerSizing && (
+                        <ScHeaderResizeHandle
+                          owner={viewData}
+                          width={true}
+                          index={col}
+                          label={`column ${columnLabel(col)}`}
+                          disabled={inputMode !== ScInputMode.SC_INPUT_NONE}
+                          sizing={props.headerSizing}
+                        />
+                      )}
+                    </div>
+                  );
+                },
               )}
             </div>
           )}
@@ -584,9 +592,12 @@ export function ScGridWindow(props: ScGridWindowProps): React.JSX.Element {
                 key={`${r}:${band.leading}`}
                 role="row"
                 aria-rowindex={r + 1 + Number(headers)}
-                className="absolute left-0 w-full"
+                className={`${viewport.frozenRows && band.leading ? "sticky z-[4] bg-white" : "absolute left-0"} w-full ${columnLayout}`}
                 style={{
-                  top: viewport.scrollTop + headerHeight + yAxis.Position(band, r),
+                  top:
+                    (viewport.frozenRows && band.leading ? 0 : viewport.scrollTop) +
+                    headerHeight +
+                    yAxis.Position(band, r),
                   height: NativeViewData.ToPixel(table.GetRowHeight(r), 1 / 15),
                 }}
               >
@@ -601,7 +612,7 @@ export function ScGridWindow(props: ScGridWindowProps): React.JSX.Element {
                       width: rowHeader,
                       height: NativeViewData.ToPixel(table.GetRowHeight(r), 1 / 15),
                     }}
-                    className="sticky left-0 z-[3] border-b border-r border-slate-300 bg-slate-50 text-center font-normal"
+                    className="sticky left-0 z-[3] col-start-1 row-start-1 border-b border-r border-slate-300 bg-slate-50 text-center font-normal"
                   >
                     <button
                       type="button"
@@ -637,6 +648,7 @@ export function ScGridWindow(props: ScGridWindowProps): React.JSX.Element {
                 {cells.map(
                   /** Paints a cell using its native value and pane-specific borders. @param entry - Column and pane border data. @returns Cell. */
                   ({ col, x, frames }) => {
+                    const fixedColumn = viewport.frozenColumns && x.leading;
                     const visible = new ScAddress(col, r, tab);
                     const visiblePattern = document.GetPattern(visible) as ScPatternAttr;
                     const merge = mergeRange(document, visible, visiblePattern);
@@ -705,6 +717,7 @@ export function ScGridWindow(props: ScGridWindowProps): React.JSX.Element {
                     const [clipTop, clipBottom] = merge
                       ? yAxis.ClipSpan(band, top, height)
                       : cellInsets(band, top, height);
+                    const mergeOffset = merge ? top - yAxis.Position(band, r) : 0;
                     const cellStyle: CSSProperties = {
                       ...fontStyle,
                       color: browserColor(color),
@@ -752,8 +765,13 @@ export function ScGridWindow(props: ScGridWindowProps): React.JSX.Element {
                         "flex-end",
                         "flex-start",
                       ][(pattern.GetItem(132) as SvxVerJustifyItem).GetValue()],
-                      left: headerWidth + viewport.scrollLeft + left,
-                      top: merge ? top - yAxis.Position(band, r) : undefined,
+                      left:
+                        headerWidth +
+                        (fixedColumn ? Math.max(0, left) : viewport.scrollLeft + left),
+                      // A merged cell can start before the first frozen column.
+                      translate: fixedColumn && left < 0 ? `${left}px` : undefined,
+                      top: fixedColumn ? undefined : mergeOffset,
+                      marginTop: fixedColumn ? mergeOffset : undefined,
                       clipPath: paneClip(clipTop, clipRight, clipBottom, clipLeft),
                       width,
                       height,
@@ -787,7 +805,7 @@ export function ScGridWindow(props: ScGridWindowProps): React.JSX.Element {
                             props.onEdit(position);
                           }
                         }
-                        className={`absolute top-0 min-w-0 overflow-hidden whitespace-nowrap border-b border-r border-slate-200 ${active ? "z-[2] outline outline-2 -outline-offset-2 outline-indigo-700" : ""} ${selected ? "bg-indigo-50" : "bg-white"}`}
+                        className={`${fixedColumn ? "sticky z-[2] col-start-1 row-start-1 self-start" : "absolute"} min-w-0 overflow-hidden whitespace-nowrap border-b border-r border-slate-200 ${active ? "outline outline-2 -outline-offset-2 outline-indigo-700" : ""} ${active && !fixedColumn ? "z-[1]" : ""} ${selected ? "bg-indigo-50" : "bg-white"}`}
                         style={cellStyle}
                       >
                         {dataBar && <ScCellDataBar info={dataBar} width={width} height={height} />}

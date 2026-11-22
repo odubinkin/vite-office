@@ -29,6 +29,42 @@ test("Calc keeps the frozen XLSX rows and columns stationary while scrolling", /
   await expect(fixedColumn).toBeInViewport();
   await expect(fixedRow).toBeInViewport();
   const initial = await corner.boundingBox();
+  const delta = await grid.evaluate(
+    /** Measures native scrolling before Calc can repaint in its scroll handler. @param element - Spreadsheet viewport. @returns Cell displacement on each axis. */
+    (element) => {
+      const before = [
+        '[data-calc-column="0"][data-calc-row="0"]',
+        '[data-calc-column="0"][data-calc-row="10"]',
+        '[data-calc-column="5"][data-calc-row="0"]',
+      ].map(
+        /** Finds and measures a cell in each frozen region. @param selector - Cell selector. @returns Cell and its original screen position. */
+        (selector) => {
+          const cell = element.querySelector(selector);
+          if (!cell) throw new Error(`Missing frozen pane cell ${selector}`);
+          const { x, y } = cell.getBoundingClientRect();
+          return { cell, x, y };
+        },
+      );
+      const { scrollLeft, scrollTop } = element;
+      element.scrollLeft += 7;
+      element.scrollTop += 5;
+      const movement = before.map(
+        /** Compares the screen position in the same browser task. @param position - Cell and original screen position. @returns Horizontal and vertical movement in pixels. */
+        ({ cell, x, y }) => {
+          const after = cell.getBoundingClientRect();
+          return [after.x - x, after.y - y];
+        },
+      );
+      element.scrollLeft = scrollLeft;
+      element.scrollTop = scrollTop;
+      return movement;
+    },
+  );
+  expect(delta).toEqual([
+    [0, 0],
+    [0, -5],
+    [-7, 0],
+  ]);
   const name = page.getByRole("textbox", { name: "Name Box" });
   await expect(name).toHaveValue("F11");
   await grid.evaluate(
