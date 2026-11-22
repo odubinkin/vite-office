@@ -1,10 +1,11 @@
 ---
 id: "202611220203-VKG8BT"
 title: "Align shared Writer ODT and Calc ODS font member import"
-status: "DOING"
+result_summary: "Shared native font member mapping preserves three script families, declaration and inline handling, named-style export and Writer ODT and Calc ODS Worker round trips."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 6
+revision: 7
 origin:
   system: "manual"
 depends_on: []
@@ -43,11 +44,16 @@ quality_review:
     - "docs/program/calc-upstream-suspected-issues.md#CALC-820"
   findings:
     - "Direct families and declaration members share original lexical parsing and ordering. Named styles emit native compatibility attributes, automatic styles preserve references, and both Worker paths keep native font state."
-commit: null
+commit:
+  hash: "b69569c9627554ecabcc989d1979147f83da7217"
+  message: "🧩 VKG8BT code: align native ODF font member maps"
 comments:
   -
     author: "CODER"
     body: "Start: align the original shared font property selection, lexical conversions and defaults in the two ODF filters without changing font embedding or file lifecycle."
+  -
+    author: "CODER"
+    body: "Verified: 113 focused tests, typecheck, lint, formatting, module boundaries, provenance, Writer and Calc registry invariants, policy routing and doctor."
 events:
   -
     type: "status"
@@ -62,8 +68,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Writer ODT and Calc ODS share original font member resolution and named-style export. 113 focused tests and all declared static checks pass."
+  -
+    type: "status"
+    at: "2026-11-22T02:16:10.533Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: 113 focused tests, typecheck, lint, formatting, module boundaries, provenance, Writer and Calc registry invariants, policy routing and doctor."
 doc_version: 3
-doc_updated_at: "2026-11-22T02:14:12.882Z"
+doc_updated_at: "2026-11-22T02:16:10.534Z"
 doc_updated_by: "CODER"
 description: "Unify font declaration and inline property resolution through the original three-script xmloff font member map, preserving file export and Worker round trips."
 sections:
