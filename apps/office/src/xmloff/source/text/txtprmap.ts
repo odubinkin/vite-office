@@ -647,6 +647,7 @@ export function exportParagraphHyphenation(settings?: OdfParagraphHyphenation): 
 
 /** Original import property map output targets the shared XPropertySet contract. */
 import type { XMLAutoStyleFamily, XMLPropertySet } from "../../inc/txtimp";
+import { paragraphAsianTypographyProperties } from "./txtprhdl";
 import { getParagraphAlignmentValue, paragraphJustificationProperties } from "../style/adjushdl";
 import type { XMLParagraphImportProperties } from "./txtparai";
 import type { OdfParagraphAlignment } from "./txtparae";
@@ -817,6 +818,10 @@ export function applyTextImportProperties(
         if (value !== undefined)
           add(name, value, typeof value === "boolean" ? "bool" : "sal_Int16");
       }
+    }
+    for (const [key, , , name] of paragraphAsianTypographyProperties) {
+      const value = paragraph.asianTypography?.[key];
+      if (value !== undefined) add(name, value, "bool");
     }
     if (paragraph.writingMode !== undefined) add("WritingMode", paragraph.writingMode, "sal_Int16");
     if (paragraph.writingModeAutomatic !== undefined)

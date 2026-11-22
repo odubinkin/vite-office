@@ -7,6 +7,7 @@ import { exportFillProperties } from "../draw/fill-properties";
 import { paragraphPropertiesKey, parseParagraphPropertiesKey } from "./txtparae-properties";
 import { exportTextConstant } from "./txtprhdl";
 import { Any } from "../../../cppu/inc/com/sun/star/uno/Any";
+import { exportParagraphAsianTypography } from "./txtprhdl";
 import { exportWritingDirection } from "../style/prhdlfac";
 import { SvXMLUnitConverter } from "../core/xmluconv";
 import { exportParagraphJustification, type OdfParagraphAlignment } from "../style/adjushdl";
@@ -735,6 +736,7 @@ export function exportParagraphAttributes(properties: OdfParagraphProperties): s
       : [`style:contextual-spacing="${properties.contextualSpacing}"`]),
     ...exportParagraphHyphenation(properties.hyphenation),
     ...exportParagraphJustification(properties.justification),
+    ...exportParagraphAsianTypography(properties.asianTypography),
     ...(properties.writingMode === undefined
       ? []
       : [`style:writing-mode="${exportWritingDirection(properties.writingMode)}"`]),

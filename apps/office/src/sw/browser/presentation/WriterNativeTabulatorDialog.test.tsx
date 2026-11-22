@@ -15,13 +15,20 @@ import {
   SvxParaVertAlignItem,
 } from "../../../editeng/source/items/paraitem.controls";
 import { SvxULSpaceItem } from "../../../editeng/inc/ulspitem";
-import { SvxHyphenZoneItem } from "../../../editeng/source/items/paraitem";
+import {
+  SvxHangingPunctuationItem,
+  SvxHyphenZoneItem,
+  SvxScriptSpaceItem,
+} from "../../../editeng/source/items/paraitem";
 import {
   RES_FRAMEDIR,
   RES_PARATR_ADJUST,
   RES_PARATR_AUTOFRAMEDIR,
   RES_PARATR_SNAPTOGRID,
   RES_PARATR_VERTALIGN,
+  RES_PARATR_FORBIDDEN_RULES,
+  RES_PARATR_HANGINGPUNCTUATION,
+  RES_PARATR_SCRIPTSPACE,
   RES_PARATR_HYPHENZONE as H,
   RES_UL_SPACE,
   RES_PARATR_TABSTOP as T,
@@ -470,5 +477,94 @@ it("updates native direction after typing and deletion with a single history ent
     expect(node.GetSwAttrSet().GetFrameDir().GetValue()).toBe(SvxFrameDirection.Horizontal_RL_TB);
   } finally {
     session.Close();
+  }
+});
+
+it("retains the three native Asian typography choices when reopening the dialog and the ODT", /** Ports the upstream Asian Typography dialog scenario and checks XML transport. @returns Completion. */ async () => {
+  const f = open();
+  try {
+    const fields = [
+      [
+        RES_PARATR_FORBIDDEN_RULES,
+        "Apply list of forbidden characters to the beginning and end of lines",
+      ],
+      [RES_PARATR_HANGINGPUNCTUATION, "Allow hanging punctuation"],
+      [RES_PARATR_SCRIPTSPACE, "Apply spacing between Asian and non-Asian text"],
+    ] as const;
+    const node = f.shell.GetActiveParagraph();
+    const undo = f.shell.GetDoc().GetUndoManager();
+    const before = undo.GetUndoActionCount();
+    fireEvent.click(screen.getByRole("tab", { name: "Asian Typography" }));
+    for (const [, name] of fields) {
+      const checkbox = screen.getByRole("checkbox", { name });
+      expect(checkbox).toBeChecked();
+      fireEvent.click(checkbox);
+    }
+    fireEvent.click(screen.getByRole("tab", { name: "Tabs" }));
+    fireEvent.click(screen.getByRole("tab", { name: "Asian Typography" }));
+    for (const [, name] of fields) expect(screen.getByRole("checkbox", { name })).not.toBeChecked();
+    fireEvent.click(screen.getByRole("button", { name: "OK" }));
+    expect(await f.result.value).toBe(true);
+    for (const [which] of fields) expect(node.GetAttr(which).QueryValue()).toBe(false);
+    expect(undo.GetUndoActionCount()).toBe(before + 1);
+    expect(f.shell.Undo()).toBe(true);
+    for (const [which] of fields) expect(node.GetAttr(which).QueryValue()).toBe(true);
+    expect(f.shell.Redo()).toBe(true);
+    const loaded = await readOdtDocument(
+      await writeOdtDocument(f.shell.GetDoc(), { title: "Asian typography" }),
+      { title: "Asian typography" },
+    );
+    try {
+      const paragraph = loaded.document.paragraphs[0];
+      for (const [which] of fields) expect(paragraph?.GetAttr(which).QueryValue()).toBe(false);
+    } finally {
+      loaded.document.Dispose();
+    }
+  } finally {
+    cleanup();
+    f.session.Close();
+  }
+});
+
+it("keeps untouched mixed Asian typography values while applying an explicit checkbox", /** Uses an actual multi-paragraph selection with independent boolean WhichIds. @returns Completion. */ async () => {
+  const f = open(
+    U.CM,
+    /** Creates two differently formatted paragraphs. @param shell - Editing shell. @returns Nothing. */ (
+      shell,
+    ) => {
+      shell.SplitNode();
+      shell.Insert("第二段");
+      const [first, second] = shell.GetDoc().paragraphs;
+      if (!first || !second) throw new Error("Missing test paragraphs.");
+      first.SetAttr(new SvxHangingPunctuationItem(false, RES_PARATR_HANGINGPUNCTUATION));
+      second.SetAttr(new SvxScriptSpaceItem(false, RES_PARATR_SCRIPTSPACE));
+      const start = new SwPosition(first, 0);
+      const end = new SwPosition(second, second.Len());
+      shell.SetPaM(end, start);
+      start.Dispose();
+      end.Dispose();
+    },
+  );
+  try {
+    fireEvent.click(screen.getByRole("tab", { name: "Asian Typography" }));
+    expect(
+      screen.getByRole("checkbox", { name: "Allow hanging punctuation" }),
+    ).toBePartiallyChecked();
+    const spacing = screen.getByRole("checkbox", {
+      name: "Apply spacing between Asian and non-Asian text",
+    });
+    expect(spacing).toBePartiallyChecked();
+    fireEvent.click(spacing);
+    expect(spacing).toBeChecked();
+    fireEvent.click(screen.getByRole("button", { name: "OK" }));
+    expect(await f.result.value).toBe(true);
+    const [first, second] = f.shell.GetDoc().paragraphs;
+    expect(first?.GetAttr(RES_PARATR_HANGINGPUNCTUATION).QueryValue()).toBe(false);
+    expect(second?.GetAttr(RES_PARATR_HANGINGPUNCTUATION).QueryValue()).toBe(true);
+    expect(first?.GetAttr(RES_PARATR_SCRIPTSPACE).QueryValue()).toBe(true);
+    expect(second?.GetAttr(RES_PARATR_SCRIPTSPACE).QueryValue()).toBe(true);
+  } finally {
+    cleanup();
+    f.session.Close();
   }
 });

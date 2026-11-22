@@ -46,6 +46,9 @@ export function paragraphPropertiesKey(properties?: OdfParagraphProperties): str
     properties?.writingMode,
     properties?.writingModeAutomatic === undefined ? "" : Number(properties.writingModeAutomatic),
     properties?.snapToGrid === undefined ? "" : Number(properties.snapToGrid),
+    properties?.asianTypography === undefined
+      ? ""
+      : encodeURIComponent(JSON.stringify(properties.asianTypography)),
   ]
     .map(
       /** Encodes one optional paragraph metric. @param value - Metric. @returns Stable field. */ (
@@ -140,6 +143,13 @@ export function parseParagraphPropertiesKey(key: string): OdfParagraphProperties
       ? { writingModeAutomatic: fields[29] === "1" }
       : {}),
     ...(fields[30] === "0" || fields[30] === "1" ? { snapToGrid: fields[30] === "1" } : {}),
+    ...(fields[31]
+      ? {
+          asianTypography: JSON.parse(decodeURIComponent(fields[31])) as NonNullable<
+            OdfParagraphProperties["asianTypography"]
+          >,
+        }
+      : {}),
     ...(fields[25] === "0" || fields[25] === "1" ? { registerModeActive: fields[25] === "1" } : {}),
     ...(autoTextIndent === undefined || autoTextIndent === ""
       ? {}

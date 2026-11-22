@@ -56,6 +56,7 @@ export function WriterEditableParagraph({
   lineNumbers,
   retainElement,
 }: WriterEditableParagraphProps): React.JSX.Element {
+  const asianTypography = paragraph.computedStyle.asianTypography;
   const paragraphElement = useRef<HTMLParagraphElement | null>(null);
   const labelElement = useRef<HTMLSpanElement | null>(null);
   const label =
@@ -301,6 +302,24 @@ export function WriterEditableParagraph({
                   ? `${paragraph.textLeftMargin / 20}pt`
                   : undefined,
             marginInlineEnd: `${paragraph.computedStyle.rightMarginPt}pt`,
+            lineBreak:
+              asianTypography === undefined
+                ? undefined
+                : asianTypography.forbiddenRules
+                  ? "strict"
+                  : "normal",
+            hangingPunctuation:
+              asianTypography === undefined
+                ? undefined
+                : asianTypography.hangingPunctuation
+                  ? "allow-end"
+                  : "none",
+            textAutospace:
+              asianTypography === undefined
+                ? undefined
+                : asianTypography.scriptSpace
+                  ? "normal"
+                  : "no-autospace",
             textAlign: paragraph.computedStyle.logicalAlignment ?? paragraph.alignment,
             textAlignLast:
               paragraph.computedStyle.lastLineAlignment === undefined

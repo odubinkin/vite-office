@@ -29,6 +29,9 @@ import {
   RES_CHRATR_SHADOWED,
   RES_CHRATR_OVERLINE,
   RES_PARATR_LINESPACING,
+  RES_PARATR_FORBIDDEN_RULES,
+  RES_PARATR_HANGINGPUNCTUATION,
+  RES_PARATR_SCRIPTSPACE,
   RES_UL_SPACE,
 } from "../../../inc/hintids";
 import { exportContentXml, exportStylesXml } from "./xmlexp";
@@ -166,6 +169,42 @@ describe("Writer ODT layout parity", /** Groups ODT layout regressions. @returns
     );
     const exported = exportStylesXml(document);
     expect(exported).toContain('style:contextual-spacing="false"');
+  });
+
+  it("preserves inherited Asian typography and independent automatic style overrides", /** Exercises the native named XML booleans over common and automatic styles. @returns Nothing. */ () => {
+    const definitions = styles(
+      '<style:style style:name="Asian" style:family="paragraph"><style:paragraph-properties style:text-autospace="none" style:punctuation-wrap="hanging" style:line-break="normal"/></style:style>',
+    );
+    const paragraphs = content(
+      '<style:style style:name="Direct" style:family="paragraph" style:parent-style-name="Asian"><style:paragraph-properties style:punctuation-wrap="simple" style:line-break="invalid"/></style:style>',
+      '<text:p text:style-name="Asian">日本語 Latin</text:p><text:p text:style-name="Direct">第二段 Latin</text:p>',
+    );
+    const source = importWriterXml(definitions, paragraphs, metadata).document;
+    /** Asserts independent effective properties after a document load. @param document - Live Writer document. @returns Nothing. */
+    function assertSettings(document: typeof source): void {
+      for (const [index, node] of document.paragraphs.entries()) {
+        expect(node.GetAttr(RES_PARATR_SCRIPTSPACE).QueryValue()).toBe(false);
+        expect(node.GetAttr(RES_PARATR_FORBIDDEN_RULES).QueryValue()).toBe(false);
+        expect(node.GetAttr(RES_PARATR_HANGINGPUNCTUATION).QueryValue()).toBe(index === 0);
+      }
+    }
+    try {
+      assertSettings(source);
+      const named = exportStylesXml(source);
+      const direct = exportContentXml(source);
+      expect(named).toContain('style:text-autospace="none"');
+      expect(named).toContain('style:punctuation-wrap="hanging"');
+      expect(named).toContain('style:line-break="normal"');
+      expect(direct).toContain('style:punctuation-wrap="simple"');
+      const reopened = importWriterXml(named, direct, metadata).document;
+      try {
+        assertSettings(reopened);
+      } finally {
+        reopened.Dispose();
+      }
+    } finally {
+      source.Dispose();
+    }
   });
 
   it("imports and exports fixed, minimum, and extra line spacing", /** Checks upstream ODF line-spacing modes and ignores the Drawing-only font-independent flag. @returns Nothing. */ () => {

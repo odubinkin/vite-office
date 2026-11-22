@@ -35,12 +35,8 @@ describe("ODT structural diagnostic callback", /** Groups diagnostic routing ass
       expect.objectContaining({ name: "style:font-size-asian" }),
     );
     expect(diagnostics).not.toContainEqual(expect.objectContaining({ name: "style:writing-mode" }));
-    expect(diagnostics).toContainEqual(
-      expect.objectContaining({
-        kind: "unknown-attribute",
-        stream: "styles.xml",
-        name: "style:text-autospace",
-      }),
+    expect(diagnostics).not.toContainEqual(
+      expect.objectContaining({ name: "style:text-autospace" }),
     );
   });
 

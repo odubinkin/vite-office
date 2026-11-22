@@ -62,6 +62,8 @@ import {
   XMLPageBackgroundExport,
   exportParagraphAdjustment,
   exportParagraphDirectionAndGrid,
+  exportParagraphAsianTypographyItems,
+  XML_ASIAN_TYPOGRAPHY_WHICH_IDS,
 } from "./xmlexpit";
 import { HoriOrientation } from "../../../../offapi/com/sun/star/text/HoriOrientation";
 import { SwFrameSize, type SwFormatFrameSize } from "../../../inc/fmtfsize";
@@ -842,6 +844,7 @@ function assertSupportedItems(
     RES_FRAMEDIR,
     RES_PARATR_AUTOFRAMEDIR,
     RES_PARATR_SNAPTOGRID,
+    ...XML_ASIAN_TYPOGRAPHY_WHICH_IDS,
     RES_BREAK,
     RES_PAGEDESC,
     RES_PARATR_LINESPACING,
@@ -934,6 +937,7 @@ function getParagraphProperties(set: SfxItemSet | undefined): OdfParagraphProper
         }
       : {}),
     ...exportParagraphDirectionAndGrid(set),
+    ...exportParagraphAsianTypographyItems(set),
     ...(adjust instanceof SvxAdjustItem
       ? { justification: exportParagraphAdjustment(adjust) }
       : {}),

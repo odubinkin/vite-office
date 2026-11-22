@@ -39,7 +39,6 @@ import {
   RES_CHRATR_OPTICAL_SIZING,
   RES_PARATR_HYPHENZONE,
   RES_PARATR_ADJUST,
-  RES_PARATR_SNAPTOGRID,
   RES_CHRATR_SCALEW,
   RES_CHRATR_CASEMAP,
   RES_CHRATR_CROSSEDOUT,
@@ -116,7 +115,7 @@ import { SvxBrushItem } from "../../../editeng/source/items/frmitems.brush";
 import { SfxBoolItem } from "../../../svl/source/items/cenumitm";
 import { WRITER_AVAILABLE_PARAGRAPH_STYLE_POOL } from "../../inc/poolfmt";
 import type { WriterPageDescriptorValue } from "../../source/core/layout/pagedesc";
-import { projectWriterGridLineHeight } from "../../source/core/text/itrform2";
+import { projectWriterParagraphLineLayout } from "../../source/core/text/itrform2";
 import { resolveSwNumberPortionBackground } from "../../source/core/text/inftxt";
 import type { SwViewOption } from "../../inc/viewopt";
 import {
@@ -363,9 +362,6 @@ export class WriterViewProjection {
           (node.GetAttr(RES_CHRATR_FONTSIZE) as SvxFontHeightItem).GetHeight() / 20;
         const page = node.FindPageDesc()?.GetMaster();
         const direction = GetParagraphFrameDirection(node);
-        const grid = (node.GetAttr(RES_PARATR_SNAPTOGRID) as SfxBoolItem).GetValue()
-          ? page?.GetTextGrid()
-          : undefined;
         const firstLine = node.GetAttr(RES_MARGIN_FIRSTLINE) as SvxFirstLineIndentItem;
         const tabItem = node.GetAttr(RES_PARATR_TABSTOP) as SvxTabStopItem;
         const explicitTabStops = Array.from(
@@ -462,7 +458,7 @@ export class WriterViewProjection {
               : 400,
             ...(highlight === "transparent" ? {} : { highlight }),
             ...(background === "transparent" ? {} : { backgroundColor: background }),
-            lineHeight: projectWriterGridLineHeight(lineSpacing, fontSizePt, grid),
+            ...projectWriterParagraphLineLayout(node, lineSpacing, fontSizePt, page?.GetTextGrid()),
             lineSpacingMode: projectWriterLineSpacing(lineSpacing).mode,
             lineSpacingValue: projectWriterLineSpacing(lineSpacing).value,
             tabStopPositionPt: tabStopsPt[0],

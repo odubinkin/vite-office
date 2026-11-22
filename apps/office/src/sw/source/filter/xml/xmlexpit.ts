@@ -57,6 +57,9 @@ import {
   RES_FRAMEDIR,
   RES_PARATR_AUTOFRAMEDIR,
   RES_PARATR_SNAPTOGRID,
+  RES_PARATR_FORBIDDEN_RULES,
+  RES_PARATR_HANGINGPUNCTUATION,
+  RES_PARATR_SCRIPTSPACE,
   RES_BOX,
   RES_SHADOW,
   RES_TEXTGRID,
@@ -342,5 +345,27 @@ export function exportParagraphDirectionAndGrid(set: SfxItemSet): OdfParagraphPr
     ...(direction instanceof SvxFrameDirectionItem ? { writingMode: direction.QueryValue() } : {}),
     ...(automatic instanceof SfxBoolItem ? { writingModeAutomatic: automatic.GetValue() } : {}),
     ...(snap instanceof SfxBoolItem ? { snapToGrid: snap.GetValue() } : {}),
+  };
+}
+
+/** Original Asian paragraph WhichIds consumed by the Writer ODF exporter. */
+export const XML_ASIAN_TYPOGRAPHY_WHICH_IDS = [
+  RES_PARATR_FORBIDDEN_RULES,
+  RES_PARATR_HANGINGPUNCTUATION,
+  RES_PARATR_SCRIPTSPACE,
+] as const;
+
+/** Projects the directly set Writer items for automatic and named ODF styles. @param set - Paragraph item set. @returns Present Asian typography values. */
+export function exportParagraphAsianTypographyItems(set: SfxItemSet): OdfParagraphProperties {
+  const hanging = set.GetItemIfSet(RES_PARATR_HANGINGPUNCTUATION, false);
+  const spacing = set.GetItemIfSet(RES_PARATR_SCRIPTSPACE, false);
+  const forbidden = set.GetItemIfSet(RES_PARATR_FORBIDDEN_RULES, false);
+  if (hanging === undefined && spacing === undefined && forbidden === undefined) return {};
+  return {
+    asianTypography: {
+      ...(hanging instanceof SfxBoolItem ? { hangingPunctuation: hanging.GetValue() } : {}),
+      ...(spacing instanceof SfxBoolItem ? { scriptSpace: spacing.GetValue() } : {}),
+      ...(forbidden instanceof SfxBoolItem ? { forbiddenRules: forbidden.GetValue() } : {}),
+    },
   };
 }

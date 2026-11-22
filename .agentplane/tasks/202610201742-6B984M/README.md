@@ -4,7 +4,7 @@ title: "Implement Writer search and replace core and browser UI"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 128
+revision: 129
 origin:
   system: "manual"
 depends_on:
@@ -562,6 +562,16 @@ comments:
       - Targeted Writer verification passed 855 tests for real dialogs, layout, document transport, defaults and deletion. Follow-up runs passed 808 tests for final Writer editing and dialog changes and 23 tests covering format-search and persisted Which IDs. Shared Unicode tests passed 22 assertions. The Chromium scenario verified visual last-line alignment, manual RTL and retained direction after typing. The production build passed.
       - Module boundaries, source structure and provenance, Writer resources, Writer parity inventory, routing, AgentPlane doctor, scoped ESLint and Prettier, and git diff checks passed. The global documentation and file-size checks report pre-existing issues outside these changes.
       - The pinned FSI case is preserved and documented. The intermediate checkpoint leaves the active task open and does not advance the ten-task full-run count.
+  -
+    author: "CODER"
+    body: |-
+      Writer Asian Typography checkpoint
+
+      - The ordinary Paragraph dialog opens the Asian Typography page after Text Flow, as in the pinned Writer dialog. Forbidden characters, hanging punctuation and spacing between Asian and non-Asian text keep their separate native defaults, mixed states and undo records.
+      - The Writer cursor, paragraph style and text default property maps use the original three UNO names. ODF named boolean handlers preserve the original vocabulary, inherited style settings, direct overrides and invalid-token behavior.
+      - Browser paragraph layout uses CSS line breaking, text autospace and hanging punctuation. Chrome accepted text-autospace normal and no-autospace and showed a width difference in a mixed text probe. The tested Chrome did not implement hanging-punctuation. Browser line breaking uses CSS and does not consume the LibreOffice user-editable forbidden-character lists.
+      - Targeted Writer verification passed 80 tests in nine files, including the upstream dialog scenario, per-item mixed selection, ODT roundtrip and named-style inheritance. The Chromium scenario verified the ordinary dialog, CSS changes, reopening and undo. Production build, module boundaries, source checks, Writer resource checks, scoped ESLint and Prettier, Writer parity inventory, AgentPlane routing and doctor passed. Repository-wide JSDoc and file-size checks show existing failures outside this checkpoint.
+      - This checkpoint leaves the current AgentPlane task open. It does not advance the full-run count.
 
 events:
   -
@@ -1319,9 +1329,21 @@ events:
       - Targeted Writer verification passed 855 tests for real dialogs, layout, document transport, defaults and deletion. Follow-up runs passed 808 tests for final Writer editing and dialog changes and 23 tests covering format-search and persisted Which IDs. Shared Unicode tests passed 22 assertions. The Chromium scenario verified visual last-line alignment, manual RTL and retained direction after typing. The production build passed.
       - Module boundaries, source structure and provenance, Writer resources, Writer parity inventory, routing, AgentPlane doctor, scoped ESLint and Prettier, and git diff checks passed. The global documentation and file-size checks report pre-existing issues outside these changes.
       - The pinned FSI case is preserved and documented. The intermediate checkpoint leaves the active task open and does not advance the ten-task full-run count.
+  -
+    type: "comment"
+    at: "2026-11-22T00:54:22.819Z"
+    author: "CODER"
+    body: |-
+      Writer Asian Typography checkpoint
+
+      - The ordinary Paragraph dialog opens the Asian Typography page after Text Flow, as in the pinned Writer dialog. Forbidden characters, hanging punctuation and spacing between Asian and non-Asian text keep their separate native defaults, mixed states and undo records.
+      - The Writer cursor, paragraph style and text default property maps use the original three UNO names. ODF named boolean handlers preserve the original vocabulary, inherited style settings, direct overrides and invalid-token behavior.
+      - Browser paragraph layout uses CSS line breaking, text autospace and hanging punctuation. Chrome accepted text-autospace normal and no-autospace and showed a width difference in a mixed text probe. The tested Chrome did not implement hanging-punctuation. Browser line breaking uses CSS and does not consume the LibreOffice user-editable forbidden-character lists.
+      - Targeted Writer verification passed 80 tests in nine files, including the upstream dialog scenario, per-item mixed selection, ODT roundtrip and named-style inheritance. The Chromium scenario verified the ordinary dialog, CSS changes, reopening and undo. Production build, module boundaries, source checks, Writer resource checks, scoped ESLint and Prettier, Writer parity inventory, AgentPlane routing and doctor passed. Repository-wide JSDoc and file-size checks show existing failures outside this checkpoint.
+      - This checkpoint leaves the current AgentPlane task open. It does not advance the full-run count.
 
 doc_version: 3
-doc_updated_at: "2026-11-22T00:46:02.917Z"
+doc_updated_at: "2026-11-22T00:54:22.819Z"
 doc_updated_by: "CODER"
 description: "Implement the approved coherent Writer search-and-replace feature from pinned LibreOffice sources: real shared search engine and options, native paragraph/cursor traversal and replacement/history contracts, view-owned search state and dispatch, Find toolbar and Find and Replace dialog with generated upstream command placement and shortcuts. Preserve source semantics and explicit unsupported boundaries; never substitute DOM text search or browser RegExp for ICU contracts. Work only on writer in vite-office-writer; local upstream reading approved, no network or merges. Keep active until approved scope is verified."
 sections:

@@ -13,6 +13,7 @@ import * as CaseMap from "../../../offapi/com/sun/star/style/CaseMap";
 import { XMLBoolPropHdl, XMLNBoolPropHdl } from "../style/xmlbahdl";
 import { XMLNamedBoolPropertyHdl } from "../style/NamedBoolPropertyHdl";
 import { XMLShadowedPropHdl } from "../style/shdwdhdl";
+import type { FastAttributeList } from "../core/xmlimp";
 import { XMLToken as T } from "../core/xmltoken";
 
 /** Native CharCaseMap property split between the case transformation and font variant. */
@@ -246,3 +247,73 @@ export const textBooleanProperties = [
     new XMLNamedBoolPropertyHdl("fixed", "line-height"),
   ],
 ] as const;
+
+/** Original named boolean mappings for the three Asian paragraph settings. */
+export const paragraphAsianTypographyProperties = [
+  [
+    "scriptSpace",
+    T.STYLE_TEXT_AUTOSPACE,
+    "style:text-autospace",
+    "ParaIsCharacterDistance",
+    new XMLNamedBoolPropertyHdl("ideograph-alpha", "none"),
+  ],
+  [
+    "hangingPunctuation",
+    T.STYLE_PUNCTUATION_WRAP,
+    "style:punctuation-wrap",
+    "ParaIsHangingPunctuation",
+    new XMLNamedBoolPropertyHdl("hanging", "simple"),
+  ],
+  [
+    "forbiddenRules",
+    T.STYLE_LINE_BREAK,
+    "style:line-break",
+    "ParaIsForbiddenRules",
+    new XMLNamedBoolPropertyHdl("strict", "normal"),
+  ],
+] as const;
+
+/** Decoded native Asian paragraph items. */
+export type OdfAsianTypography = Partial<
+  Record<(typeof paragraphAsianTypographyProperties)[number][0], boolean>
+>;
+
+/** Converts only successfully parsed native named booleans. @param attributes - Direct XML attributes. @returns Present mapped properties. */
+export function importParagraphAsianTypography(
+  attributes: FastAttributeList,
+): OdfAsianTypography | undefined {
+  const settings: OdfAsianTypography = {};
+  const converter = new SvXMLUnitConverter("twip");
+  const value = new Any();
+  try {
+    for (const [key, token, , , handler] of paragraphAsianTypographyProperties) {
+      const text = attributes.get(token);
+      if (text === null || !handler.importXML(text, value, converter)) continue;
+      const active: [boolean] = [false];
+      if (value.extract(active, "bool")) settings[key] = active[0];
+    }
+  } finally {
+    value.dispose();
+  }
+  return Object.keys(settings).length === 0 ? undefined : settings;
+}
+
+/** Serializes the original lexical tokens for explicitly authored paragraph values. @param settings - Direct typed properties. @returns Present XML attributes. */
+export function exportParagraphAsianTypography(settings?: OdfAsianTypography): string[] {
+  if (settings === undefined) return [];
+  const attributes: string[] = [];
+  const converter = new SvXMLUnitConverter("twip");
+  for (const [key, , attribute, , handler] of paragraphAsianTypographyProperties) {
+    const active = settings[key];
+    if (active === undefined) continue;
+    const value = new Any([active], "bool");
+    try {
+      const token: [string] = [""];
+      handler.exportXML(token, value, converter);
+      attributes.push(`${attribute}="${token[0]}"`);
+    } finally {
+      value.dispose();
+    }
+  }
+  return attributes;
+}

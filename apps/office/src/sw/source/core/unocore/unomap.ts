@@ -31,6 +31,8 @@ import {
   hyphenationMembers,
   hyphenationNames,
   nativeEntries,
+  paragraphBooleanMembers,
+  paragraphBooleanNames,
 } from "./unomap1";
 import { pageBitmapGeometryProperties, pageStoryPropertyEntries } from "./unostyle.page-stories";
 import * as Grid from "../../../inc/unomid";
@@ -438,8 +440,7 @@ export const SwUnoPropertyMap: ReadonlyMap<string, SwUnoPropertyEntry> = new Map
     { type: "sal_Int16", which: H.RES_FRAMEDIR, member: 0, kind: "short", attributes: 0 },
   ],
   ["ParaVertAlignment", row(H.RES_PARATR_VERTALIGN, "sal_Int16", 0, 1)],
-  ["SnapToGrid", row(H.RES_PARATR_SNAPTOGRID, "bool", 0, MAYBEVOID)],
-  ["WritingModeAutomatic", row(H.RES_PARATR_AUTOFRAMEDIR, "bool", 0, MAYBEVOID)],
+  ...paragraphBooleanMembers,
   ...adjustmentMembers,
   [
     "ParaLeftMargin",
@@ -638,8 +639,7 @@ const paragraphStyleProperties = new Set([
   "CharHighlight",
   "WritingMode",
   "ParaVertAlignment",
-  "SnapToGrid",
-  "WritingModeAutomatic",
+  ...paragraphBooleanNames,
   ...adjustmentNames,
   "ParaLeftMargin",
   "ParaRightMargin",
@@ -830,8 +830,7 @@ const textDefaultProperties = new Set([
   "CharHighlight",
   "WritingMode",
   "ParaVertAlignment",
-  "SnapToGrid",
-  "WritingModeAutomatic",
+  ...paragraphBooleanNames,
   ...adjustmentNames,
   "ParaLeftMargin",
   "ParaRightMargin",

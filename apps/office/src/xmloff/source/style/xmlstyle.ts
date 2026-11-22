@@ -26,7 +26,7 @@ import { importOdfLength, SvXMLUnitConverter } from "../core/xmluconv";
 import { Converter } from "../../../sax/source/tools/converter";
 import { XMLTableStyleContext, type OdfTableStyle } from "../table/XMLTableImport";
 import type { OdfCharacterProperties, OdfParagraphAlignment } from "../text/txtparae";
-import { importTextConstant } from "../text/txtprhdl";
+import { importParagraphAsianTypography, importTextConstant } from "../text/txtprhdl";
 import type { OdfStyleDefinition, XMLParagraphImportProperties } from "../text/txtparai";
 import {
   importParagraphHyphenation,
@@ -653,6 +653,7 @@ function importParagraphProperties(
   );
   const hyphenation = importParagraphHyphenation(attributes);
   const justification = importParagraphJustification(attributes);
+  const asianTypography = importParagraphAsianTypography(attributes);
   const register: [boolean] = [false];
   const hasRegister = Converter.convertBool(
     register,
@@ -711,6 +712,7 @@ function importParagraphProperties(
     ...(countLineNumbers === undefined ? {} : { countLineNumbers }),
     ...(hyphenation === undefined ? {} : { hyphenation }),
     ...(justification === undefined ? {} : { justification }),
+    ...(asianTypography === undefined ? {} : { asianTypography }),
     ...importParagraphDirectionAndGrid(attributes),
     ...(hasRegister ? { registerModeActive: register[0] } : {}),
     ...(joinBorder === undefined ? {} : { joinBorder }),

@@ -9,8 +9,14 @@ import {
   RES_BOX,
   RES_CHRATR_BOX,
   RES_PARATR_ADJUST,
+  RES_PARATR_AUTOFRAMEDIR,
+  RES_PARATR_FORBIDDEN_RULES,
+  RES_PARATR_HANGINGPUNCTUATION,
+  RES_PARATR_SCRIPTSPACE,
+  RES_PARATR_SNAPTOGRID,
   RES_PARATR_HYPHENZONE,
 } from "../../../inc/hintids";
+import { MAYBEVOID } from "../../../../udkapi/com/sun/star/beans/PropertyAttribute";
 import type { SwUnoPropertyEntry } from "./unomap";
 
 /** Source box property descriptors for the four physical sides. @param attributes - Original property flags. @param which - Native box item identity. @param prefix - Original character property prefix. @returns Original UNO descriptors. */
@@ -85,6 +91,29 @@ export const adjustmentMembers = (
 /** Original adjustment names admitted to style properties and document defaults. */
 export const adjustmentNames = adjustmentMembers.map(
   /** Gets a property's original UNO name. @param entry - Native row. @returns Name. */
+  ([name]) => name,
+);
+
+/** Original paragraph booleans advertised by the Writer cursor, style and text-default maps. */
+export const paragraphBooleanMembers = (
+  [
+    ["SnapToGrid", RES_PARATR_SNAPTOGRID],
+    ["WritingModeAutomatic", RES_PARATR_AUTOFRAMEDIR],
+    ["ParaIsHangingPunctuation", RES_PARATR_HANGINGPUNCTUATION],
+    ["ParaIsCharacterDistance", RES_PARATR_SCRIPTSPACE],
+    ["ParaIsForbiddenRules", RES_PARATR_FORBIDDEN_RULES],
+  ] as const
+).map(
+  /** Binds each boolean to its original WhichId. @param property - Native name and ID. @returns UNO descriptor. */
+  ([name, which]): [string, SwUnoPropertyEntry] => [
+    name,
+    { which, member: 0, type: "bool", kind: "any", attributes: MAYBEVOID },
+  ],
+);
+
+/** Original boolean paragraph names shared between property maps. */
+export const paragraphBooleanNames = paragraphBooleanMembers.map(
+  /** Selects the original property name. @param entry - Native row. @returns Name. */
   ([name]) => name,
 );
 

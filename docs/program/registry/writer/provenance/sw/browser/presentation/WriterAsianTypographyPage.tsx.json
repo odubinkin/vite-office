@@ -1,0 +1,38 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "browser-adaptation",
+    "localPath": "apps/office/src/sw/browser/presentation/WriterAsianTypographyPage.tsx",
+    "localSymbols": [
+      "WriterAsianTypographyPage"
+    ],
+    "status": "local-only",
+    "rationale": "Exposes the original Asian Typography checkboxes in the regular Writer Paragraph dialog. The browser carries mixed and disabled states, and changed values use the existing native item exchange.",
+    "responsibilities": [
+      "Exposes the original Asian Typography checkboxes in the regular Writer Paragraph dialog. The browser carries mixed and disabled states, and changed values use the existing native item exchange."
+    ],
+    "stackDivergence": {
+      "kind": "browser-adaptation",
+      "rationale": "Browser controls provide the pinned VCL dialog structure."
+    },
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sw/browser/presentation/WriterAsianTypographyPage.tsx",
+          "marker": "WriterAsianTypographyPage"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/cui/source/tabpages/paragrph.cxx",
+          "marker": "SvxAsianTabPage::FillItemSet"
+        },
+        {
+          "path": "vendor/libreoffice-reference/cui/source/tabpages/paragrph.cxx",
+          "marker": "SvxAsianTabPage::Reset"
+        }
+      ]
+    }
+  }
+}

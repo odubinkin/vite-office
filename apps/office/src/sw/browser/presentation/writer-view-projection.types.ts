@@ -23,6 +23,11 @@ export interface WriterParagraphComputedStyle {
   readonly highlight?: string;
   readonly backgroundColor?: string;
   readonly lineHeight: number;
+  readonly asianTypography?: Readonly<{
+    scriptSpace: boolean;
+    hangingPunctuation: boolean;
+    forbiddenRules: boolean;
+  }>;
   readonly lineSpacingMode?: "proportional" | "fixed" | "minimum" | "leading";
   readonly lineSpacingValue?: number;
   readonly tabStopPositionPt?: number | undefined;

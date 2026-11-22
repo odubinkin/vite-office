@@ -2,6 +2,14 @@
 
 import { SvxLineSpaceRule, SvxInterLineSpaceRule } from "../../../../editeng/inc/svxenum";
 import { SwTextGrid, type SwTextGridItem } from "../../../inc/tgrditem";
+import type { SfxBoolItem } from "../../../../svl/inc/eitem";
+import {
+  RES_PARATR_FORBIDDEN_RULES,
+  RES_PARATR_HANGINGPUNCTUATION,
+  RES_PARATR_SCRIPTSPACE,
+  RES_PARATR_SNAPTOGRID,
+} from "../../../inc/hintids";
+import type { SwTextNode } from "../txtnode/ndtxt";
 import type { SvxLineSpacingItem } from "../../../../editeng/inc/lspcitem";
 
 /** Applies Writer proportional leading to the browser device font-height estimate. @param percent - Item percentage. @returns CSS line-height multiplier. */
@@ -71,4 +79,29 @@ export function projectWriterGridLineHeight(
     default:
       return height / (fontSizePt * 20);
   }
+}
+
+/** Transfers effective paragraph formatting into the browser line formatter. @param node - Native paragraph. @param spacing - Effective native line spacing. @param fontSizePt - Browser font-size input. @param pageGrid - Actual assigned page's text grid. @returns Line formatting state. */
+export function projectWriterParagraphLineLayout(
+  node: SwTextNode,
+  spacing: SvxLineSpacingItem,
+  fontSizePt: number,
+  pageGrid?: SwTextGridItem,
+) {
+  /** Reads the native effective boolean. @param which - Paragraph WhichId. @returns Whether active. */
+  function enabled(which: number): boolean {
+    return (node.GetAttr(which) as SfxBoolItem).GetValue();
+  }
+  return {
+    lineHeight: projectWriterGridLineHeight(
+      spacing,
+      fontSizePt,
+      enabled(RES_PARATR_SNAPTOGRID) ? pageGrid : undefined,
+    ),
+    asianTypography: Object.freeze({
+      scriptSpace: enabled(RES_PARATR_SCRIPTSPACE),
+      hangingPunctuation: enabled(RES_PARATR_HANGINGPUNCTUATION),
+      forbiddenRules: enabled(RES_PARATR_FORBIDDEN_RULES),
+    }),
+  };
 }

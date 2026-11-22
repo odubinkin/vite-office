@@ -6,6 +6,7 @@ import { FieldUnit } from "../../../tools/inc/fldunit";
 import { useBrowserLocalization } from "../../../framework/browser/localization/browser-localization-context";
 import { SvxHyphenZoneItem } from "../../../editeng/source/items/paraitem";
 import { RES_PARATR_HYPHENZONE } from "../../inc/hintids";
+import { WriterAsianTypographyPage } from "./WriterAsianTypographyPage";
 import { WriterParagraphAlignmentPage } from "./WriterParagraphAlignmentPage";
 import { WriterHyphenationControls } from "./WriterHyphenationControls";
 import { WriterDialogHeader } from "./WriterDialogHeader";
@@ -42,7 +43,7 @@ export function WriterParagraphDialog({
   function label(key: string, fallback: string): string {
     return localization.GetText(`writer.paragraph.${key}`, fallback);
   }
-  const tabIds = ["spacing", "alignment", "flow", "tabs"] as const;
+  const tabIds = ["spacing", "alignment", "flow", "asiantypo", "tabs"] as const;
   const [activeTab, setActiveTab] = useState<(typeof tabIds)[number]>("spacing");
   const tabIdentity = useId(),
     tabRefs = useRef<Partial<Record<(typeof tabIds)[number], HTMLButtonElement | null>>>({});
@@ -169,12 +170,13 @@ export function WriterParagraphDialog({
                   ["spacing", "Indents & Spacing"],
                   ["alignment", "Alignment"],
                   ["flow", "Text Flow"],
+                  ["asiantypo", label("asian-typography", "Asian Typography")],
                   ["tabs", "Tabs"],
                 ] as const
               ).map(
                 /** Handles Writer formatting state. @param input1 - Input value. @returns Callback result. */ ([
                   id,
-                  label,
+                  caption,
                 ]) => (
                   <button
                     id={`${tabIdentity}-${id}`}
@@ -198,7 +200,7 @@ export function WriterParagraphDialog({
                     role="tab"
                     type="button"
                   >
-                    {label}
+                    {caption}
                   </button>
                 ),
               )}
@@ -331,6 +333,11 @@ export function WriterParagraphDialog({
                   )}
                 </>
               ) : null}
+              {activeTab === "asiantypo" && (
+                <div className="sm:col-span-2">
+                  <WriterAsianTypographyPage input={pageInput} output={tabs.output} label={label} />
+                </div>
+              )}
               {activeTab === "tabs" ? <TabulatorTabPage session={tabs} /> : null}
               <div hidden={activeTab !== "alignment"} className="sm:col-span-2">
                 <WriterParagraphAlignmentPage

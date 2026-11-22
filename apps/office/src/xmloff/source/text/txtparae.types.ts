@@ -1,4 +1,5 @@
 /** @fileoverview Bounded native-value ODF character handoff for text export/import; independent UNO script scalars,underline properties and original font metadata are preserved. No browser boolean formatting model or substitute UNO provider. */
+import type { OdfAsianTypography } from "./txtprhdl";
 import type { OdfParagraphJustification } from "../style/adjushdl";
 import type { OdfParagraphHyphenation } from "./txtprmap";
 import type { OdfFillProperties } from "../draw/fill-properties";
@@ -118,6 +119,7 @@ export interface OdfParagraphProperties extends OdfBoxProperties, OdfFillPropert
   readonly writingMode?: number;
   readonly writingModeAutomatic?: boolean;
   readonly snapToGrid?: boolean;
+  readonly asianTypography?: OdfAsianTypography;
   readonly orphans?: number;
   readonly breakBefore?: "auto" | "page";
   readonly breakAfter?: "auto" | "page";

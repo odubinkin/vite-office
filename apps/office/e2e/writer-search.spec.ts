@@ -783,3 +783,41 @@ test("Writer paints the chosen alignment on a justified paragraph's last line", 
   await page.keyboard.type("a");
   await expect(editor).toHaveCSS("direction", "rtl");
 });
+
+test("Writer applies Asian typography from the ordinary paragraph dialog", /** Exercises the production menu, paragraph page and CSS projection. @param fixtures - Playwright fixtures. @param fixtures.page - Chromium page. @returns Test completion. */ async ({
+  page,
+}) => {
+  await page.goto("/writer");
+  const editor = page.getByRole("textbox", { name: "Writer document text", exact: true });
+  await editor.fill("日本語Latin123。");
+  const format = page.getByRole("menuitem", { name: "Format", exact: true });
+  const paragraphMenu = page.getByRole("menuitem", { name: "Paragraph…", exact: true });
+  const dialog = page.getByRole("dialog", { name: "Paragraph", exact: true });
+  await expect(editor).toHaveCSS("line-break", "strict");
+
+  await format.click();
+  await paragraphMenu.click();
+  await dialog.getByRole("tab", { name: "Asian Typography", exact: true }).click();
+  await dialog.getByRole("checkbox", { name: /^Apply list of forbidden characters/ }).uncheck();
+  await dialog.getByRole("checkbox", { name: "Allow hanging punctuation", exact: true }).uncheck();
+  await dialog
+    .getByRole("checkbox", { name: "Apply spacing between Asian and non-Asian text", exact: true })
+    .uncheck();
+  await dialog.getByRole("button", { name: "OK", exact: true }).click();
+  await expect(editor).toHaveCSS("line-break", "normal");
+  const autospace = await page.evaluate(
+    /** Checks whether this browser implements the native CSS property. @returns CSS feature support. */
+    () => CSS.supports("text-autospace", "no-autospace"),
+  );
+  if (autospace) await expect(editor).toHaveCSS("text-autospace", "no-autospace");
+
+  await format.click();
+  await paragraphMenu.click();
+  await dialog.getByRole("tab", { name: "Asian Typography", exact: true }).click();
+  for (const checkbox of await dialog.getByRole("checkbox").all())
+    await expect(checkbox).not.toBeChecked();
+  await dialog.getByRole("button", { name: "Cancel", exact: true }).click();
+  await page.keyboard.press("Control+z");
+  await expect(editor).toHaveCSS("line-break", "strict");
+  if (autospace) await expect(editor).toHaveCSS("text-autospace", "normal");
+});
