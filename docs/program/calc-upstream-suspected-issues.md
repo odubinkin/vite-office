@@ -7936,3 +7936,13 @@ request retains the same parsing rule.
 
 - [Original native request parser](../../vendor/libreoffice-reference/sc/source/ui/view/formatsh.cxx#L410)
 - [Original sidebar options request](../../vendor/libreoffice-reference/sc/source/ui/sidebar/NumberFormatPropertyPanel.cxx#L108)
+
+### CALC-833 — The cell popup contains an unmatched default-style command
+
+The cell popup declares `.uno:DefaultCellStylesmenu`. The Calc command
+catalogue registers `.uno:DefaultCellStyles`. Calc retains the original
+popup identifier and records its missing registration in the resource
+disposition.
+
+- [Original cell popup](../../vendor/libreoffice-reference/sc/uiconfig/scalc/popupmenu/cell.xml#L45)
+- [Original Calc command catalogue](../../vendor/libreoffice-reference/officecfg/registry/data/org/openoffice/Office/UI/CalcCommands.xcu#L3005)

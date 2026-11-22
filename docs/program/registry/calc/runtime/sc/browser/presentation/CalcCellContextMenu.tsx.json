@@ -1,0 +1,32 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sc/browser/presentation/CalcCellContextMenu.tsx",
+    "classification": "browser-adaptation",
+    "state": "foundation",
+    "suite": "calc",
+    "subsystem": "cell-formatting",
+    "capabilityIds": [
+      "CAP-d618abf2-35e0-42c3-acf1-88c8a5f16811"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "not-applicable",
+      "defaultStatus": "not-applicable",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/sc/browser/presentation/CalcCellContextMenu.tsx",
+        "apps/office/src/sc/browser/presentation/calc-format-cells.test.tsx"
+      ],
+      "justification": "Mounts the native cell popup graph on the selected grid cell or current marked block.",
+      "knownViolations": [],
+      "localSymbols": [
+        "CalcCellContextMenu"
+      ],
+      "sourceResponsibility": "browser-owned",
+      "upstreamFile": null,
+      "upstreamSymbols": []
+    }
+  }
+}

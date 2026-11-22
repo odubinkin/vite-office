@@ -1,7 +1,10 @@
 /** @fileoverview Dispatches source Calc shortcuts shared by the workspace and its input surfaces. */
-import type { ClipboardEvent, KeyboardEvent } from "react";
+import { useMemo, type ClipboardEvent, type KeyboardEvent } from "react";
 import { getBrowserShortcut } from "../../../framework/browser/accelerators/keymapping";
-import type { BrowserCommandSource } from "../../../framework/browser/presentation/command-surface";
+import {
+  createBrowserCommandSource,
+  type BrowserCommandSource,
+} from "../../../framework/browser/presentation/command-surface";
 import type { SfxViewFrame } from "../../../sfx2/source/view/viewfrm";
 import type { CalcClipboardWorkflow } from "../workflows/calc-clipboard-workflow";
 import type { CalcViewController } from "../controller/calc-view-controller";
@@ -63,4 +66,15 @@ export function HandleCellClipboard(
 /** Existing void-slot browser arguments shared by all current Calc command surfaces;typed widgets augment their own payload through the generic controller. @returns Undefined. */
 export function resolveCalcCommandArguments(): undefined {
   return undefined;
+}
+
+/** Shares one browser command projection for the active native frame. @param frame - Calc frame. @returns Command source. */
+export function useCalcCommandSource(
+  frame: SfxViewFrame<CalcViewController>,
+): BrowserCommandSource {
+  return useMemo(
+    /** Binds the current native frame to the browser controls. @returns Command source. */ () =>
+      createBrowserCommandSource(frame),
+    [frame],
+  );
 }

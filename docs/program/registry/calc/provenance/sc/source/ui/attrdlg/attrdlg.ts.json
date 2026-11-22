@@ -1,0 +1,40 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/sc/source/ui/attrdlg/attrdlg.ts",
+    "status": "mapped",
+    "upstreamPath": "sc/source/ui/attrdlg/attrdlg.cxx",
+    "localSymbols": [
+      "ScAttrDlg"
+    ],
+    "upstreamSymbols": [
+      "ScAttrDlg::ScAttrDlg"
+    ],
+    "preservedResponsibilities": [
+      "Captures native selection inputs and projects original cell attribute tabs through one item-set response."
+    ],
+    "omittedResponsibilities": [
+      "This slice exposes Numbers, Alignment, Background and Cell Protection."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sc/source/ui/attrdlg/attrdlg.ts",
+          "marker": "ScAttrDlg"
+        },
+        {
+          "path": "apps/office/src/sc/browser/presentation/calc-format-cells.test.tsx",
+          "marker": "@fileoverview"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sc/source/ui/attrdlg/attrdlg.cxx",
+          "marker": "ScAttrDlg::ScAttrDlg"
+        }
+      ]
+    }
+  }
+}

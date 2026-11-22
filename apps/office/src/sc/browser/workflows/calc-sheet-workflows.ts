@@ -1,3 +1,4 @@
+import { CalcCellFormatWorkflow, createCellFormatSlot } from "./calc-cell-format-workflow";
 import { CalcClipboardWorkflow } from "./calc-clipboard-workflow";
 /** @fileoverview Browser async adapter for native ScTabViewShell::ExecGoToTab and JumpToTable/Nr;real sheet/cursor ownership remains with Calc. */
 import { CalcOptionsWorkflow } from "./calc-options-workflow";
@@ -127,6 +128,7 @@ export class CalcSheetWorkflows {
   readonly tabDialogs = new SfxDialogController<CalcSheetTabDialog, number[] | string>();
   readonly metricDialogs = new SfxDialogController<ScMetricInputDlg, number>();
   readonly pageStyles: CalcPageStyleWorkflow;
+  readonly cellFormat: CalcCellFormatWorkflow;
   readonly printDialogs = new SfxDialogController<PrintAreasModel, SfxRequest | undefined>();
   private managing: ScNameDlg | undefined;
   private creatingNames: AbortController | undefined;
@@ -144,6 +146,7 @@ export class CalcSheetWorkflows {
     readonly controller: CalcViewController,
     dispatcher: SfxDispatcher,
   ) {
+    this.cellFormat = new CalcCellFormatWorkflow(controller, () => !this.HasSheetDialog());
     this.pageStyles = new CalcPageStyleWorkflow(controller, () => !this.HasSheetDialog());
     this.options = new CalcOptionsWorkflow(controller, () => !this.HasSheetDialog());
     this.merge = new CalcMergeWorkflow(controller, () => !this.HasSheetDialog());
@@ -161,6 +164,7 @@ export class CalcSheetWorkflows {
     this.shell = createSfxShell(
       this,
       new SfxInterface<CalcSheetWorkflows>([
+        createCellFormatSlot(),
         ...calcMergeCommands.map(({ id, slotId, label, kind }) => ({
           commandUrl: id,
           slotId,
@@ -506,7 +510,6 @@ export class CalcSheetWorkflows {
     const result = await this.nameDialogs.Request(new ScNameDefDlg(this.controller.viewData));
     return result.kind === "accepted";
   }
-
   /** Routes the Add button through source validation before closing its request. @param id - Active request. @param data - Form values. @returns Validation error. */
   AddName(id: number, data: ScNameDef): string {
     const dialog = this.nameDialogs.GetSnapshot();
@@ -530,7 +533,6 @@ export class CalcSheetWorkflows {
     }
     return error;
   }
-
   /** Opens and resumes the transactional name manager around its nested Define Name request. @returns Whether the workbook changed. */
   private async ManageNames(): Promise<boolean> {
     if (this.HasSheetDialog() || !this.controller.Commit()) return false;
@@ -560,7 +562,6 @@ export class CalcSheetWorkflows {
       manager.Dispose();
     }
   }
-
   /** Opens the original Insert Name picker and applies its respective response. @returns Whether a command ran. */
   private async PasteNames(): Promise<boolean> {
     if (this.HasSheetDialog()) return false;
@@ -596,7 +597,6 @@ export class CalcSheetWorkflows {
       model.Dispose();
     }
   }
-
   /** Executes the source selection-label command around its modal decisions. @returns Whether the creation ran. */
   private async CreateNames(): Promise<boolean> {
     const controller = this.controller;
@@ -633,7 +633,6 @@ export class CalcSheetWorkflows {
       if (this.creatingNames === owner) this.creatingNames = undefined;
     }
   }
-
   /** Resolves the source command state against the active native selection. @returns Whether the command is available. */
   private CanTextToColumns(): boolean {
     return (
@@ -642,7 +641,6 @@ export class CalcSheetWorkflows {
       GetTextToColumnsRange(this.controller.viewData, new ScRange(), true)
     );
   }
-
   /** Routes the native single-column import and its overwrite warning through browser dialogs. @returns Whether cells changed. */
   private async TextToColumns(): Promise<boolean> {
     if (!this.CanTextToColumns()) return false;
@@ -682,6 +680,7 @@ export class CalcSheetWorkflows {
       this.dialogs.GetSnapshot() ||
       this.metricDialogs.GetSnapshot() ||
       this.printDialogs.GetSnapshot() ||
+      this.cellFormat.dialogs.GetSnapshot() ||
       this.pageStyles.pageStyleDialogs.GetSnapshot() ||
       this.pageStyles.headerFooterDialogs.GetSnapshot() ||
       this.managing ||
@@ -982,6 +981,7 @@ export class CalcSheetWorkflows {
     if (paste) this.namePasteDialogs.Cancel(paste.id);
     const name = this.nameDialogs.GetSnapshot();
     if (name) this.nameDialogs.Cancel(name.id);
+    this.cellFormat.Close();
     this.pageStyles.Close();
     const print = this.printDialogs.GetSnapshot();
     if (print) this.printDialogs.Cancel(print.id);

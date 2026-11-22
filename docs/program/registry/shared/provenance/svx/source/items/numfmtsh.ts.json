@@ -1,0 +1,50 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/svx/source/items/numfmtsh.ts",
+    "status": "mapped",
+    "upstreamPath": "svx/source/items/numfmtsh.cxx",
+    "localSymbols": [
+      "SvxNumberFormatShell"
+    ],
+    "upstreamSymbols": [
+      "SvxNumberFormatShell::GetInitSettings",
+      "SvxNumberFormatShell::FillEntryList_Impl",
+      "SvxNumberFormatShell::MakePrevStringFromVal"
+    ],
+    "preservedResponsibilities": [
+      "Lists category and locale entries and generates and previews a draft number picture using the native formatter."
+    ],
+    "omittedResponsibilities": [
+      "Custom format administration remains a separate source responsibility."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/svx/source/items/numfmtsh.ts",
+          "marker": "SvxNumberFormatShell"
+        },
+        {
+          "path": "apps/office/src/sc/browser/presentation/calc-format-cells.test.tsx",
+          "marker": "@fileoverview"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/svx/source/items/numfmtsh.cxx",
+          "marker": "SvxNumberFormatShell::GetInitSettings"
+        },
+        {
+          "path": "vendor/libreoffice-reference/svx/source/items/numfmtsh.cxx",
+          "marker": "SvxNumberFormatShell::FillEntryList_Impl"
+        },
+        {
+          "path": "vendor/libreoffice-reference/svx/source/items/numfmtsh.cxx",
+          "marker": "SvxNumberFormatShell::MakePrevStringFromVal"
+        }
+      ]
+    }
+  }
+}

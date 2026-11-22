@@ -16,6 +16,7 @@ import {
   SID_NUMBER_FORMAT,
   SID_NUMBER_TYPE_FORMAT,
 } from "../../sdi/formatsh.numformat";
+import { FORMAT_CELL_DIALOG } from "../../source/ui/attrdlg/attrdlg";
 import { getCalcCommandResource } from "../../uiconfig/scalc/menubar/menubar";
 import type { ScDocShell } from "../../source/ui/docshell/docsh";
 import { CalcCurrencyControl } from "../presentation/CalcFormattingToolbar";
@@ -103,7 +104,20 @@ export function NumberFormatPropertyPanel({
   }
 
   return (
-    <SidebarPanel title="Number Format" {...{ focusDocument }} focusContent={focusCategory}>
+    <SidebarPanel
+      title="Number Format"
+      {...{ focusDocument }}
+      focusContent={focusCategory}
+      moreOptions={
+        <CommandButton
+          commandId={FORMAT_CELL_DIALOG}
+          commandSource={commandSource}
+          getCommandResource={getCalcCommandResource}
+          resolveArguments={noArguments}
+          {...shortcutIcon(FORMAT_CELL_DIALOG)}
+        />
+      }
+    >
       <div className="grid grid-cols-[minmax(0,1fr)_minmax(3.5rem,1fr)] items-center gap-x-2 gap-y-2 text-xs text-slate-800">
         <label className="contents">
           <span>Category</span>

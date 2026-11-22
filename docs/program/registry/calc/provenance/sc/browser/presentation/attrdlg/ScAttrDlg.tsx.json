@@ -1,0 +1,29 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "browser-adaptation",
+    "status": "local-only",
+    "localPath": "apps/office/src/sc/browser/presentation/attrdlg/ScAttrDlg.tsx",
+    "rationale": "React and DOM present the original cell formatting commands and notebook while the Calc view and formatter retain the selection and item-set owners.",
+    "responsibilities": [
+      "Presents the native notebook and stages one item-set response."
+    ],
+    "stackDivergence": {
+      "kind": "browser-adaptation",
+      "rationale": "React and DOM present the original cell formatting commands and notebook while the Calc view and formatter retain the selection and item-set owners."
+    },
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sc/browser/presentation/attrdlg/ScAttrDlg.tsx",
+          "marker": "ScAttrDlg"
+        },
+        {
+          "path": "apps/office/src/sc/browser/presentation/calc-format-cells.test.tsx",
+          "marker": "@fileoverview"
+        }
+      ]
+    }
+  }
+}

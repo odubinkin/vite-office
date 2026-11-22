@@ -1,4 +1,5 @@
 /** @fileoverview Browser hosts for sheet-workflow modal requests. */
+import { ScAttrDlg } from "./attrdlg/ScAttrDlg";
 import { ScImportAsciiDlg } from "./ScImportAsciiDlg";
 import { ScPasteConfirmationDlg } from "./ScPasteConfirmationDlg";
 import { ScInsertContentsDlg } from "./ScInsertContentsDlg";
@@ -30,6 +31,7 @@ interface CalcSheetDialogsProps {
   readonly headerFooterDialog: ReturnType<
     CalcSheetWorkflows["pageStyles"]["headerFooterDialogs"]["GetSnapshot"]
   >;
+  readonly cellFormat: ReturnType<CalcSheetWorkflows["cellFormat"]["dialogs"]["GetSnapshot"]>;
   readonly pageStyleDialog: ReturnType<
     CalcSheetWorkflows["pageStyles"]["pageStyleDialogs"]["GetSnapshot"]
   >;
@@ -54,6 +56,7 @@ export function CalcSheetDialogs({
   sheetWorkflows,
   widthDialog,
   pageStyleDialog,
+  cellFormat,
   headerFooterDialog,
   mergeDialog,
   protectionDialog,
@@ -203,6 +206,14 @@ export function CalcSheetDialogs({
           onSubmit={(result) =>
             sheetWorkflows.pageStyles.headerFooterDialogs.Complete(headerFooterDialog.id, result)
           }
+        />
+      )}
+      {cellFormat && (
+        <ScAttrDlg
+          key={cellFormat.id}
+          model={cellFormat.request}
+          onCancel={() => sheetWorkflows.cellFormat.dialogs.Cancel(cellFormat.id)}
+          onSubmit={(result) => sheetWorkflows.cellFormat.dialogs.Complete(cellFormat.id, result)}
         />
       )}
       {pageStyleDialog && (

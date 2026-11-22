@@ -34,16 +34,17 @@ import type { ScSplitPos } from "../../source/ui/inc/viewdata";
 import { ScInputWindow, type CalcInputAction } from "./ScInputWindow";
 import { ScTabControl } from "./ScTabControl";
 import type { SfxViewFrame } from "../../../sfx2/source/view/viewfrm";
-import { createBrowserCommandSource } from "../../../framework/browser/presentation/command-surface";
 import { CommandToolbarItems } from "../../../framework/browser/presentation/CommandToolbar";
 import { OfficeWorkspaceHeader } from "../../../framework/browser/presentation/OfficeWorkspaceHeader";
 import { calcStandardBarItems } from "../../uiconfig/scalc/toolbar/standardbar";
 import type { CalcFileWorkflows } from "../workflows/calc-file-workflows";
+import { CalcCellContextMenu } from "./CalcCellContextMenu";
 import { CalcSheetDialogs } from "./CalcSheetDialogs";
 import {
   HandleCellClipboard,
   HandleWorkspaceShortcut,
   resolveCalcCommandArguments,
+  useCalcCommandSource,
 } from "./calc-workbench-keys";
 import { useCalcDialog } from "./use-calc-dialog";
 import { ScPrintAreasDlg, type ScPrintReferenceInput } from "./ScPrintAreasDlg";
@@ -73,6 +74,7 @@ export function CalcWorkbench({
   const tabDialog = useCalcDialog(sheetWorkflows.tabDialogs);
   const widthDialog = useCalcDialog(sheetWorkflows.metricDialogs);
   const headerFooterDialog = useCalcDialog(sheetWorkflows.pageStyles.headerFooterDialogs);
+  const cellFormat = useCalcDialog(sheetWorkflows.cellFormat.dialogs);
   const pageStyleDialog = useCalcDialog(sheetWorkflows.pageStyles.pageStyleDialogs);
   const mergeDialog = useCalcDialog(sheetWorkflows.merge.dialogs);
   const protectionDialog = useCalcDialog(sheetWorkflows.protection.dialogs);
@@ -118,6 +120,7 @@ export function CalcWorkbench({
     sheetDialog !== undefined ||
     widthDialog !== undefined ||
     tabDialog !== undefined ||
+    cellFormat !== undefined ||
     pageStyleDialog !== undefined ||
     headerFooterDialog !== undefined ||
     condManager !== undefined ||
@@ -144,11 +147,7 @@ export function CalcWorkbench({
     inputMode = controller.mode;
   const [selectionStart, selectionEnd] = controller.inputSelection;
   const cursorRowHeight = (doc.FetchTable(activeTab) as ScTable).GetRowHeight(cursorRow);
-  const source = useMemo(
-    /** Binds presenters to the active frame. @returns Command source. */ () =>
-      createBrowserCommandSource(frame),
-    [frame],
-  );
+  const source = useCalcCommandSource(frame);
   const menus = useMemo(
     /** Resolves the connected Calc menus once per frame. @returns Nonempty menu roots. */
     () =>
@@ -947,6 +946,11 @@ export function CalcWorkbench({
           }
         />
       )}
+      <CalcCellContextMenu
+        root={root}
+        {...{ controller, source }}
+        inactive={modal || referenceOpen}
+      />
       <CalcSheetDialogs
         {...{
           sheetWorkflows,
@@ -954,6 +958,7 @@ export function CalcWorkbench({
           tabDialog,
           sheetDialog,
           pageStyleDialog,
+          cellFormat,
           headerFooterDialog,
           mergeDialog,
           protectionDialog,

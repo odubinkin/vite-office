@@ -4,7 +4,7 @@ title: "Connect Calc Format Cells dialog and native scalar attribute pages"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 7
+revision: 8
 origin:
   system: "manual"
 depends_on:
@@ -37,7 +37,7 @@ events:
     to: "DOING"
     note: "Start: connect Format Cells, native formatter preview and scalar attribute pages."
 doc_version: 3
-doc_updated_at: "2026-11-22T02:11:14.770Z"
+doc_updated_at: "2026-11-22T02:33:16.222Z"
 doc_updated_by: "CODER"
 description: "Bind the native Format Cells entry points and asynchronous item-set exchange with Numbers, Alignment, Background and Cell Protection pages, selection history and formatter preview."
 sections:
@@ -54,7 +54,11 @@ sections:
     <!-- BEGIN VERIFICATION RESULTS -->
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Revert this dialog and registry update. The original document formatter, attribute history and storage routes remain the owners."
-  Findings: ""
+  Findings: |-
+    - The Format Cells command routes through the active native view and applies the dialog output with one ApplyAttributes call. Numbers supports original examples and color, categories, locales, currency selection, option-based picture generation, validation and a scratch formatter for read-only previews. Alignment, solid/no fill and Cell Protection write native pool items.
+    - CALC-833 records the unmatched default style popup identifier in the pinned resources. The generator preserves the source ID and its missing registration.
+    - The adapted tdf88999 dialog case enters the scientific value through the existing ScDocument recognizer. Browser plain input has its own simpler parsing and history path. Automatic scientific format assignment through that browser path remains a separate binding.
+    - Font, Font Effects, Borders, conditional Asian typography, expanded fills and advanced custom format administration remain separate scope.
 id_source: "generated"
 ---
 ## Summary
@@ -86,3 +90,8 @@ Create the native ScAttrDlg exchange and format shell route. Bind the Numbers dr
 Revert this dialog and registry update. The original document formatter, attribute history and storage routes remain the owners.
 
 ## Findings
+
+- The Format Cells command routes through the active native view and applies the dialog output with one ApplyAttributes call. Numbers supports original examples and color, categories, locales, currency selection, option-based picture generation, validation and a scratch formatter for read-only previews. Alignment, solid/no fill and Cell Protection write native pool items.
+- CALC-833 records the unmatched default style popup identifier in the pinned resources. The generator preserves the source ID and its missing registration.
+- The adapted tdf88999 dialog case enters the scientific value through the existing ScDocument recognizer. Browser plain input has its own simpler parsing and history path. Automatic scientific format assignment through that browser path remains a separate binding.
+- Font, Font Effects, Borders, conditional Asian typography, expanded fills and advanced custom format administration remain separate scope.

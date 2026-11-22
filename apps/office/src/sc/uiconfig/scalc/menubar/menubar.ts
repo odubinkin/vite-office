@@ -41,6 +41,8 @@ function adaptItems(nodes: readonly ResourceNode[]): CommandMenuItemPlacement[] 
     },
   );
 }
+/** Native cell context surface, with menu structure and source dispatch identities. */
+export const calcCellPopupItems = adaptItems(generated.surfaces.cell as readonly ResourceNode[]);
 /** Native complete menubar excluding only explicit shared Writer browser-policy dispositions. */
 export const calcMenus: readonly CommandMenuPlacement[] = (
   generated.surfaces.menubar as readonly ResourceNode[]

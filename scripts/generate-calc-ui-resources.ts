@@ -19,6 +19,7 @@ import {
 const root = "vendor/libreoffice-reference/",
   output = "apps/office/src/sc/uiconfig/scalc/calc-ui.generated.json";
 const surfaces = {
+  cell: "sc/uiconfig/scalc/popupmenu/cell.xml",
   sheettab: "sc/uiconfig/scalc/popupmenu/sheettab.xml",
   menubar: "sc/uiconfig/scalc/menubar/menubar.xml",
   standardbar: "sc/uiconfig/scalc/toolbar/standardbar.xml",
@@ -70,6 +71,7 @@ const excluded = new Map<string, string>([
   [".uno:Reload", "no-recovery-or-reload"],
   [".uno:VersionDialog", "no-recovery-or-reload"],
   [".uno:Quit", "browser-owned-application-lifecycle"],
+  [".uno:DefaultCellStylesmenu", "unregistered-source-cell-popup-command"],
 ]);
 // Original key-only cell-shell command:catalog metadata is required without adding a visible surface placement.
 const urls = new Set<string>([".uno:Deselect"]);
