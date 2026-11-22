@@ -25,7 +25,7 @@ import {
   pagePrintTokens,
 } from "../../../../xmloff/source/style/PageMasterStyleMap";
 import { escapeXml } from "../../../../xmloff/source/text/txtparae";
-import { ScPageScaleToItem, ScViewObjectModeItem } from "../../../inc/attrib";
+import { ScPageHFItem, ScPageScaleToItem, ScViewObjectModeItem } from "../../../inc/attrib";
 import { ScVObjMode } from "../../../inc/global";
 import { SfxStyleFamily } from "../../../../svl/inc/style-values";
 import { SfxStyleSheetBase } from "../../../../svl/source/items/style-model";
@@ -60,9 +60,10 @@ import {
   ATTR_PAGE_SCALETOPAGES,
   ATTR_PAGE_SCALETO,
   ATTR_PAGE_HEADERSET,
+  ATTR_PAGE_HEADERRIGHT,
   ATTR_PAGE_FOOTERSET,
+  ATTR_PAGE_FOOTERRIGHT,
   ATTR_PAGE_DYNAMIC,
-  ATTR_PAGE_ON,
 } from "../../../inc/scitems";
 
 const units = new SvXMLUnitConverter("twip");
@@ -126,6 +127,25 @@ function importPageScale(items: SfxItemSet, properties: ReadonlyMap<T, string>):
   items.ClearItem(ATTR_PAGE_SCALETOPAGES);
 }
 
+/** Applies the shared brush and box properties to a page or its nested header/footer set. @param items - Native style group. @param properties - ODF properties. @returns Nothing. */
+function importPageDecorations(items: SfxItemSet, properties: ReadonlyMap<T, string>): void {
+  const color = properties.get(T.FO_BACKGROUND_COLOR);
+  if (color === "transparent") items.Put(new SvxBrushItem(COL_TRANSPARENT, ATTR_BACKGROUND));
+  else if (color && /^#[0-9a-f]{6}$/iu.test(color))
+    items.Put(new SvxBrushItem(new Color(Number.parseInt(color.slice(1), 16)), ATTR_BACKGROUND));
+  const box = (items.Get(ATTR_BORDER) as SvxBoxItem).Clone();
+  if (
+    importPageBoxProperties(
+      box,
+      properties,
+      /** Converts an ODF border measure. @param value - Lexical length. @returns Twip length or absence. */
+      (value) => units.convertMeasureToCore(value),
+    )
+  )
+    items.Put(box, true);
+  else box.Dispose();
+}
+
 /** Applies original page-layout properties to the actual page-family item set. @param items - Native style. @param properties - ODF layout properties. @param usage - ODF page usage. @returns Nothing. */
 function importLayout(items: SfxItemSet, properties: ReadonlyMap<T, string>, usage: string): void {
   const get =
@@ -147,20 +167,7 @@ function importLayout(items: SfxItemSet, properties: ReadonlyMap<T, string>, usa
   if (landscape !== null || pageUsage !== undefined || num !== null) items.Put(page);
   const direction = directions.get(get(T.STYLE_WRITING_MODE) ?? "");
   if (direction !== undefined) items.Put(new SvxFrameDirectionItem(direction, ATTR_WRITINGDIR));
-  const color = get(T.FO_BACKGROUND_COLOR);
-  if (color === "transparent") items.Put(new SvxBrushItem(COL_TRANSPARENT, ATTR_BACKGROUND));
-  else if (color && /^#[0-9a-f]{6}$/iu.test(color))
-    items.Put(new SvxBrushItem(new Color(Number.parseInt(color.slice(1), 16)), ATTR_BACKGROUND));
-  const box = (items.Get(ATTR_BORDER) as SvxBoxItem).Clone();
-  if (
-    importPageBoxProperties(
-      box,
-      properties,
-      /** Converts an ODF border measure. @param value - Lexical length. @returns Twip length or absence. */
-      (value) => units.convertMeasureToCore(value),
-    )
-  )
-    items.Put(box);
+  importPageDecorations(items, properties);
   const measure =
     /** Reads one native measure in the existing page unit. @param token - Source attribute. @returns Twip length or absent. */ (
       token: T,
@@ -244,16 +251,35 @@ function importHeaderFooterLayout(
   ).Clone();
   try {
     const set = group.GetItemSet();
-    const measure =
-      /** Reads one ODF measure. @param token - Source attribute. @returns Twip length. */ (
-        token: T,
-      ) => units.convertMeasureToCore(properties.get(token) ?? "") ?? 0;
-    const fixed = properties.has(T.SVG_HEIGHT);
-    const spacing = measure(header ? T.FO_MARGIN_BOTTOM : T.FO_MARGIN_TOP);
-    const height = measure(fixed ? T.SVG_HEIGHT : T.FO_MIN_HEIGHT);
-    set.Put(new SfxBoolItem(ATTR_PAGE_DYNAMIC, !fixed));
-    set.Put(new SvxSizeItem(ATTR_PAGE_SIZE, new Size(0, height + spacing)));
-    set.Put(new SvxULSpaceItem(header ? 0 : spacing, header ? spacing : 0, ATTR_ULSPACE));
+    /** Reads an authored native measure, retaining absent values. @param token - Source attribute. @returns Twip length or absence. */
+    function measure(token: T): number | undefined {
+      const lexical = properties.get(token);
+      return lexical === undefined ? undefined : (units.convertMeasureToCore(lexical) ?? undefined);
+    }
+    const minimum = measure(T.FO_MIN_HEIGHT);
+    const height = minimum ?? measure(T.SVG_HEIGHT);
+    if (height !== undefined) {
+      const size = (set.Get(ATTR_PAGE_SIZE) as SvxSizeItem).GetSize();
+      set.Put(new SvxSizeItem(ATTR_PAGE_SIZE, new Size(size.Width(), height)));
+      set.Put(new SfxBoolItem(ATTR_PAGE_DYNAMIC, minimum !== undefined));
+    }
+    const all = measure(T.FO_MARGIN);
+    const left = measure(T.FO_MARGIN_LEFT) ?? all;
+    const right = measure(T.FO_MARGIN_RIGHT) ?? all;
+    if (left !== undefined || right !== undefined) {
+      const margins = (set.Get(ATTR_LRSPACE) as SvxLRSpaceItem).Clone();
+      if (left !== undefined) margins.SetLeft(SvxIndentValue.twips(left));
+      if (right !== undefined) margins.SetRight(SvxIndentValue.twips(right));
+      set.Put(margins, true);
+    }
+    const distance = measure(header ? T.FO_MARGIN_BOTTOM : T.FO_MARGIN_TOP) ?? all;
+    if (distance !== undefined) {
+      const spacing = (set.Get(ATTR_ULSPACE) as SvxULSpaceItem).Clone();
+      if (header) spacing.SetLower(distance);
+      else spacing.SetUpper(distance);
+      set.Put(spacing, true);
+    }
+    importPageDecorations(set, properties);
     items.Put(group);
   } finally {
     group.Dispose();
@@ -296,30 +322,43 @@ export class ScXMLPageStyles {
     if (layout?.page) importLayout(items, layout.page, layout.usage);
     if (layout?.header) importHeaderFooterLayout(items, layout.header, true);
     if (layout?.footer) importHeaderFooterLayout(items, layout.footer, false);
-    // A master page enables its header and footer through their child elements.
-    for (const which of [ATTR_PAGE_HEADERSET, ATTR_PAGE_FOOTERSET]) {
-      const group = (items.Get(which) as SvxSetItem).Clone();
-      try {
-        group.GetItemSet().Put(new SfxBoolItem(ATTR_PAGE_ON, false));
-        items.Put(group);
-      } finally {
-        group.Dispose();
-      }
-    }
     this.masterNames.set(name, displayName);
-    const importer = this.importer;
-    return new /** Native page-specific SAX context. */ (class extends SvXMLImportContext {
-      /** Processes master-page header and footer child contexts. @param element - Child token. @param attrs - Child attributes. @returns Native child owner. */
-      override createFastChildContext(element: T, attrs: FastAttributeList): SvXMLImportContext {
-        return createHeaderFooterContext(items, element, attrs, importer);
-      }
-    })();
+    return new ScMasterPageContext(items, this.importer);
   }
 
   /** Assigns the table family's master-page reference to the native sheet. @param tab - Destination sheet. @param master - XML style identity. @returns Nothing. */
   Apply(tab: number, master: string): void {
     const name = this.masterNames.get(master);
     if (name) this.document.SetPageStyle(tab, name);
+  }
+}
+
+/** Tracks the original master-page header/footer content presence through the end of its import. */
+class ScMasterPageContext extends SvXMLImportContext {
+  private containsRightHeader = false;
+  private containsRightFooter = false;
+
+  /** Binds the master to its native page-family item set. @param items - Page style. @param importer - Actual text importer. @returns Context. */
+  constructor(
+    private readonly items: SfxItemSet,
+    private readonly importer: ScXMLImport,
+  ) {
+    super();
+  }
+
+  /** Opens a header or footer and records native non-left content presence. @param element - Child token. @param attrs - Child attributes. @returns Native child owner. */
+  override createFastChildContext(element: T, attrs: FastAttributeList): SvXMLImportContext {
+    if (element === T.STYLE_HEADER || element === T.STYLE_HEADER_FIRST)
+      this.containsRightHeader = true;
+    if (element === T.STYLE_FOOTER || element === T.STYLE_FOOTER_FIRST)
+      this.containsRightFooter = true;
+    return createHeaderFooterContext(this.items, element, attrs, this.importer);
+  }
+
+  /** Clears absent right content while retaining the page style flags. @returns Nothing. */
+  override endFastElement(): void {
+    if (!this.containsRightHeader) this.items.Put(new ScPageHFItem(ATTR_PAGE_HEADERRIGHT), true);
+    if (!this.containsRightFooter) this.items.Put(new ScPageHFItem(ATTR_PAGE_FOOTERRIGHT), true);
   }
 }
 
@@ -406,14 +445,6 @@ function exportLayout(items: SfxItemSet): string {
   if (center) attributes += ` style:table-centering="${center}"`;
   if (first !== undefined)
     attributes += ` style:first-page-number="${first ? (first << 16) >> 16 : "continue"}"`;
-  const brush = items.GetItemIfSet(ATTR_BACKGROUND) as SvxBrushItem | undefined;
-  const color = brush?.GetColor();
-  const rgb = color?.IsFullyTransparent()
-    ? "transparent"
-    : "#" + ((color?.toUInt32() ?? 0) & 0xffffff).toString(16).padStart(6, "0");
-  const background = brush ? ` fo:background-color="${rgb}"` : "";
-  const box = items.GetItemIfSet(ATTR_BORDER) as SvxBoxItem | undefined;
-  const borders = box ? exportPageBoxProperties(box, measure) : "";
   const dir = (items.Get(ATTR_WRITINGDIR) as SvxFrameDirectionItem).GetValue();
   const direction =
     [...directions].find(
@@ -428,8 +459,7 @@ function exportLayout(items: SfxItemSet): string {
     exportPageScale(items) +
     ` style:writing-mode="${direction}"` +
     numbering +
-    background +
-    borders
+    exportPageDecorations(items, measure)
   );
 }
 
@@ -447,6 +477,19 @@ function exportPageScale(items: SfxItemSet): string {
   return `${scale ? ` style:scale-to="${(scale << 16) >> 16}%"` : ""}${pages ? ` style:scale-to-pages="${(pages << 16) >> 16}"` : ""}${width ? ` style:scale-to-X="${(width << 16) >> 16}"` : ""}${height ? ` style:scale-to-Y="${(height << 16) >> 16}"` : ""}`;
 }
 
+/** Emits the shared page or header/footer brush and box properties. @param items - Native style group. @param measure - ODF length formatter. @returns ODF attributes. */
+function exportPageDecorations(items: SfxItemSet, measure: (value: number) => string): string {
+  const brush = items.GetItemIfSet(ATTR_BACKGROUND) as SvxBrushItem | undefined;
+  const color = brush?.GetColor();
+  const rgb = color?.IsFullyTransparent()
+    ? "transparent"
+    : "#" + ((color?.toUInt32() ?? 0) & 0xffffff).toString(16).padStart(6, "0");
+  const background = brush ? ` fo:background-color="${rgb}"` : "";
+  const box = items.GetItemIfSet(ATTR_BORDER) as SvxBoxItem | undefined;
+  const borders = box ? exportPageBoxProperties(box, measure) : "";
+  return background + borders;
+}
+
 /** Writes header/footer layout dimensions and adjacent body spacing from the actual nested page set. @param items - Page style. @param header - Header or footer selector. @returns XML fragment. */
 function exportHeaderFooterLayout(items: SfxItemSet, header: boolean): string {
   const key = header ? "header" : "footer";
@@ -459,8 +502,11 @@ function exportHeaderFooterLayout(items: SfxItemSet, header: boolean): string {
   const distance = header ? spacing.GetLower() : spacing.GetUpper();
   const height = (set.Get(ATTR_PAGE_SIZE) as SvxSizeItem).GetSize().Height();
   const dynamic = (set.Get(ATTR_PAGE_DYNAMIC) as SfxBoolItem).GetValue();
-  const length = units.convertMeasureToXML(Math.max(0, height - distance));
-  return `<style:${key}-style><style:header-footer-properties ${dynamic ? "fo:min-height" : "svg:height"}="${length}" fo:margin-${header ? "bottom" : "top"}="${units.convertMeasureToXML(distance)}" fo:margin-left="${units.convertMeasureToXML(margins.ResolveLeft())}" fo:margin-right="${units.convertMeasureToXML(margins.ResolveRight())}"/></style:${key}-style>`;
+  /** Formats dimensions in the same output unit as the page layout. @param value - Native length. @returns ODF measure. */
+  function measure(value: number): string {
+    return units.convertMeasureToXML(value);
+  }
+  return `<style:${key}-style><style:header-footer-properties ${dynamic ? "fo:min-height" : "svg:height"}="${measure(height)}" fo:margin-${header ? "bottom" : "top"}="${measure(distance)}" fo:margin-left="${measure(margins.ResolveLeft())}" fo:margin-right="${measure(margins.ResolveRight())}"${exportPageDecorations(set, measure)}/></style:${key}-style>`;
 }
 
 /** Collects all native page styles and their automatic layouts. @param document - Workbook. @param fonts - Shared package font declarations. @returns XML records and style-name associations. */

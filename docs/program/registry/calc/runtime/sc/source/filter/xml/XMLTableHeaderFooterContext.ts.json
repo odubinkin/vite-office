@@ -18,9 +18,13 @@
       "evidence": [
         "apps/office/src/sc/source/filter/xml/XMLTableHeaderFooterContext.ts",
         "sc/source/filter/xml/XMLTableHeaderFooterContext.cxx",
-        "apps/office/src/sc/source/filter/oox/excelfilter.page-settings.test.ts"
+        "apps/office/src/sc/source/filter/oox/excelfilter.page-settings.test.ts",
+        "apps/office/src/sc/source/filter/xml/ods-page-master.test.ts#ports testHeaderFooterContentODS",
+        "vendor/libreoffice-reference/sc/source/filter/xml/XMLTableHeaderFooterContext.cxx#XMLTableHeaderFooterContext::createFastChildContext",
+        "vendor/libreoffice-reference/sc/source/filter/xml/XMLTableMasterPageExport.cxx#XMLTableMasterPageExport::exportHeaderFooter",
+        "vendor/libreoffice-reference/sc/qa/unit/subsequent_export_test2.cxx#testHeaderFooterContentODS"
       ],
-      "justification": "Reads and writes ODF master-page regions, visibility, fixed date/time snapshots, and filename display formats.",
+      "justification": "Reads and writes ODF master-page regions, visibility, fixed date/time snapshots, and filename display formats. Preserves Calc header/footer sharing and hidden content and emits the native unwrapped center-only region or the nonempty named regions.",
       "knownViolations": [],
       "localSymbols": [
         "XMLTableHeaderFooterContext"

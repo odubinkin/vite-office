@@ -281,7 +281,8 @@ class XMLHeaderFooterRegionContext extends SvXMLImportContext {
 
 /** Original master-page context for one header/footer variant. */
 export class XMLTableHeaderFooterContext extends SvXMLImportContext {
-  private readonly areas: readonly [EditTextObjectImpl, EditTextObjectImpl, EditTextObjectImpl];
+  private readonly areas: [EditTextObjectImpl, EditTextObjectImpl, EditTextObjectImpl];
+  private centerCursorOpen = false;
 
   /** Configures original visibility and sharing, then allocates the owned edit values. @param items - Page style. @param variant - Header/footer record. @param attributes - Source element attributes. @param importer - ODF importer. @returns Context. */
   constructor(
@@ -297,31 +298,53 @@ export class XMLTableHeaderFooterContext extends SvXMLImportContext {
     try {
       const set = group.GetItemSet();
       const enabled = (set.Get(Which.ATTR_PAGE_ON) as SfxBoolItem).GetValue();
-      set.Put(
-        new SfxBoolItem(
-          setting,
-          setting === Which.ATTR_PAGE_ON
-            ? display
-            : !(display && (setting === Which.ATTR_PAGE_SHARED_FIRST || enabled)),
-        ),
-      );
-      items.Put(group);
+      const value =
+        setting === Which.ATTR_PAGE_ON
+          ? display
+          : !(display && (setting === Which.ATTR_PAGE_SHARED_FIRST || enabled));
+      if (
+        setting === Which.ATTR_PAGE_SHARED_FIRST ||
+        (set.Get(setting) as SfxBoolItem).GetValue() !== value
+      ) {
+        set.Put(new SfxBoolItem(setting, value), true);
+        items.Put(group);
+      }
     } finally {
       group.Dispose();
     }
-    const pool = importer.GetDocument().GetEditEnginePool();
-    const make = /** Creates the native region object. @returns Edit text. */ () =>
-      new EditTextObjectImpl(pool, MapUnit.MapTwip, false, TextRotation.NONE, SvtScriptType.NONE);
-    this.areas = [make(), make(), make()];
+    this.areas = [this.createArea(), this.createArea(), this.createArea()];
+  }
+
+  /** Builds a real empty EditEngine region with the document's pool. @returns Edit text. */
+  private createArea(): EditTextObjectImpl {
+    return new EditTextObjectImpl(
+      this.importer.GetDocument().GetEditEnginePool(),
+      MapUnit.MapTwip,
+      false,
+      TextRotation.NONE,
+      SvtScriptType.NONE,
+    );
+  }
+
+  /** Clears previous content before importing a new original region. @param index - Native region index. @returns Fresh edit region. */
+  private replaceArea(index: number): EditTextObjectImpl {
+    this.areas[index]?.dispose();
+    const area = this.createArea();
+    this.areas[index] = area;
+    return area;
   }
 
   /** Opens the original region or an unwrapped center paragraph. @param element - Child token. @returns Context. */
   override createFastChildContext(element: T): SvXMLImportContext {
-    const area = this.areas[regions.indexOf(element)];
-    if (area) return new XMLHeaderFooterRegionContext(area, this.importer);
-    return element === T.TEXT_P
-      ? new HeaderFooterParagraph(this.areas[1], this.importer)
-      : new SvXMLIgnoreContext();
+    const region = regions.indexOf(element);
+    if (region !== -1)
+      return new XMLHeaderFooterRegionContext(this.replaceArea(region), this.importer);
+    if (element !== T.TEXT_P) return new SvXMLIgnoreContext();
+    if (!this.centerCursorOpen) {
+      this.replaceArea(1);
+      this.centerCursorOpen = true;
+    }
+    return new HeaderFooterParagraph(this.areas[1], this.importer);
   }
 
   /** Places three region objects in the actual page style. @returns Nothing. */
@@ -435,24 +458,46 @@ function exportArea(area: EditTextObjectConstReference, styles: CellTextStylePoo
   return output;
 }
 
+/** Tests the same empty text cases as the original content service. @param area - Borrowed edit text or native empty section. @returns Whether a section is written. */
+function hasRegionContent(
+  area: EditTextObjectConstReference | null,
+): area is EditTextObjectConstReference {
+  if (!area || area.GetParagraphCount() === 0) return false;
+  if (area.GetParagraphCount() > 1) return true;
+  const value = area.GetText(0);
+  try {
+    return value.getLength() > 0;
+  } finally {
+    value.dispose();
+  }
+}
+
 /** Serializes the native master page's headers and footers. @param items - Page style. @param styles - Text style pool. @returns ODF master-page children. */
 export function exportHeaderFooter(items: SfxItemSet, styles: CellTextStylePool): string {
   let output = "";
   for (const [, tag, group, which, flag] of variants) {
-    const value = items.GetItemIfSet(which) as ScPageHFItem | undefined;
+    const value = items.Get(which) as ScPageHFItem;
     const set = (items.Get(group) as SvxSetItem).GetItemSet();
     const active = (set.Get(Which.ATTR_PAGE_ON) as SfxBoolItem).GetValue();
     const display =
       flag === Which.ATTR_PAGE_ON ? active : active && !(set.Get(flag) as SfxBoolItem).GetValue();
-    if (!value && (flag === Which.ATTR_PAGE_ON ? set.Count() === 0 : !display)) continue;
-    const areas = [value?.GetLeftArea(), value?.GetCenterArea(), value?.GetRightArea()];
-    let child = "";
-    for (const [index, area] of areas.entries()) {
-      if (!area?.GetParagraphCount()) continue;
-      const region = ["left", "center", "right"][index];
-      child += `<style:region-${region}>${exportArea(area, styles)}</style:region-${region}>`;
+    const left = value.GetLeftArea();
+    const center = value.GetCenterArea();
+    const right = value.GetRightArea();
+    const hasLeft = hasRegionContent(left);
+    const hasCenter = hasRegionContent(center);
+    const hasRight = hasRegionContent(right);
+    const open = `<style:${tag}${display ? "" : ' style:display="false"'}`;
+    if (!hasLeft && !hasRight) {
+      output += hasCenter ? `${open}>${exportArea(center, styles)}</style:${tag}>` : `${open}/>`;
+      continue;
     }
-    output += `<style:${tag}${display ? "" : ' style:display="false"'}>${child}</style:${tag}>`;
+    output += `${open}>`;
+    if (hasLeft) output += `<style:region-left>${exportArea(left, styles)}</style:region-left>`;
+    if (hasCenter)
+      output += `<style:region-center>${exportArea(center, styles)}</style:region-center>`;
+    if (hasRight) output += `<style:region-right>${exportArea(right, styles)}</style:region-right>`;
+    output += `</style:${tag}>`;
   }
   return output;
 }

@@ -13,7 +13,8 @@
       "XMLTableHeaderFooterContext::endFastElement"
     ],
     "preservedResponsibilities": [
-      "Reads and writes ODF master-page regions, visibility, fixed date/time snapshots, and filename display formats."
+      "Reads and writes ODF master-page regions, visibility, fixed date/time snapshots, and filename display formats.",
+      "Preserves Calc header/footer sharing and hidden content and emits the native unwrapped center-only region or the nonempty named regions."
     ],
     "omittedResponsibilities": [
       "Field-specific ODF number-format references, pictures and complete print layout remain outside the represented slice."
@@ -27,12 +28,28 @@
         {
           "path": "apps/office/src/sc/source/filter/oox/excelfilter.page-settings.test.ts",
           "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sc/source/filter/xml/ods-page-master.test.ts",
+          "marker": "ports testHeaderFooterContentODS"
         }
       ],
       "upstream": [
         {
           "path": "sc/source/filter/xml/XMLTableHeaderFooterContext.cxx",
           "marker": "XMLTableHeaderFooterContext::endFastElement"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/source/filter/xml/XMLTableHeaderFooterContext.cxx",
+          "marker": "XMLTableHeaderFooterContext::createFastChildContext"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/source/filter/xml/XMLTableMasterPageExport.cxx",
+          "marker": "XMLTableMasterPageExport::exportHeaderFooter"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/qa/unit/subsequent_export_test2.cxx",
+          "marker": "testHeaderFooterContentODS"
         }
       ]
     }

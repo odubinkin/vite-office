@@ -7829,3 +7829,25 @@ members in cell and edit styles.
 
 - [Original charset conversion](../../vendor/libreoffice-reference/xmloff/source/style/fonthdl.cxx)
 - [Original font member defaults](../../vendor/libreoffice-reference/xmloff/source/text/txtimppr.cxx)
+
+### CALC-821 — The ODF height contains a separately exported body distance
+
+The original header/footer dialog adds the body distance before writing
+the nested size item. Calc's UNO page style then publishes that item
+height unchanged and publishes the body distance separately. The ODF
+mapper uses both values independently. Calc retains the original item
+contract and keeps the height and margin as authored in ODS.
+
+- [Original size calculation in the header/footer dialog](../../vendor/libreoffice-reference/svx/source/dialog/hdft.cxx)
+- [Original Calc page style property map](../../vendor/libreoffice-reference/sc/source/ui/unoobj/styleuno.cxx)
+- [Original ODF page master property map](../../vendor/libreoffice-reference/xmloff/source/style/PageMasterStyleMap.cxx)
+
+### CALC-822 — A first-page variant also counts as a right-page declaration
+
+The Calc master-page importer records right content presence for every
+non-left header or footer, including a first-page variant. When that
+variant is present, the finish pass skips clearing the right-page
+content even if the right-page element was absent. Calc keeps that
+presence rule and the separate first-page sharing flag.
+
+- [Original master-page child and finish rules](../../vendor/libreoffice-reference/sc/source/filter/xml/xmlstyli.cxx)

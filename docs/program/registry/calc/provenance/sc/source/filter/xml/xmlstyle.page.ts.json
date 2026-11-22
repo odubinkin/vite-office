@@ -17,10 +17,11 @@
     ],
     "preservedResponsibilities": [
       "Uses native ODF table/master-page associations to apply and write page-family item sets for represented print properties, header/footer geometry, and story content.",
-      "Collects unused and assigned named masters, merges all eight original print options, and applies the native signed scale properties and direct-state omission rules."
+      "Collects unused and assigned named masters, merges all eight original print options, and applies the native signed scale properties and direct-state omission rules.",
+      "Preserves authored header/footer height independently of body distance, reuses the native brush and box mapping for nested groups, and clears right content using the original non-left presence rule."
     ],
     "omittedResponsibilities": [
-      "Header/footer backgrounds, borders, and unsupported page-style property groups remain unported."
+      "Header/footer background images, shadows and unsupported page-style property groups remain outside the represented profile."
     ],
     "evidence": {
       "local": [
@@ -35,6 +36,10 @@
         {
           "path": "apps/office/src/sc/source/filter/xml/ods-page-master.test.ts",
           "marker": "ports testTdf154445_unused_pagestyles"
+        },
+        {
+          "path": "apps/office/src/sc/source/filter/xml/ods-page-master.test.ts",
+          "marker": "preserves nested layout members"
         }
       ],
       "upstream": [
@@ -57,6 +62,18 @@
         {
           "path": "vendor/libreoffice-reference/sc/qa/unit/subsequent_export_test4.cxx",
           "marker": "testTdf154445_unused_pagestyles"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/source/filter/xml/xmlstyli.cxx",
+          "marker": "ScMasterPageContext::CreateHeaderFooterContext"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/source/ui/unoobj/styleuno.cxx",
+          "marker": "SC_UNO_PAGE_HDRHEIGHT"
+        },
+        {
+          "path": "vendor/libreoffice-reference/xmloff/source/style/PageMasterStyleMap.cxx",
+          "marker": "CTF_PM_HEADERMINHEIGHT"
         }
       ]
     },

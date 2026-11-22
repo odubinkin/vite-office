@@ -19,9 +19,13 @@
         "apps/office/src/sc/source/filter/xml/xmlstyle.page.ts#ScXMLPageStyles",
         "vendor/libreoffice-reference/sc/source/filter/xml/xmlstyli.cxx#ScMasterPageContext::Finish",
         "apps/office/src/sc/source/filter/oox/excelfilter.page-settings.test.ts",
-        "vendor/libreoffice-reference/xmloff/source/style/PageMasterStyleMap.cxx#PROP_ScaleToPagesX"
+        "vendor/libreoffice-reference/xmloff/source/style/PageMasterStyleMap.cxx#PROP_ScaleToPagesX",
+        "apps/office/src/sc/source/filter/xml/ods-page-master.test.ts#preserves nested layout members",
+        "vendor/libreoffice-reference/sc/source/filter/xml/xmlstyli.cxx#ScMasterPageContext::CreateHeaderFooterContext",
+        "vendor/libreoffice-reference/sc/source/ui/unoobj/styleuno.cxx#SC_UNO_PAGE_HDRHEIGHT",
+        "vendor/libreoffice-reference/xmloff/source/style/PageMasterStyleMap.cxx#CTF_PM_HEADERMINHEIGHT"
       ],
-      "justification": "Uses native ODF table/master-page associations to apply and write page-family item sets for represented print properties, header/footer geometry, and story content. Header/footer backgrounds, borders, and unsupported page-style property groups remain unported.",
+      "justification": "Uses native ODF table/master-page associations to apply and write page-family item sets for represented print properties, header/footer geometry, and story content. Header/footer backgrounds, borders, and unsupported page-style property groups remain unported. Preserves authored header/footer height independently of body distance, reuses the native brush and box mapping for nested groups, and clears right content using the original non-left presence rule.",
       "knownViolations": [],
       "localSymbols": [
         "ScXMLPageStyles",

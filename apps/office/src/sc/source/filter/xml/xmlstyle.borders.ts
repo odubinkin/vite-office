@@ -152,44 +152,49 @@ function emit(name: string, widthName: string, line: BorderLine2): string {
   const compound = width.exportXML(line);
   return ` ${name}="${border.exportXML(line)}"${compound === undefined ? "" : ` ${widthName}="${compound}"`}`;
 }
+/** Applies the original shared cell and page border state coalescing. @param box - Native box. @returns Border and compound width attributes. */
+function exportBoxLineProperties(box: SvxBoxItem): string {
+  let result = "";
+  const lines = sides.map(
+      /** Reads real native UNO edge value. @param side - Original map entry. @returns Published line. */ (
+        side,
+      ) => SvxBoxItem.SvxLineToLine(box.GetLine(side[3]), true),
+    ),
+    first = lines[0] as BorderLine2,
+    same = lines.every(
+      /** Compares all original BorderLine2 fields. @param line - Side. @returns Equal. */ (line) =>
+        first.equals(line),
+    ),
+    sameWidths = lines.every(
+      /** ContextFilter compares components and total width independently of style/color. @param line - Side. @returns Equal widths. */ (
+        line,
+      ) =>
+        line.InnerLineWidth === first.InnerLineWidth &&
+        line.OuterLineWidth === first.OuterLineWidth &&
+        line.LineDistance === first.LineDistance &&
+        line.LineWidth === first.LineWidth,
+    );
+  if (same) result += ` fo:border="${border.exportXML(first)}"`;
+  else
+    for (const [index, side] of sides.entries())
+      result += ` fo:border-${side[0]}="${border.exportXML(lines[index] as BorderLine2)}"`;
+  if (sameWidths) {
+    const compound = width.exportXML(first);
+    if (compound !== undefined) result += ` style:border-line-width="${compound}"`;
+  } else
+    for (const [index, side] of sides.entries()) {
+      const compound = width.exportXML(lines[index] as BorderLine2);
+      if (compound !== undefined) result += ` style:border-line-width-${side[0]}="${compound}"`;
+    }
+  return result;
+}
+
 /** Native ContextFilter collapses equal side values and equal width values independently. @param pattern - Actual cell pattern. @returns Original cell-property attributes. */
 export function exportCellBorderProperties(pattern: ScPatternAttr): string {
-  let result = "";
-  if (pattern.GetItemSet().GetItemState(ATTR_BORDER, false) === SfxItemState.SET) {
-    const box = pattern.GetItem(ATTR_BORDER) as SvxBoxItem,
-      lines = sides.map(
-        /** Reads real native UNO edge value. @param side - Original map entry. @returns Published line. */ (
-          side,
-        ) => SvxBoxItem.SvxLineToLine(box.GetLine(side[3]), true),
-      ),
-      first = lines[0] as BorderLine2,
-      same = lines.every(
-        /** Compares all original BorderLine2 fields. @param line - Side. @returns Equal. */ (
-          line,
-        ) => first.equals(line),
-      ),
-      sameWidths = lines.every(
-        /** ContextFilter compares components and total width independently of style/color. @param line - Side. @returns Equal widths. */ (
-          line,
-        ) =>
-          line.InnerLineWidth === first.InnerLineWidth &&
-          line.OuterLineWidth === first.OuterLineWidth &&
-          line.LineDistance === first.LineDistance &&
-          line.LineWidth === first.LineWidth,
-      );
-    if (same) result += ` fo:border="${border.exportXML(first)}"`;
-    else
-      for (const [index, side] of sides.entries())
-        result += ` fo:border-${side[0]}="${border.exportXML(lines[index] as BorderLine2)}"`;
-    if (sameWidths) {
-      const compound = width.exportXML(first);
-      if (compound !== undefined) result += ` style:border-line-width="${compound}"`;
-    } else
-      for (const [index, side] of sides.entries()) {
-        const compound = width.exportXML(lines[index] as BorderLine2);
-        if (compound !== undefined) result += ` style:border-line-width-${side[0]}="${compound}"`;
-      }
-  }
+  let result =
+    pattern.GetItemSet().GetItemState(ATTR_BORDER, false) === SfxItemState.SET
+      ? exportBoxLineProperties(pattern.GetItem(ATTR_BORDER) as SvxBoxItem)
+      : "";
   for (const [suffix, , , , which] of diagonals) {
     if (pattern.GetItemSet().GetItemState(which, false) !== SfxItemState.SET) continue;
     const item = pattern.GetItem(which) as SvxLineItem,
@@ -279,14 +284,15 @@ export function exportPageBoxProperties(
   box: SvxBoxItem,
   measure: (value: number) => string,
 ): string {
-  let result = "";
-  for (const [name, , , edge] of sides) {
-    result += emit(
-      "fo:border-" + name,
-      "style:border-line-width-" + name,
-      SvxBoxItem.SvxLineToLine(box.GetLine(edge), true),
-    );
-    result += ` fo:padding-${name}="${measure(box.GetDistance(edge, true))}"`;
-  }
+  let result = exportBoxLineProperties(box);
+  const first = box.GetDistance(sides[0][3], true);
+  const equal = sides.every(
+    /** Compares all four native distance properties independently of the lines. @param side - Box side. @returns Whether the distances match. */
+    (side) => box.GetDistance(side[3], true) === first,
+  );
+  if (equal) result += ` fo:padding="${measure(first)}"`;
+  else
+    for (const [name, , , edge] of sides)
+      result += ` fo:padding-${name}="${measure(box.GetDistance(edge, true))}"`;
   return result;
 }

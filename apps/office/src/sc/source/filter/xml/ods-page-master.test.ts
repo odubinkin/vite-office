@@ -3,9 +3,16 @@ import { readFileSync } from "node:fs";
 import { assert, expect, it } from "vitest";
 import { ScDocument } from "../../../inc/document";
 import { ScVObjMode } from "../../../inc/global";
-import type { ScPageScaleToItem, ScViewObjectModeItem } from "../../../inc/attrib";
+import type { ScPageHFItem, ScPageScaleToItem, ScViewObjectModeItem } from "../../../inc/attrib";
 import type { SfxBoolItem } from "../../../../svl/source/items/cenumitm";
 import type { SfxUInt16Item } from "../../../../svl/inc/intitem";
+import type { SvxSetItem } from "../../../../svx/inc/pageitem";
+import type { SvxSizeItem } from "../../../../editeng/inc/sizeitem";
+import type { SvxULSpaceItem } from "../../../../editeng/inc/ulspitem";
+import type { SvxLRSpaceItem } from "../../../../editeng/inc/lrspitem";
+import type { SvxBrushItem } from "../../../../editeng/inc/brushitem";
+import { SvxBoxItemLine, type SvxBoxItem } from "../../../../editeng/source/items/frmitems";
+import { text } from "../../../../i18nlangtag/source/isolang/isolang.tables";
 import { DocumentArchive } from "../../../../package/source/zippackage/document-archive";
 import { ODF_NAMESPACES } from "../../../../xmloff/source/core/xmltoken";
 import {
@@ -13,7 +20,22 @@ import {
   encodeCalcDocument,
 } from "../../../browser/filter/xml/calc-document-codec";
 import {
+  ATTR_BACKGROUND,
+  ATTR_BORDER,
+  ATTR_LRSPACE,
+  ATTR_ULSPACE,
   ATTR_PAGE_CHARTS,
+  ATTR_PAGE_DYNAMIC,
+  ATTR_PAGE_HEADERRIGHT,
+  ATTR_PAGE_HEADERFIRST,
+  ATTR_PAGE_HEADERSET,
+  ATTR_PAGE_FOOTERRIGHT,
+  ATTR_PAGE_FOOTERFIRST,
+  ATTR_PAGE_FOOTERSET,
+  ATTR_PAGE_ON,
+  ATTR_PAGE_SHARED,
+  ATTR_PAGE_SHARED_FIRST,
+  ATTR_PAGE_SIZE,
   ATTR_PAGE_DRAWINGS,
   ATTR_PAGE_OBJECTS,
   ATTR_PAGE_NOTES,
@@ -196,5 +218,165 @@ it("keeps different page usages in separate ODS layouts", /** Checks layout dedu
     );
   } finally {
     source.Dispose();
+  }
+});
+
+/** Reads the native plain text of a master page's center region. @param document - Workbook. @param which - Variant slot. @returns Center text. */
+function centerText(document: ScDocument, which: number): string {
+  const item = items(document, "Default").Get(which) as ScPageHFItem;
+  const region = item.GetCenterArea();
+  assert(region);
+  const value = region.GetText(0);
+  try {
+    return text(value);
+  } finally {
+    value.dispose();
+  }
+}
+
+/** Reads one native header/footer property set. @param document - Workbook. @param name - Page style. @param which - Header or footer WhichId. @returns Nested native items. */
+function headerFooterItems(document: ScDocument, name: string, which: number) {
+  return (items(document, name).Get(which) as SvxSetItem).GetItemSet();
+}
+
+it("ports testHeaderFooterContentODS with pinned Default and Report master pages", /** Replays native first and right content through Worker and ODS. @returns Completion. */ async () => {
+  const source = await readOdsDocument(
+    new Uint8Array(
+      readFileSync(
+        "../../vendor/libreoffice-reference/sc/qa/unit/data/ods/header-footer-content.ods",
+      ),
+    ),
+  );
+  let worker: ScDocument | undefined;
+  let reopened: ScDocument | undefined;
+  try {
+    worker = decodeCalcDocument(structuredClone(encodeCalcDocument(source)));
+    const bytes = await writeOdsDocument(worker);
+    const xml = await (await DocumentArchive.open(bytes)).readTextEntry("styles.xml");
+    expect(xml).toContain("<style:header><text:p>header</text:p></style:header>");
+    expect(xml).toContain('<style:header-left style:display="false"/>');
+    expect(xml).toContain(
+      "<style:footer-first><text:p>first<text:s/>page<text:s/>footer</text:p></style:footer-first>",
+    );
+    reopened = await readOdsDocument(bytes);
+    for (const document of [source, worker, reopened]) {
+      expect(centerText(document, ATTR_PAGE_HEADERRIGHT)).toBe("header");
+      expect(centerText(document, ATTR_PAGE_HEADERFIRST)).toBe("first page header");
+      expect(centerText(document, ATTR_PAGE_FOOTERRIGHT)).toBe("footer");
+      expect(centerText(document, ATTR_PAGE_FOOTERFIRST)).toBe("first page footer");
+      const report = headerFooterItems(document, "Report", ATTR_PAGE_HEADERSET);
+      expect((report.Get(ATTR_PAGE_SIZE) as SvxSizeItem).GetSize().Height()).toBe(425);
+      expect((report.Get(ATTR_ULSPACE) as SvxULSpaceItem).GetLower()).toBe(142);
+      expect((report.Get(ATTR_BACKGROUND) as SvxBrushItem).GetColor().toUInt32()).toBe(0xc0c0c0);
+      expect((report.Get(ATTR_BORDER) as SvxBoxItem).GetLine(SvxBoxItemLine.LEFT)).toBeDefined();
+    }
+  } finally {
+    reopened?.Dispose();
+    worker?.Dispose();
+    source.Dispose();
+  }
+});
+
+it("preserves nested layout members, independent sharing and empty region omission", /** Exercises Calc's original native property slots and serialized regional grammar. @returns Completion. */ async () => {
+  const source = new ScDocument();
+  const importer = new ScXMLImport(source);
+  const ns = Object.entries(ODF_NAMESPACES)
+    .map(
+      /** Emits the source vocabulary. @param entry - Namespace definition. @returns Declaration. */ ([
+        prefix,
+        uri,
+      ]) => `xmlns:${prefix}="${uri}"`,
+    )
+    .join(" ");
+  let worker: ScDocument | undefined;
+  let reopened: ScDocument | undefined;
+  try {
+    importer.importStyles(`<office:document-styles ${ns}><office:automatic-styles>
+      <style:page-layout style:name="p"><style:page-layout-properties/>
+        <style:header-style><style:header-footer-properties fo:min-height="16pt" fo:margin="3pt" fo:margin-left="4pt" fo:margin-bottom="7pt" fo:background-color="#abcdef" fo:border="1pt solid #123456" fo:padding="2pt" fo:padding-top="3pt"/></style:header-style>
+        <style:footer-style><style:header-footer-properties svg:height="18pt" fo:margin-top="4pt" fo:background-color="transparent"/></style:footer-style>
+      </style:page-layout>
+      </office:automatic-styles><office:master-styles><style:master-page style:name="Default" style:page-layout-name="p">
+        <style:header><style:region-left><text:p/></style:region-left><style:region-center><text:p>center</text:p></style:region-center></style:header>
+        <style:header-left><style:region-left><text:p>left</text:p></style:region-left><style:region-center><text:p/></style:region-center><style:region-right><text:p>right</text:p></style:region-right></style:header-left>
+        <style:header-first style:display="false"><text:p>stored<text:s/>first</text:p></style:header-first>
+        <style:footer style:display="false"><text:p>stored footer</text:p></style:footer>
+        <style:footer-left><text:p>stored<text:s/>left<text:s/>footer</text:p></style:footer-left>
+      </style:master-page></office:master-styles></office:document-styles>`);
+    importer.importContent(
+      `<office:document-content ${ns}><office:body><office:spreadsheet><table:table table:name="Sheet1"/></office:spreadsheet></office:body></office:document-content>`,
+    );
+    worker = decodeCalcDocument(structuredClone(encodeCalcDocument(source)));
+    const bytes = await writeOdsDocument(worker);
+    const xml = await (await DocumentArchive.open(bytes)).readTextEntry("styles.xml");
+    expect(xml).toContain("<style:header><text:p>center</text:p></style:header>");
+    expect(xml).toContain(
+      "<style:header-left><style:region-left><text:p>left</text:p></style:region-left><style:region-right><text:p>right</text:p></style:region-right></style:header-left>",
+    );
+    expect(xml).toContain(
+      '<style:header-first style:display="false"><text:p>stored<text:s/>first</text:p></style:header-first>',
+    );
+    expect(xml).toContain(
+      '<style:footer-left style:display="false"><text:p>stored<text:s/>left<text:s/>footer</text:p></style:footer-left>',
+    );
+    const headerProperties = layout(xml, "Default").parentElement?.getElementsByTagNameNS(
+      ODF_NAMESPACES.style,
+      "header-footer-properties",
+    )[0];
+    assert(headerProperties);
+    expect(headerProperties.getAttributeNS(ODF_NAMESPACES.fo, "background-color")).toBe("#abcdef");
+    expect(headerProperties.getAttributeNS(ODF_NAMESPACES.fo, "border")).toMatch(/solid #123456$/u);
+    expect(headerProperties.hasAttributeNS(ODF_NAMESPACES.fo, "border-left")).toBe(false);
+    expect(headerProperties.hasAttributeNS(ODF_NAMESPACES.fo, "padding")).toBe(false);
+    reopened = await readOdsDocument(bytes);
+    for (const document of [source, worker, reopened]) {
+      const header = headerFooterItems(document, "Default", ATTR_PAGE_HEADERSET);
+      const footer = headerFooterItems(document, "Default", ATTR_PAGE_FOOTERSET);
+      const margins = header.Get(ATTR_LRSPACE) as SvxLRSpaceItem;
+      const box = header.Get(ATTR_BORDER) as SvxBoxItem;
+      expect([margins.ResolveLeft(), margins.ResolveRight()]).toEqual([80, 60]);
+      expect(box.GetDistance(SvxBoxItemLine.TOP)).toBe(60);
+      expect(box.GetDistance(SvxBoxItemLine.BOTTOM)).toBe(40);
+      expect((header.Get(ATTR_PAGE_SIZE) as SvxSizeItem).GetSize().Height()).toBe(320);
+      expect((header.Get(ATTR_ULSPACE) as SvxULSpaceItem).GetLower()).toBe(140);
+      expect((header.Get(ATTR_PAGE_DYNAMIC) as SfxBoolItem).GetValue()).toBe(true);
+      expect((header.Get(ATTR_PAGE_SHARED) as SfxBoolItem).GetValue()).toBe(false);
+      expect((header.Get(ATTR_PAGE_SHARED_FIRST) as SfxBoolItem).GetValue()).toBe(true);
+      expect((footer.Get(ATTR_PAGE_ON) as SfxBoolItem).GetValue()).toBe(false);
+      expect((footer.Get(ATTR_PAGE_SHARED) as SfxBoolItem).GetValue()).toBe(true);
+      expect((footer.Get(ATTR_PAGE_DYNAMIC) as SfxBoolItem).GetValue()).toBe(false);
+      expect((footer.Get(ATTR_PAGE_SIZE) as SvxSizeItem).GetSize().Height()).toBe(360);
+      expect((footer.Get(ATTR_ULSPACE) as SvxULSpaceItem).GetUpper()).toBe(80);
+    }
+  } finally {
+    reopened?.Dispose();
+    worker?.Dispose();
+    source.Dispose();
+  }
+});
+
+it("keeps right content when a first-page declaration satisfies the original presence rule", /** Exercises the Calc master-page finish behavior with an existing named page style. @returns Nothing. */ () => {
+  const document = new ScDocument();
+  const importer = new ScXMLImport(document);
+  const ns = `xmlns:office="${ODF_NAMESPACES.office}" xmlns:style="${ODF_NAMESPACES.style}" xmlns:text="${ODF_NAMESPACES.text}"`;
+  /** Imports the header and footer declarations into the same native master. @param children - Master page XML. @returns Nothing. */
+  function importMaster(children: string): void {
+    importer.importStyles(
+      `<office:document-styles ${ns}><office:master-styles><style:master-page style:name="Default">${children}</style:master-page></office:master-styles></office:document-styles>`,
+    );
+  }
+  try {
+    importMaster(
+      "<style:header><text:p>right header</text:p></style:header><style:footer><text:p>right footer</text:p></style:footer>",
+    );
+    importMaster("<style:header-first><text:p>first header</text:p></style:header-first>");
+    expect(centerText(document, ATTR_PAGE_HEADERRIGHT)).toBe("right header");
+    expect(centerText(document, ATTR_PAGE_HEADERFIRST)).toBe("first header");
+    const footer = items(document, "Default").Get(ATTR_PAGE_FOOTERRIGHT) as ScPageHFItem;
+    expect(footer.GetCenterArea()).toBeNull();
+    const flags = headerFooterItems(document, "Default", ATTR_PAGE_FOOTERSET);
+    expect((flags.Get(ATTR_PAGE_ON) as SfxBoolItem).GetValue()).toBe(true);
+  } finally {
+    document.Dispose();
   }
 });
