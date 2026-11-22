@@ -1,0 +1,26 @@
+{
+  "schema_version": 1,
+  "task_id": "202611220211-TEJDRR",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-11-22T02:47:43.477Z",
+  "verdict": "pass",
+  "summary": "The reviewed implementation preserves the active view, draft formatter lifetime, native item-set application and reversible document history.",
+  "evaluated_sha": "e3e30f4cce82744aa65ab02b15db908962b8bbe2",
+  "blueprint_digest": "dcc857ffb8b5f4477be4c950e0421fcddfdced73919906310a230f35e2c0dfdb",
+  "findings": [
+    "Same-agent review checked the recorded implementation and test evidence. The remaining Font, Font Effects, Borders and advanced format administration are outside this slice."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202611220211-TEJDRR/README.md",
+    "output/calc-task19-verification.md",
+    "output/calc-task19-browser-final.log",
+    "output/calc-task19-office-types-final.log",
+    "output/calc-task19-calc.log"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": [
+    "The scientific dialog regression uses native document recognition. The independent web input line still uses a simple parser."
+  ]
+}
