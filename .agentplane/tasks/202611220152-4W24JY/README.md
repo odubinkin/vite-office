@@ -1,10 +1,11 @@
 ---
 id: "202611220152-4W24JY"
 title: "Connect Calc Number Format sidebar and currency controls"
-status: "DOING"
+result_summary: "Connected Calc Properties number formatting and native currency selection."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 10
+revision: 11
 origin:
   system: "manual"
 depends_on:
@@ -42,11 +43,16 @@ quality_review:
   findings:
     - "Verified category and option requests use the original selection and current document formatter, including the native mixed-state and comma termination behaviors."
     - "The pinned currency accessor case passes. Chromium confirms grid resize, red output, currency selection and retained sidebar reveal."
-commit: null
+commit:
+  hash: "46ce7b4a8e4afd0d9f9ad37d4c506d016eb04c31"
+  message: "🧩 4W24JY code: connect Calc Number Format sidebar and currency controls"
 comments:
   -
     author: "CODER"
     body: "Start: connect native Calc number format sidebar, request and currency control contracts."
+  -
+    author: "CODER"
+    body: "Verified: connected the native Number Format panel, currency split buttons, formatter color and document currency lookup."
 events:
   -
     type: "status"
@@ -61,8 +67,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Verified: 116 focused checks and production Chromium cover the Calc Number Format panel, native currency selection, selection history and paint."
+  -
+    type: "status"
+    at: "2026-11-22T02:09:38.797Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: connected the native Number Format panel, currency split buttons, formatter color and document currency lookup."
 doc_version: 3
-doc_updated_at: "2026-11-22T02:08:14.553Z"
+doc_updated_at: "2026-11-22T02:09:38.798Z"
 doc_updated_by: "CODER"
 description: "Mount the native Properties sidebar number panel and currency selector, with original Sfx category and option arguments, formatter-backed document currencies, and grid number-format colors."
 sections:
