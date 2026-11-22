@@ -1,0 +1,35 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/cui/source/tabpages/tptrans.ts",
+    "classification": "upstream-mechanism",
+    "state": "active",
+    "suite": "shared",
+    "subsystem": "paragraph-fill",
+    "capabilityIds": [
+      "CAP-0102"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "none",
+      "evidence": [
+        "apps/office/src/cui/source/tabpages/tptrans.ts#SvxTransparenceTabPage",
+        "apps/office/src/sw/browser/presentation/WriterParagraphAreaDialog.test.tsx",
+        "vendor/libreoffice-reference/cui/source/tabpages/tptrans.cxx#SvxTransparenceTabPage::FillItemSet"
+      ],
+      "justification": "Retains the source uniform transparency radio state, 50 percent draft default, and byte-independent native fill item exchange.",
+      "knownViolations": [],
+      "localSymbols": [
+        "SvxTransparenceTabPage"
+      ],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": "cui/source/tabpages/tptrans.cxx",
+      "upstreamSymbols": [
+        "SvxTransparenceTabPage"
+      ]
+    }
+  }
+}

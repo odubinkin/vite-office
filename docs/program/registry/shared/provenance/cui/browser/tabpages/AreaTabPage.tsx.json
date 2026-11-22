@@ -1,0 +1,25 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "browser-adaptation",
+    "status": "local-only",
+    "localPath": "apps/office/src/cui/browser/tabpages/AreaTabPage.tsx",
+    "rationale": "Binds native Area and Color page controls to the supported pooled values using browser controls and the existing palettes.",
+    "responsibilities": [
+      "Binds native Area and Color page controls to the supported pooled values using browser controls and the existing palettes."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/cui/browser/tabpages/AreaTabPage.tsx",
+          "marker": "AreaTabPage"
+        }
+      ]
+    },
+    "stackDivergence": {
+      "kind": "browser-adaptation",
+      "rationale": "Browser controls replace the native weld widget binding."
+    }
+  }
+}

@@ -4,7 +4,7 @@ title: "Connect Writer paragraph area color and transparency"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 6
+revision: 8
 origin:
   system: "manual"
 depends_on: []
@@ -36,7 +36,7 @@ events:
     to: "DOING"
     note: "Start: connect the native paragraph Area and uniform Transparency page exchanges in Writer."
 doc_version: 3
-doc_updated_at: "2026-11-22T02:58:48.538Z"
+doc_updated_at: "2026-11-22T03:07:58.498Z"
 doc_updated_by: "CODER"
 description: "Add the upstream Area and Transparency pages for paragraph fill values represented by the current Writer model. Exchange native NONE/SOLID, XFillColorItem and uniform XFillTransparenceItem through the existing dialog and history. Verify preview, mixed selections, legacy brush behavior, and ODT/Worker round trips."
 sections:
@@ -53,7 +53,11 @@ sections:
     <!-- BEGIN VERIFICATION RESULTS -->
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Revert the scoped implementation commits and rerun the targeted paragraph, ODT and shared fill conversion checks."
-  Findings: ""
+  Findings: |-
+    - Connected the original Area and Transparency tabs to the native paragraph command and pooled fill deltas. None, solid color, and uniform transparency are the represented paragraph fill modes.
+    - Verified mixed selections, inherited and legacy brush colors, cancellation, undo/redo, Worker transport, ODT reopening, and visible Chromium paint. The two focused suites passed 60 Writer tests and 14 shared tests. The independent Writer resource check passed its 2 tests. The production build and 1 focused Chromium scenario passed.
+    - Scoped ESLint, Prettier, git diff check, module boundaries, source tree, source provenance, Writer resource checks, AgentPlane doctor, and policy routing passed.
+    - Global JSDoc checking still reports 307 pre-existing Calc diagnostics. Global source-size checking still reports the pre-existing 1,001-line Calc document codec. The modified Writer source files meet the size gate. The full test suite is deferred to the user's ten-task checkpoint.
 id_source: "generated"
 ---
 ## Summary
@@ -85,3 +89,8 @@ Run targeted Writer paragraph dialog, text/native fill transport, ODT and focuse
 Revert the scoped implementation commits and rerun the targeted paragraph, ODT and shared fill conversion checks.
 
 ## Findings
+
+- Connected the original Area and Transparency tabs to the native paragraph command and pooled fill deltas. None, solid color, and uniform transparency are the represented paragraph fill modes.
+- Verified mixed selections, inherited and legacy brush colors, cancellation, undo/redo, Worker transport, ODT reopening, and visible Chromium paint. The two focused suites passed 60 Writer tests and 14 shared tests. The independent Writer resource check passed its 2 tests. The production build and 1 focused Chromium scenario passed.
+- Scoped ESLint, Prettier, git diff check, module boundaries, source tree, source provenance, Writer resource checks, AgentPlane doctor, and policy routing passed.
+- Global JSDoc checking still reports 307 pre-existing Calc diagnostics. Global source-size checking still reports the pre-existing 1,001-line Calc document codec. The modified Writer source files meet the size gate. The full test suite is deferred to the user's ten-task checkpoint.

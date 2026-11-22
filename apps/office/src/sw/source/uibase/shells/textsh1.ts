@@ -1,4 +1,5 @@
 /** @fileoverview Owns the supported SwTextShell execute/state handlers from textsh1.cxx. */
+import { paragraphFormattingItemEquals } from "../../core/attr/paragraph-fill";
 import { SwFormatLineNumber } from "../../../inc/fmtline";
 import * as ParaItems from "../../../../editeng/source/items/paraitem.controls";
 import { SwBaseShell } from "./basesh";
@@ -803,7 +804,7 @@ export class SwTextShell extends SwBaseShell {
           /** Handles Writer formatting state. @param item - Input value. @returns Callback result. */ (
             item,
           ) => {
-            if (paragraph.GetAttr(item.Which()).equals(item)) return [];
+            if (paragraphFormattingItemEquals(paragraph, item)) return [];
             return [
               new SwUndoParagraphItem(
                 paragraph,

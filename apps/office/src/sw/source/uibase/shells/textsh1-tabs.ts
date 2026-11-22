@@ -1,4 +1,12 @@
 /** @fileoverview Native Writer paragraph-dialog input, tab stop context and typed paragraph formatting from textsh1.cxx. */
+import {
+  XATTR_FILLCOLOR,
+  XATTR_FILLSTYLE,
+  XATTR_FILLTRANSPARENCE,
+  XATTR_FILLUSESLIDEBACKGROUND,
+} from "../../../../svx/inc/xdef";
+import { getParagraphFillItems } from "../../core/attr/paragraph-fill";
+import type { SwTextNode } from "../../core/txtnode/ndtxt";
 import { MIN_BORDER_DIST } from "../../../inc/swtypes";
 import { FN_NUMBER_NEWSTART, FN_NUMBER_NEWSTART_AT } from "../../../inc/cmdid";
 import {
@@ -55,6 +63,9 @@ export function createWriterParagraphDialogInput(shell: SwTextShell): SfxItemSet
     [RES_BOX, RES_SHADOW],
     [RES_LINENUMBER, RES_LINENUMBER],
     [RES_FRAMEDIR, RES_FRAMEDIR],
+    [XATTR_FILLSTYLE, XATTR_FILLCOLOR],
+    [XATTR_FILLTRANSPARENCE, XATTR_FILLTRANSPARENCE],
+    [XATTR_FILLUSESLIDEBACKGROUND, XATTR_FILLUSESLIDEBACKGROUND],
     [D, O],
     [SID_ATTR_BORDER_INNER, SID_ATTR_BORDER_INNER],
     [FN_NUMBER_NEWSTART, FN_NUMBER_NEWSTART_AT],
@@ -86,6 +97,26 @@ export function createWriterParagraphDialogInput(shell: SwTextShell): SfxItemSet
     const item = shell.GetUniformParagraphItem(
       /** Reads the typed item across the selection. @param node - Selected paragraph. @returns Native item. */
       (node) => node.GetAttr(which),
+    );
+    if (item) set.Put(item);
+    else set.InvalidateItem(which);
+  }
+  const fillByParagraph = new Map<SwTextNode, ReturnType<typeof getParagraphFillItems>>();
+  for (const [which, field] of [
+    [XATTR_FILLSTYLE, "style"],
+    [XATTR_FILLCOLOR, "color"],
+    [XATTR_FILLTRANSPARENCE, "transparency"],
+  ] as const) {
+    const item = shell.GetUniformParagraphItem(
+      /** Reuses each paragraph's effective native fill values during aggregation. @param node - Selected text node. @returns One native fill item. */
+      (node) => {
+        let fill = fillByParagraph.get(node);
+        if (!fill) {
+          fill = getParagraphFillItems(node.GetSwAttrSet());
+          fillByParagraph.set(node, fill);
+        }
+        return fill[field];
+      },
     );
     if (item) set.Put(item);
     else set.InvalidateItem(which);

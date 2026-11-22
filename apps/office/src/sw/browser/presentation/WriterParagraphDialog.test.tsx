@@ -187,11 +187,17 @@ it("owns source tab keys before spin steps,retains tab changes and uses native f
     asian = screen.getByRole("tab", { name: "Asian Typography" }),
     outline = screen.getByRole("tab", { name: "Outline & List" }),
     tabs = screen.getByRole("tab", { name: "Tabs" }),
-    borders = screen.getByRole("tab", { name: "Borders" });
+    borders = screen.getByRole("tab", { name: "Borders" }),
+    area = screen.getByRole("tab", { name: "Area" }),
+    transparency = screen.getByRole("tab", { name: "Transparency" });
   expect(first).toHaveFocus();
   expect(first).toHaveAttribute("tabindex", "0");
   expect(flow).toHaveAttribute("tabindex", "-1");
   fireEvent.keyDown(first, { key: "ArrowLeft" });
+  expect(transparency).toHaveFocus();
+  fireEvent.keyDown(transparency, { key: "ArrowLeft" });
+  expect(area).toHaveFocus();
+  fireEvent.keyDown(area, { key: "ArrowLeft" });
   expect(borders).toHaveFocus();
   fireEvent.keyDown(borders, { key: "ArrowLeft" });
   expect(tabs).toHaveFocus();
@@ -206,6 +212,10 @@ it("owns source tab keys before spin steps,retains tab changes and uses native f
   });
   expect(borders).toHaveFocus();
   fireEvent.keyDown(borders, { key: "ArrowRight" });
+  expect(area).toHaveFocus();
+  fireEvent.keyDown(area, { key: "ArrowRight" });
+  expect(transparency).toHaveFocus();
+  fireEvent.keyDown(transparency, { key: "ArrowRight" });
   expect(first).toHaveFocus();
   const metric = screen.getByLabelText("Above paragraph (in)");
   fireEvent.keyDown(metric, { key: "PageDown", ctrlKey: true });

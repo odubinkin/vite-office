@@ -1,0 +1,33 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/cui/browser/tabpages/AreaTabPage.tsx",
+    "classification": "browser-adaptation",
+    "state": "active",
+    "suite": "shared",
+    "subsystem": "paragraph-fill",
+    "capabilityIds": [
+      "CAP-0102"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "not-applicable",
+      "defaultStatus": "not-applicable",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/cui/browser/tabpages/AreaTabPage.tsx#AreaTabPage",
+        "apps/office/src/sw/browser/presentation/WriterParagraphAreaDialog.test.tsx",
+        "vendor/libreoffice-reference/cui/uiconfig/ui/areatabpage.ui"
+      ],
+      "justification": "Binds native Area and Color page controls to the supported pooled values using browser controls and the existing palettes.",
+      "knownViolations": [],
+      "localSymbols": [
+        "AreaTabPage"
+      ],
+      "sourceResponsibility": "browser-owned",
+      "upstreamFile": null,
+      "upstreamSymbols": []
+    }
+  }
+}

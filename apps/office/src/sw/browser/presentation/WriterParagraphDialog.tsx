@@ -1,4 +1,9 @@
 /** @fileoverview Browser paragraph dialog driven by one Writer controller request. */
+import { AreaTabPage } from "../../../cui/browser/tabpages/AreaTabPage";
+import { TransparencyTabPage } from "../../../cui/browser/tabpages/TransparencyTabPage";
+import { SvxAreaTabPage } from "../../../cui/source/tabpages/tparea";
+import { SvxTransparenceTabPage } from "../../../cui/source/tabpages/tptrans";
+import { FillStyle } from "../../../offapi/com/sun/star/drawing/FillStyle";
 import { MetricSpinButton } from "../../../svtools/browser/control/MetricSpinButton";
 import { TabulatorDialogSession } from "../../../cui/browser/tabpages/tabstpge-session";
 import { TabulatorTabPage } from "../../../cui/browser/tabpages/TabulatorTabPage";
@@ -72,6 +77,8 @@ export function WriterParagraphDialog({
     "outline",
     "tabs",
     "borders",
+    "area",
+    "transparence",
   ] as const;
   const [activeTab, setActiveTab] = useState<(typeof tabIds)[number]>("spacing");
   const tabIdentity = useId(),
@@ -101,6 +108,25 @@ export function WriterParagraphDialog({
     /** Retains a lazy native page and accumulated exchange output for this request. @returns Session. */
     () => new TabulatorDialogSession(pageInput, unit),
   );
+  const [area] = useState(
+    /** Captures the active paragraph's native fill selection. @returns Owned Area page state. */ () =>
+      new SvxAreaTabPage(pageInput),
+  );
+  const [transparence] = useState(
+    /** Captures the active paragraph's native transparency selection. @returns Owned Transparency page state. */ () =>
+      new SvxTransparenceTabPage(pageInput),
+  );
+  const [, refreshFill] = useState(0);
+
+  /** Exchanges one page's deltas and repaints its browser controls. @param page - Page that changed. @returns Nothing. */
+  function changeFill(page: SvxAreaTabPage | SvxTransparenceTabPage): void {
+    page.FillItemSet(tabs.output);
+    refreshFill(
+      /** Invalidates the browser fill widgets. @param version - Current render version. @returns Next version. */ (
+        version,
+      ) => version + 1,
+    );
+  }
   /** Runs original tab deactivation before changing the active page. @param next - Original tab identity. @returns Nothing. */
   function activate(next: (typeof tabIds)[number]): void {
     if (next === activeTab) return;
@@ -215,6 +241,8 @@ export function WriterParagraphDialog({
                   ["outline", label("outline-and-list", "Outline & List")],
                   ["tabs", "Tabs"],
                   ["borders", label("borders", "Borders")],
+                  ["area", label("area", "Area")],
+                  ["transparence", label("transparency", "Transparency")],
                 ] as const
               ).map(
                 /** Handles Writer formatting state. @param input1 - Input value. @returns Callback result. */ ([
@@ -399,6 +427,24 @@ export function WriterParagraphDialog({
                   output={tabs.output}
                   unit={unit}
                   label={label}
+                />
+              )}
+              {activeTab === "area" && (
+                <AreaTabPage
+                  page={area}
+                  label={label}
+                  changed={/** Publishes area items. @returns Nothing. */ () => changeFill(area)}
+                />
+              )}
+              {activeTab === "transparence" && (
+                <TransparencyTabPage
+                  page={transparence}
+                  color={area.GetFillStyle() === FillStyle.SOLID ? area.GetColor() : undefined}
+                  label={label}
+                  changed={
+                    /** Publishes uniform transparency. @returns Nothing. */ () =>
+                      changeFill(transparence)
+                  }
                 />
               )}
               <div hidden={activeTab !== "alignment"} className="sm:col-span-2">
