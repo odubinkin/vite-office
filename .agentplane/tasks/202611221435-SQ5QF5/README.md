@@ -1,10 +1,11 @@
 ---
 id: "202611221435-SQ5QF5"
 title: "Keep frozen Calc cells stationary during browser scroll"
-status: "DOING"
+result_summary: "Anchored frozen Calc rows and columns to the browser scrollport."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 9
+revision: 10
 origin:
   system: "manual"
 depends_on: []
@@ -44,11 +45,16 @@ quality_review:
   findings:
     - "The existing XLSX test now measures the scroll displacement synchronously. It failed on baseline and passed after native sticky positioning."
     - "Focused Calc tests, browser specs, type checks, lint, and routing checks passed."
-commit: null
+commit:
+  hash: "4f37c7f3080adc2284c77932905a710b980590e5"
+  message: "🐛 SQ5QF5 calc: anchor frozen rows and columns"
 comments:
   -
     author: "CODER"
     body: "Start: continue direct-mode task in current checkout."
+  -
+    author: "CODER"
+    body: "Verified: Frozen cells stayed fixed on the locked axes before the scroll handler repainted. Focused Calc and browser checks passed."
 events:
   -
     type: "status"
@@ -63,8 +69,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Passed 22 focused Calc tests, all 3 Chrome regressions, production build, type checks, lint, and diff checks. The new same-task scroll assertion reproduces the prior displacement."
+  -
+    type: "status"
+    at: "2026-11-22T14:42:58.603Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: Frozen cells stayed fixed on the locked axes before the scroll handler repainted. Focused Calc and browser checks passed."
 doc_version: 3
-doc_updated_at: "2026-11-22T14:41:28.968Z"
+doc_updated_at: "2026-11-22T14:42:58.604Z"
 doc_updated_by: "CODER"
 description: "Anchor frozen grid content to the browser scrollport along its frozen axes, and cover the transient position before the native view updates."
 sections:
