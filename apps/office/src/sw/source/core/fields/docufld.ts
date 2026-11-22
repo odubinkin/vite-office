@@ -1,5 +1,6 @@
 /** @fileoverview Native document annotation field values retained by Writer text hints. */
 import type { SwDoc } from "../doc/doc";
+import type { SwFormatField } from "../../../inc/fmtfld";
 import type { EditTextObject } from "../../../../editeng/source/editeng/editobj";
 import { DateTime } from "../../../../tools/source/datetime/datetime";
 
@@ -8,6 +9,7 @@ let nextPostItId = 1;
 /** Original annotation field type carries the document that owns the fields. */
 export class SwPostItFieldType {
   private static readonly types = new WeakMap<SwDoc, SwPostItFieldType>();
+  private readonly fields = new Set<SwFormatField>();
 
   /** Finds the document's system annotation field type. @param document - Owning document. @returns Canonical field type. */
   static Get(document: SwDoc): SwPostItFieldType {
@@ -21,6 +23,21 @@ export class SwPostItFieldType {
 
   /** Associates the annotation type with one Writer document. @param document - Owning document. @returns Field type. */
   private constructor(private readonly document: SwDoc) {}
+
+  /** Registers a format bound to an actual document text hint. @param format - Attached field. @returns Nothing. */
+  RegisterField(format: SwFormatField): void {
+    this.fields.add(format);
+  }
+
+  /** Drops a field detached from the document text. @param format - Former field. @returns Nothing. */
+  UnregisterField(format: SwFormatField): void {
+    this.fields.delete(format);
+  }
+
+  /** Collects original field formats still attached to this document. @returns Borrowed format values. */
+  GatherFields(): readonly SwFormatField[] {
+    return [...this.fields];
+  }
 
   /** Returns the document associated with the field type. @returns Owning document. */
   GetDoc(): SwDoc {
@@ -71,6 +88,16 @@ export class SwPostItField {
   /** Reads the original owner type. @returns Document field type. */
   GetTyp(): SwPostItFieldType {
     return this.type;
+  }
+
+  /** Returns the field name used by original annotation marks and threads. @returns Native name. */
+  GetName(): string {
+    return this.data.name;
+  }
+
+  /** Updates the native name when an annotation mark generates it. @param name - Native mark name. @returns Nothing. */
+  SetName(name: string): void {
+    this.data = { ...this.data, name };
   }
 
   /** Reads the plain text fallback used by the original sidebar. @returns Comment text. */

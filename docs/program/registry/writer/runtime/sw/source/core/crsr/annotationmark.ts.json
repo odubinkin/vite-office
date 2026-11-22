@@ -1,0 +1,37 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sw/source/core/crsr/annotationmark.ts",
+    "classification": "upstream-mechanism",
+    "state": "active",
+    "suite": "writer",
+    "subsystem": "odf-filter",
+    "capabilityIds": [
+      "CAP-0111"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "none",
+      "evidence": [
+        "apps/office/src/sw/source/core/crsr/annotationmark.ts#AnnotationMark",
+        "apps/office/src/sw/source/filter/xml/odt-annotation-range.test.ts#preserves original comment text and anchors",
+        "vendor/libreoffice-reference/sw/source/core/crsr/annotationmark.cxx#AnnotationMark::InitDoc",
+        "vendor/libreoffice-reference/sw/source/core/crsr/annotationmark.cxx#AnnotationMark::GetAnnotationFormatField"
+      ],
+      "justification": "Binds the native annotation range to the trailing field, prefers the authored field name, and looks up the original attached format.",
+      "knownViolations": [],
+      "localSymbols": [
+        "AnnotationMark"
+      ],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": "sw/source/core/crsr/annotationmark.cxx",
+      "upstreamSymbols": [
+        "AnnotationMark::InitDoc",
+        "AnnotationMark::GetAnnotationFormatField"
+      ]
+    }
+  }
+}

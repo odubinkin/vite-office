@@ -18,9 +18,11 @@
       "evidence": [
         "apps/office/src/sw/source/core/fields/docufld.ts#SwPostItFieldType",
         "apps/office/src/sw/source/core/crsr/native-annotation-anchor.test.ts",
-        "vendor/libreoffice-reference/sw/source/core/fields/docufld.cxx"
+        "vendor/libreoffice-reference/sw/source/core/fields/docufld.cxx",
+        "apps/office/src/sw/source/filter/xml/odt-annotation-range.test.ts#preserves original comment text and anchors",
+        "vendor/libreoffice-reference/sw/source/core/fields/docufld.cxx#SwPostItField::SetName"
       ],
-      "justification": "Retains the document annotation type, native author and thread data, generated or imported identifier, and optional copied edit text snapshot.",
+      "justification": "Retains the document annotation type, native author and thread data, generated or imported identifier, and optional copied edit text snapshot. The system annotation field owner tracks the formats attached to this document and publishes their native names.",
       "knownViolations": [],
       "localSymbols": [
         "SwPostItFieldType",

@@ -1,0 +1,36 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sw/inc/txtannotationfld.ts",
+    "classification": "upstream-mechanism",
+    "state": "active",
+    "suite": "writer",
+    "subsystem": "odf-filter",
+    "capabilityIds": [
+      "CAP-0111"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "none",
+      "evidence": [
+        "apps/office/src/sw/inc/txtannotationfld.ts#SwTextAnnotationField",
+        "apps/office/src/sw/source/filter/xml/odt-annotation-range.test.ts#preserves original comment text and anchors",
+        "vendor/libreoffice-reference/sw/inc/txtannotationfld.hxx#class SwTextAnnotationField",
+        "vendor/libreoffice-reference/sw/source/core/txtnode/atrfld.cxx#SwTextAnnotationField::GetAnnotationMark"
+      ],
+      "justification": "Preserves the annotation text hint subtype and resolves its document range by the native field name.",
+      "knownViolations": [],
+      "localSymbols": [
+        "SwTextAnnotationField"
+      ],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": "sw/inc/txtannotationfld.hxx",
+      "upstreamSymbols": [
+        "class SwTextAnnotationField"
+      ]
+    }
+  }
+}

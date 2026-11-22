@@ -420,11 +420,14 @@ export function compareParagraphMarkers(
       case "bookmark-start":
         return frameAtOffset ? (marker.collapsedAroundFrame ? 0 : 1) : 2;
       case "frame":
-        return marker.frame.anchor === "as-char" ? 6 : 2;
+        return marker.frame.anchor === "as-char" ? 7 : 2;
       case "soft-page-break":
         return 5;
+      case "annotation-start":
+        return frameAtOffset ? 1 : 6;
       case "annotation":
-        return 6;
+      case "annotation-end":
+        return 7;
     }
   }
   return phase(left) - phase(right);

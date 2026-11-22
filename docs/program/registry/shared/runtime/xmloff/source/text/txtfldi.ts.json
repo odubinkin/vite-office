@@ -19,9 +19,11 @@
         "apps/office/src/xmloff/source/text/txtfldi.ts#XMLAnnotationImportContext",
         "apps/office/src/sw/source/filter/xml/odt-annotation.test.ts#preserves the bold second annotation run",
         "vendor/libreoffice-reference/xmloff/source/text/txtfldi.cxx#XMLAnnotationImportContext::ProcessAttribute",
-        "vendor/libreoffice-reference/xmloff/source/text/txtfldi.cxx#XMLAnnotationImportContext::PrepareField"
+        "vendor/libreoffice-reference/xmloff/source/text/txtfldi.cxx#XMLAnnotationImportContext::PrepareField",
+        "apps/office/src/sw/source/filter/xml/odt-annotation-range.test.ts#preserves original comment text and anchors",
+        "vendor/libreoffice-reference/xmloff/source/text/txtfldi.cxx#XMLAnnotationImportContext::endFastElement"
       ],
-      "justification": "Reads annotation identity, parent and resolution attributes, the three initials aliases, author, native date and separate edit text.",
+      "justification": "Reads annotation identity, parent and resolution attributes, the three initials aliases, author, native date and separate edit text. The closing annotation context dispatches its original name and current Writer cursor for range reattachment.",
       "knownViolations": [],
       "localSymbols": [
         "XMLAnnotationImportContext"

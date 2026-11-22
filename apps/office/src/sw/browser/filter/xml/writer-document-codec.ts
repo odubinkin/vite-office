@@ -138,6 +138,14 @@ interface WriterStyleRecord {
   readonly poolId: number;
 }
 
+/** Native annotation range endpoints over the same ordered text owners as bookmarks. */
+interface WriterAnnotationMarkRecord {
+  readonly name: string;
+  readonly nodeIndex: number;
+  readonly offset: number;
+  readonly end: Readonly<{ nodeIndex: number; offset: number }>;
+}
+
 /** Internal graph record. Paragraph identity is array order, never a stored UI key. */
 export interface WriterDocumentRecord {
   readonly theme?: ThemeRecord;
@@ -152,6 +160,7 @@ export interface WriterDocumentRecord {
     hidden?: boolean;
     condition?: string;
   }>[];
+  readonly annotationMarks?: readonly WriterAnnotationMarkRecord[];
   readonly embeddedFonts?: readonly WriterEmbeddedFont[];
   readonly bitmapTable?: readonly SfxPoolItemSnapshot[];
   readonly documentSettings: Readonly<Record<DocumentSettingId, boolean>>;
@@ -219,6 +228,13 @@ export function* encodeWriterDocumentSteps(document: SwDoc): Generator<void, Wri
   const documentProtection = ReadDocumentProtection(
     document.interopGrabBag.GetGrabBag().get("DocumentProtection"),
   );
+  const annotationMarks = document
+    .GetIDocumentMarkAccess()
+    .GetAnnotationMarks()
+    .filter(
+      /** Requires the native field that owns the end of the transferred range. @param mark - Registered annotation. @returns Whether its trailing field remains attached. */
+      (mark) => mark.GetTrailingAnnotationFormatField()?.GetField().GetName() === mark.GetName(),
+    );
   return {
     ...(documentProtection === undefined ? {} : { documentProtection }),
     ...(document.theme ? { theme: encodeTheme(document.theme) } : {}),
@@ -255,6 +271,25 @@ export function* encodeWriterDocumentSteps(document: SwDoc): Generator<void, Wri
             : {}),
         }),
       ),
+    ...(annotationMarks.length
+      ? {
+          annotationMarks: annotationMarks.map(
+            /** Encodes both registered positions of a native annotation. @param mark - Source range. @returns Native offset record. */
+            (mark) => {
+              const [start, end] = mark.GetMarkStartEnd();
+              return {
+                name: mark.GetName(),
+                nodeIndex: textOwners.indexOf(start.GetNode() as SwTextNode),
+                offset: start.GetContentIndex(),
+                end: {
+                  nodeIndex: textOwners.indexOf(end.GetNode() as SwTextNode),
+                  offset: end.GetContentIndex(),
+                },
+              };
+            },
+          ),
+        }
+      : {}),
     documentSettings: document.GetDocumentSettingManager().GetValues(),
     lineNumberInfo: document.GetLineNumberInfo().QueryValue(),
     locale: document.GetLocale(),
@@ -759,6 +794,28 @@ export function* decodeWriterDocumentSteps(
         } finally {
           end?.Dispose();
           start.Dispose();
+        }
+      }
+    }
+    if (record.annotationMarks !== undefined) {
+      if (!Array.isArray(record.annotationMarks))
+        throw new Error("Stored Writer annotation marks are invalid.");
+      for (const mark of record.annotationMarks) {
+        if (typeof mark.name !== "string")
+          throw new Error("Stored Writer annotation name is invalid.");
+        const start = decodeBookmarkPosition(textOwners, mark);
+        let end: SwPosition | undefined;
+        try {
+          end = decodeBookmarkPosition(textOwners, mark.end);
+          const range = new SwPaM(end, start);
+          try {
+            document.GetIDocumentMarkAccess().MakeAnnotationMark(range, mark.name);
+          } finally {
+            range.Dispose();
+          }
+        } finally {
+          start.Dispose();
+          end?.Dispose();
         }
       }
     }

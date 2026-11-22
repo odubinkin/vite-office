@@ -1,7 +1,9 @@
 /**
  * @fileoverview Reimplements the bounded Writer ODF XML export bridge from pinned LibreOffice `sw/source/filter/xml/xmlexp.cxx`.
  */
-import { getPostItFields, projectPostItText } from "./xmlannotation";
+import { getPostItFields, projectPostItField } from "./xmlannotation";
+import { AnnotationMark } from "../../core/crsr/annotationmark";
+import { SwTextAnnotationField } from "../../../inc/txtannotationfld";
 import { ExportNumberFormat } from "../../../../xmloff/source/style/xmlnumfe";
 import { SwBookmark } from "../../core/doc/docbm";
 import { IsSquaredPageMode } from "../../core/doc/docdesc";
@@ -800,6 +802,20 @@ function projectParagraph(
     ...marks.GetAllMarks().flatMap(
       /** Projects bookmark endpoints on this paragraph. @param mark - Native bookmark. @returns Local ODF markers. */
       (mark): XMLTextParagraphMarker[] => {
+        if (mark instanceof AnnotationMark) {
+          const start = mark.GetMarkStart();
+          if (start.GetNode() !== node) return [];
+          const field = mark.GetAnnotationFormatField()?.GetField();
+          return field
+            ? [
+                {
+                  kind: "annotation-start",
+                  offset: start.GetContentIndex(),
+                  annotation: projectPostItField(field),
+                },
+              ]
+            : [];
+        }
         if (!(mark instanceof SwBookmark)) return [];
         const [start, end] = mark.GetMarkStartEnd();
         const name = mark.GetName();
@@ -844,26 +860,14 @@ function projectParagraph(
       /** Exposes the native field at its dummy-character position. @param hint - Annotation hint. @returns Neutral annotation marker. */
       (hint): XMLTextParagraphMarker => {
         const field = hint.GetAttr().GetField();
-        const data = field.GetData();
-        const rich = field.GetTextObject();
-        return {
-          kind: "annotation",
-          offset: hint.GetStart(),
-          annotation: {
-            name: data.name,
-            parentName: data.parentName ?? "",
-            resolved: data.resolved ?? false,
-            author: data.author,
-            initials: data.initials,
-            dateTime: data.dateTime.GetUNODateTime(),
-            paragraphs: rich
-              ? projectPostItText(node.GetDoc(), rich)
-              : data.text.split("\n").map(
-                  /** Converts an original plain annotation paragraph. @param text - Plain text. @returns Edit runs. */
-                  (text) => [{ text, properties: {} }],
-                ),
-          },
-        };
+        const mark =
+          hint instanceof SwTextAnnotationField
+            ? hint.GetAnnotationMark()
+            : marks.FindAnnotationMark(field.GetName());
+        const offset = hint.GetStart();
+        return mark
+          ? { kind: "annotation-end", offset, name: mark.GetName() }
+          : { kind: "annotation", offset, annotation: projectPostItField(field) };
       },
     ),
   ].sort(

@@ -91,6 +91,23 @@ export class XMLAnnotationImportContext extends SvXMLImportContext {
   }
 }
 
+/** Resolves the named existing annotation when its end element closes. */
+export class XMLAnnotationEndImportContext extends SvXMLImportContext {
+  /** Binds the original annotation-end name to the current text owner. @param attributes - End element attributes. @param commit - Field lookup and range sink. @returns Context. */
+  constructor(
+    private readonly attributes: FastAttributeList,
+    private readonly commit: (name: string) => void,
+  ) {
+    super();
+    attributes.assertOnly([T.OFFICE_NAME], "annotation-end");
+  }
+
+  /** Completes the range of the previously inserted field. @returns Nothing. */
+  public override endFastElement(): void {
+    this.commit(this.attributes.get(T.OFFICE_NAME) ?? "");
+  }
+}
+
 /** Selects the annotation's nested paragraph text contexts. @param element - Child token. @param attributes - Style attributes. @param resolveStyle - Text style resolver. @param commit - Paragraph sink. @returns Context or unknown. */
 function annotationBlockContext(
   element: T,

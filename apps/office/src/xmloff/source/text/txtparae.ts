@@ -158,6 +158,8 @@ export type XMLTextParagraphMarker =
       collapsedAroundFrame?: boolean;
     }>
   | Readonly<{ kind: "annotation"; annotation: XMLAnnotation; offset: number }>
+  | Readonly<{ kind: "annotation-start"; annotation: XMLAnnotation; offset: number }>
+  | Readonly<{ kind: "annotation-end"; name: string; offset: number }>
   | Readonly<{ kind: "frame"; frame: XMLTextFrameExportSource; offset: number }>;
 
 /** Reiterable model-facing source; definitions are collected before body references. */
@@ -245,7 +247,7 @@ export class XMLTextParagraphExport {
       }
       if (paragraph.markerProperties) addTextStyle(paragraph.markerProperties);
       for (const marker of paragraph.markers ?? []) {
-        if (marker.kind !== "annotation") continue;
+        if (marker.kind !== "annotation" && marker.kind !== "annotation-start") continue;
         for (const editParagraph of marker.annotation.paragraphs)
           for (const span of editParagraph)
             if (Object.keys(span.properties).length) addTextStyle(span.properties);
@@ -568,6 +570,7 @@ function exportParagraphElement(
           start +
           Number(
             marker.kind === "annotation" ||
+              marker.kind === "annotation-end" ||
               (marker.kind === "frame" && marker.frame.anchor === "as-char"),
           );
         markerIndex += 1;
@@ -612,7 +615,9 @@ function exportMarker(
   renderFrame: ((frame: XMLTextFrameExportSource) => string) | undefined,
   characterStyleNames: ReadonlyMap<string, string>,
 ): string {
-  if (marker.kind === "annotation")
+  if (marker.kind === "annotation-end")
+    return `<office:annotation-end office:name="${escapeXml(marker.name)}"/>`;
+  if (marker.kind === "annotation" || marker.kind === "annotation-start")
     return exportAnnotation(
       marker.annotation,
       escapeXml,

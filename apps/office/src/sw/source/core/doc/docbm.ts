@@ -1,6 +1,7 @@
 /** @fileoverview Owns Writer bookmarks and imported soft-page positions at the pinned docbm.cxx boundary. */
 
 import { MarkBase, UnoMark } from "../crsr/bookmark";
+import { AnnotationMark } from "../crsr/annotationmark";
 import { SwPaM } from "../crsr/pam";
 import { getUniqueBookmarkName } from "./bookmark-name";
 import { SwPosition } from "../crsr/pam";
@@ -53,16 +54,20 @@ export class SwBookmark extends MarkBase {
   }
 }
 
+/** The represented families in Writer's document-wide mark index. */
+type DocumentMark = SwBookmark | UnoMark | AnnotationMark;
+
 /** Document-owned subset of LibreOffice's MarkManager plus retained soft pagination hints. */
 export class DocumentMarkAccess {
   private readonly unoMarks = new Set<UnoMark>();
-  private readonly m_vAllMarks: (SwBookmark | UnoMark)[] = [];
+  private readonly annotationMarks = new Set<AnnotationMark>();
+  private readonly m_vAllMarks: DocumentMark[] = [];
   /** Original start-order comparator for represented collapsed and UNO marks; cross-reference marks are not in this core family. @param mark - Actual borrowed mark. @returns Native start position. */
-  private static MarkStart(mark: SwBookmark | UnoMark): SwPosition {
+  private static MarkStart(mark: DocumentMark): SwPosition {
     return mark.GetMarkStart();
   }
   /** Original lower_bound insertion puts a new equal-start mark before existing ones. @param mark - Actual borrowed native mark. @returns Nothing. */
-  private InsertMarkSorted(mark: SwBookmark | UnoMark): void {
+  private InsertMarkSorted(mark: DocumentMark): void {
     let first = 0,
       last = this.m_vAllMarks.length;
     const start = DocumentMarkAccess.MarkStart(mark);
@@ -76,12 +81,12 @@ export class DocumentMarkAccess {
     this.m_vAllMarks.splice(first, 0, mark);
   }
   /** Removes a borrowed vector reference before its actual owner is destroyed. @param mark - Actual native mark. @returns Nothing. */
-  private RemoveMark(mark: SwBookmark | UnoMark): void {
+  private RemoveMark(mark: DocumentMark): void {
     const index = this.m_vAllMarks.indexOf(mark);
     if (index >= 0) this.m_vAllMarks.splice(index, 1);
   }
   /** Source all-mark view includes internal UNO marks while the UI bookmark catalog remains separate. Registered positions are reconciled in original start order on access. @returns Borrowed native vector. */
-  public GetAllMarks(): readonly (SwBookmark | UnoMark)[] {
+  public GetAllMarks(): readonly DocumentMark[] {
     this.m_vAllMarks.sort(
       /** Original start ordering for the current native families. @param first - Actual mark. @param second - Actual mark. @returns Source order. */ (
         first,
@@ -100,8 +105,58 @@ export class DocumentMarkAccess {
     this.InsertMarkSorted(mark);
     return mark;
   }
+  /** Makes a native annotation mark whose trailing character owns the named field. @param range - Expanded Writer selection. @param name - Native field name. @returns Document-owned annotation mark. */
+  public MakeAnnotationMark(range: SwPaM, name: string): AnnotationMark {
+    const start = range.Start();
+    const end = range.End();
+    this.assertNode(start.GetNode() as SwTextNode);
+    this.assertNode(end.GetNode() as SwTextNode);
+    if (start.compare(end) === 0) throw new Error("Writer annotation range is collapsed.");
+    const mark = new AnnotationMark(range, name);
+    try {
+      mark.InitDoc();
+    } catch (error) {
+      mark.Dispose();
+      throw error;
+    }
+    this.annotationMarks.add(mark);
+    this.InsertMarkSorted(mark);
+    this.document.NotifyModelChange({ kind: "mark-changed" });
+    return mark;
+  }
+
+  /** Lists the document's native annotation marks in start order. @returns Borrowed annotation marks. */
+  public GetAnnotationMarks(): readonly AnnotationMark[] {
+    return this.GetAllMarks().filter(
+      /** Selects native annotation marks independently of bookmark enumeration. @param mark - Document mark. @returns Whether it is an annotation range. */
+      (mark): mark is AnnotationMark => mark instanceof AnnotationMark,
+    );
+  }
+
+  /** Looks up an annotation mark by the original field name. @param name - Annotation name. @returns First matching mark. */
+  public FindAnnotationMark(name: string): AnnotationMark | undefined {
+    let found: AnnotationMark | undefined;
+    for (const mark of this.annotationMarks) {
+      if (
+        mark.GetName() === name &&
+        (!found || mark.GetMarkStart().compare(found.GetMarkStart()) <= 0)
+      )
+        found = mark;
+    }
+    return found;
+  }
+
+  /** Removes the annotation range from both mark indexes. @param mark - Owned annotation. @returns Nothing. */
+  public DeleteAnnotationMark(mark: AnnotationMark): void {
+    if (this.annotationMarks.delete(mark)) {
+      this.RemoveMark(mark);
+      mark.Dispose();
+      this.document.NotifyModelChange({ kind: "mark-changed" });
+    }
+  }
+
   /** Original repositionMark for current collapsed bookmarks and internal UNO ranges. Frame invalidation and other mark families have no represented owners here. Unlike editing, reposition does not publish modified/undo state. @param mark - Actual document-managed mark or native null. @param range - Original new positions. @returns Nothing. */
-  public RepositionMark(mark: SwBookmark | UnoMark | null, range: SwPaM): void {
+  public RepositionMark(mark: DocumentMark | null, range: SwPaM): void {
     if (!mark) return;
     if (mark.GetMarkPos().GetNode().GetNodes() !== this.document.GetNodes())
       throw new Error("assert(mark belongs to document)");
@@ -128,7 +183,7 @@ export class DocumentMarkAccess {
     endContent?: number,
     isReplace = false,
   ): void {
-    const deleted: (SwBookmark | UnoMark)[] = [];
+    const deleted: DocumentMark[] = [];
     for (const mark of this.GetAllMarks()) {
       const point = mark.GetMarkPos(),
         expanded = mark.IsExpanded(),
@@ -176,6 +231,7 @@ export class DocumentMarkAccess {
     for (let i = deleted.length; i;) {
       const mark = deleted[--i];
       if (mark instanceof UnoMark) this.DeleteUnoMark(mark);
+      else if (mark instanceof AnnotationMark) this.DeleteAnnotationMark(mark);
       else if (mark) this.DeleteMark(mark.GetName());
     }
     this.GetAllMarks();
@@ -184,6 +240,8 @@ export class DocumentMarkAccess {
   public Dispose(): void {
     for (const mark of this.unoMarks) mark.Dispose();
     this.unoMarks.clear();
+    for (const mark of this.annotationMarks) mark.Dispose();
+    this.annotationMarks.clear();
     this.m_vAllMarks.length = 0;
     for (const mark of this.bookmarks.values()) mark.Dispose();
     this.bookmarks.clear();

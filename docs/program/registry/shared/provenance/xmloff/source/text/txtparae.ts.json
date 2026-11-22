@@ -184,6 +184,10 @@
         {
           "path": "apps/office/src/xmloff/source/text/txtparae.ts",
           "marker": "properties.lineNumberStart"
+        },
+        {
+          "path": "apps/office/src/sw/source/filter/xml/odt-annotation-range.test.ts",
+          "marker": "preserves original comment text and anchors"
         }
       ],
       "upstream": [
@@ -302,6 +306,10 @@
         {
           "path": "xmloff/source/text/txtprmap.cxx",
           "marker": "PROP_ParaLineNumberStartValue"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/unocore/unoportenum.cxx",
+          "marker": "lcl_ExportAnnotationStarts"
         }
       ]
     },
@@ -344,7 +352,8 @@
       "Emits the shared ODF character property element, retaining the source-native complex-color child in deduplicated text and paragraph styles.",
       "Collects shared paragraph and character automatic styles for each additional master-page text section.",
       "V4DQJW as-character graphic checkpoint. An as-char frame occupies one text position in the run and the original control marker is omitted from XML.",
-      "Writes the paragraph start attribute independently of participation."
+      "Writes the paragraph start attribute independently of participation.",
+      "Exports original annotation range boundaries independently of the hidden field marker."
     ],
     "status": "mapped",
     "upstreamPath": "xmloff/source/text/txtparae.cxx",

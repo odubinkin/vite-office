@@ -1,5 +1,8 @@
 /** @fileoverview Consumed sw::mark::UnoMark from pinned bookmark.cxx: document-managed UNO range positions remain distinct from editing cursors and user bookmarks. */
 import type { SwPaM, SwPosition } from "./pam";
+let markCounter = 0;
+let markPostfix: number | undefined;
+
 /** Owns the two registered positions shared by ordinary and internal Writer marks. */
 export class MarkBase {
   private point!: SwPosition;
@@ -8,6 +11,14 @@ export class MarkBase {
   /** Binds the represented native owner and its declared inputs. @param range - Registered canonical range. @returns Nothing. */
   constructor(range: SwPaM) {
     this.SetPositions(range);
+  }
+  /** Generates the original counter plus process postfix for an unnamed mark. @param prefix - Native mark family prefix. @returns New generic mark name. */
+  static GenerateNewName(prefix: string): string {
+    if (markPostfix === undefined || markCounter === 0x7fffffff) {
+      markPostfix = Math.floor(Math.random() * 0x100000000);
+      markCounter = 0;
+    }
+    return `${prefix}${markCounter++}_${markPostfix}`;
   }
   /** Implements the represented native GetMarkPos operation. @returns The represented native operation result. */
   GetMarkPos(): SwPosition {

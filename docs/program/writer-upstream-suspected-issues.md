@@ -5994,3 +5994,16 @@ the serialization and the import result.
 - [Original annotation field default](../../vendor/libreoffice-reference/sw/source/core/unocore/unofield.cxx)
 - [Original annotation field export](../../vendor/libreoffice-reference/xmloff/source/text/txtflde.cxx)
 - [Original date-time conversion](../../vendor/libreoffice-reference/sax/source/tools/converter.cxx)
+
+### WRITER-739 — An authored annotation name overrides mark uniqueness
+
+The annotation mark initializer takes a nonempty name from its trailing
+field even after the mark manager has resolved a name collision. This
+keeps parent-name references intact when copying comments. A later
+name-based lookup can therefore find the first matching field when
+more than one annotation retains the same authored name. Writer
+preserves the original field name and the lookup behavior.
+
+- [Original annotation name reconciliation](../../vendor/libreoffice-reference/sw/source/core/crsr/annotationmark.cxx)
+- [Original mark creation and lookup](../../vendor/libreoffice-reference/sw/source/core/doc/docbm.cxx)
+- [Original annotation field unique-ID lookup](../../vendor/libreoffice-reference/sw/source/core/unocore/unofield.cxx)

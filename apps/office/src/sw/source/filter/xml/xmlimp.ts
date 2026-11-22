@@ -1,6 +1,7 @@
 /** @fileoverview Implements Writer's streaming SwXMLImport bridge over fast SAX contexts. */
 import type { XMLAnnotation } from "../../../../xmloff/source/text/txtfldi";
 import { createPostItText, insertPostItField } from "./xmlannotation";
+import { AttachAnnotationToRange, GetAnnotationByUniqueID } from "../../core/unocore/unofield";
 import { DateTime } from "../../../../tools/source/datetime/datetime";
 import { hasDrawingFrameFill, importPageBackground, importPageLayoutBox } from "./xmlimpit";
 import { getActivePageStory, type SwFrameFormat } from "../../core/layout/atrfrm";
@@ -237,6 +238,13 @@ class SwXMLImport
     } finally {
       textObject?.dispose();
     }
+  }
+
+  /** Extends an earlier ODF annotation to this closing cursor position. @param cursor - Native text cursor. @param name - Original field name. @returns Nothing. */
+  public endAnnotation(cursor: XMLTextCursor, name: string): void {
+    const writer = cursor as SwXTextCursor;
+    const source = GetAnnotationByUniqueID(writer.GetDoc(), name);
+    if (source) AttachAnnotationToRange(writer, source);
   }
 
   /** Registers the native graphic style values referenced by a text frame. @param name - ODF style name. @param style - Native frame values. @param parent - Optional inherited style. @returns Nothing. */

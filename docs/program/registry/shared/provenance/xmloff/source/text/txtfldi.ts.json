@@ -14,10 +14,11 @@
       "XMLAnnotationImportContext::PrepareField"
     ],
     "preservedResponsibilities": [
-      "Reads annotation identity, parent and resolution attributes, the three initials aliases, author, native date and separate edit text."
+      "Reads annotation identity, parent and resolution attributes, the three initials aliases, author, native date and separate edit text.",
+      "The closing annotation context dispatches its original name and current Writer cursor for range reattachment."
     ],
     "omittedResponsibilities": [
-      "Annotation-end range ownership and unrelated text field services are outside this point context."
+      "Unrelated text field services are outside the annotation import context."
     ],
     "evidence": {
       "local": [
@@ -28,6 +29,10 @@
         {
           "path": "apps/office/src/sw/source/filter/xml/odt-annotation.test.ts",
           "marker": "preserves the bold second annotation run"
+        },
+        {
+          "path": "apps/office/src/sw/source/filter/xml/odt-annotation-range.test.ts",
+          "marker": "preserves original comment text and anchors"
         }
       ],
       "upstream": [
@@ -38,6 +43,10 @@
         {
           "path": "vendor/libreoffice-reference/xmloff/source/text/txtfldi.cxx",
           "marker": "XMLAnnotationImportContext::PrepareField"
+        },
+        {
+          "path": "vendor/libreoffice-reference/xmloff/source/text/txtfldi.cxx",
+          "marker": "XMLAnnotationImportContext::endFastElement"
         }
       ]
     }

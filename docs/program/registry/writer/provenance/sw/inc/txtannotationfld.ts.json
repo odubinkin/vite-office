@@ -1,0 +1,44 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "status": "mapped",
+    "localPath": "apps/office/src/sw/inc/txtannotationfld.ts",
+    "localSymbols": [
+      "SwTextAnnotationField"
+    ],
+    "upstreamPath": "sw/inc/txtannotationfld.hxx",
+    "upstreamSymbols": [
+      "class SwTextAnnotationField"
+    ],
+    "preservedResponsibilities": [
+      "Preserves the annotation text hint subtype and resolves its document range by the native field name."
+    ],
+    "omittedResponsibilities": [
+      "The unrelated native annotation user-interface and tracked-change integration remains outside this hint."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sw/inc/txtannotationfld.ts",
+          "marker": "SwTextAnnotationField"
+        },
+        {
+          "path": "apps/office/src/sw/source/filter/xml/odt-annotation-range.test.ts",
+          "marker": "preserves original comment text and anchors"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sw/inc/txtannotationfld.hxx",
+          "marker": "class SwTextAnnotationField"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/txtnode/atrfld.cxx",
+          "marker": "SwTextAnnotationField::GetAnnotationMark"
+        }
+      ]
+    }
+  }
+}

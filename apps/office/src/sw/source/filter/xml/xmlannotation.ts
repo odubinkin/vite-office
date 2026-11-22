@@ -4,6 +4,7 @@ import { CH_TXTATR_INWORD } from "../../../inc/hintids";
 import * as H from "../../../inc/hintids";
 import { SetAttrMode } from "../../../inc/swtypes";
 import { SwTextField } from "../../../inc/txtfld";
+import { SwTextAnnotationField } from "../../../inc/txtannotationfld";
 import {
   SwPostItField,
   SwPostItFieldType,
@@ -164,7 +165,7 @@ export function insertPostItField(
   try {
     if (
       !node.InsertHint(
-        new SwTextField(new SwFormatField(field), offset),
+        new SwTextAnnotationField(new SwFormatField(field), offset),
         existingMarker ? SetAttrMode.NOTXTATRCHR : SetAttrMode.DEFAULT,
       )
     )
@@ -210,4 +211,24 @@ export function projectPostItText(
     paragraphs.push(spans);
   }
   return paragraphs;
+}
+
+/** Projects the native field into the ODF annotation payload. @param field - Actual Writer field. @returns Detached ODF values. */
+export function projectPostItField(field: SwPostItField): XMLAnnotation {
+  const data = field.GetData();
+  const rich = field.GetTextObject();
+  return {
+    name: data.name,
+    parentName: data.parentName ?? "",
+    resolved: data.resolved ?? false,
+    author: data.author,
+    initials: data.initials,
+    dateTime: data.dateTime.GetUNODateTime(),
+    paragraphs: rich
+      ? projectPostItText(field.GetTyp().GetDoc(), rich)
+      : data.text.split("\n").map(
+          /** Converts an original plain annotation paragraph. @param text - Plain text. @returns Edit runs. */
+          (text) => [{ text, properties: {} }],
+        ),
+  };
 }

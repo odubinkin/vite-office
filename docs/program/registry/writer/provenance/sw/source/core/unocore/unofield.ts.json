@@ -1,0 +1,50 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "status": "mapped",
+    "localPath": "apps/office/src/sw/source/core/unocore/unofield.ts",
+    "localSymbols": [
+      "GetAnnotationByUniqueID",
+      "AttachAnnotationToRange"
+    ],
+    "upstreamPath": "sw/source/core/unocore/unofield.cxx",
+    "upstreamSymbols": [
+      "SwXTextFieldTypes::getByUniqueID",
+      "SwXTextField::attachToRange"
+    ],
+    "preservedResponsibilities": [
+      "Finds an attached annotation by its native unique ID and reanchors its copied field from the provisional insertion point to the original selection end."
+    ],
+    "omittedResponsibilities": [
+      "Other original field services, explicit UNO aggregation and desktop undo orchestration remain outside this profile."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sw/source/core/unocore/unofield.ts",
+          "marker": "GetAnnotationByUniqueID"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/unocore/unofield.ts",
+          "marker": "AttachAnnotationToRange"
+        },
+        {
+          "path": "apps/office/src/sw/source/filter/xml/odt-annotation-range.test.ts",
+          "marker": "preserves original comment text and anchors"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/unocore/unofield.cxx",
+          "marker": "SwXTextFieldTypes::getByUniqueID"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/unocore/unofield.cxx",
+          "marker": "SwXTextField::attachToRange"
+        }
+      ]
+    }
+  }
+}
