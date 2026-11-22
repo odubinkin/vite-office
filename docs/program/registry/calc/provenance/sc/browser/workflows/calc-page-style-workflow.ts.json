@@ -1,0 +1,29 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "browser-adaptation",
+    "localPath": "apps/office/src/sc/browser/workflows/calc-page-style-workflow.ts",
+    "status": "local-only",
+    "rationale": "Owns the existing browser modal continuation and disposal for the native page style and standalone header and footer editors.",
+    "responsibilities": [
+      "Owns the existing browser modal continuation and disposal for the native page style and standalone header and footer editors."
+    ],
+    "stackDivergence": {
+      "kind": "browser-adaptation",
+      "rationale": "The existing browser Sfx modal lifecycle replaces desktop widget hosting."
+    },
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sc/browser/workflows/calc-page-style-workflow.ts",
+          "marker": "CalcPageStyleWorkflow"
+        },
+        {
+          "path": "apps/office/src/sc/browser/presentation/calc-page-style.test.tsx",
+          "marker": "@fileoverview"
+        }
+      ]
+    }
+  }
+}

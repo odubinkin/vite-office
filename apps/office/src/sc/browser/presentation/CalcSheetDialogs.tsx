@@ -19,14 +19,20 @@ import { ScSheetTabDialog } from "./ScSheetTabDialog";
 import { ScHFEditDlg } from "./pagedlg/ScHFEditDlg";
 import { ScPageStyleDlg } from "./pagedlg/ScPageStyleDlg";
 import { ScGoToTabDlg } from "./ScGoToTabDlg";
+import { ScMergeCellsDialog } from "./ScMergeCellsDialog";
 
 /** Requests from the existing native sheet workflow controllers. */
 interface CalcSheetDialogsProps {
   readonly sheetWorkflows: CalcSheetWorkflows;
   readonly widthDialog: ReturnType<CalcSheetWorkflows["metricDialogs"]["GetSnapshot"]>;
   readonly tabDialog: ReturnType<CalcSheetWorkflows["tabDialogs"]["GetSnapshot"]>;
-  readonly headerFooterDialog: ReturnType<CalcSheetWorkflows["headerFooterDialogs"]["GetSnapshot"]>;
-  readonly pageStyleDialog: ReturnType<CalcSheetWorkflows["pageStyleDialogs"]["GetSnapshot"]>;
+  readonly headerFooterDialog: ReturnType<
+    CalcSheetWorkflows["pageStyles"]["headerFooterDialogs"]["GetSnapshot"]
+  >;
+  readonly pageStyleDialog: ReturnType<
+    CalcSheetWorkflows["pageStyles"]["pageStyleDialogs"]["GetSnapshot"]
+  >;
+  readonly mergeDialog: ReturnType<CalcSheetWorkflows["merge"]["dialogs"]["GetSnapshot"]>;
   readonly condEditor: ReturnType<CalcSheetWorkflows["conditionals"]["editors"]["GetSnapshot"]>;
   readonly condManager: ReturnType<CalcSheetWorkflows["conditionals"]["managers"]["GetSnapshot"]>;
   readonly nameDialog: ReturnType<CalcSheetWorkflows["nameDialogs"]["GetSnapshot"]>;
@@ -47,6 +53,7 @@ export function CalcSheetDialogs({
   widthDialog,
   pageStyleDialog,
   headerFooterDialog,
+  mergeDialog,
   tabDialog,
   sheetDialog,
   condEditor,
@@ -63,6 +70,14 @@ export function CalcSheetDialogs({
 }: CalcSheetDialogsProps): React.JSX.Element {
   return (
     <>
+      {mergeDialog && (
+        <ScMergeCellsDialog
+          key={mergeDialog.id}
+          model={mergeDialog.request}
+          onCancel={() => sheetWorkflows.merge.dialogs.Cancel(mergeDialog.id)}
+          onSubmit={(result) => sheetWorkflows.merge.dialogs.Complete(mergeDialog.id, result)}
+        />
+      )}
       {pasteText?.request.kind === "text" && (
         <ScImportAsciiDlg
           key={pasteText.id}
@@ -169,9 +184,11 @@ export function CalcSheetDialogs({
         <ScHFEditDlg
           key={headerFooterDialog.id}
           model={headerFooterDialog.request}
-          onCancel={() => sheetWorkflows.headerFooterDialogs.Cancel(headerFooterDialog.id)}
+          onCancel={() =>
+            sheetWorkflows.pageStyles.headerFooterDialogs.Cancel(headerFooterDialog.id)
+          }
           onSubmit={(result) =>
-            sheetWorkflows.headerFooterDialogs.Complete(headerFooterDialog.id, result)
+            sheetWorkflows.pageStyles.headerFooterDialogs.Complete(headerFooterDialog.id, result)
           }
         />
       )}
@@ -179,9 +196,9 @@ export function CalcSheetDialogs({
         <ScPageStyleDlg
           key={pageStyleDialog.id}
           model={pageStyleDialog.request}
-          onCancel={() => sheetWorkflows.pageStyleDialogs.Cancel(pageStyleDialog.id)}
+          onCancel={() => sheetWorkflows.pageStyles.pageStyleDialogs.Cancel(pageStyleDialog.id)}
           onSubmit={(result) =>
-            sheetWorkflows.pageStyleDialogs.Complete(pageStyleDialog.id, result)
+            sheetWorkflows.pageStyles.pageStyleDialogs.Complete(pageStyleDialog.id, result)
           }
         />
       )}

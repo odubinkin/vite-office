@@ -71,8 +71,9 @@ export function CalcWorkbench({
   const sheetDialog = useCalcDialog(sheetWorkflows.dialogs);
   const tabDialog = useCalcDialog(sheetWorkflows.tabDialogs);
   const widthDialog = useCalcDialog(sheetWorkflows.metricDialogs);
-  const headerFooterDialog = useCalcDialog(sheetWorkflows.headerFooterDialogs);
-  const pageStyleDialog = useCalcDialog(sheetWorkflows.pageStyleDialogs);
+  const headerFooterDialog = useCalcDialog(sheetWorkflows.pageStyles.headerFooterDialogs);
+  const pageStyleDialog = useCalcDialog(sheetWorkflows.pageStyles.pageStyleDialogs);
+  const mergeDialog = useCalcDialog(sheetWorkflows.merge.dialogs);
   const printDialog = useCalcDialog(sheetWorkflows.printDialogs);
   const condEditor = useCalcDialog(sheetWorkflows.conditionals.editors);
   const condManager = useCalcDialog(sheetWorkflows.conditionals.managers);
@@ -121,6 +122,7 @@ export function CalcWorkbench({
     namePaste !== undefined ||
     createNames !== undefined ||
     optionsDialog !== undefined ||
+    mergeDialog !== undefined ||
     pasteText !== undefined;
   const root = useRef<HTMLElement>(null),
     tabs = useRef<HTMLDivElement>(null),
@@ -954,6 +956,7 @@ export function CalcWorkbench({
           sheetDialog,
           pageStyleDialog,
           headerFooterDialog,
+          mergeDialog,
           condEditor,
           condManager,
           nameDialog,

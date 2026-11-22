@@ -7,7 +7,6 @@ import {
 } from "./tabvwsh";
 import type { ScTabViewShell } from "../source/ui/view/tabvwsh4";
 import type { ScPaneCommand } from "../source/ui/view/tabview";
-import type { ScMergeCommand } from "../source/ui/view/cellsh3";
 import type { SfxRequest } from "../../sfx2/source/control/request";
 import {
   createCalcTextEffectSlots,
@@ -160,12 +159,6 @@ export const calcSheetCommands = {
 } as const;
 export const FID_TAB_SET_TAB_BG_COLOR = 26367;
 
-/** Original merge slots from the Format command range and SID_NEW_SLOTS. */
-export const calcMergeCommands = [
-  { id: ".uno:ToggleMergeCells", slotId: 26581, label: "Merge and Center Cells", kind: "toggle" },
-  { id: ".uno:MergeCells", slotId: 26300, label: "Merge Cells", kind: "merge" },
-  { id: ".uno:SplitCell", slotId: 26301, label: "Split Cells", kind: "split" },
-] as const satisfies readonly { id: string; slotId: number; label: string; kind: ScMergeCommand }[];
 /** Native split and freeze window slots from sc.hrc. */
 export const calcPaneCommands = [
   { id: ".uno:FreezePanesRow", label: "Freeze First Row", slotId: 26184, kind: "row" },

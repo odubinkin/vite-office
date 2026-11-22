@@ -1,0 +1,42 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/sc/sdi/cellsh.ts",
+    "status": "mapped",
+    "upstreamPath": "sc/sdi/cellsh.sdi",
+    "localSymbols": [
+      "calcMergeCommands"
+    ],
+    "upstreamSymbols": [
+      "FID_MERGE_ON",
+      "FID_MERGE_OFF",
+      "FID_MERGE_TOGGLE"
+    ],
+    "preservedResponsibilities": [
+      "Projects the original cell shell merge, split and merge-and-center command bindings with their source slot IDs."
+    ],
+    "omittedResponsibilities": [
+      "Sdi generation is represented by the repository\u2019s pinned browser command resources."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sc/sdi/cellsh.ts",
+          "marker": "calcMergeCommands"
+        },
+        {
+          "path": "apps/office/src/sc/browser/presentation/calc-merge-cells.test.tsx",
+          "marker": "@fileoverview"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sc/sdi/cellsh.sdi",
+          "marker": "FID_MERGE_ON"
+        }
+      ]
+    }
+  }
+}
