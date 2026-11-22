@@ -1,10 +1,11 @@
 ---
 id: "202611220341-T2VZFX"
 title: "Connect Writer Page Style header and footer settings"
-status: "DOING"
+result_summary: "Connected Writer Header and Footer settings with native frame geometry, sharing and undo."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 10
+revision: 11
 origin:
   system: "manual"
 depends_on: []
@@ -40,11 +41,16 @@ quality_review:
   findings:
     - "Primary paths preserve existing content across sharing and history and retain the represented margins and spacing through both ODT and Worker serialization."
     - "Chromium verified enable, confirmation cancellation, confirmed deletion and undo on the physical page."
-commit: null
+commit:
+  hash: "6a6eb9a6d84ee39bca6fc4c3f897970a826caae8"
+  message: "🧩 T2VZFX test: Verify Page Style story confirmation in Chromium"
 comments:
   -
     author: "CODER"
     body: "Start: Connect the native Header and Footer page-style controls and preserve story sections through Writer history."
+  -
+    author: "CODER"
+    body: "Verified: Focused Writer and resource tests, both Chromium scenarios, and production build passed."
 events:
   -
     type: "status"
@@ -59,8 +65,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "47 focused Writer tests, 2 Writer resource tests, production build, 2 Chromium scenarios and scoped checks passed. Findings records existing Calc diagnostics and the uncompleted supplementary Word fixture."
+  -
+    type: "status"
+    at: "2026-11-22T04:25:29.111Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: Focused Writer and resource tests, both Chromium scenarios, and production build passed."
 doc_version: 3
-doc_updated_at: "2026-11-22T04:13:44.169Z"
+doc_updated_at: "2026-11-22T04:25:29.149Z"
 doc_updated_by: "CODER"
 description: "Expose native page story activation, margins, spacing, height, and sharing through the Header and Footer pages, with content-preserving Writer history."
 sections:
