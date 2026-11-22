@@ -8,6 +8,62 @@ import { SfxHintId } from "../../../../svl/inc/hint";
 import { ScRange } from "../../../inc/address";
 import { InsertDeleteFlags } from "../../../inc/global";
 import { AdjustBlockHeight } from "../view/viewfun2";
+import { scMergeResourcesEnglish } from "../../../inc/globstr";
+import type { ScCellMergeOption } from "../view/cellmergeoption";
+
+/** Original split history owns one attribute snapshot and the extended source ranges. */
+export class ScUndoRemoveMerge extends SfxUndoAction<ScDocShell> {
+  /** Takes the pre-split snapshot for the source option. @param shell - Live document owner. @param option - Split range and tabs. @param undo - Owned attribute snapshot. @returns Undo action. */
+  constructor(
+    private readonly shell: ScDocShell,
+    private readonly option: ScCellMergeOption,
+    private readonly undo: ScDocument,
+  ) {
+    super();
+  }
+
+  /** Restores original attributes and marks the sheet streams for saving. @returns Nothing. */
+  override UndoWithContext(): void {
+    const doc = this.shell.GetDocument();
+    const {
+      mnStartCol: col,
+      mnStartRow: row,
+      mnEndCol: lastCol,
+      mnEndRow: lastRow,
+      maTabs,
+    } = this.option;
+    for (const tab of maTabs) {
+      const range = this.option.getSingleRange(tab);
+      const sheet = doc.FetchTable(tab);
+      sheet?.DeleteArea(col, row, lastCol, lastRow, InsertDeleteFlags.ATTRIB);
+      this.undo.CopyToDocument(range, InsertDeleteFlags.ATTRIB, false, doc);
+      this.shell.GetDocFunc().AdjustRowHeight(range, true, true);
+      sheet?.SetStreamValid(false);
+    }
+  }
+
+  /** Reapplies the native split without creating more history. @returns Nothing. */
+  override RedoWithContext(): void {
+    this.shell.GetDocFunc().UnmergeCells(this.option, false);
+  }
+
+  /** Resolves the history sheet and original rectangle. @param tab - Current view sheet. @returns Source affected range. */
+  getAffectedRange(tab: number): ScRange {
+    return this.option.maTabs.has(tab)
+      ? this.option.getSingleRange(tab)
+      : this.option.getFirstSingleRange();
+  }
+
+  /** Returns the native split caption. @returns Undo label. */
+  override GetComment(): string {
+    return scMergeResourcesEnglish.STR_UNDO_REMERGE;
+  }
+
+  /** Releases the owned snapshot. @returns Nothing. */
+  override Dispose(): void {
+    this.undo.Dispose();
+  }
+}
 /** Original indent history owns real pre-change attributes and original marks. */
 export class ScUndoIndent extends SfxUndoAction<ScDocShell> {
   private readonly marks: ScMarkData;

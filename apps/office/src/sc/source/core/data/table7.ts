@@ -7,6 +7,41 @@ import type { ColumnSpanSet } from "../../../inc/columnspanset";
 import type { ScTable } from "../../../inc/table";
 import { CRFlags } from "../../../inc/global";
 import type { ScColumn } from "../../../inc/column";
+import { MultiDataCellState } from "../../../inc/types";
+
+/** Finds the source first occupied column and stops once more than one data cell is known. @param this - Actual sheet. @param firstCol - First column. @param firstRow - First row. @param lastCol - Last column. @param lastRow - Last row. @returns Native block occupancy state. */
+export function HasMultipleDataCells(
+  this: ScTable,
+  firstCol: number,
+  firstRow: number,
+  lastCol: number,
+  lastRow: number,
+): MultiDataCellState {
+  const doc = this.GetDoc();
+  if (
+    !doc.ValidColRow(firstCol, firstRow) ||
+    !doc.ValidColRow(lastCol, lastRow) ||
+    firstCol > lastCol ||
+    firstRow > lastRow
+  )
+    return new MultiDataCellState();
+  const { Empty, HasOneCell, HasMultipleCells } = MultiDataCellState.StateType;
+  const result = new MultiDataCellState(Empty);
+  const last = this.ClampToAllocatedColumns(lastCol);
+  for (let col = firstCol; col <= last; col++) {
+    const row: [number] = [-1];
+    const count = (this.FetchColumn(col) as ScColumn).HasDataCellsInRange(firstRow, lastRow, row);
+    if (count === Empty) continue;
+    if (result.mnCol1 < 0) {
+      result.mnCol1 = col;
+      result.mnRow1 = row[0];
+    }
+    result.meState =
+      count === HasMultipleCells || result.meState === HasOneCell ? HasMultipleCells : HasOneCell;
+    if (result.meState === HasMultipleCells) break;
+  }
+  return result;
+}
 
 /** Reconciles imported row outlines with the actual hidden row runs. @param this - Native sheet. @returns Nothing. */
 export function finalizeOutlineImport(this: ScTable): void {

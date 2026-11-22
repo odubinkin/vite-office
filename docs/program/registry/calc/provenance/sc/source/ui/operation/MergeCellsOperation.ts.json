@@ -1,0 +1,40 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/sc/source/ui/operation/MergeCellsOperation.ts",
+    "status": "mapped",
+    "upstreamPath": "sc/source/ui/operation/MergeCellsOperation.cxx",
+    "localSymbols": [
+      "MergeCellsOperation"
+    ],
+    "upstreamSymbols": [
+      "MergeCellsOperation::runImplementation"
+    ],
+    "preservedResponsibilities": [
+      "Validates member sheets before mutating the workbook, applies source move and clear policies, and records the original merge history."
+    ],
+    "omittedResponsibilities": [
+      "Cell notes, drawing captions, detective overlays and alternate sheet views are unrepresented."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sc/source/ui/operation/MergeCellsOperation.ts",
+          "marker": "MergeCellsOperation"
+        },
+        {
+          "path": "apps/office/src/sc/source/ui/view/cell-merge-history.test.ts",
+          "marker": "@fileoverview"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sc/source/ui/operation/MergeCellsOperation.cxx",
+          "marker": "MergeCellsOperation::runImplementation"
+        }
+      ]
+    }
+  }
+}

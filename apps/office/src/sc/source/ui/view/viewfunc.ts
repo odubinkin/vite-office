@@ -19,7 +19,15 @@ import { SfxItemSet, SfxItemState } from "../../../../svl/inc/itemset";
 import { SfxPoolItem } from "../../../../svl/inc/poolitem";
 import { SvxBorderLine } from "../../../../editeng/source/items/borderline";
 import { SvxLineItem } from "../../../../editeng/inc/lineitem";
-import { AutoSum, GetAutoSumArea, GetAutoSumFormula, AdjustBlockHeight } from "./viewfun2";
+import {
+  AutoSum,
+  GetAutoSumArea,
+  GetAutoSumFormula,
+  AdjustBlockHeight,
+  MergeCells,
+  RemoveMerge,
+  type RunMergeCellsDialog,
+} from "./viewfun2";
 import { ScViewUtil } from "./viewutil";
 import { ScTabView } from "./tabview3";
 import type { ScDocShell } from "../docshell/docsh";
@@ -100,6 +108,20 @@ export class ScViewFunc extends ScTabView {
     module: ScModule | null = null,
   ) {
     super(data, true, module);
+  }
+  /** Runs the source view merge against the document shell. @param api - API call mode. @param contents - Move contents. @param center - Center content. @param confirm - Native dialog presenter. @returns Whether applied. */
+  MergeCells(
+    api: boolean,
+    contents: boolean,
+    center: boolean,
+    confirm: RunMergeCellsDialog,
+  ): Promise<boolean> {
+    return MergeCells(this, this.shell, api, contents, center, confirm);
+  }
+
+  /** Splits the source selection through the actual document shell. @returns Whether admitted. */
+  RemoveMerge(): boolean {
+    return RemoveMerge(this, this.shell);
   }
   /** Inserts the manual break at the original view cursor, or the supplied address. @param columns - Column axis. @param record - Record history. @param position - Explicit cursor override. @param setModified - Mark the document modified. @returns Success. */
   InsertPageBreak(

@@ -10,6 +10,88 @@ import { ScMarkData } from "../../../inc/markdata";
 import { ScRange } from "../../../inc/address";
 import { CellAttributeHolder, type ScPatternAttr } from "../../../inc/patattr";
 import { InsertDeleteFlags } from "../../../inc/global";
+import { SfxHintId } from "../../../../svl/inc/hint";
+import { scMergeResourcesEnglish } from "../../../inc/globstr";
+import type { ScCellMergeOption } from "../view/cellmergeoption";
+import { ApplyMergeAlignment } from "../../core/data/documen3";
+
+/** Original merge history restores the saved block and replays the recorded merge. */
+export class ScUndoMerge extends SfxUndoAction<ScDocShell> {
+  /** Owns the original pre-merge document and the operation's selected sheets. @param shell - Live shell. @param option - Original merge target. @param mergeContents - Native redo contents flag. @param undo - Owned undo document. @returns History action. */
+  constructor(
+    private readonly shell: ScDocShell,
+    private readonly option: ScCellMergeOption,
+    private readonly mergeContents: boolean,
+    private readonly undo: ScDocument,
+  ) {
+    super();
+  }
+
+  /** Restores the old attributes and cell contents or repeats the original merge. @param backward - Undo rather than Redo. @returns Nothing. */
+  private DoChange(backward: boolean): void {
+    const doc = this.shell.GetDocument();
+    const {
+      mnStartCol: col,
+      mnStartRow: row,
+      mnEndCol: lastCol,
+      mnEndRow: lastRow,
+      maTabs,
+      mbCenter,
+    } = this.option;
+    const contents = InsertDeleteFlags.CONTENTS | InsertDeleteFlags.NOCAPTIONS;
+    for (const tab of maTabs) {
+      const range = this.option.getSingleRange(tab);
+      if (backward) {
+        doc.RemoveMerge(col, row, tab);
+        doc.FetchTable(tab)?.DeleteArea(col, row, lastCol, lastRow, contents);
+        this.undo.CopyToDocument(range, contents | InsertDeleteFlags.ATTRIB, false, doc);
+      } else {
+        doc.DoMerge(col, row, lastCol, lastRow, tab);
+        if (mbCenter) ApplyMergeAlignment(doc, range.aStart);
+        if (this.mergeContents) doc.DoMergeContents(col, row, lastCol, lastRow, tab);
+      }
+      this.shell.GetDocFunc().AdjustRowHeight(range, true, true);
+      doc.FetchTable(tab)?.SetStreamValid(false);
+      doc.BroadcastCells(range, SfxHintId.ScDataChanged);
+    }
+  }
+
+  /** Restores the original cells. @returns Nothing. */
+  override UndoWithContext(): void {
+    this.DoChange(true);
+  }
+
+  /** Replays the recorded merge. @returns Nothing. */
+  override RedoWithContext(): void {
+    this.DoChange(false);
+  }
+
+  /** Resolves the history selection on the active sheet when it participated. @param tab - Current sheet. @returns Source affected range. */
+  getAffectedRange(tab: number): ScRange {
+    return this.option.maTabs.has(tab)
+      ? this.option.getSingleRange(tab)
+      : this.option.getFirstSingleRange();
+  }
+
+  /** Returns the original selection used by merge history. @param tab - Current sheet. @returns Native mark data. */
+  GetMarkData(tab: number): ScMarkData {
+    const marks = new ScMarkData(this.shell.GetDocument().GetSheetLimits());
+    for (const selected of this.option.maTabs) marks.SelectTable(selected, true);
+    marks.SetMarkArea(this.getAffectedRange(tab));
+    return marks;
+  }
+
+  /** Returns the native history label. @returns Undo caption. */
+  override GetComment(): string {
+    return scMergeResourcesEnglish.STR_UNDO_MERGE;
+  }
+
+  /** Releases the native snapshot. @returns Nothing. */
+  override Dispose(): void {
+    this.undo.Dispose();
+  }
+}
+
 /** Native attribute history retains selected sheets, real undo document and canonical apply pattern. */
 export class ScUndoSelectionAttr extends SfxUndoAction<ScDocShell> {
   private readonly aMarkData: ScMarkData;

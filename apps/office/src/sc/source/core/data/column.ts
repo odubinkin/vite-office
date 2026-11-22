@@ -900,6 +900,7 @@ export class ScColumn extends ScColumnData {
   GetCellType(row: number): CellType {
     return column4.GetCellType.call(this, row);
   }
+  HasDataCellsInRange = column4.HasDataCellsInRange;
   /** Reads numeric or numeric-formula values with the native zero fallback. @param row - Valid row. @returns Value. */
   GetValue(row: number): number {
     return this.maCells.get_type(row) === element_type_numeric

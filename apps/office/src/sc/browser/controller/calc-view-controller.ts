@@ -1,24 +1,18 @@
 /** @fileoverview Browser input/viewport binding for the current scalar Calc model. Actual cells,marks,formula evaluation and undo stacks remain with native-shaped owners. */
 import type { ScPaneCommand } from "../../source/ui/view/tabview";
-import { ScUndoModifyStyle } from "../../source/ui/undo/undostyl";
-import { UndoFormulaToValue } from "../../source/ui/undo/undoconvert";
-import { ScUndoOutline } from "../../source/ui/undo/undodat";
-import { ScUndoShowHideTab, ScUndoTabColor, ScUndoPrintRange } from "../../source/ui/undo/undotab";
 import { ScMarkData } from "../../inc/markdata";
 import { ScViewUtil } from "../../source/ui/view/viewutil";
 import * as pointerInput from "./calc-pointer-selection";
 import type { CalcPointerKind } from "./calc-pointer-selection";
 import * as referenceInput from "./calc-reference-input";
-import { ScUndoAddRangeData, ScUndoAllRangeNames } from "../../source/ui/undo/undorangename";
 import { GoToAddress, PositionText } from "./calc-name-box";
 import * as cellInput from "./calc-cell-input";
+import { History } from "./calc-history";
 import { ScModule } from "../../inc/scmod";
 import { ScRefType } from "../../source/ui/inc/viewdata";
 import type { CalcViewOption } from "../../sdi/tabvwsh";
 import { ViewOption } from "../../inc/viewopti";
 import type { SvxShadowedItem, SvxCharReliefItem } from "../../../editeng/source/items/textitem";
-import { ScUndoIndent } from "../../source/ui/undo/undoblk";
-import { ScUndoWidthOrHeight } from "../../source/ui/undo/undoblk2";
 import type { SfxRequest } from "../../../sfx2/source/control/request";
 import { ScCellShell } from "../../source/ui/view/cellsh3";
 import { ScColBar, ScRowBar } from "../../source/ui/inc/colrowba";
@@ -34,8 +28,6 @@ import { SvxColorItem } from "../../../editeng/inc/colritem";
 import type { CalcColorKind } from "../../source/ui/view/formatsh";
 import { getCalcSelectionScriptType } from "./calc-selection-script";
 import { SvxFontHeightItem } from "../../../editeng/inc/fhgtitem";
-import { ScUndoCursorAttr, ScUndoPageBreak, ScUndoRangeNames } from "../../source/ui/undo/undocell";
-import { ScUndoSelectionAttr, ScUndoDeleteContents } from "../../source/ui/undo/undoblk3";
 import type { CalcCharacterFormat } from "../../source/ui/view/formatsh";
 import { ScFormatShell } from "../../source/ui/view/formatsh";
 import { OpCode } from "../../../formula/inc/opcode";
@@ -46,8 +38,7 @@ import { ScDocShell } from "../../source/ui/docshell/docsh";
 import { ScViewData } from "../../source/ui/inc/viewdata";
 import { ScRangeList } from "../../inc/rangelst";
 import { ScAddress, ScRange } from "../../inc/address";
-import { ScUndoSetCell } from "../../source/ui/inc/undocell";
-import { SfxUndoAction, SfxListUndoAction } from "../../../svl/source/undo/undo";
+import { SfxUndoAction } from "../../../svl/source/undo/undo";
 import { cellInputText } from "../editor/cell-input";
 import { unicode } from "../../../i18nlangtag/source/isolang/isolang.tables";
 import { CalcViewport } from "./calc-viewport";
@@ -864,66 +855,11 @@ export class CalcViewController {
   }
   /** Applies real shared Undo and returns the cursor to an edited cell when applicable. @returns Changed. */
   Undo(): boolean {
-    return this.History(false);
+    return History.call(this, false);
   }
   /** Applies real shared Redo. @returns Changed. */
   Redo(): boolean {
-    return this.History(true);
-  }
-  /** Reconciles source model,active sheet and input after history. @param redo - Direction. @returns Changed. */
-  private History(redo: boolean): boolean {
-    const manager = this.shell.GetUndoManager(),
-      action = redo ? manager.GetRedoAction() : manager.GetUndoAction();
-    if (!(redo ? this.shell.Redo() : this.shell.Undo())) return false;
-    this.inputHandler.SetMode(ScInputMode.SC_INPUT_NONE);
-    this.inputHandler.ResetInputState();
-    let cursorAction = action;
-    while (cursorAction instanceof SfxListUndoAction)
-      cursorAction = cursorAction.GetUndoAction(redo ? cursorAction.GetActionCount() - 1 : 0);
-    if (cursorAction instanceof ScUndoOutline) cursorAction.RestoreView(this.viewShell, redo);
-    if (cursorAction instanceof UndoFormulaToValue) cursorAction.RestoreView(this.viewShell);
-    if (
-      cursorAction instanceof ScUndoWidthOrHeight ||
-      cursorAction instanceof ScUndoShowHideTab ||
-      cursorAction instanceof ScUndoTabColor ||
-      cursorAction instanceof ScUndoPrintRange ||
-      cursorAction instanceof ScUndoModifyStyle ||
-      cursorAction instanceof ScUndoRangeNames ||
-      cursorAction instanceof ScUndoAddRangeData ||
-      cursorAction instanceof ScUndoAllRangeNames ||
-      cursorAction instanceof ScUndoOutline ||
-      cursorAction instanceof UndoFormulaToValue
-    ) {
-      if (cursorAction instanceof ScUndoWidthOrHeight) {
-        this.addressText = PositionText.call(this);
-        this.Changed();
-      } else this.SyncSheetView();
-      return true;
-    }
-    const position =
-      cursorAction instanceof ScUndoSetCell ||
-      cursorAction instanceof ScUndoCursorAttr ||
-      cursorAction instanceof ScUndoPageBreak ||
-      cursorAction instanceof ScUndoIndent ||
-      cursorAction instanceof ScUndoSelectionAttr ||
-      cursorAction instanceof ScUndoDeleteContents
-        ? cursorAction.getAffectedRange().aStart
-        : new ScAddress(
-            0,
-            0,
-            Math.min(this.viewData.GetTabNumber(), this.shell.GetDocument().GetTableCount() - 1),
-          );
-    this.SelectTab(position.Tab());
-    this.Select(position.Col(), position.Row());
-    if (
-      cursorAction instanceof ScUndoIndent ||
-      cursorAction instanceof ScUndoSelectionAttr ||
-      cursorAction instanceof ScUndoDeleteContents
-    ) {
-      this.viewData.GetMarkData().assign(cursorAction.GetMarkData());
-      this.Changed();
-    }
-    return true;
+    return History.call(this, true);
   }
   /** Commits pending input before changing the real pane layout. @param command - Source pane command. @param request - Optional typed index and completion. @returns Nothing. */
   ExecutePaneCommand(command: ScPaneCommand, request: SfxRequest): void {

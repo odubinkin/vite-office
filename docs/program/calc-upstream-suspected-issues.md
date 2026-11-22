@@ -7808,3 +7808,32 @@ never reach the anchor even though the covered cells have been cleared. Calc
 preserves the same branch, including the rich-text object and its fields.
 
 - [Original merge contents routine](../../vendor/libreoffice-reference/sc/source/core/data/documen3.cxx#L2056)
+
+### CALC-820 — Redo can retain contents that Merge Cells initially emptied
+
+The merge history stores whether contents were moved to the anchor. It does
+not retain the separate choice to empty the covered cells. Undo restores
+those values. Redo reapplies the merge attributes and only repeats the move
+operation when that flag was set. Calc preserves the resulting hidden values.
+
+- [Original merge operation](../../vendor/libreoffice-reference/sc/source/ui/operation/MergeCellsOperation.cxx)
+- [Original merge history](../../vendor/libreoffice-reference/sc/source/ui/undo/undoblk3.cxx#L671)
+
+### CALC-821 — An API merge across multiple occupied cells can do nothing
+
+The source only executes a merge that needs a content decision in the
+interactive dialog callback. The API guard skips that callback even when
+the caller supplies the typed MoveContents argument. Calc preserves the
+no-op for the native view command. The direct document operation accepts
+an explicit content policy.
+
+- [Original merge view dispatch](../../vendor/libreoffice-reference/sc/source/ui/view/viewfun2.cxx#L1273)
+
+### CALC-822 — Grouped split expansion only repeats when the last sheet expands it
+
+The source overwrites the loop's expansion flag while visiting each selected
+sheet. An earlier sheet can enlarge the rectangle and a later sheet can
+clear the flag, so the enlarged rectangle may never be rescanned on the
+earlier sheet. Calc keeps the same loop and tab traversal.
+
+- [Original split view dispatch](../../vendor/libreoffice-reference/sc/source/ui/view/viewfun2.cxx#L1360)

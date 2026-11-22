@@ -42,3 +42,11 @@ export const scPasteResourcesEnglish = Object.freeze({
   STR_PASTE_BIGGER:
     "The content of the clipboard is bigger than the range selected.\nDo you want to insert it anyway?",
 });
+
+/** Resolved original English merge command resources. */
+export const scMergeResourcesEnglish = Object.freeze({
+  STR_UNDO_MERGE: "Merge",
+  STR_UNDO_REMERGE: "Split",
+  STR_MSSG_MERGECELLS_0: "Cell merge not possible if cells already merged",
+  STR_NOMULTISELECT: "This function cannot be used with multiple selections.",
+});

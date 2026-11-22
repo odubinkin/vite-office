@@ -26,6 +26,7 @@ import type { base_element_block } from "../../../../external/mdds/include/mdds/
 import { ScFormulaCell, ScFormulaCellGroup, ScMatrixMode } from "../../../inc/formulacell";
 import { IsClipboardPasteMask, type CopyFromClipContext } from "../../../inc/clipcontext";
 import { CellType, InsertDeleteFlags } from "../../../inc/global";
+import { MultiDataCellState } from "../../../inc/types";
 import { GetClipNonEmptySpans } from "./column3.clip";
 import { RowSpan, type ColumnSpanSet } from "../../../inc/columnspanset";
 import { string_element_callbacks } from "../../../inc/mtvelements";
@@ -43,6 +44,37 @@ import { delayed_delete_vector_iterator } from "../../../../external/mdds/includ
 import type { ScColumn } from "../../../inc/column";
 import { SharedFormulaUtil } from "../../../inc/sharedformula";
 import type { StartListeningContext, EndListeningContext } from "../../../inc/listenercontext";
+
+/** Counts occupied typed blocks until the source result becomes multiple. @param this - Actual column. @param first - First row. @param last - Last row. @param firstData - Output row for a data cell. @returns Source occupancy state. */
+export function HasDataCellsInRange(
+  this: ScColumn,
+  first: number,
+  last: number,
+  firstData: [number],
+): number {
+  const store = this.GetCellStore(),
+    start = store.cposition(first);
+  const { Empty, HasOneCell, HasMultipleCells } = MultiDataCellState.StateType;
+  let row = first,
+    offset = start.second,
+    state: number = Empty;
+  for (const it = start.first; !it.equals(store.cend()) && row <= last; it.increment()) {
+    const block = it.get();
+    const count = block.size - offset;
+    if (block.type !== element_type_empty) {
+      if (Math.min(count, last - row + 1) > 1) {
+        firstData[0] = row;
+        return HasMultipleCells;
+      }
+      if (state === HasOneCell) return HasMultipleCells;
+      firstData[0] = row;
+      state = HasOneCell;
+    }
+    row += count;
+    offset = 0;
+  }
+  return state;
+}
 /** Reads the native cell discriminator from the actual typed block. @param this - Column. @param row - Row. @returns Cell type. */
 export function GetCellType(this: ScColumn, row: number): CellType {
   const kind = this.GetCellStore().get_type(row);

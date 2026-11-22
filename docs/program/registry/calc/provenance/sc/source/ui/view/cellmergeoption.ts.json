@@ -1,0 +1,40 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/sc/source/ui/view/cellmergeoption.ts",
+    "status": "mapped",
+    "upstreamPath": "sc/source/ui/view/cellmergeoption.cxx",
+    "localSymbols": [
+      "ScCellMergeOption"
+    ],
+    "upstreamSymbols": [
+      "ScCellMergeOption::getSingleRange"
+    ],
+    "preservedResponsibilities": [
+      "Stores the source merge rectangle, center flag and selected sheets and constructs single-sheet ranges."
+    ],
+    "omittedResponsibilities": [
+      "Native ABI and C++ container traversal implementation are outside the browser port."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sc/source/ui/view/cellmergeoption.ts",
+          "marker": "ScCellMergeOption"
+        },
+        {
+          "path": "apps/office/src/sc/source/ui/view/cell-merge-history.test.ts",
+          "marker": "@fileoverview"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sc/source/ui/view/cellmergeoption.cxx",
+          "marker": "ScCellMergeOption::getSingleRange"
+        }
+      ]
+    }
+  }
+}

@@ -17,6 +17,7 @@ import { StartListeners, SetDirtyIncludingEmptyCells as dirtyColumn } from "./co
 import { UpdateScriptTypes } from "./column4";
 import { BroadcastAction } from "./documen7";
 import { ExtendMerge as extendTableMerge } from "./table2";
+import { MultiDataCellState } from "../../../inc/types";
 import { EndListeningIntersectedGroups as endTableGroups } from "./table7";
 /** Original single-cell teardown forwards only to an existing sheet. @param this - Document. @param context - Actual end context. @param position - Target cell. @param groups - Optional source positions. @returns Nothing. */
 export function EndListeningIntersectedGroup(
@@ -48,6 +49,14 @@ export function IsMerged(this: ScDocument, position: ScAddress): boolean {
   const table = this.FetchTable(position.Tab());
   if (!table) return false;
   return table.IsMerged(position.Col(), position.Row());
+}
+/** Queries nonempty cells on a single sheet, admitting a missing sheet as empty. @param this - Workbook. @param range - Source selection. @returns Native occupancy. */
+export function HasMultipleDataCells(this: ScDocument, range: ScRange): MultiDataCellState {
+  const { aStart, aEnd } = range;
+  if (aStart.Tab() !== aEnd.Tab()) return new MultiDataCellState();
+  const table = this.FetchTable(aStart.Tab());
+  if (!table) return new MultiDataCellState(MultiDataCellState.StateType.Empty);
+  return table.HasMultipleDataCells(aStart.Col(), aStart.Row(), aEnd.Col(), aEnd.Row());
 }
 /** Original range/coordinate regroup overloads operate on the same document's actual sheets. @param this - Actual document. @param args - Native range or sheet/column. @returns Nothing. */
 export function RegroupFormulaCells(this: ScDocument, ...args: [ScRange] | [number, number]): void {

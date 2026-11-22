@@ -287,6 +287,7 @@ export class ScDocument {
   SkipOverlapped = documen3.SkipOverlapped;
   ExtendOverlapped = document10.ExtendOverlapped;
   ExtendMergeRange = document10.ExtendMergeRange;
+  HasMultipleDataCells = document10.HasMultipleDataCells;
   /** Original selected-sheet format compatibility operation. @param args - Range,marks,pattern and category. @returns Nothing. */
   ApplyPatternIfNumberformatIncompatible(
     ...args: Parameters<typeof document10.ApplyPatternIfNumberformatIncompatible>

@@ -1,0 +1,40 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/sc/source/ui/miscdlgs/mergecellsdialog.ts",
+    "status": "mapped",
+    "upstreamPath": "sc/source/ui/miscdlgs/mergecellsdialog.cxx",
+    "localSymbols": [
+      "ScMergeCellsDialog"
+    ],
+    "upstreamSymbols": [
+      "ScMergeCellsDialog::GetMergeCellsOption"
+    ],
+    "preservedResponsibilities": [
+      "Preserves the three source content choices, Keep as the initial default and the last accepted choice in the application session."
+    ],
+    "omittedResponsibilities": [
+      "Browser presentation supplies the radio widgets instead of the native desktop builder."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sc/source/ui/miscdlgs/mergecellsdialog.ts",
+          "marker": "ScMergeCellsDialog"
+        },
+        {
+          "path": "apps/office/src/sc/source/ui/view/cell-merge-history.test.ts",
+          "marker": "@fileoverview"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sc/source/ui/miscdlgs/mergecellsdialog.cxx",
+          "marker": "ScMergeCellsDialog::GetMergeCellsOption"
+        }
+      ]
+    }
+  }
+}

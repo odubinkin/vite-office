@@ -10,10 +10,30 @@ import { FormulaGrammar, type AddressConvention } from "../../../../formula/inc/
 import { OUString } from "../../../../sal/inc/rtl/ustring";
 import { OUStringBuffer } from "../../../../sal/inc/rtl/ustrbuf";
 import { ScMF, type ScMergeAttr, type ScMergeFlagAttr } from "../../../inc/attrib";
-import { ATTR_MERGE, ATTR_MERGE_FLAG } from "../../../inc/scitems";
+import {
+  ATTR_HOR_JUSTIFY,
+  ATTR_MERGE,
+  ATTR_MERGE_FLAG,
+  ATTR_VER_JUSTIFY,
+} from "../../../inc/scitems";
 import { ScCellValue } from "../../../inc/cellvalue";
 import { ScCellFormat } from "../tool/cellform";
 import { GetMergeFlags } from "./document10";
+import { SvxHorJustifyItem, SvxVerJustifyItem } from "../../../../editeng/inc/justifyitem";
+import { SvxCellHorJustify, SvxCellVerJustify } from "../../../../editeng/inc/svxenum";
+
+/** Applies the source merge-and-center format to the origin cell. @param document - Actual workbook. @param anchor - Merge origin. @returns Nothing. */
+export function ApplyMergeAlignment(document: ScDocument, anchor: ScAddress): void {
+  const horizontal = new SvxHorJustifyItem(SvxCellHorJustify.Center, ATTR_HOR_JUSTIFY);
+  const vertical = new SvxVerJustifyItem(SvxCellVerJustify.Center, ATTR_VER_JUSTIFY);
+  try {
+    document.ApplyAttr(anchor.Col(), anchor.Row(), anchor.Tab(), horizontal);
+    document.ApplyAttr(anchor.Col(), anchor.Row(), anchor.Tab(), vertical);
+  } finally {
+    horizontal.Dispose();
+    vertical.Dispose();
+  }
+}
 
 /** Resolves the native display string after interpreting a formula with an inherited format. @param document - Actual workbook. @param position - Source cell. @returns Owned cell display string. */
 function GetString(document: ScDocument, position: ScAddress): OUString {
