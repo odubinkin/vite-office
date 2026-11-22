@@ -146,7 +146,11 @@ export class CalcSheetWorkflows {
     readonly controller: CalcViewController,
     dispatcher: SfxDispatcher,
   ) {
-    this.cellFormat = new CalcCellFormatWorkflow(controller, () => !this.HasSheetDialog());
+    this.cellFormat = new CalcCellFormatWorkflow(
+      controller,
+      /** Checks whether another sheet dialog owns input. @returns Format Cells admission. */
+      () => !this.HasSheetDialog(),
+    );
     this.pageStyles = new CalcPageStyleWorkflow(controller, () => !this.HasSheetDialog());
     this.options = new CalcOptionsWorkflow(controller, () => !this.HasSheetDialog());
     this.merge = new CalcMergeWorkflow(controller, () => !this.HasSheetDialog());

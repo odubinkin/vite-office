@@ -212,8 +212,14 @@ export function CalcSheetDialogs({
         <ScAttrDlg
           key={cellFormat.id}
           model={cellFormat.request}
-          onCancel={() => sheetWorkflows.cellFormat.dialogs.Cancel(cellFormat.id)}
-          onSubmit={(result) => sheetWorkflows.cellFormat.dialogs.Complete(cellFormat.id, result)}
+          onCancel={
+            /** Cancels the active Format Cells request. @returns Nothing. */
+            () => sheetWorkflows.cellFormat.dialogs.Cancel(cellFormat.id)
+          }
+          onSubmit={
+            /** Completes the active Format Cells request. @param result - Staged native items. @returns Nothing. */
+            (result) => sheetWorkflows.cellFormat.dialogs.Complete(cellFormat.id, result)
+          }
         />
       )}
       {pageStyleDialog && (
