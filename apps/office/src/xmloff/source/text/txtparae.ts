@@ -1,6 +1,7 @@
 /**
  * @fileoverview Reimplements the bounded ODF text paragraph export boundary from pinned LibreOffice `xmloff/source/text/txtparae.cxx`.
  */
+import { XMLShadowPropHdl } from "../style/shadwhdl";
 import { exportAnnotation, type XMLAnnotationExportMarker } from "./txtflde";
 import type { XMLTextFrameExportSource } from "./XMLTextFrameExport";
 import { exportFillProperties } from "../draw/fill-properties";
@@ -695,12 +696,17 @@ export function exportParagraphAttributes(properties: OdfParagraphProperties): s
     ...(properties.joinBorder === undefined
       ? []
       : [`style:join-border="${properties.joinBorder}"`]),
+    ...(properties.paragraphShadow === undefined
+      ? []
+      : [`style:shadow="${new XMLShadowPropHdl().exportXML(properties.paragraphShadow)}"`]),
     ...(["Top", "Bottom", "Left", "Right"] as const).flatMap(
       /** Computes the side result. @param side - Side. @returns The computed result. */ (side) => {
         const suffix = side.toLowerCase();
         const border = properties[`border${side}`];
         const width = properties[`borderLineWidth${side}`];
+        const padding = properties[`padding${side}`];
         return [
+          ...(padding === undefined ? [] : [`fo:padding-${suffix}="${exportOdfLength(padding)}"`]),
           ...(border === undefined ? [] : [`fo:border-${suffix}="${escapeXml(border)}"`]),
           ...(width === undefined
             ? []

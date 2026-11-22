@@ -1,0 +1,25 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "browser-adaptation",
+    "status": "local-only",
+    "localPath": "apps/office/src/sw/browser/presentation/WriterParagraphBorderPage.tsx",
+    "rationale": "Presents native paragraph Borders and Shadow controls with independent pooled item exchange.",
+    "responsibilities": [
+      "Presents native paragraph Borders and Shadow controls with independent pooled item exchange."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sw/browser/presentation/WriterParagraphBorderPage.tsx",
+          "marker": "WriterParagraphBorderPage"
+        }
+      ]
+    },
+    "stackDivergence": {
+      "kind": "browser-adaptation",
+      "rationale": "Browser image and text elements replace the native output-device portion painting."
+    }
+  }
+}

@@ -1,4 +1,11 @@
 /** @fileoverview Real Writer request, native CUI controls, complete paragraph history and ODT transport in one UI flow. */
+import { SvxBoxItem, SvxBoxItemLine } from "../../../editeng/source/items/frmitems";
+import { SvxShadowLocation } from "../../../editeng/inc/svxenum";
+import type { SvxShadowItem } from "../../../editeng/source/items/frmitems.shadow";
+import type { SfxBoolItem } from "../../../svl/inc/eitem";
+import { encodeWriterDocument, decodeWriterDocument } from "../filter/xml/writer-document-codec";
+import { RES_BOX, RES_PARATR_CONNECT_BORDER, RES_SHADOW } from "../../inc/hintids";
+import { projectWriterParagraphBorders } from "./writer-paragraph-border-projection";
 import { fireEvent, render, screen, cleanup, within } from "@testing-library/react";
 import { expect, it, vi } from "vitest";
 import { TabulatorDialogSession } from "../../../cui/browser/tabpages/tabstpge-session";
@@ -865,5 +872,81 @@ it("shows mixed numbering controls without changing the independently selected l
   } finally {
     cleanup();
     owner.session.Close();
+  }
+});
+
+it("reopens independent paragraph border padding and merge state, and preserves shadow and undo", /** Ports the upstream paragraph Borders reopen test and checks document transport. @returns Completion. */ async () => {
+  const f = open(U.CM);
+  const left = SvxBoxItemLine.LEFT;
+  try {
+    const node = f.shell.GetActiveParagraph();
+    const oldBox = (node.GetAttr(RES_BOX) as SvxBoxItem).Clone();
+    fireEvent.click(screen.getByRole("tab", { name: "Borders" }));
+    fireEvent.click(screen.getByRole("button", { name: "All Four Borders" }));
+    fireEvent.click(screen.getByRole("checkbox", { name: "Synchronize" }));
+    for (const [edge, value] of [
+      ["Left", "0.20 cm"],
+      ["Right", "0.10 cm"],
+      ["Top", "0.10 cm"],
+      ["Bottom", "0.10 cm"],
+    ]) {
+      const field = screen.getByRole("spinbutton", { name: `${edge} padding (cm)` });
+      fireEvent.change(field, { target: { value } });
+      fireEvent.blur(field);
+    }
+    fireEvent.click(screen.getByRole("checkbox", { name: "Merge with next paragraph" }));
+    fireEvent.change(screen.getByRole("combobox", { name: "Position" }), {
+      target: { value: String(SvxShadowLocation.BottomRight) },
+    });
+    fireEvent.click(screen.getByRole("button", { name: "OK" }));
+    expect(await f.result.value).toBe(true);
+    const current = node.GetAttr(RES_BOX) as SvxBoxItem;
+    expect(current.GetLeft()).toBeDefined();
+    expect(current.GetDistance(left)).toBe(113);
+    expect(current.GetDistance(SvxBoxItemLine.RIGHT)).toBe(57);
+    expect((node.GetAttr(RES_PARATR_CONNECT_BORDER) as SfxBoolItem).GetValue()).toBe(false);
+    expect((node.GetAttr(RES_SHADOW) as SvxShadowItem).GetLocation()).toBe(
+      SvxShadowLocation.BottomRight,
+    );
+    expect(projectWriterParagraphBorders(node)?.borderLeft).toContain("solid");
+
+    expect(f.shell.Undo()).toBe(true);
+    expect(node.GetAttr(RES_BOX).equals(oldBox)).toBe(true);
+    expect((node.GetAttr(RES_SHADOW) as SvxShadowItem).GetLocation()).toBe(SvxShadowLocation.NONE);
+    expect(f.shell.Redo()).toBe(true);
+
+    expect((node.GetAttr(RES_BOX) as SvxBoxItem).GetDistance(left)).toBe(113);
+    const encoded = encodeWriterDocument(f.shell.GetDoc());
+    expect(encoded.textNodes[0]?.autoAttributes).toEqual(
+      expect.arrayContaining([expect.objectContaining({ which: RES_BOX })]),
+    );
+    const workerDocument = decodeWriterDocument(structuredClone(encoded));
+    try {
+      const workerNode = workerDocument.paragraphs[0];
+      expect((workerNode?.GetAttr(RES_BOX) as SvxBoxItem).GetDistance(left)).toBe(113);
+      expect((workerNode?.GetAttr(RES_SHADOW) as SvxShadowItem).GetLocation()).toBe(
+        SvxShadowLocation.BottomRight,
+      );
+    } finally {
+      workerDocument.Dispose();
+    }
+
+    const decoded = await readOdtDocument(
+      await writeOdtDocument(f.shell.GetDoc(), { title: "Paragraph borders" }),
+      { title: "Paragraph borders" },
+    );
+    try {
+      const restored = decoded.document.paragraphs[0];
+      expect((restored?.GetAttr(RES_BOX) as SvxBoxItem).GetDistance(left)).toBe(113);
+      expect((restored?.GetAttr(RES_PARATR_CONNECT_BORDER) as SfxBoolItem).GetValue()).toBe(false);
+      expect((restored?.GetAttr(RES_SHADOW) as SvxShadowItem).GetLocation()).toBe(
+        SvxShadowLocation.BottomRight,
+      );
+    } finally {
+      decoded.document.Dispose();
+    }
+  } finally {
+    cleanup();
+    f.session.Close();
   }
 });

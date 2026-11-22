@@ -270,7 +270,7 @@ class XMLPageLayoutContext extends SvXMLImportContext {
     const orientation = attributes.get(XMLToken.STYLE_PRINT_ORIENTATION) ?? "portrait";
     if (orientation !== "portrait" && orientation !== "landscape")
       throw new Error(`Unsupported ODF page orientation: ${orientation}`);
-    const box = readPageLayoutBox(attributes);
+    const box = readBoxProperties(attributes);
     const shadowValue = attributes.get(XMLToken.STYLE_SHADOW);
     const shadow = shadowValue === null ? undefined : new XMLShadowPropHdl().importXML(shadowValue);
     const gutterValue = attributes.get(XMLToken.LOEXT_MARGIN_GUTTER);
@@ -313,7 +313,7 @@ class XMLPageLayoutContext extends SvXMLImportContext {
 }
 
 /** Reads original page-layout borders and padding including signed native distances. @param attributes - Source page layout attributes. @returns Represented ODF box properties. */
-function readPageLayoutBox(attributes: FastAttributeList): OdfBoxProperties {
+function readBoxProperties(attributes: FastAttributeList): OdfBoxProperties {
   const result: Record<string, string | number> = {};
   for (const [suffix, padding, border, width] of [
     ["", XMLToken.FO_PADDING, XMLToken.FO_BORDER, XMLToken.STYLE_BORDER_LINE_WIDTH],
@@ -664,31 +664,8 @@ function importParagraphProperties(
     attributes.get(XMLToken.STYLE_JOIN_BORDER),
     "paragraph border connection",
   );
-  const borders = Object.fromEntries(
-    (
-      [
-        ["borderTop", XMLToken.FO_BORDER_TOP],
-        ["borderBottom", XMLToken.FO_BORDER_BOTTOM],
-        ["borderLeft", XMLToken.FO_BORDER_LEFT],
-        ["borderRight", XMLToken.FO_BORDER_RIGHT],
-        ["borderLineWidthTop", XMLToken.STYLE_BORDER_LINE_WIDTH_TOP],
-        ["borderLineWidthBottom", XMLToken.STYLE_BORDER_LINE_WIDTH_BOTTOM],
-        ["borderLineWidthLeft", XMLToken.STYLE_BORDER_LINE_WIDTH_LEFT],
-        ["borderLineWidthRight", XMLToken.STYLE_BORDER_LINE_WIDTH_RIGHT],
-      ] as const
-    )
-      .map(
-        /** Computes the [key, token] result. @param input1 - Input1. @returns The computed result. */ ([
-          key,
-          token,
-        ]) => [key, attributes.get(token)] as const,
-      )
-      .filter(
-        /** Computes the entry result. @param entry - Entry. @returns The computed result. */ (
-          entry,
-        ) => entry[1] !== null,
-      ),
-  );
+  const rawShadow = attributes.get(XMLToken.STYLE_SHADOW);
+  const shadow = rawShadow === null ? undefined : new XMLShadowPropHdl().importXML(rawShadow);
   const result: XMLParagraphImportProperties = {
     ...importFillProperties(attributes),
     ...(firstLineIndent === undefined ? {} : { firstLineIndent }),
@@ -718,7 +695,8 @@ function importParagraphProperties(
     ...importParagraphDirectionAndGrid(attributes),
     ...(hasRegister ? { registerModeActive: register[0] } : {}),
     ...(joinBorder === undefined ? {} : { joinBorder }),
-    ...borders,
+    ...readBoxProperties(attributes),
+    ...(shadow === undefined ? {} : { paragraphShadow: shadow }),
   };
   return Object.keys(result).length === 0 ? undefined : result;
 }

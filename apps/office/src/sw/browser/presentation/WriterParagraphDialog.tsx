@@ -5,7 +5,10 @@ import { TabulatorTabPage } from "../../../cui/browser/tabpages/TabulatorTabPage
 import { FieldUnit } from "../../../tools/inc/fldunit";
 import { useBrowserLocalization } from "../../../framework/browser/localization/browser-localization-context";
 import { SvxHyphenZoneItem } from "../../../editeng/source/items/paraitem";
-import { RES_PARATR_HYPHENZONE } from "../../inc/hintids";
+import { WriterParagraphBorderPage } from "./WriterParagraphBorderPage";
+import { SwParaConnectBorderItem } from "../../source/core/para/paratr";
+import { SvxBorderTabPage } from "../../../cui/source/tabpages/border";
+import { RES_BOX, RES_PARATR_CONNECT_BORDER, RES_PARATR_HYPHENZONE } from "../../inc/hintids";
 import { WriterAsianTypographyPage } from "./WriterAsianTypographyPage";
 import { WriterParagraphOutlinePage } from "./WriterParagraphOutlinePage";
 import { WriterParagraphAlignmentPage } from "./WriterParagraphAlignmentPage";
@@ -61,7 +64,15 @@ export function WriterParagraphDialog({
   function label(key: string, fallback: string): string {
     return localization.GetText(`writer.paragraph.${key}`, fallback);
   }
-  const tabIds = ["spacing", "alignment", "flow", "asiantypo", "outline", "tabs"] as const;
+  const tabIds = [
+    "spacing",
+    "alignment",
+    "flow",
+    "asiantypo",
+    "outline",
+    "tabs",
+    "borders",
+  ] as const;
   const [activeTab, setActiveTab] = useState<(typeof tabIds)[number]>("spacing");
   const tabIdentity = useId(),
     tabRefs = useRef<Partial<Record<(typeof tabIds)[number], HTMLButtonElement | null>>>({});
@@ -85,6 +96,7 @@ export function WriterParagraphDialog({
         dialogRequest.request.pageStyleNames,
       ),
   );
+  const [borders, setBorders] = useState<SvxBorderTabPage>();
   const [tabs] = useState(
     /** Retains a lazy native page and accumulated exchange output for this request. @returns Session. */
     () => new TabulatorDialogSession(pageInput, unit),
@@ -93,6 +105,16 @@ export function WriterParagraphDialog({
   function activate(next: (typeof tabIds)[number]): void {
     if (next === activeTab) return;
     if (activeTab === "tabs") tabs.Deactivate(draft.firstLineIndentPt ?? 0);
+    if (next === "borders" && borders === undefined)
+      setBorders(
+        new SvxBorderTabPage(
+          pageInput,
+          RES_BOX,
+          RES_PARATR_CONNECT_BORDER,
+          undefined,
+          new SwParaConnectBorderItem(),
+        ),
+      );
     setActiveTab(next);
   }
   /** Accepts original request values through the existing controller port. @returns Nothing. */
@@ -192,6 +214,7 @@ export function WriterParagraphDialog({
                   ["asiantypo", label("asian-typography", "Asian Typography")],
                   ["outline", label("outline-and-list", "Outline & List")],
                   ["tabs", "Tabs"],
+                  ["borders", label("borders", "Borders")],
                 ] as const
               ).map(
                 /** Handles Writer formatting state. @param input1 - Input value. @returns Callback result. */ ([
@@ -369,6 +392,15 @@ export function WriterParagraphDialog({
                 />
               </div>
               {activeTab === "tabs" ? <TabulatorTabPage session={tabs} /> : null}
+              {activeTab === "borders" && borders && (
+                <WriterParagraphBorderPage
+                  page={borders}
+                  input={pageInput}
+                  output={tabs.output}
+                  unit={unit}
+                  label={label}
+                />
+              )}
               <div hidden={activeTab !== "alignment"} className="sm:col-span-2">
                 <WriterParagraphAlignmentPage
                   input={pageInput}

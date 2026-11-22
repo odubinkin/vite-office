@@ -8,6 +8,7 @@ import {
   RES_PARATR_VERTALIGN,
   RES_PAGEDESC,
   RES_ROW_SPLIT,
+  RES_SHADOW,
   RES_TEXTGRID,
   RES_COLLAPSING_BORDERS,
   RES_TXTATR_CHARFMT,
@@ -28,7 +29,7 @@ it("retains static default-table identity and clears MAYBEVOID except the origin
     second = new SwUnoPropertyMapProvider(),
     entries = first.GetPropertyMapEntries(PROPERTY_MAP_TEXT_DEFAULT),
     set = first.GetPropertySet(PROPERTY_MAP_TEXT_DEFAULT);
-  expect(entries.length).toBe(140);
+  expect(entries.length).toBe(141);
   const flags = upstream.originalFlags as Readonly<Record<string, number>>;
   for (const entry of entries) {
     const name = text(entry.aName);
@@ -76,6 +77,7 @@ it("publishes actual native default metadata and excludes cursor-only dispatch p
     for (const [name, which, member] of [
       ["TabStopDistance", RES_PARATR_TABSTOP, MID_STD_TAB | CONVERT_TWIPS],
       ["ParaVertAlignment", RES_PARATR_VERTALIGN, 0],
+      ["ParaShadowFormat", RES_SHADOW, CONVERT_TWIPS],
       ["ParaRegisterModeActive", RES_PARATR_REGISTER, 0],
       ["CharStyleName", RES_TXTATR_CHARFMT, 0],
       ["IsSplitAllowed", RES_ROW_SPLIT, 0],

@@ -1,4 +1,6 @@
 /** @fileoverview Verifies paragraph dimensional fields retain physical values across display units. */
+import { SvxBoxInfoItem } from "../../../editeng/source/items/frmitems";
+import { SID_ATTR_BORDER_INNER } from "../../../svx/inc/svxids";
 import { cleanup, fireEvent, render, screen } from "@testing-library/react";
 import { expect, it, vi } from "vitest";
 import { SwDoc } from "../../source/core/doc/doc";
@@ -10,6 +12,7 @@ import { FieldUnit as F } from "../../../tools/inc/fldunit";
 import type { WriterParagraphDialogRequest } from "../../source/uibase/dialog/writer-dialog-controller";
 
 const pageInput = new SfxItemSet(new SwDoc().GetAttrPool(), [[1, 12000]]);
+pageInput.Put(new SvxBoxInfoItem(SID_ATTR_BORDER_INNER));
 const nativeTabs = new SvxTabStopItem(0, 0, SvxTabAdjust.Left, RES_PARATR_TABSTOP);
 nativeTabs.Insert(new SvxTabStop(720, SvxTabAdjust.Left));
 pageInput.Put(nativeTabs);
@@ -183,11 +186,14 @@ it("owns source tab keys before spin steps,retains tab changes and uses native f
     flow = screen.getByRole("tab", { name: "Text Flow" }),
     asian = screen.getByRole("tab", { name: "Asian Typography" }),
     outline = screen.getByRole("tab", { name: "Outline & List" }),
-    tabs = screen.getByRole("tab", { name: "Tabs" });
+    tabs = screen.getByRole("tab", { name: "Tabs" }),
+    borders = screen.getByRole("tab", { name: "Borders" });
   expect(first).toHaveFocus();
   expect(first).toHaveAttribute("tabindex", "0");
   expect(flow).toHaveAttribute("tabindex", "-1");
   fireEvent.keyDown(first, { key: "ArrowLeft" });
+  expect(borders).toHaveFocus();
+  fireEvent.keyDown(borders, { key: "ArrowLeft" });
   expect(tabs).toHaveFocus();
   expect(tabs).toHaveAttribute("aria-selected", "true");
   fireEvent.change(screen.getByRole("combobox", { name: "Position" }), {
@@ -198,6 +204,8 @@ it("owns source tab keys before spin steps,retains tab changes and uses native f
     key: "PageDown",
     ctrlKey: true,
   });
+  expect(borders).toHaveFocus();
+  fireEvent.keyDown(borders, { key: "ArrowRight" });
   expect(first).toHaveFocus();
   const metric = screen.getByLabelText("Above paragraph (in)");
   fireEvent.keyDown(metric, { key: "PageDown", ctrlKey: true });

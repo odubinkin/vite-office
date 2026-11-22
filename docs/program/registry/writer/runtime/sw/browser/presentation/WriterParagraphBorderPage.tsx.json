@@ -1,0 +1,33 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sw/browser/presentation/WriterParagraphBorderPage.tsx",
+    "classification": "browser-adaptation",
+    "state": "active",
+    "suite": "writer",
+    "subsystem": "presentation",
+    "capabilityIds": [
+      "CAP-0111"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "not-applicable",
+      "defaultStatus": "not-applicable",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/sw/browser/presentation/WriterParagraphBorderPage.tsx#WriterParagraphBorderPage",
+        "vendor/libreoffice-reference/sw/source/ui/chrdlg/pardlg.cxx#SwParaDlg::PageCreated",
+        "vendor/libreoffice-reference/sw/qa/uitest/writer_tests2/formatParagraph.py#test_format_paragraph_tab_borders"
+      ],
+      "justification": "Presents native paragraph Borders and Shadow controls with independent pooled item exchange.",
+      "knownViolations": [],
+      "localSymbols": [
+        "WriterParagraphBorderPage"
+      ],
+      "upstreamSymbols": [],
+      "upstreamFile": null,
+      "sourceResponsibility": "browser-owned"
+    }
+  }
+}

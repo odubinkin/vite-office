@@ -1,4 +1,5 @@
 /** @fileoverview Consumed native text character property map and handler transport from txtprmap.cxx; no browser boolean formatting model or substitute UNO provider. */
+import { cppu_detail_getUnoType_ShadowFormat } from "../../../offapi/com/sun/star/table/ShadowFormat";
 import { cppu_detail_getUnoType_FillStyle } from "../../../offapi/com/sun/star/drawing/FillStyle";
 import { XMLConstantsPropertyHandler } from "../style/XMLConstantsPropertyHandler";
 import { PropertyValue } from "../../../udkapi/com/sun/star/beans/PropertyValue";
@@ -696,7 +697,11 @@ export function applyTextImportProperties(
       } finally {
         string.dispose();
       }
-    } else if (type === cppu_detail_getUnoType_BorderLine2) values.push(new Any(value, type));
+    } else if (
+      type === cppu_detail_getUnoType_BorderLine2 ||
+      type === cppu_detail_getUnoType_ShadowFormat
+    )
+      values.push(new Any(value, type));
     else values.push(new Any([value], type));
   }
   /** Converts parsed twips to original API MM100 with integer native rounding. @param value - Twips. @returns MM100. */
@@ -848,9 +853,13 @@ export function applyTextImportProperties(
         add(`Char${side}Border`, target.value, cppu_detail_getUnoType_BorderLine2);
       }
     }
+    if (paragraph.paragraphShadow !== undefined)
+      add("ParaShadowFormat", paragraph.paragraphShadow, cppu_detail_getUnoType_ShadowFormat);
     for (const side of ["Top", "Bottom", "Left", "Right"] as const) {
-      const rawBorder = paragraph[`border${side}`];
-      const rawWidth = paragraph[`borderLineWidth${side}`];
+      const distance = paragraph[`padding${side}`] ?? paragraph.padding;
+      if (distance !== undefined) add(`${side}BorderDistance`, mm(distance), "sal_Int32");
+      const rawBorder = paragraph[`border${side}`] ?? paragraph.border;
+      const rawWidth = paragraph[`borderLineWidth${side}`] ?? paragraph.borderLineWidth;
       if (rawBorder === undefined) continue;
       const target = { value: new BorderLine2() };
       if (!new XMLBorderHdl().importXML(rawBorder, target))

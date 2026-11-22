@@ -1,4 +1,5 @@
 /** @fileoverview Projects the live Writer graph to immutable browser presentation values. */
+import { projectWriterParagraphBorders } from "./writer-paragraph-border-projection";
 import { GetParagraphFrameDirection } from "../../source/core/doc/doclay";
 import { projectWriterFontPaint, type WriterFontPaint } from "../../source/core/txtnode/txatbase";
 import { getPageBodyGeometry } from "../../source/core/layout/pagedesc";
@@ -138,6 +139,7 @@ export interface WriterParagraphProjection extends WriterListMarkerProjection {
   readonly alignment: WriterParagraphAlignment;
   readonly bulletChar?: string;
   readonly computedStyle: WriterParagraphComputedStyle;
+  readonly borderStyle?: ReturnType<typeof projectWriterParagraphBorders>;
   readonly id: string;
   readonly list: WriterParagraphList;
   readonly listLayout?: WriterParagraphListLayout;
@@ -516,6 +518,7 @@ export class WriterViewProjection {
             ? { inFrontOfLabel: true }
             : {}),
           ...projectWriterListMarker(node, listFormat, viewOptions),
+          borderStyle: projectWriterParagraphBorders(node),
           numRuleName: node.GetNumRuleName(),
           nodeIndex: node.GetIndex(),
           runs: projectTextPortions(node, hyphenation.hyphen),

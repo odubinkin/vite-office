@@ -4,7 +4,7 @@ title: "Connect Writer paragraph border formatting"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 6
+revision: 7
 origin:
   system: "manual"
 depends_on: []
@@ -36,7 +36,7 @@ events:
     to: "DOING"
     note: "Start: connect the native paragraph border page, item exchange, paint, and ODT persistence in Writer."
 doc_version: 3
-doc_updated_at: "2026-11-22T02:30:17.591Z"
+doc_updated_at: "2026-11-22T02:54:13.717Z"
 doc_updated_by: "CODER"
 description: "Connect the native Borders page to the ordinary Writer Paragraph dialog. Reuse the CUI border editor and pooled box, shadow and connect-border items; preserve mixed selections, paint and ODT round trip."
 sections:
@@ -53,7 +53,14 @@ sections:
     <!-- BEGIN VERIFICATION RESULTS -->
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Revert the scoped implementation commits and rerun the focused paragraph border, shared CUI and ODT checks."
-  Findings: ""
+  Findings: |-
+    - Command: `npm run test:writer -- WriterNativeTabulatorDialog WriterParagraphDialog writer-paragraph-border-projection writer-attributes odt-roundtrip native-text-default-schema`. Result: pass, 55 checks in six files. Scope: real Paragraph command, independent padding, connect flag, shadow, undo/redo, worker graph, automatic paragraph style ODT reopen, adjoining borders and native UNO metadata.
+    - Command: `npm run test:shared -- native-border-page native-collapsing-border-page boxitem`. Result: pass, 82 checks in three files. Scope: original shared CUI and box contracts.
+    - Commands: `npm run build:single-threaded --workspace @vite-office/office` and `node_modules/.bin/playwright test writer-paragraph-borders.spec.ts --config=output/playwright/writer-position-chrome.config.ts --project=writer --workers=1`. Result: pass, production build and one Chrome test from the ordinary Format → Paragraph command, including undo, redo and reopen.
+    - Commands: `npm run check:dependencies`, `npm run check:source-tree`, `npm run check:source-provenance`, `npm run check:writer-hintids`, `npm run check:writer-resources`, scoped ESLint/Prettier, `ap doctor`, `node .agentplane/policy/check-routing.mjs` and `git diff --check`. Result: pass. The existing AgentPlane hook readiness warning is non-blocking.
+    - Commands: `npm run check:docs` and `npm run check:file-size`. Result: fail outside this change on existing Calc JSDoc and the two existing oversized files, calc-document-codec.ts and swatrset.ts. The edited files satisfy those checks.
+    - The browser paints the native box values with CSS, including omitted internal edges for compatible adjacent paragraph nodes. Pinned Writer's full page-frame joining across pagination and classic output-device shadow and compound-line paint are broader than the current browser projection.
+    - No full suite run at this cadence checkpoint.
 id_source: "generated"
 ---
 ## Summary
@@ -85,3 +92,11 @@ Run focused Writer tests for Paragraph Borders, native selection and history, pa
 Revert the scoped implementation commits and rerun the focused paragraph border, shared CUI and ODT checks.
 
 ## Findings
+
+- Command: `npm run test:writer -- WriterNativeTabulatorDialog WriterParagraphDialog writer-paragraph-border-projection writer-attributes odt-roundtrip native-text-default-schema`. Result: pass, 55 checks in six files. Scope: real Paragraph command, independent padding, connect flag, shadow, undo/redo, worker graph, automatic paragraph style ODT reopen, adjoining borders and native UNO metadata.
+- Command: `npm run test:shared -- native-border-page native-collapsing-border-page boxitem`. Result: pass, 82 checks in three files. Scope: original shared CUI and box contracts.
+- Commands: `npm run build:single-threaded --workspace @vite-office/office` and `node_modules/.bin/playwright test writer-paragraph-borders.spec.ts --config=output/playwright/writer-position-chrome.config.ts --project=writer --workers=1`. Result: pass, production build and one Chrome test from the ordinary Format → Paragraph command, including undo, redo and reopen.
+- Commands: `npm run check:dependencies`, `npm run check:source-tree`, `npm run check:source-provenance`, `npm run check:writer-hintids`, `npm run check:writer-resources`, scoped ESLint/Prettier, `ap doctor`, `node .agentplane/policy/check-routing.mjs` and `git diff --check`. Result: pass. The existing AgentPlane hook readiness warning is non-blocking.
+- Commands: `npm run check:docs` and `npm run check:file-size`. Result: fail outside this change on existing Calc JSDoc and the two existing oversized files, calc-document-codec.ts and swatrset.ts. The edited files satisfy those checks.
+- The browser paints the native box values with CSS, including omitted internal edges for compatible adjacent paragraph nodes. Pinned Writer's full page-frame joining across pagination and classic output-device shadow and compound-line paint are broader than the current browser projection.
+- No full suite run at this cadence checkpoint.

@@ -7,6 +7,7 @@ import type { LanguageType } from "../../../i18nlangtag/inc/lang";
 import type { FontSlant } from "../../../offapi/com/sun/star/awt/FontSlant";
 import type { FontPitch } from "../../../tools/inc/fontenum";
 import type { rtl_TextEncoding } from "../../../sal/inc/rtl/textenc";
+import type { ShadowFormat } from "../../../offapi/com/sun/star/table/ShadowFormat";
 import type { OdfBoxProperties } from "../style/bordrhdl";
 import type { OdfThemeColor } from "./XMLComplexColorContext";
 /** Direct character properties supported by the bounded text exporter. */
@@ -98,6 +99,7 @@ export interface OdfTabStop {
 /** Direct paragraph properties represented by the bounded Writer model. */
 export interface OdfParagraphProperties extends OdfBoxProperties, OdfFillProperties {
   readonly joinBorder?: boolean;
+  readonly paragraphShadow?: ShadowFormat;
   readonly countLineNumbers?: boolean;
   readonly lineNumberStartValue?: number;
   readonly contextualSpacing?: boolean;

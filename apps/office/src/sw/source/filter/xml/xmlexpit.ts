@@ -1,9 +1,8 @@
 /** @fileoverview Writer filter attribute-item export boundary corresponding to xmlexpit.cxx. Browser presentation shorthand retains its existing adapter behavior without moving native item ownership into shared xmloff. */
-import type { SvxShadowItem } from "../../../../editeng/source/items/frmitems.shadow";
+import { SvxShadowItem } from "../../../../editeng/source/items/frmitems.shadow";
 import { MID_EXPAND_SINGLE } from "../../../../editeng/inc/memberids";
 import type { SvxAdjustItem } from "../../../../editeng/inc/adjustitem";
 import type { OdfParagraphJustification } from "../../../../xmloff/source/style/adjushdl";
-import { SvxShadowLocation } from "../../../../editeng/inc/svxenum";
 import {
   cppu_detail_getUnoType_ShadowFormat as shadowType,
   ShadowFormat,
@@ -64,6 +63,7 @@ import {
   RES_PARATR_SCRIPTSPACE,
   RES_BOX,
   RES_SHADOW,
+  RES_PARATR_CONNECT_BORDER,
   RES_TEXTGRID,
 } from "../../../inc/hintids";
 import { SwTextGrid } from "../../../inc/tgrditem";
@@ -230,6 +230,35 @@ export function exportBoxProperties(item: SvxBoxItem | undefined): OdfBoxPropert
   return result;
 }
 
+/** Projects authored paragraph border attributes with their native item values. @param items - Direct paragraph set. @returns ODF border properties. */
+export function exportParagraphBorders(items: SfxItemSet): OdfParagraphProperties {
+  const box = items.GetItemIfSet(RES_BOX, false);
+  const connect = items.GetItemIfSet(RES_PARATR_CONNECT_BORDER, false);
+  const shadow = exportShadowFormat(items.GetItemIfSet(RES_SHADOW, false));
+  if (
+    (box !== undefined && !(box instanceof SvxBoxItem)) ||
+    (connect !== undefined && !(connect instanceof SfxBoolItem))
+  )
+    throw new Error("ODT paragraph border item is invalid.");
+  return {
+    ...exportBoxProperties(box),
+    ...(connect === undefined ? {} : { joinBorder: connect.GetValue() }),
+    ...(shadow === undefined ? {} : { paragraphShadow: shadow }),
+  };
+}
+
+/** Exports the native UNO shadow format, including explicit no-shadow values. @param item - Borrowed direct pool item. @returns Shadow data when authored. */
+export function exportShadowFormat(item: unknown): ShadowFormat | undefined {
+  if (!(item instanceof SvxShadowItem)) return undefined;
+  const value = new Any();
+  try {
+    const format = new ShadowFormat();
+    return item.QueryValue(value, 0x80) && value.extract(format, shadowType) ? format : undefined;
+  } finally {
+    value.dispose();
+  }
+}
+
 /** Writes the original ODF page layout box, shadow and gutter properties. @param master - Actual page frame. @param formatLength - Twips to ODF length converter. @returns XML attributes. */
 export function exportPageLayoutBox(
   master: SwFrameFormat,
@@ -248,17 +277,9 @@ export function exportPageLayoutBox(
     if (lineWidth !== undefined)
       attributes.push(`style:border-line-width-${suffix}="${lineWidth}"`);
   }
-  const shadow = items.GetItemIfSet(RES_SHADOW, false) as SvxShadowItem | undefined;
-  if (shadow && shadow.GetLocation() !== SvxShadowLocation.NONE) {
-    const value = new Any();
-    try {
-      const format = new ShadowFormat();
-      if (shadow.QueryValue(value, 0x80) && value.extract(format, shadowType))
-        attributes.push(`style:shadow="${new XMLShadowPropHdl().exportXML(format)}"`);
-    } finally {
-      value.dispose();
-    }
-  }
+  const shadow = exportShadowFormat(items.GetItemIfSet(RES_SHADOW, false));
+  if (shadow && shadow.Location !== 0)
+    attributes.push(`style:shadow="${new XMLShadowPropHdl().exportXML(shadow)}"`);
   const gutter = master.GetLRSpace().GetGutterMargin();
   if (gutter)
     attributes.push(`loext:margin-gutter="${Converter.convertMeasureToXML(gutter, "twip")}"`);

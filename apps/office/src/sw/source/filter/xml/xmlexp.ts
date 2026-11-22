@@ -53,6 +53,7 @@ import { SwXMLTableLines } from "./xmltble";
 import { VertOrientation } from "../../../../offapi/com/sun/star/text/VertOrientation";
 import {
   exportBoxProperties,
+  exportParagraphBorders,
   exportFrameVisualProperties,
   exportPageLayoutBox,
   exportPageWritingAndGrid,
@@ -145,6 +146,7 @@ import {
   RES_PARATR_LIST_RESTARTVALUE,
   RES_PARATR_NUMRULE,
   RES_PARATR_CONNECT_BORDER,
+  RES_SHADOW,
   RES_PARATR_OUTLINELEVEL,
   RES_UL_SPACE,
   RES_FRM_SIZE,
@@ -860,6 +862,7 @@ function assertSupportedItems(
     RES_KEEP,
     RES_LINENUMBER,
     RES_PARATR_CONNECT_BORDER,
+    RES_SHADOW,
     RES_BOX,
   ]);
   if (allowListItems)
@@ -901,8 +904,6 @@ function getParagraphProperties(set: SfxItemSet | undefined): OdfParagraphProper
   const verticalAlign = set.GetItemIfSet(RES_PARATR_VERTALIGN, false);
   const paragraphBreak = set.GetItemIfSet(RES_BREAK, false);
   const pageDesc = set.GetItemIfSet(RES_PAGEDESC, false);
-  const joinBorder = set.GetItemIfSet(RES_PARATR_CONNECT_BORDER, false);
-  const box = set.GetItemIfSet(RES_BOX, false);
   if (
     (firstLine !== undefined && !(firstLine instanceof SvxFirstLineIndentItem)) ||
     (right !== undefined && !(right instanceof SvxRightMarginItem)) ||
@@ -915,9 +916,7 @@ function getParagraphProperties(set: SfxItemSet | undefined): OdfParagraphProper
     (widows !== undefined && !(widows instanceof ParaItems.SvxWidowsItem)) ||
     (verticalAlign !== undefined && !(verticalAlign instanceof ParaItems.SvxParaVertAlignItem)) ||
     (paragraphBreak !== undefined && !(paragraphBreak instanceof SfxInt16Item)) ||
-    (pageDesc !== undefined && !(pageDesc instanceof SwFormatPageDesc)) ||
-    (joinBorder !== undefined && !(joinBorder instanceof SfxBoolItem)) ||
-    (box !== undefined && !(box instanceof SvxBoxItem))
+    (pageDesc !== undefined && !(pageDesc instanceof SwFormatPageDesc))
   )
     throw new Error("ODT paragraph item is invalid.");
   const properties: OdfParagraphProperties = {
@@ -969,8 +968,7 @@ function getParagraphProperties(set: SfxItemSet | undefined): OdfParagraphProper
         }
       : {}),
     ...exportParagraphLineNumbering(set),
-    ...(joinBorder instanceof SfxBoolItem ? { joinBorder: joinBorder.GetValue() } : {}),
-    ...(box instanceof SvxBoxItem ? exportBoxProperties(box) : {}),
+    ...exportParagraphBorders(set),
   };
   return Object.keys(properties).length === 0 ? undefined : properties;
 }

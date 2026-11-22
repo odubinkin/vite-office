@@ -179,6 +179,11 @@ export function WriterEditableParagraph({
       data-active={isActive}
       style={{
         backgroundColor: paragraph.computedStyle.backgroundColor,
+        ...paragraph.borderStyle,
+        ...(paragraph.borderStyle && isFollow ? { borderTop: "none", paddingTop: 0 } : {}),
+        ...(paragraph.borderStyle && fragmentEnd < paragraph.text.length
+          ? { borderBottom: "none", paddingBottom: 0 }
+          : {}),
         marginBlockStart: `${topSpacingPt ?? (cellPosition === undefined ? 0 : paragraph.computedStyle.upperSpacingPt)}pt`,
         marginBlockEnd:
           cellPosition === undefined ? undefined : `${paragraph.computedStyle.lowerSpacingPt}pt`,

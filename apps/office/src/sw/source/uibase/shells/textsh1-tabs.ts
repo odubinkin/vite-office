@@ -1,5 +1,11 @@
 /** @fileoverview Native Writer paragraph-dialog input, tab stop context and typed paragraph formatting from textsh1.cxx. */
+import { MIN_BORDER_DIST } from "../../../inc/swtypes";
 import { FN_NUMBER_NEWSTART, FN_NUMBER_NEWSTART_AT } from "../../../inc/cmdid";
+import {
+  SvxBoxInfoItem,
+  SvxBoxInfoItemValidFlags,
+} from "../../../../editeng/source/items/frmitems";
+import { SID_ATTR_BORDER_INNER } from "../../../../svx/inc/svxids";
 import { SfxBoolItem } from "../../../../svl/inc/eitem";
 import { GetTabDist } from "../utlui/uitool";
 import type { SwTextShell } from "./textsh1";
@@ -13,6 +19,9 @@ import {
 import {
   RES_PARATR_TABSTOP as T,
   RES_FRAMEDIR,
+  RES_BOX,
+  RES_SHADOW,
+  RES_PARATR_CONNECT_BORDER,
   RES_LINENUMBER,
   RES_PARATR_ADJUST,
   RES_PARATR_OUTLINELEVEL,
@@ -38,14 +47,16 @@ export function createWriterParagraphDialogInput(shell: SwTextShell): SfxItemSet
   const set = new SfxItemSet(pool, [
     [RES_PARATR_ADJUST, RES_PARATR_ADJUST],
     [T, RES_PARATR_HYPHENZONE],
-    [RES_PARATR_NUMRULE, RES_PARATR_SNAPTOGRID],
+    [RES_PARATR_NUMRULE, RES_PARATR_CONNECT_BORDER],
     [RES_PARATR_OUTLINELEVEL, RES_PARATR_OUTLINELEVEL],
     [RES_PARATR_AUTOFRAMEDIR, RES_PARATR_AUTOFRAMEDIR],
     [RES_PARATR_LIST_LEVEL, RES_PARATR_LIST_LEVEL],
     [L, L],
+    [RES_BOX, RES_SHADOW],
     [RES_LINENUMBER, RES_LINENUMBER],
     [RES_FRAMEDIR, RES_FRAMEDIR],
     [D, O],
+    [SID_ATTR_BORDER_INNER, SID_ATTR_BORDER_INNER],
     [FN_NUMBER_NEWSTART, FN_NUMBER_NEWSTART_AT],
   ]);
   const tabs = shell.GetUniformParagraphItem(
@@ -68,6 +79,9 @@ export function createWriterParagraphDialogInput(shell: SwTextShell): SfxItemSet
     RES_PARATR_AUTOFRAMEDIR,
     RES_LINENUMBER,
     RES_FRAMEDIR,
+    RES_BOX,
+    RES_SHADOW,
+    RES_PARATR_CONNECT_BORDER,
   ]) {
     const item = shell.GetUniformParagraphItem(
       /** Reads the typed item across the selection. @param node - Selected paragraph. @returns Native item. */
@@ -76,6 +90,12 @@ export function createWriterParagraphDialogInput(shell: SwTextShell): SfxItemSet
     if (item) set.Put(item);
     else set.InvalidateItem(which);
   }
+  const borderInfo = new SvxBoxInfoItem(SID_ATTR_BORDER_INNER);
+  borderInfo.SetDist(true);
+  borderInfo.SetMinDist(true);
+  borderInfo.SetDefDist(MIN_BORDER_DIST);
+  borderInfo.SetValid(SvxBoxInfoItemValidFlags.DISABLE, true);
+  set.Put(borderInfo);
   if (paragraph.GetNumRule() !== undefined) {
     set.Put(new SfxBoolItem(FN_NUMBER_NEWSTART, paragraph.IsListRestart()));
     const start = paragraph.HasAttrListRestartValue()
