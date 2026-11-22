@@ -1,10 +1,11 @@
 ---
 id: "202611220211-TEJDRR"
 title: "Connect Calc Format Cells dialog and native scalar attribute pages"
-status: "DOING"
+result_summary: "calc-format-cells-scalar-pages"
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 10
+revision: 11
 origin:
   system: "manual"
 depends_on:
@@ -42,11 +43,16 @@ quality_review:
     - "output/calc-task19-calc.log"
   findings:
     - "Same-agent review checked the recorded implementation and test evidence. The remaining Font, Font Effects, Borders and advanced format administration are outside this slice."
-commit: null
+commit:
+  hash: "e3e30f4cce82744aa65ab02b15db908962b8bbe2"
+  message: "🧩 TEJDRR code: preserve tuple types in native gallery regression"
 comments:
   -
     author: "CODER"
     body: "Start: connect Format Cells, native formatter preview and scalar attribute pages."
+  -
+    author: "CODER"
+    body: "Verified: Calc Format Cells entry points, native scalar pages, single history transaction, production Chromium and targeted regressions"
 events:
   -
     type: "status"
@@ -61,8 +67,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Verified: native Calc Format Cells pages and entry points pass focused Calc, formatter, Chromium and production checks"
+  -
+    type: "status"
+    at: "2026-11-22T02:49:36.159Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: Calc Format Cells entry points, native scalar pages, single history transaction, production Chromium and targeted regressions"
 doc_version: 3
-doc_updated_at: "2026-11-22T02:47:11.109Z"
+doc_updated_at: "2026-11-22T02:49:36.160Z"
 doc_updated_by: "CODER"
 description: "Bind the native Format Cells entry points and asynchronous item-set exchange with Numbers, Alignment, Background and Cell Protection pages, selection history and formatter preview."
 sections:
