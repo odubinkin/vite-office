@@ -1,10 +1,11 @@
 ---
 id: "202611220147-12KPBK"
 title: "Preserve Writer ODT paragraph hyphenation settings"
-status: "DOING"
+result_summary: "Writer ODT preserves all represented native paragraph hyphenation members in both XML property groups and transfers complete styles and defaults through the Worker."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 6
+revision: 7
 origin:
   system: "manual"
 depends_on: []
@@ -41,11 +42,16 @@ quality_review:
     - "docs/program/writer-upstream-suspected-issues.md#WRITER-736"
   findings:
     - "Changes align the consumed UNO default-owner route and preserve complete native unsigned fields in the Worker codec. Four pinned ODT fixtures and the combined Worker regression pass."
-commit: null
+commit:
+  hash: "85bbb24e541c0dca49ffc7a464f85418325aaed0"
+  message: "🧩 12KPBK code: preserve Writer paragraph hyphenation in ODT"
 comments:
   -
     author: "CODER"
     body: "Start: wire pinned Writer hyphenation members through their real pool item, UNO style properties, ODT property maps and Worker records."
+  -
+    author: "CODER"
+    body: "Verified: 153 focused tests, Office typecheck, lint, formatting, Writer WhichIds, boundaries, provenance, registry invariants, policy routing and doctor."
 events:
   -
     type: "status"
@@ -60,8 +66,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Writer preserves the native paragraph hyphenation item through UNO, document defaults, ODT and Worker. 153 focused tests and declared checks pass."
+  -
+    type: "status"
+    at: "2026-11-22T02:03:08.496Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: 153 focused tests, Office typecheck, lint, formatting, Writer WhichIds, boundaries, provenance, registry invariants, policy routing and doctor."
 doc_version: 3
-doc_updated_at: "2026-11-22T02:01:32.895Z"
+doc_updated_at: "2026-11-22T02:03:08.497Z"
 doc_updated_by: "CODER"
 description: "Port the native hyphenation zone item with its Writer pool default, UNO members, ODT text and paragraph maps and Worker transfer."
 sections:
