@@ -96,7 +96,7 @@ it("ports the original spell-out gallery pictures and formatted names" /** Verif
     ["One hundred", "capitalize "],
     ["One Hundred", "title "],
     ["ONE HUNDRED", "upper "],
-  ]) {
+  ] as const) {
     const row = list.getByRole("option", { name: label });
     const code = "[NatNum12 " + modifier + "cardinal]0";
     expect(row).toHaveAttribute("value", code);
