@@ -21,6 +21,8 @@ test("Writer applies real paragraph borders and reopens their controls", /** Por
   const left = dialog.getByRole("spinbutton", { name: /^Left padding/u });
   await left.fill("0.2 in");
   await left.blur();
+  const displayedPadding = await left.inputValue();
+  expect(displayedPadding).toMatch(/^0[.,](?:20 in|51 cm)$/u);
   const merge = dialog.getByRole("checkbox", { name: "Merge with next paragraph", exact: true });
   await merge.uncheck();
   await dialog.getByRole("button", { name: "OK", exact: true }).click();
@@ -31,7 +33,7 @@ test("Writer applies real paragraph borders and reopens their controls", /** Por
   await page.getByRole("button", { name: "Redo", exact: true }).click();
   await expect(paragraphFrame).not.toHaveCSS("border-left-width", "0px");
   await open();
-  await expect(left).toHaveValue(/0[.,]20/u);
+  await expect(left).toHaveValue(displayedPadding);
   await expect(merge).not.toBeChecked();
   await dialog.getByRole("button", { name: "Cancel", exact: true }).click();
   await expect(paragraphFrame).not.toHaveCSS("border-left-width", "0px");
