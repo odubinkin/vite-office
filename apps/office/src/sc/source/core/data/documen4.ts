@@ -7,6 +7,7 @@ import type { ScAddress } from "../../../inc/address";
 import type { ScCondFormatItem } from "../../../inc/attrib";
 import type { ScConditionalFormat } from "../../../inc/conditio";
 import type { ScDocument } from "../../../inc/document";
+import type { ScStyleSheetPool } from "../../../inc/stlpool";
 import { ATTR_CONDITIONAL } from "../../../inc/scitems";
 
 /** Hands an owned conditional format to its sheet. @param this - Native document. @param format - New format. @param tab - Destination sheet. @returns Assigned index or zero. */
@@ -20,20 +21,28 @@ export function GetCondResult(this: ScDocument, position: ScAddress): SfxItemSet
   if (!pool) return undefined;
   for (const format of GetConditionalFormats(this, position)) {
     const name = format.GetCellStyle(this.GetRefCellValue(position), position);
-    if (!name) continue;
-    const value = unicode(name);
-    try {
-      const style = pool.Find(value, SfxStyleFamily.Para);
-      if (style) return style.GetItemSet();
-    } finally {
-      value.dispose();
-    }
+    const set = FindConditionalStyle(pool, name);
+    if (set) return set;
   }
   return undefined;
 }
 
+/** Resolves an existing paragraph style used by a conditional rule. @param pool - Workbook style pool. @param name - Applied style name. @returns Native items or absence. */
+export function FindConditionalStyle(
+  pool: ScStyleSheetPool | null,
+  name: string,
+): SfxItemSet | undefined {
+  if (!pool || !name) return undefined;
+  const value = unicode(name);
+  try {
+    return pool.Find(value, SfxStyleFamily.Para)?.GetItemSet();
+  } finally {
+    value.dispose();
+  }
+}
+
 /** Traverses native conditional format indices in cell order. @param document - Workbook. @param position - Target cell. @returns Matched owners. */
-function* GetConditionalFormats(
+export function* GetConditionalFormats(
   document: ScDocument,
   position: ScAddress,
 ): IterableIterator<ScConditionalFormat> {

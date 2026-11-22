@@ -34,7 +34,8 @@
       "Paints independent fixed and movable cell and header bands, clipping partially visible cells at the separator and computing border adjacency per pane.",
       "Paints all normal pane windows with distinct accessible cell identities and routes click activation independently from formula pointing.",
       "Paints the native resolved color-scale background over the represented cell fill.",
-      "Brackets visible-cell style resolution with the sheet conditional-format rendering lifecycle so calendar rules use one date per pass."
+      "Brackets visible-cell style resolution with the sheet conditional-format rendering lifecycle so calendar rules use one date per pass.",
+      "Projects fillinfo conditional results and paints imported ODS data bars beneath cell contents. The display-only setting clips the presented value while retaining the accessible label and input value."
     ],
     "stackDivergence": {
       "kind": "browser-adaptation",
@@ -89,6 +90,10 @@
         {
           "path": "apps/office/e2e/calc/xlsx-date-conditions.spec.ts",
           "marker": "evaluates and round-trips a tomorrow date rule"
+        },
+        {
+          "path": "apps/office/e2e/calc/ods-data-bars.spec.ts",
+          "marker": "paints imported ODS data bars"
         }
       ],
       "upstream": [

@@ -6,6 +6,7 @@ export {
   ScCondDateFormatEntry,
   ScColorFormatCache,
   ScConditionalFormat,
+  type ScCondFormatData,
   ScConditionalFormatList,
 } from "../source/core/data/conditio";
 export {

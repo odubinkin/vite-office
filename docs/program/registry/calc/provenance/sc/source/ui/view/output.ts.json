@@ -1,0 +1,40 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/sc/source/ui/view/output.ts",
+    "status": "mapped",
+    "upstreamPath": "sc/source/ui/view/output.cxx",
+    "localSymbols": [
+      "drawDataBars"
+    ],
+    "upstreamSymbols": [
+      "drawDataBars"
+    ],
+    "preservedResponsibilities": [
+      "Resolves the native inclusive inset rectangle, signed data-bar extent and internal zero axis."
+    ],
+    "omittedResponsibilities": [
+      "The browser adapter supplies the platform color and line drawing."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sc/source/ui/view/output.ts",
+          "marker": "drawDataBars"
+        },
+        {
+          "path": "apps/office/src/sc/source/ui/view/output.test.ts",
+          "marker": "insets signed data bars"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sc/source/ui/view/output.cxx",
+          "marker": "drawDataBars"
+        }
+      ]
+    }
+  }
+}

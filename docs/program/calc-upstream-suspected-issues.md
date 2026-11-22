@@ -7762,3 +7762,14 @@ of the two absolute limits. Both limits can be zero. The model preserves
 the resulting non-finite length.
 
 - [Original data-bar axis geometry](../../vendor/libreoffice-reference/sc/source/core/data/colorscale.cxx)
+
+### CALC-815 — Conditional styles overwrite the cell protection visibility flags
+
+`handleConditionalFormat` writes `bHidden` and `bHideFormula` from the
+first resolved conditional style on a protected sheet. The adjacent
+upstream TODO questions the interaction with the flags normally derived
+from the cell pattern. The conditional paint port preserves the first
+resolved style and leaves the protection assignment to the remaining
+protected-cell rendering work.
+
+- [Original conditional paint and protection flags](../../vendor/libreoffice-reference/sc/source/core/data/fillinfo.cxx)

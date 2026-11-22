@@ -1,0 +1,32 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sc/browser/presentation/ScCellDataBar.tsx",
+    "classification": "browser-adaptation",
+    "state": "active",
+    "suite": "calc",
+    "subsystem": "conditional-data-bar",
+    "capabilityIds": [
+      "CAP-80c7cd5d-a6df-4631-80c7-c63423899de6"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "not-applicable",
+      "defaultStatus": "not-applicable",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/sc/browser/presentation/ScCellDataBar.tsx",
+        "apps/office/e2e/calc/ods-data-bars.spec.ts"
+      ],
+      "justification": "Paints the native data bar and its dashed zero axis over the cell background with CSS.",
+      "knownViolations": [],
+      "localSymbols": [
+        "ScCellDataBar"
+      ],
+      "sourceResponsibility": "browser-owned",
+      "upstreamFile": null,
+      "upstreamSymbols": []
+    }
+  }
+}

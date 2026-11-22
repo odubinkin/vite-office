@@ -1,6 +1,7 @@
 /** @fileoverview Native conditional-format ownership,copy ranges and live value-cache subscriptions;with date rules retained as copy state. */
 import type { ScRefCellValue } from "../../../inc/cellvalue";
 import type { ScAddress } from "../../../inc/address";
+import type { ScDataBarFormat, ScDataBarInfo } from "../../../inc/colorscale";
 import type { ScDocument } from "../../../inc/document";
 import { ScRangeList } from "../../../inc/rangelst";
 import type {
@@ -25,6 +26,12 @@ export enum ScFormatEntryType {
   Databar,
   Iconset,
   Date,
+}
+/** Represented results of the native conditional paint lookup for one cell. */
+export interface ScCondFormatData {
+  aStyleName: string;
+  mxColorScale: Color | undefined;
+  pDataBar: ScDataBarInfo | undefined;
 }
 /** Original native date-condition values. */
 export enum ScCondFormatDateType {
@@ -303,6 +310,26 @@ export class ScConditionalFormat {
       if (color) return color;
     }
     return undefined;
+  }
+  /** Evaluates each represented result independently in native entry order. @param cell - Actual cell. @param position - Evaluated address. @returns Conditional paint data. */
+  GetData(cell: ScRefCellValue, position: ScAddress): ScCondFormatData {
+    const data: ScCondFormatData = { aStyleName: "", mxColorScale: undefined, pDataBar: undefined };
+    for (const entry of this.maEntries) {
+      switch (entry.GetType()) {
+        case ScFormatEntryType.Condition:
+        case ScFormatEntryType.ExtCondition:
+        case ScFormatEntryType.Date:
+          if (!data.aStyleName) data.aStyleName = entry.GetCellStyle(cell, position) ?? "";
+          break;
+        case ScFormatEntryType.Colorscale:
+          data.mxColorScale ??= entry.GetColor(position);
+          break;
+        case ScFormatEntryType.Databar:
+          data.pDataBar ??= (entry as ScDataBarFormat).GetDataBarInfo(position);
+          break;
+      }
+    }
+    return data;
   }
   /** Starts a render pass for each native rule. @returns Nothing. */
   startRendering(): void {

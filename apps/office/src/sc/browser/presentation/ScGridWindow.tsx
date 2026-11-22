@@ -7,6 +7,8 @@ import { ScHeaderResizeHandle, type ScHeaderSizing } from "./ScHeaderResizeHandl
 import { ScOutlineWindow } from "./ScOutlineWindow";
 import type { ScOutlineControl } from "../../source/ui/docshell/olinefun";
 import { ScCellDiagonalBorders } from "./ScCellDiagonalBorders";
+import { ScCellDataBar } from "./ScCellDataBar";
+import { handleConditionalFormat } from "../../source/core/data/fillinfo";
 import { ScIndentItem, ScLineBreakCell } from "../../inc/attrib";
 import { SvxMarginItem } from "../../../svx/source/items/algitem";
 import { SvxCellHorJustify } from "../../../editeng/inc/svxenum";
@@ -565,9 +567,11 @@ export function ScGridWindow(props: ScGridWindowProps): React.JSX.Element {
                     const position = new ScAddress(col, r, tab),
                       cell = props.getCell(position);
                     const pattern = document.GetPattern(position) as ScPatternAttr;
-                    const conditional = document.GetCondResult(position);
+                    const conditionalInfo = handleConditionalFormat(document, position);
+                    const conditional = conditionalInfo?.pConditionSet;
+                    const dataBar = conditionalInfo?.pDataBar;
                     const background =
-                      document.GetCondColor(position) ??
+                      conditionalInfo?.mxColorScale ??
                       (pattern.GetItem(148, conditional) as SvxBrushItem).GetColor();
                     const {
                       style: fontStyle,
@@ -599,6 +603,8 @@ export function ScGridWindow(props: ScGridWindowProps): React.JSX.Element {
                         : writing === D.Horizontal_LR_TB
                           ? "ltr"
                           : undefined;
+                    const width = NativeViewData.ToPixel(table.GetColWidth(col), 1 / 15);
+                    const height = NativeViewData.ToPixel(table.GetRowHeight(r), 1 / 15);
                     const cellStyle: CSSProperties = {
                       ...fontStyle,
                       whiteSpace: (pattern.GetItem(139) as ScLineBreakCell).GetValue()
@@ -646,8 +652,8 @@ export function ScGridWindow(props: ScGridWindowProps): React.JSX.Element {
                       ][(pattern.GetItem(132) as SvxVerJustifyItem).GetValue()],
                       left: headerWidth + viewport.scrollLeft + xAxis.Position(x, col),
                       clipPath: columnClip(x, col),
-                      width: NativeViewData.ToPixel(table.GetColWidth(col), 1 / 15),
-                      height: NativeViewData.ToPixel(table.GetRowHeight(r), 1 / 15),
+                      width,
+                      height,
                     };
                     return (
                       <div
@@ -678,11 +684,8 @@ export function ScGridWindow(props: ScGridWindowProps): React.JSX.Element {
                         className={`absolute top-0 min-w-0 overflow-hidden whitespace-nowrap border-b border-r border-slate-200 ${active ? "z-[2] outline outline-2 -outline-offset-2 outline-indigo-700" : ""} ${selected ? "bg-indigo-50" : "bg-white"}`}
                         style={cellStyle}
                       >
-                        <ScCellDiagonalBorders
-                          pattern={pattern}
-                          width={NativeViewData.ToPixel(table.GetColWidth(col), 1 / 15)}
-                          height={NativeViewData.ToPixel(table.GetRowHeight(r), 1 / 15)}
-                        />
+                        {dataBar && <ScCellDataBar info={dataBar} width={width} height={height} />}
+                        <ScCellDiagonalBorders pattern={pattern} width={width} height={height} />
                         {props.referenceRange?.Contains(position) && (
                           <div
                             aria-hidden="true"
@@ -708,10 +711,14 @@ export function ScGridWindow(props: ScGridWindowProps): React.JSX.Element {
                             }}
                           />
                         )}
-                        {editing && active ? null : (
+                        {editing && active ? null : dataBar?.mbShowValue === false ? (
+                          <span id={`${cellId}-text`} className="sr-only">
+                            {cell.text}
+                          </span>
+                        ) : (
                           <div
                             id={`${cellId}-text`}
-                            className="w-full shrink-0"
+                            className={dataBar ? "relative w-full shrink-0" : "w-full shrink-0"}
                             dir={textDirection}
                           >
                             <SpecialText

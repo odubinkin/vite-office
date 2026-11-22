@@ -1,0 +1,35 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sc/source/core/data/fillinfo.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "calc",
+    "subsystem": "conditional-data-bar",
+    "capabilityIds": [
+      "CAP-80c7cd5d-a6df-4631-80c7-c63423899de6"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/sc/source/core/data/fillinfo.ts",
+        "apps/office/src/sc/source/core/data/fillinfo.test.ts",
+        "vendor/libreoffice-reference/sc/source/core/data/fillinfo.cxx#handleConditionalFormat"
+      ],
+      "justification": "Resolves the first available style, color scale and data bar independently in the ordered native conditional indexes.",
+      "knownViolations": [],
+      "localSymbols": [
+        "handleConditionalFormat"
+      ],
+      "upstreamFile": "sc/source/core/data/fillinfo.cxx",
+      "upstreamSymbols": [
+        "handleConditionalFormat"
+      ],
+      "sourceResponsibility": "unverified"
+    }
+  }
+}

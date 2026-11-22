@@ -1,0 +1,40 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/sc/source/core/data/fillinfo.ts",
+    "status": "mapped",
+    "upstreamPath": "sc/source/core/data/fillinfo.cxx",
+    "localSymbols": [
+      "handleConditionalFormat"
+    ],
+    "upstreamSymbols": [
+      "handleConditionalFormat"
+    ],
+    "preservedResponsibilities": [
+      "Resolves the first available style, color scale and data bar independently in the ordered native conditional indexes."
+    ],
+    "omittedResponsibilities": [
+      "Icon sets and the remaining row information, protection and drawing fields are outside the represented conditional paint fields."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sc/source/core/data/fillinfo.ts",
+          "marker": "handleConditionalFormat"
+        },
+        {
+          "path": "apps/office/src/sc/source/core/data/fillinfo.test.ts",
+          "marker": "uses the first available style, scale and data bar independently"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sc/source/core/data/fillinfo.cxx",
+          "marker": "handleConditionalFormat"
+        }
+      ]
+    }
+  }
+}
