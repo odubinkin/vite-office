@@ -1,0 +1,24 @@
+{
+  "schema_version": 1,
+  "task_id": "202611220135-K5MZ4R",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-11-22T01:45:35.330Z",
+  "verdict": "pass",
+  "summary": "Calc ODS span attributes use the original native Which identifiers, typed members and shared XML codecs through import, export and Worker transfer.",
+  "evaluated_sha": "d4bba62ac223fb8ff820639e610d12ca1b54a69b",
+  "blueprint_digest": "072f18601aee751291d5f07fe06ae6ce8051080062303d97611d81b19e278fb5",
+  "findings": [
+    "Existing font and decoration routing is preserved. Calc writes its native line-through word-mode attribute for the single word-mode item. Pinned package and styled text ranges reopen with the expected source values."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202611220135-K5MZ4R/README.md",
+    "d4bba62ac223 and 131 passing related tests",
+    "docs/program/calc-upstream-suspected-issues.md#CALC-819"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": [
+    "This change covers ODS edit-run transport. Browser shaping and unrelated full EditEngine property-set behavior remain outside the task."
+  ]
+}

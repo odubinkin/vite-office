@@ -4,7 +4,7 @@ title: "Align Calc ODS rich text with the native edit attribute map"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 4
+revision: 6
 origin:
   system: "manual"
 depends_on: []
@@ -19,11 +19,28 @@ plan_approval:
   updated_by: "ORCHESTRATOR"
   note: null
 verification:
-  state: "pending"
-  updated_at: null
-  updated_by: null
-  note: null
+  state: "ok"
+  updated_at: "2026-11-22T01:45:25.723Z"
+  updated_by: "CODER"
+  note: "Native Calc rich-text attributes and explicit resets survive ODS and Worker transport. 131 focused tests and the declared static checks pass."
   attempts: 0
+quality_review:
+  state: "pass"
+  updated_at: "2026-11-22T01:45:35.330Z"
+  updated_by: "EVALUATOR"
+  note: "Calc ODS span attributes use the original native Which identifiers, typed members and shared XML codecs through import, export and Worker transfer."
+  evaluated_sha: "d4bba62ac223fb8ff820639e610d12ca1b54a69b"
+  blueprint_digest: "072f18601aee751291d5f07fe06ae6ce8051080062303d97611d81b19e278fb5"
+  evidence_refs:
+    - ".agentplane/tasks/202611220135-K5MZ4R/README.md"
+    - ".agentplane/tasks/202611220135-K5MZ4R/quality/20261122-014535330-recovery-context/quality-report.json"
+    - ".agentplane/tasks/202611220135-K5MZ4R/quality/20261122-014535330-recovery-context/evaluator-prompt.md"
+    - ".agentplane/tasks/202611220135-K5MZ4R/quality/20261122-014535330-recovery-context/evaluator-opinion.md"
+    - ".agentplane/tasks/202611220135-K5MZ4R/blueprint/resolved-snapshot.json"
+    - "d4bba62ac223 and 131 passing related tests"
+    - "docs/program/calc-upstream-suspected-issues.md#CALC-819"
+  findings:
+    - "Existing font and decoration routing is preserved. Calc writes its native line-through word-mode attribute for the single word-mode item. Pinned package and styled text ranges reopen with the expected source values."
 commit: null
 comments:
   -
@@ -37,8 +54,14 @@ events:
     from: "TODO"
     to: "DOING"
     note: "Start: trace and port pinned Calc ODF edit-run attribute mappings through the existing EditEngine and Worker boundaries."
+  -
+    type: "verify"
+    at: "2026-11-22T01:45:25.723Z"
+    author: "CODER"
+    state: "ok"
+    note: "Native Calc rich-text attributes and explicit resets survive ODS and Worker transport. 131 focused tests and the declared static checks pass."
 doc_version: 3
-doc_updated_at: "2026-11-22T01:36:13.891Z"
+doc_updated_at: "2026-11-22T01:45:25.851Z"
 doc_updated_by: "CODER"
 description: "Port consumed ScXMLEditAttributeMap span mappings and use native EditEngine item values in Calc ODS import, export, and Worker round trips."
 sections:
@@ -58,6 +81,44 @@ sections:
     - Record the implementation and verification, then close and refresh the repository graph. This is the fifth task in the current ten-task regression cadence.
   Verification: |-
     <!-- BEGIN VERIFICATION RESULTS -->
+    ### 2026-11-22T01:45:25.723Z — VERIFY — ok
+
+    By: CODER
+
+    Note: Native Calc rich-text attributes and explicit resets survive ODS and Worker transport. 131 focused tests and the declared static checks pass.
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-22T01:36:13.891Z, excerpt_hash=sha256:1c72edf1d556b3f414e9597bc0eef2c38e9b13d651dfd55278459b61d8756d9b
+
+    Details:
+
+    - Command: `npm run test:calc -- ods-rich-text-fields ods.test ods-native-fonts ods-style-routing ods-worker ods-xml-boundaries format-export-failures`.
+      Result: pass. Evidence: 58 tests in 12 files. Scope: actual ODS import and export, named versus automatic text styles, span properties and resets, packaged LibreOffice rich-text fixture, signed escapement runs, and Worker transport.
+    - Commands: `npm run test:shared -- txtprmap.test chrlohdl.test native-escapement-xml xmlbahdl.test`, `npm run test:shared -- native-edit-document native-content-transfer strikeout-emphasis`, and `npm run test:writer -- editeng/source/items/textitem.test native-edit-document native-content-transfer strikeout-emphasis`.
+      Result: pass. Evidence: 49 + 18 + 6 tests, respectively. Scope: shared handler lexical conversions, locale members and native character edit items.
+    - Commands: scoped `npx eslint --max-warnings 0`, `npx prettier --check`, `npm run typecheck --workspace @vite-office/office -- --singleThreaded --checkers 1 --incremental --tsBuildInfoFile ../../output/playwright/ods-odt-office.tsbuildinfo`, `npm run check:dependencies`, `npm run check:source-provenance`, `npm run inventory:invariants -- --scope calc`, `node .agentplane/policy/check-routing.mjs`, `ap doctor`, and `git diff --check`.
+      Result: pass. Evidence: boundary check 2,988 runtime sources, provenance 2,989 runtime modules, routing OK and doctor 0 errors with the existing managed hook shim warning.
+    - CALC-819 records the native word-mode export association. This task verifies the represented span and ODS transport; the browser does not gain new text shaping or cell rendering behavior. The full run remains scheduled after ten closed tasks; this is the fifth.
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202611220135-K5MZ4R/blueprint/resolved-snapshot.json
+    - old_digest: 072f18601aee751291d5f07fe06ae6ce8051080062303d97611d81b19e278fb5
+    - current_digest: 072f18601aee751291d5f07fe06ae6ce8051080062303d97611d81b19e278fb5
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202611220135-K5MZ4R
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task verify-show 202611220135-K5MZ4R
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: false
+    - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+    - risks: none
+
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Revert the implementation commit with its source-provenance records and rerun ODS rich-text and Worker tests."
   Findings: ""
@@ -89,6 +150,44 @@ Preserve the pinned LibreOffice Calc rich-text character attribute values in ODS
 ## Verification
 
 <!-- BEGIN VERIFICATION RESULTS -->
+### 2026-11-22T01:45:25.723Z — VERIFY — ok
+
+By: CODER
+
+Note: Native Calc rich-text attributes and explicit resets survive ODS and Worker transport. 131 focused tests and the declared static checks pass.
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-22T01:36:13.891Z, excerpt_hash=sha256:1c72edf1d556b3f414e9597bc0eef2c38e9b13d651dfd55278459b61d8756d9b
+
+Details:
+
+- Command: `npm run test:calc -- ods-rich-text-fields ods.test ods-native-fonts ods-style-routing ods-worker ods-xml-boundaries format-export-failures`.
+  Result: pass. Evidence: 58 tests in 12 files. Scope: actual ODS import and export, named versus automatic text styles, span properties and resets, packaged LibreOffice rich-text fixture, signed escapement runs, and Worker transport.
+- Commands: `npm run test:shared -- txtprmap.test chrlohdl.test native-escapement-xml xmlbahdl.test`, `npm run test:shared -- native-edit-document native-content-transfer strikeout-emphasis`, and `npm run test:writer -- editeng/source/items/textitem.test native-edit-document native-content-transfer strikeout-emphasis`.
+  Result: pass. Evidence: 49 + 18 + 6 tests, respectively. Scope: shared handler lexical conversions, locale members and native character edit items.
+- Commands: scoped `npx eslint --max-warnings 0`, `npx prettier --check`, `npm run typecheck --workspace @vite-office/office -- --singleThreaded --checkers 1 --incremental --tsBuildInfoFile ../../output/playwright/ods-odt-office.tsbuildinfo`, `npm run check:dependencies`, `npm run check:source-provenance`, `npm run inventory:invariants -- --scope calc`, `node .agentplane/policy/check-routing.mjs`, `ap doctor`, and `git diff --check`.
+  Result: pass. Evidence: boundary check 2,988 runtime sources, provenance 2,989 runtime modules, routing OK and doctor 0 errors with the existing managed hook shim warning.
+- CALC-819 records the native word-mode export association. This task verifies the represented span and ODS transport; the browser does not gain new text shaping or cell rendering behavior. The full run remains scheduled after ten closed tasks; this is the fifth.
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202611220135-K5MZ4R/blueprint/resolved-snapshot.json
+- old_digest: 072f18601aee751291d5f07fe06ae6ce8051080062303d97611d81b19e278fb5
+- current_digest: 072f18601aee751291d5f07fe06ae6ce8051080062303d97611d81b19e278fb5
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202611220135-K5MZ4R
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task verify-show 202611220135-K5MZ4R
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: false
+- repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- risks: none
+
 <!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
