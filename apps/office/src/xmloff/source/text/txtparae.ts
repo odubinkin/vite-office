@@ -14,6 +14,7 @@ import { exportTableBlocks, type XMLTextExportBlock } from "../table/XMLTableExp
 import type { FontFaceNameResolver, OdfCharacterProperties } from "./txtparae.types";
 import { createOdfThemeColor, exportComplexColor } from "./XMLComplexColorContext";
 import { exportTextCharacterProperties, exportTextLanguageProperties } from "./txtprmap";
+import { exportHyphenationProperties, type OdfHyphenationProperties } from "./txtprmap.hyphenation";
 import { XMLTextNumRuleInfo } from "./XMLTextNumRuleInfo";
 export { ODF_NAMESPACES } from "../core/xmltoken";
 
@@ -54,6 +55,7 @@ export interface OdfTabStop {
 
 /** Direct paragraph properties represented by the bounded Writer model. */
 export interface OdfParagraphProperties extends OdfBoxProperties, OdfFillProperties {
+  readonly hyphenation?: OdfHyphenationProperties;
   readonly joinBorder?: boolean;
   readonly countLineNumbers?: boolean;
   readonly lineNumberStart?: number;
@@ -282,9 +284,10 @@ export class XMLTextParagraphExport {
             : `<style:paragraph-properties${paragraphAttributes.length === 0 ? "" : ` ${paragraphAttributes.join(" ")}`}>${paragraphChildren}</style:paragraph-properties>`;
         const properties = parseCharacterPropertiesKey(charKey);
         const textProperties =
-          Object.keys(properties).length === 0
+          Object.keys(properties).length === 0 &&
+          parsedParagraphProperties.hyphenation === undefined
             ? ""
-            : exportCharacterPropertyElement(properties, fontFaceName, true);
+            : exportCharacterPropertyElement(properties, fontFaceName, parsedParagraphProperties);
         if (listRule !== "") {
           const listStyle = listStyleNames.get(listRule);
           /* istanbul ignore next -- The collected paragraph and list-rule maps share one source pass. */
@@ -683,6 +686,7 @@ export function exportParagraphAttributes(properties: OdfParagraphProperties): s
   const verticalAlign = exportTextConstant("paragraphVerticalAlign", properties.verticalAlign);
   return [
     ...exportFillProperties(properties),
+    ...exportHyphenationProperties(properties.hyphenation, "paragraph"),
     ...(properties.joinBorder === undefined
       ? []
       : [`style:join-border="${properties.joinBorder}"`]),
@@ -923,13 +927,16 @@ export function exportCharacterAttributes(
   ].join("");
 }
 
-/** Writes the original text property group, with its element-valued character color when present. @param properties - Native direct properties. @param fontFaceName - Font face resolver. @param paragraphStyle - Whether to use the paragraph map. @returns Complete text-properties element. */
+/** Writes the original text property group, with its element-valued character color when present. @param properties - Native direct properties. @param fontFaceName - Font face resolver. @param paragraph - Optional paragraph map values. @returns Complete text-properties element. */
 export function exportCharacterPropertyElement(
   properties: Partial<OdfCharacterProperties>,
   fontFaceName?: FontFaceNameResolver,
-  paragraphStyle = false,
+  paragraph?: OdfParagraphProperties,
 ): string {
-  const attributes = exportCharacterAttributes(properties, fontFaceName, paragraphStyle);
+  const hyphenation = exportHyphenationProperties(paragraph?.hyphenation, "text");
+  const attributes =
+    exportCharacterAttributes(properties, fontFaceName, paragraph !== undefined) +
+    (hyphenation.length ? ` ${hyphenation.join(" ")}` : "");
   const child = properties.themeColor
     ? exportComplexColor(createOdfThemeColor(properties.themeColor), "char-complex-color")
     : "";

@@ -1,4 +1,4 @@
-/** @fileoverview Writer's item-backed UNO text defaults for character properties and tab distance. */
+/** @fileoverview Writer's item-backed UNO text defaults for represented paragraph and character properties. */
 import { Any } from "../../../../cppu/inc/com/sun/star/uno/Any";
 import { Reference } from "../../../../cppu/inc/com/sun/star/uno/Reference";
 import { PropertyVetoException } from "../../../../cppu/inc/com/sun/star/beans/PropertyVetoException";
@@ -8,6 +8,7 @@ import {
   RES_CHRATR_BEGIN,
   RES_CHRATR_END,
   RES_LINENUMBER,
+  RES_PARATR_HYPHENZONE,
   RES_PARATR_TABSTOP,
   RES_TEXTGRID,
 } from "../../../inc/hintids";
@@ -31,6 +32,7 @@ export class SwXTextDefaults {
     if (
       !entry ||
       (entry.nWID !== RES_PARATR_TABSTOP &&
+        entry.nWID !== RES_PARATR_HYPHENZONE &&
         entry.nWID !== RES_TEXTGRID &&
         entry.nWID !== RES_LINENUMBER &&
         (entry.nWID < RES_CHRATR_BEGIN || entry.nWID >= RES_CHRATR_END))

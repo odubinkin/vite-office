@@ -1,5 +1,6 @@
 /** @fileoverview Keeps the existing portable automatic paragraph-style identity fields together. */
 import type { OdfParagraphProperties, OdfTabStop } from "./txtparae";
+import type { OdfHyphenationProperties } from "./txtprmap.hyphenation";
 /** Creates a stable key for direct paragraph deltas. @param properties - Direct paragraph properties. @returns Key. */
 export function paragraphPropertiesKey(properties?: OdfParagraphProperties): string {
   return [
@@ -37,6 +38,9 @@ export function paragraphPropertiesKey(properties?: OdfParagraphProperties): str
     properties?.fillTransparency,
     properties?.verticalAlign,
     properties?.lineNumberStart,
+    properties?.hyphenation === undefined
+      ? ""
+      : encodeURIComponent(JSON.stringify(properties.hyphenation)),
   ]
     .map(
       /** Encodes one optional paragraph metric. @param value - Metric. @returns Stable field. */ (
@@ -80,6 +84,9 @@ export function parseParagraphPropertiesKey(key: string): OdfParagraphProperties
   const pageStyleName = fields[19];
   const pageNumber = fields[20];
   return {
+    ...(fields[26]
+      ? { hyphenation: JSON.parse(decodeURIComponent(fields[26])) as OdfHyphenationProperties }
+      : {}),
     ...(fields[21] === undefined || fields[21] === "" ? {} : { fillStyle: Number(fields[21]) }),
     ...(fields[22] === undefined || fields[22] === "" ? {} : { fillColor: Number(fields[22]) }),
     ...(fields[23] === undefined || fields[23] === ""

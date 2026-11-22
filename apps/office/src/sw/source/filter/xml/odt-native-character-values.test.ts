@@ -121,7 +121,7 @@ it.each([false, true])(
       .find((sample) => sample.getAttribute("style:name") === "ListLabel_20_1")
       ?.firstElementChild?.getAttribute("style:text-blinking");
     expect([smallCaps, blinking]).toEqual(["small-caps", "true"]);
-    const styles = `<office:document-styles ${namespaces}><office:styles><style:style style:name="TextFlags" style:family="paragraph"><style:text-properties fo:text-transform="uppercase" style:text-blinking="false" text:display="true" fo:hyphenate="false"/></style:style></office:styles></office:document-styles>`;
+    const styles = `<office:document-styles ${namespaces}><office:styles><style:style style:name="TextFlags" style:family="paragraph"><style:text-properties fo:text-transform="uppercase" style:text-blinking="false" text:display="true" fo:hyphenate="true"/></style:style></office:styles></office:document-styles>`;
     const content = `<office:document-content ${namespaces}><office:automatic-styles><style:style style:name="Flags" style:family="text"><style:text-properties fo:font-variant="${smallCaps}" style:text-blinking="${blinking}" text:display="none" fo:hyphenate="false"/></style:style></office:automatic-styles><office:body><office:text><text:p text:style-name="TextFlags"><text:span text:style-name="Flags">ab</text:span>cd</text:p></office:text></office:body></office:document-content>`;
     const generator = legacy
       ? "OpenOffice.org/2.4 Win32 OpenOffice.org_project/680m12$Build-9286"
@@ -140,7 +140,7 @@ it.each([false, true])(
       const contentXml = await archive.readTextEntry("content.xml");
       expect(stylesXml).toContain('fo:text-transform="uppercase"');
       expect(stylesXml).toContain(`text:display="${legacy ? "none" : "true"}"`);
-      expect(stylesXml).not.toContain("fo:hyphenate=");
+      expect(stylesXml).toContain('fo:hyphenate="true"');
       expect(contentXml).toContain('fo:font-variant="small-caps"');
       expect(contentXml).toContain('style:text-blinking="true"');
       expect(contentXml).toContain('fo:hyphenate="false"');

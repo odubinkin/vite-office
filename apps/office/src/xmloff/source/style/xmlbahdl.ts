@@ -172,6 +172,66 @@ export class XMLNBoolPropHdl {
   }
 }
 
+const integerTypes = { 1: "sal_Int8", 2: "sal_Int16", 4: "sal_Int32" } as const;
+/** Number of bytes in the original handler's signed Any. */
+type IntegerWidth = keyof typeof integerTypes;
+
+/** Stores a converted number with native saturation for the selected width. @param output - UNO output. @param number - Converted signed32. @param bytes - Original width. @returns Nothing. */
+function insertSizedNumber(output: Any, number: number, bytes: IntegerWidth): void {
+  const limit = 2 ** (bytes * 8 - 1);
+  output.insert([Math.min(limit - 1, Math.max(-limit, number))], integerTypes[bytes]);
+}
+
+/** Native number handler for a zero spelled as an XML keyword. */
+export class XMLNumberNonePropHdl {
+  private readonly zero: string;
+  private readonly bytes: IntegerWidth;
+
+  /** Sets the original syntax and storage width. @param syntax - Width or XML spelling of zero. @param bytes - Storage when a custom spelling is supplied. @returns Handler. */
+  constructor(syntax: IntegerWidth | string = 4, bytes: IntegerWidth = 4) {
+    this.zero = typeof syntax === "string" ? syntax : "no-limit";
+    this.bytes = typeof syntax === "number" ? syntax : bytes;
+  }
+
+  /** Imports a signed number or the designated zero token. @param input - XML token. @param value - UNO value. @returns Whether converted. */
+  importXML(input: string, value: Any): boolean {
+    const number: [number] = [0];
+    const success = input === this.zero || Converter.convertNumber(number, input);
+    insertSizedNumber(value, number[0], this.bytes);
+    return success;
+  }
+
+  /** Emits the native number or the zero token. @param output - XML output. @param value - UNO value. @returns Whether emitted. */
+  exportXML(output: [string], value: Any): boolean {
+    const number: [number] = [0];
+    if (!value.extract(number, integerTypes[this.bytes])) return false;
+    output[0] = number[0] === 0 ? this.zero : String(number[0]);
+    return true;
+  }
+}
+
+/** Native numeric conversion with zero suppression only on export. */
+export class XMLNumberWithoutZeroPropHdl {
+  /** Selects the original number of bytes. @param bytes - Native width. @returns Handler. */
+  constructor(private readonly bytes: IntegerWidth) {}
+
+  /** Imports a number with native saturation. @param input - XML token. @param value - UNO value. @returns Whether converted. */
+  importXML(input: string, value: Any): boolean {
+    const number: [number] = [0];
+    if (!Converter.convertNumber(number, input)) return false;
+    insertSizedNumber(value, number[0], this.bytes);
+    return true;
+  }
+
+  /** Emits the extracted number when it is nonzero. @param output - XML output. @param value - UNO value. @returns Whether emitted. */
+  exportXML(output: [string], value: Any): boolean {
+    const number: [number] = [0];
+    if (!value.extract(number, integerTypes[this.bytes]) || number[0] === 0) return false;
+    output[0] = String(number[0]);
+    return true;
+  }
+}
+
 /** Original signed measure property handler with native byte-width saturation and genuine UNO Any. */
 export class XMLMeasurePropHdl {
   /** Original native width. @param bytes - Signed scalar width. @returns Handler. */

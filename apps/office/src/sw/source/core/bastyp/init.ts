@@ -5,6 +5,7 @@ import {
   SvxScriptSpaceItem,
 } from "../../../../editeng/source/items/paraitem";
 import * as ParaItems from "../../../../editeng/source/items/paraitem.controls";
+import { SvxHyphenZoneItem } from "../../../../editeng/inc/hyphenzoneitem";
 import * as CharacterWhich from "../../../inc/hintids";
 import {
   SvxCaseMapItem,
@@ -282,6 +283,9 @@ class ItemInfoPackageSwAttributes extends ItemInfoPackage {
     add(new SvxHangingPunctuationItem(true, W.RES_PARATR_HANGINGPUNCTUATION));
     add(new SvxForbiddenRuleItem(true, W.RES_PARATR_FORBIDDEN_RULES));
     add(new SvxTabStopItem(1, 1134, SvxTabAdjust.Default, RES_PARATR_TABSTOP));
+    const hyphenation = new SvxHyphenZoneItem(false, W.RES_PARATR_HYPHENZONE);
+    hyphenation.SetMaxHyphens(0);
+    add(hyphenation);
     add(new SvxTextLeftMarginItem(RES_MARGIN_TEXTLEFT));
     add(new SvxFirstLineIndentItem(RES_MARGIN_FIRSTLINE));
     add(new SvxRightMarginItem(RES_MARGIN_RIGHT));

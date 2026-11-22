@@ -168,6 +168,30 @@ const characterTypographyNames = characterTypographyEntries.map(
     name,
   ]) => name,
 );
+/** Original common paragraph hyphenation members from unomapproperties.hxx. */
+const paragraphHyphenationEntries = [
+  ["ParaIsHyphenation", "bool", M.MID_IS_HYPHEN],
+  ["ParaHyphenationNoCaps", "bool", M.MID_HYPHEN_NO_CAPS],
+  ["ParaHyphenationNoLastWord", "bool", M.MID_HYPHEN_NO_LAST_WORD],
+  ["ParaHyphenationMaxLeadingChars", "sal_Int16", M.MID_HYPHEN_MIN_LEAD],
+  ["ParaHyphenationMaxTrailingChars", "sal_Int16", M.MID_HYPHEN_MIN_TRAIL],
+  ["ParaHyphenationCompoundMinLeadingChars", "sal_Int16", M.MID_HYPHEN_COMPOUND_MIN_LEAD],
+  ["ParaHyphenationCompoundMinTrailingChars", "sal_Int16", M.MID_HYPHEN_COMPOUND_MIN_TRAIL],
+  ["ParaHyphenationMaxHyphens", "sal_Int16", M.MID_HYPHEN_MAX_HYPHENS],
+  ["ParaHyphenationMinWordLength", "sal_Int16", M.MID_HYPHEN_MIN_WORD_LENGTH],
+  ["ParaHyphenationZone", "sal_Int16", M.MID_HYPHEN_ZONE],
+  ["ParaHyphenationZoneAlways", "sal_Int16", M.MID_HYPHEN_ZONE_ALWAYS],
+  ["ParaHyphenationZoneColumn", "sal_Int16", M.MID_HYPHEN_ZONE_COLUMN],
+  ["ParaHyphenationZonePage", "sal_Int16", M.MID_HYPHEN_ZONE_PAGE],
+  ["ParaHyphenationZoneSpread", "sal_Int16", M.MID_HYPHEN_ZONE_SPREAD],
+  ["ParaHyphenationKeep", "bool", M.MID_HYPHEN_KEEP],
+  ["ParaHyphenationKeepType", "sal_Int16", M.MID_HYPHEN_KEEP_TYPE],
+  ["ParaHyphenationKeepLine", "bool", M.MID_HYPHEN_KEEP_LINE],
+] as const;
+const paragraphHyphenationNames = paragraphHyphenationEntries.map(
+  /** Selects the shared native name. @param row - Hyphenation mapping. @returns Property name. */
+  ([name]) => name,
+);
 export const SwUnoPropertyMap: ReadonlyMap<string, SwUnoPropertyEntry> = new Map([
   [
     "ListAutoFormat",
@@ -361,6 +385,10 @@ export const SwUnoPropertyMap: ReadonlyMap<string, SwUnoPropertyEntry> = new Map
     },
   ],
   ...characterTypographyEntries,
+  ...paragraphHyphenationEntries.map(
+    /** Creates the original shared UNO row. @param entry - Property mapping. @returns Native descriptor row. */
+    ([name, type, member]) => [name, row(H.RES_PARATR_HYPHENZONE, type, member, 1)] as const,
+  ),
   [
     "ParaIsAutoFirstLineIndent",
     {
@@ -657,6 +685,7 @@ const characterMaybeVoidProperties = new Set([
   "CharStrikeout",
 ]);
 const paragraphStyleProperties = new Set([
+  ...paragraphHyphenationNames,
   ...characterTypographyNames,
   "CharLocale",
   "CharWeight",
@@ -750,6 +779,7 @@ const paragraphStyleProperties = new Set([
   "FollowStyle",
 ]);
 const paragraphMaybeVoidProperties = new Set([
+  ...paragraphHyphenationNames,
   ...characterTypographyNames,
   "CharLocale",
   "CharWeight",
@@ -862,6 +892,7 @@ const staticMapEntries: (readonly SfxItemPropertyMapEntry[] | undefined)[] = [];
 const staticPropertySets: (SfxItemPropertySet | undefined)[] = [];
 /** Original COMMON_CRSR_PARA_PROPERTIES_WITHOUT_FN and hyperlink rows represented by this core. */
 const textDefaultProperties = new Set([
+  ...paragraphHyphenationNames,
   ...characterTypographyNames,
   "CharLocale",
   "CharWeight",

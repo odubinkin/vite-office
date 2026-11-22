@@ -34,6 +34,11 @@ import {
 } from "../text/XMLLineNumberingImportContext";
 import { XMLTextFrameStyleContext, type XMLTextFrameStyle } from "../text/XMLTextFrameContext";
 import { XMLTextPropertySetContext } from "../text/XMLTextPropertySetContext";
+import {
+  hyphenationPropertyTokens,
+  importHyphenationProperties,
+  type OdfHyphenationProperties,
+} from "../text/txtprmap.hyphenation";
 import { XMLThemeContext } from "./XMLThemeContext";
 import type { XMLImageStyleDefinition } from "./ImageStyle";
 import { XMLBitmapStyleContext } from "./FillStyleContext";
@@ -354,6 +359,7 @@ class XMLStyleContext extends SvXMLImportContext {
   private alignment: OdfParagraphAlignment | undefined;
   private leftMargin: number | undefined;
   private paragraphProperties: XMLParagraphImportProperties | undefined;
+  private hyphenation: OdfHyphenationProperties | undefined;
   private hasParagraphProperties = false;
   private properties: Partial<OdfCharacterProperties> | undefined;
   private readonly name: string;
@@ -429,6 +435,8 @@ class XMLStyleContext extends SvXMLImportContext {
       this.alignment = importAlignment(attributes);
       this.leftMargin = importLeftMargin(attributes);
       this.paragraphProperties = importParagraphProperties(attributes);
+      const hyphenation = importHyphenationProperties(attributes, "paragraph");
+      if (hyphenation) this.hyphenation = { ...this.hyphenation, ...hyphenation };
       if (this.isDefault)
         this.defaultTabDistance = importOptionalLength(
           attributes,
@@ -457,6 +465,10 @@ class XMLStyleContext extends SvXMLImportContext {
         !this.tableItemTextStyle,
         this.definition.family === "paragraph",
       );
+      if (this.definition.family === "paragraph") {
+        const hyphenation = importHyphenationProperties(attributes, "text");
+        if (hyphenation) this.hyphenation = { ...this.hyphenation, ...hyphenation };
+      }
       return new XMLTextPropertySetContext(
         undefined,
         /** Retains the native complex color beside the resolved RGB attribute. @param color - Parsed theme color. @returns Nothing. */
@@ -499,11 +511,14 @@ class XMLStyleContext extends SvXMLImportContext {
         : { defaultTabDistance: this.defaultTabDistance }),
       ...(this.alignment === undefined ? {} : { alignment: this.alignment }),
       ...(this.leftMargin === undefined ? {} : { leftMargin: this.leftMargin }),
-      ...(this.paragraphProperties === undefined && this.masterPageName === undefined
+      ...(this.paragraphProperties === undefined &&
+      this.masterPageName === undefined &&
+      this.hyphenation === undefined
         ? {}
         : {
             paragraphProperties: {
               ...this.paragraphProperties,
+              ...(this.hyphenation === undefined ? {} : { hyphenation: this.hyphenation }),
               ...(this.masterPageName === undefined ? {} : { pageStyleName: this.masterPageName }),
             },
           }),
@@ -737,6 +752,7 @@ function importCharacterProperties(
     attributes.assertOnly(
       [
         ...textCharacterPropertyTokens,
+        ...(paragraphStyle ? hyphenationPropertyTokens("text") : []),
         XMLToken.STYLE_FONT_NAME,
         XMLToken.STYLE_FONT_NAME_ASIAN,
         XMLToken.STYLE_FONT_NAME_COMPLEX,

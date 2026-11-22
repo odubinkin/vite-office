@@ -1,0 +1,36 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/editeng/source/items/paraitem.hyphenation.ts",
+    "classification": "upstream-mechanism",
+    "state": "active",
+    "suite": "shared",
+    "subsystem": "paragraph-hyphenation",
+    "capabilityIds": [
+      "CAP-b3476d9d-f0e4-491e-a526-9bcce751a5e6"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/editeng/source/items/paraitem.hyphenation.ts#SvxHyphenZoneItem",
+        "vendor/libreoffice-reference/editeng/source/items/paraitem.cxx#SvxHyphenZoneItem::PutValue",
+        "vendor/libreoffice-reference/editeng/source/items/paraitem.cxx#SvxHyphenZoneItem::QueryValue"
+      ],
+      "justification": "Preserves the native hyphenation item fields, standalone defaults, cloning, typed UNO and unsigned member conversions. Native line layout, dictionary services and localized item presentation are outside this property transport.",
+      "knownViolations": [],
+      "localSymbols": [
+        "SvxHyphenZoneItem"
+      ],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": "editeng/source/items/paraitem.cxx",
+      "upstreamSymbols": [
+        "SvxHyphenZoneItem::PutValue",
+        "SvxHyphenZoneItem::QueryValue"
+      ]
+    }
+  }
+}

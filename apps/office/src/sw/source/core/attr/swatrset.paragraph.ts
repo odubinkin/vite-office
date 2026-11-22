@@ -12,6 +12,7 @@ import {
   SvxScriptSpaceItem,
 } from "../../../../editeng/source/items/paraitem";
 import { SfxBoolItem } from "../../../../svl/inc/eitem";
+import { SvxHyphenZoneItem } from "../../../../editeng/inc/hyphenzoneitem";
 import { SwFormatLineNumber } from "../../../inc/fmtline";
 import type { SfxPoolItem } from "../../../../svl/inc/poolitem";
 import {
@@ -19,6 +20,7 @@ import {
   RES_LINENUMBER,
   RES_PARATR_FORBIDDEN_RULES,
   RES_PARATR_HANGINGPUNCTUATION,
+  RES_PARATR_HYPHENZONE,
   RES_PARATR_SCRIPTSPACE,
   RES_PARATR_SPLIT,
   RES_PARATR_ORPHANS,
@@ -31,6 +33,7 @@ export const paragraphControlItems = [
   RES_PARATR_VERTALIGN,
   RES_PARATR_SCRIPTSPACE,
   RES_PARATR_HANGINGPUNCTUATION,
+  RES_PARATR_HYPHENZONE,
   RES_PARATR_FORBIDDEN_RULES,
   RES_KEEP,
   RES_LINENUMBER,
@@ -38,6 +41,7 @@ export const paragraphControlItems = [
 
 /** Restores the registered scalar controls using their native item constructors. @param which - One registered control identity. @param value - Persisted scalar. @returns Actual native item. */
 export function restoreParagraphControlItem(which: number, value: unknown): SfxPoolItem {
+  if (which === RES_PARATR_HYPHENZONE) return SvxHyphenZoneItem.fromState(value, which);
   if (which === RES_LINENUMBER) {
     if (typeof value === "boolean") return new SwFormatLineNumber(value);
     if (

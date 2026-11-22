@@ -5959,3 +5959,14 @@ property and accepts both original conversions.
 - [Original text property tables](../../vendor/libreoffice-reference/xmloff/source/text/txtprmap.cxx)
 - [Original casing handlers](../../vendor/libreoffice-reference/xmloff/source/style/csmaphdl.cxx)
 - [Original multi-property name sort](../../vendor/libreoffice-reference/xmloff/source/style/xmlimppr.cxx)
+
+### WRITER-736 — Hyphenation limits narrow through unsigned item fields
+
+Writer accepts signed numeric UNO input and narrows character limits into
+unsigned bytes and the zone values into unsigned words. Out-of-range
+counts can wrap. A zone with its top bit set reads back through the UNO
+member as a negative short. Writer preserves the storage and projection
+used by the original item.
+
+- [Original hyphenation fields](../../vendor/libreoffice-reference/include/editeng/hyphenzoneitem.hxx)
+- [Original hyphenation item query and assignment](../../vendor/libreoffice-reference/editeng/source/items/paraitem.cxx)

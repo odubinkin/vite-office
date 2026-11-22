@@ -54,6 +54,13 @@ import {
   RES_CHRATR_CTL_LANGUAGE,
 } from "../../../inc/hintids";
 import { getCharacterProperties, projectXmlTextRuns } from "./xmlexp-character";
+import { Any } from "../../../../cppu/inc/com/sun/star/uno/Any";
+import { SvxHyphenZoneItem } from "../../../../editeng/inc/hyphenzoneitem";
+import { SwUnoPropertyMap } from "../../core/unocore/unomap";
+import {
+  paragraphHyphenationMap,
+  type OdfHyphenationProperties,
+} from "../../../../xmloff/source/text/txtprmap.hyphenation";
 export { getCharacterProperties } from "./xmlexp-character";
 import { projectWriterLineSpacing } from "../../core/text/itrform2";
 import { sw_GetTableBoxColStr } from "../../core/table/swtable";
@@ -140,6 +147,7 @@ import {
   RES_PARATR_VERTALIGN,
   RES_PARATR_LINESPACING,
   RES_PARATR_TABSTOP,
+  RES_PARATR_HYPHENZONE,
   RES_PARATR_LIST_ISCOUNTED,
   RES_PARATR_LIST_ID,
   RES_PARATR_LIST_ISRESTART,
@@ -308,10 +316,10 @@ export function exportStylesXml(
           : `<style:paragraph-properties${paragraphAttributes.length === 0 ? "" : ` ${paragraphAttributes.join(" ")}`}>${paragraphChildren}</style:paragraph-properties>`;
       const characterProperties = getCharacterProperties(collection.GetAttrSet(), false);
       const textProperties =
-        characterProperties === undefined
+        characterProperties === undefined && directParagraphProperties?.hyphenation === undefined
           ? ""
           : exportCharacterPropertyElement(
-              characterProperties,
+              characterProperties ?? {},
               /** Registers one used font. @param family - Model family. @param generic - ODF generic family. @param styleName - Font style. @param pitch - Native pitch. @param charSet - Native encoding. @returns Face name. */ (
                 family,
                 generic,
@@ -319,7 +327,7 @@ export function exportStylesXml(
                 pitch,
                 charSet,
               ) => registerWriterFontFace(fonts, family, generic, styleName, pitch, charSet),
-              true,
+              directParagraphProperties ?? {},
             );
       const nextName = getParagraphOdfStyleName(document, collection.GetNextTextFormatColl().id);
       const next = nextName === name ? "" : ` style:next-style-name="${escapeXml(nextName)}"`;
@@ -451,7 +459,7 @@ function exportPageMargin(twips: number, gutter = 0): string {
   return Converter.convertMeasureToXML(Number(convertTwipToMm100(BigInt(twips))) + gutter, "mm100");
 }
 
-/** Writes the original ODF paragraph default-style tab distance and font properties from Writer's document pool. @param document - Writer document. @param fonts - Styles stream font-face pool. @returns ODF declaration. */
+/** Writes the represented ODF paragraph defaults from Writer's document pool. @param document - Writer document. @param fonts - Styles stream font-face pool. @returns ODF declaration. */
 function exportDefaultParagraphStyle(
   document: SwDoc,
   fonts: ReturnType<typeof createWriterFontAutoStylePool>,
@@ -472,20 +480,31 @@ function exportDefaultParagraphStyle(
     const properties = getCharacterProperties(set, false);
     const tabs = pool.GetUserDefaultItem(RES_PARATR_TABSTOP) as SvxTabStopItem | undefined;
     const distance = tabs?.Count() ? tabs.At(0).GetTabPos() : undefined;
+    const hyphenationItem = pool.GetUserDefaultItem(RES_PARATR_HYPHENZONE);
+    const hyphenation =
+      hyphenationItem instanceof SvxHyphenZoneItem
+        ? getHyphenationProperties(hyphenationItem)
+        : undefined;
+    const deltas = hyphenation === undefined ? {} : { hyphenation };
+    const paragraphAttributes = [
+      ...(distance === undefined ? [] : [`style:tab-stop-distance="${exportOdfLength(distance)}"`]),
+      ...exportParagraphAttributes(deltas),
+    ];
     const paragraph =
-      distance === undefined
+      paragraphAttributes.length === 0
         ? ""
-        : `<style:paragraph-properties style:tab-stop-distance="${exportOdfLength(distance)}"/>`;
+        : `<style:paragraph-properties ${paragraphAttributes.join(" ")}/>`;
     if (!properties && !paragraph) return "";
-    const element = properties
-      ? exportCharacterPropertyElement(
-          properties,
-          /** Resolves the native declared font. @param family - Family. @param generic - ODF family. @param style - Family style. @param pitch - Pitch. @param charset - Encoding. @returns Face name. */
-          (family, generic, style, pitch, charset) =>
-            registerWriterFontFace(fonts, family, generic, style, pitch, charset),
-          true,
-        )
-      : "";
+    const element =
+      properties || hyphenation
+        ? exportCharacterPropertyElement(
+            properties ?? {},
+            /** Resolves the native declared font. @param family - Family. @param generic - ODF family. @param style - Family style. @param pitch - Pitch. @param charset - Encoding. @returns Face name. */
+            (family, generic, style, pitch, charset) =>
+              registerWriterFontFace(fonts, family, generic, style, pitch, charset),
+            deltas,
+          )
+        : "";
     return `<style:default-style style:family="paragraph">${paragraph}${element}</style:default-style>`;
   } finally {
     set.Dispose();
@@ -931,6 +950,7 @@ function assertSupportedItems(
     RES_PAGEDESC,
     RES_PARATR_LINESPACING,
     RES_PARATR_TABSTOP,
+    RES_PARATR_HYPHENZONE,
     RES_MARGIN_FIRSTLINE,
     RES_MARGIN_RIGHT,
     RES_MARGIN_TEXTLEFT,
@@ -971,6 +991,7 @@ function getParagraphProperties(set: SfxItemSet | undefined): OdfParagraphProper
   const spacing = set.GetItemIfSet(RES_UL_SPACE, false);
   const lineSpacing = set.GetItemIfSet(RES_PARATR_LINESPACING, false);
   const tabStop = set.GetItemIfSet(RES_PARATR_TABSTOP, false);
+  const hyphenation = set.GetItemIfSet(RES_PARATR_HYPHENZONE, false);
   const keep = set.GetItemIfSet(RES_KEEP, false);
   const split = set.GetItemIfSet(RES_PARATR_SPLIT, false);
   const orphans = set.GetItemIfSet(RES_PARATR_ORPHANS, false);
@@ -987,6 +1008,7 @@ function getParagraphProperties(set: SfxItemSet | undefined): OdfParagraphProper
     (spacing !== undefined && !(spacing instanceof SvxULSpaceItem)) ||
     (lineSpacing !== undefined && !(lineSpacing instanceof SvxLineSpacingItem)) ||
     (tabStop !== undefined && !(tabStop instanceof SvxTabStopItem)) ||
+    (hyphenation !== undefined && !(hyphenation instanceof SvxHyphenZoneItem)) ||
     (keep !== undefined && !(keep instanceof SfxBoolItem)) ||
     (split !== undefined && !(split instanceof ParaItems.SvxFormatSplitItem)) ||
     (orphans !== undefined && !(orphans instanceof ParaItems.SvxOrphansItem)) ||
@@ -1001,6 +1023,7 @@ function getParagraphProperties(set: SfxItemSet | undefined): OdfParagraphProper
     throw new Error("ODT paragraph item is invalid.");
   const properties: OdfParagraphProperties = {
     ...getFillProperties(set),
+    ...(hyphenation === undefined ? {} : { hyphenation: getHyphenationProperties(hyphenation) }),
     ...(firstLine instanceof SvxFirstLineIndentItem
       ? {
           firstLineIndent: firstLine.ResolveTextFirstLineOffset(),
@@ -1071,6 +1094,24 @@ function getDirectLeftMargin(set: SfxItemSet): number | undefined {
   if (item === undefined) return undefined;
   if (!(item instanceof SvxTextLeftMarginItem)) throw new Error("ODT left-margin item is invalid.");
   return item.ResolveTextLeft();
+}
+
+/** Reads the native UNO value of each Writer hyphenation member. @param item - Actual pooled item. @returns Original properties. */
+function getHyphenationProperties(item: SvxHyphenZoneItem): OdfHyphenationProperties {
+  const properties: OdfHyphenationProperties = {};
+  const any = new Any();
+  try {
+    for (const [name, , , type] of paragraphHyphenationMap) {
+      const property = SwUnoPropertyMap.get(name);
+      if (!property) throw new Error(`Missing Writer hyphenation property ${name}.`);
+      item.QueryValue(any, property.member);
+      const value: [boolean | number] = [0];
+      if (any.extract(value, type)) properties[name] = value[0];
+    }
+    return properties;
+  } finally {
+    any.dispose();
+  }
 }
 
 /** Serializes twips as a bounded ODF centimetre length. @param twips - Length. @returns ODF length. */

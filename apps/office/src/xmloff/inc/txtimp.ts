@@ -7,7 +7,7 @@ import type { OUString, OUStringConstReference } from "../../sal/inc/rtl/ustring
 export interface XMLPropertySet {
   getPropertyValue(name: OUStringConstReference): Any;
   setPropertyValue(name: OUStringConstReference, value: Any): void;
-  setPropertyValues(names: readonly OUStringConstReference[], values: readonly Any[]): void;
+  setPropertyValues?(names: readonly OUStringConstReference[], values: readonly Any[]): void;
 }
 /** Borrowed XTextRange, with explicit release of native positions at the host boundary. */
 export interface XMLTextRange {

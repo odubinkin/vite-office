@@ -46,6 +46,7 @@ import { XMLCharLocale, exportCharLocale } from "../style/chrlohdl";
 import type { OdfCharacterProperties } from "./txtparae.types";
 import { createOdfThemeColor } from "./XMLComplexColorContext";
 import { createXComplexColor } from "../../../docmodel/inc/uno/UnoComplexColor";
+import { paragraphHyphenationMap } from "./txtprmap.hyphenation";
 import { XComplexColor } from "../../../offapi/com/sun/star/util/XComplexColor";
 import { escapeXml } from "./txtparae";
 import {
@@ -694,6 +695,10 @@ export function applyTextImportProperties(
       add("ParaLineNumberStartValue", paragraph.lineNumberStart, "sal_Int32");
     if (paragraph.verticalAlign !== undefined)
       add("ParaVertAlignment", paragraph.verticalAlign, "sal_Int16");
+    for (const [name, , , type] of paragraphHyphenationMap) {
+      const value = paragraph.hyphenation?.[name];
+      if (value !== undefined) add(name, value, type);
+    }
     if (paragraph.keepTogether !== undefined) add("ParaSplit", !paragraph.keepTogether, "bool");
     if (paragraph.joinBorder !== undefined)
       add("ParaIsConnectBorder", paragraph.joinBorder, "bool");
@@ -803,23 +808,26 @@ export function applyTextImportProperties(
         }
       }
     } else if (names.length) {
-      try {
-        target.setPropertyValues(names, values);
-      } catch (error) {
-        if (!(error instanceof Exception)) throw error;
-        error.dispose();
-        // Native FillPropertySet retries individual properties after the multi-set fails.
-        for (let i = 0; i < names.length; i++) {
-          try {
-            target.setPropertyValue(names[i] as OUString, values[i] as Any);
-          } catch (failure) {
-            if (
-              !(failure instanceof IllegalArgumentException) &&
-              !(failure instanceof UnknownPropertyException)
-            )
-              throw failure;
-            failure.dispose();
-          }
+      if (target.setPropertyValues) {
+        try {
+          target.setPropertyValues(names, values);
+          return;
+        } catch (error) {
+          if (!(error instanceof Exception)) throw error;
+          error.dispose();
+        }
+      }
+      // FillPropertySet uses single properties when XMultiPropertySet is absent or fails.
+      for (let i = 0; i < names.length; i++) {
+        try {
+          target.setPropertyValue(names[i] as OUString, values[i] as Any);
+        } catch (failure) {
+          if (
+            !(failure instanceof IllegalArgumentException) &&
+            !(failure instanceof UnknownPropertyException)
+          )
+            throw failure;
+          failure.dispose();
         }
       }
     }

@@ -68,6 +68,7 @@ import {
   RES_CHRATR_CJK_FONT,
   RES_CHRATR_CTL_FONT,
   RES_PARATR_TABSTOP,
+  RES_PARATR_HYPHENZONE,
   RES_PARATR_OUTLINELEVEL,
 } from "../../../inc/hintids";
 import { SwTableNode } from "../../../source/core/docnode/node";
@@ -172,6 +173,7 @@ export interface WriterDocumentRecord {
   readonly tableStyles?: readonly WriterInteropProperty[];
   readonly fontDefaults?: readonly SfxPoolItemSnapshot[];
   readonly tabStopDefault?: SfxPoolItemSnapshot;
+  readonly hyphenationDefault?: SfxPoolItemSnapshot;
   readonly textEffectDefault?: SfxPoolItemSnapshot;
   readonly textGridDefault?: SfxPoolItemSnapshot;
   readonly swModelVersion: 17;
@@ -207,6 +209,7 @@ export function* encodeWriterDocumentSteps(document: SwDoc): Generator<void, Wri
     if (font) fontDefaults.push(encodeSfxPoolItem(font));
   }
   const tabStopDefault = document.GetAttrPool().GetUserDefaultItem(RES_PARATR_TABSTOP);
+  const hyphenationDefault = document.GetAttrPool().GetUserDefaultItem(RES_PARATR_HYPHENZONE);
   const textEffectDefault = encodeTextEffectDefault(document);
   const textGridDefault = encodeTextGridDefault(document);
   const tableStyles = encodeTableStyles(document.interopGrabBag.GetGrabBag().get("tableStyles"));
@@ -224,6 +227,7 @@ export function* encodeWriterDocumentSteps(document: SwDoc): Generator<void, Wri
     ...(tableStyles === undefined ? {} : { tableStyles }),
     ...(fontDefaults.length ? { fontDefaults } : {}),
     ...(tabStopDefault ? { tabStopDefault: encodeSfxPoolItem(tabStopDefault) } : {}),
+    ...(hyphenationDefault ? { hyphenationDefault: encodeSfxPoolItem(hyphenationDefault) } : {}),
     ...(textFrames.length ? { textFrames } : {}),
     ...(pageStories === undefined ? {} : { pageStories }),
     embeddedFonts: document.GetEmbeddedFonts(),
@@ -436,6 +440,17 @@ export function* decodeWriterDocumentSteps(
         throw new Error("Stored Writer tab stop default is invalid.");
       const pool = document.GetAttrPool();
       pool.SetUserDefaultItem(decodeSfxPoolItem(pool, tab as SfxPoolItemSnapshot));
+    }
+    if (record.hyphenationDefault !== undefined) {
+      const hyphenation = record.hyphenationDefault;
+      if (
+        !isRecord(hyphenation) ||
+        hyphenation.which !== RES_PARATR_HYPHENZONE ||
+        !("value" in hyphenation)
+      )
+        throw new Error("Stored Writer hyphenation default is invalid.");
+      const pool = document.GetAttrPool();
+      pool.SetUserDefaultItem(decodeSfxPoolItem(pool, hyphenation as SfxPoolItemSnapshot));
     }
     if (record.bitmapTable !== undefined && !Array.isArray(record.bitmapTable))
       throw new Error("Stored Writer bitmap table is invalid.");

@@ -28,7 +28,7 @@ import { text } from "../../core/unocore/unocrsrhelper";
 import type { SwXStyle } from "../../core/unocore/unostyle";
 import { SwXTextDocument } from "../../uibase/uno/unotxdoc";
 import { XMLTextImportHelper } from "../../../../xmloff/source/text/txtimp";
-import { xmlTextString } from "../../../../xmloff/source/text/txtprmap";
+import { applyTextImportProperties, xmlTextString } from "../../../../xmloff/source/text/txtprmap";
 import { Any } from "../../../../cppu/inc/com/sun/star/uno/Any";
 import { convertTwipToMm100 } from "../../../../tools/inc/UnitConversion";
 
@@ -728,7 +728,14 @@ class SwXMLImport
   /** Finalizes declared styles before the first text attachment. @returns Nothing. */
   private finishStyleDefinitions(): void {
     if (this.styleDefinitionsApplied) return;
-    const distance = this.defaultParagraphStyle?.defaultTabDistance;
+    let defaultStyle = this.defaultParagraphStyle;
+    const defaults = defaultStyle?.paragraphProperties;
+    if (defaultStyle && defaults?.hyphenation) {
+      const { hyphenation, ...paragraphProperties } = defaults;
+      applyTextImportProperties(this.model.createTextDefaults(), {}, { hyphenation });
+      defaultStyle = { ...defaultStyle, paragraphProperties };
+    }
+    const distance = defaultStyle?.defaultTabDistance;
     if (distance !== undefined) {
       const name = xmlTextString("TabStopDistance");
       const value = new Any([Number(convertTwipToMm100(BigInt(distance)))], "sal_Int32");
@@ -746,7 +753,7 @@ class SwXMLImport
     applyNamedParagraphStyles(
       this.model,
       paragraphs,
-      this.defaultParagraphStyle,
+      defaultStyle,
       /** Resolves the declared ODF numbering name to its native display name. @param name - ODF identity. @returns Registered rule name. */
       (name) => this.listRules.get(name)?.name,
       /** Executes this bounded native operation. @param name - Native operation input. @returns Native operation result. */ (
