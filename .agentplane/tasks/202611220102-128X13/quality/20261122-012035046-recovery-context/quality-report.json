@@ -1,0 +1,25 @@
+{
+  "schema_version": 1,
+  "task_id": "202611220102-128X13",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-11-22T01:20:35.046Z",
+  "verdict": "pass",
+  "summary": "The native Calc icon-set owner, original ODS fixtures and production render path satisfy the task.",
+  "evaluated_sha": "dbc17b7a21900a966964a8f1db0c6d6ab7b4bdd7",
+  "blueprint_digest": "97756353d7231fda5585800931f480a89b5bb3fcb7b3d72d6ef36470d71e4a05",
+  "findings": [
+    "The two LibreOffice ODS cases, complete Worker record, source output conventions and live native bitmap changes have passing evidence."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202611220102-128X13/README.md",
+    "apps/office/src/sc/source/filter/xml/ods-icon-sets.test.ts",
+    "output/playwright/128X13/calc-final.log",
+    "output/playwright/128X13/browser.json"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": [
+    "Native ODS and accepted edits can reset icon metadata as documented. The browser maps pinned Colibre resources at CSS pixel scale."
+  ]
+}
