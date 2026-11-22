@@ -112,6 +112,13 @@ describe("Writer ODT font and style compatibility", /** Groups file compatibilit
     const metadata = { title: "Script families" };
     const saved = await writeOdtDocument(writer, metadata);
     const stylesXml = await (await DocumentArchive.open(saved)).readTextEntry("styles.xml");
+    const declared = Array.from(
+      stylesXml?.matchAll(/<style:font-face style:name="([^"]+)"/gu) ?? [],
+      /** Matches the source font-sort assertion, ignoring unique-name suffixes. @param match - Font declaration. @returns Comparison name. */
+      ([, name]) => name?.replace(/\d+$/u, ""),
+    );
+    expect(declared.length).toBeGreaterThanOrEqual(3);
+    expect(declared).toEqual([...declared].sort());
     expect(stylesXml).toContain('style:font-name-asian="Asian Serif"');
     expect(stylesXml).toContain('style:font-name-complex="Complex Serif"');
     const reopened = await readOdtDocument(saved, metadata);
@@ -125,18 +132,23 @@ describe("Writer ODT font and style compatibility", /** Groups file compatibilit
     expect((imported.Get(RES_CHRATR_CTL_FONT, true) as SvxFontItem).GetFamilyName()).toBe(
       "Complex Serif",
     );
-    for (const attribute of ["font-name-asian", "font-name-complex"]) {
-      const invalid = await rewriteStylesXml(
+    for (const [attribute, family, which] of [
+      ["font-name-asian", "Asian Serif", RES_CHRATR_CJK_FONT],
+      ["font-name-complex", "Complex Serif", RES_CHRATR_CTL_FONT],
+    ] as const) {
+      const unresolved = await rewriteStylesXml(
         saved,
-        /** Breaks one declared script face reference. @param styles - Named-style XML. @returns Invalid XML. */ (
-          styles,
-        ) =>
-          styles.replace(
-            new RegExp(`style:${attribute}="[^"]+"`, "u"),
-            `style:${attribute}="Missing"`,
-          ),
+        /** Removes the declaration reference while retaining the inline members. @param styles - Named-style XML. @returns Modified XML. */
+        (styles) =>
+          styles.replace(`style:${attribute}="${family}"`, `style:${attribute}="Missing"`),
       );
-      await expect(readOdtDocument(invalid, metadata)).rejects.toThrow("ODF XML is malformed");
+      const { document } = await readOdtDocument(unresolved, metadata);
+      try {
+        const item = document.GetTextFormatColl("text-body").GetAttrSet().Get(which) as SvxFontItem;
+        expect(item.GetFamilyName()).toBe(family);
+      } finally {
+        document.Dispose();
+      }
     }
   });
 

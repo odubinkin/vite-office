@@ -328,6 +328,7 @@ export function exportStylesXml(
                 charSet,
               ) => registerWriterFontFace(fonts, family, generic, styleName, pitch, charSet),
               directParagraphProperties ?? {},
+              true,
             );
       const nextName = getParagraphOdfStyleName(document, collection.GetNextTextFormatColl().id);
       const next = nextName === name ? "" : ` style:next-style-name="${escapeXml(nextName)}"`;
@@ -356,6 +357,8 @@ export function exportStylesXml(
                 /** Registers the style's native font with the styles stream. @param family - Font family. @param generic - Generic family. @param styleName - Font style. @param pitch - Native pitch. @param charSet - Native encoding. @returns Face name. */
                 (family, generic, styleName, pitch, charSet) =>
                   registerWriterFontFace(fonts, family, generic, styleName, pitch, charSet),
+                undefined,
+                true,
               );
         return `<style:style${exportCharacterStyleNameAttributes(format)} style:family="text"${basedOn}>${text}</style:style>`;
       },

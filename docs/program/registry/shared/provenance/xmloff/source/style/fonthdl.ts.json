@@ -10,14 +10,20 @@
       "getFontFamilyFromGeneric",
       "getFontFamilyGeneric",
       "getFontPitchGeneric",
-      "getFontPitchFromGeneric"
+      "getFontPitchFromGeneric",
+      "importFamilyName",
+      "exportFamilyName",
+      "exportInlineFont"
     ],
     "upstreamSymbols": [
-      "XMLFontFamilyPropHdl"
+      "XMLFontFamilyPropHdl",
+      "XMLFontFamilyNamePropHdl::importXML",
+      "XMLFontFamilyNamePropHdl::exportXML"
     ],
     "preservedResponsibilities": [
       "Browser enum/string handoff applies the original family and pitch tables, signed16 extraction and export fallback; full UNO property handlers remain unported.",
-      "Task135 preserves the five native SvxFontItem fields and original value defaults/constructors/copies/setters/equality/hash using existing SAL/o3tl. Writer state and ODF consumers use the single shared value owner; browser presentation and resource aliases stay at their existing boundaries. Native Any FontDescriptor, localized presentation, full font/device/config services and Calc DocPool/document/UI/ODS remain pending. Existing status/history and conscious save/open/recovery deviations are retained; no broad parity promotion or custom lifetime engine."
+      "Task135 preserves the five native SvxFontItem fields and original value defaults/constructors/copies/setters/equality/hash using existing SAL/o3tl. Writer state and ODF consumers use the single shared value owner; browser presentation and resource aliases stay at their existing boundaries. Native Any FontDescriptor, localized presentation, full font/device/config services and Calc DocPool/document/UI/ODS remain pending. Existing status/history and conscious save/open/recovery deviations are retained; no broad parity promotion or custom lifetime engine.",
+      "Preserves the native family-list lexical owners and maps inline font members to their source attributes."
     ],
     "omittedResponsibilities": [
       "Native Any FontDescriptor, full font services and complete Calc document/UI/ODS remain pending."

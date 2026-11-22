@@ -1,7 +1,7 @@
 /** @fileoverview Owns supported ODF 1.3 list label-alignment serialization from pinned xmlnume.cxx. */
 import type { OdfListLevelLayout } from "../text/txtparae";
 import { SvXMLUnitConverter } from "../core/xmluconv";
-import { exportFamilyName } from "./XMLFontStylesContext";
+import { exportFamilyName } from "./fonthdl";
 
 /** Native-style UNO properties for one supported numbering level at the XML export boundary. */
 export interface XMLListLevelExport extends OdfListLevelLayout {

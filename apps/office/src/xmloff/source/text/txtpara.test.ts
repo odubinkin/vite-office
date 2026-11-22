@@ -24,8 +24,12 @@ it("exports script-only font face references independently", /** Preserves a com
   expect(exportCharacterAttributes({ fontFamilyComplex: "Complex Face" }, faceName)).toBe(
     ' style:font-name-complex="Complex Face"',
   );
-  expect(exportCharacterAttributes({ fontFamilyAsian: "Asian Face" })).toBe("");
-  expect(exportCharacterAttributes({ fontFamilyComplex: "Complex Face" })).toBe("");
+  expect(exportCharacterAttributes({ fontFamilyAsian: "Asian Face" })).toBe(
+    ' style:font-family-asian="&apos;Asian Face&apos;"',
+  );
+  expect(exportCharacterAttributes({ fontFamilyComplex: "Complex Face" })).toBe(
+    ' style:font-family-complex="&apos;Complex Face&apos;"',
+  );
 });
 
 /** Creates a reiterable test source. @param paragraphs - Paragraph fixtures. @returns Export source. */
@@ -130,7 +134,7 @@ describe("ODF text paragraph export contexts", /** Groups export context tests. 
     expect(output.body).toContain("<text:h");
     expect(escapeXml("safe")).toBe("safe");
     expect(exportCharacterAttributes({ fontFamily: "Noto Serif" })).toBe(
-      ' fo:font-family="Noto Serif"',
+      ' fo:font-family="&apos;Noto Serif&apos;"',
     );
   });
 

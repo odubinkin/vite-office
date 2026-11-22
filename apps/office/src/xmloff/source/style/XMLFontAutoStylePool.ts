@@ -1,6 +1,7 @@
 /** @fileoverview Native XMLFontAutoStylePool full font-value key, name allocation and declaration order; existing browser package font resources remain at their shared boundary. */
 import { escapeXml } from "../text/txtparae";
-import { exportFamilyName, type OdfEmbeddedFont } from "./XMLFontStylesContext";
+import type { OdfEmbeddedFont } from "./XMLFontStylesContext";
+import { exportFamilyName } from "./fonthdl";
 import { FontFamily, FontPitch } from "../../../tools/inc/fontenum";
 import {
   RTL_TEXTENCODING_DONTKNOW,

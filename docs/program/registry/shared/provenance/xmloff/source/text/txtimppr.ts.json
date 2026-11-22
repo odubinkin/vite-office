@@ -1,0 +1,55 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "status": "mapped",
+    "localPath": "apps/office/src/xmloff/source/text/txtimppr.ts",
+    "localSymbols": [
+      "importTextFont",
+      "textFontProperties"
+    ],
+    "upstreamPath": "xmloff/source/text/txtimppr.cxx",
+    "upstreamSymbols": [
+      "XMLTextImportPropertyMapper::FontFinished",
+      "XMLTextImportPropertyMapper::FontDefaultsCheck",
+      "XMLTextImportPropertyMapper::handleSpecialItem"
+    ],
+    "preservedResponsibilities": [
+      "Resolves the three original script font groups, applies the five font members from declarations and inline properties, and supplies native defaults only where applicable."
+    ],
+    "omittedResponsibilities": [
+      "The rest of the original XML text import property mapper remains owned by its existing local contexts."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/xmloff/source/text/txtimppr.ts",
+          "marker": "importTextFont"
+        },
+        {
+          "path": "apps/office/src/xmloff/source/text/txtimppr.ts",
+          "marker": "textFontProperties"
+        },
+        {
+          "path": "apps/office/src/xmloff/source/text/txtimppr.test.ts",
+          "marker": "finishes full font members"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/xmloff/source/text/txtimppr.cxx",
+          "marker": "XMLTextImportPropertyMapper::FontFinished"
+        },
+        {
+          "path": "vendor/libreoffice-reference/xmloff/source/text/txtimppr.cxx",
+          "marker": "XMLTextImportPropertyMapper::FontDefaultsCheck"
+        },
+        {
+          "path": "vendor/libreoffice-reference/xmloff/source/text/txtimppr.cxx",
+          "marker": "XMLTextImportPropertyMapper::handleSpecialItem"
+        }
+      ]
+    }
+  }
+}

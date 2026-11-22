@@ -5970,3 +5970,14 @@ used by the original item.
 
 - [Original hyphenation fields](../../vendor/libreoffice-reference/include/editeng/hyphenzoneitem.hxx)
 - [Original hyphenation item query and assignment](../../vendor/libreoffice-reference/editeng/source/items/paraitem.cxx)
+
+### WRITER-737 — An unrecognized font charset still counts as present
+
+The XML font charset handler reports success for every token and assigns
+a value only for `x-symbol`. The font defaults pass sees that property
+as present and skips the missing-charset default. Writer preserves the
+resulting distinction between an absent charset and an unrecognized
+authored charset.
+
+- [Original font charset handler](../../vendor/libreoffice-reference/xmloff/source/style/fonthdl.cxx)
+- [Original font defaulting pass](../../vendor/libreoffice-reference/xmloff/source/text/txtimppr.cxx)

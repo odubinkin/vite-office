@@ -2,7 +2,7 @@
 import { FastAttributeList, SvXMLImport, SvXMLImportContext } from "../core/xmlimp";
 import { ODF_NAMESPACES, XMLToken } from "../core/xmltoken";
 import { SvXMLUnitConverter } from "../core/xmluconv";
-import { importFamilyName } from "./XMLFontStylesContext";
+import { importFamilyName } from "./fonthdl";
 import type {
   XMLListLevelImport,
   XMLListLevelImportProperties,

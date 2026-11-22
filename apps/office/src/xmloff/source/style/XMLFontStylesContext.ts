@@ -3,7 +3,7 @@ import { FastAttributeList, SvXMLIgnoreContext, SvXMLImportContext } from "../co
 import { XMLToken } from "../core/xmltoken";
 import { FontPitch } from "../../../tools/inc/fontenum";
 import { RTL_TEXTENCODING_SYMBOL, type rtl_TextEncoding } from "../../../sal/inc/rtl/textenc";
-import { getFontPitchFromGeneric } from "./fonthdl";
+import { getFontPitchFromGeneric, importFamilyName } from "./fonthdl";
 /** Native font-face style/pitch/encoding values accompanying the existing imported family fields. */
 export interface OdfFontFaceMetadata {
   readonly styleName: string;
@@ -187,44 +187,4 @@ class XMLFontStyleContextFontFaceUri extends SvXMLImportContext {
       style: this.style,
     });
   }
-}
-
-/** Converts an ODF comma-separated quoted family list to LibreOffice's semicolon form. @param value - SVG family list. @returns Model family list. */
-export function importFamilyName(value: string): string {
-  const families = value.match(/(?:'[^']*'|"[^"]*"|[^,])+/g) ?? [];
-  return families
-    .map(
-      /** Normalizes one family. @param family - Raw family. @returns Model family. */ (family) => {
-        const trimmed = family.trim();
-        const quote = trimmed[0];
-        return quote !== undefined && (quote === "'" || quote === '"') && trimmed.at(-1) === quote
-          ? trimmed.slice(1, -1)
-          : trimmed;
-      },
-    )
-    .filter(
-      /** Removes empty families. @param family - Family. @returns Whether non-empty. */ (family) =>
-        family.length > 0,
-    )
-    .join(";");
-}
-
-/** Quotes one semicolon-separated model family list as an ODF SVG family list. @param familyName - Model family list. @returns ODF value. */
-export function exportFamilyName(familyName: string): string {
-  return familyName
-    .split(";")
-    .map(
-      /** Normalizes one family. @param family - Family segment. @returns ODF family. */ (family) =>
-        family.trim(),
-    )
-    .filter(
-      /** Removes empty families. @param family - Family. @returns Whether non-empty. */ (family) =>
-        family.length > 0,
-    )
-    .map(
-      /** Quotes families containing ODF separators. @param family - Family. @returns Quoted family. */ (
-        family,
-      ) => (/[ ,]/.test(family) ? `'${family}'` : family),
-    )
-    .join(", ");
 }

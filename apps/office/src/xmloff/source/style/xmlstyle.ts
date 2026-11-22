@@ -26,6 +26,10 @@ import { Converter } from "../../../sax/source/tools/converter";
 import { XMLTableStyleContext, type OdfTableStyle } from "../table/XMLTableImport";
 import type { OdfCharacterProperties, OdfParagraphAlignment } from "../text/txtparae";
 import { importTextConstant } from "../text/txtprhdl";
+import { importTextFont, textFontProperties } from "../text/txtimppr";
+import { getFontFamilyFromGeneric, getFontFamilyGeneric } from "./fonthdl";
+import { FontPitch } from "../../../tools/inc/fontenum";
+import { RTL_TEXTENCODING_UTF8 } from "../../../sal/inc/rtl/textenc";
 import type { OdfStyleDefinition, XMLParagraphImportProperties } from "../text/txtparai";
 import { importTextCharacterProperties, textCharacterPropertyTokens } from "../text/txtprmap";
 import {
@@ -741,7 +745,7 @@ function importOptionalLength(
   return value === null ? undefined : importOdfLength(value, signed, label);
 }
 
-/** Imports supported character properties. @param attributes - Property attributes. @param target - Style and font resolver. @param strict - Whether to reject unsupported attributes or missing face references. @param paragraphStyle - Whether to use the paragraph map. @returns Property deltas. */
+/** Imports supported character properties. @param attributes - Property attributes. @param target - Style and font resolver. @param strict - Whether to diagnose unsupported attributes. @param paragraphStyle - Whether to use the paragraph map. @returns Property deltas. */
 function importCharacterProperties(
   attributes: FastAttributeList,
   target: XMLStyleImportTarget,
@@ -753,10 +757,7 @@ function importCharacterProperties(
       [
         ...textCharacterPropertyTokens,
         ...(paragraphStyle ? hyphenationPropertyTokens("text") : []),
-        XMLToken.STYLE_FONT_NAME,
-        XMLToken.STYLE_FONT_NAME_ASIAN,
-        XMLToken.STYLE_FONT_NAME_COMPLEX,
-        XMLToken.FO_FONT_FAMILY,
+        ...textFontProperties.flat(),
         XMLToken.FO_FONT_SIZE,
         XMLToken.STYLE_FONT_SIZE_ASIAN,
         XMLToken.STYLE_FONT_SIZE_COMPLEX,
@@ -776,10 +777,6 @@ function importCharacterProperties(
       ],
       "text properties",
     );
-  const faceName = attributes.get(XMLToken.STYLE_FONT_NAME);
-  const asianFaceName = attributes.get(XMLToken.STYLE_FONT_NAME_ASIAN);
-  const complexFaceName = attributes.get(XMLToken.STYLE_FONT_NAME_COMPLEX);
-  const fallbackFontFamily = attributes.get(XMLToken.FO_FONT_FAMILY);
   const fontSize = attributes.get(XMLToken.FO_FONT_SIZE);
   const color = attributes.get(XMLToken.FO_COLOR);
   const opacity = attributes.get(XMLToken.LOEXT_OPACITY) ?? attributes.get(XMLToken.DRAW_OPACITY);
@@ -798,26 +795,41 @@ function importCharacterProperties(
     throw new Error(`Unsupported ODF font color: ${color}`);
   if (highlight !== null && !isOdfColor(highlight, true))
     throw new Error(`Unsupported ODF highlight color: ${highlight}`);
-  const declaredFontFamily = faceName === null ? undefined : target.getFontFace(faceName);
-  if (strict && faceName !== null && declaredFontFamily === undefined)
-    throw new Error(`Undefined ODF font face: ${faceName}`);
-  const asianFontFamily = asianFaceName === null ? undefined : target.getFontFace(asianFaceName);
-  if (strict && asianFaceName !== null && asianFontFamily === undefined)
-    throw new Error(`Undefined ODF Asian font face: ${asianFaceName}`);
-  const complexFontFamily =
-    complexFaceName === null ? undefined : target.getFontFace(complexFaceName);
-  if (strict && complexFaceName !== null && complexFontFamily === undefined)
-    throw new Error(`Undefined ODF complex font face: ${complexFaceName}`);
-  const fontFamily = declaredFontFamily ?? fallbackFontFamily?.replace(/^(['"])(.*)\1$/, "$2");
-  const fontFamilyGeneric = faceName === null ? undefined : target.getFontFaceGeneric?.(faceName);
-  const fontMetadata = faceName === null ? undefined : target.getFontFaceProperties?.(faceName),
-    asianMetadata =
-      asianFaceName === null ? undefined : target.getFontFaceProperties?.(asianFaceName),
-    complexMetadata =
-      complexFaceName === null ? undefined : target.getFontFaceProperties?.(complexFaceName),
-    asianGeneric = asianFaceName === null ? undefined : target.getFontFaceGeneric?.(asianFaceName),
-    complexGeneric =
-      complexFaceName === null ? undefined : target.getFontFaceGeneric?.(complexFaceName);
+  const fonts: Partial<OdfCharacterProperties> = {};
+  for (const [suffix, group] of [
+    ["", textFontProperties[0]],
+    ["Asian", textFontProperties[1]],
+    ["Complex", textFontProperties[2]],
+  ] as const) {
+    const font = importTextFont(
+      attributes,
+      group,
+      /** Resolves the original declaration for this font member set. @param name - Face name. @returns Members. */
+      (name) => {
+        const familyName = target.getFontFace(name);
+        if (familyName === undefined) return undefined;
+        const face = target.getFontFaceProperties?.(name);
+        return {
+          familyName,
+          family: getFontFamilyFromGeneric(target.getFontFaceGeneric?.(name)),
+          styleName: face?.styleName ?? "",
+          pitch: face?.pitch ?? FontPitch.PITCH_DONTKNOW,
+          charSet: face?.charSet ?? RTL_TEXTENCODING_UTF8,
+        };
+      },
+      RTL_TEXTENCODING_UTF8,
+    );
+    if (font) {
+      const generic = getFontFamilyGeneric(font.family);
+      Object.assign(fonts, {
+        [`fontFamily${suffix}`]: font.familyName,
+        [`fontStyleName${suffix}`]: font.styleName,
+        [`fontPitch${suffix}`]: font.pitch,
+        [`fontCharSet${suffix}`]: font.charSet,
+        ...(generic === undefined ? {} : { [`fontFamilyGeneric${suffix}`]: generic }),
+      });
+    }
+  }
 
   let fontSizeTwips: number | undefined;
   if (fontSize !== null) {
@@ -832,34 +844,7 @@ function importCharacterProperties(
   return {
     ...(useWindowColor === true ? { color: "auto" } : color === null ? {} : { color }),
     ...(validOpacity ? { textTransparency: 100 - amount[0] } : {}),
-    ...(fontFamily === undefined || fontFamily.trim().length === 0 ? {} : { fontFamily }),
-    ...(fontFamilyGeneric === undefined ? {} : { fontFamilyGeneric }),
-    ...(fontMetadata === undefined
-      ? {}
-      : {
-          fontStyleName: fontMetadata.styleName,
-          fontPitch: fontMetadata.pitch,
-          fontCharSet: fontMetadata.charSet,
-        }),
-    ...(asianMetadata === undefined
-      ? {}
-      : {
-          fontStyleNameAsian: asianMetadata.styleName,
-          fontPitchAsian: asianMetadata.pitch,
-          fontCharSetAsian: asianMetadata.charSet,
-        }),
-    ...(complexMetadata === undefined
-      ? {}
-      : {
-          fontStyleNameComplex: complexMetadata.styleName,
-          fontPitchComplex: complexMetadata.pitch,
-          fontCharSetComplex: complexMetadata.charSet,
-        }),
-    ...(asianGeneric === undefined ? {} : { fontFamilyGenericAsian: asianGeneric }),
-    ...(complexGeneric === undefined ? {} : { fontFamilyGenericComplex: complexGeneric }),
-
-    ...(asianFontFamily === undefined ? {} : { fontFamilyAsian: asianFontFamily }),
-    ...(complexFontFamily === undefined ? {} : { fontFamilyComplex: complexFontFamily }),
+    ...fonts,
     ...(fontSizeTwips === undefined ? {} : { fontSizeTwips }),
     ...(highlight === null ? {} : { highlight }),
     ...importTextCharacterProperties(attributes, {

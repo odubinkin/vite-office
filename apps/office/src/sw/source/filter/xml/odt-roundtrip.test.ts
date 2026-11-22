@@ -760,18 +760,17 @@ describe("Writer ODF XML filters" /** Executes the enclosing deterministic test 
     expect(alternateFollow.document.GetTextFormatColl("heading-1").GetNextTextFormatColl()).toBe(
       alternateFollow.document.GetDfltTextFormatColl(),
     );
-    expect(
-      /** Rejects a text property referencing an undeclared font face. @returns Invalid document. */ () =>
-        importWriterXml(
-          styles,
-          content.replace(
-            "<office:automatic-styles>",
-            '<office:automatic-styles><style:style style:name="MissingFont" style:family="text"><style:text-properties style:font-name="Missing"/></style:style>',
-          ),
-          metadata(),
-          meta,
-        ),
-    ).toThrow("ODF XML is malformed");
+    const unknownFont = importWriterXml(
+      styles,
+      content.replace(
+        "<office:automatic-styles>",
+        '<office:automatic-styles><style:style style:name="MissingFont" style:family="text"><style:text-properties style:font-name="Missing"/></style:style>',
+      ),
+      metadata(),
+      meta,
+    ).document;
+    expect(unknownFont.paragraphs.length).toBeGreaterThan(0);
+    unknownFont.Dispose();
     expect(
       /** Rejects conflicting declarations sharing an ODF face name. @returns Invalid document. */ () =>
         importWriterXml(

@@ -7818,3 +7818,14 @@ attribute.
 - [Original shared text property map](../../vendor/libreoffice-reference/xmloff/source/text/txtprmap.cxx)
 - [Original Calc edit attribute map](../../vendor/libreoffice-reference/sc/source/filter/xml/editattributemap.cxx)
 - [Original edit-run export](../../vendor/libreoffice-reference/sc/source/filter/xml/xmlexprt.cxx)
+
+### CALC-820 — A font charset token can succeed without producing a value
+
+The shared XML font charset handler supplies an encoding only for
+`x-symbol` and reports success for other tokens. The defaulting pass
+does not supply the missing-charset default when that handler reports
+the property present. Calc preserves that behavior for inline font
+members in cell and edit styles.
+
+- [Original charset conversion](../../vendor/libreoffice-reference/xmloff/source/style/fonthdl.cxx)
+- [Original font member defaults](../../vendor/libreoffice-reference/xmloff/source/text/txtimppr.cxx)

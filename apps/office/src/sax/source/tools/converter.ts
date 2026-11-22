@@ -32,6 +32,18 @@ const measureRatios = {
 
 /** Owns SAX scalar conversion without document or XML-context policy. */
 export const Converter = {
+  /** Finds the next comma outside a single- or double-quoted span. @param input - UTF-16 text. @param start - Starting index. @returns Comma index or -1. */
+  indexOfComma(input: string, start: number): number {
+    let quote = "";
+    for (let index = start; index < input.length; ++index) {
+      const character = input[index];
+      if (character === "'" || character === '"') {
+        if (quote === "") quote = character;
+        else if (quote === character) quote = "";
+      } else if (character === "," && quote === "") return index;
+    }
+    return -1;
+  },
   convertColor,
   convertBool,
   convertPercent,

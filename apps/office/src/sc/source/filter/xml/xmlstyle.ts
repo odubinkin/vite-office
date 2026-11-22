@@ -34,6 +34,9 @@ import { convertTwipToMm100 } from "../../../../tools/inc/UnitConversion";
 import { toTwips, Length } from "../../../../o3tl/inc/unit_conversion";
 import { exportFontEffectProperties, importFontEffectProperties } from "./xmlstyle.font-effects";
 import { editTextPropertyTokens } from "./editattributemap";
+import { importTextFont, textFontProperties } from "../../../../xmloff/source/text/txtimppr";
+import { RTL_TEXTENCODING_UTF8 } from "../../../../sal/inc/rtl/textenc";
+import { exportInlineFont } from "../../../../xmloff/source/style/fonthdl";
 import {
   exportStrikeoutProperties,
   importStrikeoutProperties,
@@ -99,9 +102,9 @@ import {
 } from "../../../../xmloff/source/style/xmlbahdl";
 /** Font-name entries from the shared paragraph-extension mapper chained by native Calc. */
 const fonts = [
-  [XMLToken.STYLE_FONT_NAME, "style:font-name", 100],
-  [XMLToken.STYLE_FONT_NAME_ASIAN, "style:font-name-asian", 111],
-  [XMLToken.STYLE_FONT_NAME_COMPLEX, "style:font-name-complex", 116],
+  [textFontProperties[0], "", 100],
+  [textFontProperties[1], "-asian", 111],
+  [textFontProperties[2], "-complex", 116],
 ] as const;
 /** Existing native script height properties. */
 const heights = [
@@ -253,7 +256,7 @@ export function exportNamedCellStyles(document: ScDocument, fonts: XMLFontAutoSt
       const format = formatter
         ? ExportNumberFormat(formatter, pattern.GetNumberFormat(formatter), numberStyle)
         : null;
-      named += `${format ?? ""}<style:style${exportStyleNameAttributes(name, encodeStyleName(name))} style:family="table-cell"${parent ? ` style:parent-style-name="${escapeXml(parent)}"` : ""}${format ? ` style:data-style-name="${numberStyle}"` : ""}>${exportDefaultCellProperties(pattern, fonts)}</style:style>`;
+      named += `${format ?? ""}<style:style${exportStyleNameAttributes(name, encodeStyleName(name))} style:family="table-cell"${parent ? ` style:parent-style-name="${escapeXml(parent)}"` : ""}${format ? ` style:data-style-name="${numberStyle}"` : ""}>${exportDefaultCellProperties(pattern, fonts, true)}</style:style>`;
     } finally {
       pattern.Dispose();
     }
@@ -277,21 +280,26 @@ export function exportNamedCellStyles(document: ScDocument, fonts: XMLFontAutoSt
   }
 }
 
-/** Emits properties of a named style or the ODF document defaults in schema order. @param pattern - Direct native properties. @param fonts - Existing font declarations. @returns Property elements. */
-function exportDefaultCellProperties(pattern: ScPatternAttr, fonts: XMLFontAutoStylePool): string {
-  const chars = exportCellTextPropertyElement(pattern, fonts);
+/** Emits named style or default properties in schema order. @param pattern - Direct native properties. @param fonts - Existing font declarations. @param includeInlineFont - Named-style compatibility flag. @returns Property elements. */
+function exportDefaultCellProperties(
+  pattern: ScPatternAttr,
+  fonts: XMLFontAutoStylePool,
+  includeInlineFont = false,
+): string {
+  const chars = exportCellTextPropertyElement(pattern, fonts, "", includeInlineFont);
   const cell = exportCellPropertyElement(pattern);
   const paragraph = exportCellParagraphProperties(pattern);
   return `${cell}${paragraph ? `<style:paragraph-properties${paragraph}/>` : ""}${chars}`;
 }
 
-/** Emits the character property element with the optional native complex-color child. @param pattern - Actual formatted cell or span. @param fonts - Font declarations. @param extra - Additional text attributes from the owning context. @returns Property element. */
+/** Emits the character property element with the optional native complex-color child. @param pattern - Actual formatted cell or span. @param fonts - Font declarations. @param extra - Additional text attributes from the owning context. @param includeInlineFont - Named-style compatibility flag. @returns Property element. */
 export function exportCellTextPropertyElement(
   pattern: ScPatternAttr,
   fonts: XMLFontAutoStylePool,
   extra = "",
+  includeInlineFont = false,
 ): string {
-  const attrs = exportCellTextProperties(pattern, fonts) + extra;
+  const attrs = exportCellTextProperties(pattern, fonts, includeInlineFont) + extra;
   const item = pattern.GetItemSet().GetItemIfSet(ATTR_FONT_COLOR, false) as
     SvxColorItem | undefined;
   const child = item ? exportComplexColor(item.getComplexColor(), "char-complex-color") : "";
@@ -316,10 +324,11 @@ function exportPropertyElement(name: string, attrs: string, child: string): stri
   if (child) return `<style:${name}${attrs}>${child}</style:${name}>`;
   return attrs ? `<style:${name}${attrs}/>` : "";
 }
-/** Emits effective native text properties as a canonical automatic-style key and XML fragment. @param pattern - Actual pattern. @param fontPool - Original shared declaration pool. @returns XML attributes. */
+/** Emits effective native text properties as a canonical style key and XML fragment. @param pattern - Actual pattern. @param fontPool - Original shared declaration pool. @param includeInlineFont - Named-style compatibility flag. @returns XML attributes. */
 export function exportCellTextProperties(
   pattern: ScPatternAttr,
   fontPool: XMLFontAutoStylePool,
+  includeInlineFont = false,
 ): string {
   let result = exportStrikeoutProperties(pattern) + exportFontEffectProperties(pattern);
   if (pattern.GetItemSet().GetItemState(109, false) === SfxItemState.SET) {
@@ -334,7 +343,7 @@ export function exportCellTextProperties(
       value.dispose();
     }
   }
-  for (const [, name, which] of fonts) {
+  for (const [, suffix, which] of fonts) {
     if (pattern.GetItemSet().GetItemState(which, false) !== SfxItemState.SET) continue;
     const item = pattern.GetItem(which) as SvxFontItem;
     const values = [
@@ -345,7 +354,10 @@ export function exportCellTextProperties(
       item.GetCharSet(),
     ] as const;
     fontPool.Add(...values);
-    result += ` ${name}="${escapeXml(fontPool.Find(...values))}"`;
+    result += ` style:font-name${suffix}="${escapeXml(fontPool.Find(...values))}"`;
+    if (includeInlineFont)
+      for (const [name, value] of exportInlineFont(item.QueryValue(), suffix))
+        result += ` ${name}="${escapeXml(value)}"`;
   }
   for (const [, name, which] of heights)
     if (pattern.GetItemSet().GetItemState(which, false) === SfxItemState.SET)
@@ -386,11 +398,7 @@ export function importCellTextProperties(
 ): void {
   attributes.assertOnly(
     [
-      ...fonts.map(
-        /** Selects the source font-reference token. @param entry - Mapping. @returns Token. */ ([
-          token,
-        ]) => token,
-      ),
+      ...textFontProperties.flat(),
       ...heights.map(
         /** Selects original height token. @param pair - Property. @returns Token. */
         ([token]) => token,
@@ -450,17 +458,27 @@ export function importCellTextProperties(
   } finally {
     fontValue.dispose();
   }
-  for (const [token, , which] of fonts) {
-    const name = attributes.get(token);
-    if (name === null) continue;
-    const declared = findFont(name);
-    if (!declared) {
-      unsupported("missing font declaration");
-      continue;
-    }
-    const item = new SvxFontItem(declared);
-    item.SetWhich(which);
-    pattern.ItemSetPut(item);
+  for (const [group, , which] of fonts) {
+    const font = importTextFont(
+      attributes,
+      group,
+      /** Reads the complete declared members. @param name - XML face name. @returns Font state. */
+      (name) => findFont(name)?.QueryValue(),
+      RTL_TEXTENCODING_UTF8,
+      /** Reports an unresolved font reference without discarding inline members. @returns Nothing. */
+      () => unsupported("missing font declaration"),
+    );
+    if (font)
+      pattern.ItemSetPut(
+        new SvxFontItem(
+          font.family,
+          font.familyName,
+          font.styleName,
+          font.pitch,
+          font.charSet,
+          which,
+        ),
+      );
   }
   const converter = new SvXMLUnitConverter("twip");
   for (const [token, , which] of heights) {
