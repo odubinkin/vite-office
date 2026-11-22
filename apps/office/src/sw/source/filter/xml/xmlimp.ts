@@ -1,7 +1,8 @@
 /** @fileoverview Implements Writer's streaming SwXMLImport bridge over fast SAX contexts. */
+import { isOpenOffice2Generator } from "../../../../xmloff/source/core/xmlimp";
+import { getBuildIdFromGenerator } from "../../../../xmloff/source/meta/xmlmetai";
 import type { OdfBitmapGeometry } from "../../../../xmloff/source/draw/fill-properties";
 import { hasDrawingFrameFill, importPageBackground, importPageLayoutBox } from "./xmlimpit";
-import { importPageBackground, importPageLayoutBox } from "./xmlimpit";
 import { getActivePageStory, type SwFrameFormat } from "../../core/layout/atrfrm";
 import type { OdfPageBackground } from "../../../../xmloff/source/style/PageMasterStyleMap";
 import type { XMLImageStyleDefinition } from "../../../../xmloff/source/style/ImageStyle";
@@ -30,7 +31,7 @@ import { text } from "../../core/unocore/unocrsrhelper";
 import type { SwXStyle } from "../../core/unocore/unostyle";
 import { SwXTextDocument } from "../../uibase/uno/unotxdoc";
 import { XMLTextImportHelper } from "../../../../xmloff/source/text/txtimp";
-import { xmlTextString } from "../../../../xmloff/source/text/txtprmap";
+import { applyTextImportProperties, xmlTextString } from "../../../../xmloff/source/text/txtprmap";
 import { Any } from "../../../../cppu/inc/com/sun/star/uno/Any";
 import { convertTwipToMm100 } from "../../../../tools/inc/UnitConversion";
 
@@ -141,10 +142,12 @@ export function importWriterXml(
   } = {},
 ): ImportedWriterDocument {
   let locale = metadata.locale ?? "en-US";
+  let buildId = "";
   if (metaXml !== undefined) {
     const metadataImport = new SwXMLImport(new SwDoc(false));
     metadataImport.parse(metaXml, XMLToken.OFFICE_DOCUMENT_META, options);
     locale = metadataImport.language ?? locale;
+    buildId = metadataImport.buildId;
   }
   const xmlImport = new SwXMLImport(
     new SwDoc({
@@ -156,6 +159,7 @@ export function importWriterXml(
     }),
     options.graphicHelper,
   );
+  xmlImport.buildId = buildId;
   xmlImport.document.SetInReading(true);
   xmlImport.document.SetInXMLImport(true);
   let complete = false;
@@ -355,6 +359,12 @@ class SwXMLImport
   }
   public title: string | undefined;
   public language: string | undefined;
+  public buildId = "";
+
+  /** Reports the legacy generator's hidden-text polarity. @returns Whether the native filter inverts text:display. */
+  public isOpenOffice2Generator(): boolean {
+    return isOpenOffice2Generator(this.buildId);
+  }
 
   /** Creates a coordinator around a temporary document. @param document - Temporary Writer model. @param graphicHelper - Package-local images. @returns Coordinator. */
   public constructor(
@@ -723,7 +733,10 @@ class SwXMLImport
   /** Finalizes declared styles before the first text attachment. @returns Nothing. */
   private finishStyleDefinitions(): void {
     if (this.styleDefinitionsApplied) return;
-    applyParagraphTextDefaults(this.model.createTextDefaults(), this.defaultParagraphStyle);
+    const defaults = this.model.createTextDefaults();
+    applyParagraphTextDefaults(defaults, this.defaultParagraphStyle);
+    const hyphenation = this.defaultParagraphStyle?.paragraphProperties?.hyphenation;
+    if (hyphenation) applyTextImportProperties(defaults, {}, { hyphenation });
     const paragraphs = this.styles?.GetStyleDefinitions("paragraph") ?? new Map();
     applyNamedCharacterStyles(this.model, this.styles?.GetStyleDefinitions("text") ?? new Map());
     for (const configuration of this.lineNumbering) this.applyLineNumbering(configuration);
@@ -1025,6 +1038,10 @@ class XMLMetaContext extends SvXMLImportContext {
         },
       );
     }
+    if (element === XMLToken.META_GENERATOR)
+      return new XMLTitleContext((generator) => {
+        this.xmlImport.buildId = getBuildIdFromGenerator(generator);
+      });
     if (ignoredMetadataChildren.has(element)) return new SvXMLIgnoreContext(true);
     return null;
   }

@@ -1,2 +1,2 @@
-/** @fileoverview Original header for the pooled paragraph hyphenation item. */
-export { SvxHyphenZoneItem, type HyphenZoneState } from "../source/items/paraitem.hyphenation";
+/** @fileoverview Native paragraph hyphenation item. */
+export { SvxHyphenZoneItem } from "../source/items/paraitem";

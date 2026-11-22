@@ -158,6 +158,7 @@ export const calcSheetCommands = {
   color: { id: ".uno:SetTabBgColor", slotId: 26366, label: "Sheet Tab Color" },
 } as const;
 export const FID_TAB_SET_TAB_BG_COLOR = 26367;
+
 /** Native split and freeze window slots from sc.hrc. */
 export const calcPaneCommands = [
   { id: ".uno:FreezePanesRow", label: "Freeze First Row", slotId: 26184, kind: "row" },

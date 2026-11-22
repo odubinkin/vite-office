@@ -1,0 +1,40 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/sc/source/ui/view/tabvwsh3.ts",
+    "status": "mapped",
+    "upstreamPath": "sc/source/ui/view/tabvwsh3.cxx",
+    "localSymbols": [
+      "ExecProtectTable"
+    ],
+    "upstreamSymbols": [
+      "ScTabViewShell::ExecProtectTable"
+    ],
+    "preservedResponsibilities": [
+      "Routes the original sheet protection slot and BoolItem request, including source asynchronous completion and guarded workbook identity."
+    ],
+    "omittedResponsibilities": [
+      "The workbook structure protection command is independent."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sc/source/ui/view/tabvwsh3.ts",
+          "marker": "ExecProtectTable"
+        },
+        {
+          "path": "apps/office/src/sc/browser/presentation/calc-sheet-protection.test.tsx",
+          "marker": "protectSheet.py"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sc/source/ui/view/tabvwsh3.cxx",
+          "marker": "ScTabViewShell::ExecProtectTable"
+        }
+      ]
+    }
+  }
+}

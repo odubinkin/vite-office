@@ -38,4 +38,15 @@ export const scPasteResourcesEnglish = Object.freeze({
   STR_MSSG_PASTEFROMCLIP_0: "Insert into multiple selection not possible",
   STR_PROTECTIONERR: "Protected cells can not be modified.",
   STR_PASTE_FULL: "There is not enough space on the sheet to insert here.",
+  STR_PASTE_ERROR: "The contents of the clipboard could not be pasted.",
+  STR_PASTE_BIGGER:
+    "The content of the clipboard is bigger than the range selected.\nDo you want to insert it anyway?",
+});
+
+/** Resolved original English merge command resources. */
+export const scMergeResourcesEnglish = Object.freeze({
+  STR_UNDO_MERGE: "Merge",
+  STR_UNDO_REMERGE: "Split",
+  STR_MSSG_MERGECELLS_0: "Cell merge not possible if cells already merged",
+  STR_NOMULTISELECT: "This function cannot be used with multiple selections.",
 });

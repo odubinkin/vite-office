@@ -1,0 +1,26 @@
+{
+  "schema_version": 1,
+  "task_id": "202611220250-KE98GA",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-11-22T03:08:00.468Z",
+  "verdict": "pass",
+  "summary": "The Font, Font Effects and Borders pages use native pooled attributes and one view history operation. Exact source responsibilities for padding, diagonal lines, shadow and script language are covered by document and UI evidence.",
+  "evaluated_sha": "93530ea32cf4e8be624a34b46b23a29da90e6a36",
+  "blueprint_digest": "590cb9cdc0fd7f413fe1a896007557757ffcf9d94b5228c0b1d310e349b2774b",
+  "findings": [
+    "Same-agent review of the staged item ownership, actual frame and ODS state, pinned regression ports and browser paint."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202611220250-KE98GA/README.md",
+    "output/calc-task20-verification.md",
+    "output/calc-task20-tests-final.log",
+    "output/calc-task20-browser.log",
+    "output/calc-task20-types-final.log"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": [
+    "Native toolkit ornament and conditional Asian Typography are outside this task."
+  ]
+}

@@ -1,4 +1,9 @@
 /** @fileoverview Original normal-input ScModule reference dispatch;active-view lookup is an explicit browser host borrow. Reference dialogs and edit-command services remain unported. */
+import type { Grammar } from "../../../../formula/inc/grammar";
+import type { ScCalcConfig } from "../../../inc/calcconfig";
+import { ScDocOptions, type ScTpCalcItem } from "../../../inc/docoptio";
+import { ScInterpreter } from "../../core/tool/interpr4";
+import type { ScDocShell } from "../docshell/docsh";
 import { ScRange } from "../../../inc/address";
 import type { ScDocument } from "../../../inc/document";
 import type { ScInputHandler } from "../inc/inputhdl";
@@ -24,6 +29,45 @@ export class ScModule {
     const ordered = new ScRange(reference);
     ordered.PutInOrder();
     this.GetInputHdl()?.SetReference(ordered, doc);
+  }
+  /** Applies the represented source Calculate and Formula items, then updates the source formula tree when required. @param shell - Active document shell. @param item - Changed Calculate item. @param grammar - Changed Formula syntax. @param config - Changed calculation options. @param writeConfig - Changed scope for calculation options. @returns Whether an item changed. */
+  ModifyOptions(
+    shell: ScDocShell,
+    item?: ScTpCalcItem,
+    grammar?: Grammar,
+    config?: ScCalcConfig,
+    writeConfig?: boolean,
+  ): boolean {
+    if (!item && grammar === undefined && !config && writeConfig === undefined) return false;
+    const doc = shell.GetDocument();
+    const old = doc.GetDocOptions();
+    let recalculate = Boolean(config);
+    if (grammar !== undefined) doc.SetGrammar(grammar);
+    if (config) {
+      doc.GetCalcConfig().MergeDocumentSpecific(config);
+      if (writeConfig ?? old.IsWriteCalcConfig())
+        ScInterpreter.GetGlobalConfig().MergeDocumentSpecific(config);
+    }
+    if (item || writeConfig !== undefined) {
+      const next = new ScDocOptions(item?.GetDocOptions() ?? old);
+      if (writeConfig !== undefined) next.SetWriteCalcConfig(writeConfig);
+      if (item)
+        recalculate =
+          old.IsIter() !== next.IsIter() ||
+          old.GetIterCount() !== next.GetIterCount() ||
+          old.GetIterEps() !== next.GetIterEps() ||
+          old.IsIgnoreCase() !== next.IsIgnoreCase() ||
+          old.IsCalcAsShown() !== next.IsCalcAsShown() ||
+          (next.IsCalcAsShown() && old.GetStdPrecision() !== next.GetStdPrecision()) ||
+          old.IsMatchWholeCell() !== next.IsMatchWholeCell() ||
+          old.GetYear2000() !== next.GetYear2000() ||
+          old.IsFormulaRegexEnabled() !== next.IsFormulaRegexEnabled() ||
+          old.IsFormulaWildcardsEnabled() !== next.IsFormulaWildcardsEnabled();
+      doc.SetDocOptions(next);
+    }
+    if (recalculate) doc.CalcAll();
+    shell.SetDocumentModified();
+    return true;
   }
   /** Original ordinary-input reference continuation dispatch. @returns Nothing. */
   AddRefEntry(): void {

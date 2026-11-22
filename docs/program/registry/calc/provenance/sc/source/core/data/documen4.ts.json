@@ -9,15 +9,18 @@
     "localSymbols": [
       "AddCondFormat",
       "GetCondResult",
-      "GetCondColor"
+      "GetCondColor",
+      "CompileColRowNameFormula"
     ],
     "upstreamSymbols": [
       "ScDocument::AddCondFormat",
-      "ScDocument::GetCondResult"
+      "ScDocument::GetCondResult",
+      "ScDocument::CompileColRowNameFormula"
     ],
     "preservedResponsibilities": [
       "Hands conditional rules to their native sheet and resolves the first matching style through a cell's format indexes.",
-      "The presentation lookup walks the same ordered native conditional indices to resolve the first scale background."
+      "The presentation lookup walks the same ordered native conditional indices to resolve the first scale background.",
+      "Recompiles existing label-reference tokens and reattaches their data subscriptions after the dialog applies its pair lists."
     ],
     "omittedResponsibilities": [
       "Other documen4 mechanisms are outside this module."

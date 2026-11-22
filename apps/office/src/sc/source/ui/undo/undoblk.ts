@@ -1,13 +1,150 @@
 /** @fileoverview Original ScUndoIndent actual marked attribute snapshot and source redo;represented block history adjusts supported row heights. */
 import { SfxUndoAction } from "../../../../svl/source/undo/undo";
+import type { ScTabViewShell } from "../inc/tabvwsh";
 import type { ScDocShell } from "../docshell/docsh";
 import { ScDocument, ScDocumentMode } from "../../../inc/document";
 import { ScMarkData } from "../../../inc/markdata";
 import { ScRangeList } from "../../../inc/rangelst";
 import { SfxHintId } from "../../../../svl/inc/hint";
 import { ScRange } from "../../../inc/address";
-import { InsertDeleteFlags } from "../../../inc/global";
+import { HasAttrFlags, InsertDeleteFlags } from "../../../inc/global";
 import { AdjustBlockHeight } from "../view/viewfun2";
+import { scMergeResourcesEnglish } from "../../../inc/globstr";
+import type { ScCellMergeOption } from "../view/cellmergeoption";
+import { SfxStyleFamily } from "../../../../svl/inc/style-values";
+import { unicode } from "../../../../i18nlangtag/source/isolang/isolang.tables";
+
+/** Original cell-style history restores marked attributes and reapplies the named style on Redo. */
+export class ScUndoSelectionStyle extends SfxUndoAction<ScDocShell> {
+  private readonly marks: ScMarkData;
+  private readonly range: ScRange;
+
+  /** Owns original attributes and marks for the source style command. @param shell - Live shell. @param marks - Selected cells and tabs. @param range - Affected rectangle. @param styleName - Original named style. @param undo - Owned attribute snapshot. @returns History action. */
+  constructor(
+    private readonly shell: ScDocShell,
+    marks: ScMarkData,
+    range: ScRange,
+    private readonly styleName: string,
+    private readonly undo: ScDocument,
+  ) {
+    super();
+    this.marks = new ScMarkData(marks);
+    this.marks.MarkToMulti();
+    this.range = new ScRange(range);
+  }
+
+  /** Restores the original style identities and direct attributes. @returns Nothing. */
+  override UndoWithContext(): void {
+    const doc = this.shell.GetDocument(),
+      range = new ScRange(this.range);
+    if (doc.HasAttrib(range, HasAttrFlags.Merged)) doc.ExtendMergeRange(range, true);
+    range.aStart.SetTab(0);
+    range.aEnd.SetTab(doc.GetTableCount() - 1);
+    this.undo.CopyToDocument(range, InsertDeleteFlags.ATTRIB, true, doc, this.marks);
+    AdjustBlockHeight(doc, this.marks, range.aStart.Row(), range.aEnd.Row());
+  }
+
+  /** Resolves the source style name again and repeats its application. @returns Nothing. */
+  override RedoWithContext(): void {
+    const doc = this.shell.GetDocument(),
+      name = unicode(this.styleName);
+    try {
+      const style = doc.GetStyleSheetPool()?.Find(name, SfxStyleFamily.Para);
+      if (!style) return;
+      const range = new ScRange(this.range);
+      if (doc.HasAttrib(range, HasAttrFlags.Merged)) doc.ExtendMergeRange(range, true);
+      doc.ApplySelectionStyle(style, this.marks);
+      AdjustBlockHeight(doc, this.marks, range.aStart.Row(), range.aEnd.Row());
+    } finally {
+      name.dispose();
+    }
+  }
+
+  /** Repeats the original style application at the current marks. @param view - Active Calc tab view. @returns Whether applied. */
+  Repeat(view: ScTabViewShell): boolean {
+    const name = unicode(this.styleName);
+    try {
+      const style = this.shell.GetDocument().GetStyleSheetPool()?.Find(name, SfxStyleFamily.Para);
+      return style ? view.SetStyleSheetToMarked(style) : false;
+    } finally {
+      name.dispose();
+    }
+  }
+
+  /** Copies the native history selection. @returns Selected ranges and sheets. */
+  GetMarkData(): ScMarkData {
+    return new ScMarkData(this.marks);
+  }
+
+  /** Copies the original style command's rectangle. @returns Affected range. */
+  getAffectedRange(): ScRange {
+    return new ScRange(this.range);
+  }
+
+  /** Returns STR_UNDO_APPLYCELLSTYLE. @returns History caption. */
+  override GetComment(): string {
+    return "Apply Cell Style";
+  }
+
+  /** Releases the owned attribute snapshot. @returns Nothing. */
+  override Dispose(): void {
+    this.undo.Dispose();
+  }
+}
+
+/** Original split history owns one attribute snapshot and the extended source ranges. */
+export class ScUndoRemoveMerge extends SfxUndoAction<ScDocShell> {
+  /** Takes the pre-split snapshot for the source option. @param shell - Live document owner. @param option - Split range and tabs. @param undo - Owned attribute snapshot. @returns Undo action. */
+  constructor(
+    private readonly shell: ScDocShell,
+    private readonly option: ScCellMergeOption,
+    private readonly undo: ScDocument,
+  ) {
+    super();
+  }
+
+  /** Restores original attributes and marks the sheet streams for saving. @returns Nothing. */
+  override UndoWithContext(): void {
+    const doc = this.shell.GetDocument();
+    const {
+      mnStartCol: col,
+      mnStartRow: row,
+      mnEndCol: lastCol,
+      mnEndRow: lastRow,
+      maTabs,
+    } = this.option;
+    for (const tab of maTabs) {
+      const range = this.option.getSingleRange(tab);
+      const sheet = doc.FetchTable(tab);
+      sheet?.DeleteArea(col, row, lastCol, lastRow, InsertDeleteFlags.ATTRIB);
+      this.undo.CopyToDocument(range, InsertDeleteFlags.ATTRIB, false, doc);
+      this.shell.GetDocFunc().AdjustRowHeight(range, true, true);
+      sheet?.SetStreamValid(false);
+    }
+  }
+
+  /** Reapplies the native split without creating more history. @returns Nothing. */
+  override RedoWithContext(): void {
+    this.shell.GetDocFunc().UnmergeCells(this.option, false);
+  }
+
+  /** Resolves the history sheet and original rectangle. @param tab - Current view sheet. @returns Source affected range. */
+  getAffectedRange(tab: number): ScRange {
+    return this.option.maTabs.has(tab)
+      ? this.option.getSingleRange(tab)
+      : this.option.getFirstSingleRange();
+  }
+
+  /** Returns the native split caption. @returns Undo label. */
+  override GetComment(): string {
+    return scMergeResourcesEnglish.STR_UNDO_REMERGE;
+  }
+
+  /** Releases the owned snapshot. @returns Nothing. */
+  override Dispose(): void {
+    this.undo.Dispose();
+  }
+}
 /** Original indent history owns real pre-change attributes and original marks. */
 export class ScUndoIndent extends SfxUndoAction<ScDocShell> {
   private readonly marks: ScMarkData;
@@ -97,6 +234,7 @@ export class ScUndoPaste extends SfxUndoAction<ScDocShell> {
     if (
       flags !== InsertDeleteFlags.CONTENTS &&
       flags !== (InsertDeleteFlags.CONTENTS | InsertDeleteFlags.NOCAPTIONS) &&
+      flags !== (InsertDeleteFlags.ATTRIB | InsertDeleteFlags.NOCAPTIONS) &&
       flags !==
         (InsertDeleteFlags.CONTENTS | InsertDeleteFlags.ATTRIB | InsertDeleteFlags.NOCAPTIONS)
     ) {
@@ -114,7 +252,8 @@ export class ScUndoPaste extends SfxUndoAction<ScDocShell> {
     const doc = this.shell.GetDocument(),
       count = doc.GetTableCount();
     // Constructor admission retains native all-or-none content and attribute normalization.
-    let flags = InsertDeleteFlags.CONTENTS;
+    let flags =
+      this.flags & InsertDeleteFlags.CONTENTS ? InsertDeleteFlags.CONTENTS : InsertDeleteFlags.NONE;
     if (this.flags & InsertDeleteFlags.ATTRIB) flags |= InsertDeleteFlags.ATTRIB;
     flags &= ~InsertDeleteFlags.OBJECTS;
     flags |= InsertDeleteFlags.NOCAPTIONS;
@@ -278,5 +417,63 @@ export class ScUndoConditionalFormat extends ScUndoConditionalFormatList {
   /** Original single-format caption. @returns History label. */
   override GetComment(): string {
     return "Conditional Format";
+  }
+}
+
+/** Name-list history uses the cell and attribute parts of the source ALL mask. */
+export const nameListSnapshotFlags = InsertDeleteFlags.ALL & ~InsertDeleteFlags.OBJECTS;
+
+/** Source two-column block history used by Paste List. */
+export class ScUndoListNames extends SfxUndoAction<ScDocShell> {
+  private readonly range: ScRange;
+
+  /** Owns both versions of the affected block. @param range - List destination. @param undo - Before insertion. @param redo - After insertion. @returns Action. */
+  constructor(
+    range: ScRange,
+    private readonly undo: ScDocument,
+    private readonly redo: ScDocument,
+  ) {
+    super();
+    this.range = new ScRange(range);
+  }
+
+  /** Replaces the saved block including empty cells and attributes. @param shell - Workbook. @param source - Snapshot. @returns Nothing. */
+  private DoChange(shell: ScDocShell, source: ScDocument): void {
+    const doc = shell.GetDocument();
+    const { aStart, aEnd } = this.range;
+    const marks = new ScMarkData(doc.GetSheetLimits());
+    marks.SelectTable(aStart.Tab(), true);
+    doc.DeleteArea(
+      aStart.Col(),
+      aStart.Row(),
+      aEnd.Col(),
+      aEnd.Row(),
+      marks,
+      nameListSnapshotFlags,
+    );
+    source.CopyToDocument(this.range, nameListSnapshotFlags, false, doc);
+    AdjustBlockHeight(doc, marks, aStart.Row(), aEnd.Row());
+    doc.BroadcastCells(this.range, SfxHintId.ScDataChanged);
+  }
+
+  /** Restores the original block. @param shell - Workbook. @returns Nothing. */
+  override UndoWithContext(shell: ScDocShell): void {
+    this.DoChange(shell, this.undo);
+  }
+
+  /** Restores the inserted list. @param shell - Workbook. @returns Nothing. */
+  override RedoWithContext(shell: ScDocShell): void {
+    this.DoChange(shell, this.redo);
+  }
+
+  /** Releases both owned snapshots. @returns Nothing. */
+  override Dispose(): void {
+    this.undo.Dispose();
+    this.redo.Dispose();
+  }
+
+  /** Returns the source undo label. @returns Caption. */
+  override GetComment(): string {
+    return "List names";
   }
 }

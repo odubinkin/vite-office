@@ -1,19 +1,66 @@
-/** @fileoverview Consumed native ScCellShell selection,geometry and attribute-reset cases from cellsh1/cellsh3/cellsh4 over actual native view/mark owners;window/reference/protection handlers remain unported. */
+/** @fileoverview Consumed native ScCellShell selection,geometry and attribute-reset cases from cellsh1/cellsh3/cellsh4 over actual native view/mark owners;includes the original unlocked-cell selection command. */
 import { ScViewFunc } from "./viewfunc";
 import { InsertDeleteFlags, ScSizeMode, TwipsToEvenHMM } from "../../../inc/global";
 import { SfxRequest } from "../../../../sfx2/source/control/request";
 import { SfxUInt16Item, SfxInt32Item } from "../../../../svl/source/items/intitem";
 import { Length, toTwips } from "../../../../o3tl/inc/unit_conversion";
 import type { ScViewData } from "../inc/viewdata";
+import { ScRangeList } from "../../../inc/rangelst";
 import { ScRange } from "../../../inc/address";
 import { ColRowSpan } from "../../../inc/columnspanset";
+import { SfxBoolItem } from "../../../../svl/source/items/cenumitm";
+import { TestMergeCells, TestRemoveMerge, type RunMergeCellsDialog } from "./viewfun2";
+
+/** Original cell-shell slot family for merge, merge-and-center, and split. */
+export type ScMergeCommand = "merge" | "toggle" | "split";
 /** Native cell-shell command boundary;shared browser dispatch performs the existing Sfx slot admission. */
 export class ScCellShell {
   /** Borrows actual native view functions. @param view - Source view owner. @returns Cell shell. */
   constructor(private readonly view: ScViewFunc) {}
+  /** Projects the source menu state including the checked toggle. @param kind - Merge slot. @returns Native state. */
+  GetMergeState(kind: ScMergeCommand): { enabled: boolean; checked?: boolean } {
+    const data = this.view.GetViewData();
+    const merge = kind !== "split" && TestMergeCells(data);
+    const split = kind !== "merge" && TestRemoveMerge(data);
+    return kind === "toggle"
+      ? { enabled: merge || split, checked: split }
+      : { enabled: merge || split };
+  }
+
+  /** Dispatches the typed MoveContents request and original toggle decision. @param kind - Merge slot. @param request - Native request. @param confirm - Browser dialog bridge. @returns Whether cells changed. */
+  async ExecuteMerge(
+    kind: ScMergeCommand,
+    request: SfxRequest,
+    confirm: RunMergeCellsDialog,
+  ): Promise<boolean> {
+    const state = this.GetMergeState(kind);
+    if (!state.enabled) return false;
+    if (kind === "split" || state.checked) {
+      if (!this.view.RemoveMerge()) return false;
+      request.Done();
+      return true;
+    }
+    const value = request.GetArgs().find(
+      /** Finds the original slot-keyed MoveContents input. @param item - Actual argument. @returns Identity match. */
+      (item) => item.Which() === request.GetSlot(),
+    );
+    return this.view.MergeCells(
+      request.IsAPI(),
+      value instanceof SfxBoolItem && value.GetValue(),
+      kind === "toggle",
+      confirm,
+    );
+  }
   /** Original cellsh4.cxx SID_SELECT_NONE case. @returns Nothing. */
   Deselect(): void {
     this.view.Unmark();
+  }
+  /** Marks the original unlocked cells while retaining sheet selection if the result is empty. @returns Nothing. */
+  SelectUnprotectedCells(): void {
+    const data = this.view.GetViewData();
+    const ranges = new ScRangeList();
+    data.GetDocument().GetUnprotectedCells(ranges, data.CurrentTabForData());
+    data.GetMarkData().MarkFromRangeList(ranges, true);
   }
   /** Original cellsh1.cxx SID_SELECT_VISIBLE_ROWS case. Hidden ranges are subtracted from the shared mark owner across every selected sheet. @param data - Actual view data. @returns Nothing. */
   SelectVisibleRows(data: ScViewData): void {

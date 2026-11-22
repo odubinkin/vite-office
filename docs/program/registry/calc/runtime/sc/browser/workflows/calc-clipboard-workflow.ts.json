@@ -1,0 +1,33 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sc/browser/workflows/calc-clipboard-workflow.ts",
+    "classification": "browser-adaptation",
+    "state": "foundation",
+    "suite": "calc",
+    "subsystem": "clipboard",
+    "capabilityIds": [
+      "CAP-1c4b358a-d58f-4cb3-bd8a-a4aac3aa3bf5",
+      "CAP-d9e3bd7a-f47f-4958-81a7-e7ef31935bf3"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "not-applicable",
+      "defaultStatus": "not-applicable",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/sc/browser/workflows/calc-clipboard-workflow.ts#CalcClipboardWorkflow",
+        "apps/office/src/sc/browser/presentation/calc-cell-clipboard.test.tsx"
+      ],
+      "justification": "Routes real browser clipboard and menu events to source slots, native clipboard documents and paste confirmations. Paste Only uses the original Text, Number and Formula slots and requires a current in-workbook clipboard identity.",
+      "knownViolations": [],
+      "localSymbols": [
+        "CalcClipboardWorkflow"
+      ],
+      "sourceResponsibility": "browser-owned",
+      "upstreamFile": null,
+      "upstreamSymbols": []
+    }
+  }
+}

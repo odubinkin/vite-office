@@ -1,0 +1,51 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/sc/source/ui/view/cellsh2.ts",
+    "status": "mapped",
+    "upstreamPath": "sc/source/ui/view/cellsh2.cxx",
+    "localSymbols": [
+      "GetTextToColumnsRange",
+      "ImportTextToColumns"
+    ],
+    "upstreamSymbols": [
+      "lcl_GetTextToColumnsRange",
+      "ScCellShell::ExecuteDB"
+    ],
+    "preservedResponsibilities": [
+      "Resolves the source Text to Columns cursor or one-column mark and trims it to occupied rows for execution.",
+      "Runs the confirmed live CSV import with native edit admission and grouped Text to Columns Undo and Redo."
+    ],
+    "omittedResponsibilities": [
+      "Other database shell operations belong to separate source slices."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sc/source/ui/view/cellsh2.ts",
+          "marker": "GetTextToColumnsRange"
+        },
+        {
+          "path": "apps/office/src/sc/source/ui/view/text-to-columns.test.ts",
+          "marker": "shrinks whole-column selection"
+        },
+        {
+          "path": "apps/office/src/sc/browser/presentation/calc-text-to-columns.test.tsx",
+          "marker": "ports the original tdf69981 workbook"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sc/source/ui/view/cellsh2.cxx",
+          "marker": "lcl_GetTextToColumnsRange"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/source/ui/view/cellsh2.cxx",
+          "marker": "case SID_TEXT_TO_COLUMNS"
+        }
+      ]
+    }
+  }
+}

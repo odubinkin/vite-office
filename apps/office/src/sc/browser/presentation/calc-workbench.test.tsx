@@ -96,7 +96,7 @@ it("keeps canonical selection,sheet ownership,failed drafts and physical scrolli
   expect(grid.scrollTop).toBe(500000);
   expect(c.Address()).toBe("AA1000");
   fireEvent(window, new Event("resize"));
-  fireEvent.change(name, { target: { value: "bad" } });
+  fireEvent.change(name, { target: { value: "bad!" } });
   fireEvent.keyDown(name, { key: "Enter" });
   expect(screen.getByRole("alert")).toHaveTextContent("Invalid cell address.");
   fireEvent.keyDown(name, { key: "Escape" });

@@ -2,6 +2,7 @@
 import type { EditTextObject } from "../../../../editeng/inc/editobj";
 import type { SfxHintId } from "../../../../svl/inc/hint";
 import type { SharedStringConstReference } from "../../../../svl/inc/sharedstring";
+import type { ScRangeList } from "../../../inc/rangelst";
 import { ScRange } from "../../../inc/address";
 import { CRFlags, HasAttrFlags, STD_COL_WIDTH } from "../../../inc/global";
 import { ScMultiSelIter } from "../../../inc/markmulti";
@@ -13,6 +14,56 @@ import type { ScColumn } from "../../../inc/column";
 import type { StartListeningContext } from "../../../inc/listenercontext";
 import type { OUStringConstReference } from "../../../../sal/inc/rtl/ustring";
 import type { ScSetStringParam } from "../../../inc/stringutil";
+import type { ScPatternStyleReference } from "../../../inc/patattr";
+
+/** Applies the source named style to marked attribute runs with native default-column allocation. @param this - Actual sheet. @param style - Native style. @param marks - Marked areas. @returns Nothing. */
+export function ApplySelectionStyle(
+  this: ScTable,
+  style: ScPatternStyleReference,
+  marks: ScMarkData,
+): void {
+  this["ApplyWithAllocation"](
+    marks,
+    /** Applies to the allocated column or the shared default tail. @param column - Attribute owner. @param first - First row. @param last - Last row. @returns Nothing. */
+    (column, first, last) => column.ApplyStyleArea(first, last, style),
+  );
+  this.SetStreamValid(false);
+}
+
+/** Reads uniform styles from the allocated part of a simple area. @param this - Actual sheet. @param firstCol - First column. @param firstRow - First row. @param lastCol - Last column. @param lastRow - Last row. @returns Uniform style, null for mixed, or undefined for no allocated cells. */
+export function GetAreaStyle(
+  this: ScTable,
+  firstCol: number,
+  firstRow: number,
+  lastCol: number,
+  lastRow: number,
+): ScPatternStyleReference | null | undefined {
+  let style: ScPatternStyleReference | undefined;
+  const last = this.ClampToAllocatedColumns(lastCol);
+  for (let col = firstCol; col <= last; col++) {
+    const next = this.FetchColumn(col)?.GetAreaStyle(firstRow, lastRow);
+    if (next === undefined) continue;
+    if (!next || (style && style !== next)) return null;
+    style = next;
+  }
+  return style;
+}
+
+/** Reads uniform styles from the actual disjoint marked runs. @param this - Actual sheet. @param marks - Original mark data. @returns Uniform style, null for mixed, or undefined for no allocated cells. */
+export function GetSelectionStyle(
+  this: ScTable,
+  marks: ScMarkData,
+): ScPatternStyleReference | null | undefined {
+  let style: ScPatternStyleReference | undefined;
+  for (let col = 0; col < this.GetAllocatedColumnsCount(); col++) {
+    if (!marks.HasMultiMarks(col)) continue;
+    const next = this.FetchColumn(col)?.GetSelectionStyle(marks);
+    if (next === undefined) continue;
+    if (!next || (style && style !== next)) return null;
+    style = next;
+  }
+  return style;
+}
 
 /** Finds the last column with stored width, flags or hidden geometry. @param this - Native sheet. @returns Last changed column. */
 export function GetLastChangedColFlagsWidth(this: ScTable): number {
@@ -652,6 +703,15 @@ export function ApplyPatternIfNumberformatIncompatible(
     );
 }
 
+/** Reads single-cell or uniform row-span format through the actual column. @param this - Sheet. @param col - Column. @param first - Row or first row. @param last - Optional last row. @returns Native format key. */
+export function GetNumberFormat(this: ScTable, col: number, first: number, last?: number): number {
+  const doc = this["rDocument"];
+  if (!doc.ValidColRow(col, first)) return 0;
+  const column = this.GetColumnData(col);
+  if (last === undefined) return column.GetNumberFormat(doc.GetNonThreadedContext(), first);
+  return doc.ValidColRow(col, last) ? column.GetNumberFormatRange(first, last) : 0;
+}
+
 /** Original table2.cxx validated single-cell format assignment. @param this - Actual sheet. @param col - Column. @param row - Row. @param key - Formatter key. @returns Nothing. */
 export function SetNumberFormat(this: ScTable, col: number, row: number, key: number): void {
   if (!this.GetDoc().ValidColRow(col, row)) return;
@@ -761,4 +821,18 @@ export function IsSelectionEditable(
       );
   }
   return true;
+}
+
+/** Visits only allocated native columns when building the unlocked ranges. @param this - Sheet. @param ranges - Output. @returns Nothing. */
+export function GetUnprotectedCells(this: ScTable, ranges: ScRangeList): void {
+  for (let col = 0; col < this.GetAllocatedColumnsCount(); col++)
+    this.FetchColumn(col)?.GetUnprotectedCells(0, this["rDocument"].MaxRow(), ranges);
+}
+
+/** Strips protected contents from the clipboard sheet in the copied range. @param this - Clipboard sheet. @param range - Original copy area. @returns Nothing. */
+export function RemoveProtected(this: ScTable, range: ScRange): void {
+  const { aStart, aEnd } = range;
+  const last = this.ClampToAllocatedColumns(aEnd.Col());
+  for (let col = aStart.Col(); col <= last; col++)
+    this.FetchColumn(col)?.RemoveProtected(aStart.Row(), aEnd.Row());
 }

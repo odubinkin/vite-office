@@ -251,24 +251,7 @@ export function TrackFormulas(this: ScDocument, id: SfxHintId): void {
   }
 }
 
-/** Calculates represented dirty scalar formulas from the real tree; re-scan after recursive reads remove other tree nodes. @param onlyForced - Native forced-only mode. @param this - Actual document instance. @returns Nothing. */
-export function CalcFormulaTree(this: ScDocument, onlyForced: boolean): void {
-  const oldAutoCalc = this["bAutoCalc"];
-  this["bAutoCalc"] = true;
-  this["bCalculatingFormulaTree"] = true;
-  try {
-    for (;;) {
-      let cell = this["pFormulaTree"];
-      while (cell && (!cell.GetDirty() || (onlyForced && !cell.GetCode().IsRecalcModeForced())))
-        cell = cell.GetNext();
-      if (!cell) break;
-      cell.Interpret();
-    }
-  } finally {
-    this["bAutoCalc"] = oldAutoCalc;
-    this["bCalculatingFormulaTree"] = false;
-  }
-}
+export { CalcAll, CalcFormulaTree } from "./documen7.calculation";
 
 /** Marks all represented formulas with the actual native default dirty context; deleted-tab restoration is unsupported. @param context - Dirty context. @param this - Actual document instance. @returns Nothing. */
 export function SetAllFormulasDirty(this: ScDocument, context: SetFormulaDirtyContext): void {
@@ -312,6 +295,35 @@ export function GetDataArea(
   onlyDown: boolean,
 ): void {
   this.FetchTable(tab)?.GetDataArea(firstCol, firstRow, lastCol, lastRow, includeOld, onlyDown);
+}
+
+/** Delegates the source used-data-area query to the requested sheet. @param this - Document. @param shrunk - Bound change result. @param tab - Sheet. @param args - Native bound references and sticky-edge options. @returns Whether the area contains data. */
+export function ShrinkToUsedDataArea(
+  this: ScDocument,
+  shrunk: [boolean],
+  tab: number,
+  startCol: [number],
+  startRow: [number],
+  endCol: [number],
+  endRow: [number],
+  columnsOnly: boolean,
+  stickyTopRow: boolean,
+  stickyLeftCol: boolean,
+): boolean {
+  const table = this.FetchTable(tab);
+  if (table)
+    return table.ShrinkToUsedDataArea(
+      shrunk,
+      startCol,
+      startRow,
+      endCol,
+      endRow,
+      columnsOnly,
+      stickyTopRow,
+      stickyLeftCol,
+    );
+  shrunk[0] = false;
+  return false;
 }
 
 /** Original document.cxx address-only cached script query. @param this - Actual document. @param position - Cell. @returns Stored flags. */
@@ -685,6 +697,7 @@ export function CopyBlockFromClip(
     );
     clipTab = (clipTab + 1) % count;
   }
+  if (!(context.getInsertFlag() & InsertDeleteFlags.CONTENTS)) return;
   clipTab = 0;
   for (
     let tab = context.getTabStart();

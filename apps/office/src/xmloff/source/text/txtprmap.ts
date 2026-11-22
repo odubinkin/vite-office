@@ -1,4 +1,6 @@
 /** @fileoverview Consumed native text character property map and handler transport from txtprmap.cxx; no browser boolean formatting model or substitute UNO provider. */
+import { text as nativeText } from "../../../i18nlangtag/source/isolang/isolang.tables";
+import { escapeXml } from "./txtparae";
 import { cppu_detail_getUnoType_ShadowFormat } from "../../../offapi/com/sun/star/table/ShadowFormat";
 import { cppu_detail_getUnoType_FillStyle } from "../../../offapi/com/sun/star/drawing/FillStyle";
 import { XMLConstantsPropertyHandler } from "../style/XMLConstantsPropertyHandler";
@@ -265,7 +267,10 @@ export function exportTextLanguageProperties(
 }
 
 /** Emits original handler output from native UNO scalar values. @param properties - Filter handoff. @returns Attribute fragment. */
-export function exportTextCharacterProperties(properties: OdfCharacterProperties): string {
+export function exportTextCharacterProperties(
+  properties: OdfCharacterProperties,
+  paragraphStyle = false,
+): string {
   const value = new Any(),
     output: [string] = [""];
   let result = "";
@@ -280,7 +285,8 @@ export function exportTextCharacterProperties(properties: OdfCharacterProperties
       if (kerning.exportXML(output, value, kerningConverter))
         result += ` fo:letter-spacing="${output[0]}"`;
     }
-    for (const [, name, key, handler] of textBooleanProperties) {
+    for (const [token, name, key, handler] of textBooleanProperties) {
+      if (paragraphStyle && token === T.FO_HYPHENATE) continue;
       if (properties[key] !== undefined) {
         value.insert([properties[key]], "bool");
         handler.exportXML(output, value, converter);
@@ -369,9 +375,33 @@ export function exportTextCharacterProperties(properties: OdfCharacterProperties
     value.dispose();
   }
 }
+/** Imports the independent script language properties through the source locale accumulator. @param attributes - Real SAX attributes. @returns Native language values. */
+export function importTextLanguageProperties(
+  attributes: FastAttributeList,
+): Partial<OdfCharacterProperties> {
+  const result: Record<string, number> = {};
+  for (const [suffix, properties] of languageProperties) {
+    let locale: XMLCharLocale | undefined;
+    for (const [token, value] of attributes) {
+      const attribute = properties.find(
+        /** Finds the native locale property. @param entry - Source mapping. @returns Token match. */
+        ([source]) => source === token,
+      );
+      if (attribute) {
+        locale ??= new XMLCharLocale();
+        locale.importXML(attribute[2], value);
+      }
+    }
+    if (locale) result[`language${suffix}`] = locale.getLanguageType();
+  }
+  return result as Partial<OdfCharacterProperties>;
+}
+
 /** Imports native scalar properties, merging underline attributes in actual SAX order. @param attributes - Original source order. @returns Successful property conversions. */
 export function importTextCharacterProperties(
   attributes: FastAttributeList,
+  openOffice2Generator = false,
+  paragraphStyle = false,
 ): Partial<OdfCharacterProperties> {
   const result: Record<string, number | boolean | OdfBoxProperties> = {},
     value = new Any(),
@@ -415,10 +445,12 @@ export function importTextCharacterProperties(
           item === token,
       );
       if (boolean !== undefined) {
+        if (paragraphStyle && token === T.FO_HYPHENATE) continue;
         if (boolean[3].importXML(text, value, converter)) {
           const scalar: [boolean] = [false];
           value.extract(scalar, "bool");
-          result[boolean[2]] = scalar[0];
+          result[boolean[2]] =
+            boolean[2] === "hidden" && openOffice2Generator ? !scalar[0] : scalar[0];
         }
         continue;
       }
@@ -503,21 +535,7 @@ export function importTextCharacterProperties(
         }
       }
     }
-    for (const [suffix, properties] of languageProperties) {
-      let locale: XMLCharLocale | undefined;
-      for (const [token, value] of attributes) {
-        const attribute = properties.find(
-          /** Finds the source locale member. @param entry - Native property mapping. @returns Match. */ ([
-            source,
-          ]) => source === token,
-        );
-        if (attribute) {
-          locale ??= new XMLCharLocale();
-          locale.importXML(attribute[2], value);
-        }
-      }
-      if (locale) result[`language${suffix}`] = locale.getLanguageType();
-    }
+    Object.assign(result, importTextLanguageProperties(attributes));
     return result as Partial<OdfCharacterProperties>;
   } finally {
     value.dispose();
@@ -638,6 +656,24 @@ export type OdfParagraphHyphenation = Readonly<{
     : number;
 }>;
 
+/** Native paragraph hyphenation syntax used in text and paragraph property elements. */
+export const paragraphHyphenationTokens = hyphenationProperties.map(([, token]) => token);
+
+const hyphenationTextFields = new Set([
+  "hyphen",
+  "minLead",
+  "minTrail",
+  "noCaps",
+  "noLastWord",
+  "minWordLength",
+  "zone",
+  "paragraphEndZone",
+  "columnEndZone",
+  "pageEndZone",
+  "spreadEndZone",
+  "compoundMinLead",
+  "compoundMinTrail",
+]);
 const hyphenationKeepTypes = ["auto", "spread", "page", "column", "always"] as const;
 
 /** Imports the original text paragraph hyphenation XML attributes. @param attributes - Native paragraph properties. @returns Present member values. */
@@ -669,10 +705,14 @@ export function importParagraphHyphenation(
 }
 
 /** Exports the original ODF hyphenation attribute forms. @param settings - Direct paragraph item. @returns XML attributes. */
-export function exportParagraphHyphenation(settings?: OdfParagraphHyphenation): string[] {
+export function exportParagraphHyphenation(
+  settings?: OdfParagraphHyphenation,
+  group: "paragraph" | "text" = "paragraph",
+): string[] {
   if (settings === undefined) return [];
   const attributes: string[] = [];
   for (const [key, , name, , kind] of hyphenationProperties) {
+    if ((group === "text") !== hyphenationTextFields.has(key)) continue;
     const value = settings[key];
     if (value === undefined || (kind === "nonzero" && value === 0)) continue;
     let lexical: string | undefined;

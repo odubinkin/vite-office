@@ -1,0 +1,39 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sc/source/ui/view/formatsh.numformat.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "calc",
+    "subsystem": "cell-formatting",
+    "capabilityIds": [
+      "CAP-252f9507-730d-4e78-943d-365348c24997"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/sc/source/ui/view/formatsh.numformat.ts",
+        "apps/office/src/sc/browser/presentation/calc-number-format.test.tsx",
+        "vendor/libreoffice-reference/sc/source/ui/view/formatsh.cxx"
+      ],
+      "justification": "Uses the actual marked column spans and merged selection attributes. The currency key, decimal toggle, time execution, and thousands cases retain their original distinctions.",
+      "knownViolations": [],
+      "localSymbols": [
+        "ExecuteNumFormat",
+        "GetNumFormatState",
+        "GetCurrentNumberFormatType"
+      ],
+      "sourceResponsibility": "divergent",
+      "upstreamFile": "sc/source/ui/view/formatsh.cxx",
+      "upstreamSymbols": [
+        "ScFormatShell::ExecuteNumFormat",
+        "ScFormatShell::GetNumFormatState",
+        "ScFormatShell::GetCurrentNumberFormatType"
+      ]
+    }
+  }
+}

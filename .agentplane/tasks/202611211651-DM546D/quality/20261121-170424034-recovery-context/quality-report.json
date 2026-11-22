@@ -1,0 +1,24 @@
+{
+  "schema_version": 1,
+  "task_id": "202611211651-DM546D",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-11-21T17:04:24.034Z",
+  "verdict": "pass",
+  "summary": "Calc name definition and navigation follow source scope, naming, reference, and native undo contracts.",
+  "evaluated_sha": "f648269b8e0a02514b32de7b76753c55735a72af",
+  "blueprint_digest": "1b8b547c3f1705bf599e7e6872e47de8086f8e65142e6d38448fc55d3df0fb6e",
+  "findings": [
+    "Forty-one focused tests verify the actual Sheet menu, position box, navigation, history, and both document filters."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202611211651-DM546D/README.md",
+    "output/calc-DM546D-verification.md",
+    "output/calc-DM546D-test.log"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": [
+    "The global source-size check reports seven unchanged baseline files."
+  ]
+}

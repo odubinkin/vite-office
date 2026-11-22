@@ -7681,7 +7681,273 @@ change the resulting formula text. Calc preserves that construction.
 
 - [Original quick conditional-format accept handler](../../vendor/libreoffice-reference/sc/source/ui/condformat/condformateasydlg.cxx)
 
-### CALC-807 — Conditional rank percentages truncate before admitting a tie group
+### CALC-807 — A named expression can acquire a range classification from one reference token
+
+Manual name admission assigns the absolute position or area flag from the
+first reference token. The expression can include other tokens, such as an
+arithmetic operator or another reference. Calc preserves first-reference
+classification for manual entry and checks the actual token array when
+resolving a navigable range.
+
+- [Original ScRangeData::CompileRangeData](../../vendor/libreoffice-reference/sc/source/core/tool/rangenam.cxx)
+
+### CALC-808 — Moving an unchanged name can collide with an existing scope entry
+
+Manage Names performs the duplicate-name check when the spelling changes.
+Moving a name with the same spelling into a scope that already contains it
+can remove the original definition while the existing destination definition
+remains. The browser keeps the source change in the draft until confirmation
+and includes it in the manager's single Undo action.
+
+- [Original ScopeChanged and NameModified handlers](../../vendor/libreoffice-reference/sc/source/ui/namedlg/namedlg.cxx)
+
+### CALC-809 — Cancel in Create Names keeps names processed before the conflict
+
+The Cancel response to a replacement prompt stops the remaining header and
+corner labels. The source still installs the names already added to its draft.
+The browser follows that behavior and records the resulting scope as one undo
+action.
+
+- [Original CreateOneName and CreateNames](../../vendor/libreoffice-reference/sc/source/ui/docshell/docfunc.cxx)
+
+### CALC-810 — Right-edge row labels can suggest overlapping data
+
+For a row label range spanning more than one column at the sheet's right
+edge, the source default data range ends just before the last column. This
+can overlap the rest of the label range until the data range is adjusted on
+Add. Calc preserves the source default and subsequent adjustment.
+
+- [Original SetColRowData and AdjustColRowData](../../vendor/libreoffice-reference/sc/source/ui/miscdlgs/crnrdlg.cxx)
+
+### CALC-811 — Calculate options can replace a Formula page recalculation request
+
+The Formula item requests recalculation when conversion or string-reference
+settings change. If the same Options submission also returns a Calculate
+item, Calc replaces that request with the Calculate comparison. Date base
+and automatic label lookup are absent from that comparison. Calc preserves
+the source ordering and recalculation conditions.
+
+- [Original ScModule::ModifyOptions](../../vendor/libreoffice-reference/sc/source/ui/app/scmod.cxx)
+
+### CALC-812 — Formula to Value can record an empty undo action
+
+The source operation records its TableValues snapshot and marks the document
+modified even when an editable selection contains no formulas. The core
+conversion leaves the snapshot empty in that case. Calc preserves the same
+command and undo behavior for an editable selection.
+
+- [Original conversion operation](../../vendor/libreoffice-reference/sc/source/ui/operation/ConvertFormulaToValueOperation.cxx)
+- [Original column conversion and empty-result check](../../vendor/libreoffice-reference/sc/source/core/data/column4.cxx)
+
+### CALC-813 — Formula preview reparses a standalone label
+
+The source quick-help evaluator encloses a standalone column or row label
+in parentheses and compiles it again so it acts as a range. The source
+marks the resulting text with an ellipsis, which prevents Enter from
+pasting the result into the draft. Calc preserves the reparse and the
+associated insertion restriction.
+
+- [Original formula preview helper](../../vendor/libreoffice-reference/sc/source/ui/app/inputhdl.cxx)
+
+### CALC-814 — Text Import can report failure after inserting some cells
+
+When multiline clipboard text overflows the sheet, the source keeps the
+portion that fits and reports that the clipboard contents could not be
+pasted. The source marks this case with an overflow TODO and notes that the
+user can undo the partial insertion. Calc preserves the partial insertion,
+error message and Undo action.
+
+- [Original clipboard Text Import completion](../../vendor/libreoffice-reference/sc/source/ui/view/viewfun5.cxx#L793)
+
+### CALC-815 — Paste Only Numbers stores result errors as tokenless formulas
+
+Copying an erroneous formula as a number creates a formula cell with no
+formula tokens. Calc sets both the compiler error and the result error to
+carry the cached error through the clipboard. The source setter marks this
+dual use of the compiler error as a FIXME. Calc preserves the tokenless cell
+and both error fields across Paste, Undo and Redo.
+
+- [Original clipboard error conversion](../../vendor/libreoffice-reference/sc/source/core/data/column3.cxx#L1405)
+- [Original hard formula error setter](../../vendor/libreoffice-reference/sc/source/core/data/formulacell.cxx#L2785)
+
+### CALC-816 — Transpose rotates only the first endpoint of an external range reference
+
+The source token iterator admits both local and external range references.
+The formula cell recognizes only the local double-reference token when
+deciding to rotate a second endpoint. Calc preserves that distinction in
+the reference transformation.
+
+- [Original formula clipboard reference rotation](../../vendor/libreoffice-reference/sc/source/core/data/formulacell.cxx#L3934)
+- [Original reference token iterator](../../vendor/libreoffice-reference/formula/source/core/api/token.cxx#L1761)
+
+### CALC-817 — The Paste Special All checkbox can reopen unchecked
+
+The source saves the All checkbox to the registry on confirmation. Its
+in-memory previous-content mask stores the individual checkboxes without
+the full All flag. Later openings in the same session use that mask, so
+All can reopen unchecked even after the previous paste used it. Calc
+preserves the session behavior.
+
+- [Original Paste Special preference and content mask handling](../../vendor/libreoffice-reference/sc/source/ui/miscdlgs/inscodlg.cxx#L204)
+
+### CALC-818 — A disjoint mark can make Text to Columns use the cursor cell
+
+The source checks for a multi-mark inside its simple-mark branch. A
+selection stored entirely as a multi-mark reaches the cursor branch and
+can process the active cell alone. Calc preserves that behavior for
+command availability and execution.
+
+- [Original Text to Columns range selection](../../vendor/libreoffice-reference/sc/source/ui/view/cellsh2.cxx#L76)
+
+### CALC-819 — Moving merged contents can retain only the first rich-text cell
+
+The source collects the formatted text of every cell and separately saves the
+first rich-text cell. When the anchor has no display text and a rich-text cell
+was found, the source installs that edit object. The other collected values
+never reach the anchor even though the covered cells have been cleared. Calc
+preserves the same branch, including the rich-text object and its fields.
+
+- [Original merge contents routine](../../vendor/libreoffice-reference/sc/source/core/data/documen3.cxx#L2056)
+
+### CALC-820 — Redo can retain contents that Merge Cells initially emptied
+
+The merge history stores whether contents were moved to the anchor. It does
+not retain the separate choice to empty the covered cells. Undo restores
+those values. Redo reapplies the merge attributes and only repeats the move
+operation when that flag was set. Calc preserves the resulting hidden values.
+
+- [Original merge operation](../../vendor/libreoffice-reference/sc/source/ui/operation/MergeCellsOperation.cxx)
+- [Original merge history](../../vendor/libreoffice-reference/sc/source/ui/undo/undoblk3.cxx#L671)
+
+### CALC-821 — An API merge across multiple occupied cells can do nothing
+
+The source only executes a merge that needs a content decision in the
+interactive dialog callback. The API guard skips that callback even when
+the caller supplies the typed MoveContents argument. Calc preserves the
+no-op for the native view command. The direct document operation accepts
+an explicit content policy.
+
+- [Original merge view dispatch](../../vendor/libreoffice-reference/sc/source/ui/view/viewfun2.cxx#L1273)
+
+### CALC-822 — Grouped split expansion only repeats when the last sheet expands it
+
+The source overwrites the loop's expansion flag while visiting each selected
+sheet. An earlier sheet can enlarge the rectangle and a later sheet can
+clear the flag, so the enlarged rectangle may never be rescanned on the
+earlier sheet. Calc keeps the same loop and tab traversal.
+
+- [Original split view dispatch](../../vendor/libreoffice-reference/sc/source/ui/view/viewfun2.cxx#L1360)
+
+### CALC-823 — The current cell style can ignore the unallocated end of a selection
+
+The native range and disjoint-selection queries only inspect allocated
+columns. A marked range containing a styled cell and implicit Default cells
+in unallocated columns can therefore report the styled cell's style. The
+single-cursor query resolves Default when the cursor moves into that same
+unallocated area. Calc preserves both results for the Styles menu.
+
+- [Original area and selection queries](../../vendor/libreoffice-reference/sc/source/core/data/table2.cxx#L3165)
+- [Original cursor and selection dispatch](../../vendor/libreoffice-reference/sc/source/ui/view/viewfunc.cxx#L1555)
+
+### CALC-824 — A password prompt can record sheet unprotection without changing protection
+
+The callback for the original no-argument sheet command completes the
+copied request with a false protection item after the prompt, including
+when the password is incorrect or the prompt was canceled. The sheet
+changes only after successful verification. Calc preserves the request
+completion and the unchanged sheet state in those cases.
+
+- [Original password prompt callback](../../vendor/libreoffice-reference/sc/source/ui/view/tabvwsh3.cxx#L301)
+
+### CALC-825 — Grouped Protect Sheet history can discard previous protection
+
+Protect Sheet applies the new configuration to the entire selected tab
+group. Its history owns the newly applied configuration, and Undo clears
+the protected state on those tabs. A previously protected member of the
+group therefore loses its original settings when that action is undone.
+Calc preserves the source operation and its history.
+
+- [Original grouped protect operation](../../vendor/libreoffice-reference/sc/source/ui/view/viewfunc.cxx#L2805)
+- [Original sheet protection history](../../vendor/libreoffice-reference/sc/source/ui/undo/undotab.cxx#L1355)
+
+### CALC-826 — Select Unprotected Cells can include a cell that rejects input
+
+The original unlocked-range scan checks the Protected item flag. The
+input editability test also treats Hide All as protection on a protected
+sheet. The command can therefore mark a cell whose Protected flag is
+clear and whose Hide All flag is set, while input still rejects edits.
+Calc preserves both predicates.
+
+- [Original unlocked range scan](../../vendor/libreoffice-reference/sc/source/core/data/column4.cxx#L913)
+- [Original protected attribute predicate](../../vendor/libreoffice-reference/sc/source/core/data/attarray.cxx)
+
+### CALC-827 — Select Unprotected Cells omits unlocked default-column tails
+
+The original command scans only allocated columns. If the shared default
+column carries an unlocked run, its implicit instances in later columns
+are absent from the selection. Calc preserves the allocation boundary.
+
+- [Original sheet selection traversal](../../vendor/libreoffice-reference/sc/source/core/data/table2.cxx#L2047)
+
+### CALC-828 — A localized Number format can appear checked without toggling to General
+
+The Number shortcut checks the built-in table offset for its checked state.
+Its execute handler compares the full key with 4. On a noninitial language
+block the button can therefore stay checked after repeated use. Calc retains
+both checks.
+
+- [Original Number state](../../vendor/libreoffice-reference/sc/source/ui/view/formatsh.cxx#L1942)
+- [Original Number command](../../vendor/libreoffice-reference/sc/source/ui/view/formatsh.cxx#L273)
+
+### CALC-829 — The Time shortcut omits the end-input step
+
+The Time shortcut applies its category while the active cell edit is still
+open. Other category shortcuts close the edit before applying their formats.
+Calc preserves the Time shortcut's omission from the end-input switch.
+
+- [Original input termination and Time case](../../vendor/libreoffice-reference/sc/source/ui/view/formatsh.cxx#L247)
+
+### CALC-830 — The number format category of a selection can depend on its shape
+
+Each contiguous marked run is checked for a uniform format key. A run with
+different keys is classified as General, even when both formats belong to
+the same category. Separate runs with the same formats can still produce
+that category. Calc preserves the range lookup and category aggregation.
+
+- [Original category aggregation](../../vendor/libreoffice-reference/sc/source/ui/view/formatsh.cxx#L2093)
+- [Original column format lookup](../../vendor/libreoffice-reference/sc/source/core/data/column.cxx#L362)
+
+### CALC-831 — A mixed number category can show General without applying it
+
+The panel clears its category selection for an invalid state and resets its
+cached category to index 0. Selecting General then changes the visible
+selection, but the handler sees the cached index 0 and sends no command.
+Calc retains the original comparison and the displayed selection.
+
+- [Original category change handler](../../vendor/libreoffice-reference/sc/source/ui/sidebar/NumberFormatPropertyPanel.cxx#L86)
+- [Original mixed category update](../../vendor/libreoffice-reference/sc/source/ui/sidebar/NumberFormatPropertyPanel.cxx#L214)
+
+### CALC-832 — Number Format options ignore an unterminated final field
+
+The format shell assigns each option when it finds a comma. A missing
+trailing comma leaves the corresponding option at its zero default.
+The normal sidebar builds the terminated string, and a direct native
+request retains the same parsing rule.
+
+- [Original native request parser](../../vendor/libreoffice-reference/sc/source/ui/view/formatsh.cxx#L410)
+- [Original sidebar options request](../../vendor/libreoffice-reference/sc/source/ui/sidebar/NumberFormatPropertyPanel.cxx#L108)
+
+### CALC-833 — The cell popup contains an unmatched default-style command
+
+The cell popup declares `.uno:DefaultCellStylesmenu`. The Calc command
+catalogue registers `.uno:DefaultCellStyles`. Calc retains the original
+popup identifier and records its missing registration in the resource
+disposition.
+
+- [Original cell popup](../../vendor/libreoffice-reference/sc/uiconfig/scalc/popupmenu/cell.xml#L45)
+- [Original Calc command catalogue](../../vendor/libreoffice-reference/officecfg/registry/data/org/openoffice/Office/UI/CalcCommands.xcu#L3005)
+
+### CALC-834 — Conditional rank percentages truncate before admitting a tie group
 
 Calc computes the number of eligible values by truncating the numeric
 population times the percent divided by 100. A small nonzero percentage
@@ -7691,7 +7957,7 @@ count. The ODS rule keeps the original operand and evaluation.
 
 - [Original rank and percentage conditions](../../vendor/libreoffice-reference/sc/source/core/data/conditio.cxx)
 
-### CALC-808 — Conditional duplicates exclude blanks from the cache but test an empty cell as zero
+### CALC-835 — Conditional duplicates exclude blanks from the cache but test an empty cell as zero
 
 The original cache skips unoccupied cells. A condition with a numeric
 operand class nevertheless evaluates an empty cell as zero, so an empty
@@ -7700,7 +7966,7 @@ contains two numeric zeros. Empty string results take the string branch.
 
 - [Original cell content and duplicate conditions](../../vendor/libreoffice-reference/sc/source/core/data/conditio.cxx)
 
-### CALC-809 — A legacy conditional style transfers its format to the first matching sheet
+### CALC-836 — A legacy conditional style transfers its format to the first matching sheet
 
 Applying two ranges with the same automatic cell style on different sheets
 only installs the format on the first sheet. After handing off its format,
@@ -7711,7 +7977,7 @@ and equality checks.
 - [Original legacy style format application](../../vendor/libreoffice-reference/sc/source/filter/xml/xmlstyli.cxx)
 - [Scope and precedence regression](../../apps/office/src/sc/source/filter/xml/ods-legacy-conditions.test.ts)
 
-### CALC-810 — An empty extended conditional format element gates legacy maps
+### CALC-837 — An empty extended conditional format element gates legacy maps
 
 Creating a sheet's `calcext:conditional-formats` context clears that sheet's
 conditional formats and sets an importer-wide flag. Even if the element is
@@ -7722,7 +7988,7 @@ their formats. Calc keeps this ordering.
 - [Original extended element constructor](../../vendor/libreoffice-reference/sc/source/filter/xml/xmlcondformat.cxx)
 - [Original automatic style import gate](../../vendor/libreoffice-reference/sc/source/filter/xml/xmlstyli.cxx)
 
-### CALC-811 — A formula name gets a reference type flag from its first reference token
+### CALC-838 — A formula name gets a reference type flag from its first reference token
 
 `ScRangeData::CompileRangeData` sets the position or area flag from the
 first reference token it finds, including when the surrounding expression
@@ -7735,7 +8001,7 @@ expression.
 - [Original named expression compilation and reference checks](../../vendor/libreoffice-reference/sc/source/core/tool/rangenam.cxx)
 - [ODS name scope and serialization regression](../../apps/office/src/sc/source/filter/xml/ods-named-expressions.test.ts)
 
-### CALC-812 — Data-bar equality conflates different threshold types
+### CALC-839 — Data-bar equality conflates different threshold types
 
 `ScDataBarFormat::IsEqual` compares a threshold's color and value only
 when the two threshold types agree. It also leaves the configured
@@ -7745,7 +8011,7 @@ behaviors.
 - [Original data-bar equality](../../vendor/libreoffice-reference/sc/source/core/data/colorscale.cxx)
 - [Calc data-bar regression](../../apps/office/src/sc/source/filter/xml/ods-data-bars.test.ts)
 
-### CALC-813 — ODS data bars normalize zero maximum length and drop the comparison mode
+### CALC-840 — ODS data bars normalize zero maximum length and drop the comparison mode
 
 An explicit zero maximum length imports as 100. The threshold reader
 accepts `calcext:greater_equal`, but the data-bar export writes only the
@@ -7755,7 +8021,7 @@ behavior.
 - [Original data-bar and threshold import](../../vendor/libreoffice-reference/sc/source/filter/xml/xmlcondformat.cxx)
 - [Original data-bar export](../../vendor/libreoffice-reference/sc/source/filter/xml/xmlexprt.cxx)
 
-### CALC-814 — A centered data bar with two zero limits computes a non-finite length
+### CALC-841 — A centered data bar with two zero limits computes a non-finite length
 
 The middle-axis geometry divides the bounded cell value by the greater
 of the two absolute limits. Both limits can be zero. The model preserves
@@ -7763,7 +8029,7 @@ the resulting non-finite length.
 
 - [Original data-bar axis geometry](../../vendor/libreoffice-reference/sc/source/core/data/colorscale.cxx)
 
-### CALC-815 — Conditional styles overwrite the cell protection visibility flags
+### CALC-842 — Conditional styles overwrite the cell protection visibility flags
 
 `handleConditionalFormat` writes `bHidden` and `bHideFormula` from the
 first resolved conditional style on a protected sheet. The adjacent
@@ -7774,7 +8040,7 @@ protected-cell rendering work.
 
 - [Original conditional paint and protection flags](../../vendor/libreoffice-reference/sc/source/core/data/fillinfo.cxx)
 
-### CALC-816 — ODS icon-set visibility uses different import and export locations
+### CALC-843 — ODS icon-set visibility uses different import and export locations
 
 The icon-set reader negates a present `calcext:show-value` attribute.
 The exporter queues `calcext:show-value="false"` after starting the icon
@@ -7786,7 +8052,7 @@ the model's visibility flag.
 - [Original icon-set import context](../../vendor/libreoffice-reference/sc/source/filter/xml/xmlcondformat.cxx)
 - [Original icon-set output](../../vendor/libreoffice-reference/sc/source/filter/xml/xmlexprt.cxx)
 
-### CALC-817 — ODS icon sets and the editor can reset custom settings
+### CALC-844 — ODS icon sets and the editor can reset custom settings
 
 The exporter writes the custom flag and ordered custom icon pairs.
 The icon-set import context reads the set type, visibility, and formatting
@@ -7797,7 +8063,7 @@ ODS reopen or editor acceptance. Calc preserves these source paths.
 - [Original icon-set parser](../../vendor/libreoffice-reference/sc/source/filter/xml/xmlcondformat.cxx)
 - [Original icon-set editor](../../vendor/libreoffice-reference/sc/source/ui/condformat/condformatdlgentry.cxx)
 
-### CALC-818 — An icon-set clone keeps the threshold formula's source document
+### CALC-845 — An icon-set clone keeps the threshold formula's source document
 
 The icon-set data copy constructor clones each color-scale threshold
 without a destination document. The format clone can therefore own a
@@ -7806,7 +8072,7 @@ source-document binding for this copy operation.
 
 - [Original icon-set and threshold copy constructors](../../vendor/libreoffice-reference/sc/source/core/data/colorscale.cxx)
 
-### CALC-819 — Rich-text word mode exports through the strikeout attribute
+### CALC-846 — Rich-text word mode exports through the strikeout attribute
 
 The shared text mapper imports underline, overline and strikeout word
 modes into one `CharWordMode` value. Calc's edit attribute map associates
@@ -7819,7 +8085,7 @@ attribute.
 - [Original Calc edit attribute map](../../vendor/libreoffice-reference/sc/source/filter/xml/editattributemap.cxx)
 - [Original edit-run export](../../vendor/libreoffice-reference/sc/source/filter/xml/xmlexprt.cxx)
 
-### CALC-820 — A font charset token can succeed without producing a value
+### CALC-847 — A font charset token can succeed without producing a value
 
 The shared XML font charset handler supplies an encoding only for
 `x-symbol` and reports success for other tokens. The defaulting pass
@@ -7830,7 +8096,7 @@ members in cell and edit styles.
 - [Original charset conversion](../../vendor/libreoffice-reference/xmloff/source/style/fonthdl.cxx)
 - [Original font member defaults](../../vendor/libreoffice-reference/xmloff/source/text/txtimppr.cxx)
 
-### CALC-821 — The ODF height contains a separately exported body distance
+### CALC-848 — The ODF height contains a separately exported body distance
 
 The original header/footer dialog adds the body distance before writing
 the nested size item. Calc's UNO page style then publishes that item
@@ -7842,7 +8108,7 @@ contract and keeps the height and margin as authored in ODS.
 - [Original Calc page style property map](../../vendor/libreoffice-reference/sc/source/ui/unoobj/styleuno.cxx)
 - [Original ODF page master property map](../../vendor/libreoffice-reference/xmloff/source/style/PageMasterStyleMap.cxx)
 
-### CALC-822 — A left or first-page variant requires an earlier right-page declaration
+### CALC-849 — A left or first-page variant requires an earlier right-page declaration
 
 The shared master-page importer accepts left and first-page content only
 after it has processed the ordinary header or footer in the same master.

@@ -13,7 +13,9 @@ import { SfxViewFrame } from "../../../sfx2/source/view/viewfrm";
 import { createSfxShell } from "../../../sfx2/source/control/shell";
 import { BrowserSfxDispatcher } from "../../../framework/browser/dispatch/browser-dispatcher";
 import { CalcViewController } from "../controller/calc-view-controller";
+import { createCalcCalculationInterface } from "../../sdi/docsh";
 import { createCalcInterface } from "../../sdi/scalc";
+import { createCalcSidebarShell, SIDEBAR_COMMAND } from "../workflows/calc-sidebar";
 import { CalcSheetWorkflows } from "../workflows/calc-sheet-workflows";
 import { CalcFileWorkflows } from "../workflows/calc-file-workflows";
 import { CalcWorkbench } from "../presentation/calc-workbench";
@@ -45,7 +47,7 @@ export function createCalcSession(
     frame = new SfxViewFrame<CalcViewController>(new BrowserSfxDispatcher());
   const autosave = store === undefined ? undefined : createCalcAutosave(controller.shell, store),
     fileWorkflows = new CalcFileWorkflows(controller, store, autosave),
-    sheetWorkflows = new CalcSheetWorkflows(controller);
+    sheetWorkflows = new CalcSheetWorkflows(controller, frame.GetDispatcher());
   frame.SetActiveView(controller, [
     createSfxShell(
       controller,
@@ -57,8 +59,17 @@ export function createCalcSession(
           ]?.shortcuts.map(normalizeCommandShortcut),
       ),
     ),
+    createSfxShell(controller, createCalcCalculationInterface()),
+    createCalcSidebarShell(
+      /** Refreshes the active Sidebar child and View menu state. @returns Nothing. */
+      () => frame.GetDispatcher().Invalidate(SIDEBAR_COMMAND),
+      generated.commands[SIDEBAR_COMMAND].shortcuts.map(normalizeCommandShortcut),
+    ),
     fileWorkflows.GetShell(),
     sheetWorkflows.GetShell(),
+    sheetWorkflows.protection.GetShell(),
+    sheetWorkflows.options.GetShell(),
+    sheetWorkflows.clipboard.GetShell(),
   ]);
   const detach = controller.Subscribe(
     /** Invalidates shared command bindings when source/input state changes. @returns Nothing. */ () =>

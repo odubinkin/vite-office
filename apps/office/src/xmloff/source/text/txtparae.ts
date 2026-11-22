@@ -1,6 +1,9 @@
 /**
  * @fileoverview Reimplements the bounded ODF text paragraph export boundary from pinned LibreOffice `xmloff/source/text/txtparae.cxx`.
  */
+import { FontPitch } from "../../../tools/inc/fontenum";
+import { RTL_TEXTENCODING_DONTKNOW } from "../../../sal/inc/rtl/textenc";
+import { exportInlineFont, getFontFamilyFromGeneric } from "../style/fonthdl";
 import { XMLShadowPropHdl } from "../style/shadwhdl";
 import { exportAnnotation, type XMLAnnotationExportMarker } from "./txtflde";
 import type { XMLTextFrameExportSource } from "./XMLTextFrameExport";
@@ -266,9 +269,10 @@ export class XMLTextParagraphExport {
             : `<style:paragraph-properties${paragraphAttributes.length === 0 ? "" : ` ${paragraphAttributes.join(" ")}`}>${paragraphChildren}</style:paragraph-properties>`;
         const properties = parseCharacterPropertiesKey(charKey);
         const textProperties =
-          Object.keys(properties).length === 0
+          Object.keys(properties).length === 0 &&
+          parsedParagraphProperties.hyphenation === undefined
             ? ""
-            : exportCharacterPropertyElement(properties, fontFaceName);
+            : exportCharacterPropertyElement(properties, fontFaceName, parsedParagraphProperties);
         if (listRule !== "") {
           const listStyle = listStyleNames.get(listRule);
           /* istanbul ignore next -- The collected paragraph and list-rule maps share one source pass. */
@@ -896,10 +900,49 @@ function parseCharacterPropertiesKey(key: string): Partial<OdfCharacterPropertie
   return JSON.parse(key) as Partial<OdfCharacterProperties>;
 }
 
+/** Emits native face references and permitted inline members of each script. @param properties - Actual font values. @param fontFaceName - Optional font-face pool. @param includeInlineFont - Named-style compatibility flag. @returns XML attributes. */
+function exportCharacterFonts(
+  properties: Partial<OdfCharacterProperties>,
+  fontFaceName?: FontFaceNameResolver,
+  includeInlineFont = false,
+): string {
+  let result = "";
+  for (const [script, suffix] of [
+    ["", ""],
+    ["Asian", "-asian"],
+    ["Complex", "-complex"],
+  ] as const) {
+    const family = properties[`fontFamily${script}`];
+    if (family === undefined) continue;
+    const generic = properties[`fontFamilyGeneric${script}`];
+    const style = properties[`fontStyleName${script}`];
+    const pitch = properties[`fontPitch${script}`];
+    const encoding = properties[`fontCharSet${script}`];
+    if (fontFaceName) {
+      result += ` style:font-name${suffix}="${escapeXml(fontFaceName(family, generic, style, pitch, encoding))}"`;
+    }
+    if (includeInlineFont || !fontFaceName)
+      for (const [name, value] of exportInlineFont(
+        {
+          familyName: family,
+          styleName: style ?? "",
+          family: getFontFamilyFromGeneric(generic),
+          pitch: pitch ?? FontPitch.PITCH_DONTKNOW,
+          charSet: encoding ?? RTL_TEXTENCODING_DONTKNOW,
+        },
+        suffix,
+      ))
+        result += ` ${name}="${escapeXml(value)}"`;
+  }
+  return result;
+}
+
 /** Emits supported ODF text-property attributes. @param properties - Direct properties. @param fontFaceName - Optional family-to-face resolver. @returns Attribute fragment. */
 export function exportCharacterAttributes(
   properties: Partial<OdfCharacterProperties>,
   fontFaceName?: FontFaceNameResolver,
+  paragraphStyle = false,
+  includeInlineFont = false,
 ): string {
   assertOdfColor(properties.color, "auto", "font color");
   assertOdfColor(properties.highlight, "transparent", "highlight color");
@@ -912,17 +955,7 @@ export function exportCharacterAttributes(
     properties.textTransparency === undefined
       ? ""
       : ` loext:opacity="${100 - properties.textTransparency}%"`,
-    properties.fontFamily === undefined
-      ? ""
-      : fontFaceName === undefined
-        ? ` fo:font-family="${escapeXml(properties.fontFamily)}"`
-        : ` style:font-name="${escapeXml(fontFaceName(properties.fontFamily, properties.fontFamilyGeneric, properties.fontStyleName, properties.fontPitch, properties.fontCharSet))}"`,
-    properties.fontFamilyAsian !== undefined && fontFaceName !== undefined
-      ? ` style:font-name-asian="${escapeXml(fontFaceName(properties.fontFamilyAsian, properties.fontFamilyGenericAsian, properties.fontStyleNameAsian, properties.fontPitchAsian, properties.fontCharSetAsian))}"`
-      : "",
-    properties.fontFamilyComplex !== undefined && fontFaceName !== undefined
-      ? ` style:font-name-complex="${escapeXml(fontFaceName(properties.fontFamilyComplex, properties.fontFamilyGenericComplex, properties.fontStyleNameComplex, properties.fontPitchComplex, properties.fontCharSetComplex))}"`
-      : "",
+    exportCharacterFonts(properties, fontFaceName, includeInlineFont),
     properties.fontSizeTwips === undefined
       ? ""
       : ` fo:font-size="${properties.fontSizeTwips / 20}pt"`,
@@ -941,7 +974,7 @@ export function exportCharacterAttributes(
         value,
       ]) => ` ${name}="${escapeXml(value)}"`,
     ),
-    exportTextCharacterProperties(properties),
+    exportTextCharacterProperties(properties, paragraphStyle),
   ].join("");
 }
 
@@ -949,8 +982,17 @@ export function exportCharacterAttributes(
 export function exportCharacterPropertyElement(
   properties: Partial<OdfCharacterProperties>,
   fontFaceName?: FontFaceNameResolver,
+  paragraph?: OdfParagraphProperties,
+  includeInlineFont = false,
 ): string {
-  const attributes = exportCharacterAttributes(properties, fontFaceName);
+  const hyphenation = exportParagraphHyphenation(paragraph?.hyphenation, "text");
+  const attributes =
+    exportCharacterAttributes(
+      properties,
+      fontFaceName,
+      paragraph !== undefined,
+      includeInlineFont,
+    ) + (hyphenation.length ? ` ${hyphenation.join(" ")}` : "");
   const child = properties.themeColor
     ? exportComplexColor(createOdfThemeColor(properties.themeColor), "char-complex-color")
     : "";

@@ -1,0 +1,33 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sc/browser/workflows/calc-options-workflow.ts",
+    "classification": "browser-adaptation",
+    "state": "foundation",
+    "suite": "calc",
+    "subsystem": "document-calculation-options",
+    "capabilityIds": [
+      "CAP-ba65d1e2-0718-4c50-a1ab-31be6773a0b2",
+      "CAP-6edf8b17-739a-4a36-8429-4560dc10f34c"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "not-applicable",
+      "defaultStatus": "not-applicable",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/sc/browser/workflows/calc-options-workflow.ts",
+        "apps/office/src/sc/browser/presentation/calc-options.test.tsx"
+      ],
+      "justification": "Adapts the original asynchronous OptionsTreeDialog slot to the shared browser dialog service and calls ScModule for the current document.",
+      "knownViolations": [],
+      "localSymbols": [
+        "CalcOptionsWorkflow"
+      ],
+      "sourceResponsibility": "browser-owned",
+      "upstreamFile": null,
+      "upstreamSymbols": []
+    }
+  }
+}

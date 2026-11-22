@@ -1,0 +1,27 @@
+{
+  "schema_version": 1,
+  "task_id": "202611212010-FJ8YQ4",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-11-21T22:45:06.920Z",
+  "verdict": "pass",
+  "summary": "The source Paste Special workflow and presets are connected, verified in browser and native Calc tests, and the tenth-task full checkpoint and focused remediation are recorded.",
+  "evaluated_sha": "67eece481542ea68be090e2effd6070de9a4ac4d",
+  "blueprint_digest": "d95f8aa94500ed4cd503d16670e6ab6d03850381376451c9bc1d4ed99ca4c6d2",
+  "findings": [
+    "Verified exact format-only behavior, undo ownership, combined flags, clipboard preferences, and default control availability against the task contract. Inspected the full Office and Chrome logs and scoped retries for all Calc failures and both uncaught keyboard events."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202611212010-FJ8YQ4/README.md",
+    "output/calc-task10-verification-progress.md",
+    "output/calc-task10-shortcut-retry.log",
+    "output/calc-task10-shortcut-browser-retry.log",
+    "output/calc-task10-full-office.log",
+    "output/calc-task10-full-browser.log"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": [
+    "The two reproducible Writer cell-alignment assertions are inherited from baseline task 458SWH. Linked paste, arithmetic, shifts, comments, and objects require separate kernel capabilities."
+  ]
+}

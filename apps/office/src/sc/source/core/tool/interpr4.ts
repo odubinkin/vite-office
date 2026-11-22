@@ -9,7 +9,7 @@ import {
   StackVar,
 } from "../../../../formula/inc/token";
 import { ScCalcConfig } from "../../../inc/calcconfig";
-import { ScGlobal } from "../../../inc/global";
+import { CellType, ScGlobal } from "../../../inc/global";
 import { SvNumFormatType } from "../../../../svl/inc/zforlist";
 import type { OUStringConstReference } from "../../../../sal/inc/rtl/ustring";
 import { ScRefCellValue } from "../../../inc/cellvalue";
@@ -28,7 +28,6 @@ import { RangeColumnSpanSet } from "../../../inc/columnspanset";
 import { ScValueIterator } from "../../../inc/dociter";
 import { FuncSum, IterateMatrix, type MatrixAggregate } from "./interpr6";
 import { ScCompiler } from "../../../inc/compiler";
-import { CellType } from "../../../inc/global";
 import { SharedString, type SharedStringConstReference } from "../../../../svl/inc/sharedstring";
 import type { FormulaConstTokenRef } from "../../../../formula/inc/types";
 import { FormulaError, GetDoubleErrorValue } from "../../../../formula/inc/errorcodes";
@@ -53,11 +52,11 @@ import { InterpretDateOpcode, ScRangeFunc } from "./interpr2";
 import { ScFrequency, ScMatRef } from "./interpr5";
 import { InterpretAnalysisAddIn } from "./addincol.analysis";
 import { ScIsEmpty, ScIsError, ScNot, ScOffset } from "./interpr1.reference";
+import { ScColRowNameAuto } from "./interpr4.colrowname";
 import { isComparison } from "../../../../formula/inc/FormulaCompiler";
 import { ScQueryEntry, type ScQueryItem } from "./queryentry";
 import { ScQueryCellIteratorDirect } from "../data/queryiter";
 import { SearchParam } from "../../../../unotools/source/i18n/textsearch";
-
 const kScInterpreterMaxStrLen = Math.trunc(SAL_MAX_INT32 / 8);
 /** Actual initialized numeric interpreter state, with token references owned by JS GC. */
 export class ScInterpreter {
@@ -882,6 +881,8 @@ export class ScInterpreter {
         else this.PushWithoutError(token);
       } else if (op === OpCode.ocMatRef && token instanceof ScSingleRefToken)
         ScMatRef.call(this, token);
+      else if (op === OpCode.ocColRowNameAuto && token instanceof ScDoubleRefToken)
+        ScColRowNameAuto.call(this, token);
       else if (op === OpCode.ocMissing) this.PushWithoutError(token);
       else if (op === OpCode.ocPi) this.PushDouble(Math.PI);
       else if (op === OpCode.ocNotAvail) this.SetError(FormulaError.NotAvailable);

@@ -1,0 +1,25 @@
+{
+  "schema_version": 1,
+  "task_id": "202611211734-CJ68YT",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-11-21T18:09:46.232Z",
+  "verdict": "pass",
+  "summary": "Source interaction, native scope history, formula syntax and existing name filters were verified through Calc tests.",
+  "evaluated_sha": "1990258a1d4e17e09ca4d90243dd51e4f7a9c2b4",
+  "blueprint_digest": "b8a7956f3d8c207ee9177e62915a9b8f6d9d3e2d4704496d5ba82e651c03fbf9",
+  "findings": [
+    "The pinned tdf137617 orientation and position-box assertions passed in Calc A1 and Excel R1C1.",
+    "Yes, No and Cancel decisions and atomic history passed through the real sheet-menu and cell paths."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202611211734-CJ68YT/README.md",
+    "output/calc-CJ68YT-verification.md",
+    "output/calc-CJ68YT-verified.log",
+    "output/calc-CJ68YT-xlsx-verified.log",
+    "1990258a1d4e17e09ca4d90243dd51e4f7a9c2b4"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": []
+}

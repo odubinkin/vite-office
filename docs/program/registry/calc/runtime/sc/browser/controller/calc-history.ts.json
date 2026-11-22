@@ -1,0 +1,32 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sc/browser/controller/calc-history.ts",
+    "classification": "browser-adaptation",
+    "state": "foundation",
+    "suite": "calc",
+    "subsystem": "cell-merge",
+    "capabilityIds": [
+      "CAP-1e59a9cf-0fe6-4a96-acde-b800951b36b6"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "not-applicable",
+      "defaultStatus": "not-applicable",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/sc/browser/controller/calc-history.ts",
+        "apps/office/src/sc/source/ui/view/cell-merge-history.test.ts"
+      ],
+      "justification": "Projects native Undo and Redo into the active browser sheet, cursor and mark state after the document action runs. Browser viewport and input state remain with the existing Calc view controller.",
+      "knownViolations": [],
+      "localSymbols": [
+        "History"
+      ],
+      "sourceResponsibility": "browser-owned",
+      "upstreamFile": null,
+      "upstreamSymbols": []
+    }
+  }
+}

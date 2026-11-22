@@ -54,7 +54,19 @@ export function restoreParagraphControlItem(which: number, value: unknown): SfxP
   if (which === RES_PARATR_HYPHENZONE) {
     if (typeof value !== "object" || value === null)
       throw new Error("Writer hyphenation settings are invalid.");
-    const snapshot = value as HyphenZoneSettings;
+    const stored = value as Readonly<Record<string, unknown>>;
+    const snapshot = (
+      "hyphenate" in stored
+        ? {
+            ...stored,
+            hyphen: stored.hyphenate,
+            paragraphEndZone: stored.zoneAlways,
+            columnEndZone: stored.zoneColumn,
+            pageEndZone: stored.zonePage,
+            spreadEndZone: stored.zoneSpread,
+          }
+        : stored
+    ) as HyphenZoneSettings;
     const defaults = SvxHyphenZoneItem.CreateDefault().QueryValue();
     for (const key of Object.keys(defaults) as (keyof HyphenZoneSettings)[]) {
       const field = snapshot[key];

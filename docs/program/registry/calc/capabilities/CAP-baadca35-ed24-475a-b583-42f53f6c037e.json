@@ -1,0 +1,115 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "id": "CAP-baadca35-ed24-475a-b583-42f53f6c037e",
+    "capabilityId": "CAP-baadca35-ed24-475a-b583-42f53f6c037e",
+    "suite": "calc",
+    "subsystem": "cell-formatting",
+    "type": "command",
+    "maturity": "implemented",
+    "capability": "Calc Properties Number Format panel and native currency chooser",
+    "assertions": [
+      "The native Properties panel and currency split buttons operate on the active formatter, selection and attribute history. Options, visible number formats, grid colors, native category transitions and current document currency identities share the real binding state. CALC-831 and CALC-832 retain the pinned selection and request parsing behavior."
+    ],
+    "stackDivergence": {
+      "kind": "browser-adaptation",
+      "rationale": "React controls use the original panel composition and display through the shared DOM sidebar and popup owners."
+    },
+    "gaps": [
+      "This delivery contains the Number Format section of the Calc Properties deck. Additional sidebar decks and the complete Format Cells dialog have separate source owners.",
+      "Desktop UNO toolkit and language collation are projected by the existing browser Sfx adapter and native JavaScript collation."
+    ],
+    "upstream": {
+      "implementation": [
+        {
+          "path": "vendor/libreoffice-reference/sc/source/ui/view/formatsh.cxx",
+          "marker": "case SID_NUMBER_TYPE_FORMAT"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/source/ui/sidebar/NumberFormatPropertyPanel.cxx",
+          "marker": "NumberFormatPropertyPanel::NotifyItemUpdate"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/source/ui/docshell/DocumentModelAccessor.cxx",
+          "marker": "DocumentModelAccessor::getDocumentCurrencies"
+        },
+        {
+          "path": "vendor/libreoffice-reference/svx/source/tbxctrls/tbcontrl.cxx",
+          "marker": "SvxCurrencyToolBoxControl::GetCurrencySymbols"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/source/ui/view/output2.cxx",
+          "marker": "aFont.SetColor(*pColor)"
+        }
+      ],
+      "tests": [
+        {
+          "path": "vendor/libreoffice-reference/sc/qa/unit/ucalc.cxx",
+          "marker": "testDocumentModelAccessor_getDocumentCurrencies"
+        }
+      ],
+      "docs": [
+        {
+          "path": "vendor/libreoffice-reference/sc/uiconfig/scalc/ui/sidebarnumberformat.ui",
+          "marker": "decimalplaceslabel"
+        }
+      ]
+    },
+    "local": {
+      "implementation": [
+        {
+          "path": "apps/office/src/sc/source/ui/view/formatsh.numformat.ts",
+          "marker": "executeOptions"
+        },
+        {
+          "path": "apps/office/src/sc/browser/sidebar/NumberFormatPropertyPanel.tsx",
+          "marker": "NumberFormatPropertyPanel"
+        },
+        {
+          "path": "apps/office/src/sc/source/ui/docshell/DocumentModelAccessor.ts",
+          "marker": "getDocumentCurrencies"
+        },
+        {
+          "path": "apps/office/src/svx/source/tbxctrls/tbcontrl.currency.ts",
+          "marker": "GetCurrencySymbols"
+        },
+        {
+          "path": "apps/office/src/sc/browser/editor/cell-input.ts",
+          "marker": "cellPresentation"
+        }
+      ],
+      "tests": [
+        {
+          "path": "apps/office/src/sc/browser/presentation/calc-number-format-sidebar.test.tsx",
+          "marker": "ports testDocumentModelAccessor_getDocumentCurrencies"
+        },
+        {
+          "path": "apps/office/src/svx/source/tbxctrls/tbcontrl.currency.test.ts",
+          "marker": "prioritizes document currencies"
+        }
+      ],
+      "docs": [
+        {
+          "path": ".agentplane/tasks/202611220152-4W24JY/README.md",
+          "marker": "Verify Steps"
+        },
+        {
+          "path": "docs/program/calc-upstream-suspected-issues.md",
+          "marker": "CALC-831"
+        }
+      ]
+    },
+    "implemented": true,
+    "contractParity": false,
+    "behaviorParity": false,
+    "defaultParity": false,
+    "verified": false,
+    "aspect": "command-state",
+    "atomicOperation": "calc-properties-number-format",
+    "scopeLimitations": [
+      "This delivery contains the Number Format section of the Calc Properties deck. Additional sidebar decks and the complete Format Cells dialog have separate source owners.",
+      "Desktop UNO toolkit and language collation are projected by the existing browser Sfx adapter and native JavaScript collation."
+    ]
+  }
+}

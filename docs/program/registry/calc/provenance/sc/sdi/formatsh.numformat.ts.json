@@ -1,0 +1,53 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/sc/sdi/formatsh.numformat.ts",
+    "status": "mapped",
+    "upstreamPath": "sc/sdi/scalc.sdi",
+    "localSymbols": [
+      "createCalcNumberFormatSlots",
+      "SID_NUMBER_CURRENCY",
+      "SID_NUMBER_THOUSANDS"
+    ],
+    "upstreamSymbols": [
+      "SfxBoolItem NumberFormatCurrency",
+      "SfxVoidItem NumberFormatThousands"
+    ],
+    "preservedResponsibilities": [
+      "Registers all ten numeric shortcuts at their Sfx slots and delegates checked state and typed requests to the format shell."
+    ],
+    "omittedResponsibilities": [
+      "The registered commands cover the ten numeric shortcuts. The full Format Cells dialog, sidebar format setup, and currency chooser have separate source owners.",
+      "Browser input and state invalidation use the established Sfx adapter. Native toolkit and complete formatter services remain outside this capability."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sc/sdi/formatsh.numformat.ts",
+          "marker": "createCalcNumberFormatSlots"
+        },
+        {
+          "path": "apps/office/src/sc/browser/presentation/calc-number-format.test.tsx",
+          "marker": "@fileoverview"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sc/sdi/scalc.sdi",
+          "marker": "SfxBoolItem NumberFormatCurrency"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/sdi/scalc.sdi",
+          "marker": "SfxVoidItem NumberFormatThousands"
+        }
+      ]
+    },
+    "filenameDivergence": {
+      "localPath": "apps/office/src/sc/sdi/formatsh.numformat.ts",
+      "rationale": "A focused translation-unit split keeps the original source responsibility with its primary owner.",
+      "stackNecessity": "responsibility-split"
+    }
+  }
+}

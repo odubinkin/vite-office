@@ -1,0 +1,58 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/sc/source/ui/view/viewfunc.numformat.ts",
+    "status": "mapped",
+    "upstreamPath": "sc/source/ui/view/viewfunc.cxx",
+    "localSymbols": [
+      "SetNumberFormat",
+      "SetNumFmtByStr",
+      "ChangeNumFmtDecimals"
+    ],
+    "upstreamSymbols": [
+      "ScViewFunc::SetNumberFormat",
+      "ScViewFunc::SetNumFmtByStr",
+      "ScViewFunc::ChangeNumFmtDecimals"
+    ],
+    "preservedResponsibilities": [
+      "Applies formatted selection attributes through the source view history. Locale is taken from the cursor and General precision samples the compiled output of the current cell."
+    ],
+    "omittedResponsibilities": [
+      "The registered commands cover the ten numeric shortcuts. The full Format Cells dialog, sidebar format setup, and currency chooser have separate source owners.",
+      "Browser input and state invalidation use the established Sfx adapter. Native toolkit and complete formatter services remain outside this capability."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sc/source/ui/view/viewfunc.numformat.ts",
+          "marker": "SetNumberFormat"
+        },
+        {
+          "path": "apps/office/src/sc/browser/presentation/calc-number-format.test.tsx",
+          "marker": "@fileoverview"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sc/source/ui/view/viewfunc.cxx",
+          "marker": "ScViewFunc::SetNumberFormat"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/source/ui/view/viewfunc.cxx",
+          "marker": "ScViewFunc::SetNumFmtByStr"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/source/ui/view/viewfunc.cxx",
+          "marker": "ScViewFunc::ChangeNumFmtDecimals"
+        }
+      ]
+    },
+    "filenameDivergence": {
+      "localPath": "apps/office/src/sc/source/ui/view/viewfunc.numformat.ts",
+      "rationale": "A focused translation-unit split keeps the original source responsibility with its primary owner.",
+      "stackNecessity": "responsibility-split"
+    }
+  }
+}

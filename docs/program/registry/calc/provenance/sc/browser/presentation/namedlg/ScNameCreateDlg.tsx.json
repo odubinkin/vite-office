@@ -1,0 +1,29 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "browser-adaptation",
+    "localPath": "apps/office/src/sc/browser/presentation/namedlg/ScNameCreateDlg.tsx",
+    "status": "local-only",
+    "rationale": "Presents the four source edge controls and the subsequent replacement and invalid-selection prompts using native browser form controls.",
+    "responsibilities": [
+      "Presents the four source edge controls and the subsequent replacement and invalid-selection prompts using native browser form controls."
+    ],
+    "stackDivergence": {
+      "kind": "browser-adaptation",
+      "rationale": "Presents the four source edge controls and the subsequent replacement and invalid-selection prompts using native browser form controls."
+    },
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sc/browser/presentation/namedlg/ScNameCreateDlg.tsx",
+          "marker": "ScNameCreateDlg"
+        },
+        {
+          "path": "apps/office/src/sc/browser/presentation/calc-named-ranges.test.tsx",
+          "marker": "ports tdf137617"
+        }
+      ]
+    }
+  }
+}

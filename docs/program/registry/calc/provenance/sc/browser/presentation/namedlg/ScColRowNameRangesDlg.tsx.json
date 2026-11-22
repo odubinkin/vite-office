@@ -1,0 +1,29 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "browser-adaptation",
+    "localPath": "apps/office/src/sc/browser/presentation/namedlg/ScColRowNameRangesDlg.tsx",
+    "status": "local-only",
+    "rationale": "Presents the original list groups, editable reference fields and confirmation controls as a native HTML modeless Calc child window.",
+    "responsibilities": [
+      "Presents the original list groups, editable reference fields and confirmation controls as a native HTML modeless Calc child window."
+    ],
+    "stackDivergence": {
+      "kind": "browser-adaptation",
+      "rationale": "Presents the original list groups, editable reference fields and confirmation controls as a native HTML modeless Calc child window."
+    },
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sc/browser/presentation/namedlg/ScColRowNameRangesDlg.tsx",
+          "marker": "ScColRowNameRangesDlg"
+        },
+        {
+          "path": "apps/office/src/sc/browser/presentation/calc-label-ranges.test.tsx",
+          "marker": "ports tdf131170"
+        }
+      ]
+    }
+  }
+}

@@ -3,7 +3,12 @@ import { unicode } from "../../../../i18nlangtag/source/isolang/isolang.tables";
 import { SfxStyleFamily } from "../../../../svl/inc/style-values";
 import type { SfxItemSet } from "../../../../svl/source/items/itemset";
 import type { Color } from "../../../../tools/inc/color";
-import type { ScAddress } from "../../../inc/address";
+import { FormulaError } from "../../../../formula/inc/errorcodes";
+import { OpCode } from "../../../../formula/inc/opcode";
+import { ScHorizontalCellIterator } from "../../../inc/dociter";
+import type { ScFormulaCell } from "../../../inc/formulacell";
+import type { ScAddress, ScRange } from "../../../inc/address";
+import { UpdateRefMode } from "../../../inc/global";
 import type { ScCondFormatItem } from "../../../inc/attrib";
 import type { ScConditionalFormat } from "../../../inc/conditio";
 import type { ScDocument } from "../../../inc/document";
@@ -64,4 +69,45 @@ export function GetCondColor(this: ScDocument, position: ScAddress): Color | und
     if (color) return color;
   }
   return undefined;
+}
+
+/** Rebuilds RPN and subscriptions for cells whose lexical code owns label references. @param document - Workbook. @returns Nothing. */
+export function CompileColRowNameFormula(document: ScDocument): void {
+  const formulas: ScFormulaCell[] = [];
+  for (let tab = 0; tab < document.GetTableCount(); tab++) {
+    const cells = new ScHorizontalCellIterator(
+      document,
+      tab,
+      0,
+      0,
+      document.MaxCol(),
+      document.MaxRow(),
+    );
+    const col: [number] = [0],
+      row: [number] = [0];
+    for (let entry = cells.GetNext(col, row); entry; entry = cells.GetNext(col, row)) {
+      const formula = entry.getFormula();
+      if (formula?.GetCode().HasOpCode(OpCode.ocColRowName)) formulas.push(formula);
+    }
+  }
+  for (const cell of formulas) cell.EndListeningTo(document);
+  for (const cell of formulas) {
+    cell.GetCode().SetCodeError(FormulaError.NONE);
+    cell.SetCompile(true);
+    cell.CompileTokenArray(true);
+    if (cell.GetCode().GetCodeError() === FormulaError.NONE) cell.StartListeningTo(document);
+    cell.SetDirty();
+  }
+}
+
+/** Shifts native label pair references when the sheet set changes. @param document - Workbook. @param affected - Shifted sheet range. @param delta - Insertion or deletion. @returns Nothing. */
+export function UpdateLabelRangesOnTab(
+  document: ScDocument,
+  affected: ScRange,
+  delta: 1 | -1,
+): void {
+  for (const list of [document.GetColNameRanges(), document.GetRowNameRanges()]) {
+    if (delta < 0) list.DeleteOnTab(affected.aStart.Tab());
+    list.UpdateReference(UpdateRefMode.URM_INSDEL, document, affected, 0, 0, delta);
+  }
 }

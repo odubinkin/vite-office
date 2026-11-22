@@ -1,0 +1,55 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/sc/source/core/data/documen7.calculation.ts",
+    "status": "mapped",
+    "localSymbols": [
+      "CalcFormulaTree",
+      "CalcAll"
+    ],
+    "upstreamPath": "sc/source/core/data/documen7.cxx",
+    "upstreamSymbols": [
+      "ScDocument::CalcFormulaTree",
+      "ScDocument::ClearFormulaTree"
+    ],
+    "preservedResponsibilities": [
+      "Traverses the original formula tree and recalculates allocated formula blocks in workbook order with the source AutoCalculate policy."
+    ],
+    "omittedResponsibilities": [
+      "Desktop progress bars, formula group parallelism and script callbacks are outside the scalar calculation slice."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sc/source/core/data/documen7.calculation.ts",
+          "marker": "CalcFormulaTree"
+        },
+        {
+          "path": "apps/office/src/sc/browser/presentation/calc-recalculation.test.tsx",
+          "marker": "forces the cursor cell as in tdf97897"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sc/source/core/data/documen7.cxx",
+          "marker": "ScDocument::CalcFormulaTree"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/source/core/data/documen7.cxx",
+          "marker": "ScDocument::ClearFormulaTree"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/source/core/data/document.cxx",
+          "marker": "ScDocument::CalcAll"
+        }
+      ]
+    },
+    "filenameDivergence": {
+      "localPath": "apps/office/src/sc/source/core/data/documen7.calculation.ts",
+      "stackNecessity": "responsibility-split",
+      "rationale": "Separates native calculation traversal from the original TypeScript document dependency fragment."
+    }
+  }
+}

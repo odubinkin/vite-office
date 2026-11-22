@@ -1,0 +1,32 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/svx/browser/tbxctrls/CurrencyToolBoxControl.tsx",
+    "classification": "browser-adaptation",
+    "state": "foundation",
+    "suite": "shared",
+    "subsystem": "number-formatting",
+    "capabilityIds": [
+      "CAP-baadca35-ed24-475a-b583-42f53f6c037e"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "not-applicable",
+      "defaultStatus": "not-applicable",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/svx/browser/tbxctrls/CurrencyToolBoxControl.tsx",
+        "apps/office/src/sc/browser/presentation/calc-number-format-sidebar.test.tsx"
+      ],
+      "justification": "Uses the native split action, lazy twelve-row selection list, current row and sticky number-format key through the shared browser toolbox popup lifecycle.",
+      "knownViolations": [],
+      "localSymbols": [
+        "CurrencyToolBoxControl"
+      ],
+      "sourceResponsibility": "browser-owned",
+      "upstreamFile": null,
+      "upstreamSymbols": []
+    }
+  }
+}

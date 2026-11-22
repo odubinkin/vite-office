@@ -1,6 +1,6 @@
 /** @fileoverview XML number-style output from the native compiled number formatter. */
 import { LanguageTag } from "../../../i18nlangtag/source/languagetag/languagetag.value";
-import { LANGUAGE_ENGLISH_US, LANGUAGE_SYSTEM } from "../../../i18nlangtag/inc/lang";
+import { LANGUAGE_SYSTEM } from "../../../i18nlangtag/inc/lang";
 import { text } from "../../../i18nlangtag/source/isolang/isolang.tables";
 import { NfKeywordIndex as K } from "../../../svl/inc/nfkeytab";
 import { NfSymbolType as S } from "../../../svl/inc/nfsymbol";
@@ -41,13 +41,21 @@ const dateTerms = new Map<number, readonly [string, boolean, boolean?]>([
 
 /** Writes the declared data format locale. @param language - Formatter locale identifier. @returns ODF language attributes. */
 function numberStyleLocale(language: number): string {
-  if (language === LANGUAGE_SYSTEM || language === LANGUAGE_ENGLISH_US) return "";
-  const locale = new LanguageTag(language).getLocale();
-  const code = text(locale.Language),
-    country = text(locale.Country);
-  return code
-    ? ` number:language="${escapeXml(code)}"${country ? ` number:country="${escapeXml(country)}"` : ""}`
-    : "";
+  if (language === LANGUAGE_SYSTEM) return "";
+  const tag = new LanguageTag(language);
+  try {
+    const locale = tag.getLocale();
+    const code = text(locale.Language),
+      country = text(locale.Country);
+    return code
+      ? ' number:language="' +
+          escapeXml(code) +
+          '"' +
+          (country ? ' number:country="' + escapeXml(country) + '"' : "")
+      : "";
+  } finally {
+    tag.dispose();
+  }
 }
 
 /** Exports supported number-format sections using the real format behind substituted system entries. @param formatter - Workbook formatter. @param key - Assigned format key. @param name - Generated style reference. @returns ODF data style or null. */
@@ -115,6 +123,57 @@ function writeMaps(
   return maps.join("");
 }
 
+/** Builds the native ODF fraction attributes from compiled numerator and denominator.
+ * @param entry - Actual compiled format.
+ * @param part - Subformat.
+ * @param integer - Integer placeholders before the fraction separator.
+ * @param grouped - Whether the integer has thousands grouping.
+ * @returns ODF fraction element.
+ */
+function writeFraction(
+  entry: SvNumberformatConstReference,
+  part: number,
+  integer: string | undefined,
+  grouped: boolean,
+): string {
+  const numerator = entry.GetNumeratorString(part);
+  const denominator = entry.GetDenominatorString(part);
+  try {
+    const divisor = text(denominator);
+    const numeratorDigits = text(numerator);
+    const integerDigits = integer?.replaceAll("#", "").length ?? 0;
+    const blanks = integer?.replace(/[^?]/g, "").length ?? 0;
+    const delimiter = entry.GetIntegerFractionDelimiterString(part);
+    const zerosNumerator = numeratorDigits.replace(/[^0]/g, "").length;
+    const zerosDenominator = divisor.replace(/[^0]/g, "").length;
+    let attributes = "";
+    if (integer !== undefined) attributes += ' number:min-integer-digits="' + integerDigits + '"';
+    if (blanks) attributes += ' loext:max-blank-integer-digits="' + blanks + '"';
+    if (grouped) attributes += ' number:grouping="true"';
+    if (delimiter && delimiter !== " ")
+      attributes += ' loext:integer-fraction-delimiter="' + escapeXml(delimiter) + '"';
+    attributes +=
+      ' number:min-numerator-digits="' +
+      Math.max(1, numeratorDigits.replaceAll("#", "").length) +
+      '"';
+    attributes += ' loext:max-numerator-digits="' + numeratorDigits.length + '"';
+    if (zerosNumerator) attributes += ' loext:zeros-numerator-digits="' + zerosNumerator + '"';
+    const fixed = Number.parseInt(divisor, 10);
+    if (fixed > 0) attributes += ' number:denominator-value="' + fixed + '"';
+    else {
+      attributes +=
+        ' number:min-denominator-digits="' + Math.max(1, divisor.replaceAll("#", "").length) + '"';
+      attributes += ' number:max-denominator-value="' + "9".repeat(divisor.length) + '"';
+      if (zerosDenominator)
+        attributes += ' loext:zeros-denominator-digits="' + zerosDenominator + '"';
+    }
+    return "<number:fraction" + attributes + "/>";
+  } finally {
+    numerator.dispose();
+    denominator.dispose();
+  }
+}
+
 /** Emits one native part under its generated primary or volatile style name. @param entry - Actual compiled number format. @param builtin - Original format index. @param part - Section index. @param name - Main style identifier. @param defaultPart - Whether this is the last section. @param maps - Conditions on the last section. @returns XML or null for unsupported tokens. */
 function exportPart(
   entry: SvNumberformatConstReference,
@@ -138,6 +197,7 @@ function exportPart(
               ? "text-style"
               : type === T.NUMBER ||
                   type === T.SCIENTIFIC ||
+                  type === T.FRACTION ||
                   type === T.EMPTY ||
                   type === T.ALL ||
                   type === T.UNDEFINED
@@ -152,6 +212,10 @@ function exportPart(
     if (symbol === S.EXP) break;
     if (symbol === S.DIGIT) lastDigit = pos;
   }
+  const time = type === T.TIME || type === T.DATETIME;
+  let fractionAt = -1;
+  let integer = "";
+  let hasFractionInteger = false;
   let numberAt = -1,
     grouping = false,
     beforeDecimal = true,
@@ -166,12 +230,26 @@ function exportPart(
     if (!raw) break;
     const symbol = entry.GetNumForType(part, pos);
     const value = text(raw);
+    if (type === T.FRACTION) {
+      if (symbol === S.DIGIT) {
+        if (fractionAt < 0) fractionAt = parts.push("") - 1;
+        if (!hasFractionInteger) integer += value;
+        continue;
+      }
+      if (symbol === S.THSEP || symbol === S.FRAC_FDIV || symbol === S.FRAC) continue;
+      if (symbol === S.FRACBLANK) {
+        hasFractionInteger = true;
+        continue;
+      }
+    }
     const term = dateTerms.get(symbol);
     if (term) {
       const [element, long, named] = term;
       fields.add(element);
+      const precision = element === "seconds" ? entry.GetFormatPrecision(part) : 0;
+      const fractional = precision > 0 ? ' number:decimal-places="' + precision + '"' : "";
       parts.push(
-        `<number:${element} number:style="${long ? "long" : "short"}"${named ? ' number:textual="true"' : ""}/>`,
+        `<number:${element} number:style="${long ? "long" : "short"}"${named ? ' number:textual="true"' : ""}${fractional}/>`,
       );
       if (symbol === K.NNNN) {
         const locale = convertLanguageToLocale(getRealLanguage(entry.GetLanguage()), false);
@@ -188,6 +266,7 @@ function exportPart(
     } else if (symbol === K.AMPM) parts.push("<number:am-pm/>");
     else if (symbol === K.GENERAL) parts.push('<number:number number:min-integer-digits="1"/>');
     else if (symbol === S.DIGIT) {
+      if (time) continue;
       if (!/^[#0]+$/.test(value)) return null;
       if (numberAt < 0) numberAt = parts.push("") - 1;
       if (numberAt !== parts.length - 1) return null;
@@ -217,10 +296,32 @@ function exportPart(
           integer: beforeDecimal,
         });
       else parts.push(`<number:text>${escapeXml(value)}</number:text>`);
+    } else if (
+      time &&
+      (symbol === S.TIME100SECSEP || (symbol === S.DEL && (value === "[" || value === "]")))
+    ) {
+      continue;
     } else if (symbol === S.DEL && value === "@") parts.push("<number:text-content/>");
-    else if (symbol === S.CURRENCY)
-      parts.push(`<number:currency-symbol>${escapeXml(value)}</number:currency-symbol>`);
-    else if (symbol !== S.CURRDEL && symbol !== S.CURREXT) return null;
+    else if (symbol === S.CURRENCY) {
+      const extension =
+        entry.GetNumForType(part, pos + 1) === S.CURREXT
+          ? entry.GetNumForString(part, pos + 1)
+          : null;
+      const language = extension
+        ? Math.abs(Number.parseInt(text(extension), 16)) & 0xffff
+        : LANGUAGE_SYSTEM;
+      parts.push(
+        `<number:currency-symbol${numberStyleLocale(language)}>${escapeXml(value)}</number:currency-symbol>`,
+      );
+    } else if (symbol !== S.CURRDEL && symbol !== S.CURREXT) return null;
+  }
+  if (fractionAt >= 0) {
+    parts[fractionAt] = writeFraction(
+      entry,
+      part,
+      hasFractionInteger ? integer : undefined,
+      entry.GetFormatSpecialInfo(part).grouped,
+    );
   }
   if (numberAt >= 0) {
     const element = exponent ? "scientific-number" : "number";
@@ -254,5 +355,9 @@ function exportPart(
   const properties = color ? `<style:text-properties fo:color="${rgb[0]}"/>` : "";
   const styleName = escapeXml(defaultPart ? name : `${name}P${part}`);
   const flags = defaultPart ? "" : ' style:volatile="true"';
-  return `<number:${tag} style:name="${styleName}"${flags}${source}${numberStyleLocale(entry.GetLanguage())}>${properties}${parts.join("")}${defaultPart ? maps : ""}</number:${tag}>`;
+  const overflow =
+    type === T.TIME && entry.GetFormatSpecialInfo(part).grouped
+      ? ' number:truncate-on-overflow="false"'
+      : "";
+  return `<number:${tag} style:name="${styleName}"${flags}${source}${overflow}${numberStyleLocale(entry.GetLanguage())}>${properties}${parts.join("")}${defaultPart ? maps : ""}</number:${tag}>`;
 }

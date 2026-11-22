@@ -162,10 +162,41 @@ export class ScColumnData {
   GetNumberFormat(context: ScInterpreterContext, row: number): number {
     return (this.pAttrArray.GetPattern(row) as ScPatternAttr).GetNumberFormat(context);
   }
+  /** Reads a uniform number format across native pattern runs. @param first - First row. @param last - Last row. @returns Format key or General on a mismatch. */
+  GetNumberFormatRange(first: number, last: number): number {
+    const formatter = this.rDocument.GetFormatTable();
+    const start: [number] = [0],
+      end: [number] = [0];
+    let result: number | undefined;
+    for (let row = first; row <= last; row = end[0] + 1) {
+      const pattern = this.GetPatternRange(start, end, row);
+      if (!pattern) return 0;
+      const key = pattern.GetNumberFormat(formatter);
+      if (result !== undefined && result !== key) return 0;
+      result = key;
+    }
+    return result ?? 0;
+  }
   /** Borrows a complete attribute run. @param start - First output. @param end - Last output. @param row - Query row. @returns Pattern or null. */
   GetPatternRange(start: [number], end: [number], row: number): ScPatternAttr | null {
     return this.pAttrArray.GetPatternRange(start, end, row);
   }
+
+  /** Reads one column's style identity across native pattern runs. @param first - First row. @param last - Last row. @returns Uniform style, null for mixed, or undefined for no rows. */
+  GetAreaStyle(first: number, last: number): ScPatternStyleReference | null | undefined {
+    const start: [number] = [0],
+      end: [number] = [0];
+    let style: ScPatternStyleReference | undefined;
+    for (let row = first; row <= last; row = end[0] + 1) {
+      const pattern = this.GetPatternRange(start, end, row);
+      if (!pattern) break;
+      const next = pattern.GetStyleSheet();
+      if (!next || (style && style !== next)) return null;
+      style = next;
+    }
+    return style;
+  }
+
   /** Replaces actual run attributes. @param start - Ordered first row. @param end - Ordered last row. @param pattern - Canonical holder. @returns Nothing. */
   SetPatternArea(start: number, end: number, pattern: CellAttributeHolder): void {
     this.pAttrArray.SetPatternArea(start, end, pattern);
@@ -624,6 +655,23 @@ export class ScColumn extends ScColumnData {
   GetCol(): number {
     return this.nCol;
   }
+
+  /** Reads one column's style identity across disjoint marks. @param marks - Native selection. @returns Uniform style, null for mixed, or undefined for no rows. */
+  GetSelectionStyle(marks: ScMarkData): ScPatternStyleReference | null | undefined {
+    const iter = new ScMultiSelIter(marks.GetMultiSelData(), this.GetCol());
+    let style: ScPatternStyleReference | undefined;
+    for (
+      let [found, first, last] = iter.Next(0, 0);
+      found;
+      [found, first, last] = iter.Next(0, 0)
+    ) {
+      const next = this.GetAreaStyle(first, last);
+      if (next === undefined) continue;
+      if (!next || (style && style !== next)) return null;
+      style = next;
+    }
+    return style;
+  }
   /** Reads the native sheet coordinate. @returns Sheet. */
   GetTab(): number {
     return this.nTab;
@@ -900,6 +948,9 @@ export class ScColumn extends ScColumnData {
   GetCellType(row: number): CellType {
     return column4.GetCellType.call(this, row);
   }
+  HasDataCellsInRange = column4.HasDataCellsInRange;
+  GetUnprotectedCells = column4.GetUnprotectedCells;
+  RemoveProtected = column3.RemoveProtected;
   /** Reads numeric or numeric-formula values with the native zero fallback. @param row - Valid row. @returns Value. */
   GetValue(row: number): number {
     return this.maCells.get_type(row) === element_type_numeric

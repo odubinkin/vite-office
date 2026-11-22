@@ -8,15 +8,20 @@
     "localSymbols": [
       "CreatePageStyleRequest",
       "ApplyPageStyle",
-      "PageStyleModified"
+      "PageStyleModified",
+      "DoRecalc",
+      "DoHardRecalc"
     ],
     "upstreamPath": "sc/source/ui/docshell/docsh4.cxx",
     "upstreamSymbols": [
       "ScDocShell::ExecutePageStyle",
-      "ScDocShell::PageStyleModified"
+      "ScDocShell::PageStyleModified",
+      "ScDocShell::DoRecalc",
+      "ScDocShell::DoHardRecalc"
     ],
     "preservedResponsibilities": [
-      "Applies original Page Style slot output, rebinds renamed shared style usages, and invalidates their page geometry."
+      "Applies original Page Style slot output, rebinds renamed shared style usages, and invalidates their page geometry.",
+      "Routes ordinary and hard recalculation through the document and publishes source refresh hints."
     ],
     "omittedResponsibilities": [
       "Printer-dependent page layout, warnings and the standalone header/footer command remain outside this source slice."
@@ -30,6 +35,10 @@
         {
           "path": "apps/office/src/sc/browser/presentation/calc-page-style.test.tsx",
           "marker": "keeps common geometry"
+        },
+        {
+          "path": "apps/office/src/sc/browser/presentation/calc-recalculation.test.tsx",
+          "marker": "forces the cursor cell as in tdf97897"
         }
       ],
       "upstream": [
@@ -40,6 +49,14 @@
         {
           "path": "vendor/libreoffice-reference/sc/source/ui/docshell/docsh4.cxx",
           "marker": "ScDocShell::PageStyleModified"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/source/ui/docshell/docsh4.cxx",
+          "marker": "ScDocShell::DoRecalc"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/source/ui/docshell/docsh4.cxx",
+          "marker": "ScDocShell::DoHardRecalc"
         }
       ]
     }

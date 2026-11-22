@@ -1,0 +1,29 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "browser-adaptation",
+    "localPath": "apps/office/src/sc/browser/presentation/ScCsvRuler.tsx",
+    "status": "local-only",
+    "rationale": "Projects the source ScCsvRuler fixed-width position and split interactions using browser pointer and keyboard events.",
+    "responsibilities": [
+      "Presents the fixed-width ruler and edits ordered visual split positions for the Calc clipboard preview."
+    ],
+    "stackDivergence": {
+      "kind": "browser-adaptation",
+      "rationale": "Uses one keyboard-accessible browser control and pointer capture for the source ruler interactions."
+    },
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sc/browser/presentation/ScCsvRuler.tsx",
+          "marker": "ScCsvRuler"
+        },
+        {
+          "path": "apps/office/src/sc/browser/presentation/calc-cell-clipboard.test.tsx",
+          "marker": "keeps Unicode fixed-width preview and pasted columns on the same ruler positions"
+        }
+      ]
+    }
+  }
+}

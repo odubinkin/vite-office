@@ -3,6 +3,8 @@ import AxeBuilder from "@axe-core/playwright";
 import { expect, test } from "@playwright/test";
 const labels = [
   "Open",
+  "Copy",
+  "Paste",
   "Clear",
   "Undo",
   "Redo",

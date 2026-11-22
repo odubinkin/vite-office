@@ -1,0 +1,51 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/sc/source/filter/xml/xmllabri.ts",
+    "status": "mapped",
+    "localSymbols": [
+      "ScXMLLabelRangesContext",
+      "SetLabelRanges",
+      "WriteLabelRanges"
+    ],
+    "upstreamPath": "sc/source/filter/xml/xmllabri.cxx",
+    "upstreamSymbols": [
+      "ScXMLLabelRangesContext",
+      "ScXMLLabelRangeContext::endFastElement"
+    ],
+    "preservedResponsibilities": [
+      "Queues the native ODS label ranges before formula import and writes them back with the original addresses and orientation."
+    ],
+    "omittedResponsibilities": [
+      "UNO wrappers are outside the browser document filter path."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sc/source/filter/xml/xmllabri.ts",
+          "marker": "ScXMLLabelRangesContext"
+        },
+        {
+          "path": "apps/office/src/sc/browser/presentation/calc-label-ranges.test.tsx",
+          "marker": "ports tdf131170"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sc/source/filter/xml/xmllabri.cxx",
+          "marker": "ScXMLLabelRangesContext"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/source/filter/xml/xmllabri.cxx",
+          "marker": "ScXMLLabelRangeContext::endFastElement"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/source/filter/xml/xmlexprt.cxx",
+          "marker": "ScXMLExport::WriteLabelRanges"
+        }
+      ]
+    }
+  }
+}

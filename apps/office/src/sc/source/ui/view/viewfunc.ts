@@ -1,7 +1,9 @@
 /** @fileoverview Consumed native ScViewFunc selection formatting,frame operations and explicit sheet geometry;device/rich-edit/alternate-view services remain unported. */
+import * as numberFormat from "./viewfunc.numformat";
 import { PasteFromClip } from "./viewfun3";
 import { EnterBlock, EnterAutoSum, HideTable, ShowTable, SetPrintRanges } from "./viewfun2";
 import type { ScModule } from "../../../inc/scmod";
+import type { ScTableProtection } from "../../core/data/tabprotection";
 import type { ScDocumentPool } from "../../core/data/docpool";
 import {
   SvxBoxItem,
@@ -19,12 +21,22 @@ import { SfxItemSet, SfxItemState } from "../../../../svl/inc/itemset";
 import { SfxPoolItem } from "../../../../svl/inc/poolitem";
 import { SvxBorderLine } from "../../../../editeng/source/items/borderline";
 import { SvxLineItem } from "../../../../editeng/inc/lineitem";
-import { AutoSum, GetAutoSumArea, GetAutoSumFormula, AdjustBlockHeight } from "./viewfun2";
+import {
+  AutoSum,
+  GetAutoSumArea,
+  GetAutoSumFormula,
+  AdjustBlockHeight,
+  MergeCells,
+  RemoveMerge,
+  type RunMergeCellsDialog,
+} from "./viewfun2";
 import { ScViewUtil } from "./viewutil";
 import { ScTabView } from "./tabview3";
 import type { ScDocShell } from "../docshell/docsh";
 import { InsertDeleteFlags, ScSizeMode } from "../../../inc/global";
-import { ScPatternAttr } from "../../../inc/patattr";
+import { ScPatternAttr, type ScPatternStyleReference } from "../../../inc/patattr";
+import { ScUndoSelectionStyle } from "../undo/undoblk";
+import { createDeleteContentsUndoDoc } from "../docshell/docfuncutil";
 import { ScMarkData } from "../../../inc/markdata";
 import { ScRange, ScAddress } from "../../../inc/address";
 import { ScEditableTester } from "../docshell/editable";
@@ -100,6 +112,143 @@ export class ScViewFunc extends ScTabView {
     module: ScModule | null = null,
   ) {
     super(data, true, module);
+  }
+  /** Runs the source view merge against the document shell. @param api - API call mode. @param contents - Move contents. @param center - Center content. @param confirm - Native dialog presenter. @returns Whether applied. */
+  MergeCells(
+    api: boolean,
+    contents: boolean,
+    center: boolean,
+    confirm: RunMergeCellsDialog,
+  ): Promise<boolean> {
+    return MergeCells(this, this.shell, api, contents, center, confirm);
+  }
+
+  /** Splits the source selection through the actual document shell. @returns Whether admitted. */
+  RemoveMerge(): boolean {
+    return RemoveMerge(this, this.shell);
+  }
+
+  /** Applies one native protection configuration to all selected sheets. @param protection - Accepted dialog values. @returns Whether a sheet changed. */
+  ProtectSheet(protection: ScTableProtection): boolean {
+    const undo = this.shell.GetUndoManager();
+    const func = this.shell.GetDocFunc();
+    const label = "Protect sheet";
+    let changed = false;
+    undo.EnterListAction(label, label);
+    try {
+      for (const tab of this.data.GetMarkData()) {
+        if (func.ProtectSheet(tab, protection)) changed = true;
+      }
+    } finally {
+      undo.LeaveListAction();
+    }
+    return changed;
+  }
+
+  /** Verifies the requested tabs and unlocks the matching original protection records. @param tab - Active sheet. @param password - Entered value. @param isCurrent - Async view guard. @returns Whether a sheet changed and whether any password failed. */
+  async Unprotect(
+    tab: number,
+    password: string,
+    isCurrent: () => boolean,
+  ): Promise<{ changed: boolean; wrongPassword: boolean }> {
+    const doc = this.data.GetDocument();
+    const marks = this.data.GetMarkData();
+    const grouped = marks.GetSelectCount() > 1;
+    const tabs = grouped ? [...marks] : [tab];
+    const verified = await Promise.all(
+      tabs.map(
+        /** Reads and verifies one original sheet record. @param index - Selected sheet. @returns Native settings and verification. */
+        async (index) => {
+          const protection = doc.GetTabProtection(index);
+          if (!protection?.isProtected()) return undefined;
+          return { index, protection, accepted: await protection.verifyPassword(password) };
+        },
+      ),
+    );
+    if (!isCurrent() || this.shell.GetDocument() !== doc)
+      return { changed: false, wrongPassword: false };
+
+    const undo = this.shell.GetUndoManager();
+    const func = this.shell.GetDocFunc();
+    const label = "Unprotect sheet";
+    let changed = false,
+      wrongPassword = false;
+    if (grouped) undo.EnterListAction(label, label);
+    try {
+      for (const result of verified) {
+        if (!result) continue;
+        if (!result.accepted) wrongPassword = true;
+        else if (func.UnprotectSheet(result.index, result.protection)) changed = true;
+      }
+    } finally {
+      if (grouped) undo.LeaveListAction();
+    }
+    return { changed, wrongPassword };
+  }
+
+  /** Reads the source style at the cursor or across the unmodified selection. @returns Uniform cell style or null. */
+  GetStyleSheetFromMarked(): ScPatternStyleReference | null {
+    const doc = this.data.GetDocument(),
+      marks = this.data.GetMarkData();
+    if (marks.IsMarked() || marks.IsMultiMarked()) return doc.GetSelectionStyle(marks);
+    const position = new ScAddress(
+      this.data.GetCurX(),
+      this.data.GetCurY(),
+      this.data.CurrentTabForData(),
+    );
+    return doc.GetPattern(position)?.GetStyleSheet() ?? null;
+  }
+
+  /** Applies the source style through native editability, filtered marks, and attribute history. @param style - Actual named cell style. @returns Whether applied. */
+  SetStyleSheetToMarked(style: ScPatternStyleReference): boolean {
+    const doc = this.data.GetDocument(),
+      original = this.data.GetMarkData();
+    const tab = this.data.CurrentTabForData(),
+      col = this.data.GetCurX(),
+      row = this.data.GetCurY();
+    if (!this.CheckSelectionFormatEditable(true)) return false;
+
+    const marks = new ScMarkData(original);
+    ScViewUtil.UnmarkFiltered(marks, doc);
+    const marked = marks.IsMarked() || marks.IsMultiMarked();
+    if (!marked) marks.SetMarkArea(new ScRange(col, row, tab));
+    marks.MarkToMulti();
+    const range = new ScRange(marks.GetMultiMarkArea());
+    const undo = createDeleteContentsUndoDoc(doc, marks, range, marked, InsertDeleteFlags.ATTRIB);
+    this.shell
+      .GetUndoManager()
+      .AddUndoAction(
+        new ScUndoSelectionStyle(this.shell, marks, range, text(style.GetName()), undo),
+      );
+    if (marked) doc.ApplySelectionStyle(style, marks);
+    else for (const selected of marks) doc.ApplyStyleAreaTab(col, row, col, row, selected, style);
+    AdjustBlockHeight(doc, marks, range.aStart.Row(), range.aEnd.Row());
+    this.shell.SetDocumentModified();
+    return true;
+  }
+
+  /** Checks selection editability for attributes, including the matrix-only exception. @param checkSelectedTabs - Also test all selected tabs for an unmarked cursor. @returns Whether formatting is admitted. */
+  CheckSelectionFormatEditable(checkSelectedTabs = false): boolean {
+    const doc = this.data.GetDocument(),
+      original = this.data.GetMarkData();
+    const col = this.data.GetCurX(),
+      row = this.data.GetCurY();
+    const tester =
+      original.IsMarked() || original.IsMultiMarked()
+        ? ScEditableTester.CreateAndTestSelection(doc, original)
+        : checkSelectedTabs
+          ? ScEditableTester.CreateAndTestSelectedBlock(doc, col, row, col, row, original)
+          : ScEditableTester.CreateAndTestBlock(
+              doc,
+              this.data.CurrentTabForData(),
+              col,
+              row,
+              col,
+              row,
+            );
+    if (tester.IsFormatEditable()) return true;
+    this.ErrorMessage(tester.GetMessageId());
+    return false;
   }
   /** Inserts the manual break at the original view cursor, or the supplied address. @param columns - Column axis. @param record - Record history. @param position - Explicit cursor override. @param setModified - Mark the document modified. @returns Success. */
   InsertPageBreak(
@@ -230,6 +379,10 @@ export class ScViewFunc extends ScTabView {
     inner.SetMinDist(false);
     return [outer, inner];
   }
+  SetNumberFormat = numberFormat.SetNumberFormat;
+  SetNumFmtByStr = numberFormat.SetNumFmtByStr;
+  ChangeNumFmtDecimals = numberFormat.ChangeNumFmtDecimals;
+
   /** Original plain-cell ApplySelectionPattern dispatches marked versus cursor operations after removing filtered working marks. @param attr - Borrowed delta. @param cursorOnly - Restrict to cursor. @returns Native operation result. */
   ApplySelectionPattern(attr: ScPatternAttr, cursorOnly = false): boolean {
     const doc = this.data.GetDocument(),

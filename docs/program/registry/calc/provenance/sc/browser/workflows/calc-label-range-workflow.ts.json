@@ -1,0 +1,29 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "browser-adaptation",
+    "localPath": "apps/office/src/sc/browser/workflows/calc-label-range-workflow.ts",
+    "status": "local-only",
+    "rationale": "Routes the original modeless label range slot through the browser dialog service and commits the native cloned lists.",
+    "responsibilities": [
+      "Routes the original modeless label range slot through the browser dialog service and commits the native cloned lists."
+    ],
+    "stackDivergence": {
+      "kind": "browser-adaptation",
+      "rationale": "Routes the original modeless label range slot through the browser dialog service and commits the native cloned lists."
+    },
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sc/browser/workflows/calc-label-range-workflow.ts",
+          "marker": "CalcLabelRangeWorkflow"
+        },
+        {
+          "path": "apps/office/src/sc/browser/presentation/calc-label-ranges.test.tsx",
+          "marker": "ports tdf131170"
+        }
+      ]
+    }
+  }
+}

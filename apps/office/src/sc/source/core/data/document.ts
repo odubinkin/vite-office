@@ -1,4 +1,5 @@
 /** @fileoverview Native document modes, consumed pooled resources and scalar/local-reference storage, attributes and formula tracking. Full construction, formatter and shell services remain unported. */
+import { ScRangePairList } from "../../../inc/rangelst";
 import * as documentGeometry from "./document.geometry";
 import { ScCalcConfig } from "../../../inc/calcconfig";
 import { ScInterpreter } from "../inc/interpre";
@@ -17,7 +18,6 @@ import type { XBreakIterator } from "../../../../offapi/com/sun/star/i18n/XBreak
 import { OUString, type OUStringConstReference } from "../../../../sal/inc/rtl/ustring";
 import { SfxHint, SfxHintId } from "../../../../svl/inc/hint";
 import { SvtScriptType } from "../../../../svl/inc/languageoptions";
-import { SharedString } from "../../../../svl/inc/sharedstring";
 import type { SharedStringPool } from "../../../../svl/inc/sharedstringpool";
 import type { SvtBroadcaster } from "../../../../svl/source/notify/broadcast";
 import type { SvtListener } from "../../../../svl/source/notify/listener";
@@ -32,7 +32,7 @@ import type { ScColumn } from "../../../inc/column";
 import { ScDocOptions, type ScDocOptionsConstReference } from "../../../inc/docoptio";
 import type { Theme } from "../../../../docmodel/inc/theme/Theme";
 import type { ScFormulaCell } from "../../../inc/formulacell";
-import { CellType, InsertDeleteFlags } from "../../../inc/global";
+import { InsertDeleteFlags } from "../../../inc/global";
 import { ScInterpreterContext } from "../../../inc/interpretercontext";
 import type { ScMarkData } from "../../../inc/markdata";
 import {
@@ -69,11 +69,16 @@ export class ScDocument {
   GetCondResult = documen4.GetCondResult;
   GetCondColor = documen4.GetCondColor;
   IsTabProtected = documen3.IsTabProtected;
+  GetUnprotectedCells = documen3.GetUnprotectedCells;
   GetTabBgColor = documen3.GetTabBgColor;
   SetTabBgColor = documen3.SetTabBgColor;
   IsDefaultTabBgColor = documen3.IsDefaultTabBgColor;
   GetTabProtection = documen3.GetTabProtection;
   SetTabProtection = documen3.SetTabProtection;
+  DoMergeContents = documen3.DoMergeContents;
+  DoEmptyBlock = documen3.DoEmptyBlock;
+  DoMerge = documen3.DoMerge;
+  RemoveMerge = documen3.RemoveMerge;
   /** Captures original print settings for all existing sheets. @returns Native print range saver. */
   CreatePrintRangeSaver(): ScPrintRangeSaver {
     const saver = new ScPrintRangeSaver(this.GetTableCount());
@@ -89,11 +94,23 @@ export class ScDocument {
       this.FetchTable(tab)?.RestorePrintRanges(saver.GetTabData(tab));
     }
   }
+  private readonly xColNameRanges = new ScRangePairList();
+  private readonly xRowNameRanges = new ScRangePairList();
+  /** Borrows the native column label pairs. @returns Document list. */
+  GetColNameRanges(): ScRangePairList {
+    return this.xColNameRanges;
+  }
+  /** Borrows the native row label pairs. @returns Document list. */
+  GetRowNameRanges(): ScRangePairList {
+    return this.xRowNameRanges;
+  }
   private readonly pRangeName = new ScRangeName();
   /** Looks up the owner of names in this scope. @param tab - Sheet scope or -1. @returns Native names. */
   GetRangeName(tab = -1) {
     return tab === -1 ? this.pRangeName : this.FetchTable(tab)?.GetRangeName();
   }
+  /** Original exact block lookup with local scope precedence. */
+  GetRangeAtBlock = documen3.GetRangeAtBlock;
   declare private pUnoBroadcaster: SfxBroadcaster | null;
   AddUnoObject = documen3.AddUnoObject;
   RemoveUnoObject = documen3.RemoveUnoObject;
@@ -268,9 +285,12 @@ export class ScDocument {
   ExtendMerge(...args: Parameters<typeof document10.ExtendMerge>): boolean {
     return document10.ExtendMerge.apply(this, args);
   }
-  SkipOverlapped = document10.SkipOverlapped;
+  SkipOverlapped = documen3.SkipOverlapped;
   ExtendOverlapped = document10.ExtendOverlapped;
   ExtendMergeRange = document10.ExtendMergeRange;
+  HasMultipleDataCells = document10.HasMultipleDataCells;
+  ApplySelectionStyle = documen3.ApplySelectionStyle;
+  GetSelectionStyle = documen3.GetSelectionStyle;
   /** Original selected-sheet format compatibility operation. @param args - Range,marks,pattern and category. @returns Nothing. */
   ApplyPatternIfNumberformatIncompatible(
     ...args: Parameters<typeof document10.ApplyPatternIfNumberformatIncompatible>
@@ -359,6 +379,7 @@ export class ScDocument {
   GetDataArea(...args: Parameters<typeof documen7.GetDataArea>): void {
     return documen7.GetDataArea.apply(this, args);
   }
+  ShrinkToUsedDataArea = documen7.ShrinkToUsedDataArea;
   declare private pScriptTypeData: ScScriptTypeData | undefined;
   /** Original lazily owned script service. The actual process-context factory is an explicit borrowed host port;the kernel depends only on XBreakIterator. @param args - Existing real service factory or unavailable host port. @returns Stable borrowed service or empty reference. */
   GetBreakIterator(...args: Parameters<typeof GetBreakIterator>): XBreakIterator | null {
@@ -634,6 +655,7 @@ export class ScDocument {
     return this.FetchTable(position.Tab())?.GetPattern(position.Col(), position.Row()) ?? null;
   }
   GetColDefault = documentGeometry.GetColDefault;
+  GetNumberFormat = documentGeometry.GetNumberFormat;
   /** Original document10 merge query over actual sparse sheets. @param position - Queried cell. @returns Merged anchor. */
   IsMerged(position: ScAddress): boolean {
     return document10.IsMerged.call(this, position);
@@ -814,6 +836,10 @@ export class ScDocument {
   CalcFormulaTree(onlyForced = false): void {
     return documen7.CalcFormulaTree.call(this, onlyForced);
   }
+  /** Recalculates every formula in the document. @returns Nothing. */
+  CalcAll(): void {
+    documen7.CalcAll.call(this);
+  }
   /** Marks all represented formulas with the actual native default dirty context; deleted-tab restoration is unsupported. @param context - Dirty context. @returns Nothing. */
   SetAllFormulasDirty(context: SetFormulaDirtyContext): void {
     return documen7.SetAllFormulasDirty.call(this, context);
@@ -921,22 +947,9 @@ export class ScDocument {
   GetValue(position: ScAddress): number {
     return this.FetchTable(position.Tab())?.GetValue(position.Col(), position.Row()) ?? 0;
   }
-  /** Reads the actual stored scalar discriminator. @param position - Cell address. @returns Type. */
-  GetCellType(position: ScAddress): CellType {
-    return documen7.GetCellType.call(this, position);
-  }
-  /** Returns an independent shared-string value. @param position - Cell address. @returns Shared text. */
-  GetSharedString(position: ScAddress): SharedString {
-    return documen7.GetSharedString.call(this, position);
-  }
-  /** Stores a string as shared or edit text according to its content. @param position - Cell address. @param value - Text. @param parameter - Optional input policy. @returns Nothing. */
-  SetTextCell(
-    position: ScAddress,
-    value: OUStringConstReference,
-    parameter: ScSetStringParam | null = null,
-  ): void {
-    documen7.SetTextCell.call(this, position, value, parameter);
-  }
+  GetCellType = documen7.GetCellType;
+  GetSharedString = documen7.GetSharedString;
+  SetTextCell = documen7.SetTextCell;
   /** Original edit-cell setter transfers a nullable object or destroys it when no destination exists. @param position - Cell. @param value - Owned edit text. @returns Whether an existing table accepts the coordinates. */
   SetEditText(position: ScAddress, value: EditTextObject | null): boolean {
     const table = this.FetchTable(position.Tab());

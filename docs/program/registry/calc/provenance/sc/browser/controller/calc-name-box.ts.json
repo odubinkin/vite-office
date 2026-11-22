@@ -1,0 +1,29 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "browser-adaptation",
+    "status": "local-only",
+    "localPath": "apps/office/src/sc/browser/controller/calc-name-box.ts",
+    "rationale": "Binds entered addresses and names to the original selection and definition owners.",
+    "responsibilities": [
+      "Binds entered addresses and names to the original selection and definition owners."
+    ],
+    "stackDivergence": {
+      "kind": "browser-adaptation",
+      "rationale": "Binds entered addresses and names to the original selection and definition owners."
+    },
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sc/browser/controller/calc-name-box.ts",
+          "marker": "GoToAddress"
+        },
+        {
+          "path": "apps/office/src/sc/browser/presentation/calc-named-ranges.test.tsx",
+          "marker": "ports create_range_name.py"
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,27 @@
+{
+  "schema_version": 1,
+  "task_id": "202611220023-1ZKRD0",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-11-22T00:48:09.497Z",
+  "verdict": "pass",
+  "summary": "The native Calc named cell-style workflow meets its approved menu, request, model, history, and persistence checks.",
+  "evaluated_sha": "ed679e09428b2e45c565fd9ac608c9da6d8cf254",
+  "blueprint_digest": "21a7f19fe1e1aff345453e0363e7878c3023476c368ca554dd7e49708b9d5c3a",
+  "findings": [
+    "All thirteen native radio presets use the existing Calc style pool and actual marked-selection state.",
+    "Both upstream regressions pass, including full-column style history and Repeat.",
+    "Chromium verified mixed selection and Undo against the production bundle."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202611220023-1ZKRD0/README.md",
+    "output/calc-task14-verification.md",
+    "output/calc-task14-resource-tests-final.log",
+    "output/playwright/calc-task14/smoke.log"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": [
+    "Page and drawing style application, style management dialogs and fill format mode belong to separate command paths."
+  ]
+}

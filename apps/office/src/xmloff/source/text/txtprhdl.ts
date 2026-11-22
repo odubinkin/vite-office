@@ -229,6 +229,25 @@ export function exportTextEmphasis(value: number): string {
   return below ? "dot below" : "dot above";
 }
 
+/** Adapts the pinned emphasis conversion to UNO-backed Calc text properties. */
+export class XMLTextEmphasizePropHdl {
+  /** Converts a source attribute into a UNO short. @param input - XML value. @param value - UNO result. @returns Whether conversion succeeded. */
+  importXML(input: string, value: Any): boolean {
+    const emphasis = importTextEmphasis(input);
+    if (emphasis === undefined) return false;
+    value.insert([emphasis], "sal_Int16");
+    return true;
+  }
+
+  /** Emits an original emphasis token. @param output - XML destination. @param value - UNO short. @returns Whether a short was extracted. */
+  exportXML(output: [string], value: Any): boolean {
+    const emphasis: [number] = [0];
+    if (!value.extract(emphasis, "sal_Int16")) return false;
+    output[0] = exportTextEmphasis(emphasis[0]);
+    return true;
+  }
+}
+
 /** Original XMLTextRotationAnglePropHdl_Impl normalizes XML degrees to the three native text orientations. */
 export class XMLTextRotationAnglePropHdl {
   /** Parses degrees, normalizes the revolution and chooses the native orientation. @param input - ODF degrees. @param value - Native tenths of a degree. @returns Whether parsing succeeded. */

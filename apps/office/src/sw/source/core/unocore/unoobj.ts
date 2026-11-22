@@ -166,6 +166,7 @@ export class SwXTextCursor extends SwXTextRange {
     const p = this.GetPaM();
     if (!expand) {
       p.Assign(target.GetPoint(), target.HasMark() ? target.GetMark() : undefined);
+      if (!p.HasMark()) p.GetPoint().nContent.SetAffinity("after");
       return;
     }
     const first = p.Start().compare(target.Start()) <= 0 ? p.Start() : target.Start(),

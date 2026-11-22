@@ -1,4 +1,6 @@
 /** @fileoverview English SvtLanguageTable resources from the pinned svtools/inc/langtab.hrc. */
+import { u_charDirection } from "../../../external/icu/source/common/ubidi_props";
+import { UCharDirection as U } from "../../../external/icu/source/common/unicode/uchar";
 import { getReplacementForObsoleteLanguage } from "../../../i18nlangtag/source/isolang/mslangid";
 
 /** Original language names in declaration order, indexed by the matching native LanguageType. */
@@ -437,4 +439,28 @@ export function getLanguageName(language: number): string | undefined {
     /** Compares the native ID in source order. @param entry - Language row. @returns Whether the ID matches. */
     ([candidate]) => candidate === id,
   )?.[1];
+}
+
+/** Adds the original first-strong bidirectional embedding used by the currency list.
+ * @param value - Source display string.
+ * @returns Embedding-preserving label.
+ */
+export function ApplyLreOrRleEmbedding(value: string): string {
+  if (value.startsWith("\u202a") || value.startsWith("\u202b")) return value;
+  for (let index = 0; index < value.length; index++) {
+    switch (u_charDirection(value.charCodeAt(index))) {
+      case U.U_LEFT_TO_RIGHT:
+      case U.U_LEFT_TO_RIGHT_EMBEDDING:
+      case U.U_LEFT_TO_RIGHT_OVERRIDE:
+      case U.U_EUROPEAN_NUMBER:
+      case U.U_ARABIC_NUMBER:
+        return "\u202a" + value + "\u202c";
+      case U.U_RIGHT_TO_LEFT:
+      case U.U_RIGHT_TO_LEFT_ARABIC:
+      case U.U_RIGHT_TO_LEFT_EMBEDDING:
+      case U.U_RIGHT_TO_LEFT_OVERRIDE:
+        return "\u202b" + value + "\u202c";
+    }
+  }
+  return value;
 }

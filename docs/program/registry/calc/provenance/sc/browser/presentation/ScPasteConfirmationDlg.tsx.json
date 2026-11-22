@@ -1,0 +1,29 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "browser-adaptation",
+    "localPath": "apps/office/src/sc/browser/presentation/ScPasteConfirmationDlg.tsx",
+    "status": "local-only",
+    "rationale": "Presents the source larger-range and overwrite confirmations with the original default responses and warning checkbox.",
+    "responsibilities": [
+      "Presents the source larger-range and overwrite confirmations with the original default responses and warning checkbox."
+    ],
+    "stackDivergence": {
+      "kind": "browser-adaptation",
+      "rationale": "Presents the source larger-range and overwrite confirmations with the original default responses and warning checkbox."
+    },
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sc/browser/presentation/ScPasteConfirmationDlg.tsx",
+          "marker": "ScPasteConfirmationDlg"
+        },
+        {
+          "path": "apps/office/src/sc/browser/presentation/calc-cell-clipboard.test.tsx",
+          "marker": "asks to extend a short selection"
+        }
+      ]
+    }
+  }
+}

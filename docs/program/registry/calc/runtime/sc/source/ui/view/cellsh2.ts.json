@@ -1,0 +1,38 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "path": "apps/office/src/sc/source/ui/view/cellsh2.ts",
+    "state": "foundation",
+    "suite": "calc",
+    "subsystem": "text-csv-filter",
+    "capabilityIds": [
+      "CAP-5f0f5ed3-9c6d-4ac7-b9fb-250a1f2497ea"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/sc/source/ui/view/cellsh2.ts",
+        "apps/office/src/sc/source/ui/view/text-to-columns.test.ts",
+        "sc/source/ui/view/cellsh2.cxx",
+        "apps/office/src/sc/browser/presentation/calc-text-to-columns.test.tsx"
+      ],
+      "justification": "Resolves the source Text to Columns cursor or one-column mark and trims it to occupied rows for execution. Applies the accepted ASCII options through the original editable-range check and one Text to Columns history action.",
+      "knownViolations": [],
+      "localSymbols": [
+        "GetTextToColumnsRange",
+        "ImportTextToColumns"
+      ],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": "sc/source/ui/view/cellsh2.cxx",
+      "upstreamSymbols": [
+        "lcl_GetTextToColumnsRange",
+        "ScCellShell::ExecuteDB"
+      ]
+    }
+  }
+}

@@ -1,0 +1,40 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sc/source/ui/view/viewfun3.transfer.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "calc",
+    "subsystem": "clipboard",
+    "capabilityIds": [
+      "CAP-1c4b358a-d58f-4cb3-bd8a-a4aac3aa3bf5",
+      "CAP-d9e3bd7a-f47f-4958-81a7-e7ef31935bf3"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/sc/source/ui/view/viewfun3.transfer.ts#CopyToClipSingleRange",
+        "apps/office/src/sc/browser/presentation/calc-cell-clipboard.test.tsx",
+        "vendor/libreoffice-reference/sc/source/ui/view/viewfun3.cxx#ScViewFunc::CopyToClipSingleRange",
+        "vendor/libreoffice-reference/sc/source/ui/app/transobj.cxx#ScTransferObj::GetData",
+        "vendor/libreoffice-reference/sc/source/ui/view/viewfun5.cxx#ScViewFunc::PasteDataFormatFormattedText"
+      ],
+      "justification": "Captures a same-workbook single-range clipboard document and stages the string transfer through Calc string export and native text import. Task 51SY7G. A protected source sheet strips hidden cell content and converts hidden formulas to values in the actual clipboard document used for native and text transfers.",
+      "knownViolations": [],
+      "localSymbols": [
+        "CopyToClipSingleRange",
+        "ExportClipboardText",
+        "ImportClipboardText"
+      ],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": "sc/source/ui/view/viewfun3.cxx",
+      "upstreamSymbols": [
+        "ScViewFunc::CopyToClipSingleRange"
+      ]
+    }
+  }
+}

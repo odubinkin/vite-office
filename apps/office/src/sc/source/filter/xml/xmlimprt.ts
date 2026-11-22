@@ -1,8 +1,11 @@
 /** @fileoverview Calc scalar,cell-font and row/column geometry import over shared fast XML contexts;advanced styles,device layout and objects remain unported. */
+import { SetLabelRanges, type ScMyLabelRange } from "./xmllabri";
 import { FormulaError } from "../../../../formula/inc/errorcodes";
 import { ScFormulaCell } from "../../core/data/formulacell";
 import { SV_COUNTRY_LANGUAGE_OFFSET, SvNumFormatType as T } from "../../../../svl/inc/zforlist";
 import { getCurrencySymbol } from "../../../../xmloff/source/style/numehelp";
+import { LANGUAGE_DONTKNOW } from "../../../../i18nlangtag/inc/lang";
+import { SvxLanguageItem } from "../../../../editeng/source/items/textitem.language";
 import { LanguageTag } from "../../../../i18nlangtag/source/languagetag/languagetag.value";
 import {
   getNumDecimalSep,
@@ -89,6 +92,11 @@ export class ScXMLImport extends SvXMLImport implements SvXMLImportRootFactory {
     return this.options.baseUrl ? INetURLObject.GetAbsURL(this.options.baseUrl, href) : href;
   }
   readonly docImport: ScDocumentImport;
+  private readonly labelRanges: ScMyLabelRange[] = [];
+  /** Stages a label pair until all sheets are known. @param range - Pair text. @returns Nothing. */
+  AddLabelRange(range: ScMyLabelRange): void {
+    this.labelRanges.push(range);
+  }
   private readonly namedExpressions: ScMyNamedExpression[] = [];
   private readonly matrixRanges: MatrixFormulaRange[] = [];
   private readonly pendingFormulas: {
@@ -220,9 +228,8 @@ export class ScXMLImport extends SvXMLImport implements SvXMLImportRootFactory {
       next = formatter.GetStandardFormat(type, entry.GetLanguage());
     if (next === key) return;
     const pattern = new ScPatternAttr(this.document.getCellAttributeHelper());
-    const format = new SfxUInt32Item(ATTR_VALUE_FORMAT, next);
     try {
-      pattern.GetItemSetWritable().Put(format);
+      this.PutCellNumberFormat(pattern.GetItemSetWritable(), next);
       this.document.ApplyPatternAreaTab(
         start.Col(),
         start.Row(),
@@ -232,7 +239,6 @@ export class ScXMLImport extends SvXMLImport implements SvXMLImportRootFactory {
         pattern,
       );
     } finally {
-      format.Dispose();
       pattern.Dispose();
     }
   }
@@ -568,13 +574,18 @@ export class ScXMLImport extends SvXMLImport implements SvXMLImportRootFactory {
   private ApplyCellNumberStyle(items: SfxItemSet, reference: string): boolean {
     const key = this.numberStyles.get(reference)?.GetKey(this.numberStyles);
     if (key === undefined) return false;
-    const item = new SfxUInt32Item(ATTR_VALUE_FORMAT, key);
-    try {
-      items.Put(item);
-      return true;
-    } finally {
-      item.Dispose();
-    }
+    this.PutCellNumberFormat(items, key);
+    return true;
+  }
+
+  /** Applies the source UNO NumberFormat property's value and formatter language to cell attributes. @param items - Borrowed native attributes. @param key - Formatter key. @returns Nothing. */
+  private PutCellNumberFormat(items: SfxItemSet, key: number): void {
+    const language =
+      this.document.GetFormatTable().GetEntry(key)?.GetLanguage() ?? LANGUAGE_DONTKNOW;
+    items.Put(new SfxUInt32Item(ATTR_VALUE_FORMAT, key), true);
+    const old = items.Get(ATTR_LANGUAGE_FORMAT) as SvxLanguageItem;
+    if (language !== LANGUAGE_DONTKNOW && language !== old.GetLanguage())
+      items.Put(new SvxLanguageItem(language, ATTR_LANGUAGE_FORMAT), true);
   }
   /** Populates the original Default style from the named styles stream. @param pattern - Parsed direct properties. @param reference - Optional data-style reference. @returns Nothing. */
   ApplyDefaultCellStyle(pattern: ScPatternAttr, reference: string | null): void {
@@ -710,6 +721,7 @@ export class ScXMLImport extends SvXMLImport implements SvXMLImportRootFactory {
       parseOdfXmlStream(xml, this, this.options);
       if (!this.body) throw new Error("ODS spreadsheet body is missing");
       const grammar = FormulaGrammar.Grammar.GRAM_ODFF;
+      SetLabelRanges(this.document, this.labelRanges);
       InsertRangeNames(
         this.document,
         this.namedExpressions.map(
@@ -836,4 +848,4 @@ class ScXMLBodyContext_Impl extends ScXMLImportContext {
   }
 }
 import { SfxUInt32Item } from "../../../../svl/source/items/intitem";
-import { ATTR_LINEBREAK, ATTR_VALUE_FORMAT } from "../../../inc/scitems";
+import { ATTR_LANGUAGE_FORMAT, ATTR_LINEBREAK, ATTR_VALUE_FORMAT } from "../../../inc/scitems";

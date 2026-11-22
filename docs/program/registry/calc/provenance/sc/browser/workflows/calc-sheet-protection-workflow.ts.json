@@ -1,0 +1,29 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "browser-adaptation",
+    "localPath": "apps/office/src/sc/browser/workflows/calc-sheet-protection-workflow.ts",
+    "status": "local-only",
+    "rationale": "Routes the Calc protection command to its view owner and adapts its prompts to the active browser session.",
+    "responsibilities": [
+      "Routes the Calc protection command to its view owner and adapts its prompts to the active browser session."
+    ],
+    "stackDivergence": {
+      "kind": "browser-adaptation",
+      "rationale": "Hosts the existing Sfx modal lifecycle in browser UI."
+    },
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sc/browser/workflows/calc-sheet-protection-workflow.ts",
+          "marker": "CalcSheetProtectionWorkflow"
+        },
+        {
+          "path": "apps/office/src/sc/browser/presentation/calc-sheet-protection.test.tsx",
+          "marker": "protectSheet.py"
+        }
+      ]
+    }
+  }
+}

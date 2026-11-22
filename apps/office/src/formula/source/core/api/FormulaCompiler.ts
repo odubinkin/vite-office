@@ -6,6 +6,7 @@ import {
   FormulaJumpToken,
   FormulaDoubleToken,
   FormulaStringToken,
+  FormulaStringOpToken,
   FormulaErrorToken,
   FormulaExternalToken,
   FormulaSpaceToken,
@@ -27,6 +28,7 @@ import { OUString, type OUStringConstReference } from "../../../../sal/inc/rtl/u
 
 const arithmetic = new Set<OpCode>([
   OpCode.ocName,
+  OpCode.ocColRowName,
   OpCode.ocPush,
   OpCode.ocStop,
   OpCode.ocOpen,
@@ -60,6 +62,7 @@ const arithmetic = new Set<OpCode>([
   OpCode.ocCountIf,
   OpCode.ocNot,
   OpCode.ocIsEmpty,
+  OpCode.ocIsFormula,
   OpCode.ocGetMonth,
   OpCode.ocGetActDate,
   OpCode.ocExternal,
@@ -100,6 +103,20 @@ export const errorSymbols = new Map<string, FormulaError>([
   ["#SPILL!", FormulaError.Spill],
 ]);
 
+/** Reads the nearest significant source opcode around a label. @param source - Lexical tokens. @param offset - Neighbor offset. @param direction - Source direction. @returns Opcode. */
+function LabelNeighbor(
+  source: readonly FormulaToken[] | null,
+  offset: number,
+  direction: number,
+): OpCode {
+  while (source && offset >= 0 && offset < source.length) {
+    const code = source[offset]?.GetOpCode();
+    if (code !== undefined && code !== OpCode.ocSpaces && code !== OpCode.ocWhitespace) return code;
+    offset += direction;
+  }
+  return OpCode.ocAdd;
+}
+
 /** Shared source-shaped grammar over actual code/RPN arrays, using GC token identities. */
 export class FormulaCompiler {
   private mnNumFmt: SvNumFormatType = SvNumFormatType.UNDEFINED;
@@ -116,6 +133,10 @@ export class FormulaCompiler {
       this.meGrammar !== FormulaGrammar.Grammar.GRAM_ODFF_A1 &&
       this.meGrammar !== FormulaGrammar.Grammar.GRAM_PODF &&
       this.meGrammar !== FormulaGrammar.Grammar.GRAM_NATIVE &&
+      this.meGrammar !== FormulaGrammar.Grammar.GRAM_NATIVE_XL_A1 &&
+      this.meGrammar !== FormulaGrammar.Grammar.GRAM_ENGLISH_XL_A1 &&
+      this.meGrammar !== FormulaGrammar.Grammar.GRAM_NATIVE_XL_R1C1 &&
+      this.meGrammar !== FormulaGrammar.Grammar.GRAM_ENGLISH_XL_R1C1 &&
       this.meGrammar !== FormulaGrammar.Grammar.GRAM_ENGLISH &&
       this.meGrammar !== FormulaGrammar.Grammar.GRAM_OOXML
     )
@@ -167,7 +188,7 @@ export class FormulaCompiler {
         op === OpCode.ocSpaces ? " " : String.fromCharCode((token as FormulaSpaceToken).GetChar())
       ).repeat(byte);
     }
-    if (op === OpCode.ocPush || op === OpCode.ocMatRef) {
+    if (op === OpCode.ocPush || op === OpCode.ocMatRef || op === OpCode.ocColRowNameAuto) {
       if (token.GetType() === StackVar.svDouble)
         return doubleToString((token as FormulaDoubleToken).GetDouble());
       if (token.GetType() === StackVar.svString)
@@ -179,6 +200,13 @@ export class FormulaCompiler {
       if (token.GetType() === StackVar.svSingleRef) return this.CreateStringFromSingleRef(token);
       if (token.GetType() === StackVar.svDoubleRef) return this.CreateStringFromDoubleRef(token);
       throw new Error("Formula output token family is not implemented");
+    }
+    if (op === OpCode.ocBad && token instanceof FormulaStringOpToken) {
+      const value = token.GetString().getString();
+      const units = value.getStr();
+      let result = "";
+      for (let i = 0; i < value.getLength(); i++) result += String.fromCharCode(units[i] as number);
+      return result;
     }
     if (op === OpCode.ocMissing) return "";
     const symbols =
@@ -244,6 +272,18 @@ export class FormulaCompiler {
     return undefined;
   }
 
+  /** Resolves a row or column label in Calc's formula position. @param token - Label token. @param previous - Left opcode. @param next - Right opcode. @returns Expanded operand. */
+  protected HandleColRowName(
+    token: FormulaToken,
+    previous: OpCode,
+    next: OpCode,
+  ): FormulaToken | undefined {
+    void token;
+    void previous;
+    void next;
+    return undefined;
+  }
+
   /** Identifies a derived compiler's concrete matrix literal operand. @param token - Source token. @returns Whether the derived compiler owns the operand. */
   protected IsMatrixOperand(token: FormulaToken): boolean {
     void token;
@@ -262,13 +302,16 @@ export class FormulaCompiler {
   }
   /** Compiles the supported default scalar grammar; the native boolean reports subtotal presence, not success. @returns False for this non-subtotal subset. */
   CompileTokenArray(): boolean {
-    for (const token of this.mpArr.Tokens())
+    for (const token of this.mpArr.Tokens()) {
+      if (token.GetOpCode() === OpCode.ocBad && this.mpArr.GetCodeError() !== FormulaError.NONE)
+        continue;
       if (
         !arithmetic.has(token.GetOpCode()) ||
         (token.GetOpCode() === OpCode.ocIf && !(token instanceof FormulaJumpToken)) ||
         (token.GetInForceArray() !== ParamClass.Unknown && !this.IsMatrixOperand(token))
       )
         throw new Error("Formula opcode or array context is not implemented by scalar compilation");
+    }
     if (this.mpArr.GetCodeError() !== FormulaError.NONE) {
       if (this.mnNumFmt === SvNumFormatType.UNDEFINED) this.mnNumFmt = SvNumFormatType.NUMBER;
       return false;
@@ -336,6 +379,17 @@ export class FormulaCompiler {
               index: 0,
             });
             return this.GetToken();
+          }
+          if (token.GetOpCode() === OpCode.ocColRowName) {
+            const frame = this.nameFrames.at(-1);
+            const source = frame?.tokens ?? this.mpArr.GetArray();
+            const offset = frame?.index ?? this.index;
+            token = this.HandleColRowName(
+              token,
+              LabelNeighbor(source, offset - 2, -1),
+              LabelNeighbor(source, offset, 1),
+            );
+            if (!token) return false;
           }
           this.mpToken = token;
           if (token.GetOpCode() === OpCode.ocPush && this.mbComputeII)
@@ -416,7 +470,8 @@ export class FormulaCompiler {
     if (this.mpArr.GetCodeError() !== FormulaError.NONE) return;
     const op = this.mpToken.GetOpCode();
     const logical = op === OpCode.ocTrue || op === OpCode.ocFalse;
-    const logicalResult = logical || op === OpCode.ocNot || op === OpCode.ocIsEmpty;
+    const logicalResult =
+      logical || op === OpCode.ocNot || op === OpCode.ocIsEmpty || op === OpCode.ocIsFormula;
     // Native lcl_GetRetFormat classifies nullary logical constants separately from numbers.
     if (op !== OpCode.ocOpen && this.mnNumFmt === SvNumFormatType.UNDEFINED)
       this.mnNumFmt = logicalResult
@@ -426,7 +481,7 @@ export class FormulaCompiler {
           : op === OpCode.ocPercentSign
             ? SvNumFormatType.PERCENT
             : SvNumFormatType.NUMBER;
-    if (op === OpCode.ocPush || op === OpCode.ocMatRef) {
+    if (op === OpCode.ocPush || op === OpCode.ocMatRef || op === OpCode.ocColRowNameAuto) {
       this.PutCode(this.mpToken);
       if (this.NextToken() === OpCode.ocOpen) this.SetError(FormulaError.OperatorExpected);
     } else if (op === OpCode.ocMissing) {
@@ -456,6 +511,7 @@ export class FormulaCompiler {
       op === OpCode.ocAnd ||
       op === OpCode.ocNot ||
       op === OpCode.ocIsEmpty ||
+      op === OpCode.ocIsFormula ||
       op === OpCode.ocGetMonth ||
       op === OpCode.ocOffset ||
       op === OpCode.ocCountIf ||

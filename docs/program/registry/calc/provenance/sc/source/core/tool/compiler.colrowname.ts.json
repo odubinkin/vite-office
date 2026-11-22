@@ -1,0 +1,55 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/sc/source/core/tool/compiler.colrowname.ts",
+    "status": "mapped",
+    "localSymbols": [
+      "ParseColRowName",
+      "GetRefColRowNames"
+    ],
+    "upstreamPath": "sc/source/core/tool/compiler.cxx",
+    "upstreamSymbols": [
+      "ScCompiler::ParseColRowName",
+      "ScCompiler::GetRefColRowNames"
+    ],
+    "preservedResponsibilities": [
+      "Compiles explicit label pairs and optional automatic labels using source sheet precedence, position, and scalar intersection."
+    ],
+    "omittedResponsibilities": [
+      "The optional upstream automatic name cache is outside the compiler slice."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sc/source/core/tool/compiler.colrowname.ts",
+          "marker": "ParseColRowName"
+        },
+        {
+          "path": "apps/office/src/sc/browser/presentation/calc-label-ranges.test.tsx",
+          "marker": "ports tdf131170"
+        },
+        {
+          "path": "apps/office/src/sc/browser/presentation/calc-options.test.tsx",
+          "marker": "uses the automatic label switch"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sc/source/core/tool/compiler.cxx",
+          "marker": "ScCompiler::ParseColRowName"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/source/core/tool/compiler.cxx",
+          "marker": "ScCompiler::GetRefColRowNames"
+        }
+      ]
+    },
+    "filenameDivergence": {
+      "localPath": "apps/office/src/sc/source/core/tool/compiler.colrowname.ts",
+      "rationale": "Splits the original compiler translation unit by responsibility to retain the existing compiler owner within the TypeScript source size budget.",
+      "stackNecessity": "responsibility-split"
+    }
+  }
+}

@@ -6,8 +6,8 @@ import { ScFormulaCell } from "../../../inc/formulacell";
 import type { ScViewFunc } from "./viewfunc";
 import { ScDocument, ScDocumentMode } from "../../../inc/document";
 import { ScPatternAttr } from "../../../inc/patattr";
-import { scPasteResourcesEnglish } from "../../../inc/globstr";
-import { InsertDeleteFlags, ScPasteFunc, InsCellCmd } from "../../../inc/global";
+import { scMergeResourcesEnglish, scPasteResourcesEnglish } from "../../../inc/globstr";
+import { HasAttrFlags, InsertDeleteFlags, ScPasteFunc, InsCellCmd } from "../../../inc/global";
 import { ATTR_VALUE_FORMAT } from "../../../inc/scitems";
 import type { SfxUInt32Item } from "../../../../svl/inc/intitem";
 import type { ScMarkData } from "../../../inc/markdata";
@@ -25,6 +25,149 @@ import { OUString, type OUStringConstReference } from "../../../../sal/inc/rtl/u
 import { unicode, text } from "../../../../i18nlangtag/source/isolang/isolang.tables";
 import { ScMarkType, type ScViewData } from "../inc/viewdata";
 import { RowHeightContext } from "../../../inc/rowheightcontext";
+import { ScCellMergeOption } from "./cellmergeoption";
+import { ScEditableTester } from "../docshell/editable";
+import { MultiDataCellState } from "../../../inc/types";
+import { ScMergeCellsDialog, ScMergeCellsOption } from "../miscdlgs/mergecellsdialog";
+
+/** Source modal invocation returns no choice when cancelled. */
+export type RunMergeCellsDialog = (
+  dialog: ScMergeCellsDialog,
+) => Promise<ScMergeCellsOption | undefined>;
+
+/** Native Merge Cells admission needs a contiguous, non-filtered mark of more than one cell. @param view - Actual view data. @returns Whether the command is enabled. */
+export function TestMergeCells(view: ScViewData): boolean {
+  const marks = view.GetMarkData();
+  if (!marks.IsMarked() && !marks.IsMultiMarked()) return false;
+  const range = new ScRange();
+  return (
+    view.GetSimpleArea(range) === ScMarkType.SC_MARK_SIMPLE &&
+    (range.aStart.Col() !== range.aEnd.Col() || range.aStart.Row() !== range.aEnd.Row())
+  );
+}
+
+/** Native Split Cells admission checks the range or cursor merge anchor. @param view - Actual view data. @returns Whether a merge can be split. */
+export function TestRemoveMerge(view: ScViewData): boolean {
+  const range = new ScRange();
+  return (
+    view.GetSimpleArea(range) === ScMarkType.SC_MARK_SIMPLE &&
+    view.GetDocument().HasAttrib(range, HasAttrFlags.Merged)
+  );
+}
+
+/** Tests source selection editability before a merge prompt or split is possible. @param view - Actual view. @param range - Selected area. @returns Whether the selection is editable. */
+function canEditMerge(view: ScViewFunc, range: ScRange): boolean {
+  const data = view.GetViewData(),
+    { aStart, aEnd } = range;
+  const tester = ScEditableTester.CreateAndTestSelectedBlock(
+    data.GetDocument(),
+    aStart.Col(),
+    aStart.Row(),
+    aEnd.Col(),
+    aEnd.Row(),
+    data.GetMarkData(),
+  );
+  if (!tester.IsEditable()) view.ErrorMessage(tester.GetMessageId());
+  return tester.IsEditable();
+}
+
+/** Performs the original source merge selection, occupancy test and optional dialog. @param view - Original view owner. @param shell - Live document shell. @param api - API call mode. @param contents - Requested content transfer flag. @param center - Center merged contents. @param confirm - Asynchronous dialog owner. @returns Whether applied. */
+export async function MergeCells(
+  view: ScViewFunc,
+  shell: ScDocShell,
+  api: boolean,
+  contents: boolean,
+  center: boolean,
+  confirm: RunMergeCellsDialog,
+): Promise<boolean> {
+  const data = view.GetViewData(),
+    doc = data.GetDocument(),
+    marks = data.GetMarkData();
+  const area = new ScRange();
+  data.GetSimpleArea(area);
+  if (!canEditMerge(view, area)) return false;
+  marks.MarkToSimple();
+  if (!marks.IsMarked()) {
+    view.ErrorMessage(scMergeResourcesEnglish.STR_NOMULTISELECT);
+    return false;
+  }
+  const { aStart, aEnd } = marks.GetMarkArea();
+  const col = aStart.Col(),
+    row = aStart.Row(),
+    lastCol = aEnd.Col(),
+    lastRow = aEnd.Row();
+  if (col === lastCol && row === lastRow) return false;
+  if (doc.HasAttrib(marks.GetMarkArea(), HasAttrFlags.Merged | HasAttrFlags.Overlapped)) {
+    view.ErrorMessage(scMergeResourcesEnglish.STR_MSSG_MERGECELLS_0);
+    return false;
+  }
+
+  const option = new ScCellMergeOption(col, row, lastCol, lastRow, center);
+  const { HasOneCell, HasMultipleCells } = MultiDataCellState.StateType;
+  let ask = false;
+  for (const tab of marks) {
+    option.maTabs.add(tab);
+    const state = doc.HasMultipleDataCells(option.getSingleRange(tab));
+    if (state.meState === HasMultipleCells) ask = true;
+    else if (state.meState === HasOneCell && (state.mnCol1 !== col || state.mnRow1 !== row))
+      contents = true;
+  }
+
+  // Calc Compatibility/MergeCells defaults are ShowDialog=true and EmptyMergedCells=false.
+  let empty = false;
+  if (ask) {
+    if (api) return false;
+    const dialog = new ScMergeCellsDialog(),
+      choice = await confirm(dialog);
+    if (choice === undefined) return false;
+    const selected = dialog.GetMergeCellsOption(choice);
+    if (selected === ScMergeCellsOption.MoveContentHiddenCells) contents = true;
+    else if (selected === ScMergeCellsOption.EmptyContentHiddenCells) empty = true;
+  }
+  if (!shell.GetDocFunc().MergeCells(option, contents, true, api, empty)) return false;
+  view.SetCursor(col, row);
+  view.Unmark();
+  return true;
+}
+
+/** Expands source split selection through anchored and covered cells on the selected tabs. @param view - Original view owner. @param shell - Live document shell. @returns Whether admitted. */
+export function RemoveMerge(view: ScViewFunc, shell: ScDocShell): boolean {
+  const data = view.GetViewData(),
+    doc = data.GetDocument();
+  const area = new ScRange();
+  const mode = data.GetSimpleArea(area);
+  if (!canEditMerge(view, area)) return false;
+  if (mode !== ScMarkType.SC_MARK_SIMPLE) return true;
+  const { aStart, aEnd } = area;
+  const option = new ScCellMergeOption(aStart.Col(), aStart.Row(), aEnd.Col(), aEnd.Row());
+  const extended = new ScRange(area);
+  doc.ExtendMergeRange(extended);
+  let expanded: boolean;
+  do {
+    expanded = false;
+    for (const tab of data.GetMarkData()) {
+      option.maTabs.add(tab);
+      extended.aStart.SetTab(tab);
+      extended.aEnd.SetTab(tab);
+      doc.ExtendMergeRange(extended);
+      doc.ExtendOverlapped(extended);
+      expanded =
+        option.mnStartCol > extended.aStart.Col() ||
+        option.mnStartRow > extended.aStart.Row() ||
+        option.mnEndCol < extended.aEnd.Col() ||
+        option.mnEndRow < extended.aEnd.Row();
+      option.mnStartCol = Math.min(option.mnStartCol, extended.aStart.Col());
+      option.mnStartRow = Math.min(option.mnStartRow, extended.aStart.Row());
+      option.mnEndCol = Math.max(option.mnEndCol, extended.aEnd.Col());
+      option.mnEndRow = Math.max(option.mnEndRow, extended.aEnd.Row());
+    }
+  } while (expanded);
+  shell.GetDocFunc().UnmergeCells(option, true);
+  const selected = option.getFirstSingleRange();
+  view.MarkRange(selected, false);
+  view.SetCursor(selected.aStart.Col(), selected.aStart.Row());
+  return true;
+}
 /** Recalculates affected whole rows on original selected sheets, retaining source shared-context ordering. @param doc - Actual document. @param marks - Selected sheets. @param first - First row. @param last - Last row. @returns Whether geometry changed. */
 export function AdjustBlockHeight(
   doc: ScDocument,

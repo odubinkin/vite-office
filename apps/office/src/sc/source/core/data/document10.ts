@@ -1,13 +1,12 @@
 /** @fileoverview Original document10.cxx delayed formula-group ownership and regroup routing. */
-import { ScGlobal } from "../../../inc/global";
-
+import { UpdateLabelRangesOnTab } from "./documen4";
 import type { OUString, OUStringConstReference } from "../../../../sal/inc/rtl/ustring";
 import { SfxHintId } from "../../../../svl/inc/hint";
 import type { SfxPoolItem } from "../../../../svl/inc/poolitem";
 import { MAXTAB, SC_TAB_APPEND, ValidTab } from "../../../inc/address";
 import { ScMF, type ScMergeFlagAttr } from "../../../inc/attrib";
 import { ScHorizontalCellIterator } from "../../../inc/dociter";
-import { InsertDeleteFlags, UpdateRefMode } from "../../../inc/global";
+import { CellType, ScGlobal, InsertDeleteFlags, UpdateRefMode } from "../../../inc/global";
 import type { ScPatternAttr } from "../../../inc/patattr";
 import { ATTR_MERGE_FLAG } from "../../../inc/scitems";
 import { ScRangeList } from "../../../inc/rangelst";
@@ -18,6 +17,7 @@ import { StartListeners, SetDirtyIncludingEmptyCells as dirtyColumn } from "./co
 import { UpdateScriptTypes } from "./column4";
 import { BroadcastAction } from "./documen7";
 import { ExtendMerge as extendTableMerge } from "./table2";
+import { MultiDataCellState } from "../../../inc/types";
 import { EndListeningIntersectedGroups as endTableGroups } from "./table7";
 /** Original single-cell teardown forwards only to an existing sheet. @param this - Document. @param context - Actual end context. @param position - Target cell. @param groups - Optional source positions. @returns Nothing. */
 export function EndListeningIntersectedGroup(
@@ -49,6 +49,14 @@ export function IsMerged(this: ScDocument, position: ScAddress): boolean {
   const table = this.FetchTable(position.Tab());
   if (!table) return false;
   return table.IsMerged(position.Col(), position.Row());
+}
+/** Queries nonempty cells on a single sheet, admitting a missing sheet as empty. @param this - Workbook. @param range - Source selection. @returns Native occupancy. */
+export function HasMultipleDataCells(this: ScDocument, range: ScRange): MultiDataCellState {
+  const { aStart, aEnd } = range;
+  if (aStart.Tab() !== aEnd.Tab()) return new MultiDataCellState();
+  const table = this.FetchTable(aStart.Tab());
+  if (!table) return new MultiDataCellState(MultiDataCellState.StateType.Empty);
+  return table.HasMultipleDataCells(aStart.Col(), aStart.Row(), aEnd.Col(), aEnd.Row());
 }
 /** Original range/coordinate regroup overloads operate on the same document's actual sheets. @param this - Actual document. @param args - Native range or sheet/column. @returns Nothing. */
 export function RegroupFormulaCells(this: ScDocument, ...args: [ScRange] | [number, number]): void {
@@ -183,7 +191,8 @@ export function CopyOneCellFromClip(
   row2: number,
 ): boolean {
   const clip = context.getClipDoc();
-  if (clip.GetClipParam().mbCutMode) return false;
+  if (clip.GetClipParam().mbCutMode || context.getInsertFlag() !== InsertDeleteFlags.CONTENTS)
+    return false;
   const range = clip.GetClipParam().getWholeRange();
   if (range.aStart.Row() !== range.aEnd.Row()) return false;
   const width = range.aEnd.Col() - range.aStart.Col() + 1;
@@ -202,6 +211,7 @@ export function CopyOneCellFromClip(
     context.setSingleCellPattern(offset, clip.GetPattern(source));
     const column = table.FetchColumn(source.Col());
     if (!column) throw Error("Clipboard source column assertion");
+    if (column.GetCellType(source.Row()) === CellType.CELLTYPE_EDIT) return false;
     UpdateScriptTypes.call(column, source.Row(), source.Row());
     context.setSingleCell(source, column);
   }
@@ -220,7 +230,6 @@ export function CopyOneCellFromClip(
   this.UpdateReference(update, context.getUndoDoc(), false);
   return true;
 }
-
 /** Original document.cxx single-sheet clipboard listener forwarding,partitioned on the same ScDocument instance. @param this - Actual document. @param start - Actual start context. @param end - Actual end context. @param tab - Sheet. @param col1 - First column. @param row1 - First row. @param col2 - Last column. @param row2 - Last row. @returns Nothing. */
 export function StartListeningFromClip(
   this: ScDocument,
@@ -272,18 +281,6 @@ export function GetMergeFlags(
 ): ScMergeFlagAttr | undefined {
   return this.FetchTable(tab)?.GetPattern(col, row)?.GetItem(ATTR_MERGE_FLAG) as
     ScMergeFlagAttr | undefined;
-}
-
-/** Walks backwards from a covered cell to the original merge anchor. @param this - Document. @param col - Column. @param row - Row. @param tab - Sheet. @returns Anchor coordinates. */
-export function SkipOverlapped(
-  this: ScDocument,
-  col: number,
-  row: number,
-  tab: number,
-): [number, number] {
-  while (GetMergeFlags.call(this, col, row, tab)?.IsHorOverlapped()) --col;
-  while (GetMergeFlags.call(this, col, row, tab)?.IsVerOverlapped()) --row;
-  return [col, row];
 }
 
 /** Extends the leading edges to include merge anchors on every sheet in the range. @param this - Document. @param range - Ordered cell coordinates with either sheet direction. @returns Nothing. */
@@ -413,7 +410,9 @@ export function CopyFromClip(
     }
     this.SetInsertingFromOtherDoc(true);
     const broadcasts = new ColumnSpanSet();
-    const clipCol = range.aStart.Col(),
+    const allocated = clip.FetchTable(range.aStart.Tab())?.GetAllocatedColumnsCount() ?? 0;
+    const hasFullRow = range.aEnd.Col() < allocated,
+      clipCol = range.aStart.Col(),
       clipEnd = range.aEnd.Row();
     let clipRow = range.aStart.Row();
     try {
@@ -424,7 +423,7 @@ export function CopyFromClip(
           row2 = target.aEnd.Row();
         context.setDestRange(col1, row1, col2, row2);
         this.DeleteBeforeCopyFromClip(context, marks, broadcasts);
-        if (CopyOneCellFromClip.call(this, context, col1, row1, col2, row2)) continue;
+        if (hasFullRow && CopyOneCellFromClip.call(this, context, col1, row1, col2, row2)) continue;
         let c1 = col1,
           r1 = row1,
           c2 = Math.min(c1 + width, col2),
@@ -456,15 +455,15 @@ export function CopyFromClip(
     } finally {
       this.SetInsertingFromOtherDoc(false);
     }
-    // The actual context constructor admits exactly CONTENTS,so the native content guard is proven true here.
-    for (const tab of marks.GetSelectedTabs())
-      context.setListeningFormulaSpans(
-        tab,
-        destination.aStart.Col(),
-        destination.aStart.Row(),
-        destination.aEnd.Col(),
-        destination.aEnd.Row(),
-      );
+    if (flags & InsertDeleteFlags.CONTENTS)
+      for (const tab of marks.GetSelectedTabs())
+        context.setListeningFormulaSpans(
+          tab,
+          destination.aStart.Col(),
+          destination.aStart.Row(),
+          destination.aEnd.Col(),
+          destination.aEnd.Row(),
+        );
     context.startListeningFormulas();
     const bulk = new ScBulkBroadcast(this.GetBASM(), SfxHintId.ScDataChanged);
     try {
@@ -762,11 +761,12 @@ export function InsertTab(
   if (position === SC_TAB_APPEND || position >= this["maTabs"].length)
     position = this["maTabs"].length;
   if (!ValidTab(position)) return false;
+  const shifted = new ScRange(0, 0, position, this.MaxCol(), this.MaxRow(), MAXTAB);
+  const isInsertion = position < this["maTabs"].length;
+  if (isInsertion) UpdateLabelRangesOnTab(this, shifted, 1);
   this["maTabs"].splice(position, 0, new ScTable(this, position, name));
   for (let i = position + 1; i < this["maTabs"].length; i++) this["maTabs"][i]?.SetTabNo(i);
-  const shifted = new ScRange(0, 0, position, this.MaxCol(), this.MaxRow(), MAXTAB);
-  if (position < this["maTabs"].length - 1)
-    this["pBASM"]?.UpdateBroadcastAreas(UpdateRefMode.URM_INSDEL, shifted, 0, 0, 1);
+  if (isInsertion) this["pBASM"]?.UpdateBroadcastAreas(UpdateRefMode.URM_INSDEL, shifted, 0, 0, 1);
   this.SetAllFormulasDirty(new SetFormulaDirtyContext());
   return true;
 }
@@ -801,6 +801,7 @@ export function DeleteTab(this: ScDocument, tab: number): boolean {
     row: [number] = [0];
   let cell;
   while ((cell = iterator.GetNext(col, row))) cell.getFormula()?.Dispose();
+  UpdateLabelRangesOnTab(this, shifted, -1);
   (this["maTabs"][tab] as ScTable).DisposeAttributes();
   this["maTabs"].splice(tab, 1);
   for (let index = tab; index < this["maTabs"].length; index++)

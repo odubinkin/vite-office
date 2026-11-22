@@ -1,0 +1,24 @@
+{
+  "schema_version": 1,
+  "task_id": "202611212341-5A4TN3",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-11-22T00:20:40.478Z",
+  "verdict": "pass",
+  "summary": "The browser surfaces dispatch the source merge and split contracts and preserve native workbook history.",
+  "evaluated_sha": "b53c51bcc002bbf72e88d6f26851521c68105a3f",
+  "blueprint_digest": "8268a17b9729fc0aa898b6e786b43a31ef50ccb073c4232c5c84f693ed9728f2",
+  "findings": [
+    "Current Chromium, original Calc fixture coverage and focused regression tests cover the actual command entry points and retained source behavior."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202611212341-5A4TN3/README.md",
+    "output/calc-task13-verification.md",
+    "output/playwright/calc-task13/smoke-final.log"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": [
+    "Contextual Help has the existing disabled browser state and the repository-wide size gate flags seven unchanged files."
+  ]
+}

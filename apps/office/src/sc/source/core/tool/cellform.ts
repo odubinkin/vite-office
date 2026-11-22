@@ -10,6 +10,7 @@ import { FormulaError } from "../../../../formula/inc/errorcodes";
 import type { ScFormulaCell } from "../../../inc/formulacell";
 import type { SharedStringConstReference } from "../../../../svl/inc/sharedstring";
 import { unicode } from "../../../../i18nlangtag/source/isolang/isolang.tables";
+import { GetString as GetEditString } from "./editutil";
 /** Original static-only ScCellFormat API;the namespace has no substitute document or cell state. */
 export const ScCellFormat = {
   /** Original GetInputString dispatch for scalar, edit and formula cells. The current formatter admits General; numeric formatting stays owned by NFGetInputLineString. @param cell - Borrowed cell. @param format - Format key. @param context - Actual context or null. @param doc - Actual document. @param filtering - Source default false. @param forceSystemLocale - Source default false. @returns Owned input text. */
@@ -52,13 +53,15 @@ export const ScCellFormat = {
         return new OUString();
     }
   },
-  /** Original multiline display path keeps paragraph and feature expansion before scalar formatting. @param doc - Actual document. @param position - Source cell address. @param cell - Actual cell view. @param nullValues - Whether to display numeric zero. @returns Owned display text. */
+  /** Original multiline display path keeps paragraph and feature expansion before scalar formatting. @param doc - Actual document. @param position - Source cell address. @param cell - Actual cell view. @param nullValues - Whether to display numeric zero. @param color - Actual formatter color output. @returns Owned display text. */
   GetOutputString(
     doc: ScDocument,
     position: ScAddress,
     cell: ScRefCellValue,
     nullValues = true,
+    color: [Color | null] = [null],
   ): OUString {
+    color[0] = null;
     if (cell.isEmpty()) return new OUString();
     if (cell.getType() === CellType.CELLTYPE_EDIT) {
       const edit = cell.getEditText();
@@ -69,7 +72,7 @@ export const ScCellFormat = {
     }
     const context = doc.GetNonThreadedContext();
     const format = doc.GetPattern(position)?.GetNumberFormat(context) ?? 0;
-    return ScCellFormat.GetString(cell, format, [null], context, doc, nullValues);
+    return ScCellFormat.GetString(cell, format, color, context, doc, nullValues);
   },
 
   /** Original first GetString overload preserves color reset,context selection and scalar/formula evaluation order. The admitted core has native macro level0;macro callbacks and their running-cell branch remain unported. @param cell - Actual borrowed cell. @param format - Native format key. @param color - Native output pointer. @param context - Actual context or native null. @param doc - Actual document. @param nullValues - Original defaulttrue display-zero flag. @param formula - Original defaultfalse formula-output flag. @param star - Original defaultfalse formatter flag. @returns Owned native output. */
@@ -99,6 +102,15 @@ export const ScCellFormat = {
     switch (cell.getType()) {
       case CellType.CELLTYPE_STRING:
         return output((cell.getSharedString() as SharedStringConstReference).getString());
+      case CellType.CELLTYPE_EDIT: {
+        const edit = cell.getEditText();
+        const value = edit ? GetEditString(edit, doc) : new OUString();
+        try {
+          return output(value);
+        } finally {
+          value.dispose();
+        }
+      }
       case CellType.CELLTYPE_VALUE:
         return !nullValues && cell.getDouble() === 0 ? new OUString() : output(cell.getDouble());
       case CellType.CELLTYPE_FORMULA: {

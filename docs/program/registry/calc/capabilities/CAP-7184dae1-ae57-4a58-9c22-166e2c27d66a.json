@@ -1,0 +1,115 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "id": "CAP-7184dae1-ae57-4a58-9c22-166e2c27d66a",
+    "capabilityId": "CAP-7184dae1-ae57-4a58-9c22-166e2c27d66a",
+    "suite": "calc",
+    "subsystem": "cell-formatting",
+    "type": "command",
+    "maturity": "implemented",
+    "capability": "Calc Format Cells Font, Font Effects and Borders pages",
+    "assertions": [
+      "The extra Format Cells pages share the original item-set exchange, selection frame, pooled padding, script-specific font values and reversible history."
+    ],
+    "stackDivergence": {
+      "kind": "browser-adaptation",
+      "rationale": "Browser-native controls present the pinned column and script groups using the actual document formatter, frame selector and item-set owners."
+    },
+    "gaps": [
+      "The browser uses its native fonts, color inputs and CSS preview. Device rendering of complex decoration and shadow styles retains the browser's limitations.",
+      "Conditional Asian Typography remains separate from the three Font script groups. The existing open/save and recovery deviations remain in place."
+    ],
+    "upstream": {
+      "implementation": [
+        {
+          "path": "vendor/libreoffice-reference/sc/source/ui/attrdlg/attrdlg.cxx",
+          "marker": "RID_SVXPAGE_CHAR_EFFECTS"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/source/ui/view/tabvwsha.cxx",
+          "marker": "GetSelectionFrame"
+        },
+        {
+          "path": "vendor/libreoffice-reference/cui/source/tabpages/border.cxx",
+          "marker": "SvxBorderTabPage::FillItemSet"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/source/filter/xml/xmlstyle.cxx",
+          "marker": "CTF_SC_LEFTPADDING"
+        }
+      ],
+      "tests": [
+        {
+          "path": "vendor/libreoffice-reference/sc/qa/uitest/calc_tests/formatCells.py",
+          "marker": "test_format_cell_font_tab"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/qa/uitest/calc_tests/formatCells.py",
+          "marker": "test_format_cell_font_effects_tab"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/qa/uitest/calc_tests/formatCells.py",
+          "marker": "test_minimal_border_width"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/qa/uitest/calc_tests/formatCells.py",
+          "marker": "test_format_cell_borders_tab"
+        }
+      ],
+      "docs": [
+        {
+          "path": "vendor/libreoffice-reference/cui/uiconfig/ui/effectspage.ui",
+          "marker": "overlinelb"
+        }
+      ]
+    },
+    "local": {
+      "implementation": [
+        {
+          "path": "apps/office/src/sc/browser/presentation/attrdlg/FontTabPage.tsx",
+          "marker": "FontTabPage"
+        },
+        {
+          "path": "apps/office/src/sc/browser/presentation/attrdlg/FontEffectsTabPage.tsx",
+          "marker": "FontEffectsTabPage"
+        },
+        {
+          "path": "apps/office/src/sc/browser/presentation/attrdlg/CellBordersTabPage.tsx",
+          "marker": "CellBordersTabPage"
+        },
+        {
+          "path": "apps/office/src/cui/source/tabpages/border.ts",
+          "marker": "BorderPageOptions"
+        }
+      ],
+      "tests": [
+        {
+          "path": "apps/office/src/sc/browser/presentation/calc-format-cells.test.tsx",
+          "marker": "ports the three script sizes"
+        },
+        {
+          "path": "apps/office/src/sc/browser/presentation/calc-format-cells.test.tsx",
+          "marker": "ports the Calc border width defaults"
+        }
+      ],
+      "docs": [
+        {
+          "path": ".agentplane/tasks/202611220250-KE98GA/README.md",
+          "marker": "Verify Steps"
+        }
+      ]
+    },
+    "implemented": true,
+    "contractParity": false,
+    "behaviorParity": false,
+    "defaultParity": false,
+    "verified": false,
+    "aspect": "command-state",
+    "atomicOperation": "calc-format-cells-typography-borders",
+    "scopeLimitations": [
+      "The browser uses its native fonts, color inputs and CSS preview. Device rendering of complex decoration and shadow styles retains the browser's limitations.",
+      "Conditional Asian Typography remains separate from the three Font script groups. The existing open/save and recovery deviations remain in place."
+    ]
+  }
+}

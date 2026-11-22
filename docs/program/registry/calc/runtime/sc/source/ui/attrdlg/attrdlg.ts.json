@@ -1,0 +1,35 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sc/source/ui/attrdlg/attrdlg.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "calc",
+    "subsystem": "cell-formatting",
+    "capabilityIds": [
+      "CAP-d618abf2-35e0-42c3-acf1-88c8a5f16811"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/sc/source/ui/attrdlg/attrdlg.ts",
+        "apps/office/src/sc/browser/presentation/calc-format-cells.test.tsx",
+        "vendor/libreoffice-reference/sc/source/ui/attrdlg/attrdlg.cxx"
+      ],
+      "justification": "Captures native selection inputs and projects original cell attribute tabs through one item-set response.",
+      "knownViolations": [],
+      "localSymbols": [
+        "ScAttrDlg"
+      ],
+      "sourceResponsibility": "divergent",
+      "upstreamFile": "sc/source/ui/attrdlg/attrdlg.cxx",
+      "upstreamSymbols": [
+        "ScAttrDlg::ScAttrDlg"
+      ]
+    }
+  }
+}

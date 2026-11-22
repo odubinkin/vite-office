@@ -140,13 +140,9 @@ export function WriterParagraphDialog({
     if (activeTab === "tabs") tabs.Deactivate(draft.firstLineIndentPt ?? 0);
     if (next === "borders" && borders === undefined)
       setBorders(
-        new SvxBorderTabPage(
-          pageInput,
-          RES_BOX,
-          RES_PARATR_CONNECT_BORDER,
-          undefined,
-          new SwParaConnectBorderItem(),
-        ),
+        new SvxBorderTabPage(pageInput, RES_BOX, RES_PARATR_CONNECT_BORDER, undefined, {
+          mergeDefault: new SwParaConnectBorderItem(),
+        }),
       );
     setActiveTab(next);
   }

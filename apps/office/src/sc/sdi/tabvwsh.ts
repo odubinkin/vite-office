@@ -1,4 +1,6 @@
 /** @fileoverview Original view-option slots from scalc.sdi/tabvwsh.sdi,sc.hrc and solar.hrc;browser dispatch retains native request/state owners. */
+import { createCalcNumberFormatSlots } from "./formatsh.numformat";
+import type { SfxSlotState } from "../../sfx2/source/control/bindings";
 import type { SfxRequest } from "../../sfx2/source/control/request";
 import type { SfxSlotDefinition } from "../../sfx2/source/control/msg";
 /** Native view command identity used only to route the actual cases. */
@@ -9,6 +11,12 @@ export const calcViewCommands = [
   { id: ".uno:ToggleFormula", slotId: 26250, label: "Show Formulas", option: "formulas" },
   { id: ".uno:ToggleSheetGrid", slotId: 25018, label: "View Grid Lines", option: "grid" },
 ] as const;
+export const SID_STYLE_APPLY = 5552;
+/** Cell format and selection slots at SID_NEW_SLOTS + 105 and +106. */
+export const SID_SCATTR_CELLPROTECTION = 26676;
+export const SID_SELECT_UNPROTECTED_CELLS = 26677;
+/** Original sheet protection slot at EXTRA_MENU_START + 6. */
+export const FID_PROTECT_TABLE = 26314;
 export const SID_DEFINE_PRINTAREA = 26602;
 
 /** Original SID_FORMATPAGE at FORMAT_MENU_START + 17. */
@@ -48,12 +56,21 @@ export const FN_PRINT_ENTIRE_SHEET = 21163;
 
 /** Active view contract;the core owns all persistent values. */
 export interface CalcViewCommandTarget {
+  GetCellStyleState(): SfxSlotState;
+  GetNumFormatState(slot: number): SfxSlotState;
+  ExecuteNumFormat(request: SfxRequest): boolean;
+  GetCellProtectionState(): boolean;
+  ExecuteCellProtection(request: SfxRequest): boolean;
+  SelectUnprotectedCells(): boolean;
+  CanRepeat(): boolean;
+  Repeat(): boolean;
+  ExecuteCellStyle(request: SfxRequest): number | undefined;
   GetViewOptionState(option: CalcViewOption): boolean;
   ExecuteViewOption(option: CalcViewOption, request: SfxRequest): void;
 }
 /** Binds native checked states and request cases to existing Sfx. @returns Actual slots. */
 export function createCalcViewSlots(): SfxSlotDefinition<CalcViewCommandTarget>[] {
-  return calcViewCommands.map(
+  const viewOptions = calcViewCommands.map<SfxSlotDefinition<CalcViewCommandTarget>>(
     /** Creates one original slot binding. @param resource - Native command. @returns Slot. */ (
       resource,
     ) => ({
@@ -70,4 +87,42 @@ export function createCalcViewSlots(): SfxSlotDefinition<CalcViewCommandTarget>[
         ) => target.ExecuteViewOption(resource.option, request),
     }),
   );
+  return [
+    ...viewOptions,
+    ...createCalcNumberFormatSlots(),
+    {
+      commandUrl: ".uno:StyleApply",
+      slotId: SID_STYLE_APPLY,
+      label: "Apply Style",
+      /** Reads selection state from the active view. @param target - Active view. @returns Style state. */
+      getState: (target) => target.GetCellStyleState(),
+      /** Forwards the original request. @param target - Active view. @param request - Native request. @returns Result mask. */
+      execute: (target, request) => target.ExecuteCellStyle(request),
+    },
+    {
+      commandUrl: ".uno:CellProtection",
+      slotId: SID_SCATTR_CELLPROTECTION,
+      label: "Cell Protection",
+      /** Reads the native item state. @param target - Active view. @returns Slot state. */
+      getState: (target) => ({ enabled: true, checked: target.GetCellProtectionState() }),
+      /** Executes the native toggle. @param target - Active view. @param request - Native request. @returns Whether applied. */
+      execute: (target, request) => target.ExecuteCellProtection(request),
+    },
+    {
+      commandUrl: ".uno:SelectUnprotectedCells",
+      slotId: SID_SELECT_UNPROTECTED_CELLS,
+      label: "Select Unprotected Cells",
+      /** Applies unlocked marks to the real view. @param target - Active view. @returns Whether admitted. */
+      execute: (target) => target.SelectUnprotectedCells(),
+    },
+    {
+      commandUrl: ".uno:Repeat",
+      slotId: 5702,
+      label: "Repeat",
+      /** Reads availability from the actual undo stack. @param target - Active view. @returns State. */
+      getState: (target) => ({ enabled: target.CanRepeat() }),
+      /** Repeats the native action at the current selection. @param target - Active view. @returns Whether repeated. */
+      execute: (target) => target.Repeat(),
+    },
+  ];
 }

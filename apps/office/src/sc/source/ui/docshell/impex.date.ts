@@ -14,7 +14,7 @@ import { ScGlobal } from "../../../inc/global";
 import type { ScDocumentImport } from "../../../inc/documentimport";
 import type { ScAddress } from "../../../inc/address";
 import { SC_COL_YMD, SC_COL_MDY } from "../inc/csvcontrol";
-/** Original explicit-date parsing and calendar validation; false continues the original SetString/EditCell fallback. @param docImport - Actual document import owner. @param position - Actual cell. @param value - Original field string. @param columnFormat - Source external column type. @param formatter - Actual import-language formatter. @param transliteration - Actual primary comparison wrapper. @param calendar - Actual primary calendar. @param secondTransliteration - Optional actual second wrapper. @param secondCalendar - Optional actual second calendar. @returns Whether the branch wrote a date cell. */
+/** Original explicit-date parsing and calendar validation; false continues the original SetString/EditCell fallback. @param docImport - Actual document import owner. @param position - Actual cell. @param value - Original field string. @param columnFormat - Source external column type. @param formatter - Actual import-language formatter. @param transliteration - Actual primary comparison wrapper. @param calendar - Actual primary calendar. @param secondTransliteration - Optional actual second wrapper. @param secondCalendar - Optional actual second calendar. @param useDocImport - Use bulk import setters. @returns Whether the branch wrote a date cell. */
 export function PutDate(
   docImport: ScDocumentImport,
   position: ScAddress,
@@ -25,6 +25,7 @@ export function PutDate(
   calendar: CalendarWrapper,
   secondTransliteration: TransliterationWrapper | null,
   secondCalendar: CalendarWrapper | null,
+  useDocImport: boolean,
 ): boolean {
   const document = docImport.getDoc(),
     length = value.getLength(),
@@ -113,7 +114,8 @@ export function PutDate(
     const key: [number] = [0],
       numeric: [number] = [0];
     if (docFormatter.IsNumberFormat(value, key, numeric) && docFormatter.GetType(key[0]) & T.DATE) {
-      docImport.setNumericCell(position, numeric[0]);
+      if (useDocImport) docImport.setNumericCell(position, numeric[0]);
+      else document.SetValue(position, numeric[0]);
       document.SetNumberFormat(position, key[0]);
       return true;
     }
@@ -274,7 +276,8 @@ export function PutDate(
   const type = found > 3 ? T.DATETIME : T.DATE;
   let format = docFormatter.GetStandardFormat(type, latin[0]);
   if (found > 5) format = docFormatter.GetStandardFormat(days, format, type, latin[0]);
-  docImport.setNumericCell(position, days);
+  if (useDocImport) docImport.setNumericCell(position, days);
+  else document.SetValue(position, days);
   document.SetNumberFormat(position, format);
   return true;
 }

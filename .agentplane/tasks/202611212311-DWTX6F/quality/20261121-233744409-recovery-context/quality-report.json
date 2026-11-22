@@ -1,0 +1,26 @@
+{
+  "schema_version": 1,
+  "task_id": "202611212311-DWTX6F",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-11-21T23:37:44.409Z",
+  "verdict": "pass",
+  "summary": "Native Calc Text to Columns is connected through the Data menu and source ASCII import, with confirmed replacement and list Undo.",
+  "evaluated_sha": "feb0f07a309f6d74fd9220e120e2dd7ae56b5df6",
+  "blueprint_digest": "8943f06f4038526101db920f9a075bff4693732fa062f55ff9dd5550cf579f55",
+  "findings": [
+    "The whole-column, selected range, prior date format and original ODS overwrite regressions passed. Chrome verified the same replacement and Undo path."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202611212311-DWTX6F/README.md",
+    "output/calc-task12-verification.md",
+    "output/calc-task12-browser-tests-retry.log",
+    "output/playwright/calc-task12/smoke.log",
+    "feb0f07a309f6d74fd9220e120e2dd7ae56b5df6"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": [
+    "The existing browser ASCII preview is sampled and the represented history mask covers native contents and cell attributes."
+  ]
+}

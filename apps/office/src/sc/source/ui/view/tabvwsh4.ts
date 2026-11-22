@@ -18,6 +18,8 @@ import type { OUString } from "../../../../sal/inc/rtl/ustring";
 import { ScViewOptions, ViewOption } from "../../../inc/viewopti";
 import type { SfxRequest } from "../../../../sfx2/source/control/request";
 import { SfxBoolItem } from "../../../../svl/source/items/cenumitm";
+import { ExecProtectTable } from "./tabvwsh3";
+import { ExecStyle, GetStyleState } from "./tabvwsha";
 import { ScViewFunc } from "./viewfunc";
 import { ScViewData } from "./viewdata";
 import type { ScDocShell } from "../docshell/docsh";
@@ -25,6 +27,10 @@ import { SvxBorderLine, SvxBorderLineStyle } from "../../../../editeng/source/it
 import { COL_BLACK } from "../../../../tools/inc/color";
 /** Native view-shell state persists across commands and is replaced with its actual document view. */
 export class ScTabViewShell extends ScViewFunc {
+  ExecStyle = ExecStyle.bind(null, this);
+  ExecProtectTable = ExecProtectTable.bind(null, this);
+  GetStyleState = GetStyleState.bind(null, this);
+
   /** Original filtered-data command query for the represented document profile. @param ranges - Source ranges. @returns Subtotal requested. */
   UseSubTotal(ranges: ScRangeList): boolean {
     return UseSubTotal(this, ranges);

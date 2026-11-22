@@ -1,0 +1,29 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "browser-adaptation",
+    "localPath": "apps/office/src/sc/browser/presentation/optdlg/ScCalcOptionsDialog.tsx",
+    "status": "local-only",
+    "rationale": "Projects the Calc category tree and source Calculate and Formula widgets into native HTML with staged page and detail responses.",
+    "responsibilities": [
+      "Projects the Calc category tree and source Calculate and Formula widgets into native HTML with staged page and detail responses."
+    ],
+    "stackDivergence": {
+      "kind": "browser-adaptation",
+      "rationale": "Projects the Calc category tree and source Calculate and Formula widgets into native HTML with staged page and detail responses."
+    },
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sc/browser/presentation/optdlg/ScCalcOptionsDialog.tsx",
+          "marker": "ScCalcOptionsDialog"
+        },
+        {
+          "path": "apps/office/src/sc/browser/presentation/calc-options.test.tsx",
+          "marker": "applies Excel A1 references and confirmed details"
+        }
+      ]
+    }
+  }
+}

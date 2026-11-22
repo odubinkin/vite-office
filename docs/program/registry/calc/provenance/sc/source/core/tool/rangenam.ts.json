@@ -13,14 +13,14 @@
     "upstreamPath": "sc/source/core/tool/rangenam.cxx",
     "upstreamSymbols": [
       "ScRangeName::insert",
-      "ScRangeData::CompileRangeData"
+      "ScRangeData::CompileRangeData",
+      "ScRangeData::IsNameValid"
     ],
     "preservedResponsibilities": [
-      "Native name storage owns indexed token arrays and compiles all names after their scope indexes exist.",
-      "Named formulas keep the native first-reference flags, test sole reference tokens separately and validate internal relative sheet bases on output."
+      "Native name storage owns indexed token arrays, validates identifier and reference syntax, and supports admission by scope and stable index."
     ],
     "omittedResponsibilities": [
-      "Editing dialogs, structural name updates, and advanced formula types remain open."
+      "Structural modification of existing names and advanced formula types remain open."
     ],
     "evidence": {
       "local": [
@@ -33,8 +33,8 @@
           "marker": "preserves a forward name"
         },
         {
-          "path": "apps/office/src/sc/source/core/tool/rangenam.ts",
-          "marker": "ValidateTabRefs"
+          "path": "apps/office/src/sc/browser/presentation/calc-named-ranges.test.tsx",
+          "marker": "ports tdf86214"
         }
       ],
       "upstream": [
@@ -43,8 +43,8 @@
           "marker": "ScRangeName::insert"
         },
         {
-          "path": "sc/source/core/tool/rangenam.cxx",
-          "marker": "ScRangeData::ValidateTabRefs"
+          "path": "vendor/libreoffice-reference/sc/source/core/tool/rangenam.cxx",
+          "marker": "ScRangeData::IsNameValid"
         }
       ]
     }

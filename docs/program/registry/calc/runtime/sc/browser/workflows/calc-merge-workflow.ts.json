@@ -1,0 +1,32 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sc/browser/workflows/calc-merge-workflow.ts",
+    "classification": "browser-adaptation",
+    "state": "foundation",
+    "suite": "calc",
+    "subsystem": "cell-merge",
+    "capabilityIds": [
+      "CAP-1e59a9cf-0fe6-4a96-acde-b800951b36b6"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "not-applicable",
+      "defaultStatus": "not-applicable",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/sc/browser/workflows/calc-merge-workflow.ts",
+        "apps/office/src/sc/browser/presentation/calc-merge-cells.test.tsx"
+      ],
+      "justification": "Routes merge command queries and results through the native cell shell and rejects stale modal results. The existing browser Sfx modal lifecycle replaces desktop widget hosting.",
+      "knownViolations": [],
+      "localSymbols": [
+        "CalcMergeWorkflow"
+      ],
+      "sourceResponsibility": "browser-owned",
+      "upstreamFile": null,
+      "upstreamSymbols": []
+    }
+  }
+}

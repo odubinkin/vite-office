@@ -1,0 +1,55 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/sc/source/core/data/table2.transpose.ts",
+    "status": "mapped",
+    "upstreamPath": "sc/source/core/data/table2.cxx",
+    "localSymbols": [
+      "TransposeTableClip",
+      "TransposeColPatterns"
+    ],
+    "upstreamSymbols": [
+      "ScTable::TransposeClip",
+      "ScTable::TransposeColPatterns"
+    ],
+    "preservedResponsibilities": [
+      "Transposes actual clipboard cell blocks and nondefault pattern runs and rotates each border with its original distance."
+    ],
+    "omittedResponsibilities": [
+      "Merge, conditional-format range replication, partial filters, notes, drawings and links remain outside this source slice."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sc/source/core/data/table2.transpose.ts",
+          "marker": "TransposeTableClip"
+        },
+        {
+          "path": "apps/office/src/sc/browser/presentation/calc-cell-clipboard.test.tsx",
+          "marker": "ports testCopyPasteTranspose"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sc/source/core/data/table2.cxx",
+          "marker": "ScTable::TransposeClip"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/source/core/data/table2.cxx",
+          "marker": "ScTable::TransposeColPatterns"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/qa/unit/ucalc_copypaste.cxx",
+          "marker": "testCopyPasteTranspose"
+        }
+      ]
+    },
+    "filenameDivergence": {
+      "localPath": "apps/office/src/sc/source/core/data/table2.transpose.ts",
+      "stackNecessity": "responsibility-split",
+      "rationale": "Retains this clipboard transposition responsibility in a focused TypeScript fragment of the established Calc owner while keeping the main source file within the repository line budget."
+    }
+  }
+}

@@ -1,0 +1,129 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "id": "CAP-d618abf2-35e0-42c3-acf1-88c8a5f16811",
+    "capabilityId": "CAP-d618abf2-35e0-42c3-acf1-88c8a5f16811",
+    "suite": "calc",
+    "subsystem": "cell-formatting",
+    "type": "command",
+    "maturity": "implemented",
+    "capability": "Calc Format Cells numerical and scalar attribute pages",
+    "assertions": [
+      "Format Cells uses the shared native dispatcher, stages changes across four tabs, preserves mixed untouched items, and applies one reversible attribute operation."
+    ],
+    "stackDivergence": {
+      "kind": "browser-adaptation",
+      "rationale": "The DOM notebook uses the Calc item pool, sheet selection, native number formatter and attribute history."
+    },
+    "gaps": [
+      "Font, Font Effects, Borders, conditional Asian typography, expanded fills and custom format administration have separate source responsibilities.",
+      "The browser input line still uses its existing plain-input parser. The Scientific dialog regression uses the document recognition owner.",
+      "The browser retains separate DOM control and preview ownership."
+    ],
+    "upstream": {
+      "implementation": [
+        {
+          "path": "vendor/libreoffice-reference/sc/source/ui/attrdlg/attrdlg.cxx",
+          "marker": "ScAttrDlg::ScAttrDlg"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/source/ui/view/tabvwsha.cxx",
+          "marker": "ExecuteCellFormatDlg"
+        },
+        {
+          "path": "vendor/libreoffice-reference/svx/source/items/numfmtsh.cxx",
+          "marker": "SvxNumberFormatShell::GetInitSettings"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/source/ui/attrdlg/tabpages.cxx",
+          "marker": "ScTabPageProtection::FillItemSet"
+        }
+      ],
+      "tests": [
+        {
+          "path": "vendor/libreoffice-reference/sc/qa/uitest/calc_tests/formatCells.py",
+          "marker": "test_format_cell_numbers_tab"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/qa/uitest/calc_tests/formatCells.py",
+          "marker": "test_format_cell_alignment_tab"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/qa/uitest/calc_tests/formatCells.py",
+          "marker": "test_tdf130762"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/qa/uitest/calc_tests4/tdf88999_scientific_number_options.py",
+          "marker": "test_tdf88999_scientific_format_decimal_value"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/qa/uitest/calc_tests/formatCells.py",
+          "marker": "test_format_cell_spell_out_numbering"
+        }
+      ],
+      "docs": [
+        {
+          "path": "vendor/libreoffice-reference/cui/uiconfig/ui/cellalignment.ui",
+          "marker": "spinDegrees"
+        }
+      ]
+    },
+    "local": {
+      "implementation": [
+        {
+          "path": "apps/office/src/sc/source/ui/attrdlg/attrdlg.ts",
+          "marker": "ScAttrDlg"
+        },
+        {
+          "path": "apps/office/src/svx/source/items/numfmtsh.ts",
+          "marker": "SvxNumberFormatShell"
+        },
+        {
+          "path": "apps/office/src/sc/browser/workflows/calc-cell-format-workflow.ts",
+          "marker": "CalcCellFormatWorkflow"
+        }
+      ],
+      "tests": [
+        {
+          "path": "apps/office/src/sc/browser/presentation/calc-format-cells.test.tsx",
+          "marker": "ports the original Numbers options result"
+        },
+        {
+          "path": "apps/office/src/sc/browser/presentation/calc-format-cells.test.tsx",
+          "marker": "ports the scientific options regression"
+        },
+        {
+          "path": "apps/office/src/sc/browser/presentation/calc-format-cells.test.tsx",
+          "marker": "applies alignment, fill and protection"
+        },
+        {
+          "path": "apps/office/src/sc/browser/presentation/calc-format-cells.test.tsx",
+          "marker": "ports the original spell-out gallery"
+        }
+      ],
+      "docs": [
+        {
+          "path": ".agentplane/tasks/202611220211-TEJDRR/README.md",
+          "marker": "Verify Steps"
+        },
+        {
+          "path": "docs/program/calc-upstream-suspected-issues.md",
+          "marker": "CALC-833"
+        }
+      ]
+    },
+    "implemented": true,
+    "contractParity": false,
+    "behaviorParity": false,
+    "defaultParity": false,
+    "verified": false,
+    "aspect": "command-state",
+    "atomicOperation": "calc-format-cells-dialog",
+    "scopeLimitations": [
+      "Font, Font Effects, Borders, conditional Asian typography, expanded fills and custom format administration have separate source responsibilities.",
+      "The browser input line still uses its existing plain-input parser. The Scientific dialog regression uses the document recognition owner.",
+      "The browser retains separate DOM control and preview ownership."
+    ]
+  }
+}

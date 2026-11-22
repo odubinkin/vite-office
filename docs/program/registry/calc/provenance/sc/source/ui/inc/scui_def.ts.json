@@ -1,0 +1,40 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/sc/source/ui/inc/scui_def.ts",
+    "status": "mapped",
+    "localSymbols": [
+      "CreateNameFlags"
+    ],
+    "upstreamPath": "sc/source/ui/inc/scui_def.hxx",
+    "upstreamSymbols": [
+      "CreateNameFlags"
+    ],
+    "preservedResponsibilities": [
+      "Carries the original top, left, bottom and right bit flags through dialog and document creation."
+    ],
+    "omittedResponsibilities": [
+      "Native modal presentation uses the existing browser dialog service."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sc/source/ui/inc/scui_def.ts",
+          "marker": "CreateNameFlags"
+        },
+        {
+          "path": "apps/office/src/sc/browser/presentation/calc-named-ranges.test.tsx",
+          "marker": "ports tdf137617"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sc/source/ui/inc/scui_def.hxx",
+          "marker": "CreateNameFlags"
+        }
+      ]
+    }
+  }
+}

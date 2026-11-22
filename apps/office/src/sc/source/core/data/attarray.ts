@@ -188,8 +188,8 @@ export class ScAttrArray {
   }
   /** Original NeedHeight, protection and merge branches over genuine pattern values;other masks remain unported. @param pattern - Actual pattern. @param mask - Admitted native mask. @returns Requested attribute found. */
   private HasAttrib_Impl(pattern: ScPatternAttr, mask: HasAttrFlags): boolean {
-    if (mask === HasAttrFlags.Merged)
-      return (pattern.GetItem(ATTR_MERGE) as ScMergeAttr).IsMerged();
+    if (mask & HasAttrFlags.Merged && (pattern.GetItem(ATTR_MERGE) as ScMergeAttr).IsMerged())
+      return true;
     if (mask === HasAttrFlags.Protected) {
       const protection = pattern.GetItem(ATTR_PROTECTION) as ScProtectionAttr;
       return protection.GetProtection() || protection.GetHideCell();
@@ -218,6 +218,7 @@ export class ScAttrArray {
       mask !== HasAttrFlags.NeedHeight &&
       mask !== HasAttrFlags.Protected &&
       mask !== HasAttrFlags.Merged &&
+      mask !== (HasAttrFlags.Merged | HasAttrFlags.Overlapped) &&
       mask !== (HasAttrFlags.Overlapped | HasAttrFlags.AutoFilter)
     )
       throw new Error(

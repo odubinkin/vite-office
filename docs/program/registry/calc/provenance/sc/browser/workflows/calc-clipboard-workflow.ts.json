@@ -1,0 +1,34 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "browser-adaptation",
+    "localPath": "apps/office/src/sc/browser/workflows/calc-clipboard-workflow.ts",
+    "status": "local-only",
+    "rationale": "Routes real browser clipboard and menu events to source slots, native clipboard documents and paste confirmations.",
+    "responsibilities": [
+      "Routes real browser clipboard and menu events to source slots, native clipboard documents and paste confirmations.",
+      "Paste Only uses the original Text, Number and Formula slots and requires a current in-workbook clipboard identity."
+    ],
+    "stackDivergence": {
+      "kind": "browser-adaptation",
+      "rationale": "Routes real browser clipboard and menu events to source slots, native clipboard documents and paste confirmations."
+    },
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sc/browser/workflows/calc-clipboard-workflow.ts",
+          "marker": "CalcClipboardWorkflow"
+        },
+        {
+          "path": "apps/office/src/sc/browser/presentation/calc-cell-clipboard.test.tsx",
+          "marker": "uses the native menu for browser text Copy"
+        },
+        {
+          "path": "apps/office/src/sc/browser/presentation/calc-cell-clipboard.test.tsx",
+          "marker": "ports CalcPasteOnly"
+        }
+      ]
+    }
+  }
+}

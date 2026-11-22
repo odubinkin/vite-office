@@ -124,7 +124,7 @@ export class ScCondFormatDlg {
     this.position = ranges.GetTopLeftCorner();
     this.key = existing?.GetKey() ?? 0;
     const pool = document.GetStyleSheetPool();
-    const names = new Set(pool?.GetConditionalStyleNames());
+    const names = new Set(pool?.GetStandardCellStyleNames());
     pool?.GetDefaultStyle(true);
     const iterator = pool?.CreateIterator(SfxStyleFamily.Para);
     for (let style = iterator?.First(); style; style = iterator?.Next())

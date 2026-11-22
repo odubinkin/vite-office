@@ -35,6 +35,8 @@ import { type SvNumberformatConstReference } from "./zformat";
 
 import { text } from "../../../i18nlangtag/source/isolang/isolang.tables";
 
+import { GenerateFormat } from "./zforlist.picture";
+import type { FormatSpecialInfo } from "./zformat.picture";
 import { GetFormatterOutputString } from "./zforlist.output";
 import { ImpSubstituteEntry } from "./zforlist.recognition";
 import { NfCurrencyEntry } from "./zforlist.currency-entry";
@@ -334,6 +336,82 @@ export class SvNumberFormatter {
     }
     return result;
   }
+  /** Generates a native picture for the selected number format. @param key - Existing key. @param language - Locale. @param grouped - Thousands grouping. @param red - Negative red. @param precision - Decimal digits. @param leadingZeros - Mandatory integer digits. @returns Owned format code. */
+  GenerateFormat(
+    key: number,
+    language: number,
+    grouped: boolean,
+    red: boolean,
+    precision: number,
+    leadingZeros: number,
+  ): OUString {
+    return GenerateFormat(
+      this.m_aCurrentLanguage,
+      this.m_aFormatData,
+      this.GetNatNum(),
+      this.m_aRWPolicy,
+      key,
+      language,
+      grouped,
+      red,
+      precision,
+      leadingZeros,
+    );
+  }
+
+  /** Tests the original first-section spell-out prefix. @param key - Format key. @returns Whether NatNum12 is set. */
+  IsNatNum12(key: number): boolean {
+    return this.GetEntry(key)?.GetNatNumModifierString(0).startsWith("[NatNum12") ?? false;
+  }
+
+  /** Returns the immutable initial formatter language. @returns Language identity. */
+  GetLanguage(): number {
+    return this.IniLnge;
+  }
+
+  /** Borrows the table's original read-only view. @returns Format data. */
+  GetROFormatData(): Pick<SvNFFormatData, "GetFormatEntryMap"> {
+    return this.m_aFormatData;
+  }
+
+  /** Builds variants for a currency in the active formatter locale. @param formats - Owned output codes. @param entry - Currency table row. @param bank - ISO symbol mode. @returns Default format index. */
+  GetCurrencyFormatStrings(formats: OUString[], entry: NfCurrencyEntry, bank: boolean): number {
+    return this.m_aCurrentLanguage.GetCurrencyFormatStrings(formats, entry, bank);
+  }
+
+  /** Reads native format options. @param key - Format key. @returns Grouping, negative red, and digit counts. */
+  GetFormatSpecialInfo(key: number): FormatSpecialInfo {
+    return (
+      this.GetEntry(key)?.GetFormatSpecialInfo() ?? {
+        grouped: false,
+        red: false,
+        precision: 0,
+        leadingZeros: 0,
+      }
+    );
+  }
+
+  /** Reads the requested format's locale separator. @param key - Format key. @returns Owned decimal separator. */
+  GetFormatDecimalSep(key: number): OUString {
+    const entry = this.GetEntry(key);
+    return entry
+      ? this.m_aCurrentLanguage.GetLangDecimalSep(entry.GetLanguage())
+      : new OUString(this.m_aCurrentLanguage.GetNumDecimalSep());
+  }
+
+  /** Looks up an existing picture in its language block. @param code - Number format code. @param language - Requested locale. @returns Native key or not-found sentinel. */
+  GetEntryKey(code: OUStringConstReference, language: number): number {
+    const current = this.m_aCurrentLanguage;
+    if (language === LANGUAGE_DONTKNOW) language = current.GetIniLanguage();
+    const offset = this.m_aFormatData.ImpGenerateCL(current, this.GetNatNum(), language);
+    return this.m_aFormatData.ImpIsEntry(code, offset, language);
+  }
+
+  /** Borrows the current language data for compiled-entry output. @returns Current formatter language state. */
+  GetROLanguageData(): SvNFLanguageData {
+    return this.m_aCurrentLanguage;
+  }
+
   /** Original builtin-format selection. @param index - Source index. @param language - Requested language. @returns Actual format key. */
   GetFormatIndex(index: number, language = LANGUAGE_DONTKNOW): number {
     return SvNFEngine.GetFormatIndex(

@@ -81,7 +81,7 @@ it("preserves compiler/runtime errors and explicit unsupported boundaries", /** 
   expect(doc.GetFormulaCell(pos)).toBe(original);
   expect(
     /** Rejects missing localized grammar/formatter. @returns Nothing. */ () =>
-      doc.SetFormula(pos, unicode("=1"), FormulaGrammar.Grammar.GRAM_NATIVE_XL_A1),
+      doc.SetFormula(pos, unicode("=1"), FormulaGrammar.Grammar.GRAM_PODF),
   ).toThrow(/not implemented/);
 });
 

@@ -2,8 +2,10 @@
 import { ScCellFormat } from "../tool/cellform";
 import { ScRefCellValue } from "../../../inc/cellvalue";
 import type { ScPatternAttr } from "../../../inc/patattr";
-import type { ScCondFormatItem } from "../../../inc/attrib";
-import { ATTR_CONDITIONAL } from "../../../inc/scitems";
+import { ScRange } from "../../../inc/address";
+import type { ScRangeList } from "../../../inc/rangelst";
+import type { ScCondFormatItem, ScProtectionAttr } from "../../../inc/attrib";
+import { ATTR_CONDITIONAL, ATTR_PROTECTION } from "../../../inc/scitems";
 import { SvtScriptType } from "../../../../svl/inc/languageoptions";
 import { element_type_empty } from "../../../../external/mdds/include/mdds/multi_type_vector/types";
 import { element_type_celltextattr, celltextattr_block } from "../../../inc/mtvelements";
@@ -24,8 +26,10 @@ import {
 } from "../../../inc/mtvelements";
 import type { base_element_block } from "../../../../external/mdds/include/mdds/multi_type_vector/types";
 import { ScFormulaCell, ScFormulaCellGroup, ScMatrixMode } from "../../../inc/formulacell";
-import type { CopyFromClipContext } from "../../../inc/clipcontext";
+import { IsClipboardPasteMask, type CopyFromClipContext } from "../../../inc/clipcontext";
 import { CellType, InsertDeleteFlags } from "../../../inc/global";
+import { MultiDataCellState } from "../../../inc/types";
+import { GetClipNonEmptySpans } from "./column3.clip";
 import { RowSpan, type ColumnSpanSet } from "../../../inc/columnspanset";
 import { string_element_callbacks } from "../../../inc/mtvelements";
 import { double_element_callbacks } from "../../../../external/mdds/include/mdds/multi_type_vector/standard_element_blocks";
@@ -42,6 +46,37 @@ import { delayed_delete_vector_iterator } from "../../../../external/mdds/includ
 import type { ScColumn } from "../../../inc/column";
 import { SharedFormulaUtil } from "../../../inc/sharedformula";
 import type { StartListeningContext, EndListeningContext } from "../../../inc/listenercontext";
+
+/** Counts occupied typed blocks until the source result becomes multiple. @param this - Actual column. @param first - First row. @param last - Last row. @param firstData - Output row for a data cell. @returns Source occupancy state. */
+export function HasDataCellsInRange(
+  this: ScColumn,
+  first: number,
+  last: number,
+  firstData: [number],
+): number {
+  const store = this.GetCellStore(),
+    start = store.cposition(first);
+  const { Empty, HasOneCell, HasMultipleCells } = MultiDataCellState.StateType;
+  let row = first,
+    offset = start.second,
+    state: number = Empty;
+  for (const it = start.first; !it.equals(store.cend()) && row <= last; it.increment()) {
+    const block = it.get();
+    const count = block.size - offset;
+    if (block.type !== element_type_empty) {
+      if (Math.min(count, last - row + 1) > 1) {
+        firstData[0] = row;
+        return HasMultipleCells;
+      }
+      if (state === HasOneCell) return HasMultipleCells;
+      firstData[0] = row;
+      state = HasOneCell;
+    }
+    row += count;
+    offset = 0;
+  }
+  return state;
+}
 /** Reads the native cell discriminator from the actual typed block. @param this - Column. @param row - Row. @returns Cell type. */
 export function GetCellType(this: ScColumn, row: number): CellType {
   const kind = this.GetCellStore().get_type(row);
@@ -283,14 +318,30 @@ export function DeleteBeforeCopyFromClip(
   const position = context.getBlockPosition(this.GetTab(), this.GetCol());
   if (!position) return;
   const flags = context.getDeleteFlag();
-  if (context.isSkipEmptyCells() || flags !== InsertDeleteFlags.CONTENTS)
+  if (!IsClipboardPasteMask(flags))
     throw new Error("Nondefault pre-paste deletion is not implemented");
-  // CONTENTS does not delete patterns. Rich edit,notes and sparklines cannot be inserted in this represented store.
-  void clipColumn;
-  const result = this.DeleteCells(position, range.mnRow1, range.mnRow2, flags);
-  broadcasts.set(doc, this.GetTab(), this.GetCol(), result.aDeletedRows, true);
-  for (const [first, last] of result.aFormulaRanges)
-    context.setListeningFormulaSpans(this.GetTab(), this.GetCol(), first, this.GetCol(), last);
+  if (!(flags & InsertDeleteFlags.CONTENTS)) return;
+  /** Clears a destination span and records its original broadcast and listener spans. @param first - First row. @param last - Last row. @returns Nothing. */
+  const remove = (first: number, last: number): void => {
+    const result = this.DeleteCells(position, first, last, flags);
+    broadcasts.set(doc, this.GetTab(), this.GetCol(), result.aDeletedRows, true);
+    for (const [start, end] of result.aFormulaRanges)
+      context.setListeningFormulaSpans(this.GetTab(), this.GetCol(), start, this.GetCol(), end);
+  };
+  if (!context.isSkipEmptyCells()) {
+    remove(range.mnRow1, range.mnRow2);
+    return;
+  }
+  const source = context.getClipDoc().GetClipParam().getWholeRange();
+  const startRow = source.aStart.Row(),
+    endRow = source.aEnd.Row();
+  const spans = GetClipNonEmptySpans(clipColumn, startRow, endRow);
+  if (!spans.length) return;
+  for (let dy = range.mnRow1 - startRow; startRow + dy <= range.mnRow2; dy += endRow - startRow + 1)
+    for (const { mnRow1, mnRow2 } of spans) {
+      const first = mnRow1 + dy;
+      if (first <= range.mnRow2) remove(first, Math.min(range.mnRow2, mnRow2 + dy));
+    }
 }
 
 /** Original block handler ends whole intersected groups and retains source output sentinel behavior. */
@@ -458,5 +509,24 @@ export function EndListeningIntersectedGroups(
     const address = new ScAddress((group.mpTopCell as ScFormulaCell).aPos);
     address.IncRow(group.mnLength - 1);
     groups.push(address);
+  }
+}
+
+/** Joins unlocked attribute runs within the original column span. @param this - Allocated column. @param first - First row. @param last - Last row. @param ranges - Native output. @returns Nothing. */
+export function GetUnprotectedCells(
+  this: ScColumn,
+  first: number,
+  last: number,
+  ranges: ScRangeList,
+): void {
+  const start: [number] = [0],
+    end: [number] = [0];
+  const col = this.GetCol(),
+    tab = this.GetTab();
+  for (let row = first; row <= last; row = end[0] + 1) {
+    const pattern = this.GetPatternRange(start, end, row);
+    if (!pattern) break;
+    if (!(pattern.GetItem(ATTR_PROTECTION) as ScProtectionAttr).GetProtection())
+      ranges.Join(new ScRange(col, row, tab, col, Math.min(last, end[0]), tab));
   }
 }

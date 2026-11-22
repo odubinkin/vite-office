@@ -1,0 +1,38 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sc/sdi/formatsh.numformat.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "calc",
+    "subsystem": "cell-formatting",
+    "capabilityIds": [
+      "CAP-252f9507-730d-4e78-943d-365348c24997"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/sc/sdi/formatsh.numformat.ts",
+        "apps/office/src/sc/browser/presentation/calc-number-format.test.tsx",
+        "vendor/libreoffice-reference/sc/sdi/scalc.sdi"
+      ],
+      "justification": "Registers all ten numeric shortcuts at their Sfx slots and delegates checked state and typed requests to the format shell.",
+      "knownViolations": [],
+      "localSymbols": [
+        "createCalcNumberFormatSlots",
+        "SID_NUMBER_CURRENCY",
+        "SID_NUMBER_THOUSANDS"
+      ],
+      "sourceResponsibility": "divergent",
+      "upstreamFile": "sc/sdi/scalc.sdi",
+      "upstreamSymbols": [
+        "SfxBoolItem NumberFormatCurrency",
+        "SfxVoidItem NumberFormatThousands"
+      ]
+    }
+  }
+}

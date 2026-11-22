@@ -1,0 +1,57 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/svl/source/numbers/zforlist.picture.ts",
+    "status": "mapped",
+    "upstreamPath": "svl/source/numbers/zforlist.cxx",
+    "localSymbols": [
+      "GenerateFormat",
+      "ImpPosToken",
+      "LookupCurrencyEntry"
+    ],
+    "upstreamSymbols": [
+      "SvNFEngine::GenerateFormat",
+      "ImpPosToken",
+      "SvNumberFormatter::ImpLookupCurrencyEntryLoopBody"
+    ],
+    "preservedResponsibilities": [
+      "Generates locale-specific pictures from the format table, grouping iterator, original compiled tokens, and currency entry provider."
+    ],
+    "omittedResponsibilities": [
+      "Complete native formatter, scanner and service parity are outside this picture-generation slice."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/svl/source/numbers/zforlist.picture.ts",
+          "marker": "GenerateFormat"
+        },
+        {
+          "path": "apps/office/src/svl/source/numbers/zforlist.picture.test.ts",
+          "marker": "@fileoverview"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/svl/source/numbers/zforlist.cxx",
+          "marker": "SvNFEngine::GenerateFormat"
+        },
+        {
+          "path": "vendor/libreoffice-reference/svl/source/numbers/zforlist.cxx",
+          "marker": "ImpPosToken"
+        },
+        {
+          "path": "vendor/libreoffice-reference/svl/source/numbers/zforlist.cxx",
+          "marker": "SvNumberFormatter::ImpLookupCurrencyEntryLoopBody"
+        }
+      ]
+    },
+    "filenameDivergence": {
+      "localPath": "apps/office/src/svl/source/numbers/zforlist.picture.ts",
+      "rationale": "A focused translation-unit split keeps the original source responsibility with its primary owner.",
+      "stackNecessity": "responsibility-split"
+    }
+  }
+}

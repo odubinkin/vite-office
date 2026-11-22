@@ -1,4 +1,5 @@
 /** @fileoverview Browser pointer admission over actual native cell/header function sets and reference input;only transient gesture identity lives here. */
+import { PositionText } from "./calc-name-box";
 import type { CalcViewController } from "./calc-view-controller";
 import { ScAddress, ScRange } from "../../inc/address";
 /** Actual browser pointer surface identity. */
@@ -70,7 +71,7 @@ export function StartPointer(
       },
     );
     if (kind === "cell") marks.SetMarking(true);
-    this.addressText = this.Address();
+    this.addressText = PositionText.call(this);
     this.error = "";
     this["Changed"]();
   }
@@ -104,7 +105,7 @@ export function MovePointer(this: CalcViewController, position: ScAddress): void
           kind === "row" ? this.viewport.firstColumn : position.Col(),
           kind === "column" ? this.viewport.firstRow : position.Row(),
         );
-    this.addressText = this.Address();
+    this.addressText = PositionText.call(this);
     this["Changed"]();
   }
 }

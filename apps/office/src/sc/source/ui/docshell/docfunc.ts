@@ -3,6 +3,7 @@ import {
   CreateConditionalFormatUndoData,
   ScUndoConditionalFormat,
   ScUndoConditionalFormatList,
+  ScUndoRemoveMerge,
 } from "../undo/undoblk";
 import {
   ScCondDateFormatEntry,
@@ -11,25 +12,173 @@ import {
   type ScConditionalFormatList,
 } from "../../../inc/conditio";
 import type { ScRangeList } from "../../../inc/rangelst";
+import { PreprocessAllRangeNamesUpdate } from "../../core/data/document10.rangenames";
+import { CloneRangeNameMap, type ScRangeName, type ScRangeNameMap } from "../../core/tool/rangenam";
+import { ScUndoAllRangeNames } from "../undo/undorangename";
+import { InsertNameListOperation } from "../operation/InsertNameListOperation";
 import { text } from "../../../../i18nlangtag/source/isolang/isolang.tables";
 import { Color } from "../../../../tools/inc/color";
-import { ScUndoPageBreak } from "../undo/undocell";
+import { CreateNames, type ConfirmCreateName } from "./docfunc.names";
+import type { CreateNameFlags } from "../inc/scui_def";
+import { ScUndoPageBreak, ScUndoRangeNames } from "../undo/undocell";
 import { ScUndoTabColor, type ScUndoTabColorInfo } from "../undo/undotab";
 import { SetFormulaOperation } from "../operation/SetFormulaOperation";
 import type { ScFormulaCell } from "../../../inc/formulacell";
 import { RowHeightContext } from "../../../inc/rowheightcontext";
-import type { ScRange } from "../../../inc/address";
+import { ScRange, type ScAddress } from "../../../inc/address";
 import { ChangeIndentOperation } from "../operation/ChangeIndentOperation";
+import type { ScTableProtection } from "../../core/data/tabprotection";
+import { ScUndoTabProtect } from "../undo/undotab";
 import type { ScDocShell } from "./docsh";
 import type { ScMarkData } from "../../../inc/markdata";
-import type { ScAddress } from "../../../inc/address";
-import { InsertDeleteFlags } from "../../../inc/global";
+import { HasAttrFlags, InsertDeleteFlags } from "../../../inc/global";
 import { DeleteContentOperation } from "../operation/DeleteContentOperation";
 import { DeleteCellOperation } from "../operation/DeleteCellOperation";
+import { MergeCellsOperation } from "../operation/MergeCellsOperation";
+import { ScCellMergeOption } from "../view/cellmergeoption";
+import { ScDocument, ScDocumentMode } from "../../../inc/document";
+import { ScMF } from "../../../inc/attrib";
+import { ATTR_MERGE } from "../../../inc/scitems";
+import { ScPatternAttr } from "../../../inc/patattr";
 /** Native document-function owner delegates to concrete original operation classes. */
 export class ScDocFunc {
   /** Borrows the actual shell. @param shell - Document owner. @returns Function owner. */
   constructor(private readonly shell: ScDocShell) {}
+
+  /** Installs native protection and records the actual sheet mutation. @param tab - Original sheet. @param protection - Requested settings. @returns Whether the sheet was present. */
+  ProtectSheet(tab: number, protection: ScTableProtection): boolean {
+    const doc = this.shell.GetDocument();
+    if (!doc.FetchTable(tab)) return false;
+    doc.SetTabProtection(tab, protection);
+    this.shell.GetUndoManager().AddUndoAction(new ScUndoTabProtect(tab, protection));
+    this.shell.SetDocumentModified();
+    return true;
+  }
+
+  /** Applies a verified sheet unlock with the source record retained for history. @param tab - Original sheet. @param protection - Actual verified settings. @returns Whether the state changed. */
+  UnprotectSheet(tab: number, protection: Readonly<ScTableProtection>): boolean {
+    if (this.shell.GetDocument().GetTabProtection(tab) !== protection) return false;
+    const settings = protection.Clone();
+    settings.setProtected(false);
+    return this.ProtectSheet(tab, settings);
+  }
+
+  /** Dispatches source merge by rectangle and selected tabs. @param option - Original merge option. @param contents - Move the covered values. @param record - Record history. @param api - Source API mode. @param empty - Clear covered contents. @returns Whether admitted. */
+  MergeCells(
+    option: ScCellMergeOption,
+    contents: boolean,
+    record: boolean,
+    api: boolean,
+    empty = false,
+  ): boolean {
+    return new MergeCellsOperation(this.shell, option, contents, record, api, empty).run();
+  }
+
+  /** Splits source merge anchors and clears overlap only across the affected extended ranges. @param selection - Range or selected-sheet option. @param record - Record history. @returns Whether admitted. */
+  UnmergeCells(selection: ScRange | ScCellMergeOption, record: boolean): boolean {
+    const option = new ScCellMergeOption(selection);
+    if (!option.maTabs.size) return true;
+    const doc = this.shell.GetDocument();
+    const defaultItem = doc.GetPool()?.GetUserOrPoolDefaultItem(ATTR_MERGE);
+    if (!defaultItem) return false;
+    const pattern = new ScPatternAttr(doc.getCellAttributeHelper());
+    pattern.ItemSetPut(defaultItem);
+    let undo: ScDocument | undefined;
+    for (const tab of option.maTabs) {
+      const range = option.getSingleRange(tab);
+      if (!doc.HasAttrib(range, HasAttrFlags.Merged)) continue;
+      const extended = new ScRange(range);
+      doc.ExtendMergeRange(extended);
+      const refresh = new ScRange(extended);
+      doc.ExtendOverlapped(refresh);
+      if (record) {
+        if (!undo) {
+          undo = new ScDocument(ScDocumentMode.SCDOCMODE_UNDO);
+          undo.InitUndo(doc, Math.min(...option.maTabs), Math.max(...option.maTabs));
+        }
+        doc.CopyToDocument(extended, InsertDeleteFlags.ATTRIB, false, undo);
+      }
+      const { aStart, aEnd } = extended;
+      doc.ApplyPatternAreaTab(
+        range.aStart.Col(),
+        range.aStart.Row(),
+        range.aEnd.Col(),
+        range.aEnd.Row(),
+        tab,
+        pattern,
+      );
+      doc.RemoveFlagsTab(
+        aStart.Col(),
+        aStart.Row(),
+        aEnd.Col(),
+        aEnd.Row(),
+        tab,
+        ScMF.Hor | ScMF.Ver,
+      );
+      doc.ExtendMergeRange(refresh, true);
+      this.AdjustRowHeight(extended, true, true);
+      doc.FetchTable(tab)?.SetStreamValid(false);
+    }
+    pattern.Dispose();
+    if (undo)
+      this.shell.GetUndoManager().AddUndoAction(new ScUndoRemoveMerge(this.shell, option, undo));
+    this.shell.SetDocumentModified();
+    return true;
+  }
+  /** Commits an all-scope range manager snapshot as one source history action. @param names - Owned draft map. @returns Nothing. */
+  ModifyAllRangeNames(names: ScRangeNameMap): void {
+    const document = this.shell.GetDocument();
+    const undo = new ScUndoAllRangeNames(
+      CloneRangeNameMap(document),
+      names,
+      PreprocessAllRangeNamesUpdate(document, names),
+    );
+    undo.RedoWithContext(this.shell);
+    this.shell.GetUndoManager().AddUndoAction(undo);
+    this.shell.SetDocumentModified();
+  }
+
+  /** Creates range names from header labels and installs one native scope snapshot. @param range - Source selection. @param flags - Chosen edges. @param confirm - Existing name prompt. @param signal - Dialog session teardown signal. @param scope - Global or sheet-local names. @returns Whether the operation ran. */
+  async CreateNames(
+    range: ScRange,
+    flags: CreateNameFlags,
+    confirm: ConfirmCreateName,
+    signal: AbortSignal,
+    scope = -1,
+  ): Promise<boolean> {
+    const document = this.shell.GetDocument();
+    const live = document.GetRangeName(scope);
+    if (!live || signal.aborted) return false;
+    const draft = live.Clone();
+    try {
+      if (
+        !(await CreateNames(document, range, flags, draft, confirm)) ||
+        signal.aborted ||
+        document !== this.shell.GetDocument()
+      )
+        return false;
+      this.ModifyRangeNames(draft, scope);
+      return true;
+    } finally {
+      draft.clear();
+    }
+  }
+
+  /** Installs one native scope while preserving existing formula names by spelling. @param names - Replacement definitions. @param scope - Sheet index or global. @returns Nothing. */
+  ModifyRangeNames(names: ScRangeName, scope = -1): void {
+    const live = this.shell.GetDocument().GetRangeName(scope);
+    if (!live) return;
+    const history = this.shell.GetUndoManager();
+    const undo = new ScUndoRangeNames(live.Clone(), names.Clone(), scope);
+    undo.RedoWithContext(this.shell);
+    history.AddUndoAction(undo);
+    this.shell.SetDocumentModified();
+  }
+
+  /** Inserts the native sorted name and definition text block. @param position - Upper-left cell. @returns Whether written. */
+  InsertNameList(position: ScAddress): boolean {
+    return new InsertNameListOperation(this.shell, position).run();
+  }
   /** Replaces one source rule group and updates cell keys before publishing the change. @param oldKey - Existing key or zero for a new format. @param format - Owned replacement, or null for removal. @param tab - Active sheet. @param ranges - Replacement associations. @returns Whether the operation was accepted. */
   ReplaceConditionalFormat(
     oldKey: number,
@@ -85,9 +234,9 @@ export class ScDocFunc {
     const pool = this.shell.GetDocument().GetStyleSheetPool();
     for (let index = 0; index < format.size(); index++) {
       const rule = format.GetEntry(index);
-      if (rule instanceof ScCondFormatEntry) pool?.EnsureConditionalStyle(rule.GetStyleName());
+      if (rule instanceof ScCondFormatEntry) pool?.EnsureStandardCellStyle(rule.GetStyleName());
       if (rule instanceof ScCondDateFormatEntry)
-        pool?.EnsureConditionalStyle(text(rule.GetStyleName()));
+        pool?.EnsureStandardCellStyle(text(rule.GetStyleName()));
     }
   }
 

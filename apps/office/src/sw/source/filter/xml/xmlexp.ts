@@ -313,10 +313,10 @@ export function exportStylesXml(
           : `<style:paragraph-properties${paragraphAttributes.length === 0 ? "" : ` ${paragraphAttributes.join(" ")}`}>${paragraphChildren}</style:paragraph-properties>`;
       const characterProperties = getCharacterProperties(collection.GetAttrSet(), false);
       const textProperties =
-        characterProperties === undefined
+        characterProperties === undefined && directParagraphProperties?.hyphenation === undefined
           ? ""
           : exportCharacterPropertyElement(
-              characterProperties,
+              characterProperties ?? {},
               /** Registers one used font. @param family - Model family. @param generic - ODF generic family. @param styleName - Font style. @param pitch - Native pitch. @param charSet - Native encoding. @returns Face name. */ (
                 family,
                 generic,
@@ -324,6 +324,8 @@ export function exportStylesXml(
                 pitch,
                 charSet,
               ) => registerWriterFontFace(fonts, family, generic, styleName, pitch, charSet),
+              directParagraphProperties ?? {},
+              true,
             );
       const nextName = getParagraphOdfStyleName(document, collection.GetNextTextFormatColl().id);
       const next = nextName === name ? "" : ` style:next-style-name="${escapeXml(nextName)}"`;
@@ -352,6 +354,8 @@ export function exportStylesXml(
                 /** Registers the style's native font with the styles stream. @param family - Font family. @param generic - Generic family. @param styleName - Font style. @param pitch - Native pitch. @param charSet - Native encoding. @returns Face name. */
                 (family, generic, styleName, pitch, charSet) =>
                   registerWriterFontFace(fonts, family, generic, styleName, pitch, charSet),
+                undefined,
+                true,
               );
         return `<style:style${exportCharacterStyleNameAttributes(format)} style:family="text"${basedOn}>${text}</style:style>`;
       },
@@ -483,19 +487,26 @@ function exportDefaultParagraphStyle(
     const properties = getCharacterProperties(set, false);
     const tabs = pool.GetUserDefaultItem(RES_PARATR_TABSTOP) as SvxTabStopItem | undefined;
     const distance = tabs?.Count() ? tabs.At(0).GetTabPos() : undefined;
-    const paragraph =
-      distance === undefined
-        ? ""
-        : `<style:paragraph-properties style:tab-stop-distance="${exportOdfLength(distance)}"/>`;
-    if (!properties && !paragraph) return "";
-    const element = properties
-      ? exportCharacterPropertyElement(
-          properties,
-          /** Resolves the native declared font. @param family - Family. @param generic - ODF family. @param style - Family style. @param pitch - Pitch. @param charset - Encoding. @returns Face name. */
-          (family, generic, style, pitch, charset) =>
-            registerWriterFontFace(fonts, family, generic, style, pitch, charset),
-        )
+    const item = pool.GetUserDefaultItem(RES_PARATR_HYPHENZONE);
+    const deltas = item instanceof SvxHyphenZoneItem ? { hyphenation: item.QueryValue() } : {};
+    const attributes = [
+      ...(distance === undefined ? [] : [`style:tab-stop-distance="${exportOdfLength(distance)}"`]),
+      ...exportParagraphAttributes(deltas),
+    ];
+    const paragraph = attributes.length
+      ? `<style:paragraph-properties ${attributes.join(" ")}/>`
       : "";
+    if (!properties && !paragraph) return "";
+    const element =
+      properties || deltas.hyphenation
+        ? exportCharacterPropertyElement(
+            properties ?? {},
+            /** Resolves the native declared font. @param family - Family. @param generic - ODF family. @param style - Family style. @param pitch - Pitch. @param charset - Encoding. @returns Face name. */
+            (family, generic, style, pitch, charset) =>
+              registerWriterFontFace(fonts, family, generic, style, pitch, charset),
+            deltas,
+          )
+        : "";
     return `<style:default-style style:family="paragraph">${paragraph}${element}</style:default-style>`;
   } finally {
     set.Dispose();

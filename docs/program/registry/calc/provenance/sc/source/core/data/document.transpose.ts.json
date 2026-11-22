@@ -1,0 +1,49 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/sc/source/core/data/document.transpose.ts",
+    "status": "mapped",
+    "upstreamPath": "sc/source/core/data/document.cxx",
+    "localSymbols": [
+      "TransposeClip"
+    ],
+    "upstreamSymbols": [
+      "ScDocument::TransposeClip"
+    ],
+    "preservedResponsibilities": [
+      "Builds a separate native clipboard document, copies range names and applies the original clip parameter transposition."
+    ],
+    "omittedResponsibilities": [
+      "The current transposition service admits one unfiltered copy range with no matrix, drawing, link or cut semantics."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sc/source/core/data/document.transpose.ts",
+          "marker": "TransposeClip"
+        },
+        {
+          "path": "apps/office/src/sc/browser/presentation/calc-cell-clipboard.test.tsx",
+          "marker": "ports testCopyPasteTranspose"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sc/source/core/data/document.cxx",
+          "marker": "ScDocument::TransposeClip"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/qa/unit/ucalc_copypaste.cxx",
+          "marker": "testCopyPasteTranspose"
+        }
+      ]
+    },
+    "filenameDivergence": {
+      "localPath": "apps/office/src/sc/source/core/data/document.transpose.ts",
+      "stackNecessity": "responsibility-split",
+      "rationale": "Retains this clipboard transposition responsibility in a focused TypeScript fragment of the established Calc owner while keeping the main source file within the repository line budget."
+    }
+  }
+}

@@ -1,0 +1,52 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "status": "mapped",
+    "localPath": "apps/office/src/sc/source/ui/undo/undorangename.ts",
+    "localSymbols": [
+      "ScUndoAddRangeData",
+      "ScUndoAllRangeNames"
+    ],
+    "upstreamPath": "sc/source/ui/undo/undorangename.cxx",
+    "upstreamSymbols": [
+      "ScUndoAddRangeData::Undo",
+      "ScUndoAddRangeData::Redo",
+      "ScUndoAllRangeNames::Undo"
+    ],
+    "preservedResponsibilities": [
+      "Restores the source indexed name in the same local or document scope.",
+      "Restores the manager name maps and dependent hybrid formulas."
+    ],
+    "omittedResponsibilities": [
+      "Browser presentation and system-level integration use their existing adapters."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sc/source/ui/undo/undorangename.ts",
+          "marker": "ScUndoAddRangeData"
+        },
+        {
+          "path": "apps/office/src/sc/browser/presentation/calc-named-ranges.test.tsx",
+          "marker": "ports tdf86214"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sc/source/ui/undo/undorangename.cxx",
+          "marker": "ScUndoAddRangeData::Undo"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/source/ui/undo/undorangename.cxx",
+          "marker": "ScUndoAddRangeData::Redo"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/source/ui/undo/undorangename.cxx",
+          "marker": "ScUndoAllRangeNames::Undo"
+        }
+      ]
+    }
+  }
+}

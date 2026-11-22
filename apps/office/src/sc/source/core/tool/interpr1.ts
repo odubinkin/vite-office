@@ -19,6 +19,7 @@ import {
   ScMatrixToken,
   ScSingleRefToken,
 } from "../../../inc/token";
+import { CellType } from "../../../inc/global";
 import { ScRefCellValue } from "../../../inc/cellvalue";
 import { ScValueIterator } from "../../../inc/dociter";
 import { SvNumFormatType } from "../../../../svl/inc/zforlist";
@@ -85,8 +86,58 @@ export function InterpretReferenceOpcode(this: ScInterpreter, token: FormulaToke
   } else if (op === OpCode.ocAddress)
     ScAddressFunc.call(this, (token as FormulaByteToken).GetByte());
   else if (op === OpCode.ocIndirect) ScIndirect.call(this, (token as FormulaByteToken).GetByte());
+  else if (op === OpCode.ocIsFormula) ScIsFormula.call(this);
   else return false;
   return true;
+}
+
+/** Tests the referenced cell's native stored type without evaluating its formula. @param this - Current interpreter. @returns Nothing. */
+function ScIsFormula(this: ScInterpreter): void {
+  this["nRetFmtType"] = SvNumFormatType.LOGICAL;
+  const argument = this["pStack"].at(-1);
+  let result = false;
+  if (argument instanceof ScSingleRefToken) {
+    const address = this["PopSingleRef"]();
+    result =
+      this.GetError() === FormulaError.NONE &&
+      this.mrDoc.GetCellType(address) === CellType.CELLTYPE_FORMULA;
+  } else if (argument instanceof ScDoubleRefToken) {
+    const range = this["PopDoubleRef"]();
+    if (this.pMyFormulaCell?.GetMatColsRows()) {
+      if (this.GetError() !== FormulaError.NONE) return;
+      const { aStart, aEnd } = range;
+      if (aStart.Tab() !== aEnd.Tab()) {
+        this.SetError(FormulaError.IllegalArgument);
+        return;
+      }
+      const columns = aEnd.Col() - aStart.Col() + 1,
+        rows = aEnd.Row() - aStart.Row() + 1;
+      if (!ScMatrix.IsSizeAllocatable(columns, rows)) {
+        this.SetError(FormulaError.MatrixSize);
+        return;
+      }
+      const matrix = new ScMatrix(columns, rows);
+      for (let col = aStart.Col(); col <= aEnd.Col(); ++col)
+        for (let row = aStart.Row(); row <= aEnd.Row(); ++row) {
+          const cell = new ScAddress(col, row, aStart.Tab());
+          matrix.PutBoolean(
+            this.mrDoc.GetCellType(cell) === CellType.CELLTYPE_FORMULA,
+            col - aStart.Col(),
+            row - aStart.Row(),
+          );
+        }
+      this["PushWithoutError"](new ScMatrixToken(matrix));
+      return;
+    }
+    const address = new ScAddress();
+    result =
+      this.GetError() === FormulaError.NONE &&
+      this["DoubleRefToPosSingleRef"](range, address) &&
+      this.mrDoc.GetCellType(address) === CellType.CELLTYPE_FORMULA;
+  } else this["pStack"].pop();
+
+  this["nGlobalError"] = FormulaError.NONE;
+  this["PushDouble"](Number(result));
 }
 
 /** Gets an axis of the current cell or of the supplied reference. @param this - Active Calc interpreter. @param count - Native parameter count. @param rows - Select the row axis. @returns Nothing. */

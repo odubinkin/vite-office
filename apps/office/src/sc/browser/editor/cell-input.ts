@@ -1,14 +1,16 @@
 /** @fileoverview Browser scalar, formula and rich-text input/display bindings. History captures the actual native ScCellValue owner;only transient user input uses a browser parsing union. */
 import type { SharedStringConstReference } from "../../../svl/inc/sharedstring";
+import type { ScProtectionAttr } from "../../inc/attrib";
+import { ATTR_PROTECTION } from "../../inc/scitems";
 import { ScFormulaCell } from "../../inc/formulacell";
 import { ScCellValue } from "../../inc/cellvalue";
+import type { Color } from "../../../tools/inc/color";
 import { FormulaError } from "../../../formula/inc/errorcodes";
 import type { ScDocument } from "../../inc/document";
 import type { ScAddress } from "../../inc/address";
 import { CellType } from "../../inc/global";
 import { ScCellFormat } from "../../source/core/tool/cellform";
 import { ScStringUtil } from "../../inc/stringutil";
-import { FormulaGrammar } from "../../../formula/inc/grammar";
 import { unicode, text } from "../../../i18nlangtag/source/isolang/isolang.tables";
 import { doubleToString } from "../../../sal/rtl/strtmpl.math";
 /** Native English symbols used by ScGlobal::GetErrorString for reachable scalar errors. */
@@ -45,7 +47,7 @@ export function prepareCell(doc: ScDocument, pos: ScAddress, content: CalcCellIn
   try {
     if (content.kind === "formula") {
       const result = new ScCellValue();
-      result.set(new ScFormulaCell(doc, pos, value, FormulaGrammar.Grammar.GRAM_NATIVE));
+      result.set(new ScFormulaCell(doc, pos, value, doc.GetGrammar()));
       return result;
     }
     const shared = doc.GetSharedStringPool().intern(value);
@@ -85,13 +87,26 @@ export function parseCellInput(value: string): CalcCellInput {
   if (value.length > 1 && (value[0] === "+" || value[0] === "-")) return { kind: "formula", value };
   return { kind: "text", value };
 }
+/** Reads the direct or conditional visibility flags for a protected sheet. @param doc - Workbook. @param pos - Cell address. @param display - Whether the output uses conditional attributes. @returns Original protection item. */
+function sheetCellProtection(
+  doc: ScDocument,
+  pos: ScAddress,
+  display = false,
+): ScProtectionAttr | undefined {
+  if (!doc.IsTabProtected(pos.Tab())) return undefined;
+  return doc.GetPattern(pos)?.GetItem(ATTR_PROTECTION, display ? doc.GetCondResult(pos) : null) as
+    ScProtectionAttr | undefined;
+}
 /** Reads the actual source formula, scalar or edit text,including native empty-code error display. @param doc - Model. @param pos - Cell. @returns Input-line text. */
 export function cellInputText(doc: ScDocument, pos: ScAddress): string {
+  const protection = sheetCellProtection(doc, pos);
+  if (protection?.GetHideCell()) return "";
   const formula = doc.GetFormulaCell(pos);
   if (formula) {
+    if (protection?.GetHideFormula()) return "";
     if (formula.GetCode().GetCodeError() && !formula.GetCode().GetLen())
       return errorText(formula.GetCode().GetCodeError());
-    const value = formula.GetFormula(FormulaGrammar.Grammar.GRAM_NATIVE);
+    const value = formula.GetFormula(doc.GetGrammar());
     try {
       return text(value);
     } finally {
@@ -120,11 +135,14 @@ export function cellPresentation(
   pos: ScAddress,
   showFormulas = false,
   showZeros = true,
-): Readonly<{ text: string; alignment: "left" | "right" }> {
+): Readonly<{ text: string; alignment: "left" | "right"; color?: Color | null }> {
+  const protection = sheetCellProtection(doc, pos, true);
+  if (protection?.GetHideCell()) return { text: "", alignment: "left" };
   if (showFormulas) {
     const formula = doc.GetFormulaCell(pos);
     if (formula) {
-      const expression = formula.GetFormula(FormulaGrammar.Grammar.GRAM_NATIVE);
+      if (protection?.GetHideFormula()) return { text: "", alignment: "left" };
+      const expression = formula.GetFormula(doc.GetGrammar());
       try {
         return { text: text(expression), alignment: "left" };
       } finally {
@@ -136,9 +154,14 @@ export function cellPresentation(
   if (error) return { text: errorText(error), alignment: "right" };
   const ref = doc.GetRefCellValue(pos);
   if (ref.hasEmptyValue()) return { text: "", alignment: "left" };
-  const output = ScCellFormat.GetOutputString(doc, pos, ref, showZeros);
+  const color: [Color | null] = [null];
+  const output = ScCellFormat.GetOutputString(doc, pos, ref, showZeros, color);
   try {
-    return { text: text(output), alignment: ref.hasString() ? "left" : "right" };
+    return {
+      text: text(output),
+      alignment: ref.hasString() ? "left" : "right",
+      ...(color[0] ? { color: color[0] } : {}),
+    };
   } finally {
     output.dispose();
   }

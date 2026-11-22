@@ -1,10 +1,17 @@
+import { CalcCellFormatWorkflow, createCellFormatSlot } from "./calc-cell-format-workflow";
+import { CalcClipboardWorkflow } from "./calc-clipboard-workflow";
 /** @fileoverview Browser async adapter for native ScTabViewShell::ExecGoToTab and JumpToTable/Nr;real sheet/cursor ownership remains with Calc. */
-import { STD_COL_WIDTH, MAX_COL_WIDTH, MAX_ROW_HEIGHT } from "../../inc/global";
+import { CalcOptionsWorkflow } from "./calc-options-workflow";
+import { CalcLabelRangeWorkflow } from "./calc-label-range-workflow";
+import { CalcMergeWorkflow } from "./calc-merge-workflow";
+import { STD_COL_WIDTH, MAX_COL_WIDTH, MAX_ROW_HEIGHT, ScInputMode } from "../../inc/global";
 import { ScMetricInputDlg } from "../../source/ui/miscdlgs/mtrindlg";
 import { ScOptionsUtil } from "../../source/core/tool/optutil";
 import { FieldUnit } from "../../../tools/inc/fldunit";
+import { CalcSheetProtectionWorkflow } from "./calc-sheet-protection-workflow";
 import { SfxDialogController } from "../../../sfx2/source/dialog/basedlgs";
 import { SfxInterface } from "../../../sfx2/source/control/objface";
+import type { SfxDispatcher } from "../../../sfx2/source/control/dispatch";
 import { createSfxShell, type SfxShell } from "../../../sfx2/source/control/shell";
 import { SfxRequest } from "../../../sfx2/source/control/request";
 import { SfxUnoAnyItem } from "../../../sfx2/source/view/frame";
@@ -18,6 +25,9 @@ import { SfxIntegerListItem } from "../../../svl/source/items/ilstitem";
 import { Color } from "../../../tools/inc/color";
 import { createBrowserColorItem } from "../../../svx/browser/tbxctrls/color-item";
 import { ScRange } from "../../inc/address";
+import { SvStream } from "../../../tools/source/stream/stream";
+import { ScImportExport } from "../../source/ui/docshell/impex";
+import { GetTextToColumnsRange, ImportTextToColumns } from "../../source/ui/view/cellsh2";
 import {
   applyOutlineControl,
   changeOutline,
@@ -37,6 +47,7 @@ import {
   calcSheetCommands,
   FID_TAB_SET_TAB_BG_COLOR,
 } from "../../sdi/scalc";
+import { calcMergeCommands } from "../../sdi/cellsh";
 import {
   calcPageStyleCommand,
   calcHeaderFooterCommand,
@@ -48,17 +59,22 @@ import {
   SID_DEFINE_PRINTAREA,
 } from "../../sdi/tabvwsh";
 import { CreatePrintAreasModel, type PrintAreasModel } from "../../source/ui/pagedlg/areasdlg";
-import {
-  ApplyHeaderFooter,
-  ApplyPageStyle,
-  CreatePageStyleRequest,
-  FillHeaderFieldData,
-} from "../../source/ui/docshell/docsh4";
-import type { SfxItemSet } from "../../../svl/source/items/itemset";
-import { ScHFEditDlg, StandaloneHeaderFooterLayout } from "../../source/ui/pagedlg/hfedtdlg";
-import { ScStyleSaveData } from "../../source/ui/undo/undostyl";
-import type { ScStyleDlgRequest, ScStyleDlgResult } from "../../source/ui/styleui/styledlg";
+import { CalcPageStyleWorkflow } from "./calc-page-style-workflow";
 import { CalcConditionalWorkflows, conditionalFormatCommands } from "./calc-conditional-workflows";
+import {
+  FormatNameReference,
+  ScNameDefDlg,
+  type ScNameDef,
+} from "../../source/ui/namedlg/namedefdlg";
+import {
+  ScNameDlg,
+  FormatPastedRangeName,
+  type ScRangeNameLine,
+} from "../../source/ui/namedlg/namedlg";
+import { CreateNameFlags } from "../../source/ui/inc/scui_def";
+import { ScMarkType } from "../../source/ui/inc/viewdata";
+import { GetCreateNameFlags } from "../../source/ui/view/viewfunc.names";
+import type { CreateNameAnswer } from "../../source/ui/docshell/docfunc.names";
 import type { CalcViewController } from "../controller/calc-view-controller";
 /** Immutable native dialog initialization;names are copied only as dialog widget resources. */
 export interface CalcGoToSheetRequest {
@@ -89,22 +105,133 @@ function printRangeArgument(request: SfxRequest, which: number): string {
   return item instanceof SfxStringItem ? item.GetValue() : "";
 }
 
+/** Source name-paste modal result. */
+export type NamePasteResult =
+  { readonly kind: "names"; readonly rows: readonly ScRangeNameLine[] } | { readonly kind: "list" };
+
+/** Source Create Names dialog and its follow-up native prompts. */
+export type CreateNamesRequest =
+  | { readonly kind: "options"; readonly flags: CreateNameFlags }
+  | { readonly kind: "replace"; readonly name: string }
+  | { readonly kind: "invalid" };
+/** Source response to orientation or replacement. */
+export type CreateNamesResult = CreateNameFlags | Exclude<CreateNameAnswer, "cancel">;
+
 /** Session-owned native Go to Sheet request and asynchronous result application. */
 export class CalcSheetWorkflows {
+  readonly options: CalcOptionsWorkflow;
+  readonly clipboard: CalcClipboardWorkflow;
+  readonly labelRanges: CalcLabelRangeWorkflow;
+  readonly merge: CalcMergeWorkflow;
+  readonly protection: CalcSheetProtectionWorkflow;
   readonly dialogs = new SfxDialogController<CalcGoToSheetRequest, string>();
   readonly tabDialogs = new SfxDialogController<CalcSheetTabDialog, number[] | string>();
   readonly metricDialogs = new SfxDialogController<ScMetricInputDlg, number>();
-  readonly headerFooterDialogs = new SfxDialogController<ScHFEditDlg, SfxItemSet>();
-  readonly pageStyleDialogs = new SfxDialogController<ScStyleDlgRequest, ScStyleDlgResult>();
+  readonly pageStyles: CalcPageStyleWorkflow;
+  readonly cellFormat: CalcCellFormatWorkflow;
   readonly printDialogs = new SfxDialogController<PrintAreasModel, SfxRequest | undefined>();
+  private managing: ScNameDlg | undefined;
+  private creatingNames: AbortController | undefined;
+  readonly createNamesDialogs = new SfxDialogController<CreateNamesRequest, CreateNamesResult>();
+  readonly nameManagerDialogs = new SfxDialogController<ScNameDlg, "add" | "apply">();
+  readonly namePasteDialogs = new SfxDialogController<
+    readonly ScRangeNameLine[],
+    NamePasteResult
+  >();
+  readonly nameDialogs = new SfxDialogController<ScNameDefDlg, boolean>();
   readonly conditionals: CalcConditionalWorkflows;
   private readonly shell: SfxShell;
-  /** Connects a source command to the active document view. @param controller - Actual Calc controller. @returns Workflow. */
-  constructor(readonly controller: CalcViewController) {
+  /** Connects a source command to the active document view. @param controller - Actual Calc controller. @param dispatcher - Active view dispatcher. @returns Workflow. */
+  constructor(
+    readonly controller: CalcViewController,
+    dispatcher: SfxDispatcher,
+  ) {
+    this.cellFormat = new CalcCellFormatWorkflow(
+      controller,
+      /** Checks modal admission. @returns Availability. */ () => !this.HasSheetDialog(),
+    );
+    this.pageStyles = new CalcPageStyleWorkflow(controller, () => !this.HasSheetDialog());
+    this.options = new CalcOptionsWorkflow(controller, () => !this.HasSheetDialog());
+    this.merge = new CalcMergeWorkflow(controller, () => !this.HasSheetDialog());
+    this.protection = new CalcSheetProtectionWorkflow(
+      controller,
+      /** Shares sheet dialogs. @returns Availability. */ () => !this.HasSheetDialog(),
+    );
+    this.clipboard = new CalcClipboardWorkflow(
+      controller,
+      () => !this.HasSheetDialog(),
+      dispatcher,
+    );
     this.conditionals = new CalcConditionalWorkflows(controller);
+    this.labelRanges = new CalcLabelRangeWorkflow(this.controller);
     this.shell = createSfxShell(
       this,
       new SfxInterface<CalcSheetWorkflows>([
+        createCellFormatSlot(),
+        ...calcMergeCommands.map(({ id, slotId, label, kind }) => ({
+          commandUrl: id,
+          slotId,
+          label,
+          getState: (target: CalcSheetWorkflows) => target.merge.GetState(kind),
+          execute: (target: CalcSheetWorkflows, request: SfxRequest) =>
+            target.merge.Execute(kind, request),
+        })),
+        {
+          commandUrl: ".uno:TextToColumns",
+          slotId: 26347,
+          label: "Text to Columns",
+          getState: (target: CalcSheetWorkflows) => ({
+            enabled: target.CanTextToColumns(),
+          }),
+          execute: (target: CalcSheetWorkflows) => target.TextToColumns(),
+        },
+        {
+          commandUrl: ".uno:AddName",
+          slotId: 26276,
+          label: "Define Name",
+          getState: (target: CalcSheetWorkflows) => ({ enabled: !target.HasSheetDialog() }),
+          execute: (target: CalcSheetWorkflows, request: SfxRequest) =>
+            !request.GetArgs().length && target.DefineName(),
+        },
+        {
+          commandUrl: ".uno:DefineName",
+          slotId: 26271,
+          label: "Manage Names",
+          shortcuts: ["Ctrl+F3", "Meta+F3"],
+          getState: (target: CalcSheetWorkflows) => ({ enabled: !target.HasSheetDialog() }),
+          execute: (target: CalcSheetWorkflows, request: SfxRequest) =>
+            !request.GetArgs().length && target.ManageNames(),
+        },
+        {
+          commandUrl: ".uno:InsertName",
+          slotId: 26272,
+          label: "Insert Name",
+          getState: (target: CalcSheetWorkflows) => ({ enabled: !target.HasSheetDialog() }),
+          execute: (target: CalcSheetWorkflows, request: SfxRequest) =>
+            !request.GetArgs().length && target.PasteNames(),
+        },
+        {
+          commandUrl: ".uno:CreateNames",
+          slotId: 26273,
+          label: "Create Names",
+          getState: (target: CalcSheetWorkflows) => ({
+            enabled:
+              !target.HasSheetDialog() &&
+              target.controller.viewData.GetSimpleArea(new ScRange()) === ScMarkType.SC_MARK_SIMPLE,
+          }),
+          execute: (target: CalcSheetWorkflows, request: SfxRequest) =>
+            !request.GetArgs().length && target.CreateNames(),
+        },
+        {
+          commandUrl: ".uno:DefineLabelRange",
+          slotId: 26629,
+          label: "Define Label Range",
+          getState: (target: CalcSheetWorkflows) => ({
+            enabled: Boolean(target.labelRanges.dialogs.GetSnapshot()) || !target.HasSheetDialog(),
+          }),
+          execute: (target: CalcSheetWorkflows, request: SfxRequest) =>
+            !request.GetArgs().length && target.labelRanges.Execute(),
+        },
         ...conditionalFormatCommands.map(
           /** Binds one original conditional-format Sfx command. @param slot - Source command. @returns Slot definition. */ ([
             commandUrl,
@@ -210,9 +337,11 @@ export class CalcSheetWorkflows {
           commandUrl: calcHeaderFooterCommand.id,
           slotId: calcHeaderFooterCommand.slotId,
           label: calcHeaderFooterCommand.label,
-          getState: (target: CalcSheetWorkflows) => ({ enabled: target.CanEditHeaderFooter() }),
+          getState: (target: CalcSheetWorkflows) => ({
+            enabled: target.pageStyles.CanEditHeaderFooter(),
+          }),
           execute: (target: CalcSheetWorkflows, request: SfxRequest) =>
-            target.EditHeaderFooter(request),
+            target.pageStyles.EditHeaderFooter(request),
         },
         {
           commandUrl: calcPageStyleCommand.id,
@@ -220,7 +349,7 @@ export class CalcSheetWorkflows {
           label: calcPageStyleCommand.label,
           getState: (target: CalcSheetWorkflows) => ({ enabled: !target.HasSheetDialog() }),
           execute: (target: CalcSheetWorkflows, request: SfxRequest) =>
-            target.EditPageStyle(request),
+            target.pageStyles.EditPageStyle(request),
         },
         ...calcPrintRangeCommands.map(({ id, slotId, label, kind }) => ({
           commandUrl: id,
@@ -378,6 +507,175 @@ export class CalcSheetWorkflows {
       else this.controller.CompleteRowHeight(result.result);
     }
   }
+  /** Opens the source reference dialog. @returns Whether a name was added. */
+  private async DefineName(): Promise<boolean> {
+    if (this.HasSheetDialog() || !this.controller.Commit()) return false;
+    const result = await this.nameDialogs.Request(new ScNameDefDlg(this.controller.viewData));
+    return result.kind === "accepted";
+  }
+  /** Routes the Add button through source validation before closing its request. @param id - Active request. @param data - Form values. @returns Validation error. */
+  AddName(id: number, data: ScNameDef): string {
+    const dialog = this.nameDialogs.GetSnapshot();
+    if (!dialog || dialog.id !== id) return "The dialog has closed.";
+    const manager = this.managing;
+    if (manager) {
+      const answer = manager.Edit(undefined, data);
+      if (typeof answer === "string") return answer;
+      this.nameDialogs.Complete(id, true);
+      return "";
+    }
+    const error = dialog.request.Add(this.controller.shell, data);
+    if (!error) {
+      const range = new ScRange();
+      this.controller.viewData.GetSimpleArea(range);
+      if (data.expression === FormatNameReference(dialog.request.document, range)) {
+        const scope = dialog.request.scopes.find(([tab]) => tab === data.scope)?.[1];
+        this.controller.ChangeAddress(data.scope < 0 ? data.name : `${data.name} (${scope})`);
+      }
+      this.nameDialogs.Complete(id, true);
+    }
+    return error;
+  }
+  /** Opens and resumes the transactional name manager around its nested Define Name request. @returns Whether the workbook changed. */
+  private async ManageNames(): Promise<boolean> {
+    if (this.HasSheetDialog() || !this.controller.Commit()) return false;
+    const manager = new ScNameDlg(this.controller.viewData);
+    this.managing = manager;
+    try {
+      while (manager.editor.document === this.controller.shell.GetDocument()) {
+        const result = await this.nameManagerDialogs.Request(manager);
+        if (
+          result.kind !== "accepted" ||
+          manager.editor.document !== this.controller.shell.GetDocument()
+        )
+          return false;
+        if (result.result === "apply") {
+          const map = manager.TakeResult();
+          if (!map) return false;
+          this.controller.shell.GetDocFunc().ModifyAllRangeNames(map);
+          this.controller.SyncSheetView();
+          return true;
+        }
+        await this.nameDialogs.Request(manager.editor);
+        if (this.managing !== manager) return false;
+      }
+      return false;
+    } finally {
+      this.managing = undefined;
+      manager.Dispose();
+    }
+  }
+  /** Opens the original Insert Name picker and applies its respective response. @returns Whether a command ran. */
+  private async PasteNames(): Promise<boolean> {
+    if (this.HasSheetDialog()) return false;
+    const controller = this.controller;
+    const inEdit = controller.inputHandler.IsInputMode();
+    const model = new ScNameDlg(controller.viewData);
+    try {
+      const result = await this.namePasteDialogs.Request(model.GetRows());
+      if (result.kind !== "accepted" || model.editor.document !== controller.shell.GetDocument())
+        return false;
+      if (inEdit && !controller.inputHandler.IsInputMode()) return false;
+      if (result.result.kind === "list") {
+        if (inEdit || !controller.shell.GetDocFunc().InsertNameList(controller.Position()))
+          return false;
+        controller.SyncSheetView();
+        return true;
+      }
+      if (!result.result.rows.length) return false;
+      if (!inEdit && !controller.StartInput(ScInputMode.SC_INPUT_TYPE, "=")) return false;
+      const [first, last] = controller.inputSelection;
+      const start = Math.min(first, last),
+        end = Math.max(first, last);
+      const inserted =
+        result.result.rows
+          .map((row) => FormatPastedRangeName(row, model.editor.document.GetAddressConvention()))
+          .join(" ") + " ";
+      controller.ChangeInput(
+        controller.inputText.slice(0, start) + inserted + controller.inputText.slice(end),
+      );
+      controller.SetInputSelection(start + inserted.length, start + inserted.length);
+      return true;
+    } finally {
+      model.Dispose();
+    }
+  }
+  /** Executes the source selection-label command around its modal decisions. @returns Whether the creation ran. */
+  private async CreateNames(): Promise<boolean> {
+    const controller = this.controller;
+    if (this.HasSheetDialog() || !controller.Commit()) return false;
+    const view = controller.viewData;
+    const range = new ScRange();
+    if (view.GetSimpleArea(range) !== ScMarkType.SC_MARK_SIMPLE) return false;
+    const owner = new AbortController();
+    this.creatingNames = owner;
+    try {
+      const options = await this.createNamesDialogs.Request({
+        kind: "options",
+        flags: GetCreateNameFlags(view),
+      });
+      if (owner.signal.aborted || options.kind !== "accepted" || typeof options.result !== "number")
+        return false;
+      const done = await controller.shell.GetDocFunc().CreateNames(
+        range,
+        options.result,
+        async (name) => {
+          if (owner.signal.aborted) return "cancel";
+          const result = await this.createNamesDialogs.Request({ kind: "replace", name });
+          return result.kind === "accepted" && typeof result.result === "string"
+            ? result.result
+            : "cancel";
+        },
+        owner.signal,
+      );
+      if (owner.signal.aborted) return false;
+      if (done) controller.SyncSheetView();
+      else await this.createNamesDialogs.Request({ kind: "invalid" });
+      return done;
+    } finally {
+      if (this.creatingNames === owner) this.creatingNames = undefined;
+    }
+  }
+  /** Resolves the source command state against the active native selection. @returns Whether the command is available. */
+  private CanTextToColumns(): boolean {
+    return (
+      !this.HasSheetDialog() &&
+      this.controller.mode === ScInputMode.SC_INPUT_NONE &&
+      GetTextToColumnsRange(this.controller.viewData, new ScRange(), true)
+    );
+  }
+  /** Routes the native single-column import and its overwrite warning through browser dialogs. @returns Whether cells changed. */
+  private async TextToColumns(): Promise<boolean> {
+    if (!this.CanTextToColumns()) return false;
+    const { controller } = this;
+    const doc = controller.shell.GetDocument();
+    const source = new ScRange();
+    if (!GetTextToColumnsRange(controller.viewData, source, false)) return false;
+    const revision = controller.GetCommandStateRevision();
+    /** Protects the originating range as modal responses arrive. @returns Whether the target remains current. */
+    const current = (): boolean =>
+      doc === controller.shell.GetDocument() && revision === controller.GetCommandStateRevision();
+    const importer = new ScImportExport(doc, source.aStart);
+    const value = importer.ExportTextToColumns(source);
+    const options = await this.clipboard.RequestTextOptions("textToColumns", value, current);
+    if (!options || !current()) return false;
+    importer.SetExtOptions(options);
+    importer.SetOverwriting(true);
+    const stream = new SvStream(new TextEncoder().encode(value), options.eCharSet);
+    const range = importer.DetermineImportRange(stream);
+    if (!range) return false;
+    const { aStart, aEnd } = range;
+    if (
+      aStart.Col() < aEnd.Col() &&
+      !doc.IsBlockEmpty(aStart.Col() + 1, aStart.Row(), aEnd.Col(), aEnd.Row(), aStart.Tab()) &&
+      (!(await this.clipboard.ConfirmReplacement()) || !current())
+    )
+      return false;
+    if (!ImportTextToColumns(controller.shell, importer, stream, range)) return false;
+    controller.SyncSheetView();
+    return true;
+  }
+
   /** Checks whether the sheet workflows already own a modal. @returns Active modal state. */
   private HasSheetDialog(): boolean {
     return Boolean(
@@ -385,86 +683,20 @@ export class CalcSheetWorkflows {
       this.dialogs.GetSnapshot() ||
       this.metricDialogs.GetSnapshot() ||
       this.printDialogs.GetSnapshot() ||
-      this.pageStyleDialogs.GetSnapshot() ||
-      this.headerFooterDialogs.GetSnapshot() ||
+      this.cellFormat.dialogs.GetSnapshot() ||
+      this.pageStyles.pageStyleDialogs.GetSnapshot() ||
+      this.pageStyles.headerFooterDialogs.GetSnapshot() ||
+      this.managing ||
+      this.creatingNames ||
+      this.namePasteDialogs.GetSnapshot() ||
+      this.nameDialogs.GetSnapshot() ||
+      this.labelRanges.dialogs.GetSnapshot() ||
+      this.clipboard.dialogs.GetSnapshot() ||
+      this.merge.dialogs.GetSnapshot() ||
+      this.protection.IsOpen() ||
+      this.options.dialogs.GetSnapshot() ||
       this.conditionals.IsOpen(),
     );
-  }
-
-  /** Opens the original Format Page slot on the active sheet's shared page style. @param request - Source Sfx request. @returns Completion. */
-  private async EditPageStyle(request: SfxRequest): Promise<void> {
-    if (request.GetArgs().length || !this.controller.Commit()) return;
-    const view = this.controller.viewData;
-    const document = view.GetDocument();
-    const name = document.GetPageStyle(view.CurrentTabForData());
-    const style = document.GetStyleSheetPool()?.GetPageStyle(name, true);
-    if (!style) return;
-    const before = new ScStyleSaveData(style);
-    const copy = new SfxRequest(request.GetSlot(), request.GetArgs(), request.GetCallMode());
-    request.Ignore();
-    let transferred = false;
-    try {
-      const completion = await this.pageStyleDialogs.Request(
-        CreatePageStyleRequest(this.controller.shell, style, before, view.CurrentTabForData()),
-      );
-      if (completion.kind !== "accepted") return;
-      try {
-        if (this.controller.viewData.GetDocument() !== document) return;
-        transferred = ApplyPageStyle(this.controller.shell, style, before, completion.result);
-        if (transferred) copy.Done();
-      } finally {
-        completion.result.items.Dispose();
-      }
-    } finally {
-      if (!transferred) before.items.Dispose();
-    }
-  }
-
-  /** Reads original applicability from the active named page style. @returns Whether the command is available. */
-  private CanEditHeaderFooter(): boolean {
-    if (this.HasSheetDialog()) return false;
-    const view = this.controller.viewData;
-    const document = view.GetDocument();
-    const tab = view.CurrentTabForData();
-    if (!document.FetchTable(tab)) return false;
-    const style = document.GetStyleSheetPool()?.GetPageStyle(document.GetPageStyle(tab));
-    return !style || StandaloneHeaderFooterLayout(style.GetItemSet()) !== undefined;
-  }
-
-  /** Opens and applies the source standalone header/footer editor. @param request - Source request. @returns Completion. */
-  private async EditHeaderFooter(request: SfxRequest): Promise<void> {
-    if (request.GetArgs().length || !this.CanEditHeaderFooter() || !this.controller.Commit())
-      return;
-    const view = this.controller.viewData;
-    const document = view.GetDocument();
-    const tab = view.CurrentTabForData();
-    const name = document.GetPageStyle(tab);
-    const style = document.GetStyleSheetPool()?.GetPageStyle(name, true);
-    if (!style) return;
-    const items = style.GetItemSet().Clone();
-    const layout = StandaloneHeaderFooterLayout(items);
-    if (!layout) {
-      items.Dispose();
-      return;
-    }
-    const shell = this.controller.shell;
-    const model = new ScHFEditDlg(items, name, layout, FillHeaderFieldData(shell, tab));
-    const copy = new SfxRequest(request.GetSlot(), request.GetArgs(), request.GetCallMode());
-    request.Ignore();
-    try {
-      const result = await this.headerFooterDialogs.Request(model);
-      if (result.kind !== "accepted") return;
-      try {
-        if (shell.GetDocument() !== document) return;
-        ApplyHeaderFooter(shell, style, result.result);
-        copy.Done();
-      } finally {
-        result.result.Dispose();
-      }
-    } finally {
-      model.Dispose();
-      items.Dispose();
-    }
   }
 
   /** Reads source print-range availability from the current sheet. @param kind - Source command. @returns Slot state. */
@@ -736,11 +968,24 @@ export class CalcSheetWorkflows {
 
   /** Cancels the native async request before the session destroys its document. @returns Nothing. */
   Close(): void {
+    this.options.Close();
+    this.clipboard.Close();
+    this.merge.Close();
+    this.protection.Close();
     this.conditionals.Close();
-    const headerFooter = this.headerFooterDialogs.GetSnapshot();
-    if (headerFooter) this.headerFooterDialogs.Cancel(headerFooter.id);
-    const style = this.pageStyleDialogs.GetSnapshot();
-    if (style) this.pageStyleDialogs.Cancel(style.id);
+    this.labelRanges.Close();
+    this.managing = undefined;
+    this.creatingNames?.abort();
+    const createNames = this.createNamesDialogs.GetSnapshot();
+    if (createNames) this.createNamesDialogs.Cancel(createNames.id);
+    const manager = this.nameManagerDialogs.GetSnapshot();
+    if (manager) this.nameManagerDialogs.Cancel(manager.id);
+    const paste = this.namePasteDialogs.GetSnapshot();
+    if (paste) this.namePasteDialogs.Cancel(paste.id);
+    const name = this.nameDialogs.GetSnapshot();
+    if (name) this.nameDialogs.Cancel(name.id);
+    this.cellFormat.Close();
+    this.pageStyles.Close();
     const print = this.printDialogs.GetSnapshot();
     if (print) this.printDialogs.Cancel(print.id);
     const tab = this.tabDialogs.GetSnapshot();

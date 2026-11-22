@@ -64,7 +64,7 @@ it("keeps the standalone and Writer defaults distinct and narrows native UNO mem
     expect(item.PutValue(any, MID_HYPHEN_MIN_LEAD)).toBe(true);
     any.insert([-5], "sal_Int16");
     expect(item.PutValue(any, MID_HYPHEN_ZONE_PAGE)).toBe(true);
-    expect(item.QueryValue()).toMatchObject({ minLead: 44, zonePage: 65531 });
+    expect(item.QueryValue()).toMatchObject({ minLead: 44, pageEndZone: 65531 });
     item.QueryValue(any, MID_HYPHEN_ZONE_PAGE);
     const number: [number] = [0];
     expect(any.extract(number, "sal_Int16")).toBe(true);
@@ -136,13 +136,13 @@ it("keeps direct, named and document-default hyphenation through the Worker", /*
     reopened = (await readOdtDocument(bytes, metadata)).document;
     for (const candidate of [document, worker, reopened]) {
       expect(readHyphenation(candidate.paragraphs[0] as SwTextNode)).toMatchObject({
-        hyphenate: true,
+        hyphen: true,
         minLead: 3,
         zone: 567,
         noCaps: true,
       });
       expect(readHyphenation(candidate.paragraphs[1] as SwTextNode)).toMatchObject({
-        hyphenate: true,
+        hyphen: true,
         minLead: 3,
         zone: 567,
         noCaps: true,
@@ -151,7 +151,7 @@ it("keeps direct, named and document-default hyphenation through the Worker", /*
         keepLine: true,
         maxHyphens: 5,
         minWordLength: 7,
-        zoneSpread: 250,
+        spreadEndZone: 250,
         compoundMinTrail: 4,
       });
     }

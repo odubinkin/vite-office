@@ -1,6 +1,10 @@
 /** @fileoverview ODF numeric data-style context using the native number format scanner. */
 import { LanguageTag } from "../../../i18nlangtag/source/languagetag/languagetag.value";
-import { LANGUAGE_ENGLISH_US, LANGUAGE_SYSTEM } from "../../../i18nlangtag/inc/lang";
+import {
+  LANGUAGE_DONTKNOW,
+  LANGUAGE_ENGLISH_US,
+  LANGUAGE_SYSTEM,
+} from "../../../i18nlangtag/inc/lang";
 import { text, unicode } from "../../../i18nlangtag/source/isolang/isolang.tables";
 import {
   NF_MAX_FORMAT_SYMBOLS,
@@ -40,12 +44,79 @@ const dateFields = new Map<X, readonly [string, string]>([
   [X.NUMBER_SECONDS, ["S", "SS"]],
 ]);
 
+/** Resolves the format or currency element's ODF locale. @param attributes - Data-style attributes. @returns Native locale or system. */
+function getNumberStyleLanguage(attributes: FastAttributeList): number {
+  const language = attributes.get(X.FO_LANGUAGE);
+  if (!language) return LANGUAGE_SYSTEM;
+  const country = attributes.get(X.FO_COUNTRY);
+  const tag = new LanguageTag(country ? language + "-" + country : language);
+  try {
+    const result = tag.getLanguageType(false);
+    return result === LANGUAGE_DONTKNOW ? LANGUAGE_SYSTEM : result;
+  } finally {
+    tag.dispose();
+  }
+}
+
+/** Builds the original number:fraction element in the importer's English source format.
+ * @param attributes - Fraction element attributes.
+ * @param enquote - Actual style literal quoting policy.
+ * @returns Fraction code.
+ */
+function readFraction(attributes: FastAttributeList, enquote: (value: string) => string): string {
+  /** Reads a bounded nonnegative digit count. @param token - Source attribute. @returns Digit count. */
+  function digits(token: X): number {
+    return Math.max(0, Math.min(NF_MAX_FORMAT_SYMBOLS, attributes.getAsInteger(token) ?? 0));
+  }
+  /** Rebuilds visual placeholders in source order. @param width - Total width. @param minimum - Blanks and zeros. @param zeros - Zeros. @returns Placeholders. */
+  function placeholders(width: number, minimum: number, zeros: number): string {
+    const used = Math.min(width, Math.max(minimum, zeros));
+    const padded = Math.min(zeros, used);
+    return "#".repeat(width - used) + "?".repeat(used - padded) + "0".repeat(padded);
+  }
+  const integer = attributes.getAsInteger(X.NUMBER_MIN_INTEGER_DIGITS) ?? -1;
+  const blanks = digits(X.NUMBER_MAX_BLANK_INTEGER_DIGITS);
+  let prefix = "";
+  if (integer >= 0 || blanks > 0) {
+    prefix =
+      "?".repeat(blanks) + "0".repeat(Math.max(0, digits(X.NUMBER_MIN_INTEGER_DIGITS) - blanks));
+    if (!prefix) prefix = "#";
+    const grouping = attributes.get(X.NUMBER_GROUPING);
+    if (grouping === "true" || grouping === "1") {
+      prefix = prefix.padStart(4, "#");
+      prefix = prefix.slice(0, -3) + "," + prefix.slice(-3);
+    }
+    prefix += enquote(attributes.get(X.NUMBER_INTEGER_FRACTION_DELIMITER) ?? " ");
+  }
+  const minNumerator = digits(X.NUMBER_MIN_NUMERATOR_DIGITS);
+  const zeroNumerator = digits(X.NUMBER_ZEROS_NUMERATOR_DIGITS);
+  const maxNumerator = Math.max(
+    1,
+    minNumerator,
+    zeroNumerator,
+    digits(X.NUMBER_MAX_NUMERATOR_DIGITS),
+  );
+  const numerator = placeholders(maxNumerator, minNumerator, zeroNumerator);
+  const fixed = attributes.getAsInteger(X.NUMBER_DENOMINATOR_VALUE) ?? 0;
+  const maximum = attributes.get(X.NUMBER_MAX_DENOMINATOR_VALUE) ?? "";
+  const minDenominator = digits(X.NUMBER_MIN_DENOMINATOR_DIGITS);
+  const zeroDenominator = digits(X.NUMBER_ZEROS_DENOMINATOR_DIGITS);
+  const maxDenominator = /^[1-9]\d*$/.test(maximum)
+    ? Math.min(maximum.length, NF_MAX_FORMAT_SYMBOLS)
+    : Math.max(1, minDenominator, zeroDenominator);
+  const denominator =
+    fixed > 0 ? String(fixed) : placeholders(maxDenominator, minDenominator, zeroDenominator);
+  return prefix + numerator + "/" + denominator;
+}
+
 /** Holds one source number-style and compiles it after its child elements are complete. */
 export class SvXMLNumFormatContext extends SvXMLImportContext {
   private readonly parts: string[] = [];
   private readonly fields = new Set<X>();
   private readonly systemDate: boolean;
   private readonly language: number;
+  private readonly truncate: boolean;
+  private hasTime = false;
   private unsupported = false;
   private emptyText = false;
   private autoDecimal = false;
@@ -62,11 +133,9 @@ export class SvXMLNumFormatContext extends SvXMLImportContext {
     attributes: FastAttributeList,
   ) {
     super();
-    const language = attributes.get(X.FO_LANGUAGE);
-    const country = attributes.get(X.FO_COUNTRY);
-    this.language = language
-      ? new LanguageTag(country ? language + "-" + country : language).getLanguageType()
-      : LANGUAGE_SYSTEM;
+    this.language = getNumberStyleLanguage(attributes);
+    const truncate = attributes.get(X.NUMBER_TRUNCATE_ON_OVERFLOW);
+    this.truncate = truncate !== "false" && truncate !== "0";
     const automatic = attributes.get(X.NUMBER_AUTOMATIC_ORDER);
     this.systemDate =
       element === X.NUMBER_DATE_STYLE &&
@@ -103,11 +172,26 @@ export class SvXMLNumFormatContext extends SvXMLImportContext {
       return new NumberTextContext(
         /** Adds the completed text token. @param value - Source text. @returns Nothing. */
         (value) => {
-          if (element === X.NUMBER_CURRENCY_SYMBOL) this.parts.push(`[$${value}]`);
-          else if (!value) this.emptyText = true;
+          if (element === X.NUMBER_CURRENCY_SYMBOL) {
+            const language = getNumberStyleLanguage(attributes);
+            const extension =
+              language === LANGUAGE_SYSTEM ? "" : "-" + language.toString(16).toUpperCase();
+            const symbol = /[-\]]/.test(value) ? '"' + value + '"' : value;
+            this.parts.push("[$" + symbol + extension + "]");
+          } else if (!value) this.emptyText = true;
           else this.parts.push(this.EnquoteIfNecessary(value));
         },
       );
+    }
+    if (element === X.NUMBER_FRACTION) {
+      this.parts.push(
+        readFraction(
+          attributes,
+          /** Applies the actual number-style quoting policy. @param value - Separator. @returns Source code. */
+          (value) => this.EnquoteIfNecessary(value),
+        ),
+      );
+      return new SvXMLIgnoreContext(true);
     }
     if (element === X.NUMBER_NUMBER || element === X.NUMBER_SCIENTIFIC_NUMBER) {
       const sourceDigits = attributes.getAsInteger(X.NUMBER_DECIMAL_PLACES);
@@ -163,13 +247,28 @@ export class SvXMLNumFormatContext extends SvXMLImportContext {
         this.fields.add(element);
         const long = attributes.get(X.NUMBER_STYLE) === "long";
         const textual = attributes.get(X.NUMBER_TEXTUAL);
-        this.parts.push(
+        let keyword =
           element === X.NUMBER_MONTH && (textual === "true" || textual === "1")
             ? long
               ? "MMMM"
               : "MMM"
-            : field[long ? 1 : 0],
-        );
+            : field[long ? 1 : 0];
+        if (
+          element === X.NUMBER_HOURS ||
+          element === X.NUMBER_MINUTES ||
+          element === X.NUMBER_SECONDS
+        ) {
+          if (!this.truncate && !this.hasTime) keyword = "[" + keyword + "]";
+          this.hasTime = true;
+          if (element === X.NUMBER_SECONDS) {
+            const decimals = Math.min(
+              NF_MAX_FORMAT_SYMBOLS,
+              attributes.getAsInteger(X.NUMBER_DECIMAL_PLACES) ?? 0,
+            );
+            if (decimals > 0) keyword += "." + "0".repeat(decimals);
+          }
+        }
+        this.parts.push(keyword);
       } else this.unsupported = true;
     }
     return new SvXMLIgnoreContext(true);

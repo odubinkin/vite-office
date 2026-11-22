@@ -151,10 +151,10 @@ it("keeps nondefault paste families explicit and reports actual sheet overflow t
     data = view.GetViewData(),
     clip = clipboard(doc);
   const requests: Parameters<ScTabViewShell["PasteFromClip"]>[] = [
-    [F.ATTRIB, clip],
+    [F.OBJECTS, clip],
     [F.CONTENTS, clip, ScPasteFunc.ADD],
-    [F.CONTENTS, clip, ScPasteFunc.NONE, true],
-    [F.CONTENTS, clip, ScPasteFunc.NONE, false, true],
+    [F.OBJECTS | F.ATTRIB, clip, ScPasteFunc.NONE, true],
+    [F.CONTENTS, clip, ScPasteFunc.NONE, false, true, true],
     [F.CONTENTS, clip, ScPasteFunc.NONE, false, false, true],
     [F.CONTENTS, clip, ScPasteFunc.NONE, false, false, false, InsCellCmd.INS_CELLSDOWN],
     [F.CONTENTS, clip, ScPasteFunc.NONE, false, false, false, InsCellCmd.INS_NONE, F.ALL],
@@ -244,6 +244,22 @@ it("keeps nondefault paste families explicit and reports actual sheet overflow t
   ).toThrow("merged-source");
   expect(shell.GetUndoManager().GetUndoActionCount()).toBe(0);
   pattern.Dispose();
+  clip.Dispose();
+  shell.Close();
+});
+
+it("rejects transpose wider than the sheet before generating a paste history entry", () => {
+  const shell = new ScDocShell();
+  const doc = shell.GetDocument();
+  const view = new ScTabViewShell(shell);
+  const clip = clipboard(doc, new ScRange(0, 0, 0, 0, doc.MaxCol() + 1, 0));
+  const errors: string[] = [];
+  view.SetErrorMessageHandler((message) => errors.push(message));
+  const undo = shell.GetUndoManager();
+  const count = undo.GetUndoActionCount();
+  expect(view.PasteFromClip(F.CONTENTS, clip, ScPasteFunc.NONE, false, true)).toBe(false);
+  expect(errors).toEqual([R.STR_PASTE_FULL]);
+  expect(undo.GetUndoActionCount()).toBe(count);
   clip.Dispose();
   shell.Close();
 });

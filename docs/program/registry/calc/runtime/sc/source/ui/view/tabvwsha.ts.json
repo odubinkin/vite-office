@@ -1,0 +1,40 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sc/source/ui/view/tabvwsha.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "calc",
+    "subsystem": "document-pooled-resources",
+    "capabilityIds": [
+      "CAP-df5573ca-0907-47d8-a385-6cd7af847f1d"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/sc/source/ui/view/tabvwsha.ts",
+        "apps/office/src/sc/browser/presentation/calc-cell-styles.test.tsx",
+        "vendor/libreoffice-reference/sc/source/ui/view/tabvwsha.cxx",
+        "vendor/libreoffice-reference/sc/qa/unit/uicalc/uicalc2.cxx#testTdf158254",
+        "vendor/libreoffice-reference/sc/qa/unit/uicalc/uicalc2.cxx#testTdf125030"
+      ],
+      "justification": "Task 1ZKRD0 resolves the original StyleApply arguments, dispatches existing named cell styles through ScViewFunc, and projects uniform selection state for the native Styles menu radio presets. Evidence covers the cell-style case, formatted grid projection, history and ODS. The complete upstream source file covers additional style families and commands.",
+      "knownViolations": [],
+      "localSymbols": [
+        "ExecStyle",
+        "GetStyleState"
+      ],
+      "sourceResponsibility": "divergent",
+      "upstreamFile": "sc/source/ui/view/tabvwsha.cxx",
+      "upstreamSymbols": [
+        "ScTabViewShell::ExecStyle",
+        "ScTabViewShell::ExecuteApplyStyle",
+        "ScTabViewShell::GetStyleState"
+      ]
+    }
+  }
+}

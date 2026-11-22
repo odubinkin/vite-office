@@ -20,10 +20,11 @@
         "apps/office/src/sc/source/core/tool/compiler.external.test.ts",
         "vendor/libreoffice-reference/sc/source/core/tool/compiler.cxx#CreateStringFromExternal"
       ],
-      "justification": "Compiles source-indexed SpreadsheetML and ODF/native external A1 operands into the original single and double reference tokens. Uses genuine address, reference data and shared string owners. External range-name expansion, cross-sheet references and interpreter evaluation are pending.",
+      "justification": "Compiles source-indexed SpreadsheetML and ODF/native external A1 operands into the original single and double reference tokens. Uses genuine address, reference data and shared string owners. External range-name expansion, cross-sheet references and interpreter evaluation are pending. Keeps native external reference formatting beside external address and token scanning.",
       "knownViolations": [],
       "localSymbols": [
-        "parseExternalReference"
+        "parseExternalReference",
+        "CreateStringFromExternal"
       ],
       "sourceResponsibility": "unverified",
       "upstreamFile": "sc/source/core/tool/compiler.cxx",

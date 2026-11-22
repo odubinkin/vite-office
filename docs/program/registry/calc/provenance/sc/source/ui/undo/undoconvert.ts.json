@@ -1,0 +1,50 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/sc/source/ui/undo/undoconvert.ts",
+    "status": "mapped",
+    "localSymbols": [
+      "UndoFormulaToValue"
+    ],
+    "upstreamPath": "sc/source/ui/undo/undoconvert.cxx",
+    "upstreamSymbols": [
+      "UndoFormulaToValue::Undo",
+      "UndoFormulaToValue::Redo",
+      "UndoFormulaToValue::Execute"
+    ],
+    "preservedResponsibilities": [
+      "Reuses one source content swap for undo and redo and publishes the original affected range."
+    ],
+    "omittedResponsibilities": [
+      "Desktop grid repaint is supplied by the active browser view subscription."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sc/source/ui/undo/undoconvert.ts",
+          "marker": "UndoFormulaToValue"
+        },
+        {
+          "path": "apps/office/src/sc/browser/presentation/calc-recalculation.test.tsx",
+          "marker": "ports tdf131326"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sc/source/ui/undo/undoconvert.cxx",
+          "marker": "UndoFormulaToValue::Undo"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/source/ui/undo/undoconvert.cxx",
+          "marker": "UndoFormulaToValue::Redo"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/source/ui/undo/undoconvert.cxx",
+          "marker": "UndoFormulaToValue::Execute"
+        }
+      ]
+    }
+  }
+}

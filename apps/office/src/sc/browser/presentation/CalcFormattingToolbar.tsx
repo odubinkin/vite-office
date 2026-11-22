@@ -2,7 +2,10 @@
 import { useCallback, useMemo, useState } from "react";
 import { BorderSelect, BorderLineStyleSelect } from "../../../svx/browser/tbxctrls/BorderSelect";
 import type { BorderDispatch } from "../../../svx/source/tbxctrls/tbcontrl";
-import { useBrowserCommandPresentation } from "../../../framework/browser/presentation/command-surface";
+import {
+  useBrowserCommandPresentation,
+  useBrowserCommandState,
+} from "../../../framework/browser/presentation/command-surface";
 import { SvxColorItem } from "../../../editeng/inc/colritem";
 import { COL_DEFAULT_FRAMELINE } from "../../../svx/inc/xdef";
 import { CommandPopupMenu } from "../../../framework/browser/presentation/CommandPopupMenu";
@@ -11,6 +14,12 @@ import { CommandSelectControl } from "../../../framework/browser/presentation/Co
 import { CommandToolbarItems } from "../../../framework/browser/presentation/CommandToolbar";
 import { FontNameSelect, FontSizeSelect } from "../../../svx/browser/tbxctrls/FontSelects";
 import { ColorSelect } from "../../../svx/browser/tbxctrls/ColorSelect";
+import { GetCurrencySymbols } from "../../../svx/source/tbxctrls/tbcontrl.currency";
+import { LookupCurrencyEntry } from "../../../svl/source/numbers/zforlist.picture";
+import type { NfCurrencyEntry } from "../../../svl/source/numbers/zforlist.currency-entry";
+import { CurrencyToolBoxControl } from "../../../svx/browser/tbxctrls/CurrencyToolBoxControl";
+import type { ScDocShell } from "../../source/ui/docshell/docsh";
+import type { BrowserCommandSource } from "../../../framework/browser/presentation/command-surface";
 import type { SfxObjectShell } from "../../../sfx2/source/doc/objsh";
 import { officeToolbarButtonClassName } from "../../../framework/browser/presentation/office-control-styles";
 import { officeCommandIcons } from "../../../framework/browser/presentation/office-command-icons";
@@ -21,6 +30,57 @@ import { calcFormatObjectBarItems } from "../../uiconfig/scalc/toolbar/formatobj
 const BorderPresetIcon = officeCommandIcons.get(".uno:SetBorderStyle");
 const BorderStyleIcon = officeCommandIcons.get(".uno:LineStyle");
 const BorderColorIcon = officeCommandIcons.get(".uno:FrameLineColor");
+/** Connects the shared currency toolbar control to the current Calc document.
+ * @param props - Calc document and Sfx frame.
+ * @param props.commandSource - Actual Sfx bindings.
+ * @param props.objectShell - Current Calc document shell.
+ * @returns Shared currency control.
+ */
+export function CalcCurrencyControl({
+  commandSource,
+  objectShell,
+}: {
+  readonly commandSource: BrowserCommandSource;
+  readonly objectShell: ScDocShell;
+}): React.JSX.Element {
+  const command = ".uno:NumberFormatCurrency";
+  const state = useBrowserCommandState(commandSource, command);
+  return (
+    <CurrencyToolBoxControl
+      checked={state.checked ?? false}
+      enabled={state.enabled}
+      buttonClassName={officeToolbarButtonClassName}
+      onApply={
+        /** Dispatches the native default or typed NumberFormatCurrency property. @param key - Selected key. @returns Nothing. */
+        (key) => {
+          commandSource.Execute(
+            command,
+            key === undefined ? undefined : { NumberFormatCurrency: key },
+          );
+        }
+      }
+      getFormatter={
+        /** Gets the actual current document formatter. @returns Formatter. */
+        () => objectShell.GetDocument().GetFormatTable()
+      }
+      getCurrencyRows={
+        /** Resolves document currency identities to the shared table before producing popup rows. @returns Currency choices. */
+        () => {
+          const entries = new Set<NfCurrencyEntry>();
+          for (const currency of objectShell.GetDocumentModelAccessor().getDocumentCurrencies()) {
+            const match = LookupCurrencyEntry(
+              currency.aSymbol,
+              currency.aExtension,
+              currency.eLanguage,
+            );
+            if (match) entries.add(match.entry);
+          }
+          return GetCurrencySymbols(entries);
+        }
+      }
+    />
+  );
+}
 /** Renders original visible placements without fabricating unported formatting state or execution. @param props - Real command source. @returns Toolbar content. */
 export function CalcFormattingToolbar({
   commandSource,
@@ -28,7 +88,7 @@ export function CalcFormattingToolbar({
   objectShell,
   focusDocument,
 }: BrowserCommandSurfaceProps & {
-  readonly objectShell: SfxObjectShell;
+  readonly objectShell: ScDocShell;
   readonly focusDocument?: () => void;
 }): React.JSX.Element {
   return (
@@ -45,9 +105,11 @@ export function CalcFormattingToolbar({
         /** Reuses the actual common toolbar with native border toolbox controls in original resource positions. @param item - Source command placement. @returns Specialized native toolbox or the ordinary shared button. */ (
           item,
         ) =>
-          [".uno:SetBorderStyle", ".uno:LineStyle", ".uno:FrameLineColor"].includes(
-            item.commandId,
-          ) ? (
+          item.commandId === ".uno:NumberFormatCurrency" ? (
+            <CalcCurrencyControl key={item.commandId} {...{ commandSource, objectShell }} />
+          ) : [".uno:SetBorderStyle", ".uno:LineStyle", ".uno:FrameLineColor"].includes(
+              item.commandId,
+            ) ? (
             <CalcBorderToolbarItem
               key={item.commandId}
               commandId={item.commandId}

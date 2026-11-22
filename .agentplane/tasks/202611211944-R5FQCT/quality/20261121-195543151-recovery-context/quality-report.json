@@ -1,0 +1,25 @@
+{
+  "schema_version": 1,
+  "task_id": "202611211944-R5FQCT",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-11-21T19:55:43.151Z",
+  "verdict": "pass",
+  "summary": "Source Paste Only slot masks, typed results, date discrimination and full destination Undo verified.",
+  "evaluated_sha": "9afda05bed158df6b1c7f65891d3c4d3e88d976b",
+  "blueprint_digest": "61a0fd38ecbfab1f6eb271d7729167e969b127f39c603fea66c31d7f2914c11c",
+  "findings": [
+    "The port of CalcPasteOnly preserves the numeric zero, the rebased formula and the text result rules. Full targeted coverage also checks hard errors, multiline results and sparse clipboard rectangles."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202611211944-R5FQCT/README.md",
+    "output/calc-task8-focused-final.log",
+    "output/calc-task8-verification.md",
+    "9afda05bed158df6b1c7f65891d3c4d3e88d976b"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": [
+    "The browser requires a custom clipboard format to recognize the same-workbook native transfer."
+  ]
+}

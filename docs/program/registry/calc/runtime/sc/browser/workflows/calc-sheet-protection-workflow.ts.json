@@ -1,0 +1,32 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sc/browser/workflows/calc-sheet-protection-workflow.ts",
+    "classification": "browser-adaptation",
+    "state": "foundation",
+    "suite": "calc",
+    "subsystem": "sheet-protection",
+    "capabilityIds": [
+      "CAP-c8989bcd-7438-4fd9-bfdf-fdfd61a8255a"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "not-applicable",
+      "defaultStatus": "not-applicable",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/sc/browser/workflows/calc-sheet-protection-workflow.ts",
+        "apps/office/src/sc/browser/presentation/calc-sheet-protection.test.tsx"
+      ],
+      "justification": "Routes the Calc protection command to its view owner and adapts its prompts to the active browser session.",
+      "knownViolations": [],
+      "localSymbols": [
+        "CalcSheetProtectionWorkflow"
+      ],
+      "sourceResponsibility": "browser-owned",
+      "upstreamFile": null,
+      "upstreamSymbols": []
+    }
+  }
+}

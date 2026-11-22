@@ -1,21 +1,20 @@
 /** @fileoverview Browser input/viewport binding for the current scalar Calc model. Actual cells,marks,formula evaluation and undo stacks remain with native-shaped owners. */
 import type { ScPaneCommand } from "../../source/ui/view/tabview";
-import { ScUndoModifyStyle } from "../../source/ui/undo/undostyl";
-import { ScUndoOutline } from "../../source/ui/undo/undodat";
-import { ScUndoShowHideTab, ScUndoTabColor, ScUndoPrintRange } from "../../source/ui/undo/undotab";
 import { ScMarkData } from "../../inc/markdata";
 import { ScViewUtil } from "../../source/ui/view/viewutil";
 import * as pointerInput from "./calc-pointer-selection";
 import type { CalcPointerKind } from "./calc-pointer-selection";
 import * as referenceInput from "./calc-reference-input";
+import { GoToAddress, PositionText } from "./calc-name-box";
 import * as cellInput from "./calc-cell-input";
+import { ScUndoSelectionStyle } from "../../source/ui/undo/undoblk";
+import { History } from "./calc-history";
 import { ScModule } from "../../inc/scmod";
 import { ScRefType } from "../../source/ui/inc/viewdata";
 import type { CalcViewOption } from "../../sdi/tabvwsh";
+import { SID_NUMBER_TIME } from "../../sdi/formatsh.numformat";
 import { ViewOption } from "../../inc/viewopti";
 import type { SvxShadowedItem, SvxCharReliefItem } from "../../../editeng/source/items/textitem";
-import { ScUndoIndent } from "../../source/ui/undo/undoblk";
-import { ScUndoWidthOrHeight } from "../../source/ui/undo/undoblk2";
 import type { SfxRequest } from "../../../sfx2/source/control/request";
 import { ScCellShell } from "../../source/ui/view/cellsh3";
 import { ScColBar, ScRowBar } from "../../source/ui/inc/colrowba";
@@ -31,8 +30,6 @@ import { SvxColorItem } from "../../../editeng/inc/colritem";
 import type { CalcColorKind } from "../../source/ui/view/formatsh";
 import { getCalcSelectionScriptType } from "./calc-selection-script";
 import { SvxFontHeightItem } from "../../../editeng/inc/fhgtitem";
-import { ScUndoCursorAttr, ScUndoPageBreak } from "../../source/ui/undo/undocell";
-import { ScUndoSelectionAttr, ScUndoDeleteContents } from "../../source/ui/undo/undoblk3";
 import type { CalcCharacterFormat } from "../../source/ui/view/formatsh";
 import { ScFormatShell } from "../../source/ui/view/formatsh";
 import { OpCode } from "../../../formula/inc/opcode";
@@ -42,9 +39,8 @@ import { ScInputHandler } from "../../source/ui/inc/inputhdl";
 import { ScDocShell } from "../../source/ui/docshell/docsh";
 import { ScViewData } from "../../source/ui/inc/viewdata";
 import { ScRangeList } from "../../inc/rangelst";
-import { ScAddress, ScRange, ScRefFlags } from "../../inc/address";
-import { ScUndoSetCell } from "../../source/ui/inc/undocell";
-import { SfxUndoAction, SfxListUndoAction } from "../../../svl/source/undo/undo";
+import { ScAddress, ScRange } from "../../inc/address";
+import { SfxUndoAction } from "../../../svl/source/undo/undo";
 import { cellInputText } from "../editor/cell-input";
 import { unicode } from "../../../i18nlangtag/source/isolang/isolang.tables";
 import { CalcViewport } from "./calc-viewport";
@@ -86,6 +82,45 @@ export class CalcViewController {
     else this.viewShell.ToggleFormula(request);
     this.Changed();
   }
+  /** Reads the native format shell state. @param slot - Numeric shortcut. @returns Slot state. */
+  GetNumFormatState(slot: number): ReturnType<ScFormatShell["GetNumFormatState"]> {
+    return new ScFormatShell(this.viewData, this.shell).GetNumFormatState(slot);
+  }
+  /** Routes the number format shortcut after the source slot's input handling. @param request - Native request. @returns Whether applied. */
+  ExecuteNumFormat(request: SfxRequest): boolean {
+    if (request.GetSlot() !== SID_NUMBER_TIME && !this.Commit()) return false;
+    const applied = new ScFormatShell(this.viewData, this.shell).ExecuteNumFormat(request);
+    this.Changed();
+    return applied;
+  }
+  /** Reads native source cell style selection. @returns Current cell style state. */
+  GetCellStyleState(): ReturnType<ScTabViewShell["GetStyleState"]> {
+    return this.viewShell.GetStyleState();
+  }
+  /** Applies a named cell style to the real view. @param request - Original request. @returns Native result mask. */
+  ExecuteCellStyle(request: SfxRequest): number | undefined {
+    if (!this.Commit()) {
+      request.Ignore();
+      return undefined;
+    }
+    const result = this.viewShell.ExecStyle(request);
+    if (request.IsDone()) this.SyncSheetView();
+    return result;
+  }
+  /** Reads whether the latest native style action can be repeated. @returns Repeat eligibility. */
+  CanRepeat(): boolean {
+    return (
+      this.mode === ScInputMode.SC_INPUT_NONE &&
+      this.shell.GetUndoManager().GetRepeatAction() instanceof ScUndoSelectionStyle
+    );
+  }
+  /** Repeats the retained action against the current selection. @returns Whether applied. */
+  Repeat(): boolean {
+    const action = this.shell.GetUndoManager().GetRepeatAction();
+    if (!(action instanceof ScUndoSelectionStyle) || !action.Repeat(this.viewShell)) return false;
+    this.SyncSheetView();
+    return true;
+  }
   /** Routes native indentation through view,document operation and history. @param increment - Direction. @returns Result. */
   ChangeIndent(increment: boolean): boolean {
     if (!this.Commit()) return false;
@@ -97,7 +132,7 @@ export class CalcViewController {
   ExecuteRowHeight(request: SfxRequest): boolean {
     const consumed = new ScCellShell(this.viewShell).ExecuteRowHeight(request, this.viewData);
     if (consumed) {
-      this.addressText = this.Address();
+      this.addressText = PositionText.call(this);
       this.Changed();
     }
     return consumed;
@@ -105,7 +140,7 @@ export class CalcViewController {
   /** Native accepted row-height result. @param twips - Height. @returns Recorded request. */
   CompleteRowHeight(twips: number): SfxRequest {
     const request = new ScCellShell(this.viewShell).CompleteRowHeight(twips);
-    this.addressText = this.Address();
+    this.addressText = PositionText.call(this);
     this.Changed();
     return request;
   }
@@ -113,14 +148,14 @@ export class CalcViewController {
   ShowRows(show: boolean): void {
     if (!this.Commit()) return;
     new ScCellShell(this.viewShell).ShowRows(show);
-    this.addressText = this.Address();
+    this.addressText = PositionText.call(this);
     this.Changed();
   }
   /** Routes typed source width arguments through the actual cell shell. @param request - Native request. @returns Typed width consumed. */
   ExecuteColumnWidth(request: SfxRequest): boolean {
     const consumed = new ScCellShell(this.viewShell).ExecuteColumnWidth(request, this.viewData);
     if (consumed) {
-      this.addressText = this.Address();
+      this.addressText = PositionText.call(this);
       this.Changed();
     }
     return consumed;
@@ -128,7 +163,7 @@ export class CalcViewController {
   /** Applies accepted native dialog twips and returns its separate completed recording request. @param twips - Input twips. @returns Recording request. */
   CompleteColumnWidth(twips: number): SfxRequest {
     const request = new ScCellShell(this.viewShell).CompleteColumnWidth(twips);
-    this.addressText = this.Address();
+    this.addressText = PositionText.call(this);
     this.Changed();
     return request;
   }
@@ -144,21 +179,21 @@ export class CalcViewController {
   SetHeaderEntrySize(width: boolean, index: number, pixels: number): void {
     if (this.mode !== ScInputMode.SC_INPUT_NONE) return;
     this.HeaderBar(width).SetEntrySize(index, pixels);
-    this.addressText = this.Address();
+    this.addressText = PositionText.call(this);
     this.Changed();
   }
   /** Completes a negative header drag through the original hide-range operation. @param width - Axis. @param first - First entry. @param last - Last entry. @returns Nothing. */
   HideHeaderEntries(width: boolean, first: number, last: number): void {
     if (this.mode !== ScInputMode.SC_INPUT_NONE) return;
     this.HeaderBar(width).HideEntries(first, last);
-    this.addressText = this.Address();
+    this.addressText = PositionText.call(this);
     this.Changed();
   }
   /** Native column visibility command over current marks. @param show - Requested visibility. @returns Nothing. */
   ShowColumns(show: boolean): void {
     if (!this.Commit()) return;
     new ScCellShell(this.viewShell).ShowColumns(show);
-    this.addressText = this.Address();
+    this.addressText = PositionText.call(this);
     this.Changed();
   }
   /** Admits pending input then delegates native Clear through cell/view/document operation owners. @returns Whether admitted. */
@@ -178,6 +213,24 @@ export class CalcViewController {
     const result = new ScFormatShell(this.viewData, this.shell).ExecuteWrapText(request);
     this.Changed();
     return result;
+  }
+  /** Reads the actual cell protection attribute. @returns Whether locked. */
+  GetCellProtectionState(): boolean {
+    return new ScFormatShell(this.viewData, this.shell).GetCellProtectionState();
+  }
+  /** Commits pending input and applies the original protection slot. @param request - Native request. @returns Whether applied. */
+  ExecuteCellProtection(request: SfxRequest): boolean {
+    if (!this.Commit()) return false;
+    const changed = new ScFormatShell(this.viewData, this.shell).ExecuteCellProtection(request);
+    this.Changed();
+    return changed;
+  }
+  /** Selects unlocked cells through the actual marks owner. @returns Whether admitted. */
+  SelectUnprotectedCells(): boolean {
+    if (!this.Commit()) return false;
+    new ScCellShell(this.viewShell).SelectUnprotectedCells();
+    this.SyncSheetView();
+    return true;
   }
   /** Reads actual selected cell alignment. @param axis - Native axis. @returns Original enum or mixed. */
   GetAlignment(axis: CalcAlignmentAxis): SvxCellHorJustify | SvxCellVerJustify | undefined {
@@ -297,6 +350,7 @@ export class CalcViewController {
   error = "";
   private readonly gridViewport = new CalcViewport();
   private revision = 0;
+  private commandStateRevision = 0;
   /** Borrows the measured browser projection. @returns Current grid viewport. */
   get viewport(): CalcGridViewport {
     return this.gridViewport.current;
@@ -309,7 +363,7 @@ export class CalcViewController {
     this.BindViewErrorMessage();
     this.viewData = this.viewShell.GetViewData();
     this.anchor = this.Position();
-    this.addressText = this.Address();
+    this.addressText = PositionText.call(this);
     this.detachShell = shell.Subscribe(
       /** Rebinds only when the canonical model identity changes. @returns Nothing. */ () => {
         if (this.viewData.GetDocument() !== shell.GetDocument()) {
@@ -320,7 +374,7 @@ export class CalcViewController {
           this.inputHandler.SetMode(ScInputMode.SC_INPUT_NONE);
           this.inputHandler.ResetInputState();
           this.inputText = "";
-          this.addressText = this.Address();
+          this.addressText = PositionText.call(this);
           this.error = "";
         }
         this.Changed();
@@ -342,6 +396,10 @@ export class CalcViewController {
   }
   readonly GetSnapshot =
     /** Stable React external-store snapshot. @returns Revision. */ (): number => this.revision;
+  /** Reads the command target revision without viewport-only changes. @returns Current command state revision. */
+  GetCommandStateRevision(): number {
+    return this.commandStateRevision;
+  }
   readonly Subscribe =
     /** Subscribes a platform presenter. @param listener - Invalidation listener. @returns Cleanup. */ (
       listener: () => void,
@@ -352,6 +410,11 @@ export class CalcViewController {
     };
   /** Publishes source/controller changes once per input operation. @param publishOrigin - Whether a scroll changed the view origin. @returns Nothing. */
   private Changed(publishOrigin = false): void {
+    this.commandStateRevision++;
+    this.PublishView(publishOrigin);
+  }
+  /** Updates the browser projection without modifying the command target. @param publishOrigin - Whether to store the browser scroll origin. @returns Nothing. */
+  private PublishView(publishOrigin = false): void {
     this.gridViewport.Update(this.viewData, publishOrigin);
     this.revision++;
     for (const listener of this.listeners) listener();
@@ -403,7 +466,7 @@ export class CalcViewController {
         new ScRange(this.anchor.Col(), this.anchor.Row(), pos.Tab(), col, row, pos.Tab()),
       );
     else this.anchor = pos;
-    this.addressText = this.Address();
+    this.addressText = PositionText.call(this);
     this.error = "";
     this.Changed();
     return true;
@@ -646,7 +709,7 @@ export class CalcViewController {
         formula = this.viewShell.DoAutoSum(rangeFinder, subtotal, OpCode.ocSum);
       try {
         if (formula.isEmpty()) {
-          this.addressText = this.Address();
+          this.addressText = PositionText.call(this);
           this.Changed();
           return undefined;
         }
@@ -748,6 +811,7 @@ export class CalcViewController {
     this.error = "";
     this.Changed();
   }
+  FormulaPreview = referenceInput.FormulaPreview;
   /** Cancels without changing cells/history. @returns Nothing. */
   Cancel(): void {
     this.inputHandler.SetMode(ScInputMode.SC_INPUT_NONE);
@@ -771,25 +835,9 @@ export class CalcViewController {
     this.addressText = value;
     this.Changed();
   }
-  /** Parses the actual core local-A1 address convention. @returns Whether selected. */
+  /** Dispatches a name-box address, name or new definition. @returns Whether accepted. */
   GoToAddress(): boolean {
-    try {
-      const pos = this.Position(),
-        value = unicode(this.addressText);
-      try {
-        if (
-          !(pos.Parse(value, this.shell.GetDocument(), ScAddress.detailsOOOa1) & ScRefFlags.VALID)
-        )
-          throw new Error("Invalid cell address.");
-      } finally {
-        value.dispose();
-      }
-      return this.Select(pos.Col(), pos.Row());
-    } catch (error) {
-      this.error = (error as Error).message;
-      this.Changed();
-      return false;
-    }
+    return GoToAddress.call(this);
   }
   /** Source ScTabControl context admission and SwitchToPageId policy:already-selected keeps canonical active sheet/group;unselected selects only its target. @param tab - Real clicked/focused sheet. @returns Whether popup may open. */
   PrepareSheetContextMenu(tab?: number): boolean {
@@ -814,7 +862,7 @@ export class CalcViewController {
   /** Synchronizes the browser's position and command state after native sheet commands. @returns Nothing. */
   SyncSheetView(): void {
     this.anchor = this.Position();
-    this.addressText = this.Address();
+    this.addressText = PositionText.call(this);
     this.Changed();
   }
   /** Executes native adjacent-sheet navigation after accepting pending input. @param direction - Previous or next. @param extend - Extend the selected sheet group. @returns Nothing. */
@@ -866,61 +914,11 @@ export class CalcViewController {
   }
   /** Applies real shared Undo and returns the cursor to an edited cell when applicable. @returns Changed. */
   Undo(): boolean {
-    return this.History(false);
+    return History.call(this, false);
   }
   /** Applies real shared Redo. @returns Changed. */
   Redo(): boolean {
-    return this.History(true);
-  }
-  /** Reconciles source model,active sheet and input after history. @param redo - Direction. @returns Changed. */
-  private History(redo: boolean): boolean {
-    const manager = this.shell.GetUndoManager(),
-      action = redo ? manager.GetRedoAction() : manager.GetUndoAction();
-    if (!(redo ? this.shell.Redo() : this.shell.Undo())) return false;
-    this.inputHandler.SetMode(ScInputMode.SC_INPUT_NONE);
-    this.inputHandler.ResetInputState();
-    let cursorAction = action;
-    while (cursorAction instanceof SfxListUndoAction)
-      cursorAction = cursorAction.GetUndoAction(redo ? cursorAction.GetActionCount() - 1 : 0);
-    if (cursorAction instanceof ScUndoOutline) cursorAction.RestoreView(this.viewShell, redo);
-    if (
-      cursorAction instanceof ScUndoWidthOrHeight ||
-      cursorAction instanceof ScUndoShowHideTab ||
-      cursorAction instanceof ScUndoTabColor ||
-      cursorAction instanceof ScUndoPrintRange ||
-      cursorAction instanceof ScUndoModifyStyle ||
-      cursorAction instanceof ScUndoOutline
-    ) {
-      if (cursorAction instanceof ScUndoWidthOrHeight) {
-        this.addressText = this.Address();
-        this.Changed();
-      } else this.SyncSheetView();
-      return true;
-    }
-    const position =
-      cursorAction instanceof ScUndoSetCell ||
-      cursorAction instanceof ScUndoCursorAttr ||
-      cursorAction instanceof ScUndoPageBreak ||
-      cursorAction instanceof ScUndoIndent ||
-      cursorAction instanceof ScUndoSelectionAttr ||
-      cursorAction instanceof ScUndoDeleteContents
-        ? cursorAction.getAffectedRange().aStart
-        : new ScAddress(
-            0,
-            0,
-            Math.min(this.viewData.GetTabNumber(), this.shell.GetDocument().GetTableCount() - 1),
-          );
-    this.SelectTab(position.Tab());
-    this.Select(position.Col(), position.Row());
-    if (
-      cursorAction instanceof ScUndoIndent ||
-      cursorAction instanceof ScUndoSelectionAttr ||
-      cursorAction instanceof ScUndoDeleteContents
-    ) {
-      this.viewData.GetMarkData().assign(cursorAction.GetMarkData());
-      this.Changed();
-    }
-    return true;
+    return History.call(this, true);
   }
   /** Commits pending input before changing the real pane layout. @param command - Source pane command. @param request - Optional typed index and completion. @returns Nothing. */
   ExecutePaneCommand(command: ScPaneCommand, request: SfxRequest): void {
@@ -943,7 +941,7 @@ export class CalcViewController {
   /** Measures an attached or resized grid without publishing it as a user scroll. @param left - Horizontal pixels. @param top - Vertical pixels. @param width - Client width. @param height - Client height. @returns Nothing. */
   MeasureViewport(left: number, top: number, width: number, height: number): void {
     this.gridViewport.Measure(left, top, width, height);
-    this.Changed();
+    this.PublishView();
   }
   /** Routes wheel input to the relevant paired pane axes. @param left - Actual DOM horizontal offset. @param top - Actual DOM vertical offset. @param width - Client width. @param height - Client height. @param dx - Horizontal wheel delta. @param dy - Vertical wheel delta. @param leadingX - Pointer lies in the normal left band. @param leadingY - Pointer lies in the normal top band. @returns New trailing DOM offsets. */
   ScrollPaneWheel(
@@ -967,18 +965,18 @@ export class CalcViewController {
       leadingY ? 0 : dy,
     );
     this.gridViewport.Measure(offsets.left, offsets.top, width, height);
-    this.Changed(true);
+    this.PublishView(true);
     return offsets;
   }
   /** Scrolls the normal left and top axes by native logical pixels. @param dx - Left pane delta. @param dy - Top pane delta. @returns Nothing. */
   ScrollLeading(dx: number, dy: number): void {
     if (!dx && !dy) return;
     this.gridViewport.ScrollLeading(dx, dy);
-    this.Changed(true);
+    this.PublishView(true);
   }
   /** Publishes actual browser scrolling to the active view. @param left - Horizontal pixels. @param top - Vertical pixels. @param width - Client width. @param height - Client height. @returns Nothing. */
   Scroll(left: number, top: number, width: number, height: number): void {
-    this.Changed(this.gridViewport.Measure(left, top, width, height));
+    this.PublishView(this.gridViewport.Measure(left, top, width, height));
   }
   /** Projects a native column onto the browser scrollbar. @param column - First visible column. @param clientWidth - Measured width. @returns Physical offset. */
   ScrollLeftForColumn(column: number, clientWidth: number): number {

@@ -22,7 +22,7 @@ it("opens connected top menus with shared shortcut captions", /** Uses real prod
       sheetWorkflows={session.sheetWorkflows}
     />,
   );
-  const labels = ["File", "Edit", "View", "Insert", "Format", "Sheet", "Data"];
+  const labels = ["File", "Edit", "View", "Insert", "Format", "Styles", "Sheet", "Data", "Tools"];
   const menubar = screen.getByRole("menubar", { name: "Calc menu" });
   expect(
     within(menubar)
@@ -47,7 +47,11 @@ it("opens connected top menus with shared shortcut captions", /** Uses real prod
         "Ctrl+Shift+S",
       );
     }
-    if (label === "Edit") expect(screen.queryByRole("menuitem", { name: /^Cut/ })).toBeNull();
+    if (label === "Edit") {
+      expect(screen.queryByRole("menuitem", { name: /^Cut/ })).toBeNull();
+      expect(screen.getByRole("menuitem", { name: /^Copy/ })).toBeEnabled();
+      expect(screen.getByRole("menuitem", { name: /^Paste Special/ })).toBeVisible();
+    }
     if (label === "Insert")
       expect(screen.getByRole("menuitem", { name: /^Headers and Footers/ })).toBeEnabled();
     fireEvent.keyDown(screen.getAllByRole("menu")[0] as HTMLElement, { key: "Escape" });
@@ -119,6 +123,8 @@ it("retains the complete standardbar resource and projects connected controls wi
   ).toEqual(ids);
   const connectedIds = [
     ".uno:OpenFromCalc",
+    ".uno:Copy",
+    ".uno:Paste",
     ".uno:ResetAttributes",
     ".uno:Undo",
     ".uno:Redo",
@@ -148,7 +154,8 @@ it("retains the complete standardbar resource and projects connected controls wi
       expect(button.querySelector("svg")).not.toBeNull();
       expect(button).toHaveClass("size-7", "shrink-0");
       const id = connectedIds[index];
-      if (id === ".uno:Undo" || id === ".uno:Redo") expect(button).toBeDisabled();
+      if (id === ".uno:Undo" || id === ".uno:Redo" || id === ".uno:Paste")
+        expect(button).toBeDisabled();
       else expect(button).toBeEnabled();
     },
   );
@@ -198,6 +205,15 @@ it("renders connected formatting placements with the bound shared font-size cont
     "Center Vertically",
     "Align Bottom",
     "Wrap Text",
+    "Merge and Center Cells",
+    "Merge Cells",
+    "Unmerge Cells",
+    "Currency",
+    "Percent",
+    "Number",
+    "Date",
+    "Add Decimal Place",
+    "Delete Decimal Place",
     "Increase",
     "Decrease",
     "Borders (Shift to overwrite)",
@@ -229,10 +245,11 @@ it("renders connected formatting placements with the bound shared font-size cont
       control,
     ) => control.tagName === "BUTTON",
   )) {
-    const color = ["Font Color", "Background Color", "Border Color"].includes(
-      button.getAttribute("aria-label") as string,
-    );
-    expect(button).toBeEnabled();
+    const label = button.getAttribute("aria-label") ?? "";
+    const color = ["Font Color", "Background Color", "Border Color"].includes(label);
+    if (["Merge and Center Cells", "Merge Cells", "Unmerge Cells"].includes(label))
+      expect(button).toBeDisabled();
+    else expect(button).toBeEnabled();
     if (color) expect(button).toHaveClass("size-7", "rounded-l", "bg-white");
     else expect(button).toHaveClass("size-7", "rounded-md", "bg-white");
     if (["Bold", "Italic", "Underline"].includes(button.getAttribute("aria-label") as string))

@@ -30,17 +30,19 @@ function adaptItems(nodes: readonly ResourceNode[]): CommandMenuItemPlacement[] 
           items: adaptItems(node.items as readonly ResourceNode[]),
         };
       const commandId = node.commandUrl as string;
+      const resource = generated.commands[commandId as keyof typeof generated.commands];
+      const target = "targetUrl" in resource ? resource.targetUrl : undefined;
       return {
         kind: "command",
-        commandId,
-        label: node.label,
-        showsDialog:
-          node.showsDialog ??
-          generated.commands[commandId as keyof typeof generated.commands].showsDialog,
+        commandId: target ?? commandId,
+        label: node.label ?? (target ? resource.label : undefined),
+        showsDialog: node.showsDialog ?? resource.showsDialog,
       };
     },
   );
 }
+/** Native cell context surface, with menu structure and source dispatch identities. */
+export const calcCellPopupItems = adaptItems(generated.surfaces.cell as readonly ResourceNode[]);
 /** Native complete menubar excluding only explicit shared Writer browser-policy dispositions. */
 export const calcMenus: readonly CommandMenuPlacement[] = (
   generated.surfaces.menubar as readonly ResourceNode[]
@@ -53,6 +55,14 @@ export const calcMenus: readonly CommandMenuPlacement[] = (
     items: adaptItems(menu.items as readonly ResourceNode[]),
   }),
 );
+/** Metadata shared by direct commands and source dispatch redirects. */
+const calcCommandResources: Readonly<
+  Record<string, MenuCommandResource & { popupLabel?: string; targetUrl?: string }>
+> = generated.commands as typeof calcCommandResources;
+const calcTargetResources = new Map<string, (typeof calcCommandResources)[string]>();
+for (const resource of Object.values(calcCommandResources)) {
+  if (resource.targetUrl !== undefined) calcTargetResources.set(resource.targetUrl, resource);
+}
 /** Reads source labels,default accelerators and toggle properties;unregistered commands stay disabled in shared Sfx bindings. @param url - Original identity. @returns Resource. */
 export function getCalcCommandResource(url: string): MenuCommandResource {
   return selectCalcResource(url, false);
@@ -63,26 +73,14 @@ export function getCalcPopupCommandResource(url: string): MenuCommandResource {
 }
 /** Reads one source resource without guessing labels. @param url - Original identity. @param popup - Whether PopupLabel applies. @returns Presentation. */
 function selectCalcResource(url: string, popup: boolean): MenuCommandResource {
-  const resource = (
-    generated.commands as Readonly<
-      Record<
-        string,
-        Readonly<{
-          label: string;
-          popupLabel?: string;
-          semantics: string;
-          shortcuts: readonly string[];
-        }>
-      >
-    >
-  )[url];
+  const resource = calcCommandResources[url] ?? calcTargetResources.get(url);
   if (resource === undefined) throw new Error(`Unknown Calc command resource: ${url}`);
   return {
     label: (popup ? (resource.popupLabel ?? resource.label) : resource.label).replaceAll(
       "%PRODUCTNAME",
       "Vite Office",
     ),
-    semantics: resource.semantics as "action" | "check",
+    semantics: resource.semantics as MenuCommandResource["semantics"],
     shortcuts: resource.shortcuts,
   };
 }

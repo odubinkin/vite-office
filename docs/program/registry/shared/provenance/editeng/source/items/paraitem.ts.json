@@ -16,6 +16,10 @@
         {
           "path": "apps/office/src/editeng/source/items/frame-direction.test.ts",
           "marker": "it("
+        },
+        {
+          "path": "apps/office/src/editeng/source/items/paraitem.ts",
+          "marker": "SvxHyphenZoneItem"
         }
       ],
       "upstream": [
@@ -34,6 +38,14 @@
         {
           "path": "vendor/libreoffice-reference/editeng/source/items/paraitem.cxx",
           "marker": "SvxScriptSpaceItem"
+        },
+        {
+          "path": "vendor/libreoffice-reference/editeng/source/items/paraitem.cxx",
+          "marker": "SvxHyphenZoneItem::PutValue"
+        },
+        {
+          "path": "vendor/libreoffice-reference/editeng/source/items/paraitem.cxx",
+          "marker": "SvxHyphenZoneItem::QueryValue"
         }
       ]
     },
@@ -44,7 +56,8 @@
       "SvxHangingPunctuationItem",
       "SvxForbiddenRuleItem",
       "SvxAutoFrameDirectionItem",
-      "SvxTabStopConstReference"
+      "SvxTabStopConstReference",
+      "SvxHyphenZoneItem"
     ],
     "omittedResponsibilities": [
       "Native UNO presentation, full line-spacing mutation APIs and paragraph item contracts outside the implemented subset remain omitted.",
@@ -67,7 +80,9 @@
       "SvxScriptSpaceItem",
       "SvxHangingPunctuationItem",
       "SvxForbiddenRuleItem",
-      "SvxAutoFrameDirectionItem"
+      "SvxAutoFrameDirectionItem",
+      "SvxHyphenZoneItem::PutValue",
+      "SvxHyphenZoneItem::QueryValue"
     ]
   },
   "legacyOrder": 5

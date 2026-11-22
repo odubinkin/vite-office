@@ -1,0 +1,29 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "browser-adaptation",
+    "localPath": "apps/office/src/sc/browser/presentation/ScMergeCellsDialog.tsx",
+    "status": "local-only",
+    "rationale": "Hosts the original three mutually exclusive merge policies in the browser with local grid illustrations and shared dialog styling.",
+    "responsibilities": [
+      "Hosts the original three mutually exclusive merge policies in the browser with local grid illustrations and shared dialog styling."
+    ],
+    "stackDivergence": {
+      "kind": "browser-adaptation",
+      "rationale": "The existing browser Sfx modal lifecycle replaces desktop widget hosting."
+    },
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sc/browser/presentation/ScMergeCellsDialog.tsx",
+          "marker": "ScMergeCellsDialog"
+        },
+        {
+          "path": "apps/office/src/sc/browser/presentation/calc-merge-cells.test.tsx",
+          "marker": "@fileoverview"
+        }
+      ]
+    }
+  }
+}

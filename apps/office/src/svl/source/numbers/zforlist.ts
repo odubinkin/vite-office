@@ -55,7 +55,7 @@ import {
 } from "../../inc/zforlist";
 import { ImpSvNumberInputScan } from "./zforfind";
 import { GetOutputString, GetInputLineString } from "./zforlist.output";
-import { SvNumberformat } from "./zformat";
+import { SvNumberformat, type SvNumberformatConstReference } from "./zformat";
 import { ImpSvNumberformatScan } from "./zforscan";
 
 import { unicode } from "../../../i18nlangtag/source/isolang/isolang.tables";
@@ -426,6 +426,11 @@ export class SvNFFormatData {
   FindCachedDefaultFormat(search: number): number {
     return FindCachedDefaultFormat(this.fields.aDefaultFormatKeys, search);
   }
+  /** Borrows the actual entries for source document inspection. @returns Read-only format table. */
+  GetFormatEntryMap(): ReadonlyMap<number, SvNumberformatConstReference> {
+    return this.fields.aFTable;
+  }
+
   /** Original exact-key lookup;native unsigned32 argument conversion is explicit. @param key - Format key. @returns Actual borrowed entry or null. */
   GetEntry(key: number): SvNumberformat | null {
     return this.fields.aFTable.get(key >>> 0) ?? null;

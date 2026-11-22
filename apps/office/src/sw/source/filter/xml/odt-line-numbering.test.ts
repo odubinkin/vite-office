@@ -100,7 +100,7 @@ describe("Writer ODF line numbering", /** Groups global configuration cases. @re
     });
   });
 
-  it("reads omission defaults and rejects malformed or duplicate settings", /** Checks defaults and malformed input. @returns Completion after import. */ async () => {
+  it("applies omission defaults and the last line-number configuration", /** Checks native fallback values and repeated declarations. @returns Completion after import. */ async () => {
     const bytes = await writeOdtDocument(createWriterDocument(), metadata);
     const defaults = await readOdtDocument(
       await rewriteStyles(
@@ -118,18 +118,25 @@ describe("Writer ODF line numbering", /** Groups global configuration cases. @re
     expect(defaults.document.GetLineNumberInfo().IsPaintLineNumbers()).toBe(true);
     expect(defaults.document.GetLineNumberInfo().GetCountBy()).toBe(5);
 
-    for (const [from, to, error] of [
-      ['text:number-lines="false"', 'text:number-lines="yes"', "boolean"],
-      ['text:number-position="left"', 'text:number-position="above"', "position"],
-      ['style:num-format="1"', 'style:num-format="A"', "format"],
+    for (const [from, to, expected] of [
+      ['text:number-lines="false"', 'text:number-lines="yes"', { paintLineNumbers: true }],
+      [
+        'text:number-position="left"',
+        'text:number-position="above"',
+        { position: LineNumberPosition.Left },
+      ],
     ] as const) {
       const changed = await rewriteStyles(
         bytes,
-        /** Corrupts one line-number attribute. @param xml - Styles stream. @returns Rewritten stream. */ (
-          xml,
-        ) => xml.replace(from, to),
+        /** Replaces one attribute with an unsupported value. @param xml - Styles stream. @returns Rewritten stream. */
+        (xml) => xml.replace(from, to),
       );
-      await expect(readOdtDocument(changed, metadata)).rejects.toThrow(error);
+      const { document } = await readOdtDocument(changed, metadata);
+      try {
+        expect(document.GetLineNumberInfo().QueryValue()).toMatchObject(expected);
+      } finally {
+        document.Dispose();
+      }
     }
 
     const duplicate = await rewriteStyles(
@@ -138,9 +145,12 @@ describe("Writer ODF line numbering", /** Groups global configuration cases. @re
         xml,
       ) => xml.replace("</office:styles>", "<text:linenumbering-configuration/></office:styles>"),
     );
-    await expect(readOdtDocument(duplicate, metadata)).rejects.toThrow(
-      "Duplicate ODF line numbering",
-    );
+    const { document } = await readOdtDocument(duplicate, metadata);
+    try {
+      expect(document.GetLineNumberInfo().IsPaintLineNumbers()).toBe(true);
+    } finally {
+      document.Dispose();
+    }
   });
 
   it("maps right and inside positions and handles separator context boundaries", /** Checks remaining position and child-context branches. @returns Completion after import. */ async () => {
@@ -173,12 +183,11 @@ describe("Writer ODF line numbering", /** Groups global configuration cases. @re
       ),
     ).not.toBeNull();
     expect(
-      /** Attempts duplicate separator insertion. @returns Child context. */ () =>
-        context.createFastChildContext(
-          XMLToken.TEXT_LINENUMBERING_SEPARATOR,
-          new FastAttributeList([]),
-        ),
-    ).toThrow("Duplicate ODF line-number separator");
+      context.createFastChildContext(
+        XMLToken.TEXT_LINENUMBERING_SEPARATOR,
+        new FastAttributeList([]),
+      ),
+    ).not.toBeNull();
     expect(
       exportLineNumberingConfiguration({
         countBlankLines: true,

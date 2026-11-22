@@ -1,0 +1,50 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "status": "mapped",
+    "localPath": "apps/office/src/sc/source/core/data/document10.rangenames.ts",
+    "localSymbols": [
+      "PreprocessAllRangeNamesUpdate"
+    ],
+    "upstreamPath": "sc/source/core/data/document10.cxx",
+    "upstreamSymbols": [
+      "ScDocument::PreprocessAllRangeNamesUpdate",
+      "ScDocument::CompileHybridFormula"
+    ],
+    "preservedResponsibilities": [
+      "Captures name-bearing hybrid formulas and rebuilds listeners after replacing the scope maps."
+    ],
+    "omittedResponsibilities": [
+      "Native drawing and window repaints use the existing browser rendering model."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sc/source/core/data/document10.rangenames.ts",
+          "marker": "PreprocessAllRangeNamesUpdate"
+        },
+        {
+          "path": "apps/office/src/sc/browser/presentation/calc-named-ranges.test.tsx",
+          "marker": "ports tdf87474"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sc/source/core/data/document10.cxx",
+          "marker": "ScDocument::PreprocessAllRangeNamesUpdate"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/source/core/data/document10.cxx",
+          "marker": "ScDocument::CompileHybridFormula"
+        }
+      ]
+    },
+    "filenameDivergence": {
+      "localPath": "apps/office/src/sc/source/core/data/document10.rangenames.ts",
+      "rationale": "Splits the original document10 translation unit at its name-update responsibilities to keep the module within the source size budget.",
+      "stackNecessity": "responsibility-split"
+    }
+  }
+}

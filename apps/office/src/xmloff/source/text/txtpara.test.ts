@@ -119,8 +119,8 @@ describe("ODF text paragraph export contexts", /** Groups export context tests. 
     );
     expect(output.automaticStyles.match(/style:name="P/g)).toHaveLength(4);
     expect(output.automaticStyles.match(/style:name="T/g)).toHaveLength(2);
-    expect(output.automaticStyles).toContain('fo:text-align="start"');
-    expect(output.automaticStyles).toContain('fo:text-align="end"');
+    expect(output.automaticStyles).toContain('fo:text-align="left"');
+    expect(output.automaticStyles).toContain('fo:text-align="right"');
     expect(output.automaticStyles).toContain('style:parent-style-name="Heading_20_1"');
     expect(output.automaticStyles).toContain('style:parent-style-name="Title"');
     expect(output.automaticStyles).toContain('style:parent-style-name="title"');

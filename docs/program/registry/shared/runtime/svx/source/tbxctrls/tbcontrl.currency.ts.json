@@ -1,0 +1,37 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/svx/source/tbxctrls/tbcontrl.currency.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "shared",
+    "subsystem": "number-formatting",
+    "capabilityIds": [
+      "CAP-baadca35-ed24-475a-b583-42f53f6c037e"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/svx/source/tbxctrls/tbcontrl.currency.ts",
+        "apps/office/src/sc/browser/presentation/calc-number-format-sidebar.test.tsx",
+        "vendor/libreoffice-reference/svx/source/tbxctrls/tbcontrl.cxx"
+      ],
+      "justification": "Places the system choice first, document currencies above the other symbol rows, and unique bank rows at the end. Resolves and compiles the original chosen format in the target document formatter.",
+      "knownViolations": [],
+      "localSymbols": [
+        "GetCurrencySymbols",
+        "GetCurrencyFormatKey"
+      ],
+      "sourceResponsibility": "divergent",
+      "upstreamFile": "svx/source/tbxctrls/tbcontrl.cxx",
+      "upstreamSymbols": [
+        "SvxCurrencyToolBoxControl::GetCurrencySymbols",
+        "SvxCurrencyToolBoxControl::execute"
+      ]
+    }
+  }
+}

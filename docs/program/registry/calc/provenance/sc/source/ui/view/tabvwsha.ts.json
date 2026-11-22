@@ -1,0 +1,60 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/sc/source/ui/view/tabvwsha.ts",
+    "status": "mapped",
+    "upstreamPath": "sc/source/ui/view/tabvwsha.cxx",
+    "localSymbols": [
+      "ExecStyle",
+      "GetStyleState"
+    ],
+    "upstreamSymbols": [
+      "ScTabViewShell::ExecStyle",
+      "ScTabViewShell::ExecuteApplyStyle",
+      "ScTabViewShell::GetStyleState"
+    ],
+    "preservedResponsibilities": [
+      "Task 1ZKRD0 resolves the original StyleApply arguments, dispatches existing named cell styles through ScViewFunc, and projects uniform selection state for the native Styles menu radio presets.",
+      "Preserves numeric family precedence, programmatic and display naming, and the original unsigned return mask."
+    ],
+    "omittedResponsibilities": [
+      "Page and drawing style application, fill format mode, and style-edit dialogs are outside this cell application slice."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sc/source/ui/view/tabvwsha.ts",
+          "marker": "ExecStyle"
+        },
+        {
+          "path": "apps/office/src/sc/browser/presentation/calc-cell-styles.test.tsx",
+          "marker": "tdf158254"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sc/source/ui/view/tabvwsha.cxx",
+          "marker": "ScTabViewShell::ExecStyle"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/source/ui/view/tabvwsha.cxx",
+          "marker": "ScTabViewShell::ExecuteApplyStyle"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/source/ui/view/tabvwsha.cxx",
+          "marker": "ScTabViewShell::GetStyleState"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/qa/unit/uicalc/uicalc2.cxx",
+          "marker": "testTdf158254"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/qa/unit/uicalc/uicalc2.cxx",
+          "marker": "testTdf125030"
+        }
+      ]
+    }
+  }
+}

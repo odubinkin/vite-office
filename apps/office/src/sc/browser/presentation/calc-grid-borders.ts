@@ -1,4 +1,7 @@
-/** @fileoverview Browser grid border painting borrows actual native box/diagonal items and SVX frame conflict selection;CSS uses the same shared line projection as Writer. Native merged/rotation/device primitives remain unported. */
+/** @fileoverview Browser grid borders use native box items and SVX frame styles, projected through the shared CSS line renderer. */
+import { SvxShadowLocation as Shadow } from "../../../editeng/inc/svxenum";
+import type { SvxShadowItem } from "../../../editeng/source/items/frmitems.shadow";
+import type { SvxMarginItem } from "../../../svx/source/items/algitem";
 import type { CSSProperties } from "react";
 import { Array as FrameArray } from "../../../svx/source/dialog/framelinkarray";
 import { Style } from "../../../svx/source/dialog/framelink";
@@ -80,6 +83,21 @@ export function calcGridBorderStyle(
   };
 }
 
+/** Projects the original merge anchor's box around the complete merged cell. @param box - Effective box item. @param showGrid - Combined grid visibility. @returns CSS for the four perimeter edges. */
+export function calcMergedBorderStyle(box: SvxBoxItem, showGrid: boolean): CSSProperties {
+  const top = new Style(box.GetTop()),
+    right = new Style(box.GetRight()),
+    bottom = new Style(box.GetBottom()),
+    left = new Style(box.GetLeft());
+  const gridEdge = showGrid ? undefined : "1px solid transparent";
+  return {
+    borderTop: top.GetWidth() ? browserBorderLine(top, false) : undefined,
+    borderRight: right.GetWidth() ? browserBorderLine(right, false) : gridEdge,
+    borderBottom: bottom.GetWidth() ? browserBorderLine(bottom, false) : gridEdge,
+    borderLeft: left.GetWidth() ? browserBorderLine(left, false) : undefined,
+  };
+}
+
 /** Projects the first break at each visible boundary, including breaks before hidden detail. @param table - Actual sheet. @param axis - Painted pane geometry. @param columns - Column break axis. @returns Visible break rules. */
 export function calcGridPageBreaks(table: ScTable, axis: CalcGridAxis, columns: boolean) {
   const indices = new Set<number>();
@@ -102,4 +120,28 @@ export function calcGridPageBreaks(table: ScTable, axis: CalcGridAxis, columns: 
     }
   }
   return rules;
+}
+
+/** Projects the independent cell padding and original shadow offset. @param margin - Effective margin item. @param shadow - Cell shadow item. @param leftIndent - Horizontal left indent. @param rightIndent - Horizontal right indent. @returns CSS edge metrics and shadow. */
+export function calcCellEdgeStyle(
+  margin: SvxMarginItem,
+  shadow: SvxShadowItem,
+  leftIndent: number,
+  rightIndent: number,
+): CSSProperties {
+  const location = shadow.GetLocation();
+  const width = shadow.GetWidth() / 20;
+  const x = (location === Shadow.TopLeft || location === Shadow.BottomLeft ? -1 : 1) * width;
+  const y = (location === Shadow.TopLeft || location === Shadow.TopRight ? -1 : 1) * width;
+  const color = shadow.GetColor();
+  return {
+    paddingTop: Math.trunc(margin.GetTopMargin() / 15),
+    paddingBottom: Math.trunc(margin.GetBottomMargin() / 15),
+    paddingLeft: Math.trunc((margin.GetLeftMargin() + leftIndent) / 15),
+    paddingRight: Math.trunc((margin.GetRightMargin() + rightIndent) / 15),
+    boxShadow:
+      location === Shadow.NONE
+        ? undefined
+        : `${x}pt ${y}pt rgb(${color.GetRed()} ${color.GetGreen()} ${color.GetBlue()} / ${color.GetAlpha() / 255})`,
+  };
 }

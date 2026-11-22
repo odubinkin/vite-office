@@ -1,0 +1,39 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sc/source/ui/view/viewfunc.numformat.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "calc",
+    "subsystem": "cell-formatting",
+    "capabilityIds": [
+      "CAP-252f9507-730d-4e78-943d-365348c24997"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/sc/source/ui/view/viewfunc.numformat.ts",
+        "apps/office/src/sc/browser/presentation/calc-number-format.test.tsx",
+        "vendor/libreoffice-reference/sc/source/ui/view/viewfunc.cxx"
+      ],
+      "justification": "Applies formatted selection attributes through the source view history. Locale is taken from the cursor and General precision samples the compiled output of the current cell.",
+      "knownViolations": [],
+      "localSymbols": [
+        "SetNumberFormat",
+        "SetNumFmtByStr",
+        "ChangeNumFmtDecimals"
+      ],
+      "sourceResponsibility": "divergent",
+      "upstreamFile": "sc/source/ui/view/viewfunc.cxx",
+      "upstreamSymbols": [
+        "ScViewFunc::SetNumberFormat",
+        "ScViewFunc::SetNumFmtByStr",
+        "ScViewFunc::ChangeNumFmtDecimals"
+      ]
+    }
+  }
+}

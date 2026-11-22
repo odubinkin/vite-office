@@ -6,6 +6,7 @@ import {
   type ScStoredPasswordHash,
   type ScEnhancedProtection,
 } from "../../../inc/tabprotection";
+import { decodeBase64, encodeBase64 } from "../../../../comphelper/source/misc/base64";
 import type { ScDocument } from "../../../inc/document";
 import type { ScRange } from "../../../inc/address";
 import { ScRangeList } from "../../../inc/rangelst";
@@ -21,6 +22,77 @@ export function needsPassHashRegen(
     if (protection?.isProtected() && !protection.hasPasswordHash(primary, secondary)) return true;
   }
   return false;
+}
+
+/** Writes the source little-endian UTF-16 code units. @param password - Entered text. @returns Digest input. */
+function passwordBytes(password: string): Uint8Array<ArrayBuffer> {
+  const bytes = new Uint8Array(password.length * 2);
+  const view = new DataView(bytes.buffer);
+  for (let i = 0; i < password.length; i++) view.setUint16(i * 2, password.charCodeAt(i), true);
+  return bytes;
+}
+
+/** Computes the source legacy Excel verifier from signed UTF-8 bytes. @param password - Entered text. @returns Big-endian verifier bytes. */
+function xlPasswordHash(password: string): Uint8Array<ArrayBuffer> {
+  const bytes = new TextEncoder().encode(password);
+  let value = 0;
+  if (bytes.length && bytes.length <= 0xffff) {
+    const signedBytes = new Int8Array(bytes.buffer);
+    for (let i = signedBytes.length - 1; i >= 0; i--)
+      value = ((value >>> 14) & 1) ^ ((value << 1) & 0x7fff) ^ (signedBytes[i] as number);
+    value = ((value >>> 14) & 1) ^ ((value << 1) & 0x7fff) ^ 0xce4b ^ bytes.length;
+  }
+  return Uint8Array.of(value >>> 8, value & 0xff);
+}
+
+/** Computes a browser-native digest for a supported original verifier. @param algorithm - Digest name. @param input - Bytes. @returns Digest. */
+async function digest(
+  algorithm: string,
+  input: Uint8Array<ArrayBuffer>,
+): Promise<Uint8Array<ArrayBuffer>> {
+  return new Uint8Array(await crypto.subtle.digest(algorithm, input));
+}
+
+/** Selects the source byte encoding for a typed verifier. @param type - Source hash family. @param password - Entered text. @returns Verifier or undefined. */
+async function hashPassword(
+  type: Hash,
+  password: string,
+): Promise<Uint8Array<ArrayBuffer> | undefined> {
+  if (type === Hash.XL) return xlPasswordHash(password);
+  if (type === Hash.SHA1) return digest("SHA-1", passwordBytes(password));
+  if (type === Hash.SHA1_UTF8) return digest("SHA-1", new TextEncoder().encode(password));
+  if (type === Hash.SHA256) return digest("SHA-256", new TextEncoder().encode(password));
+  return undefined;
+}
+
+/** Tests exact verifier bytes. @param expected - Stored verifier. @param actual - Computed verifier. @returns Match. */
+function matchesPasswordHash(expected: Uint8Array, actual: Uint8Array): boolean {
+  if (actual.length !== expected.length) return false;
+  let difference = 0;
+  for (let i = 0; i < actual.length; i++)
+    difference |= (expected[i] as number) ^ (actual[i] as number);
+  return difference === 0;
+}
+
+/** Verifies the OOXML salt, UTF-16 password hash and appended iteration counter. @param record - Imported metadata. @param password - Entered text. @returns Match. */
+async function verifyOoxPassword(record: ScOoxPasswordHash, password: string): Promise<boolean> {
+  const bits = /^(?:SHA-?)(1|256|384|512)$/u.exec(record.algorithmName)?.[1];
+  if (!bits || !record.hashValue) return false;
+  const algorithm = "SHA-" + bits;
+  const salt = decodeBase64(record.saltValue);
+  const encoded = passwordBytes(password);
+  const initial = new Uint8Array(salt.length + encoded.length);
+  initial.set(salt);
+  initial.set(encoded, salt.length);
+  let hash = await digest(algorithm, initial);
+  const step = new Uint8Array(hash.length + 4);
+  const view = new DataView(step.buffer);
+  for (let i = 0; i < record.spinCount; i++) {
+    step.set(hash);
+    view.setUint32(hash.length, i, true);
+    hash = await digest(algorithm, step);
+  }
+  return encodeBase64(hash) === record.hashValue;
 }
 
 /** Native sheet protection state stored by ScTable. */
@@ -42,6 +114,11 @@ export class ScTableProtection {
       this.setOption(Option.SELECT_LOCKED_CELLS, true);
       this.setOption(Option.SELECT_UNLOCKED_CELLS, true);
     }
+  }
+
+  /** Produces an independent native protection snapshot. @returns Sheet protection copy. */
+  Clone(): ScTableProtection {
+    return new ScTableProtection(this);
   }
 
   /** Borrows the ordered native enhanced protection records. @returns Enhanced protection records. */
@@ -122,6 +199,37 @@ export class ScTableProtection {
   /** Tests whether a stored verifier is present. @returns Whether there is a verifier of either family. */
   hasPassword(): boolean {
     return Boolean(this.storedHash?.bytes.length || this.ooxHash?.hashValue);
+  }
+
+  /** Tests the current sheet lock and password presence. @returns Whether the original prompt is needed. */
+  isProtectedWithPass(): boolean {
+    return this.isProtected() && this.hasPassword();
+  }
+
+  /** Sets an entered password in the native preferred ODF verifier format. @param password - Entered text. @returns Completion. */
+  async setPassword(password: string): Promise<void> {
+    const bytes = password ? await digest("SHA-1", passwordBytes(password)) : undefined;
+    this.ooxHash = undefined;
+    this.setStoredPasswordHash(bytes && { bytes, primary: Hash.SHA1, secondary: Hash.UNSPECIFIED });
+  }
+
+  /** Verifies only the entered value against the sheet-owned record. @param password - Entered text. @returns Match. */
+  async verifyPassword(password: string): Promise<boolean> {
+    if (!this.hasPassword()) return password.length === 0;
+    const stored = this.storedHash;
+    if (stored?.bytes.length) {
+      const computed = await hashPassword(stored.primary, password);
+      if (computed) {
+        const actual = stored.secondary === Hash.SHA1 ? await digest("SHA-1", computed) : computed;
+        if (matchesPasswordHash(stored.bytes, actual)) return true;
+      }
+      if (stored.primary === Hash.SHA1 && stored.secondary === Hash.UNSPECIFIED)
+        return matchesPasswordHash(
+          stored.bytes,
+          await digest("SHA-1", new TextEncoder().encode(password)),
+        );
+    }
+    return this.ooxHash ? verifyOoxPassword(this.ooxHash, password) : false;
   }
 
   /** Checks whether the stored password can supply the requested digest family. @param primary - First digest. @param secondary - Optional second digest. @returns Compatibility. */

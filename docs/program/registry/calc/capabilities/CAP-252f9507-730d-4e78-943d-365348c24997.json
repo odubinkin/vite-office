@@ -1,0 +1,119 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "id": "CAP-252f9507-730d-4e78-943d-365348c24997",
+    "capabilityId": "CAP-252f9507-730d-4e78-943d-365348c24997",
+    "suite": "calc",
+    "subsystem": "cell-formatting",
+    "type": "command",
+    "maturity": "implemented",
+    "assertions": [
+      "The pinned Calc Number Format menu and formatting toolbar share the native Sfx shortcuts. Formatting uses the document's compiled numeric styles, preserves numeric values, and enters selection undo history. The French percent fixture retains its separator and precision through ODS. CALC-828 and CALC-829 retain the original toggle and edit contracts."
+    ],
+    "stackDivergence": {
+      "kind": "browser-adaptation",
+      "rationale": "The shared React workbench consumes the original resource placements and Sfx slot state."
+    },
+    "capability": "Calc numeric format shortcuts and precision controls",
+    "gaps": [
+      "The registered commands cover the ten numeric shortcuts. The full Format Cells dialog, sidebar format setup, and currency chooser have separate source owners.",
+      "Browser input and state invalidation use the established Sfx adapter. Native toolkit and complete formatter services remain outside this capability."
+    ],
+    "upstream": {
+      "implementation": [
+        {
+          "path": "vendor/libreoffice-reference/sc/source/ui/view/formatsh.cxx",
+          "marker": "ScFormatShell::ExecuteNumFormat"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/source/ui/view/viewfunc.cxx",
+          "marker": "ScViewFunc::ChangeNumFmtDecimals"
+        },
+        {
+          "path": "vendor/libreoffice-reference/svl/source/numbers/zforlist.cxx",
+          "marker": "SvNFEngine::GenerateFormat"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/source/ui/unoobj/styleuno.cxx",
+          "marker": "SvxLanguageItem(eNewLang, ATTR_LANGUAGE_FORMAT)"
+        }
+      ],
+      "tests": [
+        {
+          "path": "vendor/libreoffice-reference/sc/qa/unit/uicalc/uicalc2.cxx",
+          "marker": "testTdf133342"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/qa/uitest/textToColumns/tdf82398.py",
+          "marker": "test_tdf82398_text_to_columns"
+        }
+      ],
+      "docs": [
+        {
+          "path": "vendor/libreoffice-reference/sc/uiconfig/scalc/menubar/menubar.xml",
+          "marker": ".uno:NumberFormatThousands"
+        }
+      ]
+    },
+    "implemented": true,
+    "contractParity": false,
+    "behaviorParity": false,
+    "defaultParity": false,
+    "verified": false,
+    "local": {
+      "implementation": [
+        {
+          "path": "apps/office/src/sc/sdi/formatsh.numformat.ts",
+          "marker": "createCalcNumberFormatSlots"
+        },
+        {
+          "path": "apps/office/src/sc/source/ui/view/formatsh.numformat.ts",
+          "marker": "ExecuteNumFormat"
+        },
+        {
+          "path": "apps/office/src/sc/source/ui/view/viewfunc.numformat.ts",
+          "marker": "ChangeNumFmtDecimals"
+        },
+        {
+          "path": "apps/office/src/svl/source/numbers/zforlist.picture.ts",
+          "marker": "GenerateFormat"
+        },
+        {
+          "path": "apps/office/src/sc/source/filter/xml/xmlimprt.ts",
+          "marker": "PutCellNumberFormat"
+        }
+      ],
+      "tests": [
+        {
+          "path": "apps/office/src/sc/browser/presentation/calc-number-format.test.tsx",
+          "marker": "ports tdf133342"
+        },
+        {
+          "path": "apps/office/src/svl/source/numbers/zforlist.picture.test.ts",
+          "marker": "generates time, engineering"
+        },
+        {
+          "path": "apps/office/src/sc/browser/presentation/calc-text-to-columns.test.tsx",
+          "marker": "ports tdf82398"
+        }
+      ],
+      "docs": [
+        {
+          "path": ".agentplane/tasks/202611220122-5AP3TA/README.md",
+          "marker": "Verify Steps"
+        },
+        {
+          "path": "docs/program/calc-upstream-suspected-issues.md",
+          "marker": "CALC-828"
+        }
+      ]
+    },
+    "aspect": "command-state",
+    "atomicOperation": "calc-number-format-shortcuts",
+    "scopeLimitations": [
+      "The registered commands cover the ten numeric shortcuts. The full Format Cells dialog, sidebar format setup, and currency chooser have separate source owners.",
+      "Browser input and state invalidation use the established Sfx adapter. Native toolkit and complete formatter services remain outside this capability."
+    ]
+  }
+}

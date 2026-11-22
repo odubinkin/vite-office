@@ -95,6 +95,13 @@ export class ScTable {
   private pOutlineTable: ScOutlineTable | undefined;
   GetOutlineTable = table1.GetOutlineTable;
   finalizeOutlineImport = table7.finalizeOutlineImport;
+  HasMultipleDataCells = table7.HasMultipleDataCells;
+  ApplySelectionStyle = table2.ApplySelectionStyle;
+  GetAreaStyle = table2.GetAreaStyle;
+  GetSelectionStyle = table2.GetSelectionStyle;
+  GetNumberFormat = table2.GetNumberFormat;
+  GetUnprotectedCells = table2.GetUnprotectedCells;
+  RemoveProtected = table2.RemoveProtected;
   GetLastChangedColFlagsWidth = table2.GetLastChangedColFlagsWidth;
   StartOutlineTable = table1.StartOutlineTable;
   SetOutlineTable = table1.SetOutlineTable;
@@ -420,10 +427,7 @@ export class ScTable {
     if (this.rDocument.ValidColRow(col, row))
       this.CreateColumnIfNotExists(col).ApplyAttr(row, attr);
   }
-  /** Original table2 number-format assignment with native cell validation. @param col - Column. @param row - Row. @param key - Formatter key. @returns Nothing. */
-  SetNumberFormat(col: number, row: number, key: number): void {
-    table2.SetNumberFormat.call(this, col, row, key);
-  }
+  SetNumberFormat = table2.SetNumberFormat;
   /** Original table.hxx allocated-column validity. @param col - Column. @returns Allocated native column. */
   IsColValid(col: number): boolean {
     return col >= 0 && col < this.aCol.length;
@@ -474,6 +478,7 @@ export class ScTable {
   ): void {
     table1.GetDataArea.call(this, firstCol, firstRow, lastCol, lastRow, includeOld, onlyDown);
   }
+  ShrinkToUsedDataArea = table1.ShrinkToUsedDataArea;
   /** Original bounded last-data-row aggregation. @param first - First allocated column. @param last - Final valid column. @param row - Inclusive row bound. @returns Row or native invalid-column sentinel. */
   GetLastDataRow(first: number, last: number, row: number): number {
     if (first < 0 || first >= this.aCol.length || !this.rDocument.ValidCol(last)) return -1;

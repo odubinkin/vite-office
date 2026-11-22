@@ -1,0 +1,36 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/xmloff/inc/xmltoken.ts",
+    "status": "mapped",
+    "upstreamPath": "include/xmloff/xmltoken.hxx",
+    "localSymbols": [
+      "XMLToken"
+    ],
+    "upstreamSymbols": [
+      "XMLTokenEnum"
+    ],
+    "preservedResponsibilities": [
+      "Owns the compact XMLToken enum separately from the canonical source lookup table. Existing browser token ordinals and the exported enum identity are retained."
+    ],
+    "omittedResponsibilities": [
+      "The browser keeps the represented subset and does not share the C++ enum ordinal ABI."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/xmloff/inc/xmltoken.ts",
+          "marker": "export enum XMLToken"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/include/xmloff/xmltoken.hxx",
+          "marker": "enum XMLTokenEnum"
+        }
+      ]
+    }
+  }
+}

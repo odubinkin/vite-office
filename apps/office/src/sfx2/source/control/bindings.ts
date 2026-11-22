@@ -78,6 +78,8 @@ export function deriveParameterizedSlotState(
   parameters: Readonly<Record<string, string>> | undefined,
 ): SfxSlotState {
   if (parameters?.Style === undefined || typeof state.value !== "string") return state;
+  if (parameters.FamilyName === "CellStyles")
+    return { ...state, checked: state.value === parameters.Style };
   const style = parameters.Style === "Default Paragraph Style" ? "default" : parameters.Style;
   return {
     ...state,

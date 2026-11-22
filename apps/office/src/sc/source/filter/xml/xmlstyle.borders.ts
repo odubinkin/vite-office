@@ -1,7 +1,15 @@
 /** @fileoverview Consumed Calc border property map, export ContextFilter and import finished merge from xmlstyle.cxx/xmlstyli.cxx; actual box/line items and shared XML handlers own values. */
 import type { ComplexColor } from "../../../../docmodel/inc/color/ComplexColor";
 import { exportComplexColor } from "../../../../xmloff/source/text/XMLComplexColorContext";
-import { ATTR_BORDER } from "../../../inc/scitems";
+import { ATTR_BORDER, ATTR_MARGIN, ATTR_SHADOW } from "../../../inc/scitems";
+import { SvxMarginItem } from "../../../../svx/source/items/algitem";
+import { SvxShadowItem } from "../../../../editeng/source/items/frmitems.shadow";
+import {
+  ShadowFormat,
+  cppu_detail_getUnoType_ShadowFormat as shadowType,
+} from "../../../../offapi/com/sun/star/table/ShadowFormat";
+import { XMLShadowPropHdl } from "../../../../xmloff/source/style/shadwhdl";
+import { SvXMLUnitConverter } from "../../../../xmloff/source/core/xmluconv";
 import { SvxBoxItem } from "../../../../editeng/source/items/frmitems";
 import { SvxLineItem } from "../../../../editeng/inc/lineitem";
 import {
@@ -66,8 +74,24 @@ const diagonals = [
     142,
   ],
 ] as const;
-/** Only consumed native border tokens are admitted; complex color/padding scopes remain explicitly unported. */
+/** Calc's padding is stored separately from the four border lines. */
+const paddingSides = [
+  [XMLToken.FO_PADDING_LEFT, "left", "GetLeftMargin", "SetLeftMargin"],
+  [XMLToken.FO_PADDING_TOP, "top", "GetTopMargin", "SetTopMargin"],
+  [XMLToken.FO_PADDING_RIGHT, "right", "GetRightMargin", "SetRightMargin"],
+  [XMLToken.FO_PADDING_BOTTOM, "bottom", "GetBottomMargin", "SetBottomMargin"],
+] as const;
+const paddingUnits = new SvXMLUnitConverter("twip");
+const shadowHandler = new XMLShadowPropHdl();
+
+/** Native border, padding and shadow tokens consumed by this map. */
 export const cellBorderTokens = [
+  XMLToken.FO_PADDING,
+  XMLToken.STYLE_SHADOW,
+  ...paddingSides.map(
+    /** Reads the native padding token. @param edge - Mapping. @returns Token. */
+    ([token]) => token,
+  ),
   XMLToken.FO_BORDER,
   XMLToken.STYLE_BORDER_LINE_WIDTH,
   ...sides.flatMap(
@@ -112,6 +136,36 @@ export function importCellBorderProperties(
   attributes: FastAttributeList,
   unsupported: (name: string) => void,
 ): void {
+  const commonPadding = attributes.get(XMLToken.FO_PADDING);
+  const margin = (pattern.GetItem(ATTR_MARGIN) as SvxMarginItem).Clone();
+  let changedPadding = false;
+  for (const [token, , , setter] of paddingSides) {
+    const source = attributes.get(token) ?? commonPadding;
+    if (source === null) continue;
+    const amount = paddingUnits.convertMeasureToCore(source);
+    if (amount === null) unsupported("invalid cell padding");
+    else {
+      margin[setter](amount);
+      changedPadding = true;
+    }
+  }
+  if (changedPadding) pattern.ItemSetPut(margin);
+  margin.Dispose();
+  const shadowSource = attributes.get(XMLToken.STYLE_SHADOW);
+  if (shadowSource !== null) {
+    const native = shadowHandler.importXML(shadowSource);
+    if (native) {
+      const value = new Any(),
+        shadow = new SvxShadowItem(ATTR_SHADOW);
+      try {
+        value.insert(native, shadowType);
+        if (shadow.PutValue(value, 0x80)) pattern.ItemSetPut(shadow);
+      } finally {
+        value.dispose();
+        shadow.Dispose();
+      }
+    } else unsupported("invalid cell shadow");
+  }
   const all = parse(attributes.get(XMLToken.FO_BORDER), false, unsupported),
     allWidth = parse(attributes.get(XMLToken.STYLE_BORDER_LINE_WIDTH), true, unsupported),
     box = (pattern.GetItem(ATTR_BORDER) as SvxBoxItem).Clone();
@@ -191,10 +245,66 @@ function exportBoxLineProperties(box: SvxBoxItem): string {
 
 /** Native ContextFilter collapses equal side values and equal width values independently. @param pattern - Actual cell pattern. @returns Original cell-property attributes. */
 export function exportCellBorderProperties(pattern: ScPatternAttr): string {
-  let result =
-    pattern.GetItemSet().GetItemState(ATTR_BORDER, false) === SfxItemState.SET
-      ? exportBoxLineProperties(pattern.GetItem(ATTR_BORDER) as SvxBoxItem)
-      : "";
+  let result = "";
+  const items = pattern.GetItemSet();
+  if (items.GetItemState(ATTR_MARGIN, false) === SfxItemState.SET) {
+    const margin = pattern.GetItem(ATTR_MARGIN) as SvxMarginItem;
+    const common = margin.GetLeftMargin();
+    const uniform = paddingSides.every(
+      /** Tests whether the four sides use one native padding value. @param mapping - Source padding side. @returns Whether equal. */
+      ([, , getter]) => margin[getter]() === common,
+    );
+    if (uniform) result += ` fo:padding="${paddingUnits.convertMeasureToXML(common)}"`;
+    else
+      for (const [, name, getter] of paddingSides)
+        result += ` fo:padding-${name}="${paddingUnits.convertMeasureToXML(margin[getter]())}"`;
+  }
+  if (items.GetItemState(ATTR_SHADOW, false) === SfxItemState.SET) {
+    const value = new Any();
+    try {
+      (pattern.GetItem(ATTR_SHADOW) as SvxShadowItem).QueryValue(value, 0x80);
+      const native = new ShadowFormat();
+      if (value.extract(native, shadowType))
+        result += ` style:shadow="${shadowHandler.exportXML(native)}"`;
+    } finally {
+      value.dispose();
+    }
+  }
+  if (pattern.GetItemSet().GetItemState(ATTR_BORDER, false) === SfxItemState.SET) {
+    const box = pattern.GetItem(ATTR_BORDER) as SvxBoxItem,
+      lines = sides.map(
+        /** Reads real native UNO edge value. @param side - Original map entry. @returns Published line. */ (
+          side,
+        ) => SvxBoxItem.SvxLineToLine(box.GetLine(side[3]), true),
+      ),
+      first = lines[0] as BorderLine2,
+      same = lines.every(
+        /** Compares all original BorderLine2 fields. @param line - Side. @returns Equal. */ (
+          line,
+        ) => first.equals(line),
+      ),
+      sameWidths = lines.every(
+        /** ContextFilter compares components and total width independently of style/color. @param line - Side. @returns Equal widths. */ (
+          line,
+        ) =>
+          line.InnerLineWidth === first.InnerLineWidth &&
+          line.OuterLineWidth === first.OuterLineWidth &&
+          line.LineDistance === first.LineDistance &&
+          line.LineWidth === first.LineWidth,
+      );
+    if (same) result += ` fo:border="${border.exportXML(first)}"`;
+    else
+      for (const [index, side] of sides.entries())
+        result += ` fo:border-${side[0]}="${border.exportXML(lines[index] as BorderLine2)}"`;
+    if (sameWidths) {
+      const compound = width.exportXML(first);
+      if (compound !== undefined) result += ` style:border-line-width="${compound}"`;
+    } else
+      for (const [index, side] of sides.entries()) {
+        const compound = width.exportXML(lines[index] as BorderLine2);
+        if (compound !== undefined) result += ` style:border-line-width-${side[0]}="${compound}"`;
+      }
+  }
   for (const [suffix, , , , which] of diagonals) {
     if (pattern.GetItemSet().GetItemState(which, false) !== SfxItemState.SET) continue;
     const item = pattern.GetItem(which) as SvxLineItem,

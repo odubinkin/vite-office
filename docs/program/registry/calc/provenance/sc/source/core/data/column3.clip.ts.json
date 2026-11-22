@@ -1,0 +1,56 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/sc/source/core/data/column3.clip.ts",
+    "status": "mapped",
+    "upstreamPath": "sc/source/core/data/column3.cxx",
+    "localSymbols": [
+      "CopyCellsFromClipHandler",
+      "CopyFromClip"
+    ],
+    "upstreamSymbols": [
+      "CopyCellsFromClipHandler",
+      "ScColumn::CopyFromClip"
+    ],
+    "preservedResponsibilities": [
+      "Copies typed cell blocks, edit text and original pattern spans through the native clipboard column cursors.",
+      "The general copy handler observes the native content masks and copies scalar formula results, rich multiline text and hard errors with native cell ownership."
+    ],
+    "omittedResponsibilities": [
+      "Notes, sparklines, copy-as-link, filtered masks and nondefault clone families remain outside the active copy slice."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sc/source/core/data/column3.clip.ts",
+          "marker": "CopyCellsFromClipHandler"
+        },
+        {
+          "path": "apps/office/src/sc/browser/presentation/calc-cell-clipboard.test.tsx",
+          "marker": "copies cells and their formats"
+        },
+        {
+          "path": "apps/office/src/sc/browser/presentation/calc-cell-clipboard.test.tsx",
+          "marker": "ports CalcPasteOnly"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sc/source/core/data/column3.cxx",
+          "marker": "CopyCellsFromClipHandler"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/source/core/data/column3.cxx",
+          "marker": "ScColumn::CopyFromClip"
+        }
+      ]
+    },
+    "filenameDivergence": {
+      "localPath": "apps/office/src/sc/source/core/data/column3.clip.ts",
+      "stackNecessity": "responsibility-split",
+      "rationale": "Separates clipboard insertion and text-attribute handlers from the column storage fragment so each module stays independently reviewable within the repository line budget."
+    }
+  }
+}

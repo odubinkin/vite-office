@@ -1,0 +1,40 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/sc/source/ui/operation/ConvertFormulaToValueOperation.ts",
+    "status": "mapped",
+    "localSymbols": [
+      "ConvertFormulaToValueOperation"
+    ],
+    "upstreamPath": "sc/source/ui/operation/ConvertFormulaToValueOperation.cxx",
+    "upstreamSymbols": [
+      "ConvertFormulaToValueOperation::runImplementation"
+    ],
+    "preservedResponsibilities": [
+      "Tests native block editability, exchanges converted results, records one undo item and broadcasts changed cell content."
+    ],
+    "omittedResponsibilities": [
+      "Desktop alternate sheet-view synchronization and paint event scheduling are handled in the browser by the current view model."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sc/source/ui/operation/ConvertFormulaToValueOperation.ts",
+          "marker": "ConvertFormulaToValueOperation"
+        },
+        {
+          "path": "apps/office/src/sc/browser/presentation/calc-recalculation.test.tsx",
+          "marker": "ports tdf131326"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sc/source/ui/operation/ConvertFormulaToValueOperation.cxx",
+          "marker": "ConvertFormulaToValueOperation::runImplementation"
+        }
+      ]
+    }
+  }
+}

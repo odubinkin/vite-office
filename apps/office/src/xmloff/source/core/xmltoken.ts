@@ -1,7 +1,6 @@
 /** @fileoverview Defines compact namespace/local-name tokens for the browser fast SAX importer. */
-
-import { XMLToken } from "./xmltoken.enum";
-export { XMLToken } from "./xmltoken.enum";
+import { XMLToken } from "../../inc/xmltoken";
+export { XMLToken } from "../../inc/xmltoken";
 
 /** ODF namespace URIs understood by the bounded Writer filter. */
 export const ODF_NAMESPACES = {
@@ -121,6 +120,7 @@ const entries: readonly (readonly [string, string, XMLToken])[] = [
   [ODF_NAMESPACES.number, "boolean", XMLToken.NUMBER_BOOLEAN],
   [ODF_NAMESPACES.number, "automatic-order", XMLToken.NUMBER_AUTOMATIC_ORDER],
   [ODF_NAMESPACES.number, "format-source", XMLToken.NUMBER_FORMAT_SOURCE],
+  [ODF_NAMESPACES.number, "truncate-on-overflow", XMLToken.NUMBER_TRUNCATE_ON_OVERFLOW],
   [ODF_NAMESPACES.number, "language", XMLToken.FO_LANGUAGE],
   [ODF_NAMESPACES.number, "country", XMLToken.FO_COUNTRY],
   [ODF_NAMESPACES.table, "calculation-settings", XMLToken.TABLE_CALCULATION_SETTINGS],
@@ -154,6 +154,7 @@ const entries: readonly (readonly [string, string, XMLToken])[] = [
   [ODF_NAMESPACES.number, "min-integer-digits", XMLToken.NUMBER_MIN_INTEGER_DIGITS],
   [ODF_NAMESPACES.number, "decimal-places", XMLToken.NUMBER_DECIMAL_PLACES],
   [ODF_NAMESPACES.number, "min-decimal-places", XMLToken.NUMBER_MIN_DECIMAL_PLACES],
+  [ODF_NAMESPACES.loext, "min-decimal-places", XMLToken.NUMBER_MIN_DECIMAL_PLACES],
   [ODF_NAMESPACES.number, "grouping", XMLToken.NUMBER_GROUPING],
   [ODF_NAMESPACES.number, "year", XMLToken.NUMBER_YEAR],
   [ODF_NAMESPACES.number, "month", XMLToken.NUMBER_MONTH],
@@ -171,6 +172,19 @@ const entries: readonly (readonly [string, string, XMLToken])[] = [
   [ODF_NAMESPACES.number, "exponent-interval", XMLToken.NUMBER_EXPONENT_INTERVAL],
   [ODF_NAMESPACES.number, "forced-exponent-sign", XMLToken.NUMBER_FORCED_EXPONENT_SIGN],
   [ODF_NAMESPACES.number, "min-exponent-digits", XMLToken.NUMBER_MIN_EXPONENT_DIGITS],
+  [ODF_NAMESPACES.number, "fraction", XMLToken.NUMBER_FRACTION],
+  [ODF_NAMESPACES.loext, "max-blank-integer-digits", XMLToken.NUMBER_MAX_BLANK_INTEGER_DIGITS],
+  [ODF_NAMESPACES.loext, "integer-fraction-delimiter", XMLToken.NUMBER_INTEGER_FRACTION_DELIMITER],
+  [ODF_NAMESPACES.number, "min-numerator-digits", XMLToken.NUMBER_MIN_NUMERATOR_DIGITS],
+  [ODF_NAMESPACES.loext, "max-numerator-digits", XMLToken.NUMBER_MAX_NUMERATOR_DIGITS],
+  [ODF_NAMESPACES.loext, "zeros-numerator-digits", XMLToken.NUMBER_ZEROS_NUMERATOR_DIGITS],
+  [ODF_NAMESPACES.number, "zeros-numerator-digits", XMLToken.NUMBER_ZEROS_NUMERATOR_DIGITS],
+  [ODF_NAMESPACES.number, "min-denominator-digits", XMLToken.NUMBER_MIN_DENOMINATOR_DIGITS],
+  [ODF_NAMESPACES.number, "denominator-value", XMLToken.NUMBER_DENOMINATOR_VALUE],
+  [ODF_NAMESPACES.loext, "max-denominator-value", XMLToken.NUMBER_MAX_DENOMINATOR_VALUE],
+  [ODF_NAMESPACES.number, "max-denominator-value", XMLToken.NUMBER_MAX_DENOMINATOR_VALUE],
+  [ODF_NAMESPACES.loext, "zeros-denominator-digits", XMLToken.NUMBER_ZEROS_DENOMINATOR_DIGITS],
+  [ODF_NAMESPACES.number, "zeros-denominator-digits", XMLToken.NUMBER_ZEROS_DENOMINATOR_DIGITS],
   [ODF_NAMESPACES.number, "scientific-number", XMLToken.NUMBER_SCIENTIFIC_NUMBER],
   [ODF_NAMESPACES.draw, "frame", XMLToken.DRAW_FRAME],
   [ODF_NAMESPACES.draw, "text-box", XMLToken.DRAW_TEXT_BOX],
@@ -206,9 +220,9 @@ const entries: readonly (readonly [string, string, XMLToken])[] = [
   [ODF_NAMESPACES.draw, "fill", XMLToken.DRAW_FILL],
   [ODF_NAMESPACES.draw, "fill-color", XMLToken.DRAW_FILL_COLOR],
   [ODF_NAMESPACES.draw, "opacity", XMLToken.DRAW_OPACITY],
+  [ODF_NAMESPACES.style, "text-emphasize", XMLToken.STYLE_TEXT_EMPHASIZE],
   [ODF_NAMESPACES.style, "text-underline-mode", XMLToken.STYLE_TEXT_UNDERLINE_MODE],
   [ODF_NAMESPACES.style, "text-overline-mode", XMLToken.STYLE_TEXT_OVERLINE_MODE],
-  [ODF_NAMESPACES.style, "text-emphasize", XMLToken.STYLE_TEXT_EMPHASIZE],
   [ODF_NAMESPACES.style, "text-line-through-mode", XMLToken.STYLE_TEXT_LINE_THROUGH_MODE],
   [ODF_NAMESPACES.style, "letter-kerning", XMLToken.STYLE_LETTER_KERNING],
   [ODF_NAMESPACES.fo, "text-shadow", XMLToken.FO_TEXT_SHADOW],
@@ -287,7 +301,6 @@ const entries: readonly (readonly [string, string, XMLToken])[] = [
   [ODF_NAMESPACES.style, "default-page-layout", XMLToken.STYLE_DEFAULT_PAGE_LAYOUT],
   [ODF_NAMESPACES.style, "page-layout", XMLToken.STYLE_PAGE_LAYOUT],
   [ODF_NAMESPACES.style, "page-layout-properties", XMLToken.STYLE_PAGE_LAYOUT_PROPERTIES],
-  [ODF_NAMESPACES.style, "page-usage", XMLToken.STYLE_PAGE_USAGE],
   [ODF_NAMESPACES.style, "master-page", XMLToken.STYLE_MASTER_PAGE],
   [ODF_NAMESPACES.style, "header-style", XMLToken.STYLE_HEADER_STYLE],
   [ODF_NAMESPACES.style, "footer-style", XMLToken.STYLE_FOOTER_STYLE],
@@ -413,6 +426,11 @@ const entries: readonly (readonly [string, string, XMLToken])[] = [
   [ODF_NAMESPACES.text, "bookmark-end", XMLToken.TEXT_BOOKMARK_END],
   [ODF_NAMESPACES.text, "soft-page-break", XMLToken.TEXT_SOFT_PAGE_BREAK],
   [ODF_NAMESPACES.table, "table", XMLToken.TABLE_TABLE],
+  [ODF_NAMESPACES.table, "label-ranges", XMLToken.TABLE_LABEL_RANGES],
+  [ODF_NAMESPACES.table, "label-range", XMLToken.TABLE_LABEL_RANGE],
+  [ODF_NAMESPACES.table, "label-cell-range-address", XMLToken.TABLE_LABEL_CELL_RANGE_ADDRESS],
+  [ODF_NAMESPACES.table, "data-cell-range-address", XMLToken.TABLE_DATA_CELL_RANGE_ADDRESS],
+  [ODF_NAMESPACES.table, "orientation", XMLToken.TABLE_ORIENTATION],
   [ODF_NAMESPACES.table, "named-expressions", XMLToken.TABLE_NAMED_EXPRESSIONS],
   [ODF_NAMESPACES.table, "named-expression", XMLToken.TABLE_NAMED_EXPRESSION],
   [ODF_NAMESPACES.table, "named-range", XMLToken.TABLE_NAMED_RANGE],

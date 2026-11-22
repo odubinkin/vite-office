@@ -157,7 +157,7 @@ it("preserves failed input,cursor marks,sheets and physical/logical viewport ind
   c.ChangeAddress("$AA$12");
   expect(c.GoToAddress()).toBe(true);
   expect(c.Address()).toBe("AA12");
-  c.ChangeAddress("bad");
+  c.ChangeAddress("bad!");
   expect(c.GoToAddress()).toBe(false);
   c.ChangeAddress("");
   expect(c.GoToAddress()).toBe(false);

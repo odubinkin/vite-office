@@ -1,0 +1,45 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/sc/source/ui/miscdlgs/crnrdlg.ts",
+    "status": "mapped",
+    "localSymbols": [
+      "ScColRowNameRangesDlg"
+    ],
+    "upstreamPath": "sc/source/ui/miscdlgs/crnrdlg.cxx",
+    "upstreamSymbols": [
+      "ScColRowNameRangesDlg::SetColRowData",
+      "ScColRowNameRangesDlg::AdjustColRowData"
+    ],
+    "preservedResponsibilities": [
+      "Implements original cloned lists, label selection and spatial orientation, editing constraints and pair changes."
+    ],
+    "omittedResponsibilities": [
+      "Native widget presentation is delegated to the browser child window."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sc/source/ui/miscdlgs/crnrdlg.ts",
+          "marker": "ScColRowNameRangesDlg"
+        },
+        {
+          "path": "apps/office/src/sc/browser/presentation/calc-label-ranges.test.tsx",
+          "marker": "ports tdf131170"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sc/source/ui/miscdlgs/crnrdlg.cxx",
+          "marker": "ScColRowNameRangesDlg::SetColRowData"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/source/ui/miscdlgs/crnrdlg.cxx",
+          "marker": "ScColRowNameRangesDlg::AdjustColRowData"
+        }
+      ]
+    }
+  }
+}

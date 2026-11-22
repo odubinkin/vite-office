@@ -457,6 +457,8 @@ export class WriterViewProjection {
             tabStopPositionPt: tabStopsPt[0],
             tabStopsPt,
             keepWithNext: (node.GetAttr(RES_KEEP) as SfxBoolItem).GetValue(),
+            countLineNumbers: node.GetSwAttrSet().GetLineNumber().IsCount(),
+            lineNumberStartValue: node.GetSwAttrSet().GetLineNumber().GetStartValue(),
             lowerSpacingPt: spacing.GetLower() / 20,
             rightMarginPt:
               (node.GetAttr(RES_MARGIN_RIGHT) as SvxRightMarginItem).ResolveRight() / 20,

@@ -1,0 +1,63 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/sc/source/ui/view/viewfun3.transfer.ts",
+    "status": "mapped",
+    "upstreamPath": "sc/source/ui/view/viewfun3.cxx",
+    "localSymbols": [
+      "CopyToClipSingleRange",
+      "ExportClipboardText",
+      "ImportClipboardText"
+    ],
+    "upstreamSymbols": [
+      "ScViewFunc::CopyToClipSingleRange"
+    ],
+    "preservedResponsibilities": [
+      "Captures a same-workbook single-range clipboard document and stages the string transfer through Calc string export and native text import."
+    ],
+    "omittedResponsibilities": [
+      "Cut, selected-table copies, multi-range and desktop transferable formats remain outside this transfer path."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sc/source/ui/view/viewfun3.transfer.ts",
+          "marker": "CopyToClipSingleRange"
+        },
+        {
+          "path": "apps/office/src/sc/browser/presentation/calc-cell-clipboard.test.tsx",
+          "marker": "asks for Text Import settings"
+        },
+        {
+          "path": "apps/office/src/sc/browser/presentation/calc-cell-clipboard.test.tsx",
+          "marker": "ports tdf119343"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sc/source/ui/view/viewfun3.cxx",
+          "marker": "ScViewFunc::CopyToClipSingleRange"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/source/ui/app/transobj.cxx",
+          "marker": "ScTransferObj::GetData"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/source/ui/view/viewfun5.cxx",
+          "marker": "ScViewFunc::PasteDataFormatFormattedText"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/qa/uitest/calc_tests8/tdf119343_calculate_pasted_formula.py",
+          "marker": "test_tdf119343_copy_paste_formula"
+        }
+      ]
+    },
+    "filenameDivergence": {
+      "localPath": "apps/office/src/sc/source/ui/view/viewfun3.transfer.ts",
+      "stackNecessity": "responsibility-split",
+      "rationale": "Groups the source clipboard capture and native text-transfer responsibilities in a TypeScript fragment separate from synchronous paste, geometry and history to keep each source module independently reviewable."
+    }
+  }
+}

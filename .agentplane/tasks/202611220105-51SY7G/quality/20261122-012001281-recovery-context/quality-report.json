@@ -1,0 +1,28 @@
+{
+  "schema_version": 1,
+  "task_id": "202611220105-51SY7G",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-11-22T01:20:01.281Z",
+  "verdict": "pass",
+  "summary": "Native Calc cell protection and unlocked selection are backed by actual model attributes, original selection semantics and protected output.",
+  "evaluated_sha": "a6b1bbf29c4d1fca90ab9c2c353fbdd4ec850251",
+  "blueprint_digest": "953f3602d47a60f7c617f77ce19667b4429e4535bb3efd8e52283639ecd0bf79",
+  "findings": [
+    "Both menu commands, native history and tdf151752/tdf152327 pass through the actual Calc workspace.",
+    "Protected grid and input line visibility and clipboard formula-result conversion are verified and preserve original source cells.",
+    "The mounted test exposed a prior teardown ordering error. History now releases before the document style pool and the lifecycle checks pass."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202611220105-51SY7G/README.md",
+    "output/calc-task16-verification.md",
+    "output/calc-task16-calc-final.log",
+    "output/calc-task16-files-retry.log",
+    "output/playwright/calc-task16/smoke.log"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": [
+    "Bitmap transfer, print projection and the full Format Cells dialog remain separate consumers. Existing size gate failures are outside changed files."
+  ]
+}

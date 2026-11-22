@@ -4,6 +4,10 @@
   "locale": "en-US",
   "sources": [
     {
+      "path": "sc/uiconfig/scalc/popupmenu/cell.xml",
+      "sha256": "06ec4d72473721b77e637ad66687169dc52a8dd52f25be15e81fd05c3893decf"
+    },
+    {
       "path": "sc/uiconfig/scalc/popupmenu/sheettab.xml",
       "sha256": "a7ab4f18a4123a266b434f740028b4654b1d4ec26ff7a8ee48f567e9d21e0eb5"
     },
@@ -62,20 +66,23 @@
     ".uno:Accent1CellStyles": {
       "label": "Accent 1",
       "showsDialog": false,
+      "targetUrl": ".uno:StyleApply?Style:string=Accent 1&FamilyName:string=CellStyles",
       "shortcuts": [],
-      "semantics": "check"
+      "semantics": "radio"
     },
     ".uno:Accent2CellStyles": {
       "label": "Accent 2",
       "showsDialog": false,
+      "targetUrl": ".uno:StyleApply?Style:string=Accent 2&FamilyName:string=CellStyles",
       "shortcuts": [],
-      "semantics": "check"
+      "semantics": "radio"
     },
     ".uno:Accent3CellStyles": {
       "label": "Accent 3",
       "showsDialog": false,
+      "targetUrl": ".uno:StyleApply?Style:string=Accent 3&FamilyName:string=CellStyles",
       "shortcuts": [],
-      "semantics": "check"
+      "semantics": "radio"
     },
     ".uno:AcceptChanges": {
       "label": "Manage",
@@ -236,8 +243,9 @@
     ".uno:BadCellStyles": {
       "label": "Bad",
       "showsDialog": false,
+      "targetUrl": ".uno:StyleApply?Style:string=Bad&FamilyName:string=CellStyles",
       "shortcuts": [],
-      "semantics": "check"
+      "semantics": "radio"
     },
     ".uno:BasicIDEAppear": {
       "label": "Edit Macros",
@@ -674,6 +682,24 @@
       "shortcuts": [],
       "semantics": "check"
     },
+    ".uno:CurrentConditionalFormatDialog": {
+      "label": "Conditional Formatting",
+      "showsDialog": true,
+      "shortcuts": [],
+      "semantics": "action"
+    },
+    ".uno:CurrentConditionalFormatManagerDialog": {
+      "label": "Manage Conditional Formatting",
+      "showsDialog": true,
+      "shortcuts": [],
+      "semantics": "action"
+    },
+    ".uno:CurrentValidation": {
+      "label": "Data Validation",
+      "showsDialog": true,
+      "shortcuts": [],
+      "semantics": "action"
+    },
     ".uno:Cut": {
       "label": "Cut",
       "showsDialog": false,
@@ -754,6 +780,12 @@
       "shortcuts": [],
       "semantics": "action"
     },
+    ".uno:DataSelect": {
+      "label": "Selection List",
+      "showsDialog": false,
+      "shortcuts": ["Alt+DOWN"],
+      "semantics": "action"
+    },
     ".uno:DataSort": {
       "label": "Sort",
       "showsDialog": true,
@@ -787,8 +819,15 @@
     ".uno:DefaultCellStyles": {
       "label": "Default",
       "showsDialog": false,
+      "targetUrl": ".uno:StyleApply?Style:string=Default&FamilyName:string=CellStyles",
       "shortcuts": [],
-      "semantics": "check"
+      "semantics": "radio"
+    },
+    ".uno:DefineCurrentName": {
+      "label": "Manage Names",
+      "showsDialog": true,
+      "shortcuts": [],
+      "semantics": "action"
     },
     ".uno:DefineDBName": {
       "label": "Define Range",
@@ -956,6 +995,12 @@
       "shortcuts": [],
       "semantics": "action"
     },
+    ".uno:EditStyle": {
+      "label": "Edit",
+      "showsDialog": false,
+      "shortcuts": [],
+      "semantics": "action"
+    },
     ".uno:EnterGroup": {
       "label": "Enter Group",
       "showsDialog": false,
@@ -965,8 +1010,9 @@
     ".uno:ErrorCellStyles": {
       "label": "Error",
       "showsDialog": false,
+      "targetUrl": ".uno:StyleApply?Style:string=Error&FamilyName:string=CellStyles",
       "shortcuts": [],
-      "semantics": "check"
+      "semantics": "radio"
     },
     ".uno:ExportAsGraphic": {
       "label": "Export as Image",
@@ -1085,8 +1131,9 @@
     ".uno:FootnoteCellStyles": {
       "label": "Footnote",
       "showsDialog": false,
+      "targetUrl": ".uno:StyleApply?Style:string=Footnote&FamilyName:string=CellStyles",
       "shortcuts": [],
-      "semantics": "check"
+      "semantics": "radio"
     },
     ".uno:FormProperties": {
       "label": "Form Properties",
@@ -1213,8 +1260,9 @@
     ".uno:GoodCellStyles": {
       "label": "Good",
       "showsDialog": false,
+      "targetUrl": ".uno:StyleApply?Style:string=Good&FamilyName:string=CellStyles",
       "shortcuts": [],
-      "semantics": "check"
+      "semantics": "radio"
     },
     ".uno:Grid": {
       "label": "Table Control",
@@ -1267,14 +1315,16 @@
     ".uno:Heading1CellStyles": {
       "label": "Heading 1",
       "showsDialog": false,
+      "targetUrl": ".uno:StyleApply?Style:string=Heading 1&FamilyName:string=CellStyles",
       "shortcuts": [],
-      "semantics": "check"
+      "semantics": "radio"
     },
     ".uno:Heading2CellStyles": {
       "label": "Heading 2",
       "showsDialog": false,
+      "targetUrl": ".uno:StyleApply?Style:string=Heading 2&FamilyName:string=CellStyles",
       "shortcuts": [],
-      "semantics": "check"
+      "semantics": "radio"
     },
     ".uno:HelpIndex": {
       "label": "%PRODUCTNAME Help",
@@ -1743,8 +1793,9 @@
     ".uno:NeutralCellStyles": {
       "label": "Neutral",
       "showsDialog": false,
+      "targetUrl": ".uno:StyleApply?Style:string=Neutral&FamilyName:string=CellStyles",
       "shortcuts": [],
-      "semantics": "check"
+      "semantics": "radio"
     },
     ".uno:NewDoc": {
       "label": "Templates",
@@ -1767,8 +1818,9 @@
     ".uno:NoteCellStyles": {
       "label": "Note",
       "showsDialog": false,
+      "targetUrl": ".uno:StyleApply?Style:string=Note&FamilyName:string=CellStyles",
       "shortcuts": [],
-      "semantics": "check"
+      "semantics": "radio"
     },
     ".uno:NumberFormatCurrency": {
       "label": "Currency",
@@ -2411,6 +2463,7 @@
     ".uno:SheetInsertName": {
       "label": "Insert",
       "showsDialog": true,
+      "targetUrl": ".uno:InsertName",
       "shortcuts": [],
       "semantics": "action"
     },
@@ -2879,8 +2932,9 @@
     ".uno:WarningCellStyles": {
       "label": "Warning",
       "showsDialog": false,
+      "targetUrl": ".uno:StyleApply?Style:string=Warning&FamilyName:string=CellStyles",
       "shortcuts": [],
-      "semantics": "check"
+      "semantics": "radio"
     },
     ".uno:WebHtml": {
       "label": "Preview in Web Browser",
@@ -2951,6 +3005,76 @@
     }
   },
   "surfaces": {
+    "cell": [
+      { "commandUrl": ".uno:Cut", "kind": "command", "visible": true },
+      { "commandUrl": ".uno:Copy", "kind": "command", "visible": true },
+      { "commandUrl": ".uno:Paste", "kind": "command", "visible": true },
+      {
+        "id": ".uno:PasteSpecialMenu",
+        "items": [
+          { "commandUrl": ".uno:PasteUnformatted", "kind": "command", "visible": true },
+          { "kind": "separator" },
+          { "commandUrl": ".uno:PasteOnlyText", "kind": "command", "visible": true },
+          { "commandUrl": ".uno:PasteOnlyValue", "kind": "command", "visible": true },
+          { "commandUrl": ".uno:PasteOnlyFormula", "kind": "command", "visible": true },
+          { "kind": "separator" },
+          { "commandUrl": ".uno:PasteTransposed", "kind": "command", "visible": true },
+          { "kind": "separator" },
+          { "commandUrl": ".uno:PasteSpecial", "kind": "command", "visible": true }
+        ],
+        "kind": "menu",
+        "label": "Paste Special"
+      },
+      { "kind": "separator" },
+      { "commandUrl": ".uno:DataSelect", "kind": "command", "visible": true },
+      { "commandUrl": ".uno:CurrentValidation", "kind": "command", "visible": true },
+      { "commandUrl": ".uno:ClearAutoFilter", "kind": "command", "visible": true },
+      { "commandUrl": ".uno:DefineCurrentName", "kind": "command", "visible": true },
+      { "kind": "separator" },
+      { "commandUrl": ".uno:InsertCell", "kind": "command", "visible": true },
+      { "commandUrl": ".uno:DeleteCell", "kind": "command", "visible": true },
+      { "commandUrl": ".uno:Delete", "kind": "command", "visible": true },
+      { "commandUrl": ".uno:MergeCells", "kind": "command", "visible": true },
+      { "commandUrl": ".uno:SplitCell", "kind": "command", "visible": true },
+      { "kind": "separator" },
+      { "commandUrl": ".uno:FormatPaintbrush", "kind": "command", "visible": true },
+      { "commandUrl": ".uno:ResetAttributes", "kind": "command", "visible": true },
+      {
+        "id": ".uno:FormatStylesMenu",
+        "items": [
+          { "commandUrl": ".uno:EditStyle", "kind": "command", "visible": true },
+          { "kind": "separator" },
+          { "commandUrl": ".uno:Accent1CellStyles", "kind": "command", "visible": true },
+          { "commandUrl": ".uno:Accent2CellStyles", "kind": "command", "visible": true },
+          { "commandUrl": ".uno:Accent3CellStyles", "kind": "command", "visible": true },
+          { "kind": "separator" },
+          { "commandUrl": ".uno:BadCellStyles", "kind": "command", "visible": true },
+          { "commandUrl": ".uno:ErrorCellStyles", "kind": "command", "visible": true },
+          { "commandUrl": ".uno:GoodCellStyles", "kind": "command", "visible": true },
+          { "commandUrl": ".uno:NeutralCellStyles", "kind": "command", "visible": true },
+          { "commandUrl": ".uno:WarningCellStyles", "kind": "command", "visible": true },
+          { "kind": "separator" },
+          { "commandUrl": ".uno:FootnoteCellStyles", "kind": "command", "visible": true },
+          { "commandUrl": ".uno:NoteCellStyles", "kind": "command", "visible": true }
+        ],
+        "kind": "menu",
+        "label": "Styles"
+      },
+      { "kind": "separator" },
+      { "commandUrl": ".uno:InsertAnnotation", "kind": "command", "visible": true },
+      { "commandUrl": ".uno:EditAnnotation", "kind": "command", "visible": true },
+      { "commandUrl": ".uno:DeleteNote", "kind": "command", "visible": true },
+      { "commandUrl": ".uno:ShowNote", "kind": "command", "visible": true },
+      { "commandUrl": ".uno:HideNote", "kind": "command", "visible": true },
+      { "kind": "separator" },
+      { "commandUrl": ".uno:CurrentConditionalFormatDialog", "kind": "command", "visible": true },
+      {
+        "commandUrl": ".uno:CurrentConditionalFormatManagerDialog",
+        "kind": "command",
+        "visible": true
+      },
+      { "commandUrl": ".uno:FormatCellDialog", "kind": "command", "visible": true }
+    ],
     "sheettab": [
       { "commandUrl": ".uno:Insert", "kind": "command", "visible": true },
       { "commandUrl": ".uno:Remove", "kind": "command", "visible": true },
@@ -4191,6 +4315,22 @@
     ]
   },
   "dispositions": [
+    {
+      "classification": "X",
+      "context": [".uno:FormatStylesMenu"],
+      "entryKind": "command",
+      "sourceUrl": ".uno:DefaultCellStylesmenu",
+      "sourcePath": "sc/uiconfig/scalc/popupmenu/cell.xml",
+      "reason": "unregistered-source-cell-popup-command"
+    },
+    {
+      "classification": "X",
+      "context": [],
+      "entryKind": "menu",
+      "sourceUrl": ".uno:FormatSparklineMenu",
+      "sourcePath": "sc/uiconfig/scalc/popupmenu/cell.xml",
+      "reason": "empty-policy-filtered-menu"
+    },
     {
       "classification": "X",
       "context": [".uno:PickList"],

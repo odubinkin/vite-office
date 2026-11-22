@@ -82,6 +82,22 @@ const geometry = {
     height: "70%",
     vertical: true,
   },
+  [Edge.TLBR]: {
+    name: "Top-left to bottom-right",
+    left: "50%",
+    top: "50%",
+    width: "81%",
+    height: "1rem",
+    vertical: false,
+  },
+  [Edge.BLTR]: {
+    name: "Bottom-left to top-right",
+    left: "50%",
+    top: "50%",
+    width: "81%",
+    height: "1rem",
+    vertical: false,
+  },
 } as const;
 /** Presents the owned native border page. @param props - Page and display invalidation. @returns Native widget presentation. */
 export function BorderTabPage({
@@ -173,6 +189,13 @@ export function BorderTabPage({
                   const control = event.currentTarget.querySelector(
                     `[data-writer-border-edge="${edge}"]`,
                   ) as HTMLButtonElement;
+                  if (edge === Edge.TLBR || edge === Edge.BLTR) {
+                    const frame = event.currentTarget.getBoundingClientRect();
+                    const x = event.clientX - frame.left - frame.width / 2;
+                    const y = event.clientY - frame.top - frame.height / 2;
+                    const slope = ((edge === Edge.TLBR ? 1 : -1) * frame.height) / frame.width;
+                    return Math.abs(x) <= frame.width * 0.35 && Math.abs(y - slope * x) <= 8;
+                  }
                   const rect = control.getBoundingClientRect();
                   return (
                     event.clientX >= rect.left &&
@@ -248,7 +271,14 @@ export function BorderTabPage({
                   data-writer-border-state={state}
                   data-writer-border-edge={edge}
                   className="absolute -translate-x-1/2 -translate-y-1/2 rounded outline-offset-1 aria-pressed:outline aria-pressed:outline-2 aria-pressed:outline-indigo-500"
-                  style={{ left: g.left, top: g.top, width: g.width, height: g.height }}
+                  style={{
+                    left: g.left,
+                    top: g.top,
+                    width: g.width,
+                    height: g.height,
+                    rotate:
+                      edge === Edge.TLBR ? "30deg" : edge === Edge.BLTR ? "-30deg" : undefined,
+                  }}
                   onMouseDown={
                     /** Keeps mouse activation independent of source keyboard auto-selection. @param event - Mouse event. @returns Nothing. */ (
                       event,
@@ -446,6 +476,23 @@ export function BorderTabPage({
         </fieldset>
       ) : null}
       {shadowControls}
+      {page.HasRemoveAdjacent() && (
+        <label className="flex items-center gap-2 rounded border p-3 text-sm">
+          <input
+            type="checkbox"
+            disabled={!page.CanRemoveAdjacent()}
+            checked={page.GetRemoveAdjacent()}
+            onChange={
+              /** Sets the native adjacent-border removal option. @param event - Checkbox event. @returns Nothing. */
+              (event) => {
+                page.SetRemoveAdjacent(event.currentTarget.checked);
+                onChange();
+              }
+            }
+          />
+          Remove adjacent cell borders
+        </label>
+      )}
       {page.IsMergeAdjacentVisible() ? (
         <fieldset className="rounded border p-3">
           <legend className="text-sm font-bold">Properties</legend>

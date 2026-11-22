@@ -1,4 +1,4 @@
-/** @fileoverview Native PasteFromClip default-content copy orchestration for active normal sheets with unfiltered single clipboard ranges and enabled Undo. Nondefault paste,cut,matrix/drawing/database/window and multi-range service families remain explicit boundaries. */
+/** @fileoverview Native PasteFromClip copy orchestration for active normal sheets with unfiltered single clipboard ranges and enabled Undo. Nondefault paste,cut,matrix/drawing/database/window and multi-range service families remain explicit boundaries. */
 import type { ScViewFunc } from "./viewfunc";
 import { ScDocument, ScDocumentMode } from "../../../inc/document";
 import { ScMarkData } from "../../../inc/markdata";
@@ -9,6 +9,8 @@ import { scPasteResourcesEnglish as R } from "../../../inc/globstr";
 import { ScMarkType } from "../inc/viewdata";
 import { ScViewUtil } from "./viewutil";
 import { ScEditableTester } from "../inc/editable";
+import { IsClipboardPasteMask } from "../../../inc/clipcontext";
+import { TransposeClip } from "../../core/data/document.transpose";
 import { ScUndoPaste, ScUndoPasteOptions } from "../undo/undoblk";
 import { AdjustBlockHeight } from "./viewfun2";
 /** Original default-content PasteFromClip through real marks,clipboard,snapshots and history. Enabled Undo and the active normal view are current construction invariants;no fake native service supplies those defaults. Physical paint/OLE/UNO publication is projected by the shell's browser notification. @param this - Actual view. @param flags - Native paste flags. @param clip - Actual clipboard or null. @param operation - Native defaultNONE. @param skipEmpty - Native defaultfalse. @param transpose - Native defaultfalse. @param asLink - Native defaultfalse. @param move - Native defaultINS_NONE. @param undoExtra - Native defaultNONE. @param allowDialogs - Native defaultfalse. @returns Whether pasted. */
@@ -28,33 +30,60 @@ export function PasteFromClip(
   const data = this.GetViewData();
   if (data.SelectionForbidsPaste(clip)) return false;
   if (
-    flags !== F.CONTENTS ||
+    !IsClipboardPasteMask(flags) ||
     (undoExtra !== F.NONE && undoExtra !== F.ATTRIB) ||
     operation !== ScPasteFunc.NONE ||
-    skipEmpty ||
-    transpose ||
     asLink ||
     move !== InsCellCmd.INS_NONE ||
     allowDialogs
   )
     throw Error("Nondefault native paste services are not implemented");
-  const content = (flags & F.CONTENTS) as F;
-  // ATTRIB copying is outside this admitted path;undo-extra preserves the original destination pattern.
-  const undoFlags = (content | (undoExtra & F.ATTRIB) | F.NOCAPTIONS) as F;
-  const parameter = clip.GetClipParam(),
-    marks = data.GetMarkData();
-  if (parameter.isMultiRange() || marks.IsMultiMarked())
+  const parameter = clip.GetClipParam();
+  if (parameter.isMultiRange() || data.GetMarkData().IsMultiMarked())
     throw Error("Native multi-range paste services are not implemented");
   if (!clip.IsClipboard() || parameter.mbCutMode)
     throw Error("Native paste requires a copy-mode clipboard in this slice");
+  if (clip.HasClipFilteredRows())
+    throw Error("Native filtered-source unmerge services are not implemented");
+  if (!transpose) return PastePrepared.call(this, flags, clip, skipEmpty, false, undoExtra);
+
+  const range = parameter.getWholeRange();
+  const columns = range.aEnd.Col() - range.aStart.Col();
+  const rows = range.aEnd.Row() - range.aStart.Row();
+  if (!clip.ValidCol(range.aStart.Col() + rows) || !clip.ValidRow(range.aStart.Row() + columns)) {
+    this.ErrorMessage(R.STR_PASTE_FULL);
+    return false;
+  }
+  const transformed = new ScDocument(ScDocumentMode.SCDOCMODE_CLIP);
+  try {
+    TransposeClip.call(clip, transformed, flags, false, false);
+    return PastePrepared.call(this, flags, transformed, skipEmpty, true, undoExtra);
+  } finally {
+    transformed.Dispose();
+  }
+}
+
+/** Applies the source-ready clipboard through the original paste transaction. @param this - Active view. @param flags - Native insertion flags. @param clip - Prepared clipboard. @param skipEmpty - Preserve destination cells under empty source cells. @param transpose - Original transposition flag for Undo. @param undoExtra - Additional snapshot flags. @returns Whether pasted. */
+function PastePrepared(
+  this: ScViewFunc,
+  flags: F,
+  clip: ScDocument,
+  skipEmpty: boolean,
+  transpose: boolean,
+  undoExtra: F,
+): boolean {
+  const data = this.GetViewData(),
+    marks = data.GetMarkData();
+  // The original Undo saves all content because a typed insert can replace a different cell type.
+  const formats = (flags | undoExtra) & F.ATTRIB ? F.ATTRIB : F.NONE;
+  const contents = flags & F.CONTENTS ? F.CONTENTS : F.NONE;
+  const undoFlags = (contents | formats | F.NOCAPTIONS) as F;
   const clipX: [number] = [0],
     clipY: [number] = [0],
     destX: [number] = [0],
     destY: [number] = [0];
   clip.GetClipArea(clipX, clipY, true);
   clip.GetClipArea(destX, destY, false);
-  if (clip.HasClipFilteredRows())
-    throw Error("Native filtered-source unmerge services are not implemented");
   const doc = data.GetDocument(),
     shell = this["shell"],
     manager = shell.GetUndoManager();
@@ -157,17 +186,14 @@ export function PasteFromClip(
     this.DoneBlockMode();
     this.InitOwnBlockMode(user);
     marks.SetMarkArea(user);
-    doc.CopyFromClip(user, filteredMark, flags, null, clip, true, false, false, false);
+    doc.CopyFromClip(user, filteredMark, flags, null, clip, true, false, false, skipEmpty);
     const refreshedCol: [number] = [endCol],
       refreshedRow: [number] = [endRow];
     doc.ExtendMergeSel(startCol, startRow, refreshedCol, refreshedRow, filteredMark, true);
     AdjustBlockHeight(doc, marks, startRow, refreshedRow[0]);
     const options = new ScUndoPasteOptions();
-    options.nFunction = operation;
     options.bSkipEmptyCells = skipEmpty;
     options.bTranspose = transpose;
-    options.bAsLink = asLink;
-    options.eMoveMode = move;
     const action = new ScUndoPaste(
       shell,
       new ScRangeList(

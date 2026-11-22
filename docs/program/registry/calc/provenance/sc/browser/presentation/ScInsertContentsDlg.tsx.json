@@ -1,0 +1,29 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "browser-adaptation",
+    "localPath": "apps/office/src/sc/browser/presentation/ScInsertContentsDlg.tsx",
+    "status": "local-only",
+    "rationale": "Projects the source Paste Special groups and quick presets through native HTML form controls in Calc.",
+    "responsibilities": [
+      "Projects the source Paste Special groups and quick presets through native HTML form controls in Calc."
+    ],
+    "stackDivergence": {
+      "kind": "browser-adaptation",
+      "rationale": "Projects the source Paste Special groups and quick presets through native HTML form controls in Calc."
+    },
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sc/browser/presentation/ScInsertContentsDlg.tsx",
+          "marker": "ScInsertContentsDlg"
+        },
+        {
+          "path": "apps/office/src/sc/browser/presentation/calc-cell-clipboard.test.tsx",
+          "marker": "applies a preset draft"
+        }
+      ]
+    }
+  }
+}

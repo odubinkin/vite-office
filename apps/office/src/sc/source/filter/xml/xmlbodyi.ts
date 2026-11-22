@@ -4,6 +4,7 @@ import { SvXMLImportContext, type FastAttributeList } from "../../../../xmloff/s
 import { XMLToken } from "../../../../xmloff/source/core/xmltoken";
 import type { ScXMLImport } from "./xmlimprt";
 import { ScXMLTableContext } from "./xmltabi";
+import { ScXMLLabelRangesContext } from "./xmllabri";
 import { ScXMLNamedExpressionsContext } from "./xmlnexpi";
 import { ScXMLCalculationSettingsContext } from "./XMLCalculationSettingsContext";
 import { createExternalRefTable } from "./xmlexternaltabi";
@@ -19,6 +20,7 @@ export class ScXMLBodyContext extends ScXMLImportContext {
     element: XMLToken,
     attributes: FastAttributeList,
   ): SvXMLImportContext {
+    if (element === XMLToken.TABLE_LABEL_RANGES) return new ScXMLLabelRangesContext(this.owner);
     if (element === XMLToken.TABLE_NAMED_EXPRESSIONS)
       return new ScXMLNamedExpressionsContext(this.owner, -1);
     if (element === XMLToken.TABLE_CALCULATION_SETTINGS) {

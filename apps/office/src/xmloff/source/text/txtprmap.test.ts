@@ -155,7 +155,7 @@ it("transports all native independent script values without boolean normalizatio
   ).not.toContain("text-underline-color");
   expect(exportTextCharacterProperties({ underlineStyle: 19 })).toBe("");
   expect(importTextCharacterProperties(attributes([["fo:font-size", "12pt"]]))).toEqual({});
-  expect(textCharacterPropertyTokens).toHaveLength(77);
+  expect(textCharacterPropertyTokens).toHaveLength(82);
   expect(textCharacterPropertyTokens).toContain(XMLToken.STYLE_TEXT_EMPHASIZE);
   expect(textCharacterPropertyTokens).toContain(XMLToken.FO_LETTER_SPACING);
   expect(textCharacterPropertyTokens.slice(11, 15)).toEqual([
