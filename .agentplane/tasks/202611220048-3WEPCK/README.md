@@ -1,10 +1,11 @@
 ---
 id: "202611220048-3WEPCK"
 title: "Preserve Writer ODT character typography through native items"
-status: "DOING"
+result_summary: "Writer ODT preserves native rotation, fit, emphasis, scale, two-line brackets and automatic kerning. All 45 focused tests passed."
+status: "DONE"
 priority: "high"
 owner: "CODER"
-revision: 6
+revision: 7
 origin:
   system: "manual"
 depends_on: []
@@ -46,11 +47,16 @@ quality_review:
     - "output/playwright/3WEPCK/registry.log"
   findings:
     - "Typed member writes retain concrete items. The pinned source fixture and focused packages cover scale, style inheritance, explicit resets, and normalized values."
-commit: null
+commit:
+  hash: "c6d4ad9c87931185d69dabd6b064448e0bb4f4d0"
+  message: "🧩 3WEPCK code: round trip native Writer ODT typography"
 comments:
   -
     author: "CODER"
     body: "Start: trace and implement Writer character typography through the native ODT item and property-handler contracts."
+  -
+    author: "CODER"
+    body: "Verified: native Writer typography passed its ODT fixture and Worker round trips and related source and property checks."
 events:
   -
     type: "status"
@@ -65,8 +71,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Native Writer character typography passed focused ODT, Worker, shared handler and property metadata checks."
+  -
+    type: "status"
+    at: "2026-11-22T01:02:03.926Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: native Writer typography passed its ODT fixture and Worker round trips and related source and property checks."
 doc_version: 3
-doc_updated_at: "2026-11-22T01:00:50.905Z"
+doc_updated_at: "2026-11-22T01:02:03.928Z"
 doc_updated_by: "CODER"
 description: "Round trip represented Writer character scaling, rotation and fit, emphasis marks, two-line combination and automatic kerning through native ODT mappings, item sets and Worker records."
 sections:
