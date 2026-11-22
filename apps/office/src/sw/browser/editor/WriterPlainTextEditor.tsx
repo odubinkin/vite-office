@@ -1,5 +1,6 @@
 /** @fileoverview Projects Writer paragraphs through one browser implementation of SwEditWin. */
 
+import { writerPageBackgroundStyle } from "./page-background";
 import { Fragment, useContext, useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
 import type { ReactNode, RefObject } from "react";
 import { createPortal } from "react-dom";
@@ -669,6 +670,11 @@ export function WriterPlainTextEditor(props: WriterPlainTextEditorProps): React.
                   width: page.descriptor.width / 15,
                 }}
               >
+                <WriterPageBackground
+                  document={document}
+                  page={page}
+                  previous={pages[pageIndex - 1]}
+                />
                 <WriterPageStories
                   document={document}
                   page={page}
@@ -770,4 +776,25 @@ export function WriterPlainTextEditor(props: WriterPlainTextEditorProps): React.
       </article>
     </>
   );
+}
+
+/** Paints the native fill underneath physical page content. @param props - Physical page format context. @returns Noninteractive background. */
+function WriterPageBackground({
+  document,
+  page,
+  previous,
+}: Readonly<{
+  document: Parameters<typeof writerPageBackgroundStyle>[0];
+  page: SwPageFrame;
+  previous: SwPageFrame | undefined;
+}>): React.JSX.Element | null {
+  const paint = writerPageBackgroundStyle(document, page, previous);
+  return paint ? (
+    <div
+      aria-hidden="true"
+      data-writer-page-background
+      className="absolute -z-10 pointer-events-none"
+      style={paint}
+    />
+  ) : null;
 }

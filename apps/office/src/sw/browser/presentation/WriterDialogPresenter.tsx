@@ -188,6 +188,7 @@ export function WriterDialogPresenter({
           key={request.id}
           unit={unit}
           initialValue={request.request.initialValue}
+          pageInput={request.request.pageInput}
           onCancel={
             /** Cancels the exact Page Style request and returns document focus. @returns Nothing. */ () => {
               controller.Cancel(request.id);
@@ -195,10 +196,17 @@ export function WriterDialogPresenter({
             }
           }
           onSubmit={
-            /** Completes the exact Page Style request. @param pageDescriptor - Accepted geometry. @returns Nothing. */ (
+            /** Completes the exact Page Style request. @param pageDescriptor - Accepted geometry. @param pageItems - Owned native fill deltas. @returns Nothing. */ (
               pageDescriptor,
+              pageItems,
             ) => {
-              controller.Complete(request.id, { pageDescriptor });
+              if (
+                !controller.Complete(request.id, {
+                  pageDescriptor,
+                  ...(pageItems && { pageItems }),
+                })
+              )
+                pageItems?.Dispose();
               focusDocument();
             }
           }

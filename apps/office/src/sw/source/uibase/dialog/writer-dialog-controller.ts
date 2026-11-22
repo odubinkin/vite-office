@@ -40,15 +40,17 @@ export interface WriterBreakDialogRequest {
 export interface WriterBreakDialogResult {
   readonly breakKind: "page";
 }
-/** Page Style child-window request initialized from the Standard page descriptor. */
+/** Page Style child-window request initialized from the active page descriptor. */
 export interface WriterPageDialogRequest {
   readonly commandUrl: string;
   readonly initialValue: WriterPageDescriptorValue;
+  readonly pageInput: SfxItemSet;
   readonly kind: "page-style";
 }
-/** Accepted physical page geometry returned by the presentation adapter. */
+/** Accepted Page geometry and native tab page deltas. */
 export interface WriterPageDialogResult {
   readonly pageDescriptor: WriterPageDescriptorValue;
+  readonly pageItems?: SfxItemSet;
 }
 
 /** Every Writer child-window request supported by the browser presenter. */
@@ -196,15 +198,17 @@ export class WriterDialogController {
       : undefined;
   }
 
-  /** Requests the Writer Page tab and returns accepted geometry or cancellation. @param commandUrl - Originating command. @param initialValue - Current Standard page geometry. @returns Accepted geometry or undefined. */
+  /** Requests the Writer Page Style tabs and returns the accepted item exchange. @param commandUrl - Originating command. @param initialValue - Current page geometry. @param pageInput - Borrowed native page items. @returns Accepted values or undefined. */
   public async RequestPageDialog(
     commandUrl: string,
     initialValue: WriterPageDescriptorValue,
+    pageInput: SfxItemSet,
   ): Promise<WriterPageDialogResult | undefined> {
     const completion = await this.controller.Request({
       commandUrl,
       initialValue,
       kind: "page-style",
+      pageInput,
     });
     return completion.kind === "accepted"
       ? (completion.result as WriterPageDialogResult)

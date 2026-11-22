@@ -8,7 +8,8 @@
     "suite": "shared",
     "subsystem": "paragraph-fill",
     "capabilityIds": [
-      "CAP-0102"
+      "CAP-0102",
+      "CAP-0136"
     ],
     "semantic": {
       "behaviorStatus": "unverified",
@@ -18,7 +19,8 @@
       "evidence": [
         "apps/office/src/cui/source/tabpages/tptrans.ts#SvxTransparenceTabPage",
         "apps/office/src/sw/browser/presentation/WriterParagraphAreaDialog.test.tsx",
-        "vendor/libreoffice-reference/cui/source/tabpages/tptrans.cxx#SvxTransparenceTabPage::FillItemSet"
+        "vendor/libreoffice-reference/cui/source/tabpages/tptrans.cxx#SvxTransparenceTabPage::FillItemSet",
+        "apps/office/src/sw/browser/presentation/WriterPageAreaDialog.test.tsx"
       ],
       "justification": "Retains the source uniform transparency radio state, 50 percent draft default, and byte-independent native fill item exchange.",
       "knownViolations": [],

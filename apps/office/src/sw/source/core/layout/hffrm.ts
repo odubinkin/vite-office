@@ -2,9 +2,9 @@
 import { SvxBoxItemLine as BoxEdge } from "../../../../editeng/source/items/frmitems";
 import type { SwDoc } from "../doc/doc";
 import type { SwStartNode } from "../docnode/node";
-import { getActivePageStory, getPageFrameGutters } from "./atrfrm";
+import { getActivePageStory, getPageFrameGutters, type SwFrameFormat } from "./atrfrm";
 import type { SwPageFrame } from "./newfrm";
-import type { WriterPageDescriptorValue } from "./pagedesc";
+import type { SwPageDesc, WriterPageDescriptorValue } from "./pagedesc";
 
 /** Native page-story print bounds and connected text section. */
 export interface SwPageStory {
@@ -17,6 +17,27 @@ export interface SwPageStory {
   readonly page: WriterPageDescriptorValue;
 }
 
+/** Checks the first-page format switch for the physical page. @param descriptor - Native descriptor. @param page - Page to resolve. @param previous - Optional preceding physical page. @returns Whether this page uses its own first format. */
+function isFirstPageFormat(
+  descriptor: SwPageDesc,
+  page: SwPageFrame,
+  previous?: SwPageFrame,
+): boolean {
+  return previous?.descriptor.name !== page.descriptor.name && !descriptor.IsFirstShared();
+}
+
+/** Gets the same registered format used by stories and background paint for this physical page. @param descriptor - Native descriptor. @param page - Page to resolve. @param previous - Optional preceding physical page. @returns Page frame format. */
+export function ResolvePageFrameFormat(
+  descriptor: SwPageDesc,
+  page: SwPageFrame,
+  previous?: SwPageFrame,
+): SwFrameFormat {
+  const left = page.number % 2 === 0;
+  if (isFirstPageFormat(descriptor, page, previous))
+    return left ? descriptor.GetFirstLeft() : descriptor.GetFirstMaster();
+  return left ? descriptor.GetLeft() : descriptor.GetMaster();
+}
+
 /** Prepares the live header and footer of the current physical page format. @param doc - Canonical Writer document. @param page - Physical page. @param previous - Preceding physical page when present. @returns Connected story print areas. */
 export function PreparePageStories(
   doc: SwDoc,
@@ -25,16 +46,9 @@ export function PreparePageStories(
 ): SwPageStory[] {
   const descriptor = doc.FindPageDesc(page.descriptor.name);
   if (!descriptor) return [];
-  const first = previous?.descriptor.name !== page.descriptor.name;
+  const firstFormat = isFirstPageFormat(descriptor, page, previous);
   const leftPage = page.number % 2 === 0;
-  const firstFormat = first && !descriptor.IsFirstShared();
-  const format = firstFormat
-    ? leftPage
-      ? descriptor.GetFirstLeft()
-      : descriptor.GetFirstMaster()
-    : leftPage
-      ? descriptor.GetLeft()
-      : descriptor.GetMaster();
+  const format = ResolvePageFrameFormat(descriptor, page, previous);
   const margins = format.GetLRSpace();
   const vertical = format.GetULSpace();
   const box = format.GetBox();

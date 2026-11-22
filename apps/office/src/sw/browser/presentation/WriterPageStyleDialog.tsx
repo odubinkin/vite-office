@@ -3,7 +3,7 @@
 import { MetricSpinButton } from "../../../svtools/browser/control/MetricSpinButton";
 import { FieldUnit } from "../../../tools/inc/fldunit";
 import { WriterDialogHeader } from "./WriterDialogHeader";
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useId, useMemo, useRef, useState } from "react";
 
 import { useBrowserLocalization } from "../../../framework/browser/localization/browser-localization-context";
 import {
@@ -12,19 +12,29 @@ import {
 } from "../../source/core/layout/pagedesc";
 import { Paper } from "../../../i18nutil/inc/paper";
 import { SvxPageDescPage } from "../../../cui/source/tabpages/page";
+import { AreaTabPage } from "../../../cui/browser/tabpages/AreaTabPage";
+import { TransparencyTabPage } from "../../../cui/browser/tabpages/TransparencyTabPage";
+import { SvxAreaTabPage } from "../../../cui/source/tabpages/tparea";
+import { SvxTransparenceTabPage } from "../../../cui/source/tabpages/tptrans";
+import { FillStyle } from "../../../offapi/com/sun/star/drawing/FillStyle";
+import { SfxItemSet } from "../../../svl/inc/itemset";
+import { XATTR_FILL_FIRST, XATTR_FILL_LAST } from "../../../svx/inc/xdef";
+import { bitmapFillStyle } from "../editor/page-background";
 import { getPageFormatDefaultLimits } from "../../../cui/browser/dialog/page-format-defaults";
 
 /** Inputs and completion callbacks for the bounded Writer Page tab. */
 export interface WriterPageStyleDialogProps {
   readonly unit?: FieldUnit;
   readonly initialValue: WriterPageDescriptorValue;
+  readonly pageInput?: SfxItemSet;
   readonly onCancel: () => void;
-  readonly onSubmit: (value: WriterPageDescriptorValue) => void;
+  readonly onSubmit: (value: WriterPageDescriptorValue, items?: SfxItemSet) => void;
 }
 
 /** Collects the supported Page Style physical geometry with a live upstream-shaped preview. @param props - Initial geometry and completion callbacks. @returns Page Style dialog. */
 export function WriterPageStyleDialog({
   initialValue,
+  pageInput,
   unit = FieldUnit.CM,
   onCancel,
   onSubmit,
@@ -37,6 +47,35 @@ export function WriterPageStyleDialog({
     [],
   );
   const localization = useBrowserLocalization();
+  const id = useId();
+  const [active, setActive] = useState("page");
+  const [area] = useState(
+    /** Captures the actual Area page items for this request. @returns Native page owner. */
+    () => pageInput && new SvxAreaTabPage(pageInput, true),
+  );
+  const [transparency] = useState(
+    /** Captures the actual Transparency items for this request. @returns Native page owner. */
+    () => pageInput && new SvxTransparenceTabPage(pageInput, true),
+  );
+  const [, redraw] = useState(0);
+  /** Renders the current item-owner draft. @returns Nothing. */
+  function onFillChange(): void {
+    redraw(
+      /** Increments the widget version. @param version - Current version. @returns Next version. */ (
+        version,
+      ) => version + 1,
+    );
+  }
+  /** Resolves labels using the current Writer localization port. @param key - UI resource key. @param fallback - Source label. @returns Localized label. */
+  function pageLabel(key: string, fallback: string): string {
+    return localization.GetText(`writer.page-style.${key}`, fallback);
+  }
+  const pages = [
+    ["page", pageLabel("page-tab", "Page")],
+    ["area", pageLabel("area-tab", "Area")],
+    ["transparence", pageLabel("transparency-tab", "Transparency")],
+  ] as const;
+  const bitmap = area?.GetFillStyle() === FillStyle.BITMAP ? area.bitmap : undefined;
   const [page] = useState(
     /** Creates the original page-geometry and list owners for this request. @returns Page tab. */ () =>
       new SvxPageDescPage(
@@ -111,9 +150,24 @@ export function WriterPageStyleDialog({
           ) => {
             event.preventDefault();
             try {
-              onSubmit(
-                validateWriterPageDescriptor({ ...initialValue, ...page.GetAcceptedGeometry() }),
-              );
+              const geometry = validateWriterPageDescriptor({
+                ...initialValue,
+                ...page.GetAcceptedGeometry(),
+              });
+              if (!pageInput) {
+                onSubmit(geometry);
+                return;
+              }
+              const output = new SfxItemSet(pageInput.GetPool(), [
+                [XATTR_FILL_FIRST, XATTR_FILL_LAST],
+              ]);
+              area?.FillItemSet(output);
+              transparency?.FillItemSet(output);
+              if (output.Count()) onSubmit(geometry, output);
+              else {
+                output.Dispose();
+                onSubmit(geometry);
+              }
             } catch (caught) {
               setError(caught instanceof Error ? caught.message : "Invalid page geometry.");
             }
@@ -125,10 +179,59 @@ export function WriterPageStyleDialog({
           onClose={onCancel}
         />
         <div className="writer-dialog-content">
-          <div className="border-b border-slate-200 pb-2 text-sm font-semibold text-indigo-700">
-            {localization.GetText("writer.page-style.page-tab", "Page")}
-          </div>
-          <div className="grid gap-6 md:grid-cols-[minmax(0,1fr)_190px]">
+          {area && (
+            <div
+              role="tablist"
+              aria-label={pageLabel("title", "Page Style")}
+              className="writer-dialog-tabs"
+            >
+              {pages.map(
+                /** Renders one page listed by the native controller. @param entry - Tab ID and label. @param index - Tab order. @returns Tab. */
+                ([tab, title], index) => (
+                  <button
+                    type="button"
+                    role="tab"
+                    key={tab}
+                    id={`${id}-${tab}`}
+                    aria-selected={active === tab}
+                    aria-controls={`${id}-panel-${tab}`}
+                    tabIndex={active === tab ? 0 : -1}
+                    className="rounded-t border-b px-3 py-2 text-sm aria-selected:border-indigo-600 aria-selected:text-indigo-700"
+                    onClick={/** Activates this page. @returns Nothing. */ () => setActive(tab)}
+                    onKeyDown={
+                      /** Walks the native notebook order. @param event - Tab key action. @returns Nothing. */
+                      (event) => {
+                        const direction =
+                          event.key === "ArrowLeft" ? -1 : event.key === "ArrowRight" ? 1 : 0;
+                        const next =
+                          event.key === "Home"
+                            ? pages[0]
+                            : event.key === "End"
+                              ? pages.at(-1)
+                              : direction
+                                ? pages[(index + direction + pages.length) % pages.length]
+                                : undefined;
+                        if (!next) return;
+                        event.preventDefault();
+                        setActive(next[0]);
+                        globalThis.document.getElementById(`${id}-${next[0]}`)?.focus();
+                      }
+                    }
+                  >
+                    {title}
+                  </button>
+                ),
+              )}
+            </div>
+          )}
+          <div
+            role={area && "tabpanel"}
+            id={`${id}-panel-page`}
+            aria-labelledby={area && `${id}-page`}
+            className={
+              active === "page" ? "grid gap-6 md:grid-cols-[minmax(0,1fr)_190px]" : "hidden"
+            }
+          >
             <div className="grid gap-4">
               <fieldset className="grid grid-cols-2 gap-3 rounded-lg border border-slate-200 p-3">
                 <legend className="px-1 text-sm font-bold text-slate-700">Paper format</legend>
@@ -287,6 +390,29 @@ export function WriterPageStyleDialog({
               </div>
             </div>
           </div>
+          {area && active === "area" && (
+            <div role="tabpanel" id={`${id}-panel-area`} aria-labelledby={`${id}-area`}>
+              <AreaTabPage page={area} changed={onFillChange} label={pageLabel} />
+            </div>
+          )}
+          {area && transparency && active === "transparence" && (
+            <div
+              role="tabpanel"
+              id={`${id}-panel-transparence`}
+              aria-labelledby={`${id}-transparence`}
+            >
+              <TransparencyTabPage
+                page={transparency}
+                changed={onFillChange}
+                label={pageLabel}
+                color={area.GetFillStyle() === FillStyle.SOLID ? area.GetColor() : undefined}
+                bitmap={
+                  bitmap &&
+                  bitmapFillStyle(bitmap.GetBitmap(), bitmap.GetMode(), bitmap.GetPosition())
+                }
+              />
+            </div>
+          )}
           {error === undefined ? null : (
             <p className="text-sm font-semibold text-red-700">{error}</p>
           )}

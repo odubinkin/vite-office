@@ -8,7 +8,8 @@
     "suite": "shared",
     "subsystem": "paragraph-fill",
     "capabilityIds": [
-      "CAP-0102"
+      "CAP-0102",
+      "CAP-0136"
     ],
     "semantic": {
       "behaviorStatus": "unverified",
@@ -18,7 +19,8 @@
       "evidence": [
         "apps/office/src/cui/browser/tabpages/AreaTabPage.tsx#AreaTabPage",
         "apps/office/src/sw/browser/presentation/WriterParagraphAreaDialog.test.tsx",
-        "vendor/libreoffice-reference/cui/uiconfig/ui/areatabpage.ui"
+        "vendor/libreoffice-reference/cui/uiconfig/ui/areatabpage.ui",
+        "apps/office/src/sw/browser/presentation/WriterPageAreaDialog.test.tsx"
       ],
       "justification": "Binds native Area and Color page controls to the supported pooled values using browser controls and the existing palettes.",
       "knownViolations": [],

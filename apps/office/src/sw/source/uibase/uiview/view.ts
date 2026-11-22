@@ -44,6 +44,8 @@ import {
   applySwParagraphULSpaceItem,
 } from "./viewtab";
 import type { SvxULSpaceItem } from "../../../../editeng/inc/ulspitem";
+import { RES_PAGEDESC } from "../../../inc/hintids";
+import type { SwFormatPageDesc } from "../../core/attr/fmtpdsc";
 import { SvxRuler } from "../../../../svx/source/dialog/svxruler";
 
 /** Persistent Writer view joining SwDocShell, SwWrtShell, and frame dispatch. */
@@ -364,13 +366,35 @@ export class SwView {
   public ToggleVerticalRuler(): void {
     this.viewOptions.ToggleVerticalRuler();
   }
-  /** Opens the upstream PageDialog boundary and applies an accepted descriptor through SwWrtShell. @returns Whether accepted geometry changed the document. */
+  /** Opens the active Page Style and applies the accepted tab output in one action. @returns Whether the document changed. */
   public async OpenPageDialog(): Promise<boolean> {
-    const result = await this.dialogController.RequestPageDialog(
-      WRITER_COMMAND_IDS.pageDialog,
-      this.docShell.GetDoc().GetPageDesc().GetValue(),
-    );
-    return result === undefined ? false : this.wrtShell.SetPageDescriptor(result.pageDescriptor);
+    const document = this.docShell.GetDoc();
+    const node = this.wrtShell.GetActiveParagraph();
+    const point = this.wrtShell.GetCursor().GetPoint();
+    const assigned = node.GetAttr(RES_PAGEDESC) as SwFormatPageDesc;
+    const name =
+      this.layout.FindPageDescriptorAt(node, point.GetContentIndex()) ?? assigned.GetPageDescName();
+    const descriptor = document.FindPageDesc(name) ?? document.GetPageDesc();
+    const pageInput = descriptor.GetMaster().GetAttrSet().Clone();
+    const result = await this.dialogController
+      .RequestPageDialog(WRITER_COMMAND_IDS.pageDialog, descriptor.GetValue(), pageInput)
+      .finally(
+        /** Releases the dialog's native input snapshot on acceptance or cancellation. @returns Nothing. */
+        () => pageInput.Dispose(),
+      );
+    try {
+      return (
+        result !== undefined &&
+        this.docShell.GetDoc() === document &&
+        this.wrtShell.SetPageDescriptor(
+          result.pageDescriptor,
+          descriptor.GetName(),
+          result.pageItems,
+        )
+      );
+    } finally {
+      result?.pageItems?.Dispose();
+    }
   }
 
   /** Toggles sidebar visibility. @returns Nothing. */
@@ -386,7 +410,11 @@ export class SwView {
   /** Releases view, dispatcher, and document-shell subscriptions at explicit session close. @returns Nothing. */
   public Close(): void {
     const dialog = this.dialogController.GetSnapshot();
-    if (dialog?.request.kind === "delete-comments" || dialog?.request.kind === "character")
+    if (
+      dialog?.request.kind === "delete-comments" ||
+      dialog?.request.kind === "character" ||
+      dialog?.request.kind === "page-style"
+    )
       this.dialogController.Cancel(dialog.id);
     this.releaseMetricView();
     this.editWindow.MouseButtonUp(true);

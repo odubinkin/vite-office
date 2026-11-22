@@ -1,0 +1,36 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sw/source/uibase/wrtsh/wrtsh1-page.ts",
+    "classification": "upstream-mechanism",
+    "state": "active",
+    "suite": "writer",
+    "subsystem": "page-style-fill",
+    "capabilityIds": [
+      "CAP-0136"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "none",
+      "evidence": [
+        "apps/office/src/sw/source/uibase/wrtsh/wrtsh1-page.ts#setPageDescriptor",
+        "apps/office/src/sw/browser/presentation/WriterPageAreaDialog.test.tsx",
+        "apps/office/e2e/writer-page-area.spec.ts",
+        "vendor/libreoffice-reference/sw/source/uibase/app/docstyle.cxx#::ItemSetToPageDesc"
+      ],
+      "justification": "Applies the native Page Style item exchange through its owning page descriptor and undo action.",
+      "knownViolations": [],
+      "localSymbols": [
+        "setPageDescriptor"
+      ],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": "sw/source/uibase/app/docstyle.cxx",
+      "upstreamSymbols": [
+        "SwDocStyleSheet"
+      ]
+    }
+  }
+}

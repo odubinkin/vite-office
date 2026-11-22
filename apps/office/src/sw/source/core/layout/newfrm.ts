@@ -248,6 +248,16 @@ export class SwRootFrame extends SwLayoutFrame {
     );
   }
 
+  /** Resolves the style of the physical page at the current text position. @param node - Cursor paragraph. @param offset - Cursor offset. @returns Formatted page style name if found. */
+  public FindPageDescriptorAt(node: SwTextNode, offset: number): string | undefined {
+    if (this.lastDocument !== node.GetDoc()) return undefined;
+    for (const page of this.snapshot?.pages.slice().reverse() ?? [])
+      for (const frame of page.textFrames)
+        if (frame.GetTextNodeFirst() === node && offset >= frame.start && offset <= frame.end)
+          return page.descriptor.name;
+    return undefined;
+  }
+
   /** Invalidates the formatted graph from a changed Writer node onward. @param nodeIndex - Optional SwNodes index; absent means all frames. @returns Nothing. */
   public Invalidate(nodeIndex?: number): void {
     this.dirty = true;

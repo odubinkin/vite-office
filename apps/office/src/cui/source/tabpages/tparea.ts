@@ -9,6 +9,7 @@ import {
 import { XFillStyleItem } from "../../../svx/inc/xfillit0";
 import { XFillColorItem } from "../../../svx/inc/xflclit";
 import { XFillUseSlideBackgroundItem } from "../../../svx/inc/xfilluseslidebackgrounditem";
+import { SvxBitmapTabPage } from "./tpbitmap";
 import type { Color } from "../../../tools/inc/color";
 
 /** Owns the original Area fill selection and solid color exchange. */
@@ -18,11 +19,17 @@ export class SvxAreaTabPage {
   private style: FillStyle | undefined;
   private color: XFillColorItem | undefined;
   private selected = false;
+  public readonly bitmap: SvxBitmapTabPage | undefined;
 
-  /** Borrows the input snapshot for the dialog lifetime. @param input - Effective paragraph fill items. @returns Area page. */
-  constructor(input: SfxItemSet) {
-    this.originalStyle = input.GetItemIfSet(XATTR_FILLSTYLE, false) as XFillStyleItem | undefined;
-    this.originalColor = input.GetItemIfSet(XATTR_FILLCOLOR, false) as XFillColorItem | undefined;
+  /** Borrows the input snapshot for the dialog lifetime. @param input - Effective fill items. @param showBitmap - Whether image fill belongs to this format. @returns Area page. */
+  constructor(input: SfxItemSet, showBitmap = false) {
+    this.bitmap = showBitmap ? new SvxBitmapTabPage(input) : undefined;
+    this.originalStyle = (
+      showBitmap ? input.Get(XATTR_FILLSTYLE) : input.GetItemIfSet(XATTR_FILLSTYLE, false)
+    ) as XFillStyleItem | undefined;
+    this.originalColor = (
+      showBitmap ? input.Get(XATTR_FILLCOLOR) : input.GetItemIfSet(XATTR_FILLCOLOR, false)
+    ) as XFillColorItem | undefined;
     this.style = this.originalStyle?.GetValue();
     this.color = this.originalColor;
   }
@@ -45,7 +52,7 @@ export class SvxAreaTabPage {
   }
 
   /** Applies one of the represented native Area buttons. @param style - Chosen fill family. @returns Nothing. */
-  SelectFillType(style: FillStyle.NONE | FillStyle.SOLID): void {
+  SelectFillType(style: FillStyle.NONE | FillStyle.SOLID | FillStyle.BITMAP): void {
     this.style = style;
     this.selected = true;
   }
@@ -60,6 +67,12 @@ export class SvxAreaTabPage {
     output.ClearItem(XATTR_FILLSTYLE);
     output.ClearItem(XATTR_FILLCOLOR);
     output.ClearItem(XATTR_FILLUSESLIDEBACKGROUND);
+    this.bitmap?.ClearOutput(output);
+    if (this.style === FillStyle.BITMAP && this.bitmap?.GetBitmap().GetGraphic()) {
+      if (this.selected) output.Put(new XFillStyleItem(FillStyle.BITMAP), true);
+      this.bitmap.FillItemSet(output);
+      return;
+    }
     if (!this.selected && this.color === this.originalColor) return;
 
     if (this.style === FillStyle.NONE && this.selected) {

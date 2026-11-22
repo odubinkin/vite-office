@@ -4,7 +4,7 @@ title: "Connect Writer page style area, bitmap, and transparency"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 6
+revision: 7
 origin:
   system: "manual"
 depends_on: []
@@ -36,7 +36,7 @@ events:
     to: "DOING"
     note: "Start: Connect the existing page descriptor fill to the Page Style tabs, native undo and physical page rendering."
 doc_version: 3
-doc_updated_at: "2026-11-22T03:12:45.227Z"
+doc_updated_at: "2026-11-22T03:30:55.877Z"
 doc_updated_by: "CODER"
 description: "Expose the existing native page-style fill items through the Page Style dialog and physical page paint."
 sections:
@@ -53,7 +53,17 @@ sections:
   Rollback Plan: |-
     - Revert task-related commit(s).
     - Re-run required checks to confirm rollback safety.
-  Findings: ""
+  Findings: |-
+    - Connected the actual Page Style slot to the selected physical page's descriptor. The Page, Area and Transparency tabs exchange native DrawingLayer items and commit geometry and native fill through one Page Style history action. A no-op and cancellation leave the document and history alone.
+    - Page paint reads the physical page frame format and renders solid fills or PNG/JPEG bitmaps and uniform transparency. The bitmap page supports import, native custom/tiled/stretched placement, and the nine original anchor points. Desktop image presets, editable bitmap dimensions and tiling offsets, and gradient/pattern/hatch fills remain outside this slice.
+    - Command: `npm run test:writer --workspace @vite-office/office -- WriterPageAreaDialog WriterPageStyleDialog WriterPageLayout writer-view.test wrtsh1 undobj native-page-desc odt-page-background WriterParagraphAreaDialog hffrm`. Result: pass, 88 tests in 9 files. Scope: native dialog, geometry and fill in one undo, named page ownership, ODT and Worker serialization, native page layout and existing paragraph fill.
+    - Command: `npm run test:writer --workspace @vite-office/office -- WriterPageAreaDialog`. Result: pass, repeat run after the page item snapshot ownership changes.
+    - Command: `npm run test:shared --workspace @vite-office/office -- unobrushitemhelper fill-properties bitmap`. Result: pass, 14 tests in 2 files.
+    - Commands: `npm run check:dependencies`, `npm run check:source-tree`, `npm run check:source-provenance`, `npm run check:writer-resources`, `ap doctor`, and `node .agentplane/policy/check-routing.mjs`. Result: pass; Writer resources include 2 tests.
+    - Commands: `npm run check:docs` and `npm run check:file-size`. Result: existing Calc failures only, 307 JSDoc diagnostics and the 1,001-line Calc document codec. The scoped Writer files meet the size and JSDoc checks.
+    - The full test suite is scheduled for the user's ten-task checkpoint.
+    - Command: `node_modules/.bin/playwright test writer-page-area.spec.ts --config=output/playwright/writer-page-area-chrome.config.ts --project=writer --workers=1`. Result: pass, one Chromium scenario exercised file import, native placement and transparency, the page background layer, undo and redo, and reopening the page style.
+    - Scoped ESLint, Prettier, and git diff checks passed.
 id_source: "generated"
 ---
 ## Summary
@@ -85,3 +95,14 @@ Run focused Writer Page Style, page background ODT transport, page-descriptor/na
 - Re-run required checks to confirm rollback safety.
 
 ## Findings
+
+- Connected the actual Page Style slot to the selected physical page's descriptor. The Page, Area and Transparency tabs exchange native DrawingLayer items and commit geometry and native fill through one Page Style history action. A no-op and cancellation leave the document and history alone.
+- Page paint reads the physical page frame format and renders solid fills or PNG/JPEG bitmaps and uniform transparency. The bitmap page supports import, native custom/tiled/stretched placement, and the nine original anchor points. Desktop image presets, editable bitmap dimensions and tiling offsets, and gradient/pattern/hatch fills remain outside this slice.
+- Command: `npm run test:writer --workspace @vite-office/office -- WriterPageAreaDialog WriterPageStyleDialog WriterPageLayout writer-view.test wrtsh1 undobj native-page-desc odt-page-background WriterParagraphAreaDialog hffrm`. Result: pass, 88 tests in 9 files. Scope: native dialog, geometry and fill in one undo, named page ownership, ODT and Worker serialization, native page layout and existing paragraph fill.
+- Command: `npm run test:writer --workspace @vite-office/office -- WriterPageAreaDialog`. Result: pass, repeat run after the page item snapshot ownership changes.
+- Command: `npm run test:shared --workspace @vite-office/office -- unobrushitemhelper fill-properties bitmap`. Result: pass, 14 tests in 2 files.
+- Commands: `npm run check:dependencies`, `npm run check:source-tree`, `npm run check:source-provenance`, `npm run check:writer-resources`, `ap doctor`, and `node .agentplane/policy/check-routing.mjs`. Result: pass; Writer resources include 2 tests.
+- Commands: `npm run check:docs` and `npm run check:file-size`. Result: existing Calc failures only, 307 JSDoc diagnostics and the 1,001-line Calc document codec. The scoped Writer files meet the size and JSDoc checks.
+- The full test suite is scheduled for the user's ten-task checkpoint.
+- Command: `node_modules/.bin/playwright test writer-page-area.spec.ts --config=output/playwright/writer-page-area-chrome.config.ts --project=writer --workers=1`. Result: pass, one Chromium scenario exercised file import, native placement and transparency, the page background layer, undo and redo, and reopening the page style.
+- Scoped ESLint, Prettier, and git diff checks passed.

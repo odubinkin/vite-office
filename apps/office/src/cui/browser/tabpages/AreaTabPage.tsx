@@ -4,6 +4,7 @@ import { FillStyle } from "../../../offapi/com/sun/star/drawing/FillStyle";
 import { Color } from "../../../tools/inc/color";
 import PALETTES from "../../../svx/browser/tbxctrls/color-palettes.json" with { type: "json" };
 import { useState } from "react";
+import { BitmapTabPage } from "./BitmapTabPage";
 import type { SvxAreaTabPage } from "../../source/tabpages/tparea";
 
 /** Renders the old and new solid color preview boxes in context. @param props - Native preview values and labels. @returns Color preview. */
@@ -38,6 +39,11 @@ export function AreaTabPage({
 }>): React.JSX.Element {
   const [palette, setPalette] = useState<keyof typeof PALETTES>("Standard");
   const selected = page.GetFillStyle();
+  const modes: [FillStyle.NONE | FillStyle.SOLID | FillStyle.BITMAP, string][] = [
+    [FillStyle.NONE, label("fill-none", "None")],
+    [FillStyle.SOLID, label("fill-color", "Color")],
+  ];
+  if (page.bitmap) modes.push([FillStyle.BITMAP, label("fill-image", "Image")]);
   const color = rgb(page.GetColor());
   const previous = rgb(page.GetOriginalColor());
 
@@ -50,12 +56,7 @@ export function AreaTabPage({
   return (
     <div className="grid gap-3">
       <div className="flex gap-2" role="group" aria-label={label("fill-style", "Fill style")}>
-        {(
-          [
-            [FillStyle.NONE, label("fill-none", "None")],
-            [FillStyle.SOLID, label("fill-color", "Color")],
-          ] as const
-        ).map(
+        {modes.map(
           /** Selects one represented Area mode. @param entry - Native mode and label. @returns Mode button. */
           ([style, name]) => (
             <button
@@ -75,6 +76,9 @@ export function AreaTabPage({
           ),
         )}
       </div>
+      {selected === FillStyle.BITMAP && page.bitmap && (
+        <BitmapTabPage page={page.bitmap} changed={changed} label={label} />
+      )}
       {selected === FillStyle.SOLID && (
         <div className="grid gap-3 rounded border border-slate-200 p-3">
           <label className="flex items-center gap-2 text-sm">

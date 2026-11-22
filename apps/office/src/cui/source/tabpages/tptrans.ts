@@ -10,10 +10,13 @@ export class SvxTransparenceTabPage {
   private edited = false;
   private readonly original: number | undefined;
 
-  /** Reads the initial native item without producing a delta. @param input - Actual page input. @returns Transparency page. */
-  constructor(input: SfxItemSet) {
-    const item = input.GetItemIfSet(XATTR_FILLTRANSPARENCE, false) as
-      XFillTransparenceItem | undefined;
+  /** Reads the initial native item without producing a delta. @param input - Actual page input. @param useEffective - Reads the effective format instead of a mixed selection snapshot. @returns Transparency page. */
+  constructor(input: SfxItemSet, useEffective = false) {
+    const item = (
+      useEffective
+        ? input.Get(XATTR_FILLTRANSPARENCE)
+        : input.GetItemIfSet(XATTR_FILLTRANSPARENCE, false)
+    ) as XFillTransparenceItem | undefined;
     this.original = item?.GetValue();
     this.mode = this.original === undefined ? undefined : this.original === 0 ? "off" : "linear";
     this.linear = this.original || 50;

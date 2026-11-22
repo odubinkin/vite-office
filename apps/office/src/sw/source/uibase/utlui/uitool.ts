@@ -13,6 +13,7 @@ import {
 } from "../../../inc/hintids";
 import { writerColorFromPrimitive } from "../../core/attr/swatrset";
 import type { SwPaM } from "../../core/crsr/pam";
+import type { SwPageDesc } from "../../core/layout/pagedesc";
 import type { SwEditShell } from "../../core/edit/edatmisc";
 
 /** Projects the visible imported highlight as the Character dialog background. @param input - Owned Writer Character input set. @returns Nothing. */
@@ -89,4 +90,9 @@ export function ToggleCharBackground(
 /** Reads the first native position, independent of the tab item's default-distance field. @param tabs - Actual native item. @returns Original default interval. */
 export function GetTabDist(tabs: SvxTabStopItem): number {
   return tabs.Count() ? tabs.At(0).GetTabPos() : SVX_TAB_DEFDIST;
+}
+
+/** Transfers the represented native general page attributes to the master format. @param items - Page Style tab output. @param descriptor - Detached page style copy. @returns Whether any attributes changed. */
+export function ItemSetToPageDesc(items: SfxItemSet, descriptor: SwPageDesc): boolean {
+  return descriptor.GetMaster().SetFormatAttrSet(items);
 }

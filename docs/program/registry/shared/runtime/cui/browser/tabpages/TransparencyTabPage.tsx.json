@@ -8,7 +8,8 @@
     "suite": "shared",
     "subsystem": "paragraph-fill",
     "capabilityIds": [
-      "CAP-0102"
+      "CAP-0102",
+      "CAP-0136"
     ],
     "semantic": {
       "behaviorStatus": "unverified",
@@ -18,7 +19,8 @@
       "evidence": [
         "apps/office/src/cui/browser/tabpages/TransparencyTabPage.tsx#TransparencyTabPage",
         "apps/office/src/sw/browser/presentation/WriterParagraphAreaDialog.test.tsx",
-        "vendor/libreoffice-reference/cui/uiconfig/ui/transparencytabpage.ui"
+        "vendor/libreoffice-reference/cui/uiconfig/ui/transparencytabpage.ui",
+        "apps/office/src/sw/browser/presentation/WriterPageAreaDialog.test.tsx"
       ],
       "justification": "Binds the supported native uniform-transparency radio and numeric controls to the Area preview.",
       "knownViolations": [],

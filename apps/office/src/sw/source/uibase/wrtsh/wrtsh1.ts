@@ -68,9 +68,8 @@ import {
 import { isMoveLeftMargin, moveLeftMarginAtShell } from "../../core/edit/edattr";
 import { pasteWriterTransfer, type WriterPasteDocument } from "../dochdl/swdtflvr";
 import type { WriterPageDescriptorValue } from "../../core/layout/pagedesc";
-import { equalWriterPageDescriptors } from "../../core/layout/pagedesc";
+import { setPageDescriptor } from "./wrtsh1-page";
 import { SwUndoNumOrNoNum } from "../../core/undo/unnum";
-import { SwUndoPageDesc } from "../../core/undo/SwUndoPageDesc";
 import {
   GetSelectionType,
   IsTableSelection,
@@ -819,14 +818,13 @@ export class SwWrtShell extends SwFEShell {
     return isMoveLeftMargin(this.GetDoc(), this.getShellCursor(), right, modulus);
   }
 
-  /** Applies named page geometry as one Writer undo action. @param value - Replacement geometry. @param descriptorName - Target identity. @returns Whether it changed. */
-  public SetPageDescriptor(value: WriterPageDescriptorValue, descriptorName = value.name): boolean {
-    const descriptor = this.GetDoc().FindPageDesc(descriptorName);
-    if (descriptor === undefined) return false;
-    const before = descriptor.GetValue();
-    if (equalWriterPageDescriptors(before, value)) return false;
-    const cursor = this.CaptureCursorState();
-    return this.ApplyAction(new SwUndoPageDesc(before, value, cursor, cursor, descriptorName));
+  /** Applies named page format as one Writer undo action. @param value - Replacement geometry. @param descriptorName - Target identity. @param items - Native page attributes. @returns Whether it changed. */
+  public SetPageDescriptor(
+    value: WriterPageDescriptorValue,
+    descriptorName = value.name,
+    items?: SfxItemSet,
+  ): boolean {
+    return setPageDescriptor(this, value, descriptorName, items);
   }
   /** Applies a page ruler drag to the current descriptor. @param edge - Dragged margin. @param delta - Twip drag delta. @returns Whether changed. */
   public AdjustPageMargin(edge: "left" | "right" | "top" | "bottom", delta: number): boolean {

@@ -1,5 +1,5 @@
 /** @fileoverview Browser presentation of the native uniform Transparency controls and fill preview. */
-import { useId } from "react";
+import { useId, type CSSProperties } from "react";
 import type { Color } from "../../../tools/inc/color";
 import type { SvxTransparenceTabPage } from "../../source/tabpages/tptrans";
 
@@ -7,11 +7,13 @@ import type { SvxTransparenceTabPage } from "../../source/tabpages/tptrans";
 export function TransparencyTabPage({
   page,
   color,
+  bitmap,
   changed,
   label,
 }: Readonly<{
   page: SvxTransparenceTabPage;
   color: Readonly<Color> | undefined;
+  bitmap?: CSSProperties | undefined;
   changed: () => void;
   label: (key: string, fallback: string) => string;
 }>): React.JSX.Element {
@@ -85,6 +87,7 @@ export function TransparencyTabPage({
           style={{
             backgroundColor:
               color && `#${(color.toUInt32() & 0xffffff).toString(16).padStart(6, "0")}`,
+            ...bitmap,
             opacity: mode === "linear" ? 1 - transparency / 100 : 1,
           }}
         />

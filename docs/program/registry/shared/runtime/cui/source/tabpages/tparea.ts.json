@@ -8,7 +8,8 @@
     "suite": "shared",
     "subsystem": "paragraph-fill",
     "capabilityIds": [
-      "CAP-0102"
+      "CAP-0102",
+      "CAP-0136"
     ],
     "semantic": {
       "behaviorStatus": "unverified",
@@ -18,7 +19,8 @@
       "evidence": [
         "apps/office/src/cui/source/tabpages/tparea.ts#SvxAreaTabPage",
         "apps/office/src/sw/browser/presentation/WriterParagraphAreaDialog.test.tsx",
-        "vendor/libreoffice-reference/cui/source/tabpages/tparea.cxx#SvxAreaTabPage::DeactivatePage"
+        "vendor/libreoffice-reference/cui/source/tabpages/tparea.cxx#SvxAreaTabPage::DeactivatePage",
+        "apps/office/src/sw/browser/presentation/WriterPageAreaDialog.test.tsx"
       ],
       "justification": "Retains the native Area selection and pooled None or Color exchange for the represented Writer paragraph fills.",
       "knownViolations": [],
