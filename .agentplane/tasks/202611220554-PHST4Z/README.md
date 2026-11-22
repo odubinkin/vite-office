@@ -1,10 +1,11 @@
 ---
 id: "202611220554-PHST4Z"
 title: "Connect Writer Navigator to native document content"
-status: "DOING"
+result_summary: "Connected the Writer Navigator to live headings, tables and bookmarks, plus physical page navigation."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 9
+revision: 10
 origin:
   system: "manual"
 depends_on: []
@@ -38,11 +39,16 @@ quality_review:
     - "b54bf49e4ecc and task Findings: 78 focused cases, 8 production Chromium cases, exact Navigator and resource reruns, TypeScript and production build"
   findings:
     - "Current physical pages and table follow rows use the native root layout and editing cursor, while menus and F5 control view-only state."
-commit: null
+commit:
+  hash: "b54bf49e4ecc5c61da010eed94fa7ee5539dfdc8"
+  message: "🧩 PHST4Z code: Connect Writer Navigator to native document content"
 comments:
   -
     author: "CODER"
     body: "Start: continue direct-mode task in current checkout."
+  -
+    author: "CODER"
+    body: "Verified: focused Writer and eight Chromium scenarios, TypeScript, production build and scoped audits passed."
 events:
   -
     type: "status"
@@ -57,8 +63,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "78 focused Writer tests, 21 exact resource and view rechecks, 3 final Navigator tests, and 8 Chromium production scenarios passed. Final Navigator browser case, TypeScript, production build and scoped audits passed. Writer view is below the file-size limit."
+  -
+    type: "status"
+    at: "2026-11-22T06:25:40.603Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: focused Writer and eight Chromium scenarios, TypeScript, production build and scoped audits passed."
 doc_version: 3
-doc_updated_at: "2026-11-22T06:21:27.875Z"
+doc_updated_at: "2026-11-22T06:25:40.605Z"
 doc_updated_by: "CODER"
 description: "Show the native headings, tables, and bookmarks in a docked Navigator and route its content and page navigation through the Writer layout and cursor owners."
 sections:
