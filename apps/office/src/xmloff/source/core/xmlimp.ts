@@ -1,6 +1,7 @@
 /** @fileoverview Adapts the bounded SAX stream to LibreOffice-shaped XML import contexts. */
 
 import type { SaxesAttributeNS } from "saxes";
+import { toInt32 } from "../../../o3tl/inc/string_view";
 import {
   parseFastXmlStream,
   DEFAULT_FAST_XML_LIMITS,
@@ -12,6 +13,14 @@ import {
   createLegacySymbolImportConverter,
   type ConvertChar,
 } from "../../../unotools/source/misc/fontcvt";
+
+/** Tests the OOo_2x branch of DocumentInfo's native BuildId classification. @param buildId - Shared import BuildId. @returns Whether the generator used OpenOffice.org 2.x display polarity. */
+export function isOpenOffice2Generator(buildId: string): boolean {
+  const version = buildId.indexOf(";");
+  if (version !== -1 && version + 1 < buildId.length) return false;
+  const build = buildId.indexOf("$");
+  return build !== -1 && toInt32(buildId.slice(0, build)) === 680;
+}
 
 /** ODF import's SAX resource ceilings. */
 export type OdfXmlLimits = FastXmlLimits;

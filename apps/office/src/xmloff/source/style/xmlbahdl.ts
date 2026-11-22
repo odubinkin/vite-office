@@ -151,6 +151,27 @@ export class XMLBoolPropHdl {
   }
 }
 
+/** Native inverse XML boolean used by properties whose UNO polarity is reversed. */
+export class XMLNBoolPropHdl {
+  /** Imports an inverted boolean, including the initialized failure value. @param input - XML token. @param value - Property Any. @returns Whether converted. */
+  importXML(input: string, value: Any): boolean {
+    const boolean: [boolean] = [false];
+    const result = Converter.convertBool(boolean, input);
+    value.insert([!boolean[0]], "bool");
+    return result;
+  }
+
+  /** Exports the inverse of the original boolean. @param output - XML output. @param value - Property Any. @returns Whether emitted. */
+  exportXML(output: [string], value: Any): boolean {
+    const boolean: [boolean] = [false];
+    if (!value.extract(boolean, "bool")) return false;
+    const buffer: [string] = [""];
+    Converter.convertBool(buffer, !boolean[0]);
+    output[0] = buffer[0];
+    return true;
+  }
+}
+
 /** Original signed measure property handler with native byte-width saturation and genuine UNO Any. */
 export class XMLMeasurePropHdl {
   /** Original native width. @param bytes - Signed scalar width. @returns Handler. */

@@ -1,15 +1,18 @@
 /** @fileoverview Concrete Writer item-pool factories for character formatting used by the browser Worker graph. */
 import { SvxCaseMapItem } from "../../../../editeng/source/items/textitem.modes";
 import {
+  SvxBlinkItem,
   SvxCharRotateItem,
   SvxTwoLinesItem,
 } from "../../../../editeng/source/items/textitem.layout";
 import { SvxCharScaleWidthItem } from "../../../../editeng/source/items/textitem.spacing";
 import { SvxEmphasisMarkItem } from "../../../../editeng/inc/emphasismarkitem";
+import { SvxCharHiddenItem } from "../../../../editeng/source/items/charhiddenitem";
 import { SvxBrushItem } from "../../../../editeng/source/items/frmitems.brush";
 import {
   SvxCharReliefItem,
   SvxContourItem,
+  SvxNoHyphenItem,
   SvxOverlineItem,
   SvxShadowedItem,
 } from "../../../../editeng/source/items/textitem";
@@ -67,6 +70,18 @@ export function writerCharacterItemFactory(which: number): SfxPoolItemFactory | 
       return /** Restores the native case map. @param value - Stored value. @returns Case item. */ (
         value,
       ) => new SvxCaseMapItem(Number(value), which);
+    case Which.RES_CHRATR_BLINK:
+      return /** Restores character blinking. @param value - Stored flag. @returns Concrete item. */ (
+        value,
+      ) => new SvxBlinkItem(Boolean(value), which);
+    case Which.RES_CHRATR_HIDDEN:
+      return /** Restores hidden text. @param value - Stored flag. @returns Concrete item. */ (
+        value,
+      ) => new SvxCharHiddenItem(Boolean(value), which);
+    case Which.RES_CHRATR_NOHYPHEN:
+      return /** Restores the character hyphenation override. @param value - Stored flag. @returns Concrete item. */ (
+        value,
+      ) => new SvxNoHyphenItem(Boolean(value), which);
     case Which.RES_CHRATR_CONTOUR:
       return /** Restores the native outline. @param value - Stored value. @returns Contour item. */ (
         value,

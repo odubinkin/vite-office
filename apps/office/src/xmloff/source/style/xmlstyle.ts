@@ -47,6 +47,7 @@ const ignoredStyleDefinitions = new Set([
 
 /** Consumer of completed style definitions; Writer stores canonical results. */
 export interface XMLStyleImportTarget extends XMLListStyleImportTarget {
+  isOpenOffice2Generator?(): boolean;
   registerTheme?(theme: Theme): void;
   createNumberStyle?(element: XMLToken, attributes: FastAttributeList): SvXMLImportContext;
   registerTableStyle(name: string, style: OdfTableStyle): void;
@@ -454,6 +455,7 @@ class XMLStyleContext extends SvXMLImportContext {
         attributes,
         this.target,
         !this.tableItemTextStyle,
+        this.definition.family === "paragraph",
       );
       return new XMLTextPropertySetContext(
         undefined,
@@ -724,11 +726,12 @@ function importOptionalLength(
   return value === null ? undefined : importOdfLength(value, signed, label);
 }
 
-/** Imports supported character properties. @param attributes - Property attributes. @param target - Style and font resolver. @param strict - Whether to reject unsupported attributes or missing face references. @returns Property deltas. */
+/** Imports supported character properties. @param attributes - Property attributes. @param target - Style and font resolver. @param strict - Whether to reject unsupported attributes or missing face references. @param paragraphStyle - Whether to use the paragraph map. @returns Property deltas. */
 function importCharacterProperties(
   attributes: FastAttributeList,
   target: XMLStyleImportTarget,
-  strict = true,
+  strict: boolean,
+  paragraphStyle: boolean,
 ): Partial<OdfCharacterProperties> {
   if (strict)
     attributes.assertOnly(
@@ -843,7 +846,10 @@ function importCharacterProperties(
     ...(complexFontFamily === undefined ? {} : { fontFamilyComplex: complexFontFamily }),
     ...(fontSizeTwips === undefined ? {} : { fontSizeTwips }),
     ...(highlight === null ? {} : { highlight }),
-    ...importTextCharacterProperties(attributes),
+    ...importTextCharacterProperties(attributes, {
+      paragraphStyle,
+      isOOo2x: target.isOpenOffice2Generator?.() ?? false,
+    }),
     ...importScriptHeight(attributes, XMLToken.STYLE_FONT_SIZE_ASIAN, "fontSizeTwipsAsian"),
     ...importScriptHeight(attributes, XMLToken.STYLE_FONT_SIZE_COMPLEX, "fontSizeTwipsComplex"),
   };

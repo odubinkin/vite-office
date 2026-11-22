@@ -158,6 +158,10 @@ const characterTypographyEntries = [
   ["CharCombinePrefix", row(H.RES_CHRATR_TWO_LINES, "OUString", M.MID_START_BRACKET, 1)],
   ["CharCombineSuffix", row(H.RES_CHRATR_TWO_LINES, "OUString", M.MID_END_BRACKET, 1)],
   ["CharScaleWidth", row(H.RES_CHRATR_SCALEW, "sal_Int16", 0, 1)],
+  ["CharCaseMap", row(H.RES_CHRATR_CASEMAP, "sal_Int16", 0, 1)],
+  ["CharFlash", row(H.RES_CHRATR_BLINK, "bool", 0, 1)],
+  ["CharHidden", row(H.RES_CHRATR_HIDDEN, "bool", 0, 1)],
+  ["CharNoHyphenation", row(H.RES_CHRATR_NOHYPHEN, "bool", 0, 1)],
 ] as const;
 const characterTypographyNames = characterTypographyEntries.map(
   /** Shares the represented common typography membership. @param entry - Original row. @returns Property name. */ ([

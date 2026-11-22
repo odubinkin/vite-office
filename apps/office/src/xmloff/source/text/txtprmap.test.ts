@@ -1,6 +1,8 @@
 /** @fileoverview Native scalar property-map transport preserves independent scripts and source merge/failure behavior. */
 import { expect, it } from "vitest";
-import { FastAttributeList } from "../core/xmlimp";
+import { FastAttributeList, isOpenOffice2Generator } from "../core/xmlimp";
+import { getBuildIdFromGenerator } from "../meta/xmlmetai";
+import * as CaseMap from "../../../offapi/com/sun/star/style/CaseMap";
 import { ODF_NAMESPACES, XMLToken } from "../core/xmltoken";
 import { Any } from "../../../cppu/inc/com/sun/star/uno/Any";
 import { SvXMLUnitConverter } from "../core/xmluconv";
@@ -18,12 +20,75 @@ function attributes(pairs: readonly (readonly [string, string])[]): FastAttribut
         name,
         value,
       ]) => {
-        const [prefix, local] = name.split(":") as ["style" | "fo", string];
+        const [prefix, local] = name.split(":") as ["style" | "fo" | "text", string];
         return { name, value, prefix, local, uri: ODF_NAMESPACES[prefix] };
       },
     ),
   );
 }
+
+it("uses the native case-map tables and character flag polarity", /** Checks exact token conversion in both directions. @returns Nothing. */ () => {
+  for (const [name, token, value] of [
+    ["fo:text-transform", "none", CaseMap.NONE],
+    ["fo:text-transform", "uppercase", CaseMap.UPPERCASE],
+    ["fo:text-transform", "lowercase", CaseMap.LOWERCASE],
+    ["fo:text-transform", "capitalize", CaseMap.TITLE],
+    ["fo:font-variant", "small-caps", CaseMap.SMALLCAPS],
+    ["fo:font-variant", "normal", CaseMap.NONE],
+  ] as const) {
+    expect(importTextCharacterProperties(attributes([[name, token]]))).toEqual({
+      caseMap: value,
+    });
+    expect(exportTextCharacterProperties({ caseMap: value })).toContain(`${name}="${token}"`);
+  }
+  const flags = attributes([
+    ["style:text-blinking", "true"],
+    ["text:display", "none"],
+    ["fo:hyphenate", "false"],
+  ]);
+  expect(importTextCharacterProperties(flags)).toEqual({
+    flashing: true,
+    hidden: true,
+    noHyphenation: true,
+  });
+  expect(importTextCharacterProperties(flags, { paragraphStyle: true, isOOo2x: true })).toEqual({
+    flashing: true,
+    hidden: false,
+  });
+  expect(
+    exportTextCharacterProperties({ flashing: false, hidden: false, noHyphenation: false }),
+  ).toBe(' style:text-blinking="false" text:display="true" fo:hyphenate="true"');
+  expect(exportTextCharacterProperties({ noHyphenation: true }, true)).toBe("");
+  expect(exportTextCharacterProperties({ caseMap: CaseMap.UPPERCASE })).toBe(
+    ' fo:text-transform="uppercase"',
+  );
+  expect(
+    importTextCharacterProperties(
+      attributes([
+        ["fo:text-transform", "normal"],
+        ["fo:font-variant", "uppercase"],
+        ["style:text-blinking", "1"],
+        ["text:display", "false"],
+        ["fo:hyphenate", "0"],
+      ]),
+      { isOOo2x: true },
+    ),
+  ).toEqual({});
+});
+
+it("identifies the native OpenOffice.org 2.x BuildId including the NeoOffice alias", /** Covers generator string extraction and LibreOffice classification precedence. @returns Nothing. */ () => {
+  for (const [generator, id, legacy] of [
+    ["OpenOffice.org/2.4 Win32 OpenOffice.org_project/680m12$Build-9286", "680$9286", true],
+    ["NeoOffice/2.2", "680$9134", true],
+    ["OpenOffice.org 1.1", "645$8687", false],
+    ["LibreOffice/3.3$Win32 LibreOffice_project/680m12$Build-9286", "680$9286;3.3", false],
+    ["LibreOffice/26.8.0.2 LibreOffice_project/42", ";26.8.0.2", false],
+    [" OpenOffice.org 1.1", "", false],
+  ] as const) {
+    expect(getBuildIdFromGenerator(generator)).toBe(id);
+    expect(isOpenOffice2Generator(id)).toBe(legacy);
+  }
+});
 it("normalizes native rotation angles and preserves the original typography token rules", /** Checks native boundaries and typed XML export against the original handlers. @returns Nothing. */ () => {
   for (const [input, expected] of [
     ["44", 0],

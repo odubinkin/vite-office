@@ -553,6 +553,10 @@ export enum XMLToken {
   DRAW_FILL_IMAGE_REF_POINT_X,
   DRAW_FILL_IMAGE_REF_POINT_Y,
   DRAW_TILE_REPEAT_OFFSET,
+  FO_FONT_VARIANT,
+  FO_TEXT_TRANSFORM,
+  FO_HYPHENATE,
+  STYLE_TEXT_BLINKING,
 }
 
 const entries: readonly (readonly [string, string, XMLToken])[] = [
@@ -1052,6 +1056,9 @@ const entries: readonly (readonly [string, string, XMLToken])[] = [
   [ODF_NAMESPACES.fo, "text-indent", XMLToken.FO_TEXT_INDENT],
   [ODF_NAMESPACES.fo, "line-height", XMLToken.FO_LINE_HEIGHT],
   [ODF_NAMESPACES.fo, "font-weight", XMLToken.FO_FONT_WEIGHT],
+  [ODF_NAMESPACES.fo, "font-variant", XMLToken.FO_FONT_VARIANT],
+  [ODF_NAMESPACES.fo, "text-transform", XMLToken.FO_TEXT_TRANSFORM],
+  [ODF_NAMESPACES.fo, "hyphenate", XMLToken.FO_HYPHENATE],
   [ODF_NAMESPACES.fo, "letter-spacing", XMLToken.FO_LETTER_SPACING],
   [ODF_NAMESPACES.fo, "font-style", XMLToken.FO_FONT_STYLE],
   [ODF_NAMESPACES.fo, "font-family", XMLToken.FO_FONT_FAMILY],
@@ -1107,6 +1114,7 @@ const entries: readonly (readonly [string, string, XMLToken])[] = [
   [ODF_NAMESPACES.style, "text-combine-start-char", XMLToken.STYLE_TEXT_COMBINE_START_CHAR],
   [ODF_NAMESPACES.style, "text-combine-end-char", XMLToken.STYLE_TEXT_COMBINE_END_CHAR],
   [ODF_NAMESPACES.style, "text-scale", XMLToken.STYLE_TEXT_SCALE],
+  [ODF_NAMESPACES.style, "text-blinking", XMLToken.STYLE_TEXT_BLINKING],
   [ODF_NAMESPACES.style, "text-line-through-style", XMLToken.STYLE_TEXT_LINE_THROUGH_STYLE],
   [ODF_NAMESPACES.style, "text-line-through-type", XMLToken.STYLE_TEXT_LINE_THROUGH_TYPE],
   [ODF_NAMESPACES.style, "text-line-through-width", XMLToken.STYLE_TEXT_LINE_THROUGH_WIDTH],

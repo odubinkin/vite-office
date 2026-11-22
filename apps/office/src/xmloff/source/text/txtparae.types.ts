@@ -57,6 +57,10 @@ export interface OdfCharacterProperties {
   readonly rotation?: number;
   readonly rotationFitsLine?: boolean;
   readonly emphasis?: number;
+  readonly caseMap?: number;
+  readonly flashing?: boolean;
+  readonly hidden?: boolean;
+  readonly noHyphenation?: boolean;
   readonly combineLines?: boolean;
   readonly combinePrefix?: string;
   readonly combineSuffix?: string;

@@ -1,0 +1,35 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/xmloff/source/meta/xmlmetai.ts",
+    "classification": "upstream-mechanism",
+    "state": "active",
+    "suite": "shared",
+    "subsystem": "odf-filter",
+    "capabilityIds": [
+      "CAP-0113"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "none",
+      "evidence": [
+        "apps/office/src/xmloff/source/meta/xmlmetai.ts#getBuildIdFromGenerator",
+        "vendor/libreoffice-reference/xmloff/source/meta/xmlmetai.cxx#SvXMLMetaDocumentContext::setBuildId",
+        "apps/office/src/xmloff/source/text/txtprmap.test.ts"
+      ],
+      "justification": "Extracts the shared import BuildId from original generator text using the native milestone/build syntax, legacy StarOffice and NeoOffice aliases, and LibreOffice version suffix. Document property service initialization and other metadata import remain outside this mapper.",
+      "knownViolations": [],
+      "localSymbols": [
+        "getBuildIdFromGenerator"
+      ],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": "xmloff/source/meta/xmlmetai.cxx",
+      "upstreamSymbols": [
+        "SvXMLMetaDocumentContext::setBuildId"
+      ]
+    }
+  }
+}

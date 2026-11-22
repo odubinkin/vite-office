@@ -1,0 +1,39 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/xmloff/source/style/csmaphdl.ts",
+    "classification": "upstream-mechanism",
+    "state": "active",
+    "suite": "shared",
+    "subsystem": "odf-character",
+    "capabilityIds": [
+      "CAP-0109"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "none",
+      "evidence": [
+        "apps/office/src/xmloff/source/style/csmaphdl.ts#XMLCaseMapPropHdl",
+        "apps/office/src/xmloff/source/style/csmaphdl.ts#XMLCaseMapVariantHdl",
+        "vendor/libreoffice-reference/xmloff/source/style/csmaphdl.cxx#XMLCaseMapPropHdl",
+        "vendor/libreoffice-reference/xmloff/source/style/csmaphdl.cxx#XMLCaseMapVariantHdl",
+        "apps/office/src/xmloff/source/text/txtprmap.test.ts"
+      ],
+      "justification": "The two casing handlers preserve the native keyword tables, signed variant and unsigned transform imports, and selective export for the shared CharCaseMap value. The rest of the native property handler factory and Writer case layout remain outside this module.",
+      "knownViolations": [],
+      "localSymbols": [
+        "XMLCaseMapPropHdl",
+        "XMLCaseMapVariantHdl"
+      ],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": "xmloff/source/style/csmaphdl.cxx",
+      "upstreamSymbols": [
+        "XMLCaseMapPropHdl",
+        "XMLCaseMapVariantHdl"
+      ]
+    }
+  }
+}

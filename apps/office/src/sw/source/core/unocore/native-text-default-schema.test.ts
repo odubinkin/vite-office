@@ -17,6 +17,10 @@ import {
   RES_CHRATR_ROTATE,
   RES_CHRATR_SCALEW,
   RES_CHRATR_EMPHASIS_MARK,
+  RES_CHRATR_CASEMAP,
+  RES_CHRATR_BLINK,
+  RES_CHRATR_HIDDEN,
+  RES_CHRATR_NOHYPHEN,
   RES_CHRATR_TWO_LINES,
 } from "../../../inc/hintids";
 import {
@@ -47,7 +51,7 @@ it("retains static default-table identity and clears MAYBEVOID except the origin
     second = new SwUnoPropertyMapProvider(),
     entries = first.GetPropertyMapEntries(PROPERTY_MAP_TEXT_DEFAULT),
     set = first.GetPropertySet(PROPERTY_MAP_TEXT_DEFAULT);
-  expect(entries.length).toBe(101);
+  expect(entries.length).toBe(105);
   const flags = upstream.originalFlags as Readonly<Record<string, number>>;
   for (const entry of entries) {
     const name = text(entry.aName);
@@ -109,6 +113,10 @@ it("publishes actual native default metadata and excludes cursor-only dispatch p
       ["CharRotationIsFitToLine", RES_CHRATR_ROTATE, MID_FITTOLINE],
       ["CharScaleWidth", RES_CHRATR_SCALEW, 0],
       ["CharEmphasis", RES_CHRATR_EMPHASIS_MARK, MID_EMPHASIS],
+      ["CharCaseMap", RES_CHRATR_CASEMAP, 0],
+      ["CharFlash", RES_CHRATR_BLINK, 0],
+      ["CharHidden", RES_CHRATR_HIDDEN, 0],
+      ["CharNoHyphenation", RES_CHRATR_NOHYPHEN, 0],
       ["CharCombineIsOn", RES_CHRATR_TWO_LINES, MID_TWOLINES],
       ["CharCombinePrefix", RES_CHRATR_TWO_LINES, MID_START_BRACKET],
       ["CharCombineSuffix", RES_CHRATR_TWO_LINES, MID_END_BRACKET],

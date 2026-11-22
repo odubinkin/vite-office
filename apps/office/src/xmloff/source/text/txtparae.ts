@@ -284,7 +284,7 @@ export class XMLTextParagraphExport {
         const textProperties =
           Object.keys(properties).length === 0
             ? ""
-            : exportCharacterPropertyElement(properties, fontFaceName);
+            : exportCharacterPropertyElement(properties, fontFaceName, true);
         if (listRule !== "") {
           const listStyle = listStyleNames.get(listRule);
           /* istanbul ignore next -- The collected paragraph and list-rule maps share one source pass. */
@@ -873,10 +873,11 @@ function parseCharacterPropertiesKey(key: string): Partial<OdfCharacterPropertie
   return JSON.parse(key) as Partial<OdfCharacterProperties>;
 }
 
-/** Emits supported ODF text-property attributes. @param properties - Direct properties. @param fontFaceName - Optional family-to-face resolver. @returns Attribute fragment. */
+/** Emits supported ODF text-property attributes. @param properties - Direct properties. @param fontFaceName - Optional family-to-face resolver. @param paragraphStyle - Whether to use the paragraph map. @returns Attribute fragment. */
 export function exportCharacterAttributes(
   properties: Partial<OdfCharacterProperties>,
   fontFaceName?: FontFaceNameResolver,
+  paragraphStyle = false,
 ): string {
   assertOdfColor(properties.color, "auto", "font color");
   assertOdfColor(properties.highlight, "transparent", "highlight color");
@@ -918,16 +919,17 @@ export function exportCharacterAttributes(
         value,
       ]) => ` ${name}="${escapeXml(value)}"`,
     ),
-    exportTextCharacterProperties(properties),
+    exportTextCharacterProperties(properties, paragraphStyle),
   ].join("");
 }
 
-/** Writes the original text property group, with its element-valued character color when present. @param properties - Native direct properties. @param fontFaceName - Font face resolver. @returns Complete text-properties element. */
+/** Writes the original text property group, with its element-valued character color when present. @param properties - Native direct properties. @param fontFaceName - Font face resolver. @param paragraphStyle - Whether to use the paragraph map. @returns Complete text-properties element. */
 export function exportCharacterPropertyElement(
   properties: Partial<OdfCharacterProperties>,
   fontFaceName?: FontFaceNameResolver,
+  paragraphStyle = false,
 ): string {
-  const attributes = exportCharacterAttributes(properties, fontFaceName);
+  const attributes = exportCharacterAttributes(properties, fontFaceName, paragraphStyle);
   const child = properties.themeColor
     ? exportComplexColor(createOdfThemeColor(properties.themeColor), "char-complex-color")
     : "";

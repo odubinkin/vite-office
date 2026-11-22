@@ -41,6 +41,10 @@ import {
   RES_CHRATR_ROTATE,
   RES_CHRATR_SCALEW,
   RES_CHRATR_EMPHASIS_MARK,
+  RES_CHRATR_CASEMAP,
+  RES_CHRATR_BLINK,
+  RES_CHRATR_HIDDEN,
+  RES_CHRATR_NOHYPHEN,
   RES_CHRATR_TWO_LINES,
 } from "../../../inc/hintids";
 import { RES_CHRATR_WORDLINEMODE, RES_CHRATR_AUTOKERN } from "../../../inc/hintids";
@@ -315,6 +319,7 @@ export function exportStylesXml(
                 pitch,
                 charSet,
               ) => registerWriterFontFace(fonts, family, generic, styleName, pitch, charSet),
+              true,
             );
       const nextName = getParagraphOdfStyleName(document, collection.GetNextTextFormatColl().id);
       const next = nextName === name ? "" : ` style:next-style-name="${escapeXml(nextName)}"`;
@@ -478,6 +483,7 @@ function exportDefaultParagraphStyle(
           /** Resolves the native declared font. @param family - Family. @param generic - ODF family. @param style - Family style. @param pitch - Pitch. @param charset - Encoding. @returns Face name. */
           (family, generic, style, pitch, charset) =>
             registerWriterFontFace(fonts, family, generic, style, pitch, charset),
+          true,
         )
       : "";
     return `<style:default-style style:family="paragraph">${paragraph}${element}</style:default-style>`;
@@ -892,6 +898,10 @@ function assertSupportedItems(
     RES_CHRATR_ROTATE,
     RES_CHRATR_SCALEW,
     RES_CHRATR_EMPHASIS_MARK,
+    RES_CHRATR_CASEMAP,
+    RES_CHRATR_BLINK,
+    RES_CHRATR_HIDDEN,
+    RES_CHRATR_NOHYPHEN,
     RES_CHRATR_TWO_LINES,
     RES_CHRATR_ESCAPEMENT,
     RES_CHRATR_CROSSEDOUT,

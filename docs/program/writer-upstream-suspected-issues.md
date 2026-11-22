@@ -5945,3 +5945,17 @@ Writer preserves the native tokenization and failed assignment.
 
 - [Original emphasis handler](../../vendor/libreoffice-reference/xmloff/source/text/txtprhdl.cxx)
 - [Original XML token enumerator](../../vendor/libreoffice-reference/xmloff/source/core/xmluconv.cxx)
+
+### WRITER-735 — Two ODF casing attributes share one Writer property
+
+The text property maps assign both `fo:font-variant` and
+`fo:text-transform` to `CharCaseMap` without a merge flag. An explicit
+`font-variant="normal"` therefore supplies the same reset as
+`text-transform="none"`. If both attributes set different modes, the
+multi-property import sends two values with the same property name and
+the native name sort has no tie-breaker. Writer retains the single
+property and accepts both original conversions.
+
+- [Original text property tables](../../vendor/libreoffice-reference/xmloff/source/text/txtprmap.cxx)
+- [Original casing handlers](../../vendor/libreoffice-reference/xmloff/source/style/csmaphdl.cxx)
+- [Original multi-property name sort](../../vendor/libreoffice-reference/xmloff/source/style/xmlimppr.cxx)

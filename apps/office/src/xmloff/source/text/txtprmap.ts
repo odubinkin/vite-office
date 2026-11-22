@@ -27,7 +27,8 @@ import { SvXMLUnitConverter } from "../core/xmluconv";
 import { XMLColorTransparentPropHdl, XMLIsTransparentPropHdl } from "../style/xmlbahdl";
 import { XMLFontWeightPropHdl } from "../style/weighhdl";
 import { XMLNamedBoolPropertyHdl } from "../style/NamedBoolPropertyHdl";
-import { XMLBoolPropHdl, XMLPercentPropHdl } from "../style/xmlbahdl";
+import { XMLBoolPropHdl, XMLNBoolPropHdl, XMLPercentPropHdl } from "../style/xmlbahdl";
+import { XMLCaseMapPropHdl, XMLCaseMapVariantHdl } from "../style/csmaphdl";
 import { XMLShadowedPropHdl } from "../style/shdwdhdl";
 import { XMLConstantsPropertyHandler } from "../style/XMLConstantsPropertyHandler";
 import { FontRelief } from "../../../offapi/com/sun/star/text/FontRelief";
@@ -137,6 +138,8 @@ const effects = [
     "sal_Int16",
   ],
   [T.STYLE_TEXT_SCALE, "style:text-scale", "scaleWidth", new XMLPercentPropHdl(2), "sal_Int16"],
+  [T.FO_FONT_VARIANT, "fo:font-variant", "caseMap", new XMLCaseMapVariantHdl(), "sal_Int16"],
+  [T.FO_TEXT_TRANSFORM, "fo:text-transform", "caseMap", new XMLCaseMapPropHdl(), "sal_uInt16"],
 ] as const;
 const combineChar = new XMLTextCombineCharPropHdl();
 const combineCharacters = [
@@ -166,6 +169,9 @@ const boolProperties = [
   [T.STYLE_TEXT_OVERLINE_MODE, "style:text-overline-mode", "wordMode", wordMode],
   [T.STYLE_TEXT_LINE_THROUGH_MODE, "style:text-line-through-mode", "wordMode", wordMode],
   [T.STYLE_LETTER_KERNING, "style:letter-kerning", "autoKerning", autoKerning],
+  [T.STYLE_TEXT_BLINKING, "style:text-blinking", "flashing", new XMLBoolPropHdl()],
+  [T.TEXT_DISPLAY, "text:display", "hidden", new XMLNamedBoolPropertyHdl("none", "true")],
+  [T.FO_HYPHENATE, "fo:hyphenate", "noHyphenation", new XMLNBoolPropHdl()],
   [
     T.STYLE_TEXT_ROTATION_SCALE,
     "style:text-rotation-scale",
@@ -264,8 +270,11 @@ export function exportTextLanguageProperties(
   return result;
 }
 
-/** Emits original handler output from native UNO scalar values. @param properties - Filter handoff. @returns Attribute fragment. */
-export function exportTextCharacterProperties(properties: OdfCharacterProperties): string {
+/** Emits original handler output from native UNO scalar values. @param properties - Filter handoff. @param paragraphStyle - Whether to use the paragraph map. @returns Attribute fragment. */
+export function exportTextCharacterProperties(
+  properties: OdfCharacterProperties,
+  paragraphStyle = false,
+): string {
   const value = new Any(),
     output: [string] = [""];
   let result = "";
@@ -275,11 +284,11 @@ export function exportTextCharacterProperties(properties: OdfCharacterProperties
       if (kerning.exportXML(output, value, kerningConverter))
         result += ` fo:letter-spacing="${output[0]}"`;
     }
-    for (const [, name, key, handler] of boolProperties) {
+    for (const [token, name, key, handler] of boolProperties) {
+      if (paragraphStyle && token === T.FO_HYPHENATE) continue;
       if (properties[key] !== undefined) {
         value.insert([properties[key]], "bool");
-        handler.exportXML(output, value, converter);
-        result += ` ${name}="${output[0]}"`;
+        if (handler.exportXML(output, value, converter)) result += ` ${name}="${output[0]}"`;
       }
     }
     for (const [, name, key] of combineCharacters) {
@@ -358,9 +367,10 @@ export function exportTextCharacterProperties(properties: OdfCharacterProperties
     value.dispose();
   }
 }
-/** Imports native scalar properties, merging underline attributes in actual SAX order. @param attributes - Original source order. @returns Successful property conversions. */
+/** Imports native scalar properties in SAX order. @param attributes - Original source order. @param options - Active map and generator compatibility. @returns Successful property conversions. */
 export function importTextCharacterProperties(
   attributes: FastAttributeList,
+  options: { readonly paragraphStyle?: boolean; readonly isOOo2x?: boolean } = {},
 ): Partial<OdfCharacterProperties> {
   const result: Record<string, number | boolean | string> = {},
     value = new Any(),
@@ -395,10 +405,11 @@ export function importTextCharacterProperties(
           item === token,
       );
       if (boolean !== undefined) {
+        if (options.paragraphStyle && token === T.FO_HYPHENATE) continue;
         if (boolean[3].importXML(text, value, converter)) {
           const scalar: [boolean] = [false];
           value.extract(scalar, "bool");
-          result[boolean[2]] = scalar[0];
+          result[boolean[2]] = token === T.TEXT_DISPLAY && options.isOOo2x ? !scalar[0] : scalar[0];
         }
         continue;
       }
@@ -637,6 +648,10 @@ export function applyTextImportProperties(
       ["rotation", "CharRotation", "sal_Int16"],
       ["rotationFitsLine", "CharRotationIsFitToLine", "bool"],
       ["emphasis", "CharEmphasis", "sal_Int16"],
+      ["caseMap", "CharCaseMap", "sal_Int16"],
+      ["flashing", "CharFlash", "bool"],
+      ["hidden", "CharHidden", "bool"],
+      ["noHyphenation", "CharNoHyphenation", "bool"],
       ["combineLines", "CharCombineIsOn", "bool"],
       ["combinePrefix", "CharCombinePrefix", "OUString"],
       ["combineSuffix", "CharCombineSuffix", "OUString"],

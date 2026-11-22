@@ -13,12 +13,17 @@ import { SvxCharRotateItem } from "../../../../editeng/inc/charrotateitem";
 import { SvxCharScaleWidthItem } from "../../../../editeng/inc/charscaleitem";
 import { SvxEmphasisMarkItem } from "../../../../editeng/inc/emphasismarkitem";
 import { SvxTwoLinesItem } from "../../../../editeng/inc/twolinesitem";
+import { SvxCaseMapItem } from "../../../../editeng/source/items/textitem.modes";
+import { SvxCaseMap } from "../../../../editeng/inc/svxenum";
+import { SvxBlinkItem } from "../../../../editeng/source/items/textitem.layout";
+import { SvxCharHiddenItem } from "../../../../editeng/source/items/charhiddenitem";
 import {
   SvxWeightItem,
   SvxPostureItem,
   SvxFontHeightItem,
   SvxUnderlineItem,
   FontLineStyle,
+  SvxNoHyphenItem,
 } from "../../../../editeng/source/items/textitem";
 import { Color } from "../../../../tools/inc/color";
 import { SfxItemSet } from "../../../../svl/source/items/itemset";
@@ -41,6 +46,10 @@ import {
   RES_CHRATR_SCALEW,
   RES_CHRATR_EMPHASIS_MARK,
   RES_CHRATR_TWO_LINES,
+  RES_CHRATR_CASEMAP,
+  RES_CHRATR_BLINK,
+  RES_CHRATR_HIDDEN,
+  RES_CHRATR_NOHYPHEN,
   RES_TXTATR_AUTOFMT,
   WRITER_CHARACTER_WHICH_RANGES,
 } from "../../../inc/hintids";
@@ -62,6 +71,89 @@ function itemAt(node: SwTextNode, offset: number, which: number) {
     ? (hint.format.GetStyleHandle().GetItemIfSet(which, false) ?? node.GetAttr(which))
     : node.GetAttr(which);
 }
+
+/** Checks the native character items without applying visual formatting to the model text. @param document - Writer model. @param legacy - Whether generator inversion was applied. @returns Nothing. */
+function expectCharacterFlags(document: ReturnType<typeof createWriterDocument>, legacy: boolean) {
+  const node = document.paragraphs[0] as SwTextNode;
+  expect(node.GetText()).toBe("abcd");
+  for (const [offset, mode, flashing, hidden, noHyphen] of [
+    [1, SvxCaseMap.SmallCaps, true, !legacy, true],
+    [3, SvxCaseMap.Uppercase, false, legacy, false],
+  ] as const) {
+    const casing = itemAt(node, offset, RES_CHRATR_CASEMAP);
+    const flash = itemAt(node, offset, RES_CHRATR_BLINK);
+    const visibility = itemAt(node, offset, RES_CHRATR_HIDDEN);
+    const hyphenation = itemAt(node, offset, RES_CHRATR_NOHYPHEN);
+    assert(casing instanceof SvxCaseMapItem);
+    assert(flash instanceof SvxBlinkItem);
+    assert(visibility instanceof SvxCharHiddenItem);
+    assert(hyphenation instanceof SvxNoHyphenItem);
+    expect(casing.GetCaseMap()).toBe(mode);
+    expect(flash.GetValue()).toBe(flashing);
+    expect(visibility.GetValue()).toBe(hidden);
+    expect(hyphenation.GetValue()).toBe(noHyphen);
+  }
+}
+
+it.each([false, true])(
+  "round-trips native character flags with legacy generator %s",
+  /** Exercises upstream small caps and blink fixture attributes, named and automatic styles, and modern versus old hidden-text polarity. @param legacy - Whether to supply an old generator. @returns Completion. */ async (
+    legacy,
+  ) => {
+    const namespaces =
+      'xmlns:office="urn:oasis:names:tc:opendocument:xmlns:office:1.0" xmlns:style="urn:oasis:names:tc:opendocument:xmlns:style:1.0" xmlns:text="urn:oasis:names:tc:opendocument:xmlns:text:1.0" xmlns:fo="urn:oasis:names:tc:opendocument:xmlns:xsl-fo-compatible:1.0" xmlns:meta="urn:oasis:names:tc:opendocument:xmlns:meta:1.0"';
+    const fixture = new Uint8Array(
+      readFileSync("../../vendor/libreoffice-reference/sw/qa/extras/odfexport/data/tdf100492.odt"),
+    );
+    const fixtureStyles = await (await DocumentArchive.open(fixture)).readTextEntry("styles.xml");
+    assert(fixtureStyles);
+    const fixtureDocument = new DOMParser().parseFromString(fixtureStyles, "application/xml");
+    const sampleStyles = Array.from(
+      fixtureDocument.getElementsByTagNameNS(
+        "urn:oasis:names:tc:opendocument:xmlns:style:1.0",
+        "style",
+      ),
+    );
+    const smallCaps = sampleStyles
+      .find((sample) => sample.getAttribute("style:name") === "Titre_20_1_20_Car")
+      ?.firstElementChild?.getAttribute("fo:font-variant");
+    const blinking = sampleStyles
+      .find((sample) => sample.getAttribute("style:name") === "ListLabel_20_1")
+      ?.firstElementChild?.getAttribute("style:text-blinking");
+    expect([smallCaps, blinking]).toEqual(["small-caps", "true"]);
+    const styles = `<office:document-styles ${namespaces}><office:styles><style:style style:name="TextFlags" style:family="paragraph"><style:text-properties fo:text-transform="uppercase" style:text-blinking="false" text:display="true" fo:hyphenate="false"/></style:style></office:styles></office:document-styles>`;
+    const content = `<office:document-content ${namespaces}><office:automatic-styles><style:style style:name="Flags" style:family="text"><style:text-properties fo:font-variant="${smallCaps}" style:text-blinking="${blinking}" text:display="none" fo:hyphenate="false"/></style:style></office:automatic-styles><office:body><office:text><text:p text:style-name="TextFlags"><text:span text:style-name="Flags">ab</text:span>cd</text:p></office:text></office:body></office:document-content>`;
+    const generator = legacy
+      ? "OpenOffice.org/2.4 Win32 OpenOffice.org_project/680m12$Build-9286"
+      : "LibreOffice/26.8.0.2 LibreOffice_project/42";
+    const meta = `<office:document-meta ${namespaces}><office:meta><meta:generator>${generator}</meta:generator></office:meta></office:document-meta>`;
+    const { document } = importWriterXml(styles, content, metadata, meta);
+    let transferred: typeof document | undefined;
+    let reopened: typeof document | undefined;
+    try {
+      expectCharacterFlags(document, legacy);
+      transferred = restoreOdtWriterTransfer(structuredClone(createOdtWriterTransfer(document)));
+      expectCharacterFlags(transferred, legacy);
+      const bytes = await writeOdtDocument(transferred, metadata);
+      const archive = await DocumentArchive.open(bytes);
+      const stylesXml = await archive.readTextEntry("styles.xml");
+      const contentXml = await archive.readTextEntry("content.xml");
+      expect(stylesXml).toContain('fo:text-transform="uppercase"');
+      expect(stylesXml).toContain(`text:display="${legacy ? "none" : "true"}"`);
+      expect(stylesXml).not.toContain("fo:hyphenate=");
+      expect(contentXml).toContain('fo:font-variant="small-caps"');
+      expect(contentXml).toContain('style:text-blinking="true"');
+      expect(contentXml).toContain('fo:hyphenate="false"');
+      expect(contentXml).toContain(`text:display="${legacy ? "true" : "none"}"`);
+      reopened = (await readOdtDocument(bytes, metadata)).document;
+      expectCharacterFlags(reopened, legacy);
+    } finally {
+      reopened?.Dispose();
+      transferred?.Dispose();
+      document.Dispose();
+    }
+  },
+);
 
 it("retains the original tdf106001-2.odt text scale through Writer ODT", /** Ports the ODT-source scale used by LibreOffice's tdf106001 export fixture. @returns Completion. */ async () => {
   const fixture = new Uint8Array(

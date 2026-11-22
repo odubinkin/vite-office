@@ -30,6 +30,9 @@ import { SvxKerningItem } from "../../../../editeng/inc/kernitem";
 import { SvxCharRotateItem } from "../../../../editeng/inc/charrotateitem";
 import { SvxCharScaleWidthItem } from "../../../../editeng/inc/charscaleitem";
 import { SvxEmphasisMarkItem } from "../../../../editeng/inc/emphasismarkitem";
+import { SvxCaseMapItem } from "../../../../editeng/source/items/textitem.modes";
+import { SvxBlinkItem } from "../../../../editeng/source/items/textitem.layout";
+import { SvxCharHiddenItem } from "../../../../editeng/source/items/charhiddenitem";
 import { SvxTwoLinesItem } from "../../../../editeng/inc/twolinesitem";
 import { MID_EMPHASIS } from "../../../../editeng/inc/memberids";
 import { Any } from "../../../../cppu/inc/com/sun/star/uno/Any";
@@ -44,6 +47,7 @@ import {
   SvxContourItem,
   SvxShadowedItem,
   SvxCharReliefItem,
+  SvxNoHyphenItem,
 } from "../../../../editeng/source/items/textitem";
 import { ConvertFontWeight, ConvertFontSlant } from "../../../../vcl/inc/unohelp";
 import { getFontFamilyGeneric } from "../../../../xmloff/source/style/fonthdl";
@@ -74,6 +78,10 @@ import {
   RES_CHRATR_ROTATE,
   RES_CHRATR_SCALEW,
   RES_CHRATR_EMPHASIS_MARK,
+  RES_CHRATR_CASEMAP,
+  RES_CHRATR_BLINK,
+  RES_CHRATR_HIDDEN,
+  RES_CHRATR_NOHYPHEN,
   RES_CHRATR_TWO_LINES,
   RES_CHRATR_WEIGHT,
 } from "../../../inc/hintids";
@@ -107,6 +115,10 @@ export function getCharacterProperties(
   const rotation = set.GetItemIfSet(RES_CHRATR_ROTATE, inherited);
   const scaleWidth = set.GetItemIfSet(RES_CHRATR_SCALEW, inherited);
   const emphasis = set.GetItemIfSet(RES_CHRATR_EMPHASIS_MARK, inherited);
+  const caseMap = set.GetItemIfSet(RES_CHRATR_CASEMAP, inherited);
+  const flash = set.GetItemIfSet(RES_CHRATR_BLINK, inherited);
+  const hidden = set.GetItemIfSet(RES_CHRATR_HIDDEN, inherited);
+  const noHyphen = set.GetItemIfSet(RES_CHRATR_NOHYPHEN, inherited);
   const twoLines = set.GetItemIfSet(RES_CHRATR_TWO_LINES, inherited);
   const color = set.GetItemIfSet(RES_CHRATR_COLOR, inherited);
   const highlight = set.GetItemIfSet(RES_CHRATR_HIGHLIGHT, inherited);
@@ -139,6 +151,10 @@ export function getCharacterProperties(
     rotation === undefined &&
     scaleWidth === undefined &&
     emphasis === undefined &&
+    caseMap === undefined &&
+    flash === undefined &&
+    hidden === undefined &&
+    noHyphen === undefined &&
     twoLines === undefined &&
     crossedOut === undefined &&
     escapement === undefined &&
@@ -298,7 +314,13 @@ export function getCharacterProperties(
     ...(scaleWidth instanceof SvxCharScaleWidthItem
       ? { scaleWidth: (scaleWidth.GetValue() << 16) >> 16 }
       : {}),
-    ...(emphasis instanceof SvxEmphasisMarkItem ? { emphasis: emphasisValue(emphasis) } : {}),
+    ...(emphasis instanceof SvxEmphasisMarkItem
+      ? { emphasis: characterShortValue(emphasis, MID_EMPHASIS) }
+      : {}),
+    ...(caseMap instanceof SvxCaseMapItem ? { caseMap: characterShortValue(caseMap) } : {}),
+    ...(flash instanceof SvxBlinkItem ? { flashing: flash.GetValue() } : {}),
+    ...(hidden instanceof SvxCharHiddenItem ? { hidden: hidden.GetValue() } : {}),
+    ...(noHyphen instanceof SvxNoHyphenItem ? { noHyphenation: noHyphen.GetValue() } : {}),
     ...(twoLines instanceof SvxTwoLinesItem
       ? {
           combineLines: twoLines.GetValue(),
@@ -313,11 +335,11 @@ export function getCharacterProperties(
   };
 }
 
-/** Reads the UNO enum from the pooled emphasis flags. @param item - Native character item. @returns Mapped UNO value. */
-function emphasisValue(item: SvxEmphasisMarkItem): number {
+/** Reads the native mapped UNO short. @param item - Native character item. @param member - UNO member selector. @returns Mapped value. */
+function characterShortValue(item: SvxCaseMapItem | SvxEmphasisMarkItem, member = 0): number {
   const value = new Any();
   try {
-    item.QueryValue(value, MID_EMPHASIS);
+    item.QueryValue(value, member);
     const scalar: [number] = [0];
     value.extract(scalar, "sal_Int16");
     return scalar[0];

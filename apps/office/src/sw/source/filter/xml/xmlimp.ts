@@ -42,6 +42,7 @@ import { applyNamedParagraphStyles } from "../../../../xmloff/source/style/prsty
 
 import {
   FastAttributeList,
+  isOpenOffice2Generator,
   parseOdfXmlStream,
   SvXMLIgnoreContext,
   SvXMLImportContext,
@@ -49,6 +50,7 @@ import {
   type OdfXmlParseOptions,
   type SvXMLImportRootFactory as SvXMLImportContract,
 } from "../../../../xmloff/source/core/xmlimp";
+import { getBuildIdFromGenerator } from "../../../../xmloff/source/meta/xmlmetai";
 import { XMLToken } from "../../../../xmloff/source/core/xmltoken";
 import {
   XMLFontStylesContext,
@@ -135,10 +137,19 @@ export function importWriterXml(
   } = {},
 ): ImportedWriterDocument {
   let locale = metadata.locale ?? "en-US";
+  let title = metadata.title;
+  let buildId = "";
   if (metaXml !== undefined) {
     const metadataImport = new SwXMLImport(new SwDoc(false));
-    metadataImport.parse(metaXml, XMLToken.OFFICE_DOCUMENT_META, options);
-    locale = metadataImport.language ?? locale;
+    try {
+      metadataImport.parse(metaXml, XMLToken.OFFICE_DOCUMENT_META, options);
+      locale = metadataImport.language ?? locale;
+      title = metadataImport.title ?? title;
+      buildId = metadataImport.buildId ?? "";
+    } finally {
+      metadataImport.dispose();
+      metadataImport.document.Dispose();
+    }
   }
   const xmlImport = new SwXMLImport(
     new SwDoc({
@@ -149,6 +160,7 @@ export function importWriterXml(
         : { defaultFontDevice: options.defaultFontDevice }),
     }),
     options.graphicHelper,
+    isOpenOffice2Generator(buildId),
   );
   xmlImport.document.SetInReading(true);
   xmlImport.document.SetInXMLImport(true);
@@ -164,11 +176,10 @@ export function importWriterXml(
       xmlImport.parse(contentXml, XMLToken.OFFICE_DOCUMENT_CONTENT, options);
       xmlImport.finishContent();
     }
-    if (metaXml !== undefined) xmlImport.parse(metaXml, XMLToken.OFFICE_DOCUMENT_META, options);
     complete = true;
     return {
       document: xmlImport.document,
-      title: xmlImport.title ?? metadata.title,
+      title,
     };
   } finally {
     xmlImport.dispose();
@@ -342,11 +353,18 @@ class SwXMLImport
   }
   public title: string | undefined;
   public language: string | undefined;
+  public buildId: string | undefined;
 
-  /** Creates a coordinator around a temporary document. @param document - Temporary Writer model. @param graphicHelper - Package-local images. @returns Coordinator. */
+  /** Supplies the native hidden-text compatibility branch to the text property map. @returns Whether the package generator is OOo 2.x. */
+  public isOpenOffice2Generator(): boolean {
+    return this.openOffice2Generator;
+  }
+
+  /** Creates a coordinator around a temporary document. @param document - Temporary Writer model. @param graphicHelper - Package-local images. @param openOffice2Generator - Cached generator classification from metadata. @returns Coordinator. */
   public constructor(
     document: SwDoc,
     private readonly graphicHelper = new SvXMLGraphicHelper(),
+    private readonly openOffice2Generator = false,
   ) {
     super(document);
     this.model = new SwXTextDocument(document);
@@ -974,9 +992,9 @@ class SwXMLBodyContext extends SvXMLImportContext {
   }
 }
 
-/** Imports metadata while explicitly ignoring the known generator element. */
+/** Imports metadata consumed by Writer and the shared XML property mappers. */
 class XMLMetaContext extends SvXMLImportContext {
-  /** Ignores only metadata fields without canonical Writer effect. @param element - Child token. @returns Whether metadata-only. */
+  /** Discards attributes of metadata fields whose XML attributes are not consumed. @param element - Child token. @returns Whether to skip diagnostics. */
   public override ignoreUnknownAttributesForChild(element: XMLToken): boolean {
     return ignoredMetadataChildren.has(element);
   }
@@ -990,6 +1008,16 @@ class XMLMetaContext extends SvXMLImportContext {
     element: XMLToken,
     attributes: FastAttributeList,
   ): SvXMLImportContext | null {
+    if (element === XMLToken.META_GENERATOR) {
+      if (this.xmlImport.buildId !== undefined) return new SvXMLIgnoreContext(true);
+      return new XMLTitleContext(
+        /** Records the BuildId consumed by the document's importers. @param generator - Raw generator text. @returns Nothing. */
+        (generator) => {
+          this.xmlImport.buildId = getBuildIdFromGenerator(generator);
+        },
+        false,
+      );
+    }
     if (element === XMLToken.DC_TITLE) {
       attributes.assertOnly([], "metadata title");
       this.xmlImport.startTitle();
@@ -1015,11 +1043,14 @@ class XMLMetaContext extends SvXMLImportContext {
   }
 }
 
-/** Accumulates the bounded title element. */
+/** Accumulates a metadata text value. */
 class XMLTitleContext extends SvXMLImportContext {
   private value = "";
-  /** Creates a title accumulator. @param commit - Completion callback. @returns Context. */
-  public constructor(private readonly commit: (title: string) => void) {
+  /** Creates an accumulator. @param commit - Completion callback. @param trim - Whether to trim and require text. @returns Context. */
+  public constructor(
+    private readonly commit: (value: string) => void,
+    private readonly trim = true,
+  ) {
     super();
   }
   /** Appends title characters. @param characters - Decoded text. @returns Nothing. */
@@ -1028,7 +1059,7 @@ class XMLTitleContext extends SvXMLImportContext {
   }
   /** Commits a non-empty normalized title. @returns Nothing. */
   public override endFastElement(): void {
-    const title = this.value.trim();
-    if (title.length > 0) this.commit(title);
+    const value = this.trim ? this.value.trim() : this.value;
+    if (!this.trim || value.length > 0) this.commit(value);
   }
 }
