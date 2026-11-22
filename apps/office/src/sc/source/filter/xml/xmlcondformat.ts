@@ -38,6 +38,7 @@ import {
   ScColorScaleFormat,
   ScAxisPosition,
   ScDataBarFormat,
+  ScIconSetFormat,
 } from "../../../inc/colorscale";
 
 const odf = FormulaGrammar.AddressConvention.CONV_ODF;
@@ -119,6 +120,20 @@ function readScaleEntry(
   if (type === ScaleType.FORMULA)
     entry.SetFormula(source, document, new ScAddress(0, 0, tab), grammar);
   return entry;
+}
+
+/** Reads the original formatting entry shared by data bars and icon sets. @param attributes - XML threshold. @param document - Workbook. @param tab - Containing sheet. @returns Owned threshold. */
+function readFormattingEntry(
+  attributes: FastAttributeList,
+  document: ScDocument,
+  tab: number,
+): ScColorScaleEntry {
+  const equal = attributes.get(XMLToken.CALCEXT_GREATER_EQUAL);
+  const mode =
+    equal === null || rtl_str_toBoolean(new TextEncoder().encode(equal + "\0"))
+      ? Mode.EqGreater
+      : Mode.Greater;
+  return readScaleEntry(attributes, document, tab, new Color(), mode);
 }
 
 /** Reads a native RGB attribute with the initial default color. @param source - XML color. @returns Color. */
@@ -214,27 +229,57 @@ class ScXMLDataBarFormatContext extends ScXMLImportContext {
     data.mnMaxLength = max === 0 ? 100 : max;
     try {
       const [lower, upper] = this.limits;
-      if (lower) data.mpLowerLimit = this.readLimit(lower, document, tab);
-      if (upper) data.mpUpperLimit = this.readLimit(upper, document, tab);
+      if (lower) data.mpLowerLimit = readFormattingEntry(lower, document, tab);
+      if (upper) data.mpUpperLimit = readFormattingEntry(upper, document, tab);
       return rule;
     } catch (error) {
       rule.Dispose();
       throw error;
     }
   }
+}
 
-  /** Compiles one limit with the FastAttributeList boolean conversion for the comparison. @param attributes - XML threshold. @param document - Workbook. @param tab - Containing sheet. @returns Owned limit. */
-  private readLimit(
+/** Native icon-set context with its ordered formatting entries. */
+class ScXMLIconSetFormatContext extends ScXMLImportContext {
+  private readonly entries: FastAttributeList[] = [];
+  /** Retains icon-set attributes until threshold formulas can be compiled. @param owner - Importer. @param attributes - Rule attributes. */
+  constructor(
+    owner: ScXMLImport,
+    private readonly attributes: FastAttributeList,
+  ) {
+    super(owner);
+  }
+
+  /** Reads the original icon-set threshold children. @param token - Child. @param attributes - Threshold attributes. @returns Child context. */
+  override createFastChildContext(
+    token: XMLToken,
     attributes: FastAttributeList,
-    document: ScDocument,
-    tab: number,
-  ): ScColorScaleEntry {
-    const equal = attributes.get(XMLToken.CALCEXT_GREATER_EQUAL);
-    const mode =
-      equal === undefined || rtl_str_toBoolean(new TextEncoder().encode(equal + "\0"))
-        ? Mode.EqGreater
-        : Mode.Greater;
-    return readScaleEntry(attributes, document, tab, new Color(), mode);
+  ): SvXMLImportContext {
+    if (token === XMLToken.CALCEXT_FORMATTING_ENTRY) this.entries.push(attributes);
+    return new SvXMLIgnoreContext(true);
+  }
+
+  /** Adopts the native icon-set settings and bound thresholds. @param document - Workbook. @param tab - Containing sheet. @returns Owned rule. */
+  Finalize(document: ScDocument, tab: number): ScIconSetFormat {
+    const rule = new ScIconSetFormat(document);
+    const data = rule.GetIconSetData();
+    data.eIconSetType = ScIconSetFormat.getIconSetType(
+      this.attributes.get(XMLToken.CALCEXT_ICON_SET_TYPE) ?? "",
+    );
+    const showValue = this.attributes.get(XMLToken.CALCEXT_SHOW_VALUE);
+    if (showValue) {
+      const visible: [boolean] = [true];
+      Converter.convertBool(visible, showValue);
+      data.mbShowValue = !visible[0];
+    }
+    try {
+      for (const entry of this.entries)
+        data.m_Entries.push(readFormattingEntry(entry, document, tab));
+      return rule;
+    } catch (error) {
+      rule.Dispose();
+      throw error;
+    }
   }
 }
 
@@ -306,7 +351,11 @@ export class ScXMLConditionalFormatsContext extends ScXMLImportContext {
 class ScXMLConditionalFormatContext extends ScXMLImportContext {
   private readonly ranges: string;
   private readonly conditions: (
-    Condition | DateCondition | ScXMLColorScaleFormatContext | ScXMLDataBarFormatContext
+    | Condition
+    | DateCondition
+    | ScXMLColorScaleFormatContext
+    | ScXMLDataBarFormatContext
+    | ScXMLIconSetFormatContext
   )[] = [];
   /** Adopts the XML range record. @param owner - Importer. @param attributes - Original attributes. @returns Context. */
   constructor(owner: ScXMLImport, attributes: FastAttributeList) {
@@ -327,6 +376,11 @@ class ScXMLConditionalFormatContext extends ScXMLImportContext {
       const bar = new ScXMLDataBarFormatContext(this.GetScImport(), attributes);
       this.conditions.push(bar);
       return bar;
+    }
+    if (element === XMLToken.CALCEXT_ICON_SET) {
+      const icons = new ScXMLIconSetFormatContext(this.GetScImport(), attributes);
+      this.conditions.push(icons);
+      return icons;
     }
     if (element === XMLToken.CALCEXT_DATE_IS) {
       const value = dateTypes.indexOf(attributes.get(XMLToken.CALCEXT_DATE) ?? "");
@@ -358,7 +412,8 @@ class ScXMLConditionalFormatContext extends ScXMLImportContext {
       for (const condition of this.conditions) {
         if (
           condition instanceof ScXMLColorScaleFormatContext ||
-          condition instanceof ScXMLDataBarFormatContext
+          condition instanceof ScXMLDataBarFormatContext ||
+          condition instanceof ScXMLIconSetFormatContext
         ) {
           format.AddEntry(condition.Finalize(document, tab));
           continue;
@@ -430,13 +485,15 @@ function writeNumber(number: number): string {
   }
 }
 
-/** Serializes a native threshold, including the upper automatic spelling. @param entry - Threshold. @param first - Whether this is the lower endpoint. @returns Threshold attributes. */
-function writeScaleEntry(entry: ScColorScaleEntry, first = true): string {
+/** Serializes a native threshold, including the upper automatic spelling. @param entry - Threshold. @param first - Whether this is the lower endpoint. @param writeComparison - Whether this rule emits the mode. @returns Threshold attributes. */
+function writeScaleEntry(entry: ScColorScaleEntry, first = true, writeComparison = false): string {
   const type = entry.GetType();
   const value =
     type === ScaleType.FORMULA ? entry.GetFormula(grammar) : writeNumber(entry.GetValue());
   const kind = type === ScaleType.AUTO && !first ? "auto-maximum" : scaleTypes[type];
-  return ` calcext:value="${escapeXml(value)}" calcext:type="${kind}"`;
+  const equal =
+    writeComparison && entry.GetMode() !== Mode.EqGreater ? ' calcext:greater_equal="false"' : "";
+  return ` calcext:value="${escapeXml(value)}"${equal} calcext:type="${kind}"`;
 }
 
 /** Formats an XML RGB attribute using the native color converter. @param color - Color. @returns XML color. */
@@ -464,6 +521,23 @@ function WriteDataBar(bar: ScDataBarFormat): string {
   return `<calcext:data-bar${attributes}><calcext:formatting-entry${writeScaleEntry(data.mpLowerLimit)}/><calcext:formatting-entry${writeScaleEntry(data.mpUpperLimit, false)}/></calcext:data-bar>`;
 }
 
+/** Writes native icon-set XML with the original nested visibility attribute placement. @param icons - Rule. @returns XML fragment. */
+function WriteIconSet(icons: ScIconSetFormat): string {
+  const data = icons.GetIconSetData();
+  const name = ScIconSetFormat.getIconSetName(data.eIconSetType);
+  const custom = data.mbCustom ? ' calcext:custom="true"' : "";
+  let children = "";
+  if (data.mbCustom)
+    for (const [type, index] of data.maCustomVector)
+      children += `<calcext:custom-iconset calcext:custom-iconset-name="${ScIconSetFormat.getIconSetName(type)}" calcext:custom-iconset-index="${index}"/>`;
+  let visibility = data.mbShowValue ? "" : ' calcext:show-value="false"';
+  for (const entry of icons) {
+    children += `<calcext:formatting-entry${visibility}${writeScaleEntry(entry, true, true)}/>`;
+    visibility = "";
+  }
+  return `<calcext:icon-set calcext:icon-set-type="${name}"${custom}>${children}</calcext:icon-set>`;
+}
+
 /** Writes the original Calc extension from the sheet's native conditional ranges. @param document - Workbook. @param table - Sheet. @param standalone - Declare the namespace for worker XML. @returns Conditional-format XML. */
 export function ExportConditionalFormat(
   document: ScDocument,
@@ -481,6 +555,10 @@ export function ExportConditionalFormat(
       }
       if (entry instanceof ScDataBarFormat) {
         rules += WriteDataBar(entry);
+        continue;
+      }
+      if (entry instanceof ScIconSetFormat) {
+        rules += WriteIconSet(entry);
         continue;
       }
       if (entry instanceof ScCondDateFormatEntry) {

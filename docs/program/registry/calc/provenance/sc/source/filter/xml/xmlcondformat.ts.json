@@ -25,7 +25,8 @@
       "Serializes and imports the original operand-free is-error and is-no-error CALCEXT condition lexemes.",
       "Imports and writes the source duplicate, unique, rank and average ODS condition forms with original prefixes and formula operands.",
       "Entering the original extension context sets the document-level legacy-map gate even when the element has no entries.",
-      "Reads native and legacy data-bar threshold elements and persists the native data-bar attributes, formulas and signed numeric thresholds through ODS and Worker XML."
+      "Reads native and legacy data-bar threshold elements and persists the native data-bar attributes, formulas and signed numeric thresholds through ODS and Worker XML.",
+      "Reads and writes native icon-set formatting entries, including the source visibility placement and custom icon output."
     ],
     "omittedResponsibilities": [
       "Other unrepresented conditional format families remain pending."
@@ -95,6 +96,10 @@
         {
           "path": "apps/office/src/sc/source/filter/xml/ods-data-bars.test.ts",
           "marker": "preserves the data-bar rules from LibreOffice"
+        },
+        {
+          "path": "apps/office/src/sc/source/filter/xml/ods-icon-sets.test.ts",
+          "marker": "ports LibreOffice testTdf64401"
         }
       ],
       "upstream": [

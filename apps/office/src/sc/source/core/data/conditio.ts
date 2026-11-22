@@ -1,7 +1,12 @@
 /** @fileoverview Native conditional-format ownership,copy ranges and live value-cache subscriptions;with date rules retained as copy state. */
 import type { ScRefCellValue } from "../../../inc/cellvalue";
 import type { ScAddress } from "../../../inc/address";
-import type { ScDataBarFormat, ScDataBarInfo } from "../../../inc/colorscale";
+import type {
+  ScDataBarFormat,
+  ScDataBarInfo,
+  ScIconSetFormat,
+  ScIconSetInfo,
+} from "../../../inc/colorscale";
 import type { ScDocument } from "../../../inc/document";
 import { ScRangeList } from "../../../inc/rangelst";
 import type {
@@ -32,6 +37,7 @@ export interface ScCondFormatData {
   aStyleName: string;
   mxColorScale: Color | undefined;
   pDataBar: ScDataBarInfo | undefined;
+  pIconSet: ScIconSetInfo | undefined;
 }
 /** Original native date-condition values. */
 export enum ScCondFormatDateType {
@@ -313,7 +319,12 @@ export class ScConditionalFormat {
   }
   /** Evaluates each represented result independently in native entry order. @param cell - Actual cell. @param position - Evaluated address. @returns Conditional paint data. */
   GetData(cell: ScRefCellValue, position: ScAddress): ScCondFormatData {
-    const data: ScCondFormatData = { aStyleName: "", mxColorScale: undefined, pDataBar: undefined };
+    const data: ScCondFormatData = {
+      aStyleName: "",
+      mxColorScale: undefined,
+      pDataBar: undefined,
+      pIconSet: undefined,
+    };
     for (const entry of this.maEntries) {
       switch (entry.GetType()) {
         case ScFormatEntryType.Condition:
@@ -326,6 +337,9 @@ export class ScConditionalFormat {
           break;
         case ScFormatEntryType.Databar:
           data.pDataBar ??= (entry as ScDataBarFormat).GetDataBarInfo(position);
+          break;
+        case ScFormatEntryType.Iconset:
+          data.pIconSet ??= (entry as ScIconSetFormat).GetIconSetInfo(position);
           break;
       }
     }

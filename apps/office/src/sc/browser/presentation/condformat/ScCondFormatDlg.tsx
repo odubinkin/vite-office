@@ -2,7 +2,8 @@
 import { useImperativeHandle, useLayoutEffect, useRef, useState, type Ref } from "react";
 import { DialogHeader } from "../../../../framework/browser/presentation/DialogHeader";
 import { ScRange, type ScAddress } from "../../../inc/address";
-import { ScColorScaleEntryType } from "../../../source/core/data/colorscale";
+import { ScColorScaleEntryType, ScIconSetFormat, ScIconSetType } from "../../../inc/colorscale";
+import { ScConditionMode } from "../../../inc/conditio";
 import {
   FormatConditionalRange,
   ParseConditionalRanges,
@@ -13,6 +14,8 @@ import {
   conditionChoices,
   dataBarChoices,
   dateChoices,
+  iconSetChoices,
+  NewIconSetStops,
   scaleChoices,
   ConditionOperands,
   type ConditionalRuleDraft,
@@ -32,11 +35,17 @@ const scaleKinds = [
   ["scale2", "Color Scale (2 Entries)"],
   ["scale3", "Color Scale (3 Entries)"],
   ["databar", "Data Bar"],
+  ["iconset", "Icon Set"],
 ] as const;
+const iconSetTypes = Object.values(ScIconSetType).filter(
+  /** Selects each native icon set in enum order. @param value - Enum member. @returns Whether numeric. */ (
+    value,
+  ) => typeof value === "number",
+);
 
 /** Recognizes the native All Cells rule pages. @param kind - Current page. @returns Whether it shows threshold controls. */
 function isColorFormat(kind: ConditionalRuleKind): boolean {
-  return kind === "scale2" || kind === "scale3" || kind === "databar";
+  return kind === "scale2" || kind === "scale3" || kind === "databar" || kind === "iconset";
 }
 
 /** Original editor callbacks and reference-input binding. */
@@ -220,6 +229,27 @@ export function ScCondFormatDlg({
                           ))}
                         </select>
                       )}
+                      {rule.kind === "iconset" && (
+                        <select
+                          aria-label="Icon set type"
+                          className={control}
+                          value={rule.iconSetType ?? ScIconSetType.IconSet_3Arrows}
+                          onChange={(event) => {
+                            const iconSetType = Number(event.target.value) as ScIconSetType;
+                            change(index, {
+                              ...rule,
+                              iconSetType,
+                              stops: NewIconSetStops(iconSetType),
+                            });
+                          }}
+                        >
+                          {iconSetTypes.map((type) => (
+                            <option key={type} value={type}>
+                              {ScIconSetFormat.getIconSetName(type)}
+                            </option>
+                          ))}
+                        </select>
+                      )}
                       {isColorFormat(rule.kind) && (
                         <select
                           aria-label="Color format"
@@ -292,18 +322,22 @@ export function ScCondFormatDlg({
                         <div className="grid gap-2">
                           {rule.stops.map((stop, number) => {
                             const bar = rule.kind === "databar";
-                            const choices = bar
-                              ? dataBarChoices.filter(
-                                  ([type]) =>
-                                    type === stop.type ||
-                                    type !==
-                                      (number === 0
-                                        ? ScColorScaleEntryType.MAX
-                                        : ScColorScaleEntryType.MIN),
-                                )
-                              : scaleChoices;
-                            const label =
-                              number === 0
+                            const icons = rule.kind === "iconset";
+                            const choices = icons
+                              ? iconSetChoices
+                              : bar
+                                ? dataBarChoices.filter(
+                                    ([type]) =>
+                                      type === stop.type ||
+                                      type !==
+                                        (number === 0
+                                          ? ScColorScaleEntryType.MAX
+                                          : ScColorScaleEntryType.MIN),
+                                  )
+                                : scaleChoices;
+                            const label = icons
+                              ? `Icon ${number + 1}`
+                              : number === 0
                                 ? "Minimum"
                                 : number === rule.stops.length - 1
                                   ? "Maximum"
@@ -344,7 +378,23 @@ export function ScCondFormatDlg({
                                     update({ ...stop, value: event.target.value })
                                   }
                                 />
-                                {!bar && (
+                                {icons && (
+                                  <select
+                                    aria-label={label + " comparison"}
+                                    value={stop.mode ?? ScConditionMode.EqGreater}
+                                    className={control}
+                                    onChange={(event) =>
+                                      update({ ...stop, mode: Number(event.target.value) })
+                                    }
+                                  >
+                                    {conditionChoices.slice(0, 6).map(([mode, caption]) => (
+                                      <option key={mode} value={mode}>
+                                        {caption}
+                                      </option>
+                                    ))}
+                                  </select>
+                                )}
+                                {!bar && !icons && (
                                   <input
                                     type="color"
                                     aria-label={label + " color"}

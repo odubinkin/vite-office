@@ -48,6 +48,10 @@
         {
           "path": "apps/office/src/sc/source/ui/view/viewdata.settings.test.ts",
           "marker": "preserves the native ODS drawing grid"
+        },
+        {
+          "path": "apps/office/src/sc/source/filter/xml/ods-icon-sets.test.ts",
+          "marker": "retains complete Worker icon settings"
         }
       ]
     },
@@ -69,7 +73,8 @@
       "Copies the native packed sheet tab color across the Calc Worker, with the automatic default omitted and older records admitted.",
       "Transports the existing Calc page-style name with native ODF layout and master-page XML, validates the assignment, and admits older transfer records.",
       "Transfers native ODF calculation properties alongside the existing date and case fields. Older Worker graphs without these settings retain native new-document options.",
-      "Transfers drawing-grid values and the represented note, author, formula-mark and value-highlighting settings. Older records retain native defaults."
+      "Transfers drawing-grid values and the represented note, author, formula-mark and value-highlighting settings. Older records retain native defaults.",
+      "Adopts private icon-set settings after the existing XML has restored the threshold cells."
     ],
     "stackDivergence": {
       "kind": "local-infrastructure",

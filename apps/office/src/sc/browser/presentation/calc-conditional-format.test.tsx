@@ -10,7 +10,7 @@ import {
 import { unicode } from "../../../i18nlangtag/source/isolang/isolang.tables";
 import { createDocument } from "../../../sfx2/source/doc/objsh";
 import { ScAddress } from "../../inc/address";
-import { ScColorScaleEntryType, ScDataBarFormat } from "../../inc/colorscale";
+import { ScColorScaleEntryType, ScDataBarFormat, ScIconSetFormat } from "../../inc/colorscale";
 import { ATTR_BACKGROUND } from "../../inc/scitems";
 import { ScCondFormatEntry, ScConditionMode, ScFormatEntryType } from "../../inc/conditio";
 import { SvxBrushItem } from "../../../editeng/inc/brushitem";
@@ -214,6 +214,35 @@ it("edits an imported ODS data-bar limit through the manager and preserves the r
   } finally {
     reopened.Dispose();
   }
+});
+
+it("edits an imported ODS icon threshold through the native rule manager", /** Opens the original ODS fixture and replaces one formula threshold. @returns Completion. */ async () => {
+  const fixture = new Uint8Array(
+    readFileSync("../../vendor/libreoffice-reference/sc/qa/unit/data/ods/tdf64401.ods"),
+  );
+  const document = mount(await readOdsDocument(fixture));
+  open(".uno:ConditionalFormatManagerDialog");
+  const manager = () => screen.getByRole("dialog", { name: "Manage Conditional Formatting" });
+  expect(within(manager()).getByText("Icon Set")).toBeInTheDocument();
+  fireEvent.click(within(manager()).getByRole("button", { name: "A1:A10" }));
+  await respond(manager(), "Edit");
+  const editor = screen.getByRole("dialog", { name: /^Conditional Formatting for/ });
+  expect(within(editor).getByLabelText("Color format")).toHaveValue("iconset");
+  expect(within(editor).getByLabelText("Icon 2 type")).toHaveValue(
+    String(ScColorScaleEntryType.FORMULA),
+  );
+  fireEvent.change(within(editor).getByLabelText("Icon 2 type"), {
+    target: { value: String(ScColorScaleEntryType.VALUE) },
+  });
+  fireEvent.change(within(editor).getByLabelText("Icon 2 value"), { target: { value: "2" } });
+  await respond(editor, "OK");
+  await respond(manager(), "OK");
+  const owner = document.FetchTable(0)?.GetCondFormList();
+  assert(owner);
+  const format = [...owner][0]?.GetEntry(0);
+  assert(format instanceof ScIconSetFormat);
+  expect(format.GetIconSetData().m_Entries[1]?.GetValue()).toBe(2);
+  expect(format.GetIconSetInfo(new ScAddress(0, 1, 0))?.nIconIndex).toBe(1);
 });
 
 it("projects the original conditional commands into the formatting toolbar menu", async () => {

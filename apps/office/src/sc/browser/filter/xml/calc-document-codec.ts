@@ -1,5 +1,10 @@
 /** @fileoverview Bounded Calc worker transfer of supported native cells, sparse attributes and geometry; XML remains the durable format. */
 import { ScFormulaCell } from "../../../source/core/data/formulacell";
+import {
+  decodeCalcIconSets,
+  encodeCalcIconSets,
+  type CalcIconSetRecord,
+} from "./calc-icon-set-codec";
 import { escapeXml } from "../../../../xmloff/source/text/txtparae";
 import {
   decodeMatrixCell,
@@ -173,6 +178,7 @@ interface Sheet {
   readonly columnBreaks?: number[];
   readonly printRanges?: PrintRange[];
   readonly conditionalFormats?: string;
+  readonly conditionalIconSets?: readonly CalcIconSetRecord[];
   readonly repeatColumns?: PrintRange;
   readonly repeatRows?: PrintRange;
   readonly name: string;
@@ -355,6 +361,7 @@ function* encodeSteps(document: ScDocument): Generator<void, CalcDocumentRecord>
     const tabColor = table.GetTabBgColor();
     const pageStyle = table.GetPageStyle();
     const conditionalFormats = ExportConditionalFormat(document, table, true);
+    const conditionalIconSets = encodeCalcIconSets(table);
     const sheet: Sheet = {
       ...(pageStyles.names.has(pageStyle) ? { pageStyle } : {}),
       ...(tabColor.equals(COL_AUTO) ? {} : { tabColor: tabColor.toUInt32() }),
@@ -384,6 +391,7 @@ function* encodeSteps(document: ScDocument): Generator<void, CalcDocumentRecord>
         ? {}
         : { printRanges: GetPrintRanges(table).map(encodePrintRange) }),
       ...(conditionalFormats ? { conditionalFormats } : {}),
+      ...(conditionalIconSets.length ? { conditionalIconSets } : {}),
       ...(repeatColumns ? { repeatColumns: encodePrintRange(repeatColumns) } : {}),
       ...(repeatRows ? { repeatRows: encodePrintRange(repeatRows) } : {}),
       name: text(table.GetName()),
@@ -1032,6 +1040,10 @@ function* decodeSteps(record: CalcDocumentRecord): Generator<void, ScDocument> {
       if (sheet.conditionalFormats)
         importer.importConditionalFormats(sheet.conditionalFormats, tab);
     importer.FinalizeConditionalFormats();
+    for (const [tab, sheet] of record.sheets.entries()) {
+      const table = document.FetchTable(tab);
+      if (table && sheet.conditionalIconSets) decodeCalcIconSets(table, sheet.conditionalIconSets);
+    }
     document.SetAutoCalc(true);
     complete = true;
     return document;

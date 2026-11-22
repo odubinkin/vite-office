@@ -40,7 +40,7 @@ export class ScColorScaleEntry {
     private readonly value = 0,
     color: Readonly<Color> = new Color(),
     private readonly type = ScColorScaleEntryType.VALUE,
-    private readonly mode = ScConditionMode.EqGreater,
+    private mode = ScConditionMode.EqGreater,
   ) {
     this.color = new Color(color);
   }
@@ -92,15 +92,20 @@ export class ScColorScaleEntry {
     return this.mode;
   }
 
+  /** Updates the original comparison mode. @param mode - Boundary comparison. @returns Nothing. */
+  SetMode(mode: ScConditionMode): void {
+    this.mode = mode;
+  }
+
   /** Borrows the threshold color. @returns RGB color. */
   GetColor(): Readonly<Color> {
     return this.color;
   }
 
-  /** Copies the threshold into the destination document. @param doc - Destination. @returns Owned copy. */
-  Clone(doc: ScDocument): ScColorScaleEntry {
+  /** Copies the threshold with the source owner unless a destination is supplied. @param doc - Optional destination. @returns Owned copy. */
+  Clone(doc = this.owner): ScColorScaleEntry {
     const copy = new ScColorScaleEntry(this.value, this.color, this.type, this.mode);
-    if (this.cell)
+    if (this.cell && doc)
       copy.BindFormula(new ScFormulaCell(doc, this.cell.aPos, this.cell.GetCode().Clone()), doc);
     return copy;
   }

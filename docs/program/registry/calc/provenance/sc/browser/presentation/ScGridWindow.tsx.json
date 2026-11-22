@@ -35,7 +35,8 @@
       "Paints all normal pane windows with distinct accessible cell identities and routes click activation independently from formula pointing.",
       "Paints the native resolved color-scale background over the represented cell fill.",
       "Brackets visible-cell style resolution with the sheet conditional-format rendering lifecycle so calendar rules use one date per pass.",
-      "Projects fillinfo conditional results and paints imported ODS data bars beneath cell contents. The display-only setting clips the presented value while retaining the accessible label and input value."
+      "Projects fillinfo conditional results and paints imported ODS data bars beneath cell contents. The display-only setting clips the presented value while retaining the accessible label and input value.",
+      "Paints the native conditional icon alongside the data bar and suppresses the cell paint text when either result requests it."
     ],
     "stackDivergence": {
       "kind": "browser-adaptation",
@@ -94,6 +95,10 @@
         {
           "path": "apps/office/e2e/calc/ods-data-bars.spec.ts",
           "marker": "paints imported ODS data bars"
+        },
+        {
+          "path": "apps/office/e2e/calc/ods-icon-sets.spec.ts",
+          "marker": "paints original Calc ODS icon sets"
         }
       ],
       "upstream": [

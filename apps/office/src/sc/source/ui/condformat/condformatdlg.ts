@@ -136,7 +136,7 @@ export class ScCondFormatDlg {
       for (let index = 0; index < existing.size(); index++) {
         const entry = existing.GetEntry(index);
         if (entry) {
-          const draft = ReadConditionalRule(entry);
+          const draft = ReadConditionalRule(entry, document);
           this.original.set(draft, entry);
           rules.push(draft);
         }

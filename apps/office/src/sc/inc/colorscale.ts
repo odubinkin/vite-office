@@ -11,3 +11,9 @@ export {
   ScDataBarFormatData,
   type ScDataBarInfo,
 } from "../source/core/data/colorscale.databar";
+export {
+  ScIconSetFormat,
+  ScIconSetFormatData,
+  ScIconSetType,
+  type ScIconSetInfo,
+} from "../source/core/data/colorscale.iconset";

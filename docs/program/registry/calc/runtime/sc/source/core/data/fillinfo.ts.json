@@ -18,9 +18,10 @@
       "evidence": [
         "apps/office/src/sc/source/core/data/fillinfo.ts",
         "apps/office/src/sc/source/core/data/fillinfo.test.ts",
-        "vendor/libreoffice-reference/sc/source/core/data/fillinfo.cxx#handleConditionalFormat"
+        "vendor/libreoffice-reference/sc/source/core/data/fillinfo.cxx#handleConditionalFormat",
+        "apps/office/src/sc/source/filter/xml/ods-icon-sets.test.ts"
       ],
-      "justification": "Resolves the first available style, color scale and data bar independently in the ordered native conditional indexes.",
+      "justification": "Resolves the first available style, color scale and data bar independently in the ordered native conditional indexes. Selects the first available icon set independently of the other conditional painting fields.",
       "knownViolations": [],
       "localSymbols": [
         "handleConditionalFormat"

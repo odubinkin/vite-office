@@ -13,10 +13,11 @@
       "handleConditionalFormat"
     ],
     "preservedResponsibilities": [
-      "Resolves the first available style, color scale and data bar independently in the ordered native conditional indexes."
+      "Resolves the first available style, color scale and data bar independently in the ordered native conditional indexes.",
+      "Selects the first available icon set independently of the other conditional painting fields."
     ],
     "omittedResponsibilities": [
-      "Icon sets and the remaining row information, protection and drawing fields are outside the represented conditional paint fields."
+      "The remaining row information, protection and drawing fields are outside the represented conditional paint fields."
     ],
     "evidence": {
       "local": [
@@ -27,6 +28,10 @@
         {
           "path": "apps/office/src/sc/source/core/data/fillinfo.test.ts",
           "marker": "uses the first available style, scale and data bar independently"
+        },
+        {
+          "path": "apps/office/src/sc/source/filter/xml/ods-icon-sets.test.ts",
+          "marker": "selects the last matching threshold"
         }
       ],
       "upstream": [

@@ -24,7 +24,7 @@ interface Props {
 function getCondition(format: ScConditionalFormat): string {
   const entry = format.GetEntry(0);
   if (!entry) return "";
-  const rule = ReadConditionalRule(entry);
+  const rule = ReadConditionalRule(entry, format.GetDocument());
   switch (rule.kind) {
     case "condition":
       return [
@@ -41,6 +41,8 @@ function getCondition(format: ScConditionalFormat): string {
       return "Date is " + (dateChoices.find(([date]) => date === rule.date)?.[1] ?? "");
     case "databar":
       return "Data Bar";
+    case "iconset":
+      return "Icon Set";
     default:
       return "Color Scale";
   }

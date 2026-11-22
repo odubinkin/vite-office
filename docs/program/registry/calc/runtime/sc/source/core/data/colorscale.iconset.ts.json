@@ -1,0 +1,40 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sc/source/core/data/colorscale.iconset.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "calc",
+    "subsystem": "conditional-icon-set",
+    "capabilityIds": [
+      "CAP-80c7cd5d-a6df-4631-80c7-c63423899de6",
+      "CAP-5ed786f7-f652-4f48-ac2a-86fafe2b8fa1"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/sc/source/core/data/colorscale.iconset.ts",
+        "apps/office/src/sc/source/filter/xml/ods-icon-sets.test.ts",
+        "vendor/libreoffice-reference/sc/source/core/data/colorscale.cxx#ScIconSetFormat::GetIconSetInfo"
+      ],
+      "justification": "Owns native icon thresholds, settings, references, source-document cloning and last-matching numeric icon selection.",
+      "knownViolations": [],
+      "localSymbols": [
+        "ScIconSetFormat",
+        "ScIconSetFormatData",
+        "ScIconSetType"
+      ],
+      "upstreamFile": "sc/source/core/data/colorscale.cxx",
+      "upstreamSymbols": [
+        "ScIconSetFormat::GetIconSetInfo",
+        "ScIconSetFormat::GetMinValue",
+        "ScIconSetFormat::CalcValue"
+      ],
+      "sourceResponsibility": "unverified"
+    }
+  }
+}

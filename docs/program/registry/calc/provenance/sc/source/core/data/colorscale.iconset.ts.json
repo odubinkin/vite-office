@@ -1,0 +1,57 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "status": "mapped",
+    "localPath": "apps/office/src/sc/source/core/data/colorscale.iconset.ts",
+    "upstreamPath": "sc/source/core/data/colorscale.cxx",
+    "localSymbols": [
+      "ScIconSetFormat",
+      "ScIconSetFormatData",
+      "ScIconSetType"
+    ],
+    "upstreamSymbols": [
+      "ScIconSetFormat::GetIconSetInfo",
+      "ScIconSetFormat::GetMinValue",
+      "ScIconSetFormat::CalcValue"
+    ],
+    "preservedResponsibilities": [
+      "Owns native icon thresholds, settings, references, source-document cloning and last-matching numeric icon selection."
+    ],
+    "omittedResponsibilities": [
+      "The browser resolves bitmap resources and device pixels. The shared document invalidation path supplies repainting."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sc/source/core/data/colorscale.iconset.ts",
+          "marker": "ScIconSetFormat"
+        },
+        {
+          "path": "apps/office/src/sc/source/filter/xml/ods-icon-sets.test.ts",
+          "marker": "ports LibreOffice testTdf64401"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sc/source/core/data/colorscale.cxx",
+          "marker": "ScIconSetFormat::GetIconSetInfo"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/source/core/data/colorscale.cxx",
+          "marker": "ScIconSetFormat::GetMinValue"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/source/core/data/colorscale.cxx",
+          "marker": "ScIconSetFormat::CalcValue"
+        }
+      ]
+    },
+    "filenameDivergence": {
+      "localPath": "apps/office/src/sc/source/core/data/colorscale.iconset.ts",
+      "stackNecessity": "responsibility-split",
+      "rationale": "The TypeScript color-format family splits native colorscale.cxx into the threshold owner, data bars, and the independently owned icon-set rule."
+    }
+  }
+}

@@ -18,6 +18,8 @@ import {
   ScColorScaleFormat,
   ScDataBarFormat,
   ScDataBarFormatData,
+  ScIconSetFormat,
+  ScIconSetType,
 } from "../../../inc/colorscale";
 
 const grammar = FormulaGrammar.Grammar.GRAM_NATIVE;
@@ -82,9 +84,17 @@ export const scaleChoices = [
 /** Native data-bar limit choices, including automatic extrema. */
 export const dataBarChoices = [[Stop.AUTO, "Automatic"], ...scaleChoices] as const;
 
+/** Icon-set threshold kinds in the original editor order. */
+export const iconSetChoices = [
+  [Stop.VALUE, "Value"],
+  [Stop.PERCENT, "Percent"],
+  [Stop.PERCENTILE, "Percentile"],
+  [Stop.FORMULA, "Formula"],
+] as const;
+
 /** Rule pages backed by the existing native format entry families. */
 export type ConditionalRuleKind =
-  "condition" | "formula" | "date" | "scale2" | "scale3" | "databar";
+  "condition" | "formula" | "date" | "scale2" | "scale3" | "databar" | "iconset";
 
 /** Browser values for one original color stop. */
 export interface ConditionalScaleDraft {
@@ -104,6 +114,7 @@ export interface ConditionalRuleDraft {
   readonly date: ScCondFormatDateType;
   readonly stops: readonly ConditionalScaleDraft[];
   readonly dataBar?: Readonly<ScDataBarFormatData>;
+  readonly iconSetType?: ScIconSetType;
   readonly source?: ScAddress;
   readonly type?: ScFormatEntryType;
 }
@@ -133,15 +144,30 @@ export function NewConditionalRule(kind: ConditionalRuleKind, style: string): Co
     style,
     date: ScCondFormatDateType.TODAY,
     stops:
-      kind === "databar"
-        ? [
-            { type: Stop.AUTO, value: "", color: "#000000" },
-            { type: Stop.AUTO, value: "", color: "#000000" },
-          ]
-        : two
-          ? [low, high]
-          : [low, { type: Stop.PERCENTILE, value: "50", color: "#ffff00" }, high],
+      kind === "iconset"
+        ? NewIconSetStops(ScIconSetType.IconSet_3Arrows)
+        : kind === "databar"
+          ? [
+              { type: Stop.AUTO, value: "", color: "#000000" },
+              { type: Stop.AUTO, value: "", color: "#000000" },
+            ]
+          : two
+            ? [low, high]
+            : [low, { type: Stop.PERCENTILE, value: "50", color: "#ffff00" }, high],
   };
+}
+
+/** Recreates the native empty percent rows when the icon set changes. @param type - Icon set identity. @returns Editable thresholds. */
+export function NewIconSetStops(type: ScIconSetType): ConditionalScaleDraft[] {
+  return Array.from(
+    { length: ScIconSetFormat.getIconSetElements(type) },
+    /** Initializes the native percent row. @returns Editable threshold. */ () => ({
+      type: Stop.PERCENT,
+      value: "",
+      color: "#000000",
+      mode: Mode.Equal,
+    }),
+  );
 }
 
 /** Reads one native threshold in the editor's formula grammar. @param stop - Native threshold. @returns Editable values. */
@@ -154,8 +180,11 @@ function readStop(stop: ScColorScaleEntry): ConditionalScaleDraft {
   };
 }
 
-/** Reads rule editor values using the original formula origin when editing. @param entry - Existing rule. @returns Rule values. */
-export function ReadConditionalRule(entry: ScFormatEntry): ConditionalRuleDraft {
+/** Reads rule editor values using the original formula origin when editing. @param entry - Existing rule. @param document - Workbook number formatter owner. @returns Rule values. */
+export function ReadConditionalRule(
+  entry: ScFormatEntry,
+  document: ScDocument,
+): ConditionalRuleDraft {
   if (entry instanceof ScCondDateFormatEntry)
     return { ...NewConditionalRule("date", text(entry.GetStyleName())), date: entry.GetDateType() };
   if (entry instanceof ScColorScaleFormat) {
@@ -170,6 +199,26 @@ export function ReadConditionalRule(entry: ScFormatEntry): ConditionalRuleDraft 
       stops: [readStop(dataBar.mpLowerLimit), readStop(dataBar.mpUpperLimit)],
     };
   }
+  if (entry instanceof ScIconSetFormat)
+    return {
+      ...NewConditionalRule("iconset", ""),
+      iconSetType: entry.GetIconSetData().eIconSetType,
+      stops: Array.from(
+        entry,
+        /** Formats numeric entries for the native input line. @param threshold - Existing threshold. @returns Editable threshold. */ (
+          threshold,
+        ) => {
+          const stop = readStop(threshold);
+          if (stop.type === Stop.FORMULA) return stop;
+          const formatted = document.GetFormatTable().GetInputLineString(threshold.GetValue(), 0);
+          try {
+            return { ...stop, value: text(formatted) };
+          } finally {
+            formatted.dispose();
+          }
+        },
+      ),
+    };
   if (!(entry instanceof ScCondFormatEntry))
     throw new Error("Unsupported conditional-format entry");
   const mode = entry.GetOperation();
@@ -189,9 +238,10 @@ function createStop(
   stop: ConditionalScaleDraft,
   doc: ScDocument,
   origin: ScAddress,
+  value = Number(stop.value) || 0,
 ): ScColorScaleEntry {
   const entry = new ScColorScaleEntry(
-    Number(stop.value) || 0,
+    value,
     new Color(Number.parseInt(stop.color.slice(1), 16)),
     stop.type,
     stop.mode,
@@ -237,6 +287,27 @@ export function CreateConditionalRule(
       return entry;
     } catch (error) {
       data.Dispose();
+      throw error;
+    }
+  }
+  if (draft.kind === "iconset") {
+    const entry = new ScIconSetFormat(doc);
+    const data = entry.GetIconSetData();
+    data.eIconSetType = draft.iconSetType ?? ScIconSetType.IconSet_3Arrows;
+    try {
+      for (const stop of draft.stops) {
+        const value: [number] = [0];
+        const input = unicode(stop.value);
+        try {
+          doc.GetFormatTable().IsNumberFormat(input, [0], value);
+        } finally {
+          input.dispose();
+        }
+        data.m_Entries.push(createStop(stop, doc, origin, value[0]));
+      }
+      return entry;
+    } catch (error) {
+      entry.Dispose();
       throw error;
     }
   }

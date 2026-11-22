@@ -1,0 +1,33 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sc/browser/filter/xml/calc-icon-set-codec.ts",
+    "classification": "browser-adaptation",
+    "state": "active",
+    "suite": "calc",
+    "subsystem": "conditional-icon-set",
+    "capabilityIds": [
+      "CAP-5ed786f7-f652-4f48-ac2a-86fafe2b8fa1"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "not-applicable",
+      "defaultStatus": "not-applicable",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/sc/browser/filter/xml/calc-icon-set-codec.ts",
+        "apps/office/src/sc/source/filter/xml/ods-icon-sets.test.ts"
+      ],
+      "justification": "Transfers icon flags, custom identities and comparison modes across the existing Calc Worker boundary.",
+      "knownViolations": [],
+      "localSymbols": [
+        "encodeCalcIconSets",
+        "decodeCalcIconSets"
+      ],
+      "upstreamFile": null,
+      "upstreamSymbols": [],
+      "sourceResponsibility": "browser-owned"
+    }
+  }
+}

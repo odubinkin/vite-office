@@ -8,6 +8,7 @@ import { ScOutlineWindow } from "./ScOutlineWindow";
 import type { ScOutlineControl } from "../../source/ui/docshell/olinefun";
 import { ScCellDiagonalBorders } from "./ScCellDiagonalBorders";
 import { ScCellDataBar } from "./ScCellDataBar";
+import { ScCellIconSet } from "./ScCellIconSet";
 import { handleConditionalFormat } from "../../source/core/data/fillinfo";
 import { ScIndentItem, ScLineBreakCell } from "../../inc/attrib";
 import { SvxMarginItem } from "../../../svx/source/items/algitem";
@@ -570,6 +571,9 @@ export function ScGridWindow(props: ScGridWindowProps): React.JSX.Element {
                     const conditionalInfo = handleConditionalFormat(document, position);
                     const conditional = conditionalInfo?.pConditionSet;
                     const dataBar = conditionalInfo?.pDataBar;
+                    const iconSet = conditionalInfo?.pIconSet;
+                    const hideValue =
+                      dataBar?.mbShowValue === false || iconSet?.mbShowValue === false;
                     const background =
                       conditionalInfo?.mxColorScale ??
                       (pattern.GetItem(148, conditional) as SvxBrushItem).GetColor();
@@ -685,6 +689,7 @@ export function ScGridWindow(props: ScGridWindowProps): React.JSX.Element {
                         style={cellStyle}
                       >
                         {dataBar && <ScCellDataBar info={dataBar} width={width} height={height} />}
+                        {iconSet && <ScCellIconSet info={iconSet} />}
                         <ScCellDiagonalBorders pattern={pattern} width={width} height={height} />
                         {props.referenceRange?.Contains(position) && (
                           <div
@@ -711,14 +716,16 @@ export function ScGridWindow(props: ScGridWindowProps): React.JSX.Element {
                             }}
                           />
                         )}
-                        {editing && active ? null : dataBar?.mbShowValue === false ? (
+                        {editing && active ? null : hideValue ? (
                           <span id={`${cellId}-text`} className="sr-only">
                             {cell.text}
                           </span>
                         ) : (
                           <div
                             id={`${cellId}-text`}
-                            className={dataBar ? "relative w-full shrink-0" : "w-full shrink-0"}
+                            className={
+                              dataBar || iconSet ? "relative w-full shrink-0" : "w-full shrink-0"
+                            }
                             dir={textDirection}
                           >
                             <SpecialText

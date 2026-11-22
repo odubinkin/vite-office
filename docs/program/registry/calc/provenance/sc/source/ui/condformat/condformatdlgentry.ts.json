@@ -16,7 +16,8 @@
     ],
     "preservedResponsibilities": [
       "Converts existing native condition, date, scale and data-bar rules to editable values and back.",
-      "Edits both data-bar limits while preserving the native settings of the imported rule."
+      "Edits both data-bar limits while preserving the native settings of the imported rule.",
+      "Opens imported icon-set rules and recreates the native editable type, thresholds and comparisons."
     ],
     "omittedResponsibilities": [
       "Native Weld widgets are supplied by the browser adapter."
@@ -34,6 +35,10 @@
         {
           "path": "apps/office/src/sc/browser/presentation/calc-conditional-format.test.tsx",
           "marker": "edits an imported ODS data-bar limit"
+        },
+        {
+          "path": "apps/office/src/sc/browser/presentation/calc-conditional-format.test.tsx",
+          "marker": "edits an imported ODS icon threshold"
         }
       ],
       "upstream": [

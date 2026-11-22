@@ -7773,3 +7773,35 @@ resolved style and leaves the protection assignment to the remaining
 protected-cell rendering work.
 
 - [Original conditional paint and protection flags](../../vendor/libreoffice-reference/sc/source/core/data/fillinfo.cxx)
+
+### CALC-816 — ODS icon-set visibility uses different import and export locations
+
+The icon-set reader negates a present `calcext:show-value` attribute.
+The exporter queues `calcext:show-value="false"` after starting the icon
+set, so the value appears on the first formatting entry. The reader
+treats the set as showing cell values when the attribute is absent from
+the parent. Calc keeps the native ODS behavior. Worker transfer retains
+the model's visibility flag.
+
+- [Original icon-set import context](../../vendor/libreoffice-reference/sc/source/filter/xml/xmlcondformat.cxx)
+- [Original icon-set output](../../vendor/libreoffice-reference/sc/source/filter/xml/xmlexprt.cxx)
+
+### CALC-817 — ODS icon sets and the editor can reset custom settings
+
+The exporter writes the custom flag and ordered custom icon pairs.
+The icon-set import context reads the set type, visibility, and formatting
+entries. The editor constructs fresh settings from the selected type and
+threshold rows. Custom and reversed settings can therefore reset during
+ODS reopen or editor acceptance. Calc preserves these source paths.
+
+- [Original icon-set parser](../../vendor/libreoffice-reference/sc/source/filter/xml/xmlcondformat.cxx)
+- [Original icon-set editor](../../vendor/libreoffice-reference/sc/source/ui/condformat/condformatdlgentry.cxx)
+
+### CALC-818 — An icon-set clone keeps the threshold formula's source document
+
+The icon-set data copy constructor clones each color-scale threshold
+without a destination document. The format clone can therefore own a
+different document from its threshold formulas. Calc preserves the
+source-document binding for this copy operation.
+
+- [Original icon-set and threshold copy constructors](../../vendor/libreoffice-reference/sc/source/core/data/colorscale.cxx)
