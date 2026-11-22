@@ -97,6 +97,8 @@ export class ScTable {
   finalizeOutlineImport = table7.finalizeOutlineImport;
   HasMultipleDataCells = table7.HasMultipleDataCells;
   ApplySelectionStyle = table2.ApplySelectionStyle;
+  GetAreaStyle = table2.GetAreaStyle;
+  GetSelectionStyle = table2.GetSelectionStyle;
   GetLastChangedColFlagsWidth = table2.GetLastChangedColFlagsWidth;
   StartOutlineTable = table1.StartOutlineTable;
   SetOutlineTable = table1.SetOutlineTable;

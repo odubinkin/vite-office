@@ -1,4 +1,4 @@
-/** @fileoverview Actual Calc column/pattern style inheritance projected by the existing shared Writer UI;StyleApply and Calc style-pool construction remain separate unported paths. */
+/** @fileoverview Actual Calc column/pattern style inheritance and browser cell rendering. */
 import type { ScDocumentPool } from "../../source/core/data/docpool";
 import { expect, it } from "vitest";
 import { render, screen } from "@testing-library/react";

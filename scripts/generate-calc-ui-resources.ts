@@ -14,6 +14,7 @@ import {
   findShortcuts,
   stripMnemonic,
   findCommandPropertyBits,
+  decodeXml,
 } from "./office-ui-command-catalog";
 const root = "vendor/libreoffice-reference/",
   output = "apps/office/src/sc/uiconfig/scalc/calc-ui.generated.json";
@@ -72,6 +73,7 @@ const excluded = new Map<string, string>([
 ]);
 // Original key-only cell-shell command:catalog metadata is required without adding a visible surface placement.
 const urls = new Set<string>([".uno:Deselect"]);
+const radioCommands = new Set<string>();
 for (const path of [
   ...Object.values(surfaces),
   printRangesPopup,
@@ -82,7 +84,10 @@ for (const path of [
   function collect(node: ReturnType<typeof parseResourceXml>): void {
     if (node.name.endsWith("menuitem") || node.name.endsWith("toolbaritem")) {
       const url = node.attributes["menu:id"] ?? node.attributes["xlink:href"];
-      if (url !== undefined) urls.add(url);
+      if (url !== undefined) {
+        urls.add(url);
+        if (node.attributes["menu:style"] === "radio") radioCommands.add(url);
+      }
     }
     node.children.forEach(collect);
   }
@@ -102,6 +107,17 @@ const sourceToCommand = new Map(
       ],
     ),
 );
+/** Reads bounded dispatch redirects from the pinned command catalog. @param url - Alias command. @returns Source target URL, when enabled. */
+function findDispatchTarget(url: string): string | undefined {
+  for (const catalog of catalogs) {
+    const block = catalog.split(`<node oor:name="${url}"`)[1]?.split("</node>")[0];
+    const value = block?.match(/<prop oor:name="TargetURL"[^>]*>\s*<value>([^<]+)<\/value>/u)?.[1];
+    if (value === undefined) continue;
+    const target = decodeXml(value);
+    if (url === ".uno:SheetInsertName" || target.startsWith(".uno:StyleApply?")) return target;
+  }
+  return undefined;
+}
 const commands = Object.fromEntries(
   [...urls]
     .filter(
@@ -115,21 +131,7 @@ const commands = Object.fromEntries(
       ) => {
         const label = findEnglishLabel(url, ...catalogs),
           popupLabel = findEnglishLabelProperty(url, "PopupLabel", ...catalogs);
-        const targetUrl =
-          url === ".uno:SheetInsertName"
-            ? catalogs
-                .map(
-                  (catalog) =>
-                    catalog.split('<node oor:name=".uno:SheetInsertName"')[1]?.split("</node>")[0],
-                )
-                .map(
-                  (block) =>
-                    block?.match(
-                      /<prop oor:name="TargetURL"[^>]*>\s*<value>([^<]+)<\/value>/u,
-                    )?.[1],
-                )
-                .find((target) => target !== undefined)
-            : undefined;
+        const targetUrl = findDispatchTarget(url);
         return [
           url,
           {
@@ -147,7 +149,12 @@ const commands = Object.fromEntries(
               texts[catalogPaths[2]] as string,
               "com.sun.star.sheet.SpreadsheetDocument",
             ),
-            semantics: (findCommandPropertyBits(url, ...catalogs) & 8) !== 0 ? "check" : "action",
+            semantics:
+              targetUrl?.startsWith(".uno:StyleApply?") && radioCommands.has(url)
+                ? "radio"
+                : (findCommandPropertyBits(url, ...catalogs) & 8) !== 0
+                  ? "check"
+                  : "action",
           },
         ];
       },

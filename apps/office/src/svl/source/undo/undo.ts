@@ -269,6 +269,14 @@ export class SfxUndoManager<Context, Comment extends string | OUString = string>
     return this.actions[this.currentAction + offset];
   }
 
+  /** Reads the most recent retained action, including actions still available to Redo. @returns Original repeat candidate. */
+  public GetRepeatAction(): SfxUndoAction<Context, Comment> | undefined {
+    const action = this.listActions.at(-1);
+    if (!action) return this.actions.at(-1);
+    const count = action.GetActionCount();
+    return count === 0 ? undefined : action.GetUndoAction(count - 1);
+  }
+
   /** Returns the configured top-level capacity. @returns Maximum retained actions. */
   public GetMaxUndoActionCount(): number {
     return this.maximumActionCount;

@@ -29,6 +29,41 @@ export function ApplySelectionStyle(
   this.SetStreamValid(false);
 }
 
+/** Reads uniform styles from the allocated part of a simple area. @param this - Actual sheet. @param firstCol - First column. @param firstRow - First row. @param lastCol - Last column. @param lastRow - Last row. @returns Uniform style, null for mixed, or undefined for no allocated cells. */
+export function GetAreaStyle(
+  this: ScTable,
+  firstCol: number,
+  firstRow: number,
+  lastCol: number,
+  lastRow: number,
+): ScPatternStyleReference | null | undefined {
+  let style: ScPatternStyleReference | undefined;
+  const last = this.ClampToAllocatedColumns(lastCol);
+  for (let col = firstCol; col <= last; col++) {
+    const next = this.FetchColumn(col)?.GetAreaStyle(firstRow, lastRow);
+    if (next === undefined) continue;
+    if (!next || (style && style !== next)) return null;
+    style = next;
+  }
+  return style;
+}
+
+/** Reads uniform styles from the actual disjoint marked runs. @param this - Actual sheet. @param marks - Original mark data. @returns Uniform style, null for mixed, or undefined for no allocated cells. */
+export function GetSelectionStyle(
+  this: ScTable,
+  marks: ScMarkData,
+): ScPatternStyleReference | null | undefined {
+  let style: ScPatternStyleReference | undefined;
+  for (let col = 0; col < this.GetAllocatedColumnsCount(); col++) {
+    if (!marks.HasMultiMarks(col)) continue;
+    const next = this.FetchColumn(col)?.GetSelectionStyle(marks);
+    if (next === undefined) continue;
+    if (!next || (style && style !== next)) return null;
+    style = next;
+  }
+  return style;
+}
+
 /** Finds the last column with stored width, flags or hidden geometry. @param this - Native sheet. @returns Last changed column. */
 export function GetLastChangedColFlagsWidth(this: ScTable): number {
   const flags = this["mpColFlags"];

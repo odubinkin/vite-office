@@ -126,6 +126,19 @@ export class ScViewFunc extends ScTabView {
     return RemoveMerge(this, this.shell);
   }
 
+  /** Reads the source style at the cursor or across the unmodified selection. @returns Uniform cell style or null. */
+  GetStyleSheetFromMarked(): ScPatternStyleReference | null {
+    const doc = this.data.GetDocument(),
+      marks = this.data.GetMarkData();
+    if (marks.IsMarked() || marks.IsMultiMarked()) return doc.GetSelectionStyle(marks);
+    const position = new ScAddress(
+      this.data.GetCurX(),
+      this.data.GetCurY(),
+      this.data.CurrentTabForData(),
+    );
+    return doc.GetPattern(position)?.GetStyleSheet() ?? null;
+  }
+
   /** Applies the source style through native editability, filtered marks, and attribute history. @param style - Actual named cell style. @returns Whether applied. */
   SetStyleSheetToMarked(style: ScPatternStyleReference): boolean {
     const doc = this.data.GetDocument(),

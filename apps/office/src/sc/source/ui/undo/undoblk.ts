@@ -1,5 +1,6 @@
 /** @fileoverview Original ScUndoIndent actual marked attribute snapshot and source redo;represented block history adjusts supported row heights. */
 import { SfxUndoAction } from "../../../../svl/source/undo/undo";
+import type { ScTabViewShell } from "../inc/tabvwsh";
 import type { ScDocShell } from "../docshell/docsh";
 import { ScDocument, ScDocumentMode } from "../../../inc/document";
 import { ScMarkData } from "../../../inc/markdata";
@@ -54,6 +55,17 @@ export class ScUndoSelectionStyle extends SfxUndoAction<ScDocShell> {
       if (doc.HasAttrib(range, HasAttrFlags.Merged)) doc.ExtendMergeRange(range, true);
       doc.ApplySelectionStyle(style, this.marks);
       AdjustBlockHeight(doc, this.marks, range.aStart.Row(), range.aEnd.Row());
+    } finally {
+      name.dispose();
+    }
+  }
+
+  /** Repeats the original style application at the current marks. @param view - Active Calc tab view. @returns Whether applied. */
+  Repeat(view: ScTabViewShell): boolean {
+    const name = unicode(this.styleName);
+    try {
+      const style = this.shell.GetDocument().GetStyleSheetPool()?.Find(name, SfxStyleFamily.Para);
+      return style ? view.SetStyleSheetToMarked(style) : false;
     } finally {
       name.dispose();
     }

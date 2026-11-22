@@ -19,11 +19,13 @@ it("applies a named style on the real cursor and restores selective hard formatt
   if (!style) throw new Error("Missing Calc style");
   const position = new ScAddress(0, 0);
   /** Reads the actual cell background. @returns Workbook color. */
-  const color = () =>
-    (doc.GetPattern(position)?.GetItem(ATTR_BACKGROUND) as SvxBrushItem).GetColor();
+  function color() {
+    return (doc.GetPattern(position)?.GetItem(ATTR_BACKGROUND) as SvxBrushItem).GetColor();
+  }
   /** Reads the actual cell font weight. @returns Native weight. */
-  const weight = () =>
-    (doc.GetPattern(position)?.GetItem(ATTR_FONT_WEIGHT) as SvxWeightItem).GetWeight();
+  function weight() {
+    return (doc.GetPattern(position)?.GetItem(ATTR_FONT_WEIGHT) as SvxWeightItem).GetWeight();
+  }
   try {
     doc.ApplyAttr(0, 0, 0, new SvxBrushItem(new Color(0x770099), ATTR_BACKGROUND));
     doc.ApplyAttr(0, 0, 0, new SvxWeightItem(FontWeight.WEIGHT_BOLD, ATTR_FONT_WEIGHT));
@@ -51,10 +53,10 @@ it("applies the style to selected sheets and leaves gaps, filtered rows, and pro
   if (!style) throw new Error("Missing Calc style");
   const marks = view.GetViewData().GetMarkData();
   /** Reads the attached style at a source coordinate. @param col - Column. @param row - Row. @param tab - Sheet. @returns Style name. */
-  const name = (col: number, row: number, tab: number) => {
+  function name(col: number, row: number, tab: number) {
     const found = doc.GetPattern(new ScAddress(col, row, tab))?.GetStyleName();
     return found ? text(found) : null;
-  };
+  }
   try {
     doc.InsertTab(1, unicode("Other"));
     marks.SelectTable(1, true);

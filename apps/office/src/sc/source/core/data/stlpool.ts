@@ -174,7 +174,9 @@ export class ScStyleSheetPool extends SfxStyleSheetPool {
 
   /** Populates the workbook's built-in cell style hierarchy, retaining named styles already installed by a filter. @returns Nothing. */
   LoadStandardCellStyles(): void {
-    this.GetDefaultStyle(true);
+    const style = this.GetDefaultStyle(true);
+    const pattern = this.pDoc?.getCellAttributeHelper().getDefaultCellAttribute();
+    if (style && pattern && !pattern.GetStyleName()) pattern.SetStyleSheet(style, false);
     for (const name of this.GetStandardCellStyleNames()) this.EnsureStandardCellStyle(name);
   }
 

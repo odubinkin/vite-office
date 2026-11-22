@@ -166,6 +166,22 @@ export class ScColumnData {
   GetPatternRange(start: [number], end: [number], row: number): ScPatternAttr | null {
     return this.pAttrArray.GetPatternRange(start, end, row);
   }
+
+  /** Reads one column's style identity across native pattern runs. @param first - First row. @param last - Last row. @returns Uniform style, null for mixed, or undefined for no rows. */
+  GetAreaStyle(first: number, last: number): ScPatternStyleReference | null | undefined {
+    const start: [number] = [0],
+      end: [number] = [0];
+    let style: ScPatternStyleReference | undefined;
+    for (let row = first; row <= last; row = end[0] + 1) {
+      const pattern = this.GetPatternRange(start, end, row);
+      if (!pattern) break;
+      const next = pattern.GetStyleSheet();
+      if (!next || (style && style !== next)) return null;
+      style = next;
+    }
+    return style;
+  }
+
   /** Replaces actual run attributes. @param start - Ordered first row. @param end - Ordered last row. @param pattern - Canonical holder. @returns Nothing. */
   SetPatternArea(start: number, end: number, pattern: CellAttributeHolder): void {
     this.pAttrArray.SetPatternArea(start, end, pattern);
@@ -623,6 +639,23 @@ export class ScColumn extends ScColumnData {
   /** Reads the native column coordinate. @returns Column. */
   GetCol(): number {
     return this.nCol;
+  }
+
+  /** Reads one column's style identity across disjoint marks. @param marks - Native selection. @returns Uniform style, null for mixed, or undefined for no rows. */
+  GetSelectionStyle(marks: ScMarkData): ScPatternStyleReference | null | undefined {
+    const iter = new ScMultiSelIter(marks.GetMultiSelData(), this.GetCol());
+    let style: ScPatternStyleReference | undefined;
+    for (
+      let [found, first, last] = iter.Next(0, 0);
+      found;
+      [found, first, last] = iter.Next(0, 0)
+    ) {
+      const next = this.GetAreaStyle(first, last);
+      if (next === undefined) continue;
+      if (!next || (style && style !== next)) return null;
+      style = next;
+    }
+    return style;
   }
   /** Reads the native sheet coordinate. @returns Sheet. */
   GetTab(): number {

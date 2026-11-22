@@ -62,20 +62,23 @@
     ".uno:Accent1CellStyles": {
       "label": "Accent 1",
       "showsDialog": false,
+      "targetUrl": ".uno:StyleApply?Style:string=Accent 1&FamilyName:string=CellStyles",
       "shortcuts": [],
-      "semantics": "check"
+      "semantics": "radio"
     },
     ".uno:Accent2CellStyles": {
       "label": "Accent 2",
       "showsDialog": false,
+      "targetUrl": ".uno:StyleApply?Style:string=Accent 2&FamilyName:string=CellStyles",
       "shortcuts": [],
-      "semantics": "check"
+      "semantics": "radio"
     },
     ".uno:Accent3CellStyles": {
       "label": "Accent 3",
       "showsDialog": false,
+      "targetUrl": ".uno:StyleApply?Style:string=Accent 3&FamilyName:string=CellStyles",
       "shortcuts": [],
-      "semantics": "check"
+      "semantics": "radio"
     },
     ".uno:AcceptChanges": {
       "label": "Manage",
@@ -236,8 +239,9 @@
     ".uno:BadCellStyles": {
       "label": "Bad",
       "showsDialog": false,
+      "targetUrl": ".uno:StyleApply?Style:string=Bad&FamilyName:string=CellStyles",
       "shortcuts": [],
-      "semantics": "check"
+      "semantics": "radio"
     },
     ".uno:BasicIDEAppear": {
       "label": "Edit Macros",
@@ -787,8 +791,9 @@
     ".uno:DefaultCellStyles": {
       "label": "Default",
       "showsDialog": false,
+      "targetUrl": ".uno:StyleApply?Style:string=Default&FamilyName:string=CellStyles",
       "shortcuts": [],
-      "semantics": "check"
+      "semantics": "radio"
     },
     ".uno:DefineDBName": {
       "label": "Define Range",
@@ -965,8 +970,9 @@
     ".uno:ErrorCellStyles": {
       "label": "Error",
       "showsDialog": false,
+      "targetUrl": ".uno:StyleApply?Style:string=Error&FamilyName:string=CellStyles",
       "shortcuts": [],
-      "semantics": "check"
+      "semantics": "radio"
     },
     ".uno:ExportAsGraphic": {
       "label": "Export as Image",
@@ -1085,8 +1091,9 @@
     ".uno:FootnoteCellStyles": {
       "label": "Footnote",
       "showsDialog": false,
+      "targetUrl": ".uno:StyleApply?Style:string=Footnote&FamilyName:string=CellStyles",
       "shortcuts": [],
-      "semantics": "check"
+      "semantics": "radio"
     },
     ".uno:FormProperties": {
       "label": "Form Properties",
@@ -1213,8 +1220,9 @@
     ".uno:GoodCellStyles": {
       "label": "Good",
       "showsDialog": false,
+      "targetUrl": ".uno:StyleApply?Style:string=Good&FamilyName:string=CellStyles",
       "shortcuts": [],
-      "semantics": "check"
+      "semantics": "radio"
     },
     ".uno:Grid": {
       "label": "Table Control",
@@ -1267,14 +1275,16 @@
     ".uno:Heading1CellStyles": {
       "label": "Heading 1",
       "showsDialog": false,
+      "targetUrl": ".uno:StyleApply?Style:string=Heading 1&FamilyName:string=CellStyles",
       "shortcuts": [],
-      "semantics": "check"
+      "semantics": "radio"
     },
     ".uno:Heading2CellStyles": {
       "label": "Heading 2",
       "showsDialog": false,
+      "targetUrl": ".uno:StyleApply?Style:string=Heading 2&FamilyName:string=CellStyles",
       "shortcuts": [],
-      "semantics": "check"
+      "semantics": "radio"
     },
     ".uno:HelpIndex": {
       "label": "%PRODUCTNAME Help",
@@ -1743,8 +1753,9 @@
     ".uno:NeutralCellStyles": {
       "label": "Neutral",
       "showsDialog": false,
+      "targetUrl": ".uno:StyleApply?Style:string=Neutral&FamilyName:string=CellStyles",
       "shortcuts": [],
-      "semantics": "check"
+      "semantics": "radio"
     },
     ".uno:NewDoc": {
       "label": "Templates",
@@ -1767,8 +1778,9 @@
     ".uno:NoteCellStyles": {
       "label": "Note",
       "showsDialog": false,
+      "targetUrl": ".uno:StyleApply?Style:string=Note&FamilyName:string=CellStyles",
       "shortcuts": [],
-      "semantics": "check"
+      "semantics": "radio"
     },
     ".uno:NumberFormatCurrency": {
       "label": "Currency",
@@ -2880,8 +2892,9 @@
     ".uno:WarningCellStyles": {
       "label": "Warning",
       "showsDialog": false,
+      "targetUrl": ".uno:StyleApply?Style:string=Warning&FamilyName:string=CellStyles",
       "shortcuts": [],
-      "semantics": "check"
+      "semantics": "radio"
     },
     ".uno:WebHtml": {
       "label": "Preview in Web Browser",

@@ -9,7 +9,11 @@ import { UndoFormulaToValue } from "../../source/ui/undo/undoconvert";
 import { ScUndoOutline } from "../../source/ui/undo/undodat";
 import { ScUndoShowHideTab, ScUndoTabColor, ScUndoPrintRange } from "../../source/ui/undo/undotab";
 import { ScUndoAddRangeData, ScUndoAllRangeNames } from "../../source/ui/undo/undorangename";
-import { ScUndoIndent, ScUndoRemoveMerge } from "../../source/ui/undo/undoblk";
+import {
+  ScUndoIndent,
+  ScUndoRemoveMerge,
+  ScUndoSelectionStyle,
+} from "../../source/ui/undo/undoblk";
 import { ScUndoWidthOrHeight } from "../../source/ui/undo/undoblk2";
 import { ScUndoCursorAttr, ScUndoPageBreak, ScUndoRangeNames } from "../../source/ui/undo/undocell";
 import {
@@ -66,6 +70,7 @@ export function History(this: CalcViewController, redo: boolean): boolean {
     cursorAction instanceof ScUndoPageBreak ||
     cursorAction instanceof ScUndoIndent ||
     cursorAction instanceof ScUndoSelectionAttr ||
+    cursorAction instanceof ScUndoSelectionStyle ||
     cursorAction instanceof ScUndoDeleteContents
       ? cursorAction.getAffectedRange().aStart
       : new ScAddress(
@@ -78,6 +83,7 @@ export function History(this: CalcViewController, redo: boolean): boolean {
   if (
     cursorAction instanceof ScUndoIndent ||
     cursorAction instanceof ScUndoSelectionAttr ||
+    cursorAction instanceof ScUndoSelectionStyle ||
     cursorAction instanceof ScUndoDeleteContents
   ) {
     this.viewData.GetMarkData().assign(cursorAction.GetMarkData());

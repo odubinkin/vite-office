@@ -7837,3 +7837,14 @@ clear the flag, so the enlarged rectangle may never be rescanned on the
 earlier sheet. Calc keeps the same loop and tab traversal.
 
 - [Original split view dispatch](../../vendor/libreoffice-reference/sc/source/ui/view/viewfun2.cxx#L1360)
+
+### CALC-823 — The current cell style can ignore the unallocated end of a selection
+
+The native range and disjoint-selection queries only inspect allocated
+columns. A marked range containing a styled cell and implicit Default cells
+in unallocated columns can therefore report the styled cell's style. The
+single-cursor query resolves Default when the cursor moves into that same
+unallocated area. Calc preserves both results for the Styles menu.
+
+- [Original area and selection queries](../../vendor/libreoffice-reference/sc/source/core/data/table2.cxx#L3165)
+- [Original cursor and selection dispatch](../../vendor/libreoffice-reference/sc/source/ui/view/viewfunc.cxx#L1555)

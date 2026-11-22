@@ -7,6 +7,7 @@ import type { CalcPointerKind } from "./calc-pointer-selection";
 import * as referenceInput from "./calc-reference-input";
 import { GoToAddress, PositionText } from "./calc-name-box";
 import * as cellInput from "./calc-cell-input";
+import { ScUndoSelectionStyle } from "../../source/ui/undo/undoblk";
 import { History } from "./calc-history";
 import { ScModule } from "../../inc/scmod";
 import { ScRefType } from "../../source/ui/inc/viewdata";
@@ -79,6 +80,34 @@ export class CalcViewController {
     else if (option === "grid") this.viewShell.ToggleSheetGrid(request);
     else this.viewShell.ToggleFormula(request);
     this.Changed();
+  }
+  /** Reads native source cell style selection. @returns Current cell style state. */
+  GetCellStyleState(): ReturnType<ScTabViewShell["GetStyleState"]> {
+    return this.viewShell.GetStyleState();
+  }
+  /** Applies a named cell style to the real view. @param request - Original request. @returns Native result mask. */
+  ExecuteCellStyle(request: SfxRequest): number | undefined {
+    if (!this.Commit()) {
+      request.Ignore();
+      return undefined;
+    }
+    const result = this.viewShell.ExecStyle(request);
+    if (request.IsDone()) this.SyncSheetView();
+    return result;
+  }
+  /** Reads whether the latest native style action can be repeated. @returns Repeat eligibility. */
+  CanRepeat(): boolean {
+    return (
+      this.mode === ScInputMode.SC_INPUT_NONE &&
+      this.shell.GetUndoManager().GetRepeatAction() instanceof ScUndoSelectionStyle
+    );
+  }
+  /** Repeats the retained action against the current selection. @returns Whether applied. */
+  Repeat(): boolean {
+    const action = this.shell.GetUndoManager().GetRepeatAction();
+    if (!(action instanceof ScUndoSelectionStyle) || !action.Repeat(this.viewShell)) return false;
+    this.SyncSheetView();
+    return true;
   }
   /** Routes native indentation through view,document operation and history. @param increment - Direction. @returns Result. */
   ChangeIndent(increment: boolean): boolean {

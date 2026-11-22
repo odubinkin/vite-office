@@ -22,7 +22,7 @@ it("opens connected top menus with shared shortcut captions", /** Uses real prod
       sheetWorkflows={session.sheetWorkflows}
     />,
   );
-  const labels = ["File", "Edit", "View", "Insert", "Format", "Sheet", "Data", "Tools"];
+  const labels = ["File", "Edit", "View", "Insert", "Format", "Styles", "Sheet", "Data", "Tools"];
   const menubar = screen.getByRole("menubar", { name: "Calc menu" });
   expect(
     within(menubar)
@@ -205,6 +205,9 @@ it("renders connected formatting placements with the bound shared font-size cont
     "Center Vertically",
     "Align Bottom",
     "Wrap Text",
+    "Merge and Center Cells",
+    "Merge Cells",
+    "Unmerge Cells",
     "Increase",
     "Decrease",
     "Borders (Shift to overwrite)",
@@ -236,10 +239,11 @@ it("renders connected formatting placements with the bound shared font-size cont
       control,
     ) => control.tagName === "BUTTON",
   )) {
-    const color = ["Font Color", "Background Color", "Border Color"].includes(
-      button.getAttribute("aria-label") as string,
-    );
-    expect(button).toBeEnabled();
+    const label = button.getAttribute("aria-label") ?? "";
+    const color = ["Font Color", "Background Color", "Border Color"].includes(label);
+    if (["Merge and Center Cells", "Merge Cells", "Unmerge Cells"].includes(label))
+      expect(button).toBeDisabled();
+    else expect(button).toBeEnabled();
     if (color) expect(button).toHaveClass("size-7", "rounded-l", "bg-white");
     else expect(button).toHaveClass("size-7", "rounded-md", "bg-white");
     if (["Bold", "Italic", "Underline"].includes(button.getAttribute("aria-label") as string))

@@ -47,6 +47,40 @@ export function ApplySelectionStyle(
   }
 }
 
+/** Reads the common source style across both native mark representations, including filtered rows. @param this - Workbook. @param marks - Actual selection. @returns Uniform style or null. */
+export function GetSelectionStyle(
+  this: ScDocument,
+  marks: ScMarkData,
+): ScPatternStyleReference | null {
+  const count = this.GetTableCount();
+  let style: ScPatternStyleReference | undefined;
+  if (marks.IsMultiMarked()) {
+    for (const tab of marks) {
+      if (tab >= count) break;
+      const next = this.FetchTable(tab)?.GetSelectionStyle(marks);
+      if (next === undefined) continue;
+      if (!next || (style && style !== next)) return null;
+      style = next;
+    }
+  }
+  if (marks.IsMarked()) {
+    const { aStart, aEnd } = marks.GetMarkArea();
+    for (let tab = aStart.Tab(); tab <= aEnd.Tab() && tab < count; tab++) {
+      if (!marks.GetTableSelect(tab)) continue;
+      const next = this.FetchTable(tab)?.GetAreaStyle(
+        aStart.Col(),
+        aStart.Row(),
+        aEnd.Col(),
+        aEnd.Row(),
+      );
+      if (next === undefined) continue;
+      if (!next || (style && style !== next)) return null;
+      style = next;
+    }
+  }
+  return style ?? null;
+}
+
 /** Applies the source merge-and-center format to the origin cell. @param document - Actual workbook. @param anchor - Merge origin. @returns Nothing. */
 export function ApplyMergeAlignment(document: ScDocument, anchor: ScAddress): void {
   const horizontal = new SvxHorJustifyItem(SvxCellHorJustify.Center, ATTR_HOR_JUSTIFY);
