@@ -1,10 +1,11 @@
 ---
 id: "202611220300-C7EE7Q"
 title: "Preserve native Writer annotation ranges in ODT"
-status: "DOING"
+result_summary: "Writer ODT preserves registered annotation ranges through save, reopen and Worker transfer; the tenth alignment task is complete."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 7
+revision: 8
 origin:
   system: "manual"
 depends_on:
@@ -41,11 +42,16 @@ quality_review:
     - "output/playwright/writer-odt-annotation-ranges/verification.md"
   findings:
     - "Pinned single and multi-paragraph ranges and related native mark tests pass, along with static and source provenance checks."
-commit: null
+commit:
+  hash: "2afdb62fe60163295a159f2644620070be5dc2c1"
+  message: "🧩 C7EE7Q code: preserve native Writer ODT annotation ranges"
 comments:
   -
     author: "CODER"
     body: "Start: continue direct-mode task in current checkout."
+  -
+    author: "CODER"
+    body: "Verified: Pinned single and multi-paragraph ODT annotation anchors, native field ownership and Worker transfer. All 56 Writer and 13 shared tests and required static checks passed."
 events:
   -
     type: "status"
@@ -60,8 +66,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "56 related Writer tests and 13 shared ODF tests passed. Verified source single- and multi-paragraph annotation ranges, trailing field binding, Worker transfer and ODT reopening. Static/provenance/registry checks passed."
+  -
+    type: "status"
+    at: "2026-11-22T03:17:29.042Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: Pinned single and multi-paragraph ODT annotation anchors, native field ownership and Worker transfer. All 56 Writer and 13 shared tests and required static checks passed."
 doc_version: 3
-doc_updated_at: "2026-11-22T03:10:17.191Z"
+doc_updated_at: "2026-11-22T03:17:29.050Z"
 doc_updated_by: "CODER"
 description: "Port native annotation range endpoints, field reanchoring and range export through Writer ODT and Worker with pinned one- and multi-paragraph fixtures."
 sections:
