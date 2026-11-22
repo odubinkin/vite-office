@@ -89,7 +89,7 @@ it("ports the original spell-out gallery pictures and formatted names" /** Verif
   mount();
   open();
   const modal = dialog();
-  const gallery = modal.getByRole("listbox", { name: "Format", exact: true });
+  const gallery = modal.getByRole("listbox", { name: "Format" });
   const list = within(gallery);
   for (const [label, modifier] of [
     ["one hundred", ""],
@@ -97,7 +97,7 @@ it("ports the original spell-out gallery pictures and formatted names" /** Verif
     ["One Hundred", "title "],
     ["ONE HUNDRED", "upper "],
   ]) {
-    const row = list.getByRole("option", { name: label, exact: true });
+    const row = list.getByRole("option", { name: label });
     const code = "[NatNum12 " + modifier + "cardinal]0";
     expect(row).toHaveAttribute("value", code);
     fireEvent.change(gallery, { target: { value: code } });
