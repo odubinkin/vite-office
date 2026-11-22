@@ -4,7 +4,7 @@ title: "Carry imported Calc data bars through native cell painting"
 status: "DOING"
 priority: "high"
 owner: "CODER"
-revision: 4
+revision: 6
 origin:
   system: "manual"
 depends_on:
@@ -25,11 +25,29 @@ plan_approval:
   updated_by: "ORCHESTRATOR"
   note: null
 verification:
-  state: "pending"
-  updated_at: null
-  updated_by: null
-  note: null
+  state: "ok"
+  updated_at: "2026-11-22T00:47:30.855Z"
+  updated_by: "CODER"
+  note: "Native conditional paint selection and ODS data-bar rendering passed focused verification through core, production Chromium, and ODS export and reopen."
   attempts: 0
+quality_review:
+  state: "pass"
+  updated_at: "2026-11-22T00:47:31.522Z"
+  updated_by: "EVALUATOR"
+  note: "The native Calc conditional paint paths and browser ODS round trip satisfy the bounded scope."
+  evaluated_sha: "b4b7494cad8a58b6964eccbe2657ea5e543674b2"
+  blueprint_digest: "43bffa5b44a2d431b94e6a2f14c11061649571a3c9e201873415e98837a41efb"
+  evidence_refs:
+    - ".agentplane/tasks/202611212324-N26ZF8/README.md"
+    - ".agentplane/tasks/202611212324-N26ZF8/quality/20261122-004731522-recovery-context/quality-report.json"
+    - ".agentplane/tasks/202611212324-N26ZF8/quality/20261122-004731522-recovery-context/evaluator-prompt.md"
+    - ".agentplane/tasks/202611212324-N26ZF8/quality/20261122-004731522-recovery-context/evaluator-opinion.md"
+    - ".agentplane/tasks/202611212324-N26ZF8/blueprint/resolved-snapshot.json"
+    - "apps/office/src/sc/source/core/data/fillinfo.test.ts"
+    - "apps/office/src/sc/source/ui/view/output.test.ts"
+    - "output/playwright/N26ZF8/browser.json"
+  findings:
+    - "Style, scale and bar are evaluated independently in native order. Only-bar mode suppresses paint while leaving the accessible value and editor available."
 commit: null
 comments:
   -
@@ -43,8 +61,14 @@ events:
     from: "TODO"
     to: "DOING"
     note: "Start: port the native Calc conditional data-bar paint path using the pinned LibreOffice sources and focused ODS verification."
+  -
+    type: "verify"
+    at: "2026-11-22T00:47:30.855Z"
+    author: "CODER"
+    state: "ok"
+    note: "Native conditional paint selection and ODS data-bar rendering passed focused verification through core, production Chromium, and ODS export and reopen."
 doc_version: 3
-doc_updated_at: "2026-11-22T00:36:04.236Z"
+doc_updated_at: "2026-11-22T00:47:30.918Z"
 doc_updated_by: "CODER"
 description: "Resolve the native conditional paint results independently in their source order and carry imported ODS data-bar geometry, colors, axis and value visibility to the existing grid. Preserve persisted settings and current document actions."
 sections:
@@ -65,6 +89,38 @@ sections:
     - Record a clean task-scoped checkout. The next full run follows the ten-task cadence.
   Verification: |-
     <!-- BEGIN VERIFICATION RESULTS -->
+    ### 2026-11-22T00:47:30.855Z — VERIFY — ok
+
+    By: CODER
+
+    Note: Native conditional paint selection and ODS data-bar rendering passed focused verification through core, production Chromium, and ODS export and reopen.
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-22T00:36:04.236Z, excerpt_hash=sha256:67915fb4ee6823fd623d15c952cb5860cad6436494144ee4f5b74b1d7adfbbcb
+
+    Details:
+
+    Calc Vitest: 39 tests in eight owner files passed, including native style, scale and data-bar precedence and inclusive geometry. Production Office build and Office typecheck passed. Chromium Calc: two cases passed, covering the pinned databar.ods, positive and negative bars, centered axis color, bar-only display, accessible value, formula bar, and export and reopen. The existing reference-backed XLSX color fills also passed. Focused lint, formatting, module boundary and provenance checks passed. Calc registry invariants, routing, doctor and git diff checks passed. Doctor reported the existing hook shim warning. Chromium evidence is in output/playwright/N26ZF8/browser.json. The next full run follows the ten-task interval.
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202611212324-N26ZF8/blueprint/resolved-snapshot.json
+    - old_digest: 43bffa5b44a2d431b94e6a2f14c11061649571a3c9e201873415e98837a41efb
+    - current_digest: 43bffa5b44a2d431b94e6a2f14c11061649571a3c9e201873415e98837a41efb
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202611212324-N26ZF8
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task verify-show 202611212324-N26ZF8
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: false
+    - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+    - risks: none
+
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Revert the implementation and its source witnesses in the task commit. Existing ODS data-bar settings retain their original stored shape."
   Findings: "The preceding checkpoint owns its full regression and finishes before this task begins. The Graphify query located the existing grid and conditional result entry points; pinned fillinfo.cxx and output.cxx define the gaps this task addresses."
@@ -97,6 +153,38 @@ Carry imported Calc data bars from the native conditional-format entries into th
 ## Verification
 
 <!-- BEGIN VERIFICATION RESULTS -->
+### 2026-11-22T00:47:30.855Z — VERIFY — ok
+
+By: CODER
+
+Note: Native conditional paint selection and ODS data-bar rendering passed focused verification through core, production Chromium, and ODS export and reopen.
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-22T00:36:04.236Z, excerpt_hash=sha256:67915fb4ee6823fd623d15c952cb5860cad6436494144ee4f5b74b1d7adfbbcb
+
+Details:
+
+Calc Vitest: 39 tests in eight owner files passed, including native style, scale and data-bar precedence and inclusive geometry. Production Office build and Office typecheck passed. Chromium Calc: two cases passed, covering the pinned databar.ods, positive and negative bars, centered axis color, bar-only display, accessible value, formula bar, and export and reopen. The existing reference-backed XLSX color fills also passed. Focused lint, formatting, module boundary and provenance checks passed. Calc registry invariants, routing, doctor and git diff checks passed. Doctor reported the existing hook shim warning. Chromium evidence is in output/playwright/N26ZF8/browser.json. The next full run follows the ten-task interval.
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202611212324-N26ZF8/blueprint/resolved-snapshot.json
+- old_digest: 43bffa5b44a2d431b94e6a2f14c11061649571a3c9e201873415e98837a41efb
+- current_digest: 43bffa5b44a2d431b94e6a2f14c11061649571a3c9e201873415e98837a41efb
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202611212324-N26ZF8
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task verify-show 202611212324-N26ZF8
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: false
+- repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- risks: none
+
 <!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan

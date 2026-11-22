@@ -1,0 +1,25 @@
+{
+  "schema_version": 1,
+  "task_id": "202611212324-N26ZF8",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-11-22T00:47:31.522Z",
+  "verdict": "pass",
+  "summary": "The native Calc conditional paint paths and browser ODS round trip satisfy the bounded scope.",
+  "evaluated_sha": "b4b7494cad8a58b6964eccbe2657ea5e543674b2",
+  "blueprint_digest": "43bffa5b44a2d431b94e6a2f14c11061649571a3c9e201873415e98837a41efb",
+  "findings": [
+    "Style, scale and bar are evaluated independently in native order. Only-bar mode suppresses paint while leaving the accessible value and editor available."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202611212324-N26ZF8/README.md",
+    "apps/office/src/sc/source/core/data/fillinfo.test.ts",
+    "apps/office/src/sc/source/ui/view/output.test.ts",
+    "output/playwright/N26ZF8/browser.json"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": [
+    "Native icon-set drawing and conditional protection visibility remain outside these represented paint fields."
+  ]
+}
