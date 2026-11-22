@@ -1,10 +1,11 @@
 ---
 id: "202611220250-KE98GA"
 title: "Connect Calc Format Cells typography and borders"
-status: "DOING"
+result_summary: "calc-format-cells-typography-and-borders"
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 9
+revision: 10
 origin:
   system: "manual"
 depends_on:
@@ -44,11 +45,16 @@ quality_review:
     - "output/calc-task20-types-final.log"
   findings:
     - "Same-agent review of the staged item ownership, actual frame and ODS state, pinned regression ports and browser paint."
-commit: null
+commit:
+  hash: "93530ea32cf4e8be624a34b46b23a29da90e6a36"
+  message: "🧩 KE98GA code: connect Calc typography, borders and native cell ODS attributes"
 comments:
   -
     author: "CODER"
     body: "Start: bind native Calc typography and border pages to the active Format Cells dialog and verify their document history."
+  -
+    author: "CODER"
+    body: "Verified: Calc typography and border pages, native frame and ODS properties, single Undo and targeted Chromium checks"
 events:
   -
     type: "status"
@@ -63,8 +69,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Verified: native Calc typography and frame pages pass focused Office, ODS and production Chromium checks"
+  -
+    type: "status"
+    at: "2026-11-22T03:09:54.600Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: Calc typography and border pages, native frame and ODS properties, single Undo and targeted Chromium checks"
 doc_version: 3
-doc_updated_at: "2026-11-22T03:07:40.083Z"
+doc_updated_at: "2026-11-22T03:09:54.601Z"
 doc_updated_by: "CODER"
 description: "Connect native Font, Font Effects and Borders pages over Calc item sets, selection frame, shared widgets, history and existing document representations."
 sections:
