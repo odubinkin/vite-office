@@ -1,10 +1,11 @@
 ---
 id: "202611201803-QMYDFT"
 title: "Integrate current Writer and Calc development into main"
-status: "DOING"
+result_summary: "Integrated the published Writer and Calc tips with the pinned LibreOffice contracts and scoped verification."
+status: "DONE"
 priority: "high"
 owner: "CODER"
-revision: 11
+revision: 12
 origin:
   system: "manual"
 depends_on: []
@@ -40,11 +41,16 @@ quality_review:
     - "git merge-base --is-ancestor for origin/writer and origin/calc"
   findings:
     - "Both branch histories, range and annotation regression checks, and both upstream issue journals were preserved. The type and module-boundary checks passed."
-commit: null
+commit:
+  hash: "e044eba6577d878b4a6e089cfd171aa0a4ff673b"
+  message: "🧩 QMYDFT code: preserve Writer ODF items and Calc sheet-qualified ranges"
 comments:
   -
     author: "CODER"
     body: "Start: continue direct-mode task in current checkout."
+  -
+    author: "CODER"
+    body: "Verified: Writer, Calc, and shared merge-related tests passed, including corrected regressions and follow-up replays. The Office type and module-boundary checks passed."
 events:
   -
     type: "status"
@@ -71,8 +77,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Focused Writer, Calc, and shared checks passed across the merge and corrected replays. Both published feature tips are ancestors of the integration commit."
+  -
+    type: "status"
+    at: "2026-11-22T13:15:02.421Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: Writer, Calc, and shared merge-related tests passed, including corrected regressions and follow-up replays. The Office type and module-boundary checks passed."
 doc_version: 3
-doc_updated_at: "2026-11-22T13:13:34.239Z"
+doc_updated_at: "2026-11-22T13:15:02.422Z"
 doc_updated_by: "CODER"
 description: "Publish current feature branches, integrate both into main, run complete verification and fix regressions, record suspected upstream issues, publish main and synchronize both development checkouts."
 sections:
