@@ -1,10 +1,11 @@
 ---
 id: "202611220311-YBQJFN"
 title: "Run full Writer and Calc ODF regression after annotation range parity"
-status: "DOING"
+result_summary: "615 Chromium and 130 inventory tests passed. All three Office timeout cases and the corrected Writer WhichId check passed their owner replays."
+status: "DONE"
 priority: "high"
 owner: "CODER"
-revision: 7
+revision: 8
 origin:
   system: "manual"
 depends_on:
@@ -40,11 +41,16 @@ quality_review:
     - "output/playwright/odf-full-checkpoint-next/verification.md"
   findings:
     - "The existing Office 100 percent global coverage threshold remains unmet. No coverage-driven tests or threshold changes were made."
-commit: null
+commit:
+  hash: "582bcf95a586be4cd0624c7335fc1fced0b7c20f"
+  message: "🧩 YBQJFN regression: count the consumed Writer hyphenation identity"
 comments:
   -
     author: "CODER"
     body: "Start: continue direct-mode task in current checkout."
+  -
+    author: "CODER"
+    body: "Verified: Full Office, tooling, inventory and Chromium regression stages completed. All functional failures passed their owner replays or were fixed against the pinned source. The Office coverage threshold remains unmet."
 events:
   -
     type: "status"
@@ -59,8 +65,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Complete scheduled regression. All 615 Chromium and 130 inventory tests passed. Three Office timeout cases passed serial owner replay. The stale WhichId tooling assertion was corrected and all owner checks passed. The existing Office coverage threshold remains unmet."
+  -
+    type: "status"
+    at: "2026-11-22T12:38:14.877Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: Full Office, tooling, inventory and Chromium regression stages completed. All functional failures passed their owner replays or were fixed against the pinned source. The Office coverage threshold remains unmet."
 doc_version: 3
-doc_updated_at: "2026-11-22T12:37:21.024Z"
+doc_updated_at: "2026-11-22T12:38:14.878Z"
 doc_updated_by: "CODER"
 description: "Run all Office, production Chromium, tooling and inventory tests after the tenth scoped alignment task, repair functional regressions and keep the alignment goal active."
 sections:
