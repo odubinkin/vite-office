@@ -40,6 +40,9 @@ export function paragraphPropertiesKey(properties?: OdfParagraphProperties): str
     properties?.hyphenation === undefined
       ? ""
       : encodeURIComponent(JSON.stringify(properties.hyphenation)),
+    properties?.justification === undefined
+      ? ""
+      : encodeURIComponent(JSON.stringify(properties.justification)),
   ]
     .map(
       /** Encodes one optional paragraph metric. @param value - Metric. @returns Stable field. */ (
@@ -119,6 +122,13 @@ export function parseParagraphPropertiesKey(key: string): OdfParagraphProperties
       ? {
           hyphenation: JSON.parse(decodeURIComponent(fields[26])) as NonNullable<
             OdfParagraphProperties["hyphenation"]
+          >,
+        }
+      : {}),
+    ...(fields[27]
+      ? {
+          justification: JSON.parse(decodeURIComponent(fields[27])) as NonNullable<
+            OdfParagraphProperties["justification"]
           >,
         }
       : {}),

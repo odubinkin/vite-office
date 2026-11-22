@@ -179,6 +179,7 @@ it("owns source tab keys before spin steps,retains tab changes and uses native f
     />,
   );
   const first = screen.getByRole("tab", { name: "Indents & Spacing" }),
+    alignment = screen.getByRole("tab", { name: "Alignment" }),
     flow = screen.getByRole("tab", { name: "Text Flow" }),
     tabs = screen.getByRole("tab", { name: "Tabs" });
   expect(first).toHaveFocus();
@@ -198,6 +199,8 @@ it("owns source tab keys before spin steps,retains tab changes and uses native f
   expect(first).toHaveFocus();
   const metric = screen.getByLabelText("Above paragraph (in)");
   fireEvent.keyDown(metric, { key: "PageDown", ctrlKey: true });
+  expect(alignment).toHaveFocus();
+  fireEvent.keyDown(alignment, { key: "PageDown", ctrlKey: true });
   expect(flow).toHaveFocus();
   fireEvent.keyDown(flow, { key: "PageDown", ctrlKey: true });
   expect(tabs).toHaveFocus();

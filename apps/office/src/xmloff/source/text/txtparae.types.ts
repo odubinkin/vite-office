@@ -1,4 +1,5 @@
 /** @fileoverview Bounded native-value ODF character handoff for text export/import; independent UNO script scalars,underline properties and original font metadata are preserved. No browser boolean formatting model or substitute UNO provider. */
+import type { OdfParagraphJustification } from "../style/adjushdl";
 import type { OdfParagraphHyphenation } from "./txtprmap";
 import type { OdfFillProperties } from "../draw/fill-properties";
 import type { LanguageType } from "../../../i18nlangtag/inc/lang";
@@ -110,6 +111,7 @@ export interface OdfParagraphProperties extends OdfBoxProperties, OdfFillPropert
   readonly keepWithNext?: boolean;
   readonly registerModeActive?: boolean;
   readonly hyphenation?: OdfParagraphHyphenation;
+  readonly justification?: OdfParagraphJustification;
   readonly keepTogether?: boolean;
   readonly widows?: number;
   readonly verticalAlign?: number;

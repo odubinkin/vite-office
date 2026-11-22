@@ -647,6 +647,7 @@ export function exportParagraphHyphenation(settings?: OdfParagraphHyphenation): 
 
 /** Original import property map output targets the shared XPropertySet contract. */
 import type { XMLAutoStyleFamily, XMLPropertySet } from "../../inc/txtimp";
+import { getParagraphAlignmentValue, paragraphJustificationProperties } from "../style/adjushdl";
 import type { XMLParagraphImportProperties } from "./txtparai";
 import type { OdfParagraphAlignment } from "./txtparae";
 import { OUString } from "../../../sal/inc/rtl/ustring";
@@ -789,11 +790,11 @@ export function applyTextImportProperties(
       }
     }
     if (alignment !== undefined)
-      add(
-        "ParaAdjust",
-        alignment === "center" ? 3 : alignment === "right" ? 6 : alignment === "justify" ? 2 : 5,
-        "sal_Int16",
-      );
+      add("ParaAdjust", getParagraphAlignmentValue(alignment), "sal_Int16");
+    for (const [name, , , kind] of paragraphJustificationProperties) {
+      const value = paragraph.justification?.[name];
+      if (value !== undefined) add(name, value, kind === "bool" ? "bool" : "sal_Int16");
+    }
     if (leftMargin !== undefined) add("ParaLeftMargin", mm(leftMargin), "sal_Int32");
     for (const [key, name] of [
       ["firstLineIndent", "ParaFirstLineIndent"],

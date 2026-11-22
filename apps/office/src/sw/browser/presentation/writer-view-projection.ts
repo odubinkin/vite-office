@@ -13,7 +13,8 @@ import { browserBorderLine } from "../../../svx/browser/dialog/border-line";
 import { SvxBoxItem, SvxBoxItemLine } from "../../../editeng/source/items/frmitems";
 import { SvxColorItem } from "../../../editeng/inc/colritem";
 import { SvxCaseMapItem } from "../../../editeng/inc/cmapitem";
-import { SvxCaseMap } from "../../../editeng/inc/svxenum";
+import type { SvxAdjustItem } from "../../../editeng/inc/adjustitem";
+import { SvxAdjust, SvxCaseMap } from "../../../editeng/inc/svxenum";
 import { SvxEmphasisMarkItem } from "../../../editeng/inc/emphasismarkitem";
 import { FontEmphasisMark } from "../../../tools/inc/fontenum";
 import { SvxEscapementItem } from "../../../editeng/inc/escapementitem";
@@ -36,6 +37,7 @@ import {
   RES_CHRATR_NOHYPHEN,
   RES_CHRATR_OPTICAL_SIZING,
   RES_PARATR_HYPHENZONE,
+  RES_PARATR_ADJUST,
   RES_CHRATR_SCALEW,
   RES_CHRATR_CASEMAP,
   RES_CHRATR_CROSSEDOUT,
@@ -121,6 +123,9 @@ import {
 } from "../../source/core/text/txtfld";
 import type { SwNumberingTabSettings } from "../../source/core/text/txttab";
 import { getFontFamilyGeneric } from "../../../xmloff/source/style/fonthdl";
+import type { WriterParagraphComputedStyle } from "./writer-view-projection.types";
+export type { WriterParagraphComputedStyle } from "./writer-view-projection.types";
+
 /** Detached document style selector metadata. */
 export type WriterParagraphStyleOption = StyleToolboxEntry;
 
@@ -227,38 +232,6 @@ export interface WriterInlineGraphicProjection {
   readonly right: number;
   readonly upper: number;
   readonly lower: number;
-}
-
-/** Browser-ready values projected from effective Writer paragraph items. */
-export interface WriterParagraphComputedStyle {
-  /** Effective automatic first-line mode; omitted detached DTOs retain the manual default. */
-  readonly autoFirstLineIndent?: boolean;
-  readonly autoKerning?: boolean;
-  readonly autoHyphenation?: boolean;
-  readonly hyphenationLimits?: string;
-  readonly opticalSizing?: boolean;
-  readonly color?: string;
-  readonly contextualSpacing?: boolean;
-  readonly firstLineIndentPt: number;
-  readonly fontFamily?: string;
-  /** Layout offset distinct from the authored item; omitted detached DTOs retain their raw value. */
-  readonly resolvedFirstLineIndentPt?: number;
-  readonly fontFamilyGeneric?: string;
-  readonly fontStyle: "italic" | "normal";
-  readonly fontSizePt: number;
-  readonly fontWeight: 400 | 700;
-  readonly highlight?: string;
-  readonly backgroundColor?: string;
-  readonly lineHeight: number;
-  readonly lineSpacingMode?: "proportional" | "fixed" | "minimum" | "leading";
-  readonly lineSpacingValue?: number;
-  readonly tabStopPositionPt?: number | undefined;
-  readonly tabStopsPt?: readonly number[] | undefined;
-  readonly keepWithNext?: boolean;
-  readonly countLineNumbers?: boolean;
-  readonly lowerSpacingPt: number;
-  readonly rightMarginPt: number;
-  readonly upperSpacingPt: number;
 }
 
 /** Immutable browser presentation value with no mutable model references. */
@@ -425,6 +398,9 @@ export class WriterViewProjection {
         const font = node.GetAttr(RES_CHRATR_FONT) as SvxFontItem;
         const hyphenation = (node.GetAttr(RES_PARATR_HYPHENZONE) as SvxHyphenZoneItem).QueryValue();
         const fontFamilyGeneric = getFontFamilyGeneric(font.GetFamily());
+        const adjustment = node.GetAttr(RES_PARATR_ADJUST) as SvxAdjustItem;
+        const alignment = adjustment.GetAdjust(),
+          lastLine = adjustment.GetLastBlock();
         return Object.freeze({
           ...(rulerTabStops.length === 0 ? {} : { rulerTabStops: Object.freeze(rulerTabStops) }),
           rulerTabSettings: Object.freeze({
@@ -437,6 +413,20 @@ export class WriterViewProjection {
           computedStyle: Object.freeze({
             autoFirstLineIndent: firstLine.IsAutoFirst(),
             autoHyphenation: hyphenation.hyphen,
+            logicalAlignment:
+              alignment === SvxAdjust.ParaStart
+                ? "start"
+                : alignment === SvxAdjust.ParaEnd
+                  ? "end"
+                  : undefined,
+            lastLineAlignment:
+              alignment === SvxAdjust.Block
+                ? lastLine === SvxAdjust.Center
+                  ? "center"
+                  : lastLine === SvxAdjust.Block
+                    ? "justify"
+                    : "start"
+                : undefined,
             ...(hyphenation.hyphen
               ? {
                   hyphenationLimits: `${Math.max(1, hyphenation.minWordLength)} ${Math.max(1, hyphenation.minLead)} ${Math.max(1, hyphenation.minTrail)}`,

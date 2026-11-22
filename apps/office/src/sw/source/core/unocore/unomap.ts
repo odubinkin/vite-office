@@ -23,6 +23,8 @@ import { cppu_detail_getUnoType_ShadowFormat as shadowFormatType } from "../../.
 import * as H from "../../../inc/hintids";
 import { WID_DOC_DEFAULT_PAGE_MODE, WID_DOC_INTEROP_GRAB_BAG } from "../../../inc/unomap";
 import {
+  adjustmentMembers,
+  adjustmentNames,
   boxMembers,
   charBoxMembers,
   charBoxNames,
@@ -436,9 +438,7 @@ export const SwUnoPropertyMap: ReadonlyMap<string, SwUnoPropertyEntry> = new Map
     { type: "sal_Int16", which: H.RES_FRAMEDIR, member: 0, kind: "short", attributes: 0 },
   ],
   ["ParaVertAlignment", row(H.RES_PARATR_VERTALIGN, "sal_Int16", 0, 1)],
-  ["ParaAdjust", row(H.RES_PARATR_ADJUST, "sal_Int16", 0, 1)],
-  ["ParaLastLineAdjust", row(H.RES_PARATR_ADJUST, "sal_Int16", 1, 1)],
-  ["ParaExpandSingleWord", row(H.RES_PARATR_ADJUST, "bool", 2, 1)],
+  ...adjustmentMembers,
   [
     "ParaLeftMargin",
     {
@@ -636,9 +636,7 @@ const paragraphStyleProperties = new Set([
   "CharHighlight",
   "WritingMode",
   "ParaVertAlignment",
-  "ParaAdjust",
-  "ParaLastLineAdjust",
-  "ParaExpandSingleWord",
+  ...adjustmentNames,
   "ParaLeftMargin",
   "ParaRightMargin",
   "ParaFirstLineIndent",
@@ -828,9 +826,7 @@ const textDefaultProperties = new Set([
   "CharHighlight",
   "WritingMode",
   "ParaVertAlignment",
-  "ParaAdjust",
-  "ParaLastLineAdjust",
-  "ParaExpandSingleWord",
+  ...adjustmentNames,
   "ParaLeftMargin",
   "ParaRightMargin",
   "ParaFirstLineIndent",

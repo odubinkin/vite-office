@@ -4,7 +4,7 @@ title: "Implement Writer search and replace core and browser UI"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 126
+revision: 127
 origin:
   system: "manual"
 depends_on:
@@ -541,6 +541,16 @@ comments:
       - Writer projects the native minimum word size and required lead/trail characters through the browser's hyphenate-limit-chars property. Full advanced LibreOffice dictionary, consecutive-line and page/column/spread balancing behavior remains outside the browser device binding.
       - Source reviewed against SwTextShell Paragraph command in textsh1.cxx, SvxExtParagraphTabPage::Reset/FillItemSet/HyphenClickHdl and its native textflowpage.ui.
       - Passed 59 targeted Writer tests across seven files and the focused Chromium search/paragraph/character hyphenation scenario. Production TypeScript/Vite build, scoped lint and format, boundaries, resources, source tree, provenance, Writer inventory and AgentPlane routing passed. Global checks retain 307 existing JSDoc findings and three unrelated file-size findings. The full regression cadence is unchanged.
+  -
+    author: "CODER"
+    body: |-
+      Writer Paragraph Alignment checkpoint
+
+      - The ordinary Paragraph command exposes the upstream Alignment position in the tab order. The page edits the complete SvxAdjustItem and independent SvxParaVertAlignItem. The native exchange preserves mixed selections, runs one history entry and applies only the edited typed items.
+      - Body presentation uses the native browser text-align and text-align-last values. Named and automatic ODT styles preserve physical and logical horizontal alignment, last-line alignment, single-word expansion, justification metrics and Paragraph Composer. The UNO map uses the original SvxAdjustItem member IDs.
+      - Targeted Writer paragraph-dialog, search-formatting, DOM paragraph paint, ODT and UNO test group passed 71 tests in seven files. A follow-up run passed 15 tests in the two native paragraph/dialog files, including the added mixed-selection regression. One Chromium test passed for the ordinary Format > Paragraph command, center last-line rendering, dialog reopening and Undo.
+      - Writer resources and the two generator tests, source provenance, source tree, module boundaries, AgentPlane routing, scoped ESLint, Prettier and git diff checks passed. Repository-wide JSDoc and file-size checks still report pre-existing issues. No failures are in the changed files.
+      - Direction and snap-to-grid controls are outside this checkpoint. Exact typographic effects of text-to-text alignment and advanced justification remain open. This is an implementation checkpoint on the active task. It does not advance the ten-closed-task test cadence.
 
 events:
   -
@@ -1273,9 +1283,21 @@ events:
       - Writer projects the native minimum word size and required lead/trail characters through the browser's hyphenate-limit-chars property. Full advanced LibreOffice dictionary, consecutive-line and page/column/spread balancing behavior remains outside the browser device binding.
       - Source reviewed against SwTextShell Paragraph command in textsh1.cxx, SvxExtParagraphTabPage::Reset/FillItemSet/HyphenClickHdl and its native textflowpage.ui.
       - Passed 59 targeted Writer tests across seven files and the focused Chromium search/paragraph/character hyphenation scenario. Production TypeScript/Vite build, scoped lint and format, boundaries, resources, source tree, provenance, Writer inventory and AgentPlane routing passed. Global checks retain 307 existing JSDoc findings and three unrelated file-size findings. The full regression cadence is unchanged.
+  -
+    type: "comment"
+    at: "2026-11-22T00:31:27.822Z"
+    author: "CODER"
+    body: |-
+      Writer Paragraph Alignment checkpoint
+
+      - The ordinary Paragraph command exposes the upstream Alignment position in the tab order. The page edits the complete SvxAdjustItem and independent SvxParaVertAlignItem. The native exchange preserves mixed selections, runs one history entry and applies only the edited typed items.
+      - Body presentation uses the native browser text-align and text-align-last values. Named and automatic ODT styles preserve physical and logical horizontal alignment, last-line alignment, single-word expansion, justification metrics and Paragraph Composer. The UNO map uses the original SvxAdjustItem member IDs.
+      - Targeted Writer paragraph-dialog, search-formatting, DOM paragraph paint, ODT and UNO test group passed 71 tests in seven files. A follow-up run passed 15 tests in the two native paragraph/dialog files, including the added mixed-selection regression. One Chromium test passed for the ordinary Format > Paragraph command, center last-line rendering, dialog reopening and Undo.
+      - Writer resources and the two generator tests, source provenance, source tree, module boundaries, AgentPlane routing, scoped ESLint, Prettier and git diff checks passed. Repository-wide JSDoc and file-size checks still report pre-existing issues. No failures are in the changed files.
+      - Direction and snap-to-grid controls are outside this checkpoint. Exact typographic effects of text-to-text alignment and advanced justification remain open. This is an implementation checkpoint on the active task. It does not advance the ten-closed-task test cadence.
 
 doc_version: 3
-doc_updated_at: "2026-11-22T00:16:34.247Z"
+doc_updated_at: "2026-11-22T00:31:27.822Z"
 doc_updated_by: "CODER"
 description: "Implement the approved coherent Writer search-and-replace feature from pinned LibreOffice sources: real shared search engine and options, native paragraph/cursor traversal and replacement/history contracts, view-owned search state and dispatch, Find toolbar and Find and Replace dialog with generated upstream command placement and shortcuts. Preserve source semantics and explicit unsupported boundaries; never substitute DOM text search or browser RegExp for ICU contracts. Work only on writer in vite-office-writer; local upstream reading approved, no network or merges. Keep active until approved scope is verified."
 sections:

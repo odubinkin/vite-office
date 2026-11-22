@@ -300,7 +300,13 @@ export function WriterEditableParagraph({
                   ? `${paragraph.textLeftMargin / 20}pt`
                   : undefined,
             marginInlineEnd: `${paragraph.computedStyle.rightMarginPt}pt`,
-            textAlign: paragraph.alignment,
+            textAlign: paragraph.computedStyle.logicalAlignment ?? paragraph.alignment,
+            textAlignLast:
+              paragraph.computedStyle.lastLineAlignment === undefined
+                ? undefined
+                : fragmentEnd === paragraph.text.length
+                  ? paragraph.computedStyle.lastLineAlignment
+                  : "justify",
             // SwNumFormat already places a list's first line; applying the
             // paragraph indent here moves its text back into the marker slot.
             textIndent:

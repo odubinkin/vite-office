@@ -12,6 +12,7 @@ import {
   type OdfPageStoryGeometry,
 } from "./PageMasterStyleMap";
 import type { PageStyleLayout } from "../../../offapi/com/sun/star/style/PageStyleLayout";
+import { importParagraphAlignment, importParagraphJustification } from "./adjushdl";
 import { importWritingDirection } from "./prhdlfac";
 import type { OdfBoxProperties } from "./bordrhdl";
 import { XMLShadowPropHdl } from "./shadwhdl";
@@ -429,7 +430,7 @@ class XMLStyleContext extends SvXMLImportContext {
       if (this.hasParagraphProperties)
         throw new Error("ODF style has duplicate paragraph-properties.");
       this.hasParagraphProperties = true;
-      this.alignment = importAlignment(attributes);
+      this.alignment = importParagraphAlignment(attributes.get(XMLToken.FO_TEXT_ALIGN));
       this.leftMargin = importLeftMargin(attributes);
       this.paragraphProperties = importParagraphProperties(attributes);
       if (this.isDefault)
@@ -518,16 +519,6 @@ class XMLStyleContext extends SvXMLImportContext {
     if (this.supported && this.isDefault && !this.styles.IsAutoStyle())
       this.target.registerDefaultStyle(this.GetDefinition());
   }
-}
-
-/** Imports paragraph alignment. @param attributes - Property attributes. @returns Alignment or undefined. */
-function importAlignment(attributes: FastAttributeList): OdfParagraphAlignment | undefined {
-  const value = attributes.get(XMLToken.FO_TEXT_ALIGN);
-  if (value === null) return undefined;
-  if (value === "start" || value === "left") return "left";
-  if (value === "end" || value === "right") return "right";
-  if (value === "center" || value === "justify") return value;
-  throw new Error(`Unsupported ODF paragraph alignment: ${value}`);
 }
 
 /** Imports a signed `fo:margin-left` length into Writer twips. @param attributes - Property attributes. @returns Margin or undefined. */
@@ -640,6 +631,7 @@ function importParagraphProperties(
     "paragraph line-number participation",
   );
   const hyphenation = importParagraphHyphenation(attributes);
+  const justification = importParagraphJustification(attributes);
   const register: [boolean] = [false];
   const hasRegister = Converter.convertBool(
     register,
@@ -697,6 +689,7 @@ function importParagraphProperties(
     ...(breakAfter === undefined ? {} : { breakAfter }),
     ...(countLineNumbers === undefined ? {} : { countLineNumbers }),
     ...(hyphenation === undefined ? {} : { hyphenation }),
+    ...(justification === undefined ? {} : { justification }),
     ...(hasRegister ? { registerModeActive: register[0] } : {}),
     ...(joinBorder === undefined ? {} : { joinBorder }),
     ...borders,

@@ -7,15 +7,23 @@ import { createWriterDocumentSession } from "../composition/writer-module";
 import { WRITER_COMMAND_IDS } from "../../uiconfig/swriter/menubar/menubar-commands";
 import type { SwWrtShell } from "../../source/uibase/wrtsh/wrtsh1";
 import { SwPosition } from "../../source/core/crsr/pam";
+import { SvxAdjust, SvxAdjustItem } from "../../../editeng/inc/adjustitem";
+import {
+  ParaVertAlign,
+  SvxParaVertAlignItem,
+} from "../../../editeng/source/items/paraitem.controls";
 import { SvxULSpaceItem } from "../../../editeng/inc/ulspitem";
 import { SvxHyphenZoneItem } from "../../../editeng/source/items/paraitem";
 import {
+  RES_PARATR_ADJUST,
+  RES_PARATR_VERTALIGN,
   RES_PARATR_HYPHENZONE as H,
   RES_UL_SPACE,
   RES_PARATR_TABSTOP as T,
 } from "../../inc/hintids";
 import { SvxTabStopItem, SvxTabAdjust as A } from "../../../editeng/inc/tstpitem";
 import { FieldUnit as U } from "../../../tools/inc/fldunit";
+import { exportParagraphAdjustment } from "../../source/filter/xml/xmlexpit";
 import { writeOdtDocument } from "../../source/filter/xml/wrtxml";
 import { readOdtDocument } from "../../source/filter/xml/swxml";
 /** Opens a real asynchronous Writer command and renders its actual pending request. @param unit - Module unit. @param prepare - Optional selection setup. @returns Real owners and command completion. */
@@ -293,6 +301,109 @@ it("applies one typed hyphenation edit to mixed paragraphs, with independent spa
     expect(f.shell.Undo()).toBe(true);
     expect(document.paragraphs[0]?.GetAttr(H).QueryValue()).toMatchObject({ minLead: 2 });
     expect(document.paragraphs[1]?.GetAttr(H).QueryValue()).toMatchObject({ minLead: 5 });
+  } finally {
+    cleanup();
+    f.session.Close();
+  }
+});
+
+it("persists paragraph alignment and justification from the upstream dialog scenario", /** Uses the regular command, native item history and ODT document reopening. @returns Completion. */ async () => {
+  const f = open();
+  try {
+    const before = f.shell.GetDoc().GetUndoManager().GetUndoActionCount();
+    fireEvent.click(screen.getByRole("tab", { name: "Alignment" }));
+    fireEvent.click(screen.getByRole("radio", { name: "Justified" }));
+    fireEvent.change(screen.getByRole("combobox", { name: "Last line" }), {
+      target: { value: String(SvxAdjust.Block) },
+    });
+    fireEvent.click(screen.getByRole("checkbox", { name: "Expand single word" }));
+    fireEvent.change(screen.getByRole("combobox", { name: "Alignment" }), {
+      target: { value: String(ParaVertAlign.Top) },
+    });
+    fireEvent.change(screen.getByRole("spinbutton", { name: /^Desired word spacing/ }), {
+      target: { value: "115" },
+    });
+    fireEvent.click(screen.getByRole("tab", { name: "Text Flow" }));
+    fireEvent.click(screen.getByRole("tab", { name: "Alignment" }));
+    expect(screen.getByRole("radio", { name: "Justified" })).toBeChecked();
+    expect(screen.getByRole("checkbox", { name: "Expand single word" })).toBeChecked();
+    fireEvent.click(screen.getByRole("button", { name: "OK" }));
+    expect(await f.result.value).toBe(true);
+    const node = f.shell.GetActiveParagraph();
+    const adjust = node.GetAttr(RES_PARATR_ADJUST) as SvxAdjustItem;
+    expect(adjust.GetAdjust()).toBe(SvxAdjust.Block);
+    expect(adjust.GetLastBlock()).toBe(SvxAdjust.Block);
+    expect(adjust.GetOneWord()).toBe(SvxAdjust.Block);
+    expect(adjust.GetPropWordSpacing()).toBe(115);
+    expect((node.GetAttr(RES_PARATR_VERTALIGN) as SvxParaVertAlignItem).GetValue()).toBe(
+      ParaVertAlign.Top,
+    );
+    expect(f.shell.GetDoc().GetUndoManager().GetUndoActionCount()).toBe(before + 1);
+    f.shell.Undo();
+    expect(
+      (f.shell.GetActiveParagraph().GetAttr(RES_PARATR_ADJUST) as SvxAdjustItem).GetAdjust(),
+    ).not.toBe(SvxAdjust.Block);
+    f.shell.Redo();
+    const loaded = await readOdtDocument(
+      await writeOdtDocument(f.shell.GetDoc(), { title: "Alignment" }),
+      { title: "Alignment" },
+    );
+    try {
+      const reopened = loaded.document.paragraphs[0];
+      const reopenedAdjustment = reopened?.GetAttr(RES_PARATR_ADJUST) as SvxAdjustItem;
+      expect(reopenedAdjustment.GetAdjust()).toBe(adjust.GetAdjust());
+      expect(exportParagraphAdjustment(reopenedAdjustment)).toEqual(
+        exportParagraphAdjustment(adjust),
+      );
+      expect(reopenedAdjustment.equals(adjust)).toBe(true);
+      expect((reopened?.GetAttr(RES_PARATR_VERTALIGN) as SvxParaVertAlignItem).GetValue()).toBe(
+        ParaVertAlign.Top,
+      );
+    } finally {
+      loaded.document.Dispose();
+    }
+  } finally {
+    cleanup();
+    f.session.Close();
+  }
+});
+
+it("leaves mixed horizontal alignment untouched when only text-to-text alignment changes", /** Exercises per-item deltas on a real multi-paragraph selection. @returns Completion. */ async () => {
+  const f = open(
+    U.CM,
+    /** Creates a selected range with mixed item values. @param shell - Writer editing shell. @returns Nothing. */
+    (shell) => {
+      shell.SplitNode();
+      shell.Insert("Next paragraph");
+      const [first, second] = shell.GetDoc().paragraphs;
+      if (!first || !second) throw new Error("Missing test paragraphs.");
+      first.SetAttr(new SvxAdjustItem(SvxAdjust.Left, RES_PARATR_ADJUST));
+      second.SetAttr(new SvxAdjustItem(SvxAdjust.ParaEnd, RES_PARATR_ADJUST));
+      first.SetAttr(new SvxParaVertAlignItem(ParaVertAlign.Top, RES_PARATR_VERTALIGN));
+      second.SetAttr(new SvxParaVertAlignItem(ParaVertAlign.Bottom, RES_PARATR_VERTALIGN));
+      const start = new SwPosition(first, 0);
+      const end = new SwPosition(second, second.Len());
+      shell.SetPaM(end, start);
+      start.Dispose();
+      end.Dispose();
+    },
+  );
+  try {
+    fireEvent.click(screen.getByRole("tab", { name: "Alignment" }));
+    for (const radio of screen.getAllByRole("radio")) expect(radio).not.toBeChecked();
+    const vertical = screen.getByRole("combobox", { name: "Alignment" });
+    expect(vertical).toHaveValue("");
+    fireEvent.change(vertical, { target: { value: String(ParaVertAlign.Center) } });
+    fireEvent.click(screen.getByRole("button", { name: "OK" }));
+    expect(await f.result.value).toBe(true);
+    for (const [index, node] of f.shell.GetDoc().paragraphs.entries()) {
+      expect((node.GetAttr(RES_PARATR_ADJUST) as SvxAdjustItem).GetAdjust()).toBe(
+        index === 0 ? SvxAdjust.Left : SvxAdjust.ParaEnd,
+      );
+      expect((node.GetAttr(RES_PARATR_VERTALIGN) as SvxParaVertAlignItem).GetValue()).toBe(
+        ParaVertAlign.Center,
+      );
+    }
   } finally {
     cleanup();
     f.session.Close();

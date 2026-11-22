@@ -8,6 +8,7 @@ import { paragraphPropertiesKey, parseParagraphPropertiesKey } from "./txtparae-
 import { exportTextConstant } from "./txtprhdl";
 import { Any } from "../../../cppu/inc/com/sun/star/uno/Any";
 import { SvXMLUnitConverter } from "../core/xmluconv";
+import { exportParagraphJustification, type OdfParagraphAlignment } from "../style/adjushdl";
 import { XMLNumberWithAutoForVoidPropHdl } from "../style/xmlbahdl";
 import { SvxXMLNumRuleExport, type XMLListLevelExport } from "../style/xmlnume";
 import { exportTableBlocks, type XMLTextExportBlock } from "../table/XMLTableExport";
@@ -50,7 +51,7 @@ export type XMLParagraphStyle = string;
 type StyleKey = [string, OdfParagraphAlignment | "", string, string, string, string, string];
 
 /** Paragraph alignment values shared with the Writer model. */
-export type OdfParagraphAlignment = "left" | "center" | "right" | "justify";
+export type { OdfParagraphAlignment } from "../style/adjushdl";
 
 /** Marker family stored by one ODF list level style. */
 export type OdfListLevelKind = "bullet" | "numbered";
@@ -239,7 +240,7 @@ export class XMLTextParagraphExport {
         ) as StyleKey;
         const parent = style ? ` style:parent-style-name="${escapeXml(style)}"` : "";
         const paragraphAttributes = [
-          ...(alignment === "" ? [] : [`fo:text-align="${exportAlignment(alignment)}"`]),
+          ...(alignment === "" ? [] : [`fo:text-align="${alignment}"`]),
           ...(leftMargin === "" ? [] : [`fo:margin-left="${exportOdfLength(Number(leftMargin))}"`]),
           ...exportParagraphAttributes(parseParagraphPropertiesKey(paraKey)),
         ];
@@ -732,6 +733,7 @@ export function exportParagraphAttributes(properties: OdfParagraphProperties): s
       ? []
       : [`style:contextual-spacing="${properties.contextualSpacing}"`]),
     ...exportParagraphHyphenation(properties.hyphenation),
+    ...exportParagraphJustification(properties.justification),
     ...(properties.registerModeActive === undefined
       ? []
       : [`style:register-true="${properties.registerModeActive}"`]),
@@ -818,13 +820,6 @@ export function exportText(value: string): string {
   }
   flush();
   return output;
-}
-
-/** Maps model alignment to ODF values. @param alignment - Model alignment. @returns ODF value. */
-function exportAlignment(alignment: OdfParagraphAlignment): string {
-  if (alignment === "left") return "start";
-  if (alignment === "right") return "end";
-  return alignment;
 }
 
 /** Returns the effective paragraph character baseline. @param paragraph - Neutral paragraph. @returns Complete inherited properties. */

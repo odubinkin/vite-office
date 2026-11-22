@@ -2,10 +2,15 @@
 import { UnoType } from "../../../../cppu/inc/unotype";
 import { OUString } from "../../../../sal/inc/rtl/ustring";
 import { PropertyMoreFlags, SfxItemPropertyMapEntry } from "../../../../svl/inc/itemprop";
-import * as Hyphen from "../../../../editeng/inc/memberids";
+import * as Member from "../../../../editeng/inc/memberids";
 import { cppu_detail_getUnoType_BorderLine as borderLineType } from "../../../../offapi/com/sun/star/table/BorderLine";
 import { CONVERT_TWIPS } from "../../../../svl/inc/poolitem";
-import { RES_BOX, RES_CHRATR_BOX, RES_PARATR_HYPHENZONE } from "../../../inc/hintids";
+import {
+  RES_BOX,
+  RES_CHRATR_BOX,
+  RES_PARATR_ADJUST,
+  RES_PARATR_HYPHENZONE,
+} from "../../../inc/hintids";
 import type { SwUnoPropertyEntry } from "./unomap";
 
 /** Source box property descriptors for the four physical sides. @param attributes - Original property flags. @param which - Native box item identity. @param prefix - Original character property prefix. @returns Original UNO descriptors. */
@@ -48,13 +53,48 @@ export const charBoxNames: readonly string[] = charBoxMembers.map(
   ([name]) => name,
 );
 
+/** Native adjustment properties shared by Writer UNO map families. */
+export const adjustmentMembers = (
+  [
+    ["ParaAdjust", Member.MID_PARA_ADJUST],
+    ["ParaLastLineAdjust", Member.MID_LAST_LINE_ADJUST],
+    ["ParaExpandSingleWord", Member.MID_EXPAND_SINGLE, "bool"],
+    ["ParaWordSpacing", Member.MID_WORD_SPACING],
+    ["ParaWordSpacingMinimum", Member.MID_WORD_SPACING_MIN],
+    ["ParaWordSpacingMaximum", Member.MID_WORD_SPACING_MAX],
+    ["ParaLetterSpacingMinimum", Member.MID_LETTER_SPACING_MIN],
+    ["ParaLetterSpacingMaximum", Member.MID_LETTER_SPACING_MAX],
+    ["ParaScaleWidthMinimum", Member.MID_SCALE_WIDTH_MIN],
+    ["ParaScaleWidthMaximum", Member.MID_SCALE_WIDTH_MAX],
+    ["ParaComposer", Member.MID_PARAGRAPH_COMPOSER, "bool"],
+  ] as const
+).map(
+  /** Converts the original member descriptor. @param descriptor - Name, member and optional boolean type. @returns UNO entry. */
+  ([name, member, boolean]): [string, SwUnoPropertyEntry] => [
+    name,
+    {
+      which: RES_PARATR_ADJUST,
+      member,
+      type: boolean ?? "sal_Int16",
+      kind: "any",
+      attributes: 1,
+    },
+  ],
+);
+
+/** Original adjustment names admitted to style properties and document defaults. */
+export const adjustmentNames = adjustmentMembers.map(
+  /** Gets a property's original UNO name. @param entry - Native row. @returns Name. */
+  ([name]) => name,
+);
+
 /** Native paragraph hyphenation properties shared by Writer UNO map families. */
 export const hyphenationMembers: [string, SwUnoPropertyEntry][] = [
   [
     "ParaIsHyphenation",
     {
       which: RES_PARATR_HYPHENZONE,
-      member: Hyphen.MID_IS_HYPHEN,
+      member: Member.MID_IS_HYPHEN,
       attributes: 1,
       kind: "bool",
       type: "bool",
@@ -64,7 +104,7 @@ export const hyphenationMembers: [string, SwUnoPropertyEntry][] = [
     "ParaHyphenationMaxLeadingChars",
     {
       which: RES_PARATR_HYPHENZONE,
-      member: Hyphen.MID_HYPHEN_MIN_LEAD,
+      member: Member.MID_HYPHEN_MIN_LEAD,
       attributes: 1,
       kind: "short",
       type: "sal_Int16",
@@ -74,7 +114,7 @@ export const hyphenationMembers: [string, SwUnoPropertyEntry][] = [
     "ParaHyphenationMaxTrailingChars",
     {
       which: RES_PARATR_HYPHENZONE,
-      member: Hyphen.MID_HYPHEN_MIN_TRAIL,
+      member: Member.MID_HYPHEN_MIN_TRAIL,
       attributes: 1,
       kind: "short",
       type: "sal_Int16",
@@ -84,7 +124,7 @@ export const hyphenationMembers: [string, SwUnoPropertyEntry][] = [
     "ParaHyphenationMaxHyphens",
     {
       which: RES_PARATR_HYPHENZONE,
-      member: Hyphen.MID_HYPHEN_MAX_HYPHENS,
+      member: Member.MID_HYPHEN_MAX_HYPHENS,
       attributes: 1,
       kind: "short",
       type: "sal_Int16",
@@ -94,7 +134,7 @@ export const hyphenationMembers: [string, SwUnoPropertyEntry][] = [
     "ParaHyphenationNoCaps",
     {
       which: RES_PARATR_HYPHENZONE,
-      member: Hyphen.MID_HYPHEN_NO_CAPS,
+      member: Member.MID_HYPHEN_NO_CAPS,
       attributes: 1,
       kind: "bool",
       type: "bool",
@@ -104,7 +144,7 @@ export const hyphenationMembers: [string, SwUnoPropertyEntry][] = [
     "ParaHyphenationNoLastWord",
     {
       which: RES_PARATR_HYPHENZONE,
-      member: Hyphen.MID_HYPHEN_NO_LAST_WORD,
+      member: Member.MID_HYPHEN_NO_LAST_WORD,
       attributes: 1,
       kind: "bool",
       type: "bool",
@@ -114,7 +154,7 @@ export const hyphenationMembers: [string, SwUnoPropertyEntry][] = [
     "ParaHyphenationMinWordLength",
     {
       which: RES_PARATR_HYPHENZONE,
-      member: Hyphen.MID_HYPHEN_MIN_WORD_LENGTH,
+      member: Member.MID_HYPHEN_MIN_WORD_LENGTH,
       attributes: 1,
       kind: "short",
       type: "sal_Int16",
@@ -124,7 +164,7 @@ export const hyphenationMembers: [string, SwUnoPropertyEntry][] = [
     "ParaHyphenationZone",
     {
       which: RES_PARATR_HYPHENZONE,
-      member: Hyphen.MID_HYPHEN_ZONE,
+      member: Member.MID_HYPHEN_ZONE,
       attributes: 1,
       kind: "short",
       type: "sal_Int16",
@@ -134,7 +174,7 @@ export const hyphenationMembers: [string, SwUnoPropertyEntry][] = [
     "ParaHyphenationZoneAlways",
     {
       which: RES_PARATR_HYPHENZONE,
-      member: Hyphen.MID_HYPHEN_ZONE_ALWAYS,
+      member: Member.MID_HYPHEN_ZONE_ALWAYS,
       attributes: 1,
       kind: "short",
       type: "sal_Int16",
@@ -144,7 +184,7 @@ export const hyphenationMembers: [string, SwUnoPropertyEntry][] = [
     "ParaHyphenationZoneColumn",
     {
       which: RES_PARATR_HYPHENZONE,
-      member: Hyphen.MID_HYPHEN_ZONE_COLUMN,
+      member: Member.MID_HYPHEN_ZONE_COLUMN,
       attributes: 1,
       kind: "short",
       type: "sal_Int16",
@@ -154,7 +194,7 @@ export const hyphenationMembers: [string, SwUnoPropertyEntry][] = [
     "ParaHyphenationZonePage",
     {
       which: RES_PARATR_HYPHENZONE,
-      member: Hyphen.MID_HYPHEN_ZONE_PAGE,
+      member: Member.MID_HYPHEN_ZONE_PAGE,
       attributes: 1,
       kind: "short",
       type: "sal_Int16",
@@ -164,7 +204,7 @@ export const hyphenationMembers: [string, SwUnoPropertyEntry][] = [
     "ParaHyphenationZoneSpread",
     {
       which: RES_PARATR_HYPHENZONE,
-      member: Hyphen.MID_HYPHEN_ZONE_SPREAD,
+      member: Member.MID_HYPHEN_ZONE_SPREAD,
       attributes: 1,
       kind: "short",
       type: "sal_Int16",
@@ -174,7 +214,7 @@ export const hyphenationMembers: [string, SwUnoPropertyEntry][] = [
     "ParaHyphenationKeep",
     {
       which: RES_PARATR_HYPHENZONE,
-      member: Hyphen.MID_HYPHEN_KEEP,
+      member: Member.MID_HYPHEN_KEEP,
       attributes: 1,
       kind: "bool",
       type: "bool",
@@ -184,7 +224,7 @@ export const hyphenationMembers: [string, SwUnoPropertyEntry][] = [
     "ParaHyphenationKeepType",
     {
       which: RES_PARATR_HYPHENZONE,
-      member: Hyphen.MID_HYPHEN_KEEP_TYPE,
+      member: Member.MID_HYPHEN_KEEP_TYPE,
       attributes: 1,
       kind: "short",
       type: "sal_Int16",
@@ -194,7 +234,7 @@ export const hyphenationMembers: [string, SwUnoPropertyEntry][] = [
     "ParaHyphenationCompoundMinLeadingChars",
     {
       which: RES_PARATR_HYPHENZONE,
-      member: Hyphen.MID_HYPHEN_COMPOUND_MIN_LEAD,
+      member: Member.MID_HYPHEN_COMPOUND_MIN_LEAD,
       attributes: 1,
       kind: "short",
       type: "sal_Int16",
@@ -204,7 +244,7 @@ export const hyphenationMembers: [string, SwUnoPropertyEntry][] = [
     "ParaHyphenationCompoundMinTrailingChars",
     {
       which: RES_PARATR_HYPHENZONE,
-      member: Hyphen.MID_HYPHEN_COMPOUND_MIN_TRAIL,
+      member: Member.MID_HYPHEN_COMPOUND_MIN_TRAIL,
       attributes: 1,
       kind: "short",
       type: "sal_Int16",
@@ -214,7 +254,7 @@ export const hyphenationMembers: [string, SwUnoPropertyEntry][] = [
     "ParaHyphenationKeepLine",
     {
       which: RES_PARATR_HYPHENZONE,
-      member: Hyphen.MID_HYPHEN_KEEP_LINE,
+      member: Member.MID_HYPHEN_KEEP_LINE,
       attributes: 1,
       kind: "bool",
       type: "bool",

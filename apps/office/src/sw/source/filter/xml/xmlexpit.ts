@@ -1,5 +1,8 @@
 /** @fileoverview Writer filter attribute-item export boundary corresponding to xmlexpit.cxx. Browser presentation shorthand retains its existing adapter behavior without moving native item ownership into shared xmloff. */
 import type { SvxShadowItem } from "../../../../editeng/source/items/frmitems.shadow";
+import { MID_EXPAND_SINGLE } from "../../../../editeng/inc/memberids";
+import type { SvxAdjustItem } from "../../../../editeng/inc/adjustitem";
+import type { OdfParagraphJustification } from "../../../../xmloff/source/style/adjushdl";
 import { SvxShadowLocation } from "../../../../editeng/inc/svxenum";
 import {
   cppu_detail_getUnoType_ShadowFormat as shadowType,
@@ -300,4 +303,28 @@ export function exportParagraphLineSpacing(item: SvxLineSpacingItem): OdfParagra
     case "leading":
       return { lineSpacingTwips: value };
   }
+}
+
+/** Projects native adjustment item values through the Writer filter boundary. @param item - Direct paragraph adjustment. @returns ODF justification properties. */
+export function exportParagraphAdjustment(item: SvxAdjustItem): OdfParagraphJustification {
+  const value = new Any();
+  const expand: [boolean] = [false];
+  try {
+    item.QueryValue(value, MID_EXPAND_SINGLE);
+    value.extract(expand, "bool");
+  } finally {
+    value.dispose();
+  }
+  return {
+    ParaLastLineAdjust: item.GetLastBlock(),
+    ParaExpandSingleWord: expand[0],
+    ParaWordSpacing: item.GetPropWordSpacing(),
+    ParaWordSpacingMinimum: item.GetPropWordSpacingMinimum(),
+    ParaWordSpacingMaximum: item.GetPropWordSpacingMaximum(),
+    ParaLetterSpacingMinimum: item.GetPropLetterSpacingMinimum(),
+    ParaLetterSpacingMaximum: item.GetPropLetterSpacingMaximum(),
+    ParaScaleWidthMinimum: item.GetPropScaleWidthMinimum(),
+    ParaScaleWidthMaximum: item.GetPropScaleWidthMaximum(),
+    ParaComposer: item.GetParagraphComposer(),
+  };
 }

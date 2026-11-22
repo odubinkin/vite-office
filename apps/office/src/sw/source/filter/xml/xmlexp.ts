@@ -1,6 +1,7 @@
 /**
  * @fileoverview Reimplements the bounded Writer ODF XML export bridge from pinned LibreOffice `sw/source/filter/xml/xmlexp.cxx`.
  */
+import { exportParagraphAlignment } from "../../../../xmloff/source/style/adjushdl";
 import { SvxHyphenZoneItem } from "../../../../editeng/source/items/paraitem";
 import { SwRegisterItem } from "../../core/para/paratr";
 import { ExportNumberFormat } from "../../../../xmloff/source/style/xmlnumfe";
@@ -59,10 +60,11 @@ import {
   exportParagraphTabStops,
   exportParagraphVerticalMargins,
   XMLPageBackgroundExport,
+  exportParagraphAdjustment,
 } from "./xmlexpit";
 import { HoriOrientation } from "../../../../offapi/com/sun/star/text/HoriOrientation";
 import { SwFrameSize, type SwFormatFrameSize } from "../../../inc/fmtfsize";
-import { SvxAdjust, SvxAdjustItem } from "../../../../editeng/inc/adjustitem";
+import { SvxAdjustItem } from "../../../../editeng/inc/adjustitem";
 import { SvxTabStopItem } from "../../../../editeng/inc/tstpitem";
 import { SvxLineSpacingItem } from "../../../../editeng/inc/lspcitem";
 import {
@@ -275,7 +277,7 @@ export function exportStylesXml(document: SwDoc, graphicHelper?: SvXMLGraphicHel
           ? ""
           : ` style:master-page-name="${escapeXml(directParagraphProperties.pageStyleName)}"`;
       const paragraphAttributes = [
-        ...(alignment === undefined ? [] : [`fo:text-align="${exportAlignment(alignment)}"`]),
+        ...(alignment === undefined ? [] : [`fo:text-align="${alignment}"`]),
         ...(leftMargin === undefined ? [] : [`fo:margin-left="${exportOdfLength(leftMargin)}"`]),
         ...exportParagraphAttributes(directParagraphProperties ?? {}),
       ];
@@ -880,6 +882,7 @@ function getParagraphProperties(set: SfxItemSet | undefined): OdfParagraphProper
   const keep = set.GetItemIfSet(RES_KEEP, false);
   const register = set.GetItemIfSet(RES_PARATR_REGISTER, false);
   const hyphenation = set.GetItemIfSet(RES_PARATR_HYPHENZONE, false);
+  const adjust = set.GetItemIfSet(RES_PARATR_ADJUST, false);
   const split = set.GetItemIfSet(RES_PARATR_SPLIT, false);
   const orphans = set.GetItemIfSet(RES_PARATR_ORPHANS, false);
   const widows = set.GetItemIfSet(RES_PARATR_WIDOWS, false);
@@ -922,6 +925,9 @@ function getParagraphProperties(set: SfxItemSet | undefined): OdfParagraphProper
       ? {
           tabStopDetails: exportParagraphTabStops(tabStop),
         }
+      : {}),
+    ...(adjust instanceof SvxAdjustItem
+      ? { justification: exportParagraphAdjustment(adjust) }
       : {}),
     ...(hyphenation instanceof SvxHyphenZoneItem ? { hyphenation: hyphenation.QueryValue() } : {}),
     ...(register instanceof SwRegisterItem ? { registerModeActive: register.GetValue() } : {}),
@@ -975,17 +981,5 @@ function getDirectAlignment(item: unknown): OdfParagraphAlignment | undefined {
   if (item === undefined) return undefined;
   if (!(item instanceof SvxAdjustItem))
     throw new Error("ODT paragraph adjustment item is invalid.");
-  const value = item.GetAdjust();
-  if (value === SvxAdjust.Left || value === SvxAdjust.ParaStart) return "left";
-  if (value === SvxAdjust.Right || value === SvxAdjust.ParaEnd) return "right";
-  if (value === SvxAdjust.Center) return "center";
-  if (value === SvxAdjust.Block) return "justify";
-  throw new Error("ODT paragraph adjustment value is unsupported.");
-}
-
-/** Maps model alignment to ODF. @param alignment - Model value. @returns ODF value. */
-function exportAlignment(alignment: OdfParagraphAlignment): string {
-  if (alignment === "left") return "start";
-  if (alignment === "right") return "end";
-  return alignment;
+  return exportParagraphAlignment(item.GetAdjust());
 }

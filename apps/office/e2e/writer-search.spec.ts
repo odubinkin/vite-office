@@ -739,3 +739,34 @@ test("Writer lays out scaled and rotated text and fits rotation to the current l
   );
   await expect(editor).toHaveText(text);
 });
+
+test("Writer paints the chosen alignment on a justified paragraph's last line", /** Exercises the ordinary paragraph command and rendered alignment after accepting and undoing. @param fixtures - Playwright fixtures. @param fixtures.page - Chromium page. @returns Test completion. */ async ({
+  page,
+}) => {
+  await page.goto("/writer");
+  const editor = page.getByRole("textbox", { name: "Writer document text", exact: true });
+  await editor.fill("Justified paragraph with a centered last line");
+  const format = page.getByRole("menuitem", { name: "Format", exact: true });
+  const paragraphMenu = page.getByRole("menuitem", { name: "Paragraph…", exact: true });
+  const dialog = page.getByRole("dialog", { name: "Paragraph", exact: true });
+
+  await format.click();
+  await paragraphMenu.click();
+  await dialog.getByRole("tab", { name: "Alignment", exact: true }).click();
+  await dialog.getByRole("radio", { name: "Justified", exact: true }).check();
+  await dialog.getByRole("combobox", { name: "Last line", exact: true }).selectOption({
+    label: "Centered",
+  });
+  await dialog.getByRole("button", { name: "OK", exact: true }).click();
+  await expect(editor).toHaveCSS("text-align", "justify");
+  await expect(editor).toHaveCSS("text-align-last", "center");
+
+  await format.click();
+  await paragraphMenu.click();
+  await dialog.getByRole("tab", { name: "Alignment", exact: true }).click();
+  await expect(dialog.getByRole("radio", { name: "Justified", exact: true })).toBeChecked();
+  await expect(dialog.getByRole("combobox", { name: "Last line", exact: true })).toHaveValue("3");
+  await dialog.getByRole("button", { name: "Cancel", exact: true }).click();
+  await page.keyboard.press("Control+z");
+  await expect(editor).toHaveCSS("text-align-last", "auto");
+});

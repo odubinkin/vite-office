@@ -1,4 +1,4 @@
-/** @fileoverview Native Writer paragraph-dialog input, tab stop context and Text Flow item state from textsh1.cxx. */
+/** @fileoverview Native Writer paragraph-dialog input, tab stop context and typed paragraph formatting from textsh1.cxx. */
 import { GetTabDist } from "../utlui/uitool";
 import type { SwTextShell } from "./textsh1";
 import { SfxItemSet } from "../../../../svl/inc/itemset";
@@ -10,11 +10,12 @@ import {
 } from "../../../../editeng/inc/editids";
 import {
   RES_PARATR_TABSTOP as T,
+  RES_PARATR_ADJUST,
   RES_PARATR_HYPHENZONE,
+  RES_PARATR_VERTALIGN,
   RES_LR_SPACE as L,
   RES_MARGIN_TEXTLEFT,
 } from "../../../inc/hintids";
-import type { SvxHyphenZoneItem } from "../../../../editeng/source/items/paraitem";
 import type { SvxTabStopItem } from "../../../../editeng/inc/tstpitem";
 import { SvxFontUnitMetrics, type SvxTextLeftMarginItem } from "../../../../editeng/inc/lrspitem";
 /** Builds the original page input over the actual document pool and uniform selection. @param shell - Actual command owner. @returns Native item set. */
@@ -23,7 +24,9 @@ export function createWriterParagraphDialogInput(shell: SwTextShell): SfxItemSet
     doc = paragraph.GetDoc(),
     pool = doc.GetAttrPool();
   const set = new SfxItemSet(pool, [
+    [RES_PARATR_ADJUST, RES_PARATR_ADJUST],
     [T, RES_PARATR_HYPHENZONE],
+    [RES_PARATR_VERTALIGN, RES_PARATR_VERTALIGN],
     [L, L],
     [D, O],
   ]);
@@ -33,12 +36,14 @@ export function createWriterParagraphDialogInput(shell: SwTextShell): SfxItemSet
   );
   if (tabs) set.Put(tabs);
   else set.InvalidateItem(T);
-  const hyphenation = shell.GetUniformParagraphItem(
-    /** Reads the native item value of each paragraph in the selection. @param node - Selected paragraph. @returns Hyphenation item. */
-    (node) => node.GetAttr(RES_PARATR_HYPHENZONE) as SvxHyphenZoneItem,
-  );
-  if (hyphenation) set.Put(hyphenation);
-  else set.InvalidateItem(RES_PARATR_HYPHENZONE);
+  for (const which of [RES_PARATR_ADJUST, RES_PARATR_HYPHENZONE, RES_PARATR_VERTALIGN]) {
+    const item = shell.GetUniformParagraphItem(
+      /** Reads the typed item across the selection. @param node - Selected paragraph. @returns Native item. */
+      (node) => node.GetAttr(which),
+    );
+    if (item) set.Put(item);
+    else set.InvalidateItem(which);
+  }
   const lr = shell.GetParagraphLRSpace();
   if (lr) {
     lr.SetWhich(L);

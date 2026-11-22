@@ -1,0 +1,31 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sw/browser/presentation/writer-view-projection.types.ts",
+    "classification": "browser-adaptation",
+    "state": "active",
+    "suite": "writer",
+    "subsystem": "presentation",
+    "capabilityIds": [
+      "CAP-0111"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "A",
+      "evidence": [
+        "apps/office/src/sw/browser/presentation/writer-view-projection.types.ts#WriterParagraphComputedStyle"
+      ],
+      "justification": "Declares immutable browser values projected from effective Writer paragraph formatting items.",
+      "knownViolations": [],
+      "localSymbols": [
+        "WriterParagraphComputedStyle"
+      ],
+      "sourceResponsibility": "browser-owned",
+      "upstreamFile": null,
+      "upstreamSymbols": []
+    }
+  }
+}
