@@ -7842,12 +7842,12 @@ contract and keeps the height and margin as authored in ODS.
 - [Original Calc page style property map](../../vendor/libreoffice-reference/sc/source/ui/unoobj/styleuno.cxx)
 - [Original ODF page master property map](../../vendor/libreoffice-reference/xmloff/source/style/PageMasterStyleMap.cxx)
 
-### CALC-822 — A first-page variant also counts as a right-page declaration
+### CALC-822 — A left or first-page variant requires an earlier right-page declaration
 
-The Calc master-page importer records right content presence for every
-non-left header or footer, including a first-page variant. When that
-variant is present, the finish pass skips clearing the right-page
-content even if the right-page element was absent. Calc keeps that
-presence rule and the separate first-page sharing flag.
+The shared master-page importer accepts left and first-page content only
+after it has processed the ordinary header or footer in the same master.
+It ignores the variant when the ordinary element is omitted or appears
+later. Calc preserves the original ordering gate.
 
-- [Original master-page child and finish rules](../../vendor/libreoffice-reference/sc/source/filter/xml/xmlstyli.cxx)
+- [Original master-page child ordering](../../vendor/libreoffice-reference/xmloff/source/text/XMLTextMasterPageContext.cxx)
+- [Original Calc master-page child specialization](../../vendor/libreoffice-reference/sc/source/filter/xml/xmlstyli.cxx)

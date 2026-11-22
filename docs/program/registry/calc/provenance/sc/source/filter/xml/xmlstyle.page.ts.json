@@ -18,7 +18,7 @@
     "preservedResponsibilities": [
       "Uses native ODF table/master-page associations to apply and write page-family item sets for represented print properties, header/footer geometry, and story content.",
       "Collects unused and assigned named masters, merges all eight original print options, and applies the native signed scale properties and direct-state omission rules.",
-      "Preserves authored header/footer height independently of body distance, reuses the native brush and box mapping for nested groups, and clears right content using the original non-left presence rule."
+      "Preserves authored header/footer height independently of body distance, reuses the native brush and box mapping for nested groups, and uses the original right-page gate and page-style state reset."
     ],
     "omittedResponsibilities": [
       "Header/footer background images, shadows and unsupported page-style property groups remain outside the represented profile."
@@ -40,6 +40,10 @@
         {
           "path": "apps/office/src/sc/source/filter/xml/ods-page-master.test.ts",
           "marker": "preserves nested layout members"
+        },
+        {
+          "path": "apps/office/src/sc/source/filter/xml/ods-page-master.test.ts",
+          "marker": "requires the right-page declaration"
         }
       ],
       "upstream": [
@@ -74,6 +78,10 @@
         {
           "path": "vendor/libreoffice-reference/xmloff/source/style/PageMasterStyleMap.cxx",
           "marker": "CTF_PM_HEADERMINHEIGHT"
+        },
+        {
+          "path": "vendor/libreoffice-reference/xmloff/source/text/XMLTextMasterPageContext.cxx",
+          "marker": "XMLTextMasterPageContext::createFastChildContext"
         }
       ]
     },

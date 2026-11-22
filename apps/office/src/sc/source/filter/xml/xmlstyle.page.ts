@@ -61,8 +61,12 @@ import {
   ATTR_PAGE_SCALETO,
   ATTR_PAGE_HEADERSET,
   ATTR_PAGE_HEADERRIGHT,
+  ATTR_PAGE_HEADERLEFT,
+  ATTR_PAGE_HEADERFIRST,
   ATTR_PAGE_FOOTERSET,
   ATTR_PAGE_FOOTERRIGHT,
+  ATTR_PAGE_FOOTERLEFT,
+  ATTR_PAGE_FOOTERFIRST,
   ATTR_PAGE_DYNAMIC,
 } from "../../../inc/scitems";
 
@@ -319,6 +323,17 @@ export class ScXMLPageStyles {
     const style = this.document.GetStyleSheetPool()?.GetPageStyle(displayName, true);
     if (!style) return new SvXMLIgnoreContext(true);
     const items = style.GetItemSet();
+    for (const which of [
+      ATTR_PAGE_HEADERSET,
+      ATTR_PAGE_FOOTERSET,
+      ATTR_PAGE_HEADERRIGHT,
+      ATTR_PAGE_HEADERLEFT,
+      ATTR_PAGE_HEADERFIRST,
+      ATTR_PAGE_FOOTERRIGHT,
+      ATTR_PAGE_FOOTERLEFT,
+      ATTR_PAGE_FOOTERFIRST,
+    ])
+      items.ClearItem(which);
     if (layout?.page) importLayout(items, layout.page, layout.usage);
     if (layout?.header) importHeaderFooterLayout(items, layout.header, true);
     if (layout?.footer) importHeaderFooterLayout(items, layout.footer, false);
@@ -346,12 +361,26 @@ class ScMasterPageContext extends SvXMLImportContext {
     super();
   }
 
-  /** Opens a header or footer and records native non-left content presence. @param element - Child token. @param attrs - Child attributes. @returns Native child owner. */
+  /** Opens the first right region before admitting left and first-page variants. @param element - Child token. @param attrs - Child attributes. @returns Native child owner. */
   override createFastChildContext(element: T, attrs: FastAttributeList): SvXMLImportContext {
-    if (element === T.STYLE_HEADER || element === T.STYLE_HEADER_FIRST)
-      this.containsRightHeader = true;
-    if (element === T.STYLE_FOOTER || element === T.STYLE_FOOTER_FIRST)
-      this.containsRightFooter = true;
+    switch (element) {
+      case T.STYLE_HEADER:
+        if (this.containsRightHeader) return new SvXMLIgnoreContext(true);
+        this.containsRightHeader = true;
+        break;
+      case T.STYLE_FOOTER:
+        if (this.containsRightFooter) return new SvXMLIgnoreContext(true);
+        this.containsRightFooter = true;
+        break;
+      case T.STYLE_HEADER_LEFT:
+      case T.STYLE_HEADER_FIRST:
+        if (!this.containsRightHeader) return new SvXMLIgnoreContext(true);
+        break;
+      case T.STYLE_FOOTER_LEFT:
+      case T.STYLE_FOOTER_FIRST:
+        if (!this.containsRightFooter) return new SvXMLIgnoreContext(true);
+        break;
+    }
     return createHeaderFooterContext(this.items, element, attrs, this.importer);
   }
 

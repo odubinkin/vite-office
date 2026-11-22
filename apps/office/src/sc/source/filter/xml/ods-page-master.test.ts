@@ -355,7 +355,7 @@ it("preserves nested layout members, independent sharing and empty region omissi
   }
 });
 
-it("keeps right content when a first-page declaration satisfies the original presence rule", /** Exercises the Calc master-page finish behavior with an existing named page style. @returns Nothing. */ () => {
+it("requires the right-page declaration before its left and first-page variants", /** Replays original master-page child gating and page-style reset. @returns Nothing. */ () => {
   const document = new ScDocument();
   const importer = new ScXMLImport(document);
   const ns = `xmlns:office="${ODF_NAMESPACES.office}" xmlns:style="${ODF_NAMESPACES.style}" xmlns:text="${ODF_NAMESPACES.text}"`;
@@ -367,15 +367,16 @@ it("keeps right content when a first-page declaration satisfies the original pre
   }
   try {
     importMaster(
-      "<style:header><text:p>right header</text:p></style:header><style:footer><text:p>right footer</text:p></style:footer>",
+      "<style:header><text:p>right header</text:p></style:header><style:header-first><text:p>first header</text:p></style:header-first>",
     );
-    importMaster("<style:header-first><text:p>first header</text:p></style:header-first>");
     expect(centerText(document, ATTR_PAGE_HEADERRIGHT)).toBe("right header");
     expect(centerText(document, ATTR_PAGE_HEADERFIRST)).toBe("first header");
-    const footer = items(document, "Default").Get(ATTR_PAGE_FOOTERRIGHT) as ScPageHFItem;
-    expect(footer.GetCenterArea()).toBeNull();
-    const flags = headerFooterItems(document, "Default", ATTR_PAGE_FOOTERSET);
-    expect((flags.Get(ATTR_PAGE_ON) as SfxBoolItem).GetValue()).toBe(true);
+    importMaster(
+      "<style:header-first><text:p>ignored</text:p></style:header-first><style:header><text:p>new right</text:p></style:header><style:header><text:p>duplicate right</text:p></style:header>",
+    );
+    expect(centerText(document, ATTR_PAGE_HEADERRIGHT)).toBe("new right");
+    const first = items(document, "Default").Get(ATTR_PAGE_HEADERFIRST) as ScPageHFItem;
+    expect(first.GetCenterArea()).toBeNull();
   } finally {
     document.Dispose();
   }
