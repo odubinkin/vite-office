@@ -1,10 +1,11 @@
 ---
 id: "202611220524-FE39NC"
 title: "Connect Writer page line-spacing and the baseline grid"
-status: "DOING"
+result_summary: "Connected Writer page line-spacing, reference style history and storage, and the View baseline grid."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 9
+revision: 10
 origin:
   system: "manual"
 depends_on: []
@@ -38,11 +39,16 @@ quality_review:
     - "dca1fb005062 and task Findings: 53 Writer scenarios, 5 Chromium scenarios, production bundle and exact TypeScript"
   findings:
     - "Original item exchange, real style ownership and separate view state are covered by focused model, dialog, storage and production browser cases."
-commit: null
+commit:
+  hash: "dca1fb005062a658b6ec210a2739b15461346b52"
+  message: "🧩 FE39NC code: Connect Writer page line-spacing and the baseline grid"
 comments:
   -
     author: "CODER"
     body: "Start: continue direct-mode task in current checkout."
+  -
+    author: "CODER"
+    body: "Verified: 53 focused Writer tests, 5 Chromium scenarios, exact TypeScript and production build passed."
 events:
   -
     type: "status"
@@ -57,8 +63,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "53 focused Writer scenarios, the final register regression, five Chromium production scenarios, exact TypeScript and production build, lint, format and scoped audits passed."
+  -
+    type: "status"
+    at: "2026-11-22T05:53:19.959Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: 53 focused Writer tests, 5 Chromium scenarios, exact TypeScript and production build passed."
 doc_version: 3
-doc_updated_at: "2026-11-22T05:50:14.377Z"
+doc_updated_at: "2026-11-22T05:53:19.961Z"
 doc_updated_by: "CODER"
 description: "Expose the page register format and paragraph register attribute through their original controls, connect line placement, and add the native View Baseline Grid command and paint."
 sections:
