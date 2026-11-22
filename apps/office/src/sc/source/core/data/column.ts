@@ -934,6 +934,8 @@ export class ScColumn extends ScColumnData {
     return column4.GetCellType.call(this, row);
   }
   HasDataCellsInRange = column4.HasDataCellsInRange;
+  GetUnprotectedCells = column4.GetUnprotectedCells;
+  RemoveProtected = column3.RemoveProtected;
   /** Reads numeric or numeric-formula values with the native zero fallback. @param row - Valid row. @returns Value. */
   GetValue(row: number): number {
     return this.maCells.get_type(row) === element_type_numeric

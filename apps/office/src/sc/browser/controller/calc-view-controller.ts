@@ -202,6 +202,24 @@ export class CalcViewController {
     this.Changed();
     return result;
   }
+  /** Reads the actual cell protection attribute. @returns Whether locked. */
+  GetCellProtectionState(): boolean {
+    return new ScFormatShell(this.viewData, this.shell).GetCellProtectionState();
+  }
+  /** Commits pending input and applies the original protection slot. @param request - Native request. @returns Whether applied. */
+  ExecuteCellProtection(request: SfxRequest): boolean {
+    if (!this.Commit()) return false;
+    const changed = new ScFormatShell(this.viewData, this.shell).ExecuteCellProtection(request);
+    this.Changed();
+    return changed;
+  }
+  /** Selects unlocked cells through the actual marks owner. @returns Whether admitted. */
+  SelectUnprotectedCells(): boolean {
+    if (!this.Commit()) return false;
+    new ScCellShell(this.viewShell).SelectUnprotectedCells();
+    this.SyncSheetView();
+    return true;
+  }
   /** Reads actual selected cell alignment. @param axis - Native axis. @returns Original enum or mixed. */
   GetAlignment(axis: CalcAlignmentAxis): SvxCellHorJustify | SvxCellVerJustify | undefined {
     return new ScFormatShell(this.viewData, this.shell).GetAlignment(axis);

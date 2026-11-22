@@ -205,14 +205,7 @@ export class ScViewFunc extends ScTabView {
     const tab = this.data.CurrentTabForData(),
       col = this.data.GetCurX(),
       row = this.data.GetCurY();
-    const tester =
-      original.IsMarked() || original.IsMultiMarked()
-        ? ScEditableTester.CreateAndTestSelection(doc, original)
-        : ScEditableTester.CreateAndTestSelectedBlock(doc, col, row, col, row, original);
-    if (!tester.IsFormatEditable()) {
-      this.ErrorMessage(tester.GetMessageId());
-      return false;
-    }
+    if (!this.CheckSelectionFormatEditable(true)) return false;
 
     const marks = new ScMarkData(original);
     ScViewUtil.UnmarkFiltered(marks, doc);
@@ -231,6 +224,30 @@ export class ScViewFunc extends ScTabView {
     AdjustBlockHeight(doc, marks, range.aStart.Row(), range.aEnd.Row());
     this.shell.SetDocumentModified();
     return true;
+  }
+
+  /** Checks selection editability for attributes, including the matrix-only exception. @param checkSelectedTabs - Also test all selected tabs for an unmarked cursor. @returns Whether formatting is admitted. */
+  CheckSelectionFormatEditable(checkSelectedTabs = false): boolean {
+    const doc = this.data.GetDocument(),
+      original = this.data.GetMarkData();
+    const col = this.data.GetCurX(),
+      row = this.data.GetCurY();
+    const tester =
+      original.IsMarked() || original.IsMultiMarked()
+        ? ScEditableTester.CreateAndTestSelection(doc, original)
+        : checkSelectedTabs
+          ? ScEditableTester.CreateAndTestSelectedBlock(doc, col, row, col, row, original)
+          : ScEditableTester.CreateAndTestBlock(
+              doc,
+              this.data.CurrentTabForData(),
+              col,
+              row,
+              col,
+              row,
+            );
+    if (tester.IsFormatEditable()) return true;
+    this.ErrorMessage(tester.GetMessageId());
+    return false;
   }
   /** Inserts the manual break at the original view cursor, or the supplied address. @param columns - Column axis. @param record - Record history. @param position - Explicit cursor override. @param setModified - Mark the document modified. @returns Success. */
   InsertPageBreak(

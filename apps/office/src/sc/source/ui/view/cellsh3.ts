@@ -1,10 +1,11 @@
-/** @fileoverview Consumed native ScCellShell selection,geometry and attribute-reset cases from cellsh1/cellsh3/cellsh4 over actual native view/mark owners;window/reference/protection handlers remain unported. */
+/** @fileoverview Consumed native ScCellShell selection,geometry and attribute-reset cases from cellsh1/cellsh3/cellsh4 over actual native view/mark owners;includes the original unlocked-cell selection command. */
 import { ScViewFunc } from "./viewfunc";
 import { InsertDeleteFlags, ScSizeMode, TwipsToEvenHMM } from "../../../inc/global";
 import { SfxRequest } from "../../../../sfx2/source/control/request";
 import { SfxUInt16Item, SfxInt32Item } from "../../../../svl/source/items/intitem";
 import { Length, toTwips } from "../../../../o3tl/inc/unit_conversion";
 import type { ScViewData } from "../inc/viewdata";
+import { ScRangeList } from "../../../inc/rangelst";
 import { ScRange } from "../../../inc/address";
 import { ColRowSpan } from "../../../inc/columnspanset";
 import { SfxBoolItem } from "../../../../svl/source/items/cenumitm";
@@ -53,6 +54,13 @@ export class ScCellShell {
   /** Original cellsh4.cxx SID_SELECT_NONE case. @returns Nothing. */
   Deselect(): void {
     this.view.Unmark();
+  }
+  /** Marks the original unlocked cells while retaining sheet selection if the result is empty. @returns Nothing. */
+  SelectUnprotectedCells(): void {
+    const data = this.view.GetViewData();
+    const ranges = new ScRangeList();
+    data.GetDocument().GetUnprotectedCells(ranges, data.CurrentTabForData());
+    data.GetMarkData().MarkFromRangeList(ranges, true);
   }
   /** Original cellsh1.cxx SID_SELECT_VISIBLE_ROWS case. Hidden ranges are subtracted from the shared mark owner across every selected sheet. @param data - Actual view data. @returns Nothing. */
   SelectVisibleRows(data: ScViewData): void {

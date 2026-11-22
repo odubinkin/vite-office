@@ -7869,3 +7869,22 @@ Calc preserves the source operation and its history.
 
 - [Original grouped protect operation](../../vendor/libreoffice-reference/sc/source/ui/view/viewfunc.cxx#L2805)
 - [Original sheet protection history](../../vendor/libreoffice-reference/sc/source/ui/undo/undotab.cxx#L1355)
+
+### CALC-826 — Select Unprotected Cells can include a cell that rejects input
+
+The original unlocked-range scan checks the Protected item flag. The
+input editability test also treats Hide All as protection on a protected
+sheet. The command can therefore mark a cell whose Protected flag is
+clear and whose Hide All flag is set, while input still rejects edits.
+Calc preserves both predicates.
+
+- [Original unlocked range scan](../../vendor/libreoffice-reference/sc/source/core/data/column4.cxx#L913)
+- [Original protected attribute predicate](../../vendor/libreoffice-reference/sc/source/core/data/attarray.cxx)
+
+### CALC-827 — Select Unprotected Cells omits unlocked default-column tails
+
+The original command scans only allocated columns. If the shared default
+column carries an unlocked run, its implicit instances in later columns
+are absent from the selection. Calc preserves the allocation boundary.
+
+- [Original sheet selection traversal](../../vendor/libreoffice-reference/sc/source/core/data/table2.cxx#L2047)

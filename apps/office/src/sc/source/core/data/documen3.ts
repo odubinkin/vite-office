@@ -1,6 +1,7 @@
 /** @fileoverview Original documen3.cxx document grammar projection and copy-reference traversal;with exact range-name lookup. */
 import { Color, COL_AUTO } from "../../../../tools/inc/color";
 import { ScAddress, type ScRange } from "../../../inc/address";
+import type { ScRangeList } from "../../../inc/rangelst";
 import type { ScRangeData } from "../tool/rangenam";
 import type { ScDocument } from "../../../inc/document";
 import type { ScTableProtection } from "./tabprotection";
@@ -283,6 +284,11 @@ export function GetLanguage(this: ScDocument, latin: [number], cjk: [number], ct
   latin[0] = this["languageFields"].eLanguage;
   cjk[0] = this["languageFields"].eCjkLanguage;
   ctl[0] = this["languageFields"].eCtlLanguage;
+}
+
+/** Queries original unlocked ranges on one sheet. @param this - Workbook. @param ranges - Output owner. @param tab - Sheet. @returns Nothing. */
+export function GetUnprotectedCells(this: ScDocument, ranges: ScRangeList, tab: number): void {
+  this.FetchTable(tab)?.GetUnprotectedCells(ranges);
 }
 
 /** Tests whether the given tab is protected. @param this - Workbook. @param tab - Sheet index. @returns Protection state. */

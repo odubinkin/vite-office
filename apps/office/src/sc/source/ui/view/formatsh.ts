@@ -33,10 +33,12 @@ import {
 import { FontWeight, FontItalic, FontLineStyle } from "../../../../tools/inc/fontenum";
 import { createAttributeToggleItem } from "../../../../sfx2/source/control/bindings";
 import { GetSelectionPattern, ScViewFunc } from "./viewfunc";
-import { ScLineBreakCell } from "../../../inc/attrib";
+import { ScLineBreakCell, ScProtectionAttr } from "../../../inc/attrib";
 import { AdjustBlockHeight } from "./viewfun2";
 import { ScPatternAttr } from "../../../inc/patattr";
-import { ATTR_FONT_HEIGHT } from "../../../inc/scitems";
+import { SfxBoolItem } from "../../../../svl/source/items/cenumitm";
+import { SID_SCATTR_CELLPROTECTION } from "../../../sdi/tabvwsh";
+import { ATTR_FONT_HEIGHT, ATTR_PROTECTION } from "../../../inc/scitems";
 import { SvxFontHeightItem } from "../../../../editeng/inc/fhgtitem";
 import { SvxScriptSetItem } from "../../../../editeng/inc/scriptsetitem";
 import { SfxItemState } from "../../../../svl/inc/itemset";
@@ -53,6 +55,37 @@ export type CalcColorKind = "font" | "background";
 export const calcColorSlots = { font: 10017, background: 10186 } as const;
 /** Source format owner for the consumed simple-selection font-height command. */
 export class ScFormatShell {
+  /** Reads the original protection state, including the default item for mixed selection. @returns Lock flag. */
+  GetCellProtectionState(): boolean {
+    return (this.SelectionPattern().GetItem(ATTR_PROTECTION) as ScProtectionAttr).GetProtection();
+  }
+
+  /** Toggles the native protection item and retains its three independent visibility flags. @param request - Native request. @returns Whether attributes were applied. */
+  ExecuteCellProtection(request: SfxRequest): boolean {
+    if (request.GetArgs().length) {
+      request.Ignore();
+      return false;
+    }
+    const old = this.SelectionPattern().GetItem(ATTR_PROTECTION) as ScProtectionAttr;
+    const item = new ScProtectionAttr(
+      !old.GetProtection(),
+      old.GetHideFormula(),
+      old.GetHideCell(),
+      old.GetHidePrint(),
+    );
+    const view = this.viewData.GetViewShell() ?? new ScViewFunc(this.viewData, this.shell);
+    let applied = false;
+    if (view.CheckSelectionFormatEditable()) {
+      const delta = new ScPatternAttr(this.shell.GetDocument().getCellAttributeHelper());
+      delta.ItemSetPut(item);
+      applied = this.ApplySelectionPattern(delta);
+    }
+    request.AppendItem(item);
+    request.AppendItem(new SfxBoolItem(SID_SCATTR_CELLPROTECTION, item.GetProtection()));
+    request.Done();
+    return applied;
+  }
+
   /** Reads original ATTR_LINEBREAK binding, retaining INVALID for mixed selections. @returns Wrapped state or mixed. */
   GetWrapTextState(): boolean | undefined {
     return (this.SelectionItem(139) as ScLineBreakCell | undefined)?.GetValue();

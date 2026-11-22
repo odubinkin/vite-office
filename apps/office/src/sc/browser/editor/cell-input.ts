@@ -1,5 +1,7 @@
 /** @fileoverview Browser scalar, formula and rich-text input/display bindings. History captures the actual native ScCellValue owner;only transient user input uses a browser parsing union. */
 import type { SharedStringConstReference } from "../../../svl/inc/sharedstring";
+import type { ScProtectionAttr } from "../../inc/attrib";
+import { ATTR_PROTECTION } from "../../inc/scitems";
 import { ScFormulaCell } from "../../inc/formulacell";
 import { ScCellValue } from "../../inc/cellvalue";
 import { FormulaError } from "../../../formula/inc/errorcodes";
@@ -84,10 +86,23 @@ export function parseCellInput(value: string): CalcCellInput {
   if (value.length > 1 && (value[0] === "+" || value[0] === "-")) return { kind: "formula", value };
   return { kind: "text", value };
 }
+/** Reads the direct or conditional visibility flags for a protected sheet. @param doc - Workbook. @param pos - Cell address. @param display - Whether the output uses conditional attributes. @returns Original protection item. */
+function sheetCellProtection(
+  doc: ScDocument,
+  pos: ScAddress,
+  display = false,
+): ScProtectionAttr | undefined {
+  if (!doc.IsTabProtected(pos.Tab())) return undefined;
+  return doc.GetPattern(pos)?.GetItem(ATTR_PROTECTION, display ? doc.GetCondResult(pos) : null) as
+    ScProtectionAttr | undefined;
+}
 /** Reads the actual source formula, scalar or edit text,including native empty-code error display. @param doc - Model. @param pos - Cell. @returns Input-line text. */
 export function cellInputText(doc: ScDocument, pos: ScAddress): string {
+  const protection = sheetCellProtection(doc, pos);
+  if (protection?.GetHideCell()) return "";
   const formula = doc.GetFormulaCell(pos);
   if (formula) {
+    if (protection?.GetHideFormula()) return "";
     if (formula.GetCode().GetCodeError() && !formula.GetCode().GetLen())
       return errorText(formula.GetCode().GetCodeError());
     const value = formula.GetFormula(doc.GetGrammar());
@@ -120,9 +135,12 @@ export function cellPresentation(
   showFormulas = false,
   showZeros = true,
 ): Readonly<{ text: string; alignment: "left" | "right" }> {
+  const protection = sheetCellProtection(doc, pos, true);
+  if (protection?.GetHideCell()) return { text: "", alignment: "left" };
   if (showFormulas) {
     const formula = doc.GetFormulaCell(pos);
     if (formula) {
+      if (protection?.GetHideFormula()) return { text: "", alignment: "left" };
       const expression = formula.GetFormula(doc.GetGrammar());
       try {
         return { text: text(expression), alignment: "left" };

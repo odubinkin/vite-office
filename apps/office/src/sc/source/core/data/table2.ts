@@ -2,6 +2,7 @@
 import type { EditTextObject } from "../../../../editeng/inc/editobj";
 import type { SfxHintId } from "../../../../svl/inc/hint";
 import type { SharedStringConstReference } from "../../../../svl/inc/sharedstring";
+import type { ScRangeList } from "../../../inc/rangelst";
 import { ScRange } from "../../../inc/address";
 import { CRFlags, HasAttrFlags, STD_COL_WIDTH } from "../../../inc/global";
 import { ScMultiSelIter } from "../../../inc/markmulti";
@@ -811,4 +812,18 @@ export function IsSelectionEditable(
       );
   }
   return true;
+}
+
+/** Visits only allocated native columns when building the unlocked ranges. @param this - Sheet. @param ranges - Output. @returns Nothing. */
+export function GetUnprotectedCells(this: ScTable, ranges: ScRangeList): void {
+  for (let col = 0; col < this.GetAllocatedColumnsCount(); col++)
+    this.FetchColumn(col)?.GetUnprotectedCells(0, this["rDocument"].MaxRow(), ranges);
+}
+
+/** Strips protected contents from the clipboard sheet in the copied range. @param this - Clipboard sheet. @param range - Original copy area. @returns Nothing. */
+export function RemoveProtected(this: ScTable, range: ScRange): void {
+  const { aStart, aEnd } = range;
+  const last = this.ClampToAllocatedColumns(aEnd.Col());
+  for (let col = aStart.Col(); col <= last; col++)
+    this.FetchColumn(col)?.RemoveProtected(aStart.Row(), aEnd.Row());
 }

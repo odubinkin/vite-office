@@ -23,7 +23,7 @@
         "vendor/libreoffice-reference/sc/source/ui/app/transobj.cxx#ScTransferObj::GetData",
         "vendor/libreoffice-reference/sc/source/ui/view/viewfun5.cxx#ScViewFunc::PasteDataFormatFormattedText"
       ],
-      "justification": "Captures a same-workbook single-range clipboard document and stages the string transfer through Calc string export and native text import.",
+      "justification": "Captures a same-workbook single-range clipboard document and stages the string transfer through Calc string export and native text import. Task 51SY7G. A protected source sheet strips hidden cell content and converts hidden formulas to values in the actual clipboard document used for native and text transfers.",
       "knownViolations": [],
       "localSymbols": [
         "CopyToClipSingleRange",

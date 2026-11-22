@@ -2,8 +2,10 @@
 import { ScCellFormat } from "../tool/cellform";
 import { ScRefCellValue } from "../../../inc/cellvalue";
 import type { ScPatternAttr } from "../../../inc/patattr";
-import type { ScCondFormatItem } from "../../../inc/attrib";
-import { ATTR_CONDITIONAL } from "../../../inc/scitems";
+import { ScRange } from "../../../inc/address";
+import type { ScRangeList } from "../../../inc/rangelst";
+import type { ScCondFormatItem, ScProtectionAttr } from "../../../inc/attrib";
+import { ATTR_CONDITIONAL, ATTR_PROTECTION } from "../../../inc/scitems";
 import { SvtScriptType } from "../../../../svl/inc/languageoptions";
 import { element_type_empty } from "../../../../external/mdds/include/mdds/multi_type_vector/types";
 import { element_type_celltextattr, celltextattr_block } from "../../../inc/mtvelements";
@@ -507,5 +509,24 @@ export function EndListeningIntersectedGroups(
     const address = new ScAddress((group.mpTopCell as ScFormulaCell).aPos);
     address.IncRow(group.mnLength - 1);
     groups.push(address);
+  }
+}
+
+/** Joins unlocked attribute runs within the original column span. @param this - Allocated column. @param first - First row. @param last - Last row. @param ranges - Native output. @returns Nothing. */
+export function GetUnprotectedCells(
+  this: ScColumn,
+  first: number,
+  last: number,
+  ranges: ScRangeList,
+): void {
+  const start: [number] = [0],
+    end: [number] = [0];
+  const col = this.GetCol(),
+    tab = this.GetTab();
+  for (let row = first; row <= last; row = end[0] + 1) {
+    const pattern = this.GetPatternRange(start, end, row);
+    if (!pattern) break;
+    if (!(pattern.GetItem(ATTR_PROTECTION) as ScProtectionAttr).GetProtection())
+      ranges.Join(new ScRange(col, row, tab, col, Math.min(last, end[0]), tab));
   }
 }

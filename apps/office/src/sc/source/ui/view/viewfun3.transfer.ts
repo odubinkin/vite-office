@@ -46,6 +46,7 @@ export function CopyToClipSingleRange(view: ScViewData): ScDocument | undefined 
       for (const formula of dirty) if (formula.GetDirty()) formula.Interpret();
     }
     doc.CopyToDocument(range, calcCellClipboardFlags, false, clip);
+    if (doc.IsTabProtected(tab)) clip.FetchTable(tab)?.RemoveProtected(range);
     clip.SetClipArea(range);
     return clip;
   } catch (error) {
@@ -77,7 +78,9 @@ export function ExportClipboardText(clip: ScDocument, source: ScDocument): strin
       const value = ScCellFormat.GetOutputString(
         source,
         position,
-        source.GetRefCellValue(position),
+        clip.GetFormulaCell(position)
+          ? source.GetRefCellValue(position)
+          : clip.GetRefCellValue(position),
       );
       try {
         const field = text(value);

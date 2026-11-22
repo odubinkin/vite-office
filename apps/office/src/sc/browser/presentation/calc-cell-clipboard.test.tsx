@@ -11,6 +11,8 @@ import { SvxBoxItem, SvxBoxItemLine } from "../../../editeng/source/items/frmite
 import { Color } from "../../../tools/inc/color";
 import { ATTR_BORDER } from "../../inc/scitems";
 import { ScAddress } from "../../inc/address";
+import { ScProtectionAttr } from "../../inc/attrib";
+import { ScTableProtection } from "../../source/core/data/tabprotection";
 import { ScPatternAttr } from "../../inc/patattr";
 import { CellType } from "../../inc/global";
 import { createCalcSession } from "../composition/calc-module";
@@ -881,4 +883,67 @@ it("reports clipboard overflow at the sheet boundary and can undo the imported p
   expect(controller.shell.GetUndoManager().GetUndoActionCount()).toBe(count + 1);
   act(() => expect(controller.Undo()).toBe(true));
   expect(doc.GetCellType(bottom)).toBe(CellType.CELLTYPE_NONE);
+});
+
+it("strips hidden values and formula source in clipboard data from a protected sheet", /** Checks both clipboard flavors and preserved source data. @returns Completion. */ async () => {
+  const controller = mount();
+  const doc = controller.shell.GetDocument();
+  act(
+    /** Creates protected content and a visible result. @returns Nothing. */ () => {
+      controller.Select(0, 0);
+      controller.EnterString("hidden cell");
+      controller.Select(1, 0);
+      controller.EnterString("=20+22");
+      doc.ApplyAttr(0, 0, 0, new ScProtectionAttr(true, false, true, false));
+      doc.ApplyAttr(1, 0, 0, new ScProtectionAttr(true, true, false, false));
+      const protection = new ScTableProtection();
+      protection.setProtected(true);
+      controller.GetViewShell().ProtectSheet(protection);
+      controller.SyncSheetView();
+    },
+  );
+  select("A1:B1");
+  const copied = transfer();
+  fireEvent.copy(grid(), { clipboardData: copied });
+  expect(copied.getData("text/plain")).toBe("\t42");
+
+  act(
+    /** Creates an unprotected paste destination. @returns Nothing. */ () =>
+      controller.InsertSheet(),
+  );
+  select("A1");
+  await act(
+    /** Pastes the actual native application transfer. @returns Nothing. */ async () => {
+      fireEvent.paste(grid(), { clipboardData: copied });
+    },
+  );
+  expect(doc.GetCellType(new ScAddress(0, 0, 1))).toBe(CellType.CELLTYPE_NONE);
+  expect(doc.GetCellType(new ScAddress(1, 0, 1))).toBe(CellType.CELLTYPE_VALUE);
+  expect(doc.GetValue(new ScAddress(1, 0, 1))).toBe(42);
+  expect(doc.GetFormulaCell(new ScAddress(1, 0, 0))).not.toBeNull();
+  expect(text(doc.GetSharedString(new ScAddress(0, 0, 0)).getString())).toBe("hidden cell");
+});
+
+it("ports tdf151752 clipboard paste after an empty Select Unprotected Cells result", /** The native selection reset must retain the active sheet. @returns Completion. */ async () => {
+  const controller = mount();
+  const doc = controller.shell.GetDocument();
+  act(
+    /** Enters A1 through the real sheet input. @returns Nothing. */ () => {
+      expect(controller.EnterString("1")).toBe(true);
+    },
+  );
+  select("A1");
+  fireEvent.click(screen.getByRole("menuitem", { name: "Edit" }));
+  fireEvent.click(screen.getByRole("menuitem", { name: "Select" }));
+  fireEvent.click(screen.getByRole("menuitem", { name: "Select Unprotected Cells" }));
+  const copied = transfer();
+  fireEvent.copy(grid(), { clipboardData: copied });
+  select("B1");
+  await act(
+    /** Pastes the copied native cell. @returns Nothing. */ async () => {
+      fireEvent.paste(grid(), { clipboardData: copied });
+    },
+  );
+  expect(doc.GetValue(new ScAddress(0, 0))).toBe(1);
+  expect(doc.GetValue(new ScAddress(1, 0))).toBe(1);
 });

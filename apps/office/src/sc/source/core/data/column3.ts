@@ -3,6 +3,8 @@ import { SvNumberFormatter } from "../../../../svl/source/numbers/zforlist";
 import type { SetFormulaDirtyContext } from "../../../inc/refupdatecontext";
 import type { ScRange } from "../../../inc/address";
 import type { SfxPoolItem } from "../../../../svl/inc/poolitem";
+import type { ScProtectionAttr } from "../../../inc/attrib";
+import { ATTR_PROTECTION } from "../../../inc/scitems";
 import { SharedString } from "../../../../svl/inc/sharedstring";
 import { string_value_type } from "../../../inc/mtvelements";
 import {
@@ -844,5 +846,46 @@ export function ApplyPatternIfNumberformatIncompatible(
     }
   } finally {
     cache.Dispose();
+  }
+}
+
+/** Removes hidden contents and freezes hidden formulas to their results in the clipboard column. @param this - Clipboard column. @param first - First row. @param last - Last row. @returns Nothing. */
+export function RemoveProtected(this: ScColumn, first: number, last: number): void {
+  const start: [number] = [0],
+    end: [number] = [0];
+  const replacements: { row: number; value: number | SharedString }[] = [];
+  const cells = this.GetCellStore();
+  try {
+    for (let row = first; row <= last; row = end[0] + 1) {
+      const pattern = this.GetPatternRange(start, end, row);
+      if (!pattern) break;
+      const protection = pattern.GetItem(ATTR_PROTECTION) as ScProtectionAttr;
+      const limit = Math.min(last, end[0]);
+      if (protection.GetHideCell()) {
+        this.DeleteArea(row, limit, InsertDeleteFlags.CONTENTS, false);
+      } else if (protection.GetHideFormula()) {
+        ProcessFormula(
+          cells.position(row).first,
+          cells,
+          row,
+          limit,
+          /** Captures source result before replacing its formula. @param index - Cell row. @param cell - Formula owner. @returns Nothing. */
+          (index, cell) => {
+            replacements.push({
+              row: index,
+              value: cell.IsValue() ? cell.GetValue() : new SharedString(cell.GetString()),
+            });
+          },
+        );
+      }
+    }
+    const position = new ColumnBlockPosition();
+    this.InitBlockPosition(position);
+    for (const { row, value } of replacements) {
+      if (typeof value === "number") this.SetValue(position, row, value, false);
+      else this.SetRawString(position, row, value, false);
+    }
+  } finally {
+    for (const { value } of replacements) if (value instanceof SharedString) value.dispose();
   }
 }

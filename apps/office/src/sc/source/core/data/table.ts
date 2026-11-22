@@ -99,6 +99,8 @@ export class ScTable {
   ApplySelectionStyle = table2.ApplySelectionStyle;
   GetAreaStyle = table2.GetAreaStyle;
   GetSelectionStyle = table2.GetSelectionStyle;
+  GetUnprotectedCells = table2.GetUnprotectedCells;
+  RemoveProtected = table2.RemoveProtected;
   GetLastChangedColFlagsWidth = table2.GetLastChangedColFlagsWidth;
   StartOutlineTable = table1.StartOutlineTable;
   SetOutlineTable = table1.SetOutlineTable;

@@ -866,8 +866,8 @@ export class ScDocShell extends SfxObjectShell {
     this.odsFilter.Close();
     if (!this.CloseObjectShell()) return;
     this.openRequest++;
-    this.DisposeDocument(this.document);
     this.undo.Clear();
+    this.DisposeDocument(this.document);
     this.Dispose();
   }
 }
