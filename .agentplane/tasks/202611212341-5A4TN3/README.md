@@ -1,10 +1,11 @@
 ---
 id: "202611212341-5A4TN3"
 title: "Connect Calc merged cells to the grid and commands"
-status: "DOING"
+result_summary: "Connected Calc merge and split commands, original modal policies, accessible merged-grid spans, and native history. Verified 39 focused scenarios, the final production build, and Chromium."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 9
+revision: 10
 origin:
   system: "manual"
 depends_on:
@@ -40,11 +41,16 @@ quality_review:
     - "output/playwright/calc-task13/smoke-final.log"
   findings:
     - "Current Chromium, original Calc fixture coverage and focused regression tests cover the actual command entry points and retained source behavior."
-commit: null
+commit:
+  hash: "b53c51bcc002bbf72e88d6f26851521c68105a3f"
+  message: "🧩 5A4TN3 code: expose Calc merge commands and content dialog"
 comments:
   -
     author: "CODER"
     body: "Start: continue direct-mode task in current checkout."
+  -
+    author: "CODER"
+    body: "Verified: source merge span display, command state, content choices, original worksheet fixtures and native Undo and Redo passed targeted tests and Chromium."
 events:
   -
     type: "status"
@@ -59,8 +65,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Verified: native Calc merge modes, visible spans, original worksheet regressions, Undo and Redo, and final Chromium workflow."
+  -
+    type: "status"
+    at: "2026-11-22T00:22:02.068Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: source merge span display, command state, content choices, original worksheet fixtures and native Undo and Redo passed targeted tests and Chromium."
 doc_version: 3
-doc_updated_at: "2026-11-22T00:20:27.160Z"
+doc_updated_at: "2026-11-22T00:22:02.069Z"
 doc_updated_by: "CODER"
 description: "Connect persisted Calc merge spans to the browser grid and implement original merge, merge and center, and split commands through the source view, document, and undo contracts."
 sections:
