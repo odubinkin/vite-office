@@ -1,6 +1,7 @@
 /** @fileoverview Native SwPageDesc frame-format and use/follow ownership from pagedesc.cxx; immutable geometry is only a browser projection of canonical pooled items. */
 import { SvxBoxItemLine as BoxEdge } from "../../../../editeng/source/items/frmitems";
 import { getActivePageStory, getPageFrameGutters, SwFrameFormat } from "./atrfrm";
+import type { SwFormatHeader, SwFormatFooter } from "../../../inc/fmthdft";
 import { SwPoolFormatId } from "../../../inc/poolfmt";
 import { SfxItemSet } from "../../../../svl/source/items/itemset";
 import {
@@ -68,6 +69,7 @@ export class SwPageDesc extends BroadcastingModify {
   private m_StyleName: string;
   private m_pFollow: SwPageDesc;
   private m_IsLandscape = false;
+  private readonly stashedStoryFormats = new Map<number, SwFormatHeader | SwFormatFooter>();
   private m_eUse: UseOnPage =
     UseOnPage.All | UseOnPage.HeaderShare | UseOnPage.FooterShare | UseOnPage.FirstShare;
   /** Original copy constructor. @param source - Descriptor. @returns Descriptor. */ constructor(
@@ -109,6 +111,7 @@ export class SwPageDesc extends BroadcastingModify {
     if (typeof source !== "string") {
       this.m_IsLandscape = source.m_IsLandscape;
       this.m_eUse = source.m_eUse;
+      this.CopyStashedStoryFormats(source);
     }
   }
   /** Original descriptor pool identity is owned by the master format. @returns Native ID. */
@@ -147,6 +150,29 @@ export class SwPageDesc extends BroadcastingModify {
       margin.Dispose();
     }
   }
+  /** Looks up a detached story using its variant and header/footer identity. @param key - Native story slot. @returns Held story item, if any. */
+  GetStashedStoryFormat(key: number): SwFormatHeader | SwFormatFooter | undefined {
+    return this.stashedStoryFormats.get(key);
+  }
+
+  /** Keeps one native story registered while the visible page variant shares a different section. @param key - Native story slot. @param item - Story item, or undefined to remove the hold. @returns Nothing. */
+  StashStoryFormat(key: number, item?: SwFormatHeader | SwFormatFooter): void {
+    const existing = this.stashedStoryFormats.get(key);
+    if (item === existing) return;
+    const copy = item?.Clone();
+    if (copy) this.stashedStoryFormats.set(key, copy);
+    else this.stashedStoryFormats.delete(key);
+    existing?.Dispose();
+  }
+
+  /** Transfers the reference ownership of stored page variants between descriptors. @param source - Borrowed descriptor. @returns Nothing. */
+  CopyStashedStoryFormats(source: SwPageDesc): void {
+    if (source === this) return;
+    for (const [key, item] of source.stashedStoryFormats) this.StashStoryFormat(key, item);
+    for (const key of this.stashedStoryFormats.keys())
+      if (!source.stashedStoryFormats.has(key)) this.StashStoryFormat(key);
+  }
+
   /** Native master format. @returns Frame. */ GetMaster(): SwFrameFormat {
     return this.m_Master;
   }
@@ -286,6 +312,7 @@ export class SwPageDesc extends BroadcastingModify {
   /** Releases actual frame-format clients before the descriptor notifier. @returns Nothing. */ override DisposeModify(): void {
     for (const frame of [this.m_FirstLeft, this.m_FirstMaster, this.m_Left, this.m_Master])
       frame.DisposeModify();
+    for (const key of this.stashedStoryFormats.keys()) this.StashStoryFormat(key);
     super.DisposeModify();
   }
 }

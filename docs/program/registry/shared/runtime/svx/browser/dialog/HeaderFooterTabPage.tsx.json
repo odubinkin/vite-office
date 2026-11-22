@@ -1,0 +1,34 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/svx/browser/dialog/HeaderFooterTabPage.tsx",
+    "classification": "browser-adaptation",
+    "state": "active",
+    "suite": "shared",
+    "subsystem": "page-style-stories",
+    "capabilityIds": [
+      "CAP-0136"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "not-applicable",
+      "defaultStatus": "not-applicable",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/svx/browser/dialog/HeaderFooterTabPage.tsx#HeaderFooterTabPage",
+        "apps/office/src/sw/browser/presentation/WriterPageStoriesDialog.test.tsx",
+        "apps/office/e2e/writer-page-stories.spec.ts",
+        "vendor/libreoffice-reference/svx/uiconfig/ui/headfootformatpage.ui"
+      ],
+      "justification": "Presents the Header and Footer pages and the deletion confirmation through accessible browser controls.",
+      "knownViolations": [],
+      "localSymbols": [
+        "HeaderFooterTabPage"
+      ],
+      "sourceResponsibility": "browser-owned",
+      "upstreamFile": null,
+      "upstreamSymbols": []
+    }
+  }
+}

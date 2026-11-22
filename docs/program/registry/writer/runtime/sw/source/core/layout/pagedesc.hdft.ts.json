@@ -1,0 +1,36 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sw/source/core/layout/pagedesc.hdft.ts",
+    "classification": "upstream-mechanism",
+    "state": "active",
+    "suite": "writer",
+    "subsystem": "page-style-stories",
+    "capabilityIds": [
+      "CAP-0136"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "none",
+      "evidence": [
+        "apps/office/src/sw/source/core/layout/pagedesc.hdft.ts#preparePageStory",
+        "apps/office/src/sw/browser/presentation/WriterPageStoriesDialog.test.tsx",
+        "apps/office/e2e/writer-page-stories.spec.ts",
+        "vendor/libreoffice-reference/sw/source/core/doc/docdesc.cxx#CopyMasterHeader"
+      ],
+      "justification": "Prepares the native header and footer format references, separate contents and stored shared variants.",
+      "knownViolations": [],
+      "localSymbols": [
+        "preparePageStory"
+      ],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": "sw/source/core/doc/docdesc.cxx",
+      "upstreamSymbols": [
+        "CopyMasterHeader"
+      ]
+    }
+  }
+}

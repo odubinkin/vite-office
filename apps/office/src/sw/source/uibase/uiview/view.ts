@@ -46,6 +46,7 @@ import {
 import type { SvxULSpaceItem } from "../../../../editeng/inc/ulspitem";
 import { RES_PAGEDESC } from "../../../inc/hintids";
 import type { SwFormatPageDesc } from "../../core/attr/fmtpdsc";
+import { PageDescToItemSet } from "../utlui/uitool";
 import { SvxRuler } from "../../../../svx/source/dialog/svxruler";
 
 /** Persistent Writer view joining SwDocShell, SwWrtShell, and frame dispatch. */
@@ -375,7 +376,7 @@ export class SwView {
     const name =
       this.layout.FindPageDescriptorAt(node, point.GetContentIndex()) ?? assigned.GetPageDescName();
     const descriptor = document.FindPageDesc(name) ?? document.GetPageDesc();
-    const pageInput = descriptor.GetMaster().GetAttrSet().Clone();
+    const pageInput = PageDescToItemSet(descriptor);
     const result = await this.dialogController
       .RequestPageDialog(WRITER_COMMAND_IDS.pageDialog, descriptor.GetValue(), pageInput)
       .finally(

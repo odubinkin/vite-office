@@ -1,7 +1,12 @@
 /** @fileoverview Native header/footer text context and ODF master-page variant selection. */
 import { Any } from "../../../../cppu/inc/com/sun/star/uno/Any";
 import { convertTwipToMm100 } from "../../../../tools/inc/UnitConversion";
-import { RES_FRM_SIZE, RES_HEADER_FOOTER_EAT_SPACING, RES_UL_SPACE } from "../../../inc/hintids";
+import {
+  RES_FRM_SIZE,
+  RES_HEADER_FOOTER_EAT_SPACING,
+  RES_LR_SPACE,
+  RES_UL_SPACE,
+} from "../../../inc/hintids";
 import { SwFrameSize } from "../../../inc/fmtfsize";
 import type { SwHeaderAndFooterEatSpacingItem } from "../../../inc/hfspacingitem";
 import { getActivePageStory, type SwFrameFormat } from "../../core/layout/atrfrm";
@@ -205,6 +210,8 @@ export function applyPageStoryGeometry(style: SwXStyle, layout: OdfPageLayout): 
     for (const [suffix, field] of [
       ["Height", geometry.height],
       ["BodyDistance", geometry.bodyDistance],
+      ["LeftMargin", geometry.leftMargin],
+      ["RightMargin", geometry.rightMargin],
       ["IsDynamicHeight", geometry.isDynamicHeight],
       ["DynamicSpacing", geometry.dynamicSpacing],
     ] as const) {
@@ -246,6 +253,11 @@ export function exportPageStoryStyles(
       const spacing = story.GetULSpace();
       const distance = header ? spacing.GetLower() : spacing.GetUpper();
       attributes.push(`fo:margin-${header ? "bottom" : "top"}="${length(distance)}"`);
+    }
+    if (items.GetItemIfSet(RES_LR_SPACE, false)) {
+      const margins = story.GetLRSpace();
+      attributes.push(`fo:margin-left="${length(margins.ResolveLeft())}"`);
+      attributes.push(`fo:margin-right="${length(margins.ResolveRight())}"`);
     }
     const dynamic = items.GetItemIfSet(RES_HEADER_FOOTER_EAT_SPACING, false) as
       SwHeaderAndFooterEatSpacingItem | undefined;

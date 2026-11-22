@@ -12,6 +12,16 @@ import {
 } from "../../source/core/layout/pagedesc";
 import { Paper } from "../../../i18nutil/inc/paper";
 import { SvxPageDescPage } from "../../../cui/source/tabpages/page";
+import { HeaderFooterTabPage } from "../../../svx/browser/dialog/HeaderFooterTabPage";
+import {
+  SvxHFPage,
+  headerFooterSetSlot,
+  readHeaderFooterSet,
+  type SvxHFPageState,
+} from "../../../svx/source/dialog/hdft";
+import { SvxPageUsage, type SvxPageItem } from "../../../svx/inc/pageitem";
+import { SID_ATTR_PAGE } from "../../../svx/inc/svxids";
+import { writerPageStoryIds } from "../../source/uibase/utlui/uitool.hdft";
 import { AreaTabPage } from "../../../cui/browser/tabpages/AreaTabPage";
 import { TransparencyTabPage } from "../../../cui/browser/tabpages/TransparencyTabPage";
 import { SvxAreaTabPage } from "../../../cui/source/tabpages/tparea";
@@ -57,6 +67,38 @@ export function WriterPageStyleDialog({
     /** Captures the actual Transparency items for this request. @returns Native page owner. */
     () => pageInput && new SvxTransparenceTabPage(pageInput, true),
   );
+  const [header] = useState(
+    /** Opens the original Header tab item owner. @returns Header owner. */ () =>
+      pageInput && new SvxHFPage(pageInput, true, writerPageStoryIds),
+  );
+  const [footer] = useState(
+    /** Opens the original Footer tab item owner. @returns Footer owner. */ () =>
+      pageInput && new SvxHFPage(pageInput, false, writerPageStoryIds),
+  );
+  const [headerState, setHeaderState] = useState(
+    /** Retains the header draft across tab switches. @returns Header values. */
+    () => header?.initial ?? readHeaderFooterSet(undefined, true, writerPageStoryIds),
+  );
+  const [footerState, setFooterState] = useState(
+    /** Retains the footer draft across tab switches. @returns Footer values. */
+    () => footer?.initial ?? readHeaderFooterSet(undefined, false, writerPageStoryIds),
+  );
+  const usage = (
+    pageInput?.GetItemIfSet(SID_ATTR_PAGE, false) as SvxPageItem | undefined
+  )?.GetPageUsage();
+  const allowSideSharing = usage !== SvxPageUsage.Left && usage !== SvxPageUsage.Right;
+  /** Synchronizes the original first-page sharing bit across both tabs. @param isHeader - Edited tab. @param state - Native tab controls. @returns Nothing. */
+  function changeStory(isHeader: boolean, state: SvxHFPageState): void {
+    if (isHeader) {
+      setHeaderState(state);
+      if (state.sharedFirst !== headerState.sharedFirst)
+        setFooterState({ ...footerState, sharedFirst: state.sharedFirst });
+    } else {
+      setFooterState(state);
+      if (state.sharedFirst !== footerState.sharedFirst)
+        setHeaderState({ ...headerState, sharedFirst: state.sharedFirst });
+    }
+  }
   const [, redraw] = useState(0);
   /** Renders the current item-owner draft. @returns Nothing. */
   function onFillChange(): void {
@@ -74,6 +116,8 @@ export function WriterPageStyleDialog({
     ["page", pageLabel("page-tab", "Page")],
     ["area", pageLabel("area-tab", "Area")],
     ["transparence", pageLabel("transparency-tab", "Transparency")],
+    ["header", pageLabel("header", "Header")],
+    ["footer", pageLabel("footer", "Footer")],
   ] as const;
   const bitmap = area?.GetFillStyle() === FillStyle.BITMAP ? area.bitmap : undefined;
   const [page] = useState(
@@ -160,9 +204,12 @@ export function WriterPageStyleDialog({
               }
               const output = new SfxItemSet(pageInput.GetPool(), [
                 [XATTR_FILL_FIRST, XATTR_FILL_LAST],
+                [headerFooterSetSlot(true), headerFooterSetSlot(false)],
               ]);
               area?.FillItemSet(output);
               transparency?.FillItemSet(output);
+              header?.FillItemSet(headerState, output);
+              footer?.FillItemSet(footerState, output);
               if (output.Count()) onSubmit(geometry, output);
               else {
                 output.Dispose();
@@ -413,8 +460,30 @@ export function WriterPageStyleDialog({
               />
             </div>
           )}
+          {(active === "header" || active === "footer") && header && footer && (
+            <div role="tabpanel" id={`${id}-panel-${active}`} aria-labelledby={`${id}-${active}`}>
+              <HeaderFooterTabPage
+                key={active}
+                state={active === "header" ? headerState : footerState}
+                other={active === "header" ? footerState : headerState}
+                header={active === "header"}
+                originallyEnabled={(active === "header" ? header : footer).initial.enabled}
+                allowSideSharing={allowSideSharing}
+                geometry={draft}
+                unit={unit}
+                label={pageLabel}
+                onChange={
+                  /** Saves this tab's native values. @param state - New draft. @returns Nothing. */ (
+                    state,
+                  ) => changeStory(active === "header", state)
+                }
+              />
+            </div>
+          )}
           {error === undefined ? null : (
-            <p className="text-sm font-semibold text-red-700">{error}</p>
+            <p role="alert" className="text-sm font-semibold text-red-700">
+              {error}
+            </p>
           )}
         </div>
         <div className="writer-dialog-actions">

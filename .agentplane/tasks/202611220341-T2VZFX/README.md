@@ -4,7 +4,7 @@ title: "Connect Writer Page Style header and footer settings"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 6
+revision: 7
 origin:
   system: "manual"
 depends_on: []
@@ -36,7 +36,7 @@ events:
     to: "DOING"
     note: "Start: Connect the native Header and Footer page-style controls and preserve story sections through Writer history."
 doc_version: 3
-doc_updated_at: "2026-11-22T03:42:24.521Z"
+doc_updated_at: "2026-11-22T04:02:38.362Z"
 doc_updated_by: "CODER"
 description: "Expose native page story activation, margins, spacing, height, and sharing through the Header and Footer pages, with content-preserving Writer history."
 sections:
@@ -53,7 +53,13 @@ sections:
   Rollback Plan: |-
     - Revert task-related commit(s).
     - Re-run required checks to confirm rollback safety.
-  Findings: ""
+  Findings: |-
+    - Connected Writer's Header and Footer tabs to the native nested SvxSetItem groups. The native default height and distance are 5 mm; activation, margins, spacing, AutoFit and dynamic spacing flags, and the left/right and common first-page sharing selectors use the actual page descriptor.
+    - Page Style now places its story links and native frame geometry in one undo action. Existing content remains in the owning story section when formatting changes. The current session retains a separated section while shared, and removing an active story requires the child deletion confirmation.
+    - Source comparisons: svx/source/dialog/hdft.cxx (Reset, FillItemSet, RangeHdl and the delete confirmation), sw/source/uibase/utlui/uitool.cxx (nested page exchange), sw/source/core/doc/docdesc.cxx (variant transfer), and xmloff/source/style/PageMasterStyleMap.cxx (the original ODF story margins).
+    - The native in-document section copier covers text and tables. The existing browser story layer supplies paint and body geometry; inline story editing, browser remeasurement for AutoFit, nested border/area editing, and duplex-specific stories across document copies remain outside this task.
+    - Command: `npm run test:writer --workspace @vite-office/office -- WriterPageStoriesDialog WriterPageAreaDialog odt-page-stories`. Result: pass, 7 tests in 3 files on the updated source. Scope: native defaults, page story ownership, toggles, cancellation and deletion confirmation, shared story retention, undo/redo, ODT and Worker reopening.
+    - Scoped ESLint, Prettier, diff, dependency, source tree, registry provenance, Writer resources, doctor and routing checks passed. Global JSDoc and file size still report the known Calc baseline.
 id_source: "generated"
 ---
 ## Summary
@@ -85,3 +91,10 @@ Run targeted Writer page story, page style, native descriptor/history and ODT/Wo
 - Re-run required checks to confirm rollback safety.
 
 ## Findings
+
+- Connected Writer's Header and Footer tabs to the native nested SvxSetItem groups. The native default height and distance are 5 mm; activation, margins, spacing, AutoFit and dynamic spacing flags, and the left/right and common first-page sharing selectors use the actual page descriptor.
+- Page Style now places its story links and native frame geometry in one undo action. Existing content remains in the owning story section when formatting changes. The current session retains a separated section while shared, and removing an active story requires the child deletion confirmation.
+- Source comparisons: svx/source/dialog/hdft.cxx (Reset, FillItemSet, RangeHdl and the delete confirmation), sw/source/uibase/utlui/uitool.cxx (nested page exchange), sw/source/core/doc/docdesc.cxx (variant transfer), and xmloff/source/style/PageMasterStyleMap.cxx (the original ODF story margins).
+- The native in-document section copier covers text and tables. The existing browser story layer supplies paint and body geometry; inline story editing, browser remeasurement for AutoFit, nested border/area editing, and duplex-specific stories across document copies remain outside this task.
+- Command: `npm run test:writer --workspace @vite-office/office -- WriterPageStoriesDialog WriterPageAreaDialog odt-page-stories`. Result: pass, 7 tests in 3 files on the updated source. Scope: native defaults, page story ownership, toggles, cancellation and deletion confirmation, shared story retention, undo/redo, ODT and Worker reopening.
+- Scoped ESLint, Prettier, diff, dependency, source tree, registry provenance, Writer resources, doctor and routing checks passed. Global JSDoc and file size still report the known Calc baseline.

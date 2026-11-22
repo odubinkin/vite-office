@@ -301,10 +301,12 @@ export class XMLPagePropertySetContext extends SvXMLImportContext {
   }
 }
 
-/** Original page-style height, body distance and two independent dynamic flags. */
+/** Original page-story geometry, margins and independent dynamic flags. */
 export interface OdfPageStoryGeometry {
   readonly height?: number;
   readonly bodyDistance?: number;
+  readonly leftMargin?: number;
+  readonly rightMargin?: number;
   readonly isDynamicHeight?: boolean;
   readonly dynamicSpacing?: boolean;
   readonly background?: OdfPageBackground;
@@ -329,9 +331,14 @@ export class XMLPageHeaderFooterStyleContext extends SvXMLImportContext {
     const converter = new SvXMLUnitConverter("twip");
     const min = attributes.get(XMLToken.FO_MIN_HEIGHT);
     const fixed = attributes.get(XMLToken.SVG_HEIGHT);
+    const allMargins = attributes.get(XMLToken.FO_MARGIN);
     const distance =
       attributes.get(this.header ? XMLToken.FO_MARGIN_BOTTOM : XMLToken.FO_MARGIN_TOP) ??
-      attributes.get(XMLToken.FO_MARGIN);
+      allMargins;
+    const left = attributes.get(XMLToken.FO_MARGIN_LEFT) ?? allMargins;
+    const right = attributes.get(XMLToken.FO_MARGIN_RIGHT) ?? allMargins;
+    const leftMargin = left === null ? null : converter.convertMeasureToCore(left);
+    const rightMargin = right === null ? null : converter.convertMeasureToCore(right);
     const dynamic = attributes.get(XMLToken.STYLE_DYNAMIC_SPACING);
     const height = min === null ? null : converter.convertMeasureToCore(min);
     const fixedHeight = fixed === null ? null : converter.convertMeasureToCore(fixed);
@@ -343,6 +350,8 @@ export class XMLPageHeaderFooterStyleContext extends SvXMLImportContext {
           ? { height: fixedHeight, isDynamicHeight: false }
           : {}),
       ...(bodyDistance === null ? {} : { bodyDistance }),
+      ...(leftMargin === null ? {} : { leftMargin }),
+      ...(rightMargin === null ? {} : { rightMargin }),
       ...(dynamic === "true" || dynamic === "false" ? { dynamicSpacing: dynamic === "true" } : {}),
     };
     return new XMLPagePropertySetContext(

@@ -1,4 +1,5 @@
 /** @fileoverview Applies Page Style tab output through the native descriptor and history owners. */
+import { headerFooterSetSlot } from "../../../../svx/source/dialog/hdft";
 import type { SfxItemSet } from "../../../../svl/inc/itemset";
 import {
   equalWriterPageDescriptors,
@@ -22,7 +23,10 @@ export function setPageDescriptor(
   const master = descriptor.GetMaster().GetAttrSet();
   const fillChanged = items?.entries().some(
     /** Compares the native dialog item with the current effective value. @param item - Page delta. @returns Whether it differs. */
-    (item) => !item.equals(master.Get(item.Which())),
+    (item) =>
+      item.Which() === headerFooterSetSlot(true) ||
+      item.Which() === headerFooterSetSlot(false) ||
+      !item.equals(master.Get(item.Which())),
   );
   if (!items || !fillChanged) {
     if (!geometryChanged) return false;
@@ -30,13 +34,16 @@ export function setPageDescriptor(
     return shell.ApplyAction(new SwUndoPageDesc(original, value, cursor, cursor, name));
   }
   const updated = descriptor.Clone();
+  let changes;
   try {
     if (geometryChanged) updated.SetValue(value);
-    ItemSetToPageDesc(items, updated);
+    changes = ItemSetToPageDesc(items, updated);
   } catch (error) {
     updated.DisposeModify();
     throw error;
   }
   const cursor = shell.CaptureCursorState();
-  return shell.ApplyAction(new SwUndoPageDesc(descriptor.Clone(), updated, cursor, cursor, name));
+  return shell.ApplyAction(
+    new SwUndoPageDesc(descriptor.Clone(), updated, cursor, cursor, name, changes),
+  );
 }

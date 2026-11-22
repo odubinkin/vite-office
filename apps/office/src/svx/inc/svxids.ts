@@ -31,3 +31,11 @@ export const SID_ATTR_PAGE = 10050;
 export const SID_ATTR_PAGE_SIZE = 10051;
 /** Original SID_SVX_START +60 dynamic page-story height slot. */
 export const SID_ATTR_PAGE_DYNAMIC = 10060;
+
+/** Original header and footer item-set slots. */
+export const SID_ATTR_PAGE_HEADERSET = 10057;
+export const SID_ATTR_PAGE_FOOTERSET = 10058;
+/** Original header/footer visibility and content sharing slots. */
+export const SID_ATTR_PAGE_ON = 10059;
+export const SID_ATTR_PAGE_SHARED = 10061;
+export const SID_ATTR_PAGE_SHARED_FIRST = 11114;

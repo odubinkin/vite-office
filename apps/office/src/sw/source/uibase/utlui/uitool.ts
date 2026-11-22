@@ -13,6 +13,11 @@ import {
 } from "../../../inc/hintids";
 import { writerColorFromPrimitive } from "../../core/attr/swatrset";
 import type { SwPaM } from "../../core/crsr/pam";
+import { SvxPageItem, type SvxPageUsage } from "../../../../svx/inc/pageitem";
+import { SID_ATTR_PAGE } from "../../../../svx/inc/svxids";
+import { headerFooterSetSlot } from "../../../../svx/source/dialog/hdft";
+import { ItemSetToPageStories, PageDescToStoryItemSet } from "./uitool.hdft";
+import type { SwPageStoryFormatChange } from "../../core/layout/pagedesc.hdft";
 import type { SwPageDesc } from "../../core/layout/pagedesc";
 import type { SwEditShell } from "../../core/edit/edatmisc";
 
@@ -92,7 +97,31 @@ export function GetTabDist(tabs: SvxTabStopItem): number {
   return tabs.Count() ? tabs.At(0).GetTabPos() : SVX_TAB_DEFDIST;
 }
 
-/** Transfers the represented native general page attributes to the master format. @param items - Page Style tab output. @param descriptor - Detached page style copy. @returns Whether any attributes changed. */
-export function ItemSetToPageDesc(items: SfxItemSet, descriptor: SwPageDesc): boolean {
-  return descriptor.GetMaster().SetFormatAttrSet(items);
+/** Builds the represented native page dialog input with nested story groups. @param descriptor - Active page style. @returns Owned dialog input. */
+export function PageDescToItemSet(descriptor: SwPageDesc): SfxItemSet {
+  const items = descriptor.GetMaster().GetAttrSet().Clone();
+  items.MergeRange(SID_ATTR_PAGE, SID_ATTR_PAGE);
+  items.MergeRange(headerFooterSetSlot(true), headerFooterSetSlot(false));
+  const page = new SvxPageItem(SID_ATTR_PAGE);
+  page.SetPageUsage(Number(descriptor.GetUseOn()) as SvxPageUsage);
+  page.SetLandscape(descriptor.GetLandscape());
+  items.Put(page, true);
+  PageDescToStoryItemSet(descriptor, items);
+  return items;
+}
+
+/** Transfers general items and prepares native page story references. @param items - Page Style tab output. @param descriptor - Detached page style copy. @returns Owned Story format changes. */
+export function ItemSetToPageDesc(
+  items: SfxItemSet,
+  descriptor: SwPageDesc,
+): SwPageStoryFormatChange[] {
+  const frames = items.Clone();
+  try {
+    frames.ClearItem(headerFooterSetSlot(true));
+    frames.ClearItem(headerFooterSetSlot(false));
+    descriptor.GetMaster().SetFormatAttrSet(frames);
+  } finally {
+    frames.Dispose();
+  }
+  return ItemSetToPageStories(items, descriptor);
 }
