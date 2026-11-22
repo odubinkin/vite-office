@@ -1,10 +1,11 @@
 ---
 id: "202611220216-0YJAN7"
 title: "Preserve native Writer point annotations in ODT"
-status: "DOING"
+result_summary: "Writer ODT preserves point annotations, thread metadata, native EditEngine text and the original empty date behavior. Range owners remain separately scoped."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 6
+revision: 7
 origin:
   system: "manual"
 depends_on: []
@@ -40,11 +41,16 @@ quality_review:
     - "output/playwright/0YJAN7/verification.md"
   findings:
     - "Writer focus covered 432 tests with corrected font declaration replay; shared focus passed 48 tests. Range ownership remains a separate native task."
-commit: null
+commit:
+  hash: "2331391e58b8bfac3a4460cdfacc7ea7046d667e"
+  message: "🧩 0YJAN7 code: update legacy font diagnostic assertions"
 comments:
   -
     author: "CODER"
     body: "Start: connect existing native point annotation fields to shared XML metadata and document Worker transport with the represented EditEngine text values."
+  -
+    author: "CODER"
+    body: "Verified: Pinned Writer ODT annotation formatting and status fixtures survive native point anchors, structured clone and save/reopen. Writer checks covered 432 related tests with corrected declaration replay. Shared tests and static checks passed."
 events:
   -
     type: "status"
@@ -59,8 +65,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Verified Writer point annotations through pinned ODT fixtures, native EditEngine formatting and Writer Worker transfer. Related Writer selection covered 432 tests; two stale font assertions passed on corrected seven-test replay. Shared selection passed 48 tests. Static, provenance and registry checks passed."
+  -
+    type: "status"
+    at: "2026-11-22T02:48:37.552Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: Pinned Writer ODT annotation formatting and status fixtures survive native point anchors, structured clone and save/reopen. Writer checks covered 432 related tests with corrected declaration replay. Shared tests and static checks passed."
 doc_version: 3
-doc_updated_at: "2026-11-22T02:38:32.923Z"
+doc_updated_at: "2026-11-22T02:48:37.553Z"
 doc_updated_by: "CODER"
 description: "Connect Writer SwPostItField point hints to ODT annotation import/export and Worker snapshots with native annotation metadata and represented EditEngine formatting."
 sections:
