@@ -6039,3 +6039,9 @@ preserves both directions of the original conversion.
 ## Automatic paragraph direction and first-strong isolates
 
 The pinned direction detector describes the Unicode paragraph-level algorithm but increments its isolate depth only for LRI and RLI. FSI leaves the depth unchanged. A strong character inside an FSI can therefore determine the outer paragraph direction. The Writer port preserves the pinned switch behavior in `GuessParagraphDirection`. See [guessparadirection.cxx](../../vendor/libreoffice-reference/i18nutil/source/utility/guessparadirection.cxx).
+
+### WRITER-740 — Numbering format invalidation truncates the upper-level mask
+
+- Source: pinned `sw/source/core/doc/docnum.cxx`, `GetUpperLvlChg` and `lcl_ChgNumRule`.
+- Observation: the helper produces a mask from a 16-bit argument and returns it as an 8-bit value. On the tenth list level, a change to the ninth level cannot trigger the dependent-level notification through this mask, even when the tenth-level label includes its parent. Direct format changes still mark their own level.
+- Local behavior: Writer retains the eight-bit return width in `docnum.ts`. This observation concerns the per-node invalidation path. The source still invalidates and validates the numbering rule after a format change.

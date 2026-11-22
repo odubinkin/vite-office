@@ -103,3 +103,6 @@ export const SID_ATTR_FRAMEDIRECTION = 10944 as const;
 
 /** Native frame/paragraph background brush slot, SID_SVX_START +1. */
 export const SID_ATTR_BRUSH = 10001 as const;
+
+/** Original SID_SVX_START +855 numbering rule exchange item. */
+export const SID_ATTR_NUMBERING_RULE = 10855 as const;

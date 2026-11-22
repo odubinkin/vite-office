@@ -195,3 +195,105 @@ it("owns independent old and new rule-format history values and preserves ODT an
     candidate.Dispose();
   }
 });
+
+it("updates a named rule across separate lists and restores its formats without changing the current selection", /** Exercises native style-level history through its document owner and ODF. @returns Completion. */ async () => {
+  const f = fixture();
+  applyWriterParagraphList(f.second, {
+    kind: "numbered",
+    styleId: f.rule.GetName(),
+    listId: "separate-list",
+    level: 0,
+  });
+  const originalStart = f.rule.Get(0).GetStart();
+  const firstRecord = f.first.GetNum();
+  const secondRecord = f.second.GetNum();
+  const source = new SwNumRule(f.rule);
+  const format = new SwNumFormat(source.Get(0));
+  format.SetStart(7);
+  source.Set(0, format);
+  f.doc.ChgNumRuleFormats(source);
+  source.Dispose();
+  format.Dispose();
+  expect(f.doc.GetUndoManager().GetUndoActionCount()).toBe(1);
+  expect(f.first.GetNum()).toBe(firstRecord);
+  expect(f.second.GetNum()).toBe(secondRecord);
+  expect(f.first.GetNumRule()).toBe(f.rule);
+  expect(f.second.GetNumRule()).toBe(f.rule);
+  expect(f.first.GetNumberVector()[0]).toBe(7);
+  expect(f.second.GetNumberVector()[0]).toBe(7);
+
+  const point = new SwPosition(f.plain, 1);
+  try {
+    f.shell.SetCursor(point);
+  } finally {
+    point.Dispose();
+  }
+  expect(f.shell.Undo()).toBe(true);
+  expect(f.rule.Get(0).GetStart()).toBe(originalStart);
+  expect(f.shell.GetCursor().GetPoint().GetNode()).toBe(f.plain);
+  expect(f.shell.Redo()).toBe(true);
+  expect(f.rule.Get(0).GetStart()).toBe(7);
+  expect(f.shell.GetCursor().GetPoint().GetNode()).toBe(f.plain);
+
+  const { document } = await readOdtDocument(await writeOdtDocument(f.doc, f.metadata), f.metadata);
+  expect(document.paragraphs[0]?.GetNumberVector()[0]).toBe(7);
+  expect(document.paragraphs[1]?.GetNumberVector()[0]).toBe(7);
+  document.Dispose();
+  const disposeRule = vi.spyOn(SwNumRule.prototype, "Dispose");
+  f.doc.GetUndoManager().Clear();
+  expect(disposeRule).toHaveBeenCalledTimes(2);
+});
+
+it("preserves the original narrow dependency mask on the final list level", /** Checks the pinned upper-level notification contract. @returns Nothing. */ () => {
+  const f = fixture();
+  f.first.SetAttrListLevel(8);
+  f.second.SetAttrListLevel(9);
+  const dependent = new SwNumFormat(f.rule.Get(9));
+  dependent.SetIncludeUpperLevels(2);
+  f.rule.Set(9, dependent);
+  const beforeValidation: Array<"direct" | "dependent"> = [];
+  const direct = f.first.NumRuleChgd.bind(f.first);
+  const dependentNotification = f.second.NumRuleChgd.bind(f.second);
+  vi.spyOn(f.first, "NumRuleChgd").mockImplementation(
+    /** Records the pre-commit notification. @returns Nothing. */ () => {
+      if (f.rule.Get(8).GetStart() !== 6) beforeValidation.push("direct");
+      direct();
+    },
+  );
+  vi.spyOn(f.second, "NumRuleChgd").mockImplementation(
+    /** Distinguishes the pre-commit broadcast from regular list validation. @returns Nothing. */ () => {
+      if (f.rule.Get(8).GetStart() !== 6) beforeValidation.push("dependent");
+      dependentNotification();
+    },
+  );
+  const source = new SwNumRule(f.rule);
+  const changed = new SwNumFormat(source.Get(8));
+  changed.SetStart(6);
+  source.Set(8, changed);
+  f.doc.ChgNumRuleFormats(source);
+  expect(beforeValidation).toEqual(["direct"]);
+  expect(f.rule.Get(8).GetStart()).toBe(6);
+});
+
+it("exchanges explicit and inherited format levels and character styles with the shared rule", /** Verifies the list-style tab pages' native rule contract. @returns Nothing. */ () => {
+  const f = fixture();
+  const source = new SwNumRule("Template", "label-alignment");
+  const format = new SwNumFormat(source.Get(0));
+  const character = f.doc.MakeCharFormat("List Marker", undefined);
+  format.SetCharFormat(character);
+  source.Set(0, format);
+  format.Dispose();
+  const shared = source.MakeSvxNumRule();
+  expect(shared.Get(0)?.GetCharFormatName()).toBe("List Marker");
+  expect(shared.Get(1)).toBeNull();
+  expect(shared.GetLevel(1).Equals(source.Get(1))).toBe(true);
+  shared.SetContinuousNumbering(true);
+
+  const accepted = new SwNumRule(source);
+  accepted.SetSvxRule(shared, f.doc);
+  expect(accepted.GetNumFormat(0)?.GetCharFormat()).toBe(character);
+  expect(accepted.GetNumFormat(1)).toBeUndefined();
+  expect(accepted.IsContinusNum()).toBe(true);
+  accepted.Dispose();
+  source.Dispose();
+});

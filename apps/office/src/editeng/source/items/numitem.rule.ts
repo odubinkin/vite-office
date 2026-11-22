@@ -5,6 +5,7 @@ import {
   type SvxNumPositionAndSpaceMode,
 } from "./numitem";
 import { SvxNumRuleFlags, SvxNumRuleType } from "../../inc/numitem";
+import { SID_ATTR_NUMBERING_RULE } from "../../inc/editids";
 import { SVX_MAX_NUM } from "../../inc/numdef";
 import { SvxNumType } from "../../inc/svxenum";
 import { toTwips, Length } from "../../../o3tl/inc/unit_conversion";
@@ -220,7 +221,10 @@ export class SvxNodeNum {
 export class SvxNumBulletItem extends SfxPoolItem {
   private readonly maNumRule: SvxNumRule;
   /** Original rule/Which and implicit-copy constructors;native rvalue syntax is erased into the same owned value. @param source - Actual rule or copy source. @param which - Native default SID_ATTR_NUMBERING_RULE10855. @returns Item. */
-  constructor(source: SvxNumRule | Readonly<SvxNumBulletItem>, which = 10855) {
+  constructor(
+    source: SvxNumRule | Readonly<SvxNumBulletItem>,
+    which: number = SID_ATTR_NUMBERING_RULE,
+  ) {
     super(source instanceof SvxNumRule ? which : source.Which());
     this.maNumRule = new SvxNumRule(source instanceof SvxNumRule ? source : source.GetNumRule());
   }

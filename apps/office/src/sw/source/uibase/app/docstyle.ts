@@ -1,7 +1,11 @@
-/** @fileoverview Consumed paragraph GetItemSetForPreview/FillPreview and lcl_SwFormatToFlatItemSet from sw/source/uibase/app/docstyle.cxx; no alternate style pool. */
-import { SfxItemSet } from "../../../../svl/source/items/itemset";
+/** @fileoverview Writer style item exchange and paragraph previews from sw/source/uibase/app/docstyle.cxx. */
+import { SID_ATTR_NUMBERING_RULE } from "../../../../editeng/inc/editids";
+import { SvxNumBulletItem } from "../../../../editeng/inc/numitem";
+import { SfxItemSet, SfxItemState } from "../../../../svl/source/items/itemset";
 import type { SwFormat } from "../../core/attr/format";
 import type { SwDoc } from "../../core/doc/doc";
+import { SwNumRule } from "../../core/doc/number";
+import { GetNumRuleFromPool } from "../../core/doc/poolfmt-num";
 import { getWriterMaterializedParagraphStyleDefinition } from "../../../inc/poolfmt";
 
 /** Copies root-first parent items before child overrides, leaving no temporary-parent references. @param format - Actual native format owner. @returns Independent flattened item set. */
@@ -48,5 +52,33 @@ export function getParagraphStyleItemSetForPreview(
     } finally {
       undo.DoUndo(recording);
     }
+  }
+}
+
+/** Reads the Pseudo style family's native template input. @param document - Current owner. @param name - Named list style selected in the paragraph dialog. @returns Independent native item set for the style editor. */
+export function getListStyleItemSet(document: SwDoc, name: string): SfxItemSet | undefined {
+  const rule = GetNumRuleFromPool(document, name);
+  if (!rule || rule.IsOutlineRule() || rule.IsAutoRule()) return undefined;
+  const set = new SfxItemSet(document.GetAttrPool(), [
+    [SID_ATTR_NUMBERING_RULE, SID_ATTR_NUMBERING_RULE],
+  ]);
+  set.Put(new SvxNumBulletItem(rule.MakeSvxNumRule()), true);
+  return set;
+}
+
+/** Applies the Pseudo style family's accepted item or explicit default reset. @param document - Current owner. @param name - Native style name. @param set - Accepted style attributes. @returns Whether a rule change was applied. */
+export function setListStyleItemSet(document: SwDoc, name: string, set: SfxItemSet): boolean {
+  const rule = document.FindNumRulePtr(name);
+  if (!rule || rule.IsOutlineRule() || rule.IsAutoRule()) return false;
+  const input = set.GetItemIfSet(SID_ATTR_NUMBERING_RULE, false);
+  const reset = set.GetItemState(SID_ATTR_NUMBERING_RULE, false) === SfxItemState.INVALID;
+  if (!(input instanceof SvxNumBulletItem) && !reset) return false;
+  const changed = reset ? new SwNumRule(name, "label-alignment") : new SwNumRule(rule);
+  try {
+    if (input instanceof SvxNumBulletItem) changed.SetSvxRule(input.GetNumRule(), document);
+    document.ChgNumRuleFormats(changed);
+    return true;
+  } finally {
+    changed.Dispose();
   }
 }

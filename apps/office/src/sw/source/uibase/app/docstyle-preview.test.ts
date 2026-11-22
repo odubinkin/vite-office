@@ -4,7 +4,14 @@ import { Size } from "../../../../tools/inc/gen";
 import { setupStylePreviewFonts } from "../../../../svx/source/tbxctrls/tbcontrl.stylepreview";
 import { afterEach, expect, it } from "vitest";
 import { createWriterDocumentSession } from "../../../browser/composition/writer-module";
-import { flattenSwFormatForPreview, getParagraphStyleItemSetForPreview } from "./docstyle";
+import {
+  flattenSwFormatForPreview,
+  getListStyleItemSet,
+  getParagraphStyleItemSetForPreview,
+  setListStyleItemSet,
+} from "./docstyle";
+import { SvxNumberFormat, SvxNumBulletItem } from "../../../../editeng/inc/numitem";
+import { SfxItemSet } from "../../../../svl/source/items/itemset";
 import {
   SvxFontHeightItem,
   SvxWeightItem,
@@ -165,4 +172,35 @@ it("uses the actual Writer shell's twip unit with pool preview sizes without cha
   expect(result.complex?.GetFontHeight()).toBeGreaterThan(0);
   expect(f.docShell.GetDocumentState()).toEqual(before);
   expect(f.document.FindTextFormatColl("heading-1")).toBeUndefined();
+});
+
+it("edits a physical numbering style through its template item and keeps cancellation outside history", /** Checks native Pseudo GetItemSet and SetItemSet and the explicit invalid reset. @returns Nothing. */ () => {
+  const { document } = fixture();
+  expect(getListStyleItemSet(document, "Outline")).toBeUndefined();
+  expect(getListStyleItemSet(document, "Absent list style")).toBeUndefined();
+
+  const name = "Numbering 123";
+  const input = getListStyleItemSet(document, name);
+  const original = document.FindNumRulePtr(name);
+  const item = input?.GetItemIfSet(slot.SID_ATTR_NUMBERING_RULE, false);
+  if (!original || !input || !(item instanceof SvxNumBulletItem))
+    throw new Error("Built-in numbering style failed to resolve.");
+
+  const numberRule = item.GetNumRule();
+  const level = new SvxNumberFormat(numberRule.GetLevel(0));
+  level.SetStart(7);
+  numberRule.SetLevel(0, level);
+  expect(original.Get(0).GetStart()).toBe(1);
+  const empty = new SfxItemSet(input.GetPool(), input.GetRanges());
+  expect(setListStyleItemSet(document, name, empty)).toBe(false);
+  expect(document.GetUndoManager().GetUndoActionCount()).toBe(0);
+  expect(setListStyleItemSet(document, name, input)).toBe(true);
+  expect(document.FindNumRulePtr(name)).toBe(original);
+  expect(original.Get(0).GetStart()).toBe(7);
+  expect(document.GetUndoManager().GetUndoActionCount()).toBe(1);
+
+  empty.InvalidateItem(slot.SID_ATTR_NUMBERING_RULE);
+  expect(setListStyleItemSet(document, name, empty)).toBe(true);
+  expect(original.GetNumFormat(0)).toBeUndefined();
+  expect(original.Get(0).GetStart()).toBe(1);
 });

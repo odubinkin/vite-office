@@ -11,8 +11,11 @@ import {
 } from "../../../../editeng/source/items/numitem";
 
 import { SvxNumType } from "../../../../editeng/inc/svxenum";
+import { SvxNumRule, SvxNumRuleFlags, SvxNumRuleType } from "../../../../editeng/inc/numitem";
 export { SvxNumType } from "../../../../editeng/inc/svxenum";
 import { SwPoolFormatId } from "../../../inc/poolfmt";
+import { SwGetPoolIdFromName } from "../../../inc/SwGetPoolIdFromName";
+import { SwStyleNameMapper } from "./SwStyleNameMapper";
 import { SwClient, type SwModify } from "../../../inc/calbck";
 
 import type { SwTextNode } from "../txtnode/ndtxt";
@@ -34,10 +37,23 @@ export class SwNumFormat extends SvxNumberFormat {
       if (format !== undefined && !format.GetDoc().IsInDtor()) this.UpdateNumNodes(format.GetDoc());
     },
   );
-  /** Initializes native defaults or copies a const base format. @param format - Optional source format. @returns Nothing. */
-  public constructor(format?: ConstSvxNumberFormat) {
+  /** Initializes native defaults or copies a const base format. @param format - Optional source format. @param document - Owner resolving the base format's character style. @returns Nothing. */
+  public constructor(format?: ConstSvxNumberFormat, document?: SwDoc) {
     super(format ?? SvxNumType.SVX_NUM_ARABIC);
-    if (format instanceof SwNumFormat) this.client.StartListeningToSameModifyAs(format);
+    if (format === undefined) return;
+    if (document === undefined) {
+      if (format instanceof SwNumFormat) this.client.StartListeningToSameModifyAs(format);
+      return;
+    }
+    const name = SvxNumberFormat.prototype.GetCharFormatName.call(format);
+    if (name === "") return;
+    const pooled = SwStyleNameMapper.GetPoolIdFromUIName(name, SwGetPoolIdFromName.ChrFmt);
+    this.SetCharFormat(
+      document.FindCharFormatByName(name) ??
+        (pooled === SwPoolFormatId.UNKNOWN
+          ? document.MakeCharFormat(name, undefined)
+          : document.GetCharFormatFromPool(pooled)),
+    );
   }
   /** Logical native SwClient destructor releases the actual character-format registration. @returns Nothing. */
   public Dispose(): void {
@@ -455,6 +471,38 @@ export class SwNumRule {
   private CheckLevel(level: number): void {
     if (!Number.isInteger(level) || level < 0 || level > WRITER_MAX_LIST_LEVEL)
       throw new Error(`SwNumRule level is outside 0-${WRITER_MAX_LIST_LEVEL}.`);
+  }
+  /** Presents effective levels and separate direct-format validity in the native dialog rule. @returns Independent shared numbering rule. */
+  public MakeSvxNumRule(): SvxNumRule {
+    const result = new SvxNumRule(
+      SvxNumRuleFlags.CONTINUOUS |
+        SvxNumRuleFlags.CHAR_STYLE |
+        SvxNumRuleFlags.ENABLE_LINKED_BMP |
+        SvxNumRuleFlags.ENABLE_EMBEDDED_BMP,
+      WRITER_MAX_LIST_LEVEL + 1,
+      this.IsContinusNum(),
+      this.IsOutlineRule() ? SvxNumRuleType.OUTLINE_NUMBERING : SvxNumRuleType.NUMBERING,
+    );
+    for (let level = 0; level <= WRITER_MAX_LIST_LEVEL; level++) {
+      const effective = this.Get(level);
+      const format = new SvxNumberFormat(effective);
+      const character = effective.GetCharFormat();
+      if (character) format.SetCharFormatName(character.GetName());
+      result.SetLevel(level, format, this.GetNumFormat(level) !== undefined);
+    }
+    return result;
+  }
+
+  /** Converts valid shared levels into Writer-owned formats and resolves their character styles. @param rule - Accepted shared value. @param document - Destination owner. @returns Nothing. */
+  public SetSvxRule(rule: SvxNumRule, document: SwDoc): void {
+    for (let level = 0; level <= WRITER_MAX_LIST_LEVEL; level++) {
+      const format = rule.Get(level);
+      const owned = format === null ? undefined : new SwNumFormat(format, document);
+      this.formats[level]?.Dispose();
+      this.formats[level] = owned;
+    }
+    this.invalidRuleFlag = true;
+    this.SetContinusNum(rule.IsContinuousNumbering());
   }
   /** Copies a changed reference format; equal owned values preserve identity and validity. @param level - Native level. @param format - Const source format. @returns Nothing. */
   public Set(level: number, format: ConstSwNumFormat): void {

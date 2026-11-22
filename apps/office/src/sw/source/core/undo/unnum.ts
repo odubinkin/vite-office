@@ -4,7 +4,7 @@ import { RES_MARGIN_FIRSTLINE, RES_MARGIN_TEXTLEFT, RES_MARGIN_RIGHT } from "../
 import { SwPaM, SwPosition } from "../crsr/pam";
 import { SfxItemState, type SfxItemSet } from "../../../../svl/source/items/itemset";
 import { SwTextNode } from "../txtnode/ndtxt";
-import { SetNumRuleMode, type SwDoc } from "../doc/doc";
+import type { SwDoc } from "../doc/doc";
 import { SwNumRule } from "../doc/number";
 import {
   GetUndoTextNode,
@@ -31,25 +31,25 @@ export class SwUndoInsNum extends SwUndo {
     before: SwUndoCursorState,
     after: SwUndoCursorState,
   );
-  /** Captures the native old/new rule-format constructor family independently of paragraph attributes. @param oldRule - Previous rule. @param newRule - Accepted rule. @param document - Owning document. @param cursor - Existing command cursor boundary. @returns Nothing. */
+  /** Captures the native old/new rule-format constructor family independently of paragraph attributes. @param oldRule - Previous rule. @param newRule - Accepted rule. @param document - Owning document. @param cursor - Optional command cursor boundary. @returns Nothing. */
   public constructor(
     oldRule: SwNumRule,
     newRule: SwNumRule,
     document: SwDoc,
-    cursor: SwUndoCursorState,
+    cursor?: SwUndoCursorState,
   );
   /** Initializes the native rule or existing item history family. @param owner - Actual paragraph or old rule. @param previous - Previous items or new rule. @param replacement - New items or document. @param before - Retained cursor. @param after - Optional final cursor for item operations. @returns Nothing. */
   public constructor(
     owner: SwTextNode | SwNumRule,
     previous: SfxItemSet | SwNumRule,
     replacement: SfxItemSet | SwDoc,
-    before: SwUndoCursorState,
+    before?: SwUndoCursorState,
     after?: SwUndoCursorState,
   ) {
     super("Numbering", before, after ?? before);
     if (owner instanceof SwNumRule) {
       this.m_rDoc = replacement as SwDoc;
-      this.m_nNode = before.point.node.GetIndex();
+      this.m_nNode = 0;
       this.m_pOldNumRule = new SwNumRule(owner);
       this.m_aNumRule = new SwNumRule(previous as SwNumRule);
       this.beforeList = undefined;
@@ -62,6 +62,15 @@ export class SwUndoInsNum extends SwUndo {
       this.m_pOldNumRule = undefined;
       this.m_aNumRule = undefined;
     }
+  }
+
+  /** Releases owned rule formats, item sets and cursor history when the action leaves the stack. @returns Nothing. */
+  public override Dispose(): void {
+    this.m_aNumRule?.Dispose();
+    this.m_pOldNumRule?.Dispose();
+    this.beforeList?.Dispose();
+    this.afterList?.Dispose();
+    super.Dispose();
   }
 
   /** Reports the two bounded list item tuples. @returns Payload units. */
@@ -77,7 +86,7 @@ export class SwUndoInsNum extends SwUndo {
   /** Restores prior paragraph numbering items. @param context - Active Writer context. @returns Nothing. */
   protected override UndoImpl(context: SwUndoRedoContext): void {
     if (this.m_pOldNumRule !== undefined) {
-      this.ApplyRuleFormats(context, this.m_pOldNumRule);
+      context.GetDoc().ChgNumRuleFormats(this.m_pOldNumRule);
       return;
     }
     const paragraph = GetUndoTextNode(
@@ -93,7 +102,7 @@ export class SwUndoInsNum extends SwUndo {
   /** Reapplies paragraph numbering items. @param context - Active Writer context. @returns Nothing. */
   protected override RedoImpl(context: SwUndoRedoContext): void {
     if (this.m_aNumRule !== undefined) {
-      this.ApplyRuleFormats(context, this.m_aNumRule);
+      context.GetDoc().ChgNumRuleFormats(this.m_aNumRule);
       return;
     }
     const paragraph = GetUndoTextNode(
@@ -104,17 +113,6 @@ export class SwUndoInsNum extends SwUndo {
       if ((this.afterList as SfxItemSet).GetItemState(which, false) !== SfxItemState.UNKNOWN)
         paragraph.ResetAttr(which);
     paragraph.SetListItems(this.afterList as SfxItemSet);
-  }
-  /** Replays represented rule formats through the existing document DontSetItem primitive; full ChgNumRuleFormats history remains unverified. @param context - Actual history context. @param rule - Independently owned rule. @returns Nothing. */
-  private ApplyRuleFormats(context: SwUndoRedoContext, rule: SwNumRule): void {
-    const position = new SwPosition(context.GetDoc().GetNodes().at(this.m_nNode) as SwTextNode, 0);
-    const range = new SwPaM(position);
-    try {
-      context.GetDoc().SetNumRule(range, rule, SetNumRuleMode.DontSetItem);
-    } finally {
-      range.Dispose();
-      position.Dispose();
-    }
   }
 }
 
