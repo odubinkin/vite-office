@@ -1,10 +1,11 @@
 ---
 id: "202611220626-CFJEET"
 title: "Connect Writer Navigator heading tools"
-status: "DOING"
+result_summary: "Connected Promote, Demote, Move Up and Move Down to the native Navigator heading selection and chapter history."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 9
+revision: 10
 origin:
   system: "manual"
 depends_on: []
@@ -39,11 +40,16 @@ quality_review:
     - "output/playwright/writer-heading-chrome-complete.log"
   findings:
     - "Both pinned chapter movement sequences, cursor retention, modified clicks, whole table and bookmark identity and grouped level edits are verified."
-commit: null
+commit:
+  hash: "8f13b8cf0d156ef59cb3901c63e44004193ec11a"
+  message: "🧩 CFJEET code: Connect Writer Navigator heading tools"
 comments:
   -
     author: "CODER"
     body: "Start: continue direct-mode task in current checkout."
+  -
+    author: "CODER"
+    body: "Verified: 85 targeted tests, two Chromium flows and mapped Writer shell, document and undo contracts."
 events:
   -
     type: "status"
@@ -58,8 +64,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Verified: 85 focused cases across six Writer suites plus two production Chromium flows, exact TypeScript and Vite, native upstream chapter fixtures, source registry and static checks."
+  -
+    type: "status"
+    at: "2026-11-22T06:43:19.513Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: 85 targeted tests, two Chromium flows and mapped Writer shell, document and undo contracts."
 doc_version: 3
-doc_updated_at: "2026-11-22T06:39:43.264Z"
+doc_updated_at: "2026-11-22T06:43:19.515Z"
 doc_updated_by: "CODER"
 description: "Connect native outline level and chapter movement tools to Navigator selection, Writer outline order and undo history, with focused interaction and model verification."
 sections:
