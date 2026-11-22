@@ -1,0 +1,21 @@
+{
+  "schema_version": 1,
+  "task_id": "202611220216-0YJAN7",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-11-22T02:38:49.904Z",
+  "verdict": "pass",
+  "summary": "Native point annotation ownership, source fixture formatting and ODT/Worker metadata round trips verified.",
+  "evaluated_sha": "2331391e58b8bfac3a4460cdfacc7ea7046d667e",
+  "blueprint_digest": "728e324ee8db0b5b004a04cba21ab64096582afd57aaea58aa5100bee906e8f3",
+  "findings": [
+    "Writer focus covered 432 tests with corrected font declaration replay; shared focus passed 48 tests. Range ownership remains a separate native task."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202611220216-0YJAN7/README.md",
+    "output/playwright/0YJAN7/verification.md"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": []
+}
