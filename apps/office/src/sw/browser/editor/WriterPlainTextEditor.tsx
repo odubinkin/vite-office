@@ -2,6 +2,7 @@
 
 import { writerPageBorderStyle } from "./frame-decoration";
 import { writerPageBackgroundStyle } from "./page-background";
+import { WriterPageTextGrid } from "./WriterTextGrid";
 import { Fragment, useContext, useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
 import type { ReactNode, RefObject } from "react";
 import { createPortal } from "react-dom";
@@ -779,7 +780,7 @@ export function WriterPlainTextEditor(props: WriterPlainTextEditorProps): React.
   );
 }
 
-/** Paints the native page fill and outline underneath the physical page content. @param props - Physical page format context. @returns Noninteractive background. */
+/** Paints the native page fill, outline and text grid underneath the physical page content. @param props - Physical page format context. @returns Noninteractive background. */
 function WriterPageDecoration({
   document,
   page,
@@ -788,10 +789,9 @@ function WriterPageDecoration({
   document: Parameters<typeof writerPageBackgroundStyle>[0];
   page: SwPageFrame;
   previous: SwPageFrame | undefined;
-}>): React.JSX.Element | null {
+}>): React.JSX.Element {
   const fill = writerPageBackgroundStyle(document, page, previous);
   const border = writerPageBorderStyle(document, page, previous);
-  if (!fill && !border) return null;
   return (
     <>
       {fill && (
@@ -810,6 +810,7 @@ function WriterPageDecoration({
           style={border}
         />
       )}
+      <WriterPageTextGrid document={document} page={page} />
     </>
   );
 }

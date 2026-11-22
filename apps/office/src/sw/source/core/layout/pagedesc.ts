@@ -5,6 +5,7 @@ import {
   getPageFrameMargins,
   SwFrameFormat,
 } from "./atrfrm";
+import { FormatBodyTextGrid } from "./pagechg";
 import type { SwFormatHeader, SwFormatFooter } from "../../../inc/fmthdft";
 import { SwPoolFormatId } from "../../../inc/poolfmt";
 import { SfxItemSet } from "../../../../svl/source/items/itemset";
@@ -321,7 +322,7 @@ export class SwPageDesc extends BroadcastingModify {
   }
 }
 
-/** Projects the native body print area between the page's border box and story frames. @param page - Actual page descriptor. @returns Absolute physical body geometry. */
+/** Resolves the area available to the body between the page's border box and story frames. @param page - Actual page descriptor. @returns Absolute physical body geometry. */
 export function getPageBodyGeometry(page: SwPageDesc): WriterPageDescriptorValue {
   const value = page.GetValue();
   const master = page.GetMaster();
@@ -340,6 +341,33 @@ export function getPageBodyGeometry(page: SwPageDesc): WriterPageDescriptorValue
     leftMargin: margins.left + border.left,
     rightMargin: margins.right + border.right,
   };
+}
+
+/** Formats the native body print area using the grid and document compatibility policy. @param page - Actual page descriptor. @param document - Original document settings and paper mode owner. @returns Absolute body print geometry. */
+export function formatPageBodyGeometry(
+  page: SwPageDesc,
+  document: SwDoc,
+): WriterPageDescriptorValue {
+  const body = getPageBodyGeometry(page);
+  if (document.GetDocumentSettingManager().get("MS_WORD_COMP_GRID_METRICS")) return body;
+  const master = page.GetMaster();
+  const grid = master.GetTextGrid();
+  const insets = FormatBodyTextGrid(
+    body.width - body.leftMargin - body.rightMargin,
+    body.height - body.topMargin - body.bottomMargin,
+    grid,
+    document.IsSquaredPageMode(),
+    master.GetFrameDir().GetValue(),
+  );
+  return insets
+    ? {
+        ...body,
+        topMargin: body.topMargin + insets.top,
+        bottomMargin: body.bottomMargin + insets.bottom,
+        leftMargin: body.leftMargin + insets.left,
+        rightMargin: body.rightMargin + insets.right,
+      }
+    : body;
 }
 
 /** Native docdesc locale/paper defaults exposed as geometry for browser reset without creating detached core objects. @param locale - Locale. @returns Geometry. */

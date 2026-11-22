@@ -3,8 +3,12 @@
 import { MetricSpinButton } from "../../../svtools/browser/control/MetricSpinButton";
 import { FieldUnit } from "../../../tools/inc/fldunit";
 import { SvxBorderTabPage } from "../../../cui/source/tabpages/border";
-import { RES_BOX, RES_SHADOW } from "../../inc/hintids";
+import { RES_BOX, RES_FRAMEDIR, RES_SHADOW, RES_TEXTGRID } from "../../inc/hintids";
+import { SvxBoxItemLine, type SvxBoxItem } from "../../../editeng/source/items/frmitems";
+import { SvxFrameDirection } from "../../../editeng/inc/frmdir";
+import type { SvxFrameDirectionItem } from "../../../editeng/inc/frmdiritem";
 import { WriterFrameBorderPage } from "./WriterFrameBorderPage";
+import { WriterTextGridPage } from "./WriterTextGridPage";
 import { WriterDialogHeader } from "./WriterDialogHeader";
 import { useEffect, useId, useMemo, useRef, useState } from "react";
 
@@ -34,9 +38,12 @@ import { SfxItemSet } from "../../../svl/inc/itemset";
 import { XATTR_FILL_FIRST, XATTR_FILL_LAST } from "../../../svx/inc/xdef";
 import { bitmapFillStyle } from "../editor/page-background";
 import { getPageFormatDefaultLimits } from "../../../cui/browser/dialog/page-format-defaults";
+import { IsVerticalTextGrid } from "../../source/core/layout/pagechg";
+import { SwTextGridPage } from "../../source/ui/misc/pggrid";
 
 /** Inputs and completion callbacks for the bounded Writer Page tab. */
 export interface WriterPageStyleDialogProps {
+  readonly htmlMode?: boolean;
   readonly unit?: FieldUnit;
   readonly initialValue: WriterPageDescriptorValue;
   readonly pageInput?: SfxItemSet;
@@ -46,6 +53,7 @@ export interface WriterPageStyleDialogProps {
 
 /** Collects the supported Page Style physical geometry with a live upstream-shaped preview. @param props - Initial geometry and completion callbacks. @returns Page Style dialog. */
 export function WriterPageStyleDialog({
+  htmlMode = false,
   initialValue,
   pageInput,
   unit = FieldUnit.CM,
@@ -80,11 +88,14 @@ export function WriterPageStyleDialog({
   );
   const [borders] = useState(
     /** Opens the common native Borders page without a paragraph merge slot. @returns Page owner. */
-    () => pageInput && new SvxBorderTabPage(pageInput, RES_BOX),
+    () => (!htmlMode && pageInput ? new SvxBorderTabPage(pageInput, RES_BOX) : undefined),
   );
   const [borderOutput] = useState(
     /** Retains the frame border and shadow deltas across tab visits. @returns Owned native items. */
-    () => pageInput && new SfxItemSet(pageInput.GetPool(), [[RES_BOX, RES_SHADOW]]),
+    () =>
+      borders && pageInput
+        ? new SfxItemSet(pageInput.GetPool(), [[RES_BOX, RES_SHADOW]])
+        : undefined,
   );
   useEffect(
     /** Releases the input and output clones at dialog unmount. @returns Cleanup. */
@@ -135,14 +146,19 @@ export function WriterPageStyleDialog({
   function pageLabel(key: string, fallback: string): string {
     return localization.GetText(`writer.page-style.${key}`, fallback);
   }
-  const pages = [
+  const pages: readonly (readonly [string, string])[] = [
     ["page", pageLabel("page-tab", "Page")],
     ["area", pageLabel("area-tab", "Area")],
     ["transparence", pageLabel("transparency-tab", "Transparency")],
     ["header", pageLabel("header", "Header")],
     ["footer", pageLabel("footer", "Footer")],
-    ["borders", pageLabel("borders", "Borders")],
-  ] as const;
+    ...(!htmlMode && pageInput
+      ? ([
+          ["borders", pageLabel("borders", "Borders")],
+          ["textgrid", pageLabel("text-grid", "Text Grid")],
+        ] as const)
+      : []),
+  ];
   const bitmap = area?.GetFillStyle() === FillStyle.BITMAP ? area.bitmap : undefined;
   const [page] = useState(
     /** Creates the original page-geometry and list owners for this request. @returns Page tab. */ () =>
@@ -156,6 +172,49 @@ export function WriterPageStyleDialog({
       ),
   );
   const [draft, setDraft] = useState(page.GetGeometry());
+  const direction =
+    (pageInput?.Get(RES_FRAMEDIR) as SvxFrameDirectionItem | undefined)?.GetValue() ??
+    SvxFrameDirection.Horizontal_LR_TB;
+  const gridPreview = {
+    ...draft,
+    topMargin:
+      draft.topMargin + (headerState.enabled ? headerState.height + headerState.spacing : 0),
+    bottomMargin:
+      draft.bottomMargin + (footerState.enabled ? footerState.height + footerState.spacing : 0),
+  };
+  const box = (borderOutput?.GetItemIfSet(RES_BOX, false) ?? pageInput?.Get(RES_BOX)) as
+    SvxBoxItem | undefined;
+  const gridWidth =
+    gridPreview.width -
+    gridPreview.leftMargin -
+    gridPreview.rightMargin -
+    (box?.GetDistance(SvxBoxItemLine.LEFT) ?? 0) -
+    (box?.GetDistance(SvxBoxItemLine.RIGHT) ?? 0);
+  const gridHeight =
+    gridPreview.height -
+    gridPreview.topMargin -
+    gridPreview.bottomMargin -
+    (box?.GetDistance(SvxBoxItemLine.TOP) ?? 0) -
+    (box?.GetDistance(SvxBoxItemLine.BOTTOM) ?? 0);
+  const gridSize = IsVerticalTextGrid(direction)
+    ? { width: gridHeight, height: gridWidth }
+    : { width: gridWidth, height: gridHeight };
+  const [textGrid] = useState(
+    /** Retains the original Text Grid tab state throughout the request. @returns Native Text Grid owner. */
+    () => (!htmlMode && pageInput ? new SwTextGridPage(pageInput, gridSize) : undefined),
+  );
+  useEffect(
+    /** Releases the original Text Grid owner when the request ends. @returns Cleanup. */
+    () => {
+      return /** Releases the grid draft. @returns Nothing. */ () => textGrid?.Dispose();
+    },
+    [textGrid],
+  );
+  /** Activates the original notebook page and exchanges the current geometry. @param tab - Native tab identity. @returns Nothing. */
+  function activate(tab: string): void {
+    if (tab === "textgrid") textGrid?.UpdatePageSize(gridSize);
+    setActive(tab);
+  }
   const [paper, setPaper] = useState(page.GetPaperSizeBox().get_active_id());
   const ranges = page.GetFieldRanges();
   /** Publishes original geometry and selection after one source event. @returns Nothing. */
@@ -228,6 +287,7 @@ export function WriterPageStyleDialog({
               }
               const output = new SfxItemSet(pageInput.GetPool(), [
                 [RES_BOX, RES_SHADOW],
+                [RES_TEXTGRID, RES_TEXTGRID],
                 [XATTR_FILL_FIRST, XATTR_FILL_LAST],
                 [headerFooterSetSlot(true), headerFooterSetSlot(false)],
               ]);
@@ -236,6 +296,7 @@ export function WriterPageStyleDialog({
               header?.FillItemSet(headerState, output);
               footer?.FillItemSet(footerState, output);
               if (borderOutput) output.PutSet(borderOutput);
+              textGrid?.FillItemSet(output);
               if (output.Count()) onSubmit(geometry, output);
               else {
                 output.Dispose();
@@ -270,7 +331,7 @@ export function WriterPageStyleDialog({
                     aria-controls={`${id}-panel-${tab}`}
                     tabIndex={active === tab ? 0 : -1}
                     className="rounded-t border-b px-3 py-2 text-sm aria-selected:border-indigo-600 aria-selected:text-indigo-700"
-                    onClick={/** Activates this page. @returns Nothing. */ () => setActive(tab)}
+                    onClick={/** Activates this page. @returns Nothing. */ () => activate(tab)}
                     onKeyDown={
                       /** Walks the native notebook order. @param event - Tab key action. @returns Nothing. */
                       (event) => {
@@ -286,7 +347,7 @@ export function WriterPageStyleDialog({
                                 : undefined;
                         if (!next) return;
                         event.preventDefault();
-                        setActive(next[0]);
+                        activate(next[0]);
                         globalThis.document.getElementById(`${id}-${next[0]}`)?.focus();
                       }
                     }
@@ -513,6 +574,16 @@ export function WriterPageStyleDialog({
                 input={pageInput}
                 output={borderOutput}
                 unit={unit}
+                label={pageLabel}
+              />
+            </div>
+          )}
+          {active === "textgrid" && textGrid && (
+            <div role="tabpanel" id={`${id}-panel-textgrid`} aria-labelledby={`${id}-textgrid`}>
+              <WriterTextGridPage
+                page={textGrid}
+                layout={gridPreview}
+                direction={direction}
                 label={pageLabel}
               />
             </div>

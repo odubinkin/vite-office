@@ -10,6 +10,7 @@ import { scalar, text, unicode, unknown } from "../../core/unocore/unocrsrhelper
 const documentSettings = new Map<string, DocumentSettingId>([
   ["ApplyParagraphMarkFormatToNumbering", "APPLY_PARAGRAPH_MARK_FORMAT_TO_NUMBERING"],
   ["IgnoreTabsAndBlanksForLineCalculation", "IGNORE_TABS_AND_BLANKS_FOR_LINE_CALCULATION"],
+  ["MsWordCompGridMetrics", "MS_WORD_COMP_GRID_METRICS"],
   ["TabsRelativeToIndent", "TABS_RELATIVE_TO_INDENT"],
   ["TabAtLeftIndentForParagraphsInList", "TAB_AT_LEFT_INDENT_FOR_PARA_IN_LIST"],
   ["AddExternalLeading", "ADD_EXT_LEADING"],

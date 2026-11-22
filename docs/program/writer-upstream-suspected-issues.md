@@ -6051,3 +6051,18 @@ The pinned direction detector describes the Unicode paragraph-level algorithm bu
 - Source: pinned `cui/source/tabpages/numpages.cxx`, `SvxNumOptionsTabPage::InitControls`.
 - Observation: the loop assigns equality for the start, prefix and suffix on each selected level. An intermediate level can differ without the field appearing mixed if the last selected level matches the first. Type, character style and sublevels accumulate equality across the selection.
 - Local behavior: Writer keeps the first-to-last comparison for those three fields and retains full selection comparisons for the others. Display alone leaves the rule unchanged.
+
+### WRITER-742 — Normal text grid preview takes character width from base text height
+
+In normal paper mode, the native dialog stores Character width separately from
+Max. base text size. The preview advances the character boundaries by the
+magnified base text height. The horizontal page painter advances them by
+`GetGridWidth`, which reads the stored character width in normal mode.
+[Preview calculation](../../vendor/libreoffice-reference/sw/source/uibase/frmdlg/colex.cxx#L505)
+[Page painting](../../vendor/libreoffice-reference/sw/source/core/layout/paintfrm.cxx#L6114)
+[Width selection](../../vendor/libreoffice-reference/sw/source/core/layout/pagechg.cxx#L2889)
+
+A normal grid with 18 pt base text and 13 pt character width still previews
+18 pt cells before magnification. Changing only the width updates the document
+cell spacing. Writer preserves both source calculations. This observation is
+based on the pinned source. A compiled differential check is pending.

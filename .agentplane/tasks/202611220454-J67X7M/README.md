@@ -4,7 +4,7 @@ title: "Connect Writer Page Style text grid controls and paint"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 6
+revision: 7
 origin:
   system: "manual"
 depends_on: []
@@ -36,7 +36,7 @@ events:
     to: "DOING"
     note: "Start: continue direct-mode task in current checkout."
 doc_version: 3
-doc_updated_at: "2026-11-22T04:55:20.863Z"
+doc_updated_at: "2026-11-22T05:16:24.987Z"
 doc_updated_by: "CODER"
 description: "Connect the existing native text-grid page item, body grid metrics and paragraph snapping to an upstream-shaped Page Style tab, preview, and screen and print paint."
 sections:
@@ -53,7 +53,23 @@ sections:
   Rollback Plan: |-
     - Revert task-related commit(s).
     - Re-run required checks to confirm rollback safety.
-  Findings: ""
+  Findings: |-
+    - Command: `npm run test:writer --workspace @vite-office/office -- WriterPageTextGrid odt-page-master native-line-spacing writer-view-auto-first-layout`.
+      Result: pass. Evidence: 45 tests across 5 files. Scope: normal and squared paper, orientation, native grid item exchange, compatibility metrics, preview, history and cancellation, ODT and Worker round trips, page-master and paragraph regression coverage.
+    - Command: `npm run test:writer --workspace @vite-office/office -- WriterPageTextGrid WriterPageAreaDialog WriterPageBordersDialog WriterPageStoriesDialog WriterPageLayout tgrditem native-default-page-mode odt-page-master native-page-grid-properties writer-which-id-migration`.
+      Result: 42 other assertions passed. The grid UI fixture expected an integer-formatted point value. It was corrected to match the existing metric widget and rerun in the passing focused command above.
+    - Commands: `npm run check:dependencies`, `npm run check:source-tree`, `npm run check:source-provenance`, `npm run check:writer-resources`, `ap doctor`, and `node .agentplane/policy/check-routing.mjs`.
+      Result: pass. Evidence: 3,035 audited runtime sources, 3,036 registered modules, 2 Writer resource tests, doctor and routing passed. Scope: runtime ownership, pinned paths and provenance, Writer resources, and task policy.
+    - Commands: `node_modules/.bin/eslint --max-warnings 0 <changed TypeScript>`, `node_modules/.bin/prettier --check <changed files>`, and `git diff --check`.
+      Result: pass. Scope: changed code, tests, registry and upstream observations.
+    - Commands: `npm run check:docs` and `npm run check:file-size`.
+      Result: known baseline failures. Evidence: 307 Calc JSDoc diagnostics and a 1,001-line Calc codec. Scope: repository-wide, no Writer or shared failures reported.
+    - WRITER-742 records the source-backed difference between normal-paper preview cell width and horizontal document painting. The represented body and paragraph layout keep the existing browser font/device approximation. The desktop ruler tick updates and native footnote frame centering exception have no corresponding connected owner in this Writer slice.
+    - Full suite deferred to the user's ten-task checkpoint.
+    - Command: `npm run build:single-threaded --workspace @vite-office/office`.
+      Result: pass. Evidence: TypeScript and Vite completed. Scope: production Office build.
+    - Command: `node_modules/.bin/playwright test writer-page-text-grid.spec.ts writer-page-borders.spec.ts writer-page-area.spec.ts writer-page-stories.spec.ts --config=output/playwright/writer-grid-production.config.ts --project=writer --workers=1`.
+      Result: pass. Evidence: 4 Chromium tests. Scope: live grid preview, independent screen and print paint, undo and redo, plus related Page Style tabs.
 id_source: "generated"
 ---
 ## Summary
@@ -85,3 +101,20 @@ Run focused Writer grid-item, grid-page, core layout, paragraph grid line spacin
 - Re-run required checks to confirm rollback safety.
 
 ## Findings
+
+- Command: `npm run test:writer --workspace @vite-office/office -- WriterPageTextGrid odt-page-master native-line-spacing writer-view-auto-first-layout`.
+  Result: pass. Evidence: 45 tests across 5 files. Scope: normal and squared paper, orientation, native grid item exchange, compatibility metrics, preview, history and cancellation, ODT and Worker round trips, page-master and paragraph regression coverage.
+- Command: `npm run test:writer --workspace @vite-office/office -- WriterPageTextGrid WriterPageAreaDialog WriterPageBordersDialog WriterPageStoriesDialog WriterPageLayout tgrditem native-default-page-mode odt-page-master native-page-grid-properties writer-which-id-migration`.
+  Result: 42 other assertions passed. The grid UI fixture expected an integer-formatted point value. It was corrected to match the existing metric widget and rerun in the passing focused command above.
+- Commands: `npm run check:dependencies`, `npm run check:source-tree`, `npm run check:source-provenance`, `npm run check:writer-resources`, `ap doctor`, and `node .agentplane/policy/check-routing.mjs`.
+  Result: pass. Evidence: 3,035 audited runtime sources, 3,036 registered modules, 2 Writer resource tests, doctor and routing passed. Scope: runtime ownership, pinned paths and provenance, Writer resources, and task policy.
+- Commands: `node_modules/.bin/eslint --max-warnings 0 <changed TypeScript>`, `node_modules/.bin/prettier --check <changed files>`, and `git diff --check`.
+  Result: pass. Scope: changed code, tests, registry and upstream observations.
+- Commands: `npm run check:docs` and `npm run check:file-size`.
+  Result: known baseline failures. Evidence: 307 Calc JSDoc diagnostics and a 1,001-line Calc codec. Scope: repository-wide, no Writer or shared failures reported.
+- WRITER-742 records the source-backed difference between normal-paper preview cell width and horizontal document painting. The represented body and paragraph layout keep the existing browser font/device approximation. The desktop ruler tick updates and native footnote frame centering exception have no corresponding connected owner in this Writer slice.
+- Full suite deferred to the user's ten-task checkpoint.
+- Command: `npm run build:single-threaded --workspace @vite-office/office`.
+  Result: pass. Evidence: TypeScript and Vite completed. Scope: production Office build.
+- Command: `node_modules/.bin/playwright test writer-page-text-grid.spec.ts writer-page-borders.spec.ts writer-page-area.spec.ts writer-page-stories.spec.ts --config=output/playwright/writer-grid-production.config.ts --project=writer --workers=1`.
+  Result: pass. Evidence: 4 Chromium tests. Scope: live grid preview, independent screen and print paint, undo and redo, plus related Page Style tabs.

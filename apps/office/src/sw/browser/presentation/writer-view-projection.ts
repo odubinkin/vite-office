@@ -2,7 +2,7 @@
 import { projectWriterParagraphBorders } from "./writer-paragraph-border-projection";
 import { GetParagraphFrameDirection } from "../../source/core/doc/doclay";
 import { projectWriterFontPaint, type WriterFontPaint } from "../../source/core/txtnode/txatbase";
-import { getPageBodyGeometry } from "../../source/core/layout/pagedesc";
+import { formatPageBodyGeometry } from "../../source/core/layout/pagedesc";
 import { SwStyleNameMapper } from "../../source/core/doc/SwStyleNameMapper";
 import { IsPoolUserFormat } from "../../inc/poolfmt";
 import {
@@ -613,7 +613,7 @@ export class WriterViewProjection {
             const descriptor = document.GetPageDesc(index);
             return Object.freeze({
               followName: descriptor.GetFollow().GetName(),
-              value: getPageBodyGeometry(descriptor),
+              value: formatPageBodyGeometry(descriptor, document),
             });
           },
         ),

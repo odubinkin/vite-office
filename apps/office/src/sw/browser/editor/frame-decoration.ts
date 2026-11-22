@@ -1,6 +1,7 @@
 /** @fileoverview Browser projection of the original Writer page border and directional frame shadows. */
 import type { CSSProperties } from "react";
 import { SvxShadowLocation } from "../../../editeng/inc/svxenum";
+import { COL_AUTO, type Color } from "../../../tools/inc/color";
 import type { SvxShadowItem } from "../../../editeng/source/items/frmitems.shadow";
 import { RES_SHADOW } from "../../inc/hintids";
 import type { SwDoc } from "../../source/core/doc/doc";
@@ -8,6 +9,13 @@ import { getPageFrameMargins, getPageFrameShadowSpace } from "../../source/core/
 import { ResolvePageFrameFormat } from "../../source/core/layout/hffrm";
 import type { SwPageFrame } from "../../source/core/layout/newfrm";
 import { exportBorderShorthand } from "../../source/filter/xml/xmlexpit";
+
+/** Converts an original grid color for the browser paint device. @param color - Native grid color. @returns CSS hexadecimal color. */
+export function writerTextGridColor(color: Readonly<Color>): string {
+  return color.equals(COL_AUTO)
+    ? "#000000"
+    : `#${(color.toUInt32() & 0xffffff).toString(16).padStart(6, "0")}`;
+}
 
 /** Formats the physical shadow without changing native positioning or size. @param shadow - Shadow item. @returns CSS shadow or no shadow. */
 export function writerFrameShadow(shadow: SvxShadowItem): string | undefined {

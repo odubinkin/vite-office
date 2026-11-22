@@ -189,6 +189,7 @@ export function WriterDialogPresenter({
           unit={unit}
           initialValue={request.request.initialValue}
           pageInput={request.request.pageInput}
+          htmlMode={request.request.htmlMode}
           onCancel={
             /** Cancels the exact Page Style request and returns document focus. @returns Nothing. */ () => {
               controller.Cancel(request.id);

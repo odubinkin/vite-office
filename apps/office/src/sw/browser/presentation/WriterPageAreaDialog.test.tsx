@@ -69,7 +69,7 @@ it("applies and reopens the active named page format and undoes geometry and fil
         /** Reads accessible upstream tab labels in order. @param tab - Notebook tab. @returns Label. */
         (tab) => tab.textContent,
       ),
-    ).toEqual(["Page", "Area", "Transparency", "Header", "Footer", "Borders"]);
+    ).toEqual(["Page", "Area", "Transparency", "Header", "Footer", "Borders", "Text Grid"]);
     fireEvent.click(screen.getByRole("radio", { name: "Landscape" }));
     fireEvent.click(screen.getByRole("tab", { name: "Area" }));
     fireEvent.click(screen.getByRole("button", { name: /^Color$/ }));

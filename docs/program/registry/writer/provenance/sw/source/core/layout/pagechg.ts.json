@@ -1,0 +1,43 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "status": "mapped",
+    "localPath": "apps/office/src/sw/source/core/layout/pagechg.ts",
+    "upstreamPath": "sw/source/core/layout/pagechg.cxx",
+    "localSymbols": [
+      "FormatBodyTextGrid",
+      "GetGridWidth",
+      "IsVerticalTextGrid"
+    ],
+    "upstreamSymbols": [
+      "SwBodyFrame::Format",
+      "GetGridWidth"
+    ],
+    "preservedResponsibilities": [
+      "Centers the page body on the original text-grid line and cell sizes."
+    ],
+    "omittedResponsibilities": [
+      "The existing Writer slice has no connected page footnote frame neighbors."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sw/source/core/layout/pagechg.ts",
+          "marker": "FormatBodyTextGrid"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/layout/pagechg.cxx",
+          "marker": "SwBodyFrame::Format"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/layout/pagechg.cxx",
+          "marker": "GetGridWidth"
+        }
+      ]
+    }
+  }
+}

@@ -378,7 +378,12 @@ export class SwView {
     const descriptor = document.FindPageDesc(name) ?? document.GetPageDesc();
     const pageInput = PageDescToItemSet(descriptor);
     const result = await this.dialogController
-      .RequestPageDialog(WRITER_COMMAND_IDS.pageDialog, descriptor.GetValue(), pageInput)
+      .RequestPageDialog(
+        WRITER_COMMAND_IDS.pageDialog,
+        descriptor.GetValue(),
+        pageInput,
+        document.GetDocumentSettingManager().get("HTML_MODE"),
+      )
       .finally(
         /** Releases the dialog's native input snapshot on acceptance or cancellation. @returns Nothing. */
         () => pageInput.Dispose(),

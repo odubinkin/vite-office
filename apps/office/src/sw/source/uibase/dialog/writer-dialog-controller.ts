@@ -43,6 +43,7 @@ export interface WriterBreakDialogResult {
 /** Page Style child-window request initialized from the active page descriptor. */
 export interface WriterPageDialogRequest {
   readonly commandUrl: string;
+  readonly htmlMode: boolean;
   readonly initialValue: WriterPageDescriptorValue;
   readonly pageInput: SfxItemSet;
   readonly kind: "page-style";
@@ -198,14 +199,16 @@ export class WriterDialogController {
       : undefined;
   }
 
-  /** Requests the Writer Page Style tabs and returns the accepted item exchange. @param commandUrl - Originating command. @param initialValue - Current page geometry. @param pageInput - Borrowed native page items. @returns Accepted values or undefined. */
+  /** Requests the Writer Page Style tabs and returns the accepted item exchange. @param commandUrl - Originating command. @param initialValue - Current page geometry. @param pageInput - Borrowed native page items. @param htmlMode - Whether the document uses the Writer HTML mode. @returns Accepted values or undefined. */
   public async RequestPageDialog(
     commandUrl: string,
     initialValue: WriterPageDescriptorValue,
     pageInput: SfxItemSet,
+    htmlMode = false,
   ): Promise<WriterPageDialogResult | undefined> {
     const completion = await this.controller.Request({
       commandUrl,
+      htmlMode,
       initialValue,
       kind: "page-style",
       pageInput,
