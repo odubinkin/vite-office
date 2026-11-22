@@ -1,0 +1,25 @@
+{
+  "schema_version": 1,
+  "task_id": "202611220203-VKG8BT",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-11-22T02:14:23.372Z",
+  "verdict": "pass",
+  "summary": "The reviewed font maps follow the pinned three-script family/style/generic/pitch/charset contract across Writer ODT and Calc ODS.",
+  "evaluated_sha": "b69569c9627554ecabcc989d1979147f83da7217",
+  "blueprint_digest": "0eb7aebfcfa5d844305bd4e6d995ed6fb0a147bd7ca8314680789416f65665b5",
+  "findings": [
+    "Direct families and declaration members share original lexical parsing and ordering. Named styles emit native compatibility attributes, automatic styles preserve references, and both Worker paths keep native font state."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202611220203-VKG8BT/README.md",
+    "b69569c96275 and 113 passing related tests",
+    "docs/program/writer-upstream-suspected-issues.md#WRITER-737",
+    "docs/program/calc-upstream-suspected-issues.md#CALC-820"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": [
+    "Existing embedded resources and installed font resolution have their own owners and are outside the changed member mapper."
+  ]
+}
