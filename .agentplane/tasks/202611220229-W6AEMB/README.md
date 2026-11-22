@@ -1,10 +1,11 @@
 ---
 id: "202611220229-W6AEMB"
 title: "Connect Writer paragraph border formatting"
-status: "DOING"
+result_summary: "Connected Writer paragraph borders and shadows to the native formatting dialog."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 9
+revision: 10
 origin:
   system: "manual"
 depends_on: []
@@ -38,11 +39,16 @@ quality_review:
     - "55 focused Writer checks; 82 shared CUI/box checks; Chromium and production build"
   findings:
     - "The covered upstream reopen pattern, real browser paint/history, native shadow default, and box transport checks passed. Existing Calc JSDoc and oversized source items remain outside the changed files."
-commit: null
+commit:
+  hash: "1b0d7496cb8268b868c48a45aae384a60c5e806a"
+  message: "🧩 W6AEMB code: Connect Writer paragraph borders and shadows"
 comments:
   -
     author: "CODER"
     body: "Start: connect the native paragraph border page, item exchange, paint, and ODT persistence in Writer."
+  -
+    author: "CODER"
+    body: "Verified: Writer paragraph borders, padding, shadow and joining pass focused browser, core, and document transport checks."
 events:
   -
     type: "status"
@@ -57,8 +63,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Writer paragraph borders, independent padding, shadow and joining were verified through the real command, undo/redo, typed Worker graph and ODT reopen. 55 Writer checks, 82 shared checks, the production build and Chrome passed."
+  -
+    type: "status"
+    at: "2026-11-22T02:55:54.453Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: Writer paragraph borders, padding, shadow and joining pass focused browser, core, and document transport checks."
 doc_version: 3
-doc_updated_at: "2026-11-22T02:54:28.012Z"
+doc_updated_at: "2026-11-22T02:55:54.453Z"
 doc_updated_by: "CODER"
 description: "Connect the native Borders page to the ordinary Writer Paragraph dialog. Reuse the CUI border editor and pooled box, shadow and connect-border items; preserve mixed selections, paint and ODT round trip."
 sections:
