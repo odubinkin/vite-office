@@ -1,10 +1,11 @@
 ---
 id: "202611220105-51SY7G"
 title: "Connect Calc cell protection controls and visibility"
-status: "DOING"
+result_summary: "Connected Calc cell protection, unlocked selection and protected visibility."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 11
+revision: 12
 origin:
   system: "manual"
 depends_on:
@@ -44,11 +45,16 @@ quality_review:
     - "Both menu commands, native history and tdf151752/tdf152327 pass through the actual Calc workspace."
     - "Protected grid and input line visibility and clipboard formula-result conversion are verified and preserve original source cells."
     - "The mounted test exposed a prior teardown ordering error. History now releases before the document style pool and the lifecycle checks pass."
-commit: null
+commit:
+  hash: "a6b1bbf29c4d1fca90ab9c2c353fbdd4ec850251"
+  message: "🧩 51SY7G code: connect Calc cell protection commands and protected output"
 comments:
   -
     author: "CODER"
     body: "Start: connect native cell protection, unlocked selections and model-backed output."
+  -
+    author: "CODER"
+    body: "Verified: native Calc cell-protection toggle, unlocked selection, protected grid and clipboard output, safe history teardown and production Chromium."
 events:
   -
     type: "status"
@@ -63,8 +69,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Verified: native cell protection and unlocked selection, hidden visibility and clipboard rules, history teardown, 72 cases and production Chromium."
+  -
+    type: "status"
+    at: "2026-11-22T01:20:59.470Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: native Calc cell-protection toggle, unlocked selection, protected grid and clipboard output, safe history teardown and production Chromium."
 doc_version: 3
-doc_updated_at: "2026-11-22T01:19:46.705Z"
+doc_updated_at: "2026-11-22T01:20:59.471Z"
 doc_updated_by: "CODER"
 description: "Expose native cell protection toggle and unlocked-cell selection, and apply stored hidden-cell and hidden-formula flags to grid, input line, and native clipboard copies."
 sections:
