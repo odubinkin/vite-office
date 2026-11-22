@@ -175,7 +175,7 @@ export class XMLTextImportHelper {
     }
     this.hints.length = 0;
   }
-  /** Starts a paragraph and defers its native style application until after the break. @param style - Paragraph style. @param alignment - Direct alignment. @param left - Direct margin. @param paragraph - Paragraph properties. @param properties - Direct character map. @param list - Native list state. @param listGeometryWins - Legacy parser precedence. @param forceListRule - Explicit automatic list declaration. @param markerProperties - Direct text properties of the paragraph mark. @param applyStyle - Whether the paragraph supplies its own style. @returns Nothing. */
+  /** Starts a paragraph and defers its native style application until after the break. @param style - Paragraph style. @param alignment - Direct alignment. @param left - Direct margin. @param paragraph - Paragraph properties. @param properties - Direct character map. @param list - Native list state. @param listGeometryWins - Legacy parser precedence. @param forceListRule - Explicit automatic list declaration. @param markerProperties - Direct text properties of the paragraph mark. @param applyStyle - Whether the paragraph supplies its own style. @param outlineLevel - Native text heading level or zero for a plain paragraph. @returns Nothing. */
   public BeginParagraph(
     style: string,
     alignment: OdfParagraphAlignment | undefined,
@@ -187,6 +187,7 @@ export class XMLTextImportHelper {
     forceListRule = false,
     markerProperties?: Partial<OdfCharacterProperties>,
     applyStyle = true,
+    outlineLevel?: number,
   ): void {
     const cellStyle = this.cellParaStyleDefault;
     this.start = this.GetCursor().getStart();
@@ -198,13 +199,10 @@ export class XMLTextImportHelper {
           this.ApplyCellParaStyle(cursor, cellStyle);
           this.SetStyleAndAttrs(cursor, style, list, forceListRule, applyStyle || !cellStyle);
         }
-        applyTextImportProperties(
-          cursor.getParagraphPropertySet?.() ?? cursor,
-          properties,
-          paragraph,
-          alignment,
-          left,
-        );
+        const paragraphTarget = cursor.getParagraphPropertySet?.() ?? cursor;
+        if (outlineLevel !== undefined && !this.IsAnnotationText())
+          applyParagraphOutlineLevel(paragraphTarget, outlineLevel);
+        applyTextImportProperties(paragraphTarget, properties, paragraph, alignment, left);
         if (markerProperties && !this.IsAnnotationText()) {
           const name = xmlTextString("CharacterStyles");
           try {
@@ -565,5 +563,27 @@ export class XMLTextImportHelper {
         type === "Cell" ? "Unsupported ODF table cell section." : "Unsupported ODF text section.",
       );
     return null;
+  }
+}
+
+/** Applies an ODF heading level only when it differs from its assigned paragraph style. @param target - Paragraph property owner. @param level - ODF paragraph level. @returns Nothing. */
+function applyParagraphOutlineLevel(target: XMLPropertySet, level: number): void {
+  const name = xmlTextString("OutlineLevel");
+  try {
+    const inherited = target.getPropertyValue(name);
+    try {
+      const current: [number] = [0];
+      if (!inherited.extract(current, "sal_Int16") || current[0] === level) return;
+      const value = new Any([level], "sal_Int16");
+      try {
+        target.setPropertyValue(name, value);
+      } finally {
+        value.dispose();
+      }
+    } finally {
+      inherited.dispose();
+    }
+  } finally {
+    name.dispose();
   }
 }

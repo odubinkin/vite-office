@@ -182,6 +182,7 @@ it("owns source tab keys before spin steps,retains tab changes and uses native f
     alignment = screen.getByRole("tab", { name: "Alignment" }),
     flow = screen.getByRole("tab", { name: "Text Flow" }),
     asian = screen.getByRole("tab", { name: "Asian Typography" }),
+    outline = screen.getByRole("tab", { name: "Outline & List" }),
     tabs = screen.getByRole("tab", { name: "Tabs" });
   expect(first).toHaveFocus();
   expect(first).toHaveAttribute("tabindex", "0");
@@ -206,6 +207,8 @@ it("owns source tab keys before spin steps,retains tab changes and uses native f
   fireEvent.keyDown(flow, { key: "PageDown", ctrlKey: true });
   expect(asian).toHaveFocus();
   fireEvent.keyDown(asian, { key: "PageDown", ctrlKey: true });
+  expect(outline).toHaveFocus();
+  fireEvent.keyDown(outline, { key: "PageDown", ctrlKey: true });
   expect(tabs).toHaveFocus();
   expect(
     screen
@@ -217,8 +220,8 @@ it("owns source tab keys before spin steps,retains tab changes and uses native f
       ),
   ).toBe(true);
   fireEvent.keyDown(tabs, { key: "PageUp", ctrlKey: true });
-  expect(asian).toHaveFocus();
-  fireEvent.keyDown(asian, { key: "ArrowRight" });
+  expect(outline).toHaveFocus();
+  fireEvent.keyDown(outline, { key: "ArrowRight" });
   expect(tabs).toHaveFocus();
   fireEvent.click(tabs);
   expect(screen.getByRole("tabpanel")).toHaveAttribute("aria-labelledby", tabs.id);

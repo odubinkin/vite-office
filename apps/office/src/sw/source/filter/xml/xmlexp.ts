@@ -778,6 +778,7 @@ function projectParagraph(
           },
         }),
     ...(directCharacterProperties === undefined ? {} : { properties: directCharacterProperties }),
+    outlineLevel: node.GetAttrOutlineLevel(),
     runs: projectXmlTextRuns(node),
     style: node.GetParagraphStyle(),
     styleName: getParagraphOdfStyleName(node.GetDoc(), node.GetParagraphStyle()),
@@ -869,10 +870,8 @@ function assertSupportedItems(
       RES_PARATR_NUMRULE,
     ])
       supported.add(which);
-  if (allowStyleNumbering) {
-    supported.add(RES_PARATR_NUMRULE);
-    supported.add(RES_PARATR_OUTLINELEVEL);
-  }
+  if (allowStyleNumbering) supported.add(RES_PARATR_NUMRULE);
+  if (allowListItems || allowStyleNumbering) supported.add(RES_PARATR_OUTLINELEVEL);
   const unsupported = items.find(
     /** Finds a non-alignment item. @param item - Direct pool item. @returns Whether unsupported. */
     (item) => !supported.has(item.Which()),

@@ -258,14 +258,19 @@ export class SwUndoNumUpDown extends SwUndo {
 /** Native boolean numbering-start history retains only node index and requested flag. */
 export class SwUndoNumRuleStart extends SwUndo {
   private readonly m_nIndex: number;
-  /** Captures the native position and new flag without retaining a text node. @param position - Actual native position. @param m_bFlag - New restart state. @param cursor - Displayed command boundary. @returns Nothing. */
+  private readonly oldStart: number;
+  /** Captures the native position and new flag without retaining a text node. @param position - Actual native position. @param value - New restart flag or unsigned start. @param cursor - Displayed command boundary. @returns Nothing. */
   public constructor(
     position: SwPosition,
-    private readonly m_bFlag: boolean,
+    private readonly value: boolean | number,
     cursor: SwUndoCursorState,
   ) {
     super("Set numbering start", cursor, cursor);
     this.m_nIndex = position.GetNodeIndex();
+    const node = position.GetNode().GetTextNode();
+    this.oldStart = node?.HasAttrListRestartValue()
+      ? node.GetAttrListRestartValue() & 0xffff
+      : 0xffff;
   }
   /** Reports the native index and flag units. @returns Payload units. */
   public override GetPayloadSize(): number {
@@ -273,18 +278,19 @@ export class SwUndoNumRuleStart extends SwUndo {
   }
   /** Reverses only the restart flag through the native document owner. @param context - Native history context. @returns Nothing. */
   protected override UndoImpl(context: SwUndoRedoContext): void {
-    this.Apply(context, !this.m_bFlag);
+    this.Apply(context, typeof this.value === "boolean" ? !this.value : this.oldStart);
   }
   /** Reapplies only the restart flag. @param context - Native history context. @returns Nothing. */
   protected override RedoImpl(context: SwUndoRedoContext): void {
-    this.Apply(context, this.m_bFlag);
+    this.Apply(context, this.value);
   }
-  /** Reconstructs a current native position independently of physical text-node identity. @param context - Current document context. @param flag - Requested flag. @returns Nothing. */
-  private Apply(context: SwUndoRedoContext, flag: boolean): void {
+  /** Reconstructs a current native position independently of physical text-node identity. @param context - Current document context. @param value - Requested flag or start value. @returns Nothing. */
+  private Apply(context: SwUndoRedoContext, value: boolean | number): void {
     const doc = context.GetDoc(),
       position = new SwPosition(doc.GetNodes().at(this.m_nIndex) as SwTextNode);
     try {
-      doc.SetNumRuleStart(position, flag);
+      if (typeof value === "boolean") doc.SetNumRuleStart(position, value);
+      else position.GetNode().GetTextNode()?.SetAttrListRestartValue(value);
     } finally {
       position.Dispose();
     }

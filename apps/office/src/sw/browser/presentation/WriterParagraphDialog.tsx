@@ -7,6 +7,7 @@ import { useBrowserLocalization } from "../../../framework/browser/localization/
 import { SvxHyphenZoneItem } from "../../../editeng/source/items/paraitem";
 import { RES_PARATR_HYPHENZONE } from "../../inc/hintids";
 import { WriterAsianTypographyPage } from "./WriterAsianTypographyPage";
+import { WriterParagraphOutlinePage } from "./WriterParagraphOutlinePage";
 import { WriterParagraphAlignmentPage } from "./WriterParagraphAlignmentPage";
 import { WriterHyphenationControls } from "./WriterHyphenationControls";
 import { WriterDialogHeader } from "./WriterDialogHeader";
@@ -43,7 +44,7 @@ export function WriterParagraphDialog({
   function label(key: string, fallback: string): string {
     return localization.GetText(`writer.paragraph.${key}`, fallback);
   }
-  const tabIds = ["spacing", "alignment", "flow", "asiantypo", "tabs"] as const;
+  const tabIds = ["spacing", "alignment", "flow", "asiantypo", "outline", "tabs"] as const;
   const [activeTab, setActiveTab] = useState<(typeof tabIds)[number]>("spacing");
   const tabIdentity = useId(),
     tabRefs = useRef<Partial<Record<(typeof tabIds)[number], HTMLButtonElement | null>>>({});
@@ -171,6 +172,7 @@ export function WriterParagraphDialog({
                   ["alignment", "Alignment"],
                   ["flow", "Text Flow"],
                   ["asiantypo", label("asian-typography", "Asian Typography")],
+                  ["outline", label("outline-and-list", "Outline & List")],
                   ["tabs", "Tabs"],
                 ] as const
               ).map(
@@ -338,6 +340,15 @@ export function WriterParagraphDialog({
                   <WriterAsianTypographyPage input={pageInput} output={tabs.output} label={label} />
                 </div>
               )}
+              <div hidden={activeTab !== "outline"} className="sm:col-span-2">
+                <WriterParagraphOutlinePage
+                  input={pageInput}
+                  output={tabs.output}
+                  label={label}
+                  listStyleNames={dialogRequest.request.listStyleNames ?? []}
+                  outlineLocked={dialogRequest.request.outlineLocked ?? false}
+                />
+              </div>
               {activeTab === "tabs" ? <TabulatorTabPage session={tabs} /> : null}
               <div hidden={activeTab !== "alignment"} className="sm:col-span-2">
                 <WriterParagraphAlignmentPage

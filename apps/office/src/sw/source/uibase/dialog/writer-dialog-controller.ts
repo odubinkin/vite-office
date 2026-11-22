@@ -60,6 +60,8 @@ export interface WriterParagraphDialogRequest {
   readonly kind: "paragraph";
   readonly pageInput: SfxItemSet;
   readonly pageStyleNames?: readonly string[];
+  readonly listStyleNames?: readonly string[];
+  readonly outlineLocked?: boolean;
 }
 /** Accepted paragraph dialog values. */
 export interface WriterParagraphDialogResult {
@@ -197,18 +199,22 @@ export class WriterDialogController {
       : undefined;
   }
 
-  /** Requests paragraph settings from the presenter. @param commandUrl - Originating slot. @param initialValue - Current paragraph values. @param paintLineNumbers - Current document line-number visibility. @param pageStyleNames - Available page styles. @param pageInput - Actual native page input. @returns Accepted values or undefined. */
+  /** Requests paragraph settings from the presenter. @param commandUrl - Originating slot. @param initialValue - Current paragraph values. @param paintLineNumbers - Current document line-number visibility. @param pageStyleNames - Available page styles. @param pageInput - Actual native page input. @param listStyleNames - Available named numbering styles. @param outlineLocked - Whether the current style owns its outline level. @returns Accepted values or undefined. */
   public async RequestParagraphDialog(
     commandUrl: string,
     initialValue: WriterParagraphFormatValue,
     paintLineNumbers: boolean,
     pageStyleNames: readonly string[],
     pageInput: SfxItemSet,
+    listStyleNames: readonly string[] = [],
+    outlineLocked = false,
   ): Promise<WriterParagraphDialogResult | undefined> {
     const completion = await this.controller.Request({
       commandUrl,
       initialValue,
       kind: "paragraph",
+      listStyleNames,
+      outlineLocked,
       paintLineNumbers,
       pageStyleNames,
       pageInput,

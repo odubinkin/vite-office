@@ -1,10 +1,13 @@
 /** @fileoverview Keeps native textsh1 command registration under the mandatory source-size limit. */
+import { SfxBoolItem } from "../../../../svl/inc/eitem";
+import { SwNumRuleItem } from "../../core/para/paratr";
+import { GetNumRuleFromPool, GetParagraphListStyleNames } from "../../core/doc/poolfmt-num";
 import { createWriterParagraphDialogInput } from "./textsh1-tabs";
 import { createWriterEscapementCommands } from "./txtattr";
 
 import { SfxUInt16Item } from "../../../../svl/source/items/intitem";
 import { SfxStringItem } from "../../../../svl/source/items/stritem";
-import { FN_PARAM_1 } from "../../../inc/cmdid";
+import { FN_NUMBER_NEWSTART, FN_NUMBER_NEWSTART_AT, FN_PARAM_1 } from "../../../inc/cmdid";
 import { SwPaM } from "../../core/crsr/pam";
 import { ConvertAttrCharToGen, ConvertAttrGenToChar } from "../utlui/uitool";
 import {
@@ -13,7 +16,11 @@ import {
 } from "../../../../editeng/source/items/frmitems";
 import { SID_ATTR_BORDER_INNER } from "../../../../svx/inc/svxids";
 import { SvxCrossedOutItem } from "../../../../editeng/inc/crossedoutitem";
-import { RES_CHRATR_CROSSEDOUT, WRITER_CHARACTER_WHICH_RANGES } from "../../../inc/hintids";
+import {
+  RES_CHRATR_CROSSEDOUT,
+  RES_PARATR_NUMRULE,
+  WRITER_CHARACTER_WHICH_RANGES,
+} from "../../../inc/hintids";
 import { SfxItemSet, SfxItemState } from "../../../../svl/inc/itemset";
 import { createAttributeToggleItem } from "../../../../sfx2/source/control/bindings";
 
@@ -47,7 +54,10 @@ export function createWriterTextCommandRegistry(
   target: SwTextShell,
   dialogController: WriterDialogController,
   annotation: readonly WriterSlotHandler<SwTextShell>[],
-  editShell: Pick<SwTextShellTarget, "GetScalingOfSelectedText">,
+  editShell: Pick<
+    SwTextShellTarget,
+    "GetScalingOfSelectedText" | "SetNumRuleStart" | "SetNodeNumStart" | "DelNumRules"
+  >,
 ): SfxInterface<SwTextShell> {
   const active =
     /** Reads the currently targeted paragraph. @returns Active paragraph projection. */ (): ReturnType<
@@ -67,6 +77,8 @@ export function createWriterTextCommandRegistry(
     });
   /** Opens Execute's paragraph dialog branch for the original requesting slot. @param commandId - Native originating slot. @returns Whether accepted formatting changed. */
   function openParagraphDialog(commandId: string): Promise<boolean> {
+    const active = target.GetActiveParagraph();
+    const doc = active.GetDoc();
     return dialogController
       .RequestParagraphDialog(
         commandId,
@@ -74,17 +86,49 @@ export function createWriterTextCommandRegistry(
         target.IsPaintLineNumbers(),
         target.GetPageStyleNames(),
         createWriterParagraphDialogInput(target),
+        GetParagraphListStyleNames(doc),
+        active.GetTextFormatColl().IsAssignedToListLevelOfOutlineStyle(),
       )
       .then(
         /** Applies accepted dialog data through Writer owners. @param result - Accepted value or cancellation. @returns Whether changed. */
         (result) => {
           if (result === undefined) return false;
-          const paragraphChanged =
-            result.paragraphFormatChanged === false
-              ? target.SetParagraphItems(result.pageItems?.entries() ?? [])
-              : target.ApplyParagraphFormat(result.paragraphFormat, result.pageItems);
-          const lineNumbersChanged = target.SetPaintLineNumbers(result.paintLineNumbers);
-          return paragraphChanged || lineNumbersChanged;
+          const output = result.pageItems?.Clone();
+          const restartItem = output?.GetItemIfSet(FN_NUMBER_NEWSTART, false);
+          const startItem = output?.GetItemIfSet(FN_NUMBER_NEWSTART_AT, false);
+          const restart = restartItem instanceof SfxBoolItem ? restartItem.GetValue() : undefined;
+          const start = startItem instanceof SfxUInt16Item ? startItem.GetValue() : undefined;
+          output?.ClearItem(FN_NUMBER_NEWSTART);
+          output?.ClearItem(FN_NUMBER_NEWSTART_AT);
+          const rule = output?.GetItemIfSet(RES_PARATR_NUMRULE, false);
+          const undo = doc.GetUndoManager();
+          undo.StartUndo("Paragraph Formatting");
+          try {
+            let changed = false;
+            if (rule instanceof SwNumRuleItem) {
+              const name = rule.GetValue();
+              if (name === "") changed = editShell.DelNumRules();
+              else if (!GetNumRuleFromPool(doc, name)) output?.ClearItem(RES_PARATR_NUMRULE);
+            }
+            const formatted =
+              result.paragraphFormatChanged === false
+                ? target.SetParagraphItems(output?.entries() ?? [])
+                : target.ApplyParagraphFormat(result.paragraphFormat, output);
+            changed = formatted || changed;
+            if (!(rule instanceof SwNumRuleItem && rule.GetValue() === "")) {
+              if (restart !== undefined) {
+                changed = editShell.SetNumRuleStart(restart) || changed;
+                changed = editShell.SetNodeNumStart(start ?? 0xffff) || changed;
+              } else if (start !== undefined) {
+                changed = editShell.SetNodeNumStart(start) || changed;
+                changed = editShell.SetNumRuleStart(false) || changed;
+              }
+            }
+            return target.SetPaintLineNumbers(result.paintLineNumbers) || changed;
+          } finally {
+            undo.EndUndo();
+            output?.Dispose();
+          }
         },
       );
   }

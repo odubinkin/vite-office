@@ -1,0 +1,32 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sw/browser/presentation/WriterParagraphOutlinePage.tsx",
+    "classification": "browser-adaptation",
+    "state": "active",
+    "suite": "writer",
+    "subsystem": "presentation",
+    "capabilityIds": [
+      "CAP-0111"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "not-applicable",
+      "defaultStatus": "not-applicable",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/sw/browser/presentation/WriterParagraphOutlinePage.tsx#WriterParagraphOutlinePage",
+        "vendor/libreoffice-reference/sw/source/ui/chrdlg/numpara.cxx#SwParagraphNumTabPage::FillItemSet"
+      ],
+      "justification": "Connects the native outline and numbering fields of the ordinary Writer paragraph dialog to their original item exchange.",
+      "knownViolations": [],
+      "localSymbols": [
+        "WriterParagraphOutlinePage"
+      ],
+      "sourceResponsibility": "browser-owned",
+      "upstreamFile": null,
+      "upstreamSymbols": []
+    }
+  }
+}

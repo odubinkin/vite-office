@@ -49,3 +49,5 @@ export const FN_UNO_IS_NUMBER = 22269;
 export const FN_UNO_LIST_ID = 22307;
 /** Original numbering restart dispatch, FN_FORMAT2 +138. */
 export const FN_NUMBER_NEWSTART = 21738;
+/** Original optional explicit start value for the paragraph numbering page. */
+export const FN_NUMBER_NEWSTART_AT = 21739;

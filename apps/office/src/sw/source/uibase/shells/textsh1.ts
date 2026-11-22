@@ -92,6 +92,7 @@ export interface SwTextShellTarget extends Pick<
   | "SearchNumRule"
   | "IsNumRuleStart"
   | "SetNumRuleStart"
+  | "SetNodeNumStart"
 > {
   readonly ApplyAction: (
     action: SfxUndoAction<SwUndoRedoContext>,

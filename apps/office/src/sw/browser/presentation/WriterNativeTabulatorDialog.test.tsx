@@ -568,3 +568,86 @@ it("keeps untouched mixed Asian typography values while applying an explicit che
     f.session.Close();
   }
 });
+
+it("applies a pool list style and authored outline level through the regular Paragraph command", /** Ports the upstream outline and list-style selection through history and ODT reopening. @returns Completion. */ async () => {
+  const owner = open();
+  try {
+    const node = owner.shell.GetActiveParagraph();
+    const document = owner.shell.GetDoc();
+    const before = document.GetUndoManager().GetUndoActionCount();
+    expect(document.FindNumRulePtr("Bullet •")).toBeUndefined();
+    fireEvent.click(screen.getByRole("tab", { name: "Outline & List" }));
+    fireEvent.change(screen.getByRole("combobox", { name: "Outline level" }), {
+      target: { value: "1" },
+    });
+    fireEvent.change(screen.getByRole("combobox", { name: "List style" }), {
+      target: { value: "Bullet •" },
+    });
+    fireEvent.click(screen.getByRole("tab", { name: "Tabs" }));
+    fireEvent.click(screen.getByRole("tab", { name: "Outline & List" }));
+    expect(screen.getByRole("combobox", { name: "Outline level" })).toHaveValue("1");
+    expect(screen.getByRole("combobox", { name: "List style" })).toHaveValue("Bullet •");
+    fireEvent.click(screen.getByRole("button", { name: "OK" }));
+    expect(await owner.result.value).toBe(true);
+    expect(node.GetAttrOutlineLevel()).toBe(1);
+    expect(node.GetListLabel()).toBe("•");
+    expect(node.GetNumRule()?.Get(0).GetIndentAt()).toBe(227);
+    expect(document.GetUndoManager().GetUndoActionCount()).toBe(before + 1);
+    expect(owner.shell.Undo()).toBe(true);
+    expect(node.GetAttrOutlineLevel()).toBe(0);
+    expect(node.GetListLabel()).toBeUndefined();
+    expect(owner.shell.Redo()).toBe(true);
+    const reopened = await readOdtDocument(await writeOdtDocument(document, { title: "Outline" }), {
+      title: "Outline",
+    });
+    try {
+      expect(reopened.document.paragraphs[0]?.GetAttrOutlineLevel()).toBe(1);
+      expect(reopened.document.paragraphs[0]?.GetListLabel()).toBe("•");
+    } finally {
+      reopened.document.Dispose();
+    }
+  } finally {
+    cleanup();
+    owner.session.Close();
+  }
+});
+
+it("exchanges a restart flag and value in one undo group through the original paragraph dialog", /** Verifies the separate native slots before ODT export and reopening. @returns Completion. */ async () => {
+  const owner = open();
+  try {
+    const node = owner.shell.GetActiveParagraph();
+    const document = owner.shell.GetDoc();
+    fireEvent.click(screen.getByRole("tab", { name: "Outline & List" }));
+    fireEvent.change(screen.getByRole("combobox", { name: "List style" }), {
+      target: { value: "Numbering 123" },
+    });
+    fireEvent.click(screen.getByRole("checkbox", { name: "Restart numbering at this paragraph" }));
+    fireEvent.click(screen.getByRole("checkbox", { name: "Start with" }));
+    fireEvent.change(screen.getByRole("spinbutton", { name: "Numbering start value" }), {
+      target: { value: "7" },
+    });
+    fireEvent.click(screen.getByRole("button", { name: "OK" }));
+    expect(await owner.result.value).toBe(true);
+    expect(node.IsListRestart()).toBe(true);
+    expect(node.GetAttrListRestartValue()).toBe(7);
+    expect(node.GetListLabel()).toBe("7.");
+    expect(owner.shell.Undo()).toBe(true);
+    expect(node.IsListRestart()).toBe(false);
+    expect(node.HasAttrListRestartValue()).toBe(false);
+    expect(node.GetListLabel()).toBeUndefined();
+    expect(owner.shell.Redo()).toBe(true);
+    const reopened = await readOdtDocument(await writeOdtDocument(document, { title: "Restart" }), {
+      title: "Restart",
+    });
+    try {
+      expect(reopened.document.paragraphs[0]?.IsListRestart()).toBe(true);
+      expect(reopened.document.paragraphs[0]?.GetAttrListRestartValue()).toBe(7);
+      expect(reopened.document.paragraphs[0]?.GetListLabel()).toBe("7.");
+    } finally {
+      reopened.document.Dispose();
+    }
+  } finally {
+    cleanup();
+    owner.session.Close();
+  }
+});

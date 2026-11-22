@@ -158,6 +158,12 @@ export class XMLParaContext extends SvXMLImportContext {
     );
     const name = attributes.get(XMLToken.TEXT_STYLE_NAME) ?? "";
     const heading = element === XMLToken.TEXT_H;
+    const authoredLevel = Number(attributes.get(XMLToken.TEXT_OUTLINE_LEVEL));
+    const outlineLevel = heading
+      ? Number.isInteger(authoredLevel) && authoredLevel > 0
+        ? Math.min(authoredLevel, 10)
+        : 1
+      : 0;
     const resolved = resolveParagraphStyle(name, heading, target);
     const automatic = name ? target.getAutoStyle("paragraph", name) : undefined;
     const parent = automatic ? automatic.parentStyleName : name;
@@ -183,6 +189,7 @@ export class XMLParaContext extends SvXMLImportContext {
         (!!parent &&
           (target.resolveNamedParagraphStyle?.(parent) !== undefined ||
             target.resolveBuiltInParagraphStyle?.(parent) !== undefined)),
+      outlineLevel,
     );
     this.inherited = DEFAULT_PROPERTIES;
   }

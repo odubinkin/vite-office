@@ -821,3 +821,48 @@ test("Writer applies Asian typography from the ordinary paragraph dialog", /** E
   await expect(editor).toHaveCSS("line-break", "strict");
   if (autospace) await expect(editor).toHaveCSS("text-autospace", "normal");
 });
+
+test("Writer applies the built-in list style and numbered restart from Paragraph", /** Verifies the normal menu, native list marker, dialog reset and grouped history. @param fixtures - Playwright fixtures. @param fixtures.page - Chromium page. @returns Test completion. */ async ({
+  page,
+}) => {
+  await page.goto("/writer");
+  const editor = page.getByRole("textbox", { name: "Writer document text", exact: true });
+  await editor.fill("Outline and list");
+  const format = page.getByRole("menuitem", { name: "Format", exact: true });
+  const paragraphMenu = page.getByRole("menuitem", { name: "Paragraph…", exact: true });
+  const dialog = page.getByRole("dialog", { name: "Paragraph", exact: true });
+  const outline = dialog.getByRole("tab", { name: "Outline & List", exact: true });
+
+  await format.click();
+  await paragraphMenu.click();
+  await outline.click();
+  await dialog
+    .getByRole("combobox", { name: "Outline level", exact: true })
+    .selectOption({ label: "Level 1" });
+  await dialog
+    .getByRole("combobox", { name: "List style", exact: true })
+    .selectOption("Numbering 123");
+  await dialog
+    .getByRole("checkbox", { name: "Restart numbering at this paragraph", exact: true })
+    .check();
+  await dialog.getByRole("checkbox", { name: "Start with", exact: true }).check();
+  await dialog.getByRole("spinbutton", { name: "Numbering start value", exact: true }).fill("7");
+  await dialog.getByRole("button", { name: "OK", exact: true }).click();
+  await expect(editor).toHaveAttribute("data-list-marker", "7.");
+
+  await format.click();
+  await paragraphMenu.click();
+  await outline.click();
+  await expect(dialog.getByRole("combobox", { name: "Outline level", exact: true })).toHaveValue(
+    "1",
+  );
+  await expect(dialog.getByRole("combobox", { name: "List style", exact: true })).toHaveValue(
+    "Numbering 123",
+  );
+  await expect(
+    dialog.getByRole("spinbutton", { name: "Numbering start value", exact: true }),
+  ).toHaveValue("7");
+  await dialog.getByRole("button", { name: "Cancel", exact: true }).click();
+  await page.keyboard.press("Control+z");
+  await expect(editor).toHaveAttribute("data-list-kind", "none");
+});

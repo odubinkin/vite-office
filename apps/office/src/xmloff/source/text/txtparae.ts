@@ -98,6 +98,7 @@ export interface XMLTextListSource {
 /** Narrow live view of one canonical Writer paragraph. */
 export interface XMLTextParagraphSource {
   readonly alignment?: OdfParagraphAlignment;
+  readonly outlineLevel?: number;
   readonly inheritedProperties?: OdfCharacterProperties;
   /** Direct text-left margin in twips. */
   readonly leftMargin?: number;
@@ -579,8 +580,9 @@ function exportParagraphElement(
     characterStyleNames.get(characterPropertiesKey(paragraph.markerProperties));
   const marker = markerStyle ? ` loext:marker-style-name="${markerStyle}"` : "";
   const style = styleName ? ` text:style-name="${escapeXml(styleName)}"` : "";
-  return paragraph.style === "heading-1"
-    ? `<text:h text:outline-level="1"${style}${marker}>${content}</text:h>`
+  const outline = paragraph.outlineLevel ?? (paragraph.style === "heading-1" ? 1 : 0);
+  return outline > 0
+    ? `<text:h text:outline-level="${outline}"${style}${marker}>${content}</text:h>`
     : `<text:p${style}${marker}>${content}</text:p>`;
 }
 

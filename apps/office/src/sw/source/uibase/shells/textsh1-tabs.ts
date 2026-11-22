@@ -1,4 +1,6 @@
 /** @fileoverview Native Writer paragraph-dialog input, tab stop context and typed paragraph formatting from textsh1.cxx. */
+import { FN_NUMBER_NEWSTART, FN_NUMBER_NEWSTART_AT } from "../../../inc/cmdid";
+import { SfxBoolItem } from "../../../../svl/inc/eitem";
 import { GetTabDist } from "../utlui/uitool";
 import type { SwTextShell } from "./textsh1";
 import { SfxItemSet } from "../../../../svl/inc/itemset";
@@ -12,6 +14,9 @@ import {
   RES_PARATR_TABSTOP as T,
   RES_FRAMEDIR,
   RES_PARATR_ADJUST,
+  RES_PARATR_OUTLINELEVEL,
+  RES_PARATR_NUMRULE,
+  RES_PARATR_LIST_LEVEL,
   RES_PARATR_AUTOFRAMEDIR,
   RES_PARATR_SNAPTOGRID,
   RES_PARATR_HYPHENZONE,
@@ -32,11 +37,14 @@ export function createWriterParagraphDialogInput(shell: SwTextShell): SfxItemSet
   const set = new SfxItemSet(pool, [
     [RES_PARATR_ADJUST, RES_PARATR_ADJUST],
     [T, RES_PARATR_HYPHENZONE],
-    [RES_PARATR_SCRIPTSPACE, RES_PARATR_SNAPTOGRID],
+    [RES_PARATR_NUMRULE, RES_PARATR_SNAPTOGRID],
+    [RES_PARATR_OUTLINELEVEL, RES_PARATR_OUTLINELEVEL],
     [RES_PARATR_AUTOFRAMEDIR, RES_PARATR_AUTOFRAMEDIR],
+    [RES_PARATR_LIST_LEVEL, RES_PARATR_LIST_LEVEL],
     [L, L],
     [RES_FRAMEDIR, RES_FRAMEDIR],
     [D, O],
+    [FN_NUMBER_NEWSTART, FN_NUMBER_NEWSTART_AT],
   ]);
   const tabs = shell.GetUniformParagraphItem(
     /** Borrows each real paragraph item for native equality. @param node - Selected node. @returns Tab item. */
@@ -47,6 +55,9 @@ export function createWriterParagraphDialogInput(shell: SwTextShell): SfxItemSet
   for (const which of [
     RES_PARATR_ADJUST,
     RES_PARATR_HYPHENZONE,
+    RES_PARATR_OUTLINELEVEL,
+    RES_PARATR_NUMRULE,
+    RES_PARATR_LIST_LEVEL,
     RES_PARATR_SCRIPTSPACE,
     RES_PARATR_HANGINGPUNCTUATION,
     RES_PARATR_FORBIDDEN_RULES,
@@ -61,6 +72,13 @@ export function createWriterParagraphDialogInput(shell: SwTextShell): SfxItemSet
     );
     if (item) set.Put(item);
     else set.InvalidateItem(which);
+  }
+  if (paragraph.GetNumRule() !== undefined) {
+    set.Put(new SfxBoolItem(FN_NUMBER_NEWSTART, paragraph.IsListRestart()));
+    const start = paragraph.HasAttrListRestartValue()
+      ? paragraph.GetAttrListRestartValue() & 0xffff
+      : 0xffff;
+    set.Put(new SfxUInt16Item(FN_NUMBER_NEWSTART_AT, start));
   }
   const lr = shell.GetParagraphLRSpace();
   if (lr) {

@@ -260,6 +260,33 @@ export abstract class SwEditShell extends SwCursorShell {
       range.Dispose();
     }
   }
+  /** Updates explicit list starts at the normalized cursor endpoints with native restart undo. @param value - Unsigned start or USHRT_MAX for the style default. @returns Whether changed. */
+  public SetNodeNumStart(value: number): boolean {
+    const cursor = this.GetCursor();
+    const state = this.CaptureCursorState();
+    const actions = new SfxListUndoAction<SwUndoRedoContext>("Set numbering start");
+    const temporary = new SwPaM(cursor.GetPoint());
+    /** Adds the native restart-value undo only when an actual endpoint differs. @param point - Native endpoint. @returns Nothing. */
+    function add(point: SwPosition): void {
+      const node = point.GetNode().GetTextNode();
+      if (!node) return;
+      const start = node.HasAttrListRestartValue()
+        ? node.GetAttrListRestartValue() & 0xffff
+        : 0xffff;
+      if (start !== value) actions.AddAction(new SwUndoNumRuleStart(point, value, state));
+    }
+    try {
+      if (cursor.IsMultiSelection()) {
+        const ranges = new SwPamRanges(cursor);
+        for (let i = 0; i < ranges.Count(); i++) add(ranges.SetPam(i, temporary).GetPoint());
+      } else add(cursor.GetPoint());
+      return actions.GetActionCount() > 0 && this.ApplyAction(actions);
+    } finally {
+      state.pendingCharacterItems.Dispose();
+      temporary.Dispose();
+    }
+  }
+
   /** Applies one rule to every native ring range, reusing the first newly created list identity. @param rule - Rule value. @param createNewList - Native new-list mode. @param continuedListId - Existing list identity. @param resetIndentAttrs - Native reset-indent flag. @returns Whether text nodes were represented. */
   public SetCurNumRule(
     rule: SwNumRule,
