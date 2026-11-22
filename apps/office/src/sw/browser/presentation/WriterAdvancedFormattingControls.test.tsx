@@ -99,7 +99,7 @@ function WriterAdvancedFormattingControls({
             request: {
               commandUrl,
               kind: "paragraph",
-              tabContext: (
+              pageInput: (
                 /** Creates actual tab values over the Writer pool. @returns Native set. */ () => {
                   const set = new SfxItemSet(new SwDoc().GetAttrPool(), [[1, 12000]]);
                   const tabs = new SvxTabStopItem(0, 0, SvxTabAdjust.Left, RES_PARATR_TABSTOP);

@@ -5,7 +5,7 @@ import { GetTabDist } from "../utlui/uitool";
 import { expect, it } from "vitest";
 import { SwPosition } from "../../core/crsr/pam";
 import type { SwTextNode } from "../../core/txtnode/ndtxt";
-import { createWriterTabulatorInput } from "./textsh1-tabs";
+import { createWriterParagraphDialogInput } from "./textsh1-tabs";
 import { SvxTextLeftMarginItem, SvxIndentValue } from "../../../../editeng/inc/lrspitem";
 import {
   SID_ATTR_TABSTOP,
@@ -56,15 +56,13 @@ it("accepts complete tab-page fields in the same paragraph history action and re
     item.Insert(new SvxTabStop(0, SvxTabAdjust.Left, ".", " "));
     item.Insert(new SvxTabStop(720, SvxTabAdjust.Decimal, ";", "."));
     item.Insert(new SvxTabStop(1440, SvxTabAdjust.Right, ".", "_"));
-    const tabStopItems = new SfxItemSet(doc.GetAttrPool(), [
-      [RES_PARATR_TABSTOP, RES_PARATR_TABSTOP],
-    ]);
-    tabStopItems.Put(item);
+    const pageItems = new SfxItemSet(doc.GetAttrPool(), [[RES_PARATR_TABSTOP, RES_PARATR_TABSTOP]]);
+    pageItems.Put(item);
     expect(
       dialogs.Complete(request.id, {
         paragraphFormat: request.request.initialValue,
         paintLineNumbers: request.request.paintLineNumbers,
-        tabStopItems,
+        pageItems,
       }),
     ).toBe(true);
     expect(await result.value).toBe(true);
@@ -154,14 +152,14 @@ it("builds original tab input from actual pool defaults, mixed selection and the
     const left = new SvxTextLeftMarginItem(RES_MARGIN_TEXTLEFT);
     left.SetTextLeft(SvxIndentValue.twips(360));
     first.SetAttr(left);
-    let input = createWriterTabulatorInput(shell.GetTextShell());
+    let input = createWriterParagraphDialogInput(shell.GetTextShell());
     expect(pool.GetWhichIDFromSlotID(SID_ATTR_TABSTOP)).toBe(RES_PARATR_TABSTOP);
     expect(pool.GetWhichIDFromSlotID(SID_ATTR_LRSPACE)).toBe(RES_LR_SPACE);
     expect((input.Get(SID_ATTR_TABSTOP_DEFAULTS) as SfxUInt16Item).GetValue()).toBe(1134);
     expect((input.Get(SID_ATTR_TABSTOP_POS) as SfxUInt16Item).GetValue()).toBe(0);
     expect((input.Get(SID_ATTR_TABSTOP_OFFSET) as SfxInt32Item).GetValue()).toBe(360);
     doc.GetDocumentSettingManager().set("TABS_RELATIVE_TO_INDENT", false);
-    input = createWriterTabulatorInput(shell.GetTextShell());
+    input = createWriterParagraphDialogInput(shell.GetTextShell());
     expect((input.Get(SID_ATTR_TABSTOP_OFFSET) as SfxInt32Item).GetValue()).toBe(0);
     doc.GetDocumentSettingManager().set("TABS_RELATIVE_TO_INDENT", true);
     const point = new SwPosition(second, 0),
@@ -169,7 +167,7 @@ it("builds original tab input from actual pool defaults, mixed selection and the
     shell.SetPaM(point, mark);
     point.Dispose();
     mark.Dispose();
-    input = createWriterTabulatorInput(shell.GetTextShell());
+    input = createWriterParagraphDialogInput(shell.GetTextShell());
     expect(input.GetItemState(RES_PARATR_TABSTOP, false)).toBe(SfxItemState.INVALID);
     expect(input.GetItemState(RES_LR_SPACE, false)).toBe(SfxItemState.INVALID);
     expect((input.Get(SID_ATTR_TABSTOP_OFFSET) as SfxInt32Item).GetValue()).toBe(0);
@@ -228,10 +226,10 @@ it("accepts complete native tab-page output across actual selected table cells i
       pending = dialogs.GetSnapshot();
     if (result.status !== "executed" || pending?.request.kind !== "paragraph")
       throw new Error("Missing actual paragraph dialog");
-    expect(pending.request.tabContext.GetItemState(RES_PARATR_TABSTOP, false)).toBe(
+    expect(pending.request.pageInput.GetItemState(RES_PARATR_TABSTOP, false)).toBe(
       SfxItemState.INVALID,
     );
-    const page = new TabulatorDialogSession(pending.request.tabContext, FieldUnit.CM);
+    const page = new TabulatorDialogSession(pending.request.pageInput, FieldUnit.CM);
     page.Run(
       /** Adds complete actual page fields. @param value - Native page. @returns Nothing. */ (
         value,
@@ -250,7 +248,7 @@ it("accepts complete native tab-page output across actual selected table cells i
     dialogs.Complete(pending.id, {
       paragraphFormat: pending.request.initialValue,
       paintLineNumbers: pending.request.paintLineNumbers,
-      tabStopItems: page.output,
+      pageItems: page.output,
     });
     expect(await result.value).toBe(true);
     for (const cell of cells)

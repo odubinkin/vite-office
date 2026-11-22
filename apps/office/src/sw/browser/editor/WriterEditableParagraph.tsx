@@ -287,6 +287,7 @@ export function WriterEditableParagraph({
             fontSize: `${paragraph.computedStyle.fontSizePt}pt`,
             fontKerning: paragraph.computedStyle.autoKerning === true ? "normal" : "none",
             fontOpticalSizing: paragraph.computedStyle.opticalSizing === true ? "auto" : "none",
+            hyphenateLimitChars: paragraph.computedStyle.hyphenationLimits,
             hyphens: paragraph.computedStyle.autoHyphenation === true ? "auto" : "manual",
             fontStyle: paragraph.computedStyle.fontStyle,
             fontWeight: paragraph.computedStyle.fontWeight,

@@ -4,7 +4,7 @@ title: "Implement Writer search and replace core and browser UI"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 125
+revision: 126
 origin:
   system: "manual"
 depends_on:
@@ -531,6 +531,16 @@ comments:
       - Includes source-backed coverage for tdf106733 character-style inheritance and testOpticalSizing1/testOpticalSizing2 defaults and explicit values. Browser dictionary coverage and advanced LibreOffice hyphenation layout constraints remain distinct from the implemented item transport and browser CSS binding.
       - Passed 45 Writer tests, 25 shared tests, scoped ESLint/Prettier, source boundaries and provenance, Writer resources and inventory, source tree, doctor, routing and diff checks. Global JSDoc and size checks retain the existing 307 and 3 unrelated findings. Full repository test cadence stays unchanged.
       - Production TypeScript/Vite build and three focused Chromium scenarios passed. The hyphenation scenario enables paragraph hyphenation through the native Text Flow UI, excludes the selected word, changes its optical sizing and checks the real computed styles on adjacent text.
+  -
+    author: "CODER"
+    body: |-
+      Verified checkpoint — Writer Paragraph Text Flow hyphenation
+
+      - The standard Paragraph dialog and Search Format use the same source-backed Hyphenation and Hyphenation Across controls. The paragraph command supplies the selection's uniform SvxHyphenZoneItem or native invalid state. Edits survive tab changes and contribute the original typed item to the shared paragraph output set.
+      - A typed-page-only change applies exactly those items in one history step. A mixed paragraph selection retains distinct unrelated spacing. Existing Tabs and scalar paragraph controls still use the same command and apply path.
+      - Writer projects the native minimum word size and required lead/trail characters through the browser's hyphenate-limit-chars property. Full advanced LibreOffice dictionary, consecutive-line and page/column/spread balancing behavior remains outside the browser device binding.
+      - Source reviewed against SwTextShell Paragraph command in textsh1.cxx, SvxExtParagraphTabPage::Reset/FillItemSet/HyphenClickHdl and its native textflowpage.ui.
+      - Passed 59 targeted Writer tests across seven files and the focused Chromium search/paragraph/character hyphenation scenario. Production TypeScript/Vite build, scoped lint and format, boundaries, resources, source tree, provenance, Writer inventory and AgentPlane routing passed. Global checks retain 307 existing JSDoc findings and three unrelated file-size findings. The full regression cadence is unchanged.
 
 events:
   -
@@ -1251,9 +1261,21 @@ events:
       - Includes source-backed coverage for tdf106733 character-style inheritance and testOpticalSizing1/testOpticalSizing2 defaults and explicit values. Browser dictionary coverage and advanced LibreOffice hyphenation layout constraints remain distinct from the implemented item transport and browser CSS binding.
       - Passed 45 Writer tests, 25 shared tests, scoped ESLint/Prettier, source boundaries and provenance, Writer resources and inventory, source tree, doctor, routing and diff checks. Global JSDoc and size checks retain the existing 307 and 3 unrelated findings. Full repository test cadence stays unchanged.
       - Production TypeScript/Vite build and three focused Chromium scenarios passed. The hyphenation scenario enables paragraph hyphenation through the native Text Flow UI, excludes the selected word, changes its optical sizing and checks the real computed styles on adjacent text.
+  -
+    type: "comment"
+    at: "2026-11-22T00:16:34.247Z"
+    author: "CODER"
+    body: |-
+      Verified checkpoint — Writer Paragraph Text Flow hyphenation
+
+      - The standard Paragraph dialog and Search Format use the same source-backed Hyphenation and Hyphenation Across controls. The paragraph command supplies the selection's uniform SvxHyphenZoneItem or native invalid state. Edits survive tab changes and contribute the original typed item to the shared paragraph output set.
+      - A typed-page-only change applies exactly those items in one history step. A mixed paragraph selection retains distinct unrelated spacing. Existing Tabs and scalar paragraph controls still use the same command and apply path.
+      - Writer projects the native minimum word size and required lead/trail characters through the browser's hyphenate-limit-chars property. Full advanced LibreOffice dictionary, consecutive-line and page/column/spread balancing behavior remains outside the browser device binding.
+      - Source reviewed against SwTextShell Paragraph command in textsh1.cxx, SvxExtParagraphTabPage::Reset/FillItemSet/HyphenClickHdl and its native textflowpage.ui.
+      - Passed 59 targeted Writer tests across seven files and the focused Chromium search/paragraph/character hyphenation scenario. Production TypeScript/Vite build, scoped lint and format, boundaries, resources, source tree, provenance, Writer inventory and AgentPlane routing passed. Global checks retain 307 existing JSDoc findings and three unrelated file-size findings. The full regression cadence is unchanged.
 
 doc_version: 3
-doc_updated_at: "2026-11-22T00:08:26.509Z"
+doc_updated_at: "2026-11-22T00:16:34.247Z"
 doc_updated_by: "CODER"
 description: "Implement the approved coherent Writer search-and-replace feature from pinned LibreOffice sources: real shared search engine and options, native paragraph/cursor traversal and replacement/history contracts, view-owned search state and dispatch, Find toolbar and Find and Replace dialog with generated upstream command placement and shortcuts. Preserve source semantics and explicit unsupported boundaries; never substitute DOM text search or browser RegExp for ICU contracts. Work only on writer in vite-office-writer; local upstream reading approved, no network or merges. Keep active until approved scope is verified."
 sections:

@@ -6,7 +6,7 @@
     "status": "mapped",
     "localPath": "apps/office/src/sw/source/uibase/shells/textsh1-tabs.ts",
     "localSymbols": [
-      "createWriterTabulatorInput"
+      "createWriterParagraphDialogInput"
     ],
     "upstreamPath": "sw/source/uibase/shells/textsh1.cxx",
     "upstreamSymbols": [
@@ -23,7 +23,7 @@
       "local": [
         {
           "path": "apps/office/src/sw/source/uibase/shells/textsh1-tabs.ts",
-          "marker": "createWriterTabulatorInput"
+          "marker": "createWriterParagraphDialogInput"
         }
       ],
       "upstream": [

@@ -3,6 +3,10 @@ import { MetricSpinButton } from "../../../svtools/browser/control/MetricSpinBut
 import { TabulatorDialogSession } from "../../../cui/browser/tabpages/tabstpge-session";
 import { TabulatorTabPage } from "../../../cui/browser/tabpages/TabulatorTabPage";
 import { FieldUnit } from "../../../tools/inc/fldunit";
+import { useBrowserLocalization } from "../../../framework/browser/localization/browser-localization-context";
+import { SvxHyphenZoneItem } from "../../../editeng/source/items/paraitem";
+import { RES_PARATR_HYPHENZONE } from "../../inc/hintids";
+import { WriterHyphenationControls } from "./WriterHyphenationControls";
 import { WriterDialogHeader } from "./WriterDialogHeader";
 import { SvxExtParagraphTabPage } from "../../../cui/source/tabpages/paragrph";
 import { WriterParagraphBreakControls } from "./WriterParagraphBreakControls";
@@ -29,6 +33,14 @@ export function WriterParagraphDialog({
   onDialogCancel: (id: number) => void;
   onDialogSubmit: (id: number, value: WriterParagraphDialogResult) => void;
 }>): React.JSX.Element {
+  const localization = useBrowserLocalization();
+  const { pageInput, initialValue } = dialogRequest.request;
+  const hyphenation = pageInput.GetItem(RES_PARATR_HYPHENZONE);
+  const hyphenationDefault = pageInput.GetPool().GetUserOrPoolDefaultItem(RES_PARATR_HYPHENZONE);
+  /** Looks up the original Text Flow field names. @param key - Resource key. @param fallback - English resource text. @returns Localized text. */
+  function label(key: string, fallback: string): string {
+    return localization.GetText(`writer.paragraph.${key}`, fallback);
+  }
   const [activeTab, setActiveTab] = useState<"spacing" | "flow" | "tabs">("spacing");
   const tabIds = ["spacing", "flow", "tabs"] as const;
   const tabIdentity = useId(),
@@ -55,7 +67,7 @@ export function WriterParagraphDialog({
   );
   const [tabs] = useState(
     /** Retains a lazy native page and accumulated exchange output for this request. @returns Session. */
-    () => new TabulatorDialogSession(dialogRequest.request.tabContext, unit),
+    () => new TabulatorDialogSession(pageInput, unit),
   );
   /** Runs original tab deactivation before changing the active page. @param next - Original tab identity. @returns Nothing. */
   function activate(next: (typeof tabIds)[number]): void {
@@ -66,9 +78,17 @@ export function WriterParagraphDialog({
   /** Accepts original request values through the existing controller port. @returns Nothing. */
   function accept(): void {
     if (activeTab === "tabs") tabs.Deactivate(draft.firstLineIndentPt ?? 0);
+    const paragraphFormat = { ...draft, ...flow.FillItemSet() };
+    const paragraphFormatChanged = (
+      Object.keys(paragraphFormat) as (keyof WriterParagraphFormatValue)[]
+    ).some(
+      /** Compares stored scalar dialog values against the original snapshot. @param key - Dialog property. @returns Whether edited. */
+      (key) => paragraphFormat[key] !== initialValue[key],
+    );
     onDialogSubmit(dialogRequest.id, {
-      tabStopItems: tabs.output,
-      paragraphFormat: { ...draft, ...flow.FillItemSet() },
+      pageItems: tabs.output,
+      paragraphFormat,
+      paragraphFormatChanged,
       paintLineNumbers: showLineNumbersDraft,
     });
   }
@@ -310,6 +330,23 @@ export function WriterParagraphDialog({
                 </>
               ) : null}
               {activeTab === "tabs" ? <TabulatorTabPage session={tabs} /> : null}
+              {hyphenationDefault instanceof SvxHyphenZoneItem && (
+                <div hidden={activeTab !== "flow"} className="sm:col-span-2">
+                  <WriterHyphenationControls
+                    initial={hyphenation instanceof SvxHyphenZoneItem ? hyphenation : undefined}
+                    poolDefault={hyphenationDefault}
+                    unit={unit}
+                    label={label}
+                    onChange={
+                      /** Retains the native Text Flow item in the shared dialog output. @param item - Edited value, or undefined after restoring the original. @returns Nothing. */
+                      (item) => {
+                        if (item) tabs.output.Put(item, true);
+                        else tabs.output.ClearItem(RES_PARATR_HYPHENZONE);
+                      }
+                    }
+                  />
+                </div>
+              )}
               {activeTab === "flow" ? (
                 <>
                   <WriterParagraphBreakControls page={flow} />

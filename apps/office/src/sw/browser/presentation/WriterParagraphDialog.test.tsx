@@ -9,14 +9,14 @@ import { WriterParagraphDialog } from "./WriterParagraphDialog";
 import { FieldUnit as F } from "../../../tools/inc/fldunit";
 import type { WriterParagraphDialogRequest } from "../../source/uibase/dialog/writer-dialog-controller";
 
-const tabContext = new SfxItemSet(new SwDoc().GetAttrPool(), [[1, 12000]]);
+const pageInput = new SfxItemSet(new SwDoc().GetAttrPool(), [[1, 12000]]);
 const nativeTabs = new SvxTabStopItem(0, 0, SvxTabAdjust.Left, RES_PARATR_TABSTOP);
 nativeTabs.Insert(new SvxTabStop(720, SvxTabAdjust.Left));
-tabContext.Put(nativeTabs);
+pageInput.Put(nativeTabs);
 const request: WriterParagraphDialogRequest = {
   commandUrl: ".uno:ParagraphDialog",
   kind: "paragraph",
-  tabContext,
+  pageInput,
   paintLineNumbers: false,
   initialValue: {
     upperPt: 72,
@@ -62,7 +62,8 @@ it("edits inch,explicit suffix,and tab values through the unchanged physical par
   expect(screen.getByRole("combobox", { name: "Position" })).toHaveValue("0.50″");
   fireEvent.click(screen.getByRole("button", { name: "OK" }));
   expect(submit).toHaveBeenCalledWith(1, {
-    tabStopItems: expect.any(SfxItemSet),
+    pageItems: expect.any(SfxItemSet),
+    paragraphFormatChanged: true,
     paintLineNumbers: false,
     paragraphFormat: {
       ...request.initialValue,
@@ -71,7 +72,7 @@ it("edits inch,explicit suffix,and tab values through the unchanged physical par
       tabStopsPt: [36],
     },
   });
-  const accepted = submit.mock.calls[0]?.[1].tabStopItems.Get(RES_PARATR_TABSTOP) as SvxTabStopItem;
+  const accepted = submit.mock.calls[0]?.[1].pageItems.Get(RES_PARATR_TABSTOP) as SvxTabStopItem;
   expect(
     Array.from(
       { length: accepted.Count() },
@@ -162,7 +163,7 @@ it("exchanges the native tab page with the documented absent first-line scalar d
   fireEvent.click(screen.getByRole("tab", { name: "Text Flow" }));
   fireEvent.click(screen.getByRole("tab", { name: "Tabs" }));
   fireEvent.click(screen.getByRole("button", { name: "OK" }));
-  expect(submit.mock.calls[0]?.[1].tabStopItems).toBeInstanceOf(SfxItemSet);
+  expect(submit.mock.calls[0]?.[1].pageItems).toBeInstanceOf(SfxItemSet);
 });
 
 it("owns source tab keys before spin steps,retains tab changes and uses native form acceptance", /** Actual tab identity and deactivation survive keyboard and pointer switching. @returns Nothing. */ () => {

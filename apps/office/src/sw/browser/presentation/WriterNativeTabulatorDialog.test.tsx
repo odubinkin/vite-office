@@ -5,17 +5,26 @@ import { TabulatorDialogSession } from "../../../cui/browser/tabpages/tabstpge-s
 import { WriterParagraphDialog } from "./WriterParagraphDialog";
 import { createWriterDocumentSession } from "../composition/writer-module";
 import { WRITER_COMMAND_IDS } from "../../uiconfig/swriter/menubar/menubar-commands";
-import { RES_PARATR_TABSTOP as T } from "../../inc/hintids";
+import type { SwWrtShell } from "../../source/uibase/wrtsh/wrtsh1";
+import { SwPosition } from "../../source/core/crsr/pam";
+import { SvxULSpaceItem } from "../../../editeng/inc/ulspitem";
+import { SvxHyphenZoneItem } from "../../../editeng/source/items/paraitem";
+import {
+  RES_PARATR_HYPHENZONE as H,
+  RES_UL_SPACE,
+  RES_PARATR_TABSTOP as T,
+} from "../../inc/hintids";
 import { SvxTabStopItem, SvxTabAdjust as A } from "../../../editeng/inc/tstpitem";
 import { FieldUnit as U } from "../../../tools/inc/fldunit";
 import { writeOdtDocument } from "../../source/filter/xml/wrtxml";
 import { readOdtDocument } from "../../source/filter/xml/swxml";
-/** Opens a real asynchronous Writer command and renders its actual pending request. @param unit - Module unit. @returns Real owners and command completion. */
-function open(unit = U.CM) {
+/** Opens a real asynchronous Writer command and renders its actual pending request. @param unit - Module unit. @param prepare - Optional selection setup. @returns Real owners and command completion. */
+function open(unit = U.CM, prepare?: (shell: SwWrtShell) => void) {
   const session = createWriterDocumentSession(),
     shell = session.view.GetWrtShell(),
     dialogs = session.view.GetDialogController();
   shell.Insert("Native\ttabs");
+  prepare?.(shell);
   const result = session.view.Execute(WRITER_COMMAND_IDS.paragraphDialog);
   if (result.status !== "executed") throw new Error("Missing actual paragraph command");
   const pending = dialogs.GetSnapshot();
@@ -179,7 +188,7 @@ it("routes actual tree activation and entry blur independently and retains commi
 it("keeps an uncreated tab page inert and maps an empty actual tree selection to empty entry text", /** Uses actual session owners and DOM selection without a fake provider. @returns Completion. */ async () => {
   const f = open();
   try {
-    const tabs = new TabulatorDialogSession(f.pending.request.tabContext, U.CM);
+    const tabs = new TabulatorDialogSession(f.pending.request.pageInput, U.CM);
     tabs.Deactivate(0);
     expect(tabs.output.Count()).toBe(0);
     fireEvent.click(screen.getByRole("tab", { name: "Tabs" }));
@@ -234,5 +243,58 @@ it("synthetic-only: pins browser focus without selection for the native unreacha
     cleanup();
     f.session.Close();
     registration.mockRestore();
+  }
+});
+
+it("applies one typed hyphenation edit to mixed paragraphs, with independent spacing and undo", /** Exercises the native Paragraph Text Flow request, page exchange and selected item history. @returns Completion. */ async () => {
+  const f = open(
+    U.CM,
+    /** Creates two selected paragraphs with different hyphenation and spacing. @param shell - Real Writer editing shell. @returns Nothing. */
+    (shell) => {
+      shell.SplitNode();
+      shell.Insert("Next paragraph");
+      const [first, second] = shell.GetDoc().paragraphs;
+      if (!first || !second) throw new Error("Missing test paragraphs.");
+      first.SetAttr(new SvxHyphenZoneItem(true, H, { minLead: 2 }));
+      second.SetAttr(new SvxHyphenZoneItem(true, H, { minLead: 5 }));
+      first.SetAttr(new SvxULSpaceItem(40, 0, RES_UL_SPACE));
+      second.SetAttr(new SvxULSpaceItem(80, 0, RES_UL_SPACE));
+      const start = new SwPosition(first, 0);
+      const end = new SwPosition(second, second.Len());
+      shell.SetPaM(end, start);
+      start.Dispose();
+      end.Dispose();
+    },
+  );
+  try {
+    const document = f.shell.GetDoc();
+    const before = document.GetUndoManager().GetUndoActionCount();
+    fireEvent.click(screen.getByRole("tab", { name: "Text Flow" }));
+    const automatic = screen.getByRole("checkbox", { name: "Automatically" });
+    const lead = screen.getByRole("spinbutton", { name: "Characters at line end" });
+    expect(automatic).toBePartiallyChecked();
+    expect(lead).toBeDisabled();
+    fireEvent.click(automatic);
+    fireEvent.click(automatic);
+    fireEvent.change(lead, { target: { value: "4" } });
+    fireEvent.click(screen.getByRole("tab", { name: "Tabs" }));
+    fireEvent.click(screen.getByRole("tab", { name: "Text Flow" }));
+    expect(lead).toHaveValue(4);
+    fireEvent.click(screen.getByRole("button", { name: "OK" }));
+    expect(await f.result.value).toBe(true);
+    for (const [index, node] of document.paragraphs.entries()) {
+      expect((node.GetAttr(H) as SvxHyphenZoneItem).QueryValue()).toMatchObject({
+        hyphen: true,
+        minLead: 4,
+      });
+      expect((node.GetAttr(RES_UL_SPACE) as SvxULSpaceItem).GetUpper()).toBe(40 * (index + 1));
+    }
+    expect(document.GetUndoManager().GetUndoActionCount()).toBe(before + 1);
+    expect(f.shell.Undo()).toBe(true);
+    expect(document.paragraphs[0]?.GetAttr(H).QueryValue()).toMatchObject({ minLead: 2 });
+    expect(document.paragraphs[1]?.GetAttr(H).QueryValue()).toMatchObject({ minLead: 5 });
+  } finally {
+    cleanup();
+    f.session.Close();
   }
 });

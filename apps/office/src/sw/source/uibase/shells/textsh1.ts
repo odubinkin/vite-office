@@ -555,11 +555,8 @@ export class SwTextShell extends SwBaseShell {
       : undefined;
   }
 
-  /** Applies paragraph-dialog items through one history entry. @param value - Accepted formatting fields. @param tabStopItems - Optional original tab-page output set, empty when unchanged. @returns Whether formatting changed. */
-  public ApplyParagraphFormat(
-    value: WriterParagraphFormatValue,
-    tabStopItems?: SfxItemSet,
-  ): boolean {
+  /** Applies paragraph-dialog items through one history entry. @param value - Accepted formatting fields. @param pageItems - Optional native dialog output items, empty when the item-based pages are unchanged. @returns Whether formatting changed. */
+  public ApplyParagraphFormat(value: WriterParagraphFormatValue, pageItems?: SfxItemSet): boolean {
     if (
       !Number.isFinite(value.upperPt) ||
       value.upperPt < 0 ||
@@ -595,7 +592,7 @@ export class SwTextShell extends SwBaseShell {
       ) => Math.round(position * 20),
     );
     if (
-      tabStopItems === undefined &&
+      pageItems === undefined &&
       positions.some(
         /** Rejects positions outside the supported range. @param position - Twips. @returns Whether invalid. */ (
           position,
@@ -626,7 +623,7 @@ export class SwTextShell extends SwBaseShell {
           value.contextual,
         ),
         lineSpacing,
-        ...(tabStopItems?.entries() ?? [this.CreateTabStops(positions, paragraph)]),
+        ...(pageItems?.entries() ?? [this.CreateTabStops(positions, paragraph)]),
         new SfxBoolItem(RES_KEEP, value.keepWithNext),
         new ParaItems.SvxFormatSplitItem(!(value.keepTogether ?? false), RES_PARATR_SPLIT),
         new ParaItems.SvxOrphansItem(value.orphans ?? 2, RES_PARATR_ORPHANS),

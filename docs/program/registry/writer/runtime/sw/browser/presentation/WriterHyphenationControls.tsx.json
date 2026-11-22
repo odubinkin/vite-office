@@ -1,0 +1,31 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sw/browser/presentation/WriterHyphenationControls.tsx",
+    "classification": "browser-adaptation",
+    "state": "active",
+    "suite": "writer",
+    "subsystem": "browser-text",
+    "capabilityIds": [
+      "CAP-0125"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "not-applicable",
+      "defaultStatus": "not-applicable",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/sw/browser/presentation/WriterHyphenationControls.tsx#WriterHyphenationControls"
+      ],
+      "justification": "Presents the native Text Flow hyphenation groups in both Writer paragraph and search dialogs using browser controls and original SvxHyphenZoneItem values.",
+      "knownViolations": [],
+      "localSymbols": [
+        "WriterHyphenationControls"
+      ],
+      "sourceResponsibility": "browser-owned",
+      "upstreamFile": null,
+      "upstreamSymbols": []
+    }
+  }
+}

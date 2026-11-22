@@ -235,6 +235,7 @@ export interface WriterParagraphComputedStyle {
   readonly autoFirstLineIndent?: boolean;
   readonly autoKerning?: boolean;
   readonly autoHyphenation?: boolean;
+  readonly hyphenationLimits?: string;
   readonly opticalSizing?: boolean;
   readonly color?: string;
   readonly contextualSpacing?: boolean;
@@ -422,9 +423,7 @@ export class WriterViewProjection {
         );
         const background = writerParagraphBackgroundColor(node.GetSwAttrSet());
         const font = node.GetAttr(RES_CHRATR_FONT) as SvxFontItem;
-        const autoHyphenation = (
-          node.GetAttr(RES_PARATR_HYPHENZONE) as SvxHyphenZoneItem
-        ).QueryValue().hyphen;
+        const hyphenation = (node.GetAttr(RES_PARATR_HYPHENZONE) as SvxHyphenZoneItem).QueryValue();
         const fontFamilyGeneric = getFontFamilyGeneric(font.GetFamily());
         return Object.freeze({
           ...(rulerTabStops.length === 0 ? {} : { rulerTabStops: Object.freeze(rulerTabStops) }),
@@ -437,7 +436,12 @@ export class WriterViewProjection {
           id: this.GetNodeId(node),
           computedStyle: Object.freeze({
             autoFirstLineIndent: firstLine.IsAutoFirst(),
-            autoHyphenation,
+            autoHyphenation: hyphenation.hyphen,
+            ...(hyphenation.hyphen
+              ? {
+                  hyphenationLimits: `${Math.max(1, hyphenation.minWordLength)} ${Math.max(1, hyphenation.minLead)} ${Math.max(1, hyphenation.minTrail)}`,
+                }
+              : {}),
             opticalSizing: node.GetAttr(RES_CHRATR_OPTICAL_SIZING).QueryValue() === true,
             autoKerning: (node.GetAttr(RES_CHRATR_AUTOKERN) as SvxAutoKernItem).GetValue(),
             ...(color === "auto" ? {} : { color }),
@@ -533,7 +537,7 @@ export class WriterViewProjection {
           ...(listMarkerBackgroundColor === undefined ? {} : { listMarkerBackgroundColor }),
           numRuleName: node.GetNumRuleName(),
           nodeIndex: node.GetIndex(),
-          runs: projectTextPortions(node, autoHyphenation),
+          runs: projectTextPortions(node, hyphenation.hyphen),
           style: node.GetParagraphStyle(),
           styleDisplayName: node.GetTextFormatColl().GetName(),
           text: node.GetText(),

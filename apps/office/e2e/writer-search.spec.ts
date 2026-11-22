@@ -379,6 +379,22 @@ test("Writer applies paragraph hyphenation and preserves a character exception",
   await page.keyboard.press("Escape");
   await expect(dialog).toBeHidden();
   await expect(editor).toHaveCSS("hyphens", "auto");
+  await page.getByRole("menuitem", { name: "Format", exact: true }).click();
+  await page.getByRole("menuitem", { name: "Paragraph…", exact: true }).click();
+  const paragraph = page.getByRole("dialog", { name: "Paragraph", exact: true });
+  const flow = paragraph.getByRole("tab", { name: "Text Flow", exact: true });
+  await flow.click();
+  const paragraphLead = paragraph.getByRole("spinbutton", {
+    name: "Characters at line end",
+    exact: true,
+  });
+  await expect(paragraphLead).toHaveValue("3");
+  await paragraphLead.fill("4");
+  await paragraph.getByRole("tab", { name: "Tabs", exact: true }).click();
+  await flow.click();
+  await expect(paragraphLead).toHaveValue("4");
+  await paragraph.getByRole("button", { name: "OK", exact: true }).click();
+  await expect(editor).toHaveCSS("hyphenate-limit-chars", "4 4 2");
   await expect(editor).toHaveCSS("font-optical-sizing", "auto");
   await editor.press("Home");
   for (let offset = 0; offset < "Paragraph".length; offset++)
