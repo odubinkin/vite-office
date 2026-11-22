@@ -1,7 +1,17 @@
 /** @fileoverview Exercises native Page Style fill and geometry as one document operation. */
 import { cleanup, fireEvent, render, screen } from "@testing-library/react";
 import { expect, it } from "vitest";
+import { BitmapMode } from "../../../offapi/com/sun/star/drawing/BitmapMode";
 import { FillStyle } from "../../../offapi/com/sun/star/drawing/FillStyle";
+import { RectanglePoint } from "../../../offapi/com/sun/star/drawing/RectanglePoint";
+import {
+  bitmapGeometryWhich,
+  createBitmapGeometryItem,
+  XFillBitmapItem,
+} from "../../../svx/inc/xbtmpit";
+import { Size } from "../../../tools/inc/gen";
+import { Graphic } from "../../../vcl/source/gdi/graph";
+import { bitmapFillStyle } from "../editor/page-background";
 import { XATTR_FILLCOLOR, XATTR_FILLSTYLE, XATTR_FILLTRANSPARENCE } from "../../../svx/inc/xdef";
 import type { XFillStyleItem } from "../../../svx/inc/xfillit0";
 import type { XFillColorItem } from "../../../svx/inc/xflclit";
@@ -124,6 +134,34 @@ it("applies and reopens the active named page format and undoes geometry and fil
     expect(await accept).toBe(false);
   } finally {
     cleanup();
+    session.Close();
+  }
+});
+
+it("offsets bitmap anchors by tile dimensions only when the image repeats", /** Covers physical and percentage bitmap geometry from the native fill items. @returns Nothing. */ () => {
+  const session = createWriterDocumentSession();
+  try {
+    const items = session.docShell.GetDoc().GetPageDesc().GetMaster().GetAttrSet();
+    for (const [which, value] of [
+      [bitmapGeometryWhich.sizeX, -75],
+      [bitmapGeometryWhich.sizeY, 1440],
+      [bitmapGeometryWhich.positionX, -12],
+      [bitmapGeometryWhich.positionY, 25],
+    ] as const)
+      items.Put(createBitmapGeometryItem(which, value));
+    const item = new XFillBitmapItem(
+      "Image",
+      new Graphic(Uint8Array.of(1), "image/png", new Size(600, 300)),
+    );
+    const anchor = RectanglePoint.RIGHT_TOP;
+    expect(bitmapFillStyle(item, BitmapMode.REPEAT, anchor, items)).toMatchObject({
+      backgroundSize: "75% 96px",
+      backgroundPosition: "91% calc(0% + 24px)",
+    });
+    expect(bitmapFillStyle(item, BitmapMode.NO_REPEAT, anchor, items)).toMatchObject({
+      backgroundPosition: "100% 0%",
+    });
+  } finally {
     session.Close();
   }
 });

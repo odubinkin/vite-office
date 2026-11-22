@@ -35,6 +35,19 @@ function bitmapExtent(authored: number, preferred: number): string {
   return authored || preferred ? `${(authored || preferred) / 15}px` : "auto";
 }
 
+/** Offsets the chosen anchor by a percentage of the tile's size, as in SdrFillGraphicAttribute. @param anchor - Browser anchor percentage. @param offset - Native tile-relative offset. @param authored - Twips or negative percent. @param preferred - Intrinsic twips. @returns CSS background position. */
+function bitmapPosition(
+  anchor: number,
+  offset: number,
+  authored: number,
+  preferred: number,
+): string {
+  if (!offset) return `${anchor}%`;
+  if (authored < 0) return `${anchor + (-authored * offset) / 100}%`;
+  const shift = ((authored || preferred) * offset) / 1500;
+  return `calc(${anchor}% ${shift < 0 ? "-" : "+"} ${Math.abs(shift)}px)`;
+}
+
 /** Paints the native bitmap mode and its reference-point geometry. @param item - Image item. @param mode - Tiling, no repeat, or stretch. @param point - Native anchor. @param geometry - Optional authored bitmap size and position offsets. @returns Browser background configuration. */
 export function bitmapFillStyle(
   item: XFillBitmapItem,
@@ -52,13 +65,26 @@ export function bitmapFillStyle(
     return (geometry?.Get(which) as SfxInt32Item | undefined)?.GetValue() ?? 0;
   }
   const size = graphic.GetPrefSize();
-  const positionX = (point % 3) * 50 + readGeometry(XATTR_FILLBMP_POSOFFSETX);
-  const positionY = Math.floor(point / 3) * 50 + readGeometry(XATTR_FILLBMP_POSOFFSETY);
+  const repeat = mode === BitmapMode.REPEAT;
+  const width = readGeometry(XATTR_FILLBMP_SIZEX);
+  const height = readGeometry(XATTR_FILLBMP_SIZEY);
+  const x = bitmapPosition(
+    (point % 3) * 50,
+    repeat ? readGeometry(XATTR_FILLBMP_POSOFFSETX) : 0,
+    width,
+    size.Width(),
+  );
+  const y = bitmapPosition(
+    Math.floor(point / 3) * 50,
+    repeat ? readGeometry(XATTR_FILLBMP_POSOFFSETY) : 0,
+    height,
+    size.Height(),
+  );
   return {
     backgroundImage: source,
-    backgroundSize: `${bitmapExtent(readGeometry(XATTR_FILLBMP_SIZEX), size.Width())} ${bitmapExtent(readGeometry(XATTR_FILLBMP_SIZEY), size.Height())}`,
-    backgroundRepeat: mode === BitmapMode.REPEAT ? "repeat" : "no-repeat",
-    backgroundPosition: `${positionX}% ${positionY}%`,
+    backgroundSize: `${bitmapExtent(width, size.Width())} ${bitmapExtent(height, size.Height())}`,
+    backgroundRepeat: repeat ? "repeat" : "no-repeat",
+    backgroundPosition: `${x} ${y}`,
   };
 }
 
