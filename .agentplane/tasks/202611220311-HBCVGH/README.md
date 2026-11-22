@@ -1,10 +1,11 @@
 ---
 id: "202611220311-HBCVGH"
 title: "Connect Writer page style area, bitmap, and transparency"
-status: "DOING"
+result_summary: "Connected Writer Page Style solid and bitmap area fills with uniform transparency."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 10
+revision: 11
 origin:
   system: "manual"
 depends_on: []
@@ -40,11 +41,16 @@ quality_review:
   findings:
     - "Named page geometry and fill are committed together and survive Writer history, Worker serialization, and ODT export and import."
     - "Chromium verified file import, stretched placement, transparency, undo, redo and reopening. The renderer test proves tiled offsets use image dimensions."
-commit: null
+commit:
+  hash: "2ec42771c32a110033108f15a6abd0113731e00d"
+  message: "🧩 HBCVGH code: Match native tiled image anchor offsets"
 comments:
   -
     author: "CODER"
     body: "Start: Connect the existing page descriptor fill to the Page Style tabs, native undo and physical page rendering."
+  -
+    author: "CODER"
+    body: "Verified: Focused Writer and shared tests, Page Style and Paragraph Chromium scenarios, and production build passed."
 events:
   -
     type: "status"
@@ -59,8 +65,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "89 distinct focused Writer tests, 14 shared and 2 Writer resource tests, production build, 2 Chromium smoke scenarios, and scoped source checks passed. Findings records the unchanged Calc JSDoc and source-size diagnostics."
+  -
+    type: "status"
+    at: "2026-11-22T03:39:35.541Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: Focused Writer and shared tests, Page Style and Paragraph Chromium scenarios, and production build passed."
 doc_version: 3
-doc_updated_at: "2026-11-22T03:33:50.276Z"
+doc_updated_at: "2026-11-22T03:39:35.543Z"
 doc_updated_by: "CODER"
 description: "Expose the existing native page-style fill items through the Page Style dialog and physical page paint."
 sections:
