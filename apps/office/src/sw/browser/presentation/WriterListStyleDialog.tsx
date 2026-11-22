@@ -73,13 +73,19 @@ export function WriterListStyleDialog({
   invoker,
   unit,
   onClose,
+  onRename,
 }: Readonly<{
   request: WriterListStyleTemplateRequest;
   invoker: HTMLButtonElement;
   unit: FieldUnit;
   onClose: () => void;
+  onRename: (previous: string, next: string) => void;
 }>): React.JSX.Element {
   const [page, setPage] = useState<Page>("organizer");
+  const [name, setName] = useState(request.name);
+  const [savedName, setSavedName] = useState(request.name);
+  const [invalidName, setInvalidName] = useState(false);
+  const nameField = useRef<HTMLInputElement>(null);
   const [saved, setSaved] = useState(
     /** Owns the initial comparison value. @returns Saved rule. */ () =>
       new SvxNumRule(initialRule(request)),
@@ -96,7 +102,7 @@ export function WriterListStyleDialog({
   function label(key: string, fallback: string): string {
     return localization.GetText(`writer.list-style.${key}`, fallback);
   }
-  const title = `${label("title", "List Style")}: ${request.name}`;
+  const title = `${label("title", "List Style")}: ${savedName}`;
   const count = draft.GetLevelCount();
   const level = levels[0] === count ? 0 : (levels[0] ?? 0);
   const rows = Array.from(
@@ -109,7 +115,9 @@ export function WriterListStyleDialog({
       return index;
     },
   );
-  const changed = !draft.Equals(saved);
+  const nextName = name.replace(/^ +/u, "");
+  const formatsChanged = !draft.Equals(saved);
+  const changed = formatsChanged || name !== savedName;
 
   useLayoutEffect(
     /** Places focus in this dialog and restores the parent control after it closes. @returns Cleanup. */ () => {
@@ -117,14 +125,15 @@ export function WriterListStyleDialog({
       if (!modal) return;
       if (typeof modal.showModal === "function") modal.showModal();
       else modal.open = true;
-      tabRefs.current.organizer?.focus();
+      if (request.nameEditable) nameField.current?.focus();
+      else tabRefs.current.organizer?.focus();
       return /** Restores focus after the parent leaves its inert state. @returns Nothing. */ () => {
         if (typeof modal.close === "function") modal.close();
         else modal.open = false;
         queueMicrotask(/** Returns focus to Edit Style. @returns Nothing. */ () => invoker.focus());
       };
     },
-    [invoker],
+    [invoker, request.nameEditable],
   );
 
   /** Edits an independent native rule copy. @param edit - Page exchange. @returns Nothing. */
@@ -177,19 +186,47 @@ export function WriterListStyleDialog({
       },
     );
   }
-  /** Commits the native style item, independently of acceptance of the paragraph dialog. @returns Nothing. */
-  function apply(): void {
-    if (!changed) return;
-    const output = new SfxItemSet(request.input.GetPool(), request.input.GetRanges());
-    output.Put(new SvxNumBulletItem(draft), true);
+  /** Reports a rejected General name and keeps the name field active. @returns False to veto the current action. */
+  function rejectName(): false {
+    setInvalidName(true);
+    setPage("organizer");
+    nameField.current?.focus();
+    nameField.current?.select();
+    return false;
+  }
+  /** Runs the General name validation before changing native pages. @param next - Target native tab. @returns Whether it was activated. */
+  function activate(next: Page): boolean {
+    if (next === page) return true;
+    if (page === "organizer" && !request.isValidName(nextName)) return rejectName();
+    setPage(next);
+    return true;
+  }
+  /** Commits the name and native style item independently of the parent paragraph draft. @returns Whether the child may close. */
+  function apply(): boolean {
+    if (!changed) return true;
+    const output = formatsChanged
+      ? new SfxItemSet(request.input.GetPool(), request.input.GetRanges())
+      : undefined;
+    output?.Put(new SvxNumBulletItem(draft), true);
     try {
-      if (request.apply(output)) setSaved(new SvxNumRule(draft));
+      if (!request.apply(nextName, output)) return rejectName();
+      if (nextName !== savedName) onRename(savedName, nextName);
+      setSavedName(nextName);
+      setName(nextName);
+      setInvalidName(false);
+      if (formatsChanged) setSaved(new SvxNumRule(draft));
+      return true;
     } finally {
-      output.Dispose();
+      output?.Dispose();
     }
   }
 
-  const pageFormat = draft.GetLevel(level);
+  const selectedLevels = levels.includes(count) ? rows : levels;
+  const otherFormats = selectedLevels.slice(1).map(
+    /** Reads the remaining selected native formats. @param index - Level. @returns Shared format. */
+    (index) => draft.GetLevel(index),
+  );
+  const selectedFormats = [draft.GetLevel(level), ...otherFormats] as const;
   const presetButtons: Array<readonly [string, (rule: SvxNumRule) => void]> = [];
   if (page === "bullets") {
     for (const glyph of defaultBullets)
@@ -248,8 +285,7 @@ export function WriterListStyleDialog({
           /** Applies and closes on native form submission. @param event - Actual submission. @returns Nothing. */
           (event) => {
             event.preventDefault();
-            apply();
-            onClose();
+            if (apply()) onClose();
           }
         }
         onKeyDown={
@@ -275,10 +311,7 @@ export function WriterListStyleDialog({
                 key === page,
             );
             const next = pages[(index + direction + pages.length) % pages.length]?.[0];
-            if (next) {
-              setPage(next);
-              tabRefs.current[next]?.focus();
-            }
+            if (next && activate(next)) tabRefs.current[next]?.focus();
           }
         }
       >
@@ -307,7 +340,11 @@ export function WriterListStyleDialog({
                     tabRefs.current[key] = node;
                   }
                 }
-                onClick={/** Activates this page. @returns Nothing. */ () => setPage(key)}
+                onClick={
+                  /** Activates this page when the current page accepts its values. @returns Nothing. */ () => {
+                    activate(key);
+                  }
+                }
               >
                 {label(`tab.${key}`, caption)}
               </button>
@@ -321,14 +358,30 @@ export function WriterListStyleDialog({
           className="grid gap-3 p-4 text-sm"
         >
           {page === "organizer" && (
-            <label className="grid gap-1">
-              {label("name", "Name")}
+            <div className="grid gap-1">
+              <label htmlFor={`${id}-name`}>{label("name", "Name")}</label>
               <input
-                className="rounded border border-slate-300 bg-slate-50 p-1"
-                readOnly
-                value={request.name}
+                id={`${id}-name`}
+                ref={nameField}
+                className="rounded border border-slate-300 p-1 read-only:bg-slate-50"
+                readOnly={!request.nameEditable}
+                value={name}
+                aria-invalid={invalidName || undefined}
+                aria-describedby={invalidName ? `${id}-name-error` : undefined}
+                onChange={
+                  /** Edits the user-defined name in the dialog draft. @param event - Current input. @returns Nothing. */
+                  (event) => {
+                    setName(event.currentTarget.value);
+                    setInvalidName(false);
+                  }
+                }
               />
-            </label>
+              {invalidName && (
+                <span role="alert" id={`${id}-name-error`} className="text-red-700">
+                  {label("invalid-name", "This name is already in use or is invalid.")}
+                </span>
+              )}
+            </div>
           )}
           {presetButtons.length > 0 && (
             <div className="grid grid-cols-2 gap-2 sm:grid-cols-4">
@@ -395,7 +448,7 @@ export function WriterListStyleDialog({
               <div className="grid content-start gap-3">
                 {page === "position" ? (
                   <NumberingPositionPage
-                    format={pageFormat}
+                    formats={selectedFormats}
                     unit={unit}
                     edit={editLevels}
                     reset={resetPosition}
@@ -404,8 +457,8 @@ export function WriterListStyleDialog({
                   />
                 ) : (
                   <NumberingOptionsPage
-                    format={pageFormat}
-                    levelIndex={level}
+                    formats={selectedFormats}
+                    highestLevel={Math.max(...selectedLevels)}
                     edit={editLevels}
                     characterStyles={request.characterStyles}
                     continuous={draft.IsContinuousNumbering()}

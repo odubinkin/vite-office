@@ -1,6 +1,7 @@
 /** @fileoverview Implements represented native SwDoc numbering and outline operations from pinned docnum.cxx. */
 import { SvxNumType } from "../../../../editeng/inc/svxenum";
 import { SwUndoInsNum } from "../undo/unnum";
+import { SwUndoNumruleRename } from "../undo/SwUndoFmt";
 import { SetNumRuleMode, type SwDoc } from "./doc";
 import type { SwPaM, SwPosition } from "../crsr/pam";
 import { SwTextNode } from "../txtnode/ndtxt";
@@ -245,6 +246,32 @@ export function ChgNumRuleFormats(document: SwDoc, source: SwNumRule): void {
       changeNumRule(document, current, source);
       document.GetDocumentStateManager().SetModified();
       document.NotifyModelChange({ kind: "numbering-changed", ruleName: current.GetName() });
+    },
+  );
+}
+
+/** Renames one stored numbering rule and updates its list and format clients. @param document - Native document. @param previous - Existing name. @param next - Unused new name. @returns Whether the rule was renamed. */
+export function RenameNumRule(document: SwDoc, previous: string, next: string): boolean {
+  const rule = document.FindNumRulePtr(previous);
+  if (!rule || next === "" || document.FindNumRulePtr(next)) return false;
+  return document.RunModelTransaction(
+    /** Renames the actual rule and retained references as one document change. @returns True after application. */ () => {
+      const undo = document.GetUndoManager();
+      if (undo.DoesUndo()) undo.AddUndoAction(new SwUndoNumruleRename(previous, next, document));
+      const nodes: SwTextNode[] = [];
+      rule.GetTextNodeList(nodes);
+      rule.SetName(next, document.GetDocumentListsManager());
+      const item = new SwNumRuleItem(next);
+      for (const style of document.GetTextFormatColls()) {
+        const reference = style.GetAttrSet().GetItemIfSet(RES_PARATR_NUMRULE, false);
+        if (reference instanceof SwNumRuleItem && reference.GetValue() === previous)
+          style.SetFormatAttr(item);
+      }
+      for (const node of nodes)
+        if (node.GetSwAttrSet().GetItemIfSet(RES_PARATR_NUMRULE, false) instanceof SwNumRuleItem)
+          node.SetAttr(item);
+      document.NotifyModelChange({ kind: "numbering-changed", ruleName: next });
+      return true;
     },
   );
 }

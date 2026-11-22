@@ -43,11 +43,17 @@ export function WriterParagraphDialog({
   const [listStyle, setListStyle] = useState<{
     readonly request: WriterListStyleTemplateRequest;
     readonly invoker: HTMLButtonElement;
+    readonly renamed: (previous: string, next: string) => void;
   }>();
-  /** Opens the child template without committing the paragraph draft. @param name - Selected style name. @param invoker - Parent edit button. @returns Nothing. */
-  function openListStyle(name: string, invoker: HTMLButtonElement): void {
+  const [listStyleNames, setListStyleNames] = useState(dialogRequest.request.listStyleNames ?? []);
+  /** Opens the child template without committing the paragraph draft. @param name - Selected style name. @param invoker - Parent edit button. @param renamed - Selection and pending item update. @returns Nothing. */
+  function openListStyle(
+    name: string,
+    invoker: HTMLButtonElement,
+    renamed: (previous: string, next: string) => void,
+  ): void {
     const request = dialogRequest.request.editListStyle?.(name);
-    if (request) setListStyle({ request, invoker });
+    if (request) setListStyle({ request, invoker, renamed });
   }
   const hyphenation = pageInput.GetItem(RES_PARATR_HYPHENZONE);
   const hyphenationDefault = pageInput.GetPool().GetUserOrPoolDefaultItem(RES_PARATR_HYPHENZONE);
@@ -357,7 +363,7 @@ export function WriterParagraphDialog({
                   input={pageInput}
                   output={tabs.output}
                   label={label}
-                  listStyleNames={dialogRequest.request.listStyleNames ?? []}
+                  listStyleNames={listStyleNames}
                   outlineLocked={dialogRequest.request.outlineLocked ?? false}
                   onEditListStyle={openListStyle}
                 />
@@ -441,6 +447,22 @@ export function WriterParagraphDialog({
           request={listStyle.request}
           invoker={listStyle.invoker}
           unit={unit}
+          onRename={
+            /** Updates the parent's live list names and pending assignment. @param previous - Prior name. @param next - Applied name. @returns Nothing. */
+            (previous, next) => {
+              setListStyleNames(
+                /** Changes this entry and restores the chooser's original sort order. @param names - Previous choices. @returns Updated names. */
+                (names) =>
+                  names
+                    .map(
+                      /** Updates the selected style's name. @param name - Choice. @returns Current name. */
+                      (name) => (name === previous ? next : name),
+                    )
+                    .sort(),
+              );
+              listStyle.renamed(previous, next);
+            }
+          }
           onClose={
             /** Returns to the still-open paragraph draft. @returns Nothing. */
             () => setListStyle(undefined)

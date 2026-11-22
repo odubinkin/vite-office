@@ -1,4 +1,5 @@
 /** @fileoverview Browser numbering options over the native SvxNumberFormat value. */
+import { getUniformNumberingValue } from "../../source/tabpages/numpages";
 import { SvxNumType as Type } from "../../../editeng/inc/svxenum";
 import type { SvxNumberFormat, ConstSvxNumberFormat } from "../../../editeng/inc/numitem";
 
@@ -21,29 +22,61 @@ const numberTypes = [
 
 /** Edits the selected native numbering levels. @param props - Active levels and options exchange. @returns Native Customize controls. */
 export function NumberingOptionsPage({
-  format,
-  levelIndex,
+  formats,
+  highestLevel,
   edit,
   characterStyles,
   continuous,
   setContinuous,
   label,
 }: Readonly<{
-  format: ConstSvxNumberFormat;
-  levelIndex: number;
+  formats: readonly [ConstSvxNumberFormat, ...ConstSvxNumberFormat[]];
+  highestLevel: number;
   edit: (change: (format: SvxNumberFormat, level: number) => void) => void;
   characterStyles: readonly string[];
   continuous: boolean;
   setContinuous: (value: boolean) => void;
   label: (key: string, fallback: string) => string;
 }>): React.JSX.Element {
-  const type = format.GetNumberingType();
+  const format = formats[0];
+  const last = formats[formats.length - 1] ?? format;
+  const type = getUniformNumberingValue(
+    formats,
+    /** Reads each selected level's type. @param level - Format. @returns Type. */ (level) =>
+      level.GetNumberingType(),
+  );
+  const startType = format.GetNumberingType();
+  const zeroAllowed =
+    startType >= Type.SVX_NUM_ARABIC &&
+    startType !== Type.SVX_NUM_CHARS_UPPER_LETTER_N &&
+    startType !== Type.SVX_NUM_CHARS_LOWER_LETTER_N;
   const bullet = type === Type.SVX_NUM_CHAR_SPECIAL;
   const customType = !numberTypes.some(
     /** Checks the supported type menu against the current format. @param entry - Native type and label. @returns Match. */
     ([id]) => type === id,
   );
-  const glyph = format.GetBulletChar();
+  const glyph = getUniformNumberingValue(
+    formats,
+    /** Reads the selected glyph. @param level - Format. @returns Glyph. */ (level) =>
+      level.GetBulletChar(),
+  );
+  const characterStyle = getUniformNumberingValue(
+    formats,
+    /** Reads the selected character style. @param level - Format. @returns Name. */ (level) =>
+      level.GetCharFormatName(),
+  );
+  const sublevels = getUniformNumberingValue(
+    formats,
+    /** Reads the selected sublevel count. @param level - Format. @returns Level count. */ (
+      level,
+    ) => level.GetIncludeUpperLevels(),
+  );
+  const legal = getUniformNumberingValue(
+    formats,
+    /** Reads the selected Arabic sublevels flag. @param level - Format. @returns Flag. */ (
+      level,
+    ) => level.GetIsLegal(),
+  );
   /** Binds a native string field. @param caption - Visible label. @param value - Current text. @param onChange - Native change. @returns Text input. */
   function textField(caption: string, value: string, onChange: (value: string) => void) {
     return (
@@ -60,13 +93,14 @@ export function NumberingOptionsPage({
       </label>
     );
   }
-  /** Binds a bounded native counting field. @param caption - Visible label. @param value - Active value. @param min - Lower limit. @param max - Upper limit. @param write - Per-level mutation. @returns Numeric input. */
+  /** Binds a bounded native counting field. @param caption - Visible label. @param value - Active value. @param min - Lower limit. @param max - Upper limit. @param write - Per-level mutation. @param disabled - Control sensitivity. @returns Numeric input. */
   function numberField(
     caption: string,
-    value: number,
+    value: number | undefined,
     min: number,
     max: number,
     write: (format: SvxNumberFormat, value: number, index: number) => void,
+    disabled = false,
   ) {
     return (
       <label className="grid gap-1">
@@ -76,7 +110,8 @@ export function NumberingOptionsPage({
           className={control}
           min={min}
           max={max}
-          value={value}
+          value={value ?? ""}
+          disabled={disabled}
           onChange={
             /** Stores a defined integer in the native range. @param event - Browser input. @returns Nothing. */
             (event) => {
@@ -102,7 +137,7 @@ export function NumberingOptionsPage({
           {label("customize.type", "Number")}
           <select
             className={control}
-            value={type}
+            value={type ?? ""}
             onChange={
               /** Changes the native numbering type. @param event - Selected type. @returns Nothing. */
               (event) => {
@@ -120,7 +155,8 @@ export function NumberingOptionsPage({
               }
             }
           >
-            {customType && (
+            {type === undefined && <option value="" disabled />}
+            {type !== undefined && customType && (
               <option value={type} disabled>
                 {label("customize.current-format", "Current format")}
               </option>
@@ -139,7 +175,7 @@ export function NumberingOptionsPage({
           {label("customize.character-style", "Character style")}
           <select
             className={control}
-            value={format.GetCharFormatName()}
+            value={characterStyle ?? "\u0001"}
             onChange={
               /** Exchanges the chosen character style name. @param event - Selected style. @returns Nothing. */
               (event) => {
@@ -152,6 +188,7 @@ export function NumberingOptionsPage({
               }
             }
           >
+            {characterStyle === undefined && <option value={"\u0001"} disabled />}
             <option value="">{label("customize.no-style", "None")}</option>
             {characterStyles.map(
               /** Presents one available document character style. @param name - Native name. @returns Option. */
@@ -164,10 +201,9 @@ export function NumberingOptionsPage({
           </select>
         </label>
         {bullet &&
-          glyph <= 0x10ffff &&
           textField(
             label("customize.character", "Character"),
-            glyph ? String.fromCodePoint(glyph) : "",
+            glyph && glyph <= 0x10ffff ? String.fromCodePoint(glyph) : "",
             /** Stores a Unicode scalar as the bullet. @param value - Entered glyph. @returns Nothing. */
             (value) =>
               edit(
@@ -176,11 +212,11 @@ export function NumberingOptionsPage({
                 ) => level.SetBulletChar(value.codePointAt(0) ?? 0),
               ),
           )}
-        {format.IsTextFormat() && (
+        {!bullet && type !== Type.SVX_NUM_BITMAP && (
           <>
             {textField(
               label("customize.before", "Before"),
-              format.GetPrefix(),
+              format.GetPrefix() === last.GetPrefix() ? format.GetPrefix() : "",
               /** Updates the native prefix. @param value - New prefix. @returns Nothing. */
               (value) =>
                 edit(
@@ -192,7 +228,7 @@ export function NumberingOptionsPage({
             )}
             {textField(
               label("customize.after", "After"),
-              format.GetSuffix(),
+              format.GetSuffix() === last.GetSuffix() ? format.GetSuffix() : "",
               /** Updates the native suffix. @param value - New suffix. @returns Nothing. */
               (value) =>
                 edit(
@@ -204,25 +240,49 @@ export function NumberingOptionsPage({
             )}
             {numberField(
               label("customize.start", "Start at"),
-              format.GetStart(),
-              type === Type.SVX_NUM_ARABIC ? 0 : 1,
+              format.GetStart() === last.GetStart() ? format.GetStart() : undefined,
+              zeroAllowed ? 0 : 1,
               65535,
               /** Sets the numbering start. @param level - Format. @param value - Start value. @returns Nothing. */
               (level, value) => level.SetStart(value),
             )}
-            {levelIndex > 0 &&
-              !continuous &&
-              numberField(
-                label("customize.sublevels", "Show sublevels"),
-                Math.min(levelIndex + 1, format.GetIncludeUpperLevels()),
-                1,
-                levelIndex + 1,
-                /** Updates included levels and their pattern. @param level - Format. @param value - Requested count. @param index - Native level. @returns Nothing. */
-                (level, value, index) => {
-                  level.SetIncludeUpperLevels(Math.min(index + 1, value));
-                  level.SetListFormat(level.GetPrefix(), level.GetSuffix(), index);
-                },
-              )}
+            {numberField(
+              label("customize.sublevels", "Show sublevels"),
+              sublevels,
+              1,
+              highestLevel + 1,
+              /** Updates included levels and their pattern. @param level - Format. @param value - Requested count. @param index - Native level. @returns Nothing. */
+              (level, value, index) => {
+                level.SetIncludeUpperLevels(Math.min(index + 1, value));
+                level.SetListFormat(level.GetPrefix(), level.GetSuffix(), index);
+              },
+              highestLevel === 0 || continuous,
+            )}
+            <label className="flex items-center gap-2">
+              <input
+                type="checkbox"
+                checked={legal === true}
+                disabled={continuous}
+                ref={
+                  /** Displays mixed legal numbering across the current selection. @param input - Mounted control. @returns Nothing. */
+                  (input) => {
+                    if (input) input.indeterminate = legal === undefined;
+                  }
+                }
+                onChange={
+                  /** Applies the native flag to the selected levels. @param event - Toggled checkbox. @returns Nothing. */
+                  (event) => {
+                    const value = event.currentTarget.checked;
+                    edit(
+                      /** Writes a level flag. @param level - Editable format. @returns Nothing. */ (
+                        level,
+                      ) => level.SetIsLegal(value),
+                    );
+                  }
+                }
+              />
+              {label("customize.legal", "All sublevels Arabic")}
+            </label>
           </>
         )}
       </fieldset>

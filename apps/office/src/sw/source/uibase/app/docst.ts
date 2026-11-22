@@ -1,4 +1,5 @@
 /** @fileoverview Ports the supported paragraph StyleApply request boundary from pinned sw/source/uibase/app/docst.cxx. */
+import { GetParagraphListStyleNames } from "../../core/doc/poolfmt-num";
 import { getListStyleItemSet, setListStyleItemSet } from "./docstyle";
 import type { WriterListStyleTemplateRequest } from "../dialog/writer-dialog-controller";
 import { SwGetPoolIdFromName } from "../../../inc/SwGetPoolIdFromName";
@@ -43,9 +44,25 @@ export function editListStyle(
   name: string,
 ): WriterListStyleTemplateRequest | undefined {
   const input = getListStyleItemSet(document, name);
-  if (!input) return undefined;
+  const rule = document.FindNumRulePtr(name);
+  if (!input || !rule) return undefined;
+  const nameEditable = IsPoolUserFormat(rule.GetPoolFormatId());
+
+  /** Admits the current style name or an unused custom name in the same family. @param candidate - Normalized UI name. @returns Whether the name can be applied. */
+  function isValidName(candidate: string): boolean {
+    return (
+      candidate === rule?.GetName() ||
+      (nameEditable &&
+        candidate !== "" &&
+        !document.FindNumRulePtr(candidate) &&
+        !GetParagraphListStyleNames(document).includes(candidate))
+    );
+  }
+
   return {
     name,
+    nameEditable,
+    isValidName,
     input,
     bulletStyle: SwStyleNameMapper.GetUIName(SwPoolFormatId.CHR_BULLET_LEVEL, "Bullets"),
     numberingStyle: SwStyleNameMapper.GetUIName(SwPoolFormatId.CHR_NUM_LEVEL, "Numbering Symbols"),
@@ -56,8 +73,23 @@ export function editListStyle(
           style,
         ) => style.GetName(),
       ),
-    /** Applies the accepted template to the same named rule. @param output - Accepted dialog items. @returns Whether changed. */
-    apply: (output) => setListStyleItemSet(document, name, output),
+    /** Applies the accepted name and format attributes to the same live rule. @param candidate - Accepted name. @param output - Changed style items. @returns Whether the inputs were accepted. */
+    apply: (candidate, output) => {
+      if (!isValidName(candidate) || document.FindNumRulePtr(rule.GetName()) !== rule) return false;
+      const undo = document.GetUndoManager();
+      const renamed = candidate !== rule.GetName();
+      if (renamed && output) undo.StartUndo("Edit List Style");
+      try {
+        if (renamed) {
+          if (!document.RenameNumRule(rule.GetName(), candidate)) return false;
+          document.GetDocumentStateManager().SetModified();
+        }
+        if (output) setListStyleItemSet(document, candidate, output);
+        return true;
+      } finally {
+        if (renamed && output) undo.EndUndo();
+      }
+    },
   };
 }
 

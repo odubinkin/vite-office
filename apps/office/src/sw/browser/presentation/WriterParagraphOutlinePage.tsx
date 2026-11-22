@@ -1,5 +1,5 @@
 /** @fileoverview Native Outline & List exchange for Writer's paragraph dialog. */
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { SfxBoolItem } from "../../../svl/inc/eitem";
 import { SfxInt16Item, SfxUInt16Item } from "../../../svl/inc/intitem";
 import type { SfxItemSet } from "../../../svl/inc/itemset";
@@ -42,7 +42,11 @@ export function WriterParagraphOutlinePage({
   label: (key: string, fallback: string) => string;
   listStyleNames?: readonly string[];
   outlineLocked?: boolean;
-  onEditListStyle?: (name: string, invoker: HTMLButtonElement) => void;
+  onEditListStyle?: (
+    name: string,
+    invoker: HTMLButtonElement,
+    renamed: (previous: string, next: string) => void,
+  ) => void;
 }>): React.JSX.Element {
   const originalOutline = input.GetItem(RES_PARATR_OUTLINELEVEL);
   const originalLevel = input.GetItem(RES_PARATR_LIST_LEVEL);
@@ -67,6 +71,16 @@ export function WriterParagraphOutlinePage({
   const [outline, setOutline] = useState(outlineValue);
   const [list, setList] = useState(listChoice);
   const [style, setStyle] = useState(initialStyle);
+  const baselineStyle = useRef(initialStyle);
+
+  /** Retargets the selection and any staged assignment without committing the parent draft. @param previous - Prior style name. @param next - Accepted name. @returns Nothing. */
+  function styleRenamed(previous: string, next: string): void {
+    if (baselineStyle.current === previous) baselineStyle.current = next;
+    const staged = output.GetItemIfSet(RES_PARATR_NUMRULE, false);
+    if (staged instanceof SwNumRuleItem && staged.GetValue() === previous)
+      output.Put(new SwNumRuleItem(next));
+    setStyle(next);
+  }
   const [restart, setRestart] = useState(initialRestart);
   const [explicitStart, setExplicitStart] = useState(initialStart !== styleDefaultStart);
   const [start, setStart] = useState(
@@ -166,7 +180,7 @@ export function WriterParagraphOutlinePage({
               (event) => {
                 const value = event.currentTarget.value;
                 setStyle(value);
-                if (value === initialStyle) output.ClearItem(RES_PARATR_NUMRULE);
+                if (value === baselineStyle.current) output.ClearItem(RES_PARATR_NUMRULE);
                 else output.Put(new SwNumRuleItem(value));
                 writeLevel(list, outline, value);
               }
@@ -194,7 +208,7 @@ export function WriterParagraphOutlinePage({
           onClick={
             /** Opens the selected editable style with this native button as the focus return target. @param event - Activated button. @returns Nothing. */
             (event) => {
-              if (style !== undefined) onEditListStyle?.(style, event.currentTarget);
+              if (style !== undefined) onEditListStyle?.(style, event.currentTarget, styleRenamed);
             }
           }
         >

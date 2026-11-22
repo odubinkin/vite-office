@@ -4,7 +4,7 @@ title: "Connect Writer named list-style editing"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 7
+revision: 8
 origin:
   system: "manual"
 depends_on: []
@@ -53,6 +53,16 @@ comments:
       Open scope includes graphic numbering storage, layout and ODF, the Image gallery, complete multi-level mixed settings and General management for user-defined names. No task closure and no advance in the ten-closed-task full-test cadence.
 
       The final production build and Chrome spec `writer-list-style-dialog.spec.ts` passed, including Escape, focus return, two separate lists sharing the rule, and Undo/Redo. The first browser run exposed a test locator ambiguity between Ordered and Unordered, corrected by using the exact native tab label. The final browser run uses the native dialog implementation.
+  -
+    author: "CODER"
+    body: |-
+      Verified intermediate list-style General and mixed-level checkpoint.
+
+      - The native RenameNumRule path updates the rule index, the default and explicit lists, and direct and inherited paragraph references. SwUndoNumruleRename replays the old and new names. A name and formatting change accepted together form one history action.
+      - General validates blank and occupied names before leaving the page and updates the parent chooser without committing its paragraph draft. Loading an ODT common style now materializes the native pool entry when it has a built-in numbering name; the General field consequently distinguishes built-in and user styles after reopening.
+      - Position and Customize display mixed values for the selected levels and do not overwrite untouched properties. Legal numbering reflects mixed selections. WRITER-741 records the source's first-to-last equality for start, prefix and suffix.
+      - Final Writer tests: 229 passed across 13 suites. Production build and both Chrome nested-dialog tests passed. Scoped lint and formatting, Writer resources, source tree, boundaries, provenance, Writer parity inventory, doctor, routing, and diff checks passed. Global JSDoc and file-size still report existing unrelated findings.
+      - Native Image list styles and remaining template control parity are pending, including legacy Relative positioning and additional graphic and numbering options. This is a checkpoint without a task closure or cadence increment.
 
 events:
   -
@@ -88,9 +98,21 @@ events:
       Open scope includes graphic numbering storage, layout and ODF, the Image gallery, complete multi-level mixed settings and General management for user-defined names. No task closure and no advance in the ten-closed-task full-test cadence.
 
       The final production build and Chrome spec `writer-list-style-dialog.spec.ts` passed, including Escape, focus return, two separate lists sharing the rule, and Undo/Redo. The first browser run exposed a test locator ambiguity between Ordered and Unordered, corrected by using the exact native tab label. The final browser run uses the native dialog implementation.
+  -
+    type: "comment"
+    at: "2026-11-22T01:56:50.084Z"
+    author: "CODER"
+    body: |-
+      Verified intermediate list-style General and mixed-level checkpoint.
+
+      - The native RenameNumRule path updates the rule index, the default and explicit lists, and direct and inherited paragraph references. SwUndoNumruleRename replays the old and new names. A name and formatting change accepted together form one history action.
+      - General validates blank and occupied names before leaving the page and updates the parent chooser without committing its paragraph draft. Loading an ODT common style now materializes the native pool entry when it has a built-in numbering name; the General field consequently distinguishes built-in and user styles after reopening.
+      - Position and Customize display mixed values for the selected levels and do not overwrite untouched properties. Legal numbering reflects mixed selections. WRITER-741 records the source's first-to-last equality for start, prefix and suffix.
+      - Final Writer tests: 229 passed across 13 suites. Production build and both Chrome nested-dialog tests passed. Scoped lint and formatting, Writer resources, source tree, boundaries, provenance, Writer parity inventory, doctor, routing, and diff checks passed. Global JSDoc and file-size still report existing unrelated findings.
+      - Native Image list styles and remaining template control parity are pending, including legacy Relative positioning and additional graphic and numbering options. This is a checkpoint without a task closure or cadence increment.
 
 doc_version: 3
-doc_updated_at: "2026-11-22T01:46:03.564Z"
+doc_updated_at: "2026-11-22T01:56:50.084Z"
 doc_updated_by: "CODER"
 description: "Wire the Outline and List Edit Style button to the upstream numbering-style template dialog. Implement the document-owned rule format update and undo contract, connect the template pages to existing numbering mechanisms, and verify shared style changes, cancel, undo and ODT round trip in Writer."
 sections:

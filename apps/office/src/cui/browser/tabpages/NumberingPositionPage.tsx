@@ -1,4 +1,5 @@
 /** @fileoverview Browser controls for the original numbering position page. */
+import { getUniformNumberingValue } from "../../source/tabpages/numpages";
 import { SvxAdjust } from "../../../editeng/inc/svxenum";
 import type { SvxNumberFormat, ConstSvxNumberFormat } from "../../../editeng/inc/numitem";
 import type { ComponentType } from "react";
@@ -8,21 +9,21 @@ const control = "w-full rounded border border-slate-400 p-1";
 
 /** Presents the native alignment or legacy geometry controls. @param props - Selected levels and native format exchange. @returns Numbering position controls. */
 export function NumberingPositionPage({
-  format,
+  formats,
   unit,
   edit,
   reset,
   label,
   MetricField,
 }: Readonly<{
-  format: ConstSvxNumberFormat;
+  formats: readonly [ConstSvxNumberFormat, ...ConstSvxNumberFormat[]];
   unit: FieldUnit;
   edit: (change: (format: SvxNumberFormat) => void) => void;
   reset: () => void;
   MetricField: ComponentType<{
     "aria-label": string;
     className: string;
-    value: number;
+    value: number | undefined;
     unit: FieldUnit;
     minimum: number;
     maximum: number;
@@ -31,11 +32,26 @@ export function NumberingPositionPage({
   }>;
   label: (key: string, fallback: string) => string;
 }>): React.JSX.Element {
-  const aligned = format.GetPositionAndSpaceMode() === "label-alignment";
+  const aligned = formats.some(
+    /** Selects alignment geometry if any selected level uses it. @param level - Selected native format. @returns Whether it uses modern alignment. */
+    (level) => level.GetPositionAndSpaceMode() === "label-alignment",
+  );
+  /** Reads a native field only when its selected formats agree. @param read - Field accessor. @returns Uniform or mixed value. */
+  function uniform<T>(read: (format: ConstSvxNumberFormat) => T): T | undefined {
+    return getUniformNumberingValue(formats, read);
+  }
+  const followedBy = uniform(
+    /** Reads the level separator. @param level - Selected format. @returns Separator. */ (level) =>
+      level.GetLabelFollowedBy(),
+  );
+  const adjustment = uniform(
+    /** Reads the level alignment. @param level - Selected format. @returns Alignment. */ (level) =>
+      level.GetNumAdjust(),
+  );
   /** Binds a native dimension to its metric field. @param caption - Visible label. @param value - Physical twips. @param write - Per-level writer. @param disabled - Gated field state. @returns Metric control. */
   function metric(
     caption: string,
-    value: number,
+    value: number | undefined,
     write: (format: SvxNumberFormat, value: number) => void,
     disabled = false,
   ) {
@@ -73,7 +89,7 @@ export function NumberingPositionPage({
             {label("position.followed-by", "Followed by")}
             <select
               className={control}
-              value={format.GetLabelFollowedBy()}
+              value={followedBy ?? ""}
               onChange={
                 /** Selects the native label separator. @param event - Selected separator. @returns Nothing. */
                 (event) => {
@@ -88,6 +104,7 @@ export function NumberingPositionPage({
                 }
               }
             >
+              {followedBy === undefined && <option value="" disabled />}
               <option value="listtab">{label("position.tab", "Tab stop")}</option>
               <option value="space">{label("position.space", "Space")}</option>
               <option value="nothing">{label("position.nothing", "Nothing")}</option>
@@ -95,10 +112,14 @@ export function NumberingPositionPage({
           </label>
           {metric(
             label("position.tab-stop", "Tab stop at"),
-            format.GetListtabPos(),
+            uniform(
+              /** Reads the level tab stop. @param level - Selected format. @returns Twips. */ (
+                level,
+              ) => level.GetListtabPos(),
+            ),
             /** Stores the tab stop. @param level - Editable format. @param value - Twips. @returns Nothing. */
             (level, value) => level.SetListtabPos(value),
-            format.GetLabelFollowedBy() !== "listtab",
+            formats[0].GetLabelFollowedBy() !== "listtab",
           )}
         </>
       )}
@@ -106,7 +127,13 @@ export function NumberingPositionPage({
         {label("position.alignment", "Alignment")}
         <select
           className={control}
-          value={format.GetNumAdjust()}
+          value={
+            adjustment === undefined
+              ? ""
+              : adjustment === SvxAdjust.Left || adjustment === SvxAdjust.Right
+                ? adjustment
+                : SvxAdjust.Center
+          }
           onChange={
             /** Selects the native label alignment. @param event - Selected alignment. @returns Nothing. */
             (event) => {
@@ -119,6 +146,7 @@ export function NumberingPositionPage({
             }
           }
         >
+          {adjustment === undefined && <option value="" disabled />}
           <option value={SvxAdjust.Left}>{label("position.left", "Left")}</option>
           <option value={SvxAdjust.Center}>{label("position.center", "Centered")}</option>
           <option value={SvxAdjust.Right}>{label("position.right", "Right")}</option>
@@ -128,13 +156,21 @@ export function NumberingPositionPage({
         <>
           {metric(
             label("position.aligned-at", "Aligned at"),
-            format.GetIndentAt() + format.GetFirstLineIndent(),
+            uniform(
+              /** Reads the absolute level label position. @param level - Selected format. @returns Twips. */ (
+                level,
+              ) => level.GetIndentAt() + level.GetFirstLineIndent(),
+            ),
             /** Keeps the text position when changing the label's absolute position. @param level - Editable format. @param value - Twips. @returns Nothing. */
             (level, value) => level.SetFirstLineIndent(value - level.GetIndentAt()),
           )}
           {metric(
             label("position.indent-at", "Indent at"),
-            format.GetIndentAt(),
+            uniform(
+              /** Reads the absolute level text indent. @param level - Selected format. @returns Twips. */ (
+                level,
+              ) => level.GetIndentAt(),
+            ),
             /** Keeps the label's absolute position when changing the indent. @param level - Editable format. @param value - Twips. @returns Nothing. */
             (level, value) => {
               level.SetFirstLineIndent(level.GetFirstLineIndent() + level.GetIndentAt() - value);
@@ -146,13 +182,20 @@ export function NumberingPositionPage({
         <>
           {metric(
             label("position.indent", "Indent"),
-            format.GetAbsLSpace() + format.GetFirstLineOffset(),
+            formats.length === 1
+              ? formats[0].GetAbsLSpace() + formats[0].GetFirstLineOffset()
+              : undefined,
             /** Stores the absolute indented position. @param level - Editable format. @param value - Twips. @returns Nothing. */
             (level, value) => level.SetAbsLSpace(value - level.GetFirstLineOffset()),
+            formats.length !== 1,
           )}
           {metric(
             label("position.width", "Width of numbering"),
-            -format.GetFirstLineOffset(),
+            uniform(
+              /** Reads the native width of numbering. @param level - Selected format. @returns Twips. */ (
+                level,
+              ) => -level.GetFirstLineOffset(),
+            ),
             /** Stores the native negative first-line offset. @param level - Editable format. @param value - Twips. @returns Nothing. */
             (level, value) => {
               level.SetAbsLSpace(level.GetAbsLSpace() + level.GetFirstLineOffset() + value);
@@ -161,7 +204,11 @@ export function NumberingPositionPage({
           )}
           {metric(
             label("position.distance", "Minimum space between numbering and text"),
-            format.GetCharTextDistance(),
+            uniform(
+              /** Reads the level minimum label distance. @param level - Selected format. @returns Twips. */ (
+                level,
+              ) => level.GetCharTextDistance(),
+            ),
             /** Stores the native minimum label distance. @param level - Editable format. @param value - Twips. @returns Nothing. */
             (level, value) => level.SetCharTextDistance(value),
           )}

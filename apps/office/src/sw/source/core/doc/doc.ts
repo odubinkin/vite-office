@@ -117,6 +117,7 @@ import {
   GetUniqueNumRuleName,
   GetNumberedNodes,
   SearchNumRule,
+  RenameNumRule,
   SetNumRule,
   SetOutlineNumRule,
   PropagateOutlineRule,
@@ -703,6 +704,10 @@ export class SwDoc {
   /** Finds a numbering rule. @param name - Rule name. @returns Matching rule. */
   public FindNumRulePtr(name: string): SwNumRule | undefined {
     return this.listsManager.FindNumRulePtr(name);
+  }
+  /** Renames a document-owned list style. @param previous - Existing style name. @param next - New name. @returns Whether the rule was renamed. */
+  public RenameNumRule(previous: string, next: string): boolean {
+    return RenameNumRule(this, previous, next);
   }
   /** Searches native ordered text nodes, stopping at the nearest rule even when incompatible. @param position - Search origin. @param forward - Search direction. @param numbered - Enumeration rather than itemization. @param outline - Required rule classification. @param nonEmptyAllowed - Plain nonempty paragraphs allowed, minus one for unlimited. @param listId - Caller-owned output list identity. @param investigateStart - Include the origin, false by default. @returns Matching native rule, if any. */
   public SearchNumRule(

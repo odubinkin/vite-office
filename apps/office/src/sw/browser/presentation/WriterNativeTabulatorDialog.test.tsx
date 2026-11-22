@@ -8,6 +8,7 @@ import { WRITER_COMMAND_IDS } from "../../uiconfig/swriter/menubar/menubar-comma
 import type { SwWrtShell } from "../../source/uibase/wrtsh/wrtsh1";
 import { SwPosition } from "../../source/core/crsr/pam";
 import { applyWriterParagraphList } from "../../source/core/doc/list";
+import { SwNumFormat } from "../../source/core/doc/number";
 import { GetNumRuleFromPool } from "../../source/core/doc/poolfmt-num";
 import { SvxFrameDirection } from "../../../editeng/inc/frmdir";
 import { SwFormatLineNumber } from "../../inc/fmtline";
@@ -613,6 +614,9 @@ it("applies a pool list style and authored outline level through the regular Par
     try {
       expect(reopened.document.paragraphs[0]?.GetAttrOutlineLevel()).toBe(1);
       expect(reopened.document.paragraphs[0]?.GetListLabel()).toBe("•");
+      expect(reopened.document.paragraphs[0]?.GetNumRule()?.GetPoolFormatId()).toBe(
+        node.GetNumRule()?.GetPoolFormatId(),
+      );
       expect(reopened.document.paragraphs[0]?.GetAttr(RES_LINENUMBER).QueryValue()).toEqual({
         count: true,
         startValue: 2,
@@ -751,6 +755,113 @@ it("edits a named list style in a child of Paragraph, preserving the parent draf
     } finally {
       reopened.Dispose();
     }
+  } finally {
+    cleanup();
+    owner.session.Close();
+  }
+});
+
+it("validates a custom list name and groups its applied rename and format edits", /** Exercises General, pending parent names and one undo for the accepted template changes. @returns Completion. */ async () => {
+  const owner = open(
+    U.CM,
+    /** Creates a named user style in the active paragraph. @param shell - Writer shell. @returns Nothing. */ (
+      shell,
+    ) => {
+      applyWriterParagraphList(shell.GetActiveParagraph(), {
+        kind: "numbered",
+        styleId: "Custom list",
+        listId: "custom-list",
+        level: 0,
+      });
+    },
+  );
+  try {
+    const document = owner.shell.GetDoc();
+    const rule = document.FindNumRulePtr("Custom list");
+    const undoCount = document.GetUndoManager().GetUndoActionCount();
+    const parent = within(screen.getByRole("dialog", { name: "Paragraph" }));
+    fireEvent.click(parent.getByRole("tab", { name: "Outline & List" }));
+    fireEvent.click(parent.getByRole("button", { name: "Edit Style" }));
+    const child = within(screen.getByRole("dialog", { name: "List Style: Custom list" }));
+    const name = child.getByRole("textbox", { name: "Name" });
+    expect(name).toHaveFocus();
+    fireEvent.change(name, { target: { value: "Numbering 123" } });
+    fireEvent.click(child.getByRole("tab", { name: "Customize" }));
+    expect(name).toHaveAttribute("aria-invalid", "true");
+    expect(child.getByRole("tab", { name: "General" })).toHaveAttribute("aria-selected", "true");
+    fireEvent.change(name, { target: { value: "  Renamed list" } });
+    fireEvent.click(child.getByRole("tab", { name: "Customize" }));
+    fireEvent.change(child.getByRole("spinbutton", { name: "Start at" }), {
+      target: { value: "7" },
+    });
+    fireEvent.click(child.getByRole("button", { name: "OK" }));
+    expect(parent.getByRole("combobox", { name: "List style" })).toHaveValue("Renamed list");
+    expect(parent.queryByRole("option", { name: "Custom list" })).toBeNull();
+    expect(document.FindNumRulePtr("Renamed list")).toBe(rule);
+    expect(rule?.Get(0).GetStart()).toBe(7);
+    expect(owner.shell.GetActiveParagraph().GetListId()).toBe("custom-list");
+    fireEvent.click(parent.getByRole("button", { name: "OK" }));
+    expect(await owner.result.value).toBe(false);
+    expect(document.GetUndoManager().GetUndoActionCount()).toBe(undoCount + 1);
+    expect(owner.shell.Undo()).toBe(true);
+    expect(document.FindNumRulePtr("Custom list")).toBe(rule);
+    expect(rule?.Get(0).GetStart()).toBe(1);
+    expect(owner.shell.Redo()).toBe(true);
+    expect(document.FindNumRulePtr("Renamed list")).toBe(rule);
+    expect(rule?.Get(0).GetStart()).toBe(7);
+  } finally {
+    cleanup();
+    owner.session.Close();
+  }
+});
+
+it("shows mixed numbering controls without changing the independently selected level values", /** Checks native first-to-last behavior and the mixed position fields. @returns Nothing. */ () => {
+  const owner = open(
+    U.CM,
+    /** Creates distinct level values in one live rule. @param shell - Writer shell. @returns Nothing. */ (
+      shell,
+    ) => {
+      const doc = shell.GetDoc();
+      const rule = GetNumRuleFromPool(doc, "Numbering 123");
+      if (!rule) throw new Error("Numbering presets are missing.");
+      applyWriterParagraphList(shell.GetActiveParagraph(), {
+        kind: "numbered",
+        styleId: "Numbering 123",
+        listId: "level-preview",
+        level: 0,
+      });
+      const second = new SwNumFormat(rule.Get(1));
+      second.SetStart(5);
+      second.SetCharFormat(undefined);
+      second.SetIndentAt(2500);
+      rule.Set(1, second);
+      second.Dispose();
+    },
+  );
+  try {
+    const parent = within(screen.getByRole("dialog", { name: "Paragraph" }));
+    fireEvent.click(parent.getByRole("tab", { name: "Outline & List" }));
+    fireEvent.click(parent.getByRole("button", { name: "Edit Style" }));
+    const child = within(screen.getByRole("dialog", { name: "List Style: Numbering 123" }));
+    fireEvent.click(child.getByRole("tab", { name: "Customize" }));
+    const levels = child.getByRole("listbox", { name: "Level" });
+    const second = within(levels).getByRole("option", {
+      name: /^2$/u,
+    }) as HTMLOptionElement;
+    const third = within(levels).getByRole("option", {
+      name: /^3$/u,
+    }) as HTMLOptionElement;
+    const start = child.getByRole("spinbutton", { name: "Start at" });
+    second.selected = true;
+    fireEvent.change(levels);
+    expect(start).toHaveDisplayValue("");
+    expect(child.getByRole("combobox", { name: "Character style" })).toHaveDisplayValue("");
+    third.selected = true;
+    fireEvent.change(levels);
+    expect(start).toHaveValue(1);
+    fireEvent.click(child.getByRole("tab", { name: "Position" }));
+    expect(child.getByRole("spinbutton", { name: "Indent at" })).toHaveDisplayValue("");
+    expect(child.getByRole("button", { name: "Apply" })).toBeDisabled();
   } finally {
     cleanup();
     owner.session.Close();

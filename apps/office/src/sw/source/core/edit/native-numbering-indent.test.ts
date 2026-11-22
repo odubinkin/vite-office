@@ -7,6 +7,8 @@ import { SwPaM, SwPosition } from "../crsr/pam";
 import { SwWrtShell } from "../../uibase/wrtsh/wrtsh1";
 import { SwDocShell } from "../../uibase/app/docsh";
 import { SwUndoInsNum } from "../undo/unnum";
+import { SwNumRuleItem } from "../para/paratr";
+import { RES_PARATR_NUMRULE } from "../../../inc/hintids";
 import { createDocument } from "../../../../sfx2/source/doc/objsh";
 import {
   encodeWriterDocument,
@@ -296,4 +298,51 @@ it("exchanges explicit and inherited format levels and character styles with the
   expect(accepted.IsContinusNum()).toBe(true);
   accepted.Dispose();
   source.Dispose();
+});
+
+it("renames the actual numbered lists and both direct and inherited style references across undo and ODF", /** Checks that the numbered rules and default lists survive a name-only edit. @returns Completion. */ async () => {
+  const f = fixture();
+  const { doc, first, rule, shell } = f;
+  const style = doc.MakeTextFormatColl("List paragraph", doc.GetDfltTextFormatColl());
+  style.SetFormatAttr(new SwNumRuleItem(rule.GetName()));
+  const styled = doc.nodes.MakeTextNode(doc.nodes.GetEndOfContent(), style);
+  styled.SetText("Inherited numbering");
+  const previous = rule.GetName();
+  const defaultListId = rule.GetDefaultListId();
+  const defaultList = doc.GetDocumentListsManager().GetListForListStyle(previous);
+  const directId = first.GetListId();
+  doc.GetUndoManager().Clear();
+  expect(styled.GetNumRule()).toBe(rule);
+  expect(styled.GetpSwAttrSet()?.GetItemIfSet(RES_PARATR_NUMRULE, false)).toBeUndefined();
+  expect(doc.RenameNumRule(previous, "Renamed list")).toBe(true);
+  expect(doc.FindNumRulePtr(previous)).toBeUndefined();
+  expect(doc.FindNumRulePtr("Renamed list")).toBe(rule);
+  expect(rule.GetDefaultListId()).toBe(defaultListId);
+  expect(doc.GetDocumentListsManager().GetListForListStyle("Renamed list")).toBe(defaultList);
+  expect(defaultList.GetDefaultListStyleName()).toBe("Renamed list");
+  expect(first.GetListId()).toBe(directId);
+  expect(first.GetNumRule()).toBe(rule);
+  expect(styled.GetNumRule()).toBe(rule);
+  expect(styled.GetpSwAttrSet()?.GetItemIfSet(RES_PARATR_NUMRULE, false)).toBeUndefined();
+  expect(style.GetNumRule(false).GetValue()).toBe("Renamed list");
+  expect(shell.Undo()).toBe(true);
+  expect(style.GetNumRule(false).GetValue()).toBe(previous);
+  expect(first.GetNumRule()).toBe(rule);
+  expect(shell.Redo()).toBe(true);
+  expect(style.GetNumRule(false).GetValue()).toBe("Renamed list");
+  expect(doc.RenameNumRule("Renamed list", "Outline")).toBe(false);
+
+  const { document } = await readOdtDocument(await writeOdtDocument(doc, f.metadata), f.metadata);
+  expect(document.paragraphs[0]?.GetNumRule()?.GetName()).toBe("Renamed list");
+  expect(
+    document.paragraphs
+      .find(
+        /** Finds the inherited list paragraph. @param node - Document paragraph. @returns Whether it matches. */ (
+          node,
+        ) => node.GetText() === "Inherited numbering",
+      )
+      ?.GetNumRule()
+      ?.GetName(),
+  ).toBe("Renamed list");
+  document.Dispose();
 });

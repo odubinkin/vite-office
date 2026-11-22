@@ -1,6 +1,10 @@
 /** @fileoverview Pinned English numbering presets used by the original CUI pick pages. */
 import { SvxNumType as Type } from "../../../editeng/inc/svxenum";
-import { SvxNumberFormat, type SvxNumRule } from "../../../editeng/inc/numitem";
+import {
+  SvxNumberFormat,
+  type ConstSvxNumberFormat,
+  type SvxNumRule,
+} from "../../../editeng/inc/numitem";
 import { Font } from "../../../vcl/source/font/font";
 
 /** Common.xcs DefaultBullets in gallery order. */
@@ -141,4 +145,20 @@ export function applyOutlinePreset(
     }
     rule.SetLevel(index, level);
   }
+}
+
+/** Reads a control value only when the selected levels agree with the first. @param levels - Nonempty selected native formats. @param read - Native field accessor. @returns Agreed value, or undefined for a mixed field. */
+export function getUniformNumberingValue<T>(
+  levels: readonly ConstSvxNumberFormat[],
+  read: (format: ConstSvxNumberFormat) => T,
+): T | undefined {
+  const first = levels[0];
+  if (!first) return undefined;
+  const value = read(first);
+  return levels.every(
+    /** Compares one selected level to the first value. @param format - Selected format. @returns Whether the field agrees. */
+    (format) => read(format) === value,
+  )
+    ? value
+    : undefined;
 }

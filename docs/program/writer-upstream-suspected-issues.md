@@ -6045,3 +6045,9 @@ The pinned direction detector describes the Unicode paragraph-level algorithm bu
 - Source: pinned `sw/source/core/doc/docnum.cxx`, `GetUpperLvlChg` and `lcl_ChgNumRule`.
 - Observation: the helper produces a mask from a 16-bit argument and returns it as an 8-bit value. On the tenth list level, a change to the ninth level cannot trigger the dependent-level notification through this mask, even when the tenth-level label includes its parent. Direct format changes still mark their own level.
 - Local behavior: Writer retains the eight-bit return width in `docnum.ts`. This observation concerns the per-node invalidation path. The source still invalidates and validates the numbering rule after a format change.
+
+### WRITER-741 — Some numbering fields compare only the first and last selected levels
+
+- Source: pinned `cui/source/tabpages/numpages.cxx`, `SvxNumOptionsTabPage::InitControls`.
+- Observation: the loop assigns equality for the start, prefix and suffix on each selected level. An intermediate level can differ without the field appearing mixed if the last selected level matches the first. Type, character style and sublevels accumulate equality across the selection.
+- Local behavior: Writer keeps the first-to-last comparison for those three fields and retains full selection comparisons for the others. Display alone leaves the rule unchanged.

@@ -59,7 +59,9 @@ export interface WriterListStyleTemplateRequest {
   readonly characterStyles: readonly string[];
   readonly bulletStyle: string;
   readonly numberingStyle: string;
-  readonly apply: (items: SfxItemSet) => boolean;
+  readonly nameEditable: boolean;
+  readonly isValidName: (name: string) => boolean;
+  readonly apply: (name: string, items?: SfxItemSet) => boolean;
 }
 /** Paragraph dialog request initialized by the text shell. */
 export interface WriterParagraphDialogRequest {

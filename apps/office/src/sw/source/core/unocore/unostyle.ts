@@ -1,4 +1,5 @@
 /** @fileoverview Consumed SwXStyleFamilies/SwXStyleFamily/SwXStyle ownership from pinned unostyle.cxx; descriptors attach to the document's existing format owners. */
+import { GetNumRuleFromPool } from "../doc/poolfmt-num";
 import { PropertyState } from "../../../../udkapi/com/sun/star/beans/PropertyState";
 import { SfxItemState } from "../../../../svl/source/items/itemset";
 import { SwNumRule } from "../doc/number";
@@ -347,9 +348,14 @@ export class SwXStyle {
       );
     } else if (this.family === "PageStyles") this.owner = this.doc.MakePageDesc(name);
     else {
-      const rule = new SwNumRule(name, "label-alignment");
-      rule.SetAutoRule(false);
-      this.owner = this.doc.AddNumRule(rule);
+      if (this.doc.FindNumRulePtr(name)) elementExists();
+      const pooled = GetNumRuleFromPool(this.doc, name);
+      if (pooled) this.owner = pooled;
+      else {
+        const rule = new SwNumRule(name, "label-alignment");
+        rule.SetAutoRule(false);
+        this.owner = this.doc.AddNumRule(rule);
+      }
     }
     if (this.family === "CharacterStyles") {
       const pending = [...this.pending].sort(

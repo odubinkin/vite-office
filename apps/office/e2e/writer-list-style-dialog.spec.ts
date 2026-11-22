@@ -72,3 +72,57 @@ test("Writer edits a shared named list style without committing the paragraph dr
   await page.getByRole("button", { name: "Redo", exact: true }).click();
   await expect(markers).toHaveText(["VIII.", "VIII."]);
 });
+
+test("Writer renames a custom list style and preserves the open Paragraph draft", /** Verifies model updates and the General page error and focus lifecycle. @param fixtures - Browser fixtures. @param fixtures.page - Chrome page. @returns Completion. */ async ({
+  page,
+}) => {
+  const document = createWriterDocument();
+  const node = document.paragraphs[0];
+  if (!node) throw new Error("Body is missing.");
+  node.SetText("Custom list paragraph");
+  applyWriterParagraphList(node, {
+    kind: "numbered",
+    styleId: "Custom list",
+    listId: "custom",
+    level: 0,
+  });
+  const bytes = await writeOdtDocument(document, { title: "Custom list styles" });
+  document.Dispose();
+  await page.goto("/writer");
+  await page.getByRole("button", { name: "Open", exact: true }).click();
+  await page.getByRole("tab", { name: "On computer", exact: true }).click();
+  await page.getByLabel("Browse").setInputFiles({
+    name: "custom-list.odt",
+    mimeType: "application/vnd.oasis.opendocument.text",
+    buffer: Buffer.from(bytes),
+  });
+  await page
+    .locator("[data-writer-paragraph-id]")
+    .filter({ hasText: /^Custom list paragraph$/u })
+    .click();
+  await openBrowserMenu(page, "Format");
+  await page.getByRole("menuitem", { name: "Paragraph…", exact: true }).click();
+  const parent = page.getByRole("dialog", { name: "Paragraph", exact: true });
+  await parent.getByRole("tab", { name: "Outline & List", exact: true }).click();
+  await parent.getByRole("combobox", { name: "Outline level", exact: true }).selectOption("2");
+  const edit = parent.getByRole("button", { name: "Edit Style", exact: true });
+  await edit.click();
+  const child = page.getByRole("dialog", { name: "List Style: Custom list", exact: true });
+  const name = child.getByRole("textbox", { name: "Name", exact: true });
+  await expect(name).toBeFocused();
+  await name.fill("Numbering 123");
+  await child.getByRole("tab", { name: "Customize", exact: true }).click();
+  await expect(name).toHaveAttribute("aria-invalid", "true");
+  await expect(name).toBeFocused();
+  await name.fill("  Renamed list");
+  await child.getByRole("button", { name: "OK", exact: true }).click();
+  await expect(edit).toBeFocused();
+  await expect(parent.getByRole("combobox", { name: "List style", exact: true })).toHaveValue(
+    "Renamed list",
+  );
+  await expect(parent.getByRole("combobox", { name: "Outline level", exact: true })).toHaveValue(
+    "2",
+  );
+  await parent.getByRole("button", { name: "Cancel", exact: true }).click();
+  await expect(page.locator("[data-writer-list-marker]")).toHaveText("1.");
+});
