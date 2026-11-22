@@ -1,0 +1,23 @@
+{
+  "schema_version": 1,
+  "task_id": "202611220524-FE39NC",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-11-22T05:50:15.948Z",
+  "verdict": "pass",
+  "summary": "Writer connects native page and paragraph line-spacing, view-only baseline grid and reference style transport.",
+  "evaluated_sha": "dca1fb005062a658b6ec210a2739b15461346b52",
+  "blueprint_digest": "b537021514bed4035d1ed856601044edd8fa8c12e338dff428890164754a6adf",
+  "findings": [
+    "Original item exchange, real style ownership and separate view state are covered by focused model, dialog, storage and production browser cases."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202611220524-FE39NC/README.md",
+    "dca1fb005062 and task Findings: 53 Writer scenarios, 5 Chromium scenarios, production bundle and exact TypeScript"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": [
+    "Non-fixed font metrics follow the existing browser device approximation. WRITER-743 preserves native reference style undo semantics."
+  ]
+}
