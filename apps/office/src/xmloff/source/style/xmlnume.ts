@@ -1,4 +1,7 @@
 /** @fileoverview Owns supported ODF 1.3 list label-alignment serialization from pinned xmlnume.cxx. */
+import type { SvXMLGraphicHelper } from "../core/xmlgrhlp";
+import { VertOrientation } from "../../../offapi/com/sun/star/text/VertOrientation";
+import { encodeBase64 } from "../../../comphelper/source/misc/base64";
 import type { OdfListLevelLayout } from "../text/txtparae";
 import { SvXMLUnitConverter } from "../core/xmluconv";
 import { exportFamilyName } from "./XMLFontStylesContext";
@@ -8,6 +11,9 @@ export interface XMLListLevelExport extends OdfListLevelLayout {
   readonly kind: "bullet" | "numbered";
   /** Native sal_Int16 UNO NumberingType: ARABIC=4, NUMBER_NONE=5, CHAR_SPECIAL=6. */
   readonly numberingType?: number;
+  readonly graphic?: Readonly<{ mediaType: string; GetNativeData(): Uint8Array }>;
+  readonly graphicSize?: Readonly<{ width: number; height: number }>;
+  readonly vertOrient?: number;
   readonly bulletChar?: string;
   /** Represented Name member of the native BulletFont descriptor. */
   readonly bulletFont?: Readonly<{ name: string }>;
@@ -19,10 +25,11 @@ export interface XMLListLevelExport extends OdfListLevelLayout {
 
 /** Source-owned standard ODF numbering exporter with an XML attribute encoding port. */
 export class SvxXMLNumRuleExport {
-  /** Binds XML encoding and borrowed font declarations. @param escapeValue - XML encoding. @param fontFaceName - Existing font pool lookup; does not register fonts. @returns Exporter. */
+  /** Binds XML encoding and borrowed font declarations. @param escapeValue - XML encoding. @param fontFaceName - Existing font pool lookup; does not register fonts. @param graphicHelper - Package graphic service. @returns Exporter. */
   public constructor(
     private readonly escapeValue: (value: string) => string,
     private readonly fontFaceName?: (familyName: string) => string | undefined,
+    private readonly graphicHelper?: SvXMLGraphicHelper,
   ) {}
   /** Exports one native numbering property sequence. @param level - Zero-based level. @param properties - Level properties. @returns Standard ODF 1.3 XML. */
   public exportLevelStyle(level: number, properties: XMLListLevelExport): string {
@@ -32,13 +39,51 @@ export class SvxXMLNumRuleExport {
       attributes.push(`style:num-prefix="${this.escapeValue(properties.prefix)}"`);
     if (properties.suffix)
       attributes.push(`style:num-suffix="${this.escapeValue(properties.suffix)}"`);
-    const element = type === 6 ? "text:list-level-style-bullet" : "text:list-level-style-number";
+    const element =
+      type === 6
+        ? "text:list-level-style-bullet"
+        : type === 8
+          ? "text:list-level-style-image"
+          : "text:list-level-style-number";
+    let inline = "";
+    const imageGeometry: string[] = [];
+    if (type === 8) {
+      const graphic = properties.graphic;
+      if (graphic) {
+        const bytes = graphic.GetNativeData();
+        if (this.graphicHelper) {
+          const url = this.graphicHelper.saveGraphic({ bytes, mediaType: graphic.mediaType });
+          attributes.push(
+            `xlink:href="${this.escapeValue(url)}"`,
+            'xlink:type="simple"',
+            'xlink:show="embed"',
+            'xlink:actuate="onLoad"',
+          );
+        } else inline = `<office:binary-data>${encodeBase64(bytes)}</office:binary-data>`;
+      }
+      const size = properties.graphicSize;
+      const converter = new SvXMLUnitConverter("mm100");
+      if (size && size.width > 0)
+        imageGeometry.push(`fo:width="${converter.convertMeasureToXML(size.width)}"`);
+      if (size && size.height > 0)
+        imageGeometry.push(`fo:height="${converter.convertMeasureToXML(size.height)}"`);
+      const orientation = properties.vertOrient ?? VertOrientation.NONE;
+      if (orientation >= VertOrientation.TOP && orientation <= VertOrientation.LINE_BOTTOM) {
+        const index = orientation - 1;
+        const relation = index < 3 ? "baseline" : index < 6 ? "char" : "line";
+        const position = relation === "baseline" ? 2 - index : index % 3;
+        imageGeometry.push(
+          `style:vertical-rel="${relation}"`,
+          `style:vertical-pos="${["top", "middle", "bottom"][position]}"`,
+        );
+      }
+    }
     if (type === 6) {
       let cBullet = properties.bulletChar?.codePointAt(0) ?? 0xf095;
       if (cBullet !== 0 && cBullet < 32) cBullet = 0xf095;
       const bullet = cBullet === 0 ? "" : String.fromCodePoint(cBullet);
       attributes.push(`text:bullet-char="${this.escapeValue(bullet)}"`);
-    } else {
+    } else if (type !== 8) {
       attributes.push(
         `style:num-format="${new SvXMLUnitConverter("mm100").convertNumFormat(type)}"`,
       );
@@ -59,19 +104,22 @@ export class SvxXMLNumRuleExport {
           : `style:font-name="${this.escapeValue(face)}"`;
       fontProperties = `<style:text-properties ${attribute}/>`;
     }
-    return `<${element} ${attributes.join(" ")}>${exportListLevelLayout(properties)}${fontProperties}</${element}>`;
+    return `<${element} ${attributes.join(" ")}>${exportListLevelLayout(properties, imageGeometry)}${fontProperties}${inline}</${element}>`;
   }
 }
 
-/** Emits native mode and conditional label-alignment attributes. @param layout - Native UNO MM100 properties, or no supported alignment. @returns List-level XML. */
-export function exportListLevelLayout(layout: OdfListLevelLayout | undefined): string {
+/** Emits native mode and conditional label-alignment attributes. @param layout - Native UNO MM100 properties, or no supported alignment. @param graphic - Optional native image properties. @returns List-level XML. */
+export function exportListLevelLayout(
+  layout: OdfListLevelLayout | undefined,
+  graphic: readonly string[] = [],
+): string {
   if (layout === undefined) return "";
   const converter = new SvXMLUnitConverter("mm100");
   if (layout.positionAndSpaceMode !== "label-alignment") {
     const before = (layout.absLSpace ?? 0) + (layout.firstLineOffset ?? 0);
     const width = -(layout.firstLineOffset ?? 0);
     const distance = layout.charTextDistance ?? 0;
-    const attributes: string[] = [];
+    const attributes = [...graphic];
     if (before !== 0)
       attributes.push(`text:space-before="${converter.convertMeasureToXML(before)}"`);
     if (width !== 0)
@@ -91,5 +139,5 @@ export function exportListLevelLayout(layout: OdfListLevelLayout | undefined): s
     attributes.push(`fo:text-indent="${converter.convertMeasureToXML(firstLineIndent)}"`);
   if (indentAt !== 0)
     attributes.push(`fo:margin-left="${converter.convertMeasureToXML(indentAt)}"`);
-  return `<style:list-level-properties text:list-level-position-and-space-mode="label-alignment"><style:list-level-label-alignment ${attributes.join(" ")}/></style:list-level-properties>`;
+  return `<style:list-level-properties text:list-level-position-and-space-mode="label-alignment"${graphic.length === 0 ? "" : ` ${graphic.join(" ")}`}><style:list-level-label-alignment ${attributes.join(" ")}/></style:list-level-properties>`;
 }

@@ -1,4 +1,5 @@
-/** @fileoverview Original SvxBrushItem non-graphic color constructor/value/member family. Graphic loaders/constructors/positions/links remain unported; no fake Graphic provider, memory manager or localized presentation. */
+/** @fileoverview Original SvxBrushItem color members and embedded graphic values. */
+import { Graphic } from "../../../vcl/source/gdi/graph";
 import { SfxPoolItem } from "../../../svl/source/items/poolitem";
 import type { SfxItemPool } from "../../../svl/source/items/itempool";
 import { Any2Bool } from "../../../svl/inc/poolitem";
@@ -28,7 +29,7 @@ import {
 } from "../../inc/memberids";
 /** Original graphic persistence version declaration; no binary codec is claimed. */
 export const BRUSH_GRAPHIC_VERSION = 1;
-/** Original position values; actual graphic constructor family remains separate. */
+/** Original brush graphic positions. */
 export enum SvxGraphicPosition {
   GPOS_NONE,
   GPOS_LT,
@@ -47,19 +48,22 @@ export enum SvxGraphicPosition {
 function lcl_PercentToTransparency(percent: number): number {
   return percent ? (Math.trunc((50 + 0xfe * percent) / 100) << 24) >> 24 : 0;
 }
-/** Original pooled brush color values; reachable instances use the non-graphic GPOS_NONE family. */
+/** Original pooled color and embedded graphic brush. */
 export class SvxBrushItem extends SfxPoolItem {
   private readonly maColor = new Color(COL_TRANSPARENT);
   private readonly maComplexColor = new ComplexColor();
   private readonly maFilterColor = new Color(COL_TRANSPARENT);
   private mnShadingValue: number = ShadingPattern.CLEAR;
   private mnGraphicTransparency = 0;
-  /** Original Which-only/Color/Color+ComplexColor and copy forms. Source graphics overloads are not fabricated. @param args - Supported original constructor family. @returns Brush. */
+  private graphic: Graphic | undefined;
+  private graphicPosition = SvxGraphicPosition.GPOS_NONE;
+  /** Original Which-only, color, embedded graphic and copy forms. @param args - Supported original constructor family. @returns Brush. */
   constructor(
     ...args:
       | [which: number]
       | [color: Readonly<Color>, which: number]
       | [color: Readonly<Color>, complex: Readonly<ComplexColor>, which: number]
+      | [graphic: Graphic, position: SvxGraphicPosition, which: number]
       | [source: SvxBrushItem]
   ) {
     const first = args[0];
@@ -76,6 +80,13 @@ export class SvxBrushItem extends SfxPoolItem {
       this.maFilterColor.assign(first.maFilterColor);
       this.mnShadingValue = first.mnShadingValue;
       this.mnGraphicTransparency = first.mnGraphicTransparency;
+      this.graphic = first.graphic;
+      this.graphicPosition = first.graphicPosition;
+    } else if (first instanceof Graphic) {
+      this.graphic = first;
+      const position = args[1] as SvxGraphicPosition;
+      this.graphicPosition =
+        position === SvxGraphicPosition.GPOS_NONE ? SvxGraphicPosition.GPOS_MM : position;
     } else if (typeof first !== "number") {
       this.maColor.assign(first);
       if (args.length === 3) this.maComplexColor.assign(args[1] as Readonly<ComplexColor>);
@@ -90,7 +101,7 @@ export class SvxBrushItem extends SfxPoolItem {
     void pool;
     return new SvxBrushItem(this);
   }
-  /** Original non-graphic comparison includes full represented payload and omits Which. Graphic links are irrelevant in the native GPOS_NONE branch. @param other - Candidate. @returns Equality. */
+  /** Compares the represented brush payload independently of Which. @param other - Candidate. @returns Equality. */
   public override equals(other: SfxPoolItem): boolean {
     return (
       other instanceof SvxBrushItem &&
@@ -98,27 +109,48 @@ export class SvxBrushItem extends SfxPoolItem {
       this.maComplexColor.equals(other.maComplexColor) &&
       this.maFilterColor.equals(other.maFilterColor) &&
       this.mnGraphicTransparency === other.mnGraphicTransparency &&
-      this.mnShadingValue === other.mnShadingValue
+      this.mnShadingValue === other.mnShadingValue &&
+      this.graphicPosition === other.graphicPosition &&
+      (this.graphicPosition === SvxGraphicPosition.GPOS_NONE ||
+        (this.graphic === undefined
+          ? other.graphic === undefined
+          : other.graphic !== undefined && this.graphic.Equals(other.graphic)))
     );
   }
   /** Original hash availability. @returns True. */
   public supportsHashCode(): boolean {
     return true;
   }
-  /** Original reachable GPOS_NONE field fold through existing logical hash primitives; not a persisted native binary hash. @returns Logical unsigned64 hash. */
+  /** Hashes the represented fields in native order; embedded pixels are compared by equality. @returns Logical unsigned64 hash. */
   public hashCode(): bigint {
     const seed: [bigint] = [0n];
     hash_combine(seed, this.maColor.toInt32());
     hash_combine(seed, this.maComplexColor.getHash());
     hash_combine(seed, this.maFilterColor.toInt32());
-    hash_combine(seed, SvxGraphicPosition.GPOS_NONE);
+    hash_combine(seed, this.graphicPosition);
     hash_combine(seed, this.mnGraphicTransparency);
     hash_combine(seed, this.mnShadingValue);
     return seed[0];
   }
-  /** Original non-graphic color-use branch, testing full transparency. @returns Whether color is used. */
+  /** Tests whether a graphic position or nontransparent color is in use. @returns Whether the brush is used. */
   public isUsed(): boolean {
-    return !this.maColor.IsFullyTransparent();
+    return (
+      this.graphicPosition !== SvxGraphicPosition.GPOS_NONE || !this.maColor.IsFullyTransparent()
+    );
+  }
+  /** Borrows the immutable embedded graphic. @returns Graphic if present. */
+  public GetGraphic(): Graphic | undefined {
+    return this.graphic;
+  }
+  /** Reads the native brush position. @returns Graphic position. */
+  public GetGraphicPos(): SvxGraphicPosition {
+    return this.graphicPosition;
+  }
+  /** Replaces the embedded graphic and supplies the native middle position if unset. @param graphic - Immutable graphic value. @returns Nothing. */
+  public SetGraphic(graphic: Graphic): void {
+    this.graphic = graphic;
+    if (this.graphicPosition === SvxGraphicPosition.GPOS_NONE)
+      this.graphicPosition = SvxGraphicPosition.GPOS_MM;
   }
   /** Original mutable/const overloads share the same owned value. @returns Actual color. */
   public GetColor(): Color {
@@ -263,3 +295,8 @@ export class SvxBrushItem extends SfxPoolItem {
     return true;
   }
 }
+
+/** Borrowed brush view used by native formatting objects. */
+export type ConstSvxBrushItem = Readonly<
+  Pick<SvxBrushItem, "Clone" | "equals" | "GetGraphic" | "GetGraphicPos">
+>;

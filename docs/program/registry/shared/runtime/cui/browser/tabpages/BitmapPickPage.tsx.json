@@ -1,0 +1,37 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/cui/browser/tabpages/BitmapPickPage.tsx",
+    "classification": "browser-adaptation",
+    "state": "active",
+    "suite": "shared",
+    "subsystem": "numbering-dialog",
+    "capabilityIds": [
+      "CAP-0102"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "not-applicable",
+      "defaultStatus": "not-applicable",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/cui/browser/tabpages/BitmapPickPage.tsx#BitmapPickPage",
+        "vendor/libreoffice-reference/cui/source/tabpages/numpages.cxx#SvxBitmapPickTabPage",
+        "apps/office/e2e/writer-list-style-dialog.spec.ts",
+        "apps/office/src/cui/source/tabpages/numpages-bitmap-data.json",
+        "vendor/libreoffice-reference/cui/uiconfig/ui/pickgraphicpage.ui",
+        "vendor/libreoffice-reference/cui/uiconfig/ui/numberingoptionspage.ui"
+      ],
+      "justification": "Browser image decoding and selection for the source-shaped CUI Bullets gallery, including the original Add and Resize path.",
+      "knownViolations": [],
+      "localSymbols": [
+        "BitmapPickPage",
+        "NumberingBitmapOptions"
+      ],
+      "sourceResponsibility": "browser-owned",
+      "upstreamFile": null,
+      "upstreamSymbols": []
+    }
+  }
+}

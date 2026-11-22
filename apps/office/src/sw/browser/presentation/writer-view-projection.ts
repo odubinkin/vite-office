@@ -115,12 +115,11 @@ import { SfxBoolItem } from "../../../svl/source/items/cenumitm";
 import { WRITER_AVAILABLE_PARAGRAPH_STYLE_POOL } from "../../inc/poolfmt";
 import type { WriterPageDescriptorValue } from "../../source/core/layout/pagedesc";
 import { projectWriterParagraphLineLayout } from "../../source/core/text/itrform2";
-import { resolveSwNumberPortionBackground } from "../../source/core/text/inftxt";
 import type { SwViewOption } from "../../inc/viewopt";
 import {
-  resolveSwNumberPortionFont,
-  type SwNumberPortionFont,
-} from "../../source/core/text/txtfld";
+  projectWriterListMarker,
+  type WriterListMarkerProjection,
+} from "./writer-list-marker-projection";
 import type { SwNumberingTabSettings } from "../../source/core/text/txttab";
 import { getFontFamilyGeneric } from "../../../xmloff/source/style/fonthdl";
 import type { WriterParagraphComputedStyle } from "./writer-view-projection.types";
@@ -129,17 +128,13 @@ export type { WriterParagraphComputedStyle } from "./writer-view-projection.type
 export type WriterParagraphStyleOption = StyleToolboxEntry;
 
 /** Primitive/resource-ID projection of one text node, owned only by the browser presenter. */
-export interface WriterParagraphProjection {
+export interface WriterParagraphProjection extends WriterListMarkerProjection {
   /** Device caret painting follows the current native cursor's before-label state. */
   readonly inFrontOfLabel?: boolean;
   /** Minimum occupied label gap, separate from authored list indentation. */
   readonly listMarkerMinimumDistancePt?: number;
   /** Native tab search inputs for label-alignment numbering; legacy numbering has no following tab portion. */
   readonly listTabSettings?: Readonly<SwNumberingTabSettings>;
-  /** Window-device decoration derived from the native marked list level and view options. */
-  readonly listMarkerBackgroundColor?: string;
-  /** Detached native font values used only by the numbering paint device. */
-  readonly listMarkerFont?: Readonly<SwNumberPortionFont>;
   readonly alignment: WriterParagraphAlignment;
   readonly bulletChar?: string;
   readonly computedStyle: WriterParagraphComputedStyle;
@@ -148,7 +143,6 @@ export interface WriterParagraphProjection {
   readonly listLayout?: WriterParagraphListLayout;
   readonly listGeometryWins?: boolean;
   readonly listId: string;
-  readonly listMarker?: string;
   readonly textLeftMargin: number;
   readonly uncountedListTextLeftPt?: number;
   readonly numRuleName: string;
@@ -343,12 +337,7 @@ export class WriterViewProjection {
           list.kind === "bullet"
             ? getWriterNumFormatBullet(node.GetNumRule()?.Get(list.level))
             : undefined;
-        const listMarker = node.GetListLabel();
-        const listMarkerFont = resolveSwNumberPortionFont(node);
-        const listMarkerBackgroundColor =
-          viewOptions === undefined
-            ? undefined
-            : resolveSwNumberPortionBackground(node, viewOptions);
+
         const uncountedTextLeft = node.IsCountedInList()
           ? undefined
           : resolveSwListTextLeftMargin(node);
@@ -526,9 +515,7 @@ export class WriterViewProjection {
           ...(inFrontOfLabel && cursor.GetPoint().GetNode() === node
             ? { inFrontOfLabel: true }
             : {}),
-          ...(listMarker === undefined ? {} : { listMarker }),
-          ...(listMarkerFont === undefined ? {} : { listMarkerFont }),
-          ...(listMarkerBackgroundColor === undefined ? {} : { listMarkerBackgroundColor }),
+          ...projectWriterListMarker(node, listFormat, viewOptions),
           numRuleName: node.GetNumRuleName(),
           nodeIndex: node.GetIndex(),
           runs: projectTextPortions(node, hyphenation.hyphen),

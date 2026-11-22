@@ -20,6 +20,7 @@ import { applyPageStoryGeometry, XMLTextMasterPageContext } from "./xmlpageheade
 import type { SwXTextCursor } from "../../core/unocore/unoobj";
 import { SvXMLGraphicHelper } from "../../../../xmloff/source/core/xmlgrhlp";
 import { importGraphicFrame, importTextFrame, endTextFrame } from "./xmltextframe";
+import { UnoGraphic } from "../../../../vcl/source/graphic/UnoGraphic";
 import { FillUnoNumRule } from "../../../../xmloff/source/style/xmlnumi";
 import { Reference, UNO_QUERY } from "../../../../cppu/inc/com/sun/star/uno/Reference";
 import { cppu_detail_getUnoType as indexReplaceType } from "../../../../cppu/inc/com/sun/star/container/XIndexReplace";
@@ -288,6 +289,11 @@ class SwXMLImport
     if (!this.importedBitmaps.has(graphic)) this.importedBitmaps.set(graphic, item);
   }
 
+  /** Loads the native list image from a package reference or inline bytes. @param source - Image declaration. @returns Native UNO graphic or absence. */
+  public loadListGraphic(source: XMLGraphicSource): UnoGraphic | undefined {
+    const graphic = this.loadGraphic(source.href ? { href: source.href } : source);
+    return graphic && new UnoGraphic(new Graphic(graphic.bytes, graphic.mediaType, new Size()));
+  }
   /** Resolves a package link before the permitted inline stream. @param source - Graphic source. @returns Encoded raster if represented. */
   private loadGraphic(source: XMLGraphicSource): XMLGraphic | undefined {
     const graphic = this.graphicHelper.loadGraphicByURL(source.href);

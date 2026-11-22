@@ -1,4 +1,6 @@
 /** @fileoverview Browser numbering options over the native SvxNumberFormat value. */
+import { NumberingBitmapOptions, type BitmapMetricField } from "./BitmapPickPage";
+import type { FieldUnit } from "../../../tools/inc/fldunit";
 import { getUniformNumberingValue } from "../../source/tabpages/numpages";
 import { SvxNumType as Type } from "../../../editeng/inc/svxenum";
 import type { SvxNumberFormat, ConstSvxNumberFormat } from "../../../editeng/inc/numitem";
@@ -17,12 +19,16 @@ const numberTypes = [
   [Type.SVX_NUM_ARABIC_ZERO4, "0001, 0002, 0003, …"],
   [Type.SVX_NUM_ARABIC_ZERO5, "00001, 00002, 00003, …"],
   [Type.SVX_NUM_CHAR_SPECIAL, "Bullet"],
+  [Type.SVX_NUM_BITMAP, "Graphics"],
   [Type.SVX_NUM_NUMBER_NONE, "None"],
 ] as const;
 
 /** Edits the selected native numbering levels. @param props - Active levels and options exchange. @returns Native Customize controls. */
 export function NumberingOptionsPage({
   formats,
+  unit,
+  MetricField,
+  numberingStyle,
   highestLevel,
   edit,
   characterStyles,
@@ -31,6 +37,9 @@ export function NumberingOptionsPage({
   label,
 }: Readonly<{
   formats: readonly [ConstSvxNumberFormat, ...ConstSvxNumberFormat[]];
+  unit: FieldUnit;
+  MetricField: BitmapMetricField;
+  numberingStyle: string;
   highestLevel: number;
   edit: (change: (format: SvxNumberFormat, level: number) => void) => void;
   characterStyles: readonly string[];
@@ -51,6 +60,7 @@ export function NumberingOptionsPage({
     startType !== Type.SVX_NUM_CHARS_UPPER_LETTER_N &&
     startType !== Type.SVX_NUM_CHARS_LOWER_LETTER_N;
   const bullet = type === Type.SVX_NUM_CHAR_SPECIAL;
+  const bitmap = type === Type.SVX_NUM_BITMAP;
   const customType = !numberTypes.some(
     /** Checks the supported type menu against the current format. @param entry - Native type and label. @returns Match. */
     ([id]) => type === id,
@@ -146,6 +156,10 @@ export function NumberingOptionsPage({
                   /** Switches numbering family while retaining independent geometry. @param level - Editable format. @param index - Native level. @returns Nothing. */
                   (level, index) => {
                     level.SetNumberingType(next);
+                    if (next === Type.SVX_NUM_BITMAP) {
+                      level.SetIncludeUpperLevels(1);
+                      level.SetListFormat("", "", index);
+                    }
                     if (next === Type.SVX_NUM_CHAR_SPECIAL) {
                       level.SetListFormat("", "", index);
                       if (level.GetBulletChar() === 0) level.SetBulletChar(0x2022);
@@ -171,35 +185,46 @@ export function NumberingOptionsPage({
             )}
           </select>
         </label>
-        <label className="grid gap-1">
-          {label("customize.character-style", "Character style")}
-          <select
-            className={control}
-            value={characterStyle ?? "\u0001"}
-            onChange={
-              /** Exchanges the chosen character style name. @param event - Selected style. @returns Nothing. */
-              (event) => {
-                const name = event.currentTarget.value;
-                edit(
-                  /** Sets the shared format's native style name. @param level - Editable format. @returns Nothing. */ (
-                    level,
-                  ) => level.SetCharFormatName(name),
-                );
+        {bitmap ? (
+          <NumberingBitmapOptions
+            formats={formats}
+            unit={unit}
+            MetricField={MetricField}
+            edit={edit}
+            numberingStyle={numberingStyle}
+            label={label}
+          />
+        ) : (
+          <label className="grid gap-1">
+            {label("customize.character-style", "Character style")}
+            <select
+              className={control}
+              value={characterStyle ?? "\u0001"}
+              onChange={
+                /** Exchanges the chosen character style name. @param event - Selected style. @returns Nothing. */
+                (event) => {
+                  const name = event.currentTarget.value;
+                  edit(
+                    /** Sets the shared format's native style name. @param level - Editable format. @returns Nothing. */ (
+                      level,
+                    ) => level.SetCharFormatName(name),
+                  );
+                }
               }
-            }
-          >
-            {characterStyle === undefined && <option value={"\u0001"} disabled />}
-            <option value="">{label("customize.no-style", "None")}</option>
-            {characterStyles.map(
-              /** Presents one available document character style. @param name - Native name. @returns Option. */
-              (name) => (
-                <option key={name} value={name}>
-                  {name}
-                </option>
-              ),
-            )}
-          </select>
-        </label>
+            >
+              {characterStyle === undefined && <option value={"\u0001"} disabled />}
+              <option value="">{label("customize.no-style", "None")}</option>
+              {characterStyles.map(
+                /** Presents one available document character style. @param name - Native name. @returns Option. */
+                (name) => (
+                  <option key={name} value={name}>
+                    {name}
+                  </option>
+                ),
+              )}
+            </select>
+          </label>
+        )}
         {bullet &&
           textField(
             label("customize.character", "Character"),
@@ -212,7 +237,7 @@ export function NumberingOptionsPage({
                 ) => level.SetBulletChar(value.codePointAt(0) ?? 0),
               ),
           )}
-        {!bullet && type !== Type.SVX_NUM_BITMAP && (
+        {!bullet && !bitmap && (
           <>
             {textField(
               label("customize.before", "Before"),

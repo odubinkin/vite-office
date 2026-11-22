@@ -1,5 +1,10 @@
 /** @fileoverview Verifies native signed integer numbering-property conversion at the UNO/Writer boundary. */
-import { getWriterNumFormatBullet } from "../doc/number";
+import { Graphic } from "../../../../vcl/source/gdi/graph";
+import { Size } from "../../../../tools/inc/gen";
+import { VertOrientation } from "../../../../offapi/com/sun/star/text/VertOrientation";
+import { numberingToSequence, numberingSequenceType } from "./unosett-properties";
+import { Any } from "../../../../cppu/inc/com/sun/star/uno/Any";
+import { SvxNumType, getWriterNumFormatBullet } from "../doc/number";
 
 import { expect, it } from "vitest";
 import { createWriterNumRule } from "../doc/DocumentListsManager";
@@ -149,4 +154,41 @@ it("applies marker properties before ListFormat and ignores native out-of-range 
       }),
   ).toThrow(NumberingRulePropertyError);
   expect(rule.Get(2)).toBe(previous);
+});
+
+it("exchanges typed embedded XGraphic, awt.Size and vertical orientation in numbering rules", /** Verifies native properties across two independent Writer rules. @returns Nothing. */ () => {
+  const source = createWriterNumRule("Bitmap source");
+  const destination = createWriterNumRule("Bitmap target");
+  const bytes = new Uint8Array([0x89, 0x50, 0x4e, 0x47]);
+  const image = new Graphic(bytes, "image/png", new Size(120, 180));
+  const service = new SwXNumberingRules(source);
+  const properties = numberingToSequence({
+    kind: "numbered",
+    numberingType: SvxNumType.SVX_NUM_BITMAP,
+    graphic: image,
+    graphicSize: { width: 127, height: 254 },
+    vertOrient: VertOrientation.LINE_CENTER,
+    suffix: "",
+  });
+  const input = new Any(properties.getAddress(), numberingSequenceType);
+  try {
+    service.replaceByIndex(0, input);
+  } finally {
+    input.dispose();
+    properties.dispose();
+  }
+  const level = source.Get(0);
+  expect(level.GetBrush()?.GetGraphic()?.GetNativeData()).toEqual(bytes);
+  expect(level.GetGraphicSize().Width()).toBe(72);
+  expect(level.GetGraphicSize().Height()).toBe(144);
+  expect(level.GetGraphicOrientation()?.GetVertOrient()).toBe(VertOrientation.LINE_CENTER);
+  const serialized = service.getByIndex(0);
+  try {
+    new SwXNumberingRules(destination).replaceByIndex(0, serialized);
+  } finally {
+    serialized.dispose();
+  }
+  expect(destination.Get(0).Equals(level)).toBe(true);
+  source.Dispose();
+  destination.Dispose();
 });

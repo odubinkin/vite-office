@@ -13,6 +13,10 @@ import {
 import { SvxNumType } from "../../../../editeng/inc/svxenum";
 import { SvxNumRule, SvxNumRuleFlags, SvxNumRuleType } from "../../../../editeng/inc/numitem";
 export { SvxNumType } from "../../../../editeng/inc/svxenum";
+import type { ConstSvxBrushItem } from "../../../../editeng/source/items/frmitems.brush";
+import type { ReadonlySize } from "../../../../tools/inc/gen";
+import { VertOrientation } from "../../../../offapi/com/sun/star/text/VertOrientation";
+import { SwFormatVertOrient } from "../../../inc/fmtornt";
 import { SwPoolFormatId } from "../../../inc/poolfmt";
 import { SwGetPoolIdFromName } from "../../../inc/SwGetPoolIdFromName";
 import { SwStyleNameMapper } from "./SwStyleNameMapper";
@@ -29,6 +33,7 @@ import { WRITER_MAX_LIST_LEVEL } from "./list";
 
 /** Numbering format owned by one level of a SwNumRule, with native base defaults and null client registration. */
 export class SwNumFormat extends SvxNumberFormat {
+  private readonly graphicOrientation = new SwFormatVertOrient();
   private readonly client = new SwClient(
     /** Dispatches the native numbering client's format and attribute notifications. @param source - Original owner. @param hint - Original hint. @returns Nothing. */
     (_source, hint) => {
@@ -41,6 +46,7 @@ export class SwNumFormat extends SvxNumberFormat {
   public constructor(format?: ConstSvxNumberFormat, document?: SwDoc) {
     super(format ?? SvxNumType.SVX_NUM_ARABIC);
     if (format === undefined) return;
+    this.graphicOrientation.SetVertOrient(format.GetVertOrient());
     if (document === undefined) {
       if (format instanceof SwNumFormat) this.client.StartListeningToSameModifyAs(format);
       return;
@@ -54,6 +60,22 @@ export class SwNumFormat extends SvxNumberFormat {
           ? document.MakeCharFormat(name, undefined)
           : document.GetCharFormatFromPool(pooled)),
     );
+  }
+  /** Stores Writer's graphic orientation alongside the shared numbering brush. @param brush - Source brush or absence. @param size - Core graphic extent. @param orient - Native orientation ID. @returns Nothing. */
+  public override SetGraphicBrush(
+    brush: ConstSvxBrushItem | undefined,
+    size?: ReadonlySize,
+    orient?: number,
+  ): void {
+    if (orient !== undefined) this.graphicOrientation.SetVertOrient((orient << 16) >> 16);
+    super.SetGraphicBrush(brush, size, orient);
+  }
+  /** Returns Writer's graphic orientation item only when active. @returns Native orientation item or absence. */
+  public GetGraphicOrientation(): Readonly<Pick<SwFormatVertOrient, "GetVertOrient">> | undefined {
+    const orientation = this.GetVertOrient();
+    if (orientation === VertOrientation.NONE) return undefined;
+    this.graphicOrientation.SetVertOrient(orientation);
+    return this.graphicOrientation;
   }
   /** Logical native SwClient destructor releases the actual character-format registration. @returns Nothing. */
   public Dispose(): void {

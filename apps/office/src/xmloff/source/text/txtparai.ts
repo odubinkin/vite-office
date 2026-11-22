@@ -61,6 +61,9 @@ export interface XMLListLevelImportProperties {
 
 /** One XML declaration retained in source order until the native rule is filled. */
 export interface XMLListLevelImport {
+  readonly graphic?: import("../../../offapi/com/sun/star/graphic/XGraphic").XGraphic;
+  readonly graphicSize?: Readonly<{ width: number; height: number }>;
+  readonly vertOrient?: number;
   readonly level: number;
   readonly kind: OdfListLevelKind;
   /** Native sal_Int16 UNO NumberingType, independent of editeng format ownership. */

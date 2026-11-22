@@ -1,4 +1,5 @@
 /** @fileoverview Projects one canonical Writer paragraph inside the browser editing host. */
+import { VertOrientation } from "../../../offapi/com/sun/star/text/VertOrientation";
 import { WriterInlineGraphic } from "./WriterFloatingGraphic";
 import { WriterCharacterGeometryText } from "./WriterCharacterGeometryText";
 import { EscapementText } from "./EscapementText";
@@ -41,6 +42,29 @@ export interface WriterEditableParagraphProps {
   readonly retainElement: (paragraphId: string, element: HTMLParagraphElement | null) => void;
 }
 
+/** Maps native graphic orientations to the browser's inline alignment. @param orientation - Native orientation code. @param heightPt - Graphic extent. @returns CSS vertical alignment. */
+function graphicVerticalAlign(orientation: number, heightPt: number): string {
+  switch (orientation) {
+    case VertOrientation.LINE_TOP:
+      return "top";
+    case VertOrientation.LINE_BOTTOM:
+      return "bottom";
+    case VertOrientation.LINE_CENTER:
+    case VertOrientation.CHAR_CENTER:
+      return "middle";
+    case VertOrientation.CHAR_TOP:
+      return "text-top";
+    case VertOrientation.CHAR_BOTTOM:
+      return "text-bottom";
+    case VertOrientation.CENTER:
+      return `-${heightPt / 2}pt`;
+    case VertOrientation.BOTTOM:
+      return `-${heightPt}pt`;
+    default:
+      return "baseline";
+  }
+}
+
 /** Renders a paragraph projection that inherits editability from the one document root. @param props - Immutable paragraph projection state. @returns Rendered paragraph projection. */
 export function WriterEditableParagraph({
   index,
@@ -67,10 +91,25 @@ export function WriterEditableParagraph({
       : `Row ${cellPosition.rowIndex + 1} column ${cellPosition.cellIndex + 1} paragraph ${cellPosition.paragraphIndex + 1}`;
   const listLayout = paragraph.listLayout;
   const markerFont = paragraph.listMarkerFont;
-  let markerContent: React.ReactNode = listMarker;
-  if (markerFont?.strikeout !== undefined)
+  const markerGraphic = paragraph.listMarkerGraphic;
+  let markerContent: React.ReactNode = markerGraphic ? (
+    <img
+      alt=""
+      src={markerGraphic.src}
+      style={{
+        display: "inline-block",
+        maxWidth: "none",
+        width: `${markerGraphic.widthPt}pt`,
+        height: `${markerGraphic.heightPt}pt`,
+        verticalAlign: graphicVerticalAlign(markerGraphic.vertOrient, markerGraphic.heightPt),
+      }}
+    />
+  ) : (
+    listMarker
+  );
+  if (markerGraphic === undefined && markerFont?.strikeout !== undefined)
     markerContent = <StrikeoutText value={markerFont.strikeout}>{markerContent}</StrikeoutText>;
-  if (markerFont?.escapement !== undefined)
+  if (markerGraphic === undefined && markerFont?.escapement !== undefined)
     markerContent = <EscapementText value={markerFont.escapement}>{markerContent}</EscapementText>;
   const markerStartPt =
     listLayout === undefined ? 0 : listLayout.indentAtPt + listLayout.firstLineIndentPt;

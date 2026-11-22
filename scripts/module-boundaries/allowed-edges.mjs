@@ -44,8 +44,8 @@ export const allowedEdges = new Map([
   // Original exception rethrow and misc testgetCaughtException consume the compiler exception ABI/std::exception_ptr;
   // its actual JavaScript host binding links the same pinned SDK standard-library facade under external/libcxx.
   ["cppuhelper", new Set(["cppu", "external", "o3tl", "sal", "udkapi"])],
-  // CUI numpages.cxx constructs VCL Font values; Library_cui.mk links vcl.
-  ["cui", new Set(["editeng", "svl", "svx", "tools", "vcl"])],
+  // CUI numpages.cxx constructs VCL Font values and uses SDK VertOrientation; Library_cui.mk links vcl and admits the SDK API.
+  ["cui", new Set(["editeng", "offapi", "svl", "svx", "tools", "vcl"])],
   // Desktop appinit.cxx uses the process factory and CPPU bootstrap; the browser binds linked constructors, including stocservices.component TypeConverter.
   [
     "desktop",
@@ -388,6 +388,9 @@ export const allowedEdges = new Map([
   [
     "vcl",
     new Set([
+      // Library_vcl.mk links comphelper and the CPPU helpers used by native UnoGraphic.cxx.
+      "comphelper",
+      "cppuhelper",
       "external",
       "i18nutil",
       "i18nlangtag",

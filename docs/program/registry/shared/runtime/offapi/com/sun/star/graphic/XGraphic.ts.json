@@ -1,0 +1,37 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/offapi/com/sun/star/graphic/XGraphic.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "shared",
+    "subsystem": "graphic-values",
+    "capabilityIds": [
+      "CAP-0113"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "none",
+      "evidence": [
+        "apps/office/src/offapi/com/sun/star/graphic/XGraphic.ts#XGraphic",
+        "vendor/libreoffice-reference/offapi/com/sun/star/graphic/XGraphic.idl#XGraphic",
+        "apps/office/src/sw/source/core/unocore/unosett.test.ts"
+      ],
+      "justification": "Exposes the native XGraphic interface and generated static identity for typed numbering property exchange.",
+      "knownViolations": [],
+      "localSymbols": [
+        "XGraphic",
+        "cppu_detail_getUnoType"
+      ],
+      "upstreamSymbols": [
+        "XGraphic",
+        "getType"
+      ],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": "offapi/com/sun/star/graphic/XGraphic.idl"
+    }
+  }
+}

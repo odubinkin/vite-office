@@ -394,6 +394,7 @@ export function exportStylesXml(document: SwDoc, graphicHelper?: SvXMLGraphicHel
         FontPitch.PITCH_DONTKNOW,
         RTL_TEXTENCODING_DONTKNOW,
       ) || undefined,
+    graphicHelper,
   );
   const numberingStyles = [...namedRules.values()]
     .map(
@@ -564,6 +565,7 @@ function exportWriterText(
     isCancelled,
     fontFaceName,
     existingFontFaceName,
+    graphicHelper,
   );
   let automaticStyles = "";
   for (const style of dataStyles.values()) if (style) automaticStyles += style.xml;

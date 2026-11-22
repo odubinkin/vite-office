@@ -1,7 +1,12 @@
 /** @fileoverview Checks native label-indent shell policy and existing rule/history owners. */
 import { afterEach, expect, it, vi } from "vitest";
+import { SvxBrushItem, SvxGraphicPosition } from "../../../../editeng/source/items/frmitems.brush";
+import { DocumentArchive } from "../../../../package/source/zippackage/document-archive";
+import { Graphic } from "../../../../vcl/source/gdi/graph";
+import { Size } from "../../../../tools/inc/gen";
+import { VertOrientation } from "../../../../offapi/com/sun/star/text/VertOrientation";
 import { SwDoc } from "../doc/doc";
-import { SwNumRule, SwNumFormat } from "../doc/number";
+import { SwNumRule, SwNumFormat, SvxNumType } from "../doc/number";
 import { applyWriterParagraphList } from "../doc/list";
 import { SwPaM, SwPosition } from "../crsr/pam";
 import { SwWrtShell } from "../../uibase/wrtsh/wrtsh1";
@@ -346,3 +351,98 @@ it("renames the actual numbered lists and both direct and inherited style refere
   ).toBe("Renamed list");
   document.Dispose();
 });
+
+it("retains embedded numbering graphics in style history and the Worker graph", /** Checks the shared style template value and the actual Writer list owner. @returns Nothing. */ () => {
+  const { doc, first, rule, shell } = fixture();
+  const bytes = new Uint8Array([0x47, 0x49, 0x46, 0x38, 0x39, 0x61]);
+  const format = new SwNumFormat(rule.Get(0));
+  format.SetNumberingType(SvxNumType.SVX_NUM_BITMAP);
+  format.SetGraphicBrush(
+    new SvxBrushItem(
+      new Graphic(bytes, "image/gif", new Size(120, 150)),
+      SvxGraphicPosition.GPOS_AREA,
+      0,
+    ),
+    new Size(240, 300),
+    VertOrientation.LINE_CENTER,
+  );
+  const source = new SwNumRule(rule);
+  source.Set(0, format);
+  const shared = source.MakeSvxNumRule();
+  const result = new SwNumRule(rule);
+  result.SetSvxRule(shared, doc);
+  doc.ChgNumRuleFormats(result);
+  format.Dispose();
+  source.Dispose();
+  result.Dispose();
+  expect(first.GetNumRule()).toBe(rule);
+  expect(rule.Get(0).GetGraphicOrientation()?.GetVertOrient()).toBe(VertOrientation.LINE_CENTER);
+  expect(shell.Undo()).toBe(true);
+  expect(rule.Get(0).GetBrush()).toBeUndefined();
+  expect(shell.Redo()).toBe(true);
+  expect(rule.Get(0).GetBrush()?.GetGraphic()?.GetNativeData()).toEqual(bytes);
+
+  const transported = structuredClone(encodeWriterDocument(doc));
+  const reopened = decodeWriterDocument(transported);
+  const level = reopened.paragraphs[0]?.GetNumRule()?.Get(0);
+  expect(level?.GetNumberingType()).toBe(SvxNumType.SVX_NUM_BITMAP);
+  expect(level?.GetBrush()?.GetGraphic()?.GetNativeData()).toEqual(bytes);
+  expect(level?.GetBrush()?.GetGraphic()?.GetPrefSize().Height()).toBe(150);
+  expect(level?.GetGraphicSize().Width()).toBe(240);
+  expect(level?.GetGraphicSize().Height()).toBe(300);
+  expect(level?.GetGraphicOrientation()?.GetVertOrient()).toBe(VertOrientation.LINE_CENTER);
+  reopened.Dispose();
+});
+
+it.each([true, false])(
+  "round-trips an ODT image marker with automatic rule %s",
+  /** Verifies the package graphic and level geometry for both rule families. @param automatic - Whether the rule is automatic. @returns Completion. */ async (
+    automatic,
+  ) => {
+    const { doc, rule, metadata } = fixture();
+    rule.SetAutoRule(automatic);
+    const bytes = Uint8Array.from(
+      atob(
+        "iVBORw0KGgoAAAANSUhEUgAAACgAAAAUCAYAAAD/Rn+7AAAAM0lEQVR4nO3OMQ0AAAjAMCQhGj1YAhVkHDv6N7pyPgs6YNAgHTBokA4YNEgHDBqkAwavLZKHN5nQxmcYAAAAAElFTkSuQmCC",
+      ),
+      /** Reads the embedded test raster. @param character - Raw byte. @returns Numeric byte. */ (
+        character,
+      ) => character.charCodeAt(0),
+    );
+    const level = new SwNumFormat(rule.Get(0));
+    level.SetNumberingType(SvxNumType.SVX_NUM_BITMAP);
+    level.SetGraphicBrush(
+      new SvxBrushItem(
+        new Graphic(bytes, "image/png", new Size()),
+        SvxGraphicPosition.GPOS_AREA,
+        0,
+      ),
+      new Size(240, 300),
+      VertOrientation.LINE_CENTER,
+    );
+    rule.Set(0, level);
+    level.Dispose();
+
+    const encoded = await writeOdtDocument(doc, metadata);
+    const archive = await DocumentArchive.open(encoded);
+    const images = archive
+      .getEntryNames()
+      .filter(
+        /** Finds embedded package graphics. @param entry - Entry name. @returns Whether it is an image. */ (
+          entry,
+        ) => entry.startsWith("Pictures/"),
+      );
+    expect(images).toHaveLength(1);
+    const xml = await archive.readTextEntry(automatic ? "content.xml" : "styles.xml");
+    expect(xml).toContain("<text:list-level-style-image");
+    expect(xml).toContain(`xlink:href="${images[0]}"`);
+    const { document } = await readOdtDocument(encoded, metadata);
+    const restored = document.paragraphs[0]?.GetNumRule()?.Get(0);
+    expect(restored?.GetNumberingType()).toBe(SvxNumType.SVX_NUM_BITMAP);
+    expect(restored?.GetBrush()?.GetGraphic()?.GetNativeData()).toEqual(bytes);
+    expect(restored?.GetGraphicSize().Width()).toBe(240);
+    expect(restored?.GetGraphicSize().Height()).toBe(300);
+    expect(restored?.GetGraphicOrientation()?.GetVertOrient()).toBe(VertOrientation.LINE_CENTER);
+    document.Dispose();
+  },
+);

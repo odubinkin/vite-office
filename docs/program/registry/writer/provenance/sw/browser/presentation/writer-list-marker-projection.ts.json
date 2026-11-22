@@ -1,0 +1,25 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "browser-adaptation",
+    "status": "local-only",
+    "localPath": "apps/office/src/sw/browser/presentation/writer-list-marker-projection.ts",
+    "rationale": "Projects the native text or bitmap numbering portion, including the stored graphic extent and vertical orientation, into browser paint values.",
+    "responsibilities": [
+      "Projects the native text or bitmap numbering portion, including the stored graphic extent and vertical orientation, into browser paint values."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sw/browser/presentation/writer-list-marker-projection.ts",
+          "marker": "projectWriterListMarker"
+        }
+      ]
+    },
+    "stackDivergence": {
+      "kind": "browser-adaptation",
+      "rationale": "Browser image and text elements replace the native output-device portion painting."
+    }
+  }
+}

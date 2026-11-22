@@ -1,4 +1,11 @@
 /** @fileoverview Typed numbering property sequences from pinned unosett.cxx, split to keep UNO transport separate from the existing format-application kernel. */
+import { Reference } from "../../../../cppu/inc/com/sun/star/uno/Reference";
+import { XGraphic } from "../../../../offapi/com/sun/star/graphic/XGraphic";
+import {
+  Size,
+  cppu_detail_getUnoType_Size as sizeType,
+} from "../../../../offapi/com/sun/star/awt/Size";
+import { UnoGraphic } from "../../../../vcl/source/graphic/UnoGraphic";
 import { Any } from "../../../../cppu/inc/com/sun/star/uno/Any";
 import { Sequence } from "../../../../cppu/inc/com/sun/star/uno/Sequence";
 import {
@@ -25,6 +32,7 @@ const numericFields: Record<
 > = {
   NumberingType: ["numberingType", "sal_Int16"],
   Adjust: ["adjust", "sal_Int16"],
+  VertOrient: ["vertOrient", "sal_Int16"],
   StartWith: ["startWith", "sal_Int16"],
   ParentNumbering: ["parentNumbering", "sal_Int16"],
   LeftMargin: ["absLSpace", "sal_Int32"],
@@ -73,6 +81,19 @@ export function numberingToSequence(
       new Any([["listtab", "space", "nothing"].indexOf(properties.labelFollowedBy)], "sal_Int16"),
     );
   if (properties.isLegal !== undefined) add("LevelIsLegal", new Any([properties.isLegal], "bool"));
+  if (properties.graphic) {
+    const value = new Reference<XGraphic>(new UnoGraphic(properties.graphic));
+    try {
+      add("Graphic", new Any([value.get()], XGraphic.static_type));
+    } finally {
+      value.dispose();
+    }
+  }
+  if (properties.graphicSize)
+    add(
+      "GraphicSize",
+      new Any(new Size(properties.graphicSize.width, properties.graphicSize.height), sizeType),
+    );
   add("CharStyleName", stringAny(properties.charStyleName ?? ""));
   if (properties.bulletFont) add("BulletFontName", stringAny(properties.bulletFont.name));
   if (properties.headingStyleName !== undefined)
@@ -150,6 +171,23 @@ function decodeNumberingProperty(property: PropertyValue): Partial<WriterNumberi
       }
     }
     return { [strings[name] as string]: stringValue(property.Value) };
+  }
+  if (name === "Graphic") {
+    const value = new Reference<XGraphic>();
+    try {
+      if (!property.Value.extract(value.getAddress(), XGraphic.static_type))
+        illegal("Expected XGraphic");
+      const component = value.get();
+      if (!(component instanceof UnoGraphic)) illegal("Expected an embedded VCL graphic");
+      return { graphic: component.value };
+    } finally {
+      value.dispose();
+    }
+  }
+  if (name === "GraphicSize") {
+    const value = new Size();
+    if (!property.Value.extract(value, sizeType)) illegal("Expected awt.Size");
+    return { graphicSize: { width: value.Width, height: value.Height } };
   }
   if (name === "LevelIsLegal") {
     const legal: [boolean] = [false];

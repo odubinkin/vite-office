@@ -12,6 +12,7 @@ import { exportWritingDirection } from "../style/prhdlfac";
 import { SvXMLUnitConverter } from "../core/xmluconv";
 import { exportParagraphJustification, type OdfParagraphAlignment } from "../style/adjushdl";
 import { XMLNumberWithAutoForVoidPropHdl } from "../style/xmlbahdl";
+import type { SvXMLGraphicHelper } from "../core/xmlgrhlp";
 import { SvxXMLNumRuleExport, type XMLListLevelExport } from "../style/xmlnume";
 import { exportTableBlocks, type XMLTextExportBlock } from "../table/XMLTableExport";
 import type {
@@ -148,12 +149,13 @@ export interface OdfTextExport {
 
 /** Bounded xmloff export context owning one complete text export pass. */
 export class XMLTextParagraphExport {
-  /** Captures model source and operation ports. @param source - Model source. @param isCancelled - Cancellation probe. @param fontFaceName - Font registration. @param existingFontFaceName - Existing face lookup for numbering export. @returns Nothing. */
+  /** Captures model source and operation ports. @param source - Model source. @param isCancelled - Cancellation probe. @param fontFaceName - Font registration. @param existingFontFaceName - Existing face lookup for numbering export. @param graphicHelper - Package graphic service. @returns Nothing. */
   public constructor(
     private readonly source: XMLTextExportSource,
     private readonly isCancelled: () => boolean,
     private readonly fontFaceName?: FontFaceNameResolver,
     private readonly existingFontFaceName?: (familyName: string) => string | undefined,
+    private readonly graphicHelper?: SvXMLGraphicHelper,
   ) {}
 
   /** Exports automatic styles and text elements under this context's ownership. @returns XML fragments. */
@@ -173,7 +175,11 @@ export class XMLTextParagraphExport {
       characterStyleNames.set(key, name);
     }
     const listRules = new Map<string, XMLTextListRuleSource>();
-    const numRuleExport = new SvxXMLNumRuleExport(escapeXml, this.existingFontFaceName);
+    const numRuleExport = new SvxXMLNumRuleExport(
+      escapeXml,
+      this.existingFontFaceName,
+      this.graphicHelper,
+    );
     for (const paragraph of paragraphsForAutoStyles(source.paragraphs())) {
       if (isCancelled()) throw new Error("ODT operation was cancelled.");
       if (paragraph.list !== undefined) {
@@ -362,18 +368,20 @@ function* paragraphsForAutoStyles(
   }
 }
 
-/** Exports live Writer paragraphs through xmloff ownership. @param source - Model source. @param isCancelled - Cancellation probe. @param fontFaceName - Font registration. @param existingFontFaceName - Existing face lookup for numbering. @returns XML fragments. */
+/** Exports live Writer paragraphs through xmloff ownership. @param source - Model source. @param isCancelled - Cancellation probe. @param fontFaceName - Font registration. @param existingFontFaceName - Existing face lookup for numbering. @param graphicHelper - Package graphic lookup. @returns XML fragments. */
 export function exportTextParagraphs(
   source: XMLTextExportSource,
   isCancelled: () => boolean = /** Never cancels. @returns False. */ () => false,
   fontFaceName?: FontFaceNameResolver,
   existingFontFaceName?: (familyName: string) => string | undefined,
+  graphicHelper?: SvXMLGraphicHelper,
 ): OdfTextExport {
   return new XMLTextParagraphExport(
     source,
     isCancelled,
     fontFaceName,
     existingFontFaceName,
+    graphicHelper,
   ).Export();
 }
 

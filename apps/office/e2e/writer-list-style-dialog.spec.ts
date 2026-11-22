@@ -71,6 +71,54 @@ test("Writer edits a shared named list style without committing the paragraph dr
   await expect(markers).toHaveText(["1.", "1."]);
   await page.getByRole("button", { name: "Redo", exact: true }).click();
   await expect(markers).toHaveText(["VIII.", "VIII."]);
+
+  await openBrowserMenu(page, "Format");
+  await page.getByRole("menuitem", { name: "Paragraph…", exact: true }).click();
+  await paragraph.getByRole("tab", { name: "Outline & List", exact: true }).click();
+  await edit.click();
+  await child.getByRole("tab", { name: "Image", exact: true }).click();
+  await expect(child.getByRole("button", { name: "Add and Resize" })).toBeVisible();
+  await child.locator('input[type="file"]').setInputFiles({
+    name: "test-bullet.png",
+    mimeType: "image/png",
+    buffer: Buffer.from(
+      "iVBORw0KGgoAAAANSUhEUgAAACgAAAAUCAYAAAD/Rn+7AAAAM0lEQVR4nO3OMQ0AAAjAMCQhGj1YAhVkHDv6N7pyPgs6YNAgHTBokA4YNEgHDBqkAwavLZKHN5nQxmcYAAAAAElFTkSuQmCC",
+      "base64",
+    ),
+  });
+  const customImage = child
+    .getByRole("button", { name: "test-bullet", exact: true })
+    .locator("img");
+  await expect(customImage).toHaveJSProperty("naturalWidth", 30);
+  await expect(customImage).toHaveJSProperty("naturalHeight", 15);
+  await child.getByRole("button", { name: "circle-green", exact: true }).dblclick();
+  await expect(edit).toBeFocused();
+  const images = markers.locator("img");
+  await expect(images).toHaveCount(2);
+  await expect(images.first()).toHaveCSS("width", "16px");
+  await paragraph.getByRole("button", { name: "Cancel", exact: true }).click();
+  await page.getByRole("button", { name: "Undo", exact: true }).click();
+  await expect(markers).toHaveText(["VIII.", "VIII."]);
+  await page.getByRole("button", { name: "Redo", exact: true }).click();
+  await expect(images).toHaveCount(2);
+
+  await openBrowserMenu(page, "Format");
+  await page.getByRole("menuitem", { name: "Paragraph…", exact: true }).click();
+  await paragraph.getByRole("tab", { name: "Outline & List", exact: true }).click();
+  await edit.click();
+  await child.getByRole("tab", { name: "Customize", exact: true }).click();
+  await child.getByRole("checkbox", { name: "Keep ratio", exact: true }).check();
+  const width = child.getByRole("spinbutton", { name: "Width", exact: true });
+  await width.fill("0.5 in");
+  await width.blur();
+  await child
+    .getByRole("combobox", { name: "Alignment", exact: true })
+    .selectOption({ label: "Bottom of line" });
+  await child.getByRole("button", { name: "OK", exact: true }).click();
+  await expect(images.first()).toHaveCSS("width", "48px");
+  await expect(images.first()).toHaveCSS("height", "48px");
+  await expect(images.first()).toHaveCSS("vertical-align", "bottom");
+  await paragraph.getByRole("button", { name: "Cancel", exact: true }).click();
 });
 
 test("Writer renames a custom list style and preserves the open Paragraph draft", /** Verifies model updates and the General page error and focus lifecycle. @param fixtures - Browser fixtures. @param fixtures.page - Chrome page. @returns Completion. */ async ({

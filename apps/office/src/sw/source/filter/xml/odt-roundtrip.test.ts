@@ -517,14 +517,17 @@ describe("Writer ODF XML filters" /** Executes the enclosing deterministic test 
           ?.Get(0),
       ),
     ).toBe("");
+    const imageRule = importWithListStyle(
+      '<text:list-style style:name="Image"><text:list-level-style-image text:level="1"/></text:list-style>',
+    )
+      .document.GetNumRuleTable()
+      .at(-1);
+    expect(imageRule?.Get(0).GetNumberingType()).toBe(SvxNumType.SVX_NUM_BITMAP);
+    expect(imageRule?.Get(0).GetBrush()).toBeUndefined();
     for (const [fragment, message] of [
       [
         '<text:list-style style:name="L1"><text:list-level-style-number text:level="1" style:num-format="1"/></text:list-style>',
         "Duplicate ODF list style",
-      ],
-      [
-        '<text:list-style style:name="Image"><text:list-level-style-image text:level="1"/></text:list-style>',
-        "Unsupported ODF list level style",
       ],
     ] as const)
       expect(
@@ -587,15 +590,15 @@ describe("Writer ODF XML filters" /** Executes the enclosing deterministic test 
 
   it("maps native primary modes and preserves Left fallback for unrepresented adjustment flags" /** Executes the enclosing deterministic test or transformation callback. @returns Callback result. */, () => {
     for (const [adjust, expected] of [
-      [SvxAdjust.Left, "start"],
+      [SvxAdjust.Left, "left"],
       [SvxAdjust.ParaStart, "start"],
-      [SvxAdjust.Right, "end"],
+      [SvxAdjust.Right, "right"],
       [SvxAdjust.ParaEnd, "end"],
       [SvxAdjust.Center, "center"],
       [SvxAdjust.Block, "justify"],
-      [SvxAdjust.BlockLine, "start"],
-      [SvxAdjust.End, "start"],
-      [99 as SvxAdjust, "start"],
+      [SvxAdjust.BlockLine, "left"],
+      [SvxAdjust.End, "left"],
+      [99 as SvxAdjust, "left"],
     ] as const) {
       const writer = createWriterDocument();
       writer.GetDfltTextFormatColl().SetFormatAttr(new SvxAdjustItem(adjust, RES_PARATR_ADJUST));

@@ -9,6 +9,12 @@ import {
 } from "../../../editeng/inc/numitem";
 import { SvxNumType } from "../../../editeng/inc/svxenum";
 import { SfxItemSet } from "../../../svl/source/items/itemset";
+import { SvxBrushItem, SvxGraphicPosition } from "../../../editeng/source/items/frmitems.brush";
+import { BitmapPickPage } from "../../../cui/browser/tabpages/BitmapPickPage";
+import { getDefaultBulletGraphic } from "../../../cui/browser/tabpages/bitmap-gallery";
+import { graphicImageSource } from "../../../vcl/browser/graphic-image-source";
+import type { Graphic } from "../../../vcl/source/gdi/graph";
+import { VertOrientation } from "../../../offapi/com/sun/star/text/VertOrientation";
 import { NumberingOptionsPage } from "../../../cui/browser/tabpages/NumberingOptionsPage";
 import { NumberingPositionPage } from "../../../cui/browser/tabpages/NumberingPositionPage";
 import {
@@ -31,6 +37,7 @@ const pages = [
   ["bullets", "Unordered"],
   ["numbering", "Ordered"],
   ["outline", "Outline"],
+  ["graphics", "Image"],
   ["position", "Position"],
   ["customize", "Customize"],
 ] as const;
@@ -94,6 +101,7 @@ export function WriterListStyleDialog({
     /** Owns the editable value. @returns Working rule. */ () => new SvxNumRule(saved),
   );
   const [levels, setLevels] = useState<readonly number[]>([0]);
+  const exchangedLevels = useRef(false);
   const dialog = useRef<HTMLDialogElement>(null);
   const tabRefs = useRef<Partial<Record<Page, HTMLButtonElement | null>>>({});
   const id = useId();
@@ -116,8 +124,7 @@ export function WriterListStyleDialog({
     },
   );
   const nextName = name.replace(/^ +/u, "");
-  const formatsChanged = !draft.Equals(saved);
-  const changed = formatsChanged || name !== savedName;
+  const changed = !draft.Equals(saved) || name !== savedName;
 
   useLayoutEffect(
     /** Places focus in this dialog and restores the parent control after it closes. @returns Cleanup. */ () => {
@@ -198,23 +205,33 @@ export function WriterListStyleDialog({
   function activate(next: Page): boolean {
     if (next === page) return true;
     if (page === "organizer" && !request.isValidName(nextName)) return rejectName();
+    if (page === "position" || page === "customize") exchangedLevels.current = true;
+    if (
+      next === "graphics" &&
+      graphicLevels().every(
+        /** Finds whether the gallery needs to initialize an unset numbering level. @param index - Native level. @returns Whether its format is inherited. */
+        (index) => draft.Get(index) === null,
+      )
+    )
+      selectGraphic(getDefaultBulletGraphic(), false);
     setPage(next);
     return true;
   }
-  /** Commits the name and native style item independently of the parent paragraph draft. @returns Whether the child may close. */
-  function apply(): boolean {
-    if (!changed) return true;
+  /** Commits the name and native style item independently of the parent paragraph draft. @param rule - Edited rule to commit. @returns Whether the child may close. */
+  function apply(rule = draft): boolean {
+    const formatsChanged = !rule.Equals(saved);
+    if (!formatsChanged && name === savedName) return true;
     const output = formatsChanged
       ? new SfxItemSet(request.input.GetPool(), request.input.GetRanges())
       : undefined;
-    output?.Put(new SvxNumBulletItem(draft), true);
+    output?.Put(new SvxNumBulletItem(rule), true);
     try {
       if (!request.apply(nextName, output)) return rejectName();
       if (nextName !== savedName) onRename(savedName, nextName);
       setSavedName(nextName);
       setName(nextName);
       setInvalidName(false);
-      if (formatsChanged) setSaved(new SvxNumRule(draft));
+      if (formatsChanged) setSaved(new SvxNumRule(rule));
       return true;
     } finally {
       output?.Dispose();
@@ -222,6 +239,26 @@ export function WriterListStyleDialog({
   }
 
   const selectedLevels = levels.includes(count) ? rows : levels;
+  /** The graphic picker defaults to every level until a position or options page publishes the mask. @returns Active graphic levels. */
+  function graphicLevels(): readonly number[] {
+    return exchangedLevels.current ? selectedLevels : rows;
+  }
+  /** Applies the native graphic preset to each active level. @param graphic - Gallery graphic. @param accept - Whether to close after selecting it. @returns Nothing. */
+  function selectGraphic(graphic: Graphic, accept: boolean): void {
+    const next = new SvxNumRule(draft);
+    const brush = new SvxBrushItem(graphic, SvxGraphicPosition.GPOS_AREA, 0);
+    const size = graphic.GetPrefSize();
+    for (const index of graphicLevels()) {
+      const format = new SvxNumberFormat(next.GetLevel(index));
+      format.SetNumberingType(SvxNumType.SVX_NUM_BITMAP);
+      format.SetListFormat("", "", index);
+      format.SetCharFormatName("");
+      format.SetGraphicBrush(brush, size, VertOrientation.LINE_CENTER);
+      next.SetLevel(index, format);
+    }
+    setDraft(next);
+    if (accept && apply(next)) onClose();
+  }
   const otherFormats = selectedLevels.slice(1).map(
     /** Reads the remaining selected native formats. @param index - Level. @returns Shared format. */
     (index) => draft.GetLevel(index),
@@ -383,6 +420,13 @@ export function WriterListStyleDialog({
               )}
             </div>
           )}
+          {page === "graphics" && (
+            <BitmapPickPage
+              current={draft.GetLevel(level).GetBrush()?.GetGraphic()}
+              browseLabel={label("add-and-resize", "Add and Resize")}
+              onSelect={selectGraphic}
+            />
+          )}
           {presetButtons.length > 0 && (
             <div className="grid grid-cols-2 gap-2 sm:grid-cols-4">
               {presetButtons.map(
@@ -458,6 +502,9 @@ export function WriterListStyleDialog({
                 ) : (
                   <NumberingOptionsPage
                     formats={selectedFormats}
+                    unit={unit}
+                    MetricField={MetricSpinButton}
+                    numberingStyle={request.numberingStyle}
                     highestLevel={Math.max(...selectedLevels)}
                     edit={editLevels}
                     characterStyles={request.characterStyles}
@@ -492,13 +539,29 @@ export function WriterListStyleDialog({
                         format.GetPositionAndSpaceMode() === "label-alignment"
                           ? format.GetIndentAt() + format.GetFirstLineIndent()
                           : format.GetAbsLSpace() + format.GetFirstLineOffset();
+                      const graphic =
+                        format.GetNumberingType() === SvxNumType.SVX_NUM_BITMAP
+                          ? format.GetBrush()?.GetGraphic()
+                          : undefined;
+                      const size = format.GetGraphicSize();
                       return (
                         <li
                           key={index}
                           className="flex items-center gap-2"
                           style={{ paddingInlineStart: `clamp(0px, ${indent / 20}pt, 70%)` }}
                         >
-                          <span>{previewListMarker(draft, index)}</span>
+                          {graphic ? (
+                            <img
+                              alt=""
+                              src={graphicImageSource(graphic)}
+                              style={{
+                                width: `${size.Width() / 20}pt`,
+                                height: `${size.Height() / 20}pt`,
+                              }}
+                            />
+                          ) : (
+                            <span>{previewListMarker(draft, index)}</span>
+                          )}
                           <span className="h-0.5 grow bg-slate-300" />
                         </li>
                       );
@@ -523,7 +586,14 @@ export function WriterListStyleDialog({
           <button type="button" className={button} onClick={onClose}>
             {label("cancel", "Cancel")}
           </button>
-          <button type="button" className={button} onClick={apply} disabled={!changed}>
+          <button
+            type="button"
+            className={button}
+            onClick={
+              /** Commits the current draft. @returns Whether it was accepted. */ () => apply()
+            }
+            disabled={!changed}
+          >
             {label("apply", "Apply")}
           </button>
           <button type="submit" className={`${button} bg-slate-100 font-semibold`}>

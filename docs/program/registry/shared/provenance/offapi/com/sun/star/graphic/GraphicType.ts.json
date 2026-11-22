@@ -1,0 +1,40 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "status": "mapped",
+    "localPath": "apps/office/src/offapi/com/sun/star/graphic/GraphicType.ts",
+    "upstreamPath": "offapi/com/sun/star/graphic/GraphicType.idl",
+    "localSymbols": [
+      "EMPTY",
+      "PIXEL",
+      "VECTOR"
+    ],
+    "upstreamSymbols": [
+      "EMPTY",
+      "PIXEL",
+      "VECTOR"
+    ],
+    "preservedResponsibilities": [
+      "Retains the native byte values used by XGraphic getType."
+    ],
+    "omittedResponsibilities": [
+      "Complete service support outside these three IDL constants remains outside this binding."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/offapi/com/sun/star/graphic/GraphicType.ts",
+          "marker": "EMPTY"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/offapi/com/sun/star/graphic/GraphicType.idl",
+          "marker": "EMPTY"
+        }
+      ]
+    }
+  }
+}

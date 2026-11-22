@@ -4,7 +4,7 @@ title: "Connect Writer named list-style editing"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 8
+revision: 9
 origin:
   system: "manual"
 depends_on: []
@@ -63,7 +63,6 @@ comments:
       - Position and Customize display mixed values for the selected levels and do not overwrite untouched properties. Legal numbering reflects mixed selections. WRITER-741 records the source's first-to-last equality for start, prefix and suffix.
       - Final Writer tests: 229 passed across 13 suites. Production build and both Chrome nested-dialog tests passed. Scoped lint and formatting, Writer resources, source tree, boundaries, provenance, Writer parity inventory, doctor, routing, and diff checks passed. Global JSDoc and file-size still report existing unrelated findings.
       - Native Image list styles and remaining template control parity are pending, including legacy Relative positioning and additional graphic and numbering options. This is a checkpoint without a task closure or cadence increment.
-
 events:
   -
     type: "status"
@@ -110,9 +109,8 @@ events:
       - Position and Customize display mixed values for the selected levels and do not overwrite untouched properties. Legal numbering reflects mixed selections. WRITER-741 records the source's first-to-last equality for start, prefix and suffix.
       - Final Writer tests: 229 passed across 13 suites. Production build and both Chrome nested-dialog tests passed. Scoped lint and formatting, Writer resources, source tree, boundaries, provenance, Writer parity inventory, doctor, routing, and diff checks passed. Global JSDoc and file-size still report existing unrelated findings.
       - Native Image list styles and remaining template control parity are pending, including legacy Relative positioning and additional graphic and numbering options. This is a checkpoint without a task closure or cadence increment.
-
 doc_version: 3
-doc_updated_at: "2026-11-22T01:56:50.084Z"
+doc_updated_at: "2026-11-22T02:23:12.027Z"
 doc_updated_by: "CODER"
 description: "Wire the Outline and List Edit Style button to the upstream numbering-style template dialog. Implement the document-owned rule format update and undo contract, connect the template pages to existing numbering mechanisms, and verify shared style changes, cancel, undo and ODT round trip in Writer."
 sections:
@@ -135,7 +133,15 @@ sections:
   Rollback Plan: |-
     - Revert task-related commit(s).
     - Re-run required checks to confirm rollback safety.
-  Findings: ""
+  Findings: |-
+    - `npm run test:writer -- native-numbering-indent unosett native-list-rule-range native-list-continuation native-numbering-font docstyle-preview odt-roundtrip odt-list-declaration-defaults native-none-numbering native-bullet-scalar WriterNativeTabulatorDialog WriterEditableParagraph native-list-marker-width native-marked-list-paint` — pass, 215 checks in 19 files. Includes image brush identity, style history, Worker records, UNO property types, and named and automatic image-level ODT styles. The ODT test now distinguishes absolute left/right from logical start/end and retains the implemented Left fallback.
+    - `npm run test:shared -- numitem xmlnume` — pass, 12 checks in two files. Covers shared numbering-format ownership and ODF level serialization.
+    - `npm run build:single-threaded --workspace @vite-office/office` and `node_modules/.bin/playwright test writer-list-style-dialog.spec.ts --config=output/playwright/writer-position-chrome.config.ts --project=writer --workers=1` — pass. Chrome exercised nested focus, cancellation, shared style rename and formatting, gallery importing and resizing, bitmap geometry and redraw, and Undo/Redo.
+    - `npm run check:writer-resources`, `npm run check:dependencies`, `npm run check:source-tree`, `npm run check:source-provenance`, `npm run inventory:parity:writer`, scoped ESLint and Prettier, `ap doctor`, `node .agentplane/policy/check-routing.mjs`, and `git diff --check` — pass. Doctor reports the existing non-blocking managed shim warning.
+    - `npm run check:docs` — fail on existing Calc JSDoc reports. No changed runtime file is reported.
+    - `npm run check:file-size` — fail on existing `calc-document-codec.ts` and `swatrset.ts` counts. The changed Writer projection is below the limit.
+    - The browser gallery reuses the pinned order and matching 16-pixel PNG assets. The user gallery persists in browser storage and the image element maps native placement to browser line-box geometry. ODT can preserve embedded graphics supported by the existing PNG/JPEG package path. Numbering imports pass the native typed `Graphic` property with `XGraphic`; the separate desktop `XBitmap`/DIB service and linked bullets fall outside this embedded-graphic slice.
+    - The complete suite is scheduled after the tenth closed task since the reset.
 id_source: "generated"
 ---
 ## Summary
@@ -171,3 +177,12 @@ Implement the named numbering style path from SwParagraphNumTabPage and SwTempla
 - Re-run required checks to confirm rollback safety.
 
 ## Findings
+
+- `npm run test:writer -- native-numbering-indent unosett native-list-rule-range native-list-continuation native-numbering-font docstyle-preview odt-roundtrip odt-list-declaration-defaults native-none-numbering native-bullet-scalar WriterNativeTabulatorDialog WriterEditableParagraph native-list-marker-width native-marked-list-paint` — pass, 215 checks in 19 files. Includes image brush identity, style history, Worker records, UNO property types, and named and automatic image-level ODT styles. The ODT test now distinguishes absolute left/right from logical start/end and retains the implemented Left fallback.
+- `npm run test:shared -- numitem xmlnume` — pass, 12 checks in two files. Covers shared numbering-format ownership and ODF level serialization.
+- `npm run build:single-threaded --workspace @vite-office/office` and `node_modules/.bin/playwright test writer-list-style-dialog.spec.ts --config=output/playwright/writer-position-chrome.config.ts --project=writer --workers=1` — pass. Chrome exercised nested focus, cancellation, shared style rename and formatting, gallery importing and resizing, bitmap geometry and redraw, and Undo/Redo.
+- `npm run check:writer-resources`, `npm run check:dependencies`, `npm run check:source-tree`, `npm run check:source-provenance`, `npm run inventory:parity:writer`, scoped ESLint and Prettier, `ap doctor`, `node .agentplane/policy/check-routing.mjs`, and `git diff --check` — pass. Doctor reports the existing non-blocking managed shim warning.
+- `npm run check:docs` — fail on existing Calc JSDoc reports. No changed runtime file is reported.
+- `npm run check:file-size` — fail on existing `calc-document-codec.ts` and `swatrset.ts` counts. The changed Writer projection is below the limit.
+- The browser gallery reuses the pinned order and matching 16-pixel PNG assets. The user gallery persists in browser storage and the image element maps native placement to browser line-box geometry. ODT can preserve embedded graphics supported by the existing PNG/JPEG package path. Numbering imports pass the native typed `Graphic` property with `XGraphic`; the separate desktop `XBitmap`/DIB service and linked bullets fall outside this embedded-graphic slice.
+- The complete suite is scheduled after the tenth closed task since the reset.

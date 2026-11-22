@@ -35,7 +35,11 @@ import {
   decodeCharacterStyleReference,
   type WriterCharacterStyleRecord,
 } from "./writer-character-style-codec";
-import { encodeNumberFormat, type WriterNumberFormatRecord } from "./writer-number-format-codec";
+import {
+  decodeNumberGraphic,
+  encodeNumberFormat,
+  type WriterNumberFormatRecord,
+} from "./writer-number-format-codec";
 import { upgradeWriterWhichIds } from "./writer-which-id-migration";
 import {
   decodePageStories,
@@ -632,6 +636,7 @@ export function* decodeWriterDocumentSteps(
           decoded.SetNumberingType(format.nativeNumberingType);
         if (format.numAdjust !== undefined) decoded.SetNumAdjust(format.numAdjust);
         if (format.isLegal !== undefined) decoded.SetIsLegal(format.isLegal);
+        decodeNumberGraphic(decoded, format.graphic);
         decoded.SetCharFormat(decodeCharacterStyleReference(document, format.characterStyle));
         if (format.bulletGlyph !== undefined) decoded.SetBulletChar(format.bulletGlyph);
         if (format.showSymbol !== undefined) decoded.SetShowSymbol(format.showSymbol);
