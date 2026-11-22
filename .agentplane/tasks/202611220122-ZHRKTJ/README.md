@@ -1,10 +1,11 @@
 ---
 id: "202611220122-ZHRKTJ"
 title: "Connect Writer named list-style editing"
-status: "DOING"
+result_summary: "verified-202611220122-ZHRKTJ"
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 11
+revision: 13
 origin:
   system: "manual"
 depends_on: []
@@ -22,9 +23,9 @@ plan_approval:
   note: null
 verification:
   state: "ok"
-  updated_at: "2026-11-22T02:24:22.843Z"
+  updated_at: "2026-11-22T02:27:31.548Z"
   updated_by: "CODER"
-  note: "Verified named list-style editing and embedded graphic markers. 215 focused Writer and 12 shared checks passed; production Chrome passed both cases. The task findings record existing repository-wide JSDoc and size failures outside the changed source."
+  note: "verified-202611220122-ZHRKTJ"
   attempts: 0
 quality_review:
   state: "pass"
@@ -43,7 +44,9 @@ quality_review:
     - "Targeted named and automatic ODT image-marker round trips, Worker graph round trip, and typed UNO property sequence"
   findings:
     - "All scope-specific checks passed. Repository-wide JSDoc and size checks still report pre-existing findings outside the changed files."
-commit: null
+commit:
+  hash: "034e32774d6af402bab61c0a2a27475e28a70624"
+  message: "🧩 ZHRKTJ task: Record verified list style implementation"
 comments:
   -
     author: "CODER"
@@ -80,6 +83,9 @@ comments:
       - Position and Customize display mixed values for the selected levels and do not overwrite untouched properties. Legal numbering reflects mixed selections. WRITER-741 records the source's first-to-last equality for start, prefix and suffix.
       - Final Writer tests: 229 passed across 13 suites. Production build and both Chrome nested-dialog tests passed. Scoped lint and formatting, Writer resources, source tree, boundaries, provenance, Writer parity inventory, doctor, routing, and diff checks passed. Global JSDoc and file-size still report existing unrelated findings.
       - Native Image list styles and remaining template control parity are pending, including legacy Relative positioning and additional graphic and numbering options. This is a checkpoint without a task closure or cadence increment.
+  -
+    author: "CODER"
+    body: "Verified: verified-202611220122-ZHRKTJ. Guided shortcut recorded verification and is closing the direct task with traceable commit metadata."
 events:
   -
     type: "status"
@@ -132,8 +138,21 @@ events:
     author: "CODER"
     state: "ok"
     note: "Verified named list-style editing and embedded graphic markers. 215 focused Writer and 12 shared checks passed; production Chrome passed both cases. The task findings record existing repository-wide JSDoc and size failures outside the changed source."
+  -
+    type: "verify"
+    at: "2026-11-22T02:27:31.548Z"
+    author: "CODER"
+    state: "ok"
+    note: "verified-202611220122-ZHRKTJ"
+  -
+    type: "status"
+    at: "2026-11-22T02:27:31.678Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: verified-202611220122-ZHRKTJ. Guided shortcut recorded verification and is closing the direct task with traceable commit metadata."
 doc_version: 3
-doc_updated_at: "2026-11-22T02:24:23.166Z"
+doc_updated_at: "2026-11-22T02:27:31.678Z"
 doc_updated_by: "CODER"
 description: "Wire the Outline and List Edit Style button to the upstream numbering-style template dialog. Implement the document-owned rule format update and undo contract, connect the template pages to existing numbering mechanisms, and verify shared style changes, cancel, undo and ODT round trip in Writer."
 sections:
@@ -182,6 +201,36 @@ sections:
     - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
     - risks: none
 
+    ### 2026-11-22T02:27:31.548Z — VERIFY — ok
+
+    By: CODER
+
+    Note: verified-202611220122-ZHRKTJ
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-22T02:24:23.166Z, excerpt_hash=sha256:457b6bd39529f2a836d3fb884eeeebe540da4f8ebafb0437567565f24de7b586
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office-writer/.agentplane/tasks/202611220122-ZHRKTJ/blueprint/resolved-snapshot.json
+    - old_digest: f8605842b45943983c5279d02f65aabb3141fb139ea6ee53369ec7a5fb96d403
+    - current_digest: f8605842b45943983c5279d02f65aabb3141fb139ea6ee53369ec7a5fb96d403
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202611220122-ZHRKTJ
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task complete 202611220122-ZHRKTJ --result verified-202611220122-ZHRKTJ --commit 034e32774d6af402bab61c0a2a27475e28a70624
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: |-
     - Revert task-related commit(s).
@@ -195,6 +244,10 @@ sections:
     - `npm run check:file-size` — fail on existing `calc-document-codec.ts` and `swatrset.ts` counts. The changed Writer projection is below the limit.
     - The browser gallery reuses the pinned order and matching 16-pixel PNG assets. The user gallery persists in browser storage and the image element maps native placement to browser line-box geometry. ODT can preserve embedded graphics supported by the existing PNG/JPEG package path. Numbering imports pass the native typed `Graphic` property with `XGraphic`; the separate desktop `XBitmap`/DIB service and linked bullets fall outside this embedded-graphic slice.
     - The complete suite is scheduled after the tenth closed task since the reset.
+extensions:
+  implementation_commit:
+    hash: "3ae88311e04a040df109e171e7d7cccb5f86a947"
+    message: "🧩 ZHRKTJ code: Connect Writer graphic list markers"
 id_source: "generated"
 ---
 ## Summary
@@ -250,6 +303,36 @@ DecisionContextRef:
 - freshness: route=computed_local remote=remote_skipped
 - repeat_allowed: false
 - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- risks: none
+
+### 2026-11-22T02:27:31.548Z — VERIFY — ok
+
+By: CODER
+
+Note: verified-202611220122-ZHRKTJ
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-22T02:24:23.166Z, excerpt_hash=sha256:457b6bd39529f2a836d3fb884eeeebe540da4f8ebafb0437567565f24de7b586
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office-writer/.agentplane/tasks/202611220122-ZHRKTJ/blueprint/resolved-snapshot.json
+- old_digest: f8605842b45943983c5279d02f65aabb3141fb139ea6ee53369ec7a5fb96d403
+- current_digest: f8605842b45943983c5279d02f65aabb3141fb139ea6ee53369ec7a5fb96d403
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202611220122-ZHRKTJ
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task complete 202611220122-ZHRKTJ --result verified-202611220122-ZHRKTJ --commit 034e32774d6af402bab61c0a2a27475e28a70624
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
 - risks: none
 
 <!-- END VERIFICATION RESULTS -->
