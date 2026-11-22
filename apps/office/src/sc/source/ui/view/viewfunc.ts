@@ -32,7 +32,9 @@ import { ScViewUtil } from "./viewutil";
 import { ScTabView } from "./tabview3";
 import type { ScDocShell } from "../docshell/docsh";
 import { InsertDeleteFlags, ScSizeMode } from "../../../inc/global";
-import { ScPatternAttr } from "../../../inc/patattr";
+import { ScPatternAttr, type ScPatternStyleReference } from "../../../inc/patattr";
+import { ScUndoSelectionStyle } from "../undo/undoblk";
+import { createDeleteContentsUndoDoc } from "../docshell/docfuncutil";
 import { ScMarkData } from "../../../inc/markdata";
 import { ScRange, ScAddress } from "../../../inc/address";
 import { ScEditableTester } from "../docshell/editable";
@@ -122,6 +124,41 @@ export class ScViewFunc extends ScTabView {
   /** Splits the source selection through the actual document shell. @returns Whether admitted. */
   RemoveMerge(): boolean {
     return RemoveMerge(this, this.shell);
+  }
+
+  /** Applies the source style through native editability, filtered marks, and attribute history. @param style - Actual named cell style. @returns Whether applied. */
+  SetStyleSheetToMarked(style: ScPatternStyleReference): boolean {
+    const doc = this.data.GetDocument(),
+      original = this.data.GetMarkData();
+    const tab = this.data.CurrentTabForData(),
+      col = this.data.GetCurX(),
+      row = this.data.GetCurY();
+    const tester =
+      original.IsMarked() || original.IsMultiMarked()
+        ? ScEditableTester.CreateAndTestSelection(doc, original)
+        : ScEditableTester.CreateAndTestSelectedBlock(doc, col, row, col, row, original);
+    if (!tester.IsFormatEditable()) {
+      this.ErrorMessage(tester.GetMessageId());
+      return false;
+    }
+
+    const marks = new ScMarkData(original);
+    ScViewUtil.UnmarkFiltered(marks, doc);
+    const marked = marks.IsMarked() || marks.IsMultiMarked();
+    if (!marked) marks.SetMarkArea(new ScRange(col, row, tab));
+    marks.MarkToMulti();
+    const range = new ScRange(marks.GetMultiMarkArea());
+    const undo = createDeleteContentsUndoDoc(doc, marks, range, marked, InsertDeleteFlags.ATTRIB);
+    this.shell
+      .GetUndoManager()
+      .AddUndoAction(
+        new ScUndoSelectionStyle(this.shell, marks, range, text(style.GetName()), undo),
+      );
+    if (marked) doc.ApplySelectionStyle(style, marks);
+    else for (const selected of marks) doc.ApplyStyleAreaTab(col, row, col, row, selected, style);
+    AdjustBlockHeight(doc, marks, range.aStart.Row(), range.aEnd.Row());
+    this.shell.SetDocumentModified();
+    return true;
   }
   /** Inserts the manual break at the original view cursor, or the supplied address. @param columns - Column axis. @param record - Record history. @param position - Explicit cursor override. @param setModified - Mark the document modified. @returns Success. */
   InsertPageBreak(

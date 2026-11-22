@@ -21,6 +21,31 @@ import { ScCellFormat } from "../tool/cellform";
 import { GetMergeFlags } from "./document10";
 import { SvxHorJustifyItem, SvxVerJustifyItem } from "../../../../editeng/inc/justifyitem";
 import { SvxCellHorJustify, SvxCellVerJustify } from "../../../../editeng/inc/svxenum";
+import type { ScMarkData } from "../../../inc/markdata";
+import type { ScPatternStyleReference } from "../../../inc/patattr";
+
+/** Applies a named style across the original selected workbook sheets. @param this - Actual workbook. @param style - Native cell style. @param marks - Actual selection. @returns Nothing. */
+export function ApplySelectionStyle(
+  this: ScDocument,
+  style: ScPatternStyleReference,
+  marks: ScMarkData,
+): void {
+  const simple = marks.IsMarked() && !marks.IsMultiMarked();
+  const area = simple ? marks.GetMarkArea() : undefined;
+  for (const tab of marks) {
+    if (tab >= this.GetTableCount()) break;
+    if (area) {
+      this.ApplyStyleAreaTab(
+        area.aStart.Col(),
+        area.aStart.Row(),
+        area.aEnd.Col(),
+        area.aEnd.Row(),
+        tab,
+        style,
+      );
+    } else this.FetchTable(tab)?.ApplySelectionStyle(style, marks);
+  }
+}
 
 /** Applies the source merge-and-center format to the origin cell. @param document - Actual workbook. @param anchor - Merge origin. @returns Nothing. */
 export function ApplyMergeAlignment(document: ScDocument, anchor: ScAddress): void {

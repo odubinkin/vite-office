@@ -6,10 +6,79 @@ import { ScMarkData } from "../../../inc/markdata";
 import { ScRangeList } from "../../../inc/rangelst";
 import { SfxHintId } from "../../../../svl/inc/hint";
 import { ScRange } from "../../../inc/address";
-import { InsertDeleteFlags } from "../../../inc/global";
+import { HasAttrFlags, InsertDeleteFlags } from "../../../inc/global";
 import { AdjustBlockHeight } from "../view/viewfun2";
 import { scMergeResourcesEnglish } from "../../../inc/globstr";
 import type { ScCellMergeOption } from "../view/cellmergeoption";
+import { SfxStyleFamily } from "../../../../svl/inc/style-values";
+import { unicode } from "../../../../i18nlangtag/source/isolang/isolang.tables";
+
+/** Original cell-style history restores marked attributes and reapplies the named style on Redo. */
+export class ScUndoSelectionStyle extends SfxUndoAction<ScDocShell> {
+  private readonly marks: ScMarkData;
+  private readonly range: ScRange;
+
+  /** Owns original attributes and marks for the source style command. @param shell - Live shell. @param marks - Selected cells and tabs. @param range - Affected rectangle. @param styleName - Original named style. @param undo - Owned attribute snapshot. @returns History action. */
+  constructor(
+    private readonly shell: ScDocShell,
+    marks: ScMarkData,
+    range: ScRange,
+    private readonly styleName: string,
+    private readonly undo: ScDocument,
+  ) {
+    super();
+    this.marks = new ScMarkData(marks);
+    this.marks.MarkToMulti();
+    this.range = new ScRange(range);
+  }
+
+  /** Restores the original style identities and direct attributes. @returns Nothing. */
+  override UndoWithContext(): void {
+    const doc = this.shell.GetDocument(),
+      range = new ScRange(this.range);
+    if (doc.HasAttrib(range, HasAttrFlags.Merged)) doc.ExtendMergeRange(range, true);
+    range.aStart.SetTab(0);
+    range.aEnd.SetTab(doc.GetTableCount() - 1);
+    this.undo.CopyToDocument(range, InsertDeleteFlags.ATTRIB, true, doc, this.marks);
+    AdjustBlockHeight(doc, this.marks, range.aStart.Row(), range.aEnd.Row());
+  }
+
+  /** Resolves the source style name again and repeats its application. @returns Nothing. */
+  override RedoWithContext(): void {
+    const doc = this.shell.GetDocument(),
+      name = unicode(this.styleName);
+    try {
+      const style = doc.GetStyleSheetPool()?.Find(name, SfxStyleFamily.Para);
+      if (!style) return;
+      const range = new ScRange(this.range);
+      if (doc.HasAttrib(range, HasAttrFlags.Merged)) doc.ExtendMergeRange(range, true);
+      doc.ApplySelectionStyle(style, this.marks);
+      AdjustBlockHeight(doc, this.marks, range.aStart.Row(), range.aEnd.Row());
+    } finally {
+      name.dispose();
+    }
+  }
+
+  /** Copies the native history selection. @returns Selected ranges and sheets. */
+  GetMarkData(): ScMarkData {
+    return new ScMarkData(this.marks);
+  }
+
+  /** Copies the original style command's rectangle. @returns Affected range. */
+  getAffectedRange(): ScRange {
+    return new ScRange(this.range);
+  }
+
+  /** Returns STR_UNDO_APPLYCELLSTYLE. @returns History caption. */
+  override GetComment(): string {
+    return "Apply Cell Style";
+  }
+
+  /** Releases the owned attribute snapshot. @returns Nothing. */
+  override Dispose(): void {
+    this.undo.Dispose();
+  }
+}
 
 /** Original split history owns one attribute snapshot and the extended source ranges. */
 export class ScUndoRemoveMerge extends SfxUndoAction<ScDocShell> {

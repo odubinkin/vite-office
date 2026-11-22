@@ -170,6 +170,7 @@ export class ScDocShell extends SfxObjectShell {
       document.InsertTab(0, unicode("Sheet1"));
       document.GetStyleSheetPool()?.GetPageStyle(document.GetPageStyle(0), true);
     }
+    document.GetStyleSheetPool()?.LoadStandardCellStyles();
   }
   /** Borrows the actual document. @returns Model. */
   GetDocument(): ScDocument {
@@ -238,6 +239,7 @@ export class ScDocShell extends SfxObjectShell {
       document.InsertTab(0, unicode("Sheet1"));
       document.GetStyleSheetPool()?.GetPageStyle(document.GetPageStyle(0), true);
     }
+    document.GetStyleSheetPool()?.LoadStandardCellStyles();
     this.openRequest++;
     const previous = this.document;
     SetDocumentShell.call(document, this);

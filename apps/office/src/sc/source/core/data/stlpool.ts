@@ -15,11 +15,24 @@ import { ScPageHFItem } from "../../../inc/attrib";
 import { SvxBrushItem } from "../../../../editeng/inc/brushitem";
 import { SvxColorItem } from "../../../../editeng/inc/colritem";
 import { SvxWeightItem } from "../../../../editeng/inc/wghtitem";
-import { FontWeight } from "../../../../tools/inc/fontenum";
+import { FontItalic, FontLineStyle, FontWeight } from "../../../../tools/inc/fontenum";
+import { SvxFontHeightItem } from "../../../../editeng/inc/fhgtitem";
+import { SvxPostureItem } from "../../../../editeng/inc/postitem";
+import { SvxUnderlineItem } from "../../../../editeng/source/items/textitem";
+import { SvxBoxItem, SvxBoxItemLine } from "../../../../editeng/source/items/frmitems";
+import { SvxBorderLine, SvxBorderLineWidth } from "../../../../editeng/source/items/borderline";
 import { Color } from "../../../../tools/inc/color";
 import {
   ATTR_BACKGROUND,
+  ATTR_BORDER,
+  ATTR_CJK_FONT_HEIGHT,
+  ATTR_CJK_FONT_POSTURE,
+  ATTR_CTL_FONT_HEIGHT,
+  ATTR_CTL_FONT_POSTURE,
   ATTR_FONT_COLOR,
+  ATTR_FONT_HEIGHT,
+  ATTR_FONT_POSTURE,
+  ATTR_FONT_UNDERLINE,
   ATTR_FONT_WEIGHT,
   ATTR_CJK_FONT_WEIGHT,
   ATTR_CTL_FONT_WEIGHT,
@@ -31,21 +44,38 @@ import type { SfxItemSet } from "../../../../svl/source/items/itemset";
 
 const standard = scStyleNameResourcesEnglish.STR_STYLENAME_STANDARD;
 
-/** Source status and accent styles from sc/res/xml/styles.xml. */
-const conditionalStyles = new Map<
-  string,
-  readonly [string, (number | undefined)?, (number | undefined)?, boolean?]
->([
-  ["Status", [standard]],
-  ["Good", ["Status", 0xccffcc, 0x006600]],
-  ["Neutral", ["Status", 0xffffcc, 0x996600]],
-  ["Bad", ["Status", 0xffcccc, 0xcc0000]],
-  ["Warning", ["Status", undefined, 0xcc0000]],
-  ["Error", ["Status", 0xcc0000, 0xffffff, true]],
-  ["Accent", [standard, undefined, undefined, true]],
-  ["Accent 1", ["Accent", 0x000000, 0xffffff]],
-  ["Accent 2", ["Accent", 0x808080, 0xffffff]],
-  ["Accent 3", ["Accent", 0xdddddd]],
+/** Direct attributes in the bundled default styles. Unspecified attributes inherit from the parent. */
+interface StandardCellStyle {
+  readonly parent: string;
+  readonly background?: number;
+  readonly foreground?: number;
+  readonly height?: number;
+  readonly posture?: FontItalic;
+  readonly bold?: boolean;
+  readonly underline?: boolean;
+  readonly border?: number;
+}
+
+/** Source styles and their parent order from sc/res/xml/styles.xml. Heights are in twips. */
+const standardCellStyles = new Map<string, StandardCellStyle>([
+  ["Heading", { parent: standard, height: 480, posture: FontItalic.ITALIC_NONE, bold: true }],
+  ["Heading 1", { parent: "Heading", height: 360 }],
+  ["Heading 2", { parent: "Heading", height: 240 }],
+  ["Text", { parent: standard }],
+  ["Note", { parent: "Text", background: 0xffffcc, foreground: 0x333333, border: 0x808080 }],
+  ["Footnote", { parent: "Text", foreground: 0x808080, posture: FontItalic.ITALIC_NORMAL }],
+  ["Hyperlink", { parent: "Text", foreground: 0x0000ee, underline: true }],
+  ["Status", { parent: standard }],
+  ["Good", { parent: "Status", background: 0xccffcc, foreground: 0x006600 }],
+  ["Neutral", { parent: "Status", background: 0xffffcc, foreground: 0x996600 }],
+  ["Bad", { parent: "Status", background: 0xffcccc, foreground: 0xcc0000 }],
+  ["Warning", { parent: "Status", foreground: 0xcc0000 }],
+  ["Error", { parent: "Status", background: 0xcc0000, foreground: 0xffffff, bold: true }],
+  ["Accent", { parent: standard, bold: true }],
+  ["Accent 1", { parent: "Accent", background: 0x000000, foreground: 0xffffff }],
+  ["Accent 2", { parent: "Accent", background: 0x808080, foreground: 0xffffff }],
+  ["Accent 3", { parent: "Accent", background: 0xdddddd }],
+  ["Result", { parent: standard, bold: true, posture: FontItalic.ITALIC_NORMAL, underline: true }],
 ]);
 
 /** Actual shared style-pool base with the native Calc document pointer. */
@@ -137,27 +167,30 @@ export class ScStyleSheetPool extends SfxStyleSheetPool {
     }
   }
 
-  /** Reads source stock styles used when authoring conditional-format rules. @returns Original style names. */
-  GetConditionalStyleNames(): Iterable<string> {
-    return conditionalStyles.keys();
+  /** Reads source stock styles used by the Styles controls and conditional formats. @returns Original style names. */
+  GetStandardCellStyleNames(): Iterable<string> {
+    return standardCellStyles.keys();
   }
 
-  /** Materializes a requested stock style where an existing workbook style does not provide it. @param name - Accepted style name. @returns Nothing. */
-  EnsureConditionalStyle(name: string): void {
-    const definition = conditionalStyles.get(name);
-    if (!definition) return;
+  /** Populates the workbook's built-in cell style hierarchy, retaining named styles already installed by a filter. @returns Nothing. */
+  LoadStandardCellStyles(): void {
+    this.GetDefaultStyle(true);
+    for (const name of this.GetStandardCellStyleNames()) this.EnsureStandardCellStyle(name);
+  }
+
+  /** Materializes an original stock style and its ancestors if needed. @param name - Source style name. @returns Actual style or null. */
+  EnsureStandardCellStyle(name: string): SfxStyleSheetBase | null {
+    if (name === standard) return this.GetDefaultStyle(true);
     const value = unicode(name);
     try {
-      if (this.Find(value, SfxStyleFamily.Para)) return;
-      const [parent, background, foreground, bold] = definition;
-      this.EnsureConditionalStyle(parent);
-      const style = this.Make(value, SfxStyleFamily.Para, SfxStyleSearchBits.Auto);
-      const parentName = unicode(parent);
-      try {
-        style.SetParent(parentName);
-      } finally {
-        parentName.dispose();
-      }
+      const existing = this.Find(value, SfxStyleFamily.Para);
+      const definition = standardCellStyles.get(name);
+      if (existing || !definition) return existing;
+      const { parent, background, foreground, bold, height, posture, underline, border } =
+        definition;
+      const ancestor = this.EnsureStandardCellStyle(parent);
+      const style = this.Make(value, SfxStyleFamily.Para, SfxStyleSearchBits.ScStandard);
+      if (ancestor) style.SetParent(ancestor.GetName());
       const items = style.GetItemSet();
       if (background !== undefined)
         items.Put(new SvxBrushItem(new Color(background), ATTR_BACKGROUND));
@@ -167,6 +200,27 @@ export class ScStyleSheetPool extends SfxStyleSheetPool {
         for (const which of [ATTR_FONT_WEIGHT, ATTR_CJK_FONT_WEIGHT, ATTR_CTL_FONT_WEIGHT])
           items.Put(new SvxWeightItem(FontWeight.WEIGHT_BOLD, which));
       }
+      if (height !== undefined)
+        for (const which of [ATTR_FONT_HEIGHT, ATTR_CJK_FONT_HEIGHT, ATTR_CTL_FONT_HEIGHT])
+          items.Put(new SvxFontHeightItem(height, 100, which));
+      if (posture !== undefined)
+        for (const which of [ATTR_FONT_POSTURE, ATTR_CJK_FONT_POSTURE, ATTR_CTL_FONT_POSTURE])
+          items.Put(new SvxPostureItem(posture, which));
+      if (underline)
+        items.Put(new SvxUnderlineItem(FontLineStyle.LINESTYLE_SINGLE, ATTR_FONT_UNDERLINE));
+      if (border !== undefined) {
+        const box = new SvxBoxItem(ATTR_BORDER);
+        const line = new SvxBorderLine(new Color(border), SvxBorderLineWidth.Thin);
+        for (const side of [
+          SvxBoxItemLine.TOP,
+          SvxBoxItemLine.BOTTOM,
+          SvxBoxItemLine.LEFT,
+          SvxBoxItemLine.RIGHT,
+        ])
+          box.SetLine(line, side);
+        items.Put(box);
+      }
+      return style;
     } finally {
       value.dispose();
     }

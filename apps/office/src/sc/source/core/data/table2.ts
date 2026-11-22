@@ -13,6 +13,21 @@ import type { ScColumn } from "../../../inc/column";
 import type { StartListeningContext } from "../../../inc/listenercontext";
 import type { OUStringConstReference } from "../../../../sal/inc/rtl/ustring";
 import type { ScSetStringParam } from "../../../inc/stringutil";
+import type { ScPatternStyleReference } from "../../../inc/patattr";
+
+/** Applies the source named style to marked attribute runs with native default-column allocation. @param this - Actual sheet. @param style - Native style. @param marks - Marked areas. @returns Nothing. */
+export function ApplySelectionStyle(
+  this: ScTable,
+  style: ScPatternStyleReference,
+  marks: ScMarkData,
+): void {
+  this["ApplyWithAllocation"](
+    marks,
+    /** Applies to the allocated column or the shared default tail. @param column - Attribute owner. @param first - First row. @param last - Last row. @returns Nothing. */
+    (column, first, last) => column.ApplyStyleArea(first, last, style),
+  );
+  this.SetStreamValid(false);
+}
 
 /** Finds the last column with stored width, flags or hidden geometry. @param this - Native sheet. @returns Last changed column. */
 export function GetLastChangedColFlagsWidth(this: ScTable): number {

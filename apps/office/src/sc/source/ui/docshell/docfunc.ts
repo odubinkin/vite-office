@@ -214,9 +214,9 @@ export class ScDocFunc {
     const pool = this.shell.GetDocument().GetStyleSheetPool();
     for (let index = 0; index < format.size(); index++) {
       const rule = format.GetEntry(index);
-      if (rule instanceof ScCondFormatEntry) pool?.EnsureConditionalStyle(rule.GetStyleName());
+      if (rule instanceof ScCondFormatEntry) pool?.EnsureStandardCellStyle(rule.GetStyleName());
       if (rule instanceof ScCondDateFormatEntry)
-        pool?.EnsureConditionalStyle(text(rule.GetStyleName()));
+        pool?.EnsureStandardCellStyle(text(rule.GetStyleName()));
     }
   }
 
