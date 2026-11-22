@@ -286,6 +286,8 @@ export function WriterEditableParagraph({
             ),
             fontSize: `${paragraph.computedStyle.fontSizePt}pt`,
             fontKerning: paragraph.computedStyle.autoKerning === true ? "normal" : "none",
+            fontOpticalSizing: paragraph.computedStyle.opticalSizing === true ? "auto" : "none",
+            hyphens: paragraph.computedStyle.autoHyphenation === true ? "auto" : "manual",
             fontStyle: paragraph.computedStyle.fontStyle,
             fontWeight: paragraph.computedStyle.fontWeight,
             lineHeight: paragraph.computedStyle.lineHeight,
@@ -507,11 +509,21 @@ export function WriterTextPortionProjection({
     );
   if (run.attributes.fontSizeTwips !== undefined)
     content = <span style={{ fontSize: `${run.attributes.fontSizeTwips / 20}pt` }}>{content}</span>;
-  const { autoKerning, kerningTwips } = run.attributes;
-  if (autoKerning !== undefined || kerningTwips !== undefined)
+  const { autoKerning, kerningTwips, opticalSizing, noHyphenation, language } = run.attributes;
+  if (
+    autoKerning !== undefined ||
+    kerningTwips !== undefined ||
+    opticalSizing !== undefined ||
+    noHyphenation ||
+    language
+  )
     content = (
       <span
+        lang={language}
         style={{
+          hyphens: noHyphenation ? "manual" : undefined,
+          fontOpticalSizing:
+            opticalSizing === undefined ? undefined : opticalSizing ? "auto" : "none",
           fontKerning: autoKerning === undefined ? undefined : autoKerning ? "normal" : "none",
           letterSpacing: kerningTwips === undefined ? undefined : `${kerningTwips / 20}pt`,
         }}

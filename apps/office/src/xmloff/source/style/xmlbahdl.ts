@@ -194,3 +194,24 @@ export class XMLPercent16PropHdl {
     return true;
   }
 }
+
+/** Original XML_TYPE_NBOOL maps a positive ODF flag onto a negated native item. */
+export class XMLNBoolPropHdl {
+  /** Inverts the native XML boolean, including the initialized value on conversion failure. @param input - Lexical boolean. @param value - Native output. @returns Conversion success. */
+  importXML(input: string, value: Any): boolean {
+    const boolean: [boolean] = [false];
+    const result = Converter.convertBool(boolean, input);
+    value.insert([!boolean[0]], "bool");
+    return result;
+  }
+
+  /** Writes the inverse of the native boolean item. @param output - XML attribute destination. @param value - Native input. @returns Whether emitted. */
+  exportXML(output: [string], value: Any): boolean {
+    const boolean: [boolean] = [false];
+    if (!value.extract(boolean, "bool")) return false;
+    const buffer: [string] = [""];
+    Converter.convertBool(buffer, !boolean[0]);
+    output[0] = buffer[0];
+    return true;
+  }
+}

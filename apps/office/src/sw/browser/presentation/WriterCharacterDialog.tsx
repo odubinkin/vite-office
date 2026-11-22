@@ -8,11 +8,16 @@ import { useBrowserLocalization } from "../../../framework/browser/localization/
 import { SfxItemSet, SfxItemState } from "../../../svl/source/items/itemset";
 import * as EE from "../../../editeng/inc/eeitem";
 import { SvxBrushItem } from "../../../editeng/inc/brushitem";
+import { SvxNoHyphenItem } from "../../../editeng/inc/nhypitem";
+import { SvxOpticalSizingItem } from "../../../editeng/inc/opticalsizingitem";
 import { SvxCharRotateItem } from "../../../editeng/inc/charrotateitem";
 import { SvxCharScaleWidthItem } from "../../../editeng/inc/charscaleitem";
 import { SID_ATTR_CHAR_WIDTH_FIT_TO_LINE } from "../../../editeng/inc/editids";
 import { SfxUInt16Item } from "../../../svl/source/items/intitem";
-import { WriterCharacterScalingControls } from "./WriterCharacterScalingControls";
+import {
+  WriterCharacterPositionOptions,
+  WriterCharacterScalingControls,
+} from "./WriterCharacterScalingControls";
 import { SvxAutoKernItem } from "../../../editeng/inc/autokernitem";
 import { SvxKerningItem } from "../../../editeng/inc/kernitem";
 import * as SW from "../../inc/hintids";
@@ -80,6 +85,7 @@ const characterItems = {
     position: EE.EE_CHAR_ESCAPEMENT,
     spacing: EE.EE_CHAR_KERNING,
     scaleWidth: EE.EE_CHAR_FONTWIDTH,
+    opticalSizing: EE.EE_CHAR_OPTICALSIZING,
     pairKerning: EE.EE_CHAR_PAIRKERNING,
     color: EE.EE_CHAR_COLOR,
     background: EE.EE_CHAR_BKGCOLOR,
@@ -101,6 +107,7 @@ const characterItems = {
     position: SW.RES_CHRATR_ESCAPEMENT,
     spacing: SW.RES_CHRATR_KERNING,
     scaleWidth: SW.RES_CHRATR_SCALEW,
+    opticalSizing: SW.RES_CHRATR_OPTICAL_SIZING,
     pairKerning: SW.RES_CHRATR_AUTOKERN,
     color: SW.RES_CHRATR_COLOR,
     background: SW.RES_CHRATR_BACKGROUND,
@@ -231,6 +238,9 @@ export function WriterCharacterDialog({
   const scripted = direction !== undefined && direction !== SvxEscapement.Off;
   const script = direction === SvxEscapement.Subscript ? "lower" : "upper";
   const scriptSize = position[script];
+  const opticalSizing = read(which.opticalSizing)?.QueryValue() === true;
+  const noHyphenation =
+    mode === "standard" ? read(SW.RES_CHRATR_NOHYPHEN)?.QueryValue() === true : undefined;
   const scale = read(which.scaleWidth);
   const scaleWidth = displayCharacterScale(
     scale instanceof SvxCharScaleWidthItem ? scale.GetValue() : 100,
@@ -497,6 +507,12 @@ export function WriterCharacterDialog({
       if (offset !== escapementItem?.GetEsc() || height !== escapementItem?.GetProportionalHeight())
         output.Put(new SvxEscapementItem(offset, height, which.position), true);
     }
+    const nextOptical = values.has("opticalSizing"),
+      nextNoHyphenation = values.has("noHyphenation");
+    if (nextOptical !== opticalSizing)
+      output.Put(new SvxOpticalSizingItem(nextOptical, which.opticalSizing), true);
+    if (noHyphenation !== undefined && nextNoHyphenation !== noHyphenation)
+      output.Put(new SvxNoHyphenItem(nextNoHyphenation, SW.RES_CHRATR_NOHYPHEN), true);
     const nextScale = values.get("scaleWidth");
     if (nextScale && Number(nextScale) !== scaleWidth)
       output.Put(new SvxCharScaleWidthItem(Number(nextScale), which.scaleWidth), true);
@@ -910,6 +926,10 @@ export function WriterCharacterDialog({
                 {localization.GetText("writer.character.pair-kerning", "Pair kerning")}
               </label>
             </fieldset>
+            <WriterCharacterPositionOptions
+              noHyphenation={noHyphenation}
+              opticalSizing={opticalSizing}
+            />
           </section>
           <section
             role="tabpanel"

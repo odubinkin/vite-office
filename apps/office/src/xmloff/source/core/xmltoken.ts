@@ -539,6 +539,7 @@ const entries: readonly (readonly [string, string, XMLToken])[] = [
   [ODF_NAMESPACES.loext, "transformation", XMLToken.LOEXT_TRANSFORMATION],
   [ODF_NAMESPACES.loext, "type", XMLToken.LOEXT_TYPE],
   [ODF_NAMESPACES.loext, "value", XMLToken.LOEXT_VALUE],
+  [ODF_NAMESPACES.loext, "font-optical-sizing", XMLToken.LOEXT_FONT_OPTICAL_SIZING],
   [ODF_NAMESPACES.loext, "font-style", XMLToken.LOEXT_FONT_STYLE],
   [ODF_NAMESPACES.loext, "font-weight", XMLToken.LOEXT_FONT_WEIGHT],
   [ODF_NAMESPACES.loext, "opacity", XMLToken.LOEXT_OPACITY],

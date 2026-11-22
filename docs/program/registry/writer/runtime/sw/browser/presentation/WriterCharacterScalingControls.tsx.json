@@ -16,12 +16,14 @@
       "defaultStatus": "not-applicable",
       "divergenceClass": "B",
       "evidence": [
-        "apps/office/src/sw/browser/presentation/WriterCharacterScalingControls.tsx#WriterCharacterScalingControls"
+        "apps/office/src/sw/browser/presentation/WriterCharacterScalingControls.tsx#WriterCharacterScalingControls",
+        "apps/office/src/sw/browser/presentation/WriterCharacterScalingControls.tsx#WriterCharacterPositionOptions"
       ],
       "justification": "Presents the native Position page rotation, scale-width and Fit to Line controls over Writer item-set values. The native text frame supplies the selection-dependent percentage.",
       "knownViolations": [],
       "localSymbols": [
-        "WriterCharacterScalingControls"
+        "WriterCharacterScalingControls",
+        "WriterCharacterPositionOptions"
       ],
       "sourceResponsibility": "browser-owned",
       "upstreamFile": null,

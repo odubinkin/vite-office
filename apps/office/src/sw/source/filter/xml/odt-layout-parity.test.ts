@@ -23,6 +23,8 @@ import {
   RES_CHRATR_FONTSIZE,
   RES_CHRATR_RELIEF,
   RES_CHRATR_ROTATE,
+  RES_CHRATR_NOHYPHEN,
+  RES_CHRATR_OPTICAL_SIZING,
   RES_CHRATR_SCALEW,
   RES_CHRATR_SHADOWED,
   RES_CHRATR_OVERLINE,
@@ -43,7 +45,7 @@ import {
   encodeWriterDocument,
 } from "../../../browser/filter/xml/writer-document-codec";
 
-const namespaces = `xmlns:office="${ODF_NAMESPACES.office}" xmlns:style="${ODF_NAMESPACES.style}" xmlns:text="${ODF_NAMESPACES.text}" xmlns:fo="${ODF_NAMESPACES.fo}"`;
+const namespaces = `xmlns:office="${ODF_NAMESPACES.office}" xmlns:style="${ODF_NAMESPACES.style}" xmlns:text="${ODF_NAMESPACES.text}" xmlns:fo="${ODF_NAMESPACES.fo}" xmlns:loext="${ODF_NAMESPACES.loext}"`;
 const metadata = createDocument({ id: "odt-layout", suiteId: "writer", title: "Layout" });
 
 /** Wraps named styles in a minimal Writer styles stream. @param definitions - ODF style children. @returns XML. */
@@ -531,14 +533,17 @@ it("round-trips native character rotation and scale in an automatic text style",
   }
 });
 
-it("preserves new Writer document pair kerning as an ODT text default", /** Pins the shell default and its native pool ownership after reopening. @returns Nothing. */ () => {
+it("preserves new Writer document pair kerning and optical sizing as ODT text defaults", /** Pins the shell default and its native pool ownership after reopening. @returns Nothing. */ () => {
   const original = SwDocShell.CreateNewDocument({});
   try {
     expect(original.GetDefault(RES_CHRATR_AUTOKERN).QueryValue()).toBe(true);
+    expect(original.GetDefault(RES_CHRATR_OPTICAL_SIZING).QueryValue()).toBe(true);
     const transferred = decodeWriterDocument(encodeWriterDocument(original));
     try {
       expect(transferred.GetDefault(RES_CHRATR_AUTOKERN).QueryValue()).toBe(true);
+      expect(transferred.GetDefault(RES_CHRATR_OPTICAL_SIZING).QueryValue()).toBe(true);
       const exported = exportStylesXml(transferred);
+      expect(exported).toContain('loext:font-optical-sizing="auto"');
       expect(exported).toMatch(
         /<style:default-style style:family="paragraph">.*style:letter-kerning="true"/,
       );
@@ -549,11 +554,49 @@ it("preserves new Writer document pair kerning as an ODT text default", /** Pins
       );
       try {
         expect(reopened.GetDefault(RES_CHRATR_AUTOKERN).QueryValue()).toBe(true);
+        expect(reopened.GetDefault(RES_CHRATR_OPTICAL_SIZING).QueryValue()).toBe(true);
       } finally {
         reopened.Dispose();
       }
     } finally {
       transferred.Dispose();
+    }
+  } finally {
+    original.Dispose();
+  }
+});
+
+it("preserves character-style hyphenation exceptions and explicit optical sizing", /** Adapts the character-style and old-document cases in tdf106733 and testOpticalSizing2. @returns Nothing. */ () => {
+  const named =
+    '<style:style style:name="Protected" style:family="text"><style:text-properties fo:hyphenate="false" loext:font-optical-sizing="auto"/></style:style>';
+  const automatic =
+    '<style:style style:name="Override" style:family="text" style:parent-style-name="Protected"><style:text-properties fo:hyphenate="true" loext:font-optical-sizing="none"/></style:style>';
+  const body =
+    '<text:p><text:span text:style-name="Protected">except</text:span> <text:span text:style-name="Override">except</text:span> plain</text:p>';
+  const { document: original } = importWriterXml(styles(named), content(automatic, body), metadata);
+  try {
+    expect(original.GetDefault(RES_CHRATR_OPTICAL_SIZING).QueryValue()).toBe(false);
+    const exportedStyles = exportStylesXml(original);
+    const exportedContent = exportContentXml(original);
+    expect(exportedStyles).toContain('fo:hyphenate="false"');
+    expect(exportedStyles).toContain('loext:font-optical-sizing="auto"');
+    expect(exportedContent).toContain('fo:hyphenate="true"');
+    expect(exportedContent).toContain('loext:font-optical-sizing="none"');
+    const { document: reopened } = importWriterXml(exportedStyles, exportedContent, metadata);
+    try {
+      const iterator = new SwAttrIter(reopened.paragraphs[0]!);
+      for (const [offset, value] of [
+        [2, true],
+        [8, false],
+        [15, false],
+      ] as const) {
+        iterator.Seek(offset);
+        const handler = iterator.GetAttrHandler();
+        expect(handler.ReadItem(RES_CHRATR_NOHYPHEN).QueryValue()).toBe(value);
+        expect(handler.ReadItem(RES_CHRATR_OPTICAL_SIZING).QueryValue()).toBe(value);
+      }
+    } finally {
+      reopened.Dispose();
     }
   } finally {
     original.Dispose();

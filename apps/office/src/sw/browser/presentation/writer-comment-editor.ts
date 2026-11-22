@@ -672,6 +672,7 @@ export class WriterCommentEditor extends SwTextAPIEditSource {
     try {
       putAnnotationCharacterItems(parent, source.entries());
       const base = projectWriterCharacterAttributes(parent);
+      paragraph.style.fontOpticalSizing = base.opticalSizing === true ? "auto" : "none";
       paragraph.style.fontKerning = base.autoKerning === true ? "normal" : "none";
       if (base.fontSizeTwips !== undefined)
         paragraph.style.fontSize = `${base.fontSizeTwips / 20}pt`;
@@ -797,6 +798,8 @@ function applyTextStyle(
   if (attributes.fontFamily)
     style.fontFamily = browserFontFamily(attributes.fontFamily, undefined) ?? "";
   if (attributes.fontSizeTwips !== undefined) style.fontSize = `${attributes.fontSizeTwips / 20}pt`;
+  if (attributes.opticalSizing !== undefined)
+    style.fontOpticalSizing = attributes.opticalSizing ? "auto" : "none";
   if (attributes.autoKerning !== undefined)
     style.fontKerning = attributes.autoKerning ? "normal" : "none";
   if (attributes.kerningTwips !== undefined)

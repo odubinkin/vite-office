@@ -67,6 +67,7 @@ import {
 } from "../../../inc/poolfmt";
 import {
   RES_CHRATR_AUTOKERN,
+  RES_CHRATR_OPTICAL_SIZING,
   RES_CHRATR_FONT,
   RES_CHRATR_FONTSIZE,
   RES_CHRATR_CJK_FONTSIZE,
@@ -194,6 +195,7 @@ const fontDefaultWhichIds: readonly number[] = [
   RES_CHRATR_CJK_FONTSIZE,
   RES_CHRATR_CTL_FONT,
   RES_CHRATR_CTL_FONTSIZE,
+  RES_CHRATR_OPTICAL_SIZING,
 ];
 
 /** Encodes the model at the browser boundary. @param document - Canonical graph. @returns Current record. */

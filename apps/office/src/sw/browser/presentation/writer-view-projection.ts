@@ -19,23 +19,45 @@ import { FontEmphasisMark } from "../../../tools/inc/fontenum";
 import { SvxEscapementItem } from "../../../editeng/inc/escapementitem";
 import { SvxCharRotateItem } from "../../../editeng/inc/charrotateitem";
 import { SvxCharScaleWidthItem } from "../../../editeng/inc/charscaleitem";
+import type { SvxHyphenZoneItem } from "../../../editeng/source/items/paraitem";
+import { LanguageTag } from "../../../i18nlangtag/inc/languagetag";
+import { text as unicodeText } from "../../../i18nlangtag/source/isolang/isolang.tables";
 import { SvxAutoKernItem } from "../../../editeng/inc/autokernitem";
 import { SvxKerningItem } from "../../../editeng/inc/kernitem";
+
+import { SvxCrossedOutItem } from "../../../editeng/inc/crossedoutitem";
+import { SvxWordLineModeItem } from "../../../editeng/inc/wrlmitem";
 import {
   RES_CHRATR_AUTOKERN,
   RES_CHRATR_BOX,
   RES_CHRATR_ESCAPEMENT,
   RES_CHRATR_KERNING,
   RES_CHRATR_ROTATE,
+  RES_CHRATR_NOHYPHEN,
+  RES_CHRATR_OPTICAL_SIZING,
+  RES_PARATR_HYPHENZONE,
   RES_CHRATR_SCALEW,
-} from "../../inc/hintids";
-
-import { SvxCrossedOutItem } from "../../../editeng/inc/crossedoutitem";
-import { SvxWordLineModeItem } from "../../../editeng/inc/wrlmitem";
-import {
   RES_CHRATR_CASEMAP,
   RES_CHRATR_CROSSEDOUT,
   RES_CHRATR_WORDLINEMODE,
+  RES_CHRATR_BACKGROUND,
+  RES_CHRATR_OVERLINE,
+  RES_CHRATR_EMPHASIS_MARK,
+  RES_CHRATR_UNDERLINE,
+  RES_TXTATR_INETFMT,
+  RES_CHRATR_COLOR,
+  RES_CHRATR_FONT,
+  RES_CHRATR_FONTSIZE,
+  RES_CHRATR_HIGHLIGHT,
+  RES_CHRATR_POSTURE,
+  RES_CHRATR_WEIGHT,
+  RES_MARGIN_FIRSTLINE,
+  RES_MARGIN_RIGHT,
+  RES_PARATR_LINESPACING,
+  RES_PARATR_TABSTOP,
+  RES_KEEP,
+  RES_LINENUMBER,
+  RES_UL_SPACE,
 } from "../../inc/hintids";
 import type { RulerUnitData } from "../../../svtools/source/control/ruler";
 import type { FieldUnit } from "../../../tools/inc/fldunit";
@@ -68,13 +90,6 @@ import {
   SvxUnderlineItem,
   type SvxTextLineItem,
 } from "../../../editeng/source/items/textitem";
-import {
-  RES_CHRATR_BACKGROUND,
-  RES_CHRATR_OVERLINE,
-  RES_CHRATR_EMPHASIS_MARK,
-  RES_CHRATR_UNDERLINE,
-  RES_TXTATR_INETFMT,
-} from "../../inc/hintids";
 import { projectWriterParagraphList, type WriterParagraphList } from "../../source/core/doc/list";
 import type { WriterParagraphStyle } from "../../source/core/doc/fmtcol";
 import type { SwPaM } from "../../source/core/crsr/pam";
@@ -95,21 +110,6 @@ import {
 } from "../../../editeng/source/items/textitem";
 import { SvxBrushItem } from "../../../editeng/source/items/frmitems.brush";
 import { SfxBoolItem } from "../../../svl/source/items/cenumitm";
-import {
-  RES_CHRATR_COLOR,
-  RES_CHRATR_FONT,
-  RES_CHRATR_FONTSIZE,
-  RES_CHRATR_HIGHLIGHT,
-  RES_CHRATR_POSTURE,
-  RES_CHRATR_WEIGHT,
-  RES_MARGIN_FIRSTLINE,
-  RES_MARGIN_RIGHT,
-  RES_PARATR_LINESPACING,
-  RES_PARATR_TABSTOP,
-  RES_KEEP,
-  RES_LINENUMBER,
-  RES_UL_SPACE,
-} from "../../inc/hintids";
 import { WRITER_AVAILABLE_PARAGRAPH_STYLE_POOL } from "../../inc/poolfmt";
 import type { WriterPageDescriptorValue } from "../../source/core/layout/pagedesc";
 import { projectWriterLineHeightItem } from "../../source/core/text/itrform2";
@@ -203,6 +203,9 @@ export interface WriterTextPortion {
       autoKerning?: boolean;
       rotation?: number;
       scaleWidth?: number;
+      opticalSizing?: boolean;
+      noHyphenation?: boolean;
+      language?: string;
       joinsPreviousCharacterBox?: boolean;
       characterBox?: Readonly<
         Record<"Top" | "Bottom" | "Left" | "Right", Readonly<{ line: string; padding: number }>>
@@ -231,6 +234,8 @@ export interface WriterParagraphComputedStyle {
   /** Effective automatic first-line mode; omitted detached DTOs retain the manual default. */
   readonly autoFirstLineIndent?: boolean;
   readonly autoKerning?: boolean;
+  readonly autoHyphenation?: boolean;
+  readonly opticalSizing?: boolean;
   readonly color?: string;
   readonly contextualSpacing?: boolean;
   readonly firstLineIndentPt: number;
@@ -417,6 +422,9 @@ export class WriterViewProjection {
         );
         const background = writerParagraphBackgroundColor(node.GetSwAttrSet());
         const font = node.GetAttr(RES_CHRATR_FONT) as SvxFontItem;
+        const autoHyphenation = (
+          node.GetAttr(RES_PARATR_HYPHENZONE) as SvxHyphenZoneItem
+        ).QueryValue().hyphen;
         const fontFamilyGeneric = getFontFamilyGeneric(font.GetFamily());
         return Object.freeze({
           ...(rulerTabStops.length === 0 ? {} : { rulerTabStops: Object.freeze(rulerTabStops) }),
@@ -429,6 +437,8 @@ export class WriterViewProjection {
           id: this.GetNodeId(node),
           computedStyle: Object.freeze({
             autoFirstLineIndent: firstLine.IsAutoFirst(),
+            autoHyphenation,
+            opticalSizing: node.GetAttr(RES_CHRATR_OPTICAL_SIZING).QueryValue() === true,
             autoKerning: (node.GetAttr(RES_CHRATR_AUTOKERN) as SvxAutoKernItem).GetValue(),
             ...(color === "auto" ? {} : { color }),
             contextualSpacing: spacing.GetContext(),
@@ -523,7 +533,7 @@ export class WriterViewProjection {
           ...(listMarkerBackgroundColor === undefined ? {} : { listMarkerBackgroundColor }),
           numRuleName: node.GetNumRuleName(),
           nodeIndex: node.GetIndex(),
-          runs: projectTextPortions(node),
+          runs: projectTextPortions(node, autoHyphenation),
           style: node.GetParagraphStyle(),
           styleDisplayName: node.GetTextFormatColl().GetName(),
           text: node.GetText(),
@@ -799,8 +809,21 @@ function projectCharacterBox(
   });
 }
 
-/** Projects native item stacks at text boundaries into immutable platform display values. @param node - Actual body or cell owner. @returns Frozen display portions. */
-function projectTextPortions(node: SwTextNode): readonly WriterTextPortion[] {
+/** Resolves the Writer language to the browser's language tag for automatic hyphenation. @param node - Source paragraph. @param start - First UTF-16 unit. @returns Resolved language tag. */
+function getHyphenationLanguage(node: SwTextNode, start: number): string {
+  const language = new LanguageTag(node.GetLang(start, 1));
+  try {
+    return unicodeText(language.getBcp47());
+  } finally {
+    language.dispose();
+  }
+}
+
+/** Projects native item stacks at text boundaries into immutable platform display values. @param node - Actual body or cell owner. @param autoHyphenation - Active paragraph hyphenation. @returns Frozen display portions. */
+function projectTextPortions(
+  node: SwTextNode,
+  autoHyphenation: boolean,
+): readonly WriterTextPortion[] {
   const iterator = new SwAttrIter(node),
     portions: WriterTextPortion[] = [];
   const inherited = node.GetSwAttrSet(),
@@ -813,6 +836,7 @@ function projectTextPortions(node: SwTextNode): readonly WriterTextPortion[] {
     );
   }
   const inheritedAutoKerning = (node.GetAttr(RES_CHRATR_AUTOKERN) as SvxAutoKernItem).GetValue();
+  const inheritedOpticalSizing = node.GetAttr(RES_CHRATR_OPTICAL_SIZING).QueryValue();
   let previousBox: SvxBoxItem | undefined;
   for (let start = 0; start < node.Len();) {
     iterator.Seek(start);
@@ -825,6 +849,10 @@ function projectTextPortions(node: SwTextNode): readonly WriterTextPortion[] {
     const underline = handler.ReadItem(RES_CHRATR_UNDERLINE) as SvxUnderlineItem;
     const overline = handler.ReadItem(RES_CHRATR_OVERLINE) as SvxOverlineItem;
     const autoKerning = (handler.ReadItem(RES_CHRATR_AUTOKERN) as SvxAutoKernItem).GetValue();
+    const noHyphenation = handler.ReadItem(RES_CHRATR_NOHYPHEN).QueryValue() === true;
+    const opticalSizing = handler.ReadItem(RES_CHRATR_OPTICAL_SIZING).QueryValue() === true;
+    const language =
+      autoHyphenation && !noHyphenation ? getHyphenationLanguage(node, start) : undefined;
     const rotation = (handler.ReadItem(RES_CHRATR_ROTATE) as SvxCharRotateItem).GetValue();
     const scaleWidth = (handler.ReadItem(RES_CHRATR_SCALEW) as SvxCharScaleWidthItem).GetValue();
     const caseMap = (handler.ReadItem(RES_CHRATR_CASEMAP) as SvxCaseMapItem).GetCaseMap();
@@ -904,6 +932,9 @@ function projectTextPortions(node: SwTextNode): readonly WriterTextPortion[] {
                 ).GetHeight(),
               }
             : {}),
+          ...(noHyphenation ? { noHyphenation } : {}),
+          ...(opticalSizing !== inheritedOpticalSizing ? { opticalSizing } : {}),
+          ...(language ? { language } : {}),
           ...(rotation !== 0 ? { rotation } : {}),
           ...(scaleWidth !== 100 ? { scaleWidth } : {}),
           ...(autoKerning !== inheritedAutoKerning ? { autoKerning } : {}),

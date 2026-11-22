@@ -341,7 +341,7 @@ test("Writer keeps emphasis from formatted replacement after reopening the expor
   await expect(marked).toHaveCSS("text-emphasis-position", /^under( right)?$/);
 });
 
-test("Writer applies Text Flow hyphenation and finds the formatted paragraph", /** Exercises the native checkbox and spin controls through the production search dialog. @param fixtures - Playwright fixtures. @param fixtures.page - Chromium page. @returns Test completion. */ async ({
+test("Writer applies paragraph hyphenation and preserves a character exception", /** Exercises the native checkbox and spin controls through the production search dialog. @param fixtures - Playwright fixtures. @param fixtures.page - Chromium page. @returns Test completion. */ async ({
   page,
 }) => {
   await page.goto("/writer");
@@ -375,6 +375,35 @@ test("Writer applies Text Flow hyphenation and finds the formatted paragraph", /
   await attributes.getByRole("button", { name: "OK" }).click();
   await dialog.getByRole("button", { name: "Find All", exact: true }).click();
   await expect(dialog.getByRole("status")).toHaveText("One match found.");
+
+  await page.keyboard.press("Escape");
+  await expect(dialog).toBeHidden();
+  await expect(editor).toHaveCSS("hyphens", "auto");
+  await expect(editor).toHaveCSS("font-optical-sizing", "auto");
+  await editor.press("Home");
+  for (let offset = 0; offset < "Paragraph".length; offset++)
+    await editor.press("Shift+ArrowRight");
+  await page.getByRole("menuitem", { name: "Format", exact: true }).click();
+  await page.getByRole("menuitem", { name: "Character…", exact: true }).click();
+  const character = page.getByRole("dialog", { name: "Character", exact: true });
+  await character.getByRole("tab", { name: "Position", exact: true }).click();
+  const excluded = character.getByRole("checkbox", {
+    name: "Exclude from hyphenation",
+    exact: true,
+  });
+  const optical = character
+    .getByRole("group", { name: "Optical Font Sizing", exact: true })
+    .getByRole("checkbox", { name: "Auto", exact: true });
+  await expect(excluded).not.toBeChecked();
+  await expect(optical).toBeChecked();
+  await excluded.check();
+  await optical.uncheck();
+  await character.getByRole("button", { name: "OK", exact: true }).click();
+  const word = editor.getByText("Paragraph", { exact: true });
+  await expect(word).toHaveCSS("hyphens", "manual");
+  await expect(word).toHaveCSS("font-optical-sizing", "none");
+  await expect(editor.getByText("to format", { exact: true })).toHaveCSS("hyphens", "auto");
+  await expect(editor).toHaveText("Paragraph to format");
 });
 
 test("Writer preserves independent word-only lines when reopening an ODT", /** Drives the native Character Font Effects page and ODT round-trip. @param fixtures - Playwright fixtures. @param fixtures.page - Chromium page. @returns Test completion. */ async ({

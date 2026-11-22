@@ -1,6 +1,5 @@
 /** @fileoverview Consumed native text character property map and handler transport from txtprmap.cxx; no browser boolean formatting model or substitute UNO provider. */
 import { cppu_detail_getUnoType_FillStyle } from "../../../offapi/com/sun/star/drawing/FillStyle";
-import { XMLShadowedPropHdl } from "../style/shdwdhdl";
 import { XMLConstantsPropertyHandler } from "../style/XMLConstantsPropertyHandler";
 import { PropertyValue } from "../../../udkapi/com/sun/star/beans/PropertyValue";
 import { PropertyState } from "../../../udkapi/com/sun/star/beans/PropertyState";
@@ -9,6 +8,7 @@ import {
   exportTextEmphasis,
   importTextEmphasis,
   textCaseMapProperties,
+  textBooleanProperties,
   XMLTextRotationAnglePropHdl,
 } from "./txtprhdl";
 import { XMLEscapementPropHdl, XMLEscapementHeightPropHdl } from "../style/escphdl";
@@ -35,8 +35,7 @@ import { XMLToken as T } from "../core/xmltoken";
 import { SvXMLUnitConverter } from "../core/xmluconv";
 import { XMLColorTransparentPropHdl, XMLIsTransparentPropHdl } from "../style/xmlbahdl";
 import { XMLFontWeightPropHdl } from "../style/weighhdl";
-import { XMLNamedBoolPropertyHdl } from "../style/NamedBoolPropertyHdl";
-import { XMLBoolPropHdl, XMLPercent16PropHdl } from "../style/xmlbahdl";
+import { XMLPercent16PropHdl } from "../style/xmlbahdl";
 import { XMLPosturePropHdl } from "../style/postuhdl";
 import { XMLKerningPropHdl } from "../style/kernihdl";
 import {
@@ -127,23 +126,6 @@ const strikeoutProperties = [
     new XMLCrossedOutWidthPropHdl(),
   ],
   [T.STYLE_TEXT_LINE_THROUGH_TEXT, "style:text-line-through-text", new XMLCrossedOutTextPropHdl()],
-] as const;
-/** Native merged CharWordMode map and exact XML_TYPE_BOOL association. */
-const wordMode = new XMLNamedBoolPropertyHdl("skip-white-space", "continuous"),
-  bool = new XMLBoolPropHdl();
-const boolProperties = [
-  [T.STYLE_TEXT_UNDERLINE_MODE, "style:text-underline-mode", "wordMode", wordMode],
-  [T.STYLE_TEXT_OVERLINE_MODE, "style:text-overline-mode", "wordMode", wordMode],
-  [T.STYLE_TEXT_LINE_THROUGH_MODE, "style:text-line-through-mode", "wordMode", wordMode],
-  [T.STYLE_LETTER_KERNING, "style:letter-kerning", "autoKerning", bool],
-  [T.STYLE_TEXT_OUTLINE, "style:text-outline", "outline", bool],
-  [T.FO_TEXT_SHADOW, "fo:text-shadow", "shadow", new XMLShadowedPropHdl()],
-  [
-    T.STYLE_TEXT_ROTATION_SCALE,
-    "style:text-rotation-scale",
-    "rotationFitToLine",
-    new XMLNamedBoolPropertyHdl("fixed", "line-height"),
-  ],
 ] as const;
 /** Source merged CharLocale mappings for the three independent script families. */
 const languageProperties = [
@@ -237,7 +219,7 @@ export const textCharacterPropertyTokens = [
   T.FO_FONT_VARIANT,
   T.FO_TEXT_TRANSFORM,
   T.FO_LETTER_SPACING,
-  ...boolProperties.map(
+  ...textBooleanProperties.map(
     /** Reads original bool property tokens. @param entry - Entry. @returns Token. */ ([token]) =>
       token,
   ),
@@ -290,7 +272,7 @@ export function exportTextCharacterProperties(properties: OdfCharacterProperties
       if (kerning.exportXML(output, value, kerningConverter))
         result += ` fo:letter-spacing="${output[0]}"`;
     }
-    for (const [, name, key, handler] of boolProperties) {
+    for (const [, name, key, handler] of textBooleanProperties) {
       if (properties[key] !== undefined) {
         value.insert([properties[key]], "bool");
         handler.exportXML(output, value, converter);
@@ -387,7 +369,7 @@ export function importTextCharacterProperties(
         }
         continue;
       }
-      const boolean = boolProperties.find(
+      const boolean = textBooleanProperties.find(
         /** Reads the original bool mapping. @param entry - Entry. @returns Match. */ ([item]) =>
           item === token,
       );
@@ -792,6 +774,8 @@ export function applyTextImportProperties(
       ["overlineHasColor", "CharOverlineHasColor", "bool"],
       ["wordMode", "CharWordMode", "bool"],
       ["autoKerning", "CharAutoKerning", "bool"],
+      ["noHyphenation", "CharNoHyphenation", "bool"],
+      ["opticalSizing", "CharOpticalSizing", "bool"],
       ["kerning", "CharKerning", "sal_Int16"],
     ] as const)
       if (character[key] !== undefined) add(name, character[key], type);

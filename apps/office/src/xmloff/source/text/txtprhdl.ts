@@ -10,6 +10,9 @@ import { XMLConstantsPropertyHandler } from "../style/XMLConstantsPropertyHandle
 import { SvXMLUnitConverter } from "../core/xmluconv";
 import { Any } from "../../../cppu/inc/com/sun/star/uno/Any";
 import * as CaseMap from "../../../offapi/com/sun/star/style/CaseMap";
+import { XMLBoolPropHdl, XMLNBoolPropHdl } from "../style/xmlbahdl";
+import { XMLNamedBoolPropertyHdl } from "../style/NamedBoolPropertyHdl";
+import { XMLShadowedPropHdl } from "../style/shdwdhdl";
 import { XMLToken as T } from "../core/xmltoken";
 
 /** Native CharCaseMap property split between the case transformation and font variant. */
@@ -218,3 +221,28 @@ export class XMLTextRotationAnglePropHdl {
     return true;
   }
 }
+
+/** Native merged CharWordMode map and exact XML_TYPE_BOOL association. */
+const wordMode = new XMLNamedBoolPropertyHdl("skip-white-space", "continuous"),
+  bool = new XMLBoolPropHdl();
+export const textBooleanProperties = [
+  [T.STYLE_TEXT_UNDERLINE_MODE, "style:text-underline-mode", "wordMode", wordMode],
+  [T.STYLE_TEXT_OVERLINE_MODE, "style:text-overline-mode", "wordMode", wordMode],
+  [T.STYLE_TEXT_LINE_THROUGH_MODE, "style:text-line-through-mode", "wordMode", wordMode],
+  [T.STYLE_LETTER_KERNING, "style:letter-kerning", "autoKerning", bool],
+  [T.STYLE_TEXT_OUTLINE, "style:text-outline", "outline", bool],
+  [T.FO_HYPHENATE, "fo:hyphenate", "noHyphenation", new XMLNBoolPropHdl()],
+  [
+    T.LOEXT_FONT_OPTICAL_SIZING,
+    "loext:font-optical-sizing",
+    "opticalSizing",
+    new XMLNamedBoolPropertyHdl("auto", "none"),
+  ],
+  [T.FO_TEXT_SHADOW, "fo:text-shadow", "shadow", new XMLShadowedPropHdl()],
+  [
+    T.STYLE_TEXT_ROTATION_SCALE,
+    "style:text-rotation-scale",
+    "rotationFitToLine",
+    new XMLNamedBoolPropertyHdl("fixed", "line-height"),
+  ],
+] as const;

@@ -11,6 +11,8 @@ import { getCharacterOdfStyleName } from "./xmlexp-style-names";
 import { writerTextColorValue, writerHighlightColorValue } from "../../core/attr/swatrset";
 import { SvxColorItem } from "../../../../editeng/inc/colritem";
 import { SvxBrushItem } from "../../../../editeng/source/items/frmitems.brush";
+import { SvxNoHyphenItem } from "../../../../editeng/inc/nhypitem";
+import { SvxOpticalSizingItem } from "../../../../editeng/inc/opticalsizingitem";
 import { SvxCharRotateItem } from "../../../../editeng/inc/charrotateitem";
 import { SvxCharScaleWidthItem } from "../../../../editeng/inc/charscaleitem";
 import { SvxEscapementItem } from "../../../../editeng/inc/escapementitem";
@@ -28,6 +30,8 @@ import {
   RES_CHRATR_SHADOWED,
   RES_CHRATR_RELIEF,
   RES_CHRATR_ROTATE,
+  RES_CHRATR_NOHYPHEN,
+  RES_CHRATR_OPTICAL_SIZING,
   RES_CHRATR_SCALEW,
   RES_CHRATR_OVERLINE,
 } from "../../../inc/hintids";
@@ -104,6 +108,8 @@ export function getCharacterProperties(
   const contour = set.GetItemIfSet(RES_CHRATR_CONTOUR, inherited);
   const shadow = set.GetItemIfSet(RES_CHRATR_SHADOWED, inherited);
   const rotation = set.GetItemIfSet(RES_CHRATR_ROTATE, inherited);
+  const noHyphenation = set.GetItemIfSet(RES_CHRATR_NOHYPHEN, inherited);
+  const opticalSizing = set.GetItemIfSet(RES_CHRATR_OPTICAL_SIZING, inherited);
   const scale = set.GetItemIfSet(RES_CHRATR_SCALEW, inherited);
   const relief = set.GetItemIfSet(RES_CHRATR_RELIEF, inherited);
   const caseItem = set.GetItemIfSet(RES_CHRATR_CASEMAP, inherited);
@@ -145,6 +151,10 @@ export function getCharacterProperties(
     contour === undefined &&
     shadow === undefined &&
     relief === undefined &&
+    rotation === undefined &&
+    scale === undefined &&
+    noHyphenation === undefined &&
+    opticalSizing === undefined &&
     escapement === undefined &&
     !directFontSize &&
     color === undefined &&
@@ -291,6 +301,12 @@ export function getCharacterProperties(
       : {}),
     ...(crossedOut instanceof SvxCrossedOutItem ? { strikeout: crossedOut.GetStrikeout() } : {}),
     ...(wordMode instanceof SvxWordLineModeItem ? { wordMode: wordMode.GetValue() } : {}),
+    ...(noHyphenation instanceof SvxNoHyphenItem
+      ? { noHyphenation: noHyphenation.GetValue() }
+      : {}),
+    ...(opticalSizing instanceof SvxOpticalSizingItem
+      ? { opticalSizing: opticalSizing.GetValue() }
+      : {}),
     ...(autoKerning instanceof SvxAutoKernItem ? { autoKerning: autoKerning.GetValue() } : {}),
     ...(kerning instanceof SvxKerningItem
       ? { kerning: Number(BigInt.asIntN(16, convertTwipToMm100(BigInt(kerning.GetValue())))) }
@@ -322,6 +338,8 @@ export const XML_CHARACTER_EFFECT_WHICH_IDS = [
   RES_CHRATR_RELIEF,
   RES_CHRATR_ROTATE,
   RES_CHRATR_SCALEW,
+  RES_CHRATR_NOHYPHEN,
+  RES_CHRATR_OPTICAL_SIZING,
   RES_CHRATR_OVERLINE,
 ] as const;
 

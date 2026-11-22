@@ -70,6 +70,8 @@ export interface OdfCharacterProperties {
   /** Original shared line-decoration mode and automatic kerning bool properties. */
   readonly wordMode?: boolean;
   readonly autoKerning?: boolean;
+  readonly noHyphenation?: boolean;
+  readonly opticalSizing?: boolean;
   /** Original signed UNO CharKerning in hundredths of a millimetre. */
   readonly kerning?: number;
 }

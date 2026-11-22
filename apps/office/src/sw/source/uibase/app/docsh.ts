@@ -32,7 +32,8 @@ import { SwClient, SwModify, subscribeToSwModify } from "../../../inc/calbck";
 import type { SwModelHint } from "../../../inc/hints";
 import { SwDoc, type SwDocOptions } from "../../core/doc/doc";
 import { SvxAutoKernItem } from "../../../../editeng/inc/autokernitem";
-import { RES_CHRATR_AUTOKERN } from "../../../inc/hintids";
+import { SvxOpticalSizingItem } from "../../../../editeng/inc/opticalsizingitem";
+import { RES_CHRATR_AUTOKERN, RES_CHRATR_OPTICAL_SIZING } from "../../../inc/hintids";
 import { SwASCWriter } from "../../filter/ascii/wrtasc";
 import { RtfExport } from "../../filter/ww8/rtfexport";
 import { RtfDocumentImpl } from "../../writerfilter/rtftok/rtfdocumentimpl";
@@ -401,6 +402,7 @@ export class SwDocShell extends SfxObjectShell {
     undo.DoUndo(false);
     try {
       document.SetDefault(new SvxAutoKernItem(true, RES_CHRATR_AUTOKERN));
+      document.SetDefault(new SvxOpticalSizingItem(true, RES_CHRATR_OPTICAL_SIZING));
     } finally {
       undo.DoUndo(recording);
     }

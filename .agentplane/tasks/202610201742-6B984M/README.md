@@ -4,7 +4,7 @@ title: "Implement Writer search and replace core and browser UI"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 124
+revision: 125
 origin:
   system: "manual"
 depends_on:
@@ -520,6 +520,17 @@ comments:
       - Source contract matched against editeng/editids.hrc, cui/source/tabpages/chardlg.cxx, sw/source/uibase/shells/textsh1.cxx, sw/source/core/edit/edattr.cxx, sw/source/core/text/itratr.cxx and sw/qa/uitest/writer_tests2/formatCharacter.py. Native field and footnote width contributions, merged redline text frames and fully differential complex rotated layout remain unverified.
       - Passed 67 related Writer tests (7 files), scoped lint and format, source provenance and dependency validation, Writer resources, required source tree, Writer parity inventory (zero semantic violations), AgentPlane doctor, routing and diff checks. Global JSDoc and file-size checks retain their existing 307 and 3 unrelated findings. No full repository run at this checkpoint.
       - Two shared test files passed (13 tests). Production typecheck and Vite build passed. All 11 Chromium Writer search and Character scenarios passed against the final build.
+  -
+    author: "CODER"
+    body: |-
+      Verified checkpoint — Writer Character hyphenation and optical sizing
+
+      - Adds the native Hyphenation and Optical Font Sizing groups to Character Position. Applies the original character exclusion and sizing items to the selection, with annotation optical sizing bound to the separate EditEngine item.
+      - Projects document paragraph hyphenation and the effective Writer language to the browser's hyphenation device. A character exclusion uses explicit/manual opportunities only. Opt-in optical sizing uses the browser font axis in body and comment runs.
+      - Preserves the two controls through Writer's native UNO maps, typed Worker factories and ODT. Maps character fo:hyphenate through XML_TYPE_NBOOL independently of its positive paragraph mapping. Maps loext:font-optical-sizing to the original auto/none tokens. New document optical sizing is set by the document shell and survives Worker and ODT defaults. Old documents without the attribute keep the original false default.
+      - Includes source-backed coverage for tdf106733 character-style inheritance and testOpticalSizing1/testOpticalSizing2 defaults and explicit values. Browser dictionary coverage and advanced LibreOffice hyphenation layout constraints remain distinct from the implemented item transport and browser CSS binding.
+      - Passed 45 Writer tests, 25 shared tests, scoped ESLint/Prettier, source boundaries and provenance, Writer resources and inventory, source tree, doctor, routing and diff checks. Global JSDoc and size checks retain the existing 307 and 3 unrelated findings. Full repository test cadence stays unchanged.
+      - Production TypeScript/Vite build and three focused Chromium scenarios passed. The hyphenation scenario enables paragraph hyphenation through the native Text Flow UI, excludes the selected word, changes its optical sizing and checks the real computed styles on adjacent text.
 
 events:
   -
@@ -1227,9 +1238,22 @@ events:
       - Source contract matched against editeng/editids.hrc, cui/source/tabpages/chardlg.cxx, sw/source/uibase/shells/textsh1.cxx, sw/source/core/edit/edattr.cxx, sw/source/core/text/itratr.cxx and sw/qa/uitest/writer_tests2/formatCharacter.py. Native field and footnote width contributions, merged redline text frames and fully differential complex rotated layout remain unverified.
       - Passed 67 related Writer tests (7 files), scoped lint and format, source provenance and dependency validation, Writer resources, required source tree, Writer parity inventory (zero semantic violations), AgentPlane doctor, routing and diff checks. Global JSDoc and file-size checks retain their existing 307 and 3 unrelated findings. No full repository run at this checkpoint.
       - Two shared test files passed (13 tests). Production typecheck and Vite build passed. All 11 Chromium Writer search and Character scenarios passed against the final build.
+  -
+    type: "comment"
+    at: "2026-11-22T00:08:26.509Z"
+    author: "CODER"
+    body: |-
+      Verified checkpoint — Writer Character hyphenation and optical sizing
+
+      - Adds the native Hyphenation and Optical Font Sizing groups to Character Position. Applies the original character exclusion and sizing items to the selection, with annotation optical sizing bound to the separate EditEngine item.
+      - Projects document paragraph hyphenation and the effective Writer language to the browser's hyphenation device. A character exclusion uses explicit/manual opportunities only. Opt-in optical sizing uses the browser font axis in body and comment runs.
+      - Preserves the two controls through Writer's native UNO maps, typed Worker factories and ODT. Maps character fo:hyphenate through XML_TYPE_NBOOL independently of its positive paragraph mapping. Maps loext:font-optical-sizing to the original auto/none tokens. New document optical sizing is set by the document shell and survives Worker and ODT defaults. Old documents without the attribute keep the original false default.
+      - Includes source-backed coverage for tdf106733 character-style inheritance and testOpticalSizing1/testOpticalSizing2 defaults and explicit values. Browser dictionary coverage and advanced LibreOffice hyphenation layout constraints remain distinct from the implemented item transport and browser CSS binding.
+      - Passed 45 Writer tests, 25 shared tests, scoped ESLint/Prettier, source boundaries and provenance, Writer resources and inventory, source tree, doctor, routing and diff checks. Global JSDoc and size checks retain the existing 307 and 3 unrelated findings. Full repository test cadence stays unchanged.
+      - Production TypeScript/Vite build and three focused Chromium scenarios passed. The hyphenation scenario enables paragraph hyphenation through the native Text Flow UI, excludes the selected word, changes its optical sizing and checks the real computed styles on adjacent text.
 
 doc_version: 3
-doc_updated_at: "2026-11-21T23:58:14.872Z"
+doc_updated_at: "2026-11-22T00:08:26.509Z"
 doc_updated_by: "CODER"
 description: "Implement the approved coherent Writer search-and-replace feature from pinned LibreOffice sources: real shared search engine and options, native paragraph/cursor traversal and replacement/history contracts, view-owned search state and dispatch, Find toolbar and Find and Replace dialog with generated upstream command placement and shortcuts. Preserve source semantics and explicit unsupported boundaries; never substitute DOM text search or browser RegExp for ICU contracts. Work only on writer in vite-office-writer; local upstream reading approved, no network or merges. Keep active until approved scope is verified."
 sections:

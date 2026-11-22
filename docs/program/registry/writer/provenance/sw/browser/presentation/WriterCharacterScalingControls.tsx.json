@@ -18,6 +18,10 @@
         {
           "path": "apps/office/src/sw/browser/presentation/WriterCharacterScalingControls.tsx",
           "marker": "WriterCharacterScalingControls"
+        },
+        {
+          "path": "apps/office/src/sw/browser/presentation/WriterCharacterScalingControls.tsx",
+          "marker": "WriterCharacterPositionOptions"
         }
       ]
     },

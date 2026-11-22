@@ -22,6 +22,7 @@ export function applyParagraphTextDefaults(
       "sal_Int32",
     ],
     ["CharAutoKerning", properties?.autoKerning, "bool"],
+    ["CharOpticalSizing", properties?.opticalSizing, "bool"],
   ] as const;
   for (const [property, scalar, type] of values) {
     if (scalar === undefined) continue;
@@ -73,10 +74,12 @@ export function applyNamedParagraphStyles(
       }
     }
     if (defaultStyle) {
-      const { autoKerning, ...character } = defaultStyle.properties ?? {};
+      const { autoKerning, opticalSizing, ...character } = defaultStyle.properties ?? {};
       applyTextImportProperties(
         family.getByName(standard),
-        autoKerning === undefined ? defaultStyle.properties : character,
+        autoKerning === undefined && opticalSizing === undefined
+          ? defaultStyle.properties
+          : character,
         defaultStyle.paragraphProperties,
         defaultStyle.alignment,
         defaultStyle.leftMargin,

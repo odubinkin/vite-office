@@ -155,7 +155,7 @@ it("transports all native independent script values without boolean normalizatio
   ).not.toContain("text-underline-color");
   expect(exportTextCharacterProperties({ underlineStyle: 19 })).toBe("");
   expect(importTextCharacterProperties(attributes([["fo:font-size", "12pt"]]))).toEqual({});
-  expect(textCharacterPropertyTokens).toHaveLength(75);
+  expect(textCharacterPropertyTokens).toHaveLength(77);
   expect(textCharacterPropertyTokens).toContain(XMLToken.STYLE_TEXT_EMPHASIZE);
   expect(textCharacterPropertyTokens).toContain(XMLToken.FO_LETTER_SPACING);
   expect(textCharacterPropertyTokens.slice(11, 15)).toEqual([
@@ -395,4 +395,26 @@ it("converts ODF character rotation and scale with the native lexical handlers",
   expect(xml).toContain('style:text-rotation-angle="90"');
   expect(xml).toContain('style:text-rotation-scale="line-height"');
   expect(xml).toContain('style:text-scale="82%"');
+});
+
+it("maps character hyphenation and optical sizing through their native lexical handlers", /** Pins the inverted hyphenation flag and independent optical sizing attribute. @returns Nothing. */ () => {
+  expect(
+    importTextCharacterProperties(
+      attributes([
+        ["fo:hyphenate", "false"],
+        ["loext:font-optical-sizing", "auto"],
+      ]),
+    ),
+  ).toEqual({ noHyphenation: true, opticalSizing: true });
+  expect(
+    importTextCharacterProperties(
+      attributes([
+        ["fo:hyphenate", "invalid"],
+        ["loext:font-optical-sizing", "invalid"],
+      ]),
+    ),
+  ).toEqual({});
+  const exported = exportTextCharacterProperties({ noHyphenation: false, opticalSizing: false });
+  expect(exported).toContain('fo:hyphenate="true"');
+  expect(exported).toContain('loext:font-optical-sizing="none"');
 });

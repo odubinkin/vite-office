@@ -93,3 +93,33 @@ export function WriterCharacterScalingControls({
     </fieldset>
   );
 }
+
+/** Shows the native Position page Hyphenation and Optical Font Sizing groups. @param props - Uniform item state, or no hyphenation slot in the annotation pool. @returns Character Position controls. */
+export function WriterCharacterPositionOptions({
+  noHyphenation,
+  opticalSizing,
+}: Readonly<{ noHyphenation: boolean | undefined; opticalSizing: boolean }>): React.JSX.Element {
+  const localization = useBrowserLocalization();
+  return (
+    <>
+      {noHyphenation !== undefined && (
+        <fieldset className="mt-3">
+          <legend>{localization.GetText("writer.character.hyphenation", "Hyphenation")}</legend>
+          <label className="flex items-center gap-2">
+            <input type="checkbox" name="noHyphenation" defaultChecked={noHyphenation} />
+            {localization.GetText("writer.character.no-hyphenation", "Exclude from hyphenation")}
+          </label>
+        </fieldset>
+      )}
+      <fieldset className="mt-3">
+        <legend>
+          {localization.GetText("writer.character.optical-sizing", "Optical Font Sizing")}
+        </legend>
+        <label className="flex items-center gap-2">
+          <input type="checkbox" name="opticalSizing" defaultChecked={opticalSizing} />
+          {localization.GetText("writer.character.optical-sizing-auto", "Auto")}
+        </label>
+      </fieldset>
+    </>
+  );
+}

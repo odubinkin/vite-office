@@ -31,7 +31,11 @@ import { CollectGraphicFlyFrames, CollectTextFlyFrames } from "../../core/layout
 import type { XMLTextExportBlock } from "../../../../xmloff/source/table/XMLTableExport";
 import { getFillProperties, XML_FILL_WHICH_IDS } from "./xmlexp-fill";
 import { RES_CHRATR_BOX, RES_CHRATR_ESCAPEMENT, RES_CHRATR_KERNING } from "../../../inc/hintids";
-import { RES_CHRATR_WORDLINEMODE, RES_CHRATR_AUTOKERN } from "../../../inc/hintids";
+import {
+  RES_CHRATR_WORDLINEMODE,
+  RES_CHRATR_AUTOKERN,
+  RES_CHRATR_OPTICAL_SIZING,
+} from "../../../inc/hintids";
 import {
   RES_CHRATR_LANGUAGE,
   RES_CHRATR_CJK_LANGUAGE,
@@ -429,6 +433,7 @@ function exportDefaultParagraphStyle(
     [RES_CHRATR_AUTOKERN, RES_CHRATR_AUTOKERN],
     [RES_CHRATR_CJK_FONT, RES_CHRATR_CJK_FONTSIZE],
     [RES_CHRATR_CTL_FONT, RES_CHRATR_CTL_FONTSIZE],
+    [RES_CHRATR_OPTICAL_SIZING, RES_CHRATR_OPTICAL_SIZING],
   ] as const;
   const set = new SfxItemSet(pool, ranges);
   try {

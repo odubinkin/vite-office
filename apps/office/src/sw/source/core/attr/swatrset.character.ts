@@ -1,4 +1,6 @@
 /** @fileoverview Concrete Writer item-pool factories for character formatting used by the browser Worker graph. */
+import { SvxNoHyphenItem } from "../../../../editeng/inc/nhypitem";
+import { SvxOpticalSizingItem } from "../../../../editeng/inc/opticalsizingitem";
 import { SvxEmphasisMarkItem } from "../../../../editeng/inc/emphasismarkitem";
 import { SvxCaseMapItem } from "../../../../editeng/source/items/textitem.modes";
 import {
@@ -87,6 +89,20 @@ export function writerCharacterItemFactory(which: number): SfxPoolItemFactory | 
       return /** Restores the native relief. @param value - Stored value. @returns Relief item. */ (
         value,
       ) => new SvxCharReliefItem(Number(value), which);
+    case Which.RES_CHRATR_NOHYPHEN:
+      return /** Restores the native hyphenation exclusion flag. @param value - Stored boolean. @returns Hyphenation item. */ (
+        value,
+      ) => {
+        if (typeof value !== "boolean") throw new Error("Invalid Writer character hyphenation.");
+        return new SvxNoHyphenItem(value, which);
+      };
+    case Which.RES_CHRATR_OPTICAL_SIZING:
+      return /** Restores the native optical sizing flag. @param value - Stored boolean. @returns Optical sizing item. */ (
+        value,
+      ) => {
+        if (typeof value !== "boolean") throw new Error("Invalid Writer character optical sizing.");
+        return new SvxOpticalSizingItem(value, which);
+      };
     case Which.RES_CHRATR_SCALEW:
       return /** Restores the native character scale. @param value - Stored value. @returns Scale item. */ (
         value,
