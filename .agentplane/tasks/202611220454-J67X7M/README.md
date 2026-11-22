@@ -1,10 +1,11 @@
 ---
 id: "202611220454-J67X7M"
 title: "Connect Writer Page Style text grid controls and paint"
-status: "DOING"
+result_summary: "Connected Writer Page Style text grid controls, preview, layout and paint."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 9
+revision: 10
 origin:
   system: "manual"
 depends_on: []
@@ -38,11 +39,16 @@ quality_review:
     - "3177ddd60793 and task Findings; 45 focused tests, 4 Chromium tests, production build and repository audits"
   findings:
     - "Focused tests cover normal and squared paper, physical body bounds, settings transport, undo and redo, and distinct print behavior on the production editor."
-commit: null
+commit:
+  hash: "3177ddd60793417bb9a5c8868a07a8011ad2db63"
+  message: "🧩 J67X7M code: Connect Writer Page Style text grid and paint"
 comments:
   -
     author: "CODER"
     body: "Start: continue direct-mode task in current checkout."
+  -
+    author: "CODER"
+    body: "Verified: 45 focused Writer tests, 4 Chromium scenarios, production build and scoped audits passed."
 events:
   -
     type: "status"
@@ -57,8 +63,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "45 focused Writer tests and 4 Chromium production scenarios passed. Production build, scoped lint and formatting, module boundaries, tree and provenance, Writer resources, doctor and routing passed. Global documentation and size diagnostics remain confined to the known Calc baseline."
+  -
+    type: "status"
+    at: "2026-11-22T05:23:41.983Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: 45 focused Writer tests, 4 Chromium scenarios, production build and scoped audits passed."
 doc_version: 3
-doc_updated_at: "2026-11-22T05:17:06.286Z"
+doc_updated_at: "2026-11-22T05:23:41.985Z"
 doc_updated_by: "CODER"
 description: "Connect the existing native text-grid page item, body grid metrics and paragraph snapping to an upstream-shaped Page Style tab, preview, and screen and print paint."
 sections:
