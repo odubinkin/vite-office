@@ -148,8 +148,7 @@ export class CalcSheetWorkflows {
   ) {
     this.cellFormat = new CalcCellFormatWorkflow(
       controller,
-      /** Checks whether another sheet dialog owns input. @returns Format Cells admission. */ () =>
-        !this.HasSheetDialog(),
+      /** Checks modal admission. @returns Availability. */ () => !this.HasSheetDialog(),
     );
     this.pageStyles = new CalcPageStyleWorkflow(controller, () => !this.HasSheetDialog());
     this.options = new CalcOptionsWorkflow(controller, () => !this.HasSheetDialog());
