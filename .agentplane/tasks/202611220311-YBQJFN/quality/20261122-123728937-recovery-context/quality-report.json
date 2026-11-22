@@ -1,0 +1,21 @@
+{
+  "schema_version": 1,
+  "task_id": "202611220311-YBQJFN",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-11-22T12:37:28.937Z",
+  "verdict": "pass",
+  "summary": "Full regression stages and serial failure replays complete. No functional test failures remain after replay and the pinned WhichId expectation fix.",
+  "evaluated_sha": "582bcf95a586be4cd0624c7335fc1fced0b7c20f",
+  "blueprint_digest": "2cb2fc694a740e1db69afce62bd1fd809e30fcb46ca7981065817d1c9444a3d8",
+  "findings": [
+    "The existing Office 100 percent global coverage threshold remains unmet. No coverage-driven tests or threshold changes were made."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202611220311-YBQJFN/README.md",
+    "output/playwright/odf-full-checkpoint-next/verification.md"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": []
+}
