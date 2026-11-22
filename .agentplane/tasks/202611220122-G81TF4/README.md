@@ -1,10 +1,11 @@
 ---
 id: "202611220122-G81TF4"
 title: "Preserve Writer ODT casing and character text flags"
-status: "DOING"
+result_summary: "Native Writer ODT casing, blinking, hidden text, and character hyphenation retain their connected item and XML contracts through Worker transfer and ODT save/reopen."
+status: "DONE"
 priority: "high"
 owner: "CODER"
-revision: 6
+revision: 7
 origin:
   system: "manual"
 depends_on: []
@@ -45,11 +46,16 @@ quality_review:
     - "docs/program/writer-upstream-suspected-issues.md#WRITER-735"
   findings:
     - "The character map admits no-hyphenation and the paragraph map omits that character property. Legacy metadata is classified before style import. Native casing remains a single property."
-commit: null
+commit:
+  hash: "01295e3e2a1a8a2fae8682a47c9d7436aa7a78e2"
+  message: "🧩 G81TF4 code: preserve native Writer ODT character flags"
 comments:
   -
     author: "CODER"
     body: "Start: preserve Writer casing and character flags through the pinned ODT property and generator rules."
+  -
+    author: "CODER"
+    body: "Verified: 138 focused tests, typecheck, lint, format, module boundaries, provenance, Writer registry invariants, workflow routing and doctor. WRITER-735 records native duplicate case mapping."
 events:
   -
     type: "status"
@@ -64,8 +70,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Writer native casing, blinking, visibility, and no-hyphenation survive the supported ODT and Worker paths. 138 focused tests and all declared static checks pass."
+  -
+    type: "status"
+    at: "2026-11-22T01:35:24.430Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: 138 focused tests, typecheck, lint, format, module boundaries, provenance, Writer registry invariants, workflow routing and doctor. WRITER-735 records native duplicate case mapping."
 doc_version: 3
-doc_updated_at: "2026-11-22T01:33:34.929Z"
+doc_updated_at: "2026-11-22T01:35:24.430Z"
 doc_updated_by: "CODER"
 description: "Port the represented Writer case-map, blinking, hidden and no-hyphenation items through native ODT property mapping, Worker records and UNO metadata, including the source legacy generator handling for visibility."
 sections:
