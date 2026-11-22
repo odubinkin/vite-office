@@ -1,0 +1,22 @@
+{
+  "schema_version": 1,
+  "task_id": "202611221435-SQ5QF5",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-11-22T14:41:55.195Z",
+  "verdict": "pass",
+  "summary": "The fix meets the frozen-pane browser behavior and preserves normal split behavior.",
+  "evaluated_sha": "4f37c7f3080adc2284c77932905a710b980590e5",
+  "blueprint_digest": "d1438cde63a07f64ee8bc4bcfd9bf2f407411988531feee386fcc1f2b6ae4f10",
+  "findings": [
+    "The existing XLSX test now measures the scroll displacement synchronously. It failed on baseline and passed after native sticky positioning.",
+    "Focused Calc tests, browser specs, type checks, lint, and routing checks passed."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202611221435-SQ5QF5/README.md",
+    "4f37c7f3080adc2284c77932905a710b980590e5"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": []
+}

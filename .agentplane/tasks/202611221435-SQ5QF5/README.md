@@ -4,7 +4,7 @@ title: "Keep frozen Calc cells stationary during browser scroll"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 8
+revision: 9
 origin:
   system: "manual"
 depends_on: []
@@ -27,6 +27,23 @@ verification:
   updated_by: "CODER"
   note: "Passed 22 focused Calc tests, all 3 Chrome regressions, production build, type checks, lint, and diff checks. The new same-task scroll assertion reproduces the prior displacement."
   attempts: 0
+quality_review:
+  state: "pass"
+  updated_at: "2026-11-22T14:41:55.195Z"
+  updated_by: "EVALUATOR"
+  note: "The fix meets the frozen-pane browser behavior and preserves normal split behavior."
+  evaluated_sha: "4f37c7f3080adc2284c77932905a710b980590e5"
+  blueprint_digest: "d1438cde63a07f64ee8bc4bcfd9bf2f407411988531feee386fcc1f2b6ae4f10"
+  evidence_refs:
+    - ".agentplane/tasks/202611221435-SQ5QF5/README.md"
+    - ".agentplane/tasks/202611221435-SQ5QF5/quality/20261122-144155195-recovery-context/quality-report.json"
+    - ".agentplane/tasks/202611221435-SQ5QF5/quality/20261122-144155195-recovery-context/evaluator-prompt.md"
+    - ".agentplane/tasks/202611221435-SQ5QF5/quality/20261122-144155195-recovery-context/evaluator-opinion.md"
+    - ".agentplane/tasks/202611221435-SQ5QF5/blueprint/resolved-snapshot.json"
+    - "4f37c7f3080adc2284c77932905a710b980590e5"
+  findings:
+    - "The existing XLSX test now measures the scroll displacement synchronously. It failed on baseline and passed after native sticky positioning."
+    - "Focused Calc tests, browser specs, type checks, lint, and routing checks passed."
 commit: null
 comments:
   -
