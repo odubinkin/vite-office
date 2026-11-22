@@ -1,10 +1,11 @@
 ---
 id: "202611220102-128X13"
 title: "Preserve and display Calc ODS conditional icon sets"
-status: "DOING"
+result_summary: "Calc keeps native ODS icon-set rules and renders the pinned glyphs. All 25 targeted tests and both Chromium cases passed."
+status: "DONE"
 priority: "high"
 owner: "CODER"
-revision: 6
+revision: 7
 origin:
   system: "manual"
 depends_on: []
@@ -47,11 +48,16 @@ quality_review:
     - "output/playwright/128X13/browser.json"
   findings:
     - "The two LibreOffice ODS cases, complete Worker record, source output conventions and live native bitmap changes have passing evidence."
-commit: null
+commit:
+  hash: "dbc17b7a21900a966964a8f1db0c6d6ab7b4bdd7"
+  message: "🧩 128X13 code: preserve and paint native Calc ODS icon sets"
 comments:
   -
     author: "CODER"
     body: "Start: implement the native Calc icon-set owner and port the pinned LibreOffice ODS import, output and grid paths."
+  -
+    author: "CODER"
+    body: "Verified: native Calc ODS icon sets passed focused source, Worker, manager and Chromium checks."
 events:
   -
     type: "status"
@@ -66,8 +72,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Native Calc icon-set selection, ODS filters, Worker records, grid and editor passed focused checks."
+  -
+    type: "status"
+    at: "2026-11-22T01:21:46.421Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: native Calc ODS icon sets passed focused source, Worker, manager and Chromium checks."
 doc_version: 3
-doc_updated_at: "2026-11-22T01:20:34.397Z"
+doc_updated_at: "2026-11-22T01:21:46.422Z"
 doc_updated_by: "CODER"
 description: "Port the native icon-set owner, threshold selection, ODS and Worker transport, and the existing grid and conditional-format manager integration using the pinned LibreOffice icon resources and fixtures."
 sections:
