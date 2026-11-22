@@ -1,10 +1,11 @@
 ---
 id: "202611212324-N26ZF8"
 title: "Carry imported Calc data bars through native cell painting"
-status: "DOING"
+result_summary: "Calc paints imported ODS data bars in native conditional order. All 39 owner tests and two production Chromium cases passed."
+status: "DONE"
 priority: "high"
 owner: "CODER"
-revision: 6
+revision: 7
 origin:
   system: "manual"
 depends_on:
@@ -48,11 +49,16 @@ quality_review:
     - "output/playwright/N26ZF8/browser.json"
   findings:
     - "Style, scale and bar are evaluated independently in native order. Only-bar mode suppresses paint while leaving the accessible value and editor available."
-commit: null
+commit:
+  hash: "b4b7494cad8a58b6964eccbe2657ea5e543674b2"
+  message: "🧩 N26ZF8 code: paint native Calc data bars from ODS"
 comments:
   -
     author: "CODER"
     body: "Start: port the native Calc conditional data-bar paint path using the pinned LibreOffice sources and focused ODS verification."
+  -
+    author: "CODER"
+    body: "Verified: native Calc paint results, bar geometry, display-only values and ODS export and reopen passed focused checks."
 events:
   -
     type: "status"
@@ -67,8 +73,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Native conditional paint selection and ODS data-bar rendering passed focused verification through core, production Chromium, and ODS export and reopen."
+  -
+    type: "status"
+    at: "2026-11-22T00:48:32.526Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: native Calc paint results, bar geometry, display-only values and ODS export and reopen passed focused checks."
 doc_version: 3
-doc_updated_at: "2026-11-22T00:47:30.918Z"
+doc_updated_at: "2026-11-22T00:48:32.527Z"
 doc_updated_by: "CODER"
 description: "Resolve the native conditional paint results independently in their source order and carry imported ODS data-bar geometry, colors, axis and value visibility to the existing grid. Preserve persisted settings and current document actions."
 sections:
