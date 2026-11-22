@@ -1,10 +1,11 @@
 ---
 id: "202611220122-5AP3TA"
 title: "Connect Calc number format shortcuts and precision controls"
-status: "DOING"
+result_summary: "Connected Calc numeric format shortcuts, shared picture generation, and localized ODS round trips."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 10
+revision: 11
 origin:
   system: "manual"
 depends_on:
@@ -42,11 +43,16 @@ quality_review:
   findings:
     - "The original tdf133342 fixture and tdf82398 command path verify locale preservation and the actual Date slot."
     - "Generated time, fraction, currency and percent styles survive ODS round trips. The implementation retains the pinned handling recorded in CALC-828 through CALC-830."
-commit: null
+commit:
+  hash: "84e2217447e8bd2bca3d062125ec9685b2ff61e7"
+  message: "🧩 5AP3TA code: connect Calc numeric format shortcuts and precision controls"
 comments:
   -
     author: "CODER"
     body: "Start: connect native Calc numeric formats and precision controls to the existing formatter and history."
+  -
+    author: "CODER"
+    body: "Verified: connected ten numeric format shortcuts, precision and grouping, native selection state, ODS locale, and attribute history."
 events:
   -
     type: "status"
@@ -61,8 +67,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Verified: 169 focused cases, two upstream regressions, Chromium production UI, and numeric ODS round trips."
+  -
+    type: "status"
+    at: "2026-11-22T01:50:46.839Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: connected ten numeric format shortcuts, precision and grouping, native selection state, ODS locale, and attribute history."
 doc_version: 3
-doc_updated_at: "2026-11-22T01:49:27.772Z"
+doc_updated_at: "2026-11-22T01:50:46.839Z"
 doc_updated_by: "CODER"
 description: "Connect native Calc menu and toolbar format commands, their state and history, and the shared source numeric picture generation needed by decimal and thousands controls."
 sections:
