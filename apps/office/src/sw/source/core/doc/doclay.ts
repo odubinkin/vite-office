@@ -214,3 +214,18 @@ export function GetTextDirection(document: SwDoc, position: SwPosition): SvxFram
     document.GetAttrPool().GetUserOrPoolDefaultItem(RES_FRAMEDIR) as SvxFrameDirectionItem
   ).GetValue();
 }
+
+/** Resolves the paragraph's current frame direction before the browser device formats it. @param node - Live content owner. @returns Effective model direction. */
+export function GetParagraphFrameDirection(node: SwContentNode): SvxFrameDirection {
+  const local = node.GetSwAttrSet().GetFrameDir().GetValue();
+  if (local !== SvxFrameDirection.Environment) return local;
+  const cell = node.GetTableBox()?.GetFrameFormat().GetFrameDir().GetValue();
+  if (cell !== undefined && cell !== SvxFrameDirection.Environment) return cell;
+  const table = node.FindTableNode()?.GetTable().GetFrameFormat().GetFrameDir().GetValue();
+  if (table !== undefined && table !== SvxFrameDirection.Environment) return table;
+  return (
+    GetFlyFrameDirection(node.GetFlyFormat())?.GetValue() ??
+    node.FindPageDesc()?.GetMaster().GetFrameDir().GetValue() ??
+    SvxFrameDirection.Environment
+  );
+}

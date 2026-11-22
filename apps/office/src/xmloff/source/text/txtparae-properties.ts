@@ -43,6 +43,9 @@ export function paragraphPropertiesKey(properties?: OdfParagraphProperties): str
     properties?.justification === undefined
       ? ""
       : encodeURIComponent(JSON.stringify(properties.justification)),
+    properties?.writingMode,
+    properties?.writingModeAutomatic === undefined ? "" : Number(properties.writingModeAutomatic),
+    properties?.snapToGrid === undefined ? "" : Number(properties.snapToGrid),
   ]
     .map(
       /** Encodes one optional paragraph metric. @param value - Metric. @returns Stable field. */ (
@@ -132,6 +135,11 @@ export function parseParagraphPropertiesKey(key: string): OdfParagraphProperties
           >,
         }
       : {}),
+    ...(fields[28] ? { writingMode: Number(fields[28]) } : {}),
+    ...(fields[29] === "0" || fields[29] === "1"
+      ? { writingModeAutomatic: fields[29] === "1" }
+      : {}),
+    ...(fields[30] === "0" || fields[30] === "1" ? { snapToGrid: fields[30] === "1" } : {}),
     ...(fields[25] === "0" || fields[25] === "1" ? { registerModeActive: fields[25] === "1" } : {}),
     ...(autoTextIndent === undefined || autoTextIndent === ""
       ? {}

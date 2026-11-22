@@ -10,7 +10,10 @@ import {
 } from "../../../../editeng/inc/editids";
 import {
   RES_PARATR_TABSTOP as T,
+  RES_FRAMEDIR,
   RES_PARATR_ADJUST,
+  RES_PARATR_AUTOFRAMEDIR,
+  RES_PARATR_SNAPTOGRID,
   RES_PARATR_HYPHENZONE,
   RES_PARATR_VERTALIGN,
   RES_LR_SPACE as L,
@@ -26,8 +29,10 @@ export function createWriterParagraphDialogInput(shell: SwTextShell): SfxItemSet
   const set = new SfxItemSet(pool, [
     [RES_PARATR_ADJUST, RES_PARATR_ADJUST],
     [T, RES_PARATR_HYPHENZONE],
-    [RES_PARATR_VERTALIGN, RES_PARATR_VERTALIGN],
+    [RES_PARATR_VERTALIGN, RES_PARATR_SNAPTOGRID],
+    [RES_PARATR_AUTOFRAMEDIR, RES_PARATR_AUTOFRAMEDIR],
     [L, L],
+    [RES_FRAMEDIR, RES_FRAMEDIR],
     [D, O],
   ]);
   const tabs = shell.GetUniformParagraphItem(
@@ -36,7 +41,14 @@ export function createWriterParagraphDialogInput(shell: SwTextShell): SfxItemSet
   );
   if (tabs) set.Put(tabs);
   else set.InvalidateItem(T);
-  for (const which of [RES_PARATR_ADJUST, RES_PARATR_HYPHENZONE, RES_PARATR_VERTALIGN]) {
+  for (const which of [
+    RES_PARATR_ADJUST,
+    RES_PARATR_HYPHENZONE,
+    RES_PARATR_VERTALIGN,
+    RES_PARATR_SNAPTOGRID,
+    RES_PARATR_AUTOFRAMEDIR,
+    RES_FRAMEDIR,
+  ]) {
     const item = shell.GetUniformParagraphItem(
       /** Reads the typed item across the selection. @param node - Selected paragraph. @returns Native item. */
       (node) => node.GetAttr(which),

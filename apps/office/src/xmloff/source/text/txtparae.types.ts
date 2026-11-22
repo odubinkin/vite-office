@@ -115,6 +115,9 @@ export interface OdfParagraphProperties extends OdfBoxProperties, OdfFillPropert
   readonly keepTogether?: boolean;
   readonly widows?: number;
   readonly verticalAlign?: number;
+  readonly writingMode?: number;
+  readonly writingModeAutomatic?: boolean;
+  readonly snapToGrid?: boolean;
   readonly orphans?: number;
   readonly breakBefore?: "auto" | "page";
   readonly breakAfter?: "auto" | "page";

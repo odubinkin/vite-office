@@ -769,4 +769,17 @@ test("Writer paints the chosen alignment on a justified paragraph's last line", 
   await dialog.getByRole("button", { name: "Cancel", exact: true }).click();
   await page.keyboard.press("Control+z");
   await expect(editor).toHaveCSS("text-align-last", "auto");
+
+  await format.click();
+  await paragraphMenu.click();
+  await dialog.getByRole("tab", { name: "Alignment", exact: true }).click();
+  await dialog.getByRole("combobox", { name: "Text direction" }).selectOption({
+    label: "Right-to-left (RTL)",
+  });
+  await dialog.getByRole("checkbox", { name: "Automatically set direction" }).uncheck();
+  await dialog.getByRole("button", { name: "OK", exact: true }).click();
+  await expect(editor).toHaveAttribute("dir", "rtl");
+  await editor.press("Home");
+  await page.keyboard.type("a");
+  await expect(editor).toHaveCSS("direction", "rtl");
 });

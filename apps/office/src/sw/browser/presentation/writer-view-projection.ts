@@ -1,4 +1,5 @@
 /** @fileoverview Projects the live Writer graph to immutable browser presentation values. */
+import { GetParagraphFrameDirection } from "../../source/core/doc/doclay";
 import { projectWriterFontPaint, type WriterFontPaint } from "../../source/core/txtnode/txatbase";
 import { getPageBodyGeometry } from "../../source/core/layout/pagedesc";
 import { SwStyleNameMapper } from "../../source/core/doc/SwStyleNameMapper";
@@ -14,6 +15,7 @@ import { SvxBoxItem, SvxBoxItemLine } from "../../../editeng/source/items/frmite
 import { SvxColorItem } from "../../../editeng/inc/colritem";
 import { SvxCaseMapItem } from "../../../editeng/inc/cmapitem";
 import type { SvxAdjustItem } from "../../../editeng/inc/adjustitem";
+import { SvxFrameDirection as FrameDirection } from "../../../editeng/inc/frmdir";
 import { SvxAdjust, SvxCaseMap } from "../../../editeng/inc/svxenum";
 import { SvxEmphasisMarkItem } from "../../../editeng/inc/emphasismarkitem";
 import { FontEmphasisMark } from "../../../tools/inc/fontenum";
@@ -25,7 +27,6 @@ import { LanguageTag } from "../../../i18nlangtag/inc/languagetag";
 import { text as unicodeText } from "../../../i18nlangtag/source/isolang/isolang.tables";
 import { SvxAutoKernItem } from "../../../editeng/inc/autokernitem";
 import { SvxKerningItem } from "../../../editeng/inc/kernitem";
-
 import { SvxCrossedOutItem } from "../../../editeng/inc/crossedoutitem";
 import { SvxWordLineModeItem } from "../../../editeng/inc/wrlmitem";
 import {
@@ -38,6 +39,7 @@ import {
   RES_CHRATR_OPTICAL_SIZING,
   RES_PARATR_HYPHENZONE,
   RES_PARATR_ADJUST,
+  RES_PARATR_SNAPTOGRID,
   RES_CHRATR_SCALEW,
   RES_CHRATR_CASEMAP,
   RES_CHRATR_CROSSEDOUT,
@@ -114,7 +116,7 @@ import { SvxBrushItem } from "../../../editeng/source/items/frmitems.brush";
 import { SfxBoolItem } from "../../../svl/source/items/cenumitm";
 import { WRITER_AVAILABLE_PARAGRAPH_STYLE_POOL } from "../../inc/poolfmt";
 import type { WriterPageDescriptorValue } from "../../source/core/layout/pagedesc";
-import { projectWriterLineHeightItem } from "../../source/core/text/itrform2";
+import { projectWriterGridLineHeight } from "../../source/core/text/itrform2";
 import { resolveSwNumberPortionBackground } from "../../source/core/text/inftxt";
 import type { SwViewOption } from "../../inc/viewopt";
 import {
@@ -125,7 +127,6 @@ import type { SwNumberingTabSettings } from "../../source/core/text/txttab";
 import { getFontFamilyGeneric } from "../../../xmloff/source/style/fonthdl";
 import type { WriterParagraphComputedStyle } from "./writer-view-projection.types";
 export type { WriterParagraphComputedStyle } from "./writer-view-projection.types";
-
 /** Detached document style selector metadata. */
 export type WriterParagraphStyleOption = StyleToolboxEntry;
 
@@ -358,6 +359,13 @@ export class WriterViewProjection {
         const listTextLeft = resolveSwListTextLeftMargin(node) ?? node.GetParagraphTextLeftMargin();
         const spacing = node.GetAttr(RES_UL_SPACE) as SvxULSpaceItem;
         const lineSpacing = node.GetAttr(RES_PARATR_LINESPACING) as SvxLineSpacingItem;
+        const fontSizePt =
+          (node.GetAttr(RES_CHRATR_FONTSIZE) as SvxFontHeightItem).GetHeight() / 20;
+        const page = node.FindPageDesc()?.GetMaster();
+        const direction = GetParagraphFrameDirection(node);
+        const grid = (node.GetAttr(RES_PARATR_SNAPTOGRID) as SfxBoolItem).GetValue()
+          ? page?.GetTextGrid()
+          : undefined;
         const firstLine = node.GetAttr(RES_MARGIN_FIRSTLINE) as SvxFirstLineIndentItem;
         const tabItem = node.GetAttr(RES_PARATR_TABSTOP) as SvxTabStopItem;
         const explicitTabStops = Array.from(
@@ -399,8 +407,7 @@ export class WriterViewProjection {
         const hyphenation = (node.GetAttr(RES_PARATR_HYPHENZONE) as SvxHyphenZoneItem).QueryValue();
         const fontFamilyGeneric = getFontFamilyGeneric(font.GetFamily());
         const adjustment = node.GetAttr(RES_PARATR_ADJUST) as SvxAdjustItem;
-        const alignment = adjustment.GetAdjust(),
-          lastLine = adjustment.GetLastBlock();
+        const alignment = adjustment.GetAdjust();
         return Object.freeze({
           ...(rulerTabStops.length === 0 ? {} : { rulerTabStops: Object.freeze(rulerTabStops) }),
           rulerTabSettings: Object.freeze({
@@ -421,9 +428,9 @@ export class WriterViewProjection {
                   : undefined,
             lastLineAlignment:
               alignment === SvxAdjust.Block
-                ? lastLine === SvxAdjust.Center
+                ? adjustment.GetLastBlock() === SvxAdjust.Center
                   ? "center"
-                  : lastLine === SvxAdjust.Block
+                  : adjustment.GetLastBlock() === SvxAdjust.Block
                     ? "justify"
                     : "start"
                 : undefined,
@@ -443,16 +450,19 @@ export class WriterViewProjection {
             fontStyle: (node.GetAttr(RES_CHRATR_POSTURE) as SvxPostureItem).GetBoolValue()
               ? "italic"
               : "normal",
-            fontSizePt: (node.GetAttr(RES_CHRATR_FONTSIZE) as SvxFontHeightItem).GetHeight() / 20,
+            fontSizePt,
+            direction:
+              direction === FrameDirection.Horizontal_RL_TB
+                ? "rtl"
+                : direction === FrameDirection.Horizontal_LR_TB
+                  ? "ltr"
+                  : undefined,
             fontWeight: (node.GetAttr(RES_CHRATR_WEIGHT) as SvxWeightItem).GetBoolValue()
               ? 700
               : 400,
             ...(highlight === "transparent" ? {} : { highlight }),
             ...(background === "transparent" ? {} : { backgroundColor: background }),
-            lineHeight: projectWriterLineHeightItem(
-              lineSpacing,
-              (node.GetAttr(RES_CHRATR_FONTSIZE) as SvxFontHeightItem).GetHeight() / 20,
-            ),
+            lineHeight: projectWriterGridLineHeight(lineSpacing, fontSizePt, grid),
             lineSpacingMode: projectWriterLineSpacing(lineSpacing).mode,
             lineSpacingValue: projectWriterLineSpacing(lineSpacing).value,
             tabStopPositionPt: tabStopsPt[0],

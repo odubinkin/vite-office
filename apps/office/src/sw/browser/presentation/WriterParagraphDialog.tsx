@@ -5,14 +5,8 @@ import { TabulatorTabPage } from "../../../cui/browser/tabpages/TabulatorTabPage
 import { FieldUnit } from "../../../tools/inc/fldunit";
 import { useBrowserLocalization } from "../../../framework/browser/localization/browser-localization-context";
 import { SvxHyphenZoneItem } from "../../../editeng/source/items/paraitem";
-import { RES_PARATR_ADJUST, RES_PARATR_HYPHENZONE, RES_PARATR_VERTALIGN } from "../../inc/hintids";
-import { SvxAdjustItem } from "../../../editeng/inc/adjustitem";
-import {
-  ParaVertAlign,
-  SvxParaVertAlignItem,
-} from "../../../editeng/source/items/paraitem.controls";
-import { WriterSearchParagraphAlignment } from "./WriterSearchParagraphAlignment";
-import { paragraphVerticalAlignments } from "./writer-search-format-values";
+import { RES_PARATR_HYPHENZONE } from "../../inc/hintids";
+import { WriterParagraphAlignmentPage } from "./WriterParagraphAlignmentPage";
 import { WriterHyphenationControls } from "./WriterHyphenationControls";
 import { WriterDialogHeader } from "./WriterDialogHeader";
 import { SvxExtParagraphTabPage } from "../../../cui/source/tabpages/paragrph";
@@ -44,14 +38,6 @@ export function WriterParagraphDialog({
   const { pageInput, initialValue } = dialogRequest.request;
   const hyphenation = pageInput.GetItem(RES_PARATR_HYPHENZONE);
   const hyphenationDefault = pageInput.GetPool().GetUserOrPoolDefaultItem(RES_PARATR_HYPHENZONE);
-  const initialAdjust = pageInput.GetItem(RES_PARATR_ADJUST);
-  const initialVertical = pageInput.GetItem(RES_PARATR_VERTALIGN);
-  const [adjust, setAdjust] = useState(
-    initialAdjust instanceof SvxAdjustItem ? initialAdjust : undefined,
-  );
-  const [vertical, setVertical] = useState(
-    initialVertical instanceof SvxParaVertAlignItem ? initialVertical.GetValue() : undefined,
-  );
   /** Looks up the original paragraph dialog field names. @param key - Resource key. @param fallback - English resource text. @returns Localized text. */
   function label(key: string, fallback: string): string {
     return localization.GetText(`writer.paragraph.${key}`, fallback);
@@ -347,49 +333,11 @@ export function WriterParagraphDialog({
               ) : null}
               {activeTab === "tabs" ? <TabulatorTabPage session={tabs} /> : null}
               <div hidden={activeTab !== "alignment"} className="sm:col-span-2">
-                <WriterSearchParagraphAlignment
-                  value={adjust}
+                <WriterParagraphAlignmentPage
+                  input={pageInput}
+                  output={tabs.output}
                   label={label}
-                  onChange={
-                    /** Stages all members of the adjustment item together. @param item - Edited alignment. @returns Nothing. */
-                    (item) => {
-                      setAdjust(item);
-                      if (initialAdjust?.equals(item)) tabs.output.ClearItem(RES_PARATR_ADJUST);
-                      else tabs.output.Put(item);
-                    }
-                  }
                 />
-                <fieldset className="grid gap-1 rounded border border-slate-200 p-2">
-                  <legend className="text-sm">{label("text-to-text", "Text-to-text")}</legend>
-                  <label className="grid gap-1 text-sm">
-                    {label("vertical-alignment", "Alignment")}
-                    <select
-                      className="rounded border border-slate-400 p-1"
-                      value={vertical ?? ""}
-                      onChange={
-                        /** Stages only the original text-to-text item. @param event - Changed alignment row. @returns Nothing. */
-                        (event) => {
-                          const value = Number(event.currentTarget.value) as ParaVertAlign;
-                          const item = new SvxParaVertAlignItem(value, RES_PARATR_VERTALIGN);
-                          setVertical(value);
-                          if (initialVertical?.equals(item))
-                            tabs.output.ClearItem(RES_PARATR_VERTALIGN);
-                          else tabs.output.Put(item);
-                        }
-                      }
-                    >
-                      {vertical === undefined && <option value="" disabled />}
-                      {paragraphVerticalAlignments.map(
-                        /** Renders the original vertical alignment choices. @param option - Native value and label. @returns Option. */
-                        ([value, caption]) => (
-                          <option key={value} value={value}>
-                            {label(`vertical-alignment.${value}`, caption)}
-                          </option>
-                        ),
-                      )}
-                    </select>
-                  </label>
-                </fieldset>
               </div>
               {hyphenationDefault instanceof SvxHyphenZoneItem && (
                 <div hidden={activeTab !== "flow"} className="sm:col-span-2">

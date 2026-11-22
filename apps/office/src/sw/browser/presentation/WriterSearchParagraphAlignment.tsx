@@ -66,9 +66,10 @@ function PercentField(props: {
   );
 }
 
-/** Edits all represented justification members together in the native item. @param props - Active item, translations and output callback. @returns Alignment options and justification controls. */
+/** Edits all represented justification members together in the native item. @param props - Active item, optional grid control, translations and output callback. @returns Alignment options and justification controls. */
 export function WriterSearchParagraphAlignment(props: {
   value?: SvxAdjustItem | undefined;
+  gridControl?: React.ReactNode;
   label: (key: string, fallback: string) => string;
   onChange: (item: SvxAdjustItem) => void;
 }): React.JSX.Element {
@@ -189,6 +190,7 @@ export function WriterSearchParagraphAlignment(props: {
           />
           {label("expand-single-word", "Expand single word")}
         </label>
+        {props.gridControl}
       </fieldset>
       <fieldset disabled={!justified} className="grid gap-2 rounded border border-slate-200 p-2">
         <legend className="text-sm">{label("justification", "Justification")}</legend>

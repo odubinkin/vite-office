@@ -47,12 +47,16 @@ import { exportFillProperties } from "../../../../xmloff/source/draw/fill-proper
 import { escapeXml } from "../../../../xmloff/source/text/txtparae";
 import type { SvxBorderLine } from "../../../../editeng/source/items/borderline";
 import type { SvxBrushItem } from "../../../../editeng/source/items/frmitems.brush";
-import type { SvxFrameDirectionItem } from "../../../../editeng/inc/frmdiritem";
+import { SvxFrameDirectionItem } from "../../../../editeng/inc/frmdiritem";
 import type { OdfTableVisualProperties } from "../../../../xmloff/source/table/XMLTableImport";
+import { SfxBoolItem } from "../../../../svl/inc/eitem";
+import type { SfxItemSet } from "../../../../svl/inc/itemset";
 import { Any } from "../../../../cppu/inc/com/sun/star/uno/Any";
 import {
   RES_BACKGROUND,
   RES_FRAMEDIR,
+  RES_PARATR_AUTOFRAMEDIR,
+  RES_PARATR_SNAPTOGRID,
   RES_BOX,
   RES_SHADOW,
   RES_TEXTGRID,
@@ -326,5 +330,17 @@ export function exportParagraphAdjustment(item: SvxAdjustItem): OdfParagraphJust
     ParaScaleWidthMinimum: item.GetPropScaleWidthMinimum(),
     ParaScaleWidthMaximum: item.GetPropScaleWidthMaximum(),
     ParaComposer: item.GetParagraphComposer(),
+  };
+}
+
+/** Exports the direct paragraph writing mode and two independent layout flags. @param set - Native paragraph items. @returns ODF properties. */
+export function exportParagraphDirectionAndGrid(set: SfxItemSet): OdfParagraphProperties {
+  const direction = set.GetItemIfSet(RES_FRAMEDIR, false);
+  const automatic = set.GetItemIfSet(RES_PARATR_AUTOFRAMEDIR, false);
+  const snap = set.GetItemIfSet(RES_PARATR_SNAPTOGRID, false);
+  return {
+    ...(direction instanceof SvxFrameDirectionItem ? { writingMode: direction.QueryValue() } : {}),
+    ...(automatic instanceof SfxBoolItem ? { writingModeAutomatic: automatic.GetValue() } : {}),
+    ...(snap instanceof SfxBoolItem ? { snapToGrid: snap.GetValue() } : {}),
   };
 }

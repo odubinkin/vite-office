@@ -6035,3 +6035,7 @@ preserves both directions of the original conversion.
 
 - [Original character rotation property](../../vendor/libreoffice-reference/xmloff/source/text/txtprmap.cxx#L244)
 - [Original rotation scale handler factory](../../vendor/libreoffice-reference/xmloff/source/text/txtprhdl.cxx#L1403)
+
+## Automatic paragraph direction and first-strong isolates
+
+The pinned direction detector describes the Unicode paragraph-level algorithm but increments its isolate depth only for LRI and RLI. FSI leaves the depth unchanged. A strong character inside an FSI can therefore determine the outer paragraph direction. The Writer port preserves the pinned switch behavior in `GuessParagraphDirection`. See [guessparadirection.cxx](../../vendor/libreoffice-reference/i18nutil/source/utility/guessparadirection.cxx).

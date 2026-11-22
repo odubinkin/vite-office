@@ -465,6 +465,8 @@ const entries: readonly (readonly [string, string, XMLToken])[] = [
   [ODF_NAMESPACES.loext, "vertical-justify", XMLToken.LOEXT_VERTICAL_JUSTIFY],
   [ODF_NAMESPACES.css3t, "text-justify", XMLToken.CSS3T_TEXT_JUSTIFY],
   [ODF_NAMESPACES.style, "writing-mode", XMLToken.STYLE_WRITING_MODE],
+  [ODF_NAMESPACES.style, "writing-mode-automatic", XMLToken.STYLE_WRITING_MODE_AUTOMATIC],
+  [ODF_NAMESPACES.style, "snap-to-layout-grid", XMLToken.STYLE_SNAP_TO_LAYOUT_GRID],
   [ODF_NAMESPACES.loext, "writing-mode", XMLToken.LOEXT_WRITING_MODE],
   [ODF_NAMESPACES.style, "text-align-source", XMLToken.STYLE_TEXT_ALIGN_SOURCE],
   [ODF_NAMESPACES.style, "repeat-content", XMLToken.STYLE_REPEAT_CONTENT],

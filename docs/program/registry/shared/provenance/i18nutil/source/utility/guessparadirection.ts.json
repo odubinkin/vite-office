@@ -1,0 +1,36 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/i18nutil/source/utility/guessparadirection.ts",
+    "status": "mapped",
+    "upstreamPath": "i18nutil/source/utility/guessparadirection.cxx",
+    "localSymbols": [
+      "GuessParagraphDirection"
+    ],
+    "upstreamSymbols": [
+      "GuessParagraphDirection"
+    ],
+    "preservedResponsibilities": [
+      "Uses the pinned Unicode bidi property lookup to detect the first qualifying strong code point and preserves the original isolate handling."
+    ],
+    "omittedResponsibilities": [
+      "Writer editing and presentation belong to their own source layers."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/i18nutil/source/utility/guessparadirection.ts",
+          "marker": "GuessParagraphDirection"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/i18nutil/source/utility/guessparadirection.cxx",
+          "marker": "GuessParagraphDirection"
+        }
+      ]
+    }
+  }
+}

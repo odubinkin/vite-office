@@ -61,6 +61,7 @@ import {
   exportParagraphVerticalMargins,
   XMLPageBackgroundExport,
   exportParagraphAdjustment,
+  exportParagraphDirectionAndGrid,
 } from "./xmlexpit";
 import { HoriOrientation } from "../../../../offapi/com/sun/star/text/HoriOrientation";
 import { SwFrameSize, type SwFormatFrameSize } from "../../../inc/fmtfsize";
@@ -129,6 +130,9 @@ import {
   RES_PARATR_HYPHENZONE,
   RES_PARATR_WIDOWS,
   RES_PARATR_VERTALIGN,
+  RES_FRAMEDIR,
+  RES_PARATR_AUTOFRAMEDIR,
+  RES_PARATR_SNAPTOGRID,
   RES_PARATR_LINESPACING,
   RES_PARATR_TABSTOP,
   RES_PARATR_LIST_ISCOUNTED,
@@ -835,6 +839,9 @@ function assertSupportedItems(
     RES_PARATR_REGISTER,
     RES_PARATR_HYPHENZONE,
     RES_PARATR_VERTALIGN,
+    RES_FRAMEDIR,
+    RES_PARATR_AUTOFRAMEDIR,
+    RES_PARATR_SNAPTOGRID,
     RES_BREAK,
     RES_PAGEDESC,
     RES_PARATR_LINESPACING,
@@ -926,6 +933,7 @@ function getParagraphProperties(set: SfxItemSet | undefined): OdfParagraphProper
           tabStopDetails: exportParagraphTabStops(tabStop),
         }
       : {}),
+    ...exportParagraphDirectionAndGrid(set),
     ...(adjust instanceof SvxAdjustItem
       ? { justification: exportParagraphAdjustment(adjust) }
       : {}),

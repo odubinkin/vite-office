@@ -4,9 +4,11 @@ import {
   SvxFormatSplitItem,
   SvxOrphansItem,
   SvxParaVertAlignItem,
+  SvxParaGridItem,
   SvxWidowsItem,
 } from "../../../../editeng/source/items/paraitem.controls";
 import {
+  SvxAutoFrameDirectionItem,
   SvxForbiddenRuleItem,
   SvxHangingPunctuationItem,
   SvxHyphenZoneItem,
@@ -27,6 +29,8 @@ import {
   RES_PARATR_SPLIT,
   RES_PARATR_ORPHANS,
   RES_PARATR_VERTALIGN,
+  RES_PARATR_SNAPTOGRID,
+  RES_PARATR_AUTOFRAMEDIR,
   RES_PARATR_WIDOWS,
 } from "../../../inc/hintids";
 /** Paragraph and adjacent frame settings restored through the same native item factory. */
@@ -35,6 +39,8 @@ export const paragraphControlItems = [
   RES_PARATR_REGISTER,
   RES_PARATR_SPLIT,
   RES_PARATR_VERTALIGN,
+  RES_PARATR_SNAPTOGRID,
+  RES_PARATR_AUTOFRAMEDIR,
   RES_PARATR_SCRIPTSPACE,
   RES_PARATR_HANGINGPUNCTUATION,
   RES_PARATR_FORBIDDEN_RULES,
@@ -73,6 +79,12 @@ export function restoreParagraphControlItem(which: number, value: unknown): SfxP
     )
       throw new Error("SvxParaVertAlignItem value is invalid.");
     return new SvxParaVertAlignItem(value, which);
+  }
+  if (which === RES_PARATR_SNAPTOGRID || which === RES_PARATR_AUTOFRAMEDIR) {
+    if (typeof value !== "boolean") throw new Error("Invalid Writer paragraph boolean.");
+    return which === RES_PARATR_SNAPTOGRID
+      ? new SvxParaGridItem(value, which)
+      : new SvxAutoFrameDirectionItem(value, which);
   }
   if (which === RES_PARATR_REGISTER) return new SwRegisterItem(Boolean(value));
   if (which === RES_PARATR_SPLIT) return new SvxFormatSplitItem(Boolean(value), which);

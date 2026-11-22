@@ -7,6 +7,8 @@ import { createWriterDocumentSession } from "../composition/writer-module";
 import { WRITER_COMMAND_IDS } from "../../uiconfig/swriter/menubar/menubar-commands";
 import type { SwWrtShell } from "../../source/uibase/wrtsh/wrtsh1";
 import { SwPosition } from "../../source/core/crsr/pam";
+import { SvxFrameDirection } from "../../../editeng/inc/frmdir";
+import { SwTextGrid, SwTextGridItem } from "../../inc/tgrditem";
 import { SvxAdjust, SvxAdjustItem } from "../../../editeng/inc/adjustitem";
 import {
   ParaVertAlign,
@@ -15,7 +17,10 @@ import {
 import { SvxULSpaceItem } from "../../../editeng/inc/ulspitem";
 import { SvxHyphenZoneItem } from "../../../editeng/source/items/paraitem";
 import {
+  RES_FRAMEDIR,
   RES_PARATR_ADJUST,
+  RES_PARATR_AUTOFRAMEDIR,
+  RES_PARATR_SNAPTOGRID,
   RES_PARATR_VERTALIGN,
   RES_PARATR_HYPHENZONE as H,
   RES_UL_SPACE,
@@ -308,10 +313,32 @@ it("applies one typed hyphenation edit to mixed paragraphs, with independent spa
 });
 
 it("persists paragraph alignment and justification from the upstream dialog scenario", /** Uses the regular command, native item history and ODT document reopening. @returns Completion. */ async () => {
-  const f = open();
+  const f = open(
+    U.CM,
+    /** Enables a native page line grid to test its paragraph participation. @param shell - Editing shell. @returns Nothing. */
+    (shell) => {
+      const grid = new SwTextGridItem();
+      grid.SetGridType(SwTextGrid.LinesOnly);
+      grid.SetBaseHeight(400);
+      grid.SetRubyHeight(0);
+      shell.GetDoc().GetPageDesc().GetMaster().SetFormatAttr(grid);
+    },
+  );
   try {
     const before = f.shell.GetDoc().GetUndoManager().GetUndoActionCount();
     fireEvent.click(screen.getByRole("tab", { name: "Alignment" }));
+    const textDirection = screen.getByRole("combobox", { name: "Text direction" });
+    const automatic = screen.getByRole("checkbox", { name: "Automatically set direction" });
+    const snap = screen.getByRole("checkbox", { name: "Snap to text grid (if active)" });
+    const beforeStyle = f.session.viewStore.GetSnapshot().activeParagraph.computedStyle;
+    expect(beforeStyle.lineHeight * beforeStyle.fontSizePt).toBeCloseTo(20);
+    expect(automatic).toBeChecked();
+    expect(snap).toBeChecked();
+    fireEvent.change(textDirection, {
+      target: { value: String(SvxFrameDirection.Horizontal_LR_TB) },
+    });
+    fireEvent.click(automatic);
+    fireEvent.click(snap);
     fireEvent.click(screen.getByRole("radio", { name: "Justified" }));
     fireEvent.change(screen.getByRole("combobox", { name: "Last line" }), {
       target: { value: String(SvxAdjust.Block) },
@@ -331,6 +358,11 @@ it("persists paragraph alignment and justification from the upstream dialog scen
     expect(await f.result.value).toBe(true);
     const node = f.shell.GetActiveParagraph();
     const adjust = node.GetAttr(RES_PARATR_ADJUST) as SvxAdjustItem;
+    expect(node.GetAttr(RES_FRAMEDIR).QueryValue()).toBe(0);
+    expect(node.GetAttr(RES_PARATR_AUTOFRAMEDIR).QueryValue()).toBe(false);
+    expect(node.GetAttr(RES_PARATR_SNAPTOGRID).QueryValue()).toBe(false);
+    const style = f.session.viewStore.GetSnapshot().activeParagraph.computedStyle;
+    expect(style.lineHeight * style.fontSizePt).toBeLessThan(20);
     expect(adjust.GetAdjust()).toBe(SvxAdjust.Block);
     expect(adjust.GetLastBlock()).toBe(SvxAdjust.Block);
     expect(adjust.GetOneWord()).toBe(SvxAdjust.Block);
@@ -350,6 +382,9 @@ it("persists paragraph alignment and justification from the upstream dialog scen
     );
     try {
       const reopened = loaded.document.paragraphs[0];
+      expect(reopened?.GetAttr(RES_FRAMEDIR).QueryValue()).toBe(0);
+      expect(reopened?.GetAttr(RES_PARATR_AUTOFRAMEDIR).QueryValue()).toBe(false);
+      expect(reopened?.GetAttr(RES_PARATR_SNAPTOGRID).QueryValue()).toBe(false);
       const reopenedAdjustment = reopened?.GetAttr(RES_PARATR_ADJUST) as SvxAdjustItem;
       expect(reopenedAdjustment.GetAdjust()).toBe(adjust.GetAdjust());
       expect(exportParagraphAdjustment(reopenedAdjustment)).toEqual(
@@ -407,5 +442,33 @@ it("leaves mixed horizontal alignment untouched when only text-to-text alignment
   } finally {
     cleanup();
     f.session.Close();
+  }
+});
+
+it("updates native direction after typing and deletion with a single history entry", /** Ports the Writer auto-RTL editing scenario and checks the independent explicit flag. @returns Nothing. */ () => {
+  const session = createWriterDocumentSession();
+  const shell = session.view.GetWrtShell();
+  try {
+    expect(shell.Insert("שלום")).toBe(true);
+    const node = shell.GetActiveParagraph();
+    expect(node.GetAttr(RES_PARATR_AUTOFRAMEDIR).QueryValue()).toBe(true);
+    expect(node.GetSwAttrSet().GetFrameDir().GetValue()).toBe(SvxFrameDirection.Horizontal_RL_TB);
+    const start = new SwPosition(node, 0);
+    shell.SetCursor(start);
+    start.Dispose();
+    const before = shell.GetDoc().GetUndoManager().GetUndoActionCount();
+    expect(shell.Insert("a")).toBe(true);
+    expect(node.GetSwAttrSet().GetFrameDir().GetValue()).toBe(SvxFrameDirection.Horizontal_LR_TB);
+    expect(shell.GetDoc().GetUndoManager().GetUndoActionCount()).toBe(before + 1);
+    expect(shell.DelLeft()).toBe(true);
+    expect(node.GetText()).toBe("שלום");
+    expect(node.GetSwAttrSet().GetFrameDir().GetValue()).toBe(SvxFrameDirection.Horizontal_RL_TB);
+    expect(shell.Undo()).toBe(true);
+    expect(node.GetText()).toBe("aשלום");
+    expect(node.GetSwAttrSet().GetFrameDir().GetValue()).toBe(SvxFrameDirection.Horizontal_LR_TB);
+    expect(shell.Redo()).toBe(true);
+    expect(node.GetSwAttrSet().GetFrameDir().GetValue()).toBe(SvxFrameDirection.Horizontal_RL_TB);
+  } finally {
+    session.Close();
   }
 });

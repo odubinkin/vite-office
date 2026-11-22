@@ -1,5 +1,8 @@
 /** @fileoverview Native module-global static Writer defaults from pinned bastyp/init.cxx, limited to represented item classes. */
-import { SvxHyphenZoneItem } from "../../../../editeng/source/items/paraitem";
+import {
+  SvxAutoFrameDirectionItem,
+  SvxHyphenZoneItem,
+} from "../../../../editeng/source/items/paraitem";
 import {
   SvxForbiddenRuleItem,
   SvxHangingPunctuationItem,
@@ -152,6 +155,8 @@ import {
   RES_PARATR_SPLIT,
   RES_PARATR_TABSTOP,
   RES_PARATR_VERTALIGN,
+  RES_PARATR_SNAPTOGRID,
+  RES_PARATR_AUTOFRAMEDIR,
   RES_PARATR_WIDOWS,
   RES_UL_SPACE,
 } from "../../../inc/hintids";
@@ -299,6 +304,8 @@ class ItemInfoPackageSwAttributes extends ItemInfoPackage {
         RES_PARATR_VERTALIGN,
       ),
     );
+    add(new ParaItems.SvxParaGridItem(true, RES_PARATR_SNAPTOGRID));
+    add(new SvxAutoFrameDirectionItem(true, RES_PARATR_AUTOFRAMEDIR));
     add(new SfxInt16Item(RES_BREAK, 0));
     add(new SwFormatPageDesc());
     add(new SvxHyphenZoneItem(false, RES_PARATR_HYPHENZONE, { maxHyphens: 0 }));

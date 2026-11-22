@@ -528,6 +528,27 @@ function importLeftMargin(attributes: FastAttributeList): number | undefined {
   return importOdfLength(value, true, "paragraph left margin");
 }
 
+/** Reads native paragraph writing-mode and grid items. @param attributes - Paragraph attributes. @returns Supported properties. */
+function importParagraphDirectionAndGrid(
+  attributes: FastAttributeList,
+): XMLParagraphImportProperties {
+  const writing = attributes.get(XMLToken.STYLE_WRITING_MODE);
+  const writingMode = writing === null ? undefined : importWritingDirection(writing);
+  const writingModeAutomatic = importOptionalBoolean(
+    attributes.get(XMLToken.STYLE_WRITING_MODE_AUTOMATIC),
+    "automatic writing mode",
+  );
+  const snapToGrid = importOptionalBoolean(
+    attributes.get(XMLToken.STYLE_SNAP_TO_LAYOUT_GRID),
+    "snap to layout grid",
+  );
+  return {
+    ...(writingMode === undefined ? {} : { writingMode }),
+    ...(writingModeAutomatic === undefined ? {} : { writingModeAutomatic }),
+    ...(snapToGrid === undefined ? {} : { snapToGrid }),
+  };
+}
+
 /** Imports supported paragraph properties. @param attributes - Property attributes. @returns Property deltas. */
 function importParagraphProperties(
   attributes: FastAttributeList,
@@ -690,6 +711,7 @@ function importParagraphProperties(
     ...(countLineNumbers === undefined ? {} : { countLineNumbers }),
     ...(hyphenation === undefined ? {} : { hyphenation }),
     ...(justification === undefined ? {} : { justification }),
+    ...importParagraphDirectionAndGrid(attributes),
     ...(hasRegister ? { registerModeActive: register[0] } : {}),
     ...(joinBorder === undefined ? {} : { joinBorder }),
     ...borders,

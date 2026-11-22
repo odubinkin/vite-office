@@ -6,6 +6,7 @@ export interface WriterParagraphComputedStyle {
   readonly autoKerning?: boolean;
   readonly autoHyphenation?: boolean;
   readonly hyphenationLimits?: string;
+  readonly direction?: "ltr" | "rtl" | undefined;
   readonly logicalAlignment?: "start" | "end" | undefined;
   readonly lastLineAlignment?: "start" | "center" | "justify" | undefined;
   readonly opticalSizing?: boolean;

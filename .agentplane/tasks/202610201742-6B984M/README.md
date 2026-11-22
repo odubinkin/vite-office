@@ -4,7 +4,7 @@ title: "Implement Writer search and replace core and browser UI"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 127
+revision: 128
 origin:
   system: "manual"
 depends_on:
@@ -551,6 +551,17 @@ comments:
       - Targeted Writer paragraph-dialog, search-formatting, DOM paragraph paint, ODT and UNO test group passed 71 tests in seven files. A follow-up run passed 15 tests in the two native paragraph/dialog files, including the added mixed-selection regression. One Chromium test passed for the ordinary Format > Paragraph command, center last-line rendering, dialog reopening and Undo.
       - Writer resources and the two generator tests, source provenance, source tree, module boundaries, AgentPlane routing, scoped ESLint, Prettier and git diff checks passed. Repository-wide JSDoc and file-size checks still report pre-existing issues. No failures are in the changed files.
       - Direction and snap-to-grid controls are outside this checkpoint. Exact typographic effects of text-to-text alignment and advanced justification remain open. This is an implementation checkpoint on the active task. It does not advance the ten-closed-task test cadence.
+  -
+    author: "CODER"
+    body: |-
+      Writer paragraph writing direction and grid checkpoint
+
+      - The Alignment page exchanges independent frame direction, automatic direction and snap-to-grid items, retaining mixed selections. Native default values and WhichIds come from the Writer pool. Named and automatic ODT styles and the existing snapshot factory retain the three items.
+      - First-strong detection uses the existing Unicode bidi lookup and the pinned GuessParagraphDirection switch. Ordinary typing, grapheme deletion and supported paragraph joins record direction with the text undo operation. The browser receives the effective inherited or authored direction.
+      - For an active page text grid, the projected base line box uses the CalcRealHeight grid pitch and native fixed/minimum line-height rules. The browser still measures its own glyphs, and its current grid projection does not implement per-portion character-grid kerning or adjustments specific to non-first grid lines.
+      - Targeted Writer verification passed 855 tests for real dialogs, layout, document transport, defaults and deletion. Follow-up runs passed 808 tests for final Writer editing and dialog changes and 23 tests covering format-search and persisted Which IDs. Shared Unicode tests passed 22 assertions. The Chromium scenario verified visual last-line alignment, manual RTL and retained direction after typing. The production build passed.
+      - Module boundaries, source structure and provenance, Writer resources, Writer parity inventory, routing, AgentPlane doctor, scoped ESLint and Prettier, and git diff checks passed. The global documentation and file-size checks report pre-existing issues outside these changes.
+      - The pinned FSI case is preserved and documented. The intermediate checkpoint leaves the active task open and does not advance the ten-task full-run count.
 
 events:
   -
@@ -1295,9 +1306,22 @@ events:
       - Targeted Writer paragraph-dialog, search-formatting, DOM paragraph paint, ODT and UNO test group passed 71 tests in seven files. A follow-up run passed 15 tests in the two native paragraph/dialog files, including the added mixed-selection regression. One Chromium test passed for the ordinary Format > Paragraph command, center last-line rendering, dialog reopening and Undo.
       - Writer resources and the two generator tests, source provenance, source tree, module boundaries, AgentPlane routing, scoped ESLint, Prettier and git diff checks passed. Repository-wide JSDoc and file-size checks still report pre-existing issues. No failures are in the changed files.
       - Direction and snap-to-grid controls are outside this checkpoint. Exact typographic effects of text-to-text alignment and advanced justification remain open. This is an implementation checkpoint on the active task. It does not advance the ten-closed-task test cadence.
+  -
+    type: "comment"
+    at: "2026-11-22T00:46:02.917Z"
+    author: "CODER"
+    body: |-
+      Writer paragraph writing direction and grid checkpoint
+
+      - The Alignment page exchanges independent frame direction, automatic direction and snap-to-grid items, retaining mixed selections. Native default values and WhichIds come from the Writer pool. Named and automatic ODT styles and the existing snapshot factory retain the three items.
+      - First-strong detection uses the existing Unicode bidi lookup and the pinned GuessParagraphDirection switch. Ordinary typing, grapheme deletion and supported paragraph joins record direction with the text undo operation. The browser receives the effective inherited or authored direction.
+      - For an active page text grid, the projected base line box uses the CalcRealHeight grid pitch and native fixed/minimum line-height rules. The browser still measures its own glyphs, and its current grid projection does not implement per-portion character-grid kerning or adjustments specific to non-first grid lines.
+      - Targeted Writer verification passed 855 tests for real dialogs, layout, document transport, defaults and deletion. Follow-up runs passed 808 tests for final Writer editing and dialog changes and 23 tests covering format-search and persisted Which IDs. Shared Unicode tests passed 22 assertions. The Chromium scenario verified visual last-line alignment, manual RTL and retained direction after typing. The production build passed.
+      - Module boundaries, source structure and provenance, Writer resources, Writer parity inventory, routing, AgentPlane doctor, scoped ESLint and Prettier, and git diff checks passed. The global documentation and file-size checks report pre-existing issues outside these changes.
+      - The pinned FSI case is preserved and documented. The intermediate checkpoint leaves the active task open and does not advance the ten-task full-run count.
 
 doc_version: 3
-doc_updated_at: "2026-11-22T00:31:27.822Z"
+doc_updated_at: "2026-11-22T00:46:02.917Z"
 doc_updated_by: "CODER"
 description: "Implement the approved coherent Writer search-and-replace feature from pinned LibreOffice sources: real shared search engine and options, native paragraph/cursor traversal and replacement/history contracts, view-owned search state and dispatch, Find toolbar and Find and Replace dialog with generated upstream command placement and shortcuts. Preserve source semantics and explicit unsupported boundaries; never substitute DOM text search or browser RegExp for ICU contracts. Work only on writer in vite-office-writer; local upstream reading approved, no network or merges. Keep active until approved scope is verified."
 sections:

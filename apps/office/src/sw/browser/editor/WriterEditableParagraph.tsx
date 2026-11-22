@@ -252,6 +252,7 @@ export function WriterEditableParagraph({
               : `${cellPosition.rowIndex}:${cellPosition.cellIndex}`
           }
           className={`whitespace-pre-wrap text-slate-950 outline-none ${listMarker === undefined ? "" : "min-w-0 flex-1"}`}
+          dir={paragraph.computedStyle.direction}
           data-alignment={paragraph.alignment}
           data-list-kind={paragraph.list.kind}
           data-list-level={paragraph.list.level}

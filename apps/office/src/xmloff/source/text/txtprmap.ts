@@ -818,6 +818,10 @@ export function applyTextImportProperties(
           add(name, value, typeof value === "boolean" ? "bool" : "sal_Int16");
       }
     }
+    if (paragraph.writingMode !== undefined) add("WritingMode", paragraph.writingMode, "sal_Int16");
+    if (paragraph.writingModeAutomatic !== undefined)
+      add("WritingModeAutomatic", paragraph.writingModeAutomatic, "bool");
+    if (paragraph.snapToGrid !== undefined) add("SnapToGrid", paragraph.snapToGrid, "bool");
     if (paragraph.verticalAlign !== undefined)
       add("ParaVertAlignment", paragraph.verticalAlign, "sal_Int16");
     if (paragraph.keepTogether !== undefined) add("ParaSplit", !paragraph.keepTogether, "bool");

@@ -1,6 +1,7 @@
 /** @fileoverview Resolves the supported Writer line-spacing rules from pinned itrform2.cxx. */
 
 import { SvxLineSpaceRule, SvxInterLineSpaceRule } from "../../../../editeng/inc/svxenum";
+import { SwTextGrid, type SwTextGridItem } from "../../../inc/tgrditem";
 import type { SvxLineSpacingItem } from "../../../../editeng/inc/lspcitem";
 
 /** Applies Writer proportional leading to the browser device font-height estimate. @param percent - Item percentage. @returns CSS line-height multiplier. */
@@ -43,4 +44,31 @@ export function projectWriterLineSpacing(item: SvxLineSpacingItem): {
     mode: "proportional",
     value: inter === SvxInterLineSpaceRule.Off ? 100 : item.GetPropLineSpace(),
   };
+}
+
+/** Resolves the browser line box with the page-grid branch of CalcRealHeight. @param spacing - Native paragraph spacing item. @param fontSizePt - Browser font-height input. @param grid - Page grid when the paragraph participates. @returns Line-height multiplier. */
+export function projectWriterGridLineHeight(
+  spacing: SvxLineSpacingItem,
+  fontSizePt: number,
+  grid?: SwTextGridItem,
+): number {
+  if (grid === undefined || grid.GetGridType() === SwTextGrid.NONE)
+    return projectWriterLineHeightItem(spacing, fontSizePt);
+  const pitch = grid.GetBaseHeight() + grid.GetRubyHeight();
+  if (pitch <= 0) return projectWriterLineHeightItem(spacing, fontSizePt);
+  const natural = Math.round(fontSizePt * 20 * 1.15);
+  const height = pitch * Math.ceil(natural / pitch);
+  switch (spacing.GetLineSpaceRule()) {
+    case SvxLineSpaceRule.Min:
+      return (
+        (spacing.GetLineHeight() === 0
+          ? natural + grid.GetRubyHeight()
+          : Math.max(height, spacing.GetLineHeight())) /
+        (fontSizePt * 20)
+      );
+    case SvxLineSpaceRule.Fix:
+      return Math.max(0.05, spacing.GetLineHeight() / (fontSizePt * 20));
+    default:
+      return height / (fontSizePt * 20);
+  }
 }

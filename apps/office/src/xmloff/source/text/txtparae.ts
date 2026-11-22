@@ -7,6 +7,7 @@ import { exportFillProperties } from "../draw/fill-properties";
 import { paragraphPropertiesKey, parseParagraphPropertiesKey } from "./txtparae-properties";
 import { exportTextConstant } from "./txtprhdl";
 import { Any } from "../../../cppu/inc/com/sun/star/uno/Any";
+import { exportWritingDirection } from "../style/prhdlfac";
 import { SvXMLUnitConverter } from "../core/xmluconv";
 import { exportParagraphJustification, type OdfParagraphAlignment } from "../style/adjushdl";
 import { XMLNumberWithAutoForVoidPropHdl } from "../style/xmlbahdl";
@@ -734,6 +735,15 @@ export function exportParagraphAttributes(properties: OdfParagraphProperties): s
       : [`style:contextual-spacing="${properties.contextualSpacing}"`]),
     ...exportParagraphHyphenation(properties.hyphenation),
     ...exportParagraphJustification(properties.justification),
+    ...(properties.writingMode === undefined
+      ? []
+      : [`style:writing-mode="${exportWritingDirection(properties.writingMode)}"`]),
+    ...(properties.writingModeAutomatic === undefined
+      ? []
+      : [`style:writing-mode-automatic="${properties.writingModeAutomatic}"`]),
+    ...(properties.snapToGrid === undefined
+      ? []
+      : [`style:snap-to-layout-grid="${properties.snapToGrid}"`]),
     ...(properties.registerModeActive === undefined
       ? []
       : [`style:register-true="${properties.registerModeActive}"`]),

@@ -1,0 +1,34 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/i18nutil/source/utility/guessparadirection.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "shared",
+    "subsystem": "text-script-analysis",
+    "capabilityIds": [
+      "CAP-3b2da041-e40a-4ae2-a28a-45a45be7f83e"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "none",
+      "evidence": [
+        "apps/office/src/i18nutil/source/utility/guessparadirection.ts#GuessParagraphDirection",
+        "vendor/libreoffice-reference/i18nutil/source/utility/guessparadirection.cxx#GuessParagraphDirection"
+      ],
+      "justification": "Uses the pinned Unicode bidi property lookup to detect the first qualifying strong code point and preserves the original isolate handling.",
+      "knownViolations": [],
+      "localSymbols": [
+        "GuessParagraphDirection"
+      ],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": "i18nutil/source/utility/guessparadirection.cxx",
+      "upstreamSymbols": [
+        "GuessParagraphDirection"
+      ]
+    }
+  }
+}
