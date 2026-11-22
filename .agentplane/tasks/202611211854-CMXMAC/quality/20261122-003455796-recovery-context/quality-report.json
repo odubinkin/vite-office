@@ -1,0 +1,25 @@
+{
+  "schema_version": 1,
+  "task_id": "202611211854-CMXMAC",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-11-22T00:34:55.796Z",
+  "verdict": "pass",
+  "summary": "Scheduled regression evidence and scoped repairs satisfy the checkpoint plan. All reported functional cases have passing evidence.",
+  "evaluated_sha": "e247d34f071b5dc4a84ca4c623d3570237315791",
+  "blueprint_digest": "be1cbccccb335c423b9d040829b01b03bafeb78a09d919b715e038585c4d26fc",
+  "findings": [
+    "The unchanged repository-wide Office coverage requirement still fails. Tooling, inventory and all 613 Chromium tests passed."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202611211854-CMXMAC/README.md",
+    "output/playwright/full-regression-CMXMAC/office.json",
+    "output/playwright/full-regression-CMXMAC/chromium-local.json",
+    "output/playwright/full-regression-CMXMAC/data-bar-editor-tracked.json"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": [
+    "The Office coverage baseline is below the repository threshold and its two timing-related failures passed without instrumentation."
+  ]
+}

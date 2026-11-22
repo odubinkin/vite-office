@@ -4,7 +4,7 @@ title: "Run the Writer and Calc ODF full regression checkpoint"
 status: "DOING"
 priority: "high"
 owner: "CODER"
-revision: 17
+revision: 23
 origin:
   system: "manual"
 depends_on: []
@@ -18,11 +18,29 @@ plan_approval:
   updated_by: "ORCHESTRATOR"
   note: null
 verification:
-  state: "pending"
-  updated_at: null
-  updated_by: null
-  note: null
+  state: "ok"
+  updated_at: "2026-11-22T00:34:45.731Z"
+  updated_by: "CODER"
+  note: "Completed all scheduled regression commands, resolved or reproduced successfully each failed functional case in its owner, and preserved the existing unmet Office coverage gate."
   attempts: 0
+quality_review:
+  state: "pass"
+  updated_at: "2026-11-22T00:34:55.796Z"
+  updated_by: "EVALUATOR"
+  note: "Scheduled regression evidence and scoped repairs satisfy the checkpoint plan. All reported functional cases have passing evidence."
+  evaluated_sha: "e247d34f071b5dc4a84ca4c623d3570237315791"
+  blueprint_digest: "be1cbccccb335c423b9d040829b01b03bafeb78a09d919b715e038585c4d26fc"
+  evidence_refs:
+    - ".agentplane/tasks/202611211854-CMXMAC/README.md"
+    - ".agentplane/tasks/202611211854-CMXMAC/quality/20261122-003455796-recovery-context/quality-report.json"
+    - ".agentplane/tasks/202611211854-CMXMAC/quality/20261122-003455796-recovery-context/evaluator-prompt.md"
+    - ".agentplane/tasks/202611211854-CMXMAC/quality/20261122-003455796-recovery-context/evaluator-opinion.md"
+    - ".agentplane/tasks/202611211854-CMXMAC/blueprint/resolved-snapshot.json"
+    - "output/playwright/full-regression-CMXMAC/office.json"
+    - "output/playwright/full-regression-CMXMAC/chromium-local.json"
+    - "output/playwright/full-regression-CMXMAC/data-bar-editor-tracked.json"
+  findings:
+    - "The unchanged repository-wide Office coverage requirement still fails. Tooling, inventory and all 613 Chromium tests passed."
 commit: null
 comments:
   -
@@ -36,8 +54,14 @@ events:
     from: "TODO"
     to: "DOING"
     note: "Start: run full Office, Chromium, tooling and inventory regressions from the tenth ODF task checkpoint."
+  -
+    type: "verify"
+    at: "2026-11-22T00:34:45.731Z"
+    author: "CODER"
+    state: "ok"
+    note: "Completed all scheduled regression commands, resolved or reproduced successfully each failed functional case in its owner, and preserved the existing unmet Office coverage gate."
 doc_version: 3
-doc_updated_at: "2026-11-21T22:59:03.213Z"
+doc_updated_at: "2026-11-22T00:34:45.780Z"
 doc_updated_by: "CODER"
 description: "After ten completed Writer and Calc ODF tasks, run all application unit and integration projects with coverage, all browser projects, tooling, and inventory checks. Diagnose and fix regressions and validate repaired owners. Keep the active alignment goal running after the checkpoint."
 sections:
@@ -53,7 +77,47 @@ sections:
     - Run `npm run test:tooling -- --hookTimeout=60000 --testTimeout=60000` and `npm run test:inventory:coverage -- --maxWorkers=1 --hookTimeout=60000 --testTimeout=60000`.
     - Rerun each functional failure in its owning test suite after diagnosis or repair. Check changed TypeScript with lint, formatting and office typecheck and run boundary and provenance guards for any code changes.
     - Run `node .agentplane/policy/check-routing.mjs`, `ap doctor` and `git diff --check`, and record the finished tracked status.
-  Verification: "Pending full regression."
+  Verification: |-
+    Pending full regression.
+
+    <!-- BEGIN VERIFICATION RESULTS -->
+    ### 2026-11-22T00:34:45.731Z — VERIFY — ok
+
+    By: CODER
+
+    Note: Completed all scheduled regression commands, resolved or reproduced successfully each failed functional case in its owner, and preserved the existing unmet Office coverage gate.
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-21T23:23:45.779Z, excerpt_hash=sha256:8de2cd1ca44a40ac2a48b522ebbb15da0c93c03bd79fc250285aa63d74ceca7f
+
+    Details:
+
+    Office coverage baseline: 2256 files passed, 3 failed. 33943 tests passed, 3 failed, 23 skipped. The linked-footer DOCX test and DOCX dialog reopen passed isolated replays. The stale Writer UNO schema count was repaired and all three owner tests passed. Office coverage remains below 100% at 95.96% statements, 93.37% branches, 97.97% functions and 96.82% lines.
+    Tooling: 194 tests in 47 files passed. Inventory coverage: 130 tests in 38 files passed at 100% on all four metrics.
+    Production Chromium: 613 passed, 0 failed, 0 skipped, 0 flaky. Writer 431, Calc 114, shared 68. The installed repository-local Chromium was required after the default cache failed to launch.
+    Calc editor repair e247d34f071b: all 9 targeted conditional-format and ODS data-bar tests passed. Changed-source lint, formatting, Office typecheck, module boundary and provenance checks passed. Routing, AgentPlane doctor and diff checks passed. Doctor reported the existing hook shim warning.
+    Durable evidence: output/playwright/full-regression-CMXMAC, including coverage and browser stage status files and separate owner retry reports.
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202611211854-CMXMAC/blueprint/resolved-snapshot.json
+    - old_digest: be1cbccccb335c423b9d040829b01b03bafeb78a09d919b715e038585c4d26fc
+    - current_digest: be1cbccccb335c423b9d040829b01b03bafeb78a09d919b715e038585c4d26fc
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202611211854-CMXMAC
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task verify-show 202611211854-CMXMAC
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: false
+    - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+    - risks: none
+
+    <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Revert any scoped repair commit independently of the checkpoint evidence."
   Findings: |-
     The preceding task records baseline repository file-size debt.
@@ -105,6 +169,22 @@ sections:
     - Observation: Full Office coverage reported a stale 88-entry assertion in native-text-default-schema.test.ts. The current Writer default map exposes 94 entries after BN5ECR.
       Impact: The six added character property names are in the pinned LibreOffice COMMON_CRSR_PARA_PROPERTIES_WITHOUT_FN macro already recorded in native-text-default-schema.upstream.json. Upstream GetTextDefaultPropertyMap uses that macro and the provider clears MAYBEVOID except for PageDescName.
       Resolution: Updated the supported row count and explicitly verified the three overline members, contour, shadow and relief through the UNO default-table metadata. All three owner tests, ESLint, Prettier and diff checks passed. The production Writer schema stayed untouched.
+
+    - Observation: The Office baseline completed with 2,256 passing and 3 failing files; 33,943 passed, 3 failed and 23 skipped. The configured 100% coverage gate failed at 95.96% statements, 93.37% branches, 97.97% functions and 96.82% lines.
+      Impact: Each failed Office case passed an isolated owner rerun after diagnosis or the schema assertion repair. The baseline coverage gate remains failed.
+      Resolution: Keep the baseline and retry JSON reports with the checkpoint. The Calc editor repair was committed as e247d34f071b, and the normal tracked-source editor and filter suites passed nine tests. Scoped lint, formatting, Office typecheck, boundary guards, provenance, routing and diff checks passed.
+
+    - Observation: The previous complete Office checkpoint QMYDFT recorded 95.97% statement, 93.39% branch, 97.98% function and 96.82% line coverage at the same 100% gate.
+      Impact: The global coverage failure predates this checkpoint. The current baseline metrics moved by -0.01, -0.02, -0.01 and 0.00 percentage points respectively.
+      Resolution: Record both checkpoints and preserve the existing threshold. Functional failure recovery is tracked independently by owner and report.
+
+    - Observation: The tooling run passed 194 tests in 47 files. The inventory coverage run passed 130 tests in 38 files and measured 100% for statements, branches, functions and lines.
+      Impact: The boundary, registry and inventory checks remain healthy after the checkpoint repairs.
+      Resolution: The reports are tooling.json and inventory.json. The Chromium stage now builds the production application, and Playwright discovers 613 tests in 275 files across Writer, Calc and shared.
+
+    - Observation: The production build passed. The first Chromium invocation launched with the default cache and immediately failed because its headless executable was absent, as on QMYDFT.
+      Impact: The first attempts never opened the application. The process was stopped to avoid repeating the same environment failure across 613 cases.
+      Resolution: Relaunched all 613 Chromium cases using the already built production bundle and the installed repository-local Chromium cache, retaining separate logs and JSON. The live session is 94776 and its logs use the chromium-local prefix.
 id_source: "generated"
 ---
 ## Summary
@@ -132,6 +212,45 @@ All Office unit and integration projects, all production Chromium projects, tool
 ## Verification
 
 Pending full regression.
+
+<!-- BEGIN VERIFICATION RESULTS -->
+### 2026-11-22T00:34:45.731Z — VERIFY — ok
+
+By: CODER
+
+Note: Completed all scheduled regression commands, resolved or reproduced successfully each failed functional case in its owner, and preserved the existing unmet Office coverage gate.
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-21T23:23:45.779Z, excerpt_hash=sha256:8de2cd1ca44a40ac2a48b522ebbb15da0c93c03bd79fc250285aa63d74ceca7f
+
+Details:
+
+Office coverage baseline: 2256 files passed, 3 failed. 33943 tests passed, 3 failed, 23 skipped. The linked-footer DOCX test and DOCX dialog reopen passed isolated replays. The stale Writer UNO schema count was repaired and all three owner tests passed. Office coverage remains below 100% at 95.96% statements, 93.37% branches, 97.97% functions and 96.82% lines.
+Tooling: 194 tests in 47 files passed. Inventory coverage: 130 tests in 38 files passed at 100% on all four metrics.
+Production Chromium: 613 passed, 0 failed, 0 skipped, 0 flaky. Writer 431, Calc 114, shared 68. The installed repository-local Chromium was required after the default cache failed to launch.
+Calc editor repair e247d34f071b: all 9 targeted conditional-format and ODS data-bar tests passed. Changed-source lint, formatting, Office typecheck, module boundary and provenance checks passed. Routing, AgentPlane doctor and diff checks passed. Doctor reported the existing hook shim warning.
+Durable evidence: output/playwright/full-regression-CMXMAC, including coverage and browser stage status files and separate owner retry reports.
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202611211854-CMXMAC/blueprint/resolved-snapshot.json
+- old_digest: be1cbccccb335c423b9d040829b01b03bafeb78a09d919b715e038585c4d26fc
+- current_digest: be1cbccccb335c423b9d040829b01b03bafeb78a09d919b715e038585c4d26fc
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202611211854-CMXMAC
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task verify-show 202611211854-CMXMAC
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: false
+- repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- risks: none
+
+<!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
 
@@ -188,3 +307,19 @@ The preceding task records baseline repository file-size debt.
 - Observation: Full Office coverage reported a stale 88-entry assertion in native-text-default-schema.test.ts. The current Writer default map exposes 94 entries after BN5ECR.
   Impact: The six added character property names are in the pinned LibreOffice COMMON_CRSR_PARA_PROPERTIES_WITHOUT_FN macro already recorded in native-text-default-schema.upstream.json. Upstream GetTextDefaultPropertyMap uses that macro and the provider clears MAYBEVOID except for PageDescName.
   Resolution: Updated the supported row count and explicitly verified the three overline members, contour, shadow and relief through the UNO default-table metadata. All three owner tests, ESLint, Prettier and diff checks passed. The production Writer schema stayed untouched.
+
+- Observation: The Office baseline completed with 2,256 passing and 3 failing files; 33,943 passed, 3 failed and 23 skipped. The configured 100% coverage gate failed at 95.96% statements, 93.37% branches, 97.97% functions and 96.82% lines.
+  Impact: Each failed Office case passed an isolated owner rerun after diagnosis or the schema assertion repair. The baseline coverage gate remains failed.
+  Resolution: Keep the baseline and retry JSON reports with the checkpoint. The Calc editor repair was committed as e247d34f071b, and the normal tracked-source editor and filter suites passed nine tests. Scoped lint, formatting, Office typecheck, boundary guards, provenance, routing and diff checks passed.
+
+- Observation: The previous complete Office checkpoint QMYDFT recorded 95.97% statement, 93.39% branch, 97.98% function and 96.82% line coverage at the same 100% gate.
+  Impact: The global coverage failure predates this checkpoint. The current baseline metrics moved by -0.01, -0.02, -0.01 and 0.00 percentage points respectively.
+  Resolution: Record both checkpoints and preserve the existing threshold. Functional failure recovery is tracked independently by owner and report.
+
+- Observation: The tooling run passed 194 tests in 47 files. The inventory coverage run passed 130 tests in 38 files and measured 100% for statements, branches, functions and lines.
+  Impact: The boundary, registry and inventory checks remain healthy after the checkpoint repairs.
+  Resolution: The reports are tooling.json and inventory.json. The Chromium stage now builds the production application, and Playwright discovers 613 tests in 275 files across Writer, Calc and shared.
+
+- Observation: The production build passed. The first Chromium invocation launched with the default cache and immediately failed because its headless executable was absent, as on QMYDFT.
+  Impact: The first attempts never opened the application. The process was stopped to avoid repeating the same environment failure across 613 cases.
+  Resolution: Relaunched all 613 Chromium cases using the already built production bundle and the installed repository-local Chromium cache, retaining separate logs and JSON. The live session is 94776 and its logs use the chromium-local prefix.
