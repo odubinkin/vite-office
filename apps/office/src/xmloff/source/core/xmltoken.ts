@@ -215,6 +215,11 @@ const entries: readonly (readonly [string, string, XMLToken])[] = [
   [ODF_NAMESPACES.style, "font-relief", XMLToken.STYLE_FONT_RELIEF],
   [ODF_NAMESPACES.style, "join-border", XMLToken.STYLE_JOIN_BORDER],
   [ODF_NAMESPACES.style, "register-true", XMLToken.STYLE_REGISTER_TRUE],
+  [
+    ODF_NAMESPACES.style,
+    "register-truth-ref-style-name",
+    XMLToken.STYLE_REGISTER_TRUTH_REF_STYLE_NAME,
+  ],
   [ODF_NAMESPACES.fo, "hyphenate", XMLToken.FO_HYPHENATE],
   [ODF_NAMESPACES.fo, "hyphenation-remain-char-count", XMLToken.FO_HYPHENATION_REMAIN_CHAR_COUNT],
   [ODF_NAMESPACES.fo, "hyphenation-push-char-count", XMLToken.FO_HYPHENATION_PUSH_CHAR_COUNT],

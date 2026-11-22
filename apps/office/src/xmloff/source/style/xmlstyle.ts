@@ -81,6 +81,7 @@ export interface OdfPageLayout {
   readonly usage?: PageStyleLayout;
   readonly direction?: number;
   readonly rtlGutter?: boolean;
+  readonly registerParagraphStyle?: string;
   readonly grid: readonly OdfPageGridProperty[];
   readonly height: number;
   readonly landscape: boolean;
@@ -276,6 +277,7 @@ class XMLPageLayoutContext extends SvXMLImportContext {
     const gutterValue = attributes.get(XMLToken.LOEXT_MARGIN_GUTTER);
     const gutter = gutterValue === null ? null : Converter.convertMeasure(gutterValue, "mm100", 0);
     const writing = attributes.get(XMLToken.STYLE_WRITING_MODE);
+    const register = attributes.get(XMLToken.STYLE_REGISTER_TRUTH_REF_STYLE_NAME);
     const direction = writing === null ? undefined : importWritingDirection(writing);
     const { margins, explicit: explicitMargins } = importPageMargins(attributes);
     this.layout = {
@@ -285,6 +287,7 @@ class XMLPageLayoutContext extends SvXMLImportContext {
       ...(this.usage === undefined ? {} : { usage: this.usage }),
       ...(direction === undefined ? {} : { direction }),
       ...(writing === null ? {} : { rtlGutter: ["rl-tb", "tb-rl", "rl", "tb"].includes(writing) }),
+      ...(register ? { registerParagraphStyle: register } : {}),
       margins,
       explicitMargins,
       grid: importPageGrid(attributes),

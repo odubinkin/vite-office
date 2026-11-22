@@ -96,6 +96,7 @@
     "setOptimalRowHeight": ".uno:SetOptimalRowHeight",
     "distributeRows": ".uno:DistributeRows",
     "toggleHorizontalRuler": ".uno:Ruler",
+    "toggleBaselineGrid": ".uno:BaselineGridVisible",
     "toggleVerticalRuler": ".uno:VRuler",
     "toggleSidebar": ".uno:Sidebar",
     "showAnnotations": ".uno:ShowAnnotations",
@@ -182,6 +183,7 @@
     { "capabilityId": "CAP-0113", "commandUrl": ".uno:SaveAs" },
     { "capabilityId": "CAP-0103", "commandUrl": ".uno:SelectAll" },
     { "capabilityId": "CAP-0104", "commandUrl": ".uno:Ruler" },
+    { "capabilityId": "CAP-0104", "commandUrl": ".uno:BaselineGridVisible" },
     { "capabilityId": "CAP-0104", "commandUrl": ".uno:VRuler" },
     { "capabilityId": "CAP-0104", "commandUrl": ".uno:Sidebar" },
     { "capabilityId": "CAP-0104", "commandUrl": ".uno:ShowAnnotations" },
@@ -1217,6 +1219,18 @@
       "showsDialog": false,
       "shortcuts": [],
       "slotId": 20211
+    },
+    ".uno:BaselineGridVisible": {
+      "browserOwned": false,
+      "argumentSchema": [],
+      "capabilityId": "CAP-0104",
+      "controlLabel": "Display Baseline Grid",
+      "label": "Display Baseline Grid",
+      "placements": ["sw/uiconfig/swriter/menubar/menubar.xml"],
+      "semantics": "check",
+      "showsDialog": false,
+      "shortcuts": [],
+      "slotId": 20274
     },
     ".uno:VRuler": {
       "browserOwned": false,
@@ -2268,6 +2282,11 @@
     {
       "classification": "supported-upstream",
       "commandUrl": ".uno:Ruler",
+      "sources": ["sw/uiconfig/swriter/menubar/menubar.xml"]
+    },
+    {
+      "classification": "supported-upstream",
+      "commandUrl": ".uno:BaselineGridVisible",
       "sources": ["sw/uiconfig/swriter/menubar/menubar.xml"]
     },
     {
@@ -3329,22 +3348,6 @@
       "context": [".uno:ViewMenu", ".uno:GridsMenu"],
       "entryKind": "command",
       "sourceUrl": ".uno:HelplinesMove",
-      "reason": "outside-p1-supported-command-slice",
-      "sourcePath": "sw/uiconfig/swriter/menubar/menubar.xml"
-    },
-    {
-      "classification": "X",
-      "context": [".uno:ViewMenu", ".uno:GridsMenu"],
-      "entryKind": "command",
-      "sourceUrl": ".uno:BaselineGridVisible",
-      "reason": "outside-p1-supported-command-slice",
-      "sourcePath": "sw/uiconfig/swriter/menubar/menubar.xml"
-    },
-    {
-      "classification": "X",
-      "context": [".uno:ViewMenu"],
-      "entryKind": "menu",
-      "sourceUrl": ".uno:GridsMenu",
       "reason": "outside-p1-supported-command-slice",
       "sourcePath": "sw/uiconfig/swriter/menubar/menubar.xml"
     },
@@ -7982,6 +7985,14 @@
             "kind": "menu",
             "label": "Rulers"
           },
+          {
+            "id": ".uno:GridsMenu",
+            "items": [
+              { "commandUrl": ".uno:BaselineGridVisible", "kind": "command", "visible": true }
+            ],
+            "kind": "menu",
+            "label": "Grids and Helplines"
+          },
           { "kind": "separator" },
           { "commandUrl": ".uno:ShowAnnotations", "kind": "command", "visible": true },
           { "commandUrl": ".uno:ShowResolvedAnnotations", "kind": "command", "visible": true },
@@ -8944,18 +8955,6 @@
         "context": [".uno:ViewMenu", ".uno:GridsMenu"],
         "entryKind": "command",
         "sourceUrl": ".uno:HelplinesMove"
-      },
-      {
-        "classification": "X",
-        "context": [".uno:ViewMenu", ".uno:GridsMenu"],
-        "entryKind": "command",
-        "sourceUrl": ".uno:BaselineGridVisible"
-      },
-      {
-        "classification": "X",
-        "context": [".uno:ViewMenu"],
-        "entryKind": "menu",
-        "sourceUrl": ".uno:GridsMenu"
       },
       {
         "classification": "X",

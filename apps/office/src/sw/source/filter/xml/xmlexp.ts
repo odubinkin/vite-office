@@ -363,7 +363,11 @@ export function exportStylesXml(document: SwDoc, graphicHelper?: SvXMLGraphicHel
             : PageStyleLayout.ALL;
     const layoutName = `pm${index + 1}`;
     const background = pageBackgrounds.exportBackground(master);
-    const properties = `<style:page-layout-properties fo:page-width="${exportOdfLength(page.width)}" fo:page-height="${exportOdfLength(page.height)}" style:print-orientation="${page.landscape ? "landscape" : "portrait"}" fo:margin-top="${top}" fo:margin-bottom="${exportPageMargin(page.bottomMargin)}" fo:margin-left="${left}" fo:margin-right="${right}"${exportPageLayoutBox(master, exportOdfLength)}${exportPageWritingAndGrid(master)}${background.attributes}`;
+    const register = descriptor.GetRegisterFormatColl();
+    const registerProperty = register
+      ? ` style:register-truth-ref-style-name="${escapeXml(getParagraphOdfStyleName(document, register.id))}"`
+      : "";
+    const properties = `<style:page-layout-properties fo:page-width="${exportOdfLength(page.width)}" fo:page-height="${exportOdfLength(page.height)}" style:print-orientation="${page.landscape ? "landscape" : "portrait"}" fo:margin-top="${top}" fo:margin-bottom="${exportPageMargin(page.bottomMargin)}" fo:margin-left="${left}" fo:margin-right="${right}"${exportPageLayoutBox(master, exportOdfLength)}${exportPageWritingAndGrid(master)}${registerProperty}${background.attributes}`;
     const content = background.children
       ? `${properties}>${background.children}</style:page-layout-properties>`
       : `${properties}/>`;

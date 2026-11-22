@@ -13,6 +13,9 @@ import { SwFrameType, type SwFrame } from "../layout/wsfrm";
 import { SvxULSpaceItem } from "../../../../editeng/source/items/frmitems";
 import { SfxBoolItem } from "../../../../svl/source/items/cenumitm";
 import { SfxInt16Item } from "../../../../svl/source/items/intitem";
+import type { SvxFontHeightItem } from "../../../../editeng/inc/fhgtitem";
+import { GetParagraphRegister } from "./itrform2";
+import type { SwRegisterMetrics } from "../layout/pagechg";
 import { SwFormatPageDesc } from "../attr/fmtpdsc";
 import { SwPosition, type SwPaM } from "../crsr/pam";
 import { SwTextCursor, SwTextIter } from "./itrtxt";
@@ -22,6 +25,7 @@ import { SwLineLayout, SwParaPortion } from "./porlay";
 import { MoveTextFrameMargin } from "./frmcrsr";
 import {
   RES_BREAK,
+  RES_CHRATR_FONTSIZE,
   RES_KEEP,
   RES_LINENUMBER,
   RES_PAGEDESC,
@@ -114,6 +118,7 @@ export interface SwTextFrameInput {
   readonly pageNumber?: number;
   readonly countLineNumbers?: boolean;
   readonly lineNumberStartValue?: number;
+  readonly register?: SwRegisterMetrics & { readonly naturalHeight: number };
 }
 
 /** Reads layout-owned values from canonical Writer nodes, pairing them only with measured lines. @param document - Active Writer document. @param measurements - Browser device line geometry in document order. @returns Core frame inputs. */
@@ -136,6 +141,8 @@ export function createSwTextFrameInputs(
       const pageDesc = node.GetAttr(RES_PAGEDESC) as SwFormatPageDesc;
       const pageNumber = pageDesc.GetNumOffset();
       const lineNumber = node.GetAttr(RES_LINENUMBER) as SwFormatLineNumber;
+      const register = GetParagraphRegister(node);
+      const fontHeight = (node.GetAttr(RES_CHRATR_FONTSIZE) as SvxFontHeightItem).GetHeight();
       return {
         node,
         id: measurement.id,
@@ -144,6 +151,9 @@ export function createSwTextFrameInputs(
         style: node.GetParagraphStyle(),
         contextualSpacing: spacing.GetContext(),
         upperSpacing: spacing.GetUpper(),
+        ...(register
+          ? { register: { ...register, naturalHeight: Math.round(fontHeight * 1.15) } }
+          : {}),
         keepWithNext: (node.GetAttr(RES_KEEP) as SfxBoolItem).GetValue(),
         keepTogether: !(node.GetAttr(RES_PARATR_SPLIT) as SfxBoolItem).GetValue(),
         orphans: (node.GetAttr(RES_PARATR_ORPHANS) as SfxInt16Item).GetValue(),

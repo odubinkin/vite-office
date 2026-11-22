@@ -59,6 +59,7 @@ import {
   type OdfFontFaceMetadata,
 } from "../../../../xmloff/source/style/XMLFontStylesContext";
 import { XMLStylesContext, type OdfPageLayout } from "../../../../xmloff/source/style/xmlstyle";
+import { applyPageRegisterReference } from "../../core/layout/pagedesc";
 import type { Theme } from "../../../../docmodel/inc/theme/Theme";
 import type { XMLTableImportTarget } from "../../../../xmloff/source/table/XMLTableImport";
 import { SwXMLTableImport } from "./xmltbli";
@@ -765,6 +766,18 @@ class SwXMLImport
             setProperty("PageStyleLayout", pageLayoutType(), layout.usage);
           const page = this.model.GetDoc().FindPageDesc(name);
           if (page) importPageLayoutBox(page, layout);
+          if (page && layout.registerParagraphStyle) {
+            const styleName = layout.registerParagraphStyle;
+            const identity =
+              this.resolveNamedParagraphStyle(styleName) ?? getWriterStyleIdFromOdfName(styleName);
+            const reference =
+              identity && getWriterMaterializedParagraphStyleDefinition(identity)
+                ? this.document.GetTextFormatColl(identity)
+                : identity
+                  ? this.document.FindTextFormatColl(identity)
+                  : this.document.FindTextFormatCollByName(styleName);
+            if (reference) applyPageRegisterReference(page, reference);
+          }
           if (page?.GetUseOn() === UseOnPage.Mirror) {
             page.Mirror();
             page.GetFirstLeft().SetFormatAttr(page.GetLeft().GetLRSpace());

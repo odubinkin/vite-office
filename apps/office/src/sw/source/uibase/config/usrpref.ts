@@ -19,6 +19,8 @@ export class SwMasterUsrPref {
   private m_bIsHScrollMetricSet = false;
   private m_bIsVScrollMetricSet = false;
   private metricModified = false;
+  private baselineGridVisible = false;
+  private baselineGridModified = false;
   /** Source locale default followed by represented SwLayoutViewConfig load. @param values - Actual configuration property values. @returns Preferences. */
   constructor(values: SwMetricConfigValues = {}) {
     this.m_eUserMetric =
@@ -98,5 +100,23 @@ export class SwMasterUsrPref {
   /** Acknowledges successful platform property persistence without a ConfigItem substitute. @returns Nothing. */
   ClearMetricModified(): void {
     this.metricModified = false;
+  }
+  /** Reads the native BaselineGrid configuration value. @returns Visibility preference. */
+  IsBaselineGridVisible(): boolean {
+    return this.baselineGridVisible;
+  }
+  /** Stores the native BaselineGrid flag. @param visible - New visibility. @param noModify - Configuration read. @returns Nothing. */
+  SetBaselineGridVisible(visible: boolean, noModify = false): void {
+    if (visible === this.baselineGridVisible) return;
+    this.baselineGridVisible = visible;
+    if (!noModify) this.baselineGridModified = true;
+  }
+  /** Reads the separate native configuration dirty state. @returns Whether persistence is needed. */
+  IsBaselineGridModified(): boolean {
+    return this.baselineGridModified;
+  }
+  /** Acknowledges the committed baseline-grid configuration item. @returns Nothing. */
+  ClearBaselineGridModified(): void {
+    this.baselineGridModified = false;
   }
 }

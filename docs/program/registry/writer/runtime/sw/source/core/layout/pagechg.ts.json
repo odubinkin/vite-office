@@ -19,20 +19,24 @@
         "apps/office/src/sw/source/core/layout/pagechg.ts#FormatBodyTextGrid",
         "apps/office/src/sw/browser/presentation/WriterPageTextGrid.test.tsx",
         "vendor/libreoffice-reference/sw/source/core/layout/pagechg.cxx#SwBodyFrame::Format",
-        "vendor/libreoffice-reference/sw/source/core/layout/pagechg.cxx#GetGridWidth"
+        "vendor/libreoffice-reference/sw/source/core/layout/pagechg.cxx#GetGridWidth",
+        "apps/office/src/sw/browser/presentation/WriterPageRegister.test.tsx",
+        "vendor/libreoffice-reference/sw/source/core/layout/pagechg.cxx#SwPageFrame::ComputeRegister"
       ],
-      "justification": "Centers the page body on the original text-grid line and cell sizes. The existing Writer slice has no connected page footnote frame neighbors.",
+      "justification": "Centers the page body on the original text-grid line and cell sizes. The existing Writer slice has no connected page footnote frame neighbors. Computes the native page line-spacing reference pitch from paragraph spacing and the browser font device.",
       "knownViolations": [],
       "localSymbols": [
         "FormatBodyTextGrid",
         "GetGridWidth",
-        "IsVerticalTextGrid"
+        "IsVerticalTextGrid",
+        "ComputeRegister"
       ],
       "sourceResponsibility": "unverified",
       "upstreamFile": "sw/source/core/layout/pagechg.cxx",
       "upstreamSymbols": [
         "SwBodyFrame::Format",
-        "GetGridWidth"
+        "GetGridWidth",
+        "SwPageFrame::ComputeRegister"
       ]
     }
   }

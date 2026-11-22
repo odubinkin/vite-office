@@ -7,13 +7,18 @@
     "localPath": "apps/office/src/sw/browser/editor/WriterTextGrid.tsx",
     "rationale": "Paints original grid lines, ruby bands and character cells using a CSS browser device.",
     "responsibilities": [
-      "Paints original grid lines, ruby bands and character cells using a CSS browser device."
+      "Paints original grid lines, ruby bands and character cells using a CSS browser device.",
+      "Paints the independent View baseline grid and suppresses it for print."
     ],
     "evidence": {
       "local": [
         {
           "path": "apps/office/src/sw/browser/editor/WriterTextGrid.tsx",
           "marker": "WriterPageTextGrid"
+        },
+        {
+          "path": "apps/office/src/sw/browser/editor/WriterTextGrid.tsx",
+          "marker": "WriterBaselineGrid"
         }
       ]
     },

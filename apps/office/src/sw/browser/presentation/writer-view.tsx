@@ -136,6 +136,13 @@ export function WriterWorkbench({
     presentationStore.GetSnapshot,
     presentationStore.GetSnapshot,
   );
+  useEffect(
+    /** Persists the native baseline grid preference outside the document. @returns Nothing. */
+    () => {
+      services?.layoutPreferences?.Save(view.GetModule().GetUsrPref(false));
+    },
+    [services, snapshot.isBaselineGridVisible, view],
+  );
   const searchOwner = view.GetSearch();
   const searchFeedback = useSyncExternalStore(
     searchOwner.SubscribeFeedback,
@@ -830,6 +837,9 @@ export function WriterWorkbench({
           textNodes={snapshot.textNodes}
           selectedTableBoxes={snapshot.selectedTableBoxes}
           showLineNumbers={snapshot.lineNumberInfo.paintLineNumbers}
+          {...(snapshot.isBaselineGridVisible
+            ? { baselineGridColor: snapshot.baselineGridColor }
+            : {})}
           lineNumberInfo={snapshot.lineNumberInfo}
           verticalRuler={
             snapshot.isVerticalRulerVisible ? (

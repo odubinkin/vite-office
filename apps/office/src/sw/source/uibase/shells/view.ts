@@ -162,6 +162,14 @@ export function createWriterViewCommandRegistry(
     },
     {
       capabilityId: "CAP-0104",
+      /** Toggles the native baseline-grid view setting. @returns Nothing. */
+      execute: (): void => target.ToggleBaselineGrid(),
+      id: WRITER_COMMAND_IDS.toggleBaselineGrid,
+      /** Reads the current native baseline-grid visibility. @returns Checked state. */
+      isChecked: (): boolean => target.IsBaselineGridVisible(),
+    },
+    {
+      capabilityId: "CAP-0104",
       /** Toggles status-bar visibility. @returns Nothing. */
       execute: (): void => target.ToggleStatusBar(),
       id: WRITER_COMMAND_IDS.toggleStatusBar,

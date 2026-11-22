@@ -19,7 +19,9 @@ import {
   RES_SHADOW,
 } from "../../../inc/hintids";
 import type { SwDoc } from "../doc/doc";
-import { BroadcastingModify } from "../../../inc/calbck";
+import { BroadcastingModify, SwClient } from "../../../inc/calbck";
+import type { SwTextFormatColl } from "../doc/fmtcol";
+import { SwRegisterItem } from "../para/paratr";
 import type { SwFindNearestNode } from "../../../inc/hints";
 import { SwFrameSize } from "../../../inc/fmtfsize";
 import { SvxLRSpaceItem, SvxIndentValue } from "../../../../editeng/inc/lrspitem";
@@ -73,6 +75,16 @@ export class SwPageDesc extends BroadcastingModify {
   private readonly m_FirstLeft: SwFrameFormat;
   private m_StyleName: string;
   private m_pFollow: SwPageDesc;
+  private m_pTextFormatColl: SwTextFormatColl | undefined;
+  private readonly registerDepend = new SwClient(
+    /** Detaches the page reference when its original style dies. @param _source - Original style. @param hint - Broadcast hint. @returns Nothing. */
+    (_source, hint) => {
+      if (hint.kind === "object-dying") {
+        this.registerDepend.EndListeningAll();
+        this.m_pTextFormatColl = undefined;
+      }
+    },
+  );
   private m_IsLandscape = false;
   private readonly stashedStoryFormats = new Map<number, SwFormatHeader | SwFormatFooter>();
   private m_eUse: UseOnPage =
@@ -117,8 +129,24 @@ export class SwPageDesc extends BroadcastingModify {
       this.m_IsLandscape = source.m_IsLandscape;
       this.m_eUse = source.m_eUse;
       this.CopyStashedStoryFormats(source);
+      this.SetRegisterFormatColl(source.GetRegisterFormatColl());
     }
   }
+  /** Follows the live style used to compute page line-spacing metrics. @param format - Document-owned reference paragraph style. @returns Nothing. */
+  public SetRegisterFormatColl(format?: SwTextFormatColl): void {
+    if (format === this.m_pTextFormatColl) return;
+    this.registerDepend.EndListeningAll();
+    this.m_pTextFormatColl = format;
+    if (format) this.registerDepend.RegisterToModify(format);
+  }
+
+  /** Returns the reference only while the original registration is live. @returns Paragraph style or absence. */
+  public GetRegisterFormatColl(): SwTextFormatColl | undefined {
+    return this.registerDepend.GetRegisteredIn() === this.m_pTextFormatColl
+      ? this.m_pTextFormatColl
+      : undefined;
+  }
+
   /** Original descriptor pool identity is owned by the master format. @returns Native ID. */
   GetPoolFormatId(): SwPoolFormatId {
     return this.m_Master.GetPoolFormatId();
@@ -315,10 +343,22 @@ export class SwPageDesc extends BroadcastingModify {
     return copy;
   }
   /** Releases actual frame-format clients before the descriptor notifier. @returns Nothing. */ override DisposeModify(): void {
+    this.SetRegisterFormatColl();
     for (const frame of [this.m_FirstLeft, this.m_FirstMaster, this.m_Left, this.m_Master])
       frame.DisposeModify();
     for (const key of this.stashedStoryFormats.keys()) this.StashStoryFormat(key);
     super.DisposeModify();
+  }
+}
+
+/** Applies the original register reference and turns on register participation on its paragraph style. @param page - Actual page descriptor. @param reference - Canonical paragraph style. @returns Nothing. */
+export function applyPageRegisterReference(page: SwPageDesc, reference: SwTextFormatColl): void {
+  const register = new SwRegisterItem(true);
+  try {
+    reference.SetFormatAttr(register);
+    page.SetRegisterFormatColl(reference);
+  } finally {
+    register.Dispose();
   }
 }
 

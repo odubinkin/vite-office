@@ -26,9 +26,9 @@ export class SwParaConnectBorderItem extends SfxBoolItem {
 
 /** Native paragraph participation in page line-spacing. */
 export class SwRegisterItem extends SfxBoolItem {
-  /** Creates the paragraph register item. @param active - Participation in page line-spacing. @returns Item. */
-  public constructor(active = false) {
-    super(RES_PARATR_REGISTER, active);
+  /** Creates the original register item for its paragraph or Page Style slot. @param active - Participation in page line-spacing. @param which - Paragraph WhichId or page dialog slot. @returns Item. */
+  public constructor(active = false, which: number = RES_PARATR_REGISTER) {
+    super(which, active);
   }
 
   /** Creates the native pool default. @returns Item with participation disabled. */
@@ -38,7 +38,7 @@ export class SwRegisterItem extends SfxBoolItem {
 
   /** Copies the original typed item. @returns Independent item. */
   public override Clone(): SwRegisterItem {
-    return new SwRegisterItem(this.GetValue());
+    return new SwRegisterItem(this.GetValue(), this.Which());
   }
 }
 

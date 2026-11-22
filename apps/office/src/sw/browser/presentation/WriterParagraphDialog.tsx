@@ -11,9 +11,16 @@ import { FieldUnit } from "../../../tools/inc/fldunit";
 import { useBrowserLocalization } from "../../../framework/browser/localization/browser-localization-context";
 import { SvxHyphenZoneItem } from "../../../editeng/source/items/paraitem";
 import { WriterFrameBorderPage } from "./WriterFrameBorderPage";
-import { SwParaConnectBorderItem } from "../../source/core/para/paratr";
+import { SwParaConnectBorderItem, SwRegisterItem } from "../../source/core/para/paratr";
 import { SvxBorderTabPage } from "../../../cui/source/tabpages/border";
-import { RES_BOX, RES_PARATR_CONNECT_BORDER, RES_PARATR_HYPHENZONE } from "../../inc/hintids";
+import {
+  RES_BOX,
+  RES_PARATR_CONNECT_BORDER,
+  RES_PARATR_HYPHENZONE,
+  RES_PARATR_REGISTER,
+} from "../../inc/hintids";
+import { SfxItemState, type SfxItemSet } from "../../../svl/inc/itemset";
+import type { SfxBoolItem } from "../../../svl/inc/eitem";
 import { WriterAsianTypographyPage } from "./WriterAsianTypographyPage";
 import { WriterParagraphOutlinePage } from "./WriterParagraphOutlinePage";
 import { WriterParagraphAlignmentPage } from "./WriterParagraphAlignmentPage";
@@ -402,6 +409,11 @@ export function WriterParagraphDialog({
                       }
                     />
                   )}
+                  <ParagraphRegisterCheckbox
+                    input={pageInput}
+                    output={tabs.output}
+                    label={label("activate-page-line-spacing", "Activate page line-spacing")}
+                  />
                 </>
               ) : null}
               {activeTab === "asiantypo" && (
@@ -548,6 +560,51 @@ export function WriterParagraphDialog({
         />
       )}
     </div>
+  );
+}
+
+/** Exchanges the native register flag for the active paragraph selection. @param props - Input and output and original checkbox label. @returns Paragraph register control. */
+function ParagraphRegisterCheckbox({
+  input,
+  output,
+  label,
+}: Readonly<{
+  input: SfxItemSet;
+  output: SfxItemSet;
+  label: string;
+}>): React.JSX.Element {
+  const state = input.GetItemState(RES_PARATR_REGISTER);
+  const initial =
+    state >= SfxItemState.DEFAULT
+      ? (input.Get(RES_PARATR_REGISTER) as SfxBoolItem).GetValue()
+      : undefined;
+  const edited = output.GetItemIfSet(RES_PARATR_REGISTER, false) as SfxBoolItem | undefined;
+  const [draft, setDraft] = useState(edited?.GetValue() ?? initial);
+  return (
+    <label className="flex items-center gap-2 sm:col-span-2">
+      <input
+        type="checkbox"
+        checked={draft ?? false}
+        disabled={state === SfxItemState.UNKNOWN || state === SfxItemState.DISABLED}
+        ref={
+          /** Restores the original mixed selection state on the native checkbox. @param control - Mounted checkbox. @returns Nothing. */
+          (control) => {
+            if (control)
+              control.indeterminate = draft === undefined && state === SfxItemState.INVALID;
+          }
+        }
+        onChange={
+          /** Writes a typed paragraph register item for the accepted range. @param event - Checkbox edit. @returns Nothing. */
+          (event) => {
+            const active = event.currentTarget.checked;
+            if (active === initial) output.ClearItem(RES_PARATR_REGISTER);
+            else output.Put(new SwRegisterItem(active), true);
+            setDraft(active);
+          }
+        }
+      />
+      {label}
+    </label>
   );
 }
 

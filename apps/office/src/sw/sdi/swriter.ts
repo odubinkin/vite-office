@@ -89,6 +89,7 @@ export interface WriterViewCommandTarget {
     item: import("../../editeng/inc/ulspitem").SvxULSpaceItem,
   ) => boolean;
   readonly IsHorizontalRulerVisible: () => boolean;
+  readonly IsBaselineGridVisible: () => boolean;
   readonly IsVerticalRulerVisible: () => boolean;
   readonly IsSidebarVisible: () => boolean;
   readonly IsStatusBarVisible: () => boolean;
@@ -104,6 +105,7 @@ export interface WriterViewCommandTarget {
   readonly RepeatSearch: () => boolean;
   readonly RequestSelectAll: () => void;
   readonly ToggleHorizontalRuler: () => void;
+  readonly ToggleBaselineGrid: () => void;
   readonly ToggleVerticalRuler: () => void;
   readonly ToggleSidebar: () => void;
   readonly ToggleStatusBar: () => void;

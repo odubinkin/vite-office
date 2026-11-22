@@ -1,6 +1,45 @@
 /** @fileoverview Computes the original Writer body print area on the page text grid. */
 import { SvxFrameDirection } from "../../../../editeng/inc/frmdir";
+import { SvxInterLineSpaceRule, SvxLineSpaceRule } from "../../../../editeng/inc/svxenum";
+import type { SvxFontHeightItem } from "../../../../editeng/inc/fhgtitem";
+import type { SvxLineSpacingItem } from "../../../../editeng/inc/lspcitem";
+import { RES_CHRATR_FONTSIZE, RES_PARATR_LINESPACING } from "../../../inc/hintids";
 import { SwTextGrid, type SwTextGridItem } from "../../../inc/tgrditem";
+import type { SwTextFormatColl } from "../doc/fmtcol";
+
+/** Original page line-spacing pitch and baseline offset in twips. */
+export interface SwRegisterMetrics {
+  readonly height: number;
+  readonly ascent: number;
+}
+
+/** Computes native register metrics using the represented browser device font approximation. @param format - Original paragraph reference style. @returns Physical register metrics. */
+export function ComputeRegister(format: SwTextFormatColl): SwRegisterMetrics {
+  const set = format.GetAttrSet();
+  const spacing = set.Get(RES_PARATR_LINESPACING) as SvxLineSpacingItem;
+  if (spacing.GetLineSpaceRule() === SvxLineSpaceRule.Fix) {
+    const height = spacing.GetLineHeight();
+    return { height, ascent: Math.trunc((4 * height) / 5) };
+  }
+  const font = set.Get(RES_CHRATR_FONTSIZE) as SvxFontHeightItem;
+  const natural = Math.round(font.GetHeight() * 1.15);
+  let height =
+    spacing.GetLineSpaceRule() === SvxLineSpaceRule.Min
+      ? Math.max(natural, spacing.GetLineHeight())
+      : natural;
+  let netHeight = natural;
+  if (spacing.GetInterLineSpaceRule() === SvxInterLineSpaceRule.Prop) {
+    height = Math.max(
+      1,
+      Math.trunc((height * Math.max(50, spacing.GetPropLineSpace() || 100)) / 100),
+    );
+    netHeight = height;
+  } else if (spacing.GetInterLineSpaceRule() === SvxInterLineSpaceRule.Fix) {
+    height += spacing.GetInterLineSpace();
+    netHeight = height;
+  }
+  return { height, ascent: height - netHeight + Math.trunc((4 * natural) / 5) };
+}
 
 /** Original page directions that exchange the grid's line and character axes. @param direction - Native page direction. @returns Whether the grid follows vertical text. */
 export function IsVerticalTextGrid(direction: SvxFrameDirection): boolean {

@@ -33,6 +33,7 @@ import {
   type SwTextLine,
 } from "../text/txtfrm";
 import type { SwLineNumberInfoValue } from "../../../inc/lineinfo";
+import { GetRegisterLineOffset } from "../text/itrform2";
 
 /** One physical page and its ordered text-frame fragments. */
 export interface SwPageFrame {
@@ -882,6 +883,11 @@ export function createSwPageFrames(
       const currentDescriptor = pageDescriptors[pages.length - 1] as WriterPageDescriptorValue;
       const availableHeight =
         currentDescriptor.height - currentDescriptor.topMargin - currentDescriptor.bottomMargin;
+      const firstMeasuredLine = paragraph.lines[0];
+      const alignedGap =
+        firstMeasuredLine && paragraph.register
+          ? gap + GetRegisterLineOffset(paragraph.register, used + gap, firstMeasuredLine.height)
+          : gap;
       const wholeParagraphHeight = paragraph.lines.reduce(
         /** Handles Writer formatting state. @param sum - Input value. @param line - Input value. @returns Callback result. */ (
           sum,
@@ -895,7 +901,7 @@ export function createSwPageFrames(
         paragraph.keepTogether &&
         hasContent() &&
         wholeParagraphHeight <= availableHeight &&
-        used + gap + wholeParagraphHeight > availableHeight
+        used + alignedGap + wholeParagraphHeight > availableHeight
       ) {
         startFollowPage();
         movedForKeepTogether = true;
@@ -908,7 +914,7 @@ export function createSwPageFrames(
         hasContent() &&
         wholeParagraphHeight + nextFirstLine.height <= availableHeight &&
         used +
-          gap +
+          alignedGap +
           wholeParagraphHeight +
           getSwTextFrameGap(paragraph, nextParagraph, settings) +
           nextFirstLine.height >
@@ -922,8 +928,12 @@ export function createSwPageFrames(
         const pageDescriptor = pageDescriptors[pages.length - 1] as WriterPageDescriptorValue;
         const bodyHeight =
           pageDescriptor.height - pageDescriptor.topMargin - pageDescriptor.bottomMargin;
-        const topSpacing = firstLine === 0 ? gap : 0;
         const line = paragraph.lines[firstLine] as (typeof paragraph.lines)[number];
+        const paragraphSpace = firstLine === 0 ? gap : 0;
+        const topSpacing = paragraph.register
+          ? paragraphSpace +
+            GetRegisterLineOffset(paragraph.register, used + paragraphSpace, line.height)
+          : paragraphSpace;
         if (hasContent() && used + topSpacing + line.height > bodyHeight) {
           startFollowPage();
           continue;

@@ -9,14 +9,17 @@
     "localSymbols": [
       "FormatBodyTextGrid",
       "GetGridWidth",
-      "IsVerticalTextGrid"
+      "IsVerticalTextGrid",
+      "ComputeRegister"
     ],
     "upstreamSymbols": [
       "SwBodyFrame::Format",
-      "GetGridWidth"
+      "GetGridWidth",
+      "SwPageFrame::ComputeRegister"
     ],
     "preservedResponsibilities": [
-      "Centers the page body on the original text-grid line and cell sizes."
+      "Centers the page body on the original text-grid line and cell sizes.",
+      "Computes the page register metrics from the selected reference paragraph style."
     ],
     "omittedResponsibilities": [
       "The existing Writer slice has no connected page footnote frame neighbors."
@@ -26,6 +29,10 @@
         {
           "path": "apps/office/src/sw/source/core/layout/pagechg.ts",
           "marker": "FormatBodyTextGrid"
+        },
+        {
+          "path": "apps/office/src/sw/browser/presentation/WriterPageRegister.test.tsx",
+          "marker": "selects and retains a live page register style"
         }
       ],
       "upstream": [
@@ -36,6 +43,10 @@
         {
           "path": "vendor/libreoffice-reference/sw/source/core/layout/pagechg.cxx",
           "marker": "GetGridWidth"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/layout/pagechg.cxx",
+          "marker": "SwPageFrame::ComputeRegister"
         }
       ]
     }

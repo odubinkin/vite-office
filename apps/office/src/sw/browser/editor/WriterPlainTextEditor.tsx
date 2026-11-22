@@ -2,7 +2,7 @@
 
 import { writerPageBorderStyle } from "./frame-decoration";
 import { writerPageBackgroundStyle } from "./page-background";
-import { WriterPageTextGrid } from "./WriterTextGrid";
+import { WriterBaselineGrid, WriterPageTextGrid } from "./WriterTextGrid";
 import { Fragment, useContext, useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
 import type { ReactNode, RefObject } from "react";
 import { createPortal } from "react-dom";
@@ -53,6 +53,7 @@ export interface WriterPlainTextEditorProps {
   readonly paragraphSpacingSettings?: SwTextFrameSettings;
   readonly verticalRuler?: ReactNode;
   readonly showLineNumbers?: boolean;
+  readonly baselineGridColor?: string;
   readonly lineNumberInfo?: SwLineNumberInfoValue;
   readonly selectedTableBoxes?: readonly number[];
 }
@@ -676,6 +677,7 @@ export function WriterPlainTextEditor(props: WriterPlainTextEditorProps): React.
                   document={document}
                   page={page}
                   previous={pages[pageIndex - 1]}
+                  baselineGridColor={props.baselineGridColor}
                 />
                 <WriterPageStories
                   document={document}
@@ -785,10 +787,12 @@ function WriterPageDecoration({
   document,
   page,
   previous,
+  baselineGridColor,
 }: Readonly<{
   document: Parameters<typeof writerPageBackgroundStyle>[0];
   page: SwPageFrame;
   previous: SwPageFrame | undefined;
+  baselineGridColor: string | undefined;
 }>): React.JSX.Element {
   const fill = writerPageBackgroundStyle(document, page, previous);
   const border = writerPageBorderStyle(document, page, previous);
@@ -811,6 +815,9 @@ function WriterPageDecoration({
         />
       )}
       <WriterPageTextGrid document={document} page={page} />
+      {baselineGridColor !== undefined && (
+        <WriterBaselineGrid document={document} page={page} color={baselineGridColor} />
+      )}
     </>
   );
 }

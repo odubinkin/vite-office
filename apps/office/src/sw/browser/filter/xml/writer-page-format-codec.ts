@@ -14,10 +14,13 @@ export interface WriterPageFormatRecord {
   readonly formats: readonly (readonly SfxPoolItemSnapshot[])[];
   readonly names?: readonly string[];
   readonly poolIds?: readonly number[];
+  readonly registerStyleId?: string;
 }
 /** Serializes the four actual frame item sets without flattening inherited/default attributes. @param page - Native descriptor. @returns Record. */
 export function encodePageFormats(page: SwPageDesc): WriterPageFormatRecord {
+  const register = page.GetRegisterFormatColl();
   return {
+    ...(register ? { registerStyleId: register.id } : {}),
     poolIds: [page.GetMaster(), page.GetLeft(), page.GetFirstMaster(), page.GetFirstLeft()].map(
       /** Copies original per-frame pool identities, including UNKNOWN. @param frame - Actual frame. @returns Native unsigned16 ID. */
       (frame) => frame.GetPoolFormatId(),

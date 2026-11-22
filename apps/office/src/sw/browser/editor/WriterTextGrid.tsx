@@ -2,7 +2,11 @@
 import type { CSSProperties } from "react";
 import type { SwDoc } from "../../source/core/doc/doc";
 import type { SwPageFrame } from "../../source/core/layout/newfrm";
-import { GetGridWidth, IsVerticalTextGrid } from "../../source/core/layout/pagechg";
+import {
+  ComputeRegister,
+  GetGridWidth,
+  IsVerticalTextGrid,
+} from "../../source/core/layout/pagechg";
 import { SvxFrameDirection } from "../../../editeng/inc/frmdir";
 import { SwTextGrid, type SwTextGridItem } from "../../inc/tgrditem";
 import { writerTextGridColor } from "./frame-decoration";
@@ -93,6 +97,35 @@ export function WriterPageTextGrid({
         bottom: body.bottomMargin / 15,
         left: body.leftMargin / 15,
         right: body.rightMargin / 15,
+      }}
+    />
+  );
+}
+
+/** Paints the view-only reference grid from the first baseline of the current page print area. @param props - Physical page, document and configured line color. @returns Baseline grid layer. */
+export function WriterBaselineGrid({
+  document,
+  page,
+  color,
+}: Readonly<{ document: SwDoc; page: SwPageFrame; color: string }>): React.JSX.Element | null {
+  const body = page.descriptor;
+  const descriptor = document.FindPageDesc(body.name);
+  if (!descriptor) return null;
+  const format = descriptor.GetRegisterFormatColl() ?? document.GetTextFormatColl("text-body");
+  const { height, ascent } = ComputeRegister(format);
+  if (height <= 0) return null;
+  const pitch = height / 15;
+  return (
+    <div
+      aria-hidden="true"
+      data-writer-baseline-grid
+      className="pointer-events-none absolute -z-10 print:hidden"
+      style={{
+        top: (body.topMargin + ascent) / 15,
+        bottom: body.bottomMargin / 15,
+        left: body.leftMargin / 15,
+        right: body.rightMargin / 15,
+        backgroundImage: `repeating-linear-gradient(to bottom, ${color} 0 ${Math.min(pitch, 1)}px, transparent ${Math.min(pitch, 1)}px ${pitch}px)`,
       }}
     />
   );

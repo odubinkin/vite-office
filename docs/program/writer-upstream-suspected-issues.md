@@ -6066,3 +6066,19 @@ A normal grid with 18 pt base text and 13 pt character width still previews
 18 pt cells before magnification. Changing only the width updates the document
 cell spacing. Writer preserves both source calculations. This observation is
 based on the pinned source. A compiled differential check is pending.
+
+### WRITER-743 — Page Style undo leaves the reference paragraph style participating in page line-spacing
+
+Accepting a page line-spacing reference applies `SwRegisterItem(true)`
+directly to the selected paragraph style before changing the page descriptor.
+The page undo action restores the descriptor and its reference. It carries no
+snapshot of the selected paragraph style's prior register item.
+[Page Style exchange](../../vendor/libreoffice-reference/sw/source/uibase/utlui/uitool.cxx#L449)
+[Page descriptor undo creation](../../vendor/libreoffice-reference/sw/source/core/doc/docdesc.cxx#L433)
+[Page undo application](../../vendor/libreoffice-reference/sw/source/core/undo/SwUndoPageDesc.cxx#L232)
+
+With reference style participation initially disabled, enable page line-spacing
+with that style and undo the page edit. The descriptor reference is cleared and
+the paragraph style retains its enabled register item. Writer preserves this
+sequence. The observation follows the pinned source and the local dialog
+regression test. A compiled upstream differential check is pending.

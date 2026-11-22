@@ -725,6 +725,14 @@ export function* decodeWriterDocumentSteps(
         style.parentId === undefined ? undefined : document.GetTextFormatColl(style.parentId),
       );
     }
+    for (const descriptorRecord of record.pageDescriptors) {
+      const reference = descriptorRecord.pageFormat?.registerStyleId;
+      if (reference === undefined) continue;
+      const format =
+        typeof reference === "string" ? document.FindTextFormatColl(reference) : undefined;
+      if (!format) throw new Error("Stored Writer page register style link is invalid.");
+      document.FindPageDesc(descriptorRecord.value.name)?.SetRegisterFormatColl(format);
+    }
     if (record.textNodes.length === 0)
       throw new Error("Stored Writer document has no body text node.");
     const order =

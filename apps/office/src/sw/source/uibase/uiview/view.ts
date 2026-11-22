@@ -46,7 +46,7 @@ import {
 import type { SvxULSpaceItem } from "../../../../editeng/inc/ulspitem";
 import { RES_PAGEDESC } from "../../../inc/hintids";
 import type { SwFormatPageDesc } from "../../core/attr/fmtpdsc";
-import { PageDescToItemSet } from "../utlui/uitool";
+import { getPageRegisterStyles, PageDescToItemSet } from "../utlui/uitool";
 import { SvxRuler } from "../../../../svx/source/dialog/svxruler";
 
 /** Persistent Writer view joining SwDocShell, SwWrtShell, and frame dispatch. */
@@ -86,6 +86,7 @@ export class SwView {
     );
     this.viewOptions = new SwViewOption(
       /** Invalidates view-option slot state. @returns Nothing. */ () => this.Invalidate("view"),
+      pref.IsBaselineGridVisible(),
     );
     this.wrtShell = new SwWrtShell(
       docShell,
@@ -314,6 +315,20 @@ export class SwView {
   public IsHorizontalRulerVisible(): boolean {
     return this.viewOptions.IsHorizontalRulerVisible();
   }
+  /** Exposes the native baseline grid command's checked state. @returns Whether visible. */
+  public IsBaselineGridVisible(): boolean {
+    return this.viewOptions.IsBaselineGridVisible();
+  }
+  /** Returns the configured baseline-grid line color. @returns Native view color. */
+  public GetBaselineGridColor(): string {
+    return this.viewOptions.GetBaselineGridColor();
+  }
+  /** Handles the native View Baseline Grid toggle and writes the user preference. @returns Nothing. */
+  public ToggleBaselineGrid(): void {
+    const visible = !this.IsBaselineGridVisible();
+    this.module.GetUsrPref(false).SetBaselineGridVisible(visible);
+    this.viewOptions.SetBaselineGridVisible(visible);
+  }
   /** Returns vertical-ruler command state. @returns Visibility. */
   public IsVerticalRulerVisible(): boolean {
     return this.viewOptions.IsVerticalRulerVisible();
@@ -383,6 +398,7 @@ export class SwView {
         descriptor.GetValue(),
         pageInput,
         document.GetDocumentSettingManager().get("HTML_MODE"),
+        getPageRegisterStyles(document),
       )
       .finally(
         /** Releases the dialog's native input snapshot on acceptance or cancellation. @returns Nothing. */

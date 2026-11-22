@@ -46,6 +46,7 @@ export interface WriterPageDialogRequest {
   readonly htmlMode: boolean;
   readonly initialValue: WriterPageDescriptorValue;
   readonly pageInput: SfxItemSet;
+  readonly registerStyles: readonly string[];
   readonly kind: "page-style";
 }
 /** Accepted Page geometry and native tab page deltas. */
@@ -199,12 +200,13 @@ export class WriterDialogController {
       : undefined;
   }
 
-  /** Requests the Writer Page Style tabs and returns the accepted item exchange. @param commandUrl - Originating command. @param initialValue - Current page geometry. @param pageInput - Borrowed native page items. @param htmlMode - Whether the document uses the Writer HTML mode. @returns Accepted values or undefined. */
+  /** Requests the Writer Page Style tabs and returns the accepted item exchange. @param commandUrl - Originating command. @param initialValue - Current page geometry. @param pageInput - Borrowed native page items. @param htmlMode - Whether the document uses Writer HTML mode. @param registerStyles - Standard reference style and the Page tab picker entries. @returns Accepted values or undefined. */
   public async RequestPageDialog(
     commandUrl: string,
     initialValue: WriterPageDescriptorValue,
     pageInput: SfxItemSet,
     htmlMode = false,
+    registerStyles: readonly string[] = [],
   ): Promise<WriterPageDialogResult | undefined> {
     const completion = await this.controller.Request({
       commandUrl,
@@ -212,6 +214,7 @@ export class WriterDialogController {
       initialValue,
       kind: "page-style",
       pageInput,
+      registerStyles,
     });
     return completion.kind === "accepted"
       ? (completion.result as WriterPageDialogResult)

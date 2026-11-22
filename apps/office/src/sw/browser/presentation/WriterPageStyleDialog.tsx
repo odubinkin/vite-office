@@ -27,7 +27,14 @@ import {
   type SvxHFPageState,
 } from "../../../svx/source/dialog/hdft";
 import { SvxPageUsage, type SvxPageItem } from "../../../svx/inc/pageitem";
-import { SID_ATTR_PAGE } from "../../../svx/inc/svxids";
+import {
+  SID_ATTR_PAGE,
+  SID_SWREGISTER_COLLECTION,
+  SID_SWREGISTER_MODE,
+} from "../../../svx/inc/svxids";
+import { SfxBoolItem } from "../../../svl/inc/eitem";
+import { SfxStringItem } from "../../../svl/source/items/stritem";
+import { SwRegisterItem } from "../../source/core/para/paratr";
 import { writerPageStoryIds } from "../../source/uibase/utlui/uitool.hdft";
 import { AreaTabPage } from "../../../cui/browser/tabpages/AreaTabPage";
 import { TransparencyTabPage } from "../../../cui/browser/tabpages/TransparencyTabPage";
@@ -47,6 +54,7 @@ export interface WriterPageStyleDialogProps {
   readonly unit?: FieldUnit;
   readonly initialValue: WriterPageDescriptorValue;
   readonly pageInput?: SfxItemSet;
+  readonly registerStyles?: readonly string[];
   readonly onCancel: () => void;
   readonly onSubmit: (value: WriterPageDescriptorValue, items?: SfxItemSet) => void;
 }
@@ -56,6 +64,7 @@ export function WriterPageStyleDialog({
   htmlMode = false,
   initialValue,
   pageInput,
+  registerStyles = [],
   unit = FieldUnit.CM,
   onCancel,
   onSubmit,
@@ -70,6 +79,14 @@ export function WriterPageStyleDialog({
   const localization = useBrowserLocalization();
   const id = useId();
   const [active, setActive] = useState("page");
+  const registerModeItem = pageInput?.GetItemIfSet(SID_SWREGISTER_MODE, false);
+  const initialRegister = registerModeItem instanceof SfxBoolItem && registerModeItem.GetValue();
+  const referenceStyle = pageInput?.GetItemIfSet(SID_SWREGISTER_COLLECTION, false);
+  const [registerMode, setRegisterMode] = useState(initialRegister);
+  const [registerStyle, setRegisterStyle] = useState(
+    referenceStyle instanceof SfxStringItem ? referenceStyle.GetValue() : (registerStyles[0] ?? ""),
+  );
+  const hasRegister = !htmlMode && registerStyles.length > 1 && pageInput !== undefined;
   const [area] = useState(
     /** Captures the actual Area page items for this request. @returns Native page owner. */
     () => pageInput && new SvxAreaTabPage(pageInput, true),
@@ -290,6 +307,8 @@ export function WriterPageStyleDialog({
                 [RES_TEXTGRID, RES_TEXTGRID],
                 [XATTR_FILL_FIRST, XATTR_FILL_LAST],
                 [headerFooterSetSlot(true), headerFooterSetSlot(false)],
+                [SID_SWREGISTER_COLLECTION, SID_SWREGISTER_COLLECTION],
+                [SID_SWREGISTER_MODE, SID_SWREGISTER_MODE],
               ]);
               area?.FillItemSet(output);
               transparency?.FillItemSet(output);
@@ -297,6 +316,11 @@ export function WriterPageStyleDialog({
               footer?.FillItemSet(footerState, output);
               if (borderOutput) output.PutSet(borderOutput);
               textGrid?.FillItemSet(output);
+              if (hasRegister && (registerMode || registerMode !== initialRegister)) {
+                output.Put(new SwRegisterItem(registerMode, SID_SWREGISTER_MODE), true);
+                if (registerMode)
+                  output.Put(new SfxStringItem(SID_SWREGISTER_COLLECTION, registerStyle), true);
+              }
               if (output.Count()) onSubmit(geometry, output);
               else {
                 output.Dispose();
@@ -503,6 +527,43 @@ export function WriterPageStyleDialog({
                   }
                 />
               </fieldset>
+              {hasRegister && (
+                <fieldset className="grid gap-2 rounded-lg border border-slate-200 p-3 text-sm">
+                  <legend className="px-1 font-bold text-slate-700">
+                    {pageLabel("layout-settings", "Layout settings")}
+                  </legend>
+                  <label className="flex items-center gap-2">
+                    <input
+                      type="checkbox"
+                      checked={registerMode}
+                      onChange={
+                        /** Toggles the Page tab's original register controls. @param event - Checkbox edit. @returns Nothing. */
+                        (event) => setRegisterMode(event.currentTarget.checked)
+                      }
+                    />
+                    {pageLabel("use-page-line-spacing", "Use page line-spacing")}
+                  </label>
+                  <label className="grid gap-1 ps-5">
+                    {pageLabel("reference-style", "Reference Style:")}
+                    <select
+                      className="rounded border px-2 py-1"
+                      disabled={!registerMode}
+                      value={registerStyle}
+                      onChange={
+                        /** Selects the original reference paragraph style. @param event - Style edit. @returns Nothing. */
+                        (event) => setRegisterStyle(event.currentTarget.value)
+                      }
+                    >
+                      {registerStyles.slice(1).map(
+                        /** Presents a visible paragraph style. @param name - Name. @returns Picker entry. */
+                        (name) => (
+                          <option key={name}>{name}</option>
+                        ),
+                      )}
+                    </select>
+                  </label>
+                </fieldset>
+              )}
             </div>
             <div className="grid content-start justify-items-center gap-3 rounded-lg bg-slate-100 p-4">
               <span className="text-xs font-bold uppercase tracking-wide text-slate-500">

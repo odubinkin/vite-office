@@ -52,6 +52,7 @@ export function ChgPageDescNative(doc: SwDoc, index: number, source: SwPageDesc)
     lcl_DescSetAttr(original, destination);
   }
   target.CopyStashedStoryFormats(source);
+  target.SetRegisterFormatColl(source.GetRegisterFormatColl());
   doc.NotifyModelChange({ kind: "page-descriptor-changed" });
   doc.GetDocumentStateManager().SetModified();
 }

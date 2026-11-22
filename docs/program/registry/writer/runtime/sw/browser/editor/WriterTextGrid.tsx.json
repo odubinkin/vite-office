@@ -8,7 +8,8 @@
     "suite": "writer",
     "subsystem": "page-text-grid",
     "capabilityIds": [
-      "CAP-ba76bd42-4b00-4278-9f8f-3970be0c5fa6"
+      "CAP-ba76bd42-4b00-4278-9f8f-3970be0c5fa6",
+      "CAP-0104"
     ],
     "semantic": {
       "behaviorStatus": "unverified",
@@ -17,13 +18,15 @@
       "divergenceClass": "B",
       "evidence": [
         "apps/office/src/sw/browser/editor/WriterTextGrid.tsx#WriterPageTextGrid",
-        "apps/office/src/sw/browser/presentation/WriterPageTextGrid.test.tsx"
+        "apps/office/src/sw/browser/presentation/WriterPageTextGrid.test.tsx",
+        "apps/office/e2e/writer-baseline-grid.spec.ts"
       ],
-      "justification": "Paints original grid lines, ruby bands and character cells using a CSS browser device. Native OutputDevice line painting is expressed through CSS gradients and the browser print media selector.",
+      "justification": "Paints original grid lines, ruby bands and character cells using a CSS browser device. Native OutputDevice line painting is expressed through CSS gradients and the browser print media selector. Paints the independent screen-only baseline grid using native register metrics.",
       "knownViolations": [],
       "localSymbols": [
         "WriterPageTextGrid",
-        "WriterTextGrid"
+        "WriterTextGrid",
+        "WriterBaselineGrid"
       ],
       "sourceResponsibility": "browser-owned",
       "upstreamFile": null,
