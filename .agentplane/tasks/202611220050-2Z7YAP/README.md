@@ -1,10 +1,11 @@
 ---
 id: "202611220050-2Z7YAP"
 title: "Connect Calc sheet protection and edit permissions"
-status: "DOING"
+result_summary: "Connected the Calc sheet protection command, dialogs, native state and Undo history."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 11
+revision: 12
 origin:
   system: "manual"
 depends_on:
@@ -43,11 +44,16 @@ quality_review:
     - "The original protectSheet.py password, unlock and Cancel scenarios pass through active Calc dialogs."
     - "Grouped history and three native verifier formats pass focused validation."
     - "Production Chromium verifies incorrect password, unlock, and Undo."
-commit: null
+commit:
+  hash: "eeb921dccfc08b24a18f45dca7b5a76b4d490520"
+  message: "🧩 2Z7YAP code: connect Calc sheet protection, dialogs and history"
 comments:
   -
     author: "CODER"
     body: "Start: connect native Calc sheet protection and verify existing model and filter behavior."
+  -
+    author: "CODER"
+    body: "Verified: native Calc sheet protection, password prompts, tab flags, grouped history and ODS round-trip, focused tests and Chromium."
 events:
   -
     type: "status"
@@ -62,8 +68,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Verified: Calc sheet protection, native dialog responses and editing, grouped history, ODS persistence, focused tests and production Chromium."
+  -
+    type: "status"
+    at: "2026-11-22T01:03:51.414Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: native Calc sheet protection, password prompts, tab flags, grouped history and ODS round-trip, focused tests and Chromium."
 doc_version: 3
-doc_updated_at: "2026-11-22T01:02:44.819Z"
+doc_updated_at: "2026-11-22T01:03:51.414Z"
 doc_updated_by: "CODER"
 description: "Expose the native Calc sheet protection command, original protection and password prompts, and existing sheet protection state through menus, tabs, and document history."
 sections:
