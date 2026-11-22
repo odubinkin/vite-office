@@ -1,0 +1,25 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "browser-adaptation",
+    "status": "local-only",
+    "localPath": "apps/office/src/sw/browser/editor/frame-decoration.ts",
+    "rationale": "Paints page frame borders at the native physical margins and displays the directional shadow.",
+    "responsibilities": [
+      "Paints page frame borders at the native physical margins and displays the directional shadow."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sw/browser/editor/frame-decoration.ts",
+          "marker": "writerPageBorderStyle"
+        }
+      ]
+    },
+    "stackDivergence": {
+      "kind": "browser-adaptation",
+      "rationale": "CSS paints the border and shadow in the browser instead of the desktop output device."
+    }
+  }
+}

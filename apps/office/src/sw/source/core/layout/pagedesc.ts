@@ -1,6 +1,10 @@
 /** @fileoverview Native SwPageDesc frame-format and use/follow ownership from pagedesc.cxx; immutable geometry is only a browser projection of canonical pooled items. */
-import { SvxBoxItemLine as BoxEdge } from "../../../../editeng/source/items/frmitems";
-import { getActivePageStory, getPageFrameGutters, SwFrameFormat } from "./atrfrm";
+import {
+  getActivePageStory,
+  getPageFrameBorderSpace,
+  getPageFrameMargins,
+  SwFrameFormat,
+} from "./atrfrm";
 import type { SwFormatHeader, SwFormatFooter } from "../../../inc/fmthdft";
 import { SwPoolFormatId } from "../../../inc/poolfmt";
 import { SfxItemSet } from "../../../../svl/source/items/itemset";
@@ -321,21 +325,20 @@ export class SwPageDesc extends BroadcastingModify {
 export function getPageBodyGeometry(page: SwPageDesc): WriterPageDescriptorValue {
   const value = page.GetValue();
   const master = page.GetMaster();
-  const box = master.GetBox();
-  const gutter = getPageFrameGutters(master);
+  const margins = getPageFrameMargins(master);
+  const border = getPageFrameBorderSpace(master);
   return {
     ...value,
     topMargin:
-      value.topMargin +
-      box.CalcLineSpace(BoxEdge.TOP, true) +
-      (getActivePageStory(master, true)?.GetFrameSize().GetHeight() ?? 0) +
-      gutter.top,
+      margins.top +
+      border.top +
+      (getActivePageStory(master, true)?.GetFrameSize().GetHeight() ?? 0),
     bottomMargin:
-      value.bottomMargin +
-      box.CalcLineSpace(BoxEdge.BOTTOM, true) +
+      margins.bottom +
+      border.bottom +
       (getActivePageStory(master, false)?.GetFrameSize().GetHeight() ?? 0),
-    leftMargin: value.leftMargin + box.CalcLineSpace(BoxEdge.LEFT, true) + gutter.left,
-    rightMargin: value.rightMargin + box.CalcLineSpace(BoxEdge.RIGHT, true) + gutter.right,
+    leftMargin: margins.left + border.left,
+    rightMargin: margins.right + border.right,
   };
 }
 

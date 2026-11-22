@@ -9,7 +9,12 @@ import type { SwAttrPool } from "../attr/swatrset";
 import type { WhichRangesContainer } from "../../../../svl/source/items/itemset";
 import { SwFormatFrameSize } from "../../../inc/fmtfsize";
 import { SwFormatVertOrient } from "../../../inc/fmtornt";
-import { SvxBoxItem } from "../../../../editeng/source/items/frmitems";
+import { SvxBoxItem, SvxBoxItemLine } from "../../../../editeng/source/items/frmitems";
+import {
+  type SvxShadowItem,
+  SvxShadowItemSide,
+} from "../../../../editeng/source/items/frmitems.shadow";
+import { RES_SHADOW } from "../../../inc/hintids";
 import { RES_BOX, RES_VERT_ORIENT } from "../../../inc/hintids";
 import { SwFormatRowSplit } from "../../../inc/fmtrowsplt";
 import { RES_ROW_SPLIT, RES_FRM_SIZE } from "../../../inc/hintids";
@@ -115,6 +120,50 @@ export function getPageFrameGutters(frame: SwFrameFormat): {
   return frame.GetRtlGutter()
     ? { left: right, right: gutter, top: 0 }
     : { left: gutter, right, top: 0 };
+}
+
+/** Physical page frame insets in Writer twips. */
+interface SwPageFrameInsets {
+  readonly top: number;
+  readonly bottom: number;
+  readonly left: number;
+  readonly right: number;
+}
+
+/** Resolves the page margins including the original frame gutter. @param frame - Actual page format. @returns Outer edge insets. */
+export function getPageFrameMargins(frame: SwFrameFormat): SwPageFrameInsets {
+  const lr = frame.GetLRSpace();
+  const ul = frame.GetULSpace();
+  const gutter = getPageFrameGutters(frame);
+  return {
+    top: ul.GetUpper() + gutter.top,
+    bottom: ul.GetLower(),
+    left: lr.ResolveLeft() + gutter.left,
+    right: lr.ResolveRight() + gutter.right,
+  };
+}
+
+/** Reads the area reserved by the original directional shadow on each side. @param frame - Physical page format. @returns Native shadow spacing. */
+export function getPageFrameShadowSpace(frame: SwFrameFormat): SwPageFrameInsets {
+  const shadow = frame.GetAttrSet().Get(RES_SHADOW) as SvxShadowItem;
+  return {
+    top: shadow.CalcShadowSpace(SvxShadowItemSide.TOP),
+    bottom: shadow.CalcShadowSpace(SvxShadowItemSide.BOTTOM),
+    left: shadow.CalcShadowSpace(SvxShadowItemSide.LEFT),
+    right: shadow.CalcShadowSpace(SvxShadowItemSide.RIGHT),
+  };
+}
+
+/** Reserves border, padding and shadow as the original SwBorderAttrs line calculations do. @param frame - Physical page format. @returns Additional insets inside the page margins. */
+export function getPageFrameBorderSpace(frame: SwFrameFormat): SwPageFrameInsets {
+  const box = frame.GetBox();
+  const shadow = getPageFrameShadowSpace(frame);
+  return {
+    top: box.CalcLineSpace(SvxBoxItemLine.TOP, true) + shadow.top,
+    bottom: box.CalcLineSpace(SvxBoxItemLine.BOTTOM, true) + shadow.bottom,
+    left: box.CalcLineSpace(SvxBoxItemLine.LEFT, true) + shadow.left,
+    right: box.CalcLineSpace(SvxBoxItemLine.RIGHT, true) + shadow.right,
+  };
 }
 
 /** Original special-format base admits only fly or drawing frame identities. */

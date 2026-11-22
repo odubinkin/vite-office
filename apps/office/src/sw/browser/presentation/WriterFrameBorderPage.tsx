@@ -1,4 +1,4 @@
-/** @fileoverview Connects the Writer Paragraph Borders page to its pooled item exchange. */
+/** @fileoverview Connects shared Writer frame border and shadow controls to their pooled item exchange. */
 import { useState } from "react";
 import type { SvxBorderTabPage } from "../../../cui/source/tabpages/border";
 import { SvxShadowLocation } from "../../../editeng/inc/svxenum";
@@ -18,8 +18,8 @@ const locations = [
   [SvxShadowLocation.TopLeft, "Cast Shadow to Top Left"],
 ] as const;
 
-/** Presents paragraph border and shadow settings over the original pooled values. @param props - Native page exchange and browser presentation. @returns Paragraph Borders tab. */
-export function WriterParagraphBorderPage({
+/** Presents frame border and shadow settings over the original pooled values. @param props - Native page exchange and browser presentation. @returns Frame Borders tab. */
+export function WriterFrameBorderPage({
   page,
   input,
   output,
@@ -82,7 +82,7 @@ export function WriterParagraphBorderPage({
       page={page}
       unit={unit}
       onChange={
-        /** Exchanges paragraph border geometry. @returns Nothing. */ () => exchangeBorder(RES_BOX)
+        /** Exchanges outer border geometry. @returns Nothing. */ () => exchangeBorder(RES_BOX)
       }
       onMergeChange={
         /** Exchanges only the join option. @returns Nothing. */ () =>

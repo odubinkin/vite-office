@@ -106,6 +106,10 @@ export class SvxBorderTabPage {
     this.distanceVisible = this.oldInfo?.IsDist() ?? false;
     this.Reset();
   }
+  /** Releases the captured original item set when its owning tab dialog closes. @returns Nothing. */
+  public Dispose(): void {
+    this.original.Dispose();
+  }
   /** Restores source frame lines, saved metrics, uniform line controls and selection. @returns Nothing. */
   public Reset(): void {
     this.merge = this.savedMerge = this.oldMerge?.GetValue();

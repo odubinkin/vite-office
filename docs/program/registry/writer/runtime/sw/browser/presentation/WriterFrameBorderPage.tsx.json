@@ -2,13 +2,14 @@
   "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
   "baselineTag": "libreoffice-26.8.0.2",
   "record": {
-    "path": "apps/office/src/sw/browser/presentation/WriterParagraphBorderPage.tsx",
+    "path": "apps/office/src/sw/browser/presentation/WriterFrameBorderPage.tsx",
     "classification": "browser-adaptation",
     "state": "active",
     "suite": "writer",
     "subsystem": "presentation",
     "capabilityIds": [
-      "CAP-0111"
+      "CAP-0111",
+      "CAP-0136"
     ],
     "semantic": {
       "behaviorStatus": "unverified",
@@ -16,14 +17,15 @@
       "defaultStatus": "not-applicable",
       "divergenceClass": "B",
       "evidence": [
-        "apps/office/src/sw/browser/presentation/WriterParagraphBorderPage.tsx#WriterParagraphBorderPage",
+        "apps/office/src/sw/browser/presentation/WriterFrameBorderPage.tsx#WriterFrameBorderPage",
         "vendor/libreoffice-reference/sw/source/ui/chrdlg/pardlg.cxx#SwParaDlg::PageCreated",
-        "vendor/libreoffice-reference/sw/qa/uitest/writer_tests2/formatParagraph.py#test_format_paragraph_tab_borders"
+        "vendor/libreoffice-reference/sw/qa/uitest/writer_tests2/formatParagraph.py#test_format_paragraph_tab_borders",
+        "apps/office/src/sw/browser/presentation/WriterPageBordersDialog.test.tsx"
       ],
-      "justification": "Presents native paragraph Borders and Shadow controls with independent pooled item exchange.",
+      "justification": "Shares the native border and shadow item exchange between paragraph formatting and Page Style.",
       "knownViolations": [],
       "localSymbols": [
-        "WriterParagraphBorderPage"
+        "WriterFrameBorderPage"
       ],
       "upstreamSymbols": [],
       "upstreamFile": null,

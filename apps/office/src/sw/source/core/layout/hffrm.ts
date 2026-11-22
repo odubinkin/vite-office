@@ -1,8 +1,12 @@
 /** @fileoverview Connected Writer page header and footer format and print geometry. */
-import { SvxBoxItemLine as BoxEdge } from "../../../../editeng/source/items/frmitems";
 import type { SwDoc } from "../doc/doc";
 import type { SwStartNode } from "../docnode/node";
-import { getActivePageStory, getPageFrameGutters, type SwFrameFormat } from "./atrfrm";
+import {
+  getActivePageStory,
+  getPageFrameBorderSpace,
+  getPageFrameMargins,
+  type SwFrameFormat,
+} from "./atrfrm";
 import type { SwPageFrame } from "./newfrm";
 import type { SwPageDesc, WriterPageDescriptorValue } from "./pagedesc";
 
@@ -49,14 +53,12 @@ export function PreparePageStories(
   const firstFormat = isFirstPageFormat(descriptor, page, previous);
   const leftPage = page.number % 2 === 0;
   const format = ResolvePageFrameFormat(descriptor, page, previous);
-  const margins = format.GetLRSpace();
-  const vertical = format.GetULSpace();
-  const box = format.GetBox();
-  const gutter = getPageFrameGutters(format);
-  const left = margins.ResolveLeft() + box.CalcLineSpace(BoxEdge.LEFT, true) + gutter.left;
-  const right = margins.ResolveRight() + box.CalcLineSpace(BoxEdge.RIGHT, true) + gutter.right;
-  const top = vertical.GetUpper() + box.CalcLineSpace(BoxEdge.TOP, true) + gutter.top;
-  const bottom = vertical.GetLower() + box.CalcLineSpace(BoxEdge.BOTTOM, true);
+  const margins = getPageFrameMargins(format);
+  const border = getPageFrameBorderSpace(format);
+  const left = margins.left + border.left;
+  const right = margins.right + border.right;
+  const top = margins.top + border.top;
+  const bottom = margins.bottom + border.bottom;
   const width = page.descriptor.width - left - right;
   const pageGeometry = {
     ...page.descriptor,

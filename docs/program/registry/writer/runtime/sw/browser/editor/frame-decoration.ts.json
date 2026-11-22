@@ -1,0 +1,34 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sw/browser/editor/frame-decoration.ts",
+    "classification": "browser-adaptation",
+    "state": "active",
+    "suite": "writer",
+    "subsystem": "page-style-borders",
+    "capabilityIds": [
+      "CAP-0136"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "not-applicable",
+      "defaultStatus": "not-applicable",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/sw/browser/editor/frame-decoration.ts#writerPageBorderStyle",
+        "apps/office/src/sw/browser/presentation/WriterPageBordersDialog.test.tsx",
+        "vendor/libreoffice-reference/sw/source/core/layout/paintfrm.cxx#SwFrame::PaintSwFrameShadowAndBorder"
+      ],
+      "justification": "Paints page frame borders at the native physical margins and displays the directional shadow.",
+      "knownViolations": [],
+      "localSymbols": [
+        "writerPageBorderStyle",
+        "writerFrameShadow"
+      ],
+      "sourceResponsibility": "browser-owned",
+      "upstreamFile": null,
+      "upstreamSymbols": []
+    }
+  }
+}

@@ -14,7 +14,12 @@ import {
 import { writerColorFromPrimitive } from "../../core/attr/swatrset";
 import type { SwPaM } from "../../core/crsr/pam";
 import { SvxPageItem, type SvxPageUsage } from "../../../../svx/inc/pageitem";
-import { SID_ATTR_PAGE } from "../../../../svx/inc/svxids";
+import {
+  SvxBoxInfoItem,
+  SvxBoxInfoItemValidFlags,
+} from "../../../../editeng/source/items/frmitems";
+import { MIN_BORDER_DIST } from "../../../inc/swtypes";
+import { SID_ATTR_BORDER_INNER, SID_ATTR_PAGE } from "../../../../svx/inc/svxids";
 import { headerFooterSetSlot } from "../../../../svx/source/dialog/hdft";
 import { ItemSetToPageStories, PageDescToStoryItemSet } from "./uitool.hdft";
 import type { SwPageStoryFormatChange } from "../../core/layout/pagedesc.hdft";
@@ -106,6 +111,14 @@ export function PageDescToItemSet(descriptor: SwPageDesc): SfxItemSet {
   page.SetPageUsage(Number(descriptor.GetUseOn()) as SvxPageUsage);
   page.SetLandscape(descriptor.GetLandscape());
   items.Put(page, true);
+  items.MergeRange(SID_ATTR_BORDER_INNER, SID_ATTR_BORDER_INNER);
+  const borders = new SvxBoxInfoItem(SID_ATTR_BORDER_INNER);
+  borders.SetTable(false);
+  borders.SetDist(true);
+  borders.SetMinDist(false);
+  borders.SetDefDist(MIN_BORDER_DIST);
+  borders.SetValid(SvxBoxInfoItemValidFlags.DISABLE);
+  items.Put(borders, true);
   PageDescToStoryItemSet(descriptor, items);
   return items;
 }

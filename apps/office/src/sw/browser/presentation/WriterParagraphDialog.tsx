@@ -10,7 +10,7 @@ import { TabulatorTabPage } from "../../../cui/browser/tabpages/TabulatorTabPage
 import { FieldUnit } from "../../../tools/inc/fldunit";
 import { useBrowserLocalization } from "../../../framework/browser/localization/browser-localization-context";
 import { SvxHyphenZoneItem } from "../../../editeng/source/items/paraitem";
-import { WriterParagraphBorderPage } from "./WriterParagraphBorderPage";
+import { WriterFrameBorderPage } from "./WriterFrameBorderPage";
 import { SwParaConnectBorderItem } from "../../source/core/para/paratr";
 import { SvxBorderTabPage } from "../../../cui/source/tabpages/border";
 import { RES_BOX, RES_PARATR_CONNECT_BORDER, RES_PARATR_HYPHENZONE } from "../../inc/hintids";
@@ -421,7 +421,7 @@ export function WriterParagraphDialog({
               </div>
               {activeTab === "tabs" ? <TabulatorTabPage session={tabs} /> : null}
               {activeTab === "borders" && borders && (
-                <WriterParagraphBorderPage
+                <WriterFrameBorderPage
                   page={borders}
                   input={pageInput}
                   output={tabs.output}

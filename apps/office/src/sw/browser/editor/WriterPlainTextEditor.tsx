@@ -1,5 +1,6 @@
 /** @fileoverview Projects Writer paragraphs through one browser implementation of SwEditWin. */
 
+import { writerPageBorderStyle } from "./frame-decoration";
 import { writerPageBackgroundStyle } from "./page-background";
 import { Fragment, useContext, useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
 import type { ReactNode, RefObject } from "react";
@@ -670,7 +671,7 @@ export function WriterPlainTextEditor(props: WriterPlainTextEditorProps): React.
                   width: page.descriptor.width / 15,
                 }}
               >
-                <WriterPageBackground
+                <WriterPageDecoration
                   document={document}
                   page={page}
                   previous={pages[pageIndex - 1]}
@@ -778,8 +779,8 @@ export function WriterPlainTextEditor(props: WriterPlainTextEditorProps): React.
   );
 }
 
-/** Paints the native fill underneath physical page content. @param props - Physical page format context. @returns Noninteractive background. */
-function WriterPageBackground({
+/** Paints the native page fill and outline underneath the physical page content. @param props - Physical page format context. @returns Noninteractive background. */
+function WriterPageDecoration({
   document,
   page,
   previous,
@@ -788,13 +789,27 @@ function WriterPageBackground({
   page: SwPageFrame;
   previous: SwPageFrame | undefined;
 }>): React.JSX.Element | null {
-  const paint = writerPageBackgroundStyle(document, page, previous);
-  return paint ? (
-    <div
-      aria-hidden="true"
-      data-writer-page-background
-      className="absolute -z-10 pointer-events-none"
-      style={paint}
-    />
-  ) : null;
+  const fill = writerPageBackgroundStyle(document, page, previous);
+  const border = writerPageBorderStyle(document, page, previous);
+  if (!fill && !border) return null;
+  return (
+    <>
+      {fill && (
+        <div
+          aria-hidden="true"
+          data-writer-page-background
+          className="absolute -z-10 pointer-events-none"
+          style={fill}
+        />
+      )}
+      {border && (
+        <div
+          aria-hidden="true"
+          data-writer-page-border
+          className="absolute -z-10 pointer-events-none"
+          style={border}
+        />
+      )}
+    </>
+  );
 }

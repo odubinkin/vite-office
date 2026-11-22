@@ -2,6 +2,9 @@
 
 import { MetricSpinButton } from "../../../svtools/browser/control/MetricSpinButton";
 import { FieldUnit } from "../../../tools/inc/fldunit";
+import { SvxBorderTabPage } from "../../../cui/source/tabpages/border";
+import { RES_BOX, RES_SHADOW } from "../../inc/hintids";
+import { WriterFrameBorderPage } from "./WriterFrameBorderPage";
 import { WriterDialogHeader } from "./WriterDialogHeader";
 import { useEffect, useId, useMemo, useRef, useState } from "react";
 
@@ -75,6 +78,26 @@ export function WriterPageStyleDialog({
     /** Opens the original Footer tab item owner. @returns Footer owner. */ () =>
       pageInput && new SvxHFPage(pageInput, false, writerPageStoryIds),
   );
+  const [borders] = useState(
+    /** Opens the common native Borders page without a paragraph merge slot. @returns Page owner. */
+    () => pageInput && new SvxBorderTabPage(pageInput, RES_BOX),
+  );
+  const [borderOutput] = useState(
+    /** Retains the frame border and shadow deltas across tab visits. @returns Owned native items. */
+    () => pageInput && new SfxItemSet(pageInput.GetPool(), [[RES_BOX, RES_SHADOW]]),
+  );
+  useEffect(
+    /** Releases the input and output clones at dialog unmount. @returns Cleanup. */
+    () => {
+      /** Releases the native Borders page owned by this request. @returns Nothing. */
+      function dispose(): void {
+        borderOutput?.Dispose();
+        borders?.Dispose();
+      }
+      return dispose;
+    },
+    [borders, borderOutput],
+  );
   const [headerState, setHeaderState] = useState(
     /** Retains the header draft across tab switches. @returns Header values. */
     () => header?.initial ?? readHeaderFooterSet(undefined, true, writerPageStoryIds),
@@ -118,6 +141,7 @@ export function WriterPageStyleDialog({
     ["transparence", pageLabel("transparency-tab", "Transparency")],
     ["header", pageLabel("header", "Header")],
     ["footer", pageLabel("footer", "Footer")],
+    ["borders", pageLabel("borders", "Borders")],
   ] as const;
   const bitmap = area?.GetFillStyle() === FillStyle.BITMAP ? area.bitmap : undefined;
   const [page] = useState(
@@ -203,6 +227,7 @@ export function WriterPageStyleDialog({
                 return;
               }
               const output = new SfxItemSet(pageInput.GetPool(), [
+                [RES_BOX, RES_SHADOW],
                 [XATTR_FILL_FIRST, XATTR_FILL_LAST],
                 [headerFooterSetSlot(true), headerFooterSetSlot(false)],
               ]);
@@ -210,6 +235,7 @@ export function WriterPageStyleDialog({
               transparency?.FillItemSet(output);
               header?.FillItemSet(headerState, output);
               footer?.FillItemSet(footerState, output);
+              if (borderOutput) output.PutSet(borderOutput);
               if (output.Count()) onSubmit(geometry, output);
               else {
                 output.Dispose();
@@ -477,6 +503,17 @@ export function WriterPageStyleDialog({
                     state,
                   ) => changeStory(active === "header", state)
                 }
+              />
+            </div>
+          )}
+          {active === "borders" && pageInput && borders && borderOutput && (
+            <div role="tabpanel" id={`${id}-panel-borders`} aria-labelledby={`${id}-borders`}>
+              <WriterFrameBorderPage
+                page={borders}
+                input={pageInput}
+                output={borderOutput}
+                unit={unit}
+                label={pageLabel}
               />
             </div>
           )}

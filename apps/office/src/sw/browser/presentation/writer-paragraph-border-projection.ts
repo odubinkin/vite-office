@@ -1,7 +1,7 @@
 /** @fileoverview Browser projection of Writer paragraph border distances, lines, and shadows. */
 import type { CSSProperties } from "react";
 import { SvxBoxItem, SvxBoxItemLine as Edge } from "../../../editeng/source/items/frmitems";
-import { SvxBreak, SvxShadowLocation } from "../../../editeng/inc/svxenum";
+import { SvxBreak } from "../../../editeng/inc/svxenum";
 import type { SvxShadowItem } from "../../../editeng/source/items/frmitems.shadow";
 import type { SfxBoolItem } from "../../../svl/inc/eitem";
 import type { SfxInt16Item } from "../../../svl/inc/intitem";
@@ -14,6 +14,7 @@ import {
   RES_SHADOW,
 } from "../../inc/hintids";
 import { SwTextNode } from "../../source/core/txtnode/ndtxt";
+import { writerFrameShadow } from "../editor/frame-decoration";
 import { exportBorderShorthand } from "../../source/filter/xml/xmlexpit";
 
 /** Projects Writer's adjacent-paragraph comparison at browser paragraph boundaries. @param previous - Preceding node. @param next - Following node. @returns Whether the outlines continue across the shared boundary. */
@@ -51,27 +52,10 @@ function joinParagraphBorders(previous: unknown, next: unknown): boolean {
   );
 }
 
-/** Formats the physical shadow without changing native positioning or size. @param shadow - Shadow item. @returns CSS shadow or no shadow. */
-function paragraphShadow(shadow: SvxShadowItem): string | undefined {
-  const location = shadow.GetLocation();
-  if (location === SvxShadowLocation.NONE) return undefined;
-  const size = shadow.GetWidth() / 20;
-  const x =
-    location === SvxShadowLocation.TopLeft || location === SvxShadowLocation.BottomLeft
-      ? -size
-      : size;
-  const y =
-    location === SvxShadowLocation.TopLeft || location === SvxShadowLocation.TopRight
-      ? -size
-      : size;
-  const color = shadow.GetColor();
-  return `${x}pt ${y}pt rgba(${color.GetRed()}, ${color.GetGreen()}, ${color.GetBlue()}, ${color.GetAlpha() / 255})`;
-}
-
 /** Projects effective paragraph item values, including inherited borders. @param node - Native paragraph. @returns CSS box properties when any are visible. */
 export function projectWriterParagraphBorders(node: SwTextNode): CSSProperties | undefined {
   const box = node.GetAttr(RES_BOX) as SvxBoxItem;
-  const shadow = paragraphShadow(node.GetAttr(RES_SHADOW) as SvxShadowItem);
+  const shadow = writerFrameShadow(node.GetAttr(RES_SHADOW) as SvxShadowItem);
   if (
     !box.GetTop() &&
     !box.GetBottom() &&
