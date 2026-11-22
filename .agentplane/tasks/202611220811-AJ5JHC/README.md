@@ -1,10 +1,11 @@
 ---
 id: "202611220811-AJ5JHC"
 title: "Align Writer checkpoint verification with the connected native UI"
-status: "DOING"
+result_summary: "Aligned five Writer test fixtures with the current menu, paragraph dialog, metric display and validated source counts."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 9
+revision: 10
 origin:
   system: "manual"
 depends_on: []
@@ -40,11 +41,16 @@ quality_review:
     - "output/playwright/writer-ten-task-checkpoint/writer-hintid-recheck.log"
   findings:
     - "Production sources match the full checkpoint revision. All corrected fixtures passed independently."
-commit: null
+commit:
+  hash: "865909ebcdf906596c8dcfd206e1ff112258b6dd"
+  message: "🧩 AJ5JHC code: Align Writer checkpoint verification fixtures"
 comments:
   -
     author: "CODER"
     body: "Start: continue direct-mode task in current checkout."
+  -
+    author: "CODER"
+    body: "Verified: Four Chromium, five inventory CLI and three native Writer WhichId cases passed."
 events:
   -
     type: "status"
@@ -59,8 +65,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Verified: Four Chromium cases at the original centimeter profile, five inventory CLI cases, three native Writer identity cases, scoped lint and formatting, routing, and AgentPlane doctor."
+  -
+    type: "status"
+    at: "2026-11-22T08:23:16.143Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: Four Chromium, five inventory CLI and three native Writer WhichId cases passed."
 doc_version: 3
-doc_updated_at: "2026-11-22T08:17:46.290Z"
+doc_updated_at: "2026-11-22T08:23:16.147Z"
 doc_updated_by: "CODER"
 description: "Correct Writer browser and inventory expectations exposed by the ten-task full run, preserving production behavior and keeping the full run in progress."
 sections:
