@@ -1,12 +1,16 @@
 # Browser Writer paragraph reordering
 
-Paragraph reordering has no model helper or browser UI command at present.
+The Writer Navigator shows **Move Heading Up** and **Move Heading Down** when a
+heading is selected. The commands move the heading and its chapter content,
+including nested headings by default. The primary shortcut modifier leaves
+subheadings in place. The same toolbar provides **Promote Outline Level** and
+**Demote Outline Level**.
+
+The Navigator passes a heading and its outline range to the Writer shell. The
+document moves the complete body nodes in that range, including any complete
+tables. Undo and Redo retain the original and resulting node coordinates.
+The browser tests port the body chapter movement scenarios from the pinned
+LibreOffice Navigator tests.
 
 The former browser **Paragraph actions** menu was removed because it did not
-match an implemented Writer command placement and could be confused with the
-numbering/list movement mechanisms in Writer. A future reordering capability
-must first map a concrete Writer command, selection contract, UI placement, and
-upstream test slice before introducing a model operation or browser action.
-
-The pinned LibreOffice `sw/qa` tests remain provenance for a future command
-slice, not a claim that the local primitive reproduces their behavior.
+map to an implemented Writer command.

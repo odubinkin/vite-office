@@ -53,3 +53,55 @@ test("Writer Navigator opens from View and returns the cursor to a native headin
   await expect(navigator).toBeVisible();
   await expect(heading).toBeVisible();
 });
+
+test("Writer Navigator heading tools move and relevel the selected chapter", /** Uses the real editing surface and heading tools, including movement without sublevels. @param fixtures - Browser test inputs. @param fixtures.page - Writer page. @returns Completion. */ async ({
+  page,
+}) => {
+  await page.goto("/writer", { waitUntil: "domcontentloaded" });
+  const paragraphs = page.locator("[data-writer-paragraph-id]");
+  await paragraphs.first().click();
+  await page.keyboard.insertText("First");
+  await page.keyboard.press("Enter");
+  await page.keyboard.insertText("Child");
+  await page.keyboard.press("Enter");
+  await page.keyboard.insertText("Second");
+  const style = page
+    .getByRole("toolbar", { name: "Writer formatting toolbar" })
+    .getByRole("combobox", { name: "Paragraph style", exact: true });
+  for (const [index, heading] of ["Heading 1", "Heading 2", "Heading 1"].entries()) {
+    await paragraphs.nth(index).click();
+    await style
+      .locator("..")
+      .getByRole("button", { name: "Show Paragraph style", exact: true })
+      .click();
+    await page
+      .locator(`id=${await style.getAttribute("aria-controls")}`)
+      .getByRole("option", { name: heading, exact: true })
+      .click();
+  }
+  await page.keyboard.press("F5");
+  const navigator = page.getByRole("dialog", { name: "Navigator", exact: true });
+  const tools = navigator.getByRole("toolbar", { name: "Heading Tools" });
+  await expect(tools).toBeHidden();
+  const first = navigator.getByRole("treeitem", { name: "First", exact: true });
+  const child = navigator.getByRole("treeitem", { name: "Child", exact: true });
+  await first.click();
+  await expect(tools.getByRole("button")).toHaveCount(4);
+  await tools.getByRole("button", { name: "Move Heading Down" }).click();
+  await expect(paragraphs).toHaveText(["Second", "First", "Child"]);
+  await expect(first).toHaveAttribute("aria-selected", "true");
+  await page.keyboard.press("ControlOrMeta+z");
+  await expect(paragraphs).toHaveText(["First", "Child", "Second"]);
+  await tools
+    .getByRole("button", { name: "Move Heading Down" })
+    .click({ modifiers: ["ControlOrMeta"] });
+  await expect(paragraphs).toHaveText(["Child", "Second", "First"]);
+  await page.keyboard.press("ControlOrMeta+z");
+  await expect(paragraphs).toHaveText(["First", "Child", "Second"]);
+  await tools.getByRole("button", { name: "Demote Outline Level" }).click();
+  const outlineLevel = navigator.getByRole("combobox", { name: "Show Up to Outline Level" });
+  await outlineLevel.selectOption("2");
+  await expect(child).toBeHidden();
+  await tools.getByRole("button", { name: "Promote Outline Level" }).click();
+  await expect(child).toBeVisible();
+});

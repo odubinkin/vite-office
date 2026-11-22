@@ -1,10 +1,20 @@
 /** @fileoverview Renders the native Writer Navigator toolbar and content tree as a retained modeless window. */
-import { ArrowDown, ArrowUp, ChevronDown, ChevronRight, ListTree, X } from "lucide-react";
+import {
+  ArrowDown,
+  ArrowUp,
+  ChevronDown,
+  ChevronRight,
+  IndentDecrease,
+  IndentIncrease,
+  ListTree,
+  X,
+} from "lucide-react";
 import { useEffect, useRef, useState, type KeyboardEvent, type RefObject } from "react";
 import { useBrowserLocalization } from "../../../framework/browser/localization/browser-localization-context";
 import type {
   SwNavigatorContentGroup,
   SwNavigatorContentType,
+  SwNavigatorHeadingCommand,
 } from "../../source/uibase/utlui/content";
 import type { SwView } from "../../source/uibase/uiview/view";
 import { queueWriterCursorReveal } from "./writer-cursor-reveal";
@@ -21,6 +31,13 @@ interface NavigatorRow {
 }
 
 const contentTitles = { outline: "Headings", table: "Tables", bookmark: "Bookmarks" } as const;
+
+const headingTools = [
+  ["promote", "Promote Outline Level", IndentDecrease],
+  ["demote", "Demote Outline Level", IndentIncrease],
+  ["chapterup", "Move Heading Up", ArrowUp],
+  ["chapterdown", "Move Heading Down", ArrowDown],
+] as const satisfies readonly (readonly [SwNavigatorHeadingCommand, string, typeof ArrowUp])[];
 
 /** Projects the native content hierarchy and retains the requested outline depth. @param groups - Native content roots. @param outlineLevel - Maximum visible heading level. @param collapsed - Retained closed entries. @param root - Optional content-navigation root. @param label - Original localized text. @returns Visible rows. */
 function getRows(
@@ -110,6 +127,8 @@ export function WriterNavigator({
       /** Resolves the existing focus identity after a document edit. @param row - Mounted tree row. @returns Selection match. */
       (row) => row.id === selected,
     ) ?? rows[0];
+  const headingRow =
+    selectedRow?.type === "outline" && !selectedRow.group ? selectedRow : undefined;
 
   useEffect(
     /** Restores native content tree focus when the retained Navigator is shown. @returns Nothing. */
@@ -328,6 +347,39 @@ export function WriterNavigator({
             ),
           )}
         </select>
+      </div>
+      {/* Keep the first click on a heading from shifting its row during double-click. */}
+      <div
+        role="toolbar"
+        aria-label={label("heading-tools", "Heading Tools")}
+        className={`flex shrink-0 items-center gap-1.5 border-b border-slate-200 px-2 py-1 ${headingRow ? "" : "invisible"}`}
+      >
+        {headingTools.map(
+          /** Renders the original selection-specific heading buttons in toolbar order. @param tool - Original ID, tooltip and browser icon. @returns Native button. */
+          ([command, fallback, Icon]) => {
+            const title = label(command, fallback);
+            return (
+              <button
+                key={command}
+                type="button"
+                aria-label={title}
+                title={title}
+                className="rounded p-1 hover:bg-slate-100"
+                onClick={
+                  /** Runs the heading button, excluding sublevels with the primary modifier alone. @param event - Original pointer or keyboard activation. @returns Nothing. */
+                  (event) => {
+                    const withoutChildren =
+                      event.ctrlKey !== event.metaKey && !event.shiftKey && !event.altKey;
+                    if (headingRow && tree.ExecCommand(headingRow.id, command, !withoutChildren))
+                      reveal();
+                  }
+                }
+              >
+                <Icon size={16} />
+              </button>
+            );
+          },
+        )}
       </div>
       <ul
         ref={treeRef}

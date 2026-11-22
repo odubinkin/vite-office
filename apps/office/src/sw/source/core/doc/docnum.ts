@@ -7,9 +7,49 @@ import type { SwPaM, SwPosition } from "../crsr/pam";
 import { SwTextNode } from "../txtnode/ndtxt";
 import type { SwTextFormatColl } from "./fmtcol";
 import { WRITER_MAX_LIST_LEVEL } from "./list";
+import { SwNodeRange } from "../../../inc/ndindex";
+import { SwUndoMove } from "../undo/unmove";
+import type { SwUndoCursorState } from "../undo/undobj";
 
 /** Native level count; the shared list constant denotes the maximum zero-based index. */
 const MAXLEVEL = WRITER_MAX_LIST_LEVEL + 1;
+
+/** Moves the selected chapter's body range relative to the native outline index. @param document - Owning document. @param first - Selected heading index. @param end - Exclusive outline selection boundary. @param offset - Signed native chapter offset. @param cursor - Persistent heading position for history. @returns Whether the body range moved. */
+export function MoveOutlinePara(
+  document: SwDoc,
+  first: number,
+  end: number,
+  offset: number,
+  cursor: SwUndoCursorState,
+): boolean {
+  const nodes = document.GetNodes();
+  const outlines = nodes.GetOutLineNds().entries();
+  const bodyEnd = nodes.GetEndOfContent();
+  const body = bodyEnd.StartOfSectionNode();
+  const start = outlines[first];
+  if (!start || first >= end || offset === 0 || start.StartOfSectionNode() !== body) return false;
+  const endNode = outlines[end] ?? bodyEnd;
+  const destinationIndex = (offset > 0 ? end : first) + offset;
+  const destination =
+    destinationIndex < 0 ? nodes.at(body.GetIndex() + 1) : (outlines[destinationIndex] ?? bodyEnd);
+  if (endNode.StartOfSectionNode() !== body || destination.StartOfSectionNode() !== body)
+    return false;
+
+  const range = new SwNodeRange(start, endNode);
+  const count = endNode.GetIndex() - start.GetIndex();
+  const undo = new SwUndoMove(range, destination, cursor);
+  try {
+    if (!document.GetDocumentContentOperationsManager().MoveNodeRange(range, destination)) {
+      undo.Dispose();
+      return false;
+    }
+    undo.SetDestRange(start.GetIndex(), start.GetIndex() + count, endNode.GetIndex(), cursor);
+    document.GetUndoManager().AddUndoAction(undo);
+    return true;
+  } finally {
+    range.Dispose();
+  }
+}
 
 /** Moves actual outline paragraphs across occupied style levels or direct outline attributes. @param document - Owning aggregate. @param range - Borrowed native selection. @param offset - Native signed short level displacement. @returns Whether the whole represented range is applicable. */
 export function OutlineUpDown(document: SwDoc, range: SwPaM, offset: number): boolean {

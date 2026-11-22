@@ -11,10 +11,12 @@
     ],
     "upstreamSymbols": [
       "SwContentType::FillMemberList",
-      "SwContentTree::GotoContent"
+      "SwContentTree::GotoContent",
+      "SwContentTree::ExecCommand"
     ],
     "preservedResponsibilities": [
-      "Reads the native outline, table and bookmark owners and navigates through the live Writer cursor."
+      "Reads the native outline, table and bookmark owners and navigates through the live Writer cursor.",
+      "Uses the selected outline entry, native chapter offsets, level bounds and optional descendants for the four heading actions."
     ],
     "omittedResponsibilities": [
       "The represented tree serves the active document and the three connected native content families."
@@ -24,6 +26,10 @@
         {
           "path": "apps/office/src/sw/source/uibase/utlui/content.ts",
           "marker": "SwContentTree"
+        },
+        {
+          "path": "apps/office/src/sw/source/uibase/utlui/content.ts",
+          "marker": "ExecCommand"
         }
       ],
       "upstream": [
@@ -34,6 +40,10 @@
         {
           "path": "vendor/libreoffice-reference/sw/source/uibase/utlui/content.cxx",
           "marker": "SwContentTree::GotoContent"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/uibase/utlui/content.cxx",
+          "marker": "SwContentTree::ExecCommand"
         }
       ]
     }
