@@ -68,7 +68,7 @@ import {
 import type { SvxFontItem } from "../../../editeng/inc/fontitem";
 import { ScCellText } from "./ScCellText";
 import type { SvxBrushItem } from "../../../editeng/inc/brushitem";
-import { COL_AUTO, COL_BLACK, COL_WHITE } from "../../../tools/inc/color";
+import { COL_AUTO, COL_BLACK, COL_WHITE, type Color } from "../../../tools/inc/color";
 import { browserColor } from "../../../vcl/browser/color";
 import { ScAddress, ScRange } from "../../inc/address";
 import type { ScSplitPos, ScViewData } from "../../source/ui/inc/viewdata";
@@ -77,6 +77,7 @@ export type { CalcGridViewport } from "./calc-grid-axis";
 export interface CalcCellPresentation {
   readonly text: string;
   readonly alignment: "left" | "right";
+  readonly color?: Color | null;
 }
 /** Controller contracts corresponding to native grid painting and input routing. */
 export interface ScGridWindowProps {
@@ -659,6 +660,7 @@ export function ScGridWindow(props: ScGridWindowProps): React.JSX.Element {
                       lineColor,
                       fontColor,
                     } = cellTypography(pattern, conditional);
+                    const color = cell.color ?? fontColor.getFinalColor();
                     const pane = part(x, band);
                     const cellId = idFor(firstCol, firstRow, pane, !!merge);
                     const active = cellId === activeId;
@@ -692,6 +694,7 @@ export function ScGridWindow(props: ScGridWindowProps): React.JSX.Element {
                       : cellInsets(band, top, height);
                     const cellStyle: CSSProperties = {
                       ...fontStyle,
+                      color: browserColor(color),
                       whiteSpace: (pattern.GetItem(139) as ScLineBreakCell).GetValue()
                         ? "pre-wrap"
                         : "nowrap",
@@ -814,7 +817,7 @@ export function ScGridWindow(props: ScGridWindowProps): React.JSX.Element {
                               enabled={outlined}
                               shadow={shadowed}
                               relief={relief}
-                              color={fontColor.getFinalColor()}
+                              color={color}
                               lineColor={lineColor}
                               paintStyle={{
                                 textDecorationColor:

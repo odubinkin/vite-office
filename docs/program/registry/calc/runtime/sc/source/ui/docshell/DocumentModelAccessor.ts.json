@@ -1,0 +1,35 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sc/source/ui/docshell/DocumentModelAccessor.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "calc",
+    "subsystem": "number-formatting",
+    "capabilityIds": [
+      "CAP-baadca35-ed24-475a-b583-42f53f6c037e"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/sc/source/ui/docshell/DocumentModelAccessor.ts",
+        "apps/office/src/sc/browser/presentation/calc-number-format-sidebar.test.tsx",
+        "vendor/libreoffice-reference/sc/source/ui/docshell/DocumentModelAccessor.cxx"
+      ],
+      "justification": "Reads explicit, non-system, non-additional currency entries from the actual formatter map, returning unique source identities in tuple order.",
+      "knownViolations": [],
+      "localSymbols": [
+        "getDocumentCurrencies"
+      ],
+      "sourceResponsibility": "divergent",
+      "upstreamFile": "sc/source/ui/docshell/DocumentModelAccessor.cxx",
+      "upstreamSymbols": [
+        "DocumentModelAccessor::getDocumentCurrencies"
+      ]
+    }
+  }
+}

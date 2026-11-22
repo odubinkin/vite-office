@@ -9,7 +9,7 @@
     "localSymbols": [
       "GenerateFormat",
       "ImpPosToken",
-      "GetCurrencyEntry"
+      "LookupCurrencyEntry"
     ],
     "upstreamSymbols": [
       "SvNFEngine::GenerateFormat",

@@ -4,6 +4,7 @@ import type { ScProtectionAttr } from "../../inc/attrib";
 import { ATTR_PROTECTION } from "../../inc/scitems";
 import { ScFormulaCell } from "../../inc/formulacell";
 import { ScCellValue } from "../../inc/cellvalue";
+import type { Color } from "../../../tools/inc/color";
 import { FormulaError } from "../../../formula/inc/errorcodes";
 import type { ScDocument } from "../../inc/document";
 import type { ScAddress } from "../../inc/address";
@@ -134,7 +135,7 @@ export function cellPresentation(
   pos: ScAddress,
   showFormulas = false,
   showZeros = true,
-): Readonly<{ text: string; alignment: "left" | "right" }> {
+): Readonly<{ text: string; alignment: "left" | "right"; color?: Color | null }> {
   const protection = sheetCellProtection(doc, pos, true);
   if (protection?.GetHideCell()) return { text: "", alignment: "left" };
   if (showFormulas) {
@@ -153,9 +154,14 @@ export function cellPresentation(
   if (error) return { text: errorText(error), alignment: "right" };
   const ref = doc.GetRefCellValue(pos);
   if (ref.hasEmptyValue()) return { text: "", alignment: "left" };
-  const output = ScCellFormat.GetOutputString(doc, pos, ref, showZeros);
+  const color: [Color | null] = [null];
+  const output = ScCellFormat.GetOutputString(doc, pos, ref, showZeros, color);
   try {
-    return { text: text(output), alignment: ref.hasString() ? "left" : "right" };
+    return {
+      text: text(output),
+      alignment: ref.hasString() ? "left" : "right",
+      ...(color[0] ? { color: color[0] } : {}),
+    };
   } finally {
     output.dispose();
   }

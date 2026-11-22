@@ -7916,3 +7916,23 @@ that category. Calc preserves the range lookup and category aggregation.
 
 - [Original category aggregation](../../vendor/libreoffice-reference/sc/source/ui/view/formatsh.cxx#L2093)
 - [Original column format lookup](../../vendor/libreoffice-reference/sc/source/core/data/column.cxx#L362)
+
+### CALC-831 — A mixed number category can show General without applying it
+
+The panel clears its category selection for an invalid state and resets its
+cached category to index 0. Selecting General then changes the visible
+selection, but the handler sees the cached index 0 and sends no command.
+Calc retains the original comparison and the displayed selection.
+
+- [Original category change handler](../../vendor/libreoffice-reference/sc/source/ui/sidebar/NumberFormatPropertyPanel.cxx#L86)
+- [Original mixed category update](../../vendor/libreoffice-reference/sc/source/ui/sidebar/NumberFormatPropertyPanel.cxx#L214)
+
+### CALC-832 — Number Format options ignore an unterminated final field
+
+The format shell assigns each option when it finds a comma. A missing
+trailing comma leaves the corresponding option at its zero default.
+The normal sidebar builds the terminated string, and a direct native
+request retains the same parsing rule.
+
+- [Original native request parser](../../vendor/libreoffice-reference/sc/source/ui/view/formatsh.cxx#L410)
+- [Original sidebar options request](../../vendor/libreoffice-reference/sc/source/ui/sidebar/NumberFormatPropertyPanel.cxx#L108)

@@ -68,23 +68,24 @@ function integerPicture(
   return result;
 }
 
-/** Looks up a compiled currency symbol using the format's explicit extension.
- * @param symbol - Unquoted native symbol.
- * @param extension - Explicit hexadecimal language extension.
- * @returns Matching entry and whether it is the bank symbol.
+/** Resolved currency table entry and its matched symbol mode. */
+type CurrencyEntryMatch = { entry: NfCurrencyEntry; bank: boolean };
+
+/** Finds an unambiguous currency in the actual ordered table.
+ * @param symbol - Native symbol or bank code.
+ * @param language - Specific locale or all locales when omitted.
+ * @returns Matching entry, null for an ambiguous symbol, or undefined for a miss.
  */
-function GetCurrencyEntry(
+function findCurrencyEntry(
   symbol: string,
-  extension: string,
-): { entry: NfCurrencyEntry; bank: boolean } | null {
+  language?: number,
+): CurrencyEntryMatch | null | undefined {
   const table = SvNumberFormatter.GetTheCurrencyTable();
-  const parsed = Math.abs(Number.parseInt(extension, 16));
-  const language = parsed ? parsed & 0xffff : LANGUAGE_DONTKNOW;
-  let match: { entry: NfCurrencyEntry; bank: boolean } | null = null;
+  let match: CurrencyEntryMatch | undefined;
   for (const [position, entry] of table.entries()) {
     const actual = entry.GetLanguage();
     if (
-      extension &&
+      language !== undefined &&
       actual !== language &&
       !(language === LANGUAGE_DONTKNOW && actual === LANGUAGE_SYSTEM)
     )
@@ -97,6 +98,29 @@ function GetCurrencyEntry(
     if (system) break;
   }
   return match;
+}
+
+/** Resolves the explicit currency token with the native locale fallback order.
+ * @param symbol - Unquoted native symbol.
+ * @param extension - Optional hexadecimal language extension.
+ * @param formatLanguage - When supplied, also try the format language after the explicit extension.
+ * @returns Matching entry and bank-symbol flag.
+ */
+export function LookupCurrencyEntry(
+  symbol: string,
+  extension: string,
+  formatLanguage?: number,
+): CurrencyEntryMatch | null {
+  if (extension) {
+    const parsed = Math.abs(Number.parseInt(extension, 16));
+    const explicit = findCurrencyEntry(symbol, parsed ? parsed & 0xffff : LANGUAGE_DONTKNOW);
+    if (explicit !== undefined || formatLanguage === undefined) return explicit ?? null;
+  }
+  if (formatLanguage !== undefined) {
+    const fromFormat = findCurrencyEntry(symbol, formatLanguage);
+    if (fromFormat !== undefined) return fromFormat;
+  }
+  return extension ? null : (findCurrencyEntry(symbol) ?? null);
 }
 
 /** Produces the source currency layouts using the locale's compatibility currency or explicit symbol.
@@ -133,7 +157,7 @@ function currencyPicture(
       if (format.GetNewCurrencySymbol(symbol, extension)) {
         const name = text(symbol);
         const modifier = text(extension);
-        const match = GetCurrencyEntry(name, modifier);
+        const match = LookupCurrencyEntry(name, modifier);
         const bank = match?.bank ?? true;
         const positivePlacement = NfCurrencyEntry.GetEffectivePositiveFormat(
           positiveLayout,

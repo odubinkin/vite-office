@@ -1,0 +1,35 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sfx2/inc/IDocumentModelAccessor.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "shared",
+    "subsystem": "number-formatting",
+    "capabilityIds": [
+      "CAP-baadca35-ed24-475a-b583-42f53f6c037e"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/sfx2/inc/IDocumentModelAccessor.ts",
+        "apps/office/src/sc/browser/presentation/calc-number-format-sidebar.test.tsx",
+        "vendor/libreoffice-reference/include/sfx2/IDocumentModelAccessor.hxx"
+      ],
+      "justification": "Transports the original explicit symbol, language extension and native language ID.",
+      "knownViolations": [],
+      "localSymbols": [
+        "CurrencyID"
+      ],
+      "sourceResponsibility": "divergent",
+      "upstreamFile": "include/sfx2/IDocumentModelAccessor.hxx",
+      "upstreamSymbols": [
+        "struct SFX2_DLLPUBLIC CurrencyID"
+      ]
+    }
+  }
+}

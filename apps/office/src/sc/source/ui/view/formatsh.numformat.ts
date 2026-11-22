@@ -11,7 +11,8 @@ import {
   SV_COUNTRY_LANGUAGE_OFFSET,
   SvNumFormatType as T,
 } from "../../../../svl/inc/zforlist";
-import { SfxUInt32Item } from "../../../../svl/source/items/intitem";
+import { SfxUInt16Item, SfxUInt32Item } from "../../../../svl/source/items/intitem";
+import { SfxStringItem } from "../../../../svl/source/items/stritem";
 import { SvNumberFormatter } from "../../../../svl/source/numbers/zforlist";
 import { ScRange } from "../../../inc/address";
 import { ScMarkData } from "../../../inc/markdata";
@@ -27,6 +28,8 @@ import {
   SID_NUMBER_STANDARD,
   SID_NUMBER_THOUSANDS,
   SID_NUMBER_TIME,
+  SID_NUMBER_FORMAT,
+  SID_NUMBER_TYPE_FORMAT,
   SID_NUMBER_TWODEC,
 } from "../../../sdi/formatsh.numformat";
 import type { ScViewData } from "../inc/viewdata";
@@ -41,6 +44,54 @@ const categorySlots = new Map<number, number>([
   [SID_NUMBER_SCIENTIFIC, T.SCIENTIFIC],
   [SID_NUMBER_TIME, T.TIME],
 ]);
+
+// The sidebar index addresses the source list, excluding the All category.
+const sidebarCategories = [
+  T.NUMBER,
+  T.NUMBER,
+  T.PERCENT,
+  T.CURRENCY,
+  T.DATE,
+  T.TIME,
+  T.SCIENTIFIC,
+  T.FRACTION,
+  T.LOGICAL,
+  T.TEXT,
+] as const;
+
+/** Converts one uniform format into the native sidebar category.
+ * @param type - Masked native category.
+ * @param key - Number format key.
+ * @returns Sidebar category or undefined for an unrepresented type.
+ */
+function sidebarCategory(type: number, key: number): number | undefined {
+  if (type === T.NUMBER) return key % SV_COUNTRY_LANGUAGE_OFFSET === 0 ? 0 : 1;
+  const index = sidebarCategories.indexOf(
+    (type === T.DATETIME ? T.DATE : type) as (typeof sidebarCategories)[number],
+  );
+  return index < 0 ? undefined : index;
+}
+
+/** Serializes the five fields of the original options state item.
+ * @param formatter - Current document format table.
+ * @param key - Uniform selection key.
+ * @returns Native comma-separated item.
+ */
+function sidebarOptions(formatter: SvNumberFormatter, key: number): string {
+  const { grouped, red, precision, leadingZeros } = formatter.GetFormatSpecialInfo(key);
+  const entry = formatter.GetEntry(key);
+  const digits = entry?.GetFormatIntegerDigits() ?? 0;
+  const engineering = (entry?.GetType() ?? 0) & T.SCIENTIFIC;
+  const group = engineering ? digits > 0 && digits % 3 === 0 : grouped;
+  return [
+    Number(group),
+    Number(red),
+    precision,
+    leadingZeros,
+    Number(formatter.IsNatNum12(key)),
+    "",
+  ].join(",");
+}
 
 /** Queries the common format category over the active sheet's marked column spans.
  * @param view - Actual Calc view.
@@ -90,6 +141,15 @@ export function GetNumFormatState(this: ScFormatShell, slot: number): SfxSlotSta
   const key = selectionKey(items);
   const type =
     state >= SfxItemState.DEFAULT ? formatter.GetType(key) : GetCurrentNumberFormatType(view);
+
+  if (slot === SID_NUMBER_TYPE_FORMAT) {
+    const value = state >= SfxItemState.DEFAULT ? sidebarCategory(type, key) : undefined;
+    return value === undefined ? { enabled: true, mixed: true } : { enabled: true, value };
+  }
+  if (slot === SID_NUMBER_FORMAT)
+    return state === SfxItemState.INVALID
+      ? { enabled: true, mixed: true }
+      : { enabled: true, value: sidebarOptions(formatter, key) };
 
   switch (slot) {
     case SID_NUMBER_THOUSANDS:
@@ -177,6 +237,68 @@ function toggleThousands(view: ScViewFunc): boolean {
   }
 }
 
+/** Executes the typed NumberFormatType sidebar command. @param view - Format view. @param request - Native request. @returns Whether applied. */
+function executeCategory(view: ScViewFunc, request: SfxRequest): boolean {
+  for (const item of request.GetArgs()) {
+    if (!(item instanceof SfxUInt16Item) || item.Which() !== SID_NUMBER_TYPE_FORMAT) continue;
+    const category = item.GetValue();
+    const type = sidebarCategories[category];
+    const applied = type !== undefined && view.SetNumberFormat(type, category === 1 ? 2 : 0);
+    request.Done();
+    return applied;
+  }
+  return false;
+}
+
+/** Applies the original four terminated numeric fields through the cursor's compiled format.
+ * @param view - Actual format view.
+ * @param request - Native options request.
+ * @returns Whether applied.
+ */
+function executeOptions(view: ScViewFunc, request: SfxRequest): boolean {
+  const data = view.GetViewData();
+  const formatter = data.GetDocument().GetFormatTable();
+  const key = GetCursorNumberFormat(data);
+  const entry = formatter.GetEntry(key);
+  if (!entry) return false;
+  const type = entry.GetMaskedType();
+  if (
+    type !== T.ALL &&
+    ![T.NUMBER, T.PERCENT, T.CURRENCY, T.SCIENTIFIC, T.FRACTION, T.TIME].some(
+      /** Matches the native exact category filter. @param candidate - Allowed category. @returns Match. */
+      (candidate) => type === candidate,
+    )
+  )
+    return false;
+
+  for (const item of request.GetArgs()) {
+    if (!(item instanceof SfxStringItem) || item.Which() !== SID_NUMBER_FORMAT) continue;
+    const fields = item.GetValue().slice(0, 0xffff).split(",");
+    fields.pop(); // The source only assigns fields when it encounters a comma.
+    const [grouped = 0, red = 0, precision = 0, leadingZeros = 0] = fields.slice(0, 4).map(
+      /** Reads the original signed 32-bit decimal field with zero fallback. @param field - Encoded field. @returns Integer. */
+      (field) => {
+        const value = Number.parseInt(field, 10);
+        return value >= -0x80000000 && value <= 0x7fffffff ? value : 0;
+      },
+    );
+    const code = formatter.GenerateFormat(
+      key,
+      entry.GetLanguage(),
+      grouped !== 0,
+      red !== 0,
+      precision & 0xffff,
+      leadingZeros & 0xffff,
+    );
+    try {
+      return view.SetNumFmtByStr(code);
+    } finally {
+      code.dispose();
+    }
+  }
+  return false;
+}
+
 /** Executes the native number format shortcut and records it in the request.
  * @param this - Actual format shell.
  * @param request - Native shortcut request.
@@ -188,6 +310,10 @@ export function ExecuteNumFormat(this: ScFormatShell, request: SfxRequest): bool
   const slot = request.GetSlot();
   let applied: boolean;
   switch (slot) {
+    case SID_NUMBER_TYPE_FORMAT:
+      return executeCategory(view, request);
+    case SID_NUMBER_FORMAT:
+      return executeOptions(view, request);
     case SID_NUMBER_TWODEC: {
       const type = GetCurrentNumberFormatType(data);
       const key = selectionKey(GetSelectionPattern(data).GetItemSet());

@@ -26,7 +26,7 @@
       "localSymbols": [
         "GenerateFormat",
         "ImpPosToken",
-        "GetCurrencyEntry"
+        "LookupCurrencyEntry"
       ],
       "sourceResponsibility": "divergent",
       "upstreamFile": "svl/source/numbers/zforlist.cxx",

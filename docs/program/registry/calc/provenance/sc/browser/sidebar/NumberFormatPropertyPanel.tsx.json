@@ -1,0 +1,29 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "browser-adaptation",
+    "status": "local-only",
+    "localPath": "apps/office/src/sc/browser/sidebar/NumberFormatPropertyPanel.tsx",
+    "rationale": "React and DOM apply the source Calc/Sfx control structure and preserve the active viewport, command and document owners.",
+    "responsibilities": [
+      "Projects the native category combo, three shortcut buttons, options and numeric limits into accessible browser controls bound to the original Sfx slots."
+    ],
+    "stackDivergence": {
+      "kind": "browser-adaptation",
+      "rationale": "React and DOM apply the source Calc/Sfx control structure and preserve the active viewport, command and document owners."
+    },
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sc/browser/sidebar/NumberFormatPropertyPanel.tsx",
+          "marker": "NumberFormatPropertyPanel"
+        },
+        {
+          "path": "apps/office/src/sc/browser/presentation/calc-number-format-sidebar.test.tsx",
+          "marker": "@fileoverview"
+        }
+      ]
+    }
+  }
+}

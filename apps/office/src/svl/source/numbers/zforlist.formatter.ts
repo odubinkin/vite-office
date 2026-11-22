@@ -359,6 +359,26 @@ export class SvNumberFormatter {
     );
   }
 
+  /** Tests the original first-section spell-out prefix. @param key - Format key. @returns Whether NatNum12 is set. */
+  IsNatNum12(key: number): boolean {
+    return this.GetEntry(key)?.GetNatNumModifierString(0).startsWith("[NatNum12") ?? false;
+  }
+
+  /** Returns the immutable initial formatter language. @returns Language identity. */
+  GetLanguage(): number {
+    return this.IniLnge;
+  }
+
+  /** Borrows the table's original read-only view. @returns Format data. */
+  GetROFormatData(): Pick<SvNFFormatData, "GetFormatEntryMap"> {
+    return this.m_aFormatData;
+  }
+
+  /** Builds variants for a currency in the active formatter locale. @param formats - Owned output codes. @param entry - Currency table row. @param bank - ISO symbol mode. @returns Default format index. */
+  GetCurrencyFormatStrings(formats: OUString[], entry: NfCurrencyEntry, bank: boolean): number {
+    return this.m_aCurrentLanguage.GetCurrencyFormatStrings(formats, entry, bank);
+  }
+
   /** Reads native format options. @param key - Format key. @returns Grouping, negative red, and digit counts. */
   GetFormatSpecialInfo(key: number): FormatSpecialInfo {
     return (

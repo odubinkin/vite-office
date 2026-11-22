@@ -67,6 +67,7 @@ export class NfCurrencyEntry {
   private readonly digits: number;
   private readonly cZeroChar: number;
   /** Initializes the source wrapper fallback or Currency2 row, preserving the row's own digits. @param first - Wrapper or currency row. @param second - Language or wrapper. @param third - Row language.  @returns Constructed instance. */
+  constructor(source: NfCurrencyEntry);
   constructor(wrapper: LocaleDataWrapper, language: number);
   /** Computes the currency result. @param currency - Currency. @param wrapper - Wrapper. @param language - Language. @returns Constructed instance. */ constructor(
     currency: LocaleCurrency,
@@ -74,11 +75,21 @@ export class NfCurrencyEntry {
     language: number,
   );
   /** Computes the first result. @param first - First. @param second - Second. @param third - Third. @returns Constructed instance. */ constructor(
-    first: LocaleDataWrapper | LocaleCurrency,
-    second: number | LocaleDataWrapper,
+    first: LocaleDataWrapper | LocaleCurrency | NfCurrencyEntry,
+    second?: number | LocaleDataWrapper,
     third?: number,
   ) {
-    const wrapper = typeof second === "number" ? (first as LocaleDataWrapper) : second;
+    if (first instanceof NfCurrencyEntry) {
+      this.symbol = new OUString(first.symbol);
+      this.bankSymbol = new OUString(first.bankSymbol);
+      this.language = first.language;
+      this.positiveFormat = first.positiveFormat;
+      this.negativeFormat = first.negativeFormat;
+      this.digits = first.digits;
+      this.cZeroChar = first.cZeroChar;
+      return;
+    }
+    const wrapper = (typeof second === "number" ? first : second) as LocaleDataWrapper;
     const currency = typeof second === "number" ? null : (first as LocaleCurrency);
     this.symbol = currency ? unicode(currency.symbol) : new OUString(wrapper.getCurrSymbol());
     this.bankSymbol = currency

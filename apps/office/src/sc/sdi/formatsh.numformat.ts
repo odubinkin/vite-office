@@ -12,8 +12,15 @@ export const SID_NUMBER_TIME = 26056;
 export const SID_NUMBER_INCDEC = 26057;
 export const SID_NUMBER_DECDEC = 26058;
 export const SID_NUMBER_THOUSANDS = 26059;
+export const SID_NUMBER_TYPE_FORMAT = 26401;
+export const SID_NUMBER_FORMAT = 26620;
+
+export const NUMBER_FORMAT_TYPE = ".uno:NumberFormatType";
+export const NUMBER_FORMAT = ".uno:NumberFormat";
 
 const commands = [
+  [SID_NUMBER_TYPE_FORMAT, NUMBER_FORMAT_TYPE, "Number Format Type"],
+  [SID_NUMBER_FORMAT, NUMBER_FORMAT, "Number Format"],
   [SID_NUMBER_CURRENCY, ".uno:NumberFormatCurrency", "Currency"],
   [SID_NUMBER_PERCENT, ".uno:NumberFormatPercent", "Percent"],
   [SID_NUMBER_STANDARD, ".uno:NumberFormatStandard", "General"],

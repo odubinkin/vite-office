@@ -20,6 +20,7 @@ export interface SidebarDeckProps {
   readonly focusDocument?: () => void;
   readonly closeLabel?: string;
   readonly selectionLabel?: string;
+  readonly initiallyOpen?: boolean;
 }
 
 /** Renders a deck title and activation rail independently of whole-sidebar visibility.
@@ -30,6 +31,7 @@ export interface SidebarDeckProps {
  * @param props.focusDocument - Returns focus to the owning client without dispatch.
  * @param props.closeLabel - Localized deck close label.
  * @param props.selectionLabel - Localized activation rail label.
+ * @param props.initiallyOpen - Native module startup deck state.
  * @returns Sidebar deck chrome and its activation rail.
  */
 export function SidebarDeck({
@@ -39,8 +41,9 @@ export function SidebarDeck({
   focusDocument,
   closeLabel = "Close Sidebar Deck",
   selectionLabel = "Sidebar deck selection",
+  initiallyOpen = true,
 }: SidebarDeckProps): React.JSX.Element {
-  const [isOpen, setIsOpen] = useState(true);
+  const [isOpen, setIsOpen] = useState(initiallyOpen);
   const contentId = useId();
   const closeRef = useRef<HTMLButtonElement>(null);
   const activationRef = useRef<HTMLButtonElement>(null);

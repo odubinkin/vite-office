@@ -1,0 +1,40 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/sc/source/ui/docshell/DocumentModelAccessor.ts",
+    "status": "mapped",
+    "upstreamPath": "sc/source/ui/docshell/DocumentModelAccessor.cxx",
+    "localSymbols": [
+      "getDocumentCurrencies"
+    ],
+    "upstreamSymbols": [
+      "DocumentModelAccessor::getDocumentCurrencies"
+    ],
+    "preservedResponsibilities": [
+      "Reads explicit, non-system, non-additional currency entries from the actual formatter map, returning unique source identities in tuple order."
+    ],
+    "omittedResponsibilities": [
+      "Only the native currency-facing responsibility used by the toolbar has been ported."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sc/source/ui/docshell/DocumentModelAccessor.ts",
+          "marker": "getDocumentCurrencies"
+        },
+        {
+          "path": "apps/office/src/sc/browser/presentation/calc-number-format-sidebar.test.tsx",
+          "marker": "@fileoverview"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sc/source/ui/docshell/DocumentModelAccessor.cxx",
+          "marker": "DocumentModelAccessor::getDocumentCurrencies"
+        }
+      ]
+    }
+  }
+}

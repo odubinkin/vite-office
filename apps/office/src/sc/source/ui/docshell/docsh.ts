@@ -46,6 +46,7 @@ import {
 import { ScDocument } from "../../../inc/document";
 import { CellType, ScGlobal } from "../../../inc/global";
 import { ATTR_HOR_JUSTIFY } from "../../../inc/scitems";
+import { DocumentModelAccessor } from "./DocumentModelAccessor";
 import { SetDocumentShell } from "../../core/data/documen2";
 import { ScHorizontalCellIterator } from "../../core/data/dociter";
 import { ScCellFormat } from "../../core/tool/cellform";
@@ -171,6 +172,10 @@ export class ScDocShell extends SfxObjectShell {
       document.GetStyleSheetPool()?.GetPageStyle(document.GetPageStyle(0), true);
     }
     document.GetStyleSheetPool()?.LoadStandardCellStyles();
+  }
+  /** Creates an accessor for the actual current document. @returns Document model accessor. */
+  GetDocumentModelAccessor(): DocumentModelAccessor {
+    return new DocumentModelAccessor(this.document);
   }
   /** Borrows the actual document. @returns Model. */
   GetDocument(): ScDocument {

@@ -1,0 +1,40 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/sfx2/inc/IDocumentModelAccessor.ts",
+    "status": "mapped",
+    "upstreamPath": "include/sfx2/IDocumentModelAccessor.hxx",
+    "localSymbols": [
+      "CurrencyID"
+    ],
+    "upstreamSymbols": [
+      "struct SFX2_DLLPUBLIC CurrencyID"
+    ],
+    "preservedResponsibilities": [
+      "Transports the original explicit symbol, language extension and native language ID."
+    ],
+    "omittedResponsibilities": [
+      "Only the native currency-facing responsibility used by the toolbar has been ported."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sfx2/inc/IDocumentModelAccessor.ts",
+          "marker": "CurrencyID"
+        },
+        {
+          "path": "apps/office/src/sc/browser/presentation/calc-number-format-sidebar.test.tsx",
+          "marker": "@fileoverview"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/include/sfx2/IDocumentModelAccessor.hxx",
+          "marker": "struct SFX2_DLLPUBLIC CurrencyID"
+        }
+      ]
+    }
+  }
+}

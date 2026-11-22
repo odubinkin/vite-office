@@ -4,7 +4,7 @@ title: "Connect Calc Number Format sidebar and currency controls"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 7
+revision: 8
 origin:
   system: "manual"
 depends_on:
@@ -37,7 +37,7 @@ events:
     to: "DOING"
     note: "Start: connect native Calc number format sidebar, request and currency control contracts."
 doc_version: 3
-doc_updated_at: "2026-11-22T01:52:58.527Z"
+doc_updated_at: "2026-11-22T02:07:40.477Z"
 doc_updated_by: "CODER"
 description: "Mount the native Properties sidebar number panel and currency selector, with original Sfx category and option arguments, formatter-backed document currencies, and grid number-format colors."
 sections:
@@ -55,7 +55,12 @@ sections:
     <!-- BEGIN VERIFICATION RESULTS -->
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Revert the task implementation and associated registry records. Workbook numeric formats and file ownership stay with their existing native model owners."
-  Findings: ""
+  Findings: |-
+    The first-start Properties deck has a visible collapsed rail. The View command hides its child without deleting the expanded deck. The browser number panel follows the two original typed Calc bindings and projects native category-dependent options, including the original General blank precision. The grid consumes the formatter color for display.
+
+    The native document accessor reads the format table, including explicit currency formats already entered but not currently used by a cell. The toolbar resolves those identities to the shared table and projects the original system, used-symbol, other-symbol and bank rows. A focused port checks the pinned Slovenian euro fixture and deduplication. The browser uses its platform collation.
+
+    CALC-831 and CALC-832 retain the pinned mixed-to-General no-op and terminated options fields. The full Format Cells dialog and other Properties sections remain separate application bindings.
 id_source: "generated"
 ---
 ## Summary
@@ -88,3 +93,9 @@ Derive category and option state from the selected pattern and cursor format. Bu
 Revert the task implementation and associated registry records. Workbook numeric formats and file ownership stay with their existing native model owners.
 
 ## Findings
+
+The first-start Properties deck has a visible collapsed rail. The View command hides its child without deleting the expanded deck. The browser number panel follows the two original typed Calc bindings and projects native category-dependent options, including the original General blank precision. The grid consumes the formatter color for display.
+
+The native document accessor reads the format table, including explicit currency formats already entered but not currently used by a cell. The toolbar resolves those identities to the shared table and projects the original system, used-symbol, other-symbol and bank rows. A focused port checks the pinned Slovenian euro fixture and deduplication. The browser uses its platform collation.
+
+CALC-831 and CALC-832 retain the pinned mixed-to-General no-op and terminated options fields. The full Format Cells dialog and other Properties sections remain separate application bindings.

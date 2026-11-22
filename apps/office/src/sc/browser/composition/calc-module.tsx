@@ -15,6 +15,7 @@ import { BrowserSfxDispatcher } from "../../../framework/browser/dispatch/browse
 import { CalcViewController } from "../controller/calc-view-controller";
 import { createCalcCalculationInterface } from "../../sdi/docsh";
 import { createCalcInterface } from "../../sdi/scalc";
+import { createCalcSidebarShell, SIDEBAR_COMMAND } from "../workflows/calc-sidebar";
 import { CalcSheetWorkflows } from "../workflows/calc-sheet-workflows";
 import { CalcFileWorkflows } from "../workflows/calc-file-workflows";
 import { CalcWorkbench } from "../presentation/calc-workbench";
@@ -59,6 +60,11 @@ export function createCalcSession(
       ),
     ),
     createSfxShell(controller, createCalcCalculationInterface()),
+    createCalcSidebarShell(
+      /** Refreshes the active Sidebar child and View menu state. @returns Nothing. */
+      () => frame.GetDispatcher().Invalidate(SIDEBAR_COMMAND),
+      generated.commands[SIDEBAR_COMMAND].shortcuts.map(normalizeCommandShortcut),
+    ),
     fileWorkflows.GetShell(),
     sheetWorkflows.GetShell(),
     sheetWorkflows.protection.GetShell(),

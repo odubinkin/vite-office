@@ -1,0 +1,51 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/svx/source/tbxctrls/tbcontrl.currency.ts",
+    "status": "mapped",
+    "upstreamPath": "svx/source/tbxctrls/tbcontrl.cxx",
+    "localSymbols": [
+      "GetCurrencySymbols",
+      "GetCurrencyFormatKey"
+    ],
+    "upstreamSymbols": [
+      "SvxCurrencyToolBoxControl::GetCurrencySymbols",
+      "SvxCurrencyToolBoxControl::execute"
+    ],
+    "preservedResponsibilities": [
+      "Places the system choice first, document currencies above the other symbol rows, and unique bank rows at the end. Resolves and compiles the original chosen format in the target document formatter."
+    ],
+    "omittedResponsibilities": [
+      "Only the native currency-facing responsibility used by the toolbar has been ported."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/svx/source/tbxctrls/tbcontrl.currency.ts",
+          "marker": "GetCurrencySymbols"
+        },
+        {
+          "path": "apps/office/src/sc/browser/presentation/calc-number-format-sidebar.test.tsx",
+          "marker": "@fileoverview"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/svx/source/tbxctrls/tbcontrl.cxx",
+          "marker": "SvxCurrencyToolBoxControl::GetCurrencySymbols"
+        },
+        {
+          "path": "vendor/libreoffice-reference/svx/source/tbxctrls/tbcontrl.cxx",
+          "marker": "SvxCurrencyToolBoxControl::execute"
+        }
+      ]
+    },
+    "filenameDivergence": {
+      "localPath": "apps/office/src/svx/source/tbxctrls/tbcontrl.currency.ts",
+      "rationale": "The large upstream toolbox translation unit is split at its currency controller boundary. The format table, format key resolution and browser popup adapters keep independent owners.",
+      "stackNecessity": "responsibility-split"
+    }
+  }
+}

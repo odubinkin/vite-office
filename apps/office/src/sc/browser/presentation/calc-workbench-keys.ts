@@ -59,3 +59,8 @@ export function HandleCellClipboard(
       : workflow.PasteEvent(event.clipboardData);
   if (handled) event.preventDefault();
 }
+
+/** Existing void-slot browser arguments shared by all current Calc command surfaces;typed widgets augment their own payload through the generic controller. @returns Undefined. */
+export function resolveCalcCommandArguments(): undefined {
+  return undefined;
+}
