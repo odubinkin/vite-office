@@ -1,4 +1,8 @@
-/** @fileoverview Consumed Writer text-frame orientation and wrap maps from native txtprhdl.cxx. */
+/** @fileoverview Consumed Writer text-frame orientation, wrap and character emphasis handlers from native txtprhdl.cxx. */
+import { OUString } from "../../../sal/inc/rtl/ustring";
+import { text, unicode } from "../../../i18nlangtag/source/isolang/isolang.tables";
+import { Converter } from "../../../sax/source/tools/converter";
+import { FontEmphasis } from "../../../offapi/com/sun/star/text/FontEmphasis";
 import { HoriOrientation as H } from "../../../offapi/com/sun/star/text/HoriOrientation";
 import { VertOrientation as V } from "../../../offapi/com/sun/star/text/VertOrientation";
 import { RelOrientation as R } from "../../../offapi/com/sun/star/text/RelOrientation";
@@ -7,77 +11,40 @@ import { WrapTextMode as W } from "../../../offapi/com/sun/star/text/WrapTextMod
 import { XMLConstantsPropertyHandler } from "../style/XMLConstantsPropertyHandler";
 import { SvXMLUnitConverter } from "../core/xmluconv";
 import { Any } from "../../../cppu/inc/com/sun/star/uno/Any";
-import { FontEmphasis } from "../../../offapi/com/sun/star/text/FontEmphasis";
-import { Converter } from "../../../sax/source/tools/converter";
-import { text, unicode } from "../../../i18nlangtag/source/isolang/isolang.tables";
-import { OUString } from "../../../sal/inc/rtl/ustring";
+import * as CaseMap from "../../../offapi/com/sun/star/style/CaseMap";
+import { XMLBoolPropHdl, XMLNBoolPropHdl } from "../style/xmlbahdl";
+import { XMLNamedBoolPropertyHdl } from "../style/NamedBoolPropertyHdl";
+import { XMLShadowedPropHdl } from "../style/shdwdhdl";
+import type { FastAttributeList } from "../core/xmlimp";
+import { XMLToken as T } from "../core/xmltoken";
 
-const pXML_Emphasize_Enum = [
-  ["none", FontEmphasis.NONE],
-  ["dot", FontEmphasis.DOT_ABOVE],
-  ["circle", FontEmphasis.CIRCLE_ABOVE],
-  ["disc", FontEmphasis.DISK_ABOVE],
-  ["accent", FontEmphasis.ACCENT_ABOVE],
+/** Native CharCaseMap property split between the case transformation and font variant. */
+export const textCaseMapProperties = [
+  [
+    T.FO_FONT_VARIANT,
+    "fo:font-variant",
+    new XMLConstantsPropertyHandler(
+      [
+        ["normal", CaseMap.NONE],
+        ["small-caps", CaseMap.SMALLCAPS],
+      ],
+      null,
+    ),
+  ],
+  [
+    T.FO_TEXT_TRANSFORM,
+    "fo:text-transform",
+    new XMLConstantsPropertyHandler(
+      [
+        ["none", CaseMap.NONE],
+        ["uppercase", CaseMap.UPPERCASE],
+        ["lowercase", CaseMap.LOWERCASE],
+        ["capitalize", CaseMap.TITLE],
+      ],
+      null,
+    ),
+  ],
 ] as const;
-
-/** Native emphasis handler for one optional mark and one optional position in either order. */
-export class XMLTextEmphasizePropHdl {
-  /** Imports the original signed UNO emphasis value. @param input - Source attribute. @param value - UNO property. @returns Whether matched. */
-  importXML(input: string, value: Any): boolean {
-    let position: "above" | "below" | undefined;
-    let style: number | undefined;
-    for (const token of input.split(" ")) {
-      if (position === undefined && (token === "above" || token === "below")) {
-        position = token;
-        continue;
-      }
-      const entry = pXML_Emphasize_Enum.find(
-        /** Reads the original mark identity. @param entry - Mapping. @returns Token match. */ ([
-          name,
-        ]) => name === token,
-      );
-      if (style !== undefined || !entry) return false;
-      style = entry[1];
-    }
-    const mark = style ?? FontEmphasis.NONE;
-    value.insert([mark && position === "below" ? mark + 10 : mark], "sal_Int16");
-    return true;
-  }
-
-  /** Writes the native token and its position. @param output - XML output. @param value - UNO property. @returns Native success. */
-  exportXML(output: [string], value: Any): boolean {
-    const scalar: [number] = [0];
-    if (!value.extract(scalar, "sal_uInt16")) return true;
-    const below = scalar[0] > 10;
-    const style = below ? scalar[0] - 10 : scalar[0];
-    const entry = pXML_Emphasize_Enum.find(
-      /** Resolves the original mark. @param entry - Mapping. @returns Value match. */ ([, mark]) =>
-        mark === style,
-    );
-    output[0] = (entry?.[0] ?? "dot") + (style ? (below ? " below" : " above") : "");
-    return true;
-  }
-}
-
-/** Native character rotation-angle conversion between degrees and tenths of a degree. */
-export class XMLTextRotationAnglePropHdl {
-  /** Imports the native normalized quarter-turn. @param input - Degrees. @param value - UNO property. @returns Whether parsed. */
-  importXML(input: string, value: Any): boolean {
-    const scalar: [number] = [0];
-    if (!Converter.convertNumber(scalar, input)) return false;
-    const angle = ((scalar[0] % 360) + 360) % 360;
-    value.insert([angle < 45 || angle > 315 ? 0 : angle < 180 ? 900 : 2700], "sal_Int16");
-    return true;
-  }
-
-  /** Writes degrees using the native integer division. @param output - XML output. @param value - UNO property. @returns Whether written. */
-  exportXML(output: [string], value: Any): boolean {
-    const scalar: [number] = [0];
-    if (!value.extract(scalar, "sal_Int16")) return false;
-    output[0] = String(Math.trunc(scalar[0] / 10));
-    return true;
-  }
-}
 
 /** Native two-line bracket handler, using one UTF-16 character unit. */
 export class XMLTextCombineCharPropHdl {
@@ -225,4 +192,163 @@ export function exportTextConstant(
   } finally {
     any.dispose();
   }
+}
+
+const textEmphasisTypes: ReadonlyMap<string, number> = new Map([
+  ["none", FontEmphasis.NONE],
+  ["dot", FontEmphasis.DOT_ABOVE],
+  ["circle", FontEmphasis.CIRCLE_ABOVE],
+  ["disc", FontEmphasis.DISK_ABOVE],
+  ["accent", FontEmphasis.ACCENT_ABOVE],
+]);
+
+/** Reads the two unordered tokens accepted by XMLTextEmphasizePropHdl_Impl. @param value - ODF attribute. @returns UNO short on success. */
+export function importTextEmphasis(value: string): number | undefined {
+  let type: number | undefined;
+  let position: string | undefined;
+  for (const token of value.split(" ")) {
+    if (position === undefined && (token === "above" || token === "below")) {
+      position = token;
+      continue;
+    }
+    if (type !== undefined) return undefined;
+    type = textEmphasisTypes.get(token);
+    if (type === undefined) return undefined;
+  }
+  if (type === undefined || type === FontEmphasis.NONE) return FontEmphasis.NONE;
+  return position === "below" ? type + 10 : type;
+}
+
+/** Emits the original type and position, including the converter's default token. @param value - UNO short. @returns ODF lexical value. */
+export function exportTextEmphasis(value: number): string {
+  const below = value > 10;
+  const type = below ? value - 10 : value;
+  for (const [token, wire] of textEmphasisTypes)
+    if (wire === type)
+      return type === FontEmphasis.NONE ? token : `${token} ${below ? "below" : "above"}`;
+  return below ? "dot below" : "dot above";
+}
+
+/** Original XMLTextRotationAnglePropHdl_Impl normalizes XML degrees to the three native text orientations. */
+export class XMLTextRotationAnglePropHdl {
+  /** Parses degrees, normalizes the revolution and chooses the native orientation. @param input - ODF degrees. @param value - Native tenths of a degree. @returns Whether parsing succeeded. */
+  importXML(input: string, value: Any): boolean {
+    const parsed: [number] = [0];
+    if (!Converter.convertNumber(parsed, input)) return false;
+    const angle = ((parsed[0] % 360) + 360) % 360;
+    const orientation = angle < 45 || angle > 315 ? 0 : angle < 180 ? 900 : 2700;
+    value.insert([orientation], "sal_Int16");
+    return true;
+  }
+
+  /** Writes the native tenths as whole XML degrees. @param output - Existing attribute. @param value - Native short. @returns Whether a short was extracted. */
+  exportXML(output: [string], value: Any): boolean {
+    const angle: [number] = [0];
+    if (!value.extract(angle, "sal_Int16")) return false;
+    output[0] = String(Math.trunc(angle[0] / 10));
+    return true;
+  }
+}
+
+/** Native merged CharWordMode map and exact XML_TYPE_BOOL association. */
+const wordMode = new XMLNamedBoolPropertyHdl("skip-white-space", "continuous"),
+  bool = new XMLBoolPropHdl();
+export const textBooleanProperties = [
+  [T.STYLE_TEXT_UNDERLINE_MODE, "style:text-underline-mode", "wordMode", wordMode],
+  [T.STYLE_TEXT_OVERLINE_MODE, "style:text-overline-mode", "wordMode", wordMode],
+  [T.STYLE_TEXT_LINE_THROUGH_MODE, "style:text-line-through-mode", "wordMode", wordMode],
+  [T.STYLE_LETTER_KERNING, "style:letter-kerning", "autoKerning", bool],
+  [T.STYLE_TEXT_OUTLINE, "style:text-outline", "outline", bool],
+  [T.FO_HYPHENATE, "fo:hyphenate", "noHyphenation", new XMLNBoolPropHdl()],
+  [
+    T.LOEXT_FONT_OPTICAL_SIZING,
+    "loext:font-optical-sizing",
+    "opticalSizing",
+    new XMLNamedBoolPropertyHdl("auto", "none"),
+  ],
+  [T.FO_TEXT_SHADOW, "fo:text-shadow", "shadow", new XMLShadowedPropHdl()],
+  [
+    T.STYLE_TEXT_ROTATION_SCALE,
+    "style:text-rotation-scale",
+    "rotationFitToLine",
+    new XMLNamedBoolPropertyHdl("fixed", "line-height"),
+  ],
+  [T.STYLE_TEXT_BLINKING, "style:text-blinking", "flashing", bool],
+  [T.TEXT_DISPLAY, "text:display", "hidden", new XMLNamedBoolPropertyHdl("none", "true")],
+  [
+    T.STYLE_TEXT_COMBINE,
+    "style:text-combine",
+    "combineLines",
+    new XMLNamedBoolPropertyHdl("lines", "none"),
+  ],
+] as const;
+
+/** Original named boolean mappings for the three Asian paragraph settings. */
+export const paragraphAsianTypographyProperties = [
+  [
+    "scriptSpace",
+    T.STYLE_TEXT_AUTOSPACE,
+    "style:text-autospace",
+    "ParaIsCharacterDistance",
+    new XMLNamedBoolPropertyHdl("ideograph-alpha", "none"),
+  ],
+  [
+    "hangingPunctuation",
+    T.STYLE_PUNCTUATION_WRAP,
+    "style:punctuation-wrap",
+    "ParaIsHangingPunctuation",
+    new XMLNamedBoolPropertyHdl("hanging", "simple"),
+  ],
+  [
+    "forbiddenRules",
+    T.STYLE_LINE_BREAK,
+    "style:line-break",
+    "ParaIsForbiddenRules",
+    new XMLNamedBoolPropertyHdl("strict", "normal"),
+  ],
+] as const;
+
+/** Decoded native Asian paragraph items. */
+export type OdfAsianTypography = Partial<
+  Record<(typeof paragraphAsianTypographyProperties)[number][0], boolean>
+>;
+
+/** Converts only successfully parsed native named booleans. @param attributes - Direct XML attributes. @returns Present mapped properties. */
+export function importParagraphAsianTypography(
+  attributes: FastAttributeList,
+): OdfAsianTypography | undefined {
+  const settings: OdfAsianTypography = {};
+  const converter = new SvXMLUnitConverter("twip");
+  const value = new Any();
+  try {
+    for (const [key, token, , , handler] of paragraphAsianTypographyProperties) {
+      const text = attributes.get(token);
+      if (text === null || !handler.importXML(text, value, converter)) continue;
+      const active: [boolean] = [false];
+      if (value.extract(active, "bool")) settings[key] = active[0];
+    }
+  } finally {
+    value.dispose();
+  }
+  return Object.keys(settings).length === 0 ? undefined : settings;
+}
+
+/** Serializes the original lexical tokens for explicitly authored paragraph values. @param settings - Direct typed properties. @returns Present XML attributes. */
+export function exportParagraphAsianTypography(settings?: OdfAsianTypography): string[] {
+  if (settings === undefined) return [];
+  const attributes: string[] = [];
+  const converter = new SvXMLUnitConverter("twip");
+  for (const [key, , attribute, , handler] of paragraphAsianTypographyProperties) {
+    const active = settings[key];
+    if (active === undefined) continue;
+    const value = new Any([active], "bool");
+    try {
+      const token: [string] = [""];
+      handler.exportXML(token, value, converter);
+      attributes.push(`${attribute}="${token[0]}"`);
+    } finally {
+      value.dispose();
+    }
+  }
+  return attributes;
 }

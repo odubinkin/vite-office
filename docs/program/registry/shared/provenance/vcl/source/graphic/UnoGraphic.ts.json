@@ -1,0 +1,37 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "status": "mapped",
+    "localPath": "apps/office/src/vcl/source/graphic/UnoGraphic.ts",
+    "upstreamPath": "vcl/source/graphic/UnoGraphic.cxx",
+    "localSymbols": [
+      "UnoGraphic",
+      "getType"
+    ],
+    "upstreamSymbols": [
+      "Graphic::getType"
+    ],
+    "preservedResponsibilities": [
+      "Exposes the native XGraphic view over the embedded graphic and preserves its pixel or vector type."
+    ],
+    "omittedResponsibilities": [
+      "Bitmap DIB, descriptor properties and graphic transformation services remain unported."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/vcl/source/graphic/UnoGraphic.ts",
+          "marker": "UnoGraphic"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/vcl/source/graphic/UnoGraphic.cxx",
+          "marker": "Graphic::getType"
+        }
+      ]
+    }
+  }
+}

@@ -3,23 +3,11 @@
   "baselineTag": "libreoffice-26.8.0.2",
   "record": {
     "classification": "upstream-mechanism",
-    "status": "mapped",
     "localPath": "apps/office/src/xmloff/source/text/txtfldi.ts",
     "localSymbols": [
       "XMLAnnotationImportContext"
     ],
-    "upstreamPath": "xmloff/source/text/txtfldi.cxx",
-    "upstreamSymbols": [
-      "XMLAnnotationImportContext::ProcessAttribute",
-      "XMLAnnotationImportContext::PrepareField"
-    ],
-    "preservedResponsibilities": [
-      "Reads annotation identity, parent and resolution attributes, the three initials aliases, author, native date and separate edit text.",
-      "The closing annotation context dispatches its original name and current Writer cursor for range reattachment."
-    ],
-    "omittedResponsibilities": [
-      "Unrelated text field services are outside the annotation import context."
-    ],
+    "status": "mapped",
     "evidence": {
       "local": [
         {
@@ -28,27 +16,26 @@
         },
         {
           "path": "apps/office/src/sw/source/filter/xml/odt-annotation.test.ts",
-          "marker": "preserves the bold second annotation run"
-        },
-        {
-          "path": "apps/office/src/sw/source/filter/xml/odt-annotation-range.test.ts",
-          "marker": "preserves original comment text and anchors"
+          "marker": "imports the named annotation"
         }
       ],
       "upstream": [
         {
           "path": "vendor/libreoffice-reference/xmloff/source/text/txtfldi.cxx",
-          "marker": "XMLAnnotationImportContext::ProcessAttribute"
-        },
-        {
-          "path": "vendor/libreoffice-reference/xmloff/source/text/txtfldi.cxx",
-          "marker": "XMLAnnotationImportContext::PrepareField"
-        },
-        {
-          "path": "vendor/libreoffice-reference/xmloff/source/text/txtfldi.cxx",
           "marker": "XMLAnnotationImportContext::endFastElement"
         }
       ]
-    }
+    },
+    "upstreamPath": "xmloff/source/text/txtfldi.cxx",
+    "upstreamSymbols": [
+      "XMLAnnotationImportContext::createFastChildContext",
+      "XMLAnnotationImportContext::endFastElement"
+    ],
+    "preservedResponsibilities": [
+      "Imports annotation metadata, delegates editable text to the shared paragraph importer using the annotation TextRange cursor, and completes named annotation ranges."
+    ],
+    "omittedResponsibilities": [
+      "Uses a typed TextRange operation over the represented EditEngine cursors. Annotation hyperlinks, lists and the complete UNO service surface remain outside this mapping."
+    ]
   }
 }

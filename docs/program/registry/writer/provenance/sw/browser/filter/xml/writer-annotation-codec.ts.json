@@ -4,6 +4,9 @@
   "record": {
     "classification": "local-infrastructure",
     "localPath": "apps/office/src/sw/browser/filter/xml/writer-annotation-codec.ts",
+    "localSymbols": [
+      "encodeAnnotations"
+    ],
     "status": "local-only",
     "evidence": {
       "local": [
@@ -12,23 +15,18 @@
           "marker": "encodeAnnotations"
         },
         {
-          "path": "apps/office/src/sw/browser/filter/xml/writer-annotation-codec.ts",
-          "marker": "decodeAnnotations"
-        },
-        {
           "path": "apps/office/src/sw/source/filter/xml/odt-annotation.test.ts",
-          "marker": "retains adjacent point anchors"
+          "marker": "imports the named annotation"
         }
-      ],
-      "upstream": []
+      ]
     },
-    "rationale": "Transports the native annotation point offsets, metadata and represented edit runs through the Writer Worker graph.",
+    "rationale": "Transfers annotation field data and registered range start through the existing browser graph boundary.",
     "responsibilities": [
-      "Transports the native annotation point offsets, metadata and represented edit runs through the Writer Worker graph."
+      "Transfers annotation field data and registered range start through the existing browser graph boundary."
     ],
     "stackDivergence": {
       "kind": "local-infrastructure",
-      "rationale": "Browser Worker and document graph serialization."
+      "rationale": "Structured clone is the browser transport boundary."
     }
   }
 }

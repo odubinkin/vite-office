@@ -1,4 +1,6 @@
 /** @fileoverview Verifies paragraph dimensional fields retain physical values across display units. */
+import { SvxBoxInfoItem } from "../../../editeng/source/items/frmitems";
+import { SID_ATTR_BORDER_INNER } from "../../../svx/inc/svxids";
 import { cleanup, fireEvent, render, screen } from "@testing-library/react";
 import { expect, it, vi } from "vitest";
 import { SwDoc } from "../../source/core/doc/doc";
@@ -9,14 +11,15 @@ import { WriterParagraphDialog } from "./WriterParagraphDialog";
 import { FieldUnit as F } from "../../../tools/inc/fldunit";
 import type { WriterParagraphDialogRequest } from "../../source/uibase/dialog/writer-dialog-controller";
 
-const tabContext = new SfxItemSet(new SwDoc().GetAttrPool(), [[1, 12000]]);
+const pageInput = new SfxItemSet(new SwDoc().GetAttrPool(), [[1, 12000]]);
+pageInput.Put(new SvxBoxInfoItem(SID_ATTR_BORDER_INNER));
 const nativeTabs = new SvxTabStopItem(0, 0, SvxTabAdjust.Left, RES_PARATR_TABSTOP);
 nativeTabs.Insert(new SvxTabStop(720, SvxTabAdjust.Left));
-tabContext.Put(nativeTabs);
+pageInput.Put(nativeTabs);
 const request: WriterParagraphDialogRequest = {
   commandUrl: ".uno:ParagraphDialog",
   kind: "paragraph",
-  tabContext,
+  pageInput,
   paintLineNumbers: false,
   initialValue: {
     upperPt: 72,
@@ -62,7 +65,8 @@ it("edits inch,explicit suffix,and tab values through the unchanged physical par
   expect(screen.getByRole("combobox", { name: "Position" })).toHaveValue("0.50″");
   fireEvent.click(screen.getByRole("button", { name: "OK" }));
   expect(submit).toHaveBeenCalledWith(1, {
-    tabStopItems: expect.any(SfxItemSet),
+    pageItems: expect.any(SfxItemSet),
+    paragraphFormatChanged: true,
     paintLineNumbers: false,
     paragraphFormat: {
       ...request.initialValue,
@@ -71,7 +75,7 @@ it("edits inch,explicit suffix,and tab values through the unchanged physical par
       tabStopsPt: [36],
     },
   });
-  const accepted = submit.mock.calls[0]?.[1].tabStopItems.Get(RES_PARATR_TABSTOP) as SvxTabStopItem;
+  const accepted = submit.mock.calls[0]?.[1].pageItems.Get(RES_PARATR_TABSTOP) as SvxTabStopItem;
   expect(
     Array.from(
       { length: accepted.Count() },
@@ -162,7 +166,7 @@ it("exchanges the native tab page with the documented absent first-line scalar d
   fireEvent.click(screen.getByRole("tab", { name: "Text Flow" }));
   fireEvent.click(screen.getByRole("tab", { name: "Tabs" }));
   fireEvent.click(screen.getByRole("button", { name: "OK" }));
-  expect(submit.mock.calls[0]?.[1].tabStopItems).toBeInstanceOf(SfxItemSet);
+  expect(submit.mock.calls[0]?.[1].pageItems).toBeInstanceOf(SfxItemSet);
 });
 
 it("owns source tab keys before spin steps,retains tab changes and uses native form acceptance", /** Actual tab identity and deactivation survive keyboard and pointer switching. @returns Nothing. */ () => {
@@ -178,12 +182,24 @@ it("owns source tab keys before spin steps,retains tab changes and uses native f
     />,
   );
   const first = screen.getByRole("tab", { name: "Indents & Spacing" }),
+    alignment = screen.getByRole("tab", { name: "Alignment" }),
     flow = screen.getByRole("tab", { name: "Text Flow" }),
-    tabs = screen.getByRole("tab", { name: "Tabs" });
+    asian = screen.getByRole("tab", { name: "Asian Typography" }),
+    outline = screen.getByRole("tab", { name: "Outline & List" }),
+    tabs = screen.getByRole("tab", { name: "Tabs" }),
+    borders = screen.getByRole("tab", { name: "Borders" }),
+    area = screen.getByRole("tab", { name: "Area" }),
+    transparency = screen.getByRole("tab", { name: "Transparency" });
   expect(first).toHaveFocus();
   expect(first).toHaveAttribute("tabindex", "0");
   expect(flow).toHaveAttribute("tabindex", "-1");
   fireEvent.keyDown(first, { key: "ArrowLeft" });
+  expect(transparency).toHaveFocus();
+  fireEvent.keyDown(transparency, { key: "ArrowLeft" });
+  expect(area).toHaveFocus();
+  fireEvent.keyDown(area, { key: "ArrowLeft" });
+  expect(borders).toHaveFocus();
+  fireEvent.keyDown(borders, { key: "ArrowLeft" });
   expect(tabs).toHaveFocus();
   expect(tabs).toHaveAttribute("aria-selected", "true");
   fireEvent.change(screen.getByRole("combobox", { name: "Position" }), {
@@ -194,11 +210,23 @@ it("owns source tab keys before spin steps,retains tab changes and uses native f
     key: "PageDown",
     ctrlKey: true,
   });
+  expect(borders).toHaveFocus();
+  fireEvent.keyDown(borders, { key: "ArrowRight" });
+  expect(area).toHaveFocus();
+  fireEvent.keyDown(area, { key: "ArrowRight" });
+  expect(transparency).toHaveFocus();
+  fireEvent.keyDown(transparency, { key: "ArrowRight" });
   expect(first).toHaveFocus();
   const metric = screen.getByLabelText("Above paragraph (in)");
   fireEvent.keyDown(metric, { key: "PageDown", ctrlKey: true });
+  expect(alignment).toHaveFocus();
+  fireEvent.keyDown(alignment, { key: "PageDown", ctrlKey: true });
   expect(flow).toHaveFocus();
   fireEvent.keyDown(flow, { key: "PageDown", ctrlKey: true });
+  expect(asian).toHaveFocus();
+  fireEvent.keyDown(asian, { key: "PageDown", ctrlKey: true });
+  expect(outline).toHaveFocus();
+  fireEvent.keyDown(outline, { key: "PageDown", ctrlKey: true });
   expect(tabs).toHaveFocus();
   expect(
     screen
@@ -210,8 +238,8 @@ it("owns source tab keys before spin steps,retains tab changes and uses native f
       ),
   ).toBe(true);
   fireEvent.keyDown(tabs, { key: "PageUp", ctrlKey: true });
-  expect(flow).toHaveFocus();
-  fireEvent.keyDown(flow, { key: "ArrowRight" });
+  expect(outline).toHaveFocus();
+  fireEvent.keyDown(outline, { key: "ArrowRight" });
   expect(tabs).toHaveFocus();
   fireEvent.click(tabs);
   expect(screen.getByRole("tabpanel")).toHaveAttribute("aria-labelledby", tabs.id);

@@ -10,20 +10,41 @@ import {
   type WriterCommandResource,
 } from "../../uiconfig/swriter/writer-command-resources";
 
-/** Selects the same command metadata for every Writer presentation surface. @param localization - Active browser locale. @param commandUrl - Canonical Writer slot URL. @returns Localized generated resource. */
+/** Selects the same command metadata for every Writer presentation surface. @param localization - Active browser locale. @param commandUrl - Canonical Writer slot URL. @param view - Active view for dynamic annotation command labels. @returns Localized generated resource. */
 export function selectWriterCommandResource(
   localization: BrowserLocalizationService,
   commandUrl: string,
+  view?: SwView,
 ): WriterCommandResource {
   const resource = getWriterCommandResource(commandUrl);
+  const author =
+    commandUrl === WRITER_COMMAND_IDS.deleteAuthor
+      ? view?.GetPostItMgr().GetActiveField()?.GetField().GetData().author
+      : undefined;
   return {
     ...resource,
     controlLabel: localization.GetText(
       `writer.command.${commandUrl}.control-label`,
       resource.controlLabel,
     ),
-    label: localization.GetText(`writer.command.${commandUrl}.label`, resource.label),
+    label:
+      author === undefined
+        ? localization.GetText(`writer.command.${commandUrl}.label`, resource.label)
+        : writerDeleteAuthorLabel(localization, author),
   };
+}
+
+/** Formats the native DeleteAuthor label for an active annotation. @param localization - Browser localization. @param author - Exact annotation author. @returns Localized action label. */
+export function writerDeleteAuthorLabel(
+  localization: BrowserLocalizationService,
+  author: string,
+): string {
+  return localization
+    .GetText("writer.comments.deleteAuthor", "Delete All Comments by $1")
+    .replace(
+      "$1",
+      /** Substitutes the author's name literally. @returns Author name. */ () => author,
+    );
 }
 
 /** Selects the original native PopupLabel for context menus while retaining general resource defaults and localization elsewhere. @param localization - Active browser locale. @param commandUrl - Native slot URL. @returns Localized popup resource. */

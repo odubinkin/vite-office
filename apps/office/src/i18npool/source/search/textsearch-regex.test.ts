@@ -1,5 +1,5 @@
-/** @fileoverview Prepared ICU regex options, directional source offsets and native bridge integration. */
-import { createNativeRegexMatcher, hasNativeRegexProbe } from "../../../test/icu-regex-probe";
+/** @fileoverview Prepared regex options, directional source offsets and ECMAScript integration. */
+import { createBrowserRegexMatcher } from "../../browser/regex-matcher";
 import { expect, it, vi } from "vitest";
 import { OUString } from "../../../sal/inc/rtl/ustring";
 import { SearchOptions2 } from "../../../i18nutil/inc/searchopt";
@@ -25,7 +25,7 @@ function options(pattern: string, flags = 0): SearchOptions2 {
   return value;
 }
 
-it("keeps regex control syntax intact and gives case sensitivity to the ICU factory", /** Checks option ownership and matcher disposal independently of the deployed ICU binary. @returns Nothing. */ () => {
+it("keeps regex control syntax intact and gives case sensitivity to the regex factory", /** Checks option ownership and matcher disposal independently of the matcher. @returns Nothing. */ () => {
   const release = vi.fn();
   const create = vi.fn<RegexMatcherFactory>().mockReturnValue({
     search: vi.fn().mockReturnValue(new Int32Array()),
@@ -70,35 +70,29 @@ it("uses the retained complex key only when regex has no simple flags", /** Pres
   expect(engine.searchForward(unicode("xファ"), 0, 3).subRegExpressions).toBe(0);
 });
 
-it.skipIf(!hasNativeRegexProbe)(
-  "maps actual ICU capture results after width folding, including supplementary context",
-  /** Exercises the real shared options, transliteration and ICU boundary. @returns Nothing. */ () => {
-    const engine = new TextSearch(
-      options("(?<=😀)(Ａ)(z)?(?=Ｙ)", TransliterationFlags.IGNORE_WIDTH),
-      createNativeRegexMatcher,
-    );
-    const text = unicode("q😀ＡＹz");
-    const forward = engine.searchForward(text, 3, 4);
-    expect(offsets(forward.startOffset)).toEqual([3, 3, -1]);
-    expect(offsets(forward.endOffset)).toEqual([4, 4, -1]);
-    expect(engine.searchBackward(text, 4, 3).subRegExpressions).toBe(0);
-    const backward = engine.searchBackward(text, 6, 0);
-    expect(offsets(backward.startOffset)).toEqual([4, 4, -1]);
-    expect(offsets(backward.endOffset)).toEqual([3, 3, -1]);
-    engine.dispose();
-  },
-);
+it("maps ECMAScript capture results after width folding, including supplementary context", /** Exercises the real shared options, transliteration and regex boundary. @returns Nothing. */ () => {
+  const engine = new TextSearch(
+    options("(?<=😀)(Ａ)(z)?(?=Ｙ)", TransliterationFlags.IGNORE_WIDTH),
+    createBrowserRegexMatcher,
+  );
+  const text = unicode("q😀ＡＹz");
+  const forward = engine.searchForward(text, 3, 4);
+  expect(offsets(forward.startOffset)).toEqual([3, 3, -1]);
+  expect(offsets(forward.endOffset)).toEqual([4, 4, -1]);
+  expect(engine.searchBackward(text, 4, 3).subRegExpressions).toBe(0);
+  const backward = engine.searchBackward(text, 6, 0);
+  expect(offsets(backward.startOffset)).toEqual([4, 4, -1]);
+  expect(offsets(backward.endOffset)).toEqual([3, 3, -1]);
+  engine.dispose();
+});
 
-it.skipIf(!hasNativeRegexProbe)(
-  "preserves punctuation and original case until the actual ICU search",
-  /** Checks case flags, quotes and invalid-pattern replacement with the native bridge. @returns Nothing. */ () => {
-    const engine = new TextSearch(options("(A)'"), createNativeRegexMatcher);
-    expect(engine.searchForward(unicode("A’"), 0, 2).subRegExpressions).toBe(0);
-    expect(engine.searchForward(unicode("a'"), 0, 2).subRegExpressions).toBe(0);
-    engine.setOptions2(options("(A)'", TransliterationFlags.IGNORE_CASE));
-    expect(offsets(engine.searchForward(unicode("a'"), 0, 2).endOffset)).toEqual([2, 1]);
-    engine.setOptions2(options("("));
-    expect(engine.searchForward(unicode("("), 0, 1).subRegExpressions).toBe(0);
-    engine.dispose();
-  },
-);
+it("preserves punctuation and original case until the actual ECMAScript search", /** Checks case flags, quotes and invalid-pattern replacement with the deployed regex matcher. @returns Nothing. */ () => {
+  const engine = new TextSearch(options("(A)'"), createBrowserRegexMatcher);
+  expect(engine.searchForward(unicode("A’"), 0, 2).subRegExpressions).toBe(0);
+  expect(engine.searchForward(unicode("a'"), 0, 2).subRegExpressions).toBe(0);
+  engine.setOptions2(options("(A)'", TransliterationFlags.IGNORE_CASE));
+  expect(offsets(engine.searchForward(unicode("a'"), 0, 2).endOffset)).toEqual([2, 1]);
+  engine.setOptions2(options("("));
+  expect(engine.searchForward(unicode("("), 0, 1).subRegExpressions).toBe(0);
+  engine.dispose();
+});

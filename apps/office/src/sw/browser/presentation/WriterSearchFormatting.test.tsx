@@ -12,9 +12,8 @@ import {
 } from "../../../editeng/source/items/textitem";
 import { SvxLanguageItem } from "../../../editeng/inc/langitem";
 import { SvxHangingPunctuationItem } from "../../../editeng/source/items/paraitem";
-import { SvxBreak } from "../../../editeng/inc/svxenum";
 import { SvxTabAdjust, SvxTabStop, SvxTabStopItem } from "../../../editeng/inc/tstpitem";
-import { SfxInt16Item } from "../../../svl/source/items/intitem";
+import { SfxBoolItem } from "../../../svl/source/items/cenumitm";
 import { SvxAdjust, SvxAdjustItem } from "../../../editeng/inc/adjustitem";
 import { SvxFirstLineIndentItem, SvxIndentValue } from "../../../editeng/inc/lrspitem";
 import { SvxLineSpacingItem } from "../../../editeng/inc/lspcitem";
@@ -32,7 +31,6 @@ import { Any } from "../../../cppu/inc/com/sun/star/uno/Any";
 import { SfxGrabBagItem } from "../../../svl/inc/grabbagitem";
 import { SfxItemSet } from "../../../svl/source/items/itemset";
 import {
-  RES_BREAK,
   RES_CHRATR_BACKGROUND,
   RES_CHRATR_BEGIN,
   RES_CHRATR_COLOR,
@@ -53,6 +51,7 @@ import {
   RES_CHRATR_OVERLINE,
   RES_CHRATR_UNDERLINE,
   RES_CHRATR_WEIGHT,
+  RES_KEEP,
   RES_MARGIN_FIRSTLINE,
   RES_PARATR_ADJUST,
   RES_PARATR_HANGINGPUNCTUATION,
@@ -525,7 +524,7 @@ function attributeAt(node: SwTextNode, offset: number, which: number): number | 
   return undefined;
 }
 
-it("finds tab stops and page breaks through the sorted native slot checklist", /** Exercises paragraph attributes available through the pool and preserves their sorted order in the query. @returns Nothing. */ () => {
+it("finds tab stops and keep-with-next through the sorted native slot checklist", /** Exercises paragraph attributes available through the pool and preserves their sorted order in the query. @returns Nothing. */ () => {
   const session = createWriterDocumentSession();
   const shell = session.view.GetWrtShell();
   const first = shell.GetActiveParagraph();
@@ -536,7 +535,7 @@ it("finds tab stops and page breaks through the sorted native slot checklist", /
   const tabs = new SvxTabStopItem(0, 0, SvxTabAdjust.Left, RES_PARATR_TABSTOP);
   tabs.Insert(new SvxTabStop(720, SvxTabAdjust.Left));
   second.SetAttr(tabs);
-  second.SetAttr(new SfxInt16Item(RES_BREAK, SvxBreak.PageBefore));
+  second.SetAttr(new SfxBoolItem(RES_KEEP, true));
   const start = new SwPosition(first, 0);
   shell.SetCursor(start);
   start.Dispose();
@@ -549,12 +548,13 @@ it("finds tab stops and page breaks through the sorted native slot checklist", /
     fireEvent.click(dialog.getByRole("button", { name: "Attributes…" }));
     const attributes = within(screen.getByRole("dialog", { name: "Attributes" }));
     expect(attributes.getByRole("checkbox", { name: "Language of Asian font" })).toBeVisible();
-    expect(attributes.getByRole("checkbox", { name: "Character blinking" })).toBeVisible();
+    expect(attributes.queryByRole("checkbox", { name: "Character blinking" })).toBeNull();
+    expect(attributes.queryByRole("checkbox", { name: "Page Break" })).toBeNull();
     expect(attributes.getByRole("checkbox", { name: "Blinking" })).toBeVisible();
     fireEvent.click(attributes.getByRole("checkbox", { name: "Tab stops" }));
-    fireEvent.click(attributes.getByRole("checkbox", { name: "Page Break" }));
+    fireEvent.click(attributes.getByRole("checkbox", { name: "Keep with next paragraph" }));
     fireEvent.click(attributes.getByRole("button", { name: "OK" }));
-    expect(dialog.getByText("Page Break, Tab stops")).toBeVisible();
+    expect(dialog.getByText("Keep with next paragraph, Tab stops")).toBeVisible();
     fireEvent.click(dialog.getByRole("button", { name: "Find Next" }));
     expect(shell.GetCursor().Start().GetNode()).toBe(second);
     expect(shell.GetCursor().Start().GetContentIndex()).toBe(0);

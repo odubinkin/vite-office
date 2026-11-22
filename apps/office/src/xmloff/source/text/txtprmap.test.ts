@@ -1,8 +1,6 @@
 /** @fileoverview Native scalar property-map transport preserves independent scripts and source merge/failure behavior. */
 import { expect, it } from "vitest";
-import { FastAttributeList, isOpenOffice2Generator } from "../core/xmlimp";
-import { getBuildIdFromGenerator } from "../meta/xmlmetai";
-import * as CaseMap from "../../../offapi/com/sun/star/style/CaseMap";
+import { FastAttributeList } from "../core/xmlimp";
 import { ODF_NAMESPACES, XMLToken } from "../core/xmltoken";
 import { Any } from "../../../cppu/inc/com/sun/star/uno/Any";
 import { SvXMLUnitConverter } from "../core/xmluconv";
@@ -20,133 +18,12 @@ function attributes(pairs: readonly (readonly [string, string])[]): FastAttribut
         name,
         value,
       ]) => {
-        const [prefix, local] = name.split(":") as ["style" | "fo" | "text", string];
+        const [prefix, local] = name.split(":") as ["style" | "fo" | "loext", string];
         return { name, value, prefix, local, uri: ODF_NAMESPACES[prefix] };
       },
     ),
   );
 }
-
-it("uses the native case-map tables and character flag polarity", /** Checks exact token conversion in both directions. @returns Nothing. */ () => {
-  for (const [name, token, value] of [
-    ["fo:text-transform", "none", CaseMap.NONE],
-    ["fo:text-transform", "uppercase", CaseMap.UPPERCASE],
-    ["fo:text-transform", "lowercase", CaseMap.LOWERCASE],
-    ["fo:text-transform", "capitalize", CaseMap.TITLE],
-    ["fo:font-variant", "small-caps", CaseMap.SMALLCAPS],
-    ["fo:font-variant", "normal", CaseMap.NONE],
-  ] as const) {
-    expect(importTextCharacterProperties(attributes([[name, token]]))).toEqual({
-      caseMap: value,
-    });
-    expect(exportTextCharacterProperties({ caseMap: value })).toContain(`${name}="${token}"`);
-  }
-  const flags = attributes([
-    ["style:text-blinking", "true"],
-    ["text:display", "none"],
-    ["fo:hyphenate", "false"],
-  ]);
-  expect(importTextCharacterProperties(flags)).toEqual({
-    flashing: true,
-    hidden: true,
-    noHyphenation: true,
-  });
-  expect(importTextCharacterProperties(flags, { paragraphStyle: true, isOOo2x: true })).toEqual({
-    flashing: true,
-    hidden: false,
-  });
-  expect(
-    exportTextCharacterProperties({ flashing: false, hidden: false, noHyphenation: false }),
-  ).toBe(' style:text-blinking="false" text:display="true" fo:hyphenate="true"');
-  expect(exportTextCharacterProperties({ noHyphenation: true }, true)).toBe("");
-  expect(exportTextCharacterProperties({ caseMap: CaseMap.UPPERCASE })).toBe(
-    ' fo:text-transform="uppercase"',
-  );
-  expect(
-    importTextCharacterProperties(
-      attributes([
-        ["fo:text-transform", "normal"],
-        ["fo:font-variant", "uppercase"],
-        ["style:text-blinking", "1"],
-        ["text:display", "false"],
-        ["fo:hyphenate", "0"],
-      ]),
-      { isOOo2x: true },
-    ),
-  ).toEqual({});
-});
-
-it("identifies the native OpenOffice.org 2.x BuildId including the NeoOffice alias", /** Covers generator string extraction and LibreOffice classification precedence. @returns Nothing. */ () => {
-  for (const [generator, id, legacy] of [
-    ["OpenOffice.org/2.4 Win32 OpenOffice.org_project/680m12$Build-9286", "680$9286", true],
-    ["NeoOffice/2.2", "680$9134", true],
-    ["OpenOffice.org 1.1", "645$8687", false],
-    ["LibreOffice/3.3$Win32 LibreOffice_project/680m12$Build-9286", "680$9286;3.3", false],
-    ["LibreOffice/26.8.0.2 LibreOffice_project/42", ";26.8.0.2", false],
-    [" OpenOffice.org 1.1", "", false],
-  ] as const) {
-    expect(getBuildIdFromGenerator(generator)).toBe(id);
-    expect(isOpenOffice2Generator(id)).toBe(legacy);
-  }
-});
-it("normalizes native rotation angles and preserves the original typography token rules", /** Checks native boundaries and typed XML export against the original handlers. @returns Nothing. */ () => {
-  for (const [input, expected] of [
-    ["44", 0],
-    ["45", 900],
-    ["179", 900],
-    ["180", 2700],
-    ["315", 2700],
-    ["316", 0],
-    ["-90", 2700],
-  ] as const)
-    expect(
-      importTextCharacterProperties(attributes([["style:text-rotation-angle", input]])),
-    ).toEqual({ rotation: expected });
-  expect(
-    importTextCharacterProperties(
-      attributes([
-        ["style:text-emphasize", "below disc"],
-        ["style:text-scale", "45000%"],
-        ["style:text-rotation-scale", "fixed"],
-        ["style:text-combine", "lines"],
-        ["style:text-combine-start-char", "😀"],
-      ]),
-    ),
-  ).toEqual({
-    emphasis: 13,
-    scaleWidth: 32767,
-    rotationFitsLine: true,
-    combineLines: true,
-    combinePrefix: "\ud83d",
-  });
-  expect(
-    importTextCharacterProperties(
-      attributes([
-        ["style:text-emphasize", "dot  above"],
-        ["style:text-combine", "letters"],
-      ]),
-    ),
-  ).toEqual({});
-  const output = exportTextCharacterProperties({
-    rotation: 2700,
-    rotationFitsLine: false,
-    emphasis: 13,
-    scaleWidth: 900,
-    combineLines: false,
-    combinePrefix: "",
-    combineSuffix: '"',
-  });
-  expect(output).toContain('style:text-rotation-angle="270"');
-  expect(output).toContain('style:text-rotation-scale="line-height"');
-  expect(output).toContain('style:text-emphasize="disc below"');
-  expect(output).toContain('style:text-scale="900%"');
-  expect(output).toContain('style:text-combine="none"');
-  expect(output).toContain('style:text-combine-end-char="&quot;"');
-  expect(output).not.toContain("style:text-combine-start-char");
-  expect(exportTextCharacterProperties({ combinePrefix: "\t" })).toContain(
-    'style:text-combine-start-char="&#9;"',
-  );
-});
 it("preserves native line-mode merge order, named-token rejection and typed kerning bool transport", /** Checks the shared bool property map used by primary Writer storage. @returns Nothing. */ () => {
   expect(
     importTextCharacterProperties(
@@ -278,67 +155,15 @@ it("transports all native independent script values without boolean normalizatio
   ).not.toContain("text-underline-color");
   expect(exportTextCharacterProperties({ underlineStyle: 19 })).toBe("");
   expect(importTextCharacterProperties(attributes([["fo:font-size", "12pt"]]))).toEqual({});
+  expect(textCharacterPropertyTokens).toHaveLength(77);
+  expect(textCharacterPropertyTokens).toContain(XMLToken.STYLE_TEXT_EMPHASIZE);
   expect(textCharacterPropertyTokens).toContain(XMLToken.FO_LETTER_SPACING);
-  expect(textCharacterPropertyTokens).toEqual(
-    expect.arrayContaining([
-      XMLToken.STYLE_TEXT_LINE_THROUGH_STYLE,
-      XMLToken.STYLE_TEXT_LINE_THROUGH_TYPE,
-      XMLToken.STYLE_TEXT_LINE_THROUGH_WIDTH,
-      XMLToken.STYLE_TEXT_LINE_THROUGH_TEXT,
-    ]),
-  );
-});
-
-it("uses separate overline and underline states and the native glyph effect spellings", /** Exercises the native decoration merge and character effect handlers. @returns Nothing. */ () => {
-  const props = importTextCharacterProperties(
-    attributes([
-      ["style:text-underline-style", "solid"],
-      ["style:text-overline-style", "wave"],
-      ["style:text-overline-type", "double"],
-      ["style:text-overline-color", "#cc0033"],
-      ["style:text-outline", "true"],
-      ["fo:text-shadow", "#00ff00 2pt 4pt"],
-      ["style:font-relief", "engraved"],
-    ]),
-  );
-  expect(props).toEqual({
-    underlineStyle: 1,
-    overlineStyle: 11,
-    overlineColor: 0xcc0033,
-    overlineHasColor: true,
-    contoured: true,
-    shadowed: true,
-    relief: 2,
-  });
-  const xml = exportTextCharacterProperties(props);
-  expect(xml).toContain('style:text-overline-type="double"');
-  expect(xml).toContain('style:text-overline-color="#cc0033"');
-  expect(xml).toContain('style:text-outline="true"');
-  expect(xml).toContain('fo:text-shadow="1pt 1pt"');
-  expect(xml).toContain('style:font-relief="engraved"');
-  expect(
-    importTextCharacterProperties(
-      attributes([
-        ["style:text-outline", "invalid"],
-        ["fo:text-shadow", "none"],
-        ["style:font-relief", "invalid"],
-        ["style:text-overline-color", "font-color"],
-      ]),
-    ),
-  ).toEqual({ shadowed: false, overlineHasColor: false });
-  expect(
-    exportTextCharacterProperties({
-      underlineStyle: 0,
-      underlineColor: 0xcc0033,
-      underlineHasColor: true,
-      overlineStyle: 0,
-      overlineColor: 0xcc0033,
-      overlineHasColor: true,
-      relief: 0,
-    }),
-  ).toBe(
-    ' style:font-relief="none" style:text-underline-style="none" style:text-overline-style="none" style:text-overline-color="#cc0033"',
-  );
+  expect(textCharacterPropertyTokens.slice(11, 15)).toEqual([
+    XMLToken.STYLE_TEXT_LINE_THROUGH_STYLE,
+    XMLToken.STYLE_TEXT_LINE_THROUGH_TYPE,
+    XMLToken.STYLE_TEXT_LINE_THROUGH_WIDTH,
+    XMLToken.STYLE_TEXT_LINE_THROUGH_TEXT,
+  ]);
 });
 
 it("merges native crossed-out type and width in actual SAX order without affecting underline", /** Preserves native DOUBLE precedence and text replacement. @returns Nothing. */ () => {
@@ -386,4 +211,210 @@ it("merges native crossed-out type and width in actual SAX order without affecti
   expect(exportTextCharacterProperties({ strikeout: 2, underlineStyle: 1 })).toContain(
     'style:text-underline-style="solid"',
   );
+});
+
+it("imports legacy and extended character borders and exports extended text attributes", /** Verifies mixed namespace input and independently represented sides. @returns Nothing. */ () => {
+  const values = importTextCharacterProperties(
+    attributes([
+      ["fo:border-left", "none"],
+      ["loext:border-left", "0.05cm double #123456"],
+      ["style:border-line-width-left", "0.01cm 0.02cm 0.02cm"],
+      ["fo:padding-left", "2pt"],
+      ["loext:padding-right", "3pt"],
+      ["loext:border-right", "none"],
+    ]),
+  );
+  expect(values.characterBox).toEqual({
+    borderLeft: "0.05cm double #123456",
+    borderLineWidthLeft: "0.01cm 0.02cm 0.02cm",
+    borderRight: "none",
+    paddingLeft: 40,
+    paddingRight: 60,
+  });
+  const xml = exportTextCharacterProperties(values);
+  expect(xml).toContain('loext:border-left="0.05cm double #123456"');
+  expect(xml).toContain('loext:border-right="none"');
+  expect(xml).toContain('loext:border-line-width-left="0.01cm 0.02cm 0.02cm"');
+  expect(xml).toContain("loext:padding-left=");
+  expect(xml).toContain("loext:padding-right=");
+});
+
+it("uses the native CharEmphasis tokens in both directions", /** Checks each UNO value and the accepted native token order. @returns Nothing. */ () => {
+  for (const [emphasis, lexical] of [
+    [0, "none"],
+    [1, "dot above"],
+    [2, "circle above"],
+    [3, "disc above"],
+    [4, "accent above"],
+    [11, "dot below"],
+    [12, "circle below"],
+    [13, "disc below"],
+    [14, "accent below"],
+  ] as const) {
+    expect(importTextCharacterProperties(attributes([["style:text-emphasize", lexical]]))).toEqual({
+      emphasis,
+    });
+    expect(exportTextCharacterProperties({ emphasis })).toContain(
+      `style:text-emphasize="${lexical}"`,
+    );
+  }
+  expect(
+    importTextCharacterProperties(attributes([["style:text-emphasize", "below circle"]])),
+  ).toEqual({ emphasis: 12 });
+  expect(importTextCharacterProperties(attributes([["style:text-emphasize", "dot"]]))).toEqual({
+    emphasis: 1,
+  });
+  expect(
+    importTextCharacterProperties(attributes([["style:text-emphasize", "below none"]])),
+  ).toEqual({ emphasis: 0 });
+  for (const lexical of ["unknown", "dot below above", "dot  below", "dot circle"])
+    expect(importTextCharacterProperties(attributes([["style:text-emphasize", lexical]]))).toEqual(
+      {},
+    );
+});
+
+it("merges the native underline and overline property sequences independently", /** Verifies interleaved SAX tokens and the original overline color filter difference. @returns Nothing. */ () => {
+  const properties = importTextCharacterProperties(
+    attributes([
+      ["style:text-underline-style", "dotted"],
+      ["style:text-overline-style", "solid"],
+      ["style:text-overline-type", "double"],
+      ["style:text-underline-color", "font-color"],
+      ["style:text-overline-color", "#cc0033"],
+    ]),
+  );
+  expect(properties).toEqual({
+    underlineStyle: 3,
+    underlineHasColor: false,
+    overlineStyle: 2,
+    overlineHasColor: true,
+    overlineColor: 0xcc0033,
+  });
+  const xml = exportTextCharacterProperties(properties);
+  expect(xml).toContain('style:text-underline-style="dotted"');
+  expect(xml).toContain('style:text-underline-color="font-color"');
+  expect(xml).toContain('style:text-overline-type="double"');
+  expect(xml).toContain('style:text-overline-color="#cc0033"');
+  expect(
+    exportTextCharacterProperties({
+      underlineStyle: 0,
+      underlineHasColor: true,
+      underlineColor: 0xcc0033,
+      overlineStyle: 0,
+      overlineHasColor: true,
+      overlineColor: 0xcc0033,
+    }),
+  ).toContain('style:text-overline-style="none" style:text-overline-color="#cc0033"');
+});
+
+it("preserves the two native CharCaseMap ODF attributes", /** Checks all published case modes and the SAX application order. @returns Nothing. */ () => {
+  for (const [mode, name, value, xml] of [
+    [0, "fo:text-transform", "none", ' fo:font-variant="normal" fo:text-transform="none"'],
+    [1, "fo:text-transform", "uppercase", ' fo:text-transform="uppercase"'],
+    [2, "fo:text-transform", "lowercase", ' fo:text-transform="lowercase"'],
+    [3, "fo:text-transform", "capitalize", ' fo:text-transform="capitalize"'],
+    [4, "fo:font-variant", "small-caps", ' fo:font-variant="small-caps"'],
+  ] as const) {
+    expect(importTextCharacterProperties(attributes([[name, value]]))).toEqual({ caseMap: mode });
+    expect(exportTextCharacterProperties({ caseMap: mode })).toBe(xml);
+  }
+  expect(
+    importTextCharacterProperties(
+      attributes([
+        ["fo:font-variant", "small-caps"],
+        ["fo:text-transform", "uppercase"],
+      ]),
+    ),
+  ).toEqual({ caseMap: 1 });
+  expect(
+    importTextCharacterProperties(
+      attributes([
+        ["fo:text-transform", "uppercase"],
+        ["fo:font-variant", "small-caps"],
+      ]),
+    ),
+  ).toEqual({ caseMap: 4 });
+});
+
+it("uses the native outline, shadow and font relief ODF spellings", /** Covers explicit off values and the original shadow lexical fallback. @returns Nothing. */ () => {
+  expect(
+    importTextCharacterProperties(
+      attributes([
+        ["style:text-outline", "false"],
+        ["fo:text-shadow", "unexpected"],
+        ["style:font-relief", "engraved"],
+      ]),
+    ),
+  ).toEqual({ outline: false, shadow: true, relief: 2 });
+  expect(
+    importTextCharacterProperties(
+      attributes([
+        ["style:text-outline", "true"],
+        ["fo:text-shadow", "none"],
+        ["style:font-relief", "none"],
+      ]),
+    ),
+  ).toEqual({ outline: true, shadow: false, relief: 0 });
+  expect(exportTextCharacterProperties({ outline: true, shadow: true, relief: 1 })).toBe(
+    ' style:text-outline="true" fo:text-shadow="1pt 1pt" style:font-relief="embossed"',
+  );
+  expect(exportTextCharacterProperties({ outline: false, shadow: false, relief: 0 })).toBe(
+    ' style:text-outline="false" fo:text-shadow="none" style:font-relief="none"',
+  );
+});
+
+it("converts ODF character rotation and scale with the native lexical handlers", /** Pins rotation thresholds and the fit flag's named tokens. @returns Nothing. */ () => {
+  expect(
+    importTextCharacterProperties(
+      attributes([
+        ["style:text-rotation-angle", "-90"],
+        ["style:text-rotation-scale", "fixed"],
+        ["style:text-scale", "115%"],
+      ]),
+    ),
+  ).toEqual({ rotation: 2700, rotationFitToLine: true, scaleWidth: 115 });
+  expect(importTextCharacterProperties(attributes([["style:text-rotation-angle", "315"]]))).toEqual(
+    { rotation: 2700 },
+  );
+  expect(importTextCharacterProperties(attributes([["style:text-rotation-angle", "316"]]))).toEqual(
+    { rotation: 0 },
+  );
+  expect(
+    importTextCharacterProperties(
+      attributes([
+        ["style:text-rotation-angle", "invalid"],
+        ["style:text-rotation-scale", "invalid"],
+      ]),
+    ),
+  ).toEqual({});
+  const xml = exportTextCharacterProperties({
+    rotation: 900,
+    rotationFitToLine: false,
+    scaleWidth: 82,
+  });
+  expect(xml).toContain('style:text-rotation-angle="90"');
+  expect(xml).toContain('style:text-rotation-scale="line-height"');
+  expect(xml).toContain('style:text-scale="82%"');
+});
+
+it("maps character hyphenation and optical sizing through their native lexical handlers", /** Pins the inverted hyphenation flag and independent optical sizing attribute. @returns Nothing. */ () => {
+  expect(
+    importTextCharacterProperties(
+      attributes([
+        ["fo:hyphenate", "false"],
+        ["loext:font-optical-sizing", "auto"],
+      ]),
+    ),
+  ).toEqual({ noHyphenation: true, opticalSizing: true });
+  expect(
+    importTextCharacterProperties(
+      attributes([
+        ["fo:hyphenate", "invalid"],
+        ["loext:font-optical-sizing", "invalid"],
+      ]),
+    ),
+  ).toEqual({});
+  const exported = exportTextCharacterProperties({ noHyphenation: false, opticalSizing: false });
+  expect(exported).toContain('fo:hyphenate="true"');
+  expect(exported).toContain('loext:font-optical-sizing="none"');
 });

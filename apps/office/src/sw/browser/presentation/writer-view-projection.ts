@@ -1,5 +1,8 @@
 /** @fileoverview Projects the live Writer graph to immutable browser presentation values. */
-import { getPageBodyGeometry } from "../../source/core/layout/pagedesc";
+import { projectWriterParagraphBorders } from "./writer-paragraph-border-projection";
+import { GetParagraphFrameDirection } from "../../source/core/doc/doclay";
+import { projectWriterFontPaint, type WriterFontPaint } from "../../source/core/txtnode/txatbase";
+import { formatPageBodyGeometry } from "../../source/core/layout/pagedesc";
 import { SwStyleNameMapper } from "../../source/core/doc/SwStyleNameMapper";
 import { IsPoolUserFormat } from "../../inc/poolfmt";
 import {
@@ -8,13 +11,57 @@ import {
   writerHighlightColorValue,
   writerParagraphBackgroundColor,
 } from "../../source/core/attr/swatrset";
+import { browserBorderLine } from "../../../svx/browser/dialog/border-line";
+import { SvxBoxItem, SvxBoxItemLine } from "../../../editeng/source/items/frmitems";
 import { SvxColorItem } from "../../../editeng/inc/colritem";
+import { SvxCaseMapItem } from "../../../editeng/inc/cmapitem";
+import type { SvxAdjustItem } from "../../../editeng/inc/adjustitem";
+import { SvxFrameDirection as FrameDirection } from "../../../editeng/inc/frmdir";
+import { SvxAdjust, SvxCaseMap } from "../../../editeng/inc/svxenum";
+import { SvxEmphasisMarkItem } from "../../../editeng/inc/emphasismarkitem";
+import { FontEmphasisMark } from "../../../tools/inc/fontenum";
 import { SvxEscapementItem } from "../../../editeng/inc/escapementitem";
+import { SvxCharRotateItem } from "../../../editeng/inc/charrotateitem";
+import { SvxCharScaleWidthItem } from "../../../editeng/inc/charscaleitem";
+import type { SvxHyphenZoneItem } from "../../../editeng/source/items/paraitem";
+import { LanguageTag } from "../../../i18nlangtag/inc/languagetag";
+import { text as unicodeText } from "../../../i18nlangtag/source/isolang/isolang.tables";
+import { SvxAutoKernItem } from "../../../editeng/inc/autokernitem";
 import { SvxKerningItem } from "../../../editeng/inc/kernitem";
-import { RES_CHRATR_ESCAPEMENT, RES_CHRATR_KERNING } from "../../inc/hintids";
-
 import { SvxCrossedOutItem } from "../../../editeng/inc/crossedoutitem";
-import { RES_CHRATR_CROSSEDOUT } from "../../inc/hintids";
+import { SvxWordLineModeItem } from "../../../editeng/inc/wrlmitem";
+import {
+  RES_CHRATR_AUTOKERN,
+  RES_CHRATR_BOX,
+  RES_CHRATR_ESCAPEMENT,
+  RES_CHRATR_KERNING,
+  RES_CHRATR_ROTATE,
+  RES_CHRATR_NOHYPHEN,
+  RES_CHRATR_OPTICAL_SIZING,
+  RES_PARATR_HYPHENZONE,
+  RES_PARATR_ADJUST,
+  RES_CHRATR_SCALEW,
+  RES_CHRATR_CASEMAP,
+  RES_CHRATR_CROSSEDOUT,
+  RES_CHRATR_WORDLINEMODE,
+  RES_CHRATR_BACKGROUND,
+  RES_CHRATR_OVERLINE,
+  RES_CHRATR_EMPHASIS_MARK,
+  RES_CHRATR_UNDERLINE,
+  RES_TXTATR_INETFMT,
+  RES_CHRATR_COLOR,
+  RES_CHRATR_FONT,
+  RES_CHRATR_FONTSIZE,
+  RES_CHRATR_HIGHLIGHT,
+  RES_CHRATR_POSTURE,
+  RES_CHRATR_WEIGHT,
+  RES_MARGIN_FIRSTLINE,
+  RES_MARGIN_RIGHT,
+  RES_PARATR_LINESPACING,
+  RES_PARATR_TABSTOP,
+  RES_KEEP,
+  RES_UL_SPACE,
+} from "../../inc/hintids";
 import type { RulerUnitData } from "../../../svtools/source/control/ruler";
 import type { FieldUnit } from "../../../tools/inc/fldunit";
 import { projectWriterLineSpacing } from "../../source/core/text/itrform2";
@@ -46,12 +93,6 @@ import {
   SvxUnderlineItem,
   type SvxTextLineItem,
 } from "../../../editeng/source/items/textitem";
-import {
-  RES_CHRATR_BACKGROUND,
-  RES_CHRATR_OVERLINE,
-  RES_CHRATR_UNDERLINE,
-  RES_TXTATR_INETFMT,
-} from "../../inc/hintids";
 import { projectWriterParagraphList, type WriterParagraphList } from "../../source/core/doc/list";
 import type { WriterParagraphStyle } from "../../source/core/doc/fmtcol";
 import type { SwPaM } from "../../source/core/crsr/pam";
@@ -72,55 +113,38 @@ import {
 } from "../../../editeng/source/items/textitem";
 import { SvxBrushItem } from "../../../editeng/source/items/frmitems.brush";
 import { SfxBoolItem } from "../../../svl/source/items/cenumitm";
-import {
-  RES_CHRATR_COLOR,
-  RES_CHRATR_FONT,
-  RES_CHRATR_FONTSIZE,
-  RES_CHRATR_HIGHLIGHT,
-  RES_CHRATR_POSTURE,
-  RES_CHRATR_WEIGHT,
-  RES_MARGIN_FIRSTLINE,
-  RES_MARGIN_RIGHT,
-  RES_PARATR_LINESPACING,
-  RES_PARATR_TABSTOP,
-  RES_KEEP,
-  RES_UL_SPACE,
-} from "../../inc/hintids";
 import { WRITER_AVAILABLE_PARAGRAPH_STYLE_POOL } from "../../inc/poolfmt";
 import type { WriterPageDescriptorValue } from "../../source/core/layout/pagedesc";
-import { projectWriterLineHeightItem } from "../../source/core/text/itrform2";
-import { resolveSwNumberPortionBackground } from "../../source/core/text/inftxt";
+import { projectWriterParagraphLineLayout } from "../../source/core/text/itrform2";
 import type { SwViewOption } from "../../inc/viewopt";
 import {
-  resolveSwNumberPortionFont,
-  type SwNumberPortionFont,
-} from "../../source/core/text/txtfld";
+  projectWriterListMarker,
+  type WriterListMarkerProjection,
+} from "./writer-list-marker-projection";
 import type { SwNumberingTabSettings } from "../../source/core/text/txttab";
 import { getFontFamilyGeneric } from "../../../xmloff/source/style/fonthdl";
+import type { WriterParagraphComputedStyle } from "./writer-view-projection.types";
+export type { WriterParagraphComputedStyle } from "./writer-view-projection.types";
 /** Detached document style selector metadata. */
 export type WriterParagraphStyleOption = StyleToolboxEntry;
 
 /** Primitive/resource-ID projection of one text node, owned only by the browser presenter. */
-export interface WriterParagraphProjection {
+export interface WriterParagraphProjection extends WriterListMarkerProjection {
   /** Device caret painting follows the current native cursor's before-label state. */
   readonly inFrontOfLabel?: boolean;
   /** Minimum occupied label gap, separate from authored list indentation. */
   readonly listMarkerMinimumDistancePt?: number;
   /** Native tab search inputs for label-alignment numbering; legacy numbering has no following tab portion. */
   readonly listTabSettings?: Readonly<SwNumberingTabSettings>;
-  /** Window-device decoration derived from the native marked list level and view options. */
-  readonly listMarkerBackgroundColor?: string;
-  /** Detached native font values used only by the numbering paint device. */
-  readonly listMarkerFont?: Readonly<SwNumberPortionFont>;
   readonly alignment: WriterParagraphAlignment;
   readonly bulletChar?: string;
   readonly computedStyle: WriterParagraphComputedStyle;
+  readonly borderStyle?: ReturnType<typeof projectWriterParagraphBorders>;
   readonly id: string;
   readonly list: WriterParagraphList;
   readonly listLayout?: WriterParagraphListLayout;
   readonly listGeometryWins?: boolean;
   readonly listId: string;
-  readonly listMarker?: string;
   readonly textLeftMargin: number;
   readonly uncountedListTextLeftPt?: number;
   readonly numRuleName: string;
@@ -144,6 +168,11 @@ export interface WriterParagraphListLayout {
   readonly listTabPositionPt: number;
 }
 
+/** Separates decorated text from spacing glyphs as in CommonSalLayout. @param text - Model text portion. @returns Alternating nonspacing and spacing text, starting with nonspacing text. */
+export function splitWordLineText(text: string): string[] {
+  return text.split(/(\p{White_Space}+)/u);
+}
+
 /** Native per-line color and style at the browser paint boundary. */
 export interface WriterTextLineProjection {
   readonly style: FontLineStyle;
@@ -153,21 +182,36 @@ export interface WriterTextLineProjection {
 /** One immutable display portion; no filter or transfer record participates in rendering. */
 export interface WriterTextPortion {
   readonly inlineGraphic?: WriterInlineGraphicProjection;
-  readonly attributes: Readonly<{
-    bold: boolean;
-    italic: boolean;
-    underline: boolean;
-    underlineLine?: WriterTextLineProjection;
-    overlineLine?: WriterTextLineProjection;
-    escapement?: Readonly<{ offset: number; height: number }>;
-    strikeout?: import("../../../tools/inc/fontenum").FontStrikeout;
-    color?: string;
-    highlight?: string;
-    fontFamily?: string;
-    fontFamilyGeneric?: string;
-    fontSizeTwips?: number;
-    kerningTwips?: number;
-  }>;
+  readonly attributes: Readonly<
+    WriterFontPaint & {
+      bold: boolean;
+      italic: boolean;
+      underline: boolean;
+      underlineLine?: WriterTextLineProjection;
+      overlineLine?: WriterTextLineProjection;
+      wordLineMode?: boolean;
+      caseMap?: SvxCaseMap;
+      emphasisMark?: FontEmphasisMark;
+      escapement?: Readonly<{ offset: number; height: number }>;
+      strikeout?: import("../../../tools/inc/fontenum").FontStrikeout;
+      color?: string;
+      highlight?: string;
+      fontFamily?: string;
+      fontFamilyGeneric?: string;
+      fontSizeTwips?: number;
+      kerningTwips?: number;
+      autoKerning?: boolean;
+      rotation?: number;
+      scaleWidth?: number;
+      opticalSizing?: boolean;
+      noHyphenation?: boolean;
+      language?: string;
+      joinsPreviousCharacterBox?: boolean;
+      characterBox?: Readonly<
+        Record<"Top" | "Bottom" | "Left" | "Right", Readonly<{ line: string; padding: number }>>
+      >;
+    }
+  >;
   readonly hyperlink?: Readonly<{ url: string; targetFrame?: string }>;
   readonly startOffset: number;
   readonly text: string;
@@ -183,34 +227,6 @@ export interface WriterInlineGraphicProjection {
   readonly right: number;
   readonly upper: number;
   readonly lower: number;
-}
-
-/** Browser-ready values projected from effective Writer paragraph items. */
-export interface WriterParagraphComputedStyle {
-  /** Effective automatic first-line mode; omitted detached DTOs retain the manual default. */
-  readonly autoFirstLineIndent?: boolean;
-  readonly color?: string;
-  readonly contextualSpacing?: boolean;
-  readonly firstLineIndentPt: number;
-  readonly fontFamily?: string;
-  /** Layout offset distinct from the authored item; omitted detached DTOs retain their raw value. */
-  readonly resolvedFirstLineIndentPt?: number;
-  readonly fontFamilyGeneric?: string;
-  readonly fontStyle: "italic" | "normal";
-  readonly fontSizePt: number;
-  readonly fontWeight: 400 | 700;
-  readonly highlight?: string;
-  readonly backgroundColor?: string;
-  readonly lineHeight: number;
-  readonly lineSpacingMode?: "proportional" | "fixed" | "minimum" | "leading";
-  readonly lineSpacingValue?: number;
-  readonly tabStopPositionPt?: number | undefined;
-  readonly tabStopsPt?: readonly number[] | undefined;
-  readonly keepWithNext?: boolean;
-  readonly countLineNumbers?: boolean;
-  readonly lowerSpacingPt: number;
-  readonly rightMarginPt: number;
-  readonly upperSpacingPt: number;
 }
 
 /** Immutable browser presentation value with no mutable model references. */
@@ -246,6 +262,9 @@ export interface WriterViewSnapshot extends WriterPresentationProjection {
   readonly horizontalRulerUnitData: RulerUnitData;
   readonly verticalRulerUnitData: RulerUnitData;
   readonly isHorizontalRulerVisible: boolean;
+  readonly isBaselineGridVisible: boolean;
+  readonly isNavigatorVisible: boolean;
+  readonly baselineGridColor: string;
   readonly isVerticalRulerVisible: boolean;
   readonly isPropertiesSidebarVisible: boolean;
   readonly isStoragePending: boolean;
@@ -323,12 +342,7 @@ export class WriterViewProjection {
           list.kind === "bullet"
             ? getWriterNumFormatBullet(node.GetNumRule()?.Get(list.level))
             : undefined;
-        const listMarker = node.GetListLabel();
-        const listMarkerFont = resolveSwNumberPortionFont(node);
-        const listMarkerBackgroundColor =
-          viewOptions === undefined
-            ? undefined
-            : resolveSwNumberPortionBackground(node, viewOptions);
+
         const uncountedTextLeft = node.IsCountedInList()
           ? undefined
           : resolveSwListTextLeftMargin(node);
@@ -337,6 +351,10 @@ export class WriterViewProjection {
         const listTextLeft = resolveSwListTextLeftMargin(node) ?? node.GetParagraphTextLeftMargin();
         const spacing = node.GetAttr(RES_UL_SPACE) as SvxULSpaceItem;
         const lineSpacing = node.GetAttr(RES_PARATR_LINESPACING) as SvxLineSpacingItem;
+        const fontSizePt =
+          (node.GetAttr(RES_CHRATR_FONTSIZE) as SvxFontHeightItem).GetHeight() / 20;
+        const page = node.FindPageDesc()?.GetMaster();
+        const direction = GetParagraphFrameDirection(node);
         const firstLine = node.GetAttr(RES_MARGIN_FIRSTLINE) as SvxFirstLineIndentItem;
         const tabItem = node.GetAttr(RES_PARATR_TABSTOP) as SvxTabStopItem;
         const explicitTabStops = Array.from(
@@ -375,7 +393,10 @@ export class WriterViewProjection {
         );
         const background = writerParagraphBackgroundColor(node.GetSwAttrSet());
         const font = node.GetAttr(RES_CHRATR_FONT) as SvxFontItem;
+        const hyphenation = (node.GetAttr(RES_PARATR_HYPHENZONE) as SvxHyphenZoneItem).QueryValue();
         const fontFamilyGeneric = getFontFamilyGeneric(font.GetFamily());
+        const adjustment = node.GetAttr(RES_PARATR_ADJUST) as SvxAdjustItem;
+        const alignment = adjustment.GetAdjust();
         return Object.freeze({
           ...(rulerTabStops.length === 0 ? {} : { rulerTabStops: Object.freeze(rulerTabStops) }),
           rulerTabSettings: Object.freeze({
@@ -387,6 +408,28 @@ export class WriterViewProjection {
           id: this.GetNodeId(node),
           computedStyle: Object.freeze({
             autoFirstLineIndent: firstLine.IsAutoFirst(),
+            autoHyphenation: hyphenation.hyphen,
+            logicalAlignment:
+              alignment === SvxAdjust.ParaStart
+                ? "start"
+                : alignment === SvxAdjust.ParaEnd
+                  ? "end"
+                  : undefined,
+            lastLineAlignment:
+              alignment === SvxAdjust.Block
+                ? adjustment.GetLastBlock() === SvxAdjust.Center
+                  ? "center"
+                  : adjustment.GetLastBlock() === SvxAdjust.Block
+                    ? "justify"
+                    : "start"
+                : undefined,
+            ...(hyphenation.hyphen
+              ? {
+                  hyphenationLimits: `${Math.max(1, hyphenation.minWordLength)} ${Math.max(1, hyphenation.minLead)} ${Math.max(1, hyphenation.minTrail)}`,
+                }
+              : {}),
+            opticalSizing: node.GetAttr(RES_CHRATR_OPTICAL_SIZING).QueryValue() === true,
+            autoKerning: (node.GetAttr(RES_CHRATR_AUTOKERN) as SvxAutoKernItem).GetValue(),
             ...(color === "auto" ? {} : { color }),
             contextualSpacing: spacing.GetContext(),
             firstLineIndentPt: firstLine.ResolveTextFirstLineOffset() / 20,
@@ -396,22 +439,24 @@ export class WriterViewProjection {
             fontStyle: (node.GetAttr(RES_CHRATR_POSTURE) as SvxPostureItem).GetBoolValue()
               ? "italic"
               : "normal",
-            fontSizePt: (node.GetAttr(RES_CHRATR_FONTSIZE) as SvxFontHeightItem).GetHeight() / 20,
+            fontSizePt,
+            direction:
+              direction === FrameDirection.Horizontal_RL_TB
+                ? "rtl"
+                : direction === FrameDirection.Horizontal_LR_TB
+                  ? "ltr"
+                  : undefined,
             fontWeight: (node.GetAttr(RES_CHRATR_WEIGHT) as SvxWeightItem).GetBoolValue()
               ? 700
               : 400,
             ...(highlight === "transparent" ? {} : { highlight }),
             ...(background === "transparent" ? {} : { backgroundColor: background }),
-            lineHeight: projectWriterLineHeightItem(
-              lineSpacing,
-              (node.GetAttr(RES_CHRATR_FONTSIZE) as SvxFontHeightItem).GetHeight() / 20,
-            ),
+            ...projectWriterParagraphLineLayout(node, lineSpacing, fontSizePt, page?.GetTextGrid()),
             lineSpacingMode: projectWriterLineSpacing(lineSpacing).mode,
             lineSpacingValue: projectWriterLineSpacing(lineSpacing).value,
             tabStopPositionPt: tabStopsPt[0],
             tabStopsPt,
             keepWithNext: (node.GetAttr(RES_KEEP) as SfxBoolItem).GetValue(),
-            countLineNumbers: node.GetSwAttrSet().GetLineNumber().IsCount(),
             lowerSpacingPt: spacing.GetLower() / 20,
             rightMarginPt:
               (node.GetAttr(RES_MARGIN_RIGHT) as SvxRightMarginItem).ResolveRight() / 20,
@@ -475,12 +520,11 @@ export class WriterViewProjection {
           ...(inFrontOfLabel && cursor.GetPoint().GetNode() === node
             ? { inFrontOfLabel: true }
             : {}),
-          ...(listMarker === undefined ? {} : { listMarker }),
-          ...(listMarkerFont === undefined ? {} : { listMarkerFont }),
-          ...(listMarkerBackgroundColor === undefined ? {} : { listMarkerBackgroundColor }),
+          ...projectWriterListMarker(node, listFormat, viewOptions),
+          borderStyle: projectWriterParagraphBorders(node),
           numRuleName: node.GetNumRuleName(),
           nodeIndex: node.GetIndex(),
-          runs: projectTextPortions(node),
+          runs: projectTextPortions(node, hyphenation.hyphen),
           style: node.GetParagraphStyle(),
           styleDisplayName: node.GetTextFormatColl().GetName(),
           text: node.GetText(),
@@ -572,7 +616,7 @@ export class WriterViewProjection {
             const descriptor = document.GetPageDesc(index);
             return Object.freeze({
               followName: descriptor.GetFollow().GetName(),
-              value: getPageBodyGeometry(descriptor),
+              value: formatPageBodyGeometry(descriptor, document),
             });
           },
         ),
@@ -701,6 +745,9 @@ export class WriterViewStore {
         horizontalRulerUnitData: this.view.GetHRuler().GetCurrentRulerUnit(),
         verticalRulerUnitData: this.view.GetVRuler().GetCurrentRulerUnit(),
         isHorizontalRulerVisible: this.view.IsHorizontalRulerVisible(),
+        isBaselineGridVisible: this.view.IsBaselineGridVisible(),
+        isNavigatorVisible: this.view.IsNavigatorVisible(),
+        baselineGridColor: this.view.GetBaselineGridColor(),
         isVerticalRulerVisible: this.view.IsVerticalRulerVisible(),
         isPropertiesSidebarVisible: this.view.IsSidebarVisible(),
         isStatusBarVisible: this.view.IsStatusBarVisible(),
@@ -729,12 +776,48 @@ export class WriterViewStore {
 
 /** Projects a decorated line, preserving automatic color inheritance. @param item - Native line item. @returns Browser paint values. */
 function projectTextLine(item: SvxTextLineItem): WriterTextLineProjection {
-  const color = writerColorValue(item.GetColor());
-  return Object.freeze({ style: item.GetLineStyle(), ...(color === "auto" ? {} : { color }) });
+  const color = item.GetColor();
+  return Object.freeze({
+    style: item.GetLineStyle(),
+    ...(color.IsFullyTransparent() ? {} : { color: writerColorValue(color) }),
+  });
 }
 
-/** Projects native item stacks at text boundaries into immutable platform display values. @param node - Actual body or cell owner. @returns Frozen display portions. */
-function projectTextPortions(node: SwTextNode): readonly WriterTextPortion[] {
+/** Projects character borders in the original physical edge order. @param item - Actual character box. @returns Browser border and padding values for each side. */
+function projectCharacterBox(
+  item: SvxBoxItem,
+): NonNullable<WriterTextPortion["attributes"]["characterBox"]> {
+  /** Reads the native stroke and corresponding distance. @param edge - Native physical side. @returns Browser stroke and point distance. */
+  function side(edge: SvxBoxItemLine) {
+    const line = item.GetLine(edge);
+    return Object.freeze({
+      line: browserBorderLine(line, false),
+      padding: line === undefined ? 0 : item.GetDistance(edge) / 20,
+    });
+  }
+  return Object.freeze({
+    Top: side(SvxBoxItemLine.TOP),
+    Bottom: side(SvxBoxItemLine.BOTTOM),
+    Left: side(SvxBoxItemLine.LEFT),
+    Right: side(SvxBoxItemLine.RIGHT),
+  });
+}
+
+/** Resolves the Writer language to the browser's language tag for automatic hyphenation. @param node - Source paragraph. @param start - First UTF-16 unit. @returns Resolved language tag. */
+function getHyphenationLanguage(node: SwTextNode, start: number): string {
+  const language = new LanguageTag(node.GetLang(start, 1));
+  try {
+    return unicodeText(language.getBcp47());
+  } finally {
+    language.dispose();
+  }
+}
+
+/** Projects native item stacks at text boundaries into immutable platform display values. @param node - Actual body or cell owner. @param autoHyphenation - Active paragraph hyphenation. @returns Frozen display portions. */
+function projectTextPortions(
+  node: SwTextNode,
+  autoHyphenation: boolean,
+): readonly WriterTextPortion[] {
   const iterator = new SwAttrIter(node),
     portions: WriterTextPortion[] = [];
   const inherited = node.GetSwAttrSet(),
@@ -746,6 +829,9 @@ function projectTextPortions(node: SwTextNode): readonly WriterTextPortion[] {
       handler.ReadItem(which) !== node.GetAttr(which)
     );
   }
+  const inheritedAutoKerning = (node.GetAttr(RES_CHRATR_AUTOKERN) as SvxAutoKernItem).GetValue();
+  const inheritedOpticalSizing = node.GetAttr(RES_CHRATR_OPTICAL_SIZING).QueryValue();
+  let previousBox: SvxBoxItem | undefined;
   for (let start = 0; start < node.Len();) {
     iterator.Seek(start);
     const inlineGraphic = projectInlineGraphic(node, start);
@@ -756,6 +842,17 @@ function projectTextPortions(node: SwTextNode): readonly WriterTextPortion[] {
     const generic = getFontFamilyGeneric(font.GetFamily());
     const underline = handler.ReadItem(RES_CHRATR_UNDERLINE) as SvxUnderlineItem;
     const overline = handler.ReadItem(RES_CHRATR_OVERLINE) as SvxOverlineItem;
+    const autoKerning = (handler.ReadItem(RES_CHRATR_AUTOKERN) as SvxAutoKernItem).GetValue();
+    const noHyphenation = handler.ReadItem(RES_CHRATR_NOHYPHEN).QueryValue() === true;
+    const opticalSizing = handler.ReadItem(RES_CHRATR_OPTICAL_SIZING).QueryValue() === true;
+    const language =
+      autoHyphenation && !noHyphenation ? getHyphenationLanguage(node, start) : undefined;
+    const rotation = (handler.ReadItem(RES_CHRATR_ROTATE) as SvxCharRotateItem).GetValue();
+    const scaleWidth = (handler.ReadItem(RES_CHRATR_SCALEW) as SvxCharScaleWidthItem).GetValue();
+    const caseMap = (handler.ReadItem(RES_CHRATR_CASEMAP) as SvxCaseMapItem).GetCaseMap();
+    const emphasisMark = (
+      handler.ReadItem(RES_CHRATR_EMPHASIS_MARK) as SvxEmphasisMarkItem
+    ).GetEmphasisMark();
     const highlight = writerHighlightColorValue(
       handler.ReadItem(RES_CHRATR_HIGHLIGHT) as SvxBrushItem,
     );
@@ -763,6 +860,9 @@ function projectTextPortions(node: SwTextNode): readonly WriterTextPortion[] {
       highlight !== "transparent" || !authored(RES_CHRATR_BACKGROUND)
         ? highlight
         : writerHighlightColorValue(handler.ReadItem(RES_CHRATR_BACKGROUND) as SvxBrushItem);
+    const box = handler.ReadItem(RES_CHRATR_BOX);
+    const characterBox =
+      inlineGraphic === undefined && box instanceof SvxBoxItem && box.HasBorder() ? box : undefined;
     portions.push(
       Object.freeze({
         startOffset: start,
@@ -771,13 +871,25 @@ function projectTextPortions(node: SwTextNode): readonly WriterTextPortion[] {
         attributes: Object.freeze({
           bold: (handler.ReadItem(RES_CHRATR_WEIGHT) as SvxWeightItem).GetBoolValue(),
           italic: (handler.ReadItem(RES_CHRATR_POSTURE) as SvxPostureItem).GetBoolValue(),
+          ...projectWriterFontPaint(
+            /** Reads the current native paint item at this portion. @param which - Character item. @returns Effective item. */
+            (which) => handler.ReadItem(which),
+          ),
           underline: underline.GetBoolValue(),
+          ...(caseMap === SvxCaseMap.NotMapped ? {} : { caseMap }),
           ...(underline.GetBoolValue() &&
           (underline.GetLineStyle() !== FontLineStyle.LINESTYLE_SINGLE ||
             !underline.GetColor().IsFullyTransparent())
             ? { underlineLine: projectTextLine(underline) }
             : {}),
           ...(overline.GetBoolValue() ? { overlineLine: projectTextLine(overline) } : {}),
+          ...((handler.ReadItem(RES_CHRATR_WORDLINEMODE) as SvxWordLineModeItem).GetValue()
+            ? { wordLineMode: true }
+            : {}),
+          ...(inlineGraphic === undefined &&
+          (emphasisMark & FontEmphasisMark.Style) !== FontEmphasisMark.NONE
+            ? { emphasisMark }
+            : {}),
           ...(authored(RES_CHRATR_ESCAPEMENT)
             ? {
                 escapement: Object.freeze({
@@ -814,9 +926,22 @@ function projectTextPortions(node: SwTextNode): readonly WriterTextPortion[] {
                 ).GetHeight(),
               }
             : {}),
+          ...(noHyphenation ? { noHyphenation } : {}),
+          ...(opticalSizing !== inheritedOpticalSizing ? { opticalSizing } : {}),
+          ...(language ? { language } : {}),
+          ...(rotation !== 0 ? { rotation } : {}),
+          ...(scaleWidth !== 100 ? { scaleWidth } : {}),
+          ...(autoKerning !== inheritedAutoKerning ? { autoKerning } : {}),
           ...(authored(RES_CHRATR_KERNING)
             ? { kerningTwips: (handler.ReadItem(RES_CHRATR_KERNING) as SvxKerningItem).GetValue() }
             : {}),
+          ...(characterBox === undefined
+            ? {}
+            : {
+                characterBox: projectCharacterBox(characterBox),
+                joinsPreviousCharacterBox:
+                  previousBox !== undefined && characterBox.equals(previousBox),
+              }),
         }),
         ...(link === undefined
           ? {}
@@ -828,6 +953,7 @@ function projectTextPortions(node: SwTextNode): readonly WriterTextPortion[] {
             }),
       }),
     );
+    previousBox = characterBox;
     start = end;
   }
   return Object.freeze(portions);

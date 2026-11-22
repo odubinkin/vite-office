@@ -3,48 +3,38 @@
   "baselineTag": "libreoffice-26.8.0.2",
   "record": {
     "classification": "upstream-mechanism",
-    "status": "mapped",
     "localPath": "apps/office/src/sw/source/core/unocore/unofield.ts",
     "localSymbols": [
-      "GetAnnotationByUniqueID",
-      "AttachAnnotationToRange"
+      "SwXTextField"
     ],
-    "upstreamPath": "sw/source/core/unocore/unofield.cxx",
-    "upstreamSymbols": [
-      "SwXTextFieldTypes::getByUniqueID",
-      "SwXTextField::attachToRange"
-    ],
-    "preservedResponsibilities": [
-      "Finds an attached annotation by its native unique ID and reanchors its copied field from the provisional insertion point to the original selection end."
-    ],
-    "omittedResponsibilities": [
-      "Other original field services, explicit UNO aggregation and desktop undo orchestration remain outside this profile."
-    ],
+    "status": "mapped",
     "evidence": {
       "local": [
         {
           "path": "apps/office/src/sw/source/core/unocore/unofield.ts",
-          "marker": "GetAnnotationByUniqueID"
+          "marker": "SwXTextField"
         },
         {
-          "path": "apps/office/src/sw/source/core/unocore/unofield.ts",
-          "marker": "AttachAnnotationToRange"
-        },
-        {
-          "path": "apps/office/src/sw/source/filter/xml/odt-annotation-range.test.ts",
-          "marker": "preserves original comment text and anchors"
+          "path": "apps/office/src/sw/source/filter/xml/odt-annotation.test.ts",
+          "marker": "imports the named annotation"
         }
       ],
       "upstream": [
         {
           "path": "vendor/libreoffice-reference/sw/source/core/unocore/unofield.cxx",
-          "marker": "SwXTextFieldTypes::getByUniqueID"
-        },
-        {
-          "path": "vendor/libreoffice-reference/sw/source/core/unocore/unofield.cxx",
-          "marker": "SwXTextField::attachToRange"
+          "marker": "SwXTextField::getAnchor"
         }
       ]
-    }
+    },
+    "upstreamPath": "sw/source/core/unocore/unofield.cxx",
+    "upstreamSymbols": [
+      "SwXTextField::getAnchor"
+    ],
+    "preservedResponsibilities": [
+      "Attaches the represented UNO Annotation service to a Writer point or an expanded text range."
+    ],
+    "omittedResponsibilities": [
+      "Only the represented annotation/marker path is implemented. Complete UNO services and unsupported rich comment formatting remain outside this mapping."
+    ]
   }
 }

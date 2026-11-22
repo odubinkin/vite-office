@@ -1,11 +1,14 @@
 /** @fileoverview Native module-global static Writer defaults from pinned bastyp/init.cxx, limited to represented item classes. */
 import {
+  SvxAutoFrameDirectionItem,
+  SvxHyphenZoneItem,
+} from "../../../../editeng/source/items/paraitem";
+import {
   SvxForbiddenRuleItem,
   SvxHangingPunctuationItem,
   SvxScriptSpaceItem,
 } from "../../../../editeng/source/items/paraitem";
 import * as ParaItems from "../../../../editeng/source/items/paraitem.controls";
-import { SvxHyphenZoneItem } from "../../../../editeng/inc/hyphenzoneitem";
 import * as CharacterWhich from "../../../inc/hintids";
 import {
   SvxCaseMapItem,
@@ -101,7 +104,6 @@ import {
 } from "../../../../editeng/source/items/textitem";
 import { SvxScriptHintItem } from "../../../../editeng/source/items/textitem.modes";
 import { SfxBoolItem } from "../../../../svl/source/items/cenumitm";
-import { SwFormatLineNumber } from "../../../inc/fmtline";
 import { SfxInt16Item, SfxUInt16Item } from "../../../../svl/source/items/intitem";
 import { SfxItemPool } from "../../../../svl/source/items/itempool";
 import { type SfxPoolItem } from "../../../../svl/source/items/poolitem";
@@ -152,11 +154,14 @@ import {
   RES_PARATR_SPLIT,
   RES_PARATR_TABSTOP,
   RES_PARATR_VERTALIGN,
+  RES_PARATR_SNAPTOGRID,
+  RES_PARATR_AUTOFRAMEDIR,
   RES_PARATR_WIDOWS,
   RES_UL_SPACE,
 } from "../../../inc/hintids";
+import { SwFormatLineNumber } from "../../../inc/fmtline";
 import { SwTextGridItem } from "../../../inc/tgrditem";
-import { SwNumRuleItem, SwParaConnectBorderItem } from "../para/paratr";
+import { SwNumRuleItem, SwParaConnectBorderItem, SwRegisterItem } from "../para/paratr";
 import { SwFormatCharFormat, SwFormatINetFormat } from "../txtnode/fmtatr2";
 import { SwTableBoxFormula, SwTableBoxNumFormat, SwTableBoxValue } from "../attr/cellatr";
 import { SwFormatPageDesc } from "../attr/fmtpdsc";
@@ -166,7 +171,7 @@ import {
   ItemInfoStatic,
   type ItemInfo,
 } from "../../../../svl/source/items/itempool";
-import { RES_CHRATR_BEGIN, POOLATTR_END } from "../../../inc/hintids";
+import { RES_CHRATR_BEGIN, POOLATTR_END, RES_PARATR_HYPHENZONE } from "../../../inc/hintids";
 /** Original complete frame-format ranges from init.cxx, including unknown XML attributes and all drawing-layer fill items. */
 export const aFrameFormatSetRange: WhichRangesContainer = [
   [RES_FRMATR_BEGIN, RES_FRMATR_END - 1],
@@ -283,9 +288,6 @@ class ItemInfoPackageSwAttributes extends ItemInfoPackage {
     add(new SvxHangingPunctuationItem(true, W.RES_PARATR_HANGINGPUNCTUATION));
     add(new SvxForbiddenRuleItem(true, W.RES_PARATR_FORBIDDEN_RULES));
     add(new SvxTabStopItem(1, 1134, SvxTabAdjust.Default, RES_PARATR_TABSTOP));
-    const hyphenation = new SvxHyphenZoneItem(false, W.RES_PARATR_HYPHENZONE);
-    hyphenation.SetMaxHyphens(0);
-    add(hyphenation);
     add(new SvxTextLeftMarginItem(RES_MARGIN_TEXTLEFT));
     add(new SvxFirstLineIndentItem(RES_MARGIN_FIRSTLINE));
     add(new SvxRightMarginItem(RES_MARGIN_RIGHT));
@@ -302,8 +304,12 @@ class ItemInfoPackageSwAttributes extends ItemInfoPackage {
         RES_PARATR_VERTALIGN,
       ),
     );
+    add(new ParaItems.SvxParaGridItem(true, RES_PARATR_SNAPTOGRID));
+    add(new SvxAutoFrameDirectionItem(true, RES_PARATR_AUTOFRAMEDIR));
     add(new SfxInt16Item(RES_BREAK, 0));
     add(new SwFormatPageDesc());
+    add(new SvxHyphenZoneItem(false, RES_PARATR_HYPHENZONE, { maxHyphens: 0 }));
+    add(new SwRegisterItem());
     add(new SwNumRuleItem());
     add(new SfxStringItem(RES_PARATR_LIST_ID, ""));
     add(new SfxInt16Item(RES_PARATR_LIST_LEVEL, 0));

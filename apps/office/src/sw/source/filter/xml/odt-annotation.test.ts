@@ -1,147 +1,207 @@
-/** @fileoverview LibreOffice annotation field regressions through Writer ODT and Worker. */
+/** @fileoverview Exercises native annotations through Writer's ODT import. */
 import { readFileSync } from "node:fs";
-import { assert, expect, it } from "vitest";
-import { EE_CHAR_WEIGHT } from "../../../../editeng/inc/eeitem";
-import { SvxWeightItem } from "../../../../editeng/inc/wghtitem";
+import { expect, it } from "vitest";
+import { CH_FEATURE } from "../../../../editeng/inc/editattr";
 import type { EECharAttrib } from "../../../../editeng/inc/editdata";
+import { TextRotation } from "../../../../editeng/inc/editobj";
+import {
+  EE_CHAR_BKGCOLOR,
+  EE_CHAR_COLOR,
+  EE_CHAR_UNDERLINE,
+  EE_CHAR_WEIGHT,
+  EE_FEATURE_LINEBR,
+  EE_FEATURE_TAB,
+  EE_PARA_JUST,
+  EE_PARA_ULSPACE,
+} from "../../../../editeng/inc/eeitem";
+import { EditTextObjectImpl } from "../../../../editeng/source/editeng/editobj.owner";
+import { SvxAdjust } from "../../../../editeng/inc/svxenum";
+import { SvxColorItem } from "../../../../editeng/inc/colritem";
+import { SvxUnderlineItem } from "../../../../editeng/source/items/textitem";
+import { SvxAdjustItem } from "../../../../editeng/inc/adjustitem";
+import { SvxULSpaceItem } from "../../../../editeng/inc/ulspitem";
+import { SvxWeightItem } from "../../../../editeng/inc/wghtitem";
+import { text, unicode } from "../../../../i18nlangtag/source/isolang/isolang.tables";
+import { SvtScriptType } from "../../../../svl/inc/languageoptions";
+import { SfxStyleFamily } from "../../../../svl/inc/style-values";
+import { SfxVoidItem } from "../../../../svl/source/items/voiditem";
+import { Color } from "../../../../tools/inc/color";
+import { FontLineStyle, FontWeight } from "../../../../tools/inc/fontenum";
+import { MapUnit } from "../../../../tools/inc/mapunit";
 import { DocumentArchive } from "../../../../package/source/zippackage/document-archive";
-import { createDocument } from "../../../../sfx2/source/doc/objsh";
-import { FontWeight } from "../../../../tools/inc/fontenum";
-import { ODF_NAMESPACES as NS } from "../../../../xmloff/source/core/xmltoken";
 import {
   createOdtWriterTransfer,
   restoreOdtWriterTransfer,
 } from "../../../browser/filter/xml/odt-transfer";
-import { CH_TXTATR_INWORD } from "../../../inc/hintids";
-import type { SwTextNode } from "../../core/txtnode/ndtxt";
-import type { SwDoc } from "../../core/doc/doc";
+import { RES_TXTATR_ANNOTATION } from "../../../inc/hintids";
+import { SwTextField } from "../../../inc/txtfld";
+import { SwPostItFieldType } from "../../core/fields/docufld";
 import { readOdtDocument } from "./swxml";
 import { writeOdtDocument } from "./wrtxml";
-import { getPostItFields } from "./xmlannotation";
-import { importWriterXml } from "./xmlimp";
 
-const metadata = createDocument({ id: "annotation", suiteId: "writer", title: "Annotation" });
-const upstream = "../../vendor/libreoffice-reference/sw/qa/extras";
-
-/** Collects annotation fields in source document order. @param document - Native Writer document. @returns Original point hints. */
-function annotations(document: SwDoc) {
-  return document.paragraphs.flatMap(
-    /** Reads each native annotation hint on its paragraph. @param node - Owning paragraph. @returns Hint list. */
-    (node) => [...getPostItFields(node)],
+it("imports the named annotation and range from the upstream backward-search document", /** Reads the LibreOffice QA sample through the ordinary Writer importer. @returns Completion. */ async () => {
+  const sample =
+    "../../vendor/libreoffice-reference/sw/qa/extras/uiwriter/data/tdf147583_backwardSearch.odt";
+  const { document } = await readOdtDocument(
+    new Uint8Array(readFileSync(sample)),
+    { title: "ODT annotations" },
+    undefined,
+    { onDiagnostic: /** Omits unrelated diagnostics. @returns Nothing. */ () => undefined },
   );
-}
-
-it("preserves the bold second annotation run from annotation-formatting.odt", /** Ports testAnnotationFormatting. @returns Completion. */ async () => {
-  const source = (
-    await readOdtDocument(
-      new Uint8Array(readFileSync(`${upstream}/odfimport/data/annotation-formatting.odt`)),
-      metadata,
-    )
-  ).document;
-  let worker: SwDoc | undefined;
-  let reopened: SwDoc | undefined;
-  try {
-    worker = restoreOdtWriterTransfer(structuredClone(createOdtWriterTransfer(source)));
-    reopened = (await readOdtDocument(await writeOdtDocument(worker, metadata), metadata)).document;
-    for (const document of [source, worker, reopened]) {
-      const field = annotations(document)[0]?.GetAttr().GetField();
-      assert(field);
-      expect(field.GetPar2()).toBe("Looses: bold");
-      const rich = field.GetTextObject();
-      assert(rich);
-      const items: EECharAttrib[] = [];
-      rich.GetCharAttribs(0, items);
-      const bold = items.find(
-        /** Finds the original bold span. @param item - Native span. @returns Whether this is the span weight. */
-        (item) => item.nStart === 8 && item.nEnd === 12 && item.pAttr?.Which() === EE_CHAR_WEIGHT,
-      )?.pAttr;
-      assert(bold instanceof SvxWeightItem);
-      expect(bold.GetValue()).toBe(FontWeight.WEIGHT_BOLD);
+  const fields: SwTextField[] = [];
+  for (const node of document.GetNodes().entries()) {
+    const hints = node.GetTextNode()?.GetpSwpHints();
+    for (let index = 0; hints && index < hints.Count(); index++) {
+      const hint = hints.Get(index);
+      if (hint instanceof SwTextField && hint.Which() === RES_TXTATR_ANNOTATION) fields.push(hint);
     }
-  } finally {
-    reopened?.Dispose();
-    worker?.Dispose();
-    source.Dispose();
   }
+  expect(fields).toHaveLength(1);
+  const [field] = fields;
+  if (!field) throw new Error("Fixture annotation is missing.");
+  expect(field.GetAttr().GetField().GetData()).toMatchObject({
+    author: "Unknown Author",
+    name: "__Annotation__75_3386804513",
+    resolved: false,
+    text: "Comments are also checked\n\nFor empty paragraphs",
+  });
+  const mark = document.GetIDocumentMarkAccess().GetAnnotationMark(field.GetAttr());
+  expect(mark).toBeDefined();
+  expect(mark?.GetMarkEnd().GetNode()).toBe(field.GetTextNode());
+  expect(mark?.GetMarkEnd().GetContentIndex()).toBe(field.GetStart() + 1);
+
+  const transfer = createOdtWriterTransfer(document);
+  expect(transfer.graph.annotations).toHaveLength(1);
+  const restored = restoreOdtWriterTransfer(structuredClone(transfer));
+  expect(createOdtWriterTransfer(restored).graph.annotations).toEqual(transfer.graph.annotations);
+  const bytes = await writeOdtDocument(restored, { title: "ODT annotations" });
+  const xml = await (await DocumentArchive.open(bytes)).readTextEntry("content.xml");
+  expect(xml).toContain('<office:annotation office:name="__Annotation__75_3386804513"');
+  expect(xml).toContain('<office:annotation-end office:name="__Annotation__75_3386804513"/>');
+  expect(xml).not.toContain("\ufff9");
+  const reloaded = await readOdtDocument(bytes, { title: "ODT annotations" });
+  const before = transfer.graph.annotations?.[0];
+  const after = createOdtWriterTransfer(reloaded.document).graph.annotations?.[0];
+  expect(after).toEqual({ ...before, id: after?.id });
 });
 
-it("preserves resolved and unresolved annotation metadata from resolved-comment.odt", /** Ports testResolvedComment and verifies ODF 1.3 legacy initials conversion. @returns Completion. */ async () => {
-  const source = (
-    await readOdtDocument(
-      new Uint8Array(readFileSync(`${upstream}/odfexport/data/resolved-comment.odt`)),
-      metadata,
-    )
-  ).document;
-  let worker: SwDoc | undefined;
-  let reopened: SwDoc | undefined;
+it("transports native annotation editor text through the ODT Worker record", /** Verifies format and feature ownership across structured clone. @returns Completion. */ async () => {
+  const sample =
+    "../../vendor/libreoffice-reference/sw/qa/extras/uiwriter/data/tdf147583_backwardSearch.odt";
+  const { document } = await readOdtDocument(
+    new Uint8Array(readFileSync(sample)),
+    { title: "Rich comments" },
+    undefined,
+    { onDiagnostic: /** Omits unrelated diagnostics. @returns Nothing. */ () => undefined },
+  );
+  const record = createOdtWriterTransfer(document).graph.annotations?.[0];
+  if (!record) throw new Error("Fixture annotation is missing.");
+  const type = SwPostItFieldType.Get(document);
+  const field = type.FindField(record.id);
+  if (!field) throw new Error("Fixture field is missing.");
+  const rich = new EditTextObjectImpl(
+    null,
+    MapUnit.MapTwip,
+    false,
+    TextRotation.NONE,
+    SvtScriptType.LATIN,
+  );
+  const paragraph = rich.CreateAndInsertContent();
+  const feature = String.fromCharCode(CH_FEATURE);
+  const value = unicode(`A😀${feature}B${feature}C`);
+  const style = unicode("Comment");
+  const empty = unicode("");
   try {
-    worker = restoreOdtWriterTransfer(structuredClone(createOdtWriterTransfer(source)));
-    const bytes = await writeOdtDocument(worker, metadata);
+    paragraph.SetText(value);
+    paragraph.SetStyle(style);
+    paragraph.SetFamily(SfxStyleFamily.Para);
+    paragraph.GetParaAttribs().Put(new SvxAdjustItem(SvxAdjust.Center, EE_PARA_JUST), true);
+    const spacing = new SvxULSpaceItem(EE_PARA_ULSPACE);
+    spacing.SetUpper(160);
+    spacing.SetLower(120);
+    spacing.SetContextValue(true);
+    paragraph.GetParaAttribs().Put(spacing, true);
+    const underline = new SvxUnderlineItem(FontLineStyle.LINESTYLE_SINGLE, EE_CHAR_UNDERLINE);
+    underline.SetColor(new Color(221, 0, 73));
+    paragraph
+      .GetCharAttribs()
+      .push(
+        rich.CreateAttrib(new SvxColorItem(new Color(40, 90, 200), EE_CHAR_COLOR), 0, 3),
+        rich.CreateAttrib(new SvxWeightItem(FontWeight.WEIGHT_BOLD, EE_CHAR_WEIGHT), 1, 3),
+        rich.CreateAttrib(underline, 1, 3),
+        rich.CreateAttrib(new SvxColorItem(new Color(255, 223, 97), EE_CHAR_BKGCOLOR), 1, 3),
+        rich.CreateAttrib(new SfxVoidItem(EE_FEATURE_TAB), 3, 4),
+        rich.CreateAttrib(new SfxVoidItem(EE_FEATURE_LINEBR), 5, 6),
+      );
+    rich.CreateAndInsertContent().SetText(empty);
+    field.SetPar2("A😀\tB\nC\n");
+    field.SetTextObject(rich);
+
+    const wire = structuredClone(createOdtWriterTransfer(document));
+    const restored = restoreOdtWriterTransfer(wire);
+    const restoredField = SwPostItFieldType.Get(restored).FindField(record.id);
+    const actual = restoredField?.GetTextObject();
+    expect(actual?.Equals(rich)).toBe(true);
+    expect(actual?.GetPool()).not.toBe(rich.GetPool());
+    expect(restoredField?.GetPar2()).toBe("A😀\tB\nC\n");
+    expect(createOdtWriterTransfer(restored).graph.annotations).toEqual(wire.graph.annotations);
+
+    const bytes = await writeOdtDocument(restored, { title: "Rich comments" });
     const xml = await (await DocumentArchive.open(bytes)).readTextEntry("content.xml");
-    expect(xml).toContain("<meta:creator-initials>SC</meta:creator-initials>");
-    expect(xml).toContain("<dc:date>2019-08-08T14:05:04.535603552</dc:date>");
-    expect(xml).not.toContain(CH_TXTATR_INWORD);
-    reopened = (await readOdtDocument(bytes, metadata)).document;
-    for (const document of [source, worker, reopened]) {
-      const hints = annotations(document);
-      expect(hints).toHaveLength(2);
-      const first = hints[0]?.GetAttr().GetField().GetData();
-      expect(first).toMatchObject({
-        author: "Scott Clarke",
-        initials: "SC",
-        resolved: true,
-        text: "This comment is resolved",
-      });
-      expect(first?.dateTime.GetNanoSec()).toBe(535603552);
-      expect(hints[1]?.GetAttr().GetField().GetData()).toMatchObject({
-        resolved: false,
-        text: "This comment is not resolved",
-      });
-    }
-  } finally {
-    reopened?.Dispose();
-    worker?.Dispose();
-    source.Dispose();
-  }
-});
+    const annotation = xml?.match(/<office:annotation\s[^>]*>.*?<\/office:annotation>/su)?.[0];
+    expect(annotation).toMatch(/<text:p text:style-name="P\d+">/u);
+    expect(annotation).toMatch(/<text:span text:style-name="T\d+">😀<\/text:span>/u);
+    expect(annotation).toContain("<text:tab/>B<text:line-break/>C");
+    expect(annotation).toMatch(/<text:p(?: text:style-name="[^"]+")?><\/text:p>/u);
+    expect(xml).toContain('fo:text-align="center"');
+    expect(xml).toContain('style:contextual-spacing="true"');
+    expect(xml).toContain('fo:font-weight="bold"');
+    expect(xml).toContain('fo:color="#285ac8"');
+    expect(xml).toContain('style:text-underline-color="#dd0049"');
+    expect(xml).toContain('fo:background-color="#ffdf61"');
+    expect(xml).not.toContain(feature);
 
-it("retains adjacent point anchors, thread names and paragraph boundaries through both paths", /** Exercises real UTF-16 owners, empty dates, and legacy initials. @returns Completion. */ async () => {
-  const namespaces = `xmlns:office="${NS.office}" xmlns:style="${NS.style}" xmlns:text="${NS.text}" xmlns:dc="${NS.dc}" xmlns:loext="${NS.loext}"`;
-  const styles = `<office:document-styles ${namespaces}><office:styles/></office:document-styles>`;
-  const xml = `<office:document-content ${namespaces}><office:body><office:text><text:p>😀<office:annotation office:name="one">
-    <text:sender-initials>A</text:sender-initials><dc:date>invalid</dc:date><text:p>a<text:s text:c="2"/>b</text:p><text:p/><text:p>c<text:tab/>d</text:p>
-  </office:annotation><office:annotation office:name="two" loext:parent-name="one" loext:resolved="true"><text:p>reply</text:p></office:annotation>end</text:p></office:text></office:body></office:document-content>`;
-  const { document } = importWriterXml(styles, xml, metadata);
-  let worker: SwDoc | undefined;
-  let reopened: SwDoc | undefined;
-  try {
-    worker = restoreOdtWriterTransfer(structuredClone(createOdtWriterTransfer(document)));
-    const saved = await writeOdtDocument(worker, metadata);
-    const content = await (await DocumentArchive.open(saved)).readTextEntry("content.xml");
-    expect(content).toContain("<dc:date>0000-00-00T00:00:00</dc:date>");
-    reopened = (await readOdtDocument(saved, metadata)).document;
-    for (const candidate of [document, worker, reopened]) {
-      const node = candidate.paragraphs[0] as SwTextNode;
-      expect(node.GetText()).toBe(`😀${CH_TXTATR_INWORD}${CH_TXTATR_INWORD}end`);
-      const [one, two] = annotations(candidate);
-      assert(one && two);
-      expect([one.GetStart(), two.GetStart()]).toEqual([2, 3]);
-      expect(one.GetAttr().GetField().GetData()).toMatchObject({
-        name: "one",
-        initials: "A",
-        text: "a  b\n\nc\td",
-      });
-      expect(one.GetAttr().GetField().GetData().dateTime.GetDate()).toBe(0);
-      expect(two.GetAttr().GetField().GetData()).toMatchObject({
-        name: "two",
-        parentName: "one",
-        text: "reply",
-        resolved: true,
-      });
+    const reopened = await readOdtDocument(bytes, { title: "Rich comments" });
+    const reopenedRecord = createOdtWriterTransfer(reopened.document).graph.annotations?.[0];
+    expect(reopenedRecord?.text).toBe("A😀\tB\nC\n");
+    const reopenedField =
+      reopenedRecord && SwPostItFieldType.Get(reopened.document).FindField(reopenedRecord.id);
+    const reopenedText = reopenedField?.GetTextObject();
+    expect(reopenedText?.GetParagraphCount()).toBe(2);
+    const first = reopenedText?.GetText(0);
+    if (!first) throw new Error("Missing native annotation paragraph.");
+    try {
+      expect(text(first)).toBe(`A😀${feature}B${feature}C`);
+    } finally {
+      first.dispose();
     }
+    const spans: EECharAttrib[] = [];
+    reopenedText?.GetCharAttribs(0, spans);
+    const background = spans.find(
+      /** Locates the native imported background over the styled range. @param span - Note attribute. @returns Whether this is the background. */
+      (span) => span.pAttr?.Which() === EE_CHAR_BKGCOLOR,
+    );
+    expect(background?.pAttr).toBeInstanceOf(SvxColorItem);
+    expect((background?.pAttr as SvxColorItem).GetValue().toUInt32()).toBe(0xffdf61);
+    expect(spans).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({ nStart: 1, nEnd: 3, pAttr: expect.any(SvxWeightItem) }),
+        expect.objectContaining({ nStart: 1, nEnd: 3, pAttr: expect.any(SvxUnderlineItem) }),
+        expect.objectContaining({ nStart: 3, nEnd: 4, pAttr: expect.any(SfxVoidItem) }),
+        expect.objectContaining({ nStart: 5, nEnd: 6, pAttr: expect.any(SfxVoidItem) }),
+      ]),
+    );
+    expect(
+      (
+        reopenedText?.GetParaAttribs(0).GetItemIfSet(EE_PARA_JUST, false) as SvxAdjustItem
+      ).GetAdjust(),
+    ).toBe(SvxAdjust.Center);
+    const reopenedSpacing = reopenedText?.GetParaAttribs(0).GetItemIfSet(EE_PARA_ULSPACE, false);
+    expect(reopenedSpacing?.equals(spacing)).toBe(true);
   } finally {
-    reopened?.Dispose();
-    worker?.Dispose();
-    document.Dispose();
+    empty.dispose();
+    style.dispose();
+    value.dispose();
+    rich.dispose();
   }
 });

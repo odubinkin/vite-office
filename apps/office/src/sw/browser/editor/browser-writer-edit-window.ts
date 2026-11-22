@@ -203,6 +203,8 @@ export class BrowserWriterEditWindow {
       retained?: WriterCursorSelection,
     ): void => {
       if (this.restoringSelection) return;
+      const notes = this.editWindow.GetView().GetPostItMgr();
+      if (notes.GetActiveField()) notes.ClearActiveField();
       if (event.target === event.currentTarget) {
         const previous = event.relatedTarget ?? this.environment.document.activeElement;
         const fromControl =

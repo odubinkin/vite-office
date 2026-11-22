@@ -1,0 +1,35 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "browser-adaptation",
+    "localPath": "apps/office/src/sw/browser/presentation/writer-case-effects.ts",
+    "localSymbols": [
+      "browserCaseStyle",
+      "getTitleCaseParts"
+    ],
+    "status": "local-only",
+    "rationale": "Projects case-map formatting with CSS and isolated native title-case initials while preserving editable UTF-16 text.",
+    "responsibilities": [
+      "Projects case-map formatting with CSS and isolated native title-case initials while preserving editable UTF-16 text."
+    ],
+    "stackDivergence": {
+      "kind": "browser-adaptation",
+      "rationale": "CSS owns case shaping and glyph metrics in the browser."
+    },
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sw/browser/presentation/writer-case-effects.ts",
+          "marker": "getTitleCaseParts"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/editeng/source/items/svxfont.cxx",
+          "marker": "SvxFont::CalcCaseMap"
+        }
+      ]
+    }
+  }
+}

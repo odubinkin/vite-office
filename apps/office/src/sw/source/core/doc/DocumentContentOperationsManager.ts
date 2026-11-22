@@ -10,6 +10,10 @@ import { SwInsertFlags } from "../../../inc/IDocumentContentOperations";
 import { PaMCorrAbs } from "./doccorr";
 import { DelBookmarks } from "./docbm";
 import { SwNodeIndex } from "../crsr/pam";
+import { SwFormatField } from "../../../inc/fmtfld";
+import { SwTextField } from "../../../inc/txtfld";
+import { SwTextFlyCnt } from "../../../inc/txtflcnt";
+import type { SwPostItField } from "../fields/docufld";
 import type { SwNode } from "../docnode/node";
 import type { SwNodeRange } from "../../../inc/ndindex";
 import { SwPaM, SwPosition } from "../crsr/pam";
@@ -17,7 +21,7 @@ import { SwContentNode } from "../docnode/node";
 import { SwTextNode, type SwTextFragment } from "../txtnode/ndtxt";
 import type { SwDoc } from "./doc";
 import { SfxItemSet } from "../../../../svl/source/items/itemset";
-import { sw_GetJoinFlags, sw_JoinText } from "./docedt";
+import { PrepareJoinNext, sw_GetJoinFlags, sw_JoinText } from "./docedt";
 import type { Graphic } from "../../../../vcl/source/gdi/graph";
 import { SwPoolFormatId } from "../../../inc/poolfmt";
 import { RndStdIds } from "../../../../svx/inc/swframetypes";
@@ -27,8 +31,6 @@ import {
   RES_PARATR_LIST_ID,
   RES_PARATR_LIST_ISCOUNTED,
   WRITER_TEXT_NODE_WHICH_RANGES,
-  RES_CHRATR_BEGIN,
-  RES_CHRATR_END,
   RES_PAGEDESC,
   RES_BREAK,
   RES_KEEP,
@@ -133,11 +135,16 @@ export class DocumentContentOperationsManager {
       );
     for (const paragraph of crossesBreak ? [node, last] : [node]) {
       const hints = paragraph.GetpSwpHints();
-      if (paragraph === node && hints?.HasFlyContent(start, end))
+      for (let index = 0; hints && index < hints.Count(); index++) {
+        const hint = hints.Get(index);
+        if (!hint.HasDummyChar() || hint instanceof SwTextField) continue;
+        if (hint instanceof SwTextFlyCnt) {
+          const offset = hint.GetStart();
+          if (paragraph !== node || offset < start || offset >= end || hint.GetGraphicSection())
+            continue;
+        }
         throw new Error("Writer structured replacement is not implemented.");
-      for (const hint of hints?.entries() ?? [])
-        if (hint.HasDummyChar())
-          throw new Error("Writer structured replacement is not implemented.");
+      }
     }
     const parts = regExp ? tokenizeReplacement(replacement) : [replacement];
     return this.document.RunModelTransaction(
@@ -147,7 +154,8 @@ export class DocumentContentOperationsManager {
         const action = undo.DoesUndo() ? new SwUndoReplace(range, replacement, regExp) : undefined;
         if (action !== undefined) undo.AddUndoAction(action);
         const enabled = undo.DoesUndo(),
-          oldLength = node.Len();
+          oldLength = node.Len(),
+          replaceEnd = crossesBreak ? oldLength : range.End().GetContentIndex();
         undo.DoUndo(false);
         try {
           const position = new SwPosition(node, start);
@@ -155,9 +163,9 @@ export class DocumentContentOperationsManager {
           try {
             const initial = parts[0] ?? "";
             if (start === oldLength) this.InsertString(position, initial);
-            else if (start < end || initial.length !== 0)
-              node.ReplaceText(position, end - start, initial);
-            position.SetContent(node.Len() - oldLength + end);
+            else if (start < replaceEnd || initial.length !== 0)
+              node.ReplaceText(position, replaceEnd - start, initial);
+            position.SetContent(node.Len() - oldLength + replaceEnd);
             for (const text of parts.slice(1)) {
               const trailing = this.SplitNode(position);
               const tailLength = trailing.Len();
@@ -249,6 +257,37 @@ export class DocumentContentOperationsManager {
     return true;
   }
 
+  /** Inserts the native annotation point and its optional selected range. @param range - Insertion position or selected text. @param field - Borrowed annotation value. @returns Attached format. */
+  public InsertPostItField(range: SwPaM, field: SwPostItField): SwFormatField {
+    const start = range.Start();
+    const end = range.End();
+    const node = this.GetTextNode(end, "annotation insertion");
+    this.GetTextNode(start, "annotation insertion");
+    const expanded = start.compare(end) !== 0;
+    const first = start.clone("mark");
+    first.nContent.SetAffinity("before");
+    try {
+      const format = new SwFormatField(field);
+      const hint = new SwTextField(format, end.GetContentIndex());
+      if (!node.InsertHint(hint)) throw new Error("Writer annotation has no text space.");
+      if (expanded) {
+        const last = new SwPosition(node, hint.GetStart() + 1);
+        const mark = new SwPaM(first, last);
+        try {
+          const value = format.GetField();
+          if (!value.GetName()) value.SetName(`__Annotation__${value.GetData().id}`);
+          this.document.GetIDocumentMarkAccess().MakeAnnotationMark(mark, format);
+        } finally {
+          mark.Dispose();
+          last.Dispose();
+        }
+      }
+      return format;
+    } finally {
+      first.Dispose();
+    }
+  }
+
   /** Inserts a native Writer fragment at one canonical position. @param position - Insertion position. @param fragment - Text plus canonical hints. @returns Whether content changed. */
   public InsertTextFragment(position: SwPosition, fragment: SwTextFragment): boolean {
     if (fragment.text.length === 0 && fragment.hints.Count() === 0) return false;
@@ -332,18 +371,7 @@ export class DocumentContentOperationsManager {
     )
       throw new Error("Writer join requires adjacent SwTextNodes in one document.");
     const offset = preceding.Len();
-    if (offset !== 0) trailing.FormatToTextAttr(preceding);
-    else {
-      preceding.ResetAttr(RES_CHRATR_BEGIN, RES_CHRATR_END - 1);
-      const direct = trailing.GetpSwAttrSet();
-      if (direct !== undefined) {
-        const items = new SfxItemSet(this.document.GetAttrPool(), [
-          [RES_CHRATR_BEGIN, RES_CHRATR_END - 1],
-        ]);
-        items.PutSet(direct);
-        preceding.SetAttr(items);
-      }
-    }
+    PrepareJoinNext(preceding, trailing);
     preceding.AppendTextNode(trailing);
     preceding.GetNodes().removeTextNode(trailing);
     return offset;

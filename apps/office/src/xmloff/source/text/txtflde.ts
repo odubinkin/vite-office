@@ -1,34 +1,48 @@
-/** @fileoverview Consumed native ODF annotation field export. */
-import { OUStringBuffer } from "../../../sal/inc/rtl/ustrbuf";
-import { text } from "../../../i18nlangtag/source/isolang/isolang.tables";
-import { Converter } from "../../../sax/source/tools/converter";
-import type { XMLAnnotation } from "./txtfldi";
+/** @fileoverview Emits native ODF annotation fields and range end markers. */
 
-/** Emits the annotation field and its separate text section. @param annotation - Native annotation data. @param escape - XML attribute and character escaping. @param exportParagraphs - Annotation text paragraph exporter. @returns ODF annotation element. */
+import type { XMLTextParagraphSource } from "./txtparae";
+
+/** Neutral annotation portion before the current paragraph is serialized. */
+export type XMLAnnotationExportMarker =
+  | Readonly<{
+      kind: "annotation";
+      offset: number;
+      consumesMarker: boolean;
+      name: string;
+      author: string;
+      initials: string;
+      date: string;
+      parentName: string;
+      resolved: boolean;
+      text: string;
+      paragraphs?: readonly XMLTextParagraphSource[];
+    }>
+  | Readonly<{ kind: "annotation-end"; name: string; offset: number }>;
+
+/** Writes the represented Writer annotation payload. @param marker - Annotation portion. @param escapeXml - XML escaping. @param exportText - ODF whitespace encoding. @param exportParagraph - Shared paragraph serializer. @returns ODF annotation field XML. */
 export function exportAnnotation(
-  annotation: XMLAnnotation,
-  escape: (value: string) => string,
-  exportParagraphs: (paragraphs: XMLAnnotation["paragraphs"]) => string,
+  marker: XMLAnnotationExportMarker,
+  escapeXml: (text: string) => string,
+  exportText: (text: string) => string,
+  exportParagraph: (paragraph: XMLTextParagraphSource) => string,
 ): string {
-  const attributes =
-    (annotation.name ? ` office:name="${escape(annotation.name)}"` : "") +
-    (annotation.parentName ? ` loext:parent-name="${escape(annotation.parentName)}"` : "") +
-    ` loext:resolved="${annotation.resolved}"`;
-  const author = annotation.author ? `<dc:creator>${escape(annotation.author)}</dc:creator>` : "";
-  const initials = annotation.initials
-    ? `<meta:creator-initials>${escape(annotation.initials)}</meta:creator-initials>`
+  if (marker.kind === "annotation-end")
+    return `<office:annotation-end office:name="${escapeXml(marker.name)}"/>`;
+  const name = marker.name ? ` office:name="${escapeXml(marker.name)}"` : "";
+  const parent = marker.parentName ? ` loext:parent-name="${escapeXml(marker.parentName)}"` : "";
+  const date = marker.date ? `<dc:date>${escapeXml(marker.date)}</dc:date>` : "";
+  const initials = marker.initials
+    ? `<meta:creator-initials>${escapeXml(marker.initials)}</meta:creator-initials>`
     : "";
-  let date = "";
-  if (annotation.dateTime) {
-    const buffer = new OUStringBuffer();
-    Converter.convertDateTime(buffer, annotation.dateTime, null, true);
-    const value = buffer.makeStringAndClear();
-    try {
-      date = `<dc:date>${text(value)}</dc:date>`;
-    } finally {
-      value.dispose();
-      buffer.dispose();
-    }
-  }
-  return `<office:annotation${attributes}>${author}${date}${initials}${exportParagraphs(annotation.paragraphs)}</office:annotation>`;
+  const paragraphs =
+    marker.paragraphs?.map(exportParagraph).join("") ??
+    marker.text
+      .split("\n")
+      .map(
+        /** Emits each note paragraph, including empty paragraphs. @param line - Plain comment text. @returns XML paragraph. */ (
+          line,
+        ) => `<text:p>${exportText(line)}</text:p>`,
+      )
+      .join("");
+  return `<office:annotation${name}${parent} loext:resolved="${marker.resolved}"><dc:creator>${escapeXml(marker.author)}</dc:creator>${date}${initials}${paragraphs}</office:annotation>`;
 }

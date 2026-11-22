@@ -4,6 +4,13 @@ import { beforeEach, expect, it } from "vitest";
 import { createWriterDocumentSession } from "../composition/writer-module";
 import { SEARCH_OPTIONS_KEY } from "../storage/writer-search-options-store";
 import { WriterWorkbench } from "./writer-view";
+import { SfxItemSet } from "../../../svl/source/items/itemset";
+import { RndStdIds } from "../../../svx/inc/swframetypes";
+import { Size } from "../../../tools/inc/gen";
+import { Graphic } from "../../../vcl/source/gdi/graph";
+import { SwFormatAnchor } from "../../inc/fmtanchr";
+import { aFrameFormatSetRange } from "../../source/core/bastyp/init";
+import { SwPaM, SwPosition } from "../../source/core/crsr/pam";
 
 beforeEach(localStorage.removeItem.bind(localStorage, SEARCH_OPTIONS_KEY));
 
@@ -140,3 +147,96 @@ it("retains formatting criteria while similarity search disables their controls"
     session.view.Close();
   }
 });
+
+it.each([
+  { variant: "inline", type: RndStdIds.FLY_AS_CHAR, pattern: "a.b" },
+  { variant: "floating", type: RndStdIds.FLY_AT_CHAR, pattern: "ab" },
+])(
+  "updates a covered $variant graphic through Find and Replace and restores it on Undo",
+  /** Runs normal search commands with a rendered graphic. @param scenario - Native anchor mode and find pattern. @returns Nothing. */
+  (scenario) => {
+    const session = createWriterDocumentSession();
+    const shell = session.view.GetWrtShell();
+    shell.Insert("ab tail");
+    const node = shell.GetActiveParagraph();
+    const doc = node.GetDoc();
+    const point = new SwPosition(node, 1);
+    const range = new SwPaM(point);
+    const anchor = new SwFormatAnchor(scenario.type);
+    const items = new SfxItemSet(doc.GetAttrPool(), aFrameFormatSetRange);
+    const gif = Buffer.from("R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7", "base64");
+    try {
+      anchor.SetAnchor(point);
+      items.Put(anchor);
+      doc
+        .GetDocumentContentOperationsManager()
+        .InsertGraphic(range, new Graphic(gif, "image/gif", new Size(120, 120)), items);
+    } finally {
+      range.Dispose();
+      point.Dispose();
+      anchor.Dispose();
+      items.Dispose();
+    }
+    const workbench = render(<WriterWorkbench isActive view={session.view} />);
+    try {
+      expect(screen.getByRole("img", { name: "Image1" })).toBeInTheDocument();
+      fireEvent.keyDown(window, { key: "h", ctrlKey: true });
+      const dialog = within(screen.getByRole("dialog", { name: "Find and Replace" }));
+      fireEvent.click(dialog.getByText("Other options"));
+      fireEvent.click(dialog.getByRole("checkbox", { name: "Regular expressions" }));
+      fireEvent.change(dialog.getByLabelText("Find"), { target: { value: scenario.pattern } });
+      fireEvent.change(dialog.getByLabelText("Replace with"), { target: { value: "cat" } });
+      fireEvent.click(dialog.getByRole("button", { name: "Replace All" }));
+      expect(node.GetText()).toBe("cat tail");
+      if (scenario.type === RndStdIds.FLY_AS_CHAR) {
+        expect(screen.queryByRole("img", { name: "Image1" })).toBeNull();
+      } else {
+        expect(screen.getByRole("img", { name: "Image1" })).toBeInTheDocument();
+        expect(doc.GetSpzFrameFormats().GetFormat(0).GetAnchor().GetAnchorContentOffset()).toBe(0);
+      }
+      fireEvent.keyDown(dialog.getByLabelText("Find"), { key: "Escape" });
+      fireEvent.keyDown(window, { key: "z", ctrlKey: true });
+      expect(screen.getByRole("img", { name: "Image1" })).toBeInTheDocument();
+      expect(doc.GetSpzFrameFormats().GetFormat(0).GetAnchor().GetAnchorContentOffset()).toBe(1);
+    } finally {
+      workbench.unmount();
+      session.view.Close();
+    }
+  },
+);
+
+it.each([
+  { anchor: "^.", end: 14, selected: "test" },
+  { anchor: ".$", end: 13, selected: "tes" },
+])(
+  "keeps $anchor at the actual paragraph boundary in a selection search",
+  /** Ports tdf144089 and checks the matching end-anchor boundary. @param scenario - Pattern and native selection. @returns Nothing. */
+  (scenario) => {
+    const session = createWriterDocumentSession();
+    const shell = session.view.GetWrtShell();
+    shell.Insert("This is a test");
+    const node = shell.GetActiveParagraph();
+    const start = new SwPosition(node, 10);
+    const end = new SwPosition(node, scenario.end);
+    shell.SetPaM(end, start);
+    const workbench = render(<WriterWorkbench isActive view={session.view} />);
+    try {
+      fireEvent.keyDown(window, { key: "h", ctrlKey: true });
+      const dialog = within(screen.getByRole("dialog", { name: "Find and Replace" }));
+      fireEvent.click(dialog.getByText("Other options"));
+      fireEvent.click(dialog.getByRole("checkbox", { name: "Current selection only" }));
+      fireEvent.click(dialog.getByRole("checkbox", { name: "Regular expressions" }));
+      fireEvent.change(dialog.getByLabelText("Replace with"), { target: { value: "A" } });
+      fireEvent.change(dialog.getByLabelText("Find"), { target: { value: scenario.anchor } });
+      fireEvent.click(dialog.getByRole("button", { name: "Replace All" }));
+      fireEvent.click(dialog.getByRole("button", { name: "Close" }));
+      expect(node.GetText()).toBe("This is a test");
+      expect(window.getSelection()?.toString()).toBe(scenario.selected);
+    } finally {
+      end.Dispose();
+      start.Dispose();
+      workbench.unmount();
+      session.view.Close();
+    }
+  },
+);

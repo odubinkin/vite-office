@@ -3,22 +3,11 @@
   "baselineTag": "libreoffice-26.8.0.2",
   "record": {
     "classification": "upstream-mechanism",
-    "status": "mapped",
     "localPath": "apps/office/src/sw/source/core/crsr/annotationmark.ts",
     "localSymbols": [
       "AnnotationMark"
     ],
-    "upstreamPath": "sw/source/core/crsr/annotationmark.cxx",
-    "upstreamSymbols": [
-      "AnnotationMark::InitDoc",
-      "AnnotationMark::GetAnnotationFormatField"
-    ],
-    "preservedResponsibilities": [
-      "Binds the native annotation range to the trailing field, prefers the authored field name, and looks up the original attached format."
-    ],
-    "omittedResponsibilities": [
-      "Annotation layout invalidation and desktop undo payloads remain outside the represented mark owner."
-    ],
+    "status": "mapped",
     "evidence": {
       "local": [
         {
@@ -26,20 +15,26 @@
           "marker": "AnnotationMark"
         },
         {
-          "path": "apps/office/src/sw/source/filter/xml/odt-annotation-range.test.ts",
-          "marker": "preserves original comment text and anchors"
+          "path": "apps/office/src/sw/source/filter/xml/odt-annotation.test.ts",
+          "marker": "imports the named annotation"
         }
       ],
       "upstream": [
         {
           "path": "vendor/libreoffice-reference/sw/source/core/crsr/annotationmark.cxx",
-          "marker": "AnnotationMark::InitDoc"
-        },
-        {
-          "path": "vendor/libreoffice-reference/sw/source/core/crsr/annotationmark.cxx",
-          "marker": "AnnotationMark::GetAnnotationFormatField"
+          "marker": "AnnotationMark::AnnotationMark"
         }
       ]
-    }
+    },
+    "upstreamPath": "sw/source/core/crsr/annotationmark.cxx",
+    "upstreamSymbols": [
+      "AnnotationMark::AnnotationMark"
+    ],
+    "preservedResponsibilities": [
+      "Connects an annotation point field to registered Writer text endpoints."
+    ],
+    "omittedResponsibilities": [
+      "Only the represented annotation/marker path is implemented. Complete UNO services and unsupported rich comment formatting remain outside this mapping."
+    ]
   }
 }

@@ -79,12 +79,13 @@ export class SvxBorderTabPage {
   private customWidth = false;
   private readonly color = new Color();
   private preset: number | undefined;
-  /** Captures owned input, independent of document mutation. @param input - Native original items. @param boxWhich - Pool's outer box identity. @param mergeWhich - Mapped Writer table-mode item. @param infoWhich - Pool's inner border item identity. @returns Nothing. */
+  /** Captures owned input, independent of document mutation. @param input - Native original items. @param boxWhich - Pool's outer box identity. @param mergeWhich - Mapped Writer table-mode item. @param infoWhich - Pool's inner border item identity. @param mergeDefault - Native default for a mapped paragraph merge slot with mixed input. @returns Nothing. */
   public constructor(
     input: SfxItemSet,
     private readonly boxWhich: number,
     private readonly mergeWhich?: number,
     private readonly infoWhich: number = SID_ATTR_BORDER_INNER,
+    private readonly mergeDefault?: SfxBoolItem,
   ) {
     this.original = input.Clone();
     const box =
@@ -104,6 +105,10 @@ export class SvxBorderTabPage {
     this.vertical = this.oldInfo?.IsVer() ?? false;
     this.distanceVisible = this.oldInfo?.IsDist() ?? false;
     this.Reset();
+  }
+  /** Releases the captured original item set when its owning tab dialog closes. @returns Nothing. */
+  public Dispose(): void {
+    this.original.Dispose();
   }
   /** Restores source frame lines, saved metrics, uniform line controls and selection. @returns Nothing. */
   public Reset(): void {
@@ -355,10 +360,12 @@ export class SvxBorderTabPage {
     let changed = false;
     if (this.merge !== this.savedMerge) {
       if (this.merge === undefined) output.ClearItem(this.mergeWhich as number);
-      else if (this.oldMerge !== undefined) {
-        const item = this.oldMerge.Clone();
-        item.SetValue(this.merge);
-        output.Put(item);
+      else {
+        const item = (this.oldMerge ?? this.mergeDefault)?.Clone();
+        if (item) {
+          item.SetValue(this.merge);
+          output.Put(item);
+        }
       }
       changed = true;
     }

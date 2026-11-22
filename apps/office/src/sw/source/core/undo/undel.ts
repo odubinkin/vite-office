@@ -1,5 +1,8 @@
 /** @fileoverview Implements bounded Writer delete and join undo payloads from pinned undel.cxx. */
 
+import { RndStdIds } from "../../../../svx/inc/swframetypes";
+import { SwFlyFrameFormat } from "../layout/atrfrm";
+import { GetUndoFlySection } from "./undobj1";
 import { SwInsertFlags } from "../../../inc/IDocumentContentOperations";
 import { RES_CHRATR_BEGIN, RES_CHRATR_END, RES_BREAK, RES_PAGEDESC } from "../../../inc/hintids";
 import { SwPaM, SwPosition } from "../crsr/pam";
@@ -26,6 +29,7 @@ export class SwUndoDelete extends SwUndo {
   private m_aSttStr: string;
   private m_aEndStr: string | undefined;
   private m_pHistory: SwHistory | undefined;
+  private m_pFlyHistory: SwHistory | undefined;
   private m_bJoinNext = true;
   private m_nEndContent = 0;
   private m_aSelectedNodes: readonly SwTextNode[] | undefined;
@@ -133,6 +137,8 @@ export class SwUndoDelete extends SwUndo {
     this.m_aEndStr = undefined;
     this.m_pHistory?.Dispose();
     this.m_pHistory = undefined;
+    this.m_pFlyHistory?.Dispose();
+    this.m_pFlyHistory = undefined;
     this.m_aSttStr = "";
     super.Dispose();
   }
@@ -149,6 +155,32 @@ export class SwUndoDelete extends SwUndo {
     this.m_pHistory?.TmpRollback(context.GetDoc(), 0, false);
   }
 
+  /** Removes floating frames anchored in fully selected middle paragraphs before joining. @param range - Live selection. @returns Whether the selection was deleted. */
+  public DeleteSelection(range: SwPaM): boolean {
+    const start = range.Start();
+    const end = range.End();
+    const doc = start.GetNode().GetDoc();
+    if (start.GetNodeIndex() + 1 < end.GetNodeIndex()) {
+      for (const format of [...doc.GetSpzFrameFormats()].reverse()) {
+        if (!(format instanceof SwFlyFrameFormat)) continue;
+        const anchor = format.GetAnchor();
+        const node = anchor.GetAnchorNode();
+        const type = anchor.GetAnchorId();
+        if (
+          !node ||
+          (type !== RndStdIds.FLY_AT_CHAR && type !== RndStdIds.FLY_AT_PARA) ||
+          node.GetIndex() <= start.GetNodeIndex() ||
+          node.GetIndex() >= end.GetNodeIndex() ||
+          !GetUndoFlySection(format)
+        )
+          continue;
+        this.m_pFlyHistory ??= new SwHistory();
+        this.m_pFlyHistory.AddDeleteFly(format);
+      }
+    }
+    return doc.GetDocumentContentOperationsManager().DeleteAndJoin(range);
+  }
+
   /** Deletes the retained range again. @param context - Active Writer context. @returns Nothing. */
   protected override RedoImpl(context: SwUndoRedoContext): void {
     this.m_pHistory?.SetTmpEnd(this.m_pHistory.Count());
@@ -158,7 +190,7 @@ export class SwUndoDelete extends SwUndo {
         mark = new SwPosition(last, this.m_nEndContent, "redline"),
         range = new SwPaM(point, mark);
       try {
-        context.GetDoc().GetDocumentContentOperationsManager().DeleteAndJoin(range);
+        this.DeleteSelection(range);
         if (!this.afterRecorded) this.SetAfterDelete(range.GetPoint());
       } finally {
         range.Dispose();
@@ -198,6 +230,8 @@ export class SwUndoDelete extends SwUndo {
       if (nodes.indexOfOrUndefined(node) === undefined) nodes.insertTextNodeAfter(previous, node);
       previous = node;
     }
+    this.m_pFlyHistory?.Rollback(context.GetDoc());
+    this.m_pFlyHistory = undefined;
     this.m_pHistory?.TmpRollback(context.GetDoc(), 0, false);
   }
 }

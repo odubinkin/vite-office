@@ -286,3 +286,24 @@ export class XMLNumberWithAutoForVoidPropHdl {
     return true;
   }
 }
+
+/** Original XML_TYPE_PERCENT16 specialization of XMLPercentPropHdl. */
+export class XMLPercent16PropHdl {
+  /** Applies native percent conversion and signed16 narrowing. @param input - XML lexeme. @param value - Typed output. @returns Conversion success. */
+  importXML(input: string, value: Any): boolean {
+    const result: [number] = [0];
+    const success = Converter.convertPercent(result, input);
+    value.insert([(result[0] << 16) >> 16], "sal_Int16");
+    return success;
+  }
+
+  /** Exports the native signed width percentage. @param output - Existing attribute. @param value - Native short. @returns Whether a short was extracted. */
+  exportXML(output: [string], value: Any): boolean {
+    const number: [number] = [0];
+    if (!value.extract(number, "sal_Int16")) return false;
+    const percent: [string] = [""];
+    Converter.convertPercent(percent, number[0]);
+    output[0] = percent[0];
+    return true;
+  }
+}

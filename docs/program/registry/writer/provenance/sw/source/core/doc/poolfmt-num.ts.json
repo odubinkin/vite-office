@@ -1,0 +1,41 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/sw/source/core/doc/poolfmt-num.ts",
+    "status": "mapped",
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sw/source/core/doc/poolfmt-num.ts",
+          "marker": "GetNumRuleFromPool"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/doc/DocumentStylePoolManager.cxx",
+          "marker": "DocumentStylePoolManager::GetNumRuleFromPool"
+        }
+      ]
+    },
+    "upstreamPath": "sw/source/core/doc/DocumentStylePoolManager.cxx",
+    "localSymbols": [
+      "GetNumRuleFromPool"
+    ],
+    "upstreamSymbols": [
+      "DocumentStylePoolManager::GetNumRuleFromPool"
+    ],
+    "preservedResponsibilities": [
+      "Materializes native built-in numbering styles with their original list-level formats and alignment-mode defaults."
+    ],
+    "omittedResponsibilities": [
+      "Legacy ODF position modes have no exposed document setting in the browser application."
+    ],
+    "filenameDivergence": {
+      "localPath": "apps/office/src/sw/source/core/doc/poolfmt-num.ts",
+      "rationale": "Separates the native numbering pool presets from the other document style pool responsibilities.",
+      "stackNecessity": "responsibility-split"
+    }
+  }
+}

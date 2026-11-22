@@ -1,29 +1,36 @@
 /**
  * @fileoverview Reimplements the bounded ODF text paragraph export boundary from pinned LibreOffice `xmloff/source/text/txtparae.cxx`.
  */
-import type { XMLAnnotation } from "./txtfldi";
-import { exportAnnotation } from "./txtflde";
+import { XMLShadowPropHdl } from "../style/shadwhdl";
+import { exportAnnotation, type XMLAnnotationExportMarker } from "./txtflde";
 import type { XMLTextFrameExportSource } from "./XMLTextFrameExport";
-import { exportFillProperties, type OdfFillProperties } from "../draw/fill-properties";
+import { exportFillProperties } from "../draw/fill-properties";
 import { paragraphPropertiesKey, parseParagraphPropertiesKey } from "./txtparae-properties";
 import { exportTextConstant } from "./txtprhdl";
 import { Any } from "../../../cppu/inc/com/sun/star/uno/Any";
+import { exportParagraphAsianTypography } from "./txtprhdl";
+import { exportWritingDirection } from "../style/prhdlfac";
 import { SvXMLUnitConverter } from "../core/xmluconv";
-import type { OdfBoxProperties } from "../style/bordrhdl";
+import { exportParagraphJustification, type OdfParagraphAlignment } from "../style/adjushdl";
 import { XMLNumberWithAutoForVoidPropHdl } from "../style/xmlbahdl";
+import type { SvXMLGraphicHelper } from "../core/xmlgrhlp";
 import { SvxXMLNumRuleExport, type XMLListLevelExport } from "../style/xmlnume";
 import { exportTableBlocks, type XMLTextExportBlock } from "../table/XMLTableExport";
-import type { FontFaceNameResolver, OdfCharacterProperties } from "./txtparae.types";
+import type {
+  FontFaceNameResolver,
+  OdfCharacterProperties,
+  OdfParagraphProperties,
+} from "./txtparae.types";
 import { createOdfThemeColor, exportComplexColor } from "./XMLComplexColorContext";
-import { exportTextCharacterProperties, exportTextLanguageProperties } from "./txtprmap";
-import { exportHyphenationProperties, type OdfHyphenationProperties } from "./txtprmap.hyphenation";
+import {
+  exportParagraphHyphenation,
+  exportTextCharacterProperties,
+  exportTextLanguageProperties,
+} from "./txtprmap";
 import { XMLTextNumRuleInfo } from "./XMLTextNumRuleInfo";
-import { exportInlineFont, getFontFamilyFromGeneric } from "../style/fonthdl";
-import { RTL_TEXTENCODING_DONTKNOW } from "../../../sal/inc/rtl/textenc";
-import { FontPitch } from "../../../tools/inc/fontenum";
 export { ODF_NAMESPACES } from "../core/xmltoken";
 
-export type { OdfCharacterProperties } from "./txtparae.types";
+export type { OdfCharacterProperties, OdfParagraphProperties, OdfTabStop } from "./txtparae.types";
 
 /** Hyperlink metadata supported by the bounded text importer and exporter. */
 export interface OdfHyperlink {
@@ -48,44 +55,7 @@ export type XMLParagraphStyle = string;
 type StyleKey = [string, OdfParagraphAlignment | "", string, string, string, string, string];
 
 /** Paragraph alignment values shared with the Writer model. */
-export type OdfParagraphAlignment = "left" | "center" | "right" | "justify";
-
-/** Direct paragraph properties represented by the bounded Writer model. */
-export interface OdfTabStop {
-  readonly position: number;
-  readonly alignment: "left" | "right" | "center" | "char" | "default";
-  readonly decimal: string;
-  readonly fill: string;
-}
-
-/** Direct paragraph properties represented by the bounded Writer model. */
-export interface OdfParagraphProperties extends OdfBoxProperties, OdfFillProperties {
-  readonly hyphenation?: OdfHyphenationProperties;
-  readonly joinBorder?: boolean;
-  readonly countLineNumbers?: boolean;
-  readonly lineNumberStart?: number;
-  readonly contextualSpacing?: boolean;
-  readonly firstLineIndent?: number;
-  readonly autoTextIndent?: boolean;
-  readonly pageStyleName?: string;
-  readonly pageNumber?: number | "auto";
-  readonly lineHeightPercent?: number;
-  readonly lineHeightTwips?: number;
-  readonly lineHeightAtLeastTwips?: number;
-  readonly lineSpacingTwips?: number;
-  readonly fontIndependentLineSpacing?: boolean;
-  readonly keepWithNext?: boolean;
-  readonly keepTogether?: boolean;
-  readonly widows?: number;
-  readonly verticalAlign?: number;
-  readonly orphans?: number;
-  readonly breakBefore?: "auto" | "page";
-  readonly breakAfter?: "auto" | "page";
-  readonly lowerSpacing?: number;
-  readonly rightMargin?: number;
-  readonly tabStopDetails?: readonly OdfTabStop[];
-  readonly upperSpacing?: number;
-}
+export type { OdfParagraphAlignment } from "../style/adjushdl";
 
 /** Marker family stored by one ODF list level style. */
 export type OdfListLevelKind = "bullet" | "numbered";
@@ -130,6 +100,7 @@ export interface XMLTextListSource {
 /** Narrow live view of one canonical Writer paragraph. */
 export interface XMLTextParagraphSource {
   readonly alignment?: OdfParagraphAlignment;
+  readonly outlineLevel?: number;
   readonly inheritedProperties?: OdfCharacterProperties;
   /** Direct text-left margin in twips. */
   readonly leftMargin?: number;
@@ -157,9 +128,7 @@ export type XMLTextParagraphMarker =
       condition?: string;
       collapsedAroundFrame?: boolean;
     }>
-  | Readonly<{ kind: "annotation"; annotation: XMLAnnotation; offset: number }>
-  | Readonly<{ kind: "annotation-start"; annotation: XMLAnnotation; offset: number }>
-  | Readonly<{ kind: "annotation-end"; name: string; offset: number }>
+  | XMLAnnotationExportMarker
   | Readonly<{ kind: "frame"; frame: XMLTextFrameExportSource; offset: number }>;
 
 /** Reiterable model-facing source; definitions are collected before body references. */
@@ -181,12 +150,13 @@ export interface OdfTextExport {
 
 /** Bounded xmloff export context owning one complete text export pass. */
 export class XMLTextParagraphExport {
-  /** Captures model source and operation ports. @param source - Model source. @param isCancelled - Cancellation probe. @param fontFaceName - Font registration. @param existingFontFaceName - Existing face lookup for numbering export. @returns Nothing. */
+  /** Captures model source and operation ports. @param source - Model source. @param isCancelled - Cancellation probe. @param fontFaceName - Font registration. @param existingFontFaceName - Existing face lookup for numbering export. @param graphicHelper - Package graphic service. @returns Nothing. */
   public constructor(
     private readonly source: XMLTextExportSource,
     private readonly isCancelled: () => boolean,
     private readonly fontFaceName?: FontFaceNameResolver,
     private readonly existingFontFaceName?: (familyName: string) => string | undefined,
+    private readonly graphicHelper?: SvXMLGraphicHelper,
   ) {}
 
   /** Exports automatic styles and text elements under this context's ownership. @returns XML fragments. */
@@ -206,8 +176,12 @@ export class XMLTextParagraphExport {
       characterStyleNames.set(key, name);
     }
     const listRules = new Map<string, XMLTextListRuleSource>();
-    const numRuleExport = new SvxXMLNumRuleExport(escapeXml, this.existingFontFaceName);
-    for (const paragraph of source.paragraphs()) {
+    const numRuleExport = new SvxXMLNumRuleExport(
+      escapeXml,
+      this.existingFontFaceName,
+      this.graphicHelper,
+    );
+    for (const paragraph of paragraphsForAutoStyles(source.paragraphs())) {
       if (isCancelled()) throw new Error("ODT operation was cancelled.");
       if (paragraph.list !== undefined) {
         const list = paragraph.list;
@@ -246,12 +220,6 @@ export class XMLTextParagraphExport {
           paragraphStyleNames.set(key, `P${paragraphStyleNames.size + 1}`);
       }
       if (paragraph.markerProperties) addTextStyle(paragraph.markerProperties);
-      for (const marker of paragraph.markers ?? []) {
-        if (marker.kind !== "annotation" && marker.kind !== "annotation-start") continue;
-        for (const editParagraph of marker.annotation.paragraphs)
-          for (const span of editParagraph)
-            if (Object.keys(span.properties).length) addTextStyle(span.properties);
-      }
       paragraph.runs.forEach(
         /** Collects one used character style. @param run - Live text run. @returns Nothing. */
         (run) => {
@@ -280,9 +248,9 @@ export class XMLTextParagraphExport {
         const [style, alignment, leftMargin, paraKey, charKey, listRule, directRule] = JSON.parse(
           key,
         ) as StyleKey;
-        const parent = escapeXml(style);
+        const parent = style ? ` style:parent-style-name="${escapeXml(style)}"` : "";
         const paragraphAttributes = [
-          ...(alignment === "" ? [] : [`fo:text-align="${exportAlignment(alignment)}"`]),
+          ...(alignment === "" ? [] : [`fo:text-align="${alignment}"`]),
           ...(leftMargin === "" ? [] : [`fo:margin-left="${exportOdfLength(Number(leftMargin))}"`]),
           ...exportParagraphAttributes(parseParagraphPropertiesKey(paraKey)),
         ];
@@ -298,17 +266,16 @@ export class XMLTextParagraphExport {
             : `<style:paragraph-properties${paragraphAttributes.length === 0 ? "" : ` ${paragraphAttributes.join(" ")}`}>${paragraphChildren}</style:paragraph-properties>`;
         const properties = parseCharacterPropertiesKey(charKey);
         const textProperties =
-          Object.keys(properties).length === 0 &&
-          parsedParagraphProperties.hyphenation === undefined
+          Object.keys(properties).length === 0
             ? ""
-            : exportCharacterPropertyElement(properties, fontFaceName, parsedParagraphProperties);
+            : exportCharacterPropertyElement(properties, fontFaceName);
         if (listRule !== "") {
           const listStyle = listStyleNames.get(listRule);
           /* istanbul ignore next -- The collected paragraph and list-rule maps share one source pass. */
           if (listStyle === undefined) throw new Error(`Missing ODF list style: ${listRule}`);
           const baseName = `${name}Base`;
           namedStyles.push(
-            `<style:style style:name="${baseName}" style:family="paragraph" style:parent-style-name="${parent}"${masterPage}>${paragraphProperties}${textProperties}</style:style>`,
+            `<style:style style:name="${baseName}" style:family="paragraph"${parent}${masterPage}>${paragraphProperties}${textProperties}</style:style>`,
           );
           return `<style:style style:name="${name}" style:family="paragraph" style:parent-style-name="${baseName}" style:list-style-name="${listStyle}"/>`;
         }
@@ -317,7 +284,7 @@ export class XMLTextParagraphExport {
           throw new Error(`Missing ODF direct list style: ${directRule}`);
         const numbering =
           directNumbering === undefined ? "" : ` style:list-style-name="${directNumbering}"`;
-        return `<style:style style:name="${name}" style:family="paragraph" style:parent-style-name="${parent}"${numbering}${masterPage}>${paragraphProperties}${textProperties}</style:style>`;
+        return `<style:style style:name="${name}" style:family="paragraph"${parent}${numbering}${masterPage}>${paragraphProperties}${textProperties}</style:style>`;
       },
     );
     const characterStyles = [...characterStyleNames].map(
@@ -391,18 +358,31 @@ export class XMLTextParagraphExport {
   }
 }
 
-/** Exports live Writer paragraphs through xmloff ownership. @param source - Model source. @param isCancelled - Cancellation probe. @param fontFaceName - Font registration. @param existingFontFaceName - Existing face lookup for numbering. @returns XML fragments. */
+/** Includes annotation text in the same automatic-style collection pass as its owning paragraph. @param paragraphs - Live text location. @returns Paragraphs in export order. */
+function* paragraphsForAutoStyles(
+  paragraphs: Iterable<XMLTextParagraphSource>,
+): Iterable<XMLTextParagraphSource> {
+  for (const paragraph of paragraphs) {
+    yield paragraph;
+    for (const marker of paragraph.markers ?? [])
+      if (marker.kind === "annotation" && marker.paragraphs) yield* marker.paragraphs;
+  }
+}
+
+/** Exports live Writer paragraphs through xmloff ownership. @param source - Model source. @param isCancelled - Cancellation probe. @param fontFaceName - Font registration. @param existingFontFaceName - Existing face lookup for numbering. @param graphicHelper - Package graphic lookup. @returns XML fragments. */
 export function exportTextParagraphs(
   source: XMLTextExportSource,
   isCancelled: () => boolean = /** Never cancels. @returns False. */ () => false,
   fontFaceName?: FontFaceNameResolver,
   existingFontFaceName?: (familyName: string) => string | undefined,
+  graphicHelper?: SvXMLGraphicHelper,
 ): OdfTextExport {
   return new XMLTextParagraphExport(
     source,
     isCancelled,
     fontFaceName,
     existingFontFaceName,
+    graphicHelper,
   ).Export();
 }
 
@@ -550,6 +530,10 @@ function exportParagraphElement(
   let content = "";
   let activeHyperlink: OdfHyperlink | undefined;
   const markers = paragraph.markers ?? [];
+  const exportAnnotationParagraph =
+    /** Renders a note paragraph using the same automatic-style families. @param note - Note paragraph. @returns XML paragraph. */
+    (note: XMLTextParagraphSource): string =>
+      exportParagraphElement(note, paragraphStyleNames, characterStyleNames);
   let markerIndex = 0;
   let textOffset = 0;
   const encodeWithMarkers =
@@ -564,14 +548,14 @@ function exportParagraphElement(
         const marker = markers[markerIndex] as XMLTextParagraphMarker;
         if (marker.offset < start + localOffset) throw new Error("ODF marker order is invalid.");
         encoded += exportText(text.slice(localOffset, marker.offset - start));
-        encoded += exportMarker(marker, renderFrame, characterStyleNames);
+        encoded += exportMarker(marker, renderFrame, exportAnnotationParagraph);
         localOffset =
           marker.offset -
           start +
           Number(
-            marker.kind === "annotation" ||
+            (marker.kind === "frame" && marker.frame.anchor === "as-char") ||
               marker.kind === "annotation-end" ||
-              (marker.kind === "frame" && marker.frame.anchor === "as-char"),
+              (marker.kind === "annotation" && marker.consumesMarker),
           );
         markerIndex += 1;
       }
@@ -597,49 +581,32 @@ function exportParagraphElement(
   while (markerIndex < markers.length) {
     const marker = markers[markerIndex] as XMLTextParagraphMarker;
     if (marker.offset !== textOffset) throw new Error("ODF marker is outside its paragraph.");
-    content += exportMarker(marker, renderFrame, characterStyleNames);
+    content += exportMarker(marker, renderFrame, exportAnnotationParagraph);
     markerIndex += 1;
   }
   const markerStyle =
     paragraph.markerProperties &&
     characterStyleNames.get(characterPropertiesKey(paragraph.markerProperties));
   const marker = markerStyle ? ` loext:marker-style-name="${markerStyle}"` : "";
-  return paragraph.style === "heading-1"
-    ? `<text:h text:outline-level="1" text:style-name="${escapeXml(styleName)}"${marker}>${content}</text:h>`
-    : `<text:p text:style-name="${escapeXml(styleName)}"${marker}>${content}</text:p>`;
+  const style = styleName ? ` text:style-name="${escapeXml(styleName)}"` : "";
+  const outline = paragraph.outlineLevel ?? (paragraph.style === "heading-1" ? 1 : 0);
+  return outline > 0
+    ? `<text:h text:outline-level="${outline}"${style}${marker}>${content}</text:h>`
+    : `<text:p${style}${marker}>${content}</text:p>`;
 }
 
-/** Emits one zero-width Writer marker. @param marker - Canonical position. @param renderFrame - Native frame body exporter. @param characterStyleNames - Text automatic styles. @returns ODF element. */
+/** Emits one zero-width Writer marker. @param marker - Canonical position. @param renderFrame - Native frame body exporter. @param exportAnnotationParagraph - Shared annotation paragraph serializer. @returns ODF element. */
 function exportMarker(
   marker: XMLTextParagraphMarker,
   renderFrame: ((frame: XMLTextFrameExportSource) => string) | undefined,
-  characterStyleNames: ReadonlyMap<string, string>,
+  exportAnnotationParagraph: (paragraph: XMLTextParagraphSource) => string,
 ): string {
-  if (marker.kind === "annotation-end")
-    return `<office:annotation-end office:name="${escapeXml(marker.name)}"/>`;
-  if (marker.kind === "annotation" || marker.kind === "annotation-start")
-    return exportAnnotation(
-      marker.annotation,
-      escapeXml,
-      /** Emits the separate annotation paragraphs. @param paragraphs - Borrowed edit runs. @returns Paragraph XML. */
-      (paragraphs) => {
-        let result = "";
-        for (const paragraph of paragraphs) {
-          let content = "";
-          for (const span of paragraph) {
-            const name = characterStyleNames.get(characterPropertiesKey(span.properties));
-            const value = exportText(span.text);
-            content += name ? `<text:span text:style-name="${name}">${value}</text:span>` : value;
-          }
-          result += `<text:p>${content}</text:p>`;
-        }
-        return result;
-      },
-    );
   if (marker.kind === "frame") {
     if (!renderFrame) throw new Error("ODF anchored frame has no text export owner.");
     return renderFrame(marker.frame);
   }
+  if (marker.kind === "annotation" || marker.kind === "annotation-end")
+    return exportAnnotation(marker, escapeXml, exportText, exportAnnotationParagraph);
   if (marker.kind === "soft-page-break") return "<text:soft-page-break/>";
   if (marker.name === undefined || marker.name.length === 0)
     throw new Error("ODF bookmark name is invalid.");
@@ -726,16 +693,20 @@ export function exportParagraphAttributes(properties: OdfParagraphProperties): s
   const verticalAlign = exportTextConstant("paragraphVerticalAlign", properties.verticalAlign);
   return [
     ...exportFillProperties(properties),
-    ...exportHyphenationProperties(properties.hyphenation, "paragraph"),
     ...(properties.joinBorder === undefined
       ? []
       : [`style:join-border="${properties.joinBorder}"`]),
+    ...(properties.paragraphShadow === undefined
+      ? []
+      : [`style:shadow="${new XMLShadowPropHdl().exportXML(properties.paragraphShadow)}"`]),
     ...(["Top", "Bottom", "Left", "Right"] as const).flatMap(
       /** Computes the side result. @param side - Side. @returns The computed result. */ (side) => {
         const suffix = side.toLowerCase();
         const border = properties[`border${side}`];
         const width = properties[`borderLineWidth${side}`];
+        const padding = properties[`padding${side}`];
         return [
+          ...(padding === undefined ? [] : [`fo:padding-${suffix}="${exportOdfLength(padding)}"`]),
           ...(border === undefined ? [] : [`fo:border-${suffix}="${escapeXml(border)}"`]),
           ...(width === undefined
             ? []
@@ -779,6 +750,21 @@ export function exportParagraphAttributes(properties: OdfParagraphProperties): s
     ...(properties.contextualSpacing === undefined
       ? []
       : [`style:contextual-spacing="${properties.contextualSpacing}"`]),
+    ...exportParagraphHyphenation(properties.hyphenation),
+    ...exportParagraphJustification(properties.justification),
+    ...exportParagraphAsianTypography(properties.asianTypography),
+    ...(properties.writingMode === undefined
+      ? []
+      : [`style:writing-mode="${exportWritingDirection(properties.writingMode)}"`]),
+    ...(properties.writingModeAutomatic === undefined
+      ? []
+      : [`style:writing-mode-automatic="${properties.writingModeAutomatic}"`]),
+    ...(properties.snapToGrid === undefined
+      ? []
+      : [`style:snap-to-layout-grid="${properties.snapToGrid}"`]),
+    ...(properties.registerModeActive === undefined
+      ? []
+      : [`style:register-true="${properties.registerModeActive}"`]),
     ...(properties.keepWithNext === undefined
       ? []
       : [`fo:keep-with-next="${properties.keepWithNext ? "always" : "auto"}"`]),
@@ -795,9 +781,9 @@ export function exportParagraphAttributes(properties: OdfParagraphProperties): s
     ...(properties.countLineNumbers === undefined
       ? []
       : [`text:number-lines="${properties.countLineNumbers}"`]),
-    ...(properties.lineNumberStart === undefined
+    ...(properties.lineNumberStartValue === undefined
       ? []
-      : [`text:line-number="${properties.lineNumberStart}"`]),
+      : [`text:line-number="${properties.lineNumberStartValue}"`]),
   ];
 }
 
@@ -867,13 +853,6 @@ export function exportText(value: string): string {
   return output;
 }
 
-/** Maps model alignment to ODF values. @param alignment - Model alignment. @returns ODF value. */
-function exportAlignment(alignment: OdfParagraphAlignment): string {
-  if (alignment === "left") return "start";
-  if (alignment === "right") return "end";
-  return alignment;
-}
-
 /** Returns the effective paragraph character baseline. @param paragraph - Neutral paragraph. @returns Complete inherited properties. */
 function paragraphInheritedProperties(paragraph: XMLTextParagraphSource): OdfCharacterProperties {
   return paragraph.inheritedProperties ?? {};
@@ -917,49 +896,10 @@ function parseCharacterPropertiesKey(key: string): Partial<OdfCharacterPropertie
   return JSON.parse(key) as Partial<OdfCharacterProperties>;
 }
 
-/** Emits native face references and permitted inline members of each script. @param properties - Actual font values. @param fontFaceName - Optional font-face pool. @param includeInlineFont - Named-style compatibility flag. @returns XML attributes. */
-function exportCharacterFonts(
-  properties: Partial<OdfCharacterProperties>,
-  fontFaceName?: FontFaceNameResolver,
-  includeInlineFont = false,
-): string {
-  let result = "";
-  for (const [script, suffix] of [
-    ["", ""],
-    ["Asian", "-asian"],
-    ["Complex", "-complex"],
-  ] as const) {
-    const family = properties[`fontFamily${script}`];
-    if (family === undefined) continue;
-    const generic = properties[`fontFamilyGeneric${script}`];
-    const style = properties[`fontStyleName${script}`];
-    const pitch = properties[`fontPitch${script}`];
-    const encoding = properties[`fontCharSet${script}`];
-    if (fontFaceName) {
-      result += ` style:font-name${suffix}="${escapeXml(fontFaceName(family, generic, style, pitch, encoding))}"`;
-    }
-    if (includeInlineFont || !fontFaceName)
-      for (const [name, value] of exportInlineFont(
-        {
-          familyName: family,
-          styleName: style ?? "",
-          family: getFontFamilyFromGeneric(generic),
-          pitch: pitch ?? FontPitch.PITCH_DONTKNOW,
-          charSet: encoding ?? RTL_TEXTENCODING_DONTKNOW,
-        },
-        suffix,
-      ))
-        result += ` ${name}="${escapeXml(value)}"`;
-  }
-  return result;
-}
-
-/** Emits supported ODF text-property attributes. @param properties - Direct properties. @param fontFaceName - Optional family-to-face resolver. @param paragraphStyle - Whether to use the paragraph map. @param includeInlineFont - Named-style compatibility flag. @returns Attribute fragment. */
+/** Emits supported ODF text-property attributes. @param properties - Direct properties. @param fontFaceName - Optional family-to-face resolver. @returns Attribute fragment. */
 export function exportCharacterAttributes(
   properties: Partial<OdfCharacterProperties>,
   fontFaceName?: FontFaceNameResolver,
-  paragraphStyle = false,
-  includeInlineFont = false,
 ): string {
   assertOdfColor(properties.color, "auto", "font color");
   assertOdfColor(properties.highlight, "transparent", "highlight color");
@@ -972,7 +912,17 @@ export function exportCharacterAttributes(
     properties.textTransparency === undefined
       ? ""
       : ` loext:opacity="${100 - properties.textTransparency}%"`,
-    exportCharacterFonts(properties, fontFaceName, includeInlineFont),
+    properties.fontFamily === undefined
+      ? ""
+      : fontFaceName === undefined
+        ? ` fo:font-family="${escapeXml(properties.fontFamily)}"`
+        : ` style:font-name="${escapeXml(fontFaceName(properties.fontFamily, properties.fontFamilyGeneric, properties.fontStyleName, properties.fontPitch, properties.fontCharSet))}"`,
+    properties.fontFamilyAsian !== undefined && fontFaceName !== undefined
+      ? ` style:font-name-asian="${escapeXml(fontFaceName(properties.fontFamilyAsian, properties.fontFamilyGenericAsian, properties.fontStyleNameAsian, properties.fontPitchAsian, properties.fontCharSetAsian))}"`
+      : "",
+    properties.fontFamilyComplex !== undefined && fontFaceName !== undefined
+      ? ` style:font-name-complex="${escapeXml(fontFaceName(properties.fontFamilyComplex, properties.fontFamilyGenericComplex, properties.fontStyleNameComplex, properties.fontPitchComplex, properties.fontCharSetComplex))}"`
+      : "",
     properties.fontSizeTwips === undefined
       ? ""
       : ` fo:font-size="${properties.fontSizeTwips / 20}pt"`,
@@ -991,25 +941,16 @@ export function exportCharacterAttributes(
         value,
       ]) => ` ${name}="${escapeXml(value)}"`,
     ),
-    exportTextCharacterProperties(properties, paragraphStyle),
+    exportTextCharacterProperties(properties),
   ].join("");
 }
 
-/** Writes the original text property group. @param properties - Native direct properties. @param fontFaceName - Font face resolver. @param paragraph - Optional paragraph map values. @param includeInlineFont - Named-style compatibility flag. @returns Complete text-properties element. */
+/** Writes the original text property group, with its element-valued character color when present. @param properties - Native direct properties. @param fontFaceName - Font face resolver. @returns Complete text-properties element. */
 export function exportCharacterPropertyElement(
   properties: Partial<OdfCharacterProperties>,
   fontFaceName?: FontFaceNameResolver,
-  paragraph?: OdfParagraphProperties,
-  includeInlineFont = false,
 ): string {
-  const hyphenation = exportHyphenationProperties(paragraph?.hyphenation, "text");
-  const attributes =
-    exportCharacterAttributes(
-      properties,
-      fontFaceName,
-      paragraph !== undefined,
-      includeInlineFont,
-    ) + (hyphenation.length ? ` ${hyphenation.join(" ")}` : "");
+  const attributes = exportCharacterAttributes(properties, fontFaceName);
   const child = properties.themeColor
     ? exportComplexColor(createOdfThemeColor(properties.themeColor), "char-complex-color")
     : "";

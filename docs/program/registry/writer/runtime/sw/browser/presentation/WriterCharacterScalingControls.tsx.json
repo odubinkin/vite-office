@@ -1,0 +1,33 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sw/browser/presentation/WriterCharacterScalingControls.tsx",
+    "classification": "browser-adaptation",
+    "state": "active",
+    "suite": "writer",
+    "subsystem": "browser-text",
+    "capabilityIds": [
+      "CAP-0109"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "not-applicable",
+      "defaultStatus": "not-applicable",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/sw/browser/presentation/WriterCharacterScalingControls.tsx#WriterCharacterScalingControls",
+        "apps/office/src/sw/browser/presentation/WriterCharacterScalingControls.tsx#WriterCharacterPositionOptions"
+      ],
+      "justification": "Presents the native Position page rotation, scale-width and Fit to Line controls over Writer item-set values. The native text frame supplies the selection-dependent percentage.",
+      "knownViolations": [],
+      "localSymbols": [
+        "WriterCharacterScalingControls",
+        "WriterCharacterPositionOptions"
+      ],
+      "sourceResponsibility": "browser-owned",
+      "upstreamFile": null,
+      "upstreamSymbols": []
+    }
+  }
+}

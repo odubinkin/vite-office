@@ -1,4 +1,6 @@
 /** @fileoverview Owns the supported SwTextShell execute/state handlers from textsh1.cxx. */
+import { paragraphFormattingItemEquals } from "../../core/attr/paragraph-fill";
+import { SwFormatLineNumber } from "../../../inc/fmtline";
 import * as ParaItems from "../../../../editeng/source/items/paraitem.controls";
 import { SwBaseShell } from "./basesh";
 import { canChangeWriterFontSize, changeWriterFontSize } from "./txtattr-fontsize";
@@ -21,7 +23,6 @@ import { createSfxShell, type SfxShell } from "../../../../sfx2/source/control/s
 import { SfxListUndoAction, type SfxUndoAction } from "../../../../svl/source/undo/undo";
 import { SfxItemState, type SfxItemSet } from "../../../../svl/source/items/itemset";
 import { SfxBoolItem } from "../../../../svl/source/items/cenumitm";
-import { SwFormatLineNumber } from "../../../inc/fmtline";
 import { SfxInt16Item } from "../../../../svl/source/items/intitem";
 import { type SfxPoolItem } from "../../../../svl/source/items/poolitem";
 import { SwFormatPageDesc } from "../../core/attr/fmtpdsc";
@@ -34,7 +35,12 @@ import {
   SvxRightMarginItem,
   SvxLRSpaceItem,
 } from "../../../../editeng/inc/lrspitem";
-import { createSwParagraphLRSpaceItem } from "./txtattr-paragraph";
+import {
+  createParagraphLineCountItem,
+  createParagraphPageDescItems,
+  createSwParagraphLRSpaceItem,
+  type WriterParagraphFormatValue,
+} from "./txtattr-paragraph";
 import { SvxULSpaceItem } from "../../../../editeng/source/items/frmitems";
 import {
   RES_KEEP,
@@ -47,6 +53,7 @@ import {
   RES_PARATR_SPLIT,
   RES_PARATR_ORPHANS,
   RES_PARATR_WIDOWS,
+  RES_LINENUMBER,
   RES_PARATR_LINESPACING,
   RES_PARATR_TABSTOP,
   RES_UL_SPACE,
@@ -74,14 +81,17 @@ import { getWriterINetFormatStateAtCursor } from "../../core/edit/edattr";
 import { getParagraphAttributeNodes } from "../../core/edit/edattr-paragraph";
 import { createWriterHyperlinkAction, getWriterHyperlinkAtCursor } from "../../core/edit/editsh";
 import { getWriterSelectedTextRanges } from "../../core/crsr/pam";
+import type { WriterSlotHandler } from "../../../sdi/swriter";
 import { createWriterTextCommandRegistry } from "./textsh1-commands";
 import { SwTextNode } from "../../core/txtnode/ndtxt";
 import { SwPaM } from "../../core/crsr/pam";
 import { isWriterParagraphListKind, type WriterParagraphListKind } from "../../core/doc/list";
-import type { SwEditShell } from "../../core/edit/ednumber";
+import type { SwEditShell } from "../../core/edit/edattr";
+export type { WriterParagraphFormatValue } from "./txtattr-paragraph";
 /** Cursor/model primitives consumed by the text shell without importing SwWrtShell. */
 export interface SwTextShellTarget extends Pick<
   SwEditShell,
+  | "GetScalingOfSelectedText"
   | "SetCurNumRule"
   | "DelNumRules"
   | "SelectionHasNumber"
@@ -89,6 +99,7 @@ export interface SwTextShellTarget extends Pick<
   | "SearchNumRule"
   | "IsNumRuleStart"
   | "SetNumRuleStart"
+  | "SetNodeNumStart"
 > {
   readonly ApplyAction: (
     action: SfxUndoAction<SwUndoRedoContext>,
@@ -98,6 +109,7 @@ export interface SwTextShellTarget extends Pick<
   readonly CaptureCursorState: () => SwUndoCursorState;
   readonly GetActiveParagraph: () => SwTextNode;
   readonly GetCursor: () => import("../../core/crsr/pam").SwPaM;
+  readonly GetViewOptions: () => import("../../../inc/viewopt").SwViewOption;
   readonly IsTableMode: () => boolean;
   readonly GetDefaultFontFamily: () => string;
   readonly GetDefaultFontSizePt: () => number;
@@ -134,26 +146,6 @@ export interface SwTextShellTarget extends Pick<
   readonly SetPendingCharacterItems: (items: SfxItemSet) => void;
   readonly Undo: () => boolean;
 }
-/** Primitive values accepted by the supported Writer paragraph dialog. */
-export interface WriterParagraphFormatValue {
-  readonly upperPt: number;
-  readonly lowerPt: number;
-  readonly contextual: boolean;
-  readonly lineMode: "proportional" | "fixed" | "minimum" | "leading";
-  readonly lineValue: number;
-  readonly tabStopsPt: readonly number[];
-  readonly keepWithNext: boolean;
-  readonly keepTogether?: boolean;
-  readonly orphans?: number;
-  readonly widows?: number;
-  readonly breakBefore?: "auto" | "page";
-  readonly breakAfter?: "auto" | "page";
-  readonly firstLineIndentPt?: number;
-  readonly autoTextIndent?: boolean;
-  readonly pageStyleName?: string;
-  readonly pageNumber?: number | "auto";
-  readonly countLineNumbers: boolean;
-}
 /** Dedicated text context shell owning its execute/state registration. */
 export class SwTextShell extends SwBaseShell {
   /** Applies only the requested native pending item delta. @param items - Complete changed values. @returns Nothing. */
@@ -163,12 +155,27 @@ export class SwTextShell extends SwBaseShell {
     this.target.SetPendingCharacterItems(pending);
   }
   private readonly shell: SfxShell;
-  /** Creates the text-shell slot owner. @param target - Active Writer editing shell. @param dialogs - Writer dialog controller. @returns Nothing. */
-  public constructor(target: SwTextShellTarget, dialogs: WriterDialogController) {
+  /** Creates the text-shell slot owner. @param target - Active Writer editing shell. @param dialogs - Writer dialog controller. @param annotation - Original annotation slots. @returns Nothing. */
+  public constructor(
+    target: SwTextShellTarget,
+    dialogs: WriterDialogController,
+    annotation: readonly WriterSlotHandler<SwTextShell>[] = [],
+  ) {
     super(target);
-    this.shell = createSfxShell(this, createWriterTextCommandRegistry(this, dialogs));
+    const registry = createWriterTextCommandRegistry(this, dialogs, annotation, target);
+    this.shell = createSfxShell(this, registry);
     this.shell.GetInterface().RegisterPopupMenu("text");
   }
+  /** Reads the current native selection for the Character dialog. @returns Borrowed selection ring. */
+  public GetCharacterDialogSelection(): SwPaM {
+    return this.target.GetCursor();
+  }
+
+  /** Observes document editability for the Character dialog. @returns Whether the dialog is available. */
+  public CanFormatCharacters(): boolean {
+    return !this.target.GetViewOptions().IsReadonly();
+  }
+
   /** Returns the dispatcher-facing shell. @returns Registered Sfx shell. */
   public GetShell(): SfxShell {
     return this.shell;
@@ -556,11 +563,8 @@ export class SwTextShell extends SwBaseShell {
       : undefined;
   }
 
-  /** Applies paragraph-dialog items through one history entry. @param value - Accepted formatting fields. @param tabStopItems - Optional original tab-page output set, empty when unchanged. @returns Whether formatting changed. */
-  public ApplyParagraphFormat(
-    value: WriterParagraphFormatValue,
-    tabStopItems?: SfxItemSet,
-  ): boolean {
+  /** Applies paragraph-dialog items through one history entry. @param value - Accepted formatting fields. @param pageItems - Optional native dialog output items, empty when the item-based pages are unchanged. @returns Whether formatting changed. */
+  public ApplyParagraphFormat(value: WriterParagraphFormatValue, pageItems?: SfxItemSet): boolean {
     if (
       !Number.isFinite(value.upperPt) ||
       value.upperPt < 0 ||
@@ -596,7 +600,7 @@ export class SwTextShell extends SwBaseShell {
       ) => Math.round(position * 20),
     );
     if (
-      tabStopItems === undefined &&
+      pageItems === undefined &&
       positions.some(
         /** Rejects positions outside the supported range. @param position - Twips. @returns Whether invalid. */ (
           position,
@@ -627,7 +631,10 @@ export class SwTextShell extends SwBaseShell {
           value.contextual,
         ),
         lineSpacing,
-        ...(tabStopItems?.entries() ?? [this.CreateTabStops(positions, paragraph)]),
+        ...(pageItems?.entries() ?? [
+          this.CreateTabStops(positions, paragraph),
+          createParagraphLineCountItem(paragraph, value.countLineNumbers),
+        ]),
         new SfxBoolItem(RES_KEEP, value.keepWithNext),
         new ParaItems.SvxFormatSplitItem(!(value.keepTogether ?? false), RES_PARATR_SPLIT),
         new ParaItems.SvxOrphansItem(value.orphans ?? 2, RES_PARATR_ORPHANS),
@@ -645,20 +652,7 @@ export class SwTextShell extends SwBaseShell {
         ...(value.firstLineIndentPt === undefined && value.autoTextIndent === undefined
           ? []
           : [first]),
-        ...(value.pageStyleName === undefined && value.pageNumber === undefined
-          ? []
-          : [
-              new SwFormatPageDesc(
-                value.pageStyleName ?? "",
-                value.pageNumber === undefined || value.pageNumber === "auto"
-                  ? undefined
-                  : value.pageNumber,
-              ),
-            ]),
-        new SwFormatLineNumber(
-          value.countLineNumbers,
-          paragraph.GetSwAttrSet().GetLineNumber().GetStartValue(),
-        ),
+        ...createParagraphPageDescItems(value),
       ],
     );
   }
@@ -735,7 +729,7 @@ export class SwTextShell extends SwBaseShell {
       autoTextIndent: firstLine.IsAutoFirst(),
       pageStyleName: pageDesc.GetPageDescName(),
       pageNumber: pageDesc.GetNumOffset() ?? "auto",
-      countLineNumbers: paragraph.GetSwAttrSet().GetLineNumber().IsCount(),
+      countLineNumbers: (paragraph.GetAttr(RES_LINENUMBER) as SwFormatLineNumber).IsCount(),
     };
   }
 
@@ -810,7 +804,7 @@ export class SwTextShell extends SwBaseShell {
           /** Handles Writer formatting state. @param item - Input value. @returns Callback result. */ (
             item,
           ) => {
-            if (paragraph.GetAttr(item.Which()).equals(item)) return [];
+            if (paragraphFormattingItemEquals(paragraph, item)) return [];
             return [
               new SwUndoParagraphItem(
                 paragraph,

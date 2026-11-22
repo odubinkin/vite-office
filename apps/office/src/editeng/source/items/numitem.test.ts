@@ -1,6 +1,11 @@
 /** @fileoverview Verifies pinned SvxNumberFormat position defaults and mode-dependent legacy getters. */
 import { expect, it } from "vitest";
-import { SvxNumberFormat } from "./numitem";
+import { SvxNumberFormat, SvxNumberType } from "./numitem";
+import { SvxBrushItem, SvxGraphicPosition } from "./frmitems.brush";
+import { Graphic } from "../../../vcl/source/gdi/graph";
+import { Size } from "../../../tools/inc/gen";
+import { VertOrientation } from "../../../offapi/com/sun/star/text/VertOrientation";
+import { SvxNumType } from "../../inc/svxenum";
 
 it("initializes independent zero geometry in legacy mode", /** Asserts native constructor defaults. @returns Nothing. */ () => {
   const format = new SvxNumberFormat();
@@ -158,4 +163,43 @@ it("generates native older ODT patterns while trimming unavailable upper levels"
   format.SetListFormat("[", "]", 9);
   expect(format.GetListFormat()).toBe("[]");
   expect(format.GetListFormat(false)).toBe("");
+});
+
+it("formats native Roman and both Latin letter sequences in list labels", /** Verifies the number provider used by the ordered and outline styles. @returns Nothing. */ () => {
+  expect(new SvxNumberType(SvxNumType.SVX_NUM_ROMAN_UPPER).GetNumStr(1994)).toBe("MCMXCIV");
+  expect(new SvxNumberType(SvxNumType.SVX_NUM_ROMAN_LOWER).GetNumStr(4001)).toBe("mmmmi");
+  expect(new SvxNumberType(SvxNumType.SVX_NUM_CHARS_UPPER_LETTER).GetNumStr(28)).toBe("AB");
+  expect(new SvxNumberType(SvxNumType.SVX_NUM_CHARS_LOWER_LETTER_N).GetNumStr(28)).toBe("bb");
+});
+
+it("owns a copied bitmap brush and independent size and orientation in numbering formats", /** Exercises native brush replacement, equality and defaults. @returns Nothing. */ () => {
+  const graphic = new Graphic(
+    new Uint8Array([0x89, 0x50, 0x4e, 0x47]),
+    "image/png",
+    new Size(120, 180),
+  );
+  const brush = new SvxBrushItem(graphic, SvxGraphicPosition.GPOS_AREA, 0);
+  const format = new SvxNumberFormat(SvxNumType.SVX_NUM_BITMAP);
+  const size = new Size(200, 300);
+  format.SetGraphicBrush(brush, size, VertOrientation.CHAR_CENTER);
+  const clone = new SvxNumberFormat(format);
+  expect(clone.Equals(format)).toBe(true);
+  expect(clone.GetBrush()).not.toBe(format.GetBrush());
+  expect(clone.GetBrush()?.GetGraphic()?.Equals(graphic)).toBe(true);
+  expect(clone.GetBrush()?.GetGraphicPos()).toBe(SvxGraphicPosition.GPOS_AREA);
+  expect(clone.GetVertOrient()).toBe(VertOrientation.CHAR_CENTER);
+  expect(clone.GetGraphicSize().Width()).toBe(200);
+  expect(clone.GetGraphicSize().Height()).toBe(300);
+  size.setWidth(500);
+  brush.SetGraphic(new Graphic(new Uint8Array([1]), "image/png", new Size(1, 1)));
+  expect(format.GetGraphicSize().Width()).toBe(200);
+  expect(format.GetBrush()?.GetGraphic()?.Equals(graphic)).toBe(true);
+
+  clone.SetGraphicBrush(undefined, size);
+  expect(clone.GetBrush()).toBeUndefined();
+  expect(clone.GetGraphicSize().Width()).toBe(500);
+  expect(clone.GetVertOrient()).toBe(VertOrientation.NONE);
+  expect(clone.Equals(format)).toBe(false);
+  clone.SetGraphicBrush(undefined);
+  expect(clone.GetGraphicSize().Width()).toBe(0);
 });

@@ -1,0 +1,30 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "browser-adaptation",
+    "status": "local-only",
+    "localPath": "apps/office/src/sw/browser/presentation/WriterNavigator.tsx",
+    "rationale": "Projects the original Navigator child window, page controls, content root and outline depth controls.",
+    "responsibilities": [
+      "Projects the original Navigator child window, page controls, content root and outline depth controls.",
+      "Presents the native contextual heading toolbar and sends the selected heading, command ID and primary modifier to Writer."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sw/browser/presentation/WriterNavigator.tsx",
+          "marker": "WriterNavigator"
+        },
+        {
+          "path": "apps/office/src/sw/browser/presentation/WriterNavigator.tsx",
+          "marker": "headingTools"
+        }
+      ]
+    },
+    "stackDivergence": {
+      "kind": "browser-adaptation",
+      "rationale": "Browser focus, tree events and CSS supply the modeless child window and keyboard behavior."
+    }
+  }
+}

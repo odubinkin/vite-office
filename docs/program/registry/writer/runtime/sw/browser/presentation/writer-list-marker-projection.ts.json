@@ -1,0 +1,33 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sw/browser/presentation/writer-list-marker-projection.ts",
+    "classification": "browser-adaptation",
+    "state": "active",
+    "suite": "writer",
+    "subsystem": "presentation",
+    "capabilityIds": [
+      "CAP-0111"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "not-applicable",
+      "defaultStatus": "not-applicable",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/sw/browser/presentation/writer-list-marker-projection.ts#projectWriterListMarker",
+        "vendor/libreoffice-reference/sw/source/core/text/txtfld.cxx#SwGrfNumPortion",
+        "apps/office/e2e/writer-list-style-dialog.spec.ts"
+      ],
+      "justification": "Projects the native text or bitmap numbering portion, including the stored graphic extent and vertical orientation, into browser paint values.",
+      "knownViolations": [],
+      "localSymbols": [
+        "projectWriterListMarker"
+      ],
+      "upstreamSymbols": [],
+      "upstreamFile": null,
+      "sourceResponsibility": "browser-owned"
+    }
+  }
+}

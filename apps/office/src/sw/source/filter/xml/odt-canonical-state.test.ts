@@ -40,10 +40,7 @@ describe("ODT canonical state validation", /** Registers current-schema rejectio
     const outlinedParagraph = directOutline.paragraphs[0];
     if (outlinedParagraph === undefined) throw new Error("Outline fixture has no paragraph.");
     outlinedParagraph.SetAttrOutlineLevel(4);
-    expect(
-      /** Rejects a direct outline item beyond the named-style export slice. @returns Content XML when validation unexpectedly succeeds. */ () =>
-        exportContentXml(directOutline),
-    ).toThrow("ODT export does not support WhichId 82 on paragraph at node");
+    expect(exportContentXml(directOutline)).toContain('<text:h text:outline-level="4"');
     expect(outlinedParagraph.GetAttrOutlineLevel()).toBe(4);
     const invalidCharacter = createWriterDocument();
     const invalidCharacterSet = invalidCharacter

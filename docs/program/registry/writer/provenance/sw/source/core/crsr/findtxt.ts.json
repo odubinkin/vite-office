@@ -61,7 +61,7 @@
         },
         {
           "path": "apps/office/src/sw/source/core/crsr/native-search-replace.test.ts",
-          "marker": "replaces real ICU capture groups"
+          "marker": "replaces ECMAScript capture groups"
         }
       ],
       "upstream": [

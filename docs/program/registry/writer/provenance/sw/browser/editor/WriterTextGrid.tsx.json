@@ -1,0 +1,30 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "browser-adaptation",
+    "status": "local-only",
+    "localPath": "apps/office/src/sw/browser/editor/WriterTextGrid.tsx",
+    "rationale": "Paints original grid lines, ruby bands and character cells using a CSS browser device.",
+    "responsibilities": [
+      "Paints original grid lines, ruby bands and character cells using a CSS browser device.",
+      "Paints the independent View baseline grid and suppresses it for print."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sw/browser/editor/WriterTextGrid.tsx",
+          "marker": "WriterPageTextGrid"
+        },
+        {
+          "path": "apps/office/src/sw/browser/editor/WriterTextGrid.tsx",
+          "marker": "WriterBaselineGrid"
+        }
+      ]
+    },
+    "stackDivergence": {
+      "kind": "browser-adaptation",
+      "rationale": "Native OutputDevice line painting is expressed through CSS gradients and the browser print media selector."
+    }
+  }
+}

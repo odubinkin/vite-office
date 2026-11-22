@@ -1,12 +1,19 @@
 /** @fileoverview Checks native label-indent shell policy and existing rule/history owners. */
 import { afterEach, expect, it, vi } from "vitest";
+import { SvxBrushItem, SvxGraphicPosition } from "../../../../editeng/source/items/frmitems.brush";
+import { DocumentArchive } from "../../../../package/source/zippackage/document-archive";
+import { Graphic } from "../../../../vcl/source/gdi/graph";
+import { Size } from "../../../../tools/inc/gen";
+import { VertOrientation } from "../../../../offapi/com/sun/star/text/VertOrientation";
 import { SwDoc } from "../doc/doc";
-import { SwNumRule, SwNumFormat } from "../doc/number";
+import { SwNumRule, SwNumFormat, SvxNumType } from "../doc/number";
 import { applyWriterParagraphList } from "../doc/list";
 import { SwPaM, SwPosition } from "../crsr/pam";
 import { SwWrtShell } from "../../uibase/wrtsh/wrtsh1";
 import { SwDocShell } from "../../uibase/app/docsh";
 import { SwUndoInsNum } from "../undo/unnum";
+import { SwNumRuleItem } from "../para/paratr";
+import { RES_PARATR_NUMRULE } from "../../../inc/hintids";
 import { createDocument } from "../../../../sfx2/source/doc/objsh";
 import {
   encodeWriterDocument,
@@ -195,3 +202,247 @@ it("owns independent old and new rule-format history values and preserves ODT an
     candidate.Dispose();
   }
 });
+
+it("updates a named rule across separate lists and restores its formats without changing the current selection", /** Exercises native style-level history through its document owner and ODF. @returns Completion. */ async () => {
+  const f = fixture();
+  applyWriterParagraphList(f.second, {
+    kind: "numbered",
+    styleId: f.rule.GetName(),
+    listId: "separate-list",
+    level: 0,
+  });
+  const originalStart = f.rule.Get(0).GetStart();
+  const firstRecord = f.first.GetNum();
+  const secondRecord = f.second.GetNum();
+  const source = new SwNumRule(f.rule);
+  const format = new SwNumFormat(source.Get(0));
+  format.SetStart(7);
+  source.Set(0, format);
+  f.doc.ChgNumRuleFormats(source);
+  source.Dispose();
+  format.Dispose();
+  expect(f.doc.GetUndoManager().GetUndoActionCount()).toBe(1);
+  expect(f.first.GetNum()).toBe(firstRecord);
+  expect(f.second.GetNum()).toBe(secondRecord);
+  expect(f.first.GetNumRule()).toBe(f.rule);
+  expect(f.second.GetNumRule()).toBe(f.rule);
+  expect(f.first.GetNumberVector()[0]).toBe(7);
+  expect(f.second.GetNumberVector()[0]).toBe(7);
+
+  const point = new SwPosition(f.plain, 1);
+  try {
+    f.shell.SetCursor(point);
+  } finally {
+    point.Dispose();
+  }
+  expect(f.shell.Undo()).toBe(true);
+  expect(f.rule.Get(0).GetStart()).toBe(originalStart);
+  expect(f.shell.GetCursor().GetPoint().GetNode()).toBe(f.plain);
+  expect(f.shell.Redo()).toBe(true);
+  expect(f.rule.Get(0).GetStart()).toBe(7);
+  expect(f.shell.GetCursor().GetPoint().GetNode()).toBe(f.plain);
+
+  const { document } = await readOdtDocument(await writeOdtDocument(f.doc, f.metadata), f.metadata);
+  expect(document.paragraphs[0]?.GetNumberVector()[0]).toBe(7);
+  expect(document.paragraphs[1]?.GetNumberVector()[0]).toBe(7);
+  document.Dispose();
+  const disposeRule = vi.spyOn(SwNumRule.prototype, "Dispose");
+  f.doc.GetUndoManager().Clear();
+  expect(disposeRule).toHaveBeenCalledTimes(2);
+});
+
+it("preserves the original narrow dependency mask on the final list level", /** Checks the pinned upper-level notification contract. @returns Nothing. */ () => {
+  const f = fixture();
+  f.first.SetAttrListLevel(8);
+  f.second.SetAttrListLevel(9);
+  const dependent = new SwNumFormat(f.rule.Get(9));
+  dependent.SetIncludeUpperLevels(2);
+  f.rule.Set(9, dependent);
+  const beforeValidation: Array<"direct" | "dependent"> = [];
+  const direct = f.first.NumRuleChgd.bind(f.first);
+  const dependentNotification = f.second.NumRuleChgd.bind(f.second);
+  vi.spyOn(f.first, "NumRuleChgd").mockImplementation(
+    /** Records the pre-commit notification. @returns Nothing. */ () => {
+      if (f.rule.Get(8).GetStart() !== 6) beforeValidation.push("direct");
+      direct();
+    },
+  );
+  vi.spyOn(f.second, "NumRuleChgd").mockImplementation(
+    /** Distinguishes the pre-commit broadcast from regular list validation. @returns Nothing. */ () => {
+      if (f.rule.Get(8).GetStart() !== 6) beforeValidation.push("dependent");
+      dependentNotification();
+    },
+  );
+  const source = new SwNumRule(f.rule);
+  const changed = new SwNumFormat(source.Get(8));
+  changed.SetStart(6);
+  source.Set(8, changed);
+  f.doc.ChgNumRuleFormats(source);
+  expect(beforeValidation).toEqual(["direct"]);
+  expect(f.rule.Get(8).GetStart()).toBe(6);
+});
+
+it("exchanges explicit and inherited format levels and character styles with the shared rule", /** Verifies the list-style tab pages' native rule contract. @returns Nothing. */ () => {
+  const f = fixture();
+  const source = new SwNumRule("Template", "label-alignment");
+  const format = new SwNumFormat(source.Get(0));
+  const character = f.doc.MakeCharFormat("List Marker", undefined);
+  format.SetCharFormat(character);
+  source.Set(0, format);
+  format.Dispose();
+  const shared = source.MakeSvxNumRule();
+  expect(shared.Get(0)?.GetCharFormatName()).toBe("List Marker");
+  expect(shared.Get(1)).toBeNull();
+  expect(shared.GetLevel(1).Equals(source.Get(1))).toBe(true);
+  shared.SetContinuousNumbering(true);
+
+  const accepted = new SwNumRule(source);
+  accepted.SetSvxRule(shared, f.doc);
+  expect(accepted.GetNumFormat(0)?.GetCharFormat()).toBe(character);
+  expect(accepted.GetNumFormat(1)).toBeUndefined();
+  expect(accepted.IsContinusNum()).toBe(true);
+  accepted.Dispose();
+  source.Dispose();
+});
+
+it("renames the actual numbered lists and both direct and inherited style references across undo and ODF", /** Checks that the numbered rules and default lists survive a name-only edit. @returns Completion. */ async () => {
+  const f = fixture();
+  const { doc, first, rule, shell } = f;
+  const style = doc.MakeTextFormatColl("List paragraph", doc.GetDfltTextFormatColl());
+  style.SetFormatAttr(new SwNumRuleItem(rule.GetName()));
+  const styled = doc.nodes.MakeTextNode(doc.nodes.GetEndOfContent(), style);
+  styled.SetText("Inherited numbering");
+  const previous = rule.GetName();
+  const defaultListId = rule.GetDefaultListId();
+  const defaultList = doc.GetDocumentListsManager().GetListForListStyle(previous);
+  const directId = first.GetListId();
+  doc.GetUndoManager().Clear();
+  expect(styled.GetNumRule()).toBe(rule);
+  expect(styled.GetpSwAttrSet()?.GetItemIfSet(RES_PARATR_NUMRULE, false)).toBeUndefined();
+  expect(doc.RenameNumRule(previous, "Renamed list")).toBe(true);
+  expect(doc.FindNumRulePtr(previous)).toBeUndefined();
+  expect(doc.FindNumRulePtr("Renamed list")).toBe(rule);
+  expect(rule.GetDefaultListId()).toBe(defaultListId);
+  expect(doc.GetDocumentListsManager().GetListForListStyle("Renamed list")).toBe(defaultList);
+  expect(defaultList.GetDefaultListStyleName()).toBe("Renamed list");
+  expect(first.GetListId()).toBe(directId);
+  expect(first.GetNumRule()).toBe(rule);
+  expect(styled.GetNumRule()).toBe(rule);
+  expect(styled.GetpSwAttrSet()?.GetItemIfSet(RES_PARATR_NUMRULE, false)).toBeUndefined();
+  expect(style.GetNumRule(false).GetValue()).toBe("Renamed list");
+  expect(shell.Undo()).toBe(true);
+  expect(style.GetNumRule(false).GetValue()).toBe(previous);
+  expect(first.GetNumRule()).toBe(rule);
+  expect(shell.Redo()).toBe(true);
+  expect(style.GetNumRule(false).GetValue()).toBe("Renamed list");
+  expect(doc.RenameNumRule("Renamed list", "Outline")).toBe(false);
+
+  const { document } = await readOdtDocument(await writeOdtDocument(doc, f.metadata), f.metadata);
+  expect(document.paragraphs[0]?.GetNumRule()?.GetName()).toBe("Renamed list");
+  expect(
+    document.paragraphs
+      .find(
+        /** Finds the inherited list paragraph. @param node - Document paragraph. @returns Whether it matches. */ (
+          node,
+        ) => node.GetText() === "Inherited numbering",
+      )
+      ?.GetNumRule()
+      ?.GetName(),
+  ).toBe("Renamed list");
+  document.Dispose();
+});
+
+it("retains embedded numbering graphics in style history and the Worker graph", /** Checks the shared style template value and the actual Writer list owner. @returns Nothing. */ () => {
+  const { doc, first, rule, shell } = fixture();
+  const bytes = new Uint8Array([0x47, 0x49, 0x46, 0x38, 0x39, 0x61]);
+  const format = new SwNumFormat(rule.Get(0));
+  format.SetNumberingType(SvxNumType.SVX_NUM_BITMAP);
+  format.SetGraphicBrush(
+    new SvxBrushItem(
+      new Graphic(bytes, "image/gif", new Size(120, 150)),
+      SvxGraphicPosition.GPOS_AREA,
+      0,
+    ),
+    new Size(240, 300),
+    VertOrientation.LINE_CENTER,
+  );
+  const source = new SwNumRule(rule);
+  source.Set(0, format);
+  const shared = source.MakeSvxNumRule();
+  const result = new SwNumRule(rule);
+  result.SetSvxRule(shared, doc);
+  doc.ChgNumRuleFormats(result);
+  format.Dispose();
+  source.Dispose();
+  result.Dispose();
+  expect(first.GetNumRule()).toBe(rule);
+  expect(rule.Get(0).GetGraphicOrientation()?.GetVertOrient()).toBe(VertOrientation.LINE_CENTER);
+  expect(shell.Undo()).toBe(true);
+  expect(rule.Get(0).GetBrush()).toBeUndefined();
+  expect(shell.Redo()).toBe(true);
+  expect(rule.Get(0).GetBrush()?.GetGraphic()?.GetNativeData()).toEqual(bytes);
+
+  const transported = structuredClone(encodeWriterDocument(doc));
+  const reopened = decodeWriterDocument(transported);
+  const level = reopened.paragraphs[0]?.GetNumRule()?.Get(0);
+  expect(level?.GetNumberingType()).toBe(SvxNumType.SVX_NUM_BITMAP);
+  expect(level?.GetBrush()?.GetGraphic()?.GetNativeData()).toEqual(bytes);
+  expect(level?.GetBrush()?.GetGraphic()?.GetPrefSize().Height()).toBe(150);
+  expect(level?.GetGraphicSize().Width()).toBe(240);
+  expect(level?.GetGraphicSize().Height()).toBe(300);
+  expect(level?.GetGraphicOrientation()?.GetVertOrient()).toBe(VertOrientation.LINE_CENTER);
+  reopened.Dispose();
+});
+
+it.each([true, false])(
+  "round-trips an ODT image marker with automatic rule %s",
+  /** Verifies the package graphic and level geometry for both rule families. @param automatic - Whether the rule is automatic. @returns Completion. */ async (
+    automatic,
+  ) => {
+    const { doc, rule, metadata } = fixture();
+    rule.SetAutoRule(automatic);
+    const bytes = Uint8Array.from(
+      atob(
+        "iVBORw0KGgoAAAANSUhEUgAAACgAAAAUCAYAAAD/Rn+7AAAAM0lEQVR4nO3OMQ0AAAjAMCQhGj1YAhVkHDv6N7pyPgs6YNAgHTBokA4YNEgHDBqkAwavLZKHN5nQxmcYAAAAAElFTkSuQmCC",
+      ),
+      /** Reads the embedded test raster. @param character - Raw byte. @returns Numeric byte. */ (
+        character,
+      ) => character.charCodeAt(0),
+    );
+    const level = new SwNumFormat(rule.Get(0));
+    level.SetNumberingType(SvxNumType.SVX_NUM_BITMAP);
+    level.SetGraphicBrush(
+      new SvxBrushItem(
+        new Graphic(bytes, "image/png", new Size()),
+        SvxGraphicPosition.GPOS_AREA,
+        0,
+      ),
+      new Size(240, 300),
+      VertOrientation.LINE_CENTER,
+    );
+    rule.Set(0, level);
+    level.Dispose();
+
+    const encoded = await writeOdtDocument(doc, metadata);
+    const archive = await DocumentArchive.open(encoded);
+    const images = archive
+      .getEntryNames()
+      .filter(
+        /** Finds embedded package graphics. @param entry - Entry name. @returns Whether it is an image. */ (
+          entry,
+        ) => entry.startsWith("Pictures/"),
+      );
+    expect(images).toHaveLength(1);
+    const xml = await archive.readTextEntry(automatic ? "content.xml" : "styles.xml");
+    expect(xml).toContain("<text:list-level-style-image");
+    expect(xml).toContain(`xlink:href="${images[0]}"`);
+    const { document } = await readOdtDocument(encoded, metadata);
+    const restored = document.paragraphs[0]?.GetNumRule()?.Get(0);
+    expect(restored?.GetNumberingType()).toBe(SvxNumType.SVX_NUM_BITMAP);
+    expect(restored?.GetBrush()?.GetGraphic()?.GetNativeData()).toEqual(bytes);
+    expect(restored?.GetGraphicSize().Width()).toBe(240);
+    expect(restored?.GetGraphicSize().Height()).toBe(300);
+    expect(restored?.GetGraphicOrientation()?.GetVertOrient()).toBe(VertOrientation.LINE_CENTER);
+    document.Dispose();
+  },
+);

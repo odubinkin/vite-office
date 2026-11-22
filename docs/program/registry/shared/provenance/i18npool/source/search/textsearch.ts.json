@@ -45,7 +45,7 @@
       "The simple cascade also admits the upstream width flag for the represented algorithms.",
       "Native non-regex search uses independent prepared primary and complex keys/caches, source second-pass offset recovery and directional candidate precedence. WRITER-685 and WRITER-686 document source quirks.",
       "The approximate mode validates native directional word candidates with the existing UNO BreakIterator and WLevDistance.",
-      "ICU regex preparation preserves raw pattern syntax, delegates case matching, applies the source forward transliteration context and remaps directional capture arrays. Host tests use the compiled ICU bridge. Browser deployment remains gated on the WebAssembly module."
+      "Regex preparation preserves raw pattern syntax, delegates case matching, applies the source forward transliteration context and remaps directional capture arrays. Writer uses the platform ECMAScript matcher. Portable integration tests exercise that matcher, and optional host probes retain ICU-specific syntax coverage."
     ],
     "omittedResponsibilities": [
       "Complete upstream library/API/service and native compiled QA are unverified; task scope remains in progress."
@@ -74,7 +74,7 @@
         },
         {
           "path": "apps/office/src/i18npool/source/search/textsearch-regex.test.ts",
-          "marker": "maps actual ICU capture results"
+          "marker": "maps ECMAScript capture results"
         }
       ],
       "upstream": [

@@ -99,7 +99,7 @@ export abstract class SwUndoInserts extends SwUndo {
       this.range.SetPaM(pam);
       const first = pam.Start().GetNode() as SwTextNode;
       this.content.MoveToUndoNds(pam);
-      first.ClearSwpHintsArr(true);
+      first.ClearSwpHintsArr(false);
       first.ResetAllAttr();
       first.ChgFormatColl(this.collection);
       this.history.SetTmpEnd(this.history.Count());

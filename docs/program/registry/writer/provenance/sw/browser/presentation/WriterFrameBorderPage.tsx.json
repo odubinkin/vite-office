@@ -1,0 +1,26 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "browser-adaptation",
+    "status": "local-only",
+    "localPath": "apps/office/src/sw/browser/presentation/WriterFrameBorderPage.tsx",
+    "rationale": "Binds the native frame-border and shadow editors to Writer paragraph and page formatting.",
+    "responsibilities": [
+      "Presents native paragraph Borders and Shadow controls with independent pooled item exchange.",
+      "Exchanges page style borders and shadows without the paragraph merge option."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sw/browser/presentation/WriterFrameBorderPage.tsx",
+          "marker": "WriterFrameBorderPage"
+        }
+      ]
+    },
+    "stackDivergence": {
+      "kind": "browser-adaptation",
+      "rationale": "Browser image and text elements replace the native output-device portion painting."
+    }
+  }
+}

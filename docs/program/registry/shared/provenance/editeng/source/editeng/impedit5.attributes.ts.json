@@ -7,16 +7,19 @@
     "localPath": "apps/office/src/editeng/source/editeng/impedit5.attributes.ts",
     "upstreamPath": "editeng/source/editeng/impedit5.cxx",
     "localSymbols": [
-      "SetParaAttribs"
+      "SetParaAttribs",
+      "GetAttribs"
     ],
     "upstreamSymbols": [
-      "ImpEditEngine::SetParaAttribs"
+      "ImpEditEngine::SetParaAttribs",
+      "ImpEditEngine::GetAttribs"
     ],
     "preservedResponsibilities": [
-      "Paragraph defaults use the original pool conversion for undo, actual item-set mutation, spelling invalidation and paragraph notification order."
+      "Paragraph defaults use the original pool conversion for undo, actual item-set mutation, spelling invalidation and paragraph notification order.",
+      "The All selection attribute path merges hard runs with the original paragraph and pool defaults for the annotation Character dialog."
     ],
     "omittedResponsibilities": [
-      "Interactive view formatting remains outside the document text-object slice."
+      "The OnlyHard and paragraph-only selection attribute variants remain outside this slice."
     ],
     "evidence": {
       "local": [
@@ -27,6 +30,10 @@
         {
           "path": "apps/office/src/sc/source/ui/docshell/impex.admission.test.ts",
           "marker": "it("
+        },
+        {
+          "path": "apps/office/src/editeng/source/editeng/native-engine-object.test.ts",
+          "marker": "keeps the first paragraph character default"
         }
       ],
       "upstream": [
@@ -37,6 +44,10 @@
         {
           "path": "editeng/source/editeng/editundo.cxx",
           "marker": "EditUndoSetParaAttribs"
+        },
+        {
+          "path": "editeng/source/editeng/impedit5.cxx",
+          "marker": "GetAttribs"
         }
       ]
     },

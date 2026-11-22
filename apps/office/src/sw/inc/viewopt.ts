@@ -14,6 +14,7 @@ export enum ViewOptFlags {
 export class SwViewColors {
   public m_nAppearanceFlags = ViewOptFlags.NONE;
   public m_aFieldShadingsColor = "#c0c0c0";
+  public m_aBaselineGridColor = "#666666";
 
   /** Copies represented native value members. @param source - Optional existing colors. @returns Nothing. */
   public constructor(source?: Readonly<SwViewColors>) {
@@ -36,9 +37,14 @@ export class SwViewOption {
   private verticalRulerVisible = true;
   private sidebarVisible = true;
   private statusBarVisible = true;
+  private postIts = true;
+  private resolvedPostIts = true;
 
-  /** Creates view options with one bindings invalidation callback. @param changed - State-change callback. @returns Nothing. */
-  public constructor(private readonly changed: () => void) {}
+  /** Creates view options with one bindings invalidation callback. @param changed - State-change callback. @param baselineGridVisible - Initial baseline-grid preference. @returns Nothing. */
+  public constructor(
+    private readonly changed: () => void,
+    private baselineGridVisible = false,
+  ) {}
 
   /** Copies the initial color configuration for subsequently created views. @param colors - Native color values. @returns Nothing. */
   public static SetInitialColorConfig(colors: Readonly<SwViewColors>): void {
@@ -55,6 +61,20 @@ export class SwViewOption {
   /** Returns the configured field background color. @returns Native color. */
   public GetFieldShadingsColor(): string {
     return this.m_aColorConfig.m_aFieldShadingsColor;
+  }
+  /** Returns the configured native baseline-grid color. @returns Grid color. */
+  public GetBaselineGridColor(): string {
+    return this.m_aColorConfig.m_aBaselineGridColor;
+  }
+  /** Reads the view-local native baseline grid flag. @returns Visibility. */
+  public IsBaselineGridVisible(): boolean {
+    return this.baselineGridVisible;
+  }
+  /** Updates the view-only visibility and invalidates its bindings. @param visible - New visibility. @returns Nothing. */
+  public SetBaselineGridVisible(visible: boolean): void {
+    if (visible === this.baselineGridVisible) return;
+    this.baselineGridVisible = visible;
+    this.changed();
   }
   /** Reads native read-only view state. @returns Whether read-only. */
   public IsReadonly(): boolean {
@@ -104,6 +124,30 @@ export class SwViewOption {
   /** Returns status-bar visibility. @returns Whether visible. */
   public IsStatusBarVisible(): boolean {
     return this.statusBarVisible;
+  }
+
+  /** Reads the native comment visibility option. @returns Whether comments are visible. */
+  public IsPostIts(): boolean {
+    return this.postIts;
+  }
+
+  /** Updates the native comment visibility option. @param value - Whether to show comments. @returns Nothing. */
+  public SetPostIts(value: boolean): void {
+    if (value === this.postIts) return;
+    this.postIts = value;
+    this.changed();
+  }
+
+  /** Reads the native visibility option for resolved comments. @returns Whether resolved comments are shown. */
+  public IsResolvedPostIts(): boolean {
+    return this.resolvedPostIts;
+  }
+
+  /** Updates the native visibility option for resolved comments. @param value - Whether to show resolved comments. @returns Nothing. */
+  public SetResolvedPostIts(value: boolean): void {
+    if (value === this.resolvedPostIts) return;
+    this.resolvedPostIts = value;
+    this.changed();
   }
 
   /** Toggles horizontal-ruler visibility. @returns Nothing. */

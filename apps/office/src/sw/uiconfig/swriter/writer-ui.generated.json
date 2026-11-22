@@ -23,6 +23,19 @@
     "growFont": ".uno:Grow",
     "shrinkFont": ".uno:Shrink",
     "hyperlinkDialog": ".uno:HyperlinkDialog",
+    "insertAnnotation": ".uno:InsertAnnotation",
+    "resolveComment": ".uno:ResolveComment",
+    "resolveCommentThread": ".uno:ResolveCommentThread",
+    "deleteComment": ".uno:DeleteComment",
+    "deleteCommentThread": ".uno:DeleteCommentThread",
+    "replyComment": ".uno:ReplyComment",
+    "promoteComment": ".uno:PromoteComment",
+    "deleteAuthor": ".uno:DeleteAuthor",
+    "deleteAllNotes": ".uno:DeleteAllNotes",
+    "formatAllNotes": ".uno:FormatAllNotes",
+    "fontDialog": ".uno:FontDialog",
+    "fontEffectsDialog": ".uno:FontEffectsDialog",
+    "fontPositionDialog": ".uno:FontPositionDialog",
     "insertBookmark": ".uno:InsertBookmark",
     "insertBreak": ".uno:InsertBreak",
     "insertPageBreak": ".uno:InsertPagebreak",
@@ -66,6 +79,7 @@
     "styleNewByExample": ".uno:StyleNewByExample",
     "styleUpdateByExample": ".uno:StyleUpdateByExample",
     "formatPaintbrush": ".uno:FormatPaintbrush",
+    "clearDirectFormatting": ".uno:ResetAttributes",
     "tableDialog": ".uno:TableDialog",
     "tableRowHeight": ".uno:TableRowHeight",
     "tableColumnWidth": ".uno:TableColumWidth",
@@ -83,8 +97,12 @@
     "setOptimalRowHeight": ".uno:SetOptimalRowHeight",
     "distributeRows": ".uno:DistributeRows",
     "toggleHorizontalRuler": ".uno:Ruler",
+    "toggleBaselineGrid": ".uno:BaselineGridVisible",
+    "toggleNavigator": ".uno:Navigator",
     "toggleVerticalRuler": ".uno:VRuler",
     "toggleSidebar": ".uno:Sidebar",
+    "showAnnotations": ".uno:ShowAnnotations",
+    "showResolvedAnnotations": ".uno:ShowResolvedAnnotations",
     "toggleStatusBar": ".uno:StatusBarVisible",
     "superscript": ".uno:SuperScript",
     "subscript": ".uno:SubScript",
@@ -121,6 +139,19 @@
     { "capabilityId": "CAP-0125", "commandUrl": ".uno:LineNumberingDialog" },
     { "capabilityId": "CAP-0107", "commandUrl": ".uno:IncrementIndent" },
     { "capabilityId": "CAP-0135", "commandUrl": ".uno:HyperlinkDialog" },
+    { "capabilityId": "CAP-0111", "commandUrl": ".uno:InsertAnnotation" },
+    { "capabilityId": "CAP-0111", "commandUrl": ".uno:ResolveComment" },
+    { "capabilityId": "CAP-0111", "commandUrl": ".uno:ResolveCommentThread" },
+    { "capabilityId": "CAP-0111", "commandUrl": ".uno:DeleteComment" },
+    { "capabilityId": "CAP-0111", "commandUrl": ".uno:DeleteCommentThread" },
+    { "capabilityId": "CAP-0111", "commandUrl": ".uno:ReplyComment" },
+    { "capabilityId": "CAP-0111", "commandUrl": ".uno:PromoteComment" },
+    { "capabilityId": "CAP-0111", "commandUrl": ".uno:DeleteAuthor" },
+    { "capabilityId": "CAP-0111", "commandUrl": ".uno:DeleteAllNotes" },
+    { "capabilityId": "CAP-0111", "commandUrl": ".uno:FormatAllNotes" },
+    { "capabilityId": "CAP-0111", "commandUrl": ".uno:FontDialog" },
+    { "capabilityId": "CAP-0111", "commandUrl": ".uno:FontEffectsDialog" },
+    { "capabilityId": "CAP-0111", "commandUrl": ".uno:FontPositionDialog" },
     { "capabilityId": "CAP-0113", "commandUrl": ".uno:InsertBookmark" },
     { "capabilityId": "CAP-0112", "commandUrl": ".uno:InsertBreak" },
     { "capabilityId": "CAP-0112", "commandUrl": ".uno:InsertPagebreak" },
@@ -154,8 +185,12 @@
     { "capabilityId": "CAP-0113", "commandUrl": ".uno:SaveAs" },
     { "capabilityId": "CAP-0103", "commandUrl": ".uno:SelectAll" },
     { "capabilityId": "CAP-0104", "commandUrl": ".uno:Ruler" },
+    { "capabilityId": "CAP-0104", "commandUrl": ".uno:BaselineGridVisible" },
+    { "capabilityId": "CAP-0104", "commandUrl": ".uno:Navigator" },
     { "capabilityId": "CAP-0104", "commandUrl": ".uno:VRuler" },
     { "capabilityId": "CAP-0104", "commandUrl": ".uno:Sidebar" },
+    { "capabilityId": "CAP-0104", "commandUrl": ".uno:ShowAnnotations" },
+    { "capabilityId": "CAP-0104", "commandUrl": ".uno:ShowResolvedAnnotations" },
     { "capabilityId": "CAP-0104", "commandUrl": ".uno:StatusBarVisible" },
     { "capabilityId": "CAP-0109", "commandUrl": ".uno:SuperScript" },
     { "capabilityId": "CAP-0109", "commandUrl": ".uno:SubScript" },
@@ -535,6 +570,24 @@
       "showsDialog": true,
       "shortcuts": ["Ctrl+K", "Meta+K"],
       "slotId": 5678
+    },
+    ".uno:InsertAnnotation": {
+      "browserOwned": false,
+      "argumentSchema": [],
+      "capabilityId": "CAP-0111",
+      "controlLabel": "Comment",
+      "label": "Comment",
+      "popupLabel": "Insert Comment",
+      "placements": [
+        "sw/uiconfig/swriter/menubar/menubar.xml",
+        "sw/uiconfig/swriter/toolbar/standardbar.xml",
+        "sw/uiconfig/swriter/popupmenu/text.xml",
+        "sw/uiconfig/swriter/popupmenu/table.xml"
+      ],
+      "semantics": "action",
+      "showsDialog": false,
+      "shortcuts": ["Ctrl+Alt+C", "Meta+Alt+C"],
+      "slotId": 20329
     },
     ".uno:InsertBookmark": {
       "browserOwned": false,
@@ -1170,6 +1223,34 @@
       "shortcuts": [],
       "slotId": 20211
     },
+    ".uno:BaselineGridVisible": {
+      "browserOwned": false,
+      "argumentSchema": [],
+      "capabilityId": "CAP-0104",
+      "controlLabel": "Display Baseline Grid",
+      "label": "Display Baseline Grid",
+      "placements": ["sw/uiconfig/swriter/menubar/menubar.xml"],
+      "semantics": "check",
+      "showsDialog": false,
+      "shortcuts": [],
+      "slotId": 20274
+    },
+    ".uno:Navigator": {
+      "browserOwned": false,
+      "argumentSchema": [],
+      "capabilityId": "CAP-0104",
+      "controlLabel": "Navigator",
+      "label": "Navigator",
+      "iconName": "lc_navigator.svg",
+      "placements": [
+        "sw/uiconfig/swriter/menubar/menubar.xml",
+        "sw/uiconfig/swriter/toolbar/standardbar.xml"
+      ],
+      "semantics": "check",
+      "showsDialog": false,
+      "shortcuts": ["F5"],
+      "slotId": 10366
+    },
     ".uno:VRuler": {
       "browserOwned": false,
       "argumentSchema": [],
@@ -1195,6 +1276,183 @@
       "showsDialog": false,
       "shortcuts": ["Ctrl+F5", "Meta+F5"],
       "slotId": 10336
+    },
+    ".uno:ShowAnnotations": {
+      "browserOwned": false,
+      "argumentSchema": [],
+      "capabilityId": "CAP-0104",
+      "controlLabel": "Show Comments",
+      "label": "Show Comments",
+      "iconName": "lc_showannotations.svg",
+      "placements": ["sw/uiconfig/swriter/menubar/menubar.xml"],
+      "semantics": "check",
+      "showsDialog": false,
+      "shortcuts": [],
+      "slotId": 11098
+    },
+    ".uno:ShowResolvedAnnotations": {
+      "browserOwned": false,
+      "argumentSchema": [],
+      "capabilityId": "CAP-0104",
+      "controlLabel": "Show resolved comments",
+      "label": "Show resolved comments",
+      "placements": ["sw/uiconfig/swriter/menubar/menubar.xml"],
+      "semantics": "check",
+      "showsDialog": false,
+      "shortcuts": [],
+      "slotId": 11190
+    },
+    ".uno:ResolveComment": {
+      "browserOwned": false,
+      "argumentSchema": ["Id:SvxPostItIdItem"],
+      "capabilityId": "CAP-0111",
+      "controlLabel": "Resolved",
+      "label": "Resolved",
+      "placements": ["sw/uiconfig/swriter/menubar/menubar.xml"],
+      "semantics": "check",
+      "showsDialog": false,
+      "shortcuts": [],
+      "slotId": 22509
+    },
+    ".uno:ResolveCommentThread": {
+      "browserOwned": false,
+      "argumentSchema": ["Id:SvxPostItIdItem"],
+      "capabilityId": "CAP-0111",
+      "controlLabel": "Resolved Thread",
+      "label": "Resolved Thread",
+      "placements": ["sw/uiconfig/swriter/menubar/menubar.xml"],
+      "semantics": "check",
+      "showsDialog": false,
+      "shortcuts": [],
+      "slotId": 22510
+    },
+    ".uno:DeleteComment": {
+      "browserOwned": false,
+      "argumentSchema": ["Id:SvxPostItIdItem"],
+      "capabilityId": "CAP-0111",
+      "controlLabel": "Delete Comment",
+      "label": "Delete Comment",
+      "placements": ["sw/uiconfig/swriter/menubar/menubar.xml"],
+      "semantics": "action",
+      "showsDialog": false,
+      "shortcuts": [],
+      "slotId": 22506
+    },
+    ".uno:DeleteCommentThread": {
+      "browserOwned": false,
+      "argumentSchema": ["Id:SvxPostItIdItem"],
+      "capabilityId": "CAP-0111",
+      "controlLabel": "Delete Comment Thread",
+      "label": "Delete Comment Thread",
+      "placements": ["sw/uiconfig/swriter/menubar/menubar.xml"],
+      "semantics": "action",
+      "showsDialog": false,
+      "shortcuts": [],
+      "slotId": 22511
+    },
+    ".uno:ReplyComment": {
+      "browserOwned": false,
+      "argumentSchema": [],
+      "capabilityId": "CAP-0111",
+      "controlLabel": "Reply Comment",
+      "label": "Reply Comment",
+      "iconName": "lc_replycomment.svg",
+      "placements": ["sw/uiconfig/swriter/menubar/menubar.xml"],
+      "semantics": "action",
+      "showsDialog": false,
+      "shortcuts": [],
+      "slotId": 22507
+    },
+    ".uno:PromoteComment": {
+      "browserOwned": false,
+      "argumentSchema": ["Id:SvxPostItIdItem"],
+      "capabilityId": "CAP-0111",
+      "controlLabel": "Promote Comment To Root",
+      "label": "Promote Comment To Root",
+      "placements": ["sw/uiconfig/swriter/menubar/menubar.xml"],
+      "semantics": "action",
+      "showsDialog": false,
+      "shortcuts": [],
+      "slotId": 22512
+    },
+    ".uno:DeleteAuthor": {
+      "browserOwned": false,
+      "argumentSchema": ["Author:SfxStringItem"],
+      "capabilityId": "CAP-0111",
+      "controlLabel": "Delete All Comments by This Author",
+      "label": "Delete All Comments by This Author",
+      "placements": ["sw/uiconfig/swriter/menubar/menubar.xml"],
+      "semantics": "action",
+      "showsDialog": false,
+      "shortcuts": [],
+      "slotId": 22501
+    },
+    ".uno:DeleteAllNotes": {
+      "browserOwned": false,
+      "argumentSchema": [],
+      "capabilityId": "CAP-0111",
+      "controlLabel": "Delete All Comments",
+      "label": "Delete All Comments",
+      "placements": ["sw/uiconfig/swriter/menubar/menubar.xml"],
+      "semantics": "action",
+      "showsDialog": false,
+      "shortcuts": [],
+      "slotId": 22502
+    },
+    ".uno:FormatAllNotes": {
+      "browserOwned": false,
+      "argumentSchema": [],
+      "capabilityId": "CAP-0111",
+      "controlLabel": "Format All Comments",
+      "label": "Format All Comments",
+      "popupLabel": "Format All Comments",
+      "placements": ["sw/uiconfig/swriter/menubar/menubar.xml"],
+      "semantics": "action",
+      "showsDialog": true,
+      "shortcuts": [],
+      "slotId": 22508
+    },
+    ".uno:FontDialog": {
+      "browserOwned": false,
+      "argumentSchema": ["Page:SfxStringItem"],
+      "capabilityId": "CAP-0111",
+      "controlLabel": "Character",
+      "label": "Character",
+      "iconName": "lc_fontdialog.svg",
+      "placements": [
+        "sw/uiconfig/swriter/menubar/menubar.xml",
+        "sw/uiconfig/swriter/toolbar/textobjectbar.xml",
+        "sw/uiconfig/swriter/popupmenu/text.xml",
+        "sw/uiconfig/swriter/popupmenu/table.xml"
+      ],
+      "semantics": "action",
+      "showsDialog": true,
+      "shortcuts": ["Alt+C"],
+      "slotId": 10296
+    },
+    ".uno:FontEffectsDialog": {
+      "browserOwned": false,
+      "argumentSchema": [],
+      "capabilityId": "CAP-0111",
+      "controlLabel": "Character Font Effects",
+      "label": "Character Font Effects",
+      "placements": ["svx/sdi/svx.sdi"],
+      "semantics": "action",
+      "showsDialog": true,
+      "shortcuts": [],
+      "slotId": 11133
+    },
+    ".uno:FontPositionDialog": {
+      "browserOwned": false,
+      "argumentSchema": [],
+      "capabilityId": "CAP-0111",
+      "controlLabel": "Character Font Position",
+      "label": "Character Font Position",
+      "placements": ["svx/sdi/svx.sdi"],
+      "semantics": "action",
+      "showsDialog": true,
+      "shortcuts": [],
+      "slotId": 11134
     },
     ".uno:StatusBarVisible": {
       "browserOwned": false,
@@ -1278,7 +1536,7 @@
     },
     ".uno:FormatPaintbrush": {
       "browserOwned": false,
-      "argumentSchema": [],
+      "argumentSchema": ["PersistentCopy:SfxBoolItem"],
       "controlLabel": "Clone Formatting",
       "label": "Clone Formatting",
       "iconName": "lc_formatpaintbrush.svg",
@@ -1744,6 +2002,16 @@
     },
     {
       "classification": "supported-upstream",
+      "commandUrl": ".uno:InsertAnnotation",
+      "sources": [
+        "sw/uiconfig/swriter/menubar/menubar.xml",
+        "sw/uiconfig/swriter/toolbar/standardbar.xml",
+        "sw/uiconfig/swriter/popupmenu/text.xml",
+        "sw/uiconfig/swriter/popupmenu/table.xml"
+      ]
+    },
+    {
+      "classification": "supported-upstream",
       "commandUrl": ".uno:InsertBookmark",
       "sources": [
         "sw/uiconfig/swriter/menubar/menubar.xml",
@@ -2037,6 +2305,19 @@
     },
     {
       "classification": "supported-upstream",
+      "commandUrl": ".uno:BaselineGridVisible",
+      "sources": ["sw/uiconfig/swriter/menubar/menubar.xml"]
+    },
+    {
+      "classification": "supported-upstream",
+      "commandUrl": ".uno:Navigator",
+      "sources": [
+        "sw/uiconfig/swriter/menubar/menubar.xml",
+        "sw/uiconfig/swriter/toolbar/standardbar.xml"
+      ]
+    },
+    {
+      "classification": "supported-upstream",
       "commandUrl": ".uno:VRuler",
       "sources": ["sw/uiconfig/swriter/menubar/menubar.xml"]
     },
@@ -2044,6 +2325,81 @@
       "classification": "supported-upstream",
       "commandUrl": ".uno:Sidebar",
       "sources": ["sw/uiconfig/swriter/menubar/menubar.xml"]
+    },
+    {
+      "classification": "supported-upstream",
+      "commandUrl": ".uno:ShowAnnotations",
+      "sources": ["sw/uiconfig/swriter/menubar/menubar.xml"]
+    },
+    {
+      "classification": "supported-upstream",
+      "commandUrl": ".uno:ShowResolvedAnnotations",
+      "sources": ["sw/uiconfig/swriter/menubar/menubar.xml"]
+    },
+    {
+      "classification": "supported-upstream",
+      "commandUrl": ".uno:ResolveComment",
+      "sources": ["sw/uiconfig/swriter/menubar/menubar.xml"]
+    },
+    {
+      "classification": "supported-upstream",
+      "commandUrl": ".uno:ResolveCommentThread",
+      "sources": ["sw/uiconfig/swriter/menubar/menubar.xml"]
+    },
+    {
+      "classification": "supported-upstream",
+      "commandUrl": ".uno:DeleteComment",
+      "sources": ["sw/uiconfig/swriter/menubar/menubar.xml"]
+    },
+    {
+      "classification": "supported-upstream",
+      "commandUrl": ".uno:DeleteCommentThread",
+      "sources": ["sw/uiconfig/swriter/menubar/menubar.xml"]
+    },
+    {
+      "classification": "supported-upstream",
+      "commandUrl": ".uno:ReplyComment",
+      "sources": ["sw/uiconfig/swriter/menubar/menubar.xml"]
+    },
+    {
+      "classification": "supported-upstream",
+      "commandUrl": ".uno:PromoteComment",
+      "sources": ["sw/uiconfig/swriter/menubar/menubar.xml"]
+    },
+    {
+      "classification": "supported-upstream",
+      "commandUrl": ".uno:DeleteAuthor",
+      "sources": ["sw/uiconfig/swriter/menubar/menubar.xml"]
+    },
+    {
+      "classification": "supported-upstream",
+      "commandUrl": ".uno:DeleteAllNotes",
+      "sources": ["sw/uiconfig/swriter/menubar/menubar.xml"]
+    },
+    {
+      "classification": "supported-upstream",
+      "commandUrl": ".uno:FormatAllNotes",
+      "sources": ["sw/uiconfig/swriter/menubar/menubar.xml"]
+    },
+    {
+      "classification": "supported-upstream",
+      "commandUrl": ".uno:FontDialog",
+      "sources": [
+        "sw/uiconfig/swriter/menubar/menubar.xml",
+        "sw/uiconfig/swriter/toolbar/textobjectbar.xml",
+        "sw/uiconfig/swriter/popupmenu/text.xml",
+        "sw/uiconfig/swriter/popupmenu/table.xml"
+      ]
+    },
+    {
+      "classification": "supported-upstream",
+      "commandUrl": ".uno:FontEffectsDialog",
+      "sources": ["svx/sdi/svx.sdi"]
+    },
+    {
+      "classification": "supported-upstream",
+      "commandUrl": ".uno:FontPositionDialog",
+      "sources": ["svx/sdi/svx.sdi"]
     },
     {
       "classification": "supported-upstream",
@@ -2824,78 +3180,6 @@
     },
     {
       "classification": "X",
-      "context": [".uno:EditMenu", ".uno:EditCommentsMenu"],
-      "entryKind": "command",
-      "sourceUrl": ".uno:ReplyComment",
-      "reason": "outside-p1-supported-command-slice",
-      "sourcePath": "sw/uiconfig/swriter/menubar/menubar.xml"
-    },
-    {
-      "classification": "X",
-      "context": [".uno:EditMenu", ".uno:EditCommentsMenu"],
-      "entryKind": "command",
-      "sourceUrl": ".uno:ResolveComment",
-      "reason": "outside-p1-supported-command-slice",
-      "sourcePath": "sw/uiconfig/swriter/menubar/menubar.xml"
-    },
-    {
-      "classification": "X",
-      "context": [".uno:EditMenu", ".uno:EditCommentsMenu"],
-      "entryKind": "command",
-      "sourceUrl": ".uno:ResolveCommentThread",
-      "reason": "outside-p1-supported-command-slice",
-      "sourcePath": "sw/uiconfig/swriter/menubar/menubar.xml"
-    },
-    {
-      "classification": "X",
-      "context": [".uno:EditMenu", ".uno:EditCommentsMenu"],
-      "entryKind": "command",
-      "sourceUrl": ".uno:PromoteComment",
-      "reason": "outside-p1-supported-command-slice",
-      "sourcePath": "sw/uiconfig/swriter/menubar/menubar.xml"
-    },
-    {
-      "classification": "X",
-      "context": [".uno:EditMenu", ".uno:EditCommentsMenu"],
-      "entryKind": "command",
-      "sourceUrl": ".uno:DeleteComment",
-      "reason": "outside-p1-supported-command-slice",
-      "sourcePath": "sw/uiconfig/swriter/menubar/menubar.xml"
-    },
-    {
-      "classification": "X",
-      "context": [".uno:EditMenu", ".uno:EditCommentsMenu"],
-      "entryKind": "command",
-      "sourceUrl": ".uno:DeleteCommentThread",
-      "reason": "outside-p1-supported-command-slice",
-      "sourcePath": "sw/uiconfig/swriter/menubar/menubar.xml"
-    },
-    {
-      "classification": "X",
-      "context": [".uno:EditMenu", ".uno:EditCommentsMenu"],
-      "entryKind": "command",
-      "sourceUrl": ".uno:DeleteAuthor",
-      "reason": "outside-p1-supported-command-slice",
-      "sourcePath": "sw/uiconfig/swriter/menubar/menubar.xml"
-    },
-    {
-      "classification": "X",
-      "context": [".uno:EditMenu", ".uno:EditCommentsMenu"],
-      "entryKind": "command",
-      "sourceUrl": ".uno:DeleteAllNotes",
-      "reason": "outside-p1-supported-command-slice",
-      "sourcePath": "sw/uiconfig/swriter/menubar/menubar.xml"
-    },
-    {
-      "classification": "X",
-      "context": [".uno:EditMenu"],
-      "entryKind": "menu",
-      "sourceUrl": ".uno:EditCommentsMenu",
-      "reason": "outside-p1-supported-command-slice",
-      "sourcePath": "sw/uiconfig/swriter/menubar/menubar.xml"
-    },
-    {
-      "classification": "X",
       "context": [".uno:EditMenu", ".uno:EditLinksMenu"],
       "entryKind": "command",
       "sourceUrl": ".uno:EditFootnote",
@@ -3096,22 +3380,6 @@
     },
     {
       "classification": "X",
-      "context": [".uno:ViewMenu", ".uno:GridsMenu"],
-      "entryKind": "command",
-      "sourceUrl": ".uno:BaselineGridVisible",
-      "reason": "outside-p1-supported-command-slice",
-      "sourcePath": "sw/uiconfig/swriter/menubar/menubar.xml"
-    },
-    {
-      "classification": "X",
-      "context": [".uno:ViewMenu"],
-      "entryKind": "menu",
-      "sourceUrl": ".uno:GridsMenu",
-      "reason": "outside-p1-supported-command-slice",
-      "sourcePath": "sw/uiconfig/swriter/menubar/menubar.xml"
-    },
-    {
-      "classification": "X",
       "context": [".uno:ViewMenu"],
       "entryKind": "command",
       "sourceUrl": ".uno:ControlCodes",
@@ -3154,22 +3422,6 @@
       "classification": "X",
       "context": [".uno:ViewMenu"],
       "entryKind": "command",
-      "sourceUrl": ".uno:ShowAnnotations",
-      "reason": "outside-p1-supported-command-slice",
-      "sourcePath": "sw/uiconfig/swriter/menubar/menubar.xml"
-    },
-    {
-      "classification": "X",
-      "context": [".uno:ViewMenu"],
-      "entryKind": "command",
-      "sourceUrl": ".uno:ShowResolvedAnnotations",
-      "reason": "outside-p1-supported-command-slice",
-      "sourcePath": "sw/uiconfig/swriter/menubar/menubar.xml"
-    },
-    {
-      "classification": "X",
-      "context": [".uno:ViewMenu"],
-      "entryKind": "command",
       "sourceUrl": ".uno:Marks",
       "reason": "outside-p1-supported-command-slice",
       "sourcePath": "sw/uiconfig/swriter/menubar/menubar.xml"
@@ -3203,14 +3455,6 @@
       "context": [".uno:ViewMenu"],
       "entryKind": "command",
       "sourceUrl": ".uno:Gallery",
-      "reason": "outside-p1-supported-command-slice",
-      "sourcePath": "sw/uiconfig/swriter/menubar/menubar.xml"
-    },
-    {
-      "classification": "X",
-      "context": [".uno:ViewMenu"],
-      "entryKind": "command",
-      "sourceUrl": ".uno:Navigator",
       "reason": "outside-p1-supported-command-slice",
       "sourcePath": "sw/uiconfig/swriter/menubar/menubar.xml"
     },
@@ -3587,14 +3831,6 @@
       "context": [".uno:InsertMenu"],
       "entryKind": "command",
       "sourceUrl": ".uno:DrawText",
-      "reason": "outside-p1-supported-command-slice",
-      "sourcePath": "sw/uiconfig/swriter/menubar/menubar.xml"
-    },
-    {
-      "classification": "X",
-      "context": [".uno:InsertMenu"],
-      "entryKind": "command",
-      "sourceUrl": ".uno:InsertAnnotation",
       "reason": "outside-p1-supported-command-slice",
       "sourcePath": "sw/uiconfig/swriter/menubar/menubar.xml"
     },
@@ -4136,14 +4372,6 @@
     },
     {
       "classification": "X",
-      "context": [".uno:FormatMenu"],
-      "entryKind": "command",
-      "sourceUrl": ".uno:FontDialog",
-      "reason": "outside-p1-supported-command-slice",
-      "sourcePath": "sw/uiconfig/swriter/menubar/menubar.xml"
-    },
-    {
-      "classification": "X",
       "context": [".uno:FormatMenu", ".uno:FormatBulletsMenu"],
       "entryKind": "command",
       "sourceUrl": ".uno:DecrementSubLevels",
@@ -4243,14 +4471,6 @@
       "context": [".uno:FormatMenu"],
       "entryKind": "command",
       "sourceUrl": ".uno:TitlePageDialog",
-      "reason": "outside-p1-supported-command-slice",
-      "sourcePath": "sw/uiconfig/swriter/menubar/menubar.xml"
-    },
-    {
-      "classification": "X",
-      "context": [".uno:FormatMenu"],
-      "entryKind": "command",
-      "sourceUrl": ".uno:FormatAllNotes",
       "reason": "outside-p1-supported-command-slice",
       "sourcePath": "sw/uiconfig/swriter/menubar/menubar.xml"
     },
@@ -6154,14 +6374,6 @@
       "classification": "X",
       "context": [],
       "entryKind": "command",
-      "sourceUrl": ".uno:Navigator",
-      "reason": "outside-p1-supported-command-slice",
-      "sourcePath": "sw/uiconfig/swriter/toolbar/standardbar.xml"
-    },
-    {
-      "classification": "X",
-      "context": [],
-      "entryKind": "command",
       "sourceUrl": ".uno:SpellingAndGrammarDialog",
       "reason": "outside-p1-supported-command-slice",
       "sourcePath": "sw/uiconfig/swriter/toolbar/standardbar.xml"
@@ -6267,14 +6479,6 @@
       "context": [],
       "entryKind": "command",
       "sourceUrl": ".uno:InsertIndexesEntry",
-      "reason": "outside-p1-supported-command-slice",
-      "sourcePath": "sw/uiconfig/swriter/toolbar/standardbar.xml"
-    },
-    {
-      "classification": "X",
-      "context": [],
-      "entryKind": "command",
-      "sourceUrl": ".uno:InsertAnnotation",
       "reason": "outside-p1-supported-command-slice",
       "sourcePath": "sw/uiconfig/swriter/toolbar/standardbar.xml"
     },
@@ -6483,14 +6687,6 @@
       "context": [],
       "entryKind": "command",
       "sourceUrl": ".uno:ParaRightToLeft",
-      "reason": "outside-p1-supported-command-slice",
-      "sourcePath": "sw/uiconfig/swriter/toolbar/textobjectbar.xml"
-    },
-    {
-      "classification": "X",
-      "context": [],
-      "entryKind": "command",
-      "sourceUrl": ".uno:FontDialog",
       "reason": "outside-p1-supported-command-slice",
       "sourcePath": "sw/uiconfig/swriter/toolbar/textobjectbar.xml"
     },
@@ -6714,14 +6910,6 @@
       "classification": "X",
       "context": [".uno:CharacterMenu"],
       "entryKind": "command",
-      "sourceUrl": ".uno:FontDialog",
-      "reason": "outside-p1-supported-command-slice",
-      "sourcePath": "sw/uiconfig/swriter/popupmenu/text.xml"
-    },
-    {
-      "classification": "X",
-      "context": [".uno:CharacterMenu"],
-      "entryKind": "command",
       "sourceUrl": ".uno:DefaultCharStyle",
       "reason": "outside-p1-supported-command-slice",
       "sourcePath": "sw/uiconfig/swriter/popupmenu/text.xml"
@@ -6755,14 +6943,6 @@
       "context": [".uno:CharacterMenu"],
       "entryKind": "command",
       "sourceUrl": ".uno:SourceCharStyle",
-      "reason": "outside-p1-supported-command-slice",
-      "sourcePath": "sw/uiconfig/swriter/popupmenu/text.xml"
-    },
-    {
-      "classification": "X",
-      "context": [],
-      "entryKind": "menu",
-      "sourceUrl": ".uno:CharacterMenu",
       "reason": "outside-p1-supported-command-slice",
       "sourcePath": "sw/uiconfig/swriter/popupmenu/text.xml"
     },
@@ -6883,14 +7063,6 @@
       "context": [".uno:NumberingMenu"],
       "entryKind": "command",
       "sourceUrl": ".uno:NumberingStart",
-      "reason": "outside-p1-supported-command-slice",
-      "sourcePath": "sw/uiconfig/swriter/popupmenu/text.xml"
-    },
-    {
-      "classification": "X",
-      "context": [],
-      "entryKind": "command",
-      "sourceUrl": ".uno:InsertAnnotation",
       "reason": "outside-p1-supported-command-slice",
       "sourcePath": "sw/uiconfig/swriter/popupmenu/text.xml"
     },
@@ -7250,14 +7422,6 @@
       "classification": "X",
       "context": [".uno:CharacterMenu"],
       "entryKind": "command",
-      "sourceUrl": ".uno:FontDialog",
-      "reason": "outside-p1-supported-command-slice",
-      "sourcePath": "sw/uiconfig/swriter/popupmenu/table.xml"
-    },
-    {
-      "classification": "X",
-      "context": [".uno:CharacterMenu"],
-      "entryKind": "command",
       "sourceUrl": ".uno:DefaultCharStyle",
       "reason": "outside-p1-supported-command-slice",
       "sourcePath": "sw/uiconfig/swriter/popupmenu/table.xml"
@@ -7291,14 +7455,6 @@
       "context": [".uno:CharacterMenu"],
       "entryKind": "command",
       "sourceUrl": ".uno:SourceCharStyle",
-      "reason": "outside-p1-supported-command-slice",
-      "sourcePath": "sw/uiconfig/swriter/popupmenu/table.xml"
-    },
-    {
-      "classification": "X",
-      "context": [],
-      "entryKind": "menu",
-      "sourceUrl": ".uno:CharacterMenu",
       "reason": "outside-p1-supported-command-slice",
       "sourcePath": "sw/uiconfig/swriter/popupmenu/table.xml"
     },
@@ -7427,14 +7583,6 @@
       "context": [],
       "entryKind": "command",
       "sourceUrl": ".uno:InsertFormula",
-      "reason": "outside-p1-supported-command-slice",
-      "sourcePath": "sw/uiconfig/swriter/popupmenu/table.xml"
-    },
-    {
-      "classification": "X",
-      "context": [],
-      "entryKind": "command",
-      "sourceUrl": ".uno:InsertAnnotation",
       "reason": "outside-p1-supported-command-slice",
       "sourcePath": "sw/uiconfig/swriter/popupmenu/table.xml"
     },
@@ -7813,6 +7961,22 @@
           },
           { "commandUrl": ".uno:SearchDialog", "kind": "command", "visible": true },
           { "kind": "separator" },
+          {
+            "id": ".uno:EditCommentsMenu",
+            "items": [
+              { "commandUrl": ".uno:ReplyComment", "kind": "command", "visible": true },
+              { "commandUrl": ".uno:ResolveComment", "kind": "command", "visible": true },
+              { "commandUrl": ".uno:ResolveCommentThread", "kind": "command", "visible": true },
+              { "commandUrl": ".uno:PromoteComment", "kind": "command", "visible": true },
+              { "commandUrl": ".uno:DeleteComment", "kind": "command", "visible": true },
+              { "commandUrl": ".uno:DeleteCommentThread", "kind": "command", "visible": true },
+              { "commandUrl": ".uno:DeleteAuthor", "kind": "command", "visible": true },
+              { "commandUrl": ".uno:DeleteAllNotes", "kind": "command", "visible": true }
+            ],
+            "kind": "menu",
+            "label": "Comment"
+          },
+          { "kind": "separator" },
           { "commandUrl": ".uno:EditHyperlink", "kind": "command", "visible": true }
         ],
         "kind": "menu",
@@ -7832,8 +7996,20 @@
             "kind": "menu",
             "label": "Rulers"
           },
+          {
+            "id": ".uno:GridsMenu",
+            "items": [
+              { "commandUrl": ".uno:BaselineGridVisible", "kind": "command", "visible": true }
+            ],
+            "kind": "menu",
+            "label": "Grids and Helplines"
+          },
           { "kind": "separator" },
-          { "commandUrl": ".uno:Sidebar", "kind": "command", "visible": true }
+          { "commandUrl": ".uno:ShowAnnotations", "kind": "command", "visible": true },
+          { "commandUrl": ".uno:ShowResolvedAnnotations", "kind": "command", "visible": true },
+          { "kind": "separator" },
+          { "commandUrl": ".uno:Sidebar", "kind": "command", "visible": true },
+          { "commandUrl": ".uno:Navigator", "kind": "command", "visible": true }
         ],
         "kind": "menu",
         "label": "View"
@@ -7848,6 +8024,8 @@
             "kind": "menu",
             "label": "More Breaks"
           },
+          { "kind": "separator" },
+          { "commandUrl": ".uno:InsertAnnotation", "kind": "command", "visible": true },
           { "kind": "separator" },
           { "commandUrl": ".uno:HyperlinkDialog", "kind": "command", "visible": true },
           { "commandUrl": ".uno:InsertBookmark", "kind": "command", "visible": true }
@@ -7888,6 +8066,7 @@
           { "commandUrl": ".uno:FormatPaintbrush", "kind": "command", "visible": true },
           { "commandUrl": ".uno:ResetAttributes", "kind": "command", "visible": true },
           { "kind": "separator" },
+          { "commandUrl": ".uno:FontDialog", "kind": "command", "visible": true },
           { "commandUrl": ".uno:ParagraphDialog", "kind": "command", "visible": true },
           {
             "id": ".uno:FormatBulletsMenu",
@@ -7905,7 +8084,8 @@
             "label": "Lists"
           },
           { "kind": "separator" },
-          { "commandUrl": ".uno:PageDialog", "kind": "command", "visible": true }
+          { "commandUrl": ".uno:PageDialog", "kind": "command", "visible": true },
+          { "commandUrl": ".uno:FormatAllNotes", "kind": "command", "visible": true }
         ],
         "kind": "menu",
         "label": "Format"
@@ -8000,6 +8180,12 @@
       { "commandUrl": ".uno:FormatPaintbrush", "kind": "command", "visible": true },
       { "commandUrl": ".uno:ResetAttributes", "kind": "command", "visible": true },
       {
+        "id": ".uno:CharacterMenu",
+        "items": [{ "commandUrl": ".uno:FontDialog", "kind": "command", "visible": true }],
+        "kind": "menu",
+        "label": "Character"
+      },
+      {
         "id": ".uno:ParagraphMenu",
         "items": [{ "commandUrl": ".uno:ParagraphDialog", "kind": "command", "visible": true }],
         "kind": "menu",
@@ -8018,6 +8204,8 @@
         "kind": "menu",
         "label": "List"
       },
+      { "kind": "separator" },
+      { "commandUrl": ".uno:InsertAnnotation", "kind": "command", "visible": true },
       { "kind": "separator" },
       { "commandUrl": ".uno:EditHyperlink", "kind": "command", "visible": true },
       { "commandUrl": ".uno:RemoveHyperlink", "kind": "command", "visible": true },
@@ -8067,6 +8255,12 @@
       { "commandUrl": ".uno:FormatPaintbrush", "kind": "command", "visible": true },
       { "commandUrl": ".uno:ResetAttributes", "kind": "command", "visible": true },
       {
+        "id": ".uno:CharacterMenu",
+        "items": [{ "commandUrl": ".uno:FontDialog", "kind": "command", "visible": true }],
+        "kind": "menu",
+        "label": "Character"
+      },
+      {
         "id": ".uno:ParagraphMenu",
         "items": [{ "commandUrl": ".uno:ParagraphDialog", "kind": "command", "visible": true }],
         "kind": "menu",
@@ -8085,6 +8279,8 @@
         "kind": "menu",
         "label": "List"
       },
+      { "kind": "separator" },
+      { "commandUrl": ".uno:InsertAnnotation", "kind": "command", "visible": true },
       { "kind": "separator" },
       { "commandUrl": ".uno:EditHyperlink", "kind": "command", "visible": true },
       { "commandUrl": ".uno:RemoveHyperlink", "kind": "command", "visible": true },
@@ -8109,13 +8305,16 @@
       { "commandUrl": ".uno:Redo", "kind": "command", "visible": true },
       { "kind": "separator" },
       { "commandUrl": ".uno:SearchDialog", "kind": "command", "visible": true },
+      { "commandUrl": ".uno:Navigator", "kind": "command", "visible": false },
       { "kind": "separator" },
       { "commandUrl": ".uno:InsertTable", "kind": "command", "visible": true },
       { "kind": "separator" },
       { "commandUrl": ".uno:InsertPagebreak", "kind": "command", "visible": true },
       { "kind": "separator" },
       { "commandUrl": ".uno:HyperlinkDialog", "kind": "command", "visible": true },
-      { "commandUrl": ".uno:InsertBookmark", "kind": "command", "visible": true }
+      { "commandUrl": ".uno:InsertBookmark", "kind": "command", "visible": true },
+      { "kind": "separator" },
+      { "commandUrl": ".uno:InsertAnnotation", "kind": "command", "visible": true }
     ],
     "textobjectbar": [
       { "commandUrl": ".uno:StyleApply", "kind": "command", "visible": true },
@@ -8159,6 +8358,7 @@
       { "commandUrl": ".uno:LineSpacing", "kind": "command", "visible": true },
       { "kind": "separator" },
       { "commandUrl": ".uno:SelectAll", "kind": "command", "visible": false },
+      { "commandUrl": ".uno:FontDialog", "kind": "command", "visible": false },
       { "commandUrl": ".uno:ParagraphDialog", "kind": "command", "visible": false }
     ],
     "tableobjectbar": [
@@ -8621,60 +8821,6 @@
       },
       {
         "classification": "X",
-        "context": [".uno:EditMenu", ".uno:EditCommentsMenu"],
-        "entryKind": "command",
-        "sourceUrl": ".uno:ReplyComment"
-      },
-      {
-        "classification": "X",
-        "context": [".uno:EditMenu", ".uno:EditCommentsMenu"],
-        "entryKind": "command",
-        "sourceUrl": ".uno:ResolveComment"
-      },
-      {
-        "classification": "X",
-        "context": [".uno:EditMenu", ".uno:EditCommentsMenu"],
-        "entryKind": "command",
-        "sourceUrl": ".uno:ResolveCommentThread"
-      },
-      {
-        "classification": "X",
-        "context": [".uno:EditMenu", ".uno:EditCommentsMenu"],
-        "entryKind": "command",
-        "sourceUrl": ".uno:PromoteComment"
-      },
-      {
-        "classification": "X",
-        "context": [".uno:EditMenu", ".uno:EditCommentsMenu"],
-        "entryKind": "command",
-        "sourceUrl": ".uno:DeleteComment"
-      },
-      {
-        "classification": "X",
-        "context": [".uno:EditMenu", ".uno:EditCommentsMenu"],
-        "entryKind": "command",
-        "sourceUrl": ".uno:DeleteCommentThread"
-      },
-      {
-        "classification": "X",
-        "context": [".uno:EditMenu", ".uno:EditCommentsMenu"],
-        "entryKind": "command",
-        "sourceUrl": ".uno:DeleteAuthor"
-      },
-      {
-        "classification": "X",
-        "context": [".uno:EditMenu", ".uno:EditCommentsMenu"],
-        "entryKind": "command",
-        "sourceUrl": ".uno:DeleteAllNotes"
-      },
-      {
-        "classification": "X",
-        "context": [".uno:EditMenu"],
-        "entryKind": "menu",
-        "sourceUrl": ".uno:EditCommentsMenu"
-      },
-      {
-        "classification": "X",
         "context": [".uno:EditMenu", ".uno:EditLinksMenu"],
         "entryKind": "command",
         "sourceUrl": ".uno:EditFootnote"
@@ -8825,18 +8971,6 @@
       },
       {
         "classification": "X",
-        "context": [".uno:ViewMenu", ".uno:GridsMenu"],
-        "entryKind": "command",
-        "sourceUrl": ".uno:BaselineGridVisible"
-      },
-      {
-        "classification": "X",
-        "context": [".uno:ViewMenu"],
-        "entryKind": "menu",
-        "sourceUrl": ".uno:GridsMenu"
-      },
-      {
-        "classification": "X",
         "context": [".uno:ViewMenu"],
         "entryKind": "command",
         "sourceUrl": ".uno:ControlCodes"
@@ -8869,18 +9003,6 @@
         "classification": "X",
         "context": [".uno:ViewMenu"],
         "entryKind": "command",
-        "sourceUrl": ".uno:ShowAnnotations"
-      },
-      {
-        "classification": "X",
-        "context": [".uno:ViewMenu"],
-        "entryKind": "command",
-        "sourceUrl": ".uno:ShowResolvedAnnotations"
-      },
-      {
-        "classification": "X",
-        "context": [".uno:ViewMenu"],
-        "entryKind": "command",
         "sourceUrl": ".uno:Marks"
       },
       {
@@ -8906,12 +9028,6 @@
         "context": [".uno:ViewMenu"],
         "entryKind": "command",
         "sourceUrl": ".uno:Gallery"
-      },
-      {
-        "classification": "X",
-        "context": [".uno:ViewMenu"],
-        "entryKind": "command",
-        "sourceUrl": ".uno:Navigator"
       },
       {
         "classification": "X",
@@ -9194,12 +9310,6 @@
         "context": [".uno:InsertMenu"],
         "entryKind": "command",
         "sourceUrl": ".uno:DrawText"
-      },
-      {
-        "classification": "X",
-        "context": [".uno:InsertMenu"],
-        "entryKind": "command",
-        "sourceUrl": ".uno:InsertAnnotation"
       },
       {
         "classification": "X",
@@ -9605,12 +9715,6 @@
       },
       {
         "classification": "X",
-        "context": [".uno:FormatMenu"],
-        "entryKind": "command",
-        "sourceUrl": ".uno:FontDialog"
-      },
-      {
-        "classification": "X",
         "context": [".uno:FormatMenu", ".uno:FormatBulletsMenu"],
         "entryKind": "command",
         "sourceUrl": ".uno:DecrementSubLevels"
@@ -9686,12 +9790,6 @@
         "context": [".uno:FormatMenu"],
         "entryKind": "command",
         "sourceUrl": ".uno:TitlePageDialog"
-      },
-      {
-        "classification": "X",
-        "context": [".uno:FormatMenu"],
-        "entryKind": "command",
-        "sourceUrl": ".uno:FormatAllNotes"
       },
       {
         "classification": "X",
@@ -11091,12 +11189,6 @@
         "classification": "X",
         "context": [],
         "entryKind": "command",
-        "sourceUrl": ".uno:Navigator"
-      },
-      {
-        "classification": "X",
-        "context": [],
-        "entryKind": "command",
         "sourceUrl": ".uno:SpellingAndGrammarDialog"
       },
       {
@@ -11176,12 +11268,6 @@
         "context": [],
         "entryKind": "command",
         "sourceUrl": ".uno:InsertIndexesEntry"
-      },
-      {
-        "classification": "X",
-        "context": [],
-        "entryKind": "command",
-        "sourceUrl": ".uno:InsertAnnotation"
       },
       {
         "classification": "X",
@@ -11325,12 +11411,6 @@
         "context": [],
         "entryKind": "command",
         "sourceUrl": ".uno:ParaRightToLeft"
-      },
-      {
-        "classification": "X",
-        "context": [],
-        "entryKind": "command",
-        "sourceUrl": ".uno:FontDialog"
       }
     ],
     "sw/uiconfig/swriter/toolbar/numobjectbar.xml": [
@@ -11492,12 +11572,6 @@
         "classification": "X",
         "context": [".uno:CharacterMenu"],
         "entryKind": "command",
-        "sourceUrl": ".uno:FontDialog"
-      },
-      {
-        "classification": "X",
-        "context": [".uno:CharacterMenu"],
-        "entryKind": "command",
         "sourceUrl": ".uno:DefaultCharStyle"
       },
       {
@@ -11523,12 +11597,6 @@
         "context": [".uno:CharacterMenu"],
         "entryKind": "command",
         "sourceUrl": ".uno:SourceCharStyle"
-      },
-      {
-        "classification": "X",
-        "context": [],
-        "entryKind": "menu",
-        "sourceUrl": ".uno:CharacterMenu"
       },
       {
         "classification": "X",
@@ -11619,12 +11687,6 @@
         "context": [".uno:NumberingMenu"],
         "entryKind": "command",
         "sourceUrl": ".uno:NumberingStart"
-      },
-      {
-        "classification": "X",
-        "context": [],
-        "entryKind": "command",
-        "sourceUrl": ".uno:InsertAnnotation"
       },
       {
         "classification": "X",
@@ -11891,12 +11953,6 @@
         "classification": "X",
         "context": [".uno:CharacterMenu"],
         "entryKind": "command",
-        "sourceUrl": ".uno:FontDialog"
-      },
-      {
-        "classification": "X",
-        "context": [".uno:CharacterMenu"],
-        "entryKind": "command",
         "sourceUrl": ".uno:DefaultCharStyle"
       },
       {
@@ -11922,12 +11978,6 @@
         "context": [".uno:CharacterMenu"],
         "entryKind": "command",
         "sourceUrl": ".uno:SourceCharStyle"
-      },
-      {
-        "classification": "X",
-        "context": [],
-        "entryKind": "menu",
-        "sourceUrl": ".uno:CharacterMenu"
       },
       {
         "classification": "X",
@@ -12024,12 +12074,6 @@
         "context": [],
         "entryKind": "command",
         "sourceUrl": ".uno:InsertFormula"
-      },
-      {
-        "classification": "X",
-        "context": [],
-        "entryKind": "command",
-        "sourceUrl": ".uno:InsertAnnotation"
       },
       {
         "classification": "X",

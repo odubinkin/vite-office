@@ -2,6 +2,28 @@
  * @fileoverview Reimplements bounded paragraph-alignment, tab-stop, and line-spacing values from pinned `editeng/source/items/paraitem.cxx`.
  */
 
+import { Any } from "../../../cppu/inc/com/sun/star/uno/Any";
+import { Any2Bool, CONVERT_TWIPS } from "../../../svl/inc/poolitem";
+import { SfxPoolItem } from "../../../svl/source/items/poolitem";
+import {
+  MID_IS_HYPHEN,
+  MID_HYPHEN_MIN_LEAD,
+  MID_HYPHEN_MIN_TRAIL,
+  MID_HYPHEN_MAX_HYPHENS,
+  MID_HYPHEN_NO_CAPS,
+  MID_HYPHEN_NO_LAST_WORD,
+  MID_HYPHEN_MIN_WORD_LENGTH,
+  MID_HYPHEN_ZONE,
+  MID_HYPHEN_ZONE_ALWAYS,
+  MID_HYPHEN_ZONE_COLUMN,
+  MID_HYPHEN_ZONE_PAGE,
+  MID_HYPHEN_ZONE_SPREAD,
+  MID_HYPHEN_KEEP,
+  MID_HYPHEN_KEEP_TYPE,
+  MID_HYPHEN_COMPOUND_MIN_LEAD,
+  MID_HYPHEN_COMPOUND_MIN_TRAIL,
+  MID_HYPHEN_KEEP_LINE,
+} from "../../inc/memberids";
 import { getSystemDecimalSeparator } from "../../../unotools/source/misc/syslocale";
 import { SvxTabAdjust } from "../../inc/svxenum";
 import { SfxBoolItem } from "../../../svl/inc/eitem";
@@ -184,5 +206,124 @@ export class SvxAutoFrameDirectionItem extends SfxBoolItem {
   public override Clone(pool?: SfxItemPool): SvxAutoFrameDirectionItem {
     void pool;
     return new SvxAutoFrameDirectionItem(this);
+  }
+}
+
+/** Values from com.sun.star.text.ParagraphHyphenationKeepType. */
+export enum ParagraphHyphenationKeepType {
+  AUTO = 0,
+  SPREAD = 1,
+  PAGE = 2,
+  COLUMN = 3,
+  ALWAYS = 4,
+}
+
+/** Original SvxHyphenZoneItem constructor defaults in member order. */
+const hyphenZoneDefaults = {
+  hyphen: false,
+  minLead: 0,
+  minTrail: 0,
+  maxHyphens: 255,
+  noCaps: false,
+  noLastWord: false,
+  minWordLength: 0,
+  zone: 0,
+  paragraphEndZone: 0,
+  columnEndZone: 0,
+  pageEndZone: 0,
+  spreadEndZone: 0,
+  keep: false,
+  keepType: Number(ParagraphHyphenationKeepType.COLUMN),
+  compoundMinLead: 2,
+  compoundMinTrail: 2,
+  keepLine: false,
+};
+
+/** Borrowed copy of the concrete native hyphenation payload. */
+export type HyphenZoneSettings = Readonly<typeof hyphenZoneDefaults>;
+/** Recognized native payload field. */
+type HyphenZoneField = keyof HyphenZoneSettings;
+
+const hyphenZoneMembers: Readonly<Partial<Record<number, HyphenZoneField>>> = {
+  [MID_IS_HYPHEN]: "hyphen",
+  [MID_HYPHEN_MIN_LEAD]: "minLead",
+  [MID_HYPHEN_MIN_TRAIL]: "minTrail",
+  [MID_HYPHEN_MAX_HYPHENS]: "maxHyphens",
+  [MID_HYPHEN_NO_CAPS]: "noCaps",
+  [MID_HYPHEN_NO_LAST_WORD]: "noLastWord",
+  [MID_HYPHEN_MIN_WORD_LENGTH]: "minWordLength",
+  [MID_HYPHEN_ZONE]: "zone",
+  [MID_HYPHEN_ZONE_ALWAYS]: "paragraphEndZone",
+  [MID_HYPHEN_ZONE_COLUMN]: "columnEndZone",
+  [MID_HYPHEN_ZONE_PAGE]: "pageEndZone",
+  [MID_HYPHEN_ZONE_SPREAD]: "spreadEndZone",
+  [MID_HYPHEN_KEEP]: "keep",
+  [MID_HYPHEN_KEEP_TYPE]: "keepType",
+  [MID_HYPHEN_COMPOUND_MIN_LEAD]: "compoundMinLead",
+  [MID_HYPHEN_COMPOUND_MIN_TRAIL]: "compoundMinTrail",
+  [MID_HYPHEN_KEEP_LINE]: "keepLine",
+};
+
+/** Original paragraph hyphenation item with width-preserving UNO members. */
+export class SvxHyphenZoneItem extends SfxPoolItem {
+  private settings: HyphenZoneSettings;
+
+  /** Constructs an item with source defaults or copied settings. @param hyphen - Automatic hyphenation. @param which - Native item identity. @param settings - Copied preset values. @returns Item. */
+  public constructor(hyphen: boolean, which: number, settings?: Partial<HyphenZoneSettings>) {
+    super(which);
+    this.settings = Object.freeze({ ...hyphenZoneDefaults, ...settings, hyphen });
+  }
+
+  /** Creates the original EditEngine default. @returns Default item. */
+  public static CreateDefault(): SvxHyphenZoneItem {
+    return new SvxHyphenZoneItem(false, 0);
+  }
+
+  /** Copies the complete native slot value. @returns Detached item. */
+  public override Clone(): SvxHyphenZoneItem {
+    return new SvxHyphenZoneItem(this.settings.hyphen, this.Which(), this.settings);
+  }
+
+  /** Compares the complete native hyphenation value. @param other - Candidate item. @returns Payload equality. */
+  public override equals(other: SfxPoolItem): boolean {
+    return (
+      other instanceof SvxHyphenZoneItem &&
+      (Object.keys(hyphenZoneDefaults) as HyphenZoneField[]).every(
+        /** Compares one original field. @param field - Native payload key. @returns Field equality. */
+        (field) => this.settings[field] === other.settings[field],
+      )
+    );
+  }
+
+  /** Returns the structured browser transfer payload. @returns Current value. */
+  public override QueryValue(): HyphenZoneSettings;
+  /** Reads an original UNO member. @param output - Result Any. @param member - Member identity. @returns Native success. */
+  public override QueryValue(output: Any, member?: number): boolean;
+  /** Reads a UNO member or the immutable structured transfer value. @param output - Optional existing Any. @param member - Native member identity. @returns Success or current settings. */
+  public override QueryValue(output?: Any, member = 0): HyphenZoneSettings | boolean {
+    if (output === undefined) return this.settings;
+    const field = hyphenZoneMembers[member & ~CONVERT_TWIPS];
+    if (field === undefined) return true;
+    const value = this.settings[field];
+    if (typeof value === "boolean") output.insert([value], "bool");
+    else output.insert([(value << 16) >> 16], "sal_Int16");
+    return true;
+  }
+
+  /** Applies the source Any2Bool conversion or signed-long extraction followed by unsigned narrowing. @param input - UNO value. @param member - Native member identity. @returns Whether native conversion succeeded. */
+  public override PutValue(input: unknown, member: number): boolean {
+    const id = member & ~CONVERT_TWIPS;
+    const field = hyphenZoneMembers[id];
+    if (field !== undefined && typeof hyphenZoneDefaults[field] === "boolean") {
+      this.settings = Object.freeze({ ...this.settings, [field]: Any2Bool(input) });
+      return true;
+    }
+    const number: [number] = [0];
+    if (!(input instanceof Any) || !input.extract(number, "sal_Int32")) return false;
+    if (field !== undefined) {
+      const mask = id >= MID_HYPHEN_ZONE && id <= MID_HYPHEN_ZONE_SPREAD ? 0xffff : 0xff;
+      this.settings = Object.freeze({ ...this.settings, [field]: number[0] & mask });
+    }
+    return true;
   }
 }

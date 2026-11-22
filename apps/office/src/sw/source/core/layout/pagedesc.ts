@@ -1,6 +1,12 @@
 /** @fileoverview Native SwPageDesc frame-format and use/follow ownership from pagedesc.cxx; immutable geometry is only a browser projection of canonical pooled items. */
-import { SvxBoxItemLine as BoxEdge } from "../../../../editeng/source/items/frmitems";
-import { getActivePageStory, getPageFrameGutters, SwFrameFormat } from "./atrfrm";
+import {
+  getActivePageStory,
+  getPageFrameBorderSpace,
+  getPageFrameMargins,
+  SwFrameFormat,
+} from "./atrfrm";
+import { FormatBodyTextGrid } from "./pagechg";
+import type { SwFormatHeader, SwFormatFooter } from "../../../inc/fmthdft";
 import { SwPoolFormatId } from "../../../inc/poolfmt";
 import { SfxItemSet } from "../../../../svl/source/items/itemset";
 import {
@@ -13,7 +19,9 @@ import {
   RES_SHADOW,
 } from "../../../inc/hintids";
 import type { SwDoc } from "../doc/doc";
-import { BroadcastingModify } from "../../../inc/calbck";
+import { BroadcastingModify, SwClient } from "../../../inc/calbck";
+import type { SwTextFormatColl } from "../doc/fmtcol";
+import { SwRegisterItem } from "../para/paratr";
 import type { SwFindNearestNode } from "../../../inc/hints";
 import { SwFrameSize } from "../../../inc/fmtfsize";
 import { SvxLRSpaceItem, SvxIndentValue } from "../../../../editeng/inc/lrspitem";
@@ -67,7 +75,18 @@ export class SwPageDesc extends BroadcastingModify {
   private readonly m_FirstLeft: SwFrameFormat;
   private m_StyleName: string;
   private m_pFollow: SwPageDesc;
+  private m_pTextFormatColl: SwTextFormatColl | undefined;
+  private readonly registerDepend = new SwClient(
+    /** Detaches the page reference when its original style dies. @param _source - Original style. @param hint - Broadcast hint. @returns Nothing. */
+    (_source, hint) => {
+      if (hint.kind === "object-dying") {
+        this.registerDepend.EndListeningAll();
+        this.m_pTextFormatColl = undefined;
+      }
+    },
+  );
   private m_IsLandscape = false;
+  private readonly stashedStoryFormats = new Map<number, SwFormatHeader | SwFormatFooter>();
   private m_eUse: UseOnPage =
     UseOnPage.All | UseOnPage.HeaderShare | UseOnPage.FooterShare | UseOnPage.FirstShare;
   /** Original copy constructor. @param source - Descriptor. @returns Descriptor. */ constructor(
@@ -109,8 +128,25 @@ export class SwPageDesc extends BroadcastingModify {
     if (typeof source !== "string") {
       this.m_IsLandscape = source.m_IsLandscape;
       this.m_eUse = source.m_eUse;
+      this.CopyStashedStoryFormats(source);
+      this.SetRegisterFormatColl(source.GetRegisterFormatColl());
     }
   }
+  /** Follows the live style used to compute page line-spacing metrics. @param format - Document-owned reference paragraph style. @returns Nothing. */
+  public SetRegisterFormatColl(format?: SwTextFormatColl): void {
+    if (format === this.m_pTextFormatColl) return;
+    this.registerDepend.EndListeningAll();
+    this.m_pTextFormatColl = format;
+    if (format) this.registerDepend.RegisterToModify(format);
+  }
+
+  /** Returns the reference only while the original registration is live. @returns Paragraph style or absence. */
+  public GetRegisterFormatColl(): SwTextFormatColl | undefined {
+    return this.registerDepend.GetRegisteredIn() === this.m_pTextFormatColl
+      ? this.m_pTextFormatColl
+      : undefined;
+  }
+
   /** Original descriptor pool identity is owned by the master format. @returns Native ID. */
   GetPoolFormatId(): SwPoolFormatId {
     return this.m_Master.GetPoolFormatId();
@@ -147,6 +183,29 @@ export class SwPageDesc extends BroadcastingModify {
       margin.Dispose();
     }
   }
+  /** Looks up a detached story using its variant and header/footer identity. @param key - Native story slot. @returns Held story item, if any. */
+  GetStashedStoryFormat(key: number): SwFormatHeader | SwFormatFooter | undefined {
+    return this.stashedStoryFormats.get(key);
+  }
+
+  /** Keeps one native story registered while the visible page variant shares a different section. @param key - Native story slot. @param item - Story item, or undefined to remove the hold. @returns Nothing. */
+  StashStoryFormat(key: number, item?: SwFormatHeader | SwFormatFooter): void {
+    const existing = this.stashedStoryFormats.get(key);
+    if (item === existing) return;
+    const copy = item?.Clone();
+    if (copy) this.stashedStoryFormats.set(key, copy);
+    else this.stashedStoryFormats.delete(key);
+    existing?.Dispose();
+  }
+
+  /** Transfers the reference ownership of stored page variants between descriptors. @param source - Borrowed descriptor. @returns Nothing. */
+  CopyStashedStoryFormats(source: SwPageDesc): void {
+    if (source === this) return;
+    for (const [key, item] of source.stashedStoryFormats) this.StashStoryFormat(key, item);
+    for (const key of this.stashedStoryFormats.keys())
+      if (!source.stashedStoryFormats.has(key)) this.StashStoryFormat(key);
+  }
+
   /** Native master format. @returns Frame. */ GetMaster(): SwFrameFormat {
     return this.m_Master;
   }
@@ -284,32 +343,71 @@ export class SwPageDesc extends BroadcastingModify {
     return copy;
   }
   /** Releases actual frame-format clients before the descriptor notifier. @returns Nothing. */ override DisposeModify(): void {
+    this.SetRegisterFormatColl();
     for (const frame of [this.m_FirstLeft, this.m_FirstMaster, this.m_Left, this.m_Master])
       frame.DisposeModify();
+    for (const key of this.stashedStoryFormats.keys()) this.StashStoryFormat(key);
     super.DisposeModify();
   }
 }
 
-/** Projects the native body print area between the page's border box and story frames. @param page - Actual page descriptor. @returns Absolute physical body geometry. */
+/** Applies the original register reference and turns on register participation on its paragraph style. @param page - Actual page descriptor. @param reference - Canonical paragraph style. @returns Nothing. */
+export function applyPageRegisterReference(page: SwPageDesc, reference: SwTextFormatColl): void {
+  const register = new SwRegisterItem(true);
+  try {
+    reference.SetFormatAttr(register);
+    page.SetRegisterFormatColl(reference);
+  } finally {
+    register.Dispose();
+  }
+}
+
+/** Resolves the area available to the body between the page's border box and story frames. @param page - Actual page descriptor. @returns Absolute physical body geometry. */
 export function getPageBodyGeometry(page: SwPageDesc): WriterPageDescriptorValue {
   const value = page.GetValue();
   const master = page.GetMaster();
-  const box = master.GetBox();
-  const gutter = getPageFrameGutters(master);
+  const margins = getPageFrameMargins(master);
+  const border = getPageFrameBorderSpace(master);
   return {
     ...value,
     topMargin:
-      value.topMargin +
-      box.CalcLineSpace(BoxEdge.TOP, true) +
-      (getActivePageStory(master, true)?.GetFrameSize().GetHeight() ?? 0) +
-      gutter.top,
+      margins.top +
+      border.top +
+      (getActivePageStory(master, true)?.GetFrameSize().GetHeight() ?? 0),
     bottomMargin:
-      value.bottomMargin +
-      box.CalcLineSpace(BoxEdge.BOTTOM, true) +
+      margins.bottom +
+      border.bottom +
       (getActivePageStory(master, false)?.GetFrameSize().GetHeight() ?? 0),
-    leftMargin: value.leftMargin + box.CalcLineSpace(BoxEdge.LEFT, true) + gutter.left,
-    rightMargin: value.rightMargin + box.CalcLineSpace(BoxEdge.RIGHT, true) + gutter.right,
+    leftMargin: margins.left + border.left,
+    rightMargin: margins.right + border.right,
   };
+}
+
+/** Formats the native body print area using the grid and document compatibility policy. @param page - Actual page descriptor. @param document - Original document settings and paper mode owner. @returns Absolute body print geometry. */
+export function formatPageBodyGeometry(
+  page: SwPageDesc,
+  document: SwDoc,
+): WriterPageDescriptorValue {
+  const body = getPageBodyGeometry(page);
+  if (document.GetDocumentSettingManager().get("MS_WORD_COMP_GRID_METRICS")) return body;
+  const master = page.GetMaster();
+  const grid = master.GetTextGrid();
+  const insets = FormatBodyTextGrid(
+    body.width - body.leftMargin - body.rightMargin,
+    body.height - body.topMargin - body.bottomMargin,
+    grid,
+    document.IsSquaredPageMode(),
+    master.GetFrameDir().GetValue(),
+  );
+  return insets
+    ? {
+        ...body,
+        topMargin: body.topMargin + insets.top,
+        bottomMargin: body.bottomMargin + insets.bottom,
+        leftMargin: body.leftMargin + insets.left,
+        rightMargin: body.rightMargin + insets.right,
+      }
+    : body;
 }
 
 /** Native docdesc locale/paper defaults exposed as geometry for browser reset without creating detached core objects. @param locale - Locale. @returns Geometry. */

@@ -7,25 +7,48 @@ import fs from "node:fs";
 import path from "node:path";
 import { describe, expect, it, vi } from "vitest";
 
+import { SvxCharRotateItem } from "../../../../editeng/inc/charrotateitem";
 import { SvxLineSpacingItem } from "../../../../editeng/inc/lspcitem";
 import { SvxULSpaceItem } from "../../../../editeng/source/items/frmitems";
-import { SvxFontHeightItem } from "../../../../editeng/source/items/textitem";
+import {
+  FontLineStyle,
+  SvxFontHeightItem,
+  SvxOverlineItem,
+} from "../../../../editeng/source/items/textitem";
 import { createDocument } from "../../../../sfx2/source/doc/objsh";
 import { ODF_NAMESPACES } from "../../../../xmloff/source/core/xmltoken";
-import { RES_CHRATR_FONTSIZE, RES_PARATR_LINESPACING, RES_UL_SPACE } from "../../../inc/hintids";
+import {
+  RES_CHRATR_AUTOKERN,
+  RES_CHRATR_CONTOUR,
+  RES_CHRATR_FONTSIZE,
+  RES_CHRATR_RELIEF,
+  RES_CHRATR_ROTATE,
+  RES_CHRATR_NOHYPHEN,
+  RES_CHRATR_OPTICAL_SIZING,
+  RES_CHRATR_SCALEW,
+  RES_CHRATR_SHADOWED,
+  RES_CHRATR_OVERLINE,
+  RES_PARATR_LINESPACING,
+  RES_PARATR_FORBIDDEN_RULES,
+  RES_PARATR_HANGINGPUNCTUATION,
+  RES_PARATR_SCRIPTSPACE,
+  RES_UL_SPACE,
+} from "../../../inc/hintids";
 import { exportContentXml, exportStylesXml } from "./xmlexp";
 import { importWriterXml } from "./xmlimp";
 import { readOdtDocument } from "./swxml";
 import { writeOdtDocument } from "./wrtxml";
 import { projectSwTextPrintBounds } from "../../core/layout/newfrm";
 import { WriterViewProjection } from "../../../browser/presentation/writer-view-projection";
+import { SwDocShell } from "../../uibase/app/docsh";
+import { SwAttrIter } from "../../core/text/itratr";
 import { SwPaM, SwPosition } from "../../core/crsr/pam";
 import {
   decodeWriterDocument,
   encodeWriterDocument,
 } from "../../../browser/filter/xml/writer-document-codec";
 
-const namespaces = `xmlns:office="${ODF_NAMESPACES.office}" xmlns:style="${ODF_NAMESPACES.style}" xmlns:text="${ODF_NAMESPACES.text}" xmlns:fo="${ODF_NAMESPACES.fo}"`;
+const namespaces = `xmlns:office="${ODF_NAMESPACES.office}" xmlns:style="${ODF_NAMESPACES.style}" xmlns:text="${ODF_NAMESPACES.text}" xmlns:fo="${ODF_NAMESPACES.fo}" xmlns:loext="${ODF_NAMESPACES.loext}"`;
 const metadata = createDocument({ id: "odt-layout", suiteId: "writer", title: "Layout" });
 
 /** Wraps named styles in a minimal Writer styles stream. @param definitions - ODF style children. @returns XML. */
@@ -146,6 +169,42 @@ describe("Writer ODT layout parity", /** Groups ODT layout regressions. @returns
     );
     const exported = exportStylesXml(document);
     expect(exported).toContain('style:contextual-spacing="false"');
+  });
+
+  it("preserves inherited Asian typography and independent automatic style overrides", /** Exercises the native named XML booleans over common and automatic styles. @returns Nothing. */ () => {
+    const definitions = styles(
+      '<style:style style:name="Asian" style:family="paragraph"><style:paragraph-properties style:text-autospace="none" style:punctuation-wrap="hanging" style:line-break="normal"/></style:style>',
+    );
+    const paragraphs = content(
+      '<style:style style:name="Direct" style:family="paragraph" style:parent-style-name="Asian"><style:paragraph-properties style:punctuation-wrap="simple" style:line-break="invalid"/></style:style>',
+      '<text:p text:style-name="Asian">日本語 Latin</text:p><text:p text:style-name="Direct">第二段 Latin</text:p>',
+    );
+    const source = importWriterXml(definitions, paragraphs, metadata).document;
+    /** Asserts independent effective properties after a document load. @param document - Live Writer document. @returns Nothing. */
+    function assertSettings(document: typeof source): void {
+      for (const [index, node] of document.paragraphs.entries()) {
+        expect(node.GetAttr(RES_PARATR_SCRIPTSPACE).QueryValue()).toBe(false);
+        expect(node.GetAttr(RES_PARATR_FORBIDDEN_RULES).QueryValue()).toBe(false);
+        expect(node.GetAttr(RES_PARATR_HANGINGPUNCTUATION).QueryValue()).toBe(index === 0);
+      }
+    }
+    try {
+      assertSettings(source);
+      const named = exportStylesXml(source);
+      const direct = exportContentXml(source);
+      expect(named).toContain('style:text-autospace="none"');
+      expect(named).toContain('style:punctuation-wrap="hanging"');
+      expect(named).toContain('style:line-break="normal"');
+      expect(direct).toContain('style:punctuation-wrap="simple"');
+      const reopened = importWriterXml(named, direct, metadata).document;
+      try {
+        assertSettings(reopened);
+      } finally {
+        reopened.Dispose();
+      }
+    } finally {
+      source.Dispose();
+    }
   });
 
   it("imports and exports fixed, minimum, and extra line spacing", /** Checks upstream ODF line-spacing modes and ignores the Drawing-only font-independent flag. @returns Nothing. */ () => {
@@ -417,4 +476,168 @@ describe("Writer ODT layout parity", /** Groups ODT layout regressions. @returns
       doc.Dispose();
     }
   });
+});
+
+it("preserves a named ODT character style and a direct overline override across export", /** Checks independent styles, colors and an explicit NONE run. @returns Nothing. */ () => {
+  const named =
+    '<style:style style:name="NamedLine" style:family="text"><style:text-properties style:text-overline-style="solid" style:text-overline-type="double" style:text-overline-color="#cc0033"/></style:style>';
+  const automatic =
+    '<style:style style:name="NoLine" style:family="text"><style:text-properties style:text-overline-style="none"/></style:style>';
+  const body =
+    '<text:p><text:span text:style-name="NamedLine">A<text:span text:style-name="NoLine">B</text:span>C</text:span></text:p>';
+  const { document: source } = importWriterXml(styles(named), content(automatic, body), metadata);
+  try {
+    const exported = exportContentXml(source);
+    const { document: reopened } = importWriterXml(exportStylesXml(source), exported, metadata);
+    try {
+      const iterator = new SwAttrIter(reopened.paragraphs[0]!);
+      for (const offset of [0, 1, 2]) {
+        iterator.Seek(offset);
+        const item = iterator.GetAttrHandler().ReadItem(RES_CHRATR_OVERLINE);
+        expect(item).toBeInstanceOf(SvxOverlineItem);
+        const line = item as SvxOverlineItem;
+        if (offset === 1) expect(line.GetLineStyle()).toBe(FontLineStyle.LINESTYLE_NONE);
+        else {
+          expect(line.GetLineStyle()).toBe(FontLineStyle.LINESTYLE_DOUBLE);
+          expect(line.GetColor().toUInt32()).toBe(0xcc0033);
+        }
+      }
+    } finally {
+      reopened.Dispose();
+    }
+  } finally {
+    source.Dispose();
+  }
+});
+
+it("keeps outline and shadow values under relief and restores each native item", /** Exercises native Writer properties and the ODT export/reopen path. @returns Nothing. */ () => {
+  const combined =
+    '<style:style style:name="Effects" style:family="text"><style:text-properties style:text-outline="true" fo:text-shadow="1pt 1pt" style:font-relief="engraved"/></style:style>';
+  const body = '<text:p><text:span text:style-name="Effects">Relief</text:span> Plain</text:p>';
+  const { document: original } = importWriterXml(styles(""), content(combined, body), metadata);
+  try {
+    const exported = exportContentXml(original);
+    expect(exported).toContain('style:text-outline="true"');
+    expect(exported).toContain('fo:text-shadow="1pt 1pt"');
+    expect(exported).toContain('style:font-relief="engraved"');
+    const { document: reopened } = importWriterXml(exportStylesXml(original), exported, metadata);
+    try {
+      const iterator = new SwAttrIter(reopened.paragraphs[0]!);
+      for (const [offset, expected] of [
+        [2, [true, true, 2]],
+        [8, [false, false, 0]],
+      ] as const) {
+        iterator.Seek(offset);
+        const handler = iterator.GetAttrHandler();
+        expect([
+          handler.ReadItem(RES_CHRATR_CONTOUR).QueryValue(),
+          handler.ReadItem(RES_CHRATR_SHADOWED).QueryValue(),
+          handler.ReadItem(RES_CHRATR_RELIEF).QueryValue(),
+        ]).toEqual(expected);
+      }
+    } finally {
+      reopened.Dispose();
+    }
+  } finally {
+    original.Dispose();
+  }
+});
+
+it("round-trips native character rotation and scale in an automatic text style", /** Inspects effective pool items after reimporting Writer's emitted XML. @returns Nothing. */ () => {
+  const rotated =
+    '<style:style style:name="Rotated" style:family="text"><style:text-properties style:text-rotation-angle="90" style:text-rotation-scale="fixed" style:text-scale="84%"/></style:style>';
+  const body = '<text:p><text:span text:style-name="Rotated">Rotated</text:span> Plain</text:p>';
+  const { document: original } = importWriterXml(styles(""), content(rotated, body), metadata);
+  try {
+    const exported = exportContentXml(original);
+    expect(exported).toContain('style:text-rotation-angle="90"');
+    expect(exported).toContain('style:text-rotation-scale="fixed"');
+    expect(exported).toContain('style:text-scale="84%"');
+    const { document: reopened } = importWriterXml(exportStylesXml(original), exported, metadata);
+    try {
+      const iterator = new SwAttrIter(reopened.paragraphs[0]!);
+      iterator.Seek(2);
+      const handler = iterator.GetAttrHandler();
+      const rotation = handler.ReadItem(RES_CHRATR_ROTATE) as SvxCharRotateItem;
+      expect([rotation.GetValue(), rotation.IsFitToLine()]).toEqual([900, true]);
+      expect(handler.ReadItem(RES_CHRATR_SCALEW).QueryValue()).toBe(84);
+      iterator.Seek(9);
+      expect(handler.ReadItem(RES_CHRATR_ROTATE).QueryValue()).toBe(0);
+      expect(handler.ReadItem(RES_CHRATR_SCALEW).QueryValue()).toBe(100);
+    } finally {
+      reopened.Dispose();
+    }
+  } finally {
+    original.Dispose();
+  }
+});
+
+it("preserves new Writer document pair kerning and optical sizing as ODT text defaults", /** Pins the shell default and its native pool ownership after reopening. @returns Nothing. */ () => {
+  const original = SwDocShell.CreateNewDocument({});
+  try {
+    expect(original.GetDefault(RES_CHRATR_AUTOKERN).QueryValue()).toBe(true);
+    expect(original.GetDefault(RES_CHRATR_OPTICAL_SIZING).QueryValue()).toBe(true);
+    const transferred = decodeWriterDocument(encodeWriterDocument(original));
+    try {
+      expect(transferred.GetDefault(RES_CHRATR_AUTOKERN).QueryValue()).toBe(true);
+      expect(transferred.GetDefault(RES_CHRATR_OPTICAL_SIZING).QueryValue()).toBe(true);
+      const exported = exportStylesXml(transferred);
+      expect(exported).toContain('loext:font-optical-sizing="auto"');
+      expect(exported).toMatch(
+        /<style:default-style style:family="paragraph">.*style:letter-kerning="true"/,
+      );
+      const { document: reopened } = importWriterXml(
+        exported,
+        exportContentXml(transferred),
+        metadata,
+      );
+      try {
+        expect(reopened.GetDefault(RES_CHRATR_AUTOKERN).QueryValue()).toBe(true);
+        expect(reopened.GetDefault(RES_CHRATR_OPTICAL_SIZING).QueryValue()).toBe(true);
+      } finally {
+        reopened.Dispose();
+      }
+    } finally {
+      transferred.Dispose();
+    }
+  } finally {
+    original.Dispose();
+  }
+});
+
+it("preserves character-style hyphenation exceptions and explicit optical sizing", /** Adapts the character-style and old-document cases in tdf106733 and testOpticalSizing2. @returns Nothing. */ () => {
+  const named =
+    '<style:style style:name="Protected" style:family="text"><style:text-properties fo:hyphenate="false" loext:font-optical-sizing="auto"/></style:style>';
+  const automatic =
+    '<style:style style:name="Override" style:family="text" style:parent-style-name="Protected"><style:text-properties fo:hyphenate="true" loext:font-optical-sizing="none"/></style:style>';
+  const body =
+    '<text:p><text:span text:style-name="Protected">except</text:span> <text:span text:style-name="Override">except</text:span> plain</text:p>';
+  const { document: original } = importWriterXml(styles(named), content(automatic, body), metadata);
+  try {
+    expect(original.GetDefault(RES_CHRATR_OPTICAL_SIZING).QueryValue()).toBe(false);
+    const exportedStyles = exportStylesXml(original);
+    const exportedContent = exportContentXml(original);
+    expect(exportedStyles).toContain('fo:hyphenate="false"');
+    expect(exportedStyles).toContain('loext:font-optical-sizing="auto"');
+    expect(exportedContent).toContain('fo:hyphenate="true"');
+    expect(exportedContent).toContain('loext:font-optical-sizing="none"');
+    const { document: reopened } = importWriterXml(exportedStyles, exportedContent, metadata);
+    try {
+      const iterator = new SwAttrIter(reopened.paragraphs[0]!);
+      for (const [offset, value] of [
+        [2, true],
+        [8, false],
+        [15, false],
+      ] as const) {
+        iterator.Seek(offset);
+        const handler = iterator.GetAttrHandler();
+        expect(handler.ReadItem(RES_CHRATR_NOHYPHEN).QueryValue()).toBe(value);
+        expect(handler.ReadItem(RES_CHRATR_OPTICAL_SIZING).QueryValue()).toBe(value);
+      }
+    } finally {
+      reopened.Dispose();
+    }
+  } finally {
+    original.Dispose();
+  }
 });

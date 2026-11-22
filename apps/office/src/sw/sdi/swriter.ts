@@ -89,16 +89,25 @@ export interface WriterViewCommandTarget {
     item: import("../../editeng/inc/ulspitem").SvxULSpaceItem,
   ) => boolean;
   readonly IsHorizontalRulerVisible: () => boolean;
+  readonly IsBaselineGridVisible: () => boolean;
+  readonly IsNavigatorVisible: () => boolean;
   readonly IsVerticalRulerVisible: () => boolean;
   readonly IsSidebarVisible: () => boolean;
   readonly IsStatusBarVisible: () => boolean;
   readonly IsStoragePending: () => boolean;
+  readonly HasNotes: () => boolean;
+  readonly IsPostIts: () => boolean;
+  readonly IsResolvedPostIts: () => boolean;
+  readonly SetPostIts: (value: boolean) => void;
+  readonly SetResolvedPostIts: (value: boolean) => void;
   readonly NewDocument: () => void;
   readonly OpenPageDialog: () => Promise<boolean>;
   readonly GetSearch: () => import("../source/uibase/uiview/viewsrch").SwViewSearch;
   readonly RepeatSearch: () => boolean;
   readonly RequestSelectAll: () => void;
   readonly ToggleHorizontalRuler: () => void;
+  readonly ToggleBaselineGrid: () => void;
+  readonly ToggleNavigator: () => void;
   readonly ToggleVerticalRuler: () => void;
   readonly ToggleSidebar: () => void;
   readonly ToggleStatusBar: () => void;

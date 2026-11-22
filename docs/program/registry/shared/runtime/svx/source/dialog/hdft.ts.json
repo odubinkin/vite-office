@@ -1,0 +1,36 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/svx/source/dialog/hdft.ts",
+    "classification": "upstream-mechanism",
+    "state": "active",
+    "suite": "shared",
+    "subsystem": "page-style-stories",
+    "capabilityIds": [
+      "CAP-0136"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "none",
+      "evidence": [
+        "apps/office/src/svx/source/dialog/hdft.ts#SvxHFPage",
+        "apps/office/src/sw/browser/presentation/WriterPageStoriesDialog.test.tsx",
+        "apps/office/e2e/writer-page-stories.spec.ts",
+        "vendor/libreoffice-reference/svx/source/dialog/hdft.cxx#SvxHFPage::FillItemSet"
+      ],
+      "justification": "Exchanges the native header and footer page groups, controlling height, margins, spacing and sharing.",
+      "knownViolations": [],
+      "localSymbols": [
+        "SvxHFPage"
+      ],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": "svx/source/dialog/hdft.cxx",
+      "upstreamSymbols": [
+        "SvxHFPage"
+      ]
+    }
+  }
+}

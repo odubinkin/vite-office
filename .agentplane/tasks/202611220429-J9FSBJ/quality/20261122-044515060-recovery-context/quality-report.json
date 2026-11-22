@@ -1,0 +1,23 @@
+{
+  "schema_version": 1,
+  "task_id": "202611220429-J9FSBJ",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-11-22T04:45:15.060Z",
+  "verdict": "pass",
+  "summary": "Page Style exchanges native page frame border and shadow items and paints them in the production editor.",
+  "evaluated_sha": "2cd426979fb6638f4e906d75ba3df44061a6ded8",
+  "blueprint_digest": "384e68690119e812d975fc0077c91113a0b4714af63f93d44cd22981df8caeb9",
+  "findings": [
+    "Focused native and Chromium checks cover padding, physical placement, history, cancellation and both document carriers."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202611220429-J9FSBJ/README.md",
+    "2cd426979fb6 and task Findings: 44 focused Writer tests; 3 Chromium tests; production build and scoped audits"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": [
+    "Body pagination retains its baseline master-based geometry; global documentation and size reports retain existing Calc diagnostics."
+  ]
+}

@@ -1,0 +1,43 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sw/source/core/layout/pagechg.ts",
+    "classification": "upstream-mechanism",
+    "state": "active",
+    "suite": "writer",
+    "subsystem": "page-text-grid",
+    "capabilityIds": [
+      "CAP-ba76bd42-4b00-4278-9f8f-3970be0c5fa6"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "none",
+      "evidence": [
+        "apps/office/src/sw/source/core/layout/pagechg.ts#FormatBodyTextGrid",
+        "apps/office/src/sw/browser/presentation/WriterPageTextGrid.test.tsx",
+        "vendor/libreoffice-reference/sw/source/core/layout/pagechg.cxx#SwBodyFrame::Format",
+        "vendor/libreoffice-reference/sw/source/core/layout/pagechg.cxx#GetGridWidth",
+        "apps/office/src/sw/browser/presentation/WriterPageRegister.test.tsx",
+        "vendor/libreoffice-reference/sw/source/core/layout/pagechg.cxx#SwPageFrame::ComputeRegister"
+      ],
+      "justification": "Centers the page body on the original text-grid line and cell sizes. The existing Writer slice has no connected page footnote frame neighbors. Computes the native page line-spacing reference pitch from paragraph spacing and the browser font device.",
+      "knownViolations": [],
+      "localSymbols": [
+        "FormatBodyTextGrid",
+        "GetGridWidth",
+        "IsVerticalTextGrid",
+        "ComputeRegister"
+      ],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": "sw/source/core/layout/pagechg.cxx",
+      "upstreamSymbols": [
+        "SwBodyFrame::Format",
+        "GetGridWidth",
+        "SwPageFrame::ComputeRegister"
+      ]
+    }
+  }
+}

@@ -6,6 +6,7 @@ import type { OdfCharacterProperties, OdfHyperlink, OdfParagraphAlignment } from
 import type { XMLParagraphImportProperties, XMLParagraphListState } from "./txtparai";
 import type {
   XMLTextModel,
+  XMLAnnotationTextContent,
   XMLTextCursor,
   XMLTextRange,
   XMLNamedTextContent,
@@ -23,7 +24,7 @@ import { XMLTextFrameContext } from "./XMLTextFrameContext";
 import { XMLTextListBlockContext } from "./XMLTextListBlockContext";
 
 /** Native text import locations represented by the current body/table slice. */
-export type XMLTextType = "Body" | "Cell" | "TextBox" | "HeaderFooter";
+export type XMLTextType = "Body" | "Cell" | "TextBox" | "HeaderFooter" | "Annotation";
 
 /** One native named style application and the direct properties from its enclosing span. */
 export interface XMLCharacterStyleLayer {
@@ -86,6 +87,8 @@ export class XMLTextImportHelper {
   private start: XMLTextRange | undefined;
   private applyParagraph: ((cursor: XMLTextCursor) => void) | undefined;
   private hints: TextImportHint[] = [];
+  private annotationDepth = 0;
+  private readonly annotations = new Map<string, XMLAnnotationTextContent>();
   private readonly bookmarkStarts = new Map<
     string,
     { range: XMLTextRange; text: XMLText; hidden: boolean; condition: string }
@@ -123,6 +126,23 @@ export class XMLTextImportHelper {
     this.hints = saved.hints;
     this.lists.PopListContext();
   }
+  /** Suspends the containing text while the annotation TextRange owns the active cursor. @param cursor - Annotation text cursor. @returns Nothing. */
+  public PushAnnotationCursor(cursor: XMLTextCursor): void {
+    this.PushTextFrameCursor(cursor);
+    this.annotationDepth++;
+  }
+
+  /** Restores the containing text after the annotation is parsed. @returns Nothing. */
+  public PopAnnotationCursor(): void {
+    this.PopTextFrameCursor();
+    this.annotationDepth--;
+  }
+
+  /** Determines whether direct EditEngine range properties are in use. @returns Whether the cursor is in annotation text. */
+  public IsAnnotationText(): boolean {
+    return this.annotationDepth > 0;
+  }
+
   /** Borrows the current native text cursor. @returns Active cursor. */
   public GetCursor(): XMLTextCursor {
     if (!this.cursor) throw new RuntimeException();
@@ -135,6 +155,7 @@ export class XMLTextImportHelper {
   /** Releases import-owned cursor and hint positions after stream completion or failure. @returns Nothing. */
   public ResetCursor(): void {
     this.cellParaStyleDefault = "";
+    this.annotationDepth = 0;
     while (this.frameContexts.length !== 0) this.PopTextFrameCursor();
     this.ClearCursor();
     for (const start of this.bookmarkStarts.values()) start.range.dispose();
@@ -154,7 +175,7 @@ export class XMLTextImportHelper {
     }
     this.hints.length = 0;
   }
-  /** Starts a paragraph and defers its native style application until after the break. @param style - Paragraph style. @param alignment - Direct alignment. @param left - Direct margin. @param paragraph - Paragraph properties. @param properties - Direct character map. @param list - Native list state. @param listGeometryWins - Legacy parser precedence. @param forceListRule - Explicit automatic list declaration. @param markerProperties - Direct text properties of the paragraph mark. @param applyStyle - Whether the paragraph supplies its own style. @returns Nothing. */
+  /** Starts a paragraph and defers its native style application until after the break. @param style - Paragraph style. @param alignment - Direct alignment. @param left - Direct margin. @param paragraph - Paragraph properties. @param properties - Direct character map. @param list - Native list state. @param listGeometryWins - Legacy parser precedence. @param forceListRule - Explicit automatic list declaration. @param markerProperties - Direct text properties of the paragraph mark. @param applyStyle - Whether the paragraph supplies its own style. @param outlineLevel - Native text heading level or zero for a plain paragraph. @returns Nothing. */
   public BeginParagraph(
     style: string,
     alignment: OdfParagraphAlignment | undefined,
@@ -166,6 +187,7 @@ export class XMLTextImportHelper {
     forceListRule = false,
     markerProperties?: Partial<OdfCharacterProperties>,
     applyStyle = true,
+    outlineLevel?: number,
   ): void {
     const cellStyle = this.cellParaStyleDefault;
     this.start = this.GetCursor().getStart();
@@ -173,10 +195,15 @@ export class XMLTextImportHelper {
       /** Executes this bounded native operation. @param cursor - Native operation input. @returns Native operation result. */ (
         cursor,
       ) => {
-        this.ApplyCellParaStyle(cursor, cellStyle);
-        this.SetStyleAndAttrs(cursor, style, list, forceListRule, applyStyle || !cellStyle);
-        applyTextImportProperties(cursor, properties, paragraph, alignment, left);
-        if (markerProperties) {
+        if (!this.IsAnnotationText()) {
+          this.ApplyCellParaStyle(cursor, cellStyle);
+          this.SetStyleAndAttrs(cursor, style, list, forceListRule, applyStyle || !cellStyle);
+        }
+        const paragraphTarget = cursor.getParagraphPropertySet?.() ?? cursor;
+        if (outlineLevel !== undefined && !this.IsAnnotationText())
+          applyParagraphOutlineLevel(paragraphTarget, outlineLevel);
+        applyTextImportProperties(paragraphTarget, properties, paragraph, alignment, left);
+        if (markerProperties && !this.IsAnnotationText()) {
           const name = xmlTextString("CharacterStyles");
           try {
             const family = this.model.getAutoStyles().getByName(name);
@@ -312,6 +339,10 @@ export class XMLTextImportHelper {
         const range = text.createTextCursorByRange(hint.start);
         try {
           range.gotoRange(hint.end, true);
+          if (this.IsAnnotationText()) {
+            applyTextImportProperties(range, hint.properties);
+            continue;
+          }
           const familyName = xmlTextString("CharacterStyles");
           try {
             const family = this.model.getAutoStyles().getByName(familyName);
@@ -357,6 +388,63 @@ export class XMLTextImportHelper {
       this.applyParagraph = undefined;
     }
   }
+  /** Creates a detached Annotation field before importing its content. @param name - ODF annotation name. @returns Native descriptor. */
+  public CreateAnnotation(name: string): XMLAnnotationTextContent {
+    const service = xmlTextString("com.sun.star.text.TextField.Annotation");
+    const key = xmlTextString(name);
+    try {
+      const field = this.model.createInstance(service) as XMLAnnotationTextContent;
+      field.setName(key);
+      return field;
+    } finally {
+      service.dispose();
+      key.dispose();
+    }
+  }
+
+  /** Inserts a prepared Annotation field at the current body cursor. @param name - ODF annotation name. @param field - Prepared descriptor. @returns Nothing. */
+  public InsertAnnotation(name: string, field: XMLAnnotationTextContent): void {
+    const cursor = this.GetCursor();
+    cursor.getText().insertTextContent(cursor, field, false);
+    this.MovePastAnnotation(cursor, field);
+    if (name) this.annotations.set(name, field);
+  }
+
+  /** Reattaches a named annotation to the range ending at the active text cursor. @param name - ODF annotation name. @returns Nothing. */
+  public EndAnnotation(name: string): void {
+    const field = this.annotations.get(name);
+    if (!field) return;
+    this.annotations.delete(name);
+    const cursor = this.GetCursor();
+    const text = cursor.getText();
+    const anchor = field.getAnchor();
+    const range = text.createTextCursorByRange(cursor);
+    try {
+      try {
+        range.gotoRange(anchor, true);
+      } catch (error) {
+        if (!(error instanceof RuntimeException)) throw error;
+      }
+      text.insertTextContent(range, field, true);
+      this.MovePastAnnotation(cursor, field);
+    } finally {
+      range.dispose();
+      anchor.dispose();
+    }
+  }
+
+  /** Keeps the importer after the new point text field. @param cursor - Active import cursor. @param field - Attached annotation. @returns Nothing. */
+  private MovePastAnnotation(cursor: XMLTextCursor, field: XMLAnnotationTextContent): void {
+    const anchor = field.getAnchor();
+    const end = anchor.getEnd();
+    try {
+      cursor.gotoRange(end, false);
+    } finally {
+      end.dispose();
+      anchor.dispose();
+    }
+  }
+
   /** Attaches an original named text-content service. @param name - Bookmark name. @param range - Optional selected range. @param properties - Range bookmark attributes. @returns Nothing. */
   public InsertBookmark(
     name: string,
@@ -460,6 +548,7 @@ export class XMLTextImportHelper {
   ): SvXMLImportContext | null {
     if (element === XMLToken.TEXT_P || element === XMLToken.TEXT_H)
       return new XMLParaContext(this.target, element, attributes);
+    if (type === "Annotation") return null;
     if (element === XMLToken.TEXT_LIST)
       return new XMLTextListBlockContext(this.target, attributes, this.lists);
     if (element === XMLToken.TABLE_TABLE) {
@@ -474,5 +563,27 @@ export class XMLTextImportHelper {
         type === "Cell" ? "Unsupported ODF table cell section." : "Unsupported ODF text section.",
       );
     return null;
+  }
+}
+
+/** Applies an ODF heading level only when it differs from its assigned paragraph style. @param target - Paragraph property owner. @param level - ODF paragraph level. @returns Nothing. */
+function applyParagraphOutlineLevel(target: XMLPropertySet, level: number): void {
+  const name = xmlTextString("OutlineLevel");
+  try {
+    const inherited = target.getPropertyValue(name);
+    try {
+      const current: [number] = [0];
+      if (!inherited.extract(current, "sal_Int16") || current[0] === level) return;
+      const value = new Any([level], "sal_Int16");
+      try {
+        target.setPropertyValue(name, value);
+      } finally {
+        value.dispose();
+      }
+    } finally {
+      inherited.dispose();
+    }
+  } finally {
+    name.dispose();
   }
 }

@@ -14,15 +14,29 @@ import { XATTR_FILL_FIRST, XATTR_FILL_LAST } from "../../../../svx/inc/xdef";
 import { SwFormatAutoFormat } from "../txtnode/fmtatr2";
 import { releaseStyleHandle } from "../../../../svl/source/items/stylepool";
 import { SwAutoStyleFamily } from "../../../inc/istyleaccess";
+import {
+  GuessParagraphDirection,
+  ParagraphDirection,
+} from "../../../../i18nutil/source/utility/guessparadirection";
+import { SvxFrameDirection } from "../../../../editeng/inc/frmdir";
+import { SvxFrameDirectionItem } from "../../../../editeng/inc/frmdiritem";
+import type { SfxBoolItem } from "../../../../svl/inc/eitem";
+import { GetParagraphFrameDirection } from "./doclay";
 /** Admits native paragraph-family items supported by the represented selected edit path. @param which - Native item identity. @returns Whether the paragraph owner can apply it. */
 export function isParagraphEditItem(which: number): boolean {
   return (
     which === H.RES_PARATR_ADJUST ||
+    which === H.RES_LINENUMBER ||
     which === H.RES_PARATR_VERTALIGN ||
+    which === H.RES_PARATR_SNAPTOGRID ||
+    which === H.RES_PARATR_AUTOFRAMEDIR ||
+    which === H.RES_FRAMEDIR ||
     which === H.RES_PARATR_SCRIPTSPACE ||
     which === H.RES_PARATR_HANGINGPUNCTUATION ||
     which === H.RES_PARATR_FORBIDDEN_RULES ||
     which === H.RES_PARATR_LINESPACING ||
+    which === H.RES_PARATR_REGISTER ||
+    which === H.RES_PARATR_HYPHENZONE ||
     which === H.RES_PARATR_SPLIT ||
     which === H.RES_PARATR_ORPHANS ||
     which === H.RES_PARATR_WIDOWS ||
@@ -240,4 +254,21 @@ export function InsertItemSet(doc: SwDoc, range: SwPaM, set: SfxItemSet, mode: S
     characters.Dispose();
     other.Dispose();
   }
+}
+
+/** Checks the first strong direction of an edited paragraph and keeps ambiguous paragraphs unchanged. @param node - Actual paragraph. @param text - Resulting text. @returns New direction item when an update is required. */
+export function GetAutoParagraphDirectionItem(
+  node: SwTextNode,
+  text: string,
+): SvxFrameDirectionItem | undefined {
+  if (!(node.GetAttr(H.RES_PARATR_AUTOFRAMEDIR) as SfxBoolItem).GetValue()) return undefined;
+  const direction = GuessParagraphDirection(text);
+  if (direction === ParagraphDirection.Ambiguous) return undefined;
+  const rtl = direction === ParagraphDirection.RightToLeft;
+  const currentRtl = GetParagraphFrameDirection(node) === SvxFrameDirection.Horizontal_RL_TB;
+  if (rtl === currentRtl) return undefined;
+  return new SvxFrameDirectionItem(
+    rtl ? SvxFrameDirection.Horizontal_RL_TB : SvxFrameDirection.Horizontal_LR_TB,
+    H.RES_FRAMEDIR,
+  );
 }

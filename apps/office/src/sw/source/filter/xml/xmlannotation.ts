@@ -25,8 +25,30 @@ import { SvtScriptType } from "../../../../svl/inc/languageoptions";
 import { SfxItemSet } from "../../../../svl/source/items/itemset";
 import { MapUnit } from "../../../../tools/inc/mapunit";
 import { applyTextImportProperties } from "../../../../xmloff/source/text/txtprmap";
-import type { XMLAnnotation, XMLAnnotationSpan } from "../../../../xmloff/source/text/txtfldi";
+import type { OdfCharacterProperties } from "../../../../xmloff/source/text/txtparae";
 import { getCharacterProperties } from "./xmlexp-character";
+
+import { Any } from "../../../../cppu/inc/com/sun/star/uno/Any";
+import type { DateTime } from "../../../../offapi/com/sun/star/util/DateTime";
+
+export interface XMLAnnotationSpan {
+  readonly text: string;
+  readonly properties: Partial<OdfCharacterProperties>;
+}
+
+/** Point annotation data produced by the shared text field context. */
+export interface XMLAnnotation {
+  readonly name: string;
+  readonly parentName: string;
+  readonly resolved: boolean;
+  readonly author: string;
+  readonly initials: string;
+  readonly dateTime?: DateTime;
+  readonly paragraphs: AnnotationParagraphs;
+}
+
+/** Paragraph runs stored by the legacy Writer graph. */
+export type AnnotationParagraphs = readonly (readonly XMLAnnotationSpan[])[];
 
 /** Shared character properties with an original Writer and EditEngine item counterpart. */
 const editWhich = new Map<number, number>([
@@ -99,6 +121,8 @@ export function createPostItText(
         try {
           applyTextImportProperties(
             {
+              /** The legacy rich-text adapter only consumes imported values. @returns Empty Any. */
+              getPropertyValue: () => new Any(),
               /** Applies the shared UNO property to the corresponding EditEngine item. @param name - Native property. @param value - Typed native value. @returns Nothing. */
               setPropertyValue(name, value) {
                 const entry = SwUnoPropertyMap.get(text(name));

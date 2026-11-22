@@ -1,0 +1,45 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/sw/source/filter/xml/xmlexp-markers.ts",
+    "localSymbols": [
+      "projectParagraphMarkers"
+    ],
+    "status": "mapped",
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sw/source/filter/xml/xmlexp-markers.ts",
+          "marker": "projectParagraphMarkers"
+        },
+        {
+          "path": "apps/office/src/sw/source/filter/xml/odt-annotation.test.ts",
+          "marker": "imports the named annotation"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/xmloff/source/text/txtparae.cxx",
+          "marker": "XML_ANNOTATION_END"
+        }
+      ]
+    },
+    "upstreamPath": "xmloff/source/text/txtparae.cxx",
+    "upstreamSymbols": [
+      "XML_ANNOTATION_END"
+    ],
+    "preservedResponsibilities": [
+      "Projects native annotation, bookmark and frame portions in the source coordinates of the owning paragraph."
+    ],
+    "omittedResponsibilities": [
+      "Only the represented annotation/marker path is implemented. Complete UNO services and unsupported rich comment formatting remain outside this mapping."
+    ],
+    "filenameDivergence": {
+      "localPath": "apps/office/src/sw/source/filter/xml/xmlexp-markers.ts",
+      "stackNecessity": "responsibility-split",
+      "rationale": "Splits the existing mapped responsibility at the authored-file size boundary while retaining the original runtime owner."
+    }
+  }
+}

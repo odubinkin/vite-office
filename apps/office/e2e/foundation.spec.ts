@@ -59,6 +59,9 @@ test("Writer menu keyboard navigation and accessible application chrome" /**
   await expect(hyperlinkMenuItem).toHaveAttribute("data-popup-highlighted", "true");
   await expect(editPopup).toBeFocused();
   await editPopup.press("ArrowUp");
+  const commentMenu = editPopup.getByRole("menuitem", { exact: true, name: "Comment" });
+  await expect(commentMenu).toHaveAttribute("data-popup-highlighted", "true");
+  await editPopup.press("ArrowUp");
   const findAndReplace = editPopup.getByRole("menuitem", {
     exact: true,
     name: "Find and Replace…",

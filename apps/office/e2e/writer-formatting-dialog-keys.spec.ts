@@ -27,8 +27,14 @@ for (const width of [1280, 390])
     await format(/^Paragraph/);
     let dialog = page.getByRole("dialog", { name: "Paragraph", exact: true });
     const spacing = dialog.getByRole("tab", { name: "Indents & Spacing", exact: true }),
+      alignment = dialog.getByRole("tab", { name: "Alignment", exact: true }),
       flow = dialog.getByRole("tab", { name: "Text Flow", exact: true }),
-      tabs = dialog.getByRole("tab", { name: "Tabs", exact: true });
+      asian = dialog.getByRole("tab", { name: "Asian Typography", exact: true }),
+      outline = dialog.getByRole("tab", { name: "Outline & List", exact: true }),
+      tabs = dialog.getByRole("tab", { name: "Tabs", exact: true }),
+      borders = dialog.getByRole("tab", { name: "Borders", exact: true }),
+      area = dialog.getByRole("tab", { name: "Area", exact: true }),
+      transparency = dialog.getByRole("tab", { name: "Transparency", exact: true });
     await expect(spacing).toBeFocused();
     const oldAbove = await dialog
       .getByRole("spinbutton", { name: "Above paragraph (cm)", exact: true })
@@ -36,17 +42,35 @@ for (const width of [1280, 390])
     await dialog
       .getByRole("spinbutton", { name: "Above paragraph (cm)", exact: true })
       .press("Control+PageDown");
+    await expect(alignment).toBeFocused();
+    await alignment.press("ArrowRight");
     await expect(flow).toBeFocused();
     await flow.press("ArrowRight");
+    await expect(asian).toBeFocused();
+    await asian.press("ArrowRight");
+    await expect(outline).toBeFocused();
+    await outline.press("ArrowRight");
     await expect(tabs).toBeFocused();
     await dialog.getByRole("combobox", { name: "Position", exact: true }).fill("1 cm");
     await dialog.getByRole("button", { name: "New", exact: true }).click();
     await dialog.getByRole("combobox", { name: "Position", exact: true }).press("Control+PageDown");
+    await expect(borders).toBeFocused();
+    await borders.press("ArrowRight");
+    await expect(area).toBeFocused();
+    await area.press("ArrowRight");
+    await expect(transparency).toBeFocused();
+    await transparency.press("Control+PageDown");
     await expect(spacing).toBeFocused();
     await expect(
       dialog.getByRole("spinbutton", { name: "Above paragraph (cm)", exact: true }),
     ).toHaveValue(oldAbove);
     await spacing.press("Control+PageUp");
+    await expect(transparency).toBeFocused();
+    await transparency.press("Control+PageUp");
+    await expect(area).toBeFocused();
+    await area.press("Control+PageUp");
+    await expect(borders).toBeFocused();
+    await borders.press("Control+PageUp");
     await expect(tabs).toBeFocused();
     await expect(
       dialog.getByRole("listbox", { name: "Tab stops", exact: true }).locator("option"),
@@ -54,7 +78,7 @@ for (const width of [1280, 390])
     await page.screenshot({
       path: `output/playwright/writer-full-checkpoint/VBNV75-tabs-${width}.png`,
     });
-    await tabs.press("Control+PageDown");
+    await spacing.click();
     await dialog
       .getByRole("spinbutton", { name: "Above paragraph (cm)", exact: true })
       .fill("1 cm");

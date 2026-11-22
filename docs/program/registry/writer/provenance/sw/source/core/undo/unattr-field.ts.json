@@ -1,0 +1,45 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "status": "mapped",
+    "localPath": "apps/office/src/sw/source/core/undo/unattr-field.ts",
+    "upstreamPath": "sw/source/core/undo/unattr.cxx",
+    "localSymbols": [
+      "SwUndoInsAnnotation"
+    ],
+    "upstreamSymbols": [
+      "SwUndoAttr::RedoImpl"
+    ],
+    "preservedResponsibilities": [
+      "Replays the annotation point and its mark together and restores Writer cursor history."
+    ],
+    "omittedResponsibilities": [
+      "Typed remote requests with HTML and comment-thread management are outside this insertion path."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sw/source/core/undo/unattr-field.ts",
+          "marker": "SwUndoInsAnnotation"
+        },
+        {
+          "path": "apps/office/src/sw/browser/presentation/WriterCommentsSidebar.test.tsx",
+          "marker": "inserts and refocuses the native comment"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/undo/unattr.cxx",
+          "marker": "SwUndoAttr::RedoImpl"
+        }
+      ]
+    },
+    "filenameDivergence": {
+      "localPath": "apps/office/src/sw/source/core/undo/unattr-field.ts",
+      "stackNecessity": "responsibility-split",
+      "rationale": "The annotation insertion history specializes the represented field branch of Writer attribute undo."
+    }
+  }
+}

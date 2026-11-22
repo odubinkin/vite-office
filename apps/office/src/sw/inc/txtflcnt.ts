@@ -1,6 +1,7 @@
 /** @fileoverview Native point text hint for line-bound Writer fly formats. */
 import { RndStdIds } from "../../svx/inc/swframetypes";
 import { SwPosition } from "../source/core/crsr/pam";
+import type { SwStartNode } from "../source/core/docnode/node";
 import type { SwTextNode } from "../source/core/txtnode/ndtxt";
 import { SwTextAttr } from "../source/core/txtnode/txatbase";
 import { SwFormatAnchor } from "./fmtanchr";
@@ -19,6 +20,22 @@ export class SwTextFlyCnt extends SwTextAttr<SwFormatFlyCnt> {
   /** Returns the native point-hint identity. @returns WhichId. */
   override Which(): typeof RES_TXTATR_FLYCNT {
     return RES_TXTATR_FLYCNT;
+  }
+
+  /** Borrows the single graphic section owned by the represented inline format. @returns Original section or undefined. */
+  GetGraphicSection(): SwStartNode | undefined {
+    const format = this.GetAttr().GetFrameFormat();
+    if (format?.GetAnchor().GetAnchorId() !== RndStdIds.FLY_AS_CHAR) return undefined;
+    const section = format.GetContent().GetContentIdx()?.GetNode();
+    if (!section?.IsStartNode()) return undefined;
+    const index = section.GetIndex();
+    return section.EndOfSectionNode().GetIndex() === index + 2 &&
+      section
+        .GetNodes()
+        .at(index + 1)
+        .GetGrfNode()
+      ? section
+      : undefined;
   }
 
   /** Writes the as-character anchor back to its format for a same-document insertion or move. @param node - Text node holding the dummy character. @returns Nothing. */

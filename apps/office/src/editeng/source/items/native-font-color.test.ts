@@ -7,7 +7,7 @@ import {
   getFromXComplexColor,
 } from "../../../docmodel/inc/uno/UnoComplexColor";
 import { XComplexColor } from "../../../offapi/com/sun/star/util/XComplexColor";
-import { MID_COLOR_ALPHA, MID_COMPLEX_COLOR } from "../../inc/memberids";
+import { MID_COLOR_ALPHA, MID_COMPLEX_COLOR, MID_GRAPHIC_TRANSPARENT } from "../../inc/memberids";
 import { SvxColorItem, VERSION_USEAUTOCOLOR } from "../../inc/colritem";
 import { Color, ColorTransparency, COL_AUTO } from "../../../tools/inc/color";
 import { ComplexColor, ColorType } from "../../../docmodel/inc/color/ComplexColor";
@@ -43,6 +43,19 @@ it("uses the original UNO transparency member and retains the RGB and theme", /*
       expect(actual[0]).toBe(percent);
     }
     expect(item.PutValue(rejected, MID_COLOR_ALPHA)).toBe(false);
+    for (const transparent of [false, true]) {
+      const input = new Any([transparent], "bool");
+      try {
+        expect(item.PutValue(input, MID_GRAPHIC_TRANSPARENT)).toBe(true);
+        expect(item.QueryValue(query, MID_GRAPHIC_TRANSPARENT)).toBe(true);
+        const actual: [boolean] = [!transparent];
+        expect(query.extract(actual, "bool")).toBe(true);
+        expect(actual[0]).toBe(transparent);
+        expect(item.GetValue().GetAlpha()).toBe(transparent ? 0 : 255);
+      } finally {
+        input.dispose();
+      }
+    }
     expect(item.GetValue().toUInt32() & 0xffffff).toBe(0x112233);
     expect(item.getComplexColor().getThemeColorType()).toBe(ThemeColorType.Accent2);
   } finally {

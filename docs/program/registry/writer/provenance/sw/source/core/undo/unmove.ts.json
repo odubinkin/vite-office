@@ -1,0 +1,48 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sw/source/core/undo/unmove.ts",
+          "marker": "SwUndoMove"
+        },
+        {
+          "path": "apps/office/src/sw/browser/presentation/WriterNavigator.test.tsx",
+          "marker": "tdf164074"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/undo/unmove.cxx",
+          "marker": "SwUndoMove::SetDestRange"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/qa/uitest/navigator/movechapterupdown.py",
+          "marker": "test_tdf164074"
+        }
+      ]
+    },
+    "localPath": "apps/office/src/sw/source/core/undo/unmove.ts",
+    "localSymbols": [
+      "SwUndoMove"
+    ],
+    "omittedResponsibilities": [
+      "Partial text movement, special section footnote cleanup, redline movement and join state belong to other native branches."
+    ],
+    "preservedResponsibilities": [
+      "Stores the native numeric node source range, target and result positions, and replays through the document content operations owner."
+    ],
+    "status": "mapped",
+    "upstreamPath": "sw/source/core/undo/unmove.cxx",
+    "upstreamSymbols": [
+      "SwUndoMove::SwUndoMove",
+      "SwUndoMove::SetDestRange",
+      "SwUndoMove::UndoImpl",
+      "SwUndoMove::RedoImpl"
+    ]
+  },
+  "legacyOrder": 229
+}

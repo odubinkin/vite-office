@@ -6,7 +6,7 @@
     "status": "local-only",
     "localPath": "apps/office/src/sw/browser/presentation/WriterCommentsSidebar.tsx",
     "localSymbols": [
-      "RenderWriterComments"
+      "WriterCommentsSidebar"
     ],
     "rationale": "Projects live annotation fields in the document margin and registers each mounted comment editor by native field identity.",
     "responsibilities": [
@@ -20,7 +20,7 @@
       "local": [
         {
           "path": "apps/office/src/sw/browser/presentation/WriterCommentsSidebar.tsx",
-          "marker": "RenderWriterComments"
+          "marker": "WriterCommentsSidebar"
         },
         {
           "path": "apps/office/src/sw/browser/presentation/WriterCommentsSidebar.test.tsx",

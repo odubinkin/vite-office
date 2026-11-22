@@ -8,7 +8,7 @@
     "suite": "shared",
     "subsystem": "odf-filter",
     "capabilityIds": [
-      "CAP-0109"
+      "CAP-0113"
     ],
     "semantic": {
       "behaviorStatus": "unverified",
@@ -17,13 +17,10 @@
       "divergenceClass": "none",
       "evidence": [
         "apps/office/src/xmloff/source/text/txtfldi.ts#XMLAnnotationImportContext",
-        "apps/office/src/sw/source/filter/xml/odt-annotation.test.ts#preserves the bold second annotation run",
-        "vendor/libreoffice-reference/xmloff/source/text/txtfldi.cxx#XMLAnnotationImportContext::ProcessAttribute",
-        "vendor/libreoffice-reference/xmloff/source/text/txtfldi.cxx#XMLAnnotationImportContext::PrepareField",
-        "apps/office/src/sw/source/filter/xml/odt-annotation-range.test.ts#preserves original comment text and anchors",
-        "vendor/libreoffice-reference/xmloff/source/text/txtfldi.cxx#XMLAnnotationImportContext::endFastElement"
+        "apps/office/src/sw/source/filter/xml/odt-annotation.test.ts",
+        "vendor/libreoffice-reference/xmloff/source/text/txtfldi.cxx"
       ],
-      "justification": "Reads annotation identity, parent and resolution attributes, the three initials aliases, author, native date and separate edit text. The closing annotation context dispatches its original name and current Writer cursor for range reattachment.",
+      "justification": "Imports annotation metadata, delegates editable text to the shared paragraph importer using the annotation TextRange cursor, and completes named annotation ranges.",
       "knownViolations": [],
       "localSymbols": [
         "XMLAnnotationImportContext"
@@ -31,8 +28,8 @@
       "sourceResponsibility": "unverified",
       "upstreamFile": "xmloff/source/text/txtfldi.cxx",
       "upstreamSymbols": [
-        "XMLAnnotationImportContext::ProcessAttribute",
-        "XMLAnnotationImportContext::PrepareField"
+        "XMLAnnotationImportContext::createFastChildContext",
+        "XMLAnnotationImportContext::endFastElement"
       ]
     }
   }

@@ -20,11 +20,11 @@ export function GetSearchAttributeRows(
   const rows: SearchAttributeRow[] = [];
   const entries = criteria?.GetEntries() ?? [];
   for (const [slot, label] of AttributeNames) {
-    const which = pool.GetTrueWhichIDFromSlotID(slot);
+    const which = pool.GetWhichIDFromSlotID(slot);
     if (
       !ranges.some(
-        /** Admits slots in the document’s native search ranges. @param range - Inclusive Which range. @returns Whether the slot belongs to the range. */
-        ([start, end]) => which >= start && which <= end,
+        /** Admits registered WhichIds and the dialog's original slot ranges. @param range - Inclusive item range. @returns Whether the entry belongs to the range. */
+        ([start, end]) => (which >= start && which <= end) || (slot >= start && slot <= end),
       )
     )
       continue;

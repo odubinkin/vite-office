@@ -1,0 +1,25 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "browser-adaptation",
+    "status": "local-only",
+    "localPath": "apps/office/src/cui/browser/tabpages/TransparencyTabPage.tsx",
+    "rationale": "Binds the supported native uniform-transparency radio and numeric controls to the Area preview.",
+    "responsibilities": [
+      "Binds the supported native uniform-transparency radio and numeric controls to the Area preview."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/cui/browser/tabpages/TransparencyTabPage.tsx",
+          "marker": "TransparencyTabPage"
+        }
+      ]
+    },
+    "stackDivergence": {
+      "kind": "browser-adaptation",
+      "rationale": "Browser controls replace the native weld widget binding."
+    }
+  }
+}

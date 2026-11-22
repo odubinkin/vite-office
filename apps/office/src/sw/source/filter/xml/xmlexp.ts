@@ -1,11 +1,10 @@
 /**
  * @fileoverview Reimplements the bounded Writer ODF XML export bridge from pinned LibreOffice `sw/source/filter/xml/xmlexp.cxx`.
  */
-import { getPostItFields, projectPostItField } from "./xmlannotation";
-import { AnnotationMark } from "../../core/crsr/annotationmark";
-import { SwTextAnnotationField } from "../../../inc/txtannotationfld";
+import { exportParagraphAlignment } from "../../../../xmloff/source/style/adjushdl";
+import { SvxHyphenZoneItem } from "../../../../editeng/source/items/paraitem";
+import { SwRegisterItem } from "../../core/para/paratr";
 import { ExportNumberFormat } from "../../../../xmloff/source/style/xmlnumfe";
-import { SwBookmark } from "../../core/doc/docbm";
 import { IsSquaredPageMode } from "../../core/doc/docdesc";
 import { UseOnPage } from "../../core/layout/pagedesc";
 import { PageStyleLayout } from "../../../../offapi/com/sun/star/style/PageStyleLayout";
@@ -23,11 +22,10 @@ import type { SvxProtectItem } from "../../../../editeng/source/items/frmitems";
 import * as ParaItems from "../../../../editeng/source/items/paraitem.controls";
 import {
   getTextFrameExportParagraphs,
-  compareParagraphMarkers,
-  projectAnchoredTextFrames,
   sectionParagraphs,
   type XMLBoundWriterFrames,
 } from "./xmltextframe";
+import { projectParagraphMarkers } from "./xmlexp-markers";
 import { exportPageStoryStyles, getOdfPageStories } from "./xmlpageheaderfooter";
 import type { SvXMLGraphicHelper } from "../../../../xmloff/source/core/xmlgrhlp";
 import { CollectGraphicFlyFrames, CollectTextFlyFrames } from "../../core/layout/flycnt";
@@ -38,48 +36,45 @@ import {
   XMLBitmapStyleExport,
   XML_FILL_WHICH_IDS,
 } from "./xmlexp-fill";
-import { RES_CHRATR_ESCAPEMENT, RES_CHRATR_KERNING } from "../../../inc/hintids";
+import { RES_CHRATR_BOX, RES_CHRATR_ESCAPEMENT, RES_CHRATR_KERNING } from "../../../inc/hintids";
 import {
-  RES_CHRATR_CROSSEDOUT,
-  RES_CHRATR_ROTATE,
-  RES_CHRATR_SCALEW,
-  RES_CHRATR_EMPHASIS_MARK,
-  RES_CHRATR_CASEMAP,
-  RES_CHRATR_BLINK,
-  RES_CHRATR_HIDDEN,
-  RES_CHRATR_NOHYPHEN,
-  RES_CHRATR_TWO_LINES,
+  RES_CHRATR_WORDLINEMODE,
+  RES_CHRATR_AUTOKERN,
+  RES_CHRATR_OPTICAL_SIZING,
 } from "../../../inc/hintids";
-import { RES_CHRATR_WORDLINEMODE, RES_CHRATR_AUTOKERN } from "../../../inc/hintids";
 import {
   RES_CHRATR_LANGUAGE,
   RES_CHRATR_CJK_LANGUAGE,
   RES_CHRATR_CTL_LANGUAGE,
 } from "../../../inc/hintids";
-import { getCharacterProperties, projectXmlTextRuns } from "./xmlexp-character";
-import { Any } from "../../../../cppu/inc/com/sun/star/uno/Any";
-import { SvxHyphenZoneItem } from "../../../../editeng/inc/hyphenzoneitem";
-import { SwUnoPropertyMap } from "../../core/unocore/unomap";
 import {
-  paragraphHyphenationMap,
-  type OdfHyphenationProperties,
-} from "../../../../xmloff/source/text/txtprmap.hyphenation";
+  getCharacterProperties,
+  projectXmlTextRuns,
+  XML_CHARACTER_EFFECT_WHICH_IDS,
+} from "./xmlexp-character";
 export { getCharacterProperties } from "./xmlexp-character";
-import { projectWriterLineSpacing } from "../../core/text/itrform2";
 import { sw_GetTableBoxColStr } from "../../core/table/swtable";
 import { SwXMLTableLines } from "./xmltble";
 import { VertOrientation } from "../../../../offapi/com/sun/star/text/VertOrientation";
 import {
   exportBoxProperties,
+  exportParagraphBorders,
   exportFrameVisualProperties,
   exportPageLayoutBox,
   exportPageWritingAndGrid,
+  exportParagraphLineSpacing,
+  exportParagraphLineNumbering,
   exportParagraphTabStops,
+  exportParagraphVerticalMargins,
   XMLPageBackgroundExport,
+  exportParagraphAdjustment,
+  exportParagraphDirectionAndGrid,
+  exportParagraphAsianTypographyItems,
+  XML_ASIAN_TYPOGRAPHY_WHICH_IDS,
 } from "./xmlexpit";
 import { HoriOrientation } from "../../../../offapi/com/sun/star/text/HoriOrientation";
 import { SwFrameSize, type SwFormatFrameSize } from "../../../inc/fmtfsize";
-import { SvxAdjust, SvxAdjustItem } from "../../../../editeng/inc/adjustitem";
+import { SvxAdjustItem } from "../../../../editeng/inc/adjustitem";
 import { SvxTabStopItem } from "../../../../editeng/inc/tstpitem";
 import { SvxLineSpacingItem } from "../../../../editeng/inc/lspcitem";
 import {
@@ -99,7 +94,6 @@ import { SvxXMLNumRuleExport } from "../../../../xmloff/source/style/xmlnume";
 import type { SwNumRuleItem } from "../../core/para/paratr";
 import { exportParagraphStyleNumberingAttributes } from "../../../../xmloff/source/style/styleexp";
 import { SwFormatPageDesc } from "../../core/attr/fmtpdsc";
-import { SwFormatLineNumber } from "../../../inc/fmtline";
 import {
   escapeXml,
   exportCharacterPropertyElement,
@@ -112,7 +106,6 @@ import {
   type OdfParagraphAlignment,
   type OdfParagraphProperties,
   type XMLTextParagraphSource,
-  type XMLTextParagraphMarker,
   type XMLTextListRuleSource,
 } from "../../../../xmloff/source/text/txtparae";
 import {
@@ -134,10 +127,6 @@ import {
   RES_CHRATR_HIGHLIGHT,
   RES_CHRATR_POSTURE,
   RES_CHRATR_UNDERLINE,
-  RES_CHRATR_OVERLINE,
-  RES_CHRATR_CONTOUR,
-  RES_CHRATR_SHADOWED,
-  RES_CHRATR_RELIEF,
   RES_CHRATR_WEIGHT,
   RES_MARGIN_FIRSTLINE,
   RES_MARGIN_RIGHT,
@@ -146,11 +135,15 @@ import {
   RES_PARATR_GRABBAG,
   RES_PARATR_SPLIT,
   RES_PARATR_ORPHANS,
+  RES_PARATR_REGISTER,
+  RES_PARATR_HYPHENZONE,
   RES_PARATR_WIDOWS,
   RES_PARATR_VERTALIGN,
+  RES_FRAMEDIR,
+  RES_PARATR_AUTOFRAMEDIR,
+  RES_PARATR_SNAPTOGRID,
   RES_PARATR_LINESPACING,
   RES_PARATR_TABSTOP,
-  RES_PARATR_HYPHENZONE,
   RES_PARATR_LIST_ISCOUNTED,
   RES_PARATR_LIST_ID,
   RES_PARATR_LIST_ISRESTART,
@@ -158,6 +151,7 @@ import {
   RES_PARATR_LIST_RESTARTVALUE,
   RES_PARATR_NUMRULE,
   RES_PARATR_CONNECT_BORDER,
+  RES_SHADOW,
   RES_PARATR_OUTLINELEVEL,
   RES_UL_SPACE,
   RES_FRM_SIZE,
@@ -198,7 +192,7 @@ import { exportLineNumberingConfiguration } from "../../../../xmloff/source/text
 import { ExportThemeElement } from "../../../../xmloff/source/style/XMLThemeContext";
 import { FontFamily, FontPitch } from "../../../../tools/inc/fontenum";
 import { RTL_TEXTENCODING_DONTKNOW } from "../../../../sal/inc/rtl/textenc";
-const OFFICE_NAMESPACES = `xmlns:dc="${ODF_NAMESPACES.dc}" xmlns:meta="${ODF_NAMESPACES.meta}" xmlns:draw="${ODF_NAMESPACES.draw}" xmlns:office="${ODF_NAMESPACES.office}" xmlns:style="${ODF_NAMESPACES.style}" xmlns:text="${ODF_NAMESPACES.text}" xmlns:table="${ODF_NAMESPACES.table}" xmlns:ooow="${ODF_NAMESPACES.ooow}" xmlns:number="${ODF_NAMESPACES.number}" xmlns:fo="${ODF_NAMESPACES.fo}" xmlns:svg="${ODF_NAMESPACES.svg}" xmlns:xlink="${ODF_NAMESPACES.xlink}" xmlns:loext="${ODF_NAMESPACES.loext}"`;
+const OFFICE_NAMESPACES = `xmlns:draw="${ODF_NAMESPACES.draw}" xmlns:office="${ODF_NAMESPACES.office}" xmlns:style="${ODF_NAMESPACES.style}" xmlns:text="${ODF_NAMESPACES.text}" xmlns:table="${ODF_NAMESPACES.table}" xmlns:ooow="${ODF_NAMESPACES.ooow}" xmlns:number="${ODF_NAMESPACES.number}" xmlns:fo="${ODF_NAMESPACES.fo}" xmlns:svg="${ODF_NAMESPACES.svg}" xmlns:xlink="${ODF_NAMESPACES.xlink}" xmlns:loext="${ODF_NAMESPACES.loext}" xmlns:dc="${ODF_NAMESPACES.dc}" xmlns:meta="${ODF_NAMESPACES.meta}"`;
 
 /** Serializes Writer named paragraph styles into styles.xml. @param document - Canonical SwDoc. @param graphicHelper - Optional package graphic owner. @param bitmapStyles - Package bitmap catalogue. @returns Complete XML. */
 export function exportStylesXml(
@@ -308,7 +302,7 @@ export function exportStylesXml(
           ? ""
           : ` style:master-page-name="${escapeXml(directParagraphProperties.pageStyleName)}"`;
       const paragraphAttributes = [
-        ...(alignment === undefined ? [] : [`fo:text-align="${exportAlignment(alignment)}"`]),
+        ...(alignment === undefined ? [] : [`fo:text-align="${alignment}"`]),
         ...(leftMargin === undefined ? [] : [`fo:margin-left="${exportOdfLength(leftMargin)}"`]),
         ...exportParagraphAttributes(directParagraphProperties ?? {}),
       ];
@@ -319,10 +313,10 @@ export function exportStylesXml(
           : `<style:paragraph-properties${paragraphAttributes.length === 0 ? "" : ` ${paragraphAttributes.join(" ")}`}>${paragraphChildren}</style:paragraph-properties>`;
       const characterProperties = getCharacterProperties(collection.GetAttrSet(), false);
       const textProperties =
-        characterProperties === undefined && directParagraphProperties?.hyphenation === undefined
+        characterProperties === undefined
           ? ""
           : exportCharacterPropertyElement(
-              characterProperties ?? {},
+              characterProperties,
               /** Registers one used font. @param family - Model family. @param generic - ODF generic family. @param styleName - Font style. @param pitch - Native pitch. @param charSet - Native encoding. @returns Face name. */ (
                 family,
                 generic,
@@ -330,8 +324,6 @@ export function exportStylesXml(
                 pitch,
                 charSet,
               ) => registerWriterFontFace(fonts, family, generic, styleName, pitch, charSet),
-              directParagraphProperties ?? {},
-              true,
             );
       const nextName = getParagraphOdfStyleName(document, collection.GetNextTextFormatColl().id);
       const next = nextName === name ? "" : ` style:next-style-name="${escapeXml(nextName)}"`;
@@ -360,8 +352,6 @@ export function exportStylesXml(
                 /** Registers the style's native font with the styles stream. @param family - Font family. @param generic - Generic family. @param styleName - Font style. @param pitch - Native pitch. @param charSet - Native encoding. @returns Face name. */
                 (family, generic, styleName, pitch, charSet) =>
                   registerWriterFontFace(fonts, family, generic, styleName, pitch, charSet),
-                undefined,
-                true,
               );
         return `<style:style${exportCharacterStyleNameAttributes(format)} style:family="text"${basedOn}>${text}</style:style>`;
       },
@@ -389,7 +379,11 @@ export function exportStylesXml(
             : PageStyleLayout.ALL;
     const layoutName = `pm${index + 1}`;
     const background = pageBackgrounds.exportBackground(master);
-    const properties = `<style:page-layout-properties fo:page-width="${exportOdfLength(page.width)}" fo:page-height="${exportOdfLength(page.height)}" style:print-orientation="${page.landscape ? "landscape" : "portrait"}" fo:margin-top="${top}" fo:margin-bottom="${exportPageMargin(page.bottomMargin)}" fo:margin-left="${left}" fo:margin-right="${right}"${exportPageLayoutBox(master, exportOdfLength)}${exportPageWritingAndGrid(master)}${background.attributes}`;
+    const register = descriptor.GetRegisterFormatColl();
+    const registerProperty = register
+      ? ` style:register-truth-ref-style-name="${escapeXml(getParagraphOdfStyleName(document, register.id))}"`
+      : "";
+    const properties = `<style:page-layout-properties fo:page-width="${exportOdfLength(page.width)}" fo:page-height="${exportOdfLength(page.height)}" style:print-orientation="${page.landscape ? "landscape" : "portrait"}" fo:margin-top="${top}" fo:margin-bottom="${exportPageMargin(page.bottomMargin)}" fo:margin-left="${left}" fo:margin-right="${right}"${exportPageLayoutBox(master, exportOdfLength)}${exportPageWritingAndGrid(master)}${registerProperty}${background.attributes}`;
     const content = background.children
       ? `${properties}>${background.children}</style:page-layout-properties>`
       : `${properties}/>`;
@@ -422,6 +416,7 @@ export function exportStylesXml(
         FontPitch.PITCH_DONTKNOW,
         RTL_TEXTENCODING_DONTKNOW,
       ) || undefined,
+    graphicHelper,
   );
   const numberingStyles = [...namedRules.values()]
     .map(
@@ -465,7 +460,7 @@ function exportPageMargin(twips: number, gutter = 0): string {
   return Converter.convertMeasureToXML(Number(convertTwipToMm100(BigInt(twips))) + gutter, "mm100");
 }
 
-/** Writes the represented ODF paragraph defaults from Writer's document pool. @param document - Writer document. @param fonts - Styles stream font-face pool. @returns ODF declaration. */
+/** Writes the original ODF paragraph default-style tab distance and font properties from Writer's document pool. @param document - Writer document. @param fonts - Styles stream font-face pool. @returns ODF declaration. */
 function exportDefaultParagraphStyle(
   document: SwDoc,
   fonts: ReturnType<typeof createWriterFontAutoStylePool>,
@@ -473,8 +468,10 @@ function exportDefaultParagraphStyle(
   const pool = document.GetAttrPool();
   const ranges = [
     [RES_CHRATR_FONT, RES_CHRATR_FONTSIZE],
+    [RES_CHRATR_AUTOKERN, RES_CHRATR_AUTOKERN],
     [RES_CHRATR_CJK_FONT, RES_CHRATR_CJK_FONTSIZE],
     [RES_CHRATR_CTL_FONT, RES_CHRATR_CTL_FONTSIZE],
+    [RES_CHRATR_OPTICAL_SIZING, RES_CHRATR_OPTICAL_SIZING],
   ] as const;
   const set = new SfxItemSet(pool, ranges);
   try {
@@ -486,31 +483,19 @@ function exportDefaultParagraphStyle(
     const properties = getCharacterProperties(set, false);
     const tabs = pool.GetUserDefaultItem(RES_PARATR_TABSTOP) as SvxTabStopItem | undefined;
     const distance = tabs?.Count() ? tabs.At(0).GetTabPos() : undefined;
-    const hyphenationItem = pool.GetUserDefaultItem(RES_PARATR_HYPHENZONE);
-    const hyphenation =
-      hyphenationItem instanceof SvxHyphenZoneItem
-        ? getHyphenationProperties(hyphenationItem)
-        : undefined;
-    const deltas = hyphenation === undefined ? {} : { hyphenation };
-    const paragraphAttributes = [
-      ...(distance === undefined ? [] : [`style:tab-stop-distance="${exportOdfLength(distance)}"`]),
-      ...exportParagraphAttributes(deltas),
-    ];
     const paragraph =
-      paragraphAttributes.length === 0
+      distance === undefined
         ? ""
-        : `<style:paragraph-properties ${paragraphAttributes.join(" ")}/>`;
+        : `<style:paragraph-properties style:tab-stop-distance="${exportOdfLength(distance)}"/>`;
     if (!properties && !paragraph) return "";
-    const element =
-      properties || hyphenation
-        ? exportCharacterPropertyElement(
-            properties ?? {},
-            /** Resolves the native declared font. @param family - Family. @param generic - ODF family. @param style - Family style. @param pitch - Pitch. @param charset - Encoding. @returns Face name. */
-            (family, generic, style, pitch, charset) =>
-              registerWriterFontFace(fonts, family, generic, style, pitch, charset),
-            deltas,
-          )
-        : "";
+    const element = properties
+      ? exportCharacterPropertyElement(
+          properties,
+          /** Resolves the native declared font. @param family - Family. @param generic - ODF family. @param style - Family style. @param pitch - Pitch. @param charset - Encoding. @returns Face name. */
+          (family, generic, style, pitch, charset) =>
+            registerWriterFontFace(fonts, family, generic, style, pitch, charset),
+        )
+      : "";
     return `<style:default-style style:family="paragraph">${paragraph}${element}</style:default-style>`;
   } finally {
     set.Dispose();
@@ -612,6 +597,7 @@ function exportWriterText(
     isCancelled,
     fontFaceName,
     existingFontFaceName,
+    graphicHelper,
   );
   let automaticStyles = "";
   for (const style of dataStyles.values()) if (style) automaticStyles += style.xml;
@@ -791,89 +777,7 @@ function projectParagraph(
   const hasDirectLeftMargin =
     node.GetpSwAttrSet()?.GetItemIfSet(RES_MARGIN_TEXTLEFT, false) !== undefined;
   const paragraphProperties = getParagraphProperties(node.GetpSwAttrSet());
-  const marks = node.GetDoc().GetIDocumentMarkAccess();
-  const frames = projectAnchoredTextFrames(node, anchored, projectBlock);
-  const floatingOffsets = new Set<number>();
-  for (const marker of frames)
-    if (marker.kind === "frame" && marker.frame.anchor !== "as-char")
-      floatingOffsets.add(marker.offset);
-  const markers: XMLTextParagraphMarker[] = [
-    ...frames,
-    ...marks.GetAllMarks().flatMap(
-      /** Projects bookmark endpoints on this paragraph. @param mark - Native bookmark. @returns Local ODF markers. */
-      (mark): XMLTextParagraphMarker[] => {
-        if (mark instanceof AnnotationMark) {
-          const start = mark.GetMarkStart();
-          if (start.GetNode() !== node) return [];
-          const field = mark.GetAnnotationFormatField()?.GetField();
-          return field
-            ? [
-                {
-                  kind: "annotation-start",
-                  offset: start.GetContentIndex(),
-                  annotation: projectPostItField(field),
-                },
-              ]
-            : [];
-        }
-        if (!(mark instanceof SwBookmark)) return [];
-        const [start, end] = mark.GetMarkStartEnd();
-        const name = mark.GetName();
-        const offset = start.GetContentIndex();
-        const collapsed = start.compare(end) === 0;
-        const collapsedAroundFrame = collapsed && floatingOffsets.has(offset);
-        const local: XMLTextParagraphMarker[] = [];
-        if (start.GetNode() === node)
-          local.push({
-            kind: collapsed && !collapsedAroundFrame ? "bookmark" : "bookmark-start",
-            name,
-            offset,
-            hidden: mark.IsHidden(),
-            condition: mark.GetHideCondition(),
-            collapsedAroundFrame,
-          });
-        if (end.GetNode() === node && (!collapsed || collapsedAroundFrame))
-          local.push({
-            kind: "bookmark-end",
-            name,
-            offset: end.GetContentIndex(),
-            collapsedAroundFrame,
-          });
-        return local;
-      },
-    ),
-    ...marks
-      .GetSoftPageBreaks()
-      .filter(
-        /** Selects soft hints on this paragraph. @param position - Hint. @returns Whether owned. */
-        (position) => position.GetNode() === node,
-      )
-      .map(
-        /** Projects one soft hint. @param position - Hint. @returns Neutral marker. */
-        (position) => ({
-          kind: "soft-page-break" as const,
-          offset: position.GetContentIndex(),
-        }),
-      ),
-    ...Array.from(
-      getPostItFields(node),
-      /** Exposes the native field at its dummy-character position. @param hint - Annotation hint. @returns Neutral annotation marker. */
-      (hint): XMLTextParagraphMarker => {
-        const field = hint.GetAttr().GetField();
-        const mark =
-          hint instanceof SwTextAnnotationField
-            ? hint.GetAnnotationMark()
-            : marks.FindAnnotationMark(field.GetName());
-        const offset = hint.GetStart();
-        return mark
-          ? { kind: "annotation-end", offset, name: mark.GetName() }
-          : { kind: "annotation", offset, annotation: projectPostItField(field) };
-      },
-    ),
-  ].sort(
-    /** Orders portions in the source export phases. @param left - First portion. @param right - Second portion. @returns Portion order. */
-    (left, right) => compareParagraphMarkers(left, right, floatingOffsets),
-  );
+  const markers = projectParagraphMarkers(node, anchored, projectBlock);
   const directCharacterProperties = getCharacterProperties(node.GetpSwAttrSet(), false);
   const marker = node.GetSwAttrSet().GetItemIfSet(RES_PARATR_LIST_AUTOFMT, true);
   const markerProperties =
@@ -909,6 +813,7 @@ function projectParagraph(
           },
         }),
     ...(directCharacterProperties === undefined ? {} : { properties: directCharacterProperties }),
+    outlineLevel: node.GetAttrOutlineLevel(),
     runs: projectXmlTextRuns(node),
     style: node.GetParagraphStyle(),
     styleName: getParagraphOdfStyleName(node.GetDoc(), node.GetParagraphStyle()),
@@ -945,24 +850,13 @@ function assertSupportedItems(
     RES_CHRATR_FONT,
     RES_CHRATR_FONTSIZE,
     RES_CHRATR_UNDERLINE,
-    RES_CHRATR_OVERLINE,
-    RES_CHRATR_CONTOUR,
-    RES_CHRATR_SHADOWED,
-    RES_CHRATR_RELIEF,
-    RES_CHRATR_ROTATE,
-    RES_CHRATR_SCALEW,
-    RES_CHRATR_EMPHASIS_MARK,
-    RES_CHRATR_CASEMAP,
-    RES_CHRATR_BLINK,
-    RES_CHRATR_HIDDEN,
-    RES_CHRATR_NOHYPHEN,
-    RES_CHRATR_TWO_LINES,
     RES_CHRATR_ESCAPEMENT,
-    RES_CHRATR_CROSSEDOUT,
+    ...XML_CHARACTER_EFFECT_WHICH_IDS,
     RES_CHRATR_WEIGHT,
     RES_CHRATR_WORDLINEMODE,
     RES_CHRATR_AUTOKERN,
     RES_CHRATR_KERNING,
+    RES_CHRATR_BOX,
     RES_CHRATR_CJK_POSTURE,
     RES_CHRATR_CJK_FONT,
     RES_CHRATR_CJK_FONTSIZE,
@@ -980,12 +874,17 @@ function assertSupportedItems(
     RES_PARATR_SPLIT,
     RES_PARATR_ORPHANS,
     RES_PARATR_WIDOWS,
+    RES_PARATR_REGISTER,
+    RES_PARATR_HYPHENZONE,
     RES_PARATR_VERTALIGN,
+    RES_FRAMEDIR,
+    RES_PARATR_AUTOFRAMEDIR,
+    RES_PARATR_SNAPTOGRID,
+    ...XML_ASIAN_TYPOGRAPHY_WHICH_IDS,
     RES_BREAK,
     RES_PAGEDESC,
     RES_PARATR_LINESPACING,
     RES_PARATR_TABSTOP,
-    RES_PARATR_HYPHENZONE,
     RES_MARGIN_FIRSTLINE,
     RES_MARGIN_RIGHT,
     RES_MARGIN_TEXTLEFT,
@@ -993,6 +892,7 @@ function assertSupportedItems(
     RES_KEEP,
     RES_LINENUMBER,
     RES_PARATR_CONNECT_BORDER,
+    RES_SHADOW,
     RES_BOX,
   ]);
   if (allowListItems)
@@ -1006,10 +906,8 @@ function assertSupportedItems(
       RES_PARATR_NUMRULE,
     ])
       supported.add(which);
-  if (allowStyleNumbering) {
-    supported.add(RES_PARATR_NUMRULE);
-    supported.add(RES_PARATR_OUTLINELEVEL);
-  }
+  if (allowStyleNumbering) supported.add(RES_PARATR_NUMRULE);
+  if (allowListItems || allowStyleNumbering) supported.add(RES_PARATR_OUTLINELEVEL);
   const unsupported = items.find(
     /** Finds a non-alignment item. @param item - Direct pool item. @returns Whether unsupported. */
     (item) => !supported.has(item.Which()),
@@ -1026,39 +924,33 @@ function getParagraphProperties(set: SfxItemSet | undefined): OdfParagraphProper
   const spacing = set.GetItemIfSet(RES_UL_SPACE, false);
   const lineSpacing = set.GetItemIfSet(RES_PARATR_LINESPACING, false);
   const tabStop = set.GetItemIfSet(RES_PARATR_TABSTOP, false);
-  const hyphenation = set.GetItemIfSet(RES_PARATR_HYPHENZONE, false);
   const keep = set.GetItemIfSet(RES_KEEP, false);
+  const register = set.GetItemIfSet(RES_PARATR_REGISTER, false);
+  const hyphenation = set.GetItemIfSet(RES_PARATR_HYPHENZONE, false);
+  const adjust = set.GetItemIfSet(RES_PARATR_ADJUST, false);
   const split = set.GetItemIfSet(RES_PARATR_SPLIT, false);
   const orphans = set.GetItemIfSet(RES_PARATR_ORPHANS, false);
   const widows = set.GetItemIfSet(RES_PARATR_WIDOWS, false);
   const verticalAlign = set.GetItemIfSet(RES_PARATR_VERTALIGN, false);
   const paragraphBreak = set.GetItemIfSet(RES_BREAK, false);
   const pageDesc = set.GetItemIfSet(RES_PAGEDESC, false);
-  const lineNumber = set.GetItemIfSet(RES_LINENUMBER, false);
-  const joinBorder = set.GetItemIfSet(RES_PARATR_CONNECT_BORDER, false);
-  const box = set.GetItemIfSet(RES_BOX, false);
   if (
     (firstLine !== undefined && !(firstLine instanceof SvxFirstLineIndentItem)) ||
     (right !== undefined && !(right instanceof SvxRightMarginItem)) ||
     (spacing !== undefined && !(spacing instanceof SvxULSpaceItem)) ||
     (lineSpacing !== undefined && !(lineSpacing instanceof SvxLineSpacingItem)) ||
     (tabStop !== undefined && !(tabStop instanceof SvxTabStopItem)) ||
-    (hyphenation !== undefined && !(hyphenation instanceof SvxHyphenZoneItem)) ||
     (keep !== undefined && !(keep instanceof SfxBoolItem)) ||
     (split !== undefined && !(split instanceof ParaItems.SvxFormatSplitItem)) ||
     (orphans !== undefined && !(orphans instanceof ParaItems.SvxOrphansItem)) ||
     (widows !== undefined && !(widows instanceof ParaItems.SvxWidowsItem)) ||
     (verticalAlign !== undefined && !(verticalAlign instanceof ParaItems.SvxParaVertAlignItem)) ||
     (paragraphBreak !== undefined && !(paragraphBreak instanceof SfxInt16Item)) ||
-    (pageDesc !== undefined && !(pageDesc instanceof SwFormatPageDesc)) ||
-    (lineNumber !== undefined && !(lineNumber instanceof SwFormatLineNumber)) ||
-    (joinBorder !== undefined && !(joinBorder instanceof SfxBoolItem)) ||
-    (box !== undefined && !(box instanceof SvxBoxItem))
+    (pageDesc !== undefined && !(pageDesc instanceof SwFormatPageDesc))
   )
     throw new Error("ODT paragraph item is invalid.");
   const properties: OdfParagraphProperties = {
     ...getFillProperties(set),
-    ...(hyphenation === undefined ? {} : { hyphenation: getHyphenationProperties(hyphenation) }),
     ...(firstLine instanceof SvxFirstLineIndentItem
       ? {
           firstLineIndent: firstLine.ResolveTextFirstLineOffset(),
@@ -1066,29 +958,20 @@ function getParagraphProperties(set: SfxItemSet | undefined): OdfParagraphProper
         }
       : {}),
     ...(right instanceof SvxRightMarginItem ? { rightMargin: right.ResolveRight() } : {}),
-    ...(spacing instanceof SvxULSpaceItem
-      ? {
-          upperSpacing: spacing.GetUpper(),
-          lowerSpacing: spacing.GetLower(),
-          contextualSpacing: spacing.GetContext(),
-        }
-      : {}),
-    ...(lineSpacing instanceof SvxLineSpacingItem
-      ? {
-          ...(projectWriterLineSpacing(lineSpacing).mode === "proportional"
-            ? { lineHeightPercent: projectWriterLineSpacing(lineSpacing).value }
-            : projectWriterLineSpacing(lineSpacing).mode === "fixed"
-              ? { lineHeightTwips: projectWriterLineSpacing(lineSpacing).value }
-              : projectWriterLineSpacing(lineSpacing).mode === "minimum"
-                ? { lineHeightAtLeastTwips: projectWriterLineSpacing(lineSpacing).value }
-                : { lineSpacingTwips: projectWriterLineSpacing(lineSpacing).value }),
-        }
-      : {}),
+    ...(spacing instanceof SvxULSpaceItem ? exportParagraphVerticalMargins(spacing) : {}),
+    ...(lineSpacing instanceof SvxLineSpacingItem ? exportParagraphLineSpacing(lineSpacing) : {}),
     ...(tabStop instanceof SvxTabStopItem
       ? {
           tabStopDetails: exportParagraphTabStops(tabStop),
         }
       : {}),
+    ...exportParagraphDirectionAndGrid(set),
+    ...exportParagraphAsianTypographyItems(set),
+    ...(adjust instanceof SvxAdjustItem
+      ? { justification: exportParagraphAdjustment(adjust) }
+      : {}),
+    ...(hyphenation instanceof SvxHyphenZoneItem ? { hyphenation: hyphenation.QueryValue() } : {}),
+    ...(register instanceof SwRegisterItem ? { registerModeActive: register.GetValue() } : {}),
     ...(keep instanceof SfxBoolItem ? { keepWithNext: keep.GetValue() } : {}),
     ...(split instanceof ParaItems.SvxFormatSplitItem ? { keepTogether: !split.GetValue() } : {}),
     ...(orphans instanceof ParaItems.SvxOrphansItem ? { orphans: orphans.GetValue() } : {}),
@@ -1114,11 +997,8 @@ function getParagraphProperties(set: SfxItemSet | undefined): OdfParagraphProper
           pageNumber: pageDesc.GetNumOffset() ?? ("auto" as const),
         }
       : {}),
-    ...(lineNumber instanceof SwFormatLineNumber
-      ? { countLineNumbers: lineNumber.IsCount(), lineNumberStart: lineNumber.GetStartValue() }
-      : {}),
-    ...(joinBorder instanceof SfxBoolItem ? { joinBorder: joinBorder.GetValue() } : {}),
-    ...(box instanceof SvxBoxItem ? exportBoxProperties(box) : {}),
+    ...exportParagraphLineNumbering(set),
+    ...exportParagraphBorders(set),
   };
   return Object.keys(properties).length === 0 ? undefined : properties;
 }
@@ -1131,24 +1011,6 @@ function getDirectLeftMargin(set: SfxItemSet): number | undefined {
   return item.ResolveTextLeft();
 }
 
-/** Reads the native UNO value of each Writer hyphenation member. @param item - Actual pooled item. @returns Original properties. */
-function getHyphenationProperties(item: SvxHyphenZoneItem): OdfHyphenationProperties {
-  const properties: OdfHyphenationProperties = {};
-  const any = new Any();
-  try {
-    for (const [name, , , type] of paragraphHyphenationMap) {
-      const property = SwUnoPropertyMap.get(name);
-      if (!property) throw new Error(`Missing Writer hyphenation property ${name}.`);
-      item.QueryValue(any, property.member);
-      const value: [boolean | number] = [0];
-      if (any.extract(value, type)) properties[name] = value[0];
-    }
-    return properties;
-  } finally {
-    any.dispose();
-  }
-}
-
 /** Serializes twips as a bounded ODF centimetre length. @param twips - Length. @returns ODF length. */
 function exportOdfLength(twips: number): string {
   return `${Number(((twips * 2.54) / 1440).toFixed(4))}cm`;
@@ -1159,17 +1021,5 @@ function getDirectAlignment(item: unknown): OdfParagraphAlignment | undefined {
   if (item === undefined) return undefined;
   if (!(item instanceof SvxAdjustItem))
     throw new Error("ODT paragraph adjustment item is invalid.");
-  const value = item.GetAdjust();
-  if (value === SvxAdjust.Left || value === SvxAdjust.ParaStart) return "left";
-  if (value === SvxAdjust.Right || value === SvxAdjust.ParaEnd) return "right";
-  if (value === SvxAdjust.Center) return "center";
-  if (value === SvxAdjust.Block) return "justify";
-  throw new Error("ODT paragraph adjustment value is unsupported.");
-}
-
-/** Maps model alignment to ODF. @param alignment - Model value. @returns ODF value. */
-function exportAlignment(alignment: OdfParagraphAlignment): string {
-  if (alignment === "left") return "start";
-  if (alignment === "right") return "end";
-  return alignment;
+  return exportParagraphAlignment(item.GetAdjust());
 }

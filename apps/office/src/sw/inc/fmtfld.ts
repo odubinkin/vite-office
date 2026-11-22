@@ -48,8 +48,8 @@ export class SwFormatField extends SfxPoolItem {
 
   /** Releases the owned annotation and clears the borrowed hint link. @returns Nothing. */
   override Dispose(): void {
+    this.field.GetTyp().GetDoc().GetIDocumentMarkAccess().DeleteAnnotationMark(this);
     this.textField = undefined;
-    this.field.GetTyp().UnregisterField(this);
     this.field.Dispose();
     super.Dispose();
   }

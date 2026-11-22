@@ -79,9 +79,16 @@ export function isForbiddenDomainVclImport(relativeSource, relativeTarget, typeO
       "sw/source/core/doc/DocumentContentOperationsManager.ts",
       "sw/source/core/docnode/nodes.ts",
       "sw/source/core/graphic/ndgrf.ts",
+      "sw/source/core/unocore/unosett.ts",
     ].includes(source)
   )
     return !typeOnly;
+  // Native unosett.cxx exchanges XGraphic through Graphic::GetXGraphic, backed by UnoGraphic.cxx.
+  if (
+    source === "sw/source/core/unocore/unosett-properties.ts" &&
+    target === "vcl/source/graphic/UnoGraphic"
+  )
+    return false;
   if (source === "sc/source/core/data/global.ts" && target === "vcl/source/app/svapp") return false;
   // chartlis.hxx/cxx consume native Idle,TaskPriority and Application queued-input admission.
   // These kernel contracts use an explicitly bound platform;they never import browser adapters.

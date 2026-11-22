@@ -110,7 +110,19 @@ import {
 import { SwNumRuleItem } from "../para/paratr";
 import { SwNumRule, SwNumRuleType } from "./number";
 import { WRITER_MAX_LIST_LEVEL } from "./list";
-import { OutlineUpDown as moveOutlineLevels, GetUniqueNumRuleName } from "./docnum";
+import { SwModule } from "../../uibase/app/swmodule";
+import {
+  ChgNumRuleFormats,
+  OutlineUpDown as moveOutlineLevels,
+  GetUniqueNumRuleName,
+  GetNumberedNodes,
+  SearchNumRule,
+  RenameNumRule,
+  SetNumRule,
+  SetOutlineNumRule,
+  PropagateOutlineRule,
+  UpdateNumRule,
+} from "./docnum";
 import { moveLeftMargin, InsertPoolItem, CopyCharFormat } from "./docfmt";
 import { SwUndoMoveLeftMargin } from "../undo/unattr";
 import { SwPaM, SwPosition, type SwNodeIndex } from "../crsr/pam";
@@ -673,6 +685,10 @@ export class SwDoc {
   public SetOutlineNumRule(rule: SwNumRule): void {
     SetOutlineNumRule(this, rule);
   }
+  /** Updates the formats of a named rule while retaining the live rule and its lists. @param rule - Accepted rule formats. @returns Nothing. */
+  public ChgNumRuleFormats(rule: SwNumRule): void {
+    ChgNumRuleFormats(this, rule);
+  }
   /** Original propagation to assigned paragraph styles. @returns Nothing. */
   public PropagateOutlineRule(): void {
     PropagateOutlineRule(this);
@@ -689,6 +705,10 @@ export class SwDoc {
   public FindNumRulePtr(name: string): SwNumRule | undefined {
     return this.listsManager.FindNumRulePtr(name);
   }
+  /** Renames a document-owned list style. @param previous - Existing style name. @param next - New name. @returns Whether the rule was renamed. */
+  public RenameNumRule(previous: string, next: string): boolean {
+    return RenameNumRule(this, previous, next);
+  }
   /** Searches native ordered text nodes, stopping at the nearest rule even when incompatible. @param position - Search origin. @param forward - Search direction. @param numbered - Enumeration rather than itemization. @param outline - Required rule classification. @param nonEmptyAllowed - Plain nonempty paragraphs allowed, minus one for unlimited. @param listId - Caller-owned output list identity. @param investigateStart - Include the origin, false by default. @returns Matching native rule, if any. */
   public SearchNumRule(
     position: SwPosition,
@@ -699,40 +719,16 @@ export class SwDoc {
     listId: { value: string },
     investigateStart = false,
   ): SwNumRule | undefined {
-    const origin = position.GetNode();
-    if (!(origin instanceof SwTextNode)) return undefined;
-    if (origin.GetDoc() !== this) throw new Error("Numbering search belongs to another document.");
-    const root = this.nodes.at(0);
-    let section = origin.StartOfSectionNode();
-    while (section !== root && section.StartOfSectionNode() !== root)
-      section = section.StartOfSectionNode();
-    const start = section.GetIndex(),
-      end = section.EndOfSectionNode().GetIndex(),
-      step = forward ? 1 : -1;
-    for (
-      let index = origin.GetIndex() + (investigateStart ? 0 : step);
-      index > start && index < end;
-      index += step
-    ) {
-      const node = this.nodes.at(index);
-      if (!(node instanceof SwTextNode)) continue;
-      const rule = node.GetNumRule();
-      if (rule !== undefined) {
-        if (
-          rule.IsOutlineRule() === outline &&
-          (numbered ? rule.Get(0).IsEnumeration() : rule.Get(0).IsItemize())
-        ) {
-          listId.value = node.GetListId();
-          return rule;
-        }
-        return undefined;
-      }
-      if (node.Len() > 0) {
-        if (nonEmptyAllowed === 0) return undefined;
-        nonEmptyAllowed = Math.max(-1, nonEmptyAllowed - 1);
-      }
-    }
-    return undefined;
+    return SearchNumRule(
+      this,
+      position,
+      forward,
+      numbered,
+      outline,
+      nonEmptyAllowed,
+      listId,
+      investigateStart,
+    );
   }
   /** Returns numbering rules. @returns Rule table. */
   public GetNumRuleTable(): readonly SwNumRule[] {
@@ -784,7 +780,7 @@ export class SwDoc {
   }
   /** Checks the represented numbering range before changing any level. @param range - Native selection. @param down - Demote direction. @returns Whether every numbered node can move. */
   public CanNumUpDown(range: SwPaM, down: boolean): boolean {
-    const nodes = this.GetNumberedNodes(range);
+    const nodes = GetNumberedNodes(this, range);
     return (
       nodes.length > 0 &&
       nodes.every(
@@ -797,7 +793,7 @@ export class SwDoc {
   /** Changes only list levels in the actual selected node range, including cells. @param range - Native selection. @param down - Demote direction. @returns Whether the supported numbering range changed. */
   public NumUpDown(range: SwPaM, down: boolean): boolean {
     if (!this.CanNumUpDown(range, down)) return false;
-    const nodes = this.GetNumberedNodes(range);
+    const nodes = GetNumberedNodes(this, range);
     return this.stateManager.RunModelTransaction(
       /** Applies one fully validated native range. @returns True after mutation. */
       () => {
@@ -844,7 +840,7 @@ export class SwDoc {
   }
   /** Removes numbering over native inclusive node coordinates. @param range - Actual Writer selection. @returns Whether numbered nodes were changed. */
   public DelNumRules(range: SwPaM): boolean {
-    const nodes = this.GetNumberedNodes(range);
+    const nodes = GetNumberedNodes(this, range);
     if (nodes.length === 0) return false;
     return this.RunModelTransaction(
       /** Resets native numbering attributes without recreating a list DTO. @returns True after mutation. */
@@ -866,18 +862,6 @@ export class SwDoc {
         return true;
       },
     );
-  }
-  /** Selects native text owners with rules across inclusive SwNodes coordinates. @param range - Native selection. @returns Selected numbered nodes. */
-  private GetNumberedNodes(range: SwPaM): readonly SwTextNode[] {
-    // SwPaM validates both endpoints belong to the same node array.
-    if (range.GetPoint().GetNode().GetNodes() !== this.nodes)
-      throw new Error("Writer numbering range belongs to another node array.");
-    const nodes: SwTextNode[] = [];
-    for (let index = range.Start().GetNodeIndex(); index <= range.End().GetNodeIndex(); index++) {
-      const node = this.nodes.at(index);
-      if (node instanceof SwTextNode && node.GetNumRule() !== undefined) nodes.push(node);
-    }
-    return nodes;
   }
   /** Finds or creates a compatible numbering rule. @param name - Rule name. @param kind - Rule family. @param level - Checked level. @returns Document rule. */
   public EnsureNumRule(name: string, kind: "bullet" | "numbered", level = 0): SwNumRule {
@@ -1010,5 +994,3 @@ export class SwDoc {
 export function createWriterDocument(): SwDoc {
   return new SwDoc();
 }
-import { SwModule } from "../../uibase/app/swmodule";
-import { SetNumRule, SetOutlineNumRule, PropagateOutlineRule, UpdateNumRule } from "./docnum";

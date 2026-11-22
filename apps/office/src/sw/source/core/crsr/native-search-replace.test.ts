@@ -1,6 +1,6 @@
 /** @fileoverview Source-contract checks for actual native string replacement, search history/no-ring progression and threshold behavior. */
 import { expect, it, vi } from "vitest";
-import { createNativeRegexMatcher, hasNativeRegexProbe } from "../../../../test/icu-regex-probe";
+import { createBrowserRegexMatcher } from "../../../../i18npool/browser/regex-matcher";
 import { REGEXP } from "../../../../offapi/com/sun/star/util/SearchAlgorithms2";
 import { ReplaceBackReferences } from "./findtxt";
 import { SwDoc } from "../doc/doc";
@@ -15,6 +15,13 @@ import { FindRanges, SwDocPositions } from "../../../inc/cshtyp";
 import { SwUndoReplace } from "../undo/unins";
 import { SfxListUndoAction } from "../../../../svl/source/undo/undo";
 import type { SwTextNode } from "../txtnode/ndtxt";
+import { SfxItemSet } from "../../../../svl/source/items/itemset";
+import { RndStdIds } from "../../../../svx/inc/swframetypes";
+import { Size } from "../../../../tools/inc/gen";
+import { Graphic } from "../../../../vcl/source/gdi/graph";
+import { CH_TXTATR_BREAKWORD } from "../../../inc/hintids";
+import { SwFormatAnchor } from "../../../inc/fmtanchr";
+import { aFrameFormatSetRange } from "../bastyp/init";
 
 /** Converts Writer UTF-16 strings to real shared search values. @param text - Source value. @returns Native value. */
 function string(text: string): OUString {
@@ -392,8 +399,8 @@ it.each(["$", "^$", "$^"])(
   },
 );
 
-it.skipIf(!hasNativeRegexProbe).each([false, true])(
-  "replaces real ICU capture groups and retains grouped undo and redo backward=%s",
+it.each([false, true])(
+  "replaces ECMAScript capture groups and retains grouped undo and redo backward=%s",
   /** Exercises full regex reference expansion in the native model-text replacement strategy. @param backward - Search direction. @returns Nothing. */
   (backward) => {
     const f = fixture("a1 a2");
@@ -414,7 +421,7 @@ it.skipIf(!hasNativeRegexProbe).each([false, true])(
           true,
           undefined,
           undefined,
-          createNativeRegexMatcher,
+          createBrowserRegexMatcher,
         );
       expect(count).toBe(2);
       expect(f.node.GetText()).toBe("😀1a 😀2a");
@@ -429,40 +436,37 @@ it.skipIf(!hasNativeRegexProbe).each([false, true])(
   },
 );
 
-it.skipIf(!hasNativeRegexProbe)(
-  "keeps the native replacement fallback when capture search retains a soft hyphen",
-  /** Replays the two native cleanup policies against actual ICU. @returns Nothing. */ () => {
-    const f = fixture("a\u00adb");
-    const options = new SearchOptions2();
-    options.AlgorithmType2 = REGEXP;
-    options.searchString.assign(string("(ab)"));
-    options.replaceString.assign(string("$1"));
-    try {
-      expect(
-        f.shell
-          .GetCursor()
-          .Find_Text(
-            options,
-            false,
-            SwDocPositions.Start,
-            SwDocPositions.End,
-            [false],
-            FindRanges.InSelAll | FindRanges.InBodyOnly,
-            true,
-            undefined,
-            undefined,
-            createNativeRegexMatcher,
-          ),
-      ).toBe(1);
-      expect(f.node.GetText()).toBe("$1");
-      expect(f.shell.Undo()).toBe(true);
-      expect(f.node.GetText()).toBe("a\u00adb");
-    } finally {
-      f.shell.Close();
-      f.docShell.Close();
-    }
-  },
-);
+it("keeps the native replacement fallback when capture search retains a soft hyphen", /** Replays the two native cleanup policies with the deployed regex matcher. @returns Nothing. */ () => {
+  const f = fixture("a\u00adb");
+  const options = new SearchOptions2();
+  options.AlgorithmType2 = REGEXP;
+  options.searchString.assign(string("(ab)"));
+  options.replaceString.assign(string("$1"));
+  try {
+    expect(
+      f.shell
+        .GetCursor()
+        .Find_Text(
+          options,
+          false,
+          SwDocPositions.Start,
+          SwDocPositions.End,
+          [false],
+          FindRanges.InSelAll | FindRanges.InBodyOnly,
+          true,
+          undefined,
+          undefined,
+          createBrowserRegexMatcher,
+        ),
+    ).toBe(1);
+    expect(f.node.GetText()).toBe("$1");
+    expect(f.shell.Undo()).toBe(true);
+    expect(f.node.GetText()).toBe("a\u00adb");
+  } finally {
+    f.shell.Close();
+    f.docShell.Close();
+  }
+});
 
 it("undoes and redoes a regex replacement that creates several paragraphs", /** Ports the text and undo assertions from the pinned multi-break ReplaceRange scenario. @returns Nothing. */ () => {
   const f = fixture("foo");
@@ -569,3 +573,189 @@ it.each([
     }
   },
 );
+
+it.each([false, true])(
+  "preserves inline graphics adjacent to matches and restores a covered graphic backward=%s",
+  /** Uses real fly ownership, search bounds, and repeated document history. @param backward - Search direction. @returns Nothing. */
+  (backward) => {
+    const f = fixture("ab tail");
+    const point = new SwPosition(f.node, 1);
+    const selection = new SwPaM(point);
+    const anchor = new SwFormatAnchor(RndStdIds.FLY_AS_CHAR);
+    const items = new SfxItemSet(f.doc.GetAttrPool(), aFrameFormatSetRange);
+    const graphic = new Graphic(Uint8Array.from([137, 80, 78, 71]), "image/png", new Size(40, 20));
+    const storage = f.doc.GetUndoManager().GetUndoNodes();
+    try {
+      anchor.SetAnchor(point);
+      items.Put(anchor);
+      const format = f.doc
+        .GetDocumentContentOperationsManager()
+        .InsertGraphic(selection, graphic, items);
+      const section = format.GetContent().GetContentIdx()?.GetNode();
+      expect(section).toBeDefined();
+      const nodes = f.doc.GetNodes();
+      const oldCount = nodes.Count();
+      const options = new SearchOptions2();
+      options.AlgorithmType2 = REGEXP;
+      /** Runs the real Writer replacement strategy over the body. @param pattern - Regex query. @param replacement - Replacement text. @returns Match count. */
+      function replace(pattern: string, replacement: string): number {
+        options.searchString.assign(string(pattern));
+        options.replaceString.assign(string(replacement));
+        return f.shell
+          .GetCursor()
+          .Find_Text(
+            options,
+            false,
+            backward ? SwDocPositions.End : SwDocPositions.Start,
+            backward ? SwDocPositions.Start : SwDocPositions.End,
+            [false],
+            FindRanges.InSelAll | FindRanges.InBodyOnly,
+            true,
+            undefined,
+            undefined,
+            createBrowserRegexMatcher,
+          );
+      }
+
+      expect(replace("tail", "suffix")).toBe(1);
+      expect(f.node.GetText()).toBe(`a${CH_TXTATR_BREAKWORD}b suffix`);
+      expect(format.GetAnchor().GetAnchorContentOffset()).toBe(1);
+      expect(storage.Count()).toBe(0);
+      expect(replace("a.b", "cat")).toBe(1);
+      /** Checks that deletion moved the actual graphic section into scoped undo storage. @returns Nothing. */
+      function expectRemoved(): void {
+        expect(f.node.GetText()).toBe("cat suffix");
+        expect(f.doc.GetSpzFrameFormats().IsAlive(format)).toBe(false);
+        expect(nodes.Count()).toBe(oldCount - 3);
+        expect(storage.Count()).toBe(1);
+      }
+      expectRemoved();
+      for (let cycle = 0; cycle < 2; cycle++) {
+        expect(f.shell.Undo()).toBe(true);
+        expect(f.node.GetText()).toBe(`a${CH_TXTATR_BREAKWORD}b suffix`);
+        expect(f.doc.GetSpzFrameFormats().IsAlive(format)).toBe(true);
+        expect(nodes.Count()).toBe(oldCount);
+        expect(format.GetContent().GetContentIdx()?.GetNode()).toBe(section);
+        expect(f.node.GetpSwpHints()?.GetTextAttrForCharAt(1)?.GetAttr().GetFrameFormat()).toBe(
+          format,
+        );
+        expect(format.GetAnchor().GetAnchorNode()).toBe(f.node);
+        expect(format.GetAnchor().GetAnchorContentOffset()).toBe(1);
+        expect(storage.Count()).toBe(0);
+        expect(f.shell.Redo()).toBe(true);
+        expectRemoved();
+      }
+      f.doc.GetUndoManager().Clear();
+      expect(storage.Count()).toBe(0);
+    } finally {
+      items.Dispose();
+      anchor.Dispose();
+      selection.Dispose();
+      point.Dispose();
+      f.shell.Close();
+      f.docShell.Close();
+    }
+  },
+);
+
+it.each([false, true])(
+  "moves a covered character anchor and restores the original offset backward=%s",
+  /** Exercises floating graphic anchors through actual find, replace and history. @param backward - Search direction. @returns Nothing. */
+  (backward) => {
+    const f = fixture("hit tail");
+    const point = new SwPosition(f.node, 1);
+    const selection = new SwPaM(point);
+    const anchor = new SwFormatAnchor(RndStdIds.FLY_AT_CHAR);
+    const items = new SfxItemSet(f.doc.GetAttrPool(), aFrameFormatSetRange);
+    const graphic = new Graphic(Uint8Array.from([137, 80, 78, 71]), "image/png", new Size(40, 20));
+    try {
+      anchor.SetAnchor(point);
+      items.Put(anchor);
+      const format = f.doc
+        .GetDocumentContentOperationsManager()
+        .InsertGraphic(selection, graphic, items);
+      const section = format.GetContent().GetContentIdx()?.GetNode();
+      const options = new SearchOptions2();
+      options.searchString.assign(string("hit"));
+      options.replaceString.assign(string("matched"));
+      expect(
+        f.shell
+          .GetCursor()
+          .Find_Text(
+            options,
+            false,
+            backward ? SwDocPositions.End : SwDocPositions.Start,
+            backward ? SwDocPositions.Start : SwDocPositions.End,
+            [false],
+            FindRanges.InSelAll | FindRanges.InBodyOnly,
+            true,
+          ),
+      ).toBe(1);
+
+      expect(f.node.GetText()).toBe("matched tail");
+      expect(f.doc.GetSpzFrameFormats().IsAlive(format)).toBe(true);
+      expect(format.GetAnchor().GetAnchorNode()).toBe(f.node);
+      expect(format.GetContent().GetContentIdx()?.GetNode()).toBe(section);
+      expect(format.GetAnchor().GetAnchorContentOffset()).toBe(backward ? 3 : 0);
+
+      expect(f.shell.Undo()).toBe(true);
+      expect(f.node.GetText()).toBe("hit tail");
+      expect(format.GetAnchor().GetAnchorContentOffset()).toBe(1);
+      expect(f.shell.Redo()).toBe(true);
+      expect(f.node.GetText()).toBe("matched tail");
+      expect(format.GetAnchor().GetAnchorContentOffset()).toBe(0);
+      expect(f.shell.Undo()).toBe(true);
+      expect(format.GetAnchor().GetAnchorContentOffset()).toBe(1);
+    } finally {
+      items.Dispose();
+      anchor.Dispose();
+      selection.Dispose();
+      point.Dispose();
+      f.shell.Close();
+      f.docShell.Close();
+    }
+  },
+);
+
+it("restores a floating paragraph anchor to the recreated second paragraph", /** Checks the native move for a joined paragraph boundary and repeated undo. @returns Nothing. */ () => {
+  const f = fixture("left");
+  const last = f.doc.GetNodes().MakeTextNode("right");
+  const firstPoint = new SwPosition(f.node, f.node.Len());
+  const lastPoint = new SwPosition(last, 0);
+  const insertion = new SwPaM(lastPoint);
+  const selection = new SwPaM(lastPoint, firstPoint);
+  const graphic = new Graphic(Uint8Array.from([137, 80, 78, 71]), "image/png", new Size(40, 20));
+  try {
+    const operations = f.doc.GetDocumentContentOperationsManager();
+    const format = operations.InsertGraphic(insertion, graphic);
+    expect(format.GetAnchor().GetAnchorId()).toBe(RndStdIds.FLY_AT_PARA);
+    expect(format.GetAnchor().GetAnchorNode()).toBe(last);
+    expect(operations.ReplaceRange(selection, "-")).toBe(true);
+    expect(
+      f.doc.paragraphs.map(
+        /** Reads canonical paragraph text. @param node - Paragraph. @returns Text. */ (node) =>
+          node.GetText(),
+      ),
+    ).toEqual(["left-right"]);
+    expect(format.GetAnchor().GetAnchorNode()).toBe(f.node);
+    for (let cycle = 0; cycle < 2; cycle++) {
+      expect(f.shell.Undo()).toBe(true);
+      expect(
+        f.doc.paragraphs.map(
+          /** Reads canonical paragraph text. @param node - Paragraph. @returns Text. */ (node) =>
+            node.GetText(),
+        ),
+      ).toEqual(["left", "right"]);
+      expect(format.GetAnchor().GetAnchorNode()).toBe(f.doc.paragraphs[1]);
+      expect(f.shell.Redo()).toBe(true);
+      expect(format.GetAnchor().GetAnchorNode()).toBe(f.node);
+    }
+  } finally {
+    selection.Dispose();
+    insertion.Dispose();
+    firstPoint.Dispose();
+    lastPoint.Dispose();
+    f.shell.Close();
+    f.docShell.Close();
+  }
+});

@@ -1,0 +1,34 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "browser-adaptation",
+    "localPath": "apps/office/src/sw/browser/presentation/WriterParagraphOutlinePage.tsx",
+    "localSymbols": [
+      "WriterParagraphOutlinePage"
+    ],
+    "status": "local-only",
+    "rationale": "Connects the native outline and numbering fields of the ordinary Writer paragraph dialog to their original item exchange.",
+    "responsibilities": [
+      "Connects the native outline and numbering fields of the ordinary Writer paragraph dialog to their original item exchange."
+    ],
+    "stackDivergence": {
+      "kind": "browser-adaptation",
+      "rationale": "Browser controls provide the pinned VCL dialog structure."
+    },
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sw/browser/presentation/WriterParagraphOutlinePage.tsx",
+          "marker": "WriterParagraphOutlinePage"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sw/source/ui/chrdlg/numpara.cxx",
+          "marker": "SwParagraphNumTabPage::FillItemSet"
+        }
+      ]
+    }
+  }
+}

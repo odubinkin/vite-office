@@ -1,0 +1,56 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "status": "mapped",
+    "localPath": "apps/office/src/xmloff/source/style/adjushdl.ts",
+    "localSymbols": [
+      "importParagraphAlignment",
+      "exportParagraphAlignment",
+      "importParagraphJustification",
+      "exportParagraphJustification"
+    ],
+    "upstreamPath": "xmloff/source/style/adjushdl.cxx",
+    "upstreamSymbols": [
+      "XMLParaAdjustPropHdl::importXML",
+      "XMLLastLineAdjustPropHdl::exportXML"
+    ],
+    "preservedResponsibilities": [
+      "Maps horizontal alignment and last-line tokens to UNO values. Reads and writes the mapped paragraph justification attributes with their native scalar types."
+    ],
+    "omittedResponsibilities": [
+      "Native line composition and browser layout equivalence remain unverified."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/xmloff/source/style/adjushdl.ts",
+          "marker": "importParagraphAlignment"
+        },
+        {
+          "path": "apps/office/src/xmloff/source/style/adjushdl.ts",
+          "marker": "exportParagraphAlignment"
+        },
+        {
+          "path": "apps/office/src/xmloff/source/style/adjushdl.ts",
+          "marker": "importParagraphJustification"
+        },
+        {
+          "path": "apps/office/src/xmloff/source/style/adjushdl.ts",
+          "marker": "exportParagraphJustification"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/xmloff/source/style/adjushdl.cxx",
+          "marker": "XMLParaAdjustPropHdl::importXML"
+        },
+        {
+          "path": "vendor/libreoffice-reference/xmloff/source/style/adjushdl.cxx",
+          "marker": "XMLLastLineAdjustPropHdl::exportXML"
+        }
+      ]
+    }
+  }
+}

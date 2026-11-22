@@ -1,6 +1,58 @@
 /** @fileoverview Keeps the existing portable automatic paragraph-style identity fields together. */
+import { ShadowFormat } from "../../../offapi/com/sun/star/table/ShadowFormat";
+import type { ShadowLocation } from "../../../offapi/com/sun/star/table/ShadowLocation";
 import type { OdfParagraphProperties, OdfTabStop } from "./txtparae";
-import type { OdfHyphenationProperties } from "./txtprmap.hyphenation";
+const paragraphBoxKeys = [
+  "border",
+  "borderTop",
+  "borderBottom",
+  "borderLeft",
+  "borderRight",
+  "borderLineWidth",
+  "borderLineWidthTop",
+  "borderLineWidthBottom",
+  "borderLineWidthLeft",
+  "borderLineWidthRight",
+  "padding",
+  "paddingTop",
+  "paddingBottom",
+  "paddingLeft",
+  "paddingRight",
+  "joinBorder",
+] as const;
+
+/** Includes native box and shadow values in automatic style equality. @param properties - Direct paragraph properties. @returns Encoded border fields when authored. */
+function paragraphBoxKey(properties: OdfParagraphProperties | undefined): string | undefined {
+  if (!properties) return undefined;
+  const parts = Object.fromEntries(
+    paragraphBoxKeys.flatMap(
+      /** Retains only authored values in deterministic order. @param key - Native box field. @returns Present field. */
+      (key) => (properties[key] === undefined ? [] : [[key, properties[key]]]),
+    ),
+  );
+  const shadow = properties.paragraphShadow;
+  const shadowKey = shadow && [
+    shadow.Location,
+    shadow.ShadowWidth,
+    shadow.IsTransparent,
+    shadow.Color,
+  ];
+  if (Object.keys(parts).length === 0 && shadowKey === undefined) return undefined;
+  return encodeURIComponent(JSON.stringify({ ...parts, shadow: shadowKey }));
+}
+
+/** Restores structured box fields from an automatic style key. @param key - Encoded border payload. @returns Represented paragraph properties. */
+function parseParagraphBoxKey(key: string | undefined): OdfParagraphProperties {
+  if (!key) return {};
+  const { shadow, ...box } = JSON.parse(decodeURIComponent(key)) as Pick<
+    OdfParagraphProperties,
+    (typeof paragraphBoxKeys)[number]
+  > & { shadow?: [ShadowLocation, number, boolean, number] };
+  const paragraphShadow: ShadowFormat | undefined =
+    shadow === undefined ? undefined : new ShadowFormat(...shadow);
+  return { ...box, ...(paragraphShadow === undefined ? {} : { paragraphShadow }) };
+}
+
 /** Creates a stable key for direct paragraph deltas. @param properties - Direct paragraph properties. @returns Key. */
 export function paragraphPropertiesKey(properties?: OdfParagraphProperties): string {
   return [
@@ -37,10 +89,21 @@ export function paragraphPropertiesKey(properties?: OdfParagraphProperties): str
     properties?.fillColor,
     properties?.fillTransparency,
     properties?.verticalAlign,
-    properties?.lineNumberStart,
+    properties?.registerModeActive === undefined ? "" : Number(properties.registerModeActive),
     properties?.hyphenation === undefined
       ? ""
       : encodeURIComponent(JSON.stringify(properties.hyphenation)),
+    properties?.justification === undefined
+      ? ""
+      : encodeURIComponent(JSON.stringify(properties.justification)),
+    properties?.writingMode,
+    properties?.writingModeAutomatic === undefined ? "" : Number(properties.writingModeAutomatic),
+    properties?.snapToGrid === undefined ? "" : Number(properties.snapToGrid),
+    properties?.asianTypography === undefined
+      ? ""
+      : encodeURIComponent(JSON.stringify(properties.asianTypography)),
+    properties?.lineNumberStartValue,
+    paragraphBoxKey(properties),
   ]
     .map(
       /** Encodes one optional paragraph metric. @param value - Metric. @returns Stable field. */ (
@@ -84,18 +147,13 @@ export function parseParagraphPropertiesKey(key: string): OdfParagraphProperties
   const pageStyleName = fields[19];
   const pageNumber = fields[20];
   return {
-    ...(fields[26]
-      ? { hyphenation: JSON.parse(decodeURIComponent(fields[26])) as OdfHyphenationProperties }
-      : {}),
+    ...parseParagraphBoxKey(fields[33]),
     ...(fields[21] === undefined || fields[21] === "" ? {} : { fillStyle: Number(fields[21]) }),
     ...(fields[22] === undefined || fields[22] === "" ? {} : { fillColor: Number(fields[22]) }),
     ...(fields[23] === undefined || fields[23] === ""
       ? {}
       : { fillTransparency: Number(fields[23]) }),
     ...(fields[24] === undefined || fields[24] === "" ? {} : { verticalAlign: Number(fields[24]) }),
-    ...(fields[25] === undefined || fields[25] === ""
-      ? {}
-      : { lineNumberStart: Number(fields[25]) }),
     ...(firstLineIndent === undefined ? {} : { firstLineIndent }),
     ...(rightMargin === undefined ? {} : { rightMargin }),
     ...(upperSpacing === undefined ? {} : { upperSpacing }),
@@ -113,6 +171,7 @@ export function parseParagraphPropertiesKey(key: string): OdfParagraphProperties
       : { tabStopDetails: JSON.parse(decodeURIComponent(tabStopsKey)) as OdfTabStop[] }),
     ...(keepWithNext === undefined ? {} : { keepWithNext: keepWithNext === 1 }),
     ...(countLineNumbers === undefined ? {} : { countLineNumbers: countLineNumbers === 1 }),
+    ...(fields[32] ? { lineNumberStartValue: Number(fields[32]) } : {}),
     ...(keepTogether === undefined ? {} : { keepTogether: keepTogether === 1 }),
     ...(widows === undefined ? {} : { widows }),
     ...(orphans === undefined ? {} : { orphans }),
@@ -122,6 +181,33 @@ export function parseParagraphPropertiesKey(key: string): OdfParagraphProperties
     ...(breakAfter === undefined || breakAfter === ""
       ? {}
       : { breakAfter: breakAfter as "auto" | "page" }),
+    ...(fields[26]
+      ? {
+          hyphenation: JSON.parse(decodeURIComponent(fields[26])) as NonNullable<
+            OdfParagraphProperties["hyphenation"]
+          >,
+        }
+      : {}),
+    ...(fields[27]
+      ? {
+          justification: JSON.parse(decodeURIComponent(fields[27])) as NonNullable<
+            OdfParagraphProperties["justification"]
+          >,
+        }
+      : {}),
+    ...(fields[28] ? { writingMode: Number(fields[28]) } : {}),
+    ...(fields[29] === "0" || fields[29] === "1"
+      ? { writingModeAutomatic: fields[29] === "1" }
+      : {}),
+    ...(fields[30] === "0" || fields[30] === "1" ? { snapToGrid: fields[30] === "1" } : {}),
+    ...(fields[31]
+      ? {
+          asianTypography: JSON.parse(decodeURIComponent(fields[31])) as NonNullable<
+            OdfParagraphProperties["asianTypography"]
+          >,
+        }
+      : {}),
+    ...(fields[25] === "0" || fields[25] === "1" ? { registerModeActive: fields[25] === "1" } : {}),
     ...(autoTextIndent === undefined || autoTextIndent === ""
       ? {}
       : { autoTextIndent: autoTextIndent === "1" }),

@@ -12,6 +12,7 @@ import {
   type OdfPageStoryGeometry,
 } from "./PageMasterStyleMap";
 import type { PageStyleLayout } from "../../../offapi/com/sun/star/style/PageStyleLayout";
+import { importParagraphAlignment, importParagraphJustification } from "./adjushdl";
 import { importWritingDirection } from "./prhdlfac";
 import type { OdfBoxProperties } from "./bordrhdl";
 import { XMLShadowPropHdl } from "./shadwhdl";
@@ -25,24 +26,19 @@ import { importOdfLength, SvXMLUnitConverter } from "../core/xmluconv";
 import { Converter } from "../../../sax/source/tools/converter";
 import { XMLTableStyleContext, type OdfTableStyle } from "../table/XMLTableImport";
 import type { OdfCharacterProperties, OdfParagraphAlignment } from "../text/txtparae";
-import { importTextConstant } from "../text/txtprhdl";
-import { importTextFont, textFontProperties } from "../text/txtimppr";
-import { getFontFamilyFromGeneric, getFontFamilyGeneric } from "./fonthdl";
-import { FontPitch } from "../../../tools/inc/fontenum";
-import { RTL_TEXTENCODING_UTF8 } from "../../../sal/inc/rtl/textenc";
+import { importParagraphAsianTypography, importTextConstant } from "../text/txtprhdl";
 import type { OdfStyleDefinition, XMLParagraphImportProperties } from "../text/txtparai";
-import { importTextCharacterProperties, textCharacterPropertyTokens } from "../text/txtprmap";
+import {
+  importParagraphHyphenation,
+  importTextCharacterProperties,
+  textCharacterPropertyTokens,
+} from "../text/txtprmap";
 import {
   XMLLineNumberingImportContext,
   type OdfLineNumberingConfiguration,
 } from "../text/XMLLineNumberingImportContext";
 import { XMLTextFrameStyleContext, type XMLTextFrameStyle } from "../text/XMLTextFrameContext";
 import { XMLTextPropertySetContext } from "../text/XMLTextPropertySetContext";
-import {
-  hyphenationPropertyTokens,
-  importHyphenationProperties,
-  type OdfHyphenationProperties,
-} from "../text/txtprmap.hyphenation";
 import { XMLThemeContext } from "./XMLThemeContext";
 import type { XMLImageStyleDefinition } from "./ImageStyle";
 import { XMLBitmapStyleContext } from "./FillStyleContext";
@@ -56,7 +52,6 @@ const ignoredStyleDefinitions = new Set([
 
 /** Consumer of completed style definitions; Writer stores canonical results. */
 export interface XMLStyleImportTarget extends XMLListStyleImportTarget {
-  isOpenOffice2Generator?(): boolean;
   registerTheme?(theme: Theme): void;
   createNumberStyle?(element: XMLToken, attributes: FastAttributeList): SvXMLImportContext;
   registerTableStyle(name: string, style: OdfTableStyle): void;
@@ -86,6 +81,7 @@ export interface OdfPageLayout {
   readonly usage?: PageStyleLayout;
   readonly direction?: number;
   readonly rtlGutter?: boolean;
+  readonly registerParagraphStyle?: string;
   readonly grid: readonly OdfPageGridProperty[];
   readonly height: number;
   readonly landscape: boolean;
@@ -275,12 +271,13 @@ class XMLPageLayoutContext extends SvXMLImportContext {
     const orientation = attributes.get(XMLToken.STYLE_PRINT_ORIENTATION) ?? "portrait";
     if (orientation !== "portrait" && orientation !== "landscape")
       throw new Error(`Unsupported ODF page orientation: ${orientation}`);
-    const box = readPageLayoutBox(attributes);
+    const box = readBoxProperties(attributes);
     const shadowValue = attributes.get(XMLToken.STYLE_SHADOW);
     const shadow = shadowValue === null ? undefined : new XMLShadowPropHdl().importXML(shadowValue);
     const gutterValue = attributes.get(XMLToken.LOEXT_MARGIN_GUTTER);
     const gutter = gutterValue === null ? null : Converter.convertMeasure(gutterValue, "mm100", 0);
     const writing = attributes.get(XMLToken.STYLE_WRITING_MODE);
+    const register = attributes.get(XMLToken.STYLE_REGISTER_TRUTH_REF_STYLE_NAME);
     const direction = writing === null ? undefined : importWritingDirection(writing);
     const { margins, explicit: explicitMargins } = importPageMargins(attributes);
     this.layout = {
@@ -290,6 +287,7 @@ class XMLPageLayoutContext extends SvXMLImportContext {
       ...(this.usage === undefined ? {} : { usage: this.usage }),
       ...(direction === undefined ? {} : { direction }),
       ...(writing === null ? {} : { rtlGutter: ["rl-tb", "tb-rl", "rl", "tb"].includes(writing) }),
+      ...(register ? { registerParagraphStyle: register } : {}),
       margins,
       explicitMargins,
       grid: importPageGrid(attributes),
@@ -318,7 +316,7 @@ class XMLPageLayoutContext extends SvXMLImportContext {
 }
 
 /** Reads original page-layout borders and padding including signed native distances. @param attributes - Source page layout attributes. @returns Represented ODF box properties. */
-function readPageLayoutBox(attributes: FastAttributeList): OdfBoxProperties {
+function readBoxProperties(attributes: FastAttributeList): OdfBoxProperties {
   const result: Record<string, string | number> = {};
   for (const [suffix, padding, border, width] of [
     ["", XMLToken.FO_PADDING, XMLToken.FO_BORDER, XMLToken.STYLE_BORDER_LINE_WIDTH],
@@ -363,7 +361,6 @@ class XMLStyleContext extends SvXMLImportContext {
   private alignment: OdfParagraphAlignment | undefined;
   private leftMargin: number | undefined;
   private paragraphProperties: XMLParagraphImportProperties | undefined;
-  private hyphenation: OdfHyphenationProperties | undefined;
   private hasParagraphProperties = false;
   private properties: Partial<OdfCharacterProperties> | undefined;
   private readonly name: string;
@@ -436,11 +433,9 @@ class XMLStyleContext extends SvXMLImportContext {
       if (this.hasParagraphProperties)
         throw new Error("ODF style has duplicate paragraph-properties.");
       this.hasParagraphProperties = true;
-      this.alignment = importAlignment(attributes);
+      this.alignment = importParagraphAlignment(attributes.get(XMLToken.FO_TEXT_ALIGN));
       this.leftMargin = importLeftMargin(attributes);
       this.paragraphProperties = importParagraphProperties(attributes);
-      const hyphenation = importHyphenationProperties(attributes, "paragraph");
-      if (hyphenation) this.hyphenation = { ...this.hyphenation, ...hyphenation };
       if (this.isDefault)
         this.defaultTabDistance = importOptionalLength(
           attributes,
@@ -467,12 +462,7 @@ class XMLStyleContext extends SvXMLImportContext {
         attributes,
         this.target,
         !this.tableItemTextStyle,
-        this.definition.family === "paragraph",
       );
-      if (this.definition.family === "paragraph") {
-        const hyphenation = importHyphenationProperties(attributes, "text");
-        if (hyphenation) this.hyphenation = { ...this.hyphenation, ...hyphenation };
-      }
       return new XMLTextPropertySetContext(
         undefined,
         /** Retains the native complex color beside the resolved RGB attribute. @param color - Parsed theme color. @returns Nothing. */
@@ -515,14 +505,11 @@ class XMLStyleContext extends SvXMLImportContext {
         : { defaultTabDistance: this.defaultTabDistance }),
       ...(this.alignment === undefined ? {} : { alignment: this.alignment }),
       ...(this.leftMargin === undefined ? {} : { leftMargin: this.leftMargin }),
-      ...(this.paragraphProperties === undefined &&
-      this.masterPageName === undefined &&
-      this.hyphenation === undefined
+      ...(this.paragraphProperties === undefined && this.masterPageName === undefined
         ? {}
         : {
             paragraphProperties: {
               ...this.paragraphProperties,
-              ...(this.hyphenation === undefined ? {} : { hyphenation: this.hyphenation }),
               ...(this.masterPageName === undefined ? {} : { pageStyleName: this.masterPageName }),
             },
           }),
@@ -537,21 +524,32 @@ class XMLStyleContext extends SvXMLImportContext {
   }
 }
 
-/** Imports paragraph alignment. @param attributes - Property attributes. @returns Alignment or undefined. */
-function importAlignment(attributes: FastAttributeList): OdfParagraphAlignment | undefined {
-  const value = attributes.get(XMLToken.FO_TEXT_ALIGN);
-  if (value === null) return undefined;
-  if (value === "start" || value === "left") return "left";
-  if (value === "end" || value === "right") return "right";
-  if (value === "center" || value === "justify") return value;
-  throw new Error(`Unsupported ODF paragraph alignment: ${value}`);
-}
-
 /** Imports a signed `fo:margin-left` length into Writer twips. @param attributes - Property attributes. @returns Margin or undefined. */
 function importLeftMargin(attributes: FastAttributeList): number | undefined {
   const value = attributes.get(XMLToken.FO_MARGIN_LEFT);
   if (value === null) return undefined;
   return importOdfLength(value, true, "paragraph left margin");
+}
+
+/** Reads native paragraph writing-mode and grid items. @param attributes - Paragraph attributes. @returns Supported properties. */
+function importParagraphDirectionAndGrid(
+  attributes: FastAttributeList,
+): XMLParagraphImportProperties {
+  const writing = attributes.get(XMLToken.STYLE_WRITING_MODE);
+  const writingMode = writing === null ? undefined : importWritingDirection(writing);
+  const writingModeAutomatic = importOptionalBoolean(
+    attributes.get(XMLToken.STYLE_WRITING_MODE_AUTOMATIC),
+    "automatic writing mode",
+  );
+  const snapToGrid = importOptionalBoolean(
+    attributes.get(XMLToken.STYLE_SNAP_TO_LAYOUT_GRID),
+    "snap to layout grid",
+  );
+  return {
+    ...(writingMode === undefined ? {} : { writingMode }),
+    ...(writingModeAutomatic === undefined ? {} : { writingModeAutomatic }),
+    ...(snapToGrid === undefined ? {} : { snapToGrid }),
+  };
 }
 
 /** Imports supported paragraph properties. @param attributes - Property attributes. @returns Property deltas. */
@@ -652,43 +650,25 @@ function importParagraphProperties(
     : numberProperty.extract(numberValue, "sal_Int16")
       ? numberValue[0] & 65535
       : ("auto" as const);
-  const rawCountLines = attributes.get(XMLToken.TEXT_NUMBER_LINES);
-  const rawLineStart = attributes.get(XMLToken.TEXT_LINE_NUMBER);
-  const countLineNumbers: [boolean] = [false];
-  const lineNumberStart: [number] = [0];
-  const hasCountLines =
-    rawCountLines !== null && Converter.convertBool(countLineNumbers, rawCountLines);
-  const hasLineStart =
-    rawLineStart !== null && Converter.convertNumber(lineNumberStart, rawLineStart);
+  const lineNumberStartValue = attributes.getAsInteger(XMLToken.TEXT_LINE_NUMBER);
+  const countLineNumbers = importOptionalBoolean(
+    attributes.get(XMLToken.TEXT_NUMBER_LINES),
+    "paragraph line-number participation",
+  );
+  const hyphenation = importParagraphHyphenation(attributes);
+  const justification = importParagraphJustification(attributes);
+  const asianTypography = importParagraphAsianTypography(attributes);
+  const register: [boolean] = [false];
+  const hasRegister = Converter.convertBool(
+    register,
+    attributes.get(XMLToken.STYLE_REGISTER_TRUE) ?? "",
+  );
   const joinBorder = importOptionalBoolean(
     attributes.get(XMLToken.STYLE_JOIN_BORDER),
     "paragraph border connection",
   );
-  const borders = Object.fromEntries(
-    (
-      [
-        ["borderTop", XMLToken.FO_BORDER_TOP],
-        ["borderBottom", XMLToken.FO_BORDER_BOTTOM],
-        ["borderLeft", XMLToken.FO_BORDER_LEFT],
-        ["borderRight", XMLToken.FO_BORDER_RIGHT],
-        ["borderLineWidthTop", XMLToken.STYLE_BORDER_LINE_WIDTH_TOP],
-        ["borderLineWidthBottom", XMLToken.STYLE_BORDER_LINE_WIDTH_BOTTOM],
-        ["borderLineWidthLeft", XMLToken.STYLE_BORDER_LINE_WIDTH_LEFT],
-        ["borderLineWidthRight", XMLToken.STYLE_BORDER_LINE_WIDTH_RIGHT],
-      ] as const
-    )
-      .map(
-        /** Computes the [key, token] result. @param input1 - Input1. @returns The computed result. */ ([
-          key,
-          token,
-        ]) => [key, attributes.get(token)] as const,
-      )
-      .filter(
-        /** Computes the entry result. @param entry - Entry. @returns The computed result. */ (
-          entry,
-        ) => entry[1] !== null,
-      ),
-  );
+  const rawShadow = attributes.get(XMLToken.STYLE_SHADOW);
+  const shadow = rawShadow === null ? undefined : new XMLShadowPropHdl().importXML(rawShadow);
   const result: XMLParagraphImportProperties = {
     ...importFillProperties(attributes),
     ...(firstLineIndent === undefined ? {} : { firstLineIndent }),
@@ -710,10 +690,16 @@ function importParagraphProperties(
     ...(orphans === undefined ? {} : { orphans }),
     ...(breakBefore === undefined ? {} : { breakBefore }),
     ...(breakAfter === undefined ? {} : { breakAfter }),
-    ...(hasCountLines ? { countLineNumbers: countLineNumbers[0] } : {}),
-    ...(hasLineStart ? { lineNumberStart: lineNumberStart[0] } : {}),
+    ...(countLineNumbers === undefined ? {} : { countLineNumbers }),
+    ...(lineNumberStartValue === null ? {} : { lineNumberStartValue }),
+    ...(hyphenation === undefined ? {} : { hyphenation }),
+    ...(justification === undefined ? {} : { justification }),
+    ...(asianTypography === undefined ? {} : { asianTypography }),
+    ...importParagraphDirectionAndGrid(attributes),
+    ...(hasRegister ? { registerModeActive: register[0] } : {}),
     ...(joinBorder === undefined ? {} : { joinBorder }),
-    ...borders,
+    ...readBoxProperties(attributes),
+    ...(shadow === undefined ? {} : { paragraphShadow: shadow }),
   };
   return Object.keys(result).length === 0 ? undefined : result;
 }
@@ -745,19 +731,20 @@ function importOptionalLength(
   return value === null ? undefined : importOdfLength(value, signed, label);
 }
 
-/** Imports supported character properties. @param attributes - Property attributes. @param target - Style and font resolver. @param strict - Whether to diagnose unsupported attributes. @param paragraphStyle - Whether to use the paragraph map. @returns Property deltas. */
+/** Imports supported character properties. @param attributes - Property attributes. @param target - Style and font resolver. @param strict - Whether to reject unsupported attributes or missing face references. @returns Property deltas. */
 function importCharacterProperties(
   attributes: FastAttributeList,
   target: XMLStyleImportTarget,
-  strict: boolean,
-  paragraphStyle: boolean,
+  strict = true,
 ): Partial<OdfCharacterProperties> {
   if (strict)
     attributes.assertOnly(
       [
         ...textCharacterPropertyTokens,
-        ...(paragraphStyle ? hyphenationPropertyTokens("text") : []),
-        ...textFontProperties.flat(),
+        XMLToken.STYLE_FONT_NAME,
+        XMLToken.STYLE_FONT_NAME_ASIAN,
+        XMLToken.STYLE_FONT_NAME_COMPLEX,
+        XMLToken.FO_FONT_FAMILY,
         XMLToken.FO_FONT_SIZE,
         XMLToken.STYLE_FONT_SIZE_ASIAN,
         XMLToken.STYLE_FONT_SIZE_COMPLEX,
@@ -777,6 +764,10 @@ function importCharacterProperties(
       ],
       "text properties",
     );
+  const faceName = attributes.get(XMLToken.STYLE_FONT_NAME);
+  const asianFaceName = attributes.get(XMLToken.STYLE_FONT_NAME_ASIAN);
+  const complexFaceName = attributes.get(XMLToken.STYLE_FONT_NAME_COMPLEX);
+  const fallbackFontFamily = attributes.get(XMLToken.FO_FONT_FAMILY);
   const fontSize = attributes.get(XMLToken.FO_FONT_SIZE);
   const color = attributes.get(XMLToken.FO_COLOR);
   const opacity = attributes.get(XMLToken.LOEXT_OPACITY) ?? attributes.get(XMLToken.DRAW_OPACITY);
@@ -795,41 +786,26 @@ function importCharacterProperties(
     throw new Error(`Unsupported ODF font color: ${color}`);
   if (highlight !== null && !isOdfColor(highlight, true))
     throw new Error(`Unsupported ODF highlight color: ${highlight}`);
-  const fonts: Partial<OdfCharacterProperties> = {};
-  for (const [suffix, group] of [
-    ["", textFontProperties[0]],
-    ["Asian", textFontProperties[1]],
-    ["Complex", textFontProperties[2]],
-  ] as const) {
-    const font = importTextFont(
-      attributes,
-      group,
-      /** Resolves the original declaration for this font member set. @param name - Face name. @returns Members. */
-      (name) => {
-        const familyName = target.getFontFace(name);
-        if (familyName === undefined) return undefined;
-        const face = target.getFontFaceProperties?.(name);
-        return {
-          familyName,
-          family: getFontFamilyFromGeneric(target.getFontFaceGeneric?.(name)),
-          styleName: face?.styleName ?? "",
-          pitch: face?.pitch ?? FontPitch.PITCH_DONTKNOW,
-          charSet: face?.charSet ?? RTL_TEXTENCODING_UTF8,
-        };
-      },
-      RTL_TEXTENCODING_UTF8,
-    );
-    if (font) {
-      const generic = getFontFamilyGeneric(font.family);
-      Object.assign(fonts, {
-        [`fontFamily${suffix}`]: font.familyName,
-        [`fontStyleName${suffix}`]: font.styleName,
-        [`fontPitch${suffix}`]: font.pitch,
-        [`fontCharSet${suffix}`]: font.charSet,
-        ...(generic === undefined ? {} : { [`fontFamilyGeneric${suffix}`]: generic }),
-      });
-    }
-  }
+  const declaredFontFamily = faceName === null ? undefined : target.getFontFace(faceName);
+  if (strict && faceName !== null && declaredFontFamily === undefined)
+    throw new Error(`Undefined ODF font face: ${faceName}`);
+  const asianFontFamily = asianFaceName === null ? undefined : target.getFontFace(asianFaceName);
+  if (strict && asianFaceName !== null && asianFontFamily === undefined)
+    throw new Error(`Undefined ODF Asian font face: ${asianFaceName}`);
+  const complexFontFamily =
+    complexFaceName === null ? undefined : target.getFontFace(complexFaceName);
+  if (strict && complexFaceName !== null && complexFontFamily === undefined)
+    throw new Error(`Undefined ODF complex font face: ${complexFaceName}`);
+  const fontFamily = declaredFontFamily ?? fallbackFontFamily?.replace(/^(['"])(.*)\1$/, "$2");
+  const fontFamilyGeneric = faceName === null ? undefined : target.getFontFaceGeneric?.(faceName);
+  const fontMetadata = faceName === null ? undefined : target.getFontFaceProperties?.(faceName),
+    asianMetadata =
+      asianFaceName === null ? undefined : target.getFontFaceProperties?.(asianFaceName),
+    complexMetadata =
+      complexFaceName === null ? undefined : target.getFontFaceProperties?.(complexFaceName),
+    asianGeneric = asianFaceName === null ? undefined : target.getFontFaceGeneric?.(asianFaceName),
+    complexGeneric =
+      complexFaceName === null ? undefined : target.getFontFaceGeneric?.(complexFaceName);
 
   let fontSizeTwips: number | undefined;
   if (fontSize !== null) {
@@ -844,13 +820,37 @@ function importCharacterProperties(
   return {
     ...(useWindowColor === true ? { color: "auto" } : color === null ? {} : { color }),
     ...(validOpacity ? { textTransparency: 100 - amount[0] } : {}),
-    ...fonts,
+    ...(fontFamily === undefined || fontFamily.trim().length === 0 ? {} : { fontFamily }),
+    ...(fontFamilyGeneric === undefined ? {} : { fontFamilyGeneric }),
+    ...(fontMetadata === undefined
+      ? {}
+      : {
+          fontStyleName: fontMetadata.styleName,
+          fontPitch: fontMetadata.pitch,
+          fontCharSet: fontMetadata.charSet,
+        }),
+    ...(asianMetadata === undefined
+      ? {}
+      : {
+          fontStyleNameAsian: asianMetadata.styleName,
+          fontPitchAsian: asianMetadata.pitch,
+          fontCharSetAsian: asianMetadata.charSet,
+        }),
+    ...(complexMetadata === undefined
+      ? {}
+      : {
+          fontStyleNameComplex: complexMetadata.styleName,
+          fontPitchComplex: complexMetadata.pitch,
+          fontCharSetComplex: complexMetadata.charSet,
+        }),
+    ...(asianGeneric === undefined ? {} : { fontFamilyGenericAsian: asianGeneric }),
+    ...(complexGeneric === undefined ? {} : { fontFamilyGenericComplex: complexGeneric }),
+
+    ...(asianFontFamily === undefined ? {} : { fontFamilyAsian: asianFontFamily }),
+    ...(complexFontFamily === undefined ? {} : { fontFamilyComplex: complexFontFamily }),
     ...(fontSizeTwips === undefined ? {} : { fontSizeTwips }),
     ...(highlight === null ? {} : { highlight }),
-    ...importTextCharacterProperties(attributes, {
-      paragraphStyle,
-      isOOo2x: target.isOpenOffice2Generator?.() ?? false,
-    }),
+    ...importTextCharacterProperties(attributes),
     ...importScriptHeight(attributes, XMLToken.STYLE_FONT_SIZE_ASIAN, "fontSizeTwipsAsian"),
     ...importScriptHeight(attributes, XMLToken.STYLE_FONT_SIZE_COMPLEX, "fontSizeTwipsComplex"),
   };

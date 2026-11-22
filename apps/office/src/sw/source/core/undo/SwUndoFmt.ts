@@ -178,3 +178,33 @@ export class SwUndoTextFormatCollDelete extends SwUndoFormatDelete {
     this.m_rDoc.DelTextFormatColl(previous as SwTextFormatColl);
   }
 }
+
+/** Original format-history action for numbering-rule name changes. */
+export class SwUndoNumruleRename extends SwUndo {
+  /** Retains the original names and their document owner. @param previous - Old name. @param next - New name. @param document - Native owner. @returns Action. */
+  public constructor(
+    private readonly previous: string,
+    private readonly next: string,
+    private readonly document: SwDoc,
+  ) {
+    super("Rename numbering style: $1 $2 $3");
+  }
+  /** Supplies the original rename history arguments. @returns Native comment rewriter. */
+  protected override GetRewriter(): SwRewriter {
+    const rewriter = new SwRewriter();
+    rewriter.AddRule(SwUndoArg.UndoArg1, this.previous);
+    rewriter.AddRule(SwUndoArg.UndoArg2, "→");
+    rewriter.AddRule(SwUndoArg.UndoArg3, this.next);
+    return rewriter;
+  }
+  /** Restores the previous name through the same document mutation. @param unused - Current undo context. @returns Nothing. */
+  protected override UndoImpl(unused: SwUndoRedoContext): void {
+    void unused;
+    this.document.RenameNumRule(this.next, this.previous);
+  }
+  /** Reapplies the new name through the same document mutation. @param unused - Current redo context. @returns Nothing. */
+  protected override RedoImpl(unused: SwUndoRedoContext): void {
+    void unused;
+    this.document.RenameNumRule(this.previous, this.next);
+  }
+}

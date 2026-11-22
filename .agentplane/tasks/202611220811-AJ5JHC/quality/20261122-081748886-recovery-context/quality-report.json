@@ -1,0 +1,23 @@
+{
+  "schema_version": 1,
+  "task_id": "202611220811-AJ5JHC",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-11-22T08:17:48.886Z",
+  "verdict": "pass",
+  "summary": "Writer checkpoint fixtures follow the existing native tabs, Edit menu, display units and source-backed registry counts.",
+  "evaluated_sha": "865909ebcdf906596c8dcfd206e1ff112258b6dd",
+  "blueprint_digest": "c72158b6355fca239bc04d0a76c9f424ab772990aefc9c14b19c4b0542b3399d",
+  "findings": [
+    "Production sources match the full checkpoint revision. All corrected fixtures passed independently."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202611220811-AJ5JHC/README.md",
+    "output/playwright/writer-ten-task-checkpoint/writer-browser-recheck.log",
+    "output/playwright/writer-ten-task-checkpoint/writer-inventory-recheck.log",
+    "output/playwright/writer-ten-task-checkpoint/writer-hintid-recheck.log"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": []
+}

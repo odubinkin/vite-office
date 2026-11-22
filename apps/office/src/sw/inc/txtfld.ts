@@ -27,11 +27,6 @@ export class SwTextField extends SwTextAttr<SwFormatField> {
 
   /** Rebinds a point moved by the native hint maps. @param node - New node or detached state. @returns Nothing. */
   ChgTextNode(node: SwTextNode | undefined): void {
-    if (this.node === node) return;
-    const format = this.GetAttr();
-    const type = format.GetField().GetTyp();
-    if (this.node) type.UnregisterField(format);
     this.node = node;
-    if (node) type.RegisterField(format);
   }
 }

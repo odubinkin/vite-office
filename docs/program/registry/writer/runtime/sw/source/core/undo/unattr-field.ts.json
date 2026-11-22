@@ -1,0 +1,35 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sw/source/core/undo/unattr-field.ts",
+    "classification": "upstream-mechanism",
+    "state": "active",
+    "suite": "writer",
+    "subsystem": "text-search",
+    "capabilityIds": [
+      "CAP-0111"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "none",
+      "evidence": [
+        "apps/office/src/sw/source/core/undo/unattr-field.ts#SwUndoInsAnnotation",
+        "apps/office/src/sw/browser/presentation/WriterCommentsSidebar.test.tsx",
+        "vendor/libreoffice-reference/sw/source/core/undo/unattr.cxx"
+      ],
+      "justification": "Replays the annotation point and its mark together and restores Writer cursor history.",
+      "knownViolations": [],
+      "localSymbols": [
+        "SwUndoInsAnnotation"
+      ],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": "sw/source/core/undo/unattr.cxx",
+      "upstreamSymbols": [
+        "SwUndoAttr::RedoImpl"
+      ]
+    }
+  }
+}

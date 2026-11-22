@@ -1,14 +1,20 @@
 /** @fileoverview Writer filter attribute-item export boundary corresponding to xmlexpit.cxx. Browser presentation shorthand retains its existing adapter behavior without moving native item ownership into shared xmloff. */
-import type { SvxShadowItem } from "../../../../editeng/source/items/frmitems.shadow";
-import { SvxShadowLocation } from "../../../../editeng/inc/svxenum";
+import { SvxShadowItem } from "../../../../editeng/source/items/frmitems.shadow";
+import { MID_EXPAND_SINGLE } from "../../../../editeng/inc/memberids";
+import type { SvxAdjustItem } from "../../../../editeng/inc/adjustitem";
+import type { OdfParagraphJustification } from "../../../../xmloff/source/style/adjushdl";
 import {
   cppu_detail_getUnoType_ShadowFormat as shadowType,
   ShadowFormat,
 } from "../../../../offapi/com/sun/star/table/ShadowFormat";
 import { XMLShadowPropHdl } from "../../../../xmloff/source/style/shadwhdl";
+import { SwFormatLineNumber } from "../../../inc/fmtline";
 import type { SwFrameFormat } from "../../core/layout/atrfrm";
 import { SvxTabAdjust, type SvxTabStopItem } from "../../../../editeng/inc/tstpitem";
-import type { OdfTabStop } from "../../../../xmloff/source/text/txtparae";
+import type { SvxLineSpacingItem } from "../../../../editeng/inc/lspcitem";
+import type { SvxULSpaceItem } from "../../../../editeng/inc/ulspitem";
+import { projectWriterLineSpacing } from "../../core/text/itrform2";
+import type { OdfParagraphProperties, OdfTabStop } from "../../../../xmloff/source/text/txtparae";
 import { SvxBoxItem } from "../../../../editeng/source/items/frmitems";
 import { FillStyle } from "../../../../offapi/com/sun/star/drawing/FillStyle";
 import {
@@ -34,14 +40,23 @@ import {
 } from "../../../../xmloff/source/draw/fill-properties";
 import type { SvxBorderLine } from "../../../../editeng/source/items/borderline";
 import type { SvxBrushItem } from "../../../../editeng/source/items/frmitems.brush";
-import type { SvxFrameDirectionItem } from "../../../../editeng/inc/frmdiritem";
+import { SvxFrameDirectionItem } from "../../../../editeng/inc/frmdiritem";
 import type { OdfTableVisualProperties } from "../../../../xmloff/source/table/XMLTableImport";
+import { SfxBoolItem } from "../../../../svl/inc/eitem";
+import type { SfxItemSet } from "../../../../svl/inc/itemset";
 import { Any } from "../../../../cppu/inc/com/sun/star/uno/Any";
 import {
   RES_BACKGROUND,
   RES_FRAMEDIR,
+  RES_LINENUMBER,
+  RES_PARATR_AUTOFRAMEDIR,
+  RES_PARATR_SNAPTOGRID,
+  RES_PARATR_FORBIDDEN_RULES,
+  RES_PARATR_HANGINGPUNCTUATION,
+  RES_PARATR_SCRIPTSPACE,
   RES_BOX,
   RES_SHADOW,
+  RES_PARATR_CONNECT_BORDER,
   RES_TEXTGRID,
 } from "../../../inc/hintids";
 import { SwTextGrid } from "../../../inc/tgrditem";
@@ -171,6 +186,35 @@ export function exportBoxProperties(item: SvxBoxItem | undefined): OdfBoxPropert
   return result;
 }
 
+/** Projects authored paragraph border attributes with their native item values. @param items - Direct paragraph set. @returns ODF border properties. */
+export function exportParagraphBorders(items: SfxItemSet): OdfParagraphProperties {
+  const box = items.GetItemIfSet(RES_BOX, false);
+  const connect = items.GetItemIfSet(RES_PARATR_CONNECT_BORDER, false);
+  const shadow = exportShadowFormat(items.GetItemIfSet(RES_SHADOW, false));
+  if (
+    (box !== undefined && !(box instanceof SvxBoxItem)) ||
+    (connect !== undefined && !(connect instanceof SfxBoolItem))
+  )
+    throw new Error("ODT paragraph border item is invalid.");
+  return {
+    ...exportBoxProperties(box),
+    ...(connect === undefined ? {} : { joinBorder: connect.GetValue() }),
+    ...(shadow === undefined ? {} : { paragraphShadow: shadow }),
+  };
+}
+
+/** Exports the native UNO shadow format, including explicit no-shadow values. @param item - Borrowed direct pool item. @returns Shadow data when authored. */
+export function exportShadowFormat(item: unknown): ShadowFormat | undefined {
+  if (!(item instanceof SvxShadowItem)) return undefined;
+  const value = new Any();
+  try {
+    const format = new ShadowFormat();
+    return item.QueryValue(value, 0x80) && value.extract(format, shadowType) ? format : undefined;
+  } finally {
+    value.dispose();
+  }
+}
+
 /** Writes the original ODF page layout box, shadow and gutter properties. @param master - Actual page frame. @param formatLength - Twips to ODF length converter. @returns XML attributes. */
 export function exportPageLayoutBox(
   master: SwFrameFormat,
@@ -189,17 +233,9 @@ export function exportPageLayoutBox(
     if (lineWidth !== undefined)
       attributes.push(`style:border-line-width-${suffix}="${lineWidth}"`);
   }
-  const shadow = items.GetItemIfSet(RES_SHADOW, false) as SvxShadowItem | undefined;
-  if (shadow && shadow.GetLocation() !== SvxShadowLocation.NONE) {
-    const value = new Any();
-    try {
-      const format = new ShadowFormat();
-      if (shadow.QueryValue(value, 0x80) && value.extract(format, shadowType))
-        attributes.push(`style:shadow="${new XMLShadowPropHdl().exportXML(format)}"`);
-    } finally {
-      value.dispose();
-    }
-  }
+  const shadow = exportShadowFormat(items.GetItemIfSet(RES_SHADOW, false));
+  if (shadow && shadow.Location !== 0)
+    attributes.push(`style:shadow="${new XMLShadowPropHdl().exportXML(shadow)}"`);
   const gutter = master.GetLRSpace().GetGutterMargin();
   if (gutter)
     attributes.push(`loext:margin-gutter="${Converter.convertMeasureToXML(gutter, "twip")}"`);
@@ -229,4 +265,94 @@ export function exportParagraphTabStops(item: SvxTabStopItem): OdfTabStop[] {
     });
   }
   return stops;
+}
+
+/** Projects vertical paragraph spacing shared by body and annotation paragraphs. @param spacing - Native upper/lower spacing item. @returns ODF spacing properties. */
+export function exportParagraphVerticalMargins(spacing: SvxULSpaceItem): OdfParagraphProperties {
+  return {
+    upperSpacing: spacing.GetUpper(),
+    lowerSpacing: spacing.GetLower(),
+    contextualSpacing: spacing.GetContext(),
+  };
+}
+
+/** Projects the native line spacing mode and its independent value. @param item - Native line spacing item. @returns ODF property for the active mode. */
+export function exportParagraphLineSpacing(item: SvxLineSpacingItem): OdfParagraphProperties {
+  const { mode, value } = projectWriterLineSpacing(item);
+  switch (mode) {
+    case "proportional":
+      return { lineHeightPercent: value };
+    case "fixed":
+      return { lineHeightTwips: value };
+    case "minimum":
+      return { lineHeightAtLeastTwips: value };
+    case "leading":
+      return { lineSpacingTwips: value };
+  }
+}
+
+/** Projects native adjustment item values through the Writer filter boundary. @param item - Direct paragraph adjustment. @returns ODF justification properties. */
+export function exportParagraphAdjustment(item: SvxAdjustItem): OdfParagraphJustification {
+  const value = new Any();
+  const expand: [boolean] = [false];
+  try {
+    item.QueryValue(value, MID_EXPAND_SINGLE);
+    value.extract(expand, "bool");
+  } finally {
+    value.dispose();
+  }
+  return {
+    ParaLastLineAdjust: item.GetLastBlock(),
+    ParaExpandSingleWord: expand[0],
+    ParaWordSpacing: item.GetPropWordSpacing(),
+    ParaWordSpacingMinimum: item.GetPropWordSpacingMinimum(),
+    ParaWordSpacingMaximum: item.GetPropWordSpacingMaximum(),
+    ParaLetterSpacingMinimum: item.GetPropLetterSpacingMinimum(),
+    ParaLetterSpacingMaximum: item.GetPropLetterSpacingMaximum(),
+    ParaScaleWidthMinimum: item.GetPropScaleWidthMinimum(),
+    ParaScaleWidthMaximum: item.GetPropScaleWidthMaximum(),
+    ParaComposer: item.GetParagraphComposer(),
+  };
+}
+
+/** Exports the direct paragraph writing mode and two independent layout flags. @param set - Native paragraph items. @returns ODF properties. */
+export function exportParagraphDirectionAndGrid(set: SfxItemSet): OdfParagraphProperties {
+  const direction = set.GetItemIfSet(RES_FRAMEDIR, false);
+  const automatic = set.GetItemIfSet(RES_PARATR_AUTOFRAMEDIR, false);
+  const snap = set.GetItemIfSet(RES_PARATR_SNAPTOGRID, false);
+  return {
+    ...(direction instanceof SvxFrameDirectionItem ? { writingMode: direction.QueryValue() } : {}),
+    ...(automatic instanceof SfxBoolItem ? { writingModeAutomatic: automatic.GetValue() } : {}),
+    ...(snap instanceof SfxBoolItem ? { snapToGrid: snap.GetValue() } : {}),
+  };
+}
+
+/** Original Asian paragraph WhichIds consumed by the Writer ODF exporter. */
+export const XML_ASIAN_TYPOGRAPHY_WHICH_IDS = [
+  RES_PARATR_FORBIDDEN_RULES,
+  RES_PARATR_HANGINGPUNCTUATION,
+  RES_PARATR_SCRIPTSPACE,
+] as const;
+
+/** Serializes both members of the direct native line-number item. @param set - Writer paragraph attributes. @returns Present ODF properties. */
+export function exportParagraphLineNumbering(set: SfxItemSet): OdfParagraphProperties {
+  const item = set.GetItemIfSet(RES_LINENUMBER, false);
+  return item instanceof SwFormatLineNumber
+    ? { countLineNumbers: item.IsCount(), lineNumberStartValue: item.GetStartValue() }
+    : {};
+}
+
+/** Projects the directly set Writer items for automatic and named ODF styles. @param set - Paragraph item set. @returns Present Asian typography values. */
+export function exportParagraphAsianTypographyItems(set: SfxItemSet): OdfParagraphProperties {
+  const hanging = set.GetItemIfSet(RES_PARATR_HANGINGPUNCTUATION, false);
+  const spacing = set.GetItemIfSet(RES_PARATR_SCRIPTSPACE, false);
+  const forbidden = set.GetItemIfSet(RES_PARATR_FORBIDDEN_RULES, false);
+  if (hanging === undefined && spacing === undefined && forbidden === undefined) return {};
+  return {
+    asianTypography: {
+      ...(hanging instanceof SfxBoolItem ? { hangingPunctuation: hanging.GetValue() } : {}),
+      ...(spacing instanceof SfxBoolItem ? { scriptSpace: spacing.GetValue() } : {}),
+      ...(forbidden instanceof SfxBoolItem ? { forbiddenRules: forbidden.GetValue() } : {}),
+    },
+  };
 }

@@ -1,0 +1,25 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "browser-adaptation",
+    "status": "local-only",
+    "localPath": "apps/office/src/cui/browser/tabpages/BitmapTabPage.tsx",
+    "rationale": "Binds the native image import, style and position controls to browser file and form controls.",
+    "responsibilities": [
+      "Binds the native image import, style and position controls to browser file and form controls."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/cui/browser/tabpages/BitmapTabPage.tsx",
+          "marker": "BitmapTabPage"
+        }
+      ]
+    },
+    "stackDivergence": {
+      "kind": "browser-adaptation",
+      "rationale": "Browser controls and CSS replace the upstream weld widget or output-device binding."
+    }
+  }
+}

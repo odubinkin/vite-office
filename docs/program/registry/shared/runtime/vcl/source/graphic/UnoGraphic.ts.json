@@ -1,0 +1,36 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/vcl/source/graphic/UnoGraphic.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "shared",
+    "subsystem": "graphic-values",
+    "capabilityIds": [
+      "CAP-0113"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "none",
+      "evidence": [
+        "apps/office/src/vcl/source/graphic/UnoGraphic.ts#UnoGraphic",
+        "vendor/libreoffice-reference/vcl/source/graphic/UnoGraphic.cxx#Graphic::getType",
+        "apps/office/src/sw/source/core/unocore/unosett.test.ts"
+      ],
+      "justification": "Exposes the native XGraphic view over the embedded graphic and preserves its pixel or vector type.",
+      "knownViolations": [],
+      "localSymbols": [
+        "UnoGraphic",
+        "getType"
+      ],
+      "upstreamSymbols": [
+        "Graphic::getType"
+      ],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": "vcl/source/graphic/UnoGraphic.cxx"
+    }
+  }
+}

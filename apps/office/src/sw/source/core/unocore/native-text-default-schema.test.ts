@@ -3,39 +3,17 @@ import { expect, it } from "vitest";
 import { aSwMapProvider, SwUnoPropertyMapProvider } from "./unomap";
 import { PROPERTY_MAP_TEXT_DEFAULT } from "../../../inc/unomap";
 import {
+  RES_PARATR_REGISTER,
   RES_PARATR_TABSTOP,
   RES_PARATR_VERTALIGN,
   RES_PAGEDESC,
   RES_ROW_SPLIT,
+  RES_SHADOW,
   RES_TEXTGRID,
   RES_COLLAPSING_BORDERS,
   RES_TXTATR_CHARFMT,
-  RES_CHRATR_OVERLINE,
-  RES_CHRATR_CONTOUR,
-  RES_CHRATR_SHADOWED,
-  RES_CHRATR_RELIEF,
-  RES_CHRATR_ROTATE,
-  RES_CHRATR_SCALEW,
-  RES_CHRATR_EMPHASIS_MARK,
-  RES_CHRATR_CASEMAP,
-  RES_CHRATR_BLINK,
-  RES_CHRATR_HIDDEN,
-  RES_CHRATR_NOHYPHEN,
-  RES_CHRATR_TWO_LINES,
 } from "../../../inc/hintids";
-import {
-  MID_RELIEF,
-  MID_STD_TAB,
-  MID_TL_COLOR,
-  MID_TL_HASCOLOR,
-  MID_TL_STYLE,
-  MID_ROTATE,
-  MID_FITTOLINE,
-  MID_EMPHASIS,
-  MID_TWOLINES,
-  MID_START_BRACKET,
-  MID_END_BRACKET,
-} from "../../../../editeng/inc/memberids";
+import { MID_STD_TAB } from "../../../../editeng/inc/memberids";
 import { MID_PAGEDESC_PAGEDESCNAME, MID_GRID_STANDARD_MODE } from "../../../inc/unomid";
 import { MAYBEVOID } from "../../../../udkapi/com/sun/star/beans/PropertyAttribute";
 import { CONVERT_TWIPS } from "../../../../svl/inc/poolitem";
@@ -51,7 +29,7 @@ it("retains static default-table identity and clears MAYBEVOID except the origin
     second = new SwUnoPropertyMapProvider(),
     entries = first.GetPropertyMapEntries(PROPERTY_MAP_TEXT_DEFAULT),
     set = first.GetPropertySet(PROPERTY_MAP_TEXT_DEFAULT);
-  expect(entries.length).toBe(122);
+  expect(entries.length).toBe(141);
   const flags = upstream.originalFlags as Readonly<Record<string, number>>;
   for (const entry of entries) {
     const name = text(entry.aName);
@@ -99,27 +77,12 @@ it("publishes actual native default metadata and excludes cursor-only dispatch p
     for (const [name, which, member] of [
       ["TabStopDistance", RES_PARATR_TABSTOP, MID_STD_TAB | CONVERT_TWIPS],
       ["ParaVertAlignment", RES_PARATR_VERTALIGN, 0],
+      ["ParaShadowFormat", RES_SHADOW, CONVERT_TWIPS],
+      ["ParaRegisterModeActive", RES_PARATR_REGISTER, 0],
       ["CharStyleName", RES_TXTATR_CHARFMT, 0],
       ["IsSplitAllowed", RES_ROW_SPLIT, 0],
       ["CollapsingBorders", RES_COLLAPSING_BORDERS, 0],
       ["StandardPageMode", RES_TEXTGRID, MID_GRID_STANDARD_MODE],
-      ["CharOverline", RES_CHRATR_OVERLINE, MID_TL_STYLE],
-      ["CharOverlineColor", RES_CHRATR_OVERLINE, MID_TL_COLOR],
-      ["CharOverlineHasColor", RES_CHRATR_OVERLINE, MID_TL_HASCOLOR],
-      ["CharContoured", RES_CHRATR_CONTOUR, 0],
-      ["CharShadowed", RES_CHRATR_SHADOWED, 0],
-      ["CharRelief", RES_CHRATR_RELIEF, MID_RELIEF],
-      ["CharRotation", RES_CHRATR_ROTATE, MID_ROTATE],
-      ["CharRotationIsFitToLine", RES_CHRATR_ROTATE, MID_FITTOLINE],
-      ["CharScaleWidth", RES_CHRATR_SCALEW, 0],
-      ["CharEmphasis", RES_CHRATR_EMPHASIS_MARK, MID_EMPHASIS],
-      ["CharCaseMap", RES_CHRATR_CASEMAP, 0],
-      ["CharFlash", RES_CHRATR_BLINK, 0],
-      ["CharHidden", RES_CHRATR_HIDDEN, 0],
-      ["CharNoHyphenation", RES_CHRATR_NOHYPHEN, 0],
-      ["CharCombineIsOn", RES_CHRATR_TWO_LINES, MID_TWOLINES],
-      ["CharCombinePrefix", RES_CHRATR_TWO_LINES, MID_START_BRACKET],
-      ["CharCombineSuffix", RES_CHRATR_TWO_LINES, MID_END_BRACKET],
     ] as const) {
       const key = unicode(name),
         entry = set.getPropertyMap().getByName(propertyNameView(key)),

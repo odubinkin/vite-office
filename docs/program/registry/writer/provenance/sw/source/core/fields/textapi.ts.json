@@ -1,0 +1,46 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "status": "mapped",
+    "localPath": "apps/office/src/sw/source/core/fields/textapi.ts",
+    "upstreamPath": "sw/source/core/fields/textapi.cxx",
+    "localSymbols": [
+      "SwTextAPIEditSource",
+      "SwTextAPIObject"
+    ],
+    "upstreamSymbols": [
+      "SwTextAPIEditSource",
+      "SwTextAPIObject"
+    ],
+    "preservedResponsibilities": [
+      "Owns annotation TextRange cursors and native EditEngine text and property operations shared by Writer comment import and editing."
+    ],
+    "omittedResponsibilities": [
+      "Uses EditEngine directly while the native Outliner and full UNO text forwarder remain outside the current slice."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sw/source/core/fields/textapi.ts",
+          "marker": "class SwTextAPIEditSource"
+        },
+        {
+          "path": "apps/office/src/sw/browser/presentation/WriterCommentsSidebar.test.tsx",
+          "marker": "finds a comment after the ordinary Writer ODT open"
+        },
+        {
+          "path": "apps/office/src/sw/source/filter/xml/odt-annotation.test.ts",
+          "marker": "Missing native annotation paragraph."
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/fields/textapi.cxx",
+          "marker": "SwTextAPIEditSource::SetText"
+        }
+      ]
+    }
+  }
+}

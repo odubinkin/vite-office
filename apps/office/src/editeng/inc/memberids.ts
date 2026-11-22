@@ -26,33 +26,6 @@ export const MID_HORJUST_ADJUST = 1;
 /** Original font relief member. */
 export const MID_RELIEF = 0;
 
-/** Native member selecting paragraph hyphenation enablement. */
-export const MID_IS_HYPHEN = 0;
-/** Native leading and trailing character limits. */
-export const MID_HYPHEN_MIN_LEAD = 1;
-export const MID_HYPHEN_MIN_TRAIL = 2;
-/** Native consecutive hyphen limit. */
-export const MID_HYPHEN_MAX_HYPHENS = 3;
-/** Native exclusions for capitals and the last word. */
-export const MID_HYPHEN_NO_CAPS = 4;
-export const MID_HYPHEN_NO_LAST_WORD = 5;
-/** Native minimum word length. */
-export const MID_HYPHEN_MIN_WORD_LENGTH = 6;
-/** Native general and regional hyphenation zones. */
-export const MID_HYPHEN_ZONE = 7;
-export const MID_HYPHEN_ZONE_ALWAYS = 8;
-export const MID_HYPHEN_ZONE_COLUMN = 9;
-export const MID_HYPHEN_ZONE_PAGE = 10;
-export const MID_HYPHEN_ZONE_SPREAD = 11;
-/** Native end-region keeping and keep-type members. */
-export const MID_HYPHEN_KEEP = 12;
-export const MID_HYPHEN_KEEP_TYPE = 13;
-/** Native compound-word character limits. */
-export const MID_HYPHEN_COMPOUND_MIN_LEAD = 14;
-export const MID_HYPHEN_COMPOUND_MIN_TRAIL = 15;
-/** Native full-line versus word keeping. */
-export const MID_HYPHEN_KEEP_LINE = 16;
-
 /** Original strikeout bool member. */
 export const MID_CROSSED_OUT = 0;
 /** Original strikeout enum member. */
@@ -234,3 +207,22 @@ export const MID_GUTTER_MARGIN = 12;
 export const MID_UP_MARGIN = 3;
 /** Original lower UL-space margin member. */
 export const MID_LO_MARGIN = 4;
+
+/** Original SvxHyphenZoneItem member identities from editeng/memberids.h. */
+export const MID_IS_HYPHEN = 0;
+export const MID_HYPHEN_MIN_LEAD = 1;
+export const MID_HYPHEN_MIN_TRAIL = 2;
+export const MID_HYPHEN_MAX_HYPHENS = 3;
+export const MID_HYPHEN_NO_CAPS = 4;
+export const MID_HYPHEN_NO_LAST_WORD = 5;
+export const MID_HYPHEN_MIN_WORD_LENGTH = 6;
+export const MID_HYPHEN_ZONE = 7;
+export const MID_HYPHEN_ZONE_ALWAYS = 8;
+export const MID_HYPHEN_ZONE_COLUMN = 9;
+export const MID_HYPHEN_ZONE_PAGE = 10;
+export const MID_HYPHEN_ZONE_SPREAD = 11;
+export const MID_HYPHEN_KEEP = 12;
+export const MID_HYPHEN_KEEP_TYPE = 13;
+export const MID_HYPHEN_COMPOUND_MIN_LEAD = 14;
+export const MID_HYPHEN_COMPOUND_MIN_TRAIL = 15;
+export const MID_HYPHEN_KEEP_LINE = 16;

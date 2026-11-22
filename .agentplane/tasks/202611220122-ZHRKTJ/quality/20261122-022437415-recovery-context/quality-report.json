@@ -1,0 +1,24 @@
+{
+  "schema_version": 1,
+  "task_id": "202611220122-ZHRKTJ",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-11-22T02:24:37.415Z",
+  "verdict": "pass",
+  "summary": "The ordinary Writer Paragraph command reaches the named list-style template, whose edits preserve document ownership and undo. The graphic gallery and Customize exchange the native per-level bitmap values through rendering and ODT.",
+  "evaluated_sha": "3ae88311e04a040df109e171e7d7cccb5f86a947",
+  "blueprint_digest": "f8605842b45943983c5279d02f65aabb3141fb139ea6ee53369ec7a5fb96d403",
+  "findings": [
+    "All scope-specific checks passed. Repository-wide JSDoc and size checks still report pre-existing findings outside the changed files."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202611220122-ZHRKTJ/README.md",
+    "215 focused Writer checks, 12 shared checks, two production Chrome tests and a production build",
+    "Targeted named and automatic ODT image-marker round trips, Worker graph round trip, and typed UNO property sequence"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": [
+    "Browser line-box rendering approximates desktop placement and inherits the PNG/JPEG scope of the existing ODT package graphic service."
+  ]
+}

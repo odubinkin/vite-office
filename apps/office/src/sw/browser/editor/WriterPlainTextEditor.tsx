@@ -1,5 +1,8 @@
 /** @fileoverview Projects Writer paragraphs through one browser implementation of SwEditWin. */
 
+import { writerPageBorderStyle } from "./frame-decoration";
+import { writerPageBackgroundStyle } from "./page-background";
+import { WriterBaselineGrid, WriterPageTextGrid } from "./WriterTextGrid";
 import { Fragment, useContext, useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
 import type { ReactNode, RefObject } from "react";
 import { createPortal } from "react-dom";
@@ -50,6 +53,7 @@ export interface WriterPlainTextEditorProps {
   readonly paragraphSpacingSettings?: SwTextFrameSettings;
   readonly verticalRuler?: ReactNode;
   readonly showLineNumbers?: boolean;
+  readonly baselineGridColor?: string;
   readonly lineNumberInfo?: SwLineNumberInfoValue;
   readonly selectedTableBoxes?: readonly number[];
 }
@@ -413,7 +417,11 @@ export function WriterPlainTextEditor(props: WriterPlainTextEditorProps): React.
         focused instanceof HTMLElement &&
         focused !== root.ownerDocument.body &&
         !root.contains(focused);
-      if (outside && focused.closest("[data-writer-editing-host]") !== null) {
+      if (
+        outside &&
+        (focused.closest("[data-writer-editing-host]") !== null ||
+          props.editWindow.GetView().GetPostItMgr().GetActiveField() !== undefined)
+      ) {
         return;
       }
       controller.RestoreSelection(props.cursorSelection);
@@ -421,7 +429,14 @@ export function WriterPlainTextEditor(props: WriterPlainTextEditorProps): React.
       // intact while still projecting commands such as Select All into the DOM.
       if (outside) focused.focus();
     },
-    [controller, measuredLines, props.cursorSelection, props.paragraphs, rootElement],
+    [
+      controller,
+      measuredLines,
+      props.cursorSelection,
+      props.editWindow,
+      props.paragraphs,
+      rootElement,
+    ],
   );
 
   useLayoutEffect(
@@ -658,6 +673,12 @@ export function WriterPlainTextEditor(props: WriterPlainTextEditorProps): React.
                   width: page.descriptor.width / 15,
                 }}
               >
+                <WriterPageDecoration
+                  document={document}
+                  page={page}
+                  previous={pages[pageIndex - 1]}
+                  baselineGridColor={props.baselineGridColor}
+                />
                 <WriterPageStories
                   document={document}
                   page={page}
@@ -757,6 +778,46 @@ export function WriterPlainTextEditor(props: WriterPlainTextEditorProps): React.
           ),
         )}
       </article>
+    </>
+  );
+}
+
+/** Paints the native page fill, outline and text grid underneath the physical page content. @param props - Physical page format context. @returns Noninteractive background. */
+function WriterPageDecoration({
+  document,
+  page,
+  previous,
+  baselineGridColor,
+}: Readonly<{
+  document: Parameters<typeof writerPageBackgroundStyle>[0];
+  page: SwPageFrame;
+  previous: SwPageFrame | undefined;
+  baselineGridColor: string | undefined;
+}>): React.JSX.Element {
+  const fill = writerPageBackgroundStyle(document, page, previous);
+  const border = writerPageBorderStyle(document, page, previous);
+  return (
+    <>
+      {fill && (
+        <div
+          aria-hidden="true"
+          data-writer-page-background
+          className="absolute -z-10 pointer-events-none"
+          style={fill}
+        />
+      )}
+      {border && (
+        <div
+          aria-hidden="true"
+          data-writer-page-border
+          className="absolute -z-10 pointer-events-none"
+          style={border}
+        />
+      )}
+      <WriterPageTextGrid document={document} page={page} />
+      {baselineGridColor !== undefined && (
+        <WriterBaselineGrid document={document} page={page} color={baselineGridColor} />
+      )}
     </>
   );
 }

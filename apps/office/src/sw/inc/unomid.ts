@@ -13,8 +13,6 @@
 /** Native rel height relation member. */ export const MID_FRMSIZE_REL_HEIGHT_RELATION = 16;
 /** Native page descriptor name member. */ export const MID_PAGEDESC_PAGEDESCNAME = 0;
 /** Native optional page number offset member. */ export const MID_PAGEDESC_PAGENUMOFFSET = 1;
-/** Native paragraph line participation member. */ export const MID_LINENUMBER_COUNT = 0;
-/** Native paragraph line restart member. */ export const MID_LINENUMBER_STARTVALUE = 1;
 /** Native grid color. */ export const MID_GRID_COLOR = 0;
 /** Native grid line count. */ export const MID_GRID_LINES = 1;
 /** Native grid base height. */ export const MID_GRID_BASEHEIGHT = 2;
@@ -31,3 +29,8 @@
 export const MID_WRAP_INFLUENCE = 0;
 /** Original allow-overlap UNO member. */
 export const MID_ALLOW_OVERLAP = 1;
+
+/** Original bool member of SwFormatLineNumber. */
+export const MID_LINENUMBER_COUNT = 0;
+/** Original signed UNO value member of SwFormatLineNumber. */
+export const MID_LINENUMBER_STARTVALUE = 1;

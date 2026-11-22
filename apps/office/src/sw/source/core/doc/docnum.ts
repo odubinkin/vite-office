@@ -1,12 +1,55 @@
 /** @fileoverview Implements represented native SwDoc numbering and outline operations from pinned docnum.cxx. */
+import { SvxNumType } from "../../../../editeng/inc/svxenum";
+import { SwUndoInsNum } from "../undo/unnum";
+import { SwUndoNumruleRename } from "../undo/SwUndoFmt";
 import { SetNumRuleMode, type SwDoc } from "./doc";
-import type { SwPaM } from "../crsr/pam";
+import type { SwPaM, SwPosition } from "../crsr/pam";
 import { SwTextNode } from "../txtnode/ndtxt";
 import type { SwTextFormatColl } from "./fmtcol";
 import { WRITER_MAX_LIST_LEVEL } from "./list";
+import { SwNodeRange } from "../../../inc/ndindex";
+import { SwUndoMove } from "../undo/unmove";
+import type { SwUndoCursorState } from "../undo/undobj";
 
 /** Native level count; the shared list constant denotes the maximum zero-based index. */
 const MAXLEVEL = WRITER_MAX_LIST_LEVEL + 1;
+
+/** Moves the selected chapter's body range relative to the native outline index. @param document - Owning document. @param first - Selected heading index. @param end - Exclusive outline selection boundary. @param offset - Signed native chapter offset. @param cursor - Persistent heading position for history. @returns Whether the body range moved. */
+export function MoveOutlinePara(
+  document: SwDoc,
+  first: number,
+  end: number,
+  offset: number,
+  cursor: SwUndoCursorState,
+): boolean {
+  const nodes = document.GetNodes();
+  const outlines = nodes.GetOutLineNds().entries();
+  const bodyEnd = nodes.GetEndOfContent();
+  const body = bodyEnd.StartOfSectionNode();
+  const start = outlines[first];
+  if (!start || first >= end || offset === 0 || start.StartOfSectionNode() !== body) return false;
+  const endNode = outlines[end] ?? bodyEnd;
+  const destinationIndex = (offset > 0 ? end : first) + offset;
+  const destination =
+    destinationIndex < 0 ? nodes.at(body.GetIndex() + 1) : (outlines[destinationIndex] ?? bodyEnd);
+  if (endNode.StartOfSectionNode() !== body || destination.StartOfSectionNode() !== body)
+    return false;
+
+  const range = new SwNodeRange(start, endNode);
+  const count = endNode.GetIndex() - start.GetIndex();
+  const undo = new SwUndoMove(range, destination, cursor);
+  try {
+    if (!document.GetDocumentContentOperationsManager().MoveNodeRange(range, destination)) {
+      undo.Dispose();
+      return false;
+    }
+    undo.SetDestRange(start.GetIndex(), start.GetIndex() + count, endNode.GetIndex(), cursor);
+    document.GetUndoManager().AddUndoAction(undo);
+    return true;
+  } finally {
+    range.Dispose();
+  }
+}
 
 /** Moves actual outline paragraphs across occupied style levels or direct outline attributes. @param document - Owning aggregate. @param range - Borrowed native selection. @param offset - Native signed short level displacement. @returns Whether the whole represented range is applicable. */
 export function OutlineUpDown(document: SwDoc, range: SwPaM, offset: number): boolean {
@@ -127,6 +170,152 @@ export function GetUniqueNumRuleName(document: SwDoc, checkName?: string): strin
 }
 import { toInt32 } from "../../../../o3tl/inc/string_view";
 
+/** Selects native text owners with rules across inclusive SwNodes coordinates. @param document - Native owner. @param range - Native selection. @returns Selected numbered nodes. */
+export function GetNumberedNodes(document: SwDoc, range: SwPaM): readonly SwTextNode[] {
+  // SwPaM validates both endpoints belong to the same node array.
+  if (range.GetPoint().GetNode().GetNodes() !== document.GetNodes())
+    throw new Error("Writer numbering range belongs to another node array.");
+  const nodes: SwTextNode[] = [];
+  for (let index = range.Start().GetNodeIndex(); index <= range.End().GetNodeIndex(); index++) {
+    const node = document.GetNodes().at(index);
+    if (node instanceof SwTextNode && node.GetNumRule() !== undefined) nodes.push(node);
+  }
+  return nodes;
+}
+
+/** Searches native ordered text nodes, stopping at the nearest rule even when incompatible. @param document - Native owner. @param position - Search origin. @param forward - Search direction. @param numbered - Enumeration rather than itemization. @param outline - Required rule classification. @param nonEmptyAllowed - Plain nonempty paragraphs allowed, minus one for unlimited. @param listId - Caller-owned output list identity. @param investigateStart - Include the origin, false by default. @returns Matching native rule, if any. */
+export function SearchNumRule(
+  document: SwDoc,
+  position: SwPosition,
+  forward: boolean,
+  numbered: boolean,
+  outline: boolean,
+  nonEmptyAllowed: number,
+  listId: { value: string },
+  investigateStart = false,
+): SwNumRule | undefined {
+  const origin = position.GetNode();
+  if (!(origin instanceof SwTextNode)) return undefined;
+  if (origin.GetDoc() !== document)
+    throw new Error("Numbering search belongs to another document.");
+  const root = document.GetNodes().at(0);
+  let section = origin.StartOfSectionNode();
+  while (section !== root && section.StartOfSectionNode() !== root)
+    section = section.StartOfSectionNode();
+  const start = section.GetIndex(),
+    end = section.EndOfSectionNode().GetIndex(),
+    step = forward ? 1 : -1;
+  for (
+    let index = origin.GetIndex() + (investigateStart ? 0 : step);
+    index > start && index < end;
+    index += step
+  ) {
+    const node = document.GetNodes().at(index);
+    if (!(node instanceof SwTextNode)) continue;
+    const rule = node.GetNumRule();
+    if (rule !== undefined) {
+      if (
+        rule.IsOutlineRule() === outline &&
+        (numbered ? rule.Get(0).IsEnumeration() : rule.Get(0).IsItemize())
+      ) {
+        listId.value = node.GetListId();
+        return rule;
+      }
+      return undefined;
+    }
+    if (node.Len() > 0) {
+      if (nonEmptyAllowed === 0) return undefined;
+      nonEmptyAllowed = Math.max(-1, nonEmptyAllowed - 1);
+    }
+  }
+  return undefined;
+}
+
+/** Identifies affected upper levels with the original sal_uInt8 return width. @param level - Zero-based list level. @param included - Levels included in the label. @param mask - Bit for the current level. @returns Mask of represented upper levels. */
+function GetUpperLvlChg(level: number, included: number, mask: number): number {
+  const first = Math.max(0, level + 1 - included);
+  return (mask - 1) & ~((1 << first) - 1) & 0xff;
+}
+
+/** Updates the live rule's affected formats without replacing the rule or its lists. @param document - Native owner. @param current - Existing rule in the document. @param source - Rule with incoming formats. @returns Nothing. */
+function changeNumRule(document: SwDoc, current: SwNumRule, source: SwNumRule): void {
+  let changed = 0;
+  for (let level = 0; level < MAXLEVEL; level++) {
+    const format = source.Get(level);
+    const mask = 1 << level;
+    const included = format.GetIncludeUpperLevels();
+    if (
+      !current.Get(level).Equals(format) ||
+      (format.GetNumberingType() < SvxNumType.SVX_NUM_NUMBER_NONE &&
+        included > 1 &&
+        (changed & GetUpperLvlChg(level, included, mask)) !== 0)
+    )
+      changed |= mask;
+  }
+  const continuous = source.IsContinusNum();
+  if (changed === 0) {
+    const invalidate = current.IsContinusNum() !== continuous;
+    current.CheckCharFormats(document);
+    current.SetContinusNum(continuous);
+    if (invalidate) current.Invalidate();
+    return;
+  }
+
+  const nodes: SwTextNode[] = [];
+  current.GetTextNodeList(nodes);
+  for (const node of nodes) {
+    const level = node.GetActualListLevel() & 0xff;
+    if (level < MAXLEVEL && (changed & (1 << level)) !== 0) node.NumRuleChgd();
+  }
+  for (let level = 0; level < MAXLEVEL; level++)
+    if ((changed & (1 << level)) !== 0) current.SetByPointer(level, source.GetNumFormat(level));
+  current.CheckCharFormats(document);
+  current.Invalidate();
+  current.SetContinusNum(continuous);
+  document.UpdateNumRule();
+}
+
+/** Applies the named rule edit with native format history and no paragraph selection requirement. @param document - Native owner. @param source - Accepted numbering rule. @returns Nothing. */
+export function ChgNumRuleFormats(document: SwDoc, source: SwNumRule): void {
+  const current = document.FindNumRulePtr(source.GetName());
+  if (!current) return;
+  document.RunModelTransaction(
+    /** Commits formats and publishes this document-level change together. @returns Nothing. */ () => {
+      const undo = document.GetUndoManager();
+      if (undo.DoesUndo()) undo.AddUndoAction(new SwUndoInsNum(current, source, document));
+      changeNumRule(document, current, source);
+      document.GetDocumentStateManager().SetModified();
+      document.NotifyModelChange({ kind: "numbering-changed", ruleName: current.GetName() });
+    },
+  );
+}
+
+/** Renames one stored numbering rule and updates its list and format clients. @param document - Native document. @param previous - Existing name. @param next - Unused new name. @returns Whether the rule was renamed. */
+export function RenameNumRule(document: SwDoc, previous: string, next: string): boolean {
+  const rule = document.FindNumRulePtr(previous);
+  if (!rule || next === "" || document.FindNumRulePtr(next)) return false;
+  return document.RunModelTransaction(
+    /** Renames the actual rule and retained references as one document change. @returns True after application. */ () => {
+      const undo = document.GetUndoManager();
+      if (undo.DoesUndo()) undo.AddUndoAction(new SwUndoNumruleRename(previous, next, document));
+      const nodes: SwTextNode[] = [];
+      rule.GetTextNodeList(nodes);
+      rule.SetName(next, document.GetDocumentListsManager());
+      const item = new SwNumRuleItem(next);
+      for (const style of document.GetTextFormatColls()) {
+        const reference = style.GetAttrSet().GetItemIfSet(RES_PARATR_NUMRULE, false);
+        if (reference instanceof SwNumRuleItem && reference.GetValue() === previous)
+          style.SetFormatAttr(item);
+      }
+      for (const node of nodes)
+        if (node.GetSwAttrSet().GetItemIfSet(RES_PARATR_NUMRULE, false) instanceof SwNumRuleItem)
+          node.SetAttr(item);
+      document.NotifyModelChange({ kind: "numbering-changed", ruleName: next });
+      return true;
+    },
+  );
+}
+
 /** Native SwDoc numbering implementation moved from its aggregate without changing ownership or behavior. @param document - Native document. @param range - Actual native selection. @param rule - Native source rule. @param mode - Original flags. @param continuedListId - Original continuation. @returns Explicit list identity. */
 export function SetNumRule(
   document: SwDoc,
@@ -145,8 +334,7 @@ export function SetNumRule(
         stored = document.AddNumRule(new SwNumRule(rule));
         // AddNumRule materializes the named rule's default list and nonempty ID.
       } else if (!stored.Equals(rule)) {
-        stored.Assign(rule);
-        document.GetDocumentListsManager().InvalidateAllLists();
+        changeNumRule(document, stored, rule);
       }
       let listId = "";
       if (!(mode & SetNumRuleMode.DontSetItem)) {

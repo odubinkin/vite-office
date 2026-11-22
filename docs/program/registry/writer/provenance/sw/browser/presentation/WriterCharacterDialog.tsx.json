@@ -1,0 +1,25 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "browser-adaptation",
+    "evidence": {
+      "local": [
+        {
+          "marker": "WriterCharacterDialog",
+          "path": "apps/office/src/sw/browser/presentation/WriterCharacterDialog.tsx"
+        }
+      ]
+    },
+    "localPath": "apps/office/src/sw/browser/presentation/WriterCharacterDialog.tsx",
+    "rationale": "Uses one browser presenter for the pinned standard and annotation Character modes. Sends native item deltas to the original Writer text shell or comment manager.",
+    "responsibilities": [
+      "Presents the represented Font, Font Effects, Position and Background controls and returns accepted Writer or EditEngine attributes according to dialog mode."
+    ],
+    "stackDivergence": {
+      "kind": "browser-adaptation",
+      "rationale": "React and DOM controls replace native VCL dialog widgets."
+    },
+    "status": "local-only"
+  }
+}

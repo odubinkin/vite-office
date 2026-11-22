@@ -1,10 +1,15 @@
 /** @fileoverview Native page-style header/footer metric properties over the original story frame items. */
 import { Any } from "../../../../cppu/inc/com/sun/star/uno/Any";
-import { MID_LO_MARGIN, MID_UP_MARGIN } from "../../../../editeng/inc/memberids";
+import {
+  MID_L_MARGIN,
+  MID_LO_MARGIN,
+  MID_R_MARGIN,
+  MID_UP_MARGIN,
+} from "../../../../editeng/inc/memberids";
 import { MID_SIZE_HEIGHT } from "../../../../svl/inc/memberid";
 import { SID_ATTR_PAGE_DYNAMIC, SID_ATTR_PAGE_SIZE } from "../../../../svx/inc/svxids";
 import { convert, Length, toTwips } from "../../../../o3tl/inc/unit_conversion";
-import { RES_HEADER_FOOTER_EAT_SPACING, RES_UL_SPACE } from "../../../inc/hintids";
+import { RES_HEADER_FOOTER_EAT_SPACING, RES_LR_SPACE, RES_UL_SPACE } from "../../../inc/hintids";
 import { SwFrameSize } from "../../../inc/fmtfsize";
 import { SwHeaderAndFooterEatSpacingItem } from "../../../inc/hfspacingitem";
 import type { SwPageDesc } from "../layout/pagedesc";
@@ -26,6 +31,8 @@ import type { SwUnoPropertyEntry } from "./unomap";
 
 const geometry = [
   ["BodyDistance", RES_UL_SPACE, "long"],
+  ["LeftMargin", RES_LR_SPACE, "long"],
+  ["RightMargin", RES_LR_SPACE, "long"],
   ["Height", SID_ATTR_PAGE_SIZE, "long"],
   ["IsDynamicHeight", SID_ATTR_PAGE_DYNAMIC, "bool"],
   ["DynamicSpacing", RES_HEADER_FOOTER_EAT_SPACING, "bool"],
@@ -100,7 +107,11 @@ for (const prefix of ["Header", "Footer"] as const) {
         ? (header ? MID_LO_MARGIN : MID_UP_MARGIN) | 0x80
         : suffix === "Height"
           ? MID_SIZE_HEIGHT | 0x80
-          : 0;
+          : suffix === "LeftMargin"
+            ? MID_L_MARGIN | 0x80
+            : suffix === "RightMargin"
+              ? MID_R_MARGIN | 0x80
+              : 0;
     pageStoryPropertyEntries.set(prefix + suffix, {
       header,
       which,
@@ -126,6 +137,8 @@ export function readPageStoryProperty(page: SwPageDesc | undefined, name: string
     return new Any(
       (frame.GetAttrSet().Get(property.which) as SwHeaderAndFooterEatSpacingItem).GetValue(),
     );
+  if (property.which === RES_LR_SPACE)
+    return new Any([frame.GetLRSpace().QueryValue(property.member)], "sal_Int32");
   if (property.which === RES_UL_SPACE)
     return new Any([frame.GetULSpace().QueryValue(property.member)], "sal_Int32");
   const height = Number(
@@ -159,7 +172,14 @@ export function writePageStoryProperty(
       if (value === undefined) frame.ResetFormatAttr(property.which);
       else frame.SetFormatAttr(putPageBitmapGeometry(property.which, value));
     } else if (value === undefined) continue;
-    else if (property.which === RES_UL_SPACE) {
+    else if (property.which === RES_LR_SPACE) {
+      const margins = frame.GetLRSpace().Clone();
+      try {
+        if (margins.PutValue(value.get("sal_Int32"), property.member)) frame.SetFormatAttr(margins);
+      } finally {
+        margins.Dispose();
+      }
+    } else if (property.which === RES_UL_SPACE) {
       const spacing = frame.GetULSpace().Clone();
       try {
         if (spacing.PutValue(value.get("sal_Int32"), property.member)) frame.SetFormatAttr(spacing);

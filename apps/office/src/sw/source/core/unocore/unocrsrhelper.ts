@@ -1,4 +1,5 @@
 /** @fileoverview Consumed SwUnoCursorHelper property and CR insertion contracts from pinned unocrsrhelper.cxx; canonical nodes/items remain the only state. */
+import { SvxHyphenZoneItem } from "../../../../editeng/source/items/paraitem";
 import { SetParaListAutoFormat, GetParaListAutoFormat } from "./unoobj-listautofmt";
 import { StylePool } from "../../../../svl/source/items/stylepool";
 import { SwAutoStyleFamily } from "../../../inc/istyleaccess";
@@ -21,7 +22,7 @@ import { NoSuchElementException } from "../../../../cppu/inc/com/sun/star/contai
 import { SvxColorItem } from "../../../../editeng/inc/colritem";
 import { SvxBoxItem } from "../../../../editeng/source/items/frmitems";
 import { SvxBrushItem } from "../../../../editeng/source/items/frmitems.brush";
-import { SvxFontItem, SvxUnderlineItem } from "../../../../editeng/source/items/textitem";
+import { SvxFontItem, SvxTextLineItem } from "../../../../editeng/source/items/textitem";
 import { SvxKerningItem } from "../../../../editeng/inc/kernitem";
 import {
   BorderLine2,
@@ -152,8 +153,9 @@ export function queryItem(item: SfxPoolItem, entry: SwUnoPropertyEntry): Any {
     return out;
   }
   if (
+    item instanceof SvxHyphenZoneItem ||
     item instanceof SfxByteItem ||
-    item instanceof SvxUnderlineItem ||
+    item instanceof SvxTextLineItem ||
     item instanceof SvxFrameDirectionItem
   ) {
     item.QueryValue(out, entry.member);
@@ -248,8 +250,12 @@ export function putItem(item: SfxPoolItem, entry: SwUnoPropertyEntry, value: Any
     if (!(copy as SvxFontItem).PutValue(value, entry.member)) illegal("Invalid font member");
     return copy;
   }
-  if (copy instanceof SvxUnderlineItem) {
-    if (!copy.PutValue(value, entry.member)) illegal("Invalid underline value");
+  if (copy instanceof SvxTextLineItem) {
+    if (!copy.PutValue(value, entry.member)) illegal("Invalid text line value");
+    return copy;
+  }
+  if (copy instanceof SvxHyphenZoneItem) {
+    if (!copy.PutValue(value, entry.member)) illegal("Invalid hyphenation value");
     return copy;
   }
   if (copy instanceof SvxKerningItem) {
@@ -266,12 +272,12 @@ export function putItem(item: SfxPoolItem, entry: SwUnoPropertyEntry, value: Any
     if (!copy.PutValue(value, entry.member)) illegal("Expected byte");
     return copy;
   }
-  if (copy instanceof SfxInt16Item && entry.kind !== "any")
+  if (copy instanceof SfxInt16Item)
     return new SfxInt16Item(item.Which(), scalar(value, "sal_Int16") as number);
   if (
+    entry.kind !== "any" &&
     copy instanceof SfxUInt16Item &&
-    !(copy instanceof SvxParaVertAlignItem) &&
-    entry.kind !== "any"
+    !(copy instanceof SvxParaVertAlignItem)
   )
     return new SfxUInt16Item(item.Which(), scalar(value, "sal_Int16") as number);
   const input =

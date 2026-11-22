@@ -1,4 +1,5 @@
 /** @fileoverview RTF paragraph and character item emission following sw/source/filter/ww8/rtfattributeoutput.cxx. */
+import type { SwFormatLineNumber } from "../../../inc/fmtline";
 import { HoriOrientation } from "../../../../offapi/com/sun/star/text/HoriOrientation";
 import { VertOrientation } from "../../../../offapi/com/sun/star/text/VertOrientation";
 import { RelOrientation } from "../../../../offapi/com/sun/star/text/RelOrientation";
@@ -53,7 +54,6 @@ import { TransColToIco } from "../../../../filter/source/msfilter/util";
 import { GetScriptClass } from "../../../../i18nutil/source/utility/scriptclass";
 import { LATIN } from "../../../../offapi/com/sun/star/i18n/ScriptType";
 import { SfxBoolItem } from "../../../../svl/source/items/cenumitm";
-import type { SwFormatLineNumber } from "../../../inc/fmtline";
 import { SfxInt16Item } from "../../../../svl/source/items/intitem";
 import { FontLineStyle, FontStrikeout } from "../../../../tools/inc/fontenum";
 import {

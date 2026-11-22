@@ -39,6 +39,8 @@ export interface WriterWorkspaceChromeProps {
   readonly isStatusBarVisible: boolean;
   /** Current contextual controls and feedback placed in the Writer properties sidebar. */
   readonly propertiesSidebar: ReactNode;
+  /** Retained Navigator child window, independent of the Properties deck. */
+  readonly navigator?: ReactNode;
   /** Returns sidebar activation and cancellation to this document client. */
   readonly focusDocument?: () => void;
   /** Current operation result shown in the Writer status bar. */
@@ -65,6 +67,7 @@ export interface WriterWorkspaceChromeProps {
  * @param props.isStatusBarVisible - Whether the status feedback row remains visible below the canvas.
  * @param props.menuBar - Functional Writer menus placed beside the document title row.
  * @param props.propertiesSidebar - Contextual properties content placed in the right sidebar.
+ * @param props.navigator - The retained modeless Navigator window.
  * @param props.focusDocument - Focuses the owning Writer document client.
  * @param props.status - Current storage or download feedback.
  * @param props.toolbar - Implemented command buttons in the standard toolbar.
@@ -84,6 +87,7 @@ export function WriterWorkspaceChrome({
   menuBar,
   onDocumentTitleChange,
   propertiesSidebar,
+  navigator,
   focusDocument,
   rulers,
   status,
@@ -112,7 +116,7 @@ export function WriterWorkspaceChrome({
       />
 
       <div
-        className={`min-h-0 min-w-0 flex-1 overflow-hidden ${
+        className={`relative min-h-0 min-w-0 flex-1 overflow-hidden ${
           isPropertiesSidebarVisible
             ? "grid grid-rows-[auto_minmax(0,1fr)_auto] lg:grid-cols-[minmax(0,1fr)_auto] lg:grid-rows-[auto_minmax(0,1fr)]"
             : "flex flex-col"
@@ -167,6 +171,7 @@ export function WriterWorkspaceChrome({
             {propertiesSidebar}
           </SidebarDeck>
         ) : null}
+        {navigator}
       </div>
 
       {(tableToolbar ?? numberingToolbar) !== undefined && (

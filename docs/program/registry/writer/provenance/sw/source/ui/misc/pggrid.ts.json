@@ -1,0 +1,46 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "status": "mapped",
+    "localPath": "apps/office/src/sw/source/ui/misc/pggrid.ts",
+    "upstreamPath": "sw/source/ui/misc/pggrid.cxx",
+    "localSymbols": [
+      "SwTextGridPage"
+    ],
+    "upstreamSymbols": [
+      "SwTextGridPage::FillItemSet",
+      "SwTextGridPage::PutGridItem",
+      "SwTextGridPage::UpdatePageSize"
+    ],
+    "preservedResponsibilities": [
+      "Owns the original Text Grid controls, dependent ranges, document paper mode and native item exchange."
+    ],
+    "omittedResponsibilities": [
+      "Direct desktop ruler invalidation remains outside the browser ruler implementation."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sw/source/ui/misc/pggrid.ts",
+          "marker": "SwTextGridPage"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sw/source/ui/misc/pggrid.cxx",
+          "marker": "SwTextGridPage::FillItemSet"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/ui/misc/pggrid.cxx",
+          "marker": "SwTextGridPage::PutGridItem"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/ui/misc/pggrid.cxx",
+          "marker": "SwTextGridPage::UpdatePageSize"
+        }
+      ]
+    }
+  }
+}

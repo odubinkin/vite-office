@@ -35,7 +35,9 @@ describe("Writer uiconfig resources" /** Groups pure Writer resource tests. @ret
     expect(writerMenuCommandIds).toContain(WRITER_COMMAND_IDS.bold);
     expect(writerMenuCommandIds).toContain(WRITER_COMMAND_IDS.focusFindbar);
     expect(writerMenuCommandIds).toContain(WRITER_COMMAND_IDS.searchDialog);
+    expect(writerMenuCommandIds).toContain(WRITER_COMMAND_IDS.insertAnnotation);
     expect(writerMenuCommandIds).toContain(WRITER_COMMAND_IDS.toggleHorizontalRuler);
+    expect(writerMenuCommandIds).toContain(WRITER_COMMAND_IDS.toggleNavigator);
     expect(writerMenuCommandIds).not.toContain(WRITER_COMMAND_IDS.alignLeft);
     expect(writerMenuCommandIds).not.toContain(WRITER_COMMAND_IDS.underline);
     expect(
@@ -58,7 +60,7 @@ describe("Writer uiconfig resources" /** Groups pure Writer resource tests. @ret
       WRITER_COMMAND_IDS.copy,
       WRITER_COMMAND_IDS.paste,
       WRITER_COMMAND_IDS.formatPaintbrush,
-      ".uno:ResetAttributes",
+      WRITER_COMMAND_IDS.clearDirectFormatting,
       WRITER_COMMAND_IDS.undo,
       WRITER_COMMAND_IDS.redo,
       WRITER_COMMAND_IDS.searchDialog,
@@ -66,6 +68,7 @@ describe("Writer uiconfig resources" /** Groups pure Writer resource tests. @ret
       WRITER_COMMAND_IDS.insertPageBreak,
       WRITER_COMMAND_IDS.hyperlinkDialog,
       WRITER_COMMAND_IDS.insertBookmark,
+      WRITER_COMMAND_IDS.insertAnnotation,
     ]);
     expect(
       writerTextObjectBarItems.some(

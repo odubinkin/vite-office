@@ -1,58 +1,155 @@
-/** @fileoverview Writer's native annotation field reattachment to a text range. */
-import { SwPaM, SwPosition } from "../crsr/pam";
-import { SwPostItFieldType } from "../fields/docufld";
-import type { SwDoc } from "../doc/doc";
+/** @fileoverview Writer's UNO Annotation descriptor and attachment to the native text field. */
+import type { Any } from "../../../../cppu/inc/com/sun/star/uno/Any";
+import {
+  DateTime as UnoDateTime,
+  cppu_detail_getUnoType_DateTime,
+} from "../../../../offapi/com/sun/star/util/DateTime";
+import type { OUStringConstReference } from "../../../../sal/inc/rtl/ustring";
+import { DateTime } from "../../../../tools/source/datetime/datetime";
 import type { SwTextField } from "../../../inc/txtfld";
-import type { SwXTextCursor } from "./unoobj";
+import { SwPaM, SwPosition } from "../crsr/pam";
+import { SwPostItField, SwPostItFieldType, type SwPostItFieldData } from "../fields/docufld";
+import { SwTextAPIObject } from "../fields/textapi";
+import { SwXTextRange, type SwXTextOwner } from "./unoobj2";
+import { illegal, invalid, scalar, stringValue, text, unicode, unknown } from "./unocrsrhelper";
 
-/** Finds the attached annotation field matching the source unique-ID query. @param document - Owning document. @param name - Source annotation identity. @returns Matching point field. */
-export function GetAnnotationByUniqueID(document: SwDoc, name: string): SwTextField | undefined {
-  return SwPostItFieldType.Get(document)
-    .GatherFields()
-    .find(
-      /** Finds the first attached field by its native name. @param format - Attached native field format. @returns Whether the annotation matches. */
-      (format) => format.GetField().GetName() === name,
-    )
-    ?.GetTextField();
-}
+/** Implements the annotation service's descriptor and borrowed attached text field. */
+export class SwXTextField {
+  private data: SwPostItFieldData = {
+    author: "",
+    initials: "",
+    text: "",
+    name: "",
+    dateTime: new DateTime(DateTime.EMPTY),
+  };
+  private hint: SwTextField | undefined;
+  private parent: SwXTextOwner | undefined;
+  private textRange: SwTextAPIObject | undefined;
 
-/** Reattaches an existing annotation to the ending cursor as in SwXTextField::attachToRange. @param cursor - End of the source annotation. @param source - Existing provisional or ranged field. @returns Nothing. */
-export function AttachAnnotationToRange(cursor: SwXTextCursor, source: SwTextField): void {
-  const position = cursor.GetPaM().GetPoint();
-  const node = position.GetNode().GetTextNode();
-  const oldNode = source.GetTextNode();
-  if (!node || !oldNode) return;
-  const field = source.GetAttr().GetField();
-  const access = cursor.GetDoc().GetIDocumentMarkAccess();
-  const oldMark = access.FindAnnotationMark(field.GetName());
-  const anchor = oldMark?.GetMarkStart();
-  const startNode = anchor?.GetNode().GetTextNode() ?? oldNode;
-  const start = new SwPosition(
-    startNode,
-    anchor?.GetContentIndex() ?? source.GetStart(),
-    "cursor",
-    "before",
-  );
-  try {
-    const sameText = cursor.getText().GetTextNodes().includes(startNode);
-    const moved = source.Copy(position.GetContentIndex());
-    if (!node.InsertHint(moved)) return;
-    if (oldMark) access.DeleteAnnotationMark(oldMark);
-    oldNode.EraseText(source.GetStart(), 1);
-    position.Assign(node, moved.GetStart() + 1);
-    const fieldStart = new SwPosition(node, moved.GetStart());
-    try {
-      if (!sameText || start.compare(fieldStart) >= 0) return;
-      const range = new SwPaM(position, start);
-      try {
-        access.MakeAnnotationMark(range, field.GetName());
-      } finally {
-        range.Dispose();
+  /** Supplies the original annotation TextRange text source. @returns Actual annotation text. */
+  getTextRange(): SwTextAPIObject {
+    if (!this.textRange) {
+      this.textRange = new SwTextAPIObject();
+      const field = this.hint?.GetAttr().GetField();
+      const object = field?.GetTextObject();
+      if (object) this.textRange.GetEditSource().SetText(object);
+      else {
+        const value = unicode(field?.GetPar2() ?? this.data.text);
+        try {
+          this.textRange.GetEditSource().SetText(value);
+        } finally {
+          value.dispose();
+        }
       }
-    } finally {
-      fieldStart.Dispose();
     }
-  } finally {
-    start.Dispose();
+    return this.textRange;
+  }
+
+  /** Sets the annotation descriptor's native name. @param name - Field name. @returns Nothing. */
+  setName(name: OUStringConstReference): void {
+    this.data = { ...this.data, name: text(name) };
+    this.hint?.GetAttr().GetField().SetName(this.data.name);
+  }
+
+  /** Reads and writes the consumed descriptor properties before attachment. @param key - Native property name. @param input - Typed UNO value. @returns Nothing. */
+  setPropertyValue(key: OUStringConstReference, input: Any): void {
+    if (this.hint) invalid("Annotation descriptor is attached");
+    const propertyName = text(key);
+    switch (propertyName) {
+      case "Author":
+        this.data = { ...this.data, author: stringValue(input) };
+        break;
+      case "Initials":
+        this.data = { ...this.data, initials: stringValue(input) };
+        break;
+      case "Content":
+        this.data = { ...this.data, text: stringValue(input) };
+        break;
+      case "Name":
+        this.data = { ...this.data, name: stringValue(input) };
+        break;
+      case "ParentName":
+        this.data = { ...this.data, parentName: stringValue(input) };
+        break;
+      case "Resolved":
+        this.data = { ...this.data, resolved: scalar(input, "bool") as boolean };
+        break;
+      case "DateTimeValue": {
+        const date = new UnoDateTime();
+        if (!input.extract(date, cppu_detail_getUnoType_DateTime)) illegal(propertyName);
+        this.data = { ...this.data, dateTime: new DateTime(date) };
+        break;
+      }
+      default:
+        unknown(propertyName);
+    }
+  }
+
+  /** Inserts at the selection end, retaining the selected text as an annotation mark. @param range - Registered insertion or selected range. @returns Nothing. */
+  attach(range: SwXTextRange): void {
+    const doc = range.GetDoc();
+    const oldHint = this.hint;
+    const oldNode = oldHint?.GetTextNode();
+    if (oldHint && oldNode?.GetDoc() !== doc) illegal("Annotation belongs to another document");
+    const oldField = oldHint?.GetAttr().GetField();
+    const value = oldField ?? new SwPostItField(SwPostItFieldType.Get(doc), this.data);
+    try {
+      if (!oldField && this.textRange) {
+        const source = this.textRange.GetEditSource();
+        const plain = source.GetText();
+        const editText = source.CreateTextObject();
+        try {
+          value.SetPar2(text(plain));
+          value.SetTextObject(editText);
+        } finally {
+          editText.dispose();
+          plain.dispose();
+          this.textRange.dispose();
+          this.textRange = undefined;
+        }
+      }
+      doc.RunModelTransaction(
+        /** Attaches the current range and releases the earlier annotation point. @returns Nothing. */ () => {
+          const format = doc
+            .GetDocumentContentOperationsManager()
+            .InsertPostItField(range.GetPaM(), value);
+          if (oldHint && oldNode) oldNode.EraseText(oldHint.GetStart(), 1);
+          this.hint = format.GetTextField();
+          this.parent = range.getText();
+        },
+      );
+    } finally {
+      if (!oldField) value.Dispose();
+    }
+  }
+
+  /** Returns the annotation mark or the one-character point range. @returns Registered anchor. */
+  getAnchor(): SwXTextRange {
+    const hint = this.hint;
+    const node = hint?.GetTextNode();
+    if (!hint || !node || !this.parent) return invalid("Annotation is detached");
+    const mark = node.GetDoc().GetIDocumentMarkAccess().GetAnnotationMark(hint.GetAttr());
+    const first = mark?.GetMarkStart() ?? new SwPosition(node, hint.GetStart());
+    const last = mark?.GetMarkEnd() ?? new SwPosition(node, hint.GetStart() + 1);
+    const anchor = new SwPaM(first, last);
+    try {
+      return new SwXTextRange(anchor, this.parent);
+    } finally {
+      anchor.Dispose();
+      if (!mark) {
+        first.Dispose();
+        last.Dispose();
+      }
+    }
+  }
+
+  /** Erases the attached annotation and its range. @returns Nothing. */
+  dispose(): void {
+    const hint = this.hint;
+    if (hint) hint.GetTextNode()?.EraseText(hint.GetStart(), 1);
+    this.hint = undefined;
+    this.parent = undefined;
+    this.textRange?.dispose();
+    this.textRange = undefined;
   }
 }

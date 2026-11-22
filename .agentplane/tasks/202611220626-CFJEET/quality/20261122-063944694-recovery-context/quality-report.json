@@ -1,0 +1,24 @@
+{
+  "schema_version": 1,
+  "task_id": "202611220626-CFJEET",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-11-22T06:39:44.694Z",
+  "verdict": "pass",
+  "summary": "Navigator heading tools operate on the native outline index and connected whole-node ranges with undo and redo.",
+  "evaluated_sha": "8f13b8cf0d156ef59cb3901c63e44004193ec11a",
+  "blueprint_digest": "9dba031dffaa141e3ae9666c2a0c2fd868e61e21189da5e6ff1db7a60df7ab29",
+  "findings": [
+    "Both pinned chapter movement sequences, cursor retention, modified clicks, whole table and bookmark identity and grouped level edits are verified."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202611220626-CFJEET/README.md",
+    "output/playwright/writer-heading-vitest-final.log",
+    "output/playwright/writer-heading-chrome-complete.log"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": [
+    "The body chapter slice covers represented text and complete tables. Inline heading frames and partial text movement are outside this Navigator slice."
+  ]
+}

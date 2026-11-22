@@ -10,7 +10,6 @@ import { RES_BOX } from "../../inc/hintids";
 import { SwInsertTableFlags } from "../../inc/itabenum";
 /* eslint-disable react-refresh/only-export-components -- Pure presentation helpers are exported for focused behavior verification. */
 import { useCallback, useEffect, useMemo, useRef, useState, useSyncExternalStore } from "react";
-import { SvxSearchCmd } from "../../../svl/inc/srchitem";
 
 import { WriterCommandToolbar } from "./WriterCommandToolbar";
 import { WriterTableObjectBar } from "./WriterTableObjectBar";
@@ -41,13 +40,16 @@ import {
   resolveSwListFirstLineIndent,
 } from "../../source/core/txtnode/ndtxt-list-indent";
 import { WriterPropertiesPanel } from "./WriterPropertiesPanel";
+import { WriterNavigator } from "./WriterNavigator";
+import { useWriterSearchCursorReveal } from "./writer-cursor-reveal";
 import {
   WriterSearch,
   type SearchFocusRequest as SearchFocus,
   type SearchSurfaces,
   type WriterSearchHistory,
 } from "./WriterSearch";
-import { RenderWriterComments } from "./WriterCommentsSidebar";
+import { WriterCommentsSidebar } from "./WriterCommentsSidebar";
+import { SwPostItFieldType } from "../../source/core/fields/docufld";
 import { WriterWorkspaceChrome } from "./WriterWorkspaceChrome";
 import { CommandMenuBar } from "../../../framework/browser/presentation/CommandMenuBar";
 import { useWriterContextMenu } from "./WriterContextMenu";
@@ -135,6 +137,13 @@ export function WriterWorkbench({
     presentationStore.GetSnapshot,
     presentationStore.GetSnapshot,
   );
+  useEffect(
+    /** Persists the native baseline grid preference outside the document. @returns Nothing. */
+    () => {
+      services?.layoutPreferences?.Save(view.GetModule().GetUsrPref(false));
+    },
+    [services, snapshot.isBaselineGridVisible, view],
+  );
   const searchOwner = view.GetSearch();
   const searchFeedback = useSyncExternalStore(
     searchOwner.SubscribeFeedback,
@@ -142,6 +151,7 @@ export function WriterWorkbench({
     searchOwner.GetFeedback,
   );
   const activeDocument = view.GetDocShell().GetDoc();
+  const comments = [...SwPostItFieldType.Get(activeDocument).GatherFields()];
   const occupiedTableNames = activeDocument.GetTables().map(
     /** Reads native table names for insertion. @param table - Existing table. @returns Name. */
     (table) => table.GetName(),
@@ -180,6 +190,12 @@ export function WriterWorkbench({
     },
     [searchDialog, searchOwner, view],
   );
+  const focusDocument = useCallback(
+    /** Focuses the active Writer text client. @returns Nothing. */ () => {
+      editingHostRef.current?.focus();
+    },
+    [],
+  );
   /** Closes one search surface and restores Writer focus. @param dialog - Whether the dialog closes. @returns Nothing. */
   function closeSearch(dialog: boolean): void {
     setSearchSurfaces(
@@ -187,7 +203,7 @@ export function WriterWorkbench({
         previous,
       ) => ({ ...previous, [dialog ? "searchDialog" : "findbar"]: undefined }),
     );
-    if (!view.GetPostItMgr().GrabFocusOnActiveSidebarWin()) editingHostRef.current?.focus();
+    if (!view.GetPostItMgr().GrabFocusOnActiveSidebarWin()) focusDocument();
   }
   const [optionsDialog, setOptionsDialog] = useState(false);
   const [tableDialog, setTableDialog] = useState<"insert" | "properties">();
@@ -477,9 +493,9 @@ export function WriterWorkbench({
   const getLocalizedCommandResource = useCallback(
     /** Resolves generated command metadata through the application locale service. @param commandUrl - Canonical command URL. @returns Localized resource. */
     (commandUrl: string) => {
-      return selectWriterCommandResource(localization, commandUrl);
+      return selectWriterCommandResource(localization, commandUrl, view);
     },
-    [localization],
+    [localization, view],
   );
 
   const getLocalizedMenuLabel = useCallback(
@@ -558,27 +574,7 @@ export function WriterWorkbench({
       setTableSizeRequest(undefined);
     },
   };
-  useEffect(
-    /** Reveals any completed search after the browser projects the model cursor. @returns Optional frame cancellation. */ () => {
-      if (
-        searchFeedback?.kind !== "result" ||
-        searchFeedback.result.matches === 0 ||
-        searchFeedback.command === SvxSearchCmd.REPLACE_ALL
-      )
-        return;
-      const frame = requestAnimationFrame(
-        /** Scrolls the match into view without moving focus out of search controls. @returns Nothing. */ () => {
-          const host = editingHostRef.current;
-          const point = host?.ownerDocument.getSelection()?.focusNode;
-          if (point != null && host?.contains(point))
-            point.parentElement?.scrollIntoView?.({ block: "nearest", inline: "nearest" });
-        },
-      );
-      return /** Cancels an obsolete search scroll. @returns Nothing. */ () =>
-        cancelAnimationFrame(frame);
-    },
-    [searchFeedback],
-  );
+  useWriterSearchCursorReveal(searchFeedback, editingHostRef);
   /** Projects the requested surface over the shared view owner. @param dialog - Whether to render Find and Replace. @param request - Surface-specific focus request. @returns Mounted search controls. */
   function renderSearch(dialog: boolean, request: SearchFocus): React.JSX.Element {
     const barStatus = findbar?.feedback === searchFeedback ? undefined : findbar && searchFeedback;
@@ -602,7 +598,11 @@ export function WriterWorkbench({
     <div hidden={!isActive}>
       {searchDialog && renderSearch(true, searchDialog)}
       <WriterWorkspaceChrome
-        commentsSidebar={RenderWriterComments(activeDocument, view)}
+        commentsSidebar={
+          comments.length > 0 && (
+            <WriterCommentsSidebar comments={comments} view={view} focusDocument={focusDocument} />
+          )
+        }
         documentTitle={snapshot.documentState.title}
         findToolbar={findbar && renderSearch(false, findbar)}
         numberingToolbar={
@@ -626,10 +626,7 @@ export function WriterWorkbench({
             objectShell={view.GetDocShell()}
             unit={snapshot.metricUnit}
             isInputEnabled={isInputEnabled}
-            focusDocument={
-              /** Releases accepted style-box focus to this mounted Writer frame. @returns Nothing. */ () =>
-                (editingHostRef.current as HTMLElement).focus()
-            }
+            focusDocument={focusDocument}
             embeddedFontFamilies={activeDocument
               .GetEmbeddedFonts()
               .map(
@@ -676,10 +673,7 @@ export function WriterWorkbench({
           />
         }
         isPropertiesSidebarVisible={snapshot.isPropertiesSidebarVisible}
-        focusDocument={
-          /** Returns sidebar focus to this Writer frame's mounted client. @returns Nothing. */ () =>
-            (editingHostRef.current as HTMLElement).focus()
-        }
+        focusDocument={focusDocument}
         isVerticalRulerVisible={snapshot.isVerticalRulerVisible}
         isStatusBarVisible={snapshot.isStatusBarVisible}
         menuBar={
@@ -688,10 +682,7 @@ export function WriterWorkbench({
             commandSource={commandSource}
             getCommandResource={getLocalizedCommandResource}
             getMenuLabel={getLocalizedMenuLabel}
-            focusDocument={
-              /** Focuses this Writer frame's mounted client. @returns Nothing. */ () =>
-                (editingHostRef.current as HTMLElement).focus()
-            }
+            focusDocument={focusDocument}
             idPrefix="writer"
             isInputEnabled={isInputEnabled}
             menus={writerMenuPlacements}
@@ -714,11 +705,16 @@ export function WriterWorkbench({
               fontAvailability?.document === activeDocument ? fontAvailability.values : {}
             }
             commandSource={commandSource}
-            focusDocument={
-              /** Returns panel header focus to this Writer frame's mounted client. @returns Nothing. */ () =>
-                (editingHostRef.current as HTMLElement).focus()
-            }
+            focusDocument={focusDocument}
             resolveArguments={resolveCommandArguments}
+          />
+        }
+        navigator={
+          <WriterNavigator
+            view={view}
+            visible={snapshot.isNavigatorVisible}
+            editingHost={editingHostRef}
+            focusDocument={focusDocument}
           />
         }
         rulers={
@@ -830,6 +826,9 @@ export function WriterWorkbench({
           textNodes={snapshot.textNodes}
           selectedTableBoxes={snapshot.selectedTableBoxes}
           showLineNumbers={snapshot.lineNumberInfo.paintLineNumbers}
+          {...(snapshot.isBaselineGridVisible
+            ? { baselineGridColor: snapshot.baselineGridColor }
+            : {})}
           lineNumberInfo={snapshot.lineNumberInfo}
           verticalRuler={
             snapshot.isVerticalRulerVisible ? (
@@ -914,10 +913,7 @@ export function WriterWorkbench({
         />
       ) : null}
       <WriterDialogPresenter
-        focusDocument={
-          /** Returns closed hyperlink/bookmark dialog focus to its actual mounted document client. @returns Nothing. */ () =>
-            (editingHostRef.current as HTMLElement).focus()
-        }
+        focusDocument={focusDocument}
         bookmarkNames={view.GetWrtShell().GetTextShell().GetBookmarkNames()}
         onBookmarkOperation={
           /** Applies immediate native bookmark operations without completing the open request. @param result - Actual operation. @returns Nothing. */ (

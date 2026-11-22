@@ -6,6 +6,7 @@ import type { SwUndoCursorState, SwUndoRedoContext } from "../undo/undobj";
 import { SetNumRuleMode, type SwDoc } from "../doc/doc";
 import { SwNumRule } from "../doc/number";
 import { WRITER_MAX_LIST_LEVEL } from "../doc/list";
+import { MoveOutlinePara } from "../doc/docnum";
 import { SwPaM, SwPosition } from "../crsr/pam";
 import type { SwNode } from "../docnode/node";
 import { SwTextNode } from "../txtnode/ndtxt";
@@ -260,6 +261,33 @@ export abstract class SwEditShell extends SwCursorShell {
       range.Dispose();
     }
   }
+  /** Updates explicit list starts at the normalized cursor endpoints with native restart undo. @param value - Unsigned start or USHRT_MAX for the style default. @returns Whether changed. */
+  public SetNodeNumStart(value: number): boolean {
+    const cursor = this.GetCursor();
+    const state = this.CaptureCursorState();
+    const actions = new SfxListUndoAction<SwUndoRedoContext>("Set numbering start");
+    const temporary = new SwPaM(cursor.GetPoint());
+    /** Adds the native restart-value undo only when an actual endpoint differs. @param point - Native endpoint. @returns Nothing. */
+    function add(point: SwPosition): void {
+      const node = point.GetNode().GetTextNode();
+      if (!node) return;
+      const start = node.HasAttrListRestartValue()
+        ? node.GetAttrListRestartValue() & 0xffff
+        : 0xffff;
+      if (start !== value) actions.AddAction(new SwUndoNumRuleStart(point, value, state));
+    }
+    try {
+      if (cursor.IsMultiSelection()) {
+        const ranges = new SwPamRanges(cursor);
+        for (let i = 0; i < ranges.Count(); i++) add(ranges.SetPam(i, temporary).GetPoint());
+      } else add(cursor.GetPoint());
+      return actions.GetActionCount() > 0 && this.ApplyAction(actions);
+    } finally {
+      state.pendingCharacterItems.Dispose();
+      temporary.Dispose();
+    }
+  }
+
   /** Applies one rule to every native ring range, reusing the first newly created list identity. @param rule - Rule value. @param createNewList - Native new-list mode. @param continuedListId - Existing list identity. @param resetIndentAttrs - Native reset-indent flag. @returns Whether text nodes were represented. */
   public SetCurNumRule(
     rule: SwNumRule,
@@ -366,11 +394,10 @@ export abstract class SwEditShell extends SwCursorShell {
     }
     return this.ApplyAction(action);
   }
-  /** Moves outline levels with native normalized range short-circuit and inverse-delta history. @param offset - Signed displacement, default one. @returns Whether every normalized range succeeded, retaining earlier successful ranges on later failure. */
-  public OutlineUpDown(offset = 1): boolean {
+  /** Moves outline levels with native normalized range short-circuit and inverse-delta history. @param offset - Signed displacement, default one. @param before - Cursor retained for a grouped outline edit. @returns Whether every normalized range succeeded, retaining earlier successful ranges on later failure. */
+  public OutlineUpDown(offset = 1, before = this.CaptureCursorState()): boolean {
     const doc = this.GetDoc(),
       cursor = this.GetCursor(),
-      before = this.CaptureCursorState(),
       manager = doc.GetUndoManager();
     return this.RunNotificationTransaction(
       /** Batches actual shell and model notifications. @returns Native range result. */ () =>
@@ -401,6 +428,19 @@ export abstract class SwEditShell extends SwCursorShell {
               manager.EndUndo();
             }
           },
+        ),
+    );
+  }
+  /** Moves the selected native outline range in one shell and model transaction. @param first - Selected heading index. @param end - Exclusive outline selection boundary. @param offset - Signed chapter offset. @returns Whether the range moved. */
+  public MoveOutlinePara(first: number, end: number, offset: number): boolean {
+    const doc = this.GetDoc();
+    const cursor = this.CaptureCursorState();
+    return this.RunNotificationTransaction(
+      /** Batches cursor and model changes for the chapter move. @returns Whether the chapter moved. */
+      () =>
+        doc.RunModelTransaction(
+          /** Applies and records the complete-node movement. @returns Whether the chapter moved. */
+          () => MoveOutlinePara(doc, first, end, offset, cursor),
         ),
     );
   }

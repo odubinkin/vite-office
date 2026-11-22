@@ -7,6 +7,8 @@ export const SID_RULER_BORDERS = 10080 as const;
 export const SID_RULER_ROWS = 10992 as const;
 /** Native vertical ruler row item slot. */
 export const SID_RULER_ROWS_VERTICAL = 10993 as const;
+/** Native annotation ID string slot. */
+export const SID_ATTR_POSTIT_ID = 11203 as const;
 
 /** Original SID_SVX_START +164 drawing fill-style slot. */
 export const SID_ATTR_FILL_STYLE = 10164 as const;
@@ -27,5 +29,17 @@ export const SID_ATTR_FLASH = 10406 as const;
 export const SID_ATTR_PAGE = 10050;
 /** Original SID_SVX_START +51 page size slot. */
 export const SID_ATTR_PAGE_SIZE = 10051;
+/** Original reference paragraph style slot for page line-spacing. */
+export const SID_SWREGISTER_COLLECTION = 10451;
+/** Original page line-spacing mode slot. */
+export const SID_SWREGISTER_MODE = 10467;
 /** Original SID_SVX_START +60 dynamic page-story height slot. */
 export const SID_ATTR_PAGE_DYNAMIC = 10060;
+
+/** Original header and footer item-set slots. */
+export const SID_ATTR_PAGE_HEADERSET = 10057;
+export const SID_ATTR_PAGE_FOOTERSET = 10058;
+/** Original header/footer visibility and content sharing slots. */
+export const SID_ATTR_PAGE_ON = 10059;
+export const SID_ATTR_PAGE_SHARED = 10061;
+export const SID_ATTR_PAGE_SHARED_FIRST = 11114;

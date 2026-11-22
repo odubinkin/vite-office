@@ -1,0 +1,25 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "browser-adaptation",
+    "status": "local-only",
+    "localPath": "apps/office/src/sw/browser/presentation/WriterTextGridPage.tsx",
+    "rationale": "Binds the original Text Grid radio group, layout controls, display controls and magnified preview.",
+    "responsibilities": [
+      "Binds the original Text Grid radio group, layout controls, display controls and magnified preview."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sw/browser/presentation/WriterTextGridPage.tsx",
+          "marker": "WriterTextGridPage"
+        }
+      ]
+    },
+    "stackDivergence": {
+      "kind": "browser-adaptation",
+      "rationale": "React, native input widgets and CSS present the original tab controls and page example."
+    }
+  }
+}

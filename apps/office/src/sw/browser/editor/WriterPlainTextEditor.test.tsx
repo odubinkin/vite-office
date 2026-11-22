@@ -5,7 +5,16 @@ import { beforeEach, describe, expect, it, vi } from "vitest";
 
 import { Desktop } from "../../../framework/browser/app/desktop";
 import { createOfficeModuleDescriptors } from "../../../framework/browser/app/modulemanager";
-import { createWriterModuleFactory } from "../composition/writer-module";
+import { SfxItemSet } from "../../../svl/source/items/itemset";
+import { RndStdIds } from "../../../svx/inc/swframetypes";
+import { aFrameFormatSetRange } from "../../source/core/bastyp/init";
+import { SwPosition } from "../../source/core/crsr/pam";
+import { MakeFlySection } from "../../source/core/doc/doclay";
+import { WriterWorkbench } from "../presentation/writer-view";
+import {
+  createWriterDocumentSession,
+  createWriterModuleFactory,
+} from "../composition/writer-module";
 
 /** Renders the desktop through the same Writer module registration used by the composition root. @returns Configured desktop element. */
 function App(): React.JSX.Element {
@@ -581,4 +590,55 @@ describe("Writer paragraph breaks" /** Groups native Enter interaction and guard
     );
     expect(screen.getByRole("textbox", { name: "Writer paragraph 2" })).toHaveTextContent("Second");
   });
+});
+
+it("removes the floating frame on a replaced middle paragraph and restores it on Undo", /** Exercises the native browser edit intent on a real document selection. @returns Nothing. */ () => {
+  const session = createWriterDocumentSession();
+  const doc = session.docShell.GetDoc();
+  const shell = session.view.GetWrtShell();
+  shell.Insert("foo");
+  shell.SplitNode();
+  const anchor = new SwPosition(shell.GetActiveParagraph(), 0, "anchor", "before");
+  shell.SplitNode();
+  shell.Insert("end");
+  const items = new SfxItemSet(doc.GetAttrPool(), aFrameFormatSetRange);
+  try {
+    const frame = MakeFlySection(doc, RndStdIds.FLY_AT_CHAR, anchor, items);
+    const section = frame.GetContent().GetContentIdx()?.GetNode();
+    if (!section) throw new Error("Expected a floating text section");
+    doc.nodes
+      .at(section.GetIndex() + 1)
+      .GetTextNode()
+      ?.SetText("Floating story");
+  } finally {
+    anchor.Dispose();
+    items.Dispose();
+  }
+
+  const workbench = render(<WriterWorkbench isActive view={session.view} />);
+  try {
+    const editor = within(screen.getByRole("article", { name: "Writer document body" }));
+    const first = editor.getByText("foo", { exact: true });
+    const last = editor.getByText("end", { exact: true });
+    const start = first.firstChild;
+    const end = last.firstChild;
+    if (!start || !end) throw new Error("Expected visible paragraph text");
+    const range = document.createRange();
+    range.setStart(start, 3);
+    range.setEnd(end, 3);
+    const selection = window.getSelection();
+    selection?.removeAllRanges();
+    selection?.addRange(range);
+    expect(screen.getByText("Floating story", { exact: true })).toBeInTheDocument();
+    expect(beforeInputWriterParagraph(first, "insertText", "bar").defaultPrevented).toBe(true);
+    expect(editor.getByText("foobar", { exact: true })).toBeInTheDocument();
+    expect(screen.queryByText("Floating story", { exact: true })).toBeNull();
+    fireEvent.keyDown(window, { key: "z", ctrlKey: true });
+    expect(editor.getByText("foo", { exact: true })).toBeInTheDocument();
+    expect(editor.getByText("end", { exact: true })).toBeInTheDocument();
+    expect(screen.getByText("Floating story", { exact: true })).toBeInTheDocument();
+  } finally {
+    workbench.unmount();
+    session.view.Close();
+  }
 });

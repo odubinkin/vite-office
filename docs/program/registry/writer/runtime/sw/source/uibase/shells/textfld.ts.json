@@ -1,0 +1,36 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sw/source/uibase/shells/textfld.ts",
+    "classification": "upstream-mechanism",
+    "state": "active",
+    "suite": "writer",
+    "subsystem": "text-search",
+    "capabilityIds": [
+      "CAP-0111"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "none",
+      "evidence": [
+        "apps/office/src/sw/source/uibase/shells/textfld.ts#createWriterAnnotationCommands",
+        "apps/office/src/sw/browser/presentation/WriterCommentsSidebar.test.tsx",
+        "vendor/libreoffice-reference/sw/source/uibase/shells/textfld.cxx",
+        "vendor/libreoffice-reference/sw/qa/uitest/writer_tests/comments.py"
+      ],
+      "justification": "Routes Insert Annotation through Writer selection, field insertion, undo, and sidebar focus. Resolve Comment addresses an existing annotation through its original string ID slot.",
+      "knownViolations": [],
+      "localSymbols": [
+        "createWriterAnnotationCommands"
+      ],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": "sw/source/uibase/shells/textfld.cxx",
+      "upstreamSymbols": [
+        "SwTextShell::ExecField"
+      ]
+    }
+  }
+}

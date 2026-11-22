@@ -1,8 +1,31 @@
 /** @fileoverview Browser paragraph dialog driven by one Writer controller request. */
+import { AreaTabPage } from "../../../cui/browser/tabpages/AreaTabPage";
+import { TransparencyTabPage } from "../../../cui/browser/tabpages/TransparencyTabPage";
+import { SvxAreaTabPage } from "../../../cui/source/tabpages/tparea";
+import { SvxTransparenceTabPage } from "../../../cui/source/tabpages/tptrans";
+import { FillStyle } from "../../../offapi/com/sun/star/drawing/FillStyle";
 import { MetricSpinButton } from "../../../svtools/browser/control/MetricSpinButton";
 import { TabulatorDialogSession } from "../../../cui/browser/tabpages/tabstpge-session";
 import { TabulatorTabPage } from "../../../cui/browser/tabpages/TabulatorTabPage";
 import { FieldUnit } from "../../../tools/inc/fldunit";
+import { useBrowserLocalization } from "../../../framework/browser/localization/browser-localization-context";
+import { SvxHyphenZoneItem } from "../../../editeng/source/items/paraitem";
+import { WriterFrameBorderPage } from "./WriterFrameBorderPage";
+import { SwParaConnectBorderItem, SwRegisterItem } from "../../source/core/para/paratr";
+import { SvxBorderTabPage } from "../../../cui/source/tabpages/border";
+import {
+  RES_BOX,
+  RES_PARATR_CONNECT_BORDER,
+  RES_PARATR_HYPHENZONE,
+  RES_PARATR_REGISTER,
+} from "../../inc/hintids";
+import { SfxItemState, type SfxItemSet } from "../../../svl/inc/itemset";
+import type { SfxBoolItem } from "../../../svl/inc/eitem";
+import { WriterAsianTypographyPage } from "./WriterAsianTypographyPage";
+import { WriterParagraphOutlinePage } from "./WriterParagraphOutlinePage";
+import { WriterParagraphAlignmentPage } from "./WriterParagraphAlignmentPage";
+import { WriterHyphenationControls } from "./WriterHyphenationControls";
+import { WriterListStyleDialog } from "./WriterListStyleDialog";
 import { WriterDialogHeader } from "./WriterDialogHeader";
 import { SvxExtParagraphTabPage } from "../../../cui/source/tabpages/paragrph";
 import { WriterParagraphBreakControls } from "./WriterParagraphBreakControls";
@@ -11,6 +34,7 @@ import { tabControlDirection } from "../../../vcl/source/control/tabctrl";
 import { useEffect, useId, useRef, useState } from "react";
 import type { WriterParagraphFormatValue } from "../../source/uibase/shells/textsh1";
 import type {
+  WriterListStyleTemplateRequest,
   WriterParagraphDialogRequest,
   WriterParagraphDialogResult,
 } from "../../source/uibase/dialog/writer-dialog-controller";
@@ -29,8 +53,41 @@ export function WriterParagraphDialog({
   onDialogCancel: (id: number) => void;
   onDialogSubmit: (id: number, value: WriterParagraphDialogResult) => void;
 }>): React.JSX.Element {
-  const [activeTab, setActiveTab] = useState<"spacing" | "flow" | "tabs">("spacing");
-  const tabIds = ["spacing", "flow", "tabs"] as const;
+  const localization = useBrowserLocalization();
+  const { pageInput, initialValue } = dialogRequest.request;
+  const [listStyle, setListStyle] = useState<{
+    readonly request: WriterListStyleTemplateRequest;
+    readonly invoker: HTMLButtonElement;
+    readonly renamed: (previous: string, next: string) => void;
+  }>();
+  const [listStyleNames, setListStyleNames] = useState(dialogRequest.request.listStyleNames ?? []);
+  /** Opens the child template without committing the paragraph draft. @param name - Selected style name. @param invoker - Parent edit button. @param renamed - Selection and pending item update. @returns Nothing. */
+  function openListStyle(
+    name: string,
+    invoker: HTMLButtonElement,
+    renamed: (previous: string, next: string) => void,
+  ): void {
+    const request = dialogRequest.request.editListStyle?.(name);
+    if (request) setListStyle({ request, invoker, renamed });
+  }
+  const hyphenation = pageInput.GetItem(RES_PARATR_HYPHENZONE);
+  const hyphenationDefault = pageInput.GetPool().GetUserOrPoolDefaultItem(RES_PARATR_HYPHENZONE);
+  /** Looks up the original paragraph dialog field names. @param key - Resource key. @param fallback - English resource text. @returns Localized text. */
+  function label(key: string, fallback: string): string {
+    return localization.GetText(`writer.paragraph.${key}`, fallback);
+  }
+  const tabIds = [
+    "spacing",
+    "alignment",
+    "flow",
+    "asiantypo",
+    "outline",
+    "tabs",
+    "borders",
+    "area",
+    "transparence",
+  ] as const;
+  const [activeTab, setActiveTab] = useState<(typeof tabIds)[number]>("spacing");
   const tabIdentity = useId(),
     tabRefs = useRef<Partial<Record<(typeof tabIds)[number], HTMLButtonElement | null>>>({});
   useEffect(
@@ -53,22 +110,60 @@ export function WriterParagraphDialog({
         dialogRequest.request.pageStyleNames,
       ),
   );
+  const [borders, setBorders] = useState<SvxBorderTabPage>();
   const [tabs] = useState(
     /** Retains a lazy native page and accumulated exchange output for this request. @returns Session. */
-    () => new TabulatorDialogSession(dialogRequest.request.tabContext, unit),
+    () => new TabulatorDialogSession(pageInput, unit),
   );
+  const [area] = useState(
+    /** Captures the active paragraph's native fill selection. @returns Owned Area page state. */ () =>
+      new SvxAreaTabPage(pageInput),
+  );
+  const [transparence] = useState(
+    /** Captures the active paragraph's native transparency selection. @returns Owned Transparency page state. */ () =>
+      new SvxTransparenceTabPage(pageInput),
+  );
+  const [, refreshFill] = useState(0);
+
+  /** Exchanges one page's deltas and repaints its browser controls. @param page - Page that changed. @returns Nothing. */
+  function changeFill(page: SvxAreaTabPage | SvxTransparenceTabPage): void {
+    page.FillItemSet(tabs.output);
+    refreshFill(
+      /** Invalidates the browser fill widgets. @param version - Current render version. @returns Next version. */ (
+        version,
+      ) => version + 1,
+    );
+  }
   /** Runs original tab deactivation before changing the active page. @param next - Original tab identity. @returns Nothing. */
   function activate(next: (typeof tabIds)[number]): void {
     if (next === activeTab) return;
     if (activeTab === "tabs") tabs.Deactivate(draft.firstLineIndentPt ?? 0);
+    if (next === "borders" && borders === undefined)
+      setBorders(
+        new SvxBorderTabPage(
+          pageInput,
+          RES_BOX,
+          RES_PARATR_CONNECT_BORDER,
+          undefined,
+          new SwParaConnectBorderItem(),
+        ),
+      );
     setActiveTab(next);
   }
   /** Accepts original request values through the existing controller port. @returns Nothing. */
   function accept(): void {
     if (activeTab === "tabs") tabs.Deactivate(draft.firstLineIndentPt ?? 0);
+    const paragraphFormat = { ...draft, ...flow.FillItemSet() };
+    const paragraphFormatChanged = (
+      Object.keys(paragraphFormat) as (keyof WriterParagraphFormatValue)[]
+    ).some(
+      /** Compares stored scalar dialog values against the original snapshot. @param key - Dialog property. @returns Whether edited. */
+      (key) => paragraphFormat[key] !== initialValue[key],
+    );
     onDialogSubmit(dialogRequest.id, {
-      tabStopItems: tabs.output,
-      paragraphFormat: { ...draft, ...flow.FillItemSet() },
+      pageItems: tabs.output,
+      paragraphFormat,
+      paragraphFormatChanged,
       paintLineNumbers: showLineNumbersDraft,
     });
   }
@@ -123,6 +218,7 @@ export function WriterParagraphDialog({
             }
           }
         }
+        inert={listStyle !== undefined}
         aria-label="Paragraph"
         aria-modal="true"
         data-writer-modal-panel="true"
@@ -146,13 +242,19 @@ export function WriterParagraphDialog({
               {(
                 [
                   ["spacing", "Indents & Spacing"],
+                  ["alignment", "Alignment"],
                   ["flow", "Text Flow"],
+                  ["asiantypo", label("asian-typography", "Asian Typography")],
+                  ["outline", label("outline-and-list", "Outline & List")],
                   ["tabs", "Tabs"],
+                  ["borders", label("borders", "Borders")],
+                  ["area", label("area", "Area")],
+                  ["transparence", label("transparency", "Transparency")],
                 ] as const
               ).map(
                 /** Handles Writer formatting state. @param input1 - Input value. @returns Callback result. */ ([
                   id,
-                  label,
+                  caption,
                 ]) => (
                   <button
                     id={`${tabIdentity}-${id}`}
@@ -176,7 +278,7 @@ export function WriterParagraphDialog({
                     role="tab"
                     type="button"
                   >
-                    {label}
+                    {caption}
                   </button>
                 ),
               )}
@@ -307,9 +409,80 @@ export function WriterParagraphDialog({
                       }
                     />
                   )}
+                  <ParagraphRegisterCheckbox
+                    input={pageInput}
+                    output={tabs.output}
+                    label={label("activate-page-line-spacing", "Activate page line-spacing")}
+                  />
                 </>
               ) : null}
+              {activeTab === "asiantypo" && (
+                <div className="sm:col-span-2">
+                  <WriterAsianTypographyPage input={pageInput} output={tabs.output} label={label} />
+                </div>
+              )}
+              <div hidden={activeTab !== "outline"} className="sm:col-span-2">
+                <WriterParagraphOutlinePage
+                  input={pageInput}
+                  output={tabs.output}
+                  label={label}
+                  listStyleNames={listStyleNames}
+                  outlineLocked={dialogRequest.request.outlineLocked ?? false}
+                  onEditListStyle={openListStyle}
+                />
+              </div>
               {activeTab === "tabs" ? <TabulatorTabPage session={tabs} /> : null}
+              {activeTab === "borders" && borders && (
+                <WriterFrameBorderPage
+                  page={borders}
+                  input={pageInput}
+                  output={tabs.output}
+                  unit={unit}
+                  label={label}
+                />
+              )}
+              {activeTab === "area" && (
+                <AreaTabPage
+                  page={area}
+                  label={label}
+                  changed={/** Publishes area items. @returns Nothing. */ () => changeFill(area)}
+                />
+              )}
+              {activeTab === "transparence" && (
+                <TransparencyTabPage
+                  page={transparence}
+                  color={area.GetFillStyle() === FillStyle.SOLID ? area.GetColor() : undefined}
+                  label={label}
+                  changed={
+                    /** Publishes uniform transparency. @returns Nothing. */ () =>
+                      changeFill(transparence)
+                  }
+                />
+              )}
+              <div hidden={activeTab !== "alignment"} className="sm:col-span-2">
+                <WriterParagraphAlignmentPage
+                  input={pageInput}
+                  output={tabs.output}
+                  label={label}
+                />
+              </div>
+              {hyphenationDefault instanceof SvxHyphenZoneItem && (
+                <div hidden={activeTab !== "flow"} className="sm:col-span-2">
+                  <WriterHyphenationControls
+                    initial={hyphenation instanceof SvxHyphenZoneItem ? hyphenation : undefined}
+                    poolDefault={hyphenationDefault}
+                    unit={unit}
+                    label={label}
+                    onChange={
+                      /** Retains the native Text Flow item in the shared dialog output. @param item - Edited value, or undefined after restoring the original. @returns Nothing. */
+                      (item) => {
+                        if (item) tabs.output.Put(item, true);
+                        else tabs.output.ClearItem(RES_PARATR_HYPHENZONE);
+                      }
+                    }
+                  />
+                </div>
+              )}
               {activeTab === "flow" ? (
                 <>
                   <WriterParagraphBreakControls page={flow} />
@@ -325,18 +498,6 @@ export function WriterParagraphDialog({
                       type="checkbox"
                     />
                     Keep with next paragraph
-                  </label>
-                  <label className="sm:col-span-2 flex items-center gap-2">
-                    <input
-                      checked={draft.countLineNumbers}
-                      onChange={
-                        /** Handles Writer formatting state. @param event - Input value. @returns Callback result. */ (
-                          event,
-                        ) => setDraft({ ...draft, countLineNumbers: event.target.checked })
-                      }
-                      type="checkbox"
-                    />
-                    Include this paragraph in line numbering
                   </label>
                   <label className="sm:col-span-2 flex items-center gap-2">
                     <input
@@ -371,7 +532,79 @@ export function WriterParagraphDialog({
           </button>
         </div>
       </form>
+      {listStyle && (
+        <WriterListStyleDialog
+          request={listStyle.request}
+          invoker={listStyle.invoker}
+          unit={unit}
+          onRename={
+            /** Updates the parent's live list names and pending assignment. @param previous - Prior name. @param next - Applied name. @returns Nothing. */
+            (previous, next) => {
+              setListStyleNames(
+                /** Changes this entry and restores the chooser's original sort order. @param names - Previous choices. @returns Updated names. */
+                (names) =>
+                  names
+                    .map(
+                      /** Updates the selected style's name. @param name - Choice. @returns Current name. */
+                      (name) => (name === previous ? next : name),
+                    )
+                    .sort(),
+              );
+              listStyle.renamed(previous, next);
+            }
+          }
+          onClose={
+            /** Returns to the still-open paragraph draft. @returns Nothing. */
+            () => setListStyle(undefined)
+          }
+        />
+      )}
     </div>
+  );
+}
+
+/** Exchanges the native register flag for the active paragraph selection. @param props - Input and output and original checkbox label. @returns Paragraph register control. */
+function ParagraphRegisterCheckbox({
+  input,
+  output,
+  label,
+}: Readonly<{
+  input: SfxItemSet;
+  output: SfxItemSet;
+  label: string;
+}>): React.JSX.Element {
+  const state = input.GetItemState(RES_PARATR_REGISTER);
+  const initial =
+    state >= SfxItemState.DEFAULT
+      ? (input.Get(RES_PARATR_REGISTER) as SfxBoolItem).GetValue()
+      : undefined;
+  const edited = output.GetItemIfSet(RES_PARATR_REGISTER, false) as SfxBoolItem | undefined;
+  const [draft, setDraft] = useState(edited?.GetValue() ?? initial);
+  return (
+    <label className="flex items-center gap-2 sm:col-span-2">
+      <input
+        type="checkbox"
+        checked={draft ?? false}
+        disabled={state === SfxItemState.UNKNOWN || state === SfxItemState.DISABLED}
+        ref={
+          /** Restores the original mixed selection state on the native checkbox. @param control - Mounted checkbox. @returns Nothing. */
+          (control) => {
+            if (control)
+              control.indeterminate = draft === undefined && state === SfxItemState.INVALID;
+          }
+        }
+        onChange={
+          /** Writes a typed paragraph register item for the accepted range. @param event - Checkbox edit. @returns Nothing. */
+          (event) => {
+            const active = event.currentTarget.checked;
+            if (active === initial) output.ClearItem(RES_PARATR_REGISTER);
+            else output.Put(new SwRegisterItem(active), true);
+            setDraft(active);
+          }
+        }
+      />
+      {label}
+    </label>
   );
 }
 

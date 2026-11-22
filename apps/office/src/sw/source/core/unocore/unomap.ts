@@ -1,4 +1,6 @@
 /** @fileoverview Consumed Writer cursor/paragraph/style property entries from pinned unomap.cxx/unomap1.cxx; unrepresented properties are not advertised. */
+import { MAYBEVOID } from "../../../../udkapi/com/sun/star/beans/PropertyAttribute";
+import { CONVERT_TWIPS } from "../../../../svl/inc/poolitem";
 import { cppu_detail_getUnoType_FillStyle as fillStyleType } from "../../../../offapi/com/sun/star/drawing/FillStyle";
 import { cppu_detail_getUnoType_BitmapMode as bitmapModeType } from "../../../../offapi/com/sun/star/drawing/BitmapMode";
 import { OWN_ATTR_VALUE_START } from "../../../../svl/inc/solar";
@@ -6,11 +8,10 @@ import { XATTR_FILLBITMAP } from "../../../../svx/inc/xdef";
 import { XATTR_FILLSTYLE, XATTR_FILLCOLOR, XATTR_FILLTRANSPARENCE } from "../../../../svx/inc/xdef";
 import { cppu_detail_getUnoType_PropertyValue as propertyType } from "../../../../udkapi/com/sun/star/beans/PropertyValue";
 import { XComplexColor } from "../../../../offapi/com/sun/star/util/XComplexColor";
-import { UnoType, type UnoTypeArgument } from "../../../../cppu/inc/unotype";
+import type { UnoTypeArgument } from "../../../../cppu/inc/unotype";
 import { cppu_detail_getUnoType_BreakType as breakType } from "../../../../offapi/com/sun/star/style/BreakType";
-import { OUString } from "../../../../sal/inc/rtl/ustring";
 import { SfxItemPropertySet } from "../../../../svl/source/items/itemprop";
-import { PropertyMoreFlags, SfxItemPropertyMapEntry } from "../../../../svl/inc/itemprop";
+import type { PropertyMoreFlags, SfxItemPropertyMapEntry } from "../../../../svl/inc/itemprop";
 import { cppu_detail_getUnoType_Locale as localeType } from "../../../../udkapi/com/sun/star/lang/Locale";
 import { FN_UNO_PARA_NUM_AUTO_FORMAT } from "../../../inc/cmdid";
 import { cppu_detail_getUnoType_NamedValue as namedValueType } from "../../../../udkapi/com/sun/star/beans/NamedValue";
@@ -18,10 +19,23 @@ import * as M from "../../../../editeng/inc/memberids";
 import { cppu_detail_getUnoType_FontSlant as fontSlantType } from "../../../../offapi/com/sun/star/awt/FontSlant";
 import { cppu_detail_getUnoType_LineSpacing as lineSpacingType } from "../../../../offapi/com/sun/star/style/LineSpacing";
 import { cppu_detail_getUnoType_TabStop as tabStopType } from "../../../../offapi/com/sun/star/style/TabStop";
-import { cppu_detail_getUnoType_BorderLine as borderLineType } from "../../../../offapi/com/sun/star/table/BorderLine";
 import { cppu_detail_getUnoType_ShadowFormat as shadowFormatType } from "../../../../offapi/com/sun/star/table/ShadowFormat";
 import * as H from "../../../inc/hintids";
 import { WID_DOC_DEFAULT_PAGE_MODE, WID_DOC_INTEROP_GRAB_BAG } from "../../../inc/unomap";
+import {
+  adjustmentMembers,
+  adjustmentNames,
+  boxMembers,
+  charBoxMembers,
+  charBoxNames,
+  hyphenationMembers,
+  hyphenationNames,
+  nativeEntries,
+  paragraphBooleanMembers,
+  paragraphBooleanNames,
+  paragraphLineNumberMembers,
+  paragraphLineNumberNames,
+} from "./unomap1";
 import { pageBitmapGeometryProperties, pageStoryPropertyEntries } from "./unostyle.page-stories";
 import * as Grid from "../../../inc/unomid";
 import { MID_PAGEDESC_PAGEDESCNAME, MID_PAGEDESC_PAGENUMOFFSET } from "../../../inc/unomid";
@@ -60,34 +74,6 @@ export const SwUnoTextDocumentPropertyMap: ReadonlyMap<
 ]);
 /** Original page-style grid and direction entries from unomap1.cxx. */
 type PageStylePropertyEntry = SwUnoPropertyEntry & { readonly type: UnoTypeArgument };
-/** Shared box member descriptors for page and paragraph style property maps. @param attributes - Native property flags. @returns Original UNO descriptors. */
-function boxMembers(attributes: number): [string, PageStylePropertyEntry][] {
-  return (["Left", "Right", "Top", "Bottom"] as const).flatMap(
-    /** Binds each original box member. @param side - Physical side. @param index - Native member order. @returns UNO property entries. */
-    (side, index): [string, PageStylePropertyEntry][] => [
-      [
-        `${side}Border`,
-        {
-          which: H.RES_BOX,
-          member: (index + 1) | 0x80,
-          kind: "border",
-          type: borderLineType,
-          attributes,
-        },
-      ],
-      [
-        `${side}BorderDistance`,
-        {
-          which: H.RES_BOX,
-          member: (index + 6) | 0x80,
-          kind: "long",
-          type: "sal_Int32",
-          attributes,
-        },
-      ],
-    ],
-  );
-}
 export const SwUnoPageStylePropertyMap: ReadonlyMap<string, PageStylePropertyEntry> = new Map<
   string,
   PageStylePropertyEntry
@@ -149,49 +135,21 @@ export const SwUnoPageStylePropertyMap: ReadonlyMap<string, PageStylePropertyEnt
       ] as const,
   ),
 ]);
+/** Paragraph border properties shared by the text and style property maps. */
+const paragraphBorderNames = [
+  "ParaShadowFormat",
+  "BorderDistance",
+  "LeftBorder",
+  "LeftBorderDistance",
+  "RightBorder",
+  "RightBorderDistance",
+  "TopBorder",
+  "TopBorderDistance",
+  "BottomBorder",
+  "BottomBorderDistance",
+] as const;
+
 /** Exact property identity and member selection; numeric values stay in their original item owners. */
-const characterTypographyEntries = [
-  ["CharRotation", row(H.RES_CHRATR_ROTATE, "sal_Int16", M.MID_ROTATE, 1)],
-  ["CharRotationIsFitToLine", row(H.RES_CHRATR_ROTATE, "bool", M.MID_FITTOLINE, 1)],
-  ["CharEmphasis", row(H.RES_CHRATR_EMPHASIS_MARK, "sal_Int16", M.MID_EMPHASIS, 1)],
-  ["CharCombineIsOn", row(H.RES_CHRATR_TWO_LINES, "bool", M.MID_TWOLINES, 1)],
-  ["CharCombinePrefix", row(H.RES_CHRATR_TWO_LINES, "OUString", M.MID_START_BRACKET, 1)],
-  ["CharCombineSuffix", row(H.RES_CHRATR_TWO_LINES, "OUString", M.MID_END_BRACKET, 1)],
-  ["CharScaleWidth", row(H.RES_CHRATR_SCALEW, "sal_Int16", 0, 1)],
-  ["CharCaseMap", row(H.RES_CHRATR_CASEMAP, "sal_Int16", 0, 1)],
-  ["CharFlash", row(H.RES_CHRATR_BLINK, "bool", 0, 1)],
-  ["CharHidden", row(H.RES_CHRATR_HIDDEN, "bool", 0, 1)],
-  ["CharNoHyphenation", row(H.RES_CHRATR_NOHYPHEN, "bool", 0, 1)],
-] as const;
-const characterTypographyNames = characterTypographyEntries.map(
-  /** Shares the represented common typography membership. @param entry - Original row. @returns Property name. */ ([
-    name,
-  ]) => name,
-);
-/** Original common paragraph hyphenation members from unomapproperties.hxx. */
-const paragraphHyphenationEntries = [
-  ["ParaIsHyphenation", "bool", M.MID_IS_HYPHEN],
-  ["ParaHyphenationNoCaps", "bool", M.MID_HYPHEN_NO_CAPS],
-  ["ParaHyphenationNoLastWord", "bool", M.MID_HYPHEN_NO_LAST_WORD],
-  ["ParaHyphenationMaxLeadingChars", "sal_Int16", M.MID_HYPHEN_MIN_LEAD],
-  ["ParaHyphenationMaxTrailingChars", "sal_Int16", M.MID_HYPHEN_MIN_TRAIL],
-  ["ParaHyphenationCompoundMinLeadingChars", "sal_Int16", M.MID_HYPHEN_COMPOUND_MIN_LEAD],
-  ["ParaHyphenationCompoundMinTrailingChars", "sal_Int16", M.MID_HYPHEN_COMPOUND_MIN_TRAIL],
-  ["ParaHyphenationMaxHyphens", "sal_Int16", M.MID_HYPHEN_MAX_HYPHENS],
-  ["ParaHyphenationMinWordLength", "sal_Int16", M.MID_HYPHEN_MIN_WORD_LENGTH],
-  ["ParaHyphenationZone", "sal_Int16", M.MID_HYPHEN_ZONE],
-  ["ParaHyphenationZoneAlways", "sal_Int16", M.MID_HYPHEN_ZONE_ALWAYS],
-  ["ParaHyphenationZoneColumn", "sal_Int16", M.MID_HYPHEN_ZONE_COLUMN],
-  ["ParaHyphenationZonePage", "sal_Int16", M.MID_HYPHEN_ZONE_PAGE],
-  ["ParaHyphenationZoneSpread", "sal_Int16", M.MID_HYPHEN_ZONE_SPREAD],
-  ["ParaHyphenationKeep", "bool", M.MID_HYPHEN_KEEP],
-  ["ParaHyphenationKeepType", "sal_Int16", M.MID_HYPHEN_KEEP_TYPE],
-  ["ParaHyphenationKeepLine", "bool", M.MID_HYPHEN_KEEP_LINE],
-] as const;
-const paragraphHyphenationNames = paragraphHyphenationEntries.map(
-  /** Selects the shared native name. @param row - Hyphenation mapping. @returns Property name. */
-  ([name]) => name,
-);
 export const SwUnoPropertyMap: ReadonlyMap<string, SwUnoPropertyEntry> = new Map([
   [
     "ListAutoFormat",
@@ -316,79 +274,25 @@ export const SwUnoPropertyMap: ReadonlyMap<string, SwUnoPropertyEntry> = new Map
       ),
     ],
   ),
-  [
-    "CharUnderlineColor",
-    {
-      type: "sal_Int32",
-      attributes: 1,
-      which: H.RES_CHRATR_UNDERLINE,
-      member: M.MID_TL_COLOR,
-      kind: "any",
-    },
-  ],
-  [
-    "CharUnderlineHasColor",
-    {
-      type: "bool",
-      attributes: 1,
-      which: H.RES_CHRATR_UNDERLINE,
-      member: M.MID_TL_HASCOLOR,
-      kind: "any",
-    },
-  ],
-  [
-    "CharOverline",
-    {
-      type: "sal_Int16",
-      attributes: 1,
-      which: H.RES_CHRATR_OVERLINE,
-      member: M.MID_TL_STYLE,
-      kind: "any",
-    },
-  ],
-  [
-    "CharOverlineColor",
-    {
-      type: "sal_Int32",
-      attributes: 1,
-      which: H.RES_CHRATR_OVERLINE,
-      member: M.MID_TL_COLOR,
-      kind: "any",
-    },
-  ],
-  [
-    "CharOverlineHasColor",
-    {
-      type: "bool",
-      attributes: 1,
-      which: H.RES_CHRATR_OVERLINE,
-      member: M.MID_TL_HASCOLOR,
-      kind: "any",
-    },
-  ],
-  [
-    "CharContoured",
-    { type: "bool", attributes: 1, which: H.RES_CHRATR_CONTOUR, member: 0, kind: "bool" },
-  ],
-  [
-    "CharShadowed",
-    { type: "bool", attributes: 1, which: H.RES_CHRATR_SHADOWED, member: 0, kind: "bool" },
-  ],
-  [
-    "CharRelief",
-    {
-      type: "sal_Int16",
-      attributes: 1,
-      which: H.RES_CHRATR_RELIEF,
-      member: M.MID_RELIEF,
-      kind: "any",
-    },
-  ],
-  ...characterTypographyEntries,
-  ...paragraphHyphenationEntries.map(
-    /** Creates the original shared UNO row. @param entry - Property mapping. @returns Native descriptor row. */
-    ([name, type, member]) => [name, row(H.RES_PARATR_HYPHENZONE, type, member, 1)] as const,
-  ),
+  ["CharUnderlineColor", row(H.RES_CHRATR_UNDERLINE, "sal_Int32", M.MID_TL_COLOR, 1)],
+  ["CharUnderlineHasColor", row(H.RES_CHRATR_UNDERLINE, "bool", M.MID_TL_HASCOLOR, 1)],
+  ["CharContoured", row(H.RES_CHRATR_CONTOUR, "bool", 0, 1)],
+  ["CharShadowed", row(H.RES_CHRATR_SHADOWED, "bool", 0, 1)],
+  ["CharRelief", row(H.RES_CHRATR_RELIEF, "sal_Int16", M.MID_RELIEF, 1)],
+  ["CharRotation", row(H.RES_CHRATR_ROTATE, "sal_Int16", M.MID_ROTATE, 1)],
+  ["CharRotationIsFitToLine", row(H.RES_CHRATR_ROTATE, "bool", M.MID_FITTOLINE, 1)],
+  ["CharScaleWidth", row(H.RES_CHRATR_SCALEW, "sal_Int16", 0, 1)],
+  ["CharCombineIsOn", row(H.RES_CHRATR_TWO_LINES, "bool", M.MID_TWOLINES, 1)],
+  ["CharCombinePrefix", row(H.RES_CHRATR_TWO_LINES, "OUString", M.MID_START_BRACKET, 1)],
+  ["CharCombineSuffix", row(H.RES_CHRATR_TWO_LINES, "OUString", M.MID_END_BRACKET, 1)],
+  ["CharFlash", row(H.RES_CHRATR_BLINK, "bool", 0, 1)],
+  ["CharHidden", row(H.RES_CHRATR_HIDDEN, "bool", 0, 1)],
+  ["CharNoHyphenation", row(H.RES_CHRATR_NOHYPHEN, "bool", 0, 1)],
+  ["CharOpticalSizing", row(H.RES_CHRATR_OPTICAL_SIZING, "bool", 0, 1)],
+  ["CharCaseMap", row(H.RES_CHRATR_CASEMAP, "sal_Int16", 0, 1)],
+  ["CharOverline", row(H.RES_CHRATR_OVERLINE, "sal_Int16", M.MID_TL_STYLE, 1)],
+  ["CharOverlineColor", row(H.RES_CHRATR_OVERLINE, "sal_Int32", M.MID_TL_COLOR, 1)],
+  ["CharOverlineHasColor", row(H.RES_CHRATR_OVERLINE, "bool", M.MID_TL_HASCOLOR, 1)],
   [
     "ParaIsAutoFirstLineIndent",
     {
@@ -399,26 +303,7 @@ export const SwUnoPropertyMap: ReadonlyMap<string, SwUnoPropertyEntry> = new Map
       kind: "bool",
     },
   ],
-  [
-    "ParaLineNumberCount",
-    {
-      type: "bool",
-      attributes: 1,
-      which: H.RES_LINENUMBER,
-      member: Grid.MID_LINENUMBER_COUNT,
-      kind: "any",
-    },
-  ],
-  [
-    "ParaLineNumberStartValue",
-    {
-      type: "sal_Int32",
-      attributes: 1,
-      which: H.RES_LINENUMBER,
-      member: Grid.MID_LINENUMBER_STARTVALUE,
-      kind: "any",
-    },
-  ],
+  ...paragraphLineNumberMembers,
   [
     "ParaIsConnectBorder",
     { type: "bool", attributes: 1, which: H.RES_PARATR_CONNECT_BORDER, member: 0, kind: "bool" },
@@ -427,7 +312,10 @@ export const SwUnoPropertyMap: ReadonlyMap<string, SwUnoPropertyEntry> = new Map
     "BorderDistance",
     { type: "sal_Int32", attributes: 1, which: H.RES_BOX, member: 5 | 0x80, kind: "long" },
   ],
+  ["ParaShadowFormat", row(H.RES_SHADOW, shadowFormatType, CONVERT_TWIPS)],
   ...boxMembers(1),
+  ...charBoxMembers,
+  ...hyphenationMembers,
   ["BreakType", { type: breakType, attributes: 1, which: H.RES_BREAK, member: 0, kind: "break" }],
   [
     "PageDescName",
@@ -481,6 +369,7 @@ export const SwUnoPropertyMap: ReadonlyMap<string, SwUnoPropertyEntry> = new Map
       kind: "any",
     },
   ],
+  ["CharEmphasis", row(H.RES_CHRATR_EMPHASIS_MARK, "sal_Int16", M.MID_EMPHASIS, 1)],
   [
     "CharWordMode",
     { type: "bool", attributes: 1, which: H.RES_CHRATR_WORDLINEMODE, member: 0, kind: "bool" },
@@ -570,9 +459,8 @@ export const SwUnoPropertyMap: ReadonlyMap<string, SwUnoPropertyEntry> = new Map
     { type: "sal_Int16", which: H.RES_FRAMEDIR, member: 0, kind: "short", attributes: 0 },
   ],
   ["ParaVertAlignment", row(H.RES_PARATR_VERTALIGN, "sal_Int16", 0, 1)],
-  ["ParaAdjust", row(H.RES_PARATR_ADJUST, "sal_Int16", 0, 1)],
-  ["ParaLastLineAdjust", row(H.RES_PARATR_ADJUST, "sal_Int16", 1, 1)],
-  ["ParaExpandSingleWord", row(H.RES_PARATR_ADJUST, "bool", 2, 1)],
+  ...paragraphBooleanMembers,
+  ...adjustmentMembers,
   [
     "ParaLeftMargin",
     {
@@ -628,6 +516,10 @@ export const SwUnoPropertyMap: ReadonlyMap<string, SwUnoPropertyEntry> = new Map
       member: 0x80,
       kind: "any",
     },
+  ],
+  [
+    "ParaRegisterModeActive",
+    { type: "bool", attributes: 1, which: H.RES_PARATR_REGISTER, member: 0, kind: "bool" },
   ],
   ["ParaKeepTogether", { type: "bool", attributes: 1, which: H.RES_KEEP, member: 0, kind: "bool" }],
   [
@@ -685,8 +577,17 @@ const characterMaybeVoidProperties = new Set([
   "CharStrikeout",
 ]);
 const paragraphStyleProperties = new Set([
-  ...paragraphHyphenationNames,
-  ...characterTypographyNames,
+  "CharRotation",
+  "CharRotationIsFitToLine",
+  "CharScaleWidth",
+  "CharNoHyphenation",
+  "CharOpticalSizing",
+  "CharContoured",
+  "CharShadowed",
+  "CharRelief",
+  "CharCaseMap",
+  ...hyphenationNames,
+  ...charBoxNames,
   "CharLocale",
   "CharWeight",
   "CharPosture",
@@ -719,28 +620,17 @@ const paragraphStyleProperties = new Set([
   "CharOverline",
   "CharOverlineColor",
   "CharOverlineHasColor",
-  "CharContoured",
-  "CharShadowed",
-  "CharRelief",
   "ParaIsAutoFirstLineIndent",
-  "ParaLineNumberCount",
-  "ParaLineNumberStartValue",
+  ...paragraphLineNumberNames,
   "ParaIsConnectBorder",
-  "BorderDistance",
-  "LeftBorder",
-  "LeftBorderDistance",
-  "RightBorder",
-  "RightBorderDistance",
-  "TopBorder",
-  "TopBorderDistance",
-  "BottomBorder",
-  "BottomBorderDistance",
+  ...paragraphBorderNames,
   "BreakType",
   "PageDescName",
   "PageNumberOffset",
   "NumberingStyleName",
   "CharUnderline",
   "CharStrikeout",
+  "CharEmphasis",
   "CharWordMode",
   "CharAutoKerning",
   "CharKerning",
@@ -760,9 +650,8 @@ const paragraphStyleProperties = new Set([
   "CharHighlight",
   "WritingMode",
   "ParaVertAlignment",
-  "ParaAdjust",
-  "ParaLastLineAdjust",
-  "ParaExpandSingleWord",
+  ...paragraphBooleanNames,
+  ...adjustmentNames,
   "ParaLeftMargin",
   "ParaRightMargin",
   "ParaFirstLineIndent",
@@ -771,6 +660,7 @@ const paragraphStyleProperties = new Set([
   "ParaTabStops",
   "ParaContextMargin",
   "ParaLineSpacing",
+  "ParaRegisterModeActive",
   "ParaKeepTogether",
   "ParaSplit",
   "ParaOrphans",
@@ -779,8 +669,7 @@ const paragraphStyleProperties = new Set([
   "FollowStyle",
 ]);
 const paragraphMaybeVoidProperties = new Set([
-  ...paragraphHyphenationNames,
-  ...characterTypographyNames,
+  ...hyphenationNames,
   "CharLocale",
   "CharWeight",
   "CharPosture",
@@ -809,11 +698,13 @@ const paragraphMaybeVoidProperties = new Set([
   "CharFontCharSetComplex",
   "CharFontPitchComplex",
   "ParaIsConnectBorder",
+  "ParaShadowFormat",
   "PageDescName",
   "PageNumberOffset",
   "NumberingStyleName",
   "CharStrikeout",
   "ParaTabStops",
+  "ParaRegisterModeActive",
   "ParaOrphans",
   "ParaWidows",
   "OutlineLevel",
@@ -859,30 +750,6 @@ import { MID_PAGE_ORIENTATION, MID_PAGE_LAYOUT } from "../../../../svx/inc/unomi
 import { MID_SIZE_WIDTH, MID_SIZE_HEIGHT } from "../../../../svl/inc/memberid";
 import { cppu_detail_getUnoType as indexReplaceType } from "../../../../cppu/inc/com/sun/star/container/XIndexReplace";
 import { cppu_detail_getUnoType_PageStyleLayout as pageLayoutType } from "../../../../offapi/com/sun/star/style/PageStyleLayout";
-/** Compiler binding for original static property-table initializers over the current admitted core entries. Names/types remain genuine owned values with static lifetime. @param entries - Native Which/member descriptors. @returns Static schema values. */
-function nativeEntries(
-  entries: ReadonlyMap<string, SwUnoPropertyEntry>,
-): readonly SfxItemPropertyMapEntry[] {
-  const values: SfxItemPropertyMapEntry[] = [];
-  for (const [name, entry] of entries) {
-    const key = unicode(name);
-    try {
-      values.push(
-        new SfxItemPropertyMapEntry(
-          key,
-          entry.which,
-          UnoType.get(entry.type),
-          entry.attributes ?? 1,
-          entry.member,
-          entry.more ?? PropertyMoreFlags.NONE,
-        ),
-      );
-    } finally {
-      key.dispose();
-    }
-  }
-  return values;
-}
 /** Original static-table initializer row. @param which - Native Which/dispatch identity. @param type - Original declared type. @param member - Original member. @param attributes - Original flags. @returns Descriptor row. */
 function row(which: number, type: UnoTypeArgument, member = 0, attributes = 0): SwUnoPropertyEntry {
   return { which, type, member, attributes, kind: "any" };
@@ -892,8 +759,17 @@ const staticMapEntries: (readonly SfxItemPropertyMapEntry[] | undefined)[] = [];
 const staticPropertySets: (SfxItemPropertySet | undefined)[] = [];
 /** Original COMMON_CRSR_PARA_PROPERTIES_WITHOUT_FN and hyperlink rows represented by this core. */
 const textDefaultProperties = new Set([
-  ...paragraphHyphenationNames,
-  ...characterTypographyNames,
+  "CharRotation",
+  "CharRotationIsFitToLine",
+  "CharScaleWidth",
+  "CharNoHyphenation",
+  "CharOpticalSizing",
+  "CharContoured",
+  "CharShadowed",
+  "CharRelief",
+  "CharCaseMap",
+  ...hyphenationNames,
+  ...charBoxNames,
   "CharLocale",
   "CharWeight",
   "CharPosture",
@@ -929,22 +805,10 @@ const textDefaultProperties = new Set([
   "CharOverline",
   "CharOverlineColor",
   "CharOverlineHasColor",
-  "CharContoured",
-  "CharShadowed",
-  "CharRelief",
   "ParaIsAutoFirstLineIndent",
-  "ParaLineNumberCount",
-  "ParaLineNumberStartValue",
+  ...paragraphLineNumberNames,
   "ParaIsConnectBorder",
-  "BorderDistance",
-  "LeftBorder",
-  "LeftBorderDistance",
-  "RightBorder",
-  "RightBorderDistance",
-  "TopBorder",
-  "TopBorderDistance",
-  "BottomBorder",
-  "BottomBorderDistance",
+  ...paragraphBorderNames,
   "BreakType",
   "PageDescName",
   "PageNumberOffset",
@@ -953,6 +817,7 @@ const textDefaultProperties = new Set([
   "UnvisitedCharStyleName",
   "CharUnderline",
   "CharStrikeout",
+  "CharEmphasis",
   "CharWordMode",
   "CharAutoKerning",
   "CharKerning",
@@ -969,9 +834,8 @@ const textDefaultProperties = new Set([
   "CharHighlight",
   "WritingMode",
   "ParaVertAlignment",
-  "ParaAdjust",
-  "ParaLastLineAdjust",
-  "ParaExpandSingleWord",
+  ...paragraphBooleanNames,
+  ...adjustmentNames,
   "ParaLeftMargin",
   "ParaRightMargin",
   "ParaFirstLineIndent",
@@ -979,6 +843,7 @@ const textDefaultProperties = new Set([
   "ParaBottomMargin",
   "ParaContextMargin",
   "ParaLineSpacing",
+  "ParaRegisterModeActive",
   "ParaKeepTogether",
   "ParaSplit",
   "ParaOrphans",
@@ -1134,11 +999,3 @@ export class SwUnoPropertyMapProvider {
 }
 /** Original process-static provider. Its schema and property-set owners retain process lifetime. */
 export const aSwMapProvider = new SwUnoPropertyMapProvider();
-/** Creates the existing known-length Unicode value from browser UTF16 units. @param value - Logical text. @returns Owned native string. */
-function unicode(value: string): OUString {
-  const units = new Uint16Array(value.length);
-  for (let i = 0; i < value.length; i++) units[i] = value.charCodeAt(i);
-  return new OUString(units, units.length);
-}
-import { CONVERT_TWIPS } from "../../../../svl/inc/poolitem";
-import { MAYBEVOID } from "../../../../udkapi/com/sun/star/beans/PropertyAttribute";

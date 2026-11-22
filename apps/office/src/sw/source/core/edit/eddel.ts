@@ -84,7 +84,7 @@ export function createWriterDeleteSelectionOperation(
                   ? final
                   : (endpoints[index] as SwUndoCursorState),
               );
-              context.GetDoc().GetDocumentContentOperationsManager().DeleteAndJoin(range);
+              action.DeleteSelection(range);
               action.SetAfterDelete(
                 index === currentRanges.length - 1 ? finalPoint : range.GetPoint(),
               );

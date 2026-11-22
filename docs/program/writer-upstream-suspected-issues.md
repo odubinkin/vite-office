@@ -329,6 +329,15 @@ a second undo restores the boundary and text, while the newly split paragraph
 can inherit the join survivor's alignment. The paragraph replacement
 regression covers this extended source-derived sequence.
 
+The same retained-history path can affect annotations outside the replaced
+range. `SwHistory::CopyAttr` includes annotation hints with `bCopyFields`,
+and `ClearSwpHintsArr(true)` removes them during Undo. In the portable Writer
+view test, replacing the words on both sides of a ranged comment keeps the
+comment through replacement, the first Undo, and Redo. A second Undo
+restores the text with its annotation marker while leaving the field and
+range unrestored. The pinned native code suggests the same consumed-history
+path, and this result has been verified in the port.
+
 ## WRITER-011: Empty replacement can advance to the next content node
 
 Pinned `sw/source/core/crsr/swcrsr.cxx`, `lcl_FindSelection`, compares the live
@@ -5590,13 +5599,17 @@ applies its authored properties without that collection change.
   paragraph-only attribute branch. The view regression covers both
   directions. This is a source-derived observation.
 
-### WRITER-701 — The Attributes dialog labels pair kerning as character blinking
+### WRITER-701 — The attribute resource labels pair kerning as character blinking
 
 - Upstream `include/svx/svxitems.hrc` assigns “Character blinking” to
   `SID_ATTR_CHAR_AUTOKERN`. Writer’s pool maps that slot to `RES_CHRATR_AUTOKERN`.
   The actual blinking item uses `SID_ATTR_FLASH` and appears as “Blinking”.
-- Writer retains the two separate source slots and the original labels. The
-  Attributes dialog regression checks that both entries are available.
+- The Writer Attributes dialog now uses the pinned dialog ranges. Writer
+  lists “Blinking” and excludes the pair-kerning slot. The original strings
+  remain available to other callers.
+- The Font Position page shows the pair-kerning control, but the same Writer
+  ranges exclude its item from the output set. Toggling it alone does not
+  produce a formatting criterion.
 
 ### WRITER-702 — Format can append an exact criterion after a presence criterion for the same slot
 
@@ -5837,7 +5850,240 @@ both package-local cases.
 - [Original named bitmap context](../../vendor/libreoffice-reference/xmloff/source/style/FillStyleContext.cxx)
 - [Original legacy background image context](../../vendor/libreoffice-reference/xmloff/source/style/XMLBackgroundImageContext.cxx)
 
-### WRITER-725 — A legacy frame background can say stretch while the bitmap mode is tiled
+### WRITER-725 — An explicit resolved-comments visibility argument is inverted
+
+`SwView::ExecViewOptions` applies an explicit Boolean directly for Comments.
+For Resolved Comments it negates the explicit value before changing the
+visibility option. The argument-free menu action still toggles the current
+option. Writer preserves both branches.
+
+- [Original Writer view options dispatcher](../../vendor/libreoffice-reference/sw/source/uibase/uiview/view0.cxx)
+
+### WRITER-726 — Ordinary comment undo snapshots both contain the new resolution state
+
+`SwAnnotationWin::SetResolved` changes the field before calling `UpdateData`.
+The latter copies the old field for `SwUndoFieldFromDoc` after the change.
+Outside the Yrs transaction path, undo can restore the previous text
+snapshot while leaving the new resolution state in place. Writer preserves
+this ordering in the local annotation history.
+
+- [Original annotation update and history capture](../../vendor/libreoffice-reference/sw/source/uibase/docvw/AnnotationWin.cxx)
+- [Original field undo replay](../../vendor/libreoffice-reference/sw/source/core/undo/SwUndoField.cxx)
+
+### WRITER-727 — Resolving a mixed comment thread by ID can reopen it
+
+The annotation window's menu resolves a thread whenever any of its notes
+are unresolved. The text shell's ID-based command toggles the root note
+and copies that state to the other notes. A resolved root with unresolved
+replies therefore produces opposite results through the two commands.
+Writer preserves both paths.
+
+- [Original annotation menu action](../../vendor/libreoffice-reference/sw/source/uibase/docvw/AnnotationWin2.cxx)
+- [Original root-based toggle](../../vendor/libreoffice-reference/sw/source/uibase/docvw/AnnotationWin.cxx)
+
+### WRITER-728 — Thread navigation follows adjacent comment windows
+
+LibreOffice uses parent metadata to mark a reply as a follow window.
+Finding its thread root then walks backward in sidebar order while the
+current window is a follow window. For interleaved comments this can
+associate a reply with a preceding root whose ID differs from its stored
+parent. Writer preserves anchor order and the follow-window rule.
+
+- [Original parent metadata and sidebar ordering](../../vendor/libreoffice-reference/sw/source/uibase/docvw/PostItMgr.cxx)
+- [Original root navigation](../../vendor/libreoffice-reference/sw/source/uibase/docvw/AnnotationWin2.cxx)
+
+### WRITER-729 — A reply can quote an ellipsis before a nonempty paragraph
+
+`SwAnnotationWin::InitAnswer` tests only the first paragraph before copying
+the original text object. When that paragraph is empty, the quotation is
+`...` even if a later paragraph contains text. Writer preserves this rule.
+
+- [Original reply quotation](../../vendor/libreoffice-reference/sw/source/uibase/docvw/AnnotationWin.cxx)
+
+### WRITER-730 — Promoting a reply can leave it in its original sidebar thread
+
+`SwAnnotationWin::SetAsRoot` clears the parent links and calls
+`SwPostItMgr::MoveSubthreadToRoot`. The manager rotates the promoted subthread
+past the remaining replies, then `CalcRects` sorts the notes by field anchor.
+This restores their original order when the anchors differ. Layout sets
+the follow flag for replies and leaves the existing flag in place for a
+promoted note. A mounted note can therefore still appear within the previous
+thread after Promote Comment disappears from its menu. Writer keeps the field
+anchors and the mounted window's follow flag. Recreated windows group the
+comments from the persisted parent links.
+
+- [Original root promotion](../../vendor/libreoffice-reference/sw/source/uibase/docvw/AnnotationWin.cxx)
+- [Original anchor sorting, follow flag, and subthread rotation](../../vendor/libreoffice-reference/sw/source/uibase/docvw/PostItMgr.cxx)
+
+### WRITER-731 — Character dialog can report the first paragraph's font for a mixed selection
+
+`ImpEditEngine::GetAttribs` fills character attributes from the first
+paragraph's defaults when the selection has no hard character formatting.
+For later paragraphs it invalidates differing paragraph attributes, while
+a differing character default leaves the first paragraph's item set.
+In the annotation Character dialog, accepting the original input set can
+therefore apply that first font to every comment. Writer preserves the
+selection aggregation and the bulk-format merge.
+
+- [Original EditEngine selection aggregation](../../vendor/libreoffice-reference/editeng/source/editeng/impedit5.cxx)
+- [Original annotation Character dialog and bulk formatting](../../vendor/libreoffice-reference/sw/source/uibase/docvw/PostItMgr.cxx)
+
+### WRITER-732 — Text replacement can skip the second of two adjacent annotation markers
+
+`SwTextNode::ReplaceText` deletes a dummy attribute and its character, then
+decrements the remaining range length. The loop advances its position even
+though the next character shifted into the position just processed. If that
+character is another annotation marker, the following raw text replacement can
+overwrite the marker without deleting its field. The source-derived Writer
+test replaces `a<annotation><annotation>bc` with `ZZ` and observes the
+second field still associated with offset 1. Writer retains the original
+forward scan. The native result is inferred from the pinned source and has
+been reproduced in the port.
+
+- [Original ReplaceText loop](../../vendor/libreoffice-reference/sw/source/core/txtnode/ndtxt.cxx#L3916)
+- [Original DeleteAttribute behavior](../../vendor/libreoffice-reference/sw/source/core/txtnode/thints.cxx#L1785)
+
+### WRITER-733 — Redo can move a character-anchored graphic to the other side of its match
+
+For replacement, `SwUndoSaveContent::DelContentIndex` preserves objects
+anchored to characters in the boundary paragraphs. It moves a covered
+anchor to the mark endpoint. A backward search can leave that endpoint at
+the end of the match. `SwUndoReplace::Impl::RedoImpl` reconstructs the
+selection with its mark at the start regardless of the original direction.
+
+The source-derived Writer test replaces `hit` with `matched` with an
+image anchored at offset 1. In the backward pass, the anchor moves to the
+old match end at offset 3. The insertion at that boundary leaves the
+character anchor in place. Undo restores offset 1 and Redo moves the anchor
+to offset 0. Writer preserves this sequence. The native result is inferred
+from the pinned source and verified in the port.
+
+- [Original anchor movement](../../vendor/libreoffice-reference/sw/source/core/undo/undobj.cxx#L1087)
+- [Original redo selection](../../vendor/libreoffice-reference/sw/source/core/undo/unins.cxx#L729)
+- [Original anchor handling at the insertion boundary](../../vendor/libreoffice-reference/sw/source/core/txtnode/ndtxt.cxx#L1562)
+
+### WRITER-734 — Page Style presence can produce no search matches
+
+The Attributes checklist receives a slot range that includes
+`SID_ATTR_PARA_MODEL`. It can add an invalid-item presence criterion for
+that slot. Writer's search conversion handles a set `SvxPageModelItem`.
+It leaves the invalid presence marker in the search set. The paragraph
+comparison set then drops the raw slot because its range ends with the
+graphic attributes. A Page Style criterion alone produces
+no matches even when combined with text. Alongside a model criterion it
+does not constrain the match. Writer preserves both branches and tests
+them with an explicit page style on the paragraph.
+
+- [Original checklist construction and confirmation](../../vendor/libreoffice-reference/cui/source/dialogs/srchxtra.cxx#L112)
+- [Original conversion to a page descriptor](../../vendor/libreoffice-reference/sw/source/uibase/utlui/uitool.cxx#L701)
+- [Original comparison ranges](../../vendor/libreoffice-reference/sw/source/core/crsr/findattr.cxx#L1080)
+
+### WRITER-735 — Hyphenation zone UNO values narrow through unsigned storage
+
+`SvxHyphenZoneItem::PutValue` takes a signed 32-bit value and assigns it
+to a byte or a 16-bit word without range validation. `QueryValue` reads
+both widths as signed 16-bit values. A leading-character count of 257
+becomes 1, and a zone value of 65535 is read back as -1. The member
+handlers strip the conversion flag without converting units. Writer
+preserves the source narrowing and tests the results through UNO Any.
+
+- [Original member conversion and assignment](../../vendor/libreoffice-reference/editeng/source/items/paraitem.cxx#L639)
+
+### WRITER-736 — ODF suppresses colors for absent underlines only
+
+The text-property map assigns the underline color entries context IDs used
+by the export filter to clear colors when the underline is absent or has
+style NONE. The analogous overline entries carry context ID zero. An
+explicit overline color can therefore be exported alongside
+`style:text-overline-style="none"`. Writer preserves this asymmetry.
+
+- [Original text-property mappings](../../vendor/libreoffice-reference/xmloff/source/text/txtprmap.cxx#L178)
+- [Original overline mappings](../../vendor/libreoffice-reference/xmloff/source/text/txtprmap.cxx#L260)
+- [Original underline color filter](../../vendor/libreoffice-reference/xmloff/source/text/txtexppr.cxx#L893)
+
+### WRITER-737 — Expanding title case restarts at a Writer portion boundary
+
+The title-case scan in `SvxFont::CalcCaseMap` resets its word flag at
+ASCII space and tab only. Writer normally applies that scan to the
+whole paragraph before drawing an individual portion. When a mapped
+initial expands, the drawing code maps the selected portion again as
+a standalone snippet. A portion beginning inside an existing word
+can then acquire an uppercase initial. Writer preserves the
+space/tab boundary and expansion-triggered restart.
+
+- [Original title-case scan and midword comment](../../vendor/libreoffice-reference/editeng/source/items/svxfont.cxx#L166)
+- [Original Writer portion handling after a length change](../../vendor/libreoffice-reference/sw/source/core/txtnode/swfont.cxx#L1182)
+
+### WRITER-738 — The ODF text-shadow import accepts arbitrary values as enabled
+
+The character shadow property uses `XMLShadowedPropHdl`. Its import
+handler treats every attribute value except the exact token `none`
+as true, including an empty value or a malformed shadow expression.
+Its export handler emits `1pt 1pt` for true. Writer uses the same
+handler for this boolean character property.
+
+- [Original boolean shadow handler](../../vendor/libreoffice-reference/xmloff/source/style/shdwdhdl.cxx#L37)
+- [Original character property mapping](../../vendor/libreoffice-reference/xmloff/source/text/txtprmap.cxx#L175)
+
+### WRITER-739 — Fit to Line exports as fixed character rotation scale
+
+The character Position page stores the Fit to Line checkbox in the
+`SvxCharRotateItem` boolean exposed as `CharRotationIsFitToLine`.
+The XML handler maps true to `fixed` and false to `line-height`.
+The mapping appears reversed relative to the token names. Writer
+preserves both directions of the original conversion.
+
+- [Original character rotation property](../../vendor/libreoffice-reference/xmloff/source/text/txtprmap.cxx#L244)
+- [Original rotation scale handler factory](../../vendor/libreoffice-reference/xmloff/source/text/txtprhdl.cxx#L1403)
+
+## Automatic paragraph direction and first-strong isolates
+
+The pinned direction detector describes the Unicode paragraph-level algorithm but increments its isolate depth only for LRI and RLI. FSI leaves the depth unchanged. A strong character inside an FSI can therefore determine the outer paragraph direction. The Writer port preserves the pinned switch behavior in `GuessParagraphDirection`. See [guessparadirection.cxx](../../vendor/libreoffice-reference/i18nutil/source/utility/guessparadirection.cxx).
+
+### WRITER-740 — Numbering format invalidation truncates the upper-level mask
+
+- Source: pinned `sw/source/core/doc/docnum.cxx`, `GetUpperLvlChg` and `lcl_ChgNumRule`.
+- Observation: the helper produces a mask from a 16-bit argument and returns it as an 8-bit value. On the tenth list level, a change to the ninth level cannot trigger the dependent-level notification through this mask, even when the tenth-level label includes its parent. Direct format changes still mark their own level.
+- Local behavior: Writer retains the eight-bit return width in `docnum.ts`. This observation concerns the per-node invalidation path. The source still invalidates and validates the numbering rule after a format change.
+
+### WRITER-741 — Some numbering fields compare only the first and last selected levels
+
+- Source: pinned `cui/source/tabpages/numpages.cxx`, `SvxNumOptionsTabPage::InitControls`.
+- Observation: the loop assigns equality for the start, prefix and suffix on each selected level. An intermediate level can differ without the field appearing mixed if the last selected level matches the first. Type, character style and sublevels accumulate equality across the selection.
+- Local behavior: Writer keeps the first-to-last comparison for those three fields and retains full selection comparisons for the others. Display alone leaves the rule unchanged.
+
+### WRITER-742 — Normal text grid preview takes character width from base text height
+
+In normal paper mode, the native dialog stores Character width separately from
+Max. base text size. The preview advances the character boundaries by the
+magnified base text height. The horizontal page painter advances them by
+`GetGridWidth`, which reads the stored character width in normal mode.
+[Preview calculation](../../vendor/libreoffice-reference/sw/source/uibase/frmdlg/colex.cxx#L505)
+[Page painting](../../vendor/libreoffice-reference/sw/source/core/layout/paintfrm.cxx#L6114)
+[Width selection](../../vendor/libreoffice-reference/sw/source/core/layout/pagechg.cxx#L2889)
+
+A normal grid with 18 pt base text and 13 pt character width still previews
+18 pt cells before magnification. Changing only the width updates the document
+cell spacing. Writer preserves both source calculations. This observation is
+based on the pinned source. A compiled differential check is pending.
+
+### WRITER-743 — Page Style undo leaves the reference paragraph style participating in page line-spacing
+
+Accepting a page line-spacing reference applies `SwRegisterItem(true)`
+directly to the selected paragraph style before changing the page descriptor.
+The page undo action restores the descriptor and its reference. It carries no
+snapshot of the selected paragraph style's prior register item.
+[Page Style exchange](../../vendor/libreoffice-reference/sw/source/uibase/utlui/uitool.cxx#L449)
+[Page descriptor undo creation](../../vendor/libreoffice-reference/sw/source/core/doc/docdesc.cxx#L433)
+[Page undo application](../../vendor/libreoffice-reference/sw/source/core/undo/SwUndoPageDesc.cxx#L232)
+
+With reference style participation initially disabled, enable page line-spacing
+with that style and undo the page edit. The descriptor reference is cleared and
+the paragraph style retains its enabled register item. Writer preserves this
+sequence. The observation follows the pinned source and the local dialog
+regression test. A compiled upstream differential check is pending.
+
+### WRITER-744 — A legacy frame background can say stretch while the bitmap mode is tiled
 
 The three bitmap frames in the original `framebackgrounds.odt` fixture
 declare `style:repeat="stretch"` on the legacy child and omit the modern
@@ -5849,7 +6095,7 @@ default for this combination.
 - [Original bitmap frame assertions](../../vendor/libreoffice-reference/sw/qa/extras/odfexport/odfexport.cxx)
 - [Original text background context selection](../../vendor/libreoffice-reference/xmloff/source/text/XMLTextPropertySetContext.cxx)
 
-### WRITER-726 — The old frame transparency attribute is ignored for a modern bitmap
+### WRITER-745 — The old frame transparency attribute is ignored for a modern bitmap
 
 The original frame descriptor uses the old `style:background-transparency`
 value to recover a missing modern opacity on non-bitmap fills. It ignores
@@ -5859,7 +6105,7 @@ on the background-image child.
 
 - [Original Writer frame fill precedence and compatibility fallback](../../vendor/libreoffice-reference/sw/source/core/unocore/unoframe.cxx)
 
-### WRITER-727 — A frame RGB fallback can keep a modern solid fill transparent
+### WRITER-746 — A frame RGB fallback can keep a modern solid fill transparent
 
 When a modern solid fill has no modern color, Writer's descriptor
 applies the legacy RGB member through a default transparent brush. The
@@ -5871,7 +6117,7 @@ color when its legacy color is explicitly transparent.
 - [Original Writer frame RGB fallback](../../vendor/libreoffice-reference/sw/source/core/unocore/unoframe.cxx)
 - [Original Writer text import filtering of the solid style](../../vendor/libreoffice-reference/xmloff/source/text/txtimppr.cxx)
 
-### WRITER-728 — A saturated line-number offset is exported as absent
+### WRITER-747 — A saturated line-number offset is exported as absent
 
 The line-number settings setter caps a positive offset at 65535 twips.
 The getter interprets that same value as the unspecified-distance
@@ -5883,7 +6129,7 @@ both paths.
 - [Original XML offset default](../../vendor/libreoffice-reference/xmloff/source/text/XMLLineNumberingImportContext.cxx)
 - [Original Writer property setter and getter](../../vendor/libreoffice-reference/sw/source/core/unocore/unosett.cxx)
 
-### WRITER-729 — A later line-number separator can retain the preceding interval
+### WRITER-748 — A later line-number separator can retain the preceding interval
 
 Each separator context replaces the separator text when it closes,
 while its increment reaches the parent only if conversion succeeds.
@@ -5893,7 +6139,7 @@ Writer preserves the separate updates.
 
 - [Original separator context](../../vendor/libreoffice-reference/xmloff/source/text/XMLLineNumberingSeparatorImportContext.cxx)
 
-### WRITER-730 — A negative paragraph line restart becomes a large positive number
+### WRITER-749 — A negative paragraph line restart becomes a large positive number
 
 The UNO setter accepts a signed 32-bit value and assigns it to an unsigned
 24-bit field. For example, an ODT paragraph style with `text:line-number="-1"`
@@ -5904,7 +6150,7 @@ and conversion.
 - [Original line-number field](../../vendor/libreoffice-reference/sw/inc/fmtline.hxx)
 - [Original UNO start-value setter](../../vendor/libreoffice-reference/sw/source/core/layout/atrfrm.cxx)
 
-### WRITER-731 — Character shadow loses its input color and offsets
+### WRITER-750 — Character shadow loses its input color and offsets
 
 The ODF character property projects every value except the exact token
 `none` to the same boolean. On output an enabled shadow always becomes
@@ -5915,7 +6161,7 @@ the native conversion.
 - [Original character shadow property map](../../vendor/libreoffice-reference/xmloff/source/text/txtprmap.cxx)
 - [Original shadow handler](../../vendor/libreoffice-reference/xmloff/source/style/shdwdhdl.cxx)
 
-### WRITER-732 — Inactive overlines can export explicit colors
+### WRITER-751 — Inactive overlines can export explicit colors
 
 The text export mapper suppresses both underline color states when the
 underline style is absent or none. Overline uses the same color handlers
@@ -5926,7 +6172,7 @@ the separate behavior.
 - [Original line-decoration property map](../../vendor/libreoffice-reference/xmloff/source/text/txtprmap.cxx)
 - [Original underline-only export filter](../../vendor/libreoffice-reference/xmloff/source/text/txtexppr.cxx)
 
-### WRITER-733 — Text-combine brackets are truncated to a UTF-16 unit
+### WRITER-752 — Text-combine brackets are truncated to a UTF-16 unit
 
 The ODF text-combine bracket handler keeps only the first UTF-16 unit.
 A supplementary character therefore enters the Writer item as its high
@@ -5936,7 +6182,7 @@ preserves these native handler rules.
 
 - [Original combine bracket handlers](../../vendor/libreoffice-reference/xmloff/source/text/txtprhdl.cxx)
 
-### WRITER-734 — Extra spaces invalidate text emphasis
+### WRITER-753 — Extra spaces invalidate text emphasis
 
 The parser treats each literal space as a delimiter and receives empty
 tokens between consecutive spaces. It rejects an emphasis attribute
@@ -5946,7 +6192,7 @@ Writer preserves the native tokenization and failed assignment.
 - [Original emphasis handler](../../vendor/libreoffice-reference/xmloff/source/text/txtprhdl.cxx)
 - [Original XML token enumerator](../../vendor/libreoffice-reference/xmloff/source/core/xmluconv.cxx)
 
-### WRITER-735 — Two ODF casing attributes share one Writer property
+### WRITER-754 — Two ODF casing attributes share one Writer property
 
 The text property maps assign both `fo:font-variant` and
 `fo:text-transform` to `CharCaseMap` without a merge flag. An explicit
@@ -5960,7 +6206,7 @@ property and accepts both original conversions.
 - [Original casing handlers](../../vendor/libreoffice-reference/xmloff/source/style/csmaphdl.cxx)
 - [Original multi-property name sort](../../vendor/libreoffice-reference/xmloff/source/style/xmlimppr.cxx)
 
-### WRITER-736 — Hyphenation limits narrow through unsigned item fields
+### WRITER-755 — Hyphenation limits narrow through unsigned item fields
 
 Writer accepts signed numeric UNO input and narrows character limits into
 unsigned bytes and the zone values into unsigned words. Out-of-range
@@ -5971,7 +6217,7 @@ used by the original item.
 - [Original hyphenation fields](../../vendor/libreoffice-reference/include/editeng/hyphenzoneitem.hxx)
 - [Original hyphenation item query and assignment](../../vendor/libreoffice-reference/editeng/source/items/paraitem.cxx)
 
-### WRITER-737 — An unrecognized font charset still counts as present
+### WRITER-756 — An unrecognized font charset still counts as present
 
 The XML font charset handler reports success for every token and assigns
 a value only for `x-symbol`. The font defaults pass sees that property
@@ -5982,7 +6228,7 @@ authored charset.
 - [Original font charset handler](../../vendor/libreoffice-reference/xmloff/source/style/fonthdl.cxx)
 - [Original font defaulting pass](../../vendor/libreoffice-reference/xmloff/source/text/txtimppr.cxx)
 
-### WRITER-738 — An empty annotation date is formatted as an invalid ODF date
+### WRITER-757 — An empty annotation date is formatted as an invalid ODF date
 
 An annotation without a parsed date receives `DateTime::EMPTY`. The
 annotation exporter still writes `dc:date` when keeping author and date
@@ -5995,7 +6241,7 @@ the serialization and the import result.
 - [Original annotation field export](../../vendor/libreoffice-reference/xmloff/source/text/txtflde.cxx)
 - [Original date-time conversion](../../vendor/libreoffice-reference/sax/source/tools/converter.cxx)
 
-### WRITER-739 — An authored annotation name overrides mark uniqueness
+### WRITER-758 — An authored annotation name overrides mark uniqueness
 
 The annotation mark initializer takes a nonempty name from its trailing
 field even after the mark manager has resolved a name collision. This

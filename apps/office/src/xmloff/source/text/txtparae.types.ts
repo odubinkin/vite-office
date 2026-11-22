@@ -1,11 +1,18 @@
 /** @fileoverview Bounded native-value ODF character handoff for text export/import; independent UNO script scalars,underline properties and original font metadata are preserved. No browser boolean formatting model or substitute UNO provider. */
+import type { OdfAsianTypography } from "./txtprhdl";
+import type { OdfParagraphJustification } from "../style/adjushdl";
+import type { OdfParagraphHyphenation } from "./txtprmap";
+import type { OdfFillProperties } from "../draw/fill-properties";
 import type { LanguageType } from "../../../i18nlangtag/inc/lang";
 import type { FontSlant } from "../../../offapi/com/sun/star/awt/FontSlant";
 import type { FontPitch } from "../../../tools/inc/fontenum";
 import type { rtl_TextEncoding } from "../../../sal/inc/rtl/textenc";
+import type { ShadowFormat } from "../../../offapi/com/sun/star/table/ShadowFormat";
+import type { OdfBoxProperties } from "../style/bordrhdl";
 import type { OdfThemeColor } from "./XMLComplexColorContext";
 /** Direct character properties supported by the bounded text exporter. */
 export interface OdfCharacterProperties {
+  readonly characterBox?: OdfBoxProperties;
   readonly color?: string;
   readonly textTransparency?: number;
   readonly themeColor?: OdfThemeColor;
@@ -42,32 +49,37 @@ export interface OdfCharacterProperties {
   /** Native UNO CharUnderline and its independent color properties. */
   /** Native UNO CharStrikeout, merged from the four original ODF properties. */
   readonly strikeout?: number;
+  /** Native UNO CharEmphasis short. */
+  readonly emphasis?: number;
+  /** Original UNO CharCaseMap short, shared by both ODF attributes. */
+  readonly caseMap?: number;
+  /** Original UNO font paint properties. */
+  readonly outline?: boolean;
+  readonly shadow?: boolean;
+  readonly relief?: number;
   /** Native CharEscapement and CharEscapementHeight. */
   readonly escapement?: number;
   readonly escapementHeight?: number;
+  /** Native character rotation is carried in tenths of a degree. */
+  readonly rotation?: number;
+  readonly rotationFitToLine?: boolean;
+  readonly scaleWidth?: number;
   readonly underlineStyle?: number;
   readonly underlineColor?: number;
   readonly underlineHasColor?: boolean;
   readonly overlineStyle?: number;
   readonly overlineColor?: number;
   readonly overlineHasColor?: boolean;
-  readonly contoured?: boolean;
-  readonly shadowed?: boolean;
-  readonly relief?: number;
-  readonly rotation?: number;
-  readonly rotationFitsLine?: boolean;
-  readonly emphasis?: number;
-  readonly caseMap?: number;
-  readonly flashing?: boolean;
-  readonly hidden?: boolean;
-  readonly noHyphenation?: boolean;
-  readonly combineLines?: boolean;
-  readonly combinePrefix?: string;
-  readonly combineSuffix?: string;
-  readonly scaleWidth?: number;
   /** Original shared line-decoration mode and automatic kerning bool properties. */
   readonly wordMode?: boolean;
   readonly autoKerning?: boolean;
+  readonly noHyphenation?: boolean;
+  readonly opticalSizing?: boolean;
+  readonly flashing?: boolean;
+  readonly hidden?: boolean;
+  readonly combineLines?: boolean;
+  readonly combinePrefix?: string;
+  readonly combineSuffix?: string;
   /** Original signed UNO CharKerning in hundredths of a millimetre. */
   readonly kerning?: number;
 }
@@ -80,3 +92,47 @@ export type FontFaceNameResolver = (
   pitch?: FontPitch,
   charSet?: rtl_TextEncoding,
 ) => string;
+
+/** Direct paragraph properties represented by the bounded Writer model. */
+export interface OdfTabStop {
+  readonly position: number;
+  readonly alignment: "left" | "right" | "center" | "char" | "default";
+  readonly decimal: string;
+  readonly fill: string;
+}
+
+/** Direct paragraph properties represented by the bounded Writer model. */
+export interface OdfParagraphProperties extends OdfBoxProperties, OdfFillProperties {
+  readonly joinBorder?: boolean;
+  readonly paragraphShadow?: ShadowFormat;
+  readonly countLineNumbers?: boolean;
+  readonly lineNumberStartValue?: number;
+  readonly contextualSpacing?: boolean;
+  readonly firstLineIndent?: number;
+  readonly autoTextIndent?: boolean;
+  readonly pageStyleName?: string;
+  readonly pageNumber?: number | "auto";
+  readonly lineHeightPercent?: number;
+  readonly lineHeightTwips?: number;
+  readonly lineHeightAtLeastTwips?: number;
+  readonly lineSpacingTwips?: number;
+  readonly fontIndependentLineSpacing?: boolean;
+  readonly keepWithNext?: boolean;
+  readonly registerModeActive?: boolean;
+  readonly hyphenation?: OdfParagraphHyphenation;
+  readonly justification?: OdfParagraphJustification;
+  readonly keepTogether?: boolean;
+  readonly widows?: number;
+  readonly verticalAlign?: number;
+  readonly writingMode?: number;
+  readonly writingModeAutomatic?: boolean;
+  readonly snapToGrid?: boolean;
+  readonly asianTypography?: OdfAsianTypography;
+  readonly orphans?: number;
+  readonly breakBefore?: "auto" | "page";
+  readonly breakAfter?: "auto" | "page";
+  readonly lowerSpacing?: number;
+  readonly rightMargin?: number;
+  readonly tabStopDetails?: readonly OdfTabStop[];
+  readonly upperSpacing?: number;
+}

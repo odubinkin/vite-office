@@ -1,0 +1,23 @@
+{
+  "schema_version": 1,
+  "task_id": "202611220554-PHST4Z",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-11-22T06:21:29.970Z",
+  "verdict": "pass",
+  "summary": "The original Navigator command opens a native-shaped modeless tree backed by live Writer headings, tables and bookmarks.",
+  "evaluated_sha": "b54bf49e4ecc5c61da010eed94fa7ee5539dfdc8",
+  "blueprint_digest": "c8d869172566bcd545e5de6afcd299e891b501b884c235466966d02d28a12f84",
+  "findings": [
+    "Current physical pages and table follow rows use the native root layout and editing cursor, while menus and F5 control view-only state."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202611220554-PHST4Z/README.md",
+    "b54bf49e4ecc and task Findings: 78 focused cases, 8 production Chromium cases, exact Navigator and resource reruns, TypeScript and production build"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": [
+    "The Navigator window represents the active Writer document and the three connected content families."
+  ]
+}

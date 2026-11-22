@@ -17,11 +17,10 @@
       "divergenceClass": "none",
       "evidence": [
         "apps/office/src/sw/source/core/crsr/annotationmark.ts#AnnotationMark",
-        "apps/office/src/sw/source/filter/xml/odt-annotation-range.test.ts#preserves original comment text and anchors",
-        "vendor/libreoffice-reference/sw/source/core/crsr/annotationmark.cxx#AnnotationMark::InitDoc",
-        "vendor/libreoffice-reference/sw/source/core/crsr/annotationmark.cxx#AnnotationMark::GetAnnotationFormatField"
+        "apps/office/src/sw/source/filter/xml/odt-annotation.test.ts",
+        "vendor/libreoffice-reference/sw/source/core/crsr/annotationmark.cxx"
       ],
-      "justification": "Binds the native annotation range to the trailing field, prefers the authored field name, and looks up the original attached format.",
+      "justification": "Connects an annotation point field to registered Writer text endpoints.",
       "knownViolations": [],
       "localSymbols": [
         "AnnotationMark"
@@ -29,8 +28,7 @@
       "sourceResponsibility": "unverified",
       "upstreamFile": "sw/source/core/crsr/annotationmark.cxx",
       "upstreamSymbols": [
-        "AnnotationMark::InitDoc",
-        "AnnotationMark::GetAnnotationFormatField"
+        "AnnotationMark::AnnotationMark"
       ]
     }
   }

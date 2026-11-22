@@ -1,5 +1,6 @@
 /** @fileoverview Original EditDoc character-attribute insertion and overlap handling. */
-import type { SfxPoolItem } from "../../../svl/source/items/poolitem";
+import { SfxItemState, type SfxItemSet } from "../../../svl/source/items/itemset";
+import { SfxPoolItem } from "../../../svl/source/items/poolitem";
 import type { ContentNode } from "../../inc/ContentNode";
 import { EE_FEATURE_START } from "../../inc/eeitem";
 import type { EditCharAttrib } from "../../inc/editattr";
@@ -111,4 +112,37 @@ export function InsertAttrib(
     insert(doc, node, start, start, item);
   }
   doc.SetModified(true);
+}
+
+/** Accumulates the original hard attributes at a cursor or over a selected range. @param node - Paragraph. @param start - Inclusive start. @param end - Exclusive end. @param items - Selection's accumulated item set. @returns Nothing. */
+export function FindAttribs(
+  node: ContentNode,
+  start: number,
+  end: number,
+  items: SfxItemSet,
+): void {
+  const attributes = node.GetCharAttribs();
+  for (const attr of attributes.GetAttribs()) {
+    const from = attr.GetStart();
+    const to = attr.GetEnd();
+    const which = attr.Which();
+    if (start === end) {
+      if (from > start) break;
+      if (from === start && to > start && start !== 0) continue;
+      if (to < start || (from < start && to === start && attributes.FindEmptyAttrib(which, start)))
+        continue;
+    } else {
+      if (from >= end) break;
+      if (from > start || to < end) {
+        if (from >= start || to > start) items.InvalidateItem(which);
+        continue;
+      }
+    }
+    const item = attr.GetItem();
+    if (!item) continue;
+    const state = items.GetItemState(which);
+    if (state === SfxItemState.DEFAULT) items.Put(item);
+    else if (state === SfxItemState.SET && !SfxPoolItem.areSame(item, items.Get(which)))
+      items.InvalidateItem(which);
+  }
 }

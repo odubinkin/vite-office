@@ -15,6 +15,8 @@ import { SvxLineSpacingItem } from "../../../editeng/inc/lspcitem";
 import { SvxULSpaceItem } from "../../../editeng/inc/ulspitem";
 import { MetricSpinButton } from "../../../svtools/browser/control/MetricSpinButton";
 import { ConvertValue } from "../../../vcl/source/control/field";
+import { SID_ATTR_BRUSH } from "../../../editeng/inc/editids";
+import { XATTR_FILL_FIRST, XATTR_FILL_LAST } from "../../../svx/inc/xdef";
 import { FieldUnit } from "../../../tools/inc/fldunit";
 import { SvxOverlineItem, SvxUnderlineItem } from "../../../editeng/source/items/textitem";
 import { Color, COL_TRANSPARENT } from "../../../tools/inc/color";
@@ -36,6 +38,7 @@ import {
   setParagraphLineSpacing,
   readSearchFormatValue,
   reliefs,
+  nextFontEffectCheck,
   strikeouts,
   underlines,
 } from "./writer-search-format-values";
@@ -46,6 +49,7 @@ import {
   RES_CHRATR_COLOR,
   RES_CHRATR_CONTOUR,
   RES_CHRATR_CROSSEDOUT,
+  RES_CHRATR_EMPHASIS_MARK,
   RES_CHRATR_ESCAPEMENT,
   RES_CHRATR_KERNING,
   RES_CHRATR_OVERLINE,
@@ -62,13 +66,11 @@ import {
   RES_MARGIN_TEXTLEFT,
   RES_PARATR_ADJUST,
   RES_PARATR_LINESPACING,
-  RES_PARATR_ORPHANS,
-  RES_PARATR_SPLIT,
-  RES_PARATR_WIDOWS,
+  RES_PARATR_HYPHENZONE,
   RES_PARATR_VERTALIGN,
   RES_UL_SPACE,
 } from "../../inc/hintids";
-import { WRITER_SEARCH_ATTR_WHICH_RANGES } from "../../source/uibase/uiview/viewsrch";
+import { WRITER_SEARCH_DIALOG_WHICH_RANGES } from "../../source/uibase/uiview/viewsrch";
 import { WriterDialogHeader } from "./WriterDialogHeader";
 import { WriterSearchFontPage, type WriterSearchFontPageHandle } from "./WriterSearchFontPage";
 import {
@@ -79,6 +81,8 @@ import {
   WriterSearchTwoLinesPage,
   type WriterSearchTwoLinesPageHandle,
 } from "./WriterSearchTwoLinesPage";
+import { WriterSearchEmphasisControls } from "./WriterSearchEmphasisControls";
+import { WriterSearchTextFlowPage } from "./WriterSearchTextFlowPage";
 import { WriterSearchParagraphAlignment } from "./WriterSearchParagraphAlignment";
 
 /** Edits exact search or replacement formatting. @param props - Criteria and owning pool. @returns Modal formatting form. */
@@ -99,6 +103,8 @@ export function WriterSearchFormatDialog(
   const twoLinesPage = useRef<WriterSearchTwoLinesPageHandle>(null);
   const [complexFont, setComplexFont] = useState(readPreferredCTLFontTab);
   const [fontReset, setFontReset] = useState(0);
+  const [effectsReset, setEffectsReset] = useState(0);
+  const [textFlowReset, setTextFlowReset] = useState(0);
   const [lineMode, setLineMode] = useState<ParagraphLineSpaceMode>();
   const [draft, setDraft] = useState<ReadonlyMap<number, string | SfxPoolItem>>(new Map());
   const title =
@@ -149,6 +155,8 @@ export function WriterSearchFormatDialog(
     for (const which of formatPages[page][1]) restored.delete(which);
     if (page === "indents") setLineMode(undefined);
     if (page === "font") setFontReset(fontReset + 1);
+    if (page === "effects") setEffectsReset(effectsReset + 1);
+    if (page === "textflow") setTextFlowReset(textFlowReset + 1);
     if (page === "asianlayout") twoLinesPage.current?.Reset();
     setDraft(restored);
   }
@@ -160,8 +168,11 @@ export function WriterSearchFormatDialog(
     for (const [which, value] of draft) output.set(which, value);
     const twoLines = twoLinesPage.current?.GetItem();
     if (twoLines !== undefined) output.set(twoLines.Which(), twoLines);
-    const set = new SfxItemSet(props.pool, WRITER_SEARCH_ATTR_WHICH_RANGES);
+    const set = new SfxItemSet(props.pool, WRITER_SEARCH_DIALOG_WHICH_RANGES);
     try {
+      const brush = props.pool.GetWhichIDFromSlotID(SID_ATTR_BRUSH);
+      set.MergeRange(brush, brush);
+      set.MergeRange(XATTR_FILL_FIRST, XATTR_FILL_LAST);
       for (const [which, value] of output) {
         if (value !== "")
           set.Put(
@@ -232,8 +243,13 @@ export function WriterSearchFormatDialog(
     return localization.GetText(`writer.search.format.${key}`, fallback);
   }
 
-  /** Presents an indeterminate checkbox for an unset search item. @param which - Native WhichId. @param caption - Control label. @param disabled - Native dependency state. @returns Checkbox field. */
-  function check(which: number, caption: string, disabled = false): React.JSX.Element {
+  /** Presents an indeterminate checkbox for an unset search item. @param which - Native WhichId. @param caption - Control label. @param disabled - Native dependency state. @param allowMixed - Whether the native checkbox supports an unspecified state. @returns Checkbox field. */
+  function check(
+    which: number,
+    caption: string,
+    disabled = false,
+    allowMixed = true,
+  ): React.JSX.Element {
     const value = scalar(which);
     return (
       <label className="flex items-center gap-2 text-sm">
@@ -245,13 +261,27 @@ export function WriterSearchFormatDialog(
             /** Applies the native indeterminate state. @param input - Browser checkbox. @returns Nothing. */ (
               input,
             ) => {
-              if (input) input.indeterminate = value === "";
+              if (input) input.indeterminate = allowMixed && value === "";
             }
           }
           onChange={
             /** Commits an explicit boolean criterion. @param event - Checkbox change. @returns Nothing. */ (
               event,
-            ) => change(which, String(event.currentTarget.checked))
+            ) => {
+              if (
+                which !== RES_CHRATR_WORDLINEMODE &&
+                which !== RES_CHRATR_CONTOUR &&
+                which !== RES_CHRATR_SHADOWED
+              ) {
+                change(which, String(event.currentTarget.checked));
+                return;
+              }
+              const next = nextFontEffectCheck(
+                value === "" ? undefined : value === "true",
+                initialScalar(which) === "",
+              );
+              change(which, next === undefined ? "" : String(next));
+            }
           }
         />
         {caption}
@@ -587,6 +617,15 @@ export function WriterSearchFormatDialog(
               label("shadow", "Shadow"),
               Number(scalar(RES_CHRATR_RELIEF)) !== 0,
             )}
+            <WriterSearchEmphasisControls
+              key={effectsReset}
+              label={label}
+              value={scalar(RES_CHRATR_EMPHASIS_MARK)}
+              onChange={
+                /** Stages both native emphasis flags. @param value - Complete item value. @returns Nothing. */
+                (value) => change(RES_CHRATR_EMPHASIS_MARK, String(value))
+              }
+            />
           </fieldset>
         </div>
         <div
@@ -727,7 +766,7 @@ export function WriterSearchFormatDialog(
           <fieldset className="grid gap-2 rounded border border-slate-200 p-2">
             <legend className="text-sm">{label("spacing", "Spacing")}</legend>
             {metric(RES_CHRATR_KERNING, label("spacing-by", "By"), -1000, 1000, 0.1, "pt")}
-            {check(RES_CHRATR_AUTOKERN, label("pair-kerning", "Pair kerning"))}
+            {check(RES_CHRATR_AUTOKERN, label("pair-kerning", "Pair kerning"), false, false)}
           </fieldset>
         </div>
         <div role="tabpanel" hidden={page !== "asianlayout"}>
@@ -899,29 +938,16 @@ export function WriterSearchFormatDialog(
           </fieldset>
         </div>
         <div role="tabpanel" hidden={page !== "textflow"}>
-          <fieldset
-            disabled={scalar(RES_PARATR_SPLIT) === "false"}
-            className="grid gap-2 rounded border border-slate-200 p-2"
-          >
-            <legend className="text-sm">{label("textflow-options", "Options")}</legend>
-            {metric(
-              RES_PARATR_ORPHANS,
-              label("orphans", "Don’t split at beginning of paragraph"),
-              0,
-              9,
-              1,
-              label("lines", "lines"),
-            )}
-            {metric(
-              RES_PARATR_WIDOWS,
-              label("widows", "Don’t split at end of paragraph"),
-              0,
-              9,
-              1,
-              label("lines", "lines"),
-            )}
-          </fieldset>
-          {check(RES_PARATR_SPLIT, label("split-paragraph", "Allow to split paragraph"))}
+          <WriterSearchTextFlowPage
+            key={textFlowReset}
+            label={label}
+            hyphenation={existing(RES_PARATR_HYPHENZONE)}
+            hyphenationDefault={props.pool.GetUserOrPoolDefaultItem(RES_PARATR_HYPHENZONE)}
+            unit={props.unit}
+            value={scalar}
+            initial={initialScalar}
+            onChange={change}
+          />
         </div>
         <fieldset hidden={page !== "asiantypo"} className="rounded border border-slate-200 p-2">
           <legend className="px-1 text-sm">{label("line-change", "Line Change")}</legend>

@@ -91,11 +91,17 @@ export function BorderTabPage({
   onChange,
   formatLine,
   MetricSpinButton,
+  mergeLabel = "Merge adjacent line styles",
+  onMergeChange = onChange,
+  shadowControls,
 }: Readonly<{
   page: SvxBorderTabPage;
   unit?: FieldUnit;
   resetKey?: unknown;
   onChange: () => void;
+  mergeLabel?: string;
+  onMergeChange?: () => void;
+  shadowControls?: React.ReactNode;
   formatLine: (line: SvxBorderLine | undefined) => string;
   MetricSpinButton: ComponentType<{
     "aria-label": string;
@@ -439,6 +445,7 @@ export function BorderTabPage({
           </label>
         </fieldset>
       ) : null}
+      {shadowControls}
       {page.IsMergeAdjacentVisible() ? (
         <fieldset className="rounded border p-3">
           <legend className="text-sm font-bold">Properties</legend>
@@ -460,11 +467,11 @@ export function BorderTabPage({
                 /** Dispatches the native table merging checkbox. @param event - Checkbox. @returns Nothing. */
                 (event) => {
                   page.SetMergeAdjacentState(event.target.checked);
-                  onChange();
+                  onMergeChange();
                 }
               }
             />
-            Merge adjacent line styles
+            {mergeLabel}
           </label>
         </fieldset>
       ) : null}

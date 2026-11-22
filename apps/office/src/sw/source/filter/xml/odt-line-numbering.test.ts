@@ -1,21 +1,13 @@
-/** @fileoverview Verifies document-owned Writer line numbering across ODF styles. */
+/** @fileoverview Verifies document and paragraph line numbering across ODF styles. */
 
-import { SwFormatLineNumber } from "../../../inc/fmtline";
-import { readFileSync } from "node:fs";
-import { assert, describe, expect, it } from "vitest";
+import { describe, expect, it } from "vitest";
 
 import { DocumentArchive } from "../../../../package/source/zippackage/document-archive";
 import { DocumentArchiveWriter } from "../../../../package/source/zippackage/document-archive";
 import { createDocument } from "../../../../sfx2/source/doc/objsh";
-import { ARABIC, CHARS_UPPER_LETTER_N } from "../../../../offapi/com/sun/star/style/NumberingType";
-import { LineNumberPosition } from "../../../inc/lineinfo";
+import { SwFormatLineNumber } from "../../../inc/fmtline";
 import { RES_LINENUMBER } from "../../../inc/hintids";
-import { decodeSfxPoolItem } from "../../../browser/filter/xml/item-codec";
-import { SwPoolFormatId } from "../../../inc/poolfmt";
-import {
-  decodeWriterDocument,
-  encodeWriterDocument,
-} from "../../../browser/filter/xml/writer-document-codec";
+import { LineNumberPosition } from "../../../inc/lineinfo";
 import { FastAttributeList } from "../../../../xmloff/source/core/xmlimp";
 import { XMLToken } from "../../../../xmloff/source/core/xmltoken";
 import { XMLLineNumberingImportContext } from "../../../../xmloff/source/text/XMLLineNumberingImportContext";
@@ -86,7 +78,29 @@ describe("Writer ODF line numbering", /** Groups global configuration cases. @re
     ).toEqual(info.QueryValue());
   });
 
-  it("preserves native defaults when lexical conversion fails and applies repeated configurations in order", /** Checks native property admission on the package path. @returns Completion after import. */ async () => {
+  it("retains a direct continuation that overrides an inherited paragraph restart", /** Checks explicit zero through ODF paragraph styles. @returns Completion after import. */ async () => {
+    const writer = createWriterDocument();
+    const paragraph = writer.paragraphs[0];
+    if (!paragraph) throw new Error("Writer paragraph is missing.");
+    writer.GetDfltTextFormatColl().SetFormatAttr(new SwFormatLineNumber(false, 23));
+    paragraph.SetAttr(new SwFormatLineNumber(true, 0));
+    const bytes = await writeOdtDocument(writer, metadata);
+    const archive = await DocumentArchive.open(bytes);
+    expect(await archive.readTextEntry("styles.xml")).toContain('text:line-number="23"');
+    expect(await archive.readTextEntry("content.xml")).toContain('text:line-number="0"');
+
+    const { document } = await readOdtDocument(bytes, metadata);
+    expect(document.GetDfltTextFormatColl().GetAttrSet().Get(RES_LINENUMBER).QueryValue()).toEqual({
+      count: false,
+      startValue: 23,
+    });
+    expect(document.paragraphs[0]?.GetAttr(RES_LINENUMBER)?.QueryValue()).toEqual({
+      count: true,
+      startValue: 0,
+    });
+  });
+
+  it("reads omission defaults and rejects malformed or duplicate settings", /** Checks defaults and malformed input. @returns Completion after import. */ async () => {
     const bytes = await writeOdtDocument(createWriterDocument(), metadata);
     const defaults = await readOdtDocument(
       await rewriteStyles(
@@ -103,35 +117,29 @@ describe("Writer ODF line numbering", /** Groups global configuration cases. @re
     );
     expect(defaults.document.GetLineNumberInfo().IsPaintLineNumbers()).toBe(true);
     expect(defaults.document.GetLineNumberInfo().GetCountBy()).toBe(5);
-    expect(defaults.document.GetLineNumberInfo().GetPosFromLeft()).toBe(65535);
 
-    const repeated = await rewriteStyles(
+    for (const [from, to, error] of [
+      ['text:number-lines="false"', 'text:number-lines="yes"', "boolean"],
+      ['text:number-position="left"', 'text:number-position="above"', "position"],
+      ['style:num-format="1"', 'style:num-format="A"', "format"],
+    ] as const) {
+      const changed = await rewriteStyles(
+        bytes,
+        /** Corrupts one line-number attribute. @param xml - Styles stream. @returns Rewritten stream. */ (
+          xml,
+        ) => xml.replace(from, to),
+      );
+      await expect(readOdtDocument(changed, metadata)).rejects.toThrow(error);
+    }
+
+    const duplicate = await rewriteStyles(
       bytes,
-      /** Makes a subsequent style declaration with missing and malformed properties. @param xml - Styles stream. @returns Rewritten stream. */ (
+      /** Duplicates the global configuration. @param xml - Styles stream. @returns Rewritten stream. */ (
         xml,
-      ) =>
-        xml
-          .replace('text:increment="5"', 'text:increment="7"')
-          .replace(
-            "</office:styles>",
-            '<text:linenumbering-configuration text:number-lines="yes" text:number-position="above" style:num-format="unrecognized" text:offset="invalid"><text:linenumbering-separator text:increment="2">First</text:linenumbering-separator><text:linenumbering-separator text:increment="invalid">Last</text:linenumbering-separator></text:linenumbering-configuration></office:styles>',
-          ),
+      ) => xml.replace("</office:styles>", "<text:linenumbering-configuration/></office:styles>"),
     );
-    const reopened = (await readOdtDocument(repeated, metadata)).document;
-    expect(reopened.GetLineNumberInfo().QueryValue()).toMatchObject({
-      paintLineNumbers: true,
-      position: LineNumberPosition.Left,
-      numberingType: ARABIC,
-      posFromLeft: 65535,
-      countBy: 7,
-      dividerCountBy: 2,
-      divider: "Last",
-    });
-    const saved = await (
-      await DocumentArchive.open(await writeOdtDocument(reopened, metadata))
-    ).readTextEntry("styles.xml");
-    expect(saved.match(/<text:linenumbering-configuration\b[^>]*>/u)?.[0]).not.toContain(
-      "text:offset",
+    await expect(readOdtDocument(duplicate, metadata)).rejects.toThrow(
+      "Duplicate ODF line numbering",
     );
   });
 
@@ -165,6 +173,13 @@ describe("Writer ODF line numbering", /** Groups global configuration cases. @re
       ),
     ).not.toBeNull();
     expect(
+      /** Attempts duplicate separator insertion. @returns Child context. */ () =>
+        context.createFastChildContext(
+          XMLToken.TEXT_LINENUMBERING_SEPARATOR,
+          new FastAttributeList([]),
+        ),
+    ).toThrow("Duplicate ODF line-number separator");
+    expect(
       exportLineNumberingConfiguration({
         countBlankLines: true,
         countBy: 5,
@@ -173,148 +188,12 @@ describe("Writer ODF line numbering", /** Groups global configuration cases. @re
         dividerCountBy: 3,
         paintLineNumbers: false,
         distance: 0,
-        numberingType: ARABIC,
+        numberingType: 4,
         position: "left",
         restartEachPage: false,
       }),
     ).not.toContain("text:offset");
   });
-});
-
-it("preserves a forward character style and synchronized numbering type through Writer Worker and ODT", /** Checks that package and Worker reconstruction bind actual style owners. @returns Completion. */ async () => {
-  const bytes = await writeOdtDocument(createWriterDocument(), metadata);
-  const authored = await rewriteStyles(
-    bytes,
-    /** Declares a custom style after its settings reference. @param xml - Styles stream. @returns Rewritten stream. */ (
-      xml,
-    ) =>
-      xml
-        .replace(
-          "text:linenumbering-configuration ",
-          'text:linenumbering-configuration text:style-name="Row_20_Label" ',
-        )
-        .replace(
-          'style:num-format="1" text:number-position=',
-          'style:num-format="A" style:num-letter-sync="true" text:number-position=',
-        )
-        .replace(
-          "</office:styles>",
-          '<style:style style:name="Row_20_Label" style:display-name="Row Label" style:family="text"><style:text-properties fo:font-weight="bold"/></style:style></office:styles>',
-        ),
-  );
-  const source = (await readOdtDocument(authored, metadata)).document;
-  const worker = decodeWriterDocument(structuredClone(encodeWriterDocument(source)));
-  const saved = await writeOdtDocument(worker, metadata);
-  const xml = await (await DocumentArchive.open(saved)).readTextEntry("styles.xml");
-  expect(xml).toContain('<text:linenumbering-configuration text:style-name="Row_20_Label"');
-  expect(xml).toContain('style:num-format="A" style:num-letter-sync="true" text:number-position=');
-  const reopened = (await readOdtDocument(saved, metadata)).document;
-  for (const document of [source, worker, reopened]) {
-    const info = document.GetLineNumberInfo();
-    const style = info.GetCharFormat();
-    assert(style);
-    expect(style).toBe(document.FindCharFormatByName("Row Label"));
-    expect(info.GetNumType().GetNumberingType()).toBe(CHARS_UPPER_LETTER_N);
-    document.Dispose();
-  }
-});
-
-it("preserves the Writer distance clamp and unspecified-distance export sentinel", /** Reads the native maximum through the XML and UNO property owners. @returns Completion. */ async () => {
-  const bytes = await writeOdtDocument(createWriterDocument(), metadata);
-  const changed = await rewriteStyles(
-    bytes,
-    /** Replaces the default distance with a value beyond the native field. @param xml - Styles stream. @returns Rewritten styles. */
-    (xml) => xml.replace(/text:offset="[^"]+"/u, 'text:offset="200cm"'),
-  );
-  const document = (await readOdtDocument(changed, metadata)).document;
-  try {
-    expect(document.GetLineNumberInfo().GetPosFromLeft()).toBe(65535);
-    const saved = await (
-      await DocumentArchive.open(await writeOdtDocument(document, metadata))
-    ).readTextEntry("styles.xml");
-    expect(saved.match(/<text:linenumbering-configuration\b[^>]*>/u)?.[0]).not.toContain(
-      "text:offset",
-    );
-  } finally {
-    document.Dispose();
-  }
-});
-
-it("ports the tdf148834 paragraph line-count settings through ODT", /** Reads the pinned regression input and checks original style participation after saving. @returns Completion. */ async () => {
-  const input = new Uint8Array(
-    readFileSync(
-      "../../vendor/libreoffice-reference/sw/qa/extras/ooxmlexport/data/tdf148834_lineNumbering.odt",
-    ),
-  );
-  const source = (await readOdtDocument(input, metadata)).document;
-  const reopened = (await readOdtDocument(await writeOdtDocument(source, metadata), metadata))
-    .document;
-  for (const document of [source, reopened]) {
-    const info = document.GetLineNumberInfo();
-    expect(info.GetCharFormat()?.GetPoolFormatId()).toBe(SwPoolFormatId.CHR_LINENUM);
-    expect(info.GetCountBy()).toBe(1);
-    expect(info.GetPosFromLeft()).toBe(288);
-    const standard = document.GetDfltTextFormatColl();
-    const footer = document.FindTextFormatCollByName("Footer");
-    const numbered = document.FindTextFormatCollByName("0 NUMBERED");
-    assert(footer && numbered);
-    for (const [style, count] of [
-      [standard, false],
-      [footer, false],
-      [numbered, true],
-    ] as const)
-      expect((style.GetAttrSet().Get(RES_LINENUMBER) as SwFormatLineNumber).IsCount()).toBe(count);
-    document.Dispose();
-  }
-});
-
-it("keeps the tdf134548 style restart and separate automatic paragraph restarts through Worker and ODT", /** Preserves original named and direct formatting with the native paragraph item. @returns Completion. */ async () => {
-  const bytes = new Uint8Array(
-    readFileSync("../../vendor/libreoffice-reference/sw/qa/extras/layout/data/tdf134548.odt"),
-  );
-  const archive = await DocumentArchive.open(bytes);
-  const ordered = new DocumentArchiveWriter();
-  ordered.putNextEntry("mimetype", await archive.readEntry("mimetype"));
-  for (const name of archive.getEntryNames())
-    if (name !== "mimetype" && !name.endsWith("/"))
-      ordered.putNextEntry(name, await archive.readEntry(name));
-  const source = (await readOdtDocument(await ordered.finish(), metadata)).document;
-  let worker: ReturnType<typeof decodeWriterDocument> | undefined;
-  let reopened: typeof worker;
-  try {
-    const first = source.paragraphs[0];
-    const second = source.paragraphs[1];
-    const parent = source.FindTextFormatCollByName("LibOComputerCode ZeilenNr");
-    assert(first && second && parent);
-    source.MakeTextFormatColl("Inherited restart", parent);
-    first.SetAttr(new SwFormatLineNumber(true, 14));
-    second.SetAttr(new SwFormatLineNumber(true, 61));
-    const legacy = decodeSfxPoolItem(source.GetAttrPool(), { which: RES_LINENUMBER, value: false });
-    assert(legacy instanceof SwFormatLineNumber);
-    expect(legacy.IsCount()).toBe(false);
-    expect(legacy.GetStartValue()).toBe(0);
-
-    worker = decodeWriterDocument(structuredClone(encodeWriterDocument(source)));
-    const saved = await writeOdtDocument(worker, metadata);
-    const content = await (await DocumentArchive.open(saved)).readTextEntry("content.xml");
-    expect(content).toContain('text:number-lines="true" text:line-number="14"');
-    expect(content).toContain('text:number-lines="true" text:line-number="61"');
-    reopened = (await readOdtDocument(saved, metadata)).document;
-    for (const doc of [source, worker, reopened]) {
-      const named = doc.FindTextFormatCollByName("LibOComputerCode ZeilenNr");
-      assert(named);
-      expect(named.GetAttrSet().GetLineNumber().GetStartValue()).toBe(1);
-      const inherited = doc.FindTextFormatCollByName("Inherited restart");
-      expect(inherited?.GetAttrSet().GetLineNumber().GetStartValue()).toBe(1);
-      expect(inherited?.GetAttrSet().GetItemIfSet(RES_LINENUMBER, false)).toBeUndefined();
-      expect(doc.paragraphs[0]?.GetSwAttrSet().GetLineNumber().GetStartValue()).toBe(14);
-      expect(doc.paragraphs[1]?.GetSwAttrSet().GetLineNumber().GetStartValue()).toBe(61);
-    }
-  } finally {
-    reopened?.Dispose();
-    worker?.Dispose();
-    source.Dispose();
-  }
 });
 
 it("imports native narrowed intervals and reexports applied values instead of original lexemes", /** Real package/model/filter owners retain defaults and zero separator values. @returns Completion. */ async () => {

@@ -1,0 +1,29 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "browser-adaptation",
+    "status": "local-only",
+    "localPath": "apps/office/src/cui/browser/tabpages/bitmap-gallery.ts",
+    "rationale": "Binds the native Bullets theme to browser storage and the raster decoder, preserving the stock theme order and 30-pixel Add and Resize behavior.",
+    "responsibilities": [
+      "Binds the native Bullets theme to browser storage and the raster decoder, preserving the stock theme order and 30-pixel Add and Resize behavior."
+    ],
+    "stackDivergence": {
+      "kind": "browser-adaptation",
+      "rationale": "Projects native numbering values through HTML and the established style item binding."
+    },
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/cui/browser/tabpages/bitmap-gallery.ts",
+          "marker": "loadGallery"
+        },
+        {
+          "path": "apps/office/src/cui/source/tabpages/numpages-bitmap-data.json",
+          "marker": "circle-green"
+        }
+      ]
+    }
+  }
+}

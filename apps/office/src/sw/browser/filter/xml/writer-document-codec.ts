@@ -1,4 +1,9 @@
 /** @fileoverview Internal canonical Writer graph codec used behind boundary-specific envelopes. */
+import {
+  encodeAnnotations,
+  restoreAnnotations,
+  type WriterAnnotationRecord,
+} from "./writer-annotation-codec";
 import { XFillBitmapItem } from "../../../../svx/inc/xbtmpit";
 import { XATTR_FILLBITMAP } from "../../../../svx/inc/xdef";
 import {
@@ -30,7 +35,11 @@ import {
   decodeCharacterStyleReference,
   type WriterCharacterStyleRecord,
 } from "./writer-character-style-codec";
-import { encodeNumberFormat, type WriterNumberFormatRecord } from "./writer-number-format-codec";
+import {
+  decodeNumberGraphic,
+  encodeNumberFormat,
+  type WriterNumberFormatRecord,
+} from "./writer-number-format-codec";
 import { upgradeWriterWhichIds } from "./writer-which-id-migration";
 import {
   decodePageStories,
@@ -61,6 +70,8 @@ import {
   type WriterParagraphStyleGroup,
 } from "../../../inc/poolfmt";
 import {
+  RES_CHRATR_AUTOKERN,
+  RES_CHRATR_OPTICAL_SIZING,
   RES_CHRATR_FONT,
   RES_CHRATR_FONTSIZE,
   RES_CHRATR_CJK_FONTSIZE,
@@ -152,6 +163,7 @@ export interface WriterDocumentRecord {
   readonly bodyOrder?: readonly ("text" | "table")[];
   readonly tables?: readonly WriterTableRecord[];
   readonly textFrames?: readonly WriterTextFrameRecord[];
+  readonly annotations?: readonly WriterAnnotationRecord[];
   readonly bookmarks?: readonly Readonly<{
     name: string;
     nodeIndex: number;
@@ -181,6 +193,7 @@ export interface WriterDocumentRecord {
   readonly compatSettings?: readonly CompatSetting[];
   readonly tableStyles?: readonly WriterInteropProperty[];
   readonly fontDefaults?: readonly SfxPoolItemSnapshot[];
+  readonly pairKerningDefault?: SfxPoolItemSnapshot;
   readonly tabStopDefault?: SfxPoolItemSnapshot;
   readonly hyphenationDefault?: SfxPoolItemSnapshot;
   readonly textEffectDefault?: SfxPoolItemSnapshot;
@@ -197,6 +210,7 @@ const fontDefaultWhichIds: readonly number[] = [
   RES_CHRATR_CJK_FONTSIZE,
   RES_CHRATR_CTL_FONT,
   RES_CHRATR_CTL_FONTSIZE,
+  RES_CHRATR_OPTICAL_SIZING,
 ];
 
 /** Encodes the model at the browser boundary. @param document - Canonical graph. @returns Current record. */
@@ -212,11 +226,13 @@ export function* encodeWriterDocumentSteps(document: SwDoc): Generator<void, Wri
   const textOwners = sectionTextNodes(document.nodes.getBodyContent());
   const pageStories = yield* encodePageStories(document, textOwners);
   const textFrames = yield* encodeTextFrames(document, textOwners);
+  const annotations = encodeAnnotations(document, textOwners);
   const fontDefaults: SfxPoolItemSnapshot[] = [];
   for (const which of fontDefaultWhichIds) {
     const font = document.GetAttrPool().GetUserDefaultItem(which);
     if (font) fontDefaults.push(encodeSfxPoolItem(font));
   }
+  const pairKerningDefault = document.GetAttrPool().GetUserDefaultItem(RES_CHRATR_AUTOKERN);
   const tabStopDefault = document.GetAttrPool().GetUserDefaultItem(RES_PARATR_TABSTOP);
   const hyphenationDefault = document.GetAttrPool().GetUserDefaultItem(RES_PARATR_HYPHENZONE);
   const textEffectDefault = encodeTextEffectDefault(document);
@@ -228,13 +244,6 @@ export function* encodeWriterDocumentSteps(document: SwDoc): Generator<void, Wri
   const documentProtection = ReadDocumentProtection(
     document.interopGrabBag.GetGrabBag().get("DocumentProtection"),
   );
-  const annotationMarks = document
-    .GetIDocumentMarkAccess()
-    .GetAnnotationMarks()
-    .filter(
-      /** Requires the native field that owns the end of the transferred range. @param mark - Registered annotation. @returns Whether its trailing field remains attached. */
-      (mark) => mark.GetTrailingAnnotationFormatField()?.GetField().GetName() === mark.GetName(),
-    );
   return {
     ...(documentProtection === undefined ? {} : { documentProtection }),
     ...(document.theme ? { theme: encodeTheme(document.theme) } : {}),
@@ -242,9 +251,11 @@ export function* encodeWriterDocumentSteps(document: SwDoc): Generator<void, Wri
     ...(compatSettings === undefined ? {} : { compatSettings }),
     ...(tableStyles === undefined ? {} : { tableStyles }),
     ...(fontDefaults.length ? { fontDefaults } : {}),
+    ...(pairKerningDefault ? { pairKerningDefault: encodeSfxPoolItem(pairKerningDefault) } : {}),
     ...(tabStopDefault ? { tabStopDefault: encodeSfxPoolItem(tabStopDefault) } : {}),
     ...(hyphenationDefault ? { hyphenationDefault: encodeSfxPoolItem(hyphenationDefault) } : {}),
     ...(textFrames.length ? { textFrames } : {}),
+    ...(annotations.length ? { annotations } : {}),
     ...(pageStories === undefined ? {} : { pageStories }),
     embeddedFonts: document.GetEmbeddedFonts(),
     ...(document.GetBitmapTable().size
@@ -271,25 +282,6 @@ export function* encodeWriterDocumentSteps(document: SwDoc): Generator<void, Wri
             : {}),
         }),
       ),
-    ...(annotationMarks.length
-      ? {
-          annotationMarks: annotationMarks.map(
-            /** Encodes both registered positions of a native annotation. @param mark - Source range. @returns Native offset record. */
-            (mark) => {
-              const [start, end] = mark.GetMarkStartEnd();
-              return {
-                name: mark.GetName(),
-                nodeIndex: textOwners.indexOf(start.GetNode() as SwTextNode),
-                offset: start.GetContentIndex(),
-                end: {
-                  nodeIndex: textOwners.indexOf(end.GetNode() as SwTextNode),
-                  offset: end.GetContentIndex(),
-                },
-              };
-            },
-          ),
-        }
-      : {}),
     documentSettings: document.GetDocumentSettingManager().GetValues(),
     lineNumberInfo: document.GetLineNumberInfo().QueryValue(),
     locale: document.GetLocale(),
@@ -469,6 +461,17 @@ export function* decodeWriterDocumentSteps(
       const pool = document.GetAttrPool();
       pool.SetUserDefaultItem(decodeSfxPoolItem(pool, font));
     }
+    if (record.pairKerningDefault !== undefined) {
+      const kerning = record.pairKerningDefault;
+      if (
+        !isRecord(kerning) ||
+        kerning.which !== RES_CHRATR_AUTOKERN ||
+        typeof kerning.value !== "boolean"
+      )
+        throw new Error("Stored Writer pair kerning default is invalid.");
+      const pool = document.GetAttrPool();
+      pool.SetUserDefaultItem(decodeSfxPoolItem(pool, kerning));
+    }
     if (record.tabStopDefault !== undefined) {
       const tab = record.tabStopDefault;
       if (!isRecord(tab) || tab.which !== RES_PARATR_TABSTOP || !("value" in tab))
@@ -555,6 +558,7 @@ export function* decodeWriterDocumentSteps(
       "DO_NOT_RESET_PARA_ATTRS_FOR_NUM_FONT",
       "APPLY_PARAGRAPH_MARK_FORMAT_TO_NUMBERING",
       "GUTTER_AT_TOP",
+      "MS_WORD_COMP_GRID_METRICS",
       "TABLE_ROW_KEEP",
     ] as const)
       if (!Object.hasOwn(settings, id)) settings[id] = getDefaultDocumentSettings()[id];
@@ -657,6 +661,7 @@ export function* decodeWriterDocumentSteps(
           decoded.SetNumberingType(format.nativeNumberingType);
         if (format.numAdjust !== undefined) decoded.SetNumAdjust(format.numAdjust);
         if (format.isLegal !== undefined) decoded.SetIsLegal(format.isLegal);
+        decodeNumberGraphic(decoded, format.graphic);
         decoded.SetCharFormat(decodeCharacterStyleReference(document, format.characterStyle));
         if (format.bulletGlyph !== undefined) decoded.SetBulletChar(format.bulletGlyph);
         if (format.showSymbol !== undefined) decoded.SetShowSymbol(format.showSymbol);
@@ -744,6 +749,14 @@ export function* decodeWriterDocumentSteps(
         style.parentId === undefined ? undefined : document.GetTextFormatColl(style.parentId),
       );
     }
+    for (const descriptorRecord of record.pageDescriptors) {
+      const reference = descriptorRecord.pageFormat?.registerStyleId;
+      if (reference === undefined) continue;
+      const format =
+        typeof reference === "string" ? document.FindTextFormatColl(reference) : undefined;
+      if (!format) throw new Error("Stored Writer page register style link is invalid.");
+      document.FindPageDesc(descriptorRecord.value.name)?.SetRegisterFormatColl(format);
+    }
     if (record.textNodes.length === 0)
       throw new Error("Stored Writer document has no body text node.");
     const order =
@@ -771,6 +784,7 @@ export function* decodeWriterDocumentSteps(
     const textOwners = sectionTextNodes(document.nodes.getBodyContent());
     yield* decodePageStories(document, record.pageStories, textOwners);
     yield* decodeTextFrames(document, record.textFrames, textOwners);
+    restoreAnnotations(document, textOwners, record.annotations);
     if (record.bookmarks !== undefined) {
       if (!Array.isArray(record.bookmarks)) throw new Error("Stored Writer bookmarks are invalid.");
       for (const mark of record.bookmarks) {

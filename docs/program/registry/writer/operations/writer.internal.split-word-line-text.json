@@ -1,0 +1,12 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "id": "writer.internal.split-word-line-text",
+    "modulePath": "apps/office/src/sw/browser/presentation/writer-view-projection.ts",
+    "symbol": "splitWordLineText",
+    "classification": "browser-adaptation",
+    "capabilityId": "CAP-0111",
+    "description": "Projects spacing and nonspacing text fragments for native word-line formatting. The returned strings retain every original text unit."
+  }
+}

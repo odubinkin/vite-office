@@ -2,6 +2,7 @@
 
 import type { SwModify } from "../../../inc/calbck";
 import type { SwModelHint } from "../../../inc/hints";
+import { SwFormatLineNumber } from "../../../inc/fmtline";
 import { RES_FRAMEDIR } from "../../../inc/hintids";
 import type { SwLineNumberInfoValue } from "../../../inc/lineinfo";
 import type { SwPageFrame } from "../layout/newfrm";
@@ -12,14 +13,21 @@ import { SwFrameType, type SwFrame } from "../layout/wsfrm";
 import { SvxULSpaceItem } from "../../../../editeng/source/items/frmitems";
 import { SfxBoolItem } from "../../../../svl/source/items/cenumitm";
 import { SfxInt16Item } from "../../../../svl/source/items/intitem";
+import type { SvxFontHeightItem } from "../../../../editeng/inc/fhgtitem";
+import { GetParagraphRegister } from "./itrform2";
+import type { SwRegisterMetrics } from "../layout/pagechg";
 import { SwFormatPageDesc } from "../attr/fmtpdsc";
 import { SwPosition, type SwPaM } from "../crsr/pam";
-import { SwTextCursor } from "./itrtxt";
+import { SwTextCursor, SwTextIter } from "./itrtxt";
+import { SwTextSizeInfo } from "./inftxt";
+import { GetScalingOfSelectedText } from "./itratr";
 import { SwLineLayout, SwParaPortion } from "./porlay";
 import { MoveTextFrameMargin } from "./frmcrsr";
 import {
   RES_BREAK,
+  RES_CHRATR_FONTSIZE,
   RES_KEEP,
+  RES_LINENUMBER,
   RES_PAGEDESC,
   RES_PARATR_ORPHANS,
   RES_PARATR_SPLIT,
@@ -55,8 +63,8 @@ export function projectSwLineNumbers(
         (frame) => {
           const input = byId.get(frame.nodeId);
           if (input === undefined) throw new Error("Line-number frame has no measured text node.");
-          if (input.countLineNumbers !== false && input.lineNumberStart && !frame.IsFollow())
-            count = input.lineNumberStart - 1;
+          if (frame.start === 0 && input.countLineNumbers !== false && input.lineNumberStartValue)
+            count = input.lineNumberStartValue - 1;
           const marks: SwLineNumberMark[] = [];
           let topTwips = 0;
           for (const line of input.lines) {
@@ -109,7 +117,8 @@ export interface SwTextFrameInput {
   readonly pageStyleName?: string;
   readonly pageNumber?: number;
   readonly countLineNumbers?: boolean;
-  readonly lineNumberStart?: number;
+  readonly lineNumberStartValue?: number;
+  readonly register?: SwRegisterMetrics & { readonly naturalHeight: number };
 }
 
 /** Reads layout-owned values from canonical Writer nodes, pairing them only with measured lines. @param document - Active Writer document. @param measurements - Browser device line geometry in document order. @returns Core frame inputs. */
@@ -131,7 +140,9 @@ export function createSwTextFrameInputs(
       const paragraphBreak = (node.GetAttr(RES_BREAK) as SfxInt16Item).GetValue();
       const pageDesc = node.GetAttr(RES_PAGEDESC) as SwFormatPageDesc;
       const pageNumber = pageDesc.GetNumOffset();
-      const lineNumber = node.GetSwAttrSet().GetLineNumber();
+      const lineNumber = node.GetAttr(RES_LINENUMBER) as SwFormatLineNumber;
+      const register = GetParagraphRegister(node);
+      const fontHeight = (node.GetAttr(RES_CHRATR_FONTSIZE) as SvxFontHeightItem).GetHeight();
       return {
         node,
         id: measurement.id,
@@ -140,6 +151,9 @@ export function createSwTextFrameInputs(
         style: node.GetParagraphStyle(),
         contextualSpacing: spacing.GetContext(),
         upperSpacing: spacing.GetUpper(),
+        ...(register
+          ? { register: { ...register, naturalHeight: Math.round(fontHeight * 1.15) } }
+          : {}),
         keepWithNext: (node.GetAttr(RES_KEEP) as SfxBoolItem).GetValue(),
         keepTogether: !(node.GetAttr(RES_PARATR_SPLIT) as SfxBoolItem).GetValue(),
         orphans: (node.GetAttr(RES_PARATR_ORPHANS) as SfxInt16Item).GetValue(),
@@ -149,7 +163,7 @@ export function createSwTextFrameInputs(
         pageStyleName: pageDesc.GetPageDescName(),
         ...(pageNumber === undefined ? {} : { pageNumber }),
         countLineNumbers: lineNumber.IsCount(),
-        lineNumberStart: lineNumber.GetStartValue(),
+        lineNumberStartValue: lineNumber.GetStartValue(),
       };
     },
   );
@@ -261,6 +275,20 @@ export class SwTextFrame extends SwContentFrame {
       else break;
     }
     return frame;
+  }
+  /** Calculates character scale from the unscaled selection and actual formatted line. @param start - Selection start in frame coordinates. @param end - Selection end in the same text node. @returns Native percentage when the device can measure the selection. */
+  public GetScalingOfSelectedText(start: number, end: number): number | undefined {
+    const line = this.GetPara() ? new SwTextIter(this, new SwTextSizeInfo(this)) : undefined;
+    return GetScalingOfSelectedText(
+      this.GetTextNodeFirst(),
+      start,
+      end,
+      /** Finds the formatted line containing the first affected character. @param offset - Native frame position. @returns Measured line height or undefined. */
+      (offset) => {
+        line?.CharToLine(offset);
+        return line?.GetCurr().GetRealHeight();
+      },
+    );
   }
   /** Moves to the current visual line start. @param pam - Native cursor. @returns Admission result. */
   public LeftMargin(pam: SwPaM): boolean {

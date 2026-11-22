@@ -61,15 +61,29 @@ export function MeasureSwTextWidth(
   start: number,
   length: number,
 ): number {
+  const width = TryMeasureSwTextWidth(device, attributes, script, text, start, length);
+  if (width === undefined) throw new Error("Writer text width requires an actual output device.");
+  return width;
+}
+
+/** Tries the physical font device for operations that may omit unavailable geometry. @param device - Document output device. @param attributes - Actual active attributes. @param script - Current native script. @param text - Original text. @param start - Source UTF16 start. @param length - Source UTF16 length. @returns Width in twips when measured. */
+export function TryMeasureSwTextWidth(
+  device: DefaultFontDevice | undefined,
+  attributes: SwAttrHandler,
+  script: number,
+  text: string,
+  start: number,
+  length: number,
+): number | undefined {
   const width = device?.measureTextWidth?.(
     CreateSwMeasurementFont(attributes, script),
     text,
     start,
     length,
   );
-  if (width === undefined || !Number.isFinite(width) || width < 0)
-    throw new Error("Writer text width requires an actual output device.");
-  return Math.round(width);
+  return width === undefined || !Number.isFinite(width) || width < 0
+    ? undefined
+    : Math.round(width);
 }
 
 /** Reads the actual script font through the default output device, as AttrSetToLineHeight does.  @param set - Set. @param script - Script. @param device - Device. @returns The number result. */

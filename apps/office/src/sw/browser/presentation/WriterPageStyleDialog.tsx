@@ -2,8 +2,15 @@
 
 import { MetricSpinButton } from "../../../svtools/browser/control/MetricSpinButton";
 import { FieldUnit } from "../../../tools/inc/fldunit";
+import { SvxBorderTabPage } from "../../../cui/source/tabpages/border";
+import { RES_BOX, RES_FRAMEDIR, RES_SHADOW, RES_TEXTGRID } from "../../inc/hintids";
+import { SvxBoxItemLine, type SvxBoxItem } from "../../../editeng/source/items/frmitems";
+import { SvxFrameDirection } from "../../../editeng/inc/frmdir";
+import type { SvxFrameDirectionItem } from "../../../editeng/inc/frmdiritem";
+import { WriterFrameBorderPage } from "./WriterFrameBorderPage";
+import { WriterTextGridPage } from "./WriterTextGridPage";
 import { WriterDialogHeader } from "./WriterDialogHeader";
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useId, useMemo, useRef, useState } from "react";
 
 import { useBrowserLocalization } from "../../../framework/browser/localization/browser-localization-context";
 import {
@@ -12,19 +19,52 @@ import {
 } from "../../source/core/layout/pagedesc";
 import { Paper } from "../../../i18nutil/inc/paper";
 import { SvxPageDescPage } from "../../../cui/source/tabpages/page";
+import { HeaderFooterTabPage } from "../../../svx/browser/dialog/HeaderFooterTabPage";
+import {
+  SvxHFPage,
+  headerFooterSetSlot,
+  readHeaderFooterSet,
+  type SvxHFPageState,
+} from "../../../svx/source/dialog/hdft";
+import { SvxPageUsage, type SvxPageItem } from "../../../svx/inc/pageitem";
+import {
+  SID_ATTR_PAGE,
+  SID_SWREGISTER_COLLECTION,
+  SID_SWREGISTER_MODE,
+} from "../../../svx/inc/svxids";
+import { SfxBoolItem } from "../../../svl/inc/eitem";
+import { SfxStringItem } from "../../../svl/source/items/stritem";
+import { SwRegisterItem } from "../../source/core/para/paratr";
+import { writerPageStoryIds } from "../../source/uibase/utlui/uitool.hdft";
+import { AreaTabPage } from "../../../cui/browser/tabpages/AreaTabPage";
+import { TransparencyTabPage } from "../../../cui/browser/tabpages/TransparencyTabPage";
+import { SvxAreaTabPage } from "../../../cui/source/tabpages/tparea";
+import { SvxTransparenceTabPage } from "../../../cui/source/tabpages/tptrans";
+import { FillStyle } from "../../../offapi/com/sun/star/drawing/FillStyle";
+import { SfxItemSet } from "../../../svl/inc/itemset";
+import { XATTR_FILL_FIRST, XATTR_FILL_LAST } from "../../../svx/inc/xdef";
+import { bitmapFillStyle } from "../editor/page-background";
 import { getPageFormatDefaultLimits } from "../../../cui/browser/dialog/page-format-defaults";
+import { IsVerticalTextGrid } from "../../source/core/layout/pagechg";
+import { SwTextGridPage } from "../../source/ui/misc/pggrid";
 
 /** Inputs and completion callbacks for the bounded Writer Page tab. */
 export interface WriterPageStyleDialogProps {
+  readonly htmlMode?: boolean;
   readonly unit?: FieldUnit;
   readonly initialValue: WriterPageDescriptorValue;
+  readonly pageInput?: SfxItemSet;
+  readonly registerStyles?: readonly string[];
   readonly onCancel: () => void;
-  readonly onSubmit: (value: WriterPageDescriptorValue) => void;
+  readonly onSubmit: (value: WriterPageDescriptorValue, items?: SfxItemSet) => void;
 }
 
 /** Collects the supported Page Style physical geometry with a live upstream-shaped preview. @param props - Initial geometry and completion callbacks. @returns Page Style dialog. */
 export function WriterPageStyleDialog({
+  htmlMode = false,
   initialValue,
+  pageInput,
+  registerStyles = [],
   unit = FieldUnit.CM,
   onCancel,
   onSubmit,
@@ -37,6 +77,106 @@ export function WriterPageStyleDialog({
     [],
   );
   const localization = useBrowserLocalization();
+  const id = useId();
+  const [active, setActive] = useState("page");
+  const registerModeItem = pageInput?.GetItemIfSet(SID_SWREGISTER_MODE, false);
+  const initialRegister = registerModeItem instanceof SfxBoolItem && registerModeItem.GetValue();
+  const referenceStyle = pageInput?.GetItemIfSet(SID_SWREGISTER_COLLECTION, false);
+  const [registerMode, setRegisterMode] = useState(initialRegister);
+  const [registerStyle, setRegisterStyle] = useState(
+    referenceStyle instanceof SfxStringItem ? referenceStyle.GetValue() : (registerStyles[0] ?? ""),
+  );
+  const hasRegister = !htmlMode && registerStyles.length > 1 && pageInput !== undefined;
+  const [area] = useState(
+    /** Captures the actual Area page items for this request. @returns Native page owner. */
+    () => pageInput && new SvxAreaTabPage(pageInput, true),
+  );
+  const [transparency] = useState(
+    /** Captures the actual Transparency items for this request. @returns Native page owner. */
+    () => pageInput && new SvxTransparenceTabPage(pageInput, true),
+  );
+  const [header] = useState(
+    /** Opens the original Header tab item owner. @returns Header owner. */ () =>
+      pageInput && new SvxHFPage(pageInput, true, writerPageStoryIds),
+  );
+  const [footer] = useState(
+    /** Opens the original Footer tab item owner. @returns Footer owner. */ () =>
+      pageInput && new SvxHFPage(pageInput, false, writerPageStoryIds),
+  );
+  const [borders] = useState(
+    /** Opens the common native Borders page without a paragraph merge slot. @returns Page owner. */
+    () => (!htmlMode && pageInput ? new SvxBorderTabPage(pageInput, RES_BOX) : undefined),
+  );
+  const [borderOutput] = useState(
+    /** Retains the frame border and shadow deltas across tab visits. @returns Owned native items. */
+    () =>
+      borders && pageInput
+        ? new SfxItemSet(pageInput.GetPool(), [[RES_BOX, RES_SHADOW]])
+        : undefined,
+  );
+  useEffect(
+    /** Releases the input and output clones at dialog unmount. @returns Cleanup. */
+    () => {
+      /** Releases the native Borders page owned by this request. @returns Nothing. */
+      function dispose(): void {
+        borderOutput?.Dispose();
+        borders?.Dispose();
+      }
+      return dispose;
+    },
+    [borders, borderOutput],
+  );
+  const [headerState, setHeaderState] = useState(
+    /** Retains the header draft across tab switches. @returns Header values. */
+    () => header?.initial ?? readHeaderFooterSet(undefined, true, writerPageStoryIds),
+  );
+  const [footerState, setFooterState] = useState(
+    /** Retains the footer draft across tab switches. @returns Footer values. */
+    () => footer?.initial ?? readHeaderFooterSet(undefined, false, writerPageStoryIds),
+  );
+  const usage = (
+    pageInput?.GetItemIfSet(SID_ATTR_PAGE, false) as SvxPageItem | undefined
+  )?.GetPageUsage();
+  const allowSideSharing = usage !== SvxPageUsage.Left && usage !== SvxPageUsage.Right;
+  /** Synchronizes the original first-page sharing bit across both tabs. @param isHeader - Edited tab. @param state - Native tab controls. @returns Nothing. */
+  function changeStory(isHeader: boolean, state: SvxHFPageState): void {
+    if (isHeader) {
+      setHeaderState(state);
+      if (state.sharedFirst !== headerState.sharedFirst)
+        setFooterState({ ...footerState, sharedFirst: state.sharedFirst });
+    } else {
+      setFooterState(state);
+      if (state.sharedFirst !== footerState.sharedFirst)
+        setHeaderState({ ...headerState, sharedFirst: state.sharedFirst });
+    }
+  }
+  const [, redraw] = useState(0);
+  /** Renders the current item-owner draft. @returns Nothing. */
+  function onFillChange(): void {
+    redraw(
+      /** Increments the widget version. @param version - Current version. @returns Next version. */ (
+        version,
+      ) => version + 1,
+    );
+  }
+  /** Resolves labels using the current Writer localization port. @param key - UI resource key. @param fallback - Source label. @returns Localized label. */
+  function pageLabel(key: string, fallback: string): string {
+    return localization.GetText(`writer.page-style.${key}`, fallback);
+  }
+  const pages: readonly (readonly [string, string])[] = [
+    ["page", pageLabel("page-tab", "Page")],
+    ["area", pageLabel("area-tab", "Area")],
+    ["transparence", pageLabel("transparency-tab", "Transparency")],
+    ["header", pageLabel("header", "Header")],
+    ["footer", pageLabel("footer", "Footer")],
+    ...(!htmlMode && pageInput
+      ? ([
+          ["borders", pageLabel("borders", "Borders")],
+          ["textgrid", pageLabel("text-grid", "Text Grid")],
+        ] as const)
+      : []),
+  ];
+  const bitmap = area?.GetFillStyle() === FillStyle.BITMAP ? area.bitmap : undefined;
   const [page] = useState(
     /** Creates the original page-geometry and list owners for this request. @returns Page tab. */ () =>
       new SvxPageDescPage(
@@ -49,6 +189,49 @@ export function WriterPageStyleDialog({
       ),
   );
   const [draft, setDraft] = useState(page.GetGeometry());
+  const direction =
+    (pageInput?.Get(RES_FRAMEDIR) as SvxFrameDirectionItem | undefined)?.GetValue() ??
+    SvxFrameDirection.Horizontal_LR_TB;
+  const gridPreview = {
+    ...draft,
+    topMargin:
+      draft.topMargin + (headerState.enabled ? headerState.height + headerState.spacing : 0),
+    bottomMargin:
+      draft.bottomMargin + (footerState.enabled ? footerState.height + footerState.spacing : 0),
+  };
+  const box = (borderOutput?.GetItemIfSet(RES_BOX, false) ?? pageInput?.Get(RES_BOX)) as
+    SvxBoxItem | undefined;
+  const gridWidth =
+    gridPreview.width -
+    gridPreview.leftMargin -
+    gridPreview.rightMargin -
+    (box?.GetDistance(SvxBoxItemLine.LEFT) ?? 0) -
+    (box?.GetDistance(SvxBoxItemLine.RIGHT) ?? 0);
+  const gridHeight =
+    gridPreview.height -
+    gridPreview.topMargin -
+    gridPreview.bottomMargin -
+    (box?.GetDistance(SvxBoxItemLine.TOP) ?? 0) -
+    (box?.GetDistance(SvxBoxItemLine.BOTTOM) ?? 0);
+  const gridSize = IsVerticalTextGrid(direction)
+    ? { width: gridHeight, height: gridWidth }
+    : { width: gridWidth, height: gridHeight };
+  const [textGrid] = useState(
+    /** Retains the original Text Grid tab state throughout the request. @returns Native Text Grid owner. */
+    () => (!htmlMode && pageInput ? new SwTextGridPage(pageInput, gridSize) : undefined),
+  );
+  useEffect(
+    /** Releases the original Text Grid owner when the request ends. @returns Cleanup. */
+    () => {
+      return /** Releases the grid draft. @returns Nothing. */ () => textGrid?.Dispose();
+    },
+    [textGrid],
+  );
+  /** Activates the original notebook page and exchanges the current geometry. @param tab - Native tab identity. @returns Nothing. */
+  function activate(tab: string): void {
+    if (tab === "textgrid") textGrid?.UpdatePageSize(gridSize);
+    setActive(tab);
+  }
   const [paper, setPaper] = useState(page.GetPaperSizeBox().get_active_id());
   const ranges = page.GetFieldRanges();
   /** Publishes original geometry and selection after one source event. @returns Nothing. */
@@ -111,9 +294,38 @@ export function WriterPageStyleDialog({
           ) => {
             event.preventDefault();
             try {
-              onSubmit(
-                validateWriterPageDescriptor({ ...initialValue, ...page.GetAcceptedGeometry() }),
-              );
+              const geometry = validateWriterPageDescriptor({
+                ...initialValue,
+                ...page.GetAcceptedGeometry(),
+              });
+              if (!pageInput) {
+                onSubmit(geometry);
+                return;
+              }
+              const output = new SfxItemSet(pageInput.GetPool(), [
+                [RES_BOX, RES_SHADOW],
+                [RES_TEXTGRID, RES_TEXTGRID],
+                [XATTR_FILL_FIRST, XATTR_FILL_LAST],
+                [headerFooterSetSlot(true), headerFooterSetSlot(false)],
+                [SID_SWREGISTER_COLLECTION, SID_SWREGISTER_COLLECTION],
+                [SID_SWREGISTER_MODE, SID_SWREGISTER_MODE],
+              ]);
+              area?.FillItemSet(output);
+              transparency?.FillItemSet(output);
+              header?.FillItemSet(headerState, output);
+              footer?.FillItemSet(footerState, output);
+              if (borderOutput) output.PutSet(borderOutput);
+              textGrid?.FillItemSet(output);
+              if (hasRegister && (registerMode || registerMode !== initialRegister)) {
+                output.Put(new SwRegisterItem(registerMode, SID_SWREGISTER_MODE), true);
+                if (registerMode)
+                  output.Put(new SfxStringItem(SID_SWREGISTER_COLLECTION, registerStyle), true);
+              }
+              if (output.Count()) onSubmit(geometry, output);
+              else {
+                output.Dispose();
+                onSubmit(geometry);
+              }
             } catch (caught) {
               setError(caught instanceof Error ? caught.message : "Invalid page geometry.");
             }
@@ -125,10 +337,59 @@ export function WriterPageStyleDialog({
           onClose={onCancel}
         />
         <div className="writer-dialog-content">
-          <div className="border-b border-slate-200 pb-2 text-sm font-semibold text-indigo-700">
-            {localization.GetText("writer.page-style.page-tab", "Page")}
-          </div>
-          <div className="grid gap-6 md:grid-cols-[minmax(0,1fr)_190px]">
+          {area && (
+            <div
+              role="tablist"
+              aria-label={pageLabel("title", "Page Style")}
+              className="writer-dialog-tabs"
+            >
+              {pages.map(
+                /** Renders one page listed by the native controller. @param entry - Tab ID and label. @param index - Tab order. @returns Tab. */
+                ([tab, title], index) => (
+                  <button
+                    type="button"
+                    role="tab"
+                    key={tab}
+                    id={`${id}-${tab}`}
+                    aria-selected={active === tab}
+                    aria-controls={`${id}-panel-${tab}`}
+                    tabIndex={active === tab ? 0 : -1}
+                    className="rounded-t border-b px-3 py-2 text-sm aria-selected:border-indigo-600 aria-selected:text-indigo-700"
+                    onClick={/** Activates this page. @returns Nothing. */ () => activate(tab)}
+                    onKeyDown={
+                      /** Walks the native notebook order. @param event - Tab key action. @returns Nothing. */
+                      (event) => {
+                        const direction =
+                          event.key === "ArrowLeft" ? -1 : event.key === "ArrowRight" ? 1 : 0;
+                        const next =
+                          event.key === "Home"
+                            ? pages[0]
+                            : event.key === "End"
+                              ? pages.at(-1)
+                              : direction
+                                ? pages[(index + direction + pages.length) % pages.length]
+                                : undefined;
+                        if (!next) return;
+                        event.preventDefault();
+                        activate(next[0]);
+                        globalThis.document.getElementById(`${id}-${next[0]}`)?.focus();
+                      }
+                    }
+                  >
+                    {title}
+                  </button>
+                ),
+              )}
+            </div>
+          )}
+          <div
+            role={area && "tabpanel"}
+            id={`${id}-panel-page`}
+            aria-labelledby={area && `${id}-page`}
+            className={
+              active === "page" ? "grid gap-6 md:grid-cols-[minmax(0,1fr)_190px]" : "hidden"
+            }
+          >
             <div className="grid gap-4">
               <fieldset className="grid grid-cols-2 gap-3 rounded-lg border border-slate-200 p-3">
                 <legend className="px-1 text-sm font-bold text-slate-700">Paper format</legend>
@@ -266,6 +527,43 @@ export function WriterPageStyleDialog({
                   }
                 />
               </fieldset>
+              {hasRegister && (
+                <fieldset className="grid gap-2 rounded-lg border border-slate-200 p-3 text-sm">
+                  <legend className="px-1 font-bold text-slate-700">
+                    {pageLabel("layout-settings", "Layout settings")}
+                  </legend>
+                  <label className="flex items-center gap-2">
+                    <input
+                      type="checkbox"
+                      checked={registerMode}
+                      onChange={
+                        /** Toggles the Page tab's original register controls. @param event - Checkbox edit. @returns Nothing. */
+                        (event) => setRegisterMode(event.currentTarget.checked)
+                      }
+                    />
+                    {pageLabel("use-page-line-spacing", "Use page line-spacing")}
+                  </label>
+                  <label className="grid gap-1 ps-5">
+                    {pageLabel("reference-style", "Reference Style:")}
+                    <select
+                      className="rounded border px-2 py-1"
+                      disabled={!registerMode}
+                      value={registerStyle}
+                      onChange={
+                        /** Selects the original reference paragraph style. @param event - Style edit. @returns Nothing. */
+                        (event) => setRegisterStyle(event.currentTarget.value)
+                      }
+                    >
+                      {registerStyles.slice(1).map(
+                        /** Presents a visible paragraph style. @param name - Name. @returns Picker entry. */
+                        (name) => (
+                          <option key={name}>{name}</option>
+                        ),
+                      )}
+                    </select>
+                  </label>
+                </fieldset>
+              )}
             </div>
             <div className="grid content-start justify-items-center gap-3 rounded-lg bg-slate-100 p-4">
               <span className="text-xs font-bold uppercase tracking-wide text-slate-500">
@@ -287,8 +585,74 @@ export function WriterPageStyleDialog({
               </div>
             </div>
           </div>
+          {area && active === "area" && (
+            <div role="tabpanel" id={`${id}-panel-area`} aria-labelledby={`${id}-area`}>
+              <AreaTabPage page={area} changed={onFillChange} label={pageLabel} />
+            </div>
+          )}
+          {area && transparency && active === "transparence" && (
+            <div
+              role="tabpanel"
+              id={`${id}-panel-transparence`}
+              aria-labelledby={`${id}-transparence`}
+            >
+              <TransparencyTabPage
+                page={transparency}
+                changed={onFillChange}
+                label={pageLabel}
+                color={area.GetFillStyle() === FillStyle.SOLID ? area.GetColor() : undefined}
+                bitmap={
+                  bitmap &&
+                  bitmapFillStyle(bitmap.GetBitmap(), bitmap.GetMode(), bitmap.GetPosition())
+                }
+              />
+            </div>
+          )}
+          {(active === "header" || active === "footer") && header && footer && (
+            <div role="tabpanel" id={`${id}-panel-${active}`} aria-labelledby={`${id}-${active}`}>
+              <HeaderFooterTabPage
+                key={active}
+                state={active === "header" ? headerState : footerState}
+                other={active === "header" ? footerState : headerState}
+                header={active === "header"}
+                originallyEnabled={(active === "header" ? header : footer).initial.enabled}
+                allowSideSharing={allowSideSharing}
+                geometry={draft}
+                unit={unit}
+                label={pageLabel}
+                onChange={
+                  /** Saves this tab's native values. @param state - New draft. @returns Nothing. */ (
+                    state,
+                  ) => changeStory(active === "header", state)
+                }
+              />
+            </div>
+          )}
+          {active === "borders" && pageInput && borders && borderOutput && (
+            <div role="tabpanel" id={`${id}-panel-borders`} aria-labelledby={`${id}-borders`}>
+              <WriterFrameBorderPage
+                page={borders}
+                input={pageInput}
+                output={borderOutput}
+                unit={unit}
+                label={pageLabel}
+              />
+            </div>
+          )}
+          {active === "textgrid" && textGrid && (
+            <div role="tabpanel" id={`${id}-panel-textgrid`} aria-labelledby={`${id}-textgrid`}>
+              <WriterTextGridPage
+                page={textGrid}
+                layout={gridPreview}
+                direction={direction}
+                label={pageLabel}
+              />
+            </div>
+          )}
           {error === undefined ? null : (
-            <p className="text-sm font-semibold text-red-700">{error}</p>
+            <p role="alert" className="text-sm font-semibold text-red-700">
+              {error}
+            </p>
           )}
         </div>
         <div className="writer-dialog-actions">

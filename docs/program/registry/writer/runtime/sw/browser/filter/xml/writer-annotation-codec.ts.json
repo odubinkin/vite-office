@@ -4,11 +4,11 @@
   "record": {
     "path": "apps/office/src/sw/browser/filter/xml/writer-annotation-codec.ts",
     "classification": "local-infrastructure",
-    "state": "foundation",
+    "state": "active",
     "suite": "writer",
-    "subsystem": "document-lifecycle",
+    "subsystem": "storage-contract",
     "capabilityIds": [
-      "CAP-ba76bd42-4b00-4278-9f8f-3970be0c5fa6"
+      "CAP-0111"
     ],
     "semantic": {
       "behaviorStatus": "not-applicable",
@@ -17,13 +17,12 @@
       "divergenceClass": "B",
       "evidence": [
         "apps/office/src/sw/browser/filter/xml/writer-annotation-codec.ts#encodeAnnotations",
-        "apps/office/src/sw/source/filter/xml/odt-annotation.test.ts#retains adjacent point anchors"
+        "apps/office/src/sw/source/filter/xml/odt-annotation.test.ts"
       ],
-      "justification": "Transports the native annotation point offsets, metadata and represented edit runs through the Writer Worker graph.",
+      "justification": "Transfers annotation field data and registered range start through the existing browser graph boundary.",
       "knownViolations": [],
       "localSymbols": [
-        "encodeAnnotations",
-        "decodeAnnotations"
+        "encodeAnnotations"
       ],
       "sourceResponsibility": "browser-owned",
       "upstreamFile": null,

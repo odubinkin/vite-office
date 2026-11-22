@@ -1,6 +1,14 @@
 /** @fileoverview Owns independent supported list-level positioning and attribute import from pinned xmlnumi.cxx. */
+import { XGraphic } from "../../../offapi/com/sun/star/graphic/XGraphic";
+import {
+  Size,
+  cppu_detail_getUnoType_Size as sizeType,
+} from "../../../offapi/com/sun/star/awt/Size";
+import { VertOrientation } from "../../../offapi/com/sun/star/text/VertOrientation";
+import { XMLBase64ImportContext } from "../core/XMLBase64ImportContext";
+import type { XMLGraphicSource } from "../core/xmlgrhlp";
 import { FastAttributeList, SvXMLImport, SvXMLImportContext } from "../core/xmlimp";
-import { ODF_NAMESPACES, XMLToken } from "../core/xmltoken";
+import { XMLToken } from "../core/xmltoken";
 import { SvXMLUnitConverter } from "../core/xmluconv";
 import { importFamilyName } from "./fonthdl";
 import type {
@@ -58,6 +66,11 @@ export class SvxXMLListLevelStyleContext_Impl extends SvXMLImportContext {
   };
   private readonly level: number;
   private readonly kind: "bullet" | "numbered";
+  private readonly isImage: boolean;
+  private readonly href: string;
+  private inlineImage: Uint8Array | undefined;
+  private imageSize = { width: 0, height: 0 };
+  private imageOrientation: number = VertOrientation.NONE;
   private cBullet: number;
   private readonly xmlImport: SvXMLImport;
   private readonly format: string;
@@ -72,15 +85,23 @@ export class SvxXMLListLevelStyleContext_Impl extends SvXMLImportContext {
   public constructor(
     element: XMLToken,
     attributes: FastAttributeList,
-    private readonly fontDeclarations?: Pick<XMLListStyleImportTarget, "getFontFace">,
+    private readonly fontDeclarations?: Pick<
+      XMLListStyleImportTarget,
+      "getFontFace" | "loadListGraphic"
+    >,
   ) {
     super();
     this.xmlImport = fontDeclarations instanceof SvXMLImport ? fontDeclarations : new SvXMLImport();
     this.kind = element === XMLToken.TEXT_LIST_LEVEL_STYLE_BULLET ? "bullet" : "numbered";
+    this.isImage = element === XMLToken.TEXT_LIST_LEVEL_STYLE_IMAGE;
+    this.href = attributes.get(XMLToken.XLINK_HREF) ?? "";
     attributes.assertOnly(
       [
         XMLToken.TEXT_LEVEL,
         XMLToken.TEXT_BULLET_CHAR,
+        ...(this.isImage
+          ? [XMLToken.XLINK_HREF, XMLToken.XLINK_TYPE, XMLToken.XLINK_SHOW, XMLToken.XLINK_ACTUATE]
+          : []),
         XMLToken.STYLE_NUM_FORMAT,
         XMLToken.STYLE_NUM_LETTER_SYNC,
         XMLToken.STYLE_NUM_SUFFIX,
@@ -118,11 +139,37 @@ export class SvxXMLListLevelStyleContext_Impl extends SvXMLImportContext {
     element: XMLToken,
     attributes: FastAttributeList,
   ): SvXMLImportContext | null {
+    if (this.isImage && element === XMLToken.OFFICE_BINARY_DATA && this.href === "") {
+      return new XMLBase64ImportContext(
+        /** Retains the native inline raster bytes. @param bytes - Decoded data. @returns Nothing. */
+        (bytes) => {
+          this.inlineImage = bytes;
+        },
+      );
+    }
     if (
       element !== XMLToken.STYLE_LIST_LEVEL_PROPERTIES &&
       element !== XMLToken.STYLE_TEXT_PROPERTIES
     )
       return null;
+    if (this.isImage && element === XMLToken.STYLE_LIST_LEVEL_PROPERTIES) {
+      const converter = new SvXMLUnitConverter("mm100");
+      this.imageSize = {
+        width:
+          converter.convertMeasureToCore(attributes.get(XMLToken.FO_WIDTH) ?? "", 0, 2147483647) ??
+          0,
+        height:
+          converter.convertMeasureToCore(attributes.get(XMLToken.FO_HEIGHT) ?? "", 0, 2147483647) ??
+          0,
+      };
+      const pos = attributes.get(XMLToken.STYLE_VERTICAL_POS);
+      const rel = attributes.get(XMLToken.STYLE_VERTICAL_REL);
+      const index = pos === "top" ? 0 : pos === "bottom" ? 2 : 1;
+      this.imageOrientation =
+        rel === "baseline"
+          ? 3 - index
+          : (rel === "char" ? VertOrientation.CHAR_TOP : VertOrientation.LINE_TOP) + index;
+    }
     return new SvxXMLListLevelStyleAttrContext_Impl(
       attributes,
       /** Retains the selected fields without changing the other group. @param values - Property delta. @returns Nothing. */
@@ -143,9 +190,9 @@ export class SvxXMLListLevelStyleContext_Impl extends SvXMLImportContext {
   /** Assembles the supported native property sequence only when the owning rule reads it. @returns Declaration and both MM100 geometry groups. */
   public GetProperties(): XMLListLevelImport {
     const type = {
-      value: this.kind === "bullet" ? 6 : 4,
+      value: this.isImage ? 8 : this.kind === "bullet" ? 6 : 4,
     };
-    if (this.kind === "numbered")
+    if (this.kind === "numbered" && !this.isImage)
       new SvXMLUnitConverter("mm100").convertNumFormat(type, this.format, this.letterSync, true);
     if (this.listFormat === undefined) {
       this.listFormat = this.prefix;
@@ -169,8 +216,16 @@ export class SvxXMLListLevelStyleContext_Impl extends SvXMLImportContext {
         bulletFontName = "StarSymbol";
       }
     }
+    const graphic = this.isImage
+      ? this.fontDeclarations?.loadListGraphic?.({
+          href: this.href,
+          ...(this.inlineImage === undefined ? {} : { inline: this.inlineImage }),
+        })
+      : undefined;
     return {
       level: this.level,
+      ...(graphic === undefined ? {} : { graphic }),
+      ...(this.isImage ? { graphicSize: this.imageSize, vertOrient: this.imageOrientation } : {}),
       kind: this.kind,
       numberingType: type.value,
       ...(this.kind === "bullet"
@@ -255,6 +310,7 @@ class SvxXMLListLevelStyleAttrContext_Impl extends SvXMLImportContext {
 /** Model-facing numbering publication port used by the source-owned list context. */
 export interface XMLListStyleImportTarget {
   registerListStyle(styleName: string, rule: XMLTextListRule, automatic?: boolean): void;
+  loadListGraphic?(source: XMLGraphicSource): XGraphic | undefined;
   /** Resolves an existing declaration; missing faces retain the level's prior font. */
   getFontFace?(name: string): string | undefined;
 }
@@ -283,22 +339,13 @@ export class SvxXMLListStyleContext extends SvXMLImportContext {
   ): SvXMLImportContext | null {
     if (
       element !== XMLToken.TEXT_LIST_LEVEL_STYLE_NUMBER &&
-      element !== XMLToken.TEXT_LIST_LEVEL_STYLE_BULLET
+      element !== XMLToken.TEXT_LIST_LEVEL_STYLE_BULLET &&
+      element !== XMLToken.TEXT_LIST_LEVEL_STYLE_IMAGE
     )
       return null;
     const context = new SvxXMLListLevelStyleContext_Impl(element, attributes, this.target);
     this.levelStyles.push(context);
     return context;
-  }
-
-  /** Ignores unknown children while keeping unsupported native image numbering explicit. @param namespaceURI - Namespace. @param localName - Child name. @returns Null for native unknown-child skipping. */
-  public override createUnknownChildContext(
-    namespaceURI: string,
-    localName: string,
-  ): SvXMLImportContext | null {
-    if (namespaceURI === ODF_NAMESPACES.text && localName === "list-level-style-image")
-      throw new Error("Unsupported ODF list level style: list-level-style-image");
-    return null;
   }
 
   /** Publishes only the valid indices, reading properties from their retained native leaves. @returns Nothing. */
@@ -356,6 +403,14 @@ export function FillUnoNumRule(rules: XMLNumberingRules, declaration: XMLTextLis
         "NumberingType",
         new Any([level.numberingType ?? (level.kind === "bullet" ? 6 : 4)], "sal_Int16"),
       );
+      if (level.graphic) add("Graphic", new Any([level.graphic], XGraphic.static_type));
+      if (level.graphicSize)
+        add(
+          "GraphicSize",
+          new Any(new Size(level.graphicSize.width, level.graphicSize.height), sizeType),
+        );
+      if (level.vertOrient !== undefined)
+        add("VertOrient", new Any([level.vertOrient], "sal_Int16"));
       addString("Prefix", level.prefix);
       addString("Suffix", level.suffix);
       if (level.startWith !== undefined)

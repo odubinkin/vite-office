@@ -597,6 +597,7 @@ describe("Writer browser presentation", /** Groups presentation tests. @returns 
         page = dialogs.RequestPageDialog(
           WRITER_COMMAND_IDS.pageDialog,
           session.docShell.GetDoc().GetPageDesc().GetValue(),
+          session.docShell.GetDoc().GetPageDesc().GetMaster().GetAttrSet(),
         );
       },
     );
@@ -621,6 +622,7 @@ describe("Writer browser presentation", /** Groups presentation tests. @returns 
         acceptedPage = dialogs.RequestPageDialog(
           WRITER_COMMAND_IDS.pageDialog,
           session.docShell.GetDoc().GetPageDesc().GetValue(),
+          session.docShell.GetDoc().GetPageDesc().GetMaster().GetAttrSet(),
         );
       },
     );

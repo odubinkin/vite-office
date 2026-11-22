@@ -1,0 +1,25 @@
+{
+  "schema_version": 1,
+  "task_id": "202611220258-1P25CC",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-11-22T03:08:11.726Z",
+  "verdict": "pass",
+  "summary": "Verified native Writer paragraph solid fill and uniform transparency through application, display, history, and persistence.",
+  "evaluated_sha": "6ecd9edf9541627e07c35f277de854083905a4bb",
+  "blueprint_digest": "f9ca5cfc6fd7fcd0cf9f1d1e9c0e7546f835dac04b1a4f55ab6e778e62983ec1",
+  "findings": [
+    "Paragraph formatting exchanges pooled fill items independently and retains per-paragraph color when changing mixed transparency.",
+    "Chromium verified visible 51 percent transparency, undo, redo and reopen through the ordinary Writer command."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202611220258-1P25CC/README.md",
+    "6ecd9edf9541",
+    "apps/office/e2e/writer-paragraph-area.spec.ts"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": [
+    "Gradient and image fills are outside the current paragraph slice. Global Calc JSDoc and file-size baseline issues are recorded in Findings."
+  ]
+}

@@ -99,7 +99,7 @@ function WriterAdvancedFormattingControls({
             request: {
               commandUrl,
               kind: "paragraph",
-              tabContext: (
+              pageInput: (
                 /** Creates actual tab values over the Writer pool. @returns Native set. */ () => {
                   const set = new SfxItemSet(new SwDoc().GetAttrPool(), [[1, 12000]]);
                   const tabs = new SvxTabStopItem(0, 0, SvxTabAdjust.Left, RES_PARATR_TABSTOP);
@@ -337,7 +337,7 @@ describe("Writer advanced formatting controls", /** Handles Writer formatting st
     fireEvent.change(screen.getByLabelText("Line spacing"), { target: { value: "minimum" } });
     fireEvent.change(screen.getByLabelText("Value (pt)"), { target: { value: "16" } });
     expect(screen.queryByLabelText("Font-independent line spacing")).toBeNull();
-    fireEvent.click(screen.getByRole("tab", { name: "Text Flow" }));
+    fireEvent.click(screen.getByRole("tab", { name: "Outline & List" }));
     fireEvent.click(screen.getByLabelText("Include this paragraph in line numbering"));
     fireEvent.click(screen.getByText("Cancel"));
     expect(onParagraphFormat).not.toHaveBeenCalled();

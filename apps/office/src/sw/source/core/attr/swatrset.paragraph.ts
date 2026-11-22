@@ -4,16 +4,20 @@ import {
   SvxFormatSplitItem,
   SvxOrphansItem,
   SvxParaVertAlignItem,
+  SvxParaGridItem,
   SvxWidowsItem,
 } from "../../../../editeng/source/items/paraitem.controls";
 import {
+  SvxAutoFrameDirectionItem,
   SvxForbiddenRuleItem,
   SvxHangingPunctuationItem,
+  SvxHyphenZoneItem,
+  type HyphenZoneSettings,
   SvxScriptSpaceItem,
 } from "../../../../editeng/source/items/paraitem";
-import { SfxBoolItem } from "../../../../svl/inc/eitem";
-import { SvxHyphenZoneItem } from "../../../../editeng/inc/hyphenzoneitem";
 import { SwFormatLineNumber } from "../../../inc/fmtline";
+import { SwRegisterItem } from "../para/paratr";
+import { SfxBoolItem } from "../../../../svl/inc/eitem";
 import type { SfxPoolItem } from "../../../../svl/inc/poolitem";
 import {
   RES_KEEP,
@@ -22,18 +26,24 @@ import {
   RES_PARATR_HANGINGPUNCTUATION,
   RES_PARATR_HYPHENZONE,
   RES_PARATR_SCRIPTSPACE,
+  RES_PARATR_REGISTER,
   RES_PARATR_SPLIT,
   RES_PARATR_ORPHANS,
   RES_PARATR_VERTALIGN,
+  RES_PARATR_SNAPTOGRID,
+  RES_PARATR_AUTOFRAMEDIR,
   RES_PARATR_WIDOWS,
 } from "../../../inc/hintids";
 /** Paragraph and adjacent frame settings restored through the same native item factory. */
 export const paragraphControlItems = [
+  RES_PARATR_HYPHENZONE,
+  RES_PARATR_REGISTER,
   RES_PARATR_SPLIT,
   RES_PARATR_VERTALIGN,
+  RES_PARATR_SNAPTOGRID,
+  RES_PARATR_AUTOFRAMEDIR,
   RES_PARATR_SCRIPTSPACE,
   RES_PARATR_HANGINGPUNCTUATION,
-  RES_PARATR_HYPHENZONE,
   RES_PARATR_FORBIDDEN_RULES,
   RES_KEEP,
   RES_LINENUMBER,
@@ -41,20 +51,23 @@ export const paragraphControlItems = [
 
 /** Restores the registered scalar controls using their native item constructors. @param which - One registered control identity. @param value - Persisted scalar. @returns Actual native item. */
 export function restoreParagraphControlItem(which: number, value: unknown): SfxPoolItem {
-  if (which === RES_PARATR_HYPHENZONE) return SvxHyphenZoneItem.fromState(value, which);
-  if (which === RES_LINENUMBER) {
-    if (typeof value === "boolean") return new SwFormatLineNumber(value);
-    if (
-      !Array.isArray(value) ||
-      value.length !== 2 ||
-      typeof value[0] !== "boolean" ||
-      typeof value[1] !== "number" ||
-      !Number.isInteger(value[1]) ||
-      value[1] < 0 ||
-      value[1] > 0xffffff
-    )
-      throw new Error("Stored Writer paragraph line numbering is invalid.");
-    return new SwFormatLineNumber(value[0], value[1]);
+  if (which === RES_PARATR_HYPHENZONE) {
+    if (typeof value !== "object" || value === null)
+      throw new Error("Writer hyphenation settings are invalid.");
+    const snapshot = value as HyphenZoneSettings;
+    const defaults = SvxHyphenZoneItem.CreateDefault().QueryValue();
+    for (const key of Object.keys(defaults) as (keyof HyphenZoneSettings)[]) {
+      const field = snapshot[key];
+      if (
+        typeof field !== typeof defaults[key] ||
+        (typeof field === "number" &&
+          (!Number.isInteger(field) ||
+            field < 0 ||
+            field > (key.toLowerCase().endsWith("zone") ? 65535 : 255)))
+      )
+        throw new Error("Writer hyphenation settings are invalid.");
+    }
+    return new SvxHyphenZoneItem(snapshot.hyphen, which, snapshot);
   }
   if (which === RES_PARATR_ORPHANS) return new SvxOrphansItem(Number(value), which);
   if (which === RES_PARATR_WIDOWS) return new SvxWidowsItem(Number(value), which);
@@ -68,6 +81,31 @@ export function restoreParagraphControlItem(which: number, value: unknown): SfxP
       throw new Error("SvxParaVertAlignItem value is invalid.");
     return new SvxParaVertAlignItem(value, which);
   }
+  if (which === RES_PARATR_SNAPTOGRID || which === RES_PARATR_AUTOFRAMEDIR) {
+    if (typeof value !== "boolean") throw new Error("Invalid Writer paragraph boolean.");
+    return which === RES_PARATR_SNAPTOGRID
+      ? new SvxParaGridItem(value, which)
+      : new SvxAutoFrameDirectionItem(value, which);
+  }
+  if (which === RES_LINENUMBER) {
+    if (typeof value === "boolean") return new SwFormatLineNumber(value);
+    if (Array.isArray(value) && value.length === 2)
+      value = { count: value[0], startValue: value[1] };
+    if (
+      value === null ||
+      typeof value !== "object" ||
+      !("count" in value) ||
+      typeof value.count !== "boolean" ||
+      !("startValue" in value) ||
+      typeof value.startValue !== "number" ||
+      !Number.isInteger(value.startValue) ||
+      value.startValue < 0 ||
+      value.startValue > 0xffffff
+    )
+      throw new Error("Invalid Writer paragraph line numbering.");
+    return new SwFormatLineNumber(value.count, value.startValue);
+  }
+  if (which === RES_PARATR_REGISTER) return new SwRegisterItem(Boolean(value));
   if (which === RES_PARATR_SPLIT) return new SvxFormatSplitItem(Boolean(value), which);
   if (which === RES_PARATR_SCRIPTSPACE) return new SvxScriptSpaceItem(Boolean(value), which);
   if (which === RES_PARATR_HANGINGPUNCTUATION)

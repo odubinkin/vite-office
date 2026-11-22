@@ -1,6 +1,9 @@
 /** @fileoverview Implements structural Writer shell algorithms using the actual native SwWrtShell owner directly. */
 
-import { SwPosition, type WriterTextRange } from "../../core/crsr/pam";
+import { SwPosition, SwPaM, type WriterTextRange } from "../../core/crsr/pam";
+import type { SwFormatField } from "../../../inc/fmtfld";
+import type { SwPostItField } from "../../core/fields/docufld";
+import { SwUndoInsAnnotation } from "../../core/undo/unattr-field";
 import {
   SwTextNode,
   type SwTextFragment,
@@ -15,15 +18,36 @@ import { createWriterInsertTextAction } from "../../core/edit/editsh";
 import { createWriterDeleteSelectionOperation } from "../../core/edit/eddel";
 import { createWriterReadTextOperation } from "../../filter/basflt/shellio";
 import { SwUndoInsert } from "../../core/undo/unins";
-import { SwUndoAttr } from "../../core/undo/unattr";
+import { sw_GetJoinFlags } from "../../core/doc/docedt";
+import { GetAutoParagraphDirectionItem } from "../../core/doc/DocumentContentOperationsManager.attr";
+import { SwUndoAttr, SwUndoParagraphItem } from "../../core/undo/unattr";
 import { SwInsertFlags } from "../../../inc/IDocumentContentOperations";
-import { SfxListUndoAction } from "../../../../svl/source/undo/undo";
+import { SfxListUndoAction, type SfxUndoAction } from "../../../../svl/source/undo/undo";
 import type { SwUndoRedoContext } from "../../core/undo/undobj";
 import { SwUndoSplitNode } from "../../core/undo/unspnd";
 import { getWriterTypingCharacterClass } from "./delete";
 import type { SwWrtShell } from "./wrtsh1";
 import { SvxFirstLineIndentItem } from "../../../../editeng/inc/lrspitem";
-import { RES_MARGIN_FIRSTLINE } from "../../../inc/hintids";
+import { RES_FRAMEDIR, RES_MARGIN_FIRSTLINE, RES_TXTATR_ANNOTATION } from "../../../inc/hintids";
+
+/** Inserts an owned annotation value as one Writer history action. @param shell - Editing shell. @param range - Comment anchor or selected range. @param field - Owned field value. @returns Attached annotation format. */
+export function InsertPostIt(
+  shell: SwWrtShell,
+  range: SwPaM,
+  field: SwPostItField,
+): SwFormatField | undefined {
+  const before = shell.CaptureCursorState();
+  const action = new SwUndoInsAnnotation(range, field, before);
+  try {
+    shell.ApplyAction(action);
+    return action.GetFormat();
+  } catch (error) {
+    action.Dispose();
+    throw error;
+  } finally {
+    before.pendingCharacterItems.Dispose();
+  }
+}
 
 /** Applies the existing shell ruler-margin algorithm through actual paragraph items and shell history. @param shell - Original shell owner. @param edge - Dragged marker. @param delta - Original twip delta. @returns Whether paragraph attributes changed. */
 export function AdjustParagraphRulerIndent(
@@ -88,6 +112,47 @@ function getWriterGraphemeBoundaries(text: string): readonly number[] {
   return boundaries;
 }
 
+/** Adds the original automatic direction update to the same history entry as the text edit when needed. @param shell - Editing shell. @param action - Native text action. @param node - Resulting paragraph. @param text - Resulting text. @param tryMerge - Whether normal typing can merge. @param execute - Initial native operation if distinct from redo. @returns Whether the action was applied. */
+function applyTextAndDirection(
+  shell: SwWrtShell,
+  action: SfxUndoAction<SwUndoRedoContext>,
+  node: SwTextNode,
+  text: string,
+  tryMerge = false,
+  execute?: (context: SwUndoRedoContext) => void,
+): boolean {
+  const item = GetAutoParagraphDirectionItem(node, text);
+  if (item === undefined) return shell.ApplyAction(action, tryMerge, execute);
+  return shell.RunNotificationTransaction(
+    /** Groups direction with the text edit so undo restores both. @returns Whether changed. */
+    () => {
+      const manager = shell.GetDoc().GetUndoManager();
+      manager.StartUndo(action.GetComment());
+      try {
+        const changed = shell.ApplyAction(action, false, execute);
+        const state = shell.CaptureCursorState();
+        try {
+          shell.ApplyAction(
+            new SwUndoParagraphItem(
+              node,
+              node.GetpSwAttrSet()?.GetItemIfSet(RES_FRAMEDIR, false),
+              item,
+              state,
+              state,
+            ),
+          );
+        } finally {
+          state.pendingCharacterItems.Dispose();
+        }
+        return changed;
+      } finally {
+        manager.EndUndo();
+        item.Dispose();
+      }
+    },
+  );
+}
+
 /** Inserts text at the persistent point, replacing any selection. @param text - Inserted text. @param allowGrouping - Whether typing may merge with the preceding action. @param shell - Actual native cursor, document and history owner. @returns Whether changed. */
 export function InsertAtCursor(shell: SwWrtShell, text: string, allowGrouping: boolean): boolean {
   const before = shell.CaptureCursorState();
@@ -105,7 +170,8 @@ export function InsertAtCursor(shell: SwWrtShell, text: string, allowGrouping: b
           const position = shell.GetCursor().GetPoint();
           const target = position.GetNode() as WriterParagraph,
             start = position.GetContentIndex();
-          return shell.ApplyAction(
+          return applyTextAndDirection(
+            shell,
             createWriterInsertTextAction(
               target,
               start,
@@ -116,6 +182,8 @@ export function InsertAtCursor(shell: SwWrtShell, text: string, allowGrouping: b
               shell.CreateCollapsedCursorState(target, start + text.length),
               deleted,
             ),
+            target,
+            target.GetText().slice(0, start) + text + target.GetText().slice(start),
           );
         } finally {
           manager.EndUndo();
@@ -125,7 +193,8 @@ export function InsertAtCursor(shell: SwWrtShell, text: string, allowGrouping: b
   }
   const offset = point.GetContentIndex();
   const group = allowGrouping ? getWriterTypingCharacterClass(text) : undefined;
-  return shell.ApplyAction(
+  return applyTextAndDirection(
+    shell,
     createWriterInsertTextAction(
       paragraph,
       offset,
@@ -135,6 +204,8 @@ export function InsertAtCursor(shell: SwWrtShell, text: string, allowGrouping: b
       before,
       shell.CreateCollapsedCursorState(paragraph, offset + text.length),
     ),
+    paragraph,
+    paragraph.GetText().slice(0, offset) + text + paragraph.GetText().slice(offset),
     group !== undefined,
   );
 }
@@ -155,8 +226,37 @@ export function DeleteAtCursor(shell: SwWrtShell, direction: SwUndoDeleteDirecti
         : undefined;
     const after = target === undefined ? undefined : shell.CreateCollapsedCursorState(target, 0);
     const operation = createWriterDeleteSelectionOperation(cursor, direction, before, after);
-    if (operation !== undefined)
+    if (operation !== undefined) {
+      const start = cursor.Start();
+      const end = cursor.End();
+      const first = start.GetNode().GetTextNode();
+      const last = end.GetNode().GetTextNode();
+      if (
+        first &&
+        last &&
+        mark !== undefined &&
+        !cursor.IsMultiSelection() &&
+        !before.tableSelection &&
+        first.StartOfSectionNode() === last.StartOfSectionNode()
+      ) {
+        const selection = new SwPaM(point, mark);
+        try {
+          const survivor = sw_GetJoinFlags(selection).joinPrev ? last : first;
+          return applyTextAndDirection(
+            shell,
+            operation.action,
+            survivor,
+            first.GetText().slice(0, start.GetContentIndex()) +
+              last.GetText().slice(end.GetContentIndex()),
+            false,
+            operation.execute,
+          );
+        } finally {
+          selection.Dispose();
+        }
+      }
       return shell.ApplyAction(operation.action, false, operation.execute);
+    }
     if (target === undefined && (mark === undefined || point.compare(mark) === 0)) return false;
     const endpoint = direction === "backspace" ? cursor.Start() : cursor.End();
     const position =
@@ -178,18 +278,24 @@ export function DeleteAtCursor(shell: SwWrtShell, direction: SwUndoDeleteDirecti
     direction === "backspace"
       ? getWriterPreviousGraphemeBoundary(paragraph.GetText(), offset)
       : offset;
+  const annotation = paragraph.GetpSwpHints()?.GetTextAttrForCharAt(start, RES_TXTATR_ANNOTATION);
   const end =
-    direction === "backspace" ? offset : getWriterNextGraphemeBoundary(paragraph.GetText(), offset);
+    direction === "backspace"
+      ? offset
+      : annotation
+        ? offset + 1
+        : getWriterNextGraphemeBoundary(paragraph.GetText(), offset);
   /* istanbul ignore next -- Valid non-boundary cursor offsets still lie inside one grapheme. */
   if (start === end) return false;
   const deletedText = paragraph.GetText().slice(start, end);
   const group =
-    deletedText.length === 1
+    annotation === undefined && deletedText.length === 1
       ? /[\p{L}\p{N}]/u.test(deletedText)
         ? "word"
         : "delimiter"
       : undefined;
-  return shell.ApplyAction(
+  return applyTextAndDirection(
+    shell,
     new SwUndoDelete(
       paragraph,
       start,
@@ -199,6 +305,8 @@ export function DeleteAtCursor(shell: SwWrtShell, direction: SwUndoDeleteDirecti
       before,
       shell.CreateCollapsedCursorState(paragraph, start),
     ),
+    paragraph,
+    paragraph.GetText().slice(0, start) + paragraph.GetText().slice(end),
     group !== undefined,
   );
 }
@@ -323,7 +431,8 @@ export function MergeParagraphWithPrevious(shell: SwWrtShell, paragraph: WriterP
   )
     return false;
   const offset = preceding.Len();
-  return shell.ApplyAction(
+  return applyTextAndDirection(
+    shell,
     new SwUndoJoinParagraphs(
       preceding,
       offset,
@@ -331,6 +440,8 @@ export function MergeParagraphWithPrevious(shell: SwWrtShell, paragraph: WriterP
       shell.CaptureCursorState(),
       shell.CreateCollapsedCursorState(preceding, offset),
     ),
+    preceding,
+    preceding.GetText() + paragraph.GetText(),
   );
 }
 

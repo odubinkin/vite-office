@@ -1,0 +1,48 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/cui/source/tabpages/numpages.ts",
+    "status": "mapped",
+    "upstreamPath": "cui/source/tabpages/numpages.cxx",
+    "localSymbols": [
+      "applyBulletPreset",
+      "applyOrderedPreset",
+      "applyOutlinePreset"
+    ],
+    "upstreamSymbols": [
+      "SvxSingleNumPickTabPage",
+      "SvxNumPickTabPage",
+      "SvxBulletPickTabPage"
+    ],
+    "preservedResponsibilities": [
+      "Applies the pinned English ordered and outline locales and the default bullet presets to a copied native rule."
+    ],
+    "omittedResponsibilities": [
+      "Bitmap presets and the configurable character gallery remain outside this checkpoint."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/cui/source/tabpages/numpages.ts",
+          "marker": "applyOrderedPreset"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/cui/source/tabpages/numpages.cxx",
+          "marker": "IMPL_LINK_NOARG(SvxSingleNumPickTabPage, NumSelectHdl_Impl"
+        },
+        {
+          "path": "vendor/libreoffice-reference/i18npool/source/localedata/data/en_US.xml",
+          "marker": "LC_NumberingLevel"
+        },
+        {
+          "path": "vendor/libreoffice-reference/officecfg/registry/schema/org/openoffice/Office/Common.xcs",
+          "marker": "DefaultBullets"
+        }
+      ]
+    }
+  }
+}

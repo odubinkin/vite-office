@@ -848,21 +848,22 @@ describe("WriterMenuBar" /** Groups Writer menu and clipboard integration tests.
       "data-popup-highlighted",
       "true",
     );
-    expect(screen.getByRole("menu", { name: "Edit menu" })).toHaveFocus();
-    fireEvent.keyDown(screen.getByRole("menu", { name: "Edit menu" }), { key: "ArrowDown" });
+    const editMenu = screen.getByRole("menu", { name: "Edit menu" });
+    fireEvent.keyDown(editMenu, { key: "ArrowDown" });
     expect(screen.getByRole("menuitem", { name: "Redo" })).toHaveAttribute(
       "data-popup-highlighted",
       "true",
     );
-    fireEvent.keyDown(screen.getByRole("menu", { name: "Edit menu" }), { key: "ArrowDown" });
+    fireEvent.keyDown(editMenu, { key: "ArrowDown" });
     expect(screen.getByRole("menuitem", { name: "Cut" })).toHaveFocus();
     fireEvent.keyDown(screen.getByRole("menuitem", { name: "Cut" }), { key: "End" });
     expect(screen.getByRole("menuitem", { name: "Hyperlink…" })).toHaveAttribute(
       "data-popup-highlighted",
       "true",
     );
-    expect(screen.getByRole("menu", { name: "Edit menu" })).toHaveFocus();
-    fireEvent.keyDown(screen.getByRole("menu", { name: "Edit menu" }), { key: "ArrowUp" });
+    expect(editMenu).toHaveFocus();
+    fireEvent.keyDown(editMenu, { key: "ArrowUp" });
+    fireEvent.keyDown(screen.getByRole("menuitem", { name: "Comment" }), { key: "ArrowUp" });
     const findAndReplace = screen.getByRole("menuitem", { name: "Find and Replace…" });
     expect(findAndReplace).toHaveFocus();
     fireEvent.keyDown(findAndReplace, { key: "ArrowUp" });
@@ -874,8 +875,7 @@ describe("WriterMenuBar" /** Groups Writer menu and clipboard integration tests.
     expect(screen.getByRole("menuitem", { name: "Paste" })).toHaveFocus();
     fireEvent.keyDown(screen.getByRole("menuitem", { name: "Paste" }), { key: "Escape" });
     expect(screen.getByRole("textbox", { name: "Writer document text" })).toHaveFocus();
-    expect(screen.queryByRole("menu", { name: "Edit menu" })).not.toBeInTheDocument();
-
+    expect(editMenu).not.toBeInTheDocument();
     fireEvent.click(screen.getByRole("menuitem", { name: "Format" }));
     const text = screen.getByRole("menuitem", { name: "Text" });
     text.focus();

@@ -1,9 +1,41 @@
 /** @fileoverview Common paragraph style creation/finish from prstylei.cxx and txtstyli.cxx through the original style family/property APIs. */
-import type { XMLTextModel, XMLStyle } from "../../inc/txtimp";
+import type { XMLPropertySet, XMLTextModel, XMLStyle } from "../../inc/txtimp";
 import type { OdfStyleDefinition } from "../text/txtparai";
 import { applyTextImportProperties, xmlTextString } from "../text/txtprmap";
 import { Exception } from "../../../cppu/inc/com/sun/star/uno/Exception";
 import { Any } from "../../../cppu/inc/com/sun/star/uno/Any";
+import { convertTwipToMm100 } from "../../../tools/inc/UnitConversion";
+
+/** Applies the represented paragraph default-style properties to the original text-defaults service. @param target - Writer text defaults. @param definition - Parsed paragraph-family defaults. @returns Nothing. */
+export function applyParagraphTextDefaults(
+  target: Pick<XMLPropertySet, "setPropertyValue">,
+  definition: OdfStyleDefinition | undefined,
+): void {
+  if (definition === undefined) return;
+  const { defaultTabDistance, properties } = definition;
+  const values = [
+    [
+      "TabStopDistance",
+      defaultTabDistance === undefined
+        ? undefined
+        : Number(convertTwipToMm100(BigInt(defaultTabDistance))),
+      "sal_Int32",
+    ],
+    ["CharAutoKerning", properties?.autoKerning, "bool"],
+    ["CharOpticalSizing", properties?.opticalSizing, "bool"],
+  ] as const;
+  for (const [property, scalar, type] of values) {
+    if (scalar === undefined) continue;
+    const name = xmlTextString(property);
+    const value = new Any([scalar], type);
+    try {
+      target.setPropertyValue(name, value);
+    } finally {
+      value.dispose();
+      name.dispose();
+    }
+  }
+}
 /** Materializes styles before linking parents/follow styles and applying native property maps. @param model - Writer API model. @param styles - Parsed common paragraph declarations. @param defaultStyle - Parsed default declaration. @param listName - Display-name resolution for numbering declarations. @returns Nothing.  @param resolveBuiltIn - Native operation input. */
 export function applyNamedParagraphStyles(
   model: XMLTextModel,
@@ -41,14 +73,18 @@ export function applyNamedParagraphStyles(
         key.dispose();
       }
     }
-    if (defaultStyle)
+    if (defaultStyle) {
+      const { autoKerning, opticalSizing, ...character } = defaultStyle.properties ?? {};
       applyTextImportProperties(
         family.getByName(standard),
-        defaultStyle.properties,
+        autoKerning === undefined && opticalSizing === undefined
+          ? defaultStyle.properties
+          : character,
         defaultStyle.paragraphProperties,
         defaultStyle.alignment,
         defaultStyle.leftMargin,
       );
+    }
     // Native Finish links already-created style owners in declaration order, before property application.
     for (const style of collections.values()) style.setParentStyle(empty);
     for (const [name, definition] of styles) {

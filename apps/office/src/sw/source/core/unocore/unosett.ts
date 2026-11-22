@@ -1,4 +1,10 @@
 /** @fileoverview Owns supported numbering position property conversion from pinned SwXNumberingRules in unosett.cxx. */
+import type { Graphic } from "../../../../vcl/source/gdi/graph";
+import { Size } from "../../../../tools/inc/gen";
+import { Length, toTwips, convert } from "../../../../o3tl/inc/unit_conversion";
+import { VertOrientation } from "../../../../offapi/com/sun/star/text/VertOrientation";
+import { SvxBrushItem, SvxGraphicPosition } from "../../../../editeng/source/items/frmitems.brush";
+import { RES_BACKGROUND } from "../../../inc/hintids";
 import { illegal, stringAny, stringValue, scalar, text, unicode, unknown } from "./unocrsrhelper";
 import { queryInterface } from "../../../../cppuhelper/inc/queryinterface";
 import { UnoType } from "../../../../cppu/inc/unotype";
@@ -93,6 +99,9 @@ export interface WriterNumberingRuleProperties extends NumberingPositionProperti
   readonly charStyleName?: string;
   readonly adjust?: number;
   readonly isLegal?: boolean;
+  readonly graphic?: Graphic;
+  readonly graphicSize?: Readonly<{ width: number; height: number }>;
+  readonly vertOrient?: number;
   readonly headingStyleName?: string;
 }
 
@@ -274,6 +283,8 @@ export class SwXNumberingRules {
     const mode = format.GetPositionAndSpaceMode(),
       type = format.GetNumberingType(),
       font = format.GetBulletFont();
+    const image = type === SvxNumType.SVX_NUM_BITMAP ? format.GetBrush()?.GetGraphic() : undefined;
+    const graphicSize = format.GetGraphicSize();
     const position = numberingPositionToMM100(
       mode === "label-width-and-position"
         ? {
@@ -307,6 +318,16 @@ export class SwXNumberingRules {
       ...(format.HasListFormat() ? { listFormat: format.GetListFormat() } : {}),
       ...position,
       positionAndSpaceMode: mode,
+      ...(!chapter && type === SvxNumType.SVX_NUM_BITMAP
+        ? {
+            ...(image === undefined ? {} : { graphic: image }),
+            graphicSize: {
+              width: Number(convert(BigInt(graphicSize.Width()), Length.twip, Length.mm100)),
+              height: Number(convert(BigInt(graphicSize.Height()), Length.twip, Length.mm100)),
+            },
+            vertOrient: format.GetGraphicOrientation()?.GetVertOrient() ?? VertOrientation.NONE,
+          }
+        : {}),
       ...(!chapter && type === SvxNumType.SVX_NUM_CHAR_SPECIAL
         ? {
             bulletChar: String.fromCodePoint(format.GetBulletChar()),
@@ -346,9 +367,15 @@ export class SwXNumberingRules {
   ): void {
     const applied = new SwNumFormat(rule.Get(level));
     let heading = "";
+    let graphic: Graphic | undefined;
+    let graphicSize: WriterNumberingRuleProperties["graphicSize"];
+    let orient: number | undefined;
     try {
       for (const properties of patches) {
         const bulletFont = properties.bulletFont;
+        graphic = properties.graphic ?? graphic;
+        graphicSize = properties.graphicSize ?? graphicSize;
+        orient = properties.vertOrient ?? orient;
         if (
           bulletFont !== undefined &&
           (bulletFont === null ||
@@ -454,6 +481,28 @@ export class SwXNumberingRules {
           else if (style.GetName() === heading) style.AssignToListLevelOfOutlineStyle(level);
         }
       }
+      if (graphic !== undefined || graphicSize !== undefined || orient !== undefined) {
+        const brush = applied.GetBrush()?.Clone();
+        const nextBrush =
+          graphic === undefined
+            ? brush
+            : (brush ?? new SvxBrushItem(graphic, SvxGraphicPosition.GPOS_AREA, RES_BACKGROUND));
+        if (graphic !== undefined && brush) brush.SetGraphic(graphic);
+        if (nextBrush) {
+          let size = applied.GetGraphicSize();
+          if (graphicSize !== undefined) {
+            if (!Number.isInteger(graphicSize.width) || !Number.isInteger(graphicSize.height))
+              throw new NumberingRulePropertyError("Invalid numbering graphic size.");
+            size = new Size(
+              Number(toTwips(BigInt(graphicSize.width), Length.mm100)),
+              Number(toTwips(BigInt(graphicSize.height), Length.mm100)),
+            );
+          } else if (!size.Width() || !size.Height()) {
+            size = nextBrush.GetGraphic()?.GetPrefSize() ?? size;
+          }
+          applied.SetGraphicBrush(nextBrush, size, orient ?? applied.GetVertOrient());
+        }
+      }
       rule.Set(level, applied);
     } finally {
       applied.Dispose();
@@ -462,7 +511,6 @@ export class SwXNumberingRules {
 }
 
 import type { SwDoc } from "../doc/doc";
-import { Length, toTwips } from "../../../../o3tl/inc/unit_conversion";
 import { convertTwipToMm100 } from "../../../../tools/inc/UnitConversion";
 /** Original represented SwXLineNumberingProperties property owner over SwDoc's copied SwLineNumberInfo. */
 export class SwXLineNumberingProperties {

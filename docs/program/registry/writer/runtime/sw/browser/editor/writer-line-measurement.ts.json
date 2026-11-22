@@ -26,7 +26,7 @@
       "localSymbols": [
         "createWriterLineMeasurements",
         "measureWriterTextLines",
-        "measureInlineGraphic"
+        "measureDevicePortion"
       ],
       "sourceResponsibility": "browser-owned",
       "upstreamFile": null,

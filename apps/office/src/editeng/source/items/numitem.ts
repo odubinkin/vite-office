@@ -2,10 +2,16 @@
 
 import { SvxNumType, SvxAdjust } from "../../inc/svxenum";
 import { Color, COL_BLACK } from "../../../tools/inc/color";
+import type { ConstSvxBrushItem, SvxBrushItem } from "./frmitems.brush";
+import { Size, type ReadonlySize } from "../../../tools/inc/gen";
+import { VertOrientation } from "../../../offapi/com/sun/star/text/VertOrientation";
 import { Font, type ConstFont } from "../../../vcl/source/font/font";
 import { SVX_DEF_BULLET } from "../../inc/numdef";
 import { SVX_NUM_REL_SIZE_MIN } from "../../inc/numitem";
-import { formatArabicZero } from "../../../i18npool/source/defaultnumberingprovider/defaultnumberingprovider";
+import {
+  formatArabicZero,
+  formatLatinNumber,
+} from "../../../i18npool/source/defaultnumberingprovider/defaultnumberingprovider";
 export { SVX_DEF_BULLET } from "../../inc/numdef";
 /** Native type, show-symbol ownership, and formatting of supported numbering families. */
 export class SvxNumberType {
@@ -62,7 +68,7 @@ export class SvxNumberType {
         : SvxNumType.SVX_NUM_ARABIC;
     return type === SvxNumType.SVX_NUM_ARABIC
       ? String(value)
-      : (formatArabicZero(type, value) ?? "");
+      : (formatArabicZero(type, value) ?? formatLatinNumber(type, value) ?? "");
   }
 }
 
@@ -94,6 +100,9 @@ export interface NumberingMarkerProperties {
 export class SvxNumberFormat extends SvxNumberType {
   private cBullet = SVX_DEF_BULLET;
   private pBulletFont: ConstFont | undefined;
+  private graphicBrush: SvxBrushItem | undefined;
+  private graphicSize = new Size();
+  private vertOrient: number = VertOrientation.NONE;
   private position: Required<NumberingPositionProperties> = {
     absLSpace: 0,
     firstLineOffset: 0,
@@ -146,6 +155,9 @@ export class SvxNumberFormat extends SvxNumberType {
     this.nBulletColor.assign(source.nBulletColor);
     this.sCharStyleName = source.sCharStyleName;
     this.mbIsLegal = source.mbIsLegal;
+    this.graphicBrush = source.graphicBrush?.Clone();
+    this.graphicSize = new Size(source.graphicSize);
+    this.vertOrient = source.vertOrient;
     return this;
   }
   /** Decodes the existing raw position/marker record without re-deriving inactive fields or ListFormat compatibility state. This is a browser transfer/assembly adapter, not a native constructor. @param properties - Raw fields. @param type - Native type. @returns Format. */
@@ -194,6 +206,30 @@ export class SvxNumberFormat extends SvxNumberType {
   public SetBulletFont(font: ConstFont | undefined): void {
     this.pBulletFont = font === undefined ? undefined : Object.freeze(new Font(font));
   }
+  /** Borrows the owned graphic brush. @returns Brush or native null. */
+  public GetBrush(): ConstSvxBrushItem | undefined {
+    return this.graphicBrush;
+  }
+  /** Returns the core graphic width and height. @returns Copy of the native twip size. */
+  public GetGraphicSize(): Size {
+    return new Size(this.graphicSize);
+  }
+  /** Reads the native graphic vertical orientation. @returns Orientation ID. */
+  public GetVertOrient(): number {
+    return this.vertOrient;
+  }
+  /** Replaces the graphic brush and independently assigns size and orientation. @param brush - Source brush or absence. @param size - Core graphic extent. @param orient - Optional native signed16 orientation. @returns Nothing. */
+  public SetGraphicBrush(
+    brush: ConstSvxBrushItem | undefined,
+    size?: ReadonlySize,
+    orient?: number,
+  ): void {
+    if (!brush) this.graphicBrush = undefined;
+    else if (!this.graphicBrush || !brush.equals(this.graphicBrush))
+      this.graphicBrush = brush.Clone();
+    this.graphicSize = size === undefined ? new Size() : new Size(size);
+    this.vertOrient = orient === undefined ? VertOrientation.NONE : (orient << 16) >> 16;
+  }
   /** Compares all implemented base-format marker and position fields without conflating active geometry or optional patterns. @param other - Const base format. @returns Implemented value equality. */
   public Equals(other: ConstSvxNumberFormat): boolean {
     const source = other as SvxNumberFormat;
@@ -212,6 +248,12 @@ export class SvxNumberFormat extends SvxNumberType {
       this.nBulletColor.equals(source.nBulletColor) &&
       this.sCharStyleName === source.sCharStyleName &&
       this.mbIsLegal === source.mbIsLegal &&
+      this.vertOrient === source.vertOrient &&
+      this.graphicSize.Width() === source.graphicSize.Width() &&
+      this.graphicSize.Height() === source.graphicSize.Height() &&
+      (this.graphicBrush === undefined
+        ? source.graphicBrush === undefined
+        : source.graphicBrush !== undefined && this.graphicBrush.equals(source.graphicBrush)) &&
       (font === undefined
         ? otherFont === undefined
         : otherFont !== undefined && font.Equals(otherFont)) &&

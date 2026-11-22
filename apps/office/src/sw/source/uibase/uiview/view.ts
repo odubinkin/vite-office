@@ -20,14 +20,19 @@ import type { RegexMatcherFactory } from "../../../../unotools/inc/textsearch";
 import { SwViewSearch } from "./viewsrch";
 import { SwViewOption } from "../../../inc/viewopt";
 import { SwDocShell } from "../app/docsh";
-import { WriterDialogController } from "../dialog/writer-dialog-controller";
+import {
+  WriterDialogController,
+  type WriterCommentDeleteConfiguration,
+} from "../dialog/writer-dialog-controller";
 import { SwPostItMgr } from "../docvw/PostItMgr";
 import { SwEditWin } from "../docvw/edtwin";
+import { SwAnnotationShell } from "../shells/annotsh";
 import { SwTableShell } from "../shells/tabsh";
 import { SwViewCommandShell } from "../shells/view";
 import { SwWrtShell } from "../wrtsh/wrtsh1";
 import { WRITER_COMMAND_IDS } from "../../../uiconfig/swriter/menubar/menubar-commands";
 import { SwRootFrame } from "../../core/layout/newfrm";
+import { SwPostItFieldType } from "../../core/fields/docufld";
 import { SelectionType } from "../inc/wrtsh";
 import type { SwTabCols } from "../../core/bastyp/tabcol";
 import type { SvxColumnItem } from "../../../../svx/source/dialog/rulritem";
@@ -39,6 +44,10 @@ import {
   applySwParagraphULSpaceItem,
 } from "./viewtab";
 import type { SvxULSpaceItem } from "../../../../editeng/inc/ulspitem";
+import { RES_PAGEDESC } from "../../../inc/hintids";
+import type { SwFormatPageDesc } from "../../core/attr/fmtpdsc";
+import { getPageRegisterStyles, PageDescToItemSet } from "../utlui/uitool";
+import { SwContentTree } from "../utlui/content";
 import { SvxRuler } from "../../../../svx/source/dialog/svxruler";
 
 /** Persistent Writer view joining SwDocShell, SwWrtShell, and frame dispatch. */
@@ -48,9 +57,12 @@ export class SwView {
   private frame: SfxViewFrame<SwView> | undefined;
   private selectionType: SelectionType | undefined;
   private readonly viewCommandShell: SwViewCommandShell;
+  private readonly annotationShell: SwAnnotationShell;
   private readonly tableShell: SwTableShell;
   private readonly viewOptions: SwViewOption;
   private readonly wrtShell: SwWrtShell;
+  private readonly navigator: SwContentTree;
+  private navigatorVisible = false;
   private readonly search: SwViewSearch;
   private readonly postItMgr: SwPostItMgr;
   private readonly editWindow: SwEditWin;
@@ -59,12 +71,13 @@ export class SwView {
   private readonly layout: SwRootFrame;
   private readonly wrtShellSubscription: () => void;
 
-  /** Creates one persistent view over a persistent document shell. @param docShell - Owning Writer document shell. @param module - Actual module metric preferences and open-view enumeration. @param searchOptions - User search configuration. @param createRegex - Native ICU constructor. @returns Nothing. */
+  /** Creates one persistent view over a persistent document shell. @param docShell - Owning Writer document shell. @param module - Actual module metric preferences and open-view enumeration. @param searchOptions - User search configuration. @param createRegex - Browser regular-expression compiler. @param commentDeleteConfiguration - Shared comment deletion query preference. @returns Nothing. */
   public constructor(
     private readonly docShell: SwDocShell,
     private readonly module: SwModule = SwModule.get(),
     searchOptions?: SearchOptionsConfiguration,
     createRegex?: RegexMatcherFactory,
+    commentDeleteConfiguration?: WriterCommentDeleteConfiguration,
   ) {
     const pref = module.GetUsrPref(false);
     this.horizontalRuler.SetUnit(pref.GetHScrollMetric());
@@ -76,6 +89,7 @@ export class SwView {
     );
     this.viewOptions = new SwViewOption(
       /** Invalidates view-option slot state. @returns Nothing. */ () => this.Invalidate("view"),
+      pref.IsBaselineGridVisible(),
     );
     this.wrtShell = new SwWrtShell(
       docShell,
@@ -84,7 +98,17 @@ export class SwView {
       this.viewOptions,
       this,
     );
-    this.postItMgr = new SwPostItMgr(createRegex);
+    this.navigator = new SwContentTree(this.wrtShell, this.layout);
+    this.postItMgr = new SwPostItMgr(
+      this.viewOptions,
+      this.wrtShell,
+      createRegex,
+      /** Recomputes the native shell and annotation formatting states. @returns Nothing. */ () =>
+        this.Invalidate("selection"),
+      this.dialogController,
+      commentDeleteConfiguration,
+    );
+    this.annotationShell = new SwAnnotationShell(this.postItMgr, this.wrtShell);
     this.search = new SwViewSearch(this.wrtShell, searchOptions, createRegex, this.postItMgr);
     this.docShell.SetView(this);
     this.editWindow = new SwEditWin(
@@ -118,19 +142,27 @@ export class SwView {
     if (this.frame !== undefined) throw new Error("SwView is already attached to an SfxViewFrame.");
     this.frame = frame;
   }
-  /** Selects represented native text/list/table contexts in list-before-text dispatcher order. @returns Nothing. */
+  /** Selects the annotation shell or the represented native text/list/table stack. @returns Nothing. */
   public SelectShell(): void {
     if (this.frame === undefined || this.frame.GetActiveView() !== this) return;
-    const selectionType = this.wrtShell.GetSelectionType() & ~SelectionType.TableCell;
+    const selectionType = this.postItMgr.GetActiveField()
+      ? SelectionType.PostIt
+      : this.wrtShell.GetSelectionType() & ~SelectionType.TableCell;
     if (selectionType === this.selectionType) return;
     this.selectionType = selectionType;
     const dispatcher = this.frame.GetDispatcher(),
+      annotation = this.annotationShell.GetShell(),
       table = this.tableShell.GetCommandShell(),
       list = this.wrtShell.GetListShell().GetCommandShell(),
       text = this.wrtShell.GetCommandShell();
+    dispatcher.Pop(annotation);
     dispatcher.Pop(table);
     dispatcher.Pop(text);
     dispatcher.Pop(list);
+    if (selectionType === SelectionType.PostIt) {
+      dispatcher.Push(annotation);
+      return;
+    }
     if ((selectionType & SelectionType.NumberList) !== 0) dispatcher.Push(list);
     dispatcher.Push(text);
     if ((selectionType & SelectionType.Table) !== 0) dispatcher.Push(table);
@@ -287,6 +319,20 @@ export class SwView {
   public IsHorizontalRulerVisible(): boolean {
     return this.viewOptions.IsHorizontalRulerVisible();
   }
+  /** Exposes the native baseline grid command's checked state. @returns Whether visible. */
+  public IsBaselineGridVisible(): boolean {
+    return this.viewOptions.IsBaselineGridVisible();
+  }
+  /** Returns the configured baseline-grid line color. @returns Native view color. */
+  public GetBaselineGridColor(): string {
+    return this.viewOptions.GetBaselineGridColor();
+  }
+  /** Handles the native View Baseline Grid toggle and writes the user preference. @returns Nothing. */
+  public ToggleBaselineGrid(): void {
+    const visible = !this.IsBaselineGridVisible();
+    this.module.GetUsrPref(false).SetBaselineGridVisible(visible);
+    this.viewOptions.SetBaselineGridVisible(visible);
+  }
   /** Returns vertical-ruler command state. @returns Visibility. */
   public IsVerticalRulerVisible(): boolean {
     return this.viewOptions.IsVerticalRulerVisible();
@@ -297,9 +343,50 @@ export class SwView {
     return this.viewOptions.IsSidebarVisible();
   }
 
+  /** Borrows the current view's native Navigator content model. @returns Navigator owner. */
+  public GetNavigator(): SwContentTree {
+    return this.navigator;
+  }
+
+  /** Reports whether the original Navigator child window is shown. @returns View-local visibility. */
+  public IsNavigatorVisible(): boolean {
+    return this.navigatorVisible;
+  }
+
+  /** Toggles the original Navigator child window without changing the document or its sidebar. @returns Nothing. */
+  public ToggleNavigator(): void {
+    this.navigatorVisible = !this.navigatorVisible;
+    this.Invalidate("view");
+  }
+
   /** Returns status-bar command state. @returns Visibility. */
   public IsStatusBarVisible(): boolean {
     return this.viewOptions.IsStatusBarVisible();
+  }
+
+  /** Checks for native comment fields in the current document. @returns Whether there are comments. */
+  public HasNotes(): boolean {
+    return SwPostItFieldType.Get(this.docShell.GetDoc()).GatherFields().next().done === false;
+  }
+
+  /** Reads the current Comments view option. @returns Whether comments are shown. */
+  public IsPostIts(): boolean {
+    return this.viewOptions.IsPostIts();
+  }
+
+  /** Reads the current Resolved Comments view option. @returns Whether resolved comments are shown. */
+  public IsResolvedPostIts(): boolean {
+    return this.viewOptions.IsResolvedPostIts();
+  }
+
+  /** Applies the Comments view option through the annotation manager. @param value - Whether to show comments. @returns Nothing. */
+  public SetPostIts(value: boolean): void {
+    this.postItMgr.ShowNotes(value);
+  }
+
+  /** Applies the Resolved Comments view option through the annotation manager. @param value - Whether to show resolved comments. @returns Nothing. */
+  public SetResolvedPostIts(value: boolean): void {
+    this.postItMgr.ShowHideResolvedNotes(value);
   }
 
   /** Returns whether a medium operation gates lifecycle commands. @returns Pending state. */
@@ -315,13 +402,41 @@ export class SwView {
   public ToggleVerticalRuler(): void {
     this.viewOptions.ToggleVerticalRuler();
   }
-  /** Opens the upstream PageDialog boundary and applies an accepted descriptor through SwWrtShell. @returns Whether accepted geometry changed the document. */
+  /** Opens the active Page Style and applies the accepted tab output in one action. @returns Whether the document changed. */
   public async OpenPageDialog(): Promise<boolean> {
-    const result = await this.dialogController.RequestPageDialog(
-      WRITER_COMMAND_IDS.pageDialog,
-      this.docShell.GetDoc().GetPageDesc().GetValue(),
-    );
-    return result === undefined ? false : this.wrtShell.SetPageDescriptor(result.pageDescriptor);
+    const document = this.docShell.GetDoc();
+    const node = this.wrtShell.GetActiveParagraph();
+    const point = this.wrtShell.GetCursor().GetPoint();
+    const assigned = node.GetAttr(RES_PAGEDESC) as SwFormatPageDesc;
+    const name =
+      this.layout.FindPageDescriptorAt(node, point.GetContentIndex()) ?? assigned.GetPageDescName();
+    const descriptor = document.FindPageDesc(name) ?? document.GetPageDesc();
+    const pageInput = PageDescToItemSet(descriptor);
+    const result = await this.dialogController
+      .RequestPageDialog(
+        WRITER_COMMAND_IDS.pageDialog,
+        descriptor.GetValue(),
+        pageInput,
+        document.GetDocumentSettingManager().get("HTML_MODE"),
+        getPageRegisterStyles(document),
+      )
+      .finally(
+        /** Releases the dialog's native input snapshot on acceptance or cancellation. @returns Nothing. */
+        () => pageInput.Dispose(),
+      );
+    try {
+      return (
+        result !== undefined &&
+        this.docShell.GetDoc() === document &&
+        this.wrtShell.SetPageDescriptor(
+          result.pageDescriptor,
+          descriptor.GetName(),
+          result.pageItems,
+        )
+      );
+    } finally {
+      result?.pageItems?.Dispose();
+    }
   }
 
   /** Toggles sidebar visibility. @returns Nothing. */
@@ -336,6 +451,13 @@ export class SwView {
 
   /** Releases view, dispatcher, and document-shell subscriptions at explicit session close. @returns Nothing. */
   public Close(): void {
+    const dialog = this.dialogController.GetSnapshot();
+    if (
+      dialog?.request.kind === "delete-comments" ||
+      dialog?.request.kind === "character" ||
+      dialog?.request.kind === "page-style"
+    )
+      this.dialogController.Cancel(dialog.id);
     this.releaseMetricView();
     this.editWindow.MouseButtonUp(true);
     this.horizontalRuler.CancelDrag();

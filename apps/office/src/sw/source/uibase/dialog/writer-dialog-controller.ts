@@ -1,6 +1,7 @@
 /** @fileoverview Typed Writer dialog requests completed by an external presentation adapter. */
 
 import { SfxDialogController } from "../../../../sfx2/source/dialog/basedlgs";
+import { WRITER_COMMAND_IDS } from "../../../uiconfig/swriter/menubar/menubar-commands";
 import type { SfxItemSet } from "../../../../svl/inc/itemset";
 import type { WriterHyperlink } from "../../core/txtnode/fmtatr2";
 import type { WriterPageDescriptorValue } from "../../core/layout/pagedesc";
@@ -39,32 +40,64 @@ export interface WriterBreakDialogRequest {
 export interface WriterBreakDialogResult {
   readonly breakKind: "page";
 }
-/** Page Style child-window request initialized from the Standard page descriptor. */
+/** Page Style child-window request initialized from the active page descriptor. */
 export interface WriterPageDialogRequest {
   readonly commandUrl: string;
+  readonly htmlMode: boolean;
   readonly initialValue: WriterPageDescriptorValue;
+  readonly pageInput: SfxItemSet;
+  readonly registerStyles: readonly string[];
   readonly kind: "page-style";
 }
-/** Accepted physical page geometry returned by the presentation adapter. */
+/** Accepted Page geometry and native tab page deltas. */
 export interface WriterPageDialogResult {
   readonly pageDescriptor: WriterPageDescriptorValue;
+  readonly pageItems?: SfxItemSet;
 }
 
 /** Every Writer child-window request supported by the browser presenter. */
+/** Native Pseudo-family template exchange with the requesting Paragraph dialog as parent. */
+export interface WriterListStyleTemplateRequest {
+  readonly name: string;
+  readonly input: SfxItemSet;
+  readonly characterStyles: readonly string[];
+  readonly bulletStyle: string;
+  readonly numberingStyle: string;
+  readonly nameEditable: boolean;
+  readonly isValidName: (name: string) => boolean;
+  readonly apply: (name: string, items?: SfxItemSet) => boolean;
+}
 /** Paragraph dialog request initialized by the text shell. */
 export interface WriterParagraphDialogRequest {
   readonly commandUrl: string;
   readonly initialValue: WriterParagraphFormatValue;
   readonly paintLineNumbers: boolean;
   readonly kind: "paragraph";
-  readonly tabContext: SfxItemSet;
+  readonly pageInput: SfxItemSet;
   readonly pageStyleNames?: readonly string[];
+  readonly listStyleNames?: readonly string[];
+  readonly editListStyle?: (name: string) => WriterListStyleTemplateRequest | undefined;
+  readonly outlineLocked?: boolean;
 }
 /** Accepted paragraph dialog values. */
 export interface WriterParagraphDialogResult {
-  readonly tabStopItems?: SfxItemSet;
+  readonly pageItems?: SfxItemSet;
+  /** Whether one of the existing scalar paragraph controls emitted a changed value. */
+  readonly paragraphFormatChanged?: boolean;
   readonly paragraphFormat: WriterParagraphFormatValue;
   readonly paintLineNumbers: boolean;
+}
+
+/** Setting in Office.Common/Misc shared by both bulk annotation commands. */
+export interface WriterCommentDeleteConfiguration {
+  GetQueryDeleteAllComments(): boolean;
+  SetQueryDeleteAllComments(value: boolean): void;
+}
+
+/** Answer and checkbox value returned by the bulk comment confirmation. */
+interface WriterCommentDeleteResult {
+  readonly confirmed: boolean;
+  readonly dontShowAgain: boolean;
 }
 
 /** Every Writer child-window request supported by the presenter. */
@@ -79,7 +112,15 @@ export type WriterDialogRequest =
   | WriterBookmarkDialogRequest
   | WriterBreakDialogRequest
   | WriterPageDialogRequest
-  | WriterParagraphDialogRequest;
+  | WriterParagraphDialogRequest
+  | Readonly<{ kind: "delete-comments"; commandUrl: string; author?: string }>
+  | Readonly<{
+      kind: "character";
+      mode: "annotation" | "standard";
+      commandUrl: string;
+      input: SfxItemSet;
+      initialPage?: string;
+    }>;
 /** Every accepted result supported by the Writer dialog presenter. */
 export type WriterDialogResult =
   | Readonly<{ name: string }>
@@ -87,7 +128,9 @@ export type WriterDialogResult =
   | WriterBookmarkDialogResult
   | WriterBreakDialogResult
   | WriterPageDialogResult
-  | WriterParagraphDialogResult;
+  | WriterParagraphDialogResult
+  | WriterCommentDeleteResult
+  | Readonly<{ attributes: SfxItemSet }>;
 /** Observable snapshot published by the Writer dialog controller. */
 export type WriterDialogSnapshot = ReturnType<WriterDialogController["GetSnapshot"]>;
 
@@ -157,39 +200,85 @@ export class WriterDialogController {
       : undefined;
   }
 
-  /** Requests the Writer Page tab and returns accepted geometry or cancellation. @param commandUrl - Originating command. @param initialValue - Current Standard page geometry. @returns Accepted geometry or undefined. */
+  /** Requests the Writer Page Style tabs and returns the accepted item exchange. @param commandUrl - Originating command. @param initialValue - Current page geometry. @param pageInput - Borrowed native page items. @param htmlMode - Whether the document uses Writer HTML mode. @param registerStyles - Standard reference style and the Page tab picker entries. @returns Accepted values or undefined. */
   public async RequestPageDialog(
     commandUrl: string,
     initialValue: WriterPageDescriptorValue,
+    pageInput: SfxItemSet,
+    htmlMode = false,
+    registerStyles: readonly string[] = [],
   ): Promise<WriterPageDialogResult | undefined> {
     const completion = await this.controller.Request({
       commandUrl,
+      htmlMode,
       initialValue,
       kind: "page-style",
+      pageInput,
+      registerStyles,
     });
     return completion.kind === "accepted"
       ? (completion.result as WriterPageDialogResult)
       : undefined;
   }
 
-  /** Requests paragraph settings from the presenter. @param commandUrl - Originating slot. @param initialValue - Current paragraph values. @param paintLineNumbers - Current document line-number visibility. @param pageStyleNames - Available page styles. @param tabContext - Actual native page input. @returns Accepted values or undefined. */
+  /** Requests paragraph settings from the presenter. @param commandUrl - Originating slot. @param initialValue - Current paragraph values. @param paintLineNumbers - Current document line-number visibility. @param pageStyleNames - Available page styles. @param pageInput - Actual native page input. @param listStyleNames - Available named numbering styles. @param outlineLocked - Whether the current style owns its outline level. @param editListStyle - Opens the named template within this request. @returns Accepted values or undefined. */
   public async RequestParagraphDialog(
     commandUrl: string,
     initialValue: WriterParagraphFormatValue,
     paintLineNumbers: boolean,
     pageStyleNames: readonly string[],
-    tabContext: SfxItemSet,
+    pageInput: SfxItemSet,
+    listStyleNames: readonly string[] = [],
+    outlineLocked = false,
+    editListStyle?: WriterParagraphDialogRequest["editListStyle"],
   ): Promise<WriterParagraphDialogResult | undefined> {
     const completion = await this.controller.Request({
       commandUrl,
       initialValue,
       kind: "paragraph",
+      ...(editListStyle === undefined ? {} : { editListStyle }),
+      listStyleNames,
+      outlineLocked,
       paintLineNumbers,
       pageStyleNames,
-      tabContext,
+      pageInput,
     });
     return completion.kind === "accepted"
       ? (completion.result as WriterParagraphDialogResult)
+      : undefined;
+  }
+
+  /** Requests the original Writer Character dialog. @param commandUrl - Original slot. @param input - Borrowed native attributes. @param mode - Writer dialog mode. @param initialPage - Original tab ID, if supplied. @returns Owned output item set on acceptance. */
+  public async RequestCharacterDialog(
+    commandUrl: string,
+    input: SfxItemSet,
+    mode: "annotation" | "standard",
+    initialPage?: string,
+  ): Promise<SfxItemSet | undefined> {
+    const completion = await this.controller.Request({
+      kind: "character",
+      mode,
+      commandUrl,
+      input,
+      ...(initialPage !== undefined && { initialPage }),
+    });
+    return completion.kind === "accepted"
+      ? (completion.result as Readonly<{ attributes: SfxItemSet }>).attributes
+      : undefined;
+  }
+
+  /** Opens Writer's configured query before deleting several comments. @param author - Author filter, if supplied. @returns Query answer, if completed. */
+  public async RequestDeleteComments(
+    author?: string,
+  ): Promise<WriterCommentDeleteResult | undefined> {
+    const completion = await this.controller.Request({
+      kind: "delete-comments",
+      commandUrl:
+        author === undefined ? WRITER_COMMAND_IDS.deleteAllNotes : WRITER_COMMAND_IDS.deleteAuthor,
+      ...(author !== undefined && { author }),
+    });
+    return completion.kind === "accepted"
+      ? (completion.result as WriterCommentDeleteResult)
       : undefined;
   }
 

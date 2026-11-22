@@ -1,6 +1,12 @@
 /** @fileoverview Projects native Writer character attributes into the ODF text-property map. */
-import { RES_TXTATR_AUTOFMT, RES_TXTATR_INETFMT } from "../../../inc/hintids";
+import { RES_CHRATR_BOX, RES_TXTATR_AUTOFMT, RES_TXTATR_INETFMT } from "../../../inc/hintids";
+import { SvxBlinkItem } from "../../../../editeng/source/items/textitem.layout";
+import { SvxCharHiddenItem } from "../../../../editeng/source/items/charhiddenitem";
+import { SvxTwoLinesItem } from "../../../../editeng/inc/twolinesitem";
+import { RES_CHRATR_BLINK, RES_CHRATR_HIDDEN, RES_CHRATR_TWO_LINES } from "../../../inc/hintids";
 import { GetTextAttrMode } from "../../../inc/swtypes";
+import { SvxBoxItem } from "../../../../editeng/source/items/frmitems";
+import { exportBoxProperties } from "./xmlexpit";
 import { SwFormatAutoFormat } from "../../core/txtnode/txatbase";
 import { SwFormatINetFormat } from "../../core/txtnode/fmtatr2";
 import { SwTextCharFormat } from "../../core/txtnode/txtatr2";
@@ -9,10 +15,30 @@ import { getCharacterOdfStyleName } from "./xmlexp-style-names";
 import { writerTextColorValue, writerHighlightColorValue } from "../../core/attr/swatrset";
 import { SvxColorItem } from "../../../../editeng/inc/colritem";
 import { SvxBrushItem } from "../../../../editeng/source/items/frmitems.brush";
+import { SvxNoHyphenItem } from "../../../../editeng/inc/nhypitem";
+import { SvxOpticalSizingItem } from "../../../../editeng/inc/opticalsizingitem";
+import { SvxCharRotateItem } from "../../../../editeng/inc/charrotateitem";
+import { SvxCharScaleWidthItem } from "../../../../editeng/inc/charscaleitem";
 import { SvxEscapementItem } from "../../../../editeng/inc/escapementitem";
 import { RES_CHRATR_ESCAPEMENT } from "../../../inc/hintids";
+import { SvxCaseMapItem } from "../../../../editeng/inc/cmapitem";
+import { SvxEmphasisMarkItem } from "../../../../editeng/inc/emphasismarkitem";
+import { MID_EMPHASIS, MID_RELIEF } from "../../../../editeng/inc/memberids";
+import { Any } from "../../../../cppu/inc/com/sun/star/uno/Any";
 import { SvxCrossedOutItem } from "../../../../editeng/inc/crossedoutitem";
-import { RES_CHRATR_CROSSEDOUT } from "../../../inc/hintids";
+import {
+  RES_CHRATR_CROSSEDOUT,
+  RES_CHRATR_EMPHASIS_MARK,
+  RES_CHRATR_CASEMAP,
+  RES_CHRATR_CONTOUR,
+  RES_CHRATR_SHADOWED,
+  RES_CHRATR_RELIEF,
+  RES_CHRATR_ROTATE,
+  RES_CHRATR_NOHYPHEN,
+  RES_CHRATR_OPTICAL_SIZING,
+  RES_CHRATR_SCALEW,
+  RES_CHRATR_OVERLINE,
+} from "../../../inc/hintids";
 import {
   RES_CHRATR_WORDLINEMODE,
   RES_CHRATR_AUTOKERN,
@@ -27,15 +53,6 @@ import {
 import { SvxWordLineModeItem } from "../../../../editeng/inc/wrlmitem";
 import { SvxAutoKernItem } from "../../../../editeng/inc/autokernitem";
 import { SvxKerningItem } from "../../../../editeng/inc/kernitem";
-import { SvxCharRotateItem } from "../../../../editeng/inc/charrotateitem";
-import { SvxCharScaleWidthItem } from "../../../../editeng/inc/charscaleitem";
-import { SvxEmphasisMarkItem } from "../../../../editeng/inc/emphasismarkitem";
-import { SvxCaseMapItem } from "../../../../editeng/source/items/textitem.modes";
-import { SvxBlinkItem } from "../../../../editeng/source/items/textitem.layout";
-import { SvxCharHiddenItem } from "../../../../editeng/source/items/charhiddenitem";
-import { SvxTwoLinesItem } from "../../../../editeng/inc/twolinesitem";
-import { MID_EMPHASIS } from "../../../../editeng/inc/memberids";
-import { Any } from "../../../../cppu/inc/com/sun/star/uno/Any";
 import { convertTwipToMm100 } from "../../../../tools/inc/UnitConversion";
 import {
   SvxFontItem,
@@ -47,7 +64,6 @@ import {
   SvxContourItem,
   SvxShadowedItem,
   SvxCharReliefItem,
-  SvxNoHyphenItem,
 } from "../../../../editeng/source/items/textitem";
 import { ConvertFontWeight, ConvertFontSlant } from "../../../../vcl/inc/unohelp";
 import { getFontFamilyGeneric } from "../../../../xmloff/source/style/fonthdl";
@@ -71,18 +87,6 @@ import {
   RES_CHRATR_HIGHLIGHT,
   RES_CHRATR_POSTURE,
   RES_CHRATR_UNDERLINE,
-  RES_CHRATR_OVERLINE,
-  RES_CHRATR_CONTOUR,
-  RES_CHRATR_SHADOWED,
-  RES_CHRATR_RELIEF,
-  RES_CHRATR_ROTATE,
-  RES_CHRATR_SCALEW,
-  RES_CHRATR_EMPHASIS_MARK,
-  RES_CHRATR_CASEMAP,
-  RES_CHRATR_BLINK,
-  RES_CHRATR_HIDDEN,
-  RES_CHRATR_NOHYPHEN,
-  RES_CHRATR_TWO_LINES,
   RES_CHRATR_WEIGHT,
 } from "../../../inc/hintids";
 
@@ -102,23 +106,25 @@ export function getCharacterProperties(
     /** Detects a direct script posture. @param which - Posture WhichId. @returns Whether set. */
     (which) => set.GetItemIfSet(which, false) !== undefined,
   );
+  const box = set.GetItemIfSet(RES_CHRATR_BOX, inherited);
   const escapement = set.GetItemIfSet(RES_CHRATR_ESCAPEMENT, inherited);
   const crossedOut = set.GetItemIfSet(RES_CHRATR_CROSSEDOUT, inherited);
+  const contour = set.GetItemIfSet(RES_CHRATR_CONTOUR, inherited);
+  const shadow = set.GetItemIfSet(RES_CHRATR_SHADOWED, inherited);
+  const rotation = set.GetItemIfSet(RES_CHRATR_ROTATE, inherited);
+  const noHyphenation = set.GetItemIfSet(RES_CHRATR_NOHYPHEN, inherited);
+  const opticalSizing = set.GetItemIfSet(RES_CHRATR_OPTICAL_SIZING, inherited);
+  const scale = set.GetItemIfSet(RES_CHRATR_SCALEW, inherited);
+  const relief = set.GetItemIfSet(RES_CHRATR_RELIEF, inherited);
+  const caseItem = set.GetItemIfSet(RES_CHRATR_CASEMAP, inherited);
+  const emphasisItem = set.GetItemIfSet(RES_CHRATR_EMPHASIS_MARK, inherited);
   const wordMode = set.GetItemIfSet(RES_CHRATR_WORDLINEMODE, inherited),
     autoKerning = set.GetItemIfSet(RES_CHRATR_AUTOKERN, inherited);
   const kerning = set.GetItemIfSet(RES_CHRATR_KERNING, inherited);
-  const directUnderline = set.GetItemIfSet(RES_CHRATR_UNDERLINE, false) !== undefined;
   const overline = set.GetItemIfSet(RES_CHRATR_OVERLINE, inherited);
-  const contour = set.GetItemIfSet(RES_CHRATR_CONTOUR, inherited);
-  const shadow = set.GetItemIfSet(RES_CHRATR_SHADOWED, inherited);
-  const relief = set.GetItemIfSet(RES_CHRATR_RELIEF, inherited);
-  const rotation = set.GetItemIfSet(RES_CHRATR_ROTATE, inherited);
-  const scaleWidth = set.GetItemIfSet(RES_CHRATR_SCALEW, inherited);
-  const emphasis = set.GetItemIfSet(RES_CHRATR_EMPHASIS_MARK, inherited);
-  const caseMap = set.GetItemIfSet(RES_CHRATR_CASEMAP, inherited);
+  const directUnderline = set.GetItemIfSet(RES_CHRATR_UNDERLINE, false) !== undefined;
   const flash = set.GetItemIfSet(RES_CHRATR_BLINK, inherited);
   const hidden = set.GetItemIfSet(RES_CHRATR_HIDDEN, inherited);
-  const noHyphen = set.GetItemIfSet(RES_CHRATR_NOHYPHEN, inherited);
   const twoLines = set.GetItemIfSet(RES_CHRATR_TWO_LINES, inherited);
   const color = set.GetItemIfSet(RES_CHRATR_COLOR, inherited);
   const highlight = set.GetItemIfSet(RES_CHRATR_HIGHLIGHT, inherited);
@@ -145,20 +151,22 @@ export function getCharacterProperties(
     !directPosture &&
     !directUnderline &&
     overline === undefined &&
+    box === undefined &&
+    crossedOut === undefined &&
+    emphasisItem === undefined &&
+    caseItem === undefined &&
     contour === undefined &&
     shadow === undefined &&
     relief === undefined &&
     rotation === undefined &&
-    scaleWidth === undefined &&
-    emphasis === undefined &&
-    caseMap === undefined &&
-    flash === undefined &&
-    hidden === undefined &&
-    noHyphen === undefined &&
-    twoLines === undefined &&
-    crossedOut === undefined &&
+    scale === undefined &&
+    noHyphenation === undefined &&
+    opticalSizing === undefined &&
     escapement === undefined &&
     !directFontSize &&
+    flash === undefined &&
+    hidden === undefined &&
+    twoLines === undefined &&
     color === undefined &&
     visibleBackground === undefined &&
     language === undefined &&
@@ -209,6 +217,34 @@ export function getCharacterProperties(
   const themeColor =
     color instanceof SvxColorItem ? getOdfThemeColor(color.getComplexColor()) : undefined;
   return {
+    ...(emphasisItem instanceof SvxEmphasisMarkItem
+      ? { emphasis: queryCharacterShort(emphasisItem, MID_EMPHASIS) }
+      : {}),
+    ...(caseItem instanceof SvxCaseMapItem ? { caseMap: queryCharacterShort(caseItem, 0) } : {}),
+    ...(contour instanceof SvxContourItem ? { outline: contour.GetValue() } : {}),
+    ...(shadow instanceof SvxShadowedItem ? { shadow: shadow.GetValue() } : {}),
+    ...(relief instanceof SvxCharReliefItem
+      ? { relief: queryCharacterShort(relief, MID_RELIEF) }
+      : {}),
+    ...(flash instanceof SvxBlinkItem ? { flashing: flash.GetValue() } : {}),
+    ...(hidden instanceof SvxCharHiddenItem ? { hidden: hidden.GetValue() } : {}),
+    ...(twoLines instanceof SvxTwoLinesItem
+      ? {
+          combineLines: twoLines.GetValue(),
+          combinePrefix: twoLines.GetStartBracket()
+            ? String.fromCharCode(twoLines.GetStartBracket())
+            : "",
+          combineSuffix: twoLines.GetEndBracket()
+            ? String.fromCharCode(twoLines.GetEndBracket())
+            : "",
+        }
+      : {}),
+    ...(rotation instanceof SvxCharRotateItem
+      ? { rotation: rotation.GetValue(), rotationFitToLine: rotation.IsFitToLine() }
+      : {}),
+    ...(scale instanceof SvxCharScaleWidthItem
+      ? { scaleWidth: queryCharacterShort(scale, 0) }
+      : {}),
     ...(color instanceof SvxColorItem
       ? color.GetValue().GetAlpha() === 255 || writerTextColorValue(color) === "auto"
         ? { color: writerTextColorValue(color) }
@@ -282,21 +318,21 @@ export function getCharacterProperties(
     ...(inherited || set.GetItemIfSet(RES_CHRATR_CTL_POSTURE, false) !== undefined
       ? { fontPostureComplex: ConvertFontSlant(complexPosture.GetValue(), "FontItalic") }
       : {}),
+    ...(box instanceof SvxBoxItem ? { characterBox: exportBoxProperties(box) } : {}),
     ...(escapement instanceof SvxEscapementItem
       ? { escapement: escapement.GetEsc(), escapementHeight: escapement.GetProportionalHeight() }
       : {}),
     ...(crossedOut instanceof SvxCrossedOutItem ? { strikeout: crossedOut.GetStrikeout() } : {}),
     ...(wordMode instanceof SvxWordLineModeItem ? { wordMode: wordMode.GetValue() } : {}),
+    ...(noHyphenation instanceof SvxNoHyphenItem
+      ? { noHyphenation: noHyphenation.GetValue() }
+      : {}),
+    ...(opticalSizing instanceof SvxOpticalSizingItem
+      ? { opticalSizing: opticalSizing.GetValue() }
+      : {}),
     ...(autoKerning instanceof SvxAutoKernItem ? { autoKerning: autoKerning.GetValue() } : {}),
     ...(kerning instanceof SvxKerningItem
       ? { kerning: Number(BigInt.asIntN(16, convertTwipToMm100(BigInt(kerning.GetValue())))) }
-      : {}),
-    ...(inherited || directUnderline
-      ? {
-          underlineStyle: underline.GetLineStyle(),
-          underlineColor: underline.GetColor().toUInt32() & 0xffffff,
-          underlineHasColor: underline.GetColor().GetAlpha() === 255,
-        }
       : {}),
     ...(overline instanceof SvxOverlineItem
       ? {
@@ -305,42 +341,40 @@ export function getCharacterProperties(
           overlineHasColor: overline.GetColor().GetAlpha() === 255,
         }
       : {}),
-    ...(contour instanceof SvxContourItem ? { contoured: contour.GetValue() } : {}),
-    ...(shadow instanceof SvxShadowedItem ? { shadowed: shadow.GetValue() } : {}),
-    ...(relief instanceof SvxCharReliefItem ? { relief: relief.GetEnumValue() } : {}),
-    ...(rotation instanceof SvxCharRotateItem
-      ? { rotation: rotation.GetValue(), rotationFitsLine: rotation.IsFitToLine() }
-      : {}),
-    ...(scaleWidth instanceof SvxCharScaleWidthItem
-      ? { scaleWidth: (scaleWidth.GetValue() << 16) >> 16 }
-      : {}),
-    ...(emphasis instanceof SvxEmphasisMarkItem
-      ? { emphasis: characterShortValue(emphasis, MID_EMPHASIS) }
-      : {}),
-    ...(caseMap instanceof SvxCaseMapItem ? { caseMap: characterShortValue(caseMap) } : {}),
-    ...(flash instanceof SvxBlinkItem ? { flashing: flash.GetValue() } : {}),
-    ...(hidden instanceof SvxCharHiddenItem ? { hidden: hidden.GetValue() } : {}),
-    ...(noHyphen instanceof SvxNoHyphenItem ? { noHyphenation: noHyphen.GetValue() } : {}),
-    ...(twoLines instanceof SvxTwoLinesItem
+    ...(inherited || directUnderline
       ? {
-          combineLines: twoLines.GetValue(),
-          combinePrefix: twoLines.GetStartBracket()
-            ? String.fromCharCode(twoLines.GetStartBracket())
-            : "",
-          combineSuffix: twoLines.GetEndBracket()
-            ? String.fromCharCode(twoLines.GetEndBracket())
-            : "",
+          underlineStyle: underline.GetLineStyle(),
+          underlineColor: underline.GetColor().toUInt32() & 0xffffff,
+          underlineHasColor: underline.GetColor().GetAlpha() === 255,
         }
       : {}),
   };
 }
 
-/** Reads the native mapped UNO short. @param item - Native character item. @param member - UNO member selector. @returns Mapped value. */
-function characterShortValue(item: SvxCaseMapItem | SvxEmphasisMarkItem, member = 0): number {
+/** Character effects and position items exported with Writer text runs and paragraph styles. */
+export const XML_CHARACTER_EFFECT_WHICH_IDS = [
+  RES_CHRATR_CROSSEDOUT,
+  RES_CHRATR_EMPHASIS_MARK,
+  RES_CHRATR_CASEMAP,
+  RES_CHRATR_CONTOUR,
+  RES_CHRATR_SHADOWED,
+  RES_CHRATR_RELIEF,
+  RES_CHRATR_ROTATE,
+  RES_CHRATR_SCALEW,
+  RES_CHRATR_NOHYPHEN,
+  RES_CHRATR_OPTICAL_SIZING,
+  RES_CHRATR_OVERLINE,
+] as const;
+
+/** Reads the original UNO short without passing native flag encodings into ODF. @param item - Concrete Writer character item. @param member - Original UNO member. @returns Signed short. */
+function queryCharacterShort(
+  item: SvxEmphasisMarkItem | SvxCaseMapItem | SvxCharReliefItem | SvxCharScaleWidthItem,
+  member: number,
+): number {
   const value = new Any();
+  const scalar: [number] = [0];
   try {
     item.QueryValue(value, member);
-    const scalar: [number] = [0];
     value.extract(scalar, "sal_Int16");
     return scalar[0];
   } finally {

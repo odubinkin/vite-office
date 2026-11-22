@@ -27,7 +27,7 @@ function lcl_DescSetAttr(source: SwFrameFormat, target: SwFrameFormat): void {
   target.SetPoolFormatId(source.GetPoolFormatId());
 }
 
-/** Original index-based change preserves the registered identity and mutates the supplied descriptor's left/first frame attributes before transfer. Current model has no header/footer section, numbering, register-grid-style, footnote-info, page undo, or desktop layout owners; these are not replaced by scalar substitutes. @param doc - Actual document. @param index - Stable descriptor position. @param source - Native changed descriptor. @returns Nothing. */
+/** Original index-based change preserves the registered identity and mutates the supplied descriptor's left/first frame attributes before transfer. Transfers the prepared header and footer references and retained shared variants along with the frame settings. @param doc - Actual document. @param index - Stable descriptor position. @param source - Native changed descriptor. @returns Nothing. */
 export function ChgPageDescNative(doc: SwDoc, index: number, source: SwPageDesc): void {
   const target = doc.GetPageDesc(index);
   if (source.GetUseOn() === UseOnPage.Mirror) source.Mirror();
@@ -44,8 +44,15 @@ export function ChgPageDescNative(doc: SwDoc, index: number, source: SwPageDesc)
     [source.GetLeft(), target.GetLeft()],
     [source.GetFirstMaster(), target.GetFirstMaster()],
     [source.GetFirstLeft(), target.GetFirstLeft()],
-  ] as const)
+  ] as const) {
+    if (!destination.GetHeader().equals(original.GetHeader()))
+      destination.SetFormatAttr(original.GetHeader());
+    if (!destination.GetFooter().equals(original.GetFooter()))
+      destination.SetFormatAttr(original.GetFooter());
     lcl_DescSetAttr(original, destination);
+  }
+  target.CopyStashedStoryFormats(source);
+  target.SetRegisterFormatColl(source.GetRegisterFormatColl());
   doc.NotifyModelChange({ kind: "page-descriptor-changed" });
   doc.GetDocumentStateManager().SetModified();
 }

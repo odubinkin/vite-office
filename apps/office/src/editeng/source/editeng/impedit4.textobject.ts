@@ -142,7 +142,7 @@ export function SetTextObject(engine: DocumentImpEditEngine, object: EditTextObj
   const start = doc.GetStartPaM();
   engine.SetUpdateLayout(false);
   engine.EnableUndo(false);
-  InsertTextObject(engine, object as EditTextObjectImpl, start);
+  InsertTextObject(engine, object, start);
   const vertical = object.GetVertical();
   if (doc.IsEffectivelyVertical() !== vertical) {
     doc.SetVertical(vertical);
@@ -158,17 +158,18 @@ export function SetTextObject(engine: DocumentImpEditEngine, object: EditTextObj
 }
 
 /** Original text-object insertion loop for a document editor without style pool or formatted portion cache. @param engine - Actual document editor. @param object - Concrete text object. @param start - Native insertion position. @returns Source inserted range. */
-function InsertTextObject(
+export function InsertTextObject(
   engine: DocumentImpEditEngine,
-  object: EditTextObjectImpl,
+  object: EditTextObject,
   start: EditPaM,
 ): EditSelection {
   const doc = engine.GetEditDoc();
   const pool = doc.GetItemPool();
-  const contents = object.GetContents();
-  const sourceUnit = object.GetMetric();
+  const sourceObject = object as EditTextObjectImpl;
+  const contents = sourceObject.GetContents();
+  const sourceUnit = sourceObject.GetMetric();
   const destinationUnit = pool.GetMetric(DEF_METRIC);
-  const convert = object.HasMetric() && sourceUnit !== destinationUnit;
+  const convert = sourceObject.HasMetric() && sourceUnit !== destinationUnit;
   const selection = new EditSelection(start);
   let position = new EditPaM(start);
   let paragraph = doc.GetPos(start.GetNode());

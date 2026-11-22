@@ -1,6 +1,8 @@
 /** @fileoverview Native document annotation field values retained by Writer text hints. */
-import type { SwDoc } from "../doc/doc";
 import type { SwFormatField } from "../../../inc/fmtfld";
+import { RES_TXTATR_ANNOTATION } from "../../../inc/hintids";
+import { SwTextField } from "../../../inc/txtfld";
+import type { SwDoc } from "../doc/doc";
 import type { EditTextObject } from "../../../../editeng/source/editeng/editobj";
 import { DateTime } from "../../../../tools/source/datetime/datetime";
 
@@ -9,7 +11,6 @@ let nextPostItId = 1;
 /** Original annotation field type carries the document that owns the fields. */
 export class SwPostItFieldType {
   private static readonly types = new WeakMap<SwDoc, SwPostItFieldType>();
-  private readonly fields = new Set<SwFormatField>();
 
   /** Finds the document's system annotation field type. @param document - Owning document. @returns Canonical field type. */
   static Get(document: SwDoc): SwPostItFieldType {
@@ -24,19 +25,33 @@ export class SwPostItFieldType {
   /** Associates the annotation type with one Writer document. @param document - Owning document. @returns Field type. */
   private constructor(private readonly document: SwDoc) {}
 
-  /** Registers a format bound to an actual document text hint. @param format - Attached field. @returns Nothing. */
-  RegisterField(format: SwFormatField): void {
-    this.fields.add(format);
+  /** Enumerates live format owners in model order. @returns Annotation formats. */
+  *GatherFields(): IterableIterator<SwFormatField> {
+    for (const node of this.document.GetNodes().entries()) {
+      const hints = node.GetTextNode()?.GetpSwpHints();
+      if (!hints) continue;
+      for (
+        let index = hints.GetFirstPosSortedByWhichAndStart(RES_TXTATR_ANNOTATION);
+        index < hints.Count();
+        index++
+      ) {
+        const hint = hints.GetSortedByWhichAndStart(index);
+        if (!(hint instanceof SwTextField)) break;
+        yield hint.GetAttr();
+      }
+    }
   }
 
-  /** Drops a field detached from the document text. @param format - Former field. @returns Nothing. */
-  UnregisterField(format: SwFormatField): void {
-    this.fields.delete(format);
+  /** Resolves an annotation restored by document history. @param id - Retained field identifier. @returns Live annotation value. */
+  FindField(id: number): SwPostItField | undefined {
+    return this.FindFormat(id)?.GetField();
   }
 
-  /** Collects original field formats still attached to this document. @returns Borrowed format values. */
-  GatherFields(): readonly SwFormatField[] {
-    return [...this.fields];
+  /** Resolves the attached format after undo has recreated it. @param id - Retained field identifier. @returns Live annotation format. */
+  FindFormat(id: number): SwFormatField | undefined {
+    for (const format of this.GatherFields())
+      if (format.GetField().GetPostItId() === id) return format;
+    return undefined;
   }
 
   /** Returns the document associated with the field type. @returns Owning document. */
@@ -72,10 +87,12 @@ export class SwPostItField {
     data: SwPostItFieldData,
   ) {
     const { textObject, ...values } = data;
+    const id = data.id || nextPostItId;
+    nextPostItId = Math.max(nextPostItId, id + 1);
     this.data = {
       ...values,
       dateTime: new DateTime(data.dateTime),
-      id: data.id || nextPostItId++,
+      id,
       resolved: data.resolved ?? false,
       parentId: data.parentId ?? 0,
       paraId: data.paraId ?? 0,
@@ -90,14 +107,39 @@ export class SwPostItField {
     return this.type;
   }
 
-  /** Returns the field name used by original annotation marks and threads. @returns Native name. */
+  /** Returns the native field identity retained through undo and redo. @returns Annotation ID. */
+  GetPostItId(): number {
+    return this.data.id ?? 0;
+  }
+
+  /** Reads the persisted resolution state of this annotation. @returns Whether resolved. */
+  IsResolved(): boolean {
+    return this.data.resolved === true;
+  }
+
+  /** Sets the original resolution member. @param value - Whether resolved. @returns Nothing. */
+  SetResolved(value: boolean): void {
+    this.data = { ...this.data, resolved: value };
+  }
+
+  /** Reads the annotation name used to join its point and range. @returns Annotation name. */
   GetName(): string {
     return this.data.name;
   }
 
-  /** Updates the native name when an annotation mark generates it. @param name - Native mark name. @returns Nothing. */
+  /** Assigns the generated name when the incoming annotation has none. @param name - Field name. @returns Nothing. */
   SetName(name: string): void {
     this.data = { ...this.data, name };
+  }
+
+  /** Assigns the paragraph ID used by replies. @param paraId - Native paragraph identifier. @returns Nothing. */
+  SetParaId(paraId: number): void {
+    this.data = { ...this.data, paraId };
+  }
+
+  /** Clears the original parent link when a reply becomes a root. @returns Nothing. */
+  ClearParent(): void {
+    this.data = { ...this.data, parentId: 0, parentPostItId: 0, parentName: "" };
   }
 
   /** Reads the plain text fallback used by the original sidebar. @returns Comment text. */

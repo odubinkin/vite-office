@@ -194,6 +194,7 @@ class SwUndoReplaceImpl extends SwUndoSaveContent {
   private readonly m_nSttCnt: number;
   private readonly m_nSelEnd: number;
   private readonly m_bSplitNext: boolean;
+  private readonly m_nOffset: number;
   private m_nEndNd: number;
   private m_nEndCnt: number;
   private readonly m_sOld: string;
@@ -220,6 +221,7 @@ class SwUndoReplaceImpl extends SwUndoSaveContent {
       DelContentType.AllMask | DelContentType.Replace,
     );
     this.m_nSetPos = this.m_pHistory.Count();
+    this.m_nOffset = this.m_nSttNd - node.GetIndex();
     for (const paragraph of this.m_bSplitNext ? [node, last] : [node]) {
       const index = paragraph.GetIndex();
       this.m_pHistory.CopyAttr(paragraph.GetpSwpHints(), index, 0, paragraph.Len(), true);
@@ -232,7 +234,7 @@ class SwUndoReplaceImpl extends SwUndoSaveContent {
     if (this.m_pHistory.Count() === 0) this.m_pHistory = undefined;
     this.m_sOld = node
       .GetText()
-      .slice(this.m_nSttCnt, this.m_bSplitNext ? undefined : this.m_nSelEnd);
+      .slice(this.m_nSttCnt, this.m_bSplitNext ? undefined : range.End().GetContentIndex());
   }
   /** Native SaveContent-base member destruction uses this implementation's actual document. @returns Nothing. */
   public override Dispose(): void {
@@ -240,7 +242,7 @@ class SwUndoReplaceImpl extends SwUndoSaveContent {
   }
   /** Stores actual completed end. @param range - Completed range. @returns Nothing. */
   public SetEnd(range: SwPaM): void {
-    this.m_nEndNd = range.End().GetNodeIndex();
+    this.m_nEndNd = this.m_nOffset + range.End().GetNodeIndex();
     this.m_nEndCnt = range.End().GetContentIndex();
   }
   /** Reports represented payload units. @returns Logical units. */
@@ -250,17 +252,18 @@ class SwUndoReplaceImpl extends SwUndoSaveContent {
   /** Original hint suffix temporary restoration precedes destructive bookmark prefix rollback and ownership moves. @param doc - Owning graph. @returns Owned completed range for wrapper adaptation. */
   public UndoImpl(doc: SwDoc): SwPaM {
     const operations = doc.GetDocumentContentOperationsManager();
-    const node = doc.GetNodes().at(this.m_nSttNd) as SwTextNode;
+    const startNode = this.m_nSttNd - this.m_nOffset;
+    const node = doc.GetNodes().at(startNode) as SwTextNode;
     const split = this.m_nSttNd !== this.m_nEndNd;
-    const range = this.MakeRange(split ? node.Len() : this.m_nEndCnt);
+    const range = this.MakeRange(split ? node.Len() : this.m_nEndCnt, startNode, startNode);
     try {
       operations.ReplaceRange(range, this.m_sOld, false);
       if (split) {
         range.GetMark().Assign(node, node.Len());
-        range.GetPoint().Assign(doc.GetNodes().at(this.m_nEndNd), this.m_nEndCnt);
+        range.GetPoint().Assign(doc.GetNodes().at(this.m_nEndNd - this.m_nOffset), this.m_nEndCnt);
         operations.DeleteAndJoin(range);
       }
-      const first = doc.GetNodes().at(this.m_nSttNd) as SwTextNode;
+      const first = doc.GetNodes().at(startNode) as SwTextNode;
       if (this.m_bSplitNext) {
         if (range.GetPoint().compare(range.GetMark()) === 0) range.DeleteMark();
         const boundary = new SwPosition(first, this.m_nSttCnt + this.m_sOld.length);
@@ -324,10 +327,10 @@ class SwUndoReplaceImpl extends SwUndoSaveContent {
       throw error;
     }
   }
-  /** Reconstructs native numeric source coordinates against current node slots. @param end - Saved content end. @param endNode - Saved end node coordinate. @returns Actual range. */
-  private MakeRange(end: number, endNode = this.m_nSttNd): SwPaM {
+  /** Reconstructs native numeric source coordinates against current node slots. @param end - Saved content end. @param endNode - Saved end node coordinate. @param startNode - Saved start node coordinate. @returns Actual range. */
+  private MakeRange(end: number, endNode = this.m_nSttNd, startNode = this.m_nSttNd): SwPaM {
     const nodes = this.m_rDoc.GetNodes(),
-      start = new SwPosition(nodes.at(this.m_nSttNd), this.m_nSttCnt),
+      start = new SwPosition(nodes.at(startNode), this.m_nSttCnt),
       stop = new SwPosition(nodes.at(endNode), end);
     try {
       return new SwPaM(stop, start);

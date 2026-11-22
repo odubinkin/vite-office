@@ -1,9 +1,27 @@
 /** @fileoverview Keeps native textsh1 command registration under the mandatory source-size limit. */
-import { createWriterTabulatorInput } from "./textsh1-tabs";
+import { SfxBoolItem } from "../../../../svl/inc/eitem";
+import { SwNumRuleItem } from "../../core/para/paratr";
+import { GetNumRuleFromPool, GetParagraphListStyleNames } from "../../core/doc/poolfmt-num";
+import { editListStyle } from "../app/docst";
+import { createWriterParagraphDialogInput } from "./textsh1-tabs";
 import { createWriterEscapementCommands } from "./txtattr";
 
+import { SfxUInt16Item } from "../../../../svl/source/items/intitem";
+import { SfxStringItem } from "../../../../svl/source/items/stritem";
+import { FN_NUMBER_NEWSTART, FN_NUMBER_NEWSTART_AT, FN_PARAM_1 } from "../../../inc/cmdid";
+import { SwPaM } from "../../core/crsr/pam";
+import { ConvertAttrCharToGen, ConvertAttrGenToChar } from "../utlui/uitool";
+import {
+  SvxBoxInfoItem,
+  SvxBoxInfoItemValidFlags,
+} from "../../../../editeng/source/items/frmitems";
+import { SID_ATTR_BORDER_INNER } from "../../../../svx/inc/svxids";
 import { SvxCrossedOutItem } from "../../../../editeng/inc/crossedoutitem";
-import { RES_CHRATR_CROSSEDOUT } from "../../../inc/hintids";
+import {
+  RES_CHRATR_CROSSEDOUT,
+  RES_PARATR_NUMRULE,
+  WRITER_CHARACTER_WHICH_RANGES,
+} from "../../../inc/hintids";
 import { SfxItemSet, SfxItemState } from "../../../../svl/inc/itemset";
 import { createAttributeToggleItem } from "../../../../sfx2/source/control/bindings";
 
@@ -13,9 +31,10 @@ import {
   getWriterCommandArguments,
   type WriterCharacterCommandArguments,
   type WriterHyperlinkCommandArguments,
+  type WriterSlotHandler,
 } from "../../../sdi/swriter";
 import { WRITER_COMMAND_IDS } from "../../../uiconfig/swriter/menubar/menubar-commands";
-import type { SwTextShell, WriterParagraphFormatValue } from "./textsh1";
+import type { SwTextShell, SwTextShellTarget, WriterParagraphFormatValue } from "./textsh1";
 import type {
   WriterDialogController,
   WriterBookmarkDialogResult,
@@ -25,12 +44,21 @@ import type { WriterHyperlink } from "../../core/txtnode/fmtatr2";
 import { SvxLineSpacingItem } from "../../../../editeng/inc/lspcitem";
 
 import { SvxLRSpaceItem } from "../../../../editeng/inc/lrspitem";
-import { SID_ATTR_PARA_LINESPACE, SID_ATTR_PARA_LRSPACE } from "../../../../editeng/inc/editids";
+import {
+  SID_ATTR_CHAR_WIDTH_FIT_TO_LINE,
+  SID_ATTR_PARA_LINESPACE,
+  SID_ATTR_PARA_LRSPACE,
+} from "../../../../editeng/inc/editids";
 
-/** Creates the active SwWrtShell command registry. @param target - Persistent Writer editing shell. @param dialogController - Writer-owned dialog lifecycle. @returns Validated immutable descriptors. */
+/** Creates the active SwWrtShell command registry. @param target - Persistent Writer editing shell. @param dialogController - Writer-owned dialog lifecycle. @param annotation - Original annotation slots. @param editShell - Native selection measurement. @returns Validated immutable descriptors. */
 export function createWriterTextCommandRegistry(
   target: SwTextShell,
   dialogController: WriterDialogController,
+  annotation: readonly WriterSlotHandler<SwTextShell>[],
+  editShell: Pick<
+    SwTextShellTarget,
+    "GetScalingOfSelectedText" | "SetNumRuleStart" | "SetNodeNumStart" | "DelNumRules"
+  >,
 ): SfxInterface<SwTextShell> {
   const active =
     /** Reads the currently targeted paragraph. @returns Active paragraph projection. */ (): ReturnType<
@@ -50,27 +78,118 @@ export function createWriterTextCommandRegistry(
     });
   /** Opens Execute's paragraph dialog branch for the original requesting slot. @param commandId - Native originating slot. @returns Whether accepted formatting changed. */
   function openParagraphDialog(commandId: string): Promise<boolean> {
+    const active = target.GetActiveParagraph();
+    const doc = active.GetDoc();
     return dialogController
       .RequestParagraphDialog(
         commandId,
         target.GetParagraphFormat(),
         target.IsPaintLineNumbers(),
         target.GetPageStyleNames(),
-        createWriterTabulatorInput(target),
+        createWriterParagraphDialogInput(target),
+        GetParagraphListStyleNames(doc),
+        active.GetTextFormatColl().IsAssignedToListLevelOfOutlineStyle(),
+        /** Opens the selected named style through the document style command owner. @param name - Style UI name. @returns Nested template request. */
+        (name) => editListStyle(doc, name),
       )
       .then(
         /** Applies accepted dialog data through Writer owners. @param result - Accepted value or cancellation. @returns Whether changed. */
         (result) => {
           if (result === undefined) return false;
-          const paragraphChanged = target.ApplyParagraphFormat(
-            result.paragraphFormat,
-            result.tabStopItems,
-          );
-          const lineNumbersChanged = target.SetPaintLineNumbers(result.paintLineNumbers);
-          return paragraphChanged || lineNumbersChanged;
+          const output = result.pageItems?.Clone();
+          const restartItem = output?.GetItemIfSet(FN_NUMBER_NEWSTART, false);
+          const startItem = output?.GetItemIfSet(FN_NUMBER_NEWSTART_AT, false);
+          const restart = restartItem instanceof SfxBoolItem ? restartItem.GetValue() : undefined;
+          const start = startItem instanceof SfxUInt16Item ? startItem.GetValue() : undefined;
+          output?.ClearItem(FN_NUMBER_NEWSTART);
+          output?.ClearItem(FN_NUMBER_NEWSTART_AT);
+          const rule = output?.GetItemIfSet(RES_PARATR_NUMRULE, false);
+          const undo = doc.GetUndoManager();
+          undo.StartUndo("Paragraph Formatting");
+          try {
+            let changed = false;
+            if (rule instanceof SwNumRuleItem) {
+              const name = rule.GetValue();
+              if (name === "") changed = editShell.DelNumRules();
+              else if (!GetNumRuleFromPool(doc, name)) output?.ClearItem(RES_PARATR_NUMRULE);
+            }
+            const formatted =
+              result.paragraphFormatChanged === false
+                ? target.SetParagraphItems(output?.entries() ?? [])
+                : target.ApplyParagraphFormat(result.paragraphFormat, output);
+            changed = formatted || changed;
+            if (!(rule instanceof SwNumRuleItem && rule.GetValue() === "")) {
+              if (restart !== undefined) {
+                changed = editShell.SetNumRuleStart(restart) || changed;
+                changed = editShell.SetNodeNumStart(start ?? 0xffff) || changed;
+              } else if (start !== undefined) {
+                changed = editShell.SetNodeNumStart(start) || changed;
+                changed = editShell.SetNumRuleStart(false) || changed;
+              }
+            }
+            return target.SetPaintLineNumbers(result.paintLineNumbers) || changed;
+          } finally {
+            undo.EndUndo();
+            output?.Dispose();
+          }
         },
       );
   }
+  /** Opens the original standard Character dialog over Writer's current selection. @param command - Original slot. @param initialPage - Original notebook page. @returns Whether selected text changed. */
+  async function openCharacterDialog(command: string, initialPage?: string): Promise<boolean> {
+    const document = target.GetActiveParagraph().GetDoc();
+    const input = new SfxItemSet(document.GetAttrPool(), [
+      ...WRITER_CHARACTER_WHICH_RANGES,
+      [SID_ATTR_BORDER_INNER, SID_ATTR_BORDER_INNER],
+      [SID_ATTR_CHAR_WIDTH_FIT_TO_LINE, SID_ATTR_CHAR_WIDTH_FIT_TO_LINE],
+    ]);
+    target.GetTextCtrlState(input);
+    const fit = editShell.GetScalingOfSelectedText();
+    if (fit !== undefined) input.Put(new SfxUInt16Item(SID_ATTR_CHAR_WIDTH_FIT_TO_LINE, fit), true);
+    ConvertAttrCharToGen(input);
+    const border = new SvxBoxInfoItem(SID_ATTR_BORDER_INNER);
+    border.SetDist(true);
+    border.SetMinDist(true);
+    border.SetDefDist(28);
+    border.SetValid(SvxBoxInfoItemValidFlags.DISABLE);
+    input.Put(border, true);
+    const selection: SwPaM[] = [];
+    for (const range of target.GetCharacterDialogSelection().GetRingContainer()) {
+      const copy = new SwPaM(
+        range.GetPoint(),
+        range.HasMark() ? range.GetMark() : undefined,
+        selection[0],
+      );
+      selection.push(copy);
+    }
+    try {
+      const output = await dialogController.RequestCharacterDialog(
+        command,
+        input,
+        "standard",
+        initialPage,
+      );
+      if (!output) return false;
+      try {
+        if (
+          !output.Count() ||
+          target.GetActiveParagraph().GetDoc() !== document ||
+          !target.CanFormatCharacters()
+        )
+          return false;
+        output.ClearItem(SID_ATTR_BORDER_INNER);
+        if (!output.Count()) return false;
+        ConvertAttrGenToChar(output, input);
+        return target.ExecTextCtrl(output, selection[0]);
+      } finally {
+        output.Dispose();
+      }
+    } finally {
+      input.Dispose();
+      for (const range of selection) range.Dispose();
+    }
+  }
+
   /** Reads original complete strikeout item state through the native UI/core boundary. @returns Independent item set. */
   function strikeoutState(): SfxItemSet {
     const state = new SfxItemSet(target.GetActiveParagraph().GetDoc().GetAttrPool(), [
@@ -80,7 +199,31 @@ export function createWriterTextCommandRegistry(
     return state;
   }
   return createWriterInterface([
+    ...annotation,
     ...createWriterEscapementCommands(target),
+    ...(
+      [
+        [WRITER_COMMAND_IDS.fontDialog, undefined],
+        [WRITER_COMMAND_IDS.fontEffectsDialog, "fonteffects"],
+        [WRITER_COMMAND_IDS.fontPositionDialog, "position"],
+      ] as const
+    ).map<WriterSlotHandler<SwTextShell>>(
+      /** Routes the three body Character slots through the native text shell. @param entry - Original slot and page override. @returns Slot handler. */
+      ([id, fixedPage]) => ({
+        id,
+        /** Opens the requested standard Character page. @param _context - Bound text shell. @param args - Optional Page item. @returns Whether changed. */
+        execute: (_context, args) => {
+          const page = args.find(
+            /** Finds the original Page parameter. @param item - Request item. @returns Whether it selects a page. */
+            (item): item is SfxStringItem =>
+              item instanceof SfxStringItem && item.Which() === FN_PARAM_1,
+          );
+          return openCharacterDialog(id, fixedPage ?? page?.GetValue());
+        },
+        /** Observes native text editability. @returns Whether enabled. */
+        isEnabled: () => target.CanFormatCharacters(),
+      }),
+    ),
     ...([true, false] as const).map(
       /** Original distinct Grow/Shrink slots share native execute/state logic. @param grow - Native grow direction. @returns Original handler. */ (
         grow,

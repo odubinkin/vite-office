@@ -51,6 +51,7 @@ it("preserves Writer standard toolbar source order and original Lucide symbols",
       [".uno:Redo", "redo-2"],
       [".uno:HyperlinkDialog", "link"],
       [".uno:InsertBookmark", "bookmark"],
+      [".uno:InsertAnnotation", "message-square"],
       [".uno:InsertPagebreak", "separator-horizontal"],
     ] as const) {
       expect(

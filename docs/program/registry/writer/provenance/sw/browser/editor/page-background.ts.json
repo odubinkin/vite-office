@@ -1,0 +1,25 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "browser-adaptation",
+    "status": "local-only",
+    "localPath": "apps/office/src/sw/browser/editor/page-background.ts",
+    "rationale": "Projects the selected physical page frame’s native solid color, opacity and bitmap placement to a noninteractive CSS background.",
+    "responsibilities": [
+      "Projects the selected physical page frame’s native solid color, opacity and bitmap placement to a noninteractive CSS background."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sw/browser/editor/page-background.ts",
+          "marker": "writerPageBackgroundStyle"
+        }
+      ]
+    },
+    "stackDivergence": {
+      "kind": "browser-adaptation",
+      "rationale": "Browser controls and CSS replace the upstream weld widget or output-device binding."
+    }
+  }
+}

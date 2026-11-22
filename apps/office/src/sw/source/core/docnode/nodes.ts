@@ -569,22 +569,57 @@ export class SwNodes {
     const removed = this.nodeArray.slice(index, index + count);
     for (const node of removed) if (node instanceof SwTextNode) node.RemoveFromList();
     this.CorrectNodeIndices(index, count);
-    if (destroy)
-      for (let i = removed.length; i;) {
-        const node = removed[--i];
-        if (!node) continue;
-        if (node instanceof SwTextNode) {
-          node.GetpSwpHints()?.Dispose();
-          node.DelFrames();
-          if (node.IsOutline()) node.UpdateOutlineState();
-          node.ResetAttr(RES_PAGEDESC);
-        }
-        if (node instanceof SwTableNode) this.DestroyTableNode(node);
-        node.DisposeContentIndexRegistry();
-        node.DisposeModify();
-      }
+    if (destroy) this.DestroyNodes(removed);
     this.nodeArray.splice(index, count);
     this.document.NotifyModelChange({ index, kind: "node-removed" });
+  }
+
+  /** Destroys owned detached nodes after the retaining undo action is discarded. @param removed - Detached complete section. @returns Nothing. */
+  public DestroyDetachedSection(removed: readonly SwNode[]): void {
+    this.DestroyNodes(removed);
+  }
+  /** Tears down actual nodes in native reverse order. @param removed - Nodes leaving this array. @returns Nothing. */
+  private DestroyNodes(removed: readonly SwNode[]): void {
+    for (let i = removed.length; i;) {
+      const node = removed[--i];
+      if (!node) continue;
+      if (node instanceof SwTextNode) {
+        node.GetpSwpHints()?.Dispose();
+        node.DelFrames();
+        if (node.IsOutline()) node.UpdateOutlineState();
+        node.ResetAttr(RES_PAGEDESC);
+      }
+      if (node instanceof SwTableNode) this.DestroyTableNode(node);
+      node.DisposeContentIndexRegistry();
+      node.DisposeModify();
+    }
+  }
+  /** Moves a complete fly section out of the live document for undo. @param section - Actual fly section. @returns Owned detached section. */
+  public DetachFlySection(section: SwStartNode): readonly SwNode[] {
+    if (
+      section.GetNodes() !== this ||
+      section.GetStartNodeType() !== SwStartNodeType.SwFlyStartNode
+    )
+      throw new Error("Writer fly history requires a fly section.");
+    const start = section.GetIndex();
+    const end = section.EndOfSectionNode().GetIndex();
+    const detached = this.nodeArray.slice(start, end + 1);
+    for (const node of detached) {
+      if (node instanceof SwTextNode) this.m_aOutlineNodes.erase(node);
+      if (node instanceof SwContentNode) node.DelFrames();
+    }
+    this.RemoveNode(start, detached.length, false);
+    return detached;
+  }
+  /** Restores the original fly section at its saved position. @param index - Saved position. @param section - Owned detached nodes. @returns Nothing. */
+  public RestoreFlySection(index: number, section: readonly SwNode[]): void {
+    for (const [offset, node] of section.entries()) this.InsertNode(node, index + offset);
+    for (const node of section) {
+      if (!(node instanceof SwTextNode)) continue;
+      node.AddToList();
+      this.InsertOutlineNode(node);
+    }
+    this.document.NotifyModelChange({ index, kind: "node-inserted" });
   }
 
   /** Original BigPtrArray InsertNode overloads insert an actual detached entry without substituting a section operation. @param node - Actual node owned by this array. @param position - Native index or absolute offset. @returns Nothing. */

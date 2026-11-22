@@ -19,18 +19,22 @@
         "apps/office/src/editeng/source/editeng/editdoc.attributes.ts#InsertAttrib",
         "apps/office/src/sc/source/ui/docshell/docsh.csv-export.test.ts",
         "editeng/source/editeng/editdoc.cxx",
-        "editeng/source/editeng/ContentNode.cxx"
+        "editeng/source/editeng/ContentNode.cxx",
+        "apps/office/src/editeng/source/editeng/editdoc.attributes.ts#FindAttribs",
+        "apps/office/src/editeng/source/editeng/native-engine-object.test.ts"
       ],
-      "justification": "The native non-YRS insertion retains empty-range precedence, source-range trimming, splits and adjacent equivalent item expansion. YRS synchronization, interactive spell-check disablement and general selection attribute removal remain outside the document text slice.",
+      "justification": "The native non-YRS insertion retains empty-range precedence, source-range trimming, splits and adjacent equivalent item expansion. YRS synchronization, interactive spell-check disablement and general selection attribute removal remain outside the document text slice. Selection aggregation preserves hard-attribute boundary handling, empty-range precedence and invalidation of partial spans.",
       "knownViolations": [],
       "localSymbols": [
-        "InsertAttrib"
+        "InsertAttrib",
+        "FindAttribs"
       ],
       "sourceResponsibility": "aligned",
       "upstreamFile": "editeng/source/editeng/editdoc.cxx",
       "upstreamSymbols": [
         "EditDoc::InsertAttrib",
-        "EditDoc::InsertAttribInSelection"
+        "EditDoc::InsertAttribInSelection",
+        "EditDoc::FindAttribs"
       ]
     }
   }

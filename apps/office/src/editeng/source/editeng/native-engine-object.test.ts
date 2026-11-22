@@ -19,6 +19,7 @@ import { ScriptHintType } from "../../../i18nutil/inc/scriptchangescanner";
 import { SvxFieldItem } from "../../inc/flditem";
 import * as EE from "../../inc/eeitem";
 import { SvtScriptType as Script } from "../../../svl/inc/languageoptions";
+import { SfxItemState } from "../../../svl/source/items/itemset";
 import { SfxBoolItem } from "../../../svl/inc/eitem";
 import {
   SfxStyleSheet,
@@ -533,6 +534,39 @@ it("retains the native overlap split and reconnects equal character attributes",
   } finally {
     replacement.Dispose();
     color.Dispose();
+    engine.dispose();
+  }
+});
+
+it("keeps the first paragraph character default and invalidates a partial hard span", /** Pins the All attribute merge used by the annotation Character dialog and the range overlap rule. @returns Nothing. */ () => {
+  const engine = prepare("abc\ndef").implementation;
+  const document = engine.GetEditDoc();
+  const first = document.GetObject(0) as ContentNode;
+  const second = document.GetObject(1) as ContentNode;
+  const color = EE.EE_CHAR_COLOR;
+  first
+    .GetContentAttribs()
+    .GetItems()
+    .Put(new SvxColorItem(new Color(0x112233), color), true);
+  second
+    .GetContentAttribs()
+    .GetItems()
+    .Put(new SvxColorItem(new Color(0x445566), color), true);
+  const range = new EditSelection(document.GetStartPaM(), document.GetEndPaM());
+  const defaults = engine.GetAttribs(range);
+  try {
+    expect((defaults.Get(color) as SvxColorItem).GetValue().toUInt32()).toBe(0x112233);
+    const hard = new SvxColorItem(new Color(0x778899), color);
+    document.InsertAttrib(second, 0, 1, hard);
+    hard.Dispose();
+    const mixed = engine.GetAttribs(range);
+    try {
+      expect(mixed.GetItemState(color)).toBe(SfxItemState.INVALID);
+    } finally {
+      mixed.Dispose();
+    }
+  } finally {
+    defaults.Dispose();
     engine.dispose();
   }
 });

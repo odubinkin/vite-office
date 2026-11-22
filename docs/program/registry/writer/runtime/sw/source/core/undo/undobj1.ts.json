@@ -1,0 +1,40 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sw/source/core/undo/undobj1.ts",
+    "classification": "upstream-mechanism",
+    "state": "active",
+    "suite": "writer",
+    "subsystem": "undo-redo",
+    "capabilityIds": [
+      "CAP-0102"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "none",
+      "evidence": [
+        "apps/office/src/sw/source/core/undo/undobj1.ts#SwUndoDelLayFormat",
+        "vendor/libreoffice-reference/sw/source/core/undo/undobj1.cxx#void SwUndoFlyBase::DelFly",
+        "vendor/libreoffice-reference/sw/source/core/undo/undobj1.cxx#void SwUndoFlyBase::InsFly",
+        "apps/office/src/sw/source/core/crsr/native-search-replace.test.ts#preserves inline graphics adjacent to matches and restores a covered graphic",
+        "vendor/libreoffice-reference/sw/qa/extras/uiwriter/uiwriter9.cxx#testSetStringDeletesShape",
+        "apps/office/src/sw/source/uibase/wrtsh/native-cross-node-deletion.test.ts#replaces a multi-paragraph selection and restores its middle"
+      ],
+      "justification": "Retains the actual inline graphic format and moves its graphic section into Writer undo ownership, unlinks the dummy, then restores the original section and reinserts an as-character hint. Other floating-anchor deletion profiles, drawing anchors, nested fly content and section mark history, native layout frame selection, redlines, and complete SwNodes undo-array parity are unverified. For text selection deletion, retains the live floating text frame or graphic and its section when its anchor is on a completely selected middle paragraph. Undo restores the section, format, and original character or paragraph anchor.",
+      "knownViolations": [],
+      "localSymbols": [
+        "SwUndoDelLayFormat"
+      ],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": "sw/source/core/undo/undobj1.cxx",
+      "upstreamSymbols": [
+        "SwUndoDelLayFormat",
+        "SwUndoFlyBase::DelFly",
+        "SwUndoFlyBase::InsFly"
+      ]
+    }
+  }
+}

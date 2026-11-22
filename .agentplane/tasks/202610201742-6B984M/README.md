@@ -4,7 +4,7 @@ title: "Implement Writer search and replace core and browser UI"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 81
+revision: 131
 origin:
   system: "manual"
 depends_on:
@@ -26,7 +26,7 @@ tags:
 verify: []
 plan_approval:
   state: "approved"
-  updated_at: "2026-10-20T17:43:01.279Z"
+  updated_at: "2026-11-21T16:51:24.855Z"
   updated_by: "ORCHESTRATOR"
   note: null
 verification:
@@ -247,6 +247,353 @@ comments:
   -
     author: "CODER"
     body: "Verified checkpoint: an unsuccessful probe of an inactive annotation restores both its native and browser selections before continuing in body text. The mounted regression verifies non-BMP matching in a later comment paragraph, native literal regex replacement, multiline textarea edits, and document undo. WRITER-716 records the native annotation versus body capture-reference behavior. Passed 36 targeted Writer tests, five shared EditEngine and browser matcher tests, two Writer resource tests and the production build. Module boundaries, source tree and provenance, JSDoc, file size, scoped lint and formatting, diff, doctor and routing passed. No task closure or full-suite cadence increment."
+  -
+    author: "CODER"
+    body: "Verified continuation: recorded the user-approved annotation scope and browser RegExp in the task plan. The next full regression is due after ten completed tasks and does not stop the goal. Graphify identified the UNO, xmloff and graph transport owners. The pinned tdf147583_backwardSearch ODT now loads its annotated range, metadata and plain note paragraphs, survives structured clone and ODT save/reopen, and is searchable in a mounted Writer session opened through SwDocShell.Load. Passed 25 targeted tests, production build, two Writer resources, module boundaries, source tree and provenance, scoped ESLint and formatting, diff, doctor and routing. Repository-wide JSDoc and size gates still report 307 and five findings respectively on unchanged paths, zero on changed paths. New-comment command and richer comment formatting remain pending. No task closure or full-suite increment."
+  -
+    author: "CODER"
+    body: "Verified checkpoint: native FN_POSTIT is connected through Writer menu, standard toolbar and keyboard resources. Point and ranged insertion use the same content operation as UNO annotation attachment, preserve the selected body text, use the pinned Unknown Author fallback and focus the active window. Escape returns after consecutive annotation points. Document history rebinds later note text edits by the retained field ID after undo and redo recreate the comment. Adapted the supported insertion, default author and leave behavior of sw/qa/uitest/writer_tests/comments.py. Passed 44 focused Vitest cases in nine suites, then repeated all six browser comment unit cases after the final query typing adjustment. Two Chrome search scenarios and two resource checks passed, with production build, dependencies, source tree, provenance, scoped lint and formatting, diff, doctor and routing. The existing whole-repository JSDoc and physical file-size findings are outside the changed paths. Rich comment formatting is pending. No AgentPlane closure or full-suite cadence increment."
+  -
+    author: "CODER"
+    body: "Verified intermediate Writer annotation transfer checkpoint. The normal ODT Worker graph carries the native EditTextObject with paragraph and style metadata, mapped character and paragraph items, tab and line-break features and UTF-16 coordinates. Restoration uses an independently owned EditEngine pool and the existing concrete Writer value codecs. Legacy records retain their plain text fallback. A regression test on the pinned upstream annotation fixture exercises structured cloning, formatting and native equality. The three affected Writer suites passed 16 tests, and the Writer resource suite passed 2. Production build, scoped lint and formatting, dependency, source tree, provenance, routing, doctor and diff checks passed. Repo-wide JSDoc and file size still report existing findings outside the changed paths. Rich ODT XML, visible rich annotation editing and the remainder of the approved task remain open. No full regression run or task closure in this checkpoint."
+  -
+    author: "CODER"
+    body: "Verified intermediate ODT export checkpoint. Writer now projects annotation EditEngine text sections through the shared paragraph and automatic-style export passes, corresponding to the pinned txtflde.cxx TextRange collection and export calls. ODT output preserves represented inline formatting, paragraph alignment, tabs, soft line breaks and empty paragraphs. The browser comment editor now uses the Writer text edit source and shared DocumentImpEditEngine deletion logic. The pinned ODT fixture with a formatted native comment passes Writer Worker equality and content.xml assertions. Targeted Writer and shared runs each passed 29 tests; Writer resource suite passed 2. Production build, dependencies, source-tree, provenance, routing, doctor, scoped lint and format, and diff checks passed. Repo-wide documentation and size checks found only pre-existing problems outside these changes. Rich ODT re-import and browser formatting presentation remain pending. This is a checkpoint rather than task closure, and the ten-task full-run count is unchanged."
+  -
+    author: "CODER"
+    body: "Verified intermediate Writer annotation import checkpoint. The shared ODT paragraph parser switches to the detached annotation TextRange cursor, inserts text and structural controls into native EditEngine, applies represented item members, removes the parser's trailing separator and restores the containing cursor before the ordinary annotation attachment. The pinned annotation fixture verifies stable range and graph transport. Save/reopen verifies native UTF-16 spans, bold, underline, background color, centered alignment, vertical spacing, tab and line-break items and trailing empty paragraph. Shared export projects the represented paragraph spacing properties. The native SvxColorItem now owns MID_GRAPHIC_TRANSPARENT according to pinned textitem.cxx. Final focused runs passed 42 Writer and 34 shared tests plus 2 resource tests. Build, dependencies, source tree, provenance, scoped ESLint and Prettier, routing, doctor and diff checks passed. Repository JSDoc and size checks report existing issues outside the changed files. Named formatting is resolved to represented values. Lists, hyperlinks and visible rich annotation editing remain pending. The task remains open and the ten-task cadence is unchanged."
+  -
+    author: "CODER"
+    body: "Verified intermediate Writer annotation editing checkpoint. The existing sidebar window now presents native EditEngine paragraphs and character attributes in a browser editing host. Browser selection maps to native note positions while the document body keeps its separate shell selection. Beforeinput, clipboard text, composition, paragraph and soft line breaks, selected bold/italic/underline and undo use Writer history and the same field objects as search and ODT. Same-text formatting updates retain the selection, corresponding to SwAnnotationWin::SetPostItText. The primary Vitest run passed 33 cases and timed out on one Find Bar history case under load. The unchanged timed-out case passed in isolation, and all seven sidebar cases passed on final sources. Two focused browser tests passed on the final build in the already installed Chrome channel after the default Chromium executable was unavailable. Writer resources passed 2 cases. Production single-threaded build with type checking, dependencies, source tree and provenance, scoped ESLint and Prettier, doctor, routing and diff checks passed. Repo-wide JSDoc and file size report existing findings outside these changes. Full annotation toolbar/slot dispatch, hyperlinks, lists and complete formatting parity remain pending. No task closure or full-run count increment."
+  -
+    author: "CODER"
+    body: "Verified intermediate Writer annotation shell checkpoint. The active note selects SwAnnotationShell in the actual Sfx view stack based on the pinned view.cxx PostIt branch. Generated Writer formatting, Select All, refocus and history command IDs now act on the native note selection, with mixed and checked state, script-set font/height/weight/posture handling, underline, strikeout and paragraph alignment. Note input uses the same binding as toolbar controls and the body resumes its prior shell after focus returns. Browser paint follows EditEngine script segments. The affected Writer runs passed 45 and 18 tests in disjoint files. Two Writer resource tests and both production writer-search Chrome scenarios passed, including toolbar Bold and Undo in the note. Production single-threaded build, dependencies, source tree and provenance, scoped lint/format, routing, doctor and diff checks passed. Repo-wide JSDoc and file size report baseline issues outside the changed paths. The represented annotation slots do not cover the complete native annotation clipboard, list, hyperlink, color and dialog surface. The task remains open and the ten-task cadence is unchanged."
+  -
+    author: "CODER"
+    body: "Verified annotation color checkpoint against pinned SwAnnotationShell::Exec and GetState. The existing Writer toolbar and Character sidebar now route foreground and background palette choices to EE_CHAR_COLOR and EE_CHAR_BKGCOLOR on the active note. Uniform and mixed values, automatic and transparent resets, recent palette entries, range retention, undo, body isolation and ODT reopen are covered. The browser palette sends explicit choices through the existing Writer command payload. The native argument-free recent-color replay slot is outside this checkpoint. Four targeted Writer suites passed 24 tests, the generated resource suite passed two tests, and two Chrome end-to-end scenarios passed against the final production build. Build, dependencies, source tree and provenance, scoped ESLint and formatting, routing, doctor and diff checks passed. Repository-wide JSDoc and file-size checks retain their existing findings outside changed paths. This checkpoint does not close the parent task or advance the full-suite cadence."
+  -
+    author: "CODER"
+    body: "Verified annotation position and line-spacing checkpoint against SwAnnotationShell::Exec and GetState, and EditEngine line-spacing layout in impedit3.cxx. The original Writer position buttons dispatch to the active note's EE_CHAR_ESCAPEMENT, including automatic offsets and the native toggling behavior. The shared spacing popup sends a complete SvxLineSpacingItem to EE_PARA_SBL. Browser paragraph rendering resolves the active rule using CSS line heights. Uniform and mixed spacing, body isolation, undo, and preservation of both items on ODT reopen are covered. Four targeted Writer suites passed 20 tests, two resource checks and two Chrome scenarios passed, and the production build, dependency boundaries, source-tree, provenance, routing, doctor, scoped lint and format, and diff checks passed. The baseline repository-wide JSDoc and size findings remain outside the changed paths. The parent task remains active and the full-suite cadence is unchanged."
+  -
+    author: "CODER"
+    body: "Verified annotation visibility checkpoint against the pinned SwView::StateViewOptions and ExecViewOptions, SwPostItMgr::Focus and layout, and annotation metadata UI. View now exposes the two original menu slots in source order with true defaults and the native HasNotes availability gate. Resolved labels use the document field, the two visibility flags remain view-local, and hiding preserves mounted annotation editor state. Inserting a comment restores visibility and focuses the new note. WRITER-725 records and preserves the explicit Boolean inversion for ShowResolvedAnnotations. Four targeted Writer suites passed 35 tests, two resource checks and two Chrome scenarios passed, and production build, dependencies, source tree, provenance, Writer/shared registry checks, scoped lint and formatting, routing, doctor and diff checks passed. The repository-wide JSDoc and file-size findings remain outside the changed files. The parent task and its full-suite cadence are unchanged."
+  -
+    author: "CODER"
+    body: "Verified individual annotation resolution against AnnotationWin, PostItMgr, the annotation/text shell SDI, and the Writer comments UI test. Resolve and Unresolve update the actual field through the comment menu. The generated ResolveComment slot uses the active note in the annotation shell and the original string ID item in the body shell. The resolution badge, configured visibility, retained comment text and ODT reopen are covered. WRITER-726 records the native ordering of the ordinary non-Yrs field undo snapshots, which both contain the new resolution flag. Five targeted Writer suites passed 41 tests, the two resource checks and two Chrome scenarios passed, and production build, dependency boundaries, source tree and provenance, Writer registry, scoped lint and formatting, routing, doctor, and diff checks passed. The existing repository-wide JSDoc and file-size findings remain outside the changed paths. Thread-wide resolution remains outside this checkpoint. The parent task and its full-suite cadence are unchanged."
+  -
+    author: "CODER"
+    body: "Verified thread resolution against the pinned annotation menu, GetTopReplyNote, UpdatePostItsParentInfo and UpdateResolvedStatus. The existing comment action popup and generated ResolveCommentThread slot now operate on the same ordered follow windows. The menu restores Writer body focus as in AnnotationMenuButton.cxx. Both the active-note all-members check and the ID-based root toggle preserve their native outcomes. WRITER-727 and WRITER-728 record their divergence and adjacency-based navigation. Regressions cover nested and interleaved replies, independent comments, ODT reopen, and browser popup behavior. Four targeted Writer suites passed 37 cases, two resource checks and two Chrome scenarios passed, and production build, dependencies, source tree and provenance, Writer registry, scoped lint and formatting, routing, doctor, and diff checks passed. The existing JSDoc and file-size findings remain outside changed paths. No parent task closure or full-suite cadence increment."
+  -
+    author: "CODER"
+    body: "Verified Delete Comment and Delete Comment Thread against the pinned annotation popup, SwAnnotationWin deletion and thread traversal, SwPostItMgr ID routing, and SwHistorySetTextField. The commands use Writer cursor deletion of each annotation marker. Ordinary undo and redo preserve field IDs, contents and registered annotation ranges, including neighboring comments and undoing earlier insertion after a field is recreated. The thread uses separate deletion actions in the original sidebar order. The comment popup uses the browser top layer where supported; real Chrome verified the delete action remains clickable above the properties sidebar and undo restores the note. Seven targeted Writer suites passed 2610 tests and the two comment suites passed again after the popup correction. Two resource tests and two Chrome scenarios passed. Production build, dependency boundaries, source tree and provenance, Writer registry, scoped lint and formatting, policy routing, doctor and diff checks passed. The existing global JSDoc and file-size findings remain outside the changed files. This covers ordinary editing; change-tracking-specific deletion and bulk author/all-comment deletion remain outside the checkpoint. No parent closure or full-suite cadence increment."
+  -
+    author: "CODER"
+    body: "Verified interactive Writer comment replies against the pinned AnnotationWin, InitAnswer and native annotation field slots. Reply inserts immediately after its parent, preserves its ID, paragraph ID and name linkage, and leaves focus at the end of a formatted EditEngine quotation. The native rich text insertion loop is used to preserve quoted runs. Reply insertion is one Writer history action and parent name and reply content survive ODT reopen. WRITER-729 records the original first-paragraph ellipsis rule. The main slot accepts the active note or a parent ID from the text shell. Prefilled remote Text/HTML arguments and automatic deletion of empty parents are outside this checkpoint. Six targeted Writer suites passed 44 tests, two generated resource tests and two real Chrome scenarios passed, and build, dependency boundaries, source tree/provenance, Writer registry, scoped lint and formatting, routing, doctor and diff checks passed. Repository-wide JSDoc and size findings remain outside changed files. No parent task closure or full-suite cadence increment."
+  -
+    author: "CODER"
+    body: |-
+      Verified the Promote Comment checkpoint against pinned annotation.ui, AnnotationMenuButton, AnnotationWin, annotation and text shell dispatch, and PostItMgr. The generated Edit > Comment command and card popup use the same native field operation. Promotion clears only the selected note's parent metadata and preserves descendants, anchors and undo count. WRITER-730 records the native anchor sort and sticky follow flag that keep a live card in its previous group until windows are recreated.
+
+      - Command: `npm run test:writer -- src/sw/browser/presentation/WriterCommentReply.test.tsx src/sw/browser/presentation/WriterCommentsSidebar.test.tsx src/sw/browser/presentation/WriterCommentDeletion.test.tsx src/sw/browser/presentation/WriterMenuBar.test.tsx src/sw/source/filter/xml/odt-annotation.test.ts`. Result: 40 passed across five files, including active and ID-based promotion, focus, menu state and ODT reopen.
+      - Command: `npm run test:writer -- src/sw/browser/presentation/WriterSearch.test.tsx src/sw/browser/presentation/WriterSearchRegex.test.tsx src/sw/source/uibase/uiview/view-note-search.test.ts src/sw/source/core/crsr/native-search-replace.test.ts src/sw/source/core/crsr/findtxt.test.ts`. Result: 63 passed across five files, with 15 existing conditional skips requiring a native regex probe.
+      - Command: `npm run build:single-threaded --workspace @vite-office/office`. Result: production build and typecheck passed with the existing bundle-size advisory.
+      - Command: `node_modules/.bin/playwright test writer-search.spec.ts --config=output/playwright/writer-rich-comments-chrome.config.ts --project=writer --workers=1`. Result: both scenarios passed against the final preview bundle.
+      - Command: `npm run check:writer-resources`, `npm run check:dependencies`, `npm run check:source-tree`, `npm run check:source-provenance`, `npm run inventory:parity:writer`, scoped ESLint and Prettier, `ap doctor`, `node .agentplane/policy/check-routing.mjs`, and `git diff --check`. Result: passed, two resource tests, no registry semantic violations, and the existing doctor shim warning.
+      - Command: `npm run check:docs` and `npm run check:file-size`. Result: baseline failures remain outside the changed paths (307 JSDoc findings and five oversized files). Local evidence is in output/playwright/writer-comment-promote-docs.log and output/playwright/writer-comment-promote-size.log.
+
+      Parent task remains in progress. This checkpoint does not advance the ten-task full regression counter.
+  -
+    author: "CODER"
+    body: |-
+      Verified the Writer comment bulk-deletion checkpoint against pinned textfld, annotsh, AnnotationWin2, PostItMgr, ConfirmationDlg, Common.xcs and querydialog.ui. DeleteAuthor uses the native Author string item and defaults to the active note only in the annotation shell. Delete All Comments and the author-specific action appear in the original menu positions. Both commands use one Writer history group and the shared query preference, which defaults to false. Ports cover the ordinary author deletion and delete-all scenarios from uiwriter11 and deleteAllComments.py. The tracked-deletion branches of those native tests require Writer's redline subsystem, which is outside the represented document model.
+
+      - Command: `npm run test:writer -- src/sw/browser/presentation/WriterCommentReply.test.tsx src/sw/browser/presentation/WriterCommentsSidebar.test.tsx src/sw/browser/presentation/WriterCommentDeletion.test.tsx src/sw/browser/presentation/WriterMenuBar.test.tsx src/sw/source/filter/xml/odt-annotation.test.ts src/sw/browser/presentation/writer-command-presentation.test.ts src/sw/source/uibase/shells/native-paragraph-sidebar-slots.test.ts`. Result: 50 passed across seven files. Scope: ordinary delete, grouped undo/redo, original text and marks, browser query and preference, and other comment, menu and dialog owners.
+      - Command: `npm run build:single-threaded --workspace @vite-office/office` and `npm exec --workspace @vite-office/office -- vite build`. Result: typecheck and production bundle passed, with existing Vite advisories. Initial typechecking found the missing commandUrl on the new dialog discriminant and an unsupported exact flag in Testing Library options; both were corrected before final verification.
+      - Command: `node_modules/.bin/playwright test writer-search.spec.ts --config=output/playwright/writer-rich-comments-chrome.config.ts --project=writer --workers=1`. Result: both scenarios passed against the final bundle, including native query focus, Escape and Yes, body focus, and grouped Undo.
+      - Command: `npm run check:writer-resources`, `npm run check:dependencies`, `npm run check:source-tree`, `npm run check:source-provenance`, `npm run inventory:parity:writer`, scoped ESLint and Prettier, `ap doctor`, `node .agentplane/policy/check-routing.mjs`, and `git diff --check`. Result: passed, two resource tests, zero registry semantic violations, and the existing doctor shim warning.
+      - Command: `npm run check:docs` and `npm run check:file-size`. Result: baseline failures remain outside changed files (307 JSDoc findings and five oversized files). Local evidence is in output/playwright/writer-bulk-comment-docs.log and output/playwright/writer-bulk-comment-size.log.
+
+      Parent task remains in progress. This checkpoint does not advance the ten-task full regression counter.
+  -
+    author: "CODER"
+    body: |-
+      Verified the annotation Character formatting checkpoint against pinned char dialog, annotation popup, SwPostItMgr, EditView and ImpEditEngine sources. The action uses the active note or the first mounted note as its native input, merges accepted SfxItemSet output, applies the result over complete note text without replacing selections, and groups history. The tab sequence matches annotation mode. Browser controls expose the represented Latin font and style, size, color, underline and strikeout, automatic superscript or subscript, and background. Specialized CJK/CTL font editors, previews, additional font effects, and manual positioning remain outside the represented dialog controls. WRITER-731 documents the original differing paragraph font-default merge. The note renderer now scales the explicit point size when drawing escapement.
+
+      - Command: `npm run test:writer -- src/sw/browser/presentation/WriterCommentFormatAll.test.tsx src/sw/browser/presentation/WriterCommentsSidebar.test.tsx src/sw/browser/presentation/WriterCommentDeletion.test.tsx src/sw/browser/presentation/WriterMenuBar.test.tsx src/sw/source/filter/xml/odt-annotation.test.ts`. Result: 40 passed across five files, including cancel, seed formatting, multiple note updates, combined font size and escapement, and grouped undo/redo.
+      - Command: `npm run test:shared -- src/editeng/source/editeng/native-engine-object.test.ts src/editeng/source/editeng/native-edit-char-attrib.test.ts`. Result: 30 passed across two files, including the original character defaults and a partially covered hard range.
+      - Command: `npm run build:single-threaded --workspace @vite-office/office` and final `npm exec --workspace @vite-office/office -- vite build`. Result: typecheck and production build passed with existing bundle advisories.
+      - Command: `node_modules/.bin/playwright test writer-search.spec.ts --config=output/playwright/writer-rich-comments-chrome.config.ts --project=writer --workers=1`. Result: two passed against the final production preview. The first Chrome run detected an accessible name that included the Close control; the dialog now exposes Character as its name and focuses Font on opening.
+      - Command: `npm run check:writer-resources`, `npm run check:dependencies`, `npm run check:source-tree`, `npm run check:source-provenance`, `npm run inventory:parity:writer`, scoped ESLint and Prettier, `ap doctor`, `node .agentplane/policy/check-routing.mjs`, and `git diff --check`. Result: source and resource checks passed, with the existing doctor shim warning.
+      - Command: `npm run check:docs` and `npm run check:file-size`. Result: baseline failures remain outside changed files (307 JSDoc findings and five oversized files).
+
+      Parent task remains in progress. This checkpoint does not advance the ten-task full regression counter.
+  -
+    author: "CODER"
+    body: |-
+      Verified the annotation selection Character checkpoint against pinned SwAnnotationShell::Exec/ExecPost, the FontDialog/FontEffectsDialog/FontPositionDialog SDI declarations and the original Character dialog tabs. Format > Character opens when an annotation owns dispatch and keeps its EditEngine range across the modal focus transfer. The single-note path applies accepted output items to that range. The bulk action continues to merge input and output and works over all mounted notes. The Page string item retains its native identity, and typed EditEngine attribute requests can run without a dialog. The body-text Character dialog and advanced annotation tab controls remain outside this checkpoint.
+
+      - Command: `npm run test:writer -- src/sw/browser/presentation/WriterCommentFormatAll.test.tsx src/sw/browser/presentation/WriterCommentsSidebar.test.tsx src/sw/browser/presentation/WriterMenuBar.test.tsx src/sw/uiconfig/swriter/menubar/menubar-commands.test.ts`. Result: 36 passed in four files. Covers selection and focus restoration, single-note undo, original Page and fixed tab routes, direct item arguments and preceding bulk behavior.
+      - Command: `npm run build:single-threaded --workspace @vite-office/office` and `node_modules/.bin/playwright test writer-search.spec.ts --config=output/playwright/writer-rich-comments-chrome.config.ts --project=writer --workers=1`. Result: typecheck and production build passed with existing Vite advisories. Both Chrome scenarios passed against the final preview.
+      - Command: `npm run check:writer-resources`, `npm run check:dependencies`, `npm run check:source-tree`, `npm run check:source-provenance`, `npm run inventory:parity:writer`, scoped ESLint and Prettier, `ap doctor`, `node .agentplane/policy/check-routing.mjs`, and `git diff --check`. Result: passed with the existing AgentPlane hook shim warning.
+      - Command: `npm run check:docs` and `npm run check:file-size`. Result: baseline failures remain outside changed files (307 JSDoc findings and five oversized files).
+
+      Parent task remains in progress. This checkpoint does not advance the ten-task full regression counter.
+  -
+    author: "CODER"
+    body: |-
+      Verified the body-text Character checkpoint against pinned sw_CharDialog, sw_CharDialogResult, SwCharDlg and ConvertAttrCharToGen/ConvertAttrGenToChar. The original general, Font Effects and Position slots read mixed or uniform Writer attributes, retain the original selection ring across the asynchronous dialog and pass accepted Writer items through SetAttrSet. The standard and annotation modes share the same presenter while retaining their separate item identities. Character spacing uses the native signed kerning item in both modes. Character background displays visible imported highlighting and clears the imported highlight and shading marker only when the dialog returns a background delta. The Borders page, advanced typographic controls and the native paragraph-auto-update branch remain outside this checkpoint.
+
+      - Command: `npm run test:writer -- src/sw/browser/presentation/WriterCommentFormatAll.test.tsx src/sw/browser/presentation/WriterCommentsSidebar.test.tsx src/sw/browser/presentation/WriterMenuBar.test.tsx src/sw/browser/presentation/WriterSearchFormatting.test.tsx src/sw/source/core/edit/native-character-shell.test.ts src/sw/source/uibase/utlui/native-pointer-items.test.ts`. Result: 64 passed in six files, including mixed-size range formatting, signed spacing, background conversion and shared selection/history behavior.
+      - Command: `npm run build:single-threaded --workspace @vite-office/office` and `node_modules/.bin/playwright test writer-search.spec.ts --config=output/playwright/writer-rich-comments-chrome.config.ts --project=writer --workers=1`. Result: production build and typecheck passed with existing Vite advisories. Both Chrome scenarios passed, including opening the Character command from Format, applying a new size, restoring body focus and undoing the format change.
+      - Command: `npm run check:writer-resources`, `npm run check:dependencies`, `npm run check:source-tree`, `npm run check:source-provenance`, `npm run inventory:parity:writer`, scoped ESLint and Prettier, `ap doctor`, `node .agentplane/policy/check-routing.mjs`, and `git diff --check`. Result: passed with the existing AgentPlane hook shim warning.
+      - Command: `npm run check:docs` and `npm run check:file-size`. Result: baseline failures remain outside changed files (307 JSDoc findings and five oversized files).
+
+      Parent task remains in progress. This checkpoint does not advance the ten-task full regression counter.
+  -
+    author: "CODER"
+    body: |-
+      Verified Writer Character dialog checkpoint. The standard Character dialog reuses SvxBorderTabPage and the shared browser border controls. The shell applies the original character box item to the selected text with existing history. The browser projects physical border lines and distances, and ODT preserves the same item through UNO character border properties and loext text attributes with legacy import aliases.
+
+      Evidence: 74 targeted Writer tests in six files, five shared ODF property-map tests, two Writer resource tests, and both Writer search/annotation scenarios in production Chrome passed. The Chrome scenario verifies the standard Character dialog, computed border, focus return, and undo. Build/typecheck, scoped ESLint and Prettier, module boundaries, source provenance, source tree, Writer parity inventory, policy routing, and git diff --check passed. ap doctor retained its previous hook shim warning. Repository-wide JSDoc reports 307 existing findings, and file size reports four unrelated existing files at its limit. The updated UNO map now passes the file-size gate.
+
+      Character shadow, complex stroke appearance, and native line layout parity remain outside this checkpoint. This is a verified implementation checkpoint in the ongoing Writer task, with no task closure or full regression count increment.
+  -
+    author: "CODER"
+    body: |-
+      Verified Writer search checkpoint. The source-derived tests for range bounds, paragraph anchor rings, capture replacement, grouped undo/redo, and shared capture offsets now run with the same ECMAScript matcher used in the Writer session. Eleven previously probe-gated scenarios execute on the normal test path. The six original soft-hyphen syntax probes remain optional, including ICU-specific pattern spellings. The production matcher is unchanged.
+
+      Focused verification: Writer cursor, selection, replacement and annotation search (91 passed, six optional ICU cases skipped); Writer browser search and menu (20 passed); shared search and browser matcher (137 passed). Scoped ESLint, Prettier and git diff --check pass. The overall task remains open, including body replacement in paragraphs with existing field markers.
+  -
+    author: "CODER"
+    body: |-
+      Writer search and replacement checkpoint. Body Replace All now accepts matches before and after a represented annotation. The document preserves the marker, note content, and registered span through the edit and first Undo/Redo. For adjacent paragraph boundaries, sw_JoinText now calls the original JoinNext text-node owner and transfers live attributes. The portable paragraph split/join history caller retains its existing snapshot contract, and both paths share the original direct-format preparation.
+
+      Targeted evidence: nine Writer suites (1101 passed, six optional ICU probes skipped) cover the view, native search and replacement, paragraph joins, text formatting, and delete/split history. The final view suite passes six tests, including the consumed history on the second Undo, documented as an extension of WRITER-010 with pinned native source evidence. TypeScript, the production build, and all three production Chrome search scenarios pass. The new Chrome scenario applies Replace All to both body matches, observes the live comment, and restores the body with a single Undo. Scoped ESLint, Prettier, git diff --check, resources, dependencies, source tree, provenance, Writer/shared parity inventories, policy routing and doctor pass. Global JSDoc and file size retain 307 and four existing findings respectively. Provenance and runtime records now describe the shipped ECMAScript matcher and cite the actual running tests.
+
+      Matches that consume the annotation marker remain an open part of structured replacement. This checkpoint does not close the task or increment the full regression cadence.
+  -
+    author: "CODER"
+    body: |-
+      Writer search checkpoint. A body match spanning an annotation marker now uses the native ReplaceText sequence: erase the point attribute while processing dummy characters, then replace the remaining text. DelContentIndex saves a covered annotation mark in the ordinary mark-history prefix. The existing text-field entry restores the comment first, so mark history can bind its original range to the restored field. Model tests cover point and ranged annotations, including repeated Undo/Redo for the ranged case. The normal browser command removes the covered comment and one Undo restores it. Preserved the native forward scan over adjacent markers and documented the skipped second field under WRITER-732.
+
+      Verification: 129 tests pass in eight targeted Writer suites. Six optional ICU-specific probes are skipped. All four production Chrome search and annotation scenarios pass. Production build, independent final typecheck, scoped lint and formatting, git diff --check, dependency boundaries, source provenance and tree, Writer resources, and policy routing pass. AgentPlane doctor reports zero errors with the existing hook shim warning. The repository-wide JSDoc and file-size gates retain 307 and four prior findings respectively.
+
+      Inline-fly replacement and other unrepresented structured content still use their existing admission checks. The open search task and full-regression cadence retain their current status.
+  -
+    author: "CODER"
+    body: |-
+      Writer search and replacement checkpoint. A covered as-character graphic now enters DelContentIndex fly history before ReplaceText. The history entry retains the original frame format and transfers the actual graphic section into Writer undo storage. Undo restores the same graphic section and reinserts its point hint. Replacement coordinates retain the native offset between original and current node numbers while graphic sections are detached. Model regressions cover adjacent matches, forward and backward covered matches, two Undo/Redo cycles, original node/format identity, and disposal when the history is cleared. A Writer UI regression runs Find and Replace against the mounted inline image and verifies the image returns on Undo.
+
+      Verification: 148 tests pass in ten focused suites and six optional ICU probes remain skipped. The production TypeScript and Vite build and all four Writer Chrome search smoke scenarios pass. Dependency boundaries, source provenance and tree, Writer resources and inventory, doctor, policy routing, lint, formatting, and git diff --check pass. The repository-wide JSDoc and file-size checks retain their 307 and four existing findings. The new undo owner has mapped provenance and unverified full semantic parity. The implemented history is bounded to as-character graphics with their live single-graphic sections. Floating objects and nested fly contents remain open. This checkpoint does not close the AgentPlane task.
+  -
+    author: "CODER"
+    body: |-
+      Writer replacement checkpoint for floating anchors. SwUndoSaveContent now follows the native Replace branches for covered character anchors and paragraph anchors on the boundary nodes. The format remains live. SwHistoryChangeFlyAnchor saves the original node and optional character offset and restores them after the text and paragraph boundaries have been restored. Search regressions verify forward and backward replacement, Undo/Redo, an anchor on the second paragraph of a joined boundary, and a floating image in the actual Find and Replace UI.
+
+      WRITER-733 records the source-derived change in anchor offset when redoing a backward replacement. The existing as-character graphic behavior and its UI assertions remain covered.
+
+      Verification: 152 targeted tests pass across the ten relevant suites. A test-only assertion originally ran after closing the view and was moved before teardown; the six-test UI suite passes on recheck. Six optional ICU probe cases are skipped. The production TypeScript and Vite build and all four Chrome search smoke scenarios pass. Dependency boundaries, source provenance and tree, Writer resources, Writer inventory, lint, formatting, policy routing, and git diff --check pass. AgentPlane doctor has the existing hook shim warning. The project-wide JSDoc and size checks still report their 307 and four pre-existing findings. The implementation covers same-paragraph and adjacent-paragraph replacement. This checkpoint leaves the overall search task active.
+  -
+    author: "CODER"
+    body: |-
+      Writer multi-paragraph edit checkpoint. The browser typing path uses the native delete-and-insert sequence for a selection spanning paragraphs. SwUndoDelete now saves supported floating text frames and graphics whose anchors belong to fully selected interior paragraphs before joining the boundary text nodes. SwUndoDelLayFormat retains the original special format and moves its real section to Writer undo storage. Undo restores the body paragraphs, fly section, object identity and anchor in the correct order. Redo removes the fly again. The model regression adapts the pinned testSetStringDeletesShape selection to the ordinary Writer shell and exercises both text and graphic content. A browser editor regression uses the actual beforeinput path with a rendered floating text story.
+
+      Verification: 1804 tests passed across eight focused Writer suites, including native deletion, split history, graphics and search replacement. The production build and six Chrome search and style-history smoke scenarios pass. Scoped ESLint and Prettier, git diff --check, dependency boundaries, provenance, source tree, Writer resources and inventory, and policy routing pass. AgentPlane doctor retains its hook-shim warning and reports zero errors. The repository-wide JSDoc and file-size checks retain their 307 and four existing findings. The supported floating histories cover plain sections and graphics anchored to fully selected middle paragraphs. Nested fly content and section mark history remain open. This checkpoint leaves the search task active.
+  -
+    author: "CODER"
+    body: |-
+      Verified Text Flow checkpoint for Find and Replace. The format dialog now binds Allow to split, orphan control and widow control to the existing Writer paragraph items, with the pinned native checkbox cycle, sensitivity handlers, 2–9 line fields and explicit zero output. Keep with next paragraph is disabled by FormatHdl_Impl. The original asymmetric widow/orphan sensitivity remains as documented in WRITER090. Mounted UI evidence covers search by combined criteria, field drafts, page reset, replacement with zero and grouped Undo.
+
+      Targeted Writer run passed 147 tests in 14 files, with six existing native ICU host-probe cases skipped. Four production Chrome search scenarios passed. Production TypeScript and Vite build, Writer resource checks, dependency and source-tree checks, provenance, Writer registry parity (zero violations), scoped ESLint and Prettier, routing and diff checks passed. Repository-wide JSDoc and file-size checks still report 307 existing documentation errors and four existing files at the limit. AgentPlane doctor passed with the existing hook-shim warning.
+
+      This checkpoint keeps the search task open. It does not advance the ten-task full-regression cadence.
+  -
+    author: "CODER"
+    body: |-
+      Verified Font Effects emphasis checkpoint for Writer search. The pinned style and placement selectors edit one SvxEmphasisMarkItem, preserve the placement while switching styles, and restore it upon reopening or resetting the page. Search criteria use the pinned item summary strings and distinguish marks above and below. The editable Writer document projects the effective item from its existing attribute iterator and paints emphasis with browser CSS. The browser supplies glyph geometry and uses a filled sesame mark for the native accent style.
+
+      The UI test adapts the Dot and Below Text reopen check from formatCharacter.py and exercises exact matching, explicit None, visible paint, grouped Undo and Redo. The production Chrome test applies a mark below text through Replace All and verifies computed style and Undo. The final Writer run passed 215 tests in 17 files, with six existing native ICU host-probe cases skipped. All five Chrome search scenarios passed. The production build, dependency and source-tree checks, provenance, Writer resources and registry parity, scoped lint and formatting, doctor, routing, and diff checks passed. The repository-wide JSDoc and file-size checks retain 307 baseline JSDoc errors and four existing files at or above their limit.
+
+      The active search task stays open. This checkpoint does not increment the ten-task full-regression cadence.
+  -
+    author: "CODER"
+    body: "Follow-up verification caught TypeScript TS7053 in the paint lookup. The sparse CSS style map now accepts integer mask results and preserves absence for unmapped values. The final TypeScript and production Vite build passed, all five production Chrome scenarios passed again, and the direct emphasis/editor rerun passed 12 tests. The earlier 215-case related run passed before this type-only correction."
+  -
+    author: "CODER"
+    body: |-
+      Verified the separation between the pinned Writer search dialog ranges and the broader cursor search ranges. Attributes uses the document pool slots and the original page-model slot range, while Format applies the same dialog ranges plus the brush and fill ranges. The cursor preserves the native character and model comparison partitions. Tests verify tab-stop and keep-with-next presence together, absence of Page Break and the pair-kerning label from Attributes, discarded pair-kerning output from Format, and the Page Style behavior with text alone and with another attribute. The upstream observations are recorded under WRITER-701 and WRITER-734. Hyphenation and paragraph page line-spacing are inside the native dialog ranges, but the current Writer pool has no registered items for those two attributes.
+
+      The final Writer run passed 148 tests across 15 files with six existing native ICU host-probe skips. TypeScript and the production Vite build passed, and all five production Chrome search scenarios passed. Dependency, source tree, source provenance, Writer identities and resources, Writer registry parity, scoped lint and format, routing and diff checks passed.
+
+      Existing repository-wide JSDoc and file-size checks still report 307 documentation issues and four files at or above the limit. AgentPlane doctor retains its existing hook-shim warning. The search task remains open and this checkpoint does not advance the ten-task full-regression cadence.
+  -
+    author: "CODER"
+    body: |-
+      Verified the Writer page line-spacing attribute checkpoint. The pinned SwRegisterItem owns a false default and preserves its type through the paragraph/style pool, UNO ParaRegisterModeActive, and the existing document transfer. ODF style:register-true preserves both named-style participation and explicit automatic-style overrides, including false. The ordinary ODT Open test confirms direct-only search by Page line-spacing and the inherited match when Including Styles is selected. The pinned Format dialog does not enable the register checkbox. Page-style reference selection and physical baseline-grid layout are outside this checkpoint.
+
+      The UNO text-default schema regression now accounts for the eight native character-border rows already exposed by a7cddb231 and the new register row. The ODF and UI run passed 25 other checks and the corrected schema suite passed all three checks. All 13 related shared ODF tests passed. The search run passed 141 tests in 15 files with six existing native ICU host-probe skips. The final TypeScript and Vite production build and all five Chrome search scenarios passed. Dependency, source-tree, provenance, Writer identities and resources, registry parity, scoped lint and formatting, routing, and diff checks passed. Existing JSDoc and file-size checks retain 307 baseline JSDoc issues and four existing oversized files. AgentPlane doctor retains its existing hook-shim warning.
+
+      The search task remains open. This checkpoint does not advance the ten-task full-regression cadence.
+  -
+    author: "CODER"
+    body: |-
+      Verified the Writer search hyphenation checkpoint. The original SvxHyphenZoneItem preserves its 17 fields, the Writer-specific zero maximum, and native UNO integer conversion. Writer owns the paragraph item and its style and transfer forms. The existing ODF mapping preserves the source FO and LibreOffice extension attributes. The ODF round-trip test adapts the 0/7 character and 0/567 twip assertions from tdf149324 and tdf149420.
+
+      Find and Replace now shows Hyphenation in Attributes and the original two hyphenation groups on Text Flow. An exact criterion retains the line and compound limits, word and caps flags, five zones, boundary cascade and Move Line behavior. Tests verify exact matching, paragraph replacement and Undo. WRITER-735 records and preserves native byte and word narrowing. Dictionary-driven layout remains outside this search checkpoint.
+
+      The focused Writer run passed 138 tests in 16 files and the shared run passed 16 tests in five files. The production Vite/TypeScript build, final standalone typecheck and all six Chrome search scenarios passed. The dependency, source tree, provenance, Writer identities and resources, scoped lint and format, registry parity, doctor, routing and diff checks passed. Repository-wide JSDoc and file-size checks retain 307 baseline documentation issues and four existing oversized files. Doctor retains the existing AgentPlane hook-shim warning.
+
+      The task remains open and this intermediate checkpoint does not advance the ten-task full-regression cadence.
+  -
+    author: "CODER"
+    body: |-
+      Verified a Writer character-emphasis and search checkpoint. The standard Character dialog reuses the existing native emphasis selectors, submits a concrete Writer item and restores the selected style and position on reopen. Writer UNO and the shared ODF map now carry CharEmphasis and style:text-emphasize with the source short constants, token order, optional placement and invalid-token behavior. The Worker graph now restores the concrete emphasis item. Ported the emphasis portion of formatCharacter.py and the selection-only start-anchor scenario from tdf144089.py, with a corresponding end-anchor regression.
+
+      Targeted Writer verification passed 97 tests in 11 files. Six optional native ICU host-probe scenarios were skipped by the runner because the host probe was not configured. Targeted shared verification passed 9 tests in 2 files. All six production Chrome search scenarios passed, including export and reopen with the emphasis intact after redo. Production typecheck and Vite build, scoped ESLint and Prettier, module boundaries, source tree and provenance, Writer resources, Writer and shared registry parity (zero semantic violations), routing and diff checks passed. The first iteration exposed the missing Worker constructor and an incorrect property-map tuple; both were corrected and the related tests reran successfully.
+
+      Repository-wide documentation and file-size gates still report the existing 307 JSDoc issues and four files at the size limit. No changed path appears in either failure list. AgentPlane doctor passed with the existing hook-shim warning. The task stays open and the ten-task full-run counter is unchanged.
+  -
+    author: "CODER"
+    body: |-
+      Verified an annotation Font Effects checkpoint. The Character dialog now uses the original EditEngine emphasis WhichId in annotation mode, and normal body and annotation text share the same CSS projection for the existing native style/position flags. CharEmphasis is bound to the original EditEngine UNO member from include/editeng/unotext.hxx, so the ODT import can restore the emphasis exported by the existing text mapping. The existing Worker annotation graph retains the native range and concrete item type.
+
+      Seven targeted Writer suites passed 60 tests, including selected-note formatting and grouped undo, surrounding text and neighboring note isolation, Worker and ODT round-trip, ordinary Writer search emphasis, and the shared character projection with a sparse pool. The projection reads optional authored emphasis without requiring an emphasis default in older or restricted pools.
+
+      Production TypeScript and Vite build passed. All six production Chromium search scenarios passed, including emphasis applied through Format All Comments and removed in one Undo. Scoped ESLint and Prettier, source tree and provenance, module boundaries, Writer UI resources and registry parity, workflow routing and diff checks passed. The global JSDoc and file-size gates still report the existing 307 findings and four files at or above the size limit. AgentPlane doctor passed with the existing hook-shim warning. This is an implementation checkpoint on the existing search task. The ten-task full-run cadence is unchanged.
+  -
+    author: "CODER"
+    body: |-
+      Verified Writer Font Effects line formatting across the regular Character dialog, annotation Character dialog, search replacement, and ODT. The two decorations keep independent styles and colors. Both dialogs use the original native item identities, preserve the other fields when one field changes, and disable the color palette for an absent line. Automatic line color uses the text foreground. Annotation, body, and Worker paths retain the native line items.
+
+      ODF uses the original shared underline/overline lexical handlers with separate merge state in SAX order. Writer and EditEngine import apply the original CharOverline, CharOverlineColor and CharOverlineHasColor property members. WRITER-736 records the pinned export filter's asymmetric handling of the color of a disabled underline and overline. Verification covers selected comment formatting and isolation, Undo, ODT and Worker retention, and a named character style with direct NONE across export.
+
+      The first local verification caught a missing color-helper import, a text-line handler name colliding with the UNO paragraph LineSpacing type helper, and a test file crossing the file-size limit. Corrected the imports and handler name, and moved the dedicated ODT assertion into the ODT suite. The Writer task remains active and this checkpoint does not advance the ten-task full-run cadence.
+
+      Targeted verification passed 93 Writer scenarios across the selected suites and 7 shared ODF property tests. Production TypeScript and Vite build passed. Six existing production Chromium scenarios passed and the newly added independent line colors scenario passed in the focused rerun after correcting its palette swatches. It checks the regular Character dialog, disabled color selector, ODT download/reopen, and automatic color following the foreground.
+
+      Scoped ESLint and Prettier, dependency boundaries, source tree and provenance, Writer resources, Writer/shared registry parity (zero semantic violations), routing and diff checks passed. Global documentation and file-size checks report the same pre-existing 307 findings and four files at the size limit. AgentPlane doctor passed with the existing hook-shim warning.
+  -
+    author: "CODER"
+    body: |-
+      Verified the Writer Font Effects word-line mode checkpoint. Standard Character, annotation Character and search formatting use the existing native word-line items and the original checkbox sensitivity and mixed-state cycle. Word lines paint underline, overline and strikeout on the nonspacing text only. The browser groups text using Unicode White_Space, the same classification CommonSalLayout uses when marking spacing glyphs for ImplDrawTextLines. It preserves every original text unit and does not insert synthetic whitespace. Existing ODF and Worker contracts carry the item's native bool.
+
+      Evidence includes the normal mixed-state cycle, restoration of a nonbreaking space and the prior range formatting through Undo, formatted text search replacement and its ODF property, formatting all annotations with one Undo, and regular document underline/overline with independent colors and word mode across Writer export and reopen. Source contracts inspected are SvxCharEffectsPage, weld::TriStateEnabled, SvxSearchDialog::FormatHdl_Impl, CommonSalLayout and OutputDevice::ImplDrawTextLines. No newly suspected native issue was found in this scope.
+
+      Targeted verification passed 55 Writer tests in 7 suites and all 7 Writer search/comment scenarios in production Chromium. TypeScript and Vite build, scoped ESLint and Prettier, module boundaries, source tree and provenance, Writer resources, registry parity with zero semantic violations, routing and diff checks passed. The browser fragment operation was recorded in the runtime inventory. Repository-wide documentation and size checks still report the existing 307 JSDoc findings and four files at or above the size limit. AgentPlane doctor passed with the existing hook-shim warning. This checkpoint leaves the task active and the ten-task cadence unchanged.
+  -
+    author: "CODER"
+    body: |-
+      Verified the Writer character case-effect checkpoint. Character and annotation dialogs submit the existing SvxCaseMapItem, and ordinary text, annotation text, and formatted replacement display the effect while retaining the original editable UTF-16 text. The original Writer and EditEngine CharCaseMap property records connect the shared ODF font-variant and text-transform handlers to document, style, and annotation import/export. The Worker graph retains native items.
+
+      Browser paint uses CSS uppercase, lowercase and small caps. Title case follows the original ASCII space/tab scan and UTF-16 unit rule, including the regular Writer paragraph context and the length-changing snippet restart in WRITER-737. Browser CSS supplies glyph shaping and the capitalization locale for the represented effects.
+
+      The first verification run exposed missing test imports and an overly wide CSS style type, which were corrected. This is an implementation checkpoint in the current Writer search task and the ten-task cadence remains unchanged.
+
+      Verification passed 103 targeted Writer tests, 15 shared tests, and 8 production Chromium scenarios. The new Chromium scenario uses Character title case across ODT reopen, then applies small capitals using formatted search replacement. TypeScript and Vite build, scoped ESLint and Prettier, dependencies, source tree and provenance, Writer resources, Writer and shared registry parity (zero semantic violations), routing and diff checks passed. Repository-wide documentation and file-size checks still list the pre-existing 307 JSDoc findings and four files at or above the size limit. AgentPlane doctor passed with the existing hook-shim warning.
+  -
+    author: "CODER"
+    body: |-
+      Verified the Writer Font Effects outline, shadow and relief checkpoint. The regular and annotation Character dialog uses the native SvxContourItem, SvxShadowedItem and SvxCharReliefItem, and the search dialog keeps the corresponding mixed-state controls. Relief disables the two checkboxes while retaining their values. The document and annotation projections share the VCL effect precedence and color selection. The CSS renderer uses nominal screen offsets for stroke and shadow paint.
+
+      Writer UNO and the annotation TextRange map now carry CharContoured, CharShadowed and CharRelief through native items. Shared ODF uses the original boolean outline, the existing XMLShadowedPropHdl and the native font-relief tokens. WRITER-738 records the native shadow handler's acceptance of any value except exact none. The core paints through its EditEngine relief item contract and the browser owns CSS.
+
+      Evidence covers selected comment formatting and its Worker and ODT round-trip, the relief property alongside persisted outline and shadow, and ordinary Character controls and formatted replacement. This checkpoint leaves the current Writer search task and the ten-task cadence active.
+
+      Targeted checks passed 53 Writer tests and 15 shared tests. Production TypeScript and Vite build and all 9 Writer Chromium scenarios passed. Scoped lint and formatting, module boundaries, source tree, source provenance, Writer UI resources, Writer/shared registry parity with zero semantic violations, routing and diff checks passed. Repository-wide documentation and file-size checks still show the existing 307 findings and four files at or above the size limit. AgentPlane doctor passed with the existing hook-shim warning.
+  -
+    author: "CODER"
+    body: |-
+      Verified checkpoint — Writer Character Position
+
+      - Connects the standard and annotation Position pages to native escapement (automatic and manual, relative size) and pair-kerning items. Renders the chosen values in document text and comments. New Writer documents use the native document-shell kerning default, which survives the Worker graph and ODT text defaults. Existing documents retain their serialized default or model fallback.
+      - Adds the ODF rotation angle, rotation fit flag and character width transport through native property handlers and Writer item/UNO mappings. Records the counterintuitive rotation scale mapping as WRITER-739. Ordinary rotation and scaling controls, their browser layout and Fit to Line geometry still require implementation.
+      - Source contracts checked against cui/source/tabpages/chardlg.cxx, cui/uiconfig/ui/positionpage.ui, sw/source/uibase/app/docshini.cxx, sw/source/core/text/atrstck.cxx, editeng/source/editeng/impedit3.cxx, sw/qa/uitest/writer_tests2/formatCharacter.py and xmloff/source/text/txtprhdl.cxx.
+      - Passed focused Vitest groups (93 distinct Writer tests, 16 shared tests), scoped formatting and lint, Writer resource, dependency, source tree and provenance checks, Writer and shared inventory checks, AgentPlane doctor and policy routing. Global JSDoc reports the same 307 existing findings. File-size checks report three existing violations outside the changed files. No full run at this checkpoint.
+      - Production build passed with the single-threaded TypeScript checker. Nine unchanged Chromium search and rich-format scenarios passed together. The final Position regression passed separately and verifies manual rise and font size, saved pair kerning on selected text, the inherited kerning of the surrounding document, and reopening the Character page through the browser after ODT export/import.
+  -
+    author: "CODER"
+    body: |-
+      Verified checkpoint — Writer Character rotation and scaling
+
+      - Writer Character now exposes the native 0°, 90° and 270° choices, width percentage and the Fit to Line checkbox. Annotation Character exposes scaling through the independent EditEngine width item. Applies native rotation and scale deltas to the active text and leaves mixed values alone until edited.
+      - The text shell supplies the original SID_ATTR_CHAR_WIDTH_FIT_TO_LINE input from the editing shell and the starting text frame. The core uses script and attribute boundaries, the physical unscaled width device, the widest selected hard line and the height of the formatted line. The unformatted path uses physical font height. The browser paints one real text tree, accounts for the changed advance and measures rotated text as a single line portion.
+      - Source contract matched against editeng/editids.hrc, cui/source/tabpages/chardlg.cxx, sw/source/uibase/shells/textsh1.cxx, sw/source/core/edit/edattr.cxx, sw/source/core/text/itratr.cxx and sw/qa/uitest/writer_tests2/formatCharacter.py. Native field and footnote width contributions, merged redline text frames and fully differential complex rotated layout remain unverified.
+      - Passed 67 related Writer tests (7 files), scoped lint and format, source provenance and dependency validation, Writer resources, required source tree, Writer parity inventory (zero semantic violations), AgentPlane doctor, routing and diff checks. Global JSDoc and file-size checks retain their existing 307 and 3 unrelated findings. No full repository run at this checkpoint.
+      - Two shared test files passed (13 tests). Production typecheck and Vite build passed. All 11 Chromium Writer search and Character scenarios passed against the final build.
+  -
+    author: "CODER"
+    body: |-
+      Verified checkpoint — Writer Character hyphenation and optical sizing
+
+      - Adds the native Hyphenation and Optical Font Sizing groups to Character Position. Applies the original character exclusion and sizing items to the selection, with annotation optical sizing bound to the separate EditEngine item.
+      - Projects document paragraph hyphenation and the effective Writer language to the browser's hyphenation device. A character exclusion uses explicit/manual opportunities only. Opt-in optical sizing uses the browser font axis in body and comment runs.
+      - Preserves the two controls through Writer's native UNO maps, typed Worker factories and ODT. Maps character fo:hyphenate through XML_TYPE_NBOOL independently of its positive paragraph mapping. Maps loext:font-optical-sizing to the original auto/none tokens. New document optical sizing is set by the document shell and survives Worker and ODT defaults. Old documents without the attribute keep the original false default.
+      - Includes source-backed coverage for tdf106733 character-style inheritance and testOpticalSizing1/testOpticalSizing2 defaults and explicit values. Browser dictionary coverage and advanced LibreOffice hyphenation layout constraints remain distinct from the implemented item transport and browser CSS binding.
+      - Passed 45 Writer tests, 25 shared tests, scoped ESLint/Prettier, source boundaries and provenance, Writer resources and inventory, source tree, doctor, routing and diff checks. Global JSDoc and size checks retain the existing 307 and 3 unrelated findings. Full repository test cadence stays unchanged.
+      - Production TypeScript/Vite build and three focused Chromium scenarios passed. The hyphenation scenario enables paragraph hyphenation through the native Text Flow UI, excludes the selected word, changes its optical sizing and checks the real computed styles on adjacent text.
+  -
+    author: "CODER"
+    body: |-
+      Verified checkpoint — Writer Paragraph Text Flow hyphenation
+
+      - The standard Paragraph dialog and Search Format use the same source-backed Hyphenation and Hyphenation Across controls. The paragraph command supplies the selection's uniform SvxHyphenZoneItem or native invalid state. Edits survive tab changes and contribute the original typed item to the shared paragraph output set.
+      - A typed-page-only change applies exactly those items in one history step. A mixed paragraph selection retains distinct unrelated spacing. Existing Tabs and scalar paragraph controls still use the same command and apply path.
+      - Writer projects the native minimum word size and required lead/trail characters through the browser's hyphenate-limit-chars property. Full advanced LibreOffice dictionary, consecutive-line and page/column/spread balancing behavior remains outside the browser device binding.
+      - Source reviewed against SwTextShell Paragraph command in textsh1.cxx, SvxExtParagraphTabPage::Reset/FillItemSet/HyphenClickHdl and its native textflowpage.ui.
+      - Passed 59 targeted Writer tests across seven files and the focused Chromium search/paragraph/character hyphenation scenario. Production TypeScript/Vite build, scoped lint and format, boundaries, resources, source tree, provenance, Writer inventory and AgentPlane routing passed. Global checks retain 307 existing JSDoc findings and three unrelated file-size findings. The full regression cadence is unchanged.
+  -
+    author: "CODER"
+    body: |-
+      Writer Paragraph Alignment checkpoint
+
+      - The ordinary Paragraph command exposes the upstream Alignment position in the tab order. The page edits the complete SvxAdjustItem and independent SvxParaVertAlignItem. The native exchange preserves mixed selections, runs one history entry and applies only the edited typed items.
+      - Body presentation uses the native browser text-align and text-align-last values. Named and automatic ODT styles preserve physical and logical horizontal alignment, last-line alignment, single-word expansion, justification metrics and Paragraph Composer. The UNO map uses the original SvxAdjustItem member IDs.
+      - Targeted Writer paragraph-dialog, search-formatting, DOM paragraph paint, ODT and UNO test group passed 71 tests in seven files. A follow-up run passed 15 tests in the two native paragraph/dialog files, including the added mixed-selection regression. One Chromium test passed for the ordinary Format > Paragraph command, center last-line rendering, dialog reopening and Undo.
+      - Writer resources and the two generator tests, source provenance, source tree, module boundaries, AgentPlane routing, scoped ESLint, Prettier and git diff checks passed. Repository-wide JSDoc and file-size checks still report pre-existing issues. No failures are in the changed files.
+      - Direction and snap-to-grid controls are outside this checkpoint. Exact typographic effects of text-to-text alignment and advanced justification remain open. This is an implementation checkpoint on the active task. It does not advance the ten-closed-task test cadence.
+  -
+    author: "CODER"
+    body: |-
+      Writer paragraph writing direction and grid checkpoint
+
+      - The Alignment page exchanges independent frame direction, automatic direction and snap-to-grid items, retaining mixed selections. Native default values and WhichIds come from the Writer pool. Named and automatic ODT styles and the existing snapshot factory retain the three items.
+      - First-strong detection uses the existing Unicode bidi lookup and the pinned GuessParagraphDirection switch. Ordinary typing, grapheme deletion and supported paragraph joins record direction with the text undo operation. The browser receives the effective inherited or authored direction.
+      - For an active page text grid, the projected base line box uses the CalcRealHeight grid pitch and native fixed/minimum line-height rules. The browser still measures its own glyphs, and its current grid projection does not implement per-portion character-grid kerning or adjustments specific to non-first grid lines.
+      - Targeted Writer verification passed 855 tests for real dialogs, layout, document transport, defaults and deletion. Follow-up runs passed 808 tests for final Writer editing and dialog changes and 23 tests covering format-search and persisted Which IDs. Shared Unicode tests passed 22 assertions. The Chromium scenario verified visual last-line alignment, manual RTL and retained direction after typing. The production build passed.
+      - Module boundaries, source structure and provenance, Writer resources, Writer parity inventory, routing, AgentPlane doctor, scoped ESLint and Prettier, and git diff checks passed. The global documentation and file-size checks report pre-existing issues outside these changes.
+      - The pinned FSI case is preserved and documented. The intermediate checkpoint leaves the active task open and does not advance the ten-task full-run count.
+  -
+    author: "CODER"
+    body: |-
+      Writer Asian Typography checkpoint
+
+      - The ordinary Paragraph dialog opens the Asian Typography page after Text Flow, as in the pinned Writer dialog. Forbidden characters, hanging punctuation and spacing between Asian and non-Asian text keep their separate native defaults, mixed states and undo records.
+      - The Writer cursor, paragraph style and text default property maps use the original three UNO names. ODF named boolean handlers preserve the original vocabulary, inherited style settings, direct overrides and invalid-token behavior.
+      - Browser paragraph layout uses CSS line breaking, text autospace and hanging punctuation. Chrome accepted text-autospace normal and no-autospace and showed a width difference in a mixed text probe. The tested Chrome did not implement hanging-punctuation. Browser line breaking uses CSS and does not consume the LibreOffice user-editable forbidden-character lists.
+      - Targeted Writer verification passed 80 tests in nine files, including the upstream dialog scenario, per-item mixed selection, ODT roundtrip and named-style inheritance. The Chromium scenario verified the ordinary dialog, CSS changes, reopening and undo. Production build, module boundaries, source checks, Writer resource checks, scoped ESLint and Prettier, Writer parity inventory, AgentPlane routing and doctor passed. Repository-wide JSDoc and file-size checks show existing failures outside this checkpoint.
+      - This checkpoint leaves the current AgentPlane task open. It does not advance the full-run count.
+  -
+    author: "CODER"
+    body: |-
+      Writer Outline & List checkpoint
+
+      - The ordinary Paragraph dialog exposes outline level, named list style, list level, synchronization with the outline, and the two original numbering-restart slots. The native heading-lock and missing mixed-level states participate in Reset. Numbering settings and other accepted paragraph deltas share one undo group.
+      - The numbering pool materializes the source built-in named rules and their original ten level formats in the application's ODF alignment mode. The stored numeric start value uses the native SwUndoNumRuleStart value form and the default-start sentinel.
+      - ODF writes the effective paragraph outline level on text:h and compares it with the assigned style during import. The regular dialog is covered through ODT reopening for a numbered start and a bullet with a direct outline level.
+      - Targeted Writer runs passed 106 tests in ten files. The Chromium scenario passed for applying the built-in numbered style, starting at 7, reopening the dialog and undoing both changes. The production build passed.
+      - Module boundaries, source tree and provenance, scoped lint and formatting, Writer resources and parity inventory, AgentPlane doctor and routing passed. Repository-wide JSDoc and size checks report existing failures outside this checkpoint.
+      - Editing a list-style definition and the per-paragraph line-number restart still require their respective owners. This is an intermediate checkpoint and does not close the current AgentPlane task or advance the full-run cadence.
+  -
+    author: "CODER"
+    body: |-
+      Verified intermediate Writer paragraph line-numbering checkpoint.
+
+      - The Outline & List page now exchanges the native paragraph line-number item with independent participation and restart values. It respects mixed selection, the native spin bounds and control sensitivity. The actual Writer layout applies a counted paragraph's chosen start to its master frame and continues through page follows.
+      - Pooled styles, the two native UNO properties and ODF paragraph export and import preserve both fields. An explicit ODF zero overrides an inherited restart. Existing boolean browser snapshots restore the participation flag and continue numbering.
+      - The initial focused run passed 72 cases in ten files. A final targeted run passed 46 cases across the paragraph dialog, layout, model and UNO in five files. The final ODF run passed 18 cases in two files, including inheritance. The production build and all three Chromium line-numbering scenarios passed.
+      - Writer resources, boundaries, source tree and provenance, parity inventory, scoped ESLint and Prettier, AgentPlane doctor and routing, and git diff --check passed. Repository-wide JSDoc and file-size checks still report existing findings outside the checkpoint.
+      - Editing a list-style definition through the Outline & List page remains pending. No AgentPlane task closure or full test run occurred. The updated cadence is one full run after ten closed tasks, with the goal remaining active after the run.
+
 events:
   -
     type: "status"
@@ -600,14 +947,455 @@ events:
     at: "2026-11-21T12:28:28.209Z"
     author: "CODER"
     body: "Verified checkpoint: an unsuccessful probe of an inactive annotation restores both its native and browser selections before continuing in body text. The mounted regression verifies non-BMP matching in a later comment paragraph, native literal regex replacement, multiline textarea edits, and document undo. WRITER-716 records the native annotation versus body capture-reference behavior. Passed 36 targeted Writer tests, five shared EditEngine and browser matcher tests, two Writer resource tests and the production build. Module boundaries, source tree and provenance, JSDoc, file size, scoped lint and formatting, diff, doctor and routing passed. No task closure or full-suite cadence increment."
+  -
+    type: "comment"
+    at: "2026-11-21T17:02:14.633Z"
+    author: "CODER"
+    body: "Verified continuation: recorded the user-approved annotation scope and browser RegExp in the task plan. The next full regression is due after ten completed tasks and does not stop the goal. Graphify identified the UNO, xmloff and graph transport owners. The pinned tdf147583_backwardSearch ODT now loads its annotated range, metadata and plain note paragraphs, survives structured clone and ODT save/reopen, and is searchable in a mounted Writer session opened through SwDocShell.Load. Passed 25 targeted tests, production build, two Writer resources, module boundaries, source tree and provenance, scoped ESLint and formatting, diff, doctor and routing. Repository-wide JSDoc and size gates still report 307 and five findings respectively on unchanged paths, zero on changed paths. New-comment command and richer comment formatting remain pending. No task closure or full-suite increment."
+  -
+    type: "comment"
+    at: "2026-11-21T17:15:30.480Z"
+    author: "CODER"
+    body: "Verified checkpoint: native FN_POSTIT is connected through Writer menu, standard toolbar and keyboard resources. Point and ranged insertion use the same content operation as UNO annotation attachment, preserve the selected body text, use the pinned Unknown Author fallback and focus the active window. Escape returns after consecutive annotation points. Document history rebinds later note text edits by the retained field ID after undo and redo recreate the comment. Adapted the supported insertion, default author and leave behavior of sw/qa/uitest/writer_tests/comments.py. Passed 44 focused Vitest cases in nine suites, then repeated all six browser comment unit cases after the final query typing adjustment. Two Chrome search scenarios and two resource checks passed, with production build, dependencies, source tree, provenance, scoped lint and formatting, diff, doctor and routing. The existing whole-repository JSDoc and physical file-size findings are outside the changed paths. Rich comment formatting is pending. No AgentPlane closure or full-suite cadence increment."
+  -
+    type: "comment"
+    at: "2026-11-21T17:23:41.852Z"
+    author: "CODER"
+    body: "Verified intermediate Writer annotation transfer checkpoint. The normal ODT Worker graph carries the native EditTextObject with paragraph and style metadata, mapped character and paragraph items, tab and line-break features and UTF-16 coordinates. Restoration uses an independently owned EditEngine pool and the existing concrete Writer value codecs. Legacy records retain their plain text fallback. A regression test on the pinned upstream annotation fixture exercises structured cloning, formatting and native equality. The three affected Writer suites passed 16 tests, and the Writer resource suite passed 2. Production build, scoped lint and formatting, dependency, source tree, provenance, routing, doctor and diff checks passed. Repo-wide JSDoc and file size still report existing findings outside the changed paths. Rich ODT XML, visible rich annotation editing and the remainder of the approved task remain open. No full regression run or task closure in this checkpoint."
+  -
+    type: "comment"
+    at: "2026-11-21T17:32:44.547Z"
+    author: "CODER"
+    body: "Verified intermediate ODT export checkpoint. Writer now projects annotation EditEngine text sections through the shared paragraph and automatic-style export passes, corresponding to the pinned txtflde.cxx TextRange collection and export calls. ODT output preserves represented inline formatting, paragraph alignment, tabs, soft line breaks and empty paragraphs. The browser comment editor now uses the Writer text edit source and shared DocumentImpEditEngine deletion logic. The pinned ODT fixture with a formatted native comment passes Writer Worker equality and content.xml assertions. Targeted Writer and shared runs each passed 29 tests; Writer resource suite passed 2. Production build, dependencies, source-tree, provenance, routing, doctor, scoped lint and format, and diff checks passed. Repo-wide documentation and size checks found only pre-existing problems outside these changes. Rich ODT re-import and browser formatting presentation remain pending. This is a checkpoint rather than task closure, and the ten-task full-run count is unchanged."
+  -
+    type: "comment"
+    at: "2026-11-21T17:45:23.705Z"
+    author: "CODER"
+    body: "Verified intermediate Writer annotation import checkpoint. The shared ODT paragraph parser switches to the detached annotation TextRange cursor, inserts text and structural controls into native EditEngine, applies represented item members, removes the parser's trailing separator and restores the containing cursor before the ordinary annotation attachment. The pinned annotation fixture verifies stable range and graph transport. Save/reopen verifies native UTF-16 spans, bold, underline, background color, centered alignment, vertical spacing, tab and line-break items and trailing empty paragraph. Shared export projects the represented paragraph spacing properties. The native SvxColorItem now owns MID_GRAPHIC_TRANSPARENT according to pinned textitem.cxx. Final focused runs passed 42 Writer and 34 shared tests plus 2 resource tests. Build, dependencies, source tree, provenance, scoped ESLint and Prettier, routing, doctor and diff checks passed. Repository JSDoc and size checks report existing issues outside the changed files. Named formatting is resolved to represented values. Lists, hyperlinks and visible rich annotation editing remain pending. The task remains open and the ten-task cadence is unchanged."
+  -
+    type: "comment"
+    at: "2026-11-21T18:12:02.055Z"
+    author: "CODER"
+    body: "Verified intermediate Writer annotation editing checkpoint. The existing sidebar window now presents native EditEngine paragraphs and character attributes in a browser editing host. Browser selection maps to native note positions while the document body keeps its separate shell selection. Beforeinput, clipboard text, composition, paragraph and soft line breaks, selected bold/italic/underline and undo use Writer history and the same field objects as search and ODT. Same-text formatting updates retain the selection, corresponding to SwAnnotationWin::SetPostItText. The primary Vitest run passed 33 cases and timed out on one Find Bar history case under load. The unchanged timed-out case passed in isolation, and all seven sidebar cases passed on final sources. Two focused browser tests passed on the final build in the already installed Chrome channel after the default Chromium executable was unavailable. Writer resources passed 2 cases. Production single-threaded build with type checking, dependencies, source tree and provenance, scoped ESLint and Prettier, doctor, routing and diff checks passed. Repo-wide JSDoc and file size report existing findings outside these changes. Full annotation toolbar/slot dispatch, hyperlinks, lists and complete formatting parity remain pending. No task closure or full-run count increment."
+  -
+    type: "comment"
+    at: "2026-11-21T18:22:41.314Z"
+    author: "CODER"
+    body: "Verified intermediate Writer annotation shell checkpoint. The active note selects SwAnnotationShell in the actual Sfx view stack based on the pinned view.cxx PostIt branch. Generated Writer formatting, Select All, refocus and history command IDs now act on the native note selection, with mixed and checked state, script-set font/height/weight/posture handling, underline, strikeout and paragraph alignment. Note input uses the same binding as toolbar controls and the body resumes its prior shell after focus returns. Browser paint follows EditEngine script segments. The affected Writer runs passed 45 and 18 tests in disjoint files. Two Writer resource tests and both production writer-search Chrome scenarios passed, including toolbar Bold and Undo in the note. Production single-threaded build, dependencies, source tree and provenance, scoped lint/format, routing, doctor and diff checks passed. Repo-wide JSDoc and file size report baseline issues outside the changed paths. The represented annotation slots do not cover the complete native annotation clipboard, list, hyperlink, color and dialog surface. The task remains open and the ten-task cadence is unchanged."
+  -
+    type: "comment"
+    at: "2026-11-21T18:30:04.496Z"
+    author: "CODER"
+    body: "Verified annotation color checkpoint against pinned SwAnnotationShell::Exec and GetState. The existing Writer toolbar and Character sidebar now route foreground and background palette choices to EE_CHAR_COLOR and EE_CHAR_BKGCOLOR on the active note. Uniform and mixed values, automatic and transparent resets, recent palette entries, range retention, undo, body isolation and ODT reopen are covered. The browser palette sends explicit choices through the existing Writer command payload. The native argument-free recent-color replay slot is outside this checkpoint. Four targeted Writer suites passed 24 tests, the generated resource suite passed two tests, and two Chrome end-to-end scenarios passed against the final production build. Build, dependencies, source tree and provenance, scoped ESLint and formatting, routing, doctor and diff checks passed. Repository-wide JSDoc and file-size checks retain their existing findings outside changed paths. This checkpoint does not close the parent task or advance the full-suite cadence."
+  -
+    type: "comment"
+    at: "2026-11-21T18:36:51.093Z"
+    author: "CODER"
+    body: "Verified annotation position and line-spacing checkpoint against SwAnnotationShell::Exec and GetState, and EditEngine line-spacing layout in impedit3.cxx. The original Writer position buttons dispatch to the active note's EE_CHAR_ESCAPEMENT, including automatic offsets and the native toggling behavior. The shared spacing popup sends a complete SvxLineSpacingItem to EE_PARA_SBL. Browser paragraph rendering resolves the active rule using CSS line heights. Uniform and mixed spacing, body isolation, undo, and preservation of both items on ODT reopen are covered. Four targeted Writer suites passed 20 tests, two resource checks and two Chrome scenarios passed, and the production build, dependency boundaries, source-tree, provenance, routing, doctor, scoped lint and format, and diff checks passed. The baseline repository-wide JSDoc and size findings remain outside the changed paths. The parent task remains active and the full-suite cadence is unchanged."
+  -
+    type: "comment"
+    at: "2026-11-21T18:45:12.243Z"
+    author: "CODER"
+    body: "Verified annotation visibility checkpoint against the pinned SwView::StateViewOptions and ExecViewOptions, SwPostItMgr::Focus and layout, and annotation metadata UI. View now exposes the two original menu slots in source order with true defaults and the native HasNotes availability gate. Resolved labels use the document field, the two visibility flags remain view-local, and hiding preserves mounted annotation editor state. Inserting a comment restores visibility and focuses the new note. WRITER-725 records and preserves the explicit Boolean inversion for ShowResolvedAnnotations. Four targeted Writer suites passed 35 tests, two resource checks and two Chrome scenarios passed, and production build, dependencies, source tree, provenance, Writer/shared registry checks, scoped lint and formatting, routing, doctor and diff checks passed. The repository-wide JSDoc and file-size findings remain outside the changed files. The parent task and its full-suite cadence are unchanged."
+  -
+    type: "comment"
+    at: "2026-11-21T18:54:58.393Z"
+    author: "CODER"
+    body: "Verified individual annotation resolution against AnnotationWin, PostItMgr, the annotation/text shell SDI, and the Writer comments UI test. Resolve and Unresolve update the actual field through the comment menu. The generated ResolveComment slot uses the active note in the annotation shell and the original string ID item in the body shell. The resolution badge, configured visibility, retained comment text and ODT reopen are covered. WRITER-726 records the native ordering of the ordinary non-Yrs field undo snapshots, which both contain the new resolution flag. Five targeted Writer suites passed 41 tests, the two resource checks and two Chrome scenarios passed, and production build, dependency boundaries, source tree and provenance, Writer registry, scoped lint and formatting, routing, doctor, and diff checks passed. The existing repository-wide JSDoc and file-size findings remain outside the changed paths. Thread-wide resolution remains outside this checkpoint. The parent task and its full-suite cadence are unchanged."
+  -
+    type: "comment"
+    at: "2026-11-21T19:00:20.648Z"
+    author: "CODER"
+    body: "Verified thread resolution against the pinned annotation menu, GetTopReplyNote, UpdatePostItsParentInfo and UpdateResolvedStatus. The existing comment action popup and generated ResolveCommentThread slot now operate on the same ordered follow windows. The menu restores Writer body focus as in AnnotationMenuButton.cxx. Both the active-note all-members check and the ID-based root toggle preserve their native outcomes. WRITER-727 and WRITER-728 record their divergence and adjacency-based navigation. Regressions cover nested and interleaved replies, independent comments, ODT reopen, and browser popup behavior. Four targeted Writer suites passed 37 cases, two resource checks and two Chrome scenarios passed, and production build, dependencies, source tree and provenance, Writer registry, scoped lint and formatting, routing, doctor, and diff checks passed. The existing JSDoc and file-size findings remain outside changed paths. No parent task closure or full-suite cadence increment."
+  -
+    type: "comment"
+    at: "2026-11-21T19:13:00.537Z"
+    author: "CODER"
+    body: "Verified Delete Comment and Delete Comment Thread against the pinned annotation popup, SwAnnotationWin deletion and thread traversal, SwPostItMgr ID routing, and SwHistorySetTextField. The commands use Writer cursor deletion of each annotation marker. Ordinary undo and redo preserve field IDs, contents and registered annotation ranges, including neighboring comments and undoing earlier insertion after a field is recreated. The thread uses separate deletion actions in the original sidebar order. The comment popup uses the browser top layer where supported; real Chrome verified the delete action remains clickable above the properties sidebar and undo restores the note. Seven targeted Writer suites passed 2610 tests and the two comment suites passed again after the popup correction. Two resource tests and two Chrome scenarios passed. Production build, dependency boundaries, source tree and provenance, Writer registry, scoped lint and formatting, policy routing, doctor and diff checks passed. The existing global JSDoc and file-size findings remain outside the changed files. This covers ordinary editing; change-tracking-specific deletion and bulk author/all-comment deletion remain outside the checkpoint. No parent closure or full-suite cadence increment."
+  -
+    type: "comment"
+    at: "2026-11-21T19:21:40.452Z"
+    author: "CODER"
+    body: "Verified interactive Writer comment replies against the pinned AnnotationWin, InitAnswer and native annotation field slots. Reply inserts immediately after its parent, preserves its ID, paragraph ID and name linkage, and leaves focus at the end of a formatted EditEngine quotation. The native rich text insertion loop is used to preserve quoted runs. Reply insertion is one Writer history action and parent name and reply content survive ODT reopen. WRITER-729 records the original first-paragraph ellipsis rule. The main slot accepts the active note or a parent ID from the text shell. Prefilled remote Text/HTML arguments and automatic deletion of empty parents are outside this checkpoint. Six targeted Writer suites passed 44 tests, two generated resource tests and two real Chrome scenarios passed, and build, dependency boundaries, source tree/provenance, Writer registry, scoped lint and formatting, routing, doctor and diff checks passed. Repository-wide JSDoc and size findings remain outside changed files. No parent task closure or full-suite cadence increment."
+  -
+    type: "comment"
+    at: "2026-11-21T19:29:19.716Z"
+    author: "CODER"
+    body: |-
+      Verified the Promote Comment checkpoint against pinned annotation.ui, AnnotationMenuButton, AnnotationWin, annotation and text shell dispatch, and PostItMgr. The generated Edit > Comment command and card popup use the same native field operation. Promotion clears only the selected note's parent metadata and preserves descendants, anchors and undo count. WRITER-730 records the native anchor sort and sticky follow flag that keep a live card in its previous group until windows are recreated.
+
+      - Command: `npm run test:writer -- src/sw/browser/presentation/WriterCommentReply.test.tsx src/sw/browser/presentation/WriterCommentsSidebar.test.tsx src/sw/browser/presentation/WriterCommentDeletion.test.tsx src/sw/browser/presentation/WriterMenuBar.test.tsx src/sw/source/filter/xml/odt-annotation.test.ts`. Result: 40 passed across five files, including active and ID-based promotion, focus, menu state and ODT reopen.
+      - Command: `npm run test:writer -- src/sw/browser/presentation/WriterSearch.test.tsx src/sw/browser/presentation/WriterSearchRegex.test.tsx src/sw/source/uibase/uiview/view-note-search.test.ts src/sw/source/core/crsr/native-search-replace.test.ts src/sw/source/core/crsr/findtxt.test.ts`. Result: 63 passed across five files, with 15 existing conditional skips requiring a native regex probe.
+      - Command: `npm run build:single-threaded --workspace @vite-office/office`. Result: production build and typecheck passed with the existing bundle-size advisory.
+      - Command: `node_modules/.bin/playwright test writer-search.spec.ts --config=output/playwright/writer-rich-comments-chrome.config.ts --project=writer --workers=1`. Result: both scenarios passed against the final preview bundle.
+      - Command: `npm run check:writer-resources`, `npm run check:dependencies`, `npm run check:source-tree`, `npm run check:source-provenance`, `npm run inventory:parity:writer`, scoped ESLint and Prettier, `ap doctor`, `node .agentplane/policy/check-routing.mjs`, and `git diff --check`. Result: passed, two resource tests, no registry semantic violations, and the existing doctor shim warning.
+      - Command: `npm run check:docs` and `npm run check:file-size`. Result: baseline failures remain outside the changed paths (307 JSDoc findings and five oversized files). Local evidence is in output/playwright/writer-comment-promote-docs.log and output/playwright/writer-comment-promote-size.log.
+
+      Parent task remains in progress. This checkpoint does not advance the ten-task full regression counter.
+  -
+    type: "comment"
+    at: "2026-11-21T19:39:24.857Z"
+    author: "CODER"
+    body: |-
+      Verified the Writer comment bulk-deletion checkpoint against pinned textfld, annotsh, AnnotationWin2, PostItMgr, ConfirmationDlg, Common.xcs and querydialog.ui. DeleteAuthor uses the native Author string item and defaults to the active note only in the annotation shell. Delete All Comments and the author-specific action appear in the original menu positions. Both commands use one Writer history group and the shared query preference, which defaults to false. Ports cover the ordinary author deletion and delete-all scenarios from uiwriter11 and deleteAllComments.py. The tracked-deletion branches of those native tests require Writer's redline subsystem, which is outside the represented document model.
+
+      - Command: `npm run test:writer -- src/sw/browser/presentation/WriterCommentReply.test.tsx src/sw/browser/presentation/WriterCommentsSidebar.test.tsx src/sw/browser/presentation/WriterCommentDeletion.test.tsx src/sw/browser/presentation/WriterMenuBar.test.tsx src/sw/source/filter/xml/odt-annotation.test.ts src/sw/browser/presentation/writer-command-presentation.test.ts src/sw/source/uibase/shells/native-paragraph-sidebar-slots.test.ts`. Result: 50 passed across seven files. Scope: ordinary delete, grouped undo/redo, original text and marks, browser query and preference, and other comment, menu and dialog owners.
+      - Command: `npm run build:single-threaded --workspace @vite-office/office` and `npm exec --workspace @vite-office/office -- vite build`. Result: typecheck and production bundle passed, with existing Vite advisories. Initial typechecking found the missing commandUrl on the new dialog discriminant and an unsupported exact flag in Testing Library options; both were corrected before final verification.
+      - Command: `node_modules/.bin/playwright test writer-search.spec.ts --config=output/playwright/writer-rich-comments-chrome.config.ts --project=writer --workers=1`. Result: both scenarios passed against the final bundle, including native query focus, Escape and Yes, body focus, and grouped Undo.
+      - Command: `npm run check:writer-resources`, `npm run check:dependencies`, `npm run check:source-tree`, `npm run check:source-provenance`, `npm run inventory:parity:writer`, scoped ESLint and Prettier, `ap doctor`, `node .agentplane/policy/check-routing.mjs`, and `git diff --check`. Result: passed, two resource tests, zero registry semantic violations, and the existing doctor shim warning.
+      - Command: `npm run check:docs` and `npm run check:file-size`. Result: baseline failures remain outside changed files (307 JSDoc findings and five oversized files). Local evidence is in output/playwright/writer-bulk-comment-docs.log and output/playwright/writer-bulk-comment-size.log.
+
+      Parent task remains in progress. This checkpoint does not advance the ten-task full regression counter.
+  -
+    type: "comment"
+    at: "2026-11-21T19:51:56.995Z"
+    author: "CODER"
+    body: |-
+      Verified the annotation Character formatting checkpoint against pinned char dialog, annotation popup, SwPostItMgr, EditView and ImpEditEngine sources. The action uses the active note or the first mounted note as its native input, merges accepted SfxItemSet output, applies the result over complete note text without replacing selections, and groups history. The tab sequence matches annotation mode. Browser controls expose the represented Latin font and style, size, color, underline and strikeout, automatic superscript or subscript, and background. Specialized CJK/CTL font editors, previews, additional font effects, and manual positioning remain outside the represented dialog controls. WRITER-731 documents the original differing paragraph font-default merge. The note renderer now scales the explicit point size when drawing escapement.
+
+      - Command: `npm run test:writer -- src/sw/browser/presentation/WriterCommentFormatAll.test.tsx src/sw/browser/presentation/WriterCommentsSidebar.test.tsx src/sw/browser/presentation/WriterCommentDeletion.test.tsx src/sw/browser/presentation/WriterMenuBar.test.tsx src/sw/source/filter/xml/odt-annotation.test.ts`. Result: 40 passed across five files, including cancel, seed formatting, multiple note updates, combined font size and escapement, and grouped undo/redo.
+      - Command: `npm run test:shared -- src/editeng/source/editeng/native-engine-object.test.ts src/editeng/source/editeng/native-edit-char-attrib.test.ts`. Result: 30 passed across two files, including the original character defaults and a partially covered hard range.
+      - Command: `npm run build:single-threaded --workspace @vite-office/office` and final `npm exec --workspace @vite-office/office -- vite build`. Result: typecheck and production build passed with existing bundle advisories.
+      - Command: `node_modules/.bin/playwright test writer-search.spec.ts --config=output/playwright/writer-rich-comments-chrome.config.ts --project=writer --workers=1`. Result: two passed against the final production preview. The first Chrome run detected an accessible name that included the Close control; the dialog now exposes Character as its name and focuses Font on opening.
+      - Command: `npm run check:writer-resources`, `npm run check:dependencies`, `npm run check:source-tree`, `npm run check:source-provenance`, `npm run inventory:parity:writer`, scoped ESLint and Prettier, `ap doctor`, `node .agentplane/policy/check-routing.mjs`, and `git diff --check`. Result: source and resource checks passed, with the existing doctor shim warning.
+      - Command: `npm run check:docs` and `npm run check:file-size`. Result: baseline failures remain outside changed files (307 JSDoc findings and five oversized files).
+
+      Parent task remains in progress. This checkpoint does not advance the ten-task full regression counter.
+  -
+    type: "comment"
+    at: "2026-11-21T19:58:54.128Z"
+    author: "CODER"
+    body: |-
+      Verified the annotation selection Character checkpoint against pinned SwAnnotationShell::Exec/ExecPost, the FontDialog/FontEffectsDialog/FontPositionDialog SDI declarations and the original Character dialog tabs. Format > Character opens when an annotation owns dispatch and keeps its EditEngine range across the modal focus transfer. The single-note path applies accepted output items to that range. The bulk action continues to merge input and output and works over all mounted notes. The Page string item retains its native identity, and typed EditEngine attribute requests can run without a dialog. The body-text Character dialog and advanced annotation tab controls remain outside this checkpoint.
+
+      - Command: `npm run test:writer -- src/sw/browser/presentation/WriterCommentFormatAll.test.tsx src/sw/browser/presentation/WriterCommentsSidebar.test.tsx src/sw/browser/presentation/WriterMenuBar.test.tsx src/sw/uiconfig/swriter/menubar/menubar-commands.test.ts`. Result: 36 passed in four files. Covers selection and focus restoration, single-note undo, original Page and fixed tab routes, direct item arguments and preceding bulk behavior.
+      - Command: `npm run build:single-threaded --workspace @vite-office/office` and `node_modules/.bin/playwright test writer-search.spec.ts --config=output/playwright/writer-rich-comments-chrome.config.ts --project=writer --workers=1`. Result: typecheck and production build passed with existing Vite advisories. Both Chrome scenarios passed against the final preview.
+      - Command: `npm run check:writer-resources`, `npm run check:dependencies`, `npm run check:source-tree`, `npm run check:source-provenance`, `npm run inventory:parity:writer`, scoped ESLint and Prettier, `ap doctor`, `node .agentplane/policy/check-routing.mjs`, and `git diff --check`. Result: passed with the existing AgentPlane hook shim warning.
+      - Command: `npm run check:docs` and `npm run check:file-size`. Result: baseline failures remain outside changed files (307 JSDoc findings and five oversized files).
+
+      Parent task remains in progress. This checkpoint does not advance the ten-task full regression counter.
+  -
+    type: "comment"
+    at: "2026-11-21T20:05:54.109Z"
+    author: "CODER"
+    body: |-
+      Verified the body-text Character checkpoint against pinned sw_CharDialog, sw_CharDialogResult, SwCharDlg and ConvertAttrCharToGen/ConvertAttrGenToChar. The original general, Font Effects and Position slots read mixed or uniform Writer attributes, retain the original selection ring across the asynchronous dialog and pass accepted Writer items through SetAttrSet. The standard and annotation modes share the same presenter while retaining their separate item identities. Character spacing uses the native signed kerning item in both modes. Character background displays visible imported highlighting and clears the imported highlight and shading marker only when the dialog returns a background delta. The Borders page, advanced typographic controls and the native paragraph-auto-update branch remain outside this checkpoint.
+
+      - Command: `npm run test:writer -- src/sw/browser/presentation/WriterCommentFormatAll.test.tsx src/sw/browser/presentation/WriterCommentsSidebar.test.tsx src/sw/browser/presentation/WriterMenuBar.test.tsx src/sw/browser/presentation/WriterSearchFormatting.test.tsx src/sw/source/core/edit/native-character-shell.test.ts src/sw/source/uibase/utlui/native-pointer-items.test.ts`. Result: 64 passed in six files, including mixed-size range formatting, signed spacing, background conversion and shared selection/history behavior.
+      - Command: `npm run build:single-threaded --workspace @vite-office/office` and `node_modules/.bin/playwright test writer-search.spec.ts --config=output/playwright/writer-rich-comments-chrome.config.ts --project=writer --workers=1`. Result: production build and typecheck passed with existing Vite advisories. Both Chrome scenarios passed, including opening the Character command from Format, applying a new size, restoring body focus and undoing the format change.
+      - Command: `npm run check:writer-resources`, `npm run check:dependencies`, `npm run check:source-tree`, `npm run check:source-provenance`, `npm run inventory:parity:writer`, scoped ESLint and Prettier, `ap doctor`, `node .agentplane/policy/check-routing.mjs`, and `git diff --check`. Result: passed with the existing AgentPlane hook shim warning.
+      - Command: `npm run check:docs` and `npm run check:file-size`. Result: baseline failures remain outside changed files (307 JSDoc findings and five oversized files).
+
+      Parent task remains in progress. This checkpoint does not advance the ten-task full regression counter.
+  -
+    type: "comment"
+    at: "2026-11-21T20:18:03.777Z"
+    author: "CODER"
+    body: |-
+      Verified Writer Character dialog checkpoint. The standard Character dialog reuses SvxBorderTabPage and the shared browser border controls. The shell applies the original character box item to the selected text with existing history. The browser projects physical border lines and distances, and ODT preserves the same item through UNO character border properties and loext text attributes with legacy import aliases.
+
+      Evidence: 74 targeted Writer tests in six files, five shared ODF property-map tests, two Writer resource tests, and both Writer search/annotation scenarios in production Chrome passed. The Chrome scenario verifies the standard Character dialog, computed border, focus return, and undo. Build/typecheck, scoped ESLint and Prettier, module boundaries, source provenance, source tree, Writer parity inventory, policy routing, and git diff --check passed. ap doctor retained its previous hook shim warning. Repository-wide JSDoc reports 307 existing findings, and file size reports four unrelated existing files at its limit. The updated UNO map now passes the file-size gate.
+
+      Character shadow, complex stroke appearance, and native line layout parity remain outside this checkpoint. This is a verified implementation checkpoint in the ongoing Writer task, with no task closure or full regression count increment.
+  -
+    type: "comment"
+    at: "2026-11-21T20:21:47.732Z"
+    author: "CODER"
+    body: |-
+      Verified Writer search checkpoint. The source-derived tests for range bounds, paragraph anchor rings, capture replacement, grouped undo/redo, and shared capture offsets now run with the same ECMAScript matcher used in the Writer session. Eleven previously probe-gated scenarios execute on the normal test path. The six original soft-hyphen syntax probes remain optional, including ICU-specific pattern spellings. The production matcher is unchanged.
+
+      Focused verification: Writer cursor, selection, replacement and annotation search (91 passed, six optional ICU cases skipped); Writer browser search and menu (20 passed); shared search and browser matcher (137 passed). Scoped ESLint, Prettier and git diff --check pass. The overall task remains open, including body replacement in paragraphs with existing field markers.
+  -
+    type: "comment"
+    at: "2026-11-21T20:34:15.587Z"
+    author: "CODER"
+    body: |-
+      Writer search and replacement checkpoint. Body Replace All now accepts matches before and after a represented annotation. The document preserves the marker, note content, and registered span through the edit and first Undo/Redo. For adjacent paragraph boundaries, sw_JoinText now calls the original JoinNext text-node owner and transfers live attributes. The portable paragraph split/join history caller retains its existing snapshot contract, and both paths share the original direct-format preparation.
+
+      Targeted evidence: nine Writer suites (1101 passed, six optional ICU probes skipped) cover the view, native search and replacement, paragraph joins, text formatting, and delete/split history. The final view suite passes six tests, including the consumed history on the second Undo, documented as an extension of WRITER-010 with pinned native source evidence. TypeScript, the production build, and all three production Chrome search scenarios pass. The new Chrome scenario applies Replace All to both body matches, observes the live comment, and restores the body with a single Undo. Scoped ESLint, Prettier, git diff --check, resources, dependencies, source tree, provenance, Writer/shared parity inventories, policy routing and doctor pass. Global JSDoc and file size retain 307 and four existing findings respectively. Provenance and runtime records now describe the shipped ECMAScript matcher and cite the actual running tests.
+
+      Matches that consume the annotation marker remain an open part of structured replacement. This checkpoint does not close the task or increment the full regression cadence.
+  -
+    type: "comment"
+    at: "2026-11-21T20:43:55.218Z"
+    author: "CODER"
+    body: |-
+      Writer search checkpoint. A body match spanning an annotation marker now uses the native ReplaceText sequence: erase the point attribute while processing dummy characters, then replace the remaining text. DelContentIndex saves a covered annotation mark in the ordinary mark-history prefix. The existing text-field entry restores the comment first, so mark history can bind its original range to the restored field. Model tests cover point and ranged annotations, including repeated Undo/Redo for the ranged case. The normal browser command removes the covered comment and one Undo restores it. Preserved the native forward scan over adjacent markers and documented the skipped second field under WRITER-732.
+
+      Verification: 129 tests pass in eight targeted Writer suites. Six optional ICU-specific probes are skipped. All four production Chrome search and annotation scenarios pass. Production build, independent final typecheck, scoped lint and formatting, git diff --check, dependency boundaries, source provenance and tree, Writer resources, and policy routing pass. AgentPlane doctor reports zero errors with the existing hook shim warning. The repository-wide JSDoc and file-size gates retain 307 and four prior findings respectively.
+
+      Inline-fly replacement and other unrepresented structured content still use their existing admission checks. The open search task and full-regression cadence retain their current status.
+  -
+    type: "comment"
+    at: "2026-11-21T20:53:59.747Z"
+    author: "CODER"
+    body: |-
+      Writer search and replacement checkpoint. A covered as-character graphic now enters DelContentIndex fly history before ReplaceText. The history entry retains the original frame format and transfers the actual graphic section into Writer undo storage. Undo restores the same graphic section and reinserts its point hint. Replacement coordinates retain the native offset between original and current node numbers while graphic sections are detached. Model regressions cover adjacent matches, forward and backward covered matches, two Undo/Redo cycles, original node/format identity, and disposal when the history is cleared. A Writer UI regression runs Find and Replace against the mounted inline image and verifies the image returns on Undo.
+
+      Verification: 148 tests pass in ten focused suites and six optional ICU probes remain skipped. The production TypeScript and Vite build and all four Writer Chrome search smoke scenarios pass. Dependency boundaries, source provenance and tree, Writer resources and inventory, doctor, policy routing, lint, formatting, and git diff --check pass. The repository-wide JSDoc and file-size checks retain their 307 and four existing findings. The new undo owner has mapped provenance and unverified full semantic parity. The implemented history is bounded to as-character graphics with their live single-graphic sections. Floating objects and nested fly contents remain open. This checkpoint does not close the AgentPlane task.
+  -
+    type: "comment"
+    at: "2026-11-21T21:01:55.318Z"
+    author: "CODER"
+    body: |-
+      Writer replacement checkpoint for floating anchors. SwUndoSaveContent now follows the native Replace branches for covered character anchors and paragraph anchors on the boundary nodes. The format remains live. SwHistoryChangeFlyAnchor saves the original node and optional character offset and restores them after the text and paragraph boundaries have been restored. Search regressions verify forward and backward replacement, Undo/Redo, an anchor on the second paragraph of a joined boundary, and a floating image in the actual Find and Replace UI.
+
+      WRITER-733 records the source-derived change in anchor offset when redoing a backward replacement. The existing as-character graphic behavior and its UI assertions remain covered.
+
+      Verification: 152 targeted tests pass across the ten relevant suites. A test-only assertion originally ran after closing the view and was moved before teardown; the six-test UI suite passes on recheck. Six optional ICU probe cases are skipped. The production TypeScript and Vite build and all four Chrome search smoke scenarios pass. Dependency boundaries, source provenance and tree, Writer resources, Writer inventory, lint, formatting, policy routing, and git diff --check pass. AgentPlane doctor has the existing hook shim warning. The project-wide JSDoc and size checks still report their 307 and four pre-existing findings. The implementation covers same-paragraph and adjacent-paragraph replacement. This checkpoint leaves the overall search task active.
+  -
+    type: "comment"
+    at: "2026-11-21T21:11:42.362Z"
+    author: "CODER"
+    body: |-
+      Writer multi-paragraph edit checkpoint. The browser typing path uses the native delete-and-insert sequence for a selection spanning paragraphs. SwUndoDelete now saves supported floating text frames and graphics whose anchors belong to fully selected interior paragraphs before joining the boundary text nodes. SwUndoDelLayFormat retains the original special format and moves its real section to Writer undo storage. Undo restores the body paragraphs, fly section, object identity and anchor in the correct order. Redo removes the fly again. The model regression adapts the pinned testSetStringDeletesShape selection to the ordinary Writer shell and exercises both text and graphic content. A browser editor regression uses the actual beforeinput path with a rendered floating text story.
+
+      Verification: 1804 tests passed across eight focused Writer suites, including native deletion, split history, graphics and search replacement. The production build and six Chrome search and style-history smoke scenarios pass. Scoped ESLint and Prettier, git diff --check, dependency boundaries, provenance, source tree, Writer resources and inventory, and policy routing pass. AgentPlane doctor retains its hook-shim warning and reports zero errors. The repository-wide JSDoc and file-size checks retain their 307 and four existing findings. The supported floating histories cover plain sections and graphics anchored to fully selected middle paragraphs. Nested fly content and section mark history remain open. This checkpoint leaves the search task active.
+  -
+    type: "comment"
+    at: "2026-11-21T21:23:49.642Z"
+    author: "CODER"
+    body: |-
+      Verified Text Flow checkpoint for Find and Replace. The format dialog now binds Allow to split, orphan control and widow control to the existing Writer paragraph items, with the pinned native checkbox cycle, sensitivity handlers, 2–9 line fields and explicit zero output. Keep with next paragraph is disabled by FormatHdl_Impl. The original asymmetric widow/orphan sensitivity remains as documented in WRITER090. Mounted UI evidence covers search by combined criteria, field drafts, page reset, replacement with zero and grouped Undo.
+
+      Targeted Writer run passed 147 tests in 14 files, with six existing native ICU host-probe cases skipped. Four production Chrome search scenarios passed. Production TypeScript and Vite build, Writer resource checks, dependency and source-tree checks, provenance, Writer registry parity (zero violations), scoped ESLint and Prettier, routing and diff checks passed. Repository-wide JSDoc and file-size checks still report 307 existing documentation errors and four existing files at the limit. AgentPlane doctor passed with the existing hook-shim warning.
+
+      This checkpoint keeps the search task open. It does not advance the ten-task full-regression cadence.
+  -
+    type: "comment"
+    at: "2026-11-21T21:33:39.589Z"
+    author: "CODER"
+    body: |-
+      Verified Font Effects emphasis checkpoint for Writer search. The pinned style and placement selectors edit one SvxEmphasisMarkItem, preserve the placement while switching styles, and restore it upon reopening or resetting the page. Search criteria use the pinned item summary strings and distinguish marks above and below. The editable Writer document projects the effective item from its existing attribute iterator and paints emphasis with browser CSS. The browser supplies glyph geometry and uses a filled sesame mark for the native accent style.
+
+      The UI test adapts the Dot and Below Text reopen check from formatCharacter.py and exercises exact matching, explicit None, visible paint, grouped Undo and Redo. The production Chrome test applies a mark below text through Replace All and verifies computed style and Undo. The final Writer run passed 215 tests in 17 files, with six existing native ICU host-probe cases skipped. All five Chrome search scenarios passed. The production build, dependency and source-tree checks, provenance, Writer resources and registry parity, scoped lint and formatting, doctor, routing, and diff checks passed. The repository-wide JSDoc and file-size checks retain 307 baseline JSDoc errors and four existing files at or above their limit.
+
+      The active search task stays open. This checkpoint does not increment the ten-task full-regression cadence.
+  -
+    type: "comment"
+    at: "2026-11-21T21:36:41.935Z"
+    author: "CODER"
+    body: "Follow-up verification caught TypeScript TS7053 in the paint lookup. The sparse CSS style map now accepts integer mask results and preserves absence for unmapped values. The final TypeScript and production Vite build passed, all five production Chrome scenarios passed again, and the direct emphasis/editor rerun passed 12 tests. The earlier 215-case related run passed before this type-only correction."
+  -
+    type: "comment"
+    at: "2026-11-21T21:51:27.745Z"
+    author: "CODER"
+    body: |-
+      Verified the separation between the pinned Writer search dialog ranges and the broader cursor search ranges. Attributes uses the document pool slots and the original page-model slot range, while Format applies the same dialog ranges plus the brush and fill ranges. The cursor preserves the native character and model comparison partitions. Tests verify tab-stop and keep-with-next presence together, absence of Page Break and the pair-kerning label from Attributes, discarded pair-kerning output from Format, and the Page Style behavior with text alone and with another attribute. The upstream observations are recorded under WRITER-701 and WRITER-734. Hyphenation and paragraph page line-spacing are inside the native dialog ranges, but the current Writer pool has no registered items for those two attributes.
+
+      The final Writer run passed 148 tests across 15 files with six existing native ICU host-probe skips. TypeScript and the production Vite build passed, and all five production Chrome search scenarios passed. Dependency, source tree, source provenance, Writer identities and resources, Writer registry parity, scoped lint and format, routing and diff checks passed.
+
+      Existing repository-wide JSDoc and file-size checks still report 307 documentation issues and four files at or above the limit. AgentPlane doctor retains its existing hook-shim warning. The search task remains open and this checkpoint does not advance the ten-task full-regression cadence.
+  -
+    type: "comment"
+    at: "2026-11-21T22:04:00.554Z"
+    author: "CODER"
+    body: |-
+      Verified the Writer page line-spacing attribute checkpoint. The pinned SwRegisterItem owns a false default and preserves its type through the paragraph/style pool, UNO ParaRegisterModeActive, and the existing document transfer. ODF style:register-true preserves both named-style participation and explicit automatic-style overrides, including false. The ordinary ODT Open test confirms direct-only search by Page line-spacing and the inherited match when Including Styles is selected. The pinned Format dialog does not enable the register checkbox. Page-style reference selection and physical baseline-grid layout are outside this checkpoint.
+
+      The UNO text-default schema regression now accounts for the eight native character-border rows already exposed by a7cddb231 and the new register row. The ODF and UI run passed 25 other checks and the corrected schema suite passed all three checks. All 13 related shared ODF tests passed. The search run passed 141 tests in 15 files with six existing native ICU host-probe skips. The final TypeScript and Vite production build and all five Chrome search scenarios passed. Dependency, source-tree, provenance, Writer identities and resources, registry parity, scoped lint and formatting, routing, and diff checks passed. Existing JSDoc and file-size checks retain 307 baseline JSDoc issues and four existing oversized files. AgentPlane doctor retains its existing hook-shim warning.
+
+      The search task remains open. This checkpoint does not advance the ten-task full-regression cadence.
+  -
+    type: "comment"
+    at: "2026-11-21T22:22:36.686Z"
+    author: "CODER"
+    body: |-
+      Verified the Writer search hyphenation checkpoint. The original SvxHyphenZoneItem preserves its 17 fields, the Writer-specific zero maximum, and native UNO integer conversion. Writer owns the paragraph item and its style and transfer forms. The existing ODF mapping preserves the source FO and LibreOffice extension attributes. The ODF round-trip test adapts the 0/7 character and 0/567 twip assertions from tdf149324 and tdf149420.
+
+      Find and Replace now shows Hyphenation in Attributes and the original two hyphenation groups on Text Flow. An exact criterion retains the line and compound limits, word and caps flags, five zones, boundary cascade and Move Line behavior. Tests verify exact matching, paragraph replacement and Undo. WRITER-735 records and preserves native byte and word narrowing. Dictionary-driven layout remains outside this search checkpoint.
+
+      The focused Writer run passed 138 tests in 16 files and the shared run passed 16 tests in five files. The production Vite/TypeScript build, final standalone typecheck and all six Chrome search scenarios passed. The dependency, source tree, provenance, Writer identities and resources, scoped lint and format, registry parity, doctor, routing and diff checks passed. Repository-wide JSDoc and file-size checks retain 307 baseline documentation issues and four existing oversized files. Doctor retains the existing AgentPlane hook-shim warning.
+
+      The task remains open and this intermediate checkpoint does not advance the ten-task full-regression cadence.
+  -
+    type: "comment"
+    at: "2026-11-21T22:36:25.049Z"
+    author: "CODER"
+    body: |-
+      Verified a Writer character-emphasis and search checkpoint. The standard Character dialog reuses the existing native emphasis selectors, submits a concrete Writer item and restores the selected style and position on reopen. Writer UNO and the shared ODF map now carry CharEmphasis and style:text-emphasize with the source short constants, token order, optional placement and invalid-token behavior. The Worker graph now restores the concrete emphasis item. Ported the emphasis portion of formatCharacter.py and the selection-only start-anchor scenario from tdf144089.py, with a corresponding end-anchor regression.
+
+      Targeted Writer verification passed 97 tests in 11 files. Six optional native ICU host-probe scenarios were skipped by the runner because the host probe was not configured. Targeted shared verification passed 9 tests in 2 files. All six production Chrome search scenarios passed, including export and reopen with the emphasis intact after redo. Production typecheck and Vite build, scoped ESLint and Prettier, module boundaries, source tree and provenance, Writer resources, Writer and shared registry parity (zero semantic violations), routing and diff checks passed. The first iteration exposed the missing Worker constructor and an incorrect property-map tuple; both were corrected and the related tests reran successfully.
+
+      Repository-wide documentation and file-size gates still report the existing 307 JSDoc issues and four files at the size limit. No changed path appears in either failure list. AgentPlane doctor passed with the existing hook-shim warning. The task stays open and the ten-task full-run counter is unchanged.
+  -
+    type: "comment"
+    at: "2026-11-21T22:42:57.941Z"
+    author: "CODER"
+    body: |-
+      Verified an annotation Font Effects checkpoint. The Character dialog now uses the original EditEngine emphasis WhichId in annotation mode, and normal body and annotation text share the same CSS projection for the existing native style/position flags. CharEmphasis is bound to the original EditEngine UNO member from include/editeng/unotext.hxx, so the ODT import can restore the emphasis exported by the existing text mapping. The existing Worker annotation graph retains the native range and concrete item type.
+
+      Seven targeted Writer suites passed 60 tests, including selected-note formatting and grouped undo, surrounding text and neighboring note isolation, Worker and ODT round-trip, ordinary Writer search emphasis, and the shared character projection with a sparse pool. The projection reads optional authored emphasis without requiring an emphasis default in older or restricted pools.
+
+      Production TypeScript and Vite build passed. All six production Chromium search scenarios passed, including emphasis applied through Format All Comments and removed in one Undo. Scoped ESLint and Prettier, source tree and provenance, module boundaries, Writer UI resources and registry parity, workflow routing and diff checks passed. The global JSDoc and file-size gates still report the existing 307 findings and four files at or above the size limit. AgentPlane doctor passed with the existing hook-shim warning. This is an implementation checkpoint on the existing search task. The ten-task full-run cadence is unchanged.
+  -
+    type: "comment"
+    at: "2026-11-21T22:52:50.102Z"
+    author: "CODER"
+    body: |-
+      Verified Writer Font Effects line formatting across the regular Character dialog, annotation Character dialog, search replacement, and ODT. The two decorations keep independent styles and colors. Both dialogs use the original native item identities, preserve the other fields when one field changes, and disable the color palette for an absent line. Automatic line color uses the text foreground. Annotation, body, and Worker paths retain the native line items.
+
+      ODF uses the original shared underline/overline lexical handlers with separate merge state in SAX order. Writer and EditEngine import apply the original CharOverline, CharOverlineColor and CharOverlineHasColor property members. WRITER-736 records the pinned export filter's asymmetric handling of the color of a disabled underline and overline. Verification covers selected comment formatting and isolation, Undo, ODT and Worker retention, and a named character style with direct NONE across export.
+
+      The first local verification caught a missing color-helper import, a text-line handler name colliding with the UNO paragraph LineSpacing type helper, and a test file crossing the file-size limit. Corrected the imports and handler name, and moved the dedicated ODT assertion into the ODT suite. The Writer task remains active and this checkpoint does not advance the ten-task full-run cadence.
+
+      Targeted verification passed 93 Writer scenarios across the selected suites and 7 shared ODF property tests. Production TypeScript and Vite build passed. Six existing production Chromium scenarios passed and the newly added independent line colors scenario passed in the focused rerun after correcting its palette swatches. It checks the regular Character dialog, disabled color selector, ODT download/reopen, and automatic color following the foreground.
+
+      Scoped ESLint and Prettier, dependency boundaries, source tree and provenance, Writer resources, Writer/shared registry parity (zero semantic violations), routing and diff checks passed. Global documentation and file-size checks report the same pre-existing 307 findings and four files at the size limit. AgentPlane doctor passed with the existing hook-shim warning.
+  -
+    type: "comment"
+    at: "2026-11-21T23:02:35.735Z"
+    author: "CODER"
+    body: |-
+      Verified the Writer Font Effects word-line mode checkpoint. Standard Character, annotation Character and search formatting use the existing native word-line items and the original checkbox sensitivity and mixed-state cycle. Word lines paint underline, overline and strikeout on the nonspacing text only. The browser groups text using Unicode White_Space, the same classification CommonSalLayout uses when marking spacing glyphs for ImplDrawTextLines. It preserves every original text unit and does not insert synthetic whitespace. Existing ODF and Worker contracts carry the item's native bool.
+
+      Evidence includes the normal mixed-state cycle, restoration of a nonbreaking space and the prior range formatting through Undo, formatted text search replacement and its ODF property, formatting all annotations with one Undo, and regular document underline/overline with independent colors and word mode across Writer export and reopen. Source contracts inspected are SvxCharEffectsPage, weld::TriStateEnabled, SvxSearchDialog::FormatHdl_Impl, CommonSalLayout and OutputDevice::ImplDrawTextLines. No newly suspected native issue was found in this scope.
+
+      Targeted verification passed 55 Writer tests in 7 suites and all 7 Writer search/comment scenarios in production Chromium. TypeScript and Vite build, scoped ESLint and Prettier, module boundaries, source tree and provenance, Writer resources, registry parity with zero semantic violations, routing and diff checks passed. The browser fragment operation was recorded in the runtime inventory. Repository-wide documentation and size checks still report the existing 307 JSDoc findings and four files at or above the size limit. AgentPlane doctor passed with the existing hook-shim warning. This checkpoint leaves the task active and the ten-task cadence unchanged.
+  -
+    type: "comment"
+    at: "2026-11-21T23:12:21.557Z"
+    author: "CODER"
+    body: |-
+      Verified the Writer character case-effect checkpoint. Character and annotation dialogs submit the existing SvxCaseMapItem, and ordinary text, annotation text, and formatted replacement display the effect while retaining the original editable UTF-16 text. The original Writer and EditEngine CharCaseMap property records connect the shared ODF font-variant and text-transform handlers to document, style, and annotation import/export. The Worker graph retains native items.
+
+      Browser paint uses CSS uppercase, lowercase and small caps. Title case follows the original ASCII space/tab scan and UTF-16 unit rule, including the regular Writer paragraph context and the length-changing snippet restart in WRITER-737. Browser CSS supplies glyph shaping and the capitalization locale for the represented effects.
+
+      The first verification run exposed missing test imports and an overly wide CSS style type, which were corrected. This is an implementation checkpoint in the current Writer search task and the ten-task cadence remains unchanged.
+
+      Verification passed 103 targeted Writer tests, 15 shared tests, and 8 production Chromium scenarios. The new Chromium scenario uses Character title case across ODT reopen, then applies small capitals using formatted search replacement. TypeScript and Vite build, scoped ESLint and Prettier, dependencies, source tree and provenance, Writer resources, Writer and shared registry parity (zero semantic violations), routing and diff checks passed. Repository-wide documentation and file-size checks still list the pre-existing 307 JSDoc findings and four files at or above the size limit. AgentPlane doctor passed with the existing hook-shim warning.
+  -
+    type: "comment"
+    at: "2026-11-21T23:21:46.299Z"
+    author: "CODER"
+    body: |-
+      Verified the Writer Font Effects outline, shadow and relief checkpoint. The regular and annotation Character dialog uses the native SvxContourItem, SvxShadowedItem and SvxCharReliefItem, and the search dialog keeps the corresponding mixed-state controls. Relief disables the two checkboxes while retaining their values. The document and annotation projections share the VCL effect precedence and color selection. The CSS renderer uses nominal screen offsets for stroke and shadow paint.
+
+      Writer UNO and the annotation TextRange map now carry CharContoured, CharShadowed and CharRelief through native items. Shared ODF uses the original boolean outline, the existing XMLShadowedPropHdl and the native font-relief tokens. WRITER-738 records the native shadow handler's acceptance of any value except exact none. The core paints through its EditEngine relief item contract and the browser owns CSS.
+
+      Evidence covers selected comment formatting and its Worker and ODT round-trip, the relief property alongside persisted outline and shadow, and ordinary Character controls and formatted replacement. This checkpoint leaves the current Writer search task and the ten-task cadence active.
+
+      Targeted checks passed 53 Writer tests and 15 shared tests. Production TypeScript and Vite build and all 9 Writer Chromium scenarios passed. Scoped lint and formatting, module boundaries, source tree, source provenance, Writer UI resources, Writer/shared registry parity with zero semantic violations, routing and diff checks passed. Repository-wide documentation and file-size checks still show the existing 307 findings and four files at or above the size limit. AgentPlane doctor passed with the existing hook-shim warning.
+  -
+    type: "comment"
+    at: "2026-11-21T23:44:48.439Z"
+    author: "CODER"
+    body: |-
+      Verified checkpoint — Writer Character Position
+
+      - Connects the standard and annotation Position pages to native escapement (automatic and manual, relative size) and pair-kerning items. Renders the chosen values in document text and comments. New Writer documents use the native document-shell kerning default, which survives the Worker graph and ODT text defaults. Existing documents retain their serialized default or model fallback.
+      - Adds the ODF rotation angle, rotation fit flag and character width transport through native property handlers and Writer item/UNO mappings. Records the counterintuitive rotation scale mapping as WRITER-739. Ordinary rotation and scaling controls, their browser layout and Fit to Line geometry still require implementation.
+      - Source contracts checked against cui/source/tabpages/chardlg.cxx, cui/uiconfig/ui/positionpage.ui, sw/source/uibase/app/docshini.cxx, sw/source/core/text/atrstck.cxx, editeng/source/editeng/impedit3.cxx, sw/qa/uitest/writer_tests2/formatCharacter.py and xmloff/source/text/txtprhdl.cxx.
+      - Passed focused Vitest groups (93 distinct Writer tests, 16 shared tests), scoped formatting and lint, Writer resource, dependency, source tree and provenance checks, Writer and shared inventory checks, AgentPlane doctor and policy routing. Global JSDoc reports the same 307 existing findings. File-size checks report three existing violations outside the changed files. No full run at this checkpoint.
+      - Production build passed with the single-threaded TypeScript checker. Nine unchanged Chromium search and rich-format scenarios passed together. The final Position regression passed separately and verifies manual rise and font size, saved pair kerning on selected text, the inherited kerning of the surrounding document, and reopening the Character page through the browser after ODT export/import.
+  -
+    type: "comment"
+    at: "2026-11-21T23:58:14.872Z"
+    author: "CODER"
+    body: |-
+      Verified checkpoint — Writer Character rotation and scaling
+
+      - Writer Character now exposes the native 0°, 90° and 270° choices, width percentage and the Fit to Line checkbox. Annotation Character exposes scaling through the independent EditEngine width item. Applies native rotation and scale deltas to the active text and leaves mixed values alone until edited.
+      - The text shell supplies the original SID_ATTR_CHAR_WIDTH_FIT_TO_LINE input from the editing shell and the starting text frame. The core uses script and attribute boundaries, the physical unscaled width device, the widest selected hard line and the height of the formatted line. The unformatted path uses physical font height. The browser paints one real text tree, accounts for the changed advance and measures rotated text as a single line portion.
+      - Source contract matched against editeng/editids.hrc, cui/source/tabpages/chardlg.cxx, sw/source/uibase/shells/textsh1.cxx, sw/source/core/edit/edattr.cxx, sw/source/core/text/itratr.cxx and sw/qa/uitest/writer_tests2/formatCharacter.py. Native field and footnote width contributions, merged redline text frames and fully differential complex rotated layout remain unverified.
+      - Passed 67 related Writer tests (7 files), scoped lint and format, source provenance and dependency validation, Writer resources, required source tree, Writer parity inventory (zero semantic violations), AgentPlane doctor, routing and diff checks. Global JSDoc and file-size checks retain their existing 307 and 3 unrelated findings. No full repository run at this checkpoint.
+      - Two shared test files passed (13 tests). Production typecheck and Vite build passed. All 11 Chromium Writer search and Character scenarios passed against the final build.
+  -
+    type: "comment"
+    at: "2026-11-22T00:08:26.509Z"
+    author: "CODER"
+    body: |-
+      Verified checkpoint — Writer Character hyphenation and optical sizing
+
+      - Adds the native Hyphenation and Optical Font Sizing groups to Character Position. Applies the original character exclusion and sizing items to the selection, with annotation optical sizing bound to the separate EditEngine item.
+      - Projects document paragraph hyphenation and the effective Writer language to the browser's hyphenation device. A character exclusion uses explicit/manual opportunities only. Opt-in optical sizing uses the browser font axis in body and comment runs.
+      - Preserves the two controls through Writer's native UNO maps, typed Worker factories and ODT. Maps character fo:hyphenate through XML_TYPE_NBOOL independently of its positive paragraph mapping. Maps loext:font-optical-sizing to the original auto/none tokens. New document optical sizing is set by the document shell and survives Worker and ODT defaults. Old documents without the attribute keep the original false default.
+      - Includes source-backed coverage for tdf106733 character-style inheritance and testOpticalSizing1/testOpticalSizing2 defaults and explicit values. Browser dictionary coverage and advanced LibreOffice hyphenation layout constraints remain distinct from the implemented item transport and browser CSS binding.
+      - Passed 45 Writer tests, 25 shared tests, scoped ESLint/Prettier, source boundaries and provenance, Writer resources and inventory, source tree, doctor, routing and diff checks. Global JSDoc and size checks retain the existing 307 and 3 unrelated findings. Full repository test cadence stays unchanged.
+      - Production TypeScript/Vite build and three focused Chromium scenarios passed. The hyphenation scenario enables paragraph hyphenation through the native Text Flow UI, excludes the selected word, changes its optical sizing and checks the real computed styles on adjacent text.
+  -
+    type: "comment"
+    at: "2026-11-22T00:16:34.247Z"
+    author: "CODER"
+    body: |-
+      Verified checkpoint — Writer Paragraph Text Flow hyphenation
+
+      - The standard Paragraph dialog and Search Format use the same source-backed Hyphenation and Hyphenation Across controls. The paragraph command supplies the selection's uniform SvxHyphenZoneItem or native invalid state. Edits survive tab changes and contribute the original typed item to the shared paragraph output set.
+      - A typed-page-only change applies exactly those items in one history step. A mixed paragraph selection retains distinct unrelated spacing. Existing Tabs and scalar paragraph controls still use the same command and apply path.
+      - Writer projects the native minimum word size and required lead/trail characters through the browser's hyphenate-limit-chars property. Full advanced LibreOffice dictionary, consecutive-line and page/column/spread balancing behavior remains outside the browser device binding.
+      - Source reviewed against SwTextShell Paragraph command in textsh1.cxx, SvxExtParagraphTabPage::Reset/FillItemSet/HyphenClickHdl and its native textflowpage.ui.
+      - Passed 59 targeted Writer tests across seven files and the focused Chromium search/paragraph/character hyphenation scenario. Production TypeScript/Vite build, scoped lint and format, boundaries, resources, source tree, provenance, Writer inventory and AgentPlane routing passed. Global checks retain 307 existing JSDoc findings and three unrelated file-size findings. The full regression cadence is unchanged.
+  -
+    type: "comment"
+    at: "2026-11-22T00:31:27.822Z"
+    author: "CODER"
+    body: |-
+      Writer Paragraph Alignment checkpoint
+
+      - The ordinary Paragraph command exposes the upstream Alignment position in the tab order. The page edits the complete SvxAdjustItem and independent SvxParaVertAlignItem. The native exchange preserves mixed selections, runs one history entry and applies only the edited typed items.
+      - Body presentation uses the native browser text-align and text-align-last values. Named and automatic ODT styles preserve physical and logical horizontal alignment, last-line alignment, single-word expansion, justification metrics and Paragraph Composer. The UNO map uses the original SvxAdjustItem member IDs.
+      - Targeted Writer paragraph-dialog, search-formatting, DOM paragraph paint, ODT and UNO test group passed 71 tests in seven files. A follow-up run passed 15 tests in the two native paragraph/dialog files, including the added mixed-selection regression. One Chromium test passed for the ordinary Format > Paragraph command, center last-line rendering, dialog reopening and Undo.
+      - Writer resources and the two generator tests, source provenance, source tree, module boundaries, AgentPlane routing, scoped ESLint, Prettier and git diff checks passed. Repository-wide JSDoc and file-size checks still report pre-existing issues. No failures are in the changed files.
+      - Direction and snap-to-grid controls are outside this checkpoint. Exact typographic effects of text-to-text alignment and advanced justification remain open. This is an implementation checkpoint on the active task. It does not advance the ten-closed-task test cadence.
+  -
+    type: "comment"
+    at: "2026-11-22T00:46:02.917Z"
+    author: "CODER"
+    body: |-
+      Writer paragraph writing direction and grid checkpoint
+
+      - The Alignment page exchanges independent frame direction, automatic direction and snap-to-grid items, retaining mixed selections. Native default values and WhichIds come from the Writer pool. Named and automatic ODT styles and the existing snapshot factory retain the three items.
+      - First-strong detection uses the existing Unicode bidi lookup and the pinned GuessParagraphDirection switch. Ordinary typing, grapheme deletion and supported paragraph joins record direction with the text undo operation. The browser receives the effective inherited or authored direction.
+      - For an active page text grid, the projected base line box uses the CalcRealHeight grid pitch and native fixed/minimum line-height rules. The browser still measures its own glyphs, and its current grid projection does not implement per-portion character-grid kerning or adjustments specific to non-first grid lines.
+      - Targeted Writer verification passed 855 tests for real dialogs, layout, document transport, defaults and deletion. Follow-up runs passed 808 tests for final Writer editing and dialog changes and 23 tests covering format-search and persisted Which IDs. Shared Unicode tests passed 22 assertions. The Chromium scenario verified visual last-line alignment, manual RTL and retained direction after typing. The production build passed.
+      - Module boundaries, source structure and provenance, Writer resources, Writer parity inventory, routing, AgentPlane doctor, scoped ESLint and Prettier, and git diff checks passed. The global documentation and file-size checks report pre-existing issues outside these changes.
+      - The pinned FSI case is preserved and documented. The intermediate checkpoint leaves the active task open and does not advance the ten-task full-run count.
+  -
+    type: "comment"
+    at: "2026-11-22T00:54:22.819Z"
+    author: "CODER"
+    body: |-
+      Writer Asian Typography checkpoint
+
+      - The ordinary Paragraph dialog opens the Asian Typography page after Text Flow, as in the pinned Writer dialog. Forbidden characters, hanging punctuation and spacing between Asian and non-Asian text keep their separate native defaults, mixed states and undo records.
+      - The Writer cursor, paragraph style and text default property maps use the original three UNO names. ODF named boolean handlers preserve the original vocabulary, inherited style settings, direct overrides and invalid-token behavior.
+      - Browser paragraph layout uses CSS line breaking, text autospace and hanging punctuation. Chrome accepted text-autospace normal and no-autospace and showed a width difference in a mixed text probe. The tested Chrome did not implement hanging-punctuation. Browser line breaking uses CSS and does not consume the LibreOffice user-editable forbidden-character lists.
+      - Targeted Writer verification passed 80 tests in nine files, including the upstream dialog scenario, per-item mixed selection, ODT roundtrip and named-style inheritance. The Chromium scenario verified the ordinary dialog, CSS changes, reopening and undo. Production build, module boundaries, source checks, Writer resource checks, scoped ESLint and Prettier, Writer parity inventory, AgentPlane routing and doctor passed. Repository-wide JSDoc and file-size checks show existing failures outside this checkpoint.
+      - This checkpoint leaves the current AgentPlane task open. It does not advance the full-run count.
+  -
+    type: "comment"
+    at: "2026-11-22T01:06:13.997Z"
+    author: "CODER"
+    body: |-
+      Writer Outline & List checkpoint
+
+      - The ordinary Paragraph dialog exposes outline level, named list style, list level, synchronization with the outline, and the two original numbering-restart slots. The native heading-lock and missing mixed-level states participate in Reset. Numbering settings and other accepted paragraph deltas share one undo group.
+      - The numbering pool materializes the source built-in named rules and their original ten level formats in the application's ODF alignment mode. The stored numeric start value uses the native SwUndoNumRuleStart value form and the default-start sentinel.
+      - ODF writes the effective paragraph outline level on text:h and compares it with the assigned style during import. The regular dialog is covered through ODT reopening for a numbered start and a bullet with a direct outline level.
+      - Targeted Writer runs passed 106 tests in ten files. The Chromium scenario passed for applying the built-in numbered style, starting at 7, reopening the dialog and undoing both changes. The production build passed.
+      - Module boundaries, source tree and provenance, scoped lint and formatting, Writer resources and parity inventory, AgentPlane doctor and routing passed. Repository-wide JSDoc and size checks report existing failures outside this checkpoint.
+      - Editing a list-style definition and the per-paragraph line-number restart still require their respective owners. This is an intermediate checkpoint and does not close the current AgentPlane task or advance the full-run cadence.
+  -
+    type: "comment"
+    at: "2026-11-22T01:20:35.316Z"
+    author: "CODER"
+    body: |-
+      Verified intermediate Writer paragraph line-numbering checkpoint.
+
+      - The Outline & List page now exchanges the native paragraph line-number item with independent participation and restart values. It respects mixed selection, the native spin bounds and control sensitivity. The actual Writer layout applies a counted paragraph's chosen start to its master frame and continues through page follows.
+      - Pooled styles, the two native UNO properties and ODF paragraph export and import preserve both fields. An explicit ODF zero overrides an inherited restart. Existing boolean browser snapshots restore the participation flag and continue numbering.
+      - The initial focused run passed 72 cases in ten files. A final targeted run passed 46 cases across the paragraph dialog, layout, model and UNO in five files. The final ODF run passed 18 cases in two files, including inheritance. The production build and all three Chromium line-numbering scenarios passed.
+      - Writer resources, boundaries, source tree and provenance, parity inventory, scoped ESLint and Prettier, AgentPlane doctor and routing, and git diff --check passed. Repository-wide JSDoc and file-size checks still report existing findings outside the checkpoint.
+      - Editing a list-style definition through the Outline & List page remains pending. No AgentPlane task closure or full test run occurred. The updated cadence is one full run after ten closed tasks, with the goal remaining active after the run.
+
 doc_version: 3
-doc_updated_at: "2026-11-21T12:28:28.209Z"
+doc_updated_at: "2026-11-22T01:20:35.316Z"
 doc_updated_by: "CODER"
 description: "Implement the approved coherent Writer search-and-replace feature from pinned LibreOffice sources: real shared search engine and options, native paragraph/cursor traversal and replacement/history contracts, view-owned search state and dispatch, Find toolbar and Find and Replace dialog with generated upstream command placement and shortcuts. Preserve source semantics and explicit unsupported boundaries; never substitute DOM text search or browser RegExp for ICU contracts. Work only on writer in vite-office-writer; local upstream reading approved, no network or merges. Keep active until approved scope is verified."
 sections:
   Summary: "Implement the approved Writer search and replace feature using the pinned LibreOffice source contracts, with real shared search responsibilities, Writer cursor traversal, view-owned search state, replacement history, and browser Find / Find and Replace presentation."
-  Scope: "Only /Users/odubinkin/Projects/vite-office-writer on branch writer. Up to 50 non-task files across shared search options/backend/wrapper, Writer cursor/shell/view/dialog/browser/resource owners, related tests and provenance/runtime records. Reading the existing local LibreOffice reference is explicitly approved by the user. No network, merges, external writes, storage/recovery changes, deferred Calc LanguageTag work, DOM-based searching, or JavaScript RegExp substitution for ICU regular expressions. Preserve original UTF-16 offsets, directional endpoint conventions, option defaults, selection ownership and undo grouping. All modes and controls must have truthful source-backed capability boundaries; keep this task open while approved search/replace scope remains unfinished."
-  Plan: "Implement approved Writer search and replace as one coherent task: source-backed shared engine/options, Writer find ranges/replacement/undo, view dispatch and Find toolbar/dialog; targeted verification and truthful pending mode dependencies, no fake ICU or DOM search. Keep task active until the approved feature scope is verified."
+  Scope: "Writer worktree and branch writer only. Retain the previously approved shared search, Writer model and view, command, dialog, resources, tests, and registry work. Include the annotation field and annotation mark, UNO text content attachment, ODF annotation parser and exporter, existing Writer document graph transfer, and Insert Annotation command required to exercise comment search through normal document inputs. Use the browser's ECMAScript RegExp as directed. Preserve the existing file-opening, saving, autosave, and recovery workflows. No network, external writes, merges, or deferred Calc work."
+  Plan: "Finish the Writer search and replace block. Preserve source search ranges, preference and command contracts, edit history and the native browser matcher. Connect ODT annotation and annotation-end to the actual field and mark owners through Writer text content; preserve supported comment content and metadata through the existing graph transfer and ODT export. Connect Insert Annotation to the same native owners and verify search, replacement, undo and save/reopen on the normal Writer path. Run targeted checks and ten-task regression cadence. Continue the goal after the next full regression run as instructed."
   Verify Steps: |-
     - Run targeted Vitest tests for changed shared search owners and related Writer cursor, shell, view and browser search owners. Include forward/backward bounds, empty patterns, UTF-16 endpoints, word/case options, wrap, selection/table traversal, find-all rings, replacement growth/deletion and atomic undo/redo, and UI command/focus/cancellation behavior.
     - Run npm run build and npm run check:writer-resources after UI/resource implementation.
@@ -688,11 +1476,11 @@ Implement the approved Writer search and replace feature using the pinned LibreO
 
 ## Scope
 
-Only /Users/odubinkin/Projects/vite-office-writer on branch writer. Up to 50 non-task files across shared search options/backend/wrapper, Writer cursor/shell/view/dialog/browser/resource owners, related tests and provenance/runtime records. Reading the existing local LibreOffice reference is explicitly approved by the user. No network, merges, external writes, storage/recovery changes, deferred Calc LanguageTag work, DOM-based searching, or JavaScript RegExp substitution for ICU regular expressions. Preserve original UTF-16 offsets, directional endpoint conventions, option defaults, selection ownership and undo grouping. All modes and controls must have truthful source-backed capability boundaries; keep this task open while approved search/replace scope remains unfinished.
+Writer worktree and branch writer only. Retain the previously approved shared search, Writer model and view, command, dialog, resources, tests, and registry work. Include the annotation field and annotation mark, UNO text content attachment, ODF annotation parser and exporter, existing Writer document graph transfer, and Insert Annotation command required to exercise comment search through normal document inputs. Use the browser's ECMAScript RegExp as directed. Preserve the existing file-opening, saving, autosave, and recovery workflows. No network, external writes, merges, or deferred Calc work.
 
 ## Plan
 
-Implement approved Writer search and replace as one coherent task: source-backed shared engine/options, Writer find ranges/replacement/undo, view dispatch and Find toolbar/dialog; targeted verification and truthful pending mode dependencies, no fake ICU or DOM search. Keep task active until the approved feature scope is verified.
+Finish the Writer search and replace block. Preserve source search ranges, preference and command contracts, edit history and the native browser matcher. Connect ODT annotation and annotation-end to the actual field and mark owners through Writer text content; preserve supported comment content and metadata through the existing graph transfer and ODT export. Connect Insert Annotation to the same native owners and verify search, replacement, undo and save/reopen on the normal Writer path. Run targeted checks and ten-task regression cadence. Continue the goal after the next full regression run as instructed.
 
 ## Verify Steps
 

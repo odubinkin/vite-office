@@ -17,20 +17,27 @@
       "divergenceClass": "none",
       "evidence": [
         "apps/office/src/sw/source/uibase/app/docstyle.ts#getParagraphStyleItemSetForPreview",
-        "apps/office/src/sw/source/uibase/app/docstyle-preview.test.ts#@fileoverview"
+        "apps/office/src/sw/source/uibase/app/docstyle-preview.test.ts#@fileoverview",
+        "apps/office/src/sw/source/uibase/app/docstyle.ts#getListStyleItemSet",
+        "vendor/libreoffice-reference/sw/source/uibase/app/docstyle.cxx#SwDocStyleSheet::SetItemSet",
+        "apps/office/src/sw/source/uibase/app/docstyle-preview.test.ts#edits a physical numbering style"
       ],
-      "justification": "Task6764KT in-progress font/style dropdown pipeline: original FontNameBox item sizing, five-pixel fit loop, own-name eligibility, exact script/minimal/symbol sample order, right-aligned sample truncation and scoped paint state are represented. Browser Canvas consumes acquired face metadata and real TextMetrics; no glyph support is inferred from CSS fallback. Writer paragraph FillPreview flattens real root/parent/child item sets and temporarily resolves unused pool styles before deleting new collections in reverse creation order; no persistent style store, model revision, modified or history mutation is introduced. The old unused GetDocumentStylePoolManager accessor is canonicalized to native getIDocumentStylePoolAccess. WRITER072 documents the preserved minimal-sample overwrite. Browser font-source acquisition, real popup/style rendering and Writer/Calc acceptance remain unfinished. Focused deterministic device tests are not installed-font or Chromium-raster evidence; no broad parity/default status is promoted.",
+      "justification": "Task6764KT in-progress font/style dropdown pipeline: original FontNameBox item sizing, five-pixel fit loop, own-name eligibility, exact script/minimal/symbol sample order, right-aligned sample truncation and scoped paint state are represented. Browser Canvas consumes acquired face metadata and real TextMetrics; no glyph support is inferred from CSS fallback. Writer paragraph FillPreview flattens real root/parent/child item sets and temporarily resolves unused pool styles before deleting new collections in reverse creation order; no persistent style store, model revision, modified or history mutation is introduced. The old unused GetDocumentStylePoolManager accessor is canonicalized to native getIDocumentStylePoolAccess. WRITER072 documents the preserved minimal-sample overwrite. Browser font-source acquisition, real popup/style rendering and Writer/Calc acceptance remain unfinished. Focused deterministic device tests are not installed-font or Chromium-raster evidence; no broad parity/default status is promoted. ZHRKTJ connects the Pseudo style family through the original SvxNumBulletItem exchange, including independent template input, accepted levels and explicit reset through ChgNumRuleFormats.",
       "knownViolations": [],
       "localSymbols": [
         "getParagraphStyleItemSetForPreview",
-        "flattenSwFormatForPreview"
+        "flattenSwFormatForPreview",
+        "getListStyleItemSet",
+        "setListStyleItemSet"
       ],
       "sourceResponsibility": "unverified",
       "upstreamFile": "sw/source/uibase/app/docstyle.cxx",
       "upstreamSymbols": [
         "SwDocStyleSheet::GetItemSetForPreview",
         "lcl_SwFormatToFlatItemSet",
-        "lcl_DeleteInfoStyles"
+        "lcl_DeleteInfoStyles",
+        "SwDocStyleSheet::GetItemSet",
+        "SwDocStyleSheet::SetItemSet"
       ]
     }
   }

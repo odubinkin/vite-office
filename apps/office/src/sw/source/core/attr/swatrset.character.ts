@@ -1,18 +1,17 @@
 /** @fileoverview Concrete Writer item-pool factories for character formatting used by the browser Worker graph. */
+import { SvxNoHyphenItem } from "../../../../editeng/inc/nhypitem";
+import { SvxOpticalSizingItem } from "../../../../editeng/inc/opticalsizingitem";
+import { SvxEmphasisMarkItem } from "../../../../editeng/inc/emphasismarkitem";
 import { SvxCaseMapItem } from "../../../../editeng/source/items/textitem.modes";
 import {
-  SvxBlinkItem,
   SvxCharRotateItem,
   SvxTwoLinesItem,
 } from "../../../../editeng/source/items/textitem.layout";
 import { SvxCharScaleWidthItem } from "../../../../editeng/source/items/textitem.spacing";
-import { SvxEmphasisMarkItem } from "../../../../editeng/inc/emphasismarkitem";
-import { SvxCharHiddenItem } from "../../../../editeng/source/items/charhiddenitem";
 import { SvxBrushItem } from "../../../../editeng/source/items/frmitems.brush";
 import {
   SvxCharReliefItem,
   SvxContourItem,
-  SvxNoHyphenItem,
   SvxOverlineItem,
   SvxShadowedItem,
 } from "../../../../editeng/source/items/textitem";
@@ -70,18 +69,6 @@ export function writerCharacterItemFactory(which: number): SfxPoolItemFactory | 
       return /** Restores the native case map. @param value - Stored value. @returns Case item. */ (
         value,
       ) => new SvxCaseMapItem(Number(value), which);
-    case Which.RES_CHRATR_BLINK:
-      return /** Restores character blinking. @param value - Stored flag. @returns Concrete item. */ (
-        value,
-      ) => new SvxBlinkItem(Boolean(value), which);
-    case Which.RES_CHRATR_HIDDEN:
-      return /** Restores hidden text. @param value - Stored flag. @returns Concrete item. */ (
-        value,
-      ) => new SvxCharHiddenItem(Boolean(value), which);
-    case Which.RES_CHRATR_NOHYPHEN:
-      return /** Restores the character hyphenation override. @param value - Stored flag. @returns Concrete item. */ (
-        value,
-      ) => new SvxNoHyphenItem(Boolean(value), which);
     case Which.RES_CHRATR_CONTOUR:
       return /** Restores the native outline. @param value - Stored value. @returns Contour item. */ (
         value,
@@ -90,18 +77,36 @@ export function writerCharacterItemFactory(which: number): SfxPoolItemFactory | 
       return /** Restores the native shadow. @param value - Stored value. @returns Shadow item. */ (
         value,
       ) => new SvxShadowedItem(Boolean(value), which);
+    case Which.RES_CHRATR_EMPHASIS_MARK:
+      return /** Restores native emphasis flags. @param value - Stored unsigned short. @returns Emphasis item. */ (
+        value,
+      ) => {
+        if (typeof value !== "number" || !Number.isInteger(value) || value < 0 || value > 0xffff)
+          throw new Error("Invalid Writer emphasis mark.");
+        return new SvxEmphasisMarkItem(value, which);
+      };
     case Which.RES_CHRATR_RELIEF:
       return /** Restores the native relief. @param value - Stored value. @returns Relief item. */ (
         value,
       ) => new SvxCharReliefItem(Number(value), which);
+    case Which.RES_CHRATR_NOHYPHEN:
+      return /** Restores the native hyphenation exclusion flag. @param value - Stored boolean. @returns Hyphenation item. */ (
+        value,
+      ) => {
+        if (typeof value !== "boolean") throw new Error("Invalid Writer character hyphenation.");
+        return new SvxNoHyphenItem(value, which);
+      };
+    case Which.RES_CHRATR_OPTICAL_SIZING:
+      return /** Restores the native optical sizing flag. @param value - Stored boolean. @returns Optical sizing item. */ (
+        value,
+      ) => {
+        if (typeof value !== "boolean") throw new Error("Invalid Writer character optical sizing.");
+        return new SvxOpticalSizingItem(value, which);
+      };
     case Which.RES_CHRATR_SCALEW:
       return /** Restores the native character scale. @param value - Stored value. @returns Scale item. */ (
         value,
       ) => new SvxCharScaleWidthItem(Number(value), which);
-    case Which.RES_CHRATR_EMPHASIS_MARK:
-      return /** Restores the native emphasis flags. @param value - Stored value. @returns Emphasis item. */ (
-        value,
-      ) => new SvxEmphasisMarkItem(Number(value), which);
     case Which.RES_CHRATR_OVERLINE:
       return /** Restores the native line style. @param value - Stored value. @returns Overline item. */ (
         value,

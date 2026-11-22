@@ -30,7 +30,10 @@ import { type SfxUndoAction, type SfxUndoSavePosition } from "../../../../svl/so
 import { MIMETYPE_OASIS_OPENDOCUMENT_TEXT as ODT_MIMETYPE } from "../../../../comphelper/inc/documentconstants";
 import { SwClient, SwModify, subscribeToSwModify } from "../../../inc/calbck";
 import type { SwModelHint } from "../../../inc/hints";
-import { SwDoc } from "../../core/doc/doc";
+import { SwDoc, type SwDocOptions } from "../../core/doc/doc";
+import { SvxAutoKernItem } from "../../../../editeng/inc/autokernitem";
+import { SvxOpticalSizingItem } from "../../../../editeng/inc/opticalsizingitem";
+import { RES_CHRATR_AUTOKERN, RES_CHRATR_OPTICAL_SIZING } from "../../../inc/hintids";
 import { SwASCWriter } from "../../filter/ascii/wrtasc";
 import { RtfExport } from "../../filter/ww8/rtfexport";
 import { RtfDocumentImpl } from "../../writerfilter/rtftok/rtfdocumentimpl";
@@ -391,10 +394,25 @@ export class SwDocShell extends SfxObjectShell {
     return document;
   }
 
+  /** Applies document-shell defaults to a newly created Writer graph before it is bound to a shell. @param options - Native model construction options. @returns New unmodified model. */
+  public static CreateNewDocument(options: SwDocOptions): SwDoc {
+    const document = new SwDoc(options);
+    const undo = document.GetUndoManager();
+    const recording = undo.DoesUndo();
+    undo.DoUndo(false);
+    try {
+      document.SetDefault(new SvxAutoKernItem(true, RES_CHRATR_AUTOKERN));
+      document.SetDefault(new SvxOpticalSizingItem(true, RES_CHRATR_OPTICAL_SIZING));
+    } finally {
+      undo.DoUndo(recording);
+    }
+    return document;
+  }
+
   /** Replaces the shell contents with a new empty Writer graph. @param metadata - New lifecycle metadata. @returns New model. */
   public InitNew(metadata: SfxObjectShellState): SwDoc {
     return this.ReplaceDocument(
-      new SwDoc({
+      SwDocShell.CreateNewDocument({
         ...(this.defaultFontDevice === undefined
           ? {}
           : { defaultFontDevice: this.defaultFontDevice }),

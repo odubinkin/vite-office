@@ -3,22 +3,11 @@
   "baselineTag": "libreoffice-26.8.0.2",
   "record": {
     "classification": "upstream-mechanism",
-    "status": "mapped",
     "localPath": "apps/office/src/xmloff/source/text/txtflde.ts",
     "localSymbols": [
       "exportAnnotation"
     ],
-    "upstreamPath": "xmloff/source/text/txtflde.cxx",
-    "upstreamSymbols": [
-      "case FIELD_ID_ANNOTATION:",
-      "XMLTextFieldExport::ProcessParagraphSequence"
-    ],
-    "preservedResponsibilities": [
-      "Exports the native ODF annotation metadata and comment paragraph stream in the extended ODF 1.3 profile."
-    ],
-    "omittedResponsibilities": [
-      "Document personal information removal options and other original field cases are outside this path."
-    ],
+    "status": "mapped",
     "evidence": {
       "local": [
         {
@@ -27,19 +16,25 @@
         },
         {
           "path": "apps/office/src/sw/source/filter/xml/odt-annotation.test.ts",
-          "marker": "preserves resolved and unresolved annotation metadata"
+          "marker": "imports the named annotation"
         }
       ],
       "upstream": [
         {
           "path": "vendor/libreoffice-reference/xmloff/source/text/txtflde.cxx",
-          "marker": "case FIELD_ID_ANNOTATION:"
-        },
-        {
-          "path": "vendor/libreoffice-reference/xmloff/source/text/txtflde.cxx",
-          "marker": "XMLTextFieldExport::ProcessParagraphSequence"
+          "marker": "XML_ANNOTATION"
         }
       ]
-    }
+    },
+    "upstreamPath": "xmloff/source/text/txtflde.cxx",
+    "upstreamSymbols": [
+      "XML_ANNOTATION"
+    ],
+    "preservedResponsibilities": [
+      "Serializes the represented annotation metadata, content and named endpoint."
+    ],
+    "omittedResponsibilities": [
+      "Only the represented annotation/marker path is implemented. Complete UNO services and unsupported rich comment formatting remain outside this mapping."
+    ]
   }
 }

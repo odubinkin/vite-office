@@ -6,7 +6,7 @@
     "classification": "upstream-mechanism",
     "state": "active",
     "suite": "writer",
-    "subsystem": "writer-model",
+    "subsystem": "document-model",
     "capabilityIds": [
       "CAP-0111"
     ],
@@ -16,12 +16,11 @@
       "defaultStatus": "unverified",
       "divergenceClass": "none",
       "evidence": [
-        "apps/office/src/sw/inc/fmtline.ts",
-        "apps/office/src/sw/inc/fmtline.native.test.ts",
-        "vendor/libreoffice-reference/sw/inc/fmtline.hxx",
-        "vendor/libreoffice-reference/sw/source/core/layout/atrfrm.cxx"
+        "apps/office/src/sw/inc/fmtline.ts#SwFormatLineNumber",
+        "vendor/libreoffice-reference/sw/inc/fmtline.hxx#SwFormatLineNumber",
+        "vendor/libreoffice-reference/sw/source/core/layout/atrfrm.cxx#SwFormatLineNumber::PutValue"
       ],
-      "justification": "Owns original paragraph line-count participation and the unsigned 24-bit restart value. Copies, equality and addressed UNO values preserve both members.",
+      "justification": "Stores paragraph line-number participation and the 24-bit restart value, with native defaults, copy equality, and typed UNO members.",
       "knownViolations": [],
       "localSymbols": [
         "SwFormatLineNumber"

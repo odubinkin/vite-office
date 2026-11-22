@@ -4,10 +4,12 @@ import { SwFormatCharFormat } from "../txtnode/fmtatr2";
 import { SwClient, type SwModify } from "../../../inc/calbck";
 import { SwFormat } from "../attr/format";
 import type { SwModelHint } from "../../../inc/hints";
-import { RES_BOXATR_FORMULA, RES_BOXATR_VALUE } from "../../../inc/hintids";
+import { RES_BOXATR_FORMULA, RES_BOXATR_VALUE, RES_TXTATR_ANNOTATION } from "../../../inc/hintids";
 import { SetAttrMode } from "../../../inc/swtypes";
 import type { SwDoc } from "../doc/doc";
 import type { SwBookmark } from "../doc/docbm";
+import { AnnotationMark } from "../crsr/annotationmark";
+import type { SwPostItFieldType } from "../fields/docufld";
 import { SwPaM, SwPosition } from "../crsr/pam";
 import { SwTextNode } from "../txtnode/ndtxt";
 import type { SwpHints } from "../txtnode/ndhints";
@@ -17,6 +19,12 @@ import type { SfxPoolItem } from "../../../../svl/source/items/poolitem";
 import { SfxItemSet } from "../../../../svl/source/items/itemset";
 import { SwContentNode, SwTableNode, type SwNode, type SwNodeType } from "../docnode/node";
 import type { SwFormatColl, SwTextFormatColl } from "../doc/fmtcol";
+import { SwTextField } from "../../../inc/txtfld";
+import type { SwTextFlyCnt } from "../../../inc/txtflcnt";
+import { SwUndoDelLayFormat } from "./undobj1";
+import { RndStdIds } from "../../../../svx/inc/swframetypes";
+import type { SpzFrameFormat, SwFlyFrameFormat } from "../layout/atrfrm";
+import { SwUndRng } from "./undobj";
 
 /** Native history discriminants;registered old ranged text,direct format and text collection entries are implemented. */
 export enum HISTORY_HINT {
@@ -82,6 +90,59 @@ export class SwHistorySetFormat extends SwHistoryHint {
   public override Dispose(): void {
     this.m_pAttr?.Dispose();
     this.m_pAttr = undefined;
+  }
+}
+
+/** Original fly hint history delegates to the layout-format deletion owner. */
+export class SwHistoryTextFlyCnt extends SwHistoryHint {
+  private readonly deletion: SwUndoDelLayFormat;
+  /** Captures and removes an anchored fly. @param source - Inline point or floating format. @returns History entry. */
+  constructor(source: SwTextFlyCnt | SwFlyFrameFormat) {
+    super(HISTORY_HINT.HSTRY_FLYCNT);
+    this.deletion = new SwUndoDelLayFormat(source);
+  }
+  /** Restores the original object without selecting its layout frame. @returns Nothing. */
+  override SetInDoc(): void {
+    this.deletion.Restore();
+  }
+  /** Releases any content still retained by the deletion action. @returns Nothing. */
+  override Dispose(): void {
+    this.deletion.Dispose();
+  }
+}
+
+/** Captures the old coordinates of a floating object that stays in the document. */
+export class SwHistoryChangeFlyAnchor extends SwHistoryHint {
+  private readonly nodeIndex: number;
+  private readonly offset: number | undefined;
+
+  /** Saves the original anchor without retaining a registered position. @param format - Original special format. @returns History entry. */
+  constructor(private readonly format: SpzFrameFormat) {
+    super(HISTORY_HINT.HSTRY_CHGFLYANCHOR);
+    const anchor = format.GetAnchor();
+    const node = anchor.GetAnchorNode();
+    if (!node) throw new Error("Writer floating anchor history requires a node.");
+    this.nodeIndex = node.GetIndex();
+    this.offset =
+      anchor.GetAnchorId() === RndStdIds.FLY_AT_CHAR ? anchor.GetAnchorContentOffset() : undefined;
+  }
+
+  /** Restores the anchor of the original live format. @param doc - Owning document. @returns Nothing. */
+  override SetInDoc(doc: SwDoc): void {
+    if (!doc.GetSpzFrameFormats().IsAlive(this.format)) return;
+    const anchor = this.format.GetAnchor().Clone();
+    const position = new SwPosition(doc.GetNodes().at(this.nodeIndex), this.offset);
+    const undo = doc.GetUndoManager();
+    const enabled = undo.DoesUndo();
+    undo.DoUndo(false);
+    try {
+      anchor.SetAnchor(position);
+      this.format.SetFormatAttr(anchor);
+    } finally {
+      position.Dispose();
+      anchor.Dispose();
+      undo.DoUndo(enabled);
+    }
   }
 }
 
@@ -214,6 +275,70 @@ export class SwHistorySetText extends SwHistoryHint {
     this.m_pAttr.Dispose();
   }
 }
+
+/** Retains a native annotation field and its optional range for text history. */
+export class SwHistorySetTextField extends SwHistoryHint {
+  private readonly field: ReturnType<SwTextField["GetAttr"]>;
+  private readonly offset: number;
+  private readonly markRange: SwUndRng | undefined;
+
+  /** Captures the field and its annotation mark before the point is erased. @param hint - Attached field. @param nodeIndex - Field anchor node index. @returns History entry. */
+  public constructor(
+    hint: SwTextField,
+    private readonly nodeIndex: number,
+  ) {
+    super(HISTORY_HINT.HSTRY_SETTXTFLDHNT);
+    const format = hint.GetAttr();
+    this.field = format.Clone();
+    this.offset = hint.GetStart();
+    const mark = format
+      .GetField()
+      .GetTyp()
+      .GetDoc()
+      .GetIDocumentMarkAccess()
+      .GetAnnotationMark(format);
+    if (mark) {
+      const range = new SwPaM(mark.GetMarkEnd(), mark.GetMarkStart());
+      try {
+        this.markRange = new SwUndRng(range);
+      } finally {
+        range.Dispose();
+      }
+    }
+  }
+
+  /** Reattaches the field to its restored dummy and recreates its anchored range. @param doc - Destination graph. @returns Nothing. */
+  public override SetInDoc(doc: SwDoc): void {
+    const node = doc.GetNodes().at(this.nodeIndex);
+    if (!(node instanceof SwTextNode)) return;
+    const existing = node.GetpSwpHints()?.GetTextAttrForCharAt(this.offset, RES_TXTATR_ANNOTATION);
+    const format = existing?.GetAttr() ?? this.field.Clone();
+    if (existing && format.GetField().GetPostItId() !== this.field.GetField().GetPostItId())
+      throw new Error(
+        "Writer annotation history encountered a different field at the restored anchor.",
+      );
+    if (
+      !existing &&
+      !node.InsertHint(new SwTextField(format, this.offset), SetAttrMode.NOTXTATRCHR)
+    )
+      return;
+    if (!this.markRange) return;
+    const point = new SwPosition(node, this.offset);
+    const range = new SwPaM(point);
+    try {
+      this.markRange.SetPaM(range);
+      doc.GetIDocumentMarkAccess().MakeAnnotationMark(range, format);
+    } finally {
+      range.Dispose();
+      point.Dispose();
+    }
+  }
+
+  /** Releases the retained field value. @returns Nothing. */
+  public override Dispose(): void {
+    this.field.Dispose();
+  }
+}
 /** Original reset history retains family and exact coordinates, never the inserted item. */
 export class SwHistoryResetText extends SwHistoryHint {
   /** Records native reset identity. @param m_nAttr - Original Which. @param m_nStart - Exact start. @param m_nEnd - Exact end. @param m_nNodeIndex - Original node slot. @returns Entry. */
@@ -240,6 +365,7 @@ export class SwHistoryResetText extends SwHistoryHint {
 /** Native history payload for ordinary Writer bookmark endpoints. */
 export class SwHistoryBookmark extends SwHistoryHint {
   private readonly m_aName: string;
+  private readonly annotation: { type: SwPostItFieldType; id: number } | undefined;
   private readonly hidden: boolean;
   private readonly hideCondition: string;
   private readonly m_nNode: number;
@@ -248,14 +374,21 @@ export class SwHistoryBookmark extends SwHistoryHint {
   private readonly hadOther: boolean;
   /** Saves requested native endpoints without retaining registered positions. @param bookmark - Existing mark. @param m_bSavePos - Save primary position. @param saveOtherPos - Save second position. @returns History entry. */
   public constructor(
-    bookmark: SwBookmark,
+    bookmark: SwBookmark | AnnotationMark,
     private readonly m_bSavePos: boolean,
     saveOtherPos: boolean,
   ) {
     super(HISTORY_HINT.HSTRY_BOOKMARK);
     this.m_aName = bookmark.GetName();
-    this.hidden = bookmark.IsHidden();
-    this.hideCondition = bookmark.GetHideCondition();
+    if (bookmark instanceof AnnotationMark) {
+      const field = bookmark.GetAnnotationFormatField().GetField();
+      this.annotation = { type: field.GetTyp(), id: field.GetPostItId() };
+      this.hidden = false;
+      this.hideCondition = "";
+    } else {
+      this.hidden = bookmark.IsHidden();
+      this.hideCondition = bookmark.GetHideCondition();
+    }
     this.m_nNode = m_bSavePos ? bookmark.GetMarkPos().GetNodeIndex() : 0;
     this.m_nContent = m_bSavePos ? bookmark.GetMarkPos().GetContentIndex() : 0;
     this.hadOther = bookmark.IsExpanded();
@@ -279,15 +412,19 @@ export class SwHistoryBookmark extends SwHistoryHint {
       enabled = undo.DoesUndo();
     undo.DoUndo(false);
     try {
-      const access = doc.GetIDocumentMarkAccess(),
-        mark = access.FindMark(this.m_aName);
+      const access = doc.GetIDocumentMarkAccess();
+      const annotation = this.annotation?.type.FindFormat(this.annotation.id);
+      if (this.annotation && !annotation) return;
+      const mark = annotation
+        ? access.GetAnnotationMark(annotation)
+        : access.FindMark(this.m_aName);
       if (!this.m_bSavePos && mark === undefined)
         throw new Error("Writer unsaved bookmark position requires an existing mark.");
       const node = this.m_bSavePos ? doc.GetNodes().at(this.m_nNode) : mark?.GetMarkPos().GetNode();
       if (!(node instanceof SwTextNode)) return;
       const content = this.m_bSavePos
         ? this.m_nContent
-        : (mark as SwBookmark).GetMarkPos().GetContentIndex();
+        : (mark as SwBookmark | AnnotationMark).GetMarkPos().GetContentIndex();
       const position = new SwPosition(node, content),
         range = new SwPaM(position);
       position.Dispose();
@@ -302,6 +439,10 @@ export class SwHistoryBookmark extends SwHistoryHint {
             throw new Error("Writer unsaved bookmark end requires an existing range.");
           range.SetMark();
           range.GetMark().Assign(mark.GetOtherMarkPos());
+        }
+        if (annotation) {
+          access.MakeAnnotationMark(range, annotation);
+          return;
         }
         if (mark !== undefined) access.DeleteMark(this.m_aName);
         const restored = access.MakeBookmark(range, this.m_aName);
@@ -325,8 +466,24 @@ export class SwHistory {
     this.m_SwpHstry.push(hint);
   }
   /** Original represented ordinary mark variant of AddIMark. @param bookmark - Live mark. @param savePos - Save primary position. @param saveOtherPos - Save expanded end. @returns Nothing. */
-  public AddIMark(bookmark: SwBookmark, savePos: boolean, saveOtherPos: boolean): void {
+  public AddIMark(
+    bookmark: SwBookmark | AnnotationMark,
+    savePos: boolean,
+    saveOtherPos: boolean,
+  ): void {
     this.m_SwpHstry.push(new SwHistoryBookmark(bookmark, savePos, saveOtherPos));
+  }
+  /** Removes the covered inline fly and retains its deletion history first. @param hint - Actual point. @returns Nothing. */
+  public AddTextFly(hint: SwTextFlyCnt): void {
+    this.m_SwpHstry.push(new SwHistoryTextFlyCnt(hint));
+  }
+  /** Retains a floating format whose anchor is leaving the document. @param format - Actual fly format. @returns Nothing. */
+  public AddDeleteFly(format: SwFlyFrameFormat): void {
+    this.m_SwpHstry.push(new SwHistoryTextFlyCnt(format));
+  }
+  /** Records a floating anchor before its position changes. @param format - Actual special format. @returns Nothing. */
+  public AddChangeFlyAnchor(format: SpzFrameFormat): void {
+    this.m_SwpHstry.push(new SwHistoryChangeFlyAnchor(format));
   }
   /** Original ownership move; neither history's temporary-end counter is reset, even when moving a nonempty suffix. @param position - Destination insertion slot. @param source - Source history. @param start - First moved entry. @returns Nothing. */
   public Move(position: number, source: SwHistory, start = 0): void {
@@ -372,7 +529,7 @@ export class SwHistory {
   public AddColl(collection: SwFormatColl, nodeIndex: number, nodeType: SwNodeType): void {
     this.m_SwpHstry.push(new SwHistoryChangeFormatColl(collection, nodeIndex, nodeType));
   }
-  /** Copies old ranged items using native half-open overlap tests. @param hints - Optional original maps. @param nodeIndex - Original node index. @param start - Range start. @param end - Range end. @param copyFields - Native field policy;no field hints are currently implemented. @returns Nothing. */
+  /** Copies old hints using native half-open overlap tests. @param hints - Optional original maps. @param nodeIndex - Original node index. @param start - Range start. @param end - Range end. @param copyFields - Whether to copy fields. @returns Nothing. */
   public CopyAttr(
     hints: SwpHints | undefined,
     nodeIndex: number,
@@ -380,12 +537,16 @@ export class SwHistory {
     end: number,
     copyFields: boolean,
   ): void {
-    void copyFields;
     if (hints === undefined) return;
     for (let index = 0; index < hints.Count(); index++) {
       const hint = hints.Get(index),
         attrStart = hint.GetStart();
       if (attrStart > end) break;
+      if (hint instanceof SwTextField) {
+        if (copyFields && start <= attrStart && attrStart < end)
+          this.m_SwpHstry.push(new SwHistorySetTextField(hint, nodeIndex));
+        continue;
+      }
       if (!(hint instanceof SwTextAttrEnd)) continue;
       if (start <= attrStart) {
         if (end > attrStart) this.AddTextAttr(hint, nodeIndex, false);

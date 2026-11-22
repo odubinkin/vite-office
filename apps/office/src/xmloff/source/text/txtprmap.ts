@@ -1,8 +1,18 @@
 /** @fileoverview Consumed native text character property map and handler transport from txtprmap.cxx; no browser boolean formatting model or substitute UNO provider. */
+import { cppu_detail_getUnoType_ShadowFormat } from "../../../offapi/com/sun/star/table/ShadowFormat";
 import { cppu_detail_getUnoType_FillStyle } from "../../../offapi/com/sun/star/drawing/FillStyle";
+import { XMLConstantsPropertyHandler } from "../style/XMLConstantsPropertyHandler";
 import { PropertyValue } from "../../../udkapi/com/sun/star/beans/PropertyValue";
 import { PropertyState } from "../../../udkapi/com/sun/star/beans/PropertyState";
 
+import {
+  exportTextEmphasis,
+  importTextEmphasis,
+  textCaseMapProperties,
+  textBooleanProperties,
+  XMLTextCombineCharPropHdl,
+  XMLTextRotationAnglePropHdl,
+} from "./txtprhdl";
 import { XMLEscapementPropHdl, XMLEscapementHeightPropHdl } from "../style/escphdl";
 
 import {
@@ -19,19 +29,15 @@ import {
   BorderLine2,
   cppu_detail_getUnoType_BorderLine2,
 } from "../../../offapi/com/sun/star/table/BorderLine2";
-import { XMLBorderHdl, XMLBorderWidthHdl } from "../style/bordrhdl";
+import { Converter } from "../../../sax/source/tools/converter";
+import { XMLBorderHdl, XMLBorderWidthHdl, type OdfBoxProperties } from "../style/bordrhdl";
 import { cppu_detail_getUnoType_FontSlant as slantType } from "../../../offapi/com/sun/star/awt/FontSlant";
 import type { FastAttributeList } from "../core/xmlimp";
 import { XMLToken as T } from "../core/xmltoken";
 import { SvXMLUnitConverter } from "../core/xmluconv";
 import { XMLColorTransparentPropHdl, XMLIsTransparentPropHdl } from "../style/xmlbahdl";
 import { XMLFontWeightPropHdl } from "../style/weighhdl";
-import { XMLNamedBoolPropertyHdl } from "../style/NamedBoolPropertyHdl";
-import { XMLBoolPropHdl, XMLNBoolPropHdl, XMLPercentPropHdl } from "../style/xmlbahdl";
-import { XMLCaseMapPropHdl, XMLCaseMapVariantHdl } from "../style/csmaphdl";
-import { XMLShadowedPropHdl } from "../style/shdwdhdl";
-import { XMLConstantsPropertyHandler } from "../style/XMLConstantsPropertyHandler";
-import { FontRelief } from "../../../offapi/com/sun/star/text/FontRelief";
+import { XMLPercent16PropHdl } from "../style/xmlbahdl";
 import { XMLPosturePropHdl } from "../style/postuhdl";
 import { XMLKerningPropHdl } from "../style/kernihdl";
 import {
@@ -40,32 +46,37 @@ import {
   XMLUnderlineWidthPropHdl,
 } from "../style/undlihdl";
 import { LanguageTag } from "../../../i18nlangtag/inc/languagetag";
-import { text as nativeText } from "../../../i18nlangtag/source/isolang/isolang.tables";
 import { cppu_detail_getUnoType_Locale as localeType } from "../../../udkapi/com/sun/star/lang/Locale";
 import { XMLCharLocale, exportCharLocale } from "../style/chrlohdl";
 import type { OdfCharacterProperties } from "./txtparae.types";
 import { createOdfThemeColor } from "./XMLComplexColorContext";
 import { createXComplexColor } from "../../../docmodel/inc/uno/UnoComplexColor";
-import { paragraphHyphenationMap } from "./txtprmap.hyphenation";
 import { XComplexColor } from "../../../offapi/com/sun/star/util/XComplexColor";
-import { escapeXml } from "./txtparae";
-import {
-  XMLTextCombineCharPropHdl,
-  XMLTextEmphasizePropHdl,
-  XMLTextRotationAnglePropHdl,
-} from "./txtprhdl";
 /** Stateless original handlers and actual owning core unit. */
-const decorationColor = new XMLColorTransparentPropHdl("font-color"),
-  decorationHasColor = new XMLIsTransparentPropHdl("font-color", false);
+const textLineColor = new XMLColorTransparentPropHdl("font-color"),
+  textLineHasColor = new XMLIsTransparentPropHdl("font-color", false);
 const escapement = new XMLEscapementPropHdl(),
   escapementHeight = new XMLEscapementHeightPropHdl();
 const weight = new XMLFontWeightPropHdl(),
   posture = new XMLPosturePropHdl(),
   converter = new SvXMLUnitConverter("twip");
 const kerning = new XMLKerningPropHdl();
+const fontRelief = new XMLConstantsPropertyHandler(
+  [
+    ["none", 0],
+    ["embossed", 1],
+    ["engraved", 2],
+  ],
+  null,
+);
 const kerningConverter = new SvXMLUnitConverter("mm100");
-/** Independent source CharWeight/CharPosture associations; floats and typed FontSlant are retained. */
-const scriptProperties = [
+/** Native typed character properties with independent lexical handlers. */
+const combineChar = new XMLTextCombineCharPropHdl();
+const combineCharacters = [
+  [T.STYLE_TEXT_COMBINE_START_CHAR, "style:text-combine-start-char", "combinePrefix"],
+  [T.STYLE_TEXT_COMBINE_END_CHAR, "style:text-combine-end-char", "combineSuffix"],
+] as const;
+const numericProperties = [
   [T.FO_FONT_WEIGHT, "fo:font-weight", "fontWeight", weight, "float"],
   [T.STYLE_FONT_WEIGHT_ASIAN, "style:font-weight-asian", "fontWeightAsian", weight, "float"],
   [T.STYLE_FONT_WEIGHT_COMPLEX, "style:font-weight-complex", "fontWeightComplex", weight, "float"],
@@ -78,52 +89,7 @@ const scriptProperties = [
     posture,
     slantType,
   ],
-] as const;
-/** Separate native properties that share the text-line handlers. */
-const decorations = [
-  {
-    name: "underline",
-    tokens: [
-      T.STYLE_TEXT_UNDERLINE_STYLE,
-      T.STYLE_TEXT_UNDERLINE_TYPE,
-      T.STYLE_TEXT_UNDERLINE_WIDTH,
-    ],
-    colorToken: T.STYLE_TEXT_UNDERLINE_COLOR,
-    style: "underlineStyle",
-    color: "underlineColor",
-    hasColor: "underlineHasColor",
-  },
-  {
-    name: "overline",
-    tokens: [T.STYLE_TEXT_OVERLINE_STYLE, T.STYLE_TEXT_OVERLINE_TYPE, T.STYLE_TEXT_OVERLINE_WIDTH],
-    colorToken: T.STYLE_TEXT_OVERLINE_COLOR,
-    style: "overlineStyle",
-    color: "overlineColor",
-    hasColor: "overlineHasColor",
-  },
-] as const;
-const lineProperties = [
-  ["style", new XMLUnderlineStylePropHdl()],
-  ["type", new XMLUnderlineTypePropHdl()],
-  ["width", new XMLUnderlineWidthPropHdl()],
-] as const;
-const effects = [
-  [T.STYLE_TEXT_OUTLINE, "style:text-outline", "contoured", new XMLBoolPropHdl(), "bool"],
-  [T.FO_TEXT_SHADOW, "fo:text-shadow", "shadowed", new XMLShadowedPropHdl(), "bool"],
-  [
-    T.STYLE_FONT_RELIEF,
-    "style:font-relief",
-    "relief",
-    new XMLConstantsPropertyHandler(
-      [
-        ["none", FontRelief.NONE],
-        ["engraved", FontRelief.ENGRAVED],
-        ["embossed", FontRelief.EMBOSSED],
-      ],
-      null,
-    ),
-    "sal_Int16",
-  ],
+  [T.STYLE_TEXT_SCALE, "style:text-scale", "scaleWidth", new XMLPercent16PropHdl(), "sal_Int16"],
   [
     T.STYLE_TEXT_ROTATION_ANGLE,
     "style:text-rotation-angle",
@@ -131,22 +97,28 @@ const effects = [
     new XMLTextRotationAnglePropHdl(),
     "sal_Int16",
   ],
-  [
-    T.STYLE_TEXT_EMPHASIZE,
-    "style:text-emphasize",
-    "emphasis",
-    new XMLTextEmphasizePropHdl(),
-    "sal_Int16",
+] as const;
+const lineStyleHandler = new XMLUnderlineStylePropHdl(),
+  lineTypeHandler = new XMLUnderlineTypePropHdl(),
+  lineWidthHandler = new XMLUnderlineWidthPropHdl();
+/** Original underline and overline maps share handlers but merge their values independently. */
+const lineProperties = {
+  underline: [
+    [T.STYLE_TEXT_UNDERLINE_STYLE, "style:text-underline-style", lineStyleHandler],
+    [T.STYLE_TEXT_UNDERLINE_TYPE, "style:text-underline-type", lineTypeHandler],
+    [T.STYLE_TEXT_UNDERLINE_WIDTH, "style:text-underline-width", lineWidthHandler],
   ],
-  [T.STYLE_TEXT_SCALE, "style:text-scale", "scaleWidth", new XMLPercentPropHdl(2), "sal_Int16"],
-  [T.FO_FONT_VARIANT, "fo:font-variant", "caseMap", new XMLCaseMapVariantHdl(), "sal_Int16"],
-  [T.FO_TEXT_TRANSFORM, "fo:text-transform", "caseMap", new XMLCaseMapPropHdl(), "sal_uInt16"],
-] as const;
-const combineChar = new XMLTextCombineCharPropHdl();
-const combineCharacters = [
-  [T.STYLE_TEXT_COMBINE_START_CHAR, "style:text-combine-start-char", "combinePrefix"],
-  [T.STYLE_TEXT_COMBINE_END_CHAR, "style:text-combine-end-char", "combineSuffix"],
-] as const;
+  overline: [
+    [T.STYLE_TEXT_OVERLINE_STYLE, "style:text-overline-style", lineStyleHandler],
+    [T.STYLE_TEXT_OVERLINE_TYPE, "style:text-overline-type", lineTypeHandler],
+    [T.STYLE_TEXT_OVERLINE_WIDTH, "style:text-overline-width", lineWidthHandler],
+  ],
+} as const;
+const lineColorTokens = {
+  underline: T.STYLE_TEXT_UNDERLINE_COLOR,
+  overline: T.STYLE_TEXT_OVERLINE_COLOR,
+} as const;
+const textLines = ["underline", "overline"] as const;
 /** Original chained CharStrikeout style/type/width/text associations. */
 const strikeoutProperties = [
   [
@@ -161,30 +133,6 @@ const strikeoutProperties = [
     new XMLCrossedOutWidthPropHdl(),
   ],
   [T.STYLE_TEXT_LINE_THROUGH_TEXT, "style:text-line-through-text", new XMLCrossedOutTextPropHdl()],
-] as const;
-/** Native merged CharWordMode map and exact XML_TYPE_BOOL association. */
-const wordMode = new XMLNamedBoolPropertyHdl("skip-white-space", "continuous"),
-  autoKerning = new XMLBoolPropHdl();
-const boolProperties = [
-  [T.STYLE_TEXT_UNDERLINE_MODE, "style:text-underline-mode", "wordMode", wordMode],
-  [T.STYLE_TEXT_OVERLINE_MODE, "style:text-overline-mode", "wordMode", wordMode],
-  [T.STYLE_TEXT_LINE_THROUGH_MODE, "style:text-line-through-mode", "wordMode", wordMode],
-  [T.STYLE_LETTER_KERNING, "style:letter-kerning", "autoKerning", autoKerning],
-  [T.STYLE_TEXT_BLINKING, "style:text-blinking", "flashing", new XMLBoolPropHdl()],
-  [T.TEXT_DISPLAY, "text:display", "hidden", new XMLNamedBoolPropertyHdl("none", "true")],
-  [T.FO_HYPHENATE, "fo:hyphenate", "noHyphenation", new XMLNBoolPropHdl()],
-  [
-    T.STYLE_TEXT_ROTATION_SCALE,
-    "style:text-rotation-scale",
-    "rotationFitsLine",
-    new XMLNamedBoolPropertyHdl("fixed", "line-height"),
-  ],
-  [
-    T.STYLE_TEXT_COMBINE,
-    "style:text-combine",
-    "combineLines",
-    new XMLNamedBoolPropertyHdl("lines", "none"),
-  ],
 ] as const;
 /** Source merged CharLocale mappings for the three independent script families. */
 const languageProperties = [
@@ -216,7 +164,7 @@ const languageProperties = [
     ],
   ],
 ] as const;
-/** Original lexical inputs for the complete western, CJK and CTL locale members. */
+
 export const textLanguagePropertyTokens = languageProperties.flatMap(
   /** Selects the script's native XML locale tokens. @param association - Source map row. @returns Locale tokens. */
   ([, properties]) =>
@@ -225,33 +173,79 @@ export const textLanguagePropertyTokens = languageProperties.flatMap(
       ([token]) => token,
     ),
 );
+const characterBoxFields = [
+  ["border", "border", T.LOEXT_BORDER, T.FO_BORDER],
+  ["padding", "padding", T.LOEXT_PADDING, T.FO_PADDING],
+  ["borderLineWidth", "border-line-width", T.LOEXT_BORDER_LINE_WIDTH, T.STYLE_BORDER_LINE_WIDTH],
+  ["borderTop", "border-top", T.LOEXT_BORDER_TOP, T.FO_BORDER_TOP],
+  ["paddingTop", "padding-top", T.LOEXT_PADDING_TOP, T.FO_PADDING_TOP],
+  [
+    "borderLineWidthTop",
+    "border-line-width-top",
+    T.LOEXT_BORDER_LINE_WIDTH_TOP,
+    T.STYLE_BORDER_LINE_WIDTH_TOP,
+  ],
+  ["borderBottom", "border-bottom", T.LOEXT_BORDER_BOTTOM, T.FO_BORDER_BOTTOM],
+  ["paddingBottom", "padding-bottom", T.LOEXT_PADDING_BOTTOM, T.FO_PADDING_BOTTOM],
+  [
+    "borderLineWidthBottom",
+    "border-line-width-bottom",
+    T.LOEXT_BORDER_LINE_WIDTH_BOTTOM,
+    T.STYLE_BORDER_LINE_WIDTH_BOTTOM,
+  ],
+  ["borderLeft", "border-left", T.LOEXT_BORDER_LEFT, T.FO_BORDER_LEFT],
+  ["paddingLeft", "padding-left", T.LOEXT_PADDING_LEFT, T.FO_PADDING_LEFT],
+  [
+    "borderLineWidthLeft",
+    "border-line-width-left",
+    T.LOEXT_BORDER_LINE_WIDTH_LEFT,
+    T.STYLE_BORDER_LINE_WIDTH_LEFT,
+  ],
+  ["borderRight", "border-right", T.LOEXT_BORDER_RIGHT, T.FO_BORDER_RIGHT],
+  ["paddingRight", "padding-right", T.LOEXT_PADDING_RIGHT, T.FO_PADDING_RIGHT],
+  [
+    "borderLineWidthRight",
+    "border-line-width-right",
+    T.LOEXT_BORDER_LINE_WIDTH_RIGHT,
+    T.STYLE_BORDER_LINE_WIDTH_RIGHT,
+  ],
+] as const;
+
 /** Tokens consumed by this bounded source property map. */
 export const textCharacterPropertyTokens = [
-  ...scriptProperties.map(
+  ...numericProperties.map(
     /** Selects a native property token. @param entry - Mapping. @returns Token. */ ([token]) =>
       token,
   ),
-  ...decorations.flatMap(
-    /** Retains a decoration's native XML input tokens. @param entry - Decoration. @returns Tokens. */
-    (entry) => [...entry.tokens, entry.colorToken],
-  ),
-  ...effects.map(
-    /** Selects a native effect token. @param entry - Mapping. @returns Token. */ ([token]) =>
+  ...lineProperties.underline.map(
+    /** Selects a native property token. @param entry - Mapping. @returns Token. */ ([token]) =>
       token,
   ),
-  T.STYLE_TEXT_COMBINE_START_CHAR,
-  T.STYLE_TEXT_COMBINE_END_CHAR,
   ...strikeoutProperties.map(
     /** Reads the original decoration token. @param entry - Mapping. @returns Token. */
     ([token]) => token,
   ),
+  ...lineProperties.overline.map(
+    /** Selects an overline token. @param entry - Mapping. @returns Token. */ ([token]) => token,
+  ),
+  ...Object.values(lineColorTokens),
+  T.STYLE_TEXT_COMBINE_START_CHAR,
+  T.STYLE_TEXT_COMBINE_END_CHAR,
   T.STYLE_TEXT_POSITION,
+  T.STYLE_TEXT_EMPHASIZE,
+  T.STYLE_FONT_RELIEF,
+  T.FO_FONT_VARIANT,
+  T.FO_TEXT_TRANSFORM,
   T.FO_LETTER_SPACING,
-  ...boolProperties.map(
+  ...textBooleanProperties.map(
     /** Reads original bool property tokens. @param entry - Entry. @returns Token. */ ([token]) =>
       token,
   ),
   ...textLanguagePropertyTokens,
+  ...characterBoxFields.flatMap(
+    /** Admits the native extended and legacy text attributes. @param field - Original map row. @returns Both original tokens. */
+    ([, , extended, legacy]) => [extended, legacy],
+  ),
 ];
 /** Collects all attributes of each native script locale in XML order. @param properties - Native text properties. @returns Qualified attribute/value pairs. */
 export function exportTextLanguageProperties(
@@ -270,25 +264,27 @@ export function exportTextLanguageProperties(
   return result;
 }
 
-/** Emits original handler output from native UNO scalar values. @param properties - Filter handoff. @param paragraphStyle - Whether to use the paragraph map. @returns Attribute fragment. */
-export function exportTextCharacterProperties(
-  properties: OdfCharacterProperties,
-  paragraphStyle = false,
-): string {
+/** Emits original handler output from native UNO scalar values. @param properties - Filter handoff. @returns Attribute fragment. */
+export function exportTextCharacterProperties(properties: OdfCharacterProperties): string {
   const value = new Any(),
     output: [string] = [""];
   let result = "";
   try {
+    for (const [key, name] of characterBoxFields) {
+      const field = properties.characterBox?.[key];
+      if (field !== undefined)
+        result += ` loext:${name}="${typeof field === "number" ? Converter.convertMeasureToXML(field, "twip") : field}"`;
+    }
     if (properties.kerning !== undefined) {
       value.insert([properties.kerning], "sal_Int16");
       if (kerning.exportXML(output, value, kerningConverter))
         result += ` fo:letter-spacing="${output[0]}"`;
     }
-    for (const [token, name, key, handler] of boolProperties) {
-      if (paragraphStyle && token === T.FO_HYPHENATE) continue;
+    for (const [, name, key, handler] of textBooleanProperties) {
       if (properties[key] !== undefined) {
         value.insert([properties[key]], "bool");
-        if (handler.exportXML(output, value, converter)) result += ` ${name}="${output[0]}"`;
+        handler.exportXML(output, value, converter);
+        result += ` ${name}="${output[0]}"`;
       }
     }
     for (const [, name, key] of combineCharacters) {
@@ -309,7 +305,7 @@ export function exportTextCharacterProperties(
         string.dispose();
       }
     }
-    for (const [, name, key, handler, type] of scriptProperties) {
+    for (const [, name, key, handler, type] of numericProperties) {
       const scalar = properties[key];
       if (scalar === undefined) continue;
       value.insert([scalar], type);
@@ -328,54 +324,68 @@ export function exportTextCharacterProperties(
       // At least one native signed scalar was inserted above; both original handlers necessarily emit numeric text.
       result += ` style:text-position="${output[0]}"`;
     }
+    if (properties.relief !== undefined) {
+      output[0] = "";
+      value.insert([properties.relief], "sal_Int16");
+      if (fontRelief.exportXML(output, value, converter) && output[0] !== "")
+        result += ` style:font-relief="${output[0]}"`;
+    }
+    if (properties.caseMap !== undefined) {
+      value.insert([properties.caseMap], "sal_Int16");
+      for (const [, name, handler] of textCaseMapProperties)
+        if (handler.exportXML(output, value, converter)) result += ` ${name}="${output[0]}"`;
+    }
+    if (properties.emphasis !== undefined)
+      result += ` style:text-emphasize="${exportTextEmphasis(properties.emphasis)}"`;
     if (properties.strikeout !== undefined) {
       value.insert([properties.strikeout], "sal_Int16");
       for (const [, name, handler] of strikeoutProperties)
         if (handler.exportXML(output, value, converter)) result += ` ${name}="${output[0]}"`;
     }
-    for (const [, name, key, handler, type] of effects) {
-      const scalar = properties[key];
-      if (scalar === undefined) continue;
-      value.insert([scalar], type);
+    for (const line of textLines) {
+      const style = properties[`${line}Style`];
+      if (style !== undefined) {
+        value.insert([style], "sal_Int16");
+        for (const [, name, handler] of lineProperties[line])
+          if (handler.exportXML(output, value, converter)) result += ` ${name}="${output[0]}"`;
+      }
+      // The native ContextFilter guards underline colors only.
+      if (line === "underline" && (style === undefined || style === 0)) continue;
+      const hasColor = properties[`${line}HasColor`];
+      const color = properties[`${line}Color`];
       output[0] = "";
-      if (handler.exportXML(output, value, converter) && output[0] !== "")
-        result += ` ${name}="${output[0]}"`;
-    }
-    for (const { name, style, color, hasColor } of decorations) {
-      const lineStyle = properties[style];
-      if (lineStyle !== undefined) {
-        value.insert([lineStyle], "sal_Int16");
-        for (const [attribute, handler] of lineProperties)
-          if (handler.exportXML(output, value, converter))
-            result += ` style:text-${name}-${attribute}="${output[0]}"`;
+      if (hasColor !== undefined) {
+        value.insert([hasColor], "bool");
+        textLineHasColor.exportXML(output, value, converter);
       }
-      // ContextFilter suppresses underline color unless it has a visible underline state.
-      if (name === "underline" && (lineStyle === undefined || lineStyle === 0)) continue;
-      output[0] = "";
-      if (properties[hasColor] !== undefined) {
-        value.insert([properties[hasColor]], "bool");
-        decorationHasColor.exportXML(output, value, converter);
+      if (color !== undefined) {
+        value.insert([color], "sal_Int32");
+        textLineColor.exportXML(output, value, converter);
       }
-      if (properties[color] !== undefined) {
-        value.insert([properties[color]], "sal_Int32");
-        decorationColor.exportXML(output, value, converter);
-      }
-      if (output[0] !== "") result += ` style:text-${name}-color="${output[0]}"`;
+      if (output[0] !== "") result += ` style:text-${line}-color="${output[0]}"`;
     }
     return result;
   } finally {
     value.dispose();
   }
 }
-/** Imports native scalar properties in SAX order. @param attributes - Original source order. @param options - Active map and generator compatibility. @returns Successful property conversions. */
+/** Imports native scalar properties, merging underline attributes in actual SAX order. @param attributes - Original source order. @returns Successful property conversions. */
 export function importTextCharacterProperties(
   attributes: FastAttributeList,
-  options: { readonly paragraphStyle?: boolean; readonly isOOo2x?: boolean } = {},
 ): Partial<OdfCharacterProperties> {
-  const result: Record<string, number | boolean | string> = {},
+  const result: Record<string, number | boolean | OdfBoxProperties> = {},
     value = new Any(),
+    lineValues = { underline: new Any(), overline: new Any() },
     crossedOut = new Any();
   try {
+    const characterBox: Record<string, string | number> = {};
+    for (const [key, , extended, legacy] of characterBoxFields) {
+      const raw = attributes.get(extended) ?? attributes.get(legacy);
+      if (raw === null) continue;
+      const value = key.startsWith("padding") ? Converter.convertMeasure(raw, "twip") : raw;
+      if (value !== null) characterBox[key] = value;
+    }
+    if (Object.keys(characterBox).length) result.characterBox = characterBox;
     for (const [token, text] of attributes) {
       const bracket = combineCharacters.find(
         /** Selects the source bracket member. @param entry - Mapping. @returns Token match. */ ([
@@ -400,44 +410,53 @@ export function importTextCharacterProperties(
         }
         continue;
       }
-      const boolean = boolProperties.find(
+      const boolean = textBooleanProperties.find(
         /** Reads the original bool mapping. @param entry - Entry. @returns Match. */ ([item]) =>
           item === token,
       );
       if (boolean !== undefined) {
-        if (options.paragraphStyle && token === T.FO_HYPHENATE) continue;
         if (boolean[3].importXML(text, value, converter)) {
           const scalar: [boolean] = [false];
           value.extract(scalar, "bool");
-          result[boolean[2]] = token === T.TEXT_DISPLAY && options.isOOo2x ? !scalar[0] : scalar[0];
+          result[boolean[2]] = scalar[0];
         }
         continue;
       }
-      const effect = effects.find(
-        /** Resolves a native effect mapping. @param entry - Mapping. @returns Match. */
-        ([item]) => item === token,
-      );
-      if (effect !== undefined) {
-        const [, , key, handler, type] = effect;
-        if (handler.importXML(text, value, converter)) {
-          const scalar: [number | boolean] = [0];
-          value.extract(scalar, type);
-          result[key] = scalar[0];
-        }
-        continue;
-      }
-      const script = scriptProperties.find(
+      const numeric = numericProperties.find(
         /** Finds one source property entry. @param entry - Mapping. @returns Token equality. */ ([
           item,
         ]) => item === token,
       );
-      if (script !== undefined) {
-        const [, , key, handler, type] = script;
+      if (numeric !== undefined) {
+        const [, , key, handler, type] = numeric;
         if (handler.importXML(text, value, converter)) {
           const scalar: [number] = [0];
           value.extract(scalar, type);
           result[key] = scalar[0];
         }
+        continue;
+      }
+      const caseMap = textCaseMapProperties.find(
+        /** Resolves one of the native case attributes. @param property - Map entry. @returns Token match. */
+        ([item]) => item === token,
+      );
+      if (caseMap !== undefined) {
+        if (caseMap[2].importXML(text, value, converter)) {
+          const scalar: [number] = [0];
+          value.extract(scalar, "sal_Int16");
+          result.caseMap = scalar[0];
+        }
+        continue;
+      }
+      if (token === T.STYLE_FONT_RELIEF) {
+        const scalar: [number] = [0];
+        if (fontRelief.importXML(text, value, converter) && value.extract(scalar, "sal_Int16"))
+          result.relief = scalar[0];
+        continue;
+      }
+      if (token === T.STYLE_TEXT_EMPHASIZE) {
+        const emphasis = importTextEmphasis(text);
+        if (emphasis !== undefined) result.emphasis = emphasis;
         continue;
       }
       if (token === T.STYLE_TEXT_POSITION) {
@@ -460,8 +479,30 @@ export function importTextCharacterProperties(
         crossedOut.extract(scalar, "sal_Int16");
         result.strikeout = scalar[0];
       }
+      for (const line of textLines) {
+        const property = lineProperties[line].find(
+          /** Finds a native line attribute. @param entry - Mapping. @returns Token equality. */
+          ([item]) => item === token,
+        );
+        const merged = lineValues[line];
+        if (property !== undefined && property[2].importXML(text, merged, converter)) {
+          const scalar: [number] = [0];
+          merged.extract(scalar, "sal_Int16");
+          result[`${line}Style`] = scalar[0];
+        }
+        if (token === lineColorTokens[line]) {
+          const color: [number] = [0];
+          const hasColor: [boolean] = [false];
+          if (textLineColor.importXML(text, value, converter)) {
+            value.extract(color, "sal_Int32");
+            result[`${line}Color`] = color[0];
+          }
+          textLineHasColor.importXML(text, value, converter);
+          value.extract(hasColor, "bool");
+          result[`${line}HasColor`] = hasColor[0];
+        }
+      }
     }
-    for (const decoration of decorations) importDecoration(attributes, decoration, value, result);
     for (const [suffix, properties] of languageProperties) {
       let locale: XMLCharLocale | undefined;
       for (const [token, value] of attributes) {
@@ -480,51 +521,175 @@ export function importTextCharacterProperties(
     return result as Partial<OdfCharacterProperties>;
   } finally {
     value.dispose();
+    lineValues.underline.dispose();
+    lineValues.overline.dispose();
     crossedOut.dispose();
   }
 }
 
-/** Merges one text-line decoration's style, type and width in SAX order. @param attributes - Source attributes. @param decoration - Property mapping. @param value - Shared temporary Any for color. @param result - Parsed properties. @returns Nothing. */
-function importDecoration(
+const hyphenationProperties = [
+  ["hyphen", T.FO_HYPHENATE, "fo:hyphenate", "ParaIsHyphenation", "bool"],
+  [
+    "minLead",
+    T.FO_HYPHENATION_REMAIN_CHAR_COUNT,
+    "fo:hyphenation-remain-char-count",
+    "ParaHyphenationMaxLeadingChars",
+    "nonzero",
+  ],
+  [
+    "minTrail",
+    T.FO_HYPHENATION_PUSH_CHAR_COUNT,
+    "fo:hyphenation-push-char-count",
+    "ParaHyphenationMaxTrailingChars",
+    "nonzero",
+  ],
+  [
+    "maxHyphens",
+    T.FO_HYPHENATION_LADDER_COUNT,
+    "fo:hyphenation-ladder-count",
+    "ParaHyphenationMaxHyphens",
+    "number",
+  ],
+  [
+    "noCaps",
+    T.LOEXT_HYPHENATION_NO_CAPS,
+    "loext:hyphenation-no-caps",
+    "ParaHyphenationNoCaps",
+    "bool",
+  ],
+  [
+    "noLastWord",
+    T.LOEXT_HYPHENATION_NO_LAST_WORD,
+    "loext:hyphenation-no-last-word",
+    "ParaHyphenationNoLastWord",
+    "bool",
+  ],
+  [
+    "minWordLength",
+    T.LOEXT_HYPHENATION_WORD_CHAR_COUNT,
+    "loext:hyphenation-word-char-count",
+    "ParaHyphenationMinWordLength",
+    "number",
+  ],
+  ["zone", T.LOEXT_HYPHENATION_ZONE, "loext:hyphenation-zone", "ParaHyphenationZone", "number"],
+  [
+    "paragraphEndZone",
+    T.LOEXT_HYPHENATION_ZONE_ALWAYS,
+    "loext:hyphenation-zone-always",
+    "ParaHyphenationZoneAlways",
+    "number",
+  ],
+  [
+    "columnEndZone",
+    T.LOEXT_HYPHENATION_ZONE_COLUMN,
+    "loext:hyphenation-zone-column",
+    "ParaHyphenationZoneColumn",
+    "number",
+  ],
+  [
+    "pageEndZone",
+    T.LOEXT_HYPHENATION_ZONE_PAGE,
+    "loext:hyphenation-zone-page",
+    "ParaHyphenationZonePage",
+    "number",
+  ],
+  [
+    "spreadEndZone",
+    T.LOEXT_HYPHENATION_ZONE_SPREAD,
+    "loext:hyphenation-zone-spread",
+    "ParaHyphenationZoneSpread",
+    "number",
+  ],
+  ["keep", T.FO_HYPHENATION_KEEP, "fo:hyphenation-keep", "ParaHyphenationKeep", "keep"],
+  [
+    "keepType",
+    T.LOEXT_HYPHENATION_KEEP_TYPE,
+    "loext:hyphenation-keep-type",
+    "ParaHyphenationKeepType",
+    "keepType",
+  ],
+  [
+    "compoundMinLead",
+    T.LOEXT_HYPHENATION_COMPOUND_REMAIN_CHAR_COUNT,
+    "loext:hyphenation-compound-remain-char-count",
+    "ParaHyphenationCompoundMinLeadingChars",
+    "number",
+  ],
+  [
+    "compoundMinTrail",
+    T.LOEXT_HYPHENATION_COMPOUND_PUSH_CHAR_COUNT,
+    "loext:hyphenation-compound-push-char-count",
+    "ParaHyphenationCompoundMinTrailingChars",
+    "number",
+  ],
+  [
+    "keepLine",
+    T.LOEXT_HYPHENATION_KEEP_LINE,
+    "loext:hyphenation-keep-line",
+    "ParaHyphenationKeepLine",
+    "bool",
+  ],
+] as const;
+
+/** ODF paragraph members whose scalar types follow the XML property entries. */
+export type OdfParagraphHyphenation = Readonly<{
+  [Row in (typeof hyphenationProperties)[number] as Row[0]]?: Row[4] extends "bool" | "keep"
+    ? boolean
+    : number;
+}>;
+
+const hyphenationKeepTypes = ["auto", "spread", "page", "column", "always"] as const;
+
+/** Imports the original text paragraph hyphenation XML attributes. @param attributes - Native paragraph properties. @returns Present member values. */
+export function importParagraphHyphenation(
   attributes: FastAttributeList,
-  decoration: (typeof decorations)[number],
-  value: Any,
-  result: Record<string, number | boolean | string>,
-): void {
-  const line = new Any();
-  try {
-    for (const [token, text] of attributes) {
-      const part =
-        lineProperties[
-          decoration.tokens.findIndex(
-            /** Identifies the line style, type or width. @param item - Native token. @returns Match. */
-            (item) => item === token,
-          )
-        ];
-      if (part?.[1].importXML(text, line, converter)) {
-        const scalar: [number] = [0];
-        line.extract(scalar, "sal_Int16");
-        result[decoration.style] = scalar[0];
-      }
-      if (token === decoration.colorToken) {
-        const color: [number] = [0];
-        const hasColor: [boolean] = [false];
-        if (decorationColor.importXML(text, value, converter)) {
-          value.extract(color, "sal_Int32");
-          result[decoration.color] = color[0];
-        }
-        decorationHasColor.importXML(text, value, converter);
-        value.extract(hasColor, "bool");
-        result[decoration.hasColor] = hasColor[0];
-      }
+): OdfParagraphHyphenation | undefined {
+  const values: [keyof OdfParagraphHyphenation, number | boolean][] = [];
+  for (const [key, token, , , kind] of hyphenationProperties) {
+    const raw = attributes.get(token);
+    if (raw === null) continue;
+    if (kind === "bool") {
+      const boolean: [boolean] = [false];
+      if (Converter.convertBool(boolean, raw)) values.push([key, boolean[0]]);
+    } else if (kind === "keep") {
+      if (raw === "page" || raw === "auto") values.push([key, raw === "page"]);
+    } else if (kind === "keepType") {
+      const index = hyphenationKeepTypes.findIndex(
+        /** Resolves the native token. @param token - XML spelling. @returns Whether it matches. */
+        (token) => token === raw,
+      );
+      if (index >= 0) values.push([key, index]);
+    } else {
+      const number: [number] = [0];
+      if ((kind === "number" && raw === "none") || Converter.convertNumber(number, raw))
+        values.push([key, (number[0] << 16) >> 16]);
     }
-  } finally {
-    line.dispose();
   }
+  return values.length === 0 ? undefined : Object.fromEntries(values);
+}
+
+/** Exports the original ODF hyphenation attribute forms. @param settings - Direct paragraph item. @returns XML attributes. */
+export function exportParagraphHyphenation(settings?: OdfParagraphHyphenation): string[] {
+  if (settings === undefined) return [];
+  const attributes: string[] = [];
+  for (const [key, , name, , kind] of hyphenationProperties) {
+    const value = settings[key];
+    if (value === undefined || (kind === "nonzero" && value === 0)) continue;
+    let lexical: string | undefined;
+    if (kind === "keep") lexical = value ? "page" : "auto";
+    else if (kind === "keepType") lexical = hyphenationKeepTypes[Number(value)];
+    else if (kind === "number")
+      lexical = value === 0 ? "none" : String((Number(value) << 16) >> 16);
+    else lexical = String(value);
+    if (lexical !== undefined) attributes.push(`${name}="${lexical}"`);
+  }
+  return attributes;
 }
 
 /** Original import property map output targets the shared XPropertySet contract. */
 import type { XMLAutoStyleFamily, XMLPropertySet } from "../../inc/txtimp";
+import { paragraphAsianTypographyProperties } from "./txtprhdl";
+import { getParagraphAlignmentValue, paragraphJustificationProperties } from "../style/adjushdl";
 import type { XMLParagraphImportProperties } from "./txtparai";
 import type { OdfParagraphAlignment } from "./txtparae";
 import { OUString } from "../../../sal/inc/rtl/ustring";
@@ -552,7 +717,7 @@ interface TabStopAddress {
 const ImportTabStops = Sequence.specialize<TabStopAddress>(stopType, 12);
 /** Applies parsed XML properties as native API values. @param target - Property owner. @param character - Character deltas. @param paragraph - Paragraph deltas. @param alignment - Optional alignment. @param leftMargin - Text-left margin in twips. @param autoFamily - Automatic style family. @param autoProperty - Destination property for the interned character style. @returns Nothing. */
 export function applyTextImportProperties(
-  target: Pick<XMLPropertySet, "setPropertyValue" | "setPropertyValues">,
+  target: XMLPropertySet,
   character: Partial<OdfCharacterProperties> = {},
   paragraph: XMLParagraphImportProperties = {},
   alignment?: OdfParagraphAlignment,
@@ -572,7 +737,11 @@ export function applyTextImportProperties(
       } finally {
         string.dispose();
       }
-    } else if (type === cppu_detail_getUnoType_BorderLine2) values.push(new Any(value, type));
+    } else if (
+      type === cppu_detail_getUnoType_BorderLine2 ||
+      type === cppu_detail_getUnoType_ShadowFormat
+    )
+      values.push(new Any(value, type));
     else values.push(new Any([value], type));
   }
   /** Converts parsed twips to original API MM100 with integer native rounding. @param value - Twips. @returns MM100. */
@@ -634,30 +803,31 @@ export function applyTextImportProperties(
     for (const [key, name, type] of [
       ["textTransparency", "CharTransparence", "sal_Int16"],
       ["strikeout", "CharStrikeout", "sal_Int16"],
+      ["emphasis", "CharEmphasis", "sal_Int16"],
+      ["caseMap", "CharCaseMap", "sal_Int16"],
+      ["outline", "CharContoured", "bool"],
+      ["shadow", "CharShadowed", "bool"],
+      ["relief", "CharRelief", "sal_Int16"],
       ["escapement", "CharEscapement", "sal_Int16"],
       ["escapementHeight", "CharEscapementHeight", "sal_Int8"],
+      ["rotation", "CharRotation", "sal_Int16"],
+      ["rotationFitToLine", "CharRotationIsFitToLine", "bool"],
+      ["scaleWidth", "CharScaleWidth", "sal_Int16"],
       ["underlineStyle", "CharUnderline", "sal_Int16"],
       ["underlineColor", "CharUnderlineColor", "sal_Int32"],
       ["underlineHasColor", "CharUnderlineHasColor", "bool"],
       ["overlineStyle", "CharOverline", "sal_Int16"],
       ["overlineColor", "CharOverlineColor", "sal_Int32"],
       ["overlineHasColor", "CharOverlineHasColor", "bool"],
-      ["contoured", "CharContoured", "bool"],
-      ["shadowed", "CharShadowed", "bool"],
-      ["relief", "CharRelief", "sal_Int16"],
-      ["rotation", "CharRotation", "sal_Int16"],
-      ["rotationFitsLine", "CharRotationIsFitToLine", "bool"],
-      ["emphasis", "CharEmphasis", "sal_Int16"],
-      ["caseMap", "CharCaseMap", "sal_Int16"],
+      ["wordMode", "CharWordMode", "bool"],
+      ["autoKerning", "CharAutoKerning", "bool"],
+      ["noHyphenation", "CharNoHyphenation", "bool"],
       ["flashing", "CharFlash", "bool"],
       ["hidden", "CharHidden", "bool"],
-      ["noHyphenation", "CharNoHyphenation", "bool"],
       ["combineLines", "CharCombineIsOn", "bool"],
       ["combinePrefix", "CharCombinePrefix", "OUString"],
       ["combineSuffix", "CharCombineSuffix", "OUString"],
-      ["scaleWidth", "CharScaleWidth", "sal_Int16"],
-      ["wordMode", "CharWordMode", "bool"],
-      ["autoKerning", "CharAutoKerning", "bool"],
+      ["opticalSizing", "CharOpticalSizing", "bool"],
       ["kerning", "CharKerning", "sal_Int16"],
     ] as const)
       if (character[key] !== undefined) add(name, character[key], type);
@@ -671,11 +841,11 @@ export function applyTextImportProperties(
       }
     }
     if (alignment !== undefined)
-      add(
-        "ParaAdjust",
-        alignment === "center" ? 3 : alignment === "right" ? 6 : alignment === "justify" ? 2 : 5,
-        "sal_Int16",
-      );
+      add("ParaAdjust", getParagraphAlignmentValue(alignment), "sal_Int16");
+    for (const [name, , , kind] of paragraphJustificationProperties) {
+      const value = paragraph.justification?.[name];
+      if (value !== undefined) add(name, value, kind === "bool" ? "bool" : "sal_Int16");
+    }
     if (leftMargin !== undefined) add("ParaLeftMargin", mm(leftMargin), "sal_Int32");
     for (const [key, name] of [
       ["firstLineIndent", "ParaFirstLineIndent"],
@@ -689,22 +859,52 @@ export function applyTextImportProperties(
       ["contextualSpacing", "ParaContextMargin"],
       ["countLineNumbers", "ParaLineNumberCount"],
       ["keepWithNext", "ParaKeepTogether"],
+      ["registerModeActive", "ParaRegisterModeActive"],
     ] as const)
       if (paragraph[key] !== undefined) add(name, paragraph[key], "bool");
-    if (paragraph.lineNumberStart !== undefined)
-      add("ParaLineNumberStartValue", paragraph.lineNumberStart, "sal_Int32");
+    if (paragraph.lineNumberStartValue !== undefined)
+      add("ParaLineNumberStartValue", paragraph.lineNumberStartValue, "sal_Int32");
+    if (paragraph.hyphenation !== undefined) {
+      for (const [key, , , name] of hyphenationProperties) {
+        const value = paragraph.hyphenation[key];
+        if (value !== undefined)
+          add(name, value, typeof value === "boolean" ? "bool" : "sal_Int16");
+      }
+    }
+    for (const [key, , , name] of paragraphAsianTypographyProperties) {
+      const value = paragraph.asianTypography?.[key];
+      if (value !== undefined) add(name, value, "bool");
+    }
+    if (paragraph.writingMode !== undefined) add("WritingMode", paragraph.writingMode, "sal_Int16");
+    if (paragraph.writingModeAutomatic !== undefined)
+      add("WritingModeAutomatic", paragraph.writingModeAutomatic, "bool");
+    if (paragraph.snapToGrid !== undefined) add("SnapToGrid", paragraph.snapToGrid, "bool");
     if (paragraph.verticalAlign !== undefined)
       add("ParaVertAlignment", paragraph.verticalAlign, "sal_Int16");
-    for (const [name, , , type] of paragraphHyphenationMap) {
-      const value = paragraph.hyphenation?.[name];
-      if (value !== undefined) add(name, value, type);
-    }
     if (paragraph.keepTogether !== undefined) add("ParaSplit", !paragraph.keepTogether, "bool");
     if (paragraph.joinBorder !== undefined)
       add("ParaIsConnectBorder", paragraph.joinBorder, "bool");
+    if (character.characterBox) {
+      const box = character.characterBox;
+      for (const side of ["Top", "Bottom", "Left", "Right"] as const) {
+        const distance = box[`padding${side}`] ?? box.padding;
+        if (distance !== undefined) add(`Char${side}BorderDistance`, mm(distance), "sal_Int32");
+        const rawBorder = box[`border${side}`] ?? box.border;
+        if (rawBorder === undefined) continue;
+        const target = { value: new BorderLine2() };
+        if (!new XMLBorderHdl().importXML(rawBorder, target)) continue;
+        const rawWidth = box[`borderLineWidth${side}`] ?? box.borderLineWidth;
+        if (rawWidth !== undefined) new XMLBorderWidthHdl().importXML(rawWidth, target);
+        add(`Char${side}Border`, target.value, cppu_detail_getUnoType_BorderLine2);
+      }
+    }
+    if (paragraph.paragraphShadow !== undefined)
+      add("ParaShadowFormat", paragraph.paragraphShadow, cppu_detail_getUnoType_ShadowFormat);
     for (const side of ["Top", "Bottom", "Left", "Right"] as const) {
-      const rawBorder = paragraph[`border${side}`];
-      const rawWidth = paragraph[`borderLineWidth${side}`];
+      const distance = paragraph[`padding${side}`] ?? paragraph.padding;
+      if (distance !== undefined) add(`${side}BorderDistance`, mm(distance), "sal_Int32");
+      const rawBorder = paragraph[`border${side}`] ?? paragraph.border;
+      const rawWidth = paragraph[`borderLineWidth${side}`] ?? paragraph.borderLineWidth;
       if (rawBorder === undefined) continue;
       const target = { value: new BorderLine2() };
       if (!new XMLBorderHdl().importXML(rawBorder, target))
@@ -808,26 +1008,28 @@ export function applyTextImportProperties(
         }
       }
     } else if (names.length) {
-      if (target.setPropertyValues) {
-        try {
+      try {
+        if (target.setPropertyValues) {
           target.setPropertyValues(names, values);
           return;
-        } catch (error) {
-          if (!(error instanceof Exception)) throw error;
-          error.dispose();
         }
+      } catch (error) {
+        if (!(error instanceof Exception)) throw error;
+        error.dispose();
       }
-      // FillPropertySet uses single properties when XMultiPropertySet is absent or fails.
-      for (let i = 0; i < names.length; i++) {
-        try {
-          target.setPropertyValue(names[i] as OUString, values[i] as Any);
-        } catch (failure) {
-          if (
-            !(failure instanceof IllegalArgumentException) &&
-            !(failure instanceof UnknownPropertyException)
-          )
-            throw failure;
-          failure.dispose();
+      // Native FillPropertySet retries individual properties after the multi-set fails.
+      {
+        for (let i = 0; i < names.length; i++) {
+          try {
+            target.setPropertyValue(names[i] as OUString, values[i] as Any);
+          } catch (failure) {
+            if (
+              !(failure instanceof IllegalArgumentException) &&
+              !(failure instanceof UnknownPropertyException)
+            )
+              throw failure;
+            failure.dispose();
+          }
         }
       }
     }

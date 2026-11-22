@@ -9,23 +9,20 @@
     "localSymbols": [
       "importTextConstant",
       "exportTextConstant",
-      "XMLTextEmphasizePropHdl",
-      "XMLTextRotationAnglePropHdl",
-      "XMLTextCombineCharPropHdl"
+      "importTextEmphasis",
+      "exportTextEmphasis"
     ],
     "upstreamSymbols": [
       "pXML_HoriRel_Enum",
-      "XMLTextEmphasizePropHdl_Impl",
-      "XMLTextRotationAnglePropHdl_Impl",
-      "XMLTextCombineCharPropHdl_Impl"
+      "XMLTextEmphasizePropHdl_Impl"
     ],
     "preservedResponsibilities": [
       "Uses the original text-frame constant token maps and shared Any property handler for the consumed frame positioning and wrap values.",
       "Adds the original wrap-influence mode map used by graphic frame styles.",
-      "Ports native rotation rounding, emphasis token handling and single-UTF-16-unit text-combine bracket conversion."
+      "Preserves the native text-emphasis token order, defaults and UNO CharEmphasis values."
     ],
     "omittedResponsibilities": [
-      "Property handlers for text-frame types and other text properties outside this slice are not represented here."
+      "Unconsumed property handlers in txtprhdl.cxx remain outside this slice."
     ],
     "evidence": {
       "local": [
@@ -47,7 +44,7 @@
         },
         {
           "path": "apps/office/src/xmloff/source/text/txtprmap.test.ts",
-          "marker": "normalizes native rotation angles"
+          "marker": "uses the native CharEmphasis tokens"
         }
       ],
       "upstream": [
@@ -62,14 +59,6 @@
         {
           "path": "vendor/libreoffice-reference/xmloff/source/text/txtprhdl.cxx",
           "marker": "XMLTextEmphasizePropHdl_Impl"
-        },
-        {
-          "path": "vendor/libreoffice-reference/xmloff/source/text/txtprhdl.cxx",
-          "marker": "XMLTextRotationAnglePropHdl_Impl"
-        },
-        {
-          "path": "vendor/libreoffice-reference/xmloff/source/text/txtprhdl.cxx",
-          "marker": "XMLTextCombineCharPropHdl_Impl"
         }
       ]
     }

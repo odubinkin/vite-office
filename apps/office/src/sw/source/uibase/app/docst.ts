@@ -1,4 +1,7 @@
 /** @fileoverview Ports the supported paragraph StyleApply request boundary from pinned sw/source/uibase/app/docst.cxx. */
+import { GetParagraphListStyleNames } from "../../core/doc/poolfmt-num";
+import { getListStyleItemSet, setListStyleItemSet } from "./docstyle";
+import type { WriterListStyleTemplateRequest } from "../dialog/writer-dialog-controller";
 import { SwGetPoolIdFromName } from "../../../inc/SwGetPoolIdFromName";
 import { SwStyleNameMapper } from "../../core/doc/SwStyleNameMapper";
 
@@ -6,7 +9,11 @@ import { SfxInterface } from "../../../../sfx2/source/control/objface";
 import { SfxRequest } from "../../../../sfx2/source/control/request";
 import { SfxUInt16Item } from "../../../../svl/source/items/intitem";
 import { SfxStringItem } from "../../../../svl/source/items/stritem";
-import { IsPoolUserFormat, WRITER_AVAILABLE_PARAGRAPH_STYLE_POOL } from "../../../inc/poolfmt";
+import {
+  IsPoolUserFormat,
+  SwPoolFormatId,
+  WRITER_AVAILABLE_PARAGRAPH_STYLE_POOL,
+} from "../../../inc/poolfmt";
 import { getWriterCommandArguments, getWriterSlotId } from "../../../sdi/swriter";
 import { WRITER_COMMAND_IDS } from "../../../uiconfig/swriter/menubar/menubar-commands";
 import { getWriterCommandResource } from "../../../uiconfig/swriter/writer-command-resources";
@@ -30,6 +37,61 @@ const namedFamilies: Readonly<Record<string, number>> = {
   NumberingStyles: 16,
   TableStyles: 32,
 };
+
+/** Binds Edit Style for the Pseudo family to an independent template and the named document owner. @param document - Active Writer document. @param name - Selected list style. @returns Nested dialog request for an editable style. */
+export function editListStyle(
+  document: SwDoc,
+  name: string,
+): WriterListStyleTemplateRequest | undefined {
+  const input = getListStyleItemSet(document, name);
+  const rule = document.FindNumRulePtr(name);
+  if (!input || !rule) return undefined;
+  const nameEditable = IsPoolUserFormat(rule.GetPoolFormatId());
+
+  /** Admits the current style name or an unused custom name in the same family. @param candidate - Normalized UI name. @returns Whether the name can be applied. */
+  function isValidName(candidate: string): boolean {
+    return (
+      candidate === rule?.GetName() ||
+      (nameEditable &&
+        candidate !== "" &&
+        !document.FindNumRulePtr(candidate) &&
+        !GetParagraphListStyleNames(document).includes(candidate))
+    );
+  }
+
+  return {
+    name,
+    nameEditable,
+    isValidName,
+    input,
+    bulletStyle: SwStyleNameMapper.GetUIName(SwPoolFormatId.CHR_BULLET_LEVEL, "Bullets"),
+    numberingStyle: SwStyleNameMapper.GetUIName(SwPoolFormatId.CHR_NUM_LEVEL, "Numbering Symbols"),
+    characterStyles: document
+      .GetCharFormats()
+      .map(
+        /** Returns an available character-style UI name. @param style - Native format. @returns Name. */ (
+          style,
+        ) => style.GetName(),
+      ),
+    /** Applies the accepted name and format attributes to the same live rule. @param candidate - Accepted name. @param output - Changed style items. @returns Whether the inputs were accepted. */
+    apply: (candidate, output) => {
+      if (!isValidName(candidate) || document.FindNumRulePtr(rule.GetName()) !== rule) return false;
+      const undo = document.GetUndoManager();
+      const renamed = candidate !== rule.GetName();
+      if (renamed && output) undo.StartUndo("Edit List Style");
+      try {
+        if (renamed) {
+          if (!document.RenameNumRule(rule.GetName(), candidate)) return false;
+          document.GetDocumentStateManager().SetModified();
+        }
+        if (output) setListStyleItemSet(document, candidate, output);
+        return true;
+      } finally {
+        if (renamed && output) undo.EndUndo();
+      }
+    },
+  };
+}
 
 /** Resolves actual paragraph display names before unused supported built-in pool names. @param doc - Current model. @param name - Exact requested display name. @returns Owned or available style identity. */
 export function findParagraphStyle(doc: SwDoc, name: string): string | undefined {

@@ -2,6 +2,7 @@
  * @fileoverview Source-derived paragraph-style defaults from pinned LibreOffice
  * `sw/source/core/doc/DocumentStylePoolManager.cxx`.
  */
+import { SwFormatLineNumber } from "../../../inc/fmtline";
 import * as ParaItems from "../../../../editeng/source/items/paraitem.controls";
 import type { SwFormat } from "../attr/format";
 import { createWriterTextColorItem, createWriterHighlightItem } from "../attr/swatrset";
@@ -30,7 +31,6 @@ import {
   SvxWeightItem,
 } from "../../../../editeng/source/items/textitem";
 import { SfxBoolItem } from "../../../../svl/source/items/cenumitm";
-import { SwFormatLineNumber } from "../../../inc/fmtline";
 import {
   RES_CHRATR_CJK_FONT,
   RES_CHRATR_CJK_FONTSIZE,

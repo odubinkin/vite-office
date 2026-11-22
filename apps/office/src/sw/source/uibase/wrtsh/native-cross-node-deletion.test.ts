@@ -12,6 +12,12 @@ import { SwFormatAutoFormat, createWriterCharacterItemSet } from "../../core/txt
 import { SwFormatINetFormat } from "../../core/txtnode/fmtatr2";
 import { SwTextINetFormat } from "../../core/txtnode/txtatr2";
 import { SwFormatPageDesc } from "../../core/attr/fmtpdsc";
+import { SfxItemSet } from "../../../../svl/source/items/itemset";
+import { RndStdIds } from "../../../../svx/inc/swframetypes";
+import { Size } from "../../../../tools/inc/gen";
+import { Graphic } from "../../../../vcl/source/gdi/graph";
+import { MakeFlySection } from "../../core/doc/doclay";
+import { aFrameFormatSetRange } from "../../core/bastyp/init";
 import { SfxInt16Item } from "../../../../svl/source/items/intitem";
 import { SvxWeightItem } from "../../../../editeng/source/items/textitem";
 import { SfxListUndoAction } from "../../../../svl/source/undo/undo";
@@ -448,3 +454,72 @@ function requireInsertedHint<T>(hint: T | undefined): T {
     throw new Error("Expected native insertion to retain its actual hint owner.");
   return hint;
 }
+
+it.each(["frame", "graphic"] as const)(
+  "replaces a multi-paragraph selection and restores its middle $0 on Undo",
+  /** Ports the middle-anchor scenario from testSetStringDeletesShape to the ordinary shell replacement command. @param kind - Fly content. @returns Nothing. */
+  (kind) => {
+    const f = fixture(1);
+    const middle = required(f.middle[0]);
+    f.first.SetText("foo");
+    middle.SetText("");
+    f.last.SetText("end");
+    const point = new SwPosition(middle, 0);
+    const attachment = new SwPaM(point);
+    const items = new SfxItemSet(f.doc.GetAttrPool(), aFrameFormatSetRange);
+    const manager = f.doc.GetUndoManager();
+    try {
+      const format =
+        kind === "frame"
+          ? MakeFlySection(f.doc, RndStdIds.FLY_AT_CHAR, point, items)
+          : f.doc
+              .GetDocumentContentOperationsManager()
+              .InsertGraphic(
+                attachment,
+                new Graphic(Uint8Array.from([137, 80, 78, 71]), "image/png", new Size(40, 20)),
+              );
+      const section = required(format.GetContent().GetContentIdx()?.GetNode());
+      const story = f.doc.nodes.at(section.GetIndex() + 1);
+      story.GetTextNode()?.SetText("Original floating text");
+      const start = new SwPosition(f.first, 3);
+      const end = new SwPosition(f.last, 3);
+      try {
+        f.shell.SetPaM(end, start);
+      } finally {
+        start.Dispose();
+        end.Dispose();
+      }
+      const texts =
+        /** Reads the body paragraphs without traversing detached fly content. @returns Current texts. */ () =>
+          f.doc.paragraphs.map(
+            /** Reads one paragraph. @param node - Body paragraph. @returns Text. */ (node) =>
+              node.GetText(),
+          );
+      expect(f.shell.Insert("bar")).toBe(true);
+      expect(texts()).toEqual(["foobar"]);
+      expect(f.doc.GetSpzFrameFormats().IsAlive(format)).toBe(false);
+      expect(f.doc.nodes.indexOfOrUndefined(section)).toBeUndefined();
+      for (let cycle = 0; cycle < 2; cycle++) {
+        expect(f.shell.Undo()).toBe(true);
+        expect(texts()).toEqual(["foo", "", "end"]);
+        expect(f.doc.paragraphs[1]).toBe(middle);
+        expect(f.doc.GetSpzFrameFormats().IsAlive(format)).toBe(true);
+        expect(format.GetAnchor().GetAnchorNode()).toBe(middle);
+        expect(format.GetContent().GetContentIdx()?.GetNode()).toBe(section);
+        expect(f.doc.nodes.at(section.GetIndex() + 1)).toBe(story);
+        if (kind === "frame") expect(story.GetTextNode()?.GetText()).toBe("Original floating text");
+        expect(f.shell.Redo()).toBe(true);
+        expect(texts()).toEqual(["foobar"]);
+        expect(f.doc.GetSpzFrameFormats().IsAlive(format)).toBe(false);
+      }
+      manager.Clear();
+      expect(manager.GetUndoNodes().Count()).toBe(0);
+    } finally {
+      items.Dispose();
+      attachment.Dispose();
+      point.Dispose();
+      f.shell.Close();
+      f.doc.Dispose();
+    }
+  },
+);

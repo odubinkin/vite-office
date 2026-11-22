@@ -33,6 +33,7 @@ import {
   type SwTextLine,
 } from "../text/txtfrm";
 import type { SwLineNumberInfoValue } from "../../../inc/lineinfo";
+import { GetRegisterLineOffset } from "../text/itrform2";
 
 /** One physical page and its ordered text-frame fragments. */
 export interface SwPageFrame {
@@ -246,6 +247,27 @@ export class SwRootFrame extends SwLayoutFrame {
     this.RegisterToFormat(
       new SwFrameFormat(document.GetAttrPool(), "Root", undefined, document.GetDfltFrameFormat()),
     );
+  }
+
+  /** Resolves the style of the physical page at the current text position. @param node - Cursor paragraph. @param offset - Cursor offset. @returns Formatted page style name if found. */
+  public FindPageDescriptorAt(node: SwTextNode, offset: number): string | undefined {
+    return this.GetFormattedPages()[this.FindPageIndexAt(node, offset)]?.descriptor.name;
+  }
+
+  /** Finds the physical page owning a text cursor, preferring the follow at split boundaries. @param node - Cursor paragraph. @param offset - Cursor position in the paragraph. @returns Zero-based physical page or minus one. */
+  public FindPageIndexAt(node: SwTextNode, offset: number): number {
+    if (this.lastDocument !== node.GetDoc()) return -1;
+    const pages = this.GetFormattedPages();
+    for (let index = pages.length - 1; index >= 0; --index)
+      for (const frame of pages[index]?.textFrames ?? [])
+        if (frame.GetTextNodeFirst() === node && offset >= frame.start && offset <= frame.end)
+          return index;
+    return -1;
+  }
+
+  /** Borrows the current physical page frames for native navigation. @returns Formatted pages in physical order. */
+  public GetFormattedPages(): readonly SwPageFrame[] {
+    return this.lastDocument === this.getDocument() ? (this.snapshot?.pages ?? []) : [];
   }
 
   /** Invalidates the formatted graph from a changed Writer node onward. @param nodeIndex - Optional SwNodes index; absent means all frames. @returns Nothing. */
@@ -620,7 +642,7 @@ function textFrameInputEqual(left: SwTextFrameInput, right: SwTextFrameInput | u
     left.pageStyleName === right.pageStyleName &&
     left.pageNumber === right.pageNumber &&
     left.countLineNumbers === right.countLineNumbers &&
-    left.lineNumberStart === right.lineNumberStart &&
+    left.lineNumberStartValue === right.lineNumberStartValue &&
     textLinesEqual(left.lines, right.lines)
   );
 }
@@ -872,6 +894,11 @@ export function createSwPageFrames(
       const currentDescriptor = pageDescriptors[pages.length - 1] as WriterPageDescriptorValue;
       const availableHeight =
         currentDescriptor.height - currentDescriptor.topMargin - currentDescriptor.bottomMargin;
+      const firstMeasuredLine = paragraph.lines[0];
+      const alignedGap =
+        firstMeasuredLine && paragraph.register
+          ? gap + GetRegisterLineOffset(paragraph.register, used + gap, firstMeasuredLine.height)
+          : gap;
       const wholeParagraphHeight = paragraph.lines.reduce(
         /** Handles Writer formatting state. @param sum - Input value. @param line - Input value. @returns Callback result. */ (
           sum,
@@ -885,7 +912,7 @@ export function createSwPageFrames(
         paragraph.keepTogether &&
         hasContent() &&
         wholeParagraphHeight <= availableHeight &&
-        used + gap + wholeParagraphHeight > availableHeight
+        used + alignedGap + wholeParagraphHeight > availableHeight
       ) {
         startFollowPage();
         movedForKeepTogether = true;
@@ -898,7 +925,7 @@ export function createSwPageFrames(
         hasContent() &&
         wholeParagraphHeight + nextFirstLine.height <= availableHeight &&
         used +
-          gap +
+          alignedGap +
           wholeParagraphHeight +
           getSwTextFrameGap(paragraph, nextParagraph, settings) +
           nextFirstLine.height >
@@ -912,8 +939,12 @@ export function createSwPageFrames(
         const pageDescriptor = pageDescriptors[pages.length - 1] as WriterPageDescriptorValue;
         const bodyHeight =
           pageDescriptor.height - pageDescriptor.topMargin - pageDescriptor.bottomMargin;
-        const topSpacing = firstLine === 0 ? gap : 0;
         const line = paragraph.lines[firstLine] as (typeof paragraph.lines)[number];
+        const paragraphSpace = firstLine === 0 ? gap : 0;
+        const topSpacing = paragraph.register
+          ? paragraphSpace +
+            GetRegisterLineOffset(paragraph.register, used + paragraphSpace, line.height)
+          : paragraphSpace;
         if (hasContent() && used + topSpacing + line.height > bodyHeight) {
           startFollowPage();
           continue;

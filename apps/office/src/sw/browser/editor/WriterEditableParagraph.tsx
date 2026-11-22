@@ -1,12 +1,22 @@
 /** @fileoverview Projects one canonical Writer paragraph inside the browser editing host. */
+import { VertOrientation } from "../../../offapi/com/sun/star/text/VertOrientation";
 import { WriterInlineGraphic } from "./WriterFloatingGraphic";
+import { WriterCharacterGeometryText } from "./WriterCharacterGeometryText";
 import { EscapementText } from "./EscapementText";
 
+import { SvxCaseMap } from "../../../editeng/inc/svxenum";
+import { browserCaseStyle, getTitleCaseParts } from "../presentation/writer-case-effects";
 import { FontItalic, FontWeight } from "../../../tools/inc/fontenum";
 
 import { StrikeoutText } from "../../../vcl/browser/strikeout-text";
 import { Fragment, useLayoutEffect, useRef } from "react";
 import { resolveSwNumberingTabPosition } from "../../source/core/text/txttab";
+import {
+  browserFontPaint,
+  browserTextDecoration,
+  browserTextEmphasis,
+} from "../presentation/writer-font-paint";
+import { splitWordLineText } from "../presentation/writer-view-projection";
 import { browserFontFamily } from "./writer-font-family";
 import { FontLineStyle } from "../../../editeng/source/items/textitem";
 
@@ -32,6 +42,29 @@ export interface WriterEditableParagraphProps {
   readonly retainElement: (paragraphId: string, element: HTMLParagraphElement | null) => void;
 }
 
+/** Maps native graphic orientations to the browser's inline alignment. @param orientation - Native orientation code. @param heightPt - Graphic extent. @returns CSS vertical alignment. */
+function graphicVerticalAlign(orientation: number, heightPt: number): string {
+  switch (orientation) {
+    case VertOrientation.LINE_TOP:
+      return "top";
+    case VertOrientation.LINE_BOTTOM:
+      return "bottom";
+    case VertOrientation.LINE_CENTER:
+    case VertOrientation.CHAR_CENTER:
+      return "middle";
+    case VertOrientation.CHAR_TOP:
+      return "text-top";
+    case VertOrientation.CHAR_BOTTOM:
+      return "text-bottom";
+    case VertOrientation.CENTER:
+      return `-${heightPt / 2}pt`;
+    case VertOrientation.BOTTOM:
+      return `-${heightPt}pt`;
+    default:
+      return "baseline";
+  }
+}
+
 /** Renders a paragraph projection that inherits editability from the one document root. @param props - Immutable paragraph projection state. @returns Rendered paragraph projection. */
 export function WriterEditableParagraph({
   index,
@@ -47,6 +80,7 @@ export function WriterEditableParagraph({
   lineNumbers,
   retainElement,
 }: WriterEditableParagraphProps): React.JSX.Element {
+  const asianTypography = paragraph.computedStyle.asianTypography;
   const paragraphElement = useRef<HTMLParagraphElement | null>(null);
   const labelElement = useRef<HTMLSpanElement | null>(null);
   const label =
@@ -57,10 +91,25 @@ export function WriterEditableParagraph({
       : `Row ${cellPosition.rowIndex + 1} column ${cellPosition.cellIndex + 1} paragraph ${cellPosition.paragraphIndex + 1}`;
   const listLayout = paragraph.listLayout;
   const markerFont = paragraph.listMarkerFont;
-  let markerContent: React.ReactNode = listMarker;
-  if (markerFont?.strikeout !== undefined)
+  const markerGraphic = paragraph.listMarkerGraphic;
+  let markerContent: React.ReactNode = markerGraphic ? (
+    <img
+      alt=""
+      src={markerGraphic.src}
+      style={{
+        display: "inline-block",
+        maxWidth: "none",
+        width: `${markerGraphic.widthPt}pt`,
+        height: `${markerGraphic.heightPt}pt`,
+        verticalAlign: graphicVerticalAlign(markerGraphic.vertOrient, markerGraphic.heightPt),
+      }}
+    />
+  ) : (
+    listMarker
+  );
+  if (markerGraphic === undefined && markerFont?.strikeout !== undefined)
     markerContent = <StrikeoutText value={markerFont.strikeout}>{markerContent}</StrikeoutText>;
-  if (markerFont?.escapement !== undefined)
+  if (markerGraphic === undefined && markerFont?.escapement !== undefined)
     markerContent = <EscapementText value={markerFont.escapement}>{markerContent}</EscapementText>;
   const markerStartPt =
     listLayout === undefined ? 0 : listLayout.indentAtPt + listLayout.firstLineIndentPt;
@@ -114,12 +163,27 @@ export function WriterEditableParagraph({
     },
     [paragraph, isFollow, markerStartPt, contentStartPt, markerWidthPt, listLayout],
   );
+  // DrawText maps the complete paragraph first, then starts a new case scan for an expanding snippet.
+  const expandingTitleCase =
+    paragraph.runs.some(
+      /** Checks whether any run uses title case. @param run - Native portion. @returns Whether title casing participates. */
+      (run) => run.attributes.caseMap === SvxCaseMap.Capitalize,
+    ) &&
+    getTitleCaseParts(paragraph.text, undefined).some(
+      /** Checks the width-changing uppercase mapping before drawing a fragment. @param part - Case portion. @returns Whether the number of code units changes. */
+      (part) => part.uppercase && part.text.toUpperCase().length !== part.text.length,
+    );
   return (
     <div
       className="relative shrink-0"
       data-active={isActive}
       style={{
         backgroundColor: paragraph.computedStyle.backgroundColor,
+        ...paragraph.borderStyle,
+        ...(paragraph.borderStyle && isFollow ? { borderTop: "none", paddingTop: 0 } : {}),
+        ...(paragraph.borderStyle && fragmentEnd < paragraph.text.length
+          ? { borderBottom: "none", paddingBottom: 0 }
+          : {}),
         marginBlockStart: `${topSpacingPt ?? (cellPosition === undefined ? 0 : paragraph.computedStyle.upperSpacingPt)}pt`,
         marginBlockEnd:
           cellPosition === undefined ? undefined : `${paragraph.computedStyle.lowerSpacingPt}pt`,
@@ -233,6 +297,7 @@ export function WriterEditableParagraph({
               : `${cellPosition.rowIndex}:${cellPosition.cellIndex}`
           }
           className={`whitespace-pre-wrap text-slate-950 outline-none ${listMarker === undefined ? "" : "min-w-0 flex-1"}`}
+          dir={paragraph.computedStyle.direction}
           data-alignment={paragraph.alignment}
           data-list-kind={paragraph.list.kind}
           data-list-level={paragraph.list.level}
@@ -266,6 +331,10 @@ export function WriterEditableParagraph({
               paragraph.computedStyle.fontFamilyGeneric,
             ),
             fontSize: `${paragraph.computedStyle.fontSizePt}pt`,
+            fontKerning: paragraph.computedStyle.autoKerning === true ? "normal" : "none",
+            fontOpticalSizing: paragraph.computedStyle.opticalSizing === true ? "auto" : "none",
+            hyphenateLimitChars: paragraph.computedStyle.hyphenationLimits,
+            hyphens: paragraph.computedStyle.autoHyphenation === true ? "auto" : "manual",
             fontStyle: paragraph.computedStyle.fontStyle,
             fontWeight: paragraph.computedStyle.fontWeight,
             lineHeight: paragraph.computedStyle.lineHeight,
@@ -277,7 +346,31 @@ export function WriterEditableParagraph({
                   ? `${paragraph.textLeftMargin / 20}pt`
                   : undefined,
             marginInlineEnd: `${paragraph.computedStyle.rightMarginPt}pt`,
-            textAlign: paragraph.alignment,
+            lineBreak:
+              asianTypography === undefined
+                ? undefined
+                : asianTypography.forbiddenRules
+                  ? "strict"
+                  : "normal",
+            hangingPunctuation:
+              asianTypography === undefined
+                ? undefined
+                : asianTypography.hangingPunctuation
+                  ? "allow-end"
+                  : "none",
+            textAutospace:
+              asianTypography === undefined
+                ? undefined
+                : asianTypography.scriptSpace
+                  ? "normal"
+                  : "no-autospace",
+            textAlign: paragraph.computedStyle.logicalAlignment ?? paragraph.alignment,
+            textAlignLast:
+              paragraph.computedStyle.lastLineAlignment === undefined
+                ? undefined
+                : fragmentEnd === paragraph.text.length
+                  ? paragraph.computedStyle.lastLineAlignment
+                  : "justify",
             // SwNumFormat already places a list's first line; applying the
             // paragraph indent here moves its text back into the marker slot.
             textIndent:
@@ -296,14 +389,24 @@ export function WriterEditableParagraph({
                 run.startOffset < fragmentEnd && run.startOffset + run.text.length > fragmentStart,
             )
             .map(
-              /** Projects one canonical text run with a deterministic view key. @param run - Immutable run. @returns Semantic run projection. */ (
-                run,
-              ) => (
+              /** Projects one canonical text run with a deterministic view key.
+               * @param run - Immutable run.
+               * @param index - Run index in the visible fragment.
+               * @param runs - Runs intersecting the visible fragment.
+               * @returns Semantic run projection.
+               */ (run, index, runs) => (
                 <Fragment key={getWriterPortionProjectionKey(paragraph.id, run)}>
                   <WriterTextPortionProjection
                     inheritedBold={paragraph.computedStyle.fontWeight === 700}
                     inheritedFontFamily={paragraph.computedStyle.fontFamily}
                     inheritedItalic={paragraph.computedStyle.fontStyle === "italic"}
+                    precedingCharacter={
+                      expandingTitleCase
+                        ? undefined
+                        : paragraph.text[Math.max(fragmentStart, run.startOffset) - 1]
+                    }
+                    joinLeftBorder={index > 0 && run.attributes.joinsPreviousCharacterBox === true}
+                    joinRightBorder={runs[index + 1]?.attributes.joinsPreviousCharacterBox === true}
                     run={{
                       ...run,
                       text: run.text.slice(
@@ -322,55 +425,46 @@ export function WriterEditableParagraph({
   );
 }
 
-/** Maps native visible line variants to CSS decoration families. @param style - Native decoration style. @returns Browser decoration style. */
-function browserTextLineStyle(
-  style: FontLineStyle,
-): "solid" | "double" | "dotted" | "dashed" | "wavy" {
-  switch (style) {
-    case FontLineStyle.LINESTYLE_DOUBLE:
-      return "double";
-    case FontLineStyle.LINESTYLE_DOTTED:
-    case FontLineStyle.LINESTYLE_BOLDDOTTED:
-      return "dotted";
-    case FontLineStyle.LINESTYLE_DASH:
-    case FontLineStyle.LINESTYLE_LONGDASH:
-    case FontLineStyle.LINESTYLE_DASHDOT:
-    case FontLineStyle.LINESTYLE_DASHDOTDOT:
-    case FontLineStyle.LINESTYLE_BOLDDASH:
-    case FontLineStyle.LINESTYLE_BOLDLONGDASH:
-    case FontLineStyle.LINESTYLE_BOLDDASHDOT:
-    case FontLineStyle.LINESTYLE_BOLDDASHDOTDOT:
-      return "dashed";
-    case FontLineStyle.LINESTYLE_SMALLWAVE:
-    case FontLineStyle.LINESTYLE_WAVE:
-    case FontLineStyle.LINESTYLE_DOUBLEWAVE:
-    case FontLineStyle.LINESTYLE_BOLDWAVE:
-      return "wavy";
-    default:
-      return "solid";
-  }
-}
-
 /** Paints one selected decoration independently from the other line. @param line - Decoration position. @param value - Native line projection. @param content - Existing text portion. @returns Platform decoration. */
 function paintTextLine(
   line: "underline" | "overline",
   value: WriterTextLineProjection,
   content: React.ReactNode,
 ): React.ReactNode {
-  return (
-    <span
-      style={{
-        textDecorationLine: line,
-        textDecorationStyle: browserTextLineStyle(value.style),
-        textDecorationColor: value.color,
-        ...(value.style >= FontLineStyle.LINESTYLE_BOLD &&
-        value.style <= FontLineStyle.LINESTYLE_BOLDWAVE
-          ? { textDecorationThickness: "0.13em" }
-          : {}),
-      }}
-    >
-      {content}
-    </span>
+  return <span style={browserTextDecoration(line, value)}>{content}</span>;
+}
+
+/** Paints independently authored underline and overline styles. @param attributes - Source portion attributes. @param content - Text or previously decorated content. @returns Decorated text. */
+function paintWriterLines(
+  attributes: WriterTextPortion["attributes"],
+  content: React.ReactNode,
+): React.ReactNode {
+  if (attributes.underlineLine !== undefined)
+    content = paintTextLine("underline", attributes.underlineLine, content);
+  else if (attributes.underline)
+    content = <span style={{ textDecoration: "underline" }}>{content}</span>;
+  if (attributes.overlineLine !== undefined)
+    content = paintTextLine("overline", attributes.overlineLine, content);
+  return content;
+}
+
+/** Renders the original text with uppercase paint on native title-case initials. @param mode - Effective case effect. @param value - Original text. @param preceding - Previous character in the source paragraph. @returns Original text and paint wrappers. */
+function renderCaseText(
+  mode: SvxCaseMap | undefined,
+  value: string,
+  preceding: string | undefined,
+): React.ReactNode {
+  if (mode !== SvxCaseMap.Capitalize) return value;
+  return getTitleCaseParts(value, preceding).map(
+    /** Applies uppercase to a selected original unit. @param part - Paint portion. @param index - Portion index. @returns Original text with optional CSS. */
+    (part, index) =>
+      part.uppercase ? (
+        <span key={index} style={{ textTransform: "uppercase" }}>
+          {part.text}
+        </span>
+      ) : (
+        part.text
+      ),
   );
 }
 
@@ -379,20 +473,83 @@ export function WriterTextPortionProjection({
   inheritedBold,
   inheritedFontFamily,
   inheritedItalic,
+  precedingCharacter,
+  joinLeftBorder = false,
+  joinRightBorder = false,
   run,
 }: Readonly<{
   inheritedBold: boolean;
   inheritedFontFamily: string | undefined;
   inheritedItalic: boolean;
+  precedingCharacter?: string | undefined;
+  joinLeftBorder?: boolean;
+  joinRightBorder?: boolean;
   run: Pick<WriterTextPortion, "text" | "attributes" | "hyperlink" | "inlineGraphic">;
 }>): React.ReactNode {
   let content: React.ReactNode = run.inlineGraphic ? (
     <WriterInlineGraphic value={run.inlineGraphic} marker={run.text} />
   ) : (
-    run.text
+    renderCaseText(run.attributes.caseMap, run.text, precedingCharacter)
   );
-  if (run.attributes.strikeout !== undefined)
-    content = <StrikeoutText value={run.attributes.strikeout}>{content}</StrikeoutText>;
+  const { attributes } = run;
+  const rotation = run.inlineGraphic === undefined ? (attributes.rotation ?? 0) : 0;
+  const scaleWidth = run.inlineGraphic === undefined ? (attributes.scaleWidth ?? 100) : 100;
+  const wordLines =
+    run.inlineGraphic === undefined &&
+    attributes.wordLineMode &&
+    (attributes.underline ||
+      attributes.overlineLine !== undefined ||
+      Boolean(attributes.strikeout));
+  if (wordLines) {
+    let offset = 0;
+    content = splitWordLineText(run.text).map(
+      /** Paints nonspacing fragments without duplicating model text. @param part - Original text fragment. @param index - Fragment index. @returns Decorated word or untouched spacing. */
+      (part, index) => {
+        const preceding = offset === 0 ? precedingCharacter : run.text[offset - 1];
+        offset += part.length;
+        if (index % 2 !== 0 || part === "") return part;
+        const text = renderCaseText(attributes.caseMap, part, preceding);
+        const word =
+          attributes.strikeout === undefined ? (
+            text
+          ) : (
+            <StrikeoutText value={attributes.strikeout}>{text}</StrikeoutText>
+          );
+        const lines = paintWriterLines(attributes, word);
+        if (scaleWidth !== 100 && rotation === 0)
+          return (
+            <WriterCharacterGeometryText key={index} rotation={0} scaleWidth={scaleWidth}>
+              {lines}
+            </WriterCharacterGeometryText>
+          );
+        return <Fragment key={index}>{lines}</Fragment>;
+      },
+    );
+  }
+  if (rotation !== 0) {
+    content = (
+      <WriterCharacterGeometryText rotation={rotation} scaleWidth={scaleWidth}>
+        {content}
+      </WriterCharacterGeometryText>
+    );
+  } else if (scaleWidth !== 100 && !wordLines) {
+    let offset = 0;
+    content = run.text.split(/([\r\n\t]+| +)/u).map(
+      /** Keeps whitespace and the text's original offsets between scaled word advances. @param part - Original source segment. @param index - Stable segment index. @returns Scaled inline text or mandatory break controls. */
+      (part, index) => {
+        const preceding = offset === 0 ? precedingCharacter : run.text[offset - 1];
+        offset += part.length;
+        if (part === "" || /[\r\n\t]/u.test(part)) return part;
+        return (
+          <WriterCharacterGeometryText key={index} rotation={0} scaleWidth={scaleWidth}>
+            {renderCaseText(attributes.caseMap, part, preceding)}
+          </WriterCharacterGeometryText>
+        );
+      },
+    );
+  }
+  if (!wordLines && attributes.strikeout !== undefined)
+    content = <StrikeoutText value={attributes.strikeout}>{content}</StrikeoutText>;
   if (run.attributes.escapement !== undefined)
     content = <EscapementText value={run.attributes.escapement}>{content}</EscapementText>;
   if (run.attributes.highlight !== undefined)
@@ -406,23 +563,44 @@ export function WriterTextPortionProjection({
         {content}
       </span>
     );
+  const emphasis = browserTextEmphasis(run.attributes.emphasisMark);
+  if (emphasis !== undefined) content = <span style={emphasis}>{content}</span>;
+  if (!wordLines) content = paintWriterLines(attributes, content);
+  const caseStyle =
+    run.inlineGraphic === undefined ? browserCaseStyle(attributes.caseMap) : undefined;
+  if (caseStyle !== undefined) content = <span style={caseStyle}>{content}</span>;
+  const effect = browserFontPaint(attributes, attributes.color);
+  if (effect !== undefined && run.inlineGraphic === undefined)
+    content = <span style={effect}>{content}</span>;
   if (run.attributes.color !== undefined)
     content = (
       <span style={{ color: run.attributes.color === "auto" ? "initial" : run.attributes.color }}>
         {content}
       </span>
     );
-  if (run.attributes.underlineLine !== undefined)
-    content = paintTextLine("underline", run.attributes.underlineLine, content);
-  else if (run.attributes.underline)
-    content = <span style={{ textDecoration: "underline" }}>{content}</span>;
-  if (run.attributes.overlineLine !== undefined)
-    content = paintTextLine("overline", run.attributes.overlineLine, content);
   if (run.attributes.fontSizeTwips !== undefined)
     content = <span style={{ fontSize: `${run.attributes.fontSizeTwips / 20}pt` }}>{content}</span>;
-  if (run.attributes.kerningTwips !== undefined)
+  const { autoKerning, kerningTwips, opticalSizing, noHyphenation, language } = run.attributes;
+  if (
+    autoKerning !== undefined ||
+    kerningTwips !== undefined ||
+    opticalSizing !== undefined ||
+    noHyphenation ||
+    language
+  )
     content = (
-      <span style={{ letterSpacing: `${run.attributes.kerningTwips / 20}pt` }}>{content}</span>
+      <span
+        lang={language}
+        style={{
+          hyphens: noHyphenation ? "manual" : undefined,
+          fontOpticalSizing:
+            opticalSizing === undefined ? undefined : opticalSizing ? "auto" : "none",
+          fontKerning: autoKerning === undefined ? undefined : autoKerning ? "normal" : "none",
+          letterSpacing: kerningTwips === undefined ? undefined : `${kerningTwips / 20}pt`,
+        }}
+      >
+        {content}
+      </span>
     );
   const runFamily = run.attributes.fontFamily ?? inheritedFontFamily;
   if (run.attributes.fontFamily !== undefined)
@@ -435,6 +613,26 @@ export function WriterTextPortionProjection({
   else if (inheritedItalic) content = <span style={{ fontStyle: "normal" }}>{content}</span>;
   if (run.attributes.bold) content = <strong>{content}</strong>;
   else if (inheritedBold) content = <span style={{ fontWeight: 400 }}>{content}</span>;
+  const box = run.attributes.characterBox;
+  if (box !== undefined)
+    content = (
+      <span
+        style={{
+          borderTop: box.Top.line,
+          borderBottom: box.Bottom.line,
+          borderLeft: joinLeftBorder ? "none" : box.Left.line,
+          borderRight: joinRightBorder ? "none" : box.Right.line,
+          paddingTop: `${box.Top.padding}pt`,
+          paddingBottom: `${box.Bottom.padding}pt`,
+          paddingLeft: joinLeftBorder ? 0 : `${box.Left.padding}pt`,
+          paddingRight: joinRightBorder ? 0 : `${box.Right.padding}pt`,
+          boxDecorationBreak: "clone",
+          WebkitBoxDecorationBreak: "clone",
+        }}
+      >
+        {content}
+      </span>
+    );
   if (run.hyperlink !== undefined)
     content = (
       <a
@@ -452,5 +650,5 @@ export function WriterTextPortionProjection({
 /** Builds a deterministic view-only key from the projected run boundary and semantic state. @param paragraphId - Stable text-node identity. @param run - Projected run. @returns Stable projection key. */
 function getWriterPortionProjectionKey(paragraphId: string, run: WriterTextPortion): string {
   const attributes = run.attributes;
-  return `${paragraphId}:${run.startOffset}:${attributes.bold ? 1 : 0}${attributes.italic ? 1 : 0}${attributes.underline ? 1 : 0}:${attributes.strikeout ?? 0}:${attributes.escapement?.offset ?? 0}/${attributes.escapement?.height ?? 100}:${attributes.color ?? ""}:${attributes.highlight ?? ""}:${attributes.fontFamily ?? ""}:${attributes.fontFamilyGeneric ?? ""}:${attributes.fontSizeTwips ?? ""}:${attributes.kerningTwips ?? ""}:${run.hyperlink?.url ?? ""}:${run.hyperlink?.targetFrame ?? ""}`;
+  return `${paragraphId}:${run.startOffset}:${attributes.bold ? 1 : 0}${attributes.italic ? 1 : 0}${attributes.underline ? 1 : 0}:${attributes.strikeout ?? 0}:${attributes.escapement?.offset ?? 0}/${attributes.escapement?.height ?? 100}:${attributes.color ?? ""}:${attributes.highlight ?? ""}:${attributes.fontFamily ?? ""}:${attributes.fontFamilyGeneric ?? ""}:${attributes.fontSizeTwips ?? ""}:${attributes.kerningTwips ?? ""}:${JSON.stringify(attributes.characterBox) ?? ""}:${run.hyperlink?.url ?? ""}:${run.hyperlink?.targetFrame ?? ""}`;
 }

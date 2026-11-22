@@ -1,13 +1,10 @@
 /** @fileoverview Implements Writer's streaming SwXMLImport bridge over fast SAX contexts. */
-import type { XMLAnnotation } from "../../../../xmloff/source/text/txtfldi";
-import { createPostItText, insertPostItField } from "./xmlannotation";
-import { AttachAnnotationToRange, GetAnnotationByUniqueID } from "../../core/unocore/unofield";
-import { DateTime } from "../../../../tools/source/datetime/datetime";
+import type { OdfBitmapGeometry } from "../../../../xmloff/source/draw/fill-properties";
 import { hasDrawingFrameFill, importPageBackground, importPageLayoutBox } from "./xmlimpit";
+import { importPageBackground, importPageLayoutBox } from "./xmlimpit";
 import { getActivePageStory, type SwFrameFormat } from "../../core/layout/atrfrm";
 import type { OdfPageBackground } from "../../../../xmloff/source/style/PageMasterStyleMap";
 import type { XMLImageStyleDefinition } from "../../../../xmloff/source/style/ImageStyle";
-import type { OdfBitmapGeometry } from "../../../../xmloff/source/draw/fill-properties";
 import { XFillBitmapItem } from "../../../../svx/inc/xbtmpit";
 import { Graphic } from "../../../../vcl/source/gdi/graph";
 import { Size } from "../../../../tools/inc/gen";
@@ -25,6 +22,7 @@ import { applyPageStoryGeometry, XMLTextMasterPageContext } from "./xmlpageheade
 import type { SwXTextCursor } from "../../core/unocore/unoobj";
 import { SvXMLGraphicHelper } from "../../../../xmloff/source/core/xmlgrhlp";
 import { importGraphicFrame, importTextFrame, endTextFrame } from "./xmltextframe";
+import { UnoGraphic } from "../../../../vcl/source/graphic/UnoGraphic";
 import { FillUnoNumRule } from "../../../../xmloff/source/style/xmlnumi";
 import { Reference, UNO_QUERY } from "../../../../cppu/inc/com/sun/star/uno/Reference";
 import { cppu_detail_getUnoType as indexReplaceType } from "../../../../cppu/inc/com/sun/star/container/XIndexReplace";
@@ -32,7 +30,7 @@ import { text } from "../../core/unocore/unocrsrhelper";
 import type { SwXStyle } from "../../core/unocore/unostyle";
 import { SwXTextDocument } from "../../uibase/uno/unotxdoc";
 import { XMLTextImportHelper } from "../../../../xmloff/source/text/txtimp";
-import { applyTextImportProperties, xmlTextString } from "../../../../xmloff/source/text/txtprmap";
+import { xmlTextString } from "../../../../xmloff/source/text/txtprmap";
 import { Any } from "../../../../cppu/inc/com/sun/star/uno/Any";
 import { convertTwipToMm100 } from "../../../../tools/inc/UnitConversion";
 
@@ -42,11 +40,13 @@ import {
   applyNamedCharacterStyles,
   commonCharacterStyleName,
 } from "../../../../xmloff/source/text/txtstyli";
-import { applyNamedParagraphStyles } from "../../../../xmloff/source/style/prstylei";
+import {
+  applyNamedParagraphStyles,
+  applyParagraphTextDefaults,
+} from "../../../../xmloff/source/style/prstylei";
 
 import {
   FastAttributeList,
-  isOpenOffice2Generator,
   parseOdfXmlStream,
   SvXMLIgnoreContext,
   SvXMLImportContext,
@@ -54,7 +54,6 @@ import {
   type OdfXmlParseOptions,
   type SvXMLImportRootFactory as SvXMLImportContract,
 } from "../../../../xmloff/source/core/xmlimp";
-import { getBuildIdFromGenerator } from "../../../../xmloff/source/meta/xmlmetai";
 import { XMLToken } from "../../../../xmloff/source/core/xmltoken";
 import {
   XMLFontStylesContext,
@@ -62,6 +61,7 @@ import {
   type OdfFontFaceMetadata,
 } from "../../../../xmloff/source/style/XMLFontStylesContext";
 import { XMLStylesContext, type OdfPageLayout } from "../../../../xmloff/source/style/xmlstyle";
+import { applyPageRegisterReference } from "../../core/layout/pagedesc";
 import type { Theme } from "../../../../docmodel/inc/theme/Theme";
 import type { XMLTableImportTarget } from "../../../../xmloff/source/table/XMLTableImport";
 import { SwXMLTableImport } from "./xmltbli";
@@ -141,19 +141,10 @@ export function importWriterXml(
   } = {},
 ): ImportedWriterDocument {
   let locale = metadata.locale ?? "en-US";
-  let title = metadata.title;
-  let buildId = "";
   if (metaXml !== undefined) {
     const metadataImport = new SwXMLImport(new SwDoc(false));
-    try {
-      metadataImport.parse(metaXml, XMLToken.OFFICE_DOCUMENT_META, options);
-      locale = metadataImport.language ?? locale;
-      title = metadataImport.title ?? title;
-      buildId = metadataImport.buildId ?? "";
-    } finally {
-      metadataImport.dispose();
-      metadataImport.document.Dispose();
-    }
+    metadataImport.parse(metaXml, XMLToken.OFFICE_DOCUMENT_META, options);
+    locale = metadataImport.language ?? locale;
   }
   const xmlImport = new SwXMLImport(
     new SwDoc({
@@ -164,7 +155,6 @@ export function importWriterXml(
         : { defaultFontDevice: options.defaultFontDevice }),
     }),
     options.graphicHelper,
-    isOpenOffice2Generator(buildId),
   );
   xmlImport.document.SetInReading(true);
   xmlImport.document.SetInXMLImport(true);
@@ -180,10 +170,11 @@ export function importWriterXml(
       xmlImport.parse(contentXml, XMLToken.OFFICE_DOCUMENT_CONTENT, options);
       xmlImport.finishContent();
     }
+    if (metaXml !== undefined) xmlImport.parse(metaXml, XMLToken.OFFICE_DOCUMENT_META, options);
     complete = true;
     return {
       document: xmlImport.document,
-      title,
+      title: xmlImport.title ?? metadata.title,
     };
   } finally {
     xmlImport.dispose();
@@ -202,50 +193,6 @@ class SwXMLImport
     string,
     { style: XMLTextFrameStyle; parent: string | undefined }
   >();
-
-  /** Inserts the annotation in the original text at the position captured by the import helper. @param cursor - Writer text cursor. @param annotation - Original field contents. @returns Nothing. */
-  public insertAnnotation(cursor: XMLTextCursor, annotation: XMLAnnotation): void {
-    const position = (cursor as SwXTextCursor).GetPaM().GetPoint();
-    const node = position.GetNode().GetTextNode();
-    if (!node) throw new Error("Writer annotation has no text anchor.");
-    const offset = position.GetContentIndex();
-    const textObject = createPostItText(annotation.paragraphs);
-    try {
-      insertPostItField(node, offset, {
-        name: annotation.name,
-        parentName: annotation.parentName,
-        resolved: annotation.resolved,
-        author: annotation.author,
-        initials: annotation.initials,
-        dateTime: annotation.dateTime
-          ? new DateTime(annotation.dateTime)
-          : new DateTime(DateTime.EMPTY),
-        text: annotation.paragraphs
-          .map(
-            /** Expands individual edit paragraphs as source plain text. @param paragraph - Native edit runs. @returns Paragraph text. */
-            (paragraph) =>
-              paragraph
-                .map(
-                  /** Reads the original characters. @param span - Source run. @returns Text. */
-                  (span) => span.text,
-                )
-                .join(""),
-          )
-          .join("\n"),
-        ...(textObject ? { textObject } : {}),
-      });
-      position.Assign(node, offset + 1);
-    } finally {
-      textObject?.dispose();
-    }
-  }
-
-  /** Extends an earlier ODF annotation to this closing cursor position. @param cursor - Native text cursor. @param name - Original field name. @returns Nothing. */
-  public endAnnotation(cursor: XMLTextCursor, name: string): void {
-    const writer = cursor as SwXTextCursor;
-    const source = GetAnnotationByUniqueID(writer.GetDoc(), name);
-    if (source) AttachAnnotationToRange(writer, source);
-  }
 
   /** Registers the native graphic style values referenced by a text frame. @param name - ODF style name. @param style - Native frame values. @param parent - Optional inherited style. @returns Nothing. */
   public registerTextFrameStyle(name: string, style: XMLTextFrameStyle, parent?: string): void {
@@ -352,6 +299,11 @@ class SwXMLImport
     if (!this.importedBitmaps.has(graphic)) this.importedBitmaps.set(graphic, item);
   }
 
+  /** Loads the native list image from a package reference or inline bytes. @param source - Image declaration. @returns Native UNO graphic or absence. */
+  public loadListGraphic(source: XMLGraphicSource): UnoGraphic | undefined {
+    const graphic = this.loadGraphic(source.href ? { href: source.href } : source);
+    return graphic && new UnoGraphic(new Graphic(graphic.bytes, graphic.mediaType, new Size()));
+  }
   /** Resolves a package link before the permitted inline stream. @param source - Graphic source. @returns Encoded raster if represented. */
   private loadGraphic(source: XMLGraphicSource): XMLGraphic | undefined {
     const graphic = this.graphicHelper.loadGraphicByURL(source.href);
@@ -382,10 +334,12 @@ class SwXMLImport
   /** Applies one shared page or story background to its native frame. @param frame - Frame owner. @param background - Authored fill. @returns Nothing. */
   private applyBackground(frame: SwFrameFormat | null, background?: OdfPageBackground): void {
     if (!frame || !background) return;
+    const bitmapName =
+      background.bitmapName === undefined ? undefined : this.imageStyles.get(background.bitmapName);
     importPageBackground(
       frame,
       background,
-      this.resolveNamedBitmap(background.bitmapName),
+      bitmapName === undefined ? undefined : this.document.GetBitmapTable().get(bitmapName),
       background.image === undefined ? undefined : this.resolveBackgroundImage(background.image),
     );
   }
@@ -401,18 +355,11 @@ class SwXMLImport
   }
   public title: string | undefined;
   public language: string | undefined;
-  public buildId: string | undefined;
 
-  /** Supplies the native hidden-text compatibility branch to the text property map. @returns Whether the package generator is OOo 2.x. */
-  public isOpenOffice2Generator(): boolean {
-    return this.openOffice2Generator;
-  }
-
-  /** Creates a coordinator around a temporary document. @param document - Temporary Writer model. @param graphicHelper - Package-local images. @param openOffice2Generator - Cached generator classification from metadata. @returns Coordinator. */
+  /** Creates a coordinator around a temporary document. @param document - Temporary Writer model. @param graphicHelper - Package-local images. @returns Coordinator. */
   public constructor(
     document: SwDoc,
     private readonly graphicHelper = new SvXMLGraphicHelper(),
-    private readonly openOffice2Generator = false,
   ) {
     super(document);
     this.model = new SwXTextDocument(document);
@@ -570,7 +517,7 @@ class SwXMLImport
     return this.automaticListRules.get(styleName) ?? this.listRules.get(styleName);
   }
 
-  /** Retains line numbering in declaration order until named character styles are installed. @param value - Imported configuration. @returns Nothing. */
+  /** Applies global ODF line numbering to the canonical Writer document. @param value - Imported configuration. @returns Nothing. */
   public registerLineNumbering(value: OdfLineNumberingConfiguration): void {
     this.lineNumbering.push(value);
   }
@@ -776,24 +723,7 @@ class SwXMLImport
   /** Finalizes declared styles before the first text attachment. @returns Nothing. */
   private finishStyleDefinitions(): void {
     if (this.styleDefinitionsApplied) return;
-    let defaultStyle = this.defaultParagraphStyle;
-    const defaults = defaultStyle?.paragraphProperties;
-    if (defaultStyle && defaults?.hyphenation) {
-      const { hyphenation, ...paragraphProperties } = defaults;
-      applyTextImportProperties(this.model.createTextDefaults(), {}, { hyphenation });
-      defaultStyle = { ...defaultStyle, paragraphProperties };
-    }
-    const distance = defaultStyle?.defaultTabDistance;
-    if (distance !== undefined) {
-      const name = xmlTextString("TabStopDistance");
-      const value = new Any([Number(convertTwipToMm100(BigInt(distance)))], "sal_Int32");
-      try {
-        this.model.createTextDefaults().setPropertyValue(name, value);
-      } finally {
-        value.dispose();
-        name.dispose();
-      }
-    }
+    applyParagraphTextDefaults(this.model.createTextDefaults(), this.defaultParagraphStyle);
     const paragraphs = this.styles?.GetStyleDefinitions("paragraph") ?? new Map();
     applyNamedCharacterStyles(this.model, this.styles?.GetStyleDefinitions("text") ?? new Map());
     for (const configuration of this.lineNumbering) this.applyLineNumbering(configuration);
@@ -801,7 +731,7 @@ class SwXMLImport
     applyNamedParagraphStyles(
       this.model,
       paragraphs,
-      defaultStyle,
+      this.defaultParagraphStyle,
       /** Resolves the declared ODF numbering name to its native display name. @param name - ODF identity. @returns Registered rule name. */
       (name) => this.listRules.get(name)?.name,
       /** Executes this bounded native operation. @param name - Native operation input. @returns Native operation result. */ (
@@ -874,6 +804,18 @@ class SwXMLImport
             setProperty("PageStyleLayout", pageLayoutType(), layout.usage);
           const page = this.model.GetDoc().FindPageDesc(name);
           if (page) importPageLayoutBox(page, layout);
+          if (page && layout.registerParagraphStyle) {
+            const styleName = layout.registerParagraphStyle;
+            const identity =
+              this.resolveNamedParagraphStyle(styleName) ?? getWriterStyleIdFromOdfName(styleName);
+            const reference =
+              identity && getWriterMaterializedParagraphStyleDefinition(identity)
+                ? this.document.GetTextFormatColl(identity)
+                : identity
+                  ? this.document.FindTextFormatColl(identity)
+                  : this.document.FindTextFormatCollByName(styleName);
+            if (reference) applyPageRegisterReference(page, reference);
+          }
           if (page?.GetUseOn() === UseOnPage.Mirror) {
             page.Mirror();
             page.GetFirstLeft().SetFormatAttr(page.GetLeft().GetLRSpace());
@@ -1047,9 +989,9 @@ class SwXMLBodyContext extends SvXMLImportContext {
   }
 }
 
-/** Imports metadata consumed by Writer and the shared XML property mappers. */
+/** Imports metadata while explicitly ignoring the known generator element. */
 class XMLMetaContext extends SvXMLImportContext {
-  /** Discards attributes of metadata fields whose XML attributes are not consumed. @param element - Child token. @returns Whether to skip diagnostics. */
+  /** Ignores only metadata fields without canonical Writer effect. @param element - Child token. @returns Whether metadata-only. */
   public override ignoreUnknownAttributesForChild(element: XMLToken): boolean {
     return ignoredMetadataChildren.has(element);
   }
@@ -1063,16 +1005,6 @@ class XMLMetaContext extends SvXMLImportContext {
     element: XMLToken,
     attributes: FastAttributeList,
   ): SvXMLImportContext | null {
-    if (element === XMLToken.META_GENERATOR) {
-      if (this.xmlImport.buildId !== undefined) return new SvXMLIgnoreContext(true);
-      return new XMLTitleContext(
-        /** Records the BuildId consumed by the document's importers. @param generator - Raw generator text. @returns Nothing. */
-        (generator) => {
-          this.xmlImport.buildId = getBuildIdFromGenerator(generator);
-        },
-        false,
-      );
-    }
     if (element === XMLToken.DC_TITLE) {
       attributes.assertOnly([], "metadata title");
       this.xmlImport.startTitle();
@@ -1098,14 +1030,11 @@ class XMLMetaContext extends SvXMLImportContext {
   }
 }
 
-/** Accumulates a metadata text value. */
+/** Accumulates the bounded title element. */
 class XMLTitleContext extends SvXMLImportContext {
   private value = "";
-  /** Creates an accumulator. @param commit - Completion callback. @param trim - Whether to trim and require text. @returns Context. */
-  public constructor(
-    private readonly commit: (value: string) => void,
-    private readonly trim = true,
-  ) {
+  /** Creates a title accumulator. @param commit - Completion callback. @returns Context. */
+  public constructor(private readonly commit: (title: string) => void) {
     super();
   }
   /** Appends title characters. @param characters - Decoded text. @returns Nothing. */
@@ -1114,7 +1043,7 @@ class XMLTitleContext extends SvXMLImportContext {
   }
   /** Commits a non-empty normalized title. @returns Nothing. */
   public override endFastElement(): void {
-    const value = this.trim ? this.value.trim() : this.value;
-    if (!this.trim || value.length > 0) this.commit(value);
+    const title = this.value.trim();
+    if (title.length > 0) this.commit(title);
   }
 }

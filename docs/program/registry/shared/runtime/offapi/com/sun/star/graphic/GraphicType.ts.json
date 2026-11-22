@@ -1,0 +1,39 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/offapi/com/sun/star/graphic/GraphicType.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "shared",
+    "subsystem": "graphic-values",
+    "capabilityIds": [
+      "CAP-0113"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "none",
+      "evidence": [
+        "apps/office/src/offapi/com/sun/star/graphic/GraphicType.ts#EMPTY",
+        "vendor/libreoffice-reference/offapi/com/sun/star/graphic/GraphicType.idl#EMPTY",
+        "apps/office/src/sw/source/core/unocore/unosett.test.ts"
+      ],
+      "justification": "Retains the native byte values used by XGraphic getType.",
+      "knownViolations": [],
+      "localSymbols": [
+        "EMPTY",
+        "PIXEL",
+        "VECTOR"
+      ],
+      "upstreamSymbols": [
+        "EMPTY",
+        "PIXEL",
+        "VECTOR"
+      ],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": "offapi/com/sun/star/graphic/GraphicType.idl"
+    }
+  }
+}

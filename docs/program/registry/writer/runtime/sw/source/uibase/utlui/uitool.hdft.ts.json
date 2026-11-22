@@ -1,0 +1,36 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sw/source/uibase/utlui/uitool.hdft.ts",
+    "classification": "upstream-mechanism",
+    "state": "active",
+    "suite": "writer",
+    "subsystem": "page-style-stories",
+    "capabilityIds": [
+      "CAP-0136"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "none",
+      "evidence": [
+        "apps/office/src/sw/source/uibase/utlui/uitool.hdft.ts#PageDescToStoryItemSet",
+        "apps/office/src/sw/browser/presentation/WriterPageStoriesDialog.test.tsx",
+        "apps/office/e2e/writer-page-stories.spec.ts",
+        "vendor/libreoffice-reference/sw/source/uibase/utlui/uitool.cxx#PageDescToItemSet"
+      ],
+      "justification": "Maps the original Writer story attributes between page descriptors and their nested page style groups.",
+      "knownViolations": [],
+      "localSymbols": [
+        "PageDescToStoryItemSet"
+      ],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": "sw/source/uibase/utlui/uitool.cxx",
+      "upstreamSymbols": [
+        "PageDescToItemSet"
+      ]
+    }
+  }
+}

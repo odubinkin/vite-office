@@ -1,17 +1,12 @@
 /** @fileoverview Implements LibreOffice-shaped streaming paragraph/list import contexts. */
 
-import {
-  XMLAnnotationEndImportContext,
-  XMLAnnotationImportContext,
-  type XMLAnnotation,
-} from "./txtfldi";
-
 import type { XMLNumberingRules } from "../../inc/txtimp";
 import type { XMLTextFrameImportTarget } from "./XMLTextFrameContext";
 import { XMLTextImportHelper, type XMLCharacterStyleLayer } from "./txtimp";
 
 import { FastAttributeList, SvXMLImportContext, SvXMLIgnoreContext } from "../core/xmlimp";
 import { XMLToken } from "../core/xmltoken";
+import { XMLAnnotationImportContext } from "./txtfldi";
 import { XMLTextMarkImportContext } from "./XMLTextMarkImportContext";
 import type {
   OdfCharacterProperties,
@@ -66,6 +61,9 @@ export interface XMLListLevelImportProperties {
 
 /** One XML declaration retained in source order until the native rule is filled. */
 export interface XMLListLevelImport {
+  readonly graphic?: import("../../../offapi/com/sun/star/graphic/XGraphic").XGraphic;
+  readonly graphicSize?: Readonly<{ width: number; height: number }>;
+  readonly vertOrient?: number;
   readonly level: number;
   readonly kind: OdfListLevelKind;
   /** Native sal_Int16 UNO NumberingType, independent of editeng format ownership. */
@@ -105,11 +103,6 @@ export interface XMLParagraphListState {
 /** Model-facing import supplier and source declaration lookup. */
 export interface XMLTextImportTarget extends Partial<XMLTextFrameImportTarget> {
   GetTextImport(): XMLTextImportHelper;
-  insertAnnotation?(
-    cursor: ReturnType<XMLTextImportHelper["GetCursor"]>,
-    annotation: XMLAnnotation,
-  ): void;
-  endAnnotation?(cursor: ReturnType<XMLTextImportHelper["GetCursor"]>, name: string): void;
   getListRule(styleName: string): XMLTextListRule | undefined;
   getStyle(family: OdfStyleDefinition["family"], styleName: string): OdfStyleDefinition | undefined;
   getAutoStyle(
@@ -168,17 +161,29 @@ export class XMLParaContext extends SvXMLImportContext {
     );
     const name = attributes.get(XMLToken.TEXT_STYLE_NAME) ?? "";
     const heading = element === XMLToken.TEXT_H;
+    const authoredLevel = Number(attributes.get(XMLToken.TEXT_OUTLINE_LEVEL));
+    const outlineLevel = heading
+      ? Number.isInteger(authoredLevel) && authoredLevel > 0
+        ? Math.min(authoredLevel, 10)
+        : 1
+      : 0;
     const resolved = resolveParagraphStyle(name, heading, target);
     const automatic = name ? target.getAutoStyle("paragraph", name) : undefined;
     const parent = automatic ? automatic.parentStyleName : name;
     this.paragraph = target.GetTextImport();
     const marker = attributes.get(XMLToken.LOEXT_MARKER_STYLE_NAME);
+    const annotation = this.paragraph.IsAnnotationText();
+    const noteStyle = annotation && automatic && !automatic.parentStyleName ? automatic : undefined;
     this.paragraph.BeginParagraph(
       resolved.style,
-      resolved.alignment,
-      resolved.leftMargin,
-      resolved.paragraphProperties,
-      resolved.properties,
+      noteStyle ? noteStyle.alignment : resolved.alignment,
+      noteStyle ? noteStyle.leftMargin : resolved.leftMargin,
+      noteStyle ? noteStyle.paragraphProperties : resolved.paragraphProperties,
+      noteStyle
+        ? noteStyle.properties
+        : annotation
+          ? resolved.effectiveProperties
+          : resolved.properties,
       list,
       resolved.listGeometryWins === true,
       resolved.forceListRule,
@@ -187,6 +192,7 @@ export class XMLParaContext extends SvXMLImportContext {
         (!!parent &&
           (target.resolveNamedParagraphStyle?.(parent) !== undefined ||
             target.resolveBuiltInParagraphStyle?.(parent) !== undefined)),
+      outlineLevel,
     );
     this.inherited = DEFAULT_PROPERTIES;
   }
@@ -334,28 +340,17 @@ function createInlineContext(
   allowHyperlink = true,
   namedStyles: readonly XMLCharacterStyleLayer[] = [],
 ): SvXMLImportContext | null {
-  if (element === XMLToken.DRAW_FRAME) return paragraph.CreateTextFrameContext(attributes);
-  if (element === XMLToken.OFFICE_ANNOTATION && target.insertAnnotation)
-    return new XMLAnnotationImportContext(
-      attributes,
-      /** Resolves edit text styles from the same XML style families. @param name - Original style name. @returns Character values. */
-      (name) =>
-        target.getAutoStyle("paragraph", name)?.properties ?? resolveTextStyle(name, target),
-      /** Attaches the field at the outer cursor after reading its content. @param annotation - Complete field. @returns Nothing. */
-      (annotation) => target.insertAnnotation?.(paragraph.GetCursor(), annotation),
-    );
-  if (element === XMLToken.OFFICE_ANNOTATION_END && target.endAnnotation)
-    return new XMLAnnotationEndImportContext(
-      attributes,
-      /** Reattaches the named field to the current text cursor. @param name - ODF field identity. @returns Nothing. */
-      (name) => target.endAnnotation?.(paragraph.GetCursor(), name),
-    );
+  const annotation = paragraph.IsAnnotationText();
+  if (element === XMLToken.OFFICE_ANNOTATION || element === XMLToken.OFFICE_ANNOTATION_END)
+    return annotation ? null : new XMLAnnotationImportContext(paragraph);
+  if (element === XMLToken.DRAW_FRAME)
+    return annotation ? null : paragraph.CreateTextFrameContext(attributes);
   if (element === XMLToken.TEXT_SPAN) {
     attributes.assertOnly([XMLToken.TEXT_STYLE_NAME], "span");
     const name = attributes.get(XMLToken.TEXT_STYLE_NAME) ?? "";
     const automatic = name ? target.getAutoStyle("text", name) : undefined;
     const common = automatic ? automatic.parentStyleName : name;
-    const style = common ? target.resolveNamedCharacterStyle?.(common) : undefined;
+    const style = common && !annotation ? target.resolveNamedCharacterStyle?.(common) : undefined;
     if (style !== undefined) {
       return new XMLSpanContext(
         target,
@@ -393,7 +388,7 @@ function createInlineContext(
     element === XMLToken.TEXT_BOOKMARK_START ||
     element === XMLToken.TEXT_BOOKMARK_END
   )
-    return new XMLTextMarkImportContext(paragraph);
+    return annotation ? null : new XMLTextMarkImportContext(paragraph);
   if (element === XMLToken.TEXT_SOFT_PAGE_BREAK) {
     attributes.assertOnly([], "soft page break");
     // Native text import ignores pagination hints; these are produced by layout on export.

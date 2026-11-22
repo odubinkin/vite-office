@@ -1,0 +1,37 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/cui/browser/tabpages/bitmap-gallery.ts",
+    "classification": "browser-adaptation",
+    "state": "active",
+    "suite": "shared",
+    "subsystem": "numbering-dialog",
+    "capabilityIds": [
+      "CAP-0102"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "not-applicable",
+      "defaultStatus": "not-applicable",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/cui/browser/tabpages/bitmap-gallery.ts#loadGallery",
+        "apps/office/src/cui/source/tabpages/numpages-bitmap-data.json",
+        "vendor/libreoffice-reference/cui/source/tabpages/numpages.cxx#SvxBitmapPickTabPage",
+        "apps/office/e2e/writer-list-style-dialog.spec.ts"
+      ],
+      "justification": "Binds the native Bullets theme to browser storage and the raster decoder, preserving the stock theme order and 30-pixel Add and Resize behavior.",
+      "knownViolations": [],
+      "localSymbols": [
+        "loadGallery",
+        "addGalleryItem",
+        "readGalleryFile",
+        "getDefaultBulletGraphic"
+      ],
+      "sourceResponsibility": "browser-owned",
+      "upstreamFile": null,
+      "upstreamSymbols": []
+    }
+  }
+}

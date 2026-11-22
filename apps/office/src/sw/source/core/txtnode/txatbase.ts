@@ -4,6 +4,7 @@
 import { releaseStyleHandle } from "../../../../svl/source/items/stylepool";
 import type { SwFormatCharFormat } from "./fmtatr2";
 import {
+  writerColorValue,
   writerTextColorValue,
   writerHighlightColorValue,
   createWriterHighlightItem,
@@ -11,11 +12,17 @@ import {
 import { SvxColorItem } from "../../../../editeng/inc/colritem";
 import { createWriterTextColorItem } from "../attr/swatrset";
 import { SvxEscapementItem } from "../../../../editeng/inc/escapementitem";
+import { SvxOpticalSizingItem } from "../../../../editeng/inc/opticalsizingitem";
+import { SvxCharScaleWidthItem } from "../../../../editeng/inc/charscaleitem";
+import { SvxAutoKernItem } from "../../../../editeng/inc/autokernitem";
 import { SvxKerningItem } from "../../../../editeng/inc/kernitem";
 import { RES_CHRATR_ESCAPEMENT } from "../../../inc/hintids";
 
+import { SvxCaseMapItem } from "../../../../editeng/inc/cmapitem";
+import type { SvxCaseMap } from "../../../../editeng/inc/svxenum";
+import { SvxEmphasisMarkItem } from "../../../../editeng/inc/emphasismarkitem";
 import { SvxCrossedOutItem } from "../../../../editeng/inc/crossedoutitem";
-import { FontStrikeout } from "../../../../tools/inc/fontenum";
+import { FontEmphasisMark, FontStrikeout } from "../../../../tools/inc/fontenum";
 import { RES_CHRATR_CROSSEDOUT } from "../../../inc/hintids";
 import { FontItalic, FontWeight } from "../../../../tools/inc/fontenum";
 import {
@@ -24,6 +31,10 @@ import {
   SvxFontHeightItem,
   SvxPostureItem,
   SvxUnderlineItem,
+  SvxOverlineItem,
+  SvxCharReliefItem,
+  SvxContourItem,
+  SvxShadowedItem,
   SvxWeightItem,
   SvxWordLineModeItem,
 } from "../../../../editeng/source/items/textitem";
@@ -43,10 +54,19 @@ import {
   RES_CHRATR_FONTSIZE,
   RES_CHRATR_CTL_WEIGHT,
   RES_CHRATR_HIGHLIGHT,
+  RES_CHRATR_EMPHASIS_MARK,
+  RES_CHRATR_CASEMAP,
+  RES_CHRATR_CONTOUR,
+  RES_CHRATR_SHADOWED,
+  RES_CHRATR_RELIEF,
   RES_CHRATR_BACKGROUND,
   RES_CHRATR_KERNING,
+  RES_CHRATR_AUTOKERN,
+  RES_CHRATR_SCALEW,
+  RES_CHRATR_OPTICAL_SIZING,
   RES_CHRATR_POSTURE,
   RES_CHRATR_UNDERLINE,
+  RES_CHRATR_OVERLINE,
   RES_CHRATR_WORDLINEMODE,
   RES_CHRATR_WEIGHT,
   RES_TXTATR_AUTOFMT,
@@ -60,12 +80,35 @@ import { SwFormatINetFormat, SwFormatAutoFormat } from "./fmtatr2";
 import type { SwpHints } from "./ndhints";
 import { FontFamily, FontPitch } from "../../../../tools/inc/fontenum";
 import { RTL_TEXTENCODING_DONTKNOW } from "../../../../sal/inc/rtl/textenc";
-import { COL_TRANSPARENT, Color } from "../../../../tools/inc/color";
+import { Color } from "../../../../tools/inc/color";
 export { RES_TXTATR_AUTOFMT } from "../../../inc/hintids";
 export { RES_TXTATR_INETFMT } from "../../../inc/hintids";
 
+/** Original special text-paint items for an effective run. */
+export interface WriterFontPaint {
+  readonly outline?: boolean;
+  readonly shadow?: boolean;
+  readonly relief?: ReturnType<SvxCharReliefItem["GetValue"]>;
+}
+
+/** Resolves supported special text-paint items without changing the source set. @param get - Current character item lookup. @returns Active paint settings. */
+export function projectWriterFontPaint(
+  get: (which: number) => SfxPoolItem | undefined,
+): WriterFontPaint {
+  const outline = get(RES_CHRATR_CONTOUR);
+  const shadow = get(RES_CHRATR_SHADOWED);
+  const relief = get(RES_CHRATR_RELIEF);
+  return {
+    ...(outline instanceof SvxContourItem && outline.GetValue() ? { outline: true } : {}),
+    ...(shadow instanceof SvxShadowedItem && shadow.GetValue() ? { shadow: true } : {}),
+    ...(relief instanceof SvxCharReliefItem && relief.GetValue()
+      ? { relief: relief.GetValue() }
+      : {}),
+  };
+}
+
 /** Names the bounded direct character properties currently carried by an auto-format item. */
-export interface WriterCharacterAttributes {
+export interface WriterCharacterAttributes extends WriterFontPaint {
   /** CSS-compatible explicit foreground color or Writer's automatic color marker. */
   readonly color?: string;
   /** Explicit font family; absent means the paragraph style or document default. */
@@ -74,6 +117,9 @@ export interface WriterCharacterAttributes {
   readonly fontSizeTwips?: number;
   /** Native signed character spacing in twips. */
   readonly kerningTwips?: number;
+  readonly autoKerning?: boolean;
+  readonly scaleWidth?: number;
+  readonly opticalSizing?: boolean;
   /** CSS-compatible explicit highlight color or Writer's transparent marker. */
   readonly highlight?: string;
   /** Whether the text uses a bold font weight. */
@@ -86,10 +132,17 @@ export interface WriterCharacterAttributes {
   readonly underlineStyle?: FontLineStyle;
   /** Native underline RGB value or the automatic/transparent sentinel. */
   readonly underlineColor?: string;
+  /** Independent overline style and color. */
+  readonly overlineStyle?: FontLineStyle;
+  readonly overlineColor?: string;
   /** Whether single underline applies only to words. */
   readonly underlineWordMode?: boolean;
   /** Complete native decoration value; omitted only at legacy display boundaries. */
   readonly strikeout?: FontStrikeout;
+  /** Native emphasis style and position flags. */
+  readonly emphasisMark?: FontEmphasisMark;
+  /** Effective native case effect. */
+  readonly caseMap?: SvxCaseMap;
   /** Complete native offset and relative height. */
   readonly escapement?: Readonly<{ offset: number; height: number }>;
 }
@@ -419,6 +472,15 @@ export function createSwFormatAutoFormat(
   )
     for (const which of [RES_CHRATR_FONTSIZE, RES_CHRATR_CJK_FONTSIZE, RES_CHRATR_CTL_FONTSIZE])
       items.Put(new SvxFontHeightItem(attributes.fontSizeTwips, 100, which));
+  if (
+    attributes.opticalSizing !== undefined &&
+    attributes.opticalSizing !== inherited.opticalSizing
+  )
+    items.Put(new SvxOpticalSizingItem(attributes.opticalSizing, RES_CHRATR_OPTICAL_SIZING));
+  if (attributes.scaleWidth !== undefined && attributes.scaleWidth !== inherited.scaleWidth)
+    items.Put(new SvxCharScaleWidthItem(attributes.scaleWidth, RES_CHRATR_SCALEW));
+  if (attributes.autoKerning !== undefined && attributes.autoKerning !== inherited.autoKerning)
+    items.Put(new SvxAutoKernItem(attributes.autoKerning, RES_CHRATR_AUTOKERN));
   if (attributes.kerningTwips !== undefined && attributes.kerningTwips !== inherited.kerningTwips)
     items.Put(new SvxKerningItem(attributes.kerningTwips, RES_CHRATR_KERNING));
   if (attributes.highlight !== inherited.highlight && attributes.highlight !== undefined)
@@ -501,6 +563,15 @@ export function projectWriterCharacterAttributes(
   const fontSize =
     items.GetItemIfSet(RES_CHRATR_FONTSIZE, false) ??
     inherited?.GetItemIfSet(RES_CHRATR_FONTSIZE, true);
+  const opticalSizing =
+    items.GetItemIfSet(RES_CHRATR_OPTICAL_SIZING, false) ??
+    inherited?.GetItemIfSet(RES_CHRATR_OPTICAL_SIZING, true);
+  const scaleWidth =
+    items.GetItemIfSet(RES_CHRATR_SCALEW, false) ??
+    inherited?.GetItemIfSet(RES_CHRATR_SCALEW, true);
+  const pairKerning =
+    items.GetItemIfSet(RES_CHRATR_AUTOKERN, false) ??
+    inherited?.GetItemIfSet(RES_CHRATR_AUTOKERN, true);
   const kerning =
     items.GetItemIfSet(RES_CHRATR_KERNING, false) ??
     inherited?.GetItemIfSet(RES_CHRATR_KERNING, true);
@@ -521,10 +592,20 @@ export function projectWriterCharacterAttributes(
     items.GetItemIfSet(RES_CHRATR_ESCAPEMENT, false) ??
     inherited?.GetItemIfSet(RES_CHRATR_ESCAPEMENT, true);
   const strikeout = get(RES_CHRATR_CROSSEDOUT) as SvxCrossedOutItem;
+  const caseItem =
+    items.GetItemIfSet(RES_CHRATR_CASEMAP, false) ??
+    inherited?.GetItemIfSet(RES_CHRATR_CASEMAP, true);
+  const emphasis =
+    items.GetItemIfSet(RES_CHRATR_EMPHASIS_MARK, false) ??
+    inherited?.GetItemIfSet(RES_CHRATR_EMPHASIS_MARK, true);
+  const emphasisMark = emphasis instanceof SvxEmphasisMarkItem ? emphasis.GetEmphasisMark() : 0;
   const authoredStrikeout =
     items.GetItemIfSet(RES_CHRATR_CROSSEDOUT, false) ??
     inherited?.GetItemIfSet(RES_CHRATR_CROSSEDOUT, true);
   const underline = get(RES_CHRATR_UNDERLINE) as SvxUnderlineItem;
+  const overline =
+    items.GetItemIfSet(RES_CHRATR_OVERLINE, false) ??
+    inherited?.GetItemIfSet(RES_CHRATR_OVERLINE, true);
   const underlineStyle = underline.GetLineStyle();
   const underlineColor = underline.GetColor();
   const authoredUnderline = items.GetItemIfSet(RES_CHRATR_UNDERLINE, false);
@@ -533,9 +614,20 @@ export function projectWriterCharacterAttributes(
     items.GetItemIfSet(RES_CHRATR_WORDLINEMODE, false) ??
     inherited?.GetItemIfSet(RES_CHRATR_WORDLINEMODE, true);
   return {
+    ...projectWriterFontPaint(
+      /** Reads the attached paint item when the sparse pool represents it. @param which - Character item. @returns Attached item. */
+      (which) => items.GetItemIfSet(which, false) ?? inherited?.GetItemIfSet(which, true),
+    ),
     ...(color instanceof SvxColorItem ? { color: writerTextColorValue(color) } : {}),
     ...(font instanceof SvxFontItem ? { fontFamily: font.GetFamilyName() } : {}),
+    ...(caseItem instanceof SvxCaseMapItem ? { caseMap: caseItem.GetCaseMap() } : {}),
+    ...((emphasisMark & FontEmphasisMark.Style) !== FontEmphasisMark.NONE ? { emphasisMark } : {}),
     ...(fontSize instanceof SvxFontHeightItem ? { fontSizeTwips: fontSize.GetHeight() } : {}),
+    ...(opticalSizing instanceof SvxOpticalSizingItem
+      ? { opticalSizing: opticalSizing.GetValue() }
+      : {}),
+    ...(scaleWidth instanceof SvxCharScaleWidthItem ? { scaleWidth: scaleWidth.GetValue() } : {}),
+    ...(pairKerning instanceof SvxAutoKernItem ? { autoKerning: pairKerning.GetValue() } : {}),
     ...(kerning instanceof SvxKerningItem ? { kerningTwips: kerning.GetValue() } : {}),
     ...(visibleBackground instanceof SvxBrushItem
       ? { highlight: writerHighlightColorValue(visibleBackground) }
@@ -548,6 +640,14 @@ export function projectWriterCharacterAttributes(
     bold: (get(RES_CHRATR_WEIGHT) as SvxWeightItem).GetBoolValue(),
     italic: (get(RES_CHRATR_POSTURE) as SvxPostureItem).GetBoolValue(),
     underline: underline.GetBoolValue(),
+    ...(overline instanceof SvxOverlineItem && overline.GetBoolValue()
+      ? {
+          overlineStyle: overline.GetLineStyle(),
+          ...(!overline.GetColor().IsFullyTransparent()
+            ? { overlineColor: writerColorValue(overline.GetColor()) }
+            : {}),
+        }
+      : {}),
     ...(underlineStyle !== FontLineStyle.LINESTYLE_SINGLE &&
     underlineStyle !== FontLineStyle.LINESTYLE_NONE
       ? { underlineStyle }
@@ -556,7 +656,7 @@ export function projectWriterCharacterAttributes(
           inheritedUnderline?.GetBoolValue()
         ? { underlineStyle }
         : {}),
-    ...(!underlineColor.equals(COL_TRANSPARENT)
+    ...(!underlineColor.IsFullyTransparent()
       ? {
           underlineColor: `#${(underlineColor.toUInt32() & 0xffffff).toString(16).padStart(6, "0")}`,
         }

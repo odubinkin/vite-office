@@ -3,6 +3,8 @@
 export const FN_TABLE_REP = 20499 as const;
 /** Native box vertical alignment, FN_FORMAT +188. */
 export const FN_TABLE_SET_VERT_ALIGN = 20588 as const;
+/** Original Character dialog Page argument, FN_PARAM +60. */
+export const FN_PARAM_1 = 21160 as const;
 /** Changed table name, FN_PARAM +44. */
 export const FN_PARAM_TABLE_NAME = 21144 as const;
 /** Changed repeated headline count, FN_PARAM +50. */
@@ -47,3 +49,5 @@ export const FN_UNO_IS_NUMBER = 22269;
 export const FN_UNO_LIST_ID = 22307;
 /** Original numbering restart dispatch, FN_FORMAT2 +138. */
 export const FN_NUMBER_NEWSTART = 21738;
+/** Original optional explicit start value for the paragraph numbering page. */
+export const FN_NUMBER_NEWSTART_AT = 21739;

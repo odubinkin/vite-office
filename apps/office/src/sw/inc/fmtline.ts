@@ -1,67 +1,74 @@
-/** @fileoverview Original Writer paragraph line-number item from fmtline.hxx. */
+/** @fileoverview Original Writer paragraph line-number item from fmtline.hxx and atrfrm.cxx. */
 import { Any } from "../../cppu/inc/com/sun/star/uno/Any";
 import { CONVERT_TWIPS, SfxPoolItem } from "../../svl/inc/poolitem";
 import { RES_LINENUMBER } from "./hintids";
 import { MID_LINENUMBER_COUNT, MID_LINENUMBER_STARTVALUE } from "./unomid";
 
-/** Paragraph participation and its optional first line number share one pooled value. */
-export class SwFormatLineNumber extends SfxPoolItem {
-  private startValue: number;
+/** Serialized paragraph line numbering. Older snapshots contain only the count boolean. */
+export interface SwFormatLineNumberValue {
+  readonly count: boolean;
+  readonly startValue: number;
+}
 
-  /** Creates the original default or copies its two members. @param countLines - Paragraph participation. @param startValue - Initial number, or zero for continuation. @returns Nothing. */
+/** The native independent 24-bit start value and participation flag. */
+export class SwFormatLineNumber extends SfxPoolItem {
+  private startValue = 0;
+  /** Creates the native default or its supplied value. @param count - Whether lines participate. @param startValue - Zero for continuation. @returns New line-number item. */
   constructor(
-    private countLines = true,
+    private count = true,
     startValue = 0,
   ) {
     super(RES_LINENUMBER);
-    this.startValue = startValue & 0xffffff;
+    this.SetStartValue(startValue);
   }
 
-  /** Reads paragraph participation. @returns Whether its lines count. */
-  IsCount(): boolean {
-    return this.countLines;
-  }
-
-  /** Changes paragraph participation. @param count - Whether to count. @returns Nothing. */
-  SetCountLines(count: boolean): void {
-    this.countLines = count;
-  }
-
-  /** Reads the original 24-bit restart value. @returns First line number or zero. */
-  GetStartValue(): number {
+  /** Returns the stored unsigned 24-bit start. @returns Start or zero. */
+  public GetStartValue(): number {
     return this.startValue;
   }
 
-  /** Assigns the native unsigned 24-bit field. @param start - New start value. @returns Nothing. */
-  SetStartValue(start: number): void {
-    this.startValue = start & 0xffffff;
+  /** Stores the value in its original bit-field width. @param value - Starting value. @returns Nothing. */
+  public SetStartValue(value: number): void {
+    this.startValue = value & 0xffffff;
   }
 
-  /** Copies both native members. @returns Independent item. */
-  override Clone(): SwFormatLineNumber {
-    return new SwFormatLineNumber(this.countLines, this.startValue);
+  /** Returns whether to count this paragraph's lines. @returns Participation flag. */
+  public IsCount(): boolean {
+    return this.count;
   }
 
-  /** Compares both native members during pooling. @param other - Candidate item. @returns Equality. */
-  override equals(other: SfxPoolItem): boolean {
+  /** Stores the independent count flag. @param count - Native participation. @returns Nothing. */
+  public SetCountLines(count: boolean): void {
+    this.count = count;
+  }
+
+  /** Returns a copy retaining both values. @returns Owned item. */
+  public override Clone(): SwFormatLineNumber {
+    return new SwFormatLineNumber(this.count, this.startValue);
+  }
+
+  /** Compares both of the native fields. @param other - Candidate pool item. @returns Equality. */
+  public override equals(other: SfxPoolItem): boolean {
     return (
       other instanceof SwFormatLineNumber &&
-      other.Which() === this.Which() &&
-      other.countLines === this.countLines &&
-      other.startValue === this.startValue
+      other.startValue === this.startValue &&
+      other.count === this.count
     );
   }
 
-  /** Base no-payload query. @returns No untyped value. */
-  override QueryValue(): undefined;
-  /** Native UNO member query. @param output - Typed destination. @param member - Member identifier. @returns Success. */
-  override QueryValue(output: Any, member?: number): boolean;
-  /** Queries participation or restart through the corresponding UNO member. @param output - Typed destination. @param member - Member identifier. @returns Success when supplied. */
-  override QueryValue(output?: Any, member = MID_LINENUMBER_COUNT): boolean | undefined {
-    if (!output) return undefined;
+  /** Returns both fields for browser snapshots. @returns Serialized line numbering. */
+  public override QueryValue(): SwFormatLineNumberValue;
+  /** Exchanges a native UNO member. @param output - UNO destination. @param member - Native member with optional twip flag. @returns Whether the UNO member exists. */
+  public override QueryValue(output: Any, member: number): boolean;
+  /** Returns the browser snapshot payload or a native UNO member. @param output - Optional UNO destination. @param member - Native member with optional twip flag. @returns Snapshot or whether the UNO member exists. */
+  public override QueryValue(
+    output?: Any,
+    member = MID_LINENUMBER_COUNT,
+  ): SwFormatLineNumberValue | boolean {
+    if (!output) return { count: this.count, startValue: this.startValue };
     switch (member & ~CONVERT_TWIPS) {
       case MID_LINENUMBER_COUNT:
-        output.insert([this.countLines], "bool");
+        output.insert([this.count], "bool");
         return true;
       case MID_LINENUMBER_STARTVALUE:
         output.insert([this.startValue], "sal_Int32");
@@ -71,18 +78,19 @@ export class SwFormatLineNumber extends SfxPoolItem {
     }
   }
 
-  /** Applies the addressed UNO member after successful type extraction. @param value - Input value. @param member - Member identifier. @returns Success. */
-  override PutValue(value: Any, member: number): boolean {
+  /** Imports the original typed UNO field. @param input - UNO input. @param member - Native member with optional twip flag. @returns Whether the field was accepted. */
+  public override PutValue(input: unknown, member: number): boolean {
+    if (!(input instanceof Any)) return false;
     switch (member & ~CONVERT_TWIPS) {
       case MID_LINENUMBER_COUNT: {
-        const count: [boolean] = [false];
-        if (!value.extract(count, "bool")) return false;
+        const count: [boolean] = [true];
+        if (!input.extract(count, "bool")) return false;
         this.SetCountLines(count[0]);
         return true;
       }
       case MID_LINENUMBER_STARTVALUE: {
         const start: [number] = [0];
-        if (!value.extract(start, "sal_Int32")) return false;
+        if (!input.extract(start, "sal_Int32")) return false;
         this.SetStartValue(start[0]);
         return true;
       }

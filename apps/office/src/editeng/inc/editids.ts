@@ -12,6 +12,11 @@ export const SID_ATTR_PARA_ULSPACE = 10042 as const;
 /** Native combined paragraph indent slot, SID_SVX_START +43. */
 export const SID_ATTR_PARA_LRSPACE = 10043 as const;
 
+/** Native paragraph page-model slot, SID_SVX_START +65. */
+export const SID_ATTR_PARA_MODEL = 10065 as const;
+/** Native keep-with-next slot, SID_SVX_START +66. */
+export const SID_ATTR_PARA_KEEP = 10066 as const;
+
 /** Native paragraph line-spacing slot, SID_SVX_START +33. */
 export const SID_ATTR_PARA_LINESPACE = 10033 as const;
 
@@ -76,6 +81,9 @@ export const SID_ATTR_CHAR_EMPHASISMARK = 10899 as const;
 export const SID_ATTR_CHAR_RELIEF = 10920 as const;
 export const SID_ATTR_CHAR_OVERLINE = 11568 as const;
 
+/** Scale derived by Writer from the selected text and its current visual line. */
+export const SID_ATTR_CHAR_WIDTH_FIT_TO_LINE = 10919 as const;
+
 /** Native character color slot from editids.hrc. */
 export const SID_ATTR_CHAR_COLOR = 10017 as const;
 
@@ -95,3 +103,6 @@ export const SID_ATTR_FRAMEDIRECTION = 10944 as const;
 
 /** Native frame/paragraph background brush slot, SID_SVX_START +1. */
 export const SID_ATTR_BRUSH = 10001 as const;
+
+/** Original SID_SVX_START +855 numbering rule exchange item. */
+export const SID_ATTR_NUMBERING_RULE = 10855 as const;

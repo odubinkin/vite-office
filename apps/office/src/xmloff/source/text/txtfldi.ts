@@ -1,212 +1,136 @@
-/** @fileoverview Consumed XMLAnnotationImportContext metadata and point annotation text. */
-import { DateTime } from "../../../offapi/com/sun/star/util/DateTime";
+/** @fileoverview Imports the ODF annotation field and range end through Writer's text content service. */
+import { Any } from "../../../cppu/inc/com/sun/star/uno/Any";
+import {
+  DateTime,
+  cppu_detail_getUnoType_DateTime,
+} from "../../../offapi/com/sun/star/util/DateTime";
 import { Converter } from "../../../sax/source/tools/converter";
-import { FastAttributeList, SvXMLImportContext } from "../core/xmlimp";
-import { XMLToken as T } from "../core/xmltoken";
-import type { OdfCharacterProperties } from "./txtparae.types";
+import type { XMLAnnotationTextContent, XMLTextCursor } from "../../inc/txtimp";
+import { type FastAttributeList, SvXMLImportContext } from "../core/xmlimp";
+import { XMLToken } from "../core/xmltoken";
+import type { XMLTextImportHelper } from "./txtimp";
+import { xmlTextString } from "./txtprmap";
 
-/** Native character properties supplied to an annotation's edit paragraph. */
-export interface XMLAnnotationSpan {
-  readonly text: string;
-  readonly properties: Partial<OdfCharacterProperties>;
-}
-
-/** Point annotation data produced by the shared text field context. */
-export interface XMLAnnotation {
-  readonly name: string;
-  readonly parentName: string;
-  readonly resolved: boolean;
-  readonly author: string;
-  readonly initials: string;
-  readonly dateTime?: DateTime;
-  readonly paragraphs: readonly (readonly XMLAnnotationSpan[])[];
-}
-
-/** Resolves a source character style through the active ODF style catalogue. */
-type ResolveTextStyle = (name: string) => Partial<OdfCharacterProperties>;
-/** Closes an annotation paragraph with its original text portions. */
-type CommitParagraph = (spans: readonly XMLAnnotationSpan[]) => void;
-
-/** Reads original annotation child metadata and collects its separate text section. */
+/** Original annotation import with metadata distinct from the editable comment paragraphs. */
 export class XMLAnnotationImportContext extends SvXMLImportContext {
+  private name = "";
+  private parentName = "";
+  private readonly resolved: [boolean] = [false];
   private author = "";
   private initials = "";
   private date = "";
-  private readonly paragraphs: (readonly XMLAnnotationSpan[])[] = [];
+  private field: XMLAnnotationTextContent | undefined;
+  private cursor: XMLTextCursor | undefined;
 
-  /** Creates the native annotation element context. @param attributes - Element attributes. @param resolveStyle - Current document text styles. @param commit - Field sink. @returns Context. */
-  public constructor(
-    private readonly attributes: FastAttributeList,
-    private readonly resolveStyle: ResolveTextStyle,
-    private readonly commit: (annotation: XMLAnnotation) => void,
-  ) {
+  /** Routes one annotation declaration through the current text importer. @param helper - Original text import owner. @returns Context. */
+  constructor(private readonly helper: XMLTextImportHelper) {
     super();
-    attributes.assertOnly([T.OFFICE_NAME, T.LOEXT_PARENT_NAME, T.LOEXT_RESOLVED], "annotation");
   }
 
-  /** Resolves metadata and annotation text without modifying the outer cursor. @param element - Child token. @param attributes - Child attributes. @returns Child context. */
-  public override createFastChildContext(
-    element: T,
-    attributes: FastAttributeList,
-  ): SvXMLImportContext | null {
-    if (
-      element === T.DC_CREATOR ||
-      element === T.DC_DATE ||
-      element === T.META_CREATOR_INITIALS ||
-      element === T.LOEXT_SENDER_INITIALS ||
-      element === T.TEXT_SENDER_INITIALS
-    )
-      return new XMLAnnotationCharacters(
-        /** Appends to the original metadata buffer. @param text - Original characters. @returns Nothing. */
-        (text) => {
-          if (element === T.DC_CREATOR) this.author += text;
-          else if (element === T.DC_DATE) this.date += text;
-          else this.initials += text;
-        },
-      );
-    return annotationBlockContext(
-      element,
-      attributes,
-      this.resolveStyle,
-      /** Retains the separate annotation paragraph. @param spans - Original text runs. @returns Nothing. */
-      (spans) => this.paragraphs.push(spans),
+  /** Reads the original annotation attributes. @param element - Opening or closing annotation token. @param attributes - Source attributes. @returns Nothing. */
+  override startFastElement(element: XMLToken, attributes: FastAttributeList): void {
+    attributes.assertOnly(
+      element === XMLToken.OFFICE_ANNOTATION_END
+        ? [XMLToken.OFFICE_NAME]
+        : [XMLToken.OFFICE_NAME, XMLToken.LOEXT_PARENT_NAME, XMLToken.LOEXT_RESOLVED],
+      "annotation",
     );
+    this.name = attributes.get(XMLToken.OFFICE_NAME) ?? "";
+    this.parentName = attributes.get(XMLToken.LOEXT_PARENT_NAME) ?? "";
+    const resolved = attributes.get(XMLToken.LOEXT_RESOLVED);
+    if (resolved !== null) Converter.convertBool(this.resolved, resolved);
   }
 
-  /** Publishes a complete annotation at its original outer text position. @returns Nothing. */
-  public override endFastElement(): void {
-    const resolved: [boolean] = [false];
-    const raw = this.attributes.get(T.LOEXT_RESOLVED);
-    if (raw !== null) Converter.convertBool(resolved, raw);
-    const dateTime = new DateTime();
-    this.commit({
-      name: this.attributes.get(T.OFFICE_NAME) ?? "",
-      parentName: this.attributes.get(T.LOEXT_PARENT_NAME) ?? "",
-      resolved: resolved[0],
-      author: this.author,
-      initials: this.initials,
-      ...(Converter.parseDateTime(dateTime, this.date) ? { dateTime } : {}),
-      paragraphs: this.paragraphs,
-    });
-  }
-}
-
-/** Resolves the named existing annotation when its end element closes. */
-export class XMLAnnotationEndImportContext extends SvXMLImportContext {
-  /** Binds the original annotation-end name to the current text owner. @param attributes - End element attributes. @param commit - Field lookup and range sink. @returns Context. */
-  constructor(
-    private readonly attributes: FastAttributeList,
-    private readonly commit: (name: string) => void,
-  ) {
-    super();
-    attributes.assertOnly([T.OFFICE_NAME], "annotation-end");
-  }
-
-  /** Completes the range of the previously inserted field. @returns Nothing. */
-  public override endFastElement(): void {
-    this.commit(this.attributes.get(T.OFFICE_NAME) ?? "");
-  }
-}
-
-/** Selects the annotation's nested paragraph text contexts. @param element - Child token. @param attributes - Style attributes. @param resolveStyle - Text style resolver. @param commit - Paragraph sink. @returns Context or unknown. */
-function annotationBlockContext(
-  element: T,
-  attributes: FastAttributeList,
-  resolveStyle: ResolveTextStyle,
-  commit: CommitParagraph,
-): SvXMLImportContext | null {
-  if (element === T.TEXT_P || element === T.TEXT_H) {
-    const spans: XMLAnnotationSpan[] = [];
-    const style = attributes.get(T.TEXT_STYLE_NAME);
-    return new XMLAnnotationTextContext(
-      resolveStyle,
-      style ? resolveStyle(style) : {},
-      spans,
-      /** Sends the complete paragraph after its nested spans. @returns Nothing. */
-      () => commit(spans),
-    );
-  }
-  if (element === T.TEXT_LIST || element === T.TEXT_LIST_ITEM || element === T.TEXT_LIST_HEADER)
-    return new XMLAnnotationBlocks(resolveStyle, commit);
-  return null;
-}
-
-/** Reads paragraphs nested in supported annotation text blocks. */
-class XMLAnnotationBlocks extends SvXMLImportContext {
-  /** Captures the surrounding text section. @param resolveStyle - Text style resolver. @param commit - Paragraph sink. @returns Context. */
-  constructor(
-    private readonly resolveStyle: ResolveTextStyle,
-    private readonly commit: CommitParagraph,
-  ) {
-    super();
-  }
-
-  /** Keeps the original paragraphs in source order. @param element - Child token. @param attributes - Child attributes. @returns Child context. */
-  public override createFastChildContext(
-    element: T,
+  /** Imports metadata and routes note paragraphs through the native TextRange cursor. @param element - Child token. @param attributes - Child attributes. @returns Child context. */
+  override createFastChildContext(
+    element: XMLToken,
     attributes: FastAttributeList,
   ): SvXMLImportContext | null {
-    return annotationBlockContext(element, attributes, this.resolveStyle, this.commit);
+    switch (element) {
+      case XMLToken.DC_CREATOR:
+        return new AnnotationStringContext(
+          /** Adds author text. @param chunk - Decoded text. @returns Nothing. */ (chunk) => {
+            this.author += chunk;
+          },
+        );
+      case XMLToken.DC_DATE:
+        return new AnnotationStringContext(
+          /** Adds date text. @param chunk - Decoded text. @returns Nothing. */ (chunk) => {
+            this.date += chunk;
+          },
+        );
+      case XMLToken.TEXT_SENDER_INITIALS:
+      case XMLToken.LOEXT_SENDER_INITIALS:
+      case XMLToken.META_CREATOR_INITIALS:
+        return new AnnotationStringContext(
+          /** Adds initials. @param chunk - Decoded text. @returns Nothing. */ (chunk) => {
+            this.initials += chunk;
+          },
+        );
+      case XMLToken.TEXT_P:
+      case XMLToken.TEXT_H: {
+        this.field ??= this.helper.CreateAnnotation(this.name);
+        if (!this.cursor) {
+          this.cursor = this.field.getTextRange().createTextCursor();
+          this.helper.PushAnnotationCursor(this.cursor);
+        }
+        return this.helper.CreateTextChildContext(element, attributes, "Annotation");
+      }
+      default:
+        return null;
+    }
+  }
+
+  /** Prepares the original UNO annotation properties before attaching. @param field - Detached field descriptor. @returns Nothing. */
+  private PrepareField(field: XMLAnnotationTextContent): void {
+    this.helper.SetProperty(field, "Author", this.author);
+    this.helper.SetProperty(field, "Initials", this.initials);
+    this.helper.SetProperty(field, "Resolved", this.resolved[0]);
+    if (this.parentName) this.helper.SetProperty(field, "ParentName", this.parentName);
+    const date = new DateTime();
+    if (!Converter.parseDateTime(date, this.date)) return;
+    const name = xmlTextString("DateTimeValue");
+    const value = new Any(date, cppu_detail_getUnoType_DateTime);
+    try {
+      field.setPropertyValue(name, value);
+    } finally {
+      value.dispose();
+      name.dispose();
+    }
+  }
+
+  /** Completes the field or reattaches a named annotation to its expanded range. @param element - Closing token. @returns Nothing. */
+  override endFastElement(element: XMLToken): void {
+    if (element === XMLToken.OFFICE_ANNOTATION_END) {
+      this.helper.EndAnnotation(this.name);
+      return;
+    }
+    if (this.cursor) {
+      const empty = xmlTextString("");
+      try {
+        this.cursor.gotoEnd(false);
+        this.cursor.goLeft(1, true);
+        this.cursor.setString(empty);
+      } finally {
+        empty.dispose();
+        this.helper.PopAnnotationCursor();
+      }
+    }
+    const field = this.field ?? this.helper.CreateAnnotation(this.name);
+    this.PrepareField(field);
+    this.helper.InsertAnnotation(this.name, field);
   }
 }
 
-/** Appends original metadata characters. */
-class XMLAnnotationCharacters extends SvXMLImportContext {
-  /** Sets the metadata buffer. @param append - Buffer sink. @returns Context. */
-  constructor(private readonly append: (text: string) => void) {
+/** Buffers scalar metadata independently of the annotation's editable paragraphs. */
+class AnnotationStringContext extends SvXMLImportContext {
+  /** Uses an annotation metadata receiver. @param append - Text receiver. @returns Context. */
+  constructor(private readonly append: (value: string) => void) {
     super();
   }
 
-  /** Appends original decoded characters. @param text - XML characters. @returns Nothing. */
-  public override characters(text: string): void {
-    this.append(text);
-  }
-}
-
-/** Imports the represented paragraph and span formatting of an annotation. */
-class XMLAnnotationTextContext extends SvXMLImportContext {
-  /** Associates a text portion with the original style state. @param resolveStyle - Style resolver. @param properties - Active text values. @param spans - Shared paragraph sink. @param finish - Optional paragraph completion. @returns Context. */
-  constructor(
-    private readonly resolveStyle: ResolveTextStyle,
-    private readonly properties: Partial<OdfCharacterProperties>,
-    private readonly spans: XMLAnnotationSpan[],
-    private readonly finish?: () => void,
-  ) {
-    super();
-  }
-
-  /** Collects characters under the active text values. @param text - Original paragraph characters. @returns Nothing. */
-  public override characters(text: string): void {
-    if (text) this.spans.push({ text, properties: this.properties });
-  }
-
-  /** Handles native span and text control tokens within the annotation. @param element - Child token. @param attributes - Child attributes. @returns Child context. */
-  public override createFastChildContext(
-    element: T,
-    attributes: FastAttributeList,
-  ): SvXMLImportContext | null {
-    if (element === T.TEXT_SPAN || element === T.TEXT_A) {
-      const name = attributes.get(T.TEXT_STYLE_NAME);
-      return new XMLAnnotationTextContext(
-        this.resolveStyle,
-        name ? { ...this.properties, ...this.resolveStyle(name) } : this.properties,
-        this.spans,
-      );
-    }
-    if (element === T.TEXT_S || element === T.TEXT_TAB || element === T.TEXT_LINE_BREAK) {
-      const count = element === T.TEXT_S ? Number(attributes.get(T.TEXT_C) ?? "1") : 1;
-      if (!Number.isInteger(count) || count < 1 || count > 100_000)
-        throw new Error("ODF significant-space count is invalid.");
-      this.characters(
-        element === T.TEXT_TAB ? "\t" : element === T.TEXT_LINE_BREAK ? "\n" : " ".repeat(count),
-      );
-      return new SvXMLImportContext();
-    }
-    return null;
-  }
-
-  /** Finishes the root annotation paragraph. @returns Nothing. */
-  public override endFastElement(): void {
-    this.finish?.();
+  /** Adds decoded SAX characters. @param value - Text chunk. @returns Nothing. */
+  override characters(value: string): void {
+    this.append(value);
   }
 }
