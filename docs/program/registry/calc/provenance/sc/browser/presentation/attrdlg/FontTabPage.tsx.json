@@ -1,0 +1,29 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "browser-adaptation",
+    "status": "local-only",
+    "localPath": "apps/office/src/sc/browser/presentation/attrdlg/FontTabPage.tsx",
+    "rationale": "React and DOM present source Calc page controls while the original item-set, font inventory, frame selector and document history retain ownership.",
+    "responsibilities": [
+      "Projects the three script groups in the original character-name notebook using the browser device font inventory and real script items."
+    ],
+    "stackDivergence": {
+      "kind": "browser-adaptation",
+      "rationale": "React and DOM present source Calc page controls while the original item-set, font inventory, frame selector and document history retain ownership."
+    },
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sc/browser/presentation/attrdlg/FontTabPage.tsx",
+          "marker": "FontTabPage"
+        },
+        {
+          "path": "apps/office/src/sc/browser/presentation/calc-format-cells.test.tsx",
+          "marker": "@fileoverview"
+        }
+      ]
+    }
+  }
+}

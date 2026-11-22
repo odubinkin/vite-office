@@ -1,5 +1,4 @@
 /** @fileoverview Alignment, Background and Cell Protection controls over native Calc items. */
-import { SfxItemState } from "../../../../svl/source/items/itemset";
 import type { SfxPoolItem } from "../../../../svl/source/items/poolitem";
 import { SvxBrushItem } from "../../../../editeng/inc/brushitem";
 import {
@@ -55,10 +54,7 @@ interface PageProps {
 
 /** Reads a dialog value with its original mixed state. @param model - Dialog state. @param which - Attribute. @returns Effective native item. */
 function item<T extends SfxPoolItem>(model: ScAttrDlg, which: number): T | undefined {
-  return (model.output.GetItemIfSet(which, false) ??
-    (model.items.GetItemState(which) >= SfxItemState.DEFAULT
-      ? model.items.Get(which)
-      : undefined)) as T | undefined;
+  return model.GetItem<T>(which);
 }
 
 /** Projects the represented alignment items in original field groups.

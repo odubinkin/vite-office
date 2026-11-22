@@ -127,6 +127,18 @@ const languageProperties = [
     ],
   ],
 ] as const;
+/** Tokens from the original merged language map. */
+export const textLanguagePropertyTokens = languageProperties.flatMap(
+  /** Collects each source locale attribute token. @param family - Script mapping. @returns Tokens. */ ([
+    ,
+    properties,
+  ]) =>
+    properties.map(
+      /** Selects the original token. @param entry - Attribute mapping. @returns Token. */ ([
+        token,
+      ]) => token,
+    ),
+);
 /** Tokens consumed by this bounded source property map. */
 export const textCharacterPropertyTokens = [
   ...scriptProperties.map(
@@ -148,17 +160,7 @@ export const textCharacterPropertyTokens = [
     /** Reads original bool property tokens. @param entry - Entry. @returns Token. */ ([token]) =>
       token,
   ),
-  ...languageProperties.flatMap(
-    /** Collects each source locale attribute token. @param family - Script mapping. @returns Tokens. */ ([
-      ,
-      properties,
-    ]) =>
-      properties.map(
-        /** Selects the original token. @param entry - Attribute mapping. @returns Token. */ ([
-          token,
-        ]) => token,
-      ),
-  ),
+  ...textLanguagePropertyTokens,
 ];
 /** Collects all attributes of each native script locale in XML order. @param properties - Native text properties. @returns Qualified attribute/value pairs. */
 export function exportTextLanguageProperties(
@@ -242,6 +244,28 @@ export function exportTextCharacterProperties(properties: OdfCharacterProperties
     value.dispose();
   }
 }
+/** Imports the independent script language properties through the source locale accumulator. @param attributes - Real SAX attributes. @returns Native language values. */
+export function importTextLanguageProperties(
+  attributes: FastAttributeList,
+): Partial<OdfCharacterProperties> {
+  const result: Record<string, number> = {};
+  for (const [suffix, properties] of languageProperties) {
+    let locale: XMLCharLocale | undefined;
+    for (const [token, value] of attributes) {
+      const attribute = properties.find(
+        /** Finds the native locale property. @param entry - Source mapping. @returns Token match. */
+        ([source]) => source === token,
+      );
+      if (attribute) {
+        locale ??= new XMLCharLocale();
+        locale.importXML(attribute[2], value);
+      }
+    }
+    if (locale) result[`language${suffix}`] = locale.getLanguageType();
+  }
+  return result as Partial<OdfCharacterProperties>;
+}
+
 /** Imports native scalar properties, merging underline attributes in actual SAX order. @param attributes - Original source order. @returns Successful property conversions. */
 export function importTextCharacterProperties(
   attributes: FastAttributeList,
@@ -327,21 +351,7 @@ export function importTextCharacterProperties(
         result.underlineHasColor = hasColor[0];
       }
     }
-    for (const [suffix, properties] of languageProperties) {
-      let locale: XMLCharLocale | undefined;
-      for (const [token, value] of attributes) {
-        const attribute = properties.find(
-          /** Finds the source locale member. @param entry - Native property mapping. @returns Match. */ ([
-            source,
-          ]) => source === token,
-        );
-        if (attribute) {
-          locale ??= new XMLCharLocale();
-          locale.importXML(attribute[2], value);
-        }
-      }
-      if (locale) result[`language${suffix}`] = locale.getLanguageType();
-    }
+    Object.assign(result, importTextLanguageProperties(attributes));
     return result as Partial<OdfCharacterProperties>;
   } finally {
     value.dispose();

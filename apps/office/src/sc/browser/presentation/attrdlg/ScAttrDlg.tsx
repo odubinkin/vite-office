@@ -5,11 +5,17 @@ import type { SfxPoolItem } from "../../../../svl/source/items/poolitem";
 import {
   cellFormatPages,
   alignmentWhich,
+  borderWhich,
+  fontPageItems,
+  fontEffectsWhich,
   type NumberFormatChange,
   type ScAttrDlg as ScAttrDlgModel,
   type ScAttrDlgResult,
 } from "../../../source/ui/attrdlg/attrdlg";
 import { ATTR_BACKGROUND, ATTR_PROTECTION } from "../../../inc/scitems";
+import { CellBordersTabPage } from "./CellBordersTabPage";
+import { FontTabPage } from "./FontTabPage";
+import { FontEffectsTabPage } from "./FontEffectsTabPage";
 import { NumberFormatTabPage } from "./NumberFormatTabPage";
 import { AlignmentTabPage, BackgroundTabPage, CellProtectionTabPage } from "./CellAttributePages";
 
@@ -32,6 +38,9 @@ export function ScAttrDlg({ model, onCancel, onSubmit }: Props): React.JSX.Eleme
   const [numbers, setNumbers] = useState<NumberFormatChange>();
   const [revision, setRevision] = useState(0);
   const [resetNumber, setResetNumber] = useState(0);
+  const [resetBorder, setResetBorder] = useState(0);
+  const [resetFont, setResetFont] = useState(0);
+  const [frameEdited, setFrameEdited] = useState(false);
   const id = useId();
   const tabs = useRef<HTMLDivElement>(null);
   useLayoutEffect(
@@ -46,12 +55,31 @@ export function ScAttrDlg({ model, onCancel, onSubmit }: Props): React.JSX.Eleme
     setRevision(revision + 1);
   }
 
+  /** Renders pending frame changes and leaves conversion to the source page's FillItemSet. @returns Nothing. */
+  function frameChanged(): void {
+    setFrameEdited(true);
+    setRevision(revision + 1);
+  }
+
   /** Restores the active source page from its input values. @returns Nothing. */
   function reset(): void {
     switch (cellFormatPages[tab]?.[0]) {
       case "numbers":
         setNumbers(undefined);
         setResetNumber(resetNumber + 1);
+        break;
+      case "font":
+        for (const which of fontPageItems()) model.output.ClearItem(which);
+        setResetFont(resetFont + 1);
+        break;
+      case "fonteffects":
+        for (const which of fontEffectsWhich) model.output.ClearItem(which);
+        break;
+      case "borders":
+        for (const which of borderWhich) model.output.ClearItem(which);
+        model.borders.Reset();
+        setFrameEdited(false);
+        setResetBorder(resetBorder + 1);
         break;
       case "alignment":
         for (const which of alignmentWhich) model.output.ClearItem(which);
@@ -92,8 +120,10 @@ export function ScAttrDlg({ model, onCancel, onSubmit }: Props): React.JSX.Eleme
             event,
           ) => {
             event.preventDefault();
-            if (!invalid)
-              onSubmit({ items: model.output.Clone(), ...(numbers ? { format: numbers } : {}) });
+            if (invalid) return;
+            const items = model.output.Clone();
+            if (frameEdited) model.borders.FillItemSet(items);
+            onSubmit({ items, ...(numbers ? { format: numbers } : {}) });
           }
         }
       >
@@ -171,6 +201,17 @@ export function ScAttrDlg({ model, onCancel, onSubmit }: Props): React.JSX.Eleme
                     model={model}
                     edit={numbers}
                     setEdit={setNumbers}
+                  />
+                ) : page === "font" ? (
+                  <FontTabPage key={resetFont} model={model} onChange={stage} />
+                ) : page === "fonteffects" ? (
+                  <FontEffectsTabPage model={model} onChange={stage} />
+                ) : page === "borders" ? (
+                  <CellBordersTabPage
+                    model={model}
+                    onChange={stage}
+                    resetKey={resetBorder}
+                    onChangeFrame={frameChanged}
                   />
                 ) : page === "alignment" ? (
                   <AlignmentTabPage model={model} onChange={stage} />

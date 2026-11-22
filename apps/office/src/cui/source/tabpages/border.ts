@@ -1,4 +1,4 @@
-/** @fileoverview Owns Writer's represented native border tab page and separate item-set deltas. */
+/** @fileoverview Owns the represented native border tab page and separate item-set deltas. */
 import { Color } from "../../../tools/inc/color";
 import {
   SvxBoxItem,
@@ -9,6 +9,8 @@ import {
 import { SvxBorderLineStyle as Style } from "../../../editeng/source/items/borderline";
 import { SfxBoolItem } from "../../../svl/source/items/cenumitm";
 import { SfxItemSet, SfxItemState } from "../../../svl/source/items/itemset";
+import { SvxLineItem } from "../../../editeng/inc/lineitem";
+import { SvxMarginItem } from "../../../svx/source/items/algitem";
 import { SID_ATTR_BORDER_INNER } from "../../../svx/inc/svxids";
 import {
   FrameSelector,
@@ -57,12 +59,22 @@ function minimumLineWidth(style: Style): number {
   return 15;
 }
 
+/** Native page creation values supplied by the application. */
+export interface BorderPageOptions {
+  readonly marginWhich?: number;
+  readonly defaultWidth?: number;
+  readonly styles?: readonly Style[];
+  readonly diagonalWhich?: readonly [number, number];
+  readonly removeAdjacent?: boolean;
+}
+
 /** Owns represented border widgets; shadow/diagonal items remain separate native obligations. */
 export class SvxBorderTabPage {
   public readonly frameSelector = new FrameSelector();
   private readonly original: SfxItemSet;
   private readonly oldBox: SvxBoxItem | undefined;
   private readonly oldInfo: SvxBoxInfoItem | undefined;
+  private readonly oldMargin: SvxMarginItem | undefined;
   private readonly oldMerge: SfxBoolItem | undefined;
   private merge: boolean | undefined;
   private savedMerge: boolean | undefined;
@@ -79,12 +91,14 @@ export class SvxBorderTabPage {
   private customWidth = false;
   private readonly color = new Color();
   private preset: number | undefined;
-  /** Captures owned input, independent of document mutation. @param input - Native original items. @param boxWhich - Pool's outer box identity. @param mergeWhich - Mapped Writer table-mode item. @param infoWhich - Pool's inner border item identity. @returns Nothing. */
+  private removeAdjacent = false;
+  /** Captures owned input, independent of document mutation. @param input - Native original items. @param boxWhich - Pool's outer box identity. @param mergeWhich - Mapped Writer table-mode item. @param infoWhich - Pool's inner border item identity. @param options - Native app-supplied page defaults. @returns Nothing. */
   public constructor(
     input: SfxItemSet,
     private readonly boxWhich: number,
     private readonly mergeWhich?: number,
     private readonly infoWhich: number = SID_ATTR_BORDER_INNER,
+    private readonly options: BorderPageOptions = {},
   ) {
     this.original = input.Clone();
     const box =
@@ -97,12 +111,15 @@ export class SvxBorderTabPage {
       mergeWhich !== undefined && input.GetItemState(mergeWhich) >= SfxItemState.DEFAULT
         ? input.Get(mergeWhich)
         : undefined;
+    const margin =
+      options.marginWhich === undefined ? undefined : this.original.Get(options.marginWhich);
+    this.oldMargin = margin instanceof SvxMarginItem ? margin : undefined;
     this.oldMerge = merge instanceof SfxBoolItem ? merge.Clone() : undefined;
     this.oldBox = box instanceof SvxBoxItem ? box.Clone() : undefined;
     this.oldInfo = info instanceof SvxBoxInfoItem ? info.Clone() : undefined;
     this.horizontal = this.oldInfo?.IsHor() ?? false;
     this.vertical = this.oldInfo?.IsVer() ?? false;
-    this.distanceVisible = this.oldInfo?.IsDist() ?? false;
+    this.distanceVisible = this.oldMargin !== undefined || (this.oldInfo?.IsDist() ?? false);
     this.Reset();
   }
   /** Restores source frame lines, saved metrics, uniform line controls and selection. @returns Nothing. */
@@ -113,6 +130,7 @@ export class SvxBorderTabPage {
       FrameSelFlags.Outer |
         (this.horizontal ? FrameSelFlags.InnerHorizontal : 0) |
         (this.vertical ? FrameSelFlags.InnerVertical : 0) |
+        (this.options.diagonalWhich ? FrameSelFlags.DiagonalTLBR | FrameSelFlags.DiagonalBLTR : 0) |
         (!this.oldInfo?.IsValid(Valid.DISABLE) ? FrameSelFlags.DontCare : 0),
     );
     this.modified.fill(false);
@@ -130,7 +148,7 @@ export class SvxBorderTabPage {
             );
           else selector.SetBorderDontCare(edge);
         }
-      if (this.distanceVisible) {
+      if (this.distanceVisible && !this.oldMargin) {
         for (let edge = 0; edge < 4; edge++) this.distances[edge] = this.oldBox.GetDistance(edge);
         const visible = selector.IsAnyBorderVisible(),
           expected = visible ? this.minimumDistance : 0;
@@ -148,18 +166,40 @@ export class SvxBorderTabPage {
       selector.HideAllBorders();
       if (this.distanceVisible && this.oldBox === undefined) this.distances.fill(undefined);
     }
+    if (this.options.diagonalWhich) {
+      for (const [index, which] of this.options.diagonalWhich.entries()) {
+        const edge = index === 0 ? Edge.TLBR : Edge.BLTR;
+        if (this.original.GetItemState(which) >= SfxItemState.DEFAULT) {
+          const item = this.original.Get(which) as SvxLineItem;
+          selector.ShowBorder(edge, item.GetLine() ?? undefined);
+        } else selector.SetBorderDontCare(edge);
+      }
+    }
+    if (this.oldMargin) {
+      const margin = this.oldMargin;
+      const state = this.original.GetItemState(margin.Which());
+      this.distances.fill(undefined);
+      if (state >= SfxItemState.DEFAULT) {
+        this.distances[0] = margin.GetTopMargin();
+        this.distances[1] = margin.GetBottomMargin();
+        this.distances[2] = margin.GetLeftMargin();
+        this.distances[3] = margin.GetRightMargin();
+      }
+    }
     for (let edge = 0; edge < 4; edge++) this.savedDistances[edge] = this.distances[edge];
     if (!selector.IsAnyBorderVisible()) selector.DeselectAllBorders();
     const uniform = selector.GetVisibleWidth(),
       color = new Color(),
       hasColor = selector.GetVisibleColor(color);
     if (uniform !== undefined) this.SetLineWidth(uniform[0] * 5);
+    else if (this.options.defaultWidth !== undefined) this.SetLineWidth(this.options.defaultWidth);
     this.style = uniform?.[1] ?? Style.SOLID;
     this.color.assign(color);
     if (uniform !== undefined && hasColor) selector.SelectAllVisibleBorders();
     this.SelStyleHdl_Impl(this.style);
     this.SelColHdl_Impl(this.color);
     this.preset = undefined;
+    this.removeAdjacent = false;
     this.LinesChanged_Impl();
     this.sync = this.distances.every(
       /** Determines source Synchronize from all four values. @param value - Original metric. @returns Equality. */ (
@@ -181,7 +221,7 @@ export class SvxBorderTabPage {
   }
   /** Lists native line styles in the source order. @returns Styles. */
   public GetLineStyles(): readonly Style[] {
-    return lineStyles;
+    return this.options.styles ?? lineStyles;
   }
   /** Reads displayed native style. @returns Style. */
   public GetLineStyle(): Style {
@@ -267,7 +307,7 @@ export class SvxBorderTabPage {
         "All Four Borders",
         "Left and Right Borders Only",
         "Top and Bottom Borders Only",
-        "Left Border",
+        this.options.diagonalWhich ? "Diagonal Borders" : "Left Border",
       ];
     return [
       "No Borders",
@@ -288,7 +328,7 @@ export class SvxBorderTabPage {
         [1, 1, 1, 1, 0, 0],
         [1, 1, 0, 0, 0, 0],
         [0, 0, 1, 1, 0, 0],
-        [1, 0, 0, 0, 0, 0],
+        this.options.diagonalWhich ? [0, 0, 0, 0, 0, 0, 1, 1] : [1, 0, 0, 0, 0, 0],
       ],
       hor = [
         [0, 0, 0, 0, 0, 0],
@@ -337,10 +377,40 @@ export class SvxBorderTabPage {
     this.preset = preset;
     this.LinesChanged_Impl();
   }
+  /** Reads Calc-only adjacent removal visibility. @returns Control admission. */
+  public HasRemoveAdjacent(): boolean {
+    return this.options.removeAdjacent === true;
+  }
+
+  /** The checkbox is sensitive when an outer edge is removed, or the no-borders preset is chosen. @returns Whether the native checkbox may be toggled. */
+  public CanRemoveAdjacent(): boolean {
+    if (!this.HasRemoveAdjacent() || !this.oldBox || !this.oldInfo) return false;
+    if (this.preset === 1) return true;
+    for (const [edge, itemEdge, flag] of edges.slice(0, 4))
+      if (
+        this.frameSelector.GetFrameBorderState(edge) === State.Hide &&
+        (this.oldBox.GetLine(itemEdge) || !this.oldInfo.IsValid(flag))
+      )
+        return true;
+    return false;
+  }
+
+  /** Reads the Calc erase-neighbor option. @returns Whether adjacent edges should be removed. */
+  public GetRemoveAdjacent(): boolean {
+    return this.removeAdjacent && this.CanRemoveAdjacent();
+  }
+
+  /** Adopts the Calc erase-neighbor option. @param checked - Checkbox state. @returns Nothing. */
+  public SetRemoveAdjacent(checked: boolean): void {
+    this.removeAdjacent = checked && this.CanRemoveAdjacent();
+  }
+
   /** Updates source automatic distances after a frame-line transition. @returns Nothing. */
   public LinesChanged_Impl(): void {
+    if (!this.CanRemoveAdjacent()) this.removeAdjacent = false;
     if (
       this.distanceVisible &&
+      !this.oldMargin &&
       this.frameSelector.IsAnyBorderVisible() &&
       !this.modified.some(
         /** Tests saved edit modification flags before source automatic spacing. @param value - Modified flag. @returns Flag. */ (
@@ -362,9 +432,44 @@ export class SvxBorderTabPage {
       }
       changed = true;
     }
+    if (this.options.diagonalWhich) {
+      for (const [index, which] of this.options.diagonalWhich.entries()) {
+        const edge = index === 0 ? Edge.TLBR : Edge.BLTR;
+        if (this.frameSelector.GetFrameBorderState(edge) === State.DontCare) continue;
+        const old = this.original.Get(which) as SvxLineItem;
+        const item = old.Clone();
+        item.SetLine(this.frameSelector.GetFrameBorderStyle(edge) ?? null);
+        if (!item.equals(old) || this.original.GetItemState(which) === SfxItemState.INVALID) {
+          output.Put(item, true);
+          changed = true;
+        } else item.Dispose();
+      }
+    }
+    if (this.oldMargin) {
+      const [top, bottom, left, right] = this.distances;
+      const original = this.oldMargin;
+      const differs = this.distances.some(
+        /** Detects a changed cell padding field. @param value - Current value. @param edge - Original edge. @returns Whether the value changed. */
+        (value, edge) => value !== this.savedDistances[edge],
+      );
+      if (differs) {
+        output.Put(
+          new SvxMarginItem(
+            left ?? original.GetLeftMargin(),
+            top ?? original.GetTopMargin(),
+            right ?? original.GetRightMargin(),
+            bottom ?? original.GetBottomMargin(),
+            original.Which(),
+          ),
+          true,
+        );
+        changed = true;
+      } else output.ClearItem(original.Which());
+    }
     const box = new SvxBoxItem(this.boxWhich),
       info = new SvxBoxInfoItem(this.infoWhich),
       selector = this.frameSelector;
+    box.SetRemoveAdjacentCellBorder(this.GetRemoveAdjacent());
     for (const [edge, itemEdge, valid] of edges) {
       const enabled = selector.GetEnabledBorders().includes(edge);
       const line = enabled ? selector.GetFrameBorderStyle(edge) : undefined;
@@ -374,7 +479,8 @@ export class SvxBorderTabPage {
     }
     info.EnableHor(this.horizontal);
     info.EnableVer(this.vertical);
-    if (this.distanceVisible) {
+    if (this.oldMargin && this.oldInfo?.IsDist()) info.SetDist(true);
+    if (this.distanceVisible && !this.oldMargin) {
       info.SetDist(true);
       if (
         this.distances.some(
@@ -426,6 +532,14 @@ export class SvxBorderTabPage {
     }
     return changed;
   }
+  /** Releases the native page's copied inputs. @returns Nothing. */
+  public Dispose(): void {
+    this.original.Dispose();
+    this.oldBox?.Dispose();
+    this.oldInfo?.Dispose();
+    this.oldMerge?.Dispose();
+  }
+
   /** Resolves native predefined versus custom width presentation. @param value - Hundredths of a point, negative retains spinner value. @returns Nothing. */
   private SetLineWidth(value: number): void {
     if (value >= 0) this.width = value;

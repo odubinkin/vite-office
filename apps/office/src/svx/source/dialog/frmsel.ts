@@ -2,7 +2,7 @@
 import { Color } from "../../../tools/inc/color";
 import { SvxBorderLine, SvxBorderLineStyle } from "../../../editeng/source/items/borderline";
 
-/** Native frame edge identities, including disabled diagonal keyboard neighbors. */
+/** Native frame edge identities, including diagonal keyboard neighbors. */
 export enum FrameBorderType {
   NONE,
   Left,
@@ -29,6 +29,8 @@ export enum FrameSelFlags {
   Bottom = 8,
   InnerHorizontal = 16,
   InnerVertical = 32,
+  DiagonalTLBR = 64,
+  DiagonalBLTR = 128,
   Outer = 15,
   DontCare = 256,
 }
@@ -60,7 +62,7 @@ export class FrameSelector {
   public Initialize(flags: FrameSelFlags): void {
     this.flags = flags;
     this.borders.clear();
-    for (let edge = FrameBorderType.Left; edge <= FrameBorderType.Vertical; edge++)
+    for (let edge = FrameBorderType.Left; edge <= FrameBorderType.BLTR; edge++)
       if (flags & (1 << (edge - 1)))
         this.borders.set(edge, {
           state: FrameBorderState.Hide,
@@ -86,7 +88,7 @@ export class FrameSelector {
     return line.GetOutWidth() ? line : undefined;
   }
   /** Copies a line without selection side effects. @param edge - Enabled edge. @param line - Native input. @returns Nothing. */
-  public ShowBorder(edge: FrameBorderType, line: SvxBorderLine | undefined): void {
+  public ShowBorder(edge: FrameBorderType, line: Readonly<SvxBorderLine> | undefined): void {
     const border = this.borders.get(edge) as FrameBorder;
     border.line = line?.Clone() ?? new SvxBorderLine();
     border.state = border.line.isEmpty() ? FrameBorderState.Hide : FrameBorderState.Show;

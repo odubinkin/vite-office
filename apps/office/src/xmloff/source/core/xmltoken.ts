@@ -220,6 +220,7 @@ const entries: readonly (readonly [string, string, XMLToken])[] = [
   [ODF_NAMESPACES.draw, "fill", XMLToken.DRAW_FILL],
   [ODF_NAMESPACES.draw, "fill-color", XMLToken.DRAW_FILL_COLOR],
   [ODF_NAMESPACES.draw, "opacity", XMLToken.DRAW_OPACITY],
+  [ODF_NAMESPACES.style, "text-emphasize", XMLToken.STYLE_TEXT_EMPHASIZE],
   [ODF_NAMESPACES.style, "text-underline-mode", XMLToken.STYLE_TEXT_UNDERLINE_MODE],
   [ODF_NAMESPACES.style, "text-overline-mode", XMLToken.STYLE_TEXT_OVERLINE_MODE],
   [ODF_NAMESPACES.style, "text-line-through-mode", XMLToken.STYLE_TEXT_LINE_THROUGH_MODE],

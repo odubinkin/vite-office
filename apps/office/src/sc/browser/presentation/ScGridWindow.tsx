@@ -6,6 +6,7 @@ import {
   createCalcGridFrames,
   calcGridBorderStyle,
   calcGridPageBreaks,
+  calcCellEdgeStyle,
   calcMergedBorderStyle,
 } from "./calc-grid-borders";
 import { ScHeaderResizeHandle, type ScHeaderSizing } from "./ScHeaderResizeHandle";
@@ -25,6 +26,8 @@ import { SvxCellHorJustify } from "../../../editeng/inc/svxenum";
 import { SvxContourItem } from "../../../editeng/inc/contouritem";
 import { SpecialText } from "../../../vcl/browser/special-text";
 import { SvxShadowedItem, SvxCharReliefItem } from "../../../editeng/source/items/textitem";
+import type { SvxWordLineModeItem } from "../../../editeng/source/items/textitem";
+import type { SvxShadowItem } from "../../../editeng/source/items/frmitems.shadow";
 import type { SvxHorJustifyItem, SvxVerJustifyItem } from "../../../editeng/inc/justifyitem";
 import type { ScTable } from "../../inc/table";
 import {
@@ -127,7 +130,9 @@ function cellTypography(pattern: ScPatternAttr, conditional?: SfxItemSet) {
     relief = (pattern.GetItem(124, conditional) as SvxCharReliefItem).GetValue(),
     special = outlined || shadowed || relief !== 0;
   const lineItem = pattern.GetItem(104, conditional) as SvxUnderlineItem;
-  const underline = lineItem.GetLineStyle(),
+  const underline = (pattern.GetItem(123, conditional) as SvxWordLineModeItem).GetValue()
+      ? FontLineStyle.LINESTYLE_NONE
+      : lineItem.GetLineStyle(),
     lineColor = lineItem.GetColor();
   const fontColor = new ComplexColor();
   ScPatternAttr.fillColor(
@@ -712,21 +717,17 @@ export function ScGridWindow(props: ScGridWindowProps): React.JSX.Element {
                             r === band.cells.at(-1),
                             showGrid,
                           )),
-                      paddingLeft: Math.trunc(
-                        ((pattern.GetItem(143) as SvxMarginItem).GetLeftMargin() +
-                          ((pattern.GetItem(129) as SvxHorJustifyItem).GetValue() ===
+                      ...calcCellEdgeStyle(
+                        pattern.GetItem(143, conditional) as SvxMarginItem,
+                        pattern.GetItem(152, conditional) as SvxShadowItem,
+                        (pattern.GetItem(129) as SvxHorJustifyItem).GetValue() ===
                           SvxCellHorJustify.Left
-                            ? (pattern.GetItem(131) as ScIndentItem).GetValue()
-                            : 0)) /
-                          15,
-                      ),
-                      paddingRight: Math.trunc(
-                        ((pattern.GetItem(143) as SvxMarginItem).GetRightMargin() +
-                          ((pattern.GetItem(129) as SvxHorJustifyItem).GetValue() ===
+                          ? (pattern.GetItem(131) as ScIndentItem).GetValue()
+                          : 0,
+                        (pattern.GetItem(129) as SvxHorJustifyItem).GetValue() ===
                           SvxCellHorJustify.Right
-                            ? (pattern.GetItem(131) as ScIndentItem).GetValue()
-                            : 0)) /
-                          15,
+                          ? (pattern.GetItem(131) as ScIndentItem).GetValue()
+                          : 0,
                       ),
                       backgroundColor:
                         background.GetAlpha() === 0 ? undefined : browserColor(background),

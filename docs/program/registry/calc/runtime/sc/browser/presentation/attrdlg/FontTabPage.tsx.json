@@ -1,0 +1,32 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sc/browser/presentation/attrdlg/FontTabPage.tsx",
+    "classification": "browser-adaptation",
+    "state": "foundation",
+    "suite": "calc",
+    "subsystem": "cell-formatting",
+    "capabilityIds": [
+      "CAP-7184dae1-ae57-4a58-9c22-166e2c27d66a"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "not-applicable",
+      "defaultStatus": "not-applicable",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/sc/browser/presentation/attrdlg/FontTabPage.tsx",
+        "apps/office/src/sc/browser/presentation/calc-format-cells.test.tsx"
+      ],
+      "justification": "Projects the three script groups in the original character-name notebook using the browser device font inventory and real script items.",
+      "knownViolations": [],
+      "localSymbols": [
+        "FontTabPage"
+      ],
+      "sourceResponsibility": "browser-owned",
+      "upstreamFile": null,
+      "upstreamSymbols": []
+    }
+  }
+}

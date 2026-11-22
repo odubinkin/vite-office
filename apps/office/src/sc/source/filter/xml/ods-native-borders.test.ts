@@ -1,4 +1,6 @@
 /** @fileoverview Independent ODF border fixtures and actual ZIP package reopens across native controller, box/diagonal items and shared XML property handlers. */
+import { SvxMarginItem } from "../../../../svx/source/items/algitem";
+import { ATTR_MARGIN } from "../../../inc/scitems";
 import { expect, it } from "vitest";
 import { ScDocument } from "../../../inc/document";
 import { ScAddress } from "../../../inc/address";
@@ -151,7 +153,7 @@ it("collapses equal compound sides independently and exports only current diagon
     doc.DisposeAttributes();
   }
 });
-it("diagnoses invalid border lexemes and unported padding while preserving valid independent sides", /** Verifies unsupported metadata is visible rather than silently discarded. @returns Nothing. */ () => {
+it("diagnoses invalid border lexemes while admitting independently authored padding", /** Verifies invalid border diagnostics and valid cell padding. @returns Nothing. */ () => {
   const doc = new ScDocument(),
     diagnostics: string[] = [];
   try {
@@ -168,10 +170,12 @@ it("diagnoses invalid border lexemes and unported padding while preserving valid
     );
     expect(box(doc).GetLeft()?.GetWidth()).toBe(20);
     expect(box(doc).GetTop()).toBeUndefined();
+    const margin = doc.GetPattern(new ScAddress())?.GetItem(ATTR_MARGIN) as SvxMarginItem;
+    expect(margin.GetLeftMargin()).toBe(20);
     expect(diagnostics).toEqual(
       expect.arrayContaining(["invalid cell border", "invalid cell border widths"]),
     );
-    expect(diagnostics).toHaveLength(3);
+    expect(diagnostics).toHaveLength(2);
   } finally {
     doc.DisposeAttributes();
   }

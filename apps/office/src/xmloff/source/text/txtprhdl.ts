@@ -130,3 +130,39 @@ export function exportTextConstant(
     any.dispose();
   }
 }
+
+const emphasisTypes = ["none", "dot", "circle", "disc", "accent"] as const;
+
+/** Original text-emphasis lexical handler for the typed UNO property. */
+export class XMLTextEmphasizePropHdl {
+  /** Parses a type and position in either original order. @param text - Source value. @param output - Native short. @param converter - Document units, unused for emphasis. @returns Whether the value is valid. */
+  importXML(text: string, output: Any, converter: SvXMLUnitConverter): boolean {
+    void converter;
+    let style: number | undefined, below: boolean | undefined;
+    for (const token of text.trim().split(/\s+/u)) {
+      if (!token) continue;
+      if (below === undefined && (token === "above" || token === "below"))
+        below = token === "below";
+      else {
+        const type = emphasisTypes.indexOf(token as (typeof emphasisTypes)[number]);
+        if (style !== undefined || type < 0) return false;
+        style = type;
+      }
+    }
+    const type = style ?? 0;
+    output.insert([type !== 0 && below ? type + 10 : type], "sal_Int16");
+    return true;
+  }
+
+  /** Writes the native type and explicit position. @param output - Original string out parameter. @param input - Typed native text emphasis. @param converter - Document units, unused for emphasis. @returns Whether an emphasis value was supplied. */
+  exportXML(output: [string], input: Any, converter: SvXMLUnitConverter): boolean {
+    void converter;
+    const current = [0];
+    if (!input.extract(current, "sal_Int16")) return false;
+    const value = current[0] ?? 0,
+      below = value > 10,
+      type = below ? value - 10 : value;
+    output[0] = (emphasisTypes[type] ?? "dot") + (type === 0 ? "" : below ? " below" : " above");
+    return true;
+  }
+}

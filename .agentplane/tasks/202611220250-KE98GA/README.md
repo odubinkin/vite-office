@@ -4,7 +4,7 @@ title: "Connect Calc Format Cells typography and borders"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 6
+revision: 7
 origin:
   system: "manual"
 depends_on:
@@ -39,7 +39,7 @@ events:
     to: "DOING"
     note: "Start: bind native Calc typography and border pages to the active Format Cells dialog and verify their document history."
 doc_version: 3
-doc_updated_at: "2026-11-22T02:50:48.131Z"
+doc_updated_at: "2026-11-22T03:07:20.036Z"
 doc_updated_by: "CODER"
 description: "Connect native Font, Font Effects and Borders pages over Calc item sets, selection frame, shared widgets, history and existing document representations."
 sections:
@@ -56,7 +56,12 @@ sections:
   Rollback Plan: |-
     - Revert task-related commit(s).
     - Re-run required checks to confirm rollback safety.
-  Findings: ""
+  Findings: |-
+    - Calc uses the original three font script groups and pooled font effects. The common Format Cells request applies font, effects and borders together through native attribute history. Native device fonts and CSS own browser-specific previews and paint.
+    - Calc Borders uses the original selection frame and RTL normalization, the seven supported line styles, the 0.75 pt default, the separate margin item, the two diagonal line items and the Calc adjacent-border erase option.
+    - Source ODS cell mapping now writes and reads independent padding, shadow, script language, emphasis and line-mode attributes using the shared locale/shadow handlers and native item values. The former padding diagnostic test now verifies actual imported padding alongside unchanged border diagnostics.
+    - Conditional Asian Typography, advanced custom number-format administration and additional background selectors remain follow-up work. This task implements the three Font script groups independently of the Asian Typography tab.
+    - The full scheduled test checkpoint starts after closure. Retain the existing open/save/autosave/recovery decisions.
 id_source: "generated"
 ---
 ## Summary
@@ -88,3 +93,9 @@ Run targeted Calc Format Cells, selection frame, grouped history and ODS and rel
 - Re-run required checks to confirm rollback safety.
 
 ## Findings
+
+- Calc uses the original three font script groups and pooled font effects. The common Format Cells request applies font, effects and borders together through native attribute history. Native device fonts and CSS own browser-specific previews and paint.
+- Calc Borders uses the original selection frame and RTL normalization, the seven supported line styles, the 0.75 pt default, the separate margin item, the two diagonal line items and the Calc adjacent-border erase option.
+- Source ODS cell mapping now writes and reads independent padding, shadow, script language, emphasis and line-mode attributes using the shared locale/shadow handlers and native item values. The former padding diagnostic test now verifies actual imported padding alongside unchanged border diagnostics.
+- Conditional Asian Typography, advanced custom number-format administration and additional background selectors remain follow-up work. This task implements the three Font script groups independently of the Asian Typography tab.
+- The full scheduled test checkpoint starts after closure. Retain the existing open/save/autosave/recovery decisions.

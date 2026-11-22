@@ -1,0 +1,32 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sc/browser/presentation/attrdlg/CellBordersTabPage.tsx",
+    "classification": "browser-adaptation",
+    "state": "foundation",
+    "suite": "calc",
+    "subsystem": "cell-formatting",
+    "capabilityIds": [
+      "CAP-7184dae1-ae57-4a58-9c22-166e2c27d66a"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "not-applicable",
+      "defaultStatus": "not-applicable",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/sc/browser/presentation/attrdlg/CellBordersTabPage.tsx",
+        "apps/office/src/sc/browser/presentation/calc-format-cells.test.tsx"
+      ],
+      "justification": "Uses the shared border page and Calc shadow items with native viewport and cell attributes.",
+      "knownViolations": [],
+      "localSymbols": [
+        "CellBordersTabPage"
+      ],
+      "sourceResponsibility": "browser-owned",
+      "upstreamFile": null,
+      "upstreamSymbols": []
+    }
+  }
+}

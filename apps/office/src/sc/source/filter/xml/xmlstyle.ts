@@ -32,7 +32,11 @@ import { ScIndentItem, ScLineBreakCell } from "../../../inc/attrib";
 import { XMLMeasurePropHdl } from "../../../../xmloff/source/style/xmlbahdl";
 import { convertTwipToMm100 } from "../../../../tools/inc/UnitConversion";
 import { toTwips, Length } from "../../../../o3tl/inc/unit_conversion";
-import { exportFontEffectProperties, importFontEffectProperties } from "./xmlstyle.font-effects";
+import {
+  cellFontEffectTokens,
+  exportFontEffectProperties,
+  importFontEffectProperties,
+} from "./xmlstyle.font-effects";
 import {
   exportStrikeoutProperties,
   importStrikeoutProperties,
@@ -411,9 +415,7 @@ export function importCellTextProperties(
         ],
       ),
       ...strikeoutPropertyTokens,
-      XMLToken.STYLE_TEXT_OUTLINE,
-      XMLToken.FO_TEXT_SHADOW,
-      XMLToken.STYLE_FONT_RELIEF,
+      ...cellFontEffectTokens,
       XMLToken.FO_COLOR,
       XMLToken.STYLE_USE_WINDOW_FONT_COLOR,
       ...(textStyle ? [XMLToken.STYLE_TEXT_POSITION] : []),

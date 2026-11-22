@@ -7,6 +7,33 @@ import { text, unicode } from "../../../i18nlangtag/source/isolang/isolang.table
 import { SfxRequest } from "../../../sfx2/source/control/request";
 import { SvNumFormatType as T } from "../../../svl/inc/zforlist";
 import type { SvxBrushItem } from "../../../editeng/inc/brushitem";
+import {
+  ATTR_BORDER,
+  ATTR_MARGIN,
+  ATTR_FONT_HEIGHT,
+  ATTR_CJK_FONT_HEIGHT,
+  ATTR_CTL_FONT_HEIGHT,
+  ATTR_FONT_RELIEF,
+  ATTR_FONT_UNDERLINE,
+  ATTR_FONT_EMPHASISMARK,
+} from "../../inc/scitems";
+import { SvxMarginItem } from "../../../svx/source/items/algitem";
+import { SvxBoxItem } from "../../../editeng/source/items/frmitems";
+import { SvxFontHeightItem } from "../../../editeng/source/items/textitem.height";
+import { SvxCharReliefItem, SvxUnderlineItem } from "../../../editeng/source/items/textitem";
+import { SvxEmphasisMarkItem } from "../../../editeng/source/items/textitem.effects";
+import { FontEmphasisMark } from "../../../tools/inc/fontenum";
+import {
+  ATTR_BORDER_TLBR,
+  ATTR_CJK_FONT_LANGUAGE,
+  ATTR_CTL_FONT_LANGUAGE,
+  ATTR_SHADOW,
+} from "../../inc/scitems";
+import { LANGUAGE_NONE } from "../../../i18nlangtag/inc/lang";
+import { SvxLanguageItem } from "../../../editeng/source/items/textitem.language";
+import { SvxLineItem } from "../../../editeng/inc/lineitem";
+import { SvxShadowItem } from "../../../editeng/source/items/frmitems.shadow";
+import { SvxShadowLocation } from "../../../editeng/inc/svxenum";
 import { ScAddress, ScRange } from "../../inc/address";
 import { ScProtectionAttr, ScLineBreakCell } from "../../inc/attrib";
 import { ATTR_BACKGROUND, ATTR_LINEBREAK, ATTR_PROTECTION } from "../../inc/scitems";
@@ -152,7 +179,10 @@ it("applies alignment, fill and protection as one attribute transaction and pres
   fireEvent.change(modal.getByLabelText("Text direction"), { target: { value: "0" } });
   fireEvent.click(modal.getByRole("tab", { name: "Background" }));
   fireEvent.change(modal.getByLabelText("Fill"), { target: { value: "color" } });
-  fireEvent.change(modal.getByLabelText("Color"), { target: { value: "#1c8843" } });
+  fireEvent.change(
+    within(modal.getByRole("tabpanel", { name: "Background" })).getByLabelText("Color"),
+    { target: { value: "#1c8843" } },
+  );
   fireEvent.click(modal.getByRole("tab", { name: "Cell Protection" }));
   fireEvent.click(modal.getByRole("checkbox", { name: "Protected" }));
   fireEvent.click(modal.getByRole("checkbox", { name: "Hide formula" }));
@@ -249,4 +279,112 @@ it("uses context and keyboard entry points, preserves mixed untouched formats an
   ).toBe(true);
   const entry = doc.GetFormatTable().GetEntry(key);
   expect(entry && text(entry.GetFormatstring())).toContain("%");
+});
+
+it("ports the three script sizes and native Font Effects selections through one undo" /** Exercises the original font and effects pages and their native payload. @returns Completion. */, async () => {
+  const { controller } = mount();
+  const doc = controller.shell.GetDocument();
+  open();
+  const modal = dialog();
+  fireEvent.click(modal.getByRole("tab", { name: "Font" }));
+  fireEvent.change(
+    within(modal.getByRole("group", { name: "Western" })).getByRole("spinbutton", { name: "Size" }),
+    { target: { value: "18" } },
+  );
+  for (const script of ["Asian", "Complex"]) {
+    fireEvent.click(modal.getByRole("tab", { name: script }));
+    const group = within(modal.getByRole("tabpanel", { name: script }));
+    fireEvent.change(group.getByRole("spinbutton", { name: "Size" }), { target: { value: "18" } });
+    fireEvent.change(group.getByLabelText("Language"), { target: { value: "255" } });
+  }
+  fireEvent.click(modal.getByRole("tab", { name: "Font Effects" }));
+  const effects = within(modal.getByRole("tabpanel", { name: "Font Effects" }));
+  for (const name of ["Relief", "Overlining", "Strikethrough", "Underlining", "Emphasis mark"]) {
+    fireEvent.change(effects.getByRole("combobox", { name }), { target: { value: "1" } });
+  }
+  fireEvent.change(effects.getByRole("combobox", { name: "Position" }), {
+    target: { value: String(FontEmphasisMark.PosBelow) },
+  });
+  await accept();
+  const position = new ScAddress();
+  const pattern = doc.GetPattern(position);
+  for (const which of [ATTR_FONT_HEIGHT, ATTR_CJK_FONT_HEIGHT, ATTR_CTL_FONT_HEIGHT]) {
+    expect((pattern?.GetItem(which) as SvxFontHeightItem).GetHeight()).toBe(360);
+  }
+  expect((pattern?.GetItem(ATTR_FONT_RELIEF) as SvxCharReliefItem).GetValue()).toBe(1);
+  expect((pattern?.GetItem(ATTR_FONT_UNDERLINE) as SvxUnderlineItem).GetLineStyle()).toBe(1);
+  expect((pattern?.GetItem(ATTR_FONT_EMPHASISMARK) as SvxEmphasisMarkItem).GetEmphasisMark()).toBe(
+    FontEmphasisMark.Dot | FontEmphasisMark.PosBelow,
+  );
+  const reopened = await readOdsDocument(await writeOdsDocument(doc));
+  try {
+    const imported = reopened.GetPattern(position);
+    for (const which of [ATTR_CJK_FONT_LANGUAGE, ATTR_CTL_FONT_LANGUAGE]) {
+      expect((imported?.GetItem(which) as SvxLanguageItem).GetLanguage()).toBe(LANGUAGE_NONE);
+    }
+    expect(
+      (imported?.GetItem(ATTR_FONT_EMPHASISMARK) as SvxEmphasisMarkItem).GetEmphasisMark(),
+    ).toBe(FontEmphasisMark.Dot | FontEmphasisMark.PosBelow);
+  } finally {
+    reopened.Dispose();
+  }
+  expect(controller.shell.GetUndoManager().GetUndoActionCount()).toBe(1);
+  act(
+    /** Undoes all character attributes. @returns Nothing. */ () => {
+      expect(controller.Undo()).toBe(true);
+    },
+  );
+  expect(
+    (doc.GetPattern(position)?.GetItem(ATTR_FONT_RELIEF) as SvxCharReliefItem).GetValue(),
+  ).toBe(0);
+});
+
+it("ports the Calc border width defaults and writes the shared padding item beside the frame" /** Covers the restricted line styles, native grouped frame and ODS padding. @returns Completion. */, async () => {
+  const { controller } = mount();
+  const doc = controller.shell.GetDocument();
+  controller.viewData.GetMarkData().SetMarkArea(new ScRange(0, 0, 0, 1, 1, 0));
+  open();
+  const modal = dialog();
+  fireEvent.click(modal.getByRole("tab", { name: "Borders" }));
+  const borders = within(modal.getByRole("tabpanel", { name: "Borders" }));
+  const style = borders.getByRole("combobox", { name: "Border line style" });
+  const width = borders.getByRole("combobox", { name: "Border thickness" });
+  expect(width).toHaveValue("75");
+  expect(within(style).getAllByRole("option")).toHaveLength(7);
+  fireEvent.change(style, { target: { value: "15" } });
+  expect(width).toHaveValue("150");
+  fireEvent.click(borders.getByRole("button", { name: "Outer Border Only" }));
+  fireEvent.click(borders.getByRole("button", { name: "Top-left to bottom-right border" }));
+  fireEvent.change(borders.getByRole("combobox", { name: "Position" }), {
+    target: { value: String(SvxShadowLocation.BottomRight) },
+  });
+  fireEvent.click(borders.getByRole("checkbox", { name: "Synchronize" }));
+  fireEvent.keyDown(borders.getByRole("spinbutton", { name: /^Left padding/ }), { key: "ArrowUp" });
+  await accept();
+  const position = new ScAddress();
+  /** Reads the selected anchor. @param value - Workbook. @returns Native pattern. */
+  const getPattern = (value: typeof doc) => value.GetPattern(position);
+  const border = (getPattern(doc)?.GetItem(ATTR_BORDER) as SvxBoxItem).GetLeft();
+  const margin = getPattern(doc)?.GetItem(ATTR_MARGIN) as SvxMarginItem;
+  expect(border?.GetWidth()).toBeGreaterThan(0);
+  expect(
+    (getPattern(doc)?.GetItem(ATTR_BORDER_TLBR) as SvxLineItem).GetLine()?.GetWidth(),
+  ).toBeGreaterThan(0);
+  expect(margin.GetLeftMargin()).not.toBe(margin.GetRightMargin());
+  expect(controller.shell.GetUndoManager().GetUndoActionCount()).toBe(1);
+  const reopened = await readOdsDocument(await writeOdsDocument(doc));
+  try {
+    expect((getPattern(reopened)?.GetItem(ATTR_SHADOW) as SvxShadowItem).GetLocation()).toBe(
+      SvxShadowLocation.BottomRight,
+    );
+    expect(
+      (getPattern(reopened)?.GetItem(ATTR_BORDER_TLBR) as SvxLineItem).GetLine()?.GetWidth(),
+    ).toBeGreaterThan(0);
+    expect((getPattern(reopened)?.GetItem(ATTR_MARGIN) as SvxMarginItem).equals(margin)).toBe(true);
+    expect((getPattern(reopened)?.GetItem(ATTR_BORDER) as SvxBoxItem).GetLeft()?.GetWidth()).toBe(
+      border?.GetWidth(),
+    );
+  } finally {
+    reopened.Dispose();
+  }
 });
