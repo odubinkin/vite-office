@@ -1,4 +1,6 @@
 /** @fileoverview Ports the supported paragraph StyleApply request boundary from pinned sw/source/uibase/app/docst.cxx. */
+import { getListStyleItemSet, setListStyleItemSet } from "./docstyle";
+import type { WriterListStyleTemplateRequest } from "../dialog/writer-dialog-controller";
 import { SwGetPoolIdFromName } from "../../../inc/SwGetPoolIdFromName";
 import { SwStyleNameMapper } from "../../core/doc/SwStyleNameMapper";
 
@@ -6,7 +8,11 @@ import { SfxInterface } from "../../../../sfx2/source/control/objface";
 import { SfxRequest } from "../../../../sfx2/source/control/request";
 import { SfxUInt16Item } from "../../../../svl/source/items/intitem";
 import { SfxStringItem } from "../../../../svl/source/items/stritem";
-import { IsPoolUserFormat, WRITER_AVAILABLE_PARAGRAPH_STYLE_POOL } from "../../../inc/poolfmt";
+import {
+  IsPoolUserFormat,
+  SwPoolFormatId,
+  WRITER_AVAILABLE_PARAGRAPH_STYLE_POOL,
+} from "../../../inc/poolfmt";
 import { getWriterCommandArguments, getWriterSlotId } from "../../../sdi/swriter";
 import { WRITER_COMMAND_IDS } from "../../../uiconfig/swriter/menubar/menubar-commands";
 import { getWriterCommandResource } from "../../../uiconfig/swriter/writer-command-resources";
@@ -30,6 +36,30 @@ const namedFamilies: Readonly<Record<string, number>> = {
   NumberingStyles: 16,
   TableStyles: 32,
 };
+
+/** Binds Edit Style for the Pseudo family to an independent template and the named document owner. @param document - Active Writer document. @param name - Selected list style. @returns Nested dialog request for an editable style. */
+export function editListStyle(
+  document: SwDoc,
+  name: string,
+): WriterListStyleTemplateRequest | undefined {
+  const input = getListStyleItemSet(document, name);
+  if (!input) return undefined;
+  return {
+    name,
+    input,
+    bulletStyle: SwStyleNameMapper.GetUIName(SwPoolFormatId.CHR_BULLET_LEVEL, "Bullets"),
+    numberingStyle: SwStyleNameMapper.GetUIName(SwPoolFormatId.CHR_NUM_LEVEL, "Numbering Symbols"),
+    characterStyles: document
+      .GetCharFormats()
+      .map(
+        /** Returns an available character-style UI name. @param style - Native format. @returns Name. */ (
+          style,
+        ) => style.GetName(),
+      ),
+    /** Applies the accepted template to the same named rule. @param output - Accepted dialog items. @returns Whether changed. */
+    apply: (output) => setListStyleItemSet(document, name, output),
+  };
+}
 
 /** Resolves actual paragraph display names before unused supported built-in pool names. @param doc - Current model. @param name - Exact requested display name. @returns Owned or available style identity. */
 export function findParagraphStyle(doc: SwDoc, name: string): string | undefined {

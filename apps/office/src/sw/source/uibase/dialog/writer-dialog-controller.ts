@@ -52,6 +52,15 @@ export interface WriterPageDialogResult {
 }
 
 /** Every Writer child-window request supported by the browser presenter. */
+/** Native Pseudo-family template exchange with the requesting Paragraph dialog as parent. */
+export interface WriterListStyleTemplateRequest {
+  readonly name: string;
+  readonly input: SfxItemSet;
+  readonly characterStyles: readonly string[];
+  readonly bulletStyle: string;
+  readonly numberingStyle: string;
+  readonly apply: (items: SfxItemSet) => boolean;
+}
 /** Paragraph dialog request initialized by the text shell. */
 export interface WriterParagraphDialogRequest {
   readonly commandUrl: string;
@@ -61,6 +70,7 @@ export interface WriterParagraphDialogRequest {
   readonly pageInput: SfxItemSet;
   readonly pageStyleNames?: readonly string[];
   readonly listStyleNames?: readonly string[];
+  readonly editListStyle?: (name: string) => WriterListStyleTemplateRequest | undefined;
   readonly outlineLocked?: boolean;
 }
 /** Accepted paragraph dialog values. */
@@ -199,7 +209,7 @@ export class WriterDialogController {
       : undefined;
   }
 
-  /** Requests paragraph settings from the presenter. @param commandUrl - Originating slot. @param initialValue - Current paragraph values. @param paintLineNumbers - Current document line-number visibility. @param pageStyleNames - Available page styles. @param pageInput - Actual native page input. @param listStyleNames - Available named numbering styles. @param outlineLocked - Whether the current style owns its outline level. @returns Accepted values or undefined. */
+  /** Requests paragraph settings from the presenter. @param commandUrl - Originating slot. @param initialValue - Current paragraph values. @param paintLineNumbers - Current document line-number visibility. @param pageStyleNames - Available page styles. @param pageInput - Actual native page input. @param listStyleNames - Available named numbering styles. @param outlineLocked - Whether the current style owns its outline level. @param editListStyle - Opens the named template within this request. @returns Accepted values or undefined. */
   public async RequestParagraphDialog(
     commandUrl: string,
     initialValue: WriterParagraphFormatValue,
@@ -208,11 +218,13 @@ export class WriterDialogController {
     pageInput: SfxItemSet,
     listStyleNames: readonly string[] = [],
     outlineLocked = false,
+    editListStyle?: WriterParagraphDialogRequest["editListStyle"],
   ): Promise<WriterParagraphDialogResult | undefined> {
     const completion = await this.controller.Request({
       commandUrl,
       initialValue,
       kind: "paragraph",
+      ...(editListStyle === undefined ? {} : { editListStyle }),
       listStyleNames,
       outlineLocked,
       paintLineNumbers,

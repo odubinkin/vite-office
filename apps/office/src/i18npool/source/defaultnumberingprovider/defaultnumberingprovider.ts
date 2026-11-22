@@ -35,3 +35,51 @@ export function getNumberingIdentifier(type: number): string {
 export function findNumberingType(identifier: string): number | undefined {
   return supportedTypes.get(identifier);
 }
+
+const romanSymbols = [
+  [1000, "M"],
+  [900, "CM"],
+  [500, "D"],
+  [400, "CD"],
+  [100, "C"],
+  [90, "XC"],
+  [50, "L"],
+  [40, "XL"],
+  [10, "X"],
+  [9, "IX"],
+  [5, "V"],
+  [4, "IV"],
+  [1, "I"],
+] as const;
+
+/** Formats the locale-independent Roman and Latin numbering types. @param type - Native UNO numbering type. @param value - Positive numbering value. @returns Marker or undefined for other types. */
+export function formatLatinNumber(type: number, value: number): string | undefined {
+  if (type === N.ROMAN_UPPER || type === N.ROMAN_LOWER) {
+    let output = "";
+    for (const [magnitude, symbol] of romanSymbols) {
+      output += symbol.repeat(Math.floor(value / magnitude));
+      value %= magnitude;
+    }
+    return type === N.ROMAN_LOWER ? output.toLowerCase() : output;
+  }
+  switch (type) {
+    case N.CHARS_UPPER_LETTER_N:
+    case N.CHARS_LOWER_LETTER_N: {
+      const base = type === N.CHARS_UPPER_LETTER_N ? 65 : 97;
+      return String.fromCharCode(base + ((value - 1) % 26)).repeat(Math.ceil(value / 26));
+    }
+    case N.CHARS_UPPER_LETTER:
+    case N.CHARS_LOWER_LETTER: {
+      const base = type === N.CHARS_UPPER_LETTER ? 65 : 97;
+      let output = "";
+      while (value > 0) {
+        value--;
+        output = String.fromCharCode(base + (value % 26)) + output;
+        value = Math.floor(value / 26);
+      }
+      return output;
+    }
+    default:
+      return undefined;
+  }
+}

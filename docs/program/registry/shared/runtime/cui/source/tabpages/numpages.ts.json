@@ -1,0 +1,38 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/cui/source/tabpages/numpages.ts",
+    "classification": "upstream-mechanism",
+    "state": "active",
+    "suite": "shared",
+    "subsystem": "numbering-dialog",
+    "capabilityIds": [
+      "CAP-0102"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "none",
+      "evidence": [
+        "apps/office/src/cui/source/tabpages/numpages.ts#applyOrderedPreset",
+        "vendor/libreoffice-reference/cui/source/tabpages/numpages.cxx#IMPL_LINK_NOARG(SvxSingleNumPickTabPage, NumSelectHdl_Impl"
+      ],
+      "justification": "Applies the pinned English ordered and outline locales and the default bullet presets to a copied native rule.",
+      "knownViolations": [],
+      "localSymbols": [
+        "applyBulletPreset",
+        "applyOrderedPreset",
+        "applyOutlinePreset"
+      ],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": "cui/source/tabpages/numpages.cxx",
+      "upstreamSymbols": [
+        "SvxSingleNumPickTabPage",
+        "SvxNumPickTabPage",
+        "SvxBulletPickTabPage"
+      ]
+    }
+  }
+}

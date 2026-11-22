@@ -5,7 +5,10 @@ import { Color, COL_BLACK } from "../../../tools/inc/color";
 import { Font, type ConstFont } from "../../../vcl/source/font/font";
 import { SVX_DEF_BULLET } from "../../inc/numdef";
 import { SVX_NUM_REL_SIZE_MIN } from "../../inc/numitem";
-import { formatArabicZero } from "../../../i18npool/source/defaultnumberingprovider/defaultnumberingprovider";
+import {
+  formatArabicZero,
+  formatLatinNumber,
+} from "../../../i18npool/source/defaultnumberingprovider/defaultnumberingprovider";
 export { SVX_DEF_BULLET } from "../../inc/numdef";
 /** Native type, show-symbol ownership, and formatting of supported numbering families. */
 export class SvxNumberType {
@@ -62,7 +65,7 @@ export class SvxNumberType {
         : SvxNumType.SVX_NUM_ARABIC;
     return type === SvxNumType.SVX_NUM_ARABIC
       ? String(value)
-      : (formatArabicZero(type, value) ?? "");
+      : (formatArabicZero(type, value) ?? formatLatinNumber(type, value) ?? "");
   }
 }
 

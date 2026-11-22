@@ -35,12 +35,14 @@ export function WriterParagraphOutlinePage({
   label,
   listStyleNames = [],
   outlineLocked = false,
+  onEditListStyle,
 }: Readonly<{
   input: SfxItemSet;
   output: SfxItemSet;
   label: (key: string, fallback: string) => string;
   listStyleNames?: readonly string[];
   outlineLocked?: boolean;
+  onEditListStyle?: (name: string, invoker: HTMLButtonElement) => void;
 }>): React.JSX.Element {
   const originalOutline = input.GetItem(RES_PARATR_OUTLINELEVEL);
   const originalLevel = input.GetItem(RES_PARATR_LIST_LEVEL);
@@ -185,13 +187,26 @@ export function WriterParagraphOutlinePage({
             )}
           </select>
         </label>
+        <button
+          type="button"
+          className="justify-self-start rounded border border-slate-300 px-3 py-1 text-sm disabled:opacity-50"
+          disabled={!hasStyle || !isKnownStyle || style === "Outline" || !onEditListStyle}
+          onClick={
+            /** Opens the selected editable style with this native button as the focus return target. @param event - Activated button. @returns Nothing. */
+            (event) => {
+              if (style !== undefined) onEditListStyle?.(style, event.currentTarget);
+            }
+          }
+        >
+          {label("edit-list-style", "Edit Style")}
+        </button>
         {list !== undefined && (
           <label className="grid gap-1 text-sm">
             {label("list-level", "List level")}
             <select
               className="rounded border border-slate-400 p-1"
               value={list}
-              disabled={!hasStyle}
+              disabled={!hasStyle || style === "Outline"}
               onChange={
                 /** Selects a fixed or synchronized list level. @param event - Selected row. @returns Nothing. */
                 (event) => {

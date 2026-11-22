@@ -1,0 +1,29 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "browser-adaptation",
+    "status": "local-only",
+    "localPath": "apps/office/src/cui/browser/tabpages/NumberingOptionsPage.tsx",
+    "rationale": "Binds supported native numbering options to the selected list levels using browser controls. The browser binding reuses the original numbering values while replacing the desktop widget, painting and input APIs.",
+    "responsibilities": [
+      "Binds supported native numbering options to the selected list levels using browser controls."
+    ],
+    "stackDivergence": {
+      "kind": "browser-adaptation",
+      "rationale": "Projects native numbering values through HTML and the established style item binding."
+    },
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/cui/browser/tabpages/NumberingOptionsPage.tsx",
+          "marker": "NumberingOptionsPage"
+        },
+        {
+          "path": "apps/office/src/sw/browser/presentation/WriterNativeTabulatorDialog.test.tsx",
+          "marker": "edits a named list style in a child of Paragraph"
+        }
+      ]
+    }
+  }
+}

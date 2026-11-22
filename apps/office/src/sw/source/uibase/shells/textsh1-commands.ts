@@ -2,6 +2,7 @@
 import { SfxBoolItem } from "../../../../svl/inc/eitem";
 import { SwNumRuleItem } from "../../core/para/paratr";
 import { GetNumRuleFromPool, GetParagraphListStyleNames } from "../../core/doc/poolfmt-num";
+import { editListStyle } from "../app/docst";
 import { createWriterParagraphDialogInput } from "./textsh1-tabs";
 import { createWriterEscapementCommands } from "./txtattr";
 
@@ -88,6 +89,8 @@ export function createWriterTextCommandRegistry(
         createWriterParagraphDialogInput(target),
         GetParagraphListStyleNames(doc),
         active.GetTextFormatColl().IsAssignedToListLevelOfOutlineStyle(),
+        /** Opens the selected named style through the document style command owner. @param name - Style UI name. @returns Nested template request. */
+        (name) => editListStyle(doc, name),
       )
       .then(
         /** Applies accepted dialog data through Writer owners. @param result - Accepted value or cancellation. @returns Whether changed. */

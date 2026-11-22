@@ -1,6 +1,7 @@
 /** @fileoverview Verifies pinned SvxNumberFormat position defaults and mode-dependent legacy getters. */
 import { expect, it } from "vitest";
-import { SvxNumberFormat } from "./numitem";
+import { SvxNumberFormat, SvxNumberType } from "./numitem";
+import { SvxNumType } from "../../inc/svxenum";
 
 it("initializes independent zero geometry in legacy mode", /** Asserts native constructor defaults. @returns Nothing. */ () => {
   const format = new SvxNumberFormat();
@@ -158,4 +159,11 @@ it("generates native older ODT patterns while trimming unavailable upper levels"
   format.SetListFormat("[", "]", 9);
   expect(format.GetListFormat()).toBe("[]");
   expect(format.GetListFormat(false)).toBe("");
+});
+
+it("formats native Roman and both Latin letter sequences in list labels", /** Verifies the number provider used by the ordered and outline styles. @returns Nothing. */ () => {
+  expect(new SvxNumberType(SvxNumType.SVX_NUM_ROMAN_UPPER).GetNumStr(1994)).toBe("MCMXCIV");
+  expect(new SvxNumberType(SvxNumType.SVX_NUM_ROMAN_LOWER).GetNumStr(4001)).toBe("mmmmi");
+  expect(new SvxNumberType(SvxNumType.SVX_NUM_CHARS_UPPER_LETTER).GetNumStr(28)).toBe("AB");
+  expect(new SvxNumberType(SvxNumType.SVX_NUM_CHARS_LOWER_LETTER_N).GetNumStr(28)).toBe("bb");
 });

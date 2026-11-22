@@ -4,7 +4,7 @@ title: "Connect Writer named list-style editing"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 6
+revision: 7
 origin:
   system: "manual"
 depends_on: []
@@ -41,6 +41,18 @@ comments:
       - WRITER-740 records the original eight-bit upper-level mask. The source-shaped numbering helpers moved together into docnum.ts. The main document file dropped below the repository size limit.
       - Targeted Writer run passed 133 cases across eight suites covering rule editing, history, cursor retention, separate lists, ODF reopen, template item exchange and reset. Scoped lint and formatting, module boundaries, source tree and provenance, Writer resources, parity inventory, doctor and routing passed. Global JSDoc and file-size checks retain pre-existing findings outside changed paths.
       - The document style command, nested template presentation and Chromium acceptance remain pending within ZHRKTJ. This checkpoint does not advance the ten-task cadence.
+  -
+    author: "CODER"
+    body: |-
+      Intermediate Writer list-style presentation checkpoint.
+
+      The ordinary Paragraph command now opens the selected named list-style template from Outline & List. The child uses the HTML modal lifecycle, restores focus to Edit Style, and has separate Apply, OK, Reset and Cancel actions. The native rule exchange preserves the underlying paragraph draft. General, Unordered, Ordered, Outline, Position and Customize expose the represented numbering controls, with English locale presets and Roman and Latin rendering.
+
+      Targeted Vitest passed 158 Writer cases across 11 files and seven shared numbering cases. Writer resources, source tree and provenance, Writer parity inventory, module boundaries, scoped lint and Prettier, AgentPlane doctor and routing, and diff checks passed. Global JSDoc and file-size checks still report pre-existing findings outside the changed paths.
+
+      Open scope includes graphic numbering storage, layout and ODF, the Image gallery, complete multi-level mixed settings and General management for user-defined names. No task closure and no advance in the ten-closed-task full-test cadence.
+
+      The final production build and Chrome spec `writer-list-style-dialog.spec.ts` passed, including Escape, focus return, two separate lists sharing the rule, and Undo/Redo. The first browser run exposed a test locator ambiguity between Ordered and Unordered, corrected by using the exact native tab label. The final browser run uses the native dialog implementation.
 
 events:
   -
@@ -62,9 +74,23 @@ events:
       - WRITER-740 records the original eight-bit upper-level mask. The source-shaped numbering helpers moved together into docnum.ts. The main document file dropped below the repository size limit.
       - Targeted Writer run passed 133 cases across eight suites covering rule editing, history, cursor retention, separate lists, ODF reopen, template item exchange and reset. Scoped lint and formatting, module boundaries, source tree and provenance, Writer resources, parity inventory, doctor and routing passed. Global JSDoc and file-size checks retain pre-existing findings outside changed paths.
       - The document style command, nested template presentation and Chromium acceptance remain pending within ZHRKTJ. This checkpoint does not advance the ten-task cadence.
+  -
+    type: "comment"
+    at: "2026-11-22T01:46:03.564Z"
+    author: "CODER"
+    body: |-
+      Intermediate Writer list-style presentation checkpoint.
+
+      The ordinary Paragraph command now opens the selected named list-style template from Outline & List. The child uses the HTML modal lifecycle, restores focus to Edit Style, and has separate Apply, OK, Reset and Cancel actions. The native rule exchange preserves the underlying paragraph draft. General, Unordered, Ordered, Outline, Position and Customize expose the represented numbering controls, with English locale presets and Roman and Latin rendering.
+
+      Targeted Vitest passed 158 Writer cases across 11 files and seven shared numbering cases. Writer resources, source tree and provenance, Writer parity inventory, module boundaries, scoped lint and Prettier, AgentPlane doctor and routing, and diff checks passed. Global JSDoc and file-size checks still report pre-existing findings outside the changed paths.
+
+      Open scope includes graphic numbering storage, layout and ODF, the Image gallery, complete multi-level mixed settings and General management for user-defined names. No task closure and no advance in the ten-closed-task full-test cadence.
+
+      The final production build and Chrome spec `writer-list-style-dialog.spec.ts` passed, including Escape, focus return, two separate lists sharing the rule, and Undo/Redo. The first browser run exposed a test locator ambiguity between Ordered and Unordered, corrected by using the exact native tab label. The final browser run uses the native dialog implementation.
 
 doc_version: 3
-doc_updated_at: "2026-11-22T01:29:49.324Z"
+doc_updated_at: "2026-11-22T01:46:03.564Z"
 doc_updated_by: "CODER"
 description: "Wire the Outline and List Edit Style button to the upstream numbering-style template dialog. Implement the document-owned rule format update and undo contract, connect the template pages to existing numbering mechanisms, and verify shared style changes, cancel, undo and ODT round trip in Writer."
 sections:

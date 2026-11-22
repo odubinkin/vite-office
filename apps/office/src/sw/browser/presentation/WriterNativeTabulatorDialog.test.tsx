@@ -1,5 +1,5 @@
 /** @fileoverview Real Writer request, native CUI controls, complete paragraph history and ODT transport in one UI flow. */
-import { fireEvent, render, screen, cleanup } from "@testing-library/react";
+import { fireEvent, render, screen, cleanup, within } from "@testing-library/react";
 import { expect, it, vi } from "vitest";
 import { TabulatorDialogSession } from "../../../cui/browser/tabpages/tabstpge-session";
 import { WriterParagraphDialog } from "./WriterParagraphDialog";
@@ -7,6 +7,8 @@ import { createWriterDocumentSession } from "../composition/writer-module";
 import { WRITER_COMMAND_IDS } from "../../uiconfig/swriter/menubar/menubar-commands";
 import type { SwWrtShell } from "../../source/uibase/wrtsh/wrtsh1";
 import { SwPosition } from "../../source/core/crsr/pam";
+import { applyWriterParagraphList } from "../../source/core/doc/list";
+import { GetNumRuleFromPool } from "../../source/core/doc/poolfmt-num";
 import { SvxFrameDirection } from "../../../editeng/inc/frmdir";
 import { SwFormatLineNumber } from "../../inc/fmtline";
 import { SwTextGrid, SwTextGridItem } from "../../inc/tgrditem";
@@ -657,6 +659,97 @@ it("exchanges a restart flag and value in one undo group through the original pa
       expect(reopened.document.paragraphs[0]?.GetListLabel()).toBe("7.");
     } finally {
       reopened.document.Dispose();
+    }
+  } finally {
+    cleanup();
+    owner.session.Close();
+  }
+});
+
+it("edits a named list style in a child of Paragraph, preserving the parent draft and shared rule history", /** Checks the production request, nested controls and history independently of paragraph acceptance. @returns Completion. */ async () => {
+  const owner = open(
+    U.CM,
+    /** Creates two distinct lists using the same style. @param shell - Active Writer shell. @returns Nothing. */ (
+      shell,
+    ) => {
+      const document = shell.GetDoc();
+      GetNumRuleFromPool(document, "Numbering 123");
+      const first = shell.GetActiveParagraph();
+      const second = document.nodes.MakeTextNode();
+      second.SetText("Another list");
+      for (const [node, listId] of [
+        [first, "first-list"],
+        [second, "second-list"],
+      ] as const) {
+        applyWriterParagraphList(node, {
+          styleId: "Numbering 123",
+          listId,
+          kind: "numbered",
+          level: 0,
+        });
+      }
+    },
+  );
+  try {
+    const document = owner.shell.GetDoc();
+    const original = document.FindNumRulePtr("Numbering 123");
+    const initialUndo = document.GetUndoManager().GetUndoActionCount();
+    const paragraph = within(screen.getByRole("dialog", { name: "Paragraph" }));
+    fireEvent.click(paragraph.getByRole("tab", { name: "Outline & List" }));
+    const outline = paragraph.getByRole("combobox", { name: "Outline level" });
+    fireEvent.change(outline, { target: { value: "2" } });
+    const edit = paragraph.getByRole("button", { name: "Edit Style" });
+    fireEvent.click(edit);
+    let child = within(screen.getByRole("dialog", { name: "List Style: Numbering 123" }));
+    fireEvent.click(child.getByRole("tab", { name: "Customize" }));
+    fireEvent.change(child.getByRole("spinbutton", { name: "Start at" }), {
+      target: { value: "9" },
+    });
+    fireEvent.click(child.getByRole("button", { name: "Cancel" }));
+    expect(original?.Get(0).GetStart()).toBe(1);
+    expect(outline).toHaveValue("2");
+
+    fireEvent.click(edit);
+    child = within(screen.getByRole("dialog", { name: "List Style: Numbering 123" }));
+    fireEvent.click(child.getByRole("tab", { name: "Ordered" }));
+    fireEvent.click(child.getByRole("button", { name: "I." }));
+    fireEvent.click(child.getByRole("tab", { name: "Customize" }));
+    fireEvent.change(child.getByRole("spinbutton", { name: "Start at" }), {
+      target: { value: "8" },
+    });
+    fireEvent.click(child.getByRole("button", { name: "Apply" }));
+    expect(
+      document.paragraphs.map(
+        /** Reads the actual numbered label. @param node - Paragraph. @returns Label. */ (node) =>
+          node.GetListLabel(),
+      ),
+    ).toEqual(["VIII.", "VIII."]);
+    fireEvent.click(child.getByRole("button", { name: "OK" }));
+    await Promise.resolve();
+    expect(edit).toHaveFocus();
+    expect(outline).toHaveValue("2");
+    fireEvent.click(paragraph.getByRole("button", { name: "Cancel" }));
+    expect(await owner.result.value).toBe(false);
+    expect(document.GetUndoManager().GetUndoActionCount()).toBe(initialUndo + 1);
+    expect(owner.shell.Undo()).toBe(true);
+    expect(original?.Get(0).GetStart()).toBe(1);
+    expect(owner.shell.Redo()).toBe(true);
+    expect(original?.Get(0).GetStart()).toBe(8);
+
+    const { document: reopened } = await readOdtDocument(
+      await writeOdtDocument(document, { title: "List Style" }),
+      { title: "List Style" },
+    );
+    try {
+      expect(
+        reopened.paragraphs.every(
+          /** Reads list format through the reopened paragraph. @param node - Actual paragraph. @returns Whether Roman numbering survived. */ (
+            node,
+          ) => node.GetNumRule()?.Get(0).GetNumStr(8) === "VIII",
+        ),
+      ).toBe(true);
+    } finally {
+      reopened.Dispose();
     }
   } finally {
     cleanup();

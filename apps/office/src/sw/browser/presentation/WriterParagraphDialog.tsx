@@ -10,6 +10,7 @@ import { WriterAsianTypographyPage } from "./WriterAsianTypographyPage";
 import { WriterParagraphOutlinePage } from "./WriterParagraphOutlinePage";
 import { WriterParagraphAlignmentPage } from "./WriterParagraphAlignmentPage";
 import { WriterHyphenationControls } from "./WriterHyphenationControls";
+import { WriterListStyleDialog } from "./WriterListStyleDialog";
 import { WriterDialogHeader } from "./WriterDialogHeader";
 import { SvxExtParagraphTabPage } from "../../../cui/source/tabpages/paragrph";
 import { WriterParagraphBreakControls } from "./WriterParagraphBreakControls";
@@ -18,6 +19,7 @@ import { tabControlDirection } from "../../../vcl/source/control/tabctrl";
 import { useEffect, useId, useRef, useState } from "react";
 import type { WriterParagraphFormatValue } from "../../source/uibase/shells/textsh1";
 import type {
+  WriterListStyleTemplateRequest,
   WriterParagraphDialogRequest,
   WriterParagraphDialogResult,
 } from "../../source/uibase/dialog/writer-dialog-controller";
@@ -38,6 +40,15 @@ export function WriterParagraphDialog({
 }>): React.JSX.Element {
   const localization = useBrowserLocalization();
   const { pageInput, initialValue } = dialogRequest.request;
+  const [listStyle, setListStyle] = useState<{
+    readonly request: WriterListStyleTemplateRequest;
+    readonly invoker: HTMLButtonElement;
+  }>();
+  /** Opens the child template without committing the paragraph draft. @param name - Selected style name. @param invoker - Parent edit button. @returns Nothing. */
+  function openListStyle(name: string, invoker: HTMLButtonElement): void {
+    const request = dialogRequest.request.editListStyle?.(name);
+    if (request) setListStyle({ request, invoker });
+  }
   const hyphenation = pageInput.GetItem(RES_PARATR_HYPHENZONE);
   const hyphenationDefault = pageInput.GetPool().GetUserOrPoolDefaultItem(RES_PARATR_HYPHENZONE);
   /** Looks up the original paragraph dialog field names. @param key - Resource key. @param fallback - English resource text. @returns Localized text. */
@@ -146,6 +157,7 @@ export function WriterParagraphDialog({
             }
           }
         }
+        inert={listStyle !== undefined}
         aria-label="Paragraph"
         aria-modal="true"
         data-writer-modal-panel="true"
@@ -347,6 +359,7 @@ export function WriterParagraphDialog({
                   label={label}
                   listStyleNames={dialogRequest.request.listStyleNames ?? []}
                   outlineLocked={dialogRequest.request.outlineLocked ?? false}
+                  onEditListStyle={openListStyle}
                 />
               </div>
               {activeTab === "tabs" ? <TabulatorTabPage session={tabs} /> : null}
@@ -423,6 +436,17 @@ export function WriterParagraphDialog({
           </button>
         </div>
       </form>
+      {listStyle && (
+        <WriterListStyleDialog
+          request={listStyle.request}
+          invoker={listStyle.invoker}
+          unit={unit}
+          onClose={
+            /** Returns to the still-open paragraph draft. @returns Nothing. */
+            () => setListStyle(undefined)
+          }
+        />
+      )}
     </div>
   );
 }

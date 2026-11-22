@@ -1,0 +1,33 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/cui/browser/tabpages/NumberingPositionPage.tsx",
+    "classification": "browser-adaptation",
+    "state": "active",
+    "suite": "shared",
+    "subsystem": "numbering-dialog",
+    "capabilityIds": [
+      "CAP-0102"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "not-applicable",
+      "defaultStatus": "not-applicable",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/cui/browser/tabpages/NumberingPositionPage.tsx#NumberingPositionPage",
+        "vendor/libreoffice-reference/cui/source/tabpages/numpages.cxx#SvxNumPositionTabPage::StandardHdl_Impl",
+        "apps/office/src/sw/browser/presentation/WriterNativeTabulatorDialog.test.tsx#edits a named list style in a child of Paragraph"
+      ],
+      "justification": "Binds the native position and spacing geometries to the shared metric control.",
+      "knownViolations": [],
+      "localSymbols": [
+        "NumberingPositionPage"
+      ],
+      "sourceResponsibility": "browser-owned",
+      "upstreamFile": null,
+      "upstreamSymbols": []
+    }
+  }
+}
