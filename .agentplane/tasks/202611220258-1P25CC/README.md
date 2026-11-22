@@ -1,10 +1,11 @@
 ---
 id: "202611220258-1P25CC"
 title: "Connect Writer paragraph area color and transparency"
-status: "DOING"
+result_summary: "Connected Writer paragraph Area color and uniform transparency."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 10
+revision: 11
 origin:
   system: "manual"
 depends_on: []
@@ -40,11 +41,16 @@ quality_review:
   findings:
     - "Paragraph formatting exchanges pooled fill items independently and retains per-paragraph color when changing mixed transparency."
     - "Chromium verified visible 51 percent transparency, undo, redo and reopen through the ordinary Writer command."
-commit: null
+commit:
+  hash: "6ecd9edf9541627e07c35f277de854083905a4bb"
+  message: "🧩 1P25CC code: Connect Writer paragraph fill and transparency"
 comments:
   -
     author: "CODER"
     body: "Start: connect the native paragraph Area and uniform Transparency page exchanges in Writer."
+  -
+    author: "CODER"
+    body: "Verified: Focused Writer, shared fill, Chromium, production and source checks passed."
 events:
   -
     type: "status"
@@ -59,8 +65,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "60 focused Writer and 14 shared tests, 2 Writer resource tests, 1 Chromium scenario and production build passed. Scoped lint, formatting, dependency, source-tree, provenance, doctor and routing checks passed. Findings records unrelated Calc baseline failures in the global JSDoc and size gates."
+  -
+    type: "status"
+    at: "2026-11-22T03:09:56.273Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: Focused Writer, shared fill, Chromium, production and source checks passed."
 doc_version: 3
-doc_updated_at: "2026-11-22T03:08:11.176Z"
+doc_updated_at: "2026-11-22T03:09:56.274Z"
 doc_updated_by: "CODER"
 description: "Add the upstream Area and Transparency pages for paragraph fill values represented by the current Writer model. Exchange native NONE/SOLID, XFillColorItem and uniform XFillTransparenceItem through the existing dialog and history. Verify preview, mixed selections, legacy brush behavior, and ODT/Worker round trips."
 sections:
