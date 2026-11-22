@@ -1,10 +1,11 @@
 ---
 id: "202611220247-KQ341H"
 title: "Align Calc ODS master-page headers and footers"
-status: "DOING"
+result_summary: "Calc ODS master-page headers and footers now follow the original child gate, content grouping and native page-style dimensions and decorations."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 7
+revision: 8
 origin:
   system: "manual"
 depends_on:
@@ -41,11 +42,16 @@ quality_review:
     - "output/playwright/calc-ods-header-footer/verification.md"
   findings:
     - "All 43 related Calc tests passed on final sources, including the original LibreOffice ODS witness and directly affected XLSX page-layout path."
-commit: null
+commit:
+  hash: "33821146405ab6fce26b9e471d0bc9a69538c368"
+  message: "🧩 KQ341H code: honor native master-page variant ordering and defaults"
 comments:
   -
     author: "CODER"
     body: "Start: continue direct-mode task in current checkout."
+  -
+    author: "CODER"
+    body: "Verified: All 43 related Calc tests passed on final sources. Original ODS header and footer variants, native nested item values and Worker/page layout round trips verified."
 events:
   -
     type: "status"
@@ -60,8 +66,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "All 43 focused Calc tests and static checks passed. Pinned ODS, native header/footer layouts, original variant ordering and Calc Worker round trips verified."
+  -
+    type: "status"
+    at: "2026-11-22T03:01:20.998Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: All 43 related Calc tests passed on final sources. Original ODS header and footer variants, native nested item values and Worker/page layout round trips verified."
 doc_version: 3
-doc_updated_at: "2026-11-22T02:59:47.794Z"
+doc_updated_at: "2026-11-22T03:01:20.998Z"
 doc_updated_by: "CODER"
 description: "Preserve native page-style header/footer variants, regions and dimensions through Calc ODS and Worker, including source fixture regressions."
 sections:
