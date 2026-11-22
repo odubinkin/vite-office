@@ -1,10 +1,11 @@
 ---
 id: "202611220023-1ZKRD0"
 title: "Connect Calc cell style presets and named style application"
-status: "DOING"
+result_summary: "Connected Calc Styles radio presets and native cell style application."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 9
+revision: 10
 origin:
   system: "manual"
 depends_on:
@@ -43,11 +44,16 @@ quality_review:
     - "All thirteen native radio presets use the existing Calc style pool and actual marked-selection state."
     - "Both upstream regressions pass, including full-column style history and Repeat."
     - "Chromium verified mixed selection and Undo against the production bundle."
-commit: null
+commit:
+  hash: "ed679e09428b2e45c565fd9ac608c9da6d8cf254"
+  message: "🧩 1ZKRD0 code: connect Calc cell style commands to Styles and history"
 comments:
   -
     author: "CODER"
     body: "Start: continue direct-mode task in current checkout."
+  -
+    author: "CODER"
+    body: "Verified: native Calc cell style presets, typed dispatch, Repeat, Undo and Redo, ODS persistence, focused tests and production Chromium."
 events:
   -
     type: "status"
@@ -62,8 +68,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Verified: Calc Styles radio presets, typed StyleApply, Repeat, Undo and Redo, ODS persistence, focused tests, and Chromium."
+  -
+    type: "status"
+    at: "2026-11-22T00:49:13.835Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: native Calc cell style presets, typed dispatch, Repeat, Undo and Redo, ODS persistence, focused tests and production Chromium."
 doc_version: 3
-doc_updated_at: "2026-11-22T00:47:55.044Z"
+doc_updated_at: "2026-11-22T00:49:13.836Z"
 doc_updated_by: "CODER"
 description: "Connect the native Calc cell style pool, built-in style entries and typed StyleApply slot to real view selection, editability, and source Undo and Redo."
 sections:
