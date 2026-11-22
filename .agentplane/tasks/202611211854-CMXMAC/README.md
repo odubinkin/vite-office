@@ -1,10 +1,11 @@
 ---
 id: "202611211854-CMXMAC"
 title: "Run the Writer and Calc ODF full regression checkpoint"
-status: "DOING"
+result_summary: "613 Chromium cases, 194 tooling cases, 130 inventory cases and all functional owner replays passed. Office global coverage remains below 100%."
+status: "DONE"
 priority: "high"
 owner: "CODER"
-revision: 23
+revision: 24
 origin:
   system: "manual"
 depends_on: []
@@ -41,11 +42,16 @@ quality_review:
     - "output/playwright/full-regression-CMXMAC/data-bar-editor-tracked.json"
   findings:
     - "The unchanged repository-wide Office coverage requirement still fails. Tooling, inventory and all 613 Chromium tests passed."
-commit: null
+commit:
+  hash: "e247d34f071b5dc4a84ca4c623d3570237315791"
+  message: "🧩 CMXMAC regression: preserve imported Calc data-bar editing"
 comments:
   -
     author: "CODER"
     body: "Start: run full Office, Chromium, tooling and inventory regressions from the tenth ODF task checkpoint."
+  -
+    author: "CODER"
+    body: "Verified: completed the scheduled regression, resolved all functional findings and recorded the existing Office coverage gap."
 events:
   -
     type: "status"
@@ -60,8 +66,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Completed all scheduled regression commands, resolved or reproduced successfully each failed functional case in its owner, and preserved the existing unmet Office coverage gate."
+  -
+    type: "status"
+    at: "2026-11-22T00:35:53.337Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: completed the scheduled regression, resolved all functional findings and recorded the existing Office coverage gap."
 doc_version: 3
-doc_updated_at: "2026-11-22T00:34:45.780Z"
+doc_updated_at: "2026-11-22T00:35:53.337Z"
 doc_updated_by: "CODER"
 description: "After ten completed Writer and Calc ODF tasks, run all application unit and integration projects with coverage, all browser projects, tooling, and inventory checks. Diagnose and fix regressions and validate repaired owners. Keep the active alignment goal running after the checkpoint."
 sections:
