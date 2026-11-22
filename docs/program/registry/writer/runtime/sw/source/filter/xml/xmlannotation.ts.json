@@ -1,0 +1,39 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sw/source/filter/xml/xmlannotation.ts",
+    "classification": "upstream-mechanism",
+    "state": "active",
+    "suite": "writer",
+    "subsystem": "odf-filter",
+    "capabilityIds": [
+      "CAP-0111"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "none",
+      "evidence": [
+        "apps/office/src/sw/source/filter/xml/xmlannotation.ts#createPostItText",
+        "apps/office/src/sw/source/filter/xml/xmlannotation.ts#projectPostItText",
+        "apps/office/src/sw/source/filter/xml/odt-annotation.test.ts#preserves the bold second annotation run",
+        "vendor/libreoffice-reference/sw/source/core/fields/textapi.cxx#SwTextAPIEditSource::CreateText",
+        "vendor/libreoffice-reference/sw/source/core/fields/textapi.cxx#SwTextAPIEditSource::GetText"
+      ],
+      "justification": "Converts annotation paragraph text and the represented EditEngine character items, keeping the text object separate from the Writer body and owned by the native annotation field.",
+      "knownViolations": [],
+      "localSymbols": [
+        "createPostItText",
+        "projectPostItText"
+      ],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": "sw/source/core/fields/textapi.cxx",
+      "upstreamSymbols": [
+        "SwTextAPIEditSource::CreateText",
+        "SwTextAPIEditSource::GetText"
+      ]
+    }
+  }
+}

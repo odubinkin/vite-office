@@ -423,6 +423,8 @@ export function compareParagraphMarkers(
         return marker.frame.anchor === "as-char" ? 6 : 2;
       case "soft-page-break":
         return 5;
+      case "annotation":
+        return 6;
     }
   }
   return phase(left) - phase(right);

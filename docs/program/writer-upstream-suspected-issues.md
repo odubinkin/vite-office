@@ -5981,3 +5981,16 @@ authored charset.
 
 - [Original font charset handler](../../vendor/libreoffice-reference/xmloff/source/style/fonthdl.cxx)
 - [Original font defaulting pass](../../vendor/libreoffice-reference/xmloff/source/text/txtimppr.cxx)
+
+### WRITER-738 — An empty annotation date is formatted as an invalid ODF date
+
+An annotation without a parsed date receives `DateTime::EMPTY`. The
+annotation exporter still writes `dc:date` when keeping author and date
+metadata, so the original formatter produces `0000-00-00T00:00:00`.
+The full date-time importer requires a positive month and day and
+leaves the field at its native empty default. Writer preserves both
+the serialization and the import result.
+
+- [Original annotation field default](../../vendor/libreoffice-reference/sw/source/core/unocore/unofield.cxx)
+- [Original annotation field export](../../vendor/libreoffice-reference/xmloff/source/text/txtflde.cxx)
+- [Original date-time conversion](../../vendor/libreoffice-reference/sax/source/tools/converter.cxx)

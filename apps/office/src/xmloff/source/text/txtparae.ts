@@ -1,6 +1,8 @@
 /**
  * @fileoverview Reimplements the bounded ODF text paragraph export boundary from pinned LibreOffice `xmloff/source/text/txtparae.cxx`.
  */
+import type { XMLAnnotation } from "./txtfldi";
+import { exportAnnotation } from "./txtflde";
 import type { XMLTextFrameExportSource } from "./XMLTextFrameExport";
 import { exportFillProperties, type OdfFillProperties } from "../draw/fill-properties";
 import { paragraphPropertiesKey, parseParagraphPropertiesKey } from "./txtparae-properties";
@@ -155,6 +157,7 @@ export type XMLTextParagraphMarker =
       condition?: string;
       collapsedAroundFrame?: boolean;
     }>
+  | Readonly<{ kind: "annotation"; annotation: XMLAnnotation; offset: number }>
   | Readonly<{ kind: "frame"; frame: XMLTextFrameExportSource; offset: number }>;
 
 /** Reiterable model-facing source; definitions are collected before body references. */
@@ -241,6 +244,12 @@ export class XMLTextParagraphExport {
           paragraphStyleNames.set(key, `P${paragraphStyleNames.size + 1}`);
       }
       if (paragraph.markerProperties) addTextStyle(paragraph.markerProperties);
+      for (const marker of paragraph.markers ?? []) {
+        if (marker.kind !== "annotation") continue;
+        for (const editParagraph of marker.annotation.paragraphs)
+          for (const span of editParagraph)
+            if (Object.keys(span.properties).length) addTextStyle(span.properties);
+      }
       paragraph.runs.forEach(
         /** Collects one used character style. @param run - Live text run. @returns Nothing. */
         (run) => {
@@ -553,11 +562,14 @@ function exportParagraphElement(
         const marker = markers[markerIndex] as XMLTextParagraphMarker;
         if (marker.offset < start + localOffset) throw new Error("ODF marker order is invalid.");
         encoded += exportText(text.slice(localOffset, marker.offset - start));
-        encoded += exportMarker(marker, renderFrame);
+        encoded += exportMarker(marker, renderFrame, characterStyleNames);
         localOffset =
           marker.offset -
           start +
-          Number(marker.kind === "frame" && marker.frame.anchor === "as-char");
+          Number(
+            marker.kind === "annotation" ||
+              (marker.kind === "frame" && marker.frame.anchor === "as-char"),
+          );
         markerIndex += 1;
       }
       return encoded + exportText(text.slice(localOffset));
@@ -582,7 +594,7 @@ function exportParagraphElement(
   while (markerIndex < markers.length) {
     const marker = markers[markerIndex] as XMLTextParagraphMarker;
     if (marker.offset !== textOffset) throw new Error("ODF marker is outside its paragraph.");
-    content += exportMarker(marker, renderFrame);
+    content += exportMarker(marker, renderFrame, characterStyleNames);
     markerIndex += 1;
   }
   const markerStyle =
@@ -594,11 +606,31 @@ function exportParagraphElement(
     : `<text:p text:style-name="${escapeXml(styleName)}"${marker}>${content}</text:p>`;
 }
 
-/** Emits one zero-width Writer marker. @param marker - Canonical position. @param renderFrame - Native frame body exporter. @returns ODF element. */
+/** Emits one zero-width Writer marker. @param marker - Canonical position. @param renderFrame - Native frame body exporter. @param characterStyleNames - Text automatic styles. @returns ODF element. */
 function exportMarker(
   marker: XMLTextParagraphMarker,
   renderFrame: ((frame: XMLTextFrameExportSource) => string) | undefined,
+  characterStyleNames: ReadonlyMap<string, string>,
 ): string {
+  if (marker.kind === "annotation")
+    return exportAnnotation(
+      marker.annotation,
+      escapeXml,
+      /** Emits the separate annotation paragraphs. @param paragraphs - Borrowed edit runs. @returns Paragraph XML. */
+      (paragraphs) => {
+        let result = "";
+        for (const paragraph of paragraphs) {
+          let content = "";
+          for (const span of paragraph) {
+            const name = characterStyleNames.get(characterPropertiesKey(span.properties));
+            const value = exportText(span.text);
+            content += name ? `<text:span text:style-name="${name}">${value}</text:span>` : value;
+          }
+          result += `<text:p>${content}</text:p>`;
+        }
+        return result;
+      },
+    );
   if (marker.kind === "frame") {
     if (!renderFrame) throw new Error("ODF anchored frame has no text export owner.");
     return renderFrame(marker.frame);

@@ -1,5 +1,10 @@
 /** @fileoverview Writer browser graph transport for text nodes and the native table section hierarchy. */
 import {
+  decodeAnnotations,
+  encodeAnnotations,
+  type WriterAnnotationRecord,
+} from "./writer-annotation-codec";
+import {
   encodeCellInterop,
   restoreCellInterop,
   encodeTableInterop,
@@ -55,6 +60,7 @@ import {
 /** Primitive graph record for one ordered text node. */
 export interface WriterTextNodeRecord {
   readonly autoAttributes: readonly SfxPoolItemSnapshot[];
+  readonly annotations?: readonly WriterAnnotationRecord[];
   readonly formatCollId: WriterParagraphStyle;
   readonly hints: readonly WriterTextHintRecord[];
   readonly listGeometryWins?: boolean;
@@ -290,7 +296,9 @@ export function* encodeWriterTableSteps(
 /** Encodes a canonical text node and its soft page hints. @param document - Native document. @param node - Actual paragraph. @returns Text graph record. */
 export function encodeTextNode(document: SwDoc, node: SwTextNode): WriterTextNodeRecord {
   const direct = node.GetpSwAttrSet();
+  const annotations = encodeAnnotations(node);
   return {
+    ...(annotations.length ? { annotations } : {}),
     autoAttributes: direct === undefined ? [] : encodeSfxItemSet(direct),
     formatCollId: node.GetTextFormatColl().id,
     ...(node.DoesListGeometryWin() ? { listGeometryWins: true } : {}),
@@ -364,6 +372,7 @@ export function decodeTextNode(
   } finally {
     position.Dispose();
   }
+  if (nodeRecord.annotations) decodeAnnotations(node, nodeRecord.annotations);
   node.AddToList();
   for (const offset of nodeRecord.softPageBreaks ?? [])
     document.GetIDocumentMarkAccess().AddSoftPageBreak(node, offset);

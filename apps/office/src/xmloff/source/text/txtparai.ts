@@ -1,5 +1,7 @@
 /** @fileoverview Implements LibreOffice-shaped streaming paragraph/list import contexts. */
 
+import { XMLAnnotationImportContext, type XMLAnnotation } from "./txtfldi";
+
 import type { XMLNumberingRules } from "../../inc/txtimp";
 import type { XMLTextFrameImportTarget } from "./XMLTextFrameContext";
 import { XMLTextImportHelper, type XMLCharacterStyleLayer } from "./txtimp";
@@ -99,6 +101,10 @@ export interface XMLParagraphListState {
 /** Model-facing import supplier and source declaration lookup. */
 export interface XMLTextImportTarget extends Partial<XMLTextFrameImportTarget> {
   GetTextImport(): XMLTextImportHelper;
+  insertAnnotation?(
+    cursor: ReturnType<XMLTextImportHelper["GetCursor"]>,
+    annotation: XMLAnnotation,
+  ): void;
   getListRule(styleName: string): XMLTextListRule | undefined;
   getStyle(family: OdfStyleDefinition["family"], styleName: string): OdfStyleDefinition | undefined;
   getAutoStyle(
@@ -324,6 +330,16 @@ function createInlineContext(
   namedStyles: readonly XMLCharacterStyleLayer[] = [],
 ): SvXMLImportContext | null {
   if (element === XMLToken.DRAW_FRAME) return paragraph.CreateTextFrameContext(attributes);
+  if (element === XMLToken.OFFICE_ANNOTATION && target.insertAnnotation)
+    return new XMLAnnotationImportContext(
+      attributes,
+      /** Resolves edit text styles from the same XML style families. @param name - Original style name. @returns Character values. */
+      (name) =>
+        target.getAutoStyle("paragraph", name)?.properties ?? resolveTextStyle(name, target),
+      /** Attaches the field at the outer cursor after reading its content. @param annotation - Complete field. @returns Nothing. */
+      (annotation) => target.insertAnnotation?.(paragraph.GetCursor(), annotation),
+    );
+  if (element === XMLToken.OFFICE_ANNOTATION_END) return new SvXMLIgnoreContext();
   if (element === XMLToken.TEXT_SPAN) {
     attributes.assertOnly([XMLToken.TEXT_STYLE_NAME], "span");
     const name = attributes.get(XMLToken.TEXT_STYLE_NAME) ?? "";

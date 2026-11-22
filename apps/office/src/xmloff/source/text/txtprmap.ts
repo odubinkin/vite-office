@@ -552,7 +552,7 @@ interface TabStopAddress {
 const ImportTabStops = Sequence.specialize<TabStopAddress>(stopType, 12);
 /** Applies parsed XML properties as native API values. @param target - Property owner. @param character - Character deltas. @param paragraph - Paragraph deltas. @param alignment - Optional alignment. @param leftMargin - Text-left margin in twips. @param autoFamily - Automatic style family. @param autoProperty - Destination property for the interned character style. @returns Nothing. */
 export function applyTextImportProperties(
-  target: XMLPropertySet,
+  target: Pick<XMLPropertySet, "setPropertyValue" | "setPropertyValues">,
   character: Partial<OdfCharacterProperties> = {},
   paragraph: XMLParagraphImportProperties = {},
   alignment?: OdfParagraphAlignment,

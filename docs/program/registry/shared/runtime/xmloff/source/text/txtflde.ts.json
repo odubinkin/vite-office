@@ -1,0 +1,37 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/xmloff/source/text/txtflde.ts",
+    "classification": "upstream-mechanism",
+    "state": "active",
+    "suite": "shared",
+    "subsystem": "odf-filter",
+    "capabilityIds": [
+      "CAP-0109"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "none",
+      "evidence": [
+        "apps/office/src/xmloff/source/text/txtflde.ts#exportAnnotation",
+        "apps/office/src/sw/source/filter/xml/odt-annotation.test.ts#preserves resolved and unresolved annotation metadata",
+        "vendor/libreoffice-reference/xmloff/source/text/txtflde.cxx#case FIELD_ID_ANNOTATION:",
+        "vendor/libreoffice-reference/xmloff/source/text/txtflde.cxx#XMLTextFieldExport::ProcessParagraphSequence"
+      ],
+      "justification": "Exports the native ODF annotation metadata and comment paragraph stream in the extended ODF 1.3 profile.",
+      "knownViolations": [],
+      "localSymbols": [
+        "exportAnnotation"
+      ],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": "xmloff/source/text/txtflde.cxx",
+      "upstreamSymbols": [
+        "case FIELD_ID_ANNOTATION:",
+        "XMLTextFieldExport::ProcessParagraphSequence"
+      ]
+    }
+  }
+}

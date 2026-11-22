@@ -1,0 +1,45 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "status": "mapped",
+    "localPath": "apps/office/src/xmloff/source/text/txtfldi.ts",
+    "localSymbols": [
+      "XMLAnnotationImportContext"
+    ],
+    "upstreamPath": "xmloff/source/text/txtfldi.cxx",
+    "upstreamSymbols": [
+      "XMLAnnotationImportContext::ProcessAttribute",
+      "XMLAnnotationImportContext::PrepareField"
+    ],
+    "preservedResponsibilities": [
+      "Reads annotation identity, parent and resolution attributes, the three initials aliases, author, native date and separate edit text."
+    ],
+    "omittedResponsibilities": [
+      "Annotation-end range ownership and unrelated text field services are outside this point context."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/xmloff/source/text/txtfldi.ts",
+          "marker": "XMLAnnotationImportContext"
+        },
+        {
+          "path": "apps/office/src/sw/source/filter/xml/odt-annotation.test.ts",
+          "marker": "preserves the bold second annotation run"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/xmloff/source/text/txtfldi.cxx",
+          "marker": "XMLAnnotationImportContext::ProcessAttribute"
+        },
+        {
+          "path": "vendor/libreoffice-reference/xmloff/source/text/txtfldi.cxx",
+          "marker": "XMLAnnotationImportContext::PrepareField"
+        }
+      ]
+    }
+  }
+}

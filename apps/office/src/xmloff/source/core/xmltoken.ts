@@ -584,6 +584,13 @@ export enum XMLToken {
   STYLE_FONT_PITCH_COMPLEX,
   STYLE_FONT_CHARSET_ASIAN,
   STYLE_FONT_CHARSET_COMPLEX,
+  OFFICE_ANNOTATION,
+  OFFICE_ANNOTATION_END,
+  LOEXT_RESOLVED,
+  LOEXT_PARENT_NAME,
+  TEXT_SENDER_INITIALS,
+  LOEXT_SENDER_INITIALS,
+  META_CREATOR_INITIALS,
 }
 
 const entries: readonly (readonly [string, string, XMLToken])[] = [
@@ -820,6 +827,13 @@ const entries: readonly (readonly [string, string, XMLToken])[] = [
   [ODF_NAMESPACES.office, "spreadsheet", XMLToken.OFFICE_SPREADSHEET],
   [ODF_NAMESPACES.office, "version", XMLToken.OFFICE_VERSION],
   [ODF_NAMESPACES.office, "name", XMLToken.OFFICE_NAME],
+  [ODF_NAMESPACES.office, "annotation", XMLToken.OFFICE_ANNOTATION],
+  [ODF_NAMESPACES.office, "annotation-end", XMLToken.OFFICE_ANNOTATION_END],
+  [ODF_NAMESPACES.loext, "resolved", XMLToken.LOEXT_RESOLVED],
+  [ODF_NAMESPACES.loext, "parent-name", XMLToken.LOEXT_PARENT_NAME],
+  [ODF_NAMESPACES.text, "sender-initials", XMLToken.TEXT_SENDER_INITIALS],
+  [ODF_NAMESPACES.loext, "sender-initials", XMLToken.LOEXT_SENDER_INITIALS],
+  [ODF_NAMESPACES.meta, "creator-initials", XMLToken.META_CREATOR_INITIALS],
   [ODF_NAMESPACES.office, "target-frame-name", XMLToken.OFFICE_TARGET_FRAME_NAME],
   [ODF_NAMESPACES.style, "default-style", XMLToken.STYLE_DEFAULT_STYLE],
   [ODF_NAMESPACES.style, "default-page-layout", XMLToken.STYLE_DEFAULT_PAGE_LAYOUT],

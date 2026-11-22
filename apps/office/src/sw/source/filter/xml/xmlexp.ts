@@ -1,6 +1,7 @@
 /**
  * @fileoverview Reimplements the bounded Writer ODF XML export bridge from pinned LibreOffice `sw/source/filter/xml/xmlexp.cxx`.
  */
+import { getPostItFields, projectPostItText } from "./xmlannotation";
 import { ExportNumberFormat } from "../../../../xmloff/source/style/xmlnumfe";
 import { SwBookmark } from "../../core/doc/docbm";
 import { IsSquaredPageMode } from "../../core/doc/docdesc";
@@ -195,7 +196,7 @@ import { exportLineNumberingConfiguration } from "../../../../xmloff/source/text
 import { ExportThemeElement } from "../../../../xmloff/source/style/XMLThemeContext";
 import { FontFamily, FontPitch } from "../../../../tools/inc/fontenum";
 import { RTL_TEXTENCODING_DONTKNOW } from "../../../../sal/inc/rtl/textenc";
-const OFFICE_NAMESPACES = `xmlns:draw="${ODF_NAMESPACES.draw}" xmlns:office="${ODF_NAMESPACES.office}" xmlns:style="${ODF_NAMESPACES.style}" xmlns:text="${ODF_NAMESPACES.text}" xmlns:table="${ODF_NAMESPACES.table}" xmlns:ooow="${ODF_NAMESPACES.ooow}" xmlns:number="${ODF_NAMESPACES.number}" xmlns:fo="${ODF_NAMESPACES.fo}" xmlns:svg="${ODF_NAMESPACES.svg}" xmlns:xlink="${ODF_NAMESPACES.xlink}" xmlns:loext="${ODF_NAMESPACES.loext}"`;
+const OFFICE_NAMESPACES = `xmlns:dc="${ODF_NAMESPACES.dc}" xmlns:meta="${ODF_NAMESPACES.meta}" xmlns:draw="${ODF_NAMESPACES.draw}" xmlns:office="${ODF_NAMESPACES.office}" xmlns:style="${ODF_NAMESPACES.style}" xmlns:text="${ODF_NAMESPACES.text}" xmlns:table="${ODF_NAMESPACES.table}" xmlns:ooow="${ODF_NAMESPACES.ooow}" xmlns:number="${ODF_NAMESPACES.number}" xmlns:fo="${ODF_NAMESPACES.fo}" xmlns:svg="${ODF_NAMESPACES.svg}" xmlns:xlink="${ODF_NAMESPACES.xlink}" xmlns:loext="${ODF_NAMESPACES.loext}"`;
 
 /** Serializes Writer named paragraph styles into styles.xml. @param document - Canonical SwDoc. @param graphicHelper - Optional package graphic owner. @param bitmapStyles - Package bitmap catalogue. @returns Complete XML. */
 export function exportStylesXml(
@@ -838,6 +839,33 @@ function projectParagraph(
           offset: position.GetContentIndex(),
         }),
       ),
+    ...Array.from(
+      getPostItFields(node),
+      /** Exposes the native field at its dummy-character position. @param hint - Annotation hint. @returns Neutral annotation marker. */
+      (hint): XMLTextParagraphMarker => {
+        const field = hint.GetAttr().GetField();
+        const data = field.GetData();
+        const rich = field.GetTextObject();
+        return {
+          kind: "annotation",
+          offset: hint.GetStart(),
+          annotation: {
+            name: data.name,
+            parentName: data.parentName ?? "",
+            resolved: data.resolved ?? false,
+            author: data.author,
+            initials: data.initials,
+            dateTime: data.dateTime.GetUNODateTime(),
+            paragraphs: rich
+              ? projectPostItText(node.GetDoc(), rich)
+              : data.text.split("\n").map(
+                  /** Converts an original plain annotation paragraph. @param text - Plain text. @returns Edit runs. */
+                  (text) => [{ text, properties: {} }],
+                ),
+          },
+        };
+      },
+    ),
   ].sort(
     /** Orders portions in the source export phases. @param left - First portion. @param right - Second portion. @returns Portion order. */
     (left, right) => compareParagraphMarkers(left, right, floatingOffsets),

@@ -1,4 +1,7 @@
 /** @fileoverview Implements Writer's streaming SwXMLImport bridge over fast SAX contexts. */
+import type { XMLAnnotation } from "../../../../xmloff/source/text/txtfldi";
+import { createPostItText, insertPostItField } from "./xmlannotation";
+import { DateTime } from "../../../../tools/source/datetime/datetime";
 import { hasDrawingFrameFill, importPageBackground, importPageLayoutBox } from "./xmlimpit";
 import { getActivePageStory, type SwFrameFormat } from "../../core/layout/atrfrm";
 import type { OdfPageBackground } from "../../../../xmloff/source/style/PageMasterStyleMap";
@@ -198,6 +201,43 @@ class SwXMLImport
     string,
     { style: XMLTextFrameStyle; parent: string | undefined }
   >();
+
+  /** Inserts the annotation in the original text at the position captured by the import helper. @param cursor - Writer text cursor. @param annotation - Original field contents. @returns Nothing. */
+  public insertAnnotation(cursor: XMLTextCursor, annotation: XMLAnnotation): void {
+    const position = (cursor as SwXTextCursor).GetPaM().GetPoint();
+    const node = position.GetNode().GetTextNode();
+    if (!node) throw new Error("Writer annotation has no text anchor.");
+    const offset = position.GetContentIndex();
+    const textObject = createPostItText(annotation.paragraphs);
+    try {
+      insertPostItField(node, offset, {
+        name: annotation.name,
+        parentName: annotation.parentName,
+        resolved: annotation.resolved,
+        author: annotation.author,
+        initials: annotation.initials,
+        dateTime: annotation.dateTime
+          ? new DateTime(annotation.dateTime)
+          : new DateTime(DateTime.EMPTY),
+        text: annotation.paragraphs
+          .map(
+            /** Expands individual edit paragraphs as source plain text. @param paragraph - Native edit runs. @returns Paragraph text. */
+            (paragraph) =>
+              paragraph
+                .map(
+                  /** Reads the original characters. @param span - Source run. @returns Text. */
+                  (span) => span.text,
+                )
+                .join(""),
+          )
+          .join("\n"),
+        ...(textObject ? { textObject } : {}),
+      });
+      position.Assign(node, offset + 1);
+    } finally {
+      textObject?.dispose();
+    }
+  }
 
   /** Registers the native graphic style values referenced by a text frame. @param name - ODF style name. @param style - Native frame values. @param parent - Optional inherited style. @returns Nothing. */
   public registerTextFrameStyle(name: string, style: XMLTextFrameStyle, parent?: string): void {
