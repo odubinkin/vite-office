@@ -1,0 +1,63 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/svl/source/numbers/zformat.picture.ts",
+    "status": "mapped",
+    "upstreamPath": "svl/source/numbers/zformat.cxx",
+    "localSymbols": [
+      "GetFormatSpecialInfo",
+      "GetPercentString",
+      "GetFormatStringForTimePrecision",
+      "GetNatNumModifierString"
+    ],
+    "upstreamSymbols": [
+      "SvNumberformat::GetFormatSpecialInfo",
+      "lcl_GetPercentString",
+      "SvNumberformat::GetFormatStringForTimePrecision",
+      "SvNumberformat::GetNatNumModifierString"
+    ],
+    "preservedResponsibilities": [
+      "Reads options and literal prefixes from the compiled subformat tokens, including negative red, percent literals, seconds precision and native number modifier strings."
+    ],
+    "omittedResponsibilities": [
+      "Complete native formatter, scanner and service parity are outside this picture-generation slice."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/svl/source/numbers/zformat.picture.ts",
+          "marker": "GetFormatSpecialInfo"
+        },
+        {
+          "path": "apps/office/src/svl/source/numbers/zforlist.picture.test.ts",
+          "marker": "@fileoverview"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/svl/source/numbers/zformat.cxx",
+          "marker": "SvNumberformat::GetFormatSpecialInfo"
+        },
+        {
+          "path": "vendor/libreoffice-reference/svl/source/numbers/zformat.cxx",
+          "marker": "lcl_GetPercentString"
+        },
+        {
+          "path": "vendor/libreoffice-reference/svl/source/numbers/zformat.cxx",
+          "marker": "SvNumberformat::GetFormatStringForTimePrecision"
+        },
+        {
+          "path": "vendor/libreoffice-reference/svl/source/numbers/zformat.cxx",
+          "marker": "SvNumberformat::GetNatNumModifierString"
+        }
+      ]
+    },
+    "filenameDivergence": {
+      "localPath": "apps/office/src/svl/source/numbers/zformat.picture.ts",
+      "rationale": "A focused translation-unit split keeps the original source responsibility with its primary owner.",
+      "stackNecessity": "responsibility-split"
+    }
+  }
+}

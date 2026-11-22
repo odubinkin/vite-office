@@ -1,4 +1,5 @@
 /** @fileoverview Consumed ScFormatShell font/color/alignment operations through native script sets,merged selection patterns and attribute history;rich-edit,dialog and device layout services remain unported. */
+import { ExecuteNumFormat, GetNumFormatState } from "./formatsh.numformat";
 import type { ScDocumentPool } from "../../core/data/docpool";
 import { SvxShadowedItem, SvxCharReliefItem } from "../../../../editeng/source/items/textitem";
 
@@ -55,6 +56,9 @@ export type CalcColorKind = "font" | "background";
 export const calcColorSlots = { font: 10017, background: 10186 } as const;
 /** Source format owner for the consumed simple-selection font-height command. */
 export class ScFormatShell {
+  GetNumFormatState = GetNumFormatState;
+  ExecuteNumFormat = ExecuteNumFormat;
+
   /** Reads the original protection state, including the default item for mixed selection. @returns Lock flag. */
   GetCellProtectionState(): boolean {
     return (this.SelectionPattern().GetItem(ATTR_PROTECTION) as ScProtectionAttr).GetProtection();

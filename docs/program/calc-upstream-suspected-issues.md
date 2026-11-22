@@ -7888,3 +7888,31 @@ column carries an unlocked run, its implicit instances in later columns
 are absent from the selection. Calc preserves the allocation boundary.
 
 - [Original sheet selection traversal](../../vendor/libreoffice-reference/sc/source/core/data/table2.cxx#L2047)
+
+### CALC-828 — A localized Number format can appear checked without toggling to General
+
+The Number shortcut checks the built-in table offset for its checked state.
+Its execute handler compares the full key with 4. On a noninitial language
+block the button can therefore stay checked after repeated use. Calc retains
+both checks.
+
+- [Original Number state](../../vendor/libreoffice-reference/sc/source/ui/view/formatsh.cxx#L1942)
+- [Original Number command](../../vendor/libreoffice-reference/sc/source/ui/view/formatsh.cxx#L273)
+
+### CALC-829 — The Time shortcut omits the end-input step
+
+The Time shortcut applies its category while the active cell edit is still
+open. Other category shortcuts close the edit before applying their formats.
+Calc preserves the Time shortcut's omission from the end-input switch.
+
+- [Original input termination and Time case](../../vendor/libreoffice-reference/sc/source/ui/view/formatsh.cxx#L247)
+
+### CALC-830 — The number format category of a selection can depend on its shape
+
+Each contiguous marked run is checked for a uniform format key. A run with
+different keys is classified as General, even when both formats belong to
+the same category. Separate runs with the same formats can still produce
+that category. Calc preserves the range lookup and category aggregation.
+
+- [Original category aggregation](../../vendor/libreoffice-reference/sc/source/ui/view/formatsh.cxx#L2093)
+- [Original column format lookup](../../vendor/libreoffice-reference/sc/source/core/data/column.cxx#L362)

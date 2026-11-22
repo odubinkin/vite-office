@@ -99,6 +99,7 @@ export class ScTable {
   ApplySelectionStyle = table2.ApplySelectionStyle;
   GetAreaStyle = table2.GetAreaStyle;
   GetSelectionStyle = table2.GetSelectionStyle;
+  GetNumberFormat = table2.GetNumberFormat;
   GetUnprotectedCells = table2.GetUnprotectedCells;
   RemoveProtected = table2.RemoveProtected;
   GetLastChangedColFlagsWidth = table2.GetLastChangedColFlagsWidth;
@@ -426,10 +427,7 @@ export class ScTable {
     if (this.rDocument.ValidColRow(col, row))
       this.CreateColumnIfNotExists(col).ApplyAttr(row, attr);
   }
-  /** Original table2 number-format assignment with native cell validation. @param col - Column. @param row - Row. @param key - Formatter key. @returns Nothing. */
-  SetNumberFormat(col: number, row: number, key: number): void {
-    table2.SetNumberFormat.call(this, col, row, key);
-  }
+  SetNumberFormat = table2.SetNumberFormat;
   /** Original table.hxx allocated-column validity. @param col - Column. @returns Allocated native column. */
   IsColValid(col: number): boolean {
     return col >= 0 && col < this.aCol.length;

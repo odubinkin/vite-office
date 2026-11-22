@@ -4,7 +4,7 @@ title: "Connect Calc number format shortcuts and precision controls"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 7
+revision: 8
 origin:
   system: "manual"
 depends_on:
@@ -37,7 +37,7 @@ events:
     to: "DOING"
     note: "Start: connect native Calc numeric formats and precision controls to the existing formatter and history."
 doc_version: 3
-doc_updated_at: "2026-11-22T01:23:14.389Z"
+doc_updated_at: "2026-11-22T01:48:38.539Z"
 doc_updated_by: "CODER"
 description: "Connect native Calc menu and toolbar format commands, their state and history, and the shared source numeric picture generation needed by decimal and thousands controls."
 sections:
@@ -55,7 +55,12 @@ sections:
     <!-- BEGIN VERIFICATION RESULTS -->
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Revert the task implementation commits. Actual number formats and persisted styles remain in the existing formatter and workbook filter owners."
-  Findings: ""
+  Findings: |-
+    The original French percent fixture exposed a Calc import defect. Calc assigned the ODS style's format key and inherited the system format language. The source UNO property applies both. Binding both items retained the French style, the exact space before the percent sign, and the generated decimal precision on reopening.
+
+    The same ODS path now carries generated fractional seconds, elapsed-time overflow, fraction grouping and the currency-symbol language. The original tdf82398 regression now applies Date through the toolbar before running Text to Columns and checks all sixteen cells.
+
+    CALC-828 through CALC-830 record the source localized Number toggle, the active-edit Time branch, and the category difference between contiguous and separate marked runs. The task retains each behavior. The dedicated Format Cells dialog, sidebar controls and currency chooser are separate bindings.
 id_source: "generated"
 ---
 ## Summary
@@ -88,3 +93,9 @@ Connect native Calc preset and precision commands using compiled document format
 Revert the task implementation commits. Actual number formats and persisted styles remain in the existing formatter and workbook filter owners.
 
 ## Findings
+
+The original French percent fixture exposed a Calc import defect. Calc assigned the ODS style's format key and inherited the system format language. The source UNO property applies both. Binding both items retained the French style, the exact space before the percent sign, and the generated decimal precision on reopening.
+
+The same ODS path now carries generated fractional seconds, elapsed-time overflow, fraction grouping and the currency-symbol language. The original tdf82398 regression now applies Date through the toolbar before running Text to Columns and checks all sixteen cells.
+
+CALC-828 through CALC-830 record the source localized Number toggle, the active-edit Time branch, and the category difference between contiguous and separate marked runs. The task retains each behavior. The dedicated Format Cells dialog, sidebar controls and currency chooser are separate bindings.

@@ -1,4 +1,5 @@
 /** @fileoverview Consumed native ScViewFunc selection formatting,frame operations and explicit sheet geometry;device/rich-edit/alternate-view services remain unported. */
+import * as numberFormat from "./viewfunc.numformat";
 import { PasteFromClip } from "./viewfun3";
 import { EnterBlock, EnterAutoSum, HideTable, ShowTable, SetPrintRanges } from "./viewfun2";
 import type { ScModule } from "../../../inc/scmod";
@@ -378,6 +379,10 @@ export class ScViewFunc extends ScTabView {
     inner.SetMinDist(false);
     return [outer, inner];
   }
+  SetNumberFormat = numberFormat.SetNumberFormat;
+  SetNumFmtByStr = numberFormat.SetNumFmtByStr;
+  ChangeNumFmtDecimals = numberFormat.ChangeNumFmtDecimals;
+
   /** Original plain-cell ApplySelectionPattern dispatches marked versus cursor operations after removing filtered working marks. @param attr - Borrowed delta. @param cursorOnly - Restrict to cursor. @returns Native operation result. */
   ApplySelectionPattern(attr: ScPatternAttr, cursorOnly = false): boolean {
     const doc = this.data.GetDocument(),

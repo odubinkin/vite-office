@@ -12,6 +12,7 @@ import { History } from "./calc-history";
 import { ScModule } from "../../inc/scmod";
 import { ScRefType } from "../../source/ui/inc/viewdata";
 import type { CalcViewOption } from "../../sdi/tabvwsh";
+import { SID_NUMBER_TIME } from "../../sdi/formatsh.numformat";
 import { ViewOption } from "../../inc/viewopti";
 import type { SvxShadowedItem, SvxCharReliefItem } from "../../../editeng/source/items/textitem";
 import type { SfxRequest } from "../../../sfx2/source/control/request";
@@ -80,6 +81,17 @@ export class CalcViewController {
     else if (option === "grid") this.viewShell.ToggleSheetGrid(request);
     else this.viewShell.ToggleFormula(request);
     this.Changed();
+  }
+  /** Reads the native format shell state. @param slot - Numeric shortcut. @returns Slot state. */
+  GetNumFormatState(slot: number): ReturnType<ScFormatShell["GetNumFormatState"]> {
+    return new ScFormatShell(this.viewData, this.shell).GetNumFormatState(slot);
+  }
+  /** Routes the number format shortcut after the source slot's input handling. @param request - Native request. @returns Whether applied. */
+  ExecuteNumFormat(request: SfxRequest): boolean {
+    if (request.GetSlot() !== SID_NUMBER_TIME && !this.Commit()) return false;
+    const applied = new ScFormatShell(this.viewData, this.shell).ExecuteNumFormat(request);
+    this.Changed();
+    return applied;
   }
   /** Reads native source cell style selection. @returns Current cell style state. */
   GetCellStyleState(): ReturnType<ScTabViewShell["GetStyleState"]> {

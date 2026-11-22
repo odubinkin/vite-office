@@ -1,0 +1,58 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/sc/source/ui/view/formatsh.numformat.ts",
+    "status": "mapped",
+    "upstreamPath": "sc/source/ui/view/formatsh.cxx",
+    "localSymbols": [
+      "ExecuteNumFormat",
+      "GetNumFormatState",
+      "GetCurrentNumberFormatType"
+    ],
+    "upstreamSymbols": [
+      "ScFormatShell::ExecuteNumFormat",
+      "ScFormatShell::GetNumFormatState",
+      "ScFormatShell::GetCurrentNumberFormatType"
+    ],
+    "preservedResponsibilities": [
+      "Uses the actual marked column spans and merged selection attributes. The currency key, decimal toggle, time execution, and thousands cases retain their original distinctions."
+    ],
+    "omittedResponsibilities": [
+      "The registered commands cover the ten numeric shortcuts. The full Format Cells dialog, sidebar format setup, and currency chooser have separate source owners.",
+      "Browser input and state invalidation use the established Sfx adapter. Native toolkit and complete formatter services remain outside this capability."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sc/source/ui/view/formatsh.numformat.ts",
+          "marker": "ExecuteNumFormat"
+        },
+        {
+          "path": "apps/office/src/sc/browser/presentation/calc-number-format.test.tsx",
+          "marker": "@fileoverview"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sc/source/ui/view/formatsh.cxx",
+          "marker": "ScFormatShell::ExecuteNumFormat"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/source/ui/view/formatsh.cxx",
+          "marker": "ScFormatShell::GetNumFormatState"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/source/ui/view/formatsh.cxx",
+          "marker": "ScFormatShell::GetCurrentNumberFormatType"
+        }
+      ]
+    },
+    "filenameDivergence": {
+      "localPath": "apps/office/src/sc/source/ui/view/formatsh.numformat.ts",
+      "rationale": "A focused translation-unit split keeps the original source responsibility with its primary owner.",
+      "stackNecessity": "responsibility-split"
+    }
+  }
+}

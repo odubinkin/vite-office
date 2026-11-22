@@ -655,6 +655,7 @@ export class ScDocument {
     return this.FetchTable(position.Tab())?.GetPattern(position.Col(), position.Row()) ?? null;
   }
   GetColDefault = documentGeometry.GetColDefault;
+  GetNumberFormat = documentGeometry.GetNumberFormat;
   /** Original document10 merge query over actual sparse sheets. @param position - Queried cell. @returns Merged anchor. */
   IsMerged(position: ScAddress): boolean {
     return document10.IsMerged.call(this, position);

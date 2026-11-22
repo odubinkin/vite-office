@@ -193,15 +193,18 @@ it("ports tdf92423 and applies Text to Columns to the selection created by paste
 it("ports tdf82398 custom separators on a date-formatted input range", async () => {
   const controller = mount();
   const doc = controller.shell.GetDocument();
-  const format = doc.GetFormatTable().GetStandardFormat(SvNumFormatType.DATE);
   act(() => {
     put(0, "afasdfs.fdfasd.fsadf.fasd");
     put(1, "3242.43242.3242.2342");
     put(2, "fdsfa.afsdfa.adfdas.fsad");
     put(3, "21312.1111.1111.111");
-    for (let row = 0; row < 4; row++) doc.SetNumberFormat(new ScAddress(0, row, 0), format);
   });
   select("A1:A4");
+  const toolbar = within(screen.getByRole("toolbar", { name: "Calc formatting toolbar" }));
+  fireEvent.click(toolbar.getByRole("button", { name: "Date" }));
+  const formatter = doc.GetFormatTable();
+  for (let row = 0; row < 4; row++)
+    expect(formatter.GetType(doc.GetNumberFormat(0, row, 0))).toBe(SvNumFormatType.DATE);
   await openTextToColumns();
   const dialog = within(screen.getByRole("dialog", { name: "Text to Columns" }));
   fireEvent.click(dialog.getByRole("radio", { name: "Separated by" }));
@@ -210,11 +213,25 @@ it("ports tdf82398 custom separators on a date-formatted input range", async () 
     target: { value: "." },
   });
   await act(async () => fireEvent.click(dialog.getByRole("button", { name: "OK" })));
-  expect(text(doc.GetSharedString(new ScAddress()).getString())).toBe("afasdfs");
-  expect(doc.GetValue(new ScAddress(0, 1, 0))).toBe(3242);
-  expect(doc.GetValue(new ScAddress(1, 1, 0))).toBe(43242);
-  expect(text(doc.GetSharedString(new ScAddress(2, 2, 0)).getString())).toBe("adfdas");
-  expect(doc.GetValue(new ScAddress(3, 3, 0))).toBe(111);
+  const rows = [
+    ["afasdfs", "fdfasd", "fsadf", "fasd"],
+    [3242, 43242, 3242, 2342],
+    ["fdsfa", "afsdfa", "adfdas", "fsad"],
+    [21312, 1111, 1111, 111],
+  ];
+  for (const [row, cells] of rows.entries())
+    for (const [col, expected] of cells.entries()) {
+      const address = new ScAddress(col, row, 0);
+      if (typeof expected === "number") expect(doc.GetValue(address)).toBe(expected);
+      else {
+        const value = doc.GetSharedString(address);
+        try {
+          expect(text(value.getString())).toBe(expected);
+        } finally {
+          value.dispose();
+        }
+      }
+    }
 });
 
 it("leaves the workbook intact on dialog cancellation or when the command target changes", async () => {

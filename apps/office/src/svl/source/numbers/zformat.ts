@@ -1,8 +1,10 @@
 /** @fileoverview Native compiled-format constructor/subformat ownership and original current-language output dispatch; Source native-number modes0..11 are connected to numeric and date/time producers; mode12 remains unported. */
+import * as Picture from "./zformat.picture";
+import { text } from "../../../i18nlangtag/source/isolang/isolang.tables";
 import * as Output from "./zformat.output";
 import { GetDateOutput, GetDateTimeOutput } from "./zformat.date";
 import { GetTimeOutput } from "./zformat.time";
-import { GetFractionOutput } from "./zformat.fraction";
+import { GetDenominatorString, GetFractionOutput, GetNumeratorString } from "./zformat.fraction";
 import { GetNumberOutput, GetScientificOutput, ImpGetOutputStandard } from "./zformat.number";
 import { Construct } from "./zformat.construct";
 import type { ImpSvNumberInputScan } from "./zforfind";
@@ -469,6 +471,66 @@ export class SvNumberformat {
   GetColor(section: number): Color | null {
     return this.NumFor[section]?.GetColor() ?? null;
   }
+  /** Reads the native compiled picture options. @param section - Compiled section index. @returns Section options and negative red. */
+  GetFormatSpecialInfo(section = 0): Picture.FormatSpecialInfo {
+    return Picture.GetFormatSpecialInfo(this, this.NumFor[section] as ImpSvNumFor);
+  }
+
+  /** Reads the positive section's integer digits. @returns Compiled integer digit count. */
+  GetFormatIntegerDigits(): number {
+    return (this.NumFor[0] as ImpSvNumFor).Info().nCntPre;
+  }
+
+  /** Rebuilds the native seconds tokens with the requested precision. @param precision - Digits. @param separator - Locale fractional time separator. @returns Time picture. */
+  GetFormatStringForTimePrecision(precision: number, separator: string): string {
+    return Picture.GetFormatStringForTimePrecision(
+      this.NumFor[0] as ImpSvNumFor,
+      precision,
+      separator,
+    );
+  }
+
+  /** Reads the first subformat's percent suffix. @returns Percent token and adjacent literals. */
+  GetPercentString(): string {
+    return Picture.GetPercentString(this.NumFor[0] as ImpSvNumFor);
+  }
+
+  /** Reads a subformat fraction delimiter. @param section - Compiled section index. @returns Compiled delimiter. */
+  GetIntegerFractionDelimiterString(section = 0): string {
+    const info = (this.NumFor[section] as ImpSvNumFor).Info();
+    const position = info.nTypeArray.indexOf(NfSymbolType.FRACBLANK);
+    return position >= 0 ? text(info.sStrArray[position] as OUString) : "";
+  }
+
+  /** Reads a compiled fraction numerator. @param section - Compiled section index. @returns Owned numerator. */
+  GetNumeratorString(section = 0): OUString {
+    return GetNumeratorString(this.NumFor[section] as ImpSvNumFor);
+  }
+
+  /** Reads a compiled fraction denominator. @param section - Compiled section index. @returns Owned denominator. */
+  GetDenominatorString(section = 0): OUString {
+    return GetDenominatorString(this.NumFor[section] as ImpSvNumFor);
+  }
+
+  /** Reads a section's native number prefix. @param section - Compiled section index. @returns Prefix. */
+  GetNatNumModifierString(section: number): string {
+    const part = this.NumFor[section];
+    return part ? Picture.GetNatNumModifierString(part) : "";
+  }
+
+  /** Checks both endpoint tokens of a compiled negative section. @returns Whether the section uses parentheses. */
+  IsNegativeInBracket(): boolean {
+    const first = this.GetNumForString(1, 0);
+    const last = this.GetNumForString(1, 0xffff);
+    return first !== null && last !== null && text(first) === "(" && text(last) === ")";
+  }
+
+  /** Checks the last positive token. @returns Whether the section reserves space for a closing parenthesis. */
+  HasPositiveBracketPlaceholder(): boolean {
+    const token = this.GetNumForString(0, 0xffff);
+    return token !== null && text(token) === "_)";
+  }
+
   /** Original inline decimal precision query on the compiled subformat. @param index - Native uint16 subformat, zero by default. @returns Decimal digit count. */
   GetFormatPrecision(index = 0): number {
     return (this.NumFor[index & 65535] as ImpSvNumFor).Info().nCntPost;
@@ -888,6 +950,16 @@ export type SvNumberformatConstReference = Pick<
   | "GetNumForInfoScannedType"
   | "GetConditions"
   | "GetColor"
+  | "GetFormatSpecialInfo"
+  | "GetFormatIntegerDigits"
+  | "GetFormatStringForTimePrecision"
+  | "GetPercentString"
+  | "GetIntegerFractionDelimiterString"
+  | "GetNumeratorString"
+  | "GetDenominatorString"
+  | "GetNatNumModifierString"
+  | "IsNegativeInBracket"
+  | "HasPositiveBracketPlaceholder"
   | "GetFormatPrecision"
   | "GetSubformatIndex"
   | "IsFirstSubformatRealNegative"

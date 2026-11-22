@@ -1,4 +1,5 @@
 /** @fileoverview Original document geometry and column defaults delegated to the native sheet owner. */
+import type { ScRange } from "../../../inc/address";
 import type { ScDocument } from "../../../inc/document";
 import type { ScPatternAttr } from "../../../inc/patattr";
 import { ScGlobal } from "../../../inc/global";
@@ -185,4 +186,26 @@ export function GetColDefault(this: ScDocument, tab: number, col: number, lastRo
       selected = entry.first;
     }
   return selected;
+}
+
+/** Queries a single cell or a range with a common number format. @param this - Document. @param args - Cell coordinates or range. @returns Format key or General for mixed ranges. */
+export function GetNumberFormat(
+  this: ScDocument,
+  ...args: [col: number, row: number, tab: number] | [range: ScRange]
+): number {
+  if (args.length === 3) return this.FetchTable(args[2])?.GetNumberFormat(args[0], args[1]) ?? 0;
+  const [range] = args;
+  const first = range.aStart,
+    last = range.aEnd;
+  if (!this.FetchTable(first.Tab()) || !this.FetchTable(last.Tab())) return 0;
+  let result: number | undefined;
+  for (let tab = first.Tab(); tab <= last.Tab(); tab++) {
+    const sheet = this.FetchTable(tab);
+    for (let col = first.Col(); col <= last.Col(); col++) {
+      const key = sheet?.GetNumberFormat(col, first.Row(), last.Row()) ?? 0;
+      if (result !== undefined && result !== key) return 0;
+      result = key;
+    }
+  }
+  return result ?? 0;
 }

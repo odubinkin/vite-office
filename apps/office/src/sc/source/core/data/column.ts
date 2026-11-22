@@ -162,6 +162,21 @@ export class ScColumnData {
   GetNumberFormat(context: ScInterpreterContext, row: number): number {
     return (this.pAttrArray.GetPattern(row) as ScPatternAttr).GetNumberFormat(context);
   }
+  /** Reads a uniform number format across native pattern runs. @param first - First row. @param last - Last row. @returns Format key or General on a mismatch. */
+  GetNumberFormatRange(first: number, last: number): number {
+    const formatter = this.rDocument.GetFormatTable();
+    const start: [number] = [0],
+      end: [number] = [0];
+    let result: number | undefined;
+    for (let row = first; row <= last; row = end[0] + 1) {
+      const pattern = this.GetPatternRange(start, end, row);
+      if (!pattern) return 0;
+      const key = pattern.GetNumberFormat(formatter);
+      if (result !== undefined && result !== key) return 0;
+      result = key;
+    }
+    return result ?? 0;
+  }
   /** Borrows a complete attribute run. @param start - First output. @param end - Last output. @param row - Query row. @returns Pattern or null. */
   GetPatternRange(start: [number], end: [number], row: number): ScPatternAttr | null {
     return this.pAttrArray.GetPatternRange(start, end, row);

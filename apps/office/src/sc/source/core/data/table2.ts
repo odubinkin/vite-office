@@ -703,6 +703,15 @@ export function ApplyPatternIfNumberformatIncompatible(
     );
 }
 
+/** Reads single-cell or uniform row-span format through the actual column. @param this - Sheet. @param col - Column. @param first - Row or first row. @param last - Optional last row. @returns Native format key. */
+export function GetNumberFormat(this: ScTable, col: number, first: number, last?: number): number {
+  const doc = this["rDocument"];
+  if (!doc.ValidColRow(col, first)) return 0;
+  const column = this.GetColumnData(col);
+  if (last === undefined) return column.GetNumberFormat(doc.GetNonThreadedContext(), first);
+  return doc.ValidColRow(col, last) ? column.GetNumberFormatRange(first, last) : 0;
+}
+
 /** Original table2.cxx validated single-cell format assignment. @param this - Actual sheet. @param col - Column. @param row - Row. @param key - Formatter key. @returns Nothing. */
 export function SetNumberFormat(this: ScTable, col: number, row: number, key: number): void {
   if (!this.GetDoc().ValidColRow(col, row)) return;

@@ -1,4 +1,5 @@
 /** @fileoverview Original view-option slots from scalc.sdi/tabvwsh.sdi,sc.hrc and solar.hrc;browser dispatch retains native request/state owners. */
+import { createCalcNumberFormatSlots } from "./formatsh.numformat";
 import type { SfxSlotState } from "../../sfx2/source/control/bindings";
 import type { SfxRequest } from "../../sfx2/source/control/request";
 import type { SfxSlotDefinition } from "../../sfx2/source/control/msg";
@@ -56,6 +57,8 @@ export const FN_PRINT_ENTIRE_SHEET = 21163;
 /** Active view contract;the core owns all persistent values. */
 export interface CalcViewCommandTarget {
   GetCellStyleState(): SfxSlotState;
+  GetNumFormatState(slot: number): SfxSlotState;
+  ExecuteNumFormat(request: SfxRequest): boolean;
   GetCellProtectionState(): boolean;
   ExecuteCellProtection(request: SfxRequest): boolean;
   SelectUnprotectedCells(): boolean;
@@ -86,6 +89,7 @@ export function createCalcViewSlots(): SfxSlotDefinition<CalcViewCommandTarget>[
   );
   return [
     ...viewOptions,
+    ...createCalcNumberFormatSlots(),
     {
       commandUrl: ".uno:StyleApply",
       slotId: SID_STYLE_APPLY,

@@ -41,7 +41,7 @@ export function GetDenominatorString(section: ImpSvNumFor): OUString {
   }
 }
 /** Original numerator placeholders immediately before the slash. @param section - Actual compiled subformat. @returns Owned token string. */
-function GetNumeratorString(section: ImpSvNumFor): OUString {
+export function GetNumeratorString(section: ImpSvNumFor): OUString {
   const info = section.Info(),
     buffer = new OUStringBuffer();
   try {
