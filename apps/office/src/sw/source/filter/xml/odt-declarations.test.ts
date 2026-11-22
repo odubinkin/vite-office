@@ -68,7 +68,7 @@ describe("ODT declaration import", /** Groups declaration policy assertions. @re
     expect(diagnostics).toEqual([]);
   });
 
-  it("ignores invalid native outline values while retaining font metadata diagnostics", /** Checks source outline conversion and independent unsupported font attributes. @returns Nothing. */ () => {
+  it("ignores invalid outline and font enum values through the native style map", /** Checks source outline conversion and independent recognized font attributes. @returns Nothing. */ () => {
     const diagnostics: OdfXmlDiagnostic[] = [];
     const malformed = styles(
       '<style:style style:name="Heading_20_1" style:family="paragraph" style:default-outline-level="bad"><style:text-properties style:font-family-generic="invalid" style:font-pitch="invalid"/></style:style>',
@@ -84,23 +84,7 @@ describe("ODT declaration import", /** Groups declaration policy assertions. @re
           (diagnostic) => diagnostics.push(diagnostic),
       },
     );
-    expect(diagnostics).toEqual(
-      expect.arrayContaining([
-        expect.objectContaining({
-          kind: "unsupported-attribute",
-          name: "style:font-family-generic",
-          stream: "styles.xml",
-        }),
-        expect.objectContaining({
-          kind: "unsupported-attribute",
-          name: "style:font-pitch",
-          stream: "styles.xml",
-        }),
-      ]),
-    );
-    expect(diagnostics).not.toContainEqual(
-      expect.objectContaining({ name: "style:default-outline-level" }),
-    );
+    expect(diagnostics).toEqual([]);
     expect(imported.document.GetTextFormatColl("heading-1").GetAttrOutlineLevel()).toBe(1);
   });
 
@@ -176,7 +160,7 @@ describe("ODT declaration import", /** Groups declaration policy assertions. @re
     );
   });
 
-  it("keeps pinned styles.odt and feature_text.odt canonical imports while diagnosing font metadata", /** Checks source-backed fixture semantics. @returns Completion after imports. */ async () => {
+  it("keeps pinned styles.odt and feature_text.odt canonical imports with native font metadata", /** Checks source-backed fixture semantics. @returns Completion after imports. */ async () => {
     const fixtureCases = [
       { file: "src/sw/qa/uitest/data/styles.odt", paragraphs: 5 },
       { file: "src/sw/qa/extras/odfimport/data/feature_text.odt", paragraphs: 1 },
@@ -205,7 +189,7 @@ describe("ODT declaration import", /** Groups declaration policy assertions. @re
         expect.objectContaining({ name: "text:display-outline-level" }),
       );
       if (fixture.file.includes("feature_text"))
-        expect(diagnostics).toContainEqual(
+        expect(diagnostics).not.toContainEqual(
           expect.objectContaining({
             kind: "unsupported-attribute",
             name: "style:font-family-generic",
