@@ -1,0 +1,25 @@
+{
+  "schema_version": 1,
+  "task_id": "202611220341-T2VZFX",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-11-22T04:13:47.358Z",
+  "verdict": "pass",
+  "summary": "Writer Page Style reaches the native story refs and format owners through nested Header and Footer groups.",
+  "evaluated_sha": "6a6eb9a6d84ee39bca6fc4c3f897970a826caae8",
+  "blueprint_digest": "4a23f5dce16e0f09dc770c603aabafd8677e51f62bf14c6c0837cc9a2c2638bb",
+  "findings": [
+    "Primary paths preserve existing content across sharing and history and retain the represented margins and spacing through both ODT and Worker serialization.",
+    "Chromium verified enable, confirmation cancellation, confirmed deletion and undo on the physical page."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202611220341-T2VZFX/README.md",
+    "apps/office/e2e/writer-page-stories.spec.ts",
+    "apps/office/src/sw/browser/presentation/WriterPageStoriesDialog.test.tsx"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": [
+    "Browser story remeasurement and cross-document stashed variants remain outside this slice. A supplementary Word fixture did not complete and is recorded separately."
+  ]
+}
