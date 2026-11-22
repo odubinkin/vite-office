@@ -4,6 +4,7 @@ import { SvxOpticalSizingItem } from "../../../../editeng/inc/opticalsizingitem"
 import { SvxEmphasisMarkItem } from "../../../../editeng/inc/emphasismarkitem";
 import { SvxCaseMapItem } from "../../../../editeng/source/items/textitem.modes";
 import {
+  SvxBlinkItem,
   SvxCharRotateItem,
   SvxTwoLinesItem,
 } from "../../../../editeng/source/items/textitem.layout";
@@ -15,6 +16,7 @@ import {
   SvxOverlineItem,
   SvxShadowedItem,
 } from "../../../../editeng/source/items/textitem";
+import { SvxCharHiddenItem } from "../../../../editeng/source/items/charhiddenitem";
 import type { SfxPoolItemFactory } from "../../../../svl/source/items/itempool";
 import * as Which from "../../../inc/hintids";
 import { writerColorFromPrimitive } from "./swatrset.paragraph";
@@ -69,6 +71,10 @@ export function writerCharacterItemFactory(which: number): SfxPoolItemFactory | 
       return /** Restores the native case map. @param value - Stored value. @returns Case item. */ (
         value,
       ) => new SvxCaseMapItem(Number(value), which);
+    case Which.RES_CHRATR_BLINK:
+      return (value) => new SvxBlinkItem(Boolean(value), which);
+    case Which.RES_CHRATR_HIDDEN:
+      return (value) => new SvxCharHiddenItem(Boolean(value), which);
     case Which.RES_CHRATR_CONTOUR:
       return /** Restores the native outline. @param value - Stored value. @returns Contour item. */ (
         value,

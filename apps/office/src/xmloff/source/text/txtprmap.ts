@@ -403,7 +403,7 @@ export function importTextCharacterProperties(
   openOffice2Generator = false,
   paragraphStyle = false,
 ): Partial<OdfCharacterProperties> {
-  const result: Record<string, number | boolean | OdfBoxProperties> = {},
+  const result: Record<string, string | number | boolean | OdfBoxProperties> = {},
     value = new Any(),
     lineValues = { underline: new Any(), overline: new Any() },
     crossedOut = new Any();

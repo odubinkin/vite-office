@@ -150,8 +150,8 @@ describe("Writer line numbering on text frames", /** Groups page-frame line-numb
       bottomMargin: 100,
     };
     const inputs = [
-      { ...paragraph("split", ["a", "b", "c", "d"]), lineNumberStart: 20 },
-      { ...paragraph("excluded", ["e"], false), lineNumberStart: 500 },
+      { ...paragraph("split", ["a", "b", "c", "d"]), lineNumberStartValue: 20 },
+      { ...paragraph("excluded", ["e"], false), lineNumberStartValue: 500 },
       paragraph("next", ["f"]),
     ];
     const pages = createSwPageFrames(inputs, descriptor);

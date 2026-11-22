@@ -354,6 +354,9 @@ export function getCharacterProperties(
 /** Character effects and position items exported with Writer text runs and paragraph styles. */
 export const XML_CHARACTER_EFFECT_WHICH_IDS = [
   RES_CHRATR_CROSSEDOUT,
+  RES_CHRATR_BLINK,
+  RES_CHRATR_HIDDEN,
+  RES_CHRATR_TWO_LINES,
   RES_CHRATR_EMPHASIS_MARK,
   RES_CHRATR_CASEMAP,
   RES_CHRATR_CONTOUR,

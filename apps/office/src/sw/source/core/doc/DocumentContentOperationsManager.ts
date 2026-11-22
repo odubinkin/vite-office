@@ -12,6 +12,7 @@ import { DelBookmarks } from "./docbm";
 import { SwNodeIndex } from "../crsr/pam";
 import { SwFormatField } from "../../../inc/fmtfld";
 import { SwTextField } from "../../../inc/txtfld";
+import { SwTextAnnotationField } from "../../../inc/txtannotationfld";
 import { SwTextFlyCnt } from "../../../inc/txtflcnt";
 import type { SwPostItField } from "../fields/docufld";
 import type { SwNode } from "../docnode/node";
@@ -268,7 +269,7 @@ export class DocumentContentOperationsManager {
     first.nContent.SetAffinity("before");
     try {
       const format = new SwFormatField(field);
-      const hint = new SwTextField(format, end.GetContentIndex());
+      const hint = new SwTextAnnotationField(format, end.GetContentIndex());
       if (!node.InsertHint(hint)) throw new Error("Writer annotation has no text space.");
       if (expanded) {
         const last = new SwPosition(node, hint.GetStart() + 1);

@@ -5,6 +5,7 @@ import { SwFormatField } from "../../../inc/fmtfld";
 import { CH_TXTATR_INWORD, RES_TXTATR_ANNOTATION } from "../../../inc/hintids";
 import { SetAttrMode } from "../../../inc/swtypes";
 import { SwTextField } from "../../../inc/txtfld";
+import { SwTextAnnotationField } from "../../../inc/txtannotationfld";
 import { SwPaM, SwPosition } from "../../../source/core/crsr/pam";
 import type { SwDoc } from "../../../source/core/doc/doc";
 import { SwPostItField, SwPostItFieldType } from "../../../source/core/fields/docufld";
@@ -181,7 +182,7 @@ export function restoreAnnotations(
     } finally {
       value.Dispose();
     }
-    if (!node.InsertHint(new SwTextField(format, record.offset), SetAttrMode.NOTXTATRCHR))
+    if (!node.InsertHint(new SwTextAnnotationField(format, record.offset), SetAttrMode.NOTXTATRCHR))
       throw new Error("Stored Writer annotation could not be attached.");
     if (first && start) {
       const begin = new SwPosition(first, start.offset);

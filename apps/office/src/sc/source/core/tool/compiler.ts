@@ -84,6 +84,10 @@ const excelSheet = new RegExp("^" + sheetIdentifier + "!", "u");
 const odfSheet = new RegExp("^" + sheetIdentifier + "\\.", "u");
 const deletedOdfSheet = /^(\$?)#REF!\./u;
 const a1Reference = /^\$?[A-Za-z]+\$?[1-9][0-9]*/u;
+const a1RangeWithEndSheet = new RegExp(
+  "^" + a1Reference.source.slice(1) + ":" + sheetIdentifier + "\\." + a1Reference.source.slice(1),
+  "u",
+);
 const nameIdentifier = /^[\p{L}_][\p{L}\p{N}_.?]*/u;
 const r1c1Offset = String.raw`(?:[0-9]+|\[[+-]?[0-9]+\])?`;
 const r1c1Row = "R" + r1c1Offset,
@@ -559,7 +563,9 @@ export class ScCompiler extends FormulaCompiler {
     absolute = false,
     deletedTab = false,
   ): boolean {
-    const range = new ScRange(this.aPos, this.aPos),
+    const origin = new ScAddress(this.aPos);
+    origin.SetTab(tab);
+    const range = new ScRange(origin, origin),
       input = unicode(name);
     let flags: ScRefFlags;
     try {
@@ -569,7 +575,8 @@ export class ScCompiler extends FormulaCompiler {
     }
     if (!(flags & ScRefFlags.VALID)) throw new Error("Range/name fallback is not implemented");
     range.aStart.SetTab(tab);
-    range.aEnd.SetTab(tab);
+    const qualifiedEnd = Boolean(flags & ScRefFlags.TAB2_3D);
+    if (!qualifiedEnd) range.aEnd.SetTab(tab);
     const reference = new ScComplexRefData();
     reference.InitRange(range);
     reference.Ref1.SetColRel(!(flags & ScRefFlags.COL_ABS));
@@ -578,7 +585,8 @@ export class ScCompiler extends FormulaCompiler {
     reference.Ref1.SetFlag3D(qualified);
     reference.Ref2.SetColRel(!(flags & ScRefFlags.COL2_ABS));
     reference.Ref2.SetRowRel(!(flags & ScRefFlags.ROW2_ABS));
-    reference.Ref2.SetTabRel(!absolute);
+    reference.Ref2.SetTabRel(qualifiedEnd ? !(flags & ScRefFlags.TAB2_ABS) : !absolute);
+    reference.Ref2.SetFlag3D(qualifiedEnd);
     reference.SetRange(this.rDoc.GetSheetLimits(), range, this.aPos);
     if (deletedTab) {
       reference.Ref1.SetTabDeleted(true);
@@ -664,6 +672,7 @@ export class ScCompiler extends FormulaCompiler {
     const excel = this.IsExcelReference();
     const cellPattern = this.IsR1C1() ? r1c1Reference : a1Reference;
     const rangePattern = this.IsR1C1() ? r1c1Range : a1Range;
+    const oooRange = excel ? undefined : a1RangeWithEndSheet;
     const original = text(formula);
     let first = 0,
       end = original.length;
@@ -806,7 +815,7 @@ export class ScCompiler extends FormulaCompiler {
           const qualifiedName = nameIdentifier.exec(address)?.[0];
           const defined =
             qualifiedName && this.GetRangeNames(tab)?.findByUpperName(qualifiedName.toUpperCase());
-          const range = odf ? null : rangePattern.exec(address);
+          const range = odf ? null : (oooRange?.exec(address) ?? rangePattern.exec(address));
           const cell = range ?? (odf ? null : cellPattern.exec(address));
           if (defined) {
             if (!array.AddToken(new FormulaIndexToken(OpCode.ocName, defined.GetIndex(), tab))) {
@@ -847,7 +856,7 @@ export class ScCompiler extends FormulaCompiler {
         }
       }
       if (!odf) {
-        const range = rangePattern.exec(remaining);
+        const range = oooRange?.exec(remaining) ?? rangePattern.exec(remaining);
         if (range) {
           this.ParseDoubleReference(range[0]);
           last = OpCode.ocPush;
