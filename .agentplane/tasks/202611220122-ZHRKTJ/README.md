@@ -4,7 +4,7 @@ title: "Connect Writer named list-style editing"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 9
+revision: 11
 origin:
   system: "manual"
 depends_on: []
@@ -21,11 +21,28 @@ plan_approval:
   updated_by: "ORCHESTRATOR"
   note: null
 verification:
-  state: "pending"
-  updated_at: null
-  updated_by: null
-  note: null
+  state: "ok"
+  updated_at: "2026-11-22T02:24:22.843Z"
+  updated_by: "CODER"
+  note: "Verified named list-style editing and embedded graphic markers. 215 focused Writer and 12 shared checks passed; production Chrome passed both cases. The task findings record existing repository-wide JSDoc and size failures outside the changed source."
   attempts: 0
+quality_review:
+  state: "pass"
+  updated_at: "2026-11-22T02:24:37.415Z"
+  updated_by: "EVALUATOR"
+  note: "The ordinary Writer Paragraph command reaches the named list-style template, whose edits preserve document ownership and undo. The graphic gallery and Customize exchange the native per-level bitmap values through rendering and ODT."
+  evaluated_sha: "3ae88311e04a040df109e171e7d7cccb5f86a947"
+  blueprint_digest: "f8605842b45943983c5279d02f65aabb3141fb139ea6ee53369ec7a5fb96d403"
+  evidence_refs:
+    - ".agentplane/tasks/202611220122-ZHRKTJ/README.md"
+    - ".agentplane/tasks/202611220122-ZHRKTJ/quality/20261122-022437415-recovery-context/quality-report.json"
+    - ".agentplane/tasks/202611220122-ZHRKTJ/quality/20261122-022437415-recovery-context/evaluator-prompt.md"
+    - ".agentplane/tasks/202611220122-ZHRKTJ/quality/20261122-022437415-recovery-context/evaluator-opinion.md"
+    - ".agentplane/tasks/202611220122-ZHRKTJ/blueprint/resolved-snapshot.json"
+    - "215 focused Writer checks, 12 shared checks, two production Chrome tests and a production build"
+    - "Targeted named and automatic ODT image-marker round trips, Worker graph round trip, and typed UNO property sequence"
+  findings:
+    - "All scope-specific checks passed. Repository-wide JSDoc and size checks still report pre-existing findings outside the changed files."
 commit: null
 comments:
   -
@@ -109,8 +126,14 @@ events:
       - Position and Customize display mixed values for the selected levels and do not overwrite untouched properties. Legal numbering reflects mixed selections. WRITER-741 records the source's first-to-last equality for start, prefix and suffix.
       - Final Writer tests: 229 passed across 13 suites. Production build and both Chrome nested-dialog tests passed. Scoped lint and formatting, Writer resources, source tree, boundaries, provenance, Writer parity inventory, doctor, routing, and diff checks passed. Global JSDoc and file-size still report existing unrelated findings.
       - Native Image list styles and remaining template control parity are pending, including legacy Relative positioning and additional graphic and numbering options. This is a checkpoint without a task closure or cadence increment.
+  -
+    type: "verify"
+    at: "2026-11-22T02:24:22.843Z"
+    author: "CODER"
+    state: "ok"
+    note: "Verified named list-style editing and embedded graphic markers. 215 focused Writer and 12 shared checks passed; production Chrome passed both cases. The task findings record existing repository-wide JSDoc and size failures outside the changed source."
 doc_version: 3
-doc_updated_at: "2026-11-22T02:23:12.027Z"
+doc_updated_at: "2026-11-22T02:24:23.166Z"
 doc_updated_by: "CODER"
 description: "Wire the Outline and List Edit Style button to the upstream numbering-style template dialog. Implement the document-owned rule format update and undo contract, connect the template pages to existing numbering mechanisms, and verify shared style changes, cancel, undo and ODT round trip in Writer."
 sections:
@@ -129,6 +152,36 @@ sections:
     - Run `npm run check:docs`, `npm run check:file-size`, `ap doctor`, `node .agentplane/policy/check-routing.mjs`, `git diff --check`, and `git status --short --untracked-files=all`. The complete test suite follows the ten-closed-task cadence.
   Verification: |-
     <!-- BEGIN VERIFICATION RESULTS -->
+    ### 2026-11-22T02:24:22.843Z — VERIFY — ok
+
+    By: CODER
+
+    Note: Verified named list-style editing and embedded graphic markers. 215 focused Writer and 12 shared checks passed; production Chrome passed both cases. The task findings record existing repository-wide JSDoc and size failures outside the changed source.
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-22T02:23:12.027Z, excerpt_hash=sha256:457b6bd39529f2a836d3fb884eeeebe540da4f8ebafb0437567565f24de7b586
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office-writer/.agentplane/tasks/202611220122-ZHRKTJ/blueprint/resolved-snapshot.json
+    - old_digest: f8605842b45943983c5279d02f65aabb3141fb139ea6ee53369ec7a5fb96d403
+    - current_digest: f8605842b45943983c5279d02f65aabb3141fb139ea6ee53369ec7a5fb96d403
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202611220122-ZHRKTJ
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task verify-show 202611220122-ZHRKTJ
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: false
+    - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+    - risks: none
+
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: |-
     - Revert task-related commit(s).
@@ -169,6 +222,36 @@ Implement the named numbering style path from SwParagraphNumTabPage and SwTempla
 ## Verification
 
 <!-- BEGIN VERIFICATION RESULTS -->
+### 2026-11-22T02:24:22.843Z — VERIFY — ok
+
+By: CODER
+
+Note: Verified named list-style editing and embedded graphic markers. 215 focused Writer and 12 shared checks passed; production Chrome passed both cases. The task findings record existing repository-wide JSDoc and size failures outside the changed source.
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-22T02:23:12.027Z, excerpt_hash=sha256:457b6bd39529f2a836d3fb884eeeebe540da4f8ebafb0437567565f24de7b586
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office-writer/.agentplane/tasks/202611220122-ZHRKTJ/blueprint/resolved-snapshot.json
+- old_digest: f8605842b45943983c5279d02f65aabb3141fb139ea6ee53369ec7a5fb96d403
+- current_digest: f8605842b45943983c5279d02f65aabb3141fb139ea6ee53369ec7a5fb96d403
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202611220122-ZHRKTJ
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task verify-show 202611220122-ZHRKTJ
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: false
+- repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- risks: none
+
 <!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
