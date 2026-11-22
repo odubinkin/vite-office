@@ -34,6 +34,7 @@ export interface WriterParagraphComputedStyle {
   readonly tabStopsPt?: readonly number[] | undefined;
   readonly keepWithNext?: boolean;
   readonly countLineNumbers?: boolean;
+  readonly lineNumberStartValue?: number;
   readonly lowerSpacingPt: number;
   readonly rightMarginPt: number;
   readonly upperSpacingPt: number;

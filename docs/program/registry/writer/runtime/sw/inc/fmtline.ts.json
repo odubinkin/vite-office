@@ -1,0 +1,35 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sw/inc/fmtline.ts",
+    "classification": "upstream-mechanism",
+    "state": "active",
+    "suite": "writer",
+    "subsystem": "document-model",
+    "capabilityIds": [
+      "CAP-0111"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "none",
+      "evidence": [
+        "apps/office/src/sw/inc/fmtline.ts#SwFormatLineNumber",
+        "vendor/libreoffice-reference/sw/inc/fmtline.hxx#SwFormatLineNumber",
+        "vendor/libreoffice-reference/sw/source/core/layout/atrfrm.cxx#SwFormatLineNumber::PutValue"
+      ],
+      "justification": "Stores paragraph line-number participation and the 24-bit restart value, with native defaults, copy equality, and typed UNO members.",
+      "knownViolations": [],
+      "localSymbols": [
+        "SwFormatLineNumber"
+      ],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": "sw/inc/fmtline.hxx",
+      "upstreamSymbols": [
+        "SwFormatLineNumber"
+      ]
+    }
+  }
+}

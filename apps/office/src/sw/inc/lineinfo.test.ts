@@ -1,5 +1,6 @@
 /** @fileoverview Tests pinned SwLineNumberInfo defaults and document ownership. */
 
+import { SwFormatLineNumber } from "./fmtline";
 import { describe, expect, it } from "vitest";
 
 import { createWriterDocument } from "../source/core/doc/doc";
@@ -8,7 +9,6 @@ import {
   encodeWriterDocument,
 } from "../browser/filter/xml/writer-document-codec";
 import { createWriterDocumentSession } from "../browser/composition/writer-module";
-import { SfxBoolItem } from "../../svl/source/items/cenumitm";
 import { RES_LINENUMBER } from "./hintids";
 import { LineNumberPosition, SwLineNumberInfo } from "./lineinfo";
 
@@ -92,19 +92,19 @@ describe("SwLineNumberInfo", /** Groups pinned line-number contract checks. @ret
     expect(session.docShell.IsModified()).toBe(true);
     expect(shell.SetPaintLineNumbers(true)).toBe(false);
     expect(shell.GetLineNumberInfo().IsPaintLineNumbers()).toBe(true);
-    const noCount = new SfxBoolItem(RES_LINENUMBER, false);
+    const noCount = new SwFormatLineNumber(false);
     expect(shell.SetParagraphItem(noCount)).toBe(true);
-    expect((shell.GetActiveParagraph().GetAttr(RES_LINENUMBER) as SfxBoolItem).GetValue()).toBe(
-      false,
-    );
+    expect(
+      (shell.GetActiveParagraph().GetAttr(RES_LINENUMBER) as SwFormatLineNumber).IsCount(),
+    ).toBe(false);
     expect(shell.Undo()).toBe(true);
-    expect((shell.GetActiveParagraph().GetAttr(RES_LINENUMBER) as SfxBoolItem).GetValue()).toBe(
-      true,
-    );
+    expect(
+      (shell.GetActiveParagraph().GetAttr(RES_LINENUMBER) as SwFormatLineNumber).IsCount(),
+    ).toBe(true);
     expect(shell.Redo()).toBe(true);
-    expect((shell.GetActiveParagraph().GetAttr(RES_LINENUMBER) as SfxBoolItem).GetValue()).toBe(
-      false,
-    );
+    expect(
+      (shell.GetActiveParagraph().GetAttr(RES_LINENUMBER) as SwFormatLineNumber).IsCount(),
+    ).toBe(false);
     session.Close();
   });
 

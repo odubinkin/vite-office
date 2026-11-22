@@ -1,4 +1,5 @@
 /** @fileoverview Original page header/footer item and frame-section lifecycle. */
+import { SwFormatLineNumber } from "./fmtline";
 import { assert, expect, it } from "vitest";
 import { SwDoc } from "../source/core/doc/doc";
 import { SwPageDesc, UseOnPage } from "../source/core/layout/pagedesc";
@@ -116,7 +117,9 @@ it("uses real pool style ancestry, tabs and line numbering for page format varia
             ? SvxAdjust.Right
             : doc.GetDfltTextFormatColl().GetAttrSet().GetAdjust().GetAdjust(),
         );
-        expect((style.GetAttrSet().Get(RES_LINENUMBER) as SfxBoolItem).GetValue()).toBe(false);
+        expect((style.GetAttrSet().Get(RES_LINENUMBER) as SwFormatLineNumber).IsCount()).toBe(
+          false,
+        );
         const tabs = style.GetAttrSet().Get(RES_PARATR_TABSTOP);
         assert(tabs instanceof SvxTabStopItem);
         expect(tabs.Count()).toBe(2);

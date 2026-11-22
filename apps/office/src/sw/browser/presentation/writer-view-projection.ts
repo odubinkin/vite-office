@@ -59,7 +59,6 @@ import {
   RES_PARATR_LINESPACING,
   RES_PARATR_TABSTOP,
   RES_KEEP,
-  RES_LINENUMBER,
   RES_UL_SPACE,
 } from "../../inc/hintids";
 import type { RulerUnitData } from "../../../svtools/source/control/ruler";
@@ -464,7 +463,6 @@ export class WriterViewProjection {
             tabStopPositionPt: tabStopsPt[0],
             tabStopsPt,
             keepWithNext: (node.GetAttr(RES_KEEP) as SfxBoolItem).GetValue(),
-            countLineNumbers: (node.GetAttr(RES_LINENUMBER) as SfxBoolItem).GetValue(),
             lowerSpacingPt: spacing.GetLower() / 20,
             rightMarginPt:
               (node.GetAttr(RES_MARGIN_RIGHT) as SvxRightMarginItem).ResolveRight() / 20,

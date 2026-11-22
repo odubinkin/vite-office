@@ -26,6 +26,7 @@ import { GetParagraphFrameDirection } from "./doclay";
 export function isParagraphEditItem(which: number): boolean {
   return (
     which === H.RES_PARATR_ADJUST ||
+    which === H.RES_LINENUMBER ||
     which === H.RES_PARATR_VERTALIGN ||
     which === H.RES_PARATR_SNAPTOGRID ||
     which === H.RES_PARATR_AUTOFRAMEDIR ||

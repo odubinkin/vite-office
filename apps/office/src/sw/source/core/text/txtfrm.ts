@@ -2,6 +2,7 @@
 
 import type { SwModify } from "../../../inc/calbck";
 import type { SwModelHint } from "../../../inc/hints";
+import { SwFormatLineNumber } from "../../../inc/fmtline";
 import { RES_FRAMEDIR } from "../../../inc/hintids";
 import type { SwLineNumberInfoValue } from "../../../inc/lineinfo";
 import type { SwPageFrame } from "../layout/newfrm";
@@ -58,6 +59,8 @@ export function projectSwLineNumbers(
         (frame) => {
           const input = byId.get(frame.nodeId);
           if (input === undefined) throw new Error("Line-number frame has no measured text node.");
+          if (frame.start === 0 && input.countLineNumbers !== false && input.lineNumberStartValue)
+            count = input.lineNumberStartValue - 1;
           const marks: SwLineNumberMark[] = [];
           let topTwips = 0;
           for (const line of input.lines) {
@@ -110,6 +113,7 @@ export interface SwTextFrameInput {
   readonly pageStyleName?: string;
   readonly pageNumber?: number;
   readonly countLineNumbers?: boolean;
+  readonly lineNumberStartValue?: number;
 }
 
 /** Reads layout-owned values from canonical Writer nodes, pairing them only with measured lines. @param document - Active Writer document. @param measurements - Browser device line geometry in document order. @returns Core frame inputs. */
@@ -131,6 +135,7 @@ export function createSwTextFrameInputs(
       const paragraphBreak = (node.GetAttr(RES_BREAK) as SfxInt16Item).GetValue();
       const pageDesc = node.GetAttr(RES_PAGEDESC) as SwFormatPageDesc;
       const pageNumber = pageDesc.GetNumOffset();
+      const lineNumber = node.GetAttr(RES_LINENUMBER) as SwFormatLineNumber;
       return {
         node,
         id: measurement.id,
@@ -147,7 +152,8 @@ export function createSwTextFrameInputs(
         breakAfter: paragraphBreak === 5 || paragraphBreak === 6,
         pageStyleName: pageDesc.GetPageDescName(),
         ...(pageNumber === undefined ? {} : { pageNumber }),
-        countLineNumbers: (node.GetAttr(RES_LINENUMBER) as SfxBoolItem).GetValue(),
+        countLineNumbers: lineNumber.IsCount(),
+        lineNumberStartValue: lineNumber.GetStartValue(),
       };
     },
   );

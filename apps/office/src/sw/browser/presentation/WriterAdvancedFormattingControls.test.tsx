@@ -337,7 +337,7 @@ describe("Writer advanced formatting controls", /** Handles Writer formatting st
     fireEvent.change(screen.getByLabelText("Line spacing"), { target: { value: "minimum" } });
     fireEvent.change(screen.getByLabelText("Value (pt)"), { target: { value: "16" } });
     expect(screen.queryByLabelText("Font-independent line spacing")).toBeNull();
-    fireEvent.click(screen.getByRole("tab", { name: "Text Flow" }));
+    fireEvent.click(screen.getByRole("tab", { name: "Outline & List" }));
     fireEvent.click(screen.getByLabelText("Include this paragraph in line numbering"));
     fireEvent.click(screen.getByText("Cancel"));
     expect(onParagraphFormat).not.toHaveBeenCalled();

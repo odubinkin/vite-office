@@ -49,6 +49,7 @@ export function paragraphPropertiesKey(properties?: OdfParagraphProperties): str
     properties?.asianTypography === undefined
       ? ""
       : encodeURIComponent(JSON.stringify(properties.asianTypography)),
+    properties?.lineNumberStartValue,
   ]
     .map(
       /** Encodes one optional paragraph metric. @param value - Metric. @returns Stable field. */ (
@@ -115,6 +116,7 @@ export function parseParagraphPropertiesKey(key: string): OdfParagraphProperties
       : { tabStopDetails: JSON.parse(decodeURIComponent(tabStopsKey)) as OdfTabStop[] }),
     ...(keepWithNext === undefined ? {} : { keepWithNext: keepWithNext === 1 }),
     ...(countLineNumbers === undefined ? {} : { countLineNumbers: countLineNumbers === 1 }),
+    ...(fields[32] ? { lineNumberStartValue: Number(fields[32]) } : {}),
     ...(keepTogether === undefined ? {} : { keepTogether: keepTogether === 1 }),
     ...(widows === undefined ? {} : { widows }),
     ...(orphans === undefined ? {} : { orphans }),

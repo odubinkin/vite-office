@@ -8,6 +8,7 @@ import { WRITER_COMMAND_IDS } from "../../uiconfig/swriter/menubar/menubar-comma
 import type { SwWrtShell } from "../../source/uibase/wrtsh/wrtsh1";
 import { SwPosition } from "../../source/core/crsr/pam";
 import { SvxFrameDirection } from "../../../editeng/inc/frmdir";
+import { SwFormatLineNumber } from "../../inc/fmtline";
 import { SwTextGrid, SwTextGridItem } from "../../inc/tgrditem";
 import { SvxAdjust, SvxAdjustItem } from "../../../editeng/inc/adjustitem";
 import {
@@ -22,6 +23,7 @@ import {
 } from "../../../editeng/source/items/paraitem";
 import {
   RES_FRAMEDIR,
+  RES_LINENUMBER,
   RES_PARATR_ADJUST,
   RES_PARATR_AUTOFRAMEDIR,
   RES_PARATR_SNAPTOGRID,
@@ -583,6 +585,10 @@ it("applies a pool list style and authored outline level through the regular Par
     fireEvent.change(screen.getByRole("combobox", { name: "List style" }), {
       target: { value: "Bullet •" },
     });
+    fireEvent.click(screen.getByRole("checkbox", { name: "Restart at this paragraph" }));
+    fireEvent.change(screen.getByRole("spinbutton", { name: /^Start with$/u }), {
+      target: { value: "2" },
+    });
     fireEvent.click(screen.getByRole("tab", { name: "Tabs" }));
     fireEvent.click(screen.getByRole("tab", { name: "Outline & List" }));
     expect(screen.getByRole("combobox", { name: "Outline level" })).toHaveValue("1");
@@ -591,11 +597,13 @@ it("applies a pool list style and authored outline level through the regular Par
     expect(await owner.result.value).toBe(true);
     expect(node.GetAttrOutlineLevel()).toBe(1);
     expect(node.GetListLabel()).toBe("•");
+    expect((node.GetAttr(RES_LINENUMBER) as SwFormatLineNumber).GetStartValue()).toBe(2);
     expect(node.GetNumRule()?.Get(0).GetIndentAt()).toBe(227);
     expect(document.GetUndoManager().GetUndoActionCount()).toBe(before + 1);
     expect(owner.shell.Undo()).toBe(true);
     expect(node.GetAttrOutlineLevel()).toBe(0);
     expect(node.GetListLabel()).toBeUndefined();
+    expect((node.GetAttr(RES_LINENUMBER) as SwFormatLineNumber).GetStartValue()).toBe(0);
     expect(owner.shell.Redo()).toBe(true);
     const reopened = await readOdtDocument(await writeOdtDocument(document, { title: "Outline" }), {
       title: "Outline",
@@ -603,6 +611,10 @@ it("applies a pool list style and authored outline level through the regular Par
     try {
       expect(reopened.document.paragraphs[0]?.GetAttrOutlineLevel()).toBe(1);
       expect(reopened.document.paragraphs[0]?.GetListLabel()).toBe("•");
+      expect(reopened.document.paragraphs[0]?.GetAttr(RES_LINENUMBER).QueryValue()).toEqual({
+        count: true,
+        startValue: 2,
+      });
     } finally {
       reopened.document.Dispose();
     }

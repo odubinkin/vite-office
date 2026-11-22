@@ -13,6 +13,7 @@ import {
 import {
   RES_PARATR_TABSTOP as T,
   RES_FRAMEDIR,
+  RES_LINENUMBER,
   RES_PARATR_ADJUST,
   RES_PARATR_OUTLINELEVEL,
   RES_PARATR_NUMRULE,
@@ -42,6 +43,7 @@ export function createWriterParagraphDialogInput(shell: SwTextShell): SfxItemSet
     [RES_PARATR_AUTOFRAMEDIR, RES_PARATR_AUTOFRAMEDIR],
     [RES_PARATR_LIST_LEVEL, RES_PARATR_LIST_LEVEL],
     [L, L],
+    [RES_LINENUMBER, RES_LINENUMBER],
     [RES_FRAMEDIR, RES_FRAMEDIR],
     [D, O],
     [FN_NUMBER_NEWSTART, FN_NUMBER_NEWSTART_AT],
@@ -64,6 +66,7 @@ export function createWriterParagraphDialogInput(shell: SwTextShell): SfxItemSet
     RES_PARATR_VERTALIGN,
     RES_PARATR_SNAPTOGRID,
     RES_PARATR_AUTOFRAMEDIR,
+    RES_LINENUMBER,
     RES_FRAMEDIR,
   ]) {
     const item = shell.GetUniformParagraphItem(

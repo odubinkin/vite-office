@@ -15,6 +15,7 @@ import {
   type HyphenZoneSettings,
   SvxScriptSpaceItem,
 } from "../../../../editeng/source/items/paraitem";
+import { SwFormatLineNumber } from "../../../inc/fmtline";
 import { SwRegisterItem } from "../para/paratr";
 import { SfxBoolItem } from "../../../../svl/inc/eitem";
 import type { SfxPoolItem } from "../../../../svl/inc/poolitem";
@@ -85,6 +86,22 @@ export function restoreParagraphControlItem(which: number, value: unknown): SfxP
     return which === RES_PARATR_SNAPTOGRID
       ? new SvxParaGridItem(value, which)
       : new SvxAutoFrameDirectionItem(value, which);
+  }
+  if (which === RES_LINENUMBER) {
+    if (typeof value === "boolean") return new SwFormatLineNumber(value);
+    if (
+      value === null ||
+      typeof value !== "object" ||
+      !("count" in value) ||
+      typeof value.count !== "boolean" ||
+      !("startValue" in value) ||
+      typeof value.startValue !== "number" ||
+      !Number.isInteger(value.startValue) ||
+      value.startValue < 0 ||
+      value.startValue > 0xffffff
+    )
+      throw new Error("Invalid Writer paragraph line numbering.");
+    return new SwFormatLineNumber(value.count, value.startValue);
   }
   if (which === RES_PARATR_REGISTER) return new SwRegisterItem(Boolean(value));
   if (which === RES_PARATR_SPLIT) return new SvxFormatSplitItem(Boolean(value), which);

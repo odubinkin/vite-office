@@ -3,8 +3,10 @@ import { useState } from "react";
 import { SfxBoolItem } from "../../../svl/inc/eitem";
 import { SfxInt16Item, SfxUInt16Item } from "../../../svl/inc/intitem";
 import type { SfxItemSet } from "../../../svl/inc/itemset";
+import { SwFormatLineNumber } from "../../inc/fmtline";
 import { FN_NUMBER_NEWSTART, FN_NUMBER_NEWSTART_AT } from "../../inc/cmdid";
 import {
+  RES_LINENUMBER,
   RES_PARATR_LIST_LEVEL,
   RES_PARATR_NUMRULE,
   RES_PARATR_OUTLINELEVEL,
@@ -14,6 +16,7 @@ import { SwNumRuleItem } from "../../source/core/para/paratr";
 
 const styleDefaultStart = 0xffff;
 const maximumStart = 9999;
+const maximumLineStart = 65000;
 const levels = Array.from(
   { length: WRITER_MAX_LIST_LEVEL + 1 },
   /** Maps the one-based level. @param unused - Empty entry. @param index - Zero-based level. @returns Displayed level. */ (
@@ -67,6 +70,16 @@ export function WriterParagraphOutlinePage({
   const [start, setStart] = useState(
     initialStart === styleDefaultStart ? 1 : Math.min(initialStart, maximumStart),
   );
+  const originalLineNumber = input.GetItem(RES_LINENUMBER);
+  const originalLines =
+    originalLineNumber instanceof SwFormatLineNumber ? originalLineNumber : undefined;
+  const [countLines, setCountLines] = useState(originalLines?.IsCount());
+  const [restartLines, setRestartLines] = useState(
+    originalLines === undefined ? undefined : originalLines.GetStartValue() !== 0,
+  );
+  const [lineStart, setLineStart] = useState(
+    Math.min(maximumLineStart, originalLines?.GetStartValue() || 1),
+  );
   const hasStyle = style !== undefined && style !== "";
   const isKnownStyle =
     style === "" || style === "Outline" || (style !== undefined && listStyleNames.includes(style));
@@ -96,6 +109,13 @@ export function WriterParagraphOutlinePage({
     }
     output.Put(new SfxBoolItem(FN_NUMBER_NEWSTART, enabled));
     output.Put(new SfxUInt16Item(FN_NUMBER_NEWSTART_AT, startAt));
+  }
+
+  /** Exchanges both independent native line-number fields. @param count - Count flag. @param startAt - Explicit restart, or zero for continuation. @returns Nothing. */
+  function writeLineNumber(count: boolean, startAt: number): void {
+    if (originalLines?.IsCount() === count && originalLines.GetStartValue() === startAt)
+      output.ClearItem(RES_LINENUMBER);
+    else output.Put(new SwFormatLineNumber(count, startAt));
   }
 
   return (
@@ -243,6 +263,72 @@ export function WriterParagraphOutlinePage({
             }
           />
         </div>
+      </fieldset>
+      <fieldset className="grid gap-2 rounded border border-slate-200 p-2">
+        <legend>{label("line-numbering", "Line Numbering")}</legend>
+        <label className="flex items-center gap-2 text-sm">
+          <input
+            type="checkbox"
+            checked={countLines ?? false}
+            ref={
+              /** Reflects the native mixed selection. @param checkbox - Mounted control. @returns Nothing. */
+              (checkbox) => {
+                if (checkbox) checkbox.indeterminate = countLines === undefined;
+              }
+            }
+            onChange={
+              /** Edits participation without discarding an existing start. @param event - Checkbox input. @returns Nothing. */
+              (event) => {
+                const count = event.currentTarget.checked;
+                setCountLines(count);
+                writeLineNumber(count, restartLines ? lineStart : 0);
+              }
+            }
+          />
+          {label("count-lines", "Include this paragraph in line numbering")}
+        </label>
+        <label className="flex items-center gap-2 text-sm">
+          <input
+            type="checkbox"
+            checked={restartLines ?? false}
+            disabled={countLines !== true}
+            ref={
+              /** Retains the mixed restart state independently of participation. @param checkbox - Mounted control. @returns Nothing. */
+              (checkbox) => {
+                if (checkbox) checkbox.indeterminate = restartLines === undefined;
+              }
+            }
+            onChange={
+              /** Switches between an explicit line start and continuation. @param event - Checkbox input. @returns Nothing. */
+              (event) => {
+                const restart = event.currentTarget.checked;
+                setRestartLines(restart);
+                writeLineNumber(countLines === true, restart ? lineStart : 0);
+              }
+            }
+          />
+          {label("restart-line-count", "Restart at this paragraph")}
+        </label>
+        <label className="flex items-center gap-2 text-sm">
+          {label("line-start-with", "Start with")}
+          <input
+            type="number"
+            min={1}
+            max={maximumLineStart}
+            className="w-24 rounded border border-slate-400 p-1"
+            disabled={countLines !== true || restartLines !== true}
+            value={lineStart}
+            onChange={
+              /** Exchanges the native line-number start. @param event - Numeric input. @returns Nothing. */
+              (event) => {
+                const value = event.currentTarget.valueAsNumber;
+                if (!Number.isInteger(value) || value < 1 || value > maximumLineStart) return;
+                setLineStart(value);
+                writeLineNumber(countLines === true, value);
+              }
+            }
+          />
+        </label>
       </fieldset>
     </div>
   );

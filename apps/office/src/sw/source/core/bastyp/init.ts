@@ -138,7 +138,6 @@ import {
   RES_CHRATR_WORDLINEMODE,
   RES_COLLAPSING_BORDERS,
   RES_KEEP,
-  RES_LINENUMBER,
   RES_LR_SPACE,
   RES_MARGIN_FIRSTLINE,
   RES_MARGIN_RIGHT,
@@ -160,6 +159,7 @@ import {
   RES_PARATR_WIDOWS,
   RES_UL_SPACE,
 } from "../../../inc/hintids";
+import { SwFormatLineNumber } from "../../../inc/fmtline";
 import { SwTextGridItem } from "../../../inc/tgrditem";
 import { SwNumRuleItem, SwParaConnectBorderItem, SwRegisterItem } from "../para/paratr";
 import { SwFormatCharFormat, SwFormatINetFormat } from "../txtnode/fmtatr2";
@@ -294,8 +294,8 @@ class ItemInfoPackageSwAttributes extends ItemInfoPackage {
     add(new SvxULSpaceItem(RES_UL_SPACE));
     add(new SvxLineSpacingItem(200, RES_PARATR_LINESPACING));
     add(new ParaItems.SvxFormatSplitItem(true, RES_PARATR_SPLIT));
-    for (const which of [RES_KEEP, RES_LINENUMBER])
-      add(new SfxBoolItem(which, which === RES_LINENUMBER));
+    add(new SfxBoolItem(RES_KEEP, false));
+    add(new SwFormatLineNumber());
     add(new ParaItems.SvxOrphansItem(0, RES_PARATR_ORPHANS));
     add(new ParaItems.SvxWidowsItem(0, RES_PARATR_WIDOWS));
     add(

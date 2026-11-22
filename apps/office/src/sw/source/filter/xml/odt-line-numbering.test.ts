@@ -1,10 +1,12 @@
-/** @fileoverview Verifies document-owned Writer line numbering across ODF styles. */
+/** @fileoverview Verifies document and paragraph line numbering across ODF styles. */
 
 import { describe, expect, it } from "vitest";
 
 import { DocumentArchive } from "../../../../package/source/zippackage/document-archive";
 import { DocumentArchiveWriter } from "../../../../package/source/zippackage/document-archive";
 import { createDocument } from "../../../../sfx2/source/doc/objsh";
+import { SwFormatLineNumber } from "../../../inc/fmtline";
+import { RES_LINENUMBER } from "../../../inc/hintids";
 import { LineNumberPosition } from "../../../inc/lineinfo";
 import { FastAttributeList } from "../../../../xmloff/source/core/xmlimp";
 import { XMLToken } from "../../../../xmloff/source/core/xmltoken";
@@ -74,6 +76,28 @@ describe("Writer ODF line numbering", /** Groups global configuration cases. @re
     expect(
       (await readOdtDocument(explicitBytes, metadata)).document.GetLineNumberInfo().QueryValue(),
     ).toEqual(info.QueryValue());
+  });
+
+  it("retains a direct continuation that overrides an inherited paragraph restart", /** Checks explicit zero through ODF paragraph styles. @returns Completion after import. */ async () => {
+    const writer = createWriterDocument();
+    const paragraph = writer.paragraphs[0];
+    if (!paragraph) throw new Error("Writer paragraph is missing.");
+    writer.GetDfltTextFormatColl().SetFormatAttr(new SwFormatLineNumber(false, 23));
+    paragraph.SetAttr(new SwFormatLineNumber(true, 0));
+    const bytes = await writeOdtDocument(writer, metadata);
+    const archive = await DocumentArchive.open(bytes);
+    expect(await archive.readTextEntry("styles.xml")).toContain('text:line-number="23"');
+    expect(await archive.readTextEntry("content.xml")).toContain('text:line-number="0"');
+
+    const { document } = await readOdtDocument(bytes, metadata);
+    expect(document.GetDfltTextFormatColl().GetAttrSet().Get(RES_LINENUMBER).QueryValue()).toEqual({
+      count: false,
+      startValue: 23,
+    });
+    expect(document.paragraphs[0]?.GetAttr(RES_LINENUMBER)?.QueryValue()).toEqual({
+      count: true,
+      startValue: 0,
+    });
   });
 
   it("reads omission defaults and rejects malformed or duplicate settings", /** Checks defaults and malformed input. @returns Completion after import. */ async () => {

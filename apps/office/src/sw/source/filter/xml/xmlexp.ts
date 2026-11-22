@@ -57,6 +57,7 @@ import {
   exportPageLayoutBox,
   exportPageWritingAndGrid,
   exportParagraphLineSpacing,
+  exportParagraphLineNumbering,
   exportParagraphTabStops,
   exportParagraphVerticalMargins,
   XMLPageBackgroundExport,
@@ -898,7 +899,6 @@ function getParagraphProperties(set: SfxItemSet | undefined): OdfParagraphProper
   const verticalAlign = set.GetItemIfSet(RES_PARATR_VERTALIGN, false);
   const paragraphBreak = set.GetItemIfSet(RES_BREAK, false);
   const pageDesc = set.GetItemIfSet(RES_PAGEDESC, false);
-  const lineNumber = set.GetItemIfSet(RES_LINENUMBER, false);
   const joinBorder = set.GetItemIfSet(RES_PARATR_CONNECT_BORDER, false);
   const box = set.GetItemIfSet(RES_BOX, false);
   if (
@@ -914,7 +914,6 @@ function getParagraphProperties(set: SfxItemSet | undefined): OdfParagraphProper
     (verticalAlign !== undefined && !(verticalAlign instanceof ParaItems.SvxParaVertAlignItem)) ||
     (paragraphBreak !== undefined && !(paragraphBreak instanceof SfxInt16Item)) ||
     (pageDesc !== undefined && !(pageDesc instanceof SwFormatPageDesc)) ||
-    (lineNumber !== undefined && !(lineNumber instanceof SfxBoolItem)) ||
     (joinBorder !== undefined && !(joinBorder instanceof SfxBoolItem)) ||
     (box !== undefined && !(box instanceof SvxBoxItem))
   )
@@ -967,7 +966,7 @@ function getParagraphProperties(set: SfxItemSet | undefined): OdfParagraphProper
           pageNumber: pageDesc.GetNumOffset() ?? ("auto" as const),
         }
       : {}),
-    ...(lineNumber instanceof SfxBoolItem ? { countLineNumbers: lineNumber.GetValue() } : {}),
+    ...exportParagraphLineNumbering(set),
     ...(joinBorder instanceof SfxBoolItem ? { joinBorder: joinBorder.GetValue() } : {}),
     ...(box instanceof SvxBoxItem ? exportBoxProperties(box) : {}),
   };

@@ -1,4 +1,5 @@
 /** @fileoverview Verifies the pinned built-in Writer paragraph-style pool. */
+import { SwFormatLineNumber } from "./fmtline";
 import {
   writerTextColorValue,
   writerHighlightColorValue,
@@ -357,7 +358,7 @@ describe("Writer paragraph-style pool", /** Registers pool tests. @returns Nothi
     expect((hanging.Get(RES_PARATR_TABSTOP) as SvxTabStopItem).At(0).GetTabPos()).toBe(0);
     expect((hanging.Get(RES_PARATR_TABSTOP) as SvxTabStopItem).Count()).toBe(11);
     expect((heading.Get(RES_KEEP) as SfxBoolItem).GetValue()).toBe(true);
-    expect((caption.Get(RES_LINENUMBER) as SfxBoolItem).GetValue()).toBe(false);
+    expect((caption.Get(RES_LINENUMBER) as SwFormatLineNumber).IsCount()).toBe(false);
     expect(writerTextColorValue(comment.Get(RES_CHRATR_COLOR) as SvxColorItem)).toBe("auto");
     expect(writerHighlightColorValue(comment.Get(RES_CHRATR_HIGHLIGHT) as SvxBrushItem)).toBe(
       "transparent",
@@ -442,7 +443,7 @@ it("materializes original internal table-heading defaults and ancestry", /** Ori
       items = heading.GetAttrSet();
     expect(heading.DerivedFrom()).toBe(document.GetTextFormatColl("table-contents"));
     expect((items.Get(RES_PARATR_ADJUST) as SvxAdjustItem).GetAdjust()).toBe(SvxAdjust.Center);
-    expect((items.Get(RES_LINENUMBER) as SfxBoolItem).GetValue()).toBe(false);
+    expect((items.Get(RES_LINENUMBER) as SwFormatLineNumber).IsCount()).toBe(false);
     for (const which of [RES_CHRATR_WEIGHT, RES_CHRATR_CJK_WEIGHT, RES_CHRATR_CTL_WEIGHT])
       expect((items.Get(which) as SvxWeightItem).GetValue()).toBe(FontWeight.WEIGHT_BOLD);
   } finally {

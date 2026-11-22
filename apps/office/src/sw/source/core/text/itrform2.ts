@@ -1,9 +1,11 @@
 /** @fileoverview Resolves the supported Writer line-spacing rules from pinned itrform2.cxx. */
 
 import { SvxLineSpaceRule, SvxInterLineSpaceRule } from "../../../../editeng/inc/svxenum";
+import { SwFormatLineNumber } from "../../../inc/fmtline";
 import { SwTextGrid, type SwTextGridItem } from "../../../inc/tgrditem";
 import type { SfxBoolItem } from "../../../../svl/inc/eitem";
 import {
+  RES_LINENUMBER,
   RES_PARATR_FORBIDDEN_RULES,
   RES_PARATR_HANGINGPUNCTUATION,
   RES_PARATR_SCRIPTSPACE,
@@ -92,7 +94,10 @@ export function projectWriterParagraphLineLayout(
   function enabled(which: number): boolean {
     return (node.GetAttr(which) as SfxBoolItem).GetValue();
   }
+  const lines = node.GetAttr(RES_LINENUMBER) as SwFormatLineNumber;
   return {
+    countLineNumbers: lines.IsCount(),
+    lineNumberStartValue: lines.GetStartValue(),
     lineHeight: projectWriterGridLineHeight(
       spacing,
       fontSizePt,

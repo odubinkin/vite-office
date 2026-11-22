@@ -812,6 +812,8 @@ export function applyTextImportProperties(
       ["registerModeActive", "ParaRegisterModeActive"],
     ] as const)
       if (paragraph[key] !== undefined) add(name, paragraph[key], "bool");
+    if (paragraph.lineNumberStartValue !== undefined)
+      add("ParaLineNumberStartValue", paragraph.lineNumberStartValue, "sal_Int32");
     if (paragraph.hyphenation !== undefined) {
       for (const [key, , , name] of hyphenationProperties) {
         const value = paragraph.hyphenation[key];

@@ -767,6 +767,9 @@ export function exportParagraphAttributes(properties: OdfParagraphProperties): s
     ...(properties.countLineNumbers === undefined
       ? []
       : [`text:number-lines="${properties.countLineNumbers}"`]),
+    ...(properties.lineNumberStartValue === undefined
+      ? []
+      : [`text:line-number="${properties.lineNumberStartValue}"`]),
   ];
 }
 

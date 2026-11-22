@@ -1,0 +1,40 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "evidence": {
+      "local": [
+        {
+          "marker": "SwFormatLineNumber",
+          "path": "apps/office/src/sw/inc/fmtline.ts"
+        }
+      ],
+      "upstream": [
+        {
+          "marker": "SwFormatLineNumber",
+          "path": "vendor/libreoffice-reference/sw/inc/fmtline.hxx"
+        },
+        {
+          "marker": "SwFormatLineNumber::PutValue",
+          "path": "vendor/libreoffice-reference/sw/source/core/layout/atrfrm.cxx"
+        }
+      ]
+    },
+    "localPath": "apps/office/src/sw/inc/fmtline.ts",
+    "localSymbols": [
+      "SwFormatLineNumber"
+    ],
+    "omittedResponsibilities": [
+      "Native C++ allocation and stream diagnostics are outside the browser slice."
+    ],
+    "preservedResponsibilities": [
+      "Stores paragraph line-number participation and the 24-bit restart value, with native defaults, copy equality, and typed UNO members."
+    ],
+    "status": "mapped",
+    "upstreamPath": "sw/inc/fmtline.hxx",
+    "upstreamSymbols": [
+      "SwFormatLineNumber"
+    ]
+  }
+}

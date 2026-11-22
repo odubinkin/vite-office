@@ -4,7 +4,7 @@ title: "Implement Writer search and replace core and browser UI"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 130
+revision: 131
 origin:
   system: "manual"
 depends_on:
@@ -583,6 +583,16 @@ comments:
       - Targeted Writer runs passed 106 tests in ten files. The Chromium scenario passed for applying the built-in numbered style, starting at 7, reopening the dialog and undoing both changes. The production build passed.
       - Module boundaries, source tree and provenance, scoped lint and formatting, Writer resources and parity inventory, AgentPlane doctor and routing passed. Repository-wide JSDoc and size checks report existing failures outside this checkpoint.
       - Editing a list-style definition and the per-paragraph line-number restart still require their respective owners. This is an intermediate checkpoint and does not close the current AgentPlane task or advance the full-run cadence.
+  -
+    author: "CODER"
+    body: |-
+      Verified intermediate Writer paragraph line-numbering checkpoint.
+
+      - The Outline & List page now exchanges the native paragraph line-number item with independent participation and restart values. It respects mixed selection, the native spin bounds and control sensitivity. The actual Writer layout applies a counted paragraph's chosen start to its master frame and continues through page follows.
+      - Pooled styles, the two native UNO properties and ODF paragraph export and import preserve both fields. An explicit ODF zero overrides an inherited restart. Existing boolean browser snapshots restore the participation flag and continue numbering.
+      - The initial focused run passed 72 cases in ten files. A final targeted run passed 46 cases across the paragraph dialog, layout, model and UNO in five files. The final ODF run passed 18 cases in two files, including inheritance. The production build and all three Chromium line-numbering scenarios passed.
+      - Writer resources, boundaries, source tree and provenance, parity inventory, scoped ESLint and Prettier, AgentPlane doctor and routing, and git diff --check passed. Repository-wide JSDoc and file-size checks still report existing findings outside the checkpoint.
+      - Editing a list-style definition through the Outline & List page remains pending. No AgentPlane task closure or full test run occurred. The updated cadence is one full run after ten closed tasks, with the goal remaining active after the run.
 
 events:
   -
@@ -1365,9 +1375,21 @@ events:
       - Targeted Writer runs passed 106 tests in ten files. The Chromium scenario passed for applying the built-in numbered style, starting at 7, reopening the dialog and undoing both changes. The production build passed.
       - Module boundaries, source tree and provenance, scoped lint and formatting, Writer resources and parity inventory, AgentPlane doctor and routing passed. Repository-wide JSDoc and size checks report existing failures outside this checkpoint.
       - Editing a list-style definition and the per-paragraph line-number restart still require their respective owners. This is an intermediate checkpoint and does not close the current AgentPlane task or advance the full-run cadence.
+  -
+    type: "comment"
+    at: "2026-11-22T01:20:35.316Z"
+    author: "CODER"
+    body: |-
+      Verified intermediate Writer paragraph line-numbering checkpoint.
+
+      - The Outline & List page now exchanges the native paragraph line-number item with independent participation and restart values. It respects mixed selection, the native spin bounds and control sensitivity. The actual Writer layout applies a counted paragraph's chosen start to its master frame and continues through page follows.
+      - Pooled styles, the two native UNO properties and ODF paragraph export and import preserve both fields. An explicit ODF zero overrides an inherited restart. Existing boolean browser snapshots restore the participation flag and continue numbering.
+      - The initial focused run passed 72 cases in ten files. A final targeted run passed 46 cases across the paragraph dialog, layout, model and UNO in five files. The final ODF run passed 18 cases in two files, including inheritance. The production build and all three Chromium line-numbering scenarios passed.
+      - Writer resources, boundaries, source tree and provenance, parity inventory, scoped ESLint and Prettier, AgentPlane doctor and routing, and git diff --check passed. Repository-wide JSDoc and file-size checks still report existing findings outside the checkpoint.
+      - Editing a list-style definition through the Outline & List page remains pending. No AgentPlane task closure or full test run occurred. The updated cadence is one full run after ten closed tasks, with the goal remaining active after the run.
 
 doc_version: 3
-doc_updated_at: "2026-11-22T01:06:13.997Z"
+doc_updated_at: "2026-11-22T01:20:35.316Z"
 doc_updated_by: "CODER"
 description: "Implement the approved coherent Writer search-and-replace feature from pinned LibreOffice sources: real shared search engine and options, native paragraph/cursor traversal and replacement/history contracts, view-owned search state and dispatch, Find toolbar and Find and Replace dialog with generated upstream command placement and shortcuts. Preserve source semantics and explicit unsupported boundaries; never substitute DOM text search or browser RegExp for ICU contracts. Work only on writer in vite-office-writer; local upstream reading approved, no network or merges. Keep active until approved scope is verified."
 sections:

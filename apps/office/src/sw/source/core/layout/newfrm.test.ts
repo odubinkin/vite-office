@@ -1,4 +1,5 @@
 /** @fileoverview Checks Writer-owned page frames and same-node follow text frames. */
+import { SwFormatLineNumber } from "../../../inc/fmtline";
 import { SwClient, SwIterator } from "../../../inc/calbck";
 
 import { afterEach, describe, expect, it } from "vitest";
@@ -12,7 +13,7 @@ import { getSwTextFrameGap, makeSwTextFrame, type SwTextFrameInput } from "../te
 import { createSwTextFrameInputs } from "../text/txtfrm";
 import { SvxULSpaceItem } from "../../../../editeng/source/items/frmitems";
 import { SfxBoolItem } from "../../../../svl/source/items/cenumitm";
-import { RES_KEEP, RES_LINENUMBER, RES_UL_SPACE } from "../../../inc/hintids";
+import { RES_KEEP, RES_UL_SPACE } from "../../../inc/hintids";
 
 const standardPage = createDefaultWriterPageDescriptor("en-GB").GetValue();
 
@@ -439,7 +440,7 @@ describe("persistent Writer layout root", /** Checks core layout identity over d
     first.SetAttr(new SvxULSpaceItem(120, 60, RES_UL_SPACE, true));
     second.SetAttr(new SvxULSpaceItem(240, 80, RES_UL_SPACE));
     second.SetAttr(new SfxBoolItem(RES_KEEP, true));
-    second.SetAttr(new SfxBoolItem(RES_LINENUMBER, false));
+    second.SetAttr(new SwFormatLineNumber(false));
     const measurements = [paragraph("first", 1), paragraph("second", 1)];
     expect(createSwTextFrameInputs(document, measurements)).toMatchObject([
       { id: "first", upperSpacing: 120, lowerSpacing: 60, contextualSpacing: true },

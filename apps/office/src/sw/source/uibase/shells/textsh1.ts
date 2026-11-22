@@ -1,4 +1,5 @@
 /** @fileoverview Owns the supported SwTextShell execute/state handlers from textsh1.cxx. */
+import { SwFormatLineNumber } from "../../../inc/fmtline";
 import * as ParaItems from "../../../../editeng/source/items/paraitem.controls";
 import { SwBaseShell } from "./basesh";
 import { canChangeWriterFontSize, changeWriterFontSize } from "./txtattr-fontsize";
@@ -33,7 +34,12 @@ import {
   SvxRightMarginItem,
   SvxLRSpaceItem,
 } from "../../../../editeng/inc/lrspitem";
-import { createSwParagraphLRSpaceItem, type WriterParagraphFormatValue } from "./txtattr-paragraph";
+import {
+  createParagraphLineCountItem,
+  createParagraphPageDescItems,
+  createSwParagraphLRSpaceItem,
+  type WriterParagraphFormatValue,
+} from "./txtattr-paragraph";
 import { SvxULSpaceItem } from "../../../../editeng/source/items/frmitems";
 import {
   RES_KEEP,
@@ -624,7 +630,10 @@ export class SwTextShell extends SwBaseShell {
           value.contextual,
         ),
         lineSpacing,
-        ...(pageItems?.entries() ?? [this.CreateTabStops(positions, paragraph)]),
+        ...(pageItems?.entries() ?? [
+          this.CreateTabStops(positions, paragraph),
+          createParagraphLineCountItem(paragraph, value.countLineNumbers),
+        ]),
         new SfxBoolItem(RES_KEEP, value.keepWithNext),
         new ParaItems.SvxFormatSplitItem(!(value.keepTogether ?? false), RES_PARATR_SPLIT),
         new ParaItems.SvxOrphansItem(value.orphans ?? 2, RES_PARATR_ORPHANS),
@@ -642,17 +651,7 @@ export class SwTextShell extends SwBaseShell {
         ...(value.firstLineIndentPt === undefined && value.autoTextIndent === undefined
           ? []
           : [first]),
-        ...(value.pageStyleName === undefined && value.pageNumber === undefined
-          ? []
-          : [
-              new SwFormatPageDesc(
-                value.pageStyleName ?? "",
-                value.pageNumber === undefined || value.pageNumber === "auto"
-                  ? undefined
-                  : value.pageNumber,
-              ),
-            ]),
-        new SfxBoolItem(RES_LINENUMBER, value.countLineNumbers),
+        ...createParagraphPageDescItems(value),
       ],
     );
   }
@@ -729,7 +728,7 @@ export class SwTextShell extends SwBaseShell {
       autoTextIndent: firstLine.IsAutoFirst(),
       pageStyleName: pageDesc.GetPageDescName(),
       pageNumber: pageDesc.GetNumOffset() ?? "auto",
-      countLineNumbers: (paragraph.GetAttr(RES_LINENUMBER) as SfxBoolItem).GetValue(),
+      countLineNumbers: (paragraph.GetAttr(RES_LINENUMBER) as SwFormatLineNumber).IsCount(),
     };
   }
 

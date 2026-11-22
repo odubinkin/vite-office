@@ -79,3 +79,37 @@ for (const width of [1280, 390])
     await dialog.press("Escape");
     expect(errors).toEqual([]);
   });
+
+test("Writer restarts line numbering from the ordinary paragraph dialog", /** Exercises live numbering, dialog state and grouped undo. @param fixtures - Browser fixtures. @param fixtures.page - Actual page. @returns Completion. */ async ({
+  page,
+}) => {
+  await page.goto("/writer");
+  const editor = page.getByRole("textbox", { name: "Writer document text", exact: true });
+  await editor.fill("Line numbering");
+  /** Opens the production Paragraph dialog. @returns Dialog locator. */
+  async function openParagraph() {
+    await openBrowserMenu(page, "Format");
+    await page.getByRole("menuitem", { name: "Paragraph…", exact: true }).click();
+    return page.getByRole("dialog", { name: "Paragraph", exact: true });
+  }
+  let dialog = await openParagraph();
+  await dialog.getByRole("tab", { name: "Outline & List", exact: true }).click();
+  const lineStart = dialog.getByRole("spinbutton", { name: "Start with", exact: true });
+  await expect(lineStart).toBeDisabled();
+  await dialog.getByRole("checkbox", { name: "Restart at this paragraph", exact: true }).check();
+  await lineStart.fill("10");
+  await dialog.getByRole("tab", { name: "Text Flow", exact: true }).click();
+  await dialog.getByRole("checkbox", { name: "Show line numbers", exact: true }).check();
+  await dialog.getByRole("button", { name: "OK", exact: true }).click();
+  const glyph = editor
+    .locator("xpath=../..")
+    .locator('span[aria-hidden="true"]')
+    .filter({ hasText: /^10$/u });
+  await expect(glyph).toBeVisible();
+  dialog = await openParagraph();
+  await dialog.getByRole("tab", { name: "Outline & List", exact: true }).click();
+  await expect(lineStart).toHaveValue("10");
+  await dialog.getByRole("button", { name: "Cancel", exact: true }).click();
+  await page.getByRole("button", { name: "Undo", exact: true }).click();
+  await expect(glyph).toHaveCount(0);
+});

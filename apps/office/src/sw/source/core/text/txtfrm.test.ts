@@ -101,6 +101,38 @@ describe("Writer line numbering on text frames", /** Groups page-frame line-numb
     expect(projectSwLineNumbers(pages, inputs, info.QueryValue())).toEqual([[[], []]]);
   });
 
+  it("uses a counted paragraph start on its master and continues through page follows", /** Exercises RecalcAllLines precedence over page restart. @returns Nothing. */ () => {
+    const descriptor = {
+      ...createDefaultWriterPageDescriptor("en-GB").GetValue(),
+      height: 1100,
+      topMargin: 100,
+      bottomMargin: 100,
+    };
+    const inputs = [
+      { ...paragraph("excluded", ["first"], false), lineNumberStartValue: 40 },
+      { ...paragraph("restart", Array(5).fill("word")), lineNumberStartValue: 12 },
+      paragraph("last", ["last"]),
+    ];
+    const pages = createSwPageFrames(inputs, descriptor);
+    const info = new SwLineNumberInfo();
+    info.SetPaintLineNumbers(true);
+    info.SetCountBy(1);
+    /** Extracts visible numbers without geometry. @returns Per-page numbering. */
+    function numbers(): readonly number[][] {
+      return projectSwLineNumbers(pages, inputs, info.QueryValue()).map(
+        /** Reads the glyph numbers in physical order. @param page - Projected page marks. @returns Numbers. */
+        (page) =>
+          page.flat().map(
+            /** Reads the native line number. @param mark - Renderable mark. @returns Number. */
+            (mark) => mark.number,
+          ),
+      );
+    }
+    expect(numbers()).toEqual([[12, 13], [14, 15, 16], [17]]);
+    info.SetRestartEachPage(true);
+    expect(numbers()).toEqual([[12, 13], [1, 2, 3], [1]]);
+  });
+
   it("rejects a frame without its measured text node", /** Checks frame-input ownership. @returns Nothing. */ () => {
     const inputs = [paragraph("present", ["line"])];
     const pages = createSwPageFrames(inputs, createDefaultWriterPageDescriptor("en-GB").GetValue());

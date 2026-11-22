@@ -392,18 +392,6 @@ export function WriterParagraphDialog({
                   </label>
                   <label className="sm:col-span-2 flex items-center gap-2">
                     <input
-                      checked={draft.countLineNumbers}
-                      onChange={
-                        /** Handles Writer formatting state. @param event - Input value. @returns Callback result. */ (
-                          event,
-                        ) => setDraft({ ...draft, countLineNumbers: event.target.checked })
-                      }
-                      type="checkbox"
-                    />
-                    Include this paragraph in line numbering
-                  </label>
-                  <label className="sm:col-span-2 flex items-center gap-2">
-                    <input
                       checked={showLineNumbersDraft}
                       onChange={
                         /** Handles Writer formatting state. @param event - Input value. @returns Callback result. */ (

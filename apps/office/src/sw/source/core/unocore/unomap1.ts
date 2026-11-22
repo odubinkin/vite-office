@@ -8,6 +8,7 @@ import { CONVERT_TWIPS } from "../../../../svl/inc/poolitem";
 import {
   RES_BOX,
   RES_CHRATR_BOX,
+  RES_LINENUMBER,
   RES_PARATR_ADJUST,
   RES_PARATR_AUTOFRAMEDIR,
   RES_PARATR_FORBIDDEN_RULES,
@@ -16,6 +17,7 @@ import {
   RES_PARATR_SNAPTOGRID,
   RES_PARATR_HYPHENZONE,
 } from "../../../inc/hintids";
+import { MID_LINENUMBER_COUNT, MID_LINENUMBER_STARTVALUE } from "../../../inc/unomid";
 import { MAYBEVOID } from "../../../../udkapi/com/sun/star/beans/PropertyAttribute";
 import type { SwUnoPropertyEntry } from "./unomap";
 
@@ -114,6 +116,36 @@ export const paragraphBooleanMembers = (
 /** Original boolean paragraph names shared between property maps. */
 export const paragraphBooleanNames = paragraphBooleanMembers.map(
   /** Selects the original property name. @param entry - Native row. @returns Name. */
+  ([name]) => name,
+);
+
+/** Native compound paragraph line-number UNO properties. */
+export const paragraphLineNumberMembers: [string, SwUnoPropertyEntry][] = [
+  [
+    "ParaLineNumberCount",
+    {
+      which: RES_LINENUMBER,
+      member: MID_LINENUMBER_COUNT,
+      type: "bool",
+      kind: "any",
+      attributes: MAYBEVOID,
+    },
+  ],
+  [
+    "ParaLineNumberStartValue",
+    {
+      which: RES_LINENUMBER,
+      member: MID_LINENUMBER_STARTVALUE,
+      type: "sal_Int32",
+      kind: "any",
+      attributes: MAYBEVOID,
+    },
+  ],
+];
+
+/** Original names admitted into the native style and text-default maps. */
+export const paragraphLineNumberNames = paragraphLineNumberMembers.map(
+  /** Reads the native UNO name. @param entry - Property descriptor. @returns Name. */
   ([name]) => name,
 );
 

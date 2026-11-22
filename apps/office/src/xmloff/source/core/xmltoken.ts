@@ -528,6 +528,7 @@ const entries: readonly (readonly [string, string, XMLToken])[] = [
   [ODF_NAMESPACES.text, "outline-level", XMLToken.TEXT_OUTLINE_LEVEL],
   [ODF_NAMESPACES.text, "visited-style-name", XMLToken.TEXT_VISITED_STYLE_NAME],
   [ODF_NAMESPACES.text, "number-lines", XMLToken.TEXT_NUMBER_LINES],
+  [ODF_NAMESPACES.text, "line-number", XMLToken.TEXT_LINE_NUMBER],
   [ODF_NAMESPACES.text, "display-outline-level", XMLToken.TEXT_DISPLAY_OUTLINE_LEVEL],
   [ODF_NAMESPACES.loext, "theme", XMLToken.LOEXT_THEME],
   [ODF_NAMESPACES.loext, "theme-colors", XMLToken.LOEXT_THEME_COLORS],

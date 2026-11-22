@@ -99,6 +99,7 @@ export interface OdfTabStop {
 export interface OdfParagraphProperties extends OdfBoxProperties, OdfFillProperties {
   readonly joinBorder?: boolean;
   readonly countLineNumbers?: boolean;
+  readonly lineNumberStartValue?: number;
   readonly contextualSpacing?: boolean;
   readonly firstLineIndent?: number;
   readonly autoTextIndent?: boolean;

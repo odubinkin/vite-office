@@ -647,6 +647,7 @@ function importParagraphProperties(
     : numberProperty.extract(numberValue, "sal_Int16")
       ? numberValue[0] & 65535
       : ("auto" as const);
+  const lineNumberStartValue = attributes.getAsInteger(XMLToken.TEXT_LINE_NUMBER);
   const countLineNumbers = importOptionalBoolean(
     attributes.get(XMLToken.TEXT_NUMBER_LINES),
     "paragraph line-number participation",
@@ -710,6 +711,7 @@ function importParagraphProperties(
     ...(breakBefore === undefined ? {} : { breakBefore }),
     ...(breakAfter === undefined ? {} : { breakAfter }),
     ...(countLineNumbers === undefined ? {} : { countLineNumbers }),
+    ...(lineNumberStartValue === null ? {} : { lineNumberStartValue }),
     ...(hyphenation === undefined ? {} : { hyphenation }),
     ...(justification === undefined ? {} : { justification }),
     ...(asianTypography === undefined ? {} : { asianTypography }),

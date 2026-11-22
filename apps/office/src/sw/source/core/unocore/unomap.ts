@@ -33,6 +33,8 @@ import {
   nativeEntries,
   paragraphBooleanMembers,
   paragraphBooleanNames,
+  paragraphLineNumberMembers,
+  paragraphLineNumberNames,
 } from "./unomap1";
 import { pageBitmapGeometryProperties, pageStoryPropertyEntries } from "./unostyle.page-stories";
 import * as Grid from "../../../inc/unomid";
@@ -282,10 +284,7 @@ export const SwUnoPropertyMap: ReadonlyMap<string, SwUnoPropertyEntry> = new Map
       kind: "bool",
     },
   ],
-  [
-    "ParaLineNumberCount",
-    { type: "bool", attributes: 1, which: H.RES_LINENUMBER, member: 0, kind: "bool" },
-  ],
+  ...paragraphLineNumberMembers,
   [
     "ParaIsConnectBorder",
     { type: "bool", attributes: 1, which: H.RES_PARATR_CONNECT_BORDER, member: 0, kind: "bool" },
@@ -602,7 +601,7 @@ const paragraphStyleProperties = new Set([
   "CharOverlineColor",
   "CharOverlineHasColor",
   "ParaIsAutoFirstLineIndent",
-  "ParaLineNumberCount",
+  ...paragraphLineNumberNames,
   "ParaIsConnectBorder",
   "BorderDistance",
   "LeftBorder",
@@ -794,7 +793,7 @@ const textDefaultProperties = new Set([
   "CharOverlineColor",
   "CharOverlineHasColor",
   "ParaIsAutoFirstLineIndent",
-  "ParaLineNumberCount",
+  ...paragraphLineNumberNames,
   "ParaIsConnectBorder",
   "BorderDistance",
   "LeftBorder",

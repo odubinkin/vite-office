@@ -9,6 +9,7 @@ import {
   ShadowFormat,
 } from "../../../../offapi/com/sun/star/table/ShadowFormat";
 import { XMLShadowPropHdl } from "../../../../xmloff/source/style/shadwhdl";
+import { SwFormatLineNumber } from "../../../inc/fmtline";
 import type { SwFrameFormat } from "../../core/layout/atrfrm";
 import { SvxTabAdjust, type SvxTabStopItem } from "../../../../editeng/inc/tstpitem";
 import type { SvxLineSpacingItem } from "../../../../editeng/inc/lspcitem";
@@ -55,6 +56,7 @@ import { Any } from "../../../../cppu/inc/com/sun/star/uno/Any";
 import {
   RES_BACKGROUND,
   RES_FRAMEDIR,
+  RES_LINENUMBER,
   RES_PARATR_AUTOFRAMEDIR,
   RES_PARATR_SNAPTOGRID,
   RES_PARATR_FORBIDDEN_RULES,
@@ -354,6 +356,14 @@ export const XML_ASIAN_TYPOGRAPHY_WHICH_IDS = [
   RES_PARATR_HANGINGPUNCTUATION,
   RES_PARATR_SCRIPTSPACE,
 ] as const;
+
+/** Serializes both members of the direct native line-number item. @param set - Writer paragraph attributes. @returns Present ODF properties. */
+export function exportParagraphLineNumbering(set: SfxItemSet): OdfParagraphProperties {
+  const item = set.GetItemIfSet(RES_LINENUMBER, false);
+  return item instanceof SwFormatLineNumber
+    ? { countLineNumbers: item.IsCount(), lineNumberStartValue: item.GetStartValue() }
+    : {};
+}
 
 /** Projects the directly set Writer items for automatic and named ODF styles. @param set - Paragraph item set. @returns Present Asian typography values. */
 export function exportParagraphAsianTypographyItems(set: SfxItemSet): OdfParagraphProperties {

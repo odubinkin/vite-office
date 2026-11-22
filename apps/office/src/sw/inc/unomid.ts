@@ -29,3 +29,8 @@
 export const MID_WRAP_INFLUENCE = 0;
 /** Original allow-overlap UNO member. */
 export const MID_ALLOW_OVERLAP = 1;
+
+/** Original bool member of SwFormatLineNumber. */
+export const MID_LINENUMBER_COUNT = 0;
+/** Original signed UNO value member of SwFormatLineNumber. */
+export const MID_LINENUMBER_STARTVALUE = 1;

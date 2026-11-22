@@ -1,4 +1,5 @@
 /** @fileoverview RTF paragraph and character item emission following sw/source/filter/ww8/rtfattributeoutput.cxx. */
+import type { SwFormatLineNumber } from "../../../inc/fmtline";
 import { HoriOrientation } from "../../../../offapi/com/sun/star/text/HoriOrientation";
 import { VertOrientation } from "../../../../offapi/com/sun/star/text/VertOrientation";
 import { RelOrientation } from "../../../../offapi/com/sun/star/text/RelOrientation";
@@ -457,7 +458,7 @@ export class RtfAttributeOutput extends AttributeOutputBase<string> {
       case RES_BACKGROUND:
         return FormatBackground(item as SvxBrushItem, this.colorIndex);
       case RES_LINENUMBER:
-        return FormatLineNumbering(item as SfxBoolItem);
+        return FormatLineNumbering(item as SwFormatLineNumber);
       case RES_KEEP:
         return (item as SfxBoolItem).GetValue() ? "\\keepn" : "";
       case RES_PARATR_SPLIT:
@@ -552,7 +553,9 @@ export class RtfAttributeOutput extends AttributeOutputBase<string> {
         ),
       ) +
       this.WriteFormatBox(items.GetItemIfSet(RES_BOX, true) as SvxBoxItem | undefined) +
-      FormatLineNumbering(items.GetItemIfSet(RES_LINENUMBER, true) as SfxBoolItem | undefined) +
+      FormatLineNumbering(
+        items.GetItemIfSet(RES_LINENUMBER, true) as SwFormatLineNumber | undefined,
+      ) +
       this.WriteStyleFrameDirection(style) +
       FormatBackground(
         items.GetItemIfSet(RES_BACKGROUND, false) as SvxBrushItem | undefined,
