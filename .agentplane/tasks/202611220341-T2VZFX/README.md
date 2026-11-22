@@ -4,7 +4,7 @@ title: "Connect Writer Page Style header and footer settings"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 7
+revision: 8
 origin:
   system: "manual"
 depends_on: []
@@ -36,7 +36,7 @@ events:
     to: "DOING"
     note: "Start: Connect the native Header and Footer page-style controls and preserve story sections through Writer history."
 doc_version: 3
-doc_updated_at: "2026-11-22T04:02:38.362Z"
+doc_updated_at: "2026-11-22T04:13:33.112Z"
 doc_updated_by: "CODER"
 description: "Expose native page story activation, margins, spacing, height, and sharing through the Header and Footer pages, with content-preserving Writer history."
 sections:
@@ -60,6 +60,9 @@ sections:
     - The native in-document section copier covers text and tables. The existing browser story layer supplies paint and body geometry; inline story editing, browser remeasurement for AutoFit, nested border/area editing, and duplex-specific stories across document copies remain outside this task.
     - Command: `npm run test:writer --workspace @vite-office/office -- WriterPageStoriesDialog WriterPageAreaDialog odt-page-stories`. Result: pass, 7 tests in 3 files on the updated source. Scope: native defaults, page story ownership, toggles, cancellation and deletion confirmation, shared story retention, undo/redo, ODT and Worker reopening.
     - Scoped ESLint, Prettier, diff, dependency, source tree, registry provenance, Writer resources, doctor and routing checks passed. Global JSDoc and file size still report the known Calc baseline.
+    - Command: `npm run test:writer --workspace @vite-office/office -- WriterPageStyleDialog hffrm fmthdft writer-page-story-codec odt-page-background undobj`. Result: pass, 38 tests in 6 files. Scope: existing page style, page layout, attached region identity, background transport and Writer history.
+    - Command: `npm run test:writer --workspace @vite-office/office -- docxexport.page-stories --testNamePattern 'fixed ODF story|table-only source cell'`. Result: pass, 2 targeted tests. A supplementary attempt that included the separate Word fixture with six page variants was terminated after it did not complete. That fixture is outside the passing count.
+    - Commands: `npm run build:single-threaded --workspace @vite-office/office` and `node_modules/.bin/playwright test writer-page-stories.spec.ts writer-page-area.spec.ts --config=output/playwright/writer-hf-production.config.ts --project=writer --workers=1`. Result: production build and both Chromium scenarios passed. Chromium verified physical headers and footers, the native confirmation, cancellation with Escape, deletion and undo.
 id_source: "generated"
 ---
 ## Summary
@@ -98,3 +101,6 @@ Run targeted Writer page story, page style, native descriptor/history and ODT/Wo
 - The native in-document section copier covers text and tables. The existing browser story layer supplies paint and body geometry; inline story editing, browser remeasurement for AutoFit, nested border/area editing, and duplex-specific stories across document copies remain outside this task.
 - Command: `npm run test:writer --workspace @vite-office/office -- WriterPageStoriesDialog WriterPageAreaDialog odt-page-stories`. Result: pass, 7 tests in 3 files on the updated source. Scope: native defaults, page story ownership, toggles, cancellation and deletion confirmation, shared story retention, undo/redo, ODT and Worker reopening.
 - Scoped ESLint, Prettier, diff, dependency, source tree, registry provenance, Writer resources, doctor and routing checks passed. Global JSDoc and file size still report the known Calc baseline.
+- Command: `npm run test:writer --workspace @vite-office/office -- WriterPageStyleDialog hffrm fmthdft writer-page-story-codec odt-page-background undobj`. Result: pass, 38 tests in 6 files. Scope: existing page style, page layout, attached region identity, background transport and Writer history.
+- Command: `npm run test:writer --workspace @vite-office/office -- docxexport.page-stories --testNamePattern 'fixed ODF story|table-only source cell'`. Result: pass, 2 targeted tests. A supplementary attempt that included the separate Word fixture with six page variants was terminated after it did not complete. That fixture is outside the passing count.
+- Commands: `npm run build:single-threaded --workspace @vite-office/office` and `node_modules/.bin/playwright test writer-page-stories.spec.ts writer-page-area.spec.ts --config=output/playwright/writer-hf-production.config.ts --project=writer --workers=1`. Result: production build and both Chromium scenarios passed. Chromium verified physical headers and footers, the native confirmation, cancellation with Escape, deletion and undo.

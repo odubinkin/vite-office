@@ -5,7 +5,7 @@ import { openBrowserMenu } from "../test-support/menu-pointer-e2e";
 test("Writer Page Style enables both stories and confirms removal of an existing header", /** Exercises the actual command and physical page story paint. @param fixtures - Browser fixture. @param fixtures.page - Actual browser page. @returns Completion. */ async ({
   page,
 }) => {
-  await page.goto("/writer");
+  await page.goto("/writer", { waitUntil: "domcontentloaded" });
   await page.locator("[data-writer-paragraph-id]").first().click();
   const dialog = page.getByRole("dialog", { name: "Page Style", exact: true });
   const header = page.locator('[data-writer-page-story="header"]');
@@ -38,7 +38,7 @@ test("Writer Page Style enables both stories and confirms removal of an existing
   await dialog.getByRole("checkbox", { name: "Header on" }).click();
   const confirm = page.getByRole("alertdialog", { name: "Delete header?" });
   await expect(confirm).toBeVisible();
-  await confirm.press("Escape");
+  await confirm.getByRole("button", { name: "No" }).press("Escape");
   await expect(confirm).toBeHidden();
   await expect(dialog.getByRole("checkbox", { name: "Header on" })).toBeChecked();
   await dialog.getByRole("checkbox", { name: "Header on" }).click();
