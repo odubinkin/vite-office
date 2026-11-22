@@ -1,7 +1,7 @@
 /** @fileoverview Restores ODF text-style items and cell text span ranges on the native Calc editor. */
 import type { EditTextObject } from "../../../../editeng/inc/editobj";
 import { ESelection } from "../../../../editeng/inc/ESelection";
-import { EE_CHAR_ESCAPEMENT, EE_FEATURE_FIELD } from "../../../../editeng/inc/eeitem";
+import { EE_FEATURE_FIELD } from "../../../../editeng/inc/eeitem";
 import {
   SvxDateField,
   SvxFieldItem,
@@ -11,14 +11,13 @@ import {
   type SvxFieldData,
 } from "../../../../editeng/inc/flditem";
 import { Date } from "../../../../tools/source/datetime/tdate";
-import { SvxEscapementItem } from "../../../../editeng/source/items/textitem.escapement";
 import { unicode } from "../../../../i18nlangtag/source/isolang/isolang.tables";
 import type { SfxItemSet } from "../../../../svl/source/items/itemset";
 import { ScPatternAttr } from "../../../inc/patattr";
 import type { FastAttributeList } from "../../../../xmloff/source/core/xmlimp";
-import { importTextCharacterProperties } from "../../../../xmloff/source/text/txtprmap";
 import type { ScXMLImport } from "./xmlimprt";
 import { importCellTextProperties } from "./xmlstyle";
+import { importEditTextProperties } from "./editattributemap";
 import type { CellTextField, CellTextParagraph } from "./xmlexprt.celltext";
 
 /** Parses a text-style property list into the native edit item set. @param importer - Actual ODF importer. @param attributes - Native lexical attributes. @param items - Destination edit items. @returns Nothing. */
@@ -39,16 +38,7 @@ export function importCellTextStyle(
       true,
     );
     pattern.FillDirectEditItemSet(items);
-    const position = importTextCharacterProperties(attributes);
-    if (position.escapement !== undefined || position.escapementHeight !== undefined)
-      items.Put(
-        new SvxEscapementItem(
-          position.escapement ?? 0,
-          position.escapementHeight ?? 100,
-          EE_CHAR_ESCAPEMENT,
-        ),
-        true,
-      );
+    importEditTextProperties(attributes, items);
   } finally {
     pattern.Dispose();
   }

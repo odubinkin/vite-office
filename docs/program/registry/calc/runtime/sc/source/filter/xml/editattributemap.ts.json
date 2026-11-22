@@ -1,0 +1,41 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sc/source/filter/xml/editattributemap.ts",
+    "classification": "upstream-mechanism",
+    "state": "active",
+    "suite": "calc",
+    "subsystem": "ods-rich-text",
+    "capabilityIds": [
+      "CAP-eec4dd5f-723f-4652-b275-5ad5817f761d"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "none",
+      "evidence": [
+        "apps/office/src/sc/source/filter/xml/editattributemap.ts#importEditTextProperties",
+        "apps/office/src/sc/source/filter/xml/editattributemap.ts#exportEditTextProperties",
+        "apps/office/src/sc/source/filter/xml/editattributemap.ts#editTextPropertyTokens",
+        "apps/office/src/sc/source/filter/xml/ods-rich-text-fields.test.ts#preserves native word mode",
+        "vendor/libreoffice-reference/sc/source/filter/xml/editattributemap.cxx#ScXMLEditAttributeMap::getEntryByAPIName",
+        "vendor/libreoffice-reference/sc/source/filter/xml/editattributemap.cxx#ScXMLEditAttributeMap::getEntryByItemID"
+      ],
+      "justification": "Preserves the native word-mode, kerning, scale, escapement, emphasis and locale edit-run item mappings in ODS and Worker transfer. Existing font, color and decoration mapping continues through Calc text style construction. The represented mapping has no complete generic EditEngine UNO service or browser text shaping contract.",
+      "knownViolations": [],
+      "localSymbols": [
+        "importEditTextProperties",
+        "exportEditTextProperties",
+        "editTextPropertyTokens"
+      ],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": "sc/source/filter/xml/editattributemap.cxx",
+      "upstreamSymbols": [
+        "ScXMLEditAttributeMap::getEntryByAPIName",
+        "ScXMLEditAttributeMap::getEntryByItemID"
+      ]
+    }
+  }
+}

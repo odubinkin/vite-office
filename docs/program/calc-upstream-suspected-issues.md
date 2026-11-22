@@ -7805,3 +7805,16 @@ different document from its threshold formulas. Calc preserves the
 source-document binding for this copy operation.
 
 - [Original icon-set and threshold copy constructors](../../vendor/libreoffice-reference/sc/source/core/data/colorscale.cxx)
+
+### CALC-819 — Rich-text word mode exports through the strikeout attribute
+
+The shared text mapper imports underline, overline and strikeout word
+modes into one `CharWordMode` value. Calc's edit attribute map associates
+that item only with `style:text-line-through-mode` on export. An
+underline-only run can therefore acquire a line-through mode attribute
+when saved. Calc preserves the shared item and the original export
+attribute.
+
+- [Original shared text property map](../../vendor/libreoffice-reference/xmloff/source/text/txtprmap.cxx)
+- [Original Calc edit attribute map](../../vendor/libreoffice-reference/sc/source/filter/xml/editattributemap.cxx)
+- [Original edit-run export](../../vendor/libreoffice-reference/sc/source/filter/xml/xmlexprt.cxx)

@@ -33,6 +33,7 @@ import { XMLMeasurePropHdl } from "../../../../xmloff/source/style/xmlbahdl";
 import { convertTwipToMm100 } from "../../../../tools/inc/UnitConversion";
 import { toTwips, Length } from "../../../../o3tl/inc/unit_conversion";
 import { exportFontEffectProperties, importFontEffectProperties } from "./xmlstyle.font-effects";
+import { editTextPropertyTokens } from "./editattributemap";
 import {
   exportStrikeoutProperties,
   importStrikeoutProperties,
@@ -416,7 +417,7 @@ export function importCellTextProperties(
       XMLToken.STYLE_FONT_RELIEF,
       XMLToken.FO_COLOR,
       XMLToken.STYLE_USE_WINDOW_FONT_COLOR,
-      ...(textStyle ? [XMLToken.STYLE_TEXT_POSITION] : []),
+      ...(textStyle ? editTextPropertyTokens : []),
     ],
     "Calc text properties",
   );

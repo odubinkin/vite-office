@@ -215,6 +215,15 @@ const languageProperties = [
     ],
   ],
 ] as const;
+/** Original lexical inputs for the complete western, CJK and CTL locale members. */
+export const textLanguagePropertyTokens = languageProperties.flatMap(
+  /** Selects the script's native XML locale tokens. @param association - Source map row. @returns Locale tokens. */
+  ([, properties]) =>
+    properties.map(
+      /** Selects the XML token. @param attribute - Native locale attribute. @returns Token. */
+      ([token]) => token,
+    ),
+);
 /** Tokens consumed by this bounded source property map. */
 export const textCharacterPropertyTokens = [
   ...scriptProperties.map(
@@ -241,17 +250,7 @@ export const textCharacterPropertyTokens = [
     /** Reads original bool property tokens. @param entry - Entry. @returns Token. */ ([token]) =>
       token,
   ),
-  ...languageProperties.flatMap(
-    /** Collects each source locale attribute token. @param family - Script mapping. @returns Tokens. */ ([
-      ,
-      properties,
-    ]) =>
-      properties.map(
-        /** Selects the original token. @param entry - Attribute mapping. @returns Token. */ ([
-          token,
-        ]) => token,
-      ),
-  ),
+  ...textLanguagePropertyTokens,
 ];
 /** Collects all attributes of each native script locale in XML order. @param properties - Native text properties. @returns Qualified attribute/value pairs. */
 export function exportTextLanguageProperties(

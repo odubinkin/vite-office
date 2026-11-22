@@ -21,8 +21,212 @@ import { ScXMLImport } from "./xmlimprt";
 import { readOdsDocument, writeOdsDocument } from "./xmlwrap";
 import { processOdsWorkerRequest } from "../../../browser/filter/xml/ods-worker-runtime";
 import type { CalcDocumentRecord } from "../../../browser/filter/xml/calc-document-codec";
+import type { EECharAttrib } from "../../../../editeng/inc/editdata";
+import type { Section } from "../../../../editeng/inc/section";
+import { ATTR_FONT_WEIGHT } from "../../../inc/scitems";
+import {
+  EE_CHAR_EMPHASISMARK,
+  EE_CHAR_ESCAPEMENT,
+  EE_CHAR_FONTWIDTH,
+  EE_CHAR_ITALIC,
+  EE_CHAR_KERNING,
+  EE_CHAR_LANGUAGE,
+  EE_CHAR_LANGUAGE_CJK,
+  EE_CHAR_LANGUAGE_CTL,
+  EE_CHAR_PAIRKERNING,
+  EE_CHAR_WEIGHT,
+  EE_CHAR_WLM,
+} from "../../../../editeng/inc/eeitem";
+import { SvxEmphasisMarkItem } from "../../../../editeng/inc/emphasismarkitem";
+import { SvxEscapementItem } from "../../../../editeng/source/items/textitem.escapement";
+import { SvxWeightItem } from "../../../../editeng/inc/wghtitem";
+import { SvxPostureItem } from "../../../../editeng/inc/postitem";
+import { FontEmphasisMark, FontItalic, FontWeight } from "../../../../tools/inc/fontenum";
+import {
+  LANGUAGE_GERMAN,
+  LANGUAGE_HINDI,
+  LANGUAGE_JAPANESE,
+} from "../../../../i18nlangtag/inc/lang";
 
 const fixtureRoot = "../../vendor/libreoffice-reference/sc/qa/unit/data/ods";
+
+it("ports the pinned rich-text cell distinction and character ranges", /** Replays the cell types, text ranges and field identities in testRichTextContentODS. @returns Completion. */ async () => {
+  const source = await readOdsDocument(
+    new Uint8Array(readFileSync(`${fixtureRoot}/rich-text-cells.ods`)),
+  );
+  let reopened: ScDocument | undefined;
+  try {
+    reopened = await readOdsDocument(await writeOdsDocument(source));
+    for (const document of [source, reopened]) {
+      const normal = document.GetRefCellValue(new ScAddress(0, 1, 0));
+      const normalString = normal.getSharedString();
+      assert(normalString);
+      expect(text(normalString.getString())).toBe("Normal");
+      const styled = document.GetRefCellValue(new ScAddress(0, 2, 0));
+      const styledString = styled.getSharedString();
+      assert(styledString);
+      expect(text(styledString.getString())).toBe("All bold");
+      const weight = document.GetPattern(new ScAddress(0, 2, 0))?.GetItem(ATTR_FONT_WEIGHT);
+      assert(weight instanceof SvxWeightItem);
+      expect(weight.GetWeight()).toBe(FontWeight.WEIGHT_BOLD);
+      const lines = document.GetRefCellValue(new ScAddress(0, 3, 0)).getEditText();
+      assert(lines);
+      expect(lines.GetParagraphCount()).toBe(3);
+      for (const [index, expected] of ["one", "two", "three"].entries()) {
+        const line = lines.GetText(index);
+        try {
+          expect(text(line)).toBe(expected);
+        } finally {
+          line.dispose();
+        }
+      }
+      for (const [row, field] of [
+        [4, FieldType.TABLE],
+        [5, FieldType.URL],
+        [6, FieldType.DATE],
+        [7, FieldType.DOCINFO_TITLE],
+      ] as const)
+        expect(
+          document
+            .GetRefCellValue(new ScAddress(0, row, 0))
+            .getEditText()
+            ?.HasField(field),
+        ).toBe(true);
+      const sentence = document.GetRefCellValue(new ScAddress(0, 8, 0)).getEditText();
+      assert(sentence);
+      const value = sentence.GetText(0);
+      try {
+        const line = text(value);
+        expect(line).toBe("Sentence with bold and italic.");
+        const attrs: EECharAttrib[] = [];
+        sentence.GetCharAttribs(0, attrs);
+        const bold = attrs.find(
+          /** Locates the typed bold range. @param attribute - EditEngine attribute. @returns Whether matched. */
+          ({ pAttr, nStart, nEnd }) =>
+            pAttr?.Which() === EE_CHAR_WEIGHT && line.slice(nStart, nEnd) === "bold",
+        )?.pAttr;
+        const italic = attrs.find(
+          /** Locates the typed italic range. @param attribute - EditEngine attribute. @returns Whether matched. */
+          ({ pAttr, nStart, nEnd }) =>
+            pAttr?.Which() === EE_CHAR_ITALIC && line.slice(nStart, nEnd) === "italic",
+        )?.pAttr;
+        assert(bold instanceof SvxWeightItem);
+        assert(italic instanceof SvxPostureItem);
+        expect(bold.GetWeight()).toBe(FontWeight.WEIGHT_BOLD);
+        expect(italic.GetPosture()).toBe(FontItalic.ITALIC_NORMAL);
+      } finally {
+        value.dispose();
+      }
+    }
+  } finally {
+    reopened?.Dispose();
+    source.Dispose();
+  }
+});
+
+it("preserves native word mode, kerning, width, emphasis and script locales on cell spans", /** Checks the original pool values, XML, explicit resets and Worker transfer. @returns Completion. */ async () => {
+  const source = new ScDocument();
+  let worker: ScDocument | undefined;
+  let reopened: ScDocument | undefined;
+  try {
+    const importer = new ScXMLImport(source);
+    importer.importStyles(`
+      <office:document-styles xmlns:office="${ODF_NAMESPACES.office}" xmlns:style="${ODF_NAMESPACES.style}">
+        <office:styles><style:style style:name="NamedText" style:family="text"><style:text-properties style:text-scale="200%"/></style:style></office:styles>
+      </office:document-styles>`);
+    importer.importContent(`
+      <office:document-content xmlns:office="${ODF_NAMESPACES.office}" xmlns:table="${ODF_NAMESPACES.table}" xmlns:text="${ODF_NAMESPACES.text}" xmlns:style="${ODF_NAMESPACES.style}" xmlns:fo="${ODF_NAMESPACES.fo}">
+        <office:automatic-styles>
+          <style:style style:name="Effects" style:family="text"><style:text-properties style:text-underline-mode="skip-white-space" fo:letter-spacing="-0.12cm" style:letter-kerning="true" style:text-scale="140%" style:text-emphasize="accent below" fo:language="de" fo:country="DE" style:language-asian="ja" style:country-asian="JP" style:language-complex="hi" style:country-complex="IN"/></style:style>
+          <style:style style:name="Clear" style:family="text"><style:text-properties style:text-line-through-mode="continuous" fo:letter-spacing="normal" style:letter-kerning="false" style:text-scale="100%" style:text-emphasize="none"/></style:style>
+          <style:style style:name="Super" style:family="text"><style:text-properties style:text-position="32% 64%"/></style:style>
+          <style:style style:name="Sub" style:family="text"><style:text-properties style:text-position="-32% 66%"/></style:style>
+        </office:automatic-styles>
+        <office:body><office:spreadsheet><table:table table:name="Effects"><table:table-row><table:table-cell>
+          <text:p><text:span text:style-name="Effects">ab</text:span><text:span text:style-name="Clear">cd</text:span></text:p>
+        </table:table-cell><table:table-cell>
+          <text:p><text:span text:style-name="Super">Sub</text:span><text:span text:style-name="NamedText"> and </text:span><text:span text:style-name="Sub">Super</text:span></text:p>
+        </table:table-cell></table:table-row></table:table></office:spreadsheet></office:body>
+      </office:document-content>`);
+    worker = decodeCalcDocument(encodeCalcDocument(source));
+    const bytes = await writeOdsDocument(worker);
+    const xml = await (await DocumentArchive.open(bytes)).readTextEntry("content.xml");
+    expect(xml).not.toContain("style:text-underline-mode=");
+    expect(xml).not.toContain('style:text-scale="200%"');
+    for (const expected of [
+      'style:text-line-through-mode="skip-white-space"',
+      'style:text-line-through-mode="continuous"',
+      'fo:letter-spacing="-0.12cm"',
+      'fo:letter-spacing="normal"',
+      'style:letter-kerning="true"',
+      'style:letter-kerning="false"',
+      'style:text-scale="140%"',
+      'style:text-scale="100%"',
+      'style:text-emphasize="accent below"',
+      'style:text-emphasize="none"',
+      'fo:language="de"',
+      'style:language-asian="ja"',
+      'style:language-complex="hi"',
+    ])
+      expect(xml).toContain(expected);
+    reopened = await readOdsDocument(bytes);
+    for (const document of [source, worker, reopened]) {
+      const edit = document.GetRefCellValue(new ScAddress()).getEditText();
+      assert(edit);
+      const attrs: EECharAttrib[] = [];
+      edit.GetCharAttribs(0, attrs);
+      const values = new Map(
+        attrs.map(({ nStart, nEnd, pAttr }) => [
+          `${nStart},${nEnd},${pAttr?.Which()}`,
+          pAttr instanceof SvxEmphasisMarkItem ? pAttr.GetEmphasisMark() : pAttr?.QueryValue(),
+        ]),
+      );
+      for (const [which, first, second] of [
+        [EE_CHAR_WLM, true, false],
+        [EE_CHAR_KERNING, -120, 0],
+        [EE_CHAR_PAIRKERNING, true, false],
+        [EE_CHAR_FONTWIDTH, 140, 100],
+        [
+          EE_CHAR_EMPHASISMARK,
+          FontEmphasisMark.Accent | FontEmphasisMark.PosBelow,
+          FontEmphasisMark.NONE,
+        ],
+        [EE_CHAR_LANGUAGE, LANGUAGE_GERMAN, undefined],
+        [EE_CHAR_LANGUAGE_CJK, LANGUAGE_JAPANESE, undefined],
+        [EE_CHAR_LANGUAGE_CTL, LANGUAGE_HINDI, undefined],
+      ] as const) {
+        expect(values.get(`0,2,${which}`)).toBe(first);
+        expect(values.get(`2,4,${which}`)).toBe(second);
+      }
+      const positioned = document.GetRefCellValue(new ScAddress(1, 0, 0)).getEditText();
+      assert(positioned);
+      const sections: Section[] = [];
+      positioned.GetAllSections(sections);
+      expect(
+        sections.map(({ mnParagraph, mnStart, mnEnd, maAttributes }) => [
+          mnParagraph,
+          mnStart,
+          mnEnd,
+          maAttributes.map((item) => item.Which()),
+        ]),
+      ).toEqual([
+        [0, 0, 3, [EE_CHAR_ESCAPEMENT]],
+        [0, 3, 8, []],
+        [0, 8, 13, [EE_CHAR_ESCAPEMENT]],
+      ]);
+      const superscript = sections[0]?.maAttributes[0];
+      const subscript = sections[2]?.maAttributes[0];
+      assert(superscript instanceof SvxEscapementItem);
+      assert(subscript instanceof SvxEscapementItem);
+      expect([superscript.GetEsc(), superscript.GetProportionalHeight()]).toEqual([32, 64]);
+      expect([subscript.GetEsc(), subscript.GetProportionalHeight()]).toEqual([-32, 66]);
+    }
+  } finally {
+    reopened?.Dispose();
+    worker?.Dispose();
+    source.Dispose();
+  }
+});
 
 /** Reads the original URL feature from the native cell editor. @param document - Workbook. @param address - Source cell. @returns Borrowed field. */
 function urlField(document: ScDocument, address: ScAddress): SvxURLField {

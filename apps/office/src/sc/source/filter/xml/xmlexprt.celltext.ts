@@ -2,7 +2,6 @@
 import type { EditTextObject, EditTextObjectConstReference } from "../../../../editeng/inc/editobj";
 import type { Section } from "../../../../editeng/inc/section";
 import {
-  EE_CHAR_ESCAPEMENT,
   EE_CHAR_FONTHEIGHT,
   EE_CHAR_FONTHEIGHT_CJK,
   EE_CHAR_FONTHEIGHT_CTL,
@@ -10,7 +9,6 @@ import {
   EE_FEATURE_LINEBR,
   EE_FEATURE_TAB,
 } from "../../../../editeng/inc/eeitem";
-import type { SvxEscapementItem } from "../../../../editeng/source/items/textitem.escapement";
 import { SvxFontHeightItem } from "../../../../editeng/inc/fhgtitem";
 import { convertTwipToMm100 } from "../../../../tools/inc/UnitConversion";
 import { text } from "../../../../i18nlangtag/source/isolang/isolang.tables";
@@ -18,7 +16,6 @@ import { SfxItemSet } from "../../../../svl/source/items/itemset";
 import type { ScDocument } from "../../../inc/document";
 import { ScPatternAttr } from "../../../inc/patattr";
 import type { XMLFontAutoStylePool } from "../../../../xmloff/source/style/XMLFontAutoStylePool";
-import { exportTextCharacterProperties } from "../../../../xmloff/source/text/txtprmap";
 import { escapeXml, exportText } from "../../../../xmloff/source/text/txtparae";
 import {
   SvxDateField,
@@ -34,6 +31,7 @@ import {
 import { Date } from "../../../../tools/source/datetime/tdate";
 import { GetCellFieldValue } from "../../core/tool/editutil";
 import { exportCellTextPropertyElement } from "./xmlstyle";
+import { exportEditTextProperties } from "./editattributemap";
 
 /** Data required to reconstruct the represented native field in another document owner. */
 export type CellTextField =
@@ -101,16 +99,10 @@ export class CellTextStylePool {
         } else items.Put(item);
       }
       pattern.GetFromEditItemSet(items);
-      const position = items.GetItemIfSet(EE_CHAR_ESCAPEMENT) as SvxEscapementItem | undefined;
       properties = exportCellTextPropertyElement(
         pattern,
         this.fonts,
-        position
-          ? exportTextCharacterProperties({
-              escapement: position.GetEsc(),
-              escapementHeight: position.GetProportionalHeight(),
-            })
-          : "",
+        exportEditTextProperties(items),
       );
     } finally {
       pattern.Dispose();

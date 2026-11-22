@@ -1,0 +1,55 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "status": "mapped",
+    "localPath": "apps/office/src/sc/source/filter/xml/editattributemap.ts",
+    "localSymbols": [
+      "importEditTextProperties",
+      "exportEditTextProperties",
+      "editTextPropertyTokens"
+    ],
+    "upstreamPath": "sc/source/filter/xml/editattributemap.cxx",
+    "upstreamSymbols": [
+      "ScXMLEditAttributeMap::getEntryByAPIName",
+      "ScXMLEditAttributeMap::getEntryByItemID"
+    ],
+    "preservedResponsibilities": [
+      "Preserves the native word-mode, kerning, scale, escapement, emphasis and locale edit-run item mappings in ODS and Worker transfer. Existing font, color and decoration mapping continues through Calc text style construction."
+    ],
+    "omittedResponsibilities": [
+      "The represented mapping has no complete generic EditEngine UNO service or browser text shaping contract."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sc/source/filter/xml/editattributemap.ts",
+          "marker": "importEditTextProperties"
+        },
+        {
+          "path": "apps/office/src/sc/source/filter/xml/editattributemap.ts",
+          "marker": "exportEditTextProperties"
+        },
+        {
+          "path": "apps/office/src/sc/source/filter/xml/editattributemap.ts",
+          "marker": "editTextPropertyTokens"
+        },
+        {
+          "path": "apps/office/src/sc/source/filter/xml/ods-rich-text-fields.test.ts",
+          "marker": "preserves native word mode"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sc/source/filter/xml/editattributemap.cxx",
+          "marker": "ScXMLEditAttributeMap::getEntryByAPIName"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/source/filter/xml/editattributemap.cxx",
+          "marker": "ScXMLEditAttributeMap::getEntryByItemID"
+        }
+      ]
+    }
+  }
+}
