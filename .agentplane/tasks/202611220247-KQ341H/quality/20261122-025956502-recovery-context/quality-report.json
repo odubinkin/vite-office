@@ -1,0 +1,21 @@
+{
+  "schema_version": 1,
+  "task_id": "202611220247-KQ341H",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-11-22T02:59:56.502Z",
+  "verdict": "pass",
+  "summary": "Native Calc ODS header/footer child order, item groups and Worker round trips verified.",
+  "evaluated_sha": "33821146405ab6fce26b9e471d0bc9a69538c368",
+  "blueprint_digest": "3ec6169932848083376a81724cdac3536d0eab62d4c130ec34f0eae59190bc44",
+  "findings": [
+    "All 43 related Calc tests passed on final sources, including the original LibreOffice ODS witness and directly affected XLSX page-layout path."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202611220247-KQ341H/README.md",
+    "output/playwright/calc-ods-header-footer/verification.md"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": []
+}
