@@ -1,10 +1,11 @@
 ---
 id: "202611220135-K5MZ4R"
 title: "Align Calc ODS rich text with the native edit attribute map"
-status: "DOING"
+result_summary: "Calc ODS and Worker transfer preserve native EditEngine word mode, kerning, scale, emphasis, script locales and validated escapement in formatted spans."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 6
+revision: 7
 origin:
   system: "manual"
 depends_on: []
@@ -41,11 +42,16 @@ quality_review:
     - "docs/program/calc-upstream-suspected-issues.md#CALC-819"
   findings:
     - "Existing font and decoration routing is preserved. Calc writes its native line-through word-mode attribute for the single word-mode item. Pinned package and styled text ranges reopen with the expected source values."
-commit: null
+commit:
+  hash: "d4bba62ac223fb8ff820639e610d12ca1b54a69b"
+  message: "🧩 K5MZ4R code: preserve native Calc ODS span attributes"
 comments:
   -
     author: "CODER"
     body: "Start: trace and port pinned Calc ODF edit-run attribute mappings through the existing EditEngine and Worker boundaries."
+  -
+    author: "CODER"
+    body: "Verified: 131 focused tests, typecheck, lint, format, module boundaries, provenance, Calc registry invariants, task routing and doctor. CALC-819 records source word-mode export."
 events:
   -
     type: "status"
@@ -60,8 +66,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Native Calc rich-text attributes and explicit resets survive ODS and Worker transport. 131 focused tests and the declared static checks pass."
+  -
+    type: "status"
+    at: "2026-11-22T01:46:53.699Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: 131 focused tests, typecheck, lint, format, module boundaries, provenance, Calc registry invariants, task routing and doctor. CALC-819 records source word-mode export."
 doc_version: 3
-doc_updated_at: "2026-11-22T01:45:25.851Z"
+doc_updated_at: "2026-11-22T01:46:53.700Z"
 doc_updated_by: "CODER"
 description: "Port consumed ScXMLEditAttributeMap span mappings and use native EditEngine item values in Calc ODS import, export, and Worker round trips."
 sections:
