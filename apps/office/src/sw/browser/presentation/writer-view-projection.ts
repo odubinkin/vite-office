@@ -263,6 +263,7 @@ export interface WriterViewSnapshot extends WriterPresentationProjection {
   readonly verticalRulerUnitData: RulerUnitData;
   readonly isHorizontalRulerVisible: boolean;
   readonly isBaselineGridVisible: boolean;
+  readonly isNavigatorVisible: boolean;
   readonly baselineGridColor: string;
   readonly isVerticalRulerVisible: boolean;
   readonly isPropertiesSidebarVisible: boolean;
@@ -745,6 +746,7 @@ export class WriterViewStore {
         verticalRulerUnitData: this.view.GetVRuler().GetCurrentRulerUnit(),
         isHorizontalRulerVisible: this.view.IsHorizontalRulerVisible(),
         isBaselineGridVisible: this.view.IsBaselineGridVisible(),
+        isNavigatorVisible: this.view.IsNavigatorVisible(),
         baselineGridColor: this.view.GetBaselineGridColor(),
         isVerticalRulerVisible: this.view.IsVerticalRulerVisible(),
         isPropertiesSidebarVisible: this.view.IsSidebarVisible(),

@@ -251,12 +251,23 @@ export class SwRootFrame extends SwLayoutFrame {
 
   /** Resolves the style of the physical page at the current text position. @param node - Cursor paragraph. @param offset - Cursor offset. @returns Formatted page style name if found. */
   public FindPageDescriptorAt(node: SwTextNode, offset: number): string | undefined {
-    if (this.lastDocument !== node.GetDoc()) return undefined;
-    for (const page of this.snapshot?.pages.slice().reverse() ?? [])
-      for (const frame of page.textFrames)
+    return this.GetFormattedPages()[this.FindPageIndexAt(node, offset)]?.descriptor.name;
+  }
+
+  /** Finds the physical page owning a text cursor, preferring the follow at split boundaries. @param node - Cursor paragraph. @param offset - Cursor position in the paragraph. @returns Zero-based physical page or minus one. */
+  public FindPageIndexAt(node: SwTextNode, offset: number): number {
+    if (this.lastDocument !== node.GetDoc()) return -1;
+    const pages = this.GetFormattedPages();
+    for (let index = pages.length - 1; index >= 0; --index)
+      for (const frame of pages[index]?.textFrames ?? [])
         if (frame.GetTextNodeFirst() === node && offset >= frame.start && offset <= frame.end)
-          return page.descriptor.name;
-    return undefined;
+          return index;
+    return -1;
+  }
+
+  /** Borrows the current physical page frames for native navigation. @returns Formatted pages in physical order. */
+  public GetFormattedPages(): readonly SwPageFrame[] {
+    return this.lastDocument === this.getDocument() ? (this.snapshot?.pages ?? []) : [];
   }
 
   /** Invalidates the formatted graph from a changed Writer node onward. @param nodeIndex - Optional SwNodes index; absent means all frames. @returns Nothing. */

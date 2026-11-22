@@ -162,6 +162,14 @@ export function createWriterViewCommandRegistry(
     },
     {
       capabilityId: "CAP-0104",
+      /** Toggles the native Navigator child window. @returns Nothing. */
+      execute: (): void => target.ToggleNavigator(),
+      id: WRITER_COMMAND_IDS.toggleNavigator,
+      /** Reads Navigator child-window state. @returns Checked state. */
+      isChecked: (): boolean => target.IsNavigatorVisible(),
+    },
+    {
+      capabilityId: "CAP-0104",
       /** Toggles the native baseline-grid view setting. @returns Nothing. */
       execute: (): void => target.ToggleBaselineGrid(),
       id: WRITER_COMMAND_IDS.toggleBaselineGrid,

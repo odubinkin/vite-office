@@ -79,6 +79,7 @@
     "styleNewByExample": ".uno:StyleNewByExample",
     "styleUpdateByExample": ".uno:StyleUpdateByExample",
     "formatPaintbrush": ".uno:FormatPaintbrush",
+    "clearDirectFormatting": ".uno:ResetAttributes",
     "tableDialog": ".uno:TableDialog",
     "tableRowHeight": ".uno:TableRowHeight",
     "tableColumnWidth": ".uno:TableColumWidth",
@@ -97,6 +98,7 @@
     "distributeRows": ".uno:DistributeRows",
     "toggleHorizontalRuler": ".uno:Ruler",
     "toggleBaselineGrid": ".uno:BaselineGridVisible",
+    "toggleNavigator": ".uno:Navigator",
     "toggleVerticalRuler": ".uno:VRuler",
     "toggleSidebar": ".uno:Sidebar",
     "showAnnotations": ".uno:ShowAnnotations",
@@ -184,6 +186,7 @@
     { "capabilityId": "CAP-0103", "commandUrl": ".uno:SelectAll" },
     { "capabilityId": "CAP-0104", "commandUrl": ".uno:Ruler" },
     { "capabilityId": "CAP-0104", "commandUrl": ".uno:BaselineGridVisible" },
+    { "capabilityId": "CAP-0104", "commandUrl": ".uno:Navigator" },
     { "capabilityId": "CAP-0104", "commandUrl": ".uno:VRuler" },
     { "capabilityId": "CAP-0104", "commandUrl": ".uno:Sidebar" },
     { "capabilityId": "CAP-0104", "commandUrl": ".uno:ShowAnnotations" },
@@ -1231,6 +1234,22 @@
       "showsDialog": false,
       "shortcuts": [],
       "slotId": 20274
+    },
+    ".uno:Navigator": {
+      "browserOwned": false,
+      "argumentSchema": [],
+      "capabilityId": "CAP-0104",
+      "controlLabel": "Navigator",
+      "label": "Navigator",
+      "iconName": "lc_navigator.svg",
+      "placements": [
+        "sw/uiconfig/swriter/menubar/menubar.xml",
+        "sw/uiconfig/swriter/toolbar/standardbar.xml"
+      ],
+      "semantics": "check",
+      "showsDialog": false,
+      "shortcuts": ["F5"],
+      "slotId": 10366
     },
     ".uno:VRuler": {
       "browserOwned": false,
@@ -2288,6 +2307,14 @@
       "classification": "supported-upstream",
       "commandUrl": ".uno:BaselineGridVisible",
       "sources": ["sw/uiconfig/swriter/menubar/menubar.xml"]
+    },
+    {
+      "classification": "supported-upstream",
+      "commandUrl": ".uno:Navigator",
+      "sources": [
+        "sw/uiconfig/swriter/menubar/menubar.xml",
+        "sw/uiconfig/swriter/toolbar/standardbar.xml"
+      ]
     },
     {
       "classification": "supported-upstream",
@@ -3428,14 +3455,6 @@
       "context": [".uno:ViewMenu"],
       "entryKind": "command",
       "sourceUrl": ".uno:Gallery",
-      "reason": "outside-p1-supported-command-slice",
-      "sourcePath": "sw/uiconfig/swriter/menubar/menubar.xml"
-    },
-    {
-      "classification": "X",
-      "context": [".uno:ViewMenu"],
-      "entryKind": "command",
-      "sourceUrl": ".uno:Navigator",
       "reason": "outside-p1-supported-command-slice",
       "sourcePath": "sw/uiconfig/swriter/menubar/menubar.xml"
     },
@@ -6355,14 +6374,6 @@
       "classification": "X",
       "context": [],
       "entryKind": "command",
-      "sourceUrl": ".uno:Navigator",
-      "reason": "outside-p1-supported-command-slice",
-      "sourcePath": "sw/uiconfig/swriter/toolbar/standardbar.xml"
-    },
-    {
-      "classification": "X",
-      "context": [],
-      "entryKind": "command",
       "sourceUrl": ".uno:SpellingAndGrammarDialog",
       "reason": "outside-p1-supported-command-slice",
       "sourcePath": "sw/uiconfig/swriter/toolbar/standardbar.xml"
@@ -7997,7 +8008,8 @@
           { "commandUrl": ".uno:ShowAnnotations", "kind": "command", "visible": true },
           { "commandUrl": ".uno:ShowResolvedAnnotations", "kind": "command", "visible": true },
           { "kind": "separator" },
-          { "commandUrl": ".uno:Sidebar", "kind": "command", "visible": true }
+          { "commandUrl": ".uno:Sidebar", "kind": "command", "visible": true },
+          { "commandUrl": ".uno:Navigator", "kind": "command", "visible": true }
         ],
         "kind": "menu",
         "label": "View"
@@ -8293,6 +8305,7 @@
       { "commandUrl": ".uno:Redo", "kind": "command", "visible": true },
       { "kind": "separator" },
       { "commandUrl": ".uno:SearchDialog", "kind": "command", "visible": true },
+      { "commandUrl": ".uno:Navigator", "kind": "command", "visible": false },
       { "kind": "separator" },
       { "commandUrl": ".uno:InsertTable", "kind": "command", "visible": true },
       { "kind": "separator" },
@@ -9015,12 +9028,6 @@
         "context": [".uno:ViewMenu"],
         "entryKind": "command",
         "sourceUrl": ".uno:Gallery"
-      },
-      {
-        "classification": "X",
-        "context": [".uno:ViewMenu"],
-        "entryKind": "command",
-        "sourceUrl": ".uno:Navigator"
       },
       {
         "classification": "X",
@@ -11177,12 +11184,6 @@
         "context": [],
         "entryKind": "command",
         "sourceUrl": ".uno:PrintPreview"
-      },
-      {
-        "classification": "X",
-        "context": [],
-        "entryKind": "command",
-        "sourceUrl": ".uno:Navigator"
       },
       {
         "classification": "X",

@@ -47,6 +47,7 @@ import type { SvxULSpaceItem } from "../../../../editeng/inc/ulspitem";
 import { RES_PAGEDESC } from "../../../inc/hintids";
 import type { SwFormatPageDesc } from "../../core/attr/fmtpdsc";
 import { getPageRegisterStyles, PageDescToItemSet } from "../utlui/uitool";
+import { SwContentTree } from "../utlui/content";
 import { SvxRuler } from "../../../../svx/source/dialog/svxruler";
 
 /** Persistent Writer view joining SwDocShell, SwWrtShell, and frame dispatch. */
@@ -60,6 +61,8 @@ export class SwView {
   private readonly tableShell: SwTableShell;
   private readonly viewOptions: SwViewOption;
   private readonly wrtShell: SwWrtShell;
+  private readonly navigator: SwContentTree;
+  private navigatorVisible = false;
   private readonly search: SwViewSearch;
   private readonly postItMgr: SwPostItMgr;
   private readonly editWindow: SwEditWin;
@@ -95,6 +98,7 @@ export class SwView {
       this.viewOptions,
       this,
     );
+    this.navigator = new SwContentTree(this.wrtShell, this.layout);
     this.postItMgr = new SwPostItMgr(
       this.viewOptions,
       this.wrtShell,
@@ -337,6 +341,22 @@ export class SwView {
   /** Returns sidebar command state. @returns Visibility. */
   public IsSidebarVisible(): boolean {
     return this.viewOptions.IsSidebarVisible();
+  }
+
+  /** Borrows the current view's native Navigator content model. @returns Navigator owner. */
+  public GetNavigator(): SwContentTree {
+    return this.navigator;
+  }
+
+  /** Reports whether the original Navigator child window is shown. @returns View-local visibility. */
+  public IsNavigatorVisible(): boolean {
+    return this.navigatorVisible;
+  }
+
+  /** Toggles the original Navigator child window without changing the document or its sidebar. @returns Nothing. */
+  public ToggleNavigator(): void {
+    this.navigatorVisible = !this.navigatorVisible;
+    this.Invalidate("view");
   }
 
   /** Returns status-bar command state. @returns Visibility. */

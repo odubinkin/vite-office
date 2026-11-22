@@ -1,0 +1,34 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sw/browser/presentation/writer-cursor-reveal.ts",
+    "classification": "browser-adaptation",
+    "state": "active",
+    "suite": "writer",
+    "subsystem": "navigator",
+    "capabilityIds": [
+      "CAP-0103",
+      "CAP-0104"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "not-applicable",
+      "defaultStatus": "not-applicable",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/sw/browser/presentation/writer-cursor-reveal.ts#queueWriterCursorReveal",
+        "apps/office/src/sw/browser/presentation/WriterNavigator.test.tsx"
+      ],
+      "justification": "Reveals the projected Writer model position after Navigator and Find commands. Uses the browser paint callback and the actual editable DOM scroll surface.",
+      "knownViolations": [],
+      "localSymbols": [
+        "queueWriterCursorReveal",
+        "useWriterSearchCursorReveal"
+      ],
+      "sourceResponsibility": "browser-owned",
+      "upstreamFile": null,
+      "upstreamSymbols": []
+    }
+  }
+}

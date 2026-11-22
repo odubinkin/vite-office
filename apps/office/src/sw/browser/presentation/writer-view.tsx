@@ -10,7 +10,6 @@ import { RES_BOX } from "../../inc/hintids";
 import { SwInsertTableFlags } from "../../inc/itabenum";
 /* eslint-disable react-refresh/only-export-components -- Pure presentation helpers are exported for focused behavior verification. */
 import { useCallback, useEffect, useMemo, useRef, useState, useSyncExternalStore } from "react";
-import { SvxSearchCmd } from "../../../svl/inc/srchitem";
 
 import { WriterCommandToolbar } from "./WriterCommandToolbar";
 import { WriterTableObjectBar } from "./WriterTableObjectBar";
@@ -41,6 +40,8 @@ import {
   resolveSwListFirstLineIndent,
 } from "../../source/core/txtnode/ndtxt-list-indent";
 import { WriterPropertiesPanel } from "./WriterPropertiesPanel";
+import { WriterNavigator } from "./WriterNavigator";
+import { useWriterSearchCursorReveal } from "./writer-cursor-reveal";
 import {
   WriterSearch,
   type SearchFocusRequest as SearchFocus,
@@ -573,27 +574,7 @@ export function WriterWorkbench({
       setTableSizeRequest(undefined);
     },
   };
-  useEffect(
-    /** Reveals any completed search after the browser projects the model cursor. @returns Optional frame cancellation. */ () => {
-      if (
-        searchFeedback?.kind !== "result" ||
-        searchFeedback.result.matches === 0 ||
-        searchFeedback.command === SvxSearchCmd.REPLACE_ALL
-      )
-        return;
-      const frame = requestAnimationFrame(
-        /** Scrolls the match into view without moving focus out of search controls. @returns Nothing. */ () => {
-          const host = editingHostRef.current;
-          const point = host?.ownerDocument.getSelection()?.focusNode;
-          if (point != null && host?.contains(point))
-            point.parentElement?.scrollIntoView?.({ block: "nearest", inline: "nearest" });
-        },
-      );
-      return /** Cancels an obsolete search scroll. @returns Nothing. */ () =>
-        cancelAnimationFrame(frame);
-    },
-    [searchFeedback],
-  );
+  useWriterSearchCursorReveal(searchFeedback, editingHostRef);
   /** Projects the requested surface over the shared view owner. @param dialog - Whether to render Find and Replace. @param request - Surface-specific focus request. @returns Mounted search controls. */
   function renderSearch(dialog: boolean, request: SearchFocus): React.JSX.Element {
     const barStatus = findbar?.feedback === searchFeedback ? undefined : findbar && searchFeedback;
@@ -726,6 +707,14 @@ export function WriterWorkbench({
             commandSource={commandSource}
             focusDocument={focusDocument}
             resolveArguments={resolveCommandArguments}
+          />
+        }
+        navigator={
+          <WriterNavigator
+            view={view}
+            visible={snapshot.isNavigatorVisible}
+            editingHost={editingHostRef}
+            focusDocument={focusDocument}
           />
         }
         rulers={

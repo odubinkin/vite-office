@@ -90,6 +90,7 @@ export interface WriterViewCommandTarget {
   ) => boolean;
   readonly IsHorizontalRulerVisible: () => boolean;
   readonly IsBaselineGridVisible: () => boolean;
+  readonly IsNavigatorVisible: () => boolean;
   readonly IsVerticalRulerVisible: () => boolean;
   readonly IsSidebarVisible: () => boolean;
   readonly IsStatusBarVisible: () => boolean;
@@ -106,6 +107,7 @@ export interface WriterViewCommandTarget {
   readonly RequestSelectAll: () => void;
   readonly ToggleHorizontalRuler: () => void;
   readonly ToggleBaselineGrid: () => void;
+  readonly ToggleNavigator: () => void;
   readonly ToggleVerticalRuler: () => void;
   readonly ToggleSidebar: () => void;
   readonly ToggleStatusBar: () => void;

@@ -9,8 +9,11 @@ export const writerStandardBarItems: readonly WriterToolbarItemPlacement[] =
   normalizeWriterToolbarItems(
     generated.surfaces.standardbar
       .filter(
-        /** Keeps Save As solely in the File menu. @param item - Generated toolbar node. @returns Whether shown on the browser toolbar. */
-        (item) => item.kind !== "command" || item.commandUrl !== WRITER_COMMAND_IDS.saveOdt,
+        /** Applies original toolbar visibility and keeps Writer's established Clear Direct Formatting button. @param item - Generated toolbar node. @returns Whether shown on the browser toolbar. */
+        (item) =>
+          item.kind !== "command" ||
+          item.commandUrl === WRITER_COMMAND_IDS.clearDirectFormatting ||
+          (item.visible !== false && item.commandUrl !== WRITER_COMMAND_IDS.saveOdt),
       )
       .flatMap(
         /** Adapts one generated toolbar node. @param item - Generated node. @returns Presentation placements. */ (
