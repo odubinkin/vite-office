@@ -7,7 +7,12 @@ import { PositionText } from "./calc-name-box";
 import { ScUndoModifyStyle } from "../../source/ui/undo/undostyl";
 import { UndoFormulaToValue } from "../../source/ui/undo/undoconvert";
 import { ScUndoOutline } from "../../source/ui/undo/undodat";
-import { ScUndoShowHideTab, ScUndoTabColor, ScUndoPrintRange } from "../../source/ui/undo/undotab";
+import {
+  ScUndoShowHideTab,
+  ScUndoTabColor,
+  ScUndoPrintRange,
+  ScUndoTabProtect,
+} from "../../source/ui/undo/undotab";
 import { ScUndoAddRangeData, ScUndoAllRangeNames } from "../../source/ui/undo/undorangename";
 import {
   ScUndoIndent,
@@ -50,6 +55,7 @@ export function History(this: CalcViewController, redo: boolean): boolean {
     cursorAction instanceof ScUndoWidthOrHeight ||
     cursorAction instanceof ScUndoShowHideTab ||
     cursorAction instanceof ScUndoTabColor ||
+    cursorAction instanceof ScUndoTabProtect ||
     cursorAction instanceof ScUndoPrintRange ||
     cursorAction instanceof ScUndoModifyStyle ||
     cursorAction instanceof ScUndoRangeNames ||

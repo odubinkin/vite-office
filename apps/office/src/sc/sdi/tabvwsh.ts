@@ -11,6 +11,8 @@ export const calcViewCommands = [
   { id: ".uno:ToggleSheetGrid", slotId: 25018, label: "View Grid Lines", option: "grid" },
 ] as const;
 export const SID_STYLE_APPLY = 5552;
+/** Original sheet protection slot at EXTRA_MENU_START + 6. */
+export const FID_PROTECT_TABLE = 26314;
 export const SID_DEFINE_PRINTAREA = 26602;
 
 /** Original SID_FORMATPAGE at FORMAT_MENU_START + 17. */

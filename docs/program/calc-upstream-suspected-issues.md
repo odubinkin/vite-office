@@ -7848,3 +7848,24 @@ unallocated area. Calc preserves both results for the Styles menu.
 
 - [Original area and selection queries](../../vendor/libreoffice-reference/sc/source/core/data/table2.cxx#L3165)
 - [Original cursor and selection dispatch](../../vendor/libreoffice-reference/sc/source/ui/view/viewfunc.cxx#L1555)
+
+### CALC-824 — A password prompt can record sheet unprotection without changing protection
+
+The callback for the original no-argument sheet command completes the
+copied request with a false protection item after the prompt, including
+when the password is incorrect or the prompt was canceled. The sheet
+changes only after successful verification. Calc preserves the request
+completion and the unchanged sheet state in those cases.
+
+- [Original password prompt callback](../../vendor/libreoffice-reference/sc/source/ui/view/tabvwsh3.cxx#L301)
+
+### CALC-825 — Grouped Protect Sheet history can discard previous protection
+
+Protect Sheet applies the new configuration to the entire selected tab
+group. Its history owns the newly applied configuration, and Undo clears
+the protected state on those tabs. A previously protected member of the
+group therefore loses its original settings when that action is undone.
+Calc preserves the source operation and its history.
+
+- [Original grouped protect operation](../../vendor/libreoffice-reference/sc/source/ui/view/viewfunc.cxx#L2805)
+- [Original sheet protection history](../../vendor/libreoffice-reference/sc/source/ui/undo/undotab.cxx#L1355)

@@ -1,0 +1,35 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sc/source/ui/view/tabvwsh3.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "calc",
+    "subsystem": "sheet-protection",
+    "capabilityIds": [
+      "CAP-c8989bcd-7438-4fd9-bfdf-fdfd61a8255a"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/sc/source/ui/view/tabvwsh3.ts",
+        "apps/office/src/sc/browser/presentation/calc-sheet-protection.test.tsx",
+        "vendor/libreoffice-reference/sc/source/ui/view/tabvwsh3.cxx#ScTabViewShell::ExecProtectTable"
+      ],
+      "justification": "Routes the original sheet protection slot and BoolItem request, including source asynchronous completion and guarded workbook identity.",
+      "knownViolations": [],
+      "localSymbols": [
+        "ExecProtectTable"
+      ],
+      "sourceResponsibility": "divergent",
+      "upstreamFile": "sc/source/ui/view/tabvwsh3.cxx",
+      "upstreamSymbols": [
+        "ScTabViewShell::ExecProtectTable"
+      ]
+    }
+  }
+}

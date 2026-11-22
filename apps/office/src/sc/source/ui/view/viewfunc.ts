@@ -2,6 +2,7 @@
 import { PasteFromClip } from "./viewfun3";
 import { EnterBlock, EnterAutoSum, HideTable, ShowTable, SetPrintRanges } from "./viewfun2";
 import type { ScModule } from "../../../inc/scmod";
+import type { ScTableProtection } from "../../core/data/tabprotection";
 import type { ScDocumentPool } from "../../core/data/docpool";
 import {
   SvxBoxItem,
@@ -124,6 +125,64 @@ export class ScViewFunc extends ScTabView {
   /** Splits the source selection through the actual document shell. @returns Whether admitted. */
   RemoveMerge(): boolean {
     return RemoveMerge(this, this.shell);
+  }
+
+  /** Applies one native protection configuration to all selected sheets. @param protection - Accepted dialog values. @returns Whether a sheet changed. */
+  ProtectSheet(protection: ScTableProtection): boolean {
+    const undo = this.shell.GetUndoManager();
+    const func = this.shell.GetDocFunc();
+    const label = "Protect sheet";
+    let changed = false;
+    undo.EnterListAction(label, label);
+    try {
+      for (const tab of this.data.GetMarkData()) {
+        if (func.ProtectSheet(tab, protection)) changed = true;
+      }
+    } finally {
+      undo.LeaveListAction();
+    }
+    return changed;
+  }
+
+  /** Verifies the requested tabs and unlocks the matching original protection records. @param tab - Active sheet. @param password - Entered value. @param isCurrent - Async view guard. @returns Whether a sheet changed and whether any password failed. */
+  async Unprotect(
+    tab: number,
+    password: string,
+    isCurrent: () => boolean,
+  ): Promise<{ changed: boolean; wrongPassword: boolean }> {
+    const doc = this.data.GetDocument();
+    const marks = this.data.GetMarkData();
+    const grouped = marks.GetSelectCount() > 1;
+    const tabs = grouped ? [...marks] : [tab];
+    const verified = await Promise.all(
+      tabs.map(
+        /** Reads and verifies one original sheet record. @param index - Selected sheet. @returns Native settings and verification. */
+        async (index) => {
+          const protection = doc.GetTabProtection(index);
+          if (!protection?.isProtected()) return undefined;
+          return { index, protection, accepted: await protection.verifyPassword(password) };
+        },
+      ),
+    );
+    if (!isCurrent() || this.shell.GetDocument() !== doc)
+      return { changed: false, wrongPassword: false };
+
+    const undo = this.shell.GetUndoManager();
+    const func = this.shell.GetDocFunc();
+    const label = "Unprotect sheet";
+    let changed = false,
+      wrongPassword = false;
+    if (grouped) undo.EnterListAction(label, label);
+    try {
+      for (const result of verified) {
+        if (!result) continue;
+        if (!result.accepted) wrongPassword = true;
+        else if (func.UnprotectSheet(result.index, result.protection)) changed = true;
+      }
+    } finally {
+      if (grouped) undo.LeaveListAction();
+    }
+    return { changed, wrongPassword };
   }
 
   /** Reads the source style at the cursor or across the unmodified selection. @returns Uniform cell style or null. */

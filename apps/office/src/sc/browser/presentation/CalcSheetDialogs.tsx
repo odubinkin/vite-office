@@ -19,6 +19,7 @@ import { ScSheetTabDialog } from "./ScSheetTabDialog";
 import { ScHFEditDlg } from "./pagedlg/ScHFEditDlg";
 import { ScPageStyleDlg } from "./pagedlg/ScPageStyleDlg";
 import { ScGoToTabDlg } from "./ScGoToTabDlg";
+import { ScProtectSheetDialog } from "./ScProtectSheetDialog";
 import { ScMergeCellsDialog } from "./ScMergeCellsDialog";
 
 /** Requests from the existing native sheet workflow controllers. */
@@ -32,6 +33,7 @@ interface CalcSheetDialogsProps {
   readonly pageStyleDialog: ReturnType<
     CalcSheetWorkflows["pageStyles"]["pageStyleDialogs"]["GetSnapshot"]
   >;
+  readonly protectionDialog: ReturnType<CalcSheetWorkflows["protection"]["dialogs"]["GetSnapshot"]>;
   readonly mergeDialog: ReturnType<CalcSheetWorkflows["merge"]["dialogs"]["GetSnapshot"]>;
   readonly condEditor: ReturnType<CalcSheetWorkflows["conditionals"]["editors"]["GetSnapshot"]>;
   readonly condManager: ReturnType<CalcSheetWorkflows["conditionals"]["managers"]["GetSnapshot"]>;
@@ -54,6 +56,7 @@ export function CalcSheetDialogs({
   pageStyleDialog,
   headerFooterDialog,
   mergeDialog,
+  protectionDialog,
   tabDialog,
   sheetDialog,
   condEditor,
@@ -70,6 +73,16 @@ export function CalcSheetDialogs({
 }: CalcSheetDialogsProps): React.JSX.Element {
   return (
     <>
+      {protectionDialog && (
+        <ScProtectSheetDialog
+          key={protectionDialog.id}
+          request={protectionDialog.request}
+          onCancel={() => sheetWorkflows.protection.dialogs.Cancel(protectionDialog.id)}
+          onSubmit={(result) =>
+            sheetWorkflows.protection.dialogs.Complete(protectionDialog.id, result)
+          }
+        />
+      )}
       {mergeDialog && (
         <ScMergeCellsDialog
           key={mergeDialog.id}

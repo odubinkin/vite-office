@@ -1,6 +1,7 @@
 /** @fileoverview ScUndoShowHideTab and ScUndoTabColor from undotab.cxx. */
 import { SfxUndoAction } from "../../../../svl/source/undo/undo";
 import type { Color } from "../../../../tools/inc/color";
+import { ScTableProtection } from "../../core/data/tabprotection";
 import type { ScPrintRangeSaver } from "../../core/tool/prnsave";
 import type { ScDocShell } from "../docshell/docsh";
 import type { ScTabView } from "../view/tabview3";
@@ -98,5 +99,41 @@ export class ScUndoPrintRange extends SfxUndoAction<ScDocShell> {
   /** Returns the original Calc history caption. @returns Caption. */
   override GetComment(): string {
     return "Print range";
+  }
+}
+
+/** Native sheet protection action owns the original options and verifier. */
+export class ScUndoTabProtect extends SfxUndoAction<ScDocShell> {
+  private readonly settings: ScTableProtection;
+
+  /** Copies the protection record for history. @param tab - Sheet index. @param protection - Applied or removed settings. @returns Action. */
+  constructor(
+    private readonly tab: number,
+    protection: ScTableProtection,
+  ) {
+    super();
+    this.settings = new ScTableProtection(protection);
+  }
+
+  /** Replays the source protection state. @param shell - Document owner. @param protect - Lock direction. @returns Nothing. */
+  private DoProtect(shell: ScDocShell, protect: boolean): void {
+    const settings = protect ? new ScTableProtection(this.settings) : undefined;
+    settings?.setProtected(true);
+    shell.GetDocument().SetTabProtection(this.tab, settings);
+  }
+
+  /** Reverses the lock state. @param shell - Document owner. @returns Nothing. */
+  override UndoWithContext(shell: ScDocShell): void {
+    this.DoProtect(shell, !this.settings.isProtected());
+  }
+
+  /** Replays the lock state. @param shell - Document owner. @returns Nothing. */
+  override RedoWithContext(shell: ScDocShell): void {
+    this.DoProtect(shell, this.settings.isProtected());
+  }
+
+  /** Returns the original protection action caption. @returns Caption. */
+  override GetComment(): string {
+    return this.settings.isProtected() ? "Protect sheet" : "Unprotect sheet";
   }
 }

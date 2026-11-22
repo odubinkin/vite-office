@@ -31,18 +31,23 @@
         "vendor/libreoffice-reference/sc/source/core/data/tabprotection.cxx#ScTableProtection::ScTableProtection",
         "apps/office/src/sc/source/filter/oox/excelfilter.sheet-protection.test.ts",
         "apps/office/src/sc/source/filter/xml/ods-sheet-protection.test.ts",
-        "apps/office/src/sc/source/filter/oox/excelfilter.enhanced-protection.test.ts"
+        "apps/office/src/sc/source/filter/oox/excelfilter.enhanced-protection.test.ts",
+        "apps/office/src/sc/browser/presentation/calc-sheet-protection.test.tsx"
       ],
-      "justification": "Preserves the original sheet flag, owned copy, permissions and the two imported Excel verifier representations. Password verification, range reference updates and whole-document structure protection remain pending. Stores the native legacy and ODF verifier in the same primary/secondary format and checks native sheet-workbook hash compatibility. Retains enhanced protection records and evaluates the original direct and union predicates for uncredentialed ranges. Requires each enhanced protection range in the marked selection to pass the native block rule.",
+      "justification": "Preserves the original sheet flag, owned copy, permissions and the two imported Excel verifier representations. Range reference updates and whole-document structure protection remain pending. Stores the native legacy and ODF verifier in the same primary/secondary format and checks native sheet-workbook hash compatibility. Retains enhanced protection records and evaluates the original direct and union predicates for uncredentialed ranges. Requires each enhanced protection range in the marked selection to pass the native block rule. Task 2Z7YAP verifies stored native SHA and legacy Excel verifiers, including the original ODF UTF-8 fallback and SHA-based OOXML spin hashes, using host digest primitives.",
       "knownViolations": [],
       "localSymbols": [
-        "ScTableProtection"
+        "ScTableProtection",
+        "verifyPassword",
+        "setPassword"
       ],
       "sourceResponsibility": "divergent",
       "upstreamFile": "sc/source/core/data/tabprotection.cxx",
       "upstreamSymbols": [
         "ScTableProtection::ScTableProtection",
-        "ScTableProtection::setPasswordHash"
+        "ScTableProtection::setPasswordHash",
+        "ScTableProtection::verifyPassword",
+        "ScTableProtection::setPassword"
       ]
     }
   }

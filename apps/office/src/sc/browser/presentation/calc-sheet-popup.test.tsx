@@ -49,6 +49,7 @@ it("opens connected source popup entries and executes group commands without cha
   ).toEqual([
     "Select All Sheets",
     "Deselect All Sheets",
+    "Protect Sheet…",
     "Hide Sheet",
     "Show Sheet…",
     "✓View Grid Lines",

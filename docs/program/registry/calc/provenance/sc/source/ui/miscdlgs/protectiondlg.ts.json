@@ -1,0 +1,40 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/sc/source/ui/miscdlgs/protectiondlg.ts",
+    "status": "mapped",
+    "upstreamPath": "sc/source/ui/miscdlgs/protectiondlg.cxx",
+    "localSymbols": [
+      "ScTableProtectionDlg"
+    ],
+    "upstreamSymbols": [
+      "ScTableProtectionDlg::WriteData"
+    ],
+    "preservedResponsibilities": [
+      "Preserves original option order, dialog defaults and the construction of the accepted protection record."
+    ],
+    "omittedResponsibilities": [
+      "The workbook structure protection command is independent."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sc/source/ui/miscdlgs/protectiondlg.ts",
+          "marker": "ScTableProtectionDlg"
+        },
+        {
+          "path": "apps/office/src/sc/browser/presentation/calc-sheet-protection.test.tsx",
+          "marker": "protectSheet.py"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sc/source/ui/miscdlgs/protectiondlg.cxx",
+          "marker": "ScTableProtectionDlg::WriteData"
+        }
+      ]
+    }
+  }
+}

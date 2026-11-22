@@ -7,6 +7,7 @@ import { STD_COL_WIDTH, MAX_COL_WIDTH, MAX_ROW_HEIGHT, ScInputMode } from "../..
 import { ScMetricInputDlg } from "../../source/ui/miscdlgs/mtrindlg";
 import { ScOptionsUtil } from "../../source/core/tool/optutil";
 import { FieldUnit } from "../../../tools/inc/fldunit";
+import { CalcSheetProtectionWorkflow } from "./calc-sheet-protection-workflow";
 import { SfxDialogController } from "../../../sfx2/source/dialog/basedlgs";
 import { SfxInterface } from "../../../sfx2/source/control/objface";
 import type { SfxDispatcher } from "../../../sfx2/source/control/dispatch";
@@ -121,6 +122,7 @@ export class CalcSheetWorkflows {
   readonly clipboard: CalcClipboardWorkflow;
   readonly labelRanges: CalcLabelRangeWorkflow;
   readonly merge: CalcMergeWorkflow;
+  readonly protection: CalcSheetProtectionWorkflow;
   readonly dialogs = new SfxDialogController<CalcGoToSheetRequest, string>();
   readonly tabDialogs = new SfxDialogController<CalcSheetTabDialog, number[] | string>();
   readonly metricDialogs = new SfxDialogController<ScMetricInputDlg, number>();
@@ -145,6 +147,10 @@ export class CalcSheetWorkflows {
     this.pageStyles = new CalcPageStyleWorkflow(controller, () => !this.HasSheetDialog());
     this.options = new CalcOptionsWorkflow(controller, () => !this.HasSheetDialog());
     this.merge = new CalcMergeWorkflow(controller, () => !this.HasSheetDialog());
+    this.protection = new CalcSheetProtectionWorkflow(
+      controller,
+      /** Shares sheet dialogs. @returns Availability. */ () => !this.HasSheetDialog(),
+    );
     this.clipboard = new CalcClipboardWorkflow(
       controller,
       () => !this.HasSheetDialog(),
@@ -685,6 +691,7 @@ export class CalcSheetWorkflows {
       this.labelRanges.dialogs.GetSnapshot() ||
       this.clipboard.dialogs.GetSnapshot() ||
       this.merge.dialogs.GetSnapshot() ||
+      this.protection.IsOpen() ||
       this.options.dialogs.GetSnapshot() ||
       this.conditionals.IsOpen(),
     );
@@ -962,6 +969,7 @@ export class CalcSheetWorkflows {
     this.options.Close();
     this.clipboard.Close();
     this.merge.Close();
+    this.protection.Close();
     this.conditionals.Close();
     this.labelRanges.Close();
     this.managing = undefined;

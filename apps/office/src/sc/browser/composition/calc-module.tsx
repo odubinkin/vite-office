@@ -61,6 +61,7 @@ export function createCalcSession(
     createSfxShell(controller, createCalcCalculationInterface()),
     fileWorkflows.GetShell(),
     sheetWorkflows.GetShell(),
+    sheetWorkflows.protection.GetShell(),
     sheetWorkflows.options.GetShell(),
     sheetWorkflows.clipboard.GetShell(),
   ]);

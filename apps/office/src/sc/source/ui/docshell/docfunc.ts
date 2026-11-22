@@ -27,6 +27,8 @@ import type { ScFormulaCell } from "../../../inc/formulacell";
 import { RowHeightContext } from "../../../inc/rowheightcontext";
 import { ScRange, type ScAddress } from "../../../inc/address";
 import { ChangeIndentOperation } from "../operation/ChangeIndentOperation";
+import type { ScTableProtection } from "../../core/data/tabprotection";
+import { ScUndoTabProtect } from "../undo/undotab";
 import type { ScDocShell } from "./docsh";
 import type { ScMarkData } from "../../../inc/markdata";
 import { HasAttrFlags, InsertDeleteFlags } from "../../../inc/global";
@@ -42,6 +44,24 @@ import { ScPatternAttr } from "../../../inc/patattr";
 export class ScDocFunc {
   /** Borrows the actual shell. @param shell - Document owner. @returns Function owner. */
   constructor(private readonly shell: ScDocShell) {}
+
+  /** Installs native protection and records the actual sheet mutation. @param tab - Original sheet. @param protection - Requested settings. @returns Whether the sheet was present. */
+  ProtectSheet(tab: number, protection: ScTableProtection): boolean {
+    const doc = this.shell.GetDocument();
+    if (!doc.FetchTable(tab)) return false;
+    doc.SetTabProtection(tab, protection);
+    this.shell.GetUndoManager().AddUndoAction(new ScUndoTabProtect(tab, protection));
+    this.shell.SetDocumentModified();
+    return true;
+  }
+
+  /** Applies a verified sheet unlock with the source record retained for history. @param tab - Original sheet. @param protection - Actual verified settings. @returns Whether the state changed. */
+  UnprotectSheet(tab: number, protection: Readonly<ScTableProtection>): boolean {
+    if (this.shell.GetDocument().GetTabProtection(tab) !== protection) return false;
+    const settings = protection.Clone();
+    settings.setProtected(false);
+    return this.ProtectSheet(tab, settings);
+  }
 
   /** Dispatches source merge by rectangle and selected tabs. @param option - Original merge option. @param contents - Move the covered values. @param record - Record history. @param api - Source API mode. @param empty - Clear covered contents. @returns Whether admitted. */
   MergeCells(

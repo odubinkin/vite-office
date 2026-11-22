@@ -1,6 +1,6 @@
 /** @fileoverview Browser ScTabControl presenter over actual document sheet names and view-owned active/selected sheets. */
 import type { CSSProperties, KeyboardEvent, MouseEvent } from "react";
-import { ChevronLeft, ChevronRight, ChevronsLeft, ChevronsRight, Plus } from "lucide-react";
+import { ChevronLeft, ChevronRight, ChevronsLeft, ChevronsRight, Lock, Plus } from "lucide-react";
 import { officeToolbarButtonClassName } from "../../../framework/browser/presentation/office-control-styles";
 import type { ScViewData } from "../../source/ui/inc/viewdata";
 import { OUString } from "../../../sal/inc/rtl/ustring";
@@ -30,6 +30,7 @@ export function ScTabControl(props: ScTabControlProps): React.JSX.Element {
     name: string;
     current: boolean;
     selected: boolean;
+    protected: boolean;
     appearance: string;
     style: CSSProperties | undefined;
   }[] = [];
@@ -56,6 +57,7 @@ export function ScTabControl(props: ScTabControlProps): React.JSX.Element {
         name: text(name),
         current,
         selected,
+        protected: document.IsTabProtected(tab),
         appearance: appearance + line,
         style: custom
           ? ({
@@ -133,6 +135,7 @@ export function ScTabControl(props: ScTabControlProps): React.JSX.Element {
             name: label,
             current,
             selected,
+            protected: locked,
             appearance,
             style,
           }) => (
@@ -141,6 +144,7 @@ export function ScTabControl(props: ScTabControlProps): React.JSX.Element {
               type="button"
               role="tab"
               aria-selected={selected}
+              aria-description={locked ? "Protected sheet" : undefined}
               aria-current={current ? "page" : undefined}
               tabIndex={current ? 0 : -1}
               style={style}
@@ -189,6 +193,9 @@ export function ScTabControl(props: ScTabControlProps): React.JSX.Element {
               }
               className={`shrink-0 rounded-md border px-4 ${appearance}`}
             >
+              {locked && (
+                <Lock className="mr-1 inline align-text-bottom" size={12} aria-hidden="true" />
+              )}
               {label}
             </button>
           ),

@@ -1,0 +1,32 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sc/browser/presentation/ScProtectSheetDialog.tsx",
+    "classification": "browser-adaptation",
+    "state": "foundation",
+    "suite": "calc",
+    "subsystem": "sheet-protection",
+    "capabilityIds": [
+      "CAP-c8989bcd-7438-4fd9-bfdf-fdfd61a8255a"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "not-applicable",
+      "defaultStatus": "not-applicable",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/sc/browser/presentation/ScProtectSheetDialog.tsx",
+        "apps/office/src/sc/browser/presentation/calc-sheet-protection.test.tsx"
+      ],
+      "justification": "Hosts native sheet protection options, password confirmation and unlock prompts with existing browser dialog controls. The upstream desktop password strength estimator is separate.",
+      "knownViolations": [],
+      "localSymbols": [
+        "ScProtectSheetDialog"
+      ],
+      "sourceResponsibility": "browser-owned",
+      "upstreamFile": null,
+      "upstreamSymbols": []
+    }
+  }
+}
