@@ -4,7 +4,7 @@ title: "Integrate current Writer and Calc development into main"
 status: "DOING"
 priority: "high"
 owner: "CODER"
-revision: 9
+revision: 11
 origin:
   system: "manual"
 depends_on: []
@@ -17,11 +17,29 @@ plan_approval:
   updated_by: "ORCHESTRATOR"
   note: null
 verification:
-  state: "needs_rework"
-  updated_at: "2026-11-21T15:57:04.406Z"
+  state: "ok"
+  updated_at: "2026-11-22T13:13:34.181Z"
   updated_by: "CODER"
-  note: "The functional suites and all failure replays completed successfully. The application coverage, JSDoc and file-size gates remain below policy requirements. The user approved publication with those results recorded."
-  attempts: 2
+  note: "Focused Writer, Calc, and shared checks passed across the merge and corrected replays. Both published feature tips are ancestors of the integration commit."
+  attempts: 0
+quality_review:
+  state: "pass"
+  updated_at: "2026-11-22T13:13:34.893Z"
+  updated_by: "EVALUATOR"
+  note: "Targeted merge verification passed under the user's limited verification scope."
+  evaluated_sha: "e044eba6577d878b4a6e089cfd171aa0a4ff673b"
+  blueprint_digest: "d745fb53e06003421e806969a72ccdc04cb35c69ff0c10da6869e02708646185"
+  evidence_refs:
+    - ".agentplane/tasks/202611201803-QMYDFT/README.md"
+    - ".agentplane/tasks/202611201803-QMYDFT/quality/20261122-131334893-recovery-context/quality-report.json"
+    - ".agentplane/tasks/202611201803-QMYDFT/quality/20261122-131334893-recovery-context/evaluator-prompt.md"
+    - ".agentplane/tasks/202611201803-QMYDFT/quality/20261122-131334893-recovery-context/evaluator-opinion.md"
+    - ".agentplane/tasks/202611201803-QMYDFT/blueprint/resolved-snapshot.json"
+    - "Writer, Calc, and shared focused Vitest runs and replays"
+    - "Office TypeScript, module boundaries, Writer WhichIds, AgentPlane doctor and policy routing"
+    - "git merge-base --is-ancestor for origin/writer and origin/calc"
+  findings:
+    - "Both branch histories, range and annotation regression checks, and both upstream issue journals were preserved. The type and module-boundary checks passed."
 commit: null
 comments:
   -
@@ -47,8 +65,14 @@ events:
     author: "CODER"
     state: "needs_rework"
     note: "The functional suites and all failure replays completed successfully. The application coverage, JSDoc and file-size gates remain below policy requirements. The user approved publication with those results recorded."
+  -
+    type: "verify"
+    at: "2026-11-22T13:13:34.181Z"
+    author: "CODER"
+    state: "ok"
+    note: "Focused Writer, Calc, and shared checks passed across the merge and corrected replays. Both published feature tips are ancestors of the integration commit."
 doc_version: 3
-doc_updated_at: "2026-11-21T15:57:04.463Z"
+doc_updated_at: "2026-11-22T13:13:34.239Z"
 doc_updated_by: "CODER"
 description: "Publish current feature branches, integrate both into main, run complete verification and fix regressions, record suspected upstream issues, publish main and synchronize both development checkouts."
 sections:
@@ -119,6 +143,38 @@ sections:
     - Commands: npm run format:check, targeted final Prettier and ESLint checks, ap doctor, node .agentplane/policy/check-routing.mjs and git diff --check. Result: pass. Doctor reported the existing managed hook shim readiness warning. Scope: formatting, final changes, repository guardrails and merge hygiene.
     - Command: npm run test:coverage -- --maxWorkers=3 --testTimeout=600000 --reporter=default. Result: needs rework at the global coverage gate. Evidence: 2,253 files completed with 33,915 tests passed, five initially failed and 23 skipped. All five original nonpassing cases were rechecked successfully on the current source. The XLSX external reference, SAX and large OOXML cases exceeded their original test time budgets. The Writer undo and text-default schema cases had stale assertions that were corrected. Actual Istanbul coverage was 95.97% statements, 93.39% branches, 97.98% functions and 96.82% lines against the required 100%.
     - Command: git merge-base --is-ancestor for each feature checkpoint. Result: pass. Evidence: the local integrated main contains Writer 6bf035cb4 and Calc 16ce79238. Scope: initial feature publication and merge ancestry.
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202611201803-QMYDFT/blueprint/resolved-snapshot.json
+    - old_digest: d745fb53e06003421e806969a72ccdc04cb35c69ff0c10da6869e02708646185
+    - current_digest: d745fb53e06003421e806969a72ccdc04cb35c69ff0c10da6869e02708646185
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202611201803-QMYDFT
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task verify-show 202611201803-QMYDFT
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: false
+    - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+    - risks: none
+
+    ### 2026-11-22T13:13:34.181Z — VERIFY — ok
+
+    By: CODER
+
+    Note: Focused Writer, Calc, and shared checks passed across the merge and corrected replays. Both published feature tips are ancestors of the integration commit.
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-21T15:57:04.463Z, excerpt_hash=sha256:fb7168956ce537f97a978d7ae38997359d400b4d02b205f6182f357acdfb20f5
+
+    Details:
+
+    Writer conflict areas: 68 cases in 11 Vitest files across the initial run and successful corrected or longer-timeout replays. Calc conflict areas: 54 cases in 9 Vitest files across the initial run and successful corrected or longer-timeout replays. Shared XML and border cases: 68 cases in 5 Vitest files. npm run typecheck --workspace @vite-office/office, npm run check:dependencies, npm run check:writer-hintids, ap doctor, node .agentplane/policy/check-routing.mjs, and git diff --check passed. Doctor reported the existing hook shim warning. The user scoped verification to merge-affected modules, so the complete npm run verify suite, global coverage, and browser matrix were omitted. Both feature tips and the previously published main are ancestors of the verified local main. Remote publication and branch synchronization follow local closeout.
 
     BlueprintSnapshotRef:
     - state: current
@@ -226,6 +282,38 @@ Details:
 - Commands: npm run format:check, targeted final Prettier and ESLint checks, ap doctor, node .agentplane/policy/check-routing.mjs and git diff --check. Result: pass. Doctor reported the existing managed hook shim readiness warning. Scope: formatting, final changes, repository guardrails and merge hygiene.
 - Command: npm run test:coverage -- --maxWorkers=3 --testTimeout=600000 --reporter=default. Result: needs rework at the global coverage gate. Evidence: 2,253 files completed with 33,915 tests passed, five initially failed and 23 skipped. All five original nonpassing cases were rechecked successfully on the current source. The XLSX external reference, SAX and large OOXML cases exceeded their original test time budgets. The Writer undo and text-default schema cases had stale assertions that were corrected. Actual Istanbul coverage was 95.97% statements, 93.39% branches, 97.98% functions and 96.82% lines against the required 100%.
 - Command: git merge-base --is-ancestor for each feature checkpoint. Result: pass. Evidence: the local integrated main contains Writer 6bf035cb4 and Calc 16ce79238. Scope: initial feature publication and merge ancestry.
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202611201803-QMYDFT/blueprint/resolved-snapshot.json
+- old_digest: d745fb53e06003421e806969a72ccdc04cb35c69ff0c10da6869e02708646185
+- current_digest: d745fb53e06003421e806969a72ccdc04cb35c69ff0c10da6869e02708646185
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202611201803-QMYDFT
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task verify-show 202611201803-QMYDFT
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: false
+- repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- risks: none
+
+### 2026-11-22T13:13:34.181Z — VERIFY — ok
+
+By: CODER
+
+Note: Focused Writer, Calc, and shared checks passed across the merge and corrected replays. Both published feature tips are ancestors of the integration commit.
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-21T15:57:04.463Z, excerpt_hash=sha256:fb7168956ce537f97a978d7ae38997359d400b4d02b205f6182f357acdfb20f5
+
+Details:
+
+Writer conflict areas: 68 cases in 11 Vitest files across the initial run and successful corrected or longer-timeout replays. Calc conflict areas: 54 cases in 9 Vitest files across the initial run and successful corrected or longer-timeout replays. Shared XML and border cases: 68 cases in 5 Vitest files. npm run typecheck --workspace @vite-office/office, npm run check:dependencies, npm run check:writer-hintids, ap doctor, node .agentplane/policy/check-routing.mjs, and git diff --check passed. Doctor reported the existing hook shim warning. The user scoped verification to merge-affected modules, so the complete npm run verify suite, global coverage, and browser matrix were omitted. Both feature tips and the previously published main are ancestors of the verified local main. Remote publication and branch synchronization follow local closeout.
 
 BlueprintSnapshotRef:
 - state: current

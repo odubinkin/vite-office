@@ -1,0 +1,23 @@
+{
+  "schema_version": 1,
+  "task_id": "202611201803-QMYDFT",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-11-22T13:13:34.893Z",
+  "verdict": "pass",
+  "summary": "Targeted merge verification passed under the user's limited verification scope.",
+  "evaluated_sha": "e044eba6577d878b4a6e089cfd171aa0a4ff673b",
+  "blueprint_digest": "d745fb53e06003421e806969a72ccdc04cb35c69ff0c10da6869e02708646185",
+  "findings": [
+    "Both branch histories, range and annotation regression checks, and both upstream issue journals were preserved. The type and module-boundary checks passed."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202611201803-QMYDFT/README.md",
+    "Writer, Calc, and shared focused Vitest runs and replays",
+    "Office TypeScript, module boundaries, Writer WhichIds, AgentPlane doctor and policy routing",
+    "git merge-base --is-ancestor for origin/writer and origin/calc"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": []
+}
