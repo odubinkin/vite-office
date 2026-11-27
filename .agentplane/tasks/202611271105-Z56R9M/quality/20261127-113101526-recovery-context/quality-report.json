@@ -1,0 +1,22 @@
+{
+  "schema_version": 1,
+  "task_id": "202611271105-Z56R9M",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-11-27T11:31:01.526Z",
+  "verdict": "pass",
+  "summary": "Verified the existing Writer dialog layout scenarios at every declared viewport.",
+  "evaluated_sha": "df6c7f0d2206480900e5b441fa9a9a5a0d2f713f",
+  "blueprint_digest": "3da0e39a5483aec1d8a46a0d45688810f9b80c9ff3cfc5da60585d9242ecb985",
+  "findings": [
+    "The grid wraps fields by actual panel width while preserving the native hyphenation bindings."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202611271105-Z56R9M/README.md",
+    "/Users/odubinkin/Projects/vite-office/output/playwright/Z56R9M/verification.md",
+    "df6c7f0d2206480900e5b441fa9a9a5a0d2f713f"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": []
+}
