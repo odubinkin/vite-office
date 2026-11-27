@@ -1,10 +1,11 @@
 ---
 id: "202611271009-SD68YQ"
 title: "Reconcile Calc and Writer expectations from the ODF checkpoint"
-status: "DOING"
+result_summary: "Reconciled the source-backed Office, tooling and inventory assertions found in the full checkpoint and replayed the timed-out Calc worker file."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 7
+revision: 8
 origin:
   system: "manual"
 depends_on: []
@@ -41,11 +42,16 @@ quality_review:
     - "b79db79c439e4c87f212591a6714a76531f5c850"
   findings:
     - "Corrects assertions and identity comparisons while preserving runtime behavior. Implementation: b79db79c439e4c87f212591a6714a76531f5c850."
-commit: null
+commit:
+  hash: "b79db79c439e4c87f212591a6714a76531f5c850"
+  message: "🧪 SD68YQ verification: reconcile native assertions from the ODF checkpoint"
 comments:
   -
     author: "CODER"
     body: "Start: Reconcile completed checkpoint failures with the pinned product contracts."
+  -
+    author: "CODER"
+    body: "Verified: 62 distinct tests in affected owners pass. Implementation: b79db79c439e4c87f212591a6714a76531f5c850."
 events:
   -
     type: "status"
@@ -60,8 +66,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "62 distinct affected Office, tooling and ODT inventory tests passed. The timed-out Calc worker file passed serially. See output/playwright/SD68YQ/verification.md."
+  -
+    type: "status"
+    at: "2026-11-27T10:18:06.392Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: 62 distinct tests in affected owners pass. Implementation: b79db79c439e4c87f212591a6714a76531f5c850."
 doc_version: 3
-doc_updated_at: "2026-11-27T10:16:13.933Z"
+doc_updated_at: "2026-11-27T10:18:06.393Z"
 doc_updated_by: "CODER"
 description: "Correct the stale Calc PODF and Writer paragraph/ODF alignment expectations found by the complete Office test run. Retain the native product behavior and re-run the affected test owners."
 sections:
