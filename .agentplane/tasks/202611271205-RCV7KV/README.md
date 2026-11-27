@@ -1,10 +1,11 @@
 ---
 id: "202611271205-RCV7KV"
 title: "Implement native Calc ODS database sort and subtotal persistence"
-status: "DOING"
+result_summary: "Retain native database sort and subtotal descriptors."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 7
+revision: 8
 origin:
   system: "manual"
 depends_on: []
@@ -42,11 +43,16 @@ quality_review:
     - "8361e2887af764744ba2b7eba01778bb796b0ce7"
   findings:
     - "The tested SUBTOTAL selectors use the represented sum, average and product operations. Database sort execution, subtotal layout regeneration and interactive range editing remain outside the filter change."
-commit: null
+commit:
+  hash: "8361e2887af764744ba2b7eba01778bb796b0ce7"
+  message: "🧩 RCV7KV calc: retain native database sort and subtotal descriptors"
 comments:
   -
     author: "CODER"
     body: "Start: continue the approved descriptor persistence scope under the code blueprint."
+  -
+    author: "CODER"
+    body: "Verified: The pinned natural-sort and subtotal ODS documents retained their inherited defaults, flags and literal descriptor fields across the Worker and ODS reopen. Nested SUBTOTAL results used the native flags and exclusions."
 events:
   -
     type: "status"
@@ -61,8 +67,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Tests  51 passed (51). Pinned fixtures, typecheck, lint, formatting, dependencies, provenance and scoped inventory checks passed."
+  -
+    type: "status"
+    at: "2026-11-27T14:35:22.272Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: The pinned natural-sort and subtotal ODS documents retained their inherited defaults, flags and literal descriptor fields across the Worker and ODS reopen. Nested SUBTOTAL results used the native flags and exclusions."
 doc_version: 3
-doc_updated_at: "2026-11-27T14:34:17.072Z"
+doc_updated_at: "2026-11-27T14:35:22.272Z"
 doc_updated_by: "CODER"
 description: "Restore the ScDBData sort and subtotal parameter owners, ODS XML import and export, and Worker transport. Verify the persistence portions of the original tdf161948_NaturalSortSaveLoad.ods and tdf162262_summarybelow.ods fixtures, including the represented SUBTOTAL operations. This code task supersedes 202611271154-2C7FY1, which was classified as analysis."
 sections:
