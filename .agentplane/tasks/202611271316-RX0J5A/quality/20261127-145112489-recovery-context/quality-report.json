@@ -1,0 +1,22 @@
+{
+  "schema_version": 1,
+  "task_id": "202611271316-RX0J5A",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-11-27T14:51:12.489Z",
+  "verdict": "pass",
+  "summary": "The pinned tdf157897_main.ods retained the real linked sheet, its source and cached cells through the Worker and ODS reopen. Reload delay and per-URL export metadata follow the native link owner.",
+  "evaluated_sha": "6f483c9d8d6b324b21fd927bc505073b36788a86",
+  "blueprint_digest": "39ac86e927bf8dae0433c747740556bda82f9a93b95a86d74fcfbb30b84fc8f4",
+  "findings": [
+    "CALC-864 records native first-sheet metadata per source URL. Refreshing source media is outside the browser document model."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202611271316-RX0J5A/README.md",
+    "/Users/odubinkin/Projects/vite-office/output/playwright/RX0J5A/verification.md",
+    "6f483c9d8d6b324b21fd927bc505073b36788a86"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": []
+}
