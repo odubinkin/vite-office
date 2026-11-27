@@ -1,10 +1,11 @@
 ---
 id: "202611271759-8EGZMJ"
 title: "Implement native Writer reference marks in ODT"
-status: "DOING"
+result_summary: "Writer ODT preserves actual named reference marks and native hint ownership."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 6
+revision: 7
 origin:
   system: "manual"
 depends_on: []
@@ -41,11 +42,16 @@ quality_review:
     - "output/playwright/odf-writer-redlines/refmark-verification.md"
   findings:
     - "Point and range assertions are ported from the original ODT fixture. Documented the source expansion and rename behavior."
-commit: null
+commit:
+  hash: "9b4abc8280042041076ddb80dc057f7013bacde9"
+  message: "🧩 8EGZMJ writer: preserve native reference marks in ODT"
 comments:
   -
     author: "CODER"
     body: "Start: implement actual Writer reference-mark hints and the ODT paths."
+  -
+    author: "CODER"
+    body: "Verified: original whitespace.odt point and range reference marks, Worker transfer and ODT reopen, with all 216 focused Writer tests passing."
 events:
   -
     type: "status"
@@ -60,8 +66,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "216 focused Writer checks and 3 targeted WhichId cases passed. Original whitespace.odt retains point and range reference marks through the Writer Worker and package reopen. Static and provenance checks passed."
+  -
+    type: "status"
+    at: "2026-11-27T18:17:00.940Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: original whitespace.odt point and range reference marks, Worker transfer and ODT reopen, with all 216 focused Writer tests passing."
 doc_version: 3
-doc_updated_at: "2026-11-27T18:15:30.636Z"
+doc_updated_at: "2026-11-27T18:17:00.941Z"
 doc_updated_by: "CODER"
 description: "Port the SwFormatRefMark and SwTextRefMark item and hint owners, original point and paragraph-scoped ranged XML import, ODT export and Worker persistence. Retain the native missing-end collapse and first-match behavior, native hint identity and expansion. Port the point and ranged assertions from the pinned whitespace.odt regression and document the preserved reference mark expansion issue."
 sections:
