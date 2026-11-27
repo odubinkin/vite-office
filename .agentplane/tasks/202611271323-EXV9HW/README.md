@@ -1,10 +1,11 @@
 ---
 id: "202611271323-EXV9HW"
 title: "Reconcile the scheduled ODF checkpoint diagnostic fixture with native section support"
-status: "DOING"
+result_summary: "Align inventory privacy checks with native ODT named-section support."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 6
+revision: 7
 origin:
   system: "manual"
 depends_on: []
@@ -43,11 +44,16 @@ quality_review:
     - "67804850b18c3da4f96f1d859f641611e3bdd316"
   findings:
     - "The changed fixture directly replays the single full-checkpoint inventory failure."
-commit: null
+commit:
+  hash: "67804850b18c3da4f96f1d859f641611e3bdd316"
+  message: "🧪 EXV9HW diagnostics: update ODT diagnostics for supported sections"
 comments:
   -
     author: "CODER"
     body: "Start: reconcile the observed inventory failure with the supported native named-section import."
+  -
+    author: "CODER"
+    body: "Verified: All 7 focused inventory tests passed, including the original checkpoint failure."
 events:
   -
     type: "status"
@@ -62,8 +68,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "All 7 focused inventory tests passed; ESLint, Prettier and diff check passed."
+  -
+    type: "status"
+    at: "2026-11-27T13:31:39.253Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: All 7 focused inventory tests passed, including the original checkpoint failure."
 doc_version: 3
-doc_updated_at: "2026-11-27T13:29:56.451Z"
+doc_updated_at: "2026-11-27T13:31:39.255Z"
 doc_updated_by: "CODER"
 description: "Replay the observed inventory diagnostic regression from the latest full ODF checkpoint. Keep the existing package privacy assertions and use a genuine content-XML failure now that native named sections are supported. Verify the original inventory scenario alongside its related diagnostic tests. Record evidence in the full checkpoint report without changing available ODF section behavior."
 sections:
