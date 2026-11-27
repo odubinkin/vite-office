@@ -1,10 +1,11 @@
 ---
 id: "202611271348-QNDG5D"
 title: "Connect native document metadata to the Writer and Calc ODF filters"
-status: "DOING"
+result_summary: "Preserve the native ODF metadata DOM and document properties."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 6
+revision: 7
 origin:
   system: "manual"
 depends_on: []
@@ -43,11 +44,16 @@ quality_review:
     - "186ffff989405a5aa07f5576ad135e35498eedfe"
   findings:
     - "WRITER-767 and CALC-866 record duplicate scalar metadata retention in the source DOM. The existing inventory privacy checks passed. Writer disposes the candidate document if embedded font admission fails after metadata import."
-commit: null
+commit:
+  hash: "186ffff989405a5aa07f5576ad135e35498eedfe"
+  message: "🧩 QNDG5D metadata: retain native ODF document properties"
 comments:
   -
     author: "CODER"
     body: "Start: Bind native metadata DOM ownership to the package and Worker paths in an isolated snapshot."
+  -
+    author: "CODER"
+    body: "Verified: The original TEST.odt and CUSTOM.odt metadata streams retained native document properties and custom namespaces in the Writer and Calc packages through the Worker and reopen."
 events:
   -
     type: "status"
@@ -62,8 +68,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Tests  87 passed (87). Pinned fixtures and focused static, dependency, provenance and registry checks passed."
+  -
+    type: "status"
+    at: "2026-11-27T15:07:18.060Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: The original TEST.odt and CUSTOM.odt metadata streams retained native document properties and custom namespaces in the Writer and Calc packages through the Worker and reopen."
 doc_version: 3
-doc_updated_at: "2026-11-27T15:04:15.409Z"
+doc_updated_at: "2026-11-27T15:07:18.062Z"
 doc_updated_by: "CODER"
 description: "Use the existing SfxDocumentMetaData DOM and property bag for meta.xml imports and exports. Preserve standardized, user-defined and custom namespace metadata through the real package and Worker paths while keeping browser title/save/open intent."
 sections:
