@@ -1,0 +1,22 @@
+{
+  "schema_version": 1,
+  "task_id": "202611271233-WFWZ54",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-11-27T14:41:55.214Z",
+  "verdict": "pass",
+  "summary": "Preserved represented Calc document configuration, nested view settings, native reference syntax and calculation state through ODS and the Worker.",
+  "evaluated_sha": "99c0d66875e355613abfa2dfbad60ff71cd22547",
+  "blueprint_digest": "4a8690bdf3a010cc1a0a79a8fc7a51c1aff22f9a7e97107aaa074d976fe3cf16",
+  "findings": [
+    "Existing view/import order and intentional shell lifecycle remain in effect. Device configuration, macros and external updates remain outside the slice."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202611271233-WFWZ54/README.md",
+    "/Users/odubinkin/Projects/vite-office/output/playwright/WFWZ54/verification.md",
+    "99c0d66875e355613abfa2dfbad60ff71cd22547"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": []
+}
