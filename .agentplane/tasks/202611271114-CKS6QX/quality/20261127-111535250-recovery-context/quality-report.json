@@ -1,0 +1,22 @@
+{
+  "schema_version": 1,
+  "task_id": "202611271114-CKS6QX",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-11-27T11:15:35.250Z",
+  "verdict": "pass",
+  "summary": "Verified both existing Calc formatting toolbar viewport scenarios.",
+  "evaluated_sha": "6dba8dd857c808c2018567c68cb4c145e55a3ace",
+  "blueprint_digest": "c166f6a886137065aed3ba7e796dcf9d36fe2ac51f7bfeef8b9567190d9840fc",
+  "findings": [
+    "Updated native command order and merge sensitivity assertions while preserving all other existing behavior checks."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202611271114-CKS6QX/README.md",
+    "/Users/odubinkin/Projects/vite-office/output/playwright/odf-full-checkpoint-20261127/calc-toolbar-verification.md",
+    "6dba8dd857c808c2018567c68cb4c145e55a3ace"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": []
+}
