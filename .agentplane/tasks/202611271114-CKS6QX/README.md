@@ -1,10 +1,11 @@
 ---
 id: "202611271114-CKS6QX"
 title: "Reconcile Calc formatting toolbar browser expectations"
-status: "DOING"
+result_summary: "Updated formatted toolbar acceptance for native merge and number-format controls."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 7
+revision: 8
 origin:
   system: "manual"
 depends_on: []
@@ -40,11 +41,16 @@ quality_review:
     - "6dba8dd857c808c2018567c68cb4c145e55a3ace"
   findings:
     - "Updated native command order and merge sensitivity assertions while preserving all other existing behavior checks."
-commit: null
+commit:
+  hash: "6dba8dd857c808c2018567c68cb4c145e55a3ace"
+  message: "🧪 CKS6QX verification: align Calc toolbar browser assertions"
 comments:
   -
     author: "CODER"
     body: "Start: reconcile the Calc formatting toolbar scenario with the pinned native resources."
+  -
+    author: "CODER"
+    body: "Verified: both Calc toolbar viewport scenarios pass on the original build."
 events:
   -
     type: "status"
@@ -59,8 +65,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Both existing formatting toolbar viewport scenarios passed on the running checkpoint build. Focused Prettier, ESLint and diff checks passed."
+  -
+    type: "status"
+    at: "2026-11-27T11:16:05.859Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: both Calc toolbar viewport scenarios pass on the original build."
 doc_version: 3
-doc_updated_at: "2026-11-27T11:15:34.803Z"
+doc_updated_at: "2026-11-27T11:16:05.859Z"
 doc_updated_by: "CODER"
 description: "Align the stale browser assertion with the visible Calc formatobjectbar commands and actual single-cell merge sensitivity. Preserve the existing end-to-end formatting and ODS-adjacent behavior checked at both widths."
 sections:
