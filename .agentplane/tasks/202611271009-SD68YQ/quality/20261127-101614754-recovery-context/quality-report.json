@@ -1,0 +1,22 @@
+{
+  "schema_version": 1,
+  "task_id": "202611271009-SD68YQ",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-11-27T10:16:14.754Z",
+  "verdict": "pass",
+  "summary": "Focused replays pass on the original failing test owners with source-based assertions.",
+  "evaluated_sha": "b79db79c439e4c87f212591a6714a76531f5c850",
+  "blueprint_digest": "f88084826ae6e77327d8b36f856e82f88357948aee9d3a19e7584e00b5b0ad8e",
+  "findings": [
+    "Corrects assertions and identity comparisons while preserving runtime behavior. Implementation: b79db79c439e4c87f212591a6714a76531f5c850."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202611271009-SD68YQ/README.md",
+    "output/playwright/SD68YQ/verification.md",
+    "b79db79c439e4c87f212591a6714a76531f5c850"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": []
+}
