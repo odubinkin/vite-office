@@ -69,19 +69,72 @@ export class SwContentTree {
     return target ? this.SetCursor(target.node, target.offset) : false;
   }
 
-  /** Executes an original Navigator action on the selected heading, optionally with its descendants. @param id - Selected tree identity. @param command - Native heading toolbar action. @param withChildren - Whether the selected chapter includes sublevels. @returns Whether the heading was reached. */
-  public ExecCommand(id: string, command: SwNavigatorHeadingCommand, withChildren = true): boolean {
+  /** Executes one native Navigator action on selected chapters in document order. @param ids - Selected tree identities. @param command - Native heading toolbar action. @param withChildren - Whether selected chapters include sublevels. @returns Surviving selections for native outline root view. */
+  public ExecCommand(
+    ids: readonly string[],
+    command: SwNavigatorHeadingCommand,
+    withChildren = true,
+  ): string[] {
     const document = this.shell.GetDoc();
-    const outlines = document.GetNodes().GetOutLineNds().entries();
-    const index = outlines.findIndex(
-      /** Looks up the same heading even when the document order changed. @param node - Indexed heading. @returns Whether this is the selected heading. */
-      (node) => this.identities.get(node) === id,
+    const outlineIndex = document.GetNodes().GetOutLineNds();
+    const outlines = outlineIndex.entries();
+    const wanted = new Set(ids);
+    const moving = command === "chapterup" || command === "chapterdown";
+    const chapters: { id: string; heading: SwTextNode }[] = [];
+    let nextChapter = 0;
+    for (let index = 0; index < outlines.length; index++) {
+      const heading = outlines[index];
+      const id = heading && this.identities.get(heading);
+      if (!heading || !id || !wanted.has(id) || index < nextChapter) continue;
+      chapters.push({ id, heading });
+      if (withChildren || !moving) nextChapter = this.GetChapterEnd(outlines, index);
+    }
+    if (chapters.length === 0) return [];
+    const order = command === "chapterdown" ? [...chapters].reverse() : chapters;
+    const manager = document.GetUndoManager();
+    this.shell.RunNotificationTransaction(
+      /** Batches the grouped chapter edits and cursor changes. @returns Nothing. */
+      () =>
+        document.RunModelTransaction(
+          /** Begins a single Undo action for the selected tree rows. @returns Nothing. */
+          () => {
+            manager.StartUndo(moving ? "Move chapter" : "Outline level");
+            try {
+              for (const { heading } of order) {
+                const currentOutlines = outlineIndex.entries();
+                const index = currentOutlines.indexOf(heading);
+                if (index < 0 || !this.SetCursor(heading, 0)) continue;
+                this.ExecHeadingCommand(currentOutlines, index, heading, command, withChildren);
+              }
+            } finally {
+              manager.EndUndo();
+            }
+          },
+        ),
     );
-    const heading = outlines[index];
-    if (!heading || !this.SetCursor(heading, 0)) return false;
-    const level = heading.GetAttrOutlineLevel();
+    return chapters.map(
+      /** Retains selection by native content identity. @param chapter - Selected heading. @returns Tree identity. */
+      ({ id }) => id,
+    );
+  }
+
+  /** Finds the first heading outside a selected subtree. @param outlines - Current outline order. @param index - Selected heading index. @returns Exclusive subtree boundary. */
+  private GetChapterEnd(outlines: readonly SwTextNode[], index: number): number {
+    const level = outlines[index]?.GetAttrOutlineLevel() ?? 0;
     let end = index + 1;
     while (end < outlines.length && (outlines[end]?.GetAttrOutlineLevel() ?? 0) > level) end++;
+    return end;
+  }
+
+  /** Applies one selected chapter using the current outline positions. @param outlines - Current outline order. @param index - Selected heading index. @param heading - Selected heading. @param command - Native toolbar action. @param withChildren - Whether to include sublevels. @returns Nothing. */
+  private ExecHeadingCommand(
+    outlines: readonly SwTextNode[],
+    index: number,
+    heading: SwTextNode,
+    command: SwNavigatorHeadingCommand,
+    withChildren: boolean,
+  ): void {
+    const end = this.GetChapterEnd(outlines, index);
     const selectionEnd = withChildren ? end : index + 1;
     if (command === "chapterup" || command === "chapterdown") {
       const offset = this.GetChapterOffset(outlines, index, end, command === "chapterup");
@@ -91,40 +144,27 @@ export class SwContentTree {
           selectionEnd,
           offset + (offset > 0 ? end - selectionEnd : 0),
         );
-    } else {
-      const chapters = outlines.slice(index, selectionEnd);
-      if (
-        command === "promote"
-          ? level > 1
-          : chapters.every(
-              /** Rejects a demotion that would exceed the native outline level limit. @param node - Selected heading. @returns Whether it can move down one level. */
-              (node) => node.GetAttrOutlineLevel() <= WRITER_MAX_LIST_LEVEL,
-            )
-      ) {
-        const manager = document.GetUndoManager();
-        const cursor = this.shell.CaptureCursorState();
-        this.shell.RunNotificationTransaction(
-          /** Keeps the selected heading as the final visible cursor. @returns Nothing. */
-          () =>
-            document.RunModelTransaction(
-              /** Records the selected outline changes in one history group. @returns Nothing. */
-              () => {
-                manager.StartUndo("Outline level");
-                try {
-                  for (const node of chapters) {
-                    this.SetCursor(node, 0);
-                    this.shell.OutlineUpDown(command === "promote" ? -1 : 1, cursor);
-                  }
-                } finally {
-                  manager.EndUndo();
-                  this.SetCursor(heading, 0);
-                }
-              },
-            ),
-        );
-      }
+      return;
     }
-    return true;
+    const chapters = outlines.slice(index, selectionEnd);
+    if (
+      command === "promote"
+        ? heading.GetAttrOutlineLevel() === 1
+        : chapters.some(
+            /** Detects demotion past the native maximum outline level. @param node - Heading in range. @returns Whether demotion is prohibited. */
+            (node) => node.GetAttrOutlineLevel() > WRITER_MAX_LIST_LEVEL,
+          )
+    )
+      return;
+    const cursor = this.shell.CaptureCursorState();
+    try {
+      for (const node of chapters) {
+        this.SetCursor(node, 0);
+        this.shell.OutlineUpDown(command === "promote" ? -1 : 1, cursor);
+      }
+    } finally {
+      this.SetCursor(heading, 0);
+    }
   }
 
   /** Resolves the native chapter displacement through peer, child and parent headings. @param outlines - Current ordered outline index. @param index - Selected heading index. @param end - First heading beyond the selected subtree. @param up - Whether moving backward. @returns Signed outline displacement, or absent at the boundary. */

@@ -2,6 +2,51 @@
 import { expect, test } from "@playwright/test";
 import { openBrowserMenu } from "../test-support/menu-pointer-e2e";
 
+test("Writer Navigator moves selected chapters together in the heading root", /** Verifies native tree modifiers, one history action, and retained selection. @param fixtures - Browser test inputs. @param fixtures.page - Writer page. @returns Completion. */ async ({
+  page,
+}) => {
+  await page.goto("/writer", { waitUntil: "domcontentloaded" });
+  const paragraphs = page.locator("[data-writer-paragraph-id]");
+  await paragraphs.first().click();
+  await page.keyboard.insertText("First");
+  await page.keyboard.press("Enter");
+  await page.keyboard.insertText("Second");
+  await page.keyboard.press("Enter");
+  await page.keyboard.insertText("Third");
+  const formatting = page.getByRole("toolbar", { name: "Writer formatting toolbar" });
+  const style = formatting.getByRole("combobox", { name: "Paragraph style", exact: true });
+  for (let index = 0; index < 3; index++) {
+    await paragraphs.nth(index).click();
+    await formatting.getByRole("button", { name: "Show Paragraph style", exact: true }).click();
+    await page
+      .locator(`id=${await style.getAttribute("aria-controls")}`)
+      .getByRole("option", { name: "Heading 1", exact: true })
+      .click();
+  }
+  await page.keyboard.press("F5");
+  const navigator = page.getByRole("dialog", { name: "Navigator", exact: true });
+  const tree = navigator.getByRole("tree");
+  const first = tree.getByRole("treeitem", { name: "First", exact: true });
+  const second = tree.getByRole("treeitem", { name: "Second", exact: true });
+  await first.click();
+  await navigator.getByRole("button", { name: "Content Navigation View" }).click();
+  await expect(tree).toHaveAttribute("aria-multiselectable", "true");
+  await second.click({ modifiers: ["ControlOrMeta"] });
+  await expect(first).toHaveAttribute("aria-selected", "true");
+  await expect(second).toHaveAttribute("aria-selected", "true");
+  const down = navigator.getByRole("button", { name: "Move Heading Down" });
+  await down.click();
+  await expect(down).toBeFocused();
+  await expect(paragraphs).toHaveText(["Third", "First", "Second"]);
+  await expect(first).toHaveAttribute("aria-selected", "true");
+  await expect(second).toHaveAttribute("aria-selected", "true");
+  await page
+    .getByRole("toolbar", { name: "Writer standard toolbar" })
+    .getByRole("button", { name: "Undo", exact: true })
+    .click();
+  await expect(paragraphs).toHaveText(["First", "Second", "Third"]);
+});
+
 test("Writer Navigator opens from View and returns the cursor to a native heading", /** Exercises the upstream-shaped Navigator title, controls and outline tree. @param fixtures - Browser test inputs. @param fixtures.page - Writer page. @returns Completion. */ async ({
   page,
 }) => {

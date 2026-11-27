@@ -11,6 +11,92 @@ import { WRITER_COMMAND_IDS } from "../../uiconfig/swriter/menubar/menubar-comma
 import { createWriterDocumentSession } from "../composition/writer-module";
 import { WriterWorkbench } from "./writer-view";
 
+it("groups selected outline chapters and restores the selected heading identities", /** Exercises the heading-root range selection and original grouped command order. @returns Nothing. */ () => {
+  const session = createWriterDocumentSession();
+  const shell = session.view.GetWrtShell();
+  const document = shell.GetDoc();
+  const chapters = ["First", "Child", "Second", "Third"].map(
+    /** Creates a body chapter or its one descendant. @param title - Heading text. @param index - Initial document order. @returns Attached heading. */
+    (title, index) => {
+      const heading = index === 0 ? document.paragraphs[0] : document.nodes.MakeTextNode();
+      assert(heading);
+      heading.SetText(title);
+      heading.SetAttrOutlineLevel(index === 1 ? 2 : 1);
+      return heading;
+    },
+  );
+  try {
+    session.view.ToggleNavigator();
+    render(<WriterWorkbench view={session.view} isActive />);
+    const navigator = within(screen.getByRole("dialog", { name: "Navigator" }));
+    const tree = navigator.getByRole("tree");
+    const first = navigator.getByRole("treeitem", { name: "First" });
+    const child = navigator.getByRole("treeitem", { name: "Child" });
+    const second = navigator.getByRole("treeitem", { name: "Second" });
+    const third = navigator.getByRole("treeitem", { name: "Third" });
+    fireEvent.click(first);
+    fireEvent.click(second, { ctrlKey: true });
+    expect(first).toHaveAttribute("aria-selected", "false");
+    expect(tree).not.toHaveAttribute("aria-multiselectable");
+
+    fireEvent.click(navigator.getByRole("button", { name: "Content Navigation View" }));
+    expect(tree).toHaveAttribute("aria-multiselectable", "true");
+    fireEvent.keyDown(second, { key: "a", ctrlKey: true });
+    expect(first).toHaveAttribute("aria-selected", "true");
+    expect(third).toHaveAttribute("aria-selected", "true");
+    fireEvent.click(first);
+    fireEvent.keyDown(first, { key: "ArrowDown", shiftKey: true });
+    fireEvent.keyDown(child, { key: "ArrowDown", shiftKey: true });
+    expect(first).toHaveAttribute("aria-selected", "true");
+    expect(child).toHaveAttribute("aria-selected", "true");
+    expect(second).toHaveAttribute("aria-selected", "true");
+    expect(third).toHaveAttribute("aria-selected", "false");
+    fireEvent.click(navigator.getByRole("button", { name: "Demote Outline Level" }));
+    expect(child).toHaveAttribute("aria-selected", "false");
+    expect(first).toHaveAttribute("aria-selected", "true");
+    expect(second).toHaveAttribute("aria-selected", "true");
+    expect(
+      chapters.map(
+        /** Reads the native levels independently of the rendered row depth. @param heading - Actual heading. @returns Current outline level. */
+        (heading) => heading.GetAttrOutlineLevel(),
+      ),
+    ).toEqual([2, 3, 2, 1]);
+    act(
+      /** Undoes the complete outline group in one history step. @returns Nothing. */
+      () => {
+        expect(shell.Undo()).toBe(true);
+      },
+    );
+    expect(
+      chapters.map(
+        /** Reads the restored levels. @param heading - Actual heading. @returns Restored outline level. */
+        (heading) => heading.GetAttrOutlineLevel(),
+      ),
+    ).toEqual([1, 2, 1, 1]);
+    fireEvent.click(navigator.getByRole("button", { name: "Move Heading Down" }));
+    expect(document.paragraphs).toEqual([chapters[3], chapters[0], chapters[1], chapters[2]]);
+    expect(first).toHaveAttribute("aria-selected", "true");
+    expect(second).toHaveAttribute("aria-selected", "true");
+    act(
+      /** Restores both moved chapters in one history step. @returns Nothing. */
+      () => {
+        expect(shell.Undo()).toBe(true);
+      },
+    );
+    expect(document.paragraphs).toEqual(chapters);
+    act(
+      /** Replays the same ordered movement as one action. @returns Nothing. */
+      () => {
+        expect(shell.Redo()).toBe(true);
+      },
+    );
+    expect(document.paragraphs).toEqual([chapters[3], chapters[0], chapters[1], chapters[2]]);
+  } finally {
+    cleanup();
+    session.Close();
+  }
+});
+
 it.each([
   {
     fixture: "MoveChapterUpDown",
@@ -155,7 +241,7 @@ it("keeps chapter body, table and bookmark identity and obeys the modifier for s
   const command =
     /** Runs commands on the same selected original heading. @param action - Heading action. @param withChildren - Include the subtree. @returns Nothing. */
     (action: SwNavigatorHeadingCommand, withChildren = true) => {
-      expect(tree.ExecCommand(id, action, withChildren)).toBe(true);
+      expect(tree.ExecCommand([id], action, withChildren)).toEqual([id]);
     };
   try {
     command("chapterdown", false);
