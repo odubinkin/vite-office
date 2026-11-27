@@ -92,7 +92,11 @@ import type { SfxUInt16Item } from "../../../../svl/source/items/intitem";
 import type { SwNumRule } from "../../core/doc/number";
 import { SvxXMLNumRuleExport } from "../../../../xmloff/source/style/xmlnume";
 import type { SwNumRuleItem } from "../../core/para/paratr";
-import { exportParagraphStyleNumberingAttributes } from "../../../../xmloff/source/style/styleexp";
+import {
+  exportParagraphStyleNumberingAttributes,
+  exportStyleNameAttributes,
+} from "../../../../xmloff/source/style/styleexp";
+import { encodeStyleName } from "../../../../xmloff/source/core/xmluconv";
 import { SwFormatPageDesc } from "../../core/attr/fmtpdsc";
 import {
   escapeXml,
@@ -300,7 +304,7 @@ export function exportStylesXml(
       const masterPage =
         directParagraphProperties?.pageStyleName === undefined
           ? ""
-          : ` style:master-page-name="${escapeXml(directParagraphProperties.pageStyleName)}"`;
+          : ` style:master-page-name="${escapeXml(encodeStyleName(directParagraphProperties.pageStyleName))}"`;
       const paragraphAttributes = [
         ...(alignment === undefined ? [] : [`fo:text-align="${alignment}"`]),
         ...(leftMargin === undefined ? [] : [`fo:margin-left="${exportOdfLength(leftMargin)}"`]),
@@ -398,7 +402,7 @@ export function exportStylesXml(
     const follow =
       followName === descriptor.GetName()
         ? ""
-        : ` style:next-style-name="${escapeXml(followName)}"`;
+        : ` style:next-style-name="${escapeXml(encodeStyleName(followName))}"`;
     const children = stories[index]
       ?.map(
         /** Writes the original ODF page story element. @param story - Variant text. @returns Serialized element. */
@@ -406,7 +410,9 @@ export function exportStylesXml(
           `<style:${element}${display ? "" : ' style:display="false"'}>${inheritedStyles.sections?.[sections.indexOf(start)] ?? ""}</style:${element}>`,
       )
       .join("");
-    const open = `<style:master-page style:name="${escapeXml(descriptor.GetName())}" style:page-layout-name="${layoutName}"${follow}`;
+    const name = descriptor.GetName();
+    const nameAttributes = exportStyleNameAttributes(name, encodeStyleName(name));
+    const open = `<style:master-page${nameAttributes} style:page-layout-name="${layoutName}"${follow}`;
     masterPages.push(children ? `${open}>${children}</style:master-page>` : `${open}/>`);
   }
   const exporter = new SvxXMLNumRuleExport(

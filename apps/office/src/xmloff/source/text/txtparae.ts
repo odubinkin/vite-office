@@ -13,7 +13,7 @@ import { exportTextConstant } from "./txtprhdl";
 import { Any } from "../../../cppu/inc/com/sun/star/uno/Any";
 import { exportParagraphAsianTypography } from "./txtprhdl";
 import { exportWritingDirection } from "../style/prhdlfac";
-import { SvXMLUnitConverter } from "../core/xmluconv";
+import { encodeStyleName, SvXMLUnitConverter } from "../core/xmluconv";
 import { exportParagraphJustification, type OdfParagraphAlignment } from "../style/adjushdl";
 import { XMLNumberWithAutoForVoidPropHdl } from "../style/xmlbahdl";
 import type { SvXMLGraphicHelper } from "../core/xmlgrhlp";
@@ -261,7 +261,7 @@ export class XMLTextParagraphExport {
         const masterPage =
           parsedParagraphProperties.pageStyleName === undefined
             ? ""
-            : ` style:master-page-name="${escapeXml(parsedParagraphProperties.pageStyleName)}"`;
+            : ` style:master-page-name="${escapeXml(encodeStyleName(parsedParagraphProperties.pageStyleName))}"`;
         const paragraphChildren = exportParagraphPropertyChildren(parsedParagraphProperties);
         const paragraphProperties =
           paragraphAttributes.length === 0 && paragraphChildren.length === 0

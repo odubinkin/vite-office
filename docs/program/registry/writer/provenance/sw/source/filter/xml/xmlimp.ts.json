@@ -240,6 +240,18 @@
         {
           "path": "apps/office/src/sw/source/filter/xml/native-odt-writer-api.test.ts",
           "marker": "keeps Writer list-rule overrides and numbered paragraphs in their native lists"
+        },
+        {
+          "path": "apps/office/src/sw/source/filter/xml/xmlimp.ts",
+          "marker": "registerMasterPage"
+        },
+        {
+          "path": "apps/office/src/sw/source/filter/xml/odt-roundtrip.test.ts",
+          "marker": "round-trips encoded master pages, follow links and paragraph references"
+        },
+        {
+          "path": "apps/office/src/sw/source/filter/xml/odt-page-style-errors.test.ts",
+          "marker": "testPageStyleLayoutDefault"
         }
       ],
       "upstream": [
@@ -426,6 +438,14 @@
         {
           "path": "vendor/libreoffice-reference/xmloff/source/text/txtlists.cxx",
           "marker": "XMLTextListsHelper::MakeNumRule"
+        },
+        {
+          "path": "vendor/libreoffice-reference/xmloff/source/text/XMLTextMasterPageContext.cxx",
+          "marker": "XMLTextMasterPageContext::Finish"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/qa/extras/odfimport/odfimport.cxx",
+          "marker": "testPageStyleLayoutDefault"
         }
       ]
     },
@@ -484,7 +504,8 @@
       "Applies the ODF default style tab distance to the original Writer UNO text-default owner.",
       "Applies named styles before master-page text and restores the normal cursor and page layout association.",
       "Applies global line settings with the original character style lookup after the common style pool is populated.",
-      "Prefers the common numbering style to an automatic definition of the same raw name and creates fallback rules through the original Writer NumberingRules service."
+      "Prefers the common numbering style to an automatic definition of the same raw name and creates fallback rules through the original Writer NumberingRules service.",
+      "Registers original master-page display names before resolving page-layout and follow links and applying deferred paragraph page-style references."
     ],
     "status": "mapped",
     "upstreamPath": "sw/source/filter/xml/xmlimp.cxx",

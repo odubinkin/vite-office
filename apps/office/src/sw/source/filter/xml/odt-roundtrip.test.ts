@@ -32,9 +32,15 @@ import {
   RES_CHRATR_UNDERLINE,
   RES_CHRATR_WEIGHT,
   RES_PARATR_ADJUST,
+  RES_PAGEDESC,
 } from "../../../inc/hintids";
 import { applyWriterParagraphList, projectWriterParagraphList } from "../../core/doc/list";
 import { createWriterDocument } from "../../core/doc/doc";
+import { SwFormatPageDesc } from "../../core/attr/fmtpdsc";
+import {
+  createOdtWriterTransfer,
+  restoreOdtWriterTransfer,
+} from "../../../browser/filter/xml/odt-transfer";
 import { createWriterTextFragment } from "../basflt/writer-transfer";
 import { encodeWriterDocument } from "../../../browser/filter/xml/writer-document-codec";
 import { readOdtDocument, SwXMLReader } from "./swxml";
@@ -153,24 +159,48 @@ describe("Writer ODF XML filters" /** Executes the enclosing deterministic test 
     expect(imported.document.GetPageDesc().GetValue()).toEqual(page);
   });
 
-  it("round-trips named master pages and their follow relationship", /** Verifies Writer page descriptor collection ownership across ODF. @returns A fulfilled import promise. */ async () => {
+  it("round-trips encoded master pages, follow links and paragraph references", /** Verifies Writer page identity across Worker transfer and ODT. @returns Completion. */ async () => {
     const writer = createWriterDocument();
     const standard = writer.GetPageDesc();
     const first = writer.MakePageDesc("First Page", standard);
     writer.ChgPageDesc({ ...first.GetValue(), topMargin: 720 }, first.GetName());
     first.SetFollow(standard);
     standard.SetFollow(first);
-    const bytes = await writeTargetOdt(writer);
-    const styles = await (await DocumentArchive.open(bytes)).readTextEntry("styles.xml");
-    expect(styles).toContain('style:name="First Page"');
-    expect(styles).toContain('style:next-style-name="First Page"');
+    writer.GetTextFormatColl("heading-1").SetFormatAttr(new SwFormatPageDesc("First Page"));
+    writer.nodes.MakeTextNode("Page break").SetAttr(new SwFormatPageDesc("First Page"));
+    const restored = restoreOdtWriterTransfer(structuredClone(createOdtWriterTransfer(writer)));
+    const bytes = await writeTargetOdt(restored);
+    const archive = await DocumentArchive.open(bytes);
+    const styles = await archive.readTextEntry("styles.xml");
+    const content = await archive.readTextEntry("content.xml");
+    expect(styles).toContain('style:name="First_20_Page" style:display-name="First Page"');
+    expect(styles).toContain('style:next-style-name="First_20_Page"');
     expect(styles).toContain('style:next-style-name="Standard"');
+    expect(styles).toContain('style:master-page-name="First_20_Page"');
+    expect(content).toContain('style:master-page-name="First_20_Page"');
 
-    const imported = await readOdtDocument(bytes, metadata());
-    expect(imported.document.GetPageDescCnt()).toBe(2);
-    expect(imported.document.GetPageDesc().GetFollow().GetName()).toBe("First Page");
-    expect(imported.document.FindPageDesc("First Page")?.GetFollow().GetName()).toBe("Standard");
-    expect(imported.document.FindPageDesc("First Page")?.GetValue().topMargin).toBe(720);
+    const { document } = await readOdtDocument(bytes, metadata());
+    try {
+      expect(document.GetPageDescCnt()).toBe(2);
+      expect(document.GetPageDesc().GetFollow().GetName()).toBe("First Page");
+      expect(document.FindPageDesc("First Page")?.GetFollow().GetName()).toBe("Standard");
+      expect(document.FindPageDesc("First Page")?.GetValue().topMargin).toBe(720);
+      const paragraph = document.paragraphs.find(
+        /** Locates the original direct page break. @param node - Paragraph. @returns Whether it owns the break. */
+        (node) => node.GetText() === "Page break",
+      );
+      expect((paragraph?.GetAttr(RES_PAGEDESC) as SwFormatPageDesc).GetPageDescName()).toBe(
+        "First Page",
+      );
+      const heading = document.GetTextFormatColl("heading-1");
+      expect((heading.GetAttrSet().Get(RES_PAGEDESC) as SwFormatPageDesc).GetPageDescName()).toBe(
+        "First Page",
+      );
+    } finally {
+      writer.Dispose();
+      restored.Dispose();
+      document.Dispose();
+    }
   });
 
   it("retains a known landscape paper identity through ODT", /** Verifies oriented known-paper detection. @returns A fulfilled import promise. */ async () => {

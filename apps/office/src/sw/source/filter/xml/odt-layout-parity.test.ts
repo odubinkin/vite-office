@@ -340,7 +340,7 @@ describe("Writer ODT layout parity", /** Groups ODT layout regressions. @returns
     ).toThrow(/Unsupported ODF page orientation/);
   });
 
-  it("rejects duplicate paragraph defaults and page layouts", /** Checks rejects duplicate paragraph defaults and page layouts. @returns Test callback result. */ () => {
+  it("rejects duplicate paragraph defaults and keeps the first page layout binding", /** Checks source declaration lookup for repeated page layout names. @returns Test callback result. */ () => {
     const defaultStyle = '<style:default-style style:family="paragraph"/>';
     expect(
       /** Runs the test callback. @returns Test callback result. */ () =>
@@ -352,11 +352,14 @@ describe("Writer ODT layout parity", /** Groups ODT layout regressions. @returns
     ).toThrow(/Duplicate ODF default paragraph style/);
     const layout =
       '<style:page-layout style:name="P1"><style:page-layout-properties fo:page-width="8.5in" fo:page-height="11in"/></style:page-layout>';
-    const duplicated = `<office:document-styles ${namespaces}><office:automatic-styles>${layout}${layout}</office:automatic-styles><office:styles><style:style style:name="Standard" style:family="paragraph"/></office:styles></office:document-styles>`;
-    expect(
-      /** Runs the test callback. @returns Test callback result. */ () =>
-        importWriterXml(duplicated, content("", "<text:p>Item</text:p>"), metadata),
-    ).toThrow(/Duplicate ODF page layout/);
+    const secondLayout = layout.replace('fo:page-width="8.5in"', 'fo:page-width="9in"');
+    const duplicated = `<office:document-styles ${namespaces}><office:automatic-styles>${layout}${secondLayout}</office:automatic-styles><office:master-styles><style:master-page style:name="Standard" style:page-layout-name="P1"/></office:master-styles></office:document-styles>`;
+    const imported = importWriterXml(duplicated, content("", "<text:p>Item</text:p>"), metadata);
+    try {
+      expect(imported.document.GetPageDesc().GetValue().width).toBe(12240);
+    } finally {
+      imported.document.Dispose();
+    }
   });
 
   it("ignores unrelated page and list children while rejecting duplicate page properties", /** Checks ignores unrelated page and list children while rejecting duplicate page properties. @returns Test callback result. */ () => {

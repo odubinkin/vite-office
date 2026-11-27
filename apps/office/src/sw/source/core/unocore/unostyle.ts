@@ -13,6 +13,8 @@ import {
 } from "../../../inc/poolfmt";
 import type { SwDoc } from "../doc/doc";
 import { SwTextFormatColl } from "../doc/fmtcol";
+import { SwFormatPageDesc } from "../attr/fmtpdsc";
+import { RES_BREAK, RES_PAGEDESC } from "../../../inc/hintids";
 import type { SwPageDesc } from "../layout/pagedesc";
 import type { Any } from "../../../../cppu/inc/com/sun/star/uno/Any";
 import { Any as UnoAny } from "../../../../cppu/inc/com/sun/star/uno/Any";
@@ -484,6 +486,17 @@ export class SwXStyle {
     }
     const entry = SwUnoPropertyMap.get(n) as SwUnoPropertyEntry;
     const owner = this.owner as SwTextFormatColl | SwCharFormat;
+    if (n === "PageDescName") {
+      const pageName = stringValue(value);
+      const current = owner.GetAttrSet().GetItemIfSet(RES_PAGEDESC) as SwFormatPageDesc | null;
+      if (pageName && current?.GetPageDescName() === pageName) return;
+      if (pageName && !this.doc.FindPageDesc(pageName)) illegal("Unknown page style");
+      if (!pageName) owner.ResetFormatAttr(RES_BREAK);
+      owner.SetFormatAttr(
+        new SwFormatPageDesc(pageName, pageName ? current?.GetNumOffset() : undefined),
+      );
+      return;
+    }
     owner.SetFormatAttr(putItem(owner.GetAttrSet().Get(entry.which), entry, value));
   }
   /** Original native sequence argument form. @param names - Original name sequence. @param values - Original Any sequence. @returns Nothing. */

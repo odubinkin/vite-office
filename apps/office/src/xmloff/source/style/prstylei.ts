@@ -36,13 +36,14 @@ export function applyParagraphTextDefaults(
     }
   }
 }
-/** Materializes styles before linking parents/follow styles and applying native property maps. @param model - Writer API model. @param styles - Parsed common paragraph declarations. @param defaultStyle - Parsed default declaration. @param listName - Display-name resolution for numbering declarations. @returns Nothing.  @param resolveBuiltIn - Native operation input. */
+/** Materializes styles before linking parents/follow styles and applying native property maps. @param model - Writer API model. @param styles - Parsed common paragraph declarations. @param defaultStyle - Parsed default declaration. @param listName - Display-name resolution for numbering declarations. @param resolveBuiltIn - Built-in style identity. @param deferPageStyle - Registers a paragraph master-page reference for Finish. @returns Nothing. */
 export function applyNamedParagraphStyles(
   model: XMLTextModel,
   styles: ReadonlyMap<string, OdfStyleDefinition>,
   defaultStyle: OdfStyleDefinition | undefined,
   listName: (name: string) => string | undefined,
   resolveBuiltIn: (name: string) => string | undefined,
+  deferPageStyle?: (style: XMLStyle, name: string) => void,
 ): void {
   const familyName = xmlTextString("ParagraphStyles"),
     standard = xmlTextString("Standard"),
@@ -120,10 +121,12 @@ export function applyNamedParagraphStyles(
           display.dispose();
         }
       }
+      const { pageStyleName, ...paragraphProperties } = definition.paragraphProperties ?? {};
+      if (pageStyleName !== undefined) deferPageStyle?.(style, pageStyleName);
       applyTextImportProperties(
         style,
         definition.properties,
-        definition.paragraphProperties,
+        deferPageStyle ? paragraphProperties : definition.paragraphProperties,
         definition.alignment,
         definition.leftMargin,
       );

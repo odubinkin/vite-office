@@ -19,7 +19,7 @@ import type {
   XMLTextFrameAttributes,
   XMLTextFrameStyle,
 } from "../../../../xmloff/source/text/XMLTextFrameContext";
-import type { XMLTextCursor } from "../../../../xmloff/inc/txtimp";
+import type { XMLStyle, XMLTextCursor } from "../../../../xmloff/inc/txtimp";
 import { applyPageStoryGeometry, XMLTextMasterPageContext } from "./xmlpageheaderfooter";
 import type { SwXTextCursor } from "../../core/unocore/unoobj";
 import { SvXMLGraphicHelper } from "../../../../xmloff/source/core/xmlgrhlp";
@@ -275,10 +275,9 @@ class SwXMLImport
   private readonly fontFaces = new Map<string, string>();
   private readonly fontFaceGenerics = new Map<string, string>();
   private readonly fontFaceMetadata = new Map<string, OdfFontFaceMetadata>();
-  private readonly masterPages = new Map<
-    string,
-    Readonly<{ followName?: string; pageLayoutName: string }>
-  >();
+  private readonly masterPages: { name: string; followName: string; pageLayoutName: string }[] = [];
+  private readonly masterPageDisplayNames = new Map<string, string>();
+  private readonly paragraphPageStyleReferences: [XMLStyle, string][] = [];
   private readonly pageLayouts = new Map<string, OdfPageLayout>();
   private readonly imageStyles = new Map<string, string>();
   private readonly importedBitmaps = new Map<XMLGraphic, XFillBitmapItem>();
@@ -450,7 +449,18 @@ class SwXMLImport
     family: OdfStyleDefinition["family"],
     styleName: string,
   ): OdfStyleDefinition | undefined {
-    return this.autoStyles?.FindStyleChildContext(family, styleName)?.GetDefinition();
+    const definition = this.autoStyles?.FindStyleChildContext(family, styleName)?.GetDefinition();
+    const paragraph = definition?.paragraphProperties;
+    if (!definition || paragraph?.pageStyleName === undefined) return definition;
+    const { pageStyleName, ...otherProperties } = paragraph;
+    const displayName = this.resolvePageStyleReference(pageStyleName);
+    return {
+      ...definition,
+      paragraphProperties:
+        displayName === undefined
+          ? otherProperties
+          : { ...otherProperties, pageStyleName: displayName },
+    };
   }
 
   /** Creates and retains one native style-container context. @param automatic - Whether to replace the automatic context. @returns New owning context. */
@@ -652,8 +662,7 @@ class SwXMLImport
 
   /** Registers one named ODF page layout. @param name - Layout name. @param layout - Physical geometry. @returns Nothing. */
   public registerPageLayout(name: string, layout: OdfPageLayout): void {
-    if (this.pageLayouts.has(name)) throw new Error(`Duplicate ODF page layout: ${name}`);
-    this.pageLayouts.set(name, layout);
+    if (!this.pageLayouts.has(name)) this.pageLayouts.set(name, layout);
   }
 
   /** Applies the original default page-grid mode before publishing page styles. @param standard - Native standard-page mode. @returns Nothing. */
@@ -668,16 +677,25 @@ class SwXMLImport
     }
   }
 
-  /** Associates a named master page with its layout and optional follow style. @param name - Master-page name. @param pageLayoutName - Referenced layout. @param followName - Optional next master page. @returns Nothing. */
-  public registerMasterPage(
-    name: string,
-    pageLayoutName: string,
-    followName?: string,
-  ): XMLTextMasterPageContext {
-    if (this.masterPages.has(name)) throw new Error(`Duplicate ODF master page: ${name}`);
-    this.masterPages.set(name, {
-      ...(followName === undefined ? {} : { followName }),
-      pageLayoutName,
+  /** Resolves an ODF master name to an existing page style. @param name - Original name. @returns Native name, empty clear marker or no style. */
+  private resolvePageStyleReference(name: string): string | undefined {
+    if (!name) return "";
+    const displayName = this.masterPageDisplayNames.get(name) ?? name;
+    return this.document.FindPageDesc(displayName) ? displayName : undefined;
+  }
+
+  /** Registers the display name and binds the master page to a native page style. @param attributes - Original master-page attributes. @returns Context for the page stories. */
+  public registerMasterPage(attributes: FastAttributeList): SvXMLImportContext {
+    const styleName = attributes.get(XMLToken.STYLE_NAME) ?? "";
+    const displayName = attributes.get(XMLToken.STYLE_DISPLAY_NAME) ?? "";
+    if (displayName && !this.masterPageDisplayNames.has(styleName))
+      this.masterPageDisplayNames.set(styleName, displayName);
+    const name = displayName || styleName;
+    if (!name) return new SvXMLIgnoreContext();
+    this.masterPages.push({
+      name,
+      followName: attributes.get(XMLToken.STYLE_NEXT_STYLE_NAME) ?? "",
+      pageLayoutName: attributes.get(XMLToken.STYLE_PAGE_LAYOUT_NAME) ?? "",
     });
     const page = this.document.FindPageDesc(name) ?? this.document.MakePageDesc(name);
     return new XMLTextMasterPageContext(
@@ -774,6 +792,10 @@ class SwXMLImport
       ) => {
         const id = getWriterStyleIdFromOdfName(name);
         return id && getWriterMaterializedParagraphStyleDefinition(id) ? id : undefined;
+      },
+      /** Defers the paragraph PageDescName until the master page styles have been declared. @param style - Paragraph style. @param name - Original master name. */
+      (style, name) => {
+        this.paragraphPageStyleReferences.push([style, name]);
       },
     );
     this.styleDefinitionsApplied = true;
@@ -881,29 +903,27 @@ class SwXMLImport
           key.dispose();
         }
       };
-    if (this.masterPages.size === 0) {
-      const layout = this.pageLayouts.values().next().value;
-      if (layout) applyPage("Standard", layout);
-      return;
-    }
-    for (const [name, master] of this.masterPages) {
-      const layout = this.pageLayouts.get(master.pageLayoutName);
-      if (!layout) throw new Error(`Missing ODF page layout: ${master.pageLayoutName}`);
-      applyPage(name, layout);
-    }
-    for (const [name, master] of this.masterPages) {
-      const follow = master.followName ?? name;
-      if (!pages.hasByName(xmlTextString(follow)))
-        throw new Error(`Missing ODF follow master page: ${follow}`);
-      const value = xmlTextString(follow),
-        any = new Any(value.getDataAddress(), "OUString");
+    for (const { name, pageLayoutName, followName } of this.masterPages) {
+      const layout = this.pageLayouts.get(pageLayoutName);
+      if (layout) applyPage(name, layout);
+      const key = xmlTextString(name);
+      const property = xmlTextString("FollowStyle");
+      const value = xmlTextString(this.resolvePageStyleReference(followName) || name);
+      const any = new Any(value.getDataAddress(), "OUString");
       try {
-        pages.getByName(xmlTextString(name)).setPropertyValue(xmlTextString("FollowStyle"), any);
+        pages.getByName(key).setPropertyValue(property, any);
       } finally {
         any.dispose();
         value.dispose();
+        property.dispose();
+        key.dispose();
       }
     }
+    for (const [style, name] of this.paragraphPageStyleReferences) {
+      const pageStyleName = this.resolvePageStyleReference(name);
+      if (pageStyleName !== undefined) applyTextImportProperties(style, {}, { pageStyleName });
+    }
+    this.paragraphPageStyleReferences.length = 0;
   }
 
   /** Native endDocAdjustNodes removes only the final empty paragraph preceded by ordinary content. @returns Nothing. */
@@ -995,13 +1015,7 @@ class XMLMasterStylesContext extends SvXMLImportContext {
     attributes: FastAttributeList,
   ): SvXMLImportContext | null {
     if (element !== XMLToken.STYLE_MASTER_PAGE) return new SvXMLIgnoreContext();
-    const name = attributes.require(XMLToken.STYLE_NAME, "master page name");
-    const pageLayoutName = attributes.require(
-      XMLToken.STYLE_PAGE_LAYOUT_NAME,
-      "master page layout name",
-    );
-    const followName = attributes.get(XMLToken.STYLE_NEXT_STYLE_NAME) ?? undefined;
-    return this.xmlImport.registerMasterPage(name, pageLayoutName, followName);
+    return this.xmlImport.registerMasterPage(attributes);
   }
 }
 

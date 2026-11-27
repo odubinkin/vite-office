@@ -192,6 +192,14 @@
         {
           "path": "apps/office/src/sw/source/filter/xml/native-odt-writer-api.test.ts",
           "marker": "keeps Writer list-rule overrides and numbered paragraphs in their native lists"
+        },
+        {
+          "path": "apps/office/src/xmloff/source/text/txtparae.ts",
+          "marker": "encodeStyleName(parsedParagraphProperties.pageStyleName)"
+        },
+        {
+          "path": "apps/office/src/sw/source/filter/xml/odt-roundtrip.test.ts",
+          "marker": "round-trips encoded master pages, follow links and paragraph references"
         }
       ],
       "upstream": [
@@ -318,6 +326,10 @@
         {
           "path": "vendor/libreoffice-reference/xmloff/source/text/txtparae.cxx",
           "marker": "XML_STYLE_OVERRIDE"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/filter/xml/xmlfmte.cxx",
+          "marker": "XML_MASTER_PAGE_NAME"
         }
       ]
     },
@@ -362,7 +374,8 @@
       "V4DQJW as-character graphic checkpoint. An as-char frame occupies one text position in the run and the original control marker is omitted from XML.",
       "Writes the paragraph start attribute independently of participation.",
       "Exports original annotation range boundaries independently of the hidden field marker.",
-      "Exports alternate item rules with text:style-override while the native list ID continues. Encodes the same list structure for native numbered paragraphs."
+      "Exports alternate item rules with text:style-override while the native list ID continues. Encodes the same list structure for native numbered paragraphs.",
+      "Encodes automatic paragraph master-page references using the same original style-name converter as the exported declaration."
     ],
     "status": "mapped",
     "upstreamPath": "xmloff/source/text/txtparae.cxx",

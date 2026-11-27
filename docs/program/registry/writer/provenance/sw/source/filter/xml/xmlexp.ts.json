@@ -352,6 +352,14 @@
         {
           "path": "apps/office/src/sw/source/filter/xml/odt-layout-parity.test.ts",
           "marker": "keeps outline and shadow values under relief and restores each native item"
+        },
+        {
+          "path": "apps/office/src/sw/source/filter/xml/xmlexp.ts",
+          "marker": "exportStyleNameAttributes"
+        },
+        {
+          "path": "apps/office/src/sw/source/filter/xml/odt-roundtrip.test.ts",
+          "marker": "round-trips encoded master pages, follow links and paragraph references"
         }
       ],
       "upstream": [
@@ -594,6 +602,10 @@
         {
           "path": "vendor/libreoffice-reference/xmloff/source/text/txtprmap.cxx",
           "marker": "PROP_CharOverline"
+        },
+        {
+          "path": "vendor/libreoffice-reference/xmloff/source/style/XMLPageExport.cxx",
+          "marker": "EncodeStyleName( sName"
         }
       ]
     },
@@ -667,7 +679,8 @@
       "V4DQJW as-character graphic checkpoint. ODT export collects as-character flys as paragraph markers in the existing text and picture section traversal.",
       "Supplies the original named character style, numbering type and MM100 distance from Writer's line-numbering owner.",
       "Exports both XML properties from a single paragraph line-number item.",
-      "ODT export admits the represented native overline, contour, shadow and relief items on text collections and direct paragraph formatting."
+      "ODT export admits the represented native overline, contour, shadow and relief items on text collections and direct paragraph formatting.",
+      "Exports encoded master-page style names, conditional display names and encoded follow and named paragraph style links."
     ],
     "status": "mapped",
     "upstreamPath": "sw/source/filter/xml/xmlexp.cxx",

@@ -369,13 +369,12 @@ export function SetPropertyValue(
   if (name === "PageDescName") {
     const s = stringValue(value);
     if (s && !doc.FindPageDesc(s)) illegal("Unknown page style");
-    for (const r of ranges)
-      r.node.SetAttr(
-        new SwFormatPageDesc(
-          s,
-          (r.node.GetAttr(H.RES_PAGEDESC) as SwFormatPageDesc).GetNumOffset(),
-        ),
-      );
+    for (const { node } of ranges) {
+      const current = node.GetAttr(H.RES_PAGEDESC) as SwFormatPageDesc;
+      if (s && current.GetPageDescName() === s) continue;
+      if (!s) node.ResetAttr(H.RES_BREAK);
+      node.SetAttr(new SwFormatPageDesc(s, s ? current.GetNumOffset() : undefined));
+    }
     return;
   }
   if (

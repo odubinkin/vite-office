@@ -6253,3 +6253,15 @@ preserves the original field name and the lookup behavior.
 - [Original annotation name reconciliation](../../vendor/libreoffice-reference/sw/source/core/crsr/annotationmark.cxx)
 - [Original mark creation and lookup](../../vendor/libreoffice-reference/sw/source/core/doc/docbm.cxx)
 - [Original annotation field unique-ID lookup](../../vendor/libreoffice-reference/sw/source/core/unocore/unofield.cxx)
+
+### WRITER-759 — Duplicate master-page names can bind references to an earlier display name
+
+The master-page importer creates or reuses each page style by its own
+display name. The shared style-name map keeps the first display name
+registered for an encoded name. If different master pages declare the
+same encoded name, paragraph and follow-style references can therefore
+resolve to the earlier display name even though both page styles exist.
+Writer preserves that registration behavior.
+
+- [Original master-page style creation](../../vendor/libreoffice-reference/xmloff/source/text/XMLTextMasterPageContext.cxx)
+- [Original display-name map insertion and lookup](../../vendor/libreoffice-reference/xmloff/source/core/xmlimp.cxx)

@@ -41,7 +41,8 @@
       "S3HW1E HTML74: Page style property information and existing typed item application now consume WritingMode through actual descriptor formats.",
       "Native Writer metadata checkpoint removes the ordinary host-array property-info projection and createPropertySetInfo/-1 handles. Genuine SfxItemPropertySetInfo/WeakImplHelper, lazy property-set strong ownership, actual Reference<XPropertySetInfo>/Sequence<Property> suppliers and consumers, original static provider identities and six admitted map families are implemented. Explicit source types and literal source-derived family flags replace name heuristics. Original dispatch/member identities, RubyBelow/ParaIsConnectBorder names and BorderLine metadata are retained; cursor Para*Border aliases and family-inappropriate advertised rows are removed. Actual Writer/UNO/weak/RTF/ODF/Worker regressions accompany critical source-backed metadata tests. Other map families/TEXT_DEFAULT/SwXTextDefaults, full model/state-array/Stream/service ABI, DOCX-XLSX import/export and mounted UI remain incomplete; no broad parity/default/service promotion.",
       "Native style-name mapping checkpoint extends original FillUIName/FillProgName boundaries to represented paragraph-style attach, rename, name lookup and getName. Actual SwTextFormatColl owners hold UI names; built-in and colliding custom names retain distinct real owners, while the existing browser internal-ID lookup remains. Original6-family normal map contracts and selected English resources are source-derived; full native Sfx document pool, all style descriptors/services and filters remain incomplete.",
-      "The native no-character-style object retains the reserved Standard programmatic name. An independent common character format with a literal Standard UI name remains accessible at the existing user-suffixed name."
+      "The native no-character-style object retains the reserved Standard programmatic name. An independent common character format with a literal Standard UI name remains accessible at the existing user-suffixed name.",
+      "Assigns a named paragraph style to an existing page descriptor, preserving its page-number offset for nonempty names and resetting its break and descriptor item for the explicit empty name."
     ],
     "omittedResponsibilities": [
       "Only the current canonical Writer core slice is represented. Full UNO service metadata/query interfaces, listeners, interactive undo/actions, Unicode cursor navigation, layout, unsupported character/table/conditional styles, ranges in unsupported sections, expanded bookmarks and wider properties remain unverified or unported. DomainMapper, OOXML package parser and export are outside this task; no whole-module parity claim."
@@ -99,6 +100,14 @@
         {
           "path": "apps/office/src/svl/source/items/native-property-info.test.ts",
           "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/unocore/unostyle.ts",
+          "marker": "PageDescName"
+        },
+        {
+          "path": "apps/office/src/sw/source/filter/xml/odt-roundtrip.test.ts",
+          "marker": "round-trips encoded master pages, follow links and paragraph references"
         }
       ],
       "upstream": [
@@ -109,6 +118,10 @@
         {
           "path": "vendor/libreoffice-reference/sw/source/core/unocore/unostyle.cxx",
           "marker": "SwXPageStyle::SetPropertyValues_Impl"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/unocore/unostyle.cxx",
+          "marker": "SwXStyle::SetPropertyValue<sal_uInt16(RES_PAGEDESC)>"
         }
       ]
     }
