@@ -1,0 +1,22 @@
+{
+  "schema_version": 1,
+  "task_id": "202611270711-8TZW6W",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-11-27T07:20:12.571Z",
+  "verdict": "pass",
+  "summary": "Native threaded note data and document persons survive the Calc ODS and Worker round trip.",
+  "evaluated_sha": "84d2d7ba835d82e0037f17b6e4152d689c6521b2",
+  "blueprint_digest": "50dbad09189326add89907e8a8c2686c2e868bd18d80907451aa2b96d6f16ede",
+  "findings": [
+    "Source owner defaults, person deduplication, extension XML and version-one transfer preserve the represented native note contract. Implementation: 84d2d7ba835d82e0037f17b6e4152d689c6521b2."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202611270711-8TZW6W/README.md",
+    "output/playwright/8TZW6W/verification.md",
+    "84d2d7ba835d82e0037f17b6e4152d689c6521b2"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": []
+}
