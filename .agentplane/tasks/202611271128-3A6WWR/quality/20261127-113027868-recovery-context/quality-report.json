@@ -1,0 +1,22 @@
+{
+  "schema_version": 1,
+  "task_id": "202611271128-3A6WWR",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-11-27T11:30:27.868Z",
+  "verdict": "pass",
+  "summary": "Verified all existing shared menubar overflow cases.",
+  "evaluated_sha": "d863f65d694a3353985c403cbb3db9e4fd57db12",
+  "blueprint_digest": "0bf3cbca56c0da9152818731282e08acd72022fe541dd42c25a75e954eedf4c8",
+  "findings": [
+    "The expected Calc root order now includes the pinned Styles menu, preserving every accessibility, keyboard and geometry check."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202611271128-3A6WWR/README.md",
+    "/Users/odubinkin/Projects/vite-office/output/playwright/odf-full-checkpoint-20261127/overflow-verification.md",
+    "d863f65d694a3353985c403cbb3db9e4fd57db12"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": []
+}
