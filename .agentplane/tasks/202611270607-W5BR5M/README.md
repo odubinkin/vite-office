@@ -4,7 +4,7 @@ title: "Route Calc browser cell input through native EnterData and number format
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 7
+revision: 8
 origin:
   system: "manual"
 depends_on: []
@@ -22,6 +22,22 @@ verification:
   updated_by: "CODER"
   note: "65 targeted tests passed across normal run and exact retry. Office TypeScript, lint, format, dependencies, source tree, scoped provenance and routing passed. Baseline registry evidence issues are documented."
   attempts: 0
+quality_review:
+  state: "pass"
+  updated_at: "2026-11-27T06:29:18.260Z"
+  updated_by: "EVALUATOR"
+  note: "Source-backed normal input and history verified through the browser and Calc model"
+  evaluated_sha: "a8fd603868ebfc36c2162c8d57807a585091339f"
+  blueprint_digest: "3cb379e381cb258e7fdd52fab40a81f232bcda22d331356149f4fa5bd7086749"
+  evidence_refs:
+    - ".agentplane/tasks/202611270607-W5BR5M/README.md"
+    - ".agentplane/tasks/202611270607-W5BR5M/quality/20261127-062918260-recovery-context/quality-report.json"
+    - ".agentplane/tasks/202611270607-W5BR5M/quality/20261127-062918260-recovery-context/evaluator-prompt.md"
+    - ".agentplane/tasks/202611270607-W5BR5M/quality/20261127-062918260-recovery-context/evaluator-opinion.md"
+    - ".agentplane/tasks/202611270607-W5BR5M/blueprint/resolved-snapshot.json"
+    - "output/calc-next/W5BR5M-exact-retry.log"
+  findings:
+    - "All 65 selected cases passed across final focused evidence. Existing merged registry evidence issue recorded."
 commit: null
 comments:
   -

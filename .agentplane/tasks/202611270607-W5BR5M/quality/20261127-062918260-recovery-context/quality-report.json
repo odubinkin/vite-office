@@ -1,0 +1,21 @@
+{
+  "schema_version": 1,
+  "task_id": "202611270607-W5BR5M",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-11-27T06:29:18.260Z",
+  "verdict": "pass",
+  "summary": "Source-backed normal input and history verified through the browser and Calc model",
+  "evaluated_sha": "a8fd603868ebfc36c2162c8d57807a585091339f",
+  "blueprint_digest": "3cb379e381cb258e7fdd52fab40a81f232bcda22d331356149f4fa5bd7086749",
+  "findings": [
+    "All 65 selected cases passed across final focused evidence. Existing merged registry evidence issue recorded."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202611270607-W5BR5M/README.md",
+    "output/calc-next/W5BR5M-exact-retry.log"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": []
+}
