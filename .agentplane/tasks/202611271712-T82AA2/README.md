@@ -1,10 +1,11 @@
 ---
 id: "202611271712-T82AA2"
 title: "Implement native Writer structural redline boundaries in ODT"
-status: "DOING"
+result_summary: "Preserves Writer structural redline positions through ODT and Worker transfer."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 6
+revision: 7
 origin:
   system: "manual"
 depends_on: []
@@ -41,11 +42,16 @@ quality_review:
     - "output/playwright/odf-writer-redlines/structural-verification.md"
   findings:
     - "The source table boundary and the incomplete protected-section fixture pass on original input. WRITER-771 records the original first-match export behavior."
-commit: null
+commit:
+  hash: "32075a1022b72c2af74237fc050be3a7035edb6d"
+  message: "🧩 T82AA2 writer: preserve structural redline boundaries in ODT"
 comments:
   -
     author: "CODER"
     body: "Start: port original table and section redline placement."
+  -
+    author: "CODER"
+    body: "Verified: 61 focused Writer tests, original table and section fixtures, and required static checks."
 events:
   -
     type: "status"
@@ -60,8 +66,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "All 61 affected Writer tests passed. The tdf132911 table scope and sectionprot2 protection survived the ODT and Worker paths. Lint, type check, module boundaries, provenance and scoped inventories passed."
+  -
+    type: "status"
+    at: "2026-11-27T17:20:02.737Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: 61 focused Writer tests, original table and section fixtures, and required static checks."
 doc_version: 3
-doc_updated_at: "2026-11-27T17:18:46.075Z"
+doc_updated_at: "2026-11-27T17:20:02.738Z"
 doc_updated_by: "CODER"
 description: "Attach tracked-change markers around Writer tables and sections to their original registered structural nodes. Preserve position repair, structural markers and actual node relationships through ODT and the Worker. Use the original tdf132911 and section protection fixtures with related Writer regressions."
 sections:
