@@ -38,6 +38,7 @@ const contentTypes = ["outline", "table", "bookmark"] as const;
 export class SwContentTree {
   private readonly identities = new WeakMap<object, string>();
   private nextIdentity = 1;
+  private selectedBookmarkName = "";
 
   /** Borrows the native editing and page-layout owners. @param shell - Persistent Writer shell. @param layout - Current physical page-frame source. @returns Navigator model. */
   constructor(
@@ -66,7 +67,63 @@ export class SwContentTree {
       /** Ignores entries that were removed or replaced after selection. @param entry - Live content row. @returns Whether it is the requested target. */
       (entry) => entry.id === id,
     );
-    return target ? this.SetCursor(target.node, target.offset) : false;
+    if (!target) return false;
+    const oldBookmark = this.selectedBookmarkName;
+    this.selectedBookmarkName = target.type === "bookmark" ? target.title : "";
+    return this.SetCursor(target.node, target.offset, oldBookmark !== this.selectedBookmarkName);
+  }
+
+  /** Queries the native bookmark toolbar admission at the current cursor position. @param id - Selected bookmark row. @returns Whether it is the bookmark associated with the cursor. */
+  public IsSelectedBookmarkAtCursor(id: string): boolean {
+    const point = this.shell.GetCursor().GetPoint();
+    if (point.GetNode().FindTableNode()) return false;
+    let previous: string | undefined;
+    for (const mark of this.shell.GetDoc().GetIDocumentMarkAccess().GetBookmarks()) {
+      const [start, end] = mark.GetMarkStartEnd();
+      if (point.compare(start) < 0 && previous !== undefined) return previous === id;
+      if (point.compare(start) >= 0 && point.compare(end) <= 0) {
+        previous = this.identities.get(mark);
+        if (mark.GetName() === this.selectedBookmarkName) return previous === id;
+      }
+    }
+    return false;
+  }
+
+  /** Removes a selected ordinary bookmark or the entire Bookmark category in one native edit. @param id - Selected bookmark, or absent for the category. @returns Whether any bookmarks were removed. */
+  public DeleteBookmarks(id?: string): boolean {
+    const document = this.shell.GetDoc();
+    const marks = document.GetIDocumentMarkAccess().GetBookmarks();
+    const text = this.shell.GetTextShell();
+    if (id !== undefined) {
+      const mark = marks.find(
+        /** Resolves the current owned mark. @param bookmark - Attached bookmark. @returns Whether it is selected. */
+        (bookmark) => this.identities.get(bookmark) === id,
+      );
+      return (
+        mark !== undefined &&
+        this.GotoContent(id) &&
+        text.ApplyBookmarkOperation({ action: "remove", name: mark.GetName() })
+      );
+    }
+    if (marks.length === 0) return false;
+    const undo = document.GetUndoManager();
+    return this.shell.RunNotificationTransaction(
+      /** Groups the complete category removal and publishes one model update. @returns Whether content was deleted. */
+      () =>
+        document.RunModelTransaction(
+          /** Records the existing per-bookmark history actions in one native undo group. @returns Whether content was deleted. */
+          () => {
+            undo.StartUndo("Delete Bookmarks");
+            try {
+              for (const mark of marks)
+                text.ApplyBookmarkOperation({ action: "remove", name: mark.GetName() });
+              return true;
+            } finally {
+              undo.EndUndo();
+            }
+          },
+        ),
+    );
   }
 
   /** Executes one native Navigator action on selected chapters in document order. @param ids - Selected tree identities. @param command - Native heading toolbar action. @param withChildren - Whether selected chapters include sublevels. @returns Surviving selections for native outline root view. */
@@ -309,12 +366,12 @@ export class SwContentTree {
     return next;
   }
 
-  /** Transfers an owned position into the persistent Writer cursor. @param node - Native text node. @param offset - UTF-16 content position. @returns Whether the position belongs to the active document. */
-  private SetCursor(node: SwTextNode, offset: number): boolean {
+  /** Transfers an owned position into the persistent Writer cursor. @param node - Native text node. @param offset - UTF-16 content position. @param updateTracking - Whether the Navigator bookmark identity changed. @returns Whether the position belongs to the active document. */
+  private SetCursor(node: SwTextNode, offset: number, updateTracking = false): boolean {
     if (node.GetDoc() !== this.shell.GetDoc()) return false;
     const position = new SwPosition(node, offset);
     try {
-      this.shell.SetCursor(position);
+      if (!this.shell.SetCursor(position) && updateTracking) this.shell.NotifySelectionChanged();
       return true;
     } finally {
       position.Dispose();

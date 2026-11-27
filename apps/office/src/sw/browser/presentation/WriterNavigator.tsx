@@ -7,10 +7,13 @@ import {
   IndentDecrease,
   IndentIncrease,
   ListTree,
+  Pencil,
+  Trash2,
   X,
 } from "lucide-react";
 import { useEffect, useRef, useState, type KeyboardEvent, type RefObject } from "react";
 import { useBrowserLocalization } from "../../../framework/browser/localization/browser-localization-context";
+import { WRITER_COMMAND_IDS } from "../../uiconfig/swriter/menubar/menubar-commands";
 import type {
   SwNavigatorContentGroup,
   SwNavigatorContentType,
@@ -135,6 +138,10 @@ export function WriterNavigator({
     /** Resolves the selected visible heading identities in tree order. @param row - Tree entry. @returns Selection identity, if applicable. */
     (row) => (row.type === "outline" && !row.group && selectedIds.has(row.id) ? [row.id] : []),
   );
+  const bookmarkRow = selectedRow?.type === "bookmark" ? selectedRow : undefined;
+  const deleteBookmark = bookmarkRow && (!bookmarkRow.group || bookmarkRow.children);
+  const editBookmark =
+    bookmarkRow && !bookmarkRow.group && tree.IsSelectedBookmarkAtCursor(bookmarkRow.id);
 
   useEffect(
     /** Restores native content tree focus when the retained Navigator is shown. @returns Nothing. */
@@ -453,33 +460,80 @@ export function WriterNavigator({
       {/* Keep the first click on a heading from shifting its row during double-click. */}
       <div
         role="toolbar"
-        aria-label={label("heading-tools", "Heading Tools")}
-        className={`flex shrink-0 items-center gap-1.5 border-b border-slate-200 px-2 py-1 ${headings.length > 0 ? "" : "invisible"}`}
+        aria-label={
+          bookmarkRow
+            ? label("bookmark-tools", "Bookmark Tools")
+            : label("heading-tools", "Heading Tools")
+        }
+        className={`flex min-h-8 shrink-0 items-center gap-1.5 border-b border-slate-200 px-2 py-1 ${headings.length > 0 || deleteBookmark || editBookmark ? "" : "invisible"}`}
       >
-        {headingTools.map(
-          /** Renders the original selection-specific heading buttons in toolbar order. @param tool - Original ID, tooltip and browser icon. @returns Native button. */
-          ([command, fallback, Icon]) => {
-            const title = label(command, fallback);
-            return (
-              <button
-                key={command}
-                type="button"
-                aria-label={title}
-                title={title}
-                className="rounded p-1 hover:bg-slate-100"
-                onClick={
-                  /** Runs the heading button, excluding sublevels with the primary modifier alone. @param event - Original pointer or keyboard activation. @returns Nothing. */
-                  (event) => {
-                    const withoutChildren =
-                      event.ctrlKey !== event.metaKey && !event.shiftKey && !event.altKey;
-                    runHeadingCommand(command, !withoutChildren);
+        {!bookmarkRow &&
+          headingTools.map(
+            /** Renders the original selection-specific heading buttons in toolbar order. @param tool - Original ID, tooltip and browser icon. @returns Native button. */
+            ([command, fallback, Icon]) => {
+              const title = label(command, fallback);
+              return (
+                <button
+                  key={command}
+                  type="button"
+                  aria-label={title}
+                  title={title}
+                  className="rounded p-1 hover:bg-slate-100"
+                  onClick={
+                    /** Runs the heading button, excluding sublevels with the primary modifier alone. @param event - Original pointer or keyboard activation. @returns Nothing. */
+                    (event) => {
+                      const withoutChildren =
+                        event.ctrlKey !== event.metaKey && !event.shiftKey && !event.altKey;
+                      runHeadingCommand(command, !withoutChildren);
+                    }
                   }
-                }
-              >
-                <Icon size={16} />
-              </button>
-            );
-          },
+                >
+                  <Icon size={16} />
+                </button>
+              );
+            },
+          )}
+        {editBookmark && (
+          <button
+            type="button"
+            aria-label={label("edit-bookmark", "Edit Bookmark")}
+            title={label("edit-bookmark", "Edit Bookmark")}
+            className="rounded p-1 hover:bg-slate-100"
+            onClick={
+              /** Dispatches the source EditBookmark slot with the selected mark name. @returns Nothing. */
+              () => {
+                view.Execute(WRITER_COMMAND_IDS.editBookmark, { Bookmark: bookmarkRow.title });
+              }
+            }
+          >
+            <Pencil size={16} />
+          </button>
+        )}
+        {deleteBookmark && (
+          <button
+            type="button"
+            aria-label={
+              bookmarkRow.group
+                ? label("delete-all-bookmarks", "Delete All Bookmarks")
+                : label("delete-bookmark", "Delete Bookmark")
+            }
+            title={
+              bookmarkRow.group
+                ? label("delete-all-bookmarks", "Delete All Bookmarks")
+                : label("delete-bookmark", "Delete Bookmark")
+            }
+            className="rounded p-1 hover:bg-slate-100"
+            onClick={
+              /** Deletes the selected mark or all marks under the Bookmark category. @returns Nothing. */
+              () => {
+                if (!tree.DeleteBookmarks(bookmarkRow.group ? undefined : bookmarkRow.id)) return;
+                setSelected("bookmark");
+                reveal();
+              }
+            }
+          >
+            <Trash2 size={16} />
+          </button>
         )}
       </div>
       <ul

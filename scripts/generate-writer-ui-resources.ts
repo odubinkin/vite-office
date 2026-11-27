@@ -56,6 +56,7 @@ const specs: readonly CommandSpec[] = [
   { commandUrl: ".uno:Cut" },
   { commandUrl: ".uno:DecrementLevel" },
   { commandUrl: ".uno:DecrementIndent" },
+  { commandUrl: ".uno:EditBookmark", internalLabel: "Edit Bookmark", showsDialog: true },
   { commandUrl: ".uno:EditHyperlink", showsDialog: true },
   { commandUrl: ".uno:ExportTo", showsDialog: true },
   {
@@ -180,6 +181,7 @@ const commandAliases = {
   defaultParagraphStyle: ".uno:StyleApply?Style:string=Standard&FamilyName:string=ParagraphStyles",
   decreaseIndent: ".uno:DecrementIndent",
   demote: ".uno:DecrementLevel",
+  editBookmark: ".uno:EditBookmark",
   editHyperlink: ".uno:EditHyperlink",
   exportText: ".uno:ExportTo",
   fontName: ".uno:CharFontName",
@@ -299,6 +301,7 @@ const commandCapabilities: Readonly<Record<string, `CAP-${string}`>> = {
   ".uno:DefaultBullet": "CAP-0105",
   ".uno:DefaultNumbering": "CAP-0105",
   ".uno:ContinueNumbering": "CAP-0105",
+  ".uno:EditBookmark": "CAP-0113",
   ".uno:EditHyperlink": "CAP-0135",
   ".uno:EndPara": "CAP-0112",
   ".uno:ExportTo": "CAP-0101",

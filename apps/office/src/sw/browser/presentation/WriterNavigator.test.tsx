@@ -5,11 +5,83 @@ import { HoriOrientation } from "../../../offapi/com/sun/star/text/HoriOrientati
 import { SfxInt16Item } from "../../../svl/inc/intitem";
 import { RES_BREAK } from "../../inc/hintids";
 import { SwFormatLayoutSplit } from "../../inc/fmtlsplt";
-import { SwPosition } from "../../source/core/crsr/pam";
+import { SwPaM, SwPosition } from "../../source/core/crsr/pam";
 import type { SwNavigatorHeadingCommand } from "../../source/uibase/utlui/content";
 import { WRITER_COMMAND_IDS } from "../../uiconfig/swriter/menubar/menubar-commands";
 import { createWriterDocumentSession } from "../composition/writer-module";
 import { WriterWorkbench } from "./writer-view";
+
+it("edits and deletes native bookmarks through the Navigator toolbar and restores their ranges", /** Verifies cursor admission, the native dialog, grouped deletion and mark metadata. @returns Nothing. */ () => {
+  const session = createWriterDocumentSession();
+  const shell = session.view.GetWrtShell();
+  const document = shell.GetDoc();
+  const text = document.paragraphs[0];
+  assert(text);
+  text.SetText("Bookmarked words");
+  const marks = document.GetIDocumentMarkAccess();
+  marks.MakeMark(text, 0, "Earlier");
+  const start = new SwPosition(text, 4);
+  const end = new SwPosition(text, 10);
+  const range = new SwPaM(end, start);
+  const last = marks.MakeBookmark(range, "Last");
+  range.Dispose();
+  end.Dispose();
+  start.Dispose();
+  last.Hide(true);
+  last.SetHideCondition("condition");
+  try {
+    const caret = new SwPosition(text, 4);
+    shell.SetCursor(caret);
+    caret.Dispose();
+    session.view.ToggleNavigator();
+    render(<WriterWorkbench view={session.view} isActive />);
+    const navigator = within(screen.getByRole("dialog", { name: "Navigator" }));
+    const row = navigator.getByRole("treeitem", { name: "Last" });
+    fireEvent.click(row);
+    // The pinned cursor scan falls through when the last bookmark was never activated.
+    expect(navigator.queryByRole("button", { name: "Edit Bookmark" })).toBeNull();
+    fireEvent.doubleClick(row);
+    fireEvent.click(navigator.getByRole("button", { name: "Edit Bookmark" }));
+    const dialog = within(screen.getByRole("dialog", { name: "Bookmark" }));
+    expect(dialog.getByRole("option", { name: "Last" })).toHaveProperty("selected", true);
+    const close = dialog.getAllByRole("button", { name: "Close" }).at(-1);
+    assert(close);
+    fireEvent.click(close);
+    fireEvent.click(navigator.getByRole("button", { name: "Delete Bookmark" }));
+    expect(marks.GetBookmarkNames()).toEqual(["Earlier"]);
+    act(
+      /** Restores the deleted ordinary bookmark. @returns Nothing. */
+      () => {
+        expect(shell.Undo()).toBe(true);
+      },
+    );
+    const restored = marks.FindMark("Last");
+    expect(restored?.GetMarkStart().GetContentIndex()).toBe(4);
+    expect(restored?.GetMarkEnd().GetContentIndex()).toBe(10);
+    expect(restored?.GetHideCondition()).toBe("condition");
+    expect(restored?.IsHidden()).toBe(true);
+    fireEvent.click(navigator.getByRole("treeitem", { name: "Bookmarks" }));
+    fireEvent.click(navigator.getByRole("button", { name: "Delete All Bookmarks" }));
+    expect(marks.GetBookmarkNames()).toEqual([]);
+    act(
+      /** Restores the entire category with one undo. @returns Nothing. */
+      () => {
+        expect(shell.Undo()).toBe(true);
+      },
+    );
+    expect(marks.GetBookmarkNames()).toEqual(["Earlier", "Last"]);
+    act(
+      /** Reapplies the complete category removal. @returns Nothing. */
+      () => {
+        expect(shell.Redo()).toBe(true);
+      },
+    );
+    expect(marks.GetBookmarkNames()).toEqual([]);
+  } finally {
+    cleanup();
+    session.Close();
+  }
+});
 
 it("groups selected outline chapters and restores the selected heading identities", /** Exercises the heading-root range selection and original grouped command order. @returns Nothing. */ () => {
   const session = createWriterDocumentSession();

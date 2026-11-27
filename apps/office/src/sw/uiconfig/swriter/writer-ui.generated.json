@@ -16,6 +16,7 @@
     "defaultParagraphStyle": ".uno:StyleApply?Style:string=Standard&FamilyName:string=ParagraphStyles",
     "decreaseIndent": ".uno:DecrementIndent",
     "demote": ".uno:DecrementLevel",
+    "editBookmark": ".uno:EditBookmark",
     "editHyperlink": ".uno:EditHyperlink",
     "exportText": ".uno:ExportTo",
     "fontName": ".uno:CharFontName",
@@ -461,6 +462,18 @@
       "showsDialog": false,
       "shortcuts": [],
       "slotId": 10461
+    },
+    ".uno:EditBookmark": {
+      "browserOwned": false,
+      "argumentSchema": ["Bookmark:SfxStringItem"],
+      "capabilityId": "CAP-0113",
+      "controlLabel": "Edit Bookmark",
+      "label": "Edit Bookmark",
+      "placements": ["sw/sdi/swriter.sdi"],
+      "semantics": "action",
+      "showsDialog": true,
+      "shortcuts": [],
+      "slotId": 21433
     },
     ".uno:EditHyperlink": {
       "browserOwned": false,
@@ -1951,6 +1964,11 @@
         "sw/uiconfig/swriter/menubar/menubar.xml",
         "sw/uiconfig/swriter/toolbar/textobjectbar.xml"
       ]
+    },
+    {
+      "classification": "supported-upstream",
+      "commandUrl": ".uno:EditBookmark",
+      "sources": ["sw/sdi/swriter.sdi"]
     },
     {
       "classification": "supported-upstream",

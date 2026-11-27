@@ -24,7 +24,7 @@
         "apps/office/src/sw/source/uibase/utlui/content.ts#ExecCommand",
         "vendor/libreoffice-reference/sw/source/uibase/utlui/content.cxx#SwContentTree::ExecCommand"
       ],
-      "justification": "Reads the native outline, table and bookmark owners and navigates through the live Writer cursor. The represented tree serves the active document and the three connected native content families. Uses the selected outline entry, native chapter offsets, level bounds and optional descendants for the four heading actions. Applies selected heading commands as a single undo group in native document order, reversing chapter moves down and filtering included descendants.",
+      "justification": "Reads the native outline, table and bookmark owners and navigates through the live Writer cursor. The represented tree serves the active document and the three connected native content families. Uses the selected outline entry, native chapter offsets, level bounds and optional descendants for the four heading actions. Applies selected heading commands as a single undo group in native document order, reversing chapter moves down and filtering included descendants. Connects ordinary bookmark selection, cursor-dependent edit admission and group deletion through the native Writer mark and undo owners.",
       "knownViolations": [],
       "localSymbols": [
         "SwContentTree"

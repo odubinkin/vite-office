@@ -1,0 +1,39 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "path": "apps/office/src/sw/source/core/undo/unbkmk.ts",
+    "state": "active",
+    "suite": "writer",
+    "subsystem": "undo-redo",
+    "capabilityIds": [
+      "CAP-0113"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "none",
+      "evidence": [
+        "apps/office/src/sw/source/core/undo/unbkmk.ts#SwUndoInsBookmark",
+        "apps/office/src/sw/browser/presentation/WriterNavigator.test.tsx#edits and deletes native bookmarks through the Navigator toolbar",
+        "vendor/libreoffice-reference/sw/source/core/undo/unbkmk.cxx#SwUndoInsBookmark::UndoImpl"
+      ],
+      "justification": "Reuses SwHistoryBookmark for ordinary mark metadata and native positions. Insertion, deletion and rename use the existing mark manager in both undo directions.",
+      "knownViolations": [],
+      "localSymbols": [
+        "SwUndoInsBookmark",
+        "SwUndoDeleteBookmark",
+        "SwUndoRenameBookmark"
+      ],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": "sw/source/core/undo/unbkmk.cxx",
+      "upstreamSymbols": [
+        "SwUndoInsBookmark::UndoImpl",
+        "SwUndoDeleteBookmark::UndoImpl",
+        "SwUndoRenameBookmark::UndoImpl"
+      ]
+    }
+  }
+}

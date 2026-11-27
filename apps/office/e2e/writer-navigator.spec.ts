@@ -2,6 +2,53 @@
 import { expect, test } from "@playwright/test";
 import { openBrowserMenu } from "../test-support/menu-pointer-e2e";
 
+test("Writer Navigator opens the selected bookmark and deletes all marks in one undo step", /** Verifies real bookmark slot dispatch and grouped deletion in Chromium. @param fixtures - Browser test inputs. @param fixtures.page - Writer page. @returns Completion. */ async ({
+  page,
+}) => {
+  await page.goto("/writer");
+  const editor = page.getByRole("textbox", { name: "Writer document text" });
+  await editor.fill("Bookmark positions");
+  const bookmark = page.getByRole("dialog", { name: "Bookmark", exact: true });
+  for (const [key, name] of [
+    ["Home", "Earlier"],
+    ["End", "Later"],
+  ] as const) {
+    await editor.press(key);
+    await openBrowserMenu(page, "Insert");
+    await page.getByRole("menuitem", { name: /^Bookmark/u }).click();
+    await bookmark.getByLabel("Name", { exact: true }).fill(name);
+    await bookmark.getByRole("button", { name: "Insert", exact: true }).click();
+    await expect(bookmark).toBeHidden();
+  }
+  const standard = page.getByRole("toolbar", { name: "Writer standard toolbar" });
+  const undo = standard.getByRole("button", { name: "Undo", exact: true });
+  await page.keyboard.press("F5");
+  const navigator = page.getByRole("dialog", { name: "Navigator", exact: true });
+  const earlier = navigator.getByRole("treeitem", { name: "Earlier", exact: true });
+  const later = navigator.getByRole("treeitem", { name: "Later", exact: true });
+  await earlier.dblclick();
+  await navigator.getByRole("button", { name: "Edit Bookmark", exact: true }).click();
+  await expect(bookmark.getByRole("listbox").locator("option:checked")).toHaveText("Earlier");
+  await bookmark.getByRole("button", { name: "Rename", exact: true }).click();
+  const rename = page.getByRole("dialog", { name: "Rename object: Earlier", exact: true });
+  await rename.getByLabel("New name").fill("Renamed");
+  await rename.getByRole("button", { name: "OK", exact: true }).click();
+  await bookmark.getByRole("button", { name: "Close", exact: true }).last().click();
+  await expect(navigator.getByRole("treeitem", { name: "Renamed", exact: true })).toBeVisible();
+  await undo.click();
+  await expect(earlier).toBeVisible();
+  await navigator.getByRole("treeitem", { name: "Bookmarks", exact: true }).click();
+  await navigator.getByRole("button", { name: "Delete All Bookmarks", exact: true }).click();
+  await expect(
+    navigator.getByRole("button", { name: "Delete All Bookmarks", exact: true }),
+  ).toBeHidden();
+  await undo.click();
+  await navigator.getByRole("treeitem", { name: "Bookmarks", exact: true }).click();
+  await expect(earlier).toBeVisible();
+  await expect(later).toBeVisible();
+  await expect(editor).toHaveText("Bookmark positions");
+});
+
 test("Writer Navigator moves selected chapters together in the heading root", /** Verifies native tree modifiers, one history action, and retained selection. @param fixtures - Browser test inputs. @param fixtures.page - Writer page. @returns Completion. */ async ({
   page,
 }) => {

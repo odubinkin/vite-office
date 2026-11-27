@@ -6253,3 +6253,15 @@ preserves the original field name and the lookup behavior.
 - [Original annotation name reconciliation](../../vendor/libreoffice-reference/sw/source/core/crsr/annotationmark.cxx)
 - [Original mark creation and lookup](../../vendor/libreoffice-reference/sw/source/core/doc/docbm.cxx)
 - [Original annotation field unique-ID lookup](../../vendor/libreoffice-reference/sw/source/core/unocore/unofield.cxx)
+
+### WRITER-759 — Bookmark edit toolbar detection omits the last containing mark
+
+The Navigator walks bookmarks in document order to decide whether an entry
+matches the cursor. It returns immediately for the bookmark last activated
+through Navigator. Otherwise, it reports the latest containing mark only
+when it encounters a subsequent bookmark that starts after the cursor.
+If iteration ends first, the result is false even when a bookmark contains
+the cursor. This can hide Edit Bookmark for the last bookmark until the
+entry is activated. Writer preserves the same decision.
+
+- [Original Navigator cursor comparison and bookmark activation](../../vendor/libreoffice-reference/sw/source/uibase/utlui/content.cxx)

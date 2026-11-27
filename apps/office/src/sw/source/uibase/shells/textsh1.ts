@@ -82,7 +82,7 @@ import { getParagraphAttributeNodes } from "../../core/edit/edattr-paragraph";
 import { createWriterHyperlinkAction, getWriterHyperlinkAtCursor } from "../../core/edit/editsh";
 import { getWriterSelectedTextRanges } from "../../core/crsr/pam";
 import type { WriterSlotHandler } from "../../../sdi/swriter";
-import { createWriterTextCommandRegistry } from "./textsh1-commands";
+import { applyBookmarkOperation, createWriterTextCommandRegistry } from "./textsh1-commands";
 import { SwTextNode } from "../../core/txtnode/ndtxt";
 import { SwPaM } from "../../core/crsr/pam";
 import { isWriterParagraphListKind, type WriterParagraphListKind } from "../../core/doc/list";
@@ -309,17 +309,7 @@ export class SwTextShell extends SwBaseShell {
   }
   /** Applies one bookmark dialog choice to canonical marks and cursor. @param result - Accepted operation. @returns Whether model or cursor changed. */
   public ApplyBookmarkOperation(result: WriterBookmarkDialogResult): boolean {
-    const marks = this.target.GetDoc().GetIDocumentMarkAccess();
-    if (result.action === "navigate") {
-      const mark = marks.FindMark(result.name);
-      if (mark === undefined) return false;
-      const [start, end] = mark.GetMarkStartEnd();
-      return this.target.SetPaM(start, mark.IsExpanded() ? end : undefined);
-    }
-    if (result.action === "remove") return marks.DeleteMark(result.name);
-    if (result.action === "rename") return marks.RenameMark(result.name, result.newName);
-    marks.MakeBookmark(this.target.GetCursor(), result.name);
-    return true;
+    return applyBookmarkOperation(this.target, result);
   }
   /** Inserts a hard page boundary through Writer paragraph structure. @returns Whether inserted. */
   public InsertHardPageBreak(): boolean {
