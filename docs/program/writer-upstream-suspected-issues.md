@@ -6367,3 +6367,24 @@ also reports success for incompatible values, while leaving position as it was.
 Writer preserves both setter behaviors.
 
 - [Original ruby UNO property writeback](../../vendor/libreoffice-reference/sw/source/core/txtnode/fmtatr2.cxx#L533)
+
+### WRITER-769 — Resolving an unregistered redline author may never terminate
+
+The author lookup tries to grow the table by repeatedly inserting the name
+`nn`. The insertion method deduplicates names, so once that name exists an
+index beyond the table stays beyond it. ODT and Worker import register the
+author name before storing its index. The lookup retains the original behavior.
+
+- [Original author lookup](../../vendor/libreoffice-reference/sw/source/uibase/app/swmodul1.cxx#L425)
+- [Original author insertion](../../vendor/libreoffice-reference/sw/source/uibase/app/swmodul1.cxx#L471)
+
+### WRITER-770 — The change-info reader joins adjacent comment paragraphs without line breaks
+
+The ODF reader sends each comment paragraph into the same string buffer and
+supplies the accumulated characters to Writer without inserting paragraph
+separators. Export splits comment strings on line breaks, so an imported
+multiline comment can come back as one paragraph. Writer retains the native
+reader behavior.
+
+- [Original comment import](../../vendor/libreoffice-reference/xmloff/source/text/XMLChangeInfoContext.cxx#L66)
+- [Original change-info export](../../vendor/libreoffice-reference/xmloff/source/text/XMLRedlineExport.cxx#L543)

@@ -1,0 +1,39 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/xmloff/source/text/XMLRedlineExport.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "shared",
+    "subsystem": "odf-filter",
+    "capabilityIds": [
+      "CAP-0128",
+      "CAP-0129"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/xmloff/source/text/XMLRedlineExport.ts",
+        "apps/office/src/sw/source/filter/xml/odt-redlines.test.ts",
+        "vendor/libreoffice-reference/xmloff/source/text/XMLRedlineExport.cxx"
+      ],
+      "justification": "Writes native region definitions, full timestamps, and text change markers. Desktop personal-data options, structural endpoints and the pre-save redline visibility transition.",
+      "knownViolations": [],
+      "localSymbols": [
+        "exportTrackedChanges",
+        "exportRedlineMarker"
+      ],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": "xmloff/source/text/XMLRedlineExport.cxx",
+      "upstreamSymbols": [
+        "XMLRedlineExport::ExportChangesListElements",
+        "XMLRedlineExport::ExportChangedRegion",
+        "XMLRedlineExport::ExportChangeInfo"
+      ]
+    }
+  }
+}

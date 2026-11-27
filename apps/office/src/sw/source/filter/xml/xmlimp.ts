@@ -1,4 +1,5 @@
 /** @fileoverview Implements Writer's streaming SwXMLImport bridge over fast SAX contexts. */
+import { XMLRedlineImportHelper } from "./XMLRedlineImportHelper";
 import type { XMLRubyStyle } from "../../../../xmloff/source/text/txtprhdl";
 import type { SfxDocumentProperties } from "../../../../sfx2/source/doc/sfxbasemodel";
 import { SwPoolFormatId, WRITER_CHARACTER_STYLE_POOL } from "../../../inc/poolfmt";
@@ -479,9 +480,11 @@ class SwXMLImport
   ) {
     super(document);
     this.model = new SwXTextDocument(document);
+    this.redlineImport = new XMLRedlineImportHelper(document);
     this.textImport = new XMLTextImportHelper(this, this.model);
   }
   private readonly model: SwXTextDocument;
+  public readonly redlineImport: XMLRedlineImportHelper;
   /** Supplies the shared text import owner used by every paragraph and table cell. @returns Active native helper. */
   public GetTextImport(): XMLTextImportHelper {
     return this.textImport as XMLTextImportHelper;
@@ -493,6 +496,7 @@ class SwXMLImport
   /** Releases import API cursors and model wrappers without destroying the imported SwDoc. @returns Nothing. */
   public dispose(): void {
     this.textImport?.ResetCursor();
+    this.redlineImport.Dispose();
     this.DisposeTableContexts();
     this.model.dispose();
   }
@@ -1036,6 +1040,7 @@ class SwXMLImport
   public finishContent(): void {
     if (this.officeTextCount !== 1)
       throw new Error("ODF content must contain exactly one office:text.");
+    this.redlineImport.Finish();
     const cursor =
         this.GetTextImport().GetCursor() as import("../../core/unocore/unoobj").SwXTextCursor,
       node = cursor.GetPaM().GetPoint().GetNode() as SwTextNode,

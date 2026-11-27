@@ -1,0 +1,45 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/xmloff/source/text/XMLChangedRegionImportContext.ts",
+    "localSymbols": [
+      "XMLChangedRegionImportContext"
+    ],
+    "status": "mapped",
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/xmloff/source/text/XMLChangedRegionImportContext.ts",
+          "marker": "XMLChangedRegionImportContext"
+        },
+        {
+          "path": "apps/office/src/sw/source/filter/xml/odt-redlines.test.ts",
+          "marker": "testMidnightRedlineDatetime"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/xmloff/source/text/XMLChangedRegionImportContext.cxx",
+          "marker": "XMLChangedRegionImportContext::startFastElement"
+        },
+        {
+          "path": "vendor/libreoffice-reference/xmloff/source/text/XMLChangedRegionImportContext.cxx",
+          "marker": "XMLChangedRegionImportContext::SetChangeInfo"
+        }
+      ]
+    },
+    "upstreamPath": "xmloff/source/text/XMLChangedRegionImportContext.cxx",
+    "upstreamSymbols": [
+      "XMLChangedRegionImportContext::startFastElement",
+      "XMLChangedRegionImportContext::SetChangeInfo"
+    ],
+    "preservedResponsibilities": [
+      "Reads original change definitions and opens deletion content through the shared text filter."
+    ],
+    "omittedResponsibilities": [
+      "Prior-format automatic-style reconstruction."
+    ]
+  }
+}

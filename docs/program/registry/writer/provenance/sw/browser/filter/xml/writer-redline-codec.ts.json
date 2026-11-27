@@ -1,0 +1,37 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "local-infrastructure",
+    "localPath": "apps/office/src/sw/browser/filter/xml/writer-redline-codec.ts",
+    "localSymbols": [
+      "encodeRedlines",
+      "restoreRedlines"
+    ],
+    "status": "local-only",
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sw/browser/filter/xml/writer-redline-codec.ts",
+          "marker": "encodeRedlines"
+        },
+        {
+          "path": "apps/office/src/sw/browser/filter/xml/writer-redline-codec.ts",
+          "marker": "restoreRedlines"
+        },
+        {
+          "path": "apps/office/src/sw/source/filter/xml/odt-redlines.test.ts",
+          "marker": "testMidnightRedlineDatetime"
+        }
+      ]
+    },
+    "rationale": "Transfers live redline metadata, registered positions and deletion sections across the browser Worker.",
+    "responsibilities": [
+      "Transfers live redline metadata, registered positions and deletion sections across the browser Worker."
+    ],
+    "stackDivergence": {
+      "kind": "local-infrastructure",
+      "rationale": "Structured clone is the browser transport boundary."
+    }
+  }
+}

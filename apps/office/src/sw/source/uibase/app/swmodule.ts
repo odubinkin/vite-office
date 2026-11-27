@@ -1,4 +1,5 @@
 /** @fileoverview Consumed SwModule preference/ApplyUserMetric contracts over actual live Writer views;no complete application/service facade. */
+import { GetRedlineAuthor, InsertRedlineAuthor } from "../../core/doc/docredln";
 import { FieldUnit } from "../../../../tools/inc/fldunit";
 import { SwMasterUsrPref, type SwMetricConfigValues } from "../config/usrpref";
 /** Actual view methods consumed by the native metric update loops. */
@@ -32,6 +33,16 @@ export class SwModule {
     this.m_xItemInfoPackageSwAttributes = undefined;
     previous?.Dispose();
   }
+  /** Registers an author in the application table. @param name - Source author. @returns Application author index. */
+  InsertRedlineAuthor(name: string): number {
+    return InsertRedlineAuthor(name);
+  }
+
+  /** Resolves an author from the application table. @param index - Application author index. @returns Author name. */
+  GetRedlineAuthor(index: number): string {
+    return GetRedlineAuthor(index);
+  }
+
   private static instance: SwModule | undefined;
   private m_pUsrPref: SwMasterUsrPref | undefined;
   private m_pWebUsrPref: SwMasterUsrPref | undefined;

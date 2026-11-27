@@ -1,0 +1,50 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/sw/source/filter/xml/XMLRedlineImportHelper.ts",
+    "localSymbols": [
+      "XMLRedlineImportHelper"
+    ],
+    "status": "mapped",
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sw/source/filter/xml/XMLRedlineImportHelper.ts",
+          "marker": "XMLRedlineImportHelper"
+        },
+        {
+          "path": "apps/office/src/sw/source/filter/xml/odt-redlines.test.ts",
+          "marker": "testMidnightRedlineDatetime"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sw/source/filter/xml/XMLRedlineImportHelper.cxx",
+          "marker": "XMLRedlineImportHelper::SetCursor"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/filter/xml/XMLRedlineImportHelper.cxx",
+          "marker": "XMLRedlineImportHelper::InsertIntoDocument"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/filter/xml/XMLRedlineImportHelper.cxx",
+          "marker": "XMLRedlineImportHelper::CreateRedlineTextSection"
+        }
+      ]
+    },
+    "upstreamPath": "sw/source/filter/xml/XMLRedlineImportHelper.cxx",
+    "upstreamSymbols": [
+      "XMLRedlineImportHelper::SetCursor",
+      "XMLRedlineImportHelper::InsertIntoDocument",
+      "XMLRedlineImportHelper::CreateRedlineTextSection"
+    ],
+    "preservedResponsibilities": [
+      "Attaches imported metadata and saved deletion sections to registered Writer ranges."
+    ],
+    "omittedResponsibilities": [
+      "Structural endpoint adjustment, prior-format item sets and editing-only modes."
+    ]
+  }
+}

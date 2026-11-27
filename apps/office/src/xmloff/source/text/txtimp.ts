@@ -1,4 +1,6 @@
 /** @fileoverview Owns shared Writer body/cell text child dispatch and stream list state from native txtimp.cxx. */
+import { XMLChangeImportContext } from "./XMLChangeImportContext";
+import { XMLTrackedChangesImportContext } from "./XMLTrackedChangesImportContext";
 import type { XMLIndexMarkProperties } from "./XMLIndexMarkImportContext";
 import { FastAttributeList, SvXMLIgnoreContext, SvXMLImportContext } from "../core/xmlimp";
 import { XMLToken } from "../core/xmltoken";
@@ -32,7 +34,8 @@ import { XMLSectionImportContext } from "./XMLSectionImportContext";
 import { XMLIndexTOCContext } from "./XMLIndexTOCContext";
 
 /** Native text import locations represented by the current body/table slice. */
-export type XMLTextType = "Body" | "Cell" | "TextBox" | "HeaderFooter" | "Annotation" | "Section";
+export type XMLTextType =
+  "Body" | "Cell" | "TextBox" | "HeaderFooter" | "Annotation" | "Section" | "Redline";
 
 /** One native named style application and the direct properties from its enclosing span. */
 export interface XMLCharacterStyleLayer {
@@ -681,6 +684,12 @@ export class XMLTextImportHelper {
     if (element === XMLToken.TEXT_LIST)
       return new XMLTextListBlockContext(this.target, attributes, this.lists);
     if (type === "Annotation") return null;
+    if (this.target.redlineImport) {
+      if (element === XMLToken.TEXT_TRACKED_CHANGES)
+        return new XMLTrackedChangesImportContext(this, this.target.redlineImport);
+      if (XMLChangeImportContext.IsChange(element))
+        return new XMLChangeImportContext(this, this.target.redlineImport, true);
+    }
     if (element === XMLToken.TABLE_TABLE) {
       if ("beginTable" in this.target)
         return new XMLTableContext(this.target as XMLTableImportTarget, attributes, this);

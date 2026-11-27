@@ -1,0 +1,45 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/xmloff/source/text/XMLChangeInfoContext.ts",
+    "localSymbols": [
+      "XMLChangeInfoContext"
+    ],
+    "status": "mapped",
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/xmloff/source/text/XMLChangeInfoContext.ts",
+          "marker": "XMLChangeInfoContext"
+        },
+        {
+          "path": "apps/office/src/sw/source/filter/xml/odt-redlines.test.ts",
+          "marker": "testMidnightRedlineDatetime"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/xmloff/source/text/XMLChangeInfoContext.cxx",
+          "marker": "XMLChangeInfoContext::createFastChildContext"
+        },
+        {
+          "path": "vendor/libreoffice-reference/xmloff/source/text/XMLChangeInfoContext.cxx",
+          "marker": "XMLChangeInfoContext::endFastElement"
+        }
+      ]
+    },
+    "upstreamPath": "xmloff/source/text/XMLChangeInfoContext.cxx",
+    "upstreamSymbols": [
+      "XMLChangeInfoContext::createFastChildContext",
+      "XMLChangeInfoContext::endFastElement"
+    ],
+    "preservedResponsibilities": [
+      "Transfers original author, date, movement and comment text."
+    ],
+    "omittedResponsibilities": [
+      "No additional XML extension content is admitted."
+    ]
+  }
+}

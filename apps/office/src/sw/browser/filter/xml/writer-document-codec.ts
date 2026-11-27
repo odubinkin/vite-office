@@ -1,5 +1,12 @@
 /** @fileoverview Internal canonical Writer graph codec used behind boundary-specific envelopes. */
 import {
+  decodeRedlineSections,
+  encodeRedlineSections,
+  encodeRedlines,
+  restoreRedlines,
+  type WriterRedlineRecord,
+} from "./writer-redline-codec";
+import {
   encodeAnnotations,
   restoreAnnotations,
   type WriterAnnotationRecord,
@@ -163,6 +170,7 @@ interface WriterAnnotationMarkRecord {
 
 /** Internal graph record. Paragraph identity is array order, never a stored UI key. */
 export interface WriterDocumentRecord {
+  readonly redlines?: WriterRedlineRecord;
   readonly documentMetaXml?: string;
   readonly theme?: ThemeRecord;
   readonly bodyOrder?: readonly ("text" | "table")[];
@@ -239,7 +247,9 @@ export function* encodeWriterDocumentSteps(document: SwDoc): Generator<void, Wri
   }
   const textOwners = sectionTextNodes(document.nodes.getBodyContent());
   const pageStories = yield* encodePageStories(document, textOwners);
+  const redlineSections = yield* encodeRedlineSections(document, textOwners);
   const textFrames = yield* encodeTextFrames(document, textOwners);
+  const redlines = encodeRedlines(document, textOwners, redlineSections);
   const annotations = encodeAnnotations(document, textOwners);
   const fontDefaults: SfxPoolItemSnapshot[] = [];
   for (const which of fontDefaultWhichIds) {
@@ -260,6 +270,7 @@ export function* encodeWriterDocumentSteps(document: SwDoc): Generator<void, Wri
   );
   const documentMetaXml = document.documentProperties.GetTransferXml();
   return {
+    ...(redlines === undefined ? {} : { redlines }),
     ...(documentProtection === undefined ? {} : { documentProtection }),
     ...(document.theme ? { theme: encodeTheme(document.theme) } : {}),
     ...(document.themeFontLanguages ? { themeFontLanguages: document.themeFontLanguages } : {}),
@@ -813,7 +824,9 @@ export function* decodeWriterDocumentSteps(
     }
     const textOwners = sectionTextNodes(document.nodes.getBodyContent());
     yield* decodePageStories(document, record.pageStories, textOwners);
+    const redlineSections = yield* decodeRedlineSections(document, textOwners, record.redlines);
     yield* decodeTextFrames(document, record.textFrames, textOwners);
+    restoreRedlines(document, textOwners, redlineSections, record.redlines);
     restoreAnnotations(document, textOwners, record.annotations);
     if (record.bookmarks !== undefined) {
       if (!Array.isArray(record.bookmarks)) throw new Error("Stored Writer bookmarks are invalid.");

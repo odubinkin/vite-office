@@ -1,6 +1,7 @@
 /**
  * @fileoverview Reimplements the bounded ODF text paragraph export boundary from pinned LibreOffice `xmloff/source/text/txtparae.cxx`.
  */
+import { exportRedlineMarker, type XMLRedlineExportMarker } from "./XMLRedlineExport";
 import { FontPitch } from "../../../tools/inc/fontenum";
 import { RTL_TEXTENCODING_DONTKNOW } from "../../../sal/inc/rtl/textenc";
 import { exportInlineFont, getFontFamilyFromGeneric } from "../style/fonthdl";
@@ -152,6 +153,7 @@ export type XMLTextParagraphMarker =
     }>
   | XMLIndexMarkExportMarker
   | XMLAnnotationExportMarker
+  | XMLRedlineExportMarker
   | Readonly<{ kind: "frame"; frame: XMLTextFrameExportSource; offset: number }>;
 
 /** Reiterable model-facing source; definitions are collected before body references. */
@@ -696,6 +698,7 @@ function exportMarker(
     marker.kind === "index-mark-end"
   )
     return exportIndexMark(marker, escapeXml);
+  if ("id" in marker) return exportRedlineMarker(marker, escapeXml);
   if (marker.kind === "soft-page-break") return "<text:soft-page-break/>";
   if (marker.name === undefined || marker.name.length === 0)
     throw new Error("ODF bookmark name is invalid.");

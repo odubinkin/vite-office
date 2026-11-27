@@ -1,0 +1,37 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/xmloff/source/text/XMLChangedRegionImportContext.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "shared",
+    "subsystem": "odf-filter",
+    "capabilityIds": [
+      "CAP-0128",
+      "CAP-0129"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/xmloff/source/text/XMLChangedRegionImportContext.ts",
+        "apps/office/src/sw/source/filter/xml/odt-redlines.test.ts",
+        "vendor/libreoffice-reference/xmloff/source/text/XMLChangedRegionImportContext.cxx"
+      ],
+      "justification": "Reads original change definitions and opens deletion content through the shared text filter. Prior-format automatic-style reconstruction.",
+      "knownViolations": [],
+      "localSymbols": [
+        "XMLChangedRegionImportContext"
+      ],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": "xmloff/source/text/XMLChangedRegionImportContext.cxx",
+      "upstreamSymbols": [
+        "XMLChangedRegionImportContext::startFastElement",
+        "XMLChangedRegionImportContext::SetChangeInfo"
+      ]
+    }
+  }
+}

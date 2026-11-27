@@ -1,4 +1,5 @@
 /** @fileoverview Implements the Writer SwDoc aggregate from pinned LibreOffice `sw/inc/doc.hxx` and `sw/source/core/doc/docnew.cxx`. */
+import { DocumentRedlineManager } from "./DocumentRedlineManager";
 import { SfxDocumentProperties } from "../../../../sfx2/source/doc/sfxbasemodel";
 import { InsertTableOf } from "./doctxm";
 import type { SwSectionNode } from "../docnode/ndsect";
@@ -303,6 +304,7 @@ export class SwDoc {
   private readonly attrPool: SwAttrPool;
   private readonly styleAccess: IStyleAccess;
   private readonly contentOperationsManager: DocumentContentOperationsManager;
+  private readonly redlineAccess = new DocumentRedlineManager();
   private readonly markAccess: DocumentMarkAccess;
   private readonly listsManager: DocumentListsManager;
   private readonly mpOutlineRule: SwNumRule;
@@ -1016,6 +1018,11 @@ export class SwDoc {
   public RunModelTransaction<Result>(mutation: () => Result): Result {
     return this.stateManager.RunModelTransaction(mutation);
   }
+  /** Borrows the actual document redline manager. @returns Native range and flag owner. */
+  public GetIDocumentRedlineAccess(): DocumentRedlineManager {
+    return this.redlineAccess;
+  }
+
   /** Disposes the document notification graph. @returns Nothing. */
   public Dispose(): void {
     this.documentProperties.Dispose();
@@ -1029,6 +1036,7 @@ export class SwDoc {
     for (const bitmap of this.bitmapTable.values()) bitmap.Dispose();
     this.bitmapTable.clear();
     for (const node of this.nodes.entries()) if (node instanceof SwTextNode) node.RemoveFromList();
+    this.redlineAccess.Dispose();
     this.markAccess.Dispose();
     DestroyFrameFormatTables(this);
     this.defaultGrfFormatColl.DisposeModify();

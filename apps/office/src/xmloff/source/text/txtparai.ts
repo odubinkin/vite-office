@@ -1,3 +1,5 @@
+import { XMLChangeImportContext } from "./XMLChangeImportContext";
+import type { XMLRedlineImportTarget } from "./XMLChangedRegionImportContext";
 import {
   XMLIndexMarkImportContext,
   type XMLIndexMarkProperties,
@@ -107,6 +109,7 @@ export interface XMLParagraphListState {
 
 /** Model-facing import supplier and source declaration lookup. */
 export interface XMLTextImportTarget extends Partial<XMLTextFrameImportTarget> {
+  readonly redlineImport?: XMLRedlineImportTarget;
   beginTextSection?(
     properties: import("./XMLSectionImportContext").XMLSectionImportProperties,
   ): import("./XMLSectionImportContext").XMLSectionImport;
@@ -360,6 +363,10 @@ function createInlineContext(
     return annotation ? null : new XMLAnnotationImportContext(paragraph);
   if (element === XMLToken.DRAW_FRAME)
     return annotation ? null : paragraph.CreateTextFrameContext(attributes);
+  if (XMLChangeImportContext.IsChange(element))
+    return annotation || !target.redlineImport
+      ? null
+      : new XMLChangeImportContext(paragraph, target.redlineImport, false);
   if (element === XMLToken.TEXT_RUBY)
     return new XMLImpRubyContext(
       paragraph,

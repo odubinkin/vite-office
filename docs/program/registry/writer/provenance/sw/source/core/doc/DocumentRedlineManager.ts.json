@@ -1,0 +1,45 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/sw/source/core/doc/DocumentRedlineManager.ts",
+    "localSymbols": [
+      "DocumentRedlineManager"
+    ],
+    "status": "mapped",
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sw/source/core/doc/DocumentRedlineManager.ts",
+          "marker": "DocumentRedlineManager"
+        },
+        {
+          "path": "apps/office/src/sw/source/filter/xml/odt-redlines.test.ts",
+          "marker": "testMidnightRedlineDatetime"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/doc/DocumentRedlineManager.cxx",
+          "marker": "DocumentRedlineManager::GetRedlineTable"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/doc/DocumentRedlineManager.cxx",
+          "marker": "DocumentRedlineManager::GetRedlineFlags"
+        }
+      ]
+    },
+    "upstreamPath": "sw/source/core/doc/DocumentRedlineManager.cxx",
+    "upstreamSymbols": [
+      "DocumentRedlineManager::GetRedlineTable",
+      "DocumentRedlineManager::GetRedlineFlags"
+    ],
+    "preservedResponsibilities": [
+      "Owns the document table and recording flags."
+    ],
+    "omittedResponsibilities": [
+      "Desktop editing, compatibility modes, full show/hide transitions and notifications."
+    ]
+  }
+}

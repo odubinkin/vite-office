@@ -1,0 +1,55 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/xmloff/source/text/XMLRedlineExport.ts",
+    "localSymbols": [
+      "exportTrackedChanges",
+      "exportRedlineMarker"
+    ],
+    "status": "mapped",
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/xmloff/source/text/XMLRedlineExport.ts",
+          "marker": "exportTrackedChanges"
+        },
+        {
+          "path": "apps/office/src/xmloff/source/text/XMLRedlineExport.ts",
+          "marker": "exportRedlineMarker"
+        },
+        {
+          "path": "apps/office/src/sw/source/filter/xml/odt-redlines.test.ts",
+          "marker": "testMidnightRedlineDatetime"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/xmloff/source/text/XMLRedlineExport.cxx",
+          "marker": "XMLRedlineExport::ExportChangesListElements"
+        },
+        {
+          "path": "vendor/libreoffice-reference/xmloff/source/text/XMLRedlineExport.cxx",
+          "marker": "XMLRedlineExport::ExportChangedRegion"
+        },
+        {
+          "path": "vendor/libreoffice-reference/xmloff/source/text/XMLRedlineExport.cxx",
+          "marker": "XMLRedlineExport::ExportChangeInfo"
+        }
+      ]
+    },
+    "upstreamPath": "xmloff/source/text/XMLRedlineExport.cxx",
+    "upstreamSymbols": [
+      "XMLRedlineExport::ExportChangesListElements",
+      "XMLRedlineExport::ExportChangedRegion",
+      "XMLRedlineExport::ExportChangeInfo"
+    ],
+    "preservedResponsibilities": [
+      "Writes native region definitions, full timestamps, and text change markers."
+    ],
+    "omittedResponsibilities": [
+      "Desktop personal-data options, structural endpoints and the pre-save redline visibility transition."
+    ]
+  }
+}

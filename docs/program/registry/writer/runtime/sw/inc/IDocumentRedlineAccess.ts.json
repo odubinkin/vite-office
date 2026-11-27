@@ -1,0 +1,36 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sw/inc/IDocumentRedlineAccess.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "writer",
+    "subsystem": "odf-filter",
+    "capabilityIds": [
+      "CAP-0128",
+      "CAP-0129"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/sw/inc/IDocumentRedlineAccess.ts",
+        "apps/office/src/sw/source/filter/xml/odt-redlines.test.ts",
+        "vendor/libreoffice-reference/sw/inc/IDocumentRedlineAccess.hxx"
+      ],
+      "justification": "Defines original recording and visibility masks. Desktop editing and undo contracts.",
+      "knownViolations": [],
+      "localSymbols": [
+        "RedlineFlags"
+      ],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": "sw/inc/IDocumentRedlineAccess.hxx",
+      "upstreamSymbols": [
+        "enum class RedlineFlags"
+      ]
+    }
+  }
+}

@@ -1,6 +1,7 @@
 /**
  * @fileoverview Reimplements the bounded Writer ODF XML export bridge from pinned LibreOffice `sw/source/filter/xml/xmlexp.cxx`.
  */
+import { GetRedlineAuthor } from "../../core/doc/docredln";
 import { SwTextRuby } from "../../core/txtnode/txtatr2";
 import { text } from "../../../../i18nlangtag/source/isolang/isolang.tables";
 import { SwStyleNameMapper } from "../../core/doc/SwStyleNameMapper";
@@ -32,6 +33,12 @@ import {
   type XMLBoundWriterFrames,
 } from "./xmltextframe";
 import { projectParagraphMarkers } from "./xmlexp-markers";
+import { RedlineType } from "../../../../svx/inc/ctredlin";
+import { RedlineFlags } from "../../../inc/IDocumentRedlineAccess";
+import {
+  exportTrackedChanges,
+  type XMLRedlineChange,
+} from "../../../../xmloff/source/text/XMLRedlineExport";
 import { exportPageStoryStyles, getOdfPageStories } from "./xmlpageheaderfooter";
 import type { SvXMLGraphicHelper } from "../../../../xmloff/source/core/xmlgrhlp";
 import { CollectGraphicFlyFrames, CollectTextFlyFrames } from "../../core/layout/flycnt";
@@ -536,6 +543,15 @@ export function exportContentXml(
   bitmapStyles?: XMLBitmapStyleExport,
 ): string {
   const fonts = createWriterFontAutoStylePool(document);
+  const redlineAccess = document.GetIDocumentRedlineAccess();
+  const redlines = redlineAccess.GetRedlineTable().entries();
+  const deletionSections = redlines.flatMap(
+    /** Projects each actual saved redline section into the shared automatic style pass. @param redline - Change. @returns Saved section if present. */
+    (redline) => {
+      const section = redline.GetContentStart();
+      return section ? [section] : [];
+    },
+  );
   const exported = exportWriterText(
     document,
     isCancelled,
@@ -551,11 +567,47 @@ export function exportContentXml(
         FontPitch.PITCH_DONTKNOW,
         RTL_TEXTENCODING_DONTKNOW,
       ) || undefined,
-    undefined,
+    deletionSections.length ? deletionSections : undefined,
     graphicHelper,
     bitmapStyles,
   );
-  return `<?xml version="1.0" encoding="UTF-8"?><office:document-content ${OFFICE_NAMESPACES} office:version="1.3">${fonts.exportXML()}<office:automatic-styles>${exported.automaticStyles}</office:automatic-styles><office:body><office:text>${exported.body}</office:text></office:body></office:document-content>`;
+  let deletionIndex = 0;
+  const changes = exportTrackedChanges(
+    redlines.map(
+      /** Reads the change chain and its already formatted deletion section. @param range - Native redline. @returns Changed region. */
+      (range) => {
+        const changes: XMLRedlineChange[] = [];
+        for (let data = range.GetRedlineData(); data;) {
+          const type = data.GetType();
+          changes.push({
+            type:
+              type === RedlineType.Insert
+                ? "insertion"
+                : type === RedlineType.Delete
+                  ? "deletion"
+                  : "format-change",
+            author: GetRedlineAuthor(data.GetAuthor()),
+            date: data.GetTimeStamp().GetUNODateTime(),
+            comment: data.GetComment(),
+            movedId: data.GetMovedID(),
+            styleName: data.GetStyleName(),
+          });
+          const next = data.GetNext();
+          if (!next) break;
+          data = next;
+        }
+        if (range.GetContentIdx()) {
+          const deletion = exported.sections?.[deletionIndex++];
+          const first = changes[0];
+          if (first && deletion !== undefined) changes[0] = { ...first, deletion };
+        }
+        return { id: `ct${range.GetId()}`, mergeLastParagraph: !range.IsDeleteLastPara(), changes };
+      },
+    ),
+    Boolean(redlineAccess.GetRedlineFlags() & RedlineFlags.On),
+    escapeXml,
+  );
+  return `<?xml version="1.0" encoding="UTF-8"?><office:document-content ${OFFICE_NAMESPACES} office:version="1.3">${fonts.exportXML()}<office:automatic-styles>${exported.automaticStyles}</office:automatic-styles><office:body><office:text>${changes}${exported.body}</office:text></office:body></office:document-content>`;
 }
 
 /** Projects the same model source for both package streams. @param document - Writer model. @param isCancelled - Cancellation probe. @param fontFaceName - Font registry. @param existingFontFaceName - Existing face lookup. @param sections - Master-page text owners in the styles stream. @param graphicHelper - Optional package graphic owner. @param bitmapStyles - Package bitmap catalogue. @returns Style/body fragments. */

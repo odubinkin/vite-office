@@ -69,6 +69,30 @@ export function projectParagraphMarkers(
     ...frames,
     ...projectAnnotationMarkers(node),
     ...projectIndexMarks(node),
+    ...node
+      .GetDoc()
+      .GetIDocumentRedlineAccess()
+      .GetRedlineTable()
+      .entries()
+      .flatMap(
+        /** Projects registered change boundaries in this text node. @param range - Native redline. @returns Local portions. */
+        (range): XMLTextParagraphMarker[] => {
+          const start = range.Start();
+          const end = range.End();
+          const id = `ct${range.GetId()}`;
+          const expanded = start.compare(end) !== 0;
+          const portions: XMLTextParagraphMarker[] = [];
+          if (start.GetNode() === node)
+            portions.push({
+              kind: expanded ? "change-start" : "change",
+              id,
+              offset: start.GetContentIndex(),
+            });
+          if (expanded && end.GetNode() === node)
+            portions.push({ kind: "change-end", id, offset: end.GetContentIndex() });
+          return portions;
+        },
+      ),
     ...marks.GetAllMarks().flatMap(
       /** Projects bookmark endpoints on this paragraph. @param mark - Native bookmark. @returns Local ODF markers. */
       (mark): XMLTextParagraphMarker[] => {

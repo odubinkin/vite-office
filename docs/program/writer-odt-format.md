@@ -143,7 +143,14 @@ table cells into body paragraphs. The table and cell soft breaks in the
 certification sample retain their logical positions through Worker transfer and
 ODT save/reopen.
 
-Images, fields, annotations, tracked changes, sections, objects, scripts,
+Writer retains insertion, deletion and formatting change definitions with their
+authors, timestamps, range markers and represented deletion content across ODT
+and Worker transfer. Ordinary saved single-paragraph deletions are restored
+inline in source order. Structural change boundaries, prior-format automatic
+styles and native hide/show transitions for complex deleted content require
+further work.
+
+Images, fields, annotations, sections, objects, scripts,
 signatures, encryption, RDF, non-decimal numbering,
 and merged or nested tables remain unsupported. Table rows are
 visible at their body-order anchors but are not paginated by the page-frame

@@ -1,0 +1,77 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/sw/source/core/doc/docredln.ts",
+    "localSymbols": [
+      "SwRedlineData",
+      "SwRangeRedline",
+      "SwRedlineTable"
+    ],
+    "status": "mapped",
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sw/source/core/doc/docredln.ts",
+          "marker": "SwRedlineData"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/doc/docredln.ts",
+          "marker": "SwRangeRedline"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/doc/docredln.ts",
+          "marker": "SwRedlineTable"
+        },
+        {
+          "path": "apps/office/src/sw/source/filter/xml/odt-redlines.test.ts",
+          "marker": "testMidnightRedlineDatetime"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/doc/docredln.ts",
+          "marker": "GetRedlineAuthor"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/doc/docredln.ts",
+          "marker": "InsertRedlineAuthor"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/doc/docredln.cxx",
+          "marker": "SwRangeRedline::SwRangeRedline"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/doc/docredln.cxx",
+          "marker": "SwRedlineTable::Insert"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/doc/docredln.cxx",
+          "marker": "SwRangeRedline::MoveFromSection"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/uibase/app/swmodul1.cxx",
+          "marker": "SwModule::GetRedlineAuthor"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/uibase/app/swmodul1.cxx",
+          "marker": "SwModule::InsertRedlineAuthor"
+        }
+      ]
+    },
+    "upstreamPath": "sw/source/core/doc/docredln.cxx",
+    "upstreamSymbols": [
+      "SwRangeRedline::SwRangeRedline",
+      "SwRedlineTable::Insert",
+      "SwRangeRedline::MoveFromSection"
+    ],
+    "preservedResponsibilities": [
+      "Owns tracked change metadata, ranges and deletion section coordinates.",
+      "The original process-wide SwModule author table is shared with the filter through the Writer core module boundary."
+    ],
+    "omittedResponsibilities": [
+      "Desktop edit tracking, redline undo and complex show/hide transitions."
+    ]
+  }
+}

@@ -1,0 +1,36 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/svx/inc/ctredlin.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "shared",
+    "subsystem": "odf-filter",
+    "capabilityIds": [
+      "CAP-0128",
+      "CAP-0129"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/svx/inc/ctredlin.ts",
+        "apps/office/src/sw/source/filter/xml/odt-redlines.test.ts",
+        "vendor/libreoffice-reference/include/svx/ctredlin.hxx"
+      ],
+      "justification": "Defines original change type values. Desktop change dialog and sorting data.",
+      "knownViolations": [],
+      "localSymbols": [
+        "RedlineType"
+      ],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": "include/svx/ctredlin.hxx",
+      "upstreamSymbols": [
+        "enum class RedlineType"
+      ]
+    }
+  }
+}
