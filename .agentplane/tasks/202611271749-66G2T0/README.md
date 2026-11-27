@@ -1,10 +1,11 @@
 ---
 id: "202611271749-66G2T0"
 title: "Preserve native Calc sheet writing direction in ODS"
-status: "DOING"
+result_summary: "Calc preserves native writing direction in its ODS sheet styles and Worker document model."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 6
+revision: 7
 origin:
   system: "manual"
 depends_on: []
@@ -41,11 +42,16 @@ quality_review:
     - "output/playwright/odf-next-checkpoint/sheet-layout-verification.md"
   findings:
     - "Uses the pinned xmloff handler variant, native XML loading flag and canonical horizontal export tokens. Original mixed-direction ODS passed."
-commit: null
+commit:
+  hash: "10762f003f7af5bb21ecd39cdc3134e7e16b5e64"
+  message: "🧩 66G2T0 calc: preserve native ODS sheet writing direction"
 comments:
   -
     author: "CODER"
     body: "Start: port the native Calc ODS sheet writing direction and deferred load contract."
+  -
+    author: "CODER"
+    body: "Verified: 87 targeted tests including original mixed-direction ODS and both transport paths passed."
 events:
   -
     type: "status"
@@ -60,8 +66,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "87 focused Calc and shared Writer tests passed, including the original mixed-direction ODS, Worker and ODS reopen. Typecheck, ESLint, Prettier, module boundaries, provenance and scoped inventories passed."
+  -
+    type: "status"
+    at: "2026-11-27T17:56:53.472Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: 87 targeted tests including original mixed-direction ODS and both transport paths passed."
 doc_version: 3
-doc_updated_at: "2026-11-27T17:55:41.440Z"
+doc_updated_at: "2026-11-27T17:56:53.473Z"
 doc_updated_by: "CODER"
 description: "Complete native Calc table-family writing direction over ODS import and export and Worker transfer. Retain the pinned xmloff token conversion, sheet property value semantics, deferred XML import direction, and ScTable ownership. Verify the existing pinned mixed-direction ODS and the existing sheet border, settings and filter cases."
 sections:
