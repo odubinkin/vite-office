@@ -1,0 +1,22 @@
+{
+  "schema_version": 1,
+  "task_id": "202611270623-ZWDB49",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-11-27T07:08:57.554Z",
+  "verdict": "pass",
+  "summary": "Writer retains native list identities and item rule overrides through ODT and the Worker.",
+  "evaluated_sha": "d3e2478eeedbde82577931c02554f3a7630cee5c",
+  "blueprint_digest": "2b1210076b25a02c9a4cb6bdb53b17a5e4a22ed75a8f36eb3387c129dace9129",
+  "findings": [
+    "Scoped Writer and shared cases passed. The original UNO restart setter, fallback list rule creation, and randomized list IDs support the end-to-end ODT behavior."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202611270623-ZWDB49/README.md",
+    "output/playwright/ZWDB49/verification.md",
+    "3858bb8c89d64b6910f2f99f0854aec81fe36c5d"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": []
+}
