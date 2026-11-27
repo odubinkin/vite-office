@@ -4,7 +4,8 @@ import {
 } from "./XMLIndexMarkImportContext";
 /** @fileoverview Implements LibreOffice-shaped streaming paragraph/list import contexts. */
 
-import type { XMLNumberingRules, XMLTextCursor } from "../../inc/txtimp";
+import type { XMLRubyStyle } from "./txtprhdl";
+import type { XMLNumberingRules, XMLTextCursor, XMLTextRange } from "../../inc/txtimp";
 import type { XMLTextFrameImportTarget } from "./XMLTextFrameContext";
 import { XMLTextImportHelper, type XMLCharacterStyleLayer } from "./txtimp";
 
@@ -117,6 +118,7 @@ export interface XMLTextImportTarget extends Partial<XMLTextFrameImportTarget> {
   GetTextImport(): XMLTextImportHelper;
   getListRule(styleName: string): XMLTextListRule | undefined;
   createNumberingRule?(): XMLTextListRule;
+  getRubyStyle?(name: string): XMLRubyStyle | undefined;
   getStyle(family: OdfStyleDefinition["family"], styleName: string): OdfStyleDefinition | undefined;
   getAutoStyle(
     family: OdfStyleDefinition["family"],
@@ -358,13 +360,13 @@ function createInlineContext(
     return annotation ? null : new XMLAnnotationImportContext(paragraph);
   if (element === XMLToken.DRAW_FRAME)
     return annotation ? null : paragraph.CreateTextFrameContext(attributes);
-  // The represented Writer text layer treats these containers as transparent.
-  if (
-    element === XMLToken.TEXT_RUBY ||
-    element === XMLToken.TEXT_RUBY_BASE ||
-    element === XMLToken.TEXT_RUBY_TEXT
-  )
-    return new XMLSpanContext(target, paragraph, properties, namedStyles, hyperlink);
+  if (element === XMLToken.TEXT_RUBY)
+    return new XMLImpRubyContext(
+      paragraph,
+      attributes,
+      /** Opens native inline content in the ruby base. @returns Base context. */
+      () => new XMLSpanContext(target, paragraph, properties, namedStyles, hyperlink),
+    );
   if (element === XMLToken.TEXT_SPAN) {
     attributes.assertOnly([XMLToken.TEXT_STYLE_NAME], "span");
     const name = attributes.get(XMLToken.TEXT_STYLE_NAME) ?? "";
@@ -417,6 +419,63 @@ function createInlineContext(
     return new SvXMLIgnoreContext();
   }
   return null;
+}
+
+/** Retains a native base range while importing the independent phonetic reading. */
+class XMLImpRubyContext extends SvXMLImportContext {
+  private readonly start: XMLTextRange;
+  private readonly style: string;
+  private textStyle = "";
+  private reading = "";
+
+  /** Captures the base cursor. @param paragraph - Shared text importer. @param attributes - Opening attributes. @param base - Factory for inline base content. @returns Ruby context. */
+  constructor(
+    private readonly paragraph: XMLTextImportHelper,
+    attributes: FastAttributeList,
+    private readonly base: () => SvXMLImportContext,
+  ) {
+    super();
+    this.style = attributes.get(XMLToken.TEXT_STYLE_NAME) ?? "";
+    this.start = paragraph.GetCursor().getStart();
+  }
+
+  /** Routes base content and reading to their respective owners. @param element - Child token. @param attributes - Source attributes. @returns Child context. */
+  override createFastChildContext(
+    element: XMLToken,
+    attributes: FastAttributeList,
+  ): SvXMLImportContext | null {
+    if (element === XMLToken.TEXT_RUBY_BASE) return this.base();
+    if (element !== XMLToken.TEXT_RUBY_TEXT) return null;
+    this.textStyle = attributes.get(XMLToken.TEXT_STYLE_NAME) ?? "";
+    return new XMLImpRubyTextContext(
+      /** Appends a segment of the reading. @param text - SAX characters. @returns Nothing. */
+      (text) => {
+        this.reading += text;
+      },
+    );
+  }
+
+  /** Applies the original ruby properties and releases the captured position. @returns Nothing. */
+  override endFastElement(): void {
+    try {
+      this.paragraph.SetRuby(this.start, this.style, this.textStyle, this.reading);
+    } finally {
+      this.start.dispose();
+    }
+  }
+}
+
+/** Accumulates the ruby reading outside the Writer paragraph. */
+class XMLImpRubyTextContext extends SvXMLImportContext {
+  /** Opens the phonetic reading text. @param append - Text callback. @returns Context. */
+  constructor(private readonly append: (text: string) => void) {
+    super();
+  }
+
+  /** Adds the source reading characters. @param text - SAX characters. @returns Nothing. */
+  override characters(text: string): void {
+    this.append(text);
+  }
 }
 
 /** Appends one empty-element character construct on start. */

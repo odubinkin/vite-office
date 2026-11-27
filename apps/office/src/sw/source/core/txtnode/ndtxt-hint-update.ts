@@ -1,4 +1,5 @@
 /** @fileoverview Ports owned ranged and fly point coordinate updates from pinned SwTextNode::Update and default InsertText in ndtxt.cxx. */
+import type { SwFormatRuby } from "./fmtatr2";
 import { SwTextTOXMark } from "./atrtox";
 import type { TextNodeAttribute } from "./ndhints";
 import type { SwFormatCharFormat } from "./fmtatr2";
@@ -20,7 +21,7 @@ export function UpdateTextHints(
 ): readonly TextNodeAttribute[] {
   const collector = new Map<
     number,
-    SwTextAttrEnd<SwFormatAutoFormat | SwFormatINetFormat | SwFormatCharFormat>
+    SwTextAttrEnd<SwFormatAutoFormat | SwFormatINetFormat | SwFormatCharFormat | SwFormatRuby>
   >();
   let noExpand = false;
   for (const hint of hints) {

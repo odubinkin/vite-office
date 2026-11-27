@@ -1,4 +1,5 @@
 /** @fileoverview Represents native atrstck.cxx per-character-item stacks over the implemented automatic hint family. */
+import type { SwFormatRuby } from "../txtnode/fmtatr2";
 import type { SfxItemSet } from "../../../../svl/source/items/itemset";
 import type { SfxPoolItem } from "../../../../svl/source/items/poolitem";
 import { RES_CHRATR_BEGIN, RES_CHRATR_END } from "../../../inc/hintids";
@@ -7,14 +8,14 @@ import { SwFormatCharFormat, type SwFormatINetFormat } from "../txtnode/fmtatr2"
 
 /** Existing native ranged families; INET style/font effects are not represented yet. */
 export type SwAttributeHint = SwTextAttrEnd<
-  SwFormatAutoFormat | SwFormatINetFormat | SwFormatCharFormat
+  SwFormatAutoFormat | SwFormatINetFormat | SwFormatCharFormat | SwFormatRuby
 >;
 
 /** Original CharFormat namespace's consumed automatic and character-style branches. Internet style lookup remains with its text attribute owner. */
 export const CharFormat = {
   /** Borrows a represented native format set. @param format - Actual item. @returns Borrowed set or absent unsupported/empty owner. */
   GetItemSet(
-    format: SwFormatAutoFormat | SwFormatCharFormat | SwFormatINetFormat,
+    format: SwFormatAutoFormat | SwFormatCharFormat | SwFormatINetFormat | SwFormatRuby,
   ): SfxItemSet | undefined {
     if (format instanceof SwFormatAutoFormat) return format.GetStyleHandle();
     if (format instanceof SwFormatCharFormat) return format.GetCharFormat()?.GetAttrSet();

@@ -1,6 +1,10 @@
 /**
  * @fileoverview Reimplements the bounded Writer ODF XML export bridge from pinned LibreOffice `sw/source/filter/xml/xmlexp.cxx`.
  */
+import { SwTextRuby } from "../../core/txtnode/txtatr2";
+import { text } from "../../../../i18nlangtag/source/isolang/isolang.tables";
+import { SwStyleNameMapper } from "../../core/doc/SwStyleNameMapper";
+import { SwGetPoolIdFromName } from "../../../inc/SwGetPoolIdFromName";
 import { SwTOXBaseSection } from "../../core/inc/doctxm";
 import { exportDocumentIndex } from "./xmlindex";
 import { exportParagraphAlignment } from "../../../../xmloff/source/style/adjushdl";
@@ -821,6 +825,22 @@ function projectParagraph(
     node.GetpSwAttrSet()?.GetItemIfSet(RES_MARGIN_TEXTLEFT, false) !== undefined;
   const paragraphProperties = getParagraphProperties(node.GetpSwAttrSet());
   const markers = projectParagraphMarkers(node, anchored, projectBlock);
+  const ruby = [];
+  for (const hint of node.GetpSwpHints()?.entries() ?? []) {
+    if (!(hint instanceof SwTextRuby) || hint.GetStart() === hint.GetEnd()) continue;
+    const item = hint.GetAttr();
+    const name = item.GetCharFormatName();
+    ruby.push({
+      start: hint.GetStart(),
+      end: hint.GetEnd(),
+      reading: text(item.GetText()),
+      readingStyleName: name
+        ? encodeStyleName(SwStyleNameMapper.FillProgName(name, SwGetPoolIdFromName.ChrFmt))
+        : "",
+      adjustment: item.GetAdjustment(),
+      position: item.GetPosition(),
+    });
+  }
   const directCharacterProperties = getCharacterProperties(node.GetpSwAttrSet(), false);
   const marker = node.GetSwAttrSet().GetItemIfSet(RES_PARATR_LIST_AUTOFMT, true);
   const markerProperties =
@@ -832,6 +852,7 @@ function projectParagraph(
     ...(hasDirectLeftMargin ? { leftMargin: node.GetParagraphTextLeftMargin() } : {}),
     ...(paragraphProperties === undefined ? {} : { paragraphProperties }),
     ...(markers.length === 0 ? {} : { markers }),
+    ...(ruby.length === 0 ? {} : { ruby }),
     ...(markerProperties === undefined ? {} : { markerProperties }),
     ...(rule !== undefined &&
     node.GetpSwAttrSet()?.GetItemIfSet(RES_PARATR_NUMRULE, false) !== undefined

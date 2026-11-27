@@ -1,4 +1,5 @@
 /** @fileoverview Original InsertHint/TryInsertHint decisions for the registered ranged and inline fly attributes from thints.cxx. */
+import type { SwFormatRuby } from "./fmtatr2";
 import type { SwTextNode } from "./ndtxt";
 import type { SwpHints, TextNodeAttribute } from "./ndhints";
 import { SwTextFlyCnt } from "../../../inc/txtflcnt";
@@ -12,7 +13,7 @@ import {
 } from "../../../inc/hintids";
 import { SwInsertFlags } from "../../../inc/IDocumentContentOperations";
 import { SwFlyFrameFormat } from "../layout/atrfrm";
-import { SwTextCharFormat, SwTextINetFormat } from "./txtatr2";
+import { SwTextCharFormat, SwTextINetFormat, SwTextRuby } from "./txtatr2";
 import { SwFormatAutoFormat, SwTextAttrEnd } from "./txatbase";
 import type { SwFormatCharFormat, SwFormatINetFormat } from "./fmtatr2";
 import { SetAttrMode } from "../../../inc/swtypes";
@@ -20,10 +21,12 @@ import { BuildTextHintPortions, CheckCharacterHintSortNumber } from "./thints-po
 import { MAX_HINTS } from "./thints-nesting";
 import { SwUpdateAttr, UpdateAttrHint } from "../../../inc/hints";
 /** Actual native ranged families represented by the kernel. */
-type Hint = SwTextAttrEnd<SwFormatAutoFormat | SwFormatINetFormat | SwFormatCharFormat>;
+type Hint = SwTextAttrEnd<
+  SwFormatAutoFormat | SwFormatINetFormat | SwFormatCharFormat | SwFormatRuby
+>;
 /** Original hint destruction's represented SwClient-base cleanup. The owned pool item releases its shared automatic-style handle. @param hint - Unowned attribute. @returns Nothing. */
 export function DestroyTextNodeAttribute(hint: TextNodeAttribute): void {
-  if (hint instanceof SwTextINetFormat) hint.EndListeningAll();
+  if (hint instanceof SwTextINetFormat || hint instanceof SwTextRuby) hint.EndListeningAll();
   if (hint instanceof SwTextFlyCnt) {
     const format = hint.GetAttr().GetFrameFormat();
     hint.GetAttr().SetFlyFormat();
@@ -46,6 +49,7 @@ export function TryInsertTextNodeHint(
   }
   if (hint instanceof SwTextCharFormat) hint.ChgTextNode(node);
   else if (hint instanceof SwTextINetFormat) hint.InitINetFormat(node);
+  else if (hint instanceof SwTextRuby) hint.InitRuby(node);
   const families =
     hint.format instanceof SwFormatAutoFormat
       ? hint.format
@@ -68,7 +72,7 @@ export function TryInsertTextNodeHint(
   const end = hint.GetEnd(),
     noAdjust = (mode & SetAttrMode.NOHINTADJUST) !== 0;
   if (hint.IsNesting()) {
-    if (!(hint instanceof SwTextINetFormat))
+    if (!(hint instanceof SwTextINetFormat) && !(hint instanceof SwTextRuby))
       throw new Error("Writer structured nesting is not implemented.");
     if (!hints.TryInsertNesting(node, hint)) return false;
   } else if (!noAdjust && !hint.IsOverlapAllowedAttr() && !node.GetDoc().IsInXMLImport()) {

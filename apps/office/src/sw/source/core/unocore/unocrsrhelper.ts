@@ -43,9 +43,11 @@ import { MID_PAGEDESC_PAGEDESCNAME } from "../../../inc/unomid";
 import { SwFormatPageDesc } from "../attr/fmtpdsc";
 import { SwPaM } from "../crsr/pam";
 import { findCharacterStyle, setTextFormatCollAtNode } from "../doc/docfmt";
+import { SwGetPoolIdFromName } from "../../../inc/SwGetPoolIdFromName";
+import { MID_RUBY_CHARSTYLE } from "../../../../editeng/inc/memberids";
 import { SwStyleNameMapper } from "../doc/SwStyleNameMapper";
 import { SwNumRuleItem, SwParaConnectBorderItem } from "../para/paratr";
-import { SwFormatCharFormat, SwFormatINetFormat } from "../txtnode/fmtatr2";
+import { SwFormatCharFormat, SwFormatINetFormat, SwFormatRuby } from "../txtnode/fmtatr2";
 import { SwTextNode } from "../txtnode/ndtxt";
 import { SwFormatAutoFormat } from "../txtnode/txatbase";
 import { SwUnoPropertyMap, type SwUnoPropertyEntry } from "./unomap";
@@ -224,6 +226,17 @@ export function putItem(item: SfxPoolItem, entry: SwUnoPropertyEntry, value: Any
   }
   const copy = item.Clone();
   if (copy === null) invalid("Invalid pooled item");
+  if (copy instanceof SwFormatRuby) {
+    if (!copy.PutValue(value, entry.member)) {
+      copy.Dispose();
+      illegal("Invalid ruby property");
+    }
+    if (entry.member === MID_RUBY_CHARSTYLE)
+      copy.SetCharFormatId(
+        SwStyleNameMapper.GetPoolIdFromUIName(copy.GetCharFormatName(), SwGetPoolIdFromName.ChrFmt),
+      );
+    return copy;
+  }
   if (entry.kind === "long" && copy instanceof SvxBoxItem) {
     if (!copy.PutValue(scalar(value, "sal_Int32"), entry.member))
       illegal("Invalid paragraph border distance");

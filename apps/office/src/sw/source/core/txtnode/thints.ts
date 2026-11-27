@@ -1,4 +1,5 @@
 /** @fileoverview Ports MakeTextAttr construction and represented GetParaAttr character queries for the registered ranged hint types from pinned sw/source/core/txtnode/thints.cxx. */
+import { SwFormatRuby } from "./fmtatr2";
 import { SwUpdateAttr, UpdateAttrHint } from "../../../inc/hints";
 import { MergeTextHintPortions } from "./thints-merge";
 import { InsertTextNodeHint, DestroyTextNodeAttribute } from "./thints-insert";
@@ -14,7 +15,7 @@ import { RES_CHRATR_BEGIN, RES_CHRATR_END, RES_TXTATR_END } from "../../../inc/h
 import { SwAutoStyleFamily } from "../../../inc/istyleaccess";
 import type { SwDoc } from "../doc/doc";
 import { SwFormatCharFormat, SwFormatINetFormat } from "./fmtatr2";
-import { SwTextCharFormat, SwTextINetFormat } from "./txtatr2";
+import { SwTextCharFormat, SwTextINetFormat, SwTextRuby } from "./txtatr2";
 import { SwFormatAutoFormat, SwTextAttrEnd } from "./txatbase";
 import { SwTextField } from "../../../inc/txtfld";
 
@@ -24,7 +25,7 @@ export function MakeTextAttr(
   attr: SfxItemSet | SfxPoolItem,
   start: number,
   end: number,
-): SwTextAttrEnd<SwFormatAutoFormat | SwFormatINetFormat | SwFormatCharFormat> {
+): SwTextAttrEnd<SwFormatAutoFormat | SwFormatINetFormat | SwFormatCharFormat | SwFormatRuby> {
   if (attr instanceof SfxItemSet) {
     const handle = doc.GetIStyleAccess().getAutomaticStyle(attr, SwAutoStyleFamily.AUTO_STYLE_CHAR);
     const format = new SwFormatAutoFormat(handle);
@@ -58,6 +59,7 @@ export function MakeTextAttr(
         : attr.Clone();
     return new SwTextCharFormat(copied, start, end);
   }
+  if (attr instanceof SwFormatRuby) return new SwTextRuby(attr.Clone(), start, end);
   if (attr instanceof SwFormatINetFormat) return new SwTextINetFormat(attr.Clone(), start, end);
   if (attr instanceof SwFormatAutoFormat) return new SwTextAttrEnd(attr.Clone(), start, end);
   throw new Error("MakeTextAttr hint type is not implemented.");
@@ -70,7 +72,9 @@ export function InsertTextNodeItem(
   start: number,
   end: number,
   mode: SetAttrMode,
-): SwTextAttrEnd<SwFormatAutoFormat | SwFormatINetFormat | SwFormatCharFormat> | undefined {
+):
+  | SwTextAttrEnd<SwFormatAutoFormat | SwFormatINetFormat | SwFormatCharFormat | SwFormatRuby>
+  | undefined {
   if (attr.Which() >= RES_CHRATR_BEGIN && attr.Which() < RES_CHRATR_END)
     throw new Error("Writer InsertItem requires a text-attribute item.");
   const hint = MakeTextAttr(node.GetDoc(), attr, start, end);

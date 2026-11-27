@@ -45,6 +45,7 @@ import {
 } from "../text/XMLLineNumberingImportContext";
 import { XMLTextFrameStyleContext, type XMLTextFrameStyle } from "../text/XMLTextFrameContext";
 import { XMLTextPropertySetContext } from "../text/XMLTextPropertySetContext";
+import { XMLRubyStyleContext, type XMLRubyStyle } from "../text/txtprhdl";
 import { XMLSectionStyleContext, type XMLSectionStyle } from "../text/XMLSectionStyleContext";
 import { XMLThemeContext } from "./XMLThemeContext";
 import type { XMLImageStyleDefinition } from "./ImageStyle";
@@ -65,6 +66,7 @@ export interface XMLStyleImportTarget extends XMLListStyleImportTarget {
   registerTableStyle(name: string, style: OdfTableStyle): void;
   registerTextFrameStyle?(name: string, style: XMLTextFrameStyle, parent?: string): void;
   registerSectionStyle?(name: string, style: XMLSectionStyle): void;
+  registerRubyStyle?(name: string, style: XMLRubyStyle): void;
   registerLineNumbering(value: OdfLineNumberingConfiguration): void;
   getFontFace(name: string): string | undefined;
   getFontFaceGeneric?(name: string): string | undefined;
@@ -166,6 +168,11 @@ export class XMLStylesContext extends SvXMLImportContext {
       return this.target.createNumberStyle(element, attributes);
     if (element === XMLToken.STYLE_STYLE) {
       const family = attributes.get(XMLToken.STYLE_FAMILY);
+      if (family === "ruby" && this.target.registerRubyStyle)
+        return new XMLRubyStyleContext(
+          attributes.get(XMLToken.STYLE_NAME) ?? "",
+          this.target.registerRubyStyle.bind(this.target),
+        );
       if (family === "section" && this.target.registerSectionStyle)
         return new XMLSectionStyleContext(
           attributes.get(XMLToken.STYLE_NAME) ?? "",

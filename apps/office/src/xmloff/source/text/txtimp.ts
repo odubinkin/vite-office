@@ -334,6 +334,34 @@ export class XMLTextImportHelper {
       current.dispose();
     }
   }
+  /** Applies native ruby properties to the completed base text range. @param origin - Start of the base text. @param styleName - Ruby style. @param textStyleName - Reading character style. @param reading - Phonetic text. @returns Nothing. */
+  public SetRuby(
+    origin: XMLTextRange,
+    styleName: string,
+    textStyleName: string,
+    reading: string,
+  ): void {
+    if (this.IsAnnotationText()) return;
+    const cursor = this.GetCursor();
+    const end = cursor.getStart();
+    const range = cursor.getText().createTextCursorByRange(origin);
+    try {
+      range.gotoRange(end, true);
+      this.SetProperty(range, "RubyText", reading);
+      const style = this.target.getRubyStyle?.(styleName);
+      if (style?.adjust !== undefined)
+        this.SetProperty(range, "RubyAdjust", style.adjust, "sal_Int16");
+      if (style?.above !== undefined) this.SetProperty(range, "RubyIsAbove", style.above);
+      if (style?.position !== undefined)
+        this.SetProperty(range, "RubyPosition", style.position, "sal_Int16");
+      const textStyle = this.target.resolveNamedCharacterStyle?.(textStyleName);
+      if (textStyle) this.SetProperty(range, "RubyCharStyleName", textStyle);
+    } finally {
+      range.dispose();
+      end.dispose();
+    }
+  }
+
   /** Writes an actual typed property without exposing model items to xmloff. @param cursor - Real property owner. @param name - Native property name. @param value - Scalar. @param numeric - Optional numeric type. @returns Nothing. */
   public SetProperty(
     cursor: Pick<XMLPropertySet, "setPropertyValue">,

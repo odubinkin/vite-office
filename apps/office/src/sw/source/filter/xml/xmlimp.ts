@@ -1,4 +1,5 @@
 /** @fileoverview Implements Writer's streaming SwXMLImport bridge over fast SAX contexts. */
+import type { XMLRubyStyle } from "../../../../xmloff/source/text/txtprhdl";
 import type { SfxDocumentProperties } from "../../../../sfx2/source/doc/sfxbasemodel";
 import { SwPoolFormatId, WRITER_CHARACTER_STYLE_POOL } from "../../../inc/poolfmt";
 import { isOpenOffice2Generator } from "../../../../xmloff/source/core/xmlimp";
@@ -223,6 +224,17 @@ class SwXMLImport
   implements SvXMLImportContract, XMLTableImportTarget, XMLFontStylesImportTarget
 {
   private readonly sectionStyles = new Map<string, XMLSectionStyle>();
+  private readonly rubyStyles = new Map<string, XMLRubyStyle>();
+
+  /** Registers the native automatic ruby style. @param name - Source style name. @param style - Imported ruby properties. @returns Nothing. */
+  public registerRubyStyle(name: string, style: XMLRubyStyle): void {
+    this.rubyStyles.set(name, style);
+  }
+
+  /** Resolves a ruby style without conflating it with the reading's character style. @param name - Source style name. @returns Original properties or absence. */
+  public getRubyStyle(name: string): XMLRubyStyle | undefined {
+    return this.rubyStyles.get(name);
+  }
 
   /** Registers automatic section format values. @param name - Source style name. @param style - Authored frame properties. @returns Nothing. */
   public registerSectionStyle(name: string, style: XMLSectionStyle): void {

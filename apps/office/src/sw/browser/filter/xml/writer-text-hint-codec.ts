@@ -1,4 +1,5 @@
 /** @fileoverview Transports actual native ranged hint families without flattening named character styles. */
+import { SwFormatRuby } from "../../../source/core/txtnode/fmtatr2";
 import type { SwDoc } from "../../../source/core/doc/doc";
 import { SwFormatAutoFormat, type SwTextAttrEnd } from "../../../source/core/txtnode/txatbase";
 import { SwFormatCharFormat, type SwFormatINetFormat } from "../../../source/core/txtnode/fmtatr2";
@@ -18,13 +19,27 @@ import {
   decodeSwFormatINetFormatRecord,
   type WriterInternetFormatRecord,
 } from "./item-codec";
+import { text, unicode } from "../../../../i18nlangtag/source/isolang/isolang.tables";
+import { RubyAdjust } from "../../../../offapi/com/sun/star/text/RubyAdjust";
+import * as RubyPosition from "../../../../offapi/com/sun/star/text/RubyPosition";
+
 /** Actual represented native hint families. */
-type Hint = SwTextAttrEnd<SwFormatAutoFormat | SwFormatCharFormat | SwFormatINetFormat>;
+type Hint = SwTextAttrEnd<
+  SwFormatAutoFormat | SwFormatCharFormat | SwFormatINetFormat | SwFormatRuby
+>;
 /** Primitive records retain historical automatic/internet envelopes and add a native character owner. */
 export type WriterTextHintRecord = Readonly<{ start: number; end: number }> &
   (
     | Readonly<{ kind: "auto-format"; items: readonly SfxPoolItemSnapshot[] }>
     | Readonly<{ kind: "hyperlink"; hyperlink: WriterInternetFormatRecord }>
+    | Readonly<{
+        kind: "ruby";
+        text: string;
+        charStyle: string;
+        styleId: number;
+        position: number;
+        adjustment: RubyAdjust;
+      }>
     | Readonly<{
         kind: "character-format";
         characterStyle?: number;
@@ -37,6 +52,16 @@ export function encodeTextHint(doc: SwDoc, hint: Hint): WriterTextHintRecord {
   const range = { start: hint.start, end: hint.end };
   if (hint.format instanceof SwFormatAutoFormat)
     return { ...range, kind: "auto-format", items: encodeSfxItemSet(hint.format.GetStyleHandle()) };
+  if (hint.format instanceof SwFormatRuby)
+    return {
+      ...range,
+      kind: "ruby",
+      text: text(hint.format.GetText()),
+      charStyle: hint.format.GetCharFormatName(),
+      styleId: hint.format.GetCharFormatId(),
+      position: hint.format.GetPosition(),
+      adjustment: hint.format.GetAdjustment(),
+    };
   if (hint.format instanceof SwFormatCharFormat && hint instanceof SwTextCharFormat) {
     const characterStyle = encodeCharacterStyleReference(doc, hint.format.GetCharFormat());
     return {
@@ -75,6 +100,34 @@ export function decodeTextHint(doc: SwDoc, record: WriterTextHintRecord): Hint {
       record.start,
       record.end,
     );
+  if (record.kind === "ruby") {
+    if (
+      typeof record.text !== "string" ||
+      typeof record.charStyle !== "string" ||
+      !Number.isInteger(record.styleId) ||
+      record.styleId < 0 ||
+      record.styleId > 65535 ||
+      !Number.isInteger(record.position) ||
+      record.position < RubyPosition.ABOVE ||
+      record.position > RubyPosition.INTER_CHARACTER ||
+      !Number.isInteger(record.adjustment) ||
+      record.adjustment < RubyAdjust.LEFT ||
+      record.adjustment > RubyAdjust.INDENT_BLOCK
+    )
+      throw new Error("Stored Writer ruby hint is invalid.");
+    const reading = unicode(record.text);
+    const item = new SwFormatRuby(reading);
+    try {
+      item.SetCharFormatName(record.charStyle);
+      item.SetCharFormatId(record.styleId);
+      item.SetPosition(record.position);
+      item.SetAdjustment(record.adjustment);
+      return MakeTextAttr(doc, item, record.start, record.end);
+    } finally {
+      item.Dispose();
+      reading.dispose();
+    }
+  }
   if (record.kind === "character-format") {
     if (
       !Number.isInteger(record.sortNumber) ||

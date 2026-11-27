@@ -1,84 +1,114 @@
-/** @fileoverview Original TryInsertNesting passes for the registered INET nesting family from thints.cxx; structured/Ruby hint owners remain unrepresented. */
+/** @fileoverview Original TryInsertNesting passes for Writer's hyperlink and ruby attributes. */
 import type { SwTextNode } from "./ndtxt";
 import type { SwpHints } from "./ndhints";
-import { SwTextINetFormat } from "./txtatr2";
+import { SwTextINetFormat, SwTextRuby } from "./txtatr2";
 import { MakeTextAttr } from "./thints";
-/** Source size_t hint limit on the pinned 64-bit reference target. JS arrays cannot reach this count. */
+
+/** Registered native nesting attributes in the supported Writer text model. */
+export type NestingAttribute = SwTextINetFormat | SwTextRuby;
+
+/** Source size_t hint limit on the pinned 64-bit reference target. */
 export const MAX_HINTS = (1n << 64n) - 2n;
-/** Original asymmetric nesting predicate: an empty first interval is not nested in a nonempty second. @param a - First start. @param b - First end. @param c - Second start. @param d - Second end. @returns Whether nested by the original test. */
+
+/** Original asymmetric nesting predicate. @param a - First start. @param b - First end. @param c - Second start. @param d - Second end. @returns Whether native ranges nest. */
 function isNestedAny(a: number, b: number, c: number, d: number): boolean {
   return a === c || b === d ? a !== b || c === d : a < c ? b >= d : b <= d;
 }
-/** Constructs the original fresh nesting fragment and initializes its source normal-style client. @param node - Actual owner. @param hint - Source INET attribute. @param start - New start. @param end - New end. @returns Fresh fragment. */
+
+/** Creates an independent nesting fragment with the original default style listener. @param node - Actual paragraph. @param hint - Existing item owner. @param start - Inclusive position. @param end - Exclusive position. @returns New attribute. */
 function MakeTextAttrNesting(
   node: SwTextNode,
-  hint: SwTextINetFormat,
+  hint: NestingAttribute,
   start: number,
   end: number,
-): SwTextINetFormat {
+): NestingAttribute {
   const created = MakeTextAttr(node.GetDoc(), hint.GetAttr(), start, end);
-  if (!(created instanceof SwTextINetFormat))
-    throw new Error("Expected native internet nesting attribute.");
-  created.InitINetFormat(node);
+  if (created instanceof SwTextINetFormat) created.InitINetFormat(node);
+  else if (created instanceof SwTextRuby) created.InitRuby(node);
+  else throw new Error("Expected a native Writer nesting attribute.");
   return created;
 }
-/** Original raw insertion plus new history capture. @param hints - Actual maps. @param hint - Detached attribute. @returns Nothing. */
-function InsertNesting(hints: SwpHints, hint: SwTextINetFormat): void {
+
+/** Inserts an attribute and records its native insertion history. @param hints - Actual ordered maps. @param hint - Detached attribute. @returns Nothing. */
+function InsertNesting(hints: SwpHints, hint: NestingAttribute): void {
   hints.Insert(hint);
   hints.NoteInHistory(hint, true);
 }
-/** Ports original four-pass nesting insertion for the actual registered family. INET/INET uses SPLIT_OTHER and is not self-nestable; no unsupported structured owner or fieldmark is synthesized. @param hints - Actual maps. @param node - Actual node. @param incoming - New INET attribute. @returns Native insertion result. */
-export function TryInsertInternetNesting(
+
+/** Implements the native split and replacement order for hyperlinks and ruby ranges. @param hints - Actual ordered maps. @param node - Source text node. @param incoming - New nesting attribute. @returns Insertion success. */
+export function TryInsertNesting(
   hints: SwpHints,
   node: SwTextNode,
-  incoming: SwTextINetFormat,
+  incoming: NestingAttribute,
 ): boolean {
-  const start = incoming.GetStart(),
-    end = incoming.GetEnd(),
-    overlapping: SwTextINetFormat[] = [],
-    overwritten: SwTextINetFormat[] = [];
-  // Pass1: only INET is represented; same-family overlap uses SPLIT_OTHER.
+  const start = incoming.GetStart();
+  const end = incoming.GetEnd();
+  const overlapping: NestingAttribute[] = [];
+  const overwritten: NestingAttribute[] = [];
+  const splitPositions = new Set<number>();
   for (let index = 0; index < hints.Count(); ++index) {
     const other = hints.GetSortedByEnd(index);
     if (!other.IsNesting()) continue;
-    if (!(other instanceof SwTextINetFormat))
+    if (!(other instanceof SwTextINetFormat) && !(other instanceof SwTextRuby))
       throw new Error("Writer structured nesting is not implemented.");
-    const a = other.GetStart(),
-      b = other.GetEnd();
-    if ((start > a && start < b && end > b) || (start < a && a < end && end < b))
-      overlapping.push(other);
-    else if (isNestedAny(start, end, a, b)) overwritten.push(other);
+    const a = other.GetStart();
+    const b = other.GetEnd();
+    const overlapBefore = start < a && a < end && end < b;
+    const overlapBehind = a < start && start < b && b < end;
+    if (overlapBefore || overlapBehind) {
+      if (incoming instanceof SwTextINetFormat && other instanceof SwTextRuby)
+        splitPositions.add(overlapBefore ? a : b);
+      else overlapping.push(other);
+    } else if (incoming.Which() === other.Which() && isNestedAny(start, end, a, b))
+      overwritten.push(other);
   }
-  // Pass1b has no branches in the represented collapsed-bookmark model: no fieldmarks exist.
-  // Pass2: preserve original existing owners when truncating their overlapping portion.
+
+  const fragments = [incoming];
+  for (const position of [...splitPositions].sort(
+    /** Orders original split boundaries. @param left - Left offset. @param right - Right offset. @returns Sort order. */
+    (left, right) => left - right,
+  )) {
+    fragments.at(-1)?.SetEnd(position);
+    fragments.push(MakeTextAttrNesting(node, incoming, position, end));
+  }
+
   for (const other of overlapping) {
-    const a = other.GetStart(),
-      b = other.GetEnd();
-    if (start < a && a < end && end < b) {
-      hints.DeleteAtPos(hints.entries().indexOf(other));
-      other.SetStart(end);
-      InsertNesting(hints, other);
-    } else if (a < start && start < b && b < end) {
-      hints.DeleteAtPos(hints.entries().indexOf(other));
-      other.SetEnd(start);
-      InsertNesting(hints, other);
+    const a = other.GetStart();
+    const b = other.GetEnd();
+    const preserveOverlap = incoming.Which() !== other.Which();
+    for (const fragment of fragments) {
+      const c = fragment.GetStart();
+      const d = fragment.GetEnd();
+      if (c < a && a < d && d < b) {
+        hints.DeleteAtPos(hints.entries().indexOf(other));
+        other.SetStart(d);
+        InsertNesting(hints, other);
+        if (preserveOverlap) InsertNesting(hints, MakeTextAttrNesting(node, other, a, d));
+        break;
+      }
+      if (a < c && c < b && b < d) {
+        hints.DeleteAtPos(hints.entries().indexOf(other));
+        other.SetEnd(c);
+        InsertNesting(hints, other);
+        if (preserveOverlap) InsertNesting(hints, MakeTextAttrNesting(node, other, c, b));
+        break;
+      }
     }
   }
-  // Original capacity check deliberately reserves strictly more than the one incoming fragment.
-  if (MAX_HINTS <= BigInt(hints.Count()) || MAX_HINTS - BigInt(hints.Count()) <= 1n) return false;
-  // Pass3: insert first, then repair overwritten hints in original remembered order.
-  InsertNesting(hints, incoming);
+
+  if (MAX_HINTS - BigInt(hints.Count()) <= BigInt(fragments.length)) return false;
+  for (const fragment of fragments) InsertNesting(hints, fragment);
   for (const other of overwritten) {
-    const a = other.GetStart(),
-      b = other.GetEnd();
+    const a = other.GetStart();
+    const b = other.GetEnd();
     hints.DeleteAtPos(hints.entries().indexOf(other));
-    if (start <= a && b <= end) other.EndListeningAll();
-    else {
-      if (end < b) TryInsertInternetNesting(hints, node, MakeTextAttrNesting(node, other, end, b));
-      if (a < start) {
-        other.SetEnd(start);
-        TryInsertInternetNesting(hints, node, other);
-      } else other.EndListeningAll();
+    if (end < b) TryInsertNesting(hints, node, MakeTextAttrNesting(node, other, end, b));
+    if (a < start) {
+      other.SetEnd(start);
+      TryInsertNesting(hints, node, other);
+    } else {
+      other.EndListeningAll();
+      other.GetAttr().Dispose();
     }
   }
   return true;

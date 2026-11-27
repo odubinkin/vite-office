@@ -9,7 +9,7 @@
       "local": [
         {
           "path": "apps/office/src/sw/source/core/txtnode/thints-nesting.ts",
-          "marker": "TryInsertInternetNesting"
+          "marker": "TryInsertNesting"
         },
         {
           "path": "apps/office/src/sw/source/core/txtnode/native-internet-nesting.test.ts",
@@ -33,7 +33,7 @@
     },
     "upstreamPath": "sw/source/core/txtnode/thints.cxx",
     "localSymbols": [
-      "TryInsertInternetNesting",
+      "TryInsertNesting",
       "MAX_HINTS"
     ],
     "upstreamSymbols": [
@@ -41,15 +41,15 @@
       "MakeTextAttrNesting"
     ],
     "preservedResponsibilities": [
-      "Original INET/INET four-pass nesting retains the asymmetric empty predicate, SPLIT_OTHER policy, old owner truncation, insertion before recursive overwrite repair, source size_t capacity inequalities, fresh fragment normal-style initialization and explicit old/new history. Empty interior insertion can be destroyed by its recursive repair exactly as in source."
+      "Original four-pass hyperlink and ruby nesting retains the asymmetric empty predicate, source SPLIT_NEW and SPLIT_OTHER policies, old owner truncation, insertion before recursive overwrite repair, source size_t capacity inequalities, fresh fragment normal-style initialization and explicit old/new history. Empty interior insertion can be destroyed by its recursive repair exactly as in source."
     ],
     "omittedResponsibilities": [
-      "Ruby/meta/content-control/input-field/fieldmark owners are not represented by the current kernel. No stand-in hints or fieldmark breaks are synthesized; the mapped mechanism covers every registered actual nesting family. MAX_HINTS retains the source 64-bit size_t profile, beyond reachable JS-array counts."
+      "Meta/content-control/input-field/fieldmark owners are not represented by the current kernel. No stand-in hints or fieldmark breaks are synthesized; the mapped mechanism covers every registered actual nesting family. MAX_HINTS retains the source 64-bit size_t profile, beyond reachable JS-array counts."
     ],
     "filenameDivergence": {
       "localPath": "apps/office/src/sw/source/core/txtnode/thints-nesting.ts",
       "stackNecessity": "responsibility-split",
-      "rationale": "Original INET/INET four-pass nesting retains the asymmetric empty predicate, SPLIT_OTHER policy, old owner truncation, insertion before recursive overwrite repair, source size_t capacity inequalities, fresh fragment normal-style initialization and explicit old/new history. Empty interior insertion can be destroyed by its recursive repair exactly as in source."
+      "rationale": "Original four-pass hyperlink and ruby nesting retains the asymmetric empty predicate, source SPLIT_NEW and SPLIT_OTHER policies, old owner truncation, insertion before recursive overwrite repair, source size_t capacity inequalities, fresh fragment normal-style initialization and explicit old/new history. Empty interior insertion can be destroyed by its recursive repair exactly as in source."
     }
   }
 }

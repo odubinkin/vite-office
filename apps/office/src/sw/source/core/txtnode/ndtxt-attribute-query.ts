@@ -1,15 +1,21 @@
+import type { SwFormatRuby } from "./fmtatr2";
 import { isTextFormatHint } from "./txatbase";
 /** @fileoverview Implements the ranged pointer branch of ndtxt.cxx text-attribute lookup. */
 import type { SwFormatCharFormat } from "./fmtatr2";
 import { GetTextAttrMode } from "../../../inc/swtypes";
-import { RES_TXTATR_AUTOFMT, RES_TXTATR_INETFMT, RES_TXTATR_CHARFMT } from "../../../inc/hintids";
+import {
+  RES_TXTATR_AUTOFMT,
+  RES_TXTATR_INETFMT,
+  RES_TXTATR_CHARFMT,
+  RES_TXTATR_CJK_RUBY,
+} from "../../../inc/hintids";
 import type { SwpHints } from "./ndhints";
 import type { SwFormatINetFormat } from "./fmtatr2";
 import { type SwFormatAutoFormat, SwTextAttrEnd } from "./txatbase";
 
 /** Existing ranged families accepted by the native pointer-query boundary. */
 export type RangedTextAttribute = SwTextAttrEnd<
-  SwFormatAutoFormat | SwFormatINetFormat | SwFormatCharFormat
+  SwFormatAutoFormat | SwFormatINetFormat | SwFormatCharFormat | SwFormatRuby
 >;
 
 /** Matches the default native interval. @param index - Offset. @param start - Hint start. @param end - Hint end. @returns Whether contained. */
@@ -45,7 +51,12 @@ export function GetTextAttrAt(
   which: number,
   mode: GetTextAttrMode,
 ): RangedTextAttribute | undefined {
-  if (which !== RES_TXTATR_AUTOFMT && which !== RES_TXTATR_INETFMT && which !== RES_TXTATR_CHARFMT)
+  if (
+    which !== RES_TXTATR_AUTOFMT &&
+    which !== RES_TXTATR_INETFMT &&
+    which !== RES_TXTATR_CHARFMT &&
+    which !== RES_TXTATR_CJK_RUBY
+  )
     throw new Error("Unsupported Writer text-attribute query family.");
   if (hints === undefined) return undefined;
   const count = hints.Count(),

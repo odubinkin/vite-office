@@ -19,6 +19,8 @@ import { exportParagraphJustification, type OdfParagraphAlignment } from "../sty
 import { XMLNumberWithAutoForVoidPropHdl } from "../style/xmlbahdl";
 import type { SvXMLGraphicHelper } from "../core/xmlgrhlp";
 import { SvxXMLNumRuleExport, type XMLListLevelExport } from "../style/xmlnume";
+import { exportRubyStyle } from "./txtprhdl";
+import type { RubyAdjust } from "../../../offapi/com/sun/star/text/RubyAdjust";
 import { exportTableBlocks, type XMLTextExportBlock } from "../table/XMLTableExport";
 import type {
   FontFaceNameResolver,
@@ -101,8 +103,24 @@ export interface XMLTextListSource {
   readonly startValue?: number;
 }
 
+/** Native ruby portion over a paragraph range. */
+export interface XMLRubyRange {
+  readonly start: number;
+  readonly end: number;
+  readonly reading: string;
+  readonly readingStyleName: string;
+  readonly adjustment: RubyAdjust;
+  readonly position: number;
+}
+
+/** Returns the native automatic ruby style key. @param ruby - Original position and adjustment. @returns Key. */
+function rubyStyleKey(ruby: XMLRubyRange): string {
+  return `${ruby.adjustment}:${ruby.position}`;
+}
+
 /** Narrow live view of one canonical Writer paragraph. */
 export interface XMLTextParagraphSource {
+  readonly ruby?: readonly XMLRubyRange[];
   readonly alignment?: OdfParagraphAlignment;
   readonly outlineLevel?: number;
   readonly inheritedProperties?: OdfCharacterProperties;
@@ -181,6 +199,8 @@ export class XMLTextParagraphExport {
       characterStyleNames.set(key, name);
     }
     const listRules = new Map<string, XMLTextListRuleSource>();
+    const rubyStyleNames = new Map<string, string>();
+    const rubyStyles: string[] = [];
     const numRuleExport = new SvxXMLNumRuleExport(
       escapeXml,
       this.existingFontFaceName,
@@ -188,6 +208,13 @@ export class XMLTextParagraphExport {
     );
     for (const paragraph of paragraphsForAutoStyles(source.paragraphs())) {
       if (isCancelled()) throw new Error("ODT operation was cancelled.");
+      for (const ruby of paragraph.ruby ?? []) {
+        const key = rubyStyleKey(ruby);
+        if (rubyStyleNames.has(key)) continue;
+        const name = `Ru${rubyStyleNames.size + 1}`;
+        rubyStyleNames.set(key, name);
+        rubyStyles.push(exportRubyStyle(name, ruby.adjustment, ruby.position));
+      }
       if (paragraph.list !== undefined) {
         const list = paragraph.list;
         assertList(list);
@@ -333,6 +360,7 @@ export class XMLTextParagraphExport {
           paragraphStyleNames,
           characterStyleNames,
           listStyleNames,
+          rubyStyleNames,
           isCancelled,
           listIdentities,
           usedXmlIds,
@@ -353,6 +381,7 @@ export class XMLTextParagraphExport {
         ...paragraphStyles,
         ...characterStyles,
         ...listStyles,
+        ...rubyStyles,
         rendered.automaticStyles,
       ].join(""),
       body: rendered.body,
@@ -398,6 +427,7 @@ function exportParagraphBody(
   paragraphStyleNames: ReadonlyMap<string, string>,
   characterStyleNames: ReadonlyMap<string, string>,
   listStyleNames: ReadonlyMap<string, string>,
+  rubyStyleNames: ReadonlyMap<string, string>,
   isCancelled: () => boolean,
   listIdentities: Map<string, { readonly rootId: string; segments: number }>,
   usedXmlIds: Set<string>,
@@ -459,6 +489,7 @@ function exportParagraphBody(
       paragraph,
       paragraphStyleNames,
       characterStyleNames,
+      rubyStyleNames,
       renderFrame,
     );
     info.Set(paragraph.list);
@@ -514,6 +545,7 @@ function exportParagraphElement(
   paragraph: XMLTextParagraphSource,
   paragraphStyleNames: ReadonlyMap<string, string>,
   characterStyleNames: ReadonlyMap<string, string>,
+  rubyStyleNames: ReadonlyMap<string, string>,
   renderFrame?: (frame: XMLTextFrameExportSource) => string,
 ): string {
   const baseStyleName = getOdfStyleName(paragraph);
@@ -542,7 +574,7 @@ function exportParagraphElement(
   const exportAnnotationParagraph =
     /** Renders a note paragraph using the same automatic-style families. @param note - Note paragraph. @returns XML paragraph. */
     (note: XMLTextParagraphSource): string =>
-      exportParagraphElement(note, paragraphStyleNames, characterStyleNames);
+      exportParagraphElement(note, paragraphStyleNames, characterStyleNames, rubyStyleNames);
   let markerIndex = 0;
   let textOffset = 0;
   const encodeWithMarkers =
@@ -571,23 +603,64 @@ function exportParagraphElement(
       }
       return encoded + exportText(text.slice(localOffset));
     };
-  for (const run of paragraph.runs) {
-    if (JSON.stringify(run.hyperlink) !== JSON.stringify(activeHyperlink)) {
+  const rubyRanges = paragraph.ruby ?? [];
+  let rubyIndex = 0;
+  let activeRuby: XMLRubyRange | undefined;
+  const closeHyperlink =
+    /** Closes the active link at an outer text boundary. @returns Nothing. */ (): void => {
       if (activeHyperlink !== undefined) content += "</text:a>";
-      activeHyperlink = run.hyperlink;
-      if (activeHyperlink !== undefined) content += exportHyperlinkStart(activeHyperlink);
-    }
-    const encoded = encodeWithMarkers(run.text, textOffset);
-    textOffset += run.text.length;
-    for (const style of run.characterStyles ?? [])
-      content += `<text:span text:style-name="${escapeXml(style)}">`;
-    if (hasAutomaticTextStyle(run, paragraph)) {
-      const name = characterStyleNames.get(characterPropertiesKey(run.properties)) as string;
-      content += `<text:span text:style-name="${name}">${encoded}</text:span>`;
-    } else content += encoded;
-    content += "</text:span>".repeat(run.characterStyles?.length ?? 0);
+      activeHyperlink = undefined;
+    };
+  const updateRuby =
+    /** Opens or closes the native ruby scope at the current text position. @returns Nothing. */ (): void => {
+      if (activeRuby?.end === textOffset) {
+        closeHyperlink();
+        const name = activeRuby.readingStyleName;
+        const style = name ? ` text:style-name="${escapeXml(name)}"` : "";
+        content += `</text:ruby-base><text:ruby-text${style}>${escapeXml(activeRuby.reading)}</text:ruby-text></text:ruby>`;
+        activeRuby = undefined;
+        rubyIndex++;
+      }
+      const next = rubyRanges[rubyIndex];
+      if (activeRuby === undefined && next?.start === textOffset) {
+        closeHyperlink();
+        const name = rubyStyleNames.get(rubyStyleKey(next));
+        if (name === undefined) throw new Error("Missing automatic ruby style.");
+        content += `<text:ruby text:style-name="${name}"><text:ruby-base>`;
+        activeRuby = next;
+      }
+    };
+  for (const run of paragraph.runs) {
+    const runStart = textOffset;
+    const runEnd = runStart + run.text.length;
+    do {
+      updateRuby();
+      if (JSON.stringify(run.hyperlink) !== JSON.stringify(activeHyperlink)) {
+        closeHyperlink();
+        activeHyperlink = run.hyperlink;
+        if (activeHyperlink !== undefined) content += exportHyperlinkStart(activeHyperlink);
+      }
+      const boundary = activeRuby?.end ?? rubyRanges[rubyIndex]?.start ?? runEnd;
+      if (boundary < textOffset) throw new Error("ODF ruby range order is invalid.");
+      const partEnd = Math.min(runEnd, boundary);
+      const encoded = encodeWithMarkers(
+        run.text.slice(textOffset - runStart, partEnd - runStart),
+        textOffset,
+      );
+      textOffset = partEnd;
+      for (const style of run.characterStyles ?? [])
+        content += `<text:span text:style-name="${escapeXml(style)}">`;
+      if (hasAutomaticTextStyle(run, paragraph)) {
+        const name = characterStyleNames.get(characterPropertiesKey(run.properties)) as string;
+        content += `<text:span text:style-name="${name}">${encoded}</text:span>`;
+      } else content += encoded;
+      content += "</text:span>".repeat(run.characterStyles?.length ?? 0);
+    } while (textOffset < runEnd);
   }
-  if (activeHyperlink !== undefined) content += "</text:a>";
+  updateRuby();
+  if (activeRuby !== undefined || rubyIndex !== rubyRanges.length)
+    throw new Error("ODF ruby range is outside its paragraph.");
+  closeHyperlink();
   while (markerIndex < markers.length) {
     const marker = markers[markerIndex] as XMLTextParagraphMarker;
     if (marker.offset !== textOffset) throw new Error("ODF marker is outside its paragraph.");

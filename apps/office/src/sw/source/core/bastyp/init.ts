@@ -163,7 +163,7 @@ import {
 import { SwFormatLineNumber } from "../../../inc/fmtline";
 import { SwTextGridItem } from "../../../inc/tgrditem";
 import { SwNumRuleItem, SwParaConnectBorderItem, SwRegisterItem } from "../para/paratr";
-import { SwFormatCharFormat, SwFormatINetFormat } from "../txtnode/fmtatr2";
+import { SwFormatCharFormat, SwFormatINetFormat, SwFormatRuby } from "../txtnode/fmtatr2";
 import { SwTableBoxFormula, SwTableBoxNumFormat, SwTableBoxValue } from "../attr/cellatr";
 import { SwFormatPageDesc } from "../attr/fmtpdsc";
 import { GetDefaultFonts } from "../../../../editeng/inc/fontitem";
@@ -264,6 +264,7 @@ class ItemInfoPackageSwAttributes extends ItemInfoPackage {
     add(new SfxBoolItem(RES_COLLAPSING_BORDERS, false));
     add(new SwFormatINetFormat("", ""));
     add(new SwFormatCharFormat());
+    add(new SwFormatRuby());
     add(new SwParaConnectBorderItem());
     add(new SfxUInt16Item(RES_PARATR_OUTLINELEVEL, 0));
     for (const which of [RES_CHRATR_FONT, RES_CHRATR_CJK_FONT, RES_CHRATR_CTL_FONT])

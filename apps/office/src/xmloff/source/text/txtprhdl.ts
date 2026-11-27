@@ -1,4 +1,6 @@
 /** @fileoverview Consumed Writer text-frame orientation, wrap and character emphasis handlers from native txtprhdl.cxx. */
+import { RubyAdjust } from "../../../offapi/com/sun/star/text/RubyAdjust";
+import * as RubyPosition from "../../../offapi/com/sun/star/text/RubyPosition";
 import { OUString } from "../../../sal/inc/rtl/ustring";
 import { text, unicode } from "../../../i18nlangtag/source/isolang/isolang.tables";
 import { Converter } from "../../../sax/source/tools/converter";
@@ -15,7 +17,7 @@ import * as CaseMap from "../../../offapi/com/sun/star/style/CaseMap";
 import { XMLBoolPropHdl, XMLNBoolPropHdl } from "../style/xmlbahdl";
 import { XMLNamedBoolPropertyHdl } from "../style/NamedBoolPropertyHdl";
 import { XMLShadowedPropHdl } from "../style/shdwdhdl";
-import type { FastAttributeList } from "../core/xmlimp";
+import { SvXMLImportContext, type FastAttributeList } from "../core/xmlimp";
 import { XMLToken as T } from "../core/xmltoken";
 
 /** Native CharCaseMap property split between the case transformation and font variant. */
@@ -370,4 +372,73 @@ export function exportParagraphAsianTypography(settings?: OdfAsianTypography): s
     }
   }
   return attributes;
+}
+
+const rubyAlignments = [
+  "left",
+  "center",
+  "right",
+  "distribute-letter",
+  "distribute-space",
+] as const;
+const rubyPositions = ["above", "below", "inter-character"] as const;
+
+/** The native ruby style values independently of its displayed reading. */
+export interface XMLRubyStyle {
+  readonly adjust?: RubyAdjust;
+  readonly above?: boolean;
+  readonly position?: number;
+}
+
+/** Imports a ruby-family automatic style. */
+export class XMLRubyStyleContext extends SvXMLImportContext {
+  private style: XMLRubyStyle = {};
+
+  /** Retains the original ruby style name until its property child completes. @param name - ODF style name. @param register - Receiver for the original style. @returns Context. */
+  constructor(
+    private readonly name: string,
+    private readonly register: (name: string, style: XMLRubyStyle) => void,
+  ) {
+    super();
+  }
+
+  /** Captures the original alignment, legacy bool and extended position. @param element - Property token. @param attributes - Source attributes. @returns Inert property child. */
+  override createFastChildContext(
+    element: T,
+    attributes: FastAttributeList,
+  ): SvXMLImportContext | null {
+    if (element !== T.STYLE_RUBY_PROPERTIES) return null;
+    const alignment = attributes.get(T.STYLE_RUBY_ALIGN);
+    const legacy = attributes.get(T.STYLE_RUBY_POSITION);
+    const extended = attributes.get(T.LOEXT_RUBY_POSITION);
+    const adjust = rubyAlignments.findIndex(
+      /** Matches the original ruby alignment mapping. @param name - Native ODF spelling. @returns Match. */ (
+        name,
+      ) => name === alignment,
+    );
+    const position = rubyPositions.findIndex(
+      /** Matches the original three-value ruby position. @param name - Native ODF spelling. @returns Match. */ (
+        name,
+      ) => name === extended,
+    );
+    this.style = {
+      ...(adjust < 0 ? {} : { adjust }),
+      ...(legacy === "above" || legacy === "below" ? { above: legacy === "above" } : {}),
+      ...(position < 0 ? {} : { position }),
+    };
+    return new SvXMLImportContext();
+  }
+
+  /** Publishes the native ruby style. @returns Nothing. */
+  override endFastElement(): void {
+    if (this.name) this.register(this.name, this.style);
+  }
+}
+
+/** Emits one native automatic ruby style for the ODF package. @param name - Generated style name. @param adjustment - Native ruby alignment. @param position - Native reading position. @returns Style XML. */
+export function exportRubyStyle(name: string, adjustment: RubyAdjust, position: number): string {
+  const align = rubyAlignments[Number(adjustment)] ?? "left";
+  const legacy = position === RubyPosition.ABOVE ? "above" : "below";
+  const extended = rubyPositions[position] ?? "above";
+  return `<style:style style:name="${name}" style:family="ruby"><style:ruby-properties style:ruby-align="${align}" style:ruby-position="${legacy}" loext:ruby-position="${extended}"/></style:style>`;
 }

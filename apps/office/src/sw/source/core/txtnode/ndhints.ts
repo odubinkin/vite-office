@@ -2,13 +2,14 @@
  * @fileoverview Implements Writer's ordered auto-format hint container from pinned `sw/source/core/txtnode/ndhints.cxx`.
  */
 
+import type { SwFormatRuby } from "./fmtatr2";
 import { SwTextTOXMark } from "./atrtox";
 import { RES_TXTATR_TOXMARK } from "../../../inc/hintids";
 import { SwTextField } from "../../../inc/txtfld";
 import { SwPostItFieldType } from "../fields/docufld";
 import { SwTextFlyCnt } from "../../../inc/txtflcnt";
 import { TryInsertTextNodeHint, DestroyTextNodeAttribute } from "./thints-insert";
-import { TryInsertInternetNesting } from "./thints-nesting";
+import { TryInsertNesting, type NestingAttribute } from "./thints-nesting";
 import type { SwRegHistory } from "../undo/rolbck";
 import { CheckCharacterHintSortNumber } from "./thints-portions";
 import { SvxFontItem } from "../../../../editeng/inc/fontitem";
@@ -35,7 +36,7 @@ import {
 import type { SwTextNode } from "./ndtxt";
 import type { SwAttrPool } from "../attr/swatrset";
 import { MakeTextAttr, MergeTextNodePortions } from "./thints";
-import { SwTextCharFormat, SwTextINetFormat } from "./txtatr2";
+import { SwTextCharFormat, SwTextINetFormat, SwTextRuby } from "./txtatr2";
 import { AdjustInsertTextHints, EraseTextHints, UpdateTextHints } from "./ndtxt-hint-update";
 import {
   NormalizeOwnedTextHints,
@@ -65,7 +66,9 @@ import {
 } from "./fmtatr2";
 
 /** Bounded implemented ranged item families held by the native maps. */
-type RangedTextAttr = SwTextAttrEnd<SwFormatAutoFormat | SwFormatINetFormat | SwFormatCharFormat>;
+type RangedTextAttr = SwTextAttrEnd<
+  SwFormatAutoFormat | SwFormatINetFormat | SwFormatCharFormat | SwFormatRuby
+>;
 /** Point and ranged attributes share the three native indexes. */
 export type TextNodeAttribute = RangedTextAttr | SwTextFlyCnt | SwTextField | SwTextTOXMark;
 
@@ -98,6 +101,7 @@ export class SwpHints {
     for (const hint of this.m_HintsByStart)
       if (
         hint instanceof SwTextINetFormat ||
+        hint instanceof SwTextRuby ||
         hint instanceof SwTextCharFormat ||
         hint instanceof SwTextField ||
         hint instanceof SwTextTOXMark
@@ -127,6 +131,7 @@ export class SwpHints {
       hint.m_pHints = undefined;
       if (
         hint instanceof SwTextINetFormat ||
+        hint instanceof SwTextRuby ||
         hint instanceof SwTextCharFormat ||
         hint instanceof SwTextField ||
         hint instanceof SwTextTOXMark
@@ -140,6 +145,7 @@ export class SwpHints {
       hint.m_pHints = this;
       if (
         hint instanceof SwTextINetFormat ||
+        hint instanceof SwTextRuby ||
         hint instanceof SwTextCharFormat ||
         hint instanceof SwTextField ||
         hint instanceof SwTextTOXMark
@@ -301,8 +307,8 @@ export class SwpHints {
     return TryInsertTextNodeHint(this, hint, node, mode);
   }
   /** Original nesting entrypoint for the registered internet family. @param node - Actual node. @param hint - Initialized INET attribute. @returns Success. */
-  public TryInsertNesting(node: SwTextNode, hint: SwTextINetFormat): boolean {
-    return TryInsertInternetNesting(this, node, hint);
+  public TryInsertNesting(node: SwTextNode, hint: NestingAttribute): boolean {
+    return TryInsertNesting(this, node, hint);
   }
 
   /** Merges registered automatic-style portions and normalizes native format-ignore boundaries. @param node - Native owning paragraph. @returns Whether merged. */

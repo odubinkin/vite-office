@@ -6356,3 +6356,14 @@ loading these sources while preserving the saved index body.
 - Source: `sfx2/source/doc/SfxDocumentMetaData.cxx` `getChildNodeByName`, `SfxDocumentMetaData::init`, `SfxDocumentMetaData::setMetaText` and `SfxDocumentMetaData::serialize`.
 - Scalar property lookup claims the first matching immediate DOM element. Updating that property edits the selected node, while native SAX export traverses the whole preserved DOM. An invalid file with duplicate scalar elements can therefore still carry its later stale entry after save.
 - Ordinary ODF package filtering uses the same native property selection and DOM serialization. Browser shell titles continue to use the selected value returned by the Writer filter.
+
+### WRITER-768 — Incompatible ruby values can succeed and reset the original property
+
+The native ruby adjustment and position setters initialize a signed 16-bit
+temporary to zero and validate its range after extraction without checking
+whether extraction succeeded. An incompatible value can therefore report
+success and set left adjustment or above position. The legacy above setter
+also reports success for incompatible values, while leaving position as it was.
+Writer preserves both setter behaviors.
+
+- [Original ruby UNO property writeback](../../vendor/libreoffice-reference/sw/source/core/txtnode/fmtatr2.cxx#L533)

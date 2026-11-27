@@ -1,6 +1,7 @@
 /**
  * @fileoverview Implements canonical Writer text nodes at the pinned LibreOffice `sw/source/core/txtnode/ndtxt.cxx` ownership boundary.
  */
+import type { SwFormatRuby } from "./fmtatr2";
 import { GetTextNodeLanguage } from "./thints-language";
 import { GetMinMaxSize, type SwMinMaxSize } from "../text/itratr.minmax";
 import { InsertTextNodeHint } from "./thints-insert";
@@ -208,7 +209,9 @@ export class SwTextNode extends SwContentNode {
     start: number,
     end: number,
     mode = SetAttrMode.DEFAULT,
-  ): SwTextAttrEnd<SwFormatAutoFormat | SwFormatINetFormat | SwFormatCharFormat> | undefined {
+  ):
+    | SwTextAttrEnd<SwFormatAutoFormat | SwFormatINetFormat | SwFormatCharFormat | SwFormatRuby>
+    | undefined {
     return thints.InsertTextNodeItem(this, attr, start, end, mode);
   }
 

@@ -8,20 +8,21 @@ import {
 } from "../../../inc/hints";
 import { SwClient, type SwModify, type LegacyModifyHint } from "../../../inc/calbck";
 import type { SwModelHint } from "../../../inc/hints";
-import { SwPoolFormatId } from "../../../inc/poolfmt";
+import { IsPoolUserFormat, SwPoolFormatId } from "../../../inc/poolfmt";
 import {
   RES_UPDATEATTR_FMT_CHG,
   RES_UPDATEATTR_ATTRSET_CHG,
   RES_UPDATEATTR_OBJECTDYING,
 } from "../../../inc/hintids";
+import type { SwCharFormat } from "../../../inc/charfmt";
 import type { SwTextNode } from "./ndtxt";
-import { SwFormatCharFormat, SwFormatINetFormat } from "./fmtatr2";
+import { SwFormatCharFormat, SwFormatINetFormat, SwFormatRuby } from "./fmtatr2";
 import { SwTextAttrEnd, SwTextAttrNesting } from "./txatbase";
 
 /** Concrete native internet attribute with locked nesting defaults and an item backlink. */
 export class SwTextINetFormat extends SwTextAttrNesting<SwFormatINetFormat> {
   private m_pTextNode: SwTextNode | undefined;
-  private readonly client = new InternetFormatClient(this);
+  private readonly client = new TextNestingClient(this);
   private m_bVisited = false;
   private m_bVisitedValid = false;
   /** Original cache flag; it is not a persistent document property. @returns Visited cache. */
@@ -167,11 +168,11 @@ export class SwTextCharFormat extends SwTextAttrEnd<SwFormatCharFormat> {
   }
 }
 
-/** JS binding of SwTextINetFormat's independent SwClient base; the callback borrows the actual attribute. */
-class InternetFormatClient extends SwClient {
-  private readonly owner: WeakRef<SwTextINetFormat>;
+/** JS binding of the nesting attribute's independent SwClient base; the callback borrows the actual attribute. */
+class TextNestingClient extends SwClient {
+  private readonly owner: WeakRef<SwTextINetFormat | SwTextRuby>;
   /** Binds native multiple inheritance without a second document/style graph. @param owner - Actual attribute. @returns Client base. */
-  public constructor(owner: SwTextINetFormat) {
+  public constructor(owner: SwTextINetFormat | SwTextRuby) {
     super();
     this.owner = new WeakRef(owner);
     internetFormatFinalizers.register(owner, new WeakRef(this));
@@ -192,3 +193,74 @@ const internetFormatFinalizers = new FinalizationRegistry<WeakRef<SwClient>>(
   /** Releases the registered native base when its text attribute is unreachable. @param client - Borrowed native base. @returns Nothing. */
   (client) => client.deref()?.Dispose(),
 );
+
+/** Concrete native Writer ruby node with locked nesting and independent reading styles. */
+export class SwTextRuby extends SwTextAttrNesting<SwFormatRuby> {
+  private node: SwTextNode | undefined;
+  private readonly client = new TextNestingClient(this);
+
+  /** Attaches the non-shareable item to the native range. @param format - Owned ruby item. @param start - Inclusive offset. @param end - Exclusive offset. @returns Range. */
+  constructor(format: SwFormatRuby, start: number, end: number) {
+    super(format, start, end);
+    format.m_pTextAttr = this;
+  }
+
+  /** Connects the original default Ruby Text style at insertion. @param node - Actual text owner. @returns Nothing. */
+  InitRuby(node: SwTextNode): void {
+    this.ChgTextNode(node);
+    this.EndListeningAll();
+    node.GetDoc().GetCharFormatFromPool(SwPoolFormatId.CHR_RUBYTEXT)?.Add(this.client);
+  }
+
+  /** Sets the native node backlink. @param node - Owning paragraph, if attached. @returns Nothing. */
+  ChgTextNode(node: SwTextNode | undefined): void {
+    if (node !== this.node) this.EndListeningAll();
+    this.node = node;
+  }
+
+  /** Removes the attribute's style listener. @returns Nothing. */
+  EndListeningAll(): void {
+    this.client.EndListeningAll();
+  }
+
+  /** Resolves the original ruby character style independently of the base text. @returns Native style if the field has a reading. */
+  GetCharFormat(): SwCharFormat | undefined {
+    this.EndListeningAll();
+    if (!this.node || this.format.GetText().getLength() === 0) return undefined;
+    const doc = this.node.GetDoc();
+    const name = this.format.GetCharFormatName();
+    const id = name ? this.format.GetCharFormatId() : SwPoolFormatId.CHR_RUBYTEXT;
+    const style = IsPoolUserFormat(id)
+      ? doc.FindCharFormatByName(name)
+      : doc.GetCharFormatFromPool(id);
+    style?.Add(this.client);
+    return style;
+  }
+
+  /** Emits the original range updates when the reading style changes. @param _source - Style owner. @param hint - Native notification. @returns Nothing. */
+  SwClientNotify(_source: SwModify, hint: SwModelHint): void {
+    const which =
+      hint.kind === "format-change"
+        ? RES_UPDATEATTR_FMT_CHG
+        : hint.kind === "attr-set-change"
+          ? RES_UPDATEATTR_ATTRSET_CHG
+          : hint.kind === "object-dying"
+            ? RES_UPDATEATTR_OBJECTDYING
+            : hint.kind === "legacy-modify"
+              ? hint.GetWhich()
+              : 0;
+    if (which && this.node) {
+      const update = new SwUpdateAttr(this.GetStart(), this.GetEnd(), which);
+      this.node.TriggerNodeUpdate(new UpdateAttrHint(update, update));
+    }
+  }
+
+  /** Clones a ruby range independently of the currently bound node. @param format - Detached format. @param start - Inclusive offset. @param end - Exclusive offset. @returns Native ruby text attribute. */
+  protected override createRangeClone(
+    format: SwFormatRuby,
+    start: number,
+    end: number,
+  ): SwTextRuby {
+    return new SwTextRuby(format, start, end);
+  }
+}

@@ -231,6 +231,21 @@ export const SwUnoPropertyMap: ReadonlyMap<string, SwUnoPropertyEntry> = new Map
         ],
       ] as [string, SwUnoPropertyEntry][],
   ),
+  ...(
+    [
+      ["RubyText", "OUString", M.MID_RUBY_TEXT],
+      ["RubyAdjust", "sal_Int16", M.MID_RUBY_ADJUST],
+      ["RubyCharStyleName", "OUString", M.MID_RUBY_CHARSTYLE],
+      ["RubyPosition", "sal_Int16", M.MID_RUBY_POSITION],
+      ["RubyIsAbove", "bool", M.MID_RUBY_ABOVE],
+    ] as const
+  ).map(
+    /** Registers the original native ruby cursor property. @param row - Name, UNO type and member. @returns Property entry. */
+    ([name, type, member]): [string, SwUnoPropertyEntry] => [
+      name,
+      { type, attributes: 1, which: H.RES_TXTATR_CJK_RUBY, member, kind: "any" },
+    ],
+  ),
   [
     "HyperLinkURL",
     { type: "OUString", attributes: 1, which: H.RES_TXTATR_INETFMT, member: 4, kind: "hyperlink" },

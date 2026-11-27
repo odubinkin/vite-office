@@ -5,11 +5,11 @@ import type { SfxPoolItem } from "../../../../svl/source/items/poolitem";
 import { DestroyTextNodeAttribute } from "./thints-insert";
 import { RES_TXTATR_CHARFMT, RES_TXTATR_AUTOFMT } from "../../../inc/hintids";
 import { SwTextCharFormat } from "./txtatr2";
-import { SwFormatINetFormat } from "./fmtatr2";
+import { SwFormatINetFormat, SwFormatRuby } from "./fmtatr2";
 
 /** Retains the portions of one hint outside a replacement range. @param hint - Existing hint. @param start - Inclusive replacement start. @param end - Exclusive replacement end. @returns Zero, one, or two clipped clones. */
 export function clipHintOutsideRange<
-  T extends SwFormatAutoFormat | SwFormatINetFormat | SwFormatCharFormat,
+  T extends SwFormatAutoFormat | SwFormatINetFormat | SwFormatCharFormat | SwFormatRuby,
 >(hint: SwTextAttrEnd<T>, start: number, end: number): readonly SwTextAttrEnd<T>[] {
   if (hint.end <= start || hint.start >= end) return [hint.clone()];
   const retained: SwTextAttrEnd<T>[] = [];
@@ -131,7 +131,9 @@ export function hintPositionBound(
 }
 
 /** Supported native map element. */
-type RangedTextAttr = SwTextAttrEnd<SwFormatAutoFormat | SwFormatINetFormat | SwFormatCharFormat>;
+type RangedTextAttr = SwTextAttrEnd<
+  SwFormatAutoFormat | SwFormatINetFormat | SwFormatCharFormat | SwFormatRuby
+>;
 /** Normalizes fresh owned projection hints, destroying discarded owners while preserving retained object identity. @param hints - Owned values. @returns Ordered normalized map. */
 export function NormalizeOwnedTextHints(hints: readonly RangedTextAttr[]): RangedTextAttr[] {
   const sorted = hints
@@ -141,6 +143,7 @@ export function NormalizeOwnedTextHints(hints: readonly RangedTextAttr[]): Range
         hint.end >= hint.start &&
         ((hint.format instanceof SwFormatAutoFormat && hint.format.GetStyleHandle().Count() > 0) ||
           hint.format instanceof SwFormatINetFormat ||
+          hint.format instanceof SwFormatRuby ||
           hint.format instanceof SwFormatCharFormat),
     )
     .sort(compareHints);

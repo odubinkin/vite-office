@@ -1,4 +1,5 @@
 /** @fileoverview Ports native BuildPortions for automatic and named character formats from thints.cxx. */
+import type { SwFormatRuby } from "./fmtatr2";
 import { releaseStyleHandle } from "../../../../svl/source/items/stylepool";
 import { DestroyTextNodeAttribute } from "./thints-insert";
 import { SfxItemSet } from "../../../../svl/source/items/itemset";
@@ -14,7 +15,9 @@ import { MakeTextAttr } from "./thints";
 import { CharFormat } from "../text/atrstck";
 import { WRITER_CHARACTER_WHICH_RANGES } from "../../../inc/hintids";
 /** Actual registered native ranged item families. */
-type Hint = SwTextAttrEnd<SwFormatAutoFormat | SwFormatCharFormat | SwFormatINetFormat>;
+type Hint = SwTextAttrEnd<
+  SwFormatAutoFormat | SwFormatCharFormat | SwFormatINetFormat | SwFormatRuby
+>;
 /** Checks the two native portion-building families. @param hint - Actual owner. @returns Whether portioned. */
 function portioned(hint: Hint): boolean {
   return hint.format instanceof SwFormatAutoFormat || hint.format instanceof SwFormatCharFormat;

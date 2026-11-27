@@ -1,3 +1,4 @@
+import type { SwFormatRuby } from "../txtnode/fmtatr2";
 import { isTextFormatHint } from "../txtnode/txatbase";
 /** @fileoverview Restores bounded native text-attribute history from sw/source/core/undo/rolbck.cxx. */
 import type { TextAttributeOutput } from "../txtnode/thints-setattr";
@@ -232,14 +233,17 @@ export class SwHistoryChangeFormatColl extends SwHistoryHint {
 }
 /** Cloned native item and original coordinates,retaining only format-ignore flags. */
 export class SwHistorySetText extends SwHistoryHint {
-  private readonly m_pAttr: SwFormatAutoFormat | SwFormatINetFormat | SwFormatCharFormat;
+  private readonly m_pAttr:
+    SwFormatAutoFormat | SwFormatINetFormat | SwFormatCharFormat | SwFormatRuby;
   private readonly m_nStart: number;
   private readonly m_nEnd: number;
   private readonly m_bFormatIgnoreStart: boolean;
   private readonly m_bFormatIgnoreEnd: boolean;
   /** Records the old item independently of subsequent edits. @param hint - Original attribute. @param m_nNodeIndex - Native node index. @returns Nothing. */
   public constructor(
-    hint: SwTextAttrEnd<SwFormatAutoFormat | SwFormatINetFormat | SwFormatCharFormat>,
+    hint: SwTextAttrEnd<
+      SwFormatAutoFormat | SwFormatINetFormat | SwFormatCharFormat | SwFormatRuby
+    >,
     private readonly m_nNodeIndex: number,
   ) {
     super(HISTORY_HINT.HSTRY_SETTXTHNT);
@@ -510,7 +514,9 @@ export class SwHistory {
   }
   /** Captures old values or original new-attribute reset entries. @param hint - Attribute. @param nodeIndex - Original node index. @param newAttr - Whether record the new family/range reset. @returns Nothing. */
   public AddTextAttr(
-    hint: SwTextAttrEnd<SwFormatAutoFormat | SwFormatINetFormat | SwFormatCharFormat>,
+    hint: SwTextAttrEnd<
+      SwFormatAutoFormat | SwFormatINetFormat | SwFormatCharFormat | SwFormatRuby
+    >,
     nodeIndex: number,
     newAttr: boolean,
   ): void {
@@ -627,7 +633,9 @@ export class SwRegHistory extends SwClient {
   }
   /** Original ranged-attribute history forwarding uses the registered native node slot. @param hint - Actual old or new attribute. @param isNew - Whether record its exact reset. @returns Nothing. */
   public AddHint(
-    hint: SwTextAttrEnd<SwFormatAutoFormat | SwFormatINetFormat | SwFormatCharFormat>,
+    hint: SwTextAttrEnd<
+      SwFormatAutoFormat | SwFormatINetFormat | SwFormatCharFormat | SwFormatRuby
+    >,
     isNew: boolean,
   ): void {
     this.m_pHistory?.AddTextAttr(hint, this.m_nNodeIndex, isNew);

@@ -33,7 +33,7 @@ import type { SfxPoolItem } from "../../../../svl/source/items/poolitem";
 import { RES_CHRATR_END } from "../../../inc/hintids";
 import { setCharacterItems } from "../txtnode/ndhints-font";
 import { SwFormatAutoFormat } from "../txtnode/txatbase";
-import { SwFormatCharFormat, SwFormatINetFormat } from "../txtnode/fmtatr2";
+import { SwFormatCharFormat, SwFormatINetFormat, SwFormatRuby } from "../txtnode/fmtatr2";
 import {
   SvxTextLeftMarginItem,
   SvxFirstLineIndentItem,
@@ -223,7 +223,8 @@ export function InsertPoolItem(
     const start = node === range.Start().GetNode() ? range.Start().GetContentIndex() : 0;
     const end = node === range.End().GetNode() ? range.End().GetContentIndex() : node.Len();
     if (item instanceof SwFormatCharFormat) node.InsertItem(item, start, end, mode);
-    else if (item instanceof SwFormatINetFormat) node.InsertItem(item, start, end, mode);
+    else if (item instanceof SwFormatINetFormat || item instanceof SwFormatRuby)
+      node.InsertItem(item, start, end, mode);
     else if (item instanceof SwFormatAutoFormat && item.Which() === RES_TXTATR_AUTOFMT)
       node.InsertItem(item, start, end, mode);
     else if (item.Which() >= RES_CHRATR_BEGIN && item.Which() < RES_CHRATR_END) {

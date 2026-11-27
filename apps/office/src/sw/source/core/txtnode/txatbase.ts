@@ -1,6 +1,7 @@
 /**
  * @fileoverview Defines Writer text-range attributes at the pinned LibreOffice `sw/source/core/txtnode/txatbase.cxx` ownership boundary.
  */
+import type { SwFormatRuby } from "./fmtatr2";
 import { releaseStyleHandle } from "../../../../svl/source/items/stylepool";
 import type { SwFormatCharFormat } from "./fmtatr2";
 import {
@@ -82,6 +83,7 @@ import { FontFamily, FontPitch } from "../../../../tools/inc/fontenum";
 import { RTL_TEXTENCODING_DONTKNOW } from "../../../../sal/inc/rtl/textenc";
 import { Color } from "../../../../tools/inc/color";
 export { RES_TXTATR_AUTOFMT } from "../../../inc/hintids";
+import { RES_TXTATR_CJK_RUBY } from "../../../inc/hintids";
 export { RES_TXTATR_INETFMT } from "../../../inc/hintids";
 
 /** Original special text-paint items for an effective run. */
@@ -371,7 +373,7 @@ export class SwTextAttr<TFormat extends SfxPoolItem = SwFormatAutoFormat> {
 
 /** Determines the native end type of each represented text attribute. */
 type TextAttributeEnd<TFormat extends SfxPoolItem> = TFormat extends
-  SwFormatAutoFormat | SwFormatINetFormat | SwFormatCharFormat
+  SwFormatAutoFormat | SwFormatINetFormat | SwFormatCharFormat | SwFormatRuby
   ? number
   : number | undefined;
 
@@ -388,8 +390,11 @@ export class SwTextAttrEnd<
   }
   /** Returns the registered ranged-family identifier. @returns WhichId. */
   public override Which(): TFormat extends
-    SwFormatAutoFormat | SwFormatINetFormat | SwFormatCharFormat
-    ? typeof RES_TXTATR_AUTOFMT | typeof RES_TXTATR_INETFMT | typeof RES_TXTATR_CHARFMT
+    SwFormatAutoFormat | SwFormatINetFormat | SwFormatCharFormat | SwFormatRuby
+    ? | typeof RES_TXTATR_AUTOFMT
+      | typeof RES_TXTATR_INETFMT
+      | typeof RES_TXTATR_CHARFMT
+      | typeof RES_TXTATR_CJK_RUBY
     : number {
     return super.Which() as ReturnType<SwTextAttrEnd<TFormat>["Which"]>;
   }
@@ -433,17 +438,23 @@ export class SwTextAttrEnd<
 /** Tests the hint families that represent character formatting rather than structured text content. @param hint - Native text attribute. @returns Whether this is a ranged format hint. */
 export function isTextFormatHint(
   hint: SwTextAttr<SfxPoolItem>,
-): hint is SwTextAttrEnd<SwFormatAutoFormat | SwFormatINetFormat | SwFormatCharFormat> {
+): hint is SwTextAttrEnd<
+  SwFormatAutoFormat | SwFormatINetFormat | SwFormatCharFormat | SwFormatRuby
+> {
   if (!(hint instanceof SwTextAttrEnd)) return false;
   const which = hint.Which();
   return (
-    which === RES_TXTATR_AUTOFMT || which === RES_TXTATR_INETFMT || which === RES_TXTATR_CHARFMT
+    which === RES_TXTATR_AUTOFMT ||
+    which === RES_TXTATR_INETFMT ||
+    which === RES_TXTATR_CHARFMT ||
+    which === RES_TXTATR_CJK_RUBY
   );
 }
 
 /** Native range whose constructor prohibits expansion and marks nesting. */
 export class SwTextAttrNesting<
-  TFormat extends SwFormatAutoFormat | SwFormatINetFormat | SwFormatCharFormat = SwFormatAutoFormat,
+  TFormat extends SwFormatAutoFormat | SwFormatINetFormat | SwFormatCharFormat | SwFormatRuby =
+    SwFormatAutoFormat,
 > extends SwTextAttrEnd<TFormat> {
   /** Initializes native nesting defaults. @param format - Owned item. @param start - Start. @param end - End. @returns Nothing. */
   protected constructor(format: TFormat, start: number, end: number) {

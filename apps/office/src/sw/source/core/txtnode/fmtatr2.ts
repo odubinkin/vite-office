@@ -1,5 +1,13 @@
 /** @fileoverview Implements Writer's hyperlink pool item from pinned LibreOffice `sw/source/core/txtnode/fmtatr2.cxx` and `sw/inc/fmtinfmt.hxx`. */
 
+import * as RubyMember from "../../../../editeng/inc/memberids";
+import { RubyAdjust } from "../../../../offapi/com/sun/star/text/RubyAdjust";
+import * as RubyPosition from "../../../../offapi/com/sun/star/text/RubyPosition";
+import { text, unicode } from "../../../../i18nlangtag/source/isolang/isolang.tables";
+import { CONVERT_TWIPS } from "../../../../svl/inc/poolitem";
+import type { OUStringConstReference } from "../../../../sal/inc/rtl/ustring";
+import { RES_TXTATR_CJK_RUBY } from "../../../inc/hintids";
+import type { SwTextRuby } from "./txtatr2";
 import {
   StylePool,
   acquireStyleHandle,
@@ -363,5 +371,175 @@ export class SwFormatAutoFormat<
     void value;
     void member;
     return false;
+  }
+}
+
+/** Owns the phonetic text and style settings of a native Writer ruby range. */
+export class SwFormatRuby extends SfxPoolItem {
+  private readonly m_sRubyText = new OUString();
+  private m_sCharFormatName = "";
+  private m_nCharFormatId = SwPoolFormatId.ZERO;
+  private m_nPosition = RubyPosition.ABOVE;
+  private m_eAdjustment = RubyAdjust.LEFT;
+  m_pTextAttr: SwTextRuby | undefined;
+
+  /** Constructs an independent non-shareable source item. @param source - Reading text or native source item. @returns Ruby item. */
+  constructor(source?: OUStringConstReference | SwFormatRuby) {
+    super(RES_TXTATR_CJK_RUBY);
+    this.setNonShareable();
+    if (source instanceof SwFormatRuby) {
+      this.m_sRubyText.assign(source.m_sRubyText);
+      this.m_sCharFormatName = source.m_sCharFormatName;
+      this.m_nCharFormatId = source.m_nCharFormatId;
+      this.m_nPosition = source.m_nPosition;
+      this.m_eAdjustment = source.m_eAdjustment;
+    } else if (source !== undefined) this.m_sRubyText.assign(source);
+  }
+
+  /** Borrows the reading stored by the text attribute. @returns Native text. */
+  GetText(): OUStringConstReference {
+    return this.m_sRubyText;
+  }
+
+  /** Returns the native display name of the reading's character style. @returns Style name. */
+  GetCharFormatName(): string {
+    return this.m_sCharFormatName;
+  }
+
+  /** Sets the native reading style's display name. @param value - Original UI name. @returns Nothing. */
+  SetCharFormatName(value: string): void {
+    this.m_sCharFormatName = value;
+  }
+
+  /** Returns the native pool identity of the reading's character style. @returns Pool identifier. */
+  GetCharFormatId(): SwPoolFormatId {
+    return this.m_nCharFormatId;
+  }
+
+  /** Sets the chosen character style's original pool identifier. @param value - Native pool identifier. @returns Nothing. */
+  SetCharFormatId(value: SwPoolFormatId): void {
+    this.m_nCharFormatId = value;
+  }
+
+  /** Returns the native ruby position. @returns Position value. */
+  GetPosition(): number {
+    return this.m_nPosition;
+  }
+
+  /** Sets the native unsigned16 ruby position. @param value - Original position. @returns Nothing. */
+  SetPosition(value: number): void {
+    this.m_nPosition = value & 0xffff;
+  }
+
+  /** Returns the native ruby adjustment. @returns Adjustment value. */
+  GetAdjustment(): RubyAdjust {
+    return this.m_eAdjustment;
+  }
+
+  /** Sets the independent ruby adjustment. @param value - Original adjustment. @returns Nothing. */
+  SetAdjustment(value: RubyAdjust): void {
+    this.m_eAdjustment = value;
+  }
+
+  /** Copies this item without its text-node backlink. @returns Detached ruby item. */
+  override Clone(): SwFormatRuby {
+    return new SwFormatRuby(this);
+  }
+
+  /** Compares the original properties independently from the attached text position. @param other - Item to compare. @returns Equality. */
+  override equals(other: SfxPoolItem): boolean {
+    return (
+      other instanceof SwFormatRuby &&
+      this.m_sRubyText.equals(other.m_sRubyText) &&
+      this.m_sCharFormatName === other.m_sCharFormatName &&
+      this.m_nCharFormatId === other.m_nCharFormatId &&
+      this.m_nPosition === other.m_nPosition &&
+      this.m_eAdjustment === other.m_eAdjustment
+    );
+  }
+
+  /** Returns the original UNO member with the native scalar width and style name. @param result - Destination Any. @param member - Original member identifier. @returns Whether the member is represented. */
+  override QueryValue(): string;
+  override QueryValue(result: Any, member?: number): boolean;
+  override QueryValue(result?: Any, member = RubyMember.MID_RUBY_TEXT): string | boolean {
+    if (result === undefined) return text(this.m_sRubyText);
+    switch (member & ~CONVERT_TWIPS) {
+      case RubyMember.MID_RUBY_TEXT:
+        result.insert(this.m_sRubyText, "OUString");
+        return true;
+      case RubyMember.MID_RUBY_ADJUST:
+        result.insert([this.m_eAdjustment], "sal_Int16");
+        return true;
+      case RubyMember.MID_RUBY_POSITION:
+        result.insert([this.m_nPosition], "sal_Int16");
+        return true;
+      case RubyMember.MID_RUBY_ABOVE:
+        result.insert([this.m_nPosition === RubyPosition.ABOVE], "bool");
+        return true;
+      case RubyMember.MID_RUBY_CHARSTYLE: {
+        const value = unicode(
+          SwStyleNameMapper.FillProgName(this.m_sCharFormatName, SwGetPoolIdFromName.ChrFmt),
+        );
+        try {
+          result.insert(value, "OUString");
+        } finally {
+          value.dispose();
+        }
+        return true;
+      }
+      default:
+        return false;
+    }
+  }
+
+  /** Writes the original UNO member and preserves its extraction behavior. @param value - Borrowed native Any. @param member - Original member identifier. @returns Whether accepted. */
+  override PutValue(value: Any, member: number): boolean {
+    switch (member & ~CONVERT_TWIPS) {
+      case RubyMember.MID_RUBY_TEXT:
+        return value.extract(this.m_sRubyText, "OUString");
+      case RubyMember.MID_RUBY_ADJUST: {
+        const adjustment: [number] = [0];
+        value.extract(adjustment, "sal_Int16");
+        if (adjustment[0] < RubyAdjust.LEFT || adjustment[0] > RubyAdjust.INDENT_BLOCK)
+          return false;
+        this.m_eAdjustment = adjustment[0];
+        return true;
+      }
+      case RubyMember.MID_RUBY_POSITION: {
+        const position: [number] = [0];
+        value.extract(position, "sal_Int16");
+        if (position[0] < RubyPosition.ABOVE || position[0] > RubyPosition.INTER_CHARACTER)
+          return false;
+        this.m_nPosition = position[0];
+        return true;
+      }
+      case RubyMember.MID_RUBY_ABOVE: {
+        const above: [boolean] = [false];
+        if (value.extract(above, "bool"))
+          this.m_nPosition = above[0] ? RubyPosition.ABOVE : RubyPosition.BELOW;
+        return true;
+      }
+      case RubyMember.MID_RUBY_CHARSTYLE: {
+        const name = new OUString();
+        try {
+          if (!value.extract(name, "OUString")) return false;
+          this.m_sCharFormatName = SwStyleNameMapper.GetUIName(
+            text(name),
+            SwGetPoolIdFromName.ChrFmt,
+          );
+          return true;
+        } finally {
+          name.dispose();
+        }
+      }
+      default:
+        return false;
+    }
+  }
+
+  /** Releases the actual owned reading string. @returns Nothing. */
+  override Dispose(): void {
+    this.m_sRubyText.dispose();
+    super.Dispose();
   }
 }

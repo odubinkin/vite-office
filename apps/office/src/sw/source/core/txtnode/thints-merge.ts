@@ -1,11 +1,14 @@
 /** @fileoverview Ports MergePortions for the represented character/automatic families from thints.cxx; RSID items remain outside the registered kernel. */
+import type { SwFormatRuby } from "./fmtatr2";
 import { DestroyTextNodeAttribute } from "./thints-insert";
 import type { SwpHints } from "./ndhints";
 import { SwFormatAutoFormat, type SwTextAttrEnd } from "./txatbase";
 import { SwFormatCharFormat, type SwFormatINetFormat } from "./fmtatr2";
 import { SfxPoolItem } from "../../../../svl/source/items/poolitem";
 /** Actual registered native ranged item families. */
-type Hint = SwTextAttrEnd<SwFormatAutoFormat | SwFormatCharFormat | SwFormatINetFormat>;
+type Hint = SwTextAttrEnd<
+  SwFormatAutoFormat | SwFormatCharFormat | SwFormatINetFormat | SwFormatRuby
+>;
 /** Compares source portions, preserving independent character owners and automatic-handle identity. @param first - Earlier portion. @param second - Next portion. @returns Match, differing equal-layout automatic handles, or different. */
 function compare(first: readonly Hint[], second: readonly Hint[]): "match" | "layout" | "differ" {
   if (first.length !== second.length || first.length === 0) return "differ";

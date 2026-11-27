@@ -3,6 +3,7 @@ import { assert, expect, it } from "vitest";
 import { SfxItemSet } from "../../../../svl/source/items/itemset";
 import { SwFormatAutoFormat } from "./txatbase";
 import { SwDoc } from "../doc/doc";
+import type { SwFormatRuby } from "./fmtatr2";
 import { SwFormatCharFormat, SwFormatINetFormat } from "./fmtatr2";
 import { SwTextCharFormat } from "./txtatr2";
 import { MakeTextAttr } from "./thints";
@@ -335,7 +336,9 @@ it("keeps a direct value equal to the paragraph when a character style would oth
 });
 
 /** Inspects actual nested item values; core SwFormatAutoFormat::QueryValue is a style-name API. @param item - Native hint item. @returns Native style identity or contained item payloads. */
-function hintValue(item: SwFormatAutoFormat | SwFormatCharFormat | SwFormatINetFormat) {
+function hintValue(
+  item: SwFormatAutoFormat | SwFormatCharFormat | SwFormatINetFormat | SwFormatRuby,
+) {
   return item instanceof SwFormatAutoFormat
     ? item
         .GetStyleHandle()

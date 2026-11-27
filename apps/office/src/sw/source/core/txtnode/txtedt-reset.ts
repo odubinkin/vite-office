@@ -1,3 +1,4 @@
+import type { SwFormatRuby } from "./fmtatr2";
 import { isTextFormatHint } from "./txatbase";
 /** @fileoverview Original ranged RstTextAttr geometry and selective automatic-style reset from txtedt.cxx for registered hint families. */
 import type { SwTextNode } from "./ndtxt";
@@ -14,7 +15,9 @@ import { SetAttrMode } from "../../../inc/swtypes";
 import { RES_TXTATR_AUTOFMT } from "../../../inc/hintids";
 import { SwUpdateAttr, UpdateAttrHint, SwFormatChangeHint } from "../../../inc/hints";
 /** Actual registered native range families. */
-type Hint = SwTextAttrEnd<SwFormatAutoFormat | SwFormatCharFormat | SwFormatINetFormat>;
+type Hint = SwTextAttrEnd<
+  SwFormatAutoFormat | SwFormatCharFormat | SwFormatINetFormat | SwFormatRuby
+>;
 /** Original lcl_HaveCommonAttributes: actual reduced automatic style or absent when every requested value is removed. @param node - Actual style access. @param requested - Optional deletion set. @param which - Single-item alternative. @param original - Source style. @returns Whether common fields exist and their original reduced native style handle. */
 function common(
   node: SwTextNode,
