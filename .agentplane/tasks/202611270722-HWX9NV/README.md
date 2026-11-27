@@ -1,10 +1,11 @@
 ---
 id: "202611270722-HWX9NV"
 title: "Align Writer ODT master-page style identity and references with LibreOffice"
-status: "DOING"
+result_summary: "ODT master-page names, native paragraph references, layouts and follow links follow the pinned Writer contracts."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 7
+revision: 8
 origin:
   system: "manual"
 depends_on: []
@@ -43,11 +44,16 @@ quality_review:
     - "24dea702b5513a2556dbbf9c98f324b12c72305c"
   findings:
     - "Pinned master-page layout/follow fallback and paragraph PageDescName rules pass focused tests. Implementation: 24dea702b5513a2556dbbf9c98f324b12c72305c."
-commit: null
+commit:
+  hash: "24dea702b5513a2556dbbf9c98f324b12c72305c"
+  message: "🧩 HWX9NV writer: align ODT master-page identity and references"
 comments:
   -
     author: "CODER"
     body: "Start: Align Writer ODT master-page identity and style links with the pinned native contracts."
+  -
+    author: "CODER"
+    body: "Verified: 101 focused Writer cases and scoped static checks pass. Implementation: 24dea702b551."
 events:
   -
     type: "status"
@@ -62,8 +68,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "101 focused Writer ODT, Worker and UNO cases pass, including the pinned default page-layout scenario; static and registry checks pass. See output/playwright/HWX9NV/verification.md."
+  -
+    type: "status"
+    at: "2026-11-27T07:33:17.711Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: 101 focused Writer cases and scoped static checks pass. Implementation: 24dea702b551."
 doc_version: 3
-doc_updated_at: "2026-11-27T07:30:10.627Z"
+doc_updated_at: "2026-11-27T07:33:17.714Z"
 doc_updated_by: "CODER"
 description: "Use the pinned XMLTextMasterPageContext and XMLPageExport contracts to preserve encoded names, display identity, page-layout and follow links, and paragraph references through the existing Writer ODT and Worker owners. Compare fallback behavior and run focused page-style, paragraph-style and ODT round-trip checks."
 sections:
