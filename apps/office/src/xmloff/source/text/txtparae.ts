@@ -5,6 +5,7 @@ import { FontPitch } from "../../../tools/inc/fontenum";
 import { RTL_TEXTENCODING_DONTKNOW } from "../../../sal/inc/rtl/textenc";
 import { exportInlineFont, getFontFamilyFromGeneric } from "../style/fonthdl";
 import { XMLShadowPropHdl } from "../style/shadwhdl";
+import { exportIndexMark, type XMLIndexMarkExportMarker } from "./XMLIndexMarkExport";
 import { exportAnnotation, type XMLAnnotationExportMarker } from "./txtflde";
 import type { XMLTextFrameExportSource } from "./XMLTextFrameExport";
 import { exportFillProperties } from "../draw/fill-properties";
@@ -131,6 +132,7 @@ export type XMLTextParagraphMarker =
       condition?: string;
       collapsedAroundFrame?: boolean;
     }>
+  | XMLIndexMarkExportMarker
   | XMLAnnotationExportMarker
   | Readonly<{ kind: "frame"; frame: XMLTextFrameExportSource; offset: number }>;
 
@@ -562,6 +564,7 @@ function exportParagraphElement(
           Number(
             (marker.kind === "frame" && marker.frame.anchor === "as-char") ||
               marker.kind === "annotation-end" ||
+              marker.kind === "index-mark" ||
               (marker.kind === "annotation" && marker.consumesMarker),
           );
         markerIndex += 1;
@@ -614,6 +617,12 @@ function exportMarker(
   }
   if (marker.kind === "annotation" || marker.kind === "annotation-end")
     return exportAnnotation(marker, escapeXml, exportText, exportAnnotationParagraph);
+  if (
+    marker.kind === "index-mark" ||
+    marker.kind === "index-mark-start" ||
+    marker.kind === "index-mark-end"
+  )
+    return exportIndexMark(marker, escapeXml);
   if (marker.kind === "soft-page-break") return "<text:soft-page-break/>";
   if (marker.name === undefined || marker.name.length === 0)
     throw new Error("ODF bookmark name is invalid.");

@@ -1,3 +1,4 @@
+import { isTextFormatHint } from "./txatbase";
 /** @fileoverview Implements the ranged pointer branch of ndtxt.cxx text-attribute lookup. */
 import type { SwFormatCharFormat } from "./fmtatr2";
 import { GetTextAttrMode } from "../../../inc/swtypes";
@@ -55,7 +56,7 @@ export function GetTextAttrAt(
     if (hint.Which() !== which) break;
     const start = hint.GetStart();
     if (index < start) break;
-    if (hint instanceof SwTextAttrEnd && match(index, start, hint.GetEnd())) result = hint;
+    if (isTextFormatHint(hint) && match(index, start, hint.GetEnd())) result = hint;
   }
   return result;
 }

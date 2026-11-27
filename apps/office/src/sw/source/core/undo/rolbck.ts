@@ -1,3 +1,4 @@
+import { isTextFormatHint } from "../txtnode/txatbase";
 /** @fileoverview Restores bounded native text-attribute history from sw/source/core/undo/rolbck.cxx. */
 import type { TextAttributeOutput } from "../txtnode/thints-setattr";
 import { SwFormatCharFormat } from "../txtnode/fmtatr2";
@@ -547,7 +548,7 @@ export class SwHistory {
           this.m_SwpHstry.push(new SwHistorySetTextField(hint, nodeIndex));
         continue;
       }
-      if (!(hint instanceof SwTextAttrEnd)) continue;
+      if (!isTextFormatHint(hint)) continue;
       if (start <= attrStart) {
         if (end > attrStart) this.AddTextAttr(hint, nodeIndex, false);
       } else if (start < hint.GetAnyEnd()) this.AddTextAttr(hint, nodeIndex, false);

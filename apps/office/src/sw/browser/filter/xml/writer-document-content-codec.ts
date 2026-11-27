@@ -1,5 +1,10 @@
 /** @fileoverview Writer browser graph transport for text nodes and the native table section hierarchy. */
 import {
+  decodeIndexMarks,
+  encodeIndexMarks,
+  type WriterIndexMarkRecord,
+} from "./writer-index-mark-codec";
+import {
   decodeLegacyAnnotations,
   type LegacyWriterAnnotationRecord,
 } from "./writer-annotation-codec";
@@ -64,6 +69,7 @@ export interface WriterTextNodeRecord {
   readonly annotations?: readonly LegacyWriterAnnotationRecord[];
   readonly formatCollId: WriterParagraphStyle;
   readonly hints: readonly WriterTextHintRecord[];
+  readonly indexMarks?: readonly WriterIndexMarkRecord[];
   readonly listGeometryWins?: boolean;
   /** True only for the model's synthesized empty numbering item; absence keeps legacy explicit items distinct. */
   readonly emptyListStyle?: true;
@@ -326,7 +332,9 @@ export function* encodeWriterTableSteps(
 /** Encodes a canonical text node and its soft page hints. @param document - Native document. @param node - Actual paragraph. @returns Text graph record. */
 export function encodeTextNode(document: SwDoc, node: SwTextNode): WriterTextNodeRecord {
   const direct = node.GetpSwAttrSet();
+  const indexMarks = encodeIndexMarks(node);
   return {
+    ...(indexMarks.length ? { indexMarks } : {}),
     autoAttributes: direct === undefined ? [] : encodeSfxItemSet(direct),
     formatCollId: node.GetTextFormatColl().id,
     ...(node.DoesListGeometryWin() ? { listGeometryWins: true } : {}),
@@ -400,6 +408,7 @@ export function decodeTextNode(
   } finally {
     position.Dispose();
   }
+  decodeIndexMarks(node, nodeRecord.indexMarks);
   if (nodeRecord.annotations) decodeLegacyAnnotations(node, nodeRecord.annotations);
   node.AddToList();
   for (const offset of nodeRecord.softPageBreaks ?? [])

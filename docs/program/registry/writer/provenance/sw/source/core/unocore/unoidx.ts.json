@@ -7,14 +7,17 @@
     "status": "mapped",
     "upstreamPath": "sw/source/core/unocore/unoidx.cxx",
     "localSymbols": [
-      "SwXDocumentIndex"
+      "SwXDocumentIndex",
+      "SwXDocumentIndexMark"
     ],
     "upstreamSymbols": [
       "SwXDocumentIndex::attach",
-      "SwDocIndexDescriptorProperties_Impl::SwDocIndexDescriptorProperties_Impl"
+      "SwDocIndexDescriptorProperties_Impl::SwDocIndexDescriptorProperties_Impl",
+      "SwXDocumentIndexMark::attach"
     ],
     "preservedResponsibilities": [
-      "Creates and attaches the native Writer contents-index descriptor at the stream import cursor."
+      "Creates and attaches the native Writer contents-index descriptor at the stream import cursor.",
+      "Connects the original index-mark descriptor to an actual Writer paragraph using the native point versus range rule."
     ],
     "omittedResponsibilities": [
       "The complete index UNO property set and interactive update service are outside this slice."
@@ -28,6 +31,10 @@
         {
           "path": "apps/office/src/sw/source/filter/xml/odt-table-of-content.test.ts",
           "marker": "SimpleTOC.odt"
+        },
+        {
+          "path": "apps/office/src/sw/source/filter/xml/odt-index-marks.test.ts",
+          "marker": "testToxmarkLinks"
         }
       ],
       "upstream": [
@@ -42,6 +49,10 @@
         {
           "path": "vendor/libreoffice-reference/sw/qa/extras/globalfilter/globalfilter.cxx",
           "marker": "testTableOfContentLinksHaveContentSet"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/unocore/unoidx.cxx",
+          "marker": "SwXDocumentIndexMark::attach"
         }
       ]
     }

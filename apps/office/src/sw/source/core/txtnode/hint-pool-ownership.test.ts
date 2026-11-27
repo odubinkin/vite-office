@@ -1,3 +1,4 @@
+import { isTextFormatHint } from "./txatbase";
 /** @fileoverview Checks destination hint ownership and separates native copying from retained state snapshots. */
 import { assert, describe, expect, it } from "vitest";
 import { SfxItemSet, SfxItemState } from "../../../../svl/source/items/itemset";
@@ -143,7 +144,7 @@ describe("destination-owned hint copying", /** Registers ownership and snapshot 
     expect(original.clone(target.GetAttrPool()).Count()).toBe(0);
     expect(states.Count()).toBe(2);
     const valid = sourceHints(source, 7).Get(1);
-    assert(valid instanceof SwTextAttrEnd);
+    assert(isTextFormatHint(valid));
     const bound = new SwpHints(target.GetAttrPool(), [valid]);
     expect(handle(bound).GetPool()).toBe(target.GetAttrPool());
     expect(bound.Get(0)).toMatchObject({

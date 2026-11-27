@@ -376,6 +376,7 @@ export class SwAttrPool extends SfxItemPool {
     register(WriterWhich.RES_TXTATR_INETFMT);
     register(WriterWhich.RES_TXTATR_CHARFMT);
     register(WriterWhich.RES_TXTATR_FLYCNT);
+    register(WriterWhich.RES_TXTATR_TOXMARK);
     register(
       WriterWhich.RES_PARATR_CONNECT_BORDER,
       /** Applies register to value. @param value - value value. @returns Callback result. */ (

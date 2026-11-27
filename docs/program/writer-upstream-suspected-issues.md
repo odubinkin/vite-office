@@ -6292,3 +6292,27 @@ for individual level templates.
 
 - [Original TOC source](../../vendor/libreoffice-reference/xmloff/source/text/XMLIndexTOCSourceContext.cxx#L62)
 - [Original SAX number converter](../../vendor/libreoffice-reference/sax/source/tools/converter.cxx#L716)
+
+### WRITER-762 — The TOC mark importer ignores the last available outline level
+
+Writer's UNO index-mark descriptor accepts all ten outline levels, and its
+exporter writes the one-based level for every TOC mark. The TOC mark reader
+accepts levels strictly below the chapter numbering count. Reopening a mark
+exported at level ten leaves it at the descriptor's default, level one.
+User-index marks include the last level in their import range. That reader
+also admits zero before subtracting one, which the UNO setter rejects.
+Writer preserves both filters' original bounds.
+
+- [Original mark attribute readers](../../vendor/libreoffice-reference/xmloff/source/text/txtparai.cxx#L1120)
+- [Original mark descriptor level setter](../../vendor/libreoffice-reference/sw/source/core/unocore/unoidx.cxx#L2123)
+- [Original mark level exporter](../../vendor/libreoffice-reference/xmloff/source/text/XMLIndexMarkExport.cxx#L139)
+
+### WRITER-763 — The index mark copy constructor drops its bookmark name
+
+The native UNO descriptor exposes a bookmark-name property on TOC marks.
+The native `SwTOXMark` copy constructor retains the alternative text, keys
+and levels but leaves the bookmark name empty. The port retains this
+behavior for native mark cloning.
+
+- [Original bookmark property setter](../../vendor/libreoffice-reference/sw/source/core/unocore/unoidx.cxx#L2133)
+- [Original mark copy constructor](../../vendor/libreoffice-reference/sw/source/core/tox/tox.cxx#L116)

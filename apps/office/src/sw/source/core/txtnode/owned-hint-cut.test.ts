@@ -1,3 +1,4 @@
+import { isTextFormatHint } from "./txatbase";
 /** @fileoverview Verifies native cut hint identity and consumable container ownership independently of node snapshots. */
 import { assert, describe, expect, it } from "vitest";
 import { SvxWeightItem } from "../../../../editeng/source/items/textitem";
@@ -209,7 +210,7 @@ describe("owned cut containers", /** Registers actual transfer and copy ownershi
     const doc = new SwDoc(),
       source = fixture(doc, 0, 3, 7),
       head = source.Get(0);
-    assert(head instanceof SwTextAttrEnd);
+    assert(isTextFormatHint(head));
     const tail = head.clone();
     tail.start = 7;
     tail.SetEnd(10);

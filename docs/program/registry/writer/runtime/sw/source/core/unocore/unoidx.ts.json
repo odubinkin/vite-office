@@ -20,18 +20,21 @@
         "apps/office/src/sw/source/core/unocore/unoidx.ts",
         "apps/office/src/sw/source/filter/xml/odt-table-of-content.test.ts",
         "vendor/libreoffice-reference/sw/source/core/unocore/unoidx.cxx",
-        "vendor/libreoffice-reference/sw/qa/extras/globalfilter/globalfilter.cxx"
+        "vendor/libreoffice-reference/sw/qa/extras/globalfilter/globalfilter.cxx",
+        "apps/office/src/sw/source/filter/xml/odt-index-marks.test.ts"
       ],
-      "justification": "Creates and attaches the native Writer contents-index descriptor at the stream import cursor. The complete index UNO property set and interactive update service are outside this slice.",
+      "justification": "Creates and attaches the native Writer contents-index descriptor at the stream import cursor. The complete index UNO property set and interactive update service are outside this slice. Connects the original index-mark descriptor to an actual Writer paragraph using the native point versus range rule.",
       "knownViolations": [],
       "localSymbols": [
-        "SwXDocumentIndex"
+        "SwXDocumentIndex",
+        "SwXDocumentIndexMark"
       ],
       "sourceResponsibility": "unverified",
       "upstreamFile": "sw/source/core/unocore/unoidx.cxx",
       "upstreamSymbols": [
         "SwXDocumentIndex::attach",
-        "SwDocIndexDescriptorProperties_Impl::SwDocIndexDescriptorProperties_Impl"
+        "SwDocIndexDescriptorProperties_Impl::SwDocIndexDescriptorProperties_Impl",
+        "SwXDocumentIndexMark::attach"
       ]
     }
   }

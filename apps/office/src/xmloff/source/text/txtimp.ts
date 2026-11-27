@@ -1,4 +1,5 @@
 /** @fileoverview Owns shared Writer body/cell text child dispatch and stream list state from native txtimp.cxx. */
+import type { XMLIndexMarkProperties } from "./XMLIndexMarkImportContext";
 import { FastAttributeList, SvXMLIgnoreContext, SvXMLImportContext } from "../core/xmlimp";
 import { XMLToken } from "../core/xmltoken";
 import { XMLTableContext, type XMLTableImportTarget } from "../table/XMLTableImport";
@@ -48,6 +49,13 @@ interface TextImportHint {
   characterStyles: readonly XMLCharacterStyleLayer[];
 }
 
+/** Source position hints wait until the native paragraph has been created. */
+interface XMLPendingIndexMark {
+  readonly properties: XMLIndexMarkProperties;
+  readonly start: XMLTextRange;
+  end?: XMLTextRange;
+}
+
 /** One native text import owner keeps processed list roots across body and every cell. */
 export class XMLTextImportHelper {
   private readonly lists = new XMLTextListsHelper();
@@ -94,6 +102,8 @@ export class XMLTextImportHelper {
   private start: XMLTextRange | undefined;
   private applyParagraph: ((cursor: XMLTextCursor) => void) | undefined;
   private hints: TextImportHint[] = [];
+  private indexMarks: XMLPendingIndexMark[] = [];
+  private indexMarkIds = new Map<string, XMLPendingIndexMark>();
   private annotationDepth = 0;
   private readonly annotations = new Map<string, XMLAnnotationTextContent>();
   private readonly bookmarkStarts = new Map<
@@ -106,6 +116,8 @@ export class XMLTextImportHelper {
     start: XMLTextRange | undefined;
     applyParagraph: ((cursor: XMLTextCursor) => void) | undefined;
     hints: TextImportHint[];
+    indexMarks: XMLPendingIndexMark[];
+    indexMarkIds: Map<string, XMLPendingIndexMark>;
   }[] = [];
 
   /** Saves the original cursor, enclosing paragraph ranges and list context for a nested text frame. @param cursor - Frame text cursor. @returns Nothing. */
@@ -126,11 +138,15 @@ export class XMLTextImportHelper {
       start: this.start,
       applyParagraph: this.applyParagraph,
       hints: this.hints,
+      indexMarks: this.indexMarks,
+      indexMarkIds: this.indexMarkIds,
     });
     this.cursor = cursor;
     this.start = undefined;
     this.applyParagraph = undefined;
     this.hints = [];
+    this.indexMarks = [];
+    this.indexMarkIds = new Map();
     if (isolateList) this.lists.PushListContext();
   }
 
@@ -153,6 +169,8 @@ export class XMLTextImportHelper {
     this.start = saved.start;
     this.applyParagraph = saved.applyParagraph;
     this.hints = saved.hints;
+    this.indexMarks = saved.indexMarks;
+    this.indexMarkIds = saved.indexMarkIds;
     if (saved.isolateList) this.lists.PopListContext();
   }
   /** Suspends the containing text while the annotation TextRange owns the active cursor. @param cursor - Annotation text cursor. @returns Nothing. */
@@ -203,6 +221,7 @@ export class XMLTextImportHelper {
       hint.end.dispose();
     }
     this.hints.length = 0;
+    this.clearIndexMarks();
   }
   /** Starts a paragraph and defers its native style application until after the break. @param style - Paragraph style. @param alignment - Direct alignment. @param left - Direct margin. @param paragraph - Paragraph properties. @param properties - Direct character map. @param list - Native list state. @param listGeometryWins - Legacy parser precedence. @param forceListRule - Explicit automatic list declaration. @param markerProperties - Direct text properties of the paragraph mark. @param applyStyle - Whether the paragraph supplies its own style. @param outlineLevel - Native text heading level or zero for a plain paragraph. @returns Nothing. */
   public BeginParagraph(
@@ -404,6 +423,15 @@ export class XMLTextImportHelper {
           range.dispose();
         }
       }
+      for (const mark of this.indexMarks) {
+        const range = text.createTextCursorByRange(mark.start);
+        try {
+          if (mark.end) range.gotoRange(mark.end, true);
+          this.target.insertIndexMark?.(mark.properties, range);
+        } finally {
+          range.dispose();
+        }
+      }
     } finally {
       selected.dispose();
       start.dispose();
@@ -414,9 +442,40 @@ export class XMLTextImportHelper {
         hint.end.dispose();
       }
       this.hints.length = 0;
+      this.clearIndexMarks();
       this.applyParagraph = undefined;
     }
   }
+  /** Reads the number of native chapter numbering levels. @returns Writer outline level count. */
+  public GetIndexOutlineLevelCount(): number {
+    return this.target.getIndexOutlineLevelCount?.() ?? 0;
+  }
+
+  /** Retains the native start of a point or ranged index mark. @param properties - Original descriptor. @param id - Optional source pair ID. @returns Nothing. */
+  public AddIndexMark(properties: XMLIndexMarkProperties, id: string): void {
+    const hint = { properties, start: this.GetCursor().getStart() };
+    this.indexMarks.push(hint);
+    if (id && !this.indexMarkIds.has(id)) this.indexMarkIds.set(id, hint);
+  }
+
+  /** Sets the end of the first matching original paragraph mark. @param id - ODF range ID. @returns Nothing. */
+  public EndIndexMark(id: string): void {
+    const mark = this.indexMarkIds.get(id);
+    if (!mark) return;
+    mark.end?.dispose();
+    mark.end = this.GetCursor().getStart();
+  }
+
+  /** Releases the paragraph-scoped native index positions. @returns Nothing. */
+  private clearIndexMarks(): void {
+    for (const mark of this.indexMarks) {
+      mark.end?.dispose();
+      mark.start.dispose();
+    }
+    this.indexMarks.length = 0;
+    this.indexMarkIds.clear();
+  }
+
   /** Creates a detached Annotation field before importing its content. @param name - ODF annotation name. @returns Native descriptor. */
   public CreateAnnotation(name: string): XMLAnnotationTextContent {
     const service = xmlTextString("com.sun.star.text.TextField.Annotation");

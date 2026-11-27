@@ -1,0 +1,59 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/xmloff/source/text/XMLIndexMarkExport.ts",
+    "status": "mapped",
+    "upstreamPath": "xmloff/source/text/XMLIndexMarkExport.cxx",
+    "localSymbols": [
+      "exportIndexMark"
+    ],
+    "upstreamSymbols": [
+      "XMLIndexMarkExport::ExportIndexMark",
+      "XMLIndexMarkExport::ExportTOCMarkAttributes",
+      "XMLIndexMarkExport::ExportUserIndexMarkAttributes",
+      "XMLIndexMarkExport::ExportAlphabeticalIndexMarkAttributes"
+    ],
+    "preservedResponsibilities": [
+      "Exports original collapsed and paired index portions and the source family-specific attributes."
+    ],
+    "omittedResponsibilities": [
+      "Process pointer aliases become deterministic per-document IDs with the same source pairing contract."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/xmloff/source/text/XMLIndexMarkExport.ts",
+          "marker": "exportIndexMark"
+        },
+        {
+          "path": "apps/office/src/sw/source/filter/xml/odt-index-marks.test.ts",
+          "marker": "testWhitespace"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/xmloff/source/text/XMLIndexMarkExport.cxx",
+          "marker": "XMLIndexMarkExport::ExportIndexMark"
+        },
+        {
+          "path": "vendor/libreoffice-reference/xmloff/source/text/XMLIndexMarkExport.cxx",
+          "marker": "XMLIndexMarkExport::ExportTOCMarkAttributes"
+        },
+        {
+          "path": "vendor/libreoffice-reference/xmloff/source/text/XMLIndexMarkExport.cxx",
+          "marker": "XMLIndexMarkExport::ExportUserIndexMarkAttributes"
+        },
+        {
+          "path": "vendor/libreoffice-reference/xmloff/source/text/XMLIndexMarkExport.cxx",
+          "marker": "XMLIndexMarkExport::ExportAlphabeticalIndexMarkAttributes"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/qa/extras/odfexport/odfexport3.cxx",
+          "marker": "testWhitespace"
+        }
+      ]
+    }
+  }
+}

@@ -369,9 +369,15 @@ export class SwTextAttr<TFormat extends SfxPoolItem = SwFormatAutoFormat> {
   }
 }
 
+/** Determines the native end type of each represented text attribute. */
+type TextAttributeEnd<TFormat extends SfxPoolItem> = TFormat extends
+  SwFormatAutoFormat | SwFormatINetFormat | SwFormatCharFormat
+  ? number
+  : number | undefined;
+
 /** Native ranged text attribute with end-change notifications. */
 export class SwTextAttrEnd<
-  TFormat extends SwFormatAutoFormat | SwFormatINetFormat | SwFormatCharFormat = SwFormatAutoFormat,
+  TFormat extends SfxPoolItem = SwFormatAutoFormat,
 > extends SwTextAttr<TFormat> {
   protected m_nEnd: number;
   /** Initializes a ranged item. @param format - Owned item. @param start - Start offset. @param end - End offset. @returns Nothing. */
@@ -381,14 +387,15 @@ export class SwTextAttrEnd<
     this.m_nEnd = end;
   }
   /** Returns the registered ranged-family identifier. @returns WhichId. */
-  public override Which():
-    typeof RES_TXTATR_AUTOFMT | typeof RES_TXTATR_INETFMT | typeof RES_TXTATR_CHARFMT {
-    return super.Which() as
-      typeof RES_TXTATR_AUTOFMT | typeof RES_TXTATR_INETFMT | typeof RES_TXTATR_CHARFMT;
+  public override Which(): TFormat extends
+    SwFormatAutoFormat | SwFormatINetFormat | SwFormatCharFormat
+    ? typeof RES_TXTATR_AUTOFMT | typeof RES_TXTATR_INETFMT | typeof RES_TXTATR_CHARFMT
+    : number {
+    return super.Which() as ReturnType<SwTextAttrEnd<TFormat>["Which"]>;
   }
   /** Returns the range end. @returns UTF-16 offset. */
-  public override GetEnd(): number {
-    return this.m_nEnd;
+  public override GetEnd(): TextAttributeEnd<TFormat> {
+    return this.m_nEnd as TextAttributeEnd<TFormat>;
   }
   /** Sets the end without imposing ordering during structural shifts. @param end - New offset. @returns Nothing. */
   public override SetEnd(end: number): void {
@@ -400,7 +407,7 @@ export class SwTextAttrEnd<
     }
   }
   /** Reads the existing portable end projection. @returns UTF-16 offset. */
-  public get end(): number {
+  public get end(): TextAttributeEnd<TFormat> {
     return this.GetEnd();
   }
   /** Writes through native end notification. @param end - New offset. @returns Nothing. */
@@ -409,18 +416,29 @@ export class SwTextAttrEnd<
   }
   /** Constructs the same concrete ranged kind for a portable snapshot. @param format - Independent item. @param start - Start. @param end - End. @returns Detached snapshot. */
   protected createRangeClone(format: TFormat, start: number, end: number): SwTextAttrEnd<TFormat> {
-    return new SwTextAttrEnd(format, start, end);
+    return new SwTextAttrEnd<TFormat>(format, start, end);
   }
   /** Captures independent supported state, distinct from MakeTextAttr's fresh native flags. @param offset - Range translation. @returns Detached snapshot. */
   public clone(offset = 0): SwTextAttrEnd<TFormat> {
     const cloned = this.createRangeClone(
       this.format.Clone() as TFormat,
       this.start + offset,
-      this.end + offset,
+      this.m_nEnd + offset,
     );
     this.CopyFlagsTo(cloned);
     return cloned;
   }
+}
+
+/** Tests the hint families that represent character formatting rather than structured text content. @param hint - Native text attribute. @returns Whether this is a ranged format hint. */
+export function isTextFormatHint(
+  hint: SwTextAttr<SfxPoolItem>,
+): hint is SwTextAttrEnd<SwFormatAutoFormat | SwFormatINetFormat | SwFormatCharFormat> {
+  if (!(hint instanceof SwTextAttrEnd)) return false;
+  const which = hint.Which();
+  return (
+    which === RES_TXTATR_AUTOFMT || which === RES_TXTATR_INETFMT || which === RES_TXTATR_CHARFMT
+  );
 }
 
 /** Native range whose constructor prohibits expansion and marks nesting. */

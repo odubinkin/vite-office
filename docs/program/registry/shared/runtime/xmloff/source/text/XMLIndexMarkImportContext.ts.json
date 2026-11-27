@@ -1,0 +1,40 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/xmloff/source/text/XMLIndexMarkImportContext.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "shared",
+    "subsystem": "odf-filter",
+    "capabilityIds": [
+      "CAP-0128",
+      "CAP-0129"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/xmloff/source/text/XMLIndexMarkImportContext.ts",
+        "apps/office/src/sw/source/filter/xml/odt-index-marks.test.ts",
+        "vendor/libreoffice-reference/xmloff/source/text/txtparai.cxx",
+        "vendor/libreoffice-reference/sw/qa/extras/odfexport/odfexport3.cxx"
+      ],
+      "justification": "Admits the nine original ODF mark elements, resolves original paragraph-local ids and parses native index mark properties. The adapter connects these properties to Writer through the existing typed paragraph import target.",
+      "knownViolations": [],
+      "localSymbols": [
+        "XMLIndexMarkImportContext"
+      ],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": "xmloff/source/text/txtparai.cxx",
+      "upstreamSymbols": [
+        "XMLIndexMarkImportContext_Impl::startFastElement",
+        "XMLTOCMarkImportContext_Impl::ProcessAttribute",
+        "XMLUserIndexMarkImportContext_Impl::ProcessAttribute",
+        "XMLAlphaIndexMarkImportContext_Impl::ProcessAttribute"
+      ]
+    }
+  }
+}

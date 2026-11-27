@@ -1,0 +1,54 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/sw/source/core/txtnode/atrtox.ts",
+    "status": "mapped",
+    "upstreamPath": "sw/source/core/txtnode/atrtox.cxx",
+    "localSymbols": [
+      "SwTextTOXMark"
+    ],
+    "upstreamSymbols": [
+      "SwTextTOXMark::SwTextTOXMark",
+      "SwTextTOXMark::GetEnd",
+      "SwTextTOXMark::CopyTOXMark"
+    ],
+    "preservedResponsibilities": [
+      "Owns the original optional-ended TOX hint, dummy character flags and placement on a native text node."
+    ],
+    "omittedResponsibilities": [
+      "Index display collection from a physical Writer layout is outside this model slice."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sw/source/core/txtnode/atrtox.ts",
+          "marker": "SwTextTOXMark"
+        },
+        {
+          "path": "apps/office/src/sw/source/filter/xml/odt-index-marks.test.ts",
+          "marker": "testWhitespace"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/txtnode/atrtox.cxx",
+          "marker": "SwTextTOXMark::SwTextTOXMark"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/txtnode/atrtox.cxx",
+          "marker": "SwTextTOXMark::GetEnd"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/txtnode/atrtox.cxx",
+          "marker": "SwTextTOXMark::CopyTOXMark"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/qa/extras/odfexport/odfexport3.cxx",
+          "marker": "testWhitespace"
+        }
+      ]
+    }
+  }
+}

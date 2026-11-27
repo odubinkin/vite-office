@@ -1,6 +1,10 @@
+import {
+  XMLIndexMarkImportContext,
+  type XMLIndexMarkProperties,
+} from "./XMLIndexMarkImportContext";
 /** @fileoverview Implements LibreOffice-shaped streaming paragraph/list import contexts. */
 
-import type { XMLNumberingRules } from "../../inc/txtimp";
+import type { XMLNumberingRules, XMLTextCursor } from "../../inc/txtimp";
 import type { XMLTextFrameImportTarget } from "./XMLTextFrameContext";
 import { XMLTextImportHelper, type XMLCharacterStyleLayer } from "./txtimp";
 
@@ -108,6 +112,8 @@ export interface XMLTextImportTarget extends Partial<XMLTextFrameImportTarget> {
   beginDocumentIndex?(
     properties: import("./XMLIndexTOCContext").XMLIndexImportProperties,
   ): import("./XMLIndexTOCContext").XMLIndexImport;
+  insertIndexMark?(properties: XMLIndexMarkProperties, range: XMLTextCursor): void;
+  getIndexOutlineLevelCount?(): number;
   GetTextImport(): XMLTextImportHelper;
   getListRule(styleName: string): XMLTextListRule | undefined;
   createNumberingRule?(): XMLTextListRule;
@@ -396,6 +402,8 @@ function createInlineContext(
     element === XMLToken.TEXT_BOOKMARK_END
   )
     return annotation ? null : new XMLTextMarkImportContext(paragraph);
+  if (XMLIndexMarkImportContext.IsIndexMark(element))
+    return annotation || !target.insertIndexMark ? null : new XMLIndexMarkImportContext(paragraph);
   if (element === XMLToken.TEXT_SOFT_PAGE_BREAK) {
     attributes.assertOnly([], "soft page break");
     // Native text import ignores pagination hints; these are produced by layout on export.

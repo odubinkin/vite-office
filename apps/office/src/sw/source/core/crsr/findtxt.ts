@@ -11,7 +11,12 @@ import {
   type SwSearchNodeFilter,
 } from "./swcrsr";
 import { FindRanges, SwDocPositions } from "../../../inc/cshtyp";
-import { CH_TXTATR_INWORD, RES_TXTATR_ANNOTATION, RES_TXTATR_FLYCNT } from "../../../inc/hintids";
+import {
+  CH_TXTATR_INWORD,
+  RES_TXTATR_ANNOTATION,
+  RES_TXTATR_FLYCNT,
+  RES_TXTATR_TOXMARK,
+} from "../../../inc/hintids";
 import { REG_NOT_BEGINOFLINE } from "../../../../offapi/com/sun/star/util/SearchFlags";
 import { SwTextNode } from "../txtnode/ndtxt";
 import type { SearchOptions2 } from "../../../../i18nutil/inc/searchopt";
@@ -40,14 +45,15 @@ function lcl_CleanStr(
   removeCommentAnchors: boolean,
 ): { text: OUString; end: number; removed: readonly number[] } {
   const hints = node.GetpSwpHints(),
-    flyAnchors = new Set<number>(),
+    emptyAnchors = new Set<number>(),
     commentAnchors = new Set<number>();
   for (let i = 0; hints !== undefined && i < hints.Count(); i++) {
     const hint = hints.Get(i);
     const offset = hint.GetStart();
     if (offset >= end) break;
     if (offset < start || !hint.HasDummyChar()) continue;
-    if (hint.Which() === RES_TXTATR_FLYCNT) flyAnchors.add(offset);
+    if (hint.Which() === RES_TXTATR_FLYCNT || hint.Which() === RES_TXTATR_TOXMARK)
+      emptyAnchors.add(offset);
     else if (hint.Which() === RES_TXTATR_ANNOTATION) {
       if (removeCommentAnchors) commentAnchors.add(offset);
     } else throw new Error("Writer field/dummy-character search is not implemented.");
@@ -58,7 +64,7 @@ function lcl_CleanStr(
     replaced: number[] = [];
   for (let i = 0; i < original.length; i++) {
     const unit = original.charCodeAt(i);
-    if (flyAnchors.has(i)) {
+    if (emptyAnchors.has(i)) {
       if (units.length === start) {
         removed.push(units.length);
       } else {

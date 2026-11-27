@@ -1,3 +1,4 @@
+import { isTextFormatHint } from "./txatbase";
 /** @fileoverview Original ranged RstTextAttr geometry and selective automatic-style reset from txtedt.cxx for registered hint families. */
 import type { SwTextNode } from "./ndtxt";
 import { releaseStyleHandle } from "../../../../svl/source/items/stylepool";
@@ -94,7 +95,7 @@ export function ResetTextNodeAttributes(
     const hint = hints.GetWithoutResorting(index),
       a = hint.GetStart();
     if (!(a < end || length === 0 || (end === a && a === node.Len()))) break;
-    if (!(hint instanceof SwTextAttrEnd) || hint.HasContent()) continue;
+    if (!isTextFormatHint(hint) || hint.HasContent()) continue;
     const b = hint.GetEnd();
     const [skip, style] = GetTextResetStyle(node, hint, requested, which);
     try {
@@ -150,7 +151,7 @@ export function ResetTextNodeAttributes(
     for (let index = 0; index < hints.Count(); ++index) {
       const hint = hints.Get(index);
       if (
-        hint instanceof SwTextAttrEnd &&
+        isTextFormatHint(hint) &&
         hint.Which() === RES_TXTATR_AUTOFMT &&
         hint.GetStart() === start &&
         hint.GetEnd() === end

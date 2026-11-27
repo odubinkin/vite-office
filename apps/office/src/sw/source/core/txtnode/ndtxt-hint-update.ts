@@ -1,4 +1,5 @@
 /** @fileoverview Ports owned ranged and fly point coordinate updates from pinned SwTextNode::Update and default InsertText in ndtxt.cxx. */
+import { SwTextTOXMark } from "./atrtox";
 import type { TextNodeAttribute } from "./ndhints";
 import type { SwFormatCharFormat } from "./fmtatr2";
 import { SwInsertFlags } from "../../../inc/IDocumentContentOperations";
@@ -23,26 +24,26 @@ export function UpdateTextHints(
   >();
   let noExpand = false;
   for (const hint of hints) {
-    if (!(hint instanceof SwTextAttrEnd)) {
+    const end = hint.GetEnd();
+    if (end === undefined) {
       if (negative && hint.start > offset) hint.SetStart(Math.max(offset, hint.start - length));
       else if (!negative && hint.start >= offset) hint.SetStart(hint.start + length);
       continue;
     }
     if (negative) {
       if (hint.start > offset) hint.SetStart(Math.max(offset, hint.start - length));
-      if (hint.end > offset) hint.SetEnd(Math.max(offset, hint.end - length));
+      if (end > offset) hint.SetEnd(Math.max(offset, end - length));
     } else if (hint.start >= offset) {
       hint.SetStart(hint.start + length);
-      hint.SetEnd(hint.end + length);
-    } else if (hint.end > offset || (hint.end === offset && ignoreDontExpand))
-      hint.SetEnd(hint.end + length);
-    else if (hint.end === offset) {
+      hint.SetEnd(end + length);
+    } else if (end > offset || (end === offset && ignoreDontExpand)) hint.SetEnd(end + length);
+    else if (end === offset) {
       if (hint.dontExpand) {
         hint.dontExpand = false;
         if (hint.Which() === RES_TXTATR_INETFMT) noExpand = true;
-      } else if (noExpand)
+      } else if (noExpand && hint instanceof SwTextAttrEnd && !(hint instanceof SwTextTOXMark))
         collector.set(hint.Which(), MakeTextAttr(doc, hint.format, offset, offset + length));
-      else hint.SetEnd(hint.end + length);
+      else hint.SetEnd(end + length);
     }
   }
   return [...hints, ...collector.values()];
@@ -56,15 +57,16 @@ export function AdjustInsertTextHints(
   mode = SwInsertFlags.DEFAULT,
 ): readonly TextNodeAttribute[] {
   for (const hint of hints) {
-    if (!(hint instanceof SwTextAttrEnd)) continue;
-    if (hint.end === offset + length) {
+    const end = hint.GetEnd();
+    if (end === undefined) continue;
+    if (end === offset + length) {
       if (
         mode & SwInsertFlags.NOHINTEXPAND ||
         (!(mode & SwInsertFlags.FORCEHINTEXPAND) && hint.dontExpand)
       ) {
-        if (hint.start === hint.end) hint.SetStart(hint.start - length);
-        hint.SetEnd(hint.end - length);
-      } else if (mode & SwInsertFlags.EMPTYEXPAND && hint.start === hint.end) {
+        if (hint.start === end) hint.SetStart(hint.start - length);
+        hint.SetEnd(end - length);
+      } else if (mode & SwInsertFlags.EMPTYEXPAND && hint.start === end) {
         hint.SetStart(hint.start - length);
         continue;
       } else continue;
@@ -89,8 +91,12 @@ export function EraseTextHints(
 ): readonly TextNodeAttribute[] {
   const end = offset + length;
   const retained = hints.filter(
-    /** Preserves attributes outside the native interior-GC condition. @param hint - Actual attribute. @returns Whether retained. */
-    (hint) => !(hint.start >= offset && hint.start <= end && hint.GetAnyEnd() < end),
+    /** Applies the native exact-end erasure for TOX ranges in ordinary erase mode. @param hint - Actual attribute. @returns Whether retained. */
+    (hint) => {
+      if (hint.start < offset || hint.start > end) return true;
+      const endOfHint = hint.GetEnd();
+      return hint.GetAnyEnd() >= end && !(hint instanceof SwTextTOXMark && endOfHint === end);
+    },
   );
   return UpdateTextHints(doc, retained, offset, length, true);
 }

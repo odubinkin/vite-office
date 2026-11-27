@@ -3,7 +3,13 @@ import type { SwTextNode } from "./ndtxt";
 import type { SwpHints, TextNodeAttribute } from "./ndhints";
 import { SwTextFlyCnt } from "../../../inc/txtflcnt";
 import { SwTextField } from "../../../inc/txtfld";
-import { CH_TXTATR_BREAKWORD, CH_TXTATR_INWORD, RES_TXTATR_ANNOTATION } from "../../../inc/hintids";
+import { SwTextTOXMark } from "./atrtox";
+import {
+  CH_TXTATR_BREAKWORD,
+  CH_TXTATR_INWORD,
+  RES_TXTATR_ANNOTATION,
+  RES_TXTATR_TOXMARK,
+} from "../../../inc/hintids";
 import { SwInsertFlags } from "../../../inc/IDocumentContentOperations";
 import { SwFlyFrameFormat } from "../layout/atrfrm";
 import { SwTextCharFormat, SwTextINetFormat } from "./txtatr2";
@@ -24,6 +30,7 @@ export function DestroyTextNodeAttribute(hint: TextNodeAttribute): void {
     if (format instanceof SwFlyFrameFormat)
       format.GetDoc().getIDocumentLayoutAccess().DelLayoutFormat(format);
   }
+  if (hint instanceof SwTextTOXMark) hint.GetAttr().SetTextTOXMark(undefined);
   hint.GetAttr().Dispose();
 }
 /** Original TryInsertHint branches; RSID/hidden fields, dummy/content hints and unrepresented nesting families are not fabricated. @param hints - Actual maps. @param hint - New owned-on-success attribute. @param node - Native node. @param mode - Original flags. @returns Native success, independently of whether merging retains the incoming identity. */
@@ -96,6 +103,22 @@ export function InsertTextNodeHint(
 ): boolean {
   if (hint.GetStart() < 0 || hint.GetAnyEnd() > node.Len() || hint.GetStart() > node.Len())
     throw new Error("assert: Writer hint endpoint exceeds text length");
+  if (hint instanceof SwTextTOXMark) {
+    if (hint.HasDummyChar()) return InsertPointHint(node, hint, mode);
+    const hints = node.GetOrCreateSwpHints();
+    if (MAX_HINTS <= BigInt(hints.Count())) {
+      DestroyTextNodeAttribute(hint);
+      return false;
+    }
+    hints.Insert(hint);
+    node.TriggerNodeUpdate(
+      new UpdateAttrHint(
+        undefined,
+        new SwUpdateAttr(hint.GetStart(), hint.GetAnyEnd(), hint.Which()),
+      ),
+    );
+    return true;
+  }
   if (!(hint instanceof SwTextAttrEnd)) return InsertPointHint(node, hint, mode);
   if (hint.HasDummyChar() || hint.HasContent())
     throw new Error("Writer structured InsertHint is not implemented.");
@@ -105,12 +128,16 @@ export function InsertTextNodeHint(
 /** Applies the native point-hint insertion order, inserting its dummy before binding the owned point. @param node - Owning text node. @param hint - Detached point. @param mode - Native insertion flags. @returns Whether inserted. */
 function InsertPointHint(
   node: SwTextNode,
-  hint: SwTextFlyCnt | SwTextField,
+  hint: SwTextFlyCnt | SwTextField | SwTextTOXMark,
   mode: SetAttrMode,
 ): boolean {
   const format = hint instanceof SwTextFlyCnt ? hint.GetAttr().GetFrameFormat() : undefined;
   const owner =
-    hint instanceof SwTextField ? hint.GetAttr().GetField().GetTyp().GetDoc() : format?.GetDoc();
+    hint instanceof SwTextField
+      ? hint.GetAttr().GetField().GetTyp().GetDoc()
+      : hint instanceof SwTextTOXMark
+        ? node.GetDoc()
+        : format?.GetDoc();
   if (
     hint.m_pHints ||
     owner !== node.GetDoc() ||
@@ -119,9 +146,9 @@ function InsertPointHint(
     throw new Error(
       hint instanceof SwTextFlyCnt
         ? "Writer inline hint requires a detached point and an owned fly format."
-        : "Writer annotation requires a detached point in its owning document.",
+        : "Writer text hint requires a detached point in its owning document.",
     );
-  const marker = hint instanceof SwTextField ? CH_TXTATR_INWORD : CH_TXTATR_BREAKWORD;
+  const marker = hint instanceof SwTextFlyCnt ? CH_TXTATR_BREAKWORD : CH_TXTATR_INWORD;
   const start = hint.GetStart();
   const existing = node.GetpSwpHints();
   const hasMarker = (mode & SetAttrMode.NOTXTATRCHR) !== 0;
@@ -129,7 +156,8 @@ function InsertPointHint(
     hasMarker &&
     (node.GetText().charAt(start) !== marker ||
       existing?.GetTextAttrForCharAt(start) ||
-      existing?.GetTextAttrForCharAt(start, RES_TXTATR_ANNOTATION))
+      existing?.GetTextAttrForCharAt(start, RES_TXTATR_ANNOTATION) ||
+      existing?.GetTextAttrForCharAt(start, RES_TXTATR_TOXMARK))
   )
     throw new Error("Writer inline hint requires an unclaimed dummy character.");
   if (MAX_HINTS <= BigInt(existing?.Count() ?? 0) || (!hasMarker && !node.GetSpaceLeft())) {

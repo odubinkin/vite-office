@@ -1,3 +1,5 @@
+import { SwTextTOXMark } from "./atrtox";
+import { RES_TXTATR_TOXMARK } from "../../../inc/hintids";
 /** @fileoverview Owns portable hint insertion, copying and projection at the native ndtxt.cxx text-node responsibility boundary. */
 import { ApplyCutTextNodeAttributes } from "./ndtxt-join";
 import { DestroyTextNodeAttribute } from "./thints-insert";
@@ -77,6 +79,7 @@ export function EraseTextNodeReplacementDummies(
       offset >= start &&
       hint.HasDummyChar() &&
       !(hint instanceof SwTextField) &&
+      !(hint instanceof SwTextTOXMark) &&
       !(hint instanceof SwTextFlyCnt && hint.GetGraphicSection())
     )
       throw new Error("Writer dummy-character replacement is not implemented.");
@@ -89,7 +92,8 @@ export function EraseTextNodeReplacementDummies(
       marker === CH_TXTATR_BREAKWORD
         ? hints?.GetTextAttrForCharAt(offset)
         : marker === CH_TXTATR_INWORD
-          ? hints?.GetTextAttrForCharAt(offset, RES_TXTATR_ANNOTATION)
+          ? (hints?.GetTextAttrForCharAt(offset, RES_TXTATR_ANNOTATION) ??
+            hints?.GetTextAttrForCharAt(offset, RES_TXTATR_TOXMARK))
           : undefined;
     if (!hint) continue;
     node.EraseText(offset, 1);
@@ -191,12 +195,17 @@ export function AppendTextNodeHints(
       const hint = fragment.hints.Get(0);
       fragment.hints.DeleteAtPos(0);
       hint.SetStart(hint.GetStart() + offset);
-      if (hint instanceof SwTextAttrEnd) hint.SetEnd(hint.GetEnd() + offset);
+      const end = hint.GetEnd();
+      if (end !== undefined) hint.SetEnd(end + offset);
       node.InsertHint(
         hint,
         SetAttrMode.NOTXTATRCHR |
           SetAttrMode.DONTREPLACE |
-          (hint instanceof SwTextAttrEnd && !originalHints.has(hint) ? SetAttrMode.IS_COPY : 0),
+          (hint instanceof SwTextAttrEnd &&
+          !(hint instanceof SwTextTOXMark) &&
+          !originalHints.has(hint)
+            ? SetAttrMode.IS_COPY
+            : 0),
       );
     }
   } finally {

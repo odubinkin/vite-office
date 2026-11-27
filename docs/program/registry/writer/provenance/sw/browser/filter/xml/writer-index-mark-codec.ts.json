@@ -1,0 +1,30 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "local-infrastructure",
+    "localPath": "apps/office/src/sw/browser/filter/xml/writer-index-mark-codec.ts",
+    "status": "local-only",
+    "rationale": "Transports native Writer index mark values by their paragraph, optional end coordinate and canonical index type through the Worker.",
+    "responsibilities": [
+      "Transports native Writer index mark values by their paragraph, optional end coordinate and canonical index type through the Worker."
+    ],
+    "stackDivergence": {
+      "kind": "local-infrastructure",
+      "rationale": "Structured Worker transport of position-bound native index marks."
+    },
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sw/browser/filter/xml/writer-index-mark-codec.ts",
+          "marker": "encodeIndexMarks"
+        },
+        {
+          "path": "apps/office/src/sw/source/filter/xml/odt-index-marks.test.ts",
+          "marker": "testWhitespace"
+        }
+      ],
+      "upstream": []
+    }
+  }
+}

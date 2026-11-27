@@ -40,6 +40,12 @@ import { getParagraphOdfStyleName } from "./xmlexp-style-names";
 import { AnnotationMark } from "../../core/crsr/annotationmark";
 import { SwBookmark } from "../../core/doc/docbm";
 import type { SwSectionBlock } from "../../core/docnode/nodes";
+import { getUserIndexProgrammaticName } from "../../core/unocore/unoidx";
+import { TOXTypes } from "../../core/tox/tox";
+import type { XMLIndexMarkProperties } from "../../../../xmloff/source/text/XMLIndexMarkImportContext";
+import type { XMLIndexMarkExportMarker } from "../../../../xmloff/source/text/XMLIndexMarkExport";
+import { compareHintsByEnd } from "../../core/txtnode/ndhints-range";
+import type { SwTextTOXMark } from "../../core/txtnode/atrtox";
 import type { SwTextNode } from "../../core/txtnode/ndtxt";
 import {
   compareParagraphMarkers,
@@ -62,6 +68,7 @@ export function projectParagraphMarkers(
   const markers: XMLTextParagraphMarker[] = [
     ...frames,
     ...projectAnnotationMarkers(node),
+    ...projectIndexMarks(node),
     ...marks.GetAllMarks().flatMap(
       /** Projects bookmark endpoints on this paragraph. @param mark - Native bookmark. @returns Local ODF markers. */
       (mark): XMLTextParagraphMarker[] => {
@@ -108,6 +115,51 @@ export function projectParagraphMarkers(
     /** Orders portions in the source export phases. @param left - First portion. @param right - Second portion. @returns Portion order. */
     (left, right) => compareParagraphMarkers(left, right, floatingOffsets),
   );
+  return markers;
+}
+
+/** Projects native index mark holds before character dummy consumption. @param node - Original paragraph. @returns Point and paired TOX portions. */
+function projectIndexMarks(node: SwTextNode): XMLIndexMarkExportMarker[] {
+  const hints = node.GetpSwpHints()?.GetIndexMarks();
+  if (!hints?.length) return [];
+  const document = node.GetDoc();
+  const markers: XMLIndexMarkExportMarker[] = [];
+  const ends = new Map<SwTextTOXMark, XMLIndexMarkExportMarker>();
+  for (const [index, hint] of hints.entries()) {
+    const item = hint.GetAttr();
+    const type = item.type;
+    if (!type) throw new Error("Writer index mark is missing its type.");
+    const kind =
+      type.type === TOXTypes.Index
+        ? "alphabetical-index"
+        : type.type === TOXTypes.User
+          ? "user-index"
+          : "toc";
+    const mark: XMLIndexMarkProperties = {
+      kind,
+      alternativeText: item.alternativeText,
+      indexName: kind === "user-index" ? getUserIndexProgrammaticName(document, type.name) : "",
+      level: item.level,
+      key1: item.primaryKey,
+      key2: item.secondaryKey,
+      key1Reading: item.primaryKeyReading,
+      key2Reading: item.secondaryKeyReading,
+      textReading: item.textReading,
+      mainEntry: item.mainEntry,
+    };
+    const offset = hint.GetStart();
+    const end = hint.GetEnd();
+    if (end === undefined) markers.push({ kind: "index-mark", offset, mark });
+    else {
+      const id = `IMark${node.GetIndex()}_${index}`;
+      markers.push({ kind: "index-mark-start", offset, id, mark });
+      ends.set(hint, { kind: "index-mark-end", offset: end, id, family: kind });
+    }
+  }
+  for (const hint of [...ends.keys()].sort(compareHintsByEnd)) {
+    const end = ends.get(hint);
+    if (end) markers.push(end);
+  }
   return markers;
 }
 

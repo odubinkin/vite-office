@@ -9,14 +9,17 @@
     "localSymbols": [
       "SwTOXBase",
       "SwForm",
-      "SwFormToken"
+      "SwFormToken",
+      "SwTOXMark"
     ],
     "upstreamSymbols": [
       "SwTOXBase::SwTOXBase",
-      "SwForm::SwForm"
+      "SwForm::SwForm",
+      "SwTOXMark::SwTOXMark"
     ],
     "preservedResponsibilities": [
-      "Owns the contents-index source and independent native form, including original default levels, paragraph styles and token order."
+      "Owns the contents-index source and independent native form, including original default levels, paragraph styles and token order.",
+      "Owns the native non-shareable TOX mark item with independent strings, its optional-end hint backpointer and original copy defaults."
     ],
     "omittedResponsibilities": [
       "Index generation and other index types remain outside this model slice."
@@ -30,6 +33,10 @@
         {
           "path": "apps/office/src/sw/source/filter/xml/odt-table-of-content.test.ts",
           "marker": "SimpleTOC.odt"
+        },
+        {
+          "path": "apps/office/src/sw/source/filter/xml/odt-index-marks.test.ts",
+          "marker": "testToxmarkLinks"
         }
       ],
       "upstream": [
@@ -44,6 +51,10 @@
         {
           "path": "vendor/libreoffice-reference/sw/qa/extras/globalfilter/globalfilter.cxx",
           "marker": "testTableOfContentLinksHaveContentSet"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/tox/tox.cxx",
+          "marker": "SwTOXMark::SwTOXMark"
         }
       ]
     }

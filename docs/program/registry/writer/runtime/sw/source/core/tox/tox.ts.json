@@ -20,20 +20,23 @@
         "apps/office/src/sw/source/core/tox/tox.ts",
         "apps/office/src/sw/source/filter/xml/odt-table-of-content.test.ts",
         "vendor/libreoffice-reference/sw/source/core/tox/tox.cxx",
-        "vendor/libreoffice-reference/sw/qa/extras/globalfilter/globalfilter.cxx"
+        "vendor/libreoffice-reference/sw/qa/extras/globalfilter/globalfilter.cxx",
+        "apps/office/src/sw/source/filter/xml/odt-index-marks.test.ts"
       ],
-      "justification": "Owns the contents-index source and independent native form, including original default levels, paragraph styles and token order. Index generation and other index types remain outside this model slice.",
+      "justification": "Owns the contents-index source and independent native form, including original default levels, paragraph styles and token order. Index generation and other index types remain outside this model slice. Owns the native non-shareable TOX mark item with independent strings, its optional-end hint backpointer and original copy defaults.",
       "knownViolations": [],
       "localSymbols": [
         "SwTOXBase",
         "SwForm",
-        "SwFormToken"
+        "SwFormToken",
+        "SwTOXMark"
       ],
       "sourceResponsibility": "unverified",
       "upstreamFile": "sw/source/core/tox/tox.cxx",
       "upstreamSymbols": [
         "SwTOXBase::SwTOXBase",
-        "SwForm::SwForm"
+        "SwForm::SwForm",
+        "SwTOXMark::SwTOXMark"
       ]
     }
   }

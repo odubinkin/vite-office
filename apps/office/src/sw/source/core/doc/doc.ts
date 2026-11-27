@@ -320,7 +320,11 @@ export class SwDoc {
   private readonly embeddedFonts = new Map<string, WriterEmbeddedFont>();
   private readonly bitmapTable = new Map<string, XFillBitmapItem>();
   public readonly nodes: SwNodes;
-  private readonly contentsIndexType = new SwTOXType(TOXTypes.Content, "Table of Contents");
+  private readonly toxTypes = [
+    new SwTOXType(TOXTypes.Content, "Table of Contents"),
+    new SwTOXType(TOXTypes.Index, "Alphabetical Index"),
+    new SwTOXType(TOXTypes.User, "User-Defined Index"),
+  ];
   /** Creates the canonical fixed sections and optionally one empty body node. @param createInitialTextNode - Whether to create initial body content. @returns Nothing. */
   public constructor(createInitialTextNode: boolean | SwDocOptions = true) {
     const options = typeof createInitialTextNode === "object" ? createInitialTextNode : undefined;
@@ -947,9 +951,17 @@ export class SwDoc {
   public GetTextDirection(position: SwPosition): SvxFrameDirection {
     return GetTextDirection(this, position);
   }
-  /** Borrows the original contents type registered on this document. @returns Native type identity. */
-  public GetTOXType(): SwTOXType {
-    return this.contentsIndexType;
+  /** Borrows the original index type registered on this document. @param kind - Represented native index family. @param name - Optional source user-type identity. @returns Native type definition. */
+  public GetTOXType(kind = TOXTypes.Content, name = ""): SwTOXType {
+    const existing = this.toxTypes.find(
+      /** Matches the original type and optional name. @param type - Registered type. @returns Match. */
+      (type) => type.type === kind && (!name || type.name === name),
+    );
+    if (existing) return existing;
+    if (kind !== TOXTypes.User || !name) throw new Error("Writer index type is not represented.");
+    const added = new SwTOXType(kind, name);
+    this.toxTypes.push(added);
+    return added;
   }
 
   /** Inserts a native contents index with its ODF descriptor. @param before - Native paragraph boundary. @param descriptor - Original index values. @returns Connected section. */

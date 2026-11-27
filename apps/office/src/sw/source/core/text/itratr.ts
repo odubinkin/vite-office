@@ -1,3 +1,4 @@
+import { isTextFormatHint } from "../txtnode/txatbase";
 /** @fileoverview Represents native itratr.cxx hint traversal for one unmerged text node without a filter-run conversion. */
 import { DICTIONARY_WORD } from "../../../../offapi/com/sun/star/i18n/WordType";
 import { unicode } from "../../../../i18nlangtag/source/isolang/isolang.tables";
@@ -20,7 +21,6 @@ import {
   RES_CHRATR_LANGUAGE,
   RES_TXTATR_CHARFMT,
 } from "../../../inc/hintids";
-import { SwTextAttrEnd } from "../txtnode/txatbase";
 import { SwAttrHandler } from "./atrstck";
 
 /** Traverses actual native start/end maps and maintains character stacks for the current text position. */
@@ -66,7 +66,7 @@ export class SwAttrIter {
       ) {
         const hint = hints.GetSortedByEnd(this.m_nEndIndex++);
         if (
-          hint instanceof SwTextAttrEnd &&
+          isTextFormatHint(hint) &&
           this.m_nStartIndex !== 0 &&
           hint.GetStart() <= this.m_nPosition
         )
@@ -78,7 +78,7 @@ export class SwAttrIter {
       ) {
         const hint = hints.Get(this.m_nStartIndex++);
         if (
-          hint instanceof SwTextAttrEnd &&
+          isTextFormatHint(hint) &&
           hint.GetEnd() > position &&
           (this.includeCollections || hint.Which() !== RES_TXTATR_CHARFMT)
         )

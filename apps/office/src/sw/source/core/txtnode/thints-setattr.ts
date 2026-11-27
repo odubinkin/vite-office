@@ -1,3 +1,4 @@
+import { isTextFormatHint } from "./txatbase";
 /** @fileoverview Original SwTextNode::SetAttr item-set/range decisions and DontExpandFormat from thints.cxx/ndtxt.cxx. */
 import type { SwTextNode } from "./ndtxt";
 import { SfxItemSet } from "../../../../svl/source/items/itemset";
@@ -12,7 +13,7 @@ import {
   RES_TXTATR_AUTOFMT,
   WRITER_CHARACTER_WHICH_RANGES,
 } from "../../../inc/hintids";
-import { SwFormatAutoFormat, SwTextAttrEnd } from "./txatbase";
+import { SwFormatAutoFormat } from "./txatbase";
 import { SwFormatCharFormat } from "./fmtatr2";
 import type { RangedTextAttribute } from "./ndtxt-attribute-query";
 import { MakeTextAttr } from "./thints";
@@ -101,7 +102,7 @@ export function DontExpandTextNodeFormat(
   for (let index = hints.GetLastPosSortedByEnd(offset); index >= 0; --index) {
     const hint = hints.GetSortedByEnd(index);
     if (hint.GetAnyEnd() !== offset) break;
-    if (!(hint instanceof SwTextAttrEnd)) continue;
+    if (!isTextFormatHint(hint)) continue;
     if (flag !== hint.DontExpand() && !hint.IsLockExpandFlag() && hint.GetEnd() > hint.GetStart()) {
       changed = true;
       hints.NoteInHistory(hint);

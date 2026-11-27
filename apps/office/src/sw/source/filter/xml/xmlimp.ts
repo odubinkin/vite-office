@@ -70,6 +70,9 @@ import type {
 import type { XMLSectionStyle } from "../../../../xmloff/source/text/XMLSectionStyleContext";
 import { importTextSection } from "./xmlsection";
 import { importDocumentIndex } from "./xmlindex";
+import type { XMLIndexMarkProperties } from "../../../../xmloff/source/text/XMLIndexMarkImportContext";
+import { MAXLEVEL, SwTOXMark, TOXTypes } from "../../core/tox/tox";
+import { SwXDocumentIndexMark, getUserIndexTypeName } from "../../core/unocore/unoidx";
 import type {
   XMLIndexImport,
   XMLIndexImportProperties,
@@ -234,6 +237,37 @@ class SwXMLImport
         return family === "paragraph" && this.resolveNamedParagraphStyle(name) ? name : undefined;
       },
     );
+  }
+
+  /** Returns the original chapter numbering rule level count. @returns Outline level count. */
+  public getIndexOutlineLevelCount(): number {
+    return MAXLEVEL;
+  }
+
+  /** Connects a shared XML mark descriptor to the original Writer text hint. @param properties - ODF mark attributes. @param range - Native paragraph range. @returns Nothing. */
+  public insertIndexMark(properties: XMLIndexMarkProperties, range: XMLTextCursor): void {
+    const kind =
+      properties.kind === "toc"
+        ? TOXTypes.Content
+        : properties.kind === "user-index"
+          ? TOXTypes.User
+          : TOXTypes.Index;
+    const mark = new SwTOXMark(
+      this.document.GetTOXType(
+        kind,
+        kind === TOXTypes.User ? getUserIndexTypeName(this.document, properties.indexName) : "",
+      ),
+    );
+    mark.alternativeText = properties.alternativeText;
+    mark.primaryKey = properties.key1;
+    mark.secondaryKey = properties.key2;
+    mark.primaryKeyReading = properties.key1Reading;
+    mark.secondaryKeyReading = properties.key2Reading;
+    mark.textReading = properties.textReading;
+    mark.mainEntry = properties.mainEntry;
+    const descriptor = new SwXDocumentIndexMark(mark);
+    if (kind !== TOXTypes.Index) descriptor.setLevel(properties.level - 1);
+    descriptor.attach(range as SwXTextCursor);
   }
 
   private readonly textFrameStyles = new Map<

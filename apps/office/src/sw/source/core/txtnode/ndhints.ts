@@ -2,6 +2,8 @@
  * @fileoverview Implements Writer's ordered auto-format hint container from pinned `sw/source/core/txtnode/ndhints.cxx`.
  */
 
+import { SwTextTOXMark } from "./atrtox";
+import { RES_TXTATR_TOXMARK } from "../../../inc/hintids";
 import { SwTextField } from "../../../inc/txtfld";
 import { SwPostItFieldType } from "../fields/docufld";
 import { SwTextFlyCnt } from "../../../inc/txtflcnt";
@@ -65,7 +67,7 @@ import {
 /** Bounded implemented ranged item families held by the native maps. */
 type RangedTextAttr = SwTextAttrEnd<SwFormatAutoFormat | SwFormatINetFormat | SwFormatCharFormat>;
 /** Point and ranged attributes share the three native indexes. */
-export type TextNodeAttribute = RangedTextAttr | SwTextFlyCnt | SwTextField;
+export type TextNodeAttribute = RangedTextAttr | SwTextFlyCnt | SwTextField | SwTextTOXMark;
 
 /** Stores directly formatted text portions in three native ordered maps. */
 export class SwpHints {
@@ -97,7 +99,8 @@ export class SwpHints {
       if (
         hint instanceof SwTextINetFormat ||
         hint instanceof SwTextCharFormat ||
-        hint instanceof SwTextField
+        hint instanceof SwTextField ||
+        hint instanceof SwTextTOXMark
       )
         hint.ChgTextNode(node);
   }
@@ -125,7 +128,8 @@ export class SwpHints {
       if (
         hint instanceof SwTextINetFormat ||
         hint instanceof SwTextCharFormat ||
-        hint instanceof SwTextField
+        hint instanceof SwTextField ||
+        hint instanceof SwTextTOXMark
       )
         hint.ChgTextNode(undefined);
     }
@@ -137,7 +141,8 @@ export class SwpHints {
       if (
         hint instanceof SwTextINetFormat ||
         hint instanceof SwTextCharFormat ||
-        hint instanceof SwTextField
+        hint instanceof SwTextField ||
+        hint instanceof SwTextTOXMark
       )
         hint.ChgTextNode(this.m_pTextNode);
     }
@@ -280,7 +285,7 @@ export class SwpHints {
   /** Releases an actual attribute from the three owned maps. @param position - Native start-map offset. @returns Nothing. */
   public DeleteAtPos(position: number): void {
     const hint = this.Get(position);
-    if (hint instanceof SwTextAttrEnd) this.NoteInHistory(hint);
+    if (hint instanceof SwTextAttrEnd && !(hint instanceof SwTextTOXMark)) this.NoteInHistory(hint);
     this.hintsByStart = this.hintsByStart.filter(
       /** Keeps the other actual attributes. @param entry - Map attribute. @returns Whether retained. */ (
         entry,
@@ -332,7 +337,8 @@ export class SwpHints {
   public entries(): readonly RangedTextAttr[] {
     return this.hintsByStart.filter(
       /** Selects the intervals used by ranged callers. @param hint - Indexed attribute. @returns Whether it owns an end. */
-      (hint): hint is RangedTextAttr => hint instanceof SwTextAttrEnd,
+      (hint): hint is RangedTextAttr =>
+        hint instanceof SwTextAttrEnd && !(hint instanceof SwTextTOXMark),
     );
   }
 
@@ -343,17 +349,36 @@ export class SwpHints {
     offset: number,
     which: typeof RES_TXTATR_ANNOTATION,
   ): SwTextField | undefined;
+  /** Looks up the original single index mark at its marker. @param offset - Text offset. @param which - Index hint WhichId. @returns Native point hint. */
+  public GetTextAttrForCharAt(
+    offset: number,
+    which: typeof RES_TXTATR_TOXMARK,
+  ): SwTextTOXMark | undefined;
   /** Queries an owned point of the requested family. @param offset - Text offset. @param which - Requested family. @returns Point or undefined. */
   public GetTextAttrForCharAt(
     offset: number,
     which: number = RES_TXTATR_FLYCNT,
-  ): SwTextFlyCnt | SwTextField | undefined {
+  ): SwTextFlyCnt | SwTextField | SwTextTOXMark | undefined {
     const hints = this.hintsByStart;
     for (let i = hintPositionBound(hints, offset, false); hints[i]?.GetStart() === offset; ++i) {
       const hint = hints[i];
-      if (hint && !(hint instanceof SwTextAttrEnd) && hint.Which() === which) return hint;
+      if (
+        hint &&
+        (!(hint instanceof SwTextAttrEnd) || hint instanceof SwTextTOXMark) &&
+        hint.HasDummyChar() &&
+        hint.Which() === which
+      )
+        return hint;
     }
     return undefined;
+  }
+
+  /** Returns native index marks in the same order as other text hints. @returns Borrowed index attributes. */
+  public GetIndexMarks(): readonly SwTextTOXMark[] {
+    return this.hintsByStart.filter(
+      /** Selects the original index-mark family. @param hint - Owned attribute. @returns Whether index mark. */
+      (hint): hint is SwTextTOXMark => hint instanceof SwTextTOXMark,
+    );
   }
 
   /** Obtains a position in the full start index. @param hint - Owned hint. @returns Index or -1. */
@@ -404,8 +429,11 @@ export class SwpHints {
       throw new Error("Writer inline fly copy requires a layout format copy.");
     const result = this.sliceRanges(start, end, cut);
     for (const hint of this.hintsByStart)
-      if (hint instanceof SwTextField && hint.start >= start && hint.start < end)
-        result.Insert(hint.Copy(hint.start - start));
+      if (hint.start >= start && hint.start < end) {
+        if (hint instanceof SwTextField) result.Insert(hint.Copy(hint.start - start));
+        else if (hint instanceof SwTextTOXMark && hint.HasDummyChar())
+          result.Insert(hint.clone(-start));
+      }
     return result;
   }
 
@@ -430,6 +458,14 @@ export class SwpHints {
         },
       ),
     );
+    for (const hint of this.GetIndexMarks()) {
+      const endOfMark = hint.GetEnd();
+      if (endOfMark === undefined || hint.start >= end || endOfMark <= start) continue;
+      const copied = hint.clone();
+      copied.SetStart(Math.max(start, hint.start) - start);
+      copied.SetEnd(Math.min(end, endOfMark) - start);
+      result.Insert(copied);
+    }
     return result;
   }
 
@@ -442,7 +478,8 @@ export class SwpHints {
     const moved: TextNodeAttribute[] = [];
     const remaining: TextNodeAttribute[] = [];
     for (const hint of this.hintsByStart) {
-      if (!(hint instanceof SwTextAttrEnd)) {
+      const hintEnd = hint.GetEnd();
+      if (hintEnd === undefined) {
         if (hint.start >= start && hint.start < end) {
           hint.start -= start;
           moved.push(hint);
@@ -452,25 +489,22 @@ export class SwpHints {
         }
         continue;
       }
-      if (hint.start < end && hint.end > start) {
-        if (hint.start >= start && hint.end < end) {
+      if (hint.start < end && hintEnd > start) {
+        if (hint.start >= start && hintEnd < end) {
           hint.m_pHints = undefined;
           hint.start -= start;
-          hint.SetEnd(hint.end - start);
+          hint.SetEnd(hintEnd - start);
           moved.push(hint);
           continue;
         }
-        moved.push(
-          MakeTextAttr(
-            this.pool.GetDoc(),
-            hint.format,
-            Math.max(start, hint.start) - start,
-            Math.min(end, hint.end) - start,
-          ),
-        );
+        const first = Math.max(start, hint.start) - start;
+        const last = Math.min(end, hintEnd) - start;
+        if (hint instanceof SwTextTOXMark)
+          moved.push(new SwTextTOXMark(hint.format.Clone(), first, last));
+        else moved.push(MakeTextAttr(this.pool.GetDoc(), hint.format, first, last));
       }
       if (hint.start > start) hint.start = Math.max(start, hint.start - length);
-      if (hint.end > start) hint.SetEnd(Math.max(start, hint.end - length));
+      if (hintEnd > start) hint.SetEnd(Math.max(start, hintEnd - length));
       remaining.push(hint);
     }
     this.assignOwned(remaining);
@@ -520,7 +554,7 @@ export class SwpHints {
   /** Transfers surviving point hints after the new ranged coordinates are ready. @param destination - Replacement map. @param start - First removed offset. @param end - End of removal. @param length - Inserted text length. @returns Nothing. */
   public TransferPointHints(destination: SwpHints, start = 0, end = 0, length = 0): void {
     for (const hint of [...this.hintsByStart]) {
-      if (hint instanceof SwTextAttrEnd) continue;
+      if (hint.GetEnd() !== undefined) continue;
       this.DeleteAtPos(this.GetIndexOf(hint));
       if (hint.start >= start && hint.start < end) DestroyTextNodeAttribute(hint);
       else {
@@ -536,7 +570,7 @@ export class SwpHints {
     const trailing = this.sliceRanges(offset, length);
     this.TransferPointHints(leading);
     for (const hint of [...leading.hintsByStart]) {
-      if (hint instanceof SwTextAttrEnd || hint.start < offset) continue;
+      if (hint.GetEnd() !== undefined || hint.start < offset) continue;
       leading.DeleteAtPos(leading.GetIndexOf(hint));
       hint.start -= offset;
       trailing.Insert(hint);
@@ -550,7 +584,8 @@ export class SwpHints {
     this.hintsByStart = [];
     for (const hint of owned) {
       hint.start += offset;
-      if (hint instanceof SwTextAttrEnd) hint.SetEnd(hint.end + offset);
+      const end = hint.GetEnd();
+      if (end !== undefined) hint.SetEnd(end + offset);
     }
     return owned;
   }
@@ -577,6 +612,7 @@ export class SwpHints {
         (hint) => {
           if (
             !(hint instanceof SwTextAttrEnd) ||
+            hint instanceof SwTextTOXMark ||
             hint.Which() !== RES_TXTATR_AUTOFMT ||
             hint.end <= offset ||
             hint.start >= end
@@ -813,12 +849,13 @@ export class SwpHints {
       ...NormalizeOwnedTextHints(
         hints.filter(
           /** Selects only native ranged portions for normalization. @param hint - Attribute. @returns Whether ranged. */
-          (hint): hint is RangedTextAttr => hint instanceof SwTextAttrEnd,
+          (hint): hint is RangedTextAttr =>
+            hint instanceof SwTextAttrEnd && !(hint instanceof SwTextTOXMark),
         ),
       ),
       ...hints.filter(
         /** Preserves the identity of point hints. @param hint - Attribute. @returns Whether a point. */
-        (hint) => !(hint instanceof SwTextAttrEnd),
+        (hint) => !(hint instanceof SwTextAttrEnd) || hint instanceof SwTextTOXMark,
       ),
     ].sort(compareHints);
     for (const hint of old) DestroyTextNodeAttribute(hint);
@@ -918,6 +955,7 @@ export class SwpHints {
     const result = new SwpHints(pool, this.entries());
     for (const hint of this.hintsByStart)
       if (hint instanceof SwTextField) result.Insert(hint.Copy(hint.start));
+      else if (hint instanceof SwTextTOXMark) result.Insert(hint.clone());
     return result;
   }
 
@@ -935,6 +973,7 @@ export class SwpHints {
     for (const hint of this.hintsByStart)
       if (hint instanceof SwTextField)
         result.Insert(hint.Copy(hint.start, SwPostItFieldType.Get(pool.GetDoc())));
+      else if (hint instanceof SwTextTOXMark) result.Insert(hint.CopyTOXMark(pool.GetDoc()));
     return result;
   }
 

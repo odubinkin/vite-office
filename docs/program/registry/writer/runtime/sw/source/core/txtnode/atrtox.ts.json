@@ -1,0 +1,39 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sw/source/core/txtnode/atrtox.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "writer",
+    "subsystem": "document-core",
+    "capabilityIds": [
+      "CAP-0128",
+      "CAP-0129"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/sw/source/core/txtnode/atrtox.ts",
+        "apps/office/src/sw/source/filter/xml/odt-index-marks.test.ts",
+        "vendor/libreoffice-reference/sw/source/core/txtnode/atrtox.cxx",
+        "vendor/libreoffice-reference/sw/qa/extras/odfexport/odfexport3.cxx"
+      ],
+      "justification": "Owns the original optional-ended TOX hint, dummy character flags and placement on a native text node. Index display collection from a physical Writer layout is outside this model slice.",
+      "knownViolations": [],
+      "localSymbols": [
+        "SwTextTOXMark"
+      ],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": "sw/source/core/txtnode/atrtox.cxx",
+      "upstreamSymbols": [
+        "SwTextTOXMark::SwTextTOXMark",
+        "SwTextTOXMark::GetEnd",
+        "SwTextTOXMark::CopyTOXMark"
+      ]
+    }
+  }
+}

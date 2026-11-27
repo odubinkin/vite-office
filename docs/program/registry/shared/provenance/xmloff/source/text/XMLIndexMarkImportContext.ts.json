@@ -1,0 +1,64 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/xmloff/source/text/XMLIndexMarkImportContext.ts",
+    "status": "mapped",
+    "upstreamPath": "xmloff/source/text/txtparai.cxx",
+    "localSymbols": [
+      "XMLIndexMarkImportContext"
+    ],
+    "upstreamSymbols": [
+      "XMLIndexMarkImportContext_Impl::startFastElement",
+      "XMLTOCMarkImportContext_Impl::ProcessAttribute",
+      "XMLUserIndexMarkImportContext_Impl::ProcessAttribute",
+      "XMLAlphaIndexMarkImportContext_Impl::ProcessAttribute"
+    ],
+    "preservedResponsibilities": [
+      "Admits the nine original ODF mark elements, resolves original paragraph-local ids and parses native index mark properties."
+    ],
+    "omittedResponsibilities": [
+      "The adapter connects these properties to Writer through the existing typed paragraph import target."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/xmloff/source/text/XMLIndexMarkImportContext.ts",
+          "marker": "XMLIndexMarkImportContext"
+        },
+        {
+          "path": "apps/office/src/sw/source/filter/xml/odt-index-marks.test.ts",
+          "marker": "testWhitespace"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/xmloff/source/text/txtparai.cxx",
+          "marker": "XMLIndexMarkImportContext_Impl::startFastElement"
+        },
+        {
+          "path": "vendor/libreoffice-reference/xmloff/source/text/txtparai.cxx",
+          "marker": "XMLTOCMarkImportContext_Impl::ProcessAttribute"
+        },
+        {
+          "path": "vendor/libreoffice-reference/xmloff/source/text/txtparai.cxx",
+          "marker": "XMLUserIndexMarkImportContext_Impl::ProcessAttribute"
+        },
+        {
+          "path": "vendor/libreoffice-reference/xmloff/source/text/txtparai.cxx",
+          "marker": "XMLAlphaIndexMarkImportContext_Impl::ProcessAttribute"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/qa/extras/odfexport/odfexport3.cxx",
+          "marker": "testWhitespace"
+        }
+      ]
+    },
+    "filenameDivergence": {
+      "localPath": "apps/office/src/xmloff/source/text/XMLIndexMarkImportContext.ts",
+      "stackNecessity": "responsibility-split",
+      "rationale": "The native paragraph parser's index-mark contexts live in an adjacent module to retain the existing streaming text filter split."
+    }
+  }
+}
