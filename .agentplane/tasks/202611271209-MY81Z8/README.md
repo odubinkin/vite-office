@@ -1,10 +1,11 @@
 ---
 id: "202611271209-MY81Z8"
 title: "Implement native Writer index marks in ODT"
-status: "DOING"
+result_summary: "Preserve native odt index marks."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 7
+revision: 8
 origin:
   system: "manual"
 depends_on: []
@@ -42,11 +43,16 @@ quality_review:
     - "8ccf760cd25653c6dff9654a3330c8abd25fe4f0"
   findings:
     - "Interactive index regeneration, index jump links and index sections other than contents remain outside this task."
-commit: null
+commit:
+  hash: "8ccf760cd25653c6dff9654a3330c8abd25fe4f0"
+  message: "🧩 MY81Z8 writer: preserve native ODT index marks"
 comments:
   -
     author: "CODER"
     body: "Start: preserve native contents, user and alphabetical index marks through the Writer ODT and Worker boundaries."
+  -
+    author: "CODER"
+    body: "Verified: The unmodified tdf149248.odt, whitespace.odt and udindex3.odt retained their native range pairs, original whitespace and TOC/user type ownership across Worker and ODT reopening. The XML writer consumed the native dummy characters."
 events:
   -
     type: "status"
@@ -61,8 +67,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Tests  690 passed | 6 skipped (696). Pinned fixtures, typecheck, lint, formatting, dependencies, provenance and scoped inventory checks passed."
+  -
+    type: "status"
+    at: "2026-11-27T14:38:00.910Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: The unmodified tdf149248.odt, whitespace.odt and udindex3.odt retained their native range pairs, original whitespace and TOC/user type ownership across Worker and ODT reopening. The XML writer consumed the native dummy characters."
 doc_version: 3
-doc_updated_at: "2026-11-27T14:36:58.087Z"
+doc_updated_at: "2026-11-27T14:38:00.911Z"
 doc_updated_by: "CODER"
 description: "Port the native Writer pool item and anchored text hint for contents, user and alphabetical index marks. Route ODF point marks and start/end pairs through the original xmloff contexts, carry the native hints across Worker transport, and preserve visible text and link boundaries. Use pinned Writer ODT marks fixtures. Generated index refresh, nonlocal UNO selection operations and other index sections are outside this filter task."
 sections:
