@@ -1,10 +1,11 @@
 ---
 id: "202611271333-ABXQBM"
 title: "Align Writer ODT annotation text and metadata with native import"
-status: "DOING"
+result_summary: "Align ODT annotation child text and metadata with LibreOffice."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 6
+revision: 7
 origin:
   system: "manual"
 depends_on: []
@@ -43,11 +44,16 @@ quality_review:
     - "2042a4a67e59c8d02a74521f84e4418356cb21ac"
   findings:
     - "WRITER-766 records the original behavior when an annotation Outliner rejects a Writer numbering rule and retains its text level."
-commit: null
+commit:
+  hash: "2042a4a67e59c8d02a74521f84e4418356cb21ac"
+  message: "🧩 ABXQBM annotations: import native ODT annotation text"
 comments:
   -
     author: "CODER"
     body: "Start: Compare the native annotation shape-text and metadata contracts in an isolated snapshot."
+  -
+    author: "CODER"
+    body: "Verified: The pinned annotation-formatting.odt and resolved-comment.odt preserved rich note text, original annotation metadata and range behavior across import, Worker transfer and ODT reopen."
 events:
   -
     type: "status"
@@ -62,8 +68,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Tests  27 passed (27). Pinned fixtures and focused static, dependency, provenance and registry checks passed."
+  -
+    type: "status"
+    at: "2026-11-27T14:54:25.771Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: The pinned annotation-formatting.odt and resolved-comment.odt preserved rich note text, original annotation metadata and range behavior across import, Worker transfer and ODT reopen."
 doc_version: 3
-doc_updated_at: "2026-11-27T14:53:14.355Z"
+doc_updated_at: "2026-11-27T14:54:25.771Z"
 doc_updated_by: "CODER"
 description: "Use the shared text field/shape dispatch and isolated list context for annotation EditEngine text, align native content fallback and metadata XML, and port the original annotation formatting and resolution tests for the represented fields."
 sections:
