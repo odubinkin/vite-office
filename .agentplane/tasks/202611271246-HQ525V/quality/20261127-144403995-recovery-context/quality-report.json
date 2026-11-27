@@ -1,0 +1,22 @@
+{
+  "schema_version": 1,
+  "task_id": "202611271246-HQ525V",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-11-27T14:44:03.995Z",
+  "verdict": "pass",
+  "summary": "The original tdf144672.odt and tdf153636.odt retained the original alphabetical separators and levels, the main-entry character style and collation settings, the user-index flags, and the stored title and entries across the Worker and ODT reopen.",
+  "evaluated_sha": "ffda762b101061f6aa8ed68751278bb4ad13597d",
+  "blueprint_digest": "f019061d6475ed0a48208cc5553a28bbf94339927d4ae2ec1b92ecbb5cb9181c",
+  "findings": [
+    "This task covers the represented alphabetical and user index source and cached sections. Runtime index generation, bibliography and the other index sources remain outside its scope."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202611271246-HQ525V/README.md",
+    "/Users/odubinkin/Projects/vite-office/output/playwright/HQ525V/verification.md",
+    "ffda762b101061f6aa8ed68751278bb4ad13597d"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": []
+}
