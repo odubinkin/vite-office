@@ -1,10 +1,11 @@
 ---
 id: "202611270601-E652PR"
 title: "Connect Writer Navigator outline multi-selection"
-status: "DOING"
+result_summary: "Connected native heading-root multiple selection and grouped outline movements, level changes and undo."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 9
+revision: 10
 origin:
   system: "manual"
 depends_on: []
@@ -39,11 +40,16 @@ quality_review:
     - "output/playwright/writer-navigator-multi-chromium.log"
   findings:
     - "Browser selection and original command order are validated independent of document history and root-mode focus."
-commit: null
+commit:
+  hash: "d2f0cdd21dcd42bade27ea95c68efbae9d13fe4b"
+  message: "🧩 E652PR code: Connect Writer Navigator outline multi-selection"
 comments:
   -
     author: "CODER"
     body: "Start: continue direct-mode task in current checkout."
+  -
+    author: "CODER"
+    body: "Verified: 62 focused Writer cases, Writer resource checks and three Chromium Navigator flows."
 events:
   -
     type: "status"
@@ -58,8 +64,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Verified: 62 focused Writer tests, two resource cases and three Chromium scenarios prove root selection, native grouped action order, one undo and stable selection."
+  -
+    type: "status"
+    at: "2026-11-27T06:08:16.937Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: 62 focused Writer cases, Writer resource checks and three Chromium Navigator flows."
 doc_version: 3
-doc_updated_at: "2026-11-27T06:06:40.635Z"
+doc_updated_at: "2026-11-27T06:08:16.938Z"
 doc_updated_by: "CODER"
 description: "Port heading-root multiple selection and grouped chapter commands, including selected ancestors and one undo, and reconcile the generated Navigator toolbar order witness."
 sections:
