@@ -1,0 +1,22 @@
+{
+  "schema_version": 1,
+  "task_id": "202611271323-EXV9HW",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-11-27T13:29:58.163Z",
+  "verdict": "pass",
+  "summary": "Aligns the inventory fixture with native named-section import and retains package and XML privacy assertions.",
+  "evaluated_sha": "67804850b18c3da4f96f1d859f641611e3bdd316",
+  "blueprint_digest": "c9fa598100b9019fd9ead9fae1d6877fb6474c390d833c161874eff86c1bd970",
+  "findings": [
+    "The changed fixture directly replays the single full-checkpoint inventory failure."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202611271323-EXV9HW/README.md",
+    "/Users/odubinkin/Projects/vite-office/output/playwright/EXV9HW/verification.md",
+    "67804850b18c3da4f96f1d859f641611e3bdd316"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": []
+}
