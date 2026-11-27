@@ -1,10 +1,11 @@
 ---
 id: "202611270607-W5BR5M"
 title: "Route Calc browser cell input through native EnterData and number format history"
-status: "DOING"
+result_summary: "Connected Calc normal input to native number recognition and reversible format history."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 8
+revision: 9
 origin:
   system: "manual"
 depends_on: []
@@ -38,11 +39,16 @@ quality_review:
     - "output/calc-next/W5BR5M-exact-retry.log"
   findings:
     - "All 65 selected cases passed across final focused evidence. Existing merged registry evidence issue recorded."
-commit: null
+commit:
+  hash: "a8fd603868ebfc36c2162c8d57807a585091339f"
+  message: "🧩 W5BR5M code: use native Calc normal input and numeric format history"
 comments:
   -
     author: "CODER"
     body: "Start: Connect original Calc plain-string entry and undo through the existing view and document owners."
+  -
+    author: "CODER"
+    body: "Verified: Normal browser entry uses native recognition, grouped scalar history and the pinned input-line display. All 65 targeted cases passed across final evidence."
 events:
   -
     type: "status"
@@ -57,8 +63,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "65 targeted tests passed across normal run and exact retry. Office TypeScript, lint, format, dependencies, source tree, scoped provenance and routing passed. Baseline registry evidence issues are documented."
+  -
+    type: "status"
+    at: "2026-11-27T06:33:55.910Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: Normal browser entry uses native recognition, grouped scalar history and the pinned input-line display. All 65 targeted cases passed across final evidence."
 doc_version: 3
-doc_updated_at: "2026-11-27T06:28:57.817Z"
+doc_updated_at: "2026-11-27T06:33:55.912Z"
 doc_updated_by: "CODER"
 description: "Connect ordinary cell entry to source-backed ScViewFunc EnterData and SetNormalStringOperation. Restore native number recognition, selected-sheet grouped history and the original scientific Format Cells scenario through the normal editor."
 sections:
