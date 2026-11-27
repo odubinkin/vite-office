@@ -1,0 +1,22 @@
+{
+  "schema_version": 1,
+  "task_id": "202611271205-RCV7KV",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-11-27T14:34:17.614Z",
+  "verdict": "pass",
+  "summary": "The pinned natural-sort and subtotal ODS documents retained their inherited defaults, flags and literal descriptor fields across the Worker and ODS reopen. Nested SUBTOTAL results used the native flags and exclusions.",
+  "evaluated_sha": "8361e2887af764744ba2b7eba01778bb796b0ce7",
+  "blueprint_digest": "25414a1b27c93cdf427760aadde9713a5b69855c5805a45db862351d7e218450",
+  "findings": [
+    "The tested SUBTOTAL selectors use the represented sum, average and product operations. Database sort execution, subtotal layout regeneration and interactive range editing remain outside the filter change."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202611271205-RCV7KV/README.md",
+    "/Users/odubinkin/Projects/vite-office/output/playwright/2C7FY1/verification.md",
+    "8361e2887af764744ba2b7eba01778bb796b0ce7"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": []
+}
