@@ -1,10 +1,11 @@
 ---
 id: "202611271525-JB5J7E"
 title: "Restore Calc native subtotal registration and AutoSum"
-status: "DOING"
+result_summary: "Complete native subtotal registration and filtered AutoSum."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 6
+revision: 7
 origin:
   system: "manual"
 depends_on: []
@@ -43,11 +44,16 @@ quality_review:
     - "a8ab58df230b0c221797b1815ff9e372d34c2f74"
   findings:
     - "The immutable checkpoint failure was an obsolete constructor rejection. Calc preserves the pinned fixed range selection offset in CALC-870."
-commit: null
+commit:
+  hash: "a8ab58df230b0c221797b1815ff9e372d34c2f74"
+  message: "🧩 JB5J7E calc: complete native subtotal registration and AutoSum"
 comments:
   -
     author: "CODER"
     body: "Start: Repair the confirmed full-checkpoint subtotal assertion through the pinned formula owner, document registry and AutoSum contracts."
+  -
+    author: "CODER"
+    body: "Verified: Calc registers native subtotal formulas, recalculates affected references and preserves the original AutoSum subtotals through the Worker and ODS."
 events:
   -
     type: "status"
@@ -62,8 +68,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "The 43 controller and formula tests and 41 ODS and formula lifecycle tests passed. The original autosum.ods values survive ODS and Worker. Focused static, dependency, provenance and registry checks passed."
+  -
+    type: "status"
+    at: "2026-11-27T15:36:18.349Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: Calc registers native subtotal formulas, recalculates affected references and preserves the original AutoSum subtotals through the Worker and ODS."
 doc_version: 3
-doc_updated_at: "2026-11-27T15:34:45.674Z"
+doc_updated_at: "2026-11-27T15:36:18.350Z"
 doc_updated_by: "CODER"
 description: "Connect the represented subtotal formula calculation to native document registration, reference-based invalidation and the filtered AutoSum path. Preserve the original Calc token, group and ODS Worker owners. Update outdated subtotal admission assertions revealed by the full checkpoint and run related Calc tests."
 sections:
