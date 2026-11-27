@@ -25,6 +25,14 @@
         {
           "path": "apps/office/src/sw/source/filter/xml/odt-redlines.test.ts",
           "marker": "format-charstyle-direct.odt"
+        },
+        {
+          "path": "apps/office/src/sw/source/filter/xml/XMLRedlineImportHelper.ts",
+          "marker": "RedlineAdjustStartNodeCursor"
+        },
+        {
+          "path": "apps/office/src/sw/source/filter/xml/odt-redlines.test.ts",
+          "marker": "testTdf132911"
         }
       ],
       "upstream": [
@@ -43,6 +51,14 @@
         {
           "path": "vendor/libreoffice-reference/sw/qa/filter/xml/xml.cxx",
           "marker": "testFormatCharstyleDirectOdtImport"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/filter/xml/XMLRedlineImportHelper.cxx",
+          "marker": "XMLRedlineImportHelper::AdjustStartNodeCursor"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/qa/extras/uiwriter/uiwriter3.cxx",
+          "marker": "testTdf132911"
         }
       ]
     },
@@ -54,10 +70,11 @@
     ],
     "preservedResponsibilities": [
       "Attaches imported metadata and saved deletion sections to registered Writer ranges.",
-      "Imports the leading change’s native previous character style and direct formatting."
+      "Imports the leading change’s native previous character style and direct formatting.",
+      "Registers previous-node anchors around table and section boundaries and adjusts them after node creation."
     ],
     "omittedResponsibilities": [
-      "Structural endpoint adjustment and editing-only modes."
+      "Editing-only modes and complex deletion visibility transitions."
     ]
   }
 }

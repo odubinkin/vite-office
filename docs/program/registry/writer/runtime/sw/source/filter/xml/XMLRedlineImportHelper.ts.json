@@ -20,9 +20,10 @@
         "apps/office/src/sw/source/filter/xml/XMLRedlineImportHelper.ts",
         "apps/office/src/sw/source/filter/xml/odt-redlines.test.ts",
         "vendor/libreoffice-reference/sw/source/filter/xml/XMLRedlineImportHelper.cxx",
-        "vendor/libreoffice-reference/sw/qa/filter/xml/xml.cxx"
+        "vendor/libreoffice-reference/sw/qa/filter/xml/xml.cxx",
+        "vendor/libreoffice-reference/sw/qa/extras/uiwriter/uiwriter3.cxx"
       ],
-      "justification": "Attaches imported metadata and saved deletion sections to registered Writer ranges. Structural endpoint adjustment and editing-only modes. Imports the leading change’s native previous character style and direct formatting.",
+      "justification": "Attaches imported metadata and saved deletion sections to registered Writer ranges. Editing-only modes. Imports the leading change’s native previous character style and direct formatting. Registers previous-node anchors around table and section boundaries and adjusts them after node creation.",
       "knownViolations": [],
       "localSymbols": [
         "XMLRedlineImportHelper"

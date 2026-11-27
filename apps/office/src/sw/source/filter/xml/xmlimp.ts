@@ -1095,6 +1095,7 @@ class SwXMLImport
   public finishContent(): void {
     if (this.officeTextCount !== 1)
       throw new Error("ODF content must contain exactly one office:text.");
+    this.GetTextImport().RedlineAdjustStartNodeCursor();
     this.redlineImport.Finish();
     const cursor =
         this.GetTextImport().GetCursor() as import("../../core/unocore/unoobj").SwXTextCursor,

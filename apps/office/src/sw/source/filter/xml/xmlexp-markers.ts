@@ -47,11 +47,30 @@ import type { XMLIndexMarkExportMarker } from "../../../../xmloff/source/text/XM
 import { compareHintsByEnd } from "../../core/txtnode/ndhints-range";
 import type { SwTextTOXMark } from "../../core/txtnode/atrtox";
 import type { SwTextNode } from "../../core/txtnode/ndtxt";
+import type { SwNode } from "../../core/docnode/node";
+import type { XMLRedlineExportMarker } from "../../../../xmloff/source/text/XMLRedlineExport";
 import {
   compareParagraphMarkers,
   projectAnchoredTextFrames,
   type XMLBoundWriterFrames,
 } from "./xmltextframe";
+
+/** Reads the first matching structural endpoint as the original table and section UNO properties do. @param node - Actual boundary node. @returns Native change marker. */
+export function projectStructuralRedline(node: SwNode): XMLRedlineExportMarker | undefined {
+  const ranges = node.GetNodes().GetDoc().GetIDocumentRedlineAccess().GetRedlineTable().entries();
+  for (const range of ranges) {
+    const start = range.Start();
+    const end = range.End();
+    if (start.GetNode() !== node && end.GetNode() !== node) continue;
+    const kind = !range.HasMark()
+      ? "change"
+      : start.GetNode() === node
+        ? "change-start"
+        : "change-end";
+    return { kind, id: `ct${range.GetId()}`, offset: 0 };
+  }
+  return undefined;
+}
 
 /** Projects all native paragraph markers in export order. @param node - Source node. @param anchored - Anchored frame projection. @param projectBlock - Frame body export callback. @returns ODF markers. */
 export function projectParagraphMarkers(

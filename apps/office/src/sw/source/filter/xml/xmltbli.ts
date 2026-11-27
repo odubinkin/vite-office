@@ -146,6 +146,7 @@ export class SwXMLTableImport extends SvXMLImport {
         )
       : this.document.nodes.MakeTableNode(name);
     this.tableContexts.push(new SwXMLTableContextState(table, defaultCellStyleName));
+    this.textImport?.RedlineAdjustStartNodeCursor();
     const frameFormat = table.GetFrameFormat();
     importFrameVisualProperties(frameFormat, style);
     const hasMargins = style.marginLeft !== undefined || style.marginRight !== undefined;
@@ -563,6 +564,7 @@ export class SwXMLTableImport extends SvXMLImport {
     context.verticalSpans.clear();
     table.SetRowsToRepeat(context.headerRowCount);
     this.tableContexts.pop();
+    this.textImport?.RedlineAdjustStartNodeCursor();
   }
 
   /** Records a table-owned pagination marker at the next row boundary. */

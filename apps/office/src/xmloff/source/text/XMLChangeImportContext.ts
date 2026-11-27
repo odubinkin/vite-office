@@ -28,12 +28,14 @@ export class XMLChangeImportContext extends SvXMLImportContext {
   override startFastElement(element: XMLToken, attributes: FastAttributeList): void {
     const id = attributes.get(XMLToken.TEXT_CHANGE_ID);
     if (!id) return;
+    if (this.outside) this.helper.SetOpenRedlineId(id);
     const range = this.helper.GetCursor().getStart();
+    const collapsed = element === XMLToken.TEXT_CHANGE;
     try {
       if (element !== XMLToken.TEXT_CHANGE_END)
-        this.redlines.RedlineSetCursor(id, true, range, this.outside);
+        this.redlines.RedlineSetCursor(id, true, range, this.outside, collapsed);
       if (element !== XMLToken.TEXT_CHANGE_START)
-        this.redlines.RedlineSetCursor(id, false, range, this.outside);
+        this.redlines.RedlineSetCursor(id, false, range, this.outside, collapsed);
     } finally {
       range.dispose();
     }

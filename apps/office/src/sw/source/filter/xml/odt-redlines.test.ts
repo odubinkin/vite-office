@@ -11,6 +11,7 @@ import {
   encodeWriterDocument,
 } from "../../../browser/filter/xml/writer-document-codec";
 import type { SwDoc } from "../../core/doc/doc";
+import { SwTableNode } from "../../core/docnode/node";
 import { SwFormatCharFormat } from "../../core/txtnode/fmtatr2";
 import { effectiveItem } from "../../core/unocore/unocrsrhelper";
 import { readOdtDocument } from "./swxml";
@@ -144,3 +145,45 @@ it.each([
     expect(saved).toContain("<text:format-change loext:style-name=");
   },
 );
+
+it("keeps the structural tracked table from testTdf132911", /** Ports the original table admission and verifies both connected boundary nodes. @returns Completion. */ async () => {
+  const bytes = new Uint8Array(
+    readFileSync("../../vendor/libreoffice-reference/sw/qa/extras/uiwriter/data/tdf132911.odt"),
+  );
+  const { document } = await readOdtDocument(bytes, metadata);
+  const saved = await roundTrip(document, (model) => {
+    const nodes = model.GetNodes();
+    const body = nodes.GetSectionBlocks(nodes.GetEndOfContent().StartOfSectionNode());
+    const tables = body.filter((node) => node instanceof SwTableNode);
+    expect(tables).toHaveLength(1);
+    const [table] = tables;
+    assert(table);
+    const change = model
+      .GetIDocumentRedlineAccess()
+      .GetRedlineTable()
+      .entries()
+      .find((range) => range.Start().GetNode() === table);
+    assert(change);
+    expect(change.End().GetNode().GetIndex()).toBe(table.EndOfSectionNode().GetIndex() + 1);
+    expect(change.End().GetContentIndex()).toBe(0);
+  });
+  expect(saved).toMatch(
+    /<text:change-start text:change-id="([^"]+)"\/><table:table [\s\S]*?<\/table:table><text:p[^>]*><text:change-end text:change-id="\1"\/>/u,
+  );
+});
+
+it("retains the protected section in testSectionProtection2", /** Ports the ODT import assertion despite the source region without a closing marker. @returns Completion. */ async () => {
+  const bytes = new Uint8Array(
+    readFileSync(
+      "../../vendor/libreoffice-reference/sw/qa/extras/ooxmlexport/data/sectionprot2.odt",
+    ),
+  );
+  const { document } = await readOdtDocument(bytes, metadata);
+  await roundTrip(document, (model) => {
+    const sections = model
+      .GetNodes()
+      .entries()
+      .filter((node) => node.GetSectionNode() === node);
+    expect(sections[0]?.GetSectionNode()?.GetSection().IsProtect()).toBe(true);
+  });
+});

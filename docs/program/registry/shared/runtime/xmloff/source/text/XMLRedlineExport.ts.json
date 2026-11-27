@@ -19,9 +19,10 @@
       "evidence": [
         "apps/office/src/xmloff/source/text/XMLRedlineExport.ts",
         "apps/office/src/sw/source/filter/xml/odt-redlines.test.ts",
-        "vendor/libreoffice-reference/xmloff/source/text/XMLRedlineExport.cxx"
+        "vendor/libreoffice-reference/xmloff/source/text/XMLRedlineExport.cxx",
+        "vendor/libreoffice-reference/sw/qa/extras/uiwriter/uiwriter3.cxx"
       ],
-      "justification": "Writes native region definitions, full timestamps, and text change markers. Desktop personal-data options, structural endpoints and the pre-save redline visibility transition.",
+      "justification": "Writes native region definitions, full timestamps, and text change markers. Desktop personal-data options, the pre-save redline visibility transition. Emits original structural redline markers around the associated ODF block.",
       "knownViolations": [],
       "localSymbols": [
         "exportTrackedChanges",

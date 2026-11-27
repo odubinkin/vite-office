@@ -25,7 +25,14 @@ export interface XMLRedlineImportTarget {
   RedlineAdd(change: XMLRedlineInfo): void;
   RedlineCreateText(id: string): XMLTextCursor | undefined;
   RedlineFinishText(id: string): void;
-  RedlineSetCursor(id: string, start: boolean, range: XMLTextRange, outside: boolean): void;
+  RedlineSetCursor(
+    id: string,
+    start: boolean,
+    range: XMLTextRange,
+    outside: boolean,
+    collapsed?: boolean,
+  ): void;
+  RedlineAdjustStartNodeCursor(id: string): void;
 }
 
 /** Dispatches the native change-info child and the ordinary deleted text context. */

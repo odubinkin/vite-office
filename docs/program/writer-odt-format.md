@@ -147,9 +147,10 @@ Writer retains insertion, deletion and formatting change definitions with their
 authors, timestamps, range markers and represented deletion content across ODT
 and Worker transfer. Ordinary saved single-paragraph deletions are restored
 inline in source order. Format redlines keep the previous named character style
-and direct character items in the document's automatic style pool. Structural
-change boundaries and native hide/show transitions for complex deleted content
-require further work.
+and direct character items in the document's automatic style pool. Table and
+section change markers use the registered boundary nodes through Worker transfer
+and export. Native hide/show transitions for complex deleted content require
+further work.
 
 Images, fields, annotations, sections, objects, scripts,
 signatures, encryption, RDF, non-decimal numbering,

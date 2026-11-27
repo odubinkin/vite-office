@@ -22,6 +22,10 @@
         {
           "path": "apps/office/src/sw/source/filter/xml/odt-redlines.test.ts",
           "marker": "testMidnightRedlineDatetime"
+        },
+        {
+          "path": "apps/office/src/sw/source/filter/xml/odt-redlines.test.ts",
+          "marker": "testTdf132911"
         }
       ],
       "upstream": [
@@ -36,6 +40,14 @@
         {
           "path": "vendor/libreoffice-reference/xmloff/source/text/XMLRedlineExport.cxx",
           "marker": "XMLRedlineExport::ExportChangeInfo"
+        },
+        {
+          "path": "vendor/libreoffice-reference/xmloff/source/text/XMLRedlineExport.cxx",
+          "marker": "XMLRedlineExport::ExportStartOrEndRedline"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/qa/extras/uiwriter/uiwriter3.cxx",
+          "marker": "testTdf132911"
         }
       ]
     },
@@ -46,10 +58,11 @@
       "XMLRedlineExport::ExportChangeInfo"
     ],
     "preservedResponsibilities": [
-      "Writes native region definitions, full timestamps, and text change markers."
+      "Writes native region definitions, full timestamps, and text change markers.",
+      "Emits original structural redline markers around the associated ODF block."
     ],
     "omittedResponsibilities": [
-      "Desktop personal-data options, structural endpoints and the pre-save redline visibility transition."
+      "Desktop personal-data options and the pre-save redline visibility transition."
     ]
   }
 }

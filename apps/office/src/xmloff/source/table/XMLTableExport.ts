@@ -2,6 +2,7 @@
 
 import { escapeXml, exportOdfLength, type XMLTextParagraphSource } from "../text/txtparae";
 import { encodeStyleName } from "../core/xmluconv";
+import { exportRedlineMarker, type XMLRedlineExportMarker } from "../text/XMLRedlineExport";
 import type { OdfBoxProperties } from "../style/bordrhdl";
 import type { OdfTableVisualProperties } from "./XMLTableImport";
 import { exportWritingDirection } from "../style/prhdlfac";
@@ -20,8 +21,11 @@ import {
 /** Ordered text and table blocks supplied by Writer's canonical node array. */
 export type XMLTextExportBlock =
   | Readonly<{ kind: "paragraph"; paragraph: XMLTextParagraphSource }>
-  | Readonly<{ kind: "table"; table: XMLTableExportSource }>
-  | Readonly<{ kind: "section"; section: XMLSectionExportSource }>;
+  | ((
+      | Readonly<{ kind: "table"; table: XMLTableExportSource }>
+      | Readonly<{ kind: "section"; section: XMLSectionExportSource }>
+    ) &
+      Readonly<{ redlineStart?: XMLRedlineExportMarker; redlineEnd?: XMLRedlineExportMarker }>);
 
 /** Neutral table values consumed by the xmloff export pass. */
 export interface XMLTableExportSource {
@@ -127,6 +131,7 @@ export function exportTableBlocks(
         continue;
       }
       flush();
+      if (block.redlineStart) body += exportRedlineMarker(block.redlineStart, escapeXml);
       if (block.kind === "section") {
         const attributes = exportSectionStyleAttributes(block.section.style);
         let name = sectionStyles.get(attributes);
@@ -137,6 +142,7 @@ export function exportTableBlocks(
           automaticStyles += `<style:style style:name="${name}" style:family="section">${properties}</style:style>`;
         }
         body += exportSection(block.section, name, renderBlocks(block.section.content));
+        if (block.redlineEnd) body += exportRedlineMarker(block.redlineEnd, escapeXml);
         continue;
       }
       const table = block.table;
@@ -267,6 +273,7 @@ export function exportTableBlocks(
         body += "</table:table-header-rows>";
       if (table.softPageBreakRows.includes(table.rows.length)) body += "<text:soft-page-break/>";
       body += "</table:table>";
+      if (block.redlineEnd) body += exportRedlineMarker(block.redlineEnd, escapeXml);
     }
     flush();
     return body;

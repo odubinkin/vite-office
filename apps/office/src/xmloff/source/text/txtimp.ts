@@ -131,6 +131,7 @@ export class XMLTextImportHelper {
   /** Enters a named section in the current list context. @param cursor - Section text cursor. @returns Nothing. */
   public PushSectionCursor(cursor: XMLTextCursor): void {
     this.PushTextCursor(cursor, false);
+    this.RedlineAdjustStartNodeCursor();
   }
 
   /** Suspends text ranges so the child text can use the same dispatch helpers. @param cursor - Child text cursor. @param isolateList - Whether to isolate list state. @returns Nothing. */
@@ -161,6 +162,21 @@ export class XMLTextImportHelper {
   /** Restores the cursor from before the named section. @returns Nothing. */
   public PopSectionCursor(): void {
     this.PopTextCursor();
+    this.RedlineAdjustStartNodeCursor();
+  }
+
+  private openRedlineId = "";
+
+  /** Remembers the source structural redline waiting for its node. @param id - Original change ID. */
+  public SetOpenRedlineId(id: string): void {
+    this.openRedlineId = id;
+  }
+
+  /** Commits the pending structural boundary once its text owner has connected. */
+  public RedlineAdjustStartNodeCursor(): void {
+    if (!this.openRedlineId) return;
+    this.target.redlineImport?.RedlineAdjustStartNodeCursor(this.openRedlineId);
+    this.openRedlineId = "";
   }
 
   /** Resumes the parent cursor and its original list context. @returns Nothing. */

@@ -30,13 +30,22 @@
         {
           "path": "apps/office/src/sw/source/filter/xml/odt-redlines.test.ts",
           "marker": "format-charstyle-direct.odt"
+        },
+        {
+          "path": "apps/office/src/sw/browser/filter/xml/writer-redline-codec.ts",
+          "marker": "sectionDepth"
+        },
+        {
+          "path": "apps/office/src/sw/source/filter/xml/odt-redlines.test.ts",
+          "marker": "testTdf132911"
         }
       ]
     },
     "rationale": "Transfers live redline metadata, registered positions and deletion sections across the browser Worker.",
     "responsibilities": [
       "Transfers live redline metadata, registered positions and deletion sections across the browser Worker.",
-      "Transfers native previous-format items and the document-owned named character format."
+      "Transfers native previous-format items and the document-owned named character format.",
+      "Rebinds table and section endpoints through their actual restored descendant text owners."
     ],
     "stackDivergence": {
       "kind": "local-infrastructure",

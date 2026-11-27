@@ -8,7 +8,7 @@ import type {
 } from "../../../../xmloff/source/text/XMLChangedRegionImportContext";
 import { RedlineFlags } from "../../../inc/IDocumentRedlineAccess";
 import { SwStartNodeType } from "../../../inc/ndtyp";
-import { CheckNodesRange, SwPosition } from "../../core/crsr/pam";
+import { CheckNodesRange, SwNodeIndex, SwPosition } from "../../core/crsr/pam";
 import type { SwDoc } from "../../core/doc/doc";
 import {
   SwRangeRedline,
@@ -16,7 +16,7 @@ import {
   InsertRedlineAuthor,
   type SwRedlineExtraData_FormatColl,
 } from "../../core/doc/docredln";
-import type { SwStartNode } from "../../core/docnode/node";
+import { SwTableNode, type SwStartNode } from "../../core/docnode/node";
 import { SwTextNode } from "../../core/txtnode/ndtxt";
 import type { SwXTextCursor } from "../../core/unocore/unoobj";
 import { SwXTextRange } from "../../core/unocore/unoobj2";
@@ -31,8 +31,8 @@ const redlineTypes = {
 /** The original per-ID import state, before both endpoints are known. */
 interface RedlineInfo {
   readonly changes: XMLRedlineInfo[];
-  start?: SwPosition;
-  end?: SwPosition;
+  start?: SwPosition | SwNodeIndex;
+  end?: SwPosition | SwNodeIndex;
   content?: SwStartNode;
   outside?: boolean;
 }
@@ -84,16 +84,39 @@ export class XMLRedlineImportHelper implements XMLRedlineImportTarget {
       nodes.removeTextNode(last);
   }
 
-  /** Captures a real document position using the original change identifier. @param id - Declared change ID. @param start - Use the leading endpoint. @param range - Actual UNO range. @param outside - Whether a structural boundary needs deferred completion. */
-  RedlineSetCursor(id: string, start: boolean, range: XMLTextRange, outside: boolean): void {
+  /** Captures a real document position using the original change identifier. @param id - Declared change ID. @param start - Use the leading endpoint. @param range - Actual UNO range. @param outside - Whether a structural boundary needs deferred completion. @param collapsed - Whether both endpoints are the same source marker. */
+  RedlineSetCursor(
+    id: string,
+    start: boolean,
+    range: XMLTextRange,
+    outside: boolean,
+    collapsed = false,
+  ): void {
     const entry = this.m_aRedlineMap.get(id);
     if (!entry || !(range instanceof SwXTextRange)) return;
     const point = range.GetPaM().GetPoint();
     const key = start ? "start" : "end";
     entry[key]?.Dispose();
-    entry[key] = new SwPosition(point.GetNode(), point.GetContentIndex(), "redline", "before");
+    const node = point.GetNode();
+    if (outside) {
+      const previous = node.GetNodes().at(node.GetIndex() - 1);
+      const section = previous.IsEndNode() ? previous.StartOfSectionNode() : undefined;
+      // The scoped body cursor stays on the paragraph after a connected table or section.
+      entry[key] =
+        !start && !collapsed && (section instanceof SwTableNode || section?.GetSectionNode())
+          ? new SwPosition(previous)
+          : new SwNodeIndex(previous);
+    } else entry[key] = new SwPosition(node, point.GetContentIndex(), "redline", "before");
     entry.outside ||= outside;
     if (entry.start && entry.end && !entry.outside) this.InsertIntoDocument(id, entry);
+  }
+
+  /** Completes an open structural redline after its target node exists. @param id - Source change identity. */
+  RedlineAdjustStartNodeCursor(id: string): void {
+    const entry = this.m_aRedlineMap.get(id);
+    if (!entry) return;
+    entry.outside = false;
+    if (entry.start && entry.end) this.InsertIntoDocument(id, entry);
   }
 
   /** Completes recorded structural boundaries and drops incomplete definitions. */
@@ -145,25 +168,37 @@ export class XMLRedlineImportHelper implements XMLRedlineImportTarget {
 
   /** Promotes the ranged or saved change into the native document table. @param id - Source identity. @param entry - Completed import state. */
   private InsertIntoDocument(id: string, entry: RedlineInfo): void {
-    const start = entry.start;
-    const end = entry.end;
     const change = entry.changes[0];
-    if (!start || !end || !change) return;
-    const collapsed = start.compare(end) === 0;
-    const content = entry.content;
-    if ((collapsed && !content) || !CheckNodesRange(start.GetNode(), end.GetNode(), true)) {
-      this.RemovePending(id, entry, true);
-      return;
+    if (!entry.start || !entry.end || !change) return;
+    const start = this.CopyPosition(entry.start);
+    const end = this.CopyPosition(entry.end);
+    try {
+      const collapsed = start.compare(end) === 0;
+      const content = entry.content;
+      if ((collapsed && !content) || !CheckNodesRange(start.GetNode(), end.GetNode(), true)) {
+        this.RemovePending(id, entry, true);
+        return;
+      }
+      const redline = new SwRangeRedline(
+        this.ConvertRedline(entry),
+        end,
+        collapsed ? undefined : start,
+        !change.mergeLastParagraph,
+      );
+      if (content) redline.SetContentIdx(content);
+      this.document.GetIDocumentRedlineAccess().GetRedlineTable().Insert(redline);
+      this.RemovePending(id, entry, false);
+    } finally {
+      end.Dispose();
+      start.Dispose();
     }
-    const redline = new SwRangeRedline(
-      this.ConvertRedline(entry),
-      end,
-      collapsed ? undefined : start,
-      !change.mergeLastParagraph,
-    );
-    if (content) redline.SetContentIdx(content);
-    this.document.GetIDocumentRedlineAccess().GetRedlineTable().Insert(redline);
-    this.RemovePending(id, entry, false);
+  }
+
+  /** Resolves the previous-node index only after structural materialization. @param anchor - Borrowed range or node index. @returns Registered position. */
+  private CopyPosition(anchor: SwPosition | SwNodeIndex): SwPosition {
+    return anchor instanceof SwPosition
+      ? anchor.clone()
+      : new SwPosition(anchor.GetNodes().at(anchor.GetIndex() + 1), 0, "redline", "before");
   }
 
   /** Releases borrowed importer positions and an abandoned deletion section. @param id - Source identity. @param entry - Import state. @param removeContent - Whether the section has no surviving owner. */

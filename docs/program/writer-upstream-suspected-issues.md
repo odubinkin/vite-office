@@ -6388,3 +6388,14 @@ reader behavior.
 
 - [Original comment import](../../vendor/libreoffice-reference/xmloff/source/text/XMLChangeInfoContext.cxx#L66)
 - [Original change-info export](../../vendor/libreoffice-reference/xmloff/source/text/XMLRedlineExport.cxx#L543)
+
+### WRITER-771 — A table or section boundary exports only the first matching redline
+
+The native table and section property readers scan the redline table and stop
+at the first range whose endpoint occupies the requested boundary node. The
+ODF exporter reads that single property sequence, so later ranges with an
+endpoint on the same node have no marker from that boundary. Writer retains
+the original first-match behavior.
+
+- [Original table boundary query](../../vendor/libreoffice-reference/sw/source/core/unocore/unotbl.cxx#L326)
+- [Original section boundary query](../../vendor/libreoffice-reference/sw/source/core/unocore/unosect.cxx#L1121)

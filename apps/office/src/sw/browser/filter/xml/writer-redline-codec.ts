@@ -21,7 +21,7 @@ import {
   GetRedlineAuthor,
   InsertRedlineAuthor,
 } from "../../../source/core/doc/docredln";
-import type { SwStartNode } from "../../../source/core/docnode/node";
+import { SwTableNode, type SwStartNode } from "../../../source/core/docnode/node";
 import type { SwTextNode } from "../../../source/core/txtnode/ndtxt";
 import {
   decodeSectionBlocks,
@@ -30,7 +30,12 @@ import {
 } from "./writer-document-content-codec";
 
 /** Native position expressed in graph text-owner order. */
-type Endpoint = Readonly<{ nodeIndex: number; offset: number }>;
+type Endpoint = Readonly<{
+  nodeIndex: number;
+  offset: number;
+  boundary?: "start" | "end";
+  sectionDepth?: number;
+}>;
 /** Scalar components of the native local timestamp. */
 type Timestamp = readonly [
   year: number,
@@ -92,10 +97,32 @@ export function encodeRedlines(
   const ranges: Range[] = [];
   /** Maps a registered endpoint to the public graph's node ordering. @param position - Native position. @returns Primitive endpoint. */
   function endpoint(position: SwPosition): Endpoint {
-    const node = position.GetNode().GetTextNode();
-    const nodeIndex = node === null ? -1 : owners.indexOf(node);
-    if (nodeIndex < 0) throw new Error("Writer redline is missing its graph text owner.");
-    return { nodeIndex, offset: position.GetContentIndex() };
+    const node = position.GetNode();
+    const text = node.GetTextNode();
+    if (text) {
+      const nodeIndex = owners.indexOf(text);
+      if (nodeIndex < 0) throw new Error("Writer redline is missing its graph text owner.");
+      return { nodeIndex, offset: position.GetContentIndex() };
+    }
+    const section = node.IsEndNode() ? node.StartOfSectionNode() : node;
+    if (!section.IsStartNode() || !(section instanceof SwTableNode || section.GetSectionNode()))
+      throw new Error("Writer redline is missing its graph structural owner.");
+    const from = section.GetIndex();
+    const to = section.EndOfSectionIndex();
+    const nodeIndex = owners.findIndex(
+      /** Uses a real descendant text owner as the graph anchor. @param candidate - Graph text owner. @returns Whether it belongs to this block. */
+      (candidate) => candidate.GetIndex() > from && candidate.GetIndex() < to,
+    );
+    const owner = owners[nodeIndex];
+    if (!owner) throw new Error("Writer redline structural block has no graph text owner.");
+    let sectionDepth = 0;
+    for (
+      let current = owner.StartOfSectionNode();
+      current !== section;
+      current = current.StartOfSectionNode()
+    )
+      sectionDepth++;
+    return { nodeIndex, offset: 0, boundary: node.IsEndNode() ? "end" : "start", sectionDepth };
   }
   for (const range of access.GetRedlineTable().entries()) {
     const changes: Change[] = [];
@@ -185,6 +212,27 @@ export function restoreRedlines(
       endpoint.offset > node.Len()
     )
       throw new Error("Stored Writer redline position is invalid.");
+    if (endpoint.boundary !== undefined) {
+      const depth = endpoint.sectionDepth;
+      if (
+        (endpoint.boundary !== "start" && endpoint.boundary !== "end") ||
+        depth === undefined ||
+        !Number.isInteger(depth) ||
+        depth < 0 ||
+        endpoint.offset !== 0
+      )
+        throw new Error("Stored Writer redline boundary is invalid.");
+      let section = node.StartOfSectionNode();
+      for (let level = 0; level < depth; level++) {
+        const parent = section.StartOfSectionNode();
+        if (parent === section)
+          throw new Error("Stored Writer redline boundary exceeds its text owner.");
+        section = parent;
+      }
+      if (!(section instanceof SwTableNode || section.GetSectionNode()))
+        throw new Error("Stored Writer redline boundary has no structural owner.");
+      return new SwPosition(endpoint.boundary === "start" ? section : section.EndOfSectionNode());
+    }
     return new SwPosition(node, endpoint.offset, "redline", "before");
   }
   for (const range of record.ranges) {

@@ -36,7 +36,7 @@ import {
   sectionParagraphs,
   type XMLBoundWriterFrames,
 } from "./xmltextframe";
-import { projectParagraphMarkers } from "./xmlexp-markers";
+import { projectParagraphMarkers, projectStructuralRedline } from "./xmlexp-markers";
 import { RedlineType } from "../../../../svx/inc/ctredlin";
 import { RedlineFlags } from "../../../inc/IDocumentRedlineAccess";
 import {
@@ -707,6 +707,14 @@ function exportWriterText(
 
 /** Projects one original text or table node, including interleaved cell sections. @param block - Native node. @param anchored - Actual bound frame sets. @returns Neutral ODF body block. */
 function projectBlock(block: SwSectionBlock, anchored: XMLBoundWriterFrames): XMLTextExportBlock {
+  if (!(block instanceof SwSectionNode) && !(block instanceof SwTableNode))
+    return { kind: "paragraph", paragraph: projectParagraph(block, anchored) };
+  const redlineStart = projectStructuralRedline(block);
+  const redlineEnd = projectStructuralRedline(block.EndOfSectionNode());
+  const redlines = {
+    ...(redlineStart ? { redlineStart } : {}),
+    ...(redlineEnd ? { redlineEnd } : {}),
+  };
   if (block instanceof SwSectionNode) {
     const content = block
       .GetNodes()
@@ -719,14 +727,13 @@ function projectBlock(block: SwSectionBlock, anchored: XMLBoundWriterFrames): XM
     const properties = exportTextSection(block, content);
     return {
       kind: "section",
+      ...redlines,
       section:
         section instanceof SwTOXBaseSection
           ? { ...properties, index: exportDocumentIndex(section.tox, block.GetDoc()) }
           : properties,
     };
   }
-  if (!(block instanceof SwTableNode))
-    return { kind: "paragraph", paragraph: projectParagraph(block, anchored) };
   const table = block.GetTable(),
     grid = new SwXMLTableLines(table);
   const items = table.GetFrameFormat().GetAttrSet();
@@ -743,6 +750,7 @@ function projectBlock(block: SwSectionBlock, anchored: XMLBoundWriterFrames): XM
   const borders = items.GetItemIfSet(RES_COLLAPSING_BORDERS, false) as SfxBoolItem | undefined;
   return {
     kind: "table" as const,
+    ...redlines,
     table: {
       name: table.GetName(),
       columnName: sw_GetTableBoxColStr,
