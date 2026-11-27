@@ -1,0 +1,21 @@
+{
+  "schema_version": 1,
+  "task_id": "202611271823-P3TJDC",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-11-27T18:43:49.976Z",
+  "verdict": "pass",
+  "summary": "Writer preserves original named GetReference fields and displayed text through ODT and Worker.",
+  "evaluated_sha": "5760ce646992a1641f6fb89a72242ca14f61f70d",
+  "blueprint_digest": "01661106a077969a1807a12b0b42d2fa995a12f3a49f2ba077c805b0aa37ef53",
+  "findings": [
+    "Unmodified LibreOffice reference fixtures passed their represented source, cached text and expansion checks. Page-dependent evaluation remains outside this slice."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202611271823-P3TJDC/README.md",
+    "output/playwright/odf-writer-redlines/reference-fields-verification.md"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": []
+}
