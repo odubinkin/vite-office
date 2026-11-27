@@ -1,10 +1,11 @@
 ---
 id: "202611271659-6P09PX"
 title: "Implement native Writer redline formatting in ODT"
-status: "DOING"
+result_summary: "Preserves original named and direct previous formatting for Writer redlines in ODT and the Worker."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 6
+revision: 7
 origin:
   system: "manual"
 depends_on: []
@@ -41,11 +42,16 @@ quality_review:
     - "output/playwright/odf-writer-redlines/prior-style-verification.md"
   findings:
     - "Both pinned LibreOffice formats preserve old named and direct properties through import, Worker and export."
-commit: null
+commit:
+  hash: "fda30b316e25b9789772499678b214f71b386956"
+  message: "🧩 6P09PX writer: preserve previous character formatting in ODT redlines"
 comments:
   -
     author: "CODER"
     body: "Start: port original previous-format data ownership and ODT style pass."
+  -
+    author: "CODER"
+    body: "Verified: two original LibreOffice prior-format fixtures, 40 focused Writer cases, three tooling cases and required static checks."
 events:
   -
     type: "status"
@@ -60,8 +66,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Forty Writer tests and three tooling tests passed. Both original format-redline fixtures retain the previous style and direct size through the Worker and ODT. Office typecheck, lint, module boundaries, provenance and scoped inventory passed."
+  -
+    type: "status"
+    at: "2026-11-27T17:11:59.756Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: two original LibreOffice prior-format fixtures, 40 focused Writer cases, three tooling cases and required static checks."
 doc_version: 3
-doc_updated_at: "2026-11-27T17:10:08.329Z"
+doc_updated_at: "2026-11-27T17:11:59.757Z"
 doc_updated_by: "CODER"
 description: "Replace lexical prior-style references with the original Writer redline extra data and character automatic-style storage. Preserve named and direct previous formats in ODT import, export and Worker transfer. Port the original XML-filter named and direct formatting fixtures."
 sections:
