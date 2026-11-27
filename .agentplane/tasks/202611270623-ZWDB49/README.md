@@ -1,10 +1,11 @@
 ---
 id: "202611270623-ZWDB49"
 title: "Align Writer ODT list rule overrides and numbered paragraphs"
-status: "DOING"
+result_summary: "Writer preserves numbered paragraphs and per-item list-rule overrides through native ODT ownership."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 7
+revision: 8
 origin:
   system: "manual"
 depends_on: []
@@ -41,11 +42,16 @@ quality_review:
     - "3858bb8c89d64b6910f2f99f0854aec81fe36c5d"
   findings:
     - "Scoped Writer and shared cases passed. The original UNO restart setter, fallback list rule creation, and randomized list IDs support the end-to-end ODT behavior."
-commit: null
+commit:
+  hash: "d3e2478eeedbde82577931c02554f3a7630cee5c"
+  message: "🐛 F36CFN calc: retain numeric durations and portable external paths"
 comments:
   -
     author: "CODER"
     body: "Start: continue direct-mode task in current checkout."
+  -
+    author: "CODER"
+    body: "Verified: 61 scoped Writer tests and two shared list-context tests passed. Implementation: 3858bb8c89d64b6910f2f99f0854aec81fe36c5d."
 events:
   -
     type: "status"
@@ -60,8 +66,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "61 existing and new targeted Writer cases and 2 shared cases pass after replaying two resource timeouts. All static, provenance and scoped registry checks passed."
+  -
+    type: "status"
+    at: "2026-11-27T07:11:10.739Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: 61 scoped Writer tests and two shared list-context tests passed. Implementation: 3858bb8c89d64b6910f2f99f0854aec81fe36c5d."
 doc_version: 3
-doc_updated_at: "2026-11-27T07:08:55.560Z"
+doc_updated_at: "2026-11-27T07:11:10.739Z"
 doc_updated_by: "CODER"
 description: "Import native numbered paragraph contexts and per-item rule overrides; export alternate rules within one native list identity using text:style-override, following pinned LibreOffice list ownership, default rule formats and context transitions."
 sections:
