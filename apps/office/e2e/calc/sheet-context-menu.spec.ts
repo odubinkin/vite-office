@@ -27,7 +27,10 @@ for (const viewport of [
     const menu = page.getByRole("menu", { name: "Calc sheet context menu" });
     await expect(menu).toBeFocused();
     await expect(menu.getByRole("menuitem")).toHaveCount(5);
-    await expect(menu.getByRole("menuitemcheckbox")).toHaveCount(1);
+    await expect(menu.getByRole("menuitemcheckbox")).toHaveCount(2);
+    await expect(
+      menu.getByRole("menuitemcheckbox", { name: "Protect Sheet…", exact: true }),
+    ).not.toBeChecked();
     await expect(
       menu.getByRole("menuitemcheckbox", { name: "View Grid Lines", exact: true }),
     ).toBeChecked();
