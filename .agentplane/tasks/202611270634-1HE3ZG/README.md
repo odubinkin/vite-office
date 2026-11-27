@@ -1,10 +1,11 @@
 ---
 id: "202611270634-1HE3ZG"
 title: "Synchronize Writer Navigator with the document cursor"
-status: "DOING"
+result_summary: "Navigator tracks the active document cursor with native outline, table and bookmark priorities."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 9
+revision: 10
 origin:
   system: "manual"
 depends_on: []
@@ -39,11 +40,16 @@ quality_review:
     - "output/playwright/writer-navigator-tracking-chromium.log"
   findings:
     - "Focused tests cover heading root selection on cursor movement, bookmark and table priority, and grouped command history. Provenance drift in an unrelated ODT witness is recorded in Findings."
-commit: null
+commit:
+  hash: "f9f30269735a3f18193f44bef8982c20af2953b3"
+  message: "🧩 1HE3ZG code: Synchronize Writer Navigator with the document cursor"
 comments:
   -
     author: "CODER"
     body: "Start: continue direct-mode task in current checkout."
+  -
+    author: "CODER"
+    body: "Verified: cursor tracking passes 60 focused tests, 5 Chromium scenarios, and the production build."
 events:
   -
     type: "status"
@@ -58,8 +64,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Verified: 60 targeted cursor shell, slot and Navigator unit tests and 5 Chromium Navigator scenarios, including tdf114724 selection in heading root mode and grouped history. TypeScript, production build, scoped lint, Prettier, dependency, source tree, Writer resources, scoped provenance and policy routing checks passed."
+  -
+    type: "status"
+    at: "2026-11-27T07:11:04.083Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: cursor tracking passes 60 focused tests, 5 Chromium scenarios, and the production build."
 doc_version: 3
-doc_updated_at: "2026-11-27T07:09:57.152Z"
+doc_updated_at: "2026-11-27T07:11:04.084Z"
 doc_updated_by: "CODER"
 description: "Connect default native outline, table and bookmark tracking to the modeless Navigator while retaining explicit tree selection and scope."
 sections:
