@@ -7,17 +7,22 @@
     "status": "mapped",
     "upstreamPath": "sc/source/filter/xml/xmlannoi.cxx",
     "localSymbols": [
-      "ScXMLAnnotationContext"
+      "ScXMLAnnotationContext",
+      "ScXMLThreadedCommentContext",
+      "ScXMLThreadedCommentReplyContext"
     ],
     "upstreamSymbols": [
       "ScXMLAnnotationContext::createFastChildContext",
-      "ScXMLAnnotationContext::endFastElement"
+      "ScXMLAnnotationContext::endFastElement",
+      "ScXMLThreadedCommentContext",
+      "ScXMLThreadedCommentReplyContext"
     ],
     "preservedResponsibilities": [
-      "Imports annotation text separately from the cell value and reads creator, date, legacy date fallback, and display metadata. Retains valid ISO dates in the model for the browser, as LibreOfficeKit does."
+      "Imports annotation text separately from the cell value and reads creator, date, legacy date fallback, and display metadata. Retains valid ISO dates in the model for the browser, as LibreOfficeKit does.",
+      "Imports the native threaded comment root and ordered replies, preserving lexical fields and moving thread ownership to the first created note."
     ],
     "omittedResponsibilities": [
-      "Caption drawing properties and threaded comments are outside this model."
+      "Caption drawing properties are outside this model."
     ],
     "evidence": {
       "local": [
@@ -28,6 +33,18 @@
         {
           "path": "apps/office/src/sc/source/filter/xml/ods-cell-notes.test.ts",
           "marker": "testCellNoteExportODS"
+        },
+        {
+          "path": "apps/office/src/sc/source/filter/xml/xmlannoi.ts",
+          "marker": "ScXMLThreadedCommentContext"
+        },
+        {
+          "path": "apps/office/src/sc/source/filter/xml/xmlannoi.ts",
+          "marker": "ScXMLThreadedCommentReplyContext"
+        },
+        {
+          "path": "apps/office/src/sc/source/filter/xml/ods-cell-notes.test.ts",
+          "marker": "testThreadedCommentOdsRoundtrip"
         }
       ],
       "upstream": [
@@ -42,6 +59,14 @@
         {
           "path": "vendor/libreoffice-reference/sc/source/filter/xml/xmlcelli.cxx",
           "marker": "ScXMLTableRowCellContext::SetAnnotation"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/source/filter/xml/xmlannoi.cxx",
+          "marker": "ScXMLThreadedCommentContext"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/source/filter/xml/xmlannoi.cxx",
+          "marker": "ScXMLThreadedCommentReplyContext"
         }
       ]
     }

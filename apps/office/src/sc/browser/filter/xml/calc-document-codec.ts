@@ -1,5 +1,13 @@
 /** @fileoverview Bounded Calc worker transfer of supported native cells, sparse attributes and geometry; XML remains the durable format. */
-import { ScPostIt, type NoteEntry } from "../../../inc/postit";
+import type { NoteEntry } from "../../../inc/postit";
+import {
+  decodeCalcCellNote,
+  decodeCalcPerson,
+  encodeCalcCellNote,
+  encodeCalcPerson,
+  type CalcCellNoteRecord,
+  type CalcPersonRecord,
+} from "./calc-note-codec";
 import { ScFormulaCell } from "../../../source/core/data/formulacell";
 import {
   decodeCalcIconSets,
@@ -104,16 +112,6 @@ type Cell =
   | readonly [col: number, row: number, kind: "text", value: string]
   | readonly [col: number, row: number, kind: "formula", value: string, cache?: FormulaCache]
   | readonly [col: number, row: number, kind: "edit", value: string | readonly CellTextParagraph[]];
-/** Metadata and either the simple or the original edit caption payload. */
-type CellNote = readonly [
-  col: number,
-  row: number,
-  author: string,
-  date: string,
-  shown: boolean,
-  text: string | readonly CellTextParagraph[],
-];
-
 /** Actual sparse pattern span; -1 selects the native default column. */
 type Pattern = readonly [
   col: number,
@@ -200,7 +198,7 @@ interface Sheet {
   readonly panes?: SheetPaneLayout;
   readonly optimalMinRowHeight?: number;
   readonly cells: Cell[];
-  readonly notes?: readonly CellNote[];
+  readonly notes?: readonly CalcCellNoteRecord[];
   readonly patterns: Pattern[];
   readonly merges?: [firstColumn: number, firstRow: number, lastColumn: number, lastRow: number][];
   readonly columns: [first: number, last: number, width: number, hidden: boolean][];
@@ -269,6 +267,7 @@ export interface CalcDocumentRecord {
   readonly styles: string;
   readonly sheets: Sheet[];
   readonly externalFiles?: readonly ExternalFile[];
+  readonly persons?: readonly CalcPersonRecord[];
   readonly visibleTab?: number;
   readonly showGrid?: boolean;
   readonly showFormulas?: boolean;
@@ -375,7 +374,7 @@ function* encodeSteps(document: ScDocument): Generator<void, CalcDocumentRecord>
     const conditionalIconSets = encodeCalcIconSets(table);
     const noteEntries: NoteEntry[] = [];
     document.GetAllNoteEntries(tab, noteEntries);
-    const notes: CellNote[] = [];
+    const notes: CalcCellNoteRecord[] = [];
     const sheet: Sheet = {
       ...(pageStyles.names.has(pageStyle) ? { pageStyle } : {}),
       ...(tabColor.equals(COL_AUTO) ? {} : { tabColor: tabColor.toUInt32() }),
@@ -422,16 +421,8 @@ function* encodeSteps(document: ScDocument): Generator<void, CalcDocumentRecord>
       rows: [],
     };
     sheets.push(sheet);
-    for (const { maPos, mpNote } of noteEntries) {
-      const edit = mpNote.GetEditTextObject();
-      notes.push([
-        maPos.Col(),
-        maPos.Row(),
-        mpNote.GetAuthor(),
-        mpNote.GetDate(),
-        mpNote.IsCaptionShown(),
-        edit ? textStyles.collect(edit) : mpNote.GetText(),
-      ]);
+    for (const entry of noteEntries) {
+      notes.push(encodeCalcCellNote(entry, textStyles));
       yield;
     }
     if (outline)
@@ -640,10 +631,16 @@ function* encodeSteps(document: ScDocument): Generator<void, CalcDocumentRecord>
   }
   const options = document.GetDocOptions();
   const grid = view.GetGridOptions();
+  const persons: CalcPersonRecord[] = [];
+  for (const person of document.GetPersonList()) {
+    persons.push(encodeCalcPerson(person));
+    yield;
+  }
   return {
     version: 1,
     sheets,
     ...(externalFiles.length ? { externalFiles } : {}),
+    ...(persons.length ? { persons } : {}),
     ...(document.GetVisibleTab() ? { visibleTab: document.GetVisibleTab() } : {}),
     ...(view.GetOption(ViewOption.GRID) ? {} : { showGrid: false }),
     ...(view.GetOption(ViewOption.FORMULAS) ? { showFormulas: true } : {}),
@@ -834,6 +831,10 @@ function* decodeSteps(record: CalcDocumentRecord): Generator<void, ScDocument> {
       view.SetOption(ViewOption.SYNTAX, record.valueHighlighting);
     if (record.drawingGrid !== undefined)
       view.SetGridOptions(decodeDrawingGrid(record.drawingGrid));
+    for (const person of record.persons ?? []) {
+      document.AddPerson(decodeCalcPerson(person));
+      yield;
+    }
     for (const [name, sheets, relativeName, filter] of record.externalFiles ?? []) {
       const manager = document.GetExternalRefManager();
       const file = manager.getExternalFileId(name);
@@ -1029,25 +1030,8 @@ function* decodeSteps(record: CalcDocumentRecord): Generator<void, ScDocument> {
       if (sheet.repeatColumns)
         table.SetRepeatColRange(decodePrintRange(sheet.repeatColumns, document));
       if (sheet.repeatRows) table.SetRepeatRowRange(decodePrintRange(sheet.repeatRows, document));
-      for (const [col, row, author, date, shown, value] of sheet.notes ?? []) {
-        if (
-          !document.ValidColRow(col, row) ||
-          !Number.isInteger(col) ||
-          !Number.isInteger(row) ||
-          typeof author !== "string" ||
-          typeof date !== "string" ||
-          typeof shown !== "boolean" ||
-          !(typeof value === "string" || Array.isArray(value))
-        )
-          throw new Error("Calc worker cell note is invalid.");
-        const position = new ScAddress(col, row, tab);
-        const note = new ScPostIt(
-          shown,
-          typeof value === "string" ? value : createCellEditText(importer, value),
-        );
-        note.SetAuthor(author);
-        note.SetDate(date);
-        document.SetNote(position, note);
+      for (const note of sheet.notes ?? []) {
+        decodeCalcCellNote(importer, tab, note);
         yield;
       }
       for (const record of sheet.cells) {

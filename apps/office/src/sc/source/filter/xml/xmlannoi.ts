@@ -7,7 +7,12 @@ import {
 import { XMLToken } from "../../../../xmloff/source/core/xmltoken";
 import { SvXMLUnitConverter } from "../../../../xmloff/source/core/xmluconv";
 import type { ScAddress } from "../../../inc/address";
-import { ScNoteUtil, type ScPostIt } from "../../../inc/postit";
+import {
+  ScNoteUtil,
+  ScThreadedCommentData,
+  ScThreadedCommentEntry,
+  type ScPostIt,
+} from "../../../inc/postit";
 import { ScXMLCellTextParaContext } from "./celltextparacontext";
 import { ScXMLImportContext } from "./importcontext";
 import { createCellEditText } from "./xmlcelli.edit";
@@ -27,6 +32,74 @@ class ScXMLContentContext extends SvXMLImportContext {
   }
 }
 
+/** Reads one native threaded entry's lexical attributes. @param entry - Comment or reply. @param attributes - Original metadata. */
+function readThreadEntry(entry: ScThreadedCommentEntry, attributes: FastAttributeList): void {
+  entry.maGuid = attributes.get(XMLToken.LOEXT_ID) ?? "";
+  entry.maPersonId = attributes.get(XMLToken.LOEXT_PERSON_ID) ?? "";
+  entry.maDateTime = attributes.get(XMLToken.LOEXT_DATE_TIME) ?? "";
+}
+
+/** Collects one reply under its native thread owner. */
+class ScXMLThreadedCommentReplyContext extends SvXMLImportContext {
+  private readonly entry = new ScThreadedCommentEntry();
+
+  /** Reads the original reply attributes. @param data - Owning thread. @param attributes - Reply attributes. */
+  constructor(
+    private readonly data: ScThreadedCommentData,
+    attributes: FastAttributeList,
+  ) {
+    super();
+    readThreadEntry(this.entry, attributes);
+  }
+
+  /** Accumulates the text of this reply. @param element - Child token. @returns Child context. */
+  override createFastChildContext(element: XMLToken): SvXMLImportContext | null {
+    return element === XMLToken.LOEXT_TEXT
+      ? new ScXMLContentContext(
+          /** Appends decoded reply text. @param value - Characters. */
+          (value) => {
+            this.entry.maText += value;
+          },
+        )
+      : null;
+  }
+
+  /** Commits the entry in source order. */
+  override endFastElement(): void {
+    this.data.maReplies.push(this.entry);
+  }
+}
+
+/** Collects the native comment root and its independent reply sequence. */
+class ScXMLThreadedCommentContext extends SvXMLImportContext {
+  /** Reads the original thread attributes. @param data - Newly owned thread metadata. @param attributes - Root attributes. */
+  constructor(
+    private readonly data: ScThreadedCommentData,
+    attributes: FastAttributeList,
+  ) {
+    super();
+    readThreadEntry(data.maRoot, attributes);
+    data.mbDone = attributes.get(XMLToken.LOEXT_RESOLVED) === "true";
+  }
+
+  /** Dispatches root text and replies. @param element - Child token. @param attributes - Child metadata. @returns Child context. */
+  override createFastChildContext(
+    element: XMLToken,
+    attributes: FastAttributeList,
+  ): SvXMLImportContext | null {
+    if (element === XMLToken.LOEXT_TEXT)
+      return new ScXMLContentContext(
+        /** Appends decoded root text. @param value - Characters. */
+        (value) => {
+          this.data.maRoot.maText += value;
+        },
+      );
+    return element === XMLToken.LOEXT_REPLY
+      ? new ScXMLThreadedCommentReplyContext(this.data, attributes)
+      : null;
+  }
+}
+
 /** Handles the annotation subtree independently of the owning cell value. */
 export class ScXMLAnnotationContext extends ScXMLImportContext {
   private author: string;
@@ -34,6 +107,7 @@ export class ScXMLAnnotationContext extends ScXMLImportContext {
   private dateString: string;
   private readonly shown: boolean;
   private simpleText = "";
+  private threaded: ScThreadedCommentData | null = null;
   private readonly paragraphs: CellTextParagraph[] = [];
 
   /** Reads legacy annotation attributes before child elements. @param owner - Native importer. @param tab - Current sheet. @param attributes - Annotation attributes. */
@@ -54,8 +128,11 @@ export class ScXMLAnnotationContext extends ScXMLImportContext {
     this.paragraphs.push(paragraph);
   }
 
-  /** Dispatches native metadata and supported caption paragraphs. @param element - Child token. @returns Child context. */
-  override createFastChildContext(element: XMLToken): SvXMLImportContext {
+  /** Dispatches native metadata and supported caption paragraphs. @param element - Child token. @param attributes - Child metadata. @returns Child context. */
+  override createFastChildContext(
+    element: XMLToken,
+    attributes: FastAttributeList,
+  ): SvXMLImportContext {
     switch (element) {
       case XMLToken.DC_CREATOR:
         return new ScXMLContentContext(
@@ -78,6 +155,9 @@ export class ScXMLAnnotationContext extends ScXMLImportContext {
             this.dateString += value;
           },
         );
+      case XMLToken.LOEXT_THREADED_COMMENT:
+        this.threaded = new ScThreadedCommentData();
+        return new ScXMLThreadedCommentContext(this.threaded, attributes);
       case XMLToken.TEXT_P:
         return new ScXMLCellTextParaContext(this, this.tab);
       default:
@@ -132,5 +212,9 @@ export class ScXMLAnnotationContext extends ScXMLImportContext {
     )
       note.SetDate(date);
     note.SetAuthor(this.author);
+    if (this.threaded) {
+      note.SetThreadedCommentData(this.threaded);
+      this.threaded = null;
+    }
   }
 }

@@ -7,6 +7,29 @@ import { DateTime } from "../../../../tools/source/datetime/datetime";
 import type { ScAddress } from "../../../inc/address";
 import type { ScDocument } from "../../../inc/document";
 
+/** Native root or reply entry in a threaded cell comment. */
+export class ScThreadedCommentEntry {
+  maGuid = "";
+  maPersonId = "";
+  maDateTime = "";
+  maText = "";
+}
+
+/** Thread metadata attached to a note independently of its classic caption. */
+export class ScThreadedCommentData {
+  readonly maRoot = new ScThreadedCommentEntry();
+  readonly maReplies: ScThreadedCommentEntry[] = [];
+  mbDone = false;
+}
+
+/** Document person referenced by the thread's root or reply. */
+export interface ScPersonData {
+  readonly maId: string;
+  readonly maDisplayName: string;
+  readonly maUserId: string;
+  readonly maProviderId: string;
+}
+
 /** Initial caption content kept by the note before a drawing object is needed. */
 class ScCaptionInitData {
   mxEditTextObject: EditTextObject | null;
@@ -39,6 +62,7 @@ export class ScPostIt {
   private static mnLastPostItId = 1;
   private readonly maNoteData: ScNoteData;
   private readonly mnPostItId: number;
+  private mpThreadedCommentData: ScThreadedCommentData | null = null;
 
   /** Initializes a new Calc note and its stamp. @param shown - Initial caption visibility. @param caption - Owned caption contents. @param id - Explicit note identity, or zero to allocate. */
   constructor(shown = false, caption: string | EditTextObject = "", id = 0) {
@@ -125,11 +149,32 @@ export class ScPostIt {
     init.maSimpleText = value;
   }
 
+  /** Indicates whether this note has been resolved. @returns Resolved state. */
+  IsResolved(): boolean {
+    return this.mpThreadedCommentData?.mbDone ?? false;
+  }
+
+  /** Applies the native resolved flag and initializes thread state if absent. @param resolved - Resolved state. */
+  SetResolved(resolved: boolean): void {
+    (this.mpThreadedCommentData ??= new ScThreadedCommentData()).mbDone = resolved;
+  }
+
+  /** Borrows the native thread metadata. @returns Thread metadata or null. */
+  GetThreadedCommentData(): ScThreadedCommentData | null {
+    return this.mpThreadedCommentData;
+  }
+
+  /** Replaces the note's owned thread metadata. @param data - Thread metadata or null. */
+  SetThreadedCommentData(data: ScThreadedCommentData | null): void {
+    this.mpThreadedCommentData = data;
+  }
+
   /** Releases the native edit payload when the note leaves storage. */
   Dispose(): void {
     const init = this.maNoteData.mxInitData;
     init.mxEditTextObject?.dispose();
     init.mxEditTextObject = null;
+    this.mpThreadedCommentData = null;
   }
 }
 

@@ -1,5 +1,5 @@
 /** @fileoverview Native document modes, consumed pooled resources and scalar/local-reference storage, attributes and formula tracking. Full construction, formatter and shell services remain unported. */
-import { ScPostIt, type NoteEntry } from "../../../inc/postit";
+import { ScPostIt, type NoteEntry, type ScPersonData } from "../../../inc/postit";
 import { ScRangePairList } from "../../../inc/rangelst";
 import * as documentGeometry from "./document.geometry";
 import { ScCalcConfig } from "../../../inc/calcconfig";
@@ -576,6 +576,7 @@ export class ScDocument {
     this.maCalcConfig.copy_assign(config);
   }
   private bAutoCalc: boolean;
+  private readonly maPersonList: ScPersonData[] = [];
   private readonly maTabs: (ScTable | null)[] = [];
   protected nVisibleTab = 0;
   private externalReferences: ScExternalRefManager | undefined;
@@ -917,6 +918,26 @@ export class ScDocument {
     this.SetNote(position, note);
     return note;
   }
+  /** Keeps the first native document person with an authored ID. @param person - Person data. */
+  AddPerson(person: ScPersonData): void {
+    if (!this.GetPersonById(person.maId)) this.maPersonList.push({ ...person });
+  }
+
+  /** Borrows one represented comment person by ID. @param id - Original person ID. @returns Person or null. */
+  GetPersonById(id: string): ScPersonData | null {
+    return (
+      this.maPersonList.find(
+        /** Matches a person using the original exact ID. @param person - Candidate. @returns Whether the ID matches. */
+        (person) => person.maId === id,
+      ) ?? null
+    );
+  }
+
+  /** Borrows the persons in insertion order. @returns Native person list. */
+  GetPersonList(): readonly ScPersonData[] {
+    return this.maPersonList;
+  }
+
   /** Collects borrowed native note entries for a sheet. @param tab - Sheet. @param notes - Output vector. */
   GetAllNoteEntries(tab: number, notes: NoteEntry[]): void {
     this.FetchTable(tab)?.GetAllNoteEntries(notes);

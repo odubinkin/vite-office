@@ -50,7 +50,9 @@
       "GetTableCount",
       "AddCondFormat",
       "GetCondResult",
-      "GetCondColor"
+      "GetCondColor",
+      "AddPerson",
+      "GetPersonById"
     ],
     "upstreamSymbols": [
       "ScDocument::SetValue",
@@ -74,7 +76,9 @@
       "ScDocument::SetTextCell",
       "ScDocument::SetEditText",
       "GetEditEngine",
-      "ScDocument::GetTableCount"
+      "ScDocument::GetTableCount",
+      "ScDocument::AddPerson",
+      "ScDocument::GetPersonById"
     ],
     "preservedResponsibilities": [
       "Task76 in progress: original clipboard ResetClip/InitClipPtrs and SharePooledResources retain genuine pool/string/attribute helper identities,source option values and sparse selected-sheet indexes. Clear releases actual formula and attribute owners before sheet removal. Native column4 CloneFormulaCell creates shared code once per shareable span,bulk-inserts actual typed storage and joins boundaries. Default CONTENTS CopyFromClipContext retains native cursor caches,cell values,metadata and deferred listening spans;single-cell column replication handles represented values,strings,empty and grouped formulas. Original temporary/inserting document guards suppress premature subscriptions and broadcasts. No browser fill loop,formula-text reparse,alternate workbook or simulated physical refcount is introduced. Document-level paste/reference completion,real paste undo and EnterBlock/UI acceptance are still pending;this progress record does not certify task76 or full native parity.",
@@ -118,7 +122,8 @@
       "Exposes native leading-overlap, trailing-merge and covered-anchor operations for view selection.",
       "Exposes the original document tab color operations from the documen3 owner.",
       "Dispatches GetPageStyle and SetPageStyle through the actual native sheet.",
-      "The document exposes native conditional scale backgrounds via its existing conditional-format owner."
+      "The document exposes native conditional scale backgrounds via its existing conditional-format owner.",
+      "Owns ordered threaded-comment persons and keeps the first record for each exact identifier."
     ],
     "omittedResponsibilities": [
       "The browser document text-object slice only admits the consumed operations."
@@ -324,6 +329,18 @@
         {
           "path": "apps/office/src/sc/source/filter/oox/condformatbuffer.colorscale.test.ts",
           "marker": "ports the upstream two- and three-stop"
+        },
+        {
+          "path": "apps/office/src/sc/source/core/data/document.ts",
+          "marker": "AddPerson"
+        },
+        {
+          "path": "apps/office/src/sc/source/core/data/document.ts",
+          "marker": "GetPersonById"
+        },
+        {
+          "path": "apps/office/src/sc/source/filter/xml/ods-cell-notes.test.ts",
+          "marker": "testThreadedCommentOdsRoundtrip"
         }
       ],
       "upstream": [
@@ -574,6 +591,14 @@
         {
           "path": "sc/source/core/data/fillinfo.cxx",
           "marker": "handleConditionalFormat"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/source/core/data/document.cxx",
+          "marker": "ScDocument::AddPerson"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/source/core/data/document.cxx",
+          "marker": "ScDocument::GetPersonById"
         }
       ]
     }

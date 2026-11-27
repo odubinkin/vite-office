@@ -1,6 +1,10 @@
 /** @fileoverview Native ScXMLBodyContext spreadsheet/table dispatch subset. */
 import { ScXMLImportContext } from "./importcontext";
-import { SvXMLImportContext, type FastAttributeList } from "../../../../xmloff/source/core/xmlimp";
+import {
+  SvXMLIgnoreContext,
+  SvXMLImportContext,
+  type FastAttributeList,
+} from "../../../../xmloff/source/core/xmlimp";
 import { XMLToken } from "../../../../xmloff/source/core/xmltoken";
 import type { ScXMLImport } from "./xmlimprt";
 import { ScXMLTableContext } from "./xmltabi";
@@ -20,6 +24,7 @@ export class ScXMLBodyContext extends ScXMLImportContext {
     element: XMLToken,
     attributes: FastAttributeList,
   ): SvXMLImportContext {
+    if (element === XMLToken.LOEXT_PERSONS) return new ScXMLPersonsContext(this.owner);
     if (element === XMLToken.TABLE_LABEL_RANGES) return new ScXMLLabelRangesContext(this.owner);
     if (element === XMLToken.TABLE_NAMED_EXPRESSIONS)
       return new ScXMLNamedExpressionsContext(this.owner, -1);
@@ -38,5 +43,30 @@ export class ScXMLBodyContext extends ScXMLImportContext {
   override endFastElement(): void {
     if (!this.hadCalculationSettings)
       new ScXMLCalculationSettingsContext(this.owner).endFastElement();
+  }
+}
+
+/** Registers native threaded-comment persons on the spreadsheet document. */
+class ScXMLPersonsContext extends ScXMLImportContext {
+  /** Consumes one person's original metadata in spreadsheet-body order. @param element - Child token. @param attributes - Person attributes. @returns Context for remaining content. */
+  override createFastChildContext(
+    element: XMLToken,
+    attributes: FastAttributeList,
+  ): SvXMLImportContext {
+    if (element === XMLToken.LOEXT_PERSON)
+      this.GetScImport()
+        .GetDocument()
+        .AddPerson({
+          maId: attributes.get(XMLToken.LOEXT_PERSON_ID) ?? "",
+          maDisplayName: attributes.get(XMLToken.LOEXT_DISPLAY_NAME) ?? "",
+          maUserId: attributes.get(XMLToken.LOEXT_USER_ID) ?? "",
+          maProviderId: attributes.get(XMLToken.LOEXT_PROVIDER_ID) ?? "",
+        });
+    return new SvXMLIgnoreContext(true);
+  }
+
+  /** Ignores unrepresented person children as the source context does. @returns Ignore context. */
+  override createUnknownChildContext(): SvXMLImportContext {
+    return new SvXMLIgnoreContext(true);
   }
 }

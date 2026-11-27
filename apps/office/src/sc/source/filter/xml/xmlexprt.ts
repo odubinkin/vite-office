@@ -25,7 +25,7 @@ import type { SharedStringConstReference } from "../../../../svl/inc/sharedstrin
 import type { ScDocument } from "../../../inc/document";
 import { MAXROW, ScAddress, ScRange, ScRefFlags } from "../../../inc/address";
 import { ScMyNotEmptyCellsIterator } from "./XMLExportIterator";
-import type { ScPostIt } from "../../../inc/postit";
+import type { ScPostIt, ScThreadedCommentEntry } from "../../../inc/postit";
 import { LANGUAGE_SYSTEM } from "../../../../i18nlangtag/inc/lang";
 import { NfIndexTableOffset } from "../../../../svl/inc/zforlist";
 import { CRFlags } from "../../../inc/global";
@@ -495,7 +495,8 @@ export class ScXMLExport {
         return dataStyle ? this.registerCellStyle("", dataStyle, "") : "";
       },
     );
-    body += external + this.WriteNamedRange(-1) + WriteLabelRanges(this.document);
+    body +=
+      external + this.WritePersons() + this.WriteNamedRange(-1) + WriteLabelRanges(this.document);
     let automatic = this.textStyles.exportStyles() + (external ? externalRefCacheStyle : "");
     for (const { properties, name, master } of tableStyles.values()) {
       const page = master ? ` style:master-page-name="${master}"` : "";
@@ -731,8 +732,40 @@ export class ScXMLExport {
           )
           .join("");
     const display = note.IsCaptionShown() ? ' office:display="true"' : "";
-    return `<office:annotation${display}>${creator}${date}${caption}</office:annotation>`;
+    return `<office:annotation${display}>${creator}${date}${this.WriteThreadedComment(note)}${caption}</office:annotation>`;
   }
+  /** Emits the original fields of a root entry or reply. @param entry - Native thread entry. @param resolved - Whether this is a resolved root. @returns ODF attributes. */
+  private threadedCommentAttributes(entry: ScThreadedCommentEntry, resolved = false): string {
+    const date = entry.maDateTime ? ` loext:date-time="${escapeXml(entry.maDateTime)}"` : "";
+    return ` loext:id="${escapeXml(entry.maGuid)}"${date}${resolved ? ' loext:resolved="true"' : ""} loext:person-id="${escapeXml(entry.maPersonId)}"`;
+  }
+
+  /** Writes the same extension as LibreOffice's extended ODF note export. @param note - Native note. @returns Thread extension or empty content. */
+  private WriteThreadedComment(note: ScPostIt): string {
+    const thread = note.GetThreadedCommentData();
+    if (!thread) return "";
+    const root = thread.maRoot;
+    let xml = `<loext:threaded-comment${this.threadedCommentAttributes(root, thread.mbDone)}><loext:text>${escapeXml(root.maText)}</loext:text>`;
+    for (const reply of thread.maReplies)
+      xml += `<loext:reply${this.threadedCommentAttributes(reply)}><loext:text>${escapeXml(reply.maText)}</loext:text></loext:reply>`;
+    return xml + "</loext:threaded-comment>";
+  }
+
+  /** Writes the document's native persons after the sheet content. @returns ODF person declarations. */
+  private WritePersons(): string {
+    const persons = this.document.GetPersonList();
+    if (!persons.length) return "";
+    let xml = "<loext:persons>";
+    for (const person of persons) {
+      const user = person.maUserId ? ` loext:user-id="${escapeXml(person.maUserId)}"` : "";
+      const provider = person.maProviderId
+        ? ` loext:provider-id="${escapeXml(person.maProviderId)}"`
+        : "";
+      xml += `<loext:person loext:person-id="${escapeXml(person.maId)}" loext:display-name="${escapeXml(person.maDisplayName)}"${user}${provider}/>`;
+    }
+    return xml + "</loext:persons>";
+  }
+
   /** Reuses actual shared Writer/Calc inline encoding for a simple literal paragraph. @param value - Literal simple text. @returns Paragraph XML. */
   private textParagraph(value: string): string {
     return `<text:p>${exportText(value.replace(/\r\n?/gu, "\n"))}</text:p>`;

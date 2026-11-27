@@ -56,6 +56,18 @@
         {
           "path": "apps/office/src/sc/source/filter/xml/xmlexternaltabi.test.ts",
           "marker": "round-trips native ODF cache formats and source filter metadata"
+        },
+        {
+          "path": "apps/office/src/sc/browser/filter/xml/calc-document-codec.ts",
+          "marker": "encodeCalcCellNote"
+        },
+        {
+          "path": "apps/office/src/sc/browser/filter/xml/calc-document-codec.ts",
+          "marker": "decodeCalcPerson"
+        },
+        {
+          "path": "apps/office/src/sc/source/filter/xml/ods-cell-notes.test.ts",
+          "marker": "testThreadedCommentOdsRoundtrip"
         }
       ]
     },
@@ -79,7 +91,8 @@
       "Transfers native ODF calculation properties alongside the existing date and case fields. Older Worker graphs without these settings retain native new-document options.",
       "Transfers drawing-grid values and the represented note, author, formula-mark and value-highlighting settings. Older records retain native defaults.",
       "Adopts private icon-set settings after the existing XML has restored the threshold cells.",
-      "Transfers optional external cache number formats through the existing version-one formatter table and native source filter metadata alongside the referenced workbook."
+      "Transfers optional external cache number formats through the existing version-one formatter table and native source filter metadata alongside the referenced workbook.",
+      "Transfers optional note threads and native persons while admitting earlier version-one snapshots."
     ],
     "stackDivergence": {
       "kind": "local-infrastructure",

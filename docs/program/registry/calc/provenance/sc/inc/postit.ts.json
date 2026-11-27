@@ -9,18 +9,23 @@
     "localSymbols": [
       "ScPostIt",
       "ScNoteUtil",
-      "NoteEntry"
+      "NoteEntry",
+      "ScThreadedCommentData",
+      "ScPersonData"
     ],
     "upstreamSymbols": [
       "ScPostIt",
       "ScNoteUtil",
-      "NoteEntry"
+      "NoteEntry",
+      "ScThreadedCommentData",
+      "ScPersonData"
     ],
     "preservedResponsibilities": [
-      "Exposes the represented note owner, note creation operations, and native address/borrowed-note entry."
+      "Exposes the represented note owner, note creation operations, and native address/borrowed-note entry.",
+      "Exposes native thread root, reply and person data alongside the note owner."
     ],
     "omittedResponsibilities": [
-      "Drawing caption, clipboard, and threaded-comment declarations remain outside the represented note model."
+      "Drawing caption and clipboard declarations remain outside the represented note model."
     ],
     "evidence": {
       "local": [
@@ -39,6 +44,18 @@
         {
           "path": "apps/office/src/sc/source/filter/xml/ods-cell-notes.test.ts",
           "marker": "testCellNoteExportODS"
+        },
+        {
+          "path": "apps/office/src/sc/inc/postit.ts",
+          "marker": "ScThreadedCommentData"
+        },
+        {
+          "path": "apps/office/src/sc/inc/postit.ts",
+          "marker": "ScPersonData"
+        },
+        {
+          "path": "apps/office/src/sc/source/filter/xml/ods-cell-notes.test.ts",
+          "marker": "testThreadedCommentOdsRoundtrip"
         }
       ],
       "upstream": [
@@ -53,6 +70,14 @@
         {
           "path": "vendor/libreoffice-reference/sc/inc/postit.hxx",
           "marker": "NoteEntry"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/inc/postit.hxx",
+          "marker": "ScThreadedCommentData"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/inc/postit.hxx",
+          "marker": "ScPersonData"
         }
       ]
     }

@@ -1,0 +1,35 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sc/browser/filter/xml/calc-note-codec.ts",
+    "classification": "local-infrastructure",
+    "state": "active",
+    "suite": "calc",
+    "subsystem": "document-lifecycle",
+    "capabilityIds": [
+      "CAP-f15476e9-2d48-48f8-9cc5-6c90aa523b01"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "not-applicable",
+      "defaultStatus": "not-applicable",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/sc/browser/filter/xml/calc-note-codec.ts",
+        "apps/office/src/sc/source/filter/xml/ods-cell-notes.test.ts"
+      ],
+      "justification": "Transfers sparse Calc notes, native threads and document persons through compatible version-one Worker records.",
+      "knownViolations": [],
+      "localSymbols": [
+        "encodeCalcCellNote",
+        "decodeCalcCellNote",
+        "encodeCalcPerson",
+        "decodeCalcPerson"
+      ],
+      "sourceResponsibility": "browser-owned",
+      "upstreamFile": null,
+      "upstreamSymbols": []
+    }
+  }
+}

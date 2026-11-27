@@ -1,0 +1,41 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "local-infrastructure",
+    "localPath": "apps/office/src/sc/browser/filter/xml/calc-note-codec.ts",
+    "status": "local-only",
+    "rationale": "Transfers sparse Calc notes, native threads and document persons through compatible version-one Worker records.",
+    "responsibilities": [
+      "Transfers sparse Calc notes, native threads and document persons through compatible version-one Worker records."
+    ],
+    "stackDivergence": {
+      "kind": "local-infrastructure",
+      "rationale": "The browser Worker transfers detached values between browser realms; the native desktop source has no Worker serialization format."
+    },
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sc/browser/filter/xml/calc-note-codec.ts",
+          "marker": "encodeCalcCellNote"
+        },
+        {
+          "path": "apps/office/src/sc/browser/filter/xml/calc-note-codec.ts",
+          "marker": "decodeCalcCellNote"
+        },
+        {
+          "path": "apps/office/src/sc/browser/filter/xml/calc-note-codec.ts",
+          "marker": "encodeCalcPerson"
+        },
+        {
+          "path": "apps/office/src/sc/browser/filter/xml/calc-note-codec.ts",
+          "marker": "decodeCalcPerson"
+        },
+        {
+          "path": "apps/office/src/sc/source/filter/xml/ods-cell-notes.test.ts",
+          "marker": "testThreadedCommentOdsRoundtrip"
+        }
+      ]
+    }
+  }
+}

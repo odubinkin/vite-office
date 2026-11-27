@@ -8130,3 +8130,22 @@ relative source workbook name.
 
 - [Original external cache export](../../vendor/libreoffice-reference/sc/source/filter/xml/xmlexprt.cxx)
 - [Original relative reference conversion](../../vendor/libreoffice-reference/xmloff/source/core/xmlexp.cxx)
+
+### CALC-851 — Setting an unresolved state can create an empty thread
+
+`ScPostIt::SetResolved(false)` allocates thread data even for a legacy note
+that has never had a thread. Extended ODF export subsequently writes an
+empty root GUID and person ID for that note. Calc keeps this allocation
+and emits the same root attributes.
+
+- [Original resolved-state setter](../../vendor/libreoffice-reference/sc/source/core/data/postit.cxx)
+- [Original annotation metadata export](../../vendor/libreoffice-reference/sc/source/filter/xml/xmlexprt.cxx)
+
+### CALC-852 — A repeated annotation transfers its thread only to the first note
+
+The repeated-cell importer calls `SetAnnotation` for each position. Classic
+caption content can create a note at each position, while
+`SetAnnotation` moves the single thread object into the first note it
+creates. Calc preserves this ownership transfer.
+
+- [Original repeated-cell and note import](../../vendor/libreoffice-reference/sc/source/filter/xml/xmlcelli.cxx)
