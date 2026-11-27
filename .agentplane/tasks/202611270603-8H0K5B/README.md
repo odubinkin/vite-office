@@ -1,10 +1,11 @@
 ---
 id: "202611270603-8H0K5B"
 title: "Preserve Calc cell notes through native storage and ODS round trips"
-status: "DOING"
+result_summary: "Calc ODS retains native notes independently of cell values through import, export, and Worker transfer."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 8
+revision: 9
 origin:
   system: "manual"
 depends_on: []
@@ -41,7 +42,9 @@ quality_review:
     - "784482b638a0"
   findings:
     - "The pinned note-only cell regression, 44 Calc tests, and source, inventory and static gates passed."
-commit: null
+commit:
+  hash: "c9a6619db34b6073365c49718091769ea925e3b3"
+  message: "🧩 8H0K5B task: link the verified implementation evidence"
 comments:
   -
     author: "CODER"
@@ -49,6 +52,9 @@ comments:
   -
     author: "CODER"
     body: "Implementation evidence: 784482b638a0. Verified checks are recorded in output/playwright/8H0K5B/verification.md."
+  -
+    author: "CODER"
+    body: "Verified: The pinned note-only cell regression, 44 Calc tests, and source, inventory and static gates passed. Implementation: 784482b638a0."
 events:
   -
     type: "status"
@@ -68,8 +74,15 @@ events:
     at: "2026-11-27T07:10:42.215Z"
     author: "CODER"
     body: "Implementation evidence: 784482b638a0. Verified checks are recorded in output/playwright/8H0K5B/verification.md."
+  -
+    type: "status"
+    at: "2026-11-27T07:11:00.216Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: The pinned note-only cell regression, 44 Calc tests, and source, inventory and static gates passed. Implementation: 784482b638a0."
 doc_version: 3
-doc_updated_at: "2026-11-27T07:10:47.802Z"
+doc_updated_at: "2026-11-27T07:11:00.218Z"
 doc_updated_by: "CODER"
 description: "Port the supported ScPostIt data and sparse column note ownership, cell annotation XML and Worker transfer from pinned LibreOffice. Verify native annotations on otherwise empty cells with testCellNoteExportODS and related existing checks."
 sections:
