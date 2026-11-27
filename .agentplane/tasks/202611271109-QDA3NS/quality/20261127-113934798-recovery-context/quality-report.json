@@ -1,0 +1,22 @@
+{
+  "schema_version": 1,
+  "task_id": "202611271109-QDA3NS",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-11-27T11:39:34.798Z",
+  "verdict": "pass",
+  "summary": "Verified pinned ODS validation declarations, native cell bindings and sparse repeated ranges after Worker transfer and reopening.",
+  "evaluated_sha": "b0653f9908ec94117fe04f3c571c55233e1de25c",
+  "blueprint_digest": "2e5fcfe4995c7e9df07ef7bdfc30f0151808a63fb1261d376b68179a2eca6d56",
+  "findings": [
+    "The shared formula condition, document-owned rule keys and XML contexts retain the native rule and prompt behavior in the represented filter. Interactive validation and macro events are outside this slice."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202611271109-QDA3NS/README.md",
+    "/Users/odubinkin/Projects/vite-office/output/playwright/QDA3NS/verification.md",
+    "b0653f9908ec94117fe04f3c571c55233e1de25c"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": []
+}
