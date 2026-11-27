@@ -1,10 +1,11 @@
 ---
 id: "202611271756-GSDVGC"
 title: "Reconcile Calc ODS embedded font verification with the pinned importer"
-status: "DOING"
+result_summary: "Calc font verification now checks the implemented document-owned ODS declarations and deferred byte admission."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 6
+revision: 7
 origin:
   system: "manual"
 depends_on: []
@@ -41,11 +42,16 @@ quality_review:
     - "output/playwright/odf-full-checkpoint-20261128/font-checkpoint-verification.md"
   findings:
     - "One stale checkpoint assertion replaced with document ownership and embedding flag assertions. Production code unchanged."
-commit: null
+commit:
+  hash: "6862a9d35e6b35486ab42c13b970a34f39c6ff2a"
+  message: "🧩 GSDVGC calc: reconcile the ODS font declaration assertion"
 comments:
   -
     author: "CODER"
     body: "Start: reconcile the reproduced font-declaration assertion with the implemented native owner."
+  -
+    author: "CODER"
+    body: "Verified: reproduced the pinned assertion and passed all 16 existing font tests on main."
 events:
   -
     type: "status"
@@ -60,8 +66,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Pinned assertion reproduced. All 16 existing Calc and Writer ODF font cases pass on main along with focused lint, format and git diff checks."
+  -
+    type: "status"
+    at: "2026-11-27T17:59:19.519Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: reproduced the pinned assertion and passed all 16 existing font tests on main."
 doc_version: 3
-doc_updated_at: "2026-11-27T17:58:32.441Z"
+doc_updated_at: "2026-11-27T17:59:19.520Z"
 doc_updated_by: "CODER"
 description: "Repair the reproducible full-checkpoint assertion that Calc still rejects embedded font declarations. Verify declaration ownership before byte admission, preserve the missing-face defaults and invalid-style diagnostics, and rerun the existing Calc and shared ODF font cases."
 sections:
