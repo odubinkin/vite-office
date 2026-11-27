@@ -1,0 +1,22 @@
+{
+  "schema_version": 1,
+  "task_id": "202611270711-8WD106",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-11-27T07:19:03.265Z",
+  "verdict": "pass",
+  "summary": "Native Writer Navigator tracking settings are reachable from their contextual rows and persist across reload.",
+  "evaluated_sha": "abf62188a7937c0422869da40f69648371f478ec",
+  "blueprint_digest": "a0328bb77f3c212ea9890615aae9b863fc1be46dcaa0be85a8f93c569edead59",
+  "findings": [
+    "Selected outline mode, checked table and bookmark settings, keyboard submenu, focus restoration, collapsed sibling branches and priority fallback are covered. Unrelated registry baseline drift is recorded in Findings."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202611270711-8WD106/README.md",
+    "output/playwright/writer-navigator-preferences-vitest.log",
+    "output/playwright/writer-navigator-preferences-chromium.log"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": []
+}
