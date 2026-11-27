@@ -3,7 +3,7 @@ import AxeBuilder from "@axe-core/playwright";
 import { expect, test } from "@playwright/test";
 const roots = {
   writer: ["File", "Edit", "View", "Insert", "Format", "Styles", "Table", "Tools"],
-  calc: ["File", "Edit", "View", "Insert", "Format", "Sheet", "Data", "Tools"],
+  calc: ["File", "Edit", "View", "Insert", "Format", "Styles", "Sheet", "Data", "Tools"],
 };
 for (const suite of ["writer", "calc"] as const)
   for (const width of suite === "writer" ? [1280, 390] : [1280, 390, 320]) {
