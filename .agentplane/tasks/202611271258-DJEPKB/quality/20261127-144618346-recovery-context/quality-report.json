@@ -1,0 +1,22 @@
+{
+  "schema_version": 1,
+  "task_id": "202611271258-DJEPKB",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-11-27T14:46:18.346Z",
+  "verdict": "pass",
+  "summary": "The original tdf106899.odt with a later mimetype entry and tdf103829_textTab.ods with a deflated mimetype opened. Ordinary loads used the original manifest type for optional or reordered MIME streams, and exported packages placed mimetype first and stored. Conflicts, malformed manifests, and repair-only fallbacks were rejected.",
+  "evaluated_sha": "eee88f64aaafa4445449a10cde59080e616d88e6",
+  "blueprint_digest": "9e6eba285954a1b45b65304f3405e23617dcf119fb63fe6fdab4378ea991a3ce",
+  "findings": [
+    "Normal package ZIP validation, manifest processing and filter progress were verified. The existing recovery and repair policies remain in effect."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202611271258-DJEPKB/README.md",
+    "/Users/odubinkin/Projects/vite-office/output/playwright/DJEPKB/verification.md",
+    "eee88f64aaafa4445449a10cde59080e616d88e6"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": []
+}
