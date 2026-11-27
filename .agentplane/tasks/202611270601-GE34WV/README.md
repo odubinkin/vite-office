@@ -1,10 +1,11 @@
 ---
 id: "202611270601-GE34WV"
 title: "Connect Calc Asian Typography to native slots and ODS styles"
-status: "DOING"
+result_summary: "Connected Asian Typography to Format Cells and completed scoped verification."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 8
+revision: 9
 origin:
   system: "manual"
 depends_on: []
@@ -38,11 +39,16 @@ quality_review:
     - "output/calc-next/GE34WV-ui-retry.log"
   findings:
     - "43 targeted tests pass. Global provenance refers to baseline markers and is documented independently."
-commit: null
+commit:
+  hash: "c5c929ee0b80dcfcf058cd22973bea54294d3f60"
+  message: "🧩 GE34WV code: connect Calc Asian Typography and ODS paragraph flags"
 comments:
   -
     author: "CODER"
     body: "Start: Implement source-backed Asian Typography controls and Calc ODF paragraph formatting."
+  -
+    author: "CODER"
+    body: "Verified: Native Calc Asian Typography preserves source control availability, the existing item-set exchange and all original ODF boolean pairs."
 events:
   -
     type: "status"
@@ -57,8 +63,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "43 targeted tests pass with the local pinned asset path admitted. Typecheck, lint, format, dependency and source-tree checks pass. Scoped provenance passes. Existing integrated registry failures are recorded in Findings."
+  -
+    type: "status"
+    at: "2026-11-27T06:06:56.757Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: Native Calc Asian Typography preserves source control availability, the existing item-set exchange and all original ODF boolean pairs."
 doc_version: 3
-doc_updated_at: "2026-11-27T06:04:47.654Z"
+doc_updated_at: "2026-11-27T06:06:56.758Z"
 doc_updated_by: "CODER"
 description: "Complete the Calc Format Cells notebook using pinned CUI slot admission, grouped attribute history, and all three original ODF paragraph property mappings. Reuse shared Writer/Calc ODF tokens and document source evidence."
 sections:
