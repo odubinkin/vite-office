@@ -200,7 +200,7 @@ class ScXMLExternalRefCellContext extends SvXMLImportContext {
           const serial: [number] = [this.numericValue];
           convertDurationToDays(serial, source);
           this.numericValue = serial[0];
-          this.nonempty = true;
+          this.isNumeric = this.nonempty = true;
           break;
         }
         case XMLToken.OFFICE_STRING_VALUE:

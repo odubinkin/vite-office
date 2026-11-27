@@ -33,7 +33,8 @@ export function WriteExternalRefCaches(
   const xml: string[] = [];
   for (const file of document.GetExternalRefManager().getExternalFiles()) {
     const uri = getExternalFileUrl(file.name);
-    const href = file.relativeName === undefined ? "" : "../" + file.relativeName;
+    const relative = file.relativeName ?? (uri === file.name ? undefined : file.name);
+    const href = relative === undefined ? "" : "../" + relative;
     const filterName = file.filterName ? ` table:filter-name="${escapeXml(file.filterName)}"` : "";
     const filterOptions = file.filterOptions
       ? ` table:filter-options="${escapeXml(file.filterOptions)}"`

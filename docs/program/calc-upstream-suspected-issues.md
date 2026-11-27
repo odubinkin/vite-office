@@ -8125,7 +8125,8 @@ When the external source has no relative name after export preparation,
 `GetRelativeReference`. The converter leaves empty strings alone. The cache
 table name still contains the original workbook URL and sheet, while its
 `table:table-source` has an empty `xlink:href`. Calc follows that fallback
-when the browser document has no stored relative reference.
+when the browser document has neither a stored relative reference nor a
+relative source workbook name.
 
 - [Original external cache export](../../vendor/libreoffice-reference/sc/source/filter/xml/xmlexprt.cxx)
 - [Original relative reference conversion](../../vendor/libreoffice-reference/xmloff/source/core/xmlexp.cxx)
