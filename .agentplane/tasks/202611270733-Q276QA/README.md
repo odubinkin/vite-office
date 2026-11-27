@@ -1,10 +1,11 @@
 ---
 id: "202611270733-Q276QA"
 title: "Preserve Calc ODS database range ownership and filter parameters"
-status: "DOING"
+result_summary: "Calc preserves ODS database range owners, filter query entries and header flags through the native document and Worker."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 7
+revision: 8
 origin:
   system: "manual"
 depends_on: []
@@ -41,11 +42,16 @@ quality_review:
     - "f63e6c5f2021e1d796bde24f57ffbc9834320527"
   findings:
     - "Source range defaults, query order, filtered rows and separate named/anonymous ownership were checked against the pinned LibreOffice sources. Implementation: f63e6c5f2021e1d796bde24f57ffbc9834320527."
-commit: null
+commit:
+  hash: "f63e6c5f2021e1d796bde24f57ffbc9834320527"
+  message: "🧩 Q276QA calc: preserve ODS database range and query owners"
 comments:
   -
     author: "CODER"
     body: "Start: Transfer native Calc database ranges and their represented ODS query state."
+  -
+    author: "CODER"
+    body: "Verified: 29 focused Calc cases plus typecheck and scoped static checks pass. Implementation: f63e6c5f2021."
 events:
   -
     type: "status"
@@ -60,8 +66,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "29 focused Calc cases pass across Worker and ODS, including the supported LibreOffice database fixture assertions. Static and registry checks pass. See output/playwright/Q276QA/verification.md."
+  -
+    type: "status"
+    at: "2026-11-27T07:51:48.804Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: 29 focused Calc cases plus typecheck and scoped static checks pass. Implementation: f63e6c5f2021."
 doc_version: 3
-doc_updated_at: "2026-11-27T07:48:19.820Z"
+doc_updated_at: "2026-11-27T07:51:48.805Z"
 doc_updated_by: "CODER"
 description: "Port the pinned ScDBData, named/global-anonymous/sheet-anonymous ownership, database-range and query XML contexts, native flag application and compatible Worker transfer. Verify the database.ods range and filtered-row assertions within the existing Calc kernel."
 sections:
