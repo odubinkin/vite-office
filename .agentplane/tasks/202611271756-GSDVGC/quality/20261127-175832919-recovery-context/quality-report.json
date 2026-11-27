@@ -1,0 +1,21 @@
+{
+  "schema_version": 1,
+  "task_id": "202611271756-GSDVGC",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-11-27T17:58:32.919Z",
+  "verdict": "pass",
+  "summary": "The existing Calc font test follows the implemented native declaration owner.",
+  "evaluated_sha": "6862a9d35e6b35486ab42c13b970a34f39c6ff2a",
+  "blueprint_digest": "0a9712536f097f84228789b304009bb3cf63e4d8695600234d219a30378765e6",
+  "findings": [
+    "One stale checkpoint assertion replaced with document ownership and embedding flag assertions. Production code unchanged."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202611271756-GSDVGC/README.md",
+    "output/playwright/odf-full-checkpoint-20261128/font-checkpoint-verification.md"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": []
+}
