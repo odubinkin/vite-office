@@ -470,11 +470,18 @@ export class SwXMLTableImport extends SvXMLImport {
     const context = this.tableContext;
     const source = context.activeCell;
     if (this.textImport && context.oldCursor) {
-      const cursor = this.textImport.GetCursor();
+      const cursor =
+        this.textImport.GetCursor() as import("../../core/unocore/unoobj").SwXTextCursor;
       const content = source?.GetContentNodes();
-      if (content?.at(-2)?.IsTextNode()) this.textImport.DeleteParagraph();
+      const trailing = cursor.GetPaM().GetPoint().GetNode().GetTextNode();
+      const previous = trailing?.GetNodes().entries()[trailing.GetIndex() - 1];
+      const followsSection =
+        previous?.IsEndNode() && previous.StartOfSectionNode().GetSectionNode() !== null;
+      if (!followsSection && content?.at(-2)?.IsTextNode()) this.textImport.DeleteParagraph();
       this.textImport.SetCursor(context.oldCursor);
       cursor.dispose();
+      if (followsSection && trailing?.Len() === 0)
+        trailing.GetNodes().RemoveNode(trailing.GetIndex(), 1, true);
       context.oldCursor = undefined;
     }
     const value = context.activeCellValue;

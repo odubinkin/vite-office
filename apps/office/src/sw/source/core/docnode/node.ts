@@ -15,6 +15,7 @@ import { SwAttrSet } from "../attr/swatrset";
 import { SwContentIndexRegistry } from "../bastyp/index";
 import { SwTextFormatColl, type SwFormatColl } from "../doc/fmtcol";
 import type { SwNodes } from "./nodes";
+import type { SwSectionNode } from "./ndsect";
 import { AttrSetHandleHelper, type SwAttrSetHandle } from "./node-attribute-handle";
 import type { SwTableBox } from "../table/swtable";
 import type { SwTable } from "../table/swtable";
@@ -33,7 +34,7 @@ import type { SwFormatPageDesc } from "../attr/fmtpdsc";
 import type { SwPageDesc } from "../layout/pagedesc";
 
 /** Identifies the node categories implemented by the current Writer model slice. */
-export type SwNodeType = "end" | "start" | "text" | "graphic";
+export type SwNodeType = "end" | "start" | "section" | "text" | "graphic";
 
 /** Base class of every Writer document model element. */
 export abstract class SwNode extends SwContentIndexRegistry {
@@ -125,6 +126,22 @@ export abstract class SwNode extends SwContentIndexRegistry {
       current = current.StartOfSectionNode();
     return current.GetStartNodeType() === type ? current : null;
   }
+  /** Returns the named text section for this exact start node. @returns Native named section or null. */
+  public GetSectionNode(): SwSectionNode | null {
+    return null;
+  }
+  /** Follows the actual parents to the nearest named section. @returns Native enclosing section or null. */
+  public FindSectionNode(): SwSectionNode | null {
+    const ownSection = this.GetSectionNode();
+    if (ownSection) return ownSection;
+    let node: SwNode = this.StartOfSectionNode();
+    while (node.GetIndex()) {
+      const section = node.GetSectionNode();
+      if (section) return section;
+      node = node.StartOfSectionNode();
+    }
+    return null;
+  }
   /** Original fly start-node query. @returns Actual fly section or null. */
   public FindFlyStartNode(): SwStartNode | null {
     return this.FindStartNodeByType(SwStartNodeType.SwFlyStartNode);
@@ -189,7 +206,7 @@ export abstract class SwNode extends SwContentIndexRegistry {
 
   /** Reports whether this is a section start sentinel. @returns True for SwStartNode. */
   public IsStartNode(): this is SwStartNode {
-    return this.nodeType === "start";
+    return this.nodeType === "start" || this.nodeType === "section";
   }
 
   /** Reports whether this is a section end sentinel. @returns True for SwEndNode. */
@@ -212,8 +229,9 @@ export class SwStartNode extends SwNode {
     nodes: SwNodes,
     parent?: SwStartNode,
     private readonly startNodeType = SwStartNodeType.SwNormalStartNode,
+    nodeType: "start" | "section" = "start",
   ) {
-    super(nodes, "start", parent);
+    super(nodes, nodeType, parent);
   }
 
   /** Original section-kind value is independent of the ordinary node category. @returns Native section tag. */

@@ -1,0 +1,39 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/xmloff/source/text/XMLSectionImportContext.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "shared",
+    "subsystem": "odf-filter",
+    "capabilityIds": [
+      "CAP-0113",
+      "CAP-0128"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/xmloff/source/text/XMLSectionImportContext.ts",
+        "apps/office/src/sw/source/filter/xml/odt-text-sections.test.ts",
+        "vendor/libreoffice-reference/xmloff/source/text/XMLSectionImportContext.cxx",
+        "vendor/libreoffice-reference/sw/qa/extras/odfexport/odfexport.cxx"
+      ],
+      "justification": "Reads regular text section properties, original condition scope, stored visibility and protection digest bytes. Index headers, metadata identity, redline nodes and platform DDE are outside the represented regular section.",
+      "knownViolations": [],
+      "localSymbols": [
+        "XMLSectionImportContext"
+      ],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": "xmloff/source/text/XMLSectionImportContext.cxx",
+      "upstreamSymbols": [
+        "XMLSectionImportContext::startFastElement",
+        "XMLSectionImportContext::ProcessAttributes",
+        "XMLSectionImportContext::createFastChildContext"
+      ]
+    }
+  }
+}

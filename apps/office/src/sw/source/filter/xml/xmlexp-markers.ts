@@ -39,7 +39,7 @@ import {
 import { getParagraphOdfStyleName } from "./xmlexp-style-names";
 import { AnnotationMark } from "../../core/crsr/annotationmark";
 import { SwBookmark } from "../../core/doc/docbm";
-import type { SwTableNode } from "../../core/docnode/node";
+import type { SwSectionBlock } from "../../core/docnode/nodes";
 import type { SwTextNode } from "../../core/txtnode/ndtxt";
 import {
   compareParagraphMarkers,
@@ -51,10 +51,7 @@ import {
 export function projectParagraphMarkers(
   node: SwTextNode,
   anchored: XMLBoundWriterFrames | undefined,
-  projectBlock: (
-    node: SwTextNode | SwTableNode,
-    anchored: XMLBoundWriterFrames,
-  ) => XMLTextExportBlock,
+  projectBlock: (node: SwSectionBlock, anchored: XMLBoundWriterFrames) => XMLTextExportBlock,
 ): XMLTextParagraphMarker[] {
   const marks = node.GetDoc().GetIDocumentMarkAccess();
   const frames = projectAnchoredTextFrames(node, anchored, projectBlock);

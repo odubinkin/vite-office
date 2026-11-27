@@ -156,15 +156,9 @@ it("keeps native body cell dispatch and explicit unimplemented structural bounda
   expect(helper.CreateTextChildContext(XMLToken.TEXT_SEQUENCE_DECLS, attrs(), "Cell")).toBeNull();
   expect(helper.CreateTextChildContext(XMLToken.UNKNOWN, attrs(), "Body")).toBeNull();
   expect(helper.CreateTextChildContext(XMLToken.TABLE_TABLE, attrs(), "Body")).toBeNull();
-  expect(
-    /** Reads unsupported body section. @returns Result. */ () =>
-      helper.CreateTextChildContext(XMLToken.TEXT_SECTION, attrs(), "Body"),
-  ).toThrow("Unsupported ODF text section");
+  for (const type of ["Body", "Cell"] as const)
+    expect(helper.CreateTextChildContext(XMLToken.TEXT_SECTION, attrs(), type)).toBeNull();
   expect(helper.CreateTextChildContext(XMLToken.TABLE_TABLE, attrs(), "Cell")).toBeNull();
-  expect(
-    /** Reads unsupported nested section. @returns Result. */ () =>
-      helper.CreateTextChildContext(XMLToken.TEXT_SECTION, attrs(), "Cell"),
-  ).toThrow("Unsupported ODF table cell section");
   const sink: XMLTableImportTarget = {
     ...base,
     registerTableStyle: /** No style mutation here. @returns Nothing. */ () => {},

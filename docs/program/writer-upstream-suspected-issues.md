@@ -6265,3 +6265,13 @@ Writer preserves that registration behavior.
 
 - [Original master-page style creation](../../vendor/libreoffice-reference/xmloff/source/text/XMLTextMasterPageContext.cxx)
 - [Original display-name map insertion and lookup](../../vendor/libreoffice-reference/xmloff/source/core/xmlimp.cxx)
+
+### WRITER-760 — A section name with a numeric prefix reserves an automatic name
+
+The section name allocator parses the part after the localized default
+name as an integer and does not require the entire suffix to be numeric.
+For example, in English an existing section named `Section1Appendix`
+can reserve `Section1` from automatic allocation even though the names
+are distinct. Writer keeps the native suffix conversion for this path.
+
+- [Original Writer section name allocation](../../vendor/libreoffice-reference/sw/source/core/docnode/ndsect.cxx#L1385)

@@ -63,6 +63,12 @@ import {
   type OdfFontFaceMetadata,
 } from "../../../../xmloff/source/style/XMLFontStylesContext";
 import { XMLStylesContext, type OdfPageLayout } from "../../../../xmloff/source/style/xmlstyle";
+import type {
+  XMLSectionImport,
+  XMLSectionImportProperties,
+} from "../../../../xmloff/source/text/XMLSectionImportContext";
+import type { XMLSectionStyle } from "../../../../xmloff/source/text/XMLSectionStyleContext";
+import { importTextSection } from "./xmlsection";
 import { applyPageRegisterReference } from "../../core/layout/pagedesc";
 import type { Theme } from "../../../../docmodel/inc/theme/Theme";
 import type { XMLTableImportTarget } from "../../../../xmloff/source/table/XMLTableImport";
@@ -194,6 +200,22 @@ class SwXMLImport
   extends SwXMLTableImport
   implements SvXMLImportContract, XMLTableImportTarget, XMLFontStylesImportTarget
 {
+  private readonly sectionStyles = new Map<string, XMLSectionStyle>();
+
+  /** Registers automatic section format values. @param name - Source style name. @param style - Authored frame properties. @returns Nothing. */
+  public registerSectionStyle(name: string, style: XMLSectionStyle): void {
+    this.sectionStyles.set(name, style);
+  }
+
+  /** Attaches an original Writer text section at the shared import cursor. @param properties - ODF section descriptor. @returns Connected source and text operations. */
+  public beginTextSection(properties: XMLSectionImportProperties): XMLSectionImport {
+    return importTextSection(
+      this.GetTextImport(),
+      properties,
+      this.sectionStyles.get(properties.styleName),
+    );
+  }
+
   private readonly textFrameStyles = new Map<
     string,
     { style: XMLTextFrameStyle; parent: string | undefined }
@@ -936,8 +958,9 @@ class SwXMLImport
       previous = this.document.GetNodes().entries()[node.GetIndex() - 1];
     if (
       node.Len() === 0 &&
-      previous instanceof SwTextNode &&
-      previous.StartOfSectionNode() === node.StartOfSectionNode()
+      ((previous instanceof SwTextNode &&
+        previous.StartOfSectionNode() === node.StartOfSectionNode()) ||
+        (previous?.IsEndNode() && previous.StartOfSectionNode().GetSectionNode() !== null))
     ) {
       this.GetTextImport().ResetCursor();
       this.document.GetNodes().removeTextNode(node);

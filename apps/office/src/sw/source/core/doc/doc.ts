@@ -1,4 +1,5 @@
 /** @fileoverview Implements the Writer SwDoc aggregate from pinned LibreOffice `sw/inc/doc.hxx` and `sw/source/core/doc/docnew.cxx`. */
+import { toInt32 } from "../../../../o3tl/inc/string_view";
 import type { SwFormat } from "../attr/format";
 import type { Theme } from "../../../../docmodel/inc/theme/Theme";
 import type { SvxFrameDirection } from "../../../../editeng/inc/frmdir";
@@ -942,6 +943,25 @@ export class SwDoc {
   public GetTextDirection(position: SwPosition): SvxFrameDirection {
     return GetTextDirection(this, position);
   }
+  /** Allocates the original first available section name. @param requested - Requested document name. @returns Unique section identity. */
+  public GetUniqueSectionName(requested?: string): string {
+    const names = new Set<string>();
+    for (const node of this.nodes.entries()) {
+      const section = node.GetSectionNode();
+      if (section) names.add(section.GetSection().GetSectionData().name);
+    }
+    if (requested !== undefined && !names.has(requested)) return requested;
+    const flags = new Set<number>();
+    for (const name of names) {
+      if (!name.startsWith("Section")) continue;
+      const index = toInt32(name.slice("Section".length));
+      if (index > 0 && index <= names.size) flags.add(index);
+    }
+    let index = 1;
+    while (flags.has(index)) index++;
+    return `Section${index}`;
+  }
+
   /** Resolves native first-unused table naming. @returns Unoccupied table name. */
   public GetUniqueTableName(): string {
     return GetUniqueTableName(this);

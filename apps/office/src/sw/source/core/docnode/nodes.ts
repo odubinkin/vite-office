@@ -27,6 +27,8 @@ import {
   type SwNode,
 } from "./node";
 import { SwTextNode } from "../txtnode/ndtxt";
+import { SwSectionNode } from "./ndsect";
+import type { SwSectionData } from "./section";
 import {
   SwTable,
   SwTableBox,
@@ -47,6 +49,9 @@ export interface SwTableBoxSection {
   readonly box: SwTableBox;
   readonly nodes: readonly SwNode[];
 }
+
+/** Direct paragraph, table or named section in the native node array. */
+export type SwSectionBlock = SwTextNode | SwTableNode | SwSectionNode;
 
 /** Owns every Writer model node and the fixed non-content/content section sentinels. */
 export class SwNodes {
@@ -195,14 +200,44 @@ export class SwNodes {
     return this.GetSectionContent(this.endOfContent.StartOfSectionNode());
   }
 
-  /** Reads the actual direct text and table nodes of a native section in order. @param section - Connected section. @returns Direct content owners. */
+  /** Enumerates paragraph and table owners, transparently traversing named sections. @param section - Connected text owner. @returns Content in native node order. */
   public GetSectionContent(section: SwStartNode): readonly (SwTextNode | SwTableNode)[] {
+    const result: (SwTextNode | SwTableNode)[] = [];
+    for (const node of this.GetSectionBlocks(section)) {
+      if (node instanceof SwSectionNode) {
+        for (const child of this.GetSectionContent(node)) result.push(child);
+      } else result.push(node);
+    }
+    return result;
+  }
+
+  /** Reads direct blocks including original named section boundaries. @param section - Connected text owner. @returns Structural children. */
+  public GetSectionBlocks(section: SwStartNode): readonly SwSectionBlock[] {
     return this.nodeArray.slice(section.GetIndex() + 1, section.EndOfSectionIndex()).filter(
-      /** Keeps only direct children of the body section. @param node - Candidate. @returns Whether a direct body block. */
-      (node): node is SwTextNode | SwTableNode =>
-        (node instanceof SwTextNode || node instanceof SwTableNode) &&
+      /** Checks direct block ownership. @param node - Candidate. @returns Whether this node starts a direct block. */
+      (node): node is SwSectionBlock =>
+        (node instanceof SwTextNode ||
+          node instanceof SwTableNode ||
+          node instanceof SwSectionNode) &&
         node.StartOfSectionNode() === section,
     );
+  }
+
+  /** Inserts an ordinary named section at a native text boundary. @param before - Existing insertion boundary. @param data - Section data. @returns Connected owner with an initial text node. */
+  public InsertTextSection(before: SwNode, data: SwSectionData): SwSectionNode {
+    if (before.GetNodes() !== this) throw new Error("Writer section belongs to another document.");
+    const index = before.GetIndex();
+    const parent = before.StartOfSectionNode();
+    const format = parent.FindSectionNode()?.GetSection().GetFormat();
+    const start = new SwSectionNode(this, parent, data, format);
+    const end = new SwEndNode(this, start);
+    start.setEndOfSection(end);
+    this.nodeArray.splice(index, 0, start, end);
+    this.MakeTextNode(
+      end,
+      before.GetTextNode()?.GetTextFormatColl() ?? this.document.GetDfltTextFormatColl(),
+    );
+    return start;
   }
 
   /** Inserts a table section after an optional body paragraph. @param name - Table identity. @param format - Physical table geometry. @param after - Optional body predecessor. @returns Canonical table. */
@@ -817,10 +852,10 @@ export class SwNodes {
   /** Removes one connected text node while retaining its section's non-empty content invariant. @param node - Removed text node. @returns Nothing. */
   public removeTextNode(node: SwTextNode): void {
     if (node.GetNodes() !== this) throw new Error("SwTextNode belongs to another SwNodes array.");
-    const textNodes = this.nodeArray.filter(
-      /** Keeps actual text owners in the removed node section. @param candidate - Connected node. @returns Whether it belongs to this text section. */
-      (candidate): candidate is SwTextNode =>
-        candidate.IsTextNode() && candidate.StartOfSectionNode() === node.StartOfSectionNode(),
+    const section = node.StartOfSectionNode();
+    const textNodes = this.GetSectionContent(section).filter(
+      /** Selects text owners without stepping into nested table sections. @param candidate - Connected block. @returns Whether the block is text. */
+      (candidate): candidate is SwTextNode => candidate instanceof SwTextNode,
     );
     if (textNodes.length === 1) throw new Error("Writer document must retain one paragraph.");
     const textIndex = textNodes.indexOf(node);

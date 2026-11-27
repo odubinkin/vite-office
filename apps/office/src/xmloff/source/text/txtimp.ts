@@ -27,9 +27,10 @@ import {
 import { XMLTextListsHelper } from "./txtlists";
 import { XMLTextFrameContext } from "./XMLTextFrameContext";
 import { XMLTextListBlockContext } from "./XMLTextListBlockContext";
+import { XMLSectionImportContext } from "./XMLSectionImportContext";
 
 /** Native text import locations represented by the current body/table slice. */
-export type XMLTextType = "Body" | "Cell" | "TextBox" | "HeaderFooter" | "Annotation";
+export type XMLTextType = "Body" | "Cell" | "TextBox" | "HeaderFooter" | "Annotation" | "Section";
 
 /** One native named style application and the direct properties from its enclosing span. */
 export interface XMLCharacterStyleLayer {
@@ -98,7 +99,8 @@ export class XMLTextImportHelper {
     string,
     { range: XMLTextRange; text: XMLText; hidden: boolean; condition: string }
   >();
-  private readonly frameContexts: {
+  private readonly textContexts: {
+    isolateList: boolean;
     cursor: XMLTextCursor | undefined;
     start: XMLTextRange | undefined;
     applyParagraph: ((cursor: XMLTextCursor) => void) | undefined;
@@ -107,7 +109,18 @@ export class XMLTextImportHelper {
 
   /** Saves the original cursor, enclosing paragraph ranges and list context for a nested text frame. @param cursor - Frame text cursor. @returns Nothing. */
   public PushTextFrameCursor(cursor: XMLTextCursor): void {
-    this.frameContexts.push({
+    this.PushTextCursor(cursor, true);
+  }
+
+  /** Enters a named section in the current list context. @param cursor - Section text cursor. @returns Nothing. */
+  public PushSectionCursor(cursor: XMLTextCursor): void {
+    this.PushTextCursor(cursor, false);
+  }
+
+  /** Suspends text ranges so the child text can use the same dispatch helpers. @param cursor - Child text cursor. @param isolateList - Whether to isolate list state. @returns Nothing. */
+  private PushTextCursor(cursor: XMLTextCursor, isolateList: boolean): void {
+    this.textContexts.push({
+      isolateList,
       cursor: this.cursor,
       start: this.start,
       applyParagraph: this.applyParagraph,
@@ -117,19 +130,29 @@ export class XMLTextImportHelper {
     this.start = undefined;
     this.applyParagraph = undefined;
     this.hints = [];
-    this.lists.PushListContext();
+    if (isolateList) this.lists.PushListContext();
   }
 
   /** Releases frame text ranges and restores the enclosing original paragraph and list context. @returns Nothing. */
   public PopTextFrameCursor(): void {
-    const saved = this.frameContexts.pop();
+    this.PopTextCursor();
+  }
+
+  /** Restores the cursor from before the named section. @returns Nothing. */
+  public PopSectionCursor(): void {
+    this.PopTextCursor();
+  }
+
+  /** Resumes the parent cursor and its original list context. @returns Nothing. */
+  private PopTextCursor(): void {
+    const saved = this.textContexts.pop();
     if (saved === undefined) throw new RuntimeException();
     this.ClearCursor();
     this.cursor = saved.cursor;
     this.start = saved.start;
     this.applyParagraph = saved.applyParagraph;
     this.hints = saved.hints;
-    this.lists.PopListContext();
+    if (saved.isolateList) this.lists.PopListContext();
   }
   /** Suspends the containing text while the annotation TextRange owns the active cursor. @param cursor - Annotation text cursor. @returns Nothing. */
   public PushAnnotationCursor(cursor: XMLTextCursor): void {
@@ -161,7 +184,7 @@ export class XMLTextImportHelper {
   public ResetCursor(): void {
     this.cellParaStyleDefault = "";
     this.annotationDepth = 0;
-    while (this.frameContexts.length !== 0) this.PopTextFrameCursor();
+    while (this.textContexts.length !== 0) this.PopTextCursor();
     this.ClearCursor();
     for (const start of this.bookmarkStarts.values()) start.range.dispose();
     this.bookmarkStarts.clear();
@@ -565,10 +588,8 @@ export class XMLTextImportHelper {
     }
     if (element === XMLToken.TEXT_SEQUENCE_DECLS && type === "Body")
       return new SvXMLIgnoreContext(true);
-    if (element === XMLToken.TEXT_SECTION)
-      throw new Error(
-        type === "Cell" ? "Unsupported ODF table cell section." : "Unsupported ODF text section.",
-      );
+    if (element === XMLToken.TEXT_SECTION && this.target.beginTextSection)
+      return new XMLSectionImportContext(this, this.target.beginTextSection.bind(this.target));
     return null;
   }
 }

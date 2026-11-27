@@ -1,0 +1,44 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "status": "mapped",
+    "localPath": "apps/office/src/xmloff/source/text/XMLSectionSourceImportContext.ts",
+    "upstreamPath": "xmloff/source/text/XMLSectionSourceImportContext.cxx",
+    "localSymbols": [
+      "XMLSectionSourceImportContext"
+    ],
+    "upstreamSymbols": [
+      "XMLSectionSourceImportContext::startFastElement"
+    ],
+    "preservedResponsibilities": [
+      "Reads the native file URL, filter and section region source values."
+    ],
+    "omittedResponsibilities": [
+      "External refresh uses a separate link service outside this ODF content path."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/xmloff/source/text/XMLSectionSourceImportContext.ts",
+          "marker": "XMLSectionSourceImportContext"
+        },
+        {
+          "path": "apps/office/src/sw/source/filter/xml/odt-text-sections.test.ts",
+          "marker": "testProtectionKey"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/xmloff/source/text/XMLSectionSourceImportContext.cxx",
+          "marker": "XMLSectionSourceImportContext::startFastElement"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/qa/extras/odfexport/odfexport.cxx",
+          "marker": "testProtectionKey"
+        }
+      ]
+    }
+  }
+}

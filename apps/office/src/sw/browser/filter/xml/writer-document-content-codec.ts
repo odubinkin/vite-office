@@ -28,6 +28,8 @@ import { SwPosition } from "../../../source/core/crsr/pam";
 import type { SwDoc } from "../../../source/core/doc/doc";
 import { SwTableNode, type SwNode, type SwStartNode } from "../../../source/core/docnode/node";
 import type { SwTextNode } from "../../../source/core/txtnode/ndtxt";
+import { SwSectionNode } from "../../../source/core/docnode/ndsect";
+import { decodeSection, encodeSection, type WriterSectionRecord } from "./writer-section-codec";
 import type { SwTable, SwTableBox, SwTableBoxFormat } from "../../../source/core/table/swtable";
 import {
   encodeTableFormat,
@@ -84,32 +86,39 @@ export interface WriterTableRecord {
       paragraphs: readonly WriterTextNodeRecord[];
       tables?: readonly WriterTableRecord[];
       contentOrder?: readonly ("text" | "table")[];
+      contentBlocks?: readonly WriterSectionBlock[];
       rowSpan?: number;
     }>[];
   }>[];
 }
 
-/** Direct paragraph or table block in an owned native text section. */
+/** Direct block in an owned native text section. */
 export type WriterSectionBlock =
-  { readonly text: WriterTextNodeRecord } | { readonly table: WriterTableRecord };
+  | { readonly text: WriterTextNodeRecord }
+  | { readonly table: WriterTableRecord }
+  | { readonly section: WriterSectionRecord; readonly content: readonly WriterSectionBlock[] };
 
 /** Encodes a native text section in block order. @param document - Actual document. @param start - Existing section. @param owners - Ordered bookmark and anchor owners. @returns Cloneable section blocks. */
 export function* encodeSectionBlocks(
   document: SwDoc,
   start: SwStartNode,
-  owners: SwTextNode[],
+  owners?: SwTextNode[],
 ): Generator<void, WriterSectionBlock[]> {
-  const content = document.nodes.GetSectionContent(start);
   const blocks: WriterSectionBlock[] = [];
-  for (const block of content) {
-    blocks.push(
-      block instanceof SwTableNode
-        ? { table: yield* encodeWriterTableSteps(document, block.GetTable()) }
-        : { text: encodeTextNode(document, block) },
-    );
+  for (const block of document.nodes.GetSectionBlocks(start)) {
+    if (block instanceof SwSectionNode)
+      blocks.push({
+        section: encodeSection(block),
+        content: yield* encodeSectionBlocks(document, block),
+      });
+    else if (block instanceof SwTableNode)
+      blocks.push({ table: yield* encodeWriterTableSteps(document, block.GetTable()) });
+    else blocks.push({ text: encodeTextNode(document, block) });
     yield;
   }
-  for (const owner of sectionTextNodes(content)) owners.push(owner);
+  if (owners)
+    for (const owner of sectionTextNodes(document.nodes.GetSectionContent(start)))
+      owners.push(owner);
   return blocks;
 }
 
@@ -118,8 +127,9 @@ export function* decodeSectionBlocks(
   document: SwDoc,
   start: SwStartNode,
   blocks: readonly WriterSectionBlock[],
-  owners: SwTextNode[],
+  owners?: SwTextNode[],
 ): Generator<void, void> {
+  if (!Array.isArray(blocks)) throw new Error("Stored Writer section content is invalid.");
   const end = start.EndOfSectionNode();
   let first = document.nodes.at(start.GetIndex() + 1).GetTextNode();
   for (const block of blocks) {
@@ -133,11 +143,16 @@ export function* decodeSectionBlocks(
       );
       first = null;
     } else if ("table" in block) yield* decodeWriterTableSteps(document, block.table, first ?? end);
-    else throw new Error("Stored Writer section block is invalid.");
+    else if ("section" in block) {
+      const section = decodeSection(document, first ?? end, block.section);
+      yield* decodeSectionBlocks(document, section, block.content);
+    } else throw new Error("Stored Writer section block is invalid.");
     yield;
   }
   if (first !== null) document.nodes.RemoveNode(first.GetIndex(), 1, true);
-  for (const owner of sectionTextNodes(document.nodes.GetSectionContent(start))) owners.push(owner);
+  if (owners)
+    for (const owner of sectionTextNodes(document.nodes.GetSectionContent(start)))
+      owners.push(owner);
 }
 
 /** Primitive complete box item; legacy scalar alignment is accepted only at storage ingress. */
@@ -252,6 +267,23 @@ export function* encodeWriterTableSteps(
   for (const row of table.GetTabLines()) {
     const cells: WriterTableRecord["rows"][number]["cells"][number][] = [];
     for (const cell of row.GetTabBoxes()) {
+      const start = cell.GetStartNode();
+      const rowSpan = cell.getRowSpan();
+      if (
+        document.nodes.GetSectionBlocks(start).some(
+          /** Detects a real named section inside the cell. @param block - Direct cell child. @returns Whether structural transport is needed. */
+          (block) => block instanceof SwSectionNode,
+        )
+      ) {
+        cells.push({
+          format: encodeBoxFormat(cell),
+          paragraphs: [],
+          contentBlocks: yield* encodeSectionBlocks(document, start),
+          ...(rowSpan === 1 ? {} : { rowSpan }),
+        });
+        yield;
+        continue;
+      }
       const paragraphs: WriterTextNodeRecord[] = [];
       const tables: WriterTableRecord[] = [];
       const contentOrder: ("text" | "table")[] = [];
@@ -265,7 +297,6 @@ export function* encodeWriterTableSteps(
         }
         yield;
       }
-      const rowSpan = cell.getRowSpan();
       cells.push({
         format: encodeBoxFormat(cell),
         paragraphs,
@@ -407,7 +438,10 @@ export function* decodeWriterTableSteps(
     restoreFrameBackground(row.GetFrameFormat(), rowRecord.background);
     for (const [cellIndex, cellRecord] of rowRecord.cells.entries()) {
       const cell = row.GetTabBoxes()[cellIndex];
-      if (cell === undefined || cellRecord.paragraphs.length === 0)
+      if (
+        cell === undefined ||
+        (cellRecord.contentBlocks === undefined && cellRecord.paragraphs.length === 0)
+      )
         throw new Error("Stored Writer table cell is invalid.");
       if (cellRecord.rowSpan !== undefined) {
         const span = cellRecord.rowSpan;
@@ -421,6 +455,11 @@ export function* decodeWriterTableSteps(
       restoreFrameBackground(frame, cellRecord.format.background);
       if (cellRecord.format.interop !== undefined)
         restoreCellInterop(frame, cellRecord.format.interop);
+      if (cellRecord.contentBlocks !== undefined) {
+        yield* decodeSectionBlocks(document, cell.GetStartNode(), cellRecord.contentBlocks);
+        decodeBoxValue(cell, cellRecord.format);
+        continue;
+      }
       const order =
         cellRecord.contentOrder ??
         cellRecord.paragraphs.map(

@@ -102,6 +102,9 @@ export interface XMLParagraphListState {
 
 /** Model-facing import supplier and source declaration lookup. */
 export interface XMLTextImportTarget extends Partial<XMLTextFrameImportTarget> {
+  beginTextSection?(
+    properties: import("./XMLSectionImportContext").XMLSectionImportProperties,
+  ): import("./XMLSectionImportContext").XMLSectionImport;
   GetTextImport(): XMLTextImportHelper;
   getListRule(styleName: string): XMLTextListRule | undefined;
   createNumberingRule?(): XMLTextListRule;

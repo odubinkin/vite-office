@@ -1,0 +1,39 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/xmloff/source/text/XMLSectionStyleContext.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "shared",
+    "subsystem": "odf-filter",
+    "capabilityIds": [
+      "CAP-0113",
+      "CAP-0128"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/xmloff/source/text/XMLSectionStyleContext.ts",
+        "apps/office/src/sw/source/filter/xml/odt-text-sections.test.ts",
+        "vendor/libreoffice-reference/xmloff/source/text/txtprmap.cxx",
+        "vendor/libreoffice-reference/sw/qa/extras/odfexport/odfexport.cxx"
+      ],
+      "justification": "Parses the original section-family background, writing mode and frame margins. Section column formatting, note policy and XML attribute container owners remain outside this represented format slice.",
+      "knownViolations": [],
+      "localSymbols": [
+        "XMLSectionStyleContext"
+      ],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": "xmloff/source/text/txtprmap.cxx",
+      "upstreamSymbols": [
+        "aXMLSectionPropMap",
+        "PROP_SectionLeftMargin",
+        "PROP_SectionRightMargin"
+      ]
+    }
+  }
+}

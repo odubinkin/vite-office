@@ -1,0 +1,55 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "status": "mapped",
+    "localPath": "apps/office/src/sw/source/filter/xml/xmlsection.ts",
+    "upstreamPath": "sw/source/core/unocore/unosect.cxx",
+    "localSymbols": [
+      "importTextSection",
+      "exportTextSection"
+    ],
+    "upstreamSymbols": [
+      "SwXTextSection::attach",
+      "WID_SECT_PROTECTED"
+    ],
+    "preservedResponsibilities": [
+      "Connects section descriptors and Writer frame attributes to the shared ODF cursor and projects the original node on export."
+    ],
+    "omittedResponsibilities": [
+      "The browser projects ordinary section formatting, cached visibility and file descriptors without a platform link-update service."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sw/source/filter/xml/xmlsection.ts",
+          "marker": "importTextSection"
+        },
+        {
+          "path": "apps/office/src/sw/source/filter/xml/odt-text-sections.test.ts",
+          "marker": "testProtectionKey"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/unocore/unosect.cxx",
+          "marker": "SwXTextSection::attach"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/unocore/unosect.cxx",
+          "marker": "WID_SECT_PROTECTED"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/qa/extras/odfexport/odfexport.cxx",
+          "marker": "testProtectionKey"
+        }
+      ]
+    },
+    "filenameDivergence": {
+      "localPath": "apps/office/src/sw/source/filter/xml/xmlsection.ts",
+      "stackNecessity": "responsibility-split",
+      "rationale": "Holds the Writer-side adapter for xmloff named-section values beside the ODT filters while the descriptor retains its original unosect owner."
+    }
+  }
+}

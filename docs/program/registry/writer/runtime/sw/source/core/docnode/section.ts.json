@@ -1,0 +1,40 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sw/source/core/docnode/section.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "writer",
+    "subsystem": "document-core",
+    "capabilityIds": [
+      "CAP-ba76bd42-4b00-4278-9f8f-3970be0c5fa6"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/sw/source/core/docnode/section.ts",
+        "apps/office/src/sw/source/filter/xml/odt-text-sections.test.ts",
+        "vendor/libreoffice-reference/sw/source/core/docnode/section.cxx",
+        "vendor/libreoffice-reference/sw/qa/extras/odfexport/odfexport.cxx"
+      ],
+      "justification": "Owns native section data, frame-format inheritance and the content protection item. Physical section frames, linked content refresh and unrepresented section format properties remain outside this slice.",
+      "knownViolations": [],
+      "localSymbols": [
+        "SwSectionData",
+        "SwSection",
+        "SwSectionFormat"
+      ],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": "sw/source/core/docnode/section.cxx",
+      "upstreamSymbols": [
+        "SwSectionData::SwSectionData",
+        "SwSection::IsProtect",
+        "SwSectionFormat::SwSectionFormat"
+      ]
+    }
+  }
+}

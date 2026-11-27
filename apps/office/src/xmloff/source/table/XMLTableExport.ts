@@ -11,11 +11,17 @@ import {
   type XMLTextFrameExportSource,
 } from "../text/XMLTextFrameExport";
 import { WritingMode2 } from "../../../offapi/com/sun/star/text/WritingMode2";
+import {
+  exportRegularSection,
+  exportSectionStyleAttributes,
+  type XMLSectionExportSource,
+} from "../text/XMLSectionExport";
 
 /** Ordered text and table blocks supplied by Writer's canonical node array. */
 export type XMLTextExportBlock =
   | Readonly<{ kind: "paragraph"; paragraph: XMLTextParagraphSource }>
-  | Readonly<{ kind: "table"; table: XMLTableExportSource }>;
+  | Readonly<{ kind: "table"; table: XMLTableExportSource }>
+  | Readonly<{ kind: "section"; section: XMLSectionExportSource }>;
 
 /** Neutral table values consumed by the xmloff export pass. */
 export interface XMLTableExportSource {
@@ -98,6 +104,7 @@ export function exportTableBlocks(
 } {
   let automaticStyles = "";
   const tableStyleNames = new Set<string>();
+  const sectionStyles = new Map<string, string>();
   let frameIndex = 0;
   /** Shares graphic and table style identity across every nested native text box. @param frame - Native frame properties. @returns Frame XML. */
   function renderFrame(frame: XMLTextFrameExportSource): string {
@@ -120,6 +127,18 @@ export function exportTableBlocks(
         continue;
       }
       flush();
+      if (block.kind === "section") {
+        const attributes = exportSectionStyleAttributes(block.section.style);
+        let name = sectionStyles.get(attributes);
+        if (name === undefined) {
+          name = sectionStyles.size === 0 ? "Sect" : `Sect${sectionStyles.size}`;
+          sectionStyles.set(attributes, name);
+          const properties = attributes ? `<style:section-properties${attributes}/>` : "";
+          automaticStyles += `<style:style style:name="${name}" style:family="section">${properties}</style:style>`;
+        }
+        body += exportRegularSection(block.section, name, renderBlocks(block.section.content));
+        continue;
+      }
       const table = block.table;
       const base = table.name || "Table";
       let stylePrefix = base;

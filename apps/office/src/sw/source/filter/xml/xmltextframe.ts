@@ -43,6 +43,7 @@ import type { XMLTextFrameExportSource } from "../../../../xmloff/source/text/XM
 import type { XMLTextExportBlock } from "../../../../xmloff/source/table/XMLTableExport";
 import type { SwDoc } from "../../core/doc/doc";
 import { SwTableNode } from "../../core/docnode/node";
+import type { SwSectionBlock } from "../../core/docnode/nodes";
 import type { SwTextNode } from "../../core/txtnode/ndtxt";
 import type { XMLTextParagraphMarker } from "../../../../xmloff/source/text/txtparae";
 import type { SwFlyFrameFormat } from "../../core/layout/atrfrm";
@@ -338,26 +339,30 @@ export interface XMLBoundWriterFrames {
 export function projectAnchoredTextFrames(
   node: SwTextNode,
   anchored: XMLBoundWriterFrames | undefined,
-  projectBlock: (
-    block: SwTextNode | SwTableNode,
-    frames: XMLBoundWriterFrames,
-  ) => XMLTextExportBlock,
+  projectBlock: (block: SwSectionBlock, frames: XMLBoundWriterFrames) => XMLTextExportBlock,
 ): XMLTextParagraphMarker[] {
   if (anchored === undefined) return [];
   const markers: XMLTextParagraphMarker[] = (anchored.text.get(node) ?? []).map(
     /** Projects one bound frame with its direct native section. @param item - Native frame owner and content. @returns Inline frame portion. */
-    ({ format, content }) => ({
-      kind: "frame",
-      frame: exportTextFrame(
-        format,
-        content.map(
-          /** Projects a native text or table child. @param block - Actual direct child. @returns Neutral ODF block. */
-          (block) => projectBlock(block, anchored),
+    ({ format }) => {
+      const start = format.GetContent().GetContentIdx()?.GetNode();
+      if (!start?.IsStartNode()) throw new Error("assert(Writer text fly section)");
+      return {
+        kind: "frame",
+        frame: exportTextFrame(
+          format,
+          start
+            .GetNodes()
+            .GetSectionBlocks(start)
+            .map(
+              /** Projects a structural text frame child. @param block - Actual direct child. @returns Neutral ODF block. */
+              (block) => projectBlock(block, anchored),
+            ),
+          anchored.bitmapStyles,
         ),
-        anchored.bitmapStyles,
-      ),
-      offset: format.GetAnchor().GetAnchorContentOffset(),
-    }),
+        offset: format.GetAnchor().GetAnchorContentOffset(),
+      };
+    },
   );
   const helper = anchored.graphicHelper;
   if (helper) {

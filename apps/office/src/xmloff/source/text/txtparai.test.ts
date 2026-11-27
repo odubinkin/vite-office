@@ -617,12 +617,9 @@ describe("ODF streaming text import contexts", /** Groups direct model import te
       levelCount: 10,
       name: "Bullets",
     };
-    expect(
-      /** Imports a section without its model service. @returns Nothing. */ () =>
-        importBody("<text:section/>", styles, new Map([["L1", bullet]])),
-    ).toThrow("Unsupported ODF");
     for (const [body, count] of [
       ["<text:list/>", 0],
+      ["<text:section/>", 0],
       [
         '<text:list text:style-name="L1"><text:list-item><text:p>a</text:p><text:p>b</text:p></text:list-item></text:list>',
         2,

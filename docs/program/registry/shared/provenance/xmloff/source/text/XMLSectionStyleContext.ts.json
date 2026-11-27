@@ -1,0 +1,59 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "status": "mapped",
+    "localPath": "apps/office/src/xmloff/source/text/XMLSectionStyleContext.ts",
+    "upstreamPath": "xmloff/source/text/txtprmap.cxx",
+    "localSymbols": [
+      "XMLSectionStyleContext"
+    ],
+    "upstreamSymbols": [
+      "aXMLSectionPropMap",
+      "PROP_SectionLeftMargin",
+      "PROP_SectionRightMargin"
+    ],
+    "preservedResponsibilities": [
+      "Parses the original section-family background, writing mode and frame margins."
+    ],
+    "omittedResponsibilities": [
+      "Section column formatting, note policy and XML attribute container owners remain outside this represented format slice."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/xmloff/source/text/XMLSectionStyleContext.ts",
+          "marker": "XMLSectionStyleContext"
+        },
+        {
+          "path": "apps/office/src/sw/source/filter/xml/odt-text-sections.test.ts",
+          "marker": "testProtectionKey"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/xmloff/source/text/txtprmap.cxx",
+          "marker": "aXMLSectionPropMap"
+        },
+        {
+          "path": "vendor/libreoffice-reference/xmloff/source/text/txtprmap.cxx",
+          "marker": "PROP_SectionLeftMargin"
+        },
+        {
+          "path": "vendor/libreoffice-reference/xmloff/source/text/txtprmap.cxx",
+          "marker": "PROP_SectionRightMargin"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/qa/extras/odfexport/odfexport.cxx",
+          "marker": "testProtectionKey"
+        }
+      ]
+    },
+    "filenameDivergence": {
+      "localPath": "apps/office/src/xmloff/source/text/XMLSectionStyleContext.ts",
+      "stackNecessity": "responsibility-split",
+      "rationale": "Places the section-family scalar properties in the SAX style context that owns their parsing and uses the original txtprmap.cxx property map."
+    }
+  }
+}

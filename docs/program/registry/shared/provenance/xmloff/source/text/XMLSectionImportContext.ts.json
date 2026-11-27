@@ -1,0 +1,54 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "status": "mapped",
+    "localPath": "apps/office/src/xmloff/source/text/XMLSectionImportContext.ts",
+    "upstreamPath": "xmloff/source/text/XMLSectionImportContext.cxx",
+    "localSymbols": [
+      "XMLSectionImportContext"
+    ],
+    "upstreamSymbols": [
+      "XMLSectionImportContext::startFastElement",
+      "XMLSectionImportContext::ProcessAttributes",
+      "XMLSectionImportContext::createFastChildContext"
+    ],
+    "preservedResponsibilities": [
+      "Reads regular text section properties, original condition scope, stored visibility and protection digest bytes."
+    ],
+    "omittedResponsibilities": [
+      "Index headers, metadata identity, redline nodes and platform DDE are outside the represented regular section."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/xmloff/source/text/XMLSectionImportContext.ts",
+          "marker": "XMLSectionImportContext"
+        },
+        {
+          "path": "apps/office/src/sw/source/filter/xml/odt-text-sections.test.ts",
+          "marker": "testProtectionKey"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/xmloff/source/text/XMLSectionImportContext.cxx",
+          "marker": "XMLSectionImportContext::startFastElement"
+        },
+        {
+          "path": "vendor/libreoffice-reference/xmloff/source/text/XMLSectionImportContext.cxx",
+          "marker": "XMLSectionImportContext::ProcessAttributes"
+        },
+        {
+          "path": "vendor/libreoffice-reference/xmloff/source/text/XMLSectionImportContext.cxx",
+          "marker": "XMLSectionImportContext::createFastChildContext"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/qa/extras/odfexport/odfexport.cxx",
+          "marker": "testProtectionKey"
+        }
+      ]
+    }
+  }
+}

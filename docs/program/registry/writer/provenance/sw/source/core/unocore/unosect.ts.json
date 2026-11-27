@@ -1,0 +1,54 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "status": "mapped",
+    "localPath": "apps/office/src/sw/source/core/unocore/unosect.ts",
+    "upstreamPath": "sw/source/core/unocore/unosect.cxx",
+    "localSymbols": [
+      "SwXTextSection"
+    ],
+    "upstreamSymbols": [
+      "SwXTextSection::attach",
+      "WID_SECT_CURRENTLY_VISIBLE",
+      "WID_SECT_REGION"
+    ],
+    "preservedResponsibilities": [
+      "Applies the native UNO descriptor defaults at the section insertion boundary and retains file-link values."
+    ],
+    "omittedResponsibilities": [
+      "The property service and general partial selections remain outside the streaming ODF attachment entry point."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sw/source/core/unocore/unosect.ts",
+          "marker": "SwXTextSection"
+        },
+        {
+          "path": "apps/office/src/sw/source/filter/xml/odt-text-sections.test.ts",
+          "marker": "testProtectionKey"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/unocore/unosect.cxx",
+          "marker": "SwXTextSection::attach"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/unocore/unosect.cxx",
+          "marker": "WID_SECT_CURRENTLY_VISIBLE"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/unocore/unosect.cxx",
+          "marker": "WID_SECT_REGION"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/qa/extras/odfexport/odfexport.cxx",
+          "marker": "testProtectionKey"
+        }
+      ]
+    }
+  }
+}

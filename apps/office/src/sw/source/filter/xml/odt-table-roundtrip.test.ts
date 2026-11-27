@@ -582,10 +582,7 @@ describe("Writer canonical ODF tables", /** Verifies the bounded table scenario.
           "<table:table-column/><table:table-row><table:table-cell><table:table-row/></table:table-cell></table:table-row>",
         ),
     ).not.toThrow();
-    for (const [unsupported, message] of [
-      ["<table:table/>", "table name"],
-      ["<text:section/>", "Unsupported ODF table cell section"],
-    ] as const)
+    for (const [unsupported, message] of [["<table:table/>", "table name"]] as const)
       expect(
         /** Preserves explicit rejection for native cell features not implemented here. @returns Nothing. */ () =>
           open(

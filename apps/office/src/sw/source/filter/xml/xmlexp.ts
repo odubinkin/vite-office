@@ -180,6 +180,9 @@ import { WRITER_MAX_LIST_LEVEL } from "../../core/doc/list";
 import { SwXNumberingRules } from "../../core/unocore/unosett";
 import type { SwDoc } from "../../core/doc/doc";
 import { SwTableNode, type SwStartNode } from "../../core/docnode/node";
+import { SwSectionNode } from "../../core/docnode/ndsect";
+import type { SwSectionBlock } from "../../core/docnode/nodes";
+import { exportTextSection } from "./xmlsection";
 import type { SwTextNode } from "../../core/txtnode/ndtxt";
 import { SwFormatAutoFormat } from "../../core/txtnode/txatbase";
 import { RES_PARATR_LIST_AUTOFMT } from "../../../inc/hintids";
@@ -593,7 +596,9 @@ function exportWriterText(
       },
       /** Iterates ordered direct body blocks and projects table cells through the same text exporter. @returns Body blocks. */
       *blocks() {
-        for (const block of document.nodes.getBodyContent()) yield projectBlock(block, anchored);
+        const nodes = document.nodes;
+        for (const block of nodes.GetSectionBlocks(nodes.GetEndOfContent().StartOfSectionNode()))
+          yield projectBlock(block, anchored);
       },
       ...(sections === undefined
         ? {}
@@ -603,7 +608,7 @@ function exportWriterText(
               return sections.map(
                 /** Projects one direct native text section. @param start - Section. @returns First-level XML blocks. */
                 (start) =>
-                  document.nodes.GetSectionContent(start).map(
+                  document.nodes.GetSectionBlocks(start).map(
                     /** Connects paragraphs and tables to the existing exporter. @param block - Direct section block. @returns XML block source. */
                     (block) => projectBlock(block, anchored),
                   ),
@@ -622,10 +627,17 @@ function exportWriterText(
 }
 
 /** Projects one original text or table node, including interleaved cell sections. @param block - Native node. @param anchored - Actual bound frame sets. @returns Neutral ODF body block. */
-function projectBlock(
-  block: SwTextNode | SwTableNode,
-  anchored: XMLBoundWriterFrames,
-): XMLTextExportBlock {
+function projectBlock(block: SwSectionBlock, anchored: XMLBoundWriterFrames): XMLTextExportBlock {
+  if (block instanceof SwSectionNode) {
+    const content = block
+      .GetNodes()
+      .GetSectionBlocks(block)
+      .map(
+        /** Projects a structural child of the named section. @param child - Native node. @returns ODF block. */
+        (child) => projectBlock(child, anchored),
+      );
+    return { kind: "section", section: exportTextSection(block, content) };
+  }
   if (!(block instanceof SwTableNode))
     return { kind: "paragraph", paragraph: projectParagraph(block, anchored) };
   const table = block.GetTable(),
@@ -748,10 +760,14 @@ function projectBlock(
                               ? "top"
                               : "",
                   },
-                  content: cell.GetContentNodes().map(
-                    /** Projects one actual cell text or table block. @param child - Native block. @returns ODF block. */
-                    (child) => projectBlock(child, anchored),
-                  ),
+                  content: cell
+                    .GetStartNode()
+                    .GetNodes()
+                    .GetSectionBlocks(cell.GetStartNode())
+                    .map(
+                      /** Projects one actual cell text or table block. @param child - Native block. @returns ODF block. */
+                      (child) => projectBlock(child, anchored),
+                    ),
                 };
               },
             ),

@@ -72,15 +72,12 @@ export class SwXText implements SwXTextOwner {
   }
   /** Implements the represented native GetTextNodes operation. @returns The represented native operation result. */
   GetTextNodes(): readonly SwTextNode[] {
-    const doc = this.GetDoc(),
-      start = this.GetStartNode();
-    return doc
+    return this.GetDoc()
       .GetNodes()
-      .entries()
+      .GetSectionContent(this.GetStartNode())
       .filter(
-        /** Processes one ordered native value at this boundary. @param node - Canonical text node. @returns The represented native operation result. */
-        (node): node is SwTextNode =>
-          node instanceof SwTextNode && node.StartOfSectionNode() === start,
+        /** Selects text paragraphs without entering table owners. @param node - Content block. @returns Whether the block is text. */
+        (node): node is SwTextNode => node instanceof SwTextNode,
       );
   }
   /** Implements the represented native createTextCursor operation. @returns The represented native operation result. */
@@ -311,7 +308,11 @@ export class SwXText implements SwXTextOwner {
       direct = node.GetpSwAttrSet()?.Clone(),
       style = node.GetTextFormatColl(),
       hints = new SwpHints(doc.GetAttrPool(), node.GetpSwpHints()?.entries());
-    const next = new SwTextNode(doc.GetNodes(), this.GetStartNode(), style.GetNextTextFormatColl());
+    const next = new SwTextNode(
+      doc.GetNodes(),
+      node.StartOfSectionNode(),
+      style.GetNextTextFormatColl(),
+    );
     doc.GetNodes().insertTextNodeAfter(node, next);
     try {
       p.SetMark();

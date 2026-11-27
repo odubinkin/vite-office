@@ -1,0 +1,30 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "local-infrastructure",
+    "localPath": "apps/office/src/sw/browser/filter/xml/writer-section-codec.ts",
+    "status": "local-only",
+    "rationale": "Worker structured-clone transport retains native named-section properties, direct format items and children without serializing the document node index.",
+    "responsibilities": [
+      "Worker structured-clone transport retains native named-section properties, direct format items and children without serializing the document node index."
+    ],
+    "stackDivergence": {
+      "kind": "local-infrastructure",
+      "rationale": "Worker structured-clone transport retains native named-section properties, direct format items and children without serializing the document node index."
+    },
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sw/browser/filter/xml/writer-section-codec.ts",
+          "marker": "WriterSectionRecord"
+        },
+        {
+          "path": "apps/office/src/sw/source/filter/xml/odt-text-sections.test.ts",
+          "marker": "through Worker and ODT"
+        }
+      ],
+      "upstream": []
+    }
+  }
+}

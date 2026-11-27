@@ -83,11 +83,15 @@ import {
   RES_PARATR_OUTLINELEVEL,
 } from "../../../inc/hintids";
 import { SwTableNode } from "../../../source/core/docnode/node";
+import { SwSectionNode } from "../../../source/core/docnode/ndsect";
 import type { SwTextNode } from "../../../source/core/txtnode/ndtxt";
 import { SwPaM, SwPosition } from "../../../source/core/crsr/pam";
 import { SwDoc, type WriterEmbeddedFont } from "../../../source/core/doc/doc";
 import {
   sectionTextNodes,
+  encodeSectionBlocks,
+  decodeSectionBlocks,
+  type WriterSectionBlock,
   encodeTextNode,
   decodeTextNode,
   encodeWriterTableSteps,
@@ -161,6 +165,7 @@ interface WriterAnnotationMarkRecord {
 export interface WriterDocumentRecord {
   readonly theme?: ThemeRecord;
   readonly bodyOrder?: readonly ("text" | "table")[];
+  readonly bodyBlocks?: readonly WriterSectionBlock[];
   readonly tables?: readonly WriterTableRecord[];
   readonly textFrames?: readonly WriterTextFrameRecord[];
   readonly annotations?: readonly WriterAnnotationRecord[];
@@ -217,12 +222,20 @@ const fontDefaultWhichIds: readonly number[] = [
 export function* encodeWriterDocumentSteps(document: SwDoc): Generator<void, WriterDocumentRecord> {
   const textNodes: WriterTextNodeRecord[] = [];
   const tables: WriterTableRecord[] = [];
-  for (const node of document.paragraphs) {
-    textNodes.push(encodeTextNode(document, node));
-    yield;
+  const bodyStart = document.nodes.GetEndOfContent().StartOfSectionNode();
+  const hasNamedSections = document.nodes.GetSectionBlocks(bodyStart).some(
+    /** Selects body storage that can represent native named sections. @param block - Direct body block. @returns Whether a named section is present. */
+    (block) => block instanceof SwSectionNode,
+  );
+  const bodyBlocks = hasNamedSections ? yield* encodeSectionBlocks(document, bodyStart) : undefined;
+  if (!bodyBlocks) {
+    for (const node of document.paragraphs) {
+      textNodes.push(encodeTextNode(document, node));
+      yield;
+    }
+    for (const table of document.GetTables())
+      tables.push(yield* encodeWriterTableSteps(document, table));
   }
-  for (const table of document.GetTables())
-    tables.push(yield* encodeWriterTableSteps(document, table));
   const textOwners = sectionTextNodes(document.nodes.getBodyContent());
   const pageStories = yield* encodePageStories(document, textOwners);
   const textFrames = yield* encodeTextFrames(document, textOwners);
@@ -356,13 +369,17 @@ export function* encodeWriterDocumentSteps(document: SwDoc): Generator<void, Wri
         };
       },
     ),
-    bodyOrder: document.nodes
-      .getBodyContent()
-      .map(
-        /** Handles the browser table interaction. @param argument1 - Callback input. @returns Callback result. */ (
-          node,
-        ) => (node instanceof SwTableNode ? "table" : "text"),
-      ),
+    ...(bodyBlocks
+      ? { bodyBlocks }
+      : {
+          bodyOrder: document.nodes
+            .getBodyContent()
+            .map(
+              /** Handles the browser table interaction. @param argument1 - Callback input. @returns Callback result. */ (
+                node,
+              ) => (node instanceof SwTableNode ? "table" : "text"),
+            ),
+        }),
     tables,
     textNodes,
   };
@@ -757,30 +774,38 @@ export function* decodeWriterDocumentSteps(
       if (!format) throw new Error("Stored Writer page register style link is invalid.");
       document.FindPageDesc(descriptorRecord.value.name)?.SetRegisterFormatColl(format);
     }
-    if (record.textNodes.length === 0)
-      throw new Error("Stored Writer document has no body text node.");
-    const order =
-      record.bodyOrder ??
-      record.textNodes.map(
-        /** Handles the browser table interaction.  @returns Callback result. */ () =>
-          "text" as const,
+    if (record.bodyBlocks !== undefined)
+      yield* decodeSectionBlocks(
+        document,
+        document.nodes.GetEndOfContent().StartOfSectionNode(),
+        record.bodyBlocks,
       );
-    let textIndex = 0;
-    let tableIndex = 0;
-    for (const kind of order) {
-      if (kind === "text") {
-        const nodeRecord = record.textNodes[textIndex++];
-        if (nodeRecord === undefined) throw new Error("Stored Writer body order is invalid.");
-        decodeTextNode(document, document.nodes.MakeTextNode(), nodeRecord);
-        yield;
-        continue;
+    else {
+      if (record.textNodes.length === 0)
+        throw new Error("Stored Writer document has no body text node.");
+      const order =
+        record.bodyOrder ??
+        record.textNodes.map(
+          /** Handles the browser table interaction.  @returns Callback result. */ () =>
+            "text" as const,
+        );
+      let textIndex = 0;
+      let tableIndex = 0;
+      for (const kind of order) {
+        if (kind === "text") {
+          const nodeRecord = record.textNodes[textIndex++];
+          if (nodeRecord === undefined) throw new Error("Stored Writer body order is invalid.");
+          decodeTextNode(document, document.nodes.MakeTextNode(), nodeRecord);
+          yield;
+          continue;
+        }
+        const tableRecord = record.tables?.[tableIndex++];
+        if (tableRecord === undefined) throw new Error("Stored Writer table order is invalid.");
+        yield* decodeWriterTableSteps(document, tableRecord);
       }
-      const tableRecord = record.tables?.[tableIndex++];
-      if (tableRecord === undefined) throw new Error("Stored Writer table order is invalid.");
-      yield* decodeWriterTableSteps(document, tableRecord);
+      if (textIndex !== record.textNodes.length || tableIndex !== (record.tables?.length ?? 0))
+        throw new Error("Stored Writer body order is invalid.");
     }
-    if (textIndex !== record.textNodes.length || tableIndex !== (record.tables?.length ?? 0))
-      throw new Error("Stored Writer body order is invalid.");
     const textOwners = sectionTextNodes(document.nodes.getBodyContent());
     yield* decodePageStories(document, record.pageStories, textOwners);
     yield* decodeTextFrames(document, record.textFrames, textOwners);

@@ -45,6 +45,7 @@ import {
 } from "../text/XMLLineNumberingImportContext";
 import { XMLTextFrameStyleContext, type XMLTextFrameStyle } from "../text/XMLTextFrameContext";
 import { XMLTextPropertySetContext } from "../text/XMLTextPropertySetContext";
+import { XMLSectionStyleContext, type XMLSectionStyle } from "../text/XMLSectionStyleContext";
 import { XMLThemeContext } from "./XMLThemeContext";
 import type { XMLImageStyleDefinition } from "./ImageStyle";
 import { XMLBitmapStyleContext } from "./FillStyleContext";
@@ -63,6 +64,7 @@ export interface XMLStyleImportTarget extends XMLListStyleImportTarget {
   createNumberStyle?(element: XMLToken, attributes: FastAttributeList): SvXMLImportContext;
   registerTableStyle(name: string, style: OdfTableStyle): void;
   registerTextFrameStyle?(name: string, style: XMLTextFrameStyle, parent?: string): void;
+  registerSectionStyle?(name: string, style: XMLSectionStyle): void;
   registerLineNumbering(value: OdfLineNumberingConfiguration): void;
   getFontFace(name: string): string | undefined;
   getFontFaceGeneric?(name: string): string | undefined;
@@ -164,6 +166,11 @@ export class XMLStylesContext extends SvXMLImportContext {
       return this.target.createNumberStyle(element, attributes);
     if (element === XMLToken.STYLE_STYLE) {
       const family = attributes.get(XMLToken.STYLE_FAMILY);
+      if (family === "section" && this.target.registerSectionStyle)
+        return new XMLSectionStyleContext(
+          attributes.get(XMLToken.STYLE_NAME) ?? "",
+          this.target.registerSectionStyle.bind(this.target),
+        );
       if (family === "graphic" && this.target.registerTextFrameStyle)
         return new XMLTextFrameStyleContext(
           attributes,
