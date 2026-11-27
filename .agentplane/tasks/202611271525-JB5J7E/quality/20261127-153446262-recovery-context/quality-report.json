@@ -1,0 +1,22 @@
+{
+  "schema_version": 1,
+  "task_id": "202611271525-JB5J7E",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-11-27T15:34:46.262Z",
+  "verdict": "pass",
+  "summary": "The native subtotal owner registers formula cells, invalidates by actual reference range and produces filtered AutoSum formulas from the original ODS case.",
+  "evaluated_sha": "a8ab58df230b0c221797b1815ff9e372d34c2f74",
+  "blueprint_digest": "62afa97aaa46ea4b42b497063879b2dc3f37f31cc72552f37f16a82ce65333f9",
+  "findings": [
+    "The immutable checkpoint failure was an obsolete constructor rejection. Calc preserves the pinned fixed range selection offset in CALC-870."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202611271525-JB5J7E/README.md",
+    "/Users/odubinkin/Projects/vite-office/output/playwright/odf-subtotal-followup/verification.md",
+    "a8ab58df230b0c221797b1815ff9e372d34c2f74"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": []
+}
