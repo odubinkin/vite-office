@@ -187,7 +187,7 @@ export function WriterHyphenationControls({
   }
 
   return (
-    <div className="grid gap-2 sm:grid-cols-2">
+    <div className="grid grid-cols-[repeat(auto-fit,minmax(min(100%,14rem),1fr))] gap-2">
       <fieldset className="grid gap-2 rounded border border-slate-200 p-2">
         <legend className="text-sm">{label("hyphenation", "Hyphenation")}</legend>
         {checkbox(
