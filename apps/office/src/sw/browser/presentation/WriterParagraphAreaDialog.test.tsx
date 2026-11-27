@@ -55,7 +55,7 @@ it("applies palette color and uniform transparency with one undo and reopens bot
     const result = open(session);
     fireEvent.click(screen.getByRole("tab", { name: "Area" }));
     fireEvent.click(screen.getByRole("button", { name: /^Color$/ }));
-    fireEvent.click(screen.getByRole("button", { name: /^#ff0000$/ }));
+    fireEvent.click(screen.getByRole("button", { name: /^Red$/ }));
     fireEvent.click(screen.getByRole("tab", { name: "Transparency" }));
     fireEvent.click(screen.getByRole("radio", { name: /^Transparency$/ }));
     const percent = screen.getByRole("spinbutton", { name: "Transparency" });
@@ -90,10 +90,7 @@ it("applies palette color and uniform transparency with one undo and reopens bot
     cleanup();
     const reopen = open(session);
     fireEvent.click(screen.getByRole("tab", { name: "Area" }));
-    expect(screen.getByRole("button", { name: /^#ff0000$/ })).toHaveAttribute(
-      "aria-pressed",
-      "true",
-    );
+    expect(screen.getByRole("button", { name: /^Red$/ })).toHaveAttribute("aria-pressed", "true");
     fireEvent.click(screen.getByRole("tab", { name: "Transparency" }));
     expect(screen.getByRole("radio", { name: /^Transparency$/ })).toBeChecked();
     expect(screen.getByRole("spinbutton", { name: "Transparency" })).toHaveValue(51);

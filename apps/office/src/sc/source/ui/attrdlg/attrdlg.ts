@@ -1,4 +1,5 @@
 /** @fileoverview Format Cells' original selection snapshot and typed output exchange. */
+import { SvxBkgTabPage } from "../../../../cui/source/tabpages/backgrnd";
 import { SvxBorderTabPage } from "../../../../cui/source/tabpages/border";
 import { SvxBorderLineStyle as Style } from "../../../../editeng/source/items/borderline";
 import {
@@ -152,6 +153,7 @@ export class ScAttrDlg {
   readonly formatter;
   readonly numbers: SvxNumberFormatShell;
   readonly borders: SvxBorderTabPage;
+  readonly background: SvxBkgTabPage;
   readonly asianTypography: SvxAsianTabPage;
   readonly output: SfxItemSet;
 
@@ -193,6 +195,7 @@ export class ScAttrDlg {
       ],
     });
 
+    this.background = new SvxBkgTabPage(this.items);
     this.output = this.items.Clone(false);
     this.output.MergeRange(SID_ATTR_NUMBERFORMAT_INFO, SID_ATTR_NUMBERFORMAT_INFO);
     this.asianTypography = new SvxAsianTabPage(this.items, this.output);
@@ -246,6 +249,7 @@ export class ScAttrDlg {
   Dispose(): void {
     this.numbers.Dispose();
     this.borders.Dispose();
+    this.background.Dispose();
     this.output.Dispose();
     this.items.Dispose();
   }

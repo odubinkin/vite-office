@@ -73,7 +73,7 @@ it("applies and reopens the active named page format and undoes geometry and fil
     fireEvent.click(screen.getByRole("radio", { name: "Landscape" }));
     fireEvent.click(screen.getByRole("tab", { name: "Area" }));
     fireEvent.click(screen.getByRole("button", { name: /^Color$/ }));
-    fireEvent.click(screen.getByRole("button", { name: /^#ff0000$/ }));
+    fireEvent.click(screen.getByRole("button", { name: /^Red$/ }));
     fireEvent.click(screen.getByRole("tab", { name: "Transparency" }));
     fireEvent.click(screen.getByRole("radio", { name: /^Transparency$/ }));
     fireEvent.change(screen.getByRole("spinbutton", { name: "Transparency" }), {

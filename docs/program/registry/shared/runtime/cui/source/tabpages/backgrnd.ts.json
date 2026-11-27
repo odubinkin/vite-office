@@ -1,0 +1,35 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/cui/source/tabpages/backgrnd.ts",
+    "classification": "upstream-mechanism",
+    "state": "active",
+    "suite": "shared",
+    "subsystem": "background-fill",
+    "capabilityIds": [
+      "CAP-4a19c52b-15b5-4643-9fc3-086a22f9339d"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "none",
+      "evidence": [
+        "apps/office/src/cui/source/tabpages/backgrnd.ts#SvxBkgTabPage",
+        "vendor/libreoffice-reference/cui/source/tabpages/backgrnd.cxx#SvxBkgTabPage::FillItemSet",
+        "apps/office/src/sc/browser/presentation/calc-format-cells.test.tsx"
+      ],
+      "justification": "Adapts the original brush slot to drawing fill items and exchanges the accepted None or Color through the original brush comparison.",
+      "knownViolations": [],
+      "localSymbols": [
+        "SvxBkgTabPage"
+      ],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": "cui/source/tabpages/backgrnd.cxx",
+      "upstreamSymbols": [
+        "SvxBkgTabPage"
+      ]
+    }
+  }
+}

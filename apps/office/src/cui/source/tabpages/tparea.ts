@@ -44,6 +44,11 @@ export class SvxAreaTabPage {
     return this.color?.GetColorValue();
   }
 
+  /** Reads the source identity of the pending preset. @returns Swatch name if selected. */
+  GetColorName(): string | undefined {
+    return this.color?.GetName() || undefined;
+  }
+
   /** Reads the original color for the old-color preview. @returns Starting native color. */
   GetOriginalColor(): Readonly<Color> | undefined {
     return this.originalStyle?.GetValue() === FillStyle.SOLID

@@ -4,7 +4,7 @@ title: "Connect Calc Background to the native Area and brush exchange"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 5
+revision: 6
 origin:
   system: "manual"
 depends_on: []
@@ -36,7 +36,7 @@ events:
     to: "DOING"
     note: "Start: Replace Calc Background with the shared native palette and typed brush exchange."
 doc_version: 3
-doc_updated_at: "2026-11-27T07:10:07.434Z"
+doc_updated_at: "2026-11-27T07:25:21.576Z"
 doc_updated_by: "CODER"
 description: "Replace the browser-only Calc Background form with the pinned SvxBkgTabPage controls, shared palette and preview, original brush exchange, and selected-cell history and ODS verification."
 sections:
@@ -49,7 +49,13 @@ sections:
     - Run Office typecheck, changed-source lint and format, dependency/source-tree checks, source provenance, Calc/shared inventory, routing and doctor. Record inherited integration evidence failures separately.
   Verification: "Pending execution."
   Rollback Plan: "Revert the scoped Background owner, UI and registry changes."
-  Findings: "Calc opens the SW/SVX shared Background implementation without optional graphic controls. The source page compares the original brush with the output solid color after converting the actual selection to drawing fill items."
+  Findings: |-
+    - **Command:** From `apps/office`, run `../../node_modules/.bin/vitest run --config ../../output/calc-next/vitest.GE34WV.config.ts src/sc/browser/presentation/calc-format-cells.test.tsx src/sc/source/filter/xml/ods.test.ts src/sc/source/filter/xml/ods-native-colors.test.ts src/svx/source/unodraw/unobrushitemhelper.test.ts src/svx/browser/fill-item-boundaries.test.ts src/sw/browser/presentation/WriterParagraphAreaDialog.test.tsx src/sw/browser/presentation/WriterPageAreaDialog.test.tsx --maxWorkers=2 --testTimeout=180000 --reporter=verbose`. **Result:** pass. **Evidence:** 82 tests across seven files. **Scope:** native None and Color, palette names and indices, recent colors across different cells, Reset, Cancel, history, matching complex colors, accepted partial opacity, ODS and shared Writer Area.
+    - **Command:** `npm run typecheck --workspace @vite-office/office`, changed-source ESLint, Prettier and JSDoc, `git diff --check`, `npm run check:dependencies`, `npm run check:source-tree`, `node .agentplane/policy/check-routing.mjs`, `ap doctor`. **Result:** pass. **Evidence:** checks passed, with the existing AgentPlane hook-shim readiness warning. **Scope:** shared Area and Calc sources, registry JSON, office types and repository structure.
+    - **Command:** `node_modules/.bin/tsx output/calc-next/GK0SFZ-provenance.ts` and `cmp` for each installed SOC against its pinned native counterpart. **Result:** pass. **Evidence:** two changed runtime owners matched their scoped provenance and all eight resources were byte-identical. **Scope:** new Background native owner and browser palette adapter.
+    - **Command:** `npm run check:source-provenance`, `npm run inventory:parity:calc`, `npm run inventory:parity:shared` and `npm run check:docs`. **Result:** fail at inherited integration findings. **Evidence:** the global provenance reports the absent Writer native overline test marker. Both inventory scopes report the absent shared XML style `rawLineStart` marker. Global JSDoc reports issues in unchanged sources. **Scope:** repository-wide checks. All changed sources pass the corresponding scoped checks.
+    - **Native behavior:** As recorded in CALC-851, accepting the visited solid page can turn a partially transparent brush opaque. The unvisited page and Cancel preserve it. Original opaque colors retain their complex color when the resolved color matches.
+    - **Boundary:** The port uses installed SOC resources, a profile-backed named recent palette and the browser color chooser. Custom palette editing, document theme palette editing and the native component editor are outside this slice.
 id_source: "generated"
 ---
 ## Summary
@@ -80,4 +86,9 @@ Revert the scoped Background owner, UI and registry changes.
 
 ## Findings
 
-Calc opens the SW/SVX shared Background implementation without optional graphic controls. The source page compares the original brush with the output solid color after converting the actual selection to drawing fill items.
+- **Command:** From `apps/office`, run `../../node_modules/.bin/vitest run --config ../../output/calc-next/vitest.GE34WV.config.ts src/sc/browser/presentation/calc-format-cells.test.tsx src/sc/source/filter/xml/ods.test.ts src/sc/source/filter/xml/ods-native-colors.test.ts src/svx/source/unodraw/unobrushitemhelper.test.ts src/svx/browser/fill-item-boundaries.test.ts src/sw/browser/presentation/WriterParagraphAreaDialog.test.tsx src/sw/browser/presentation/WriterPageAreaDialog.test.tsx --maxWorkers=2 --testTimeout=180000 --reporter=verbose`. **Result:** pass. **Evidence:** 82 tests across seven files. **Scope:** native None and Color, palette names and indices, recent colors across different cells, Reset, Cancel, history, matching complex colors, accepted partial opacity, ODS and shared Writer Area.
+- **Command:** `npm run typecheck --workspace @vite-office/office`, changed-source ESLint, Prettier and JSDoc, `git diff --check`, `npm run check:dependencies`, `npm run check:source-tree`, `node .agentplane/policy/check-routing.mjs`, `ap doctor`. **Result:** pass. **Evidence:** checks passed, with the existing AgentPlane hook-shim readiness warning. **Scope:** shared Area and Calc sources, registry JSON, office types and repository structure.
+- **Command:** `node_modules/.bin/tsx output/calc-next/GK0SFZ-provenance.ts` and `cmp` for each installed SOC against its pinned native counterpart. **Result:** pass. **Evidence:** two changed runtime owners matched their scoped provenance and all eight resources were byte-identical. **Scope:** new Background native owner and browser palette adapter.
+- **Command:** `npm run check:source-provenance`, `npm run inventory:parity:calc`, `npm run inventory:parity:shared` and `npm run check:docs`. **Result:** fail at inherited integration findings. **Evidence:** the global provenance reports the absent Writer native overline test marker. Both inventory scopes report the absent shared XML style `rawLineStart` marker. Global JSDoc reports issues in unchanged sources. **Scope:** repository-wide checks. All changed sources pass the corresponding scoped checks.
+- **Native behavior:** As recorded in CALC-851, accepting the visited solid page can turn a partially transparent brush opaque. The unvisited page and Cancel preserve it. Original opaque colors retain their complex color when the resolved color matches.
+- **Boundary:** The port uses installed SOC resources, a profile-backed named recent palette and the browser color chooser. Custom palette editing, document theme palette editing and the native component editor are outside this slice.

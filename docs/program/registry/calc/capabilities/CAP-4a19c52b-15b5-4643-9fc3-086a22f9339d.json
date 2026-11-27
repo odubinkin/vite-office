@@ -1,0 +1,111 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "id": "CAP-4a19c52b-15b5-4643-9fc3-086a22f9339d",
+    "capabilityId": "CAP-4a19c52b-15b5-4643-9fc3-086a22f9339d",
+    "suite": "calc",
+    "subsystem": "cell-formatting",
+    "type": "command",
+    "maturity": "implemented",
+    "capability": "Calc Format Cells Background brush and palette",
+    "assertions": [
+      "Calc exposes None and Color through the original shared Area tab with native swatch names and order.",
+      "The preset palette preference and named recent colors survive dialog reopen through the browser profile.",
+      "Accept and Reset use the native brush item exchange. An unchanged opaque brush retains its complex color and accepted changes share the selected-cell transaction."
+    ],
+    "stackDivergence": {
+      "kind": "browser-adaptation",
+      "rationale": "Loads the original installed SOC resources with DOMParser and stores native UserColors values with the browser profile."
+    },
+    "gaps": [
+      "The palette port represents installed SOC files and browser recent colors. Custom and document theme palette editing and the RGB/CMYK component editor are outside this slice."
+    ],
+    "upstream": {
+      "implementation": [
+        {
+          "path": "vendor/libreoffice-reference/cui/source/tabpages/backgrnd.cxx",
+          "marker": "SvxBkgTabPage::Reset"
+        },
+        {
+          "path": "vendor/libreoffice-reference/cui/source/tabpages/backgrnd.cxx",
+          "marker": "SvxBkgTabPage::FillItemSet"
+        },
+        {
+          "path": "vendor/libreoffice-reference/cui/source/tabpages/tpcolor.cxx",
+          "marker": "SvxColorTabPage::FillItemSet"
+        },
+        {
+          "path": "vendor/libreoffice-reference/svx/source/tbxctrls/PaletteManager.cxx",
+          "marker": "PaletteManager::AddRecentColor"
+        }
+      ],
+      "tests": [
+        {
+          "path": "vendor/libreoffice-reference/sc/qa/uitest/calc_tests/cellBackgroundColorSelector.py",
+          "marker": "test_color_selector"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/qa/uitest/calc_tests/cellBackgroundColorSelector.py",
+          "marker": "test_recent_color_selector"
+        }
+      ],
+      "docs": [
+        {
+          "path": "vendor/libreoffice-reference/cui/uiconfig/ui/areatabpage.ui",
+          "marker": "id=\"btncolor\""
+        },
+        {
+          "path": "vendor/libreoffice-reference/extras/source/palettes/chart-palettes.soc",
+          "marker": "draw:name=\"Chart 2\""
+        }
+      ]
+    },
+    "local": {
+      "implementation": [
+        {
+          "path": "apps/office/src/cui/source/tabpages/backgrnd.ts",
+          "marker": "class SvxBkgTabPage"
+        },
+        {
+          "path": "apps/office/src/cui/browser/tabpages/AreaTabPage.tsx",
+          "marker": "Recent Colors"
+        },
+        {
+          "path": "apps/office/src/svx/browser/tbxctrls/palette-manager.ts",
+          "marker": "getPaletteColors"
+        }
+      ],
+      "tests": [
+        {
+          "path": "apps/office/src/sc/browser/presentation/calc-format-cells.test.tsx",
+          "marker": "keeps unchanged themed brushes"
+        },
+        {
+          "path": "apps/office/src/sc/browser/presentation/calc-format-cells.test.tsx",
+          "marker": "ports the original Background selector palettes"
+        },
+        {
+          "path": "apps/office/src/sc/browser/presentation/calc-format-cells.test.tsx",
+          "marker": "uses the native Background palette"
+        }
+      ],
+      "docs": [
+        {
+          "path": "docs/program/calc-upstream-suspected-issues.md",
+          "marker": "CALC-851"
+        }
+      ]
+    },
+    "implemented": true,
+    "contractParity": false,
+    "behaviorParity": false,
+    "defaultParity": false,
+    "verified": false,
+    "aspect": "command-state",
+    "atomicOperation": "calc-format-cells-background",
+    "scopeLimitations": [
+      "Background uses the two original modes admitted by Calc. Bitmap and table/character brushes are outside this use of SvxBkgTabPage."
+    ]
+  }
+}

@@ -7,7 +7,10 @@ import { text } from "../../../i18nlangtag/source/isolang/isolang.tables";
 import type { SfxBoolItem } from "../../../svl/source/items/cenumitm";
 import { SfxRequest } from "../../../sfx2/source/control/request";
 import { SvNumFormatType as T } from "../../../svl/inc/zforlist";
-import type { SvxBrushItem } from "../../../editeng/inc/brushitem";
+import { SvxBrushItem } from "../../../editeng/inc/brushitem";
+import { ComplexColor } from "../../../docmodel/inc/color/ComplexColor";
+import { ThemeColorType } from "../../../docmodel/inc/theme/ThemeColorType";
+import { Color } from "../../../tools/inc/color";
 import {
   ATTR_BORDER,
   ATTR_MARGIN,
@@ -52,6 +55,7 @@ afterEach(
     cleanup();
     session?.Close();
     session = undefined;
+    localStorage.clear();
   },
 );
 
@@ -179,11 +183,9 @@ it("applies alignment, fill and protection as one attribute transaction and pres
   fireEvent.click(modal.getByRole("checkbox", { name: "Hyphenation active" }));
   fireEvent.change(modal.getByLabelText("Text direction"), { target: { value: "0" } });
   fireEvent.click(modal.getByRole("tab", { name: "Background" }));
-  fireEvent.change(modal.getByLabelText("Fill"), { target: { value: "color" } });
-  fireEvent.change(
-    within(modal.getByRole("tabpanel", { name: "Background" })).getByLabelText("Color"),
-    { target: { value: "#1c8843" } },
-  );
+  const background = within(modal.getByRole("tabpanel", { name: "Background" }));
+  fireEvent.click(background.getByRole("button", { name: "Color" }));
+  fireEvent.change(background.getByLabelText("Custom Color"), { target: { value: "#1c8843" } });
   fireEvent.click(modal.getByRole("tab", { name: "Cell Protection" }));
   fireEvent.click(modal.getByRole("checkbox", { name: "Protected" }));
   fireEvent.click(modal.getByRole("checkbox", { name: "Hide formula" }));
@@ -564,4 +566,194 @@ it("rolls back a newly added format on Cancel and accepts a comment on implicit 
   const saved = formatter.GetEntry(doc.GetNumberFormat(0, 0, 0));
   assert(saved);
   expect(text(saved.GetComment())).toBe("Reviewed");
+});
+
+/** Opens the shared Area presentation through the native Calc Background tab. @returns Dialog and background queries. */
+function backgroundPage() {
+  open();
+  const modal = dialog();
+  fireEvent.click(modal.getByRole("tab", { name: "Background" }));
+  return { modal, area: within(modal.getByRole("tabpanel", { name: "Background" })) };
+}
+
+it("uses the native Background palette, preview, Reset and selected-cell history", /** Verifies Calc's original no-fill and color choices and the common brush transaction. @returns Completion. */ async () => {
+  const { controller } = mount();
+  const doc = controller.shell.GetDocument();
+  const mark = new ScRange(0, 0, 0, 1, 0, 0);
+  controller.viewData.GetMarkData().SetMarkArea(mark);
+  let { modal, area } = backgroundPage();
+  const fills = within(area.getByRole("group", { name: "Fill style" }));
+  expect(fills.getAllByRole("button")).toHaveLength(2);
+  expect(fills.getByRole("button", { name: "None" })).toHaveAttribute("aria-pressed", "true");
+  fireEvent.click(fills.getByRole("button", { name: "Color" }));
+  fireEvent.click(area.getByRole("button", { name: "Red" }));
+  expect(area.getByLabelText("Custom Color")).toHaveValue("#ff0000");
+  expect(area.getByText("Previous")).toBeVisible();
+  expect(area.getByText("New")).toBeVisible();
+  fireEvent.click(modal.getByRole("button", { name: "Reset" }));
+  expect(area.getByRole("button", { name: "None" })).toHaveAttribute("aria-pressed", "true");
+  await accept();
+  expect(controller.shell.GetUndoManager().GetUndoActionCount()).toBe(0);
+
+  ({ modal, area } = backgroundPage());
+  fireEvent.click(area.getByRole("button", { name: "Color" }));
+  fireEvent.click(area.getByRole("button", { name: "Red" }));
+  fireEvent.click(modal.getByRole("button", { name: "Cancel" }));
+  expect(controller.shell.GetUndoManager().GetUndoActionCount()).toBe(0);
+
+  ({ area } = backgroundPage());
+  fireEvent.click(area.getByRole("button", { name: "Color" }));
+  fireEvent.click(area.getByRole("button", { name: "Red" }));
+  await accept();
+  const brush =
+    /** Reads selected native brush state. @param col - Selected column. @returns Actual brush. */ (
+      col: number,
+    ) => doc.GetPattern(new ScAddress(col, 0, 0))?.GetItem(ATTR_BACKGROUND) as SvxBrushItem;
+  expect(brush(0).GetColor().toUInt32()).toBe(0xff0000);
+  expect(brush(1).GetColor().toUInt32()).toBe(0xff0000);
+  expect(controller.shell.GetUndoManager().GetUndoActionCount()).toBe(1);
+  act(
+    /** Applies the one actual grouped background undo. @returns Nothing. */
+    () => {
+      expect(controller.Undo()).toBe(true);
+    },
+  );
+  expect(brush(0).GetColor().IsTransparent()).toBe(true);
+  expect(brush(1).GetColor().IsTransparent()).toBe(true);
+
+  act(
+    /** Restores the applied group color before clearing the fill. @returns Nothing. */ () => {
+      expect(controller.Redo()).toBe(true);
+    },
+  );
+  ({ area } = backgroundPage());
+  fireEvent.click(area.getByRole("button", { name: "None" }));
+  await accept();
+  expect(brush(0).GetColor().IsTransparent()).toBe(true);
+  expect(brush(1).GetColor().IsTransparent()).toBe(true);
+});
+
+it("keeps unchanged themed brushes and retains the pinned visited partial-opacity transfer", /** Covers the source full-color comparison and native Background visit boundary. @returns Completion. */ async () => {
+  const { controller } = mount();
+  const doc = controller.shell.GetDocument();
+  const color = new Color(0xff0000);
+  const themed = new SvxBrushItem(
+    color,
+    ComplexColor.Theme(ThemeColorType.Accent2),
+    ATTR_BACKGROUND,
+  );
+  doc.ApplyAttr(0, 0, 0, themed);
+  let { area } = backgroundPage();
+  fireEvent.click(area.getByRole("button", { name: "Red" }));
+  await accept();
+  const current = /** Reads the original selected background brush. @returns Actual brush. */ () =>
+    doc.GetPattern(new ScAddress())?.GetItem(ATTR_BACKGROUND) as SvxBrushItem;
+  expect(current().getComplexColor().getThemeColorType()).toBe(ThemeColorType.Accent2);
+  expect(controller.shell.GetUndoManager().GetUndoActionCount()).toBe(0);
+
+  color.SetAlpha(128);
+  doc.ApplyAttr(0, 0, 0, new SvxBrushItem(color, ATTR_BACKGROUND));
+  open();
+  await accept();
+  expect(current().GetColor().GetAlpha()).toBe(128);
+  const canceled = backgroundPage();
+  fireEvent.click(canceled.modal.getByRole("button", { name: "Cancel" }));
+  expect(current().GetColor().GetAlpha()).toBe(128);
+  ({ area } = backgroundPage());
+  expect(area.getByLabelText("Custom Color")).toHaveValue("#ff0000");
+  await accept();
+  expect(current().GetColor().GetAlpha()).toBe(255);
+  act(
+    /** Reverts the native change to the original semi-transparent brush. @returns Nothing. */
+    () => {
+      expect(controller.Undo()).toBe(true);
+    },
+  );
+  expect(current().GetColor().GetAlpha()).toBe(128);
+});
+
+it("ports the original Background selector palettes and their named recent colors", /** Replays the source palette positions and opens another cell to pick its last named color. @returns Completion. */ async () => {
+  const { controller } = mount();
+  const doc = controller.shell.GetDocument();
+  let { area } = backgroundPage();
+  fireEvent.click(area.getByRole("button", { name: "Color" }));
+  const palette = area.getByRole("combobox", { name: "Palette" });
+  const rows = [
+    [
+      "Chart Palettes",
+      12,
+      [
+        [1, "Chart 2", "#ff420e"],
+        [4, "Chart 5", "#7e0021"],
+      ],
+    ],
+    [
+      "LibreOffice",
+      32,
+      [
+        [5, "Green Accent", "#2cee0e"],
+        [29, "Yellow Accent", "#ffd74c"],
+      ],
+    ],
+    [
+      "HTML",
+      139,
+      [
+        [0, "White", "#ffffff"],
+        [119, "Navy", "#000080"],
+      ],
+    ],
+    [
+      "Freecolour HLC",
+      1032,
+      [
+        [987, "HLC 350 60 10"],
+        [574, "HLC 190 50 20"],
+      ],
+    ],
+    [
+      "Tonal",
+      120,
+      [
+        [16, "Cyan 82%"],
+        [12, "Magenta 82%"],
+      ],
+    ],
+    ["Material", 228, [[8, "Gray 800"]]],
+    ["Standard", 120, [[2, "Dark Gray 3"]]],
+  ] as const;
+  for (const [name, length, picks] of rows) {
+    fireEvent.change(palette, { target: { value: name } });
+    const colors = within(area.getByRole("group", { name: "Palette colors" })).getAllByRole(
+      "button",
+    );
+    expect(colors).toHaveLength(length);
+    for (const [index, tooltip, rgb] of picks) {
+      const swatch = colors[index];
+      assert(swatch);
+      expect(swatch).toHaveAccessibleName(tooltip);
+      if (rgb) expect(swatch).toHaveAttribute("data-rgb", rgb);
+      fireEvent.click(swatch);
+      expect(swatch).toHaveAttribute("aria-pressed", "true");
+    }
+  }
+
+  fireEvent.change(palette, { target: { value: "Chart Palettes" } });
+  fireEvent.click(area.getByRole("button", { name: "Chart 2" }));
+  await accept();
+
+  controller.viewData.SetCurX(3);
+  controller.viewData.SetCurY(2);
+  ({ area } = backgroundPage());
+  fireEvent.click(area.getByRole("button", { name: "Color" }));
+  const recent = within(area.getByRole("group", { name: "Recent Colors" })).getAllByRole("button");
+  expect(recent).toHaveLength(1);
+  const swatch = recent[0];
+  assert(swatch);
+  expect(swatch).toHaveAccessibleName("Chart 2");
+  expect(swatch).toHaveAttribute("data-rgb", "#ff420e");
+  fireEvent.click(swatch);
+  await accept();
+  const brush = doc.GetPattern(new ScAddress(3, 2, 0))?.GetItem(ATTR_BACKGROUND) as SvxBrushItem;
+  expect(brush.GetColor().toUInt32()).toBe(0xff420e);
 });

@@ -8124,3 +8124,10 @@ later. Calc preserves the original ordering gate.
 - Observation: Add writes to the formatter immediately and records its key in the add list. Remove places the key in a deferred delete list and erases it from the add list. Re-adding a removed key clears the delete entry and places the existing key back in the add list.
 - Impact: Cancel after Add followed by Remove leaves the newly allocated format in the formatter. Cancel after Remove followed by re-adding an existing format deletes that original format. The normal single Add and single Remove cancellation paths behave as expected.
 - Local preservation: keep the original list transfers and guard on acceptance. The focused shell cases assert both observed outcomes.
+
+### CALC-851 — Visiting the Background tab can make a partial-alpha brush opaque
+
+- Pinned source: `cui/source/tabpages/backgrnd.cxx`, `SvxBkgTabPage::Reset` and `FillItemSet`, and `svx/source/unodraw/unobrushitemhelper.cxx`, `setSvxBrushItemAsFillAttributesToTargetSet`.
+- Observation: Reset splits the partial-alpha brush into an opaque RGB color and a separate drawing transparency item. The solid branch compares the RGB color with the complete prior brush color and writes a brush from the RGB color alone when they differ.
+- Impact: accepting a visited Background page can replace partial opacity with an opaque solid of the same RGB. A matching opaque brush retains its original metadata. Cancel and dialogs where Background is unvisited leave opacity alone.
+- Local preservation: use the same split and full-color comparison through the native brush exchange, with a targeted dialog and history case.

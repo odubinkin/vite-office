@@ -1,11 +1,10 @@
-/** @fileoverview Alignment, Asian Typography, Background and Cell Protection controls over native Calc items. */
+/** @fileoverview Alignment, Asian Typography and Cell Protection controls over native Calc items. */
 import {
   asianTypographyControls,
   type AsianTypographySlot,
   type SvxAsianTabPage,
 } from "../../../../cui/source/tabpages/paragrph";
 import type { SfxPoolItem } from "../../../../svl/source/items/poolitem";
-import { SvxBrushItem } from "../../../../editeng/inc/brushitem";
 import {
   SvxHorJustifyItem,
   SvxJustifyMethodItem,
@@ -19,7 +18,6 @@ import {
 import { SvxFrameDirectionItem } from "../../../../editeng/source/items/frmitems.direction";
 import { SvxFrameDirection as D } from "../../../../editeng/inc/frmdir";
 import { SvxRotateMode as R, SvxRotateModeItem } from "../../../../svx/inc/rotmodit";
-import { Color, COL_TRANSPARENT } from "../../../../tools/inc/color";
 import {
   ScHyphenateCell,
   ScIndentItem,
@@ -30,7 +28,6 @@ import {
   ScVerticalStackCell,
 } from "../../../inc/attrib";
 import {
-  ATTR_BACKGROUND,
   ATTR_HOR_JUSTIFY,
   ATTR_HOR_JUSTIFY_METHOD,
   ATTR_HYPHENATE,
@@ -223,70 +220,6 @@ export function AlignmentTabPage({ model, onChange }: PageProps): React.JSX.Elem
         />
       </fieldset>
     </div>
-  );
-}
-
-/** Projects the native solid and no-fill states of the cell Background page.
- * @param props - Dialog item owners.
- * @param props.model - Input and staged sets.
- * @param props.onChange - Writes a brush item.
- * @returns Background tab.
- */
-export function BackgroundTabPage({ model, onChange }: PageProps): React.JSX.Element {
-  const color = item<SvxBrushItem>(model, ATTR_BACKGROUND)?.GetColor();
-  const mode = color ? (color.IsTransparent() ? "none" : "color") : "";
-  const hex =
-    color && mode === "color"
-      ? color.GetRGBColor().toUInt32().toString(16).padStart(6, "0")
-      : "ffffff";
-  return (
-    <fieldset className={group}>
-      <legend className="px-1 font-medium">Background</legend>
-      <label className="contents">
-        Fill
-        <select
-          className={field}
-          value={mode}
-          onChange={
-            /** Stages no fill or the selected solid fill. @param event - Browser control event. @returns Nothing. */ (
-              event,
-            ) =>
-              onChange([
-                new SvxBrushItem(
-                  event.currentTarget.value === "none"
-                    ? COL_TRANSPARENT
-                    : new Color(Number.parseInt(hex, 16)),
-                  ATTR_BACKGROUND,
-                ),
-              ])
-          }
-        >
-          {mode === "" && <option value="" />}
-          <option value="none">None</option>
-          <option value="color">Color</option>
-        </select>
-      </label>
-      {mode === "color" && (
-        <label className="contents">
-          Color
-          <input
-            type="color"
-            value={"#" + hex}
-            onChange={
-              /** Stages the chosen solid fill color. @param event - Browser control event. @returns Nothing. */ (
-                event,
-              ) =>
-                onChange([
-                  new SvxBrushItem(
-                    new Color(Number.parseInt(event.currentTarget.value.slice(1), 16)),
-                    ATTR_BACKGROUND,
-                  ),
-                ])
-            }
-          />
-        </label>
-      )}
-    </fieldset>
   );
 }
 
