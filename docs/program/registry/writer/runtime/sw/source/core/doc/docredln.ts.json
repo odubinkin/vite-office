@@ -23,7 +23,7 @@
         "vendor/libreoffice-reference/sw/source/uibase/app/swmodul1.cxx",
         "vendor/libreoffice-reference/sw/qa/filter/xml/xml.cxx"
       ],
-      "justification": "Owns tracked change metadata, ranges and deletion section coordinates. Desktop edit tracking, redline undo and complex show/hide transitions. The original process-wide SwModule author table is shared with the filter through the Writer core module boundary. Retains the original previous-format items through an owned automatic-style handle.",
+      "justification": "Owns tracked change metadata, ranges and deletion section coordinates. Copies and removes represented inline deletions in separate passes and restores them through the native range owner. The original process-wide SwModule author table is shared with the filter through the Writer core module boundary. Retains the original previous-format items through an owned automatic-style handle. Desktop edit tracking, redline undo and complex visibility transitions remain outside this slice.",
       "knownViolations": [],
       "localSymbols": [
         "SwRedlineData",
@@ -35,7 +35,9 @@
       "upstreamSymbols": [
         "SwRangeRedline::SwRangeRedline",
         "SwRedlineTable::Insert",
-        "SwRangeRedline::MoveFromSection"
+        "SwRangeRedline::MoveFromSection",
+        "SwRangeRedline::CopyToSection",
+        "SwRangeRedline::DelCopyOfSection"
       ]
     }
   }

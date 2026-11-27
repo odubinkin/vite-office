@@ -11,12 +11,13 @@ import {
   encodeWriterDocument,
 } from "../../../browser/filter/xml/writer-document-codec";
 import type { SwDoc } from "../../core/doc/doc";
+import { SwPosition } from "../../core/crsr/pam";
 import { SwTableNode } from "../../core/docnode/node";
 import { SwFormatCharFormat } from "../../core/txtnode/fmtatr2";
 import { effectiveItem } from "../../core/unocore/unocrsrhelper";
 import { readOdtDocument } from "./swxml";
 import { importWriterXml } from "./xmlimp";
-import { writeOdtDocument } from "./wrtxml";
+import { writeOdtDocument, writeOdtXml } from "./wrtxml";
 
 const metadata = { title: "Writer tracked changes" };
 const fixtures = "../../vendor/libreoffice-reference/sw/qa/extras/odfexport/data";
@@ -58,6 +59,10 @@ it("exports a full midnight datetime from testMidnightRedlineDatetime", /** Port
   });
   expect(saved).toContain("<dc:date>2001-01-01T00:00:00</dc:date>");
   expect(saved).toContain('text:track-changes="false"');
+  expect(saved).toMatch(
+    /<text:deletion>[\s\S]*?<text:p[^>]*>Deleted<text:s\/>text<\/text:p><\/text:deletion>/u,
+  );
+  expect(saved).toMatch(/<\/text:tracked-changes><text:p[^>]*><text:change text:change-id=/u);
 });
 
 it("retains the two change portions around a single space in testWhitespace", /** Ports the two original redline portion sequences. @returns Completion. */ async () => {
@@ -186,4 +191,47 @@ it("retains the protected section in testSectionProtection2", /** Ports the ODT 
       .filter((node) => node.GetSectionNode() === node);
     expect(sections[0]?.GetSectionNode()?.GetSection().IsProtect()).toBe(true);
   });
+});
+
+it("restores the original visible deletion when ODT export is cancelled", /** Verifies the live positions and flags while the pinned source deletion moves to and from its saved section. @returns Nothing. */ () => {
+  const fixture = readFileSync(`${fixtures}/midnight_redline.fodt`, "utf8");
+  const content = fixture.replaceAll("office:document", "office:document-content");
+  const { document } = importWriterXml(undefined, content, metadata);
+  const paragraph = document.paragraphs[0];
+  assert(paragraph);
+  const position = new SwPosition(paragraph, 4);
+  const access = document.GetIDocumentRedlineAccess();
+  const flags = access.GetRedlineFlags();
+  const undo = document.GetUndoManager().DoesUndo();
+  let cancelled = false;
+  try {
+    expect(() =>
+      writeOdtXml(document, metadata, {
+        isCancelled: () => cancelled,
+        /** Cancels once the exporter has entered the temporary native visibility state. @param stage - Filter stage. */
+        onProgress(stage) {
+          if (stage !== "styles") return;
+          expect(paragraph.GetText()).toBe("");
+          const deleted = access.GetRedlineTable().entries()[0]?.GetContentStart();
+          expect(
+            deleted
+              ?.GetNodes()
+              .at(deleted.GetIndex() + 1)
+              .GetTextNode()
+              ?.GetText(),
+          ).toBe("Deleted text");
+          cancelled = true;
+        },
+      }),
+    ).toThrow("ODT operation was cancelled.");
+    expect(access.GetRedlineFlags()).toBe(flags);
+    expect(document.GetUndoManager().DoesUndo()).toBe(undo);
+    expect(paragraph.GetText()).toBe("Deleted text");
+    expect(position.GetNode() === paragraph).toBe(true);
+    expect(position.GetContentIndex()).toBe(4);
+    expect(access.GetRedlineTable().entries()[0]?.GetContentStart()).toBeUndefined();
+  } finally {
+    position.Dispose();
+    document.Dispose();
+  }
 });

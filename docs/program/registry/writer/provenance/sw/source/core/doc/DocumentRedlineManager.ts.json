@@ -27,19 +27,25 @@
         {
           "path": "vendor/libreoffice-reference/sw/source/core/doc/DocumentRedlineManager.cxx",
           "marker": "DocumentRedlineManager::GetRedlineFlags"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/doc/DocumentRedlineManager.cxx",
+          "marker": "DocumentRedlineManager::SetRedlineFlags"
         }
       ]
     },
     "upstreamPath": "sw/source/core/doc/DocumentRedlineManager.cxx",
     "upstreamSymbols": [
       "DocumentRedlineManager::GetRedlineTable",
-      "DocumentRedlineManager::GetRedlineFlags"
+      "DocumentRedlineManager::GetRedlineFlags",
+      "DocumentRedlineManager::SetRedlineFlags"
     ],
     "preservedResponsibilities": [
-      "Owns the document table and recording flags."
+      "Owns the document table and recording flags.",
+      "Applies the original two hide passes for represented deletions and restores the save visibility and Undo state."
     ],
     "omittedResponsibilities": [
-      "Desktop editing, compatibility modes, full show/hide transitions and notifications."
+      "Desktop editing, compatibility modes, complex visibility transitions and notifications."
     ]
   }
 }

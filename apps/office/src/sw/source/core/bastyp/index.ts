@@ -114,6 +114,29 @@ export abstract class SwContentIndexRegistry extends BroadcastingModify {
     }
   }
 
+  /** Saves registered owners displaced by a redline text move. @param first - Start before the move. @param last - End before the move. @param whole - Whether the entire source node will be released. @returns Callback rebinding saved owners to the destination. */
+  public SaveRedlineContentIndices(
+    first: number,
+    last: number,
+    whole = false,
+  ): (target: SwContentNode, offset: number) => void {
+    const saved: { index: SwContentIndex; relative: number }[] = [];
+    for (const index of this.GetContentIndices()) {
+      if (index.GetOwnerKind() === "redline") continue;
+      const current = index.GetIndex();
+      if (
+        whole ||
+        (first < current && current < last) ||
+        (current === first && index.GetAffinity() === "after") ||
+        (current === last && index.GetAffinity() === "before")
+      )
+        saved.push({ index, relative: current - first });
+    }
+    return (target, offset) => {
+      for (const { index, relative } of saved) index.AssignFromRegistry(target, offset + relative);
+    };
+  }
+
   /** Returns a stable list of live indices and removes dead weak references. @returns Live indices. */
   private GetContentIndices(): readonly SwContentIndex[] {
     const indices: SwContentIndex[] = [];

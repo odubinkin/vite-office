@@ -1,5 +1,6 @@
 /** @fileoverview Native Writer redline data, range and ordered table from docredln.cxx. */
-import type { RedlineType } from "../../../../svx/inc/ctredlin";
+import { RedlineType } from "../../../../svx/inc/ctredlin";
+import { SwStartNodeType } from "../../../inc/ndtyp";
 import { DateTime } from "../../../../tools/source/datetime/datetime";
 import { SwNodeIndex, SwPaM, SwPosition } from "../crsr/pam";
 import type { SwStartNode } from "../docnode/node";
@@ -7,6 +8,8 @@ import type { SfxItemSet } from "../../../../svl/source/items/itemset";
 import { acquireStyleHandle, releaseStyleHandle } from "../../../../svl/source/items/stylepool";
 import {
   RES_CHRATR_BEGIN,
+  RES_TXTATR_ANNOTATION,
+  RES_TXTATR_FLYCNT,
   RES_TXTATR_WITHEND_END,
   RES_UNKNOWNATR_BEGIN,
   RES_UNKNOWNATR_END,
@@ -140,6 +143,8 @@ export class SwRangeRedline extends SwPaM {
     private readonly deleteLastPara = false,
   ) {
     super(point, mark);
+    this.GetPoint().SetOwnerKind("redline");
+    if (this.HasMark()) this.GetMark().SetOwnerKind("redline");
   }
 
   /** Borrows the original change metadata. @returns Native metadata. */
@@ -179,6 +184,98 @@ export class SwRangeRedline extends SwPaM {
     this.m_pContentNode = new SwNodeIndex(start);
   }
 
+  /** Copies a represented inline deletion into the original redline node area. @param ranges - Ordered table used to identify overlapping changes. @returns Whether the deletion was copied. */
+  CopyToSection(ranges: readonly SwRangeRedline[]): boolean {
+    const type = this.data.GetType();
+    if (
+      (type !== RedlineType.Delete &&
+        !(type === RedlineType.Format && this.data.GetNext()?.GetType() === RedlineType.Delete)) ||
+      this.GetContentIdx() ||
+      this.deleteLastPara ||
+      !this.HasMark()
+    )
+      return false;
+    const start = this.Start();
+    const end = this.End();
+    const source = start.GetNode().GetTextNode();
+    if (!source || end.GetNode() !== source || start.compare(end) === 0) return false;
+    if (
+      ranges.some(
+        /** Finds ranges that need native overlap adjustment. @param other - Existing redline. @returns Whether the intervals overlap. */
+        (other) =>
+          other !== this && other.Start().compare(end) < 0 && start.compare(other.End()) < 0,
+      )
+    )
+      return false;
+
+    const first = start.GetContentIndex();
+    const last = end.GetContentIndex();
+    const hints = source.GetpSwpHints();
+    if (hints)
+      for (let i = 0; i < hints.Count(); i++) {
+        const hint = hints.Get(i);
+        if (
+          first <= hint.GetStart() &&
+          hint.GetStart() < last &&
+          (hint.Which() === RES_TXTATR_FLYCNT || hint.Which() === RES_TXTATR_ANNOTATION)
+        )
+          return false;
+      }
+
+    const operations = source.GetDoc().GetDocumentContentOperationsManager();
+    const nodes = source.GetNodes();
+    const section = nodes.MakeTextSection(
+      nodes.GetEndOfRedlines(),
+      SwStartNodeType.SwNormalStartNode,
+      source.GetTextFormatColl(),
+    );
+    try {
+      const target = nodes.at(section.GetIndex() + 1).GetTextNode();
+      if (!target) throw new Error("Writer redline section has no text node.");
+      const direct = source.GetpSwAttrSet();
+      if (direct) target.SetAttr(direct);
+      const destination = new SwPosition(target);
+      try {
+        operations.CopyRange(this, destination);
+      } finally {
+        destination.Dispose();
+      }
+      this.SetContentIdx(section);
+      return true;
+    } finally {
+      if (!this.GetContentIdx()) operations.DeleteSection(section);
+    }
+  }
+
+  /** Removes the original text after all deletions have been copied. */
+  DelCopyOfSection(): void {
+    const section = this.GetContentStart();
+    const start = this.Start();
+    const source = start.GetNode().GetTextNode();
+    const target = section
+      ?.GetNodes()
+      .at(section.GetIndex() + 1)
+      .GetTextNode();
+    if (!source || !target) throw new Error("Missing Writer deletion text.");
+    const first = start.GetContentIndex();
+    const last = this.End().GetContentIndex();
+    const restoreOwners = source.SaveRedlineContentIndices(first, last);
+    source.GetDoc().GetDocumentContentOperationsManager().DeleteAndJoin(this);
+    restoreOwners(target, 0);
+    this.GetPoint().Assign(source, first);
+    this.GetPoint().nContent.SetAffinity("before");
+    this.DeleteMark();
+  }
+
+  /** Releases a prepared deletion if the save stops before removing its original text. */
+  DiscardContentSection(): void {
+    const section = this.GetContentStart();
+    if (!section) return;
+    this.m_pContentNode?.Dispose();
+    this.m_pContentNode = undefined;
+    section.GetNodes().GetDoc().GetDocumentContentOperationsManager().DeleteSection(section);
+  }
+
   /** Restores a saved single-paragraph deletion through the document's range move. @param ranges - Ordered redline table. @param index - This redline's table position. */
   MoveFromSection(ranges: readonly SwRangeRedline[], index: number): void {
     const section = this.GetContentStart();
@@ -188,10 +285,14 @@ export class SwRangeRedline extends SwPaM {
     const nodes = section.GetNodes();
     if (section.EndOfSectionIndex() !== section.GetIndex() + 2) return;
     const source = nodes.at(section.GetIndex() + 1).GetTextNode();
-    if (!source?.Len() || source.HasAnyContentIndex()) return;
+    if (!source?.Len()) return;
     const document = nodes.GetDoc();
     for (const frame of document.GetSpzFrameFormats())
-      if (frame.GetAnchor().GetAnchorNode() === source) return;
+      if (
+        frame.GetAnchor().GetAnchorNode() === source &&
+        frame.GetAnchor().GetContentAnchor()?.nContent.GetContentNode() !== source
+      )
+        return;
     const before: SwPosition[] = [];
     const behind: SwPosition[] = [];
     for (const step of [-1, 1]) {
@@ -208,6 +309,7 @@ export class SwRangeRedline extends SwPaM {
       }
     }
     const start = point.clone();
+    const restoreOwners = source.SaveRedlineContentIndices(0, source.Len(), true);
     const sourceStart = new SwPosition(source);
     const sourceEnd = new SwPosition(source, source.Len());
     const move = new SwPaM(sourceEnd, sourceStart);
@@ -215,6 +317,7 @@ export class SwRangeRedline extends SwPaM {
     try {
       const end = operations.MoveRange(move, point);
       try {
+        restoreOwners(target, start.GetContentIndex());
         end.nContent.SetAffinity("before");
         this.Assign(end, start);
         this.GetPoint().SetOwnerKind("redline");

@@ -65,10 +65,17 @@ export class SwXMLWriter {
     const fonts = document.GetEmbeddedFonts();
     const graphics = new SvXMLGraphicHelper();
     const bitmapStyles = new XMLBitmapStyleExport(graphics);
-    checkpoint(control, "styles");
-    const styles = exportStylesXml(document, graphics, bitmapStyles);
-    checkpoint(control, "content");
-    const content = exportContentXml(document, control.isCancelled, graphics, bitmapStyles);
+    const { styles, content } = document.GetIDocumentRedlineAccess().WithRedlinesHiddenForExport(
+      document,
+      /** Writes both original XML streams with deletion sections in their package state. @returns Styles and content XML. */
+      () => {
+        checkpoint(control, "styles");
+        const styles = exportStylesXml(document, graphics, bitmapStyles);
+        checkpoint(control, "content");
+        const content = exportContentXml(document, control.isCancelled, graphics, bitmapStyles);
+        return { styles, content };
+      },
+    );
     const pictures = graphics.getEntries();
     output.putNextEntry("mimetype", ODT_MIMETYPE);
     output.putNextEntry(

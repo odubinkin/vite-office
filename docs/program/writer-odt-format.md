@@ -149,8 +149,10 @@ and Worker transfer. Ordinary saved single-paragraph deletions are restored
 inline in source order. Format redlines keep the previous named character style
 and direct character items in the document's automatic style pool. Table and
 section change markers use the registered boundary nodes through Worker transfer
-and export. Native hide/show transitions for complex deleted content require
-further work.
+and export. Saving moves represented single-paragraph deletions to the redline
+node area, writes them as deletion content, and restores the live text and
+registered positions. Complex deletion visibility transitions require further
+work.
 
 Images, fields, annotations, sections, objects, scripts,
 signatures, encryption, RDF, non-decimal numbering,

@@ -21,7 +21,7 @@
         "apps/office/src/sw/source/filter/xml/odt-redlines.test.ts",
         "vendor/libreoffice-reference/sw/source/core/doc/DocumentRedlineManager.cxx"
       ],
-      "justification": "Owns the document table and recording flags. Desktop editing, compatibility modes, full show/hide transitions and notifications.",
+      "justification": "Owns the document table and recording flags. Applies the original two hide passes for represented deletions and restores the save visibility and Undo state. Desktop editing, compatibility modes, complex visibility transitions and notifications remain outside this slice.",
       "knownViolations": [],
       "localSymbols": [
         "DocumentRedlineManager"
@@ -30,7 +30,8 @@
       "upstreamFile": "sw/source/core/doc/DocumentRedlineManager.cxx",
       "upstreamSymbols": [
         "DocumentRedlineManager::GetRedlineTable",
-        "DocumentRedlineManager::GetRedlineFlags"
+        "DocumentRedlineManager::GetRedlineFlags",
+        "DocumentRedlineManager::SetRedlineFlags"
       ]
     }
   }

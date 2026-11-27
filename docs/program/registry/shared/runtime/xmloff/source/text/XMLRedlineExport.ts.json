@@ -22,7 +22,7 @@
         "vendor/libreoffice-reference/xmloff/source/text/XMLRedlineExport.cxx",
         "vendor/libreoffice-reference/sw/qa/extras/uiwriter/uiwriter3.cxx"
       ],
-      "justification": "Writes native region definitions, full timestamps, and text change markers. Desktop personal-data options, the pre-save redline visibility transition. Emits original structural redline markers around the associated ODF block.",
+      "justification": "Writes native region definitions, full timestamps, and text change markers. Emits structural markers around the associated ODF block and writes single-paragraph deletions from Writer's redline node area during save. Desktop personal-data options and complex deletion visibility transitions remain outside this slice.",
       "knownViolations": [],
       "localSymbols": [
         "exportTrackedChanges",

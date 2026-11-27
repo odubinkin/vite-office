@@ -62,7 +62,7 @@
       "Emits original structural redline markers around the associated ODF block."
     ],
     "omittedResponsibilities": [
-      "Desktop personal-data options and the pre-save redline visibility transition."
+      "Desktop personal-data options and visibility transitions for complex deleted content."
     ]
   }
 }
