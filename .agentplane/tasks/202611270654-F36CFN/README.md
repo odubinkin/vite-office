@@ -1,10 +1,11 @@
 ---
 id: "202611270654-F36CFN"
 title: "Preserve Calc ODS external cache number formats and source metadata"
-status: "DOING"
+result_summary: "Calc external cache preserves formats, temporal values and workbook filter metadata through ODS and Worker transfer."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 8
+revision: 9
 origin:
   system: "manual"
 depends_on: []
@@ -42,7 +43,9 @@ quality_review:
     - "d3e2478eeedb"
   findings:
     - "Styled date caches and numeric durations pass ODS and Worker round trips, and the original relative XLSX link survives an ODS reopen."
-commit: null
+commit:
+  hash: "5a6146604c2d69d5d54d29593bf4ab487434f993"
+  message: "🧩 F36CFN task: link verified cache implementation"
 comments:
   -
     author: "CODER"
@@ -50,6 +53,9 @@ comments:
   -
     author: "CODER"
     body: "Implementation evidence: a890e2055a2b and d3e2478eeedb. Verification is recorded in output/playwright/F36CFN/verification.md."
+  -
+    author: "CODER"
+    body: "Verified: all 32 unique selected Calc cases passed after the cache replay. Implementations: a890e2055a2b and d3e2478eeedb."
 events:
   -
     type: "status"
@@ -69,8 +75,15 @@ events:
     at: "2026-11-27T07:09:49.638Z"
     author: "CODER"
     body: "Implementation evidence: a890e2055a2b and d3e2478eeedb. Verification is recorded in output/playwright/F36CFN/verification.md."
+  -
+    type: "status"
+    at: "2026-11-27T07:11:19.982Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: all 32 unique selected Calc cases passed after the cache replay. Implementations: a890e2055a2b and d3e2478eeedb."
 doc_version: 3
-doc_updated_at: "2026-11-27T07:09:49.638Z"
+doc_updated_at: "2026-11-27T07:11:19.982Z"
 doc_updated_by: "CODER"
 description: "Port external cache cell format indices and temporal values through native ODS import/export and Worker transfer. Preserve the upstream source filter metadata and numeric cache token representation."
 sections:
