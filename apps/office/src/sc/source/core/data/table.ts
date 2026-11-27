@@ -1,9 +1,9 @@
 /** @fileoverview ScTable scalar/local-reference,cell-attribute and standard row-height operations over lazy contiguous columns. Device layout and full sheet services remain unported. */
-import { ScLinkMode } from "../../../inc/global";
+import { ScLinkMode, ScScenarioFlags } from "../../../inc/global";
 import type { NoteEntry, ScPostIt } from "../../../inc/postit";
 import type { ScDBData } from "../../../inc/dbdata";
 import type { ScOutlineTable } from "./olinetab";
-import { Color, COL_AUTO } from "../../../../tools/inc/color";
+import { Color, COL_AUTO, COL_LIGHTGRAY } from "../../../../tools/inc/color";
 import type { ScTableProtection } from "./tabprotection";
 import { ScRangeName } from "../tool/rangenam";
 import { SetAllFormulasDirty as dirtyFormulas } from "./table.formula-admission";
@@ -41,7 +41,10 @@ import {
   STD_COL_WIDTH,
 } from "../../../inc/global";
 import type { EndListeningContext, StartListeningContext } from "../../../inc/listenercontext";
-import type { ScMarkData } from "../../../inc/markdata";
+import { ScMarkData } from "../../../inc/markdata";
+import { ScRangeList } from "../../../inc/rangelst";
+import { ATTR_MERGE_FLAG } from "../../../inc/scitems";
+import { ScMF, type ScMergeFlagAttr } from "./attrib";
 import { ScMultiSelIter } from "../../../inc/markmulti";
 import type { ColumnBlockPosition } from "../../../inc/mtvelements";
 import type {
@@ -69,6 +72,67 @@ import * as table7 from "./table7";
 type ColumnDataApply = (column: ScColumnData, first: number, last: number) => void;
 /** Sheet owner for the supported scalar document operations. */
 export class ScTable {
+  private bScenario = false;
+  private bActiveScenario = false;
+  private aScenarioColor = new Color(COL_LIGHTGRAY.toUInt32());
+  private nScenarioFlags = ScScenarioFlags.NONE;
+  private aScenarioComment = "";
+
+  /** Reports original sheet scenario state. @returns Whether this is a scenario sheet. */
+  IsScenario(): boolean {
+    return this.bScenario;
+  }
+
+  /** Assigns original sheet scenario state. @param scenario - Whether this is a scenario sheet. */
+  SetScenario(scenario: boolean): void {
+    this.bScenario = scenario;
+  }
+
+  /** Reports original scenario activation. @returns Whether active. */
+  IsActiveScenario(): boolean {
+    return this.bActiveScenario;
+  }
+
+  /** Stores the scenario activation written by ODF. @param active - Whether active. */
+  SetActiveScenario(active: boolean): void {
+    this.bActiveScenario = active;
+  }
+
+  /** Assigns native scenario attributes. @param comment - Description. @param color - Frame color. @param flags - Original option bits. */
+  SetScenarioData(comment: string, color: Color, flags: ScScenarioFlags): void {
+    this.aScenarioComment = comment;
+    this.aScenarioColor = new Color(color.toUInt32());
+    this.nScenarioFlags = flags;
+  }
+
+  /** Reads original scenario attributes. @returns Borrowed scenario values. */
+  GetScenarioData(): { comment: string; color: Color; flags: ScScenarioFlags } {
+    return {
+      comment: this.aScenarioComment,
+      color: this.aScenarioColor,
+      flags: this.nScenarioFlags,
+    };
+  }
+
+  /** Reconstructs scenario marks from the canonical column pattern runs. @returns Native marked ranges. */
+  GetScenarioRanges(): ScRangeList {
+    const result = new ScRangeList();
+    if (!this.bScenario) return result;
+    const marks = new ScMarkData(this.rDocument.GetSheetLimits());
+    const start: [number] = [0];
+    const end: [number] = [0];
+    for (const [col, column] of this.aCol.entries()) {
+      for (let row = 0; row <= this.rDocument.MaxRow(); row = end[0] + 1) {
+        const pattern = column.GetPatternRange(start, end, row);
+        if (!pattern) break;
+        const flags = pattern.GetItem(ATTR_MERGE_FLAG) as ScMergeFlagAttr;
+        if (flags.GetValue() & ScMF.Scenario)
+          marks.SetMultiMarkArea(new ScRange(col, start[0], this.nTab, col, end[0], this.nTab));
+      }
+    }
+    marks.FillRangeListWithMarks(result, false);
+    return result;
+  }
   private nLinkMode = ScLinkMode.NONE;
   private readonly aLinkDoc = new OUString();
   private readonly aLinkFlt = new OUString();

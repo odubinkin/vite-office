@@ -144,3 +144,18 @@ export const subtotalFunctions = new Map([
   ["var", ScSubTotalFunc.VAR],
   ["varp", ScSubTotalFunc.VARP],
 ]);
+
+/** Native ScSubTotalFunc mapping shared by consolidation and subtotal export. */
+export const subtotalFunctionNames = new Map<ScSubTotalFunc, string>();
+for (const [token, operation] of subtotalFunctions) subtotalFunctionNames.set(operation, token);
+subtotalFunctionNames.set(ScSubTotalFunc.CNT, "count");
+subtotalFunctionNames.set(ScSubTotalFunc.CNT2, "countnums");
+subtotalFunctionNames.set(ScSubTotalFunc.MED, "median");
+
+/** Resolves the original ScSubTotalFunc spelling, including median. @param name - ODF function. @returns Native function or NONE. */
+export function GetSubTotalFuncFromString(name: string): ScSubTotalFunc {
+  if (name === "count") return ScSubTotalFunc.CNT;
+  if (name === "countnums") return ScSubTotalFunc.CNT2;
+  if (name === "median") return ScSubTotalFunc.MED;
+  return subtotalFunctions.get(name) ?? ScSubTotalFunc.NONE;
+}

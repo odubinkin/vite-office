@@ -1,5 +1,6 @@
 /** @fileoverview Native document modes, consumed pooled resources and scalar/local-reference storage, attributes and formula tracking. Full construction, formatter and shell services remain unported. */
 import { ScDetectiveRefIter } from "./formulaiter";
+import type { ScConsolidateParam } from "./global2";
 import { DocumentLinkManager } from "../../ui/docshell/documentlinkmgr";
 import type { LinkManager } from "../../../../sfx2/source/appl/linkmgr2";
 import { SfxDocumentProperties } from "../../../../sfx2/source/doc/sfxbasemodel";
@@ -81,6 +82,10 @@ export class ScDocument {
   GetUnprotectedCells = documen3.GetUnprotectedCells;
   GetTabBgColor = documen3.GetTabBgColor;
   SetTabBgColor = documen3.SetTabBgColor;
+  SetScenario = documen3.SetScenario;
+  IsScenario = documen3.IsScenario;
+  SetScenarioData = documen3.SetScenarioData;
+  SetActiveScenario = documen3.SetActiveScenario;
   IsDefaultTabBgColor = documen3.IsDefaultTabBgColor;
   GetTabProtection = documen3.GetTabProtection;
   SetTabProtection = documen3.SetTabProtection;
@@ -119,6 +124,17 @@ export class ScDocument {
     return tab === -1 ? this.pRangeName : this.FetchTable(tab)?.GetRangeName();
   }
   private readonly pDBCollection = new ScDBCollection(this);
+  private pConsolidateDlgData: ScConsolidateParam | undefined;
+
+  /** Borrows the document's saved consolidation parameters. @returns Owned source description. */
+  GetConsolidateDlgData(): ScConsolidateParam | undefined {
+    return this.pConsolidateDlgData;
+  }
+
+  /** Takes ownership of the native saved consolidation parameters. @param data - Imported parameters. */
+  SetConsolidateDlgData(data: ScConsolidateParam | undefined): void {
+    this.pConsolidateDlgData = data;
+  }
   /** Borrows the native global database range collection. @returns Database ranges. */
   GetDBCollection(): ScDBCollection {
     return this.pDBCollection;

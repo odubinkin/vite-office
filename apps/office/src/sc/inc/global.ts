@@ -125,6 +125,18 @@ export enum ScSubTotalFunc {
   SELECTION_COUNT,
 }
 
+/** Original sheet-scenario options. */
+export enum ScScenarioFlags {
+  NONE = 0,
+  CopyAll = 1,
+  ShowFrame = 2,
+  PrintFrame = 4,
+  TwoWay = 8,
+  Attrib = 16,
+  Value = 32,
+  Protected = 64,
+}
+
 /** Original aggregate/subtotal row and error flags;ordinary iterator consumers use NONE. */
 export enum SubtotalFlags {
   NONE = 0x00,

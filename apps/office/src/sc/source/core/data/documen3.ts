@@ -6,7 +6,7 @@ import type { ScRangeData } from "../tool/rangenam";
 import type { ScDocument } from "../../../inc/document";
 import type { ScTableProtection } from "./tabprotection";
 import type { RefUpdateContext } from "../../../inc/refupdatecontext";
-import { CellType, ScLinkMode, UpdateRefMode } from "../../../inc/global";
+import { CellType, ScLinkMode, type ScScenarioFlags, UpdateRefMode } from "../../../inc/global";
 import { FormulaGrammar, type AddressConvention } from "../../../../formula/inc/grammar";
 import { OUString, type OUStringConstReference } from "../../../../sal/inc/rtl/ustring";
 import { OUStringBuffer } from "../../../../sal/inc/rtl/ustrbuf";
@@ -24,6 +24,33 @@ import { SvxHorJustifyItem, SvxVerJustifyItem } from "../../../../editeng/inc/ju
 import { SvxCellHorJustify, SvxCellVerJustify } from "../../../../editeng/inc/svxenum";
 import type { ScMarkData } from "../../../inc/markdata";
 import type { ScPatternStyleReference } from "../../../inc/patattr";
+
+/** Sets the document's scenario marker on an existing sheet. @param this - Workbook. @param tab - Sheet index. @param scenario - Original marker. */
+export function SetScenario(this: ScDocument, tab: number, scenario: boolean): void {
+  this.FetchTable(tab)?.SetScenario(scenario);
+}
+
+/** Reports whether a sheet owns a scenario. @param this - Workbook. @param tab - Sheet index. @returns Scenario state. */
+export function IsScenario(this: ScDocument, tab: number): boolean {
+  return this.FetchTable(tab)?.IsScenario() ?? false;
+}
+
+/** Assigns scenario values through the original document boundary. @param this - Workbook. @param tab - Scenario sheet. @param comment - Description. @param color - Border color. @param flags - Native option bits. */
+export function SetScenarioData(
+  this: ScDocument,
+  tab: number,
+  comment: string,
+  color: Color,
+  flags: ScScenarioFlags,
+): void {
+  const table = this.FetchTable(tab);
+  if (table?.IsScenario()) table.SetScenarioData(comment, color, flags);
+}
+
+/** Assigns the original active flag on an existing sheet. @param this - Workbook. @param tab - Sheet index. @param active - Active scenario. */
+export function SetActiveScenario(this: ScDocument, tab: number, active: boolean): void {
+  this.FetchTable(tab)?.SetActiveScenario(active);
+}
 
 /** Applies a named style across the original selected workbook sheets. @param this - Actual workbook. @param style - Native cell style. @param marks - Actual selection. @returns Nothing. */
 export function ApplySelectionStyle(

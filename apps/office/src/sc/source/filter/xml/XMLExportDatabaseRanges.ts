@@ -8,13 +8,13 @@ import { escapeXml } from "../../../../xmloff/source/text/txtparae";
 import { ScAddress, ScRange, ScRefFlags } from "../../../inc/address";
 import type { ScDBData } from "../../../inc/dbdata";
 import type { ScDocument } from "../../../inc/document";
-import { ScQueryConnect, ScQueryOp, ScSubTotalFunc } from "../../../inc/global";
+import { ScQueryConnect, ScQueryOp } from "../../../inc/global";
 import { STR_DB_GLOBAL_NONAME, STR_DB_LOCAL_NONAME } from "../../../inc/globalnames";
 import { ScSortNumberBehavior } from "../../core/data/sortparam";
 import type { ScDBQueryItem, ScQueryParam, ScQueryParamEntry } from "../../core/tool/queryparam";
 import { ScRangeStringConverter } from "../../core/tool/rangeutl";
 import { queryOps } from "./xmlfilti";
-import { subtotalFunctions } from "./XMLConverter";
+import { subtotalFunctionNames } from "./XMLConverter";
 
 const ooo = FormulaGrammar.AddressConvention.CONV_OOO;
 const queryOperatorTokens = new Map<ScQueryOp, string>();
@@ -24,12 +24,6 @@ for (const [token, operation] of queryOps) queryOperatorTokens.set(operation, to
 function lexicalValue(item: ScDBQueryItem): string {
   return item.type === "number" ? (item.lexical ?? "") : item.value;
 }
-
-const subtotalFunctionNames = new Map<ScSubTotalFunc, string>();
-for (const [token, operation] of subtotalFunctions) subtotalFunctionNames.set(operation, token);
-subtotalFunctionNames.set(ScSubTotalFunc.CNT, "count");
-subtotalFunctionNames.set(ScSubTotalFunc.CNT2, "countnums");
-subtotalFunctionNames.set(ScSubTotalFunc.MED, "median");
 
 /** Writes a table namespace language tag with the original ISO fallback. @param locale - Stored locale. @returns Locale attributes. */
 function writeSortLocale(locale: ReturnType<LanguageTag["getLocale"]>): string {

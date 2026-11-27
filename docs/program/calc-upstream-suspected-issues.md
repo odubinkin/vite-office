@@ -8343,3 +8343,20 @@ the beginning of the range. Calc preserves the native selection offsets.
 
 - [Original AutoSum selection](../../vendor/libreoffice-reference/sc/source/ui/app/inputwin.cxx#L814)
 - [Original subtotal selector mapping](../../vendor/libreoffice-reference/sc/source/ui/view/viewfun2.cxx#L476)
+
+### CALC-871 — Consolidation export can reuse the source list for a missing target sheet
+
+The exporter writes the source ranges into a string and then passes that same
+string to the target-address formatter. The formatter only assigns its output
+when the target sheet exists. A consolidation descriptor whose target sheet is
+missing can therefore export its source list as the target address. Calc
+preserves this behavior and admits the descriptor on import only when the
+target parses as an address.
+
+The source-area array also uses the original token count described in CALC-349.
+Its size is capped at 65,535, and failed range reads leave the corresponding
+areas at their default coordinates.
+
+- [Original consolidation export](../../vendor/libreoffice-reference/sc/source/filter/xml/xmlexprt.cxx#L5230)
+- [Original address formatter](../../vendor/libreoffice-reference/sc/source/core/tool/rangeutl.cxx#L620)
+- [Original consolidation admission](../../vendor/libreoffice-reference/sc/source/filter/xml/XMLConsolidationContext.cxx#L77)

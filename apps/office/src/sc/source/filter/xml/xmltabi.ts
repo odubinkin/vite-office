@@ -11,6 +11,7 @@ import { createTableColContext } from "./xmlcoli";
 import { createTableRowContext } from "./xmlrowi";
 import { ScXMLConditionalFormatsContext } from "./xmlcondformat";
 import { ScXMLNamedExpressionsContext } from "./xmlnexpi";
+import { ScXMLTableScenarioContext } from "./xmlsceni";
 import { readTableProtection, readTableProtectionOptions } from "./xmlsubti";
 import { ScXMLTableSourceContext } from "./XMLTableSourceContext";
 import { ScMyStylesImportHelper } from "./XMLStylesImportHelper";
@@ -94,6 +95,8 @@ export class ScXMLTableContext extends ScXMLImportContext {
     }
     if (element === XMLToken.TABLE_TABLE_SOURCE)
       return new ScXMLTableSourceContext(this.owner, this.tab, attributes);
+    if (element === XMLToken.TABLE_SCENARIO)
+      return new ScXMLTableScenarioContext(this.owner, this.tab, attributes);
     if (element === XMLToken.TABLE_NAMED_EXPRESSIONS)
       return new ScXMLNamedExpressionsContext(this.owner, this.tab);
     const axis =

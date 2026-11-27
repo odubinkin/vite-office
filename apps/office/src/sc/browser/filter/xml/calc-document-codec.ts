@@ -70,7 +70,13 @@ import { ScTableProtection } from "../../../source/core/data/tabprotection";
 import { ScRangeList } from "../../../inc/rangelst";
 import { ScAddress, ScRange, MAXCOL, MAXROW } from "../../../inc/address";
 import { ScHorizontalCellIterator } from "../../../inc/dociter";
-import { CellType, CRFlags } from "../../../inc/global";
+import { CellType, CRFlags, ScScenarioFlags } from "../../../inc/global";
+import { ScMF } from "../../../source/core/data/attrib";
+import {
+  decodeConsolidation,
+  encodeConsolidation,
+  type CalcConsolidationRecord,
+} from "./calc-consolidation-codec";
 import { CellAttributeHolder, ScPatternAttr } from "../../../inc/patattr";
 import { FormulaGrammar, type AddressConvention } from "../../../../formula/inc/grammar";
 import { unicode, text } from "../../../../i18nlangtag/source/isolang/isolang.tables";
@@ -196,6 +202,13 @@ function isOoxPasswordHash(hash: ScOoxPasswordHash | undefined): boolean {
 }
 /** Native sparse sheet transfer record. */
 interface Sheet {
+  readonly scenario?: {
+    readonly active: boolean;
+    readonly comment: string;
+    readonly color: number;
+    readonly flags: ScScenarioFlags;
+    readonly ranges: readonly PrintRange[];
+  };
   readonly visible?: boolean;
   readonly link?: CalcSheetLinkRecord;
   readonly tabColor?: number;
@@ -289,6 +302,7 @@ function decodeDrawingGrid(input: DrawingGrid): ScGridOptions {
 
 /** Ephemeral transport, never persisted instead of XML. */
 export interface CalcDocumentRecord {
+  readonly consolidation?: CalcConsolidationRecord;
   readonly documentMetaXml?: string;
   readonly version: 1;
   readonly storageGrammar?: typeof FormulaGrammar.Grammar.GRAM_PODF;
@@ -410,7 +424,19 @@ function* encodeSteps(document: ScDocument): Generator<void, CalcDocumentRecord>
     const noteEntries: NoteEntry[] = [];
     document.GetAllNoteEntries(tab, noteEntries);
     const notes: CalcCellNoteRecord[] = [];
+    const scenario = table.IsScenario() ? table.GetScenarioData() : undefined;
     const sheet: Sheet = {
+      ...(scenario
+        ? {
+            scenario: {
+              active: table.IsActiveScenario(),
+              comment: scenario.comment,
+              color: scenario.color.toUInt32(),
+              flags: scenario.flags,
+              ranges: Array.from(table.GetScenarioRanges(), encodePrintRange),
+            },
+          }
+        : {}),
       ...(link ? { link } : {}),
       ...(pageStyles.names.has(pageStyle) ? { pageStyle } : {}),
       ...(tabColor.equals(COL_AUTO) ? {} : { tabColor: tabColor.toUInt32() }),
@@ -680,6 +706,7 @@ function* encodeSteps(document: ScDocument): Generator<void, CalcDocumentRecord>
   const databaseRanges = encodeCalcDatabaseRanges(document);
   const validations = encodeCalcValidations(document);
   const documentMetaXml = document.documentProperties.GetTransferXml();
+  const consolidation = document.GetConsolidateDlgData();
   const areaLinks: CalcAreaLinkRecord[] = [];
   for (const link of document.GetDocLinkManager().getExistingLinkManager()?.GetLinks() ?? []) {
     if (link instanceof ScAreaLink) areaLinks.push(encodeCalcAreaLink(link));
@@ -687,6 +714,7 @@ function* encodeSteps(document: ScDocument): Generator<void, CalcDocumentRecord>
   }
   return {
     version: 1,
+    ...(consolidation === undefined ? {} : { consolidation: encodeConsolidation(consolidation) }),
     ...(documentMetaXml === undefined ? {} : { documentMetaXml }),
     ...(FormulaGrammar.isPODF(document.GetStorageGrammar())
       ? { storageGrammar: FormulaGrammar.Grammar.GRAM_PODF }
@@ -1104,6 +1132,35 @@ function* decodeSteps(record: CalcDocumentRecord): Generator<void, ScDocument> {
         ).SetPatternArea(first, last, holder);
         yield;
       }
+      if (sheet.scenario !== undefined) {
+        const { active, comment, color, flags, ranges } = sheet.scenario;
+        if (
+          typeof active !== "boolean" ||
+          typeof comment !== "string" ||
+          !Number.isInteger(color) ||
+          color < 0 ||
+          color > 0xffffffff ||
+          !Number.isInteger(flags) ||
+          flags < 0 ||
+          flags > 127 ||
+          !Array.isArray(ranges)
+        )
+          throw new Error("Calc worker scenario is invalid.");
+        table.SetScenario(true);
+        table.SetScenarioData(comment, new Color(color), flags);
+        table.SetActiveScenario(active);
+        for (const range of ranges) {
+          const { aStart, aEnd } = decodePrintRange(range, document);
+          document.ApplyFlagsTab(
+            aStart.Col(),
+            aStart.Row(),
+            aEnd.Col(),
+            aEnd.Row(),
+            tab,
+            ScMF.Scenario,
+          );
+        }
+      }
       for (const [first, last, width, hidden] of sheet.columns) {
         for (let col = first; col <= last; col++) {
           table.SetColWidthOnly(col, width);
@@ -1208,6 +1265,8 @@ function* decodeSteps(record: CalcDocumentRecord): Generator<void, ScDocument> {
       }
     }
     for (const range of databaseRanges) SetDatabaseRangeAutoFilterFlags(document, range);
+    if (record.consolidation !== undefined)
+      document.SetConsolidateDlgData(decodeConsolidation(document, record.consolidation));
     if (record.areaLinks !== undefined && !Array.isArray(record.areaLinks))
       throw new Error("Calc Worker area-links collection is invalid.");
     for (const link of record.areaLinks ?? []) {

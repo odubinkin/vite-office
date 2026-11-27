@@ -17,6 +17,7 @@ import { stringToDouble } from "../../../../sal/inc/rtl/math";
 import { unicode } from "../../../../i18nlangtag/source/isolang/isolang.tables";
 import { createExternalRefTable } from "./xmlexternaltabi";
 import { ScXMLContentValidationsContext } from "./xmlcvali";
+import { ScXMLConsolidationContext } from "./XMLConsolidationContext";
 /** Spreadsheet content owns table creation,not a separate workbook model. */
 export class ScXMLBodyContext extends ScXMLImportContext {
   private hadCalculationSettings = false;
@@ -48,6 +49,8 @@ export class ScXMLBodyContext extends ScXMLImportContext {
     if (element === XMLToken.TABLE_DATABASE_RANGE)
       return new ScXMLDatabaseRangeContext(this.owner, attributes);
     if (element === XMLToken.TABLE_LABEL_RANGES) return new ScXMLLabelRangesContext(this.owner);
+    if (element === XMLToken.TABLE_CONSOLIDATION)
+      return new ScXMLConsolidationContext(this.owner, attributes);
     if (element === XMLToken.TABLE_NAMED_EXPRESSIONS)
       return new ScXMLNamedExpressionsContext(this.owner, -1);
     if (element === XMLToken.TABLE_CALCULATION_SETTINGS) {

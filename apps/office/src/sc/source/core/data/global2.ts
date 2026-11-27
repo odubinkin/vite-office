@@ -9,6 +9,48 @@ import { toInt32 } from "../../../../o3tl/inc/string_view";
 import { Date } from "../../../../tools/source/datetime/tdate";
 import { SvNumFormatType } from "../../../../svl/inc/zforlist";
 import type { ScInterpreterContext } from "../../../inc/interpretercontext";
+import { ScSubTotalFunc } from "../../../inc/global";
+import type { ScArea } from "../tool/rangeutl";
+
+/** Native saved consolidation parameters and their independently owned source-area array. */
+export class ScConsolidateParam {
+  nCol = 0;
+  nRow = 0;
+  nTab = 0;
+  eFunction = ScSubTotalFunc.SUM;
+  pDataAreas: ScArea[] = [];
+  bByCol = false;
+  bByRow = false;
+  bReferenceData = false;
+
+  /** Original copy construction duplicates each source area. @param source - Copied parameters. */
+  constructor(source?: ScConsolidateParam) {
+    if (!source) return;
+    this.nCol = source.nCol;
+    this.nRow = source.nRow;
+    this.nTab = source.nTab;
+    this.eFunction = source.eFunction;
+    this.bByCol = source.bByCol;
+    this.bByRow = source.bByRow;
+    this.bReferenceData = source.bReferenceData;
+    this.SetAreas(
+      source.pDataAreas.map(
+        /** Copies native area value. @param area - Source coordinate. @returns Independent area. */
+        (area) => area.clone(),
+      ),
+    );
+  }
+
+  /** Native area count follows the owned allocation. @returns Source area count. */
+  get nDataAreaCount(): number {
+    return this.pDataAreas.length;
+  }
+
+  /** Takes ownership of the importer's ordered area values. @param areas - Owned source areas. */
+  SetAreas(areas: ScArea[]): void {
+    this.pDataAreas = areas;
+  }
+}
 /** Original empty-or-ASCII-spaces predicate. @param value - Counted native string. @returns Empty flag. */
 function isEmptyString(value: OUStringConstReference): boolean {
   if (value.isEmpty()) return true;

@@ -6,8 +6,54 @@ import type { ScDocument } from "../../../inc/document";
 import { ScRangeList } from "../../../inc/rangelst";
 import type { AddressConvention } from "../../../../formula/inc/grammar";
 
+/** Original single-sheet source area used by Calc consolidation. */
+export class ScArea {
+  /** Initializes the native coordinates. @param nTab - Sheet. @param nColStart - First column. @param nRowStart - First row. @param nColEnd - Last column. @param nRowEnd - Last row. */
+  constructor(
+    public nTab = 0,
+    public nColStart = 0,
+    public nRowStart = 0,
+    public nColEnd = 0,
+    public nRowEnd = 0,
+  ) {}
+
+  /** Copies the original stored coordinates. @returns Independent area value. */
+  clone(): ScArea {
+    return new ScArea(this.nTab, this.nColStart, this.nRowStart, this.nColEnd, this.nRowEnd);
+  }
+
+  /** Compares native area coordinates. @param other - Compared area. @returns Equality. */
+  equals(other: ScArea): boolean {
+    return (
+      this.nTab === other.nTab &&
+      this.nColStart === other.nColStart &&
+      this.nRowStart === other.nRowStart &&
+      this.nColEnd === other.nColEnd &&
+      this.nRowEnd === other.nRowEnd
+    );
+  }
+}
+
 /** Original static token and reference conversion members; unconsumed naming/API/formatting members remain unported. */
 export const ScRangeStringConverter = {
+  /** Reads a single-sheet area, retaining the destination value on failure. @param area - Destination. @param source - Range list. @param doc - Workbook. @param convention - Address convention. @param offset - In/out token offset. @returns Whether the area was assigned. */
+  GetAreaFromString(
+    area: ScArea,
+    source: string,
+    doc: ScDocument,
+    convention: AddressConvention,
+    offset: [number],
+  ): boolean {
+    const range = new ScRange();
+    if (!this.GetRangeFromString(range, source, doc, convention, offset) || offset[0] < 0)
+      return false;
+    area.nTab = range.aStart.Tab();
+    area.nColStart = range.aStart.Col();
+    area.nRowStart = range.aStart.Row();
+    area.nColEnd = range.aEnd.Col();
+    area.nRowEnd = range.aEnd.Row();
+    return true;
+  },
   /** Writes both endpoints with their respective sheet qualifiers, as the ODF print-range attribute requires. @param ranges - Sheet areas. @param doc - Actual workbook. @param convention - Original output convention. @returns Space-delimited range addresses. */
   GetStringFromRangeList(
     ranges: Iterable<ScRange>,

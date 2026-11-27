@@ -2,7 +2,7 @@
 import type { ScAreaLink } from "../../ui/docshell/arealink";
 import { convertDaysToDuration } from "../../../../sax/source/tools/converter.duration";
 import { GetSheetLinkByName } from "../../ui/unoobj/linkuno";
-import { ScLinkMode } from "../../../inc/global";
+import { ScLinkMode, ScScenarioFlags } from "../../../inc/global";
 import { ScDocumentConfiguration } from "../../ui/unoobj/confuno";
 import { SfxUInt32Item } from "../../../../svl/source/items/intitem";
 import { ATTR_VALIDDATA } from "../../../inc/scitems";
@@ -41,6 +41,7 @@ import { CRFlags } from "../../../inc/global";
 import { CellType } from "../../../inc/global";
 import { FormulaGrammar } from "../../../../formula/inc/grammar";
 import { ScRangeStringConverter } from "../../core/tool/rangeutl";
+import { subtotalFunctionNames } from "./XMLConverter";
 import { FormulaError } from "../../../../formula/inc/errorcodes";
 import { ODF_NAMESPACES } from "../../../../xmloff/source/core/xmltoken";
 import {
@@ -361,6 +362,7 @@ export class ScXMLExport {
       }
       body += `<table:table table:name="${escapeXml(text(name))}"${styleAttribute}${protectionAttributes}${print}>`;
       body += this.WriteTableSource(table);
+      body += this.WriteScenario(table);
       name.dispose();
       if (protection?.isProtected()) body += writeTableProtectionOptions(protection);
       const outline = table.GetOutlineTable();
@@ -573,7 +575,8 @@ export class ScXMLExport {
       this.WritePersons() +
       this.WriteNamedRange(-1) +
       WriteDatabaseRanges(this.document) +
-      WriteLabelRanges(this.document);
+      WriteLabelRanges(this.document) +
+      this.WriteConsolidation();
     let automatic = this.textStyles.exportStyles() + (external ? externalRefCacheStyle : "");
     for (const { properties, name, master } of tableStyles.values()) {
       const page = master ? ` style:master-page-name="${master}"` : "";
@@ -593,6 +596,73 @@ export class ScXMLExport {
       automatic += `<style:style style:name="${name}" style:family="table-column"><style:table-column-properties fo:break-before="${pageBreak}" style:column-width="${new SvXMLUnitConverter("mm100").convertMeasureToXML(hmm)}"/></style:style>`;
     }
     return `<?xml version="1.0" encoding="UTF-8"?><office:document-content xmlns:calcext="${ODF_NAMESPACES.calcext}" xmlns:office="${ODF_NAMESPACES.office}" xmlns:dc="${ODF_NAMESPACES.dc}" xmlns:meta="${ODF_NAMESPACES.meta}" xmlns:number="${ODF_NAMESPACES.number}" xmlns:table="${ODF_NAMESPACES.table}" xmlns:text="${ODF_NAMESPACES.text}" xmlns:of="${ODF_NAMESPACES.of}" xmlns:style="${ODF_NAMESPACES.style}" xmlns:fo="${ODF_NAMESPACES.fo}" xmlns:css3t="${ODF_NAMESPACES.css3t}" xmlns:svg="${ODF_NAMESPACES.svg}" xmlns:loext="${ODF_NAMESPACES.loext}" xmlns:xlink="${ODF_NAMESPACES.xlink}" office:version="1.3">${this.fontPool.exportXML()}<office:automatic-styles>${automatic}</office:automatic-styles><office:body><office:spreadsheet>${calculationSettings}${validations.WriteValidations()}${body}</office:spreadsheet></office:body></office:document-content>`;
+  }
+
+  /** Emits original sheet scenario flags and scenario-mark ranges. @param table - Native scenario sheet. @returns ODS scenario XML. */
+  private WriteScenario(table: ScTable): string {
+    if (!table.IsScenario()) return "";
+    const { color, comment, flags } = table.GetScenarioData();
+    const rgb: [string] = [""];
+    Converter.convertColor(rgb, color.toUInt32());
+    let attributes = flags & ScScenarioFlags.ShowFrame ? "" : ' table:display-border="false"';
+    attributes += ` table:border-color="${rgb[0]}"`;
+    if (!(flags & ScScenarioFlags.TwoWay)) attributes += ' table:copy-back="false"';
+    if (!(flags & ScScenarioFlags.Attrib)) attributes += ' table:copy-styles="false"';
+    if (flags & ScScenarioFlags.Value) attributes += ' table:copy-formulas="false"';
+    if (flags & ScScenarioFlags.Protected) attributes += ' table:protected="true"';
+    attributes += ` table:is-active="${table.IsActiveScenario()}"`;
+    const ranges = ScRangeStringConverter.GetStringFromRangeList(
+      table.GetScenarioRanges(),
+      this.document,
+      FormulaGrammar.AddressConvention.CONV_OOO,
+    );
+    attributes += ` table:scenario-ranges="${escapeXml(ranges)}"`;
+    if (comment) attributes += ` table:comment="${escapeXml(comment)}"`;
+    return `<table:scenario${attributes}/>`;
+  }
+
+  /** Emits the native document-level consolidation descriptor. @returns ODS consolidation XML. */
+  private WriteConsolidation(): string {
+    const document = this.document;
+    const params = document.GetConsolidateDlgData();
+    if (!params) return "";
+    const convention = FormulaGrammar.AddressConvention.CONV_OOO;
+    const sources = ScRangeStringConverter.GetStringFromRangeList(
+      params.pDataAreas.map(
+        /** Projects the original one-sheet source area. @param area - Model area. @returns Range for formatting. */
+        (area) =>
+          new ScRange(
+            area.nColStart,
+            area.nRowStart,
+            area.nTab,
+            area.nColEnd,
+            area.nRowEnd,
+            area.nTab,
+          ),
+      ),
+      document,
+      convention,
+    );
+    let target = sources;
+    if (document.FetchTable(params.nTab)) {
+      const address = new ScAddress(params.nCol, params.nRow, params.nTab).Format(
+        ScRefFlags.VALID | ScRefFlags.TAB_3D,
+        document,
+        new ScAddress.Details(convention),
+      );
+      try {
+        target = text(address);
+      } finally {
+        address.dispose();
+      }
+    }
+    let flags = "";
+    if (params.bByCol || params.bByRow) {
+      const label = params.bByCol && params.bByRow ? "both" : params.bByCol ? "column" : "row";
+      flags += ` table:use-label="${label}"`;
+    }
+    if (params.bReferenceData) flags += ' table:link-to-source-data="true"';
+    return `<table:consolidation table:function="${subtotalFunctionNames.get(params.eFunction) ?? ""}" table:source-cell-range-addresses="${escapeXml(sources)}" table:target-cell-address="${escapeXml(target)}"${flags}/>`;
   }
   /** Writes calculation settings that differ from the ODF defaults. @returns ODF calculation settings. */
   private WriteCalculationSettings(): string {
