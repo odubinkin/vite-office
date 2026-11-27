@@ -1,10 +1,11 @@
 ---
 id: "202611270709-GK0SFZ"
 title: "Connect Calc Background to the native Area and brush exchange"
-status: "DOING"
+result_summary: "Connected Calc Background to shared palettes, native selected-cell brushes, and named recent colors. Preserved original comparison and documented CALC-851."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 8
+revision: 9
 origin:
   system: "manual"
 depends_on: []
@@ -40,11 +41,16 @@ quality_review:
     - "output/calc-next/GK0SFZ-findings.md"
   findings:
     - "The accepted selection preserves equal opaque themed brushes and reproduces the pinned partial-opacity transfer."
-commit: null
+commit:
+  hash: "ad14827a84ac9f67e6faab395a11db845b8c6a73"
+  message: "🧩 GK0SFZ code: connect Calc Background to the shared Area brush and palettes"
 comments:
   -
     author: "CODER"
     body: "Start: Replace Calc Background with the shared native palette and typed brush exchange."
+  -
+    author: "CODER"
+    body: "Verified: connected Calc Background to shared Area and native brush exchange. All 82 focused tests passed."
 events:
   -
     type: "status"
@@ -59,8 +65,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "82 focused tests passed across Calc, ODS, Writer Area, and shared fill items. Types, lint, format, scoped JSDoc and provenance, routing, and structural checks passed. Global inventory, provenance and documentation findings remain on untouched integration paths."
+  -
+    type: "status"
+    at: "2026-11-27T07:30:35.453Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: connected Calc Background to shared Area and native brush exchange. All 82 focused tests passed."
 doc_version: 3
-doc_updated_at: "2026-11-27T07:25:32.384Z"
+doc_updated_at: "2026-11-27T07:30:35.454Z"
 doc_updated_by: "CODER"
 description: "Replace the browser-only Calc Background form with the pinned SvxBkgTabPage controls, shared palette and preview, original brush exchange, and selected-cell history and ODS verification."
 sections:
