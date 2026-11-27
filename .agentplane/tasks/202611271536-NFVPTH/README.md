@@ -1,10 +1,11 @@
 ---
 id: "202611271536-NFVPTH"
 title: "Preserve native Writer tracked changes through ODT"
-status: "DOING"
+result_summary: "Preserves native Writer change definitions, range ownership, recording mode and represented deletion sections in ODT and Worker transfer."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 6
+revision: 7
 origin:
   system: "manual"
 depends_on: []
@@ -42,11 +43,16 @@ quality_review:
     - "output/playwright/odf-writer-redlines/verification.md"
   findings:
     - "Original midnight, whitespace and same-position deletion fixtures pass. Complex deletion moves, structural markers and prior-format automatic style ownership remain separate parity work."
-commit: null
+commit:
+  hash: "9eef6a0497491b7f2f38dcf565de28aad9501c08"
+  message: "🧩 NFVPTH writer: preserve native ODT tracked changes"
 comments:
   -
     author: "CODER"
     body: "Start: Follow the pinned Writer redline owner and ODF definition and marker contracts for ordinary package retention."
+  -
+    author: "CODER"
+    body: "Verified: pinned midnight, whitespace and same-position deletions, ODT and Worker round trips, 27 affected cases on final replay and required static checks."
 events:
   -
     type: "status"
@@ -61,8 +67,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Writer ODT, Worker and range-move selection passed 337 cases. All 27 tests from the seven affected files passed on final replay, including three original LibreOffice redline cases. ESLint, office typecheck, module boundaries, source provenance and Writer/shared inventory passed. Remaining structural and prior-format contracts are documented."
+  -
+    type: "status"
+    at: "2026-11-27T16:40:44.662Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: pinned midnight, whitespace and same-position deletions, ODT and Worker round trips, 27 affected cases on final replay and required static checks."
 doc_version: 3
-doc_updated_at: "2026-11-27T16:36:53.506Z"
+doc_updated_at: "2026-11-27T16:40:44.665Z"
 doc_updated_by: "CODER"
 description: "Preserve the currently represented Writer text ranges and detached deletion sections in ODT tracked changes. Port native redline definition, ownership, boundary dispatch, date and flag handling, ODF export and the existing Writer Worker graph. Verify pinned midnight and whitespace fixtures."
 sections:
