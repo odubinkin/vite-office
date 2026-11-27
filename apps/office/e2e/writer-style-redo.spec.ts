@@ -60,8 +60,10 @@ for (const width of [1280, 390])
         paragraphs = editor.locator("[data-writer-paragraph-id]"),
         target = paragraphs.nth(1),
         before = paragraphs.nth(0),
-        after = paragraphs.nth(2),
-        beforeStyle = await before.getAttribute("style"),
+        after = paragraphs.nth(2);
+      await expect(before).toHaveText("BeforeHistoryNeighbor");
+      await expect(after).toHaveText("AfterHistoryNeighbor");
+      const beforeStyle = await before.getAttribute("style"),
         afterStyle = await after.getAttribute("style");
       await target.click();
       await page.keyboard.press("End");

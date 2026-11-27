@@ -41,7 +41,7 @@ test("Writer cell paragraph alignment and native list display survive history an
   await cell.press("Control+y");
   await expect(cell).toHaveCSS("text-align", "center");
   await expect(marker).toHaveText("1.");
-  await expect(neighbor).toHaveCSS("text-align", "left");
+  await expect(neighbor).toHaveCSS("text-align", "start");
   await expect(neighbor).toHaveAttribute("data-list-kind", "none");
   const pending = page.waitForEvent("download");
   await page.getByRole("menuitem", { name: "File", exact: true }).click();
