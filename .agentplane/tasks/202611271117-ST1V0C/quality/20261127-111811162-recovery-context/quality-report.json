@@ -1,0 +1,22 @@
+{
+  "schema_version": 1,
+  "task_id": "202611271117-ST1V0C",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-11-27T11:18:11.162Z",
+  "verdict": "pass",
+  "summary": "Verified both existing Calc sheet menu viewport scenarios.",
+  "evaluated_sha": "434f352c871e4ebcf0da08e255bff481f682e8c0",
+  "blueprint_digest": "62987c2bd3be3cc4ce65c797f2a28cde8db568896a2011ad176b34470bb1378a",
+  "findings": [
+    "The new assertion covers the original Protect Sheet command without changing product behavior."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202611271117-ST1V0C/README.md",
+    "/Users/odubinkin/Projects/vite-office/output/playwright/odf-full-checkpoint-20261127/calc-sheet-menu-verification.md",
+    "434f352c871e4ebcf0da08e255bff481f682e8c0"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": []
+}
