@@ -12,6 +12,9 @@ import { ScXMLLabelRangesContext } from "./xmllabri";
 import { ScXMLDatabaseRangeContext, ScXMLDatabaseRangesContext } from "./xmldrani";
 import { ScXMLNamedExpressionsContext } from "./xmlnexpi";
 import { ScXMLCalculationSettingsContext } from "./XMLCalculationSettingsContext";
+import { FormulaGrammar } from "../../../../formula/inc/grammar";
+import { stringToDouble } from "../../../../sal/inc/rtl/math";
+import { unicode } from "../../../../i18nlangtag/source/isolang/isolang.tables";
 import { createExternalRefTable } from "./xmlexternaltabi";
 /** Spreadsheet content owns table creation,not a separate workbook model. */
 export class ScXMLBodyContext extends ScXMLImportContext {
@@ -19,6 +22,17 @@ export class ScXMLBodyContext extends ScXMLImportContext {
   /** Binds importer. @param owner - Owner. @returns Context. */
   constructor(private readonly owner: ScXMLImport) {
     super(owner);
+    const version = unicode(owner.GetODFVersion());
+    try {
+      const legacy = stringToDouble(version, ".".charCodeAt(0), 0) < 1.2;
+      owner
+        .GetDocument()
+        .SetStorageGrammar(
+          legacy ? FormulaGrammar.Grammar.GRAM_PODF : FormulaGrammar.Grammar.GRAM_ODFF,
+        );
+    } finally {
+      version.dispose();
+    }
   }
   /** Creates actual sheets. @param element - Token. @param attributes - Attributes. @returns Context. */
   override createFastChildContext(

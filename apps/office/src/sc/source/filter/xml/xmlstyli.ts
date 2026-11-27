@@ -16,7 +16,7 @@ import {
   type SvXMLImportContext,
   type FastAttributeList,
 } from "../../../../xmloff/source/core/xmlimp";
-import { ODF_NAMESPACES, XMLToken } from "../../../../xmloff/source/core/xmltoken";
+import { XMLToken } from "../../../../xmloff/source/core/xmltoken";
 import { FormulaGrammar, type Grammar } from "../../../../formula/inc/grammar";
 import { ScAddress, ScRefFlags } from "../../../inc/address";
 import { ScCondFormatEntry } from "../../../inc/conditio";
@@ -234,7 +234,7 @@ class XMLCellTextStyleContext extends ScXMLImportContext {
 /** Original style-map condition held as XML operands until Calc can compile its references. */
 export class ScXMLMapContext extends SvXMLIgnoreContext {
   private readonly condition: ReturnType<typeof ScXMLConditionHelper.parseCondition>;
-  private readonly grammar: Grammar;
+  private readonly grammar: Grammar | undefined;
   private readonly base: string;
   private readonly style: string;
 
@@ -242,16 +242,9 @@ export class ScXMLMapContext extends SvXMLIgnoreContext {
   constructor(owner: ScXMLImport, attributes: FastAttributeList) {
     super(true);
     const source = attributes.get(XMLToken.STYLE_CONDITION) ?? "";
-    const separator = source.indexOf(":");
-    const namespace = separator < 0 ? null : attributes.getNamespaceUri(source.slice(0, separator));
-    const openFormula = namespace === ODF_NAMESPACES.of;
-    const legacyFormula = namespace === "http://openoffice.org/2004/calc";
-    this.grammar = legacyFormula
-      ? FormulaGrammar.Grammar.GRAM_PODF
-      : FormulaGrammar.Grammar.GRAM_ODFF;
-    this.condition = ScXMLConditionHelper.parseCondition(
-      openFormula || legacyFormula ? source.slice(separator + 1) : source,
-    );
+    const formula = owner.ExtractFormulaNamespaceGrammar(source, attributes);
+    this.grammar = source === formula.source ? undefined : formula.grammar;
+    this.condition = ScXMLConditionHelper.parseCondition(formula.source);
     const style = attributes.get(XMLToken.STYLE_APPLY_STYLE_NAME) ?? "";
     const named = owner.GetNamedCellStyle(style);
     this.style = named ? text(named.GetName()) : style;
@@ -263,6 +256,7 @@ export class ScXMLMapContext extends SvXMLIgnoreContext {
     const { mode, operands } = this.condition;
     return (
       mode === other?.condition.mode &&
+      this.grammar === other.grammar &&
       this.style === other.style &&
       operands.length === other.condition.operands.length &&
       (!operands.length || this.base === other.base) &&
@@ -292,7 +286,7 @@ export class ScXMLMapContext extends SvXMLIgnoreContext {
       this.condition.operands,
       document,
       position,
-      this.grammar,
+      this.grammar ?? document.GetStorageGrammar(),
       this.style,
     );
   }

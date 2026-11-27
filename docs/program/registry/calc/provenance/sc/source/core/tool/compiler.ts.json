@@ -34,7 +34,8 @@
       "Preserves the original sheet absolute marker in native A1 formula output and omits it under the Excel qualifier convention.",
       "Selects the native pre-OpenFormula lexical symbols for the represented formula opcodes, which legacy automatic style maps can request.",
       "Compiles OOO A1 and ODFF internal ranges with separately qualified endpoints and retains the second endpoint's sheet and absolute flag.",
-      "Compiles native named database ranges with their global index, expands the data area for evaluation and restores the name for ODS output."
+      "Compiles native named database ranges with their global index, expands the data area for evaluation and restores the name for ODS output.",
+      "Accepts the native pre-OpenFormula language with OOo A1 references for ODF named ranges."
     ],
     "omittedResponsibilities": [
       "All services outside the explicitly represented numeric formula/arithmetic subset remain unsupported; no broad parity claim.",
@@ -121,6 +122,10 @@
         {
           "path": "apps/office/src/sc/source/filter/xml/ods-database-ranges.test.ts",
           "marker": "testDatabaseRangesODS"
+        },
+        {
+          "path": "apps/office/src/sc/source/filter/xml/ods-formula-grammar.test.ts",
+          "marker": "tdf37341"
         }
       ],
       "upstream": [
@@ -167,6 +172,10 @@
         {
           "path": "vendor/libreoffice-reference/sc/source/core/tool/compiler.cxx",
           "marker": "ScCompiler::HandleDbData"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/source/core/tool/compiler.cxx",
+          "marker": "ScCompiler::SetGrammar"
         }
       ]
     }

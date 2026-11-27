@@ -290,6 +290,7 @@ export class ScCompiler extends FormulaCompiler {
       grammar !== FormulaGrammar.Grammar.GRAM_ODFF &&
       grammar !== FormulaGrammar.Grammar.GRAM_ODFF_A1 &&
       grammar !== FormulaGrammar.Grammar.GRAM_PODF &&
+      grammar !== FormulaGrammar.Grammar.GRAM_PODF_A1 &&
       grammar !== FormulaGrammar.Grammar.GRAM_NATIVE &&
       grammar !== FormulaGrammar.Grammar.GRAM_ENGLISH &&
       grammar !== FormulaGrammar.Grammar.GRAM_OOXML &&
@@ -684,7 +685,7 @@ export class ScCompiler extends FormulaCompiler {
     const ooxml = this.meGrammar === FormulaGrammar.Grammar.GRAM_OOXML;
     const symbols = ooxml
       ? ooxmlSymbols
-      : this.meGrammar === FormulaGrammar.Grammar.GRAM_PODF
+      : FormulaGrammar.isPODF(this.meGrammar)
         ? podfSymbols
         : odffSymbols;
     const excel = this.IsExcelReference();

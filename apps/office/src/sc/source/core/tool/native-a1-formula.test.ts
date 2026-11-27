@@ -138,10 +138,12 @@ it("rejects unimplemented grammars and semantic reference families without silen
   const doc = new ScDocument(),
     pos = new ScAddress(0, 0, 0);
   doc.InsertTab(0, unicode("Sheet1"));
-  expect(
-    /** Unavailable convention has no implementation. @returns Compiler. */ () =>
-      new ScCompiler(doc, pos, G.GRAM_PODF_A1),
-  ).toThrow(/not implemented/);
+  const namedRange = unicode("A1:B2");
+  try {
+    expect(new ScCompiler(doc, pos, G.GRAM_PODF_A1).CompileString(namedRange).GetLen()).toBe(1);
+  } finally {
+    namedRange.dispose();
+  }
   const defaultCompiler = new ScCompiler(doc, pos, G.GRAM_UNSPECIFIED);
   expect(defaultCompiler.CompileString(unicode("=A1+2")).GetLen()).toBe(3);
   expect(

@@ -341,6 +341,15 @@ export class ScDocument {
   CountNonFilteredRows(first: number, last: number, tab: number): number {
     return this.FetchTable(tab)?.getFilterData().countNonFilteredRows(first, last) ?? 0;
   }
+  private eStorageGrammar: Grammar = FormulaGrammar.Grammar.GRAM_ODFF;
+  /** Returns the document's ODF formula storage grammar. @returns Native storage grammar. */
+  GetStorageGrammar(): Grammar {
+    return this.eStorageGrammar;
+  }
+  /** Sets the original modern or legacy ODF storage grammar without changing the UI grammar. @param grammar - ODF storage grammar. @returns Nothing. */
+  SetStorageGrammar(grammar: Grammar): void {
+    this.eStorageGrammar = grammar;
+  }
   private eGrammar: Grammar = FormulaGrammar.Grammar.GRAM_NATIVE;
   /** Original current formula convention,initialized GRAM_NATIVE. @returns Grammar. */
   GetGrammar(): Grammar {

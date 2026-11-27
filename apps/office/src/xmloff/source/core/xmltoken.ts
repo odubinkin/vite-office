@@ -9,6 +9,7 @@ export const ODF_NAMESPACES = {
   config: "urn:oasis:names:tc:opendocument:xmlns:config:1.0",
   ooo: "http://openoffice.org/2004/office",
   ooow: "http://openoffice.org/2004/writer",
+  oooc: "http://openoffice.org/2004/calc",
   draw: "urn:oasis:names:tc:opendocument:xmlns:drawing:1.0",
   of: "urn:oasis:names:tc:opendocument:xmlns:of:1.2",
   dc: "http://purl.org/dc/elements/1.1/",

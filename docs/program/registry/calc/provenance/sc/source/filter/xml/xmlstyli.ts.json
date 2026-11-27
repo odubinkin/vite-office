@@ -30,7 +30,8 @@
       "Applies the original typed ODF table-cell border color children after shorthand geometry.",
       "Reads standard and legacy ODF table-family tab colors via the native SAX color conversion.",
       "Routes page layouts and preserves native master-page names referenced by automatic table styles.",
-      "Automatic cell styles collect legacy conditional maps with their style display names, native formula grammars and OOo A1 source strings."
+      "Automatic cell styles collect legacy conditional maps with their style display names, native formula grammars and OOo A1 source strings.",
+      "Uses the original storage grammar when a conditional style map has no explicit formula namespace."
     ],
     "omittedResponsibilities": [
       "Only the consumed responsibilities are represented; full original constructors, UNO/property-map graph, VCL/device/layout and native dialogs remain unverified."
@@ -60,6 +61,10 @@
         {
           "path": "apps/office/src/sc/source/filter/xml/xmlstyli.ts",
           "marker": "ScXMLMapContext"
+        },
+        {
+          "path": "apps/office/src/sc/source/filter/xml/ods-formula-grammar.test.ts",
+          "marker": "tdf37341"
         }
       ],
       "upstream": [
@@ -69,6 +74,10 @@
         },
         {
           "path": "sc/source/filter/xml/xmlstyli.cxx",
+          "marker": "ScXMLMapContext::CreateConditionEntry"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/source/filter/xml/xmlstyli.cxx",
           "marker": "ScXMLMapContext::CreateConditionEntry"
         }
       ]

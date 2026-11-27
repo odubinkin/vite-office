@@ -49,7 +49,7 @@ import { ScDocumentImport } from "../../../inc/documentimport";
 import type { ScAddress, ScRange } from "../../../inc/address";
 import { ScConditionalFormat } from "../../../inc/conditio";
 import { ScRangeList } from "../../../inc/rangelst";
-import { FormulaGrammar } from "../../../../formula/inc/grammar";
+import { FormulaGrammar, type Grammar } from "../../../../formula/inc/grammar";
 import { InsertRangeNames } from "../../core/tool/rangenam";
 import { GetNamedExpressionBase, type ScMyNamedExpression } from "./xmlnexpi";
 import type { ScDocument } from "../../../inc/document";
@@ -86,6 +86,12 @@ interface StyleConditionalFormat {
   readonly ranges: ScRangeList;
 }
 
+/** An ODF formula token string and its original compiler grammar. */
+export interface ScXMLFormula {
+  readonly source: string;
+  readonly grammar: Grammar;
+}
+
 /** Actual import root/state for scalar content;no intermediate sheet/cell data model is retained. */
 export class ScXMLImport extends SvXMLImport implements SvXMLImportRootFactory {
   /** Resolves a field reference when the caller supplies the original document URI. @param href - ODF reference. @returns Document-relative or resolved URI. */
@@ -102,7 +108,7 @@ export class ScXMLImport extends SvXMLImport implements SvXMLImportRootFactory {
   private readonly matrixRanges: MatrixFormulaRange[] = [];
   private readonly pendingFormulas: {
     address: ScAddress;
-    source: string;
+    formula: ScXMLFormula;
     cache: number | string | undefined;
     hasStyle: boolean;
     emptyDisplay: boolean;
@@ -120,21 +126,21 @@ export class ScXMLImport extends SvXMLImport implements SvXMLImportRootFactory {
   AddNamedExpression(expression: ScMyNamedExpression): void {
     this.namedExpressions.push(expression);
   }
-  /** Defers a cell formula until name indexes exist. @param address - Destination. @param source - Native ODFF formula. @param cache - Saved result. @param hasStyle - Whether a style reference was authored. @param emptyDisplay - Whether a numeric zero was displayed as empty. @returns Nothing. */
+  /** Defers a cell formula until name indexes exist. @param address - Destination. @param formula - Formula text and original grammar. @param cache - Saved result. @param hasStyle - Whether a style reference was authored. @param emptyDisplay - Whether a numeric zero was displayed as empty. @returns Nothing. */
   AddFormula(
     address: ScAddress,
-    source: string,
+    formula: ScXMLFormula,
     cache: number | string | undefined,
     hasStyle: boolean,
     emptyDisplay: boolean,
   ): void {
-    this.pendingFormulas.push({ address, source, cache, hasStyle, emptyDisplay });
+    this.pendingFormulas.push({ address, formula, cache, hasStyle, emptyDisplay });
   }
 
-  /** Queues a native master range and its top-left cache. @param range - Clipped array rectangle. @param source - Original formula. @param cache - Saved top-left value. @param error - Original error. @returns Nothing. */
+  /** Queues a native master range and its top-left cache. @param range - Clipped array rectangle. @param formula - Formula text and original grammar. @param cache - Saved top-left value. @param error - Original error. @returns Nothing. */
   AddMatrixFormula(
     range: ScRange,
-    source: string,
+    formula: ScXMLFormula,
     cache: number | string | null | undefined,
     error: FormulaError,
   ): void {
@@ -147,7 +153,7 @@ export class ScXMLImport extends SvXMLImport implements SvXMLImportRootFactory {
     if (error !== FormulaError.Spill) this.matrixRanges.push(matrix);
     this.pendingFormulas.push({
       address: range.aStart,
-      source,
+      formula,
       cache: undefined,
       hasStyle: true,
       emptyDisplay: false,
@@ -672,22 +678,20 @@ export class ScXMLImport extends SvXMLImport implements SvXMLImportRootFactory {
     if (this.cells > (this.options.maxExpandedCells ?? 1_000_000))
       throw new Error("ODS expanded cell limit exceeded");
   }
-  /** Preserves modern ODF namespace/default formula selection;legacy/external grammars are explicit boundaries. @param value - Formula attribute. @param attributes - Actual SAX scope. @returns Unprefixed ODFF source. */
-  ExtractFormulaNamespaceGrammar(value: string, attributes: FastAttributeList): string {
-    if (value.startsWith("=")) return value;
-    const colon = value.indexOf(":"),
-      prefix = value.slice(0, colon);
-    if (colon < 0 || attributes.getNamespaceUri(prefix) !== ODF_NAMESPACES.of)
-      throw new Error("ODS legacy/external formula grammar is not implemented");
-    return value.slice(colon + 1);
+  /** Resolves built-in formula prefixes or retains the entire attribute with the document's storage grammar. @param value - Formula attribute. @param attributes - Actual SAX scope. @returns Original formula text and grammar. */
+  ExtractFormulaNamespaceGrammar(value: string, attributes: FastAttributeList): ScXMLFormula {
+    const colon = value.indexOf(":");
+    const namespace = colon < 0 ? undefined : attributes.getNamespaceUri(value.slice(0, colon));
+    if (namespace === ODF_NAMESPACES.oooc)
+      return { source: value.slice(colon + 1), grammar: FormulaGrammar.Grammar.GRAM_PODF };
+    if (namespace === ODF_NAMESPACES.of)
+      return { source: value.slice(colon + 1), grammar: FormulaGrammar.Grammar.GRAM_ODFF };
+    return { source: value, grammar: this.document.GetStorageGrammar() };
   }
-  /** Creates the supported native content document context. @param element - Root. @param attributes - Attributes. @returns Context. */
-  createFastContext(element: XMLToken, attributes: FastAttributeList): SvXMLImportContext {
+  /** Creates the supported native content document context. @param element - Root. @returns Context. */
+  createFastContext(element: XMLToken): SvXMLImportContext {
     if (element !== XMLToken.OFFICE_DOCUMENT_CONTENT)
       throw new Error("ODS document-content expected");
-    const version = attributes.get(XMLToken.OFFICE_VERSION);
-    if (version !== null && !/^1\.[234]$/.test(version))
-      throw new Error("ODS legacy storage grammar is not implemented");
     return new ScXMLDocContext_Impl(this);
   }
   /** Unknown document roots are not spreadsheet content. @param namespaceURI - URI. @param localName - Name. @param attributes - Attributes. @returns Never. */
@@ -728,7 +732,6 @@ export class ScXMLImport extends SvXMLImport implements SvXMLImportRootFactory {
     try {
       parseOdfXmlStream(xml, this, this.options);
       if (!this.body) throw new Error("ODS spreadsheet body is missing");
-      const grammar = FormulaGrammar.Grammar.GRAM_ODFF;
       SetLabelRanges(this.document, this.labelRanges);
       for (const range of this.databaseRanges) range.Apply(this.document);
       this.databaseRanges.length = 0;
@@ -738,10 +741,11 @@ export class ScXMLImport extends SvXMLImport implements SvXMLImportRootFactory {
           /** Resolves the original position after sheet creation. @param name - Source definition. @returns Native admission record. */
           (name) => ({ ...name, pos: GetNamedExpressionBase(this.document, name) }),
         ),
-        grammar,
+        this.document.GetStorageGrammar(),
       );
-      for (const { address, source, cache, hasStyle, emptyDisplay, matrix } of this
+      for (const { address, formula, cache, hasStyle, emptyDisplay, matrix } of this
         .pendingFormulas) {
+        const { source, grammar } = formula;
         const value = unicode(source);
         try {
           if (matrix) {

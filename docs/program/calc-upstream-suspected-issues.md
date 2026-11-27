@@ -8206,3 +8206,15 @@ existing cells, so matching rows with an empty cell in that field can
 be omitted from the result.
 
 - [Original field resolution and DCOUNT loop](../../vendor/libreoffice-reference/sc/source/core/tool/interpr1.cxx)
+
+### CALC-859 — A malformed ODF version can select the legacy formula grammar
+
+The Calc body importer converts the version attribute with a numeric
+prefix parser and compares the number with 1.2. It does not require the
+conversion to consume the entire attribute. This intentionally accepts
+a micro version such as `1.2.3`, but it also means an invalid version
+prefix can produce zero and select the legacy grammar for unqualified
+formulas. Calc keeps the native numeric conversion and threshold.
+
+- [Original storage grammar selection](../../vendor/libreoffice-reference/sc/source/filter/xml/xmlbodyi.cxx#L69)
+- [Original formula namespace fallback](../../vendor/libreoffice-reference/sc/source/filter/xml/xmlimprt.cxx#L1571)

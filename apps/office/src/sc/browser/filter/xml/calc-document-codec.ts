@@ -270,6 +270,7 @@ function decodeDrawingGrid(input: DrawingGrid): ScGridOptions {
 /** Ephemeral transport, never persisted instead of XML. */
 export interface CalcDocumentRecord {
   readonly version: 1;
+  readonly storageGrammar?: typeof FormulaGrammar.Grammar.GRAM_PODF;
   readonly styles: string;
   readonly sheets: Sheet[];
   readonly externalFiles?: readonly ExternalFile[];
@@ -646,6 +647,9 @@ function* encodeSteps(document: ScDocument): Generator<void, CalcDocumentRecord>
   const databaseRanges = encodeCalcDatabaseRanges(document);
   return {
     version: 1,
+    ...(FormulaGrammar.isPODF(document.GetStorageGrammar())
+      ? { storageGrammar: FormulaGrammar.Grammar.GRAM_PODF }
+      : {}),
     sheets,
     ...(databaseRanges ? { databaseRanges } : {}),
     ...(externalFiles.length ? { externalFiles } : {}),
@@ -730,6 +734,11 @@ function* decodeSteps(record: CalcDocumentRecord): Generator<void, ScDocument> {
   let complete = false;
   document.SetAutoCalc(false);
   try {
+    if (record.storageGrammar !== undefined) {
+      if (record.storageGrammar !== FormulaGrammar.Grammar.GRAM_PODF)
+        throw new Error("Calc worker storage grammar is invalid.");
+      document.SetStorageGrammar(record.storageGrammar);
+    }
     if (
       record.ignoreCase === true ||
       record.nullDate !== undefined ||

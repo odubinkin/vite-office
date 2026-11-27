@@ -15,7 +15,8 @@
     ],
     "preservedResponsibilities": [
       "ODS named-range and named-expression contexts retain scopes, reference bases, flags and expressions before compiler finalization.",
-      "Resolves name origins through the original address converter and admits range addresses and expressions in their own grammars with element-specific type flags."
+      "Resolves name origins through the original address converter and admits range addresses and expressions in their own grammars with element-specific type flags.",
+      "Uses shared native namespace resolution for expressions and the original OOo reference convention for named ranges."
     ],
     "omittedResponsibilities": [
       "External ODF name-expression grammars remain open."
@@ -33,6 +34,10 @@
         {
           "path": "apps/office/src/sc/source/filter/xml/xmlnexpi.ts",
           "marker": "GetNamedExpressionBase"
+        },
+        {
+          "path": "apps/office/src/sc/source/filter/xml/ods-formula-grammar.test.ts",
+          "marker": "tdf37341"
         }
       ],
       "upstream": [
@@ -43,6 +48,10 @@
         {
           "path": "sc/source/filter/xml/xmlimprt.cxx",
           "marker": "RangeNameInserter"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/source/filter/xml/xmlnexpi.cxx",
+          "marker": "ExtractFormulaNamespaceGrammar"
         }
       ]
     }

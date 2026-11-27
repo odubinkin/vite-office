@@ -1,5 +1,5 @@
 /** @fileoverview Original ODS named range and expression import contexts. */
-import { XMLToken, ODF_NAMESPACES } from "../../../../xmloff/source/core/xmltoken";
+import { XMLToken } from "../../../../xmloff/source/core/xmltoken";
 import { FormulaGrammar, type Grammar } from "../../../../formula/inc/grammar";
 import {
   SvXMLIgnoreContext,
@@ -77,21 +77,21 @@ export class ScXMLNamedExpressionsContext extends ScXMLImportContext {
     if (!name || source === null)
       throw new Error("ODS named expression is missing a name or formula");
     let type = RangeDataType.Name;
-    let grammar: Grammar = FormulaGrammar.Grammar.GRAM_ODFF;
-    let symbol = source;
+    let grammar: Grammar;
+    let symbol: string;
     if (range) {
       for (const flag of (attributes.get(XMLToken.TABLE_RANGE_USABLE_AS) ?? "").split(" "))
         type |= tableRangeTypes.get(flag) ?? 0;
-      grammar = FormulaGrammar.Grammar.GRAM_ODFF_A1;
+      grammar = FormulaGrammar.mergeToGrammar(
+        this.owner.GetDocument().GetStorageGrammar(),
+        FormulaGrammar.AddressConvention.CONV_OOO,
+      );
       symbol = ConvertCellRangeAddress(source);
     } else {
       if (attributes.get(XMLToken.LOEXT_HIDDEN) === "true") type |= RangeDataType.Hidden;
-      const colon = source.indexOf(":");
-      const namespace = colon < 0 ? null : attributes.getNamespaceUri(source.slice(0, colon));
-      if (namespace === ODF_NAMESPACES.of || namespace === "http://openoffice.org/2004/calc")
-        symbol = source.slice(colon + 1);
-      if (namespace === "http://openoffice.org/2004/calc")
-        grammar = FormulaGrammar.Grammar.GRAM_PODF;
+      const formula = this.owner.ExtractFormulaNamespaceGrammar(source, attributes);
+      symbol = formula.source;
+      grammar = formula.grammar;
     }
     this.owner.AddNamedExpression({ name, base, symbol, type, grammar, scope: this.scope });
     return new SvXMLIgnoreContext(true);

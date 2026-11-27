@@ -205,8 +205,19 @@ export interface SvXMLImportRootFactory {
   ): SvXMLImportContext | null;
 }
 
-/** Owns the represented native lazy symbol converters; other importer responsibilities remain outside this partial base. */
+/** Owns shared ODF version state and the original lazy symbol converters. */
 export class SvXMLImport {
+  private odfVersion = "";
+  /** Reads the current XML stream's declared ODF version. @returns Version or the original empty default. */
+  public GetODFVersion(): string {
+    return this.odfVersion;
+  }
+
+  /** Captures office:version from the original top-level XML element. @param attributes - Root attributes. @returns Nothing. */
+  public ReadODFVersion(attributes: FastAttributeList): void {
+    this.odfVersion = attributes.get(XMLToken.OFFICE_VERSION) ?? "";
+  }
+
   private hBatsFontConv: Readonly<ConvertChar> | undefined;
   private hMathFontConv: Readonly<ConvertChar> | undefined;
   /** Converts the supported legacy StarBats scalar with the import-owned lazy handle. @param character - Native scalar. @returns StarSymbol scalar. */
@@ -259,6 +270,8 @@ export function parseOdfXmlStream(
             resolvePrefix,
           );
           const token = getXMLToken(tag.uri, tag.local);
+          if (parent === undefined && xmlImport instanceof SvXMLImport)
+            xmlImport.ReadODFVersion(fastAttributes);
           let context =
             parent === undefined
               ? token === XMLToken.UNKNOWN

@@ -43,7 +43,8 @@
       "Exports cell annotations before the owning cell value and includes note-only positions in the sheet bounds.",
       "Registers automatic number-format styles for external cache entries through the same owner used by sheet cell styles.",
       "Writes threaded comment metadata after the classic author and date, with the workbook persons following the external caches.",
-      "Exports database range ownership and filters after named expressions."
+      "Exports database range ownership and filters after named expressions.",
+      "Sets the native modern storage grammar for ODF 1.3 export and serializes names and cells through it."
     ],
     "omittedResponsibilities": [
       "Field identity and unimplemented character properties are outside this XML text boundary."
@@ -133,6 +134,10 @@
         {
           "path": "apps/office/src/sc/source/filter/xml/ods-database-ranges.test.ts",
           "marker": "testDatabaseRangesODS"
+        },
+        {
+          "path": "apps/office/src/sc/source/filter/xml/ods-formula-grammar.test.ts",
+          "marker": "tdf37341"
         }
       ],
       "upstream": [
@@ -183,6 +188,10 @@
         {
           "path": "vendor/libreoffice-reference/sc/source/filter/xml/xmlexprt.cxx",
           "marker": "aExportDatabaseRanges.WriteDatabaseRanges"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/source/filter/xml/xmlexprt.cxx",
+          "marker": "ScXMLExport::setSourceDocument"
         }
       ]
     }

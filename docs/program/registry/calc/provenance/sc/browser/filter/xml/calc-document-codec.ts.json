@@ -84,11 +84,15 @@
         {
           "path": "apps/office/src/sc/source/filter/xml/ods-database-ranges.test.ts",
           "marker": "testDatabaseRangesODS"
+        },
+        {
+          "path": "apps/office/src/sc/source/filter/xml/ods-formula-grammar.test.ts",
+          "marker": "tdf37341"
         }
       ]
     },
     "localPath": "apps/office/src/sc/browser/filter/xml/calc-document-codec.ts",
-    "rationale": "Transfers supported native Calc cells, formula source, sparse patterns and geometry across the worker boundary; XML remains the durable representation. This is local browser integration infrastructure; no native LibreOffice file ownership or semantic parity is claimed.\nAQF9AG finalizes document import before exposing the decoded model. Existing edit-text reconstruction uses the document text bridge and invalidates cached import positions after external cell-store mutation; the browser transfer format remains unchanged.",
+    "rationale": "Transfers supported native Calc cells, formula source, sparse patterns and geometry across the worker boundary; XML remains the durable representation. This is local browser integration infrastructure; no native LibreOffice file ownership or semantic parity is claimed.\nAQF9AG finalizes document import before exposing the decoded model. Existing edit-text reconstruction uses the document text bridge and invalidates cached import positions after external cell-store mutation; the browser transfer format remains unchanged. The Worker keeps the original storage grammar while serializing the existing formula-token projection as OpenFormula.",
     "responsibilities": [
       "Transfers supported native Calc cells, formula source, sparse patterns and geometry across the worker boundary; XML remains the durable representation.",
       "Expands source text features before carrying the existing plain edit-cell worker record.",
@@ -110,7 +114,8 @@
       "Transfers optional external cache number formats through the existing version-one formatter table and native source filter metadata alongside the referenced workbook.",
       "Transfers optional note threads and native persons while admitting earlier version-one snapshots.",
       "Keeps the database range query and ownership state in compatible Worker records.",
-      "Restores database names before formula tokens compile and applies autofilter flags after cell patterns."
+      "Restores database names before formula tokens compile and applies autofilter flags after cell patterns.",
+      "The Worker keeps the original storage grammar while serializing the existing formula-token projection as OpenFormula."
     ],
     "stackDivergence": {
       "kind": "local-infrastructure",

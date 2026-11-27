@@ -124,7 +124,8 @@
       "Dispatches GetPageStyle and SetPageStyle through the actual native sheet.",
       "The document exposes native conditional scale backgrounds via its existing conditional-format owner.",
       "Owns ordered threaded-comment persons and keeps the first record for each exact identifier.",
-      "Owns global database ranges and routes a sheet anonymous range to the native ScTable owner."
+      "Owns global database ranges and routes a sheet anonymous range to the native ScTable owner.",
+      "Uses the native ODF storage grammar alongside the independent UI grammar."
     ],
     "omittedResponsibilities": [
       "The browser document text-object slice only admits the consumed operations."
@@ -350,6 +351,10 @@
         {
           "path": "apps/office/src/sc/source/filter/xml/ods-database-ranges.test.ts",
           "marker": "testDatabaseRangesODS"
+        },
+        {
+          "path": "apps/office/src/sc/source/filter/xml/ods-formula-grammar.test.ts",
+          "marker": "tdf37341"
         }
       ],
       "upstream": [
@@ -612,6 +617,10 @@
         {
           "path": "vendor/libreoffice-reference/sc/source/core/data/document.cxx",
           "marker": "ScDocument::GetAnonymousDBData"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/source/core/data/documen2.cxx",
+          "marker": "ScDocument::SetStorageGrammar"
         }
       ]
     }

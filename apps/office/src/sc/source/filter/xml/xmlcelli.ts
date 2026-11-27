@@ -1,5 +1,6 @@
 /** @fileoverview Native scalar Calc XML cell/default/repeat import specialization. */
 import { FormulaError, isPublishedFormulaError } from "../../../../formula/inc/errorcodes";
+import type { ScXMLFormula } from "./xmlimprt";
 import { errorSymbols } from "../../../../formula/inc/FormulaCompiler";
 import { ScXMLImportContext } from "./importcontext";
 import { SvXMLImportContext, type FastAttributeList } from "../../../../xmloff/source/core/xmlimp";
@@ -34,7 +35,7 @@ export class ScXMLTableRowCellContext extends ScXMLImportContext {
   private readonly hasExtendedValueType: boolean;
   private readonly formulaTextResult: boolean;
   private readonly hasStyle: boolean;
-  private readonly source: string | null;
+  private readonly source: ScXMLFormula | null;
   private readonly stringValue: string | null;
   /** Reads native scalar attributes and explicit unsupported boundaries. @param row - Row cursor. @param attributes - Actual SAX attributes/scope. @param covered - Covered cell. @returns Context. */
   constructor(

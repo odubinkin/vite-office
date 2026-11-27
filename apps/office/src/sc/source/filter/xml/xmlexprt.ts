@@ -125,6 +125,7 @@ export class ScXMLExport {
     private readonly document: ScDocument,
     private readonly options: ScXMLExportOptions = {},
   ) {
+    document.SetStorageGrammar(FormulaGrammar.Grammar.GRAM_ODFF);
     this.reservedStyleNames = getCellStyleXMLNames(document);
     this.textStyles = new CellTextStylePool(document, this.fontPool);
     this.pageStyles = exportPageStyles(document, this.pageFontPool);
@@ -588,7 +589,7 @@ export class ScXMLExport {
       const address = text(base);
       base.dispose();
       const properties = ` table:name="${escapeXml(entry.name)}" table:base-cell-address="${escapeXml(address)}"`;
-      const symbol = entry.GetSymbol();
+      const symbol = entry.GetSymbol(this.document.GetStorageGrammar());
       if (entry.IsReference(range)) {
         const flags = [
           [RangeDataType.ColHeader, "repeat-column"],
@@ -631,7 +632,7 @@ export class ScXMLExport {
       const actual = cell.getFormula() as ScFormulaCell;
       const mode = actual.GetMatrixFlag();
       if (mode !== ScMatrixMode.Reference) {
-        const source = actual.GetFormula(FormulaGrammar.Grammar.GRAM_ODFF);
+        const source = actual.GetFormula(this.document.GetStorageGrammar());
         try {
           const dimensions = actual.GetMatColsRows();
           const code = text(source);

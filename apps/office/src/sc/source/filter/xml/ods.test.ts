@@ -272,10 +272,6 @@ it("rejects unsupported cell services and malformed structure explicitly", /** E
       .replace("<office:body>", "")
       .replace("</office:body>", "")
       .replace(/<office:spreadsheet>.*<\/office:spreadsheet>/, ""),
-    independent("").replace(
-      "<office:document-content ",
-      '<office:document-content office:version="1.0" ',
-    ),
   ])
     expect(
       /** Invalid roots/grammar/body cannot be treated as an empty spreadsheet. @returns Document. */ () =>
