@@ -11,7 +11,10 @@ depends_on: []
 tags:
   - "odt"
   - "writer"
-verify: []
+  - "code"
+verify:
+  - "Run focused Writer ODT master-page, header/footer, paragraph-style and Worker round-trip tests."
+  - "Run Office typecheck, scoped ESLint and format, dependency and provenance checks, Writer/shared registry invariants, routing and git diff checks."
 plan_approval:
   state: "approved"
   updated_at: "2026-11-27T07:22:49.525Z"

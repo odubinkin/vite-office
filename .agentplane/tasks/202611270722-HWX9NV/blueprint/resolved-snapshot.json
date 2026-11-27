@@ -7,7 +7,8 @@
     "description": "Use the pinned XMLTextMasterPageContext and XMLPageExport contracts to preserve encoded names, display identity, page-layout and follow links, and paragraph references through the existing Writer ODT and Worker owners. Compare fallback behavior and run focused page-style, paragraph-style and ODT round-trip checks.",
     "tags": [
       "odt",
-      "writer"
+      "writer",
+      "code"
     ],
     "owner": "CODER",
     "workflowMode": "direct",
@@ -19,25 +20,27 @@
       "lifecycleCommentCommitLocation": "current_checkout",
       "finishCommitFromComment": true
     },
-    "mutation": "none",
+    "mutation": "code",
     "touchedPaths": [],
     "recipeHints": [],
     "riskFlags": []
   },
   "selectedBlueprint": {
-    "id": "content.light",
+    "id": "code.direct",
     "version": 1,
-    "title": "Lightweight content",
+    "title": "Direct code change",
     "taskKinds": [
-      "content"
+      "code"
     ],
-    "workflowModes": []
+    "workflowModes": [
+      "direct"
+    ]
   },
   "plan": {
     "schemaVersion": 1,
-    "blueprintId": "content.light",
+    "blueprintId": "code.direct",
     "blueprintVersion": 1,
-    "title": "Lightweight content",
+    "title": "Direct code change",
     "taskId": "202611270722-HWX9NV",
     "workflowMode": "direct",
     "workflowGitCapabilities": {
@@ -49,12 +52,12 @@
       "finishCommitFromComment": true
     },
     "taskIntent": {
-      "mutationScope": "none"
+      "mutationScope": "code"
     },
     "whySelected": [
-      "task kind resolved to content",
+      "task kind resolved to code",
       "workflow mode: direct",
-      "mutation scope: none"
+      "mutation scope: code"
     ],
     "states": [
       {
@@ -80,16 +83,32 @@
         ]
       },
       {
+        "id": "approval_gate",
+        "kind": "approval_gate",
+        "mode": "approval",
+        "required": true,
+        "protected": true,
+        "allowedCommands": [],
+        "policyModules": [],
+        "evidenceKinds": [
+          "approval"
+        ]
+      },
+      {
         "id": "context_resolve",
         "kind": "context_resolve",
         "mode": "deterministic",
         "required": true,
         "protected": false,
         "allowedCommands": [],
-        "policyModules": [],
+        "policyModules": [
+          ".agentplane/policy/security.must.md",
+          ".agentplane/policy/dod.core.md",
+          ".agentplane/policy/dod.code.md",
+          ".agentplane/policy/workflow.direct.md"
+        ],
         "evidenceKinds": [
-          "context_manifest",
-          "sources"
+          "context_manifest"
         ]
       },
       {
@@ -101,8 +120,7 @@
         "allowedCommands": [],
         "policyModules": [],
         "evidenceKinds": [
-          "artifact",
-          "final_output"
+          "changed_paths"
         ]
       },
       {
@@ -111,22 +129,13 @@
         "mode": "deterministic",
         "required": true,
         "protected": false,
-        "allowedCommands": [],
+        "allowedCommands": [
+          "agentplane task verify-show <task-id>",
+          "project focused checks"
+        ],
         "policyModules": [],
         "evidenceKinds": [
           "check_result"
-        ]
-      },
-      {
-        "id": "artifact_write",
-        "kind": "artifact_write",
-        "mode": "deterministic",
-        "required": true,
-        "protected": false,
-        "allowedCommands": [],
-        "policyModules": [],
-        "evidenceKinds": [
-          "artifact"
         ]
       },
       {
@@ -138,7 +147,7 @@
         "allowedCommands": [],
         "policyModules": [],
         "evidenceKinds": [
-          "final_output"
+          "check_result"
         ]
       },
       {
@@ -147,7 +156,9 @@
         "mode": "agentic",
         "required": true,
         "protected": true,
-        "allowedCommands": [],
+        "allowedCommands": [
+          "agentplane evaluator run <task-id> --verdict pass|rework|blocked|human_review"
+        ],
         "policyModules": [],
         "evidenceKinds": [
           "quality_report"
@@ -162,48 +173,57 @@
         "allowedCommands": [],
         "policyModules": [],
         "evidenceKinds": [
-          "final_output"
+          "commit"
         ]
       }
     ],
     "requiredEvidence": [
       {
-        "id": "content.sources",
-        "kind": "sources",
-        "producedBy": "context_resolve",
+        "id": "code_direct.paths",
+        "kind": "changed_paths",
+        "producedBy": "work_unit",
         "required": true,
-        "description": "Source or product facts used."
+        "description": "Changed source paths."
       },
       {
-        "id": "content.check",
+        "id": "code_direct.check",
         "kind": "check_result",
         "producedBy": "deterministic_check",
         "required": true,
-        "description": "Style or editorial check."
+        "description": "Focused checks."
       },
       {
-        "id": "content.final",
-        "kind": "final_output",
-        "producedBy": "work_unit",
+        "id": "code_direct.commit",
+        "kind": "commit",
+        "producedBy": "finish",
         "required": true,
-        "description": "Final content artifact."
+        "description": "Close commit."
       },
       {
-        "id": "content.quality",
+        "id": "code_direct.quality",
         "kind": "quality_report",
         "producedBy": "quality_gate",
         "required": true,
         "description": "EVALUATOR quality verdict."
       }
     ],
-    "policyModules": [],
+    "policyModules": [
+      ".agentplane/policy/dod.code.md",
+      ".agentplane/policy/dod.core.md",
+      ".agentplane/policy/security.must.md",
+      ".agentplane/policy/workflow.direct.md"
+    ],
     "allowedCommands": [
-      "editorial or formatting checks"
+      "agentplane evaluator run <task-id> --verdict pass|rework|blocked|human_review",
+      "agentplane finish <task-id>",
+      "agentplane task verify-show <task-id>",
+      "agentplane verify <task-id> --ok|--rework",
+      "project focused checks"
     ],
     "contextBudget": {
-      "maxPolicyModules": 0,
-      "maxPromptBlocks": 8,
-      "rationale": "Content work should favor source material and recipe context over workflow policy."
+      "maxPolicyModules": 4,
+      "maxPromptBlocks": 12,
+      "rationale": "Direct code work needs code DoD plus the active direct workflow contract."
     },
     "contextManifest": [],
     "acceptedRecipeExtensions": [],
@@ -234,16 +254,32 @@
       ]
     },
     {
+      "id": "approval_gate",
+      "kind": "approval_gate",
+      "mode": "approval",
+      "required": true,
+      "protected": true,
+      "allowedCommands": [],
+      "policyModules": [],
+      "evidenceKinds": [
+        "approval"
+      ]
+    },
+    {
       "id": "context_resolve",
       "kind": "context_resolve",
       "mode": "deterministic",
       "required": true,
       "protected": false,
       "allowedCommands": [],
-      "policyModules": [],
+      "policyModules": [
+        ".agentplane/policy/security.must.md",
+        ".agentplane/policy/dod.core.md",
+        ".agentplane/policy/dod.code.md",
+        ".agentplane/policy/workflow.direct.md"
+      ],
       "evidenceKinds": [
-        "context_manifest",
-        "sources"
+        "context_manifest"
       ]
     },
     {
@@ -255,8 +291,7 @@
       "allowedCommands": [],
       "policyModules": [],
       "evidenceKinds": [
-        "artifact",
-        "final_output"
+        "changed_paths"
       ]
     },
     {
@@ -265,22 +300,13 @@
       "mode": "deterministic",
       "required": true,
       "protected": false,
-      "allowedCommands": [],
+      "allowedCommands": [
+        "agentplane task verify-show <task-id>",
+        "project focused checks"
+      ],
       "policyModules": [],
       "evidenceKinds": [
         "check_result"
-      ]
-    },
-    {
-      "id": "artifact_write",
-      "kind": "artifact_write",
-      "mode": "deterministic",
-      "required": true,
-      "protected": false,
-      "allowedCommands": [],
-      "policyModules": [],
-      "evidenceKinds": [
-        "artifact"
       ]
     },
     {
@@ -292,7 +318,7 @@
       "allowedCommands": [],
       "policyModules": [],
       "evidenceKinds": [
-        "final_output"
+        "check_result"
       ]
     },
     {
@@ -301,7 +327,9 @@
       "mode": "agentic",
       "required": true,
       "protected": true,
-      "allowedCommands": [],
+      "allowedCommands": [
+        "agentplane evaluator run <task-id> --verdict pass|rework|blocked|human_review"
+      ],
       "policyModules": [],
       "evidenceKinds": [
         "quality_report"
@@ -316,60 +344,69 @@
       "allowedCommands": [],
       "policyModules": [],
       "evidenceKinds": [
-        "final_output"
+        "commit"
       ]
     }
   ],
   "requiredEvidence": [
     {
-      "id": "content.sources",
-      "kind": "sources",
-      "producedBy": "context_resolve",
+      "id": "code_direct.paths",
+      "kind": "changed_paths",
+      "producedBy": "work_unit",
       "required": true,
-      "description": "Source or product facts used."
+      "description": "Changed source paths."
     },
     {
-      "id": "content.check",
+      "id": "code_direct.check",
       "kind": "check_result",
       "producedBy": "deterministic_check",
       "required": true,
-      "description": "Style or editorial check."
+      "description": "Focused checks."
     },
     {
-      "id": "content.final",
-      "kind": "final_output",
-      "producedBy": "work_unit",
+      "id": "code_direct.commit",
+      "kind": "commit",
+      "producedBy": "finish",
       "required": true,
-      "description": "Final content artifact."
+      "description": "Close commit."
     },
     {
-      "id": "content.quality",
+      "id": "code_direct.quality",
       "kind": "quality_report",
       "producedBy": "quality_gate",
       "required": true,
       "description": "EVALUATOR quality verdict."
     }
   ],
-  "policyModules": [],
+  "policyModules": [
+    ".agentplane/policy/dod.code.md",
+    ".agentplane/policy/dod.core.md",
+    ".agentplane/policy/security.must.md",
+    ".agentplane/policy/workflow.direct.md"
+  ],
   "allowedCommands": [
-    "editorial or formatting checks"
+    "agentplane evaluator run <task-id> --verdict pass|rework|blocked|human_review",
+    "agentplane finish <task-id>",
+    "agentplane task verify-show <task-id>",
+    "agentplane verify <task-id> --ok|--rework",
+    "project focused checks"
   ],
   "contextBudget": {
-    "maxPolicyModules": 0,
-    "maxPromptBlocks": 8,
-    "rationale": "Content work should favor source material and recipe context over workflow policy."
+    "maxPolicyModules": 4,
+    "maxPromptBlocks": 12,
+    "rationale": "Direct code work needs code DoD plus the active direct workflow contract."
   },
   "contextManifest": [],
   "acceptedRecipeExtensions": [],
   "rejectedRecipeExtensions": [],
   "stopReasons": [],
   "selectionReasons": [
-    "task kind resolved to content",
+    "task kind resolved to code",
     "workflow mode: direct",
-    "mutation scope: none"
+    "mutation scope: code"
   ],
   "digest": {
     "algorithm": "sha256",
-    "value": "ec271494feb4ce135fff679a6715c7003e6d382408ab697663f136a4dc1d612b"
+    "value": "c7a48cbca811caee052d14ccdd4bee5b5975f5c02304aa709b8f36f89fe9c098"
   }
 }
