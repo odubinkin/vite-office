@@ -1,10 +1,11 @@
 ---
 id: "202611270730-P86BEJ"
 title: "Connect Calc Alignment to the native CUI control and item exchange"
-status: "DOING"
+result_summary: "Connected native Alignment controls, mixed-state exchange, and selected-cell orientation. Preserved CALC-852 and verified native ODS glyph and indent properties."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 9
+revision: 10
 origin:
   system: "manual"
 depends_on: []
@@ -40,11 +41,16 @@ quality_review:
     - "output/calc-next/P86BEJ-findings.md"
   findings:
     - "The mixed selection source asymmetry is reproduced with no unvisited-page mutation."
-commit: null
+commit:
+  hash: "67e6b2314a35d474abfd232b2e2c00bcc583d9f6"
+  message: "🧩 P86BEJ code: connect native Calc alignment and orientation controls"
 comments:
   -
     author: "CODER"
     body: "Start: continue direct-mode task in current checkout."
+  -
+    author: "CODER"
+    body: "Verified: Calc uses the native CUI Alignment model, linked angle controls and typed ODS values. All 39 focused tests passed."
 events:
   -
     type: "status"
@@ -59,8 +65,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "39 targeted tests passed in six files. Office types, changed-source lint, format and JSDoc, scoped provenance, dependency/source-tree, routing and doctor passed. Full inventory and provenance retain unchanged integration marker failures."
+  -
+    type: "status"
+    at: "2026-11-27T08:05:26.584Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: Calc uses the native CUI Alignment model, linked angle controls and typed ODS values. All 39 focused tests passed."
 doc_version: 3
-doc_updated_at: "2026-11-27T07:49:17.735Z"
+doc_updated_at: "2026-11-27T08:05:26.590Z"
 doc_updated_by: "CODER"
 description: "Route Calc Format Cells Alignment through the original CUI AlignmentTabPage and the existing Calc item pool. Move saved-value, mixed-selection and control sensitivity contracts into the CUI model with source slot-to-Which mapping. Present the Text Alignment, Text Orientation and Properties groups with the synchronized dial and angle entry, the three native reference-edge choices, Vertical Asian layout when enabled, and the pinned justify/wrap interactions. Keep the normal Calc attribute transaction and validate ODS properties and grouped history. Preserve existing browser storage and recovery policy."
 sections:
