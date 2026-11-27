@@ -154,11 +154,11 @@ function decodeQuery(document: ScDocument, record: Query): ScQueryParam {
   return Object.assign(new ScQueryParam(), record);
 }
 
-/** Restores all original owners and their sparse auto-filter flags. @param document - Target workbook with sheets. @param record - Transfer extension. */
+/** Restores original owners before formulas compile. @param document - Target workbook with sheets. @param record - Transfer extension. @returns Ranges for applying header flags after cell patterns. */
 export function decodeCalcDatabaseRanges(
   document: ScDocument,
   record: CalcDatabaseRangesRecord,
-): void {
+): ScDBData[] {
   if (
     !record ||
     !Array.isArray(record.ranges) ||
@@ -166,6 +166,7 @@ export function decodeCalcDatabaseRanges(
     record.nextIndex < 1
   )
     throw new Error("Calc worker database range collection is invalid.");
+  const ranges: ScDBData[] = [];
   for (const entry of record.ranges as readonly DatabaseRangeRecord[]) {
     if (
       !entry ||
@@ -201,6 +202,8 @@ export function decodeCalcDatabaseRanges(
     range.SetQueryParam(query);
     if (entry.advanced) range.SetAdvancedQuerySource(decodeArea(document, entry.advanced));
     AdoptDatabaseRange(document, range, entry.type);
+    ranges.push(range);
   }
   document.GetDBCollection().getNamedDBs().SetNextIndex(record.nextIndex);
+  return ranges;
 }

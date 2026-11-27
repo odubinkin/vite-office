@@ -498,6 +498,8 @@ const operators = new Set<OpCode>([
   OpCode.ocAnd,
   OpCode.ocOffset,
   OpCode.ocCountIf,
+  OpCode.ocDBCount,
+  OpCode.ocDBCount2,
   OpCode.ocNot,
   OpCode.ocIsEmpty,
   OpCode.ocIsFormula,

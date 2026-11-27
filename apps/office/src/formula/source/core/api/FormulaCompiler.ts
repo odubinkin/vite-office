@@ -28,6 +28,7 @@ import { OUString, type OUStringConstReference } from "../../../../sal/inc/rtl/u
 
 const arithmetic = new Set<OpCode>([
   OpCode.ocName,
+  OpCode.ocDBArea,
   OpCode.ocColRowName,
   OpCode.ocPush,
   OpCode.ocStop,
@@ -60,6 +61,8 @@ const arithmetic = new Set<OpCode>([
   OpCode.ocAnd,
   OpCode.ocOffset,
   OpCode.ocCountIf,
+  OpCode.ocDBCount,
+  OpCode.ocDBCount2,
   OpCode.ocNot,
   OpCode.ocIsEmpty,
   OpCode.ocIsFormula,
@@ -272,6 +275,11 @@ export class FormulaCompiler {
     return undefined;
   }
 
+  /** Expands a derived database name operand. @param token - Database token. @returns Operand or none. */
+  protected HandleDbData(token: FormulaToken): FormulaToken | undefined {
+    return token;
+  }
+
   /** Resolves a row or column label in Calc's formula position. @param token - Label token. @param previous - Left opcode. @param next - Right opcode. @returns Expanded operand. */
   protected HandleColRowName(
     token: FormulaToken,
@@ -389,6 +397,10 @@ export class FormulaCompiler {
               LabelNeighbor(source, offset - 2, -1),
               LabelNeighbor(source, offset, 1),
             );
+            if (!token) return false;
+          }
+          if (token.GetOpCode() === OpCode.ocDBArea) {
+            token = this.HandleDbData(token);
             if (!token) return false;
           }
           this.mpToken = token;
@@ -515,6 +527,8 @@ export class FormulaCompiler {
       op === OpCode.ocGetMonth ||
       op === OpCode.ocOffset ||
       op === OpCode.ocCountIf ||
+      op === OpCode.ocDBCount ||
+      op === OpCode.ocDBCount2 ||
       op === OpCode.ocExternal ||
       op === OpCode.ocRow ||
       op === OpCode.ocColumn ||

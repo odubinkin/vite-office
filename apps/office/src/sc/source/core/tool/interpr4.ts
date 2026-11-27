@@ -47,6 +47,7 @@ import { ScMatValType } from "../../../inc/types";
 import type { ScExternalCacheToken } from "../../ui/docshell/externalrefmgr";
 import { CalculateMatrixLookup, InterpretReferenceOpcode, ScAnd } from "./interpr1";
 import { InterpretConditionalAggregate } from "./interpr1.conditional";
+import { InterpretDatabaseCount } from "./interpr1.database";
 import { CompareScalar } from "./compare";
 import { InterpretDateOpcode, ScRangeFunc } from "./interpr2";
 import { ScFrequency, ScMatRef } from "./interpr5";
@@ -933,6 +934,7 @@ export class ScInterpreter {
       } else if (op === OpCode.ocRange) ScRangeFunc.call(this);
       else if (
         !InterpretConditionalAggregate.call(this, token) &&
+        !InterpretDatabaseCount.call(this, token) &&
         !InterpretReferenceOpcode.call(this, token) &&
         !InterpretDateOpcode.call(this, token) &&
         !InterpretAnalysisAddIn.call(this, token)

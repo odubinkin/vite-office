@@ -15,17 +15,27 @@ import { ScXMLImportContext } from "./importcontext";
 import { readDatabaseRangeAddress, ScXMLFilterContext } from "./xmlfilti";
 import type { ScXMLImport } from "./xmlimprt";
 
-/** Applies the source auto-filter flag and transfers ownership to the original range container. @param document - Workbook. @param range - New data. @param type - Original ownership category. */
+/** Applies the original sparse AutoFilter header flags. @param document - Workbook. @param range - Native range. */
+export function SetDatabaseRangeAutoFilterFlags(document: ScDocument, range: ScDBData): void {
+  if (!range.HasAutoFilter()) return;
+  const { aStart, aEnd } = range.GetArea();
+  document.ApplyFlagsTab(
+    aStart.Col(),
+    aStart.Row(),
+    aEnd.Col(),
+    aStart.Row(),
+    aStart.Tab(),
+    ScMF.Auto,
+  );
+}
+
+/** Transfers ownership to the original range container. @param document - Workbook. @param range - New data. @param type - Original ownership category. */
 export function AdoptDatabaseRange(
   document: ScDocument,
   range: ScDBData,
   type: ScDBRangeType,
 ): void {
-  const { aStart, aEnd } = range.GetArea();
-  const tab = aStart.Tab();
-  if (range.HasAutoFilter())
-    document.ApplyFlagsTab(aStart.Col(), aStart.Row(), aEnd.Col(), aStart.Row(), tab, ScMF.Auto);
-
+  const tab = range.GetArea().aStart.Tab();
   const collection = document.GetDBCollection();
   switch (type) {
     case ScDBRangeType.SheetAnonymous:
@@ -122,6 +132,7 @@ export class ScXMLDatabaseRangeContext extends ScXMLImportContext {
     const advancedSource = this.filter?.Resolve(document, area) ?? null;
     range.SetQueryParam(this.query);
     range.SetAdvancedQuerySource(advancedSource);
+    SetDatabaseRangeAutoFilterFlags(document, range);
     AdoptDatabaseRange(document, range, type);
   }
 }

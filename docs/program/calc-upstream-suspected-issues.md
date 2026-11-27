@@ -8187,3 +8187,22 @@ retains the resulting ordinary comparison.
 
 - [Original filter operator and condition conversion](../../vendor/libreoffice-reference/sc/source/filter/xml/xmlfilti.cxx)
 - [Original empty and nonempty condition tests](../../vendor/libreoffice-reference/sc/source/core/tool/queryentry.cxx)
+
+### CALC-857 — StarOffice database criteria walk the database row count
+
+The four-column criteria importer uses the database range height as its
+iteration limit. The worksheet range view reads the requested offsets
+from the sheet, so a shorter criteria range can read adjacent cells
+while trying the StarOffice form. The Excel criteria grid remains the
+fallback when the StarOffice interpretation fails.
+
+- [Original database criteria and internal range view](../../vendor/libreoffice-reference/sc/source/core/tool/doubleref.cxx)
+
+### CALC-858 — Fieldless DCOUNT can omit matching rows with an empty criterion-field cell
+
+For a missing result field and an internal range, DCOUNT restricts the
+direct cell iterator to the first query field. The iterator yields only
+existing cells, so matching rows with an empty cell in that field can
+be omitted from the result.
+
+- [Original field resolution and DCOUNT loop](../../vendor/libreoffice-reference/sc/source/core/tool/interpr1.cxx)

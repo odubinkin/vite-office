@@ -52,7 +52,8 @@
       "Admits the native VLOOKUP and HLOOKUP opcodes through the existing lexical and formula-token path, preserving the original arguments in the RPN function token.",
       "Compiles scalar IF using the native conditional jump offsets, comparisons and variable-arity reference calls.",
       "Compiles AVERAGEIF, MINIFS and MAXIFS using the existing variable-arity function path and native parameter classification.",
-      "Serializes represented pre-OpenFormula opcodes using the original pre-OpenFormula resource."
+      "Serializes represented pre-OpenFormula opcodes using the original pre-OpenFormula resource.",
+      "Routes database range tokens through the derived formula compiler before RPN evaluation."
     ],
     "omittedResponsibilities": [
       "All opcode families and services outside the scalar token subset, including text scanning, function calls, II and matrix compilation; complete upstream QA is not executed.",
@@ -139,6 +140,14 @@
         {
           "path": "apps/office/src/formula/source/core/api/FormulaCompiler.ts",
           "marker": "GRAM_PODF"
+        },
+        {
+          "path": "apps/office/src/formula/source/core/api/FormulaCompiler.ts",
+          "marker": "HandleDbData"
+        },
+        {
+          "path": "apps/office/src/sc/source/filter/xml/ods-database-ranges.test.ts",
+          "marker": "testDatabaseRangesODS"
         }
       ],
       "upstream": [
@@ -217,6 +226,10 @@
         {
           "path": "formula/source/core/api/FormulaCompiler.cxx",
           "marker": "RID_STRLIST_FUNCTION_NAMES_ENGLISH_PODF"
+        },
+        {
+          "path": "vendor/libreoffice-reference/formula/source/core/api/FormulaCompiler.cxx",
+          "marker": "return HandleDbData()"
         }
       ]
     }

@@ -1,3 +1,4 @@
+import { SetDatabaseRangeAutoFilterFlags } from "../../../source/filter/xml/xmldrani";
 /** @fileoverview Bounded Calc worker transfer of supported native cells, sparse attributes and geometry; XML remains the durable format. */
 import type { NoteEntry } from "../../../inc/postit";
 import {
@@ -897,6 +898,10 @@ function* decodeSteps(record: CalcDocumentRecord): Generator<void, ScDocument> {
         }
       }
     }
+    const databaseRanges =
+      record.databaseRanges === undefined
+        ? []
+        : decodeCalcDatabaseRanges(document, record.databaseRanges);
     InsertRangeNames(
       document,
       (record.names ?? []).map(
@@ -1103,8 +1108,7 @@ function* decodeSteps(record: CalcDocumentRecord): Generator<void, ScDocument> {
         yield;
       }
     }
-    if (record.databaseRanges !== undefined)
-      decodeCalcDatabaseRanges(document, record.databaseRanges);
+    for (const range of databaseRanges) SetDatabaseRangeAutoFilterFlags(document, range);
     importer.docImport.finalize();
     for (const [tab, sheet] of record.sheets.entries())
       if (sheet.conditionalFormats)

@@ -19,7 +19,8 @@
       "Includes native ODFF and OOXML text concatenation spellings.",
       "Admits the native VLOOKUP and HLOOKUP opcodes through the existing lexical and formula-token path, preserving the original arguments in the RPN function token.",
       "Adds the pinned ODFF and OOXML spellings for AVERAGEIF, MINIFS and MAXIFS.",
-      "The represented pre-OpenFormula resource retains the original plain MINIFS and MAXIFS spellings alongside common ODFF symbols."
+      "The represented pre-OpenFormula resource retains the original plain MINIFS and MAXIFS spellings alongside common ODFF symbols.",
+      "Publishes original DCOUNT and DCOUNTA function names in the represented formula grammars."
     ],
     "omittedResponsibilities": [
       "Other grammars/localized symbol services,functions/names/external/range/matrix/table references and missing-argument rewrite services remain unsupported. Compiler string token output does not imply string-expression evaluation. Localized empty-code errors reject explicitly. ODS filters and UI are not implemented by this task; no broad native parity is certified."
@@ -49,6 +50,14 @@
         {
           "path": "apps/office/src/formula/inc/core_resource.ts",
           "marker": "RID_STRLIST_FUNCTION_NAMES_ENGLISH_PODF"
+        },
+        {
+          "path": "apps/office/src/formula/inc/core_resource.ts",
+          "marker": "DCOUNTA"
+        },
+        {
+          "path": "apps/office/src/sc/source/filter/xml/ods-database-ranges.test.ts",
+          "marker": "testDatabaseRangesODS"
         }
       ],
       "upstream": [
@@ -63,6 +72,10 @@
         {
           "path": "formula/inc/core_resource.hrc",
           "marker": "RID_STRLIST_FUNCTION_NAMES_ENGLISH_PODF"
+        },
+        {
+          "path": "vendor/libreoffice-reference/formula/inc/core_resource.hrc",
+          "marker": "\"DCOUNTA\""
         }
       ]
     }

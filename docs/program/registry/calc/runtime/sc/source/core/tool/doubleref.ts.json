@@ -1,0 +1,37 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sc/source/core/tool/doubleref.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "calc",
+    "subsystem": "range-formula-execution",
+    "capabilityIds": [
+      "CAP-df5573ca-0907-47d8-a385-6cd7af847f1d"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/sc/source/core/tool/doubleref.ts",
+        "apps/office/src/sc/source/filter/xml/ods-database-ranges.test.ts",
+        "vendor/libreoffice-reference/sc/source/core/tool/doubleref.cxx"
+      ],
+      "justification": "Binds worksheet database fields and reads native StarOffice and Excel criteria in order. Matrix and external database operands and realm-specific ICU pattern services are outside the represented worksheet count path.",
+      "knownViolations": [],
+      "localSymbols": [
+        "ScDBInternalRange"
+      ],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": "sc/source/core/tool/doubleref.cxx",
+      "upstreamSymbols": [
+        "ScDBInternalRange::createQueryParam",
+        "lcl_createStarQuery",
+        "lcl_createExcelQuery"
+      ]
+    }
+  }
+}

@@ -423,6 +423,10 @@ export class ScCompiler extends FormulaCompiler {
       );
     if (token instanceof ScSingleRefToken && token.GetOpCode() === OpCode.ocColRowName)
       return this.CreateStringFromLabel(token);
+    if (token instanceof FormulaIndexToken && token.GetOpCode() === OpCode.ocDBArea)
+      return (
+        this.rDoc.GetDBCollection().getNamedDBs().findByIndex(token.GetIndex())?.GetName() ?? ""
+      );
     if (!(token instanceof FormulaIndexToken) || token.GetOpCode() !== OpCode.ocName)
       return super.CreateStringFromToken(token);
     const tab = token.GetSheet();
@@ -462,6 +466,20 @@ export class ScCompiler extends FormulaCompiler {
     if (typeof expanded !== "number") return expanded;
     this.SetError(expanded);
     return undefined;
+  }
+
+  /** Expands a global database name to its absolute native range. @param token - Source name index. @returns Range reference. */
+  protected override HandleDbData(token: FormulaToken): FormulaToken | undefined {
+    if (!(token instanceof FormulaIndexToken)) return undefined;
+    const data = this.rDoc.GetDBCollection().getNamedDBs().findByIndex(token.GetIndex());
+    if (!data) {
+      this.SetError(FormulaError.NoName);
+      return undefined;
+    }
+    const reference = new ScComplexRefData();
+    reference.InitFlags();
+    reference.SetRange(this.rDoc.GetSheetLimits(), data.GetArea(), this.aPos);
+    return new ScDoubleRefToken(this.rDoc.GetSheetLimits(), reference);
   }
 
   /** Expands the actual name at RPN compilation time, preserving source order. @param token - Compiled name index. @returns Name expansion. */
@@ -847,6 +865,16 @@ export class ScCompiler extends FormulaCompiler {
               new FormulaIndexToken(OpCode.ocName, range.GetIndex(), local ? this.aPos.Tab() : -1),
             )
           ) {
+            this.SetError(FormulaError.CodeOverflow);
+            break;
+          }
+          index += identifier[0].length;
+          last = OpCode.ocPush;
+          continue;
+        }
+        const database = this.rDoc.GetDBCollection().getNamedDBs().findByUpperName(key);
+        if (database) {
+          if (!array.AddToken(new FormulaIndexToken(OpCode.ocDBArea, database.GetIndex(), -1))) {
             this.SetError(FormulaError.CodeOverflow);
             break;
           }

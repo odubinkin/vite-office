@@ -14,30 +14,24 @@ import { ATTR_MERGE_FLAG } from "../../../inc/scitems";
 import { readOdsDocument, writeOdsDocument } from "./xmlwrap";
 
 it("testDatabaseRangesODS preserves database ranges and filtered row runs", /** Ports the native range ownership and filtered geometry assertions. @returns Completion. */ async () => {
-  const fixture = await DocumentArchive.open(
+  const source = await readOdsDocument(
     new Uint8Array(
       readFileSync("../../vendor/libreoffice-reference/sc/qa/unit/data/ods/database.ods"),
     ),
   );
-  const contentXml = await fixture.readTextEntry("content.xml");
-  const stylesXml = await fixture.readTextEntry("styles.xml");
-  const mimetype = await fixture.readTextEntry("mimetype");
-  const manifest = await fixture.readTextEntry("META-INF/manifest.xml");
-  assert(contentXml && stylesXml && mimetype && manifest);
-  const source = await readOdsDocument({
-    format: "xml",
-    files: {
-      mimetype,
-      "META-INF/manifest.xml": manifest,
-      "content.xml": contentXml.replace(/ table:formula="of:=DCOUNT\([^"]*"/gu, ""),
-      "styles.xml": stylesXml,
-    },
-  });
   const transferred = decodeCalcDocument(structuredClone(encodeCalcDocument(source)));
   const bytes = await writeOdsDocument(transferred);
   const reopened = await readOdsDocument(bytes);
   try {
     for (const document of [source, transferred, reopened]) {
+      document.CalcAll();
+      for (const [column, value] of [
+        [0, 4],
+        [1, 2],
+        [3, 4],
+        [4, 2],
+      ] as const)
+        expect(document.GetValue(new ScAddress(column, 10, 1))).toBe(value);
       const database = document.GetDBCollection().getNamedDBs().findByUpperName("DATABASE1");
       assert(database);
       expect(database.GetArea().GetVars()).toEqual([0, 0, 1, 2, 6, 1]);
@@ -73,6 +67,7 @@ it("testDatabaseRangesODS preserves database ranges and filtered row runs", /** 
       '<table:database-ranges><table:database-range table:name="database1"',
     );
     expect(content).toContain('table:name="__Anonymous_Sheet_DB__0"');
+    expect(content).toContain('table:formula="of:=DCOUNT(database1;');
   } finally {
     source.Dispose();
     transferred.Dispose();

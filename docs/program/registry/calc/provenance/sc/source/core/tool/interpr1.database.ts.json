@@ -1,0 +1,60 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "status": "mapped",
+    "localPath": "apps/office/src/sc/source/core/tool/interpr1.database.ts",
+    "upstreamPath": "sc/source/core/tool/interpr1.cxx",
+    "localSymbols": [
+      "InterpretDatabaseCount",
+      "ScDBCount"
+    ],
+    "upstreamSymbols": [
+      "ScInterpreter::GetDBParams",
+      "ScInterpreter::ScDBCount",
+      "ScInterpreter::ScDBCount2"
+    ],
+    "preservedResponsibilities": [
+      "Resolves worksheet database operands and counts numeric or nonempty matched cells, including the legacy missing field."
+    ],
+    "omittedResponsibilities": [
+      "Matrix and external database operands and realm-specific ICU pattern services are outside the represented worksheet count path."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sc/source/core/tool/interpr1.database.ts",
+          "marker": "InterpretDatabaseCount"
+        },
+        {
+          "path": "apps/office/src/sc/source/core/tool/interpr1.database.ts",
+          "marker": "ScDBCount"
+        },
+        {
+          "path": "apps/office/src/sc/source/filter/xml/ods-database-ranges.test.ts",
+          "marker": "testDatabaseRangesODS"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sc/source/core/tool/interpr1.cxx",
+          "marker": "ScInterpreter::GetDBParams"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/source/core/tool/interpr1.cxx",
+          "marker": "ScInterpreter::ScDBCount"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/source/core/tool/interpr1.cxx",
+          "marker": "ScInterpreter::ScDBCount2"
+        }
+      ]
+    },
+    "filenameDivergence": {
+      "localPath": "apps/office/src/sc/source/core/tool/interpr1.database.ts",
+      "stackNecessity": "responsibility-split",
+      "rationale": "Keeps worksheet database operand decoding and counting from interpr1.cxx together while the original interpreter dispatcher retains ownership of stack and result state."
+    }
+  }
+}
