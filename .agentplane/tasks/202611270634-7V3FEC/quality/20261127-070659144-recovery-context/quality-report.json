@@ -1,0 +1,21 @@
+{
+  "schema_version": 1,
+  "task_id": "202611270634-7V3FEC",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-11-27T07:06:59.144Z",
+  "verdict": "pass",
+  "summary": "Native number-format catalog controls and ODS comment recovery verified",
+  "evaluated_sha": "f6f82c8c1a2fec4afaebc5d310d7fdfadafe6b7c",
+  "blueprint_digest": "c7ef374a4fca65dcadca970cb388c4e7c7a5422d44bc56de358b1a97c5169a46",
+  "findings": [
+    "The catalog lifecycle, typed output, rollback and comment round trip pass focused Calc and shared tests."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202611270634-7V3FEC/README.md",
+    "output/calc-next/7V3FEC-tests-exact.log"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": []
+}
