@@ -1,10 +1,11 @@
 ---
 id: "202611271105-Z56R9M"
 title: "Fit Writer hyphenation controls to the dialog content width"
-status: "DOING"
+result_summary: "Wrapped the hyphenation controls based on the panel width."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 7
+revision: 8
 origin:
   system: "manual"
 depends_on: []
@@ -40,11 +41,16 @@ quality_review:
     - "df6c7f0d2206480900e5b441fa9a9a5a0d2f713f"
   findings:
     - "The grid wraps fields by actual panel width while preserving the native hyphenation bindings."
-commit: null
+commit:
+  hash: "df6c7f0d2206480900e5b441fa9a9a5a0d2f713f"
+  message: "🧩 Z56R9M writer: size hyphenation controls from available panel width"
 comments:
   -
     author: "CODER"
     body: "Start: fix the reproduced compact Text Flow layout regression."
+  -
+    author: "CODER"
+    body: "Verified: Writer dialog layout passed on all three original viewport sizes."
 events:
   -
     type: "status"
@@ -59,8 +65,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "All three production Chromium dialog sizes, focused lint, formatting and diff checks passed."
+  -
+    type: "status"
+    at: "2026-11-27T11:31:29.290Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: Writer dialog layout passed on all three original viewport sizes."
 doc_version: 3
-doc_updated_at: "2026-11-27T11:31:00.932Z"
+doc_updated_at: "2026-11-27T11:31:29.290Z"
 doc_updated_by: "CODER"
 description: "Fix the reproduced Text Flow label overlap at 640 by 360 during the ODF regression checkpoint. Preserve native control bindings and verify the existing three viewport cases."
 sections:
