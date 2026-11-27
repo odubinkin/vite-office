@@ -1,0 +1,22 @@
+{
+  "schema_version": 1,
+  "task_id": "202611271402-8ZWWC2",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-11-27T15:11:04.043Z",
+  "verdict": "pass",
+  "summary": "The original ruby-position.odt retains its inter-character ruby position through the Worker and ODT reopen. The original tdf168817 fixture retains the Unicode hyperlink inside the ruby base.",
+  "evaluated_sha": "2eda752120c585c1a2e5ca7443f432a23470ad86",
+  "blueprint_digest": "9da2759dd9084e3f93ea0921d0e5043d7ec3b82d9b4b24d7e76ad510c46e822a",
+  "findings": [
+    "WRITER-768 records the accepted incompatible Any ruby values. Existing character, nested hyperlink, ODT and Worker tests pass."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202611271402-8ZWWC2/README.md",
+    "/Users/odubinkin/Projects/vite-office/output/playwright/8ZWWC2/verification.md",
+    "2eda752120c585c1a2e5ca7443f432a23470ad86"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": []
+}
