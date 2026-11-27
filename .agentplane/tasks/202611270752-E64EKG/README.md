@@ -1,10 +1,11 @@
 ---
 id: "202611270752-E64EKG"
 title: "Preserve Calc ODS database-range formulas and counting semantics"
-status: "DOING"
+result_summary: "Calc preserves named database formulas and recalculates the original worksheet DCOUNT cases through ODS and Worker."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 7
+revision: 8
 origin:
   system: "manual"
 depends_on: []
@@ -41,11 +42,16 @@ quality_review:
     - "57a41891e40985c4e037bbe7d1e0a72e89851f66"
   findings:
     - "The complete native fixture retains formula references and all four original results. Implementation: 57a41891e40985c4e037bbe7d1e0a72e89851f66."
-commit: null
+commit:
+  hash: "57a41891e40985c4e037bbe7d1e0a72e89851f66"
+  message: "🧩 E64EKG calc: preserve ODS database range formulas and counts"
 comments:
   -
     author: "CODER"
     body: "Start: Port worksheet database-range formula binding and counting."
+  -
+    author: "CODER"
+    body: "Verified: 48 focused Calc cases and static checks pass. Implementation: 57a41891e40985c4e037bbe7d1e0a72e89851f66."
 events:
   -
     type: "status"
@@ -60,8 +66,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "48 focused cases pass, including unmodified database.ods recalculation, Worker and ODS reopen. Static checks pass. See output/playwright/E64EKG/verification.md."
+  -
+    type: "status"
+    at: "2026-11-27T08:42:31.009Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: 48 focused Calc cases and static checks pass. Implementation: 57a41891e40985c4e037bbe7d1e0a72e89851f66."
 doc_version: 3
-doc_updated_at: "2026-11-27T08:41:20.922Z"
+doc_updated_at: "2026-11-27T08:42:31.012Z"
 doc_updated_by: "CODER"
 description: "Port native named database range token binding, worksheet data/criteria range handling, DCOUNT and DCOUNTA through Calc formula compilation and evaluation. Restore the full pinned database.ods assertions, verify Worker and ODS reopen, and then run the full ten-task checkpoint."
 sections:
