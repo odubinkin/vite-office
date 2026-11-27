@@ -11,7 +11,8 @@
     "rationale": "Projects applicable Navigator context entries in pinned resource order, connecting local handlers, radio preferences and disabled action state.",
     "responsibilities": [
       "Projects applicable Navigator context entries in pinned resource order, connecting local handlers, radio preferences and disabled action state.",
-      "Projects the hyperlink and comment tracking, edit and delete menu entries admitted by the selected category or row."
+      "Projects the hyperlink and comment tracking, edit and delete menu entries admitted by the selected category or row.",
+      "Projects the native per-category Display Alphabetically checkbox and omits contextual chapter moves while the outline is sorted."
     ],
     "evidence": {
       "local": [
@@ -30,6 +31,14 @@
         {
           "path": "apps/office/src/sw/browser/presentation/WriterNavigatorFields.test.tsx",
           "marker": "updates the collapsed comments category for the pinned tdf137274 sequence"
+        },
+        {
+          "path": "apps/office/src/sw/browser/presentation/writer-navigator-menu.ts",
+          "marker": "display-alphabetically"
+        },
+        {
+          "path": "apps/office/src/sw/browser/presentation/WriterNavigator.test.tsx",
+          "marker": "sorts only the chosen category, flattening headings without changing their document order"
         }
       ],
       "upstream": [
@@ -52,6 +61,14 @@
         {
           "path": "vendor/libreoffice-reference/sw/uiconfig/swriter/ui/navigatorcontextmenu.ui",
           "marker": "id=\"deletecomment\""
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/uiconfig/swriter/ui/navigatorcontextmenu.ui",
+          "marker": "navigatorcontextmenu|STR_SORT_ALPHABETICALLY"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/uibase/utlui/content.cxx",
+          "marker": "if (!pType->IsAlphabeticSort())"
         }
       ]
     },

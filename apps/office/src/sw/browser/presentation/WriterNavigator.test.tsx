@@ -326,6 +326,7 @@ it("groups selected outline chapters and restores the selected heading identitie
     expect(chapterOrder()).toEqual(["Third", "First", "Child", "Second"]);
   } finally {
     cleanup();
+    session.view.GetNavigator().SetRootType();
     session.Close();
   }
 });
@@ -833,6 +834,67 @@ it("runs the native Navigator context actions for outline branches and bookmark 
   } finally {
     tree.SetOutlineLevel(previousLevel);
     cleanup();
+    session.Close();
+  }
+});
+
+it("sorts only the chosen category, flattening headings without changing their document order", /** Uses the native context checkbox and checks the displayed order, focus and heading actions. @returns Nothing. */ () => {
+  const session = createWriterDocumentSession();
+  const document = session.view.GetWrtShell().GetDoc();
+  const first = document.paragraphs[0];
+  assert(first);
+  const child = document.nodes.MakeTextNode();
+  const last = document.nodes.MakeTextNode();
+  for (const [paragraph, title, depth] of [
+    [first, "Chapter 10", 1],
+    [child, "Chapter 3", 2],
+    [last, "Chapter 2", 1],
+  ] as const) {
+    paragraph.SetText(title);
+    paragraph.SetAttrOutlineLevel(depth);
+  }
+  const tree = session.view.GetNavigator();
+  const marks = document.GetIDocumentMarkAccess();
+  marks.MakeMark(first, 0, "Bookmark 10");
+  marks.MakeMark(last, 0, "Bookmark 2");
+  /** Reads and selects the category's native sort checkbox. @param category - Tree category. @param checked - Expected sort state. @returns Nothing. */
+  function toggleSort(category: HTMLElement, checked: boolean): void {
+    fireEvent.contextMenu(category);
+    const choice = screen.getByRole("menuitemcheckbox", { name: "Display Alphabetically" });
+    expect(choice).toHaveAttribute("aria-checked", String(checked));
+    fireEvent.click(choice);
+  }
+  try {
+    session.view.ToggleNavigator();
+    render(<WriterWorkbench view={session.view} isActive />);
+    const navigator = within(screen.getByRole("dialog", { name: "Navigator" }));
+    const category = navigator.getByRole("treeitem", { name: "Headings" });
+    const nested = navigator.getByRole("treeitem", { name: "Chapter 3" });
+    expect(nested).toHaveAttribute("aria-level", "3");
+    toggleSort(category, false);
+    expect(category).toHaveFocus();
+    expect(navigator.getAllByRole("treeitem", { name: /^Chapter /u })).toEqual([
+      navigator.getByRole("treeitem", { name: "Chapter 2" }),
+      nested,
+      navigator.getByRole("treeitem", { name: "Chapter 10" }),
+    ]);
+    expect(nested).toHaveAttribute("aria-level", "2");
+    expect(navigator.getAllByRole("treeitem", { name: /^Bookmark [0-9]/u })).toEqual([
+      navigator.getByRole("treeitem", { name: "Bookmark 10" }),
+      navigator.getByRole("treeitem", { name: "Bookmark 2" }),
+    ]);
+    fireEvent.contextMenu(nested);
+    expect(screen.queryByRole("menuitem", { name: "Move Heading Up" })).toBeNull();
+    expect(screen.queryByRole("menuitemcheckbox", { name: "Display Alphabetically" })).toBeNull();
+    fireEvent.keyDown(screen.getByRole("menu", { name: "Navigator context menu" }), {
+      key: "Escape",
+    });
+    toggleSort(category, true);
+    expect(nested).toHaveAttribute("aria-level", "3");
+    expect(document.paragraphs).toEqual([first, child, last]);
+  } finally {
+    cleanup();
+    tree.SetAlphabeticSort("outline", false);
     session.Close();
   }
 });

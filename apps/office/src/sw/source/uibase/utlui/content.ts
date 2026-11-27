@@ -11,10 +11,15 @@ import { SwTextNode } from "../../core/txtnode/ndtxt";
 import type { SwPostItMgr } from "../docvw/PostItMgr";
 import type { SwWrtShell } from "../wrtsh/wrtsh1";
 import { GetURLFieldContents, GetURLFieldContentName } from "./content-hyperlink";
-import { OutlineTrackingMode, SwNavigationConfig, type TrackedContentType } from "./navicfg";
+import {
+  OutlineTrackingMode,
+  SwNavigationConfig,
+  type NavigatorContentType,
+  type TrackedContentType,
+} from "./navicfg";
 
 /** Original content families with connected Writer model ownership. */
-export type SwNavigatorContentType = "outline" | TrackedContentType;
+export type SwNavigatorContentType = NavigatorContentType;
 
 /** Command identifiers from the native Navigator heading toolbar. */
 export type SwNavigatorHeadingCommand = "promote" | "demote" | "chapterup" | "chapterdown";
@@ -30,6 +35,7 @@ export interface SwNavigatorContent {
 export interface SwNavigatorContentGroup {
   readonly type: SwNavigatorContentType;
   readonly contents: readonly SwNavigatorContent[];
+  readonly alphabetical: boolean;
 }
 
 /** Internal target borrows its registered owner until the next snapshot. */
@@ -42,6 +48,7 @@ interface SwNavigatorTarget extends SwNavigatorContent {
 }
 
 const contentTypes = ["outline", "table", "bookmark", "hyperlink", "comment"] as const;
+const naturalNameOrder = new Intl.Collator(undefined, { numeric: true });
 
 /** Builds the native content tree from the active document and moves its real editing cursor. */
 export class SwContentTree {
@@ -49,17 +56,27 @@ export class SwContentTree {
   private nextIdentity = 1;
   private selectedBookmarkName = "";
   private lastGotoOutline: number | undefined;
+  private rootType: SwNavigatorContentType | undefined;
+  private readonly sortedCategories: Set<SwNavigatorContentType>;
   private outlineLevel: number;
   private outlineTracking: OutlineTrackingMode;
   private readonly trackContentType: Record<TrackedContentType, boolean>;
 
-  /** Borrows the native editing and page-layout owners. @param shell - Persistent Writer shell. @param layout - Current physical page-frame source. @param config - Navigator preferences. @param postIts - Active annotation manager. @returns Navigator model. */
+  /** Borrows the native editing and page-layout owners. @param shell - Persistent Writer shell. @param layout - Current physical page-frame source. @param config - Navigator preferences. @param postIts - Active annotation manager. @param displayChanged - Notifies the view to refresh the Navigator projection. @returns Navigator model. */
   constructor(
     private readonly shell: SwWrtShell,
     private readonly layout: SwRootFrame,
     private readonly config = new SwNavigationConfig(),
     private readonly postIts?: SwPostItMgr,
+    private readonly displayChanged?: () => void,
   ) {
+    this.rootType = config.GetRootType();
+    this.sortedCategories = new Set(
+      contentTypes.filter(
+        /** Reads the native current preference for each represented category. @param type - Original content family. @returns Whether its sort bit is set. */
+        (type) => config.IsAlphabeticSort(type),
+      ),
+    );
     this.outlineLevel = config.GetOutlineLevel();
     this.outlineTracking = config.GetOutlineTracking();
     this.trackContentType = {
@@ -70,7 +87,7 @@ export class SwContentTree {
     };
   }
 
-  /** Lists represented content in native category and document order. @returns Content tree roots. */
+  /** Lists represented content in native category and configured member order. @returns Content tree roots. */
   public GetContents(): readonly SwNavigatorContentGroup[] {
     const targets = this.GetTargets().filter(
       /** Limits outline members to the visible depth. @param target - Original content target. @returns Whether the entry is represented. */
@@ -78,13 +95,19 @@ export class SwContentTree {
     );
     return contentTypes.map(
       /** Builds one native content root. @param type - Content family. @returns Named group. */
-      (type) => ({
-        type,
-        contents: targets.filter(
+      (type) => {
+        const contents = targets.filter(
           /** Admits only this native content kind. @param target - Document entry. @returns Whether to include it. */
           (target) => target.type === type,
-        ),
-      }),
+        );
+        const alphabetical = this.IsAlphabeticSort(type);
+        if (alphabetical)
+          contents.sort(
+            /** Orders native names naturally, with document order retained for ties. @param a - First content row. @param b - Second content row. @returns Name comparison. */
+            (a, b) => naturalNameOrder.compare(a.title, b.title),
+          );
+        return { type, contents, alphabetical };
+      },
     );
   }
 
@@ -163,6 +186,33 @@ export class SwContentTree {
       /** Matches the borrowed native annotation owner. @param entry - Current entry. @returns Whether it is requested. */
       (entry) => entry.type === "comment" && entry.id === id,
     );
+  }
+
+  /** Returns the displayed content root. @returns A single category or undefined when showing all categories. */
+  public GetRootType(): SwNavigatorContentType | undefined {
+    return this.rootType;
+  }
+
+  /** Persists and displays the current content root. @param type - Category or undefined when showing all categories. @returns Nothing. */
+  public SetRootType(type?: SwNavigatorContentType): void {
+    if (this.rootType === type) return;
+    this.rootType = type;
+    this.config.SetRootType(type);
+    this.displayChanged?.();
+  }
+
+  /** Reads the category's current display order. @param type - Content category. @returns Whether it is sorted by name. */
+  public IsAlphabeticSort(type: SwNavigatorContentType): boolean {
+    return this.sortedCategories.has(type);
+  }
+
+  /** Updates the category display order and its corresponding persisted bit. @param type - Content category. @param enabled - Whether to display alphabetically. @returns Nothing. */
+  public SetAlphabeticSort(type: SwNavigatorContentType, enabled: boolean): void {
+    if (this.IsAlphabeticSort(type) === enabled) return;
+    if (enabled) this.sortedCategories.add(type);
+    else this.sortedCategories.delete(type);
+    this.config.SetAlphabeticSort(type, enabled);
+    this.displayChanged?.();
   }
 
   /** Reads the original maximum heading depth. @returns Outline level. */

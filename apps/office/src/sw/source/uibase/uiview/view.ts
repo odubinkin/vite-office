@@ -114,6 +114,8 @@ export class SwView {
       this.layout,
       module.GetNavigationConfig(navigatorConfiguration),
       this.postItMgr,
+      /** Republishes the Navigator projection after a display change. @returns Nothing. */
+      () => this.Invalidate("view"),
     );
     this.annotationShell = new SwAnnotationShell(this.postItMgr, this.wrtShell);
     this.search = new SwViewSearch(this.wrtShell, searchOptions, createRegex, this.postItMgr);

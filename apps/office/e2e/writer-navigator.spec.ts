@@ -395,3 +395,49 @@ test("Writer Navigator edits an anchored hyperlink and opens and removes a live 
   await expect(noteRow).toHaveCount(0);
   await expect(comment).toHaveCount(0);
 });
+
+test("Writer Navigator remembers the selected category and its natural display order", /** Verifies the native root and sort controls across a browser reload. @param fixtures - Browser test inputs. @param fixtures.page - Writer page. @returns Completion. */ async ({
+  page,
+}) => {
+  await page.goto("/writer", { waitUntil: "domcontentloaded" });
+  const editor = page.getByRole("textbox", { name: "Writer document text" });
+  const paragraphs = page.locator("[data-writer-paragraph-id]");
+  const formatting = page.getByRole("toolbar", { name: "Writer formatting toolbar" });
+  const style = formatting.getByRole("combobox", { name: "Paragraph style", exact: true });
+  await editor.click();
+  for (const [index, title] of ["Heading 10", "Heading 2"].entries()) {
+    if (index > 0) await page.keyboard.press("Enter");
+    await page.keyboard.insertText(title);
+    await formatting.getByRole("button", { name: "Show Paragraph style", exact: true }).click();
+    await page
+      .locator(`id=${await style.getAttribute("aria-controls")}`)
+      .getByRole("option", { name: "Heading 1", exact: true })
+      .click();
+  }
+  await page.keyboard.press("F5");
+  const navigator = page.getByRole("dialog", { name: "Navigator", exact: true });
+  const headings = navigator.getByRole("treeitem", { name: "Headings", exact: true });
+  const root = navigator.getByRole("button", { name: "Content Navigation View" });
+  const sort = page.getByRole("menuitemcheckbox", { name: "Display Alphabetically" });
+  await headings.click({ button: "right" });
+  await expect(sort).not.toBeChecked();
+  await sort.click();
+  await expect(navigator.getByRole("treeitem", { name: /^Heading [0-9]/u })).toHaveText([
+    "Heading 2",
+    "Heading 10",
+  ]);
+  await expect(paragraphs).toHaveText(["Heading 10", "Heading 2"]);
+  await root.click();
+  await expect(root).toHaveAttribute("aria-pressed", "true");
+  await expect(navigator.getByRole("treeitem", { name: "Tables", exact: true })).toHaveCount(0);
+  await page.reload({ waitUntil: "domcontentloaded" });
+  await editor.click();
+  await page.keyboard.press("F5");
+  await expect(root).toHaveAttribute("aria-pressed", "true");
+  await expect(navigator.getByRole("treeitem", { name: "Tables", exact: true })).toHaveCount(0);
+  await headings.click({ button: "right" });
+  await expect(sort).toBeChecked();
+  await sort.press("Escape");
+  await root.click();
+  await expect(navigator.getByRole("treeitem", { name: "Tables", exact: true })).toBeVisible();
+});

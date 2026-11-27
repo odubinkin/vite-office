@@ -26,9 +26,14 @@
         "vendor/libreoffice-reference/officecfg/registry/schema/org/openoffice/Office/Writer.xcs#oor:name=\"OutlineLevel\"",
         "apps/office/src/sw/source/uibase/utlui/navicfg.ts#HyperlinkTracking",
         "vendor/libreoffice-reference/officecfg/registry/schema/org/openoffice/Office/Writer.xcs#oor:name=\"HyperlinkTracking\"",
-        "vendor/libreoffice-reference/officecfg/registry/schema/org/openoffice/Office/Writer.xcs#oor:name=\"CommentTracking\""
+        "vendor/libreoffice-reference/officecfg/registry/schema/org/openoffice/Office/Writer.xcs#oor:name=\"CommentTracking\"",
+        "apps/office/src/sw/source/uibase/utlui/navicfg.ts#GetRootType",
+        "apps/office/src/sw/browser/storage/writer-navigator-configuration-store.test.ts#persists the native root ID and toggles sort bits independently",
+        "vendor/libreoffice-reference/officecfg/registry/schema/org/openoffice/Office/Writer.xcs#oor:name=\"RootType\"",
+        "vendor/libreoffice-reference/officecfg/registry/schema/org/openoffice/Office/Writer.xcs#oor:name=\"SortAlphabeticallyBlock\"",
+        "vendor/libreoffice-reference/sw/source/uibase/inc/swcont.hxx#enum class ContentTypeId"
       ],
-      "justification": "Loads and updates the native outline mode and content-type tracking flags with the Writer Navigator configuration defaults. Restores and stores the original OutlineLevel property, using the native ten-level default. Reads and persists native HyperlinkTracking and CommentTracking flags with default true.",
+      "justification": "Loads and updates the native outline mode and content-type tracking flags with the Writer Navigator configuration defaults. Restores and stores the original OutlineLevel property, using the native ten-level default. Reads and persists native HyperlinkTracking and CommentTracking flags with default true. Persists the original RootType ordinal and per-category natural sorting bit without changing other category bits.",
       "knownViolations": [],
       "localSymbols": [
         "SwNavigationConfig"

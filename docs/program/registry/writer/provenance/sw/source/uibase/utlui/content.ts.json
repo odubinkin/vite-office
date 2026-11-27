@@ -22,7 +22,8 @@
       "Tracks the live table, outline and bookmark indexes in the native order for the current content root.",
       "Uses source outline tracking mode and content-type flags when choosing the next tracked entry.",
       "Applies the native configured outline depth at the Navigator content list.",
-      "Lists the attached hyperlink and annotation owners in native order, and routes their address-based navigation and cursor tracking."
+      "Lists the attached hyperlink and annotation owners in native order, and routes their address-based navigation and cursor tracking.",
+      "Retains the native category root and updates only the selected category display order through the original sort state."
     ],
     "omittedResponsibilities": [
       "The represented tree serves the active document and the three connected native content families."
@@ -60,6 +61,14 @@
         {
           "path": "apps/office/src/sw/browser/presentation/WriterNavigatorFields.test.tsx",
           "marker": "orders the pinned tdf134960 hyperlinks by document and frame-anchor position"
+        },
+        {
+          "path": "apps/office/src/sw/source/uibase/utlui/content.ts",
+          "marker": "SetAlphabeticSort"
+        },
+        {
+          "path": "apps/office/src/sw/browser/presentation/WriterNavigator.test.tsx",
+          "marker": "sorts only the chosen category, flattening headings without changing their document order"
         }
       ],
       "upstream": [
@@ -98,6 +107,18 @@
         {
           "path": "vendor/libreoffice-reference/sw/source/uibase/utlui/content.cxx",
           "marker": "SwContentTree::GotoContent"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/uibase/utlui/content.cxx",
+          "marker": "SwContentTree::ToggleToRoot"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/uibase/utlui/content.cxx",
+          "marker": "SetSortAlphabeticallyBlock(nBlock ^ nMask)"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/uibase/inc/swcont.hxx",
+          "marker": "vcl::NaturalSortCompare"
         }
       ]
     }

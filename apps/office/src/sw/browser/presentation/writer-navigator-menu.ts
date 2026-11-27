@@ -76,6 +76,7 @@ export function getWriterNavigatorMenuItems(
   }: NavigatorMenuOptions,
 ): readonly PopupMenuItemPlacement[] {
   const items: PopupMenuItemPlacement[] = [];
+  const alphabetical = tree.IsAlphabeticSort(type);
   if (allExpanded !== undefined) {
     items.push(
       {
@@ -99,7 +100,7 @@ export function getWriterNavigatorMenuItems(
       semantics: "action",
       activate: goTo,
     });
-    if (type === "outline")
+    if (type === "outline" && !alphabetical)
       for (const [id, name, fallback] of headingActions)
         items.push({
           kind: "local",
@@ -181,6 +182,19 @@ export function getWriterNavigatorMenuItems(
         tree.SetContentTypeTracking(type, !checked),
     });
   }
+  if (group)
+    items.push(
+      {
+        kind: "local",
+        id: "sort",
+        label: label("display-alphabetically", "Display Alphabetically"),
+        semantics: "check",
+        checked: alphabetical,
+        activate: /** Changes the native display order for this category. @returns Nothing. */ () =>
+          tree.SetAlphabeticSort(type, !alphabetical),
+      },
+      { kind: "separator" },
+    );
   if (type === "outline")
     items.push({
       kind: "submenu",

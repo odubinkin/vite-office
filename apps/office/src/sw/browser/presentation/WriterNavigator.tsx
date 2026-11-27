@@ -73,7 +73,7 @@ function getRows(
   label: (key: string, fallback: string) => string,
 ): NavigatorRow[] {
   const rows: NavigatorRow[] = [];
-  for (const { type, contents: entries } of groups) {
+  for (const { type, contents: entries, alphabetical } of groups) {
     if (root && root !== type) continue;
     const group: NavigatorRow = {
       type,
@@ -91,7 +91,7 @@ function getRows(
     entries.forEach(
       /** Keeps each existing outline under its closest original heading. @param entry - Current content entry. @param index - Position in the filtered root. @returns Nothing. */
       (entry, index) => {
-        const sourceLevel = entry.level ?? 1;
+        const sourceLevel = alphabetical ? 1 : (entry.level ?? 1);
         while (ancestors.length > 1 && (ancestors.at(-1)?.sourceLevel ?? 0) >= sourceLevel)
           ancestors.pop();
         const parent = ancestors.at(-1) ?? { row: group, sourceLevel: 0, hidden: false };
@@ -102,7 +102,7 @@ function getRows(
           title: entry.title || (type === "outline" ? label("empty-heading", "Empty heading") : ""),
           parent: parent.row.id,
           level: parent.row.level + 1,
-          children: (entries[index + 1]?.level ?? 0) > sourceLevel,
+          children: !alphabetical && (entries[index + 1]?.level ?? 0) > sourceLevel,
         };
         const hidden = parent.hidden || collapsed.has(parent.row.id);
         if (!hidden) rows.push(row);
@@ -161,7 +161,10 @@ export function WriterNavigator({
     () => new Set(),
   );
   const [selected, setSelected] = useState<string | null>("");
-  const [extended, setExtended] = useState<readonly string[]>([]);
+  const [extended, setExtended] = useState<readonly string[]>(
+    /** Starts an already rooted outline at the category row. @returns Initial multi-selection. */
+    () => (tree.GetRootType() === "outline" ? ["outline"] : []),
+  );
   const selectionAnchor = useRef("");
   const trackedScroll = useRef<string | undefined>(undefined);
   const headingCommandActive = useRef(false);
@@ -169,7 +172,7 @@ export function WriterNavigator({
     /** Restores the native configuration before building the tree. @returns Initial outline depth. */
     () => tree.GetOutlineLevel(),
   );
-  const [root, setRoot] = useState<SwNavigatorContentType>();
+  const root = tree.GetRootType();
   const [pageDraft, setPageDraft] = useState<{ origin: number; value: string }>();
   const [popup, setPopup] = useState<
     | {
@@ -415,14 +418,14 @@ export function WriterNavigator({
   /** Switches to or from native content root navigation with its matching selection mode. @returns Nothing. */
   function toggleRoot(): void {
     if (root) {
-      setRoot(undefined);
+      tree.SetRootType();
       setExtended([]);
       return;
     }
-    const entry = selectedRow?.id ?? "";
-    setRoot(selectedRow?.type ?? "outline");
-    selectionAnchor.current = entry;
-    setExtended(entry ? [entry] : []);
+    if (!selectedRow) return;
+    tree.SetRootType(selectedRow.type);
+    selectionAnchor.current = selectedRow.id;
+    setExtended([selectedRow.id]);
   }
 
   /** Applies the selected headings and reveals the retained native outline rows. @param command - Heading toolbar action. @param withChildren - Whether descendants move with their parent. @param selection - Heading identities when a native popup opened. @returns Nothing. */

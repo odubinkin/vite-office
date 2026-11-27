@@ -16,7 +16,8 @@
     "preservedResponsibilities": [
       "Loads and updates the native outline mode and content-type tracking flags with the Writer Navigator configuration defaults.",
       "Restores and stores the original OutlineLevel property, using the native ten-level default.",
-      "Reads and persists native HyperlinkTracking and CommentTracking flags with default true."
+      "Reads and persists native HyperlinkTracking and CommentTracking flags with default true.",
+      "Persists the original RootType ordinal and per-category natural sorting bit without changing other category bits."
     ],
     "omittedResponsibilities": [
       "Other Navigator settings and unrepresented content types are outside the connected tracking slice."
@@ -38,6 +39,14 @@
         {
           "path": "apps/office/src/sw/source/uibase/utlui/navicfg.ts",
           "marker": "HyperlinkTracking"
+        },
+        {
+          "path": "apps/office/src/sw/source/uibase/utlui/navicfg.ts",
+          "marker": "GetRootType"
+        },
+        {
+          "path": "apps/office/src/sw/browser/storage/writer-navigator-configuration-store.test.ts",
+          "marker": "persists the native root ID and toggles sort bits independently"
         }
       ],
       "upstream": [
@@ -64,6 +73,18 @@
         {
           "path": "vendor/libreoffice-reference/officecfg/registry/schema/org/openoffice/Office/Writer.xcs",
           "marker": "oor:name=\"CommentTracking\""
+        },
+        {
+          "path": "vendor/libreoffice-reference/officecfg/registry/schema/org/openoffice/Office/Writer.xcs",
+          "marker": "oor:name=\"RootType\""
+        },
+        {
+          "path": "vendor/libreoffice-reference/officecfg/registry/schema/org/openoffice/Office/Writer.xcs",
+          "marker": "oor:name=\"SortAlphabeticallyBlock\""
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/uibase/inc/swcont.hxx",
+          "marker": "enum class ContentTypeId"
         }
       ]
     }
