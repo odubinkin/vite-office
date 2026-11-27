@@ -1,3 +1,9 @@
+import {
+  SvXMLUnitConverter,
+  type ConfigurationProperties,
+} from "../../../../xmloff/source/core/xmluconv";
+import { ScCalcConfig } from "../../core/tool/calcconfig";
+import { ScDocumentConfiguration } from "../../ui/unoobj/confuno";
 /** @fileoverview Calc scalar,cell-font and row/column geometry import over shared fast XML contexts;advanced styles,device layout and objects remain unported. */
 import { SetLabelRanges, type ScMyLabelRange } from "./xmllabri";
 import type { ScMyImportValidation } from "./xmlcvali";
@@ -817,6 +823,27 @@ export class ScXMLImport extends SvXMLImport implements SvXMLImportRootFactory {
       this.options,
     );
   }
+  /** Applies represented native document settings before sheet styles and content. @param properties - Borrowed xmloff property vector. @returns Nothing. */
+  SetConfigurationSettings(properties: ConfigurationProperties): void {
+    SvXMLUnitConverter.convertPropertySet(
+      new ScDocumentConfiguration(this.document),
+      [...properties].reverse(),
+    );
+  }
+
+  /** Restores the historical combined reference syntax when the document omitted it. @returns Nothing. */
+  private SetStringRefSyntaxIfMissing(): void {
+    const current = this.document.GetCalcConfig();
+    if (current.mbHasStringRefSyntax) return;
+    const config = new ScCalcConfig(current);
+    try {
+      config.meStringRefAddressSyntax = FormulaGrammar.AddressConvention.CONV_A1_XL_A1;
+      this.document.SetCalcConfig(config);
+    } finally {
+      config.dispose();
+    }
+  }
+
   /** Parses directly into the real document with native normal recalculation disabled during import. @param xml - Content. @returns Nothing. */
   importContent(xml: string): void {
     if (this.document.GetTableCount()) throw new Error("ODS import requires a fresh document");
@@ -882,6 +909,7 @@ export class ScXMLImport extends SvXMLImport implements SvXMLImportRootFactory {
         }
       }
       this.docImport.finalize();
+      this.SetStringRefSyntaxIfMissing();
       this.FinalizeConditionalFormats();
       this.FinalizeValidations();
       for (const [tab, ranges] of this.recalcRows) {

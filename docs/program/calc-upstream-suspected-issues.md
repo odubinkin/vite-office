@@ -8264,3 +8264,15 @@ nested-subtotal check. For example, if A1 is 10 and A2 contains
 `=SUBTOTAL(9;A1)`, `=SUBTOTAL(9;A2)` reads 10 while
 `=SUBTOTAL(9;A2:A2)` excludes A2. The represented aggregate paths keep
 the two native branches distinct.
+### CALC-863 — An omitted SyntaxStringRef can become an explicit setting on re-export
+
+The ODS content importer assigns the combined Calc A1 and Excel A1 convention
+when the document has no explicit string-reference setting. It changes the
+address convention directly and leaves the explicit-setting flag clear.
+The configuration exporter writes the convention anyway because it differs
+from the native Calc A1 convention. Opening that export invokes the UNO
+setter and marks the same convention explicit. Calc keeps the original
+import, export and explicit-setting behavior.
+
+- [Original ODS fallback](../../vendor/libreoffice-reference/sc/source/filter/xml/xmlimprt.cxx#L1339)
+- [Original configuration setter and getter](../../vendor/libreoffice-reference/sc/source/ui/unoobj/confuno.cxx#L384)

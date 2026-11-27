@@ -1,4 +1,5 @@
 /** @fileoverview Scalar ScXMLExport content path over actual row-major document cells and native ODFF serialization. */
+import { ScDocumentConfiguration } from "../../ui/unoobj/confuno";
 import { SfxUInt32Item } from "../../../../svl/source/items/intitem";
 import { ATTR_VALIDDATA } from "../../../inc/scitems";
 import { ScMyValidationsContainer } from "./XMLStylesExportHelper";
@@ -38,7 +39,10 @@ import { FormulaGrammar } from "../../../../formula/inc/grammar";
 import { ScRangeStringConverter } from "../../core/tool/rangeutl";
 import { FormulaError } from "../../../../formula/inc/errorcodes";
 import { ODF_NAMESPACES } from "../../../../xmloff/source/core/xmltoken";
-import { SvXMLUnitConverter } from "../../../../xmloff/source/core/xmluconv";
+import {
+  SvXMLUnitConverter,
+  type ConfigurationProperties,
+} from "../../../../xmloff/source/core/xmluconv";
 import { escapeXml, exportText } from "../../../../xmloff/source/text/txtparae";
 import { RangeDataType } from "../../core/tool/rangenam";
 import { writeNumberFormatAttributes } from "../../../../xmloff/source/style/numehelp";
@@ -134,6 +138,11 @@ export class ScXMLExport {
     this.textStyles = new CellTextStylePool(document, this.fontPool);
     this.pageStyles = exportPageStyles(document, this.pageFontPool);
   }
+  /** Returns the original configuration property vector for the settings stream. @returns Owned workbook properties. */
+  GetConfigurationSettings(): ConfigurationProperties {
+    return SvXMLUnitConverter.convertPropertySet(new ScDocumentConfiguration(this.document));
+  }
+
   /** Registers direct font-height pattern data in the automatic-style pool. @param pattern - Real cell pattern. @returns Style name or empty default. */
   private styleName(pattern: ScPatternAttr): string {
     const cached = this.patternNames.get(pattern);

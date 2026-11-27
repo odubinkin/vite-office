@@ -1,4 +1,8 @@
 /** @fileoverview Owns the bounded ODF-to-core length conversion responsibility from pinned xmloff/source/core/xmluconv.cxx. */
+import type { Any } from "../../../cppu/inc/com/sun/star/uno/Any";
+import { text, unicode } from "../../../i18nlangtag/source/isolang/isolang.tables";
+import { PropertyState } from "../../../udkapi/com/sun/star/beans/PropertyState";
+import { PropertyValue } from "../../../udkapi/com/sun/star/beans/PropertyValue";
 import { DateTime } from "../../../offapi/com/sun/star/util/DateTime";
 import { Date as ToolsDate, type DateConstReference } from "../../../tools/source/datetime/tdate";
 import { Time } from "../../../tools/source/datetime/ttime";
@@ -26,10 +30,59 @@ for (const [format, type] of standardNumberingTypes) standardNumberingFormats.se
 standardNumberingFormats.set(N.CHARS_LOWER_LETTER_N, "a");
 standardNumberingFormats.set(N.CHARS_UPPER_LETTER_N, "A");
 
+/** Original UNO property values exchanged with XML settings services. */
+export type ConfigurationProperties = readonly PropertyValue[];
+
+/** Represented property set and its information for native scalar configuration conversion. */
+interface ConfigurationPropertySet {
+  getPropertyNames(): Iterable<string>;
+  hasPropertyByName(name: string): boolean;
+  getPropertyValue(name: string): Any;
+  setPropertyValue(name: string, value: Any): void;
+}
+
 /** Delegates configured XML core measurement conversion to the SAX converter. */
 export class SvXMLUnitConverter {
   /** Captures the owning import's core measurement unit. @param coreUnit - Core unit. @returns Nothing. */
   public constructor(private readonly coreUnit: CoreMeasureUnit) {}
+
+  /** Reads a property sequence from the original owner. @param owner - Property set. @returns Owned property vector. */
+  static convertPropertySet(owner: ConfigurationPropertySet): ConfigurationProperties;
+  /** Applies a configuration sequence to properties exposed by the owner. @param owner - Property set. @param properties - Borrowed properties. @returns Nothing. */
+  static convertPropertySet(
+    owner: ConfigurationPropertySet,
+    properties: ConfigurationProperties,
+  ): void;
+  /** Converts between a property set and its native property-value sequence. @param owner - Property set. @param properties - Optional borrowed input. @returns Owned properties for export, or nothing on import. */
+  static convertPropertySet(
+    owner: ConfigurationPropertySet,
+    properties?: ConfigurationProperties,
+  ): ConfigurationProperties | void {
+    if (properties !== undefined) {
+      for (const property of properties) {
+        const name = text(property.Name);
+        if (owner.hasPropertyByName(name)) owner.setPropertyValue(name, property.Value);
+      }
+      return;
+    }
+    const result: PropertyValue[] = [];
+    try {
+      for (const key of owner.getPropertyNames()) {
+        const name = unicode(key);
+        const value = owner.getPropertyValue(key);
+        try {
+          result.push(new PropertyValue(name, 0, value, PropertyState.DIRECT_VALUE));
+        } finally {
+          name.dispose();
+          value.dispose();
+        }
+      }
+      return result;
+    } catch (error) {
+      for (const property of result) property.dispose();
+      throw error;
+    }
+  }
 
   /** Parses an ISO date or datetime against the document null date. @param output - Serial value destination. @param source - Original XML attribute. @param nullDate - Document day zero. @returns Conversion success. */
   static convertDateTimeToDays(

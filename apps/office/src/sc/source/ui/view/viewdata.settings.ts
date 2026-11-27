@@ -1,5 +1,6 @@
 /** @fileoverview Reads and writes the supported native Calc document and sheet view properties. */
 import type { ScDocument } from "../../../inc/document";
+import { configurationViewOptions } from "../unoobj/confuno";
 import { ScGridOptions, ViewOption } from "../../../inc/viewopti";
 import { COL_AUTO, Color, ColorTransparency } from "../../../../tools/inc/color";
 import { OUString } from "../../../../sal/inc/rtl/ustring";
@@ -23,11 +24,6 @@ const SC_ACTIVETABLE = "ActiveTable";
 const SC_TABLES = "Tables";
 const SC_TABLESELECTED = "TableSelected";
 const SC_UNO_SHOWGRID = "ShowGrid";
-const SC_UNO_SHOWZERO = "ShowZeroValues";
-const SC_UNO_COLROWHDR = "HasColumnRowHeaders";
-const SC_UNO_OUTLSYMB = "IsOutlineSymbolsSet";
-const SC_UNO_SHEETTABS = "HasSheetTabs";
-const SC_UNO_SHOWPAGEBR = "ShowPageBreaks";
 const SC_CURSORPOSITIONX = "CursorPositionX";
 const SC_CURSORPOSITIONY = "CursorPositionY";
 const SC_UNONAME_TABCOLOR = "TabColor";
@@ -39,17 +35,9 @@ const SC_UNO_RASTERSUBX = "RasterSubdivisionX";
 const SC_UNO_RASTERSUBY = "RasterSubdivisionY";
 const SC_UNO_RASTERSYNC = "IsRasterAxisSynchronized";
 
-const viewOptions = new Map<string, ViewOption>([
-  [SC_UNO_SHOWGRID, ViewOption.GRID],
-  [SC_UNO_SHOWZERO, ViewOption.NULLVALS],
-  ["ShowNotes", ViewOption.NOTES],
-  ["ShowNoteAuthor", ViewOption.NOTEAUTHOR],
-  ["ShowFormulasMarks", ViewOption.FORMULAS_MARKS],
-  [SC_UNO_COLROWHDR, ViewOption.HEADER],
-  [SC_UNO_OUTLSYMB, ViewOption.OUTLINER],
-  [SC_UNO_SHEETTABS, ViewOption.TABCONTROLS],
-  [SC_UNO_SHOWPAGEBR, ViewOption.PAGEBREAKS],
-  ["IsValueHighlightingEnabled", ViewOption.SYNTAX],
+const viewOptions = new Map([
+  ...configurationViewOptions,
+  ["IsValueHighlightingEnabled", ViewOption.SYNTAX] as const,
 ]);
 
 /** Reads the selected table name from the primary view entry. @param document - Actual document. @param views - Borrowed records. @returns Nothing. */

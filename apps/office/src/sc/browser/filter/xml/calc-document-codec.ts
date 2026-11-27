@@ -32,7 +32,8 @@ import {
   encodeMatrixCell,
   type CalcMatrixCellRecord,
 } from "./calc-matrix-cell-codec";
-import { Color, ColorTransparency, COL_AUTO } from "../../../../tools/inc/color";
+import { ScCalcConfig } from "../../../source/core/tool/calcconfig";
+import { Color, ColorTransparency, COL_AUTO, COL_GRAY3 } from "../../../../tools/inc/color";
 import { exportPageStyles } from "../../../source/filter/xml/xmlstyle.page";
 import { GetPrintRanges } from "../../../source/core/data/table1";
 import {
@@ -60,7 +61,7 @@ import { ScAddress, ScRange, MAXCOL, MAXROW } from "../../../inc/address";
 import { ScHorizontalCellIterator } from "../../../inc/dociter";
 import { CellType, CRFlags } from "../../../inc/global";
 import { CellAttributeHolder, ScPatternAttr } from "../../../inc/patattr";
-import { FormulaGrammar } from "../../../../formula/inc/grammar";
+import { FormulaGrammar, type AddressConvention } from "../../../../formula/inc/grammar";
 import { unicode, text } from "../../../../i18nlangtag/source/isolang/isolang.tables";
 import { XMLFontAutoStylePool } from "../../../../xmloff/source/style/XMLFontAutoStylePool";
 import { ODF_NAMESPACES } from "../../../../xmloff/source/core/xmltoken";
@@ -297,6 +298,9 @@ export interface CalcDocumentRecord {
   readonly showFormulasMarks?: boolean;
   readonly valueHighlighting?: boolean;
   readonly drawingGrid?: DrawingGrid;
+  readonly gridColor?: number;
+  readonly autoCalculate?: boolean;
+  readonly stringRefSyntax?: readonly [convention: AddressConvention, explicit: boolean];
   readonly nullDate?: number;
   readonly ignoreCase?: boolean;
   readonly calculationSettings?: CalculationSettings;
@@ -650,6 +654,8 @@ function* encodeSteps(document: ScDocument): Generator<void, CalcDocumentRecord>
   }
   const options = document.GetDocOptions();
   const grid = view.GetGridOptions();
+  const gridColor = view.GetGridColor();
+  const config = document.GetCalcConfig();
   const persons: CalcPersonRecord[] = [];
   for (const person of document.GetPersonList()) {
     persons.push(encodeCalcPerson(person));
@@ -679,6 +685,12 @@ function* encodeSteps(document: ScDocument): Generator<void, CalcDocumentRecord>
     ...(view.GetOption(ViewOption.NOTEAUTHOR) ? {} : { showNoteAuthor: false }),
     ...(view.GetOption(ViewOption.FORMULAS_MARKS) ? { showFormulasMarks: true } : {}),
     ...(view.GetOption(ViewOption.SYNTAX) ? { valueHighlighting: true } : {}),
+    ...(!gridColor.equals(COL_GRAY3) ? { gridColor: gridColor.toUInt32() } : {}),
+    ...(document.GetAutoCalc() ? {} : { autoCalculate: false }),
+    ...(config.mbHasStringRefSyntax ||
+    config.meStringRefAddressSyntax !== FormulaGrammar.AddressConvention.CONV_UNSPECIFIED
+      ? { stringRefSyntax: [config.meStringRefAddressSyntax, config.mbHasStringRefSyntax] as const }
+      : {}),
     drawingGrid: [
       grid.GetFieldDrawX(),
       grid.GetFieldDrawY(),
@@ -747,6 +759,24 @@ function* decodeSteps(record: CalcDocumentRecord): Generator<void, ScDocument> {
   let complete = false;
   document.SetAutoCalc(false);
   try {
+    if (record.autoCalculate !== undefined && typeof record.autoCalculate !== "boolean")
+      throw new Error("Calc worker AutoCalculate state is invalid.");
+    if (record.stringRefSyntax !== undefined) {
+      const [convention, explicit] = record.stringRefSyntax;
+      if (
+        !Object.values(FormulaGrammar.AddressConvention).includes(convention) ||
+        typeof explicit !== "boolean"
+      )
+        throw new Error("Calc worker string reference syntax is invalid.");
+      const config = new ScCalcConfig(document.GetCalcConfig());
+      try {
+        config.meStringRefAddressSyntax = convention;
+        config.mbHasStringRefSyntax = explicit;
+        document.SetCalcConfig(config);
+      } finally {
+        config.dispose();
+      }
+    }
     if (record.storageGrammar !== undefined) {
       if (record.storageGrammar !== FormulaGrammar.Grammar.GRAM_PODF)
         throw new Error("Calc worker storage grammar is invalid.");
@@ -860,6 +890,11 @@ function* decodeSteps(record: CalcDocumentRecord): Generator<void, ScDocument> {
       view.SetOption(ViewOption.FORMULAS_MARKS, record.showFormulasMarks);
     if (typeof record.valueHighlighting === "boolean")
       view.SetOption(ViewOption.SYNTAX, record.valueHighlighting);
+    if (record.gridColor !== undefined) {
+      if (!Number.isInteger(record.gridColor) || record.gridColor >>> 0 !== record.gridColor)
+        throw new Error("Calc worker grid color is invalid.");
+      view.SetGridColor(new Color(ColorTransparency, record.gridColor, "ColorTransparencyTag"));
+    }
     if (record.drawingGrid !== undefined)
       view.SetGridOptions(decodeDrawingGrid(record.drawingGrid));
     for (const person of record.persons ?? []) {
@@ -1151,7 +1186,7 @@ function* decodeSteps(record: CalcDocumentRecord): Generator<void, ScDocument> {
       const table = document.FetchTable(tab);
       if (table && sheet.conditionalIconSets) decodeCalcIconSets(table, sheet.conditionalIconSets);
     }
-    document.SetAutoCalc(true);
+    document.SetAutoCalc(record.autoCalculate ?? true);
     complete = true;
     return document;
   } finally {

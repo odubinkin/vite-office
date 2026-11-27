@@ -1,4 +1,5 @@
 /** @fileoverview Calc display and drawing-grid options with native defaults and value copying. */
+import { COL_GRAY3, Color } from "../../../../tools/inc/color";
 import { ScGridOptions } from "./viewopti.grid";
 
 /** Native sc::ViewOption ordinals from viewopti.hxx. */
@@ -27,6 +28,7 @@ export enum ViewOption {
 export class ScViewOptions {
   private aOptArr: boolean[] = [];
   private readonly aGridOpt = new ScGridOptions();
+  private readonly aGridCol = new Color();
   /** Original default or independent copy construction. @param source - Optional source options. @returns Options. */
   constructor(source?: ScViewOptions) {
     if (source) this.copy_assign(source);
@@ -55,12 +57,14 @@ export class ScViewOptions {
       false,
       false,
     ];
+    this.aGridCol.assign(COL_GRAY3);
     this.aGridOpt.SetDefaults();
   }
   /** Original array assignment copies values into the existing owner. @param source - Source. @returns This. */
   copy_assign(source: ScViewOptions): this {
     this.aOptArr = [...source.aOptArr];
     this.aGridOpt.copy_assign(source.aGridOpt);
+    this.aGridCol.assign(source.aGridCol);
     return this;
   }
   /** Original indexed option getter. @param option - Native valid ordinal. @returns Stored value. */
@@ -70,6 +74,16 @@ export class ScViewOptions {
   /** Original indexed option setter. @param option - Native valid ordinal. @param value - State. @returns Nothing. */
   SetOption(option: ViewOption, value: boolean): void {
     this.aOptArr[option] = value;
+  }
+
+  /** Returns the original document grid line color. @returns Independent color. */
+  GetGridColor(): Color {
+    return new Color(this.aGridCol);
+  }
+
+  /** Sets the original document grid line color. @param color - Native grid color. @returns Nothing. */
+  SetGridColor(color: Readonly<Color>): void {
+    this.aGridCol.assign(color);
   }
 
   /** Borrows the native drawing-grid options. @returns Read-only grid options. */

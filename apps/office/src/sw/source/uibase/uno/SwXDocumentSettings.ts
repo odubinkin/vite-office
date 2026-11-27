@@ -1,5 +1,6 @@
 /** @fileoverview Native Writer document setting properties consumed by RTF and browser ODF reopen. */
 import { Any } from "../../../../cppu/inc/com/sun/star/uno/Any";
+import { TypeClass } from "../../../../udkapi/com/sun/star/uno/TypeClass";
 import type { OUStringConstReference } from "../../../../sal/inc/rtl/ustring";
 import { PropertyValue } from "../../../../udkapi/com/sun/star/beans/PropertyValue";
 import { PropertyState } from "../../../../udkapi/com/sun/star/beans/PropertyState";
@@ -53,7 +54,10 @@ export class SwXDocumentSettings {
   /** Applies supported boolean configuration properties in input order. @param properties - Borrowed original vector. @returns Nothing. */
   setConfigurationSettings(properties: readonly PropertyValue[]): void {
     for (const property of properties) {
-      if (documentSettings.has(text(property.Name)))
+      if (
+        property.Value.getValueTypeClass() === TypeClass.BOOLEAN &&
+        documentSettings.has(text(property.Name))
+      )
         this.setPropertyValue(property.Name, property.Value);
     }
   }

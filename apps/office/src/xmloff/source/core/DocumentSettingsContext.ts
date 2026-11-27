@@ -20,9 +20,14 @@ type ViewProperty = readonly [
 /** Represented indexed view records, in source order. */
 export type ViewSettings = readonly (readonly ViewProperty[])[];
 
+/** A configuration scalar retains the original UNO width. */
+type ConfigItem =
+  | readonly [name: string, type: "boolean", value: boolean]
+  | readonly [name: string, type: "short" | "int", value: number];
+
 /** Original office:settings context for the represented configuration-property sequence. */
 export class XMLDocumentSettingsContext extends SvXMLImportContext {
-  private configuration: readonly (readonly [string, boolean])[] = [];
+  private configuration: readonly ConfigItem[] = [];
   private views: ViewSettings | undefined;
 
   /** Binds the configuration and indexed view consumers. @param apply - Borrows the native configuration vector. @param applyViews - Receives the indexed view records. @returns Context. */
@@ -73,11 +78,14 @@ export class XMLDocumentSettingsContext extends SvXMLImportContext {
     if (!this.apply || this.configuration.length === 0) return;
     const properties: PropertyValue[] = [];
     try {
-      for (const [key, flag] of this.configuration) {
+      for (const [key, type, scalar] of this.configuration) {
         const units = new Uint16Array(key.length);
         for (let index = 0; index < key.length; ++index) units[index] = key.charCodeAt(index);
         const name = new OUString(units, units.length);
-        const value = new Any(flag);
+        const value =
+          type === "boolean"
+            ? new Any(scalar)
+            : new Any([scalar], type === "short" ? "sal_Int16" : "sal_Int32");
         try {
           properties.push(new PropertyValue(name, 0, value, PropertyState.DIRECT_VALUE));
         } finally {
@@ -252,31 +260,37 @@ function createViewItem(
   );
 }
 
-/** A configuration item set retains typed boolean properties in input order. */
+/** A configuration item set retains represented typed properties in input order. */
 class XMLConfigItemSetContext extends SvXMLImportContext {
-  private readonly values: [string, boolean][] = [];
+  private readonly values: ConfigItem[] = [];
 
   /** Binds the settings group's property receiver. @param finish - Completed group consumer. @returns Context. */
-  constructor(private readonly finish: (values: readonly (readonly [string, boolean])[]) => void) {
+  constructor(private readonly finish: (values: readonly ConfigItem[]) => void) {
     super();
   }
 
-  /** Reads the original boolean configuration-item domain. @param element - Child token. @param attributes - Source attributes. @returns Child context. */
+  /** Reads the represented original configuration-item domain. @param element - Child token. @param attributes - Source attributes. @returns Child context. */
   override createFastChildContext(
     element: XMLToken,
     attributes: FastAttributeList,
   ): SvXMLImportContext {
     const name = attributes.get(XMLToken.CONFIG_NAME);
+    const type = attributes.get(XMLToken.CONFIG_TYPE);
     if (
       element !== XMLToken.CONFIG_ITEM ||
       !name ||
-      attributes.get(XMLToken.CONFIG_TYPE) !== "boolean"
+      (type !== "boolean" && type !== "short" && type !== "int")
     )
       return new SvXMLIgnoreContext(true);
     return new XMLConfigItemContext(
-      /** Adds the named native boolean value. @param value - Parsed value. @returns Nothing. */
+      /** Adds the native scalar with its original UNO type. @param value - Parsed value. @returns Nothing. */
       (value) => {
-        this.values.push([name, value === "true"]);
+        if (type === "boolean") this.values.push([name, type, value === "true"]);
+        else {
+          const number: [number] = [0];
+          Converter.convertNumber(number, value);
+          this.values.push([name, type, type === "short" ? (number[0] << 16) >> 16 : number[0]]);
+        }
       },
     );
   }

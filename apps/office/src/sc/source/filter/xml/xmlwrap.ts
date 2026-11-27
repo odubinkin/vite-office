@@ -19,25 +19,29 @@ import {
   XMLDocumentSettingsContext,
   type ViewSettings,
 } from "../../../../xmloff/source/core/DocumentSettingsContext";
-import { exportViewSettings } from "../../../../xmloff/source/core/SettingsExportHelper";
+import { exportDocumentSettings } from "../../../../xmloff/source/core/SettingsExportHelper";
 import {
   parseOdfXmlStream,
   SvXMLIgnoreContext,
   SvXMLImportContext,
 } from "../../../../xmloff/source/core/xmlimp";
 import { XMLToken } from "../../../../xmloff/source/core/xmltoken";
+import type { ConfigurationProperties } from "../../../../xmloff/source/core/xmluconv";
 import { ReadUserDataSequence, WriteUserDataSequence } from "../../ui/view/viewdata.settings";
 
 /** Accepts the original settings element in the settings stream. */
 class ScXMLDocumentSettingsContext extends SvXMLImportContext {
-  /** Collects the incoming view data before the content stream is read. @param applyViews - Receives the loaded view records. @returns Context. */
-  constructor(private readonly applyViews: (views: ViewSettings) => void) {
+  /** Binds the loaded properties before the content stream is read. @param apply - Consumes configuration properties. @param applyViews - Receives the loaded view records. @returns Context. */
+  constructor(
+    private readonly apply: (properties: ConfigurationProperties) => void,
+    private readonly applyViews: (views: ViewSettings) => void,
+  ) {
     super();
   }
   /** Dispatches the settings group using the shared xmloff owner. @param element - Child token. @returns Context. */
   override createFastChildContext(element: XMLToken): SvXMLImportContext {
     if (element !== XMLToken.OFFICE_SETTINGS) return new SvXMLIgnoreContext(true);
-    return new XMLDocumentSettingsContext(undefined, this.applyViews);
+    return new XMLDocumentSettingsContext(this.apply, this.applyViews);
   }
   /** Ignores unrelated children of the settings stream. @returns Ignore context. */
   override createUnknownChildContext(): SvXMLImportContext {
@@ -84,6 +88,7 @@ export class ScXMLImportWrapper {
     if (mimetype !== ODS_MIMETYPE) throw new Error("Invalid ODS mimetype");
     readPlainPackageManifest(zip, await zip.readTextEntry("META-INF/manifest.xml"), mimetype);
     if (options.isCancelled?.()) throw new Error("ODS operation was cancelled");
+    const importer = new ScXMLImport(this.document, options);
     let views: ViewSettings | undefined;
     if (zip.getEntryNames().includes("settings.xml")) {
       parseOdfXmlStream(
@@ -93,6 +98,8 @@ export class ScXMLImportWrapper {
           createFastContext: (element) =>
             element === XMLToken.OFFICE_DOCUMENT_SETTINGS
               ? new ScXMLDocumentSettingsContext(
+                  /** Applies original scalar configuration settings. @param properties - Borrowed properties. @returns Nothing. */
+                  (properties) => importer.SetConfigurationSettings(properties),
                   /** Retains parsed settings until the sheet names are available. @param records - Parsed views. @returns Nothing. */
                   (records) => (views = records),
                 )
@@ -104,7 +111,6 @@ export class ScXMLImportWrapper {
       );
     }
     const content = await zip.readTextEntry("content.xml");
-    const importer = new ScXMLImport(this.document, options);
     if (zip.getEntryNames().includes("styles.xml"))
       importer.importStyles(await zip.readTextEntry("styles.xml"));
     importer.importContent(content);
@@ -153,14 +159,10 @@ export class ScXMLImportWrapper {
             ],
           ]
         : []),
-      ...(views.length
-        ? [
-            [
-              ["FullPath", "settings.xml"],
-              ["MediaType", "text/xml"],
-            ],
-          ]
-        : []),
+      [
+        ["FullPath", "settings.xml"],
+        ["MediaType", "text/xml"],
+      ],
     ].map(
       /** Builds actual native PropertyValue sequences. @param properties - Fields. @returns Sequence. */ (
         properties,
@@ -175,7 +177,15 @@ export class ScXMLImportWrapper {
     zip.putNextEntry("META-INF/manifest.xml", createManifestXml(manifest));
     zip.putNextEntry("content.xml", content);
     if (styles) zip.putNextEntry("styles.xml", styles);
-    if (views.length) zip.putNextEntry("settings.xml", exportViewSettings(views));
+    const configuration = exporter.GetConfigurationSettings();
+    try {
+      zip.putNextEntry(
+        "settings.xml",
+        exportDocumentSettings(views.length ? views : undefined, configuration),
+      );
+    } finally {
+      for (const property of configuration) property.dispose();
+    }
     const size = Object.values(files).reduce(
       /** Reads or measures an unpacked Calc XML stream. @param sum - sum. @param value - value. @returns Operation result. */ (
         sum,

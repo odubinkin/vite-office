@@ -1,0 +1,45 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/sc/source/ui/unoobj/confuno.ts",
+    "status": "mapped",
+    "upstreamPath": "sc/source/ui/unoobj/confuno.cxx",
+    "localSymbols": [
+      "ScDocumentConfiguration"
+    ],
+    "upstreamSymbols": [
+      "ScDocumentConfiguration::setPropertyValue",
+      "ScDocumentConfiguration::getPropertyValue"
+    ],
+    "preservedResponsibilities": [
+      "Preserves the native Calc configuration property types, including view options, raster values, automatic calculation and the explicit document string-reference convention."
+    ],
+    "omittedResponsibilities": [
+      "Printer, macro, link-update, embed-font, document-sharing and unrepresented shell services remain outside this owner slice."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sc/source/ui/unoobj/confuno.ts",
+          "marker": "ScDocumentConfiguration"
+        },
+        {
+          "path": "apps/office/src/sc/source/filter/xml/ods-document-configuration.test.ts",
+          "marker": "tdf144970.ods"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sc/source/ui/unoobj/confuno.cxx",
+          "marker": "ScDocumentConfiguration::setPropertyValue"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/source/ui/unoobj/confuno.cxx",
+          "marker": "ScDocumentConfiguration::getPropertyValue"
+        }
+      ]
+    }
+  }
+}
