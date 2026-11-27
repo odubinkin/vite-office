@@ -15,7 +15,8 @@
       "void writeFilter"
     ],
     "preservedResponsibilities": [
-      "Writes native database range owners, display flags and database query conditions after named expressions."
+      "Writes native database range owners, display flags and database query conditions after named expressions.",
+      "Exports the native ODS sort descriptor and subtotal rule groups, including non-default embedded number behavior and summary position."
     ],
     "omittedResponsibilities": [
       "External data source, sort and subtotal export are outside this represented owner."
@@ -33,6 +34,10 @@
         {
           "path": "apps/office/src/sc/source/filter/xml/ods-database-ranges.test.ts",
           "marker": "testDatabaseRangesODS"
+        },
+        {
+          "path": "apps/office/src/sc/source/filter/xml/ods-database-descriptors.test.ts",
+          "marker": "@fileoverview"
         }
       ],
       "upstream": [

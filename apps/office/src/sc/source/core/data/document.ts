@@ -113,7 +113,7 @@ export class ScDocument {
   GetRangeName(tab = -1) {
     return tab === -1 ? this.pRangeName : this.FetchTable(tab)?.GetRangeName();
   }
-  private readonly pDBCollection = new ScDBCollection();
+  private readonly pDBCollection = new ScDBCollection(this);
   /** Borrows the native global database range collection. @returns Database ranges. */
   GetDBCollection(): ScDBCollection {
     return this.pDBCollection;

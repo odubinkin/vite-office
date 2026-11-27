@@ -9,7 +9,7 @@ import {
   StackVar,
 } from "../../../../formula/inc/token";
 import { ScCalcConfig } from "../../../inc/calcconfig";
-import { CellType, ScGlobal } from "../../../inc/global";
+import { CellType, ScGlobal, ScSubTotalFunc, SubtotalFlags } from "../../../inc/global";
 import { SvNumFormatType } from "../../../../svl/inc/zforlist";
 import type { OUStringConstReference } from "../../../../sal/inc/rtl/ustring";
 import { ScRefCellValue } from "../../../inc/cellvalue";
@@ -106,6 +106,7 @@ export class ScInterpreter {
   readonly aPos: ScAddress;
   private pStack: FormulaToken[] = [];
   private nGlobalError = FormulaError.NONE;
+  private mnSubTotalFlags = SubtotalFlags.NONE;
   private xResult: FormulaToken | null = null;
   /** Binds the native cell/document/context/position/code responsibilities consumed by this specialization. @param pMyFormulaCell - Formula cell. @param mrDoc - Document. @param mrContext - Per-document context. @param position - Position. @param pArr - Compiled array. @returns Interpreter. */
   constructor(
@@ -333,7 +334,7 @@ export class ScInterpreter {
       left = this.GetString();
     this.PushString(this.CheckStringResultLen(left.length, right.length) ? left + right : "");
   }
-  /** Executes ordinary non-subtotal SUM/SUMSQ/PRODUCT/AVERAGE parameter iteration from interpr6. @param op - Aggregate opcode. @param parameterCount - Native byte arity. @returns Nothing. */
+  /** Executes SUM/SUMSQ/PRODUCT/AVERAGE parameter iteration from interpr6. @param op - Aggregate opcode. @param parameterCount - Native byte arity. @returns Nothing. */
   private IterateParameters(op: MatrixAggregate, parameterCount: number): void {
     const result = new KahanSum(op === OpCode.ocProduct ? 1 : 0);
     let count = 0;
@@ -361,6 +362,13 @@ export class ScInterpreter {
             this.PushDouble(0);
             return;
           }
+          const table = this.mrDoc.FetchTable(address.Tab());
+          if (
+            (this.mnSubTotalFlags & SubtotalFlags.IgnoreFiltered &&
+              table?.getFilterData().rowFiltered(address.Row())) ||
+            (this.mnSubTotalFlags & SubtotalFlags.IgnoreHidden && table?.RowHidden(address.Row()))
+          )
+            continue;
           const cell = new ScRefCellValue(this.mrDoc, address);
           if (!cell.hasNumeric()) continue;
           value = this.GetCellValue(address, cell);
@@ -394,7 +402,7 @@ export class ScInterpreter {
             this.PushDouble(0);
             return;
           }
-          if (op === OpCode.ocSum) {
+          if (op === OpCode.ocSum && this.mnSubTotalFlags === SubtotalFlags.NONE) {
             const action = new FuncSum(this.mrContext);
             new RangeColumnSpanSet(range).executeColumnAction(this.mrDoc, action);
             const error = action.getError();
@@ -405,7 +413,7 @@ export class ScInterpreter {
             }
             result.add(action.getSum());
           } else {
-            const iterator = new ScValueIterator(this.mrContext, range),
+            const iterator = new ScValueIterator(this.mrContext, range, this.mnSubTotalFlags),
               output = { error: FormulaError.NONE, value: 0 };
             if (iterator.GetFirst(output)) {
               do {
@@ -431,6 +439,43 @@ export class ScInterpreter {
     else if (op === OpCode.ocProduct && count === 0) value = 0;
     this.PushDouble(value);
   }
+  /** Applies the native subtotal flags and dispatches the represented aggregate implementations. @param count - Native parameter count. @returns Nothing. */
+  private ScSubTotal(count: number): void {
+    const start = this.pStack.length - count;
+    const selector = this.pStack[start];
+    if (count < 2 || !selector) {
+      this.SetError(FormulaError.IllegalParameter);
+      this.PushDouble(0);
+      return;
+    }
+    this.PushWithoutError(selector);
+    let operation = this.GetInt32();
+    this.mnSubTotalFlags = SubtotalFlags.IgnoreNestedStAg | SubtotalFlags.IgnoreFiltered;
+    if (operation > 100) {
+      this.mnSubTotalFlags |= SubtotalFlags.IgnoreHidden;
+      operation -= 100;
+    }
+    try {
+      const opcode =
+        operation === ScSubTotalFunc.SUM
+          ? OpCode.ocSum
+          : operation === ScSubTotalFunc.AVE
+            ? OpCode.ocAverage
+            : operation === ScSubTotalFunc.PROD
+              ? OpCode.ocProduct
+              : undefined;
+      if (this.nGlobalError !== FormulaError.NONE || opcode === undefined) {
+        this.SetError(FormulaError.IllegalArgument);
+        this.PushDouble(0);
+      } else this.IterateParameters(opcode, count - 1);
+      const value = this.pStack.pop();
+      this.pStack.length = start;
+      if (value) this.PushWithoutError(value);
+    } finally {
+      this.mnSubTotalFlags = SubtotalFlags.NONE;
+    }
+  }
+
   /** Resolves actual initialized reference data through its original owner. @returns Absolute address. */
   private PopSingleRef(): ScAddress {
     const reference = (this.pStack.pop() as ScSingleRefToken).GetSingleRef();
@@ -914,6 +959,7 @@ export class ScInterpreter {
         op === OpCode.ocAverage
       )
         this.IterateParameters(op, (token as FormulaByteToken).GetByte());
+      else if (op === OpCode.ocSubTotal) this.ScSubTotal((token as FormulaByteToken).GetByte());
       else if (op === OpCode.ocConcat) this.ScConcat((token as FormulaByteToken).GetByte());
       else if (op === OpCode.ocVLookup || op === OpCode.ocHLookup)
         this.CalculateLookup((token as FormulaByteToken).GetByte(), op === OpCode.ocHLookup);

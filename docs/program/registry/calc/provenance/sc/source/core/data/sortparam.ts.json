@@ -1,0 +1,56 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/sc/source/core/data/sortparam.ts",
+    "status": "mapped",
+    "upstreamPath": "sc/source/core/data/sortparam.cxx",
+    "localSymbols": [
+      "ScSortParam",
+      "ScSortKeyState",
+      "ScDataAreaExtras",
+      "ScSortNumberBehavior"
+    ],
+    "upstreamSymbols": [
+      "ScSortParam::Clear",
+      "ScSortParam::operator="
+    ],
+    "preservedResponsibilities": [
+      "Owns native sort keys, original defaults and copied locale, destination, numeric behavior and data area flags."
+    ],
+    "omittedResponsibilities": [
+      "Active sorting, non-content color sort and draw-object relocation are outside this ODS slice."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sc/source/core/data/sortparam.ts",
+          "marker": "ScSortParam"
+        },
+        {
+          "path": "apps/office/src/sc/source/filter/xml/ods-database-descriptors.test.ts",
+          "marker": "@fileoverview"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sc/source/core/data/sortparam.cxx",
+          "marker": "ScSortParam::Clear"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/source/core/data/sortparam.cxx",
+          "marker": "ScSortParam::operator="
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/qa/unit/subsequent_filters_test5.cxx",
+          "marker": "testTdf161948_NaturalSortSaveLoad"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/qa/unit/subsequent_export_test4.cxx",
+          "marker": "testTdf162262_summarybelow"
+        }
+      ]
+    }
+  }
+}

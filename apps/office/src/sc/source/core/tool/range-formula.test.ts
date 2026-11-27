@@ -532,13 +532,9 @@ it("walks real numeric/formula blocks in native column/sheet order and preserves
   expect(absent.GetFirst(out)).toBe(false);
   expect(out.error).toBe(FormulaError.NoName);
   expect(
-    /** Rejects unavailable subtotal filtering. @returns Iterator. */ () =>
-      new ScValueIterator(d.GetNonThreadedContext(), new ScRange(), SubtotalFlags.IgnoreHidden),
-  ).toThrow(/Subtotal/);
-  expect(
     /** Rejects unavailable text-as-zero services. @returns Iterator. */ () =>
       new ScValueIterator(d.GetNonThreadedContext(), new ScRange(), SubtotalFlags.NONE, true),
-  ).toThrow(/text-as-zero/);
+  ).toThrow(/Text-as-zero/);
   empty.Dispose();
   d.Dispose();
 });

@@ -194,7 +194,6 @@ export class ScFormulaCell extends SvtListener<SfxHint> {
       true,
       this.cMatrixFlag !== ScMatrixMode.NONE,
     );
-    // The actual shared compiler rejects subtotal opcodes before returning in this slice.
     compiler.CompileTokenArray();
     if (this.pCode.GetCodeError() === FormulaError.NONE) {
       this.nFormatType = compiler.GetNumFormatType();
@@ -347,8 +346,6 @@ export class ScFormulaCell extends SvtListener<SfxHint> {
         return;
       }
       if (formulaOrPosition instanceof ScFormulaCellGroup) {
-        if (formulaOrPosition.mbSubTotal)
-          throw new Error("Subtotal-cell document registration is not implemented");
         this.mxGroup = formulaOrPosition;
         this.nFormatType = formulaOrPosition.mnFormatType;
         this.pCode = formulaOrPosition.mpCode ?? new ScTokenArray(this.rDocument);
@@ -374,11 +371,7 @@ export class ScFormulaCell extends SvtListener<SfxHint> {
           );
           compiler.CompileTokenArray();
           this.nFormatType = compiler.GetNumFormatType();
-        } else if (
-          this.pCode.HasOpCodeRPN(OpCode.ocSubTotal) ||
-          this.pCode.HasOpCodeRPN(OpCode.ocAggregate)
-        )
-          throw new Error("Subtotal-cell document registration is not implemented");
+        }
         this.pCode.GenHash();
       } else {
         this.pCode = new ScTokenArray(this.rDocument);
@@ -421,6 +414,15 @@ export class ScFormulaCell extends SvtListener<SfxHint> {
       output.dispose();
     }
   }
+  /** Reports an original subtotal or aggregate opcode in the compiled cell. @returns Whether outer subtotals skip this cell. */
+  IsSubTotal(): boolean {
+    return (
+      Boolean(this.mxGroup?.mbSubTotal) ||
+      this.pCode.HasOpCodeRPN(OpCode.ocSubTotal) ||
+      this.pCode.HasOpCodeRPN(OpCode.ocAggregate)
+    );
+  }
+
   /** Borrows the actual formula token owner. @returns Code. */
   GetCode(): ScTokenArray {
     return this.pCode;

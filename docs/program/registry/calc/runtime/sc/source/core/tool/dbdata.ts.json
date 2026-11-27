@@ -30,10 +30,11 @@
       "evidence": [
         "apps/office/src/sc/source/core/tool/dbdata.ts",
         "apps/office/src/sc/source/filter/xml/ods-database-ranges.test.ts",
-        "vendor/libreoffice-reference/sc/source/core/tool/dbdata.cxx"
+        "vendor/libreoffice-reference/sc/source/core/tool/dbdata.cxx",
+        "apps/office/src/sc/source/filter/xml/ods-database-descriptors.test.ts"
       ],
       "knownViolations": [],
-      "justification": "Owns the database area, native flags and query, preserving separate named and anonymous storage and the name index counter. Reference updates, table column listeners, database source refresh and database formula evaluation remain unported."
+      "justification": "Owns the database area, native flags and query, preserving separate named and anonymous storage and the name index counter. Reference updates, table column listeners, database source refresh and database formula evaluation remain unported. Owns the native sort and subtotal descriptors using the existing range coordinates and exact area lookup precedence."
     }
   }
 }

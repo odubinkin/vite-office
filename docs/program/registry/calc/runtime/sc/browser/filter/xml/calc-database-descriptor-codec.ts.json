@@ -1,0 +1,33 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sc/browser/filter/xml/calc-database-descriptor-codec.ts",
+    "classification": "local-infrastructure",
+    "state": "foundation",
+    "suite": "calc",
+    "subsystem": "document-lifecycle",
+    "capabilityIds": [
+      "CAP-f15476e9-2d48-48f8-9cc5-6c90aa523b01"
+    ],
+    "semantic": {
+      "behaviorStatus": "not-applicable",
+      "contractStatus": "not-applicable",
+      "defaultStatus": "not-applicable",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/sc/browser/filter/xml/calc-database-descriptor-codec.ts",
+        "apps/office/src/sc/source/filter/xml/ods-database-descriptors.test.ts"
+      ],
+      "justification": "Transports the original native database sort and subtotal options as optional detached version-one Worker data.",
+      "knownViolations": [],
+      "localSymbols": [
+        "encodeDatabaseDescriptors",
+        "decodeDatabaseDescriptors"
+      ],
+      "sourceResponsibility": "browser-owned",
+      "upstreamFile": null,
+      "upstreamSymbols": []
+    }
+  }
+}

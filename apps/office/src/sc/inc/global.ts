@@ -100,6 +100,24 @@ export enum ScSizeMode {
 /** Original indentation step in twips. */
 export const SC_INDENT_STEP = 200;
 
+/** Original subtotal operation identities shared by the formula and descriptor owners. */
+export enum ScSubTotalFunc {
+  NONE,
+  AVE,
+  CNT,
+  CNT2,
+  MAX,
+  MIN,
+  PROD,
+  STD,
+  STDP,
+  SUM,
+  VAR,
+  VARP,
+  MED,
+  SELECTION_COUNT,
+}
+
 /** Original aggregate/subtotal row and error flags;ordinary iterator consumers use NONE. */
 export enum SubtotalFlags {
   NONE = 0x00,

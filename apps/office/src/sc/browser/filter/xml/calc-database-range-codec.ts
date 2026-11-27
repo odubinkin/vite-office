@@ -9,6 +9,11 @@ import {
   type ScDBQueryItem,
   type ScQueryParamEntry,
 } from "../../../source/core/tool/queryparam";
+import {
+  decodeDatabaseDescriptors,
+  encodeDatabaseDescriptors,
+  type CalcDatabaseDescriptors,
+} from "./calc-database-descriptor-codec";
 import { AdoptDatabaseRange } from "../../../source/filter/xml/xmldrani";
 
 /** Native database area coordinates. */
@@ -17,7 +22,7 @@ type Area = ReturnType<ScRange["GetVars"]>;
 type Query = Omit<ScQueryParam, "Clone">;
 
 /** One detached range and its owning collection category. */
-interface DatabaseRangeRecord {
+interface DatabaseRangeRecord extends CalcDatabaseDescriptors {
   readonly type: ScDBRangeType;
   readonly name: string;
   readonly area: Area;
@@ -52,6 +57,7 @@ function encodeRange(type: ScDBRangeType, data: ScDBData): DatabaseRangeRecord {
     moveCells: data.IsDoSize(),
     stripData: data.IsStripData(),
     selection: data.HasImportSelection(),
+    ...encodeDatabaseDescriptors(data),
   };
 }
 
@@ -201,6 +207,7 @@ export function decodeCalcDatabaseRanges(
     range.SetImportSelection(entry.selection);
     range.SetQueryParam(query);
     if (entry.advanced) range.SetAdvancedQuerySource(decodeArea(document, entry.advanced));
+    decodeDatabaseDescriptors(range, document, entry);
     AdoptDatabaseRange(document, range, entry.type);
     ranges.push(range);
   }

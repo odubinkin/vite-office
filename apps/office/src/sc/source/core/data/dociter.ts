@@ -165,7 +165,7 @@ export class ScHorizontalCellIterator {
   }
 }
 
-/** Original column-major numeric iterator,consuming only ordinary NONE/false default options. Format,CalcAsShown and subtotal services remain unported. */
+/** Original column-major numeric iterator and its subtotal row/cell exclusions. */
 export class ScValueIterator {
   private readonly mrDoc: ScDocument;
   private readonly maStartPos: ScAddress;
@@ -178,11 +178,10 @@ export class ScValueIterator {
   constructor(
     context: ScInterpreterContext,
     range: ScRange,
-    flags = SubtotalFlags.NONE,
+    private readonly flags = SubtotalFlags.NONE,
     textAsZero = false,
   ) {
-    if (flags !== SubtotalFlags.NONE || textAsZero)
-      throw new Error("Subtotal/text-as-zero iteration services are not implemented");
+    if (textAsZero) throw new Error("Text-as-zero iteration services are not implemented");
     this.mrDoc = context.mpDoc;
     this.maStartPos = new ScAddress(range.aStart);
     this.maEndPos = new ScAddress(range.aEnd);
@@ -241,6 +240,23 @@ export class ScValueIterator {
       }
       const position = this.maCurPos as ReturnType<CellStoreType["cposition"]>,
         node = position.first.get();
+      if (
+        this.flags !== SubtotalFlags.NONE &&
+        (node.type === element_type_numeric || node.type === element_type_formula)
+      ) {
+        const row = this.GetRow();
+        const last: [number] = [row];
+        const table = this.mrDoc.FetchTable(this.mnTab) as ScTable;
+        if (
+          (this.flags & SubtotalFlags.IgnoreFiltered &&
+            table.getFilterData().rowFiltered(row, undefined, last)) ||
+          (this.flags & SubtotalFlags.IgnoreHidden && table.RowHidden(row, undefined, last))
+        ) {
+          if (last[0] >= this.maEndPos.Row()) this.mpCells = null;
+          else this.maCurPos = this.mpCells?.cposition(last[0] + 1) ?? null;
+          continue;
+        }
+      }
       switch (node.type) {
         case element_type_numeric:
           output.value = numeric_block.at(node.data as base_element_block, position.second);
@@ -251,7 +267,12 @@ export class ScValueIterator {
             node.data as base_element_block,
             position.second,
           ) as ScFormulaCell;
-          if (cell.GetErrorOrValue(output)) return true;
+          if (
+            !(this.flags & SubtotalFlags.IgnoreNestedStAg && cell.IsSubTotal()) &&
+            !(this.flags & SubtotalFlags.IgnoreErrVal && cell.GetErrCode() !== FormulaError.NONE) &&
+            cell.GetErrorOrValue(output)
+          )
+            return true;
           this.IncPos();
           break;
         }

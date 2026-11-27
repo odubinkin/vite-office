@@ -17,7 +17,8 @@
       "ScDBData::GetQueryParam"
     ],
     "preservedResponsibilities": [
-      "Owns the database area, native flags and query, preserving separate named and anonymous storage and the name index counter."
+      "Owns the database area, native flags and query, preserving separate named and anonymous storage and the name index counter.",
+      "Owns the native sort and subtotal descriptors using the existing range coordinates and exact area lookup precedence."
     ],
     "omittedResponsibilities": [
       "Reference updates, table column listeners, database source refresh and database formula evaluation remain unported."
@@ -35,6 +36,10 @@
         {
           "path": "apps/office/src/sc/source/filter/xml/ods-database-ranges.test.ts",
           "marker": "testDatabaseRangesODS"
+        },
+        {
+          "path": "apps/office/src/sc/source/filter/xml/ods-database-descriptors.test.ts",
+          "marker": "@fileoverview"
         }
       ],
       "upstream": [

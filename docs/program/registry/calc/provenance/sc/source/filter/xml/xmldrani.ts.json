@@ -18,7 +18,8 @@
       "setAutoFilterFlags"
     ],
     "preservedResponsibilities": [
-      "Reads native ODS range attributes and transfers the represented data to the corresponding document or sheet owner, including the original header-cell flag."
+      "Reads native ODS range attributes and transfers the represented data to the corresponding document or sheet owner, including the original header-cell flag.",
+      "Binds the native sort parameters and original subtotal groups to each imported database range."
     ],
     "omittedResponsibilities": [
       "External sources, sorting, subtotals and formula evaluation remain outside this import slice."
@@ -40,6 +41,10 @@
         {
           "path": "apps/office/src/sc/source/filter/xml/ods-database-ranges.test.ts",
           "marker": "testDatabaseRangesODS"
+        },
+        {
+          "path": "apps/office/src/sc/source/filter/xml/ods-database-descriptors.test.ts",
+          "marker": "@fileoverview"
         }
       ],
       "upstream": [

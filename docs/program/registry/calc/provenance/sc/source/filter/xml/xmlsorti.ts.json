@@ -1,0 +1,59 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/sc/source/filter/xml/xmlsorti.ts",
+    "status": "mapped",
+    "upstreamPath": "sc/source/filter/xml/xmlsorti.cxx",
+    "localSymbols": [
+      "ScXMLSortContext",
+      "ScXMLSortByContext"
+    ],
+    "upstreamSymbols": [
+      "ScXMLSortContext::ScXMLSortContext",
+      "ScXMLSortContext::AddSortField",
+      "ScXMLSortByContext::endFastElement"
+    ],
+    "preservedResponsibilities": [
+      "Reads the original ODF database sort definition, resolving its destination and applying database-relative fields to the native owner."
+    ],
+    "omittedResponsibilities": [
+      "The UNO general-purpose sort descriptor bridge and active sorting are outside this filter slice."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sc/source/filter/xml/xmlsorti.ts",
+          "marker": "ScXMLSortContext"
+        },
+        {
+          "path": "apps/office/src/sc/source/filter/xml/ods-database-descriptors.test.ts",
+          "marker": "@fileoverview"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sc/source/filter/xml/xmlsorti.cxx",
+          "marker": "ScXMLSortContext::ScXMLSortContext"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/source/filter/xml/xmlsorti.cxx",
+          "marker": "ScXMLSortContext::AddSortField"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/source/filter/xml/xmlsorti.cxx",
+          "marker": "ScXMLSortByContext::endFastElement"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/qa/unit/subsequent_filters_test5.cxx",
+          "marker": "testTdf161948_NaturalSortSaveLoad"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/qa/unit/subsequent_export_test4.cxx",
+          "marker": "testTdf162262_summarybelow"
+        }
+      ]
+    }
+  }
+}

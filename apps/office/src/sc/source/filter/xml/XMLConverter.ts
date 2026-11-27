@@ -1,5 +1,6 @@
 /** @fileoverview Original Calc XML condition expression scanner over UTF-16 formula text. */
 import { implIsWhitespace } from "../../../../o3tl/inc/string_view";
+import { ScSubTotalFunc } from "../../../inc/global";
 import { ScConditionMode as Mode } from "../../../inc/conditio";
 
 /** Removes local-reference dots outside quoted names in a table:cell-range-address. @param source - Original ODF address. @returns Calc A1 address. */
@@ -127,3 +128,19 @@ export class ScXMLConditionHelper {
     return "";
   }
 }
+
+/** Calc ODF subtotal functions. The legacy import uses the GeneralFunction token subset. */
+export const subtotalFunctions = new Map([
+  ["none", ScSubTotalFunc.NONE],
+  ["average", ScSubTotalFunc.AVE],
+  ["count", ScSubTotalFunc.CNT2],
+  ["countnums", ScSubTotalFunc.CNT],
+  ["max", ScSubTotalFunc.MAX],
+  ["min", ScSubTotalFunc.MIN],
+  ["product", ScSubTotalFunc.PROD],
+  ["stdev", ScSubTotalFunc.STD],
+  ["stdevp", ScSubTotalFunc.STDP],
+  ["sum", ScSubTotalFunc.SUM],
+  ["var", ScSubTotalFunc.VAR],
+  ["varp", ScSubTotalFunc.VARP],
+]);

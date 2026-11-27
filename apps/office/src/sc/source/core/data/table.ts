@@ -97,6 +97,7 @@ export class ScTable {
   }
   /** Replaces the anonymous database range. @param data - New owner. */
   SetAnonymousDBData(data: ScDBData): void {
+    if (this.mpDBDataNoName !== data) this.mpDBDataNoName?.Dispose();
     this.mpDBDataNoName = data;
   }
   declare private pTabProtection: ScTableProtection | undefined;
@@ -797,6 +798,8 @@ export class ScTable {
   }
   /** Releases native conditional-format and canonical pattern ownership on sheet teardown. @returns Nothing. */
   DisposeAttributes(): void {
+    this.mpDBDataNoName?.Dispose();
+    this.mpDBDataNoName = null;
     this.mpCondFormatList?.Dispose();
     for (const col of this.aCol) col.DisposeAttributes();
     this.aDefaultColData.DisposeAttributes();
@@ -804,6 +807,7 @@ export class ScTable {
   /** Releases represented members in native reverse declaration order after document-level conditional listeners are cleared. @returns Nothing. */
   Dispose(): void {
     this.pRangeName.clear();
+    this.mpDBDataNoName?.Dispose();
     this.mpDBDataNoName = null;
     this.aDefaultColData.DisposeAttributes();
     this.mpCondFormatList?.Dispose();

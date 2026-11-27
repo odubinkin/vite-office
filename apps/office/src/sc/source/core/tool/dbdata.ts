@@ -1,7 +1,10 @@
 /** @fileoverview Native named and anonymous Calc database range data and ownership. */
 import { ScRange } from "../../../inc/address";
+import type { ScDocument } from "../../../inc/document";
 import { GetCollator } from "./queryentry";
 import { ScQueryParam } from "./queryparam";
+import { ScSortParam } from "../data/sortparam";
+import { ScSubTotalParam } from "../data/subtotalparam";
 
 /** Native scope discriminator for the three distinct database range containers. */
 export enum ScDBRangeType {
@@ -15,6 +18,8 @@ export class ScDBData {
   private readonly aUpper: string;
   private readonly area: ScRange;
   private query = new ScQueryParam();
+  private readonly sort = new ScSortParam();
+  private readonly subtotal = new ScSubTotalParam();
   private advancedSource: ScRange | null = null;
   private nIndex = 0;
   private bAutoFilter = false;
@@ -27,7 +32,7 @@ export class ScDBData {
   constructor(
     private readonly name: string,
     range: ScRange,
-    private readonly byRow = true,
+    private byRow = true,
     private readonly hasHeader = true,
     private readonly hasTotals = false,
   ) {
@@ -81,6 +86,39 @@ export class ScDBData {
     this.advancedSource = null;
   }
 
+  /** Copies native sort data and rebinds it to the parent range. @param output - Optional destination. @returns Independent sort parameter. */
+  GetSortParam(output = new ScSortParam()): ScSortParam {
+    output.assign(this.sort);
+    output.nCol1 = this.area.aStart.Col();
+    output.nRow1 = this.area.aStart.Row();
+    output.nCol2 = this.area.aEnd.Col();
+    output.nRow2 = this.area.aEnd.Row();
+    output.bByRow = this.byRow;
+    output.bHasHeader = this.hasHeader;
+    return output;
+  }
+
+  /** Stores independent sort data and adopts its range orientation. @param sort - Source parameter. @returns Nothing. */
+  SetSortParam(sort: ScSortParam): void {
+    this.sort.assign(sort);
+    this.byRow = sort.bByRow;
+  }
+
+  /** Copies native subtotal options using the source range owned by this database definition. @param output - Optional destination. @returns Independent subtotal parameter. */
+  GetSubTotalParam(output = new ScSubTotalParam()): ScSubTotalParam {
+    output.assign(this.subtotal);
+    output.nCol1 = this.area.aStart.Col();
+    output.nRow1 = this.area.aStart.Row();
+    output.nCol2 = this.area.aEnd.Col();
+    output.nRow2 = this.area.aEnd.Row();
+    return output;
+  }
+
+  /** Stores the original independent subtotal groups and options. @param subtotal - Source parameter. @returns Nothing. */
+  SetSubTotalParam(subtotal: ScSubTotalParam): void {
+    this.subtotal.assign(subtotal);
+  }
+
   /** Borrows the optional advanced source as an independent range. @returns Source area. */
   GetAdvancedQuerySource(): ScRange | null {
     return this.advancedSource && new ScRange(this.advancedSource);
@@ -130,6 +168,10 @@ export class ScDBData {
   /** Sets the import selection flag. @param flag - Source flag. */
   SetImportSelection(flag: boolean): void {
     this.bDBSelection = flag;
+  }
+  /** Releases owned descriptor resources when the containing native range is discarded. @returns Nothing. */
+  Dispose(): void {
+    this.sort.Dispose();
   }
 }
 
@@ -194,6 +236,7 @@ class NamedDBs {
 
   /** Releases the named ranges. */
   clear(): void {
+    for (const range of this.ranges) range.Dispose();
     this.ranges.length = 0;
   }
 }
@@ -214,6 +257,7 @@ class AnonDBs {
 
   /** Releases the anonymous ranges. */
   clear(): void {
+    for (const range of this.ranges) range.Dispose();
     this.ranges.length = 0;
   }
 }
@@ -222,6 +266,25 @@ class AnonDBs {
 export class ScDBCollection {
   private readonly maNamedDBs = new NamedDBs();
   private readonly maAnonDBs = new AnonDBs();
+
+  /** Attaches the collection to its original workbook. @param document - Native document. @returns Collection. */
+  public constructor(private readonly document: ScDocument) {}
+
+  /** Resolves the exact original area in named, sheet-anonymous and global-anonymous order. @param tab - Sheet. @param col1 - First column. @param row1 - First row. @param col2 - Last column. @param row2 - Last row. @returns Borrowed range. */
+  public GetDBAtArea(
+    tab: number,
+    col1: number,
+    row1: number,
+    col2: number,
+    row2: number,
+  ): ScDBData | null {
+    const area = new ScRange(col1, row1, tab, col2, row2, tab);
+    for (const entry of this.maNamedDBs) if (entry.GetArea().equals(area)) return entry;
+    const local = this.document.GetAnonymousDBData(tab);
+    if (local?.GetArea().equals(area)) return local;
+    for (const entry of this.maAnonDBs) if (entry.GetArea().equals(area)) return entry;
+    return null;
+  }
 
   /** Borrows globally named ranges. @returns Native named container. */
   getNamedDBs(): NamedDBs {

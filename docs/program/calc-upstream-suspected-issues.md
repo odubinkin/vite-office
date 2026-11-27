@@ -8237,3 +8237,30 @@ export writes the reject type and display flag with an empty message. The
 intent for disabled or dormant alert text is unverified. The Calc filter
 preserves the source behavior, and the Worker transport carries the original
 model properties until ODS export.
+
+## CALC-861: Subtotal function names are asymmetric between ODS import and export
+
+Status: suspicious source behavior, preserved.
+
+The [ODS subtotal field importer](../../vendor/libreoffice-reference/sc/source/filter/xml/xmldrani.cxx#L795)
+first resolves the attribute through the older `sheet::GeneralFunction`
+lookup. [The native subtotal conversion](../../vendor/libreoffice-reference/sc/source/core/data/dputil.cxx#L395)
+maps `count` to `SUBTOTAL_FUNC_CNT2` and `countnums` to `SUBTOTAL_FUNC_CNT`.
+[The exporter](../../vendor/libreoffice-reference/sc/source/filter/xml/XMLConverter.cxx#L163)
+writes those two native values as `countnums` and `count`, respectively.
+The exporter also produces `median`, which the older import lookup does not
+recognize. The port follows the native direction-specific mappings.
+
+## CALC-862: An explicit subtotal cell and a one-cell range aggregate differently
+
+Status: suspicious source behavior, preserved.
+
+With the nested subtotal exclusion enabled, the
+[numeric range iterator](../../vendor/libreoffice-reference/sc/source/core/data/dociter.cxx#L219)
+skips a formula cell marked as a subtotal or aggregate. A direct single-cell
+operand follows [the scalar reference branch](../../vendor/libreoffice-reference/sc/source/core/tool/interpr6.cxx#L646),
+which checks row visibility and then admits the numeric value without the
+nested-subtotal check. For example, if A1 is 10 and A2 contains
+`=SUBTOTAL(9;A1)`, `=SUBTOTAL(9;A2)` reads 10 while
+`=SUBTOTAL(9;A2:A2)` excludes A2. The represented aggregate paths keep
+the two native branches distinct.

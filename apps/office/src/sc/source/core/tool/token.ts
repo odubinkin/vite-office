@@ -485,6 +485,7 @@ const operators = new Set<OpCode>([
   OpCode.ocPercentSign,
   OpCode.ocStop,
   OpCode.ocSum,
+  OpCode.ocSubTotal,
   OpCode.ocEqual,
   OpCode.ocNotEqual,
   OpCode.ocLess,

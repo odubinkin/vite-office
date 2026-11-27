@@ -28,10 +28,11 @@
       "evidence": [
         "apps/office/src/sc/source/filter/xml/XMLExportDatabaseRanges.ts",
         "apps/office/src/sc/source/filter/xml/ods-database-ranges.test.ts",
-        "vendor/libreoffice-reference/sc/source/filter/xml/XMLExportDatabaseRanges.cxx"
+        "vendor/libreoffice-reference/sc/source/filter/xml/XMLExportDatabaseRanges.cxx",
+        "apps/office/src/sc/source/filter/xml/ods-database-descriptors.test.ts"
       ],
       "knownViolations": [],
-      "justification": "Writes native database range owners, display flags and database query conditions after named expressions. External data source, sort and subtotal export are outside this represented owner."
+      "justification": "Writes native database range owners, display flags and database query conditions after named expressions. External data source, sort and subtotal export are outside this represented owner. Exports the native ODS sort descriptor and subtotal rule groups, including non-default embedded number behavior and summary position."
     }
   }
 }

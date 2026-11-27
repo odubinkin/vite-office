@@ -31,10 +31,11 @@
       "evidence": [
         "apps/office/src/sc/source/filter/xml/xmldrani.ts",
         "apps/office/src/sc/source/filter/xml/ods-database-ranges.test.ts",
-        "vendor/libreoffice-reference/sc/source/filter/xml/xmldrani.cxx"
+        "vendor/libreoffice-reference/sc/source/filter/xml/xmldrani.cxx",
+        "apps/office/src/sc/source/filter/xml/ods-database-descriptors.test.ts"
       ],
       "knownViolations": [],
-      "justification": "Reads native ODS range attributes and transfers the represented data to the corresponding document or sheet owner, including the original header-cell flag. External sources, sorting, subtotals and formula evaluation remain outside this import slice."
+      "justification": "Reads native ODS range attributes and transfers the represented data to the corresponding document or sheet owner, including the original header-cell flag. External sources, sorting, subtotals and formula evaluation remain outside this import slice. Binds the native sort parameters and original subtotal groups to each imported database range."
     }
   }
 }

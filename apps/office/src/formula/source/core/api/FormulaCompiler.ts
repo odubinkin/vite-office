@@ -78,6 +78,7 @@ const arithmetic = new Set<OpCode>([
   OpCode.ocTrue,
   OpCode.ocFalse,
   OpCode.ocSum,
+  OpCode.ocSubTotal,
   OpCode.ocSumSQ,
   OpCode.ocProduct,
   OpCode.ocAverage,
@@ -309,7 +310,7 @@ export class FormulaCompiler {
   protected SetError(error: FormulaError): void {
     void error;
   }
-  /** Compiles the supported default scalar grammar; the native boolean reports subtotal presence, not success. @returns False for this non-subtotal subset. */
+  /** Compiles the supported default scalar grammar; the native boolean reports subtotal presence, not success. @returns Whether the compiled array contains a subtotal function. */
   CompileTokenArray(): boolean {
     for (const token of this.mpArr.Tokens()) {
       if (token.GetOpCode() === OpCode.ocBad && this.mpArr.GetCodeError() !== FormulaError.NONE)
@@ -349,7 +350,9 @@ export class FormulaCompiler {
     }
     if (forced) this.mpArr.SetRecalcModeForced();
     if (this.mnNumFmt === SvNumFormatType.UNDEFINED) this.mnNumFmt = SvNumFormatType.NUMBER;
-    return false;
+    return (
+      this.mpArr.HasOpCodeRPN(OpCode.ocSubTotal) || this.mpArr.HasOpCodeRPN(OpCode.ocAggregate)
+    );
   }
   /** Reads the next active token, skipping insignificant whitespace for this scalar subset. @returns Whether a token exists. */
   private GetToken(): boolean {
@@ -541,6 +544,7 @@ export class FormulaCompiler {
       op === OpCode.ocAddress ||
       op === OpCode.ocIndirect ||
       op === OpCode.ocSum ||
+      op === OpCode.ocSubTotal ||
       op === OpCode.ocSumSQ ||
       op === OpCode.ocProduct ||
       op === OpCode.ocAverage ||

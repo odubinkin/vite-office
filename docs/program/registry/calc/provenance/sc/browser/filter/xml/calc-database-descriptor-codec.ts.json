@@ -1,0 +1,30 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "local-infrastructure",
+    "localPath": "apps/office/src/sc/browser/filter/xml/calc-database-descriptor-codec.ts",
+    "status": "local-only",
+    "rationale": "Transports the original native database sort and subtotal options as optional detached version-one Worker data.",
+    "responsibilities": [
+      "Transports the original native database sort and subtotal options as optional detached version-one Worker data."
+    ],
+    "stackDivergence": {
+      "kind": "local-infrastructure",
+      "rationale": "Structured Worker transport of native database operation settings."
+    },
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sc/browser/filter/xml/calc-database-descriptor-codec.ts",
+          "marker": "encodeDatabaseDescriptors"
+        },
+        {
+          "path": "apps/office/src/sc/source/filter/xml/ods-database-descriptors.test.ts",
+          "marker": "@fileoverview"
+        }
+      ],
+      "upstream": []
+    }
+  }
+}
