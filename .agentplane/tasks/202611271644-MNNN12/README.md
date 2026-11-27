@@ -1,10 +1,11 @@
 ---
 id: "202611271644-MNNN12"
 title: "Implement native Calc ODS consolidation settings and sheet scenarios"
-status: "DOING"
+result_summary: "Implements the native Calc consolidation and sheet scenario metadata contracts through ODS and Worker transfer."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 6
+revision: 7
 origin:
   system: "manual"
 depends_on: []
@@ -40,11 +41,16 @@ quality_review:
     - "output/playwright/odf-next-checkpoint/calc-next-verification.md"
   findings:
     - "Scenario ranges use actual cell pattern flags. Both native consolidation fixture scenarios and ODS plus Worker transfer are exercised."
-commit: null
+commit:
+  hash: "25d15433a1195b64ad3f5e79f757aa34591d51c2"
+  message: "🧩 MNNN12 calc: implement native ODS consolidation and scenario settings"
 comments:
   -
     author: "CODER"
     body: "Start: port native document consolidation and scenario ODF owners."
+  -
+    author: "CODER"
+    body: "Verified: all 136 affected Calc tests, final ODS replay and required static checks."
 events:
   -
     type: "status"
@@ -59,8 +65,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "136 focused Calc tests passed, with all three cases passing final replay. Office typecheck, lint, module boundaries, provenance and Calc/shared inventory passed. The pinned tdf149752 consolidation and tdf136551 malformed target contracts plus real Scenario pattern flags are verified."
+  -
+    type: "status"
+    at: "2026-11-27T16:59:12.899Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: all 136 affected Calc tests, final ODS replay and required static checks."
 doc_version: 3
-doc_updated_at: "2026-11-27T16:57:44.825Z"
+doc_updated_at: "2026-11-27T16:59:12.899Z"
 doc_updated_by: "CODER"
 description: "Implement ScConsolidateParam, native scenario range flags, ODS importer and exporter, and Worker support in apps/office/src/sc and the shared ODF token module. Verify with LibreOffice consolidation inputs and a native scenario ODS round trip."
 sections:
