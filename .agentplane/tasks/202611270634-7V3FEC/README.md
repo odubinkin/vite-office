@@ -1,10 +1,11 @@
 ---
 id: "202611270634-7V3FEC"
 title: "Complete Calc user-defined number format administration"
-status: "DOING"
+result_summary: "Connected native user-defined format catalog controls and ODS comments, with 59 focused cases passing."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 8
+revision: 9
 origin:
   system: "manual"
 depends_on: []
@@ -38,11 +39,16 @@ quality_review:
     - "output/calc-next/7V3FEC-tests-exact.log"
   findings:
     - "The catalog lifecycle, typed output, rollback and comment round trip pass focused Calc and shared tests."
-commit: null
+commit:
+  hash: "f6f82c8c1a2fec4afaebc5d310d7fdfadafe6b7c"
+  message: "🧩 7V3FEC code: manage user number formats and persist their ODS comments"
 comments:
   -
     author: "CODER"
     body: "Start: Connect the original user-format actions and typed formatter update in Calc Format Cells."
+  -
+    author: "CODER"
+    body: "Verified: The Calc user number-format catalog uses source add, remove and comment actions. Comment metadata round-trips through the original ODS number title."
 events:
   -
     type: "status"
@@ -57,8 +63,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "All 59 targeted tests passed across the full selection and exact rerun. Office TypeScript, changed-file lint and formatting, source-tree, dependencies, scoped provenance and routing passed. Existing integrated registry marker failures are recorded."
+  -
+    type: "status"
+    at: "2026-11-27T07:09:23.268Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: The Calc user number-format catalog uses source add, remove and comment actions. Comment metadata round-trips through the original ODS number title."
 doc_version: 3
-doc_updated_at: "2026-11-27T07:06:55.305Z"
+doc_updated_at: "2026-11-27T07:09:23.269Z"
 doc_updated_by: "CODER"
 description: "Connect the pinned Add, Edit Comment and Remove controls, shared number-format shell lifecycle and original Calc formatter update exchange. Preserve native cancellation, accepted actions and inherited styles."
 sections:
