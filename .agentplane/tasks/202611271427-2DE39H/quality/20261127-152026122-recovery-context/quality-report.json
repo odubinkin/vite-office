@@ -1,0 +1,22 @@
+{
+  "schema_version": 1,
+  "task_id": "202611271427-2DE39H",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-11-27T15:20:26.122Z",
+  "verdict": "pass",
+  "summary": "The six worksheets and both original tdf124829 external data ranges retained their registration, dimensions, refresh delay and cached cells through the Calc Worker and ODS reopen.",
+  "evaluated_sha": "70cafce2f8b8fa30f58fda0fca6631fa9d55b6af",
+  "blueprint_digest": "70b663df6b7e0dd91ac34ff4703828335fcfe3eb14ba5bb8c52b1809e591f0d5",
+  "findings": [
+    "CALC-867 through CALC-869 record the omitted-dimension rule, first registration selection and refresh metadata on repeated cells. The test fixture uses cached cells from its original content because unrelated native formula functions lie outside the current slice."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202611271427-2DE39H/README.md",
+    "/Users/odubinkin/Projects/vite-office/output/playwright/2DE39H/verification.md",
+    "70cafce2f8b8fa30f58fda0fca6631fa9d55b6af"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": []
+}
