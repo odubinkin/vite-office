@@ -23,6 +23,15 @@ export function ThrowFilterLoadError(error: unknown): never {
   }
 }
 
+/** Applies normal Sfx storage loading to resolved ODF package metadata. @param properties - Native package root media type and fallback flag. @param expected - Selected filter media type. @returns Nothing. */
+export function CheckOdfStorageMediaType(
+  properties: { readonly mediaType: string; readonly mediaTypeFallbackUsed: boolean },
+  expected: string,
+): void {
+  if (properties.mediaTypeFallbackUsed) throw new Error("ODF package media type requires repair.");
+  if (properties.mediaType !== expected) throw new Error("ODF package media type is invalid.");
+}
+
 const commonSeparators = [",", "\t", ";", ":", "|", " ", "\\", "/"] as const;
 
 /** Source occurrence statistics for one candidate UTF-16 separator. */

@@ -180,7 +180,12 @@ export function readPlainPackageManifest(
   xml: string,
   mimetype?: string,
 ): PlainPackageMetadata {
-  return applyPlainManifestMetadata(archive, readManifestSequence(xml), mimetype);
+  const manifest = readManifestSequence(xml);
+  try {
+    return applyPlainManifestMetadata(archive, manifest, mimetype);
+  } finally {
+    for (const sequence of manifest) for (const property of sequence) property.dispose();
+  }
 }
 
 /** Native ZipPackage::WriteContentTypes standard defaults and manifest override selection. @param manifest - Actual package PropertyValue sequences. @returns Content types XML. */

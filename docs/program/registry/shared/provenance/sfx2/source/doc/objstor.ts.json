@@ -8,7 +8,8 @@
     "upstreamPath": "sfx2/source/doc/objstor.cxx",
     "localSymbols": [
       "DetectCsvSeparators",
-      "ThrowFilterLoadError"
+      "ThrowFilterLoadError",
+      "CheckOdfStorageMediaType"
     ],
     "upstreamSymbols": [
       "SfxObjectShell::DetectCsvSeparators"
@@ -16,7 +17,8 @@
     "preservedResponsibilities": [
       "Task AQF9AG ports source CSV separator detection's header check, quote state, per-line common-character counts, stability selection, priority ordering, timeout and stream rewind.",
       "The 500ms source CSV separator timeout uses native monotonic clock units and is checked after each physical-line read.",
-      "The bounded load path extracts the actual native wrong-format target and exposes the row/column diagnostic to the existing browser error boundary."
+      "The bounded load path extracts the actual native wrong-format target and exposes the row/column diagnostic to the existing browser error boundary.",
+      "Applies the ordinary native Sfx load decision to the package media type and repair-only fallback."
     ],
     "omittedResponsibilities": [
       "Browser file storage remains separate from this detector."
@@ -46,6 +48,10 @@
         {
           "path": "apps/office/e2e/writer-docx-styles.spec.ts",
           "marker": "shows a DOCX parser diagnostic"
+        },
+        {
+          "path": "apps/office/src/sw/source/filter/xml/odt-roundtrip.test.ts",
+          "marker": "media type requires repair"
         }
       ],
       "upstream": [
@@ -64,6 +70,10 @@
         {
           "path": "sfx2/source/doc/objstor.cxx",
           "marker": "rWrapped.TargetException >>= e"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sfx2/source/doc/objstor.cxx",
+          "marker": "MediaTypeFallbackUsed"
         }
       ]
     }

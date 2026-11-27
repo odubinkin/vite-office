@@ -1,4 +1,10 @@
 /** @fileoverview Actual ODS bytes/native document edit-save-reload and independent XML input. */
+import { readFileSync } from "node:fs";
+import { processOdsWorkerRequest } from "../../../browser/filter/xml/ods-worker-runtime";
+import {
+  decodeCalcDocument,
+  type CalcDocumentRecord,
+} from "../../../browser/filter/xml/calc-document-codec";
 import { compressedMimetypePackage } from "../../../../test/fixtures/zip";
 import { implementations } from "../../../../desktop/browser/app/uno-components";
 import { InitApplicationServiceManager } from "../../../../desktop/source/app/appinit";
@@ -411,6 +417,36 @@ it("bounds scalar expansion and reports actual formatting/range omissions", /** 
   expect(columns.GetCellType(new ScAddress(16383, 0, 0))).toBe(1);
 });
 
+it("opens the original tdf103829 ODS package with a deflated mimetype", /** Ports the native plain-cell tab assertion through the actual Calc Worker filter. @returns Completion. */ async () => {
+  const input = new Uint8Array(
+    readFileSync("../../vendor/libreoffice-reference/sc/qa/unit/data/ods/tdf103829_textTab.ods"),
+  );
+  const archive = await DocumentArchive.open(input);
+  expect(archive.getEntryMethod("mimetype")).toBe(8);
+  const graph = (await processOdsWorkerRequest({
+    id: 1,
+    operation: "import",
+    input: input.buffer,
+    options: {},
+  })) as CalcDocumentRecord;
+  const source = decodeCalcDocument(graph);
+  let reopened: ScDocument | undefined;
+  try {
+    const output = await writeOdsDocument(source);
+    const exported = await DocumentArchive.open(output);
+    expect(exported.getEntryNames()[0]).toBe("mimetype");
+    expect(exported.getEntryMethod("mimetype")).toBe(0);
+    reopened = await readOdsDocument(output);
+    for (const document of [source, reopened])
+      expect(text(document.GetSharedString(new ScAddress(0, 1, 0)).getString())).toBe(
+        "\tLeading tab. THREE tabs inside: [\t\t\t]",
+      );
+  } finally {
+    reopened?.Dispose();
+    source.Dispose();
+  }
+});
+
 it("enforces real ZIP/media boundaries and cooperative import/export controls", /** Package metadata is composed through the same shared native property owners. @returns Completion. */ async () => {
   const { DocumentArchiveWriter } =
       await import("../../../../package/source/zippackage/document-archive"),
@@ -419,10 +455,10 @@ it("enforces real ZIP/media boundaries and cooperative import/export controls", 
     { ODS_MIMETYPE, ScXMLImportWrapper } = await import("./xmlwrap"),
     { DEFAULT_ARCHIVE_LIMITS } =
       await import("../../../../package/source/zippackage/document-archive");
-  /** Builds independent wire bytes,not a fake ZIP backend. @param mime - Media content. @param first - Whether media entry is first. @param root - Root media property. @returns Package. */
+  /** Builds independent wire bytes,not a fake ZIP backend. @param mime - Media content. @param placement - Where the optional media entry occurs. @param root - Root media property. @returns Package. */
   async function bytes(
     mime = ODS_MIMETYPE,
-    first = true,
+    placement: "first" | "last" | "absent" = "first",
     root = ODS_MIMETYPE,
   ): Promise<Uint8Array> {
     const zip = new DocumentArchiveWriter(),
@@ -430,7 +466,7 @@ it("enforces real ZIP/media boundaries and cooperative import/export controls", 
       sequence = [
         [
           createManifestProperty("FullPath", "/"),
-          createManifestProperty("MediaType", root),
+          createManifestProperty("MediaType", root || ODS_MIMETYPE),
           createManifestProperty("Version", "1.3"),
         ],
         [
@@ -438,7 +474,7 @@ it("enforces real ZIP/media boundaries and cooperative import/export controls", 
           createManifestProperty("MediaType", "text/xml"),
         ],
       ];
-    if (first) zip.putNextEntry("mimetype", encoder.encode(mime));
+    if (placement === "first") zip.putNextEntry("mimetype", encoder.encode(mime));
     zip.putNextEntry(
       "content.xml",
       encoder.encode(
@@ -447,22 +483,48 @@ it("enforces real ZIP/media boundaries and cooperative import/export controls", 
         ),
       ),
     );
-    if (!first) zip.putNextEntry("mimetype", encoder.encode(mime));
-    zip.putNextEntry("META-INF/manifest.xml", encoder.encode(createManifestXml(sequence)));
+    if (placement === "last") zip.putNextEntry("mimetype", encoder.encode(mime));
+    const manifest = createManifestXml(sequence);
+    zip.putNextEntry(
+      "META-INF/manifest.xml",
+      encoder.encode(
+        root
+          ? manifest
+          : manifest.replace(`manifest:media-type="${ODS_MIMETYPE}"`, 'manifest:media-type=""'),
+      ),
+    );
     return await zip.finish();
   }
   for (const input of [
     await bytes("bad"),
-    await bytes(ODS_MIMETYPE, false),
-    await bytes(ODS_MIMETYPE, true, "application/vnd.oasis.opendocument.text"),
+    await bytes(ODS_MIMETYPE, "first", "application/vnd.oasis.opendocument.text"),
+    await bytes(
+      "application/vnd.oasis.opendocument.text",
+      "first",
+      "application/vnd.oasis.opendocument.text",
+    ),
   ])
-    await expect(readOdsDocument(input)).rejects.toThrow();
-  const compressed = await compressedMimetypePackage(ODS_MIMETYPE);
-  await expect(readOdsDocument(compressed)).rejects.toThrow(/mimetype/);
+    await expect(readOdsDocument(input)).rejects.toThrow(/media type|mimetype/);
+  await expect(readOdsDocument(await bytes(ODS_MIMETYPE, "first", ""))).rejects.toThrow(
+    "media type requires repair",
+  );
   const normal = await bytes();
-  expect(
-    (await readOdsDocument(normal, { zipLimits: DEFAULT_ARCHIVE_LIMITS })).GetTableCount(),
-  ).toBe(1);
+  const compressed = await compressedMimetypePackage(await DocumentArchive.open(normal));
+  expect((await DocumentArchive.open(compressed)).getEntryMethod("mimetype")).toBe(8);
+  for (const input of [
+    normal,
+    compressed,
+    await bytes(ODS_MIMETYPE, "last"),
+    await bytes(ODS_MIMETYPE, "absent"),
+  ]) {
+    const source = await readOdsDocument(input, { zipLimits: DEFAULT_ARCHIVE_LIMITS });
+    try {
+      expect(source.GetTableCount()).toBe(1);
+      expect(source.GetValue(new ScAddress(0, 0, 0))).toBe(2);
+    } finally {
+      source.Dispose();
+    }
+  }
   await expect(
     readOdsDocument(normal, {
       isCancelled: /** Aborts before package reads. @returns True. */ () => true,

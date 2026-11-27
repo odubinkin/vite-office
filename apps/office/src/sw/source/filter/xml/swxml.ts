@@ -2,6 +2,7 @@
  * @fileoverview Reimplements the bounded SwXMLReader package orchestration from pinned LibreOffice `sw/source/filter/xml/swxml.cxx`.
  */
 
+import { CheckOdfStorageMediaType } from "../../../../sfx2/source/doc/objstor";
 import { readPlainPackageManifest } from "../../../../package/source/zippackage/ZipPackage";
 import { MIMETYPE_OASIS_OPENDOCUMENT_TEXT as ODT_MIMETYPE } from "../../../../comphelper/inc/documentconstants";
 import {
@@ -61,9 +62,6 @@ export class SwXMLReader {
             getEntryNames:
               /** Reads an unpacked Writer stream under the existing import limits.  @returns Operation result. */ () =>
                 Object.keys(bytes.files),
-            getEntryMethod:
-              /** Reads an unpacked Writer stream under the existing import limits.  @returns Operation result. */ () =>
-                0 as const,
             readEntry:
               /** Reads an unpacked Writer stream under the existing import limits. @param name - name. @returns Operation result. */ async (
                 name: string,
@@ -90,16 +88,13 @@ export class SwXMLReader {
         names.includes(name)
           ? readText(name, stage)
           : (checkpoint(control, stage), Promise.resolve(undefined));
-    if (names[0] !== "mimetype") throw new Error("ODT mimetype must be the first ZIP entry.");
-    if (packageFile.getEntryMethod("mimetype") !== 0)
-      throw new Error("ODT mimetype must be stored without compression.");
-    const mimetype = await readText("mimetype", "package");
-    if (mimetype !== ODT_MIMETYPE) throw new Error("ODT mimetype entry is invalid.");
+    const mimetype = await optionalText("mimetype", "package");
     const packageMetadata = readPlainPackageManifest(
       packageFile,
       await readText("META-INF/manifest.xml", "manifest"),
       mimetype,
     );
+    CheckOdfStorageMediaType(packageMetadata, ODT_MIMETYPE);
     const manifest = packageMetadata.streamMediaTypes;
     const settingsXml = names.includes("settings.xml") ? await readText("settings.xml") : undefined;
     const stylesXml = await optionalText("styles.xml", "styles");
@@ -190,7 +185,7 @@ export async function readOdtDocument(
 
 /** Reads and bounds one UTF-8 package stream. @param packageFile - Validated ZIP. @param name - Entry path. @param control - Cooperative controls. @param stage - Progress stage. @returns Decoded text. */
 async function readXmlEntry(
-  packageFile: Pick<DocumentArchive, "getEntryNames" | "readEntry" | "getEntryMethod">,
+  packageFile: Pick<DocumentArchive, "readEntry">,
   name: string,
   control: OdtImportControl,
   stage?: OdtImportProgressStage,

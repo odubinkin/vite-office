@@ -21,7 +21,8 @@
       "ZipPackage::parseContentType"
     ],
     "preservedResponsibilities": [
-      "Existing plain metadata/flat archive transport functions move unchanged and remain re-exported from their former public module. Actual package tree/state is not duplicated. Native value/SAX helper contracts and intentional existing persistence deviations remain unchanged."
+      "Existing plain metadata/flat archive transport functions move unchanged and remain re-exported from their former public module. Actual package tree/state is not duplicated. Native value/SAX helper contracts and intentional existing persistence deviations remain unchanged.",
+      "Releases the parsed native PropertyValue manifest after transferring its metadata into the package hierarchy."
     ],
     "omittedResponsibilities": [
       "Full native package/model/filter/storage/UI and physical ABI/thread parity remain unfinished."
@@ -35,11 +36,19 @@
         {
           "path": "apps/office/src/package/source/zippackage/native-plain-manifest.test.ts",
           "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sc/source/filter/xml/ods.test.ts",
+          "marker": "tdf103829"
         }
       ],
       "upstream": [
         {
           "path": "package/source/zippackage/ZipPackage.cxx",
+          "marker": "ZipPackage::parseManifest"
+        },
+        {
+          "path": "vendor/libreoffice-reference/package/source/zippackage/ZipPackage.cxx",
           "marker": "ZipPackage::parseManifest"
         }
       ]

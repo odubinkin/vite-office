@@ -24,13 +24,16 @@
         "tools/source/datetime/ttime.cxx",
         "apps/office/src/sw/source/writerfilter/filter/WriterFilter.test.ts",
         "apps/office/src/sw/browser/presentation/WriterFileDialog.test.tsx",
-        "apps/office/e2e/writer-docx-styles.spec.ts"
+        "apps/office/e2e/writer-docx-styles.spec.ts",
+        "apps/office/src/sw/source/filter/xml/odt-roundtrip.test.ts",
+        "vendor/libreoffice-reference/sfx2/source/doc/objstor.cxx"
       ],
-      "justification": "Task AQF9AG ports source CSV separator detection's header check, quote state, per-line common-character counts, stability selection, priority ordering, timeout and stream rewind. The 500ms source CSV separator timeout uses native monotonic clock units and is checked after each physical-line read. Browser file storage remains separate from this detector. The bounded load path extracts the actual native wrong-format target and exposes the row/column diagnostic to the existing browser error boundary.",
+      "justification": "Task AQF9AG ports source CSV separator detection's header check, quote state, per-line common-character counts, stability selection, priority ordering, timeout and stream rewind. The 500ms source CSV separator timeout uses native monotonic clock units and is checked after each physical-line read. Browser file storage remains separate from this detector. The bounded load path extracts the actual native wrong-format target and exposes the row/column diagnostic to the existing browser error boundary. Applies the ordinary native Sfx load decision to the package media type and repair-only fallback.",
       "knownViolations": [],
       "localSymbols": [
         "DetectCsvSeparators",
-        "ThrowFilterLoadError"
+        "ThrowFilterLoadError",
+        "CheckOdfStorageMediaType"
       ],
       "sourceResponsibility": "aligned",
       "upstreamFile": "sfx2/source/doc/objstor.cxx",

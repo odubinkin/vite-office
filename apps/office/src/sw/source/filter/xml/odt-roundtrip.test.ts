@@ -1,6 +1,7 @@
 /**
  * @fileoverview Verifies the source-shaped Writer ODF package and XML filter slice.
  */
+import { readFileSync } from "node:fs";
 import { SvxNumType } from "../../../../editeng/inc/svxenum";
 import { compressedMimetypePackage } from "../../../../test/fixtures/zip";
 import { FontItalic, FontWeight } from "../../../../tools/inc/fontenum";
@@ -642,7 +643,23 @@ describe("Writer ODF XML filters" /** Executes the enclosing deterministic test 
     }
   });
 
-  it("validates package order, media type, required streams, and explicit limits" /** Executes the enclosing deterministic test or transformation callback. @returns Callback result. */, async () => {
+  it("imports the original tdf106899 package with its later mimetype entry", /** Uses the normal Writer import path and verifies canonical re-export. @returns Completion. */ async () => {
+    const source = new Uint8Array(
+      readFileSync("../../vendor/libreoffice-reference/sw/qa/uitest/data/tdf106899.odt"),
+    );
+    expect((await DocumentArchive.open(source)).getEntryNames()[0]).toBe("Configurations2/");
+    const { document } = await readOdtDocument(source, metadata());
+    try {
+      expect(document.paragraphs[0]?.GetText()).toContain("Sài Gòn");
+      const exported = await DocumentArchive.open(await writeOdtDocument(document, metadata()));
+      expect(exported.getEntryNames()[0]).toBe("mimetype");
+      expect(exported.getEntryMethod("mimetype")).toBe(0);
+    } finally {
+      document.Dispose();
+    }
+  });
+
+  it("uses the manifest media type and retains required streams and explicit limits" /** Executes the enclosing deterministic test or transformation callback. @returns Callback result. */, async () => {
     const bytes = await basicOdt();
     const names = (await DocumentArchive.open(bytes)).getEntryNames();
     const reordered = await rewritePackage(bytes, {}, [
@@ -650,26 +667,33 @@ describe("Writer ODF XML filters" /** Executes the enclosing deterministic test 
       names[0] as string,
       ...names.slice(2),
     ]);
-    await expect(readOdtDocument(reordered, metadata())).rejects.toThrow(
-      "mimetype must be the first",
-    );
+    const original = await DocumentArchive.open(bytes);
+    const compressedType = await compressedMimetypePackage(original);
+    expect((await DocumentArchive.open(compressedType)).getEntryMethod("mimetype")).toBe(8);
+    for (const input of [
+      bytes,
+      reordered,
+      compressedType,
+      await rewritePackage(bytes, { mimetype: null }),
+    ]) {
+      const { document } = await readOdtDocument(input, metadata(), DEFAULT_ARCHIVE_LIMITS);
+      try {
+        expect(document.paragraphs).toHaveLength(1);
+      } finally {
+        document.Dispose();
+      }
+    }
+
     const wrongType = await rewritePackage(bytes, { mimetype: "application/invalid" });
     await expect(readOdtDocument(wrongType, metadata())).rejects.toThrow(
-      "mimetype entry is invalid",
+      "mimetype conflicts with manifest.xml",
     );
-    const compressedType = await compressedMimetypePackage(
-      await (await DocumentArchive.open(bytes)).readTextEntry("mimetype"),
+    const noManifest = await rewritePackage(bytes, { "META-INF/manifest.xml": null });
+    await expect(readOdtDocument(noManifest, metadata())).rejects.toThrow("Missing ZIP entry");
+    const malformed = await rewritePackage(bytes, { "META-INF/manifest.xml": "<broken" });
+    await expect(readOdtDocument(malformed, metadata())).rejects.toThrow(
+      "media type requires repair",
     );
-    await expect(readOdtDocument(compressedType, metadata())).rejects.toThrow(
-      "mimetype must be stored without compression",
-    );
-    for (const name of ["mimetype", "META-INF/manifest.xml"])
-      await expect(
-        readOdtDocument(await rewritePackage(bytes, { [name]: null }), metadata()),
-      ).rejects.toThrow(name === "mimetype" ? "mimetype must be the first" : "Missing ZIP entry");
-    expect(
-      (await readOdtDocument(bytes, metadata(), DEFAULT_ARCHIVE_LIMITS)).document.paragraphs,
-    ).toHaveLength(1);
     await expect(
       new SwXMLReader().Read(bytes, metadata(), undefined, { maxXmlStreamBytes: 1 }),
     ).rejects.toThrow("XML stream exceeds size limit");

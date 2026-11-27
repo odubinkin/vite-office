@@ -165,8 +165,8 @@ describe("privacy-safe ODT import diagnostics", /** Groups package diagnostic as
         new TextEncoder().encode("invalid manifest"),
       ),
     );
-    // Native ManifestReader discards SAX failures; ZipPackage can recover the MIME from mimetype.
-    expect(malformed.imported).toBe(true);
+    // Normal Sfx document load rejects the ZIP MIME fallback after a manifest parse failure.
+    expect(malformed.imported).toBe(false);
     expect(JSON.stringify(malformed)).not.toContain("invalid manifest");
     const manifestFailure = await replaceFixtureEntry(
       "META-INF/manifest.xml",

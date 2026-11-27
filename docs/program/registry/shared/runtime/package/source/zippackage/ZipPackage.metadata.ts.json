@@ -26,9 +26,11 @@
         "apps/office/src/package/source/zippackage/ZipPackage.metadata.ts",
         "apps/office/src/package/source/zippackage/native-plain-manifest.test.ts",
         "apps/office/src/comphelper/source/xml/ofopxmlhelper.test.ts",
+        "vendor/libreoffice-reference/package/source/zippackage/ZipPackage.cxx",
+        "apps/office/src/sc/source/filter/xml/ods.test.ts",
         "vendor/libreoffice-reference/package/source/zippackage/ZipPackage.cxx"
       ],
-      "justification": "Existing plain archive metadata/flat transport helper responsibilities move unchanged from ZipPackage.ts with their original actual native value/SAX helpers and API re-exports. Full native package/storage/filter/model/UI remains unqualified; no new provider, service or document DTO is supplied.",
+      "justification": "Existing plain archive metadata/flat transport helper responsibilities move unchanged from ZipPackage.ts with their original actual native value/SAX helpers and API re-exports. Full native package/storage/filter/model/UI remains unqualified; no new provider, service or document DTO is supplied. Releases the parsed native PropertyValue manifest after transferring its metadata into the package hierarchy.",
       "knownViolations": [],
       "localSymbols": [
         "PlainPackageMetadata",

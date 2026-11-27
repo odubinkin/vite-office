@@ -18,8 +18,11 @@ the package streams.
 4. `content.xml`;
 5. `meta.xml`.
 
-The reader accepts STORE and raw-DEFLATE ZIP32 entries. It imports named styles
-before content, matching the ordering in the pinned Writer XML filter. Export is
+The reader accepts STORE and raw-DEFLATE ZIP32 entries. The package manifest and
+optional `mimetype` establish the media type for normal ODT loading. A `mimetype`
+entry can be compressed or appear after another entry on input. Export places it
+first and stores it without compression. The reader imports named styles before
+content, matching the ordering in the pinned Writer XML filter. Export is
 deliberately STORE-only: the result remains a valid ODF ZIP package, avoids adding
 a second compression implementation to the browser bundle, and is bounded by a
 64 MiB complete-output ceiling.

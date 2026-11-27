@@ -6,6 +6,7 @@ import {
 } from "../../../../package/source/zippackage/document-archive";
 import { packXmlPackage } from "../../../../package/source/zippackage/xml-package";
 import type { XmlPackage } from "../../../../svl/source/misc/storage";
+import { CheckOdfStorageMediaType } from "../../../../sfx2/source/doc/objstor";
 import { readPlainPackageManifest } from "../../../../package/source/zippackage/ZipPackage";
 import {
   createManifestXml,
@@ -70,9 +71,6 @@ export class ScXMLImportWrapper {
             getEntryNames:
               /** Reads or measures an unpacked Calc XML stream.  @returns Operation result. */ () =>
                 Object.keys(bytes.files),
-            getEntryMethod:
-              /** Reads or measures an unpacked Calc XML stream.  @returns Operation result. */ () =>
-                0,
             readTextEntry:
               /** Reads or measures an unpacked Calc XML stream. @param name - name. @returns Operation result. */ async (
                 name: string,
@@ -82,15 +80,18 @@ export class ScXMLImportWrapper {
                 return value;
               },
           };
-    if (zip.getEntryNames()[0] !== "mimetype" || zip.getEntryMethod("mimetype") !== 0)
-      throw new Error("ODS requires first uncompressed mimetype entry");
-    const mimetype = await zip.readTextEntry("mimetype");
-    if (mimetype !== ODS_MIMETYPE) throw new Error("Invalid ODS mimetype");
-    readPlainPackageManifest(zip, await zip.readTextEntry("META-INF/manifest.xml"), mimetype);
+    const names = zip.getEntryNames();
+    const mimetype = names.includes("mimetype") ? await zip.readTextEntry("mimetype") : undefined;
+    const metadata = readPlainPackageManifest(
+      zip,
+      await zip.readTextEntry("META-INF/manifest.xml"),
+      mimetype,
+    );
+    CheckOdfStorageMediaType(metadata, ODS_MIMETYPE);
     if (options.isCancelled?.()) throw new Error("ODS operation was cancelled");
     const importer = new ScXMLImport(this.document, options);
     let views: ViewSettings | undefined;
-    if (zip.getEntryNames().includes("settings.xml")) {
+    if (names.includes("settings.xml")) {
       parseOdfXmlStream(
         await zip.readTextEntry("settings.xml"),
         {
@@ -111,8 +112,7 @@ export class ScXMLImportWrapper {
       );
     }
     const content = await zip.readTextEntry("content.xml");
-    if (zip.getEntryNames().includes("styles.xml"))
-      importer.importStyles(await zip.readTextEntry("styles.xml"));
+    if (names.includes("styles.xml")) importer.importStyles(await zip.readTextEntry("styles.xml"));
     importer.importContent(content);
     if (views !== undefined) ReadUserDataSequence(this.document, views);
   }
@@ -204,8 +204,13 @@ export async function readOdsDocument(
   options: OdsImportOptions = {},
 ): Promise<ScDocument> {
   const doc = new ScDocument();
-  await new ScXMLImportWrapper(doc).Import(bytes, options);
-  return doc;
+  try {
+    await new ScXMLImportWrapper(doc).Import(bytes, options);
+    return doc;
+  } catch (error) {
+    doc.Dispose();
+    throw error;
+  }
 }
 /** Browser native-document-to-package binding. @param document - Actual document. @param options - Controls. @returns ODS bytes. */
 export async function writeOdsDocument(
