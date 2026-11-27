@@ -121,6 +121,7 @@ const entries: readonly (readonly [string, string, XMLToken])[] = [
   [ODF_NAMESPACES.number, "automatic-order", XMLToken.NUMBER_AUTOMATIC_ORDER],
   [ODF_NAMESPACES.number, "format-source", XMLToken.NUMBER_FORMAT_SOURCE],
   [ODF_NAMESPACES.number, "truncate-on-overflow", XMLToken.NUMBER_TRUNCATE_ON_OVERFLOW],
+  [ODF_NAMESPACES.number, "title", XMLToken.NUMBER_TITLE],
   [ODF_NAMESPACES.number, "language", XMLToken.FO_LANGUAGE],
   [ODF_NAMESPACES.number, "country", XMLToken.FO_COUNTRY],
   [ODF_NAMESPACES.table, "calculation-settings", XMLToken.TABLE_CALCULATION_SETTINGS],

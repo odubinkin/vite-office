@@ -8117,3 +8117,10 @@ later. Calc preserves the original ordering gate.
 
 - [Original master-page child ordering](../../vendor/libreoffice-reference/xmloff/source/text/XMLTextMasterPageContext.cxx)
 - [Original Calc master-page child specialization](../../vendor/libreoffice-reference/sc/source/filter/xml/xmlstyli.cxx)
+
+### CALC-850 — Number-format cancellation follows the remaining add list
+
+- Pinned source: `svx/source/items/numfmtsh.cxx`, `~SvxNumberFormatShell`, `AddFormat` and `RemoveFormat`.
+- Observation: Add writes to the formatter immediately and records its key in the add list. Remove places the key in a deferred delete list and erases it from the add list. Re-adding a removed key clears the delete entry and places the existing key back in the add list.
+- Impact: Cancel after Add followed by Remove leaves the newly allocated format in the formatter. Cancel after Remove followed by re-adding an existing format deletes that original format. The normal single Add and single Remove cancellation paths behave as expected.
+- Local preservation: keep the original list transfers and guard on acceptance. The focused shell cases assert both observed outcomes.

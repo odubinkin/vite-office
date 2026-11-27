@@ -5,6 +5,8 @@ import {
   SvxBoxItemLine as Edge,
   SvxBoxInfoItemValidFlags as Valid,
 } from "../../../../editeng/source/items/frmitems";
+import { SID_ATTR_NUMBERFORMAT_INFO } from "../../../../svx/inc/svxids";
+import { SvxNumberInfoItem } from "../../../../svx/source/items/numinf";
 import { SvxNumberFormatShell } from "../../../../svx/source/items/numfmtsh";
 import {
   ATTR_VALUE_FORMAT,
@@ -134,6 +136,7 @@ export const cellFormatPages = [
 export interface NumberFormatChange {
   readonly language: number;
   readonly code: string;
+  readonly comment?: string;
 }
 
 /** Original output item set and the staged number-format selection. */
@@ -191,6 +194,7 @@ export class ScAttrDlg {
     });
 
     this.output = this.items.Clone(false);
+    this.output.MergeRange(SID_ATTR_NUMBERFORMAT_INFO, SID_ATTR_NUMBERFORMAT_INFO);
     this.asianTypography = new SvxAsianTabPage(this.items, this.output);
     if (pattern.HasValidNumberFormat())
       this.items.Put(
@@ -209,6 +213,20 @@ export class ScAttrDlg {
       this.sample = formula?.IsValue() ? formula.GetValue() : undefined;
     }
     this.numbers = new SvxNumberFormatShell(this.formatter, this.sample);
+  }
+
+  /** Completes the original number-info exchange after successful dialog admission.
+   * @param output - Pending typed output.
+   * @returns Nothing.
+   */
+  FillNumberFormatInfo(output: SfxItemSet): void {
+    const deleted = this.numbers.GetUpdateData();
+    if (deleted.length) {
+      const info = new SvxNumberInfoItem(this.formatter, SID_ATTR_NUMBERFORMAT_INFO);
+      info.SetDelFormats(deleted);
+      output.Put(info, true);
+    }
+    this.numbers.ValidateNewEntries();
   }
 
   /** Reads the pending or original item while preserving mixed state. @param which - Native item ID. @returns Effective item or mixed. */

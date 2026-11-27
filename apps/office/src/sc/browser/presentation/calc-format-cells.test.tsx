@@ -1,5 +1,5 @@
 /** @fileoverview Format Cells tests over the real Calc frame, imported formatting and undo owners. */
-import { afterEach, expect, it } from "vitest";
+import { afterEach, assert, expect, it } from "vitest";
 import { act, cleanup, fireEvent, render, screen, within } from "@testing-library/react";
 import { implementations } from "../../../desktop/browser/app/uno-components";
 import { InitApplicationServiceManager } from "../../../desktop/source/app/appinit";
@@ -471,4 +471,97 @@ it("retains the native mixed forbidden-character selection through Reset, Cancel
     },
   );
   expect(read()).toBe(false);
+});
+
+it("uses the native Add, Edit Comment and Remove controls for document number formats" /** Drives real formatter entries and defers catalog deletion through the typed response. @returns Completion. */, async () => {
+  const { controller } = mount();
+  const doc = controller.shell.GetDocument();
+  const formatter = doc.GetFormatTable();
+  const code = '0.0000" custom unit"';
+  open();
+  let modal = dialog();
+  expect(modal.getByRole("button", { name: /^Add$/ })).toBeDisabled();
+  expect(modal.getByRole("button", { name: /^Remove$/ })).toBeDisabled();
+  fireEvent.change(modal.getByRole("textbox", { name: "Format Code" }), {
+    target: { value: code },
+  });
+  fireEvent.click(modal.getByRole("button", { name: "Edit Comment" }));
+  const comment = modal.getByRole("textbox", { name: "Comment" });
+  fireEvent.change(comment, { target: { value: "Data export" } });
+  fireEvent.blur(comment);
+  fireEvent.click(modal.getByRole("button", { name: /^Add$/ }));
+  expect(modal.getByRole("button", { name: /^Add$/ })).toBeDisabled();
+  expect(modal.getByRole("button", { name: /^Remove$/ })).toBeEnabled();
+  expect(modal.getByText("Data export")).toBeVisible();
+  await accept();
+
+  const key = doc.GetNumberFormat(0, 0, 0);
+  expect(formatter.IsUserDefined(key)).toBe(true);
+  const saved = formatter.GetEntry(key);
+  assert(saved);
+  expect(text(saved.GetComment())).toBe("Data export");
+  const reopened = await readOdsDocument(await writeOdsDocument(doc));
+  try {
+    const format = reopened.GetFormatTable().GetEntry(reopened.GetNumberFormat(0, 0, 0));
+    assert(format);
+    expect(text(format.GetComment())).toBe("Data export");
+  } finally {
+    reopened.Dispose();
+  }
+
+  open();
+  modal = dialog();
+  expect(modal.getByText("Data export")).toBeVisible();
+  fireEvent.click(modal.getByRole("button", { name: "Edit Comment" }));
+  const updated = modal.getByRole("textbox", { name: "Comment" });
+  fireEvent.change(updated, { target: { value: "Measurement" } });
+  fireEvent.blur(updated);
+  fireEvent.click(modal.getByRole("button", { name: /^Remove$/ }));
+  expect(formatter.GetEntry(key)).not.toBeNull();
+  fireEvent.click(modal.getByRole("button", { name: "Cancel" }));
+  expect(formatter.GetEntry(key)).toBe(saved);
+  expect(text(saved.GetComment())).toBe("Measurement");
+
+  open();
+  modal = dialog();
+  fireEvent.click(modal.getByRole("button", { name: /^Remove$/ }));
+  await accept();
+  expect(formatter.GetEntry(key)).toBeNull();
+  expect(doc.GetNumberFormat(0, 0, 0)).not.toBe(key);
+});
+
+it("rolls back a newly added format on Cancel and accepts a comment on implicit Add" /** Checks the known native Add side effect and its acceptance boundary. @returns Completion. */, async () => {
+  const { controller } = mount();
+  const doc = controller.shell.GetDocument();
+  const formatter = doc.GetFormatTable();
+  const code = '0.0000" temporary"';
+  const size = formatter.GetROFormatData().GetFormatEntryMap().size;
+  open();
+  let modal = dialog();
+  fireEvent.change(modal.getByRole("textbox", { name: "Format Code" }), {
+    target: { value: code },
+  });
+  fireEvent.click(modal.getByRole("button", { name: /^Add$/ }));
+  expect(formatter.GetROFormatData().GetFormatEntryMap().size).toBe(size + 1);
+  await act(
+    /** Waits for the dismissed dialog's formatter cleanup. @returns Completion. */ async () => {
+      fireEvent.click(modal.getByRole("button", { name: "Cancel" }));
+    },
+  );
+  expect(formatter.GetROFormatData().GetFormatEntryMap().size).toBe(size);
+
+  open();
+  modal = dialog();
+  fireEvent.change(modal.getByRole("textbox", { name: "Format Code" }), {
+    target: { value: code },
+  });
+  fireEvent.click(modal.getByRole("button", { name: "Edit Comment" }));
+  const comment = modal.getByRole("textbox", { name: "Comment" });
+  fireEvent.change(comment, { target: { value: "Reviewed" } });
+  fireEvent.blur(comment);
+  await accept();
+  expect(formatter.IsUserDefined(doc.GetNumberFormat(0, 0, 0))).toBe(true);
+  const saved = formatter.GetEntry(doc.GetNumberFormat(0, 0, 0));
+  assert(saved);
+  expect(text(saved.GetComment())).toBe("Reviewed");
 });

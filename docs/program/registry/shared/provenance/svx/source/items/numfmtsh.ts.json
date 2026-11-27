@@ -15,7 +15,8 @@
       "SvxNumberFormatShell::MakePrevStringFromVal"
     ],
     "preservedResponsibilities": [
-      "Lists category and locale entries and generates and previews a draft number picture using the native formatter."
+      "Lists category and locale entries and generates and previews a draft number picture using the native formatter.",
+      "Maintains the pinned native add/remove lists for document-owned formats, exact related comments and cancellation."
     ],
     "omittedResponsibilities": [
       "Custom format administration remains a separate source responsibility."
@@ -29,6 +30,10 @@
         {
           "path": "apps/office/src/sc/browser/presentation/calc-format-cells.test.tsx",
           "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/svx/source/items/numfmtsh.test.ts",
+          "marker": "preserves the native add and remove list order"
         }
       ],
       "upstream": [
@@ -43,6 +48,10 @@
         {
           "path": "vendor/libreoffice-reference/svx/source/items/numfmtsh.cxx",
           "marker": "SvxNumberFormatShell::MakePrevStringFromVal"
+        },
+        {
+          "path": "vendor/libreoffice-reference/svx/source/items/numfmtsh.cxx",
+          "marker": "SvxNumberFormatShell::RemoveFormat"
         }
       ]
     }

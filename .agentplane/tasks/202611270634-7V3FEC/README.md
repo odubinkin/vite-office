@@ -4,7 +4,7 @@ title: "Complete Calc user-defined number format administration"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 5
+revision: 6
 origin:
   system: "manual"
 depends_on: []
@@ -36,7 +36,7 @@ events:
     to: "DOING"
     note: "Start: Connect the original user-format actions and typed formatter update in Calc Format Cells."
 doc_version: 3
-doc_updated_at: "2026-11-27T06:35:08.181Z"
+doc_updated_at: "2026-11-27T07:05:04.620Z"
 doc_updated_by: "CODER"
 description: "Connect the pinned Add, Edit Comment and Remove controls, shared number-format shell lifecycle and original Calc formatter update exchange. Preserve native cancellation, accepted actions and inherited styles."
 sections:
@@ -48,7 +48,12 @@ sections:
     - Run Office typecheck, changed-source ESLint and Prettier, dependencies, source tree, provenance and registry. Preserve existing integrated gate diagnostics where they apply.
   Verification: "Pending execution."
   Rollback Plan: "Revert the scoped UI, item and formatter changes."
-  Findings: "Native spelling and placement come from numberingformatpage.ui. The formatter session maintains its add and remove lists separately; native output carries deleted keys via SID_ATTR_NUMBERFORMAT_INFO."
+  Findings: |-
+    The native Format Code group now uses the actual shared add, remove and selected comment paths. The original typed SvxNumberInfoItem carries the removal keys. XML number:title stores and restores the accepted comment when the assigned number style is exported and reopened. CALC-850 records the pinned two-list cancellation asymmetries and the focused shell tests retain them.
+
+    Command: Office Vitest Calc Format Cells, Number Format and ODS suites plus the shared number-format shell, formatter-entry and picture suites. Result: 59 selected cases passed across the original run and the exact rerun. The first run found an incorrect assumption about an accepted quoted code and a cancellation assertion that ran before asynchronous cleanup. Both corrected cases passed on the exact rerun, along with the successful ODS comment reopen case.
+
+    Commands: changed-source ESLint and Prettier, module boundaries, source tree, scoped provenance, AgentPlane routing and doctor. Result: pass. Global provenance and Calc/shared registry still stop on their already missing integrated Writer/shared ODF markers. No catalog or dialog change caused those inherited failures.
 id_source: "generated"
 ---
 ## Summary
@@ -78,4 +83,8 @@ Revert the scoped UI, item and formatter changes.
 
 ## Findings
 
-Native spelling and placement come from numberingformatpage.ui. The formatter session maintains its add and remove lists separately; native output carries deleted keys via SID_ATTR_NUMBERFORMAT_INFO.
+The native Format Code group now uses the actual shared add, remove and selected comment paths. The original typed SvxNumberInfoItem carries the removal keys. XML number:title stores and restores the accepted comment when the assigned number style is exported and reopened. CALC-850 records the pinned two-list cancellation asymmetries and the focused shell tests retain them.
+
+Command: Office Vitest Calc Format Cells, Number Format and ODS suites plus the shared number-format shell, formatter-entry and picture suites. Result: 59 selected cases passed across the original run and the exact rerun. The first run found an incorrect assumption about an accepted quoted code and a cancellation assertion that ran before asynchronous cleanup. Both corrected cases passed on the exact rerun, along with the successful ODS comment reopen case.
+
+Commands: changed-source ESLint and Prettier, module boundaries, source tree, scoped provenance, AgentPlane routing and doctor. Result: pass. Global provenance and Calc/shared registry still stop on their already missing integrated Writer/shared ODF markers. No catalog or dialog change caused those inherited failures.

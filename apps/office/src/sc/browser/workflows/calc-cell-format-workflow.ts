@@ -6,6 +6,8 @@ import { unicode } from "../../../i18nlangtag/source/isolang/isolang.tables";
 import { SfxDialogController } from "../../../sfx2/source/dialog/basedlgs";
 import { SfxRequest } from "../../../sfx2/source/control/request";
 import { NUMBERFORMAT_ENTRY_NOT_FOUND, SvNumFormatType } from "../../../svl/inc/zforlist";
+import { SID_ATTR_NUMBERFORMAT_INFO } from "../../../svx/inc/svxids";
+import type { SvxNumberInfoItem } from "../../../svx/source/items/numinf";
 import { SfxUInt32Item } from "../../../svl/source/items/intitem";
 import { SvxLanguageItem } from "../../../editeng/source/items/textitem.language";
 import { ATTR_LANGUAGE_FORMAT, ATTR_VALUE_FORMAT } from "../../inc/scitems";
@@ -118,15 +120,33 @@ export class CalcCellFormatWorkflow {
             if (key[0] === NUMBERFORMAT_ENTRY_NOT_FOUND)
               formatter.PutEntry(code, check, [SvNumFormatType.ALL], key, format.language);
             if (check[0] || key[0] === NUMBERFORMAT_ENTRY_NOT_FOUND) return false;
+            if (model.numbers.GetUpdateData().includes(key[0]))
+              model.numbers.AddFormat(format.code, format.language);
+            if (format.comment && format.comment !== "User-defined")
+              model.numbers.SetComment4Entry(key[0], format.comment);
             items.Put(new SfxUInt32Item(ATTR_VALUE_FORMAT, key[0]), true);
-            items.Put(new SvxLanguageItem(format.language, ATTR_LANGUAGE_FORMAT), true);
+            items.Put(
+              new SvxLanguageItem(
+                formatter.GetEntry(key[0])?.GetLanguage() ?? format.language,
+                ATTR_LANGUAGE_FORMAT,
+              ),
+              true,
+            );
           } finally {
             code.dispose();
           }
         }
+        model.FillNumberFormatInfo(items);
+        const info = items.GetItemIfSet(SID_ATTR_NUMBERFORMAT_INFO, false) as
+          SvxNumberInfoItem | undefined;
+        if (info) {
+          for (const key of info.GetDelFormats()) info.GetNumberFormatter().DeleteEntry(key);
+          items.ClearItem(SID_ATTR_NUMBERFORMAT_INFO);
+          this.controller.shell.SetDocumentModified();
+        }
         if (items.Count()) view.ApplyAttributes(items, model.items);
         copy.Done();
-        return items.Count() !== 0;
+        return info !== undefined || items.Count() !== 0;
       } finally {
         items.Dispose();
       }

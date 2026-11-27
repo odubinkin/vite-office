@@ -1,9 +1,9 @@
 /** @fileoverview Native Numbers page controls and formatter-backed preview. */
-import { useState } from "react";
+import { useRef, useState } from "react";
 import type { Color } from "../../../../tools/inc/color";
 import { SfxItemState } from "../../../../svl/source/items/itemset";
 import type { SfxUInt32Item } from "../../../../svl/source/items/intitem";
-import { SvNumFormatType as T } from "../../../../svl/inc/zforlist";
+import { NUMBERFORMAT_ENTRY_NOT_FOUND, SvNumFormatType as T } from "../../../../svl/inc/zforlist";
 import { LANGUAGE_SYSTEM } from "../../../../i18nlangtag/inc/lang";
 import { text } from "../../../../i18nlangtag/source/isolang/isolang.tables";
 import {
@@ -46,6 +46,8 @@ export function NumberFormatTabPage({ model, edit, setEdit }: Props): React.JSX.
   const code = edit?.code ?? (initial ? text(initial.GetFormatstring()) : "");
   const [categoryOverride, setCategory] = useState<number>();
   const [currency, setCurrency] = useState("");
+  const [commentEditor, setCommentEditor] = useState<{ key: number; value: string }>();
+  const formatCode = useRef<HTMLInputElement>(null);
   const description = model.numbers.Describe(code, language);
   const type = description?.type ?? T.ALL;
   const initialCategory =
@@ -66,6 +68,16 @@ export function NumberFormatTabPage({ model, edit, setEdit }: Props): React.JSX.
   const currencyRows = category === T.CURRENCY ? currencyList : [];
   const formats = model.numbers.GetFormats(category, language);
   const currentCode = description?.code ?? code;
+  const entry = model.numbers.FindEntry(currentCode, language);
+  const addSensitive =
+    code !== "" &&
+    entry === NUMBERFORMAT_ENTRY_NOT_FOUND &&
+    (type !== T.CURRENCY || !model.numbers.IsInCurrencyTable(currentCode, language));
+  const userDefined = model.numbers.IsUserDefined(entry);
+  const comment =
+    entry !== NUMBERFORMAT_ENTRY_NOT_FOUND
+      ? model.numbers.GetComment4Entry(entry) || (userDefined ? "User-defined" : "")
+      : (edit?.comment ?? (addSensitive ? "User-defined" : ""));
   const selectedCode = formats.some(
     /** Resolves the selected original gallery row. @param row - Format gallery row. @returns Whether its code is active. */
     (row) => row.code === currentCode,
@@ -92,6 +104,38 @@ export function NumberFormatTabPage({ model, edit, setEdit }: Props): React.JSX.
       language,
       code: model.numbers.Generate(picture, language, { ...previous, ...patch }),
     });
+  }
+
+  /** Applies the original Add action and selects its normalized result in the gallery. @returns Nothing. */
+  function addFormat(): void {
+    const added = model.numbers.AddFormat(code, language);
+    if (!added) {
+      formatCode.current?.focus();
+      formatCode.current?.select();
+      return;
+    }
+    if (edit?.comment && edit.comment !== "User-defined")
+      model.numbers.SetComment4Entry(added.key, edit.comment);
+    const addedType = model.formatter.GetType(added.key);
+    setCategory(addedType === T.DATETIME ? T.DATE : addedType);
+    setEdit({ code: added.code, language: added.language });
+  }
+
+  /** Selects the native standard replacement and defers removal until OK. @returns Nothing. */
+  function removeFormat(): void {
+    const replacement = model.numbers.RemoveFormat(entry);
+    if (!replacement) return;
+    setCategory(replacement.category);
+    setEdit({ code: replacement.code, language: replacement.language });
+  }
+
+  /** Saves an existing comment on leaving its editor and retains new comments until Add. @returns Nothing. */
+  function finishComment(): void {
+    if (!commentEditor) return;
+    if (commentEditor.key === NUMBERFORMAT_ENTRY_NOT_FOUND)
+      setEdit({ code, language, comment: commentEditor.value });
+    else model.numbers.SetComment4Entry(commentEditor.key, commentEditor.value);
+    setCommentEditor(undefined);
   }
 
   return (
@@ -292,19 +336,80 @@ export function NumberFormatTabPage({ model, edit, setEdit }: Props): React.JSX.
           {type === T.SCIENTIFIC ? "Engineering notation" : "Thousands separator"}
         </label>
       </fieldset>
-      <label className="block space-y-1 text-sm">
-        Format Code
-        <input
-          className={fieldClass + " w-full font-mono"}
-          value={code}
-          aria-invalid={!!edit && !description}
-          onChange={
-            /** Stages the user's draft picture. @param event - Browser control event. @returns Nothing. */ (
-              event,
-            ) => setEdit({ language, code: event.currentTarget.value })
-          }
-        />
-      </label>
+      <fieldset className="rounded border border-slate-200 p-3 text-sm">
+        <legend className="px-1 font-medium">Format Code</legend>
+        <div className="flex flex-wrap items-center gap-2">
+          <input
+            ref={formatCode}
+            className={fieldClass + " min-w-24 flex-1 font-mono"}
+            aria-label="Format Code"
+            value={code}
+            aria-invalid={!!edit && !description}
+            onChange={
+              /** Stages the user's draft picture. @param event - Browser control event. @returns Nothing. */ (
+                event,
+              ) => setEdit({ language, code: event.currentTarget.value })
+            }
+          />
+          <button type="button" className={fieldClass} disabled={!addSensitive} onClick={addFormat}>
+            Add
+          </button>
+          <button
+            type="button"
+            className={fieldClass}
+            disabled={!addSensitive && !userDefined}
+            onClick={
+              /** Opens the selected entry comment editor. @returns Nothing. */
+              () => {
+                if (commentEditor) finishComment();
+                else setCommentEditor({ key: entry, value: comment });
+              }
+            }
+            onMouseDown={
+              /** Lets the comment toggle receive clicks before the input loses focus. @param event - Button event. @returns Nothing. */
+              (event) => {
+                if (commentEditor) event.preventDefault();
+              }
+            }
+          >
+            Edit Comment
+          </button>
+          <button
+            type="button"
+            className={fieldClass}
+            disabled={!userDefined}
+            onClick={removeFormat}
+          >
+            Remove
+          </button>
+        </div>
+        {commentEditor ? (
+          <input
+            type="text"
+            className={fieldClass + " mt-2 w-full"}
+            aria-label="Comment"
+            autoFocus
+            value={commentEditor.value}
+            onChange={
+              /** Retains the typed annotation until the source editor loses focus. @param event - Browser control event. @returns Nothing. */
+              (event) => setCommentEditor({ ...commentEditor, value: event.currentTarget.value })
+            }
+            onBlur={finishComment}
+            onKeyDown={
+              /** Accepts a comment without submitting the containing dialog. @param event - Browser control event. @returns Nothing. */
+              (event) => {
+                if (event.key === "Enter") {
+                  event.preventDefault();
+                  event.currentTarget.blur();
+                  formatCode.current?.focus();
+                }
+              }
+            }
+          />
+        ) : (
+          comment && <p className="mt-2 text-slate-600">{comment}</p>
+        )}
+      </fieldset>
     </div>
   );
 }

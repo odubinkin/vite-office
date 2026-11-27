@@ -1,0 +1,36 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/svx/source/items/numinf.ts",
+    "classification": "upstream-mechanism",
+    "state": "active",
+    "suite": "shared",
+    "subsystem": "number-format",
+    "capabilityIds": [
+      "CAP-9edf9151-bbd9-46b7-96e7-a002cc8fa650"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "none",
+      "evidence": [
+        "apps/office/src/svx/source/items/numinf.ts#SvxNumberInfoItem",
+        "apps/office/src/svx/source/items/numfmtsh.test.ts",
+        "vendor/libreoffice-reference/svx/source/items/numinf.cxx#SvxNumberInfoItem::SetDelFormats"
+      ],
+      "justification": "Transports that formatter and an independent ordered copy of the actual deferred deletion keys.",
+      "knownViolations": [],
+      "localSymbols": [
+        "SvxNumberInfoItem"
+      ],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": "svx/source/items/numinf.cxx",
+      "upstreamSymbols": [
+        "SvxNumberInfoItem::SetDelFormats",
+        "SvxNumberInfoItem::Clone"
+      ]
+    }
+  }
+}

@@ -1,0 +1,45 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/svx/source/items/numinf.ts",
+    "status": "mapped",
+    "upstreamPath": "svx/source/items/numinf.cxx",
+    "localSymbols": [
+      "SvxNumberInfoItem"
+    ],
+    "upstreamSymbols": [
+      "SvxNumberInfoItem::SetDelFormats",
+      "SvxNumberInfoItem::Clone"
+    ],
+    "preservedResponsibilities": [
+      "Carries the original borrowed formatter and ordered deletion keys through the typed Sfx exchange."
+    ],
+    "omittedResponsibilities": [
+      "Calc already has the represented cursor sample in its format dialog, so this slice only constructs the formatter-only number info item."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/svx/source/items/numinf.ts",
+          "marker": "SvxNumberInfoItem"
+        },
+        {
+          "path": "apps/office/src/svx/source/items/numfmtsh.test.ts",
+          "marker": "carries an independent deletion list"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/svx/source/items/numinf.cxx",
+          "marker": "SvxNumberInfoItem::SetDelFormats"
+        },
+        {
+          "path": "vendor/libreoffice-reference/svx/source/items/numinf.cxx",
+          "marker": "SvxNumberInfoItem::Clone"
+        }
+      ]
+    }
+  }
+}
