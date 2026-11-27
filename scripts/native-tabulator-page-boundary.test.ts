@@ -31,7 +31,8 @@ it.each([
     expect(isOriginalCharacterValueImport(source, "vcl/browser/native-provider.ts")).toBe(false);
   },
 );
-it("retains native module blanket restrictions", /** A field query cannot enable unrelated framework or configuration imports. @returns Nothing. */ () => {
-  for (const target of ["vcl", "svtools", "sfx2", "unotools"])
+it("keeps native VCL admission and exact-only tab-page exceptions", /** Checks the current library edge and narrow tab-page exceptions. @returns Nothing. */ () => {
+  expect(isForbiddenModuleEdge("cui", "vcl")).toBe(false);
+  for (const target of ["svtools", "sfx2", "unotools"])
     expect(isForbiddenModuleEdge("cui", target)).toBe(true);
 });

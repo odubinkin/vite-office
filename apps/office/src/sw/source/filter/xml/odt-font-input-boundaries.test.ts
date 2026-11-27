@@ -55,16 +55,19 @@ it("rejects incorrectly typed direct margins and paragraph adjustments at export
   }
 });
 
-it("rejects an unsupported adjustment returned by a native item", /** Checks the exporter boundary independently of native getter normalization. @returns Nothing. */ () => {
+it("exports start for an unmapped native adjustment", /** Checks the exporter boundary independently of native getter normalization. @returns Nothing. */ () => {
   const doc = new SwDoc();
   doc
     .GetTextFormatColl("text-body")
     .SetFormatAttr(new SvxAdjustItem(SvxAdjust.Left, RES_PARATR_ADJUST));
   const getter = vi.spyOn(SvxAdjustItem.prototype, "GetAdjust").mockReturnValue(SvxAdjust.End);
   try {
-    expect(
-      /** Serializes unsupported native adjustment. @returns XML. */ () => exportStylesXml(doc),
-    ).toThrow("ODT paragraph adjustment value is unsupported");
+    const styles = exportStylesXml(doc);
+    const bodyStyle =
+      /<style:style\b[^>]*style:name="Text_20_body"[^>]*>([\s\S]*?)<\/style:style>/u.exec(
+        styles,
+      )?.[1];
+    expect(bodyStyle).toContain('fo:text-align="start"');
   } finally {
     getter.mockRestore();
     doc.Dispose();

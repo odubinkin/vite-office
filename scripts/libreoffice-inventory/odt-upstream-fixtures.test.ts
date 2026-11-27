@@ -29,12 +29,24 @@ beforeAll(initializeOfficeServices);
 
 const fixtureRoot = path.resolve("apps/office/src/sw/qa/extras/odfimport/data");
 
-/** Removes only document-local numeric automatic-rule identities; all exported geometry and common names remain comparable. @param xml - Exported XML stream. @returns Stable XML for package-cycle comparison. */
-function normalizeAutomaticListIdentities(xml: string): string {
-  return xml.replace(
-    /(<text:list-style style:name="L\d+" style:display-name=")[0-9]+(")/gu,
-    "$1generated-list$2",
-  );
+/** Canonicalizes generated rule names and native default list IDs. @param xml - Exported XML. @param document - Owner of its generated IDs. @returns XML retaining authored identities and continuation links. */
+function normalizeAutomaticListIdentities(xml: string, document: SwDoc): string {
+  const defaults = new Map<string, string>();
+  for (const [index, rule] of document.GetNumRuleTable().entries()) {
+    const id = rule.GetDefaultListId();
+    if (id) defaults.set(id, `default-list-${index}`);
+  }
+  return xml
+    .replace(
+      /(<text:list-style style:name="L\d+" style:display-name=")[0-9]+(")/gu,
+      "$1generated-list$2",
+    )
+    .replace(
+      /((?:xml:id|text:continue-list)=")([^"]+)(")/gu,
+      /** Substitutes only a native document default and preserves the attribute kind. @param _match - Full attribute. @param prefix - Name and quote. @param id - Actual list identity. @param suffix - Closing quote. @returns Stable attribute. */
+      (_match, prefix: string, id: string, suffix: string) =>
+        prefix + (defaults.get(id) ?? id) + suffix,
+    );
 }
 
 /** Canonicalizes adjacent inline runs with the same style, including runs split by text:s. @param xml - Exported content stream. @returns XML retaining all text and style assignments. */
@@ -390,8 +402,14 @@ describe("pinned LibreOffice ODT feature fixtures" /** Mirrors the three createS
           "meta.xml",
           "settings.xml",
         ]) {
-          const firstXml = normalizeAutomaticListIdentities(await archive.readTextEntry(entry));
-          const secondXml = normalizeAutomaticListIdentities(await second.readTextEntry(entry));
+          const firstXml = normalizeAutomaticListIdentities(
+            await archive.readTextEntry(entry),
+            imported.document,
+          );
+          const secondXml = normalizeAutomaticListIdentities(
+            await second.readTextEntry(entry),
+            reopened.document,
+          );
           if (entry === "content.xml")
             expect(normalizeAdjacentTextSpans(secondXml)).toBe(
               normalizeAdjacentTextSpans(firstXml),

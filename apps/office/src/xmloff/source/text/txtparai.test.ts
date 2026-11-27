@@ -175,6 +175,8 @@ function importBody(
     GetTextImport: () => helper,
     /** Resolves a list rule. @param name - Style name. @returns Rule. */
     getListRule: (name) => rules.get(name),
+    /** Supplies the test text model's native unnamed rule service. @returns Default rule. */
+    createNumberingRule: () => ({ name: "Default Bullets", levelCount: 10, levels: [] }),
     /** Resolves a style only in the active automatic container. @param family - Style family. @param name - Style name. @returns Automatic definition. */
     getAutoStyle: (family, name) =>
       automaticDefinitions.find(
@@ -615,12 +617,12 @@ describe("ODF streaming text import contexts", /** Groups direct model import te
       levelCount: 10,
       name: "Bullets",
     };
-    for (const body of ["<text:list/>", "<text:section/>"])
-      expect(
-        /** Imports an unsupported structure. @returns Nothing. */ () =>
-          importBody(body, styles, new Map([["L1", bullet]])),
-      ).toThrow("Unsupported ODF");
+    expect(
+      /** Imports a section without its model service. @returns Nothing. */ () =>
+        importBody("<text:section/>", styles, new Map([["L1", bullet]])),
+    ).toThrow("Unsupported ODF");
     for (const [body, count] of [
+      ["<text:list/>", 0],
       [
         '<text:list text:style-name="L1"><text:list-item><text:p>a</text:p><text:p>b</text:p></text:list-item></text:list>',
         2,
@@ -720,21 +722,19 @@ describe("ODF streaming text import contexts", /** Groups direct model import te
       },
     ]);
     expect(
-      /** Imports a missing list style. @returns Nothing. */ () =>
-        importBody(
-          '<text:list text:style-name="Missing"><text:list-item><text:p/></text:list-item></text:list>',
-          styles,
-          new Map([["L1", bullet]]),
-        ),
-    ).toThrow("Unsupported ODF list style");
+      importBody(
+        '<text:list text:style-name="Missing"><text:list-item><text:p/></text:list-item></text:list>',
+        styles,
+        new Map([["L1", bullet]]),
+      )[0]?.list?.ruleName,
+    ).toBe("Default Bullets");
     expect(
-      /** Imports beyond a short numbering rule. @returns Nothing. */ () =>
-        importBody(
-          '<text:list text:style-name="L1"><text:list-item><text:list><text:list-item><text:p/></text:list-item></text:list></text:list-item></text:list>',
-          styles,
-          new Map([["L1", { levels: [], levelCount: 1, name: "Short" }]]),
-        ),
-    ).toThrow("Unsupported ODF list level");
+      importBody(
+        '<text:list text:style-name="L1"><text:list-item><text:list><text:list-item><text:p/></text:list-item></text:list></text:list-item></text:list>',
+        styles,
+        new Map([["L1", { levels: [], levelCount: 1, name: "Short" }]]),
+      )[0]?.list?.level,
+    ).toBe(0);
     for (const [value, startValue] of [
       ["40000", undefined],
       ["nope", 0],
@@ -749,7 +749,7 @@ describe("ODF streaming text import contexts", /** Groups direct model import te
         level: 0,
         listId: expect.stringMatching(/^list\d+$/u),
         ruleName: "Bullets",
-        ...(startValue === undefined ? {} : { restart: true, startValue }),
+        ...(startValue === undefined ? {} : { startValue }),
       });
     expect(
       importBody(

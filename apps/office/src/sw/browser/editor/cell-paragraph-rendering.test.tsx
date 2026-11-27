@@ -57,12 +57,14 @@ describe("shared native cell paragraph display", /** Registers actual node-to-di
       const owner = fixture();
       owner.node.SetParagraphAlignment(alignment);
       mount(owner);
-      const cell = screen.getByLabelText("Row 1 column 1 paragraph 1");
-      expect(cell).toHaveStyle({ textAlign: alignment });
+      const cell = screen.getByLabelText<HTMLElement>("Row 1 column 1 paragraph 1");
+      expect(cell.style.textAlign || cell.style.getPropertyValue("text-align-all")).toBe(alignment);
+      if (alignment === "justify")
+        expect(cell.style.getPropertyValue("text-align-last")).toBe("start");
       expect(cell).toHaveAttribute("data-alignment", alignment);
       expect(cell).toHaveAttribute("role", "textbox");
       expect(screen.getByLabelText("Row 1 column 2 paragraph 1")).toHaveStyle({
-        textAlign: "left",
+        textAlign: "start",
       });
       expect(owner.neighbor.GetText()).toBe("Neighbor");
     },

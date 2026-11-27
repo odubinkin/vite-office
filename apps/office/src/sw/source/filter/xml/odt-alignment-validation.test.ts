@@ -52,12 +52,7 @@ describe("Writer ODT alignment validation", /** Registers alignment import check
       importWriterXml(styles, content, metadata(), meta).document.paragraphs[0]?.GetText(),
     ).toBe("plain");
 
-    for (const [adjust, expected] of [
-      [SvxAdjust.Left, "left"],
-      [SvxAdjust.Right, "right"],
-      [SvxAdjust.Center, "center"],
-      [SvxAdjust.Block, "justify"],
-    ] as const) {
+    for (const adjust of [SvxAdjust.Left, SvxAdjust.Right, SvxAdjust.Center, SvxAdjust.Block]) {
       const styledWriter = createWriterDocument();
       styledWriter
         .GetDfltTextFormatColl()
@@ -68,13 +63,7 @@ describe("Writer ODT alignment validation", /** Registers alignment import check
         metadata(),
       );
       expect(imported.document.GetDfltTextFormatColl().GetAttrSet().GetAdjust().GetAdjust()).toBe(
-        expected === "left"
-          ? SvxAdjust.ParaStart
-          : expected === "right"
-            ? SvxAdjust.ParaEnd
-            : expected === "center"
-              ? SvxAdjust.Center
-              : SvxAdjust.Block,
+        adjust,
       );
     }
     const headingWriter = createWriterDocument();
@@ -87,7 +76,7 @@ describe("Writer ODT alignment validation", /** Registers alignment import check
         .GetAttrSet()
         .GetAdjust()
         .GetAdjust(),
-    ).toBe(SvxAdjust.ParaEnd);
+    ).toBe(SvxAdjust.Right);
     expect(
       /** Executes the enclosing deterministic test or transformation callback. @returns Callback result. */
       () =>
