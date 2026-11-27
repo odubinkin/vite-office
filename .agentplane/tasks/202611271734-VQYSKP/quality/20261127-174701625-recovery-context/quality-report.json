@@ -1,0 +1,21 @@
+{
+  "schema_version": 1,
+  "task_id": "202611271734-VQYSKP",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-11-27T17:47:01.625Z",
+  "verdict": "pass",
+  "summary": "Writer ODT save applies the pinned two-pass redline visibility transition for represented inline deletions.",
+  "evaluated_sha": "522fffce49a974be6c4213ddceb096a20ed6b102",
+  "blueprint_digest": "0495ca5c71adae5e3c397ac9b2e4eb9d7f769336d252e5b353e52dcdff93dbc8",
+  "findings": [
+    "Original ODT redline fixtures and cancellation preserve saved representation and live model. Complex deletion transitions remain outside this slice."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202611271734-VQYSKP/README.md",
+    "output/playwright/odf-writer-redlines/visibility-verification.md"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": []
+}
