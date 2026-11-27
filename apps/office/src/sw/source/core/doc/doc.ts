@@ -324,6 +324,9 @@ export class SwDoc {
     new SwTOXType(TOXTypes.Content, "Table of Contents"),
     new SwTOXType(TOXTypes.Index, "Alphabetical Index"),
     new SwTOXType(TOXTypes.User, "User-Defined Index"),
+    new SwTOXType(TOXTypes.Illustrations, "Table of Figures"),
+    new SwTOXType(TOXTypes.Objects, "Table of Objects"),
+    new SwTOXType(TOXTypes.Tables, "Index of Tables"),
   ];
   /** Creates the canonical fixed sections and optionally one empty body node. @param createInitialTextNode - Whether to create initial body content. @returns Nothing. */
   public constructor(createInitialTextNode: boolean | SwDocOptions = true) {

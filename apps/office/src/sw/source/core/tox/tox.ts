@@ -47,6 +47,23 @@ export enum SwTOIOptions {
   InitialCaps = 0x40,
 }
 
+/** Native caption display forms for table and illustration indexes. */
+export enum SwCaptionDisplay {
+  Complete,
+  Number,
+  Text,
+}
+
+/** Original object classes admitted as entries into an object index. */
+export enum SwTOOElements {
+  None = 0x00,
+  Math = 0x01,
+  Chart = 0x02,
+  Calc = 0x08,
+  DrawImpress = 0x10,
+  Other = 0x80,
+}
+
 /** Original stored TOX form token identities. */
 export enum FormTokenType {
   EntryNo,
@@ -84,6 +101,15 @@ export class SwFormToken {
   public constructor(public readonly eTokenType: FormTokenType) {}
 }
 
+const formStyleName: ReadonlyMap<TOXTypes, string> = new Map([
+  [TOXTypes.Index, "Index"],
+  [TOXTypes.User, "User Index"],
+  [TOXTypes.Content, "Contents"],
+  [TOXTypes.Illustrations, "Figure Index"],
+  [TOXTypes.Objects, "Object Index"],
+  [TOXTypes.Tables, "Table Index"],
+]);
+
 /** Native title and entry templates with type-specific default patterns. */
 export class SwForm {
   private readonly templates: string[] = [];
@@ -95,29 +121,33 @@ export class SwForm {
   public constructor(type = TOXTypes.Content) {
     const alphabetical = type === TOXTypes.Index;
     const content = type === TOXTypes.Content;
-    const style = alphabetical ? "Index" : content ? "Contents" : "User Index";
+    const needsLink = content || type === TOXTypes.Illustrations || type === TOXTypes.Tables;
+    const style = formStyleName.get(type);
+    if (style === undefined) throw new Error("Writer index form type is not represented.");
     this.templates.push(`${style} Heading`);
     if (alphabetical) {
       this.templates.push("Index Separator");
       this.patterns.push([new SwFormToken(FormTokenType.Entry)]);
     }
-    const levels = alphabetical ? 3 : MAXLEVEL;
+    const levels = alphabetical ? 3 : content || type === TOXTypes.User ? MAXLEVEL : 1;
     for (let level = 1; level <= levels; level++) {
       const tab = new SwFormToken(FormTokenType.TabStop);
       tab.cTabFillChar = ".";
       tab.eTabAlign = SvxTabAdjust.End;
       this.templates.push(`${style} ${level}`);
       const fields = [tab, new SwFormToken(FormTokenType.PageNums)];
-      if (content) {
-        const link = new SwFormToken(FormTokenType.LinkStart);
-        link.sCharStyleName = "Index Link";
+      if (content)
         fields.unshift(
-          link,
           new SwFormToken(FormTokenType.EntryNo),
           new SwFormToken(FormTokenType.EntryText),
         );
+      else fields.unshift(new SwFormToken(FormTokenType.Entry));
+      if (needsLink) {
+        const link = new SwFormToken(FormTokenType.LinkStart);
+        link.sCharStyleName = "Index Link";
+        fields.unshift(link);
         fields.push(new SwFormToken(FormTokenType.LinkEnd));
-      } else fields.unshift(new SwFormToken(FormTokenType.Entry));
+      }
       this.patterns.push(fields);
     }
   }
@@ -192,6 +222,10 @@ export class SwTOXBase {
   public mainEntryCharStyle = "";
   public language = MsLangId.getConfiguredSystemUILanguage();
   public sortAlgorithm = "";
+  public fromObjectNames = false;
+  public sequenceName = "";
+  public captionDisplay = SwCaptionDisplay.Complete;
+  public objectOptions = SwTOOElements.None;
   private readonly styles: string[] = Array<string>(MAXLEVEL).fill("");
 
   /** Binds one native source type and owned form. @param type - Document type definition. @param form - Index form. @param createType - Original source flags. @returns Index descriptor. */
@@ -233,6 +267,10 @@ export class SwTOXBase {
     copy.mainEntryCharStyle = this.mainEntryCharStyle;
     copy.language = this.language;
     copy.sortAlgorithm = this.sortAlgorithm;
+    copy.fromObjectNames = this.fromObjectNames;
+    copy.sequenceName = this.sequenceName;
+    copy.captionDisplay = this.captionDisplay;
+    copy.objectOptions = this.objectOptions;
     for (let level = 0; level < MAXLEVEL; level++) copy.styles[level] = this.GetStyleNames(level);
     return copy;
   }

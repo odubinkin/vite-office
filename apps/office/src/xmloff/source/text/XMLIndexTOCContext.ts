@@ -13,13 +13,28 @@ import {
   type XMLIndexAlphabeticalSource,
 } from "./XMLIndexAlphabeticalSourceContext";
 
+import { XMLIndexIllustrationSourceContext } from "./XMLIndexIllustrationSourceContext";
+import {
+  XMLIndexObjectSourceContext,
+  type XMLIndexObjectSource,
+} from "./XMLIndexObjectSourceContext";
+import { XMLIndexTableSourceContext, type XMLIndexTableSource } from "./XMLIndexTableSourceContext";
+
 /** Type-specific properties accepted by the represented native index service. */
-export type XMLIndexSource = XMLIndexTOCSource | XMLIndexUserSource | XMLIndexAlphabeticalSource;
+export type XMLIndexSource =
+  | XMLIndexTOCSource
+  | XMLIndexUserSource
+  | XMLIndexAlphabeticalSource
+  | XMLIndexTableSource
+  | XMLIndexObjectSource;
 
 const indexElements: ReadonlyMap<XMLToken, XMLIndexFamily> = new Map([
   [XMLToken.TEXT_TABLE_OF_CONTENT, "table-of-content"],
   [XMLToken.TEXT_USER_INDEX, "user-index"],
   [XMLToken.TEXT_ALPHABETICAL_INDEX, "alphabetical-index"],
+  [XMLToken.TEXT_TABLE_INDEX, "table-index"],
+  [XMLToken.TEXT_ILLUSTRATION_INDEX, "illustration-index"],
+  [XMLToken.TEXT_OBJECT_INDEX, "object-index"],
 ]);
 
 /** Original common index section properties. */
@@ -95,6 +110,12 @@ export class XMLIndexTOCContext extends SvXMLImportContext {
         this.index.outlineLevels,
         this.index.setSource,
       );
+    if (this.family === "table-index" && token === XMLToken.TEXT_TABLE_INDEX_SOURCE)
+      return new XMLIndexTableSourceContext(attributes, this.index.setSource);
+    if (this.family === "illustration-index" && token === XMLToken.TEXT_ILLUSTRATION_INDEX_SOURCE)
+      return new XMLIndexIllustrationSourceContext(attributes, this.index.setSource);
+    if (this.family === "object-index" && token === XMLToken.TEXT_OBJECT_INDEX_SOURCE)
+      return new XMLIndexObjectSourceContext(attributes, this.index.setSource);
     if (token === XMLToken.TEXT_INDEX_BODY) {
       this.body = new XMLIndexBodyContext(this.text);
       return this.body;

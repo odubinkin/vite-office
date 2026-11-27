@@ -9,12 +9,17 @@ import type {
   XMLIndexImportProperties,
   XMLIndexSource,
 } from "../../../../xmloff/source/text/XMLIndexTOCContext";
-import type { XMLIndexSourceProperties } from "../../../../xmloff/source/text/XMLIndexSourceBaseContext";
+import type {
+  XMLIndexFamily,
+  XMLIndexSourceProperties,
+} from "../../../../xmloff/source/text/XMLIndexSourceBaseContext";
 import type { XMLIndexEntry } from "../../../../xmloff/source/text/XMLIndexTemplateContext";
 import type { XMLSectionStyle } from "../../../../xmloff/source/text/XMLSectionStyleContext";
 import type { XMLTextImportHelper } from "../../../../xmloff/source/text/txtimp";
 import {
   FormTokenType,
+  SwCaptionDisplay,
+  SwTOOElements,
   MAXLEVEL,
   SwChapterFormat,
   SwFormToken,
@@ -52,6 +57,17 @@ const xmlTypes = new Map<FormTokenType, XMLIndexEntry["kind"]>(
 xmlTypes.set(FormTokenType.Entry, "text");
 xmlTypes.set(FormTokenType.ChapterInfo, "chapter");
 
+const indexTypes: Readonly<Record<XMLIndexFamily, TOXTypes>> = {
+  "table-of-content": TOXTypes.Content,
+  "user-index": TOXTypes.User,
+  "alphabetical-index": TOXTypes.Index,
+  "table-index": TOXTypes.Tables,
+  "illustration-index": TOXTypes.Illustrations,
+  "object-index": TOXTypes.Objects,
+};
+
+const captionFormats = ["text", "category-and-value", "caption"] as const;
+
 const chapterDisplay = [
   "number",
   "name",
@@ -63,7 +79,7 @@ const chapterDisplay = [
 /** Resolves the native display name declared for a referenced ODF style. */
 type IndexStyleName = (family: "text" | "paragraph", name: string) => string | undefined;
 
-/** Writes the index source through the original Writer descriptor and form. @param tox - Attached index descriptor. @param source - Shared parsed properties. @param styleName - Original style-name boundary. @returns Nothing. */
+/** Writes the index source through the original Writer descriptor and form. @param tox - Attached index descriptor. @param source - Shared parsed properties. @param styleName - Original style-name boundary. @param document - Owns the native index type definitions. @returns Nothing. */
 function importIndexSource(
   tox: SwTOXBase,
   source: XMLIndexSource,
@@ -83,7 +99,7 @@ function importIndexSource(
     tox.form.SetCommaSeparated(source.commaSeparated);
     if (source.language !== undefined) tox.language = source.language;
     if (source.sortAlgorithm) tox.sortAlgorithm = source.sortAlgorithm;
-  } else {
+  } else if (source.family === "table-of-content" || source.family === "user-index") {
     tox.createType =
       (source.useMarks ? SwTOXElement.Mark : SwTOXElement.None) |
       (source.useStyles ? SwTOXElement.Template : SwTOXElement.None);
@@ -101,6 +117,28 @@ function importIndexSource(
           TOXTypes.User,
           getUserIndexTypeName(document, source.indexName),
         );
+    }
+  } else {
+    if (source.family === "object-index") {
+      tox.objectOptions =
+        (source.useOtherObjects ? SwTOOElements.Other : SwTOOElements.None) |
+        (source.useSpreadsheetObjects ? SwTOOElements.Calc : SwTOOElements.None) |
+        (source.useChartObjects ? SwTOOElements.Chart : SwTOOElements.None) |
+        (source.useDrawObjects ? SwTOOElements.DrawImpress : SwTOOElements.None) |
+        (source.useMathObjects ? SwTOOElements.Math : SwTOOElements.None);
+    } else {
+      tox.fromObjectNames = !source.useCaption;
+      if (source.sequenceName !== undefined)
+        tox.sequenceName = SwStyleNameMapper.GetSpecialExtraUIName(source.sequenceName);
+      if (source.captionFormat !== undefined)
+        tox.captionDisplay = captionFormats.indexOf(source.captionFormat) as SwCaptionDisplay;
+    }
+    if (source.sourceStyle) {
+      const style = styleName("paragraph", source.sourceStyle) ?? source.sourceStyle;
+      if (style.includes(TOX_STYLE_DELIMITER))
+        throw new Error("Writer index source style must contain one paragraph style.");
+      tox.SetStyleNames(style, 0);
+      tox.createType |= SwTOXElement.Template;
     }
   }
   tox.fromChapter = source.fromChapter;
@@ -171,13 +209,7 @@ export function importDocumentIndex(
 ): XMLIndexImport {
   const parent = helper.GetCursor() as SwXTextCursor;
   const document = parent.GetDoc();
-  const type =
-    properties.family === "alphabetical-index"
-      ? TOXTypes.Index
-      : properties.family === "user-index"
-        ? TOXTypes.User
-        : TOXTypes.Content;
-  const index = new SwXDocumentIndex(document, type);
+  const index = new SwXDocumentIndex(document, indexTypes[properties.family]);
   const descriptor = index.GetTOXBase();
   descriptor.name = properties.name;
   descriptor.protected = properties.protected;
@@ -231,14 +263,28 @@ export function exportDocumentIndex(tox: SwTOXBase, document: SwDoc): XMLIndexSo
         });
       else entries.push({ kind, styleName });
     }
-    templates.push({ level, styleName: tox.form.GetTemplate(level), entries });
+    templates.push({
+      level,
+      styleName: SwStyleNameMapper.FillProgName(
+        tox.form.GetTemplate(level),
+        SwGetPoolIdFromName.TxtColl,
+      ),
+      entries,
+    });
     const styles = tox.GetStyleNames(level - 1);
-    if (styles) sourceStyles.set(level, styles.split(TOX_STYLE_DELIMITER));
+    if (styles && (tox.type.type === TOXTypes.Content || tox.type.type === TOXTypes.User))
+      sourceStyles.set(level, styles.split(TOX_STYLE_DELIMITER));
   }
   const common = {
     fromChapter: tox.fromChapter,
     relativeTabs: tox.form.IsRelTabPos(),
-    title: { styleName: tox.form.GetTemplate(0), text: tox.title },
+    title: {
+      styleName: SwStyleNameMapper.FillProgName(
+        tox.form.GetTemplate(0),
+        SwGetPoolIdFromName.TxtColl,
+      ),
+      text: tox.title,
+    },
     templates,
     sourceStyles,
   };
@@ -263,6 +309,32 @@ export function exportDocumentIndex(tox: SwTOXBase, document: SwDoc): XMLIndexSo
       language: tox.language,
     };
   }
+  const paragraphStyle = tox.createType & SwTOXElement.Template ? tox.GetStyleNames(0) : "";
+  const sourceStyle = paragraphStyle
+    ? {
+        sourceStyle: SwStyleNameMapper.FillProgName(paragraphStyle, SwGetPoolIdFromName.TxtColl),
+      }
+    : {};
+  if (tox.type.type === TOXTypes.Objects)
+    return {
+      ...common,
+      ...sourceStyle,
+      family: "object-index",
+      useOtherObjects: Boolean(tox.objectOptions & SwTOOElements.Other),
+      useSpreadsheetObjects: Boolean(tox.objectOptions & SwTOOElements.Calc),
+      useChartObjects: Boolean(tox.objectOptions & SwTOOElements.Chart),
+      useDrawObjects: Boolean(tox.objectOptions & SwTOOElements.DrawImpress),
+      useMathObjects: Boolean(tox.objectOptions & SwTOOElements.Math),
+    };
+  if (tox.type.type === TOXTypes.Tables || tox.type.type === TOXTypes.Illustrations)
+    return {
+      ...common,
+      ...sourceStyle,
+      family: tox.type.type === TOXTypes.Tables ? "table-index" : "illustration-index",
+      useCaption: !tox.fromObjectNames,
+      sequenceName: SwStyleNameMapper.GetSpecialExtraProgName(tox.sequenceName),
+      captionFormat: captionFormats[tox.captionDisplay],
+    };
   const useMarks = Boolean(tox.createType & SwTOXElement.Mark);
   const useStyles = Boolean(tox.createType & SwTOXElement.Template);
   if (tox.type.type === TOXTypes.User)

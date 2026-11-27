@@ -5,7 +5,16 @@ import { XMLToken } from "../core/xmltoken";
 import { XMLIndexTemplateContext, type XMLIndexTemplate } from "./XMLIndexTemplateContext";
 
 /** ODF section families with a represented Writer index service. */
-export type XMLIndexFamily = "table-of-content" | "user-index" | "alphabetical-index";
+export type XMLIndexFamily =
+  "table-of-content" | "user-index" | "alphabetical-index" | XMLSingleLevelIndexFamily;
+
+/** Original index families that have one entry template after the heading. */
+export type XMLSingleLevelIndexFamily = "table-index" | "illustration-index" | "object-index";
+
+/** Recognizes the original single-template families. @param family - Source family. @returns Whether it has the single-level source form. */
+export function isSingleLevelIndex(family: XMLIndexFamily): family is XMLSingleLevelIndexFamily {
+  return family === "table-index" || family === "illustration-index" || family === "object-index";
+}
 
 /** Common source, format and cached-body descriptor properties from XMLIndexSourceBaseContext. */
 export interface XMLIndexSourceProperties {
@@ -15,12 +24,16 @@ export interface XMLIndexSourceProperties {
   readonly title?: { readonly styleName: string; readonly text: string };
   readonly templates: readonly XMLIndexTemplate[];
   readonly sourceStyles: ReadonlyMap<number, readonly string[]>;
+  readonly sourceStyle?: string;
 }
 
 const templateElements: Readonly<Record<XMLIndexFamily, XMLToken>> = {
   "table-of-content": XMLToken.TEXT_TABLE_OF_CONTENT_ENTRY_TEMPLATE,
   "user-index": XMLToken.TEXT_USER_INDEX_ENTRY_TEMPLATE,
   "alphabetical-index": XMLToken.TEXT_ALPHABETICAL_INDEX_ENTRY_TEMPLATE,
+  "table-index": XMLToken.TEXT_TABLE_INDEX_ENTRY_TEMPLATE,
+  "illustration-index": XMLToken.TEXT_ILLUSTRATION_INDEX_ENTRY_TEMPLATE,
+  "object-index": XMLToken.TEXT_OBJECT_INDEX_ENTRY_TEMPLATE,
 };
 
 /** Original common writer index source parsing owner. */
@@ -28,6 +41,7 @@ export class XMLIndexSourceBaseContext extends SvXMLImportContext {
   private readonly templates: XMLIndexTemplate[] = [];
   private readonly sourceStyles = new Map<number, readonly string[]>();
   private title: XMLIndexSourceProperties["title"];
+  private sourceStyle: string | undefined;
   private readonly relativeTabs: [boolean] = [true];
   private fromChapter = false;
 
@@ -57,6 +71,7 @@ export class XMLIndexSourceBaseContext extends SvXMLImportContext {
         },
       );
     const alphabetical = this.family === "alphabetical-index";
+    const single = isSingleLevelIndex(this.family);
     if (token === templateElements[this.family])
       return new XMLIndexTemplateContext(
         attributes,
@@ -65,9 +80,9 @@ export class XMLIndexSourceBaseContext extends SvXMLImportContext {
         (template) => {
           this.templates.push(template);
         },
-        alphabetical,
+        alphabetical ? "alphabetical" : single ? "single" : "outline",
       );
-    if (token === XMLToken.TEXT_INDEX_SOURCE_STYLES && !alphabetical) {
+    if (token === XMLToken.TEXT_INDEX_SOURCE_STYLES && !alphabetical && !single) {
       const level: [number] = [0];
       const outlineLevel = attributes.get(XMLToken.TEXT_OUTLINE_LEVEL);
       if (outlineLevel !== null && Converter.convertNumber(level, outlineLevel, 1, this.levels))
@@ -77,6 +92,13 @@ export class XMLIndexSourceBaseContext extends SvXMLImportContext {
             this.sourceStyles.set(level[0], styles);
           },
         );
+    }
+    if (
+      single &&
+      (token === XMLToken.TEXT_INDEX_SOURCE_STYLE || token === XMLToken.LOEXT_INDEX_SOURCE_STYLE)
+    ) {
+      const name = attributes.get(XMLToken.TEXT_STYLE_NAME);
+      if (name) this.sourceStyle = name;
     }
     return null;
   }
@@ -90,6 +112,7 @@ export class XMLIndexSourceBaseContext extends SvXMLImportContext {
       ...(this.title ? { title: this.title } : {}),
       templates: this.templates,
       sourceStyles: this.sourceStyles,
+      ...(this.sourceStyle ? { sourceStyle: this.sourceStyle } : {}),
     };
   }
 }

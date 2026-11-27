@@ -1,0 +1,45 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/xmloff/source/text/XMLIndexObjectSourceContext.ts",
+    "status": "mapped",
+    "upstreamPath": "xmloff/source/text/XMLIndexObjectSourceContext.cxx",
+    "localSymbols": [
+      "XMLIndexObjectSourceContext"
+    ],
+    "upstreamSymbols": [
+      "XMLIndexObjectSourceContext::ProcessAttribute",
+      "XMLIndexObjectSourceContext::endFastElement"
+    ],
+    "preservedResponsibilities": [
+      "Imports the source class selection for the original object index."
+    ],
+    "omittedResponsibilities": [
+      "Live index collection, generation and layout are outside this persistence path."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/xmloff/source/text/XMLIndexObjectSourceContext.ts",
+          "marker": "XMLIndexObjectSourceContext"
+        },
+        {
+          "path": "apps/office/src/sw/source/filter/xml/odt-index-families.test.ts",
+          "marker": "tdf99689"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/xmloff/source/text/XMLIndexObjectSourceContext.cxx",
+          "marker": "XMLIndexObjectSourceContext::ProcessAttribute"
+        },
+        {
+          "path": "vendor/libreoffice-reference/xmloff/source/text/XMLIndexObjectSourceContext.cxx",
+          "marker": "XMLIndexObjectSourceContext::endFastElement"
+        }
+      ]
+    }
+  }
+}

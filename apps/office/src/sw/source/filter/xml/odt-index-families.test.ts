@@ -11,7 +11,14 @@ import type { SwDoc } from "../../core/doc/doc";
 import { SwSectionNode } from "../../core/docnode/ndsect";
 import { SectionType } from "../../core/docnode/section";
 import { SwTOXBaseSection } from "../../core/inc/doctxm";
-import { FormTokenType, SwTOIOptions, SwTOXElement, TOXTypes } from "../../core/tox/tox";
+import {
+  FormTokenType,
+  SwCaptionDisplay,
+  SwTOIOptions,
+  SwTOOElements,
+  SwTOXElement,
+  TOXTypes,
+} from "../../core/tox/tox";
 import { readOdtDocument } from "./swxml";
 import { writeOdtDocument } from "./wrtxml";
 
@@ -104,4 +111,83 @@ it("keeps the user-defined index's type, source switches and cached frame and ta
     ]);
   });
   expect(xml).toContain('text:copy-outline-levels="true" text:index-name="User-Defined"');
+});
+
+it.each([
+  {
+    type: TOXTypes.Tables,
+    name: "Index of Tables1",
+    title: "Index of Tables",
+    style: "Table Index 1",
+    sequence: "Table",
+    element: "table-index",
+    fixture: "extras/uiwriter/data/tdf99689_tables.odt",
+    text: "Table 1: This is the first table, conatins superscript\t1",
+  },
+  {
+    type: TOXTypes.Illustrations,
+    name: "Illustration Index1",
+    title: "Illustration Index",
+    style: "Figure Index 1",
+    sequence: "Illustration",
+    element: "illustration-index",
+    fixture: "extras/uiwriter/data/tdf99689_figures.odt",
+    text: " Illustration 1: Caption 1 with subscript in it.\t1",
+  },
+])(
+  "retains the original $element caption source and stored entries",
+  /** Opens the pinned tdf99689 documents and checks the native kept sections. @param fixture - Source descriptor and expected content. @returns Completion. */ async (
+    fixture,
+  ) => {
+    const xml = await checkRoundTrip(fixture.fixture, (document) => {
+      const [node] = indexes(document, fixture.type);
+      assert(node);
+      const section = node.GetSection();
+      assert(section instanceof SwTOXBaseSection);
+      const tox = section.tox;
+      expect(tox.name).toBe(fixture.name);
+      expect(tox.title).toBe(fixture.title);
+      expect(tox.sequenceName).toBe(fixture.sequence);
+      expect(tox.captionDisplay).toBe(SwCaptionDisplay.Complete);
+      expect(tox.fromObjectNames).toBe(false);
+      expect(tox.form.GetFormMax()).toBe(2);
+      expect(tox.form.GetTemplate(1)).toBe(fixture.style);
+      expect(tox.form.GetPattern(1).map((token) => token.eTokenType)).toEqual([
+        FormTokenType.LinkStart,
+        FormTokenType.Entry,
+        FormTokenType.TabStop,
+        FormTokenType.PageNums,
+        FormTokenType.LinkEnd,
+      ]);
+      const [, entry] = document.GetNodes().GetSectionBlocks(node);
+      expect(entry?.GetTextNode()?.GetText()).toBe(fixture.text);
+    });
+    expect(xml).toContain(
+      `<text:${fixture.element}-source text:caption-sequence-name="${fixture.sequence}" text:caption-sequence-format="text"`,
+    );
+    expect(xml).toContain(`<text:${fixture.element}-entry-template text:style-name=`);
+  },
+);
+
+it("keeps the object-index source classes and cached title from TESTXMLID.odt", /** Uses the original object index section from the native test fixture. @returns Completion. */ async () => {
+  const xml = await checkRoundTrip("python/testdocuments/TESTXMLID.odt", (document) => {
+    const [node] = indexes(document, TOXTypes.Objects);
+    assert(node);
+    const section = node.GetSection();
+    assert(section instanceof SwTOXBaseSection);
+    const tox = section.tox;
+    expect(tox.name).toBe("Table of Objects1");
+    expect(tox.objectOptions).toBe(
+      SwTOOElements.Calc | SwTOOElements.Chart | SwTOOElements.DrawImpress | SwTOOElements.Math,
+    );
+    expect(tox.form.GetTemplate(1)).toBe("Object Index 1");
+    const [title] = document.GetNodes().GetSectionBlocks(node);
+    assert(title instanceof SwSectionNode);
+    expect(document.GetNodes().GetSectionBlocks(title)[0]?.GetTextNode()?.GetText()).toBe(
+      "Table of Objects",
+    );
+  });
+  expect(xml).toContain(
+    '<text:object-index-source text:use-spreadsheet-objects="true" text:use-chart-objects="true" text:use-draw-objects="true" text:use-math-objects="true">',
+  );
 });

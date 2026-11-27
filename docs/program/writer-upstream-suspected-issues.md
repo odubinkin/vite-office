@@ -6328,3 +6328,17 @@ format. Writer preserves these type-specific read and export rules.
 
 - [Original chapter field importer](../../vendor/libreoffice-reference/xmloff/source/text/XMLIndexChapterInfoEntryContext.cxx#L69)
 - [Original Writer token exposure](../../vendor/libreoffice-reference/sw/source/core/unocore/unoidx.cxx#L2894)
+
+### WRITER-765 — Single-level index imports leave the entry template at the default
+
+The table, illustration, and object index readers pass a level-name map to the
+shared template constructor while providing no level attribute. The constructor
+enables implicit level one only when its map is absent. The resulting template
+context retains an invalid level and exits before assigning the entry tokens or
+paragraph style. Writer keeps the original type-specific form defaults when
+loading these sources while preserving the saved index body.
+
+- [Original table index template dispatch](../../vendor/libreoffice-reference/xmloff/source/text/XMLIndexTableSourceContext.cxx#L131)
+- [Original illustration index template dispatch](../../vendor/libreoffice-reference/xmloff/source/text/XMLIndexIllustrationSourceContext.cxx#L52)
+- [Original object index template dispatch](../../vendor/libreoffice-reference/xmloff/source/text/XMLIndexObjectSourceContext.cxx#L118)
+- [Original level initialization and early return](../../vendor/libreoffice-reference/xmloff/source/text/XMLIndexTemplateContext.cxx#L59)

@@ -4,6 +4,7 @@ import type { XMLTextExportBlock } from "../table/XMLTableExport";
 import { exportWritingDirection } from "../style/prhdlfac";
 import { encodeStyleName } from "../core/xmluconv";
 import { Converter } from "../../../sax/source/tools/converter";
+import { isSingleLevelIndex } from "./XMLIndexSourceBaseContext";
 import type { XMLIndexSource } from "./XMLIndexTOCContext";
 import { LanguageTag } from "../../../i18nlangtag/inc/languagetag";
 import { text } from "../../../i18nlangtag/source/isolang/isolang.tables";
@@ -135,7 +136,7 @@ function exportIndexSource(source: XMLIndexSource): string {
     attributes += exportIndexBoolean("copy-outline-levels", source.copyOutlineLevels);
     attributes += exportIndexBoolean("use-index-source-styles", source.useStyles);
     attributes += ` text:index-name="${escapeXml(source.indexName)}"`;
-  } else {
+  } else if (source.family === "alphabetical-index") {
     if (source.mainEntryStyle)
       attributes += ` text:main-entry-style-name="${escapeXml(encodeStyleName(source.mainEntryStyle))}"`;
     attributes += exportIndexBoolean("ignore-case", source.ignoreCase);
@@ -149,6 +150,16 @@ function exportIndexSource(source: XMLIndexSource): string {
     if (source.sortAlgorithm)
       attributes += ` text:sort-algorithm="${escapeXml(source.sortAlgorithm)}"`;
     if (source.language !== undefined) attributes += exportIndexLanguage(source.language);
+  } else if (source.family === "object-index") {
+    attributes += exportIndexBoolean("use-other-objects", source.useOtherObjects);
+    attributes += exportIndexBoolean("use-spreadsheet-objects", source.useSpreadsheetObjects);
+    attributes += exportIndexBoolean("use-chart-objects", source.useChartObjects);
+    attributes += exportIndexBoolean("use-draw-objects", source.useDrawObjects);
+    attributes += exportIndexBoolean("use-math-objects", source.useMathObjects);
+  } else {
+    attributes += exportIndexBoolean("use-caption", source.useCaption, true);
+    attributes += ` text:caption-sequence-name="${escapeXml(source.sequenceName ?? "")}"`;
+    attributes += ` text:caption-sequence-format="${source.captionFormat ?? "text"}"`;
   }
   if (source.fromChapter) attributes += ' text:index-scope="chapter"';
   if (!source.relativeTabs) attributes += ' text:relative-tab-stop-position="false"';
@@ -164,7 +175,8 @@ function exportIndexSource(source: XMLIndexSource): string {
           : template.level - 1
         : template.level;
     const name = `text:${source.family}-entry-template`;
-    templates += `<${name} text:outline-level="${level}" text:style-name="${escapeXml(encodeStyleName(template.styleName ?? ""))}">${template.entries.map(exportIndexEntry).join("")}</${name}>`;
+    const outline = isSingleLevelIndex(source.family) ? "" : ` text:outline-level="${level}"`;
+    templates += `<${name}${outline} text:style-name="${escapeXml(encodeStyleName(template.styleName ?? ""))}">${template.entries.map(exportIndexEntry).join("")}</${name}>`;
   }
   let styles = "";
   for (const [level, names] of source.sourceStyles) {
@@ -173,6 +185,8 @@ function exportIndexSource(source: XMLIndexSource): string {
       styles += `<text:index-source-style text:style-name="${escapeXml(encodeStyleName(name))}"/>`;
     styles += "</text:index-source-styles>";
   }
+  if (isSingleLevelIndex(source.family) && source.sourceStyle)
+    styles += `<loext:index-source-style text:style-name="${escapeXml(encodeStyleName(source.sourceStyle))}"/>`;
   return `<text:${source.family}-source${attributes}>${title}${templates}${styles}</text:${source.family}-source>`;
 }
 

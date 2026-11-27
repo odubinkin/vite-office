@@ -1,0 +1,40 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/xmloff/source/text/XMLIndexIllustrationSourceContext.ts",
+    "status": "mapped",
+    "upstreamPath": "xmloff/source/text/XMLIndexIllustrationSourceContext.cxx",
+    "localSymbols": [
+      "XMLIndexIllustrationSourceContext"
+    ],
+    "upstreamSymbols": [
+      "XMLIndexIllustrationSourceContext::createFastChildContext"
+    ],
+    "preservedResponsibilities": [
+      "Uses the table-source contract with the original illustration form and cached section."
+    ],
+    "omittedResponsibilities": [
+      "Live index collection, generation and layout are outside this persistence path."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/xmloff/source/text/XMLIndexIllustrationSourceContext.ts",
+          "marker": "XMLIndexIllustrationSourceContext"
+        },
+        {
+          "path": "apps/office/src/sw/source/filter/xml/odt-index-families.test.ts",
+          "marker": "tdf99689"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/xmloff/source/text/XMLIndexIllustrationSourceContext.cxx",
+          "marker": "XMLIndexIllustrationSourceContext::createFastChildContext"
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,45 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/xmloff/source/text/XMLIndexTableSourceContext.ts",
+    "status": "mapped",
+    "upstreamPath": "xmloff/source/text/XMLIndexTableSourceContext.cxx",
+    "localSymbols": [
+      "XMLIndexTableSourceContext"
+    ],
+    "upstreamSymbols": [
+      "XMLIndexTableSourceContext::ProcessAttribute",
+      "XMLIndexTableSourceContext::endFastElement"
+    ],
+    "preservedResponsibilities": [
+      "Imports the original caption index labels, display format aliases and optional source paragraph style."
+    ],
+    "omittedResponsibilities": [
+      "Live index collection, generation and layout are outside this persistence path."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/xmloff/source/text/XMLIndexTableSourceContext.ts",
+          "marker": "XMLIndexTableSourceContext"
+        },
+        {
+          "path": "apps/office/src/sw/source/filter/xml/odt-index-families.test.ts",
+          "marker": "tdf99689"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/xmloff/source/text/XMLIndexTableSourceContext.cxx",
+          "marker": "XMLIndexTableSourceContext::ProcessAttribute"
+        },
+        {
+          "path": "vendor/libreoffice-reference/xmloff/source/text/XMLIndexTableSourceContext.cxx",
+          "marker": "XMLIndexTableSourceContext::endFastElement"
+        }
+      ]
+    }
+  }
+}

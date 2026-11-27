@@ -6,6 +6,8 @@ import type { SwDoc } from "../../../source/core/doc/doc";
 import {
   FormTokenType,
   MAXLEVEL,
+  SwCaptionDisplay,
+  SwTOOElements,
   SwChapterFormat,
   SwFormToken,
   SwTOXBase,
@@ -14,7 +16,14 @@ import {
 
 /** Value-only TOC descriptor record, with its structural children carried by the section codec. */
 export interface WriterIndexRecord {
-  readonly type?: TOXTypes.Index | TOXTypes.User;
+  readonly type?:
+    TOXTypes.Index | TOXTypes.User | TOXTypes.Tables | TOXTypes.Illustrations | TOXTypes.Objects;
+  readonly caption?: {
+    readonly fromObjectNames: boolean;
+    readonly sequenceName: string;
+    readonly display: SwCaptionDisplay;
+  };
+  readonly objectOptions?: SwTOOElements;
   readonly typeName?: string;
   readonly levelFromChapter?: boolean;
   readonly alphabetical?: {
@@ -37,6 +46,20 @@ export interface WriterIndexRecord {
   readonly sourceStyles: readonly string[];
 }
 
+/** Matches the currently represented native index type identities. @param type - Index enum value. @returns Whether the type has a native form in this document. */
+function isStoredIndexType(
+  type: TOXTypes,
+): type is NonNullable<WriterIndexRecord["type"]> | TOXTypes.Content {
+  return (
+    type === TOXTypes.Content ||
+    type === TOXTypes.User ||
+    type === TOXTypes.Index ||
+    type === TOXTypes.Tables ||
+    type === TOXTypes.Illustrations ||
+    type === TOXTypes.Objects
+  );
+}
+
 /** Encodes just the native TOC values. @param tox - Attached index descriptor. @returns Detached record. */
 export function encodeIndex(tox: SwTOXBase): WriterIndexRecord {
   const form = [];
@@ -52,7 +75,7 @@ export function encodeIndex(tox: SwTOXBase): WriterIndexRecord {
     if (level > 0) sourceStyles.push(tox.GetStyleNames(level - 1));
   }
   const type = tox.type.type;
-  if (type !== TOXTypes.Content && type !== TOXTypes.User && type !== TOXTypes.Index)
+  if (!isStoredIndexType(type))
     throw new Error("Writer index type is not represented in the Worker graph.");
   const tag = new LanguageTag(tox.language);
   let languageTag: string;
@@ -75,6 +98,16 @@ export function encodeIndex(tox: SwTOXBase): WriterIndexRecord {
           },
         }
       : {}),
+    ...(type === TOXTypes.Tables || type === TOXTypes.Illustrations
+      ? {
+          caption: {
+            fromObjectNames: tox.fromObjectNames,
+            sequenceName: tox.sequenceName,
+            display: tox.captionDisplay,
+          },
+        }
+      : {}),
+    ...(type === TOXTypes.Objects ? { objectOptions: tox.objectOptions } : {}),
     title: tox.title,
     level: tox.level,
     fromChapter: tox.fromChapter,
@@ -90,7 +123,7 @@ export function encodeIndex(tox: SwTOXBase): WriterIndexRecord {
 export function decodeIndex(document: SwDoc, name: string, record: WriterIndexRecord): SwTOXBase {
   const type = record.type ?? TOXTypes.Content;
   if (
-    (type !== TOXTypes.Content && type !== TOXTypes.User && type !== TOXTypes.Index) ||
+    !isStoredIndexType(type) ||
     (record.typeName !== undefined && typeof record.typeName !== "string") ||
     (record.levelFromChapter !== undefined && typeof record.levelFromChapter !== "boolean")
   )
@@ -139,6 +172,33 @@ export function decodeIndex(document: SwDoc, name: string, record: WriterIndexRe
     tox.mainEntryCharStyle = alpha.mainEntryCharStyle;
     tox.sortAlgorithm = alpha.sortAlgorithm;
     tox.form.SetCommaSeparated(alpha.commaSeparated);
+  }
+  if (type === TOXTypes.Tables || type === TOXTypes.Illustrations) {
+    const caption = record.caption;
+    if (
+      !caption ||
+      typeof caption.fromObjectNames !== "boolean" ||
+      typeof caption.sequenceName !== "string" ||
+      !Number.isInteger(caption.display) ||
+      caption.display < SwCaptionDisplay.Complete ||
+      caption.display > SwCaptionDisplay.Text
+    )
+      throw new Error("Stored Writer caption index is invalid.");
+    tox.fromObjectNames = caption.fromObjectNames;
+    tox.sequenceName = caption.sequenceName;
+    tox.captionDisplay = caption.display;
+  }
+  if (type === TOXTypes.Objects) {
+    const options = record.objectOptions;
+    const mask =
+      SwTOOElements.Math |
+      SwTOOElements.Chart |
+      SwTOOElements.Calc |
+      SwTOOElements.DrawImpress |
+      SwTOOElements.Other;
+    if (options === undefined || !Number.isInteger(options) || (options & mask) !== options)
+      throw new Error("Stored Writer object index is invalid.");
+    tox.objectOptions = options;
   }
   tox.levelFromChapter = record.levelFromChapter ?? false;
   tox.name = name;
