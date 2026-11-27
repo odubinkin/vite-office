@@ -4,7 +4,7 @@ title: "Connect Calc Asian Typography to native slots and ODS styles"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 7
+revision: 8
 origin:
   system: "manual"
 depends_on: []
@@ -22,6 +22,22 @@ verification:
   updated_by: "CODER"
   note: "43 targeted tests pass with the local pinned asset path admitted. Typecheck, lint, format, dependency and source-tree checks pass. Scoped provenance passes. Existing integrated registry failures are recorded in Findings."
   attempts: 0
+quality_review:
+  state: "pass"
+  updated_at: "2026-11-27T06:05:08.317Z"
+  updated_by: "EVALUATOR"
+  note: "Scoped implementation and full affected test set reviewed after integration"
+  evaluated_sha: "c5c929ee0b80dcfcf058cd22973bea54294d3f60"
+  blueprint_digest: "ff6b2051f66e1e82e9046c7b0f1eb888626fd1df65b4c38f40ae7c72cee2c5d5"
+  evidence_refs:
+    - ".agentplane/tasks/202611270601-GE34WV/README.md"
+    - ".agentplane/tasks/202611270601-GE34WV/quality/20261127-060508317-recovery-context/quality-report.json"
+    - ".agentplane/tasks/202611270601-GE34WV/quality/20261127-060508317-recovery-context/evaluator-prompt.md"
+    - ".agentplane/tasks/202611270601-GE34WV/quality/20261127-060508317-recovery-context/evaluator-opinion.md"
+    - ".agentplane/tasks/202611270601-GE34WV/blueprint/resolved-snapshot.json"
+    - "output/calc-next/GE34WV-ui-retry.log"
+  findings:
+    - "43 targeted tests pass. Global provenance refers to baseline markers and is documented independently."
 commit: null
 comments:
   -
