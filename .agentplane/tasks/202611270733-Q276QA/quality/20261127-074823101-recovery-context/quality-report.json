@@ -1,0 +1,22 @@
+{
+  "schema_version": 1,
+  "task_id": "202611270733-Q276QA",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-11-27T07:48:23.101Z",
+  "verdict": "pass",
+  "summary": "Calc persists native database range ownership, filters and sparse header flags through ODS and Worker.",
+  "evaluated_sha": "f63e6c5f2021e1d796bde24f57ffbc9834320527",
+  "blueprint_digest": "229fa6d3b13268fdaeedd3dd0a94b24b4066344cd143d20c18c224213db8164a",
+  "findings": [
+    "Source range defaults, query order, filtered rows and separate named/anonymous ownership were checked against the pinned LibreOffice sources. Implementation: f63e6c5f2021e1d796bde24f57ffbc9834320527."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202611270733-Q276QA/README.md",
+    "output/playwright/Q276QA/verification.md",
+    "f63e6c5f2021e1d796bde24f57ffbc9834320527"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": []
+}
