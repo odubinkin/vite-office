@@ -1,10 +1,11 @@
 ---
 id: "202611270608-C08G26"
 title: "Connect Writer Navigator bookmark actions and history"
-status: "DOING"
+result_summary: "Connected contextual bookmark edit, delete and delete all to native bookmark history and command dispatch."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 9
+revision: 10
 origin:
   system: "manual"
 depends_on: []
@@ -39,11 +40,16 @@ quality_review:
     - "output/playwright/writer-navigator-bookmarks-chromium.log"
   findings:
     - "Browser and core evidence covers selected-name routing, undo, grouped deletion, range offsets and metadata."
-commit: null
+commit:
+  hash: "8bed5252ef20000edc6cafe9c8d39237c80f2d66"
+  message: "🧩 C08G26 code: Connect Writer Navigator bookmark actions and history"
 comments:
   -
     author: "CODER"
     body: "Start: continue direct-mode task in current checkout."
+  -
+    author: "CODER"
+    body: "Verified: 40 focused Writer cases and six Chromium flows exercise bookmark actions and history."
 events:
   -
     type: "status"
@@ -58,8 +64,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Verified: 40 focused Writer cases, six Chromium cases and exact TypeScript and production build. Bookmark edit uses the native slot, grouped delete restores original ranges and visibility metadata in one undo."
+  -
+    type: "status"
+    at: "2026-11-27T06:33:36.736Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: 40 focused Writer cases and six Chromium flows exercise bookmark actions and history."
 doc_version: 3
-doc_updated_at: "2026-11-27T06:28:54.649Z"
+doc_updated_at: "2026-11-27T06:33:36.737Z"
 doc_updated_by: "CODER"
 description: "Wire native bookmark edit and delete actions to Writer Navigator, reuse the bookmark dialog and native history payload, verify selection, delete all and recovery of bookmark endpoints."
 sections:
