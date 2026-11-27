@@ -82,5 +82,6 @@ export interface XMLNumberingRules {
 export interface XMLAutoStyleFamily {
   insertStyle(values: readonly PropertyValue[]): {
     getPropertyValue(name: OUStringConstReference): Any;
+    Dispose?(): void;
   };
 }

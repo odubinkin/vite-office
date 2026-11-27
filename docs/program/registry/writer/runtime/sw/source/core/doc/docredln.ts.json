@@ -20,9 +20,10 @@
         "apps/office/src/sw/source/core/doc/docredln.ts",
         "apps/office/src/sw/source/filter/xml/odt-redlines.test.ts",
         "vendor/libreoffice-reference/sw/source/core/doc/docredln.cxx",
-        "vendor/libreoffice-reference/sw/source/uibase/app/swmodul1.cxx"
+        "vendor/libreoffice-reference/sw/source/uibase/app/swmodul1.cxx",
+        "vendor/libreoffice-reference/sw/qa/filter/xml/xml.cxx"
       ],
-      "justification": "Owns tracked change metadata, ranges and deletion section coordinates. Desktop edit tracking, redline undo and complex show/hide transitions. The original process-wide SwModule author table is shared with the filter through the Writer core module boundary.",
+      "justification": "Owns tracked change metadata, ranges and deletion section coordinates. Desktop edit tracking, redline undo and complex show/hide transitions. The original process-wide SwModule author table is shared with the filter through the Writer core module boundary. Retains the original previous-format items through an owned automatic-style handle.",
       "knownViolations": [],
       "localSymbols": [
         "SwRedlineData",

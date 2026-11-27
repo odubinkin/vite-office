@@ -17,6 +17,14 @@
         {
           "path": "apps/office/src/sw/source/filter/xml/odt-redlines.test.ts",
           "marker": "testMidnightRedlineDatetime"
+        },
+        {
+          "path": "apps/office/src/sw/source/filter/xml/XMLRedlineImportHelper.ts",
+          "marker": "SetExtraData"
+        },
+        {
+          "path": "apps/office/src/sw/source/filter/xml/odt-redlines.test.ts",
+          "marker": "format-charstyle-direct.odt"
         }
       ],
       "upstream": [
@@ -31,6 +39,10 @@
         {
           "path": "vendor/libreoffice-reference/sw/source/filter/xml/XMLRedlineImportHelper.cxx",
           "marker": "XMLRedlineImportHelper::CreateRedlineTextSection"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/qa/filter/xml/xml.cxx",
+          "marker": "testFormatCharstyleDirectOdtImport"
         }
       ]
     },
@@ -41,10 +53,11 @@
       "XMLRedlineImportHelper::CreateRedlineTextSection"
     ],
     "preservedResponsibilities": [
-      "Attaches imported metadata and saved deletion sections to registered Writer ranges."
+      "Attaches imported metadata and saved deletion sections to registered Writer ranges.",
+      "Imports the leading change’s native previous character style and direct formatting."
     ],
     "omittedResponsibilities": [
-      "Structural endpoint adjustment, prior-format item sets and editing-only modes."
+      "Structural endpoint adjustment and editing-only modes."
     ]
   }
 }

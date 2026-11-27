@@ -1,5 +1,12 @@
 /** @fileoverview Implements Writer's streaming SwXMLImport bridge over fast SAX contexts. */
 import { XMLRedlineImportHelper } from "./XMLRedlineImportHelper";
+import { SfxItemSet } from "../../../../svl/source/items/itemset";
+import { releaseStyleHandle } from "../../../../svl/source/items/stylepool";
+import { SwAutoStyleFamily } from "../../../inc/istyleaccess";
+import { REDLINE_FORMAT_RANGES, SwRedlineExtraData_FormatColl } from "../../core/doc/docredln";
+import { findCharacterStyle } from "../../core/doc/docfmt";
+import { SwFormatCharFormat } from "../../core/txtnode/fmtatr2";
+import { SwXAutoStyle, SwXAutoStyleFamily } from "../../core/unocore/unostyle-auto";
 import type { XMLRubyStyle } from "../../../../xmloff/source/text/txtprhdl";
 import type { SfxDocumentProperties } from "../../../../sfx2/source/doc/sfxbasemodel";
 import { SwPoolFormatId, WRITER_CHARACTER_STYLE_POOL } from "../../../inc/poolfmt";
@@ -480,11 +487,59 @@ class SwXMLImport
   ) {
     super(document);
     this.model = new SwXTextDocument(document);
-    this.redlineImport = new XMLRedlineImportHelper(document);
+    this.redlineImport = new XMLRedlineImportHelper(
+      document,
+      /** Resolves previous format after the named and automatic styles have loaded. @param name - Authored redline style. @returns Native previous format. */
+      (name) => this.ResolveRedlineStyle(name),
+    );
     this.textImport = new XMLTextImportHelper(this, this.model);
   }
   private readonly model: SwXTextDocument;
   public readonly redlineImport: XMLRedlineImportHelper;
+
+  /** Resolves the authored automatic character style and its named parent separately. @param name - XML style name. @returns Previous-format owner. */
+  private ResolveRedlineStyle(name: string): SwRedlineExtraData_FormatColl | undefined {
+    const automatic = this.getAutoStyle("text", name);
+    const named = automatic ? automatic.parentStyleName : name;
+    const items = new SfxItemSet(this.document.GetAttrPool(), REDLINE_FORMAT_RANGES);
+    try {
+      if (named) {
+        const definition = this.getStyle("text", named);
+        const format = findCharacterStyle(
+          this.document,
+          definition ? commonCharacterStyleName(named, definition) : named,
+        );
+        if (format) items.Put(new SwFormatCharFormat(format));
+      }
+      if (automatic?.properties) {
+        const style = applyTextImportProperties(
+          undefined,
+          automatic.properties,
+          undefined,
+          undefined,
+          undefined,
+          new SwXAutoStyleFamily(this.document),
+        );
+        if (style instanceof SwXAutoStyle)
+          try {
+            items.PutSet(style.GetItemSet());
+          } finally {
+            style.Dispose();
+          }
+      }
+      if (!items.Count()) return undefined;
+      const handle = this.document
+        .GetIStyleAccess()
+        .getAutomaticStyle(items, SwAutoStyleFamily.AUTO_STYLE_CHAR);
+      try {
+        return new SwRedlineExtraData_FormatColl(handle);
+      } finally {
+        releaseStyleHandle(handle);
+      }
+    } finally {
+      items.Dispose();
+    }
+  }
   /** Supplies the shared text import owner used by every paragraph and table cell. @returns Active native helper. */
   public GetTextImport(): XMLTextImportHelper {
     return this.textImport as XMLTextImportHelper;

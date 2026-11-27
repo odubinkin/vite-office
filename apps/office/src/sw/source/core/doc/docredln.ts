@@ -3,6 +3,20 @@ import type { RedlineType } from "../../../../svx/inc/ctredlin";
 import { DateTime } from "../../../../tools/source/datetime/datetime";
 import { SwNodeIndex, SwPaM, SwPosition } from "../crsr/pam";
 import type { SwStartNode } from "../docnode/node";
+import type { SfxItemSet } from "../../../../svl/source/items/itemset";
+import { acquireStyleHandle, releaseStyleHandle } from "../../../../svl/source/items/stylepool";
+import {
+  RES_CHRATR_BEGIN,
+  RES_TXTATR_WITHEND_END,
+  RES_UNKNOWNATR_BEGIN,
+  RES_UNKNOWNATR_END,
+} from "../../../inc/hintids";
+
+/** Native character and text-attribute bounds of the previous-format set. */
+export const REDLINE_FORMAT_RANGES = [
+  [RES_CHRATR_BEGIN, RES_TXTATR_WITHEND_END - 1],
+  [RES_UNKNOWNATR_BEGIN, RES_UNKNOWNATR_END - 1],
+] as const;
 
 // The native SwModule table is process-wide. The core and module share this
 // registration without a reverse dependency on the UI module.
@@ -20,11 +34,37 @@ export function GetRedlineAuthor(index: number): string {
   return redlineAuthors[index] as string;
 }
 
+/** Original prior-format payload retaining a shared character automatic style. */
+export class SwRedlineExtraData_FormatColl {
+  private readonly pSet: SfxItemSet;
+
+  /** Copies the native style handle. @param items - Interned previous character formatting. */
+  constructor(items: SfxItemSet) {
+    this.pSet = acquireStyleHandle(items);
+  }
+
+  /** Borrows the original previous-format payload. @returns Interned native items. */
+  GetItemSet(): SfxItemSet {
+    return this.pSet;
+  }
+
+  /** Copies the original extra data. @returns Another owner of the previous-format handle. */
+  CreateNew(): SwRedlineExtraData_FormatColl {
+    return new SwRedlineExtraData_FormatColl(this.pSet);
+  }
+
+  /** Releases the native automatic style handle. */
+  Dispose(): void {
+    releaseStyleHandle(this.pSet);
+  }
+}
+
 /** An original tracked-change metadata entry; a successor represents layered changes. */
 export class SwRedlineData {
   private readonly m_aStamp: DateTime;
+  private m_pExtraData: SwRedlineExtraData_FormatColl | undefined;
 
-  /** Stores the native change metadata. @param m_eType - Change type. @param m_nAuthor - Module author index. @param stamp - Native time. @param m_nMovedID - Move identifier. @param m_sComment - Authored comment. @param m_pNext - Layered successor. @param m_aStyleName - Programmatic character style for represented formatting. */
+  /** Stores the native change metadata. @param m_eType - Change type. @param m_nAuthor - Module author index. @param stamp - Native time. @param m_nMovedID - Move identifier. @param m_sComment - Authored comment. @param m_pNext - Layered successor. */
   constructor(
     private readonly m_eType: RedlineType,
     private readonly m_nAuthor: number,
@@ -32,7 +72,6 @@ export class SwRedlineData {
     private readonly m_nMovedID: number,
     private readonly m_sComment: string,
     private readonly m_pNext: SwRedlineData | undefined = undefined,
-    private readonly m_aStyleName = "",
   ) {
     this.m_aStamp = new DateTime(stamp);
   }
@@ -67,9 +106,23 @@ export class SwRedlineData {
     return this.m_pNext;
   }
 
-  /** Reads the previous named character style. @returns Style name. */
-  GetStyleName(): string {
-    return this.m_aStyleName;
+  /** Assigns a clone of the native previous-format payload. @param extra - New source payload. */
+  SetExtraData(extra: SwRedlineExtraData_FormatColl): void {
+    const next = extra.CreateNew();
+    this.m_pExtraData?.Dispose();
+    this.m_pExtraData = next;
+  }
+
+  /** Borrows the native previous-format payload. @returns Extra data if retained. */
+  GetExtraData(): SwRedlineExtraData_FormatColl | undefined {
+    return this.m_pExtraData;
+  }
+
+  /** Releases this change and its complete successor chain. */
+  Dispose(): void {
+    this.m_pExtraData?.Dispose();
+    this.m_pExtraData = undefined;
+    this.m_pNext?.Dispose();
   }
 }
 
@@ -92,6 +145,11 @@ export class SwRangeRedline extends SwPaM {
   /** Borrows the original change metadata. @returns Native metadata. */
   GetRedlineData(): SwRedlineData {
     return this.data;
+  }
+
+  /** Borrows the leading change's original extra data. @returns Previous format if present. */
+  GetExtraData(): SwRedlineExtraData_FormatColl | undefined {
+    return this.data.GetExtraData();
   }
 
   /** Returns an opaque identifier for this live range. @returns Instance identifier. */
@@ -181,6 +239,7 @@ export class SwRangeRedline extends SwPaM {
   override Dispose(): void {
     this.m_pContentNode?.Dispose();
     this.m_pContentNode = undefined;
+    this.data.Dispose();
     super.Dispose();
   }
 }

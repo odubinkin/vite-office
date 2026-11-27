@@ -4,11 +4,15 @@ import { readFileSync } from "node:fs";
 import { assert, expect, it } from "vitest";
 import { DocumentArchive } from "../../../../package/source/zippackage/document-archive";
 import { RedlineType } from "../../../../svx/inc/ctredlin";
+import { SvxFontHeightItem } from "../../../../editeng/source/items/textitem.height";
+import { RES_CHRATR_FONTSIZE, RES_TXTATR_CHARFMT } from "../../../inc/hintids";
 import {
   decodeWriterDocument,
   encodeWriterDocument,
 } from "../../../browser/filter/xml/writer-document-codec";
 import type { SwDoc } from "../../core/doc/doc";
+import { SwFormatCharFormat } from "../../core/txtnode/fmtatr2";
+import { effectiveItem } from "../../core/unocore/unocrsrhelper";
 import { readOdtDocument } from "./swxml";
 import { importWriterXml } from "./xmlimp";
 import { writeOdtDocument } from "./wrtxml";
@@ -98,3 +102,45 @@ it("restores same-position deletions in their original order from testTdf107292"
     ]);
   });
 });
+
+it.each([
+  ["format-char-style-change.odt", false],
+  ["format-charstyle-direct.odt", true],
+] as const)(
+  "preserves the previous character format from %s",
+  /** Ports the original named and direct format redline fixture assertions. @param fixture - Original package. @param withSize - Whether the direct font sizes are present. @returns Completion. */
+  async (fixture, withSize) => {
+    const bytes = new Uint8Array(
+      readFileSync(`../../vendor/libreoffice-reference/sw/qa/filter/xml/data/${fixture}`),
+    );
+    const { document } = await readOdtDocument(bytes, metadata);
+    const saved = await roundTrip(document, (model) => {
+      const table = model.GetIDocumentRedlineAccess().GetRedlineTable().entries();
+      expect(table).toHaveLength(1);
+      const range = table[0];
+      assert(range);
+      expect(range.GetRedlineData().GetType()).toBe(RedlineType.Format);
+      const old = range.GetExtraData()?.GetItemSet();
+      assert(old);
+      const named = old.GetItemIfSet(RES_TXTATR_CHARFMT, false);
+      assert(named instanceof SwFormatCharFormat);
+      expect(named.GetCharFormat()?.GetName()).toBe("Strong Emphasis");
+      const start = range.Start();
+      const node = start.GetNode().GetTextNode();
+      assert(node);
+      const current = effectiveItem(node, start.GetContentIndex(), RES_TXTATR_CHARFMT);
+      assert(current instanceof SwFormatCharFormat);
+      expect(current.GetCharFormat()?.GetName()).toBe("Quote Char");
+      if (withSize) {
+        const oldHeight = old.GetItemIfSet(RES_CHRATR_FONTSIZE, false);
+        const currentHeight = effectiveItem(node, start.GetContentIndex(), RES_CHRATR_FONTSIZE);
+        assert(
+          oldHeight instanceof SvxFontHeightItem && currentHeight instanceof SvxFontHeightItem,
+        );
+        expect(oldHeight.GetHeight()).toBe(480);
+        expect(currentHeight.GetHeight()).toBe(720);
+      }
+    });
+    expect(saved).toContain("<text:format-change loext:style-name=");
+  },
+);

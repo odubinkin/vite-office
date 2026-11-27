@@ -3,12 +3,21 @@ import { DateTime as UnoDateTime } from "../../../../offapi/com/sun/star/util/Da
 import { RedlineType } from "../../../../svx/inc/ctredlin";
 import { DateTime } from "../../../../tools/source/datetime/datetime";
 import { RedlineFlags } from "../../../inc/IDocumentRedlineAccess";
+import { SwAutoStyleFamily } from "../../../inc/istyleaccess";
+import { SfxItemSet } from "../../../../svl/source/items/itemset";
+import { releaseStyleHandle } from "../../../../svl/source/items/stylepool";
+import type { SfxPoolItemSnapshot } from "../../../../svl/source/items/poolitem";
+import { findCharacterStyle } from "../../../source/core/doc/docfmt";
+import { SwFormatCharFormat } from "../../../source/core/txtnode/fmtatr2";
+import { decodeSfxItemSet, encodeSfxItemSet } from "./item-codec";
 import { SwStartNodeType } from "../../../inc/ndtyp";
 import { SwPosition } from "../../../source/core/crsr/pam";
 import type { SwDoc } from "../../../source/core/doc/doc";
 import {
   SwRangeRedline,
   SwRedlineData,
+  SwRedlineExtraData_FormatColl,
+  REDLINE_FORMAT_RANGES,
   GetRedlineAuthor,
   InsertRedlineAuthor,
 } from "../../../source/core/doc/docredln";
@@ -40,7 +49,8 @@ interface Change {
   readonly timestamp: Timestamp;
   readonly comment: string;
   readonly movedId: number;
-  readonly styleName: string;
+  readonly previousFormat?: readonly SfxPoolItemSnapshot[];
+  readonly styleName?: string;
 }
 
 /** Tracked range and optional detached content. */
@@ -95,6 +105,7 @@ export function encodeRedlines(
       data = data.GetNext()
     ) {
       const stamp = data.GetTimeStamp();
+      const items = data.GetExtraData()?.GetItemSet();
       changes.push({
         type: data.GetType(),
         author: GetRedlineAuthor(data.GetAuthor()),
@@ -109,7 +120,7 @@ export function encodeRedlines(
         ],
         comment: data.GetComment(),
         movedId: data.GetMovedID(),
-        styleName: data.GetStyleName(),
+        ...(items ? { previousFormat: encodeSfxItemSet(items) } : {}),
       });
     }
     const content = sections.get(range);
@@ -178,43 +189,76 @@ export function restoreRedlines(
   }
   for (const range of record.ranges) {
     let data: SwRedlineData | undefined;
-    for (const change of [...range.changes].reverse()) {
-      if (
-        !change ||
-        typeof change.author !== "string" ||
-        typeof change.comment !== "string" ||
-        typeof change.styleName !== "string" ||
-        !Number.isInteger(change.movedId) ||
-        ![RedlineType.Insert, RedlineType.Delete, RedlineType.Format].includes(change.type) ||
-        !Array.isArray(change.timestamp) ||
-        change.timestamp.length !== 7 ||
-        !change.timestamp.every(Number.isInteger)
-      )
-        throw new Error("Stored Writer change metadata is invalid.");
-      const [year, month, day, hour, minute, second, nano] = change.timestamp;
-      data = new SwRedlineData(
-        change.type,
-        InsertRedlineAuthor(change.author),
-        new DateTime(new UnoDateTime(nano, second, minute, hour, day, month, year, false)),
-        change.movedId,
-        change.comment,
-        data,
-        change.styleName,
-      );
-    }
-    if (!data) throw new Error("Stored Writer change metadata is missing.");
-    const point = bind(range.point);
+    let point: SwPosition | undefined;
     let mark: SwPosition | undefined;
     try {
+      for (const change of [...range.changes].reverse()) {
+        if (
+          !change ||
+          typeof change.author !== "string" ||
+          typeof change.comment !== "string" ||
+          (change.styleName !== undefined && typeof change.styleName !== "string") ||
+          (change.previousFormat !== undefined && !Array.isArray(change.previousFormat)) ||
+          !Number.isInteger(change.movedId) ||
+          ![RedlineType.Insert, RedlineType.Delete, RedlineType.Format].includes(change.type) ||
+          !Array.isArray(change.timestamp) ||
+          change.timestamp.length !== 7 ||
+          !change.timestamp.every(Number.isInteger)
+        )
+          throw new Error("Stored Writer change metadata is invalid.");
+        const [year, month, day, hour, minute, second, nano] = change.timestamp;
+        data = new SwRedlineData(
+          change.type,
+          InsertRedlineAuthor(change.author),
+          new DateTime(new UnoDateTime(nano, second, minute, hour, day, month, year, false)),
+          change.movedId,
+          change.comment,
+          data,
+        );
+        if (change.previousFormat !== undefined || change.styleName)
+          restorePreviousFormat(document, data, change);
+      }
+      if (!data) throw new Error("Stored Writer change metadata is missing.");
+      point = bind(range.point);
       mark = range.mark === undefined ? undefined : bind(range.mark);
       const restored = new SwRangeRedline(data, point, mark, range.deleteLastPara);
       const section = sections.get(range);
       if (section) restored.SetContentIdx(section);
       access.GetRedlineTable().Insert(restored);
+      data = undefined;
     } finally {
       mark?.Dispose();
-      point.Dispose();
+      point?.Dispose();
+      data?.Dispose();
     }
   }
   access.SetRedlineFlags(record.flags);
+}
+
+/** Restores pool items and the named-character style reference from the graph. @param document - Destination. @param data - Native change. @param change - Encoded formatting. */
+function restorePreviousFormat(document: SwDoc, data: SwRedlineData, change: Change): void {
+  const items = new SfxItemSet(document.GetAttrPool(), REDLINE_FORMAT_RANGES);
+  try {
+    if (change.previousFormat !== undefined) decodeSfxItemSet(items, change.previousFormat);
+    else if (change.styleName) {
+      const style = findCharacterStyle(document, change.styleName);
+      if (style) items.Put(new SwFormatCharFormat(style));
+    }
+    if (!items.Count()) return;
+    const handle = document
+      .GetIStyleAccess()
+      .getAutomaticStyle(items, SwAutoStyleFamily.AUTO_STYLE_CHAR);
+    try {
+      const extra = new SwRedlineExtraData_FormatColl(handle);
+      try {
+        data.SetExtraData(extra);
+      } finally {
+        extra.Dispose();
+      }
+    } finally {
+      releaseStyleHandle(handle);
+    }
+  } finally {
+    items.Dispose();
+  }
 }

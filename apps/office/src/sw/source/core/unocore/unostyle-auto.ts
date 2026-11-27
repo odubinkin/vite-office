@@ -1,7 +1,7 @@
 /** @fileoverview Character SwXAutoStyles/SwXAutoStyleFamily/SwXAutoStyle from pinned unostyle.cxx, over the document-owned automatic-style pool. */
 import type { SwDoc } from "../doc/doc";
 import { SfxItemSet } from "../../../../svl/source/items/itemset";
-import { StylePool } from "../../../../svl/source/items/stylepool";
+import { releaseStyleHandle, StylePool } from "../../../../svl/source/items/stylepool";
 import { WRITER_CHARACTER_WHICH_RANGES } from "../../../inc/hintids";
 import { SwAutoStyleFamily } from "../../../inc/istyleaccess";
 import type { OUStringConstReference } from "../../../../sal/inc/rtl/ustring";
@@ -28,30 +28,42 @@ export class SwXAutoStyleFamily {
   /** Applies ordered properties and interns the resulting native item set. @param values - Actual PropertyValue descriptors. @returns Native auto style. */
   insertStyle(values: readonly PropertyValue[]): SwXAutoStyle {
     const set = new SfxItemSet(this.doc.GetAttrPool(), WRITER_CHARACTER_WHICH_RANGES);
-    for (const property of values) {
-      try {
-        const name = text(property.Name),
-          entry = SwUnoPropertyMap.get(name);
-        if (!entry || !name.startsWith("Char")) unknown(name);
-        set.Put(putItem(set.Get(entry.which), entry, property.Value));
-      } catch (error) {
-        if (
-          !(error instanceof IllegalArgumentException) &&
-          !(error instanceof UnknownPropertyException)
-        )
-          throw error;
-        error.dispose();
+    try {
+      for (const property of values) {
+        try {
+          const name = text(property.Name),
+            entry = SwUnoPropertyMap.get(name);
+          if (!entry || !name.startsWith("Char")) unknown(name);
+          set.Put(putItem(set.Get(entry.which), entry, property.Value));
+        } catch (error) {
+          if (
+            !(error instanceof IllegalArgumentException) &&
+            !(error instanceof UnknownPropertyException)
+          )
+            throw error;
+          error.dispose();
+        }
       }
+      return new SwXAutoStyle(
+        this.doc.GetIStyleAccess().cacheAutomaticStyle(set, SwAutoStyleFamily.AUTO_STYLE_CHAR),
+      );
+    } finally {
+      set.Dispose();
     }
-    return new SwXAutoStyle(
-      this.doc.GetIStyleAccess().cacheAutomaticStyle(set, SwAutoStyleFamily.AUTO_STYLE_CHAR),
-    );
   }
 }
 /** Native automatic-style property reader retaining the shared item-set handle. */
 export class SwXAutoStyle {
   /** Retains the document-owned handle. @param set - Interned items. @returns Nothing. */
   constructor(private readonly set: SfxItemSet) {}
+  /** Borrows the interned character item set. @returns Native items. */
+  GetItemSet(): SfxItemSet {
+    return this.set;
+  }
+  /** Releases the original automatic-style reference. */
+  Dispose(): void {
+    releaseStyleHandle(this.set);
+  }
   /** Reads the native identity or a represented item member. @param name - Native property. @returns Owned Any. */
   getPropertyValue(name: OUStringConstReference): Any {
     const key = text(name);

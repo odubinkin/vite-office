@@ -10,7 +10,12 @@ import { RedlineFlags } from "../../../inc/IDocumentRedlineAccess";
 import { SwStartNodeType } from "../../../inc/ndtyp";
 import { CheckNodesRange, SwPosition } from "../../core/crsr/pam";
 import type { SwDoc } from "../../core/doc/doc";
-import { SwRangeRedline, SwRedlineData, InsertRedlineAuthor } from "../../core/doc/docredln";
+import {
+  SwRangeRedline,
+  SwRedlineData,
+  InsertRedlineAuthor,
+  type SwRedlineExtraData_FormatColl,
+} from "../../core/doc/docredln";
 import type { SwStartNode } from "../../core/docnode/node";
 import { SwTextNode } from "../../core/txtnode/ndtxt";
 import type { SwXTextCursor } from "../../core/unocore/unoobj";
@@ -36,8 +41,11 @@ interface RedlineInfo {
 export class XMLRedlineImportHelper implements XMLRedlineImportTarget {
   private readonly m_aRedlineMap = new Map<string, RedlineInfo>();
 
-  /** Binds the original import document. @param document - Actual Writer owner. */
-  constructor(private readonly document: SwDoc) {}
+  /** Binds the original import document. @param document - Actual Writer owner. @param resolveStyle - Loaded ODF character-style owners. */
+  constructor(
+    private readonly document: SwDoc,
+    private readonly resolveStyle: (name: string) => SwRedlineExtraData_FormatColl | undefined,
+  ) {}
 
   /** Applies the original record-changes flag without changing display mode. @param enabled - Source setting. */
   SetRecordChanges(enabled: boolean): void {
@@ -111,15 +119,28 @@ export class XMLRedlineImportHelper implements XMLRedlineImportTarget {
       (next?.type === "deletion" && change.type === "format-change") ||
       (next?.type === "insertion" && change.type !== "insertion");
     const moved = /^\s*[+-]?\d+/u.exec(change.movedId)?.[0];
-    return new SwRedlineData(
+    const data = new SwRedlineData(
       redlineTypes[change.type],
       InsertRedlineAuthor(change.author),
       new DateTime(change.date),
       Number(moved ?? "0") >>> 0,
       change.comment,
       combined ? this.ConvertRedline(entry, index + 1) : undefined,
-      change.styleName,
     );
+    try {
+      const extra =
+        index === 0 && change.styleName ? this.resolveStyle(change.styleName) : undefined;
+      if (extra)
+        try {
+          data.SetExtraData(extra);
+        } finally {
+          extra.Dispose();
+        }
+      return data;
+    } catch (error) {
+      data.Dispose();
+      throw error;
+    }
   }
 
   /** Promotes the ranged or saved change into the native document table. @param id - Source identity. @param entry - Completed import state. */

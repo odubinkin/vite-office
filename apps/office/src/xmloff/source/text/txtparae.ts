@@ -163,6 +163,14 @@ export interface XMLTextExportSource {
   paragraphs(): Iterable<XMLTextParagraphSource>;
   blocks?(): Iterable<XMLTextExportBlock>;
   sections?(): Iterable<Iterable<XMLTextExportBlock>>;
+  readonly redlineStyles?: readonly XMLRedlineStyleSource[];
+}
+
+/** Previous character formatting used by a specific tracked change. */
+export interface XMLRedlineStyleSource {
+  readonly key: string;
+  readonly parent: string;
+  readonly properties?: Partial<OdfCharacterProperties>;
 }
 
 /** Serialized automatic styles and paragraph body fragment. */
@@ -171,6 +179,7 @@ export interface OdfTextExport {
   readonly body: string;
   readonly namedStyles: string;
   readonly sections?: readonly string[];
+  readonly redlineStyleNames: ReadonlyMap<string, string>;
 }
 
 /** Bounded xmloff export context owning one complete text export pass. */
@@ -190,15 +199,21 @@ export class XMLTextParagraphExport {
     const paragraphStyleNames = new Map<string, string>();
     const characterStyleNames = new Map<string, string>();
     const reservedCharacterStyleNames = new Set(source.commonCharacterStyleNames);
+    const characterParents = new Map<string, string>();
+    const redlineStyleNames = new Map<string, string>();
     let nextCharacterStyle = 0;
-    /** Interns both ordinary spans and paragraph markers in the text auto-style family. @param properties - Direct text properties. @returns Nothing. */
-    function addTextStyle(properties: Partial<OdfCharacterProperties>): void {
-      const key = characterPropertiesKey(properties);
-      if (characterStyleNames.has(key)) return;
+    /** Interns direct text properties in the text auto-style family. @param properties - Direct text properties. @param parent - Named parent style. @returns ODF name. */
+    function addTextStyle(properties: Partial<OdfCharacterProperties>, parent = ""): string {
+      const propertyKey = characterPropertiesKey(properties);
+      const key = parent ? `${parent}\0${propertyKey}` : propertyKey;
+      const existing = characterStyleNames.get(key);
+      if (existing !== undefined) return existing;
       let name: string;
       do name = `T${++nextCharacterStyle}`;
       while (reservedCharacterStyleNames.has(name));
       characterStyleNames.set(key, name);
+      if (parent) characterParents.set(name, parent);
+      return name;
     }
     const listRules = new Map<string, XMLTextListRuleSource>();
     const rubyStyleNames = new Map<string, string>();
@@ -322,12 +337,16 @@ export class XMLTextParagraphExport {
         return `<style:style style:name="${name}" style:family="paragraph"${parent}${numbering}${masterPage}>${paragraphProperties}${textProperties}</style:style>`;
       },
     );
+    for (const { key, parent, properties } of source.redlineStyles ?? [])
+      redlineStyleNames.set(key, properties ? addTextStyle(properties, parent) : parent);
     const characterStyles = [...characterStyleNames].map(
       /** Emits one automatic character style. @param entry - Internal key and ODF name. @returns Style XML. */
       (entry) => {
         const [key, name] = entry;
-        const properties = parseCharacterPropertiesKey(key);
-        return `<style:style style:name="${name}" style:family="text">${exportCharacterPropertyElement(properties, fontFaceName)}</style:style>`;
+        const parent = characterParents.get(name);
+        const properties = parseCharacterPropertiesKey(parent ? key.slice(parent.length + 1) : key);
+        const parentAttribute = parent ? ` style:parent-style-name="${escapeXml(parent)}"` : "";
+        return `<style:style style:name="${name}" style:family="text"${parentAttribute}>${exportCharacterPropertyElement(properties, fontFaceName)}</style:style>`;
       },
     );
     const listStyles = [...listRules.values()]
@@ -388,6 +407,7 @@ export class XMLTextParagraphExport {
       ].join(""),
       body: rendered.body,
       namedStyles: namedStyles.join(""),
+      redlineStyleNames,
       ...("sections" in rendered && rendered.sections !== undefined
         ? { sections: rendered.sections }
         : {}),

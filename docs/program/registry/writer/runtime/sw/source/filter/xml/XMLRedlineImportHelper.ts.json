@@ -19,9 +19,10 @@
       "evidence": [
         "apps/office/src/sw/source/filter/xml/XMLRedlineImportHelper.ts",
         "apps/office/src/sw/source/filter/xml/odt-redlines.test.ts",
-        "vendor/libreoffice-reference/sw/source/filter/xml/XMLRedlineImportHelper.cxx"
+        "vendor/libreoffice-reference/sw/source/filter/xml/XMLRedlineImportHelper.cxx",
+        "vendor/libreoffice-reference/sw/qa/filter/xml/xml.cxx"
       ],
-      "justification": "Attaches imported metadata and saved deletion sections to registered Writer ranges. Structural endpoint adjustment, prior-format item sets and editing-only modes.",
+      "justification": "Attaches imported metadata and saved deletion sections to registered Writer ranges. Structural endpoint adjustment and editing-only modes. Imports the leading change’s native previous character style and direct formatting.",
       "knownViolations": [],
       "localSymbols": [
         "XMLRedlineImportHelper"

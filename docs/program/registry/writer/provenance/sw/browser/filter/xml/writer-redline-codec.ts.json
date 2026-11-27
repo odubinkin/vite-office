@@ -22,12 +22,21 @@
         {
           "path": "apps/office/src/sw/source/filter/xml/odt-redlines.test.ts",
           "marker": "testMidnightRedlineDatetime"
+        },
+        {
+          "path": "apps/office/src/sw/browser/filter/xml/writer-redline-codec.ts",
+          "marker": "restorePreviousFormat"
+        },
+        {
+          "path": "apps/office/src/sw/source/filter/xml/odt-redlines.test.ts",
+          "marker": "format-charstyle-direct.odt"
         }
       ]
     },
     "rationale": "Transfers live redline metadata, registered positions and deletion sections across the browser Worker.",
     "responsibilities": [
-      "Transfers live redline metadata, registered positions and deletion sections across the browser Worker."
+      "Transfers live redline metadata, registered positions and deletion sections across the browser Worker.",
+      "Transfers native previous-format items and the document-owned named character format."
     ],
     "stackDivergence": {
       "kind": "local-infrastructure",

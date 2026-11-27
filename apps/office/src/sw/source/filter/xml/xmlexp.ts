@@ -2,6 +2,10 @@
  * @fileoverview Reimplements the bounded Writer ODF XML export bridge from pinned LibreOffice `sw/source/filter/xml/xmlexp.cxx`.
  */
 import { GetRedlineAuthor } from "../../core/doc/docredln";
+import type { SwRedlineData } from "../../core/doc/docredln";
+import { SwFormatCharFormat } from "../../core/txtnode/fmtatr2";
+import { RES_TXTATR_CHARFMT } from "../../../inc/hintids";
+import type { XMLRedlineStyleSource } from "../../../../xmloff/source/text/txtparae";
 import { SwTextRuby } from "../../core/txtnode/txtatr2";
 import { text } from "../../../../i18nlangtag/source/isolang/isolang.tables";
 import { SwStyleNameMapper } from "../../core/doc/SwStyleNameMapper";
@@ -545,6 +549,20 @@ export function exportContentXml(
   const fonts = createWriterFontAutoStylePool(document);
   const redlineAccess = document.GetIDocumentRedlineAccess();
   const redlines = redlineAccess.GetRedlineTable().entries();
+  const redlineStyles: XMLRedlineStyleSource[] = [];
+  const styleKeys = new Map<SwRedlineData, string>();
+  for (const range of redlines) {
+    const data = range.GetRedlineData();
+    const items = data.GetExtraData()?.GetItemSet();
+    if (!items) continue;
+    const named = items.GetItemIfSet(RES_TXTATR_CHARFMT, false);
+    const format = named instanceof SwFormatCharFormat ? named.GetCharFormat() : undefined;
+    const parent = format ? getCharacterOdfStyleName(format) : "";
+    const properties = getCharacterProperties(items, false);
+    const key = String(redlineStyles.length);
+    styleKeys.set(data, key);
+    redlineStyles.push({ key, parent, ...(properties ? { properties } : {}) });
+  }
   const deletionSections = redlines.flatMap(
     /** Projects each actual saved redline section into the shared automatic style pass. @param redline - Change. @returns Saved section if present. */
     (redline) => {
@@ -570,6 +588,7 @@ export function exportContentXml(
     deletionSections.length ? deletionSections : undefined,
     graphicHelper,
     bitmapStyles,
+    redlineStyles,
   );
   let deletionIndex = 0;
   const changes = exportTrackedChanges(
@@ -590,7 +609,7 @@ export function exportContentXml(
             date: data.GetTimeStamp().GetUNODateTime(),
             comment: data.GetComment(),
             movedId: data.GetMovedID(),
-            styleName: data.GetStyleName(),
+            styleName: exported.redlineStyleNames.get(styleKeys.get(data) ?? "") ?? "",
           });
           const next = data.GetNext();
           if (!next) break;
@@ -610,7 +629,7 @@ export function exportContentXml(
   return `<?xml version="1.0" encoding="UTF-8"?><office:document-content ${OFFICE_NAMESPACES} office:version="1.3">${fonts.exportXML()}<office:automatic-styles>${exported.automaticStyles}</office:automatic-styles><office:body><office:text>${changes}${exported.body}</office:text></office:body></office:document-content>`;
 }
 
-/** Projects the same model source for both package streams. @param document - Writer model. @param isCancelled - Cancellation probe. @param fontFaceName - Font registry. @param existingFontFaceName - Existing face lookup. @param sections - Master-page text owners in the styles stream. @param graphicHelper - Optional package graphic owner. @param bitmapStyles - Package bitmap catalogue. @returns Style/body fragments. */
+/** Projects the same model source for both package streams. @param document - Writer model. @param isCancelled - Cancellation probe. @param fontFaceName - Font registry. @param existingFontFaceName - Existing face lookup. @param sections - Master-page text owners in the styles stream. @param graphicHelper - Optional package graphic owner. @param bitmapStyles - Package bitmap catalogue. @param redlineStyles - Previous formatting submitted to the same style pass. @returns Style/body fragments. */
 function exportWriterText(
   document: SwDoc,
   isCancelled: () => boolean,
@@ -625,6 +644,7 @@ function exportWriterText(
   sections?: readonly SwStartNode[],
   graphicHelper?: SvXMLGraphicHelper,
   bitmapStyles?: XMLBitmapStyleExport,
+  redlineStyles?: readonly XMLRedlineStyleSource[],
 ): OdfTextExport {
   const anchored: XMLBoundWriterFrames = {
     text: CollectTextFlyFrames(document),
@@ -644,6 +664,7 @@ function exportWriterText(
         return dataStyles.get(key)?.name;
       },
       commonCharacterStyleNames: document.GetCharFormats().slice(1).map(getCharacterOdfStyleName),
+      ...(redlineStyles === undefined ? {} : { redlineStyles }),
       /** Iterates live Writer nodes without retaining a projection. @returns Paragraph source iterator. */
       *paragraphs(): Iterable<XMLTextParagraphSource> {
         for (const node of getTextFrameExportParagraphs(document, anchored.text))

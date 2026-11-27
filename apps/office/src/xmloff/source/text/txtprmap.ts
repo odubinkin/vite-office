@@ -755,16 +755,16 @@ interface TabStopAddress {
 }
 /** Original generated compound stride, consumed through the existing CPPU sequence owner. */
 const ImportTabStops = Sequence.specialize<TabStopAddress>(stopType, 12);
-/** Applies parsed XML properties as native API values. @param target - Property owner. @param character - Character deltas. @param paragraph - Paragraph deltas. @param alignment - Optional alignment. @param leftMargin - Text-left margin in twips. @param autoFamily - Automatic style family. @param autoProperty - Destination property for the interned character style. @returns Nothing. */
+/** Applies parsed XML properties as native API values. @param target - Property owner, or absent when collecting an automatic style. @param character - Character deltas. @param paragraph - Paragraph deltas. @param alignment - Optional alignment. @param leftMargin - Text-left margin in twips. @param autoFamily - Automatic style family. @param autoProperty - Destination property for the interned character style. @returns Collected automatic style when no target was supplied. */
 export function applyTextImportProperties(
-  target: XMLPropertySet,
+  target: XMLPropertySet | undefined,
   character: Partial<OdfCharacterProperties> = {},
   paragraph: XMLParagraphImportProperties = {},
   alignment?: OdfParagraphAlignment,
   leftMargin?: number,
   autoFamily?: XMLAutoStyleFamily,
   autoProperty: "CharAutoStyleName" | "ListAutoFormat" = "CharAutoStyleName",
-): void {
+): ReturnType<XMLAutoStyleFamily["insertStyle"]> | undefined {
   const names: OUString[] = [],
     values: Any[] = [];
   /** Appends one original typed property value. @param name - Native name. @param value - Parsed scalar. @param type - Native declared type. @returns Nothing. */
@@ -1032,12 +1032,17 @@ export function applyTextImportProperties(
       const key = xmlTextString("CharAutoStyleName");
       const destination = autoProperty === "CharAutoStyleName" ? key : xmlTextString(autoProperty);
       try {
-        const style = autoFamily.insertStyle(properties),
-          value = style.getPropertyValue(key);
+        const style = autoFamily.insertStyle(properties);
+        if (target === undefined) return style;
         try {
-          target.setPropertyValue(destination, value);
+          const value = style.getPropertyValue(key);
+          try {
+            target.setPropertyValue(destination, value);
+          } finally {
+            value.dispose();
+          }
         } finally {
-          value.dispose();
+          style.Dispose?.();
         }
       } finally {
         if (destination !== key) destination.dispose();
@@ -1047,7 +1052,7 @@ export function applyTextImportProperties(
           property.Value.dispose();
         }
       }
-    } else if (names.length) {
+    } else if (names.length && target) {
       try {
         if (target.setPropertyValues) {
           target.setPropertyValues(names, values);
@@ -1077,4 +1082,5 @@ export function applyTextImportProperties(
     for (const name of names) name.dispose();
     for (const value of values) value.dispose();
   }
+  return undefined;
 }

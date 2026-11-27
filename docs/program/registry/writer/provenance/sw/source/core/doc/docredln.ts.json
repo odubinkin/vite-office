@@ -35,6 +35,14 @@
         {
           "path": "apps/office/src/sw/source/core/doc/docredln.ts",
           "marker": "InsertRedlineAuthor"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/doc/docredln.ts",
+          "marker": "SwRedlineExtraData_FormatColl"
+        },
+        {
+          "path": "apps/office/src/sw/source/filter/xml/odt-redlines.test.ts",
+          "marker": "format-charstyle-direct.odt"
         }
       ],
       "upstream": [
@@ -57,6 +65,14 @@
         {
           "path": "vendor/libreoffice-reference/sw/source/uibase/app/swmodul1.cxx",
           "marker": "SwModule::InsertRedlineAuthor"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/doc/docredln.cxx",
+          "marker": "SwRedlineExtraData_FormatColl::CreateNew"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/qa/filter/xml/xml.cxx",
+          "marker": "testFormatCharstyleDirectOdtImport"
         }
       ]
     },
@@ -68,7 +84,8 @@
     ],
     "preservedResponsibilities": [
       "Owns tracked change metadata, ranges and deletion section coordinates.",
-      "The original process-wide SwModule author table is shared with the filter through the Writer core module boundary."
+      "The original process-wide SwModule author table is shared with the filter through the Writer core module boundary.",
+      "Retains the original previous-format items through an owned automatic-style handle."
     ],
     "omittedResponsibilities": [
       "Desktop edit tracking, redline undo and complex show/hide transitions."
