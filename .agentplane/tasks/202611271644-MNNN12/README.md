@@ -4,7 +4,7 @@ title: "Implement native Calc ODS consolidation settings and sheet scenarios"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 4
+revision: 6
 origin:
   system: "manual"
 depends_on: []
@@ -19,11 +19,27 @@ plan_approval:
   updated_by: "ORCHESTRATOR"
   note: null
 verification:
-  state: "pending"
-  updated_at: null
-  updated_by: null
-  note: null
+  state: "ok"
+  updated_at: "2026-11-27T16:57:44.764Z"
+  updated_by: "CODER"
+  note: "136 focused Calc tests passed, with all three cases passing final replay. Office typecheck, lint, module boundaries, provenance and Calc/shared inventory passed. The pinned tdf149752 consolidation and tdf136551 malformed target contracts plus real Scenario pattern flags are verified."
   attempts: 0
+quality_review:
+  state: "pass"
+  updated_at: "2026-11-27T16:57:45.312Z"
+  updated_by: "EVALUATOR"
+  note: "Native document consolidation and sheet scenario metadata now have canonical core ownership, ODS import/export, and Worker transfer."
+  evaluated_sha: "25d15433a1195b64ad3f5e79f757aa34591d51c2"
+  blueprint_digest: "68cb1da38d00135f6db2729f66c45bf5e39e63d55e01281a58f82f23ac639e03"
+  evidence_refs:
+    - ".agentplane/tasks/202611271644-MNNN12/README.md"
+    - ".agentplane/tasks/202611271644-MNNN12/quality/20261127-165745312-recovery-context/quality-report.json"
+    - ".agentplane/tasks/202611271644-MNNN12/quality/20261127-165745312-recovery-context/evaluator-prompt.md"
+    - ".agentplane/tasks/202611271644-MNNN12/quality/20261127-165745312-recovery-context/evaluator-opinion.md"
+    - ".agentplane/tasks/202611271644-MNNN12/blueprint/resolved-snapshot.json"
+    - "output/playwright/odf-next-checkpoint/calc-next-verification.md"
+  findings:
+    - "Scenario ranges use actual cell pattern flags. Both native consolidation fixture scenarios and ODS plus Worker transfer are exercised."
 commit: null
 comments:
   -
@@ -37,8 +53,14 @@ events:
     from: "TODO"
     to: "DOING"
     note: "Start: port native document consolidation and scenario ODF owners."
+  -
+    type: "verify"
+    at: "2026-11-27T16:57:44.764Z"
+    author: "CODER"
+    state: "ok"
+    note: "136 focused Calc tests passed, with all three cases passing final replay. Office typecheck, lint, module boundaries, provenance and Calc/shared inventory passed. The pinned tdf149752 consolidation and tdf136551 malformed target contracts plus real Scenario pattern flags are verified."
 doc_version: 3
-doc_updated_at: "2026-11-27T16:45:14.865Z"
+doc_updated_at: "2026-11-27T16:57:44.825Z"
 doc_updated_by: "CODER"
 description: "Implement ScConsolidateParam, native scenario range flags, ODS importer and exporter, and Worker support in apps/office/src/sc and the shared ODF token module. Verify with LibreOffice consolidation inputs and a native scenario ODS round trip."
 sections:
@@ -58,6 +80,36 @@ sections:
     3. Compare the final result against ## Scope and record any residual follow-up in ## Findings. Expected: open edges are explicit rather than implicit.
   Verification: |-
     <!-- BEGIN VERIFICATION RESULTS -->
+    ### 2026-11-27T16:57:44.764Z — VERIFY — ok
+
+    By: CODER
+
+    Note: 136 focused Calc tests passed, with all three cases passing final replay. Office typecheck, lint, module boundaries, provenance and Calc/shared inventory passed. The pinned tdf149752 consolidation and tdf136551 malformed target contracts plus real Scenario pattern flags are verified.
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-27T16:45:14.865Z, excerpt_hash=sha256:005d2f3e8ed7a489597fa1aa9e317cdf704c3d55af6386397fad1613d01f2cb8
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202611271644-MNNN12/blueprint/resolved-snapshot.json
+    - old_digest: 68cb1da38d00135f6db2729f66c45bf5e39e63d55e01281a58f82f23ac639e03
+    - current_digest: 68cb1da38d00135f6db2729f66c45bf5e39e63d55e01281a58f82f23ac639e03
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202611271644-MNNN12
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task verify-show 202611271644-MNNN12
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: false
+    - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+    - risks: none
+
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: |-
     - Revert task-related commit(s).
@@ -91,6 +143,36 @@ PLANNER fallback scaffold for "Preserve native Calc consolidation settings and s
 ## Verification
 
 <!-- BEGIN VERIFICATION RESULTS -->
+### 2026-11-27T16:57:44.764Z — VERIFY — ok
+
+By: CODER
+
+Note: 136 focused Calc tests passed, with all three cases passing final replay. Office typecheck, lint, module boundaries, provenance and Calc/shared inventory passed. The pinned tdf149752 consolidation and tdf136551 malformed target contracts plus real Scenario pattern flags are verified.
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-27T16:45:14.865Z, excerpt_hash=sha256:005d2f3e8ed7a489597fa1aa9e317cdf704c3d55af6386397fad1613d01f2cb8
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202611271644-MNNN12/blueprint/resolved-snapshot.json
+- old_digest: 68cb1da38d00135f6db2729f66c45bf5e39e63d55e01281a58f82f23ac639e03
+- current_digest: 68cb1da38d00135f6db2729f66c45bf5e39e63d55e01281a58f82f23ac639e03
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202611271644-MNNN12
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task verify-show 202611271644-MNNN12
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: false
+- repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- risks: none
+
 <!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan

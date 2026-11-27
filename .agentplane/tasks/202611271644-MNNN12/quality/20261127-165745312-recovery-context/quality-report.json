@@ -1,0 +1,21 @@
+{
+  "schema_version": 1,
+  "task_id": "202611271644-MNNN12",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-11-27T16:57:45.312Z",
+  "verdict": "pass",
+  "summary": "Native document consolidation and sheet scenario metadata now have canonical core ownership, ODS import/export, and Worker transfer.",
+  "evaluated_sha": "25d15433a1195b64ad3f5e79f757aa34591d51c2",
+  "blueprint_digest": "68cb1da38d00135f6db2729f66c45bf5e39e63d55e01281a58f82f23ac639e03",
+  "findings": [
+    "Scenario ranges use actual cell pattern flags. Both native consolidation fixture scenarios and ODS plus Worker transfer are exercised."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202611271644-MNNN12/README.md",
+    "output/playwright/odf-next-checkpoint/calc-next-verification.md"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": []
+}
