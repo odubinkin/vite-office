@@ -1,10 +1,11 @@
 ---
 id: "202611271117-ST1V0C"
 title: "Check native Protect Sheet state in the Calc browser menu"
-status: "DOING"
+result_summary: "Recognized the native Protect Sheet checkbox and retained all previous browser assertions."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 7
+revision: 8
 origin:
   system: "manual"
 depends_on: []
@@ -40,11 +41,16 @@ quality_review:
     - "434f352c871e4ebcf0da08e255bff481f682e8c0"
   findings:
     - "The new assertion covers the original Protect Sheet command without changing product behavior."
-commit: null
+commit:
+  hash: "434f352c871e4ebcf0da08e255bff481f682e8c0"
+  message: "🧪 ST1V0C verification: check native Calc sheet protection menu"
 comments:
   -
     author: "CODER"
     body: "Start: check the original Protect Sheet entry in the existing browser acceptance."
+  -
+    author: "CODER"
+    body: "Verified: both Calc sheet context menu scenarios passed on the original build."
 events:
   -
     type: "status"
@@ -59,8 +65,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Both viewport scenarios passed on the running checkpoint build. Focused lint, formatting, canonical replay comparison and diff checks passed."
+  -
+    type: "status"
+    at: "2026-11-27T11:18:49.078Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: both Calc sheet context menu scenarios passed on the original build."
 doc_version: 3
-doc_updated_at: "2026-11-27T11:18:10.201Z"
+doc_updated_at: "2026-11-27T11:18:49.080Z"
 doc_updated_by: "CODER"
 description: "Reconcile the sheet context menu tests with the existing native Protect Sheet checkbox and verify menu focus, selection, geometry and accessibility at both original widths."
 sections:
