@@ -4,7 +4,7 @@ title: "Align Writer ODT master-page style identity and references with LibreOff
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 4
+revision: 5
 origin:
   system: "manual"
 depends_on: []
@@ -40,7 +40,7 @@ events:
     to: "DOING"
     note: "Start: Align Writer ODT master-page identity and style links with the pinned native contracts."
 doc_version: 3
-doc_updated_at: "2026-11-27T07:22:49.910Z"
+doc_updated_at: "2026-11-27T07:24:32.756Z"
 doc_updated_by: "CODER"
 description: "Use the pinned XMLTextMasterPageContext and XMLPageExport contracts to preserve encoded names, display identity, page-layout and follow links, and paragraph references through the existing Writer ODT and Worker owners. Compare fallback behavior and run focused page-style, paragraph-style and ODT round-trip checks."
 sections:
@@ -56,11 +56,8 @@ sections:
     2. Apply the original declarative master-page identity and resolution rules to the existing page-style, paragraph style and XML import/export entry points. Preserve the existing header/footer owner and package lifecycle.
     3. Update existing master-page assertions for the corrected behavior. Run the related Writer ODT, page-style and Worker tests and required static checks.
   Verify Steps: |-
-    PLANNER fallback scaffold for "Align Writer ODT master-page style identity and references with LibreOffice". Replace with task-specific acceptance checks when PLANNER context is available.
-
-    1. Review the requested outcome for "Align Writer ODT master-page style identity and references with LibreOffice". Expected: the visible result matches ## Summary and stays inside approved scope.
-    2. Run the most relevant validation step for this task. Expected: it succeeds without unexpected regressions in touched behavior.
-    3. Compare the final result against ## Scope and record any residual follow-up in ## Findings. Expected: open edges are explicit rather than implicit.
+    - Run existing Writer master-page, header/footer, paragraph style, declarations, ODT round-trip and related Worker filters. Exercise the pinned default page usage assertion and encoded page names through ODT and Worker.
+    - Run Office typecheck, changed-file lint and format, dependencies, source provenance, Writer/shared inventory, routing, AgentPlane doctor and git diff checks.
   Verification: |-
     <!-- BEGIN VERIFICATION RESULTS -->
     <!-- END VERIFICATION RESULTS -->
@@ -89,11 +86,8 @@ Use the pinned XMLTextMasterPageContext and XMLPageExport contracts to preserve 
 
 ## Verify Steps
 
-PLANNER fallback scaffold for "Align Writer ODT master-page style identity and references with LibreOffice". Replace with task-specific acceptance checks when PLANNER context is available.
-
-1. Review the requested outcome for "Align Writer ODT master-page style identity and references with LibreOffice". Expected: the visible result matches ## Summary and stays inside approved scope.
-2. Run the most relevant validation step for this task. Expected: it succeeds without unexpected regressions in touched behavior.
-3. Compare the final result against ## Scope and record any residual follow-up in ## Findings. Expected: open edges are explicit rather than implicit.
+- Run existing Writer master-page, header/footer, paragraph style, declarations, ODT round-trip and related Worker filters. Exercise the pinned default page usage assertion and encoded page names through ODT and Worker.
+- Run Office typecheck, changed-file lint and format, dependencies, source provenance, Writer/shared inventory, routing, AgentPlane doctor and git diff checks.
 
 ## Verification
 
