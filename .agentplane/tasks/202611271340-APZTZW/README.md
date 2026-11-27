@@ -1,10 +1,11 @@
 ---
 id: "202611271340-APZTZW"
 title: "Port native Calc ODS cell text, ruby base and inline whitespace contexts"
-status: "DOING"
+result_summary: "Import native ODS ruby base and rich cell text."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 6
+revision: 7
 origin:
   system: "manual"
 depends_on: []
@@ -43,11 +44,16 @@ quality_review:
     - "a109ada2928f0d6f2176ee44b3e88b24a94b8491"
   findings:
     - "CALC-865 records the original removal of ruby pronunciation and guide styling after the meaningful base has been imported."
-commit: null
+commit:
+  hash: "a109ada2928f0d6f2176ee44b3e88b24a94b8491"
+  message: "🧩 APZTZW calc: import native rich cell text and ruby base"
 comments:
   -
     author: "CODER"
     body: "Start: Restore the native Calc cell SAX contexts and use the original ruby fixture."
+  -
+    author: "CODER"
+    body: "Verified: The pinned tdf129940.ods preserved the three original cell strings and distinct ruby base span sizes through the Calc Worker and ODS reopen. Existing native rich-text, field, note and paragraph tests passed."
 events:
   -
     type: "status"
@@ -62,8 +68,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Tests  57 passed (57). Pinned fixtures and focused static, dependency, provenance and registry checks passed."
+  -
+    type: "status"
+    at: "2026-11-27T14:57:54.044Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: The pinned tdf129940.ods preserved the three original cell strings and distinct ruby base span sizes through the Calc Worker and ODS reopen. Existing native rich-text, field, note and paragraph tests passed."
 doc_version: 3
-doc_updated_at: "2026-11-27T14:56:48.820Z"
+doc_updated_at: "2026-11-27T14:57:54.045Z"
 doc_updated_by: "CODER"
 description: "Use the original paragraph, span, spaces and ruby-base context boundaries for rich Calc cells. Retain timed native text fields and string versus edit-cell storage contracts, and port the pinned ruby witness through ODS and Worker."
 sections:
