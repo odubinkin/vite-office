@@ -1,0 +1,21 @@
+{
+  "schema_version": 1,
+  "task_id": "202611271816-5TSN0F",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-11-27T18:22:14.560Z",
+  "verdict": "pass",
+  "summary": "Calc table-family background import uses native sparse cell formatting.",
+  "evaluated_sha": "7e66bc3707adf0e38a6b73f35e799addc47d78b6",
+  "blueprint_digest": "2381b4a1ccaf7cb5dc3995d1801434fe89203a97c7f4b703808dcad113a94fb9",
+  "findings": [
+    "Cell override and both transport paths passed. Source behavior for the ignored table complex-color child is documented as CALC-872."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202611271816-5TSN0F/README.md",
+    "output/playwright/odf-next-checkpoint/sheet-background-verification.md"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": []
+}
